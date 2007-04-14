@@ -1,0 +1,20 @@
+This package was debianized by bart <bvh-osm@irule.be> on
+Sat, 28 Oct 2006 12:59:04 +0200.
+
+It was downloaded from http://www.irule.be/bvh/c++/merkaartor/ 
+
+Upstream Author: Bart Vanhauwaert <bvh-osm@irule.be> 
+
+Copyright: 2006, Bart Vanhauwaert 
+
+License:
+
+GNU General Public License
+
+The Debian packaging is (C) 2006, bart <bvh-osm@irule.be> and
+is licensed under the GPL, see `/usr/share/common-licenses/GPL'.
+
+
+# Please also look if there are files or directories which have a
+# different copyright/license attached and list them here.
+

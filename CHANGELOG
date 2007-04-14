@@ -1,0 +1,91 @@
+v0.06 5 dec 2006 
+	* FIX : also recognize true/false for oneway tag
+	* FIX : correctly update roads when downloading the same road twice
+	* ADD : type combobox to set highway tag
+	* FIX : no busy waiting for OSM download
+	* ADD : progress dialog while downloading from OSM
+	* FIX : refresh view immediatly after download
+	* FIX : download segments outside original bounding box for roads
+	* FIX : don't call QStatusbar methods from a paintEvent
+	* FIX : speed up drawing of roads when zoomed out
+	* ADD : undo/redo icons + actions added to toolbar
+	* FIX : improve speed with a double buffer for static content
+	* ADD : change tags on multiple elements at the same time
+	* ADD : delete tag tool
+	* ADD : download with 0.4 API
+	* ADD : upload with 0.4 API
+	* ADD : draw arrows on GPX tracks
+	* ADD : optionally download trackpoints from OSM
+	* ADD : ability to contact OSM at a different port
+	* ADD : allow panning with right mouse button from all interactions
+	* FIX : keep correct startpoint when changing view during segment drawing
+	* ADD : debugging mode
+	* FIX : create node bad url
+	* ADD : double carriageway tool
+	* FIX : upload segments before roads and nodes before segments
+	* ADD : draw roundabout tool
+	* ADD : easy single way creation
+	* FIX : improve speed with large number of trackpoints
+
+v0.05 15 nov 2006
+	* ADD : connection roads by dragging end points
+	* FIX : don't crash after undoing deletion and doing something else
+	* ADD : go to selection interaction after upload/import/open/download
+	* FIX : make the Cancel button work in the import OSM progress dialog
+	* FIX : add a id hash map to speed up importing OSM file
+	* ADD : bookmark system for downloading from OSM
+	* FIX : don't jump when zooming after panning
+	* FIX : use the same step to zoom in and out
+	* FIX : calculate correct bounding box
+	* FIX : always update tagview and fix memory leak
+	* FIX : performace improvements
+	* ADD : oneway markers
+	* ADD : reverse way/road action
+	* ADD : traffic direction combobox in road properties
+	* ADD : load tags for nodes
+	* ADD : rendering of parks pitches and water reservoirs
+	* ADD : set view to coordinates dialog box
+	* FIX : after downloading from web focus on downloaded area
+
+v0.04 29 oct 2006
+	* FIX : reset brush when drawing zoom window
+	* FIX : include way id when sending updates to Openstreetmap
+	* FIX : always prefer to select a road
+	* ADD : delete nodes,segments,roads on server
+	* ADD : ability to remove segments from roads, and influence order
+	* ADD : user recognizable names in upload window
+	* FIX : use a dotted line for gpx track segments
+	* ADD : split roads by adding a node
+	* ADD : zoom in/out with the scrollwheel
+	* ADD : debian package
+
+v0.03 25 oct 2006
+	* FIX : compilation fixes for linux
+	* ADD : pan view by dragging
+	* ADD : create node
+	* FIX : don't draw nodes when zoomed out
+	* FIX : draw segments stronger when zoomed out
+	* FIX : make roads easier to select, segments harder
+
+v0.02 24 oct 2006
+	* ADD : update/commit style merging and conflict resolution
+	  with openstreetmap
+	* ADD : delete node/segment
+	* FIX : move trackpoints accessible from editor toolbar
+	* ADD : layers
+	* ADD : support for OSM ways
+
+v0.01 20 oct 2006
+	* ADD : upload node/segments to OSM
+	* ADD : download segment tags
+	* ADD : edit node properties (long,lat)
+	* ADD : edit segment properties (width,tags)
+
+v0.00 17 oct 2006
+	* ADD : download node/segments from OSM
+	* ADD : display node/segments/tracks
+	* ADD : add segments
+	* ADD : move nodes
+
+
+

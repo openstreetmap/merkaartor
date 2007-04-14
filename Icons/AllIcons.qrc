@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/Icons" >
+        <file>add.xpm</file>
+        <file>empty.xpm</file>
+        <file>eye.xpm</file>
+        <file>move.xpm</file>
+        <file>remove.xpm</file>
+        <file>toolselect.xpm</file>
+        <file>zoomico.xpm</file>
+        <file>reverse.xpm</file>
+        <file>edit-undo.xpm</file>
+        <file>edit-redo.xpm</file>
+    </qresource>
+</RCC>
+
+
+

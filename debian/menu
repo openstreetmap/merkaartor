@@ -1,0 +1,2 @@
+?package(merkaartor):needs="X11" section="Apps/Science"\
+  title="merkaartor" command="/usr/bin/merkaartor"

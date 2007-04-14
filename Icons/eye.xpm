@@ -1,0 +1,44 @@
+/* XPM */
+static char *eye_xpm[] = {
+/* eye pixmap
+ * width height ncolors chars_per_pixel */
+"16 16 17 1 ",
+/* colors */
+"0 c black       m black         s s_black ",
+"r c red4        m black         s s_darkred ",
+"g c green4      m black         s s_darkgreen ",
+"y c yellow4     m black         s s_darkyellow ",
+"b c blue4       m black         s s_darkblue ",
+"m c magenta4    m black         s s_darkmagenta ",
+"c c cyan4       m black         s s_darkcyan ",
+"a c gray50      m black         s s_darkgray ",
+"A c gray75      m white         s s_gray ",
+"R c red         m white         s s_red ",
+"G c green       m white         s s_green ",
+"Y c yellow      m white         s s_yellow ",
+"B c blue        m white         s s_blue ",
+"M c magenta     m white         s s_magenta ",
+"C c cyan        m white         s s_cyan ",
+"W c white       m white         s s_white ",
+"  c none        m white         s none ",
+/* pixels */
+"AAAAAAAAAAAAAAA ",
+"AaaaaaaaaaaaaWA ",
+"AaAAAAAAAAAAAWA ",
+"AaAAAAAAAAAAAWA ",
+"AaAAA0000AAAAWA ",
+"AaA00000000AAWA ",
+"Aa0A00W000A0AWA ",
+"AaAA0WW000AA0WA ",
+"AaAA000000AA0WA ",
+"AaAAA0000AA0AWA ",
+"AaA00AAAA00AAWA ",
+"AaAAA0000AAAAWA ",
+"AaAAAAAAAAAAAWA ",
+"AaAAAAAAAAAAAWA ",
+"AWWWWWWWWWWWWWA ",
+"AAAAAAAAAAAAAAA ",
+};
+
+
+

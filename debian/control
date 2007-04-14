@@ -1,0 +1,11 @@
+Source: merkaartor
+Section: unknown
+Priority: optional
+Maintainer: Bart Vanhauwaert <bvh-osm@irule.be>
+Build-Depends: debhelper (>= 5), libqt4-dev
+Standards-Version: 3.7.2
+
+Package: merkaartor
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libqt4-core, libqt4-gui
+Description: map editor for www.openstreetmap.org 
