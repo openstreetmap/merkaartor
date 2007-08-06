@@ -1,11 +1,9 @@
 Need
 * Working C++ compiler
-* Qt 4.2 development environment
+* Qt 4.2 or later development environment
 
-On (K)ubuntu Edgy it is sufficient to install the "g++" and 
-"qt4-dev" package to satisfy these requirements.
-
-On Ubuntu Edgy you need libqt4-dev
+On (K)ubuntu Edgy it is sufficient to install the qt4-dev package
+to satisfy these requirements.
 
 Instructions
 
