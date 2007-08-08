@@ -28,7 +28,7 @@
 /* DOWNLOADER */
 
 Downloader::Downloader(const QString& aWeb, const QString& aUser, const QString& aPwd, bool aUse04Api)
-: Port(80), Web(aWeb), User(aUser), Password(aPwd), Error(false), Use04Api(aUse04Api), Animator(0)
+: Port(80), Web(aWeb), User(aUser), Password(aPwd), Error(false), Use04Api(aUse04Api), Animator(0), AnimationTimer(0)
 {
 	int p = Web.lastIndexOf(':');
 	if (p != -1)
@@ -39,19 +39,26 @@ Downloader::Downloader(const QString& aWeb, const QString& aUser, const QString&
 	Request.setHost(Web,Port);
 	Request.setUser(User,Password);
 	connect(&Request,SIGNAL(requestFinished(int, bool)), this,SLOT(finished(int, bool)));
+	connect(&Request,SIGNAL(dataReadProgress(int, int)), this,SLOT(progress(int, int)));
 }
 
 
 void Downloader::animate()
 {
-	if (Animator && Animate)
+	if (Animator && AnimationTimer)
 		Animator->setValue((Animator->value()+1) % Animator->maximum());
 }
 
 void Downloader::setAnimator(QProgressDialog *anAnimator, bool anAnimate)
 {
 	Animator = anAnimator;
-	Animate = anAnimate;
+	if (Animator && anAnimate)
+	{
+		if (AnimationTimer)
+			delete AnimationTimer;
+		AnimationTimer = new QTimer(this);
+		connect(AnimationTimer,SIGNAL(timeout()),this,SLOT(animate()));
+	}
 	if (Animator)
 		connect(Animator,SIGNAL(canceled()),this,SLOT(on_Cancel_clicked()));
 }
@@ -87,9 +94,8 @@ void showDebug(const QString& Method, const QString& URL, const QString& Sent, c
 bool Downloader::go(const QString& url)
 {
 	if (Error) return false;
-	QTimer* t = new QTimer(this);
-	connect(t,SIGNAL(timeout()),this,SLOT(animate()));
-	t->start(200);
+	if (AnimationTimer)
+		AnimationTimer->start(200);
 	Content.clear();
 	Id = Request.get(url);
 	if (Loop.exec() == QDialog::Rejected)
@@ -102,7 +108,8 @@ bool Downloader::go(const QString& url)
 	showDebug("GET", url, QByteArray() ,Content);
 #endif
 	Result = Request.lastResponse().statusCode();
-	delete t;
+	delete AnimationTimer;
+	AnimationTimer = 0;
 	return !Error;
 }
 
@@ -144,6 +151,22 @@ void Downloader::finished(int id, bool error)
 		Error = true;
 	if ( (Id == id) && (Loop.isRunning()) )
 		Loop.exit(QDialog::Accepted);
+}
+
+void Downloader::progress(int done, int total)
+{
+	if (Animator)
+	{
+		Animator->setLabelText(QString("Downloading from OSM (%1 bytes)").arg(done));
+		if (AnimationTimer && total != 0)
+		{
+			delete AnimationTimer;
+			AnimationTimer = 0;
+			Animator->setMaximum(total);
+		}
+		if (!AnimationTimer)
+			Animator->setValue(done);
+	}
 }
 
 int Downloader::resultCode()
@@ -224,7 +247,7 @@ bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser
 	Bar->setTextVisible(false);
 	ProgressDialog->setBar(Bar);
 	ProgressDialog->setMinimumDuration(0);
-	ProgressDialog->setLabelText("Downloading from OSM");
+	ProgressDialog->setLabelText("Downloading from OSM (connecting)");
 	ProgressDialog->setMaximum(11);
 	Rcv.setAnimator(ProgressDialog,true);
 	

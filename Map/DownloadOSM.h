@@ -7,6 +7,7 @@ class QHttp;
 class QString;
 class QMainWindow;
 class QProgressDialog;
+class QTimer;
 class MainWindow;
 class CoordBox;
 
@@ -38,6 +39,7 @@ class Downloader : public QObject
 
 	public slots:
 		void finished( int id, bool error );
+		void progress( int done, int total );
 		void animate();
 		void on_Cancel_clicked();
 
@@ -52,7 +54,7 @@ class Downloader : public QObject
 		QEventLoop Loop;
 		bool Use04Api;
 		QProgressDialog* Animator;
-		bool Animate;
+		QTimer *AnimationTimer;
 };
 
 bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDocument);
