@@ -27,6 +27,10 @@ Way::Way(TrackPoint* aFrom, TrackPoint* aTo)
 
 Way::~Way(void)
 {
+	std::vector<Road*> Container(PartOf);
+	PartOf.clear();
+	for (unsigned int i=0; i<Container.size(); ++i)
+		Container[i]->erase(this);
 }
 
 void Way::addAsPartOf(Road* R)
@@ -75,20 +79,6 @@ void Way::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* F, Command
 	if (R) removeAsPartOf(R);
 }
 
-double Way::width() const
-{
-	unsigned int idx=findKey("width");
-	if (idx<tagSize())
-		return tagValue(idx).toDouble();
-	for (unsigned int i=0; i<PartOf.size(); ++i)
-	{
-		idx = PartOf[i]->findKey("width");
-		if (idx < PartOf[i]->tagSize())
-			return PartOf[i]->tagValue(idx).toDouble();
-	}
-	return DEFAULTWIDTH;
-}
-
 MapFeature::TrafficDirectionType Way::trafficDirection() const
 {
 	QString d;
@@ -110,13 +100,6 @@ MapFeature::TrafficDirectionType Way::trafficDirection() const
 }
 
 
-void Way::setWidth(double w)
-{
-	if (fabs(w-DEFAULTWIDTH) < 0.01)
-		clearTag("width");
-	else
-		setTag("width",QString::number(w));
-}
 
 CoordBox Way::boundingBox() const
 {
@@ -194,7 +177,7 @@ static double pixelDistance(const QPointF& Target, const QPointF& P1, const QPoi
 
 void Way::draw(QPainter& P, const Projection& theProjection)
 {
-	if (theProjection.viewport().disjunctFrom(boundingBox())) return;
+/*	if (theProjection.viewport().disjunctFrom(boundingBox())) return;
 	double WW = theProjection.pixelPerM()*width();
 	if (WW<1)
 		WW = 1;
@@ -203,12 +186,12 @@ void Way::draw(QPainter& P, const Projection& theProjection)
 		TP = QPen(QBrush(QColor(0xff,0,0)),WW);
 	else
 		TP = QPen(QBrush(QColor(0xff,0x88,0x22,128)),WW);
-	::draw(P,TP,this,WW,theProjection);
+	::draw(P,TP,this,WW,theProjection); */
 }
 
 void Way::drawFocus(QPainter& P, const Projection& theProjection)
 {
-	double W = theProjection.pixelPerM()*width()/2+1;
+	double W = theProjection.pixelPerM()*widthOf(this)/2+1;
 	QPen TP(QBrush(QColor(0x00,0x00,0xff,128)),W);
 	QPainterPath Path;
 	::draw(P,TP,this,theProjection);
@@ -238,4 +221,51 @@ double Way::pixelDistance(const QPointF& Target, double ClearEndDistance, const 
 		LineF L(F,T);
 		return L.capDistance(Target);
 	}
+}
+
+const std::vector<Road*>& Way::containers() const
+{
+	return PartOf;
+}
+
+QString highwayTypeOf(const Way* W)
+{
+	return cascadedTagValue(W,"highway",QString());
+}
+
+double widthOf(const Way* W)
+{
+	QString s(cascadedTagValue(W,"width",QString()));
+	if (!s.isNull())
+		return s.toDouble();
+	QString h = highwayTypeOf(W);
+	if ( (h == "motorway") || (h=="motorway_link") )
+		return 4*4; // 3 lanes plus emergency
+	else if ( (h == "trunk") || (h=="trunk_link") )
+		return 3*4; // 2 lanes plus emergency
+	else if ( (h == "primary") || (h=="primary_link") )
+		return 2*4; // 2 lanes
+	else if (h == "secondary")
+		return 2*4; // 2 lanes
+	else if (h == "tertiary")
+		return 1.5*4; // shared middle lane
+	else if (h == "cycleway")
+		return 1.5;
+	return DEFAULTWIDTH;
+}
+
+void setWidthOf(Way* W, double NewWidth)
+{
+	W->clearTag("width");
+	double Default = widthOf(W);
+	if (fabs(NewWidth-Default) > 0.01)
+		W->setTag("width",QString::number(NewWidth));
+}
+
+QString cascadedTagValue(const Way* W, const QString& Tag, const QString& Default)
+{
+	QString s(W->tagValue(Tag,Default));
+	for (unsigned int i=0; s.isNull() && (i<W->containers().size()); ++i)
+		s = W->containers()[i]->tagValue(Tag,Default);
+	return s;
 }

@@ -202,10 +202,7 @@ static void importWay(QProgressDialog* dlg, const QDomElement& Root, MapDocument
 		{
 			R = new Road;
 			for (unsigned int i=0; i<Segments.size(); ++i)
-			{
 				R->add(Segments[i]);
-				Segments[i]->addAsPartOf(R);
-			}
 			R->setId(id);
 			loadTags(Root,R);
 			theList->add(new AddFeatureCommand(theLayer,R, false));
@@ -390,6 +387,9 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 		theDownloader->setAnimator(dlg,false);
 	if (!DomDoc.setContent(&File, true, &ErrorStr, &ErrorLine,&ErrorColumn))
 	{
+		QFile debug("c:\\temp\\debug.osm");
+		File.reset();
+		debug.write(File.readAll());
 		File.close();
 		QMessageBox::warning(aParent,"Parse error",
 			QString("Parse error at line %1, column %2:\n%3")

@@ -123,14 +123,12 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
 				L->add(new AddFeatureCommand(Main->activeLayer(),New,true));
 				Way* W = new Way(Last,New);
 				R->add(W);
-				W->addAsPartOf(R);
 				L->add(new AddFeatureCommand(Main->activeLayer(),W,true));
 				Last = New;
 			}
 			Way* W = new Way(Last,First);
 			L->add(new AddFeatureCommand(Main->activeLayer(),W,true));
 			R->add(W);
-			W->addAsPartOf(R);
 			L->add(new AddFeatureCommand(Main->activeLayer(),R,true));
 			std::vector<Way*> ToTest;
 			for (FeatureIterator it(document()); !it.isEnd(); ++it)

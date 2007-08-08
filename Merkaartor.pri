@@ -32,6 +32,8 @@ HEADERS += \
 ./Map/TrackSegment.h \
 ./Map/Way.h \
 ./MapView.h \
+./PaintStyle/EditPaintStyle.h
+./PaintStyle/PaintStyle.h
 ./PropertiesDock.h \
 ./Sync/DirtyList.h \
 ./Sync/SyncOSM.h \
@@ -70,6 +72,8 @@ SOURCES += \
 ./Interaction/Interaction.cpp \
 ./Interaction/MoveTrackPointInteraction.cpp \
 ./Interaction/ZoomInteraction.cpp \
+./PaintStyle/EditPaintStyle.cpp
+./PaintStyle/PaintStyle.cpp
 ./Sync/DirtyList.cpp \
 ./Sync/SyncOSM.cpp \
 ./Main.cpp \

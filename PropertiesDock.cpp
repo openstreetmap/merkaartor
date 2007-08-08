@@ -168,7 +168,7 @@ void PropertiesDock::resetValues()
 	{
 		if (Way* W = dynamic_cast<Way*>(Current[0]))
 		{
-			WayUi.Width->setText(QString::number(W->width()));
+			WayUi.Width->setText(QString::number(widthOf(W)));
 			WayUi.Id->setText(W->id());
 			WayUi.TagView->setModel(theModel);
 		}

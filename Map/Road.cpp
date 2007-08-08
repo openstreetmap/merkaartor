@@ -32,13 +32,20 @@ Road::Road(const Road& )
 
 Road::~Road(void)
 {
+	std::vector<Way*> Parts(p->Ways);
+	p->Ways.clear();
+	for (unsigned int i=0; i<Parts.size(); ++i)
+		Parts[i]->removeAsPartOf(this);
 	delete p;
 }
 
 void Road::add(Way* W)
 {
 	if (std::find(p->Ways.begin(),p->Ways.end(),W) == p->Ways.end())
+	{
 		p->Ways.push_back(W);
+		W->addAsPartOf(this);
+	}
 }
 
 void Road::add(Way* W, unsigned int Idx)
@@ -47,6 +54,7 @@ void Road::add(Way* W, unsigned int Idx)
 	{
 		p->Ways.push_back(W);
 		std::rotate(p->Ways.begin()+Idx,p->Ways.end()-1,p->Ways.end());
+		W->addAsPartOf(this);
 	}
 }
 
@@ -62,7 +70,10 @@ void Road::erase(Way* W)
 {
 	std::vector<Way*>::iterator i = std::find(p->Ways.begin(),p->Ways.end(),W);
 	if (i != p->Ways.end())
+	{
 		p->Ways.erase(i);
+		W->removeAsPartOf(this);
+	}
 }
 
 unsigned int Road::size() const
@@ -127,7 +138,7 @@ static Coord half(Way* W)
 
 void Road::draw(QPainter& thePainter, const Projection& theProjection)
 {
-	::drawPossibleArea(thePainter,this,theProjection);
+/*	::drawPossibleArea(thePainter,this,theProjection);
 	thePainter.setBrush(QColor(0x22,0xff,0x22,128));
 	thePainter.setPen(QColor(255,255,255,128));
 	for (unsigned int i=0; i<p->Ways.size(); ++i)
@@ -135,7 +146,7 @@ void Road::draw(QPainter& thePainter, const Projection& theProjection)
 		Way* W = p->Ways[i];
 
 		QPointF P(theProjection.project(half(W)));
-		double Rad = theProjection.pixelPerM()*W->width();
+		double Rad = theProjection.pixelPerM()*widthOf(W);
 		if (Rad>2)
 			thePainter.drawEllipse(P.x()-Rad/2,P.y()-Rad/2,Rad,Rad);
 		if (Rad>2)
@@ -147,7 +158,7 @@ void Road::draw(QPainter& thePainter, const Projection& theProjection)
 				TP = QPen(QBrush(QColor(0x22,0xff,0x22,128)),Rad/4);
 			::draw(thePainter, TP, W, theProjection);
 		}
-	}
+	} */
 }
 
 void Road::drawFocus(QPainter& thePainter, const Projection& theProjection)
@@ -178,7 +189,7 @@ void Road::drawFocus(QPainter& thePainter, const Projection& theProjection)
 		}
 		else
 		{
-			double Rad = theProjection.pixelPerM()*W->width();
+			double Rad = theProjection.pixelPerM()*widthOf(W);
 			thePainter.drawEllipse(P.x()-Rad/2,P.y()-Rad/2,Rad,Rad);
 		}
 	}

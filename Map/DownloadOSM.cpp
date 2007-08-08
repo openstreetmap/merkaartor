@@ -157,7 +157,10 @@ void Downloader::progress(int done, int total)
 {
 	if (Animator)
 	{
-		Animator->setLabelText(QString("Downloading from OSM (%1 bytes)").arg(done));
+		if (done < 10240)
+			Animator->setLabelText(QString("Downloading from OSM (%1 bytes)").arg(done));
+		else
+			Animator->setLabelText(QString("Downloading from OSM (%1 kBytes)").arg(done/1024));
 		if (AnimationTimer && total != 0)
 		{
 			delete AnimationTimer;

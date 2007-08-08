@@ -44,7 +44,6 @@ void EditRoadInteraction::snapMouseReleaseEvent(QMouseEvent *anEvent, Way * W)
 		{
 			Current = new Road;
 			Current->add(W);
-			W->addAsPartOf(Current);
 			document()->history().add(new AddFeatureCommand( main()->activeLayer() ,Current, true));
 			main()->properties()->setSelection(Current);
 		}

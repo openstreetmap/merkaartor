@@ -19,8 +19,6 @@ class Way : public MapFeature
 		virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection) const;
 		virtual bool notEverythingDownloaded() const;
 
-		double width() const;
-		void setWidth(double w);
 		MapFeature::TrafficDirectionType trafficDirection() const;
 		TrackPoint* from();
 		TrackPoint* to();
@@ -31,15 +29,25 @@ class Way : public MapFeature
 		void setFromTo(TrackPoint* From, TrackPoint* To);
 		void setFromTo(TrackPoint* From, TrackPoint* aC1, TrackPoint* aC2, TrackPoint* To);
 		virtual void cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const std::vector<MapFeature*>& Alternatives);
-		void addAsPartOf(Road* R);
-		void removeAsPartOf(Road* R);
 		bool isPartOf(Road* R);
+		const std::vector<Road*>& containers() const;
 
 	private:
+		void addAsPartOf(Road* R);
+		void removeAsPartOf(Road* R);
+
 		TrackPoint* From, *To;
 		TrackPoint* ControlFrom, *ControlTo;
 		std::vector<Road*> PartOf;
+
+		// So it can do addAsPartOf and removeAsPartOf
+		friend class Road;
 };
+
+QString cascadedTagValue(const Way* W, const QString& Tag, const QString& Default);
+QString highwayTypeOf(const Way* W);
+double widthOf(const Way* W);
+void setWidthOf(Way* W, double NewWidth);
 
 #endif
 

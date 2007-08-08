@@ -188,8 +188,6 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 				R2->setTag("oneway","yes");
 				R1->add(W1);
 				R2->add(W2);
-				W1->addAsPartOf(R1);
-				W2->addAsPartOf(R2);
 				CommandList* L = new CommandList;
 				L->add(new AddFeatureCommand(Main->activeLayer(),A1,true));
 				L->add(new AddFeatureCommand(Main->activeLayer(),A2,true));

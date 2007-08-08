@@ -3,19 +3,19 @@
 #include "Sync/DirtyList.h"
 
 WaySetWidthCommand::WaySetWidthCommand(Way* W, double w)
-: theWay(W), OldWidth(W->width()), NewWidth(w)
+: theWay(W), OldWidth(widthOf(W)), NewWidth(w)
 {
 	redo();
 }
 
 void WaySetWidthCommand::redo()
 {
-	theWay->setWidth(NewWidth);
+	setWidthOf(theWay,NewWidth);
 }
 
 void WaySetWidthCommand::undo()
 {
-	theWay->setWidth(OldWidth);
+	setWidthOf(theWay,OldWidth);
 }
 
 bool WaySetWidthCommand::buildDirtyList(DirtyList &theList)

@@ -4,6 +4,7 @@
 #include "Map/MapFeature.h"
 #include "Interaction/EditInteraction.h"
 #include "Interaction/Interaction.h"
+#include "PaintStyle/EditPaintStyle.h"
 
 #include <QtCore/QTime>
 #include <QtGui/QMainWindow>
@@ -61,7 +62,7 @@ void MapView::paintEvent(QPaintEvent* anEvent)
 	}
 }
 
-void MapView::updateStaticBuffer(QPaintEvent* anEvent)
+void MapView::updateStaticBuffer(QPaintEvent*)
 {
 	if (!StaticBuffer || (StaticBuffer->width() != width()) || (StaticBuffer->height() != height()))
 	{
@@ -79,6 +80,19 @@ void MapView::updateStaticBuffer(QPaintEvent* anEvent)
 	{
 		for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
 			i.get()->draw(P,projection());
+		EditPaintStyle EP(P,projection());
+		PaintStyle* Current = EP.firstLayer();
+		while (Current)
+		{
+			for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
+			{
+				if (Way* W = dynamic_cast<Way*>(i.get()))
+					Current->draw(W);
+				else if (Road* R = dynamic_cast<Road*>(i.get()))
+					Current->draw(R);
+			}
+			Current = Current->nextLayer();
+		}
 	}
 /*	QTime Stop(QTime::currentTime());
 	main()->statusBar()->clearMessage();
