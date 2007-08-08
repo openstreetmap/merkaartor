@@ -42,6 +42,7 @@ static void importNode(const QDomElement& Root, MapDocument* theDocument, MapLay
 			// conflict
 			Pt->setLastUpdated(MapFeature::UserResolved);
 			Pt = new TrackPoint(Coord(angToRad(Lat),angToRad(Lon)));
+			loadTags(Root,Pt);
 			Pt->setId("conflict_"+id);
 			Pt->setLastUpdated(MapFeature::OSMServerConflict);
 			theList->add(new AddFeatureCommand(conflictLayer, Pt, false));
@@ -388,6 +389,7 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 	if (!DomDoc.setContent(&File, true, &ErrorStr, &ErrorLine,&ErrorColumn))
 	{
 		QFile debug("c:\\temp\\debug.osm");
+		debug.open(QIODevice::Truncate|QIODevice::WriteOnly);
 		File.reset();
 		debug.write(File.readAll());
 		File.close();
@@ -405,6 +407,7 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 		return false;
 	}
 	CommandList* theList = new CommandList;
+	theList->setIsUpdateFromOSM();
 	theDocument->add(theLayer);
 	MapLayer* conflictLayer = new MapLayer("Conflicts from "+theLayer->name());
 	importOSM(dlg, root, theDocument, theLayer, conflictLayer, theList, theDownloader);

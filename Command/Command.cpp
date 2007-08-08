@@ -6,10 +6,20 @@ Command::~Command()
 {
 }
 
+CommandList::CommandList()
+: IsUpdateFromOSM(false)
+{
+}
+
 CommandList::~CommandList(void)
 {
 	for (unsigned int i=0; i<Subs.size(); ++i)
 		delete Subs[i];
+}
+
+void CommandList::setIsUpdateFromOSM()
+{
+	IsUpdateFromOSM = true;
 }
 
 void CommandList::add(Command* aCommand)
@@ -36,6 +46,8 @@ void CommandList::undo()
 
 bool CommandList::buildDirtyList(DirtyList& theList)
 {
+	if (IsUpdateFromOSM)
+		Subs.clear();
 	for (unsigned int i=0; i<Subs.size();)
 	{
 		if (Subs[i]->buildDirtyList(theList))
@@ -65,7 +77,7 @@ void CommandHistory::cleanup()
 	for (unsigned int i=Index; i<Subs.size(); ++i)
 		Subs[i]->redo();
 	for (unsigned int i=0; i<Subs.size(); ++i)
-		delete  Subs[i];
+		delete Subs[i];
 	Subs.clear();
 }
 

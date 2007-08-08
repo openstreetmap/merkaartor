@@ -20,6 +20,7 @@ class Command
 class CommandList : public Command
 {
 	public:
+		CommandList();
 		virtual ~CommandList();
 
 		virtual void undo();
@@ -27,9 +28,11 @@ class CommandList : public Command
 		bool empty() const;
 		void add(Command* aCommand);
 		bool buildDirtyList(DirtyList& theList);
+		void setIsUpdateFromOSM();
 
 	private:
 		std::vector<Command*> Subs;
+		bool IsUpdateFromOSM;
 };
 
 class CommandHistory
