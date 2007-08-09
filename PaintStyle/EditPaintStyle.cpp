@@ -304,14 +304,19 @@ void EditPaintStylePrivate::initPainters()
 	Painters.push_back(Railway);
 
 	FeaturePaintSelector Park;
-	Park.foregroundFill(QColor(0,0x77,0),QColor(0x77,0xff,0x77),2);
+	Park.foregroundFill(QColor(0,0x77,0),QColor(0x77,0xff,0x77,0x77),2);
 	Park.selectOnTag("leisure","park").limitToZoom(FeaturePaintSelector::RegionalZoom);
 	Painters.push_back(Park);
 
 	FeaturePaintSelector Pitch;
-	Pitch.foregroundFill(QColor(0x770,0,0),QColor(0xff,0x77,0x77),2);
+	Pitch.foregroundFill(QColor(0x77,0,0),QColor(0xff,0x77,0x77,0x77),2);
 	Pitch.selectOnTag("leisure","pitch").limitToZoom(FeaturePaintSelector::RegionalZoom);
 	Painters.push_back(Pitch);
+
+	FeaturePaintSelector Water;
+	Water.foregroundFill(QColor(0,0,0x77),QColor(0x77,0x77,0xff,0x77),2);
+	Water.selectOnTag("natural","water").limitToZoom(FeaturePaintSelector::RegionalZoom);
+	Painters.push_back(Water);
 }
 
 void EPBackgroundLayer::setP(EditPaintStylePrivate* ap)
