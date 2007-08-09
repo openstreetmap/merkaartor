@@ -60,13 +60,25 @@ QVariant TagModel::data(const QModelIndex &index, int role) const
 		return QVariant();
 	if (role == Qt::DisplayRole)
 	{
-		if (index.row() == Tags.size())
+		if (index.row() >= Tags.size())
 		{
 			if (index.column() == 0)
 				return "Edit this to add...";
 			else
 				return "";
 		}
+		else
+		{
+			if (index.column() == 0)
+				return Tags[index.row()].first;
+			else
+				return Tags[index.row()].second;
+		}
+	}
+	else if (role == Qt::EditRole)
+	{
+		if (index.row() >= Tags.size())
+			return "";
 		else
 		{
 			if (index.column() == 0)
@@ -96,7 +108,7 @@ Qt::ItemFlags TagModel::flags(const QModelIndex &index) const
 {
 	if (!index.isValid())
 		return Qt::ItemIsEnabled;
-	return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
+	return QAbstractTableModel::flags(index) | Qt::ItemIsEditable  | Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
 bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role)

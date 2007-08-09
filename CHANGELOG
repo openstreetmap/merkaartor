@@ -2,6 +2,7 @@ v0.07
 	* ADD : nice mappaint mechanism
 	* FIX : downloading same area twice doesn't create upload conflicts
 	anymore
+	* FIX : keep tag content when editing them in the tag table
 
 v0.06 5 dec 2006 
 	* FIX : also recognize true/false for oneway tag
