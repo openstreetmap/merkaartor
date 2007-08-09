@@ -306,7 +306,7 @@ bool DirtyListDescriber::eraseRoad(Road* R)
 DirtyListExecutor::DirtyListExecutor(MapDocument* aDoc, const DirtyListBuild& aFuture, const QString& aWeb, const QString& aUser, const QString& aPwd, unsigned int aTasks, bool aUse4Api)
 : DirtyListVisit(aDoc, aFuture, true), Tasks(aTasks), Done(0), Web(aWeb), User(aUser), Pwd(aPwd), Use4Api(aUse4Api), theDownloader(0)
 {
-	theDownloader = new Downloader(Web, User, Pwd, Use4Api);
+	theDownloader = new Downloader(Web, User, Pwd);
 }
 
 DirtyListExecutor::~DirtyListExecutor()

@@ -27,8 +27,8 @@
 
 /* DOWNLOADER */
 
-Downloader::Downloader(const QString& aWeb, const QString& aUser, const QString& aPwd, bool aUse04Api)
-: Port(80), Web(aWeb), User(aUser), Password(aPwd), Error(false), Use04Api(aUse04Api), Animator(0), AnimationTimer(0)
+Downloader::Downloader(const QString& aWeb, const QString& aUser, const QString& aPwd)
+: Port(80), Web(aWeb), User(aUser), Password(aPwd), Error(false), Animator(0), AnimationTimer(0)
 {
 	int p = Web.lastIndexOf(':');
 	if (p != -1)
@@ -179,69 +179,55 @@ int Downloader::resultCode()
 
 QString Downloader::getURLToFetch(const QString &What)
 {
-	QString URL("/api/0.3/%1?%2=");
-	if (Use04Api)
-		URL = QString("/api/0.4/%1?%2=");
+	QString URL = QString("/api/0.4/%1?%2=");
 	return URL.arg(What).arg(What);
 }
 
 
 QString Downloader::getURLToFetch(const QString &What, const QString& Id)
 {
-	QString URL("/api/0.3/%1/%2");
-	if (Use04Api)
-		URL = QString("/api/0.4/%1/%2");
+	QString URL = QString("/api/0.4/%1/%2");
 	return URL.arg(What).arg(Id);
 }
 
 QString Downloader::getURLToCreate(const QString &What)
 {
-	QString URL("/api/0.3/%1/0");
-	if (Use04Api)
-		URL = QString("/api/0.4/%1/create");
+	QString URL = QString("/api/0.4/%1/create");
 	return URL.arg(What);
 }
 
 QString Downloader::getURLToUpdate(const QString &What, const QString& Id)
 {
-	QString URL("/api/0.3/%1/%2");
-	if (Use04Api)
-		URL = QString("/api/0.4/%1/%2");
+	QString URL = QString("/api/0.4/%1/%2");
 	return URL.arg(What).arg(Id);
 }
 
 QString Downloader::getURLToDelete(const QString &What, const QString& Id)
 {
-	QString URL("/api/0.3/%1/%2");
-	if (Use04Api)
-		URL = QString("/api/0.4/%1/%2");
+	QString URL = QString("/api/0.4/%1/%2");
 	return URL.arg(What).arg(Id);
 }
 
 QString Downloader::getURLToMap()
 {
-	QString URL("/api/0.3/map?bbox=%1,%2,%3,%4");
-	if (Use04Api)
-		URL = QString("/api/0.4/map?bbox=%1,%2,%3,%4");
+	QString URL = QString("/api/0.4/map?bbox=%1,%2,%3,%4");
 	return URL;
 }
 
 QString Downloader::getURLToTrackPoints()
 {
-	QString URL("/api/0.3/trackpoints?bbox=%1,%2,%3,%4&page=%5");
-	if (Use04Api)
-		URL = QString("/api/0.4/trackpoints?bbox=%1,%2,%3,%4&page=%5");
+	QString URL = QString("/api/0.4/trackpoints?bbox=%1,%2,%3,%4&page=%5");
 	return URL;
 }
 
-bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser, const QString& aPassword, bool Use04Api, const CoordBox& aBox , MapDocument* theDocument)
+bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser, const QString& aPassword, const CoordBox& aBox , MapDocument* theDocument)
 {
 	if (checkForConflicts(theDocument))
 	{
 		QMessageBox::warning(aParent,MainWindow::tr("Unresolved conflicts"), MainWindow::tr("Please resolve existing conflicts first"));
 		return false;
 	}
-	Downloader Rcv(aWeb, aUser, aPassword, Use04Api);
+	Downloader Rcv(aWeb, aUser, aPassword);
 	QString URL = Rcv.getURLToMap();
 	URL = URL.arg(radToAng(aBox.bottomLeft().lon())).arg(radToAng(aBox.bottomLeft().lat())).arg(radToAng(aBox.topRight().lon())).arg(radToAng(aBox.topRight().lat()));
 	QProgressDialog* ProgressDialog = new QProgressDialog(aParent);
@@ -276,7 +262,7 @@ bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser
 		QMessageBox::warning(aParent,MainWindow::tr("Download failed"),MainWindow::tr("Unexpected http status code (%1)").arg(x));
 		return false;
 	}
-	Downloader Down(aWeb, aUser, aPassword, Use04Api);
+	Downloader Down(aWeb, aUser, aPassword);
 	MapLayer* theLayer = new MapLayer("Download");
 	bool OK = importOSM(aParent, Rcv.content(), theDocument, theLayer, &Down);
 	if (!OK)
@@ -285,9 +271,9 @@ bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser
 }
 
 
-bool downloadTracksFromOSM(QMainWindow* Main, const QString& aWeb, const QString& aUser, const QString& aPassword, bool Use04Api, const CoordBox& aBox , MapDocument* theDocument)
+bool downloadTracksFromOSM(QMainWindow* Main, const QString& aWeb, const QString& aUser, const QString& aPassword, const CoordBox& aBox , MapDocument* theDocument)
 {
-	Downloader theDownloader(aWeb, aUser, aPassword, Use04Api);
+	Downloader theDownloader(aWeb, aUser, aPassword);
 	MapLayer* trackLayer = new MapLayer("Downloaded tracks");
 	theDocument->add(trackLayer);
 	QProgressDialog ProgressDialog(Main);
@@ -349,18 +335,16 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 	QVariant V = Sets.value("bookmarks");
 	if (!V.isNull())
 		Bookmarks = V.toStringList();
-	for (unsigned int i=0; i<Bookmarks.size(); i+=5)
+	for (int i=0; i<Bookmarks.size(); i+=5)
 		ui.Bookmarks->addItem(Bookmarks[i]);
 	ui.Username->setText(Sets.value("user").toString());
 	ui.Password->setText(Sets.value("password").toString());
 	ui.IncludeTracks->setChecked(DownloadRaw);
-	ui.Use04Api->setChecked(Sets.value("use04api").toBool());
 	bool OK = true;
 	if (dlg->exec() == QDialog::Accepted)
 	{
 		Sets.setValue("user",ui.Username->text());
 		Sets.setValue("password",ui.Password->text());
-		Sets.setValue("use04api",ui.Use04Api->isChecked());
 		DownloadRaw = false;
 		CoordBox Clip(Coord(0,0),Coord(0,0));
 		if (ui.FromBookmark->isChecked())
@@ -384,9 +368,9 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 			Sets.setValue("bookmarks",Bookmarks);
 		}
 		aParent->view()->setUpdatesEnabled(false);
-		OK = downloadOSM(aParent,ui.Website->text(),ui.Username->text(),ui.Password->text(),ui.Use04Api->isChecked(),Clip,theDocument);
+		OK = downloadOSM(aParent,ui.Website->text(),ui.Username->text(),ui.Password->text(),Clip,theDocument);
 		if (OK && ui.IncludeTracks->isChecked())
-			OK = downloadTracksFromOSM(aParent,ui.Website->text(),ui.Username->text(),ui.Password->text(),ui.Use04Api->isChecked(),Clip,theDocument);
+			OK = downloadTracksFromOSM(aParent,ui.Website->text(),ui.Username->text(),ui.Password->text(),Clip,theDocument);
 		aParent->view()->setUpdatesEnabled(true);
 		if (OK)
 		{

@@ -22,7 +22,7 @@ class Downloader : public QObject
 	Q_OBJECT
 
 	public:
-		Downloader(const QString& aWeb, const QString& aUser, const QString& aPwd, bool aUse04Api);
+		Downloader(const QString& aWeb, const QString& aUser, const QString& aPwd);
 
 		bool request(const QString& Method, const QString& URL, const QString& Out);
 		bool go(const QString& url);
@@ -52,7 +52,6 @@ class Downloader : public QObject
 		int Id;
 		bool Error;
 		QEventLoop Loop;
-		bool Use04Api;
 		QProgressDialog* Animator;
 		QTimer *AnimationTimer;
 };

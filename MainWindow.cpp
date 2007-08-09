@@ -209,13 +209,11 @@ void MainWindow::on_fileUploadAction_triggered()
 	ui.Website->setText("www.openstreetmap.org");
 	ui.Username->setText(Sets.value("user").toString());
 	ui.Password->setText(Sets.value("password").toString());
-	ui.Use04Api->setChecked(Sets.value("use04api").toBool());
 	if (dlg->exec() == QDialog::Accepted)
 	{
 		Sets.setValue("user",ui.Username->text());
 		Sets.setValue("password",ui.Password->text());
-		Sets.setValue("use04apu",ui.Use04Api->isChecked());
-		syncOSM(this,ui.Website->text(),ui.Username->text(),ui.Password->text(),ui.Use04Api->isChecked());
+		syncOSM(this,ui.Website->text(),ui.Username->text(),ui.Password->text(),true);
 	}
 	delete dlg;
 

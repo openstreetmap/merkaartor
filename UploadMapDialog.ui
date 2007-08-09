@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>157</height>
+    <height>132</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -58,13 +58,6 @@
       </widget>
      </item>
     </layout>
-   </item>
-   <item>
-    <widget class="QCheckBox" name="Use04Api" >
-     <property name="text" >
-      <string>Use 0.4 API (don't use this option if you don't know)</string>
-     </property>
-    </widget>
    </item>
    <item>
     <spacer>
