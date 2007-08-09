@@ -15,13 +15,13 @@ TagModel::~TagModel(void)
 
 void TagModel::setFeature(const std::vector<MapFeature*> Features)
 {
-	if (Tags.size())
+	if (theFeatures.size())
 	{
 		beginRemoveRows(QModelIndex(),0,Tags.size());
+		Tags.clear();
 		endRemoveRows();
 	}
 	theFeatures = Features;
-	Tags.clear();
 	if (theFeatures.size())
 	{
 		MapFeature* F = theFeatures[0];
@@ -34,7 +34,7 @@ void TagModel::setFeature(const std::vector<MapFeature*> Features)
 			if (j == theFeatures.size())
 				Tags.push_back(std::make_pair(F->tagKey(i),F->tagValue(i)));
 		}
-		beginInsertRows(QModelIndex(),0,Tags.size()+1);
+		beginInsertRows(QModelIndex(),0,Tags.size());
 		endInsertRows();
 	}
 }
@@ -120,7 +120,7 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
 		{
 			if (index.column() == 0)
 			{
-				beginInsertRows(QModelIndex(), Tags.size()+1, Tags.size()+2);
+				beginInsertRows(QModelIndex(), Tags.size()+1, Tags.size()+1);
 				CommandList* L = new CommandList;
 				for (unsigned int i=0; i<theFeatures.size(); ++i)
 				{
@@ -150,7 +150,7 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
 				theFeatures[i]->setLastUpdated(MapFeature::User);
 			}
 			Main->document()->history().add(L);
-			Main->invalidateView();
+			Main->invalidateView(false);
 		}
 		emit dataChanged(index, index);
 		return true;
