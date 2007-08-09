@@ -5,6 +5,7 @@ v0.07
 	* FIX : keep tag content when editing them in the tag table
 	* FIX : correctly keep track of the tag table size
 	* FIX : remove 0.3 API support
+	* ADD : gzipped downloading
 
 v0.06 5 dec 2006 
 	* FIX : also recognize true/false for oneway tag

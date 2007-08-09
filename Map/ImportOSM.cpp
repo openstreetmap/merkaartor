@@ -386,6 +386,11 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 	dlg->show();
 	if (theDownloader)
 		theDownloader->setAnimator(dlg,false);
+/*	QFile debug("c:\\temp\\debug.osm");
+	debug.open(QIODevice::Truncate|QIODevice::WriteOnly);
+	File.reset();
+	debug.write(File.readAll());
+	File.close(); */
 	if (!DomDoc.setContent(&File, true, &ErrorStr, &ErrorLine,&ErrorColumn))
 	{
 		QMessageBox::warning(aParent,"Parse error",
@@ -396,11 +401,6 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 		return false;
 	}
 
-	QFile debug("c:\\temp\\debug.osm");
-	debug.open(QIODevice::Truncate|QIODevice::WriteOnly);
-	File.reset();
-	debug.write(File.readAll());
-	File.close();
 
 	QDomElement root = DomDoc.documentElement();
 	if (root.tagName() != "osm")

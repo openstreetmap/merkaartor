@@ -21,6 +21,8 @@
 #include <QtGui/QProgressDialog>
 #include <QtGui/QStatusBar>
 
+#include "zlib/zlib.h"
+
 // #define DEBUG_EVERY_CALL
 // #define DEBUG_MAPCALL_ONLY
 // #define DEBUG_NONGET_CALL
@@ -91,19 +93,98 @@ void showDebug(const QString& Method, const QString& URL, const QString& Sent, c
 }
 
 
+#define CHUNK 4096 
+
+QByteArray gzipDecode(const QByteArray& In)
+{
+	QByteArray Total;
+
+	int ret;
+	unsigned have;
+	z_stream strm;
+	char in[CHUNK+2];
+	char out[CHUNK+2];
+	/* allocate inflate state */
+	strm.zalloc = Z_NULL;
+	strm.zfree = Z_NULL;
+	strm.opaque = Z_NULL;
+	strm.avail_in = 0;
+	strm.next_in = Z_NULL;
+	ret = inflateInit2(&strm,15+32);
+	if (ret != Z_OK)
+		return Total;
+	int RealSize = In.size();
+	for (unsigned int i=0; i<RealSize/CHUNK+1; ++i)
+	{
+		unsigned int Left = RealSize-(i*CHUNK);
+		if (Left > CHUNK)
+			Left = CHUNK;
+		memcpy(in,In.constData()+(i*CHUNK),Left);
+		strm.avail_in = Left;
+		strm.next_in = reinterpret_cast<unsigned char*>(in);
+
+		/* run inflate() on input until output buffer not full */
+		do
+		{
+			strm.avail_out = CHUNK;
+			strm.next_out = reinterpret_cast<unsigned char*>(out);
+			ret = inflate(&strm, Z_NO_FLUSH);
+			if (ret == Z_STREAM_ERROR)
+				return Total;
+			switch (ret)
+			{
+				case Z_NEED_DICT:
+					ret = Z_DATA_ERROR;     /* and fall through */
+				case Z_DATA_ERROR:
+				case Z_MEM_ERROR:
+					(void)inflateEnd(&strm);
+					return Total;
+			}
+			have = CHUNK - strm.avail_out;
+			out[have] = 0;
+			Total.append(QByteArray(out,have));
+		} while (strm.avail_out == 0);
+	}
+	return Total;
+}
+
+
+
+
 bool Downloader::go(const QString& url)
 {
 	if (Error) return false;
 	if (AnimationTimer)
 		AnimationTimer->start(200);
 	Content.clear();
-	Id = Request.get(url);
+	QBuffer ResponseBuffer(&Content);
+	ResponseBuffer.open(QIODevice::WriteOnly);
+
+	QHttpRequestHeader Header("GET",url);
+	Header.setValue("Accept-Encoding", "gzip,deflate");
+	if (Port == 80)
+		Header.setValue("Host",Web);
+	else
+		Header.setValue("Host",Web+':'+QString::number(Port));
+	Content.clear();
+	Id = Request.request(Header,QByteArray(), &ResponseBuffer);
+
 	if (Loop.exec() == QDialog::Rejected)
 	{
 		Request.abort();
 		return false;
 	}
-	Content = Request.readAll();
+
+	if (Request.lastResponse().hasKey("Content-encoding"))
+	{
+		QString t(Request.lastResponse().value("Content-encoding"));
+		if (t == "gzip")
+		{
+			QByteArray Uncompressed(gzipDecode(Content));
+			Content = Uncompressed;
+		}
+	}
+
 #ifdef DEBUG_EVERY_CALL
 	showDebug("GET", url, QByteArray() ,Content);
 #endif
@@ -120,6 +201,7 @@ bool Downloader::request(const QString& Method, const QString& URL, const QStrin
 	QBuffer Buf(&ba);
 
 	QHttpRequestHeader Header(Method,URL);
+	Header.setValue("Accept-Encoding", "gzip,deflate");
 	if (Port == 80)
 		Header.setValue("Host",Web);
 	else
@@ -133,6 +215,15 @@ bool Downloader::request(const QString& Method, const QString& URL, const QStrin
 		return false;
 	}
 	Content = Request.readAll();
+	if (Request.lastResponse().hasKey("Content-encoding"))
+	{
+		QString t(Request.lastResponse().value("Content-encoding"));
+		if (t == "gzip")
+		{
+			QByteArray Uncompressed(gzipDecode(Content));
+			Content = Uncompressed;
+		}
+	}
 #ifdef DEBUG_NONGET_CALL
 	showDebug(Method,URL,Data,Content);
 #endif
