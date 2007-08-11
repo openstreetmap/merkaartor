@@ -24,13 +24,13 @@
    </property>
    <widget class="QMenu" name="menuHelp" >
     <property name="title" >
-     <string>Help</string>
+     <string>&amp;Help</string>
     </property>
     <addaction name="helpAboutAction" />
    </widget>
    <widget class="QMenu" name="menuView" >
     <property name="title" >
-     <string>View</string>
+     <string>&amp;View</string>
     </property>
     <addaction name="viewZoomAllAction" />
     <addaction name="viewZoomWindowAction" />
@@ -40,15 +40,16 @@
    </widget>
    <widget class="QMenu" name="menuEdit" >
     <property name="title" >
-     <string>Edit</string>
+     <string>&amp;Edit</string>
     </property>
     <addaction name="editUndoAction" />
     <addaction name="editRedoAction" />
    </widget>
    <widget class="QMenu" name="menuFile" >
     <property name="title" >
-     <string>File</string>
+     <string>&amp;File</string>
     </property>
+    <addaction name="fileNewAction" />
     <addaction name="fileOpenAction" />
     <addaction name="fileImportAction" />
     <addaction name="fileDownloadAction" />
@@ -57,7 +58,7 @@
    </widget>
    <widget class="QMenu" name="menuCreate" >
     <property name="title" >
-     <string>Create</string>
+     <string>&amp;Create</string>
     </property>
     <addaction name="createNodeAction" />
     <addaction name="createLinearWayAction" />
@@ -83,7 +84,10 @@
     <enum>Qt::ToolButtonTextUnderIcon</enum>
    </property>
    <attribute name="toolBarArea" >
-    <number>4</number>
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak" >
+    <bool>false</bool>
    </attribute>
    <addaction name="editUndoAction" />
    <addaction name="editRedoAction" />
@@ -206,10 +210,13 @@
    <property name="text" >
     <string>Download from web</string>
    </property>
+   <property name="shortcut" >
+    <string>Ctrl+D</string>
+   </property>
   </action>
   <action name="createLinearWayAction" >
    <property name="text" >
-    <string>Create link</string>
+    <string>Link</string>
    </property>
    <property name="iconText" >
     <string>Create link</string>
@@ -236,6 +243,9 @@
    <property name="text" >
     <string>Upload to web</string>
    </property>
+   <property name="shortcut" >
+    <string>Ctrl+U</string>
+   </property>
   </action>
   <action name="editRemoveAction" >
    <property name="enabled" >
@@ -255,6 +265,9 @@
    <property name="text" >
     <string>Road</string>
    </property>
+   <property name="shortcut" >
+    <string>R</string>
+   </property>
   </action>
   <action name="editAddAction" >
    <property name="enabled" >
@@ -270,6 +283,9 @@
   <action name="createNodeAction" >
    <property name="text" >
     <string>Node</string>
+   </property>
+   <property name="shortcut" >
+    <string>N</string>
    </property>
   </action>
   <action name="editReverseAction" >
@@ -296,6 +312,11 @@
   <action name="createRoundaboutAction" >
    <property name="text" >
     <string>Roundabout</string>
+   </property>
+  </action>
+  <action name="fileNewAction" >
+   <property name="text" >
+    <string>New</string>
    </property>
   </action>
  </widget>

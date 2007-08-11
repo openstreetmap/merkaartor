@@ -30,6 +30,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_editPropertiesAction_triggered();
 		virtual void on_editUndoAction_triggered();
 		virtual void on_editRedoAction_triggered();
+		virtual void on_fileNewAction_triggered();
 		virtual void on_fileDownloadAction_triggered();
 		virtual void on_fileUploadAction_triggered();
 		virtual void on_fileImportAction_triggered();

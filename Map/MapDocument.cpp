@@ -145,7 +145,19 @@ MapDocument::~MapDocument(void)
 	delete p;
 }
 
+void MapDocument::clear()
+{
+	delete p;
+	p = new MapDocumentPrivate;
+	add(new MapLayer("Generic layer"));
+}
+
 CommandHistory& MapDocument::history()
+{
+	return p->History;
+}
+
+const CommandHistory& MapDocument::history() const
 {
 	return p->History;
 }
@@ -319,4 +331,7 @@ std::pair<bool,CoordBox> boundingBox(const MapDocument* theDocument)
 	return std::make_pair(true,BBox);
 }
 
-
+bool hasUnsavedChanges(const MapDocument& aDoc)
+{
+	return aDoc.history().index();
+}

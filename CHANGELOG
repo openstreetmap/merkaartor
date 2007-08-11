@@ -7,6 +7,9 @@ v0.07
 	* FIX : remove 0.3 API support
 	* ADD : gzipped downloading
 	* ADD : nice painting for water
+	* ADD : file->new menu option to start a new map
+	* FIX : change current directory when opening a file
+	* FIX : surpress drawing artefact when creating a new segment
 
 v0.06 5 dec 2006 
 	* FIX : also recognize true/false for oneway tag

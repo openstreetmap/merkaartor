@@ -56,10 +56,13 @@ class MapDocument
 
 		MapFeature* get(const QString& id);
 		CommandHistory& history();
+		const CommandHistory& history() const;
+		void clear();
 	private:
 		MapDocumentPrivate* p;
 };
 
+bool hasUnsavedChanges(const MapDocument& aDoc);
 std::pair<bool,CoordBox> boundingBox(const MapDocument* theDocument);
 
 class VisibleFeatureIterator

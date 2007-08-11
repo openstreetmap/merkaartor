@@ -44,6 +44,7 @@ void CreateWayInteraction::snapMouseReleaseEvent(QMouseEvent * event, TrackPoint
 			P1 = projection().inverse(event->pos());
 			if (From)
 				P1 = From->position();
+			P2 = P1;
 			HaveFirstPoint = true;
 			view()->update();
 		}

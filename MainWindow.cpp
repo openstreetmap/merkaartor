@@ -23,6 +23,8 @@
 #include "GeneratedFiles/ui_UploadMapDialog.h"
 #include "GeneratedFiles/ui_SetPositionDialog.h"
 
+#include <QtCore/QDir>
+#include <QtCore/QFileInfo>
 #include <QtCore/QSettings>
 #include <QtCore/QTimer>
 #include <QtGui/QDialog>
@@ -102,6 +104,7 @@ void MainWindow::on_editUndoAction_triggered()
 void MainWindow::on_editPropertiesAction_triggered()
 {
 	theProperties->setSelection(0);
+	invalidateView();
 	theView->launch(new EditInteraction(theView));
 }
 
@@ -125,6 +128,12 @@ void MainWindow::on_editReverseAction_triggered()
 	emit reverse_triggered();
 }
 
+static void changeCurrentDirToFile(const QString& s)
+{
+	QFileInfo info(s);
+	QDir::setCurrent(info.absolutePath());
+}
+
 void MainWindow::on_fileImportAction_triggered()
 {
 	QString s = QFileDialog::getOpenFileName(
@@ -134,6 +143,7 @@ void MainWindow::on_fileImportAction_triggered()
 		tr("GPS Exchange format (*.gpx)\nOpenStreetMap format (*.osm)"));
 	if (!s.isNull())
 	{
+		changeCurrentDirToFile(s);
 		bool OK = false;
 		MapLayer* NewLayer = new MapLayer(tr("Import %1").arg(s.right(s.length()-s.lastIndexOf('/')-1)));
 		if (s.right(4).toLower() == ".gpx")
@@ -162,8 +172,18 @@ void MainWindow::on_fileImportAction_triggered()
 	}
 }
 
+static bool mayDiscardUnsavedChanges(QWidget* aWidget)
+{
+	return QMessageBox::question(aWidget,MainWindow::tr("Unsaved changes"),
+		MainWindow::tr("The current map contains unsaved changes that will be lost when starting a new one.\n"
+			"Do you want to cancel starting a new map or continue and discard the old changes?"),
+			QMessageBox::Discard|QMessageBox::Cancel,QMessageBox::Cancel) == QMessageBox::Discard;
+}
+
 void MainWindow::on_fileOpenAction_triggered()
 {
+	if (hasUnsavedChanges(*theDocument) && !mayDiscardUnsavedChanges(this))
+		return;
 	QString s = QFileDialog::getOpenFileName(
 		this,
 		tr("Open track file"),
@@ -171,6 +191,7 @@ void MainWindow::on_fileOpenAction_triggered()
 		tr("GPS Exchange format (*.gpx)\nOpenStreetMap format (*.osm)"));
 	if (!s.isNull())
 	{
+		changeCurrentDirToFile(s);
 		MapDocument* NewDoc = new MapDocument;
 		MapLayer* NewLayer = new MapLayer(tr("Open %1").arg(s.right(s.length()-s.lastIndexOf('/')-1)));
 		bool OK = false;
@@ -287,6 +308,17 @@ void MainWindow::on_viewSetCoordinatesAction_triggered()
 		invalidateView();
 	}
 	delete Dlg;
+}
+
+void MainWindow::on_fileNewAction_triggered()
+{
+	theView->launch(0);
+	theProperties->setSelection(0);
+	if (!hasUnsavedChanges(*theDocument) || mayDiscardUnsavedChanges(this))
+	{
+		theDocument->clear();
+		invalidateView();
+	}
 }
 
 void MainWindow::on_createDoubleWayAction_triggered()
