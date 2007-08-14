@@ -6,6 +6,7 @@ class MapDocument;
 class QHttp;
 class QString;
 class QMainWindow;
+class QProgressBar;
 class QProgressDialog;
 class QTimer;
 class MainWindow;
@@ -35,13 +36,14 @@ class Downloader : public QObject
 		QString getURLToCreate(const QString& What);
 		QString getURLToUpdate(const QString& What, const QString& Id);
 		QString getURLToDelete(const QString& What, const QString& Id);
-		void setAnimator(QProgressDialog* Animator, bool anAnimate);
+		void setAnimator(QProgressDialog* Animator, QProgressBar* AnimatorBar, bool anAnimate);
 
 	public slots:
-		void finished( int id, bool error );
+		void allDone( bool error );
 		void progress( int done, int total );
 		void animate();
 		void on_Cancel_clicked();
+		void exitDownloadLoop();
 
 	private:
 		unsigned int Port;
@@ -53,6 +55,7 @@ class Downloader : public QObject
 		bool Error;
 		QEventLoop Loop;
 		QProgressDialog* Animator;
+		QProgressBar* AnimatorBar;
 		QTimer *AnimationTimer;
 };
 

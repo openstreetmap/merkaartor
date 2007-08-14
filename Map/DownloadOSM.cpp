@@ -30,7 +30,7 @@
 /* DOWNLOADER */
 
 Downloader::Downloader(const QString& aWeb, const QString& aUser, const QString& aPwd)
-: Port(80), Web(aWeb), User(aUser), Password(aPwd), Error(false), Animator(0), AnimationTimer(0)
+: Port(80), Web(aWeb), User(aUser), Password(aPwd), Error(false), Animator(0), AnimatorBar(0), AnimationTimer(0)
 {
 	int p = Web.lastIndexOf(':');
 	if (p != -1)
@@ -40,20 +40,21 @@ Downloader::Downloader(const QString& aWeb, const QString& aUser, const QString&
 	}
 	Request.setHost(Web,Port);
 	Request.setUser(User,Password);
-	connect(&Request,SIGNAL(requestFinished(int, bool)), this,SLOT(finished(int, bool)));
+	connect(&Request,SIGNAL(done(bool)), this,SLOT(allDone(bool)));
 	connect(&Request,SIGNAL(dataReadProgress(int, int)), this,SLOT(progress(int, int)));
 }
 
 
 void Downloader::animate()
 {
-	if (Animator && AnimationTimer)
-		Animator->setValue((Animator->value()+1) % Animator->maximum());
+	if (AnimatorBar && AnimationTimer)
+		AnimatorBar->setValue((AnimatorBar->value()+1) % AnimatorBar->maximum());
 }
 
-void Downloader::setAnimator(QProgressDialog *anAnimator, bool anAnimate)
+void Downloader::setAnimator(QProgressDialog *anAnimator,  QProgressBar* aBar, bool anAnimate)
 {
 	Animator = anAnimator;
+	AnimatorBar = aBar;
 	if (Animator && anAnimate)
 	{
 		if (AnimationTimer)
@@ -62,7 +63,11 @@ void Downloader::setAnimator(QProgressDialog *anAnimator, bool anAnimate)
 		connect(AnimationTimer,SIGNAL(timeout()),this,SLOT(animate()));
 	}
 	if (Animator)
+	{
+		Animator->setValue(0);
 		connect(Animator,SIGNAL(canceled()),this,SLOT(on_Cancel_clicked()));
+		qApp->processEvents();
+	}
 }
 
 void Downloader::on_Cancel_clicked()
@@ -175,6 +180,15 @@ bool Downloader::go(const QString& url)
 		return false;
 	}
 
+	if (Error)
+	{
+		QMessageBox::information(0,"error",Request.errorString());
+	}
+	if (Content.size() != Request.lastResponse().contentLength())
+	{
+		QMessageBox::information(0,"didn't download enough",QString("%1 %2").arg(Content.size()).arg(Request.lastResponse().contentLength()));
+	}
+
 	if (Request.lastResponse().hasKey("Content-encoding"))
 	{
 		QString t(Request.lastResponse().value("Content-encoding"));
@@ -236,11 +250,18 @@ QByteArray& Downloader::content()
 	return Content;
 }
 
-void Downloader::finished(int id, bool error)
+void Downloader::allDone(bool error)
 {
 	if (error)
 		Error = true;
-	if ( (Id == id) && (Loop.isRunning()) )
+	if ( Loop.isRunning() )
+		QTimer::singleShot(1000,this,SLOT(exitDownloadLoop()));
+//		Loop.exit(QDialog::Accepted);
+}
+
+void Downloader::exitDownloadLoop()
+{
+	if ( Loop.isRunning() )
 		Loop.exit(QDialog::Accepted);
 }
 
@@ -256,10 +277,10 @@ void Downloader::progress(int done, int total)
 		{
 			delete AnimationTimer;
 			AnimationTimer = 0;
-			Animator->setMaximum(total);
+			AnimatorBar->setMaximum(total);
 		}
-		if (!AnimationTimer)
-			Animator->setValue(done);
+		if (!AnimationTimer && AnimatorBar)
+			AnimatorBar->setValue(done);
 	}
 }
 
@@ -329,7 +350,7 @@ bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser
 	ProgressDialog->setMinimumDuration(0);
 	ProgressDialog->setLabelText("Downloading from OSM (connecting)");
 	ProgressDialog->setMaximum(11);
-	Rcv.setAnimator(ProgressDialog,true);
+	Rcv.setAnimator(ProgressDialog,Bar,true);
 	
 	if (!Rcv.go(URL))
 	{
@@ -376,7 +397,7 @@ bool downloadTracksFromOSM(QMainWindow* Main, const QString& aWeb, const QString
 	ProgressDialog.setMaximum(11);
 	ProgressDialog.setValue(1);
 	ProgressDialog.show();
-	theDownloader.setAnimator(&ProgressDialog,true);
+	theDownloader.setAnimator(&ProgressDialog,Bar,true);
 	for (unsigned int Page=0; ;++Page)
 	{
 		ProgressDialog.setLabelText(QString("Downloading trackpoints %1-%2").arg(Page*5000+1).arg(Page*5000+5000));

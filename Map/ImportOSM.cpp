@@ -18,6 +18,7 @@
 #include <QtCore/QEventLoop>
 #include <QtCore/QFile>
 #include <QtGui/QMessageBox>
+#include <QtGui/QProgressBar>
 #include <QtGui/QProgressDialog>
 #include <QtXml/QDomDocument>
 
@@ -380,12 +381,14 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 	int ErrorLine;
 	int ErrorColumn;
 	QProgressDialog* dlg = new QProgressDialog(aParent);
+	QProgressBar* Bar = new QProgressBar(dlg);
+	dlg->setBar(Bar);
 	dlg->setWindowModality(Qt::ApplicationModal);
 	dlg->setMinimumDuration(0);
 	dlg->setLabelText("Parsing XML");
 	dlg->show();
 	if (theDownloader)
-		theDownloader->setAnimator(dlg,false);
+		theDownloader->setAnimator(dlg,Bar,false);
 /*	QFile debug("c:\\temp\\debug.osm");
 	debug.open(QIODevice::Truncate|QIODevice::WriteOnly);
 	File.reset();

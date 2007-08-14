@@ -10,6 +10,7 @@ v0.07
 	* ADD : file->new menu option to start a new map
 	* FIX : change current directory when opening a file
 	* FIX : surpress drawing artefact when creating a new segment
+	* FIX : avoid Qt to have to process download notifications recursively
 
 v0.06 5 dec 2006 
 	* FIX : also recognize true/false for oneway tag
