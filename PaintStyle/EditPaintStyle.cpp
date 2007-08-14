@@ -5,8 +5,8 @@
 #include "Map/Road.h"
 #include "Map/Way.h"
 
-#include <QtGui/QPainter.h>
-#include <QtGui/QPainterPath.h>
+#include <QtGui/QPainter>
+#include <QtGui/QPainterPath>
 
 /* FEATUREPAINTSELECTOR */
 
