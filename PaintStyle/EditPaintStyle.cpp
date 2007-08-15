@@ -25,9 +25,9 @@ FeaturePaintSelector& FeaturePaintSelector::limitToZoom(FeaturePaintSelector::Zo
 	ZoomLimit = true;
 	switch (aType)
 	{
-		case GlobalZoom : PixelPerMZoomLimit = 0.02; break;
-		case RegionalZoom : PixelPerMZoomLimit = 0.10; break;
-		case LocalZoom : PixelPerMZoomLimit = 0.5; break;
+		case GlobalZoom : PixelPerMZoomLimit = 0.01; break;
+		case RegionalZoom : PixelPerMZoomLimit = 0.05; break;
+		case LocalZoom : PixelPerMZoomLimit = 0.25; break;
 		case NoZoomLimit : ZoomLimit = false; break;
 	}
 	return *this;
