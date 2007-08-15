@@ -215,7 +215,6 @@ bool Downloader::request(const QString& Method, const QString& URL, const QStrin
 	QBuffer Buf(&ba);
 
 	QHttpRequestHeader Header(Method,URL);
-	Header.setValue("Accept-Encoding", "gzip,deflate");
 	if (Port == 80)
 		Header.setValue("Host",Web);
 	else
