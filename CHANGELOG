@@ -15,6 +15,7 @@ v0.07
 	* ADD : create way from selected segments tool
 	* FIX : don't systematically add width tags to segments
 	* FIX : streamline changing the width of a segment
+	* FIX : bring back drawing of traffic direction indicators
 
 v0.06 5 dec 2006 
 	* FIX : also recognize true/false for oneway tag

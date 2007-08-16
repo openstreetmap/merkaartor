@@ -32,7 +32,7 @@ static void buildCubicPath(QPainterPath& Path, const QPointF& P1, const QPointF&
 }
 
 /// draws way with oneway markers
-void draw(QPainter& thePainter, QPen& thePen, MapFeature::TrafficDirectionType TT, const QPointF& FromF, const QPointF& ToF, double theWidth, const Projection& theProjection)
+void draw(QPainter& thePainter, QPen& thePen, MapFeature::TrafficDirectionType TT, const QPointF& FromF, const QPointF& ToF, double theWidth, const Projection&)
 {
 	QPainterPath Path;
 	Path.moveTo(FromF);

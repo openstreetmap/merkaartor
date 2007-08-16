@@ -1,23 +1,33 @@
 #include "PaintStyle/EditPaintStyle.h"
 #include "Map/Projection.h"
 #include "Map/TrackPoint.h"
-
 #include "Map/Road.h"
 #include "Map/Way.h"
+#include "Utils/LineF.h"
 
 #include <QtGui/QPainter>
 #include <QtGui/QPainterPath>
 
+#include <math.h>
+#include <utility>
+
 /* FEATUREPAINTSELECTOR */
 
 FeaturePaintSelector::FeaturePaintSelector()
-: DrawBackground(false), DrawForeground(false), DrawTouchup(false), ZoomLimit(false), ForegroundFill(false)
+: DrawBackground(false), DrawForeground(false), DrawTouchup(false), ZoomLimit(false), 
+  ForegroundFill(false), DrawTrafficDirectionMarks(true)
 {
 }
 
 static bool localZoom(const Projection& theProjection)
 {
 	return theProjection.pixelPerM() < 0.5;
+}
+
+FeaturePaintSelector& FeaturePaintSelector::drawTrafficDirectionMarks()
+{
+	DrawTrafficDirectionMarks = true;
+	return *this;
 }
 
 FeaturePaintSelector& FeaturePaintSelector::limitToZoom(FeaturePaintSelector::ZoomType aType)
@@ -161,24 +171,62 @@ void FeaturePaintSelector::drawForeground(Way* W, QPainter& thePainter, const Pr
 
 void FeaturePaintSelector::drawTouchup(Way* W, QPainter& thePainter, const Projection& theProjection) const
 {
-	if (!DrawTouchup) return;
-	double PixelPerM = theProjection.pixelPerM();
-	double WW = PixelPerM*widthOf(W)*TouchupScale+TouchupOffset;
-	if (WW < 0) return;
-	QPen thePen(TouchupColor,WW);
-	thePen.setCapStyle(Qt::FlatCap);
-	if (TouchupDashSet)
+	if (DrawTouchup)
 	{
-		QVector<qreal> Pattern;
-		Pattern << TouchupDash << TouchupWhite;
-		thePen.setDashPattern(Pattern);
+		double PixelPerM = theProjection.pixelPerM();
+		double WW = PixelPerM*widthOf(W)*TouchupScale+TouchupOffset;
+		if (WW > 0)
+		{
+			QPen thePen(TouchupColor,WW);
+			thePen.setCapStyle(Qt::FlatCap);
+			if (TouchupDashSet)
+			{
+				QVector<qreal> Pattern;
+				Pattern << TouchupDash << TouchupWhite;
+				thePen.setDashPattern(Pattern);
+			}
+			QPainterPath Path;
+			QPointF FromF(theProjection.project(W->from()->position()));
+			QPointF ToF(theProjection.project(W->to()->position()));
+			Path.moveTo(FromF);
+			Path.lineTo(ToF);
+			thePainter.strokePath(Path,thePen);
+		}
 	}
-	QPainterPath Path;
-	QPointF FromF(theProjection.project(W->from()->position()));
-	QPointF ToF(theProjection.project(W->to()->position()));
-	Path.moveTo(FromF);
-	Path.lineTo(ToF);
-	thePainter.strokePath(Path,thePen);
+	if (DrawTrafficDirectionMarks)
+	{
+		double theWidth = theProjection.pixelPerM()*widthOf(W)-4;
+		if (theWidth > 8)
+			theWidth = 8;
+		double DistFromCenter = 2*(theWidth+4);
+		if (theWidth > 0)
+		{
+			QPointF FromF(theProjection.project(W->from()->position()));
+			QPointF ToF(theProjection.project(W->to()->position()));
+			if (distance(FromF,ToF) > (DistFromCenter*2+4))
+			{
+				QPointF H(FromF+ToF);
+				H *= 0.5;
+				double A = angle(FromF-ToF);
+				QPointF T(DistFromCenter*cos(A),DistFromCenter*sin(A));
+				QPointF V1(theWidth*cos(A+3.141592/6),theWidth*sin(A+3.141592/6));
+				QPointF V2(theWidth*cos(A-3.141592/6),theWidth*sin(A-3.141592/6));
+				MapFeature::TrafficDirectionType TT = W->trafficDirection();
+				if ( (TT == MapFeature::OtherWay) || (TT == MapFeature::BothWays) )
+				{
+					thePainter.setPen(QColor(0,0,0));
+					thePainter.drawLine(H+T,H+T-V1);
+					thePainter.drawLine(H+T,H+T-V2);
+				}
+				if ( (TT == MapFeature::OneWay) || (TT == MapFeature::BothWays) )
+				{
+					thePainter.setPen(QColor(0,0,0));
+					thePainter.drawLine(H-T,H-T+V1);
+					thePainter.drawLine(H-T,H-T+V2);
+				}
+			}
+		}
+	}
 }
 
 void FeaturePaintSelector::drawForeground(Road* R, QPainter& thePainter, const Projection& theProjection) const
@@ -256,37 +304,42 @@ void EditPaintStylePrivate::initPainters()
 	FeaturePaintSelector MotorWay;
 	MotorWay.background(QColor(0xff,0,0),1,0).foreground(QColor(0xff,0xff,0),0.5,0);
 	MotorWay.selectOnTag("highway","motorway","motorway_link");
+	MotorWay.drawTrafficDirectionMarks();
 	Painters.push_back(MotorWay);
 
 	FeaturePaintSelector Trunk;
 	Trunk.foreground(QColor(0xff,0,0),1,0);
 	Trunk.selectOnTag("highway","trunk","trunk_link");
+	Trunk.drawTrafficDirectionMarks();
 	Painters.push_back(Trunk);
 
 	FeaturePaintSelector Primary;
 	Primary.foreground(QColor(0,0xff,0),1,0);
 	Primary.selectOnTag("highway","primary","primary_link").limitToZoom(FeaturePaintSelector::GlobalZoom);
+	Primary.drawTrafficDirectionMarks();
 	Painters.push_back(Primary);
 
 	FeaturePaintSelector Secondary;
 	Secondary.foreground(QColor(0xff,0xff,0),1,0);
 	Secondary.selectOnTag("highway","secondary","secondary_link").limitToZoom(FeaturePaintSelector::RegionalZoom);
+	Secondary.drawTrafficDirectionMarks();
 	Painters.push_back(Secondary);
 
 	FeaturePaintSelector Tertiary;
 	Tertiary.foreground(QColor(0xff,0xff,0x77),1,0);
 	Tertiary.selectOnTag("highway","tertiary","tertiary_link").limitToZoom(FeaturePaintSelector::RegionalZoom);
+	Tertiary.drawTrafficDirectionMarks();
 	Painters.push_back(Tertiary);
 
 	FeaturePaintSelector Cycleway;
-	Tertiary.foreground(QColor(0,0,0xff),1,0).foregroundDash(2,2);
-	Tertiary.selectOnTag("highway","cycleway").limitToZoom(FeaturePaintSelector::LocalZoom);
-	Painters.push_back(Tertiary);
+	Cycleway.foreground(QColor(0,0,0xff),1,0).foregroundDash(2,2);
+	Cycleway.selectOnTag("highway","cycleway").limitToZoom(FeaturePaintSelector::LocalZoom);
+	Painters.push_back(Cycleway);
 
 	FeaturePaintSelector Footway;
-	Tertiary.foreground(QColor(0,0,0),1,0).foregroundDash(2,2);
-	Tertiary.selectOnTag("highway","footway","track").limitToZoom(FeaturePaintSelector::LocalZoom);
-	Painters.push_back(Tertiary);
+	Footway.foreground(QColor(0,0,0),1,0).foregroundDash(2,2);
+	Footway.selectOnTag("highway","footway","track").limitToZoom(FeaturePaintSelector::LocalZoom);
+	Painters.push_back(Footway);
 
 	FeaturePaintSelector Pedestrian;
 	Pedestrian.foreground(QColor(0xaa,0xaa,0xaa),1,0);
@@ -296,6 +349,7 @@ void EditPaintStylePrivate::initPainters()
 	FeaturePaintSelector Residential;
 	Residential.background(QColor(0,0,0),1,0).foreground(QColor(0xff,0xff,0xff),1,-2);
 	Residential.selectOnTag("highway","residential","unclassified").limitToZoom(FeaturePaintSelector::LocalZoom);
+	Residential.drawTrafficDirectionMarks();
 	Painters.push_back(Residential);
 
 	FeaturePaintSelector Railway;

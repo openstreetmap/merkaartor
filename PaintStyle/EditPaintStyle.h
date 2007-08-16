@@ -34,6 +34,7 @@ class FeaturePaintSelector
 		FeaturePaintSelector& touchupDash(double Dash, double White);
 		FeaturePaintSelector& foregroundFill(const QColor& StrokeColor, const QColor& FillColor, double StrokeWidth);
 		FeaturePaintSelector& limitToZoom(ZoomType aType);
+		FeaturePaintSelector& drawTrafficDirectionMarks();
 
 		void drawBackground(Way* W, QPainter& thePainter, const Projection& theProjection) const;
 		void drawForeground(Way* W, QPainter& thePainter, const Projection& theProjection) const;
@@ -64,6 +65,7 @@ class FeaturePaintSelector
 		QColor ForegroundFillStrokeColor;
 		QColor ForegroundFillFillColor;
 		double ForegroundFillStrokeWidth;
+		bool DrawTrafficDirectionMarks;
 };
 
 class EditPaintStyle : public EmptyPaintStyle
