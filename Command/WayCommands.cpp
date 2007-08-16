@@ -1,26 +1,38 @@
 #include "Command/WayCommands.h"
+#include "Command/FeatureCommands.h"
 #include "Map/Way.h"
 #include "Sync/DirtyList.h"
 
-WaySetWidthCommand::WaySetWidthCommand(Way* W, double w)
-: theWay(W), OldWidth(widthOf(W)), NewWidth(w)
+#include <math.h>
+
+WaySetWidthCommand::WaySetWidthCommand(Way* W, double NewWidth)
+: Sub(0)
 {
-	redo();
+	double Default = widthOf(W);
+	if (fabs(NewWidth-Default) > 0.01)
+		Sub = new SetTagCommand(W,"width", QString::number(NewWidth));
+	else
+		Sub = new ClearTagCommand(W,"width");
+}
+
+WaySetWidthCommand::~WaySetWidthCommand()
+{
+	delete Sub;
 }
 
 void WaySetWidthCommand::redo()
 {
-	setWidthOf(theWay,NewWidth);
+	Sub->redo();
 }
 
 void WaySetWidthCommand::undo()
 {
-	setWidthOf(theWay,OldWidth);
+	Sub->undo();
 }
 
 bool WaySetWidthCommand::buildDirtyList(DirtyList &theList)
 {
-	return theList.update(theWay);
+	return Sub->buildDirtyList(theList);
 }
 
 /* WAYSETFROMTOCOMMAND */

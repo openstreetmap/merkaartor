@@ -47,7 +47,6 @@ class Way : public MapFeature
 QString cascadedTagValue(const Way* W, const QString& Tag, const QString& Default);
 QString highwayTypeOf(const Way* W);
 double widthOf(const Way* W);
-void setWidthOf(Way* W, double NewWidth);
 
 #endif
 

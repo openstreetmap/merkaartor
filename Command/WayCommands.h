@@ -10,14 +10,14 @@ class WaySetWidthCommand :	public Command
 {
 	public:
 		WaySetWidthCommand(Way* W, double w);
+		virtual ~WaySetWidthCommand();
 
 		virtual void redo();
 		virtual void undo();
 		bool buildDirtyList(DirtyList& theList);
 
 	private:
-		Way* theWay;
-		double OldWidth, NewWidth;
+		Command* Sub;
 };
 
 class WaySetFromToCommand : public Command

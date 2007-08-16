@@ -14,6 +14,7 @@ v0.07
 	* ADD : scripts to create the windows installation package
 	* ADD : create way from selected segments tool
 	* FIX : don't systematically add width tags to segments
+	* FIX : streamline changing the width of a segment
 
 v0.06 5 dec 2006 
 	* FIX : also recognize true/false for oneway tag

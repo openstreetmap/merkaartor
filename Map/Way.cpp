@@ -254,14 +254,6 @@ double widthOf(const Way* W)
 	return DEFAULTWIDTH;
 }
 
-void setWidthOf(Way* W, double NewWidth)
-{
-	W->clearTag("width");
-	double Default = widthOf(W);
-	if (fabs(NewWidth-Default) > 0.01)
-		W->setTag("width",QString::number(NewWidth));
-}
-
 QString cascadedTagValue(const Way* W, const QString& Tag, const QString& Default)
 {
 	QString s(W->tagValue(Tag,Default));

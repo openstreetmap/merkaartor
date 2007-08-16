@@ -96,6 +96,8 @@ void ClearTagCommand::redo()
 
 bool ClearTagCommand::buildDirtyList(DirtyList& theList)
 {
+	if (!Existed)
+		return true;
 	return theList.update(theFeature);
 }
 
