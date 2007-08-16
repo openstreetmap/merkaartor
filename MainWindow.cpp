@@ -4,6 +4,7 @@
 #include "MapView.h"
 #include "PropertiesDock.h"
 #include "Command/Command.h"
+#include "Command/DocumentCommands.h"
 #include "Interaction/CreateDoubleWayInteraction.h"
 #include "Interaction/CreateNodeInteraction.h"
 #include "Interaction/CreateRoundaboutInteraction.h"
@@ -18,6 +19,8 @@
 #include "Map/ImportOSM.h"
 #include "Map/MapDocument.h"
 #include "Map/MapFeature.h"
+#include "Map/Road.h"
+#include "Map/Way.h"
 #include "Sync/SyncOSM.h"
 #include "GeneratedFiles/ui_AboutDialog.h"
 #include "GeneratedFiles/ui_UploadMapDialog.h"
@@ -359,4 +362,18 @@ MapLayer* MainWindow::activeLayer()
 MapView* MainWindow::view()
 {
 	return theView;
+}
+
+void MainWindow::on_createRoadFromSelectedSegmentsAction_triggered()
+{
+	Road* R = new Road;
+	for (unsigned int i=0; i<theProperties->size(); ++i)
+	{
+		Way* W = dynamic_cast<Way*>(theProperties->selection(i));
+		if (W)
+			R->add(W);
+	}
+	theDocument->history().add(new AddFeatureCommand(theLayers->activeLayer(), R, true));
+	theProperties->setSelection(R);
+
 }

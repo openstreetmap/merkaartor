@@ -24,6 +24,7 @@ EditInteraction::EditInteraction(MapView* theView)
 	connect(main(),SIGNAL(move_triggered()),this,SLOT(on_move_triggered()));
 	connect(main(),SIGNAL(add_triggered()),this,SLOT(on_add_triggered()));
 	connect(main(),SIGNAL(reverse_triggered()), this,SLOT(on_reverse_triggered()));
+	view()->properties()->checkMenuStatus();
 }
 
 EditInteraction::~EditInteraction(void)
@@ -52,26 +53,7 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * event, MapFeature* aLast
 		}
 		else
 			view()->properties()->setSelection(aLast);
-		bool IsPoint = false;
-		bool IsRoad = false;
-		bool IsWay = false;
-		bool IsRoads = view()->properties()->size() > 0;
-		if (view()->properties()->size() == 1)
-		{
-			IsPoint = dynamic_cast<TrackPoint*>(aLast) != 0;
-			IsRoad = dynamic_cast<Road*>(aLast) != 0;
-			IsWay = dynamic_cast<Way*>(aLast) != 0;
-		}
-		for (unsigned int i=0; i<view()->properties()->size(); ++i)
-		{
-			if (!dynamic_cast<Road*>(aLast))
-				IsRoads = false;
-		}
-		main()->editRemoveAction->setEnabled(view()->properties()->size() == 1);
-		main()->editMoveAction->setEnabled(IsPoint);
-		main()->editAddAction->setEnabled(IsRoad);
-		main()->editReverseAction->setEnabled(IsRoad || IsWay);
-		
+		view()->properties()->checkMenuStatus();
 		view()->update();
 	}
 }
@@ -90,7 +72,7 @@ void EditInteraction::on_remove_triggered()
 	if (Selection)
 	{
 		view()->properties()->setSelection(0);
-		main()->editRemoveAction->setEnabled(false);
+		view()->properties()->checkMenuStatus();
 		std::vector<MapFeature*> Alternatives;
 		CommandList* theList = new CommandList;
 		for (FeatureIterator it(document()); !it.isEnd(); ++it)

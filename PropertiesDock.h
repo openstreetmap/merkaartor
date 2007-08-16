@@ -28,6 +28,7 @@ class PropertiesDock : public QDockWidget
 		MapFeature* selection(unsigned int idx);
 		unsigned int size() const;
 		void resetValues();
+		void checkMenuStatus();
 
 	public slots:
 		void on_WayWidth_textChanged(const QString& s);

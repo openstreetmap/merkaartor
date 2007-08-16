@@ -63,6 +63,7 @@
     <addaction name="createNodeAction" />
     <addaction name="createLinearWayAction" />
     <addaction name="createRoadAction" />
+    <addaction name="createRoadFromSelectedSegmentsAction" />
     <addaction name="createDoubleWayAction" />
     <addaction name="createRoundaboutAction" />
    </widget>
@@ -317,6 +318,11 @@
   <action name="fileNewAction" >
    <property name="text" >
     <string>New</string>
+   </property>
+  </action>
+  <action name="createRoadFromSelectedSegmentsAction" >
+   <property name="text" >
+    <string>Road from selected segments</string>
    </property>
   </action>
  </widget>

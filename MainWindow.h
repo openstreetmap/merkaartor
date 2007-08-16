@@ -27,6 +27,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_createWayAction_triggered();
 		virtual void on_createLinearWayAction_triggered();
 		virtual void on_createRoadAction_triggered();
+		virtual void on_createRoadFromSelectedSegmentsAction_triggered();
 		virtual void on_editPropertiesAction_triggered();
 		virtual void on_editUndoAction_triggered();
 		virtual void on_editRedoAction_triggered();

@@ -31,6 +31,30 @@ PropertiesDock::~PropertiesDock(void)
 	delete theModel;
 }
 
+void PropertiesDock::checkMenuStatus()
+{
+	bool IsPoint = false;
+	bool IsRoad = false;
+	bool IsWay = false;
+	bool OnlySegments = Selection.size() > 0;
+	if (Selection.size() == 1)
+	{
+		IsPoint = dynamic_cast<TrackPoint*>(Selection[0]) != 0;
+		IsRoad = dynamic_cast<Road*>(Selection[0]) != 0;
+		IsWay = dynamic_cast<Way*>(Selection[0]) != 0;
+	}
+	for (unsigned int i=0; i<Selection.size(); ++i)
+	{
+		if (!dynamic_cast<Way*>(Selection[i]))
+			OnlySegments = false;
+	}
+	Main->editRemoveAction->setEnabled(Selection.size() == 1);
+	Main->editMoveAction->setEnabled(IsPoint);
+	Main->editAddAction->setEnabled(IsRoad);
+	Main->editReverseAction->setEnabled(IsRoad || IsWay);
+	Main->createRoadFromSelectedSegmentsAction->setEnabled(OnlySegments);
+}
+
 unsigned int PropertiesDock::size() const
 {
 	return Selection.size();
