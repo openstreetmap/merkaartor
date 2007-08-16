@@ -13,6 +13,7 @@ v0.07
 	* FIX : avoid Qt to have to process download notifications recursively
 	* ADD : scripts to create the windows installation package
 	* ADD : create way from selected segments tool
+	* FIX : don't systematically add width tags to segments
 
 v0.06 5 dec 2006 
 	* FIX : also recognize true/false for oneway tag

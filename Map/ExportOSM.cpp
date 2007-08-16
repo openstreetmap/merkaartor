@@ -35,7 +35,6 @@ QString exportOSM(const Way& W)
 {
 	QString S;
 	S += QString("<segment id=\"%1\" from=\"%2\" to=\"%3\">").arg(stripToOSMId(W.id())).arg(stripToOSMId(W.from()->id())).arg(stripToOSMId(W.to()->id()));
-	S += QString("<tag k=\"width\" v=\"%1\"/>").arg(widthOf(&W));
 	S += tagOSM(W);
 	S += "</segment>";
 	return S;
