@@ -21,7 +21,17 @@ FeaturePaintSelector::FeaturePaintSelector()
 
 static bool localZoom(const Projection& theProjection)
 {
-	return theProjection.pixelPerM() < 0.5;
+	return theProjection.pixelPerM() < 0.25;
+}
+
+static bool regionalZoom(const Projection& theProjection)
+{
+	return theProjection.pixelPerM() < 0.05;
+}
+
+static bool globalZoom(const Projection& theProjection)
+{
+	return theProjection.pixelPerM() < 0.01;
 }
 
 FeaturePaintSelector& FeaturePaintSelector::drawTrafficDirectionMarks()
@@ -358,18 +368,18 @@ void EditPaintStylePrivate::initPainters()
 	Painters.push_back(Railway);
 
 	FeaturePaintSelector Park;
-	Park.foregroundFill(QColor(0,0x77,0),QColor(0x77,0xff,0x77,0x77),2);
-	Park.selectOnTag("leisure","park").limitToZoom(FeaturePaintSelector::RegionalZoom);
+	Park.foregroundFill(QColor(0,0x77,0),QColor(0x77,0xff,0x77,0x77),1);
+	Park.selectOnTag("leisure","park").limitToZoom(FeaturePaintSelector::GlobalZoom);
 	Painters.push_back(Park);
 
 	FeaturePaintSelector Pitch;
-	Pitch.foregroundFill(QColor(0x77,0,0),QColor(0xff,0x77,0x77,0x77),2);
-	Pitch.selectOnTag("leisure","pitch").limitToZoom(FeaturePaintSelector::RegionalZoom);
+	Pitch.foregroundFill(QColor(0x77,0,0),QColor(0xff,0x77,0x77,0x77),1);
+	Pitch.selectOnTag("leisure","pitch").limitToZoom(FeaturePaintSelector::GlobalZoom);
 	Painters.push_back(Pitch);
 
 	FeaturePaintSelector Water;
-	Water.foregroundFill(QColor(0,0,0x77),QColor(0x77,0x77,0xff,0x77),2);
-	Water.selectOnTag("natural","water").limitToZoom(FeaturePaintSelector::RegionalZoom);
+	Water.foregroundFill(QColor(0,0,0x77),QColor(0x77,0x77,0xff,0x77),1);
+	Water.selectOnTag("natural","water").limitToZoom(FeaturePaintSelector::GlobalZoom);
 	Painters.push_back(Water);
 }
 
@@ -389,9 +399,11 @@ void EPBackgroundLayer::draw(Way* W)
 			p->Painters[i].drawBackground(W,p->thePainter,p->theProjection);
 			return;
 		}
-	if (localZoom(p->theProjection))
+	if (globalZoom(p->theProjection))
 		return;
 	QPen thePen(QColor(0,0,0),1);
+	if (regionalZoom(p->theProjection))
+		thePen = QPen(QColor(0x77,0x77,0x77),1);
 	QPainterPath Path;
 	QPointF FromF(p->theProjection.project(W->from()->position()));
 	QPointF ToF(p->theProjection.project(W->to()->position()));
