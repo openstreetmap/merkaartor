@@ -1,4 +1,4 @@
-v0.07
+v0.07 18 aug 2007
 	* ADD : nice mappaint mechanism
 	* FIX : downloading same area twice doesn't create upload conflicts
 	anymore
