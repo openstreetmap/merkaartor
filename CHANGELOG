@@ -17,6 +17,7 @@ v0.07
 	* FIX : streamline changing the width of a segment
 	* FIX : bring back drawing of traffic direction indicators
 	* FIX : show more segments on greater zoom levels
+	* FIX : make user interface work with Qt 4.2 again
 
 v0.06 5 dec 2006 
 	* FIX : also recognize true/false for oneway tag
