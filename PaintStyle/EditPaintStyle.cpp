@@ -2,7 +2,6 @@
 #include "Map/Projection.h"
 #include "Map/TrackPoint.h"
 #include "Map/Road.h"
-#include "Map/Way.h"
 #include "Utils/LineF.h"
 
 #include <QtGui/QPainter>
@@ -53,12 +52,10 @@ FeaturePaintSelector& FeaturePaintSelector::limitToZoom(FeaturePaintSelector::Zo
 	return *this;
 }
 
-FeaturePaintSelector& FeaturePaintSelector::foregroundFill(const QColor& StrokeColor, const QColor& FillColor, double StrokeWidth)
+FeaturePaintSelector& FeaturePaintSelector::foregroundFill(const QColor& FillColor)
 {
 	ForegroundFill = true;
-	ForegroundFillStrokeColor = StrokeColor;
 	ForegroundFillFillColor = FillColor;
-	ForegroundFillStrokeWidth = StrokeWidth;
 	return *this;
 }
 
@@ -121,18 +118,10 @@ FeaturePaintSelector& FeaturePaintSelector::selectOnTag(const QString& Tag, cons
 	return *this;
 }
 
-bool FeaturePaintSelector::isHit(const Way* W, double PixelPerM) const
-{
-	if (ZoomLimit && (PixelPerM < PixelPerMZoomLimit))
-		return false;
-	for (unsigned int i=0; i<OneOfTheseTags.size(); ++i)
-		if (cascadedTagValue(W,OneOfTheseTags[i].first,QString()) == OneOfTheseTags[i].second)
-			return true;
-	return false;
-}
-
 bool FeaturePaintSelector::isHit(const Road* R, double PixelPerM) const
 {
+	if (R->size() < 2)
+		return false;
 	if (ZoomLimit && (PixelPerM < PixelPerMZoomLimit))
 		return false;
 	for (unsigned int i=0; i<OneOfTheseTags.size(); ++i)
@@ -141,50 +130,64 @@ bool FeaturePaintSelector::isHit(const Road* R, double PixelPerM) const
 	return false;
 }
 
-void FeaturePaintSelector::drawBackground(Way* W, QPainter& thePainter, const Projection& theProjection) const
+void buildPathFromRoad(Road *R, Projection const &theProjection, QPainterPath &Path)
+{
+	Path.moveTo(theProjection.project(R->get(0)->position()));
+	for (unsigned int i=1; i<R->size(); ++i)
+		Path.lineTo(theProjection.project(R->get(i)->position()));
+}
+
+void FeaturePaintSelector::drawBackground(Road* R, QPainter& thePainter, const Projection& theProjection) const
 {
 	if (!DrawBackground) return;
 	double PixelPerM = theProjection.pixelPerM();
-	double WW = PixelPerM*widthOf(W)*BackgroundScale+BackgroundOffset;
+	double WW = PixelPerM*widthOf(R)*BackgroundScale+BackgroundOffset;
 	if (WW < 0) return;
 	QPen thePen(BackgroundColor,WW);
 	thePen.setCapStyle(Qt::RoundCap);
 	QPainterPath Path;
-	QPointF FromF(theProjection.project(W->from()->position()));
-	QPointF ToF(theProjection.project(W->to()->position()));
-	Path.moveTo(FromF);
-	Path.lineTo(ToF);
+	buildPathFromRoad(R, theProjection, Path);
 	thePainter.strokePath(Path,thePen);
 }
 
-void FeaturePaintSelector::drawForeground(Way* W, QPainter& thePainter, const Projection& theProjection) const
+void FeaturePaintSelector::drawForeground(Road* R, QPainter& thePainter, const Projection& theProjection) const
 {
-	if (!DrawForeground) return;
-	double PixelPerM = theProjection.pixelPerM();
-	double WW = PixelPerM*widthOf(W)*ForegroundScale+ForegroundOffset;
-	if (WW < 0) return;
-	QPen thePen(ForegroundColor,WW);
-	thePen.setCapStyle(Qt::RoundCap);
-	if (ForegroundDashSet)
+	if (!DrawForeground && !ForegroundFill) return;
+	if (DrawForeground)
 	{
-		QVector<qreal> Pattern;
-		Pattern << ForegroundDash << ForegroundWhite;
-		thePen.setDashPattern(Pattern);
+		double PixelPerM = theProjection.pixelPerM();
+		double WW = PixelPerM*widthOf(R)*ForegroundScale+ForegroundOffset;
+		if (WW < 0) return;
+		QPen thePen(ForegroundColor,WW);
+		thePen.setCapStyle(Qt::RoundCap);
+		if (ForegroundDashSet)
+		{
+			QVector<qreal> Pattern;
+			Pattern << ForegroundDash << ForegroundWhite;
+			thePen.setDashPattern(Pattern);
+		}
+		thePainter.setPen(thePen);
 	}
+	else
+		thePainter.setPen(QPen(Qt::NoPen));
+	if (ForegroundFill && (R->size() > 2))
+	{
+		QBrush theBrush(ForegroundFillFillColor);
+		thePainter.setBrush(theBrush);
+	}
+	else
+		thePainter.setBrush(QBrush(Qt::NoBrush));
 	QPainterPath Path;
-	QPointF FromF(theProjection.project(W->from()->position()));
-	QPointF ToF(theProjection.project(W->to()->position()));
-	Path.moveTo(FromF);
-	Path.lineTo(ToF);
-	thePainter.strokePath(Path,thePen);
+	buildPathFromRoad(R, theProjection, Path);
+	thePainter.drawPath(Path);
 }
 
-void FeaturePaintSelector::drawTouchup(Way* W, QPainter& thePainter, const Projection& theProjection) const
+void FeaturePaintSelector::drawTouchup(Road* R, QPainter& thePainter, const Projection& theProjection) const
 {
 	if (DrawTouchup)
 	{
 		double PixelPerM = theProjection.pixelPerM();
-		double WW = PixelPerM*widthOf(W)*TouchupScale+TouchupOffset;
+		double WW = PixelPerM*widthOf(R)*TouchupScale+TouchupOffset;
 		if (WW > 0)
 		{
 			QPen thePen(TouchupColor,WW);
@@ -196,14 +199,12 @@ void FeaturePaintSelector::drawTouchup(Way* W, QPainter& thePainter, const Proje
 				thePen.setDashPattern(Pattern);
 			}
 			QPainterPath Path;
-			QPointF FromF(theProjection.project(W->from()->position()));
-			QPointF ToF(theProjection.project(W->to()->position()));
-			Path.moveTo(FromF);
-			Path.lineTo(ToF);
+			buildPathFromRoad(R, theProjection, Path);
 			thePainter.strokePath(Path,thePen);
 		}
 	}
-	if (DrawTrafficDirectionMarks)
+	// FIXME
+/*	if (DrawTrafficDirectionMarks)
 	{
 		double theWidth = theProjection.pixelPerM()*widthOf(W)-4;
 		if (theWidth > 8)
@@ -236,30 +237,18 @@ void FeaturePaintSelector::drawTouchup(Way* W, QPainter& thePainter, const Proje
 				}
 			}
 		}
-	}
+	} */
 }
 
+/* FIXME
 void FeaturePaintSelector::drawForeground(Road* R, QPainter& thePainter, const Projection& theProjection) const
 {
-	if (R->size() < 3) return;
-	if (!ForegroundFill) return;
-	QPen thePen(ForegroundFillStrokeColor,ForegroundFillStrokeWidth);
-	thePen.setCapStyle(Qt::RoundCap);
-	QBrush theBrush(ForegroundFillFillColor);
-	QPainterPath Path;
-	Path.moveTo(theProjection.project(R->get(0)->from()->position()));
-	for (unsigned int i=0; i<R->size(); ++i)
-		Path.lineTo(theProjection.project(R->get(i)->to()->position()));
-	thePainter.setPen(thePen);
-	thePainter.setBrush(theBrush);
-	thePainter.drawPath(Path);
 }
-
+*/
 class EPBackgroundLayer : public CascadingPaintStyleLayer
 {
 	public:
 		void setP(EditPaintStylePrivate* p);
-		virtual void draw(Way* W);
 		virtual void draw(Road* R);
 	private:
 		EditPaintStylePrivate* p;
@@ -269,7 +258,6 @@ class EPForegroundLayer : public CascadingPaintStyleLayer
 {
 	public:
 		void setP(EditPaintStylePrivate* p);
-		virtual void draw(Way* W);
 		virtual void draw(Road* R);
 	private:
 		EditPaintStylePrivate* p;
@@ -279,7 +267,6 @@ class EPTouchupLayer : public CascadingPaintStyleLayer
 {
 	public:
 		void setP(EditPaintStylePrivate* p);
-		virtual void draw(Way* W);
 		virtual void draw(Road* R);
 	private:
 		EditPaintStylePrivate* p;
@@ -368,17 +355,17 @@ void EditPaintStylePrivate::initPainters()
 	Painters.push_back(Railway);
 
 	FeaturePaintSelector Park;
-	Park.foregroundFill(QColor(0,0x77,0),QColor(0x77,0xff,0x77,0x77),1);
+	Park.foregroundFill(QColor(0x77,0xff,0x77,0x77)).foreground(QColor(0,0x77,0),0,1);
 	Park.selectOnTag("leisure","park").limitToZoom(FeaturePaintSelector::GlobalZoom);
 	Painters.push_back(Park);
 
 	FeaturePaintSelector Pitch;
-	Pitch.foregroundFill(QColor(0x77,0,0),QColor(0xff,0x77,0x77,0x77),1);
+	Pitch.foregroundFill(QColor(0xff,0x77,0x77,0x77)).foreground(QColor(0x77,0,0),0,1);
 	Pitch.selectOnTag("leisure","pitch").limitToZoom(FeaturePaintSelector::GlobalZoom);
 	Painters.push_back(Pitch);
 
 	FeaturePaintSelector Water;
-	Water.foregroundFill(QColor(0,0,0x77),QColor(0x77,0x77,0xff,0x77),1);
+	Water.foregroundFill(QColor(0x77,0x77,0xff,0x77)).foreground(QColor(0,0,0x77),0,1);
 	Water.selectOnTag("natural","water").limitToZoom(FeaturePaintSelector::GlobalZoom);
 	Painters.push_back(Water);
 }
@@ -389,14 +376,14 @@ void EPBackgroundLayer::setP(EditPaintStylePrivate* ap)
 }
 
 
-void EPBackgroundLayer::draw(Way* W)
+void EPBackgroundLayer::draw(Road* R)
 {
-	if (p->theProjection.viewport().disjunctFrom(W->boundingBox())) return;
+	if (p->theProjection.viewport().disjunctFrom(R->boundingBox())) return;
 	double PixelPerM = p->theProjection.pixelPerM();
 	for (unsigned int i=0; i<p->Painters.size(); ++i)
-		if (p->Painters[i].isHit(W,PixelPerM))
+		if (p->Painters[i].isHit(R,PixelPerM))
 		{
-			p->Painters[i].drawBackground(W,p->thePainter,p->theProjection);
+			p->Painters[i].drawBackground(R,p->thePainter,p->theProjection);
 			return;
 		}
 	if (globalZoom(p->theProjection))
@@ -405,16 +392,8 @@ void EPBackgroundLayer::draw(Way* W)
 	if (regionalZoom(p->theProjection))
 		thePen = QPen(QColor(0x77,0x77,0x77),1);
 	QPainterPath Path;
-	QPointF FromF(p->theProjection.project(W->from()->position()));
-	QPointF ToF(p->theProjection.project(W->to()->position()));
-	Path.moveTo(FromF);
-	Path.lineTo(ToF);
+	buildPathFromRoad(R, p->theProjection, Path);
 	p->thePainter.strokePath(Path,thePen);
-}
-
-void EPBackgroundLayer::draw(Road*)
-{
-	// roads don't need background for now
 }
 
 void EPForegroundLayer::setP(EditPaintStylePrivate* ap)
@@ -434,38 +413,19 @@ void EPForegroundLayer::draw(Road* R)
 		}
 }
 
-void EPForegroundLayer::draw(Way* W)
-{
-	if (p->theProjection.viewport().disjunctFrom(W->boundingBox())) return;
-	double PixelPerM = p->theProjection.pixelPerM();
-	for (unsigned int i=0; i<p->Painters.size(); ++i)
-		if (p->Painters[i].isHit(W, PixelPerM))
-		{
-			p->Painters[i].drawForeground(W,p->thePainter,p->theProjection);
-			return;
-		}
-}
-
-
-
 void EPTouchupLayer::setP(EditPaintStylePrivate* ap)
 {
 	p = ap;
 }
 
-void EPTouchupLayer::draw(Road*)
+void EPTouchupLayer::draw(Road* R)
 {
-	// Roads don't need touchup for now
-}
-
-void EPTouchupLayer::draw(Way* W)
-{
-	if (p->theProjection.viewport().disjunctFrom(W->boundingBox())) return;
+	if (p->theProjection.viewport().disjunctFrom(R->boundingBox())) return;
 	double PixelPerM = p->theProjection.pixelPerM();
 	for (unsigned int i=0; i<p->Painters.size(); ++i)
-		if (p->Painters[i].isHit(W, PixelPerM))
+		if (p->Painters[i].isHit(R, PixelPerM))
 		{
-			p->Painters[i].drawTouchup(W,p->thePainter,p->theProjection);
+			p->Painters[i].drawTouchup(R,p->thePainter,p->theProjection);
 			return;
 		}
 }

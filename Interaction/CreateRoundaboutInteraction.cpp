@@ -5,7 +5,6 @@
 #include "Map/Painting.h"
 #include "Map/Road.h"
 #include "Map/TrackPoint.h"
-#include "Map/Way.h"
 #include "Utils/LineF.h"
 #include "PropertiesDock.h"
 
@@ -39,51 +38,25 @@ CreateRoundaboutInteraction::~CreateRoundaboutInteraction()
 	view()->update();
 }
 
-void CreateRoundaboutInteraction::testIntersections(CommandList* L, Road* R, unsigned int FromIdx, Way* W1, double Radius)
+void CreateRoundaboutInteraction::testIntersections(CommandList* L, Road* Left, unsigned int FromIdx, Road* Right, unsigned int RightIndex, double Radius)
 {
-	LineF L1(view()->projection().project(W1->from()->position()),
-		view()->projection().project(W1->to()->position()));
-	for (unsigned int i=FromIdx; i<R->size(); ++i)
+	LineF L1(view()->projection().project(Right->get(RightIndex-1)->position()),
+		view()->projection().project(Right->get(RightIndex)->position()));
+	for (unsigned int i=FromIdx; i<Left->size(); ++i)
 	{
-		Way* W2 = R->get(i);
-		LineF L2(view()->projection().project(W2->from()->position()),
-			view()->projection().project(W2->to()->position()));
+		LineF L2(view()->projection().project(Left->get(i-1)->position()),
+			view()->projection().project(Left->get(i)->position()));
 		QPointF Intersection(L1.intersectionWith(L2));
 		if (L1.segmentContains(Intersection) && L2.segmentContains(Intersection))
 		{
 			TrackPoint* Pt = new TrackPoint(view()->projection().inverse(Intersection));
-			Way* W1A = new Way(W1->from(),Pt);
-			Way* W1B = new Way(Pt,W1->to());
 			L->add(new AddFeatureCommand(Main->activeLayer(),Pt,true));
-			L->add(new AddFeatureCommand(Main->activeLayer(),W1A,true));
-			L->add(new AddFeatureCommand(Main->activeLayer(),W1B,true));
-			std::vector<MapFeature*> Alternatives;
-			Alternatives.push_back(W1A);
-			Alternatives.push_back(W1B);
-			L->add(new RemoveFeatureCommand(document(),W1,Alternatives));
-			Way* W2A = new Way(W2->from(),Pt);
-			Way* W2B = new Way(Pt,W2->to());
-			L->add(new AddFeatureCommand(Main->activeLayer(),W2A,true));
-			L->add(new AddFeatureCommand(Main->activeLayer(),W2B,true));
-			Alternatives.clear();
-			Alternatives.push_back(W2A);
-			Alternatives.push_back(W2B);
-			L->add(new RemoveFeatureCommand(document(),W2,Alternatives));
-			testIntersections(L,R,i+2,W1A,Radius);
-			testIntersections(L,R,i+2,W1B,Radius);
+			L->add(new RoadAddTrackPointCommand(Left,Pt,i));
+			L->add(new RoadAddTrackPointCommand(Right,Pt,RightIndex));
+			testIntersections(L,Left,i+2,Right,RightIndex,Radius);
+			testIntersections(L,Left,i+2,Right,RightIndex+1,Radius);
 			return;
 		}
-	}
-	if (FromIdx)
-	{
-		QPointF CenterF(view()->projection().project(Center));
-		QPointF FromF = view()->projection().project(W1->from()->position());
-		double Dist = distance(CenterF,FromF);
-		if (Dist > Radius) return;
-		QPointF ToF = view()->projection().project(W1->to()->position());
-		Dist = distance(CenterF,ToF);
-		if (Dist > Radius) return;
-		L->add(new RemoveFeatureCommand(document(),W1,std::vector<MapFeature*>()));
 	}
 }
 
@@ -113,7 +86,6 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
 			CommandList* L = new CommandList;
 			TrackPoint* First = new TrackPoint(view()->projection().inverse(Prev));
 			L->add(new AddFeatureCommand(Main->activeLayer(),First,true));
-			TrackPoint* Last = First;
 			Road* R = new Road;
 			R->setTag("oneway","yes");
 			for (double a = Angle*3/2; a<2*3.141592; a+=Angle)
@@ -121,26 +93,15 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
 				QPointF Next(CenterF.x()+cos(Modifier*a)*Radius,CenterF.y()+sin(Modifier*a)*Radius);
 				TrackPoint* New = new TrackPoint(view()->projection().inverse(Next));
 				L->add(new AddFeatureCommand(Main->activeLayer(),New,true));
-				Way* W = new Way(Last,New);
-				R->add(W);
-				L->add(new AddFeatureCommand(Main->activeLayer(),W,true));
-				Last = New;
+				L->add(new RoadAddTrackPointCommand(R,New));
 			}
-			Way* W = new Way(Last,First);
-			L->add(new AddFeatureCommand(Main->activeLayer(),W,true));
-			R->add(W);
 			L->add(new AddFeatureCommand(Main->activeLayer(),R,true));
-			std::vector<Way*> ToTest;
 			for (FeatureIterator it(document()); !it.isEnd(); ++it)
 			{
-				Way* W1 = dynamic_cast<Way*>(it.get());
-				if (W1 && !W1->isPartOf(R))
-					ToTest.push_back(W1);
-			}
-			for (unsigned int i=0; i<ToTest.size(); ++i)
-			{
-				Way* W1 = ToTest[i];
-				testIntersections(L,R,0,W1,Radius);
+				Road* W1 = dynamic_cast<Road*>(it.get());
+				if (W1 && (W1 != R))
+					for (unsigned int i=1; i<W1->size(); ++i)
+						testIntersections(L,R,1,W1,i,Radius);
 			}
 			Main->properties()->setSelection(R);
 			document()->history().add(L);
@@ -160,7 +121,7 @@ void CreateRoundaboutInteraction::mouseMoveEvent(QMouseEvent* event)
 	Interaction::mouseMoveEvent(event);
 }
 
-void CreateRoundaboutInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
+void CreateRoundaboutInteraction::paintEvent(QPaintEvent* , QPainter& thePainter)
 {
 	if (HaveCenter)
 	{

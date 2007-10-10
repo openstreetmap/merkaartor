@@ -2,7 +2,6 @@
 #include "Map/Projection.h"
 #include "Map/TrackPoint.h"
 #include "Map/Road.h"
-#include "Map/Way.h"
 #include "Utils/LineF.h"
 
 #include <QtGui/QPainter>
@@ -70,52 +69,16 @@ void draw(QPainter& thePainter, QPen& thePen, MapFeature::TrafficDirectionType T
 	draw(thePainter,thePen,TT,FromF,ToF,theWidth,theProjection);
 }
 
-void draw(QPainter& thePainter, QPen& thePen, Way* W, double theWidth, const Projection& theProjection)
-{
-	// due to a bug in Qt 4.20
-/*	Path.cubicTo(
-		theProjection.project(W->controlFrom()->position()),
-		theProjection.project(W->controlTo()->position()),
-		theProjection.project(W->to()->position())); */
-	if (W->controlFrom() && W->controlTo())
-	{
-		QPainterPath Path;
-		QPointF FromF(theProjection.project(W->from()->position()));
-		QPointF ToF(theProjection.project(W->to()->position()));
-		Path.moveTo(FromF);
-		buildCubicPath(Path,FromF,
-			theProjection.project(W->controlFrom()->position()),
-			theProjection.project(W->controlTo()->position()),
-			ToF);
-		thePainter.strokePath(Path,thePen);
-	}
-	else
-		draw(thePainter, thePen,W->trafficDirection(), W->from()->position(), W->to()->position(), theWidth, theProjection);
-}
 
-
-
-
-void draw(QPainter& thePainter, QPen& thePen, Way* W, const Projection& theProjection)
+/* void draw(QPainter& thePainter, QPen& thePen, Way* W, const Projection& theProjection)
 {
 	QPainterPath Path;
 	QPointF FromF(theProjection.project(W->from()->position()));
 	QPointF ToF(theProjection.project(W->to()->position()));
 	Path.moveTo(FromF);
-	// due to a bug in Qt 4.20
-/*	Path.cubicTo(
-		theProjection.project(W->controlFrom()->position()),
-		theProjection.project(W->controlTo()->position()),
-		theProjection.project(W->to()->position())); */
-	if (W->controlFrom() && W->controlTo())
-		buildCubicPath(Path,FromF,
-			theProjection.project(W->controlFrom()->position()),
-			theProjection.project(W->controlTo()->position()),
-			ToF);
-	else
-		Path.lineTo(ToF);
+	Path.lineTo(ToF);
 	thePainter.strokePath(Path,thePen);
-}
+} */
 
 void drawPossibleArea(QPainter& thePainter, Road* R, const Projection& theProjection)
 {
@@ -137,9 +100,9 @@ void drawPossibleArea(QPainter& thePainter, Road* R, const Projection& theProjec
 	{
 		thePainter.setPen(QPen(Qt::NoPen));
 		QPainterPath Path;
-		Path.moveTo(theProjection.project(R->get(0)->from()->position()));
-		for (unsigned int i=0; i<R->size(); ++i)
-			Path.lineTo(theProjection.project(R->get(i)->to()->position()));
+		Path.moveTo(theProjection.project(R->get(0)->position()));
+		for (unsigned int i=1; i<R->size(); ++i)
+			Path.lineTo(theProjection.project(R->get(i)->position()));
 		thePainter.drawPath(Path);
 	}
 

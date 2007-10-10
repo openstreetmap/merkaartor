@@ -17,7 +17,6 @@ class QPainter;
 #include "Map/MapFeature.h"
 #include "Map/Road.h"
 #include "Map/TrackPoint.h"
-#include "Map/Way.h"
 
 #include <QtCore/QObject>
 #include <QtCore/QTime>
@@ -57,7 +56,7 @@ class GenericFeatureSnapInteraction : public Interaction
 	public:
 		GenericFeatureSnapInteraction(MapView* theView)
 			: Interaction(theView), LastSnap(0), SnapActive(true),
-			  NoSelectPoints(false), NoSelectWays(false), NoSelectRoads(false)
+			  NoSelectPoints(false), NoSelectRoads(false)
 		{
 		}
 
@@ -109,10 +108,6 @@ class GenericFeatureSnapInteraction : public Interaction
 		{
 			NoSelectPoints = b;
 		}
-		void setDontSelectWays(bool b)
-		{
-			NoSelectWays = b;
-		}
 		void setDontSelectRoads(bool b)
 		{
 			NoSelectRoads = b;
@@ -138,8 +133,6 @@ class GenericFeatureSnapInteraction : public Interaction
 				if (Pt)
 				{
 					if ( (NoRoads || NoSelectRoads) && dynamic_cast<Road*>(Pt))
-						continue;
-					if (NoSelectWays && dynamic_cast<Way*>(Pt))
 						continue;
 					if (NoSelectPoints && dynamic_cast<TrackPoint*>(Pt))
 						continue;
@@ -170,7 +163,7 @@ class GenericFeatureSnapInteraction : public Interaction
 
 typedef GenericFeatureSnapInteraction<MapFeature> FeatureSnapInteraction;
 typedef GenericFeatureSnapInteraction<TrackPoint> TrackPointSnapInteraction;
-typedef GenericFeatureSnapInteraction<Way> WaySnapInteraction;
+typedef GenericFeatureSnapInteraction<Road> RoadSnapInteraction;
 
 #endif
 

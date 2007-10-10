@@ -4,7 +4,7 @@
 #include "Map/MapFeature.h"
 
 class RoadPrivate;
-class Way;
+class TrackPoint;
 
 class Road : public MapFeature
 {
@@ -22,20 +22,20 @@ class Road : public MapFeature
 		virtual void cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const std::vector<MapFeature*>& Alternatives);		
 		virtual bool notEverythingDownloaded() const;
 
-		void add(Way* W);
-		void add(Way* W, unsigned int Idx);
-		void erase(Way* W);
+		void add(TrackPoint* Pt);
+		void add(TrackPoint* Pt, unsigned int Idx);
+		void remove(TrackPoint* Pt);
 		unsigned int size() const;
-		unsigned int find(Way* W) const;
-		Way* get(unsigned int idx);
-		const Way* get(unsigned int Idx) const;
-
+		unsigned int find(TrackPoint* Pt) const;
+		TrackPoint* get(unsigned int idx);
+		const TrackPoint* get(unsigned int Idx) const;
 
 		RoadPrivate* p;
 };
 
 MapFeature::TrafficDirectionType trafficDirection(const Road* R);
-
+double widthOf(const Road* R);
+unsigned int findSnapPointIndex(const Road* R, Coord& P);
 
 #endif
 

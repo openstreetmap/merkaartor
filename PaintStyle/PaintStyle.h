@@ -2,7 +2,6 @@
 #define MERKAARTOR_PAINTSTYLE_H_
 
 class Road;
-class Way;
 
 class PaintStyle
 {
@@ -11,7 +10,6 @@ class PaintStyle
 
 		virtual PaintStyle* firstLayer() = 0;
 		virtual PaintStyle* nextLayer() = 0;
-		virtual void draw(Way* W) = 0;
 		virtual void draw(Road* R) = 0;
 };
 
@@ -30,7 +28,6 @@ class CascadingPaintStyleLayer : public PaintStyle
 class EmptyPaintStyle : public PaintStyle
 {
 	public:
-		virtual void draw(Way* W);
 		virtual void draw(Road* R);
 };
 

@@ -24,10 +24,6 @@ PaintStyle* CascadingPaintStyleLayer::nextLayer()
 	return Next;
 }
 
-void EmptyPaintStyle::draw(Way* )
-{
-}
-
 void EmptyPaintStyle::draw(Road *)
 {
 }

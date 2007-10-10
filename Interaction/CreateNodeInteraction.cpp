@@ -3,15 +3,15 @@
 #include "MainWindow.h"
 #include "PropertiesDock.h"
 #include "Command/DocumentCommands.h"
+#include "Command/RoadCommands.h"
 #include "Map/Projection.h"
 #include "Map/TrackPoint.h"
-#include "Map/Way.h"
 #include "Utils/LineF.h"
 
 #include <vector>
 
 CreateNodeInteraction::CreateNodeInteraction(MapView* aView)
-: WaySnapInteraction(aView)
+: GenericFeatureSnapInteraction(aView)
 {
 }
 
@@ -19,26 +19,19 @@ CreateNodeInteraction::~CreateNodeInteraction(void)
 {
 }
 
-void CreateNodeInteraction::snapMouseReleaseEvent(QMouseEvent * ev, Way* aWay)
+void CreateNodeInteraction::snapMouseReleaseEvent(QMouseEvent * ev, Road* aRoad)
 {
 	if (ev->button() == Qt::LeftButton)
 	{
 		Coord P(projection().inverse(ev->pos()));
-		if (aWay && !aWay->controlFrom())
+		if (aRoad)
 		{
 			main()->properties()->setSelection(0);
 			CommandList* theList = new CommandList;
-			LineF L(aWay->from()->position(),aWay->to()->position());
-			TrackPoint* N = new TrackPoint(L.project(P));
+			unsigned int SnapIdx = findSnapPointIndex(aRoad, P);
+			TrackPoint* N = new TrackPoint(P);
 			theList->add(new AddFeatureCommand(main()->activeLayer(),N,true));
-			Way* W1 = new Way(aWay->from(),N);
-			theList->add(new AddFeatureCommand(main()->activeLayer(),W1,true));
-			Way* W2 = new Way(N,aWay->to());
-			theList->add(new AddFeatureCommand(main()->activeLayer(),W2,true));
-			std::vector<MapFeature*> Alternatives;
-			Alternatives.push_back(W1);
-			Alternatives.push_back(W2);
-			theList->add(new RemoveFeatureCommand(document(),aWay, Alternatives));
+			theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx));
 			document()->history().add(theList);
 			view()->invalidate();
 		}

@@ -9,9 +9,7 @@
 #include "Interaction/CreateNodeInteraction.h"
 #include "Interaction/CreateRoundaboutInteraction.h"
 #include "Interaction/CreateSingleWayInteraction.h"
-#include "Interaction/CreateWayInteraction.h"
 #include "Interaction/EditInteraction.h"
-#include "Interaction/EditRoadInteraction.h"
 #include "Interaction/ZoomInteraction.h"
 #include "Map/Coord.h"
 #include "Map/DownloadOSM.h"
@@ -20,7 +18,7 @@
 #include "Map/MapDocument.h"
 #include "Map/MapFeature.h"
 #include "Map/Road.h"
-#include "Map/Way.h"
+#include "Map/TrackPoint.h"
 #include "Sync/SyncOSM.h"
 #include "GeneratedFiles/ui_AboutDialog.h"
 #include "GeneratedFiles/ui_UploadMapDialog.h"
@@ -38,8 +36,6 @@
 #define MAJORVERSION "0"
 #define MINORVERSION "07"
 
-#include "Map/TrackPoint.h"
-#include "Map/Way.h"
 
 MainWindow::MainWindow(void)
 : theDocument(0)
@@ -336,12 +332,12 @@ void MainWindow::on_createRoundaboutAction_triggered()
 
 void MainWindow::on_createWayAction_triggered()
 {
-	theView->launch(new CreateWayInteraction(this, theView,true));
+//	theView->launch(new CreateWayInteraction(this, theView,true));
 }
 
 void MainWindow::on_createLinearWayAction_triggered()
 {
-	theView->launch(new CreateWayInteraction(this, theView,false));
+//	theView->launch(new CreateWayInteraction(this, theView,false));
 }
 
 void MainWindow::on_createRoadAction_triggered()
@@ -362,18 +358,4 @@ MapLayer* MainWindow::activeLayer()
 MapView* MainWindow::view()
 {
 	return theView;
-}
-
-void MainWindow::on_createRoadFromSelectedSegmentsAction_triggered()
-{
-	Road* R = new Road;
-	for (unsigned int i=0; i<theProperties->size(); ++i)
-	{
-		Way* W = dynamic_cast<Way*>(theProperties->selection(i));
-		if (W)
-			R->add(W);
-	}
-	theDocument->history().add(new AddFeatureCommand(theLayers->activeLayer(), R, true));
-	theProperties->setSelection(R);
-
 }

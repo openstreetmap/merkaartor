@@ -12,7 +12,6 @@ class EditPaintStylePrivate;
 class MapFeature;
 class Projection;
 class Road;
-class Way;
 class QPainter;
 class QString;
 
@@ -23,7 +22,6 @@ class FeaturePaintSelector
 
 		FeaturePaintSelector();
 
-		bool isHit(const Way* W, double PixelPerM) const;
 		bool isHit(const Road* R, double PixelPerM) const;
 		FeaturePaintSelector& selectOnTag(const QString& Tag, const QString& Value);
 		FeaturePaintSelector& selectOnTag(const QString& Tag, const QString& Value1, const QString& Value2);
@@ -32,14 +30,14 @@ class FeaturePaintSelector
 		FeaturePaintSelector& foregroundDash(double Dash, double White);
 		FeaturePaintSelector& touchup(const QColor& Color, double Scale, double Offset);
 		FeaturePaintSelector& touchupDash(double Dash, double White);
-		FeaturePaintSelector& foregroundFill(const QColor& StrokeColor, const QColor& FillColor, double StrokeWidth);
+		FeaturePaintSelector& foregroundFill(const QColor& FillColor);
 		FeaturePaintSelector& limitToZoom(ZoomType aType);
 		FeaturePaintSelector& drawTrafficDirectionMarks();
 
-		void drawBackground(Way* W, QPainter& thePainter, const Projection& theProjection) const;
-		void drawForeground(Way* W, QPainter& thePainter, const Projection& theProjection) const;
-		void drawTouchup(Way* W, QPainter& thePainter, const Projection& theProjection) const;
+		void drawBackground(Road* R, QPainter& thePainter, const Projection& theProjection) const;
 		void drawForeground(Road* R, QPainter& thePainter, const Projection& theProjection) const;
+		void drawTouchup(Road* R, QPainter& thePainter, const Projection& theProjection) const;
+//		void drawForeground(Road* R, QPainter& thePainter, const Projection& theProjection) const;
 	private:
 		std::vector<std::pair<QString, QString> > OneOfTheseTags;
 
@@ -62,9 +60,7 @@ class FeaturePaintSelector
 		bool TouchupDashSet;
 		double TouchupDash, TouchupWhite;
 		bool ForegroundFill;
-		QColor ForegroundFillStrokeColor;
 		QColor ForegroundFillFillColor;
-		double ForegroundFillStrokeWidth;
 		bool DrawTrafficDirectionMarks;
 };
 

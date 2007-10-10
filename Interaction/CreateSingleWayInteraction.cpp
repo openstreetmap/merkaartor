@@ -5,7 +5,6 @@
 #include "Map/Painting.h"
 #include "Map/Road.h"
 #include "Map/TrackPoint.h"
-#include "Map/Way.h"
 #include "Utils/LineF.h"
 #include "MainWindow.h"
 #include "PropertiesDock.h"
@@ -18,7 +17,6 @@ CreateSingleWayInteraction::CreateSingleWayInteraction(MainWindow* aMain, MapVie
 	: GenericFeatureSnapInteraction<MapFeature>(aView), Main(aMain), theRoad(0), FirstPoint(0,0), 
 	  HaveFirst(false), FirstNode(0)
 {
-	setDontSelectRoads(true);
 }
 
 CreateSingleWayInteraction::~CreateSingleWayInteraction()
@@ -36,18 +34,18 @@ void CreateSingleWayInteraction::paintEvent(QPaintEvent* anEvent, QPainter& theP
 	GenericFeatureSnapInteraction<MapFeature>::paintEvent(anEvent,thePainter);
 }
 
-void CreateSingleWayInteraction::snapMouseMoveEvent(QMouseEvent* event, MapFeature* aFeature)
+void CreateSingleWayInteraction::snapMouseMoveEvent(QMouseEvent* ev, MapFeature* aFeature)
 {
 	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(aFeature))
 		LastCursor = view()->projection().project(Pt->position());	
-	else if (Way* W = dynamic_cast<Way*>(aFeature))
+	else if (Road* R = dynamic_cast<Road*>(aFeature))
 	{
-		LineF L(view()->projection().project(W->from()->position()),
-			view()->projection().project(W->to()->position()));
-		LastCursor = L.project(event->pos());
+		Coord P(projection().inverse(ev->pos()));
+		findSnapPointIndex(R, P);
+		LastCursor = projection().project(P);
 	}
 	else
-		LastCursor = event->pos();
+		LastCursor = ev->pos();
 	view()->update();
 }
 
@@ -61,21 +59,14 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFe
 			HaveFirst = true;
 			if (Pt)
 				FirstNode = Pt;
-			else if (Way* aWay = dynamic_cast<Way*>(aFeature))
+			else if (Road* aRoad = dynamic_cast<Road*>(aFeature))
 			{
 				Coord P(projection().inverse(anEvent->pos()));
 				CommandList* theList = new CommandList;
-				LineF L(aWay->from()->position(),aWay->to()->position());
-				TrackPoint* N = new TrackPoint(L.project(P));
+				unsigned int SnapIdx = findSnapPointIndex(aRoad, P);
+				TrackPoint* N = new TrackPoint(P);
 				theList->add(new AddFeatureCommand(main()->activeLayer(),N,true));
-				Way* W1 = new Way(aWay->from(),N);
-				theList->add(new AddFeatureCommand(main()->activeLayer(),W1,true));
-				Way* W2 = new Way(N,aWay->to());
-				theList->add(new AddFeatureCommand(main()->activeLayer(),W2,true));
-				std::vector<MapFeature*> Alternatives;
-				Alternatives.push_back(W1);
-				Alternatives.push_back(W2);
-				theList->add(new RemoveFeatureCommand(document(),aWay, Alternatives));
+				theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx));
 				document()->history().add(theList);
 				view()->invalidate();
 				FirstNode = N;
@@ -84,9 +75,9 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFe
 		else 
 		{
 			CommandList* L = new CommandList;
-			TrackPoint* From = 0;
 			if (!theRoad)
 			{
+				TrackPoint* From = 0;
 				theRoad = new Road;
 				if (FirstNode)
 					From = FirstNode;
@@ -96,26 +87,21 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFe
 					L->add(new AddFeatureCommand(Main->activeLayer(),From,true));
 				}
 				L->add(new AddFeatureCommand(Main->activeLayer(),theRoad,true));
+				L->add(new RoadAddTrackPointCommand(theRoad,From));
 			}
-			else
-				From = theRoad->get(theRoad->size()-1)->to();
 			TrackPoint* To = 0;
 			if (Pt)
 				To = Pt;
-			else if (Way* aWay = dynamic_cast<Way*>(aFeature))
+			else if (Road* aRoad = dynamic_cast<Road*>(aFeature))
 			{
 				Coord P(projection().inverse(anEvent->pos()));
-				LineF LL(aWay->from()->position(),aWay->to()->position());
-				TrackPoint* N = new TrackPoint(LL.project(P));
-				L->add(new AddFeatureCommand(main()->activeLayer(),N,true));
-				Way* W1 = new Way(aWay->from(),N);
-				L->add(new AddFeatureCommand(main()->activeLayer(),W1,true));
-				Way* W2 = new Way(N,aWay->to());
-				L->add(new AddFeatureCommand(main()->activeLayer(),W2,true));
-				std::vector<MapFeature*> Alternatives;
-				Alternatives.push_back(W1);
-				Alternatives.push_back(W2);
-				L->add(new RemoveFeatureCommand(document(),aWay, Alternatives));
+				CommandList* theList = new CommandList;
+				unsigned int SnapIdx = findSnapPointIndex(aRoad, P);
+				TrackPoint* N = new TrackPoint(P);
+				theList->add(new AddFeatureCommand(main()->activeLayer(),N,true));
+				theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx));
+				document()->history().add(theList);
+				view()->invalidate();
 				To = N;
 			}
 			if (!To)
@@ -123,9 +109,7 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFe
 				To = new TrackPoint(view()->projection().inverse(anEvent->pos()));
 				L->add(new AddFeatureCommand(Main->activeLayer(),To,true));
 			}
-			Way* W = new Way(From,To);
-			L->add(new AddFeatureCommand(Main->activeLayer(),W,true));
-			L->add(new RoadAddWayCommand(theRoad,W));
+			L->add(new RoadAddTrackPointCommand(theRoad,To));
 			document()->history().add(L);
 			view()->invalidate();
 			Main->properties()->setSelection(theRoad);

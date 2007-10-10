@@ -4,7 +4,6 @@
 #include "GeneratedFiles/ui_TrackPointProperties.h"
 #include "GeneratedFiles/ui_RoadProperties.h"
 #include "GeneratedFiles/ui_MultiProperties.h"
-#include "GeneratedFiles/ui_WayProperties.h"
 
 #include <QtGui/QDockWidget>
 
@@ -31,7 +30,6 @@ class PropertiesDock : public QDockWidget
 		void checkMenuStatus();
 
 	public slots:
-		void on_WayWidth_textChanged(const QString& s);
 		void on_TrackPointLat_textChanged(const QString& s);
 		void on_TrackPointLon_textChanged(const QString& s);
 		void on_RoadName_textChanged(const QString& s);
@@ -41,7 +39,6 @@ class PropertiesDock : public QDockWidget
 
 	private:
 		void switchUi();
-		void switchToWayUi();
 		void switchToNoUi();
 		void switchToTrackPointUi();
 		void switchToRoadUi();
@@ -50,13 +47,12 @@ class PropertiesDock : public QDockWidget
 		MainWindow* Main;
 		QWidget* CurrentUi;
 		std::vector<MapFeature*> Selection;
-		Ui::WayProperties WayUi;
 		Ui::TrackPointProperties TrackPointUi;
 		Ui::RoadProperties RoadUi;
 		Ui::MultiProperties MultiUi;
 		TagModel* theModel;
 
-		enum { NoUiShowing, WayUiShowing, TrackPointUiShowing, RoadUiShowing, MultiShowing } NowShowing ;
+		enum { NoUiShowing, TrackPointUiShowing, RoadUiShowing, MultiShowing } NowShowing ;
 };
 
 #endif

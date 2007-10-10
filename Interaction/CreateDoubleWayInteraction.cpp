@@ -5,7 +5,6 @@
 #include "Map/Painting.h"
 #include "Map/Road.h"
 #include "Map/TrackPoint.h"
-#include "Map/Way.h"
 #include "Utils/LineF.h"
 #include "MainWindow.h"
 
@@ -102,10 +101,14 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 		}
 		else if (R1)
 		{
-			Way* W1 = R1->get(R1->size()-1);
-			Way* W2 = R2->get(0);
-			LineF P1(view()->projection().project(W1->from()->position()),view()->projection().project(W1->to()->position()));
-			LineF P2(view()->projection().project(W2->to()->position()),view()->projection().project(W2->from()->position()));
+			unsigned int i1 = R1->size()-1;
+			unsigned int i2 = 1;
+			LineF P1(
+				view()->projection().project(R1->get(i1-1)->position()),
+				view()->projection().project(R1->get(i1)->position()));
+			LineF P2(
+				view()->projection().project(R2->get(i2-1)->position()),
+				view()->projection().project(R2->get(i2)->position()));
 
 			Coord PreviousPoint = FirstPoint;
 			if (distance(view()->projection().project(PreviousPoint), LastCursor) > 1)
@@ -127,8 +130,8 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 				TrackPoint* A1;
 				TrackPoint* A2;
 				CommandList* L = new CommandList;
-				A1 = W1->to();
-				A2 = W2->from();
+				A1 = R1->get(i1);
+				A2 = R2->get(i2-1);
 				L->add(new MoveTrackPointCommand(A1,view()->projection().inverse(
 					P1.intersectionWith(N1))));
 				L->add(new MoveTrackPointCommand(A2,view()->projection().inverse(
@@ -138,14 +141,8 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 				TrackPoint* B2 = new TrackPoint(view()->projection().inverse(
 					FB2.project(LastCursor)));
 
-				W1 = new Way(A1,B1);
-				W2 = new Way(B2,A2);
-				L->add(new AddFeatureCommand(Main->activeLayer(),B1,true));
-				L->add(new AddFeatureCommand(Main->activeLayer(),B2,true));
-				L->add(new AddFeatureCommand(Main->activeLayer(),W1,true));
-				L->add(new AddFeatureCommand(Main->activeLayer(),W2,true));
-				L->add(new RoadAddWayCommand(R1,W1));
-				L->add(new RoadAddWayCommand(R2,W2,0));
+				L->add(new RoadAddTrackPointCommand(R1,B1));
+				L->add(new RoadAddTrackPointCommand(R2,B2,0));
 				document()->history().add(L);
 				view()->invalidate();
 				FirstPoint = view()->projection().inverse(anEvent->pos());
@@ -177,26 +174,22 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 					FB1.project(LastCursor)));
 				TrackPoint* B2 = new TrackPoint(view()->projection().inverse(
 					FB2.project(LastCursor)));
-
-				Way* W1;
-				Way* W2;
-				W1 = new Way(A1,B1);
-				W2 = new Way(B2,A2);
-				R1 = new Road;
-				R2 = new Road;
-				R1->setTag("oneway","yes");
-				R2->setTag("oneway","yes");
-				R1->add(W1);
-				R2->add(W2);
 				CommandList* L = new CommandList;
 				L->add(new AddFeatureCommand(Main->activeLayer(),A1,true));
 				L->add(new AddFeatureCommand(Main->activeLayer(),A2,true));
 				L->add(new AddFeatureCommand(Main->activeLayer(),B1,true));
 				L->add(new AddFeatureCommand(Main->activeLayer(),B2,true));
-				L->add(new AddFeatureCommand(Main->activeLayer(),W1,true));
-				L->add(new AddFeatureCommand(Main->activeLayer(),W2,true));
+
+				R1 = new Road;
+				R2 = new Road;
 				L->add(new AddFeatureCommand(Main->activeLayer(),R1,true));
 				L->add(new AddFeatureCommand(Main->activeLayer(),R2,true));
+				R1->setTag("oneway","yes");
+				R2->setTag("oneway","yes");
+				L->add(new RoadAddTrackPointCommand(R1,A1));
+				L->add(new RoadAddTrackPointCommand(R1,A2));
+				L->add(new RoadAddTrackPointCommand(R2,B2));
+				L->add(new RoadAddTrackPointCommand(R2,B1));
 				document()->history().add(L);
 				view()->invalidate();
 				FirstPoint = view()->projection().inverse(anEvent->pos());

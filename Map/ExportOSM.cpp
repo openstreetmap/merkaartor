@@ -2,7 +2,6 @@
 
 #include "Map/Road.h"
 #include "Map/TrackPoint.h"
-#include "Map/Way.h"
 
 static QString stripToOSMId(const QString& id)
 {
@@ -31,21 +30,12 @@ QString exportOSM(const TrackPoint& Pt)
 	return S.arg(stripToOSMId(Pt.id())).arg(radToAng(Pt.position().lat()),0,'f',8).arg(radToAng(Pt.position().lon()),0,'f',8);
 }
 
-QString exportOSM(const Way& W)
-{
-	QString S;
-	S += QString("<segment id=\"%1\" from=\"%2\" to=\"%3\">").arg(stripToOSMId(W.id())).arg(stripToOSMId(W.from()->id())).arg(stripToOSMId(W.to()->id()));
-	S += tagOSM(W);
-	S += "</segment>";
-	return S;
-}
-
 QString exportOSM(const Road& R)
 {
 	QString S;
 	S += QString("<way id=\"%1\">").arg(stripToOSMId(R.id()));
 	for (unsigned int i=0; i<R.size(); ++i)
-		S+=QString("<seg id=\"%1\"/>").arg(stripToOSMId(R.get(i)->id()));
+		S+=QString("<nd id=\"%1\"/>").arg(stripToOSMId(R.get(i)->id()));
 	S += tagOSM(R);
 	S += "</way>";
 	return S;

@@ -11,7 +11,6 @@
 #include "Map/Road.h"
 #include "Map/TrackPoint.h"
 #include "Map/TrackSegment.h"
-#include "Map/Way.h"
 
 #include <QtCore/QBuffer>
 #include <QtCore/QDateTime>
@@ -93,87 +92,32 @@ static void loadTags(const QDomElement& Root, MapFeature* W, CommandList* theLis
 	}
 }
 
-static void importSegment(const QDomElement& Root, MapDocument* theDocument, MapLayer* theLayer, MapLayer* conflictLayer, CommandList* theList)
-{
-	TrackPoint* From = dynamic_cast<TrackPoint*>(theDocument->get("node_"+Root.attribute("from")));
-	if (!From)
-	{
-		From = new TrackPoint(Coord(0,0));
-		From->setId("node_"+Root.attribute("from"));
-		From->setLastUpdated(MapFeature::NotYetDownloaded);
-		theList->add(new AddFeatureCommand(theLayer, From, false));
-	}
-	TrackPoint* To = dynamic_cast<TrackPoint*>(theDocument->get("node_"+Root.attribute("to")));
-	if (!To)
-	{
-		To = new TrackPoint(Coord(0,0));
-		To->setId("node_"+Root.attribute("to"));
-		To->setLastUpdated(MapFeature::NotYetDownloaded);
-		theList->add(new AddFeatureCommand(theLayer, To, false));
-	}
-	QString id = "segment_"+Root.attribute("id");
-	Way* W = dynamic_cast<Way*>(theDocument->get(id));
-	if (W)
-	{
-		if (W->lastUpdated() == MapFeature::User)
-		{
-			W->setLastUpdated(MapFeature::UserResolved);
-			// conflict
-			TrackPoint* Conflict = dynamic_cast<TrackPoint*>(theDocument->get("conflict_node_"+Root.attribute("from")));
-			if (Conflict) From = Conflict;
-			Conflict = dynamic_cast<TrackPoint*>(theDocument->get("conflict_node_"+Root.attribute("to")));
-			if (Conflict) To = Conflict;
-			Way* W = new Way(From,To);
-			W->setId("conflict_"+id);
-			loadTags(Root,W);
-			theList->add(new AddFeatureCommand(conflictLayer,W, false));
-			W->setLastUpdated(MapFeature::OSMServerConflict);
-		}
-		else if (W->lastUpdated() != MapFeature::UserResolved)
-		{
-			theList->add(new WaySetFromToCommand(W,From,To));
-			loadTags(Root,W, theList);
-			if (W->lastUpdated() == MapFeature::NotYetDownloaded)
-				W->setLastUpdated(MapFeature::OSMServer);
-		}
-	}
-	else
-	{
-		W = new Way(From,To);
-		W->setId(id);
-		loadTags(Root,W);
-		theList->add(new AddFeatureCommand(theLayer,W, false));
-		W->setLastUpdated(MapFeature::OSMServer);
-	}
-}
-
-
 static void importWay(QProgressDialog* dlg, const QDomElement& Root, MapDocument* theDocument, MapLayer* theLayer, 
 					  MapLayer* conflictLayer, CommandList* theList, Downloader* theDownloader)
 {
-	std::vector<Way*> Segments;
+	std::vector<TrackPoint*> Pts;
 	for(QDomNode n = Root.firstChild(); !n.isNull(); n = n.nextSibling())
 	{
 		QDomElement t = n.toElement();
 		if (!t.isNull())
 		{
-			if (t.tagName() == "seg")
+			if (t.tagName() == "nd")
 			{
-				Way* Part = dynamic_cast<Way*>(theDocument->get("segment_"+t.attribute("id")));
+				TrackPoint* Part = dynamic_cast<TrackPoint*>(theDocument->get("node_"+t.attribute("ref")));
 				if (!Part)
 				{
-					Part = new Way(0,0);
-					Part->setId("segment_"+t.attribute("id"));
+					Part = new TrackPoint(Coord(0,0));
+					Part->setId("node_"+t.attribute("id"));
 					Part->setLastUpdated(MapFeature::NotYetDownloaded);
 					theList->add(new AddFeatureCommand(theLayer, Part, false));
 				}
-				Segments.push_back(Part);
+				Pts.push_back(Part);
 			}
 		}
 	}
-	QString id = "way_"+Root.attribute("id");
-	if (Segments.size())
+	if (Pts.size())
 	{
+		QString id = "way_"+Root.attribute("id");
 		Road* R = dynamic_cast<Road*>(theDocument->get(id));
 		if (R)
 		{
@@ -194,17 +138,17 @@ static void importWay(QProgressDialog* dlg, const QDomElement& Root, MapDocument
 			else if (R->lastUpdated() != MapFeature::UserResolved)
 			{
 				while (R->size())
-					theList->add(new RoadRemoveWayCommand(R,R->get(0)));
-				for (unsigned int i=0; i<Segments.size(); ++i)
-					theList->add(new RoadAddWayCommand(R,Segments[i]));
+					theList->add(new RoadRemoveTrackPointCommand(R,R->get(0)));
+				for (unsigned int i=0; i<Pts.size(); ++i)
+					theList->add(new RoadAddTrackPointCommand(R,Pts[i]));
 				loadTags(Root,R, theList);
 			}
 		}
 		else
 		{
 			R = new Road;
-			for (unsigned int i=0; i<Segments.size(); ++i)
-				R->add(Segments[i]);
+			for (unsigned int i=0; i<Pts.size(); ++i)
+				R->add(Pts[i]);
 			R->setId(id);
 			loadTags(Root,R);
 			theList->add(new AddFeatureCommand(theLayer,R, false));
@@ -230,8 +174,6 @@ static void importOSM(QProgressDialog* dlg, const QDomElement& Root, MapDocument
 		{
 			if (t.tagName() == "node")
 				importNode(t,theDocument, theLayer, conflictLayer, theList);
-			else if (t.tagName() == "segment")
-				importSegment(t,theDocument, theLayer, conflictLayer, theList);
 			else if (t.tagName() == "way")
 				importWay(dlg, t,theDocument, theLayer, conflictLayer, theList, theDownloader);
 		}
@@ -287,66 +229,12 @@ static bool downloadToResolve(const QString& What, const std::vector<MapFeature*
 	return true;
 }
 
-// as long as /api/0.3/segments?segments= doesn't work
-static bool downloadToResolveSegments(const std::vector<MapFeature*>& Resolution, QProgressDialog* dlg, MapDocument* theDocument, MapLayer* theLayer, CommandList* theList, Downloader* theDownloader)
-{
-	for (unsigned int i=0; i<Resolution.size(); ++i )
-	{
-		dlg->setValue(i);
-//		QString URL("/api/0.3/segment/%1");
-		QString URL(theDownloader->getURLToFetch("segment",
-			Resolution[i]->id().right(Resolution[i]->id().length()-Resolution[i]->id().lastIndexOf('_')-1)));
-		dlg->setLabelText(QString("downloading segment %1 of %2").arg(i).arg(Resolution.size()));
-		if (theDownloader->go(URL))
-		{
-			if (theDownloader->resultCode() == 410)
-				theList->add(new RemoveFeatureCommand(theDocument, Resolution[i], std::vector<MapFeature*>()));
-			else
-			{
-				QByteArray ba(theDownloader->content());
-				QBuffer  File(&ba);
-				dlg->setLabelText(QString("parsing segment %1 of %2").arg(i).arg(Resolution.size()));
-
-				QDomDocument DomDoc;
-				QString ErrorStr;
-				int ErrorLine;
-				int ErrorColumn;
-				if (DomDoc.setContent(&File, true, &ErrorStr, &ErrorLine,&ErrorColumn))
-				{
-					QDomElement root = DomDoc.documentElement();
-					if (root.tagName() == "osm")
-						importOSM(0, root, theDocument, theLayer, 0, theList, 0);
-				}
-			}
-		}
-		else
-			return false;
-	}
-	return true;
-}
-
-
 static bool resolveNotYetDownloaded(QProgressDialog* dlg, MapDocument* theDocument, MapLayer* theLayer, CommandList* theList, Downloader* theDownloader)
 {
 	if (theDownloader)
 	{
-		// resolve segments
+		// resolve nodes FIXME make this for nodes only or templatize?
 		std::vector<MapFeature*> MustResolve;
-		for (unsigned int i=0; i<theLayer->size(); ++i)
-		{
-			Way* W = dynamic_cast<Way*>(theLayer->get(i));
-			if (W && W->lastUpdated() == MapFeature::NotYetDownloaded)
-				MustResolve.push_back(W);
-		}
-		if (MustResolve.size())
-		{
-			dlg->setMaximum(MustResolve.size());
-			dlg->setValue(0);
-			dlg->show();
-			if (!downloadToResolveSegments(MustResolve,dlg,theDocument,theLayer, theList,theDownloader))
-				return false;
-		}
-		// resolve nodes
 		MustResolve.clear();
 		for (unsigned int i=0; i<theLayer->size(); ++i)
 		{

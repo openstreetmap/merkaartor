@@ -57,13 +57,10 @@ class DirtyListVisit : public DirtyList
 		virtual bool erase(MapFeature* F);
 
 		virtual bool addPoint(TrackPoint* Pt) = 0;
-		virtual bool addWay(Way* W) = 0;
 		virtual bool addRoad(Road* R) = 0;
 		virtual bool updatePoint(TrackPoint* Pt) = 0;
-		virtual bool updateWay(Way* W) = 0;
 		virtual bool updateRoad(Road* R) = 0;
 		virtual bool erasePoint(TrackPoint* Pt) = 0;
-		virtual bool eraseWay(Way* W) = 0;
 		virtual bool eraseRoad(Road* R) = 0;
 
 	private:
@@ -82,13 +79,10 @@ class DirtyListDescriber : public DirtyListVisit
 		DirtyListDescriber(MapDocument* aDoc, const DirtyListBuild& aFuture);
 
 		virtual bool addPoint(TrackPoint* Pt);
-		virtual bool addWay(Way* W);
 		virtual bool addRoad(Road* R);
 		virtual bool updatePoint(TrackPoint* Pt);
-		virtual bool updateWay(Way* W);
 		virtual bool updateRoad(Road* R);
 		virtual bool erasePoint(TrackPoint* Pt);
-		virtual bool eraseWay(Way* W);
 		virtual bool eraseRoad(Road* R);
 
 		bool showChanges(QWidget* Parent);
@@ -109,13 +103,10 @@ class DirtyListExecutor : public QObject, public DirtyListVisit
 		virtual ~DirtyListExecutor();
 
 		virtual bool addPoint(TrackPoint* Pt);
-		virtual bool addWay(Way* W);
 		virtual bool addRoad(Road* R);
 		virtual bool updatePoint(TrackPoint* Pt);
-		virtual bool updateWay(Way* W);
 		virtual bool updateRoad(Road* R);
 		virtual bool erasePoint(TrackPoint* Pt);
-		virtual bool eraseWay(Way* W);
 		virtual bool eraseRoad(Road* R);
 
 		bool executeChanges(QWidget* Parent);

@@ -6,7 +6,7 @@
 class Road;
 class Way;
 
-class EditRoadInteraction : public WaySnapInteraction
+class EditRoadInteraction : public FeatureSnapInteraction
 {
 	public:
 		EditRoadInteraction(MapView* aView);
@@ -14,7 +14,7 @@ class EditRoadInteraction : public WaySnapInteraction
 		~EditRoadInteraction(void);
 
 		virtual void paintEvent(QPaintEvent* , QPainter& thePainter);
-		virtual void snapMouseReleaseEvent(QMouseEvent* anEvent, Way* W);
+		virtual void snapMouseReleaseEvent(QMouseEvent* anEvent, MapFeature* W);
 
 	private:
 		Road* Current;

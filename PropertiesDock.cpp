@@ -9,7 +9,6 @@
 #include "Map/MapFeature.h"
 #include "Map/Road.h"
 #include "Map/TrackPoint.h"
-#include "Map/Way.h"
 
 #include <QtGui/QHeaderView>
 #include <QtGui/QLineEdit>
@@ -35,24 +34,15 @@ void PropertiesDock::checkMenuStatus()
 {
 	bool IsPoint = false;
 	bool IsRoad = false;
-	bool IsWay = false;
-	bool OnlySegments = Selection.size() > 0;
 	if (Selection.size() == 1)
 	{
 		IsPoint = dynamic_cast<TrackPoint*>(Selection[0]) != 0;
 		IsRoad = dynamic_cast<Road*>(Selection[0]) != 0;
-		IsWay = dynamic_cast<Way*>(Selection[0]) != 0;
-	}
-	for (unsigned int i=0; i<Selection.size(); ++i)
-	{
-		if (!dynamic_cast<Way*>(Selection[i]))
-			OnlySegments = false;
 	}
 	Main->editRemoveAction->setEnabled(Selection.size() == 1);
-	Main->editMoveAction->setEnabled(IsPoint);
+	Main->editMoveAction->setEnabled(Selection.size());
 	Main->editAddAction->setEnabled(IsRoad);
-	Main->editReverseAction->setEnabled(IsRoad || IsWay);
-	Main->createRoadFromSelectedSegmentsAction->setEnabled(OnlySegments);
+	Main->editReverseAction->setEnabled(IsRoad);
 }
 
 unsigned int PropertiesDock::size() const
@@ -91,9 +81,7 @@ void PropertiesDock::switchUi()
 		switchToNoUi();
 	else if (Selection.size() == 1)
 	{
-		if (dynamic_cast<Way*>(Selection[0]))
-			switchToWayUi();
-		else if (dynamic_cast<TrackPoint*>(Selection[0]))
+		if (dynamic_cast<TrackPoint*>(Selection[0]))
 			switchToTrackPointUi();
 		else if (dynamic_cast<Road*>(Selection[0]))
 			switchToRoadUi();
@@ -137,22 +125,6 @@ void PropertiesDock::switchToTrackPointUi()
 	setWindowTitle(tr("Properties - Trackpoint"));
 }
 
-void PropertiesDock::switchToWayUi()
-{
-	if (NowShowing == WayUiShowing) return;
-	NowShowing = WayUiShowing;
-	QWidget* NewUi = new QWidget(this);
-	WayUi.setupUi(NewUi);
-	WayUi.TagView->verticalHeader()->hide();
-	setWidget(NewUi);
-	if (CurrentUi)
-		delete CurrentUi;
-	CurrentUi = NewUi;
-	connect(WayUi.Width,SIGNAL(textChanged(const QString&)),this, SLOT(on_WayWidth_textChanged(const QString&)));
-	connect(WayUi.RemoveTagButton,SIGNAL(clicked()),this, SLOT(on_RemoveTagButton_clicked()));
-	setWindowTitle(tr("Properties - Link"));
-}
-
 void PropertiesDock::switchToNoUi()
 {
 	if (NowShowing == NoUiShowing) return;
@@ -190,13 +162,7 @@ void PropertiesDock::resetValues()
 	Selection.clear();
 	if (Current.size() == 1)
 	{
-		if (Way* W = dynamic_cast<Way*>(Current[0]))
-		{
-			WayUi.Width->setText(QString::number(widthOf(W)));
-			WayUi.Id->setText(W->id());
-			WayUi.TagView->setModel(theModel);
-		}
-		else if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(Current[0]))
+		if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(Current[0]))
 		{
 			TrackPointUi.Id->setText(Pt->id());
 			TrackPointUi.Latitude->setText(QString::number(radToAng(Pt->position().lat()),'g',8));
@@ -221,19 +187,6 @@ void PropertiesDock::resetValues()
 	Selection = Current;
 }
 
-void PropertiesDock::on_WayWidth_textChanged(const QString& )
-{
-	if (WayUi.Width->text().isEmpty()) return;
-	Way* W = dynamic_cast<Way*>(selection(0));
-	if (W)
-	{
-		W->setLastUpdated(MapFeature::User);
-		Main->document()->history().add(
-			new WaySetWidthCommand(W,WayUi.Width->text().toDouble()));
-		Main->invalidateView(false);
-		theModel->setFeature(Selection);
-	}
-}
 void PropertiesDock::on_TrackPointLat_textChanged(const QString&)
 {
 	if (TrackPointUi.Latitude->text().isEmpty()) return;
@@ -314,8 +267,6 @@ void PropertiesDock::on_RemoveTagButton_clicked()
 	QTableView* TagTable = 0;
 	switch (NowShowing)
 	{
-	case WayUiShowing:
-		TagTable = WayUi.TagView; break;
 	case TrackPointUiShowing:
 		TagTable = TrackPointUi.TagView; break;
 	case RoadUiShowing:

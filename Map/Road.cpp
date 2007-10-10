@@ -5,7 +5,6 @@
 #include "Map/Painting.h"
 #include "Map/Projection.h"
 #include "Map/TrackPoint.h"
-#include "Map/Way.h"
 #include "Utils/LineF.h"
 
 #include <QtGui/QPainter>
@@ -17,7 +16,7 @@
 class RoadPrivate
 {
 	public:
-		std::vector<Way*> Ways;
+		std::vector<TrackPoint*> Nodes;
 };
 
 Road::Road(void)
@@ -32,137 +31,79 @@ Road::Road(const Road& )
 
 Road::~Road(void)
 {
-	std::vector<Way*> Parts(p->Ways);
-	p->Ways.clear();
-	for (unsigned int i=0; i<Parts.size(); ++i)
-		Parts[i]->removeAsPartOf(this);
 	delete p;
 }
 
-void Road::add(Way* W)
+void Road::add(TrackPoint* Pt)
 {
-	if (std::find(p->Ways.begin(),p->Ways.end(),W) == p->Ways.end())
-	{
-		p->Ways.push_back(W);
-		W->addAsPartOf(this);
-	}
+	p->Nodes.push_back(Pt);
 }
 
-void Road::add(Way* W, unsigned int Idx)
+void Road::add(TrackPoint* Pt, unsigned int Idx)
 {
-	if (std::find(p->Ways.begin(),p->Ways.end(),W) == p->Ways.end())
-	{
-		p->Ways.push_back(W);
-		std::rotate(p->Ways.begin()+Idx,p->Ways.end()-1,p->Ways.end());
-		W->addAsPartOf(this);
-	}
+	p->Nodes.push_back(Pt);
+	std::rotate(p->Nodes.begin()+Idx,p->Nodes.end()-1,p->Nodes.end());
 }
 
-unsigned int Road::find(Way* W) const
+unsigned int Road::find(TrackPoint* Pt) const
 {
-	for (unsigned int i=0; i<p->Ways.size(); ++i)
-		if (p->Ways[i] == W)
+	for (unsigned int i=0; i<p->Nodes.size(); ++i)
+		if (p->Nodes[i] == Pt)
 			return i;
-	return p->Ways.size();
+	return p->Nodes.size();
 }
 
-void Road::erase(Way* W)
+void Road::remove(TrackPoint* Pt)
 {
-	std::vector<Way*>::iterator i = std::find(p->Ways.begin(),p->Ways.end(),W);
-	if (i != p->Ways.end())
-	{
-		p->Ways.erase(i);
-		W->removeAsPartOf(this);
-	}
+	std::vector<TrackPoint*>::iterator i = std::find(p->Nodes.begin(),p->Nodes.end(),Pt);
+	if (i != p->Nodes.end())
+		p->Nodes.erase(i);
 }
 
 unsigned int Road::size() const
 {
-	return p->Ways.size();
+	return p->Nodes.size();
 }
 
-Way* Road::get(unsigned int idx)
+TrackPoint* Road::get(unsigned int idx)
 {
-	return p->Ways[idx];
+	return p->Nodes[idx];
 }
 
-const Way* Road::get(unsigned int idx) const
+const TrackPoint* Road::get(unsigned int idx) const
 {
-	return p->Ways[idx];
+	return p->Nodes[idx];
 }
 
 bool Road::notEverythingDownloaded() const
 {
 	if (lastUpdated() == MapFeature::NotYetDownloaded)
 		return true;
-	for (unsigned int i=0; i<p->Ways.size(); ++i)
-		if (p->Ways[i]->notEverythingDownloaded())
+	for (unsigned int i=0; i<p->Nodes.size(); ++i)
+		if (p->Nodes[i]->notEverythingDownloaded())
 			return true;
 	return false;
 }
 
 CoordBox Road::boundingBox() const
 {
-	if (p->Ways.size())
+	if (p->Nodes.size())
 	{
-		CoordBox BBox(p->Ways[0]->boundingBox());
-		for (unsigned int i=1; i<p->Ways.size(); ++i)
-			BBox.merge(p->Ways[i]->boundingBox());
+		CoordBox BBox(p->Nodes[0]->boundingBox());
+		for (unsigned int i=1; i<p->Nodes.size(); ++i)
+			BBox.merge(p->Nodes[i]->boundingBox());
 		return BBox;
 	}
 	return CoordBox(Coord(0,0),Coord(0,0));
 }
 
-static Coord half(Way* W)
-{
-	if (W->controlFrom() && W->controlTo())
-	{
-		double H = (W->controlFrom()->position().lat()+W->controlTo()->position().lat())/2;
-		double L2 = (W->from()->position().lat()+W->controlFrom()->position().lat())/2;
-		double R3 = (W->controlTo()->position().lat()+W->to()->position().lat())/2;
-		double L3 = (L2+H)/2;
-		double R2 = (H+R3)/2;
-		double Lat = (L3+R2)/2;
-		H = (W->controlFrom()->position().lon()+W->controlTo()->position().lon())/2;
-		L2 = (W->from()->position().lon()+W->controlFrom()->position().lon())/2;
-		R3 = (W->controlTo()->position().lon()+W->to()->position().lon())/2;
-		L3 = (L2+H)/2;
-		R2 = (H+R3)/2;
-		double Lon = (L3+R2)/2;
-		return Coord(Lat,Lon);
-	}
-	double Lat = 0.5*(W->from()->position().lat()+W->to()->position().lat());
-	double Lon = 0.5*(W->from()->position().lon()+W->to()->position().lon());
-	return Coord(Lat,Lon);
-}
-
 void Road::draw(QPainter& thePainter, const Projection& theProjection)
 {
-/*	::drawPossibleArea(thePainter,this,theProjection);
-	thePainter.setBrush(QColor(0x22,0xff,0x22,128));
-	thePainter.setPen(QColor(255,255,255,128));
-	for (unsigned int i=0; i<p->Ways.size(); ++i)
-	{
-		Way* W = p->Ways[i];
-
-		QPointF P(theProjection.project(half(W)));
-		double Rad = theProjection.pixelPerM()*widthOf(W);
-		if (Rad>2)
-			thePainter.drawEllipse(P.x()-Rad/2,P.y()-Rad/2,Rad,Rad);
-		if (Rad>2)
-		{
-			QPen TP;
-			if (lastUpdated() == MapFeature::OSMServerConflict)
-				TP = QPen(QBrush(QColor(0xff,0,0)),Rad/4);
-			else
-				TP = QPen(QBrush(QColor(0x22,0xff,0x22,128)),Rad/4);
-			::draw(thePainter, TP, W, theProjection);
-		}
-	} */
 }
 
 void Road::drawFocus(QPainter& thePainter, const Projection& theProjection)
 {
+	// FIXME
 	QFont F(thePainter.font());
 	F.setPointSize(10);
 	F.setBold(true);
@@ -171,64 +112,50 @@ void Road::drawFocus(QPainter& thePainter, const Projection& theProjection)
 	QPen TP(QColor(0,0,255));
 	thePainter.setPen(TP);
 	thePainter.setBrush(QColor(0,0,255));
-	for (unsigned int i=0; i<p->Ways.size(); ++i)
+	for (unsigned int i=1; i<p->Nodes.size(); ++i)
 	{
-		Way* W = p->Ways[i];
-		QPointF F(theProjection.project(W->from()->position()));
-		QPointF P(theProjection.project(half(W)));
-		::draw(thePainter,TP,W,theProjection);
-		if (distance(F,P)>30)
-		{
-			thePainter.setBrush(Qt::NoBrush);
-			thePainter.setPen(QColor(0,0,0));
-			thePainter.fillRect(QRect(P.x()-6,P.y()-6,12,12),QColor(255,255,255));
-			thePainter.drawText(QRect(P.x()-6,P.y()-6,12,12),Qt::AlignCenter,QString::number(i+1));
-			thePainter.setPen(TP);
-			thePainter.drawEllipse(P.x()-7,P.y()-7,14,14);
-			thePainter.setBrush(QColor(0,0,255));
-		}
-		else
-		{
-			double Rad = theProjection.pixelPerM()*widthOf(W);
-			thePainter.drawEllipse(P.x()-Rad/2,P.y()-Rad/2,Rad,Rad);
-		}
+		::draw(thePainter,TP,MapFeature::UnknownDirection,p->Nodes[i-1]->position(),p->Nodes[i]->position(),widthOf(this),theProjection);
 	}
 }
 
 double Road::pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection) const
 {
 	double Best = 1000000;
-	for (unsigned int i=0; i<p->Ways.size(); ++i)
+	for (unsigned int i=0; i<p->Nodes.size(); ++i)
 	{
-		double D = p->Ways[i]->pixelDistance(Target,ClearEndDistance,theProjection);
+		double x = distance(Target,theProjection.project(p->Nodes[i]->position()));
+		if (x<ClearEndDistance)
+			return Best;
+	}
+	for (unsigned int i=1; i<p->Nodes.size(); ++i)
+	{
+		LineF F(theProjection.project(p->Nodes[i-1]->position()),theProjection.project(p->Nodes[i]->position()));
+		double D = F.capDistance(Target);
 		if (D < ClearEndDistance)
 			Best = D;
 	}
-	// always prefer us over ways
-	if (Best<ClearEndDistance)
-		Best*=0.99;
 	return Best;
 }
 
 void Road::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const std::vector<MapFeature*>& Proposals)
 {
-	for (unsigned int i=0; i<p->Ways.size(); ++i)
-		if (p->Ways[i] == aFeature)
+	for (unsigned int i=0; i<p->Nodes.size(); ++i)
+		if (p->Nodes[i] == aFeature)
 		{
-			std::vector<Way*> Alternatives;
+			std::vector<TrackPoint*> Alternatives;
 			for (unsigned int j=0; j<Proposals.size(); ++j)
 			{
-				Way* W = dynamic_cast<Way*>(Proposals[j]);
-				if (W)
-					Alternatives.push_back(W);
+				TrackPoint* Pt = dynamic_cast<TrackPoint*>(Proposals[j]);
+				if (Pt)
+					Alternatives.push_back(Pt);
 			}
-			if ( (p->Ways.size() == 1) && (Alternatives.size() == 0) )
+			if ( (p->Nodes.size() == 1) && (Alternatives.size() == 0) )
 				theList->add(new RemoveFeatureCommand(theDocument,this));
 			else
 			{
-				theList->add(new RoadRemoveWayCommand(this, p->Ways[i]));
+				theList->add(new RoadRemoveTrackPointCommand(this, p->Nodes[i]));
 				for (unsigned int j=0; j<Alternatives.size(); ++j)
-					theList->add(new RoadAddWayCommand(this, Alternatives[j], i+j));
+					theList->add(new RoadAddTrackPointCommand(this, Alternatives[j], i+j));
 			}
 			return;
 		}
@@ -247,4 +174,47 @@ MapFeature::TrafficDirectionType trafficDirection(const Road* R)
 	if (d == "no") return MapFeature::BothWays;
 	if (d == "-1") return MapFeature::OtherWay;
 	return MapFeature::UnknownDirection;
+}
+
+#define DEFAULTWIDTH 4
+
+double widthOf(const Road* R) 
+{ 
+	QString s(R->tagValue("width",QString())); 
+	if (!s.isNull()) 
+		return s.toDouble(); 
+	QString h = R->tagValue("highway",QString()); 
+	if ( (h == "motorway") || (h=="motorway_link") ) 
+		return 4*4; // 3 lanes plus emergency 
+	else if ( (h == "trunk") || (h=="trunk_link") ) 
+		return 3*4; // 2 lanes plus emergency 
+	else if ( (h == "primary") || (h=="primary_link") ) 
+		return 2*4; // 2 lanes 
+	else if (h == "secondary") 
+		return 2*4; // 2 lanes 
+	else if (h == "tertiary") 
+		return 1.5*4; // shared middle lane 
+	else if (h == "cycleway") 
+		return 1.5; 
+	return DEFAULTWIDTH; 
+} 
+
+unsigned int findSnapPointIndex(const Road* R, Coord& P)
+{
+	LineF L(R->get(0)->position(),R->get(1)->position());
+	unsigned int BestIdx = 1;
+	double BestDistance = L.capDistance(P);
+	for (unsigned int i = 2; i<R->size(); ++i)
+	{
+		LineF L(R->get(i-1)->position(),R->get(i)->position());
+		double Distance = L.capDistance(P);
+		if (Distance < BestDistance)
+		{
+			BestIdx = i;
+			BestDistance = Distance;
+		}
+	}
+	LineF F(R->get(BestIdx-1)->position(),R->get(BestIdx)->position());
+	P = F.project(Coord(P));
+	return BestIdx;
 }

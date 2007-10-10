@@ -4,7 +4,6 @@
 #include "Map/MapDocument.h"
 #include "Map/Projection.h"
 #include "Map/TrackPoint.h"
-#include "Map/Way.h"
 
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>

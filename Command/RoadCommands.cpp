@@ -1,56 +1,56 @@
 #include "RoadCommands.h"
 
 #include "Map/Road.h"
-#include "Map/Way.h"
+#include "Map/TrackPoint.h"
 #include "Sync/DirtyList.h"
 
-RoadAddWayCommand::RoadAddWayCommand(Road* R, Way* W)
-: theRoad(R), theWay(W), Position(theRoad->size())
+RoadAddTrackPointCommand::RoadAddTrackPointCommand(Road* R, TrackPoint* W)
+: theRoad(R), theTrackPoint(W), Position(theRoad->size())
 {
 	redo();
 }
 
-RoadAddWayCommand::RoadAddWayCommand(Road* R, Way* W, unsigned int aPos)
-: theRoad(R), theWay(W), Position(aPos)
+RoadAddTrackPointCommand::RoadAddTrackPointCommand(Road* R, TrackPoint* W, unsigned int aPos)
+: theRoad(R), theTrackPoint(W), Position(aPos)
 {
 	redo();
 }
 
-void RoadAddWayCommand::undo()
+void RoadAddTrackPointCommand::undo()
 {
-	theRoad->erase(theWay);
+	theRoad->remove(theTrackPoint);
 }
 
-void RoadAddWayCommand::redo()
+void RoadAddTrackPointCommand::redo()
 {
-	theRoad->add(theWay, Position);
+	theRoad->add(theTrackPoint, Position);
 }
 
-bool RoadAddWayCommand::buildDirtyList(DirtyList& theList)
+bool RoadAddTrackPointCommand::buildDirtyList(DirtyList& theList)
 {
 	return theList.update(theRoad);
 }
 
 
-/* ROADREMOVEWAYCOMMAND */
+/* ROADREMOVETRACKPOINTCOMMAND */
 
-RoadRemoveWayCommand::RoadRemoveWayCommand(Road* R, Way* W)
-: Idx(R->find(W)), theRoad(R), theWay(W)
+RoadRemoveTrackPointCommand::RoadRemoveTrackPointCommand(Road* R, TrackPoint* W)
+: Idx(R->find(W)), theRoad(R), theTrackPoint(W)
 {
 	redo();
 }
 
-void RoadRemoveWayCommand::undo()
+void RoadRemoveTrackPointCommand::undo()
 {
-	theRoad->add(theWay,Idx);
+	theRoad->add(theTrackPoint,Idx);
 }
 
-void RoadRemoveWayCommand::redo()
+void RoadRemoveTrackPointCommand::redo()
 {
-	theRoad->erase(theWay);
+	theRoad->remove(theTrackPoint);
 }
 
-bool RoadRemoveWayCommand::buildDirtyList(DirtyList& theList)
+bool RoadRemoveTrackPointCommand::buildDirtyList(DirtyList& theList)
 {
 	return theList.update(theRoad);
 }

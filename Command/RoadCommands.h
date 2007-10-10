@@ -4,13 +4,13 @@
 #include "Command/Command.h"
 
 class Road;
-class Way;
+class TrackPoint;
 
-class RoadAddWayCommand : public Command
+class RoadAddTrackPointCommand : public Command
 {
 	public:
-		RoadAddWayCommand(Road* R, Way* W);
-		RoadAddWayCommand(Road* R, Way* W, unsigned int Position);
+		RoadAddTrackPointCommand(Road* R, TrackPoint* W);
+		RoadAddTrackPointCommand(Road* R, TrackPoint* W, unsigned int Position);
 
 		virtual void undo();
 		virtual void redo();
@@ -18,14 +18,14 @@ class RoadAddWayCommand : public Command
 
 	private:
 		Road* theRoad;
-		Way* theWay;
+		TrackPoint* theTrackPoint;
 		unsigned int Position;
 };
 
-class RoadRemoveWayCommand : public Command
+class RoadRemoveTrackPointCommand : public Command
 {
 	public:
-		RoadRemoveWayCommand(Road* R, Way* W);
+		RoadRemoveTrackPointCommand(Road* R, TrackPoint* W);
 
 		virtual void undo();
 		virtual void redo();
@@ -34,7 +34,7 @@ class RoadRemoveWayCommand : public Command
 	private:
 		unsigned int Idx;
 		Road* theRoad;
-		Way* theWay;
+		TrackPoint* theTrackPoint;
 };
 
 #endif

@@ -107,6 +107,11 @@ public:
 			return sqrt( (P.x()-A)*(P.x()-A) + (P.y()-B)*(P.y()-B) );
 	}
 
+	double capDistance(const Coord& P)
+	{
+		return capDistance(QPointF(P.lat(),P.lon()));
+	}
+
 	Coord project(const Coord& P)
 	{
 		if (Valid)

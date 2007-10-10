@@ -5,10 +5,8 @@ HEADERS += \
 ./Command/FeatureCommands.h \
 ./Command/RoadCommands.h \
 ./Command/TrackPointCommands.h \
-./Command/WayCommands.h \
 ./Interaction/CreateDoubleWayInteraction.h \
 ./Interaction/CreateNodeInteraction.h \
-./Interaction/CreateWayInteraction.h \
 ./Interaction/CreateRoundaboutInteraction.h \
 ./Interaction/CreateSingleWayInteraction.h \
 ./Interaction/EditInteraction.h \
@@ -30,7 +28,6 @@ HEADERS += \
 ./Map/Road.h \
 ./Map/TrackPoint.h \
 ./Map/TrackSegment.h \
-./Map/Way.h \
 ./MapView.h \
 ./PaintStyle/EditPaintStyle.h \
 ./PaintStyle/PaintStyle.h \
@@ -47,7 +44,6 @@ SOURCES += \
 ./Command/FeatureCommands.cpp \
 ./Command/TrackPointCommands.cpp \
 ./Command/RoadCommands.cpp \
-./Command/WayCommands.cpp \
 ./Map/Coord.cpp \
 ./Map/DownloadOSM.cpp \
 ./Map/ExportOSM.cpp \
@@ -60,13 +56,11 @@ SOURCES += \
 ./Map/Road.cpp \
 ./Map/TrackPoint.cpp \
 ./Map/TrackSegment.cpp \
-./Map/Way.cpp \
 ./MapView.cpp \
 ./Interaction/CreateDoubleWayInteraction.cpp \
 ./Interaction/CreateNodeInteraction.cpp \
 ./Interaction/CreateSingleWayInteraction.cpp \
 ./Interaction/CreateRoundaboutInteraction.cpp \
-./Interaction/CreateWayInteraction.cpp \
 ./Interaction/EditInteraction.cpp \
 ./Interaction/EditRoadInteraction.cpp \
 ./Interaction/Interaction.cpp \
@@ -91,7 +85,6 @@ FORMS += \
 ./Sync/SyncListDialog.ui \
 ./TrackPointProperties.ui \
 ./UploadMapDialog.ui \
-./WayProperties.ui \
 ./SetPositionDialog.ui \
 ./MultiProperties.ui \
 ./Interaction/CreateDoubleWayDock.ui \

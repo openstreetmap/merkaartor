@@ -13,7 +13,6 @@
 #include "Map/MapFeature.h"
 #include "Map/Road.h"
 #include "Map/TrackPoint.h"
-#include "Map/Way.h"
 
 #include <QtGui/QMouseEvent>
 
@@ -90,7 +89,7 @@ void EditInteraction::on_move_triggered()
 
 void EditInteraction::on_add_triggered()
 {
-	view()->launch(new EditRoadInteraction(view(),dynamic_cast<Road*>(view()->properties()->selection(0))));
+//	view()->launch(new EditRoadInteraction(view(),dynamic_cast<Road*>(view()->properties()->selection(0))));
 }
 
 void EditInteraction::on_reverse_triggered()
@@ -98,20 +97,17 @@ void EditInteraction::on_reverse_triggered()
 	MapFeature* Selection = view()->properties()->selection(0);
 	if (Road* R = dynamic_cast<Road*>(Selection))
 	{
-		std::vector<Way*> Ways;
+		std::vector<TrackPoint*> Pts;
 		CommandList* theList = new CommandList;
 		for (unsigned int i=R->size(); i; --i)
 		{
-			Way* W = R->get(i-1);
-			Ways.push_back(W);
-			theList->add(new RoadRemoveWayCommand(R,W));
-			theList->add(new WaySetFromToCommand(W,W->to(),W->controlTo(),W->controlFrom(),W->from()));
+			TrackPoint* Pt = R->get(i-1);
+			Pts.push_back(Pt);
+			theList->add(new RoadRemoveTrackPointCommand(R,Pt));
 		}
-		for (unsigned int i=0; i<Ways.size(); ++i)
-			theList->add(new RoadAddWayCommand(R,Ways[i]));
+		for (unsigned int i=0; i<Pts.size(); ++i)
+			theList->add(new RoadAddTrackPointCommand(R,Pts[i]));
 		document()->history().add(theList);
 	}
-	else if (Way* W = dynamic_cast<Way*>(Selection))
-		document()->history().add(new WaySetFromToCommand(W,W->to(),W->controlTo(),W->controlFrom(),W->from()));
 	view()->invalidate();
 }

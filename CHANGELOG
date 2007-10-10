@@ -1,3 +1,6 @@
+v0.08
+	* FIX : work with 0.5 API
+	
 v0.07 18 aug 2007
 	* ADD : nice mappaint mechanism
 	* FIX : downloading same area twice doesn't create upload conflicts

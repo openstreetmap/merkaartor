@@ -297,37 +297,37 @@ QString Downloader::getURLToFetch(const QString &What)
 
 QString Downloader::getURLToFetch(const QString &What, const QString& Id)
 {
-	QString URL = QString("/api/0.4/%1/%2");
+	QString URL = QString("/api/0.5/%1/%2");
 	return URL.arg(What).arg(Id);
 }
 
 QString Downloader::getURLToCreate(const QString &What)
 {
-	QString URL = QString("/api/0.4/%1/create");
+	QString URL = QString("/api/0.5/%1/create");
 	return URL.arg(What);
 }
 
 QString Downloader::getURLToUpdate(const QString &What, const QString& Id)
 {
-	QString URL = QString("/api/0.4/%1/%2");
+	QString URL = QString("/api/0.5/%1/%2");
 	return URL.arg(What).arg(Id);
 }
 
 QString Downloader::getURLToDelete(const QString &What, const QString& Id)
 {
-	QString URL = QString("/api/0.4/%1/%2");
+	QString URL = QString("/api/0.5/%1/%2");
 	return URL.arg(What).arg(Id);
 }
 
 QString Downloader::getURLToMap()
 {
-	QString URL = QString("/api/0.4/map?bbox=%1,%2,%3,%4");
+	QString URL = QString("/api/0.5/map?bbox=%1,%2,%3,%4");
 	return URL;
 }
 
 QString Downloader::getURLToTrackPoints()
 {
-	QString URL = QString("/api/0.4/trackpoints?bbox=%1,%2,%3,%4&page=%5");
+	QString URL = QString("/api/0.5/trackpoints?bbox=%1,%2,%3,%4&page=%5");
 	return URL;
 }
 
@@ -412,7 +412,7 @@ bool downloadTracksFromOSM(QMainWindow* Main, const QString& aWeb, const QString
 			return false;
 		unsigned int Before = trackLayer->size();
 		QByteArray Ar(theDownloader.content());
-		bool OK = importGPX(Main, Ar, theDocument, trackLayer, false);
+		bool OK = importGPX(Main, Ar, theDocument, trackLayer, true);
 		if (!OK)
 			return false;
 		if (Before == trackLayer->size())
