@@ -6,7 +6,6 @@
 #include "Command/DocumentCommands.h"
 #include "Command/FeatureCommands.h"
 #include "Command/RoadCommands.h"
-#include "Command/WayCommands.h"
 #include "Interaction/EditRoadInteraction.h"
 #include "Interaction/MoveTrackPointInteraction.h"
 #include "Map/MapDocument.h"
