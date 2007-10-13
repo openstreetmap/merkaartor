@@ -5,7 +5,6 @@
 #include "Command/FeatureCommands.h"
 #include "Command/RoadCommands.h"
 #include "Command/TrackPointCommands.h"
-#include "Command/WayCommands.h"
 #include "Map/DownloadOSM.h"
 #include "Map/MapDocument.h"
 #include "Map/Road.h"

@@ -4,19 +4,23 @@
 #include "Interaction/Interaction.h"
 #include "Map/Coord.h"
 
-class MoveTrackPointInteraction : public TrackPointSnapInteraction
+#include <vector>
+
+class MoveTrackPointInteraction : public FeatureSnapInteraction
 {
 	public:
 		MoveTrackPointInteraction(MapView* aView);
 		~MoveTrackPointInteraction(void);
 
-		virtual void snapMousePressEvent(QMouseEvent * event, TrackPoint* aLast);
-		virtual void snapMouseReleaseEvent(QMouseEvent * event, TrackPoint* aLast);
-		virtual void snapMouseMoveEvent(QMouseEvent* event, TrackPoint* aLast);\
+		virtual void snapMousePressEvent(QMouseEvent * event, MapFeature* aLast);
+		virtual void snapMouseReleaseEvent(QMouseEvent * event, MapFeature* aLast);
+		virtual void snapMouseMoveEvent(QMouseEvent* event, MapFeature* aLast);
 
 	private:
-		TrackPoint* Moving;
-		Coord Orig;
+		Coord calculateNewPosition(QMouseEvent* event, MapFeature* aLast);
+		std::vector<TrackPoint*> Moving;
+		std::vector<Coord> OriginalPosition;
+		Coord StartDragPosition;
 };
 
 #endif

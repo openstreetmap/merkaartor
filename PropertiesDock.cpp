@@ -3,7 +3,6 @@
 #include "TagModel.h"
 #include "Command/FeatureCommands.h"
 #include "Command/TrackPointCommands.h"
-#include "Command/WayCommands.h"
 #include "Map/Coord.h"
 #include "Map/MapDocument.h"
 #include "Map/MapFeature.h"

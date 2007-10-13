@@ -44,6 +44,16 @@ class Coord
 		double Lon;
 };
 
+inline Coord operator-(Coord& A,  Coord& B)
+{
+	return Coord(A.lat()-B.lat(),A.lon()-B.lon());
+}
+
+inline Coord operator+(Coord& A,  Coord& B)
+{
+	return Coord(A.lat()+B.lat(),A.lon()+B.lon());
+}
+
 class CoordBox
 {
 	public:

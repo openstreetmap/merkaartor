@@ -12,7 +12,7 @@
 #include <vector>
 
 MoveTrackPointInteraction::MoveTrackPointInteraction(MapView* aView)
-: TrackPointSnapInteraction(aView), Moving(0), Orig(0,0)
+: GenericFeatureSnapInteraction(aView), StartDragPosition(0,0)
 {
 }
 
@@ -20,51 +20,83 @@ MoveTrackPointInteraction::~MoveTrackPointInteraction(void)
 {
 }
 
-void MoveTrackPointInteraction::snapMousePressEvent(QMouseEvent *, TrackPoint* aLast)
+void MoveTrackPointInteraction::snapMousePressEvent(QMouseEvent * event, MapFeature* aLast)
 {
-	Moving = aLast;
-	if (Moving)
+	clearNoSnap();
+	Moving.clear();
+	OriginalPosition.clear();
+	StartDragPosition = projection().inverse(event->pos());
+	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(aLast))
 	{
-		Orig = Moving->position();
-		addToNoSnap(Moving);
+		Moving.push_back(Pt);
+		StartDragPosition = Pt->position();
+	}
+	else if (Road* R = dynamic_cast<Road*>(aLast))
+		for (unsigned int i=0; i<R->size(); ++i)
+			if (std::find(Moving.begin(),Moving.end(),R->get(i)) == Moving.end())
+				Moving.push_back(R->get(i));
+	for (unsigned int i=0; i<Moving.size(); ++i)
+	{
+		OriginalPosition.push_back(Moving[i]->position());
+		addToNoSnap(Moving[i]);
 	}
 }
 
-void MoveTrackPointInteraction::snapMouseReleaseEvent(QMouseEvent * event, TrackPoint* Closer)
+void MoveTrackPointInteraction::snapMouseReleaseEvent(QMouseEvent * event, MapFeature* Closer)
 {
-	if (Moving)
+	if (Moving.size())
 	{
-		Moving->setPosition(Orig);
-		Moving->setLastUpdated(MapFeature::User);
-		if (Closer)
+		CommandList* theList = new CommandList;
+		Coord Diff(calculateNewPosition(event,Closer)-StartDragPosition);
+		for (unsigned int i=0; i<Moving.size(); ++i)
 		{
-			CommandList* theList = new CommandList;
-			theList->add(new MoveTrackPointCommand(Moving,Closer->position()));
-			std::vector<MapFeature*> Alternative;
-			Alternative.push_back(Moving);
-			theList->add(new RemoveFeatureCommand(document(),Closer,Alternative));
-			document()->history().add(theList);
+			Moving[i]->setPosition(OriginalPosition[i]);
+			theList->add(new MoveTrackPointCommand(Moving[i],OriginalPosition[i]+Diff));
 		}
-		else
-			document()->history().add(new MoveTrackPointCommand(Moving,projection().inverse(event->pos())));
+		document()->history().add(theList);
 		view()->invalidate();
-		Moving = 0;
 	}
+	Moving.clear();
+	OriginalPosition.clear();
 	clearNoSnap();
 }
 
-void MoveTrackPointInteraction::snapMouseMoveEvent(QMouseEvent* event, TrackPoint* Closer)
+void MoveTrackPointInteraction::snapMouseMoveEvent(QMouseEvent* event, MapFeature* Closer)
 {
-	if (Moving)
+	if (Moving.size())
 	{
-		if (Closer)
-			Moving->setPosition(Closer->position());
-		else
-			Moving->setPosition(projection().inverse(event->pos()));
+		Coord Diff = calculateNewPosition(event,Closer)-StartDragPosition;
+		for (unsigned int i=0; i<Moving.size(); ++i)
+			Moving[i]->setPosition(OriginalPosition[i]+Diff);
 		view()->invalidate();
 	}
 }
 
+Coord MoveTrackPointInteraction::calculateNewPosition(QMouseEvent *event, MapFeature *aLast)
+{
+	Coord Target = projection().inverse(event->pos());
+	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(aLast))
+		return Pt->position();
+/*	else if (Road* R = dynamic_cast<Road*>(aLast))
+	{
+		LineF L1(R->get(0),R->get(1));
+		double Dist = L1.distance(Target);
+		Coord BestTarget = L1.project(Target);
+		for (unsigned int i=2; i<R->size(); ++i)
+		{
+			LineF L2(R->get(i-1),R->get(i));
+			double Dist2 = L2.distance(Target);
+			if (Dist2 < Dist)
+			{
+				Dist = Dist2;
+				BestTarget = L2.project(Target);
+			}
+		}
+		Target = BestTarget;
+	}
+	Coord Diff = */
+	return projection().inverse(event->pos());
+}
 
 
 
