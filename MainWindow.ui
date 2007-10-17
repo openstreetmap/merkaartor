@@ -19,7 +19,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>29</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >
@@ -61,7 +61,6 @@
      <string>&amp;Create</string>
     </property>
     <addaction name="createNodeAction" />
-    <addaction name="createLinearWayAction" />
     <addaction name="createRoadAction" />
     <addaction name="createRoadFromSelectedSegmentsAction" />
     <addaction name="createDoubleWayAction" />

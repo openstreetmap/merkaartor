@@ -336,16 +336,6 @@ void MainWindow::on_createRoundaboutAction_triggered()
 	theView->launch(new CreateRoundaboutInteraction(this, theView));
 }
 
-void MainWindow::on_createWayAction_triggered()
-{
-//	theView->launch(new CreateWayInteraction(this, theView,true));
-}
-
-void MainWindow::on_createLinearWayAction_triggered()
-{
-//	theView->launch(new CreateWayInteraction(this, theView,false));
-}
-
 void MainWindow::on_createRoadAction_triggered()
 {
 	theView->launch(new CreateSingleWayInteraction(this, theView));

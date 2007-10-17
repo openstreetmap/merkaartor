@@ -39,7 +39,7 @@ void PropertiesDock::checkMenuStatus()
 		IsRoad = dynamic_cast<Road*>(Selection[0]) != 0;
 	}
 	Main->editRemoveAction->setEnabled(Selection.size() == 1);
-	Main->editMoveAction->setEnabled(Selection.size());
+	Main->editMoveAction->setEnabled(true);
 	Main->editAddAction->setEnabled(IsRoad);
 	Main->editReverseAction->setEnabled(IsRoad);
 }
