@@ -29,8 +29,10 @@
 
 /* DOWNLOADER */
 
-Downloader::Downloader(const QString& aWeb, const QString& aUser, const QString& aPwd)
-: Port(80), Web(aWeb), User(aUser), Password(aPwd), Error(false), Animator(0), AnimatorBar(0), AnimationTimer(0)
+Downloader::Downloader(const QString& aWeb, const QString& aUser, const QString& aPwd, bool aUseProxy, const QString& aProxyHost, int aProxyPort)
+: Port(80), Web(aWeb), User(aUser), Password(aPwd),
+  UseProxy(aUseProxy), ProxyHost(aProxyHost), ProxyPort(aProxyPort),
+  Error(false), Animator(0), AnimatorBar(0), AnimationTimer(0)
 {
 	int p = Web.lastIndexOf(':');
 	if (p != -1)
@@ -164,7 +166,8 @@ bool Downloader::go(const QString& url)
 	Content.clear();
 	QBuffer ResponseBuffer(&Content);
 	ResponseBuffer.open(QIODevice::WriteOnly);
-
+	if (UseProxy)
+		Request.setProxy(ProxyHost,ProxyPort);
 	QHttpRequestHeader Header("GET",url);
 	Header.setValue("Accept-Encoding", "gzip,deflate");
 	if (Port == 80)
@@ -214,6 +217,8 @@ bool Downloader::request(const QString& Method, const QString& URL, const QStrin
 	QByteArray ba(Data.toUtf8());
 	QBuffer Buf(&ba);
 
+	if (UseProxy)
+		Request.setProxy(ProxyHost,ProxyPort);
 	QHttpRequestHeader Header(Method,URL);
 	if (Port == 80)
 		Header.setValue("Host",Web);
@@ -331,14 +336,14 @@ QString Downloader::getURLToTrackPoints()
 	return URL;
 }
 
-bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser, const QString& aPassword, const CoordBox& aBox , MapDocument* theDocument)
+bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort, const CoordBox& aBox , MapDocument* theDocument)
 {
 	if (checkForConflicts(theDocument))
 	{
 		QMessageBox::warning(aParent,MainWindow::tr("Unresolved conflicts"), MainWindow::tr("Please resolve existing conflicts first"));
 		return false;
 	}
-	Downloader Rcv(aWeb, aUser, aPassword);
+	Downloader Rcv(aWeb, aUser, aPassword, UseProxy, ProxyHost, ProxyPort);
 	QString URL = Rcv.getURLToMap();
 	URL = URL.arg(radToAng(aBox.bottomLeft().lon())).arg(radToAng(aBox.bottomLeft().lat())).arg(radToAng(aBox.topRight().lon())).arg(radToAng(aBox.topRight().lat()));
 	QProgressDialog* ProgressDialog = new QProgressDialog(aParent);
@@ -373,7 +378,7 @@ bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser
 		QMessageBox::warning(aParent,MainWindow::tr("Download failed"),MainWindow::tr("Unexpected http status code (%1)").arg(x));
 		return false;
 	}
-	Downloader Down(aWeb, aUser, aPassword);
+	Downloader Down(aWeb, aUser, aPassword, UseProxy, ProxyHost, ProxyPort);
 	MapLayer* theLayer = new MapLayer("Download");
 	bool OK = importOSM(aParent, Rcv.content(), theDocument, theLayer, &Down);
 	if (!OK)
@@ -382,9 +387,9 @@ bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser
 }
 
 
-bool downloadTracksFromOSM(QMainWindow* Main, const QString& aWeb, const QString& aUser, const QString& aPassword, const CoordBox& aBox , MapDocument* theDocument)
+bool downloadTracksFromOSM(QMainWindow* Main, const QString& aWeb, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort , const CoordBox& aBox , MapDocument* theDocument)
 {
-	Downloader theDownloader(aWeb, aUser, aPassword);
+	Downloader theDownloader(aWeb, aUser, aPassword, UseProxy, ProxyHost, ProxyPort);
 	MapLayer* trackLayer = new MapLayer("Downloaded tracks");
 	theDocument->add(trackLayer);
 	QProgressDialog ProgressDialog(Main);
@@ -432,7 +437,7 @@ bool checkForConflicts(MapDocument* theDocument)
 
 bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDocument)
 {
-	static bool DownloadRaw = true;
+	static bool DownloadRaw = false;
 	QDialog * dlg = new QDialog(aParent);
 	QSettings Sets;
 	Sets.beginGroup("downloadosm");
@@ -451,11 +456,17 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 	ui.Username->setText(Sets.value("user").toString());
 	ui.Password->setText(Sets.value("password").toString());
 	ui.IncludeTracks->setChecked(DownloadRaw);
+	ui.UseProxy->setChecked(Sets.value("useproxy").toBool());
+	ui.ProxyHost->setText(Sets.value("proxyhost").toString());
+	ui.ProxyPort->setText(Sets.value("proxyport").toString());
 	bool OK = true;
 	if (dlg->exec() == QDialog::Accepted)
 	{
 		Sets.setValue("user",ui.Username->text());
 		Sets.setValue("password",ui.Password->text());
+		Sets.setValue("useproxy",ui.UseProxy->isChecked());
+		Sets.setValue("proxyhost",ui.ProxyHost->text());
+		Sets.setValue("proxyport",ui.ProxyPort->text());
 		DownloadRaw = false;
 		CoordBox Clip(Coord(0,0),Coord(0,0));
 		if (ui.FromBookmark->isChecked())
@@ -479,9 +490,9 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 			Sets.setValue("bookmarks",Bookmarks);
 		}
 		aParent->view()->setUpdatesEnabled(false);
-		OK = downloadOSM(aParent,ui.Website->text(),ui.Username->text(),ui.Password->text(),Clip,theDocument);
+		OK = downloadOSM(aParent,ui.Website->text(),ui.Username->text(),ui.Password->text(), ui.UseProxy->isChecked(), ui.ProxyHost->text(), ui.ProxyPort->text().toInt(),Clip,theDocument);
 		if (OK && ui.IncludeTracks->isChecked())
-			OK = downloadTracksFromOSM(aParent,ui.Website->text(),ui.Username->text(),ui.Password->text(),Clip,theDocument);
+			OK = downloadTracksFromOSM(aParent,ui.Website->text(),ui.Username->text(),ui.Password->text(),ui.UseProxy->isChecked(), ui.ProxyHost->text(), ui.ProxyPort->text().toInt(), Clip,theDocument);
 		aParent->view()->setUpdatesEnabled(true);
 		if (OK)
 		{

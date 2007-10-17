@@ -23,7 +23,7 @@ class Downloader : public QObject
 	Q_OBJECT
 
 	public:
-		Downloader(const QString& aWeb, const QString& aUser, const QString& aPwd);
+		Downloader(const QString& aWeb, const QString& aUser, const QString& aPwd, bool UseProxy, const QString& aProxyHost, int aProxyPort);
 
 		bool request(const QString& Method, const QString& URL, const QString& Out);
 		bool go(const QString& url);
@@ -49,6 +49,9 @@ class Downloader : public QObject
 		unsigned int Port;
 		QHttp Request;
 		QString Web, User, Password;
+		bool UseProxy;
+		QString ProxyHost;
+		int ProxyPort;
 		QByteArray Content;
 		int Result;
 		int Id;

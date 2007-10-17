@@ -229,11 +229,17 @@ void MainWindow::on_fileUploadAction_triggered()
 	ui.Website->setText("www.openstreetmap.org");
 	ui.Username->setText(Sets.value("user").toString());
 	ui.Password->setText(Sets.value("password").toString());
+	ui.UseProxy->setChecked(Sets.value("useproxy").toBool());
+	ui.ProxyHost->setText(Sets.value("proxyhost").toString());
+	ui.ProxyPort->setText(Sets.value("proxyport").toString());
 	if (dlg->exec() == QDialog::Accepted)
 	{
 		Sets.setValue("user",ui.Username->text());
 		Sets.setValue("password",ui.Password->text());
-		syncOSM(this,ui.Website->text(),ui.Username->text(),ui.Password->text(),true);
+		Sets.setValue("useproxy",ui.UseProxy->isChecked());
+		Sets.setValue("proxyhost",ui.ProxyHost->text());
+		Sets.setValue("proxyport",ui.ProxyPort->text());
+		syncOSM(this,ui.Website->text(),ui.Username->text(),ui.Password->text(),ui.UseProxy->isChecked(), ui.ProxyHost->text(), ui.ProxyPort->text().toInt());
 	}
 	delete dlg;
 

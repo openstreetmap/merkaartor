@@ -8,7 +8,7 @@
 
 #include <QtGui/QMessageBox>
 
-void syncOSM(MainWindow* theMain, const QString& aWeb, const QString& aUser, const QString& aPwd, bool Use4Api)
+void syncOSM(MainWindow* theMain, const QString& aWeb, const QString& aUser, const QString& aPwd, bool UseProxy, const QString& ProxyHost, int ProxyPort)
 {
 	if (checkForConflicts(theMain->document()))
 	{
@@ -22,7 +22,7 @@ void syncOSM(MainWindow* theMain, const QString& aWeb, const QString& aUser, con
 	if (Describer.showChanges(theMain))
 	{
 		Future.resetUpdates();
-		DirtyListExecutor Exec(theMain->document(),Future,aWeb,aUser,aPwd,Describer.tasks(), Use4Api);
+		DirtyListExecutor Exec(theMain->document(),Future,aWeb,aUser,aPwd, UseProxy, ProxyHost, ProxyPort,Describer.tasks());
 		Exec.executeChanges(theMain);
 	}
 }
