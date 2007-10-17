@@ -7,7 +7,9 @@
 #include "Map/Projection.h"
 #include "Map/TrackPoint.h"
 
+#include <QtGui/QCursor>
 #include <QtGui/QMouseEvent>
+#include <QtGui/QPixmap>
 
 #include <vector>
 
@@ -19,6 +21,13 @@ MoveTrackPointInteraction::MoveTrackPointInteraction(MapView* aView)
 MoveTrackPointInteraction::~MoveTrackPointInteraction(void)
 {
 }
+
+QCursor MoveTrackPointInteraction::cursor() const
+{
+	QPixmap pm(":/Icons/move.xpm");
+	return QCursor(pm);
+}
+
 
 void MoveTrackPointInteraction::snapMousePressEvent(QMouseEvent * event, MapFeature* aLast)
 {

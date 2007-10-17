@@ -2,6 +2,7 @@ v0.08
 	* FIX : work with 0.5 API
 	* ADD : move can now work on a complete way
 	* ADD : non-transparant proxy support
+	* ADD : change cursor when in move mode
 	
 v0.07 18 aug 2007
 	* ADD : nice mappaint mechanism

@@ -15,6 +15,7 @@ class MoveTrackPointInteraction : public FeatureSnapInteraction
 		virtual void snapMousePressEvent(QMouseEvent * event, MapFeature* aLast);
 		virtual void snapMouseReleaseEvent(QMouseEvent * event, MapFeature* aLast);
 		virtual void snapMouseMoveEvent(QMouseEvent* event, MapFeature* aLast);
+		virtual QCursor cursor() const;
 
 	private:
 		Coord calculateNewPosition(QMouseEvent* event, MapFeature* aLast);
