@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>176</width>
-    <height>242</height>
+    <width>202</width>
+    <height>307</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -97,7 +97,7 @@
         <string>...</string>
        </property>
        <property name="icon" >
-        <iconset>Icons/small-remove.xpm</iconset>
+        <iconset resource="Icons/AllIcons.qrc" >:/Icons/small-remove.xpm</iconset>
        </property>
       </widget>
      </item>
@@ -108,6 +108,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="Icons/AllIcons.qrc" />
+ </resources>
  <connections/>
 </ui>
