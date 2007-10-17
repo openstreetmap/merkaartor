@@ -170,13 +170,14 @@ MapFeature::TrafficDirectionType trafficDirection(const Road* R)
 		d = R->tagValue(idx);
 	else
 		return MapFeature::UnknownDirection;
-	if (d == "yes") return MapFeature::OneWay;
+	if ( (d == "yes") || (d == "1") ) return MapFeature::OneWay;
 	if (d == "no") return MapFeature::BothWays;
 	if (d == "-1") return MapFeature::OtherWay;
 	return MapFeature::UnknownDirection;
 }
 
-#define DEFAULTWIDTH 4
+#define DEFAULTWIDTH 6
+#define LANEWIDTH 4
 
 double widthOf(const Road* R) 
 { 
@@ -185,15 +186,15 @@ double widthOf(const Road* R)
 		return s.toDouble(); 
 	QString h = R->tagValue("highway",QString()); 
 	if ( (h == "motorway") || (h=="motorway_link") ) 
-		return 4*4; // 3 lanes plus emergency 
+		return 4*LANEWIDTH; // 3 lanes plus emergency 
 	else if ( (h == "trunk") || (h=="trunk_link") ) 
-		return 3*4; // 2 lanes plus emergency 
+		return 3*LANEWIDTH; // 2 lanes plus emergency 
 	else if ( (h == "primary") || (h=="primary_link") ) 
-		return 2*4; // 2 lanes 
+		return 2*LANEWIDTH; // 2 lanes 
 	else if (h == "secondary") 
-		return 2*4; // 2 lanes 
+		return 2*LANEWIDTH; // 2 lanes 
 	else if (h == "tertiary") 
-		return 1.5*4; // shared middle lane 
+		return 1.5*LANEWIDTH; // shared middle lane 
 	else if (h == "cycleway") 
 		return 1.5; 
 	return DEFAULTWIDTH; 
