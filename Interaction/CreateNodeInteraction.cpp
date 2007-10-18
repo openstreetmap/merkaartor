@@ -11,7 +11,7 @@
 #include <vector>
 
 CreateNodeInteraction::CreateNodeInteraction(MapView* aView)
-: GenericFeatureSnapInteraction(aView)
+: RoadSnapInteraction(aView)
 {
 }
 
