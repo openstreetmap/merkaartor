@@ -5,6 +5,7 @@ v0.08
 	* ADD : change cursor when in move mode
 	* FIX : recognize 1 in oneway key
 	* FIX : slightly change default way width
+	* FIX : undo/redo handling for manipulating tags
 	
 v0.07 18 aug 2007
 	* ADD : nice mappaint mechanism
