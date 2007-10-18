@@ -35,7 +35,7 @@ QString exportOSM(const Road& R)
 	QString S;
 	S += QString("<way id=\"%1\">").arg(stripToOSMId(R.id()));
 	for (unsigned int i=0; i<R.size(); ++i)
-		S+=QString("<nd id=\"%1\"/>").arg(stripToOSMId(R.get(i)->id()));
+		S+=QString("<nd ref=\"%1\"/>").arg(stripToOSMId(R.get(i)->id()));
 	S += tagOSM(R);
 	S += "</way>";
 	return S;
