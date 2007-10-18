@@ -23,6 +23,7 @@ class FeaturePaintSelector
 		FeaturePaintSelector();
 
 		bool isHit(const Road* R, double PixelPerM) const;
+		bool isHit(const TrackPoint* Pt, double PixelPerM) const;
 		FeaturePaintSelector& selectOnTag(const QString& Tag, const QString& Value);
 		FeaturePaintSelector& selectOnTag(const QString& Tag, const QString& Value1, const QString& Value2);
 		FeaturePaintSelector& background(const QColor& Color, double Scale, double Offset);
@@ -33,11 +34,12 @@ class FeaturePaintSelector
 		FeaturePaintSelector& foregroundFill(const QColor& FillColor);
 		FeaturePaintSelector& limitToZoom(ZoomType aType);
 		FeaturePaintSelector& drawTrafficDirectionMarks();
+		FeaturePaintSelector& trackPointIcon(const QString& Filename);
 
 		void drawBackground(Road* R, QPainter& thePainter, const Projection& theProjection) const;
 		void drawForeground(Road* R, QPainter& thePainter, const Projection& theProjection) const;
 		void drawTouchup(Road* R, QPainter& thePainter, const Projection& theProjection) const;
-//		void drawForeground(Road* R, QPainter& thePainter, const Projection& theProjection) const;
+		void drawTouchup(TrackPoint* R, QPainter& thePainter, const Projection& theProjection) const;
 	private:
 		std::vector<std::pair<QString, QString> > OneOfTheseTags;
 
@@ -62,6 +64,7 @@ class FeaturePaintSelector
 		bool ForegroundFill;
 		QColor ForegroundFillFillColor;
 		bool DrawTrafficDirectionMarks;
+		QString TrackPointIconName;
 };
 
 class EditPaintStyle : public EmptyPaintStyle

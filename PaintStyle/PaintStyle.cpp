@@ -27,3 +27,7 @@ PaintStyle* CascadingPaintStyleLayer::nextLayer()
 void EmptyPaintStyle::draw(Road *)
 {
 }
+
+void EmptyPaintStyle::draw(TrackPoint*)
+{
+}

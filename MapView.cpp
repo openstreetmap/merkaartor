@@ -89,6 +89,11 @@ void MapView::updateStaticBuffer(QPaintEvent*)
 				if (Road* R = dynamic_cast<Road*>(i.get()))
 					Current->draw(R);
 			}
+			for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
+			{
+				if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(i.get()))
+					Current->draw(Pt);
+			}
 			Current = Current->nextLayer();
 		}
 	}

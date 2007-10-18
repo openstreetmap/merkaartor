@@ -105,6 +105,12 @@ FeaturePaintSelector& FeaturePaintSelector::foreground(const QColor& Color, doub
 	return *this;
 }
 
+FeaturePaintSelector& FeaturePaintSelector::trackPointIcon(const QString& Filename)
+{
+	TrackPointIconName = Filename;
+	return *this;
+}
+
 FeaturePaintSelector& FeaturePaintSelector::selectOnTag(const QString& Tag, const QString& Value)
 {
 	OneOfTheseTags.push_back(std::make_pair(Tag,Value));
@@ -126,6 +132,16 @@ bool FeaturePaintSelector::isHit(const Road* R, double PixelPerM) const
 		return false;
 	for (unsigned int i=0; i<OneOfTheseTags.size(); ++i)
 		if (R->tagValue(OneOfTheseTags[i].first,QString::null) == OneOfTheseTags[i].second)
+			return true;
+	return false;
+}
+
+bool FeaturePaintSelector::isHit(const TrackPoint* Pt, double PixelPerM) const
+{
+	if (ZoomLimit && (PixelPerM < PixelPerMZoomLimit))
+		return false;
+	for (unsigned int i=0; i<OneOfTheseTags.size(); ++i)
+		if (Pt->tagValue(OneOfTheseTags[i].first,QString::null) == OneOfTheseTags[i].second)
 			return true;
 	return false;
 }
@@ -180,6 +196,16 @@ void FeaturePaintSelector::drawForeground(Road* R, QPainter& thePainter, const P
 	QPainterPath Path;
 	buildPathFromRoad(R, theProjection, Path);
 	thePainter.drawPath(Path);
+}
+
+void FeaturePaintSelector::drawTouchup(TrackPoint* Pt, QPainter& thePainter, const Projection& theProjection) const
+{
+	if (TrackPointIconName != "")
+	{
+		QPixmap pm(TrackPointIconName);
+		QPointF C(theProjection.project(Pt->position()));
+		thePainter.drawPixmap( C.x()-pm.width()/2,C.y()-pm.height()-2 , pm);
+	}
 }
 
 void FeaturePaintSelector::drawTouchup(Road* R, QPainter& thePainter, const Projection& theProjection) const
@@ -241,17 +267,12 @@ void FeaturePaintSelector::drawTouchup(Road* R, QPainter& thePainter, const Proj
 		}
 	}
 }
-
-/* FIXME
-void FeaturePaintSelector::drawForeground(Road* R, QPainter& thePainter, const Projection& theProjection) const
-{
-}
-*/
 class EPBackgroundLayer : public CascadingPaintStyleLayer
 {
 	public:
 		void setP(EditPaintStylePrivate* p);
 		virtual void draw(Road* R);
+		virtual void draw(TrackPoint* Pt);
 	private:
 		EditPaintStylePrivate* p;
 };
@@ -261,6 +282,7 @@ class EPForegroundLayer : public CascadingPaintStyleLayer
 	public:
 		void setP(EditPaintStylePrivate* p);
 		virtual void draw(Road* R);
+		virtual void draw(TrackPoint* Pt);
 	private:
 		EditPaintStylePrivate* p;
 };
@@ -270,6 +292,7 @@ class EPTouchupLayer : public CascadingPaintStyleLayer
 	public:
 		void setP(EditPaintStylePrivate* p);
 		virtual void draw(Road* R);
+		virtual void draw(TrackPoint* Pt);
 	private:
 		EditPaintStylePrivate* p;
 };
@@ -398,6 +421,10 @@ void EPBackgroundLayer::draw(Road* R)
 	p->thePainter.strokePath(Path,thePen);
 }
 
+void EPBackgroundLayer::draw(TrackPoint*)
+{
+}
+
 void EPForegroundLayer::setP(EditPaintStylePrivate* ap)
 {
 	p = ap;
@@ -413,6 +440,10 @@ void EPForegroundLayer::draw(Road* R)
 			p->Painters[i].drawForeground(R,p->thePainter,p->theProjection);
 			return;
 		}
+}
+
+void EPForegroundLayer::draw(TrackPoint*)
+{
 }
 
 void EPTouchupLayer::setP(EditPaintStylePrivate* ap)
@@ -432,6 +463,28 @@ void EPTouchupLayer::draw(Road* R)
 		}
 }
 
+void EPTouchupLayer::draw(TrackPoint* Pt)
+{
+	if (p->theProjection.viewport().disjunctFrom(Pt->boundingBox())) return;
+	double PixelPerM = p->theProjection.pixelPerM();
+	for (unsigned int i=0; i<p->Painters.size(); ++i)
+		if (p->Painters[i].isHit(Pt, PixelPerM))
+		{
+			p->Painters[i].drawTouchup(Pt,p->thePainter,p->theProjection);
+			break;
+		}
+	QPointF P(p->theProjection.project(Pt->position()));
+	if (p->theProjection.pixelPerM() > .1)
+	{
+		QRectF R(P-QPointF(2,2),QSize(4,4));
+		p->thePainter.fillRect(R,QColor(0,0,0,128));
+	}
+	else
+	{
+		p->thePainter.setPen(QColor(0,0,0,128));
+		p->thePainter.drawPoint(P);
+	}
+}
 
 /* EDITPAINTSTYLE */
 

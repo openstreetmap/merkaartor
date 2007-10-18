@@ -6,6 +6,7 @@ v0.08
 	* FIX : recognize 1 in oneway key
 	* FIX : slightly change default way width
 	* FIX : undo/redo handling for manipulating tags
+	* ADD : ability to draw icons on specific trackpoints
 	
 v0.07 18 aug 2007
 	* ADD : nice mappaint mechanism
