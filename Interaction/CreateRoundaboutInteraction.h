@@ -20,7 +20,7 @@ class CreateRoundaboutInteraction : public Interaction
 		virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter);
 
 	private:
-		void testIntersections(CommandList* L, Road* Left, unsigned int FromIdx, Road* Right, unsigned int RightIdx, double Radius);
+		void testIntersections(CommandList* L, Road* Left, unsigned int FromIdx, Road* Right, unsigned int RightIdx);
 		MainWindow* Main;
 		QDockWidget* theDock;
 		Ui::CreateRoundaboutDock DockData;

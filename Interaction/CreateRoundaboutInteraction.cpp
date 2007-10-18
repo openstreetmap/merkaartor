@@ -38,7 +38,7 @@ CreateRoundaboutInteraction::~CreateRoundaboutInteraction()
 	view()->update();
 }
 
-void CreateRoundaboutInteraction::testIntersections(CommandList* L, Road* Left, unsigned int FromIdx, Road* Right, unsigned int RightIndex, double Radius)
+void CreateRoundaboutInteraction::testIntersections(CommandList* L, Road* Left, unsigned int FromIdx, Road* Right, unsigned int RightIndex)
 {
 	LineF L1(view()->projection().project(Right->get(RightIndex-1)->position()),
 		view()->projection().project(Right->get(RightIndex)->position()));
@@ -53,8 +53,8 @@ void CreateRoundaboutInteraction::testIntersections(CommandList* L, Road* Left, 
 			L->add(new AddFeatureCommand(Main->activeLayer(),Pt,true));
 			L->add(new RoadAddTrackPointCommand(Left,Pt,i));
 			L->add(new RoadAddTrackPointCommand(Right,Pt,RightIndex));
-			testIntersections(L,Left,i+2,Right,RightIndex,Radius);
-			testIntersections(L,Left,i+2,Right,RightIndex+1,Radius);
+			testIntersections(L,Left,i+2,Right,RightIndex);
+			testIntersections(L,Left,i+2,Right,RightIndex+1);
 			return;
 		}
 	}
@@ -87,21 +87,28 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
 			TrackPoint* First = new TrackPoint(view()->projection().inverse(Prev));
 			L->add(new AddFeatureCommand(Main->activeLayer(),First,true));
 			Road* R = new Road;
+			R->add(First);
 			R->setTag("oneway","yes");
 			for (double a = Angle*3/2; a<2*3.141592; a+=Angle)
 			{
 				QPointF Next(CenterF.x()+cos(Modifier*a)*Radius,CenterF.y()+sin(Modifier*a)*Radius);
 				TrackPoint* New = new TrackPoint(view()->projection().inverse(Next));
 				L->add(new AddFeatureCommand(Main->activeLayer(),New,true));
-				L->add(new RoadAddTrackPointCommand(R,New));
+				R->add(New);
 			}
+			R->add(First);
 			L->add(new AddFeatureCommand(Main->activeLayer(),R,true));
 			for (FeatureIterator it(document()); !it.isEnd(); ++it)
 			{
 				Road* W1 = dynamic_cast<Road*>(it.get());
 				if (W1 && (W1 != R))
 					for (unsigned int i=1; i<W1->size(); ++i)
-						testIntersections(L,R,1,W1,i,Radius);
+					{
+						unsigned int Before = W1->size();
+						testIntersections(L,R,1,W1,i);
+						unsigned int After = W1->size();
+						i += (After-Before);
+					}
 			}
 			Main->properties()->setSelection(R);
 			document()->history().add(L);
