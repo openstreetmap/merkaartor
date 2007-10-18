@@ -10,7 +10,6 @@ HEADERS += \
 ./Interaction/CreateRoundaboutInteraction.h \
 ./Interaction/CreateSingleWayInteraction.h \
 ./Interaction/EditInteraction.h \
-./Interaction/EditRoadInteraction.h \
 ./Interaction/Interaction.h \
 ./Interaction/MoveTrackPointInteraction.h \
 ./Interaction/ZoomInteraction.h \
@@ -62,7 +61,6 @@ SOURCES += \
 ./Interaction/CreateSingleWayInteraction.cpp \
 ./Interaction/CreateRoundaboutInteraction.cpp \
 ./Interaction/EditInteraction.cpp \
-./Interaction/EditRoadInteraction.cpp \
 ./Interaction/Interaction.cpp \
 ./Interaction/MoveTrackPointInteraction.cpp \
 ./Interaction/ZoomInteraction.cpp \

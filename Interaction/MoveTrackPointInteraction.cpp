@@ -3,6 +3,7 @@
 #include "MapView.h"
 #include "Command/DocumentCommands.h"
 #include "Command/TrackPointCommands.h"
+#include "Map/Coord.h"
 #include "Map/MapDocument.h"
 #include "Map/Projection.h"
 #include "Map/TrackPoint.h"
@@ -14,7 +15,7 @@
 #include <vector>
 
 MoveTrackPointInteraction::MoveTrackPointInteraction(MapView* aView)
-: GenericFeatureSnapInteraction(aView), StartDragPosition(0,0)
+: FeatureSnapInteraction(aView), StartDragPosition(0,0)
 {
 }
 
