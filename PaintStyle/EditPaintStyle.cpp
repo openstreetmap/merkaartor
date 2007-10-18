@@ -342,13 +342,13 @@ void EditPaintStylePrivate::initPainters()
 	Painters.push_back(Primary);
 
 	FeaturePaintSelector Secondary;
-	Secondary.foreground(QColor(0xff,0xff,0),1,0);
+	Secondary.foreground(QColor(0xff,0xaa,0),1,0);
 	Secondary.selectOnTag("highway","secondary","secondary_link").limitToZoom(FeaturePaintSelector::RegionalZoom);
 	Secondary.drawTrafficDirectionMarks();
 	Painters.push_back(Secondary);
 
 	FeaturePaintSelector Tertiary;
-	Tertiary.foreground(QColor(0xff,0xff,0x77),1,0);
+	Tertiary.foreground(QColor(0xff,0x55,0x55),1,0);
 	Tertiary.selectOnTag("highway","tertiary","tertiary_link").limitToZoom(FeaturePaintSelector::RegionalZoom);
 	Tertiary.drawTrafficDirectionMarks();
 	Painters.push_back(Tertiary);
@@ -369,7 +369,7 @@ void EditPaintStylePrivate::initPainters()
 	Painters.push_back(Pedestrian);
 
 	FeaturePaintSelector Residential;
-	Residential.background(QColor(0,0,0),1,0).foreground(QColor(0xff,0xff,0xff),1,-2);
+	Residential.background(QColor(0x77,0x77,0x77),1,0).foreground(QColor(0xff,0xff,0xff),1,-2);
 	Residential.selectOnTag("highway","residential","unclassified").limitToZoom(FeaturePaintSelector::LocalZoom);
 	Residential.drawTrafficDirectionMarks();
 	Painters.push_back(Residential);
@@ -479,15 +479,10 @@ void EPTouchupLayer::draw(TrackPoint* Pt)
 			break;
 		}
 	QPointF P(p->theProjection.project(Pt->position()));
-	if (p->theProjection.pixelPerM() > .1)
+	if (p->theProjection.pixelPerM() > 1)
 	{
 		QRectF R(P-QPointF(2,2),QSize(4,4));
 		p->thePainter.fillRect(R,QColor(0,0,0,128));
-	}
-	else
-	{
-		p->thePainter.setPen(QColor(0,0,0,128));
-		p->thePainter.drawPoint(P);
 	}
 }
 
