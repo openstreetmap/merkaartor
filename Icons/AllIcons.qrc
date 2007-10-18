@@ -12,6 +12,10 @@
         <file>edit-undo.xpm</file>
         <file>edit-redo.xpm</file>
     </qresource>
+    <qresource prefix="/Art">
+        <file>Mapnik/parking.png</file>
+    </qresource>
+
 </RCC>
 
 

@@ -204,7 +204,7 @@ void FeaturePaintSelector::drawTouchup(TrackPoint* Pt, QPainter& thePainter, con
 	{
 		QPixmap pm(TrackPointIconName);
 		QPointF C(theProjection.project(Pt->position()));
-		thePainter.drawPixmap( C.x()-pm.width()/2,C.y()-pm.height()-2 , pm);
+		thePainter.drawPixmap( C.x()-pm.width()/2,C.y()-pm.height()-5 , pm);
 	}
 }
 
@@ -393,6 +393,11 @@ void EditPaintStylePrivate::initPainters()
 	Water.foregroundFill(QColor(0x77,0x77,0xff,0x77)).foreground(QColor(0,0,0x77),0,1);
 	Water.selectOnTag("natural","water").limitToZoom(FeaturePaintSelector::GlobalZoom);
 	Painters.push_back(Water);
+
+	FeaturePaintSelector Parking;
+	Parking.trackPointIcon(":/Art/Mapnik/parking.png");
+	Parking.selectOnTag("amenity","parking");
+	Painters.push_back(Parking);
 }
 
 void EPBackgroundLayer::setP(EditPaintStylePrivate* ap)
