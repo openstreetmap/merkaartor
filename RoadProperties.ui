@@ -133,6 +133,11 @@
        </item>
        <item>
         <property name="text" >
+         <string>tertiary</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
          <string>residential</string>
         </property>
        </item>
