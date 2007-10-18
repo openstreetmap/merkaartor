@@ -141,6 +141,8 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 				TrackPoint* B2 = new TrackPoint(view()->projection().inverse(
 					FB2.project(LastCursor)));
 
+				L->add(new AddFeatureCommand(Main->activeLayer(),B1,true));
+				L->add(new AddFeatureCommand(Main->activeLayer(),B2,true));
 				L->add(new RoadAddTrackPointCommand(R1,B1));
 				L->add(new RoadAddTrackPointCommand(R2,B2,0));
 				document()->history().add(L);
@@ -187,9 +189,9 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 				R1->setTag("oneway","yes");
 				R2->setTag("oneway","yes");
 				L->add(new RoadAddTrackPointCommand(R1,A1));
-				L->add(new RoadAddTrackPointCommand(R1,A2));
+				L->add(new RoadAddTrackPointCommand(R1,B1));
 				L->add(new RoadAddTrackPointCommand(R2,B2));
-				L->add(new RoadAddTrackPointCommand(R2,B1));
+				L->add(new RoadAddTrackPointCommand(R2,A2));
 				document()->history().add(L);
 				view()->invalidate();
 				FirstPoint = view()->projection().inverse(anEvent->pos());
