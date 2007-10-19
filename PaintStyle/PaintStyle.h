@@ -35,3 +35,4 @@ class EmptyPaintStyle : public PaintStyle
 };
 
 #endif
+
