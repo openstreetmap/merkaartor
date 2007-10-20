@@ -2,6 +2,7 @@
 
 #include "Command/DocumentCommands.h"
 #include "Command/RoadCommands.h"
+#include "Map/Coord.h"
 #include "Map/Painting.h"
 #include "Map/Projection.h"
 #include "Map/TrackPoint.h"
@@ -16,7 +17,13 @@
 class RoadPrivate
 {
 	public:
+		RoadPrivate()
+		: BBox(Coord(0,0),Coord(0,0)), BBoxUpToDate(true)
+		{
+		}
 		std::vector<TrackPoint*> Nodes;
+		CoordBox BBox;
+		bool BBoxUpToDate;
 };
 
 Road::Road(void)
@@ -37,12 +44,14 @@ Road::~Road(void)
 void Road::add(TrackPoint* Pt)
 {
 	p->Nodes.push_back(Pt);
+	p->BBoxUpToDate = false;
 }
 
 void Road::add(TrackPoint* Pt, unsigned int Idx)
 {
 	p->Nodes.push_back(Pt);
 	std::rotate(p->Nodes.begin()+Idx,p->Nodes.end()-1,p->Nodes.end());
+	p->BBoxUpToDate = false;
 }
 
 unsigned int Road::find(TrackPoint* Pt) const
@@ -57,7 +66,10 @@ void Road::remove(TrackPoint* Pt)
 {
 	std::vector<TrackPoint*>::iterator i = std::find(p->Nodes.begin(),p->Nodes.end(),Pt);
 	if (i != p->Nodes.end())
+	{
 		p->Nodes.erase(i);
+		p->BBoxUpToDate = false;
+	}
 }
 
 unsigned int Road::size() const
@@ -87,14 +99,19 @@ bool Road::notEverythingDownloaded() const
 
 CoordBox Road::boundingBox() const
 {
-	if (p->Nodes.size())
+	if (!p->BBoxUpToDate)
 	{
-		CoordBox BBox(p->Nodes[0]->boundingBox());
-		for (unsigned int i=1; i<p->Nodes.size(); ++i)
-			BBox.merge(p->Nodes[i]->boundingBox());
-		return BBox;
+		if (p->Nodes.size())
+		{
+			p->BBox = CoordBox(p->Nodes[0]->position(),p->Nodes[0]->position());
+			for (unsigned int i=1; i<p->Nodes.size(); ++i)
+				p->BBox.merge(p->Nodes[i]->position());
+		}
+		else
+			p->BBox = CoordBox(Coord(0,0),Coord(0,0));
+		p->BBoxUpToDate = true;
 	}
-	return CoordBox(Coord(0,0),Coord(0,0));
+	return p->BBox;
 }
 
 void Road::draw(QPainter& thePainter, const Projection& theProjection)

@@ -10,6 +10,7 @@ v0.08
 	* ADD : draw parking symbol from mapnik
 	* ADD : tertiary highway type
 	* FIX : tweak color scheme
+	* ADD : cache road bounding box
 	
 v0.07 18 aug 2007
 	* ADD : nice mappaint mechanism
