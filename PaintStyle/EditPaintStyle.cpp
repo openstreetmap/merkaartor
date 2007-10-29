@@ -46,7 +46,7 @@ FeaturePaintSelector& FeaturePaintSelector::limitToZoom(FeaturePaintSelector::Zo
 	{
 		case GlobalZoom : PixelPerMZoomLimit = 0.01; break;
 		case RegionalZoom : PixelPerMZoomLimit = 0.05; break;
-		case LocalZoom : PixelPerMZoomLimit = 0.25; break;
+		case LocalZoom : PixelPerMZoomLimit = 0.33; break;
 		case NoZoomLimit : ZoomLimit = false; break;
 	}
 	return *this;
@@ -395,8 +395,10 @@ void EditPaintStylePrivate::initPainters()
 	Painters.push_back(Water);
 
 	FeaturePaintSelector Parking;
-	Parking.trackPointIcon(":/Art/Mapnik/parking.png");
+	Parking.trackPointIcon(":/Art/Mapnik/parking.png").limitToZoom(FeaturePaintSelector::LocalZoom);
+	Parking.foregroundFill(QColor(0xf6,0xee,0xb6,0x77));
 	Parking.selectOnTag("amenity","parking");
+	Parking.limitToZoom(FeaturePaintSelector::LocalZoom);
 	Painters.push_back(Parking);
 }
 

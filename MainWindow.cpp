@@ -133,13 +133,19 @@ static void changeCurrentDirToFile(const QString& s)
 	QDir::setCurrent(info.absolutePath());
 }
 
+
+#define FILTER_LOAD_SUPPORTED \
+	"Supported formats (*.gpx *.osm)\n" \
+	"GPS Exchange format (*.gpx)\n" \
+	"OpenStreetMap format (*.osm)\n" \
+	"All Files (*)"
+
 void MainWindow::on_fileImportAction_triggered()
 {
 	QString s = QFileDialog::getOpenFileName(
 		this,
 		tr("Open track file"),
-		"",
-		tr("GPS Exchange format (*.gpx)\nOpenStreetMap format (*.osm)"));
+		"", tr(FILTER_LOAD_SUPPORTED));
 	if (!s.isNull())
 	{
 		changeCurrentDirToFile(s);
@@ -186,8 +192,7 @@ void MainWindow::on_fileOpenAction_triggered()
 	QString s = QFileDialog::getOpenFileName(
 		this,
 		tr("Open track file"),
-		"",
-		tr("GPS Exchange format (*.gpx)\nOpenStreetMap format (*.osm)"));
+		"", tr(FILTER_LOAD_SUPPORTED));
 	if (!s.isNull())
 	{
 		changeCurrentDirToFile(s);
