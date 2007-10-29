@@ -27,9 +27,6 @@
      <property name="spacing" >
       <number>6</number>
      </property>
-     <item row="0" column="1" >
-      <widget class="QLineEdit" name="Latitude" />
-     </item>
      <item row="0" column="0" >
       <widget class="QLabel" name="label" >
        <property name="text" >
@@ -37,15 +34,8 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0" >
-      <widget class="QLabel" name="label_4" >
-       <property name="text" >
-        <string>Span longitude</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1" >
-      <widget class="QLineEdit" name="SpanLongitude" />
+     <item row="0" column="1" >
+      <widget class="QLineEdit" name="Latitude" />
      </item>
      <item row="1" column="0" >
       <widget class="QLabel" name="label_2" >
@@ -53,6 +43,9 @@
         <string>Longitude center</string>
        </property>
       </widget>
+     </item>
+     <item row="1" column="1" >
+      <widget class="QLineEdit" name="Longitude" />
      </item>
      <item row="2" column="0" >
       <widget class="QLabel" name="label_3" >
@@ -64,8 +57,15 @@
      <item row="2" column="1" >
       <widget class="QLineEdit" name="SpanLatitude" />
      </item>
-     <item row="1" column="1" >
-      <widget class="QLineEdit" name="Longitude" />
+     <item row="3" column="0" >
+      <widget class="QLabel" name="label_4" >
+       <property name="text" >
+        <string>Span longitude</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1" >
+      <widget class="QLineEdit" name="SpanLongitude" />
      </item>
     </layout>
    </item>

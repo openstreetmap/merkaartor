@@ -11,6 +11,8 @@ v0.08
 	* ADD : tertiary highway type
 	* FIX : tweak color scheme
 	* ADD : cache road bounding box
+	* FIX : draw parking surface
+	* FIX : tab order of various widgets
 	
 v0.07 18 aug 2007
 	* ADD : nice mappaint mechanism
