@@ -312,6 +312,8 @@ class EditPaintStylePrivate
 		}
 
 		void initPainters();
+		FeaturePaintSelector *findPainter(Road *R);
+		FeaturePaintSelector *findPainter(TrackPoint *Pt);
 
 		QPainter& thePainter;
 		const Projection& theProjection;
@@ -402,6 +404,29 @@ void EditPaintStylePrivate::initPainters()
 	Painters.push_back(Parking);
 }
 
+FeaturePaintSelector *EditPaintStylePrivate::findPainter(Road *R)
+{
+	double PixelPerM = theProjection.pixelPerM();
+	for (unsigned int i=0; i < Painters.size(); ++i)
+	{
+		if (Painters[i].isHit(R,PixelPerM))
+			return &Painters[i];
+	}
+	return 0;
+}
+
+FeaturePaintSelector *EditPaintStylePrivate::findPainter(TrackPoint *Pt)
+{
+	double PixelPerM = theProjection.pixelPerM();
+	for (unsigned int i=0; i < Painters.size(); ++i)
+	{
+		if (Painters[i].isHit(Pt, PixelPerM))
+			return &Painters[i];
+	}
+	return 0;
+}
+
+
 void EPBackgroundLayer::setP(EditPaintStylePrivate* ap)
 {
 	p = ap;
@@ -411,13 +436,11 @@ void EPBackgroundLayer::setP(EditPaintStylePrivate* ap)
 void EPBackgroundLayer::draw(Road* R)
 {
 	if (p->theProjection.viewport().disjunctFrom(R->boundingBox())) return;
-	double PixelPerM = p->theProjection.pixelPerM();
-	for (unsigned int i=0; i<p->Painters.size(); ++i)
-		if (p->Painters[i].isHit(R,PixelPerM))
-		{
-			p->Painters[i].drawBackground(R,p->thePainter,p->theProjection);
-			return;
-		}
+	if (FeaturePaintSelector *paintsel = p->findPainter(R))
+	{
+		paintsel->drawBackground(R,p->thePainter,p->theProjection);
+		return;
+	}
 	if (globalZoom(p->theProjection))
 		return;
 	QPen thePen(QColor(0,0,0),1);
@@ -440,13 +463,8 @@ void EPForegroundLayer::setP(EditPaintStylePrivate* ap)
 void EPForegroundLayer::draw(Road* R)
 {
 	if (p->theProjection.viewport().disjunctFrom(R->boundingBox())) return;
-	double PixelPerM = p->theProjection.pixelPerM();
-	for (unsigned int i=0; i<p->Painters.size(); ++i)
-		if (p->Painters[i].isHit(R, PixelPerM))
-		{
-			p->Painters[i].drawForeground(R,p->thePainter,p->theProjection);
-			return;
-		}
+	if (FeaturePaintSelector *paintsel = p->findPainter(R))
+		paintsel->drawForeground(R,p->thePainter,p->theProjection);
 }
 
 void EPForegroundLayer::draw(TrackPoint*)
@@ -461,25 +479,16 @@ void EPTouchupLayer::setP(EditPaintStylePrivate* ap)
 void EPTouchupLayer::draw(Road* R)
 {
 	if (p->theProjection.viewport().disjunctFrom(R->boundingBox())) return;
-	double PixelPerM = p->theProjection.pixelPerM();
-	for (unsigned int i=0; i<p->Painters.size(); ++i)
-		if (p->Painters[i].isHit(R, PixelPerM))
-		{
-			p->Painters[i].drawTouchup(R,p->thePainter,p->theProjection);
-			return;
-		}
+	if (FeaturePaintSelector *paintsel = p->findPainter(R))
+		paintsel->drawTouchup(R,p->thePainter,p->theProjection);
 }
 
 void EPTouchupLayer::draw(TrackPoint* Pt)
 {
 	if (p->theProjection.viewport().disjunctFrom(Pt->boundingBox())) return;
-	double PixelPerM = p->theProjection.pixelPerM();
-	for (unsigned int i=0; i<p->Painters.size(); ++i)
-		if (p->Painters[i].isHit(Pt, PixelPerM))
-		{
-			p->Painters[i].drawTouchup(Pt,p->thePainter,p->theProjection);
-			break;
-		}
+	if (FeaturePaintSelector *paintsel = p->findPainter(Pt))
+		paintsel->drawTouchup(Pt,p->thePainter,p->theProjection);
+
 	QPointF P(p->theProjection.project(Pt->position()));
 	if (p->theProjection.pixelPerM() > 1)
 	{
