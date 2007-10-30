@@ -73,7 +73,7 @@ SlippyMapWidget::~SlippyMapWidget(void)
 
 static double ProjectF(double Lat)
 {
-	double LL = Lat/360*3.141592;
+	double LL = Lat/180*3.141592;
 	double Y = log(tan(LL) + (1/cos(LL)));
 	return Y;
 }
@@ -84,7 +84,7 @@ static double ProjectMercToLat(double MercY)
 }
 
 
-QRect SlippyMapWidget::viewArea() const
+QRectF SlippyMapWidget::viewArea() const
 {
 	double X1 = p->Lat - (width()/2.0)/TILESIZE;
 	double Y1 = p->Lon - (height()/2.0)/TILESIZE;
@@ -99,10 +99,14 @@ QRect SlippyMapWidget::viewArea() const
 	relY2 = LimitY - RangeY * relY2;
 	double Lat1 = ProjectMercToLat(relY1);
 	double Lat2 = ProjectMercToLat(relY2);
-	Unit = 360 / (1<<p->Zoom);
+	Unit = 360.0 / (1<<p->Zoom);
 	double Long1 = -180 + X1 * Unit;
 	double Long2 = -180 + X2 * Unit;
-	return QRect(Lat1,Long1,Lat2-Lat1,Long2-Long1);
+	Long1 *= 3.141592/180;
+	Long2 *= 3.141592/180;
+	Lat1 *= 3.141592/180;
+	Lat2 *= 3.141592/180;
+	return QRectF(Lat2,Long1,Lat1-Lat2,Long2-Long1);
 }
 
 void SlippyMapWidget::paintEvent(QPaintEvent*)

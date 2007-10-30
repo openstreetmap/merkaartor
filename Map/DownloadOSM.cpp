@@ -8,6 +8,7 @@
 #include "Map/MapDocument.h"
 #include "Map/MapFeature.h"
 #include "Map/TrackSegment.h"
+#include "Utils/SlippyMapWidget.h"
 
 #include "GeneratedFiles/ui_DownloadMapDialog.h"
 
@@ -443,6 +444,9 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 	Sets.beginGroup("downloadosm");
 	Ui::DownloadMapDialog ui;
 	ui.setupUi(dlg);
+	SlippyMapWidget* SlippyMap = new SlippyMapWidget(ui.groupBox);
+	SlippyMap->setMinimumHeight(256);
+	ui.vboxLayout1->addWidget(SlippyMap);
 	ui.Website->setText("www.openstreetmap.org");
 	QStringList DefaultBookmarks;
 	DefaultBookmarks << "London" << "51.47" << "-0.20" << "51.51" << "-0.08";
@@ -488,6 +492,11 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 			Bookmarks.insert(3,QString::number(radToAng(Clip.topRight().lat())));
 			Bookmarks.insert(4,QString::number(radToAng(Clip.topRight().lon())));
 			Sets.setValue("bookmarks",Bookmarks);
+		}
+		else if (ui.FromMap->isChecked())
+		{
+			QRectF R(SlippyMap->viewArea());
+			Clip = CoordBox(Coord(R.x(),R.y()),Coord(R.x()+R.width(),R.y()+R.height()));
 		}
 		aParent->view()->setUpdatesEnabled(false);
 		OK = downloadOSM(aParent,ui.Website->text(),ui.Username->text(),ui.Password->text(), ui.UseProxy->isChecked(), ui.ProxyHost->text(), ui.ProxyPort->text().toInt(),Clip,theDocument);

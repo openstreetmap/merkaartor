@@ -15,7 +15,13 @@
     <qresource prefix="/Art">
         <file>Mapnik/parking.png</file>
     </qresource>
-
+    <qresource>
+    	<file>Tiles/000.png</file>
+    	<file>Tiles/100.png</file>
+    	<file>Tiles/101.png</file>
+    	<file>Tiles/110.png</file>
+    	<file>Tiles/111.png</file>
+    </qresource>
 </RCC>
 
 

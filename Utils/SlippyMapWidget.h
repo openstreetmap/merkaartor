@@ -63,7 +63,7 @@ class SlippyMapWidget :	public QWidget
 		virtual void mouseMoveEvent(QMouseEvent* ev);
 		virtual void mouseReleaseEvent(QMouseEvent* ev);
 
-		QRect viewArea() const;
+		QRectF viewArea() const;
 
 	private:
 		SlippyMapWidgetPrivate* p;

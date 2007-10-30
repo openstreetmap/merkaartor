@@ -34,7 +34,8 @@ HEADERS += \
 ./Sync/DirtyList.h \
 ./Sync/SyncOSM.h \
 ./TagModel.h \
-./Utils/LineF.h
+./Utils/LineF.h \
+./Utils/SlippyMapWidget.h
 
 #Source files
 SOURCES += \
@@ -72,7 +73,8 @@ SOURCES += \
 ./MainWindow.cpp \
 ./PropertiesDock.cpp \
 ./TagModel.cpp \
-./LayerDock.cpp
+./LayerDock.cpp \
+./Utils/SlippyMapWidget.h
 
 #Forms
 FORMS += \

@@ -97,9 +97,9 @@ void MapView::updateStaticBuffer(QPaintEvent*)
 			Current = Current->nextLayer();
 		}
 	}
-/*	QTime Stop(QTime::currentTime());
+	QTime Stop(QTime::currentTime());
 	main()->statusBar()->clearMessage();
-	main()->statusBar()->showMessage(QString("Paint took %1ms").arg(Start.msecsTo(Stop))); */
+	main()->statusBar()->showMessage(QString("Paint took %1ms").arg(Start.msecsTo(Stop)));
 	StaticBufferUpToDate = true;
 }
 

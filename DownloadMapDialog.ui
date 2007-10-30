@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>490</width>
-    <height>340</height>
+    <width>468</width>
+    <height>359</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -116,6 +116,14 @@
    </item>
    <item>
     <widget class="QGroupBox" name="groupBox" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>7</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="title" >
       <string>Location</string>
      </property>
@@ -192,6 +200,13 @@
         </item>
        </layout>
       </item>
+      <item>
+       <widget class="QRadioButton" name="FromMap" >
+        <property name="text" >
+         <string>From the map below (map provided by the OpenStreetMap project)</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -201,19 +216,6 @@
       <string>Also download raw GPS tracks</string>
      </property>
     </widget>
-   </item>
-   <item>
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>435</width>
-       <height>16</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item>
     <widget class="QDialogButtonBox" name="buttonBox" >

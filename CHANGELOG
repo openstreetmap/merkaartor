@@ -13,6 +13,7 @@ v0.08
 	* ADD : cache road bounding box
 	* FIX : draw parking surface
 	* FIX : tab order of various widgets
+	* ADD : slippy map coordinates selector
 	
 v0.07 18 aug 2007
 	* ADD : nice mappaint mechanism
