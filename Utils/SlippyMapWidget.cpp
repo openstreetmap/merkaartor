@@ -20,11 +20,13 @@ class SlippyMapWidgetPrivate
 		SlippyMapWidgetPrivate(SlippyMapWidget* w)
 			: theWidget(w), Zoom(1), Lat(1), Lon(1), InDrag(false)
 		{
-			theCache = new SlippyMapCache(this);
+			if (!theCache)
+				theCache = new SlippyMapCache;
+			theCache->setMap(this);
 		}
 		~SlippyMapWidgetPrivate()
 		{
-			delete theCache;
+			theCache->setMap(0);
 		}
 
 		QPixmap* getImage(int x, int y);
@@ -35,8 +37,10 @@ class SlippyMapWidgetPrivate
 		double Lat,Lon;
 		QPoint PreviousDrag;
 		bool InDrag;
-		SlippyMapCache* theCache;
+		static SlippyMapCache* theCache;
 };
+
+SlippyMapCache* SlippyMapWidgetPrivate::theCache = 0;
 
 QPixmap* SlippyMapWidgetPrivate::getImage(int x, int y)
 {
@@ -177,8 +181,8 @@ void SlippyMapWidget::mouseMoveEvent(QMouseEvent* ev)
 
 /* SLIPPYMAPCACHE */
 
-SlippyMapCache::SlippyMapCache(SlippyMapWidgetPrivate* p)
-: QObject(0), DownloadBusy(false), theMap(p)
+SlippyMapCache::SlippyMapCache()
+: QObject(0), DownloadBusy(false), theMap(0)
 {
 	Download.setHost("tile.openstreetmap.org");
 	DownloadBuffer.setBuffer(&DownloadData);
@@ -191,6 +195,16 @@ SlippyMapCache::SlippyMapCache(SlippyMapWidgetPrivate* p)
 	preload(Coord(1,0,1),":/Tiles/110.png");
 	preload(Coord(1,1,1),":/Tiles/111.png");
 }
+
+void SlippyMapCache::setMap(SlippyMapWidgetPrivate* aMap)
+{
+	theMap = aMap;
+	unsigned int Use = 0;
+	for (std::map<Coord, QByteArray>::iterator i = Memory.begin(); i != Memory.end(); ++i)
+		Use += i->second.length();
+	Dirties.clear();
+}
+
 
 void SlippyMapCache::preload(const Coord& C, const QString& Filename)
 {
@@ -210,7 +224,8 @@ void SlippyMapCache::on_requestFinished(int Id, bool Error)
 		if (!Error)
 		{
 			Memory[DownloadCoord] = DownloadData;
-			theMap->newData(DownloadCoord.X,DownloadCoord.Y,DownloadCoord.Zoom);
+			if (theMap)
+				theMap->newData(DownloadCoord.X,DownloadCoord.Y,DownloadCoord.Zoom);
 			std::map<Coord,QByteArray>::iterator i = Dirties.find(DownloadCoord);
 			if (i != Dirties.end())
 				Dirties.erase(i);

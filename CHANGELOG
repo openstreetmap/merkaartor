@@ -14,6 +14,7 @@ v0.08
 	* FIX : draw parking surface
 	* FIX : tab order of various widgets
 	* ADD : slippy map coordinates selector
+	* FIX : reuse slippy map cache between different invocations
 	
 v0.07 18 aug 2007
 	* ADD : nice mappaint mechanism

@@ -29,7 +29,9 @@ class SlippyMapCache : public QObject
 		};
 
 	public:
-		SlippyMapCache(SlippyMapWidgetPrivate* p);
+		SlippyMapCache();
+
+		void setMap(SlippyMapWidgetPrivate* aMap);
 
 		QPixmap* getImage(int x, int y, int Zoom);
 		QPixmap* getDirty(int x, int y, int Zoom);
