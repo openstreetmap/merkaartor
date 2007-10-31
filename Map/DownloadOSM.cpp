@@ -43,7 +43,8 @@ Downloader::Downloader(const QString& aWeb, const QString& aUser, const QString&
 	}
 	Request.setHost(Web,Port);
 	Request.setUser(User,Password);
-	connect(&Request,SIGNAL(done(bool)), this,SLOT(allDone(bool)));
+//	connect(&Request,SIGNAL(done(bool)), this,SLOT(allDone(bool)));
+	connect(&Request,SIGNAL(requestFinished(int, bool)),this,SLOT(on_requestFinished(int, bool)));
 	connect(&Request,SIGNAL(dataReadProgress(int, int)), this,SLOT(progress(int, int)));
 }
 
@@ -255,18 +256,11 @@ QByteArray& Downloader::content()
 	return Content;
 }
 
-void Downloader::allDone(bool error)
+void Downloader::on_requestFinished(int anId, bool anError)
 {
-	if (error)
+	if (anError)
 		Error = true;
-	if ( Loop.isRunning() )
-		QTimer::singleShot(1000,this,SLOT(exitDownloadLoop()));
-//		Loop.exit(QDialog::Accepted);
-}
-
-void Downloader::exitDownloadLoop()
-{
-	if ( Loop.isRunning() )
+	if ( (anId == Id) && Loop.isRunning() )
 		Loop.exit(QDialog::Accepted);
 }
 

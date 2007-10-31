@@ -39,11 +39,10 @@ class Downloader : public QObject
 		void setAnimator(QProgressDialog* Animator, QProgressBar* AnimatorBar, bool anAnimate);
 
 	public slots:
-		void allDone( bool error );
 		void progress( int done, int total );
+		void on_requestFinished(int Id, bool Error);
 		void animate();
 		void on_Cancel_clicked();
-		void exitDownloadLoop();
 
 	private:
 		unsigned int Port;

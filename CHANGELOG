@@ -15,6 +15,7 @@ v0.08
 	* FIX : tab order of various widgets
 	* ADD : slippy map coordinates selector
 	* FIX : reuse slippy map cache between different invocations
+	* FIX : improve download handling
 	
 v0.07 18 aug 2007
 	* ADD : nice mappaint mechanism
