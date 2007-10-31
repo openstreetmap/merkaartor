@@ -74,7 +74,7 @@ SOURCES += \
 ./PropertiesDock.cpp \
 ./TagModel.cpp \
 ./LayerDock.cpp \
-./Utils/SlippyMapWidget.h
+./Utils/SlippyMapWidget.cpp
 
 #Forms
 FORMS += \

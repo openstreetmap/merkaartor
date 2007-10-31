@@ -2,7 +2,7 @@
 
 #include <QtCore/QFile>
 #include <QtGui/QPainter>
-#include <Qtgui/QPixmap>
+#include <QtGui/QPixmap>
 #include <QtGui/QWheelEvent>
 
 #include <math.h>
