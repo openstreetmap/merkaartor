@@ -24,7 +24,7 @@ class Road : public MapFeature
 
 		void add(TrackPoint* Pt);
 		void add(TrackPoint* Pt, unsigned int Idx);
-		void remove(TrackPoint* Pt);
+		void remove(unsigned int Idx);
 		unsigned int size() const;
 		unsigned int find(TrackPoint* Pt) const;
 		TrackPoint* get(unsigned int idx);
@@ -36,6 +36,7 @@ class Road : public MapFeature
 MapFeature::TrafficDirectionType trafficDirection(const Road* R);
 double widthOf(const Road* R);
 unsigned int findSnapPointIndex(const Road* R, Coord& P);
+bool isClosed(Road* R);
 
 #endif
 

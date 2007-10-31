@@ -18,6 +18,7 @@
 #include "Map/MapDocument.h"
 #include "Map/MapFeature.h"
 #include "Map/Road.h"
+#include "Map/RoadManipulations.h"
 #include "Map/TrackPoint.h"
 #include "Sync/SyncOSM.h"
 #include "GeneratedFiles/ui_AboutDialog.h"
@@ -350,6 +351,37 @@ void MainWindow::on_createNodeAction_triggered()
 {
 	theView->launch(new CreateNodeInteraction(theView));
 }
+
+void MainWindow::on_roadJoinAction_triggered()
+{
+	CommandList* theList = new CommandList;
+	joinRoads(theDocument,theList,theProperties);
+	if (theList->empty())
+		delete theList;
+	else
+		theDocument->history().add(theList);
+}
+
+void MainWindow::on_roadSplitAction_triggered()
+{
+	CommandList* theList = new CommandList;
+	splitRoads(activeLayer(),theList,theProperties);
+	if (theList->empty())
+		delete theList;
+	else
+		theDocument->history().add(theList);
+}
+
+void MainWindow::on_roadBreakAction_triggered()
+{
+	CommandList* theList = new CommandList;
+	breakRoads(activeLayer(),theList,theProperties);
+	if (theList->empty())
+		delete theList;
+	else
+		theDocument->history().add(theList);
+}
+
 
 MapLayer* MainWindow::activeLayer()
 {

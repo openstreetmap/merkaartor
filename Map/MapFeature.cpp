@@ -13,6 +13,11 @@ MapFeature::MapFeature()
 {
 }
 
+MapFeature::MapFeature(const MapFeature& other)
+: Tags(other.Tags), LastActor(MapFeature::User), theLayer(0)
+{
+}
+
 MapFeature::~MapFeature(void)
 {
 	if (theLayer)

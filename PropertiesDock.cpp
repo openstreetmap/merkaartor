@@ -33,15 +33,27 @@ void PropertiesDock::checkMenuStatus()
 {
 	bool IsPoint = false;
 	bool IsRoad = false;
+	unsigned int NumRoads = 0;
+	unsigned int NumPoints = 0;
 	if (Selection.size() == 1)
 	{
 		IsPoint = dynamic_cast<TrackPoint*>(Selection[0]) != 0;
 		IsRoad = dynamic_cast<Road*>(Selection[0]) != 0;
 	}
+	for (unsigned int i=0; i<Selection.size(); ++i)
+	{
+		if (dynamic_cast<TrackPoint*>(Selection[i]))
+			++NumPoints;
+		if (dynamic_cast<Road*>(Selection[i]))
+			++NumRoads;
+	}
 	Main->editRemoveAction->setEnabled(Selection.size() == 1);
 	Main->editMoveAction->setEnabled(true);
 	Main->editAddAction->setEnabled(IsRoad);
 	Main->editReverseAction->setEnabled(IsRoad);
+	Main->roadJoinAction->setEnabled(NumRoads > 1);
+	Main->roadSplitAction->setEnabled(NumRoads && NumPoints);
+	Main->roadBreakAction->setEnabled(NumRoads > 1);
 }
 
 unsigned int PropertiesDock::size() const
@@ -73,6 +85,7 @@ void PropertiesDock::toggleSelection(MapFeature* S)
 		Selection.erase(i);
 	switchUi();
 }
+
 
 void PropertiesDock::switchUi()
 {

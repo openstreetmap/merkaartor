@@ -38,13 +38,6 @@
     <addaction name="viewZoomInAction" />
     <addaction name="viewSetCoordinatesAction" />
    </widget>
-   <widget class="QMenu" name="menuEdit" >
-    <property name="title" >
-     <string>&amp;Edit</string>
-    </property>
-    <addaction name="editUndoAction" />
-    <addaction name="editRedoAction" />
-   </widget>
    <widget class="QMenu" name="menuFile" >
     <property name="title" >
      <string>&amp;File</string>
@@ -66,10 +59,27 @@
     <addaction name="createDoubleWayAction" />
     <addaction name="createRoundaboutAction" />
    </widget>
+   <widget class="QMenu" name="menuEdit" >
+    <property name="title" >
+     <string>&amp;Edit</string>
+    </property>
+    <addaction name="editUndoAction" />
+    <addaction name="editRedoAction" />
+   </widget>
+   <widget class="QMenu" name="menuRoad" >
+    <property name="title" >
+     <string>Road</string>
+    </property>
+    <addaction name="roadSplitAction" />
+    <addaction name="roadBreakAction" />
+    <addaction name="roadJoinAction" />
+    <addaction name="editReverseAction" />
+   </widget>
    <addaction name="menuFile" />
    <addaction name="menuEdit" />
    <addaction name="menuView" />
    <addaction name="menuCreate" />
+   <addaction name="menuRoad" />
    <addaction name="menuHelp" />
   </widget>
   <widget class="QStatusBar" name="StatusBar" />
@@ -319,6 +329,21 @@
   <action name="createRoadFromSelectedSegmentsAction" >
    <property name="text" >
     <string>Road from selected segments</string>
+   </property>
+  </action>
+  <action name="roadSplitAction" >
+   <property name="text" >
+    <string>Split</string>
+   </property>
+  </action>
+  <action name="roadJoinAction" >
+   <property name="text" >
+    <string>Join</string>
+   </property>
+  </action>
+  <action name="roadBreakAction" >
+   <property name="text" >
+    <string>Break apart</string>
    </property>
   </action>
  </widget>

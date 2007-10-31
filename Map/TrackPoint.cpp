@@ -10,6 +10,11 @@ TrackPoint::TrackPoint(const Coord& aCoord)
 {
 }
 
+TrackPoint::TrackPoint(const TrackPoint& other)
+: MapFeature(other), Position(other.Position), Time(other.Time)
+{
+}
+
 TrackPoint::~TrackPoint(void)
 {
 }

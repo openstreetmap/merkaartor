@@ -23,6 +23,8 @@ class PropertiesDock : public QDockWidget
 		~PropertiesDock(void);
 
 		void setSelection(MapFeature* aFeature);
+		template<class T>
+		void setSelection(const std::vector<T*>& aFeatureList);
 		void toggleSelection(MapFeature* aFeature);
 		MapFeature* selection(unsigned int idx);
 		unsigned int size() const;
@@ -54,6 +56,16 @@ class PropertiesDock : public QDockWidget
 
 		enum { NoUiShowing, TrackPointUiShowing, RoadUiShowing, MultiShowing } NowShowing ;
 };
+
+template<class T>
+void PropertiesDock::setSelection(const std::vector<T*>& aFeatureList)
+{
+	Selection.clear();
+	for (unsigned int i=0; i<aFeatureList.size(); ++i)
+		Selection.push_back(aFeatureList[i]);
+	switchUi();
+}
+
 
 #endif
 

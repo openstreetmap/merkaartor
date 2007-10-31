@@ -25,6 +25,7 @@ HEADERS += \
 ./Map/Painting.h \
 ./Map/Projection.h \
 ./Map/Road.h \
+./Map/RoadManipulations.h \
 ./Map/TrackPoint.h \
 ./Map/TrackSegment.h \
 ./MapView.h \
@@ -54,6 +55,7 @@ SOURCES += \
 ./Map/Painting.cpp \
 ./Map/Projection.cpp \
 ./Map/Road.cpp \
+./Map/RoadManipulations.cpp \
 ./Map/TrackPoint.cpp \
 ./Map/TrackSegment.cpp \
 ./MapView.cpp \

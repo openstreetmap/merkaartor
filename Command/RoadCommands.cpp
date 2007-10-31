@@ -18,7 +18,7 @@ RoadAddTrackPointCommand::RoadAddTrackPointCommand(Road* R, TrackPoint* W, unsig
 
 void RoadAddTrackPointCommand::undo()
 {
-	theRoad->remove(theTrackPoint);
+	theRoad->remove(Position);
 }
 
 void RoadAddTrackPointCommand::redo()
@@ -40,6 +40,13 @@ RoadRemoveTrackPointCommand::RoadRemoveTrackPointCommand(Road* R, TrackPoint* W)
 	redo();
 }
 
+RoadRemoveTrackPointCommand::RoadRemoveTrackPointCommand(Road* R, unsigned int anIdx)
+: Idx(anIdx), theRoad(R), theTrackPoint(R->get(anIdx))
+{
+	redo();
+}
+
+
 void RoadRemoveTrackPointCommand::undo()
 {
 	theRoad->add(theTrackPoint,Idx);
@@ -47,7 +54,7 @@ void RoadRemoveTrackPointCommand::undo()
 
 void RoadRemoveTrackPointCommand::redo()
 {
-	theRoad->remove(theTrackPoint);
+	theRoad->remove(Idx);
 }
 
 bool RoadRemoveTrackPointCommand::buildDirtyList(DirtyList& theList)

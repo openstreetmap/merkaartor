@@ -62,7 +62,7 @@ unsigned int Road::find(TrackPoint* Pt) const
 	return p->Nodes.size();
 }
 
-void Road::remove(TrackPoint* Pt)
+/*void Road::remove(TrackPoint* Pt)
 {
 	std::vector<TrackPoint*>::iterator i = std::find(p->Nodes.begin(),p->Nodes.end(),Pt);
 	if (i != p->Nodes.end())
@@ -70,6 +70,12 @@ void Road::remove(TrackPoint* Pt)
 		p->Nodes.erase(i);
 		p->BBoxUpToDate = false;
 	}
+}*/
+
+void Road::remove(unsigned int idx)
+{
+	p->Nodes.erase(p->Nodes.begin()+idx);
+	p->BBoxUpToDate = false;
 }
 
 unsigned int Road::size() const
@@ -235,4 +241,9 @@ unsigned int findSnapPointIndex(const Road* R, Coord& P)
 	LineF F(R->get(BestIdx-1)->position(),R->get(BestIdx)->position());
 	P = F.project(Coord(P));
 	return BestIdx;
+}
+
+bool isClosed(Road* R)
+{
+	return R->size() && (R->get(0) == R->get(R->size()-1));
 }

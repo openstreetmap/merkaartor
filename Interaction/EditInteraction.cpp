@@ -11,6 +11,7 @@
 #include "Map/MapDocument.h"
 #include "Map/MapFeature.h"
 #include "Map/Road.h"
+#include "Map/RoadManipulations.h"
 #include "Map/TrackPoint.h"
 
 #include <QtGui/QMouseEvent>
@@ -96,16 +97,8 @@ void EditInteraction::on_reverse_triggered()
 	MapFeature* Selection = view()->properties()->selection(0);
 	if (Road* R = dynamic_cast<Road*>(Selection))
 	{
-		std::vector<TrackPoint*> Pts;
 		CommandList* theList = new CommandList;
-		for (unsigned int i=R->size(); i; --i)
-		{
-			TrackPoint* Pt = R->get(i-1);
-			Pts.push_back(Pt);
-			theList->add(new RoadRemoveTrackPointCommand(R,Pt));
-		}
-		for (unsigned int i=0; i<Pts.size(); ++i)
-			theList->add(new RoadAddTrackPointCommand(R,Pts[i]));
+		reversePoints(theList,R);
 		document()->history().add(theList);
 	}
 	view()->invalidate();

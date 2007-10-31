@@ -26,6 +26,7 @@ class RoadRemoveTrackPointCommand : public Command
 {
 	public:
 		RoadRemoveTrackPointCommand(Road* R, TrackPoint* W);
+		RoadRemoveTrackPointCommand(Road* R, unsigned int anIdx);
 
 		virtual void undo();
 		virtual void redo();

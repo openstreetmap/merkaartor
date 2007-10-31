@@ -10,6 +10,7 @@ class TrackPoint : public MapFeature
 {
 	public:
 		TrackPoint(const Coord& aCoord);
+		TrackPoint(const TrackPoint& other);
 		virtual ~TrackPoint();
 
 		virtual CoordBox boundingBox() const;

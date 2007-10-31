@@ -43,6 +43,9 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_editMoveAction_triggered();
 		virtual void on_editAddAction_triggered();
 		virtual void on_editReverseAction_triggered();
+		virtual void on_roadSplitAction_triggered();
+		virtual void on_roadBreakAction_triggered();
+		virtual void on_roadJoinAction_triggered();
 
 	signals:
 		void remove_triggered();

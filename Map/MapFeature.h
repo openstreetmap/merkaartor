@@ -22,6 +22,7 @@ class MapFeature
 		typedef enum { UnknownDirection, BothWays, OneWay, OtherWay } TrafficDirectionType;
 	public:
 		MapFeature();
+		MapFeature(const MapFeature& other);
 		virtual ~MapFeature() = 0;
 
 		virtual CoordBox boundingBox() const = 0;
@@ -50,7 +51,6 @@ class MapFeature
 
 	private:
 		mutable QString Id;
-		bool IsInOSM;
 		std::vector<std::pair<QString, QString> > Tags;
 		ActorType LastActor;
 		MapLayer* theLayer;

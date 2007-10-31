@@ -16,6 +16,7 @@ v0.08
 	* ADD : slippy map coordinates selector
 	* FIX : reuse slippy map cache between different invocations
 	* FIX : improve download handling
+	* ADD : join/split/break road actions
 	
 v0.07 18 aug 2007
 	* ADD : nice mappaint mechanism
