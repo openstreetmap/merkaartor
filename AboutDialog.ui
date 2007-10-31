@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>232</width>
-    <height>113</height>
+    <width>288</width>
+    <height>133</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -29,7 +29,14 @@
    <item>
     <widget class="QLabel" name="label" >
      <property name="text" >
-      <string>Copyright Bart Vanhauwaert, 2006, 2007</string>
+      <string>Copyright Bart Vanhauwaert and others, 2006, 2007</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_3" >
+     <property name="text" >
+      <string>This program is licensed under the GNU Public License v2</string>
      </property>
     </widget>
    </item>
