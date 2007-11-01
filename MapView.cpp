@@ -81,9 +81,9 @@ void MapView::updateStaticBuffer(QPaintEvent*)
 		for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
 			i.get()->draw(P,projection());
 		EditPaintStyle EP(P,projection());
-		PaintStyle* Current = EP.firstLayer();
-		while (Current)
+		for (unsigned int i=0; i<EP.size(); ++i)
 		{
+			PaintStyleLayer* Current = EP.get(i);
 			for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
 			{
 				if (Road* R = dynamic_cast<Road*>(i.get()))
@@ -94,7 +94,6 @@ void MapView::updateStaticBuffer(QPaintEvent*)
 				if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(i.get()))
 					Current->draw(Pt);
 			}
-			Current = Current->nextLayer();
 		}
 	}
 	QTime Stop(QTime::currentTime());
