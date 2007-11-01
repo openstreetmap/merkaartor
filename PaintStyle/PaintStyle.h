@@ -5,6 +5,7 @@
 
 #include <vector>
 
+class MapFeature;
 class Projection;
 class Road;
 class TrackPoint;
@@ -17,12 +18,11 @@ void buildPathFromRoad(Road *R, Projection const &theProjection, QPainterPath &P
 class FeaturePainter
 {
 	public:
-		typedef enum { GlobalZoom, RegionalZoom, LocalZoom, NoZoomLimit } ZoomType;
+		typedef enum {NoZoomLimit, GlobalZoom, RegionalZoom, LocalZoom, } ZoomType;
 
 		FeaturePainter();
 
-		bool isHit(const Road* R, double PixelPerM) const;
-		bool isHit(const TrackPoint* Pt, double PixelPerM) const;
+		bool isHit(const MapFeature* F, ZoomType Zoom) const;
 		FeaturePainter& selectOnTag(const QString& Tag, const QString& Value);
 		FeaturePainter& selectOnTag(const QString& Tag, const QString& Value1, const QString& Value2);
 		FeaturePainter& background(const QColor& Color, double Scale, double Offset);
@@ -42,8 +42,7 @@ class FeaturePainter
 	private:
 		std::vector<std::pair<QString, QString> > OneOfTheseTags;
 
-		bool ZoomLimit;
-		double PixelPerMZoomLimit;
+		ZoomType ZoomLimit;
 		bool DrawBackground;
 		QColor BackgroundColor;
 		double BackgroundScale;

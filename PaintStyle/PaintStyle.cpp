@@ -10,7 +10,7 @@
 #include <math.h>
 
 FeaturePainter::FeaturePainter()
-: DrawBackground(false), DrawForeground(false), DrawTouchup(false), ZoomLimit(false), 
+: DrawBackground(false), DrawForeground(false), DrawTouchup(false), ZoomLimit(NoZoomLimit), 
   ForegroundFill(false), DrawTrafficDirectionMarks(true)
 {
 }
@@ -24,14 +24,7 @@ FeaturePainter& FeaturePainter::drawTrafficDirectionMarks()
 
 FeaturePainter& FeaturePainter::limitToZoom(FeaturePainter::ZoomType aType)
 {
-	ZoomLimit = true;
-	switch (aType)
-	{
-		case GlobalZoom : PixelPerMZoomLimit = 0.01; break;
-		case RegionalZoom : PixelPerMZoomLimit = 0.05; break;
-		case LocalZoom : PixelPerMZoomLimit = 0.33; break;
-		case NoZoomLimit : ZoomLimit = false; break;
-	}
+	ZoomLimit = aType;
 	return *this;
 }
 
@@ -107,24 +100,12 @@ FeaturePainter& FeaturePainter::selectOnTag(const QString& Tag, const QString& V
 	return *this;
 }
 
-bool FeaturePainter::isHit(const Road* R, double PixelPerM) const
+bool FeaturePainter::isHit(const MapFeature* F, ZoomType Zoom) const
 {
-	if (R->size() < 2)
-		return false;
-	if (ZoomLimit && (PixelPerM < PixelPerMZoomLimit))
+	if (ZoomLimit > Zoom)
 		return false;
 	for (unsigned int i=0; i<OneOfTheseTags.size(); ++i)
-		if (R->tagValue(OneOfTheseTags[i].first,QString::null) == OneOfTheseTags[i].second)
-			return true;
-	return false;
-}
-
-bool FeaturePainter::isHit(const TrackPoint* Pt, double PixelPerM) const
-{
-	if (ZoomLimit && (PixelPerM < PixelPerMZoomLimit))
-		return false;
-	for (unsigned int i=0; i<OneOfTheseTags.size(); ++i)
-		if (Pt->tagValue(OneOfTheseTags[i].first,QString::null) == OneOfTheseTags[i].second)
+		if (F->tagValue(OneOfTheseTags[i].first,QString::null) == OneOfTheseTags[i].second)
 			return true;
 	return false;
 }

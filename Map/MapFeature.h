@@ -2,6 +2,7 @@
 #define MERKATOR_MAPFEATURE_H_
 
 #include "Map/Coord.h"
+#include "PaintStyle/PaintStyle.h"
 
 #include <QtCore/QString>
 
@@ -50,6 +51,9 @@ class MapFeature
 		QString tagValue(const QString& k, const QString& Default) const;
 		QString tagKey(unsigned int i) const;
 		void removeTag(unsigned int i);
+
+		FeaturePainter* getEditPainter(FeaturePainter::ZoomType Zoom) const;
+		bool hasEditPainter() const;
 
 	private:
 		MapFeaturePrivate* p;
