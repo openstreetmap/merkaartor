@@ -49,16 +49,6 @@
     <addaction name="fileUploadAction" />
     <addaction name="fileQuitAction" />
    </widget>
-   <widget class="QMenu" name="menuCreate" >
-    <property name="title" >
-     <string>&amp;Create</string>
-    </property>
-    <addaction name="createNodeAction" />
-    <addaction name="createRoadAction" />
-    <addaction name="createRoadFromSelectedSegmentsAction" />
-    <addaction name="createDoubleWayAction" />
-    <addaction name="createRoundaboutAction" />
-   </widget>
    <widget class="QMenu" name="menuEdit" >
     <property name="title" >
      <string>&amp;Edit</string>
@@ -74,6 +64,15 @@
     <addaction name="roadBreakAction" />
     <addaction name="roadJoinAction" />
     <addaction name="editReverseAction" />
+   </widget>
+   <widget class="QMenu" name="menuCreate" >
+    <property name="title" >
+     <string>&amp;Create</string>
+    </property>
+    <addaction name="createNodeAction" />
+    <addaction name="createRoadAction" />
+    <addaction name="createDoubleWayAction" />
+    <addaction name="createRoundaboutAction" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuEdit" />
@@ -324,11 +323,6 @@
   <action name="fileNewAction" >
    <property name="text" >
     <string>New</string>
-   </property>
-  </action>
-  <action name="createRoadFromSelectedSegmentsAction" >
-   <property name="text" >
-    <string>Road from selected segments</string>
    </property>
   </action>
   <action name="roadSplitAction" >

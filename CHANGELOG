@@ -22,6 +22,7 @@ v0.08
 	* ADD : drag box to select a group of elements
 	* ADD : selection box when multiple features are selected
 	* FIX : zoom with wheelbox as in Google maps
+	* FIX : remove irrelevant menu item
 	
 v0.07 18 aug 2007
 	* ADD : nice mappaint mechanism
