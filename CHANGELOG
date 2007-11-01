@@ -20,6 +20,7 @@ v0.08
 	* ADD : caching algorithm for editstylepainters
 	* FIX : improve rendering on higher zoomed-out levels
 	* ADD : drag box to select a group of elements
+	* ADD : selection box when multiple features are selected
 	
 v0.07 18 aug 2007
 	* ADD : nice mappaint mechanism

@@ -41,6 +41,15 @@ Road::~Road(void)
 	delete p;
 }
 
+QString Road::description() const
+{
+	QString s(tagValue("name",""));
+	if (!s.isEmpty())
+		return QString("%1 (road %2)").arg(s).arg(id());
+	return
+		QString("road %1").arg(id());
+}
+
 void Road::add(TrackPoint* Pt)
 {
 	p->Nodes.push_back(Pt);
@@ -243,7 +252,7 @@ unsigned int findSnapPointIndex(const Road* R, Coord& P)
 	return BestIdx;
 }
 
-bool isClosed(Road* R)
+bool isClosed(const Road* R)
 {
 	return R->size() && (R->get(0) == R->get(R->size()-1));
 }

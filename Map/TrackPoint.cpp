@@ -70,6 +70,15 @@ void TrackPoint::cascadedRemoveIfUsing(MapDocument*, MapFeature*, CommandList*, 
 {
 }
 
+QString TrackPoint::description() const
+{
+	QString s(tagValue("name",""));
+	if (!s.isEmpty())
+		return QString("%1 (node %2)").arg(s).arg(id());
+	return
+		QString("node %1").arg(id());
+}
+
 
 
 

@@ -1,5 +1,6 @@
 #include "PropertiesDock.h"
 #include "MainWindow.h"
+#include "MapView.h"
 #include "TagModel.h"
 #include "Command/FeatureCommands.h"
 #include "Command/TrackPointCommands.h"
@@ -9,8 +10,10 @@
 #include "Map/Road.h"
 #include "Map/TrackPoint.h"
 
+#include <QtCore/QTimer>
 #include <QtGui/QHeaderView>
 #include <QtGui/QLineEdit>
+#include <QtGui/QListWidget>
 #include <QtGui/QTableView>
 
 #include <algorithm>
@@ -73,7 +76,9 @@ void PropertiesDock::setSelection(MapFeature* S)
 	Selection.clear();
 	if (S)
 		Selection.push_back(S);
+	FullSelection = Selection;
 	switchUi();
+	fillMultiUiSelectionBox();
 }
 
 void PropertiesDock::toggleSelection(MapFeature* S)
@@ -83,19 +88,65 @@ void PropertiesDock::toggleSelection(MapFeature* S)
 		Selection.push_back(S);
 	else
 		Selection.erase(i);
+	FullSelection = Selection;
 	switchUi();
+	fillMultiUiSelectionBox();
 }
 
+void PropertiesDock::fillMultiUiSelectionBox()
+{
+	if (NowShowing == MultiShowing)
+	{
+		// to prevent on_SelectionList_itemSelectionChanged to kick in
+		NowShowing = NoUiShowing;
+		MultiUi.SelectionList->clear();
+		for (unsigned int i=0; i<FullSelection.size(); ++i)
+		{
+			QListWidgetItem* it = new QListWidgetItem(FullSelection[i]->description(),MultiUi.SelectionList);
+			it->setData(Qt::UserRole,QVariant(i));
+			it->setSelected(true);
+		}
+		NowShowing = MultiShowing;
+	}
+}
+
+void PropertiesDock::on_SelectionList_itemSelectionChanged()
+{
+	if (NowShowing == MultiShowing)
+	{
+		Selection.clear();
+		for (unsigned int i=0; i<FullSelection.size(); ++i)
+			if (MultiUi.SelectionList->item(i)->isSelected())
+				Selection.push_back(FullSelection[i]);
+		theModel->setFeature(Selection);
+		Main->view()->update();
+	}
+}
+
+void PropertiesDock::on_SelectionList_itemDoubleClicked(QListWidgetItem* item)
+{
+	unsigned int i=item->data(Qt::UserRole).toUInt();
+	PendingSelectionChange = i;
+	// changing directly from this method would delete the current Ui from
+	// which this slot is called
+	QTimer::singleShot(0,this,SLOT(executePendingSelectionChange()));
+}
+
+void PropertiesDock::executePendingSelectionChange()
+{
+	if (PendingSelectionChange < FullSelection.size())
+		setSelection(FullSelection[PendingSelectionChange]);
+}
 
 void PropertiesDock::switchUi()
 {
-	if (Selection.size() == 0)
+	if (FullSelection.size() == 0)
 		switchToNoUi();
-	else if (Selection.size() == 1)
+	else if (FullSelection.size() == 1)
 	{
-		if (dynamic_cast<TrackPoint*>(Selection[0]))
+		if (dynamic_cast<TrackPoint*>(FullSelection[0]))
 			switchToTrackPointUi();
-		else if (dynamic_cast<Road*>(Selection[0]))
+		else if (dynamic_cast<Road*>(FullSelection[0]))
 			switchToRoadUi();
 		else
 			switchToNoUi();
@@ -117,6 +168,8 @@ void PropertiesDock::switchToMultiUi()
 		delete CurrentUi;
 	CurrentUi = NewUi;
 	connect(MultiUi.RemoveTagButton,SIGNAL(clicked()),this, SLOT(on_RemoveTagButton_clicked()));
+	connect(MultiUi.SelectionList,SIGNAL(itemSelectionChanged()),this,SLOT(on_SelectionList_itemSelectionChanged()));
+	connect(MultiUi.SelectionList,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(on_SelectionList_itemDoubleClicked(QListWidgetItem*)));
 	setWindowTitle(tr("Properties - Multiple elements"));
 }
 
@@ -172,16 +225,16 @@ void PropertiesDock::resetValues()
 	// to prevent slots to change the values also
 	std::vector<MapFeature*> Current = Selection;
 	Selection.clear();
-	if (Current.size() == 1)
+	if (FullSelection.size() == 1)
 	{
-		if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(Current[0]))
+		if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(FullSelection[0]))
 		{
 			TrackPointUi.Id->setText(Pt->id());
 			TrackPointUi.Latitude->setText(QString::number(radToAng(Pt->position().lat()),'g',8));
 			TrackPointUi.Longitude->setText(QString::number(radToAng(Pt->position().lon()),'g',8));
 			TrackPointUi.TagView->setModel(theModel);
 		}
-		else if (Road* R = dynamic_cast<Road*>(Current[0]))
+		else if (Road* R = dynamic_cast<Road*>(FullSelection[0]))
 		{
 			RoadUi.Id->setText(R->id());
 			RoadUi.Name->setText(R->tagValue("name",""));
@@ -193,7 +246,7 @@ void PropertiesDock::resetValues()
 			RoadUi.Highway->setCurrentIndex(idx);
 		}
 	}
-	else if (Current.size() > 1)
+	else if (FullSelection.size() > 1)
 		MultiUi.TagView->setModel(theModel);
 	theModel->setFeature(Current);
 	Selection = Current;

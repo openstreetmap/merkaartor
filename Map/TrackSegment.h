@@ -21,6 +21,7 @@ class TrackSegment : public MapFeature
 		virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection) const;
 		void cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const std::vector<MapFeature*>& Alternatives);
 		virtual bool notEverythingDownloaded() const;
+		virtual QString description() const;
 
 		void add(TrackPoint* aPoint);
 		unsigned int size() const;

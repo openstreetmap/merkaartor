@@ -40,6 +40,7 @@ class MapFeature
 		ActorType lastUpdated() const;
 		void setLastUpdated(ActorType A);
 		void setLayer(MapLayer* aLayer);
+		virtual QString description() const = 0;
 
 		void setTag(const QString& k, const QString& v);
 		void setTag(unsigned int idx, const QString& k, const QString& v);

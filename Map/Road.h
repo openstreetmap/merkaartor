@@ -21,6 +21,7 @@ class Road : public MapFeature
 		virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection) const;
 		virtual void cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const std::vector<MapFeature*>& Alternatives);		
 		virtual bool notEverythingDownloaded() const;
+		virtual QString description() const;
 
 		void add(TrackPoint* Pt);
 		void add(TrackPoint* Pt, unsigned int Idx);
@@ -36,7 +37,7 @@ class Road : public MapFeature
 MapFeature::TrafficDirectionType trafficDirection(const Road* R);
 double widthOf(const Road* R);
 unsigned int findSnapPointIndex(const Road* R, Coord& P);
-bool isClosed(Road* R);
+bool isClosed(const Road* R);
 
 #endif
 

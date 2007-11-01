@@ -45,6 +45,11 @@ void TrackSegment::sortByTime()
 	}
 }
 
+QString TrackSegment::description() const
+{
+	return "tracksegment";
+}
+
 void TrackSegment::add(TrackPoint* aPoint)
 {
 	p->Points.push_back(aPoint);
