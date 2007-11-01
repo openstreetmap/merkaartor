@@ -88,13 +88,15 @@ CoordBox Projection::viewport() const
 	return Viewport;
 }
 
-void Projection::zoom(double d, const QRect& Screen)
+void Projection::zoom(double d, const QPointF& Around, const QRect& Screen)
 {
-	Coord C = Viewport.center();
+	Coord Before = inverse(Around);
 	ScaleLon *= d;
 	ScaleLat *= d;
-	QPointF F(project(C));
-	DeltaLon += Screen.width()/2-F.x();
-	DeltaLat += Screen.height()/2-F.y();
+	Coord After = inverse(Around);
+	DeltaLat = Around.y()+Before.lat()*ScaleLat;
+	DeltaLon = Around.x()-Before.lon()*ScaleLon;
+//	DeltaLon += Screen.width()/2-F.x();
+//	DeltaLat += Screen.height()/2-F.y();
 	viewportRecalc(Screen);
 }

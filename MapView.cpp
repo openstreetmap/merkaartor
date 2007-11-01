@@ -127,13 +127,13 @@ void MapView::wheelEvent(QWheelEvent* ev)
 	if (Steps > 0)
 	{
 		for (int i=0; i<Steps; ++i)
-			projection().zoom(0.75,rect());
+			projection().zoom(1/0.75,ev->pos(),rect());
 		invalidate();
 	}
 	else if (Steps < 0)
 	{
 		for (int i=0; i<-Steps; ++i)
-			projection().zoom(1/0.75,rect());
+			projection().zoom(0.75,ev->pos(),rect());
 		invalidate();
 	}
 }

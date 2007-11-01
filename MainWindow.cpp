@@ -282,13 +282,13 @@ void MainWindow::on_viewZoomAllAction_triggered()
 
 void MainWindow::on_viewZoomInAction_triggered()
 {
-	theView->projection().zoom(1.33333, theView->rect());
+	theView->projection().zoom(1.33333, theView->rect().center(), theView->rect());
 	invalidateView();
 }
 
 void MainWindow::on_viewZoomOutAction_triggered()
 {
-	theView->projection().zoom(0.75, theView->rect());
+	theView->projection().zoom(0.75, theView->rect().center(), theView->rect());
 	invalidateView();
 }
 
