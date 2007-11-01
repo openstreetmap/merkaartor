@@ -8,117 +8,133 @@ static QString randomId()
 	return QUuid::createUuid().toString(); 
 }
 
-MapFeature::MapFeature()
-: LastActor(MapFeature::User), theLayer(0)
+class MapFeaturePrivate
 {
+	public:
+		MapFeaturePrivate()
+			: LastActor(MapFeature::User), theLayer(0) { }
+		MapFeaturePrivate(const MapFeaturePrivate& other)
+			: Tags(other.Tags), LastActor(MapFeature::User), theLayer(0) { }
+
+		mutable QString Id;
+		std::vector<std::pair<QString, QString> > Tags;
+		MapFeature::ActorType LastActor;
+		MapLayer* theLayer;
+};
+
+MapFeature::MapFeature()
+: p(0)
+{
+	 p = new MapFeaturePrivate;
 }
 
 MapFeature::MapFeature(const MapFeature& other)
-: Tags(other.Tags), LastActor(MapFeature::User), theLayer(0)
 {
+	p = new MapFeaturePrivate(*other.p);
 }
 
 MapFeature::~MapFeature(void)
 {
-	if (theLayer)
-		theLayer->notifyIdUpdate(Id,0);
+	if (p->theLayer)
+		p->theLayer->notifyIdUpdate(p->Id,0);
+	delete p;
 }
 
 void MapFeature::setLastUpdated(MapFeature::ActorType A)
 {
-	LastActor = A;
+	p->LastActor = A;
 }
 
 MapFeature::ActorType MapFeature::lastUpdated() const
 {
-	return LastActor;
+	return p->LastActor;
 }
 
 void MapFeature::setId(const QString& id)
 {
-	if (theLayer)
+	if (p->theLayer)
 	{
-		theLayer->notifyIdUpdate(Id,0);
-		theLayer->notifyIdUpdate(id,this);
+		p->theLayer->notifyIdUpdate(p->Id,0);
+		p->theLayer->notifyIdUpdate(id,this);
 	}
-	Id = id;
+	p->Id = id;
 }
 
 const QString& MapFeature::id() const
 {
-	if (Id == "")
+	if (p->Id == "")
 	{
-		Id = randomId();
-		if (theLayer)
-			theLayer->notifyIdUpdate(Id,const_cast<MapFeature*>(this));
+		p->Id = randomId();
+		if (p->theLayer)
+			p->theLayer->notifyIdUpdate(p->Id,const_cast<MapFeature*>(this));
 	}
-	return Id;
+	return p->Id;
 }
 
 void MapFeature::setTag(unsigned int idx, const QString& k, const QString& v)
 {
-	Tags[idx] = std::make_pair(k,v);
+	p->Tags[idx] = std::make_pair(k,v);
 }
 
 void MapFeature::setTag(const QString& k, const QString& v)
 {
-	for (unsigned int i=0; i<Tags.size(); ++i)
-		if (Tags[i].first == k)
+	for (unsigned int i=0; i<p->Tags.size(); ++i)
+		if (p->Tags[i].first == k)
 		{
-			Tags[i].second = v;
+			p->Tags[i].second = v;
 			return;
 		}
-	Tags.push_back(std::make_pair(k,v));
+	p->Tags.push_back(std::make_pair(k,v));
 }
 
 void MapFeature::clearTags()
 {
-	Tags.clear();
+	p->Tags.clear();
 }
 
 void MapFeature::clearTag(const QString& k)
 {
-	for (unsigned int i=0; i<Tags.size(); ++i)
-		if (Tags[i].first == k)
+	for (unsigned int i=0; i<p->Tags.size(); ++i)
+		if (p->Tags[i].first == k)
 		{
-			Tags.erase(Tags.begin()+i);
+			p->Tags.erase(p->Tags.begin()+i);
 			return;
 		}
 }
 
 unsigned int MapFeature::tagSize() const
 {
-	return Tags.size();
+	return p->Tags.size();
 }
 
 QString MapFeature::tagValue(unsigned int i) const
 {
-	return Tags[i].second;
+	return p->Tags[i].second;
 }
 
 QString MapFeature::tagKey(unsigned int i) const
 {
-	return Tags[i].first;
+	return p->Tags[i].first;
 }
 
 unsigned int MapFeature::findKey(const QString &k) const
 {
-	for (unsigned int i=0; i<Tags.size(); ++i)
-		if (Tags[i].first == k)
+	for (unsigned int i=0; i<p->Tags.size(); ++i)
+		if (p->Tags[i].first == k)
 			return i;
-	return Tags.size();
+	return p->Tags.size();
 }
 
 void MapFeature::removeTag(unsigned int idx)
 {
-	Tags.erase(Tags.begin()+idx);
+	p->Tags.erase(p->Tags.begin()+idx);
 }
 
 QString MapFeature::tagValue(const QString& k, const QString& Default) const
 {
-	for (unsigned int i=0; i<Tags.size(); ++i)
-		if (Tags[i].first == k)
-			return Tags[i].second;
+	for (unsigned int i=0; i<p->Tags.size(); ++i)
+		if (p->Tags[i].first == k)
+			return p->Tags[i].second;
 	return Default;
 }
 

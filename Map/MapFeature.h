@@ -15,6 +15,8 @@ class Projection;
 class QPointF;
 class QPainter;
 
+class MapFeaturePrivate;
+
 class MapFeature
 {
 	public:
@@ -50,10 +52,7 @@ class MapFeature
 		void removeTag(unsigned int i);
 
 	private:
-		mutable QString Id;
-		std::vector<std::pair<QString, QString> > Tags;
-		ActorType LastActor;
-		MapLayer* theLayer;
+		MapFeaturePrivate* p;
 };
 
 #endif
