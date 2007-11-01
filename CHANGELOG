@@ -18,6 +18,7 @@ v0.08
 	* FIX : improve download handling
 	* ADD : join/split/break road actions
 	* ADD : caching algorithm for editstylepainters
+	* FIX : improve rendering on higher zoomed-out levels
 	
 v0.07 18 aug 2007
 	* ADD : nice mappaint mechanism

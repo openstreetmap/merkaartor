@@ -80,8 +80,6 @@ class EditPaintStylePrivate
 		}
 
 		void initPainters();
-/*		FeaturePainter *findPainter(Road *R);
-		FeaturePainter *findPainter(TrackPoint *Pt); */
 
 		QPainter& thePainter;
 		const Projection& theProjection;
@@ -96,31 +94,31 @@ void EditPaintStylePrivate::initPainters()
 	if (EditPaintStyle::Painters.size()) return;
 
 	FeaturePainter MotorWay;
-	MotorWay.background(QColor(0xff,0,0),1,0).foreground(QColor(0xff,0xff,0),0.5,0);
+	MotorWay.background(QColor(0xff,0,0),1,6).foreground(QColor(0xff,0xff,0),0.5,2);
 	MotorWay.selectOnTag("highway","motorway","motorway_link");
 	MotorWay.drawTrafficDirectionMarks();
 	EditPaintStyle::Painters.push_back(MotorWay);
 
 	FeaturePainter Trunk;
-	Trunk.foreground(QColor(0xff,0,0),1,0);
+	Trunk.foreground(QColor(0xff,0,0),1,4);
 	Trunk.selectOnTag("highway","trunk","trunk_link");
 	Trunk.drawTrafficDirectionMarks();
 	EditPaintStyle::Painters.push_back(Trunk);
 
 	FeaturePainter Primary;
-	Primary.foreground(QColor(0,0xff,0),1,0);
+	Primary.foreground(QColor(0,0xff,0),1,3);
 	Primary.selectOnTag("highway","primary","primary_link").limitToZoom(FeaturePainter::GlobalZoom);
 	Primary.drawTrafficDirectionMarks();
 	EditPaintStyle::Painters.push_back(Primary);
 
 	FeaturePainter Secondary;
-	Secondary.foreground(QColor(0xff,0xaa,0),1,0);
+	Secondary.foreground(QColor(0xff,0xaa,0),1,2);
 	Secondary.selectOnTag("highway","secondary","secondary_link").limitToZoom(FeaturePainter::RegionalZoom);
 	Secondary.drawTrafficDirectionMarks();
 	EditPaintStyle::Painters.push_back(Secondary);
 
 	FeaturePainter Tertiary;
-	Tertiary.foreground(QColor(0xff,0x55,0x55),1,0);
+	Tertiary.foreground(QColor(0xff,0x55,0x55),1,1.5);
 	Tertiary.selectOnTag("highway","tertiary","tertiary_link").limitToZoom(FeaturePainter::RegionalZoom);
 	Tertiary.drawTrafficDirectionMarks();
 	EditPaintStyle::Painters.push_back(Tertiary);
@@ -141,13 +139,13 @@ void EditPaintStylePrivate::initPainters()
 	EditPaintStyle::Painters.push_back(Pedestrian);
 
 	FeaturePainter Residential;
-	Residential.background(QColor(0x77,0x77,0x77),1,0).foreground(QColor(0xff,0xff,0xff),1,-2);
+	Residential.background(QColor(0x77,0x77,0x77),1,1).foreground(QColor(0xff,0xff,0xff),1,-1);
 	Residential.selectOnTag("highway","residential","unclassified").limitToZoom(FeaturePainter::LocalZoom);
 	Residential.drawTrafficDirectionMarks();
 	EditPaintStyle::Painters.push_back(Residential);
 
 	FeaturePainter Railway;
-	Railway.background(QColor(0,0,0),1,0).foreground(QColor(0xff,0xff,0xff),1,-3).touchup(QColor(0,0,0),1,-3).touchupDash(3,3);
+	Railway.background(QColor(0,0,0),1,4).foreground(QColor(0xff,0xff,0xff),1,2).touchup(QColor(0,0,0),1,2).touchupDash(3,3);
 	Railway.selectOnTag("railway","rail").limitToZoom(FeaturePainter::GlobalZoom);
 	EditPaintStyle::Painters.push_back(Railway);
 
@@ -173,29 +171,6 @@ void EditPaintStylePrivate::initPainters()
 	Parking.limitToZoom(FeaturePainter::LocalZoom);
 	EditPaintStyle::Painters.push_back(Parking);
 }
-/*
-FeaturePainter *EditPaintStylePrivate::findPainter(Road *R)
-{
-	double PixelPerM = theProjection.pixelPerM();
-	for (unsigned int i=0; i < EditPaintStyle::Painters.size(); ++i)
-	{
-		if (EditPaintStyle::Painters[i].isHit(R,PixelPerM))
-			return &EditPaintStyle::Painters[i];
-	}
-	return 0;
-}
-
-FeaturePainter *EditPaintStylePrivate::findPainter(TrackPoint *Pt)
-{
-	double PixelPerM = theProjection.pixelPerM();
-	for (unsigned int i=0; i < EditPaintStyle::Painters.size(); ++i)
-	{
-		if (EditPaintStyle::Painters[i].isHit(Pt, PixelPerM))
-			return &EditPaintStyle::Painters[i];
-	}
-	return 0;
-}
-*/
 
 void EPBackgroundLayer::setP(EditPaintStylePrivate* ap)
 {
