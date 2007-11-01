@@ -19,6 +19,7 @@ v0.08
 	* ADD : join/split/break road actions
 	* ADD : caching algorithm for editstylepainters
 	* FIX : improve rendering on higher zoomed-out levels
+	* ADD : drag box to select a group of elements
 	
 v0.07 18 aug 2007
 	* ADD : nice mappaint mechanism

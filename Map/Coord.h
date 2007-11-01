@@ -77,6 +77,11 @@ class CoordBox
 				(C.lat() < TopRight.lat()) && (C.lon() <= TopRight.lon());
 		}
 
+		bool contains(const CoordBox& B) const
+		{
+			return contains(B.BottomLeft) && contains(B.TopRight);
+		}
+
 		void merge(const CoordBox& B)
 		{
 			merge(B.BottomLeft);

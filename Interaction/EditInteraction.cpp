@@ -15,9 +15,12 @@
 #include "Map/TrackPoint.h"
 
 #include <QtGui/QMouseEvent>
+#include <QtGui/QPainter>
+
+#include <vector>
 
 EditInteraction::EditInteraction(MapView* theView)
-: FeatureSnapInteraction(theView)
+: FeatureSnapInteraction(theView), Dragging(false), StartDrag(0,0), EndDrag(0,0)
 {
 	connect(main(),SIGNAL(remove_triggered()),this,SLOT(on_remove_triggered()));
 	connect(main(),SIGNAL(move_triggered()),this,SLOT(on_move_triggered()));
@@ -38,31 +41,57 @@ void EditInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
 {
 	for (unsigned int i=0; i<view()->properties()->size(); ++i)
 		view()->properties()->selection(i)->drawFocus(thePainter, projection());
+	if (Dragging)
+	{
+		thePainter.setPen(QPen(QColor(255,0,0),1,Qt::DotLine));
+		thePainter.drawRect(QRectF(projection().project(StartDrag),projection().project(EndDrag)));
+	}
 	FeatureSnapInteraction::paintEvent(anEvent, thePainter);
 }
 
-void EditInteraction::snapMousePressEvent(QMouseEvent * event, MapFeature* aLast)
+void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 {
-	if (event->buttons() & Qt::LeftButton)
+	if (ev->buttons() & Qt::LeftButton)
 	{
-		if (event->modifiers() & Qt::ControlModifier)
+		if (ev->modifiers() & Qt::ControlModifier)
 		{
 			if (aLast)
 				view()->properties()->toggleSelection(aLast);
 		}
 		else
 			view()->properties()->setSelection(aLast);
+		if (!aLast)
+		{
+			EndDrag = StartDrag = projection().inverse(ev->pos());
+			Dragging = true;
+		}
 		view()->properties()->checkMenuStatus();
 		view()->update();
 	}
 }
 
-void EditInteraction::snapMouseReleaseEvent(QMouseEvent * , MapFeature* )
+void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* )
 {
+	if (Dragging)
+	{
+		std::vector<MapFeature*> List;
+		CoordBox DragBox(StartDrag,projection().inverse(ev->pos()));
+		for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it)
+			if (DragBox.contains(it.get()->boundingBox()))
+				List.push_back(it.get());
+		view()->properties()->setSelection(List);
+		Dragging = false;
+		view()->update();
+	}
 }
 
 void EditInteraction::snapMouseMoveEvent(QMouseEvent* event, MapFeature* )
 {
+	if (Dragging)
+	{
+		EndDrag = projection().inverse(event->pos());
+		view()->update();
+	}
 }
 
 void EditInteraction::on_remove_triggered()
