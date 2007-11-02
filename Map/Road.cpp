@@ -46,8 +46,7 @@ QString Road::description() const
 	QString s(tagValue("name",""));
 	if (!s.isEmpty())
 		return QString("%1 (road %2)").arg(s).arg(id());
-	return
-		QString("road %1").arg(id());
+	return QString("road %1").arg(id());
 }
 
 void Road::add(TrackPoint* Pt)

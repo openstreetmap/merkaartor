@@ -3,10 +3,12 @@
 #include "Command/Command.h"
 #include "Command/DocumentCommands.h"
 #include "Command/FeatureCommands.h"
+#include "Command/RelationCommands.h"
 #include "Command/RoadCommands.h"
 #include "Command/TrackPointCommands.h"
 #include "Map/DownloadOSM.h"
 #include "Map/MapDocument.h"
+#include "Map/Relation.h"
 #include "Map/Road.h"
 #include "Map/TrackPoint.h"
 #include "Map/TrackSegment.h"
@@ -91,6 +93,45 @@ static void loadTags(const QDomElement& Root, MapFeature* W, CommandList* theLis
 	}
 }
 
+static TrackPoint* getTrackPointOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id)
+{
+	TrackPoint* Part = dynamic_cast<TrackPoint*>(theDocument->get("node_"+Id));
+	if (!Part)
+	{
+		Part = new TrackPoint(Coord(0,0));
+		Part->setId("node_"+Id);
+		Part->setLastUpdated(MapFeature::NotYetDownloaded);
+		theList->add(new AddFeatureCommand(theLayer, Part, false));
+	}
+	return Part;
+}
+
+static Road* getWayOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id)
+{
+	Road* Part = dynamic_cast<Road*>(theDocument->get("way_"+Id));
+	if (!Part)
+	{
+		Part = new Road;
+		Part->setId("way_"+Id);
+		Part->setLastUpdated(MapFeature::NotYetDownloaded);
+		theList->add(new AddFeatureCommand(theLayer, Part, false));
+	}
+	return Part;
+}
+
+static Relation* getRelationOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id)
+{
+	Relation* Part = dynamic_cast<Relation*>(theDocument->get("rel_"+Id));
+	if (!Part)
+	{
+		Part = new Relation;
+		Part->setId("rel_"+Id);
+		Part->setLastUpdated(MapFeature::NotYetDownloaded);
+		theList->add(new AddFeatureCommand(theLayer, Part, false));
+	}
+	return Part;
+}
+
 static void importWay(QProgressDialog* dlg, const QDomElement& Root, MapDocument* theDocument, MapLayer* theLayer, 
 					  MapLayer* conflictLayer, CommandList* theList, Downloader* theDownloader)
 {
@@ -102,14 +143,7 @@ static void importWay(QProgressDialog* dlg, const QDomElement& Root, MapDocument
 		{
 			if (t.tagName() == "nd")
 			{
-				TrackPoint* Part = dynamic_cast<TrackPoint*>(theDocument->get("node_"+t.attribute("ref")));
-				if (!Part)
-				{
-					Part = new TrackPoint(Coord(0,0));
-					Part->setId("node_"+t.attribute("id"));
-					Part->setLastUpdated(MapFeature::NotYetDownloaded);
-					theList->add(new AddFeatureCommand(theLayer, Part, false));
-				}
+				TrackPoint *Part = getTrackPointOrCreatePlaceHolder(theDocument, theLayer, theList, t.attribute("ref"));
 				Pts.push_back(Part);
 			}
 		}
@@ -157,6 +191,73 @@ static void importWay(QProgressDialog* dlg, const QDomElement& Root, MapDocument
 }
 
 
+static void importRelation(QProgressDialog* dlg, const QDomElement& Root, MapDocument* theDocument, MapLayer* theLayer, 
+					  MapLayer* conflictLayer, CommandList* theList, Downloader* theDownloader)
+{
+	std::vector<std::pair<QString,MapFeature*> > Fts;
+	for(QDomNode n = Root.firstChild(); !n.isNull(); n = n.nextSibling())
+	{
+		QDomElement t = n.toElement();
+		if (!t.isNull())
+		{
+			if (t.tagName() == "member")
+			{
+				QString Type = t.attribute("type");
+				MapFeature* F = 0;
+				if (Type == "node")
+					F = getTrackPointOrCreatePlaceHolder(theDocument, theLayer, theList, t.attribute("ref"));
+				else if (Type == "way")
+					F = getWayOrCreatePlaceHolder(theDocument, theLayer, theList, t.attribute("ref"));
+				else if (Type == "relation")
+					F = getRelationOrCreatePlaceHolder(theDocument, theLayer, theList, t.attribute("ref"));
+				if (F)
+					Fts.push_back(std::make_pair(t.attribute("role"),F));
+			}
+		}
+	}
+	if (Fts.size())
+	{
+		QString id = "rel_"+Root.attribute("id");
+		Relation* R = dynamic_cast<Relation*>(theDocument->get(id));
+		if (R)
+		{
+			if (R->lastUpdated() == MapFeature::User)
+			{
+				R->setLastUpdated(MapFeature::UserResolved);
+				// conflict
+/*				TrackPoint* Conflict = dynamic_cast<TrackPoint*>(theDocument->get("conflict_node_"+Root.attribute("from")));
+				if (Conflict) From = Conflict;
+				Conflict = dynamic_cast<TrackPoint*>(theDocument->get("conflict_node_"+Root.attribute("to")));
+				if (Conflict) To = Conflict;
+				Way* W = new Way(From,To);
+				W->setId("conflict_"+id);
+				loadSegmentTags(Root,W);
+				theList->add(new AddFeatureCommand(conflictLayer,W, false));
+				W->setLastUpdated(MapFeature::OSMServerConflict); */
+			}
+			else if (R->lastUpdated() != MapFeature::UserResolved)
+			{
+				while (R->size())
+					theList->add(new RelationRemoveFeatureCommand(R,R->get(0)));
+				for (unsigned int i=0; i<Fts.size(); ++i)
+					theList->add(new RelationAddFeatureCommand(R,Fts[i].first,Fts[i].second));
+				loadTags(Root,R, theList);
+			}
+		}
+		else
+		{
+			R = new Relation;
+			for (unsigned int i=0; i<Fts.size(); ++i)
+				R->add(Fts[i].first,Fts[i].second);
+			R->setId(id);
+			loadTags(Root,R);
+			theList->add(new AddFeatureCommand(theLayer,R, false));
+			R->setLastUpdated(MapFeature::OSMServer);
+		}
+	}
+}
+
+
 static void importOSM(QProgressDialog* dlg, const QDomElement& Root, MapDocument* theDocument, MapLayer* theLayer, MapLayer* conflictLayer, CommandList* theList, Downloader* theDownloader)
 {
 	unsigned int Count = 0;
@@ -175,6 +276,8 @@ static void importOSM(QProgressDialog* dlg, const QDomElement& Root, MapDocument
 				importNode(t,theDocument, theLayer, conflictLayer, theList);
 			else if (t.tagName() == "way")
 				importWay(dlg, t,theDocument, theLayer, conflictLayer, theList, theDownloader);
+			else if (t.tagName() == "relation")
+				importRelation(dlg, t,theDocument, theLayer, conflictLayer, theList, theDownloader);
 		}
 		++Done;
 		if (dlg)

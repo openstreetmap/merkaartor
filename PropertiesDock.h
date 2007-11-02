@@ -2,6 +2,7 @@
 #define MERKATOR_PROPERTIESDOCK_H_
 
 #include "GeneratedFiles/ui_TrackPointProperties.h"
+#include "GeneratedFiles/ui_RelationProperties.h"
 #include "GeneratedFiles/ui_RoadProperties.h"
 #include "GeneratedFiles/ui_MultiProperties.h"
 
@@ -43,11 +44,13 @@ class PropertiesDock : public QDockWidget
 		void executePendingSelectionChange();
 
 	private:
+		void cleanUpUi();
 		void switchUi();
 		void switchToNoUi();
 		void switchToTrackPointUi();
 		void switchToRoadUi();
 		void switchToMultiUi();
+		void switchToRelationUi();
 		void fillMultiUiSelectionBox();
 
 		MainWindow* Main;
@@ -57,15 +60,17 @@ class PropertiesDock : public QDockWidget
 		Ui::TrackPointProperties TrackPointUi;
 		Ui::RoadProperties RoadUi;
 		Ui::MultiProperties MultiUi;
+		Ui::RelationProperties RelationUi;
 		TagModel* theModel;
 		unsigned int PendingSelectionChange;
 
-		enum { NoUiShowing, TrackPointUiShowing, RoadUiShowing, MultiShowing } NowShowing ;
+		enum { NoUiShowing, TrackPointUiShowing, RoadUiShowing, RelationUiShowing, MultiShowing } NowShowing ;
 };
 
 template<class T>
 void PropertiesDock::setSelection(const std::vector<T*>& aFeatureList)
 {
+	cleanUpUi();
 	Selection.clear();
 	for (unsigned int i=0; i<aFeatureList.size(); ++i)
 		Selection.push_back(aFeatureList[i]);

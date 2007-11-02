@@ -23,6 +23,8 @@ v0.08
 	* ADD : selection box when multiple features are selected
 	* FIX : zoom with wheelbox as in Google maps
 	* FIX : remove irrelevant menu item
+	* ADD : import relations
+	* ADD : view relations in the propertiesdock
 	
 v0.07 18 aug 2007
 	* ADD : nice mappaint mechanism

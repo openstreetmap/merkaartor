@@ -7,6 +7,7 @@
 #include "Map/Coord.h"
 #include "Map/MapDocument.h"
 #include "Map/MapFeature.h"
+#include "Map/Relation.h"
 #include "Map/Road.h"
 #include "Map/TrackPoint.h"
 
@@ -73,6 +74,7 @@ MapFeature* PropertiesDock::selection(unsigned int idx)
 
 void PropertiesDock::setSelection(MapFeature* S)
 {
+	cleanUpUi();
 	Selection.clear();
 	if (S)
 		Selection.push_back(S);
@@ -83,6 +85,7 @@ void PropertiesDock::setSelection(MapFeature* S)
 
 void PropertiesDock::toggleSelection(MapFeature* S)
 {
+	cleanUpUi();
 	std::vector<MapFeature*>::iterator i = std::find(Selection.begin(),Selection.end(),S);
 	if (i == Selection.end())
 		Selection.push_back(S);
@@ -138,6 +141,16 @@ void PropertiesDock::executePendingSelectionChange()
 		setSelection(FullSelection[PendingSelectionChange]);
 }
 
+void PropertiesDock::cleanUpUi()
+{
+	if (NowShowing == RelationUiShowing)
+	{
+		RelationUi.MembersView->setModel(0);
+		Relation* R = dynamic_cast<Relation*>(FullSelection[0]);
+		R->releaseMemberModel();
+	}
+}
+
 void PropertiesDock::switchUi()
 {
 	if (FullSelection.size() == 0)
@@ -148,6 +161,8 @@ void PropertiesDock::switchUi()
 			switchToTrackPointUi();
 		else if (dynamic_cast<Road*>(FullSelection[0]))
 			switchToRoadUi();
+		else if (dynamic_cast<Relation*>(FullSelection[0]))
+			switchToRelationUi();
 		else
 			switchToNoUi();
 	}
@@ -189,6 +204,23 @@ void PropertiesDock::switchToTrackPointUi()
 	connect(TrackPointUi.RemoveTagButton,SIGNAL(clicked()),this, SLOT(on_RemoveTagButton_clicked()));
 	setWindowTitle(tr("Properties - Trackpoint"));
 }
+
+
+void PropertiesDock::switchToRelationUi()
+{
+	if (NowShowing == RelationUiShowing) return;
+	NowShowing = RelationUiShowing;
+	QWidget* NewUi = new QWidget(this);
+	RelationUi.setupUi(NewUi);
+	RelationUi.TagView->verticalHeader()->hide();
+	setWidget(NewUi);
+	if (CurrentUi)
+		delete CurrentUi;
+	CurrentUi = NewUi;
+	connect(RelationUi.RemoveTagButton,SIGNAL(clicked()),this, SLOT(on_RemoveTagButton_clicked()));
+	setWindowTitle(tr("Properties - Relation"));
+}
+
 
 void PropertiesDock::switchToNoUi()
 {
@@ -244,6 +276,11 @@ void PropertiesDock::resetValues()
 			if (idx == -1)
 				idx = 0;
 			RoadUi.Highway->setCurrentIndex(idx);
+		}
+		else if (Relation* R = dynamic_cast<Relation*>(FullSelection[0]))
+		{
+			RelationUi.MembersView->setModel(R->referenceMemberModel(Main));
+			RelationUi.TagView->setModel(theModel);
 		}
 	}
 	else if (FullSelection.size() > 1)
@@ -338,6 +375,8 @@ void PropertiesDock::on_RemoveTagButton_clicked()
 		TagTable = RoadUi.TagView; break;
 	case MultiShowing:
 		TagTable = MultiUi.TagView; break;
+	case RelationUiShowing:
+		TagTable = RelationUi.TagView; break;
 	}
 	if (TagTable)
 	{

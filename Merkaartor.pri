@@ -3,6 +3,7 @@ HEADERS += \
 ./Command/Command.h \
 ./Command/DocumentCommands.h \
 ./Command/FeatureCommands.h \
+./Command/RelationCommands.h \
 ./Command/RoadCommands.h \
 ./Command/TrackPointCommands.h \
 ./Interaction/CreateDoubleWayInteraction.h \
@@ -24,6 +25,7 @@ HEADERS += \
 ./Map/MapFeature.h \
 ./Map/Painting.h \
 ./Map/Projection.h \
+./Map/Relation.h \
 ./Map/Road.h \
 ./Map/RoadManipulations.h \
 ./Map/TrackPoint.h \
@@ -44,6 +46,7 @@ SOURCES += \
 ./Command/DocumentCommands.cpp \
 ./Command/FeatureCommands.cpp \
 ./Command/TrackPointCommands.cpp \
+./Command/RelationCommands.cpp \
 ./Command/RoadCommands.cpp \
 ./Map/Coord.cpp \
 ./Map/DownloadOSM.cpp \
@@ -54,6 +57,7 @@ SOURCES += \
 ./Map/MapFeature.cpp \
 ./Map/Painting.cpp \
 ./Map/Projection.cpp \
+./Map/Relation.cpp \
 ./Map/Road.cpp \
 ./Map/RoadManipulations.cpp \
 ./Map/TrackPoint.cpp \
@@ -89,6 +93,7 @@ FORMS += \
 ./UploadMapDialog.ui \
 ./SetPositionDialog.ui \
 ./MultiProperties.ui \
+./RelationProperties.ui \
 ./Interaction/CreateDoubleWayDock.ui \
 ./Interaction/CreateRoundaboutDock.ui
 
