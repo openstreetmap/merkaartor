@@ -31,6 +31,11 @@ class Road : public MapFeature
 		TrackPoint* get(unsigned int idx);
 		const TrackPoint* get(unsigned int Idx) const;
 
+		virtual void addedToDocument();
+		virtual void removedFromDocument();
+		virtual void partChanged(MapFeature* F);
+
+	private:
 		RoadPrivate* p;
 };
 

@@ -32,6 +32,10 @@ class Relation : public MapFeature
 		void releaseMemberModel();
 		QString description() const;
 
+		virtual void addedToDocument();
+		virtual void removedFromDocument();
+		virtual void partChanged(MapFeature* F);
+
 	private:
 		Relation(const Relation&);
 		RelationPrivate* p;

@@ -26,6 +26,9 @@ class TrackSegment : public MapFeature
 		void add(TrackPoint* aPoint);
 		unsigned int size() const;
 		void sortByTime();
+		virtual void addedToDocument();
+		virtual void removedFromDocument();
+		virtual void partChanged(MapFeature* F);
 
 	private:
 		TrackSegmentPrivate* p;

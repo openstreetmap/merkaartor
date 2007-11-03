@@ -65,12 +65,14 @@ void MapLayer::add(MapFeature* aFeature)
 {
 	p->Features.push_back(aFeature);
 	notifyIdUpdate(aFeature->id(),aFeature);
+	aFeature->addedToDocument();
 }
 
 void MapLayer::add(MapFeature* aFeature, unsigned int Idx)
 {
 	add(aFeature);
 	std::rotate(p->Features.begin()+Idx,p->Features.end()-1,p->Features.end());
+	aFeature->addedToDocument();
 }
 
 void MapLayer::notifyIdUpdate(const QString& id, MapFeature* aFeature)
@@ -84,6 +86,7 @@ void MapLayer::remove(MapFeature* aFeature)
 	if (i != p->Features.end())
 	{
 		p->Features.erase(i);
+		aFeature->removedFromDocument();
 		notifyIdUpdate(aFeature->id(),0);
 	}
 }

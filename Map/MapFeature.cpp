@@ -4,6 +4,8 @@
 
 #include <QtCore/QUuid>
 
+#include <algorithm>
+
 static QString randomId()
 {
 	return QUuid::createUuid().toString(); 
@@ -38,6 +40,7 @@ class MapFeaturePrivate
 		FeaturePainter* PainterOnGlobalZoom;
 		FeaturePainter* PainterOnAnyZoom;
 		MapFeature* theFeature;
+		std::vector<MapFeature*> Parents;
 };
 
 MapFeature::MapFeature()
@@ -95,6 +98,7 @@ void MapFeature::setTag(unsigned int idx, const QString& k, const QString& v)
 {
 	p->PaintersUpToDate = false;
 	p->Tags[idx] = std::make_pair(k,v);
+	notifyParents();
 }
 
 void MapFeature::setTag(const QString& k, const QString& v)
@@ -104,15 +108,18 @@ void MapFeature::setTag(const QString& k, const QString& v)
 		if (p->Tags[i].first == k)
 		{
 			p->Tags[i].second = v;
+			notifyParents();
 			return;
 		}
 	p->Tags.push_back(std::make_pair(k,v));
+	notifyParents();
 }
 
 void MapFeature::clearTags()
 {
 	p->PaintersUpToDate = false;
 	p->Tags.clear();
+	notifyParents();
 }
 
 void MapFeature::clearTag(const QString& k)
@@ -122,6 +129,7 @@ void MapFeature::clearTag(const QString& k)
 		if (p->Tags[i].first == k)
 		{
 			p->Tags.erase(p->Tags.begin()+i);
+			notifyParents();
 			return;
 		}
 }
@@ -153,6 +161,7 @@ void MapFeature::removeTag(unsigned int idx)
 {
 	p->PaintersUpToDate = false;
 	p->Tags.erase(p->Tags.begin()+idx);
+	notifyParents();
 }
 
 QString MapFeature::tagValue(const QString& k, const QString& Default) const
@@ -206,3 +215,34 @@ bool MapFeature::hasEditPainter() const
 	return p->PainterOnGlobalZoom || p->PainterOnLocalZoom || p->PainterOnGlobalZoom || p->PainterOnAnyZoom;
 }
 
+void MapFeature::setParent(MapFeature* F)
+{
+	if (std::find(p->Parents.begin(),p->Parents.end(),F) == p->Parents.end())
+		p->Parents.push_back(F);
+}
+
+void MapFeature::unsetParent(MapFeature* F)
+{
+	for (unsigned int i=0; i<p->Parents.size(); ++i)
+		if (p->Parents[i] == F)
+		{
+			p->Parents.erase(p->Parents.begin()+i);
+			return;
+		}
+}
+
+unsigned int MapFeature::sizeParents() const
+{
+	return p->Parents.size();
+}
+
+MapFeature* MapFeature::getParent(unsigned int i)
+{
+	return p->Parents[i];
+}
+
+void MapFeature::notifyParents()
+{
+	for (unsigned int i=0; i<p->Parents.size(); ++i)
+		p->Parents[i]->partChanged(this);
+}

@@ -41,6 +41,23 @@ Road::~Road(void)
 	delete p;
 }
 
+void Road::addedToDocument()
+{
+	for (unsigned int i=0; i<p->Nodes.size(); ++i)
+		p->Nodes[i]->setParent(this);
+}
+
+void Road::removedFromDocument()
+{
+	for (unsigned int i=0; i<p->Nodes.size(); ++i)
+		p->Nodes[i]->unsetParent(this);
+}
+
+void Road::partChanged(MapFeature*)
+{
+	p->BBoxUpToDate = false;
+}
+
 QString Road::description() const
 {
 	QString s(tagValue("name",""));
@@ -52,6 +69,7 @@ QString Road::description() const
 void Road::add(TrackPoint* Pt)
 {
 	p->Nodes.push_back(Pt);
+	Pt->setParent(this);
 	p->BBoxUpToDate = false;
 }
 
@@ -59,6 +77,7 @@ void Road::add(TrackPoint* Pt, unsigned int Idx)
 {
 	p->Nodes.push_back(Pt);
 	std::rotate(p->Nodes.begin()+Idx,p->Nodes.end()-1,p->Nodes.end());
+	Pt->setParent(this);
 	p->BBoxUpToDate = false;
 }
 
@@ -70,19 +89,11 @@ unsigned int Road::find(TrackPoint* Pt) const
 	return p->Nodes.size();
 }
 
-/*void Road::remove(TrackPoint* Pt)
-{
-	std::vector<TrackPoint*>::iterator i = std::find(p->Nodes.begin(),p->Nodes.end(),Pt);
-	if (i != p->Nodes.end())
-	{
-		p->Nodes.erase(i);
-		p->BBoxUpToDate = false;
-	}
-}*/
-
 void Road::remove(unsigned int idx)
 {
+	TrackPoint* Pt = p->Nodes[idx];
 	p->Nodes.erase(p->Nodes.begin()+idx);
+	Pt->unsetParent(this);
 	p->BBoxUpToDate = false;
 }
 
@@ -255,3 +266,4 @@ bool isClosed(const Road* R)
 {
 	return R->size() && (R->get(0) == R->get(R->size()-1));
 }
+

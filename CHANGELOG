@@ -25,6 +25,7 @@ v0.08
 	* FIX : remove irrelevant menu item
 	* ADD : import relations
 	* ADD : view relations in the propertiesdock
+	* ADD : track back to which features a feature belongs
 	
 v0.07 18 aug 2007
 	* ADD : nice mappaint mechanism

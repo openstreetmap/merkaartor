@@ -56,6 +56,23 @@ Relation::~Relation()
 	delete p;
 }
 
+
+void Relation::addedToDocument()
+{
+	for (unsigned int i=0; i<p->Members.size(); ++i)
+		p->Members[i].second->setParent(this);
+}
+
+void Relation::removedFromDocument()
+{
+	for (unsigned int i=0; i<p->Members.size(); ++i)
+		p->Members[i].second->unsetParent(this);
+}
+
+void Relation::partChanged(MapFeature*)
+{
+}
+
 QString Relation::description() const
 {
 	return QString("relationship %1").arg(id());
@@ -261,6 +278,7 @@ bool RelationMemberModel::setData(const QModelIndex &index, const QVariant &valu
 	}
 	return false;
 }
+
 
 
 

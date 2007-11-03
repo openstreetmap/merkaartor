@@ -56,6 +56,15 @@ class MapFeature
 		FeaturePainter* getEditPainter(FeaturePainter::ZoomType Zoom) const;
 		bool hasEditPainter() const;
 
+		void setParent(MapFeature* F);
+		void unsetParent(MapFeature* F);
+		unsigned int sizeParents() const;
+		MapFeature* getParent(unsigned int i);
+		virtual void addedToDocument() = 0;
+		virtual void removedFromDocument() = 0;
+		virtual void partChanged(MapFeature* F) = 0;
+		void notifyParents();
+
 	private:
 		MapFeaturePrivate* p;
 };

@@ -26,6 +26,9 @@ class TrackPoint : public MapFeature
 		const QDateTime& time() const;
 		void setTime(const QDateTime& aTime);
 
+		virtual void addedToDocument();
+		virtual void removedFromDocument();
+		virtual void partChanged(MapFeature* F);
 	private:
 		Coord Position;
 		QDateTime Time;
