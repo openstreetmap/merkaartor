@@ -19,8 +19,8 @@ TrackSegment::TrackSegment(void)
 	p = new TrackSegmentPrivate;
 }
 
-TrackSegment::TrackSegment(const TrackSegment&)
-: p(0)
+TrackSegment::TrackSegment(const TrackSegment& other)
+: MapFeature(other), p(0)
 {
 }
 

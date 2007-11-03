@@ -68,6 +68,7 @@ class FeaturePainter
 class PaintStyleLayer
 {
 	public:
+		virtual ~PaintStyleLayer() { } ;
 		virtual void draw(Road* R) = 0;
 		virtual void draw(TrackPoint* Pt) = 0;
 };

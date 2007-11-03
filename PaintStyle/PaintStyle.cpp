@@ -232,6 +232,10 @@ void FeaturePainter::drawTouchup(Road* R, QPainter& thePainter, const Projection
 	}
 }
 
+PaintStyleLayer::~PaintStyleLayer()
+{
+}
+
 void PaintStyle::add(PaintStyleLayer *aLayer)
 {
 	Layers.push_back(aLayer);
