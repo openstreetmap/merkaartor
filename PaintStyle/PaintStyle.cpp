@@ -127,8 +127,9 @@ bool FeaturePainter::isHit(const MapFeature* F, ZoomType Zoom) const
 	if (const Relation* R = dynamic_cast<const Relation*>(F))
 	{
 		for (unsigned int i=0; i<R->size(); ++i)
-			if (isHit(R->get(i),Zoom))
-				return true;
+			for (unsigned int j=0; j<OneOfTheseTags.size(); ++j)
+				if (R->get(i)->tagValue(OneOfTheseTags[j].first,QString::null) == OneOfTheseTags[j].second)
+					return true;
 	}
 	return false;
 }

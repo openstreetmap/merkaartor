@@ -29,6 +29,8 @@ v0.08
 	* FIX : compile warnings (by Elrond)
 	* ADD : rendering according to correct priority
 	* ADD : create relationships
+	* FIX : also render relations where tags are on the individual
+	roads
 	
 v0.07 18 aug 2007
 	* ADD : nice mappaint mechanism
