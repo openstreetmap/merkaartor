@@ -51,6 +51,7 @@ void PropertiesDock::checkMenuStatus()
 		if (dynamic_cast<Road*>(Selection[i]))
 			++NumRoads;
 	}
+	Main->createRelationAction->setEnabled(Selection.size());
 	Main->editRemoveAction->setEnabled(Selection.size() == 1);
 	Main->editMoveAction->setEnabled(true);
 	Main->editAddAction->setEnabled(IsRoad);

@@ -27,6 +27,8 @@ v0.08
 	* ADD : view relations in the propertiesdock
 	* ADD : track back to which features a feature belongs
 	* FIX : compile warnings (by Elrond)
+	* ADD : rendering according to correct priority
+	* ADD : create relationships
 	
 v0.07 18 aug 2007
 	* ADD : nice mappaint mechanism

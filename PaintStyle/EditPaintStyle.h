@@ -16,6 +16,8 @@ class EditPaintStyle : public PaintStyle
 	public:
 		EditPaintStyle(QPainter& P, const Projection& theProjection);
 		virtual ~EditPaintStyle();
+
+		FeaturePainter::ZoomType zoom() const;
 		
 	private:
 		EditPaintStylePrivate* p;

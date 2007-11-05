@@ -2,6 +2,7 @@
 #include "MainWindow.h"
 #include "Map/MapDocument.h"
 #include "Map/MapFeature.h"
+#include "Map/Relation.h"
 #include "Interaction/EditInteraction.h"
 #include "Interaction/Interaction.h"
 #include "PaintStyle/EditPaintStyle.h"
@@ -78,9 +79,11 @@ void MapView::updateStaticBuffer(QPaintEvent*)
 	P.fillRect(StaticBuffer->rect(),QBrush(QColor(255,255,255)));
 	if (theDocument)
 	{
+		EditPaintStyle EP(P,projection());
+		for (unsigned int i=0; i<theDocument->numLayers(); ++i)
+			theDocument->layer(i)->sortRenderingPriority(EP.zoom());
 		for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
 			i.get()->draw(P,projection());
-		EditPaintStyle EP(P,projection());
 		for (unsigned int i=0; i<EP.size(); ++i)
 		{
 			PaintStyleLayer* Current = EP.get(i);
@@ -88,11 +91,10 @@ void MapView::updateStaticBuffer(QPaintEvent*)
 			{
 				if (Road* R = dynamic_cast<Road*>(i.get()))
 					Current->draw(R);
-			}
-			for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
-			{
-				if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(i.get()))
+				else if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(i.get()))
 					Current->draw(Pt);
+				else if (Relation* RR = dynamic_cast<Relation*>(i.get()))
+					Current->draw(RR);
 			}
 		}
 	}

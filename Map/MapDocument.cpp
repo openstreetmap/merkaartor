@@ -13,6 +13,10 @@
 class MapLayerPrivate
 {
 public:
+	MapLayerPrivate()
+		: RenderPriorityUpToDate(false)
+	{
+	}
 	~MapLayerPrivate()
 	{
 		for (unsigned int i=0; i<Features.size(); ++i)
@@ -22,7 +26,33 @@ public:
 	std::map<QString, MapFeature*> IdMap;
 	QString Name;
 	bool Visible;
+	bool RenderPriorityUpToDate;
+	FeaturePainter::ZoomType RenderPriorityForZoom;
+
+	void sortRenderingPriority(FeaturePainter::ZoomType Zoom);
 };
+
+class SortAccordingToRenderingPriority
+{
+	public:
+		SortAccordingToRenderingPriority(FeaturePainter::ZoomType aZoom)
+			: Zoom(aZoom)
+		{
+		}
+		bool operator()(MapFeature* A, MapFeature* B)
+		{
+			return A->renderPriority(Zoom) < B->renderPriority(Zoom);
+		}
+
+		FeaturePainter::ZoomType Zoom;
+};
+
+void MapLayerPrivate::sortRenderingPriority(FeaturePainter::ZoomType Zoom)
+{
+	std::sort(Features.begin(),Features.end(),SortAccordingToRenderingPriority(Zoom));
+	RenderPriorityUpToDate = true;
+	RenderPriorityForZoom = Zoom;
+}
 
 MapLayer::MapLayer(const QString& aName)
 : p(new MapLayerPrivate)
@@ -39,6 +69,17 @@ MapLayer::MapLayer(const MapLayer&)
 MapLayer::~MapLayer()
 {
 	delete p;
+}
+
+void MapLayer::sortRenderingPriority(FeaturePainter::ZoomType Zoom)
+{
+	if (!p->RenderPriorityUpToDate || (Zoom != p->RenderPriorityForZoom) )
+		p->sortRenderingPriority(Zoom);
+}
+
+void MapLayer::invalidateRenderPriority()
+{
+	p->RenderPriorityUpToDate = false;
 }
 
 void MapLayer::setName(const QString& s)
@@ -65,14 +106,16 @@ void MapLayer::add(MapFeature* aFeature)
 {
 	p->Features.push_back(aFeature);
 	notifyIdUpdate(aFeature->id(),aFeature);
-	aFeature->addedToDocument();
+	aFeature->setLayer(this);
+	p->RenderPriorityUpToDate = false;
 }
 
 void MapLayer::add(MapFeature* aFeature, unsigned int Idx)
 {
 	add(aFeature);
 	std::rotate(p->Features.begin()+Idx,p->Features.end()-1,p->Features.end());
-	aFeature->addedToDocument();
+	aFeature->setLayer(this);
+	p->RenderPriorityUpToDate = false;
 }
 
 void MapLayer::notifyIdUpdate(const QString& id, MapFeature* aFeature)
@@ -86,8 +129,9 @@ void MapLayer::remove(MapFeature* aFeature)
 	if (i != p->Features.end())
 	{
 		p->Features.erase(i);
-		aFeature->removedFromDocument();
+		aFeature->setLayer(0);
 		notifyIdUpdate(aFeature->id(),0);
+		p->RenderPriorityUpToDate = false;
 	}
 }
 

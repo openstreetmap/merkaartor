@@ -2,6 +2,7 @@
 #define MAPDOCUMENT_H_
 
 #include "Map/Coord.h"
+#include "PaintStyle/PaintStyle.h"
 
 #include <utility>
 
@@ -34,6 +35,8 @@ class MapLayer
 		const MapFeature* get(unsigned int i) const;
 		MapFeature* get(const QString& id);
 		void notifyIdUpdate(const QString& id, MapFeature* aFeature);
+		void sortRenderingPriority(FeaturePainter::ZoomType Zoom);
+		void invalidateRenderPriority();
 
 	private:
 		MapLayerPrivate* p;

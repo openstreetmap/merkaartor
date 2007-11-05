@@ -18,7 +18,7 @@ class MapFeaturePrivate
 			: LastActor(MapFeature::User), theLayer(0), PaintersUpToDate(false),
 		      PainterOnLocalZoom(0), PainterOnRegionalZoom(0), 
 			  PainterOnGlobalZoom(0), PainterOnAnyZoom(0),
-			  theFeature(0) { }
+			  theFeature(0), LastPartNotification(0) { }
 		MapFeaturePrivate(const MapFeaturePrivate& other)
 			: Tags(other.Tags), LastActor(MapFeature::User), theLayer(0),
 			  PaintersUpToDate(other.PaintersUpToDate),
@@ -26,7 +26,7 @@ class MapFeaturePrivate
 			  PainterOnRegionalZoom(other.PainterOnRegionalZoom),
 			  PainterOnGlobalZoom(other.PainterOnGlobalZoom),
 			  PainterOnAnyZoom(other.PainterOnAnyZoom),
-			  theFeature(0) { }
+			  theFeature(0), LastPartNotification(0) { }
 
 		void updatePainters();
 
@@ -41,6 +41,7 @@ class MapFeaturePrivate
 		FeaturePainter* PainterOnAnyZoom;
 		MapFeature* theFeature;
 		std::vector<MapFeature*> Parents;
+		unsigned int LastPartNotification;
 };
 
 MapFeature::MapFeature()
@@ -61,6 +62,11 @@ MapFeature::~MapFeature(void)
 	if (p->theLayer)
 		p->theLayer->notifyIdUpdate(p->Id,0);
 	delete p;
+}
+
+void MapFeature::setLayer(MapLayer* aLayer)
+{
+	p->theLayer = aLayer;
 }
 
 void MapFeature::setLastUpdated(MapFeature::ActorType A)
@@ -98,7 +104,7 @@ void MapFeature::setTag(unsigned int idx, const QString& k, const QString& v)
 {
 	p->PaintersUpToDate = false;
 	p->Tags[idx] = std::make_pair(k,v);
-	notifyParents();
+	notifyChanges();
 }
 
 void MapFeature::setTag(const QString& k, const QString& v)
@@ -108,18 +114,18 @@ void MapFeature::setTag(const QString& k, const QString& v)
 		if (p->Tags[i].first == k)
 		{
 			p->Tags[i].second = v;
-			notifyParents();
+			notifyChanges();
 			return;
 		}
 	p->Tags.push_back(std::make_pair(k,v));
-	notifyParents();
+	notifyChanges();
 }
 
 void MapFeature::clearTags()
 {
 	p->PaintersUpToDate = false;
 	p->Tags.clear();
-	notifyParents();
+	notifyChanges();
 }
 
 void MapFeature::clearTag(const QString& k)
@@ -129,7 +135,7 @@ void MapFeature::clearTag(const QString& k)
 		if (p->Tags[i].first == k)
 		{
 			p->Tags.erase(p->Tags.begin()+i);
-			notifyParents();
+			notifyChanges();
 			return;
 		}
 }
@@ -161,7 +167,7 @@ void MapFeature::removeTag(unsigned int idx)
 {
 	p->PaintersUpToDate = false;
 	p->Tags.erase(p->Tags.begin()+idx);
-	notifyParents();
+	notifyChanges();
 }
 
 QString MapFeature::tagValue(const QString& k, const QString& Default) const
@@ -241,8 +247,26 @@ MapFeature* MapFeature::getParent(unsigned int i)
 	return p->Parents[i];
 }
 
-void MapFeature::notifyParents()
+const MapFeature* MapFeature::getParent(unsigned int i) const
 {
-	for (unsigned int i=0; i<p->Parents.size(); ++i)
-		p->Parents[i]->partChanged(this);
+	return p->Parents[i];
+}
+
+
+void MapFeature::notifyChanges()
+{
+	static unsigned int Id = 0;
+	notifyParents(++Id);
+	if (p->theLayer)
+		p->theLayer->invalidateRenderPriority();
+}
+
+void MapFeature::notifyParents(unsigned int Id)
+{
+	if (Id != p->LastPartNotification)
+	{
+		p->LastPartNotification = Id;
+		for (unsigned int i=0; i<p->Parents.size(); ++i)
+			p->Parents[i]->partChanged(this, Id);
+	}
 }

@@ -20,15 +20,14 @@ class TrackPoint : public MapFeature
 		virtual void cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const std::vector<MapFeature*>& Alternatives);
 		virtual bool notEverythingDownloaded() const;
 		virtual QString description() const;
+		virtual RenderPriority renderPriority(FeaturePainter::ZoomType Zoom) const;
 
 		const Coord& position() const;
 		void setPosition(const Coord& aCoord);
 		const QDateTime& time() const;
 		void setTime(const QDateTime& aTime);
 
-		virtual void addedToDocument();
-		virtual void removedFromDocument();
-		virtual void partChanged(MapFeature* F);
+		virtual void partChanged(MapFeature* F, unsigned int ChangeId);
 	private:
 		Coord Position;
 		QDateTime Time;

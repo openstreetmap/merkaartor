@@ -18,12 +18,14 @@ class RoadPrivate
 {
 	public:
 		RoadPrivate()
-		: BBox(Coord(0,0),Coord(0,0)), BBoxUpToDate(true)
+		: BBox(Coord(0,0),Coord(0,0)), BBoxUpToDate(true), Area(0), AreaUpToDate(true)
 		{
 		}
 		std::vector<TrackPoint*> Nodes;
 		CoordBox BBox;
 		bool BBoxUpToDate;
+		double Area;
+		bool AreaUpToDate;
 };
 
 Road::Road(void)
@@ -41,21 +43,22 @@ Road::~Road(void)
 	delete p;
 }
 
-void Road::addedToDocument()
+void Road::setLayer(MapLayer* L)
 {
-	for (unsigned int i=0; i<p->Nodes.size(); ++i)
-		p->Nodes[i]->setParent(this);
+	if (L)
+		for (unsigned int i=0; i<p->Nodes.size(); ++i)
+			p->Nodes[i]->setParent(this);
+	else
+		for (unsigned int i=0; i<p->Nodes.size(); ++i)
+			p->Nodes[i]->unsetParent(this);
+	MapFeature::setLayer(L);
 }
 
-void Road::removedFromDocument()
-{
-	for (unsigned int i=0; i<p->Nodes.size(); ++i)
-		p->Nodes[i]->unsetParent(this);
-}
-
-void Road::partChanged(MapFeature*)
+void Road::partChanged(MapFeature*, unsigned int ChangeId)
 {
 	p->BBoxUpToDate = false;
+	p->AreaUpToDate = false;
+	notifyParents(ChangeId);
 }
 
 QString Road::description() const
@@ -66,11 +69,20 @@ QString Road::description() const
 	return QString("road %1").arg(id());
 }
 
+RenderPriority Road::renderPriority(FeaturePainter::ZoomType Zoom) const
+{
+	FeaturePainter* thePainter = getEditPainter(Zoom);
+	if (thePainter && thePainter->isFilled())
+		return RenderPriority(RenderPriority::IsArea,fabs(area()));
+	return RenderPriority(RenderPriority::IsLinear,0);
+}
+
 void Road::add(TrackPoint* Pt)
 {
 	p->Nodes.push_back(Pt);
 	Pt->setParent(this);
 	p->BBoxUpToDate = false;
+	p->AreaUpToDate = false;
 }
 
 void Road::add(TrackPoint* Pt, unsigned int Idx)
@@ -79,6 +91,7 @@ void Road::add(TrackPoint* Pt, unsigned int Idx)
 	std::rotate(p->Nodes.begin()+Idx,p->Nodes.end()-1,p->Nodes.end());
 	Pt->setParent(this);
 	p->BBoxUpToDate = false;
+	p->AreaUpToDate = false;
 }
 
 unsigned int Road::find(TrackPoint* Pt) const
@@ -95,6 +108,7 @@ void Road::remove(unsigned int idx)
 	p->Nodes.erase(p->Nodes.begin()+idx);
 	Pt->unsetParent(this);
 	p->BBoxUpToDate = false;
+	p->AreaUpToDate = false;
 }
 
 unsigned int Road::size() const
@@ -137,6 +151,23 @@ CoordBox Road::boundingBox() const
 		p->BBoxUpToDate = true;
 	}
 	return p->BBox;
+}
+
+double Road::area() const
+{
+	if (!p->AreaUpToDate)
+	{
+		p->Area = 0;
+		if (p->Nodes.size() && (p->Nodes[0] == p->Nodes[p->Nodes.size()-1]))
+		{
+			for (unsigned int i=0; (i+1)<p->Nodes.size(); ++i)
+				p->Area += p->Nodes[i]->position().lat() * p->Nodes[i+1]->position().lon()
+					- p->Nodes[i+1]->position().lat() * p->Nodes[i]->position().lon();
+			p->Area /= 2;
+		}
+		p->AreaUpToDate = true;
+	}
+	return p->Area;
 }
 
 void Road::draw(QPainter& thePainter, const Projection& theProjection)

@@ -73,6 +73,7 @@
     <addaction name="createRoadAction" />
     <addaction name="createDoubleWayAction" />
     <addaction name="createRoundaboutAction" />
+    <addaction name="createRelationAction" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuEdit" />
@@ -338,6 +339,11 @@
   <action name="roadBreakAction" >
    <property name="text" >
     <string>Break apart</string>
+   </property>
+  </action>
+  <action name="createRelationAction" >
+   <property name="text" >
+    <string>Relation</string>
    </property>
   </action>
  </widget>

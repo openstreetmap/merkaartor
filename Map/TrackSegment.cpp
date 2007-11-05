@@ -50,6 +50,11 @@ QString TrackSegment::description() const
 	return "tracksegment";
 }
 
+RenderPriority TrackSegment::renderPriority(FeaturePainter::ZoomType) const
+{
+	return RenderPriority(RenderPriority::IsLinear,0);
+}
+
 void TrackSegment::add(TrackPoint* aPoint)
 {
 	p->Points.push_back(aPoint);
@@ -138,15 +143,6 @@ void TrackSegment::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* a
 	}
 }
 
-
-void TrackSegment::addedToDocument()
-{
-}
-
-void TrackSegment::removedFromDocument()
-{
-}
-
-void TrackSegment::partChanged(MapFeature*)
+void TrackSegment::partChanged(MapFeature*, unsigned int)
 {
 }

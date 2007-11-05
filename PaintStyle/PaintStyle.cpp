@@ -1,6 +1,7 @@
 #include "PaintStyle.h"
 #include "Map/Projection.h"
 #include "Map/TrackPoint.h"
+#include "Map/Relation.h"
 #include "Map/Road.h"
 #include "Utils/LineF.h"
 
@@ -15,6 +16,10 @@ FeaturePainter::FeaturePainter()
 {
 }
 
+bool FeaturePainter::isFilled() const
+{
+	return ForegroundFill;
+}
 
 FeaturePainter& FeaturePainter::drawTrafficDirectionMarks()
 {
@@ -104,9 +109,27 @@ bool FeaturePainter::isHit(const MapFeature* F, ZoomType Zoom) const
 {
 	if (ZoomLimit > Zoom)
 		return false;
+	// Special casing for multipolygon roads
+	if (const Road* R = dynamic_cast<const Road*>(F))
+	{
+		// TODO create a isPartOfMultiPolygon(R) function for this
+		for (unsigned int i=0; i<R->sizeParents(); ++i)
+		{
+			if (const Relation* Parent = dynamic_cast<const Relation*>(R->getParent(i)))
+				if (Parent->tagValue("type","") == "multipolygon")
+					return false;
+		}
+	}
 	for (unsigned int i=0; i<OneOfTheseTags.size(); ++i)
 		if (F->tagValue(OneOfTheseTags[i].first,QString::null) == OneOfTheseTags[i].second)
 			return true;
+	// Special casing for multipolygon relations
+	if (const Relation* R = dynamic_cast<const Relation*>(F))
+	{
+		for (unsigned int i=0; i<R->size(); ++i)
+			if (isHit(R->get(i),Zoom))
+				return true;
+	}
 	return false;
 }
 
@@ -115,6 +138,13 @@ void buildPathFromRoad(Road *R, Projection const &theProjection, QPainterPath &P
 	Path.moveTo(theProjection.project(R->get(0)->position()));
 	for (unsigned int i=1; i<R->size(); ++i)
 		Path.lineTo(theProjection.project(R->get(i)->position()));
+}
+
+void buildPathFromRelation(Relation *R, Projection const &theProjection, QPainterPath &Path)
+{
+	for (unsigned int i=0; i<R->size(); ++i)
+		if (Road* M = dynamic_cast<Road*>(R->get(i)))
+			buildPathFromRoad(M, theProjection, Path);
 }
 
 void FeaturePainter::drawBackground(Road* R, QPainter& thePainter, const Projection& theProjection) const
@@ -127,6 +157,20 @@ void FeaturePainter::drawBackground(Road* R, QPainter& thePainter, const Project
 	thePen.setCapStyle(Qt::RoundCap);
 	QPainterPath Path;
 	buildPathFromRoad(R, theProjection, Path);
+	thePainter.strokePath(Path,thePen);
+}
+
+void FeaturePainter::drawBackground(Relation* R, QPainter& thePainter, const Projection& theProjection) const
+{
+	if (!DrawBackground) return;
+	double PixelPerM = theProjection.pixelPerM();
+//	double WW = PixelPerM*widthOf(R)*BackgroundScale+BackgroundOffset;
+	double WW = BackgroundOffset;
+	if (WW < 0) return;
+	QPen thePen(BackgroundColor,WW);
+	thePen.setCapStyle(Qt::RoundCap);
+	QPainterPath Path;
+	buildPathFromRelation(R, theProjection, Path);
 	thePainter.strokePath(Path,thePen);
 }
 
@@ -161,6 +205,40 @@ void FeaturePainter::drawForeground(Road* R, QPainter& thePainter, const Project
 	buildPathFromRoad(R, theProjection, Path);
 	thePainter.drawPath(Path);
 }
+
+void FeaturePainter::drawForeground(Relation* R, QPainter& thePainter, const Projection& theProjection) const
+{
+	if (!DrawForeground && !ForegroundFill) return;
+	if (DrawForeground)
+	{
+		double PixelPerM = theProjection.pixelPerM();
+//		double WW = PixelPerM*widthOf(R)*ForegroundScale+ForegroundOffset;
+		double WW = ForegroundOffset;
+		if (WW < 0) return;
+		QPen thePen(ForegroundColor,WW);
+		thePen.setCapStyle(Qt::RoundCap);
+		if (ForegroundDashSet)
+		{
+			QVector<qreal> Pattern;
+			Pattern << ForegroundDash << ForegroundWhite;
+			thePen.setDashPattern(Pattern);
+		}
+		thePainter.setPen(thePen);
+	}
+	else
+		thePainter.setPen(QPen(Qt::NoPen));
+	if (ForegroundFill)
+	{
+		QBrush theBrush(ForegroundFillFillColor);
+		thePainter.setBrush(theBrush);
+	}
+	else
+		thePainter.setBrush(QBrush(Qt::NoBrush));
+	QPainterPath Path;
+	buildPathFromRelation(R, theProjection, Path);
+	thePainter.drawPath(Path);
+}
+
 
 void FeaturePainter::drawTouchup(TrackPoint* Pt, QPainter& thePainter, const Projection& theProjection) const
 {

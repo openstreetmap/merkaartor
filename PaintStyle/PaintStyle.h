@@ -7,6 +7,7 @@
 
 class MapFeature;
 class Projection;
+class Relation;
 class Road;
 class TrackPoint;
 class QPainter;
@@ -22,6 +23,7 @@ class FeaturePainter
 
 		FeaturePainter();
 
+		bool isFilled() const;
 		bool isHit(const MapFeature* F, ZoomType Zoom) const;
 		FeaturePainter& selectOnTag(const QString& Tag, const QString& Value);
 		FeaturePainter& selectOnTag(const QString& Tag, const QString& Value1, const QString& Value2);
@@ -36,7 +38,9 @@ class FeaturePainter
 		FeaturePainter& trackPointIcon(const QString& Filename);
 
 		void drawBackground(Road* R, QPainter& thePainter, const Projection& theProjection) const;
+		void drawBackground(Relation* R, QPainter& thePainter, const Projection& theProjection) const;
 		void drawForeground(Road* R, QPainter& thePainter, const Projection& theProjection) const;
+		void drawForeground(Relation* R, QPainter& thePainter, const Projection& theProjection) const;
 		void drawTouchup(Road* R, QPainter& thePainter, const Projection& theProjection) const;
 		void drawTouchup(TrackPoint* R, QPainter& thePainter, const Projection& theProjection) const;
 	private:
@@ -71,6 +75,7 @@ class PaintStyleLayer
 		virtual ~PaintStyleLayer() = 0;
 		virtual void draw(Road* R) = 0;
 		virtual void draw(TrackPoint* Pt) = 0;
+		virtual void draw(Relation* R) = 0;
 };
 
 class PaintStyle

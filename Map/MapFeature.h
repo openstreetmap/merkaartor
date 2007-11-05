@@ -18,6 +18,22 @@ class QPainter;
 
 class MapFeaturePrivate;
 
+class RenderPriority
+{
+	public:
+		typedef enum { IsArea, IsLinear, IsSingular } Class;
+		RenderPriority(Class C, double IC)
+			: theClass(C), InClassPriority(IC) { }
+		bool operator<(const RenderPriority& R) const
+		{
+			return (theClass < R.theClass) ||
+				( (theClass == R.theClass) && (InClassPriority > R.InClassPriority) );
+		}
+	private:
+		Class theClass;
+		double InClassPriority;
+};
+
 class MapFeature
 {
 	public:
@@ -39,8 +55,9 @@ class MapFeature
 		const QString& id() const;
 		ActorType lastUpdated() const;
 		void setLastUpdated(ActorType A);
-		void setLayer(MapLayer* aLayer);
+		virtual void setLayer(MapLayer* aLayer);
 		virtual QString description() const = 0;
+		virtual RenderPriority renderPriority(FeaturePainter::ZoomType Zoom) const = 0;
 
 		void setTag(const QString& k, const QString& v);
 		void setTag(unsigned int idx, const QString& k, const QString& v);
@@ -60,10 +77,10 @@ class MapFeature
 		void unsetParent(MapFeature* F);
 		unsigned int sizeParents() const;
 		MapFeature* getParent(unsigned int i);
-		virtual void addedToDocument() = 0;
-		virtual void removedFromDocument() = 0;
-		virtual void partChanged(MapFeature* F) = 0;
-		void notifyParents();
+		const MapFeature* getParent(unsigned int i) const;
+		virtual void partChanged(MapFeature* F, unsigned int ChangeId) = 0;
+		void notifyChanges();
+		void notifyParents(unsigned int Id);
 
 	private:
 		MapFeaturePrivate* p;

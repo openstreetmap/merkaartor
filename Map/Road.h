@@ -22,6 +22,7 @@ class Road : public MapFeature
 		virtual void cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const std::vector<MapFeature*>& Alternatives);		
 		virtual bool notEverythingDownloaded() const;
 		virtual QString description() const;
+		virtual RenderPriority renderPriority(FeaturePainter::ZoomType Zoom) const;
 
 		void add(TrackPoint* Pt);
 		void add(TrackPoint* Pt, unsigned int Idx);
@@ -31,9 +32,10 @@ class Road : public MapFeature
 		TrackPoint* get(unsigned int idx);
 		const TrackPoint* get(unsigned int Idx) const;
 
-		virtual void addedToDocument();
-		virtual void removedFromDocument();
-		virtual void partChanged(MapFeature* F);
+		virtual void partChanged(MapFeature* F, unsigned int ChangeId);
+		virtual void setLayer(MapLayer* aLayer);
+
+		double area() const;
 
 	private:
 		RoadPrivate* p;

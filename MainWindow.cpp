@@ -17,6 +17,7 @@
 #include "Map/ImportOSM.h"
 #include "Map/MapDocument.h"
 #include "Map/MapFeature.h"
+#include "Map/Relation.h"
 #include "Map/Road.h"
 #include "Map/RoadManipulations.h"
 #include "Map/TrackPoint.h"
@@ -382,6 +383,15 @@ void MainWindow::on_roadBreakAction_triggered()
 		theDocument->history().add(theList);
 }
 
+void MainWindow::on_createRelationAction_triggered()
+{
+	Relation* R = new Relation;
+	for (unsigned int i=0; i<theProperties->size(); ++i)
+		R->add("",theProperties->selection(i));
+	theDocument->history().add(
+		new AddFeatureCommand(theLayers->activeLayer(),R,true));
+	theProperties->setSelection(R);
+}
 
 MapLayer* MainWindow::activeLayer()
 {

@@ -56,26 +56,30 @@ Relation::~Relation()
 	delete p;
 }
 
-
-void Relation::addedToDocument()
+void Relation::setLayer(MapLayer* L)
 {
-	for (unsigned int i=0; i<p->Members.size(); ++i)
-		p->Members[i].second->setParent(this);
+	if (L)
+		for (unsigned int i=0; i<p->Members.size(); ++i)
+			p->Members[i].second->setParent(this);
+	else
+		for (unsigned int i=0; i<p->Members.size(); ++i)
+			p->Members[i].second->unsetParent(this);
+	MapFeature::setLayer(L);
 }
 
-void Relation::removedFromDocument()
+void Relation::partChanged(MapFeature*, unsigned int ChangeId)
 {
-	for (unsigned int i=0; i<p->Members.size(); ++i)
-		p->Members[i].second->unsetParent(this);
-}
-
-void Relation::partChanged(MapFeature*)
-{
+	notifyParents(ChangeId);
 }
 
 QString Relation::description() const
 {
 	return QString("relationship %1").arg(id());
+}
+
+RenderPriority Relation::renderPriority(FeaturePainter::ZoomType) const
+{
+	return RenderPriority(RenderPriority::IsLinear,0);
 }
 
 CoordBox Relation::boundingBox() const

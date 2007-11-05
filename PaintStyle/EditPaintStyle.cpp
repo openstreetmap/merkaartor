@@ -1,6 +1,7 @@
 #include "PaintStyle/EditPaintStyle.h"
 #include "Map/Projection.h"
 #include "Map/TrackPoint.h"
+#include "Map/Relation.h"
 #include "Map/Road.h"
 #include "Utils/LineF.h"
 
@@ -34,6 +35,7 @@ class EPBackgroundLayer : public PaintStyleLayer
 		void setP(EditPaintStylePrivate* p);
 		virtual void draw(Road* R);
 		virtual void draw(TrackPoint* Pt);
+		virtual void draw(Relation* R);
 	private:
 		EditPaintStylePrivate* p;
 };
@@ -44,6 +46,7 @@ class EPForegroundLayer : public PaintStyleLayer
 		void setP(EditPaintStylePrivate* p);
 		virtual void draw(Road* R);
 		virtual void draw(TrackPoint* Pt);
+		virtual void draw(Relation* R);
 	private:
 		EditPaintStylePrivate* p;
 };
@@ -54,6 +57,7 @@ class EPTouchupLayer : public PaintStyleLayer
 		void setP(EditPaintStylePrivate* p);
 		virtual void draw(Road* R);
 		virtual void draw(TrackPoint* Pt);
+		virtual void draw(Relation* R);
 	private:
 		EditPaintStylePrivate* p;
 };
@@ -195,6 +199,15 @@ void EPBackgroundLayer::draw(Road* R)
 	}
 }
 
+void EPBackgroundLayer::draw(Relation* R)
+{
+	if (p->theProjection.viewport().disjunctFrom(R->boundingBox())) return;
+	FeaturePainter* paintsel = R->getEditPainter(p->CurrentZoomLevel);
+	if (paintsel)
+		paintsel->drawBackground(R,p->thePainter,p->theProjection);
+}
+
+
 void EPBackgroundLayer::draw(TrackPoint*)
 {
 }
@@ -205,6 +218,14 @@ void EPForegroundLayer::setP(EditPaintStylePrivate* ap)
 }
 
 void EPForegroundLayer::draw(Road* R)
+{
+	if (p->theProjection.viewport().disjunctFrom(R->boundingBox())) return;
+	FeaturePainter* paintsel = R->getEditPainter(p->CurrentZoomLevel);
+	if (paintsel)
+		paintsel->drawForeground(R,p->thePainter,p->theProjection);
+}
+
+void EPForegroundLayer::draw(Relation* R)
 {
 	if (p->theProjection.viewport().disjunctFrom(R->boundingBox())) return;
 	FeaturePainter* paintsel = R->getEditPainter(p->CurrentZoomLevel);
@@ -227,6 +248,10 @@ void EPTouchupLayer::draw(Road* R)
 	FeaturePainter* paintsel = R->getEditPainter(p->CurrentZoomLevel);
 	if (paintsel)
 		paintsel->drawTouchup(R,p->thePainter,p->theProjection);
+}
+
+void EPTouchupLayer::draw(Relation* R)
+{
 }
 
 void EPTouchupLayer::draw(TrackPoint* Pt)
@@ -258,4 +283,9 @@ EditPaintStyle::EditPaintStyle(QPainter& P, const Projection& theProjection)
 EditPaintStyle::~EditPaintStyle(void)
 {
 	delete p;
+}
+
+FeaturePainter::ZoomType EditPaintStyle::zoom() const
+{
+	return p->CurrentZoomLevel;
 }

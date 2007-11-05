@@ -27,7 +27,7 @@ const QDateTime& TrackPoint::time() const
 void TrackPoint::setTime(const QDateTime& time)
 {
 	Time = time;
-	notifyParents();
+	notifyChanges();
 }
 
 const Coord& TrackPoint::position() const
@@ -38,7 +38,7 @@ const Coord& TrackPoint::position() const
 void TrackPoint::setPosition(const Coord& aCoord)
 {
 	Position = aCoord;
-	notifyParents();
+	notifyChanges();
 }
 
 bool TrackPoint::notEverythingDownloaded() const
@@ -81,17 +81,15 @@ QString TrackPoint::description() const
 		QString("node %1").arg(id());
 }
 
-void TrackPoint::addedToDocument()
+void TrackPoint::partChanged(MapFeature*, unsigned int)
 {
 }
 
-void TrackPoint::removedFromDocument()
+RenderPriority TrackPoint::renderPriority(FeaturePainter::ZoomType) const
 {
+	return RenderPriority(RenderPriority::IsSingular,0);
 }
 
-void TrackPoint::partChanged(MapFeature*)
-{
-}
 
 
 
