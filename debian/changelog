@@ -1,8 +1,14 @@
+merkaartor (0.0.7-1) feisty; urgency=low
+
+  * Upgrade to version 0.0.7
+
+ -- Bart Vanhauwaert <bvh-osm@irule.be>  Sat, 18 Aug 2007 18:04:49 +0200
+
 merkaartor (0.0.6-1) unstable; urgency=low
 
   * Upgrade to version 0.0.6 
 
- -- bart <bart@localhost.localdomain>  Wed,  6 Dec 2006 17:59:51 +0100
+ -- Bart Vanhauwaert <bvh-osm@irule.be>  Wed,  6 Dec 2006 17:59:51 +0100
 
 merkaartor (0.0.5-1) unstable; urgency=low
 
