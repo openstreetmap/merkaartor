@@ -46,8 +46,8 @@ Relation::Relation()
 	p = new RelationPrivate(this);
 }
 
-Relation::Relation(const Relation&)
-: p(0)
+Relation::Relation(const Relation& other)
+: MapFeature(other), p(0)
 {
 }
 

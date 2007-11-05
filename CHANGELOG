@@ -31,6 +31,7 @@ v0.08
 	* ADD : create relationships
 	* FIX : also render relations where tags are on the individual
 	roads
+	* FIX : clean up code and compile warnings (by Elrond)
 	
 v0.07 18 aug 2007
 	* ADD : nice mappaint mechanism

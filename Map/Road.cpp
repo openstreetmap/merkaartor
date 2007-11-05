@@ -33,8 +33,8 @@ Road::Road(void)
 {
 }
 
-Road::Road(const Road& )
-: p(0)
+Road::Road(const Road& other)
+: MapFeature(other), p(0)
 {
 }
 

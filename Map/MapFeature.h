@@ -86,6 +86,8 @@ class MapFeature
 		MapFeaturePrivate* p;
 };
 
+void copyTags(MapFeature* Dest, MapFeature* Src);
+
 #endif
 
 

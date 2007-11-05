@@ -131,12 +131,6 @@ void joinRoads(MapDocument* theDocument, CommandList* theList, PropertiesDock* t
 	theDock->setSelection(Input);
 }
 
-static void copyTags(MapFeature* Dest, MapFeature* Src)
-{
-	for (unsigned int i=0; i<Src->tagSize(); ++i)
-		Dest->setTag(Src->tagKey(i),Src->tagValue(i));
-}
-
 static void splitRoad(MapLayer* theLayer, CommandList* theList, Road* In, const std::vector<TrackPoint*>& Points, std::vector<Road*>& Result)
 {
 	bool WasClosed = isClosed(In);

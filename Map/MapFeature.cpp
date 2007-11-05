@@ -11,6 +11,8 @@ static QString randomId()
 	return QUuid::createUuid().toString(); 
 }
 
+void copyTags(MapFeature* Dest, MapFeature* Src){	for (unsigned int i=0; i<Src->tagSize(); ++i)		Dest->setTag(Src->tagKey(i),Src->tagValue(i));}
+
 class MapFeaturePrivate
 {
 	public:
