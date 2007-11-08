@@ -1,3 +1,6 @@
+v0.09
+	* ADD : support for Noni GPSPlot tracks
+
 v0.08
 	* FIX : work with 0.5 API
 	* ADD : move can now work on a complete way

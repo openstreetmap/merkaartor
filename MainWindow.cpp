@@ -14,6 +14,7 @@
 #include "Map/Coord.h"
 #include "Map/DownloadOSM.h"
 #include "Map/ImportGPX.h"
+#include "Map/ImportNGT.h"
 #include "Map/ImportOSM.h"
 #include "Map/MapDocument.h"
 #include "Map/MapFeature.h"
@@ -137,9 +138,10 @@ static void changeCurrentDirToFile(const QString& s)
 
 
 #define FILTER_LOAD_SUPPORTED \
-	"Supported formats (*.gpx *.osm)\n" \
+	"Supported formats (*.gpx *.osm *.ngt)\n" \
 	"GPS Exchange format (*.gpx)\n" \
 	"OpenStreetMap format (*.osm)\n" \
+	"Noni GPSPlot format (*.ngt)\n" \
 	"All Files (*)"
 
 void MainWindow::on_fileImportAction_triggered()
@@ -163,6 +165,12 @@ void MainWindow::on_fileImportAction_triggered()
 		{
 			view()->setUpdatesEnabled(false);
 			OK = importOSM(this, s, theDocument, NewLayer);
+			view()->setUpdatesEnabled(true);
+		}
+		else if (s.right(4).toLower() == ".ngt")
+		{
+			view()->setUpdatesEnabled(false);
+			OK = importNGT(this, s, theDocument, NewLayer);
 			view()->setUpdatesEnabled(true);
 		}
 		if (OK)
@@ -203,8 +211,10 @@ void MainWindow::on_fileOpenAction_triggered()
 		bool OK = false;
 		if (s.right(4).toLower() == ".gpx")
 			OK = importGPX(this, s, NewDoc, NewLayer);
-		if (s.right(4).toLower() == ".osm")
+		else if (s.right(4).toLower() == ".osm")
 			OK = importOSM(this, s, NewDoc, NewLayer);
+		else if (s.right(4).toLower() == ".ngt")
+			OK = importNGT(this, s, NewDoc, NewLayer);
 		if (OK)
 		{
 			theProperties->setSelection(0);
