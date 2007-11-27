@@ -21,6 +21,7 @@ HEADERS += \
 ./Map/ExportOSM.h \
 ./Map/ImportGPX.h \
 ./Map/ImportOSM.h \
+./Map/ImportNGT.h \
 ./Map/MapDocument.h \
 ./Map/MapFeature.h \
 ./Map/Painting.h \
@@ -53,6 +54,7 @@ SOURCES += \
 ./Map/ExportOSM.cpp \
 ./Map/ImportGPX.cpp \
 ./Map/ImportOSM.cpp \
+./Map/ImportNGT.cpp \
 ./Map/MapDocument.cpp \
 ./Map/MapFeature.cpp \
 ./Map/Painting.cpp \
