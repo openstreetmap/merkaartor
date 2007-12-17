@@ -20,6 +20,7 @@ HEADERS += \
 ./Map/DownloadOSM.h \
 ./Map/ExportOSM.h \
 ./Map/ImportGPX.h \
+./Map/ImportNGT.h \
 ./Map/ImportOSM.h \
 ./Map/ImportNGT.h \
 ./Map/MapDocument.h \
