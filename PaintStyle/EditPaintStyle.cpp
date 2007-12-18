@@ -158,6 +158,11 @@ void EditPaintStylePrivate::initPainters()
 	Park.selectOnTag("leisure","park").limitToZoom(FeaturePainter::GlobalZoom);
 	EditPaintStyle::Painters.push_back(Park);
 
+	FeaturePainter Wood;
+	Wood.foregroundFill(QColor(0x22,0x99,0x22,0x77)).foreground(QColor(0,0x77,0),0,1);
+	Wood.selectOnTag("natural","wood").limitToZoom(FeaturePainter::GlobalZoom);
+	EditPaintStyle::Painters.push_back(Wood);
+
 	FeaturePainter Pitch;
 	Pitch.foregroundFill(QColor(0xff,0x77,0x77,0x77)).foreground(QColor(0x77,0,0),0,1);
 	Pitch.selectOnTag("leisure","pitch").limitToZoom(FeaturePainter::GlobalZoom);
