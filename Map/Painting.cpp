@@ -80,35 +80,5 @@ void draw(QPainter& thePainter, QPen& thePen, MapFeature::TrafficDirectionType T
 	thePainter.strokePath(Path,thePen);
 } */
 
-void drawPossibleArea(QPainter& thePainter, Road* R, const Projection& theProjection)
-{
-	if (!R->size() )
-		return;
-	bool Draw = true;
-	QString LandUse = R->tagValue("landuse","");
-	QString Leisure = R->tagValue("leisure","");
-	QString Natural = R->tagValue("natural","");
-	if (LandUse == "reservoir")
-		thePainter.setBrush(QBrush(QColor(0x22,0x22,0xcc,128),Qt::BDiagPattern));
-	else if ( (LandUse == "forest") || (Leisure == "park") )
-		thePainter.setBrush(QBrush(QColor(0x22,0xcc,0x22,128),Qt::BDiagPattern));
-	else if (Leisure == "pitch")
-		thePainter.setBrush(QBrush(QColor(0xcc,0x22,0x22,128),Qt::BDiagPattern));
-	else if (Natural == "wood")
-		thePainter.setBrush(QBrush(QColor(0x22,0x99,0x22,128),Qt::BDiagPattern));
-	else
-		Draw = false;
-
-	if ( Draw )
-	{
-		thePainter.setPen(QPen(Qt::NoPen));
-		QPainterPath Path;
-		Path.moveTo(theProjection.project(R->get(0)->position()));
-		for (unsigned int i=1; i<R->size(); ++i)
-			Path.lineTo(theProjection.project(R->get(i)->position()));
-		thePainter.drawPath(Path);
-	}
-
-}
 
 
