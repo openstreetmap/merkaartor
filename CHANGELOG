@@ -1,6 +1,7 @@
 v0.09
 	* ADD : support for Noni GPSPlot tracks
 	* ADD : draw natural=wood areas (by Raphael Studer)
+	* FIX : also draw trackpoints that have an icon
 
 v0.08
 	* FIX : work with 0.5 API

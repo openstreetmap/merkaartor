@@ -245,8 +245,10 @@ void FeaturePainter::drawTouchup(TrackPoint* Pt, QPainter& thePainter, const Pro
 {
 	if (TrackPointIconName != "")
 	{
+
 		QPixmap pm(TrackPointIconName);
 		QPointF C(theProjection.project(Pt->position()));
+		thePainter.fillRect(QRectF(C-QPointF(2,2),QSize(4,4)),QColor(0,0,0,128));
 		thePainter.drawPixmap( C.x()-pm.width()/2,C.y()-pm.height()-5 , pm);
 	}
 }
