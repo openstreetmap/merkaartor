@@ -11,19 +11,23 @@
 #include <math.h>
 #include <utility>
 
+#define LOCALZOOM		0.05
+#define REGIONALZOOM	0.01
+#define GLOBALZOOM		0.002
+
 static bool localZoom(const Projection& theProjection)
 {
-	return theProjection.pixelPerM() < 0.25;
+	return theProjection.pixelPerM() < LOCALZOOM;
 }
 
 static bool regionalZoom(const Projection& theProjection)
 {
-	return theProjection.pixelPerM() < 0.05;
+	return theProjection.pixelPerM() < REGIONALZOOM;
 }
 
 static bool globalZoom(const Projection& theProjection)
 {
-	return theProjection.pixelPerM() < 0.01;
+	return theProjection.pixelPerM() < GLOBALZOOM;
 }
 
 
@@ -73,11 +77,11 @@ class EditPaintStylePrivate
 			Third.setP(this);
 			initPainters();
 			double PM = theProjection.pixelPerM();
-			if (PM > 0.25)
+			if (PM > LOCALZOOM)
 				CurrentZoomLevel = FeaturePainter::LocalZoom;
-			else if (PM > 0.05)
+			else if (PM > REGIONALZOOM)
 				CurrentZoomLevel = FeaturePainter::RegionalZoom;
-			else if (PM > 0.01)
+			else if (PM > GLOBALZOOM)
 				CurrentZoomLevel = FeaturePainter::GlobalZoom;
 			else
 				CurrentZoomLevel = FeaturePainter::NoZoomLimit;
@@ -265,11 +269,17 @@ void EPTouchupLayer::draw(TrackPoint* Pt)
 	FeaturePainter* paintsel = Pt->getEditPainter(p->CurrentZoomLevel);
 	if (paintsel)
 		paintsel->drawTouchup(Pt,p->thePainter,p->theProjection);
-	else if (!Pt->hasEditPainter() && (p->theProjection.pixelPerM() > 1) )
+	else if (!Pt->hasEditPainter())
 	{
-		QPointF P(p->theProjection.project(Pt->position()));
-		QRectF R(P-QPointF(2,2),QSize(4,4));
-		p->thePainter.fillRect(R,QColor(0,0,0,128));
+		bool Draw = p->theProjection.pixelPerM() > 1;
+		if (!Draw && !Pt->sizeParents() && (p->theProjection.pixelPerM() > LOCALZOOM) )
+			Draw = true;
+		if (Draw)
+		{
+			QPointF P(p->theProjection.project(Pt->position()));
+			QRectF R(P-QPointF(2,2),QSize(4,4));
+			p->thePainter.fillRect(R,QColor(0,0,0,128));
+		}
 	}
 }
 
