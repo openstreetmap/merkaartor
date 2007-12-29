@@ -135,6 +135,12 @@ void MapLayer::remove(MapFeature* aFeature)
 	}
 }
 
+bool MapLayer::exists(MapFeature* F) const
+{
+	std::vector<MapFeature*>::iterator i = std::find(p->Features.begin(),p->Features.end(), F);
+	return i != p->Features.end();
+}
+
 unsigned int MapLayer::size() const
 {
 	return p->Features.size();
@@ -219,6 +225,13 @@ void MapDocument::remove(MapLayer* aLayer)
 	std::vector<MapLayer*>::iterator i = std::find(p->Layers.begin(),p->Layers.end(), aLayer);
 	if (i != p->Layers.end())
 		p->Layers.erase(i);
+}
+
+bool MapDocument::exists(MapFeature* F) const
+{
+	for (unsigned int i=0; i<p->Layers.size(); ++i)
+		if (p->Layers[i]->exists(F)) return true;
+	return false;
 }
 
 unsigned int MapDocument::numLayers() const

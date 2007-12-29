@@ -80,6 +80,7 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* )
 			if (DragBox.contains(it.get()->boundingBox()))
 				List.push_back(it.get());
 		view()->properties()->setSelection(List);
+		view()->properties()->checkMenuStatus();
 		Dragging = false;
 		view()->update();
 	}
@@ -96,19 +97,23 @@ void EditInteraction::snapMouseMoveEvent(QMouseEvent* event, MapFeature* )
 
 void EditInteraction::on_remove_triggered()
 {
-	MapFeature* Selection = view()->properties()->selection(0);
-	if (Selection)
-	{
-		view()->properties()->setSelection(0);
-		view()->properties()->checkMenuStatus();
-		std::vector<MapFeature*> Alternatives;
-		CommandList* theList = new CommandList;
-		for (FeatureIterator it(document()); !it.isEnd(); ++it)
-			it.get()->cascadedRemoveIfUsing(document(), Selection, theList, Alternatives);
-		theList->add(new RemoveFeatureCommand(document(), Selection));
-		document()->history().add(theList);
-		view()->invalidate();
-	}
+	std::vector<MapFeature*> Sel;
+	for (unsigned int i=0; i<view()->properties()->size(); ++i)
+		Sel.push_back(view()->properties()->selection(i));
+	if (Sel.size() == 0) return;
+	view()->properties()->setSelection(0);
+	view()->properties()->checkMenuStatus();
+	CommandList* theList = new CommandList;
+	for (unsigned int i=0; i<Sel.size(); ++i)
+		if (document()->exists(Sel[i]))
+		{
+			std::vector<MapFeature*> Alternatives;
+			for (FeatureIterator it(document()); !it.isEnd(); ++it)
+				it.get()->cascadedRemoveIfUsing(document(), Sel[i], theList, Alternatives);
+			theList->add(new RemoveFeatureCommand(document(), Sel[i]));
+		}
+	document()->history().add(theList);
+	view()->invalidate();
 }
 
 void EditInteraction::on_move_triggered()

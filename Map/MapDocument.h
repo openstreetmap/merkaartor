@@ -30,6 +30,7 @@ class MapLayer
 		void add(MapFeature* aFeature);
 		void add(MapFeature* aFeature, unsigned int Idx);
 		void remove(MapFeature* aFeature);
+		bool exists(MapFeature* aFeature) const;
 		unsigned int size() const;
 		MapFeature* get(unsigned int i);
 		const MapFeature* get(unsigned int i) const;
@@ -53,6 +54,7 @@ class MapDocument
 
 		void add(MapLayer* aLayer);
 		void remove(MapLayer* aLayer);
+		bool exists(MapFeature* aFeature) const;
 		unsigned int numLayers() const;
 		MapLayer* layer(unsigned int i);
 		const MapLayer* layer(unsigned int i) const;
