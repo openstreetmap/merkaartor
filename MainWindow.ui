@@ -28,15 +28,24 @@
     </property>
     <addaction name="helpAboutAction" />
    </widget>
-   <widget class="QMenu" name="menuView" >
+   <widget class="QMenu" name="menuCreate" >
     <property name="title" >
-     <string>&amp;View</string>
+     <string>&amp;Create</string>
     </property>
-    <addaction name="viewZoomAllAction" />
-    <addaction name="viewZoomWindowAction" />
-    <addaction name="viewZoomOutAction" />
-    <addaction name="viewZoomInAction" />
-    <addaction name="viewSetCoordinatesAction" />
+    <addaction name="createNodeAction" />
+    <addaction name="createRoadAction" />
+    <addaction name="createDoubleWayAction" />
+    <addaction name="createRoundaboutAction" />
+    <addaction name="createRelationAction" />
+   </widget>
+   <widget class="QMenu" name="menuRoad" >
+    <property name="title" >
+     <string>Road</string>
+    </property>
+    <addaction name="roadSplitAction" />
+    <addaction name="roadBreakAction" />
+    <addaction name="roadJoinAction" />
+    <addaction name="editReverseAction" />
    </widget>
    <widget class="QMenu" name="menuFile" >
     <property name="title" >
@@ -49,31 +58,23 @@
     <addaction name="fileUploadAction" />
     <addaction name="fileQuitAction" />
    </widget>
+   <widget class="QMenu" name="menuView" >
+    <property name="title" >
+     <string>&amp;View</string>
+    </property>
+    <addaction name="viewZoomAllAction" />
+    <addaction name="viewZoomWindowAction" />
+    <addaction name="viewZoomOutAction" />
+    <addaction name="viewZoomInAction" />
+    <addaction name="viewSetCoordinatesAction" />
+   </widget>
    <widget class="QMenu" name="menuEdit" >
     <property name="title" >
      <string>&amp;Edit</string>
     </property>
     <addaction name="editUndoAction" />
     <addaction name="editRedoAction" />
-   </widget>
-   <widget class="QMenu" name="menuRoad" >
-    <property name="title" >
-     <string>Road</string>
-    </property>
-    <addaction name="roadSplitAction" />
-    <addaction name="roadBreakAction" />
-    <addaction name="roadJoinAction" />
-    <addaction name="editReverseAction" />
-   </widget>
-   <widget class="QMenu" name="menuCreate" >
-    <property name="title" >
-     <string>&amp;Create</string>
-    </property>
-    <addaction name="createNodeAction" />
-    <addaction name="createRoadAction" />
-    <addaction name="createDoubleWayAction" />
-    <addaction name="createRoundaboutAction" />
-    <addaction name="createRelationAction" />
+    <addaction name="editRemoveAction" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuEdit" />
