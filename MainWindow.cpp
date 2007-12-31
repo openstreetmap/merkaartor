@@ -59,6 +59,9 @@ MainWindow::MainWindow(void)
 	addDockWidget(Qt::RightDockWidgetArea, theProperties);
 	on_editPropertiesAction_triggered();
 	QTimer::singleShot(0,this,SLOT(initViewport()));
+	QSettings Sets;
+	if (Sets.contains("general/workingdir"))
+		QDir::setCurrent(Sets.value("general/workingdir").toString());
 }
 
 void MainWindow::initViewport()
@@ -70,6 +73,8 @@ void MainWindow::initViewport()
 
 MainWindow::~MainWindow(void)
 {
+	QSettings Sets;
+	Sets.setValue("general/workingdir",QDir::currentPath());
 	delete theDocument;
 }
 

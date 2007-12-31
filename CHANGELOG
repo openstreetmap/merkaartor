@@ -4,6 +4,7 @@ v0.09
 	* FIX : also draw trackpoints that have an icon
 	* FIX : draw unconnected trackpoints
 	* ADD : multiple remove
+	* ADD : save last current directory
 
 v0.08
 	* FIX : work with 0.5 API

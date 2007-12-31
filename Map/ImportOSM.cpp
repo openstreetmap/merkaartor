@@ -34,7 +34,6 @@ static void importNode(const QDomElement& Root, MapDocument* theDocument, MapLay
 	double Lat = Root.attribute("lat").toDouble();
 	double Lon = Root.attribute("lon").toDouble();
 	QString id = "node_"+Root.attribute("id");
-//	QDateTime dt(QDateTime::fromString(Root.attribute("timestamp","yyyy-MM-dd HH:mm:ss")));
 	TrackPoint* Pt = dynamic_cast<TrackPoint*>(theDocument->get(id));
 	if (Pt)
 	{
