@@ -1,7 +1,7 @@
 TEMPLATE = app
 TARGET = merkaartor
 DESTDIR = ./release
-QT += network xml
+QT += network xml core gui
 CONFIG += release
 INCLUDEPATH += .
 DEPENDPATH += .

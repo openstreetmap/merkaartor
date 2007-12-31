@@ -15,3 +15,4 @@ void breakRoads(MapLayer* theLayer, CommandList* theList, PropertiesDock* theDoc
 void reversePoints(CommandList* theList, Road* R);
 
 #endif
+
