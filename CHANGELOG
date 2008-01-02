@@ -6,6 +6,7 @@ v0.09
 	* ADD : multiple remove
 	* ADD : save last current directory
 	* ADD : draw landuse=forest area (by Raphael Studer)
+	* ADD : move trackpoints onto a road inserts the point in the road
 
 v0.08
 	* FIX : work with 0.5 API

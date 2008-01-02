@@ -6,6 +6,8 @@
 
 #include <vector>
 
+class CommandList;
+
 class MoveTrackPointInteraction : public FeatureSnapInteraction
 {
 	public:
@@ -18,7 +20,7 @@ class MoveTrackPointInteraction : public FeatureSnapInteraction
 		virtual QCursor cursor() const;
 
 	private:
-		Coord calculateNewPosition(QMouseEvent* event, MapFeature* aLast);
+		Coord calculateNewPosition(QMouseEvent* event, MapFeature* aLast, CommandList* theList);
 		std::vector<TrackPoint*> Moving;
 		std::vector<Coord> OriginalPosition;
 		Coord StartDragPosition;

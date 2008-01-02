@@ -2,11 +2,13 @@
 
 #include "MapView.h"
 #include "Command/DocumentCommands.h"
+#include "Command/RoadCommands.h"
 #include "Command/TrackPointCommands.h"
 #include "Map/Coord.h"
 #include "Map/MapDocument.h"
 #include "Map/Projection.h"
 #include "Map/TrackPoint.h"
+#include "Utils/LineF.h"
 
 #include <QtGui/QCursor>
 #include <QtGui/QMouseEvent>
@@ -57,7 +59,7 @@ void MoveTrackPointInteraction::snapMouseReleaseEvent(QMouseEvent * event, MapFe
 	if (Moving.size())
 	{
 		CommandList* theList = new CommandList;
-		Coord Diff(calculateNewPosition(event,Closer)-StartDragPosition);
+		Coord Diff(calculateNewPosition(event,Closer, theList)-StartDragPosition);
 		for (unsigned int i=0; i<Moving.size(); ++i)
 		{
 			Moving[i]->setPosition(OriginalPosition[i]);
@@ -75,36 +77,41 @@ void MoveTrackPointInteraction::snapMouseMoveEvent(QMouseEvent* event, MapFeatur
 {
 	if (Moving.size())
 	{
-		Coord Diff = calculateNewPosition(event,Closer)-StartDragPosition;
+		Coord Diff = calculateNewPosition(event,Closer,0)-StartDragPosition;
 		for (unsigned int i=0; i<Moving.size(); ++i)
 			Moving[i]->setPosition(OriginalPosition[i]+Diff);
 		view()->invalidate();
 	}
 }
 
-Coord MoveTrackPointInteraction::calculateNewPosition(QMouseEvent *event, MapFeature *aLast)
+Coord MoveTrackPointInteraction::calculateNewPosition(QMouseEvent *event, MapFeature *aLast, CommandList* theList)
 {
-	Coord Target = projection().inverse(event->pos());
+	Coord TargetC = projection().inverse(event->pos());
+	QPointF Target(TargetC.lat(),TargetC.lon());
 	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(aLast))
 		return Pt->position();
-/*	else if (Road* R = dynamic_cast<Road*>(aLast))
+	else if (Road* R = dynamic_cast<Road*>(aLast))
 	{
-		LineF L1(R->get(0),R->get(1));
+		LineF L1(R->get(0)->position(),R->get(1)->position());
 		double Dist = L1.distance(Target);
-		Coord BestTarget = L1.project(Target);
+		QPointF BestTarget = L1.project(Target);
+		unsigned int BestIdx = 1;
 		for (unsigned int i=2; i<R->size(); ++i)
 		{
-			LineF L2(R->get(i-1),R->get(i));
+			LineF L2(R->get(i-1)->position(),R->get(i)->position());
 			double Dist2 = L2.distance(Target);
 			if (Dist2 < Dist)
 			{
 				Dist = Dist2;
 				BestTarget = L2.project(Target);
+				BestIdx = i;
 			}
 		}
-		Target = BestTarget;
+		if (theList && (Moving.size() == 1))
+			theList->add(new
+				RoadAddTrackPointCommand(R,Moving[0],BestIdx));
+		return Coord(BestTarget.x(),BestTarget.y());
 	}
-	Coord Diff = */
 	return projection().inverse(event->pos());
 }
 
