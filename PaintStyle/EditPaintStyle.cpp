@@ -167,6 +167,11 @@ void EditPaintStylePrivate::initPainters()
 	Wood.selectOnTag("natural","wood").limitToZoom(FeaturePainter::GlobalZoom);
 	EditPaintStyle::Painters.push_back(Wood);
 
+	FeaturePainter Forest;
+	Forest.foregroundFill(QColor(0x22,0xcc,0x22,0x77)).foreground(QColor(0,0x77,0),0,1);
+	Forest.selectOnTag("landuse","forest").limitToZoom(FeaturePainter::GlobalZoom);
+	EditPaintStyle::Painters.push_back(Forest);
+
 	FeaturePainter Pitch;
 	Pitch.foregroundFill(QColor(0xff,0x77,0x77,0x77)).foreground(QColor(0x77,0,0),0,1);
 	Pitch.selectOnTag("leisure","pitch").limitToZoom(FeaturePainter::GlobalZoom);
