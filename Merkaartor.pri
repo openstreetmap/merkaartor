@@ -26,6 +26,7 @@ HEADERS += \
 ./Map/MapDocument.h \
 ./Map/MapFeature.h \
 ./Map/Painting.h \
+./Map/PreDefinedTags.h \
 ./Map/Projection.h \
 ./Map/Relation.h \
 ./Map/Road.h \
@@ -59,6 +60,7 @@ SOURCES += \
 ./Map/MapDocument.cpp \
 ./Map/MapFeature.cpp \
 ./Map/Painting.cpp \
+./Map/PreDefinedTags.cpp \
 ./Map/Projection.cpp \
 ./Map/Relation.cpp \
 ./Map/Road.cpp \
