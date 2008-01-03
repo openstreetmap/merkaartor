@@ -14,6 +14,7 @@
     </qresource>
     <qresource prefix="/Art">
         <file>Mapnik/parking.png</file>
+        <file>Mapnik/hospital.png</file>
     </qresource>
     <qresource>
     	<file>Tiles/000.png</file>

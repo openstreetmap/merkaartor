@@ -179,7 +179,7 @@ void EditPaintStylePrivate::initPainters()
 
 	FeaturePainter Heath;
 	Heath.foregroundFill(QColor(0x55,0x99,0x44,0x77)).foreground(QColor(0,0x77,0),0,1);
-	Heath.selectOnTag("natural","scrub").limitToZoom(FeaturePainter::GlobalZoom);
+	Heath.selectOnTag("natural","heath").limitToZoom(FeaturePainter::GlobalZoom);
 	EditPaintStyle::Painters.push_back(Heath);
 
 	FeaturePainter Pitch;
@@ -199,6 +199,13 @@ void EditPaintStylePrivate::initPainters()
 	Parking.limitToZoom(FeaturePainter::LocalZoom);
 	EditPaintStyle::Painters.push_back(Parking);
 
+	FeaturePainter Hospital;
+	Hospital.trackPointIcon(":/Art/Mapnik/hospital.png").limitToZoom(FeaturePainter::RegionalZoom);
+	Hospital.foregroundFill(QColor(0xf6,0x66,0x66,0x77));
+	Hospital.selectOnTag("amenity","hospital");
+	Hospital.limitToZoom(FeaturePainter::LocalZoom);
+	EditPaintStyle::Painters.push_back(Hospital);
+
 	FeaturePainter School;
 	//School.trackPointIcon(":/Art/Mapnik/school.png").limitToZoom(FeaturePainter::LocalZoom);
 	School.foregroundFill(QColor(0xF0,0xF0,0xD9,0x77)).foreground(QColor(0xDB,0xBA,0xAB),0,1);
@@ -210,11 +217,6 @@ void EditPaintStylePrivate::initPainters()
 	LanduseFarm.foregroundFill(QColor(0xBB,0xE1,0xC9,0x77));
 	LanduseFarm.selectOnTag("landuse","farm").limitToZoom(FeaturePainter::GlobalZoom);
 	EditPaintStyle::Painters.push_back(LanduseFarm);
-
-	FeaturePainter LanduseForest;
-	LanduseForest.foregroundFill(QColor(0x70,0xBD,0x7E,0x77));
-	LanduseForest.selectOnTag("landuse","forest").limitToZoom(FeaturePainter::GlobalZoom);
-	EditPaintStyle::Painters.push_back(LanduseForest);
 
 	FeaturePainter RecreationGround;
 	RecreationGround.foregroundFill(QColor(0xD0,0xEB,0xA9,0x77));
