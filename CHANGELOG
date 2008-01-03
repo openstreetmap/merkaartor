@@ -12,6 +12,7 @@ v0.09
 	* ADD : nice amenity selector for nodes
 	* FIX : use the standard system for predefined tags for highway
 	* ADD : nice landuse selector for roads (areas)
+	* ADD : more amenities (by Matt Williams)
 
 v0.08
 	* FIX : work with 0.5 API

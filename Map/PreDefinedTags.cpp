@@ -25,9 +25,22 @@ void addDefaults(QComboBox* Box)
 void fillAmenities(QComboBox* Box)
 {
 	addDefaults(Box);
+	Box->addItem(QCoreApplication::translate("Amenities","College"), "college");
+	Box->addItem(QCoreApplication::translate("Amenities","Fire Station"), "fire_station");
+	Box->addItem(QCoreApplication::translate("Amenities","Fuel"), "fuel");
 	Box->addItem(QCoreApplication::translate("Amenities","Hospital"), "hospital");
+	Box->addItem(QCoreApplication::translate("Amenities","Library"), "library");
 	Box->addItem(QCoreApplication::translate("Amenities","Parking"), "parking");
+	Box->addItem(QCoreApplication::translate("Amenities","Place of Worship"), "place_of_worship");
+	Box->addItem(QCoreApplication::translate("Amenities","Police Station"), "police");
+	Box->addItem(QCoreApplication::translate("Amenities","Post Box"), "post_box");
+	Box->addItem(QCoreApplication::translate("Amenities","Post Office"), "post_office");
+	Box->addItem(QCoreApplication::translate("Amenities","Pub"), "pub");
+	Box->addItem(QCoreApplication::translate("Amenities","Public Telephone"), "telephone");
+	Box->addItem(QCoreApplication::translate("Amenities","Recycling Facilities"), "recycling");
+	Box->addItem(QCoreApplication::translate("Amenities","Restaurant"), "restaurant");
 	Box->addItem(QCoreApplication::translate("Amenities","School"), "school");
+	Box->addItem(QCoreApplication::translate("Amenities","University"), "university");
 }
 
 void fillHighway(QComboBox* Box)
