@@ -1,0 +1,6 @@
+This are some basic notes on hacking on merkaartor
+
+- adding amenities
+	see Map/PreDefinedTags.cpp fillAmenities
+
+

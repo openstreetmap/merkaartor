@@ -7,6 +7,7 @@
 #include "Map/Coord.h"
 #include "Map/MapDocument.h"
 #include "Map/MapFeature.h"
+#include "Map/PreDefinedTags.h"
 #include "Map/Relation.h"
 #include "Map/Road.h"
 #include "Map/TrackPoint.h"
@@ -195,6 +196,7 @@ void PropertiesDock::switchToTrackPointUi()
 	NowShowing = TrackPointUiShowing;
 	QWidget* NewUi = new QWidget(this);
 	TrackPointUi.setupUi(NewUi);
+	fillAmenities(TrackPointUi.Amenity);
 	TrackPointUi.TagView->verticalHeader()->hide();
 	setWidget(NewUi);
 	if (CurrentUi)
@@ -203,6 +205,7 @@ void PropertiesDock::switchToTrackPointUi()
 	connect(TrackPointUi.Longitude,SIGNAL(textChanged(const QString&)),this, SLOT(on_TrackPointLon_textChanged(const QString&)));
 	connect(TrackPointUi.Latitude,SIGNAL(textChanged(const QString&)),this, SLOT(on_TrackPointLat_textChanged(const QString&)));
 	connect(TrackPointUi.RemoveTagButton,SIGNAL(clicked()),this, SLOT(on_RemoveTagButton_clicked()));
+	connect(TrackPointUi.Amenity,SIGNAL(activated(int)),this,SLOT(on_Amenity_activated(int)));
 	setWindowTitle(tr("Properties - Trackpoint"));
 }
 
@@ -266,6 +269,7 @@ void PropertiesDock::resetValues()
 			TrackPointUi.Latitude->setText(QString::number(radToAng(Pt->position().lat()),'g',8));
 			TrackPointUi.Longitude->setText(QString::number(radToAng(Pt->position().lon()),'g',8));
 			TrackPointUi.TagView->setModel(theModel);
+			resetTagComboBox(TrackPointUi.Amenity,Pt,"amenity");
 		}
 		else if (Road* R = dynamic_cast<Road*>(FullSelection[0]))
 		{
@@ -361,6 +365,15 @@ void PropertiesDock::on_Highway_activated(int idx)
 			Main->document()->history().add(new ClearTagCommand(R,"highway"));
 		else
 			Main->document()->history().add(new SetTagCommand(R,"highway",RoadUi.Highway->currentText()));
+		Main->invalidateView();
+	}
+}
+
+void PropertiesDock::on_Amenity_activated(int idx)
+{
+	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(selection(0)))
+	{
+		tagComboBoxActivated(TrackPointUi.Amenity,idx,Pt, "amenity",Main->document());
 		Main->invalidateView();
 	}
 }
