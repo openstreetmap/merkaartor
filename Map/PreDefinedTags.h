@@ -8,6 +8,8 @@ class QComboBox;
 class QString;
 
 void fillAmenities(QComboBox* Box);
+void fillHighway(QComboBox* Box);
+
 void resetTagComboBox(QComboBox* Box, MapFeature* F, const QString& key);
 void tagComboBoxActivated(QComboBox* Box, int idx, MapFeature* F, const QString& key, MapDocument* doc);
 

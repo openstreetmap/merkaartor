@@ -10,6 +10,7 @@ v0.09
 	* ADD : draw a lot of more things in merkaartor (by Matt Williams)
 	* ADD : draw hospital area and node
 	* ADD : nice amenity selector for nodes
+	* FIX : use the standard system for predefined tags for highway
 
 v0.08
 	* FIX : work with 0.5 API

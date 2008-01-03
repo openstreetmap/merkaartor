@@ -244,6 +244,7 @@ void PropertiesDock::switchToRoadUi()
 	NowShowing = RoadUiShowing;
 	QWidget* NewUi = new QWidget(this);
 	RoadUi.setupUi(NewUi);
+	fillHighway(RoadUi.Highway);
 	RoadUi.TagView->verticalHeader()->hide();
 	setWidget(NewUi);
 	if (CurrentUi)
@@ -277,10 +278,7 @@ void PropertiesDock::resetValues()
 			RoadUi.Name->setText(R->tagValue("name",""));
 			RoadUi.TrafficDirection->setCurrentIndex(trafficDirection(R));
 			RoadUi.TagView->setModel(theModel);
-			unsigned int idx = RoadUi.Highway->findText(R->tagValue("highway","Unknown"));
-			if (idx == -1)
-				idx = 0;
-			RoadUi.Highway->setCurrentIndex(idx);
+			resetTagComboBox(RoadUi.Highway,R,"highway");
 		}
 		else if (Relation* R = dynamic_cast<Relation*>(FullSelection[0]))
 		{
@@ -358,13 +356,9 @@ void PropertiesDock::on_TrafficDirection_activated(int idx)
 
 void PropertiesDock::on_Highway_activated(int idx)
 {
-	Road* R = dynamic_cast<Road*>(selection(0));
-	if (R)
+	if (Road* R = dynamic_cast<Road*>(selection(0)))
 	{
-		if (idx == 0)
-			Main->document()->history().add(new ClearTagCommand(R,"highway"));
-		else
-			Main->document()->history().add(new SetTagCommand(R,"highway",RoadUi.Highway->currentText()));
+		tagComboBoxActivated(RoadUi.Highway,idx,R,"highway",Main->document());
 		Main->invalidateView();
 	}
 }

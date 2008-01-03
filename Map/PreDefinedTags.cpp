@@ -30,6 +30,27 @@ void fillAmenities(QComboBox* Box)
 	Box->addItem(QCoreApplication::translate("Amenities","School"), "school");
 }
 
+void fillHighway(QComboBox* Box)
+{
+	addDefaults(Box);
+	Box->addItem(QCoreApplication::translate("Highway","Motorway"), "motorway");
+	Box->addItem(QCoreApplication::translate("Highway","Ramp to motorway"), "motorway_link");
+	Box->addItem(QCoreApplication::translate("Highway","Trunk road"), "trunk");
+	Box->addItem(QCoreApplication::translate("Highway","Ramp to trunk road"), "trunk_link");
+	Box->addItem(QCoreApplication::translate("Highway","Primary road"), "primary");
+	Box->addItem(QCoreApplication::translate("Highway","Ramp to primary road"), "primary_link");
+	Box->addItem(QCoreApplication::translate("Highway","Secondary road"), "secondary");
+	Box->addItem(QCoreApplication::translate("Highway","Tertiary road"), "tertiary");
+	Box->addItem(QCoreApplication::translate("Highway","Residential road"), "residential");
+	Box->addItem(QCoreApplication::translate("Highway","Service road"), "service");
+	Box->addItem(QCoreApplication::translate("Highway","Unsurfaced road"), "track");
+	Box->addItem(QCoreApplication::translate("Highway","Track road"), "track");
+	Box->addItem(QCoreApplication::translate("Highway","Cycleway"), "cycleway");
+	Box->addItem(QCoreApplication::translate("Highway","Footway"), "footway");
+	Box->addItem(QCoreApplication::translate("Highway","Bridleway"), "bridleway");
+	Box->addItem(QCoreApplication::translate("Highway","Steps"), "steps");
+}
+
 void setTagComboBoxTo(QComboBox* Box, const QString& userData)
 {
 	for (int i=0; i<Box->count(); ++i)
