@@ -7,6 +7,7 @@ v0.09
 	* ADD : save last current directory
 	* ADD : draw landuse=forest area (by Raphael Studer)
 	* ADD : move trackpoints onto a road inserts the point in the road
+	* ADD : draw a lot of more things in merkaartor (by Matt Williams)
 
 v0.08
 	* FIX : work with 0.5 API

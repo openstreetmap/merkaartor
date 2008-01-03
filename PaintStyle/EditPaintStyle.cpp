@@ -172,6 +172,16 @@ void EditPaintStylePrivate::initPainters()
 	Forest.selectOnTag("landuse","forest").limitToZoom(FeaturePainter::GlobalZoom);
 	EditPaintStyle::Painters.push_back(Forest);
 
+	FeaturePainter Scrub;
+	Scrub.foregroundFill(QColor(0xBC,0xCF,0x8F,0x77)).foreground(QColor(0,0x77,0),0,1);
+	Scrub.selectOnTag("natural","scrub").limitToZoom(FeaturePainter::GlobalZoom);
+	EditPaintStyle::Painters.push_back(Scrub);
+
+	FeaturePainter Heath;
+	Heath.foregroundFill(QColor(0x55,0x99,0x44,0x77)).foreground(QColor(0,0x77,0),0,1);
+	Heath.selectOnTag("natural","scrub").limitToZoom(FeaturePainter::GlobalZoom);
+	EditPaintStyle::Painters.push_back(Heath);
+
 	FeaturePainter Pitch;
 	Pitch.foregroundFill(QColor(0xff,0x77,0x77,0x77)).foreground(QColor(0x77,0,0),0,1);
 	Pitch.selectOnTag("leisure","pitch").limitToZoom(FeaturePainter::GlobalZoom);
@@ -188,6 +198,53 @@ void EditPaintStylePrivate::initPainters()
 	Parking.selectOnTag("amenity","parking");
 	Parking.limitToZoom(FeaturePainter::LocalZoom);
 	EditPaintStyle::Painters.push_back(Parking);
+
+	FeaturePainter School;
+	//School.trackPointIcon(":/Art/Mapnik/school.png").limitToZoom(FeaturePainter::LocalZoom);
+	School.foregroundFill(QColor(0xF0,0xF0,0xD9,0x77)).foreground(QColor(0xDB,0xBA,0xAB),0,1);
+	School.selectOnTag("amenity","school");
+	School.limitToZoom(FeaturePainter::LocalZoom);
+	EditPaintStyle::Painters.push_back(School);
+
+	FeaturePainter LanduseFarm;
+	LanduseFarm.foregroundFill(QColor(0xBB,0xE1,0xC9,0x77));
+	LanduseFarm.selectOnTag("landuse","farm").limitToZoom(FeaturePainter::GlobalZoom);
+	EditPaintStyle::Painters.push_back(LanduseFarm);
+
+	FeaturePainter LanduseForest;
+	LanduseForest.foregroundFill(QColor(0x70,0xBD,0x7E,0x77));
+	LanduseForest.selectOnTag("landuse","forest").limitToZoom(FeaturePainter::GlobalZoom);
+	EditPaintStyle::Painters.push_back(LanduseForest);
+
+	FeaturePainter RecreationGround;
+	RecreationGround.foregroundFill(QColor(0xD0,0xEB,0xA9,0x77));
+	RecreationGround.selectOnTag("landuse","recreation_ground").limitToZoom(FeaturePainter::GlobalZoom);
+	EditPaintStyle::Painters.push_back(RecreationGround);
+
+	FeaturePainter VillageGreen;
+	VillageGreen.foregroundFill(QColor(0xD0,0xEB,0xA9,0x77));
+	VillageGreen.selectOnTag("landuse","village_green").limitToZoom(FeaturePainter::GlobalZoom);
+	EditPaintStyle::Painters.push_back(VillageGreen);
+
+	FeaturePainter LanduseResidential;
+	LanduseResidential.foregroundFill(QColor(0xDC,0xDC,0xDC,0x55));
+	LanduseResidential.selectOnTag("landuse","residential").limitToZoom(FeaturePainter::GlobalZoom);
+	EditPaintStyle::Painters.push_back(LanduseResidential);
+
+	FeaturePainter LanduseIndustrial;
+	LanduseIndustrial.foregroundFill(QColor(0xFE,0xAD,0xBA,0x55));
+	LanduseIndustrial.selectOnTag("landuse","industrial").limitToZoom(FeaturePainter::GlobalZoom);
+	EditPaintStyle::Painters.push_back(LanduseIndustrial);
+
+	FeaturePainter LanduseRetail;
+	LanduseRetail.foregroundFill(QColor(0xF4,0x98,0x96,0x55));
+	LanduseRetail.selectOnTag("landuse","retail").limitToZoom(FeaturePainter::GlobalZoom);
+	EditPaintStyle::Painters.push_back(LanduseRetail);
+
+	FeaturePainter LanduseCommercial;
+	LanduseCommercial.foregroundFill(QColor(0xFB,0xFD,0xC8,0x55));
+	LanduseCommercial.selectOnTag("landuse","commercial").limitToZoom(FeaturePainter::GlobalZoom);
+	EditPaintStyle::Painters.push_back(LanduseCommercial);
 }
 
 void EPBackgroundLayer::setP(EditPaintStylePrivate* ap)
