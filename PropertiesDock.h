@@ -39,6 +39,7 @@ class PropertiesDock : public QDockWidget
 		void on_TrafficDirection_activated(int idx);
 		void on_Highway_activated(int idx);
 		void on_Amenity_activated(int idx);
+		void on_LandUse_activated(int idx);
 		void on_RemoveTagButton_clicked();
 		void on_SelectionList_itemSelectionChanged();
 		void on_SelectionList_itemDoubleClicked(QListWidgetItem* item);

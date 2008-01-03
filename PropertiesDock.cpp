@@ -245,6 +245,7 @@ void PropertiesDock::switchToRoadUi()
 	QWidget* NewUi = new QWidget(this);
 	RoadUi.setupUi(NewUi);
 	fillHighway(RoadUi.Highway);
+	fillLandUse(RoadUi.LandUse);
 	RoadUi.TagView->verticalHeader()->hide();
 	setWidget(NewUi);
 	if (CurrentUi)
@@ -253,6 +254,7 @@ void PropertiesDock::switchToRoadUi()
 	connect(RoadUi.Name,SIGNAL(textChanged(const QString&)),this, SLOT(on_RoadName_textChanged(const QString&)));
 	connect(RoadUi.TrafficDirection,SIGNAL(activated(int)), this, SLOT(on_TrafficDirection_activated(int)));
 	connect(RoadUi.Highway,SIGNAL(activated(int)), this, SLOT(on_Highway_activated(int)));
+	connect(RoadUi.LandUse,SIGNAL(activated(int)), this, SLOT(on_LandUse_activated(int)));
 	connect(RoadUi.RemoveTagButton,SIGNAL(clicked()),this, SLOT(on_RemoveTagButton_clicked()));
 	setWindowTitle(tr("Properties - Road"));
 }
@@ -279,6 +281,7 @@ void PropertiesDock::resetValues()
 			RoadUi.TrafficDirection->setCurrentIndex(trafficDirection(R));
 			RoadUi.TagView->setModel(theModel);
 			resetTagComboBox(RoadUi.Highway,R,"highway");
+			resetTagComboBox(RoadUi.LandUse,R,"landuse");
 		}
 		else if (Relation* R = dynamic_cast<Relation*>(FullSelection[0]))
 		{
@@ -368,6 +371,15 @@ void PropertiesDock::on_Amenity_activated(int idx)
 	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(selection(0)))
 	{
 		tagComboBoxActivated(TrackPointUi.Amenity,idx,Pt, "amenity",Main->document());
+		Main->invalidateView();
+	}
+}
+
+void PropertiesDock::on_LandUse_activated(int idx)
+{
+	if (Road* R = dynamic_cast<Road*>(selection(0)))
+	{
+		tagComboBoxActivated(RoadUi.LandUse,idx,R,"landuse",Main->document());
 		Main->invalidateView();
 	}
 }

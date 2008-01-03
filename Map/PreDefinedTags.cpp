@@ -43,12 +43,25 @@ void fillHighway(QComboBox* Box)
 	Box->addItem(QCoreApplication::translate("Highway","Tertiary road"), "tertiary");
 	Box->addItem(QCoreApplication::translate("Highway","Residential road"), "residential");
 	Box->addItem(QCoreApplication::translate("Highway","Service road"), "service");
-	Box->addItem(QCoreApplication::translate("Highway","Unsurfaced road"), "track");
+	Box->addItem(QCoreApplication::translate("Highway","Unsurfaced road"), "unsurfaced");
 	Box->addItem(QCoreApplication::translate("Highway","Track road"), "track");
 	Box->addItem(QCoreApplication::translate("Highway","Cycleway"), "cycleway");
 	Box->addItem(QCoreApplication::translate("Highway","Footway"), "footway");
 	Box->addItem(QCoreApplication::translate("Highway","Bridleway"), "bridleway");
 	Box->addItem(QCoreApplication::translate("Highway","Steps"), "steps");
+}
+
+void fillLandUse(QComboBox* Box)
+{
+	addDefaults(Box);
+	Box->addItem(QCoreApplication::translate("landuse","Forest"),"forest");
+	Box->addItem(QCoreApplication::translate("landuse","Farm"),"farm");
+	Box->addItem(QCoreApplication::translate("landuse","Recreation ground"),"recreation_ground");
+	Box->addItem(QCoreApplication::translate("landuse","Village green"),"village_green");
+	Box->addItem(QCoreApplication::translate("landuse","Residential zone"),"residential");
+	Box->addItem(QCoreApplication::translate("landuse","Industrial zone"),"industrial");
+	Box->addItem(QCoreApplication::translate("landuse","Retail zone"),"retail");
+	Box->addItem(QCoreApplication::translate("landuse","Commercial zone"),"commercial");
 }
 
 void setTagComboBoxTo(QComboBox* Box, const QString& userData)

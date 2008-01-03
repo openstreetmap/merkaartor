@@ -11,6 +11,7 @@ v0.09
 	* ADD : draw hospital area and node
 	* ADD : nice amenity selector for nodes
 	* FIX : use the standard system for predefined tags for highway
+	* ADD : nice landuse selector for roads (areas)
 
 v0.08
 	* FIX : work with 0.5 API
