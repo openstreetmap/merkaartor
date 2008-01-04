@@ -30,7 +30,7 @@ bool importNGT(QWidget* aParent, const QString& aFilename, MapDocument* theDocum
 		if (theList->empty())
 		{
 			delete theList;
-			theSegment;
+			delete theSegment;
 		}
 		else
 		{

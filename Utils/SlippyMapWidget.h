@@ -72,3 +72,4 @@ class SlippyMapWidget :	public QWidget
 };
 
 #endif
+

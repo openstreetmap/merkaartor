@@ -9,3 +9,4 @@ class QWidget;
 bool importNGT(QWidget* aParent, const QString& aFilename, MapDocument* theDocument, MapLayer* theLayer);
 
 #endif
+
