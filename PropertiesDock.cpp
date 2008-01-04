@@ -216,26 +216,15 @@ void PropertiesDock::switchToRelationUi()
 	NowShowing = RelationUiShowing;
 	QWidget* NewUi = new QWidget(this);
 	RelationUi.setupUi(NewUi);
+	fillLandUse(RelationUi.LandUse);
 	RelationUi.TagView->verticalHeader()->hide();
 	setWidget(NewUi);
 	if (CurrentUi)
 		delete CurrentUi;
 	CurrentUi = NewUi;
 	connect(RelationUi.RemoveTagButton,SIGNAL(clicked()),this, SLOT(on_RemoveTagButton_clicked()));
+	connect(RelationUi.LandUse,SIGNAL(activated(int)), this, SLOT(on_LandUse_activated(int)));
 	setWindowTitle(tr("Properties - Relation"));
-}
-
-
-void PropertiesDock::switchToNoUi()
-{
-	if (NowShowing == NoUiShowing) return;
-	NowShowing = NoUiShowing;
-	QWidget* NewUi = new QWidget(this);
-	setWidget(NewUi);
-	if (CurrentUi)
-		delete CurrentUi;
-	CurrentUi = NewUi;
-	setWindowTitle(tr("Properties"));
 }
 
 void PropertiesDock::switchToRoadUi()
@@ -257,6 +246,18 @@ void PropertiesDock::switchToRoadUi()
 	connect(RoadUi.LandUse,SIGNAL(activated(int)), this, SLOT(on_LandUse_activated(int)));
 	connect(RoadUi.RemoveTagButton,SIGNAL(clicked()),this, SLOT(on_RemoveTagButton_clicked()));
 	setWindowTitle(tr("Properties - Road"));
+}
+
+void PropertiesDock::switchToNoUi()
+{
+	if (NowShowing == NoUiShowing) return;
+	NowShowing = NoUiShowing;
+	QWidget* NewUi = new QWidget(this);
+	setWidget(NewUi);
+	if (CurrentUi)
+		delete CurrentUi;
+	CurrentUi = NewUi;
+	setWindowTitle(tr("Properties"));
 }
 
 void PropertiesDock::resetValues()
@@ -287,6 +288,7 @@ void PropertiesDock::resetValues()
 		{
 			RelationUi.MembersView->setModel(R->referenceMemberModel(Main));
 			RelationUi.TagView->setModel(theModel);
+			resetTagComboBox(RelationUi.LandUse,R,"landuse");
 		}
 	}
 	else if (FullSelection.size() > 1)
@@ -378,10 +380,10 @@ void PropertiesDock::on_Amenity_activated(int idx)
 void PropertiesDock::on_LandUse_activated(int idx)
 {
 	if (Road* R = dynamic_cast<Road*>(selection(0)))
-	{
 		tagComboBoxActivated(RoadUi.LandUse,idx,R,"landuse",Main->document());
-		Main->invalidateView();
-	}
+	else if (Relation* Rel = dynamic_cast<Relation*>(selection(0)))
+		tagComboBoxActivated(RelationUi.LandUse,idx,Rel,"landuse",Main->document());
+	Main->invalidateView();
 }
 
 void PropertiesDock::on_RemoveTagButton_clicked()
