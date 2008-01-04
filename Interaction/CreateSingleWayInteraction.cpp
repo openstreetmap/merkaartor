@@ -27,7 +27,8 @@ void CreateSingleWayInteraction::paintEvent(QPaintEvent* anEvent, QPainter& theP
 {
 	if (HaveFirst)
 	{
-		QPen TP(QBrush(QColor(0xff,0x77,0x11,128)),projection().pixelPerM()*4);
+	  QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
+		QPen TP(SomeBrush,projection().pixelPerM()*4);
 		QPointF PreviousPoint = view()->projection().project(FirstPoint);
 		::draw(thePainter,TP,MapFeature::UnknownDirection, PreviousPoint,LastCursor ,4 ,view()->projection());
 	}

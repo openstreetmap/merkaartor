@@ -81,7 +81,8 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
 			Angle = 2*3.141592/Steps;
 			Radius *= view()->projection().pixelPerM();
 			double Modifier = DockData.DriveRight->isChecked()?-1:1;		
-			QPen TP(QBrush(QColor(0xff,0x77,0x11,128)),projection().pixelPerM()*4);
+			QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
+			QPen TP(SomeBrush,projection().pixelPerM()*4);
 			QPointF Prev(CenterF.x()+cos(Modifier*Angle/2)*Radius,CenterF.y()+sin(Modifier*Angle/2)*Radius);
 			CommandList* L = new CommandList;
 			TrackPoint* First = new TrackPoint(view()->projection().inverse(Prev));
@@ -141,8 +142,9 @@ void CreateRoundaboutInteraction::paintEvent(QPaintEvent* , QPainter& thePainter
 		double Steps = ceil(2*3.141592/Angle);
 		Angle = 2*3.141592/Steps;
 		Radius *= view()->projection().pixelPerM();
-		double Modifier = DockData.DriveRight->isChecked()?-1:1;		
-		QPen TP(QBrush(QColor(0xff,0x77,0x11,128)),projection().pixelPerM()*4);
+		double Modifier = DockData.DriveRight->isChecked()?-1:1;	
+		QBrush SomeBrush(QColor(0xff,0x77,0x11,128));	
+		QPen TP(SomeBrush,projection().pixelPerM()*4);
 		QPointF Prev(CenterF.x()+cos(Modifier*Angle/2)*Radius,CenterF.y()+sin(Modifier*Angle/2)*Radius);
 		for (double a = Angle*3/2; a<2*3.141592; a+=Angle)
 		{

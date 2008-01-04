@@ -65,8 +65,8 @@ void CreateDoubleWayInteraction::paintEvent(QPaintEvent* anEvent, QPainter& theP
 			QPointF B1(FB1.project(LastCursor));
 			QPointF B2(FB2.project(LastCursor));
 
-
-			QPen TP(QBrush(QColor(0xff,0x77,0x11,128)),projection().pixelPerM()*4);
+      QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
+			QPen TP(SomeBrush,projection().pixelPerM()*4);
 			if (DockData.DriveRight->isChecked())
 			{
 				::draw(thePainter,TP,MapFeature::OneWay, B1,A1,rB/4,view()->projection());

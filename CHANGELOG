@@ -16,6 +16,7 @@ v0.09
 	* ADD : ability to easily draw an area
 	* ADD : landuse selector for relations
 	* ADD : upload relations to OSM
+	* FIX : compile fixes for gcc 3.x (by Thomas Wood)
 
 v0.08
 	* FIX : work with 0.5 API
