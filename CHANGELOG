@@ -13,6 +13,7 @@ v0.09
 	* FIX : use the standard system for predefined tags for highway
 	* ADD : nice landuse selector for roads (areas)
 	* ADD : more amenities (by Matt Williams)
+	* ADD : ability to easily draw an area
 
 v0.08
 	* FIX : work with 0.5 API

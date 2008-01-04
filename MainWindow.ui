@@ -19,7 +19,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>19</height>
+     <height>29</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >
@@ -36,6 +36,7 @@
     <addaction name="createRoadAction" />
     <addaction name="createDoubleWayAction" />
     <addaction name="createRoundaboutAction" />
+    <addaction name="createAreaAction" />
     <addaction name="createRelationAction" />
    </widget>
    <widget class="QMenu" name="menuRoad" >
@@ -95,7 +96,10 @@
     <enum>Qt::ToolButtonTextUnderIcon</enum>
    </property>
    <attribute name="toolBarArea" >
-    <number>4</number>
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak" >
+    <bool>false</bool>
    </attribute>
    <addaction name="editUndoAction" />
    <addaction name="editRedoAction" />
@@ -345,6 +349,11 @@
   <action name="createRelationAction" >
    <property name="text" >
     <string>Relation</string>
+   </property>
+  </action>
+  <action name="createAreaAction" >
+   <property name="text" >
+    <string>Area</string>
    </property>
   </action>
  </widget>

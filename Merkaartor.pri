@@ -6,6 +6,7 @@ HEADERS += \
 ./Command/RelationCommands.h \
 ./Command/RoadCommands.h \
 ./Command/TrackPointCommands.h \
+./Interaction/CreateAreaInteraction.h \
 ./Interaction/CreateDoubleWayInteraction.h \
 ./Interaction/CreateNodeInteraction.h \
 ./Interaction/CreateRoundaboutInteraction.h \
@@ -68,6 +69,7 @@ SOURCES += \
 ./Map/TrackPoint.cpp \
 ./Map/TrackSegment.cpp \
 ./MapView.cpp \
+./Interaction/CreateAreaInteraction.cpp \
 ./Interaction/CreateDoubleWayInteraction.cpp \
 ./Interaction/CreateNodeInteraction.cpp \
 ./Interaction/CreateSingleWayInteraction.cpp \
