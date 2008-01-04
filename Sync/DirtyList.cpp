@@ -4,6 +4,7 @@
 #include "Map/DownloadOSM.h"
 #include "Map/ExportOSM.h"
 #include "Map/MapDocument.h"
+#include "Map/Relation.h"
 #include "Map/Road.h"
 #include "Map/TrackPoint.h"
 
@@ -162,6 +163,16 @@ bool DirtyListVisit::add(MapFeature* F)
 		EraseResponse.push_back(x);
 		return x;
 	}
+	else if (Relation* Rel = dynamic_cast<Relation*>(F))
+	{
+		for (unsigned int i=0; i<Rel->size(); ++i)
+			if (Future.willBeAdded(Rel->get(i)) && notYetAdded(Rel->get(i)))
+				add(Rel->get(i));
+		bool x = addRelation(Rel);
+		AlreadyAdded.push_back(F);
+		EraseResponse.push_back(x);
+		return x;
+	}
 	return EraseFromHistory;
 }
 
@@ -180,6 +191,8 @@ bool DirtyListVisit::update(MapFeature* F)
 	}
 	else if (Road* R = dynamic_cast<Road*>(F))
 		return updateRoad(R);
+	else if (Relation* S = dynamic_cast<Relation*>(F))
+		return updateRelation(S);
 	return EraseFromHistory;
 }
 
@@ -196,6 +209,8 @@ bool DirtyListVisit::erase(MapFeature* F)
 	}
 	else if (Road* R = dynamic_cast<Road*>(F))
 		return eraseRoad(R);
+	else if (Relation* S = dynamic_cast<Relation*>(F))
+		return eraseRelation(S);
 	return EraseFromHistory;
 }
 
@@ -239,9 +254,21 @@ bool DirtyListDescriber::addPoint(TrackPoint* Pt)
 	return false;
 }
 
+bool DirtyListDescriber::addRelation(Relation* R)
+{
+	Ui.ChangesList->addItem(QString("ADD relation %1").arg(R->id()) + userName(R));
+	return false;
+}
+
 bool DirtyListDescriber::updatePoint(TrackPoint* Pt)
 {
 	Ui.ChangesList->addItem(QString("UPDATE trackpoint %1").arg(Pt->id()) + userName(Pt));
+	return false;
+}
+
+bool DirtyListDescriber::updateRelation(Relation* R)
+{
+	Ui.ChangesList->addItem(QString("UPDATE relation %1").arg(R->id()) + userName(R));
 	return false;
 }
 
@@ -262,6 +289,13 @@ bool DirtyListDescriber::eraseRoad(Road* R)
 	Ui.ChangesList->addItem(QString("REMOVE road %1").arg(R->id()) + userName(R));
 	return false;
 }
+
+bool DirtyListDescriber::eraseRelation(Relation* R)
+{
+	Ui.ChangesList->addItem(QString("REMOVE relation %1").arg(R->id()) + userName(R));
+	return false;
+}
+
 
 
 /* DIRTYLIST */
@@ -311,6 +345,27 @@ bool DirtyListExecutor::executeChanges(QWidget* aParent)
 	return true;
 }
 
+bool DirtyListExecutor::addRelation(Relation *R)
+{
+	Progress->setValue(++Done);
+	Progress->setLabelText(QString("ADD relation %1").arg(R->id()) + userName(R));
+	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
+
+	QString DataIn, DataOut, OldId;
+	OldId = R->id();
+	R->setId("0");
+	DataIn = wrapOSM(exportOSM(*R));
+	R->setId(OldId);
+	QString URL=theDownloader->getURLToCreate("relation");
+	if (sendRequest("PUT",URL,DataIn,DataOut))
+	{
+		// chop off extra spaces, newlines etc
+		R->setId("rel_"+QString::number(DataOut.toInt()));
+		R->setLastUpdated(MapFeature::OSMServer);
+		return true;
+	}
+	return false;
+}
 
 bool DirtyListExecutor::addRoad(Road *R)
 {
@@ -359,6 +414,23 @@ bool DirtyListExecutor::addPoint(TrackPoint* Pt)
 	return false;
 }
 
+
+
+bool DirtyListExecutor::updateRelation(Relation* R)
+{
+	Progress->setValue(++Done);
+	Progress->setLabelText(QString("UPDATE relation %1").arg(R->id()) + userName(R));
+	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
+	QString URL = theDownloader->getURLToUpdate("relation",stripToOSMId(R->id()));
+	QString DataIn, DataOut;
+	DataIn = wrapOSM(exportOSM(*R));
+	if (sendRequest("PUT",URL,DataIn,DataOut))
+	{
+		R->setLastUpdated(MapFeature::OSMServer);
+		return true;
+	}
+	return true;
+}
 
 
 bool DirtyListExecutor::updateRoad(Road* R)
@@ -422,6 +494,21 @@ bool DirtyListExecutor::eraseRoad(Road *R)
 //	QString URL("/api/0.3/way/%1");
 //	URL = URL.arg(stripToOSMId(R->id()));
 	QString URL = theDownloader->getURLToDelete("way",stripToOSMId(R->id()));
+	QString DataIn, DataOut;
+	if (sendRequest("DELETE",URL,DataIn,DataOut))
+	{
+		R->setLastUpdated(MapFeature::OSMServer);
+		return true;
+	}
+	return false;
+}
+
+bool DirtyListExecutor::eraseRelation(Relation *R)
+{
+	Progress->setValue(++Done);
+	Progress->setLabelText(QString("REMOVE relation %1").arg(R->id()) + userName(R));
+	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
+	QString URL = theDownloader->getURLToDelete("relation",stripToOSMId(R->id()));
 	QString DataIn, DataOut;
 	if (sendRequest("DELETE",URL,DataIn,DataOut))
 	{

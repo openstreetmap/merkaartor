@@ -4,6 +4,7 @@
 class Downloader;
 class MapDocument;
 class MapFeature;
+class Relation;
 class Road;
 class TrackPoint;
 class Way;
@@ -58,10 +59,13 @@ class DirtyListVisit : public DirtyList
 
 		virtual bool addPoint(TrackPoint* Pt) = 0;
 		virtual bool addRoad(Road* R) = 0;
+		virtual bool addRelation(Relation* R) = 0;
 		virtual bool updatePoint(TrackPoint* Pt) = 0;
 		virtual bool updateRoad(Road* R) = 0;
+		virtual bool updateRelation(Relation* R) = 0;
 		virtual bool erasePoint(TrackPoint* Pt) = 0;
 		virtual bool eraseRoad(Road* R) = 0;
+		virtual bool eraseRelation(Relation* R) = 0;
 
 	private:
 		bool notYetAdded(MapFeature* F);
@@ -80,10 +84,13 @@ class DirtyListDescriber : public DirtyListVisit
 
 		virtual bool addPoint(TrackPoint* Pt);
 		virtual bool addRoad(Road* R);
+		virtual bool addRelation(Relation* R);
 		virtual bool updatePoint(TrackPoint* Pt);
 		virtual bool updateRoad(Road* R);
+		virtual bool updateRelation(Relation *R);
 		virtual bool erasePoint(TrackPoint* Pt);
 		virtual bool eraseRoad(Road* R);
+		virtual bool eraseRelation(Relation* R);
 
 		bool showChanges(QWidget* Parent);
 		unsigned int tasks() const;
@@ -104,10 +111,13 @@ class DirtyListExecutor : public QObject, public DirtyListVisit
 
 		virtual bool addPoint(TrackPoint* Pt);
 		virtual bool addRoad(Road* R);
+		virtual bool addRelation(Relation* R);
 		virtual bool updatePoint(TrackPoint* Pt);
 		virtual bool updateRoad(Road* R);
+		virtual bool updateRelation(Relation* R);
 		virtual bool erasePoint(TrackPoint* Pt);
 		virtual bool eraseRoad(Road* R);
+		virtual bool eraseRelation(Relation* R);
 
 		bool executeChanges(QWidget* Parent);
 

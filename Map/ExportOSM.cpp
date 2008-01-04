@@ -1,5 +1,6 @@
 #include "ExportOSM.h"
 
+#include "Map/Relation.h"
 #include "Map/Road.h"
 #include "Map/TrackPoint.h"
 
@@ -40,6 +41,25 @@ QString exportOSM(const Road& R)
 	S += "</way>";
 	return S;
 }
+
+QString exportOSM(const Relation& R)
+{
+	QString S;
+	S += QString("<relation id=\"%1\">").arg(stripToOSMId(R.id()));
+	for (unsigned int i=0; i<R.size(); ++i)
+	{
+		QString Type("node");
+		if (dynamic_cast<const Road*>(R.get(i)))
+			Type="way";
+		else if (dynamic_cast<const Relation*>(R.get(i)))
+			Type="relation";
+		S+=QString("<member type=\"%1\" ref=\"%2\" role=\"%3\"/>").arg(Type).arg(stripToOSMId(R.get(i)->id())).arg(R.getRole(i));
+	}
+	S += tagOSM(R);
+	S += "</relation>";
+	return S;
+}
+
 
 QString wrapOSM(const QString& S)
 {

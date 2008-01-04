@@ -38,7 +38,7 @@
 #include <QtGui/QMouseEvent>
 
 #define MAJORVERSION "0"
-#define MINORVERSION "08"
+#define MINORVERSION "09"
 
 
 MainWindow::MainWindow(void)

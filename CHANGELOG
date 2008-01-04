@@ -15,6 +15,7 @@ v0.09
 	* ADD : more amenities (by Matt Williams)
 	* ADD : ability to easily draw an area
 	* ADD : landuse selector for relations
+	* ADD : upload relations to OSM
 
 v0.08
 	* FIX : work with 0.5 API
