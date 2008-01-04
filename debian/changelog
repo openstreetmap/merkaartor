@@ -1,3 +1,15 @@
+merkaartor (0.0.9-1) gutsy; urgency=low
+
+  * Upgrade to 0.0.9
+
+ -- Bart Vanhauwaert <bvh-osm@irule.be>  Fri, 04 Jan 2008 16:00:38 +0100
+
+merkaartor (0.0.8-1) gutsy; urgency=low
+
+  * Upgrade to version 0.0.8. Works with OpenStreetMap API 0.5
+
+ -- Bart Vanhauwaert <bvh-osm@irule.be>  Mon, 05 Nov 2007 22:38:06 +0100
+
 merkaartor (0.0.7-1) feisty; urgency=low
 
   * Upgrade to version 0.0.7
