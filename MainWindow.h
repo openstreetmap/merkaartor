@@ -30,6 +30,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_editPropertiesAction_triggered();
 		virtual void on_editUndoAction_triggered();
 		virtual void on_editRedoAction_triggered();
+		virtual void on_editMapStyleAction_triggered();
 		virtual void on_fileNewAction_triggered();
 		virtual void on_fileDownloadAction_triggered();
 		virtual void on_fileUploadAction_triggered();
@@ -48,6 +49,8 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_roadSplitAction_triggered();
 		virtual void on_roadBreakAction_triggered();
 		virtual void on_roadJoinAction_triggered();
+		virtual void on_mapStyleSaveAction_triggered();
+		virtual void on_mapStyleLoadAction_triggered();
 
 	signals:
 		void remove_triggered();

@@ -19,7 +19,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>29</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >
@@ -48,6 +48,25 @@
     <addaction name="roadJoinAction" />
     <addaction name="editReverseAction" />
    </widget>
+   <widget class="QMenu" name="menuEdit" >
+    <property name="title" >
+     <string>&amp;Edit</string>
+    </property>
+    <addaction name="editUndoAction" />
+    <addaction name="editRedoAction" />
+    <addaction name="editRemoveAction" />
+   </widget>
+   <widget class="QMenu" name="menuView" >
+    <property name="title" >
+     <string>&amp;View</string>
+    </property>
+    <addaction name="viewZoomAllAction" />
+    <addaction name="viewZoomWindowAction" />
+    <addaction name="viewZoomOutAction" />
+    <addaction name="viewZoomInAction" />
+    <addaction name="viewSetCoordinatesAction" />
+    <addaction name="separator" />
+   </widget>
    <widget class="QMenu" name="menuFile" >
     <property name="title" >
      <string>&amp;File</string>
@@ -59,27 +78,18 @@
     <addaction name="fileUploadAction" />
     <addaction name="fileQuitAction" />
    </widget>
-   <widget class="QMenu" name="menuView" >
+   <widget class="QMenu" name="menuStyle" >
     <property name="title" >
-     <string>&amp;View</string>
+     <string>Style</string>
     </property>
-    <addaction name="viewZoomAllAction" />
-    <addaction name="viewZoomWindowAction" />
-    <addaction name="viewZoomOutAction" />
-    <addaction name="viewZoomInAction" />
-    <addaction name="viewSetCoordinatesAction" />
-   </widget>
-   <widget class="QMenu" name="menuEdit" >
-    <property name="title" >
-     <string>&amp;Edit</string>
-    </property>
-    <addaction name="editUndoAction" />
-    <addaction name="editRedoAction" />
-    <addaction name="editRemoveAction" />
+    <addaction name="editMapStyleAction" />
+    <addaction name="mapStyleLoadAction" />
+    <addaction name="mapStyleSaveAction" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuEdit" />
    <addaction name="menuView" />
+   <addaction name="menuStyle" />
    <addaction name="menuCreate" />
    <addaction name="menuRoad" />
    <addaction name="menuHelp" />
@@ -96,10 +106,7 @@
     <enum>Qt::ToolButtonTextUnderIcon</enum>
    </property>
    <attribute name="toolBarArea" >
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak" >
-    <bool>false</bool>
+    <number>4</number>
    </attribute>
    <addaction name="editUndoAction" />
    <addaction name="editRedoAction" />
@@ -354,6 +361,21 @@
   <action name="createAreaAction" >
    <property name="text" >
     <string>Area</string>
+   </property>
+  </action>
+  <action name="editMapStyleAction" >
+   <property name="text" >
+    <string>Edit</string>
+   </property>
+  </action>
+  <action name="mapStyleSaveAction" >
+   <property name="text" >
+    <string>Save</string>
+   </property>
+  </action>
+  <action name="mapStyleLoadAction" >
+   <property name="text" >
+    <string>Load</string>
    </property>
   </action>
  </widget>

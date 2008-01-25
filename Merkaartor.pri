@@ -37,6 +37,7 @@ HEADERS += \
 ./MapView.h \
 ./PaintStyle/EditPaintStyle.h \
 ./PaintStyle/PaintStyle.h \
+./PaintStyle/PaintStyleEditor.h \ 
 ./PropertiesDock.h \
 ./Sync/DirtyList.h \
 ./Sync/SyncOSM.h \
@@ -80,6 +81,7 @@ SOURCES += \
 ./Interaction/ZoomInteraction.cpp \
 ./PaintStyle/EditPaintStyle.cpp \
 ./PaintStyle/PaintStyle.cpp \
+./PaintStyle/PaintStyleEditor.cpp \
 ./Sync/DirtyList.cpp \
 ./Sync/SyncOSM.cpp \
 ./Main.cpp \
@@ -102,7 +104,8 @@ FORMS += \
 ./MultiProperties.ui \
 ./RelationProperties.ui \
 ./Interaction/CreateDoubleWayDock.ui \
-./Interaction/CreateRoundaboutDock.ui
+./Interaction/CreateRoundaboutDock.ui \
+./PaintStyle/PaintStyleEditor.ui
 
 
 #Resource file(s)

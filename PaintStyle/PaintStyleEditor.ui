@@ -1,0 +1,1089 @@
+<ui version="4.0" >
+ <class>PaintStyleEditor</class>
+ <widget class="QDialog" name="PaintStyleEditor" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>713</width>
+    <height>562</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Map style editor</string>
+  </property>
+  <layout class="QVBoxLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item>
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QPushButton" name="AddButton" >
+           <property name="text" >
+            <string>Add</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="RemoveButton" >
+           <property name="text" >
+            <string>Remove</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QListWidget" name="PaintList" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>1</hsizetype>
+           <vsizetype>7</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <layout class="QGridLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item row="0" column="0" >
+          <widget class="QLabel" name="label" >
+           <property name="text" >
+            <string>Key</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="3" >
+          <widget class="QLineEdit" name="Value2" />
+         </item>
+         <item row="0" column="2" >
+          <widget class="QLabel" name="label_2" >
+           <property name="text" >
+            <string>Value</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1" >
+          <widget class="QLineEdit" name="Key" />
+         </item>
+         <item row="0" column="3" >
+          <widget class="QLineEdit" name="Value1" />
+         </item>
+         <item row="1" column="2" >
+          <widget class="QLabel" name="label_3" >
+           <property name="text" >
+            <string>or</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QGridLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item row="0" column="2" >
+          <widget class="QLabel" name="label_6" >
+           <property name="text" >
+            <string>meter/pixel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1" >
+          <widget class="QDoubleSpinBox" name="LowerZoomBoundary" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>7</hsizetype>
+             <vsizetype>0</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="decimals" >
+            <number>0</number>
+           </property>
+           <property name="maximum" >
+            <double>99999.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0" >
+          <widget class="QLabel" name="label_5" >
+           <property name="text" >
+            <string>Visible up to</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0" >
+          <widget class="QLabel" name="label_4" >
+           <property name="text" >
+            <string>Visible from scale</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1" >
+          <widget class="QDoubleSpinBox" name="UpperZoomBoundary" >
+           <property name="decimals" >
+            <number>0</number>
+           </property>
+           <property name="maximum" >
+            <double>99999.000000000000000</double>
+           </property>
+           <property name="singleStep" >
+            <double>100.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2" >
+          <widget class="QLabel" name="label_7" >
+           <property name="text" >
+            <string>meter/pixel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3" >
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QCheckBox" name="DrawBackground" >
+           <property name="text" >
+            <string>Draw boundary with outside color</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="BackgroundColor" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
+           <property name="minimumSize" >
+            <size>
+             <width>45</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="text" >
+            <string>...</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType" >
+            <enum>QSizePolicy::Minimum</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_8" >
+           <property name="text" >
+            <string>Proportional thickness</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="ProportionalBackground" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
+           <property name="decimals" >
+            <number>1</number>
+           </property>
+           <property name="singleStep" >
+            <double>0.500000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_9" >
+           <property name="text" >
+            <string>Fixed thickness</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="FixedBackground" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
+           <property name="decimals" >
+            <number>1</number>
+           </property>
+           <property name="singleStep" >
+            <double>0.500000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QCheckBox" name="DrawForeground" >
+           <property name="text" >
+            <string>Draw boundary with color</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="ForegroundColor" >
+           <property name="minimumSize" >
+            <size>
+             <width>45</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="text" >
+            <string>...</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType" >
+            <enum>QSizePolicy::Minimum</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_10" >
+           <property name="text" >
+            <string>Proportional thickness</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="ProportionalForeground" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
+           <property name="decimals" >
+            <number>1</number>
+           </property>
+           <property name="singleStep" >
+            <double>0.500000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_11" >
+           <property name="text" >
+            <string>Fixed thickness</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="FixedForeground" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
+           <property name="decimals" >
+            <number>1</number>
+           </property>
+           <property name="singleStep" >
+            <double>0.500000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType" >
+            <enum>QSizePolicy::Minimum</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="ForegroundDashed" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
+           <property name="text" >
+            <string>Dashed</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="ForegroundDashOn" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_12" >
+           <property name="text" >
+            <string>off</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="ForegroundDashOff" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QCheckBox" name="DrawTouchup" >
+           <property name="text" >
+            <string>Draw steps on boundary line</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="TouchupColor" >
+           <property name="minimumSize" >
+            <size>
+             <width>45</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="text" >
+            <string>...</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType" >
+            <enum>QSizePolicy::Minimum</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_14" >
+           <property name="text" >
+            <string>Proportional thickness</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="ProportionalTouchup" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
+           <property name="decimals" >
+            <number>1</number>
+           </property>
+           <property name="singleStep" >
+            <double>0.500000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_15" >
+           <property name="text" >
+            <string>Fixed thickness</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="FixedTouchup" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
+           <property name="decimals" >
+            <number>1</number>
+           </property>
+           <property name="singleStep" >
+            <double>0.500000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType" >
+            <enum>QSizePolicy::Minimum</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="TouchupDashed" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
+           <property name="text" >
+            <string>Dashed</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="TouchupDashOn" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_13" >
+           <property name="text" >
+            <string>off</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="TouchupDashOff" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QCheckBox" name="DrawFill" >
+           <property name="text" >
+            <string>Fill area</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="FillColor" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
+           <property name="minimumSize" >
+            <size>
+             <width>45</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="text" >
+            <string>...</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QCheckBox" name="DrawIcon" >
+           <property name="text" >
+            <string>Draw icon</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="IconName" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>407</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons" >
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>PaintStyleEditor</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>254</x>
+     <y>552</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>PaintStyleEditor</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>322</x>
+     <y>552</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>DrawBackground</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>BackgroundColor</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>457</x>
+     <y>149</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>508</x>
+     <y>152</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>DrawBackground</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>ProportionalBackground</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>457</x>
+     <y>149</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>483</x>
+     <y>181</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>DrawBackground</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>FixedBackground</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>457</x>
+     <y>149</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>621</x>
+     <y>181</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>DrawForeground</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>ForegroundColor</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>419</x>
+     <y>212</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>470</x>
+     <y>215</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>DrawForeground</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>ProportionalForeground</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>419</x>
+     <y>212</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>483</x>
+     <y>244</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>DrawForeground</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>FixedForeground</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>419</x>
+     <y>212</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>621</x>
+     <y>244</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>DrawForeground</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>ForegroundDashed</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>419</x>
+     <y>212</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>378</x>
+     <y>273</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>DrawForeground</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>ForegroundDashOn</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>419</x>
+     <y>212</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>437</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>DrawForeground</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>ForegroundDashOff</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>419</x>
+     <y>212</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>516</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>DrawTouchup</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>ProportionalTouchup</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>356</x>
+     <y>302</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>458</x>
+     <y>328</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>DrawTouchup</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>FixedTouchup</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>331</x>
+     <y>298</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>591</x>
+     <y>328</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>DrawTouchup</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>TouchupDashed</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>308</x>
+     <y>297</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>358</x>
+     <y>355</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>DrawTouchup</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>TouchupDashOff</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>298</x>
+     <y>302</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>482</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>DrawFill</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>FillColor</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>300</x>
+     <y>392</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>349</x>
+     <y>392</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>DrawIcon</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>IconName</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>312</x>
+     <y>422</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>385</x>
+     <y>422</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

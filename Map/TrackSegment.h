@@ -22,7 +22,7 @@ class TrackSegment : public MapFeature
 		void cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const std::vector<MapFeature*>& Alternatives);
 		virtual bool notEverythingDownloaded() const;
 		virtual QString description() const;
-		virtual RenderPriority renderPriority(FeaturePainter::ZoomType Zoom) const;
+		virtual RenderPriority renderPriority(double aPixelPerM) const;
 
 		void add(TrackPoint* aPoint);
 		unsigned int size() const;

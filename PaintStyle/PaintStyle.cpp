@@ -5,15 +5,100 @@
 #include "Map/Road.h"
 #include "Utils/LineF.h"
 
+#include <QtCore/QString>
 #include <QtGui/QPainter>
 #include <QtGui/QPainterPath>
 
 #include <math.h>
 
 FeaturePainter::FeaturePainter()
-: DrawBackground(false), DrawForeground(false), DrawTouchup(false), ZoomLimit(NoZoomLimit), 
+: ZoomLimitSet(false), ZoomUnder(0), ZoomUpper(10e6),
+  DrawBackground(false), BackgroundScale(0), BackgroundOffset(3), 
+  DrawForeground(false), ForegroundScale(0), ForegroundOffset(2),
+  DrawTouchup(false), TouchupScale(0), TouchupOffset(1),
   ForegroundFill(false), DrawTrafficDirectionMarks(true)
 {
+}
+
+QString paddedHexa(unsigned int i)
+{
+	QString r=QString::number(i,16);
+	if (r.length() < 2)
+		r = "0"+r;
+	return r;
+}
+
+QString asXML(const QColor& c)
+{
+	return "#"+paddedHexa(c.red())+paddedHexa(c.green())+paddedHexa(c.blue())+paddedHexa(c.alpha());
+}
+
+QString boundaryAsXML(const QString& name, const QColor& c, double Scale, double Offset)
+{
+	return
+		name+"Color=\""+asXML(c)+"\" "+name+"Scale=\""+QString::number(Scale)+"\" "+name+"Offset=\""+QString::number(Offset)+"\"\n"; 
+}
+
+QString FeaturePainter::asXML() const
+{
+	QString r;
+	r += "<painter\n";
+	if (ZoomLimitSet)
+		r += " zoomUnder=\""+QString::number(ZoomUnder)+"\" zoomUpper=\""+QString::number(ZoomUpper)+"\"\n";
+	if (DrawBackground)
+		r += " " + boundaryAsXML("background",BackgroundColor, BackgroundScale, BackgroundOffset);
+	if (DrawForeground)
+		r += " " + boundaryAsXML("foreground",ForegroundColor, ForegroundScale, ForegroundOffset);
+	if (ForegroundDashSet && DrawForeground)
+		r += " foregroundDashDown=\""+QString::number(ForegroundDash)+"\" foregroundDashUp=\""+QString::number(ForegroundWhite)+"\"\n";
+	if (DrawTouchup)
+		r += " " + boundaryAsXML("touchup",TouchupColor, TouchupScale, TouchupOffset);
+	if (TouchupDashSet && DrawTouchup)
+		r += " touchupDashDown=\""+QString::number(TouchupDash)+"\" touchupDashUp=\""+QString::number(TouchupWhite)+"\"\n";
+	if (ForegroundFill)
+		r += " fillColor=\""+::asXML(ForegroundFillFillColor)+"\"\n";
+	if (!TrackPointIconName.isEmpty())
+		r += " icon=\""+TrackPointIconName+"\"\n";
+	if (DrawTrafficDirectionMarks)
+		r += " drawTrafficDirectionMarks=\"yes\"";
+	else
+		r += " drawTrafficDirectionMarks=\"no\"";
+	r += ">\n";
+	for (unsigned int i=0; i<OneOfTheseTags.size(); ++i)
+		r += "  <selector key=\""+OneOfTheseTags[i].first+"\" value=\""+OneOfTheseTags[i].second+"\"/>\n";
+	r += "</painter>\n";
+	return r;
+}
+
+QString FeaturePainter::userName() const
+{
+	if (OneOfTheseTags.size())
+		return QString("%1 for %2").arg(OneOfTheseTags[0].second).arg(OneOfTheseTags[0].first);
+	return "Unnamed";
+}
+
+const std::vector<std::pair<QString,QString> >& FeaturePainter::tagSelectors() const
+{
+	return OneOfTheseTags;
+}
+
+std::pair<double, double> FeaturePainter::zoomBoundaries() const
+{
+	if (ZoomLimitSet)
+		return std::make_pair(ZoomUnder,ZoomUpper);
+	return std::make_pair(0.0,0.0);
+}
+
+QColor FeaturePainter::fillColor() const
+{
+	if (!ForegroundFill)
+		return QColor();
+	return ForegroundFillFillColor;
+}
+
+void FeaturePainter::clearSelectors()
+{
+	OneOfTheseTags.clear();
 }
 
 bool FeaturePainter::isFilled() const
@@ -27,9 +112,11 @@ FeaturePainter& FeaturePainter::drawTrafficDirectionMarks()
 	return *this;
 }
 
-FeaturePainter& FeaturePainter::limitToZoom(FeaturePainter::ZoomType aType)
+FeaturePainter& FeaturePainter::zoomBoundary(double anUnder, double anUpper)
 {
-	ZoomLimit = aType;
+	ZoomLimitSet = true;
+	ZoomUnder = anUnder;
+	ZoomUpper = anUpper;
 	return *this;
 }
 
@@ -48,6 +135,18 @@ FeaturePainter& FeaturePainter::background(const QColor& Color, double Scale, do
 	BackgroundScale = Scale;
 	BackgroundOffset = Offset;
 	return *this;
+}
+
+LineParameters FeaturePainter::backgroundBoundary() const
+{
+	LineParameters P;
+	P.Draw = DrawBackground;
+	P.Color = BackgroundColor;
+	P.Proportional = BackgroundScale;
+	P.Fixed = BackgroundOffset;
+	P.Dashed = false;
+	P.DashOn = P.DashOff = 0;
+	return P;
 }
 
 FeaturePainter& FeaturePainter::touchupDash(double Dash, double White)
@@ -86,6 +185,51 @@ FeaturePainter& FeaturePainter::foreground(const QColor& Color, double Scale, do
 	return *this;
 }
 
+void FeaturePainter::clearForegroundDash()
+{
+	ForegroundDashSet = false;
+}
+
+LineParameters FeaturePainter::foregroundBoundary() const
+{
+	LineParameters P;
+	P.Draw = DrawForeground;
+	P.Color = ForegroundColor;
+	P.Proportional = ForegroundScale;
+	P.Fixed = ForegroundOffset;
+	P.Dashed = ForegroundDashSet;
+	P.DashOn = ForegroundDash;
+	P.DashOff = ForegroundWhite;
+	if (!P.Dashed)
+		P.DashOff = P.DashOn = 0;
+	return P;
+}
+
+void FeaturePainter::clearTouchupDash()
+{
+	TouchupDashSet = false;
+}
+
+LineParameters FeaturePainter::touchupBoundary() const
+{
+	LineParameters P;
+	P.Draw = DrawTouchup;
+	P.Color = TouchupColor;
+	P.Proportional = TouchupScale;
+	P.Fixed = TouchupOffset;
+	P.Dashed = TouchupDashSet;
+	P.DashOn = TouchupDash;
+	P.DashOff = TouchupWhite;
+	if (!P.Dashed)
+		P.DashOff = P.DashOn = 0;
+	return P;
+}
+
+QString FeaturePainter::iconName() const
+{
+	return TrackPointIconName;
+}
+
 FeaturePainter& FeaturePainter::trackPointIcon(const QString& Filename)
 {
 	TrackPointIconName = Filename;
@@ -105,10 +249,8 @@ FeaturePainter& FeaturePainter::selectOnTag(const QString& Tag, const QString& V
 	return *this;
 }
 
-bool FeaturePainter::isHit(const MapFeature* F, ZoomType Zoom) const
+bool FeaturePainter::matchesTag(const MapFeature* F) const
 {
-	if (ZoomLimit > Zoom)
-		return false;
 	// Special casing for multipolygon roads
 	if (const Road* R = dynamic_cast<const Road*>(F))
 	{
@@ -132,6 +274,13 @@ bool FeaturePainter::isHit(const MapFeature* F, ZoomType Zoom) const
 					return true;
 	}
 	return false;
+}
+
+bool FeaturePainter::matchesZoom(double PixelPerM) const
+{
+	if (ZoomLimitSet)
+		return (ZoomUnder <= PixelPerM) && (PixelPerM <= ZoomUpper);
+	return true;
 }
 
 void buildPathFromRoad(Road *R, Projection const &theProjection, QPainterPath &Path)

@@ -19,7 +19,7 @@ class Relation : public MapFeature
 		virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection) const;
 		virtual void cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const std::vector<MapFeature*>& Alternatives);
 		virtual bool notEverythingDownloaded() const;
-		virtual RenderPriority renderPriority(FeaturePainter::ZoomType Zoom) const;
+		virtual RenderPriority renderPriority(double aPixelPerM) const;
 
 		void add(const QString& Role, MapFeature* Pt);
 		void add(const QString& Role, MapFeature* Pt, unsigned int Idx);

@@ -23,6 +23,8 @@
 #include "Map/Road.h"
 #include "Map/RoadManipulations.h"
 #include "Map/TrackPoint.h"
+#include "PaintStyle/EditPaintStyle.h"
+#include "PaintStyle/PaintStyleEditor.h"
 #include "Sync/SyncOSM.h"
 #include "GeneratedFiles/ui_AboutDialog.h"
 #include "GeneratedFiles/ui_UploadMapDialog.h"
@@ -414,6 +416,19 @@ void MainWindow::on_createRelationAction_triggered()
 	theProperties->setSelection(R);
 }
 
+void MainWindow::on_editMapStyleAction_triggered()
+{
+	PaintStyleEditor* dlg = new PaintStyleEditor(this, EditPaintStyle::Painters);
+	if (dlg->exec() == QDialog::Accepted)
+	{
+		EditPaintStyle::Painters = dlg->thePainters;
+		for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
+			i.get()->invalidatePainter();
+		invalidateView();
+	}
+	delete dlg;
+}
+
 MapLayer* MainWindow::activeLayer()
 {
 	return theLayers->activeLayer();
@@ -422,4 +437,23 @@ MapLayer* MainWindow::activeLayer()
 MapView* MainWindow::view()
 {
 	return theView;
+}
+
+void MainWindow::on_mapStyleSaveAction_triggered()
+{
+	QString f = QFileDialog::getSaveFileName(this,tr("Save map style"),QString(),tr("Merkaartor map style (*.mas)"));
+	if (!f.isNull())
+		savePainters(f);
+}
+
+void MainWindow::on_mapStyleLoadAction_triggered()
+{
+	QString f = QFileDialog::getOpenFileName(this,tr("Load map style"),QString(),tr("Merkaartor map style (*.mas)"));
+	if (!f.isNull())
+	{
+		loadPainters(f);
+		for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
+			i.get()->invalidatePainter();
+		invalidateView();
+	}
 }

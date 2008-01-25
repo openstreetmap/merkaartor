@@ -6,6 +6,7 @@
 class EditPaintStylePrivate;
 class Projection;
 class QPainter;
+class QString;
 
 #include <vector>
 
@@ -17,10 +18,11 @@ class EditPaintStyle : public PaintStyle
 		EditPaintStyle(QPainter& P, const Projection& theProjection);
 		virtual ~EditPaintStyle();
 
-		FeaturePainter::ZoomType zoom() const;
-		
 	private:
 		EditPaintStylePrivate* p;
 };
+
+void savePainters(const QString& filename);
+void loadPainters(const QString& filename);
 
 #endif

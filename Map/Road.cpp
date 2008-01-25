@@ -69,9 +69,9 @@ QString Road::description() const
 	return QString("road %1").arg(id());
 }
 
-RenderPriority Road::renderPriority(FeaturePainter::ZoomType Zoom) const
+RenderPriority Road::renderPriority(double aPixelPerM) const
 {
-	FeaturePainter* thePainter = getEditPainter(Zoom);
+	FeaturePainter* thePainter = getEditPainter(aPixelPerM);
 	if (thePainter && thePainter->isFilled())
 		return RenderPriority(RenderPriority::IsArea,fabs(area()));
 	return RenderPriority(RenderPriority::IsLinear,0);

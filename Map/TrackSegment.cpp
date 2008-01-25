@@ -50,7 +50,7 @@ QString TrackSegment::description() const
 	return "tracksegment";
 }
 
-RenderPriority TrackSegment::renderPriority(FeaturePainter::ZoomType) const
+RenderPriority TrackSegment::renderPriority(double) const
 {
 	return RenderPriority(RenderPriority::IsLinear,0);
 }

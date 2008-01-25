@@ -21,30 +21,23 @@ class MapFeaturePrivate
 {
 	public:
 		MapFeaturePrivate()
-			: LastActor(MapFeature::User), theLayer(0), PaintersUpToDate(false),
-		      PainterOnLocalZoom(0), PainterOnRegionalZoom(0), 
-			  PainterOnGlobalZoom(0), PainterOnAnyZoom(0),
+			: LastActor(MapFeature::User), theLayer(0), 
+			  PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
 			  theFeature(0), LastPartNotification(0) { }
 		MapFeaturePrivate(const MapFeaturePrivate& other)
 			: Tags(other.Tags), LastActor(MapFeature::User), theLayer(0),
-			  PaintersUpToDate(other.PaintersUpToDate),
-			  PainterOnLocalZoom(other.PainterOnLocalZoom),
-			  PainterOnRegionalZoom(other.PainterOnRegionalZoom),
-			  PainterOnGlobalZoom(other.PainterOnGlobalZoom),
-			  PainterOnAnyZoom(other.PainterOnAnyZoom),
+			  PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
 			  theFeature(0), LastPartNotification(0) { }
 
-		void updatePainters();
+		void updatePainters(double PixelPerM);
 
 		mutable QString Id;
 		std::vector<std::pair<QString, QString> > Tags;
 		MapFeature::ActorType LastActor;
 		MapLayer* theLayer;
-		bool PaintersUpToDate;
-		FeaturePainter* PainterOnLocalZoom;
-		FeaturePainter* PainterOnRegionalZoom;
-		FeaturePainter* PainterOnGlobalZoom;
-		FeaturePainter* PainterOnAnyZoom;
+		double PixelPerMForPainter;
+		FeaturePainter* CurrentPainter;
+		bool HasPainter;
 		MapFeature* theFeature;
 		std::vector<MapFeature*> Parents;
 		unsigned int LastPartNotification;
@@ -108,14 +101,14 @@ const QString& MapFeature::id() const
 
 void MapFeature::setTag(unsigned int idx, const QString& k, const QString& v)
 {
-	p->PaintersUpToDate = false;
+	p->PixelPerMForPainter = -1;
 	p->Tags[idx] = std::make_pair(k,v);
 	notifyChanges();
 }
 
 void MapFeature::setTag(const QString& k, const QString& v)
 {
-	p->PaintersUpToDate = false;
+	p->PixelPerMForPainter = -1;
 	for (unsigned int i=0; i<p->Tags.size(); ++i)
 		if (p->Tags[i].first == k)
 		{
@@ -129,17 +122,22 @@ void MapFeature::setTag(const QString& k, const QString& v)
 
 void MapFeature::clearTags()
 {
-	p->PaintersUpToDate = false;
+	p->PixelPerMForPainter = -1;
 	p->Tags.clear();
 	notifyChanges();
 }
 
+void MapFeature::invalidatePainter()
+{
+	p->PixelPerMForPainter = -1;
+}
+
 void MapFeature::clearTag(const QString& k)
 {
-	p->PaintersUpToDate = false;
 	for (unsigned int i=0; i<p->Tags.size(); ++i)
 		if (p->Tags[i].first == k)
 		{
+			p->PixelPerMForPainter = -1;
 			p->Tags.erase(p->Tags.begin()+i);
 			notifyChanges();
 			return;
@@ -171,7 +169,7 @@ unsigned int MapFeature::findKey(const QString &k) const
 
 void MapFeature::removeTag(unsigned int idx)
 {
-	p->PaintersUpToDate = false;
+	p->PixelPerMForPainter = -1;
 	p->Tags.erase(p->Tags.begin()+idx);
 	notifyChanges();
 }
@@ -184,47 +182,36 @@ QString MapFeature::tagValue(const QString& k, const QString& Default) const
 	return Default;
 }
 
-void MapFeaturePrivate::updatePainters()
+void MapFeaturePrivate::updatePainters(double PixelPerM)
 {
-	PainterOnLocalZoom = PainterOnRegionalZoom = PainterOnGlobalZoom = PainterOnAnyZoom = 0;
+	CurrentPainter = 0;
+	HasPainter = false;
+	PixelPerMForPainter = PixelPerM;
 	for (unsigned int i=0; i<EditPaintStyle::Painters.size(); ++i)
 	{
 		FeaturePainter* Current = &EditPaintStyle::Painters[i];
-		if (!PainterOnLocalZoom && Current->isHit(theFeature,FeaturePainter::LocalZoom))
-			PainterOnLocalZoom = Current;
-		if (!PainterOnRegionalZoom && Current->isHit(theFeature,FeaturePainter::RegionalZoom))
-			PainterOnRegionalZoom = Current;
-		if (!PainterOnGlobalZoom && Current->isHit(theFeature,FeaturePainter::GlobalZoom))
-			PainterOnGlobalZoom = Current;
-		if (!PainterOnAnyZoom && Current->isHit(theFeature,FeaturePainter::NoZoomLimit))
-			PainterOnAnyZoom = Current;
+		if (Current->matchesTag(theFeature))
+		{
+			HasPainter = true;
+			if (Current->matchesZoom(PixelPerM))
+			{
+				CurrentPainter = Current;
+				return;
+			}
+		}
 	}
-	PaintersUpToDate = true;
 }
 
-FeaturePainter* MapFeature::getEditPainter(FeaturePainter::ZoomType Zoom) const
+FeaturePainter* MapFeature::getEditPainter(double PixelPerM) const
 {
-	if (!p->PaintersUpToDate)
-		p->updatePainters();
-	switch (Zoom)
-	{
-	case FeaturePainter::LocalZoom:
-		return p->PainterOnLocalZoom;
-	case FeaturePainter::RegionalZoom:
-		return p->PainterOnRegionalZoom;
-	case FeaturePainter::GlobalZoom:
-		return p->PainterOnGlobalZoom;
-	case FeaturePainter::NoZoomLimit:
-		return p->PainterOnAnyZoom;
-	}
-	return 0;
+	if (p->PixelPerMForPainter != PixelPerM)
+		p->updatePainters(PixelPerM);
+	return p->CurrentPainter;
 }
 
 bool MapFeature::hasEditPainter() const
 {
-	if (!p->PaintersUpToDate)
-		p->updatePainters();
-	return p->PainterOnGlobalZoom || p->PainterOnLocalZoom || p->PainterOnGlobalZoom || p->PainterOnAnyZoom;
+	return p->HasPainter;
 }
 
 void MapFeature::setParent(MapFeature* F)

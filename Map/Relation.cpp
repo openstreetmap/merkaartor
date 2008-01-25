@@ -77,7 +77,7 @@ QString Relation::description() const
 	return QString("relationship %1").arg(id());
 }
 
-RenderPriority Relation::renderPriority(FeaturePainter::ZoomType) const
+RenderPriority Relation::renderPriority(double aPixelPerM) const
 {
 	return RenderPriority(RenderPriority::IsLinear,0);
 }

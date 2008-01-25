@@ -27,31 +27,31 @@ public:
 	QString Name;
 	bool Visible;
 	bool RenderPriorityUpToDate;
-	FeaturePainter::ZoomType RenderPriorityForZoom;
+	double RenderPriorityForPixelPerM;
 
-	void sortRenderingPriority(FeaturePainter::ZoomType Zoom);
+	void sortRenderingPriority(double PixelPerM);
 };
 
 class SortAccordingToRenderingPriority
 {
 	public:
-		SortAccordingToRenderingPriority(FeaturePainter::ZoomType aZoom)
-			: Zoom(aZoom)
+		SortAccordingToRenderingPriority(double aPixelPerM)
+			: PixelPerM(aPixelPerM)
 		{
 		}
 		bool operator()(MapFeature* A, MapFeature* B)
 		{
-			return A->renderPriority(Zoom) < B->renderPriority(Zoom);
+			return A->renderPriority(PixelPerM) < B->renderPriority(PixelPerM);
 		}
 
-		FeaturePainter::ZoomType Zoom;
+		double PixelPerM;
 };
 
-void MapLayerPrivate::sortRenderingPriority(FeaturePainter::ZoomType Zoom)
+void MapLayerPrivate::sortRenderingPriority(double aPixelPerM)
 {
-	std::sort(Features.begin(),Features.end(),SortAccordingToRenderingPriority(Zoom));
+	std::sort(Features.begin(),Features.end(),SortAccordingToRenderingPriority(aPixelPerM));
 	RenderPriorityUpToDate = true;
-	RenderPriorityForZoom = Zoom;
+	RenderPriorityForPixelPerM = aPixelPerM;
 }
 
 MapLayer::MapLayer(const QString& aName)
@@ -71,10 +71,10 @@ MapLayer::~MapLayer()
 	delete p;
 }
 
-void MapLayer::sortRenderingPriority(FeaturePainter::ZoomType Zoom)
+void MapLayer::sortRenderingPriority(double aPixelPerM)
 {
-	if (!p->RenderPriorityUpToDate || (Zoom != p->RenderPriorityForZoom) )
-		p->sortRenderingPriority(Zoom);
+	if (!p->RenderPriorityUpToDate || (aPixelPerM != p->RenderPriorityForPixelPerM) )
+		p->sortRenderingPriority(aPixelPerM);
 }
 
 void MapLayer::invalidateRenderPriority()

@@ -85,7 +85,7 @@ void TrackPoint::partChanged(MapFeature*, unsigned int)
 {
 }
 
-RenderPriority TrackPoint::renderPriority(FeaturePainter::ZoomType) const
+RenderPriority TrackPoint::renderPriority(double) const
 {
 	return RenderPriority(RenderPriority::IsSingular,0);
 }

@@ -81,7 +81,7 @@ void MapView::updateStaticBuffer(QPaintEvent*)
 	{
 		EditPaintStyle EP(P,projection());
 		for (unsigned int i=0; i<theDocument->numLayers(); ++i)
-			theDocument->layer(i)->sortRenderingPriority(EP.zoom());
+			theDocument->layer(i)->sortRenderingPriority(projection().pixelPerM());
 		for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
 			i.get()->draw(P,projection());
 		for (unsigned int i=0; i<EP.size(); ++i)

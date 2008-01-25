@@ -57,7 +57,7 @@ class MapFeature
 		void setLastUpdated(ActorType A);
 		virtual void setLayer(MapLayer* aLayer);
 		virtual QString description() const = 0;
-		virtual RenderPriority renderPriority(FeaturePainter::ZoomType Zoom) const = 0;
+		virtual RenderPriority renderPriority(double aPixelPerM) const = 0;
 
 		void setTag(const QString& k, const QString& v);
 		void setTag(unsigned int idx, const QString& k, const QString& v);
@@ -70,8 +70,9 @@ class MapFeature
 		QString tagKey(unsigned int i) const;
 		void removeTag(unsigned int i);
 
-		FeaturePainter* getEditPainter(FeaturePainter::ZoomType Zoom) const;
+		FeaturePainter* getEditPainter(double PixelPerM) const;
 		bool hasEditPainter() const;
+		void invalidatePainter();
 
 		void setParent(MapFeature* F);
 		void unsetParent(MapFeature* F);
