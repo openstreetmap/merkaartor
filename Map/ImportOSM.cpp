@@ -58,10 +58,10 @@ static void importNode(const QDomElement& Root, MapDocument* theDocument, MapLay
 	else
 	{
 		Pt = new TrackPoint(Coord(angToRad(Lat),angToRad(Lon)));
-		Pt->setId(id);
+                theList->add(new AddFeatureCommand(theLayer,Pt, false));
+                Pt->setId(id);
 		loadTags(Root, Pt);
 		Pt->setLastUpdated(MapFeature::OSMServer);
-		theList->add(new AddFeatureCommand(theLayer,Pt, false));
 	}
 }
 
@@ -179,11 +179,11 @@ static void importWay(QProgressDialog* dlg, const QDomElement& Root, MapDocument
 		else
 		{
 			R = new Road;
-			for (unsigned int i=0; i<Pts.size(); ++i)
+                        theList->add(new AddFeatureCommand(theLayer,R, false));
+                        for (unsigned int i=0; i<Pts.size(); ++i)
 				R->add(Pts[i]);
 			R->setId(id);
 			loadTags(Root,R);
-			theList->add(new AddFeatureCommand(theLayer,R, false));
 			R->setLastUpdated(MapFeature::OSMServer);
 		}
 	}

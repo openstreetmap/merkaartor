@@ -2,6 +2,7 @@
 #include "MainWindow.h"
 #include "MapView.h"
 #include "TagModel.h"
+#include "Utils/EditCompleterDelegate.h"
 #include "Command/FeatureCommands.h"
 #include "Command/TrackPointCommands.h"
 #include "Map/Coord.h"
@@ -27,6 +28,7 @@ PropertiesDock::PropertiesDock(MainWindow* aParent)
 	switchToNoUi();
 	setWindowTitle(tr("Properties"));
 	theModel = new TagModel(aParent);
+    delegate = new EditCompleterDelegate(aParent);
 }
 
 PropertiesDock::~PropertiesDock(void)
@@ -273,6 +275,7 @@ void PropertiesDock::resetValues()
 			TrackPointUi.Latitude->setText(QString::number(radToAng(Pt->position().lat()),'g',8));
 			TrackPointUi.Longitude->setText(QString::number(radToAng(Pt->position().lon()),'g',8));
 			TrackPointUi.TagView->setModel(theModel);
+                        TrackPointUi.TagView->setItemDelegate(delegate);
 			resetTagComboBox(TrackPointUi.Amenity,Pt,"amenity");
 		}
 		else if (Road* R = dynamic_cast<Road*>(FullSelection[0]))
@@ -281,19 +284,23 @@ void PropertiesDock::resetValues()
 			RoadUi.Name->setText(R->tagValue("name",""));
 			RoadUi.TrafficDirection->setCurrentIndex(trafficDirection(R));
 			RoadUi.TagView->setModel(theModel);
-			resetTagComboBox(RoadUi.Highway,R,"highway");
+                        RoadUi.TagView->setItemDelegate(delegate);
+                        resetTagComboBox(RoadUi.Highway,R,"highway");
 			resetTagComboBox(RoadUi.LandUse,R,"landuse");
 		}
 		else if (Relation* R = dynamic_cast<Relation*>(FullSelection[0]))
 		{
 			RelationUi.MembersView->setModel(R->referenceMemberModel(Main));
 			RelationUi.TagView->setModel(theModel);
-			resetTagComboBox(RelationUi.LandUse,R,"landuse");
+                        RelationUi.TagView->setItemDelegate(delegate);
+                        resetTagComboBox(RelationUi.LandUse,R,"landuse");
 		}
 	}
-	else if (FullSelection.size() > 1)
+	else if (FullSelection.size() > 1) {
 		MultiUi.TagView->setModel(theModel);
-	theModel->setFeature(Current);
+                MultiUi.TagView->setItemDelegate(delegate);
+        }
+        theModel->setFeature(Current);
 	Selection = Current;
 }
 

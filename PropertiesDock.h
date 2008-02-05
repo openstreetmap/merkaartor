@@ -13,6 +13,7 @@
 class MainWindow;
 class MapFeature;
 class TagModel;
+class EditCompleterDelegate;
 
 class PropertiesDock : public QDockWidget
 {
@@ -65,6 +66,7 @@ class PropertiesDock : public QDockWidget
 		Ui::RelationProperties RelationUi;
 		TagModel* theModel;
 		unsigned int PendingSelectionChange;
+                EditCompleterDelegate* delegate;
 
 		enum { NoUiShowing, TrackPointUiShowing, RoadUiShowing, RelationUiShowing, MultiShowing } NowShowing ;
 };

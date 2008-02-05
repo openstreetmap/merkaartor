@@ -43,7 +43,8 @@ HEADERS += \
 ./Sync/SyncOSM.h \
 ./TagModel.h \
 ./Utils/LineF.h \
-./Utils/SlippyMapWidget.h
+./Utils/SlippyMapWidget.h \
+./Utils/EditCompleterDelegate.h
 
 #Source files
 SOURCES += \
@@ -89,7 +90,8 @@ SOURCES += \
 ./PropertiesDock.cpp \
 ./TagModel.cpp \
 ./LayerDock.cpp \
-./Utils/SlippyMapWidget.cpp
+./Utils/SlippyMapWidget.cpp \
+./Utils/EditCompleterDelegate.cpp
 
 #Forms
 FORMS += \

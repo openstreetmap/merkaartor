@@ -3,6 +3,8 @@
 #include "Map/MapFeature.h"
 
 #include <QtCore/QString>
+#include <QMultiMap>
+
 
 #include <algorithm>
 #include <map>
@@ -27,8 +29,9 @@ public:
 	QString Name;
 	bool Visible;
 	bool RenderPriorityUpToDate;
+	MapDocument* theDocument;
 	double RenderPriorityForPixelPerM;
-
+  
 	void sortRenderingPriority(double PixelPerM);
 };
 
@@ -47,7 +50,7 @@ class SortAccordingToRenderingPriority
 		double PixelPerM;
 };
 
-void MapLayerPrivate::sortRenderingPriority(double aPixelPerM)
+ void MapLayerPrivate::sortRenderingPriority(double aPixelPerM)
 {
 	std::sort(Features.begin(),Features.end(),SortAccordingToRenderingPriority(aPixelPerM));
 	RenderPriorityUpToDate = true;
@@ -146,6 +149,16 @@ unsigned int MapLayer::size() const
 	return p->Features.size();
 }
 
+void MapLayer::setDocument(MapDocument* aDocument)
+{
+    p->theDocument = aDocument;
+}
+
+MapDocument* MapLayer::getDocument()
+{
+    return p->theDocument;
+}
+
 MapFeature* MapLayer::get(unsigned int i)
 {
 	return p->Features[i];
@@ -178,9 +191,8 @@ public:
 	}
 	CommandHistory History;
 	std::vector<MapLayer*> Layers;
+	QMultiMap<QString, QString> tagList;
 };
-
-
 
 MapDocument::MapDocument()
 : p(new MapDocumentPrivate)
@@ -218,6 +230,24 @@ const CommandHistory& MapDocument::history() const
 void MapDocument::add(MapLayer* aLayer)
 {
 	p->Layers.push_back(aLayer);
+	aLayer->setDocument(this);
+}
+
+void MapDocument::addToTagList(QString k, QString v)
+{
+	if (!p->tagList.contains(k, v)) {
+	p->tagList.insert(k, v);
+	}
+}
+
+QStringList MapDocument::getTagList() 
+{
+	return p->tagList.uniqueKeys();
+}
+
+QStringList MapDocument::getTagValueList(QString k) 
+{
+	return p->tagList.values(k);
 }
 
 void MapDocument::remove(MapLayer* aLayer)

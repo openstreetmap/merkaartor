@@ -115,6 +115,7 @@ void MainWindow::on_editPropertiesAction_triggered()
 {
 	theProperties->setSelection(0);
 	invalidateView();
+		//TODO: Fix memleak
 	theView->launch(new EditInteraction(theView));
 }
 
@@ -217,18 +218,26 @@ void MainWindow::on_fileOpenAction_triggered()
 		MapDocument* NewDoc = new MapDocument;
 		MapLayer* NewLayer = new MapLayer(tr("Open %1").arg(s.right(s.length()-s.lastIndexOf('/')-1)));
 		bool OK = false;
-		if (s.right(4).toLower() == ".gpx")
+		if (s.right(4).toLower() == ".gpx") {
 			OK = importGPX(this, s, NewDoc, NewLayer);
-		else if (s.right(4).toLower() == ".osm")
+			if (OK) {
+				NewDoc->add(NewLayer);
+			}
+		}
+		else if (s.right(4).toLower() == ".osm") {
 			OK = importOSM(this, s, NewDoc, NewLayer);
-		else if (s.right(4).toLower() == ".ngt")
+		}
+		else if (s.right(4).toLower() == ".ngt") {
 			OK = importNGT(this, s, NewDoc, NewLayer);
+			if (OK) {
+				NewDoc->add(NewLayer);
+			}
+		}
 		if (OK)
 		{
 			theProperties->setSelection(0);
 			delete theDocument;
 			theDocument = NewDoc;
-			theDocument->add(NewLayer);
 			theView->setDocument(theDocument);
 			on_viewZoomAllAction_triggered();
 			on_editPropertiesAction_triggered();
@@ -438,7 +447,7 @@ MapView* MainWindow::view()
 {
 	return theView;
 }
-
+ 
 void MainWindow::on_mapStyleSaveAction_triggered()
 {
 	QString f = QFileDialog::getSaveFileName(this,tr("Save map style"),QString(),tr("Merkaartor map style (*.mas)"));
@@ -457,3 +466,4 @@ void MainWindow::on_mapStyleLoadAction_triggered()
 		invalidateView();
 	}
 }
+

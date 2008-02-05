@@ -9,6 +9,7 @@
 class QString;
 
 class CommandHistory;
+class MapDocument;
 class MapDocumentPrivate;
 class MapFeature;
 class MapLayerPrivate;
@@ -38,6 +39,9 @@ class MapLayer
 		void notifyIdUpdate(const QString& id, MapFeature* aFeature);
 		void sortRenderingPriority(double PixelPerM);
 		void invalidateRenderPriority();
+                
+                void setDocument(MapDocument* aDocument);
+                MapDocument* getDocument();
 
 	private:
 		MapLayerPrivate* p;
@@ -63,8 +67,14 @@ class MapDocument
 		CommandHistory& history();
 		const CommandHistory& history() const;
 		void clear();
+		
+        void addToTagList(QString k, QString v);
+        QStringList getTagList() ;
+        QStringList getTagValueList(QString k) ;
 	private:
 		MapDocumentPrivate* p;
+		QStringList tagKeys;
+		QStringList tagValues;
 };
 
 bool hasUnsavedChanges(const MapDocument& aDoc);

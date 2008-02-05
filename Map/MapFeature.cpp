@@ -117,6 +117,7 @@ void MapFeature::setTag(const QString& k, const QString& v)
 			return;
 		}
 	p->Tags.push_back(std::make_pair(k,v));
+        p->theLayer->getDocument()->addToTagList(k, v);
 	notifyChanges();
 }
 
