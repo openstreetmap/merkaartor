@@ -65,8 +65,6 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		MapView* view();
 		void invalidateView(bool UpdateDock = true);
 
-	private slots:
-		void initViewport();
 	private:
 		MapView* theView;
 		MapDocument* theDocument;

@@ -170,11 +170,11 @@ double Road::area() const
 	return p->Area;
 }
 
-void Road::draw(QPainter& thePainter, const Projection& theProjection)
+void Road::draw(QPainter& thePainter, const Projection* theProjection)
 {
 }
 
-void Road::drawFocus(QPainter& thePainter, const Projection& theProjection)
+void Road::drawFocus(QPainter& thePainter, const Projection* theProjection)
 {
 	// FIXME
 	QFont F(thePainter.font());
@@ -191,18 +191,18 @@ void Road::drawFocus(QPainter& thePainter, const Projection& theProjection)
 	}
 }
 
-double Road::pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection) const
+double Road::pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection* theProjection) const
 {
 	double Best = 1000000;
 	for (unsigned int i=0; i<p->Nodes.size(); ++i)
 	{
-		double x = distance(Target,theProjection.project(p->Nodes[i]->position()));
+		double x = distance(Target,theProjection->project(p->Nodes[i]->position()));
 		if (x<ClearEndDistance)
 			return Best;
 	}
 	for (unsigned int i=1; i<p->Nodes.size(); ++i)
 	{
-		LineF F(theProjection.project(p->Nodes[i-1]->position()),theProjection.project(p->Nodes[i]->position()));
+		LineF F(theProjection->project(p->Nodes[i-1]->position()),theProjection->project(p->Nodes[i]->position()));
 		double D = F.capDistance(Target);
 		if (D < ClearEndDistance)
 			Best = D;
@@ -252,26 +252,26 @@ MapFeature::TrafficDirectionType trafficDirection(const Road* R)
 #define DEFAULTWIDTH 6
 #define LANEWIDTH 4
 
-double widthOf(const Road* R) 
-{ 
-	QString s(R->tagValue("width",QString())); 
-	if (!s.isNull()) 
-		return s.toDouble(); 
-	QString h = R->tagValue("highway",QString()); 
-	if ( (h == "motorway") || (h=="motorway_link") ) 
-		return 4*LANEWIDTH; // 3 lanes plus emergency 
-	else if ( (h == "trunk") || (h=="trunk_link") ) 
-		return 3*LANEWIDTH; // 2 lanes plus emergency 
-	else if ( (h == "primary") || (h=="primary_link") ) 
-		return 2*LANEWIDTH; // 2 lanes 
-	else if (h == "secondary") 
-		return 2*LANEWIDTH; // 2 lanes 
-	else if (h == "tertiary") 
-		return 1.5*LANEWIDTH; // shared middle lane 
-	else if (h == "cycleway") 
-		return 1.5; 
-	return DEFAULTWIDTH; 
-} 
+double widthOf(const Road* R)
+{
+	QString s(R->tagValue("width",QString()));
+	if (!s.isNull())
+		return s.toDouble();
+	QString h = R->tagValue("highway",QString());
+	if ( (h == "motorway") || (h=="motorway_link") )
+		return 4*LANEWIDTH; // 3 lanes plus emergency
+	else if ( (h == "trunk") || (h=="trunk_link") )
+		return 3*LANEWIDTH; // 2 lanes plus emergency
+	else if ( (h == "primary") || (h=="primary_link") )
+		return 2*LANEWIDTH; // 2 lanes
+	else if (h == "secondary")
+		return 2*LANEWIDTH; // 2 lanes
+	else if (h == "tertiary")
+		return 1.5*LANEWIDTH; // shared middle lane
+	else if (h == "cycleway")
+		return 1.5;
+	return DEFAULTWIDTH;
+}
 
 unsigned int findSnapPointIndex(const Road* R, Coord& P)
 {

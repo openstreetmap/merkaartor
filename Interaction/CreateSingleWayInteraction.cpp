@@ -14,7 +14,7 @@
 #include <QtGui/QPainter>
 
 CreateSingleWayInteraction::CreateSingleWayInteraction(MainWindow* aMain, MapView* aView)
-	: GenericFeatureSnapInteraction<MapFeature>(aView), Main(aMain), theRoad(0), FirstPoint(0,0), 
+	: GenericFeatureSnapInteraction<MapFeature>(aView), Main(aMain), theRoad(0), FirstPoint(0,0),
 	  HaveFirst(false), FirstNode(0)
 {
 }
@@ -28,8 +28,8 @@ void CreateSingleWayInteraction::paintEvent(QPaintEvent* anEvent, QPainter& theP
 	if (HaveFirst)
 	{
 	  QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
-		QPen TP(SomeBrush,projection().pixelPerM()*4);
-		QPointF PreviousPoint = view()->projection().project(FirstPoint);
+		QPen TP(SomeBrush,projection()->pixelPerM()*4);
+		QPointF PreviousPoint = view()->projection()->project(FirstPoint);
 		::draw(thePainter,TP,MapFeature::UnknownDirection, PreviousPoint,LastCursor ,4 ,view()->projection());
 	}
 	GenericFeatureSnapInteraction<MapFeature>::paintEvent(anEvent,thePainter);
@@ -38,12 +38,12 @@ void CreateSingleWayInteraction::paintEvent(QPaintEvent* anEvent, QPainter& theP
 void CreateSingleWayInteraction::snapMouseMoveEvent(QMouseEvent* ev, MapFeature* aFeature)
 {
 	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(aFeature))
-		LastCursor = view()->projection().project(Pt->position());	
+		LastCursor = view()->projection()->project(Pt->position());
 	else if (Road* R = dynamic_cast<Road*>(aFeature))
 	{
-		Coord P(projection().inverse(ev->pos()));
+		Coord P(projection()->inverse(ev->pos()));
 		findSnapPointIndex(R, P);
-		LastCursor = projection().project(P);
+		LastCursor = projection()->project(P);
 	}
 	else
 		LastCursor = ev->pos();
@@ -62,7 +62,7 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFe
 				FirstNode = Pt;
 			else if (Road* aRoad = dynamic_cast<Road*>(aFeature))
 			{
-				Coord P(projection().inverse(anEvent->pos()));
+				Coord P(projection()->inverse(anEvent->pos()));
 				CommandList* theList = new CommandList;
 				unsigned int SnapIdx = findSnapPointIndex(aRoad, P);
 				TrackPoint* N = new TrackPoint(P);
@@ -73,7 +73,7 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFe
 				FirstNode = N;
 			}
 		}
-		else 
+		else
 		{
 			CommandList* L = new CommandList;
 			if (!theRoad)
@@ -95,7 +95,7 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFe
 				To = Pt;
 			else if (Road* aRoad = dynamic_cast<Road*>(aFeature))
 			{
-				Coord P(projection().inverse(anEvent->pos()));
+				Coord P(projection()->inverse(anEvent->pos()));
 				CommandList* theList = new CommandList;
 				unsigned int SnapIdx = findSnapPointIndex(aRoad, P);
 				TrackPoint* N = new TrackPoint(P);
@@ -107,7 +107,7 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFe
 			}
 			if (!To)
 			{
-				To = new TrackPoint(view()->projection().inverse(anEvent->pos()));
+				To = new TrackPoint(view()->projection()->inverse(anEvent->pos()));
 				L->add(new AddFeatureCommand(Main->activeLayer(),To,true));
 			}
 			L->add(new RoadAddTrackPointCommand(theRoad,To));
@@ -115,7 +115,7 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFe
 			view()->invalidate();
 			Main->properties()->setSelection(theRoad);
 		}
-		FirstPoint = view()->projection().inverse(anEvent->pos());
+		FirstPoint = view()->projection()->inverse(anEvent->pos());
 	}
 	else
 		Interaction::mousePressEvent(anEvent);

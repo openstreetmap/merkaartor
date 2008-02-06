@@ -39,7 +39,7 @@ MapDocument* Interaction::document()
 	return theView->document();
 }
 
-const Projection& Interaction::projection() const
+const Projection* Interaction::projection() const
 {
 	return theView->projection();
 }
@@ -68,7 +68,7 @@ void Interaction::mouseMoveEvent(QMouseEvent* anEvent)
 	{
 		QPoint Delta = LastPan;
 		Delta -= anEvent->pos();
-		view()->projection().panScreen(-Delta,view()->rect());
+		view()->projection()->panScreen(-Delta,view()->rect());
 		view()->invalidate();
 		LastPan = anEvent->pos();
 	}

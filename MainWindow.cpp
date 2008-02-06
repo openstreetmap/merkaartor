@@ -44,14 +44,14 @@
 
 
 MainWindow::MainWindow(void)
-: theDocument(0)
+		: theDocument(0)
 {
 	setupUi(this);
 	theView = new MapView(this);
 	setCentralWidget(theView);
 	theDocument = new MapDocument;
 	theView->setDocument(theDocument);
-	theDocument->history().setActions(editUndoAction,editRedoAction);
+	theDocument->history().setActions(editUndoAction, editRedoAction);
 
 	theLayers = new LayerDock(this);
 	theLayers->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
@@ -61,23 +61,15 @@ MainWindow::MainWindow(void)
 	theProperties->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 	addDockWidget(Qt::RightDockWidgetArea, theProperties);
 	on_editPropertiesAction_triggered();
-	QTimer::singleShot(0,this,SLOT(initViewport()));
 	QSettings Sets;
 	if (Sets.contains("general/workingdir"))
 		QDir::setCurrent(Sets.value("general/workingdir").toString());
 }
 
-void MainWindow::initViewport()
-{
-	theView->projection().setViewport(CoordBox(
-		Coord(0.90608700309350998,0.077357771651368701),
-		Coord(0.90611773551427466,0.077409749255956645)),theView->rect());
-}
-
 MainWindow::~MainWindow(void)
 {
 	QSettings Sets;
-	Sets.setValue("general/workingdir",QDir::currentPath());
+	Sets.setValue("general/workingdir", QDir::currentPath());
 	delete theDocument;
 }
 
@@ -115,7 +107,7 @@ void MainWindow::on_editPropertiesAction_triggered()
 {
 	theProperties->setSelection(0);
 	invalidateView();
-		//TODO: Fix memleak
+	//TODO: Fix memleak
 	theView->launch(new EditInteraction(theView));
 }
 
@@ -156,52 +148,45 @@ static void changeCurrentDirToFile(const QString& s)
 void MainWindow::on_fileImportAction_triggered()
 {
 	QString s = QFileDialog::getOpenFileName(
-		this,
-		tr("Open track file"),
-		"", tr(FILTER_LOAD_SUPPORTED));
-	if (!s.isNull())
-	{
+					this,
+					tr("Open track file"),
+					"", tr(FILTER_LOAD_SUPPORTED));
+	if (!s.isNull()) {
 		changeCurrentDirToFile(s);
 		bool OK = false;
-		MapLayer* NewLayer = new MapLayer(tr("Import %1").arg(s.right(s.length()-s.lastIndexOf('/')-1)));
-		if (s.right(4).toLower() == ".gpx")
-		{
+		MapLayer* NewLayer = new MapLayer(tr("Import %1").arg(s.right(s.length() - s.lastIndexOf('/') - 1)), MapLayer::DrawingLayer);
+		if (s.right(4).toLower() == ".gpx") {
 			OK = importGPX(this, s, theDocument, NewLayer);
 			if (OK)
 				theDocument->add(NewLayer);
-		}
-		else if (s.right(4).toLower() == ".osm")
-		{
-			view()->setUpdatesEnabled(false);
-			OK = importOSM(this, s, theDocument, NewLayer);
-			view()->setUpdatesEnabled(true);
-		}
-		else if (s.right(4).toLower() == ".ngt")
-		{
-			view()->setUpdatesEnabled(false);
-			OK = importNGT(this, s, theDocument, NewLayer);
-			view()->setUpdatesEnabled(true);
-		}
-		if (OK)
-		{
+		} else
+			if (s.right(4).toLower() == ".osm") {
+				view()->setUpdatesEnabled(false);
+				OK = importOSM(this, s, theDocument, NewLayer);
+				view()->setUpdatesEnabled(true);
+			} else
+				if (s.right(4).toLower() == ".ngt") {
+					view()->setUpdatesEnabled(false);
+					OK = importNGT(this, s, theDocument, NewLayer);
+					view()->setUpdatesEnabled(true);
+				}
+		if (OK) {
 			on_viewZoomAllAction_triggered();
 			on_editPropertiesAction_triggered();
-			theDocument->history().setActions(editUndoAction,editRedoAction);
-		}
-		else
-		{
+			theDocument->history().setActions(editUndoAction, editRedoAction);
+		} else {
 			delete NewLayer;
-			QMessageBox::warning(this,tr("Not a valid file"),tr("The file could not be opened"));
+			QMessageBox::warning(this, tr("Not a valid file"), tr("The file could not be opened"));
 		}
 	}
 }
 
 static bool mayDiscardUnsavedChanges(QWidget* aWidget)
 {
-	return QMessageBox::question(aWidget,MainWindow::tr("Unsaved changes"),
-		MainWindow::tr("The current map contains unsaved changes that will be lost when starting a new one.\n"
-			"Do you want to cancel starting a new map or continue and discard the old changes?"),
-			QMessageBox::Discard|QMessageBox::Cancel,QMessageBox::Cancel) == QMessageBox::Discard;
+	return QMessageBox::question(aWidget, MainWindow::tr("Unsaved changes"),
+								 MainWindow::tr("The current map contains unsaved changes that will be lost when starting a new one.\n"
+												"Do you want to cancel starting a new map or continue and discard the old changes?"),
+								 QMessageBox::Discard | QMessageBox::Cancel, QMessageBox::Cancel) == QMessageBox::Discard;
 }
 
 void MainWindow::on_fileOpenAction_triggered()
@@ -209,45 +194,41 @@ void MainWindow::on_fileOpenAction_triggered()
 	if (hasUnsavedChanges(*theDocument) && !mayDiscardUnsavedChanges(this))
 		return;
 	QString s = QFileDialog::getOpenFileName(
-		this,
-		tr("Open track file"),
-		"", tr(FILTER_LOAD_SUPPORTED));
-	if (!s.isNull())
-	{
+					this,
+					tr("Open track file"),
+					"", tr(FILTER_LOAD_SUPPORTED));
+	if (!s.isNull()) {
 		changeCurrentDirToFile(s);
 		MapDocument* NewDoc = new MapDocument;
-		MapLayer* NewLayer = new MapLayer(tr("Open %1").arg(s.right(s.length()-s.lastIndexOf('/')-1)));
+		MapLayer* NewLayer = new MapLayer(tr("Open %1").arg(s.right(s.length() - s.lastIndexOf('/') - 1)), MapLayer::DrawingLayer);
 		bool OK = false;
 		if (s.right(4).toLower() == ".gpx") {
 			OK = importGPX(this, s, NewDoc, NewLayer);
 			if (OK) {
 				NewDoc->add(NewLayer);
 			}
-		}
-		else if (s.right(4).toLower() == ".osm") {
-			OK = importOSM(this, s, NewDoc, NewLayer);
-		}
-		else if (s.right(4).toLower() == ".ngt") {
-			OK = importNGT(this, s, NewDoc, NewLayer);
-			if (OK) {
-				NewDoc->add(NewLayer);
-			}
-		}
-		if (OK)
-		{
+		} else
+			if (s.right(4).toLower() == ".osm") {
+				OK = importOSM(this, s, NewDoc, NewLayer);
+			} else
+				if (s.right(4).toLower() == ".ngt") {
+					OK = importNGT(this, s, NewDoc, NewLayer);
+					if (OK) {
+						NewDoc->add(NewLayer);
+					}
+				}
+		if (OK) {
 			theProperties->setSelection(0);
 			delete theDocument;
 			theDocument = NewDoc;
 			theView->setDocument(theDocument);
 			on_viewZoomAllAction_triggered();
 			on_editPropertiesAction_triggered();
-			theDocument->history().setActions(editUndoAction,editRedoAction);
-		}
-		else
-		{
+			theDocument->history().setActions(editUndoAction, editRedoAction);
+		} else {
 			delete NewDoc;
 			delete NewLayer;
-			QMessageBox::warning(this,tr("Not a valid file"),tr("The file could not be opened"));
+			QMessageBox::warning(this, tr("Not a valid file"), tr("The file could not be opened"));
 		}
 	}
 }
@@ -266,14 +247,13 @@ void MainWindow::on_fileUploadAction_triggered()
 	ui.UseProxy->setChecked(Sets.value("useproxy").toBool());
 	ui.ProxyHost->setText(Sets.value("proxyhost").toString());
 	ui.ProxyPort->setText(Sets.value("proxyport").toString());
-	if (dlg->exec() == QDialog::Accepted)
-	{
-		Sets.setValue("user",ui.Username->text());
-		Sets.setValue("password",ui.Password->text());
-		Sets.setValue("useproxy",ui.UseProxy->isChecked());
-		Sets.setValue("proxyhost",ui.ProxyHost->text());
-		Sets.setValue("proxyport",ui.ProxyPort->text());
-		syncOSM(this,ui.Website->text(),ui.Username->text(),ui.Password->text(),ui.UseProxy->isChecked(), ui.ProxyHost->text(), ui.ProxyPort->text().toInt());
+	if (dlg->exec() == QDialog::Accepted) {
+		Sets.setValue("user", ui.Username->text());
+		Sets.setValue("password", ui.Password->text());
+		Sets.setValue("useproxy", ui.UseProxy->isChecked());
+		Sets.setValue("proxyhost", ui.ProxyHost->text());
+		Sets.setValue("proxyport", ui.ProxyPort->text());
+		syncOSM(this, ui.Website->text(), ui.Username->text(), ui.Password->text(), ui.UseProxy->isChecked(), ui.ProxyHost->text(), ui.ProxyPort->text().toInt());
 	}
 	delete dlg;
 
@@ -281,12 +261,10 @@ void MainWindow::on_fileUploadAction_triggered()
 
 void MainWindow::on_fileDownloadAction_triggered()
 {
-	if ( downloadOSM(this,theView->projection().viewport(),theDocument))
-	{
+	if (downloadOSM(this, theView->projection()->viewport(), theDocument)) {
 		on_editPropertiesAction_triggered();
-	}
-	else
-		QMessageBox::warning(this,tr("Error downloading"),tr("The map could not be downloaded"));
+	} else
+		QMessageBox::warning(this, tr("Error downloading"), tr("The map could not be downloaded"));
 }
 
 void MainWindow::on_helpAboutAction_triggered()
@@ -301,22 +279,21 @@ void MainWindow::on_helpAboutAction_triggered()
 void MainWindow::on_viewZoomAllAction_triggered()
 {
 	std::pair<bool, CoordBox> BBox(boundingBox(theDocument));
-	if (BBox.first)
-	{
-		theView->projection().setViewport(BBox.second,theView->rect());
+	if (BBox.first) {
+		theView->projection()->setViewport(BBox.second, theView->rect());
 		invalidateView();
 	}
 }
 
 void MainWindow::on_viewZoomInAction_triggered()
 {
-	theView->projection().zoom(1.33333, theView->rect().center(), theView->rect());
+	theView->projection()->zoom(1.33333, theView->rect().center(), theView->rect());
 	invalidateView();
 }
 
 void MainWindow::on_viewZoomOutAction_triggered()
 {
-	theView->projection().zoom(0.75, theView->rect().center(), theView->rect());
+	theView->projection()->zoom(0.75, theView->rect().center(), theView->rect());
 	invalidateView();
 }
 
@@ -330,20 +307,19 @@ void MainWindow::on_viewSetCoordinatesAction_triggered()
 	QDialog* Dlg = new QDialog(this);
 	Ui::SetPositionDialog Data;
 	Data.setupUi(Dlg);
-	CoordBox B(theView->projection().viewport());
+	CoordBox B(theView->projection()->viewport());
 	Data.Longitude->setText(QString::number(radToAng(B.center().lon())));
 	Data.Latitude->setText(QString::number(radToAng(B.center().lat())));
 	Data.SpanLongitude->setText(QString::number(radToAng(B.lonDiff())));
 	Data.SpanLatitude->setText(QString::number(radToAng(B.latDiff())));
-	if (Dlg->exec() == QDialog::Accepted)
-	{
-		theView->projection().setViewport(CoordBox(
-			Coord(
-				angToRad(Data.Latitude->text().toDouble()-Data.SpanLatitude->text().toDouble()/2),
-				angToRad(Data.Longitude->text().toDouble()-Data.SpanLongitude->text().toDouble()/2)),
-			Coord(
-				angToRad(Data.Latitude->text().toDouble()+Data.SpanLatitude->text().toDouble()/2),
-				angToRad(Data.Longitude->text().toDouble()+Data.SpanLongitude->text().toDouble()/2))), theView->rect());
+	if (Dlg->exec() == QDialog::Accepted) {
+		theView->projection()->setViewport(CoordBox(
+											   Coord(
+												   angToRad(Data.Latitude->text().toDouble() - Data.SpanLatitude->text().toDouble() / 2),
+												   angToRad(Data.Longitude->text().toDouble() - Data.SpanLongitude->text().toDouble() / 2)),
+											   Coord(
+												   angToRad(Data.Latitude->text().toDouble() + Data.SpanLatitude->text().toDouble() / 2),
+												   angToRad(Data.Longitude->text().toDouble() + Data.SpanLongitude->text().toDouble() / 2))), theView->rect());
 		invalidateView();
 	}
 	delete Dlg;
@@ -353,8 +329,7 @@ void MainWindow::on_fileNewAction_triggered()
 {
 	theView->launch(0);
 	theProperties->setSelection(0);
-	if (!hasUnsavedChanges(*theDocument) || mayDiscardUnsavedChanges(this))
-	{
+	if (!hasUnsavedChanges(*theDocument) || mayDiscardUnsavedChanges(this)) {
 		theDocument->clear();
 		invalidateView();
 	}
@@ -388,7 +363,7 @@ void MainWindow::on_createNodeAction_triggered()
 void MainWindow::on_roadJoinAction_triggered()
 {
 	CommandList* theList = new CommandList;
-	joinRoads(theDocument,theList,theProperties);
+	joinRoads(theDocument, theList, theProperties);
 	if (theList->empty())
 		delete theList;
 	else
@@ -398,7 +373,7 @@ void MainWindow::on_roadJoinAction_triggered()
 void MainWindow::on_roadSplitAction_triggered()
 {
 	CommandList* theList = new CommandList;
-	splitRoads(activeLayer(),theList,theProperties);
+	splitRoads(activeLayer(), theList, theProperties);
 	if (theList->empty())
 		delete theList;
 	else
@@ -408,7 +383,7 @@ void MainWindow::on_roadSplitAction_triggered()
 void MainWindow::on_roadBreakAction_triggered()
 {
 	CommandList* theList = new CommandList;
-	breakRoads(activeLayer(),theList,theProperties);
+	breakRoads(activeLayer(), theList, theProperties);
 	if (theList->empty())
 		delete theList;
 	else
@@ -418,18 +393,17 @@ void MainWindow::on_roadBreakAction_triggered()
 void MainWindow::on_createRelationAction_triggered()
 {
 	Relation* R = new Relation;
-	for (unsigned int i=0; i<theProperties->size(); ++i)
-		R->add("",theProperties->selection(i));
+	for (unsigned int i = 0; i < theProperties->size(); ++i)
+		R->add("", theProperties->selection(i));
 	theDocument->history().add(
-		new AddFeatureCommand(theLayers->activeLayer(),R,true));
+		new AddFeatureCommand(theLayers->activeLayer(), R, true));
 	theProperties->setSelection(R);
 }
 
 void MainWindow::on_editMapStyleAction_triggered()
 {
 	PaintStyleEditor* dlg = new PaintStyleEditor(this, EditPaintStyle::Painters);
-	if (dlg->exec() == QDialog::Accepted)
-	{
+	if (dlg->exec() == QDialog::Accepted) {
 		EditPaintStyle::Painters = dlg->thePainters;
 		for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
 			i.get()->invalidatePainter();
@@ -447,19 +421,18 @@ MapView* MainWindow::view()
 {
 	return theView;
 }
- 
+
 void MainWindow::on_mapStyleSaveAction_triggered()
 {
-	QString f = QFileDialog::getSaveFileName(this,tr("Save map style"),QString(),tr("Merkaartor map style (*.mas)"));
+	QString f = QFileDialog::getSaveFileName(this, tr("Save map style"), QString(), tr("Merkaartor map style (*.mas)"));
 	if (!f.isNull())
 		savePainters(f);
 }
 
 void MainWindow::on_mapStyleLoadAction_triggered()
 {
-	QString f = QFileDialog::getOpenFileName(this,tr("Load map style"),QString(),tr("Merkaartor map style (*.mas)"));
-	if (!f.isNull())
-	{
+	QString f = QFileDialog::getOpenFileName(this, tr("Load map style"), QString(), tr("Merkaartor map style (*.mas)"));
+	if (!f.isNull()) {
 		loadPainters(f);
 		for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
 			i.get()->invalidatePainter();

@@ -131,7 +131,7 @@ static Relation* getRelationOrCreatePlaceHolder(MapDocument *theDocument, MapLay
 	return Part;
 }
 
-static void importWay(QProgressDialog* dlg, const QDomElement& Root, MapDocument* theDocument, MapLayer* theLayer, 
+static void importWay(QProgressDialog* dlg, const QDomElement& Root, MapDocument* theDocument, MapLayer* theLayer,
 					  MapLayer* conflictLayer, CommandList* theList, Downloader* theDownloader)
 {
 	std::vector<TrackPoint*> Pts;
@@ -190,7 +190,7 @@ static void importWay(QProgressDialog* dlg, const QDomElement& Root, MapDocument
 }
 
 
-static void importRelation(QProgressDialog* dlg, const QDomElement& Root, MapDocument* theDocument, MapLayer* theLayer, 
+static void importRelation(QProgressDialog* dlg, const QDomElement& Root, MapDocument* theDocument, MapLayer* theLayer,
 					  MapLayer* conflictLayer, CommandList* theList, Downloader* theDownloader)
 {
 	std::vector<std::pair<QString,MapFeature*> > Fts;
@@ -249,8 +249,8 @@ static void importRelation(QProgressDialog* dlg, const QDomElement& Root, MapDoc
 			for (unsigned int i=0; i<Fts.size(); ++i)
 				R->add(Fts[i].first,Fts[i].second);
 			R->setId(id);
-			loadTags(Root,R);
 			theList->add(new AddFeatureCommand(theLayer,R, false));
+			loadTags(Root,R);
 			R->setLastUpdated(MapFeature::OSMServer);
 		}
 	}
@@ -403,7 +403,7 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 	CommandList* theList = new CommandList;
 	theList->setIsUpdateFromOSM();
 	theDocument->add(theLayer);
-	MapLayer* conflictLayer = new MapLayer("Conflicts from "+theLayer->name());
+	MapLayer* conflictLayer = new MapLayer("Conflicts from "+theLayer->name(), MapLayer::DrawingLayer);
 	importOSM(dlg, root, theDocument, theLayer, conflictLayer, theList, theDownloader);
 	bool WasCanceled = dlg->wasCanceled();
 	if (!WasCanceled)

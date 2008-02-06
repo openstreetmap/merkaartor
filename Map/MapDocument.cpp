@@ -2,9 +2,13 @@
 #include "Command/Command.h"
 #include "Map/MapFeature.h"
 
+#include "QMapControl/mapadapter.h"
+#include "QMapControl/yahoomapadapter.h"
+#include "QMapControl/layer.h"
+#include "QMapControl/layermanager.h"
+
 #include <QtCore/QString>
 #include <QMultiMap>
-
 
 #include <algorithm>
 #include <map>
@@ -28,40 +32,59 @@ public:
 	std::map<QString, MapFeature*> IdMap;
 	QString Name;
 	bool Visible;
+
+	MapLayer::MapLayerType LayerType;
+	MapAdapter* mapadapter_yahoo;
+	Layer* layer_yahoo;
+
 	bool RenderPriorityUpToDate;
-	MapDocument* theDocument;
-	double RenderPriorityForPixelPerM;
-  
-	void sortRenderingPriority(double PixelPerM);
+        MapDocument* theDocument;
+ 	double RenderPriorityForPixelPerM;
+
+ 	void sortRenderingPriority(double PixelPerM);
 };
 
 class SortAccordingToRenderingPriority
 {
 	public:
-		SortAccordingToRenderingPriority(double aPixelPerM)
-			: PixelPerM(aPixelPerM)
+ 		SortAccordingToRenderingPriority(double aPixelPerM)
+ 			: PixelPerM(aPixelPerM)
 		{
 		}
 		bool operator()(MapFeature* A, MapFeature* B)
 		{
-			return A->renderPriority(PixelPerM) < B->renderPriority(PixelPerM);
+ 			return A->renderPriority(PixelPerM) < B->renderPriority(PixelPerM);
 		}
 
-		double PixelPerM;
+ 		double PixelPerM;
 };
 
  void MapLayerPrivate::sortRenderingPriority(double aPixelPerM)
 {
-	std::sort(Features.begin(),Features.end(),SortAccordingToRenderingPriority(aPixelPerM));
-	RenderPriorityUpToDate = true;
-	RenderPriorityForPixelPerM = aPixelPerM;
+ 	std::sort(Features.begin(),Features.end(),SortAccordingToRenderingPriority(aPixelPerM));
+  	RenderPriorityUpToDate = true;
+ 	RenderPriorityForPixelPerM = aPixelPerM;
 }
 
-MapLayer::MapLayer(const QString& aName)
+MapLayer::MapLayer(const QString& aName, enum MapLayerType layertype)
 : p(new MapLayerPrivate)
 {
 	p->Name = aName;
-	p->Visible = true;
+	p->LayerType = layertype;
+	layermanager = NULL;
+
+	switch (p->LayerType) {
+	    case MapLayer::ImageLayer:
+		p->mapadapter_yahoo = new YahooMapAdapter("us.maps3.yimg.com", "/aerial.maps.yimg.com/png?v=1.7&t=a&s=256&x=%2&y=%3&z=%1");
+		p->layer_yahoo = new Layer("Custom Layer", p->mapadapter_yahoo, Layer::MapLayer);
+		p->layer_yahoo->setVisible(false);
+
+		p->Visible = false;
+		break;
+	default:
+        	p->Visible = true;
+
+	}
 }
 
 MapLayer::MapLayer(const MapLayer&)
@@ -71,6 +94,12 @@ MapLayer::MapLayer(const MapLayer&)
 
 MapLayer::~MapLayer()
 {
+	switch (p->LayerType) {
+		case MapLayer::ImageLayer:
+//			delete p->mapadapter_yahoo;
+			delete p->layer_yahoo;
+			break;
+	}
 	delete p;
 }
 
@@ -98,6 +127,23 @@ const QString& MapLayer::name() const
 void MapLayer::setVisible(bool b)
 {
 	p->Visible = b;
+	switch (p->LayerType) {
+	    case MapLayer::ImageLayer:
+            p->layer_yahoo->setVisible(b);
+            break;
+        default:
+            break;
+	}
+}
+
+MapLayer::MapLayerType MapLayer::type()
+{
+    return p->LayerType;
+}
+
+Layer* MapLayer::imageLayer()
+{
+    return p->layer_yahoo;
 }
 
 bool MapLayer::isVisible() const
@@ -191,13 +237,15 @@ public:
 	}
 	CommandHistory History;
 	std::vector<MapLayer*> Layers;
-	QMultiMap<QString, QString> tagList;
+        QMultiMap<QString, QString> tagList;
 };
 
 MapDocument::MapDocument()
 : p(new MapDocumentPrivate)
 {
-	add(new MapLayer("Generic layer"));
+	bgLayer = new MapLayer("Background imagery", MapLayer::ImageLayer);
+	add(bgLayer);
+	add(new MapLayer("Generic layer", MapLayer::DrawingLayer));
 }
 
 MapDocument::MapDocument(const MapDocument&)
@@ -205,7 +253,7 @@ MapDocument::MapDocument(const MapDocument&)
 {
 }
 
-MapDocument::~MapDocument(void)
+MapDocument::~MapDocument()
 {
 	delete p;
 }
@@ -214,7 +262,9 @@ void MapDocument::clear()
 {
 	delete p;
 	p = new MapDocumentPrivate;
-	add(new MapLayer("Generic layer"));
+	bgLayer = new MapLayer("Background imagery", MapLayer::ImageLayer);
+	add(bgLayer);
+	add(new MapLayer("Generic layer", MapLayer::DrawingLayer));
 }
 
 CommandHistory& MapDocument::history()
@@ -230,22 +280,22 @@ const CommandHistory& MapDocument::history() const
 void MapDocument::add(MapLayer* aLayer)
 {
 	p->Layers.push_back(aLayer);
-	aLayer->setDocument(this);
+    aLayer->setDocument(this);
 }
 
 void MapDocument::addToTagList(QString k, QString v)
 {
 	if (!p->tagList.contains(k, v)) {
-	p->tagList.insert(k, v);
+    	p->tagList.insert(k, v);
 	}
 }
 
-QStringList MapDocument::getTagList() 
+QStringList MapDocument::getTagList()
 {
 	return p->tagList.uniqueKeys();
 }
 
-QStringList MapDocument::getTagValueList(QString k) 
+QStringList MapDocument::getTagValueList(QString k)
 {
 	return p->tagList.values(k);
 }

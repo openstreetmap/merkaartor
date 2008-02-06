@@ -10,7 +10,7 @@ class QString;
 class QWidget;
 
 bool importOSM(QWidget* aParent, const QString& aFilename, MapDocument* theDocument, MapLayer* theLayer);
-bool importOSM(QWidget* aParent, QByteArray& aFile, MapDocument* theDocument, MapLayer* theLayer, Downloader* theDownloader);
+bool importOSM(QWidget* aParent, QByteArray& Content, MapDocument* theDocument, MapLayer* theLayer, Downloader* theDownloader);
 
 #endif
 

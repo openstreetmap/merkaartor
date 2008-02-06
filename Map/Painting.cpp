@@ -26,12 +26,12 @@ static void buildCubicPath(QPainterPath& Path, const QPointF& P1, const QPointF&
 		QPointF L4 = (L3+R2)/2;
 		buildCubicPath(Path,P1,L2,L3,L4);
 		buildCubicPath(Path,L4,R2,R3,P4);
-		
+
 	}
 }
 
 /// draws way with oneway markers
-void draw(QPainter& thePainter, QPen& thePen, MapFeature::TrafficDirectionType TT, const QPointF& FromF, const QPointF& ToF, double theWidth, const Projection&)
+void draw(QPainter& thePainter, QPen& thePen, MapFeature::TrafficDirectionType TT, const QPointF& FromF, const QPointF& ToF, double theWidth, const Projection*)
 {
 	QPainterPath Path;
 	Path.moveTo(FromF);
@@ -62,10 +62,10 @@ void draw(QPainter& thePainter, QPen& thePen, MapFeature::TrafficDirectionType T
 	thePainter.strokePath(Path,thePen);
 }
 
-void draw(QPainter& thePainter, QPen& thePen, MapFeature::TrafficDirectionType TT, const Coord& From, const Coord& To, double theWidth, const Projection& theProjection)
+void draw(QPainter& thePainter, QPen& thePen, MapFeature::TrafficDirectionType TT, const Coord& From, const Coord& To, double theWidth, const Projection* theProjection)
 {
-	QPointF FromF(theProjection.project(From));
-	QPointF ToF(theProjection.project(To));
+	QPointF FromF(theProjection->project(From));
+	QPointF ToF(theProjection->project(To));
 	draw(thePainter,thePen,TT,FromF,ToF,theWidth,theProjection);
 }
 

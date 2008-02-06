@@ -84,7 +84,7 @@ RenderPriority Relation::renderPriority(double aPixelPerM) const
 
 CoordBox Relation::boundingBox() const
 {
-	if (p->Members.size() == 0) 
+	if (p->Members.size() == 0)
 		return CoordBox(Coord(0,0),Coord(0,0));
 	else
 	{
@@ -95,17 +95,17 @@ CoordBox Relation::boundingBox() const
 	}
 }
 
-void Relation::draw(QPainter&, const Projection&)
+void Relation::draw(QPainter&, const Projection*)
 {
 }
 
-void Relation::drawFocus(QPainter& P, const Projection& theProjection)
+void Relation::drawFocus(QPainter& P, const Projection* theProjection)
 {
 	for (unsigned int i=0; i<p->Members.size(); ++i)
 		p->Members[i].second->drawFocus(P,theProjection);
 }
 
-double Relation::pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection) const
+double Relation::pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection* theProjection) const
 {
 	double Best = 1000000;
 	for (unsigned int i=0; i<p->Members.size(); ++i)
@@ -273,7 +273,7 @@ bool RelationMemberModel::setData(const QModelIndex &index, const QVariant &valu
 	if (index.isValid() && role == Qt::EditRole)
 	{
 		MapFeature* Tmp = Parent->Members[index.row()].second;
-		CommandList* L = new CommandList;	
+		CommandList* L = new CommandList;
 		L->add(new RelationRemoveFeatureCommand(Parent->theRelation, index.row()));
 		L->add(new RelationAddFeatureCommand(Parent->theRelation,value.toString(),Tmp,index.row()));
 		Main->document()->history().add(L);

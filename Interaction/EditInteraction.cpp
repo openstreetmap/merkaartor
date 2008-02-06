@@ -43,7 +43,7 @@ void EditInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
 	if (Dragging)
 	{
 		thePainter.setPen(QPen(QColor(255,0,0),1,Qt::DotLine));
-		thePainter.drawRect(QRectF(projection().project(StartDrag),projection().project(EndDrag)));
+		thePainter.drawRect(QRectF(projection()->project(StartDrag),projection()->project(EndDrag)));
 	}
 	FeatureSnapInteraction::paintEvent(anEvent, thePainter);
 }
@@ -61,7 +61,7 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 			view()->properties()->setSelection(aLast);
 		if (!aLast)
 		{
-			EndDrag = StartDrag = projection().inverse(ev->pos());
+			EndDrag = StartDrag = projection()->inverse(ev->pos());
 			Dragging = true;
 		}
 		view()->properties()->checkMenuStatus();
@@ -74,7 +74,7 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* )
 	if (Dragging)
 	{
 		std::vector<MapFeature*> List;
-		CoordBox DragBox(StartDrag,projection().inverse(ev->pos()));
+		CoordBox DragBox(StartDrag,projection()->inverse(ev->pos()));
 		for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it)
 			if (DragBox.contains(it.get()->boundingBox()))
 				List.push_back(it.get());
@@ -89,7 +89,7 @@ void EditInteraction::snapMouseMoveEvent(QMouseEvent* event, MapFeature* )
 {
 	if (Dragging)
 	{
-		EndDrag = projection().inverse(event->pos());
+		EndDrag = projection()->inverse(event->pos());
 		view()->update();
 	}
 }

@@ -15,7 +15,7 @@ class EditPaintStyle : public PaintStyle
 	public:
 		static std::vector<FeaturePainter> Painters;
 	public:
-		EditPaintStyle(QPainter& P, const Projection& theProjection);
+		EditPaintStyle(QPainter& P, const Projection* theProjection);
 		virtual ~EditPaintStyle();
 
 	private:

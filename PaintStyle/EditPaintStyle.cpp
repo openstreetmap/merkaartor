@@ -20,19 +20,19 @@
 #define REGIONALZOOM	0.01
 #define GLOBALZOOM		0.002
 
-static bool localZoom(const Projection& theProjection)
+static bool localZoom(const Projection* theProjection)
 {
-	return theProjection.pixelPerM() < LOCALZOOM;
+	return theProjection->pixelPerM() < LOCALZOOM;
 }
 
-static bool regionalZoom(const Projection& theProjection)
+static bool regionalZoom(const Projection* theProjection)
 {
-	return theProjection.pixelPerM() < REGIONALZOOM;
+	return theProjection->pixelPerM() < REGIONALZOOM;
 }
 
-static bool globalZoom(const Projection& theProjection)
+static bool globalZoom(const Projection* theProjection)
 {
-	return theProjection.pixelPerM() < GLOBALZOOM;
+	return theProjection->pixelPerM() < GLOBALZOOM;
 }
 
 
@@ -74,7 +74,7 @@ class EPTouchupLayer : public PaintStyleLayer
 class EditPaintStylePrivate
 {
 	public:
-		EditPaintStylePrivate(QPainter& P, const Projection& aProj)
+		EditPaintStylePrivate(QPainter& P, const Projection* aProj)
 			: thePainter(P), theProjection(aProj)
 		{
 			First.setP(this);
@@ -86,7 +86,7 @@ class EditPaintStylePrivate
 		void initPainters();
 
 		QPainter& thePainter;
-		const Projection& theProjection;
+		const Projection* theProjection;
 		EPBackgroundLayer First;
 		EPForegroundLayer Second;
 		EPTouchupLayer Third;
@@ -266,8 +266,8 @@ void EPBackgroundLayer::setP(EditPaintStylePrivate* ap)
 
 void EPBackgroundLayer::draw(Road* R)
 {
-	if (p->theProjection.viewport().disjunctFrom(R->boundingBox())) return;
-	FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
+	if (p->theProjection->viewport().disjunctFrom(R->boundingBox())) return;
+	FeaturePainter* paintsel = R->getEditPainter(p->theProjection->pixelPerM());
 	if (paintsel)
 		paintsel->drawBackground(R,p->thePainter,p->theProjection);
 	else if (!globalZoom(p->theProjection) && !R->hasEditPainter())
@@ -283,8 +283,8 @@ void EPBackgroundLayer::draw(Road* R)
 
 void EPBackgroundLayer::draw(Relation* R)
 {
-	if (p->theProjection.viewport().disjunctFrom(R->boundingBox())) return;
-	FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
+	if (p->theProjection->viewport().disjunctFrom(R->boundingBox())) return;
+	FeaturePainter* paintsel = R->getEditPainter(p->theProjection->pixelPerM());
 	if (paintsel)
 		paintsel->drawBackground(R,p->thePainter,p->theProjection);
 }
@@ -301,16 +301,16 @@ void EPForegroundLayer::setP(EditPaintStylePrivate* ap)
 
 void EPForegroundLayer::draw(Road* R)
 {
-	if (p->theProjection.viewport().disjunctFrom(R->boundingBox())) return;
-	FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
+	if (p->theProjection->viewport().disjunctFrom(R->boundingBox())) return;
+	FeaturePainter* paintsel = R->getEditPainter(p->theProjection->pixelPerM());
 	if (paintsel)
 		paintsel->drawForeground(R,p->thePainter,p->theProjection);
 }
 
 void EPForegroundLayer::draw(Relation* R)
 {
-	if (p->theProjection.viewport().disjunctFrom(R->boundingBox())) return;
-	FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
+	if (p->theProjection->viewport().disjunctFrom(R->boundingBox())) return;
+	FeaturePainter* paintsel = R->getEditPainter(p->theProjection->pixelPerM());
 	if (paintsel)
 		paintsel->drawForeground(R,p->thePainter,p->theProjection);
 }
@@ -326,8 +326,8 @@ void EPTouchupLayer::setP(EditPaintStylePrivate* ap)
 
 void EPTouchupLayer::draw(Road* R)
 {
-	if (p->theProjection.viewport().disjunctFrom(R->boundingBox())) return;
-	FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
+	if (p->theProjection->viewport().disjunctFrom(R->boundingBox())) return;
+	FeaturePainter* paintsel = R->getEditPainter(p->theProjection->pixelPerM());
 	if (paintsel)
 		paintsel->drawTouchup(R,p->thePainter,p->theProjection);
 }
@@ -338,18 +338,18 @@ void EPTouchupLayer::draw(Relation* R)
 
 void EPTouchupLayer::draw(TrackPoint* Pt)
 {
-	if (p->theProjection.viewport().disjunctFrom(Pt->boundingBox())) return;
-	FeaturePainter* paintsel = Pt->getEditPainter(p->theProjection.pixelPerM());
+	if (p->theProjection->viewport().disjunctFrom(Pt->boundingBox())) return;
+	FeaturePainter* paintsel = Pt->getEditPainter(p->theProjection->pixelPerM());
 	if (paintsel)
 		paintsel->drawTouchup(Pt,p->thePainter,p->theProjection);
 	else if (!Pt->hasEditPainter())
 	{
-		bool Draw = p->theProjection.pixelPerM() > 1;
-		if (!Draw && !Pt->sizeParents() && (p->theProjection.pixelPerM() > LOCALZOOM) )
+		bool Draw = p->theProjection->pixelPerM() > 1;
+		if (!Draw && !Pt->sizeParents() && (p->theProjection->pixelPerM() > LOCALZOOM) )
 			Draw = true;
 		if (Draw)
 		{
-			QPointF P(p->theProjection.project(Pt->position()));
+			QPointF P(p->theProjection->project(Pt->position()));
 			QRectF R(P-QPointF(2,2),QSize(4,4));
 			p->thePainter.fillRect(R,QColor(0,0,0,128));
 		}
@@ -360,7 +360,7 @@ void EPTouchupLayer::draw(TrackPoint* Pt)
 
 std::vector<FeaturePainter> EditPaintStyle::Painters;
 
-EditPaintStyle::EditPaintStyle(QPainter& P, const Projection& theProjection)
+EditPaintStyle::EditPaintStyle(QPainter& P, const Projection* theProjection)
 {
 	p = new EditPaintStylePrivate(P,theProjection);
 	add(&p->First);

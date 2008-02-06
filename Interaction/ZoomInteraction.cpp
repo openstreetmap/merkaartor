@@ -39,7 +39,7 @@ void ZoomInteraction::mouseReleaseEvent(QMouseEvent * event)
 	else
 	{
 		P2 = event->pos();
-		view()->projection().setViewport(CoordBox(projection().inverse(P1),projection().inverse(P2)),view()->rect());
+		view()->projection()->setViewport(CoordBox(projection()->inverse(P1),projection()->inverse(P2)),view()->rect());
 		view()->invalidate();
 		view()->launch(0);
 	}

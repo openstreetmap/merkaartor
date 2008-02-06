@@ -102,7 +102,7 @@ void showDebug(const QString& Method, const QString& URL, const QString& Sent, c
 }
 
 
-#define CHUNK 4096 
+#define CHUNK 4096
 
 QByteArray gzipDecode(const QByteArray& In)
 {
@@ -350,7 +350,7 @@ bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser
 	ProgressDialog->setLabelText("Downloading from OSM (connecting)");
 	ProgressDialog->setMaximum(11);
 	Rcv.setAnimator(ProgressDialog,Bar,true);
-	
+
 	if (!Rcv.go(URL))
 	{
 		aParent->setCursor(QCursor(Qt::ArrowCursor));
@@ -374,7 +374,7 @@ bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser
 		return false;
 	}
 	Downloader Down(aWeb, aUser, aPassword, UseProxy, ProxyHost, ProxyPort);
-	MapLayer* theLayer = new MapLayer("Download");
+	MapLayer* theLayer = new MapLayer("Download", MapLayer::DrawingLayer);
 	bool OK = importOSM(aParent, Rcv.content(), theDocument, theLayer, &Down);
 	if (!OK)
 		delete theLayer;
@@ -385,7 +385,7 @@ bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser
 bool downloadTracksFromOSM(QMainWindow* Main, const QString& aWeb, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort , const CoordBox& aBox , MapDocument* theDocument)
 {
 	Downloader theDownloader(aWeb, aUser, aPassword, UseProxy, ProxyHost, ProxyPort);
-	MapLayer* trackLayer = new MapLayer("Downloaded tracks");
+	MapLayer* trackLayer = new MapLayer("Downloaded tracks", MapLayer::DrawingLayer);
 	theDocument->add(trackLayer);
 	QProgressDialog ProgressDialog(Main);
 	ProgressDialog.setWindowModality(Qt::ApplicationModal);
@@ -499,8 +499,9 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 		aParent->view()->setUpdatesEnabled(true);
 		if (OK)
 		{
-			aParent->view()->projection().setViewport(Clip,aParent->view()->rect());
+			aParent->view()->projection()->setViewport(Clip,aParent->view()->rect());
 			aParent->invalidateView();
+
 		}
 	}
 	delete dlg;

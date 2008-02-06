@@ -13,11 +13,20 @@ class MapDocument;
 class MapDocumentPrivate;
 class MapFeature;
 class MapLayerPrivate;
+class Layer;
+class LayerManager;
 
 class MapLayer
 {
+    public:
+        enum MapLayerType
+        {
+            ImageLayer,
+            DrawingLayer
+        };
+
 	public:
-		MapLayer(const QString& Name);
+		MapLayer(const QString& aName, enum MapLayerType layertype);
 	private:
 		MapLayer(const MapLayer& aLayer);
 	public:
@@ -39,9 +48,13 @@ class MapLayer
 		void notifyIdUpdate(const QString& id, MapFeature* aFeature);
 		void sortRenderingPriority(double PixelPerM);
 		void invalidateRenderPriority();
-                
-                void setDocument(MapDocument* aDocument);
-                MapDocument* getDocument();
+
+        void setDocument(MapDocument* aDocument);
+        MapDocument* getDocument();
+
+        MapLayer::MapLayerType type();
+        Layer* imageLayer();
+	const LayerManager* layermanager;
 
 	private:
 		MapLayerPrivate* p;
@@ -52,7 +65,7 @@ class MapDocument
 	public:
 		MapDocument();
 	private:
-		MapDocument(const MapDocument& aDoc);
+		MapDocument(const MapDocument&);
 	public:
 		~MapDocument();
 
@@ -67,7 +80,7 @@ class MapDocument
 		CommandHistory& history();
 		const CommandHistory& history() const;
 		void clear();
-		
+
         void addToTagList(QString k, QString v);
         QStringList getTagList() ;
         QStringList getTagValueList(QString k) ;
@@ -75,6 +88,7 @@ class MapDocument
 		MapDocumentPrivate* p;
 		QStringList tagKeys;
 		QStringList tagValues;
+		MapLayer* bgLayer;
 };
 
 bool hasUnsavedChanges(const MapDocument& aDoc);

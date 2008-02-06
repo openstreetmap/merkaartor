@@ -2,7 +2,7 @@ TEMPLATE = app
 TARGET = merkaartor
 DESTDIR = ./release
 QT += network xml core gui
-CONFIG += debug
+CONFIG += debug_and_release console
 INCLUDEPATH += .
 DEPENDPATH += .
 MOC_DIR += ./GeneratedFiles/release
@@ -11,6 +11,7 @@ UI_DIR += ./GeneratedFiles
 
 #Include file(s)
 include(Merkaartor.pri)
+include(QMapControl.pri)
 
 
 

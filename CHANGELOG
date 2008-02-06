@@ -1,4 +1,5 @@
 v0.10
+	* ADD : support for Yahoo maps backgrounds (by Chris Browet; QMapControl widget by Kai Winter)
 	* ADD : tags autocompletion in related widgets
 	* ADD : paint style editor
 

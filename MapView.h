@@ -10,14 +10,19 @@ class Interaction;
 class MainWindow;
 class MapDocument;
 class PropertiesDock;
+class MapAdapter;
+class Layer;
+class LayerManager;
 
 
 class MapView :	public QWidget
 {
+	Q_OBJECT
+
 	public:
 		MapView(MainWindow* aMain);
 	public:
-		virtual ~MapView(void);
+		~MapView();
 
 		MainWindow* main();
 		void setDocument(MapDocument* aDoc);
@@ -32,18 +37,27 @@ class MapView :	public QWidget
 		virtual void mouseReleaseEvent(QMouseEvent * event);
 		virtual void mouseMoveEvent(QMouseEvent* event);
 		virtual void wheelEvent(QWheelEvent* ev);
-		
-		Projection& projection();
+
+		Projection* projection();
 		PropertiesDock* properties();
+
+        LayerManager*	layermanager;
 
 	private:
 		void updateStaticBuffer(QPaintEvent* anEvent);
 		MainWindow* Main;
-		Projection theProjection;
+		Projection* theProjection;
 		MapDocument* theDocument;
 		Interaction* theInteraction;
 		QPixmap* StaticBuffer;
 		bool StaticBufferUpToDate;
+
+	public slots:
+		void updateRequestNew();
+	private slots:
+        	void loadingFinished();
+	protected:
+		void resizeEvent(QResizeEvent *event);
 };
 
 #endif
