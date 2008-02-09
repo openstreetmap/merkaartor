@@ -2,7 +2,8 @@ TEMPLATE = app
 TARGET = merkaartor
 DESTDIR = ./release
 QT += network xml core gui
-CONFIG += debug_and_release console
+CONFIG += debug_and_release
+
 INCLUDEPATH += .
 DEPENDPATH += .
 MOC_DIR += ./GeneratedFiles/release
