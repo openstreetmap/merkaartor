@@ -137,8 +137,8 @@ void Point::draw(QPainter* painter, const MapAdapter* mapadapter, const QRect &v
 		int diffzoom = homelevel-currentzoom;
 		int viewheight = size.height();
 		int viewwidth = size.width();
-		viewheight = int(viewheight / pow(2, diffzoom));
-		viewwidth = int(viewwidth / pow(2, diffzoom));
+		viewheight = int(viewheight / pow(2, diffzoom+0.0));
+		viewwidth = int(viewwidth / pow(2, diffzoom+0.0));
 		
 		if (minsize.height()!= -1 && viewheight < minsize.height())
 			viewheight = minsize.height();

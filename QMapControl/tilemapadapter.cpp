@@ -149,8 +149,8 @@ bool TileMapAdapter::isValid(int x, int y, int z) const
 		z= min_zoom - z;
 	}
 
-	if (x<0 || x>pow(2,z)-1 ||
-			y<0 || y>pow(2,z)-1)
+	if (x<0 || x>pow(2,z+0.0)-1 ||
+			y<0 || y>pow(2,z+0.0)-1)
 	{
 		return false;
 	}
@@ -159,7 +159,7 @@ bool TileMapAdapter::isValid(int x, int y, int z) const
 }
 int TileMapAdapter::tilesonzoomlevel(int zoomlevel) const
 {
-	return int(pow(2, zoomlevel));
+	return int(pow(2, zoomlevel+0.0));
 }
 int TileMapAdapter::getxoffset(int x) const
 {

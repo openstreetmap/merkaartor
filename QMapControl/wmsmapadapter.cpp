@@ -40,7 +40,7 @@ WMSMapAdapter::WMSMapAdapter(QString host, QString serverPath, int tilesize)
 	this->serverPath.append("&WIDTH=").append(loc.toString(tilesize))
 				 .append("&HEIGHT=").append(loc.toString(tilesize))
 				 .append("&BBOX=");
-	numberOfTiles = pow(2, current_zoom);
+	numberOfTiles = pow(2, current_zoom+0.0);
 	coord_per_x_tile = 360. / numberOfTiles;
 	coord_per_y_tile = 180. / numberOfTiles;
 }
@@ -71,14 +71,14 @@ QPointF WMSMapAdapter::displayToCoordinate(const QPoint& point) const
 void WMSMapAdapter::zoom_in()
 {
 	current_zoom+=1;
-	numberOfTiles = pow(2, current_zoom);
+	numberOfTiles = pow(2, current_zoom+0.0);
 	coord_per_x_tile = 360. / numberOfTiles;
 	coord_per_y_tile = 180. / numberOfTiles;
 }
 void WMSMapAdapter::zoom_out()
 {
 	current_zoom-=1;
-	numberOfTiles = pow(2, current_zoom);
+	numberOfTiles = pow(2, current_zoom+0.0);
 	coord_per_x_tile = 360. / numberOfTiles;
 	coord_per_y_tile = 180. / numberOfTiles;
 }
