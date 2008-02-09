@@ -24,7 +24,7 @@ StaticBufferUpToDate(false)
 {
 	setMouseTracking(true);
 	setAttribute(Qt::WA_OpaquePaintEvent);
-	theProjection = new ImageProjection();
+	theProjection = new Projection();
 
 	QSettings Sets;
 	Sets.beginGroup("downloadosm");
@@ -69,7 +69,7 @@ void MapView::setDocument(MapDocument * aDoc)
 
 	layermanager->addLayer(theDocument->layer(0)->imageLayer());
 	theDocument->layer(0)->layermanager = layermanager;
-	((ImageProjection *) projection())->setLayerManager(layermanager);
+	projection()->setLayerManager(layermanager);
 	projection()->setViewport(CoordBox(Coord(1, -1), Coord(-1, 1)),
 				  rect());
 }

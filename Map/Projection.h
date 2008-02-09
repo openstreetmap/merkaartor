@@ -12,22 +12,29 @@ class Projection
 {
 	public:
 		Projection(void);
-		virtual ~Projection(void) {};
 
-		virtual void setViewport(const CoordBox& Map, const QRect& Screen) = 0;
-		virtual void panScreen(const QPoint& p, const QRect& Screen) = 0;
+		virtual void setViewport(const CoordBox& Map, const QRect& Screen);
+		virtual void panScreen(const QPoint& p, const QRect& Screen);
 		virtual CoordBox viewport() const;
-		virtual QPointF project(const Coord& Map) const = 0;
+		virtual QPointF project(const Coord& Map) const;
 		virtual double pixelPerM() const;
 		virtual double latAnglePerM() const;
 		virtual double lonAnglePerM(double Lat) const;
-		virtual Coord inverse(const QPointF& Screen) const = 0;
-		virtual void zoom(double d, const QPointF& Around, const QRect& Screen) = 0;
+		virtual Coord inverse(const QPointF& Screen) const;
+		virtual void zoom(double d, const QPointF& Around, const QRect& Screen);
+		void setLayerManager(LayerManager* lm);
 	protected:
 		double ScaleLat, DeltaLat, ScaleLon, DeltaLon;
 		CoordBox Viewport;
+		QPoint screen_middle;
+		LayerManager* layermanager;
+	private:
+		void viewportRecalc(const QRect& Screen);
+		void layerManagerSetViewport(const CoordBox& Map, const QRect& Screen);
+		QPointF screenToCoordinate(QPointF click) const;
+		QPoint coordinateToScreen(QPointF click) const;
 };
-
+/*
 class DrawingProjection : public Projection
 {
 	public:
@@ -63,6 +70,7 @@ class ImageProjection : public Projection
 		LayerManager* layermanager;
 		QPoint screen_middle;
 };
+*/
 #endif
 
 
