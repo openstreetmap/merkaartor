@@ -499,7 +499,7 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 		aParent->view()->setUpdatesEnabled(true);
 		if (OK)
 		{
-			aParent->view()->projection()->setViewport(Clip,aParent->view()->rect());
+			aParent->view()->projection().setViewport(Clip,aParent->view()->rect());
 			aParent->invalidateView();
 
 		}

@@ -51,21 +51,21 @@ CoordBox TrackPoint::boundingBox() const
 	return CoordBox(Position,Position);
 }
 
-void TrackPoint::draw(QPainter& thePainter, const Projection* theProjection)
+void TrackPoint::draw(QPainter& thePainter, const Projection& theProjection)
 {
 }
 
-void TrackPoint::drawFocus(QPainter& thePainter, const Projection* theProjection)
+void TrackPoint::drawFocus(QPainter& thePainter, const Projection& theProjection)
 {
 	thePainter.setPen(QColor(0,0,255));
-	QPointF P(theProjection->project(Position));
+	QPointF P(theProjection.project(Position));
 	QRectF R(P-QPointF(3,3),QSize(6,6));
 	thePainter.drawRect(R);
 }
 
-double TrackPoint::pixelDistance(const QPointF& Target, double, const Projection* theProjection) const
+double TrackPoint::pixelDistance(const QPointF& Target, double, const Projection& theProjection) const
 {
-	return distance(Target,theProjection->project(Position));
+	return distance(Target,theProjection.project(Position));
 }
 
 void TrackPoint::cascadedRemoveIfUsing(MapDocument*, MapFeature*, CommandList*, const std::vector<MapFeature*>&)

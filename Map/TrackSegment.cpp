@@ -65,13 +65,13 @@ unsigned int TrackSegment::size() const
 	return p->Points.size();
 }
 
-void TrackSegment::draw(QPainter &P, const Projection* theProjection)
+void TrackSegment::draw(QPainter &P, const Projection& theProjection)
 {
 	P.setPen(QPen(QColor(128,128,128),1,Qt::DotLine));
 	for (unsigned int i=1; i<p->Points.size(); ++i)
 	{
-		QPointF FromF(theProjection->project(p->Points[i-1]->position()));
-		QPointF ToF(theProjection->project(p->Points[i]->position()));
+		QPointF FromF(theProjection.project(p->Points[i-1]->position()));
+		QPointF ToF(theProjection.project(p->Points[i]->position()));
 		P.drawLine(FromF,ToF);
 		if (distance(FromF,ToF) > 30)
 		{
@@ -97,7 +97,7 @@ bool TrackSegment::notEverythingDownloaded() const
 	return false;
 }
 
-void TrackSegment::drawFocus(QPainter &, const Projection *)
+void TrackSegment::drawFocus(QPainter &, const Projection &)
 {
 	// Can't be selection
 }
@@ -114,7 +114,7 @@ CoordBox TrackSegment::boundingBox() const
 	return CoordBox(Coord(0,0),Coord(0,0));
 }
 
-double TrackSegment::pixelDistance(const QPointF& , double , const Projection*) const
+double TrackSegment::pixelDistance(const QPointF& , double , const Projection&) const
 {
 	// unable to select that one
 	return 1000000;

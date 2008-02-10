@@ -261,7 +261,7 @@ void MainWindow::on_fileUploadAction_triggered()
 
 void MainWindow::on_fileDownloadAction_triggered()
 {
-	if (downloadOSM(this, theView->projection()->viewport(), theDocument)) {
+	if (downloadOSM(this, theView->projection().viewport(), theDocument)) {
 		on_editPropertiesAction_triggered();
 	} else
 		QMessageBox::warning(this, tr("Error downloading"), tr("The map could not be downloaded"));
@@ -280,20 +280,20 @@ void MainWindow::on_viewZoomAllAction_triggered()
 {
 	std::pair<bool, CoordBox> BBox(boundingBox(theDocument));
 	if (BBox.first) {
-		theView->projection()->setViewport(BBox.second, theView->rect());
+		theView->projection().setViewport(BBox.second, theView->rect());
 		invalidateView();
 	}
 }
 
 void MainWindow::on_viewZoomInAction_triggered()
 {
-	theView->projection()->zoom(1.33333, theView->rect().center(), theView->rect());
+	theView->projection().zoom(1.33333, theView->rect().center(), theView->rect());
 	invalidateView();
 }
 
 void MainWindow::on_viewZoomOutAction_triggered()
 {
-	theView->projection()->zoom(0.75, theView->rect().center(), theView->rect());
+	theView->projection().zoom(0.75, theView->rect().center(), theView->rect());
 	invalidateView();
 }
 
@@ -307,13 +307,13 @@ void MainWindow::on_viewSetCoordinatesAction_triggered()
 	QDialog* Dlg = new QDialog(this);
 	Ui::SetPositionDialog Data;
 	Data.setupUi(Dlg);
-	CoordBox B(theView->projection()->viewport());
+	CoordBox B(theView->projection().viewport());
 	Data.Longitude->setText(QString::number(radToAng(B.center().lon())));
 	Data.Latitude->setText(QString::number(radToAng(B.center().lat())));
 	Data.SpanLongitude->setText(QString::number(radToAng(B.lonDiff())));
 	Data.SpanLatitude->setText(QString::number(radToAng(B.latDiff())));
 	if (Dlg->exec() == QDialog::Accepted) {
-		theView->projection()->setViewport(CoordBox(
+		theView->projection().setViewport(CoordBox(
 											   Coord(
 												   angToRad(Data.Latitude->text().toDouble() - Data.SpanLatitude->text().toDouble() / 2),
 												   angToRad(Data.Longitude->text().toDouble() - Data.SpanLongitude->text().toDouble() / 2)),

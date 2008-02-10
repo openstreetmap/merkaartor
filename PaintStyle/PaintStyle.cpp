@@ -283,24 +283,24 @@ bool FeaturePainter::matchesZoom(double PixelPerM) const
 	return true;
 }
 
-void buildPathFromRoad(Road *R, Projection const *theProjection, QPainterPath &Path)
+void buildPathFromRoad(Road *R, const Projection &theProjection, QPainterPath &Path)
 {
-	Path.moveTo(theProjection->project(R->get(0)->position()));
+	Path.moveTo(theProjection.project(R->get(0)->position()));
 	for (unsigned int i=1; i<R->size(); ++i)
-		Path.lineTo(theProjection->project(R->get(i)->position()));
+		Path.lineTo(theProjection.project(R->get(i)->position()));
 }
 
-void buildPathFromRelation(Relation *R, Projection const *theProjection, QPainterPath &Path)
+void buildPathFromRelation(Relation *R, const Projection &theProjection, QPainterPath &Path)
 {
 	for (unsigned int i=0; i<R->size(); ++i)
 		if (Road* M = dynamic_cast<Road*>(R->get(i)))
 			buildPathFromRoad(M, theProjection, Path);
 }
 
-void FeaturePainter::drawBackground(Road* R, QPainter& thePainter, const Projection* theProjection) const
+void FeaturePainter::drawBackground(Road* R, QPainter& thePainter, const Projection& theProjection) const
 {
 	if (!DrawBackground) return;
-	double PixelPerM = theProjection->pixelPerM();
+	double PixelPerM = theProjection.pixelPerM();
 	double WW = PixelPerM*widthOf(R)*BackgroundScale+BackgroundOffset;
 	if (WW < 0) return;
 	QPen thePen(BackgroundColor,WW);
@@ -310,10 +310,10 @@ void FeaturePainter::drawBackground(Road* R, QPainter& thePainter, const Project
 	thePainter.strokePath(Path,thePen);
 }
 
-void FeaturePainter::drawBackground(Relation* R, QPainter& thePainter, const Projection* theProjection) const
+void FeaturePainter::drawBackground(Relation* R, QPainter& thePainter, const Projection& theProjection) const
 {
 	if (!DrawBackground) return;
-	double PixelPerM = theProjection->pixelPerM();
+	double PixelPerM = theProjection.pixelPerM();
 //	double WW = PixelPerM*widthOf(R)*BackgroundScale+BackgroundOffset;
 	double WW = BackgroundOffset;
 	if (WW < 0) return;
@@ -324,12 +324,12 @@ void FeaturePainter::drawBackground(Relation* R, QPainter& thePainter, const Pro
 	thePainter.strokePath(Path,thePen);
 }
 
-void FeaturePainter::drawForeground(Road* R, QPainter& thePainter, const Projection* theProjection) const
+void FeaturePainter::drawForeground(Road* R, QPainter& thePainter, const Projection& theProjection) const
 {
 	if (!DrawForeground && !ForegroundFill) return;
 	if (DrawForeground)
 	{
-		double PixelPerM = theProjection->pixelPerM();
+		double PixelPerM = theProjection.pixelPerM();
 		double WW = PixelPerM*widthOf(R)*ForegroundScale+ForegroundOffset;
 		if (WW < 0) return;
 		QPen thePen(ForegroundColor,WW);
@@ -356,12 +356,12 @@ void FeaturePainter::drawForeground(Road* R, QPainter& thePainter, const Project
 	thePainter.drawPath(Path);
 }
 
-void FeaturePainter::drawForeground(Relation* R, QPainter& thePainter, const Projection* theProjection) const
+void FeaturePainter::drawForeground(Relation* R, QPainter& thePainter, const Projection& theProjection) const
 {
 	if (!DrawForeground && !ForegroundFill) return;
 	if (DrawForeground)
 	{
-		double PixelPerM = theProjection->pixelPerM();
+		double PixelPerM = theProjection.pixelPerM();
 //		double WW = PixelPerM*widthOf(R)*ForegroundScale+ForegroundOffset;
 		double WW = ForegroundOffset;
 		if (WW < 0) return;
@@ -390,23 +390,23 @@ void FeaturePainter::drawForeground(Relation* R, QPainter& thePainter, const Pro
 }
 
 
-void FeaturePainter::drawTouchup(TrackPoint* Pt, QPainter& thePainter, const Projection* theProjection) const
+void FeaturePainter::drawTouchup(TrackPoint* Pt, QPainter& thePainter, const Projection& theProjection) const
 {
 	if (TrackPointIconName != "")
 	{
 
 		QPixmap pm(TrackPointIconName);
-		QPointF C(theProjection->project(Pt->position()));
+		QPointF C(theProjection.project(Pt->position()));
 		thePainter.fillRect(QRectF(C-QPointF(2,2),QSize(4,4)),QColor(0,0,0,128));
 		thePainter.drawPixmap( C.x()-pm.width()/2,C.y()-pm.height()-5 , pm);
 	}
 }
 
-void FeaturePainter::drawTouchup(Road* R, QPainter& thePainter, const Projection* theProjection) const
+void FeaturePainter::drawTouchup(Road* R, QPainter& thePainter, const Projection& theProjection) const
 {
 	if (DrawTouchup)
 	{
-		double PixelPerM = theProjection->pixelPerM();
+		double PixelPerM = theProjection.pixelPerM();
 		double WW = PixelPerM*widthOf(R)*TouchupScale+TouchupOffset;
 		if (WW > 0)
 		{
@@ -425,7 +425,7 @@ void FeaturePainter::drawTouchup(Road* R, QPainter& thePainter, const Projection
 	}
 	if (DrawTrafficDirectionMarks)
 	{
-		double theWidth = theProjection->pixelPerM()*widthOf(R)-4;
+		double theWidth = theProjection.pixelPerM()*widthOf(R)-4;
 		if (theWidth > 8)
 			theWidth = 8;
 		double DistFromCenter = 2*(theWidth+4);
@@ -433,8 +433,8 @@ void FeaturePainter::drawTouchup(Road* R, QPainter& thePainter, const Projection
 		{
 			for (unsigned int i=1; i<R->size(); ++i)
 			{
-				QPointF FromF(theProjection->project(R->get(i-1)->position()));
-				QPointF ToF(theProjection->project(R->get(i)->position()));
+				QPointF FromF(theProjection.project(R->get(i-1)->position()));
+				QPointF ToF(theProjection.project(R->get(i)->position()));
 				if (distance(FromF,ToF) > (DistFromCenter*2+4))
 				{
 					QPointF H(FromF+ToF);

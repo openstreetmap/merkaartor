@@ -42,7 +42,7 @@ class Interaction : public QObject
 		MapView* view();
 		MapDocument* document();
 		MainWindow* main();
-		const Projection* projection() const;
+		const Projection& projection() const;
 		bool panning() const;
 	private:
 		MapView* theView;

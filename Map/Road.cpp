@@ -170,11 +170,11 @@ double Road::area() const
 	return p->Area;
 }
 
-void Road::draw(QPainter& thePainter, const Projection* theProjection)
+void Road::draw(QPainter& thePainter, const Projection& )
 {
 }
 
-void Road::drawFocus(QPainter& thePainter, const Projection* theProjection)
+void Road::drawFocus(QPainter& thePainter, const Projection& theProjection)
 {
 	// FIXME
 	QFont F(thePainter.font());
@@ -191,18 +191,18 @@ void Road::drawFocus(QPainter& thePainter, const Projection* theProjection)
 	}
 }
 
-double Road::pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection* theProjection) const
+double Road::pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection) const
 {
 	double Best = 1000000;
 	for (unsigned int i=0; i<p->Nodes.size(); ++i)
 	{
-		double x = distance(Target,theProjection->project(p->Nodes[i]->position()));
+		double x = distance(Target,theProjection.project(p->Nodes[i]->position()));
 		if (x<ClearEndDistance)
 			return Best;
 	}
 	for (unsigned int i=1; i<p->Nodes.size(); ++i)
 	{
-		LineF F(theProjection->project(p->Nodes[i-1]->position()),theProjection->project(p->Nodes[i]->position()));
+		LineF F(theProjection.project(p->Nodes[i-1]->position()),theProjection.project(p->Nodes[i]->position()));
 		double D = F.capDistance(Target);
 		if (D < ClearEndDistance)
 			Best = D;

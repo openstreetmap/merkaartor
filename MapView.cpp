@@ -24,7 +24,6 @@ StaticBufferUpToDate(false)
 {
 	setMouseTracking(true);
 	setAttribute(Qt::WA_OpaquePaintEvent);
-	theProjection = new Projection();
 
 	QSettings Sets;
 	Sets.beginGroup("downloadosm");
@@ -69,7 +68,7 @@ void MapView::setDocument(MapDocument * aDoc)
 
 	layermanager->addLayer(theDocument->layer(0)->imageLayer());
 	theDocument->layer(0)->layermanager = layermanager;
-	projection()->setViewport(CoordBox(Coord(1, -1), Coord(-1, 1)),
+	projection().setViewport(CoordBox(Coord(1, -1), Coord(-1, 1)),
 				  rect());
 	checkLayerManager();
 }
@@ -82,10 +81,10 @@ void MapView::checkLayerManager()
 		if (theDocument->layer(i)->isVisible() && (theDocument->layer(i)->type() == MapLayer::ImageLayer))
 			ImageVisible = true;
 	if (ImageVisible)
-		projection()->setLayerManager(layermanager);
+		projection().setLayerManager(layermanager);
 	else
-		projection()->setLayerManager(0);
-	projection()->setViewport(projection()->viewport(),rect());
+		projection().setLayerManager(0);
+	projection().setViewport(projection().viewport(),rect());
 }
 
 
@@ -131,8 +130,7 @@ void MapView::updateStaticBuffer(QPaintEvent * anEvent)
 
 		for (unsigned int i = 0; i < theDocument->numLayers(); ++i) {
 			theDocument->layer(i)->
-				sortRenderingPriority(projection()->
-						      pixelPerM());
+				sortRenderingPriority(projection().pixelPerM());
 		}
 
 		if (layermanager->getLayers().size() > 0) {
@@ -189,12 +187,12 @@ void MapView::wheelEvent(QWheelEvent * ev)
 	int Steps = ev->delta() / 120;
 	if (Steps > 0) {
 		for (int i = 0; i < Steps; ++i) {
-			projection()->zoom(1 / 0.75, ev->pos(), rect());
+			projection().zoom(1 / 0.75, ev->pos(), rect());
 		}
 		invalidate();
 	} else if (Steps < 0) {
 		for (int i = 0; i < -Steps; ++i) {
-			projection()->zoom(0.75, ev->pos(), rect());
+			projection().zoom(0.75, ev->pos(), rect());
 		}
 		invalidate();
 	}
@@ -218,7 +216,7 @@ Interaction *MapView::interaction()
 	return theInteraction;
 }
 
-Projection *MapView::projection()
+Projection& MapView::projection()
 {
 	return theProjection;
 }
@@ -240,7 +238,7 @@ void MapView::resizeEvent(QResizeEvent * event)
 {
 	StaticBufferUpToDate = false;
 	layermanager->setSize(size());
-	projection()->zoom(1, QPoint(width() / 2, height() / 2), rect());
+	projection().zoom(1, QPoint(width() / 2, height() / 2), rect());
 
 	QWidget::resizeEvent(event);
 }

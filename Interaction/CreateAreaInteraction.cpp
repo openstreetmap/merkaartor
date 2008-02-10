@@ -32,8 +32,8 @@ void CreateAreaInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainte
 	if (HaveFirst)
 	{
 		QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
-    QPen TP(SomeBrush,projection()->pixelPerM()*4);
-		QPointF PreviousPoint = view()->projection()->project(FirstPoint);
+    QPen TP(SomeBrush,projection().pixelPerM()*4);
+		QPointF PreviousPoint = view()->projection().project(FirstPoint);
 		::draw(thePainter,TP,MapFeature::UnknownDirection, PreviousPoint,LastCursor ,4 ,view()->projection());
 	}
 	GenericFeatureSnapInteraction<MapFeature>::paintEvent(anEvent,thePainter);
@@ -42,12 +42,12 @@ void CreateAreaInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainte
 void CreateAreaInteraction::snapMouseMoveEvent(QMouseEvent* ev, MapFeature* aFeature)
 {
 	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(aFeature))
-		LastCursor = view()->projection()->project(Pt->position());
+		LastCursor = view()->projection().project(Pt->position());
 	else if (Road* R = dynamic_cast<Road*>(aFeature))
 	{
-		Coord P(projection()->inverse(ev->pos()));
+		Coord P(projection().inverse(ev->pos()));
 		findSnapPointIndex(R, P);
-		LastCursor = projection()->project(P);
+		LastCursor = projection().project(P);
 	}
 	else
 		LastCursor = ev->pos();
@@ -60,7 +60,7 @@ void CreateAreaInteraction::startNewRoad(QMouseEvent* anEvent, MapFeature* aFeat
 		FirstNode = Pt;
 	else if (Road* aRoad = dynamic_cast<Road*>(aFeature))
 	{
-		Coord P(projection()->inverse(anEvent->pos()));
+		Coord P(projection().inverse(anEvent->pos()));
 		CommandList* theList = new CommandList;
 		unsigned int SnapIdx = findSnapPointIndex(aRoad, P);
 		TrackPoint* N = new TrackPoint(P);
@@ -125,7 +125,7 @@ void CreateAreaInteraction::addToRoad(QMouseEvent* anEvent, MapFeature* Snap, Co
 		To = Pt;
 	else if (Road* aRoad = dynamic_cast<Road*>(Snap))
 	{
-		Coord P(projection()->inverse(anEvent->pos()));
+		Coord P(projection().inverse(anEvent->pos()));
 		CommandList* theList = new CommandList;
 		unsigned int SnapIdx = findSnapPointIndex(aRoad, P);
 		TrackPoint* N = new TrackPoint(P);
@@ -137,7 +137,7 @@ void CreateAreaInteraction::addToRoad(QMouseEvent* anEvent, MapFeature* Snap, Co
 	}
 	if (!To)
 	{
-		To = new TrackPoint(view()->projection()->inverse(anEvent->pos()));
+		To = new TrackPoint(view()->projection().inverse(anEvent->pos()));
 		L->add(new AddFeatureCommand(Main->activeLayer(),To,true));
 	}
 	L->add(new RoadAddTrackPointCommand(theRoad,To));
@@ -167,7 +167,7 @@ void CreateAreaInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFeature
 			else
 				Main->properties()->setSelection(theRoad);
 		}
-		FirstPoint = view()->projection()->inverse(anEvent->pos());
+		FirstPoint = view()->projection().inverse(anEvent->pos());
 	}
 	else
 		Interaction::mousePressEvent(anEvent);

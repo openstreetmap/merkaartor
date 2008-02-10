@@ -45,9 +45,9 @@ class MapFeature
 		virtual ~MapFeature() = 0;
 
 		virtual CoordBox boundingBox() const = 0;
-		virtual void draw(QPainter& P, const Projection* theProjection) = 0;
-		virtual void drawFocus(QPainter& P, const Projection* theProjection) = 0;
-		virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection* theProjection) const = 0;
+		virtual void draw(QPainter& P, const Projection& theProjection) = 0;
+		virtual void drawFocus(QPainter& P, const Projection& theProjection) = 0;
+		virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection) const = 0;
 		virtual void cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const std::vector<MapFeature*>& Alternatives) = 0;
 		virtual bool notEverythingDownloaded() const = 0;
 

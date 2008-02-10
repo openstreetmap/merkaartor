@@ -14,7 +14,7 @@ class TrackPoint;
 class QPainter;
 class QPainterPath;
 
-void buildPathFromRoad(Road *R, Projection const *theProjection, QPainterPath &Path);
+void buildPathFromRoad(Road *R, const Projection& theProjection, QPainterPath &Path);
 
 class LineParameters
 {
@@ -64,12 +64,12 @@ class FeaturePainter
 
 		QString asXML() const;
 
-		void drawBackground(Road* R, QPainter& thePainter, const Projection* theProjection) const;
-		void drawBackground(Relation* R, QPainter& thePainter, const Projection* theProjection) const;
-		void drawForeground(Road* R, QPainter& thePainter, const Projection* theProjection) const;
-		void drawForeground(Relation* R, QPainter& thePainter, const Projection* theProjection) const;
-		void drawTouchup(Road* R, QPainter& thePainter, const Projection* theProjection) const;
-		void drawTouchup(TrackPoint* R, QPainter& thePainter, const Projection* theProjection) const;
+		void drawBackground(Road* R, QPainter& thePainter, const Projection& theProjection) const;
+		void drawBackground(Relation* R, QPainter& thePainter, const Projection& theProjection) const;
+		void drawForeground(Road* R, QPainter& thePainter, const Projection& theProjection) const;
+		void drawForeground(Relation* R, QPainter& thePainter, const Projection& theProjection) const;
+		void drawTouchup(Road* R, QPainter& thePainter, const Projection& theProjection) const;
+		void drawTouchup(TrackPoint* R, QPainter& thePainter, const Projection& theProjection) const;
 	private:
 		std::vector<std::pair<QString, QString> > OneOfTheseTags;
 

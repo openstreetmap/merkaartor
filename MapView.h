@@ -38,7 +38,7 @@ class MapView :	public QWidget
 		virtual void mouseMoveEvent(QMouseEvent* event);
 		virtual void wheelEvent(QWheelEvent* ev);
 
-		Projection* projection();
+		Projection& projection();
 		PropertiesDock* properties();
 
         LayerManager*	layermanager;
@@ -47,7 +47,7 @@ class MapView :	public QWidget
 	private:
 		void updateStaticBuffer(QPaintEvent* anEvent);
 		MainWindow* Main;
-		Projection* theProjection;
+		Projection theProjection;
 		MapDocument* theDocument;
 		Interaction* theInteraction;
 		QPixmap* StaticBuffer;
