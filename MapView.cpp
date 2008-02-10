@@ -69,10 +69,25 @@ void MapView::setDocument(MapDocument * aDoc)
 
 	layermanager->addLayer(theDocument->layer(0)->imageLayer());
 	theDocument->layer(0)->layermanager = layermanager;
-	projection()->setLayerManager(layermanager);
 	projection()->setViewport(CoordBox(Coord(1, -1), Coord(-1, 1)),
 				  rect());
+	checkLayerManager();
 }
+
+
+void MapView::checkLayerManager()
+{
+	bool ImageVisible = false;
+	for (unsigned int i=0; i<theDocument->numLayers(); ++i)
+		if (theDocument->layer(i)->isVisible() && (theDocument->layer(i)->type() == MapLayer::ImageLayer))
+			ImageVisible = true;
+	if (ImageVisible)
+		projection()->setLayerManager(layermanager);
+	else
+		projection()->setLayerManager(0);
+	projection()->setViewport(projection()->viewport(),rect());
+}
+
 
 MapDocument *MapView::document()
 {

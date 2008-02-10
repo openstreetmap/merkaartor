@@ -42,6 +42,7 @@ class MapView :	public QWidget
 		PropertiesDock* properties();
 
         LayerManager*	layermanager;
+		void checkLayerManager();
 
 	private:
 		void updateStaticBuffer(QPaintEvent* anEvent);

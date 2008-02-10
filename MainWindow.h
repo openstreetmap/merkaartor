@@ -58,7 +58,6 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		void add_triggered();
 		void reverse_triggered();
 	public:
-
 		PropertiesDock* properties();
 		MapDocument* document();
 		MapLayer* activeLayer();

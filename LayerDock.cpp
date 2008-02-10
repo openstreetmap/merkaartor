@@ -1,6 +1,7 @@
 #include "LayerDock.h"
 
 #include "MainWindow.h"
+#include "MapView.h"
 #include "Map/MapDocument.h"
 
 #include <QtGui/QMouseEvent>
@@ -43,6 +44,8 @@ void LayerWidget::mouseReleaseEvent(QMouseEvent* anEvent)
 		if (anEvent->pos().x()<20)
 		{
 			Layer->setVisible(!Layer->isVisible());
+			if (Layer->type() == MapLayer::ImageLayer)
+				Main->view()->checkLayerManager();
 			update();
 			Main->invalidateView();
 		}
