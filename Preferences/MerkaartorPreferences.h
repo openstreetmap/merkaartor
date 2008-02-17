@@ -21,7 +21,8 @@
 
 enum ImageBackgroundType {
 	Bg_None,
-	Bg_Wms
+	Bg_Wms,
+ 	Bg_OSM
 #ifdef yahoo_illegal
 	, Bg_Yahoo_illegal
 #endif

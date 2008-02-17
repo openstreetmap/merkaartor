@@ -5,6 +5,7 @@
 #include "Map/Projection.h"
 
 #include "QMapControl/mapadapter.h"
+#include "QMapControl/osmmapadapter.h"
 #include "QMapControl/wmsmapadapter.h"
 #ifdef yahoo_illegal
 	#include "QMapControl/yahoomapadapter.h"
@@ -246,6 +247,13 @@ void MapLayer::setMapAdapter(ImageBackgroundType typ)
 			p->layer_bg->setVisible(p->Visible);
 
 			setName("Background - WMS - " + WmsServers[(i*6)]);
+			break;
+		case Bg_OSM:
+			p->mapadapter_bg = new OSMMapAdapter();
+			p->layer_bg = new Layer("Custom Layer", p->mapadapter_bg, Layer::MapLayer);
+			p->layer_bg->setVisible(p->Visible);
+
+			setName("Background - OSM");
 			break;
 #ifdef yahoo_illegal
 		case Bg_Yahoo_illegal:

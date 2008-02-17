@@ -1,4 +1,5 @@
 v0.10
+	* ADD : support for OSM backgrounds (by Chris Browet)
 	* ADD : centralized preferences dialog (by Chris Browet)
 	* ADD : support for WMS maps (by Chris Browet)
 	* FIX : remove yahoo maps support (not "legal" way to access tiles) (by Chris Browet)

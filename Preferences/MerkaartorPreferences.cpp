@@ -20,6 +20,7 @@ MerkaartorPreferences::MerkaartorPreferences()
 
 	bgTypes.insert(Bg_None, "None");
 	bgTypes.insert(Bg_Wms, "WMS adapter");
+	bgTypes.insert(Bg_OSM, "OSM adapter");
 #ifdef yahoo_illegal
 	bgTypes.insert(Bg_Yahoo_illegal, "Illegal Yahoo adapter");
 #endif

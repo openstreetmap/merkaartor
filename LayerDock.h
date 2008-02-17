@@ -35,6 +35,7 @@ class LayerWidget : public QWidget
 		QAction* actYahoo;
 #endif
 		QAction* actNone;
+		QAction* actOSM;
 		QMenu* wmsMenu;
 
 	private slots:
@@ -42,6 +43,7 @@ class LayerWidget : public QWidget
 #ifdef yahoo_illegal
 		void setYahoo(bool);
 #endif
+		void setOSM(bool);
 		void setNone(bool);
 
 };

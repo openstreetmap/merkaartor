@@ -6,7 +6,7 @@
 #include "Preferences/MerkaartorPreferences.h"
 
 #include <QtGui/QMouseEvent>
-#include <QtGui/QPainter> 
+#include <QtGui/QPainter>
 
 #define SAFE_DELETE(x) {delete (x); x = NULL;}
 
@@ -21,6 +21,11 @@ LayerWidget::LayerWidget(MainWindow* aMain, QWidget* aParent)
 	//actNone->setCheckable(true);
 	actNone->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_None));
 	connect(actNone, SIGNAL(triggered(bool)), this, SLOT(setNone(bool)));
+
+	actOSM = new QAction(MerkaartorPreferences::instance()->getBgTypes()[Bg_OSM], this);
+	//actNone->setCheckable(true);
+	actOSM->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_OSM));
+	connect(actOSM, SIGNAL(triggered(bool)), this, SLOT(setOSM(bool)));
 
 #ifdef yahoo_illegal
 	actYahoo = new QAction(MerkaartorPreferences::instance()->getBgTypes()[Bg_Yahoo_illegal], this);
@@ -66,15 +71,25 @@ void LayerWidget::setNone(bool)
 	this->update(rect());
 }
 
+void LayerWidget::setOSM(bool)
+{
+	MapLayer* Layer = Main->document()->getBgLayer();
+	Layer->setMapAdapter(Bg_OSM,  Main);
+	Layer->setVisible(true);
+
+	Main->view()->invalidate();
+	this->update(rect());
+}
+
 void LayerWidget::initWmsActions()
 {
 	//if (actgrWms)
 	//	delete actgrWms;
 	//actgrWms = new QActionGroup(this);
-	
+
 	SAFE_DELETE(wmsMenu);
 	wmsMenu = new QMenu(MerkaartorPreferences::instance()->getBgTypes()[Bg_Wms]);
-	
+
 	QStringList Servers = MerkaartorPreferences::instance()->getWmsServers();
 	for (int i=0; i<Servers.size(); i+=6) {
 		QStringList oneServer;
@@ -143,7 +158,6 @@ void LayerWidget::mouseReleaseEvent(QMouseEvent* anEvent)
 	}
 }
 
-
 void LayerWidget::updateContent()
 {
 }
@@ -163,6 +177,7 @@ void LayerWidget::contextMenuEvent(QContextMenuEvent* anEvent)
 				menu.addMenu(wmsMenu);
 				connect(wmsMenu, SIGNAL(triggered(QAction*)), this, SLOT(setWms(QAction*)));
 
+				menu.addAction(actOSM);
 #ifdef yahoo_illegal
 				menu.addAction(actYahoo);
 #endif
@@ -172,7 +187,7 @@ void LayerWidget::contextMenuEvent(QContextMenuEvent* anEvent)
 				break;
 		}
 	}
-} 
+}
 
 
 MapLayer* LayerWidget::activeLayer()
@@ -215,7 +230,3 @@ MapLayer* LayerDock::activeLayer()
 {
 	return Content->activeLayer();
 }
-
-
-
-

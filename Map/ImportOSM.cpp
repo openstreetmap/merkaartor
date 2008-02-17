@@ -418,6 +418,7 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 	}
 	else
 	{
+		//FIXME Do we have to add a download to the undo list? + dirties the document
 		theDocument->history().add(theList);
 		if (conflictLayer->size())
 			theDocument->add(conflictLayer);
