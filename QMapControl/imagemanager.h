@@ -91,6 +91,7 @@ class ImageManager : public QObject
 // 		QHash<QString, QImage> images;
 		
 	signals:
+		void imageRequested();
 		void imageReceived();
 		void loadingFinished();
 };

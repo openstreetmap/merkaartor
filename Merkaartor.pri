@@ -44,7 +44,9 @@ HEADERS += \
 ./TagModel.h \
 ./Utils/LineF.h \
 ./Utils/SlippyMapWidget.h \
-./Utils/EditCompleterDelegate.h
+./Utils/EditCompleterDelegate.h \
+./Preferences/MerkaartorPreferences.h \
+./Preferences/PreferencesDialog.h
 
 #Source files
 SOURCES += \
@@ -91,7 +93,9 @@ SOURCES += \
 ./TagModel.cpp \
 ./LayerDock.cpp \
 ./Utils/SlippyMapWidget.cpp \
-./Utils/EditCompleterDelegate.cpp
+./Utils/EditCompleterDelegate.cpp \
+./Preferences/MerkaartorPreferences.cpp \
+./Preferences/PreferencesDialog.cpp
 
 #Forms
 FORMS += \
@@ -107,7 +111,8 @@ FORMS += \
 ./RelationProperties.ui \
 ./Interaction/CreateDoubleWayDock.ui \
 ./Interaction/CreateRoundaboutDock.ui \
-./PaintStyle/PaintStyleEditor.ui
+./PaintStyle/PaintStyleEditor.ui \
+./Preferences/PreferencesDialog.ui
 
 
 #Resource file(s)

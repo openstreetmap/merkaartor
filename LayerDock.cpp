@@ -1,17 +1,105 @@
 #include "LayerDock.h"
 
 #include "MainWindow.h"
-#include "MapView.h"
 #include "Map/MapDocument.h"
+#include "MapView.h"
+#include "Preferences/MerkaartorPreferences.h"
 
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPainter> 
 
+#define SAFE_DELETE(x) {delete (x); x = NULL;}
+
 #define LINEHEIGHT 20
 
 LayerWidget::LayerWidget(MainWindow* aMain, QWidget* aParent)
-: QWidget(aParent), Main(aMain), ActiveLayer(0)
+: QWidget(aParent), Main(aMain), ActiveLayer(0), actgrWms(0), wmsMenu(0)
 {
+	//actgrAdapter = new QActionGroup(this);
+
+	actNone = new QAction(MerkaartorPreferences::instance()->getBgTypes()[Bg_None], this);
+	//actNone->setCheckable(true);
+	actNone->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_None));
+	connect(actNone, SIGNAL(triggered(bool)), this, SLOT(setNone(bool)));
+
+#ifdef yahoo_illegal
+	actYahoo = new QAction(MerkaartorPreferences::instance()->getBgTypes()[Bg_Yahoo_illegal], this);
+	//actYahoo->setCheckable(true);
+	actYahoo->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_Yahoo_illegal));
+	connect(actYahoo, SIGNAL(triggered(bool)), this, SLOT(setYahoo(bool)));
+#endif
+	initWmsActions();
+}
+
+void LayerWidget::setWms(QAction* act)
+{
+	QStringList server = act->data().toStringList();
+	MerkaartorPreferences::instance()->setSelectedWmsServer(server[6].toInt());
+
+	MapLayer* Layer = Main->document()->getBgLayer();
+
+	Layer->setMapAdapter(Bg_Wms, Main);
+	Layer->setVisible(true);
+
+	Main->view()->invalidate();
+	this->update(rect());
+}
+
+#ifdef yahoo_illegal
+void LayerWidget::setYahoo(bool)
+{
+	MapLayer* Layer = Main->document()->getBgLayer();
+	Layer->setMapAdapter(Bg_Yahoo_illegal,  Main);
+	Layer->setVisible(true);
+
+	Main->view()->invalidate();
+	this->update(rect());
+}
+#endif
+
+void LayerWidget::setNone(bool)
+{
+	MapLayer* Layer = Main->document()->getBgLayer();
+	Layer->setMapAdapter(Bg_None, Main);
+
+	Main->view()->invalidate();
+	this->update(rect());
+}
+
+void LayerWidget::initWmsActions()
+{
+	//if (actgrWms)
+	//	delete actgrWms;
+	//actgrWms = new QActionGroup(this);
+	
+	SAFE_DELETE(wmsMenu);
+	wmsMenu = new QMenu(MerkaartorPreferences::instance()->getBgTypes()[Bg_Wms]);
+	
+	QStringList Servers = MerkaartorPreferences::instance()->getWmsServers();
+	for (int i=0; i<Servers.size(); i+=6) {
+		QStringList oneServer;
+		oneServer.append(Servers[i]);
+		oneServer.append(Servers[i+1]);
+		oneServer.append(Servers[i+2]);
+		oneServer.append(Servers[i+3]);
+		oneServer.append(Servers[i+4]);
+		oneServer.append(Servers[i+5]);
+		oneServer.append(QString().setNum(int(i/6)));
+
+		QAction* act = new QAction(Servers[i], actgrWms);
+		act->setData(oneServer);
+		//act->setCheckable(true);
+		wmsMenu->addAction(act);
+		//actgrAdapter->addAction(act);
+		//actgrWms->addAction(act);
+		if (MerkaartorPreferences::instance()->getBgType() == Bg_Wms)
+			if (int(i/6) == MerkaartorPreferences::instance()->getSelectedWmsServer())
+				act->setChecked(true);
+	}
+	actNone->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_None));
+#ifdef yahoo_illegal
+	actYahoo->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_Yahoo_illegal));
+#endif
 }
 
 void LayerWidget::paintEvent(QPaintEvent*)
@@ -44,8 +132,6 @@ void LayerWidget::mouseReleaseEvent(QMouseEvent* anEvent)
 		if (anEvent->pos().x()<20)
 		{
 			Layer->setVisible(!Layer->isVisible());
-			if (Layer->type() == MapLayer::ImageLayer)
-				Main->view()->checkLayerManager();
 			update();
 			Main->invalidateView();
 		}
@@ -61,6 +147,32 @@ void LayerWidget::mouseReleaseEvent(QMouseEvent* anEvent)
 void LayerWidget::updateContent()
 {
 }
+
+void LayerWidget::contextMenuEvent(QContextMenuEvent* anEvent)
+{
+	unsigned int Idx = anEvent->pos().y()/LINEHEIGHT;
+	if (Idx && (Idx <= Main->document()->numLayers()))
+	{
+		MapLayer* Layer = Main->document()->layer(Idx-1);
+
+		QMenu menu(this);
+		switch (Layer->type()) {
+			case MapLayer::ImageLayer:
+				menu.addAction(actNone);
+
+				menu.addMenu(wmsMenu);
+				connect(wmsMenu, SIGNAL(triggered(QAction*)), this, SLOT(setWms(QAction*)));
+
+#ifdef yahoo_illegal
+				menu.addAction(actYahoo);
+#endif
+				menu.exec(anEvent->globalPos());
+				break;
+			default:
+				break;
+		}
+	}
+} 
 
 
 MapLayer* LayerWidget::activeLayer()
@@ -89,6 +201,8 @@ LayerDock::~LayerDock()
 void LayerDock::updateContent()
 {
 	Content->setFixedSize(Scroller->width(),(Main->document()->numLayers()+1)*LINEHEIGHT+1);
+	Content->initWmsActions();
+	Content->update();
 }
 
 void LayerDock::resizeEvent(QResizeEvent* )

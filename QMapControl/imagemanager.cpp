@@ -49,6 +49,7 @@ QPixmap ImageManager::getImage(const QString& host, const QString& url)
 		// load from net, add empty image
 		net->loadImage(host, url);
 // 		QPixmapCache::insert(url, emptyPixmap);
+		emit(imageRequested());
 		return emptyPixmap;
 	}
 	return pm;
@@ -75,6 +76,7 @@ void ImageManager::loadingQueueEmpty()
 void ImageManager::abortLoading()
 {
 	net->abortLoading();
+	loadingQueueEmpty();
 }
 void ImageManager::setProxy(QString host, int port)
 {

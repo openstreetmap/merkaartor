@@ -51,6 +51,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_roadJoinAction_triggered();
 		virtual void on_mapStyleSaveAction_triggered();
 		virtual void on_mapStyleLoadAction_triggered();
+		virtual void on_toolsPreferencesAction_triggered();
 
 	signals:
 		void remove_triggered();
@@ -58,6 +59,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		void add_triggered();
 		void reverse_triggered();
 	public:
+
 		PropertiesDock* properties();
 		MapDocument* document();
 		MapLayer* activeLayer();

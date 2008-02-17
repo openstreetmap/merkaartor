@@ -12,6 +12,7 @@ class Projection
 {
 	public:
 		Projection(void);
+		virtual ~Projection(void) {};
 
 		void setViewport(const CoordBox& Map, const QRect& Screen);
 		void panScreen(const QPoint& p, const QRect& Screen);

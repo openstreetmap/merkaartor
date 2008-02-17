@@ -7,8 +7,8 @@
 #include "Map/TrackPoint.h"
 #include "Utils/LineF.h"
 #include "PropertiesDock.h"
+#include "Preferences/MerkaartorPreferences.h"
 
-#include <QtCore/QSettings>
 #include <QtGui/QDockWidget>
 #include <QtGui/QPainter>
 
@@ -24,16 +24,12 @@ CreateRoundaboutInteraction::CreateRoundaboutInteraction(MainWindow* aMain, MapV
 	theDock->setAllowedAreas(Qt::LeftDockWidgetArea);
 	Main->addDockWidget(Qt::LeftDockWidgetArea, theDock);
 	theDock->show();
-	QSettings Sets;
-	Sets.beginGroup("roadstructure");
-	DockData.DriveRight->setChecked(Sets.value("rightsidedriving",true).toBool());
+	DockData.DriveRight->setChecked(MerkaartorPreferences::instance()->getRightSideDriving());
 }
 
 CreateRoundaboutInteraction::~CreateRoundaboutInteraction()
 {
-	QSettings Sets;
-	Sets.beginGroup("roadstructure");
-	Sets.setValue("rightsidedriving",DockData.DriveRight->isChecked());
+	MerkaartorPreferences::instance()->setRightSideDriving(DockData.DriveRight->isChecked());
 	delete theDock;
 	view()->update();
 }

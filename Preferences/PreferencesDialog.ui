@@ -1,0 +1,451 @@
+<ui version="4.0" >
+ <author>Chris Browet</author>
+ <class>PreferencesDialog</class>
+ <widget class="QDialog" name="PreferencesDialog" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>475</width>
+    <height>560</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Dialog</string>
+  </property>
+  <layout class="QVBoxLayout" >
+   <item>
+    <layout class="QVBoxLayout" >
+     <item>
+      <widget class="QTabWidget" name="tabPref" >
+       <property name="currentIndex" >
+        <number>2</number>
+       </property>
+       <widget class="QWidget" name="tab_3" >
+        <attribute name="title" >
+         <string>OSM</string>
+        </attribute>
+        <layout class="QVBoxLayout" >
+         <item>
+          <widget class="QGroupBox" name="groupBox_2" >
+           <property name="title" >
+            <string>OSM</string>
+           </property>
+           <layout class="QHBoxLayout" >
+            <item>
+             <layout class="QVBoxLayout" >
+              <item>
+               <widget class="QLabel" name="label_12" >
+                <property name="text" >
+                 <string>Website:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_14" >
+                <property name="text" >
+                 <string>Username:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_13" >
+                <property name="text" >
+                 <string>Password:</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" >
+              <item>
+               <widget class="QLineEdit" name="edOsmUrl" />
+              </item>
+              <item>
+               <widget class="QLineEdit" name="edOsmUser" />
+              </item>
+              <item>
+               <widget class="QLineEdit" name="edOsmPwd" >
+                <property name="echoMode" >
+                 <enum>QLineEdit::Password</enum>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>20</width>
+             <height>181</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab" >
+        <attribute name="title" >
+         <string>Network</string>
+        </attribute>
+        <layout class="QVBoxLayout" >
+         <item>
+          <widget class="QGroupBox" name="groupBox" >
+           <property name="title" >
+            <string>Proxy settings</string>
+           </property>
+           <layout class="QGridLayout" >
+            <item row="0" column="0" colspan="2" >
+             <widget class="QCheckBox" name="bbUseProxy" >
+              <property name="text" >
+               <string>Use Proxy</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" >
+             <widget class="QLabel" name="label" >
+              <property name="text" >
+               <string>Host:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1" >
+             <widget class="QLineEdit" name="edProxyHost" >
+              <property name="maximumSize" >
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0" >
+             <widget class="QLabel" name="label_2" >
+              <property name="text" >
+               <string>Port:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1" >
+             <widget class="QLineEdit" name="edProxyPort" >
+              <property name="maximumSize" >
+               <size>
+                <width>50</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab_2" >
+        <attribute name="title" >
+         <string>Background Image</string>
+        </attribute>
+        <layout class="QVBoxLayout" >
+         <item>
+          <layout class="QGridLayout" >
+           <item row="0" column="0" >
+            <widget class="QLabel" name="label_4" >
+             <property name="maximumSize" >
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text" >
+              <string>Select Map Adapter:</string>
+             </property>
+             <property name="buddy" >
+              <cstring>cbMapAdapter</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1" >
+            <widget class="QComboBox" name="cbMapAdapter" >
+             <property name="minimumSize" >
+              <size>
+               <width>200</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="grpWmsServers" >
+           <property name="title" >
+            <string>WMS Servers</string>
+           </property>
+           <layout class="QHBoxLayout" >
+            <property name="spacing" >
+             <number>1</number>
+            </property>
+            <property name="leftMargin" >
+             <number>1</number>
+            </property>
+            <property name="topMargin" >
+             <number>1</number>
+            </property>
+            <property name="rightMargin" >
+             <number>1</number>
+            </property>
+            <property name="bottomMargin" >
+             <number>1</number>
+            </property>
+            <item>
+             <widget class="QFrame" name="frame_2" >
+              <property name="frameShape" >
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <property name="frameShadow" >
+               <enum>QFrame::Raised</enum>
+              </property>
+              <layout class="QVBoxLayout" >
+               <property name="spacing" >
+                <number>5</number>
+               </property>
+               <property name="leftMargin" >
+                <number>5</number>
+               </property>
+               <property name="topMargin" >
+                <number>5</number>
+               </property>
+               <property name="rightMargin" >
+                <number>5</number>
+               </property>
+               <property name="bottomMargin" >
+                <number>5</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="label_10" >
+                 <property name="text" >
+                  <string>Server list:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QListWidget" name="lvWmsServers" />
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QFrame" name="frame" >
+              <property name="frameShape" >
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <property name="frameShadow" >
+               <enum>QFrame::Raised</enum>
+              </property>
+              <layout class="QVBoxLayout" >
+               <item>
+                <widget class="QLabel" name="label_11" >
+                 <property name="text" >
+                  <string>Name:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="edWmsName" >
+                 <property name="minimumSize" >
+                  <size>
+                   <width>100</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_5" >
+                 <property name="text" >
+                  <string>Server adress:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="edWmsAdr" />
+               </item>
+               <item>
+                <widget class="QLabel" name="label_6" >
+                 <property name="text" >
+                  <string>Main path:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="edWmsPath" />
+               </item>
+               <item>
+                <widget class="QPushButton" name="btShowCapabilities" >
+                 <property name="text" >
+                  <string>Show Capabilities</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_7" >
+                 <property name="text" >
+                  <string>Layers:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="edWmsLayers" />
+               </item>
+               <item>
+                <widget class="QLabel" name="label_8" >
+                 <property name="text" >
+                  <string>Projection:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="edWmsProj" />
+               </item>
+               <item>
+                <widget class="QLabel" name="label_9" >
+                 <property name="text" >
+                  <string>Styles:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="edWmsStyles" />
+               </item>
+               <item>
+                <spacer>
+                 <property name="orientation" >
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" >
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btApplyWmsServer" >
+                 <property name="text" >
+                  <string>Apply</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btAddWmsServer" >
+                 <property name="text" >
+                  <string>Add</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btDelWmsServer" >
+                 <property name="text" >
+                  <string>Remove</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons" >
+      <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>tabPref</tabstop>
+  <tabstop>edOsmUrl</tabstop>
+  <tabstop>edOsmUser</tabstop>
+  <tabstop>edOsmPwd</tabstop>
+  <tabstop>bbUseProxy</tabstop>
+  <tabstop>edProxyHost</tabstop>
+  <tabstop>edProxyPort</tabstop>
+  <tabstop>cbMapAdapter</tabstop>
+  <tabstop>lvWmsServers</tabstop>
+  <tabstop>edWmsName</tabstop>
+  <tabstop>edWmsAdr</tabstop>
+  <tabstop>edWmsPath</tabstop>
+  <tabstop>edWmsLayers</tabstop>
+  <tabstop>edWmsProj</tabstop>
+  <tabstop>edWmsStyles</tabstop>
+  <tabstop>btAddWmsServer</tabstop>
+  <tabstop>btDelWmsServer</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>PreferencesDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>295</x>
+     <y>546</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

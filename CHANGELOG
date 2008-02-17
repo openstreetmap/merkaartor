@@ -1,4 +1,7 @@
 v0.10
+	* ADD : centralized preferences dialog (by Chris Browet)
+	* ADD : support for WMS maps (by Chris Browet)
+	* FIX : remove yahoo maps support (not "legal" way to access tiles) (by Chris Browet)
 	* ADD : support for Yahoo maps backgrounds (by Chris Browet; QMapControl widget by Kai Winter)
 	* ADD : tags autocompletion in related widgets
 	* ADD : paint style editor

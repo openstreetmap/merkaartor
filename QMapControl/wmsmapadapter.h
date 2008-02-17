@@ -40,24 +40,38 @@ class WMSMapAdapter : public MapAdapter
 	 * @param serverPath The path to the tiles with placeholders
 	 * @param tilesize the size of the tiles
 	 */
-		WMSMapAdapter(QString host, QString serverPath, int tilesize = 256);
+		WMSMapAdapter(QString host, QString serverPath, QString wlayers, QString wSrs, QString wStyles, int tilesize = 256);
 		virtual ~WMSMapAdapter();
-		
+
 		virtual QPoint		coordinateToDisplay(const QPointF&) const;
 		virtual QPointF	displayToCoordinate(const QPoint&) const;
-		
-		
+
+
 	protected:
 		virtual void zoom_in();
 		virtual void zoom_out();
 		virtual QString getQuery(int x, int y, int z) const;
 		virtual bool isValid(int x, int y, int z) const;
-		
+
 	private:
 		virtual QString getQ(double ux, double uy, double ox, double oy) const;
-		
+
 		double coord_per_x_tile;
 		double coord_per_y_tile;
+
+		QString wms_version;
+		QString wms_request;
+		QString wms_layers;
+		QString wms_styles;
+		QString wms_srs;
+		QString wms_format;
+		QString wms_transparent;
+		QString wms_bgcolor;
+		QString wms_exceptions;
+		QString wms_time;
+		QString wms_elevation;
+		QString wms_width;
+		QString wms_height;
 };
 
 #endif

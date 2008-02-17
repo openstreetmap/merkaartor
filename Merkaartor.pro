@@ -13,6 +13,3 @@ UI_DIR += ./GeneratedFiles
 #Include file(s)
 include(Merkaartor.pri)
 include(QMapControl.pri)
-
-
-

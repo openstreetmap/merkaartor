@@ -52,7 +52,7 @@ QPixmap LayerManager::getImage() const
 Layer* LayerManager::getLayer() const
 {
 	Q_ASSERT_X(layers.size()>0, "LayerManager::getLayer()", "No layers were added!");
-	return layers.at(0);
+	return layers.first();
 }
 
 Layer* LayerManager::getLayer(const QString& layername) const
@@ -141,7 +141,7 @@ void LayerManager::setView(const QList<QPointF> coordinates)
 
 	if (!containsAll(coordinates))
 	{
-		zoomOut();
+		//zoomOut();
 		QCoreApplication::processEvents();
 	}
 
@@ -207,6 +207,12 @@ void LayerManager::addLayer(Layer* layer)
 	{
 		setView(QPointF(0,0));
 	}
+}
+
+void LayerManager::removeLayer()
+{
+	Q_ASSERT_X(layers.size()>0, "LayerManager::removeLayer()", "No layers existing!");
+	layers.removeAt(0);
 }
 
 void LayerManager::newOffscreenImage(bool clearImage, bool showZoomImage)

@@ -7,8 +7,8 @@
 #include "Map/TrackPoint.h"
 #include "Utils/LineF.h"
 #include "MainWindow.h"
+#include "Preferences/MerkaartorPreferences.h"
 
-#include <QtCore/QSettings>
 #include <QtGui/QDockWidget>
 #include <QtGui/QPainter>
 
@@ -22,18 +22,15 @@ CreateDoubleWayInteraction::CreateDoubleWayInteraction(MainWindow* aMain, MapVie
 	theDock->setAllowedAreas(Qt::LeftDockWidgetArea);
 	Main->addDockWidget(Qt::LeftDockWidgetArea, theDock);
 	theDock->show();
-	QSettings Sets;
-	Sets.beginGroup("roadstructure");
-	DockData.DriveRight->setChecked(Sets.value("rightsidedriving",true).toBool());
-	DockData.RoadDistance->setText(Sets.value("doubleroaddistance","20").toString());
+	DockData.DriveRight->setChecked(MerkaartorPreferences::instance()->getRightSideDriving());
+	DockData.RoadDistance->setText(QString().setNum(MerkaartorPreferences::instance()->getDoubleRoadDistance()));
 }
 
 CreateDoubleWayInteraction::~CreateDoubleWayInteraction()
 {
-	QSettings Sets;
-	Sets.beginGroup("roadstructure");
-	Sets.setValue("rightsidedriving",DockData.DriveRight->isChecked());
-	Sets.setValue("doubleroaddistance",DockData.RoadDistance->text());
+	MerkaartorPreferences::instance()->setRightSideDriving(DockData.DriveRight->isChecked());
+	MerkaartorPreferences::instance()->setDoubleRoadDistance(DockData.RoadDistance->text().toDouble());
+
 	delete theDock;
 	view()->update();
 }

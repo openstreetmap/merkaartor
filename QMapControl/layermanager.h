@@ -46,34 +46,34 @@ class LayerManager : public QObject
 	public:
 		LayerManager(QWidget*, QSize);
 		~LayerManager();
-		
+
 		//! returns the coordinate of the center of the map
 		/*!
 		 * @return returns the coordinate of the middle of the screen
 		 */
 		QPointF		getCurrentCoordinate	() const;
-		
+
 		//! returns the current offscreen image
 		/*!
 		 * @return the current offscreen image
 		 */
 		QPixmap		getImage					() const;
-		
+
 		//! returns the layer with the given name
 		/*!
 		 * @param  layername name of the wanted layer
 		 * @return the layer with the given name
 		 */
 		Layer*		getLayer					(const QString&) const;
-		
+
 		//! returns the base layer
 		/*!
 		 * This will return the base layer of the LayerManager.
 		 * The base layer is the one which is used to do internal coordinate calculations.
-		 * @return the base layer 
+		 * @return the base layer
 		 */
 		Layer*		getLayer					() const;
-		
+
 		//! returns the names of all layers
 		/*!
 		 * @return returns a QList with the names of all layers
@@ -85,7 +85,7 @@ class LayerManager : public QObject
 		 * @param  coordinate the coordinate which the view´s middle should be set to
 		 */
 		void			setView					(const QPointF& coordinate);
-		
+
 		//! sets the view, so all coordinates are visible
 		/*!
 		 * The code of setting the view to multiple coordinates is "brute force" and pretty slow.
@@ -93,33 +93,33 @@ class LayerManager : public QObject
 		 * @param  coordinates the Coorinates which should be visible
 		 */
 		void			setView					(const QList<QPointF> coordinates);
-		
+
 		//! zooms in one step
 		void			zoomIn					();
-		
+
 		//! zooms out one step
 		void			zoomOut					();
-		
+
 		//! sets the given zoomlevel
 		/*!
 		 * @param zoomlevel the zoomlevel
 		 */
 		void 			setZoom(int zoomlevel);
-	
+
 		//! The Viewport of the display
 		/*!
 		 * Returns the visible viewport in world coordinates
 		 * @return the visible viewport in world coordinates
 		 */
 		QRectF getViewport() const;
-		
+
 		//! scrolls the view
-		/*! 
+		/*!
 		 * Scrolls the view by the given value in pixels and in display coordinates
 		 * @param  offset the distance which the view should be scrolled
 		 */
 		void scrollView(const QPoint& offset);
-		
+
 		//! forwards mouseevents to the layers
 		/*!
 		 * This method is invoked by the MapControl which receives Mouse Events.
@@ -130,25 +130,26 @@ class LayerManager : public QObject
 
 		//! returns the middle of the map in projection coordinates
 		/*!
-		 * 
+		 *
 		 * @return the middle of the map in projection coordinates
 		 */
 		QPoint getMapmiddle_px() const;
-		
+
 		void forceRedraw();
 		void removeZoomImage();
-		
+
 		//! adds a layer
 		/*!
 		 * If multiple layers are added, they are painted in the added order.
 		 * @param layer the layer which should be added
 		 */
 		void addLayer(Layer* layer);
-		
+		void removeLayer();
+
 		void drawGeoms(QPainter* painter);
 		void drawImage(QPainter* painter);
 		void setSize(QSize newSize);
-	
+
 	private:
 		LayerManager& operator=(const LayerManager& rhs);
 		LayerManager(const LayerManager& old);
@@ -162,33 +163,33 @@ class LayerManager : public QObject
 		inline bool containsAll(QList<QPointF> coordinates) const;
 		inline void moveWidgets();
 		inline void setMiddle(QList<QPointF> coordinates);
-		
+
                 QWidget* parentWidget;
-                
+
 		QPoint screenmiddle;		// middle of the screen
 		QPoint scroll;				// scrollvalue of the offscreen image
 		QPoint zoomImageScroll;	// scrollvalue of the zoom image
-		
+
 		QSize size;		// widget size
 		QSize offSize;	// size of the offscreen image
-		
+
 		QPixmap composedOffscreenImage;
 		QPixmap composedOffscreenImage2;
 		QPixmap zoomImage;
-		
+
 		QList<Layer*>	layers;
-		
 
-		
 
-		
+
+
+
 		QPoint mapmiddle_px;	// projection-display coordinates
 		QPointF mapmiddle;	// world coordinate
 
 		QMutex scrollMutex;
 		QPoint whilenewscroll;
-		mutable QMutex refreshMutex;	
-		
+		mutable QMutex refreshMutex;
+
 	public slots:
 		void updateRequest(QRectF rect);
 		void updateRequest();

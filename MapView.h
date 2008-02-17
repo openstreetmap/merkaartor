@@ -5,6 +5,7 @@
 
 #include <QtGui/QPixmap>
 #include <QtGui/QWidget>
+#include <QProgressBar>
 
 class Interaction;
 class MainWindow;
@@ -42,7 +43,6 @@ class MapView :	public QWidget
 		PropertiesDock* properties();
 
         LayerManager*	layermanager;
-		void checkLayerManager();
 
 	private:
 		void updateStaticBuffer(QPaintEvent* anEvent);
@@ -52,10 +52,13 @@ class MapView :	public QWidget
 		Interaction* theInteraction;
 		QPixmap* StaticBuffer;
 		bool StaticBufferUpToDate;
+		
+		int numImages;
+		QProgressBar* pbImages;
 
-	public slots:
-		void updateRequestNew();
 	private slots:
+			void imageRequested();
+			void imageReceived();
         	void loadingFinished();
 	protected:
 		void resizeEvent(QResizeEvent *event);

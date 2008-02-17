@@ -1,9 +1,14 @@
 #include "Map/MapDocument.h"
 #include "Command/Command.h"
 #include "Map/MapFeature.h"
+#include "MapView.h"
+#include "Map/Projection.h"
 
 #include "QMapControl/mapadapter.h"
-#include "QMapControl/yahoomapadapter.h"
+#include "QMapControl/wmsmapadapter.h"
+#ifdef yahoo_illegal
+	#include "QMapControl/yahoomapadapter.h"
+#endif
 #include "QMapControl/layer.h"
 #include "QMapControl/layermanager.h"
 
@@ -14,6 +19,8 @@
 #include <map>
 #include <vector>
 
+#define SAFE_DELETE(x) {delete (x); x = NULL;}
+
 /* MAPLAYER */
 
 class MapLayerPrivate
@@ -22,6 +29,7 @@ public:
 	MapLayerPrivate()
 		: RenderPriorityUpToDate(false)
 	{
+		layer_bg = NULL;
 	}
 	~MapLayerPrivate()
 	{
@@ -34,8 +42,9 @@ public:
 	bool Visible;
 
 	MapLayer::MapLayerType LayerType;
-	MapAdapter* mapadapter_yahoo;
-	Layer* layer_yahoo;
+	ImageBackgroundType bgType;
+	MapAdapter* mapadapter_bg;
+	Layer* layer_bg;
 
 	bool RenderPriorityUpToDate;
         MapDocument* theDocument;
@@ -67,23 +76,20 @@ class SortAccordingToRenderingPriority
 }
 
 MapLayer::MapLayer(const QString& aName, enum MapLayerType layertype)
-: p(new MapLayerPrivate)
+: layermanager(0), p(new MapLayerPrivate)
 {
 	p->Name = aName;
 	p->LayerType = layertype;
-	layermanager = NULL;
 
 	switch (p->LayerType) {
 	    case MapLayer::ImageLayer:
-		p->mapadapter_yahoo = new YahooMapAdapter("us.maps3.yimg.com", "/aerial.maps.yimg.com/png?v=1.7&t=a&s=256&x=%2&y=%3&z=%1");
-		p->layer_yahoo = new Layer("Custom Layer", p->mapadapter_yahoo, Layer::MapLayer);
-		p->layer_yahoo->setVisible(false);
-
-		p->Visible = false;
+			if (MerkaartorPreferences::instance()->getBgType() == Bg_None)
+				p->Visible = false;
+			else
+				p->Visible = MerkaartorPreferences::instance()->getBgVisible();
 		break;
 	default:
-        	p->Visible = true;
-
+		p->Visible = true;
 	}
 }
 
@@ -96,8 +102,9 @@ MapLayer::~MapLayer()
 {
 	switch (p->LayerType) {
 		case MapLayer::ImageLayer:
-//			delete p->mapadapter_yahoo;
-			delete p->layer_yahoo;
+				SAFE_DELETE(p->layer_bg);
+			break;
+		default:
 			break;
 	}
 	delete p;
@@ -129,8 +136,12 @@ void MapLayer::setVisible(bool b)
 	p->Visible = b;
 	switch (p->LayerType) {
 	    case MapLayer::ImageLayer:
-            p->layer_yahoo->setVisible(b);
-            break;
+			if (p->bgType == Bg_None)
+				p->Visible = false;
+			else
+				p->layer_bg->setVisible(b);
+			MerkaartorPreferences::instance()->setBgVisible(p->Visible);
+			break;
         default:
             break;
 	}
@@ -143,7 +154,7 @@ MapLayer::MapLayerType MapLayer::type()
 
 Layer* MapLayer::imageLayer()
 {
-    return p->layer_yahoo;
+    return p->layer_bg;
 }
 
 bool MapLayer::isVisible() const
@@ -200,6 +211,58 @@ void MapLayer::setDocument(MapDocument* aDocument)
     p->theDocument = aDocument;
 }
 
+void MapLayer::setMapAdapter(ImageBackgroundType typ, MainWindow* main)
+{
+	CoordBox bb = main->view()->projection().viewport();
+	setMapAdapter(typ);
+	main->view()->projection().setViewport(bb, main->view()->rect());
+}
+
+void MapLayer::setMapAdapter(ImageBackgroundType typ)
+{
+	int i;
+	QStringList WmsServers;
+
+	if (layermanager)
+		if (layermanager->getLayers().size() > 0) {
+			layermanager->removeLayer();
+		}
+	SAFE_DELETE(p->layer_bg);
+
+	p->bgType = typ;
+	MerkaartorPreferences::instance()->setBgType(typ);
+	switch (p->bgType) {
+		case Bg_None:
+			setName("Background - None");
+			p->Visible = false;
+			break;
+
+		case Bg_Wms:
+			WmsServers = MerkaartorPreferences::instance()->getWmsServers();
+			i = MerkaartorPreferences::instance()->getSelectedWmsServer();
+			p->mapadapter_bg = new WMSMapAdapter(WmsServers[(i*6)+1], WmsServers[(i*6)+2], WmsServers[(i*6)+3],
+											WmsServers[(i*6)+4], WmsServers[(i*6)+5], 256);
+			p->layer_bg = new Layer("Custom Layer", p->mapadapter_bg, Layer::MapLayer);
+			p->layer_bg->setVisible(p->Visible);
+
+			setName("Background - WMS - " + WmsServers[(i*6)]);
+			break;
+#ifdef yahoo_illegal
+		case Bg_Yahoo_illegal:
+			p->mapadapter_bg = new YahooMapAdapter("us.maps3.yimg.com", "/aerial.maps.yimg.com/png?v=1.7&t=a&s=256&x=%2&y=%3&z=%1");
+			p->layer_bg = new Layer("Custom Layer", p->mapadapter_bg, Layer::MapLayer);
+			p->layer_bg->setVisible(p->Visible);
+
+			setName("Background - Yahoo");
+			break;
+#endif
+	}
+	if (layermanager)
+		if (p->layer_bg) {
+			layermanager->addLayer(p->layer_bg);
+		}
+}
+
 MapDocument* MapLayer::getDocument()
 {
     return p->theDocument;
@@ -244,7 +307,9 @@ MapDocument::MapDocument()
 : p(new MapDocumentPrivate)
 {
 	bgLayer = new MapLayer("Background imagery", MapLayer::ImageLayer);
+	bgLayer->setMapAdapter(MerkaartorPreferences::instance()->getBgType());
 	add(bgLayer);
+
 	add(new MapLayer("Generic layer", MapLayer::DrawingLayer));
 }
 
@@ -263,6 +328,7 @@ void MapDocument::clear()
 	delete p;
 	p = new MapDocumentPrivate;
 	bgLayer = new MapLayer("Background imagery", MapLayer::ImageLayer);
+	bgLayer->setMapAdapter(MerkaartorPreferences::instance()->getBgType());
 	add(bgLayer);
 	add(new MapLayer("Generic layer", MapLayer::DrawingLayer));
 }
@@ -337,6 +403,11 @@ MapFeature* MapDocument::get(const QString& id)
 		if (F) return F;
 	}
 	return 0;
+}
+
+MapLayer* MapDocument::getBgLayer() const
+{
+	return bgLayer;
 }
 
 /* VISIBLEFEATUREITERATOR */
@@ -441,8 +512,6 @@ unsigned int FeatureIterator::index()
 {
 	return Idx;
 }
-
-
 
 
 

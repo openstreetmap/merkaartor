@@ -19,27 +19,25 @@
  ***************************************************************************/
 #include "wmsmapadapter.h"
 
-WMSMapAdapter::WMSMapAdapter(QString host, QString serverPath, int tilesize)
+WMSMapAdapter::WMSMapAdapter(QString host, QString serverPath, QString wlayers, QString wSrs, QString wStyles, int tilesize)
  : MapAdapter(host, serverPath, tilesize, 0, 17)
 {
-// 	param1 = serverPath.indexOf("%1");
-// 	param2 = serverPath.indexOf("%2");
-// 	param3 = serverPath.indexOf("%3");
-// 	param4 = serverPath.indexOf("%4");
-// 	param5 = serverPath.indexOf("%5");
-// 	param6 = serverPath.lastIndexOf("%5");
-	
-// 	this->serverPath = serverPath.replace(param6, 2, QString().setNum(tilesize)).replace(param5, 2, QString().setNum(tilesize));
-	
-// 	sub1 = serverPath.mid(0, param1);
-// 	sub2 = serverPath.mid(param1+2, param2-param1-2);
-// 	sub3 = serverPath.mid(param2+2, param3-param2-2);
-// 	sub4 = serverPath.mid(param3+2, param4-param3-2);
-// 	sub5 = serverPath.mid(param4+2);
-	
-	this->serverPath.append("&WIDTH=").append(loc.toString(tilesize))
-				 .append("&HEIGHT=").append(loc.toString(tilesize))
-				 .append("&BBOX=");
+	wms_version = "1.1.1";
+	wms_request = "GetMap";
+	wms_format = "image/png";
+	wms_transparent = "TRUE";
+	wms_width = loc.toString(tilesize);
+	wms_height = loc.toString(tilesize);
+
+	wms_layers = wlayers;
+	wms_styles = wStyles;
+	wms_srs = wSrs;
+
+	wms_bgcolor = "";
+	wms_exceptions = "";
+	wms_time = "";
+	wms_elevation = "";
+
 	numberOfTiles = pow(2, current_zoom+0.0);
 	coord_per_x_tile = 360. / numberOfTiles;
 	coord_per_y_tile = 180. / numberOfTiles;
@@ -54,7 +52,7 @@ QPoint WMSMapAdapter::coordinateToDisplay(const QPointF& coordinate) const
 {
 // 	double x = ((coordinate.x()+180)*(tilesize*numberOfTiles/360));
 // 	double y = (((coordinate.y()*-1)+90)*(tilesize*numberOfTiles/180));
-	
+
 	double x = (coordinate.x()+180) * (numberOfTiles*tilesize)/360.;		// coord to pixel!
 	double y = -1*(coordinate.y()-90) * (numberOfTiles*tilesize)/180.;	// coord to pixel!
 	return QPoint(int(x), int(y));
@@ -63,7 +61,7 @@ QPointF WMSMapAdapter::displayToCoordinate(const QPoint& point) const
 {
 // 	double lon = ((point.x()/tilesize*numberOfTiles)*360)-180;
 // 	double lat = (((point.y()/tilesize*numberOfTiles)*180)-90)*-1;
-	
+
 	double lon = (point.x()*(360./(numberOfTiles*tilesize)))-180;
 	double lat = -(point.y()*(180./(numberOfTiles*tilesize)))+90;
 	return QPointF(lon, lat);
@@ -101,6 +99,17 @@ QString WMSMapAdapter::getQuery(int i, int j, int z) const
 QString WMSMapAdapter::getQ(double ux, double uy, double ox, double oy) const
 {
 	return QString().append(serverPath)
+						.append("SERVICE=WMS")
+						.append("&VERSION=").append(wms_version)
+						.append("&REQUEST=").append(wms_request)
+						.append("&LAYERS=").append(wms_layers)
+						.append("&SRS=").append(wms_srs)
+						.append("&STYLES=").append(wms_styles)
+						.append("&FORMAT=").append(wms_format)
+						.append("&TRANSPARENT=").append(wms_transparent)
+						.append("&WIDTH=").append(wms_width)
+						.append("&HEIGHT=").append(wms_height)
+						.append("&BBOX=")
 						 .append(loc.toString(ux)).append(",")
 						 .append(loc.toString(uy)).append(",")
 						 .append(loc.toString(ox)).append(",")

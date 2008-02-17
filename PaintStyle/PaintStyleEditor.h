@@ -17,9 +17,9 @@ class PaintStyleEditor : public QDialog, public Ui::PaintStyleEditor
 
 	public slots:
 		void on_PaintList_itemClicked(QListWidgetItem*);
-                void on_Key_editingFinished();
-                void on_Value1_editingFinished();
-                void on_Value2_editingFinished();
+		void on_Key_editingFinished();
+		void on_Value1_editingFinished();
+		void on_Value2_editingFinished();
 		void on_LowerZoomBoundary_valueChanged();
 		void on_UpperZoomBoundary_valueChanged();
 		void on_BackgroundColor_clicked();

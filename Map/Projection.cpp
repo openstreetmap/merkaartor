@@ -8,6 +8,8 @@
 
 #include <math.h>
 
+#define LAYERMANAGER_OK (layermanager->getLayers().size() > 0)
+
 // from wikipedia
 #define EQUATORIALRADIUS 6378137
 #define POLARRADIUS      6356752
@@ -48,7 +50,7 @@ double Projection::lonAnglePerM(double Lat) const
 
 QPointF Projection::project(const Coord & Map) const
 {
-	if (layermanager)
+	if (LAYERMANAGER_OK)
 	{
 		const QPointF c(radToAng(Map.lon()), radToAng(Map.lat()));
 		return coordinateToScreen(c);
@@ -59,7 +61,7 @@ QPointF Projection::project(const Coord & Map) const
 
 Coord Projection::inverse(const QPointF & Screen) const
 {
-	if (layermanager)
+	if (LAYERMANAGER_OK)
 	{
 		QPointF c(screenToCoordinate(Screen));
 		return Coord(angToRad(c.y()),angToRad(c.x()));
@@ -73,7 +75,7 @@ void Projection::panScreen(const QPoint & p, const QRect & Screen)
 	DeltaLon += p.x();
 	DeltaLat += p.y();
 	viewportRecalc(Screen);
-	if (layermanager)
+	if (LAYERMANAGER_OK)
 		layermanager->scrollView(-p);
 }
 
@@ -84,7 +86,7 @@ CoordBox Projection::viewport() const
 
 void Projection::viewportRecalc(const QRect & Screen)
 {
-	if (layermanager)
+	if (LAYERMANAGER_OK)
 	{
 		QPointF tr = screenToCoordinate(Screen.topRight());
 		QPointF bl = screenToCoordinate(Screen.bottomLeft());
@@ -108,7 +110,7 @@ void Projection::viewportRecalc(const QRect & Screen)
 void Projection::setViewport(const CoordBox & TargetMap,
 									const QRect & Screen)
 {
-	if (layermanager)
+	if (LAYERMANAGER_OK)
 		layerManagerSetViewport(TargetMap, Screen);
 	else
 	{
@@ -136,7 +138,7 @@ void Projection::setViewport(const CoordBox & TargetMap,
 void Projection::zoom(double d, const QPointF & Around,
 							 const QRect & Screen)
 {
-	if (layermanager)
+	if (LAYERMANAGER_OK)
 	{
 		screen_middle = QPoint(Screen.width() / 2, Screen.height() / 2);
 

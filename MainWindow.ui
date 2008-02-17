@@ -19,7 +19,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>19</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >
@@ -74,24 +74,35 @@
     <addaction name="fileNewAction" />
     <addaction name="fileOpenAction" />
     <addaction name="fileImportAction" />
+    <addaction name="separator" />
     <addaction name="fileDownloadAction" />
     <addaction name="fileUploadAction" />
+    <addaction name="separator" />
     <addaction name="fileQuitAction" />
    </widget>
-   <widget class="QMenu" name="menuStyle" >
+   <widget class="QMenu" name="menuTools" >
     <property name="title" >
-     <string>Style</string>
+     <string>Tools</string>
     </property>
-    <addaction name="editMapStyleAction" />
-    <addaction name="mapStyleLoadAction" />
-    <addaction name="mapStyleSaveAction" />
+    <widget class="QMenu" name="menuStyle_2" >
+     <property name="title" >
+      <string>Style</string>
+     </property>
+     <addaction name="editMapStyleAction" />
+     <addaction name="separator" />
+     <addaction name="mapStyleSaveAction" />
+     <addaction name="mapStyleLoadAction" />
+    </widget>
+    <addaction name="menuStyle_2" />
+    <addaction name="separator" />
+    <addaction name="toolsPreferencesAction" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuEdit" />
    <addaction name="menuView" />
-   <addaction name="menuStyle" />
    <addaction name="menuCreate" />
    <addaction name="menuRoad" />
+   <addaction name="menuTools" />
    <addaction name="menuHelp" />
   </widget>
   <widget class="QStatusBar" name="StatusBar" />
@@ -106,7 +117,10 @@
     <enum>Qt::ToolButtonTextUnderIcon</enum>
    </property>
    <attribute name="toolBarArea" >
-    <number>4</number>
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak" >
+    <bool>false</bool>
    </attribute>
    <addaction name="editUndoAction" />
    <addaction name="editRedoAction" />
@@ -376,6 +390,11 @@
   <action name="mapStyleLoadAction" >
    <property name="text" >
     <string>Load</string>
+   </property>
+  </action>
+  <action name="toolsPreferencesAction" >
+   <property name="text" >
+    <string>Preferences...</string>
    </property>
   </action>
  </widget>

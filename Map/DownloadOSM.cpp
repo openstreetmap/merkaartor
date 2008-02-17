@@ -9,6 +9,7 @@
 #include "Map/MapFeature.h"
 #include "Map/TrackSegment.h"
 #include "Utils/SlippyMapWidget.h"
+#include "Preferences/MerkaartorPreferences.h"
 
 #include "GeneratedFiles/ui_DownloadMapDialog.h"
 
@@ -432,39 +433,41 @@ bool checkForConflicts(MapDocument* theDocument)
 
 bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDocument)
 {
+	QString osmWebsite, osmUser, osmPwd, proxyHost;
+	int proxyPort;
+	bool useProxy;
 	static bool DownloadRaw = false;
+
 	QDialog * dlg = new QDialog(aParent);
-	QSettings Sets;
-	Sets.beginGroup("downloadosm");
+
+	osmWebsite = MerkaartorPreferences::instance()->getOsmWebsite();
+	osmUser = MerkaartorPreferences::instance()->getOsmUser();
+	osmPwd = MerkaartorPreferences::instance()->getOsmPassword();
+
+	useProxy = MerkaartorPreferences::instance()->getProxyUse();
+	proxyHost = MerkaartorPreferences::instance()->getProxyHost();
+	proxyPort = MerkaartorPreferences::instance()->getProxyPort();
+
 	Ui::DownloadMapDialog ui;
 	ui.setupUi(dlg);
 	SlippyMapWidget* SlippyMap = new SlippyMapWidget(ui.groupBox);
 	SlippyMap->setMinimumHeight(256);
 	ui.vboxLayout1->addWidget(SlippyMap);
-	ui.Website->setText("www.openstreetmap.org");
+
 	QStringList DefaultBookmarks;
 	DefaultBookmarks << "London" << "51.47" << "-0.20" << "51.51" << "-0.08";
 //	DefaultBookmarks << "Rotterdam" << "51.89" << "4.43" << "51.93" << "4.52";
 	QStringList Bookmarks(DefaultBookmarks);
-	QVariant V = Sets.value("bookmarks");
-	if (!V.isNull())
-		Bookmarks = V.toStringList();
+
+	QStringList sl = MerkaartorPreferences::instance()->getBookmarks();
+	if (sl.size() > 0)
+		Bookmarks = sl;
 	for (int i=0; i<Bookmarks.size(); i+=5)
 		ui.Bookmarks->addItem(Bookmarks[i]);
-	ui.Username->setText(Sets.value("user").toString());
-	ui.Password->setText(Sets.value("password").toString());
 	ui.IncludeTracks->setChecked(DownloadRaw);
-	ui.UseProxy->setChecked(Sets.value("useproxy").toBool());
-	ui.ProxyHost->setText(Sets.value("proxyhost").toString());
-	ui.ProxyPort->setText(Sets.value("proxyport").toString());
 	bool OK = true;
 	if (dlg->exec() == QDialog::Accepted)
 	{
-		Sets.setValue("user",ui.Username->text());
-		Sets.setValue("password",ui.Password->text());
-		Sets.setValue("useproxy",ui.UseProxy->isChecked());
-		Sets.setValue("proxyhost",ui.ProxyHost->text());
-		Sets.setValue("proxyport",ui.ProxyPort->text());
 		DownloadRaw = false;
 		CoordBox Clip(Coord(0,0),Coord(0,0));
 		if (ui.FromBookmark->isChecked())
@@ -485,7 +488,7 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 			Bookmarks.insert(2,QString::number(radToAng(Clip.bottomLeft().lon())));
 			Bookmarks.insert(3,QString::number(radToAng(Clip.topRight().lat())));
 			Bookmarks.insert(4,QString::number(radToAng(Clip.topRight().lon())));
-			Sets.setValue("bookmarks",Bookmarks);
+			MerkaartorPreferences::instance()->setBookmarks(Bookmarks);
 		}
 		else if (ui.FromMap->isChecked())
 		{
@@ -493,9 +496,9 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 			Clip = CoordBox(Coord(R.x(),R.y()),Coord(R.x()+R.width(),R.y()+R.height()));
 		}
 		aParent->view()->setUpdatesEnabled(false);
-		OK = downloadOSM(aParent,ui.Website->text(),ui.Username->text(),ui.Password->text(), ui.UseProxy->isChecked(), ui.ProxyHost->text(), ui.ProxyPort->text().toInt(),Clip,theDocument);
+		OK = downloadOSM(aParent,osmWebsite,osmUser,osmPwd,useProxy,proxyHost,proxyPort,Clip,theDocument);
 		if (OK && ui.IncludeTracks->isChecked())
-			OK = downloadTracksFromOSM(aParent,ui.Website->text(),ui.Username->text(),ui.Password->text(),ui.UseProxy->isChecked(), ui.ProxyHost->text(), ui.ProxyPort->text().toInt(), Clip,theDocument);
+			OK = downloadTracksFromOSM(aParent,osmWebsite,osmUser,osmPwd,useProxy,proxyHost,proxyPort, Clip,theDocument);
 		aParent->view()->setUpdatesEnabled(true);
 		if (OK)
 		{

@@ -3,12 +3,15 @@
 
 #include <QtGui/QDockWidget>
 #include <QtGui/QScrollArea>
+#include <QActionGroup>
 
 class MainWindow;
 class MapLayer;
 
 class LayerWidget : public QWidget
 {
+	Q_OBJECT
+
 	public:
 		LayerWidget(MainWindow* aMain, QWidget* aParent);
 
@@ -17,9 +20,30 @@ class LayerWidget : public QWidget
 		void updateContent();
 		MapLayer* activeLayer();
 
+	protected:
+		void contextMenuEvent(QContextMenuEvent* anEvent);
+
+	public:
+		void initWmsActions();
+
 	private:
 		MainWindow* Main;
 		unsigned int ActiveLayer;
+		QActionGroup* actgrAdapter;
+		QActionGroup* actgrWms;
+#ifdef yahoo_illegal
+		QAction* actYahoo;
+#endif
+		QAction* actNone;
+		QMenu* wmsMenu;
+
+	private slots:
+		void setWms(QAction*);
+#ifdef yahoo_illegal
+		void setYahoo(bool);
+#endif
+		void setNone(bool);
+
 };
 
 class LayerDock : public QDockWidget

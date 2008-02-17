@@ -11,7 +11,6 @@
 #include "MainWindow.h"
 #include "PropertiesDock.h"
 
-#include <QtCore/QSettings>
 #include <QtGui/QDockWidget>
 #include <QtGui/QMessageBox>
 #include <QtGui/QPainter>

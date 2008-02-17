@@ -29,10 +29,14 @@
 #include "GeneratedFiles/ui_AboutDialog.h"
 #include "GeneratedFiles/ui_UploadMapDialog.h"
 #include "GeneratedFiles/ui_SetPositionDialog.h"
+#include "Preferences/PreferencesDialog.h"
+#include "Preferences/MerkaartorPreferences.h"
+#include "QMapControl/imagemanager.h"
+#include "QMapControl/mapadapter.h"
+#include "QMapControl/wmsmapadapter.h"
 
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>
-#include <QtCore/QSettings>
 #include <QtCore/QTimer>
 #include <QtGui/QDialog>
 #include <QtGui/QFileDialog>
@@ -47,6 +51,19 @@ MainWindow::MainWindow(void)
 		: theDocument(0)
 {
 	setupUi(this);
+	
+	QStringList Servers = MerkaartorPreferences::instance()->getWmsServers();
+	if (Servers.size() == 0) {
+		Servers.append("Demis");
+		Servers.append("www2.demis.nl");
+		Servers.append("/wms/wms.asp?wms=WorldMap&");
+		Servers.append("Countries,Borders,Highways,Roads,Cities");
+		Servers.append("EPSG:4326");
+		Servers.append(",");
+		MerkaartorPreferences::instance()->setWmsServers(Servers);
+		MerkaartorPreferences::instance()->setSelectedWmsServer(0);
+	}
+	
 	theView = new MapView(this);
 	setCentralWidget(theView);
 	theDocument = new MapDocument;
@@ -61,15 +78,13 @@ MainWindow::MainWindow(void)
 	theProperties->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 	addDockWidget(Qt::RightDockWidgetArea, theProperties);
 	on_editPropertiesAction_triggered();
-	QSettings Sets;
-	if (Sets.contains("general/workingdir"))
-		QDir::setCurrent(Sets.value("general/workingdir").toString());
+	QDir::setCurrent(MerkaartorPreferences::instance()->getWorkingDir());
 }
 
 MainWindow::~MainWindow(void)
 {
-	QSettings Sets;
-	Sets.setValue("general/workingdir", QDir::currentPath());
+	MerkaartorPreferences::instance()->setWorkingDir(QDir::currentPath());
+	delete MerkaartorPreferences::instance();
 	delete theDocument;
 }
 
@@ -236,26 +251,9 @@ void MainWindow::on_fileOpenAction_triggered()
 void MainWindow::on_fileUploadAction_triggered()
 {
 	on_editPropertiesAction_triggered();
-	QDialog * dlg = new QDialog(this);
-	QSettings Sets;
-	Sets.beginGroup("downloadosm");
-	Ui::UploadMapDialog ui;
-	ui.setupUi(dlg);
-	ui.Website->setText("www.openstreetmap.org");
-	ui.Username->setText(Sets.value("user").toString());
-	ui.Password->setText(Sets.value("password").toString());
-	ui.UseProxy->setChecked(Sets.value("useproxy").toBool());
-	ui.ProxyHost->setText(Sets.value("proxyhost").toString());
-	ui.ProxyPort->setText(Sets.value("proxyport").toString());
-	if (dlg->exec() == QDialog::Accepted) {
-		Sets.setValue("user", ui.Username->text());
-		Sets.setValue("password", ui.Password->text());
-		Sets.setValue("useproxy", ui.UseProxy->isChecked());
-		Sets.setValue("proxyhost", ui.ProxyHost->text());
-		Sets.setValue("proxyport", ui.ProxyPort->text());
-		syncOSM(this, ui.Website->text(), ui.Username->text(), ui.Password->text(), ui.UseProxy->isChecked(), ui.ProxyHost->text(), ui.ProxyPort->text().toInt());
-	}
-	delete dlg;
+	MerkaartorPreferences* p = MerkaartorPreferences::instance();
+	syncOSM(this, p->getOsmWebsite(), p->getOsmUser(), p->getOsmPassword(), p->getProxyUse(),
+		p->getProxyHost(), p->getProxyPort());
 
 }
 
@@ -330,7 +328,10 @@ void MainWindow::on_fileNewAction_triggered()
 	theView->launch(0);
 	theProperties->setSelection(0);
 	if (!hasUnsavedChanges(*theDocument) || mayDiscardUnsavedChanges(this)) {
-		theDocument->clear();
+		delete theDocument;
+		theDocument = new MapDocument;
+		theView->setDocument(theDocument);
+		theDocument->history().setActions(editUndoAction, editRedoAction);
 		invalidateView();
 	}
 }
@@ -440,3 +441,17 @@ void MainWindow::on_mapStyleLoadAction_triggered()
 	}
 }
 
+void MainWindow::on_toolsPreferencesAction_triggered()
+{
+	PreferencesDialog* Pref = new PreferencesDialog();
+	
+	if (Pref->exec() == QDialog::Accepted) {
+		theLayers->updateContent();
+		theDocument->getBgLayer()->setMapAdapter(MerkaartorPreferences::instance()->getBgType());
+
+		if (MerkaartorPreferences::instance()->getProxyUse()) {
+			ImageManager::instance()->setProxy(MerkaartorPreferences::instance()->getProxyHost(),
+				MerkaartorPreferences::instance()->getProxyPort());
+		}
+	}
+}

@@ -17,7 +17,7 @@ HEADERS += QMapControl/curve.h \
  QMapControl/osmmapadapter.h \
  QMapControl/maplayer.h \
  QMapControl/geometrylayer.h \
- QMapControl/yahoomapadapter.h \
+# QMapControl/yahoomapadapter.h \
  QMapControl/googlemapadapter.h
 SOURCES += QMapControl/curve.cpp \
            QMapControl/geometry.cpp \
@@ -37,7 +37,7 @@ SOURCES += QMapControl/curve.cpp \
  QMapControl/osmmapadapter.cpp \
  QMapControl/maplayer.cpp \
  QMapControl/geometrylayer.cpp \
- QMapControl/yahoomapadapter.cpp \
+# QMapControl/yahoomapadapter.cpp \
  QMapControl/googlemapadapter.cpp
 
 QT += network  

@@ -9,6 +9,7 @@
 
 #include "QMapControl/layermanager.h"
 #include "QMapControl/imagemanager.h"
+#include "Preferences/MerkaartorPreferences.h"
 
 
 #include <QtCore/QTime>
@@ -17,28 +18,28 @@
 #include <QtGui/QPainter>
 #include <QtGui/QStatusBar>
 
-MapView::MapView(MainWindow * aMain)
-:
-Main(aMain), theDocument(0), theInteraction(0), StaticBuffer(0),
-StaticBufferUpToDate(false)
+MapView::MapView(MainWindow* aMain) : 
+	Main(aMain), theDocument(0), theInteraction(0), StaticBuffer(0),
+		StaticBufferUpToDate(false), numImages(0)
 {
 	setMouseTracking(true);
 	setAttribute(Qt::WA_OpaquePaintEvent);
 
-	QSettings Sets;
-	Sets.beginGroup("downloadosm");
-	if (Sets.value("useproxy").toBool()) {
-		ImageManager::instance()->setProxy(Sets.value("proxyhost").
-						   toString(),
-						   Sets.value("proxyport").
-						   toInt());
+	if (MerkaartorPreferences::instance()->getProxyUse()) {
+		ImageManager::instance()->setProxy(MerkaartorPreferences::instance()->getProxyHost(),
+			MerkaartorPreferences::instance()->getProxyPort());
 	}
 
 	layermanager = new LayerManager((QWidget *) this, size());
 
-	connect(ImageManager::instance(), SIGNAL(imageReceived()),
-		this, SLOT(updateRequestNew()));
+	pbImages = new QProgressBar(Main);
+	pbImages->setFormat("tile %v / %m");
+	Main->statusBar()->addPermanentWidget(pbImages);
 
+	connect(ImageManager::instance(), SIGNAL(imageRequested()),
+		this, SLOT(imageRequested()));
+	connect(ImageManager::instance(), SIGNAL(imageReceived()),
+		this, SLOT(imageReceived()));
 	connect(ImageManager::instance(), SIGNAL(loadingFinished()),
 		this, SLOT(loadingFinished()));
 }
@@ -59,34 +60,19 @@ PropertiesDock *MapView::properties()
 	return Main->properties();
 }
 
-void MapView::setDocument(MapDocument * aDoc)
+void MapView::setDocument(MapDocument* aDoc)
 {
 	theDocument = aDoc;
 
 	delete layermanager;
 	layermanager = new LayerManager((QWidget *) this, size());
 
-	layermanager->addLayer(theDocument->layer(0)->imageLayer());
+	if (theDocument->layer(0)->imageLayer())
+		layermanager->addLayer(theDocument->layer(0)->imageLayer());
 	theDocument->layer(0)->layermanager = layermanager;
-	projection().setViewport(CoordBox(Coord(1, -1), Coord(-1, 1)),
-				  rect());
-	checkLayerManager();
+	projection().setLayerManager(layermanager);
+	projection().setViewport(CoordBox(Coord(1, -1), Coord(-1, 1)), rect());
 }
-
-
-void MapView::checkLayerManager()
-{
-	bool ImageVisible = false;
-	for (unsigned int i=0; i<theDocument->numLayers(); ++i)
-		if (theDocument->layer(i)->isVisible() && (theDocument->layer(i)->type() == MapLayer::ImageLayer))
-			ImageVisible = true;
-	if (ImageVisible)
-		projection().setLayerManager(layermanager);
-	else
-		projection().setLayerManager(0);
-	projection().setViewport(projection().viewport(),rect());
-}
-
 
 MapDocument *MapView::document()
 {
@@ -133,8 +119,10 @@ void MapView::updateStaticBuffer(QPaintEvent * anEvent)
 				sortRenderingPriority(projection().pixelPerM());
 		}
 
-		if (layermanager->getLayers().size() > 0) {
-			layermanager->drawImage(&P);
+		if (layermanager) {
+			if (layermanager->getLayers().size() > 0) {
+				layermanager->drawImage(&P);
+			}
 		}
 		for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
 			i.get()->draw(P, projection());
@@ -162,19 +150,19 @@ void MapView::updateStaticBuffer(QPaintEvent * anEvent)
 	StaticBufferUpToDate = true;
 }
 
-void MapView::mousePressEvent(QMouseEvent * event)
+void MapView::mousePressEvent(QMouseEvent* event)
 {
 	if (theInteraction)
 		theInteraction->mousePressEvent(event);
 }
 
-void MapView::mouseReleaseEvent(QMouseEvent * event)
+void MapView::mouseReleaseEvent(QMouseEvent* event)
 {
 	if (theInteraction)
 		theInteraction->mouseReleaseEvent(event);
 }
 
-void MapView::mouseMoveEvent(QMouseEvent * anEvent)
+void MapView::mouseMoveEvent(QMouseEvent* anEvent)
 {
 	if (!updatesEnabled())
 		return;
@@ -182,7 +170,7 @@ void MapView::mouseMoveEvent(QMouseEvent * anEvent)
 		theInteraction->mouseMoveEvent(anEvent);
 }
 
-void MapView::wheelEvent(QWheelEvent * ev)
+void MapView::wheelEvent(QWheelEvent* ev)
 {
 	int Steps = ev->delta() / 120;
 	if (Steps > 0) {
@@ -198,7 +186,7 @@ void MapView::wheelEvent(QWheelEvent * ev)
 	}
 }
 
-void MapView::launch(Interaction * anInteraction)
+void MapView::launch(Interaction* anInteraction)
 {
 	if (theInteraction)
 		delete theInteraction;
@@ -221,10 +209,18 @@ Projection& MapView::projection()
 	return theProjection;
 }
 
-void MapView::updateRequestNew()
+void MapView::imageRequested()
 {
-//      qDebug() << "MapControl::updateRequestNew()";
-	layermanager->forceRedraw();
+	++numImages;
+	pbImages->setRange(0, numImages);
+	pbImages->setValue(0);
+	pbImages->update();
+}
+
+void MapView::imageReceived()
+{
+	pbImages->setValue(pbImages->value()+1);
+	
 	invalidate();
 }
 
@@ -232,6 +228,12 @@ void MapView::loadingFinished()
 {
 //      qDebug() << "MapControl::loadingFinished()";
 	layermanager->removeZoomImage();
+	numImages = 0;
+	pbImages->reset();
+	
+//	Main->statusBar()->removeWidget(pbImages);
+//	delete pbImages;
+	
 }
 
 void MapView::resizeEvent(QResizeEvent * event)
