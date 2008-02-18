@@ -29,6 +29,7 @@ class TrackSegment : public MapFeature
 		void sortByTime();
 		virtual void partChanged(MapFeature* F, unsigned int ChangeId);
 
+		virtual QString exportOSM() {return QString("");};
 	private:
 		TrackSegmentPrivate* p;
 };

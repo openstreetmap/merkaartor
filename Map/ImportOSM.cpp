@@ -42,10 +42,10 @@ static void importNode(const QDomElement& Root, MapDocument* theDocument, MapLay
 			// conflict
 			Pt->setLastUpdated(MapFeature::UserResolved);
 			Pt = new TrackPoint(Coord(angToRad(Lat),angToRad(Lon)));
+			theList->add(new AddFeatureCommand(conflictLayer, Pt, false));
 			loadTags(Root,Pt);
 			Pt->setId("conflict_"+id);
 			Pt->setLastUpdated(MapFeature::OSMServerConflict);
-			theList->add(new AddFeatureCommand(conflictLayer, Pt, false));
 		}
 		else if (Pt->lastUpdated() != MapFeature::UserResolved)
 		{
@@ -58,8 +58,8 @@ static void importNode(const QDomElement& Root, MapDocument* theDocument, MapLay
 	else
 	{
 		Pt = new TrackPoint(Coord(angToRad(Lat),angToRad(Lon)));
-                theList->add(new AddFeatureCommand(theLayer,Pt, false));
-                Pt->setId(id);
+		theList->add(new AddFeatureCommand(theLayer,Pt, false));
+		Pt->setId(id);
 		loadTags(Root, Pt);
 		Pt->setLastUpdated(MapFeature::OSMServer);
 	}
@@ -404,6 +404,7 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 	theList->setIsUpdateFromOSM();
 	theDocument->add(theLayer);
 	MapLayer* conflictLayer = new MapLayer("Conflicts from "+theLayer->name(), MapLayer::DrawingLayer);
+	theDocument->add(conflictLayer);
 	importOSM(dlg, root, theDocument, theLayer, conflictLayer, theList, theDownloader);
 	bool WasCanceled = dlg->wasCanceled();
 	if (!WasCanceled)
@@ -420,10 +421,10 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 	{
 		//FIXME Do we have to add a download to the undo list? + dirties the document
 		theDocument->history().add(theList);
-		if (conflictLayer->size())
-			theDocument->add(conflictLayer);
-		else
+		if (!conflictLayer->size()) {
+			theDocument->remove(conflictLayer);
 			delete conflictLayer;
+		}
 	}
 	return true;
 }

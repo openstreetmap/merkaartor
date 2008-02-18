@@ -234,6 +234,17 @@ void Road::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature,
 		}
 }
 
+QString Road::exportOSM()
+{
+	QString S;
+	S += QString("<way id=\"%1\">").arg(stripToOSMId(id()));
+	for (unsigned int i=0; i<size(); ++i)
+		S+=QString("<nd ref=\"%1\"/>").arg(stripToOSMId(get(i)->id()));
+	S += tagOSM();
+	S += "</way>";
+	return S;
+}
+
 MapFeature::TrafficDirectionType trafficDirection(const Road* R)
 {
 	// TODO some duplication with Way trafficDirection

@@ -8,7 +8,7 @@
 
 static QString randomId()
 {
-	return QUuid::createUuid().toString(); 
+	return QUuid::createUuid().toString();
 }
 
 void copyTags(MapFeature* Dest, MapFeature* Src)
@@ -21,7 +21,7 @@ class MapFeaturePrivate
 {
 	public:
 		MapFeaturePrivate()
-			: LastActor(MapFeature::User), theLayer(0), 
+			: LastActor(MapFeature::User), theLayer(0),
 			  PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
 			  theFeature(0), LastPartNotification(0) { }
 		MapFeaturePrivate(const MapFeaturePrivate& other)
@@ -117,7 +117,7 @@ void MapFeature::setTag(const QString& k, const QString& v)
 			return;
 		}
 	p->Tags.push_back(std::make_pair(k,v));
-        p->theLayer->getDocument()->addToTagList(k, v);
+	p->theLayer->getDocument()->addToTagList(k, v);
 	notifyChanges();
 }
 
@@ -264,3 +264,24 @@ void MapFeature::notifyParents(unsigned int Id)
 			p->Parents[i]->partChanged(this, Id);
 	}
 }
+
+QString MapFeature::tagOSM()
+{
+	QString S;
+	for (unsigned int i=0; i<tagSize(); ++i)
+	{
+		if (tagKey(i) == "width") continue;
+		S += QString("<tag k=\"%1\" v=\"%2\"/>").arg(tagKey(i)).arg(tagValue(i));
+	}
+	return S;
+}
+
+QString MapFeature::stripToOSMId(const QString& id)
+{
+	int f = id.lastIndexOf("_");
+	if (f>0)
+		return id.right(id.length()-(f+1));
+	return id;
+}
+
+

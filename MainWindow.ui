@@ -74,6 +74,7 @@
     <addaction name="fileNewAction" />
     <addaction name="fileOpenAction" />
     <addaction name="fileImportAction" />
+    <addaction name="exportOSMAction" />
     <addaction name="separator" />
     <addaction name="fileDownloadAction" />
     <addaction name="fileUploadAction" />
@@ -144,6 +145,9 @@
   <action name="fileOpenAction" >
    <property name="text" >
     <string>Open</string>
+   </property>
+   <property name="statusTip" >
+    <string>Create a new document and import a file</string>
    </property>
   </action>
   <action name="viewZoomAllAction" >
@@ -237,6 +241,9 @@
   <action name="fileImportAction" >
    <property name="text" >
     <string>Import</string>
+   </property>
+   <property name="statusTip" >
+    <string>Import a file into the current document</string>
    </property>
   </action>
   <action name="fileDownloadAction" >
@@ -351,6 +358,9 @@
    <property name="text" >
     <string>New</string>
    </property>
+   <property name="statusTip" >
+    <string>Create a new document</string>
+   </property>
   </action>
   <action name="roadSplitAction" >
    <property name="text" >
@@ -395,6 +405,14 @@
   <action name="toolsPreferencesAction" >
    <property name="text" >
     <string>Preferences...</string>
+   </property>
+  </action>
+  <action name="exportOSMAction" >
+   <property name="text" >
+    <string>Export OSM...</string>
+   </property>
+   <property name="statusTip" >
+    <string>Export all visible layers to a file</string>
    </property>
   </action>
  </widget>

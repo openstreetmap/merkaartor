@@ -294,6 +294,13 @@ const MapFeature* MapLayer::get(unsigned int i) const
 	return p->Features[i];
 }
 
+void MapLayer::ExportOSM()
+{
+	for (int i=0; i< size(); i++) {
+		MapFeature* f = get(i);
+	}
+}
+
 
 /* MAPDOCUMENT */
 
@@ -417,6 +424,37 @@ MapLayer* MapDocument::getBgLayer() const
 {
 	return bgLayer;
 }
+
+void MapDocument::exportOSM(const QString& filename)
+{
+	QString theExport, coreExport;
+
+	for (VisibleFeatureIterator i(this); !i.isEnd(); ++i) {
+		coreExport += i.get()->exportOSM();
+	}
+
+	std::pair<bool,CoordBox> bb = boundingBox(this);
+
+	theExport += "<?xml version='1.0' encoding='UTF-8'?>\n";
+	theExport += "<osm version='0.5' generator='Merkaartor'>\n";
+	theExport += "<bound box='";
+	theExport += QString().number(radToAng(bb.second.bottomLeft().lat())) + ",";
+	theExport += QString().number(radToAng(bb.second.bottomLeft().lon())) + ",";
+	theExport += QString().number(radToAng(bb.second.topRight().lat())) + ",";
+	theExport += QString().number(radToAng(bb.second.topRight().lon()));
+	theExport += "' origin='http://www.openstreetmap.org/api/0.5' />\n";
+	theExport += coreExport;
+	theExport += "</osm>";
+
+	QFile file(filename);
+	if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+		return;
+
+	QTextStream out(&file);
+	out << theExport;
+	file.close();
+}
+
 
 /* VISIBLEFEATUREITERATOR */
 

@@ -90,6 +90,14 @@ RenderPriority TrackPoint::renderPriority(double) const
 	return RenderPriority(RenderPriority::IsSingular,0);
 }
 
+QString TrackPoint::exportOSM()
+{
+	QString S("<node id=\"%1\" lat=\"%2\" lon=\"%3\">");
+	S+=tagOSM();
+	S+="</node>";
+	return S.arg(stripToOSMId(id())).arg(radToAng(position().lat()),0,'f',8).arg(radToAng(position().lon()),0,'f',8);
+}
+
 
 
 

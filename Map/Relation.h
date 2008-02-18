@@ -36,6 +36,8 @@ class Relation : public MapFeature
 		virtual void setLayer(MapLayer* aLayer);
 		virtual void partChanged(MapFeature* F, unsigned int ChangeId);
 
+		virtual QString exportOSM();
+
 	private:
 		Relation(const Relation&);
 		RelationPrivate* p;

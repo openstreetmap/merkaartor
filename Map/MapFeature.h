@@ -83,8 +83,16 @@ class MapFeature
 		void notifyChanges();
 		void notifyParents(unsigned int Id);
 
+		virtual QString exportOSM() = 0;
+
+
 	private:
 		MapFeaturePrivate* p;
+
+	protected:
+		QString tagOSM();
+		static QString stripToOSMId(const QString& id);
+
 };
 
 void copyTags(MapFeature* Dest, MapFeature* Src);

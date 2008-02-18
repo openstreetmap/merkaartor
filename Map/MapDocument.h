@@ -61,6 +61,8 @@ public:
 	void setMapAdapter(ImageBackgroundType typ, MainWindow* main);
 	LayerManager* layermanager;
 
+	void ExportOSM(void);
+
 private:
 	MapLayerPrivate* p;
 };
@@ -93,6 +95,8 @@ public:
 	QStringList getTagList() ;
 	QStringList getTagValueList(QString k) ;
     MapLayer* getBgLayer() const;
+	void exportOSM(const QString& filename);
+
 
 private:
 	MapDocumentPrivate* p;

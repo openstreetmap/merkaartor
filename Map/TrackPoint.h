@@ -28,6 +28,9 @@ class TrackPoint : public MapFeature
 		void setTime(const QDateTime& aTime);
 
 		virtual void partChanged(MapFeature* F, unsigned int ChangeId);
+
+		virtual QString exportOSM();
+
 	private:
 		Coord Position;
 		QDateTime Time;

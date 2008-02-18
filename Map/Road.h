@@ -37,6 +37,7 @@ class Road : public MapFeature
 
 		double area() const;
 
+		virtual QString exportOSM();
 	private:
 		RoadPrivate* p;
 };

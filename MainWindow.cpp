@@ -455,3 +455,12 @@ void MainWindow::on_toolsPreferencesAction_triggered()
 		}
 	}
 }
+
+void MainWindow::on_exportOSMAction_triggered()
+{
+	QString fileName = QFileDialog::getSaveFileName(this,
+		tr("Export OSM"), MerkaartorPreferences::instance()->getWorkingDir() + "/untitled.osm", tr("OSM Files (*.osm)")); 
+
+	if (fileName != "")
+		theDocument->exportOSM(fileName);
+}

@@ -1,8 +1,11 @@
 #include "Map/Relation.h"
+#include "Map/Road.h"
 #include "MainWindow.h"
 #include "Command/DocumentCommands.h"
 #include "Command/RelationCommands.h"
 #include "Map/MapDocument.h"
+
+#include "ExportOSM.h"
 
 #include <QtCore/QAbstractTableModel>
 
@@ -206,6 +209,24 @@ void Relation::releaseMemberModel()
 		delete p->theModel;
 		p->theModel = 0;
 	}
+}
+
+QString Relation::exportOSM()
+{
+	QString S;
+	S += QString("<relation id=\"%1\">").arg(stripToOSMId(id()));
+	for (unsigned int i=0; i<size(); ++i)
+	{
+		QString Type("node");
+		if (dynamic_cast<const Road*>(get(i)))
+			Type="way";
+		else if (dynamic_cast<const Relation*>(get(i)))
+			Type="relation";
+		S+=QString("<member type=\"%1\" ref=\"%2\" role=\"%3\"/>").arg(Type).arg(stripToOSMId(get(i)->id())).arg(getRole(i));
+	}
+	S += tagOSM();
+	S += "</relation>";
+	return S;
 }
 
 
