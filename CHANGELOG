@@ -1,4 +1,5 @@
 v0.10
+	* FIX : enhance somewhat visibility of selected items (by Chris Browet)
 	* ADD : export OSM files (by Chris Browet)
 	* ADD : support for OSM backgrounds (by Chris Browet)
 	* ADD : centralized preferences dialog (by Chris Browet)

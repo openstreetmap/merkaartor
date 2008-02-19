@@ -176,13 +176,14 @@ void Road::draw(QPainter& thePainter, const Projection& )
 
 void Road::drawFocus(QPainter& thePainter, const Projection& theProjection)
 {
-	// FIXME
+	// FIXME Selected route
 	QFont F(thePainter.font());
 	F.setPointSize(10);
 	F.setBold(true);
 	F.setWeight(QFont::Black);
 	thePainter.setFont(F);
 	QPen TP(QColor(0,0,255));
+	TP.setWidth(5);
 	thePainter.setPen(TP);
 	thePainter.setBrush(QColor(0,0,255));
 	for (unsigned int i=1; i<p->Nodes.size(); ++i)

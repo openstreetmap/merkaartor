@@ -61,6 +61,8 @@ void TrackPoint::drawFocus(QPainter& thePainter, const Projection& theProjection
 	QPointF P(theProjection.project(Position));
 	QRectF R(P-QPointF(3,3),QSize(6,6));
 	thePainter.drawRect(R);
+	R.adjust(-7, -7, 7, 7);
+	thePainter.drawEllipse(R);
 }
 
 double TrackPoint::pixelDistance(const QPointF& Target, double, const Projection& theProjection) const
