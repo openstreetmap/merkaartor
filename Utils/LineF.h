@@ -43,6 +43,16 @@ inline double angle(const QPointF& A)
 	return atan2(A.y(),A.x());
 }
 
+inline QPointF toQt(const Coord& C)
+{
+	return QPointF(C.lat(),C.lon());
+}
+
+inline Coord toCoord(const QPointF& F)
+{
+	return Coord(F.x(),F.y());
+}
+
 class LineF
 {
 public:
@@ -155,6 +165,54 @@ private:
 	QPointF P1, P2;
 	bool Valid;
 	double A,B,C;
+};
+
+class BezierF
+{
+	public:
+		BezierF(const QPointF& aA, const QPointF& aB, const QPointF& aC, const QPointF& aD)
+			: A(aA), B(aB), C(aC), D(aD)
+		{
+		}
+
+		BezierF(const Coord& aA, const Coord& aB, const Coord& aC, const Coord& aD)
+			: A(toQt(aA)), B(toQt(aB)), C(toQt(aC)), D(toQt(aD))
+		{
+		}
+
+		double distance(const QPointF& T) const
+		{
+			double LowestZ = ::distance(A,T);
+			for (double t=0;t<1.0125; t+=0.025)
+			{
+				QPointF P = A*(1-t)*(1-t)*(1-t) + 3*B*(1-t)*(1-t)*t + 3*C*(1-t)*t*t + D*t*t*t;
+				double z = ::distance(P,T);
+				if (z < LowestZ)
+					LowestZ = z;
+			}
+			return LowestZ;
+		}
+
+		QPointF project(const QPointF& T) const
+		{
+			double LowestZ = ::distance(A,T);
+			QPointF ClosestP(A);
+			for (double t=0;t<1.0125; t+=0.025)
+			{
+				QPointF P = A*(1-t)*(1-t)*(1-t) + 3*B*(1-t)*(1-t)*t + 3*C*(1-t)*t*t + D*t*t*t;
+				double z = ::distance(P,T);
+				if (z < LowestZ)
+				{
+					LowestZ = z;
+					ClosestP = P;
+				}
+			}
+			return ClosestP;
+		}
+
+
+	private:
+		QPointF A,B,C,D;	
 };
 
 #endif

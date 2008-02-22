@@ -1,4 +1,5 @@
 #include "PaintStyle.h"
+#include "Map/Painting.h"
 #include "Map/Projection.h"
 #include "Map/TrackPoint.h"
 #include "Map/Relation.h"
@@ -282,7 +283,7 @@ bool FeaturePainter::matchesZoom(double PixelPerM) const
 		return (ZoomUnder <= PixelPerM) && (PixelPerM <= ZoomUpper);
 	return true;
 }
-
+/*
 void buildPathFromRoad(Road *R, const Projection &theProjection, QPainterPath &Path)
 {
 	Path.moveTo(theProjection.project(R->get(0)->position()));
@@ -297,6 +298,7 @@ void buildPathFromRelation(Relation *R, const Projection &theProjection, QPainte
 			buildPathFromRoad(M, theProjection, Path);
 }
 
+*/
 void FeaturePainter::drawBackground(Road* R, QPainter& thePainter, const Projection& theProjection) const
 {
 	if (!DrawBackground) return;

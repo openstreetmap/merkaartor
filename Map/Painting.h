@@ -9,7 +9,11 @@ class Road;
 class Way;
 
 class QPainter;
+class QPainterPath;
 class QPen;
+
+void buildPathFromRoad(Road *R, Projection const &theProjection, QPainterPath &Path);
+void buildPathFromRelation(Relation *R, Projection const &theProjection, QPainterPath &Path);
 
 /// draws way with oneway markers
 void draw(QPainter& thePainter, QPen& thePen, MapFeature::TrafficDirectionType Dir, const QPointF& FromF, const QPointF& ToF, double theWidth, const Projection& theProjection);

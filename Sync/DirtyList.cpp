@@ -39,7 +39,7 @@ static bool isInterestingPoint(MapDocument* theDocument, TrackPoint* Pt)
 	// does its id look like one from osm
 	if (Pt->id().left(5) == "node_")
 		return true;
-	// if the user has added special tags, that fine also
+	// if the user has added special tags, that's fine also
 	for (unsigned int i=0; i<Pt->tagSize(); ++i)
 		if (Pt->tagKey(i) != "created_by")
 			return true;

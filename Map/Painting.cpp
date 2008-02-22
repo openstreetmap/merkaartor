@@ -1,6 +1,7 @@
 #include "Map/Painting.h"
 #include "Map/Projection.h"
 #include "Map/TrackPoint.h"
+#include "Map/Relation.h"
 #include "Map/Road.h"
 #include "Utils/LineF.h"
 
@@ -29,6 +30,31 @@ static void buildCubicPath(QPainterPath& Path, const QPointF& P1, const QPointF&
 
 	}
 }
+
+
+void buildPathFromRoad(Road *R, Projection const &theProjection, QPainterPath &Path)
+{
+	Path.moveTo(theProjection.project(R->get(0)->position()));
+	if (R->smoothed().size())
+	{
+		for (unsigned int i=3; i<R->smoothed().size(); i+=3)
+			Path.cubicTo(
+				theProjection.project(R->smoothed()[i-2]),
+				theProjection.project(R->smoothed()[i-1]),
+				theProjection.project(R->smoothed()[i]));
+	}
+	else
+		for (unsigned int i=1; i<R->size(); ++i)
+			Path.lineTo(theProjection.project(R->get(i)->position()));
+}
+
+void buildPathFromRelation(Relation *R, Projection const &theProjection, QPainterPath &Path)
+{
+	for (unsigned int i=0; i<R->size(); ++i)
+		if (Road* M = dynamic_cast<Road*>(R->get(i)))
+			buildPathFromRoad(M, theProjection, Path);
+}
+
 
 /// draws way with oneway markers
 void draw(QPainter& thePainter, QPen& thePen, MapFeature::TrafficDirectionType TT, const QPointF& FromF, const QPointF& ToF, double theWidth, const Projection&)

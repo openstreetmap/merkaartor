@@ -12,9 +12,9 @@
 #include <QtGui/QDockWidget>
 #include <QtGui/QPainter>
 
-CreateSingleWayInteraction::CreateSingleWayInteraction(MainWindow* aMain, MapView* aView)
+CreateSingleWayInteraction::CreateSingleWayInteraction(MainWindow* aMain, MapView* aView, bool aCurved)
 	: GenericFeatureSnapInteraction<MapFeature>(aView), Main(aMain), theRoad(0), FirstPoint(0,0),
-	  HaveFirst(false), FirstNode(0)
+	  HaveFirst(false), FirstNode(0), IsCurved(aCurved)
 {
 }
 
@@ -27,7 +27,7 @@ void CreateSingleWayInteraction::paintEvent(QPaintEvent* anEvent, QPainter& theP
 	if (HaveFirst)
 	{
 	  QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
-		QPen TP(SomeBrush,projection().pixelPerM()*4);
+		QPen TP(SomeBrush,projection().pixelPerM()*4+2);
 		QPointF PreviousPoint = view()->projection().project(FirstPoint);
 		::draw(thePainter,TP,MapFeature::UnknownDirection, PreviousPoint,LastCursor ,4 ,view()->projection());
 	}
@@ -79,6 +79,8 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFe
 			{
 				TrackPoint* From = 0;
 				theRoad = new Road;
+				if (IsCurved)
+					theRoad->setTag("smooth","yes");
 				if (FirstNode)
 					From = FirstNode;
 				else

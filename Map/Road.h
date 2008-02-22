@@ -1,6 +1,8 @@
 #ifndef MERKAARTOR_ROAD_H_
 #define MERKAARTOR_ROAD_H_
 
+#include <vector>
+
 #include "Map/MapFeature.h"
 
 class RoadPrivate;
@@ -31,6 +33,7 @@ class Road : public MapFeature
 		unsigned int find(TrackPoint* Pt) const;
 		TrackPoint* get(unsigned int idx);
 		const TrackPoint* get(unsigned int Idx) const;
+		const std::vector<Coord>& smoothed() const;
 
 		virtual void partChanged(MapFeature* F, unsigned int ChangeId);
 		virtual void setLayer(MapLayer* aLayer);

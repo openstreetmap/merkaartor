@@ -1,4 +1,5 @@
 #include "PaintStyle/EditPaintStyle.h"
+#include "Map/Painting.h"
 #include "Map/Projection.h"
 #include "Map/TrackPoint.h"
 #include "Map/Relation.h"

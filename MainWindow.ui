@@ -28,17 +28,6 @@
     </property>
     <addaction name="helpAboutAction" />
    </widget>
-   <widget class="QMenu" name="menuCreate" >
-    <property name="title" >
-     <string>&amp;Create</string>
-    </property>
-    <addaction name="createNodeAction" />
-    <addaction name="createRoadAction" />
-    <addaction name="createDoubleWayAction" />
-    <addaction name="createRoundaboutAction" />
-    <addaction name="createAreaAction" />
-    <addaction name="createRelationAction" />
-   </widget>
    <widget class="QMenu" name="menuRoad" >
     <property name="title" >
      <string>Road</string>
@@ -97,6 +86,17 @@
     <addaction name="menuStyle_2" />
     <addaction name="separator" />
     <addaction name="toolsPreferencesAction" />
+   </widget>
+   <widget class="QMenu" name="menuCreate" >
+    <property name="title" >
+     <string>&amp;Create</string>
+    </property>
+    <addaction name="createNodeAction" />
+    <addaction name="createRoadAction" />
+    <addaction name="createDoubleWayAction" />
+    <addaction name="createRoundaboutAction" />
+    <addaction name="createAreaAction" />
+    <addaction name="createRelationAction" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuEdit" />
@@ -400,6 +400,11 @@
   <action name="mapStyleLoadAction" >
    <property name="text" >
     <string>Load</string>
+   </property>
+  </action>
+  <action name="createCurvedRoadAction" >
+   <property name="text" >
+    <string>Curved road</string>
    </property>
   </action>
   <action name="toolsPreferencesAction" >

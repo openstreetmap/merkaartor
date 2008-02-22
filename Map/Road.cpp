@@ -18,15 +18,50 @@ class RoadPrivate
 {
 	public:
 		RoadPrivate()
-		: BBox(Coord(0,0),Coord(0,0)), BBoxUpToDate(true), Area(0), AreaUpToDate(true)
+		: SmoothedUpToDate(false), BBox(Coord(0,0),Coord(0,0)), BBoxUpToDate(true), Area(0), AreaUpToDate(true)
 		{
 		}
 		std::vector<TrackPoint*> Nodes;
+		std::vector<Coord> Smoothed;
+		bool SmoothedUpToDate;
 		CoordBox BBox;
 		bool BBoxUpToDate;
 		double Area;
 		bool AreaUpToDate;
+
+		void updateSmoothed(bool DoSmooth);
+		void addSmoothedBezier(unsigned int i, unsigned int j, unsigned int k, unsigned int l);
 };
+
+void RoadPrivate::addSmoothedBezier(unsigned int i, unsigned int j, unsigned int k, unsigned int l)
+{
+	Coord A(Nodes[i]->position());
+	Coord B(Nodes[j]->position());
+	Coord C(Nodes[k]->position());
+	Coord D(Nodes[l]->position());
+
+	Coord Ctrl1(B+(C-A)*(1.0/6));
+	Coord Ctrl2(C-(D-B)*(1.0/6));
+
+
+	Smoothed.push_back(Ctrl1);
+	Smoothed.push_back(Ctrl2);
+	Smoothed.push_back(C);
+}
+
+void RoadPrivate::updateSmoothed(bool DoSmooth)
+{
+	SmoothedUpToDate = true;
+	Smoothed.clear();
+	if ( (Nodes.size() < 3) || !DoSmooth )
+		return;
+	Smoothed.push_back(Nodes[0]->position());
+	addSmoothedBezier(0,0,1,2);
+	for (unsigned int i=1; i<Nodes.size()-2; ++i)
+		addSmoothedBezier(i-1,i,i+1,i+2);
+	unsigned int Last = Nodes.size()-1;
+	addSmoothedBezier(Last-2,Last-1,Last,Last);
+}
 
 Road::Road(void)
 : p(new RoadPrivate)
@@ -58,6 +93,7 @@ void Road::partChanged(MapFeature*, unsigned int ChangeId)
 {
 	p->BBoxUpToDate = false;
 	p->AreaUpToDate = false;
+	p->SmoothedUpToDate = false;
 	notifyParents(ChangeId);
 }
 
@@ -83,6 +119,7 @@ void Road::add(TrackPoint* Pt)
 	Pt->setParent(this);
 	p->BBoxUpToDate = false;
 	p->AreaUpToDate = false;
+	p->SmoothedUpToDate = false;
 }
 
 void Road::add(TrackPoint* Pt, unsigned int Idx)
@@ -92,6 +129,7 @@ void Road::add(TrackPoint* Pt, unsigned int Idx)
 	Pt->setParent(this);
 	p->BBoxUpToDate = false;
 	p->AreaUpToDate = false;
+	p->SmoothedUpToDate = false;
 }
 
 unsigned int Road::find(TrackPoint* Pt) const
@@ -109,6 +147,7 @@ void Road::remove(unsigned int idx)
 	Pt->unsetParent(this);
 	p->BBoxUpToDate = false;
 	p->AreaUpToDate = false;
+	p->SmoothedUpToDate = false;
 }
 
 unsigned int Road::size() const
@@ -185,11 +224,9 @@ void Road::drawFocus(QPainter& thePainter, const Projection& theProjection)
 	QPen TP(QColor(0,0,255));
 	TP.setWidth(5);
 	thePainter.setPen(TP);
-	thePainter.setBrush(QColor(0,0,255));
-	for (unsigned int i=1; i<p->Nodes.size(); ++i)
-	{
-		::draw(thePainter,TP,MapFeature::UnknownDirection,p->Nodes[i-1]->position(),p->Nodes[i]->position(),widthOf(this),theProjection);
-	}
+	QPainterPath Pt;
+	buildPathFromRoad(this,theProjection,Pt);
+	thePainter.drawPath(Pt);
 }
 
 double Road::pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection) const
@@ -201,13 +238,26 @@ double Road::pixelDistance(const QPointF& Target, double ClearEndDistance, const
 		if (x<ClearEndDistance)
 			return Best;
 	}
-	for (unsigned int i=1; i<p->Nodes.size(); ++i)
-	{
-		LineF F(theProjection.project(p->Nodes[i-1]->position()),theProjection.project(p->Nodes[i]->position()));
-		double D = F.capDistance(Target);
-		if (D < ClearEndDistance)
-			Best = D;
-	}
+	if (smoothed().size())
+		for (unsigned int i=3; i <p->Smoothed.size(); i += 3)
+		{
+			BezierF F(
+				theProjection.project(p->Smoothed[i-3]),
+				theProjection.project(p->Smoothed[i-2]),
+				theProjection.project(p->Smoothed[i-1]),
+				theProjection.project(p->Smoothed[i]));
+			double D = F.distance(Target);
+			if (D < ClearEndDistance)
+				Best = D;
+		}
+	else
+		for (unsigned int i=1; i<p->Nodes.size(); ++i)
+		{
+			LineF F(theProjection.project(p->Nodes[i-1]->position()),theProjection.project(p->Nodes[i]->position()));
+			double D = F.capDistance(Target);
+			if (D < ClearEndDistance)
+				Best = D;
+		}
 	return Best;
 }
 
@@ -287,6 +337,25 @@ double widthOf(const Road* R)
 
 unsigned int findSnapPointIndex(const Road* R, Coord& P)
 {
+	if (R->smoothed().size())
+	{
+		BezierF L(R->smoothed()[0],R->smoothed()[1],R->smoothed()[2],R->smoothed()[3]);
+		unsigned int BestIdx = 3;
+		double BestDistance = L.distance(toQt(P));
+		for (unsigned int i=3; i<R->smoothed().size(); i+=3)
+		{
+			BezierF L(R->smoothed()[i-3],R->smoothed()[i-2],R->smoothed()[i-1],R->smoothed()[i]);
+			double Distance = L.distance(toQt(P));
+			if (Distance < BestDistance)
+			{
+				BestIdx = i;
+				BestDistance = Distance;
+			}
+		}
+		BezierF B(R->smoothed()[BestIdx-3],R->smoothed()[BestIdx-2],R->smoothed()[BestIdx-1],R->smoothed()[BestIdx]);
+		P = toCoord(B.project(toQt(P)));
+		return BestIdx/3;
+	}
 	LineF L(R->get(0)->position(),R->get(1)->position());
 	unsigned int BestIdx = 1;
 	double BestDistance = L.capDistance(P);
@@ -310,3 +379,9 @@ bool isClosed(const Road* R)
 	return R->size() && (R->get(0) == R->get(R->size()-1));
 }
 
+const std::vector<Coord>& Road::smoothed() const
+{
+	if (!p->SmoothedUpToDate)
+		p->updateSmoothed(tagValue("smooth","") == "yes");
+	return p->Smoothed;
+}

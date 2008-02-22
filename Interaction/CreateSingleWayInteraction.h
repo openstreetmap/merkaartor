@@ -14,7 +14,7 @@ class CreateSingleWayInteraction : public GenericFeatureSnapInteraction<MapFeatu
 	Q_OBJECT
 
 	public:
-		CreateSingleWayInteraction(MainWindow* Main, MapView* aView);
+		CreateSingleWayInteraction(MainWindow* Main, MapView* aView, bool aCurved);
 		~CreateSingleWayInteraction();
 
 		virtual void snapMousePressEvent(QMouseEvent * event, MapFeature* aLast);
@@ -28,6 +28,7 @@ class CreateSingleWayInteraction : public GenericFeatureSnapInteraction<MapFeatu
 		Coord FirstPoint;
 		TrackPoint* FirstNode;
 		bool HaveFirst;
+		bool IsCurved;
 };
 
 #endif // INTERACTION\CREATEDOUBLEWAYINTERACTION_H

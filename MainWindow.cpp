@@ -348,7 +348,12 @@ void MainWindow::on_createRoundaboutAction_triggered()
 
 void MainWindow::on_createRoadAction_triggered()
 {
-	theView->launch(new CreateSingleWayInteraction(this, theView));
+	theView->launch(new CreateSingleWayInteraction(this, theView, false));
+}
+
+void MainWindow::on_createCurvedRoadAction_triggered()
+{
+	theView->launch(new CreateSingleWayInteraction(this, theView, true));
 }
 
 void MainWindow::on_createAreaAction_triggered()

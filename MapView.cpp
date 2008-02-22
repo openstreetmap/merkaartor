@@ -42,6 +42,7 @@ MapView::MapView(MainWindow* aMain) :
 		this, SLOT(imageReceived()));
 	connect(ImageManager::instance(), SIGNAL(loadingFinished()),
 		this, SLOT(loadingFinished()));
+
 }
 
 MapView::~MapView()

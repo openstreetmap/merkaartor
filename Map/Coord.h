@@ -1,6 +1,8 @@
 #ifndef MERKATOR_COORD_H_
 #define MERKATOR_COORD_H_
 
+#include <math.h>
+
 inline double angToRad(double a)
 {
 	return a*3.141592/180;
@@ -39,6 +41,11 @@ class Coord
 			Lon = l;
 		}
 
+		double length() const
+		{
+			return sqrt(Lat*Lat+Lon*Lon);
+		}
+
 	private:
 		double Lat;
 		double Lon;
@@ -53,6 +60,12 @@ inline Coord operator+(const Coord& A, const Coord& B)
 {
 	return Coord(A.lat()+B.lat(),A.lon()+B.lon());
 }
+
+inline Coord operator*(const Coord& A, double d)
+{
+	return Coord(A.lat()*d,A.lon()*d);
+}
+
 
 class CoordBox
 {
