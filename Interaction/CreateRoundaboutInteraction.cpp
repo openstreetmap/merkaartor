@@ -84,6 +84,7 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
 			TrackPoint* First = new TrackPoint(view()->projection().inverse(Prev));
 			L->add(new AddFeatureCommand(Main->activeLayer(),First,true));
 			Road* R = new Road;
+			R->setLayer(Main->activeLayer());
 			R->add(First);
 			R->setTag("oneway","yes");
 			for (double a = Angle*3/2; a<2*3.141592; a+=Angle)

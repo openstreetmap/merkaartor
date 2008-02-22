@@ -1,4 +1,5 @@
 v0.10
+	* FIX : don't crash while createing a roundabout (by Tommi Vainikiainen)
 	* ADD : curved road support
 	* FIX : enhance somewhat visibility of selected items (by Chris Browet)
 	* ADD : export OSM files (by Chris Browet)
