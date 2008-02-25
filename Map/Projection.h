@@ -23,6 +23,7 @@ class Projection
 		double lonAnglePerM(double Lat) const;
 		Coord inverse(const QPointF& Screen) const;
 		void zoom(double d, const QPointF& Around, const QRect& Screen);
+		void setCenter(Coord& Center, const QRect& Screen);
 
 		void setLayerManager(LayerManager* lm);
 	protected:

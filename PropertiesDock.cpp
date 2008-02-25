@@ -29,6 +29,11 @@ PropertiesDock::PropertiesDock(MainWindow* aParent)
 	setWindowTitle(tr("Properties"));
 	theModel = new TagModel(aParent);
     delegate = new EditCompleterDelegate(aParent);
+
+	centerAction = new QAction("Center map", this);
+	connect(centerAction, SIGNAL(triggered()), this, SLOT(on_centerAction_triggered()));
+	centerZoomAction = new QAction("Center && Zoom map", this);
+	connect(centerZoomAction, SIGNAL(triggered()), this, SLOT(on_centerZoomAction_triggered()));
 }
 
 PropertiesDock::~PropertiesDock(void)
@@ -87,6 +92,24 @@ void PropertiesDock::setSelection(MapFeature* S)
 	fillMultiUiSelectionBox();
 }
 
+void PropertiesDock::setMultiSelection(const std::vector<MapFeature*>& aFeatureList)
+{
+	cleanUpUi();
+	Selection.clear();
+	for (unsigned int i=0; i<aFeatureList.size(); ++i)
+		Selection.push_back(aFeatureList[i]);
+	FullSelection = Selection;
+	switchToMultiUi();
+	// to prevent slots to change the values also
+	std::vector<MapFeature*> Current = Selection;
+	Selection.clear();
+	MultiUi.TagView->setModel(theModel);
+	MultiUi.TagView->setItemDelegate(delegate);
+	theModel->setFeature(Current);
+	Selection = Current;
+	fillMultiUiSelectionBox();
+}
+
 void PropertiesDock::toggleSelection(MapFeature* S)
 {
 	cleanUpUi();
@@ -106,6 +129,7 @@ void PropertiesDock::fillMultiUiSelectionBox()
 	{
 		// to prevent on_SelectionList_itemSelectionChanged to kick in
 		NowShowing = NoUiShowing;
+		Main->setUpdatesEnabled(false);
 		MultiUi.SelectionList->clear();
 		for (unsigned int i=0; i<FullSelection.size(); ++i)
 		{
@@ -113,6 +137,8 @@ void PropertiesDock::fillMultiUiSelectionBox()
 			it->setData(Qt::UserRole,QVariant(i));
 			it->setSelected(true);
 		}
+		MultiUi.lbStatus->setText(QString("%1/%1 selected item(s)").arg(FullSelection.size()));
+		Main->setUpdatesEnabled(true);
 		NowShowing = MultiShowing;
 	}
 }
@@ -126,6 +152,7 @@ void PropertiesDock::on_SelectionList_itemSelectionChanged()
 			if (MultiUi.SelectionList->item(i)->isSelected())
 				Selection.push_back(FullSelection[i]);
 		theModel->setFeature(Selection);
+		MultiUi.lbStatus->setText(QString("%1/%2 selected item(s)").arg(Selection.size()).arg(FullSelection.size()));
 		Main->view()->update();
 	}
 }
@@ -182,6 +209,8 @@ void PropertiesDock::switchToMultiUi()
 	QWidget* NewUi = new QWidget(this);
 	MultiUi.setupUi(NewUi);
 	MultiUi.TagView->verticalHeader()->hide();
+	MultiUi.SelectionList->setContextMenuPolicy(Qt::CustomContextMenu);
+	MultiUi.lbStatus->setText("Selected items");
 	setWidget(NewUi);
 	if (CurrentUi)
 		delete CurrentUi;
@@ -189,6 +218,7 @@ void PropertiesDock::switchToMultiUi()
 	connect(MultiUi.RemoveTagButton,SIGNAL(clicked()),this, SLOT(on_RemoveTagButton_clicked()));
 	connect(MultiUi.SelectionList,SIGNAL(itemSelectionChanged()),this,SLOT(on_SelectionList_itemSelectionChanged()));
 	connect(MultiUi.SelectionList,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(on_SelectionList_itemDoubleClicked(QListWidgetItem*)));
+	connect(MultiUi.SelectionList, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(on_SelectionList_customContextMenuRequested(const QPoint &)));
 	setWindowTitle(tr("Properties - Multiple elements"));
 }
 
@@ -296,11 +326,12 @@ void PropertiesDock::resetValues()
                         resetTagComboBox(RelationUi.LandUse,R,"landuse");
 		}
 	}
-	else if (FullSelection.size() > 1) {
+	else if (FullSelection.size() > 1)
+	{
 		MultiUi.TagView->setModel(theModel);
-                MultiUi.TagView->setItemDelegate(delegate);
-        }
-        theModel->setFeature(Current);
+		MultiUi.TagView->setItemDelegate(delegate);
+	}
+	theModel->setFeature(Current);
 	Selection = Current;
 }
 
@@ -434,4 +465,47 @@ void PropertiesDock::on_RemoveTagButton_clicked()
 			}
 		}
 	}
+}
+
+void PropertiesDock::on_SelectionList_customContextMenuRequested(const QPoint & pos)
+{
+	QListWidgetItem *it = MultiUi.SelectionList->itemAt(pos);
+	if (it) {
+		QMenu menu(MultiUi.SelectionList);
+		menu.addAction(centerAction);
+		menu.addAction(centerZoomAction);
+		menu.exec(MultiUi.SelectionList->mapToGlobal(pos));
+	}
+}
+
+void PropertiesDock::on_centerAction_triggered()
+{
+	Main->setUpdatesEnabled(false);
+	unsigned int idx = MultiUi.SelectionList->selectedItems()[0]->data(Qt::UserRole).toUInt();
+	CoordBox cb = FullSelection[idx]->boundingBox();
+	for (int i=1; i < MultiUi.SelectionList->selectedItems().size(); i++) {
+		idx = MultiUi.SelectionList->selectedItems()[i]->data(Qt::UserRole).toUInt();
+		cb.merge(FullSelection[idx]->boundingBox());
+	}
+	Coord c = cb.center();
+	Main->view()->projection().setCenter(c, Main->view()->rect());
+	Main->setUpdatesEnabled(true);
+	Main->invalidateView();
+}
+
+void PropertiesDock::on_centerZoomAction_triggered()
+{
+	Main->setUpdatesEnabled(false);
+	unsigned int idx = MultiUi.SelectionList->selectedItems()[0]->data(Qt::UserRole).toUInt();
+	CoordBox cb = FullSelection[idx]->boundingBox();
+	for (int i=1; i < MultiUi.SelectionList->selectedItems().size(); i++) {
+		idx = MultiUi.SelectionList->selectedItems()[i]->data(Qt::UserRole).toUInt();
+		cb.merge(FullSelection[idx]->boundingBox());
+	}
+	CoordBox min(cb.center()-0.00001, cb.center()+0.00001);
+	cb.merge(min);
+	cb = cb.zoomed(1.1);
+	Main->view()->projection().setViewport(cb, Main->view()->rect());
+	Main->setUpdatesEnabled(true);
+	Main->invalidateView();
 }

@@ -469,3 +469,4 @@ void loadPainters(const QString& filename)
 		n = n.nextSibling();
 	}
 }
+

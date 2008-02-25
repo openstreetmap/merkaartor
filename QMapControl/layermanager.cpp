@@ -129,21 +129,31 @@ void LayerManager::setView(const QPointF& coordinate)
 	}
 }
 
+
 void LayerManager::setView(const QList<QPointF> coordinates)
 {
-	while (containsAll(coordinates))
+
+	while ((!containsAll(coordinates)) && (getLayer()->getMapAdapter()->getZoom() > getLayer()->getMapAdapter()->getAdaptedMinZoom()))
 	{
 		setMiddle(coordinates);
-		zoomIn();
-		QCoreApplication::processEvents();
+		backZoomOut();
+		//QCoreApplication::processEvents();
 	}
 
-
-	if (!containsAll(coordinates))
+	while ((containsAll(coordinates)) && (getLayer()->getMapAdapter()->getZoom() < getLayer()->getMapAdapter()->getAdaptedMaxZoom()))
 	{
-		//zoomOut();
-		QCoreApplication::processEvents();
+		setMiddle(coordinates);
+		backZoomIn();
+		//QCoreApplication::processEvents();
 	}
+
+
+	//if ((!containsAll(coordinates)) && (getLayer()->getMapAdapter()->getZoom() > getLayer()->getMapAdapter()->getAdaptedMinZoom()))
+	//{
+	//	setMiddle(coordinates);
+	//  backZoomOut();
+	//	//QCoreApplication::processEvents();
+	//}
 
 	parentWidget->update();
 }
@@ -257,11 +267,27 @@ void LayerManager::newOffscreenImage(bool clearImage, bool showZoomImage)
 
 }
 
+void LayerManager::backZoomIn()
+{
+	ImageManager::instance()->abortLoading();
+	QListIterator<Layer*> it(layers);
+	//TODO: remove hack, that mapadapters wont get set zoom multiple times
+	QList<const MapAdapter*> doneadapters;
+	while (it.hasNext())
+	{
+		Layer* l = it.next();
+		if (!doneadapters.contains(l->getMapAdapter()))
+		{
+			l->zoomIn();
+			doneadapters.append(l->getMapAdapter());
+		}
+	}
+	mapmiddle_px = getLayer()->getMapAdapter()->coordinateToDisplay(mapmiddle);
+	whilenewscroll = mapmiddle_px;
+}
+
 void LayerManager::zoomIn()
 {
-// 	if (getLayer()->getMapAdapter()->getZoom() < getLayer
-	ImageManager::instance()->abortLoading();
-	// layer rendern abbrechen?
 	zoomImageScroll = QPoint(0,0);
 
 	zoomImage.fill(Qt::white);
@@ -279,21 +305,8 @@ void LayerManager::zoomIn()
 	painter.translate(-screenmiddle);
 	painter.end();
 
-	QListIterator<Layer*> it(layers);
-	//TODO: remove hack, that mapadapters wont get set zoom multiple times
-	QList<const MapAdapter*> doneadapters;
-	while (it.hasNext())
-	{
-		Layer* l = it.next();
-		if (!doneadapters.contains(l->getMapAdapter()))
-		{
-			l->zoomIn();
-			doneadapters.append(l->getMapAdapter());
-		}
-	}
-	mapmiddle_px = getLayer()->getMapAdapter()->coordinateToDisplay(mapmiddle);
-	whilenewscroll = mapmiddle_px;
-// 	zoomImageScroll = mapmiddle_px;
+	backZoomIn();
+
 	newOffscreenImage();
 
 }
@@ -314,21 +327,9 @@ bool LayerManager::checkOffscreen() const
 
 	return true;
 }
-void LayerManager::zoomOut()
+void LayerManager::backZoomOut()
 {
 	ImageManager::instance()->abortLoading();
-	zoomImageScroll = QPoint(0,0);
-	QPixmap tmpImg = composedOffscreenImage.copy(screenmiddle.x()+scroll.x(),screenmiddle.y()+scroll.y(), size.width(), size.height());
-	QPainter painter(&zoomImage);
-	painter.translate(screenmiddle);
-	painter.scale(0.5,0.5);
-	painter.translate(-screenmiddle);
-	painter.drawPixmap(0,0,tmpImg);
-
-	painter.translate(screenmiddle);
-	painter.scale(2,2);
-	painter.translate(-screenmiddle);
-
 	QListIterator<Layer*> it(layers);
 	//TODO: remove hack, that mapadapters wont get set zoom multiple times
 	QList<const MapAdapter*> doneadapters;
@@ -343,6 +344,24 @@ void LayerManager::zoomOut()
 	}
 	mapmiddle_px = getLayer()->getMapAdapter()->coordinateToDisplay(mapmiddle);
 	whilenewscroll = mapmiddle_px;
+}
+
+void LayerManager::zoomOut()
+{
+	zoomImageScroll = QPoint(0,0);
+	QPixmap tmpImg = composedOffscreenImage.copy(screenmiddle.x()+scroll.x(),screenmiddle.y()+scroll.y(), size.width(), size.height());
+	QPainter painter(&zoomImage);
+	painter.translate(screenmiddle);
+	painter.scale(0.5,0.5);
+	painter.translate(-screenmiddle);
+	painter.drawPixmap(0,0,tmpImg);
+
+	painter.translate(screenmiddle);
+	painter.scale(2,2);
+	painter.translate(-screenmiddle);
+
+	backZoomOut();
+
 	newOffscreenImage();
 }
 

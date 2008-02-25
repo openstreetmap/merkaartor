@@ -46,7 +46,9 @@ HEADERS += \
 ./Utils/SlippyMapWidget.h \
 ./Utils/EditCompleterDelegate.h \
 ./Preferences/MerkaartorPreferences.h \
-./Preferences/PreferencesDialog.h
+./Preferences/PreferencesDialog.h \
+./Save/SaveOSM.h \
+./Utils/SelectionDialog.h
 
 #Source files
 SOURCES += \
@@ -95,7 +97,9 @@ SOURCES += \
 ./Utils/SlippyMapWidget.cpp \
 ./Utils/EditCompleterDelegate.cpp \
 ./Preferences/MerkaartorPreferences.cpp \
-./Preferences/PreferencesDialog.cpp
+./Preferences/PreferencesDialog.cpp \
+./Save/SaveOSM.cpp \
+./Utils/SelectionDialog.cpp
 
 #Forms
 FORMS += \
@@ -112,7 +116,8 @@ FORMS += \
 ./Interaction/CreateDoubleWayDock.ui \
 ./Interaction/CreateRoundaboutDock.ui \
 ./PaintStyle/PaintStyleEditor.ui \
-./Preferences/PreferencesDialog.ui
+./Preferences/PreferencesDialog.ui \
+./Utils/SelectionDialog.ui
 
 
 #Resource file(s)

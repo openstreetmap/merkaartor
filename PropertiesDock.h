@@ -25,8 +25,10 @@ class PropertiesDock : public QDockWidget
 		~PropertiesDock(void);
 
 		void setSelection(MapFeature* aFeature);
+		void setMultiSelection(MapFeature* aFeature);
 		template<class T>
-		void setSelection(const std::vector<T*>& aFeatureList);
+				void setSelection(const std::vector<T*>& aFeatureList);
+		void setMultiSelection(const std::vector<MapFeature*>& aFeatureList);
 		void toggleSelection(MapFeature* aFeature);
 		MapFeature* selection(unsigned int idx);
 		unsigned int size() const;
@@ -45,6 +47,9 @@ class PropertiesDock : public QDockWidget
 		void on_SelectionList_itemSelectionChanged();
 		void on_SelectionList_itemDoubleClicked(QListWidgetItem* item);
 		void executePendingSelectionChange();
+		void on_SelectionList_customContextMenuRequested(const QPoint & pos);
+		void on_centerAction_triggered();
+		void on_centerZoomAction_triggered();
 
 	private:
 		void cleanUpUi();
@@ -66,13 +71,15 @@ class PropertiesDock : public QDockWidget
 		Ui::RelationProperties RelationUi;
 		TagModel* theModel;
 		unsigned int PendingSelectionChange;
-                EditCompleterDelegate* delegate;
+		EditCompleterDelegate* delegate;
+		QAction* centerAction;
+		QAction* centerZoomAction;
 
 		enum { NoUiShowing, TrackPointUiShowing, RoadUiShowing, RelationUiShowing, MultiShowing } NowShowing ;
 };
 
 template<class T>
-void PropertiesDock::setSelection(const std::vector<T*>& aFeatureList)
+		void PropertiesDock::setSelection(const std::vector<T*>& aFeatureList)
 {
 	cleanUpUi();
 	Selection.clear();

@@ -56,9 +56,19 @@ inline Coord operator-(const Coord& A, const Coord& B)
 	return Coord(A.lat()-B.lat(),A.lon()-B.lon());
 }
 
+inline Coord operator-(const Coord& A, const double B)
+{
+	return Coord(A.lat()-B,A.lon()-B);
+}
+
 inline Coord operator+(const Coord& A, const Coord& B)
 {
 	return Coord(A.lat()+B.lat(),A.lon()+B.lon());
+}
+
+inline Coord operator+(const Coord& A, const double B)
+{
+	return Coord(A.lat()+B,A.lon()+B);
 }
 
 inline Coord operator*(const Coord& A, double d)

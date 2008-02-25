@@ -149,8 +149,8 @@ bool TileMapAdapter::isValid(int x, int y, int z) const
 		z= min_zoom - z;
 	}
 
-	if (x<0 || x>pow(2,z+0.0)-1 ||
-			y<0 || y>pow(2,z+0.0)-1)
+	if ((x<0) || (x>pow(2,z+0.0)-1) ||
+			(y<0) || (y>pow(2,z+0.0)-1))
 	{
 		return false;
 	}

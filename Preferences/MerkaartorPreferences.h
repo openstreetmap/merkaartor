@@ -87,7 +87,15 @@ public:
 
 	QStringList getBgTypes();
 
-
+	/* Search */
+	void setLastMaxSearchResults(int theValue);
+	int getLastMaxSearchResults() const;
+	void setLastSearchName(const QString & theValue);
+	QString getLastSearchName() const;
+	void setLastSearchKey(const QString & theValue);
+	QString getLastSearchKey() const;
+	void setLastSearchValue(const QString & theValue);
+	QString getLastSearchValue() const;
 
 protected:
 	bool RightSideDriving;

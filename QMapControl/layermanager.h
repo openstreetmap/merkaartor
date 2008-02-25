@@ -163,8 +163,10 @@ class LayerManager : public QObject
 		inline bool containsAll(QList<QPointF> coordinates) const;
 		inline void moveWidgets();
 		inline void setMiddle(QList<QPointF> coordinates);
+		void backZoomIn();
+		void backZoomOut();
 
-                QWidget* parentWidget;
+		QWidget* parentWidget;
 
 		QPoint screenmiddle;		// middle of the screen
 		QPoint scroll;				// scrollvalue of the offscreen image

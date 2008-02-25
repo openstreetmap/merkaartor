@@ -181,7 +181,6 @@ void Projection::layerManagerSetViewport(const CoordBox & TargetMap, const QRect
 	Coord ctr(Viewport.topRight());
 	QPointF ctrf = QPointF(radToAng(ctr.lon()), radToAng(ctr.lat()));
 	ql.append(ctrf);
-	layermanager->setZoom(0);
 	layermanager->setView(ql);
 	viewportRecalc(Screen);
 }
@@ -210,4 +209,13 @@ QPoint Projection::coordinateToScreen(QPointF click) const
 			   -layermanager->getMapmiddle_px().y() + p.y() +
 			   screen_middle.y());
 	return r;
+}
+
+void Projection::setCenter(Coord & Center, const QRect & Screen)
+{
+	Coord curCenter(Viewport.center());
+	QPointF curCenterScreen = project(curCenter);
+	QPointF newCenterScreen = project(Center);
+
+	panScreen(QPoint(curCenterScreen.x() - newCenterScreen.x(), curCenterScreen.y() - newCenterScreen.y()), Screen);
 }

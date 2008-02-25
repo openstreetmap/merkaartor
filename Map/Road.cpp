@@ -22,8 +22,8 @@ class RoadPrivate
 		{
 		}
 		std::vector<TrackPoint*> Nodes;
-		std::vector<Coord> Smoothed;
-		bool SmoothedUpToDate;
+ 		std::vector<Coord> Smoothed;
+ 		bool SmoothedUpToDate;
 		CoordBox BBox;
 		bool BBoxUpToDate;
 		double Area;

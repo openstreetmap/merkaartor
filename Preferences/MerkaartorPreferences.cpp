@@ -181,3 +181,44 @@ void MerkaartorPreferences::save()
 {
  	Sets->sync();
 }
+
+/* Search */
+void MerkaartorPreferences::setLastMaxSearchResults(int theValue)
+{
+	Sets->setValue("search/LastMax", theValue);
+}
+
+int MerkaartorPreferences::getLastMaxSearchResults() const
+{
+	return (ImageBackgroundType)Sets->value("search/LastMax", 100).toInt();
+}
+
+void MerkaartorPreferences::setLastSearchName(const QString & theValue)
+{
+	Sets->setValue("search/LastName", theValue);
+}
+
+QString MerkaartorPreferences::getLastSearchName() const
+{
+	return Sets->value("search/LastName").toString();
+}
+
+void MerkaartorPreferences::setLastSearchKey(const QString & theValue)
+{
+	Sets->setValue("search/LastKey", theValue);
+}
+
+QString MerkaartorPreferences::getLastSearchKey() const
+{
+	return Sets->value("search/LastKey").toString();
+}
+
+void MerkaartorPreferences::setLastSearchValue(const QString & theValue)
+{
+	Sets->setValue("search/LastValue", theValue);
+}
+
+QString MerkaartorPreferences::getLastSearchValue() const
+{
+	return Sets->value("search/LastValue").toString();
+}

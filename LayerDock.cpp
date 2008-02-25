@@ -13,7 +13,7 @@
 #define LINEHEIGHT 20
 
 LayerWidget::LayerWidget(MainWindow* aMain, QWidget* aParent)
-: QWidget(aParent), Main(aMain), ActiveLayer(0), actgrWms(0), wmsMenu(0)
+: QWidget(aParent), Main(aMain), ActiveLayer(1), actgrWms(0), wmsMenu(0)
 {
 	//actgrAdapter = new QActionGroup(this);
 
@@ -152,8 +152,10 @@ void LayerWidget::mouseReleaseEvent(QMouseEvent* anEvent)
 		}
 		else
 		{
-			ActiveLayer = Idx-1;
-			update();
+			if (Idx > 1) {
+				ActiveLayer = Idx-1;
+				update();
+			}
 		}
 	}
 }

@@ -29,8 +29,10 @@
 #include "GeneratedFiles/ui_AboutDialog.h"
 #include "GeneratedFiles/ui_UploadMapDialog.h"
 #include "GeneratedFiles/ui_SetPositionDialog.h"
+#include "GeneratedFiles/ui_SelectionDialog.h"
 #include "Preferences/PreferencesDialog.h"
 #include "Preferences/MerkaartorPreferences.h"
+#include "Utils/SelectionDialog.h"
 #include "QMapControl/imagemanager.h"
 #include "QMapControl/mapadapter.h"
 #include "QMapControl/wmsmapadapter.h"
@@ -51,7 +53,7 @@ MainWindow::MainWindow(void)
 		: theDocument(0)
 {
 	setupUi(this);
-	
+
 	QStringList Servers = MerkaartorPreferences::instance()->getWmsServers();
 	if (Servers.size() == 0) {
 		Servers.append("Demis");
@@ -63,7 +65,7 @@ MainWindow::MainWindow(void)
 		MerkaartorPreferences::instance()->setWmsServers(Servers);
 		MerkaartorPreferences::instance()->setSelectedWmsServer(0);
 	}
-	
+
 	theView = new MapView(this);
 	setCentralWidget(theView);
 	theDocument = new MapDocument;
@@ -449,7 +451,7 @@ void MainWindow::on_mapStyleLoadAction_triggered()
 void MainWindow::on_toolsPreferencesAction_triggered()
 {
 	PreferencesDialog* Pref = new PreferencesDialog();
-	
+
 	if (Pref->exec() == QDialog::Accepted) {
 		theLayers->updateContent();
 		theDocument->getBgLayer()->setMapAdapter(MerkaartorPreferences::instance()->getBgType());
@@ -464,8 +466,46 @@ void MainWindow::on_toolsPreferencesAction_triggered()
 void MainWindow::on_exportOSMAction_triggered()
 {
 	QString fileName = QFileDialog::getSaveFileName(this,
-		tr("Export OSM"), MerkaartorPreferences::instance()->getWorkingDir() + "/untitled.osm", tr("OSM Files (*.osm)")); 
+		tr("Export OSM"), MerkaartorPreferences::instance()->getWorkingDir() + "/untitled.osm", tr("OSM Files (*.osm)"));
 
 	if (fileName != "")
 		theDocument->exportOSM(fileName);
+}
+
+void MainWindow::on_editSelectAction_triggered()
+{
+	SelectionDialog* Sel = new SelectionDialog(this);
+
+	if (Sel->exec() == QDialog::Accepted) {
+		MerkaartorPreferences::instance()->setLastSearchName(Sel->edName->text());
+		MerkaartorPreferences::instance()->setLastSearchKey(Sel->cbKey->currentText());
+		MerkaartorPreferences::instance()->setLastSearchValue(Sel->cbValue->currentText());
+		MerkaartorPreferences::instance()->setLastMaxSearchResults(Sel->sbMaxResult->value());
+
+		QRegExp selName(Sel->edName->text(), Qt::CaseInsensitive, QRegExp::RegExp);
+		QRegExp selKey(Sel->cbKey->currentText(), Qt::CaseInsensitive, QRegExp::RegExp);
+		QRegExp selValue(Sel->cbValue->currentText(), Qt::CaseInsensitive, QRegExp::RegExp);
+		int selMaxResult = Sel->sbMaxResult->value();
+
+		std::vector <MapFeature *> selection;
+		int added = 0;
+		for (VisibleFeatureIterator i(theDocument); !i.isEnd() && added < selMaxResult; ++i) {
+			MapFeature* F = i.get();
+			if (selName.indexIn(F->description()) == -1) {
+				continue;
+			}
+			int ok = false;
+			for (int j=0; j < F->tagSize(); j++) {
+				if ((selKey.indexIn(F->tagKey(j)) > -1) && (selValue.indexIn(F->tagValue(j)) > -1)) {
+					ok = true;
+					break;
+				}
+			}
+			if (ok) {
+				selection.push_back(F);
+				++added;
+			}
+		}
+		theProperties->setMultiSelection(selection);
+	}
 }

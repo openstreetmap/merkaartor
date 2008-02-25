@@ -378,7 +378,10 @@ QStringList MapDocument::getTagList()
 
 QStringList MapDocument::getTagValueList(QString k)
 {
-	return p->tagList.values(k);
+	if (k == "*")
+		return p->tagList.values();
+	else
+		return p->tagList.values(k);
 }
 
 void MapDocument::remove(MapLayer* aLayer)

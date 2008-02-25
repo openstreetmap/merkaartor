@@ -21,7 +21,7 @@
 
 MapAdapter::MapAdapter(const QString& host, const QString& serverPath, int tilesize, int minZoom, int maxZoom)
 	:host(host), serverPath(serverPath), tilesize(tilesize), min_zoom(minZoom), max_zoom(maxZoom)
-{	
+{
 	current_zoom = min_zoom;
 	loc = QLocale(QLocale::English);
 }
@@ -48,6 +48,16 @@ int MapAdapter::getMinZoom() const
 int MapAdapter::getMaxZoom() const
 {
 	return max_zoom;
+}
+
+int MapAdapter::getAdaptedMinZoom() const
+{
+	return max_zoom > min_zoom ? min_zoom : max_zoom;
+}
+
+int MapAdapter::getAdaptedMaxZoom() const
+{
+	return max_zoom > min_zoom ? max_zoom : min_zoom;
 }
 
 int MapAdapter::getZoom() const

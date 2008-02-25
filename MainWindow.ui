@@ -19,7 +19,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>21</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >
@@ -27,6 +27,17 @@
      <string>&amp;Help</string>
     </property>
     <addaction name="helpAboutAction" />
+   </widget>
+   <widget class="QMenu" name="menuCreate" >
+    <property name="title" >
+     <string>&amp;Create</string>
+    </property>
+    <addaction name="createNodeAction" />
+    <addaction name="createRoadAction" />
+    <addaction name="createDoubleWayAction" />
+    <addaction name="createRoundaboutAction" />
+    <addaction name="createAreaAction" />
+    <addaction name="createRelationAction" />
    </widget>
    <widget class="QMenu" name="menuRoad" >
     <property name="title" >
@@ -44,6 +55,8 @@
     <addaction name="editUndoAction" />
     <addaction name="editRedoAction" />
     <addaction name="editRemoveAction" />
+    <addaction name="separator" />
+    <addaction name="editSelectAction" />
    </widget>
    <widget class="QMenu" name="menuView" >
     <property name="title" >
@@ -86,17 +99,6 @@
     <addaction name="menuStyle_2" />
     <addaction name="separator" />
     <addaction name="toolsPreferencesAction" />
-   </widget>
-   <widget class="QMenu" name="menuCreate" >
-    <property name="title" >
-     <string>&amp;Create</string>
-    </property>
-    <addaction name="createNodeAction" />
-    <addaction name="createRoadAction" />
-    <addaction name="createDoubleWayAction" />
-    <addaction name="createRoundaboutAction" />
-    <addaction name="createAreaAction" />
-    <addaction name="createRelationAction" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuEdit" />
@@ -418,6 +420,11 @@
    </property>
    <property name="statusTip" >
     <string>Export all visible layers to a file</string>
+   </property>
+  </action>
+  <action name="editSelectAction" >
+   <property name="text" >
+    <string>Select...</string>
    </property>
   </action>
  </widget>
