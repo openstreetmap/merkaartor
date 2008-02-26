@@ -47,7 +47,6 @@ HEADERS += \
 ./Utils/EditCompleterDelegate.h \
 ./Preferences/MerkaartorPreferences.h \
 ./Preferences/PreferencesDialog.h \
-./Save/SaveOSM.h \
 ./Utils/SelectionDialog.h
 
 #Source files
@@ -98,7 +97,6 @@ SOURCES += \
 ./Utils/EditCompleterDelegate.cpp \
 ./Preferences/MerkaartorPreferences.cpp \
 ./Preferences/PreferencesDialog.cpp \
-./Save/SaveOSM.cpp \
 ./Utils/SelectionDialog.cpp
 
 #Forms
