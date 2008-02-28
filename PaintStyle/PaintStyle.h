@@ -40,15 +40,20 @@ class FeaturePainter
 		bool matchesZoom(double PixelPerM) const;
 		FeaturePainter& selectOnTag(const QString& Tag, const QString& Value);
 		FeaturePainter& selectOnTag(const QString& Tag, const QString& Value1, const QString& Value2);
+		FeaturePainter& backgroundActive(bool b);
 		FeaturePainter& background(const QColor& Color, double Scale, double Offset);
+		FeaturePainter& foregroundActive(bool b);
 		FeaturePainter& foreground(const QColor& Color, double Scale, double Offset);
 		FeaturePainter& foregroundDash(double Dash, double White);
+		FeaturePainter& touchupActive(bool b);
 		FeaturePainter& touchup(const QColor& Color, double Scale, double Offset);
 		FeaturePainter& touchupDash(double Dash, double White);
 		FeaturePainter& foregroundFill(const QColor& FillColor);
 		FeaturePainter& zoomBoundary(double anUnder, double anUpper);
 		FeaturePainter& drawTrafficDirectionMarks();
 		FeaturePainter& trackPointIcon(const QString& Filename);
+		FeaturePainter& fillActive(bool b);
+		FeaturePainter& iconActive(bool b);
 
 		QString userName() const;
 		const std::vector<std::pair<QString, QString> >& tagSelectors() const;
@@ -61,6 +66,7 @@ class FeaturePainter
 		void clearTouchupDash();
 		QColor fillColor() const;
 		QString iconName() const;
+		bool isIconActive() const;
 
 		QString asXML() const;
 
@@ -94,6 +100,7 @@ class FeaturePainter
 		bool ForegroundFill;
 		QColor ForegroundFillFillColor;
 		bool DrawTrafficDirectionMarks;
+		bool DrawIcon;
 		QString TrackPointIconName;
 };
 

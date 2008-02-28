@@ -119,7 +119,7 @@ void PaintStyleEditor::on_PaintList_itemClicked(QListWidgetItem* it)
 	TouchupDashOff->setValue(FP.touchupBoundary().DashOff);
 	DrawFill->setChecked(FP.fillColor().isValid());
 	makeBoundaryIcon(FillColor, FP.fillColor());
-	DrawIcon->setChecked(!FP.iconName().isEmpty());
+	DrawIcon->setChecked(FP.isIconActive());
 	IconName->setText(FP.iconName());
 	FreezeUpdate = false;
 }
@@ -180,6 +180,14 @@ void PaintStyleEditor::on_UpperZoomBoundary_valueChanged()
 	on_LowerZoomBoundary_valueChanged();
 }
 
+void PaintStyleEditor::on_DrawBackground_clicked(bool b)
+{
+	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	if (idx >= thePainters.size())
+		return;
+	thePainters[idx].backgroundActive(b);
+}
+
 void PaintStyleEditor::on_BackgroundColor_clicked()
 {
 	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
@@ -209,6 +217,15 @@ void PaintStyleEditor::on_FixedBackground_valueChanged()
 {
 	on_ProportionalBackground_valueChanged();
 }
+
+void PaintStyleEditor::on_DrawForeground_clicked(bool b)
+{
+	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	if (idx >= thePainters.size())
+		return;
+	thePainters[idx].foregroundActive(b);
+}
+
 
 void PaintStyleEditor::on_ForegroundColor_clicked()
 {
@@ -265,7 +282,13 @@ void PaintStyleEditor::on_ForegroundDashOn_valueChanged()
 	on_ForegroundDashed_clicked();
 }
 
-
+void PaintStyleEditor::on_DrawTouchup_clicked(bool b)
+{
+	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	if (idx >= thePainters.size())
+		return;
+	thePainters[idx].touchupActive(b);
+}
 
 void PaintStyleEditor::on_TouchupColor_clicked()
 {
@@ -322,6 +345,13 @@ void PaintStyleEditor::on_TouchupDashOn_valueChanged()
 	on_TouchupDashed_clicked();
 }
 
+void PaintStyleEditor::on_DrawFill_clicked(bool b)
+{
+	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	if (idx >= thePainters.size())
+		return;
+	thePainters[idx].fillActive(b);
+}
 
 void PaintStyleEditor::on_FillColor_clicked()
 {
@@ -335,6 +365,14 @@ void PaintStyleEditor::on_FillColor_clicked()
 		makeBoundaryIcon(FillColor, QColor::fromRgba(rgb));
 		FP.foregroundFill(QColor::fromRgba(rgb));
 	}
+}
+
+void PaintStyleEditor::on_DrawIcon_clicked(bool b)
+{
+	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	if (idx >= thePainters.size())
+		return;
+	thePainters[idx].iconActive(b);
 }
 
 void PaintStyleEditor::on_IconName_textEdited()

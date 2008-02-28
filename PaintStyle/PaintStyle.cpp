@@ -17,7 +17,8 @@ FeaturePainter::FeaturePainter()
   DrawBackground(false), BackgroundScale(0), BackgroundOffset(3),
   DrawForeground(false), ForegroundScale(0), ForegroundOffset(2),
   DrawTouchup(false), TouchupScale(0), TouchupOffset(1),
-  ForegroundFill(false), DrawTrafficDirectionMarks(true)
+  ForegroundFill(false), DrawTrafficDirectionMarks(true),
+  DrawIcon(false)
 {
 }
 
@@ -58,7 +59,7 @@ QString FeaturePainter::asXML() const
 		r += " touchupDashDown=\""+QString::number(TouchupDash)+"\" touchupDashUp=\""+QString::number(TouchupWhite)+"\"\n";
 	if (ForegroundFill)
 		r += " fillColor=\""+::asXML(ForegroundFillFillColor)+"\"\n";
-	if (!TrackPointIconName.isEmpty())
+	if (!TrackPointIconName.isEmpty() && DrawIcon)
 		r += " icon=\""+TrackPointIconName+"\"\n";
 	if (DrawTrafficDirectionMarks)
 		r += " drawTrafficDirectionMarks=\"yes\"";
@@ -121,6 +122,14 @@ FeaturePainter& FeaturePainter::zoomBoundary(double anUnder, double anUpper)
 	return *this;
 }
 
+FeaturePainter& FeaturePainter::fillActive(bool b)
+{
+	ForegroundFill = b;
+	if (ForegroundFill && !ForegroundFillFillColor.isValid())
+		ForegroundFillFillColor.setRgb(0,0,0);
+	return *this;
+}
+
 FeaturePainter& FeaturePainter::foregroundFill(const QColor& FillColor)
 {
 	ForegroundFill = true;
@@ -128,6 +137,11 @@ FeaturePainter& FeaturePainter::foregroundFill(const QColor& FillColor)
 	return *this;
 }
 
+FeaturePainter& FeaturePainter::backgroundActive(bool b)
+{
+	DrawBackground = b;
+	return *this;
+}
 
 FeaturePainter& FeaturePainter::background(const QColor& Color, double Scale, double Offset)
 {
@@ -150,6 +164,12 @@ LineParameters FeaturePainter::backgroundBoundary() const
 	return P;
 }
 
+FeaturePainter& FeaturePainter::touchupActive(bool b)
+{
+	DrawTouchup = b;
+	return *this;
+}
+
 FeaturePainter& FeaturePainter::touchupDash(double Dash, double White)
 {
 	TouchupDashSet = true;
@@ -165,6 +185,12 @@ FeaturePainter& FeaturePainter::touchup(const QColor& Color, double Scale, doubl
 	TouchupScale = Scale;
 	TouchupOffset = Offset;
 	TouchupDashSet = false;
+	return *this;
+}
+
+FeaturePainter& FeaturePainter::foregroundActive(bool b)
+{
+	DrawForeground = b;
 	return *this;
 }
 
@@ -226,13 +252,25 @@ LineParameters FeaturePainter::touchupBoundary() const
 	return P;
 }
 
+bool FeaturePainter::isIconActive() const
+{
+	return DrawIcon;
+}
+
 QString FeaturePainter::iconName() const
 {
 	return TrackPointIconName;
 }
 
+FeaturePainter& FeaturePainter::iconActive(bool b)
+{
+	DrawIcon = b;
+	return *this;
+}
+
 FeaturePainter& FeaturePainter::trackPointIcon(const QString& Filename)
 {
+	DrawIcon = true;
 	TrackPointIconName = Filename;
 	return *this;
 }
@@ -394,7 +432,7 @@ void FeaturePainter::drawForeground(Relation* R, QPainter& thePainter, const Pro
 
 void FeaturePainter::drawTouchup(TrackPoint* Pt, QPainter& thePainter, const Projection& theProjection) const
 {
-	if (TrackPointIconName != "")
+	if (DrawIcon && (TrackPointIconName != "") )
 	{
 
 		QPixmap pm(TrackPointIconName);
