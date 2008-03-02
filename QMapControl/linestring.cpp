@@ -120,7 +120,7 @@ bool LineString::Touches(Point* geom, const MapAdapter* mapadapter)
 	}
 	return touches;
 }
-bool LineString::Touches(Geometry* geom, const MapAdapter* mapadapter)
+bool LineString::Touches(Geometry* , const MapAdapter* /* mapadapter */)
 {
 // 	qDebug() << "LineString::Touches Geom";
 	touchedPoints.clear();

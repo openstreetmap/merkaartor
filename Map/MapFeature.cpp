@@ -1,5 +1,6 @@
 #include "Map/MapFeature.h"
 #include "Map/MapDocument.h"
+#include "Map/MapLayer.h"
 #include "PaintStyle/EditPaintStyle.h"
 
 #include <QtCore/QUuid>

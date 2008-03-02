@@ -81,13 +81,13 @@ QList<QString> LayerManager::getLayers() const
 
 void LayerManager::scrollView(const QPoint& point)
 {
-	if (scrollMutex.tryLock())
+// 	if (scrollMutex.tryLock())
 	{
 
 	scroll += point;
 	zoomImageScroll+=point;
 	mapmiddle_px += point;
-	scrollMutex.unlock();
+// 	scrollMutex.unlock();
 	}
 	mapmiddle = getLayer()->getMapAdapter()->displayToCoordinate(mapmiddle_px);
 	if (!checkOffscreen())
@@ -132,21 +132,24 @@ void LayerManager::setView(const QPointF& coordinate)
 
 void LayerManager::setView(const QList<QPointF> coordinates)
 {
-
-	while ((!containsAll(coordinates)) && (getLayer()->getMapAdapter()->getZoom() > getLayer()->getMapAdapter()->getAdaptedMinZoom()))
+	while ((!containsAll(coordinates)) && (getLayer()->getMapAdapter()->getAdaptedZoom() > getLayer()->getMapAdapter()->getAdaptedMinZoom()))
 	{
 		setMiddle(coordinates);
 		backZoomOut();
 		//QCoreApplication::processEvents();
 	}
 
-	while ((containsAll(coordinates)) && (getLayer()->getMapAdapter()->getZoom() < getLayer()->getMapAdapter()->getAdaptedMaxZoom()))
+	while ((containsAll(coordinates)) && (getLayer()->getMapAdapter()->getAdaptedZoom() < getLayer()->getMapAdapter()->getAdaptedMaxZoom()))
 	{
 		setMiddle(coordinates);
 		backZoomIn();
 		//QCoreApplication::processEvents();
 	}
 
+// 	if (getLayer()->getMapAdapter()->getAdaptedZoom() > getLayer()->getMapAdapter()->getAdaptedMinZoom()) {
+// 		setMiddle(coordinates);
+// 		backZoomOut();
+// 	}
 
 	//if ((!containsAll(coordinates)) && (getLayer()->getMapAdapter()->getZoom() > getLayer()->getMapAdapter()->getAdaptedMinZoom()))
 	//{
@@ -228,7 +231,7 @@ void LayerManager::removeLayer()
 void LayerManager::newOffscreenImage(bool clearImage, bool showZoomImage)
 {
 // 	qDebug() << "LayerManager::newOffscreenImage()";
-	if (refreshMutex.tryLock())
+// 	if (refreshMutex.tryLock())
 	{
 		QPainter painter(&composedOffscreenImage2);
 		whilenewscroll = mapmiddle_px;
@@ -255,14 +258,14 @@ void LayerManager::newOffscreenImage(bool clearImage, bool showZoomImage)
 		}
 
 		composedOffscreenImage = composedOffscreenImage2;
-		if (scrollMutex.tryLock())
+// 		if (scrollMutex.tryLock())
 		{
 			scroll = mapmiddle_px-whilenewscroll;
 // 			scroll = QPoint(0,0);
-			scrollMutex.unlock();
+// 			scrollMutex.unlock();
 		}
-                parentWidget->update();
-		refreshMutex.unlock();
+		parentWidget->update();
+//		refreshMutex.unlock();
 	}
 
 }
@@ -481,4 +484,9 @@ void LayerManager::setSize(QSize newSize)
 
 	newOffscreenImage();
 
+}
+
+int LayerManager::getCurrentZoom() const
+{
+	return getLayer()->getMapAdapter()->getZoom();
 }

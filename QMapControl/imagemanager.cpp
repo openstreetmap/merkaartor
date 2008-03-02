@@ -23,7 +23,7 @@ ImageManager::ImageManager(QObject* parent)
 	:QObject(parent), emptyPixmap(QPixmap(1,1)), net(new MapNetwork(this))
 {
 	emptyPixmap.fill(Qt::transparent);
-
+	
 	if (QPixmapCache::cacheLimit() <= 20000)
 	{
 		QPixmapCache::setCacheLimit(20000);	// in kb
@@ -41,7 +41,7 @@ QPixmap ImageManager::getImage(const QString& host, const QString& url)
 // 	qDebug() << "ImageManager::getImage";
 	QPixmap pm;
 	pm.fill(Qt::black);
-
+	
 	// is image cached or currently loading?
 	if (!QPixmapCache::find(url, pm) && !net->imageIsLoading(url))
 // 	if (!images.contains(url) && !net->imageIsLoading(url))
@@ -55,14 +55,28 @@ QPixmap ImageManager::getImage(const QString& host, const QString& url)
 	return pm;
 }
 
+QPixmap ImageManager::prefetchImage(const QString& host, const QString& url)
+{
+	prefetch.append(url);
+	return getImage(host, url);
+}
+
 void ImageManager::receivedImage(const QPixmap pixmap, const QString& url)
 {
 // 	qDebug() << "ImageManager::receivedImage";
 	QPixmapCache::insert(url, pixmap);
 // 	images[url] = pixmap;
-
+	
 // 	((Layer*)this->parent())->imageReceived();
-	emit(imageReceived());
+	
+	if (!prefetch.contains(url))
+	{
+		emit(imageReceived());
+	}
+	else
+	{
+		prefetch.remove(prefetch.indexOf(url));
+	}
 }
 
 void ImageManager::loadingQueueEmpty()

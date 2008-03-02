@@ -35,13 +35,13 @@ CreateDoubleWayInteraction::~CreateDoubleWayInteraction()
 	view()->update();
 }
 
-void CreateDoubleWayInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
+void CreateDoubleWayInteraction::paintEvent(QPaintEvent* /* anEvent */, QPainter& thePainter)
 {
 	double rB = view()->projection().pixelPerM()*DockData.RoadDistance->text().toDouble()/2;
 	if (!HaveFirst)
 	{
 		thePainter.setPen(QColor(0,0,0));
-		thePainter.drawEllipse(LastCursor.x()-rB,LastCursor.y()-rB,rB*2,rB*2);
+		thePainter.drawEllipse(int(LastCursor.x()-rB),int(LastCursor.y()-rB),int(rB*2),int(rB*2));
 	}
 	else
 	{

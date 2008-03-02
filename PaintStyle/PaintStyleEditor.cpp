@@ -120,6 +120,7 @@ void PaintStyleEditor::on_PaintList_itemClicked(QListWidgetItem* it)
 	DrawFill->setChecked(FP.fillColor().isValid());
 	makeBoundaryIcon(FillColor, FP.fillColor());
 	DrawIcon->setChecked(FP.isIconActive());
+	DrawIcon->setChecked(!FP.iconName().isEmpty());
 	IconName->setText(FP.iconName());
 	FreezeUpdate = false;
 }

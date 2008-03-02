@@ -274,6 +274,10 @@ void MapControl::setZoom(int zoomlevel)
 	layermanager->setZoom(zoomlevel);
 	update();
 }
+int MapControl::getCurrentZoom() const
+{
+	return layermanager->getCurrentZoom();
+}
 void MapControl::scrollLeft(int pixel)
 {
 	layermanager->scrollView(QPoint(-pixel,0));

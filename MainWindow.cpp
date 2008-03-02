@@ -18,6 +18,7 @@
 #include "Map/ImportNGT.h"
 #include "Map/ImportOSM.h"
 #include "Map/MapDocument.h"
+#include "Map/MapLayer.h"
 #include "Map/MapFeature.h"
 #include "Map/Relation.h"
 #include "Map/Road.h"
@@ -81,6 +82,8 @@ MainWindow::MainWindow(void)
 	addDockWidget(Qt::RightDockWidgetArea, theProperties);
 	on_editPropertiesAction_triggered();
 	QDir::setCurrent(MerkaartorPreferences::instance()->getWorkingDir());
+
+	connect (theLayers, SIGNAL(layersChanged(bool)), this, SLOT(adjustLayers(bool)));
 }
 
 MainWindow::~MainWindow(void)
@@ -90,10 +93,17 @@ MainWindow::~MainWindow(void)
 	delete theDocument;
 }
 
+void MainWindow::adjustLayers(bool adjustViewport)
+{
+	if (adjustViewport)
+		view()->projection().setViewport(view()->projection().viewport(), view()->rect());
+	invalidateView(true);
+}
+
 void MainWindow::invalidateView(bool UpdateDock)
 {
 	theView->invalidate();
-	theLayers->updateContent();
+	//theLayers->updateContent();
 	if (UpdateDock)
 		theProperties->resetValues();
 }
@@ -171,7 +181,7 @@ void MainWindow::on_fileImportAction_triggered()
 	if (!s.isNull()) {
 		changeCurrentDirToFile(s);
 		bool OK = false;
-		MapLayer* NewLayer = new MapLayer(tr("Import %1").arg(s.right(s.length() - s.lastIndexOf('/') - 1)), MapLayer::DrawingLayer);
+		DrawingMapLayer* NewLayer = new DrawingMapLayer(tr("Import %1").arg(s.right(s.length() - s.lastIndexOf('/') - 1)));
 		if (s.right(4).toLower() == ".gpx") {
 			OK = importGPX(this, s, theDocument, NewLayer);
 			if (OK)
@@ -217,7 +227,7 @@ void MainWindow::on_fileOpenAction_triggered()
 	if (!s.isNull()) {
 		changeCurrentDirToFile(s);
 		MapDocument* NewDoc = new MapDocument;
-		MapLayer* NewLayer = new MapLayer(tr("Open %1").arg(s.right(s.length() - s.lastIndexOf('/') - 1)), MapLayer::DrawingLayer);
+		DrawingMapLayer* NewLayer = new DrawingMapLayer(tr("Open %1").arg(s.right(s.length() - s.lastIndexOf('/') - 1)));
 		bool OK = false;
 		if (s.right(4).toLower() == ".gpx") {
 			OK = importGPX(this, s, NewDoc, NewLayer);
@@ -239,6 +249,7 @@ void MainWindow::on_fileOpenAction_triggered()
 			delete theDocument;
 			theDocument = NewDoc;
 			theView->setDocument(theDocument);
+			theLayers->updateContent();
 			on_viewZoomAllAction_triggered();
 			on_editPropertiesAction_triggered();
 			theDocument->history().setActions(editUndoAction, editRedoAction);
@@ -281,6 +292,7 @@ void MainWindow::on_viewZoomAllAction_triggered()
 	std::pair<bool, CoordBox> BBox(boundingBox(theDocument));
 	if (BBox.first) {
 		theView->projection().setViewport(BBox.second, theView->rect());
+		theView->projection().zoom(0.99, theView->rect().center(), theView->rect());
 		invalidateView();
 	}
 }
@@ -453,13 +465,15 @@ void MainWindow::on_toolsPreferencesAction_triggered()
 	PreferencesDialog* Pref = new PreferencesDialog();
 
 	if (Pref->exec() == QDialog::Accepted) {
+		theDocument->getImageLayer()->setMapAdapter(MerkaartorPreferences::instance()->getBgType());
 		theLayers->updateContent();
-		theDocument->getBgLayer()->setMapAdapter(MerkaartorPreferences::instance()->getBgType());
+		adjustLayers(true);
 
 		if (MerkaartorPreferences::instance()->getProxyUse()) {
 			ImageManager::instance()->setProxy(MerkaartorPreferences::instance()->getProxyHost(),
 				MerkaartorPreferences::instance()->getProxyPort());
 		}
+		emit(preferencesChanged());
 	}
 }
 
@@ -495,7 +509,7 @@ void MainWindow::on_editSelectAction_triggered()
 				continue;
 			}
 			int ok = false;
-			for (int j=0; j < F->tagSize(); j++) {
+			for (unsigned int j=0; j < F->tagSize(); j++) {
 				if ((selKey.indexIn(F->tagKey(j)) > -1) && (selValue.indexIn(F->tagValue(j)) > -1)) {
 					ok = true;
 					break;
@@ -507,5 +521,12 @@ void MainWindow::on_editSelectAction_triggered()
 			}
 		}
 		theProperties->setMultiSelection(selection);
+	}
+}
+
+void MainWindow::closeEvent(QCloseEvent * event)
+{
+	if (hasUnsavedChanges(*theDocument) && !mayDiscardUnsavedChanges(this)) {
+		event->ignore();
 	}
 }

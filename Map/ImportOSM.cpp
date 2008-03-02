@@ -8,6 +8,7 @@
 #include "Command/TrackPointCommands.h"
 #include "Map/DownloadOSM.h"
 #include "Map/MapDocument.h"
+#include "Map/MapLayer.h"
 #include "Map/Relation.h"
 #include "Map/Road.h"
 #include "Map/TrackPoint.h"
@@ -131,8 +132,8 @@ static Relation* getRelationOrCreatePlaceHolder(MapDocument *theDocument, MapLay
 	return Part;
 }
 
-static void importWay(QProgressDialog* dlg, const QDomElement& Root, MapDocument* theDocument, MapLayer* theLayer,
-					  MapLayer* conflictLayer, CommandList* theList, Downloader* theDownloader)
+static void importWay(QProgressDialog* /* dlg */, const QDomElement& Root, MapDocument* theDocument, MapLayer* theLayer,
+					  MapLayer* /* conflictLayer */, CommandList* theList, Downloader* /* theDownloader */)
 {
 	std::vector<TrackPoint*> Pts;
 	for(QDomNode n = Root.firstChild(); !n.isNull(); n = n.nextSibling())
@@ -190,8 +191,8 @@ static void importWay(QProgressDialog* dlg, const QDomElement& Root, MapDocument
 }
 
 
-static void importRelation(QProgressDialog* dlg, const QDomElement& Root, MapDocument* theDocument, MapLayer* theLayer,
-					  MapLayer* conflictLayer, CommandList* theList, Downloader* theDownloader)
+static void importRelation(QProgressDialog* /* dlg */, const QDomElement& Root, MapDocument* theDocument, MapLayer* theLayer,
+					  MapLayer* /* conflictLayer */, CommandList* theList, Downloader* /* theDownloader */)
 {
 	std::vector<std::pair<QString,MapFeature*> > Fts;
 	for(QDomNode n = Root.firstChild(); !n.isNull(); n = n.nextSibling())
@@ -356,7 +357,7 @@ static bool resolveNotYetDownloaded(QProgressDialog* dlg, MapDocument* theDocume
 	{
 		if (theLayer->get(i-1)->notEverythingDownloaded())
 		{
-			bool x = theLayer->get(i-1)->notEverythingDownloaded();
+//			bool x = theLayer->get(i-1)->notEverythingDownloaded();
 			theList->add(new RemoveFeatureCommand(theDocument,theLayer->get(i-1)));
 		}
 	}
@@ -403,7 +404,7 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 	CommandList* theList = new CommandList;
 	theList->setIsUpdateFromOSM();
 	theDocument->add(theLayer);
-	MapLayer* conflictLayer = new MapLayer("Conflicts from "+theLayer->name(), MapLayer::DrawingLayer);
+	MapLayer* conflictLayer = new DrawingMapLayer("Conflicts from "+theLayer->name());
 	theDocument->add(conflictLayer);
 	importOSM(dlg, root, theDocument, theLayer, conflictLayer, theList, theDownloader);
 	bool WasCanceled = dlg->wasCanceled();
@@ -420,7 +421,7 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 	else
 	{
 		//FIXME Do we have to add a download to the undo list? + dirties the document
-		theDocument->history().add(theList);
+		//theDocument->history().add(theList);
 		if (!conflictLayer->size()) {
 			theDocument->remove(conflictLayer);
 			delete conflictLayer;

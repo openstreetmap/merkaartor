@@ -333,7 +333,7 @@ void EPTouchupLayer::draw(Road* R)
 		paintsel->drawTouchup(R,p->thePainter,p->theProjection);
 }
 
-void EPTouchupLayer::draw(Relation* R)
+void EPTouchupLayer::draw(Relation* /* R */)
 {
 }
 

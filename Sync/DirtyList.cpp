@@ -4,6 +4,7 @@
 #include "Map/DownloadOSM.h"
 #include "Map/ExportOSM.h"
 #include "Map/MapDocument.h"
+#include "Map/MapLayer.h"
 #include "Map/Relation.h"
 #include "Map/Road.h"
 #include "Map/TrackPoint.h"
@@ -301,9 +302,9 @@ bool DirtyListDescriber::eraseRelation(Relation* R)
 /* DIRTYLIST */
 
 
-DirtyListExecutor::DirtyListExecutor(MapDocument* aDoc, const DirtyListBuild& aFuture, const QString& aWeb, const QString& aUser, const QString& aPwd, 
+DirtyListExecutor::DirtyListExecutor(MapDocument* aDoc, const DirtyListBuild& aFuture, const QString& aWeb, const QString& aUser, const QString& aPwd,
 									 bool aUseProxy, const QString& aProxyHost, int aProxyPort, unsigned int aTasks)
-: DirtyListVisit(aDoc, aFuture, true), Tasks(aTasks), Done(0), Web(aWeb), User(aUser), Pwd(aPwd), 
+: DirtyListVisit(aDoc, aFuture, true), Tasks(aTasks), Done(0), Web(aWeb), User(aUser), Pwd(aPwd),
   UseProxy(aUseProxy), ProxyHost(aProxyHost), ProxyPort(aProxyPort), theDownloader(0)
 {
 	theDownloader = new Downloader(Web, User, Pwd, UseProxy, ProxyHost, ProxyPort);
@@ -322,7 +323,7 @@ bool DirtyListExecutor::sendRequest(const QString& Method, const QString& URL, c
 
 	QByteArray Content = theDownloader->content();
 	int x = theDownloader->resultCode();
-	
+
 	if (x==200)
 	{
 		Rcv = QString::fromUtf8(Content.data());

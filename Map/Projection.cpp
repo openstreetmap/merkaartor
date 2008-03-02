@@ -189,10 +189,10 @@ QPointF Projection::screenToCoordinate(QPointF click) const
 {
 	// click coordinate to image coordinate
 	QPoint displayToImage =
-		QPoint(click.x() - screen_middle.x() +
-			   layermanager->getMapmiddle_px().x(),
-			   click.y() - screen_middle.y() +
-			   layermanager->getMapmiddle_px().y());
+		QPoint(int(click.x() - screen_middle.x() +
+			   layermanager->getMapmiddle_px().x()),
+			   int(click.y() - screen_middle.y() +
+			   layermanager->getMapmiddle_px().y()));
 	// image coordinate to world coordinate
 	return layermanager->getLayer()->getMapAdapter()->
 		   displayToCoordinate(displayToImage);
@@ -217,5 +217,5 @@ void Projection::setCenter(Coord & Center, const QRect & Screen)
 	QPointF curCenterScreen = project(curCenter);
 	QPointF newCenterScreen = project(Center);
 
-	panScreen(QPoint(curCenterScreen.x() - newCenterScreen.x(), curCenterScreen.y() - newCenterScreen.y()), Screen);
+	panScreen(QPoint(int(curCenterScreen.x() - newCenterScreen.x()), int(curCenterScreen.y() - newCenterScreen.y())), Screen);
 }

@@ -51,7 +51,7 @@ CoordBox TrackPoint::boundingBox() const
 	return CoordBox(Position,Position);
 }
 
-void TrackPoint::draw(QPainter& thePainter, const Projection& theProjection)
+void TrackPoint::draw(QPainter& /* thePainter */, const Projection& /*theProjection*/ )
 {
 }
 

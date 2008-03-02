@@ -80,7 +80,7 @@ QString Relation::description() const
 	return QString("relationship %1").arg(id());
 }
 
-RenderPriority Relation::renderPriority(double aPixelPerM) const
+RenderPriority Relation::renderPriority(double /* aPixelPerM */) const
 {
 	return RenderPriority(RenderPriority::IsLinear,0);
 }
@@ -249,7 +249,7 @@ QVariant RelationMemberModel::data(const QModelIndex &index, int role) const
 {
 	if (!index.isValid())
 		return QVariant();
-	if (index.row() >= Parent->Members.size())
+	if (index.row() >= (int)Parent->Members.size())
 		return QVariant();
 	if (role == Qt::DisplayRole)
 	{
@@ -260,7 +260,7 @@ QVariant RelationMemberModel::data(const QModelIndex &index, int role) const
 	}
 	else if (role == Qt::EditRole)
 	{
-		if ( (index.column() == 0) && (index.row() < Parent->Members.size()) )
+		if ( (index.column() == 0) && (index.row() < (int)Parent->Members.size()) )
 			return Parent->Members[index.row()].first;
 	}
 	return QVariant();

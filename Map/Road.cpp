@@ -209,7 +209,7 @@ double Road::area() const
 	return p->Area;
 }
 
-void Road::draw(QPainter& thePainter, const Projection& )
+void Road::draw(QPainter& /* thePainter */, const Projection& )
 {
 }
 

@@ -54,6 +54,8 @@ class ImageManager : public QObject
 		 */
 		QPixmap getImage(const QString& host, const QString& path);
 		
+		QPixmap prefetchImage(const QString& host, const QString& path);
+		
 		void receivedImage(const QPixmap pixmap, const QString& url);
 		
 		/*!
@@ -85,6 +87,7 @@ class ImageManager : public QObject
 		ImageManager& operator=(const ImageManager&);
 		QPixmap emptyPixmap;
 		MapNetwork* net;
+		QVector<QString> prefetch;
 	
 		static ImageManager* m_Instance;
 		

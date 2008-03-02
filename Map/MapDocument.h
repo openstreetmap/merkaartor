@@ -12,60 +12,7 @@ class QString;
 class CommandHistory;
 class MapDocument;
 class MapDocumentPrivate;
-class MapFeature;
-class MapLayerPrivate;
-class MapAdapter;
-class Layer;
-class LayerManager;
-
-class MapLayer
-{
-public:
-	enum MapLayerType {
-		ImageLayer,
-		DrawingLayer
-	};
-
-public:
-	MapLayer(const QString& aName, enum MapLayerType layertype);
-
-private:
-	MapLayer(const MapLayer& aLayer);
-
-public:
-	~MapLayer();
-
-	void setName(const QString& aName);
-	const QString& name() const;
-	bool isVisible() const;
-	void setVisible(bool b);
-
-	void add(MapFeature* aFeature);
-	void add(MapFeature* aFeature, unsigned int Idx);
-	void remove(MapFeature* aFeature);
-	bool exists(MapFeature* aFeature) const;
-	unsigned int size() const;
-	MapFeature* get(unsigned int i);
-	const MapFeature* get(unsigned int i) const;
-	MapFeature* get(const QString& id);
-	void notifyIdUpdate(const QString& id, MapFeature* aFeature);
-	void sortRenderingPriority(double PixelPerM);
-	void invalidateRenderPriority();
-
-	void setDocument(MapDocument* aDocument);
-	MapDocument* getDocument();
-
-	MapLayer::MapLayerType type();
-	Layer* imageLayer();
-	void setMapAdapter(ImageBackgroundType typ);
-	void setMapAdapter(ImageBackgroundType typ, MainWindow* main);
-	LayerManager* layermanager;
-
-	void ExportOSM(void);
-
-private:
-	MapLayerPrivate* p;
-};
+class ImageMapLayer;
 
 class MapDocument
 {
@@ -94,7 +41,7 @@ public:
 	void addToTagList(QString k, QString v);
 	QStringList getTagList() ;
 	QStringList getTagValueList(QString k) ;
-    MapLayer* getBgLayer() const;
+	ImageMapLayer* getImageLayer() const;
 	void exportOSM(const QString& filename);
 
 
@@ -102,7 +49,6 @@ private:
 	MapDocumentPrivate* p;
 	QStringList tagKeys;
 	QStringList tagValues;
-	MapLayer* bgLayer;
 };
 
 bool hasUnsavedChanges(const MapDocument& aDoc);

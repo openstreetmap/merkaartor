@@ -101,6 +101,12 @@ class MapControl : public QWidget
 		 */
 		QPointF	getCurrentCoordinate() const;
 		
+		//! returns the current zoom level
+		/*!
+		 * @return returns the current zoom level
+		 */
+		int getCurrentZoom() const;
+		
 		//! sets the middle of the map to the given coordinate
 		/*!
 		 * @param  coordinate the coordinate which the view´s middle should be set to

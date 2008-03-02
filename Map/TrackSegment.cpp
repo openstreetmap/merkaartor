@@ -120,7 +120,7 @@ double TrackSegment::pixelDistance(const QPointF& , double , const Projection&) 
 	return 1000000;
 }
 
-void TrackSegment::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const std::vector<MapFeature*>& Alternatives)
+void TrackSegment::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const std::vector<MapFeature*>& /*Alternatives*/)
 {
 	for (unsigned int i=0; i<p->Points.size(); ++i)
 	{

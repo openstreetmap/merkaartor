@@ -56,11 +56,11 @@ QVariant TagModel::data(const QModelIndex &index, int role) const
 		return QVariant();
 	if (!index.isValid())
 		return QVariant();
-	if (index.row() > Tags.size())
+	if ((unsigned int)index.row() > Tags.size())
 		return QVariant();
 	if (role == Qt::DisplayRole)
 	{
-		if (index.row() >= Tags.size())
+		if ((unsigned int)index.row() >= Tags.size())
 		{
 			if (index.column() == 0)
 				return "Edit this to add...";
@@ -77,7 +77,7 @@ QVariant TagModel::data(const QModelIndex &index, int role) const
 	}
 	else if (role == Qt::EditRole)
 	{
-		if (index.row() >= Tags.size())
+		if ((unsigned int)index.row() >= Tags.size())
 			return "";
 		else
 		{
@@ -116,7 +116,7 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
 	if (!theFeatures.size()) return false;
 	if (index.isValid() && role == Qt::EditRole)
 	{
-		if (index.row() == Tags.size())
+		if ((unsigned int)index.row() == Tags.size())
 		{
 			if (index.column() == 0)
 			{
@@ -141,7 +141,7 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
 				Tags[index.row()].first = value.toString();
 			else
 				Tags[index.row()].second = value.toString();
-			CommandList* L = new CommandList;	
+			CommandList* L = new CommandList;
 			for (unsigned int i=0; i<theFeatures.size(); ++i)
 			{
 				unsigned int j = theFeatures[i]->findKey(Original);

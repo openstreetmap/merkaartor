@@ -13,7 +13,7 @@
 #include <QtXml/QDomDocument>
 
 
-static TrackPoint* importTrkPt(const QDomElement& Root, MapDocument* theDocument, MapLayer* theLayer, CommandList* theList)
+static TrackPoint* importTrkPt(const QDomElement& Root, MapDocument* /* theDocument */, MapLayer* theLayer, CommandList* theList)
 {
 	double Lat = Root.attribute("lat").toDouble();
 	double Lon = Root.attribute("lon").toDouble();

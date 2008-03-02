@@ -117,10 +117,10 @@ void SlippyMapWidget::paintEvent(QPaintEvent*)
 {
 	QPainter Painter(this);
 	Painter.fillRect(QRect(0,0,width(),height()),QColor(255,255,255));
-	int LatRect = floor(p->Lat);
-	int LatPixel = -(p->Lat - LatRect ) * TILESIZE + width()/2;
-	int LonRect = floor(p->Lon);
-	int LonPixel = -(p->Lon - LonRect ) * TILESIZE + height()/2;
+	int LatRect = int(floor(p->Lat));
+	int LatPixel = int(-(p->Lat - LatRect ) * TILESIZE + width()/2);
+	int LonRect = int(floor(p->Lon));
+	int LonPixel = int(-(p->Lon - LonRect ) * TILESIZE + height()/2);
 	while (LatPixel > 0)
 		LatPixel -=TILESIZE, --LatRect;
 	while (LonPixel > 0)
@@ -144,7 +144,7 @@ void SlippyMapWidget::wheelEvent(QWheelEvent* ev)
 		NewZoom = MINZOOMLEVEL;
 	if (NewZoom > MAXZOOMLEVEL)
 		NewZoom = MAXZOOMLEVEL;
-	if (p->Zoom != NewZoom)
+	if ((int)p->Zoom != NewZoom)
 	{
 		double dx = (ev->pos().x()-width()/2)/(TILESIZE*1.0);
 		double dy = (ev->pos().y()-height()/2)/(TILESIZE*1.0);

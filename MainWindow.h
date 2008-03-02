@@ -61,12 +61,18 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		void move_triggered();
 		void add_triggered();
 		void reverse_triggered();
-	public:
+		void preferencesChanged();
 
+	public:
 		PropertiesDock* properties();
 		MapDocument* document();
 		MapLayer* activeLayer();
 		MapView* view();
+
+	public slots:
+		void adjustLayers(bool adjustViewport);
+
+	public:
 		void invalidateView(bool UpdateDock = true);
 
 	private:
@@ -74,6 +80,9 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		MapDocument* theDocument;
 		PropertiesDock* theProperties;
 		LayerDock* theLayers;
+
+	protected:
+		void closeEvent(QCloseEvent * event);
 };
 
 #endif

@@ -25,7 +25,7 @@ void ZoomInteraction::paintEvent(QPaintEvent*, QPainter& thePainter)
 		thePainter.setBrush(Qt::NoBrush);
 		TP.setColor(QColor(255,0,0));
 		thePainter.setPen(TP);
-		thePainter.drawRect(QRectF(P1,QSize(P2.x()-P1.x(),P2.y()-P1.y())));
+		thePainter.drawRect(QRectF(P1,QSize(int(P2.x()-P1.x()),int(P2.y()-P1.y()))));
 	}
 }
 

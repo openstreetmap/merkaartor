@@ -22,7 +22,7 @@ EditCompleterDelegate::~EditCompleterDelegate()
 {
 }
 
-QWidget* EditCompleterDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const
+QWidget* EditCompleterDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& /* option */, const QModelIndex& index) const
 {
     QCompleter* completer;
     
@@ -58,7 +58,7 @@ void EditCompleterDelegate::setModelData(QWidget* editor, QAbstractItemModel* mo
     model->setData(index, edit->currentText());
 }
 
-void EditCompleterDelegate::updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index) const
+void EditCompleterDelegate::updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& /* index */) const
 {
     editor->setGeometry(option.rect);
 }

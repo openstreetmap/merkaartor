@@ -353,7 +353,7 @@ void FeaturePainter::drawBackground(Road* R, QPainter& thePainter, const Project
 void FeaturePainter::drawBackground(Relation* R, QPainter& thePainter, const Projection& theProjection) const
 {
 	if (!DrawBackground) return;
-	double PixelPerM = theProjection.pixelPerM();
+//	double PixelPerM = theProjection.pixelPerM();
 //	double WW = PixelPerM*widthOf(R)*BackgroundScale+BackgroundOffset;
 	double WW = BackgroundOffset;
 	if (WW < 0) return;
@@ -401,7 +401,7 @@ void FeaturePainter::drawForeground(Relation* R, QPainter& thePainter, const Pro
 	if (!DrawForeground && !ForegroundFill) return;
 	if (DrawForeground)
 	{
-		double PixelPerM = theProjection.pixelPerM();
+//		double PixelPerM = theProjection.pixelPerM();
 //		double WW = PixelPerM*widthOf(R)*ForegroundScale+ForegroundOffset;
 		double WW = ForegroundOffset;
 		if (WW < 0) return;
@@ -438,7 +438,7 @@ void FeaturePainter::drawTouchup(TrackPoint* Pt, QPainter& thePainter, const Pro
 		QPixmap pm(TrackPointIconName);
 		QPointF C(theProjection.project(Pt->position()));
 		thePainter.fillRect(QRectF(C-QPointF(2,2),QSize(4,4)),QColor(0,0,0,128));
-		thePainter.drawPixmap( C.x()-pm.width()/2,C.y()-pm.height()-5 , pm);
+		thePainter.drawPixmap( int(C.x()-pm.width()/2), int(C.y()-pm.height()-5) , pm);
 	}
 }
 

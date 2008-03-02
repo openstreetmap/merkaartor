@@ -8,7 +8,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QTextStream>
 
-bool importNGT(QWidget* aParent, const QString& aFilename, MapDocument* theDocument, MapLayer* theLayer)
+bool importNGT(QWidget* /* aParent */, const QString& aFilename, MapDocument* theDocument, MapLayer* theLayer)
 {
 	QFile f(aFilename);
 	if (f.open(QIODevice::ReadOnly))

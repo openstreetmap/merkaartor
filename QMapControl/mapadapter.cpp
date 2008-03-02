@@ -52,12 +52,12 @@ int MapAdapter::getMaxZoom() const
 
 int MapAdapter::getAdaptedMinZoom() const
 {
-	return max_zoom > min_zoom ? min_zoom : max_zoom;
+	return 0;
 }
 
 int MapAdapter::getAdaptedMaxZoom() const
 {
-	return max_zoom > min_zoom ? max_zoom : min_zoom;
+	return max_zoom > min_zoom ? max_zoom - min_zoom : min_zoom - max_zoom;
 }
 
 int MapAdapter::getZoom() const

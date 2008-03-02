@@ -437,6 +437,7 @@ void PropertiesDock::on_RemoveTagButton_clicked()
 		TagTable = MultiUi.TagView; break;
 	case RelationUiShowing:
 		TagTable = RelationUi.TagView; break;
+	default: break;
 	}
 	if (TagTable)
 	{

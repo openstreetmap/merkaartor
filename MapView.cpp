@@ -1,6 +1,7 @@
 #include "MapView.h"
 #include "MainWindow.h"
 #include "Map/MapDocument.h"
+#include "Map/MapLayer.h"
 #include "Map/MapFeature.h"
 #include "Map/Relation.h"
 #include "Interaction/EditInteraction.h"
@@ -18,7 +19,7 @@
 #include <QtGui/QPainter>
 #include <QtGui/QStatusBar>
 
-MapView::MapView(MainWindow* aMain) : 
+MapView::MapView(MainWindow* aMain) :
 	Main(aMain), theDocument(0), theInteraction(0), StaticBuffer(0),
 		StaticBufferUpToDate(false), numImages(0)
 {
@@ -68,11 +69,12 @@ void MapView::setDocument(MapDocument* aDoc)
 	delete layermanager;
 	layermanager = new LayerManager((QWidget *) this, size());
 
-	if (theDocument->layer(0)->imageLayer())
-		layermanager->addLayer(theDocument->layer(0)->imageLayer());
-	theDocument->layer(0)->layermanager = layermanager;
+	if (theDocument->getImageLayer()->imageLayer())
+		layermanager->addLayer(theDocument->getImageLayer()->imageLayer());
+	theDocument->getImageLayer()->layermanager = layermanager;
 	projection().setLayerManager(layermanager);
-	projection().setViewport(CoordBox(Coord(1, -1), Coord(-1, 1)), rect());
+
+	projection().setViewport(CoordBox(Coord(1.5, -1.5), Coord(-1.5, 1.5)), rect());
 }
 
 MapDocument *MapView::document()
@@ -98,7 +100,7 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 	}
 }
 
-void MapView::updateStaticBuffer(QPaintEvent * anEvent)
+void MapView::updateStaticBuffer(QPaintEvent * /* anEvent */)
 {
 	if (!StaticBuffer || (StaticBuffer->width() != width())
 	    || (StaticBuffer->height() != height())) {
@@ -221,7 +223,7 @@ void MapView::imageRequested()
 void MapView::imageReceived()
 {
 	pbImages->setValue(pbImages->value()+1);
-	
+
 	invalidate();
 }
 
@@ -231,10 +233,10 @@ void MapView::loadingFinished()
 	layermanager->removeZoomImage();
 	numImages = 0;
 	pbImages->reset();
-	
+
 //	Main->statusBar()->removeWidget(pbImages);
 //	delete pbImages;
-	
+
 }
 
 void MapView::resizeEvent(QResizeEvent * event)

@@ -16,6 +16,7 @@ HEADERS += \
 ./Interaction/MoveTrackPointInteraction.h \
 ./Interaction/ZoomInteraction.h \
 ./LayerDock.h \
+./LayerWidget.h \
 ./MainWindow.h \
 ./Map/Coord.h \
 ./Map/DownloadOSM.h \
@@ -25,6 +26,7 @@ HEADERS += \
 ./Map/ImportOSM.h \
 ./Map/ImportNGT.h \
 ./Map/MapDocument.h \
+./Map/MapLayer.h \
 ./Map/MapFeature.h \
 ./Map/Painting.h \
 ./Map/PreDefinedTags.h \
@@ -64,6 +66,7 @@ SOURCES += \
 ./Map/ImportOSM.cpp \
 ./Map/ImportNGT.cpp \
 ./Map/MapDocument.cpp \
+./Map/MapLayer.cpp \
 ./Map/MapFeature.cpp \
 ./Map/Painting.cpp \
 ./Map/PreDefinedTags.cpp \
@@ -93,6 +96,7 @@ SOURCES += \
 ./PropertiesDock.cpp \
 ./TagModel.cpp \
 ./LayerDock.cpp \
+./LayerWidget.cpp \
 ./Utils/SlippyMapWidget.cpp \
 ./Utils/EditCompleterDelegate.cpp \
 ./Preferences/MerkaartorPreferences.cpp \

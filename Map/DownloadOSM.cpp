@@ -6,6 +6,7 @@
 #include "Map/ImportGPX.h"
 #include "Map/ImportOSM.h"
 #include "Map/MapDocument.h"
+#include "Map/MapLayer.h"
 #include "Map/MapFeature.h"
 #include "Map/TrackSegment.h"
 #include "Utils/SlippyMapWidget.h"
@@ -123,7 +124,7 @@ QByteArray gzipDecode(const QByteArray& In)
 	ret = inflateInit2(&strm,15+32);
 	if (ret != Z_OK)
 		return Total;
-	int RealSize = In.size();
+	unsigned int RealSize = In.size();
 	for (unsigned int i=0; i<RealSize/CHUNK+1; ++i)
 	{
 		unsigned int Left = RealSize-(i*CHUNK);
@@ -190,7 +191,7 @@ bool Downloader::go(const QString& url)
 	{
 		QMessageBox::information(0,"error",Request.errorString());
 	}
-	if (Content.size() != Request.lastResponse().contentLength())
+	if (Content.size() != (int)Request.lastResponse().contentLength())
 	{
 		QMessageBox::information(0,"didn't download enough",QString("%1 %2").arg(Content.size()).arg(Request.lastResponse().contentLength()));
 	}
@@ -375,7 +376,7 @@ bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser
 		return false;
 	}
 	Downloader Down(aWeb, aUser, aPassword, UseProxy, ProxyHost, ProxyPort);
-	MapLayer* theLayer = new MapLayer("Download", MapLayer::DrawingLayer);
+	MapLayer* theLayer = new DrawingMapLayer("Download");
 	bool OK = importOSM(aParent, Rcv.content(), theDocument, theLayer, &Down);
 	if (!OK)
 		delete theLayer;
@@ -386,7 +387,7 @@ bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser
 bool downloadTracksFromOSM(QMainWindow* Main, const QString& aWeb, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort , const CoordBox& aBox , MapDocument* theDocument)
 {
 	Downloader theDownloader(aWeb, aUser, aPassword, UseProxy, ProxyHost, ProxyPort);
-	MapLayer* trackLayer = new MapLayer("Downloaded tracks", MapLayer::DrawingLayer);
+	TrackMapLayer* trackLayer = new TrackMapLayer("Downloaded tracks");
 	theDocument->add(trackLayer);
 	QProgressDialog ProgressDialog(Main);
 	ProgressDialog.setWindowModality(Qt::ApplicationModal);

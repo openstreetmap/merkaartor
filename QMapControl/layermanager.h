@@ -144,7 +144,14 @@ class LayerManager : public QObject
 		 * @param layer the layer which should be added
 		 */
 		void addLayer(Layer* layer);
+		//! removes a layer
 		void removeLayer();
+		
+		//! returns the current zoom level
+		/*!
+		 * @return returns the current zoom level
+		 */
+		int getCurrentZoom() const;
 
 		void drawGeoms(QPainter* painter);
 		void drawImage(QPainter* painter);

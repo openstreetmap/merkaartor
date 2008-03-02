@@ -1,5 +1,6 @@
 #include "DocumentCommands.h"
 #include "Map/MapDocument.h"
+#include "Map/MapLayer.h"
 #include "Map/MapFeature.h"
 #include "Sync/DirtyList.h"
 

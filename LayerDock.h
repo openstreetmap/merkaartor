@@ -3,53 +3,18 @@
 
 #include <QtGui/QDockWidget>
 #include <QtGui/QScrollArea>
-#include <QActionGroup>
+#include <QVBoxLayout>
+#include <QGroupBox>
+#include <QButtonGroup>
 
 class MainWindow;
 class MapLayer;
-
-class LayerWidget : public QWidget
-{
-	Q_OBJECT
-
-	public:
-		LayerWidget(MainWindow* aMain, QWidget* aParent);
-
-		void paintEvent(QPaintEvent* anEvent);
-		void mouseReleaseEvent(QMouseEvent* anEvent);
-		void updateContent();
-		MapLayer* activeLayer();
-
-	protected:
-		void contextMenuEvent(QContextMenuEvent* anEvent);
-
-	public:
-		void initWmsActions();
-
-	private:
-		MainWindow* Main;
-		unsigned int ActiveLayer;
-		QActionGroup* actgrAdapter;
-		QActionGroup* actgrWms;
-#ifdef yahoo_illegal
-		QAction* actYahoo;
-#endif
-		QAction* actNone;
-		QAction* actOSM;
-		QMenu* wmsMenu;
-
-	private slots:
-		void setWms(QAction*);
-#ifdef yahoo_illegal
-		void setYahoo(bool);
-#endif
-		void setOSM(bool);
-		void setNone(bool);
-
-};
+class LayerWidget;
 
 class LayerDock : public QDockWidget
 {
+	Q_OBJECT
+
 	public:
 		LayerDock(MainWindow* aParent);
 	public:
@@ -62,7 +27,15 @@ class LayerDock : public QDockWidget
 	private:
 		MainWindow* Main;
 		QScrollArea* Scroller;
-		LayerWidget* Content;
+		QGroupBox* Content;
+		QVBoxLayout* Layout;
+		QButtonGroup* butGroup;
+
+	private slots:
+		void layerChanged(LayerWidget*, bool adjustViewport);
+
+	signals:
+		void layersChanged(bool adjustViewport);
 };
 
 #endif

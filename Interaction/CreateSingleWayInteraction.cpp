@@ -14,7 +14,7 @@
 
 CreateSingleWayInteraction::CreateSingleWayInteraction(MainWindow* aMain, MapView* aView, bool aCurved)
 	: GenericFeatureSnapInteraction<MapFeature>(aView), Main(aMain), theRoad(0), FirstPoint(0,0),
-	  HaveFirst(false), FirstNode(0), IsCurved(aCurved)
+	 FirstNode(0), HaveFirst(false), IsCurved(aCurved)
 {
 }
 

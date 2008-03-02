@@ -81,7 +81,7 @@ void WMSMapAdapter::zoom_out()
 	coord_per_y_tile = 180. / numberOfTiles;
 }
 
-bool WMSMapAdapter::isValid(int x, int y, int z) const
+bool WMSMapAdapter::isValid(int /* x */, int /* y */, int /* z */) const
 {
 // 	if (x>0 && y>0 && z>0)
 	{
@@ -89,7 +89,7 @@ bool WMSMapAdapter::isValid(int x, int y, int z) const
 	}
 // 	return false;
 }
-QString WMSMapAdapter::getQuery(int i, int j, int z) const
+QString WMSMapAdapter::getQuery(int i, int j, int /* z */) const
 {
 	return getQ(-180+i*coord_per_x_tile,
  					90-(j+1)*coord_per_y_tile,
