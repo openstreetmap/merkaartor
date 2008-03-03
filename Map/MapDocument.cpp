@@ -3,6 +3,8 @@
 #include "Map/MapFeature.h"
 #include "Command/Command.h"
 
+#include "ImportExport/ImportNMEA.h"
+
 #include <QtCore/QString>
 #include <QMultiMap>
 
@@ -172,6 +174,25 @@ void MapDocument::exportOSM(const QString& filename)
 	QTextStream out(&file);
 	out << theExport;
 	file.close();
+}
+
+TrackMapLayer* MapDocument::importNMEA(const QString& filename)
+{
+	TrackMapLayer* NewLayer = new TrackMapLayer(QObject::tr("Import %1").arg(filename.right(filename.length() - filename.lastIndexOf('/') - 1)));
+
+	ImportNMEA imp;
+	if (!imp.loadFile(filename))
+		return NULL;
+	imp.import(NewLayer);
+
+	if (NewLayer->size())
+		add(NewLayer);
+	else {
+		delete NewLayer;
+		NewLayer = NULL;
+	}
+
+	return NewLayer;
 }
 
 

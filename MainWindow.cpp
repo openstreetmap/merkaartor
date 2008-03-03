@@ -166,10 +166,11 @@ static void changeCurrentDirToFile(const QString& s)
 
 
 #define FILTER_LOAD_SUPPORTED \
-	"Supported formats (*.gpx *.osm *.ngt)\n" \
+	"Supported formats (*.gpx *.osm *.ngt *.nmea *.nme)\n" \
 	"GPS Exchange format (*.gpx)\n" \
 	"OpenStreetMap format (*.osm)\n" \
 	"Noni GPSPlot format (*.ngt)\n" \
+	"NMEA GPS log format (*.nmea *.nme)\n" \
 	"All Files (*)"
 
 void MainWindow::on_fileImportAction_triggered()
@@ -196,8 +197,15 @@ void MainWindow::on_fileImportAction_triggered()
 					view()->setUpdatesEnabled(false);
 					OK = importNGT(this, s, theDocument, NewLayer);
 					view()->setUpdatesEnabled(true);
-				}
+				} else
+					if ((s.right(5).toLower() == ".nmea") || (s.right(4).toLower() == ".nme")) {
+						view()->setUpdatesEnabled(false);
+						if (theDocument->importNMEA(s))
+							OK = true;
+						view()->setUpdatesEnabled(true);
+					}
 		if (OK) {
+			theLayers->updateContent();
 			on_viewZoomAllAction_triggered();
 			on_editPropertiesAction_triggered();
 			theDocument->history().setActions(editUndoAction, editRedoAction);
@@ -243,7 +251,12 @@ void MainWindow::on_fileOpenAction_triggered()
 					if (OK) {
 						NewDoc->add(NewLayer);
 					}
-				}
+				} else
+					if ((s.right(5).toLower() == ".nmea") || (s.right(4).toLower() == ".nme")) {
+						if (NewDoc->importNMEA(s)) {
+							OK = true;
+						}
+					}
 		if (OK) {
 			theProperties->setSelection(0);
 			delete theDocument;

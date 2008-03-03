@@ -236,9 +236,9 @@ ImageMapLayer::ImageMapLayer(const QString & aName)
 {
 	setMapAdapter(MerkaartorPreferences::instance()->getBgType());
 	if (MerkaartorPreferences::instance()->getBgType() == Bg_None)
-		p->Visible = false;
+		setVisible(false);
 	else
-		p->Visible = MerkaartorPreferences::instance()->getBgVisible();
+		setVisible(MerkaartorPreferences::instance()->getBgVisible());
 }
 
 ImageMapLayer::~ ImageMapLayer()

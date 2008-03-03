@@ -13,6 +13,7 @@ class CommandHistory;
 class MapDocument;
 class MapDocumentPrivate;
 class ImageMapLayer;
+class TrackMapLayer;
 
 class MapDocument
 {
@@ -42,7 +43,9 @@ public:
 	QStringList getTagList() ;
 	QStringList getTagValueList(QString k) ;
 	ImageMapLayer* getImageLayer() const;
+
 	void exportOSM(const QString& filename);
+	TrackMapLayer* importNMEA(const QString& filename);
 
 
 private:
