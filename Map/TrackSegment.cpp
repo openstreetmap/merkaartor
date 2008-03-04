@@ -70,7 +70,7 @@ void TrackSegment::draw(QPainter &P, const Projection& theProjection)
 	P.setPen(QPen(QColor(128,128,128),1,Qt::DotLine));
 	for (unsigned int i=1; i<p->Points.size(); ++i)
 	{
-		if ((!theProjection.viewport().contains(p->Points[i]->position())) && (!theProjection.viewport().contains(p->Points[i-1]->position())))
+		if ((!theProjection.viewport().contains(p->Points[i]->position())) || (!theProjection.viewport().contains(p->Points[i-1]->position())))
 			continue;
 		QPointF FromF(theProjection.project(p->Points[i-1]->position()));
 		QPointF ToF(theProjection.project(p->Points[i]->position()));
