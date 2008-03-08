@@ -12,7 +12,7 @@
 #define LINEHEIGHT 20
 
 LayerDock::LayerDock(MainWindow* aMain)
-: QDockWidget(aMain), Main(aMain), Scroller(0), Content(0), Layout(0)
+: QDockWidget(aMain), Main(aMain), Scroller(0), Content(0), Layout(0), butGroup(0)
 {
 	setMinimumSize(220,100);
 	setWindowTitle(tr("Layers"));
@@ -26,7 +26,7 @@ LayerDock::~LayerDock()
 
 void LayerDock::updateContent()
 {
-	//delete Scroller;
+//	delete Scroller;
 
 	Scroller = new QScrollArea;
 	Scroller->setBackgroundRole(QPalette::Base);
@@ -38,7 +38,7 @@ void LayerDock::updateContent()
 	Layout->setMargin(0);
 	Content->setFixedSize(width(),20+(Main->document()->numLayers()+1)*LINEHEIGHT+1);
 
-	butGroup = new QButtonGroup;
+	butGroup = new QButtonGroup(Content);
 	for (unsigned int i=0; i < Main->document()->numLayers(); i++) {
 		LayerWidget* w = Main->document()->layer(i)->newWidget();
 		butGroup->addButton(w);
