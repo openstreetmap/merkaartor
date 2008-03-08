@@ -1,11 +1,28 @@
 Source: merkaartor
-Section: unknown
-Priority: optional
-Maintainer: Bart Vanhauwaert <bvh-osm@irule.be>
+Section: science
+Priority: extra
+Maintainer: Christoph Berg <myon@debian.org>
 Build-Depends: debhelper (>= 5), libqt4-dev
-Standards-Version: 3.7.2
+Standards-Version: 3.7.3
+Vcs-Svn: svn+ssh://svn.debian.org/svn/collab-maint/deb-maint/merkaartor
+Vcs-Browser: http://svn.debian.org/wsvn/collab-maint/deb-maint/merkaartor/
 
 Package: merkaartor
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libqt4-core, libqt4-gui
-Description: map editor for www.openstreetmap.org 
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: map editor for OpenStreetMap.org
+ Merkaartor is a map editor for OpenStreetMap.org, the free editable map of the
+ whole world.
+ .
+ Supported:
+  * download from and upload to the OpenStreetMap server
+  * open .osm and .gpx files
+  * create and move trackpoints, ways, and areas
+  * add tags, delete features
+  * reverse, split and join ways
+  * visualize some leisure/landuse areas and road types
+ .
+ Not yet supported:
+  * no interfacing to GPS devices
+  * does not save maps locally
+Homepage: http://www.irule.be/bvh/c++/merkaartor/

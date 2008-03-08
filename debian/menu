@@ -1,2 +1,2 @@
-?package(merkaartor):needs="X11" section="Apps/Science"\
+?package(merkaartor):needs="X11" section="Applications/Science/Geoscience"\
   title="merkaartor" command="/usr/bin/merkaartor"
