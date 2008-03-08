@@ -47,7 +47,6 @@ public:
 	void exportOSM(const QString& filename);
 	TrackMapLayer* importNMEA(const QString& filename);
 
-
 private:
 	MapDocumentPrivate* p;
 	QStringList tagKeys;

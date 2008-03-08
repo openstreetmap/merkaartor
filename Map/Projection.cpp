@@ -77,6 +77,7 @@ void Projection::panScreen(const QPoint & p, const QRect & Screen)
 	viewportRecalc(Screen);
 	if (LAYERMANAGER_OK)
 		layermanager->scrollView(-p);
+	viewportRecalc(Screen);
 }
 
 CoordBox Projection::viewport() const
@@ -143,8 +144,7 @@ void Projection::zoom(double d, const QPointF & Around,
 		screen_middle = QPoint(Screen.width() / 2, Screen.height() / 2);
 
 		QPoint c = QPoint((int) Around.x(), (int) Around.y());
-		QPointF v = screenToCoordinate(c);
-		layermanager->setView(v);
+		QPointF v_before = screenToCoordinate(c);
 
 		if (d < 1)
 			layermanager->zoomOut();
@@ -152,6 +152,8 @@ void Projection::zoom(double d, const QPointF & Around,
 			if (d > 1)
 				layermanager->zoomIn();
 		viewportRecalc(Screen);
+		QPoint v_after = coordinateToScreen(v_before);
+		panScreen(QPoint(Around.x()-v_after.x(),Around.y()-v_after.y()),Screen);
 	}
 	else
 	{
