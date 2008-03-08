@@ -137,28 +137,45 @@ void SlippyMapWidget::paintEvent(QPaintEvent*)
 		}
 }
 
-void SlippyMapWidget::wheelEvent(QWheelEvent* ev)
+void SlippyMapWidget::ZoomTo(const QPoint & NewCenter, int NewZoom)
 {
-	int NewZoom = ev->delta()/120 + p->Zoom;
 	if (NewZoom < MINZOOMLEVEL)
 		NewZoom = MINZOOMLEVEL;
 	if (NewZoom > MAXZOOMLEVEL)
 		NewZoom = MAXZOOMLEVEL;
-	if ((int)p->Zoom != NewZoom)
-	{
-		double dx = (ev->pos().x()-width()/2)/(TILESIZE*1.0);
-		double dy = (ev->pos().y()-height()/2)/(TILESIZE*1.0);
-		p->Lat = (p->Lat + dx) * (1 << NewZoom) / (1 << p->Zoom) - dx;
-		p->Lon = (p->Lon + dy) * (1 << NewZoom) / (1 << p->Zoom) - dy;
-		p->Zoom = NewZoom;
-		update();
-	}
+	if ((int)p->Zoom == NewZoom)
+		return;
+	
+ 	double dx = (NewCenter.x()-width()/2)/(TILESIZE*1.0);
+	double dy = (NewCenter.y()-height()/2)/(TILESIZE*1.0);
+
+	p->Lat = (p->Lat + dx) * (1 << NewZoom) / (1 << p->Zoom) - dx;
+	p->Lon = (p->Lon + dy) * (1 << NewZoom) / (1 << p->Zoom) - dy;
+	p->Zoom = NewZoom;
+	update();
+}
+
+void SlippyMapWidget::wheelEvent(QWheelEvent* ev)
+{
+	int NewZoom = ev->delta()/120 + p->Zoom;
+	ZoomTo(ev->pos(), NewZoom);
 }
 
 void SlippyMapWidget::mousePressEvent(QMouseEvent* ev)
 {
-	p->PreviousDrag = ev->pos();
-	p->InDrag = true;
+	if (ev->button() == Qt::MidButton)
+	{
+		ZoomTo(ev->pos(), p->Zoom + 1);
+	}
+	else if (ev->button() == Qt::RightButton)
+	{
+		ZoomTo(ev->pos(), p->Zoom - 1);
+	}
+	else
+	{
+		p->PreviousDrag = ev->pos();
+		p->InDrag = true;
+	}
 }
 
 void SlippyMapWidget::mouseReleaseEvent(QMouseEvent*)

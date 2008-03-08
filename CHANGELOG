@@ -1,4 +1,5 @@
 v0.10
+	* ADD : provide navigation for the slippy map with right and left mouse button (by Daniel van Gerpen)
 	* FIX : zoom around cursor position
 	* ADD : import NMEA logs (crude) (by Chris Browet)
 	* FIX : proper handling of dirty documents (by Chris Browet)

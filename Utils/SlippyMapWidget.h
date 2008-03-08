@@ -69,6 +69,8 @@ class SlippyMapWidget :	public QWidget
 
 	private:
 		SlippyMapWidgetPrivate* p;
+
+		void ZoomTo(const QPoint & NewCenter, int NewZoom);
 };
 
 #endif
