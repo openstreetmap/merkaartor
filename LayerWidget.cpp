@@ -184,7 +184,7 @@ void ImageLayerWidget::initWmsActions()
 		oneServer.append(Servers[i+5]);
 		oneServer.append(QString().setNum(int(i/6)));
 
-		QAction* act = new QAction(Servers[i], actgrWms);
+               QAction* act = new QAction(Servers[i], wmsMenu);
 		act->setData(oneServer);
 		//act->setCheckable(true);
 		wmsMenu->addAction(act);
