@@ -123,7 +123,10 @@ QByteArray gzipDecode(const QByteArray& In)
 	strm.next_in = Z_NULL;
 	ret = inflateInit2(&strm,15+32);
 	if (ret != Z_OK)
+       {
+               (void)inflateEnd(&strm);
 		return Total;
+       }
 	unsigned int RealSize = In.size();
 	for (unsigned int i=0; i<RealSize/CHUNK+1; ++i)
 	{
@@ -141,7 +144,10 @@ QByteArray gzipDecode(const QByteArray& In)
 			strm.next_out = reinterpret_cast<unsigned char*>(out);
 			ret = inflate(&strm, Z_NO_FLUSH);
 			if (ret == Z_STREAM_ERROR)
+                       {
+                               (void)inflateEnd(&strm);
 				return Total;
+                       }
 			switch (ret)
 			{
 				case Z_NEED_DICT:
@@ -156,6 +162,7 @@ QByteArray gzipDecode(const QByteArray& In)
 			Total.append(QByteArray(out,have));
 		} while (strm.avail_out == 0);
 	}
+       (void)inflateEnd(&strm);
 	return Total;
 }
 
