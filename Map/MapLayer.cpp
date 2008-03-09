@@ -224,7 +224,7 @@ void DrawingMapLayer::setVisible(bool b)
 
 LayerWidget* DrawingMapLayer::newWidget(void)
 {
-	delete p->theWidget;
+//	delete p->theWidget;
 	p->theWidget = new DrawingLayerWidget(this);
 	return p->theWidget;
 }
@@ -248,6 +248,7 @@ ImageMapLayer::~ ImageMapLayer()
 
 LayerWidget* ImageMapLayer::newWidget(void)
 {
+//	delete p->theWidget;
 	p->theWidget = new ImageLayerWidget(this);
 	return p->theWidget;
 }

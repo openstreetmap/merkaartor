@@ -73,10 +73,18 @@
     <property name="title" >
      <string>&amp;File</string>
     </property>
+    <widget class="QMenu" name="menuExport_OSM" >
+     <property name="title" >
+      <string>Export OSM</string>
+     </property>
+     <addaction name="exportOSMAllAction" />
+     <addaction name="exportOSMViewportAction" />
+    </widget>
     <addaction name="fileNewAction" />
     <addaction name="fileOpenAction" />
     <addaction name="fileImportAction" />
-    <addaction name="exportOSMAction" />
+    <addaction name="menuExport_OSM" />
+    <addaction name="renderAction" />
     <addaction name="separator" />
     <addaction name="fileDownloadAction" />
     <addaction name="fileUploadAction" />
@@ -414,9 +422,9 @@
     <string>Preferences...</string>
    </property>
   </action>
-  <action name="exportOSMAction" >
+  <action name="exportOSMAllAction" >
    <property name="text" >
-    <string>Export OSM...</string>
+    <string>All..</string>
    </property>
    <property name="statusTip" >
     <string>Export all visible layers to a file</string>
@@ -425,6 +433,19 @@
   <action name="editSelectAction" >
    <property name="text" >
     <string>Select...</string>
+   </property>
+  </action>
+  <action name="renderAction" >
+   <property name="text" >
+    <string>Render...</string>
+   </property>
+  </action>
+  <action name="exportOSMViewportAction" >
+   <property name="text" >
+    <string>Viewport...</string>
+   </property>
+   <property name="statusTip" >
+    <string>Export the features in the viewport to a file</string>
    </property>
   </action>
  </widget>

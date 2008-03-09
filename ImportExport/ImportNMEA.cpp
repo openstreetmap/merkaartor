@@ -113,6 +113,8 @@ TrackPoint* ImportNMEA::importGGA (QString line)
 TrackPoint* ImportNMEA::importRMC (QString line)
 {
 	QStringList tokens = line.split(",");
+	if (tokens.size() < 10)
+		return NULL;
 
 	//int time = tokens[1];
 	if (tokens[2] == "V")

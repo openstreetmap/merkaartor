@@ -44,7 +44,7 @@ public:
 	QStringList getTagValueList(QString k) ;
 	ImageMapLayer* getImageLayer() const;
 
-	void exportOSM(const QString& filename);
+	QString exportOSM(const CoordBox& aCoordBox = WORLD_COORDBOX);
 	TrackMapLayer* importNMEA(const QString& filename);
 
 private:

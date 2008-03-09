@@ -74,7 +74,7 @@ void MapView::setDocument(MapDocument* aDoc)
 	theDocument->getImageLayer()->layermanager = layermanager;
 	projection().setLayerManager(layermanager);
 
-	projection().setViewport(CoordBox(Coord(1.5, -1.5), Coord(-1.5, 1.5)), rect());
+	projection().setViewport(WORLD_COORDBOX, rect());
 }
 
 MapDocument *MapView::document()

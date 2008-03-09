@@ -2,6 +2,9 @@
 #define MERKATOR_COORD_H_
 
 #include <math.h>
+#include <QRectF>
+
+#define WORLD_COORDBOX CoordBox(Coord(1.5, -1.5), Coord(-1.5, 1.5))
 
 inline double angToRad(double a)
 {
@@ -103,6 +106,25 @@ class CoordBox
 		bool contains(const CoordBox& B) const
 		{
 			return contains(B.BottomLeft) && contains(B.TopRight);
+		}
+
+		bool intersects(const Coord& C) const
+		{
+			return contains(C);
+		}
+
+		bool intersects(const CoordBox& B) const
+		{
+			if ((B.latDiff() == 0) && (B.lonDiff() == 0)) {
+				return contains(B.bottomLeft());
+			}
+			return qMax(BottomLeft.lon(), B.bottomLeft().lon()) <= qMin(TopRight.lon(), B.topRight().lon())
+					&& qMax(BottomLeft.lat(), B.bottomLeft().lat()) <= qMin(TopRight.lat(), B.topRight().lat());
+
+/*			QRectF BRect(B.bottomLeft().lon(), B.topRight().lat(), B.lonDiff(), B.latDiff());
+			QRectF myRect(BottomLeft.lon(), TopRight.lat(), lonDiff(), latDiff());
+
+			return myRect.intersects(BRect);*/
 		}
 
 		void merge(const CoordBox& B)

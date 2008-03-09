@@ -53,8 +53,10 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_mapStyleSaveAction_triggered();
 		virtual void on_mapStyleLoadAction_triggered();
 		virtual void on_toolsPreferencesAction_triggered();
-		virtual void on_exportOSMAction_triggered();
+		virtual void on_exportOSMAllAction_triggered();
+		virtual void on_exportOSMViewportAction_triggered();
 		virtual void on_editSelectAction_triggered();
+		virtual void on_renderAction_triggered();
 
 	signals:
 		void remove_triggered();

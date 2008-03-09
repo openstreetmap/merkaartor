@@ -146,34 +146,50 @@ ImageMapLayer* MapDocument::getImageLayer() const
 	return p->bgLayer;
 }
 
-void MapDocument::exportOSM(const QString& filename)
+QString MapDocument::exportOSM(const CoordBox& aCoordBox)
 {
 	QString theExport, coreExport;
 
 	for (VisibleFeatureIterator i(this); !i.isEnd(); ++i) {
-		coreExport += i.get()->exportOSM();
+		if (TrackPoint* P = dynamic_cast<TrackPoint*>(i.get())) {
+			if (aCoordBox.contains(P->position())) {
+				coreExport += P->exportOSM();
+			}
+		} else
+			if (Road* G = dynamic_cast<Road*>(i.get())) {
+				if (aCoordBox.intersects(G->boundingBox())) {
+					for (unsigned int j=0; j < G->size(); j++) {
+						TrackPoint* P = dynamic_cast<TrackPoint*>(G->get(j));
+						if (!aCoordBox.contains(P->position()))
+							coreExport += P->exportOSM();
+					}
+					coreExport += G->exportOSM();
+				}
+			} else
+				if (Relation* G = dynamic_cast<Relation*>(i.get())) {
+					if (aCoordBox.intersects(G->boundingBox())) {
+						for (unsigned int j=0; j < G->size(); j++) {
+							TrackPoint* P = dynamic_cast<TrackPoint*>(G->get(j));
+							if (!aCoordBox.contains(P->position()))
+								coreExport += P->exportOSM();
+						}
+						coreExport += G->exportOSM();
+					}
+				}
 	}
-
-	std::pair<bool,CoordBox> bb = boundingBox(this);
 
 	theExport += "<?xml version='1.0' encoding='UTF-8'?>\n";
 	theExport += "<osm version='0.5' generator='Merkaartor'>\n";
 	theExport += "<bound box='";
-	theExport += QString().number(radToAng(bb.second.bottomLeft().lat())) + ",";
-	theExport += QString().number(radToAng(bb.second.bottomLeft().lon())) + ",";
-	theExport += QString().number(radToAng(bb.second.topRight().lat())) + ",";
-	theExport += QString().number(radToAng(bb.second.topRight().lon()));
+	theExport += QString().number(radToAng(aCoordBox.bottomLeft().lat())) + ",";
+	theExport += QString().number(radToAng(aCoordBox.bottomLeft().lon())) + ",";
+	theExport += QString().number(radToAng(aCoordBox.topRight().lat())) + ",";
+	theExport += QString().number(radToAng(aCoordBox.topRight().lon()));
 	theExport += "' origin='http://www.openstreetmap.org/api/0.5' />\n";
 	theExport += coreExport;
 	theExport += "</osm>";
 
-	QFile file(filename);
-	if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-		return;
-
-	QTextStream out(&file);
-	out << theExport;
-	file.close();
+	return theExport;
 }
 
 TrackMapLayer* MapDocument::importNMEA(const QString& filename)

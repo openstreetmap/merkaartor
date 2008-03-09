@@ -107,10 +107,11 @@ bool importGPX(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 	}
 	CommandList* theList = new CommandList;
 	importGPX(root, theDocument, theLayer, theList, MakeSegment);
-	if (theList->empty())
+	delete theList;
+/*	if (theList->empty())
 		delete theList;
 	else
-		theDocument->history().add(theList);
+		theDocument->history().add(theList);*/
 	return true;
 }
 

@@ -37,6 +37,9 @@
 #include "QMapControl/imagemanager.h"
 #include "QMapControl/mapadapter.h"
 #include "QMapControl/wmsmapadapter.h"
+#ifdef OSMARENDER
+	#include "Render/OsmaRender.h"
+#endif
 
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>
@@ -84,6 +87,11 @@ MainWindow::MainWindow(void)
 	QDir::setCurrent(MerkaartorPreferences::instance()->getWorkingDir());
 
 	connect (theLayers, SIGNAL(layersChanged(bool)), this, SLOT(adjustLayers(bool)));
+
+#if not defined(OSMARENDER)
+	//TODO Osmarender rendering
+	renderAction->setVisible(false);
+#endif
 }
 
 MainWindow::~MainWindow(void)
@@ -182,7 +190,7 @@ void MainWindow::on_fileImportAction_triggered()
 	if (!s.isNull()) {
 		changeCurrentDirToFile(s);
 		bool OK = false;
-		DrawingMapLayer* NewLayer = new DrawingMapLayer(tr("Import %1").arg(s.right(s.length() - s.lastIndexOf('/') - 1)));
+		TrackMapLayer* NewLayer = new TrackMapLayer(tr("Import %1").arg(s.right(s.length() - s.lastIndexOf('/') - 1)));
 		if (s.right(4).toLower() == ".gpx") {
 			OK = importGPX(this, s, theDocument, NewLayer);
 			if (OK)
@@ -235,7 +243,7 @@ void MainWindow::on_fileOpenAction_triggered()
 	if (!s.isNull()) {
 		changeCurrentDirToFile(s);
 		MapDocument* NewDoc = new MapDocument;
-		DrawingMapLayer* NewLayer = new DrawingMapLayer(tr("Open %1").arg(s.right(s.length() - s.lastIndexOf('/') - 1)));
+		TrackMapLayer* NewLayer = new TrackMapLayer(tr("Open %1").arg(s.right(s.length() - s.lastIndexOf('/') - 1)));
 		bool OK = false;
 		if (s.right(4).toLower() == ".gpx") {
 			OK = importGPX(this, s, NewDoc, NewLayer);
@@ -286,6 +294,7 @@ void MainWindow::on_fileUploadAction_triggered()
 void MainWindow::on_fileDownloadAction_triggered()
 {
 	if (downloadOSM(this, theView->projection().viewport(), theDocument)) {
+		theLayers->updateContent();
 		on_editPropertiesAction_triggered();
 	} else
 		QMessageBox::warning(this, tr("Error downloading"), tr("The map could not be downloaded"));
@@ -359,6 +368,7 @@ void MainWindow::on_fileNewAction_triggered()
 		theDocument = new MapDocument;
 		theView->setDocument(theDocument);
 		theDocument->history().setActions(editUndoAction, editRedoAction);
+		theLayers->updateContent();
 		invalidateView();
 	}
 }
@@ -490,13 +500,36 @@ void MainWindow::on_toolsPreferencesAction_triggered()
 	}
 }
 
-void MainWindow::on_exportOSMAction_triggered()
+void MainWindow::on_exportOSMAllAction_triggered()
 {
 	QString fileName = QFileDialog::getSaveFileName(this,
 		tr("Export OSM"), MerkaartorPreferences::instance()->getWorkingDir() + "/untitled.osm", tr("OSM Files (*.osm)"));
 
-	if (fileName != "")
-		theDocument->exportOSM(fileName);
+	if (fileName != "") {
+		QFile file(fileName);
+		if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+			return;
+
+		QTextStream out(&file);
+		out << theDocument->exportOSM();
+		file.close();
+	}
+}
+
+void MainWindow::on_exportOSMViewportAction_triggered()
+{
+	QString fileName = QFileDialog::getSaveFileName(this,
+		tr("Export OSM"), MerkaartorPreferences::instance()->getWorkingDir() + "/untitled.osm", tr("OSM Files (*.osm)"));
+
+	if (fileName != "") {
+		QFile file(fileName);
+		if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+			return;
+
+		QTextStream out(&file);
+		out << theDocument->exportOSM(view()->projection().viewport());
+		file.close();
+	}
 }
 
 void MainWindow::on_editSelectAction_triggered()
@@ -542,4 +575,12 @@ void MainWindow::closeEvent(QCloseEvent * event)
 	if (hasUnsavedChanges(*theDocument) && !mayDiscardUnsavedChanges(this)) {
 		event->ignore();
 	}
+}
+
+void MainWindow::on_renderAction_triggered()
+{
+#ifdef OSMARENDER
+	OsmaRender osmR;
+	osmR.render(theDocument, view()->projection().viewport());
+#endif
 }

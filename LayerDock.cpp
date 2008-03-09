@@ -26,7 +26,7 @@ LayerDock::~LayerDock()
 
 void LayerDock::updateContent()
 {
-//	delete Scroller;
+	delete Scroller;
 
 	Scroller = new QScrollArea;
 	Scroller->setBackgroundRole(QPalette::Base);
