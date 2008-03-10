@@ -4,6 +4,9 @@ DESTDIR = ./release
 QT += network xml core gui
 CONFIG += debug_and_release
 
+DEFINES += MAJORVERSION="0"
+DEFINES += MINORVERSION="10"
+
 INCLUDEPATH += .
 DEPENDPATH += .
 MOC_DIR += ./GeneratedFiles/release
@@ -14,4 +17,3 @@ UI_DIR += ./GeneratedFiles
 include(Merkaartor.pri)
 include(QMapControl.pri)
 include(ImportExport.pri)
-

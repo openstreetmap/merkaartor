@@ -48,10 +48,7 @@
 #include <QtGui/QFileDialog>
 #include <QtGui/QMessageBox>
 #include <QtGui/QMouseEvent>
-
-#define MAJORVERSION "0"
-#define MINORVERSION "09"
-
+#include <QInputDialog>
 
 MainWindow::MainWindow(void)
 		: theDocument(0)
@@ -68,6 +65,14 @@ MainWindow::MainWindow(void)
 		Servers.append(",");
 		MerkaartorPreferences::instance()->setWmsServers(Servers);
 		MerkaartorPreferences::instance()->setSelectedWmsServer(0);
+	}
+	
+	QStringList sl = MerkaartorPreferences::instance()->getBookmarks();
+	if (sl.size() == 0) {
+		QStringList DefaultBookmarks;
+		DefaultBookmarks << "London" << "51.47" << "-0.20" << "51.51" << "-0.08";
+	//	DefaultBookmarks << "Rotterdam" << "51.89" << "4.43" << "51.93" << "4.52";
+		MerkaartorPreferences::instance()->setBookmarks(DefaultBookmarks);
 	}
 
 	theView = new MapView(this);
@@ -88,7 +93,9 @@ MainWindow::MainWindow(void)
 
 	connect (theLayers, SIGNAL(layersChanged(bool)), this, SLOT(adjustLayers(bool)));
 
-#if not defined(OSMARENDER)
+	updateBookmarksMenu();
+
+#ifndef OSMARENDER
 	//TODO Osmarender rendering
 	renderAction->setVisible(false);
 #endif
@@ -100,6 +107,7 @@ MainWindow::~MainWindow(void)
 	delete MerkaartorPreferences::instance();
 	delete theDocument;
 }
+
 
 void MainWindow::adjustLayers(bool adjustViewport)
 {
@@ -284,8 +292,16 @@ void MainWindow::on_fileOpenAction_triggered()
 
 void MainWindow::on_fileUploadAction_triggered()
 {
-	on_editPropertiesAction_triggered();
 	MerkaartorPreferences* p = MerkaartorPreferences::instance();
+	while (p->getOsmUser().isEmpty()) {
+		int ret = QMessageBox::warning(this, tr("Upload OSM"), tr("You don't seem to have specified your\n"
+			"Openstreetmap userid & password.\nDo you want to do this now?"), QMessageBox::Yes | QMessageBox::No);
+		if (ret == QMessageBox::Yes) {
+			on_toolsPreferencesAction_triggered();
+		} else
+			return;
+	}
+	on_editPropertiesAction_triggered();
 	syncOSM(this, p->getOsmWebsite(), p->getOsmUser(), p->getOsmPassword(), p->getProxyUse(),
 		p->getProxyHost(), p->getProxyPort());
 
@@ -295,8 +311,8 @@ void MainWindow::on_fileDownloadAction_triggered()
 {
 	MerkaartorPreferences* p = MerkaartorPreferences::instance();
 	while (p->getOsmUser().isEmpty()) {
-		int ret = QMessageBox::warning(this, "Download OSM", "You don't seem to have specified your\n"
-			"Openstreetmap userid & password.\nDo you want to do this now?", QMessageBox::Yes | QMessageBox::No);
+		int ret = QMessageBox::warning(this, tr("Download OSM"), tr("You don't seem to have specified your\n"
+			"Openstreetmap userid & password.\nDo you want to do this now?"), QMessageBox::Yes | QMessageBox::No);
 		if (ret == QMessageBox::Yes) {
 			on_toolsPreferencesAction_triggered();
 		} else
@@ -593,4 +609,99 @@ void MainWindow::on_renderAction_triggered()
 	OsmaRender osmR;
 	osmR.render(theDocument, view()->projection().viewport());
 #endif
+}
+
+void MainWindow::updateBookmarksMenu()
+{
+	QStringList Bookmarks = MerkaartorPreferences::instance()->getBookmarks();
+	for (int i=0; i<Bookmarks.size(); i+=5) {
+		QAction* a = new QAction(Bookmarks[i], menuBookmarks);
+		menuBookmarks->addAction(a);
+	}
+
+	connect (menuBookmarks, SIGNAL(triggered(QAction *)), this, SLOT(bookmarkTriggered(QAction *)));
+}
+
+void MainWindow::on_bookmarkAddAction_triggered()
+{
+	bool ok = true;
+	QString text;
+
+	QStringList Bookmarks = MerkaartorPreferences::instance()->getBookmarks();
+	QStringList bkName;
+	for (int i=0; i<Bookmarks.size(); i+=5) {
+		bkName.append(Bookmarks[i]);
+	}
+	while (ok) {
+		text = QInputDialog::getItem(this, MainWindow::tr("Add Bookmark"),
+						MainWindow::tr("Specify the name of the bookmark."), bkName, 0, true, &ok);
+		if (ok) {
+			if (text.isEmpty()) {
+				QMessageBox::critical(this, tr("Invalid bookmark name"), 
+					tr("Bookmark cannot be blank."), QMessageBox::Ok);
+				continue;
+			}
+			if (Bookmarks.contains(text)) {
+				QMessageBox::critical(this, tr("Invalid bookmark name"), 
+					tr("Bookmark already exists."), QMessageBox::Ok);
+				continue;
+			}
+			break;
+		}
+	} 
+	if (ok) {
+		CoordBox Clip = view()->projection().viewport();
+		int idx = Bookmarks.size();
+		Bookmarks.append(text);
+		Bookmarks.append(QString::number(radToAng(Clip.bottomLeft().lat())));
+		Bookmarks.append(QString::number(radToAng(Clip.bottomLeft().lon())));
+		Bookmarks.append(QString::number(radToAng(Clip.topRight().lat())));
+		Bookmarks.append(QString::number(radToAng(Clip.topRight().lon())));
+		MerkaartorPreferences::instance()->setBookmarks(Bookmarks);
+
+		QAction* a = new QAction(Bookmarks[idx], menuBookmarks);
+		a->setData(idx);
+		menuBookmarks->addAction(a);
+	}
+}
+
+void MainWindow::on_bookmarkRemoveAction_triggered()
+{
+	bool ok;
+
+	QStringList Bookmarks = MerkaartorPreferences::instance()->getBookmarks();
+	QStringList bkName;
+	for (int i=0; i<Bookmarks.size(); i+=5) {
+		bkName.append(Bookmarks[i]);
+	}
+	QString item = QInputDialog::getItem(this, MainWindow::tr("Remove Bookmark"),
+						MainWindow::tr("Select the bookmark to remove."), bkName, 0, false, &ok);
+	if (ok) {
+		int i = Bookmarks.indexOf(item);
+		Bookmarks.removeAt(i);
+		Bookmarks.removeAt(i);
+		Bookmarks.removeAt(i);
+		Bookmarks.removeAt(i);
+		Bookmarks.removeAt(i);
+		MerkaartorPreferences::instance()->setBookmarks(Bookmarks);
+
+		for(int i=2; i < menuBookmarks->actions().count(); i++) {
+			if (menuBookmarks->actions()[i]->text() == item) {
+				menuBookmarks->removeAction(menuBookmarks->actions()[i]);
+				break;
+			}
+		}
+	}
+}
+
+void MainWindow::bookmarkTriggered(QAction* anAction)
+{
+	if (anAction == bookmarkAddAction || anAction == bookmarkRemoveAction)
+		return;
+	QStringList Bookmarks = MerkaartorPreferences::instance()->getBookmarks();
+	int idx = Bookmarks.indexOf(anAction->text()) + 1;
+	CoordBox Clip = CoordBox(Coord(angToRad(Bookmarks[idx].toDouble()),angToRad(Bookmarks[idx+1].toDouble())),
+		Coord(angToRad(Bookmarks[idx+2].toDouble()),angToRad(Bookmarks[idx+3].toDouble())));
+	view()->projection().setViewport(Clip, view()->rect());
+	invalidateView();
 }

@@ -19,7 +19,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>23</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >
@@ -62,11 +62,21 @@
     <property name="title" >
      <string>&amp;View</string>
     </property>
+    <widget class="QMenu" name="menuBookmarks" >
+     <property name="title" >
+      <string>Bookmarks</string>
+     </property>
+     <addaction name="bookmarkAddAction" />
+     <addaction name="bookmarkRemoveAction" />
+     <addaction name="separator" />
+    </widget>
     <addaction name="viewZoomAllAction" />
     <addaction name="viewZoomWindowAction" />
     <addaction name="viewZoomOutAction" />
     <addaction name="viewZoomInAction" />
+    <addaction name="separator" />
     <addaction name="viewSetCoordinatesAction" />
+    <addaction name="menuBookmarks" />
     <addaction name="separator" />
    </widget>
    <widget class="QMenu" name="menuFile" >
@@ -446,6 +456,16 @@
    </property>
    <property name="statusTip" >
     <string>Export the features in the viewport to a file</string>
+   </property>
+  </action>
+  <action name="bookmarkAddAction" >
+   <property name="text" >
+    <string>Add...</string>
+   </property>
+  </action>
+  <action name="bookmarkRemoveAction" >
+   <property name="text" >
+    <string>Remove...</string>
    </property>
   </action>
  </widget>

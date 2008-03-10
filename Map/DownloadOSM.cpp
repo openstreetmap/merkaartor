@@ -23,6 +23,7 @@
 #include <QtGui/QProgressBar>
 #include <QtGui/QProgressDialog>
 #include <QtGui/QStatusBar>
+#include <QInputDialog>
 
 #include "zlib/zlib.h"
 
@@ -462,14 +463,7 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 	SlippyMap->setMinimumHeight(256);
 	ui.vboxLayout1->addWidget(SlippyMap);
 
-	QStringList DefaultBookmarks;
-	DefaultBookmarks << "London" << "51.47" << "-0.20" << "51.51" << "-0.08";
-//	DefaultBookmarks << "Rotterdam" << "51.89" << "4.43" << "51.93" << "4.52";
-	QStringList Bookmarks(DefaultBookmarks);
-
-	QStringList sl = MerkaartorPreferences::instance()->getBookmarks();
-	if (sl.size() > 0)
-		Bookmarks = sl;
+	QStringList Bookmarks = MerkaartorPreferences::instance()->getBookmarks();
 	for (int i=0; i<Bookmarks.size(); i+=5)
 		ui.Bookmarks->addItem(Bookmarks[i]);
 	ui.IncludeTracks->setChecked(DownloadRaw);
@@ -491,12 +485,24 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 		else if (ui.FromviewAndAdd->isChecked())
 		{
 			Clip = aBox;
-			Bookmarks.insert(0,ui.NewBookmark->text());
-			Bookmarks.insert(1,QString::number(radToAng(Clip.bottomLeft().lat())));
-			Bookmarks.insert(2,QString::number(radToAng(Clip.bottomLeft().lon())));
-			Bookmarks.insert(3,QString::number(radToAng(Clip.topRight().lat())));
-			Bookmarks.insert(4,QString::number(radToAng(Clip.topRight().lon())));
-			MerkaartorPreferences::instance()->setBookmarks(Bookmarks);
+			QString newBk = ui.NewBookmark->text();
+			bool ok = true;
+			while (Bookmarks.contains(newBk) && ok) {
+				QString text = QInputDialog::getText(dlg, MainWindow::tr("Warning: Bookmark exists"),
+                                          MainWindow::tr("Bookmark name already exists. Enter a new one or cancel to not add."), QLineEdit::Normal,
+                                          newBk, &ok);
+			    if (ok && !text.isEmpty())
+			         newBk = text; 
+
+			}
+			if (ok) {
+				Bookmarks.insert(0,newBk);
+				Bookmarks.insert(1,QString::number(radToAng(Clip.bottomLeft().lat())));
+				Bookmarks.insert(2,QString::number(radToAng(Clip.bottomLeft().lon())));
+				Bookmarks.insert(3,QString::number(radToAng(Clip.topRight().lat())));
+				Bookmarks.insert(4,QString::number(radToAng(Clip.topRight().lon())));
+				MerkaartorPreferences::instance()->setBookmarks(Bookmarks);
+			}
 		}
 		else if (ui.FromMap->isChecked())
 		{
@@ -512,7 +518,6 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 		{
 			aParent->view()->projection().setViewport(Clip,aParent->view()->rect());
 			aParent->invalidateView();
-
 		}
 	}
 	delete dlg;

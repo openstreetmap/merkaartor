@@ -57,6 +57,8 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_exportOSMViewportAction_triggered();
 		virtual void on_editSelectAction_triggered();
 		virtual void on_renderAction_triggered();
+		virtual void on_bookmarkAddAction_triggered();
+		virtual void on_bookmarkRemoveAction_triggered();
 
 	signals:
 		void remove_triggered();
@@ -73,6 +75,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 
 	public slots:
 		void adjustLayers(bool adjustViewport);
+		void bookmarkTriggered(QAction* anAction);
 
 	public:
 		void invalidateView(bool UpdateDock = true);
@@ -82,6 +85,9 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		MapDocument* theDocument;
 		PropertiesDock* theProperties;
 		LayerDock* theLayers;
+	
+	private:
+		void updateBookmarksMenu();
 
 	protected:
 		void closeEvent(QCloseEvent * event);
