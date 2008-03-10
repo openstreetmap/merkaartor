@@ -18,6 +18,9 @@
     <layout class="QVBoxLayout" >
      <item>
       <widget class="QTabWidget" name="tabPref" >
+       <property name="tabPosition" >
+        <enum>QTabWidget::West</enum>
+       </property>
        <property name="currentIndex" >
         <number>2</number>
        </property>

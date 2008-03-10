@@ -293,6 +293,15 @@ void MainWindow::on_fileUploadAction_triggered()
 
 void MainWindow::on_fileDownloadAction_triggered()
 {
+	MerkaartorPreferences* p = MerkaartorPreferences::instance();
+	while (p->getOsmUser().isEmpty()) {
+		int ret = QMessageBox::warning(this, "Download OSM", "You don't seem to have specified your\n"
+			"Openstreetmap userid & password.\nDo you want to do this now?", QMessageBox::Yes | QMessageBox::No);
+		if (ret == QMessageBox::Yes) {
+			on_toolsPreferencesAction_triggered();
+		} else
+			return;
+	}
 	if (downloadOSM(this, theView->projection().viewport(), theDocument)) {
 		theLayers->updateContent();
 		on_editPropertiesAction_triggered();
@@ -486,6 +495,7 @@ void MainWindow::on_mapStyleLoadAction_triggered()
 void MainWindow::on_toolsPreferencesAction_triggered()
 {
 	PreferencesDialog* Pref = new PreferencesDialog();
+	Pref->tabPref->setCurrentIndex(0);
 
 	if (Pref->exec() == QDialog::Accepted) {
 		theDocument->getImageLayer()->setMapAdapter(MerkaartorPreferences::instance()->getBgType());

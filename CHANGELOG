@@ -1,4 +1,5 @@
 v0.10
+	* FIX : warn when OSM userid/password not set
 	* ADD : Export viewport to OSM
 	* FIX : crash when splitting roads (by Daniel van Gerpen)
 	* FIX : various memory leaks and clean ups (by Daniel van Gerpen)
