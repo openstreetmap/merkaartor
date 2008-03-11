@@ -143,7 +143,7 @@ void Projection::zoom(double d, const QPointF & Around,
 	{
 		screen_middle = QPoint(Screen.width() / 2, Screen.height() / 2);
 
-		QPoint c = QPoint((int) Around.x(), (int) Around.y());
+		QPoint c = Around.toPoint();
 		QPointF v_before = screenToCoordinate(c);
 
 		if (d < 1)
@@ -153,7 +153,7 @@ void Projection::zoom(double d, const QPointF & Around,
 				layermanager->zoomIn();
 		viewportRecalc(Screen);
 		QPoint v_after = coordinateToScreen(v_before);
-		panScreen(QPoint(Around.x()-v_after.x(),Around.y()-v_after.y()),Screen);
+		panScreen(c-v_after, Screen);
 	}
 	else
 	{
@@ -190,11 +190,8 @@ void Projection::layerManagerSetViewport(const CoordBox & TargetMap, const QRect
 QPointF Projection::screenToCoordinate(QPointF click) const
 {
 	// click coordinate to image coordinate
-	QPoint displayToImage =
-		QPoint(int(click.x() - screen_middle.x() +
-			   layermanager->getMapmiddle_px().x()),
-			   int(click.y() - screen_middle.y() +
-			   layermanager->getMapmiddle_px().y()));
+	QPoint displayToImage = click.toPoint() - screen_middle + layermanager->getMapmiddle_px();
+
 	// image coordinate to world coordinate
 	return layermanager->getLayer()->getMapAdapter()->
 		   displayToCoordinate(displayToImage);
@@ -219,5 +216,6 @@ void Projection::setCenter(Coord & Center, const QRect & Screen)
 	QPointF curCenterScreen = project(curCenter);
 	QPointF newCenterScreen = project(Center);
 
-	panScreen(QPoint(int(curCenterScreen.x() - newCenterScreen.x()), int(curCenterScreen.y() - newCenterScreen.y())), Screen);
+	QPoint panDelta = (curCenterScreen - newCenterScreen).toPoint();
+	panScreen(panDelta, Screen);
 }

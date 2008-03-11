@@ -51,6 +51,7 @@ void LayerDock::updateContent()
 	setWidget(Scroller);
 	Scroller->setWidget(Content);
 
+	setFocus();
 	update();
 }
 

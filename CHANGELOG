@@ -1,4 +1,5 @@
 v0.10
+	* FIX : Remove compile warnings and c-style casts (by Daniel van Gerpen)
 	* ADD : "created_by" to new features
 	* ADD : navigation: view -> bookmark + add/remove
 	* FIX : warn when OSM userid/password not set
