@@ -4,6 +4,9 @@
 #include "Map/MapDocument.h"
 #include "Map/MapFeature.h"
 
+#define NEW_KEY_TEXT "Edit this to add..."
+
+
 TagModel::TagModel(MainWindow* aMain)
 : Main(aMain)
 {
@@ -63,7 +66,7 @@ QVariant TagModel::data(const QModelIndex &index, int role) const
 		if ((unsigned int)index.row() >= Tags.size())
 		{
 			if (index.column() == 0)
-				return "Edit this to add...";
+				return NEW_KEY_TEXT;
 			else
 				return "";
 		}

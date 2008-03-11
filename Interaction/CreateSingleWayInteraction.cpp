@@ -65,6 +65,7 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFe
 				CommandList* theList = new CommandList;
 				unsigned int SnapIdx = findSnapPointIndex(aRoad, P);
 				TrackPoint* N = new TrackPoint(P);
+				N->setTag("created_by", QString("Merkaartor %1.%2").arg(MAJORVERSION).arg(MINORVERSION));
 				theList->add(new AddFeatureCommand(main()->activeLayer(),N,true));
 				theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx));
 				document()->history().add(theList);
@@ -79,6 +80,7 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFe
 			{
 				TrackPoint* From = 0;
 				theRoad = new Road;
+				theRoad->setTag("created_by", QString("Merkaartor %1.%2").arg(MAJORVERSION).arg(MINORVERSION));
 				if (IsCurved)
 					theRoad->setTag("smooth","yes");
 				if (FirstNode)
@@ -86,6 +88,7 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFe
 				else
 				{
 					From = new TrackPoint(FirstPoint);
+					From->setTag("created_by", QString("Merkaartor %1.%2").arg(MAJORVERSION).arg(MINORVERSION));
 					L->add(new AddFeatureCommand(Main->activeLayer(),From,true));
 				}
 				L->add(new AddFeatureCommand(Main->activeLayer(),theRoad,true));
@@ -100,6 +103,7 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFe
 				CommandList* theList = new CommandList;
 				unsigned int SnapIdx = findSnapPointIndex(aRoad, P);
 				TrackPoint* N = new TrackPoint(P);
+				N->setTag("created_by", QString("Merkaartor %1.%2").arg(MAJORVERSION).arg(MINORVERSION));
 				theList->add(new AddFeatureCommand(main()->activeLayer(),N,true));
 				theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx));
 				document()->history().add(theList);
@@ -109,6 +113,7 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFe
 			if (!To)
 			{
 				To = new TrackPoint(view()->projection().inverse(anEvent->pos()));
+				To->setTag("created_by", QString("Merkaartor %1.%2").arg(MAJORVERSION).arg(MINORVERSION));
 				L->add(new AddFeatureCommand(Main->activeLayer(),To,true));
 			}
 			L->add(new RoadAddTrackPointCommand(theRoad,To));

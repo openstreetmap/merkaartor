@@ -87,10 +87,12 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
 			R->setLayer(Main->activeLayer());
 			R->add(First);
 			R->setTag("oneway","yes");
+			R->setTag("created_by", QString("Merkaartor %1.%2").arg(MAJORVERSION).arg(MINORVERSION));
 			for (double a = Angle*3/2; a<2*3.141592; a+=Angle)
 			{
 				QPointF Next(CenterF.x()+cos(Modifier*a)*Radius,CenterF.y()+sin(Modifier*a)*Radius);
 				TrackPoint* New = new TrackPoint(view()->projection().inverse(Next));
+				New->setTag("created_by", QString("Merkaartor %1.%2").arg(MAJORVERSION).arg(MINORVERSION));
 				L->add(new AddFeatureCommand(Main->activeLayer(),New,true));
 				R->add(New);
 			}

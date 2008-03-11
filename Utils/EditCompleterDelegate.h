@@ -1,7 +1,7 @@
 //
 // C++ Interface: editcompleterdelegate
 //
-// Description: 
+// Description:
 //
 //
 // Author: cbro <cbro@semperpax.com>, (C) 2008

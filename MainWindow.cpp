@@ -178,6 +178,7 @@ static void changeCurrentDirToFile(const QString& s)
 {
 	QFileInfo info(s);
 	QDir::setCurrent(info.absolutePath());
+	MerkaartorPreferences::instance()->setWorkingDir(QDir::currentPath());
 }
 
 

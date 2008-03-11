@@ -159,19 +159,27 @@ QString MapDocument::exportOSM(const CoordBox& aCoordBox)
 			if (Road* G = dynamic_cast<Road*>(i.get())) {
 				if (aCoordBox.intersects(G->boundingBox())) {
 					for (unsigned int j=0; j < G->size(); j++) {
-						TrackPoint* P = dynamic_cast<TrackPoint*>(G->get(j));
-						if (!aCoordBox.contains(P->position()))
-							coreExport += P->exportOSM();
+						if (TrackPoint* P = dynamic_cast<TrackPoint*>(G->get(j)))
+							if (!aCoordBox.contains(P->position()))
+								coreExport += P->exportOSM();
 					}
 					coreExport += G->exportOSM();
 				}
 			} else
+				//FIXME Not working for relation (not made of point?)
 				if (Relation* G = dynamic_cast<Relation*>(i.get())) {
 					if (aCoordBox.intersects(G->boundingBox())) {
 						for (unsigned int j=0; j < G->size(); j++) {
-							TrackPoint* P = dynamic_cast<TrackPoint*>(G->get(j));
-							if (!aCoordBox.contains(P->position()))
-								coreExport += P->exportOSM();
+							if (Road* R = dynamic_cast<Road*>(G->get(j))) {
+								if (!aCoordBox.contains(R->boundingBox())) {
+									for (unsigned int k=0; k < R->size(); k++) {
+										if (TrackPoint* P = dynamic_cast<TrackPoint*>(R->get(k)))
+											if (!aCoordBox.contains(P->position()))
+												coreExport += P->exportOSM();
+									}
+									coreExport += R->exportOSM();
+								}
+							}
 						}
 						coreExport += G->exportOSM();
 					}
