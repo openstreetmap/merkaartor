@@ -88,7 +88,7 @@
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
- foregroundColor="#818181fc" foregroundScale="0.4" foregroundOffset="0"
+ foregroundColor="#00ff00fc" foregroundScale="0.4" foregroundOffset="0"
  foregroundDashDown="2" foregroundDashUp="4"
  drawTrafficDirectionMarks="yes">
   <selector key="highway" value="bridleway"/>
@@ -232,12 +232,6 @@
   <selector key="natural" value="water"/>
 </painter>
 <painter
- zoomUnder="0.002" zoomUpper="1e+07"
- fillColor="#b5d0d0cd"
- drawTrafficDirectionMarks="yes">
-  <selector key="landuse" value="reservoir"/>
-</painter>
-<painter
  zoomUnder="0.03" zoomUpper="1e+07"
  fillColor="#f7efb7cd"
  icon=":/Art/Mapnik/parking.png"
@@ -262,12 +256,6 @@
  zoomUnder="0.002" zoomUpper="1e+07"
  fillColor="#ead8bdcd"
  drawTrafficDirectionMarks="yes">
-  <selector key="landuse" value="farm"/>
-</painter>
-<painter
- zoomUnder="0.002" zoomUpper="1e+07"
- fillColor="#ead8bdcd"
- drawTrafficDirectionMarks="yes">
   <selector key="landuse" value="vineyard"/>
 </painter>
 <painter
@@ -276,6 +264,18 @@
  icon=":/Art/Mapnik/forest.png"
  drawTrafficDirectionMarks="yes">
   <selector key="landuse" value="forest"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#b5d0d0cd"
+ drawTrafficDirectionMarks="yes">
+  <selector key="landuse" value="reservoir"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#ead8bdcd"
+ drawTrafficDirectionMarks="yes">
+  <selector key="landuse" value="farm"/>
 </painter>
 <painter
  zoomUnder="0.002" zoomUpper="1e+07"
@@ -291,6 +291,12 @@
 </painter>
 <painter
  zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#9d9d6c77"
+ drawTrafficDirectionMarks="yes">
+  <selector key="landuse" value="brownfield"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
  fillColor="#d0eba977"
  drawTrafficDirectionMarks="yes">
   <selector key="landuse" value="grass"/>
@@ -302,21 +308,15 @@
   <selector key="landuse" value="village_green"/>
 </painter>
 <painter
- zoomUnder="0.01" zoomUpper="1e+07"
- fillColor="#d0eba977"
+ fillColor="#c8b084cd"
  drawTrafficDirectionMarks="yes">
-  <selector key="leisure" value="common"/>
+  <selector key="landuse" value="allotments"/>
 </painter>
 <painter
- zoomUnder="0.002" zoomUpper="1e+07"
- fillColor="#abdf96cd">
-  <selector key="leisure" value="nature_reserve"/>
-</painter>
-<painter
- zoomUnder="0.002" zoomUpper="1e+07"
- fillColor="#dcdcdc55"
+ backgroundColor="#0000fffc" backgroundScale="0" backgroundOffset="3"
+ fillColor="#a0b6ffcd"
  drawTrafficDirectionMarks="yes">
-  <selector key="place" value="town"/>
+  <selector key="landuse" value="basin"/>
 </painter>
 <painter
  zoomUnder="0.002" zoomUpper="1e+07"
@@ -343,16 +343,10 @@
   <selector key="landuse" value="commercial"/>
 </painter>
 <painter
- fillColor="#cc9999cd"
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#edededcd"
  drawTrafficDirectionMarks="yes">
-  <selector key="building" value="yes"/>
-  <selector key="amenity" value="public_building"/>
-</painter>
-<painter
- backgroundColor="#aa5500fc" backgroundScale="0" backgroundOffset="3"
- fillColor="#ffc8aecd"
- drawTrafficDirectionMarks="yes">
-  <selector key="amenity" value="university"/>
+  <selector key="landuse" value="pedestrian"/>
 </painter>
 <painter
  fillColor="#aacbafcd"
@@ -365,6 +359,44 @@
   <selector key="amenity" value="grave_yard"/>
 </painter>
 <painter
+ zoomUnder="0.01" zoomUpper="1e+07"
+ fillColor="#d0eba977"
+ drawTrafficDirectionMarks="yes">
+  <selector key="leisure" value="common"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#abdf96cd">
+  <selector key="leisure" value="nature_reserve"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#dcdcdc55"
+ drawTrafficDirectionMarks="yes">
+  <selector key="place" value="town"/>
+</painter>
+<painter
+ fillColor="#cc9999cd"
+ drawTrafficDirectionMarks="yes">
+  <selector key="building" value="yes"/>
+  <selector key="building" value="true"/>
+</painter>
+<painter
+ fillColor="#cc9999cd">
+  <selector key="amenity" value="public_building"/>
+</painter>
+<painter
+ fillColor="#cc9999cd"
+ drawTrafficDirectionMarks="yes">
+  <selector key="building" value="company"/>
+</painter>
+<painter
+ backgroundColor="#aa5500fc" backgroundScale="0" backgroundOffset="3"
+ fillColor="#ffc8aecd"
+ drawTrafficDirectionMarks="yes">
+  <selector key="amenity" value="university"/>
+</painter>
+<painter
  fillColor="#33cc99cd"
  drawTrafficDirectionMarks="yes">
   <selector key="leisure" value="stadium"/>
@@ -373,6 +405,21 @@
  foregroundColor="#b5d0d0fc" foregroundScale="0" foregroundOffset="2"
  drawTrafficDirectionMarks="yes">
   <selector key="waterway" value="river"/>
+</painter>
+<painter
+ foregroundColor="#b5d0d0fc" foregroundScale="0" foregroundOffset="2"
+ drawTrafficDirectionMarks="yes">
+  <selector key="waterway" value="stream"/>
+</painter>
+<painter
+ foregroundColor="#b5d0d0fc" foregroundScale="0" foregroundOffset="1"
+ drawTrafficDirectionMarks="yes">
+  <selector key="waterway" value="drain"/>
+</painter>
+<painter
+ foregroundColor="#b5d0d0fc" foregroundScale="0" foregroundOffset="1"
+ drawTrafficDirectionMarks="yes">
+  <selector key="waterway" value="canal"/>
 </painter>
 <painter
  fillColor="#444444cd"
@@ -422,24 +469,9 @@
   <selector key="power" value="sub_station"/>
 </painter>
 <painter
- foregroundColor="#b5d0d0fc" foregroundScale="0" foregroundOffset="2"
- drawTrafficDirectionMarks="yes">
-  <selector key="waterway" value="stream"/>
-</painter>
-<painter
- foregroundColor="#b5d0d0fc" foregroundScale="0" foregroundOffset="1"
- drawTrafficDirectionMarks="yes">
-  <selector key="waterway" value="drain"/>
-</painter>
-<painter
  fillColor="#ff8f8fcd"
  drawTrafficDirectionMarks="yes">
   <selector key="military" value="barracks"/>
-</painter>
-<painter
- fillColor="#c8b084cd"
- drawTrafficDirectionMarks="yes">
-  <selector key="landuse" value="allotments"/>
 </painter>
 <painter
  fillColor="#00c38fcd"
@@ -451,12 +483,6 @@
  fillColor="#a0b6ffcd"
  drawTrafficDirectionMarks="yes">
   <selector key="sport" value="swimming"/>
-</painter>
-<painter
- backgroundColor="#0000fffc" backgroundScale="0" backgroundOffset="3"
- fillColor="#a0b6ffcd"
- drawTrafficDirectionMarks="yes">
-  <selector key="landuse" value="basin"/>
 </painter>
 <painter
  backgroundColor="#636363fc" backgroundScale="0.6" backgroundOffset="1"
@@ -505,6 +531,11 @@
  fillColor="#b5d0d0cd"
  drawTrafficDirectionMarks="yes">
   <selector key="natural" value="fell"/>
+</painter>
+<painter
+ fillColor="#f2efe9cd"
+ drawTrafficDirectionMarks="yes">
+  <selector key="natural" value="land"/>
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
