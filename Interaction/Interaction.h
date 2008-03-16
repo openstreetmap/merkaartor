@@ -125,7 +125,7 @@ class GenericFeatureSnapInteraction : public Interaction
 			LastSnap = 0;
 			if (!SnapActive) return;
 			QTime Start(QTime::currentTime());
-
+			CoordBox HotZone(projection().inverse(event->pos()-QPointF(5,5)),projection().inverse(event->pos()+QPointF(5,5)));
 			double BestDistance = 5;
 			for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it)
 			{
@@ -137,6 +137,8 @@ class GenericFeatureSnapInteraction : public Interaction
 					if (NoSelectPoints && dynamic_cast<TrackPoint*>(Pt))
 						continue;
 					if (std::find(NoSnap.begin(),NoSnap.end(),Pt) != NoSnap.end())
+						continue;
+					if (Pt->boundingBox().disjunctFrom(HotZone))
 						continue;
 					double Distance = Pt->pixelDistance(event->pos(), 5.01, projection());
 					if (Distance < BestDistance)
