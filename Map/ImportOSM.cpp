@@ -22,76 +22,8 @@
 #include <QtGui/QProgressBar>
 #include <QtGui/QProgressDialog>
 #include <QtXml/QDomDocument>
+#include <QtXml/QXmlAttributes>
 
-/*
- * Forward decls
- */
-static void loadTags(const QDomElement& Root, MapFeature* W);
-static void loadTags(const QDomElement& Root, MapFeature* W, CommandList* theList);
-static void importOSM(QProgressDialog* dlg, const QDomElement& Root, MapDocument* theDocument, MapLayer* theLayer, MapLayer* conflictLayer, CommandList* theList, Downloader* theDownloader);
-
-static void importNode(const QDomElement& Root, MapDocument* theDocument, MapLayer* theLayer, MapLayer* conflictLayer, CommandList* theList)
-{
-	double Lat = Root.attribute("lat").toDouble();
-	double Lon = Root.attribute("lon").toDouble();
-	QString id = "node_"+Root.attribute("id");
-	TrackPoint* Pt = dynamic_cast<TrackPoint*>(theDocument->get(id));
-	if (Pt)
-	{
-		if (Pt->lastUpdated() == MapFeature::User)
-		{
-			// conflict
-			Pt->setLastUpdated(MapFeature::UserResolved);
-			Pt = new TrackPoint(Coord(angToRad(Lat),angToRad(Lon)));
-			theList->add(new AddFeatureCommand(conflictLayer, Pt, false));
-			loadTags(Root,Pt);
-			Pt->setId("conflict_"+id);
-			Pt->setLastUpdated(MapFeature::OSMServerConflict);
-		}
-		else if (Pt->lastUpdated() != MapFeature::UserResolved)
-		{
-			theList->add(new MoveTrackPointCommand(Pt,Coord(angToRad(Lat),angToRad(Lon))));
-			loadTags(Root, Pt, theList);
-			if (Pt->lastUpdated() == MapFeature::NotYetDownloaded)
-				Pt->setLastUpdated(MapFeature::OSMServer);
-		}
-	}
-	else
-	{
-		Pt = new TrackPoint(Coord(angToRad(Lat),angToRad(Lon)));
-		theList->add(new AddFeatureCommand(theLayer,Pt, false));
-		Pt->setId(id);
-		loadTags(Root, Pt);
-		Pt->setLastUpdated(MapFeature::OSMServer);
-	}
-}
-
-static void loadTags(const QDomElement& Root, MapFeature* W)
-{
-	for(QDomNode n = Root.firstChild(); !n.isNull(); n = n.nextSibling())
-	{
-		QDomElement t = n.toElement();
-		if (!t.isNull())
-		{
-			if (t.tagName() == "tag")
-				W->setTag(t.attribute("k"),t.attribute("v"));
-		}
-	}
-}
-
-static void loadTags(const QDomElement& Root, MapFeature* W, CommandList* theList)
-{
-	theList->add(new ClearTagsCommand(W));
-	for(QDomNode n = Root.firstChild(); !n.isNull(); n = n.nextSibling())
-	{
-		QDomElement t = n.toElement();
-		if (!t.isNull())
-		{
-			if (t.tagName() == "tag")
-				theList->add(new SetTagCommand(W, t.attribute("k"),t.attribute("v")));
-		}
-	}
-}
 
 static TrackPoint* getTrackPointOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id)
 {
@@ -132,161 +64,191 @@ static Relation* getRelationOrCreatePlaceHolder(MapDocument *theDocument, MapLay
 	return Part;
 }
 
-static void importWay(QProgressDialog* /* dlg */, const QDomElement& Root, MapDocument* theDocument, MapLayer* theLayer,
-					  MapLayer* /* conflictLayer */, CommandList* theList, Downloader* /* theDownloader */)
+
+OSMHandler::OSMHandler(MapDocument* aDoc, MapLayer* aLayer, MapLayer* aConflict, CommandList* aList)
+: theDocument(aDoc), theLayer(aLayer), conflictLayer(aConflict), theList(aList), Current(0)
 {
-	std::vector<TrackPoint*> Pts;
-	for(QDomNode n = Root.firstChild(); !n.isNull(); n = n.nextSibling())
+}
+
+void OSMHandler::parseTag(const QXmlAttributes &atts)
+{
+	if (!Current) return;
+	if (NewFeature)
+		Current->setTag(atts.value("k"),atts.value("v"));
+	else
+		theList->add(new SetTagCommand(Current, atts.value("k"),atts.value("v")));
+}
+
+void OSMHandler::parseNode(const QXmlAttributes& atts)
+{
+	double Lat = atts.value("lat").toDouble();
+	double Lon = atts.value("lon").toDouble();
+	QString id = "node_"+atts.value("id");
+	TrackPoint* Pt = dynamic_cast<TrackPoint*>(theDocument->get(id));
+	if (Pt)
 	{
-		QDomElement t = n.toElement();
-		if (!t.isNull())
+		if (Pt->lastUpdated() == MapFeature::User)
 		{
-			if (t.tagName() == "nd")
-			{
-				TrackPoint *Part = getTrackPointOrCreatePlaceHolder(theDocument, theLayer, theList, t.attribute("ref"));
-				Pts.push_back(Part);
-			}
+			// conflict
+			Pt->setLastUpdated(MapFeature::UserResolved);
+			Pt = new TrackPoint(Coord(angToRad(Lat),angToRad(Lon)));
+			theList->add(new AddFeatureCommand(conflictLayer, Pt, false));
+			NewFeature = true;
+			Pt->setId("conflict_"+id);
+			Pt->setLastUpdated(MapFeature::OSMServerConflict);
+		}
+		else if (Pt->lastUpdated() != MapFeature::UserResolved)
+		{
+			theList->add(new MoveTrackPointCommand(Pt,Coord(angToRad(Lat),angToRad(Lon))));
+			NewFeature = false;
+			if (Pt->lastUpdated() == MapFeature::NotYetDownloaded)
+				Pt->setLastUpdated(MapFeature::OSMServer);
 		}
 	}
-	if (Pts.size())
+	else
 	{
-		QString id = "way_"+Root.attribute("id");
-		Road* R = dynamic_cast<Road*>(theDocument->get(id));
-		if (R)
+		Pt = new TrackPoint(Coord(angToRad(Lat),angToRad(Lon)));
+		theList->add(new AddFeatureCommand(theLayer,Pt, false));
+		NewFeature = true;
+		Pt->setId(id);
+		Pt->setLastUpdated(MapFeature::OSMServer);
+	}
+	Current = Pt;
+}
+
+void OSMHandler::parseNd(const QXmlAttributes& atts)
+{
+	Road* R = dynamic_cast<Road*>(Current);
+	if (!R) return;
+	TrackPoint *Part = getTrackPointOrCreatePlaceHolder(theDocument, theLayer, theList, atts.value("ref"));
+	if (NewFeature)
+		R->add(Part);
+	else
+		theList->add(new RoadAddTrackPointCommand(R,Part));
+}
+
+void OSMHandler::parseWay(const QXmlAttributes& atts)
+{
+	QString id = "way_"+atts.value("id");
+	Road* R = dynamic_cast<Road*>(theDocument->get(id));
+	if (R)
+	{
+		if (R->lastUpdated() == MapFeature::User)
 		{
-			if (R->lastUpdated() == MapFeature::User)
-			{
-				R->setLastUpdated(MapFeature::UserResolved);
-				// conflict
+			R->setLastUpdated(MapFeature::UserResolved);
+			NewFeature = false;
+			// conflict
 /*				TrackPoint* Conflict = dynamic_cast<TrackPoint*>(theDocument->get("conflict_node_"+Root.attribute("from")));
-				if (Conflict) From = Conflict;
-				Conflict = dynamic_cast<TrackPoint*>(theDocument->get("conflict_node_"+Root.attribute("to")));
-				if (Conflict) To = Conflict;
-				Way* W = new Way(From,To);
-				W->setId("conflict_"+id);
-				loadSegmentTags(Root,W);
-				theList->add(new AddFeatureCommand(conflictLayer,W, false));
-				W->setLastUpdated(MapFeature::OSMServerConflict); */
-			}
-			else if (R->lastUpdated() != MapFeature::UserResolved)
-			{
-				while (R->size())
-					theList->add(new RoadRemoveTrackPointCommand(R,R->get(0)));
-				for (unsigned int i=0; i<Pts.size(); ++i)
-					theList->add(new RoadAddTrackPointCommand(R,Pts[i]));
-				loadTags(Root,R, theList);
-			}
+			if (Conflict) From = Conflict;
+			Conflict = dynamic_cast<TrackPoint*>(theDocument->get("conflict_node_"+Root.attribute("to")));
+			if (Conflict) To = Conflict;
+			Way* W = new Way(From,To);
+			W->setId("conflict_"+id);
+			loadSegmentTags(Root,W);
+			theList->add(new AddFeatureCommand(conflictLayer,W, false));
+			W->setLastUpdated(MapFeature::OSMServerConflict); */
 		}
-		else
+		else if (R->lastUpdated() != MapFeature::UserResolved)
 		{
-			R = new Road;
-                        theList->add(new AddFeatureCommand(theLayer,R, false));
-                        for (unsigned int i=0; i<Pts.size(); ++i)
-				R->add(Pts[i]);
-			R->setId(id);
-			loadTags(Root,R);
-			R->setLastUpdated(MapFeature::OSMServer);
+			while (R->size())
+				theList->add(new RoadRemoveTrackPointCommand(R,R->get(0)));
+			NewFeature = false;
 		}
+	}
+	else
+	{
+		R = new Road;
+		theList->add(new AddFeatureCommand(theLayer,R, false));
+		NewFeature = true;
+		R->setId(id);
+		R->setLastUpdated(MapFeature::OSMServer);
+	}
+	Current = R;
+}
+
+void OSMHandler::parseMember(const QXmlAttributes& atts)
+{
+	Relation* R = dynamic_cast<Relation*>(Current);
+	if (!R)
+		return;
+	QString Type = atts.value("type");
+	MapFeature* F = 0;
+	if (Type == "node")
+		F = getTrackPointOrCreatePlaceHolder(theDocument, theLayer, theList, atts.value("ref"));
+	else if (Type == "way")
+		F = getWayOrCreatePlaceHolder(theDocument, theLayer, theList, atts.value("ref"));
+	else if (Type == "relation")
+		F = getRelationOrCreatePlaceHolder(theDocument, theLayer, theList, atts.value("ref"));
+	if (F)
+	{
+		if (NewFeature)
+			R->add(atts.value("role"),F);
+		else
+			theList->add(new RelationAddFeatureCommand(R,atts.value("role"),F));
 	}
 }
 
-
-static void importRelation(QProgressDialog* /* dlg */, const QDomElement& Root, MapDocument* theDocument, MapLayer* theLayer,
-					  MapLayer* /* conflictLayer */, CommandList* theList, Downloader* /* theDownloader */)
+void OSMHandler::parseRelation(const QXmlAttributes& atts)
 {
-	std::vector<std::pair<QString,MapFeature*> > Fts;
-	for(QDomNode n = Root.firstChild(); !n.isNull(); n = n.nextSibling())
+	QString id = "rel_"+atts.value("id");
+	Relation* R = dynamic_cast<Relation*>(theDocument->get(id));
+	if (R)
 	{
-		QDomElement t = n.toElement();
-		if (!t.isNull())
+		if (R->lastUpdated() == MapFeature::User)
 		{
-			if (t.tagName() == "member")
-			{
-				QString Type = t.attribute("type");
-				MapFeature* F = 0;
-				if (Type == "node")
-					F = getTrackPointOrCreatePlaceHolder(theDocument, theLayer, theList, t.attribute("ref"));
-				else if (Type == "way")
-					F = getWayOrCreatePlaceHolder(theDocument, theLayer, theList, t.attribute("ref"));
-				else if (Type == "relation")
-					F = getRelationOrCreatePlaceHolder(theDocument, theLayer, theList, t.attribute("ref"));
-				if (F)
-					Fts.push_back(std::make_pair(t.attribute("role"),F));
-			}
-		}
-	}
-	if (Fts.size())
-	{
-		QString id = "rel_"+Root.attribute("id");
-		Relation* R = dynamic_cast<Relation*>(theDocument->get(id));
-		if (R)
-		{
-			if (R->lastUpdated() == MapFeature::User)
-			{
-				R->setLastUpdated(MapFeature::UserResolved);
-				// conflict
+			R->setLastUpdated(MapFeature::UserResolved);
+			NewFeature = true;
+			// conflict
 /*				TrackPoint* Conflict = dynamic_cast<TrackPoint*>(theDocument->get("conflict_node_"+Root.attribute("from")));
-				if (Conflict) From = Conflict;
-				Conflict = dynamic_cast<TrackPoint*>(theDocument->get("conflict_node_"+Root.attribute("to")));
-				if (Conflict) To = Conflict;
-				Way* W = new Way(From,To);
-				W->setId("conflict_"+id);
-				loadSegmentTags(Root,W);
-				theList->add(new AddFeatureCommand(conflictLayer,W, false));
-				W->setLastUpdated(MapFeature::OSMServerConflict); */
-			}
-			else if (R->lastUpdated() != MapFeature::UserResolved)
-			{
-				while (R->size())
-					theList->add(new RelationRemoveFeatureCommand(R,R->get(0)));
-				for (unsigned int i=0; i<Fts.size(); ++i)
-					theList->add(new RelationAddFeatureCommand(R,Fts[i].first,Fts[i].second));
-				loadTags(Root,R, theList);
-			}
+			if (Conflict) From = Conflict;
+			Conflict = dynamic_cast<TrackPoint*>(theDocument->get("conflict_node_"+Root.attribute("to")));
+			if (Conflict) To = Conflict;
+			Way* W = new Way(From,To);
+			W->setId("conflict_"+id);
+			loadSegmentTags(Root,W);
+			theList->add(new AddFeatureCommand(conflictLayer,W, false));
+			W->setLastUpdated(MapFeature::OSMServerConflict); */
 		}
-		else
+		else if (R->lastUpdated() != MapFeature::UserResolved)
 		{
-			R = new Relation;
-			for (unsigned int i=0; i<Fts.size(); ++i)
-				R->add(Fts[i].first,Fts[i].second);
-			R->setId(id);
-			theList->add(new AddFeatureCommand(theLayer,R, false));
-			loadTags(Root,R);
-			R->setLastUpdated(MapFeature::OSMServer);
+			while (R->size())
+				theList->add(new RelationRemoveFeatureCommand(R,R->get(0)));
+			NewFeature = false;
 		}
 	}
+	else
+	{
+		R = new Relation;
+		NewFeature = true;
+		R->setId(id);
+		theList->add(new AddFeatureCommand(theLayer,R, false));
+		R->setLastUpdated(MapFeature::OSMServer);
+	}
+	Current = R;
 }
 
-
-static void importOSM(QProgressDialog* dlg, const QDomElement& Root, MapDocument* theDocument, MapLayer* theLayer, MapLayer* conflictLayer, CommandList* theList, Downloader* theDownloader)
+bool OSMHandler::startElement ( const QString &, const QString & localName, const QString & qName, const QXmlAttributes & atts )
 {
-	unsigned int Count = 0;
-	for(QDomNode n = Root.firstChild(); !n.isNull(); n = n.nextSibling())
-		++Count;
-	unsigned int Done = 0;
-	if (dlg)
-		dlg->setMaximum(Count);
-	QEventLoop ev;
-	for(QDomNode n = Root.firstChild(); !n.isNull(); n = n.nextSibling())
-	{
-		QDomElement t = n.toElement();
-		if (!t.isNull())
-		{
-			if (t.tagName() == "node")
-				importNode(t,theDocument, theLayer, conflictLayer, theList);
-			else if (t.tagName() == "way")
-				importWay(dlg, t,theDocument, theLayer, conflictLayer, theList, theDownloader);
-			else if (t.tagName() == "relation")
-				importRelation(dlg, t,theDocument, theLayer, conflictLayer, theList, theDownloader);
-		}
-		++Done;
-		if (dlg)
-		{
-			dlg->setValue(Done);
-			ev.processEvents();
-			if (dlg->wasCanceled()) return;
-		}
-	}
+	if (qName == "tag")
+		parseTag(atts);
+	else if (qName == "node")
+		parseNode(atts);
+	else if (qName == "nd")
+		parseNd(atts);
+	else if (qName == "way")
+		parseWay(atts);
+	else if (qName == "member")
+		parseMember(atts);
+	else if (qName == "relation")
+		parseRelation(atts);
+	return true;
+}
+
+bool OSMHandler::endElement ( const QString &, const QString & localName, const QString & qName )
+{
+	if (qName == "node")
+		Current = 0;
+	return true;
 }
 
 static bool downloadToResolve(const QString& What, const std::vector<MapFeature*>& Resolution, QProgressDialog* dlg, MapDocument* theDocument, MapLayer* theLayer, CommandList* theList, Downloader* theDownloader)
@@ -319,8 +281,8 @@ static bool downloadToResolve(const QString& What, const std::vector<MapFeature*
 				if (DomDoc.setContent(&File, true, &ErrorStr, &ErrorLine,&ErrorColumn))
 				{
 					QDomElement root = DomDoc.documentElement();
-					if (root.tagName() == "osm")
-						importOSM(0, root, theDocument, theLayer, 0, theList, 0);
+//					if (root.tagName() == "osm")
+//						importOSM(0, root, theDocument, theLayer, 0, theList, 0);
 				}
 			}
 		}
@@ -379,41 +341,40 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 	dlg->show();
 	if (theDownloader)
 		theDownloader->setAnimator(dlg,Bar,false);
-/*	QFile debug("c:\\temp\\debug.osm");
-	debug.open(QIODevice::Truncate|QIODevice::WriteOnly);
-	File.reset();
-	debug.write(File.readAll());
-	File.close(); */
-	if (!DomDoc.setContent(&File, true, &ErrorStr, &ErrorLine,&ErrorColumn))
-	{
-		QMessageBox::warning(aParent,"Parse error",
-			QString("Parse error at line %1, column %2:\n%3")
-                                  .arg(ErrorLine)
-                                  .arg(ErrorColumn)
-                                  .arg(ErrorStr));
-		return false;
-	}
-
-
-	QDomElement root = DomDoc.documentElement();
-	if (root.tagName() != "osm")
-	{
-		QMessageBox::information(aParent, "Parse error","Root is not an osm node");
-		return false;
-	}
 	CommandList* theList = new CommandList;
 	theList->setIsUpdateFromOSM();
-	theDocument->add(theLayer);
 	MapLayer* conflictLayer = new DrawingMapLayer("Conflicts from "+theLayer->name());
 	theDocument->add(conflictLayer);
-	importOSM(dlg, root, theDocument, theLayer, conflictLayer, theList, theDownloader);
+
+	OSMHandler theHandler(theDocument,theLayer,conflictLayer,theList);
+
+	QXmlSimpleReader xmlReader;
+	xmlReader.setContentHandler(&theHandler);
+	QXmlInputSource source;
+	QByteArray buf(File.read(10240));
+	source.setData(buf);
+	xmlReader.parse(&source,true);
+	Bar->setMaximum(File.size());
+	Bar->setValue(Bar->value()+buf.size());
+	while (!File.atEnd())
+	{
+		QByteArray buf(File.read(20480));
+		source.setData(buf);
+		xmlReader.parseContinue();
+		Bar->setValue(Bar->value()+buf.size());
+		qApp->processEvents();
+		if (dlg->wasCanceled())
+			break;
+	}
+	bool ok = xmlReader.parse(source);
+
 	bool WasCanceled = dlg->wasCanceled();
 	if (!WasCanceled)
 		WasCanceled = !resolveNotYetDownloaded(dlg,theDocument,theLayer,theList,theDownloader);
 	delete dlg;
 	if (WasCanceled)
 	{
-		theDocument->remove(theLayer);
+		theDocument->remove(conflictLayer);
 		delete conflictLayer;
 		delete theList;
 		return false;
@@ -446,6 +407,7 @@ bool importOSM(QWidget* aParent, const QString& aFilename, MapDocument* theDocum
 bool importOSM(QWidget* aParent, QByteArray& Content, MapDocument* theDocument, MapLayer* theLayer, Downloader* theDownloader)
 {
 	QBuffer File(&Content);
+	File.open(QIODevice::ReadOnly);
 	return importOSM(aParent, File, theDocument, theLayer, theDownloader);
 }
 

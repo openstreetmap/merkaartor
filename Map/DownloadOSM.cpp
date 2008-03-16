@@ -385,9 +385,13 @@ bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser
 	}
 	Downloader Down(aWeb, aUser, aPassword, UseProxy, ProxyHost, ProxyPort);
 	MapLayer* theLayer = new DrawingMapLayer("Download");
+	theDocument->add(theLayer);
 	bool OK = importOSM(aParent, Rcv.content(), theDocument, theLayer, &Down);
 	if (!OK)
+	{
+		theDocument->remove(theLayer);
 		delete theLayer;
+	}
 	return OK;
 }
 

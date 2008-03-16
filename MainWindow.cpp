@@ -201,10 +201,9 @@ void MainWindow::on_fileImportAction_triggered()
 		changeCurrentDirToFile(s);
 		bool OK = false;
 		TrackMapLayer* NewLayer = new TrackMapLayer(tr("Import %1").arg(s.right(s.length() - s.lastIndexOf('/') - 1)));
+		theDocument->add(NewLayer);
 		if (s.right(4).toLower() == ".gpx") {
 			OK = importGPX(this, s, theDocument, NewLayer);
-			if (OK)
-				theDocument->add(NewLayer);
 		} else
 			if (s.right(4).toLower() == ".osm") {
 				view()->setUpdatesEnabled(false);
@@ -228,6 +227,7 @@ void MainWindow::on_fileImportAction_triggered()
 			on_editPropertiesAction_triggered();
 			theDocument->history().setActions(editUndoAction, editRedoAction);
 		} else {
+			theDocument->remove(NewLayer);
 			delete NewLayer;
 			QMessageBox::warning(this, tr("Not a valid file"), tr("The file could not be opened"));
 		}
@@ -258,22 +258,25 @@ void MainWindow::loadFile(const QString & fn)
 
 	if (fn.endsWith(".gpx")) {
 		NewLayer = new TrackMapLayer( NewLayerName );
+		NewDoc->add(NewLayer);
 		importOK = importGPX(this, fn, NewDoc, NewLayer);
 	}
 	else if (fn.endsWith(".osm")) {
 		NewLayer = new TrackMapLayer( NewLayerName );
+		NewDoc->add(NewLayer);
 		importOK = importOSM(this, fn, NewDoc, NewLayer);
 	}
 	else if (fn.endsWith(".ngt")) {
 		NewLayer = new TrackMapLayer( NewLayerName );
+		NewDoc->add(NewLayer);
 		importOK = importNGT(this, fn, NewDoc, NewLayer);
 	}
 	else if (fn.endsWith(".nmea") || (fn.endsWith(".nme"))) {
 		importOK = NewDoc->importNMEA(fn);
 	}
 		
-	if (importOK && NewLayer)
-		NewDoc->add(NewLayer);
+	if (!importOK && NewLayer)
+		NewDoc->remove(NewLayer);
 
 	if (importOK == false) {
 		delete NewDoc;
@@ -285,8 +288,8 @@ void MainWindow::loadFile(const QString & fn)
 	theProperties->setSelection(0);
 	delete theDocument;
 	theDocument = NewDoc;
-	theView->setDocument(theDocument);
 	theLayers->updateContent();
+	theView->setDocument(theDocument);
 	on_viewZoomAllAction_triggered();
 	on_editPropertiesAction_triggered();
 	theDocument->history().setActions(editUndoAction, editRedoAction);
