@@ -23,6 +23,10 @@
     	<file>Tiles/110.png</file>
     	<file>Tiles/111.png</file>
     </qresource>
+    <qresource prefix="/Styles">
+    	<file alias="Classic.mas">../Styles/Classic.mas</file>
+    	<file alias="Mapnik.mas">../Styles/Mapnik.mas</file>
+    </qresource>
 </RCC>
 
 

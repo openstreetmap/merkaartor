@@ -4,14 +4,17 @@
 // Description: 
 //
 //
-// Author: cbro <cbro@semperpax.com>, (C) 2008
+// Author: cbro <cbro@semperpax.com>, Bart Vanhauwaert (C) 2008
 //
 // Copyright: See COPYING file that comes with this distribution
 //
 //
 #include "Preferences/PreferencesDialog.h"
 #include "Preferences/MerkaartorPreferences.h"
+#include "PaintStyle/EditPaintStyle.h"
 
+#include <QtCore/QDir>
+#include <QtGui/QFileDialog>
 #include <QMessageBox>
 #include <QUrl>
 #include <QTextStream>
@@ -204,6 +207,18 @@ void PreferencesDialog::loadPrefs()
 
 	cbMapAdapter->setCurrentIndex(MerkaartorPreferences::instance()->getBgType());
 	grpWmsServers->setVisible((MerkaartorPreferences::instance()->getBgType() == Bg_Wms));
+	QString s = MerkaartorPreferences::instance()->getDefaultStyle();
+	if (s == ":/Styles/Mapnik.mas")
+		StyleMapnik->setChecked(true);
+	else if (s== ":/Styles/Classic.mas")
+		StyleClassic->setChecked(true);
+	else
+	{
+		StyleCustom->setChecked(true);
+		CustomStyleName->setEnabled(true);
+		CustomStyleName->setText(s);
+		BrowseStyle->setEnabled(true);
+	}
 }
 
 void PreferencesDialog::savePrefs()
@@ -227,6 +242,21 @@ void PreferencesDialog::savePrefs()
 	}
 	MerkaartorPreferences::instance()->setWmsServers(Servers);
 	MerkaartorPreferences::instance()->setSelectedWmsServer(getSelectedServer());
+
+	QString NewStyle;
+
+	if (StyleMapnik->isChecked())
+		NewStyle = ":/Styles/Mapnik.mas";
+	else if (StyleClassic->isChecked())
+		NewStyle = ":/Styles/Classic.mas";
+	else
+		NewStyle = CustomStyleName->text();
+
+	if (NewStyle != MerkaartorPreferences::instance()->getDefaultStyle())
+	{
+		MerkaartorPreferences::instance()->setDefaultStyle(NewStyle);
+		loadPainters(MerkaartorPreferences::instance()->getDefaultStyle());
+	}
 }
 
 void PreferencesDialog::on_cbMapAdapter_currentIndexChanged(int index)
@@ -238,4 +268,11 @@ void PreferencesDialog::on_cbMapAdapter_currentIndexChanged(int index)
 			grpWmsServers->setVisible(true);
 			break;
 	}
+}
+
+void PreferencesDialog::on_BrowseStyle_clicked()
+{
+	QString s = QFileDialog::getOpenFileName(this,tr("Custom style"),"",tr("Merkaartor map style (*.mas)"));
+	if (!s.isNull())
+		CustomStyleName->setText(QDir::toNativeSeparators(s));
 }

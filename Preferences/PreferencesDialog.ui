@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>475</width>
-    <height>560</height>
+    <width>541</width>
+    <height>575</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -22,8 +22,79 @@
         <enum>QTabWidget::West</enum>
        </property>
        <property name="currentIndex" >
-        <number>2</number>
+        <number>0</number>
        </property>
+       <widget class="QWidget" name="tab_4" >
+        <attribute name="title" >
+         <string>Visual</string>
+        </attribute>
+        <layout class="QVBoxLayout" >
+         <item>
+          <widget class="QGroupBox" name="MapStyle" >
+           <property name="title" >
+            <string>Map style</string>
+           </property>
+           <layout class="QVBoxLayout" >
+            <item>
+             <widget class="QRadioButton" name="StyleClassic" >
+              <property name="text" >
+               <string>Merkaartor classic</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="StyleMapnik" >
+              <property name="text" >
+               <string>Mapnik lookalike</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" >
+              <item>
+               <widget class="QRadioButton" name="StyleCustom" >
+                <property name="text" >
+                 <string>Custom</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="CustomStyleName" >
+                <property name="enabled" >
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="BrowseStyle" >
+                <property name="enabled" >
+                 <bool>false</bool>
+                </property>
+                <property name="text" >
+                 <string>Browse</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
        <widget class="QWidget" name="tab_3" >
         <attribute name="title" >
          <string>OSM</string>
@@ -34,48 +105,40 @@
            <property name="title" >
             <string>OSM</string>
            </property>
-           <layout class="QHBoxLayout" >
-            <item>
-             <layout class="QVBoxLayout" >
-              <item>
-               <widget class="QLabel" name="label_12" >
-                <property name="text" >
-                 <string>Website:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="label_14" >
-                <property name="text" >
-                 <string>Username:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="label_13" >
-                <property name="text" >
-                 <string>Password:</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
+           <layout class="QGridLayout" >
+            <item row="0" column="0" >
+             <widget class="QLabel" name="label_12" >
+              <property name="text" >
+               <string>Website:</string>
+              </property>
+             </widget>
             </item>
-            <item>
-             <layout class="QVBoxLayout" >
-              <item>
-               <widget class="QLineEdit" name="edOsmUrl" />
-              </item>
-              <item>
-               <widget class="QLineEdit" name="edOsmUser" />
-              </item>
-              <item>
-               <widget class="QLineEdit" name="edOsmPwd" >
-                <property name="echoMode" >
-                 <enum>QLineEdit::Password</enum>
-                </property>
-               </widget>
-              </item>
-             </layout>
+            <item row="0" column="1" >
+             <widget class="QLineEdit" name="edOsmUrl" />
+            </item>
+            <item row="1" column="0" >
+             <widget class="QLabel" name="label_14" >
+              <property name="text" >
+               <string>Username:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1" >
+             <widget class="QLineEdit" name="edOsmUser" />
+            </item>
+            <item row="2" column="0" >
+             <widget class="QLabel" name="label_13" >
+              <property name="text" >
+               <string>Password:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1" >
+             <widget class="QLineEdit" name="edOsmPwd" >
+              <property name="echoMode" >
+               <enum>QLineEdit::Password</enum>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
@@ -122,6 +185,9 @@
             </item>
             <item row="1" column="1" >
              <widget class="QLineEdit" name="edProxyHost" >
+              <property name="enabled" >
+               <bool>false</bool>
+              </property>
               <property name="maximumSize" >
                <size>
                 <width>16777215</width>
@@ -139,6 +205,9 @@
             </item>
             <item row="2" column="1" >
              <widget class="QLineEdit" name="edProxyPort" >
+              <property name="enabled" >
+               <bool>false</bool>
+              </property>
               <property name="maximumSize" >
                <size>
                 <width>50</width>
@@ -199,19 +268,6 @@
             </widget>
            </item>
           </layout>
-         </item>
-         <item>
-          <spacer>
-           <property name="orientation" >
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" >
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
          </item>
          <item>
           <widget class="QGroupBox" name="grpWmsServers" >
@@ -447,6 +503,70 @@
     <hint type="destinationlabel" >
      <x>286</x>
      <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>bbUseProxy</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>edProxyHost</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>78</x>
+     <y>59</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>99</x>
+     <y>76</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>bbUseProxy</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>edProxyPort</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>108</x>
+     <y>54</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>109</x>
+     <y>110</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>StyleCustom</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>CustomStyleName</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>72</x>
+     <y>106</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>169</x>
+     <y>107</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>StyleCustom</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>BrowseStyle</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>80</x>
+     <y>116</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>456</x>
+     <y>112</y>
     </hint>
    </hints>
   </connection>

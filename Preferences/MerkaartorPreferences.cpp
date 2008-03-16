@@ -222,3 +222,13 @@ QString MerkaartorPreferences::getLastSearchValue() const
 {
 	return Sets->value("search/LastValue").toString();
 }
+
+QString MerkaartorPreferences::getDefaultStyle() const
+{
+	return Sets->value("style/Default",":/Styles/Classic.mas").toString();
+}
+
+void MerkaartorPreferences::setDefaultStyle(const QString& S)
+{
+	Sets->setValue("style/Default",S);
+}

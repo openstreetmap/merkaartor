@@ -54,6 +54,7 @@ MainWindow::MainWindow(void)
 		: theDocument(0)
 {
 	setupUi(this);
+	loadPainters(MerkaartorPreferences::instance()->getDefaultStyle());
 
 	QStringList Servers = MerkaartorPreferences::instance()->getWmsServers();
 	if (Servers.size() == 0) {

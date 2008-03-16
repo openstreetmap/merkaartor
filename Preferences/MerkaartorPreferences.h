@@ -97,6 +97,9 @@ public:
 	void setLastSearchValue(const QString & theValue);
 	QString getLastSearchValue() const;
 
+	QString getDefaultStyle() const;
+	void setDefaultStyle(const QString& aString);
+
 protected:
 	bool RightSideDriving;
 	double DoubleRoadDistance;

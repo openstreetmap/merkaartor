@@ -58,6 +58,7 @@ public slots:
 	void httpRequestFinished(bool error);
 	void on_buttonBox_clicked(QAbstractButton * button);
 	void on_cbMapAdapter_currentIndexChanged(int index);
+	void on_BrowseStyle_clicked();
 
 private:
 	void loadPrefs();

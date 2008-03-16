@@ -1,4 +1,6 @@
 v0.10
+	* ADD : Mapnik-lookalike style (by Colin Marquardt and Andreas Laas)
+	* ADD : ability to set default style at startup
 	* FIX : Remove compile warnings and c-style casts (by Daniel van Gerpen)
 	* ADD : "created_by" to new features
 	* ADD : navigation: view -> bookmark + add/remove

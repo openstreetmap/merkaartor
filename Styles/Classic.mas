@@ -1,0 +1,186 @@
+<mapStyle>
+<painter
+ backgroundColor="#ff0000ff" backgroundScale="1" backgroundOffset="6"
+ foregroundColor="#ffff00ff" foregroundScale="0.5" foregroundOffset="2"
+ drawTrafficDirectionMarks="yes">
+  <selector key="highway" value="motorway"/>
+  <selector key="highway" value="motorway_link"/>
+</painter>
+<painter
+ foregroundColor="#ff0000ff" foregroundScale="1" foregroundOffset="4"
+ drawTrafficDirectionMarks="yes">
+  <selector key="highway" value="trunk"/>
+  <selector key="highway" value="trunk_link"/>
+</painter>
+<painter
+ zoomUnder="0.01" zoomUpper="1e+07"
+ foregroundColor="#00ff00ff" foregroundScale="1" foregroundOffset="3"
+ drawTrafficDirectionMarks="yes">
+  <selector key="highway" value="primary"/>
+  <selector key="highway" value="primary_link"/>
+</painter>
+<painter
+ zoomUnder="0.02" zoomUpper="1e+07"
+ foregroundColor="#ffaa00ff" foregroundScale="1" foregroundOffset="2"
+ drawTrafficDirectionMarks="yes">
+  <selector key="highway" value="secondary"/>
+  <selector key="highway" value="secondary_link"/>
+</painter>
+<painter
+ zoomUnder="0.05" zoomUpper="1e+07"
+ foregroundColor="#ff5555ff" foregroundScale="1" foregroundOffset="1.5"
+ drawTrafficDirectionMarks="yes">
+  <selector key="highway" value="tertiary"/>
+  <selector key="highway" value="tertiary_link"/>
+</painter>
+<painter
+ zoomUnder="0.1" zoomUpper="1e+07"
+ backgroundColor="#777777ff" backgroundScale="1" backgroundOffset="1"
+ foregroundColor="#ffffffff" foregroundScale="1" foregroundOffset="-1"
+ drawTrafficDirectionMarks="yes">
+  <selector key="highway" value="residential"/>
+  <selector key="highway" value="unclassified"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ foregroundColor="#0000ffff" foregroundScale="1" foregroundOffset="0"
+ foregroundDashDown="2" foregroundDashUp="2"
+ drawTrafficDirectionMarks="yes">
+  <selector key="highway" value="cycleway"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ foregroundColor="#000000ff" foregroundScale="1" foregroundOffset="0"
+ foregroundDashDown="2" foregroundDashUp="2"
+ drawTrafficDirectionMarks="yes">
+  <selector key="highway" value="footway"/>
+  <selector key="highway" value="track"/>
+</painter>
+<painter
+ zoomUnder="0.1" zoomUpper="1e+07"
+ foregroundColor="#aaaaaaff" foregroundScale="1" foregroundOffset="0"
+ drawTrafficDirectionMarks="yes">
+  <selector key="highway" value="pedestrian"/>
+</painter>
+<painter
+ zoomUnder="0.01" zoomUpper="1e+07"
+ backgroundColor="#000000ff" backgroundScale="1" backgroundOffset="4"
+ foregroundColor="#ffffffff" foregroundScale="1" foregroundOffset="2"
+ touchupColor="#000000ff" touchupScale="1" touchupOffset="2"
+ touchupDashDown="3" touchupDashUp="3"
+ drawTrafficDirectionMarks="yes">
+  <selector key="railway" value="rail"/>
+</painter>
+<painter
+ zoomUnder="0.02" zoomUpper="1e+07"
+ foregroundColor="#007700ff" foregroundScale="0" foregroundOffset="1"
+ fillColor="#77ff7777"
+ drawTrafficDirectionMarks="yes">
+  <selector key="leisure" value="park"/>
+</painter>
+<painter
+ zoomUnder="0.02" zoomUpper="1e+07"
+ foregroundColor="#770000ff" foregroundScale="0" foregroundOffset="1"
+ fillColor="#ff777777"
+ drawTrafficDirectionMarks="yes">
+  <selector key="leisure" value="pitch"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ foregroundColor="#007700ff" foregroundScale="0" foregroundOffset="1"
+ fillColor="#22992277"
+ drawTrafficDirectionMarks="yes">
+  <selector key="natural" value="wood"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ foregroundColor="#007700ff" foregroundScale="0" foregroundOffset="1"
+ fillColor="#bccf8f77"
+ drawTrafficDirectionMarks="yes">
+  <selector key="natural" value="scrub"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ foregroundColor="#007700ff" foregroundScale="0" foregroundOffset="1"
+ fillColor="#55994477"
+ drawTrafficDirectionMarks="yes">
+  <selector key="natural" value="heath"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ foregroundColor="#000077ff" foregroundScale="0" foregroundOffset="1"
+ fillColor="#7777ff77"
+ drawTrafficDirectionMarks="yes">
+  <selector key="natural" value="water"/>
+</painter>
+<painter
+ zoomUnder="0.03" zoomUpper="1e+07"
+ fillColor="#f6eeb677"
+ icon=":/Art/Mapnik/parking.png"
+ drawTrafficDirectionMarks="yes">
+  <selector key="amenity" value="parking"/>
+</painter>
+<painter
+ zoomUnder="0.01" zoomUpper="1e+07"
+ fillColor="#f6666677"
+ icon=":/Art/Mapnik/hospital.png"
+ drawTrafficDirectionMarks="yes">
+  <selector key="amenity" value="hospital"/>
+</painter>
+<painter
+ zoomUnder="0.02" zoomUpper="1e+07"
+ foregroundColor="#dbbaabff" foregroundScale="0" foregroundOffset="1"
+ fillColor="#f0f0d977"
+ drawTrafficDirectionMarks="yes">
+  <selector key="amenity" value="school"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#bbe1c977"
+ drawTrafficDirectionMarks="yes">
+  <selector key="landuse" value="farm"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ foregroundColor="#007700ff" foregroundScale="0" foregroundOffset="1"
+ fillColor="#22cc2277"
+ drawTrafficDirectionMarks="yes">
+  <selector key="landuse" value="forest"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#d0eba977"
+ drawTrafficDirectionMarks="yes">
+  <selector key="landuse" value="recreation_ground"/>
+</painter>
+<painter
+ zoomUnder="0.01" zoomUpper="1e+07"
+ fillColor="#d0eba977"
+ drawTrafficDirectionMarks="yes">
+  <selector key="landuse" value="village_green"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#dcdcdc55"
+ drawTrafficDirectionMarks="yes">
+  <selector key="landuse" value="residential"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#feadba55"
+ drawTrafficDirectionMarks="yes">
+  <selector key="landuse" value="industrial"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#f4989655"
+ drawTrafficDirectionMarks="yes">
+  <selector key="landuse" value="retail"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#fbfdc855"
+ drawTrafficDirectionMarks="yes">
+  <selector key="landuse" value="commercial"/>
+</painter>
+</mapStyle>
