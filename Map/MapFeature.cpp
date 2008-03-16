@@ -291,7 +291,7 @@ bool hasOSMId(const MapFeature* aFeature)
 	QString id = aFeature->id();
 	if (id.left(5) == "node_")
 		return true;
-	if (id.left(4) == "waÿ_")
+	if (id.left(4) == "way_")
 		return true;
 	if (id.left(4) == "rel_")
 		return true;
