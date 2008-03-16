@@ -1,4 +1,5 @@
 v0.10
+	* ADD : ability to load tracks from the command line (by Daniel van Gerpen)
 	* ADD : Mapnik-lookalike style (by Colin Marquardt and Andreas Laas)
 	* ADD : ability to set default style at startup
 	* FIX : Remove compile warnings and c-style casts (by Daniel van Gerpen)

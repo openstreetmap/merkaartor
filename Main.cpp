@@ -12,7 +12,13 @@ int main(int argc, char** argv)
 	QCoreApplication::setApplicationName("Merkaartor");
 
 	MainWindow Main;
+
+	const QStringList & params = QCoreApplication::arguments();
+	if (params.size() == 2)
+		Main.loadFile(params.at(1));
+	
 	Main.show();
+
 	return app.exec();
 }
 

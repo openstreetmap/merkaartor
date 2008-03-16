@@ -79,6 +79,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 
 	public:
 		void invalidateView(bool UpdateDock = true);
+		void loadFile(const QString & fn);
 
 	private:
 		MapView* theView;

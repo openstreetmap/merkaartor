@@ -242,54 +242,67 @@ static bool mayDiscardUnsavedChanges(QWidget* aWidget)
 								 QMessageBox::Discard | QMessageBox::Cancel, QMessageBox::Cancel) == QMessageBox::Discard;
 }
 
+void MainWindow::loadFile(const QString & fn)
+{
+	if (fn.isNull())
+		return;
+
+	changeCurrentDirToFile(fn);
+
+	MapDocument* NewDoc = new MapDocument;
+	
+	QString NewLayerName = tr("Open %1").arg( fn.section('/', - 1));
+	TrackMapLayer* NewLayer = NULL;
+
+	bool importOK = false;
+
+	if (fn.endsWith(".gpx")) {
+		NewLayer = new TrackMapLayer( NewLayerName );
+		importOK = importGPX(this, fn, NewDoc, NewLayer);
+	}
+	else if (fn.endsWith(".osm")) {
+		NewLayer = new TrackMapLayer( NewLayerName );
+		importOK = importOSM(this, fn, NewDoc, NewLayer);
+	}
+	else if (fn.endsWith(".ngt")) {
+		NewLayer = new TrackMapLayer( NewLayerName );
+		importOK = importNGT(this, fn, NewDoc, NewLayer);
+	}
+	else if (fn.endsWith(".nmea") || (fn.endsWith(".nme"))) {
+		importOK = NewDoc->importNMEA(fn);
+	}
+		
+	if (importOK && NewLayer)
+		NewDoc->add(NewLayer);
+
+	if (importOK == false) {
+		delete NewDoc;
+		delete NewLayer;
+		QMessageBox::warning(this, tr("No valid file"), tr("%1 could not be opened.").arg(fn));
+		return;
+	}
+
+	theProperties->setSelection(0);
+	delete theDocument;
+	theDocument = NewDoc;
+	theView->setDocument(theDocument);
+	theLayers->updateContent();
+	on_viewZoomAllAction_triggered();
+	on_editPropertiesAction_triggered();
+	theDocument->history().setActions(editUndoAction, editRedoAction);
+}
+
 void MainWindow::on_fileOpenAction_triggered()
 {
 	if (hasUnsavedChanges(*theDocument) && !mayDiscardUnsavedChanges(this))
 		return;
-	QString s = QFileDialog::getOpenFileName(
+
+	QString fileName = QFileDialog::getOpenFileName(
 					this,
 					tr("Open track file"),
 					"", tr(FILTER_LOAD_SUPPORTED));
-	if (!s.isNull()) {
-		changeCurrentDirToFile(s);
-		MapDocument* NewDoc = new MapDocument;
-		TrackMapLayer* NewLayer = new TrackMapLayer(tr("Open %1").arg(s.right(s.length() - s.lastIndexOf('/') - 1)));
-		bool OK = false;
-		if (s.right(4).toLower() == ".gpx") {
-			OK = importGPX(this, s, NewDoc, NewLayer);
-			if (OK) {
-				NewDoc->add(NewLayer);
-			}
-		} else
-			if (s.right(4).toLower() == ".osm") {
-				OK = importOSM(this, s, NewDoc, NewLayer);
-			} else
-				if (s.right(4).toLower() == ".ngt") {
-					OK = importNGT(this, s, NewDoc, NewLayer);
-					if (OK) {
-						NewDoc->add(NewLayer);
-					}
-				} else
-					if ((s.right(5).toLower() == ".nmea") || (s.right(4).toLower() == ".nme")) {
-						if (NewDoc->importNMEA(s)) {
-							OK = true;
-						}
-					}
-		if (OK) {
-			theProperties->setSelection(0);
-			delete theDocument;
-			theDocument = NewDoc;
-			theView->setDocument(theDocument);
-			theLayers->updateContent();
-			on_viewZoomAllAction_triggered();
-			on_editPropertiesAction_triggered();
-			theDocument->history().setActions(editUndoAction, editRedoAction);
-		} else {
-			delete NewDoc;
-			delete NewLayer;
-			QMessageBox::warning(this, tr("Not a valid file"), tr("The file could not be opened"));
-		}
-	}
+
+	loadFile(fileName);
 }
 
 void MainWindow::on_fileUploadAction_triggered()
