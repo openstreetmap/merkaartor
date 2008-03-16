@@ -96,6 +96,7 @@ class MapFeature
 };
 
 void copyTags(MapFeature* Dest, MapFeature* Src);
+bool hasOSMId(const MapFeature* aFeature);
 
 #endif
 
