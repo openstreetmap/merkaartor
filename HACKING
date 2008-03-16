@@ -2,11 +2,10 @@ This are some basic notes on hacking on merkaartor
 
 - adding amenities
 	see Map/PreDefinedTags.cpp fillAmenities for filling combobox
-	see Painting/EditPaintStyle for drawing
 - adding highways
 	see Map/PreDefinedTags.cpp fillHighway for filling combobox
-	see Painting/EditPaintStyle for drawing
 - adding landuse
 	see Map/PreDefinedTags.cpp fillLandUse for filling combobox
-	see Painting/EditPaintStyle for drawing
 
+If you want to change the default rendering of any of those
+items see the Styles/Classic.mas file.
