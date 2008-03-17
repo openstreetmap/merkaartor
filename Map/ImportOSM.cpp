@@ -366,7 +366,6 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 		if (dlg->wasCanceled())
 			break;
 	}
-	bool ok = xmlReader.parse(source);
 
 	bool WasCanceled = dlg->wasCanceled();
 	if (!WasCanceled)
