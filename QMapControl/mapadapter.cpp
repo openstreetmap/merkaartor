@@ -30,6 +30,11 @@ MapAdapter::~MapAdapter()
 {
 }
 
+QString MapAdapter::getName() const
+{
+	return name;
+}
+
 QString MapAdapter::getHost() const
 {
 	return host;

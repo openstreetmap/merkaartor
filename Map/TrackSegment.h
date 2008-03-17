@@ -26,6 +26,7 @@ class TrackSegment : public MapFeature
 
 		void add(TrackPoint* aPoint);
 		unsigned int size() const;
+		TrackPoint* get(int i);
 		void sortByTime();
 		virtual void partChanged(MapFeature* F, unsigned int ChangeId);
 

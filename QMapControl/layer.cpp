@@ -201,8 +201,8 @@ void Layer::_draw(QPainter* painter, const QPoint mapmiddle_px) const
 	if (mapAdapter->isValid(mapmiddle_tile_x, mapmiddle_tile_y, mapAdapter->getZoom()))
 	{
 		painter->drawPixmap(-cross_x+size.width(),
-								-cross_y+size.height(),
-															ImageManager::instance()->getImage(mapAdapter->getHost(), mapAdapter->getQuery(mapmiddle_tile_x, mapmiddle_tile_y, mapAdapter->getZoom())));
+							-cross_y+size.height(),
+							ImageManager::instance()->getImage(mapAdapter, mapmiddle_tile_x, mapmiddle_tile_y, mapAdapter->getZoom()));
 	}
 	
 	for (i=-tiles_left+mapmiddle_tile_x; i<=tiles_right+mapmiddle_tile_x; i++)
@@ -216,7 +216,7 @@ void Layer::_draw(QPainter* painter, const QPoint mapmiddle_px) const
 				
 				painter->drawPixmap(((i-mapmiddle_tile_x)*tilesize)-cross_x+size.width(),
 											 ((j-mapmiddle_tile_y)*tilesize)-cross_y+size.height(),
-												ImageManager::instance()->getImage(mapAdapter->getHost(), mapAdapter->getQuery(i, j, mapAdapter->getZoom())));
+												ImageManager::instance()->getImage(mapAdapter, i, j, mapAdapter->getZoom()));
 // 			if (QCoreApplication::hasPendingEvents())
 // 				QCoreApplication::processEvents();
 			}
@@ -234,25 +234,25 @@ void Layer::_draw(QPainter* painter, const QPoint mapmiddle_px) const
 	for (i=left; i<=right; i++)
 	{
 		if (mapAdapter->isValid(i, j, mapAdapter->getZoom()))
-			ImageManager::instance()->prefetchImage(mapAdapter->getHost(), mapAdapter->getQuery(i, j, mapAdapter->getZoom()));
+			ImageManager::instance()->prefetchImage(mapAdapter, i, j, mapAdapter->getZoom());
 	}
 	j = lower;
 	for (i=left; i<=right; i++)
 	{
 		if (mapAdapter->isValid(i, j, mapAdapter->getZoom()))
-			ImageManager::instance()->prefetchImage(mapAdapter->getHost(), mapAdapter->getQuery(i, j, mapAdapter->getZoom()));
+			ImageManager::instance()->prefetchImage(mapAdapter, i, j, mapAdapter->getZoom());
 	}
 	i = left;
 	for (j=upper+1; j<=lower-1; j++)
 	{
 		if (mapAdapter->isValid(i, j, mapAdapter->getZoom()))
-			ImageManager::instance()->prefetchImage(mapAdapter->getHost(), mapAdapter->getQuery(i, j, mapAdapter->getZoom()));
+			ImageManager::instance()->prefetchImage(mapAdapter, i, j, mapAdapter->getZoom());
 	}
 	i = right;
 	for (j=upper+1; j<=lower-1; j++)
 	{
 		if (mapAdapter->isValid(i, j, mapAdapter->getZoom()))
-			ImageManager::instance()->prefetchImage(mapAdapter->getHost(), mapAdapter->getQuery(i, j, mapAdapter->getZoom()));
+			ImageManager::instance()->prefetchImage(mapAdapter, i, j, mapAdapter->getZoom());
 	}
 	
 }

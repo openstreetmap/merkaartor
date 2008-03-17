@@ -24,7 +24,10 @@
 #include <QPixmapCache>
 #include <QDebug>
 #include <QMutex>
+#include <QDir>
+#include <QFileInfo>
 #include "mapnetwork.h"
+#include "mapadapter.h"
 
 class MapNetwork;
 /**
@@ -52,9 +55,11 @@ class ImageManager : public QObject
 		 * @param path the path to the image
 		 * @return the pixmap of the asked image
 		 */
-		QPixmap getImage(const QString& host, const QString& path);
+		//QPixmap getImage(const QString& host, const QString& path);
+		QPixmap getImage(MapAdapter* anAdapter, int x, int y, int z);
 		
-		QPixmap prefetchImage(const QString& host, const QString& path);
+		//QPixmap prefetchImage(const QString& host, const QString& path);
+		QPixmap prefetchImage(MapAdapter* anAdapter, int x, int y, int z);
 		
 		void receivedImage(const QPixmap pixmap, const QString& url);
 		
@@ -81,6 +86,9 @@ class ImageManager : public QObject
 		 */
 		void setProxy(QString host, int port);
 
+		void setCacheDir(const QDir& path);
+		void setCacheMaxSize(int max);
+
 	private:
 		ImageManager(QObject* parent = 0);
 		ImageManager(const ImageManager&);
@@ -90,8 +98,14 @@ class ImageManager : public QObject
 		QVector<QString> prefetch;
 	
 		static ImageManager* m_Instance;
-		
-// 		QHash<QString, QImage> images;
+
+		QDir cacheDir;
+		QFileInfoList cacheInfo;
+		int cacheSize;
+		int	cacheMaxSize;
+
+		bool useDiskCache(QString filename);
+		void adaptCache();
 		
 	signals:
 		void imageRequested();

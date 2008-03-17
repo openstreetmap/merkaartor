@@ -67,7 +67,7 @@ MainWindow::MainWindow(void)
 		MerkaartorPreferences::instance()->setWmsServers(Servers);
 		MerkaartorPreferences::instance()->setSelectedWmsServer(0);
 	}
-	
+
 	QStringList sl = MerkaartorPreferences::instance()->getBookmarks();
 	if (sl.size() == 0) {
 		QStringList DefaultBookmarks;
@@ -78,13 +78,14 @@ MainWindow::MainWindow(void)
 
 	theView = new MapView(this);
 	setCentralWidget(theView);
-	theDocument = new MapDocument;
-	theView->setDocument(theDocument);
-	theDocument->history().setActions(editUndoAction, editRedoAction);
 
 	theLayers = new LayerDock(this);
 	theLayers->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 	addDockWidget(Qt::LeftDockWidgetArea, theLayers);
+
+	theDocument = new MapDocument(theLayers);
+	theView->setDocument(theDocument);
+	theDocument->history().setActions(editUndoAction, editRedoAction);
 
 	theProperties = new PropertiesDock(this);
 	theProperties->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
@@ -222,7 +223,6 @@ void MainWindow::on_fileImportAction_triggered()
 						view()->setUpdatesEnabled(true);
 					}
 		if (OK) {
-			theLayers->updateContent();
 			on_viewZoomAllAction_triggered();
 			on_editPropertiesAction_triggered();
 			theDocument->history().setActions(editUndoAction, editRedoAction);
@@ -249,10 +249,11 @@ void MainWindow::loadFile(const QString & fn)
 
 	changeCurrentDirToFile(fn);
 
-	MapDocument* NewDoc = new MapDocument;
-	
+	theLayers->setUpdatesEnabled(false);
+	MapDocument* NewDoc = new MapDocument(theLayers);
+
 	QString NewLayerName = tr("Open %1").arg( fn.section('/', - 1));
-	TrackMapLayer* NewLayer = NULL;
+	MapLayer* NewLayer = NULL;
 
 	bool importOK = false;
 
@@ -267,20 +268,20 @@ void MainWindow::loadFile(const QString & fn)
 		importOK = importOSM(this, fn, NewDoc, NewLayer);
 	}
 	else if (fn.endsWith(".ngt")) {
-		NewLayer = new TrackMapLayer( NewLayerName );
+		NewLayer = new DrawingMapLayer( NewLayerName );
 		NewDoc->add(NewLayer);
 		importOK = importNGT(this, fn, NewDoc, NewLayer);
 	}
 	else if (fn.endsWith(".nmea") || (fn.endsWith(".nme"))) {
 		importOK = NewDoc->importNMEA(fn);
 	}
-		
+
 	if (!importOK && NewLayer)
 		NewDoc->remove(NewLayer);
 
 	if (importOK == false) {
 		delete NewDoc;
-		delete NewLayer;
+ 		delete NewLayer;
 		QMessageBox::warning(this, tr("No valid file"), tr("%1 could not be opened.").arg(fn));
 		return;
 	}
@@ -288,11 +289,12 @@ void MainWindow::loadFile(const QString & fn)
 	theProperties->setSelection(0);
 	delete theDocument;
 	theDocument = NewDoc;
-	theLayers->updateContent();
 	theView->setDocument(theDocument);
 	on_viewZoomAllAction_triggered();
 	on_editPropertiesAction_triggered();
 	theDocument->history().setActions(editUndoAction, editRedoAction);
+
+	theLayers->setUpdatesEnabled(true);
 }
 
 void MainWindow::on_fileOpenAction_triggered()
@@ -337,7 +339,6 @@ void MainWindow::on_fileDownloadAction_triggered()
 			return;
 	}
 	if (downloadOSM(this, theView->projection().viewport(), theDocument)) {
-		theLayers->updateContent();
 		on_editPropertiesAction_triggered();
 	} else
 		QMessageBox::warning(this, tr("Error downloading"), tr("The map could not be downloaded"));
@@ -408,10 +409,9 @@ void MainWindow::on_fileNewAction_triggered()
 	theProperties->setSelection(0);
 	if (!hasUnsavedChanges(*theDocument) || mayDiscardUnsavedChanges(this)) {
 		delete theDocument;
-		theDocument = new MapDocument;
+		theDocument = new MapDocument(theLayers);
 		theView->setDocument(theDocument);
 		theDocument->history().setActions(editUndoAction, editRedoAction);
-		theLayers->updateContent();
 		invalidateView();
 	}
 }
@@ -533,12 +533,15 @@ void MainWindow::on_toolsPreferencesAction_triggered()
 
 	if (Pref->exec() == QDialog::Accepted) {
 		theDocument->getImageLayer()->setMapAdapter(MerkaartorPreferences::instance()->getBgType());
-		theLayers->updateContent();
 		adjustLayers(true);
 
+		ImageManager::instance()->setCacheDir(MerkaartorPreferences::instance()->getCacheDir());
+		ImageManager::instance()->setCacheMaxSize(MerkaartorPreferences::instance()->getCacheSize());
 		if (MerkaartorPreferences::instance()->getProxyUse()) {
 			ImageManager::instance()->setProxy(MerkaartorPreferences::instance()->getProxyHost(),
 				MerkaartorPreferences::instance()->getProxyPort());
+		} else {
+			ImageManager::instance()->setProxy("",0);
 		}
 		emit(preferencesChanged());
 	}
@@ -655,18 +658,18 @@ void MainWindow::on_bookmarkAddAction_triggered()
 						MainWindow::tr("Specify the name of the bookmark."), bkName, 0, true, &ok);
 		if (ok) {
 			if (text.isEmpty()) {
-				QMessageBox::critical(this, tr("Invalid bookmark name"), 
+				QMessageBox::critical(this, tr("Invalid bookmark name"),
 					tr("Bookmark cannot be blank."), QMessageBox::Ok);
 				continue;
 			}
 			if (Bookmarks.contains(text)) {
-				QMessageBox::critical(this, tr("Invalid bookmark name"), 
+				QMessageBox::critical(this, tr("Invalid bookmark name"),
 					tr("Bookmark already exists."), QMessageBox::Ok);
 				continue;
 			}
 			break;
 		}
-	} 
+	}
 	if (ok) {
 		CoordBox Clip = view()->projection().viewport();
 		int idx = Bookmarks.size();

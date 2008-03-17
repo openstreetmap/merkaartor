@@ -26,6 +26,9 @@ enum ImageBackgroundType {
 #ifdef yahoo_illegal
 	, Bg_Yahoo_illegal
 #endif
+#ifdef google_illegal
+	, Bg_Google_illegal
+#endif
 };
 
 class MerkaartorPreferences
@@ -84,6 +87,12 @@ public:
 
 	void setBgType(ImageBackgroundType theValue);
 	ImageBackgroundType getBgType() const;
+
+	/* Tile Cache */
+	void setCacheDir(const QString & theValue);
+	QString getCacheDir() const;
+	void setCacheSize(int theValue);
+	int getCacheSize() const;
 
 	QStringList getBgTypes();
 

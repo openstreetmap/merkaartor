@@ -1,0 +1,29 @@
+//
+// C++ Interface: ImportNMEA
+//
+// Description:
+//
+//
+// Author: cbro <cbro@semperpax.com>, (C) 2008
+//
+// Copyright: See COPYING file that comes with this distribution
+//
+//
+#ifndef OSMARENDER_H
+#define OSMARENDER_H
+
+#include "Map/Coord.h"
+
+class MapDocument;
+
+class OsmaRender
+{
+public:
+	OsmaRender(void);
+public:
+	virtual ~OsmaRender(void);
+
+	void render(MapDocument *aDoc, const CoordBox& aCoordBox = WORLD_COORDBOX);
+};
+
+#endif

@@ -27,7 +27,7 @@
 
 static TrackPoint* getTrackPointOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id)
 {
-	TrackPoint* Part = dynamic_cast<TrackPoint*>(theDocument->get("node_"+Id));
+	TrackPoint* Part = dynamic_cast<TrackPoint*>(theDocument->getFeature("node_"+Id));
 	if (!Part)
 	{
 		Part = new TrackPoint(Coord(0,0));
@@ -40,7 +40,7 @@ static TrackPoint* getTrackPointOrCreatePlaceHolder(MapDocument *theDocument, Ma
 
 static Road* getWayOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id)
 {
-	Road* Part = dynamic_cast<Road*>(theDocument->get("way_"+Id));
+	Road* Part = dynamic_cast<Road*>(theDocument->getFeature("way_"+Id));
 	if (!Part)
 	{
 		Part = new Road;
@@ -53,7 +53,7 @@ static Road* getWayOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLa
 
 static Relation* getRelationOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id)
 {
-	Relation* Part = dynamic_cast<Relation*>(theDocument->get("rel_"+Id));
+	Relation* Part = dynamic_cast<Relation*>(theDocument->getFeature("rel_"+Id));
 	if (!Part)
 	{
 		Part = new Relation;
@@ -84,7 +84,7 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
 	double Lat = atts.value("lat").toDouble();
 	double Lon = atts.value("lon").toDouble();
 	QString id = "node_"+atts.value("id");
-	TrackPoint* Pt = dynamic_cast<TrackPoint*>(theDocument->get(id));
+	TrackPoint* Pt = dynamic_cast<TrackPoint*>(theDocument->getFeature(id));
 	if (Pt)
 	{
 		if (Pt->lastUpdated() == MapFeature::User)
@@ -130,7 +130,7 @@ void OSMHandler::parseNd(const QXmlAttributes& atts)
 void OSMHandler::parseWay(const QXmlAttributes& atts)
 {
 	QString id = "way_"+atts.value("id");
-	Road* R = dynamic_cast<Road*>(theDocument->get(id));
+	Road* R = dynamic_cast<Road*>(theDocument->getFeature(id));
 	if (R)
 	{
 		if (R->lastUpdated() == MapFeature::User)
@@ -191,7 +191,7 @@ void OSMHandler::parseMember(const QXmlAttributes& atts)
 void OSMHandler::parseRelation(const QXmlAttributes& atts)
 {
 	QString id = "rel_"+atts.value("id");
-	Relation* R = dynamic_cast<Relation*>(theDocument->get(id));
+	Relation* R = dynamic_cast<Relation*>(theDocument->getFeature(id));
 	if (R)
 	{
 		if (R->lastUpdated() == MapFeature::User)
@@ -227,7 +227,7 @@ void OSMHandler::parseRelation(const QXmlAttributes& atts)
 	Current = R;
 }
 
-bool OSMHandler::startElement ( const QString &, const QString & localName, const QString & qName, const QXmlAttributes & atts )
+bool OSMHandler::startElement ( const QString &, const QString & /* localName */, const QString & qName, const QXmlAttributes & atts )
 {
 	if (qName == "tag")
 		parseTag(atts);
@@ -244,14 +244,14 @@ bool OSMHandler::startElement ( const QString &, const QString & localName, cons
 	return true;
 }
 
-bool OSMHandler::endElement ( const QString &, const QString & localName, const QString & qName )
+bool OSMHandler::endElement ( const QString &, const QString & /* localName */, const QString & qName )
 {
 	if (qName == "node")
 		Current = 0;
 	return true;
 }
 
-static bool downloadToResolve(const QString& What, const std::vector<MapFeature*>& Resolution, QProgressDialog* dlg, MapDocument* theDocument, MapLayer* theLayer, CommandList* theList, Downloader* theDownloader)
+static bool downloadToResolve(const QString& What, const std::vector<MapFeature*>& Resolution, QProgressDialog* dlg, MapDocument* theDocument, MapLayer* /* theLayer */, CommandList* theList, Downloader* theDownloader)
 {
 	for (unsigned int i=0; i<Resolution.size(); i+=10 )
 	{
@@ -330,7 +330,7 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 {
 	QDomDocument DomDoc;
 	QString ErrorStr;
-	int ErrorLine;
+	/* int ErrorLine; */
 	int ErrorColumn;
 	QProgressDialog* dlg = new QProgressDialog(aParent);
 	QProgressBar* Bar = new QProgressBar(dlg);

@@ -26,9 +26,13 @@ MapView::MapView(MainWindow* aMain) :
 	setMouseTracking(true);
 	setAttribute(Qt::WA_OpaquePaintEvent);
 
+	ImageManager::instance()->setCacheDir(MerkaartorPreferences::instance()->getCacheDir());
+	ImageManager::instance()->setCacheMaxSize(MerkaartorPreferences::instance()->getCacheSize());
 	if (MerkaartorPreferences::instance()->getProxyUse()) {
 		ImageManager::instance()->setProxy(MerkaartorPreferences::instance()->getProxyHost(),
 			MerkaartorPreferences::instance()->getProxyPort());
+	} else {
+		ImageManager::instance()->setProxy("",0);
 	}
 
 	layermanager = new LayerManager((QWidget *) this, size());
@@ -117,8 +121,8 @@ void MapView::updateStaticBuffer(QPaintEvent * /* anEvent */)
 	if (theDocument) {
 		EditPaintStyle EP(P, projection());
 
-		for (unsigned int i = 0; i < theDocument->numLayers(); ++i) {
-			theDocument->layer(i)->
+		for (unsigned int i = 0; i < theDocument->layerSize(); ++i) {
+			theDocument->getLayer(i)->
 				sortRenderingPriority(projection().pixelPerM());
 		}
 
@@ -229,14 +233,11 @@ void MapView::imageReceived()
 
 void MapView::loadingFinished()
 {
-//      qDebug() << "MapControl::loadingFinished()";
 	layermanager->removeZoomImage();
 	numImages = 0;
 	pbImages->reset();
 
-//	Main->statusBar()->removeWidget(pbImages);
-//	delete pbImages;
-
+	invalidate();
 }
 
 void MapView::resizeEvent(QResizeEvent * event)

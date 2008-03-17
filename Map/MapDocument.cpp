@@ -22,19 +22,25 @@ public:
 	~MapDocumentPrivate()
 	{
 		History.cleanup();
-		for (unsigned int i=0; i<Layers.size(); ++i)
+		for (unsigned int i=0; i<Layers.size(); ++i) {
+			if (theDock)
+				theDock->deleteLayer(Layers[i]);
 			delete Layers[i];
+		}
 	}
-	CommandHistory History;
-	std::vector<MapLayer*> Layers;
+	CommandHistory				History;
+	std::vector<MapLayer*>		Layers;
 	QMultiMap<QString, QString> tagList;
-	ImageMapLayer* bgLayer;
+	ImageMapLayer*				bgLayer;
+	LayerDock*					theDock;
 
 };
 
-MapDocument::MapDocument()
+MapDocument::MapDocument(LayerDock* aDock)
 : p(new MapDocumentPrivate)
 {
+	p->theDock = aDock;
+
 	p->bgLayer = new ImageMapLayer("Background imagery");
 	add(p->bgLayer);
 
@@ -43,7 +49,7 @@ MapDocument::MapDocument()
 	add(l);
 }
 
-MapDocument::MapDocument(const MapDocument&)
+MapDocument::MapDocument(const MapDocument&, LayerDock*)
 : p(0)
 {
 }
@@ -51,6 +57,16 @@ MapDocument::MapDocument(const MapDocument&)
 MapDocument::~MapDocument()
 {
 	delete p;
+}
+
+void MapDocument::setLayerDock(LayerDock* aDock)
+{
+	p->theDock = aDock;
+}
+
+LayerDock* MapDocument::getLayerDock(void)
+{
+	return p->theDock;
 }
 
 void MapDocument::clear()
@@ -80,6 +96,8 @@ void MapDocument::add(MapLayer* aLayer)
 {
 	p->Layers.push_back(aLayer);
     aLayer->setDocument(this);
+	if (p->theDock)
+		p->theDock->addLayer(aLayer);
 }
 
 void MapDocument::addToTagList(QString k, QString v)
@@ -105,8 +123,18 @@ QStringList MapDocument::getTagValueList(QString k)
 void MapDocument::remove(MapLayer* aLayer)
 {
 	std::vector<MapLayer*>::iterator i = std::find(p->Layers.begin(),p->Layers.end(), aLayer);
-	if (i != p->Layers.end())
+	if (i != p->Layers.end()) {
 		p->Layers.erase(i);
+	}
+	if (p->theDock)
+		p->theDock->deleteLayer(aLayer);
+}
+
+bool MapDocument::exists(MapLayer* L) const
+{
+	for (unsigned int i=0; i<p->Layers.size(); ++i)
+		if (p->Layers[i] == L) return true;
+	return false;
 }
 
 bool MapDocument::exists(MapFeature* F) const
@@ -116,22 +144,22 @@ bool MapDocument::exists(MapFeature* F) const
 	return false;
 }
 
-unsigned int MapDocument::numLayers() const
+unsigned int MapDocument::layerSize() const
 {
 	return p->Layers.size();
 }
 
-MapLayer* MapDocument::layer(unsigned int i)
+MapLayer* MapDocument::getLayer(unsigned int i)
 {
 	return p->Layers[i];
 }
 
-const MapLayer* MapDocument::layer(unsigned int i) const
+const MapLayer* MapDocument::getLayer(unsigned int i) const
 {
 	return p->Layers[i];
 }
 
-MapFeature* MapDocument::get(const QString& id)
+MapFeature* MapDocument::getFeature(const QString& id)
 {
 	for (unsigned int i=0; i<p->Layers.size(); ++i)
 	{
@@ -225,9 +253,9 @@ TrackMapLayer* MapDocument::importNMEA(const QString& filename)
 VisibleFeatureIterator::VisibleFeatureIterator(MapDocument *aDoc)
 : theDocument(aDoc), Layer(0), Idx(0)
 {
-	while (Layer < theDocument->numLayers())
+	while (Layer < theDocument->layerSize())
 	{
-		MapLayer* L = theDocument->layer(Layer);
+		MapLayer* L = theDocument->getLayer(Layer);
 		if (L->isVisible() && L->size())
 			break;
 		++Layer;
@@ -236,24 +264,24 @@ VisibleFeatureIterator::VisibleFeatureIterator(MapDocument *aDoc)
 
 MapFeature* VisibleFeatureIterator::get()
 {
-	return theDocument->layer(Layer)->get(Idx);
+	return theDocument->getLayer(Layer)->get(Idx);
 }
 
 bool VisibleFeatureIterator::isEnd() const
 {
-	return Layer >= theDocument->numLayers();
+	return Layer >= theDocument->layerSize();
 }
 
 VisibleFeatureIterator& VisibleFeatureIterator::operator++()
 {
 	++Idx;
-	if (Idx >= theDocument->layer(Layer)->size())
+	if (Idx >= theDocument->getLayer(Layer)->size())
 	{
 		Idx = 0;
 		++Layer;
-		while (Layer < theDocument->numLayers())
+		while (Layer < theDocument->layerSize())
 		{
-			MapLayer* L = theDocument->layer(Layer);
+			MapLayer* L = theDocument->getLayer(Layer);
 			if (L->isVisible() && L->size())
 				break;
 			++Layer;
@@ -264,7 +292,7 @@ VisibleFeatureIterator& VisibleFeatureIterator::operator++()
 
 MapLayer* VisibleFeatureIterator::layer()
 {
-	return theDocument->layer(Layer);
+	return theDocument->getLayer(Layer);
 }
 
 unsigned int VisibleFeatureIterator::index()
@@ -278,9 +306,9 @@ unsigned int VisibleFeatureIterator::index()
 FeatureIterator::FeatureIterator(MapDocument *aDoc)
 : theDocument(aDoc), Layer(0), Idx(0)
 {
-	while (Layer < theDocument->numLayers())
+	while (Layer < theDocument->layerSize())
 	{
-		if (theDocument->layer(Layer)->size())
+		if (theDocument->getLayer(Layer)->size())
 			break;
 		++Layer;
 	}
@@ -288,24 +316,24 @@ FeatureIterator::FeatureIterator(MapDocument *aDoc)
 
 MapFeature* FeatureIterator::get()
 {
-	return theDocument->layer(Layer)->get(Idx);
+	return theDocument->getLayer(Layer)->get(Idx);
 }
 
 bool FeatureIterator::isEnd() const
 {
-	return Layer >= theDocument->numLayers();
+	return Layer >= theDocument->layerSize();
 }
 
 FeatureIterator& FeatureIterator::operator++()
 {
 	++Idx;
-	if (Idx >= theDocument->layer(Layer)->size())
+	if (Idx >= theDocument->getLayer(Layer)->size())
 	{
 		Idx = 0;
 		++Layer;
-		while (Layer < theDocument->numLayers())
+		while (Layer < theDocument->layerSize())
 		{
-			if (theDocument->layer(Layer)->size())
+			if (theDocument->getLayer(Layer)->size())
 				break;
 			++Layer;
 		}
@@ -315,7 +343,7 @@ FeatureIterator& FeatureIterator::operator++()
 
 MapLayer* FeatureIterator::layer()
 {
-	return theDocument->layer(Layer);
+	return theDocument->getLayer(Layer);
 }
 
 unsigned int FeatureIterator::index()
@@ -336,15 +364,15 @@ static CoordBox boundingBox(const MapLayer* theLayer)
 std::pair<bool,CoordBox> boundingBox(const MapDocument* theDocument)
 {
 	unsigned int First;
-	for (First = 0; First < theDocument->numLayers(); ++First)
-		if (theDocument->layer(First)->size())
+	for (First = 0; First < theDocument->layerSize(); ++First)
+		if (theDocument->getLayer(First)->size())
 			break;
-	if (First == theDocument->numLayers())
+	if (First == theDocument->layerSize())
 		return std::make_pair(false,CoordBox(Coord(0,0),Coord(0,0)));
-	CoordBox BBox(boundingBox(theDocument->layer(First)));
-	for (unsigned int i=First+1; i<theDocument->numLayers(); ++i)
-		if (theDocument->layer(i)->size())
-			BBox.merge(boundingBox(theDocument->layer(i)));
+	CoordBox BBox(boundingBox(theDocument->getLayer(First)));
+	for (unsigned int i=First+1; i<theDocument->layerSize(); ++i)
+		if (theDocument->getLayer(i)->size())
+			BBox.merge(boundingBox(theDocument->getLayer(i)));
 	return std::make_pair(true,BBox);
 }
 

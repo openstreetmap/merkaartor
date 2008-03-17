@@ -45,6 +45,7 @@
 */
 class MapAdapter : public QObject
 {
+	friend class ImageManager;
 	friend class Layer;
 
 Q_OBJECT
@@ -55,31 +56,37 @@ public:
 	/*!
 	 * @return  the host of this MapAdapter
 	 */
-	QString	getHost		() const;
+	virtual QString	getName		() const;
+
+	//! returns the host of this MapAdapter
+	/*!
+	 * @return  the host of this MapAdapter
+	 */
+	virtual QString	getHost		() const;
 
 	//! returns the size of the tiles
 	/*!
 	 * @return the size of the tiles
 	 */
-	int		getTileSize	() const;
+	virtual int		getTileSize	() const;
 
 	//! returns the min zoom value
 	/*!
 	 * @return the min zoom value
 	 */
-	int 		getMinZoom	() const;
+	virtual int 		getMinZoom	() const;
 
 	//! returns the max zoom value
 	/*!
 	 * @return the max zoom value
 	 */
-	int		getMaxZoom	() const;
+	virtual int		getMaxZoom	() const;
 
 	//! returns the current zoom
 	/*!
 	 * @return the current zoom
 	 */
-	int 		getZoom		() const;
+	virtual int 		getZoom		() const;
 
 	virtual int		getAdaptedZoom()const;
 	virtual int 	getAdaptedMinZoom	() const;
@@ -105,6 +112,7 @@ public:
 	virtual QPointF	displayToCoordinate(const QPoint& point) const = 0;
 
 protected:
+	QString name;
 	MapAdapter(const QString& host, const QString& serverPath, int tilesize, int minZoom = 0, int maxZoom = 0);
 	virtual void zoom_in() = 0;
 	virtual void zoom_out() = 0;

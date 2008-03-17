@@ -76,11 +76,16 @@ public:
 	virtual LayerWidget* newWidget(void);
 };
 
-class TrackMapLayer : public DrawingMapLayer
+class TrackMapLayer : public MapLayer
 {
 public:
-	TrackMapLayer(const QString& aName) : DrawingMapLayer(aName) {};
-	virtual ~TrackMapLayer() {};
+	TrackMapLayer(const QString& aName);
+	virtual ~TrackMapLayer();
+
+	virtual void setVisible(bool b);
+	virtual LayerWidget* newWidget(void);
+
+	void extractLayer();
 };
 
 #endif

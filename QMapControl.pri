@@ -15,10 +15,11 @@ HEADERS += QMapControl/curve.h \
  QMapControl/imagepoint.h \
  QMapControl/gps_position.h \
  QMapControl/osmmapadapter.h \
- QMapControl/maplayer.h \
  QMapControl/geometrylayer.h \
 # QMapControl/yahoomapadapter.h \
- QMapControl/googlemapadapter.h
+# QMapControl/googlemapadapter.h \
+# QMapControl/googlesatmapadapter.h \
+ QMapControl/maplayer.h 
 SOURCES += QMapControl/curve.cpp \
            QMapControl/geometry.cpp \
            QMapControl/imagemanager.cpp \
@@ -35,9 +36,10 @@ SOURCES += QMapControl/curve.cpp \
  QMapControl/imagepoint.cpp \
  QMapControl/gps_position.cpp \
  QMapControl/osmmapadapter.cpp \
- QMapControl/maplayer.cpp \
  QMapControl/geometrylayer.cpp \
 # QMapControl/yahoomapadapter.cpp \
- QMapControl/googlemapadapter.cpp
+# QMapControl/googlemapadapter.cpp
+# QMapControl/googlesatmapadapter.cpp
+ QMapControl/maplayer.cpp 
 
 QT += network  

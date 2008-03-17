@@ -110,10 +110,13 @@ void LayerManager::moveWidgets()
 	}
 }
 
-void LayerManager::setView(const QPointF& coordinate)
+void LayerManager::setView(const QPointF& coordinate, bool newImage)
 {
 	mapmiddle_px = getLayer()->getMapAdapter()->coordinateToDisplay(coordinate);
 	mapmiddle = coordinate;
+
+	if (!newImage)
+		return;
 
 	//TODO: muss wegen moveTo() raus
 	if (!checkOffscreen())
@@ -174,7 +177,7 @@ void LayerManager::setMiddle(QList<QPointF> coordinates)
 	QPointF middle = getLayer()->getMapAdapter()->displayToCoordinate(QPoint(sum_x/coordinates.size(), sum_y/coordinates.size()));
 	// middle in px rechnen!
 
-	setView(middle);
+	setView(middle, false);
 }
 
 bool LayerManager::containsAll(QList<QPointF> coordinates) const
@@ -183,7 +186,8 @@ bool LayerManager::containsAll(QList<QPointF> coordinates) const
 	bool containsall = true;
 	for (int i=0; i<coordinates.size(); i++)
 	{
-		if (!bb.contains(coordinates.at(i)))
+		QPointF p = coordinates.at(i);
+		if (!bb.contains(p))
 			return false;
 	}
 	return containsall;
@@ -272,7 +276,6 @@ void LayerManager::newOffscreenImage(bool clearImage, bool showZoomImage)
 
 void LayerManager::backZoomIn()
 {
-	ImageManager::instance()->abortLoading();
 	QListIterator<Layer*> it(layers);
 	//TODO: remove hack, that mapadapters wont get set zoom multiple times
 	QList<const MapAdapter*> doneadapters;
@@ -291,6 +294,7 @@ void LayerManager::backZoomIn()
 
 void LayerManager::zoomIn()
 {
+	ImageManager::instance()->abortLoading();
 	zoomImageScroll = QPoint(0,0);
 
 	zoomImage.fill(Qt::white);
@@ -332,7 +336,6 @@ bool LayerManager::checkOffscreen() const
 }
 void LayerManager::backZoomOut()
 {
-	ImageManager::instance()->abortLoading();
 	QListIterator<Layer*> it(layers);
 	//TODO: remove hack, that mapadapters wont get set zoom multiple times
 	QList<const MapAdapter*> doneadapters;
@@ -351,6 +354,7 @@ void LayerManager::backZoomOut()
 
 void LayerManager::zoomOut()
 {
+	ImageManager::instance()->abortLoading();
 	zoomImageScroll = QPoint(0,0);
 	QPixmap tmpImg = composedOffscreenImage.copy(screenmiddle.x()+scroll.x(),screenmiddle.y()+scroll.y(), size.width(), size.height());
 	QPainter painter(&zoomImage);

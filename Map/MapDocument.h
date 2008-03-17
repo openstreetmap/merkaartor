@@ -5,6 +5,7 @@
 #include "PaintStyle/PaintStyle.h"
 #include "MainWindow.h"
 #include "Preferences/MerkaartorPreferences.h"
+#include "LayerDock.h"
 
 #include <utility>
 
@@ -19,22 +20,26 @@ class MapDocument
 {
 
 public:
-	MapDocument();
+	MapDocument(LayerDock* aDock);
 
 private:
-	MapDocument(const MapDocument&);
+	MapDocument(const MapDocument&, LayerDock* aDock);
 
 public:
 	~MapDocument();
 
+	void setLayerDock(LayerDock* aDock);
+	LayerDock* getLayerDock(void);
+
 	void add(MapLayer* aLayer);
 	void remove(MapLayer* aLayer);
+	bool exists(MapLayer* aLayer) const;
 	bool exists(MapFeature* aFeature) const;
-	unsigned int numLayers() const;
-	MapLayer* layer(unsigned int i);
-	const MapLayer* layer(unsigned int i) const;
+	unsigned int layerSize() const;
+	MapLayer* getLayer(unsigned int i);
+	const MapLayer* getLayer(unsigned int i) const;
 
-	MapFeature* get(const QString& id);
+	MapFeature* getFeature(const QString& id);
 	CommandHistory& history();
 	const CommandHistory& history() const;
 	void clear();

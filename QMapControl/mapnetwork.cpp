@@ -34,7 +34,7 @@ MapNetwork::~MapNetwork()
 }
 
 
-void MapNetwork::loadImage(const QString& host, const QString& url)
+void MapNetwork::loadImage(const QString& hash, const QString& host, const QString& url)
 {
 	qDebug() << "getting: " << QString(host).append(url);
 // 	http->setHost(host);
@@ -48,7 +48,7 @@ void MapNetwork::loadImage(const QString& host, const QString& url)
 
 	if (vectorMutex.tryLock())
 	{
-		loadingMap[getId] = url;
+		loadingMap[getId] = hash;
 		vectorMutex.unlock();
 	}
 }
@@ -69,7 +69,7 @@ void MapNetwork::requestFinished(int id, bool error)
 	if (loadingMap.contains(id))
 	{
 
-		QString url = loadingMap[id];
+		QString hash = loadingMap[id];
 		loadingMap.remove(id);
 		vectorMutex.unlock();
 // 		qDebug() << "request finished for id: " << id;
@@ -85,7 +85,7 @@ void MapNetwork::requestFinished(int id, bool error)
 			{
 				loaded += pm.size().width()*pm.size().height()*pm.depth()/8/1024;
 // 				qDebug() << "Network loaded: " << (loaded);
-				parent->receivedImage(pm, url);
+				parent->receivedImage(pm, hash);
 			}
 			else
 			{
@@ -116,9 +116,9 @@ void MapNetwork::abortLoading()
 	}
 }
 
-bool MapNetwork::imageIsLoading(QString url)
+bool MapNetwork::imageIsLoading(QString hash)
 {
-	return loadingMap.values().contains(url);
+	return loadingMap.values().contains(hash);
 }
 
 void MapNetwork::setProxy(QString host, int port)

@@ -18,6 +18,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "imagemanager.h"
+
+#include <QDateTime>
+
 ImageManager* ImageManager::m_Instance = 0;
 ImageManager::ImageManager(QObject* parent)
 	:QObject(parent), emptyPixmap(QPixmap(1,1)), net(new MapNetwork(this))
@@ -30,52 +33,118 @@ ImageManager::ImageManager(QObject* parent)
 	}
 }
 
+void ImageManager::setCacheDir(const QDir& path)
+{
+	cacheDir = path;
+	cacheSize = 0;
+	if (!cacheDir.exists()) {
+		cacheDir.mkpath(cacheDir.absolutePath());
+	} else {
+		cacheInfo = cacheDir.entryInfoList(QDir::Files, QDir::Time);
+		for (int i=0; i<cacheInfo.size(); i++) {
+			cacheSize += cacheInfo[i].size();
+		}
+	}
+}
+		
+void ImageManager::setCacheMaxSize(int max)
+{
+	cacheMaxSize = max*1024*1024;
+}
+
 
 ImageManager::~ImageManager()
 {
 	delete net;
 }
 
-QPixmap ImageManager::getImage(const QString& host, const QString& url)
+//QPixmap ImageManager::getImage(const QString& host, const QString& url)
+QPixmap ImageManager::getImage(MapAdapter* anAdapter, int x, int y, int z)
 {
 // 	qDebug() << "ImageManager::getImage";
 	QPixmap pm;
-	pm.fill(Qt::black);
 	
-	// is image cached or currently loading?
-	if (!QPixmapCache::find(url, pm) && !net->imageIsLoading(url))
-// 	if (!images.contains(url) && !net->imageIsLoading(url))
+	QString host = anAdapter->getHost();
+	QString url = anAdapter->getQuery(x, y, z);
+	QString hash = QString("%1_%2_%3_%4").arg(anAdapter->getName()).arg(x).arg(y).arg(z);
+
+	// is image in picture cache
+	if (QPixmapCache::find(hash, pm))
+		return pm;
+
+	// disk cache?
+	if (useDiskCache(hash + ".png")) {
+		if (pm.load(cacheDir.absolutePath() + "/" + hash + ".png"))
+			return pm;
+		else
+			pm.fill(Qt::black);
+	}
+
+	// currently loading?
+	if (!net->imageIsLoading(hash))
 	{
 		// load from net, add empty image
-		net->loadImage(host, url);
-// 		QPixmapCache::insert(url, emptyPixmap);
+		net->loadImage(hash, host, url);
 		emit(imageRequested());
 		return emptyPixmap;
 	}
 	return pm;
 }
 
-QPixmap ImageManager::prefetchImage(const QString& host, const QString& url)
+bool ImageManager::useDiskCache(QString filename)
 {
-	prefetch.append(url);
-	return getImage(host, url);
+	if (!cacheMaxSize)
+		return false;
+
+	if (!cacheDir.exists(filename))
+		return false;
+
+	int random = qrand() % 100;
+	QFileInfo info(cacheDir.absolutePath() + "/" + filename);
+	int days = info.lastModified().daysTo(QDateTime::currentDateTime());
+	
+	return  random < (10 * days) ? false : true;
 }
 
-void ImageManager::receivedImage(const QPixmap pixmap, const QString& url)
+//QPixmap ImageManager::prefetchImage(const QString& host, const QString& url)
+QPixmap ImageManager::prefetchImage(MapAdapter* anAdapter, int x, int y, int z)
+{
+	QString hash = QString("%1_%2_%3_%4").arg(anAdapter->getName()).arg(x).arg(y).arg(z);
+
+	prefetch.append(hash);
+	return getImage(anAdapter, x, y, z);
+}
+
+void ImageManager::receivedImage(const QPixmap pixmap, const QString& hash)
 {
 // 	qDebug() << "ImageManager::receivedImage";
-	QPixmapCache::insert(url, pixmap);
-// 	images[url] = pixmap;
+	QPixmapCache::insert(hash, pixmap);
+	if (cacheMaxSize) {
+		pixmap.save(cacheDir.absolutePath() + "/" + hash + ".png");
+		QFileInfo info(cacheDir.absolutePath() + "/" + hash + ".png");
+		cacheInfo.append(info);
+		cacheSize += info.size();
+
+		adaptCache();
+	}
 	
-// 	((Layer*)this->parent())->imageReceived();
-	
-	if (!prefetch.contains(url))
+	if (!prefetch.contains(hash))
 	{
 		emit(imageReceived());
 	}
 	else
 	{
-		prefetch.remove(prefetch.indexOf(url));
+		prefetch.remove(prefetch.indexOf(hash));
+	}
+}
+
+void ImageManager::adaptCache()
+{
+	QFileInfo info;
+	while (cacheSize > cacheMaxSize) {
+		info = cacheInfo.takeFirst();
+		cacheDir.remove(info.fileName());
+		cacheSize -= info.size();
 	}
 }
 
@@ -96,3 +165,4 @@ void ImageManager::setProxy(QString host, int port)
 {
 	net->setProxy(host, port);
 }
+

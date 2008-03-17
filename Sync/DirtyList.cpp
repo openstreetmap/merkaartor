@@ -45,9 +45,9 @@ static bool isInterestingPoint(MapDocument* theDocument, TrackPoint* Pt)
 		if (Pt->tagKey(i) != "created_by")
 			return true;
 	// if it is part of a road, then too
-	for (unsigned int j=0; j<theDocument->numLayers(); ++j)
+	for (unsigned int j=0; j<theDocument->layerSize(); ++j)
 	{
-		MapLayer* theLayer = theDocument->layer(j);
+		MapLayer* theLayer = theDocument->getLayer(j);
 		for (unsigned i=0; i<theLayer->size(); ++i)
 		{
 			Road* R = dynamic_cast<Road*>(theLayer->get(i));

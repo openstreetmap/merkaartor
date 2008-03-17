@@ -1,7 +1,7 @@
 //
 // C++ Implementation: PreferencesDialog
 //
-// Description: 
+// Description:
 //
 //
 // Author: cbro <cbro@semperpax.com>, Bart Vanhauwaert (C) 2008
@@ -88,12 +88,12 @@ void PreferencesDialog::on_btShowCapabilities_clicked(void)
 	QHttpRequestHeader header("GET", url.path() + url.encodedQuery());
 	qDebug() << header.toString();
 	char *userAgent = "Mozilla/9.876 (X11; U; Linux 2.2.12-20 i686, en) Gecko/25250101 Netscape/5.432b1";
-	
+
 	header.setValue("Host", url.host());
 	header.setValue("User-Agent", userAgent);
-	
+
 	http->setHost(url.host(), url.port() == -1 ? 80 : url.port());
-	
+
 	if (MerkaartorPreferences::instance()->getProxyUse())
 		http->setProxy(MerkaartorPreferences::instance()->getProxyHost(), MerkaartorPreferences::instance()->getProxyPort());
 
@@ -121,7 +121,7 @@ void PreferencesDialog::httpRequestFinished(bool error)
 		QTextEdit* edit = new QTextEdit();
 		edit->setPlainText(QString(http->readAll()));
 		mainLayout->addWidget(edit);
-		
+
 		QDialog* dlg = new QDialog(this);
 		dlg->setLayout(mainLayout);
 		dlg->show();
@@ -131,7 +131,7 @@ void PreferencesDialog::httpRequestFinished(bool error)
 
 void PreferencesDialog::on_btAddWmsServer_clicked(void)
 {
-	addServer(WmsServer(edWmsName->text(), edWmsAdr->text(), edWmsPath->text(), 
+	addServer(WmsServer(edWmsName->text(), edWmsAdr->text(), edWmsPath->text(),
 		edWmsLayers->text(), edWmsProj->text(), edWmsStyles->text()));
 	lvWmsServers->setCurrentRow(theWmsServers.size() - 1);
 	on_lvWmsServers_itemClicked(lvWmsServers->item(lvWmsServers->currentRow()));
@@ -200,13 +200,22 @@ void PreferencesDialog::loadPrefs()
 	edProxyHost->setText(MerkaartorPreferences::instance()->getProxyHost());
 	edProxyPort->setText(QString().setNum(MerkaartorPreferences::instance()->getProxyPort()));
 
+	edCacheDir->setText(MerkaartorPreferences::instance()->getCacheDir());
+	sbCacheSize->setValue(MerkaartorPreferences::instance()->getCacheSize());
+
 	QStringList Servers = MerkaartorPreferences::instance()->getWmsServers();
 	for (int i=0; i<Servers.size(); i+=6)
 		addServer(WmsServer(Servers[i], Servers[i+1], Servers[i+2], Servers[i+3], Servers[i+4], Servers[i+5]));
 	setSelectedServer(MerkaartorPreferences::instance()->getSelectedWmsServer());
 
 	cbMapAdapter->setCurrentIndex(MerkaartorPreferences::instance()->getBgType());
-	grpWmsServers->setVisible((MerkaartorPreferences::instance()->getBgType() == Bg_Wms));
+	if (MerkaartorPreferences::instance()->getBgType() != Bg_Wms) {
+		grpWmsServers->setVisible(false);
+		//grpWmsServers->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+		//layout()->activate();
+		//QApplication::processEvents();
+		//setFixedSize(minimumSizeHint());
+	}
 	QString s = MerkaartorPreferences::instance()->getDefaultStyle();
 	if (s == ":/Styles/Mapnik.mas")
 		StyleMapnik->setChecked(true);
@@ -230,6 +239,9 @@ void PreferencesDialog::savePrefs()
 	MerkaartorPreferences::instance()->setProxyHost(edProxyHost->text());
 	MerkaartorPreferences::instance()->setProxyPort(edProxyPort->text().toInt());
 	MerkaartorPreferences::instance()->setBgType((ImageBackgroundType)cbMapAdapter->currentIndex());
+
+	MerkaartorPreferences::instance()->setCacheDir(edCacheDir->text());
+	MerkaartorPreferences::instance()->setCacheSize(sbCacheSize->value());
 
 	QStringList Servers;
 	for (unsigned int i = 0; i < theWmsServers.size(); ++i) {
@@ -261,13 +273,19 @@ void PreferencesDialog::savePrefs()
 
 void PreferencesDialog::on_cbMapAdapter_currentIndexChanged(int index)
 {
+	//grpWmsServers->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 	grpWmsServers->setVisible(false);
 
 	switch (index) {
 		case Bg_Wms:
+			//grpWmsServers->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 			grpWmsServers->setVisible(true);
 			break;
 	}
+	//layout()->activate();
+	//QApplication::processEvents();
+	//setFixedSize(minimumSizeHint());
+
 }
 
 void PreferencesDialog::on_BrowseStyle_clicked()

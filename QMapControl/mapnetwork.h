@@ -37,7 +37,7 @@ class MapNetwork : QObject
 		MapNetwork(ImageManager* parent);
 		~MapNetwork();
 		
-		void loadImage(const QString& host, const QString& url);
+		void loadImage(const QString& hash, const QString& host, const QString& url);
 		
 		/*!
 		 * checks if the given url is already loading

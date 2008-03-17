@@ -1,4 +1,7 @@
 v0.10
+	* ADD : Background tiles caching
+	* ADD : Initial track to road
+	* ADD : Initial osmarender rendering
 	* FIX : decrease memory usage when importing OSM
 	* FIX : increase snap update speed
 	* ADD : ability to load tracks from the command line (by Daniel van Gerpen)

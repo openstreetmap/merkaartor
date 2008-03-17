@@ -22,6 +22,8 @@
 TileMapAdapter::TileMapAdapter(const QString& host, const QString& serverPath, int tilesize, int minZoom, int maxZoom)
 	:MapAdapter(host, serverPath, tilesize, minZoom, maxZoom)
 {
+	name = "tiles";
+
 	PI = acos(-1.0);
 
 // 	qDebug() << "creating adapter: min, max, current: " << minZoom << ", " << maxZoom << ", " << current_zoom << ", " << (min_zoom < max_zoom);

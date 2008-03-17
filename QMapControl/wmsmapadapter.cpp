@@ -22,6 +22,8 @@
 WMSMapAdapter::WMSMapAdapter(QString host, QString serverPath, QString wlayers, QString wSrs, QString wStyles, int tilesize)
  : MapAdapter(host, serverPath, tilesize, 0, 17)
 {
+	name = "WMS-"+ host;
+
 	wms_version = "1.1.1";
 	wms_request = "GetMap";
 	wms_format = "image/png";

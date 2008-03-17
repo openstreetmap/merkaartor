@@ -8,12 +8,12 @@
 
 inline double angToRad(double a)
 {
-	return a*3.141592/180;
+	return a*M_PI/180;
 }
 
 inline double radToAng(double a)
 {
-	return a*180/3.141592;
+	return a*180/M_PI;
 }
 
 class Coord

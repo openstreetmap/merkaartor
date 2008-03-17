@@ -65,6 +65,11 @@ unsigned int TrackSegment::size() const
 	return p->Points.size();
 }
 
+TrackPoint* TrackSegment::get(int i)
+{
+	return p->Points[i];
+}
+
 void TrackSegment::draw(QPainter &P, const Projection& theProjection)
 {
 	P.setPen(QPen(QColor(128,128,128),1,Qt::DotLine));

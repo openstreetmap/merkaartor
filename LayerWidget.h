@@ -26,12 +26,16 @@ class LayerWidget : public QAbstractButton
 		virtual MapLayer* getMapLayer();
 
 	protected:
+		virtual void contextMenuEvent(QContextMenuEvent* anEvent);
+
+	protected:
 		virtual void checkStateSet();
 
 		MapLayer* theLayer;
 		QPixmap visibleIcon;
 		QPixmap hiddenIcon;
 		QBrush backColor;
+		QMenu* ctxMenu;
 
 	signals:
 		void layerChanged(LayerWidget *, bool adjustViewport);
@@ -49,9 +53,16 @@ class DrawingLayerWidget : public LayerWidget
 		//DrawingMapLayer* theLayer;
 };
 
-class TrackLayerWidget : public DrawingLayerWidget
+class TrackLayerWidget : public LayerWidget
 {
 	Q_OBJECT
+
+	public:
+		TrackLayerWidget(TrackMapLayer* aLayer, QWidget* aParent = 0);
+		virtual ~TrackLayerWidget();
+
+	private slots:
+		void extractLayer(bool);
 };
 
 class ImageLayerWidget : public LayerWidget
@@ -61,9 +72,6 @@ class ImageLayerWidget : public LayerWidget
 	public:
 		ImageLayerWidget(ImageMapLayer* aLayer, QWidget* aParent = 0);
 		virtual ~ImageLayerWidget();
-
-	protected:
-		void contextMenuEvent(QContextMenuEvent* anEvent);
 
 	public:
 		void initWmsActions();
@@ -76,15 +84,20 @@ class ImageLayerWidget : public LayerWidget
 #ifdef yahoo_illegal
 		QAction* actYahoo;
 #endif
+#ifdef google_illegal
+		QAction* actGoogle;
+#endif
 		QAction* actNone;
 		QAction* actOSM;
 		QMenu* wmsMenu;
-		QMenu* imageMenu;
 
 	private slots:
 		void setWms(QAction*);
 #ifdef yahoo_illegal
 		void setYahoo(bool);
+#endif
+#ifdef google_illegal
+		void setGoogle(bool);
 #endif
 		void setOSM(bool);
 		void setNone(bool);

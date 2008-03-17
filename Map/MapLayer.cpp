@@ -1,5 +1,8 @@
 #include "Map/MapLayer.h"
 #include "Map/MapFeature.h"
+#include "Map/Road.h"
+#include "Map/TrackPoint.h"
+#include "Map/TrackSegment.h"
 #include "MapView.h"
 #include "LayerWidget.h"
 
@@ -8,6 +11,9 @@
 #include "QMapControl/wmsmapadapter.h"
 #ifdef yahoo_illegal
 	#include "QMapControl/yahoomapadapter.h"
+#endif
+#ifdef google_illegal
+	#include "QMapControl/googlesatmapadapter.h"
 #endif
 #include "QMapControl/layer.h"
 #include "QMapControl/layermanager.h"
@@ -314,6 +320,15 @@ void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 				setName("Background - Yahoo");
 				break;
 #endif
+#ifdef google_illegal
+			case Bg_Google_illegal:
+				mapadapter_bg = new GoogleSatMapAdapter();
+				p->layer_bg = new Layer("Custom Layer", mapadapter_bg, Layer::MapLayer);
+				p->layer_bg->setVisible(p->Visible);
+
+				setName("Background - Google");
+				break;
+#endif
 		}
 		if (layermanager)
 			if (p->layer_bg) {
@@ -322,4 +337,61 @@ void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 }
 
 
+// TrackMapLayer
 
+TrackMapLayer::TrackMapLayer(const QString & aName)
+	: MapLayer(aName)
+{
+	p->Visible = true;
+}
+
+TrackMapLayer::~ TrackMapLayer()
+{
+}
+
+void TrackMapLayer::setVisible(bool b)
+{
+	p->Visible = b;
+}
+
+LayerWidget* TrackMapLayer::newWidget(void)
+{
+	p->theWidget = new TrackLayerWidget(this);
+	return p->theWidget;
+}
+
+void TrackMapLayer::extractLayer()
+{
+	DrawingMapLayer* extL = new DrawingMapLayer("Extract - " + name());
+	TrackPoint* P;
+
+	//P = new TrackPoint( ((TrackPoint *)get(0))->position() );
+	//P->setTag("created_by", QString("Merkaartor %1.%2").arg(MAJORVERSION).arg(MINORVERSION));
+	//extL->add(P);
+	//R->add(P);
+
+	//P = new TrackPoint( ((TrackPoint *)get(size()-1))->position() );
+	//P->setTag("created_by", QString("Merkaartor %1.%2").arg(MAJORVERSION).arg(MINORVERSION));
+	//extL->add(P);
+	//R->add(P);
+
+
+	for (unsigned int i=0; i < size(); i++) {
+		if (TrackSegment* S = dynamic_cast<TrackSegment*>(get(i))) {
+			Road* R = new Road();
+			R->setLastUpdated(MapFeature::OSMServer);
+			R->setTag("created_by", QString("Merkaartor %1.%2").arg(MAJORVERSION).arg(MINORVERSION));
+
+			for (unsigned int j=0; j < S->size(); j++) {
+				P = new TrackPoint( S->get(j)->position() );
+				P->setTag("created_by", QString("Merkaartor %1.%2").arg(MAJORVERSION).arg(MINORVERSION));
+				extL->add(P);
+				R->add(P);
+			}
+
+				extL->add(R);
+		}
+	}
+
+	p->theDocument->add(extL);
+}

@@ -20,9 +20,14 @@ class LayerDock : public QDockWidget
 	public:
 		~LayerDock(void);
 
-		void updateContent();
+		void createContent();
+		//void updateContent();
 		void resizeEvent(QResizeEvent* anEvent);
 		MapLayer* activeLayer();
+
+		void clearLayers();
+		void addLayer(MapLayer* aLayer);
+		void deleteLayer(MapLayer* aLayer);
 
 	private:
 		MainWindow* Main;
@@ -30,6 +35,8 @@ class LayerDock : public QDockWidget
 		QGroupBox* Content;
 		QVBoxLayout* Layout;
 		QButtonGroup* butGroup;
+
+		QList < QPair<MapLayer*, LayerWidget*> > layerList;
 
 	private slots:
 		void layerChanged(LayerWidget*, bool adjustViewport);

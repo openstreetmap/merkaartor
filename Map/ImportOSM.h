@@ -11,7 +11,7 @@ class QByteArray;
 class QString;
 class QWidget;
 
-#include <QtXML/QXmlDefaultHandler>
+#include <QXmlDefaultHandler>
 
 class OSMHandler : public QXmlDefaultHandler
 {

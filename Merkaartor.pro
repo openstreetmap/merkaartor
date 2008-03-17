@@ -17,3 +17,12 @@ UI_DIR += ./GeneratedFiles
 include(Merkaartor.pri)
 include(QMapControl.pri)
 include(ImportExport.pri)
+
+win32 {
+	DEFINES += _USE_MATH_DEFINES
+	QMAKE_LFLAGS += /NODEFAULTLIB:MSVCRT
+}
+
+osmarender {
+	include(Render.pri)
+}

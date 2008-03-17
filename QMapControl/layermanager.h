@@ -84,7 +84,7 @@ class LayerManager : public QObject
 		/*!
 		 * @param  coordinate the coordinate which the view´s middle should be set to
 		 */
-		void			setView					(const QPointF& coordinate);
+		void			setView					(const QPointF& coordinate, bool newImage = true);
 
 		//! sets the view, so all coordinates are visible
 		/*!

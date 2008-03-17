@@ -1,4 +1,5 @@
 #include "LayerWidget.h"
+#include "LayerDock.h"
 
 #include "MainWindow.h"
 #include "Map/MapDocument.h"
@@ -11,10 +12,10 @@
 
 #define SAFE_DELETE(x) {delete (x); x = NULL;}
 
-#define LINEHEIGHT 20
+#define LINEHEIGHT 25
 
 LayerWidget::LayerWidget(QWidget* aParent)
-: QAbstractButton(aParent)
+: QAbstractButton(aParent), ctxMenu(0)
 {
 	setCheckable(true);
 	setAutoExclusive(true) ;
@@ -82,6 +83,13 @@ MapLayer* LayerWidget::getMapLayer()
 	return theLayer;
 }
 
+void LayerWidget::contextMenuEvent(QContextMenuEvent* anEvent)
+{
+	if (ctxMenu)
+		ctxMenu->exec(anEvent->globalPos());
+}
+
+
 // DrawingLayerWidget
 
 DrawingLayerWidget::DrawingLayerWidget(DrawingMapLayer* aLayer, QWidget* aParent)
@@ -94,7 +102,7 @@ DrawingLayerWidget::DrawingLayerWidget(DrawingMapLayer* aLayer, QWidget* aParent
 // ImageLayerWidget
 
 ImageLayerWidget::ImageLayerWidget(ImageMapLayer* aLayer, QWidget* aParent)
-: LayerWidget(aParent), actgrWms(0), imageMenu(0)
+: LayerWidget(aParent), actgrWms(0)
 {
 	theLayer = aLayer;
 	backColor = QColor(128,128,128);
@@ -115,6 +123,12 @@ ImageLayerWidget::ImageLayerWidget(ImageMapLayer* aLayer, QWidget* aParent)
 	//actYahoo->setCheckable(true);
 	actYahoo->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_Yahoo_illegal));
 	connect(actYahoo, SIGNAL(triggered(bool)), this, SLOT(setYahoo(bool)));
+#endif
+#ifdef google_illegal
+	actGoogle = new QAction(MerkaartorPreferences::instance()->getBgTypes()[Bg_Google_illegal], this);
+	//actGoogle->setCheckable(true);
+	actGoogle->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_Google_illegal));
+	connect(actGoogle, SIGNAL(triggered(bool)), this, SLOT(setGoogle(bool)));
 #endif
 	initWmsActions();
 }
@@ -146,6 +160,17 @@ void ImageLayerWidget::setYahoo(bool)
 }
 #endif
 
+#ifdef google_illegal
+void ImageLayerWidget::setGoogle(bool)
+{
+	((ImageMapLayer *)theLayer)->setMapAdapter(Bg_Google_illegal);
+	theLayer->setVisible(true);
+
+	this->update(rect());
+	emit (layerChanged(this, true));
+}
+#endif
+
 void ImageLayerWidget::setNone(bool)
 {
 	((ImageMapLayer *)theLayer)->setMapAdapter(Bg_None);
@@ -169,7 +194,7 @@ void ImageLayerWidget::initWmsActions()
 	//	delete actgrWms;
 	//actgrWms = new QActionGroup(this);
 
-	SAFE_DELETE(imageMenu);
+	SAFE_DELETE(ctxMenu);
 
 	wmsMenu = new QMenu(MerkaartorPreferences::instance()->getBgTypes()[Bg_Wms], this);
 
@@ -184,7 +209,7 @@ void ImageLayerWidget::initWmsActions()
 		oneServer.append(Servers[i+5]);
 		oneServer.append(QString().setNum(int(i/6)));
 
-               QAction* act = new QAction(Servers[i], wmsMenu);
+		QAction* act = new QAction(Servers[i], wmsMenu);
 		act->setData(oneServer);
 		//act->setCheckable(true);
 		wmsMenu->addAction(act);
@@ -198,22 +223,45 @@ void ImageLayerWidget::initWmsActions()
 #ifdef yahoo_illegal
 	actYahoo->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_Yahoo_illegal));
 #endif
+#ifdef google_illegal
+	actGoogle->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_Google_illegal));
+#endif
 
-	imageMenu = new QMenu(this);
-	imageMenu->addAction(actNone);
+	ctxMenu = new QMenu(this);
+	ctxMenu->addAction(actNone);
 
-	imageMenu->addMenu(wmsMenu);
+	ctxMenu->addMenu(wmsMenu);
 	connect(wmsMenu, SIGNAL(triggered(QAction*)), this, SLOT(setWms(QAction*)));
 
-	imageMenu->addAction(actOSM);
+	ctxMenu->addAction(actOSM);
 #ifdef yahoo_illegal
-	imageMenu->addAction(actYahoo);
+	ctxMenu->addAction(actYahoo);
+#endif
+#ifdef google_illegal
+	ctxMenu->addAction(actGoogle);
 #endif
 }
 
-void ImageLayerWidget::contextMenuEvent(QContextMenuEvent* anEvent)
+// TrackLayerWidget
+
+TrackLayerWidget::TrackLayerWidget(TrackMapLayer* aLayer, QWidget* /* aParent */)
 {
-	imageMenu->exec(anEvent->globalPos());
+	theLayer = aLayer;
+	backColor = QColor(255,255,255);
+
+	ctxMenu = new QMenu(this);
+
+	QAction* actExtract = new QAction("Extract Drawing layer", ctxMenu);
+	ctxMenu->addAction(actExtract);
+	connect(actExtract, SIGNAL(triggered(bool)), this, SLOT(extractLayer(bool)));
 }
 
+TrackLayerWidget::~TrackLayerWidget()
+{
+}
 
+void TrackLayerWidget::extractLayer(bool)
+{
+	((TrackMapLayer*)theLayer)->extractLayer();
+	emit (layerChanged(this, false));
+}

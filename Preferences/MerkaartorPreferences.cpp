@@ -24,6 +24,9 @@ MerkaartorPreferences::MerkaartorPreferences()
 #ifdef yahoo_illegal
 	bgTypes.insert(Bg_Yahoo_illegal, "Illegal Yahoo adapter");
 #endif
+#ifdef google_illegal
+	bgTypes.insert(Bg_Google_illegal, "Illegal Google adapter");
+#endif
 }
 
 MerkaartorPreferences::~MerkaartorPreferences()
@@ -176,6 +179,25 @@ QStringList MerkaartorPreferences::getBgTypes()
 	return bgTypes;
 }
 
+void MerkaartorPreferences::setCacheDir(const QString & theValue)
+{
+	Sets->setValue("backgroundImage/CacheDir", theValue);
+}
+
+QString MerkaartorPreferences::getCacheDir() const
+{
+	return Sets->value("backgroundImage/CacheDir", QDir::homePath() + "/.QMapControlCache").toString();
+}
+
+int MerkaartorPreferences::getCacheSize() const
+{
+	return Sets->value("backgroundImage/CacheSize", 0).toInt();
+}
+
+void MerkaartorPreferences::setCacheSize(int theValue)
+{
+	Sets->setValue("backgroundImage/CacheSize", theValue);
+}
 
 void MerkaartorPreferences::save()
 {
