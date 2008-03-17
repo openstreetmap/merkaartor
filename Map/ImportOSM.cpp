@@ -331,7 +331,7 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 	QDomDocument DomDoc;
 	QString ErrorStr;
 	/* int ErrorLine; */
-	int ErrorColumn;
+	/* int ErrorColumn; */
 	QProgressDialog* dlg = new QProgressDialog(aParent);
 	QProgressBar* Bar = new QProgressBar(dlg);
 	dlg->setBar(Bar);

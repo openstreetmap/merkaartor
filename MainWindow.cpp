@@ -263,12 +263,12 @@ void MainWindow::loadFile(const QString & fn)
 		importOK = importGPX(this, fn, NewDoc, NewLayer);
 	}
 	else if (fn.endsWith(".osm")) {
-		NewLayer = new TrackMapLayer( NewLayerName );
+		NewLayer = new DrawingMapLayer( NewLayerName );
 		NewDoc->add(NewLayer);
 		importOK = importOSM(this, fn, NewDoc, NewLayer);
 	}
 	else if (fn.endsWith(".ngt")) {
-		NewLayer = new DrawingMapLayer( NewLayerName );
+		NewLayer = new TrackMapLayer( NewLayerName );
 		NewDoc->add(NewLayer);
 		importOK = importNGT(this, fn, NewDoc, NewLayer);
 	}
@@ -663,9 +663,25 @@ void MainWindow::on_bookmarkAddAction_triggered()
 				continue;
 			}
 			if (Bookmarks.contains(text)) {
-				QMessageBox::critical(this, tr("Invalid bookmark name"),
-					tr("Bookmark already exists."), QMessageBox::Ok);
-				continue;
+				QString newBk = QInputDialog::getText(this, MainWindow::tr("Warning: Bookmark name already exists"),
+						MainWindow::tr("Enter a new one, keep the same to overwrite or Ccancel."), QLineEdit::Normal,
+									   text, &ok);
+				if (ok && Bookmarks.contains(newBk)) {
+					int i = Bookmarks.indexOf(newBk);
+					Bookmarks.removeAt(i);
+					Bookmarks.removeAt(i);
+					Bookmarks.removeAt(i);
+					Bookmarks.removeAt(i);
+					Bookmarks.removeAt(i);
+
+					for(int i=2; i < menuBookmarks->actions().count(); i++) {
+						if (menuBookmarks->actions()[i]->text() == newBk) {
+							menuBookmarks->removeAction(menuBookmarks->actions()[i]);
+							break;
+						}
+					}
+				}
+				text = newBk;
 			}
 			break;
 		}

@@ -491,13 +491,23 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 			Clip = aBox;
 			QString newBk = ui.NewBookmark->text();
 			bool ok = true;
-			while (Bookmarks.contains(newBk) && ok) {
-				QString text = QInputDialog::getText(dlg, MainWindow::tr("Warning: Bookmark exists"),
-                                          MainWindow::tr("Bookmark name already exists. Enter a new one or cancel to not add."), QLineEdit::Normal,
+			if (Bookmarks.contains(newBk)) {
+				QString text = QInputDialog::getText(dlg, MainWindow::tr("Warning: Bookmark name already exists"),
+                                          MainWindow::tr("Enter a new one, keep the same to overwrite or cancel to not add."), QLineEdit::Normal,
                                           newBk, &ok);
 			    if (ok && !text.isEmpty())
-			         newBk = text; 
+			         newBk = text;
+				else
+					ok = false;
 
+			}
+			if (ok && Bookmarks.contains(newBk)) {
+				int i = Bookmarks.indexOf(newBk);
+				Bookmarks.removeAt(i);
+				Bookmarks.removeAt(i);
+				Bookmarks.removeAt(i);
+				Bookmarks.removeAt(i);
+				Bookmarks.removeAt(i);
 			}
 			if (ok) {
 				Bookmarks.insert(0,newBk);
