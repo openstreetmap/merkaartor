@@ -2,7 +2,7 @@ TEMPLATE = app
 TARGET = merkaartor
 DESTDIR = ./release
 QT += network xml core gui
-CONFIG += debug_and_release
+CONFIG += debug_and_release yahoo google osmarender
 
 DEFINES += MAJORVERSION="0"
 DEFINES += MINORVERSION="10"
@@ -18,11 +18,12 @@ include(Merkaartor.pri)
 include(QMapControl.pri)
 include(ImportExport.pri)
 
-win32 {
+win32-msvc* {
 	DEFINES += _USE_MATH_DEFINES
-	QMAKE_LFLAGS += /NODEFAULTLIB:MSVCRT
 }
 
 osmarender {
-	include(Render.pri)
+	!win32-g++ {
+		include(Render.pri)
+	}
 }

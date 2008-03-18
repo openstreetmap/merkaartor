@@ -24,11 +24,20 @@
 #include <QDebug>
 #include <QHttp>
 #include <QVector>
+#include <QQueue>
 #include <QPixmap>
 #include "imagemanager.h"
 /**
 	@author Kai Winter <kaiwinter@gmx.de>
 */
+class LoadingRequest
+{
+	public:
+		LoadingRequest(QString h, QString H, QString U) : hash(h), host(H), url(U) {};
+	QString hash;
+	QString host;
+	QString url;
+};
 class ImageManager;
 class MapNetwork : QObject
 {
@@ -36,32 +45,35 @@ class MapNetwork : QObject
 	public:
 		MapNetwork(ImageManager* parent);
 		~MapNetwork();
-		
+
 		void loadImage(const QString& hash, const QString& host, const QString& url);
-		
+
 		/*!
 		 * checks if the given url is already loading
 		 * @param url the url of the image
 		 * @return boolean, if the image is already loading
 		 */
-		bool imageIsLoading(QString url);
-		
+		bool imageIsLoading(QString hash);
+
 		/*!
 		 * Aborts all current loading threads.
 		 * This is useful when changing the zoom-factor, though newly needed images loads faster
  		*/
 		void abortLoading();
 		void setProxy(QString host, int port);
-		
+
 	private:
 		ImageManager* parent;
 		QHttp* http;
 		QMap<int, QString> loadingMap;
+		QQueue<LoadingRequest*> loadingRequests;
 		double loaded;
 		QMutex vectorMutex;
 		MapNetwork& operator=(const MapNetwork& rhs);
 		MapNetwork(const MapNetwork& old);
-		
+		void launchRequest();
+
+
 	private slots:
 		void requestFinished(int id, bool error);
 };
