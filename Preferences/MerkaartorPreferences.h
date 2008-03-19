@@ -15,6 +15,7 @@
 #include <QtCore>
 #include <QtCore/QSettings>
 
+#define REVISION "1"
 /**
 	@author cbro <cbro@semperpax.com>
 */
@@ -31,6 +32,24 @@ enum ImageBackgroundType {
 #endif
 };
 
+class WmsServer
+{
+	public:
+		WmsServer();
+		WmsServer(QString Name, QString Adress, QString Path, QString Layers, QString Projections, QString Styles, QString ImgFormat);
+
+	public:
+		QString WmsName;
+		QString WmsAdress;
+		QString WmsPath;
+		QString WmsLayers;
+		QString WmsProjections;
+		QString WmsStyles;
+		QString WmsImgFormat;
+};
+typedef QMap<QString, WmsServer> WmsServerList;
+typedef QMapIterator<QString, WmsServer> WmsServerListIterator;
+
 class MerkaartorPreferences
 {
 public:
@@ -45,6 +64,7 @@ public:
 		return m_prefInstance;
 	}
 
+	void save();
 
 	void setRightSideDriving(bool theValue);
 	bool getRightSideDriving() const;
@@ -73,11 +93,10 @@ public:
 	void setBookmarks(const QStringList & theValue);
 	QStringList getBookmarks() const;
 
-	void setWmsServers(const QStringList & theValue);
-	QStringList getWmsServers() const;
+	WmsServerList* getWmsServers() const;
 
-	void setSelectedWmsServer(int theValue);
-	int getSelectedWmsServer() const;
+	void setSelectedWmsServer(const QString & theValue);
+	QString getSelectedWmsServer() const;
 
 	void setProxyPort(int theValue);
 	int getProxyPort() const;
@@ -110,6 +129,7 @@ public:
 	void setDefaultStyle(const QString& aString);
 
 protected:
+	QString version;
 	bool RightSideDriving;
 	double DoubleRoadDistance;
 	QString WorkingDir;
@@ -121,9 +141,11 @@ protected:
 	int ProxyPort;
 	QStringList Bookmarks;
 
-	void save();
+	void setWmsServers();
+	void initialize();
 
 private:
+	WmsServerList* theWmsServerList;
 	QSettings * Sets;
 	QStringList bgTypes;
 	static MerkaartorPreferences* m_prefInstance;

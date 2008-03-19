@@ -40,7 +40,7 @@ class WMSMapAdapter : public MapAdapter
 	 * @param serverPath The path to the tiles with placeholders
 	 * @param tilesize the size of the tiles
 	 */
-		WMSMapAdapter(QString host, QString serverPath, QString wlayers, QString wSrs, QString wStyles, int tilesize = 256);
+		WMSMapAdapter(QString host, QString serverPath, QString wlayers, QString wSrs, QString wStyles, QString wImgFormat, int tilesize = 256);
 		virtual ~WMSMapAdapter();
 
 		virtual QPoint		coordinateToDisplay(const QPointF&) const;

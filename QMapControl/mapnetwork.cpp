@@ -96,10 +96,10 @@ void MapNetwork::requestFinished(int id, bool error)
 					if (pm.loadFromData(ax)) {
 						loaded += pm.size().width() * pm.size().height() * pm.depth() / 8 / 1024;
 // 				qDebug() << "Network loaded: " << (loaded);
-						parent->receivedImage(pm, hash);
 					} else {
 						qDebug() << "NETWORK_PIXMAP_ERROR: " << ax;
 					}
+					parent->receivedImage(pm, hash);
 				}
 
 			} else

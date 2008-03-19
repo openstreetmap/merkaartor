@@ -43,6 +43,7 @@ public:
 	MapDocument* getDocument();
 
 	LayerWidget* getWidget(void);
+	virtual void updateWidget() {};
 
 	virtual void setVisible(bool b) = 0;
 	virtual void setSelected(bool b);
@@ -74,6 +75,7 @@ public:
 
 	virtual void setVisible(bool b);
 	virtual LayerWidget* newWidget(void);
+	virtual void updateWidget();
 };
 
 class TrackMapLayer : public MapLayer

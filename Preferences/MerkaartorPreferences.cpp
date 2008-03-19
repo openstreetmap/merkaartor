@@ -14,10 +14,42 @@
 
 MerkaartorPreferences* MerkaartorPreferences::m_prefInstance = 0;
 
+WmsServer::WmsServer()
+{
+	WmsServer("New Server", "", "", "", "", "", "");
+}
+
+WmsServer::WmsServer(QString Name, QString Adress, QString Path, QString Layers, QString Projections, QString Styles, QString ImgFormat)
+	: WmsName(Name), WmsAdress(Adress), WmsPath(Path), WmsLayers(Layers), WmsProjections(Projections), WmsStyles(Styles), WmsImgFormat(ImgFormat)
+{
+	if (Name == "") {
+		WmsName = "New Server";
+	}
+}
+
 MerkaartorPreferences::MerkaartorPreferences()
 {
 	Sets = new QSettings();
+	theWmsServerList = new WmsServerList();
 
+	version = Sets->value("version/version", "0").toString();
+	initialize();
+}
+
+MerkaartorPreferences::~MerkaartorPreferences()
+{
+	delete Sets;
+}
+
+void MerkaartorPreferences::save()
+{
+	Sets->setValue("version/version", QString("%1.%2.%3").arg(MAJORVERSION).arg(MINORVERSION).arg(REVISION));
+	setWmsServers();
+ 	Sets->sync();
+}
+
+void MerkaartorPreferences::initialize()
+{
 	bgTypes.insert(Bg_None, "None");
 	bgTypes.insert(Bg_Wms, "WMS adapter");
 	bgTypes.insert(Bg_OSM, "OSM adapter");
@@ -27,11 +59,67 @@ MerkaartorPreferences::MerkaartorPreferences()
 #ifdef google_illegal
 	bgTypes.insert(Bg_Google_illegal, "Illegal Google adapter");
 #endif
-}
 
-MerkaartorPreferences::~MerkaartorPreferences()
-{
-	delete Sets;
+	QStringList sl = getBookmarks();
+	if (sl.size() == 0) {
+		QStringList DefaultBookmarks;
+		DefaultBookmarks << "London" << "51.47" << "-0.20" << "51.51" << "-0.08";
+	//	DefaultBookmarks << "Rotterdam" << "51.89" << "4.43" << "51.93" << "4.52";
+		setBookmarks(DefaultBookmarks);
+	}
+
+	if (version == "0") {
+		QStringList Servers = Sets->value("WSM/servers").toStringList();
+		if (Servers.size() == 0) {
+			WmsServer demis("Demis", "www2.demis.nl", "/wms/wms.asp?wms=WorldMap&",
+				"Countries,Borders,Highways,Roads,Cities", "EPSG:4326", ",", "image/png");
+			theWmsServerList->insert("Demis", demis);
+			WmsServer oam("OpenAerialMap", "openaerialmap.org", "/wms/?",
+				"world", "EPSG:4326", ",", "image/jpeg");
+			theWmsServerList->insert("OpenAerialMap", oam);
+			WmsServer tu("Terraservice_Urban", "terraservice.net", "/ogcmap.ashx?",
+				"urbanarea", "EPSG:4326", ",", "image/jpeg");
+			theWmsServerList->insert("Terraservice_Urban", tu);
+			WmsServer tg("Terraservice_DRG", "terraservice.net", "/ogcmap.ashx?",
+				"drg", "EPSG:4326", ",", "image/jpeg");
+			theWmsServerList->insert("Terraservice_DRG", tg);
+			WmsServer tq("Terraservice_DOQ", "terraservice.net", "/ogcmap.ashx?",
+				"doq", "EPSG:4326", ",", "image/jpeg");
+			theWmsServerList->insert("Terraservice_DOQ", tq);
+			MerkaartorPreferences::instance()->setSelectedWmsServer("OpenAerialMap");
+		} else {
+			int selI = Sets->value("WSM/selected", "0").toInt();
+			QString selS;
+			for (int i=0; i<Servers.size()/6; i++) {
+				WmsServer S(Servers[(i*6)], Servers[(i*6)+1], Servers[(i*6)+2], Servers[(i*6)+3], Servers[(i*6)+4], Servers[(i*6)+5], "image/png");
+				theWmsServerList->insert(Servers[(i*6)], S);
+				if (i == selI)
+					selS = Servers[(i*6)];
+			}
+			setSelectedWmsServer(selS);
+			if (!theWmsServerList->contains("OpenAerialMap")) {
+				WmsServer oam("OpenAerialMap", "openaerialmap.org", "/wms/?",
+					"world", "EPSG:4326", ",", "image/jpeg");
+				theWmsServerList->insert("OpenAerialMap", oam);
+				WmsServer tu("Terraservice_Urban", "terraservice.net", "/ogcmap.ashx?",
+					"urbanarea", "EPSG:4326", ",", "image/jpeg");
+				theWmsServerList->insert("Terraservice_Urban", tu);
+				WmsServer tg("Terraservice_DRG", "terraservice.net", "/ogcmap.ashx?",
+					"drg", "EPSG:4326", ",", "image/jpeg");
+				theWmsServerList->insert("Terraservice_DRG", tg);
+				WmsServer tq("Terraservice_DOQ", "terraservice.net", "/ogcmap.ashx?",
+					"doq", "EPSG:4326", ",", "image/jpeg");
+				theWmsServerList->insert("Terraservice_DOQ", tq);
+			}
+		}
+		save();
+	} else {
+		QStringList Servers = Sets->value("WSM/servers").toStringList();
+		for (int i=0; i<Servers.size(); i+=7) {
+			WmsServer S(Servers[i], Servers[i+1], Servers[i+2], Servers[i+3], Servers[i+4], Servers[i+5], Servers[i+6]);
+			theWmsServerList->insert(Servers[i], S);
+		}
+	}
 }
 
 bool MerkaartorPreferences::getRightSideDriving() const
@@ -134,22 +222,36 @@ void MerkaartorPreferences::setBookmarks(const QStringList & theValue)
 	Sets->setValue("downloadosm/bookmarks", theValue);
 }
 
-QStringList MerkaartorPreferences::getWmsServers() const
+WmsServerList* MerkaartorPreferences::getWmsServers() const
 {
-	return Sets->value("WSM/servers").toStringList();
+//	return Sets->value("WSM/servers").toStringList();
+	return theWmsServerList;
 }
 
-void MerkaartorPreferences::setWmsServers(const QStringList & theValue)
+void MerkaartorPreferences::setWmsServers()
 {
-	Sets->setValue("WSM/servers", theValue);
+	QStringList Servers;
+	WmsServerListIterator i(*theWmsServerList);
+	while (i.hasNext()) {
+		i.next();
+		WmsServer S = i.value();
+		Servers.append(S.WmsName);
+		Servers.append(S.WmsAdress);
+		Servers.append(S.WmsPath);
+		Servers.append(S.WmsLayers);
+		Servers.append(S.WmsProjections);
+		Servers.append(S.WmsStyles);
+		Servers.append(S.WmsImgFormat);
+	}
+	Sets->setValue("WSM/servers", Servers);
 }
 
-int MerkaartorPreferences::getSelectedWmsServer() const
+QString MerkaartorPreferences::getSelectedWmsServer() const
 {
-	return Sets->value("WSM/selected").toInt();
+	return Sets->value("WSM/selected").toString();
 }
 
-void MerkaartorPreferences::setSelectedWmsServer(int theValue)
+void MerkaartorPreferences::setSelectedWmsServer(const QString & theValue)
 {
 	Sets->setValue("WSM/selected", theValue);
 }
@@ -197,11 +299,6 @@ int MerkaartorPreferences::getCacheSize() const
 void MerkaartorPreferences::setCacheSize(int theValue)
 {
 	Sets->setValue("backgroundImage/CacheSize", theValue);
-}
-
-void MerkaartorPreferences::save()
-{
- 	Sets->sync();
 }
 
 /* Search */

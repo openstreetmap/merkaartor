@@ -220,7 +220,7 @@ void MapView::imageRequested()
 {
 	++numImages;
 	pbImages->setRange(0, numImages);
-	pbImages->setValue(0);
+	//pbImages->setValue(0);
 	pbImages->update();
 }
 

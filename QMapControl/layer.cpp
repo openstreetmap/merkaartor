@@ -223,6 +223,7 @@ void Layer::_draw(QPainter* painter, const QPoint mapmiddle_px) const
 		}
 	}
 	
+	return;
 	
 	// PREFETCHING
 	int upper = mapmiddle_tile_y-tiles_above-1;

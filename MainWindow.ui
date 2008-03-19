@@ -41,7 +41,7 @@
    </widget>
    <widget class="QMenu" name="menuRoad" >
     <property name="title" >
-     <string>Road</string>
+     <string>&amp;Road</string>
     </property>
     <addaction name="roadSplitAction" />
     <addaction name="roadBreakAction" />
@@ -64,7 +64,7 @@
     </property>
     <widget class="QMenu" name="menuBookmarks" >
      <property name="title" >
-      <string>Bookmarks</string>
+      <string>&amp;Bookmarks</string>
      </property>
      <addaction name="bookmarkAddAction" />
      <addaction name="bookmarkRemoveAction" />
@@ -85,7 +85,7 @@
     </property>
     <widget class="QMenu" name="menuExport_OSM" >
      <property name="title" >
-      <string>Export OSM</string>
+      <string>&amp;Export OSM</string>
      </property>
      <addaction name="exportOSMAllAction" />
      <addaction name="exportOSMViewportAction" />
@@ -103,11 +103,11 @@
    </widget>
    <widget class="QMenu" name="menuTools" >
     <property name="title" >
-     <string>Tools</string>
+     <string>&amp;Tools</string>
     </property>
     <widget class="QMenu" name="menuStyle_2" >
      <property name="title" >
-      <string>Style</string>
+      <string>&amp;Style</string>
      </property>
      <addaction name="editMapStyleAction" />
      <addaction name="separator" />
@@ -154,17 +154,17 @@
   </widget>
   <action name="fileQuitAction" >
    <property name="text" >
-    <string>Quit</string>
+    <string>&amp;Quit</string>
    </property>
   </action>
   <action name="helpAboutAction" >
    <property name="text" >
-    <string>About</string>
+    <string>&amp;About</string>
    </property>
   </action>
   <action name="fileOpenAction" >
    <property name="text" >
-    <string>Open</string>
+    <string>&amp;Open</string>
    </property>
    <property name="statusTip" >
     <string>Create a new document and import a file</string>
@@ -172,7 +172,7 @@
   </action>
   <action name="viewZoomAllAction" >
    <property name="text" >
-    <string>Zoom all</string>
+    <string>Zoom &amp;all</string>
    </property>
    <property name="shortcut" >
     <string>F2</string>
@@ -180,7 +180,7 @@
   </action>
   <action name="viewZoomWindowAction" >
    <property name="text" >
-    <string>Zoom window</string>
+    <string>Zoom &amp;window</string>
    </property>
    <property name="iconText" >
     <string>Zoom window</string>
@@ -194,12 +194,12 @@
   </action>
   <action name="viewZoomOutAction" >
    <property name="text" >
-    <string>Zoom out</string>
+    <string>Zoom &amp;out</string>
    </property>
   </action>
   <action name="viewZoomInAction" >
    <property name="text" >
-    <string>Zoom in</string>
+    <string>Zoom &amp;in</string>
    </property>
    <property name="iconText" >
     <string>Zoom in</string>
@@ -227,7 +227,7 @@
     <iconset resource="Icons/AllIcons.qrc" >:/Icons/edit-undo.xpm</iconset>
    </property>
    <property name="text" >
-    <string>Undo</string>
+    <string>&amp;Undo</string>
    </property>
    <property name="shortcut" >
     <string>Ctrl+Z</string>
@@ -238,7 +238,7 @@
     <iconset resource="Icons/AllIcons.qrc" >:/Icons/edit-redo.xpm</iconset>
    </property>
    <property name="text" >
-    <string>Redo</string>
+    <string>&amp;Redo</string>
    </property>
    <property name="shortcut" >
     <string>Ctrl+Y</string>
@@ -260,7 +260,7 @@
   </action>
   <action name="fileImportAction" >
    <property name="text" >
-    <string>Import</string>
+    <string>&amp;Import</string>
    </property>
    <property name="statusTip" >
     <string>Import a file into the current document</string>
@@ -268,7 +268,7 @@
   </action>
   <action name="fileDownloadAction" >
    <property name="text" >
-    <string>Download from web</string>
+    <string>&amp;Download from web</string>
    </property>
    <property name="shortcut" >
     <string>Ctrl+D</string>
@@ -301,7 +301,7 @@
   </action>
   <action name="fileUploadAction" >
    <property name="text" >
-    <string>Upload to web</string>
+    <string>&amp;Upload to web</string>
    </property>
    <property name="shortcut" >
     <string>Ctrl+U</string>
@@ -315,7 +315,7 @@
     <iconset resource="Icons/AllIcons.qrc" >:/Icons/remove.xpm</iconset>
    </property>
    <property name="text" >
-    <string>Remove</string>
+    <string>R&amp;emove</string>
    </property>
    <property name="shortcut" >
     <string>Del</string>
@@ -323,7 +323,7 @@
   </action>
   <action name="createRoadAction" >
    <property name="text" >
-    <string>Road</string>
+    <string>&amp;Road</string>
    </property>
    <property name="shortcut" >
     <string>R</string>
@@ -342,7 +342,7 @@
   </action>
   <action name="createNodeAction" >
    <property name="text" >
-    <string>Node</string>
+    <string>&amp;Node</string>
    </property>
    <property name="shortcut" >
     <string>N</string>
@@ -356,27 +356,27 @@
     <iconset resource="Icons/AllIcons.qrc" >:/Icons/reverse.xpm</iconset>
    </property>
    <property name="text" >
-    <string>Reverse</string>
+    <string>&amp;Reverse</string>
    </property>
   </action>
   <action name="viewSetCoordinatesAction" >
    <property name="text" >
-    <string>Set coordinates</string>
+    <string>&amp;Set coordinates</string>
    </property>
   </action>
   <action name="createDoubleWayAction" >
    <property name="text" >
-    <string>Double carriage way</string>
+    <string>&amp;Double carriage way</string>
    </property>
   </action>
   <action name="createRoundaboutAction" >
    <property name="text" >
-    <string>Roundabout</string>
+    <string>&amp;Roundabout</string>
    </property>
   </action>
   <action name="fileNewAction" >
    <property name="text" >
-    <string>New</string>
+    <string>&amp;New</string>
    </property>
    <property name="statusTip" >
     <string>Create a new document</string>
@@ -384,57 +384,57 @@
   </action>
   <action name="roadSplitAction" >
    <property name="text" >
-    <string>Split</string>
+    <string>&amp;Split</string>
    </property>
   </action>
   <action name="roadJoinAction" >
    <property name="text" >
-    <string>Join</string>
+    <string>&amp;Join</string>
    </property>
   </action>
   <action name="roadBreakAction" >
    <property name="text" >
-    <string>Break apart</string>
+    <string>&amp;Break apart</string>
    </property>
   </action>
   <action name="createRelationAction" >
    <property name="text" >
-    <string>Relation</string>
+    <string>Re&amp;lation</string>
    </property>
   </action>
   <action name="createAreaAction" >
    <property name="text" >
-    <string>Area</string>
+    <string>&amp;Area</string>
    </property>
   </action>
   <action name="editMapStyleAction" >
    <property name="text" >
-    <string>Edit</string>
+    <string>&amp;Edit</string>
    </property>
   </action>
   <action name="mapStyleSaveAction" >
    <property name="text" >
-    <string>Save</string>
+    <string>&amp;Save</string>
    </property>
   </action>
   <action name="mapStyleLoadAction" >
    <property name="text" >
-    <string>Load</string>
+    <string>&amp;Load</string>
    </property>
   </action>
   <action name="createCurvedRoadAction" >
    <property name="text" >
-    <string>Curved road</string>
+    <string>&amp;Curved road</string>
    </property>
   </action>
   <action name="toolsPreferencesAction" >
    <property name="text" >
-    <string>Preferences...</string>
+    <string>&amp;Preferences...</string>
    </property>
   </action>
   <action name="exportOSMAllAction" >
    <property name="text" >
-    <string>All..</string>
+    <string>&amp;All..</string>
    </property>
    <property name="statusTip" >
     <string>Export all visible layers to a file</string>
@@ -442,7 +442,7 @@
   </action>
   <action name="editSelectAction" >
    <property name="text" >
-    <string>Select...</string>
+    <string>&amp;Select...</string>
    </property>
   </action>
   <action name="renderAction" >
@@ -452,7 +452,7 @@
   </action>
   <action name="exportOSMViewportAction" >
    <property name="text" >
-    <string>Viewport...</string>
+    <string>&amp;Viewport...</string>
    </property>
    <property name="statusTip" >
     <string>Export the features in the viewport to a file</string>
@@ -460,12 +460,12 @@
   </action>
   <action name="bookmarkAddAction" >
    <property name="text" >
-    <string>Add...</string>
+    <string>&amp;Add...</string>
    </property>
   </action>
   <action name="bookmarkRemoveAction" >
    <property name="text" >
-    <string>Remove...</string>
+    <string>&amp;Remove...</string>
    </property>
   </action>
  </widget>

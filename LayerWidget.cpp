@@ -139,8 +139,9 @@ ImageLayerWidget::~ImageLayerWidget()
 
 void ImageLayerWidget::setWms(QAction* act)
 {
-	QStringList server = act->data().toStringList();
-	MerkaartorPreferences::instance()->setSelectedWmsServer(server[6].toInt());
+	WmsServerList* L = MerkaartorPreferences::instance()->getWmsServers();
+	WmsServer S = L->value(act->data().toString());
+	MerkaartorPreferences::instance()->setSelectedWmsServer(S.WmsName);
 
 	((ImageMapLayer *)theLayer)->setMapAdapter(Bg_Wms);
 	theLayer->setVisible(true);
@@ -198,25 +199,19 @@ void ImageLayerWidget::initWmsActions()
 
 	wmsMenu = new QMenu(MerkaartorPreferences::instance()->getBgTypes()[Bg_Wms], this);
 
-	QStringList Servers = MerkaartorPreferences::instance()->getWmsServers();
-	for (int i=0; i<Servers.size(); i+=6) {
-		QStringList oneServer;
-		oneServer.append(Servers[i]);
-		oneServer.append(Servers[i+1]);
-		oneServer.append(Servers[i+2]);
-		oneServer.append(Servers[i+3]);
-		oneServer.append(Servers[i+4]);
-		oneServer.append(Servers[i+5]);
-		oneServer.append(QString().setNum(int(i/6)));
-
-		QAction* act = new QAction(Servers[i], wmsMenu);
-		act->setData(oneServer);
+	WmsServerList* Servers = MerkaartorPreferences::instance()->getWmsServers();
+	WmsServerListIterator i(*Servers);
+	while (i.hasNext()) {
+		i.next();
+		WmsServer S = i.value();
+		QAction* act = new QAction(S.WmsName, wmsMenu);
+		act->setData(S.WmsName);
 		//act->setCheckable(true);
 		wmsMenu->addAction(act);
 		//actgrAdapter->addAction(act);
 		//actgrWms->addAction(act);
 		if (MerkaartorPreferences::instance()->getBgType() == Bg_Wms)
-			if (int(i/6) == MerkaartorPreferences::instance()->getSelectedWmsServer())
+			if (S.WmsName == MerkaartorPreferences::instance()->getSelectedWmsServer())
 				act->setChecked(true);
 	}
 	actNone->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_None));

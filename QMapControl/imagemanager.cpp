@@ -118,24 +118,27 @@ QPixmap ImageManager::prefetchImage(MapAdapter* anAdapter, int x, int y, int z)
 void ImageManager::receivedImage(const QPixmap pixmap, const QString& hash)
 {
 // 	qDebug() << "ImageManager::receivedImage";
-	QPixmapCache::insert(hash, pixmap);
-	if (cacheMaxSize) {
-		pixmap.save(cacheDir.absolutePath() + "/" + hash + ".png");
-		QFileInfo info(cacheDir.absolutePath() + "/" + hash + ".png");
-		cacheInfo.append(info);
-		cacheSize += info.size();
+	if (pixmap.isNull()) {
+		QPixmap pm(256, 256);
+		pm.fill(Qt::gray);
+		QPixmapCache::insert(hash, pm);
+	} else {
+		QPixmapCache::insert(hash, pixmap);
+		if (cacheMaxSize) {
+			pixmap.save(cacheDir.absolutePath() + "/" + hash + ".png");
+			QFileInfo info(cacheDir.absolutePath() + "/" + hash + ".png");
+			cacheInfo.append(info);
+			cacheSize += info.size();
 
-		adaptCache();
+			adaptCache();
+		}
 	}
 	
-	if (!prefetch.contains(hash))
-	{
-		emit(imageReceived());
-	}
-	else
+	if (prefetch.contains(hash))
 	{
 		prefetch.remove(prefetch.indexOf(hash));
 	}
+	emit(imageReceived());
 }
 
 void ImageManager::adaptCache()

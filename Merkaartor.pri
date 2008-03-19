@@ -49,6 +49,7 @@ HEADERS += \
 ./Utils/EditCompleterDelegate.h \
 ./Preferences/MerkaartorPreferences.h \
 ./Preferences/PreferencesDialog.h \
+./Preferences/WMSPreferencesDialog.h \
 ./Utils/SelectionDialog.h
 
 #Source files
@@ -101,6 +102,7 @@ SOURCES += \
 ./Utils/EditCompleterDelegate.cpp \
 ./Preferences/MerkaartorPreferences.cpp \
 ./Preferences/PreferencesDialog.cpp \
+./Preferences/WMSPreferencesDialog.cpp \
 ./Utils/SelectionDialog.cpp
 
 #Forms
@@ -119,6 +121,7 @@ FORMS += \
 ./Interaction/CreateRoundaboutDock.ui \
 ./PaintStyle/PaintStyleEditor.ui \
 ./Preferences/PreferencesDialog.ui \
+./Preferences/WMSPreferencesDialog.ui \
 ./Utils/SelectionDialog.ui
 
 

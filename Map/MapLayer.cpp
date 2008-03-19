@@ -259,6 +259,12 @@ LayerWidget* ImageMapLayer::newWidget(void)
 	return p->theWidget;
 }
 
+void ImageMapLayer::updateWidget()
+{
+	((ImageLayerWidget*) p->theWidget)->initWmsActions();
+	p->theWidget->update();
+}
+
 void ImageMapLayer::setVisible(bool b)
 {
 	p->Visible = b;
@@ -276,64 +282,65 @@ Layer* ImageMapLayer::imageLayer()
 
 void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 {
-	int i;
-	QStringList WmsServers;
 	MapAdapter* mapadapter_bg;
+	WmsServerList* wsl;
+	WmsServer ws;
 
 	if (layermanager)
 		if (layermanager->getLayers().size() > 0) {
 			layermanager->removeLayer();
 		}
-		SAFE_DELETE(p->layer_bg);
+	SAFE_DELETE(p->layer_bg);
 
-		p->bgType = typ;
-		MerkaartorPreferences::instance()->setBgType(typ);
-		switch (p->bgType) {
-			case Bg_None:
-				setName("Background - None");
-				p->Visible = false;
-				break;
+	p->bgType = typ;
+	MerkaartorPreferences::instance()->setBgType(typ);
+	switch (p->bgType) {
+		case Bg_None:
+			setName("Background - None");
+			p->Visible = false;
+			break;
 
-			case Bg_Wms:
-				WmsServers = MerkaartorPreferences::instance()->getWmsServers();
-				i = MerkaartorPreferences::instance()->getSelectedWmsServer();
-				mapadapter_bg = new WMSMapAdapter(WmsServers[(i*6)+1], WmsServers[(i*6)+2], WmsServers[(i*6)+3],
-						WmsServers[(i*6)+4], WmsServers[(i*6)+5], 256);
-				p->layer_bg = new Layer("Custom Layer", mapadapter_bg, Layer::MapLayer);
-				p->layer_bg->setVisible(p->Visible);
+		case Bg_Wms:
+			wsl = MerkaartorPreferences::instance()->getWmsServers();
+			ws = wsl->value(MerkaartorPreferences::instance()->getSelectedWmsServer());
+			mapadapter_bg = new WMSMapAdapter(ws.WmsAdress, ws.WmsPath, ws.WmsLayers, ws.WmsProjections,
+					ws.WmsStyles, ws.WmsImgFormat, 256);
+			p->layer_bg = new Layer("Custom Layer", mapadapter_bg, Layer::MapLayer);
+			p->layer_bg->setVisible(p->Visible);
 
-				setName("Background - WMS - " + WmsServers[(i*6)]);
-				break;
-			case Bg_OSM:
-				mapadapter_bg = new OSMMapAdapter();
-				p->layer_bg = new Layer("Custom Layer", mapadapter_bg, Layer::MapLayer);
-				p->layer_bg->setVisible(p->Visible);
+			setName("Background - WMS - " + ws.WmsName);
+			break;
+		case Bg_OSM:
+			mapadapter_bg = new OSMMapAdapter();
+			p->layer_bg = new Layer("Custom Layer", mapadapter_bg, Layer::MapLayer);
+			p->layer_bg->setVisible(p->Visible);
 
-				setName("Background - OSM");
-				break;
+			setName("Background - OSM");
+			break;
 #ifdef yahoo_illegal
-			case Bg_Yahoo_illegal:
-				mapadapter_bg = new YahooMapAdapter("us.maps3.yimg.com", "/aerial.maps.yimg.com/png?v=1.7&t=a&s=256&x=%2&y=%3&z=%1");
-				p->layer_bg = new Layer("Custom Layer", mapadapter_bg, Layer::MapLayer);
-				p->layer_bg->setVisible(p->Visible);
+		case Bg_Yahoo_illegal:
+			mapadapter_bg = new YahooMapAdapter("us.maps3.yimg.com", "/aerial.maps.yimg.com/png?v=1.7&t=a&s=256&x=%2&y=%3&z=%1");
+			p->layer_bg = new Layer("Custom Layer", mapadapter_bg, Layer::MapLayer);
+			p->layer_bg->setVisible(p->Visible);
 
-				setName("Background - Yahoo");
-				break;
+			setName("Background - Yahoo");
+			break;
 #endif
 #ifdef google_illegal
-			case Bg_Google_illegal:
-				mapadapter_bg = new GoogleSatMapAdapter();
-				p->layer_bg = new Layer("Custom Layer", mapadapter_bg, Layer::MapLayer);
-				p->layer_bg->setVisible(p->Visible);
+		case Bg_Google_illegal:
+			mapadapter_bg = new GoogleSatMapAdapter();
+			p->layer_bg = new Layer("Custom Layer", mapadapter_bg, Layer::MapLayer);
+			p->layer_bg->setVisible(p->Visible);
 
-				setName("Background - Google");
-				break;
+			setName("Background - Google");
+			break;
 #endif
+	}
+	if (layermanager)
+		if (p->layer_bg) {
+			layermanager->addLayer(p->layer_bg);
 		}
-		if (layermanager)
-			if (p->layer_bg) {
-				layermanager->addLayer(p->layer_bg);
-			}
+
 }
 
 

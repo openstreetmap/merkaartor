@@ -56,26 +56,6 @@ MainWindow::MainWindow(void)
 	setupUi(this);
 	loadPainters(MerkaartorPreferences::instance()->getDefaultStyle());
 
-	QStringList Servers = MerkaartorPreferences::instance()->getWmsServers();
-	if (Servers.size() == 0) {
-		Servers.append("Demis");
-		Servers.append("www2.demis.nl");
-		Servers.append("/wms/wms.asp?wms=WorldMap&");
-		Servers.append("Countries,Borders,Highways,Roads,Cities");
-		Servers.append("EPSG:4326");
-		Servers.append(",");
-		MerkaartorPreferences::instance()->setWmsServers(Servers);
-		MerkaartorPreferences::instance()->setSelectedWmsServer(0);
-	}
-
-	QStringList sl = MerkaartorPreferences::instance()->getBookmarks();
-	if (sl.size() == 0) {
-		QStringList DefaultBookmarks;
-		DefaultBookmarks << "London" << "51.47" << "-0.20" << "51.51" << "-0.08";
-	//	DefaultBookmarks << "Rotterdam" << "51.89" << "4.43" << "51.93" << "4.52";
-		MerkaartorPreferences::instance()->setBookmarks(DefaultBookmarks);
-	}
-
 	theView = new MapView(this);
 	setCentralWidget(theView);
 
@@ -533,6 +513,7 @@ void MainWindow::on_toolsPreferencesAction_triggered()
 
 	if (Pref->exec() == QDialog::Accepted) {
 		theDocument->getImageLayer()->setMapAdapter(MerkaartorPreferences::instance()->getBgType());
+		theDocument->getImageLayer()->updateWidget();
 		adjustLayers(true);
 
 		ImageManager::instance()->setCacheDir(MerkaartorPreferences::instance()->getCacheDir());

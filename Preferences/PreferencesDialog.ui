@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>540</width>
-    <height>291</height>
+    <height>250</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -314,191 +314,17 @@
                 </property>
                </widget>
               </item>
+              <item>
+               <widget class="QPushButton" name="btAdapterSetup" >
+                <property name="text" >
+                 <string>Setup...</string>
+                </property>
+               </widget>
+              </item>
              </layout>
             </widget>
            </item>
           </layout>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="grpWmsServers" >
-           <property name="title" >
-            <string>WMS Servers</string>
-           </property>
-           <layout class="QHBoxLayout" >
-            <property name="spacing" >
-             <number>1</number>
-            </property>
-            <property name="leftMargin" >
-             <number>1</number>
-            </property>
-            <property name="topMargin" >
-             <number>1</number>
-            </property>
-            <property name="rightMargin" >
-             <number>1</number>
-            </property>
-            <property name="bottomMargin" >
-             <number>1</number>
-            </property>
-            <item>
-             <widget class="QFrame" name="frame_2" >
-              <property name="frameShape" >
-               <enum>QFrame::StyledPanel</enum>
-              </property>
-              <property name="frameShadow" >
-               <enum>QFrame::Raised</enum>
-              </property>
-              <layout class="QVBoxLayout" >
-               <property name="spacing" >
-                <number>5</number>
-               </property>
-               <property name="leftMargin" >
-                <number>5</number>
-               </property>
-               <property name="topMargin" >
-                <number>5</number>
-               </property>
-               <property name="rightMargin" >
-                <number>5</number>
-               </property>
-               <property name="bottomMargin" >
-                <number>5</number>
-               </property>
-               <item>
-                <widget class="QLabel" name="label_10" >
-                 <property name="text" >
-                  <string>Server list:</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QListWidget" name="lvWmsServers" />
-               </item>
-              </layout>
-             </widget>
-            </item>
-            <item>
-             <widget class="QFrame" name="frame" >
-              <property name="frameShape" >
-               <enum>QFrame::StyledPanel</enum>
-              </property>
-              <property name="frameShadow" >
-               <enum>QFrame::Raised</enum>
-              </property>
-              <layout class="QVBoxLayout" >
-               <item>
-                <widget class="QLabel" name="label_11" >
-                 <property name="text" >
-                  <string>Name:</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="edWmsName" >
-                 <property name="minimumSize" >
-                  <size>
-                   <width>100</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="label_5" >
-                 <property name="text" >
-                  <string>Server adress:</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="edWmsAdr" />
-               </item>
-               <item>
-                <widget class="QLabel" name="label_6" >
-                 <property name="text" >
-                  <string>Main path:</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="edWmsPath" />
-               </item>
-               <item>
-                <widget class="QPushButton" name="btShowCapabilities" >
-                 <property name="text" >
-                  <string>Show Capabilities</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="label_7" >
-                 <property name="text" >
-                  <string>Layers:</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="edWmsLayers" />
-               </item>
-               <item>
-                <widget class="QLabel" name="label_8" >
-                 <property name="text" >
-                  <string>Projection:</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="edWmsProj" />
-               </item>
-               <item>
-                <widget class="QLabel" name="label_9" >
-                 <property name="text" >
-                  <string>Styles:</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="edWmsStyles" />
-               </item>
-               <item>
-                <spacer>
-                 <property name="orientation" >
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                 <property name="sizeHint" >
-                  <size>
-                   <width>20</width>
-                   <height>1</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-               <item>
-                <widget class="QPushButton" name="btApplyWmsServer" >
-                 <property name="text" >
-                  <string>Apply</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="btAddWmsServer" >
-                 <property name="text" >
-                  <string>Add</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="btDelWmsServer" >
-                 <property name="text" >
-                  <string>Remove</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-            </item>
-           </layout>
-          </widget>
          </item>
          <item>
           <spacer>

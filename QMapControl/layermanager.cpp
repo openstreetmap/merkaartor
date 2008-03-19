@@ -229,6 +229,7 @@ void LayerManager::addLayer(Layer* layer)
 void LayerManager::removeLayer()
 {
 	Q_ASSERT_X(layers.size()>0, "LayerManager::removeLayer()", "No layers existing!");
+	ImageManager::instance()->abortLoading();
 	layers.removeAt(0);
 }
 
