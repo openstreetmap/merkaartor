@@ -76,6 +76,9 @@ void PreferencesDialog::loadPrefs()
 		CustomStyleName->setText(s);
 		BrowseStyle->setEnabled(true);
 	}
+
+	sbZoomInPerc->setValue(MerkaartorPreferences::instance()->getZoomInPerc());
+	sbZoomOutPerc->setValue(MerkaartorPreferences::instance()->getZoomOutPerc());
 }
 
 void PreferencesDialog::savePrefs()
@@ -105,6 +108,8 @@ void PreferencesDialog::savePrefs()
 		MerkaartorPreferences::instance()->setDefaultStyle(NewStyle);
 		loadPainters(MerkaartorPreferences::instance()->getDefaultStyle());
 	}
+	MerkaartorPreferences::instance()->setZoomInPerc(sbZoomInPerc->text().toInt());
+	MerkaartorPreferences::instance()->setZoomOutPerc(sbZoomOutPerc->text().toInt());
 	MerkaartorPreferences::instance()->save();
 }
 

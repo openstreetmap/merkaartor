@@ -182,12 +182,12 @@ void MapView::wheelEvent(QWheelEvent* ev)
 	int Steps = ev->delta() / 120;
 	if (Steps > 0) {
 		for (int i = 0; i < Steps; ++i) {
-			projection().zoom(1 / 0.75, ev->pos(), rect());
+			projection().zoom(MerkaartorPreferences::instance()->getZoomInPerc()/100.0, ev->pos(), rect());
 		}
 		invalidate();
 	} else if (Steps < 0) {
 		for (int i = 0; i < -Steps; ++i) {
-			projection().zoom(0.75, ev->pos(), rect());
+			projection().zoom(MerkaartorPreferences::instance()->getZoomOutPerc()/100.0, ev->pos(), rect());
 		}
 		invalidate();
 	}

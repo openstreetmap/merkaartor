@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>540</width>
-    <height>250</height>
+    <height>419</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -28,7 +28,7 @@
         <enum>QTabWidget::North</enum>
        </property>
        <property name="currentIndex" >
-        <number>3</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="tab_4" >
         <attribute name="title" >
@@ -82,6 +82,42 @@
                </widget>
               </item>
              </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBox_4" >
+           <property name="title" >
+            <string>Zoom factors percentage</string>
+           </property>
+           <layout class="QGridLayout" >
+            <item row="0" column="1" >
+             <widget class="QSpinBox" name="sbZoomInPerc" >
+              <property name="minimum" >
+               <number>100</number>
+              </property>
+              <property name="maximum" >
+               <number>1000</number>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0" >
+             <widget class="QLabel" name="label_5" >
+              <property name="text" >
+               <string>Zoom In</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" >
+             <widget class="QLabel" name="label_6" >
+              <property name="text" >
+               <string>Zoom Out</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1" >
+             <widget class="QSpinBox" name="sbZoomOutPerc" />
             </item>
            </layout>
           </widget>

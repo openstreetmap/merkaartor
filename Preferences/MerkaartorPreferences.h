@@ -125,8 +125,14 @@ public:
 	void setLastSearchValue(const QString & theValue);
 	QString getLastSearchValue() const;
 
+	/* Visual */
 	QString getDefaultStyle() const;
 	void setDefaultStyle(const QString& aString);
+
+	void setZoomInPerc(int theValue);
+	int getZoomInPerc() const;
+	void setZoomOutPerc(int theValue);
+	int getZoomOutPerc() const;
 
 protected:
 	QString version;

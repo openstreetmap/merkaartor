@@ -1,4 +1,5 @@
 v0.10
+	* ADD : configurable zoom factors (only for "None" background for now)
 	* ADD : Background tiles caching
 	* ADD : Initial track to road
 	* ADD : Initial osmarender rendering

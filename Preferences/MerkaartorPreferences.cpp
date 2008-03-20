@@ -342,6 +342,8 @@ QString MerkaartorPreferences::getLastSearchValue() const
 	return Sets->value("search/LastValue").toString();
 }
 
+/* Visuals */
+
 QString MerkaartorPreferences::getDefaultStyle() const
 {
 	return Sets->value("style/Default",":/Styles/Classic.mas").toString();
@@ -350,4 +352,24 @@ QString MerkaartorPreferences::getDefaultStyle() const
 void MerkaartorPreferences::setDefaultStyle(const QString& S)
 {
 	Sets->setValue("style/Default",S);
+}
+
+int MerkaartorPreferences::getZoomInPerc() const
+{
+	return Sets->value("zoom/zoomIn", "133").toInt();
+}
+
+void MerkaartorPreferences::setZoomInPerc(int theValue)
+{
+	Sets->setValue("zoom/zoomIn", theValue);
+}
+
+int MerkaartorPreferences::getZoomOutPerc() const
+{
+	return Sets->value("zoom/zoomOut", "75").toInt();
+}
+
+void MerkaartorPreferences::setZoomOutPerc(int theValue)
+{
+	Sets->setValue("zoom/zoomOut", theValue);
 }
