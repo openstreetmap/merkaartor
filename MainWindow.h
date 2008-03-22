@@ -52,7 +52,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_roadJoinAction_triggered();
 		virtual void on_mapStyleSaveAction_triggered();
 		virtual void on_mapStyleLoadAction_triggered();
-		virtual void on_toolsPreferencesAction_triggered();
+		virtual void on_toolsPreferencesAction_triggered(unsigned int tabIdx = 0);
 		virtual void on_exportOSMAllAction_triggered();
 		virtual void on_exportOSMViewportAction_triggered();
 		virtual void on_editSelectAction_triggered();

@@ -298,7 +298,7 @@ void MainWindow::on_fileUploadAction_triggered()
 		int ret = QMessageBox::warning(this, tr("Upload OSM"), tr("You don't seem to have specified your\n"
 			"Openstreetmap userid & password.\nDo you want to do this now?"), QMessageBox::Yes | QMessageBox::No);
 		if (ret == QMessageBox::Yes) {
-			on_toolsPreferencesAction_triggered();
+			on_toolsPreferencesAction_triggered(1);
 		} else
 			return;
 	}
@@ -315,7 +315,7 @@ void MainWindow::on_fileDownloadAction_triggered()
 		int ret = QMessageBox::warning(this, tr("Download OSM"), tr("You don't seem to have specified your\n"
 			"Openstreetmap userid & password.\nDo you want to do this now?"), QMessageBox::Yes | QMessageBox::No);
 		if (ret == QMessageBox::Yes) {
-			on_toolsPreferencesAction_triggered();
+			on_toolsPreferencesAction_triggered(1);
 		} else
 			return;
 	}
@@ -507,10 +507,10 @@ void MainWindow::on_mapStyleLoadAction_triggered()
 	}
 }
 
-void MainWindow::on_toolsPreferencesAction_triggered()
+void MainWindow::on_toolsPreferencesAction_triggered(unsigned int tabidx)
 {
 	PreferencesDialog* Pref = new PreferencesDialog();
-	Pref->tabPref->setCurrentIndex(0);
+	Pref->tabPref->setCurrentIndex(tabidx);
 
 	if (Pref->exec() == QDialog::Accepted) {
 		theDocument->getImageLayer()->setMapAdapter(MerkaartorPreferences::instance()->getBgType());
