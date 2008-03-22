@@ -2,7 +2,7 @@ TEMPLATE = app
 TARGET = merkaartor
 DESTDIR = ./release
 QT += network xml core gui
-CONFIG += debug_and_release yahoo google osmarender
+CONFIG += debug_and_release osmarender
 
 DEFINES += MAJORVERSION="0"
 DEFINES += MINORVERSION="10"
@@ -28,14 +28,3 @@ osmarender {
     }
 }
 
-yahoo {
-    DEFINES += yahoo_illegal
-    SOURCES += QMapControl/yahoomapadapter.cpp
-    HEADERS += QMapControl/yahoomapadapter.h
-}
-
-google {
-    DEFINES += google_illegal
-    SOURCES += QMapControl/googlesatmapadapter.cpp
-    HEADERS += QMapControl/googlesatmapadapter.h
-}
