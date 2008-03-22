@@ -15,6 +15,7 @@
 #include "Map/Coord.h"
 
 class MapDocument;
+class QWidget;
 
 class OsmaRender
 {
@@ -23,7 +24,7 @@ public:
 public:
 	virtual ~OsmaRender(void);
 
-	void render(MapDocument *aDoc, const CoordBox& aCoordBox = WORLD_COORDBOX);
+	void render(QWidget* aParent, MapDocument *aDoc, const CoordBox& aCoordBox = WORLD_COORDBOX);
 };
 
 #endif

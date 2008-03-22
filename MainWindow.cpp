@@ -610,7 +610,7 @@ void MainWindow::on_renderAction_triggered()
 {
 #ifdef OSMARENDER
 	OsmaRender osmR;
-	osmR.render(theDocument, view()->projection().viewport());
+	osmR.render(this, theDocument, view()->projection().viewport());
 #endif
 }
 

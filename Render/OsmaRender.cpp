@@ -1,6 +1,6 @@
 #include "OsmaRender.h"
 
-#include <QtGui>
+#include <QtGui/QMessageBox>
 #include <QtSvg>
 //#include <QValueVector>
 
@@ -26,7 +26,7 @@ OsmaRender::~OsmaRender(void)
 {
 }
 
-void OsmaRender::render(MapDocument *aDoc, const CoordBox& aCoordBox)
+void OsmaRender::render(QWidget* aParent, MapDocument *aDoc, const CoordBox& aCoordBox)
 {
 	xsltStylesheetPtr cur = NULL;
 	xmlDocPtr doc, res;
@@ -47,7 +47,16 @@ void OsmaRender::render(MapDocument *aDoc, const CoordBox& aCoordBox)
 #else
 	QString src_path("/var/src/merkaartor");
 #endif
-	cur = xsltParseStylesheetFile((const xmlChar *)QDir(src_path+"/osmarender6/osmarender.xsl").path().toLatin1().data());
+	QString StyleSheetFileName = src_path+"/osmarender6/osmarender.xsl";
+	cur = xsltParseStylesheetFile((const xmlChar *)QDir(StyleSheetFileName).path().toLatin1().data());
+	if (!cur)
+	{
+		QMessageBox::warning(aParent, 
+			"Unable to read stylesheet",
+			QString("Please make sure the Osmarender stylesheet is available at %1").arg(StyleSheetFileName));
+		return;
+	}
+
 	doc = xmlParseFile((const char *)QDir(src_path+"/osmarender6/osm-map-features-z12.xml").path().toLatin1().data());
 
 	const char * params[3];
