@@ -246,7 +246,7 @@ QColor toColor(const QString& s)
 
 void readFromNode(const QDomElement& e, FeaturePainter& FP)
 {
-	if (e.hasAttribute("zoomUnder") || e.hasAttribute("zoomPpper"))
+	if (e.hasAttribute("zoomUnder") || e.hasAttribute("zoomUpper"))
 		FP.zoomBoundary(e.attribute("zoomUnder","0").toDouble(),e.attribute("zoomUpper","10e6").toDouble());
 	if (e.hasAttribute("foregroundColor"))
 	{

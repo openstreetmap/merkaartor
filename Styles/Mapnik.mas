@@ -491,18 +491,6 @@
   <selector key="highway" value="service"/>
 </painter>
 <painter
- icon=":/Art/Mapnik/fuel.png"
- drawTrafficDirectionMarks="yes">
-  <selector key="amenity" value="fuel"/>
-</painter>
-<painter
- zoomUnder="0.03" zoomUpper="1e+07"
- fillColor="#efe49677"
- icon=":/Art/Mapnik/post_box.png"
- drawTrafficDirectionMarks="yes">
-  <selector key="amenity" value="post_box"/>
-</painter>
-<painter
  zoomUnder="0.2" zoomUpper="1e+07"
  foregroundColor="#fa8072fc" foregroundScale="1" foregroundOffset="0"
  foregroundDashDown="0.2" foregroundDashUp="1.3"
@@ -546,5 +534,75 @@
  zoomUnder="0.01" zoomUpper="1e+07"
  backgroundColor="#ff0000fc" backgroundScale="1.5" backgroundOffset="0">
   <selector key="note" value="FIXME previously unwayed segment"/>
+</painter>
+<painter
+ zoomUnder="0.03" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/airport.png">
+  <selector key="amenity" value="airport"/>
+</painter>
+<painter
+ zoomUnder="0.06" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/post_office.png">
+  <selector key="amenity" value="post_office"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/post_box.png">
+  <selector key="amenity" value="post_box"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/fuel.png">
+  <selector key="amenity" value="fuel"/>
+</painter>
+<painter
+ zoomUnder="0.03" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/station.png">
+  <selector key="railway" value="station"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/pint.png">
+  <selector key="amenity" value="pub"/>
+</painter>
+<painter
+ zoomUnder="0.03" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/peak.png">
+  <selector key="natural" value="peak"/>
+</painter>
+<painter
+ zoomUnder="0.03" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/tower.png">
+  <selector key="man_made" value="mast"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/recycling.png">
+  <selector key="amenity" value="recycling"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/bus_stop.png">
+  <selector key="amenity" value="bus_stop"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/bus_stop.png">
+  <selector key="highway" value="bus_stop"/>
+</painter>
+<painter
+ zoomUnder="0.15" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/place_of_worship.png">
+  <selector key="amenity" value="place_of_worship"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/mini_round.png">
+  <selector key="highway" value="mini_roundabout"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/power_tower.png">
+  <selector key="power" value="tower"/>
 </painter>
 </mapStyle>

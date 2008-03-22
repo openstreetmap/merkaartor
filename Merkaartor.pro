@@ -19,11 +19,23 @@ include(QMapControl.pri)
 include(ImportExport.pri)
 
 win32-msvc* {
-	DEFINES += _USE_MATH_DEFINES
+    DEFINES += _USE_MATH_DEFINES
 }
 
 osmarender {
-	!win32-g++ {
-		include(Render.pri)
-	}
+    !win32-g++ {
+        include(Render.pri)
+    }
+}
+
+yahoo {
+    DEFINES += yahoo_illegal
+    SOURCES += QMapControl/yahoomapadapter.cpp
+    HEADERS += QMapControl/yahoomapadapter.h
+}
+
+google {
+    DEFINES += google_illegal
+    SOURCES += QMapControl/googlesatmapadapter.cpp
+    HEADERS += QMapControl/googlesatmapadapter.h
 }

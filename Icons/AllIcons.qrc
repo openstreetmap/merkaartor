@@ -13,8 +13,34 @@
         <file>edit-redo.xpm</file>
     </qresource>
     <qresource prefix="/Art">
-        <file>Mapnik/parking.png</file>
+        <file>Mapnik/airport.png</file>
+        <file>Mapnik/arrow_back.png</file>
+        <file>Mapnik/arrow.png</file>
+        <file>Mapnik/beach.png</file>
+        <file>Mapnik/bus_stop.png</file>
+        <file>Mapnik/forest.png</file>
+        <file>Mapnik/grave_yard.png</file>
         <file>Mapnik/hospital.png</file>
+        <file>Mapnik/level_crossing2.png</file>
+        <file>Mapnik/level_crossing.png</file>
+        <file>Mapnik/london-tube-24.png</file>
+        <file>Mapnik/mini_round.png</file>
+        <file>Mapnik/nature_reserve2.png</file>
+        <file>Mapnik/nature_reserve.png</file>
+        <file>Mapnik/parking.png</file>
+        <file>Mapnik/peak.png</file>
+        <file>Mapnik/pint.png</file>
+        <file>Mapnik/place_of_worship.png</file>
+        <file>Mapnik/post_box.png</file>
+        <file>Mapnik/post_office.png</file>
+        <file>Mapnik/postoffice.png</file>
+        <file>Mapnik/power_tower.png</file>
+        <file>Mapnik/pub.png</file>
+        <file>Mapnik/recycle.png</file>
+        <file>Mapnik/recycling.png</file>
+        <file>Mapnik/station.png</file>
+        <file>Mapnik/station_small.png</file>
+        <file>Mapnik/tower.png</file>
     </qresource>
     <qresource>
     	<file>Tiles/000.png</file>
@@ -28,6 +54,3 @@
     	<file alias="Mapnik.mas">../Styles/Mapnik.mas</file>
     </qresource>
 </RCC>
-
-
-
