@@ -19,7 +19,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>21</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >
@@ -70,6 +70,12 @@
      <addaction name="bookmarkRemoveAction" />
      <addaction name="separator" />
     </widget>
+    <widget class="QMenu" name="mnuProjections" >
+     <property name="title" >
+      <string>Set &amp;projection</string>
+     </property>
+     <addaction name="separator" />
+    </widget>
     <addaction name="viewZoomAllAction" />
     <addaction name="viewZoomWindowAction" />
     <addaction name="viewZoomOutAction" />
@@ -78,6 +84,7 @@
     <addaction name="viewSetCoordinatesAction" />
     <addaction name="menuBookmarks" />
     <addaction name="separator" />
+    <addaction name="mnuProjections" />
    </widget>
    <widget class="QMenu" name="menuFile" >
     <property name="title" >

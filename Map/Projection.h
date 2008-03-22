@@ -34,6 +34,7 @@ class Projection
 	private:
 		void viewportRecalc(const QRect& Screen);
 		void layerManagerSetViewport(const CoordBox& Map, const QRect& Screen);
+		void layerManagerViewportRecalc(const QRect& Screen);
 		QPointF screenToCoordinate(QPointF click) const;
 		QPoint coordinateToScreen(QPointF click) const;
 };

@@ -157,6 +157,16 @@ class CoordBox
 			return TopRight;
 		}
 
+		Coord topLeft() const
+		{
+			return Coord(TopRight.lat(), BottomLeft.lon());
+		}
+
+		Coord bottomRight() const
+		{
+			return Coord(BottomLeft.lat(), TopRight.lon());
+		}
+
 		bool disjunctFrom(const CoordBox& B) const
 		{
 			if (BottomLeft.lat() > B.TopRight.lat()) return true;
@@ -164,6 +174,11 @@ class CoordBox
 			if (TopRight.lat() < B.BottomLeft.lat()) return true;
 			if (TopRight.lon() < B.BottomLeft.lon()) return true;
 			return false;
+		}
+
+		QRectF toRectF()
+		{
+			return QRectF(BottomLeft.lon(), TopRight.lat(), lonDiff(), latDiff());
 		}
 
 	private:

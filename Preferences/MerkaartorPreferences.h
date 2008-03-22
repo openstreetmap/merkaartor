@@ -32,6 +32,11 @@ enum ImageBackgroundType {
 #endif
 };
 
+enum ProjectionType {
+ 	Proj_Background,
+	Proj_Merkaartor
+};
+
 class WmsServer
 {
 	public:
@@ -106,14 +111,13 @@ public:
 
 	void setBgType(ImageBackgroundType theValue);
 	ImageBackgroundType getBgType() const;
+	QStringList getBgTypes();
 
 	/* Tile Cache */
 	void setCacheDir(const QString & theValue);
 	QString getCacheDir() const;
 	void setCacheSize(int theValue);
 	int getCacheSize() const;
-
-	QStringList getBgTypes();
 
 	/* Search */
 	void setLastMaxSearchResults(int theValue);
@@ -133,6 +137,10 @@ public:
 	int getZoomInPerc() const;
 	void setZoomOutPerc(int theValue);
 	int getZoomOutPerc() const;
+
+	void setProjectionType(ProjectionType theValue);
+	ProjectionType getProjectionType() const;
+	QStringList getProjectionTypes();
 
 protected:
 	QString version;
@@ -154,6 +162,7 @@ private:
 	WmsServerList* theWmsServerList;
 	QSettings * Sets;
 	QStringList bgTypes;
+	QStringList projTypes;
 	static MerkaartorPreferences* m_prefInstance;
 };
 

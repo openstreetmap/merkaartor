@@ -60,6 +60,9 @@ void MerkaartorPreferences::initialize()
 	bgTypes.insert(Bg_Google_illegal, "Illegal Google adapter");
 #endif
 
+	projTypes.insert(Proj_Merkaartor, "Merkaartor");
+	projTypes.insert(Proj_Background, "Background");
+
 	QStringList sl = getBookmarks();
 	if (sl.size() == 0) {
 		QStringList DefaultBookmarks;
@@ -373,3 +376,20 @@ void MerkaartorPreferences::setZoomOutPerc(int theValue)
 {
 	Sets->setValue("zoom/zoomOut", theValue);
 }
+
+void MerkaartorPreferences::setProjectionType(ProjectionType theValue)
+{
+	Sets->setValue("projection/Type", theValue);
+}
+
+ProjectionType MerkaartorPreferences::getProjectionType() const
+{
+	return (ProjectionType)Sets->value("projection/Type", 0).toInt();
+}
+
+QStringList MerkaartorPreferences::getProjectionTypes()
+{
+	return projTypes;
+}
+
+

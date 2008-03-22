@@ -128,7 +128,22 @@ void MapView::updateStaticBuffer(QPaintEvent * /* anEvent */)
 
 		if (layermanager) {
 			if (layermanager->getLayers().size() > 0) {
-				layermanager->drawImage(&P);
+				if (MerkaartorPreferences::instance()->getProjectionType() == Proj_Merkaartor) {
+					QRectF vlm = layermanager->getViewport();
+					Coord ctl = Coord(angToRad(vlm.bottomLeft().y()), angToRad(vlm.bottomLeft().x()));
+					Coord cbr = Coord(angToRad(vlm.topRight().y()), angToRad(vlm.topRight().x()));
+					QPointF tl = projection().project(ctl);
+					QPointF br = projection().project(cbr);
+					QRect pr = QRectF(tl, br).toRect();
+					QSize ps = pr.size();
+					QPixmap pm(size());
+					QPainter pmp(&pm);
+					layermanager->drawImage(&pmp);
+					QPixmap pms = pm.scaled(ps /*, Qt::IgnoreAspectRatio, Qt::SmoothTransformation */ );
+					P.drawPixmap((width()-pms.width())/2, (height()-pms.height())/2, pms);
+				} else {
+					layermanager->drawImage(&P);
+				}
 			}
 		}
 		for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)

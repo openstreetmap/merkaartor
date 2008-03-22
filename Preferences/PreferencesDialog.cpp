@@ -23,6 +23,9 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 	for (int i=0; i < MerkaartorPreferences::instance()->getBgTypes().size(); ++i) {
 		cbMapAdapter->insertItem(i, MerkaartorPreferences::instance()->getBgTypes()[i]);
 	}
+	for (int i=0; i < MerkaartorPreferences::instance()->getProjectionTypes().size(); ++i) {
+		cbProjection->insertItem(i, MerkaartorPreferences::instance()->getProjectionTypes()[i]);
+	}
 
 	loadPrefs();
 }
@@ -79,6 +82,7 @@ void PreferencesDialog::loadPrefs()
 
 	sbZoomInPerc->setValue(MerkaartorPreferences::instance()->getZoomInPerc());
 	sbZoomOutPerc->setValue(MerkaartorPreferences::instance()->getZoomOutPerc());
+	cbProjection->setCurrentIndex(MerkaartorPreferences::instance()->getProjectionType());
 }
 
 void PreferencesDialog::savePrefs()
@@ -110,6 +114,7 @@ void PreferencesDialog::savePrefs()
 	}
 	MerkaartorPreferences::instance()->setZoomInPerc(sbZoomInPerc->text().toInt());
 	MerkaartorPreferences::instance()->setZoomOutPerc(sbZoomOutPerc->text().toInt());
+	MerkaartorPreferences::instance()->setProjectionType((ProjectionType)cbProjection->currentIndex());
 	MerkaartorPreferences::instance()->save();
 }
 

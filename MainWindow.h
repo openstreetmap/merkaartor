@@ -16,7 +16,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 	Q_OBJECT
 
 	public:
-		MainWindow();
+		MainWindow(void);
 	public:
 		virtual ~MainWindow(void);
 
@@ -76,6 +76,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 	public slots:
 		void adjustLayers(bool adjustViewport);
 		void bookmarkTriggered(QAction* anAction);
+		void projectionTriggered(QAction* anAction);
 
 	public:
 		void invalidateView(bool UpdateDock = true);
@@ -86,9 +87,10 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		MapDocument* theDocument;
 		PropertiesDock* theProperties;
 		LayerDock* theLayers;
-	
+
 	private:
 		void updateBookmarksMenu();
+		void updateProjectionMenu();
 
 	protected:
 		void closeEvent(QCloseEvent * event);

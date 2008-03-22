@@ -76,6 +76,7 @@ MainWindow::MainWindow(void)
 	connect (theLayers, SIGNAL(layersChanged(bool)), this, SLOT(adjustLayers(bool)));
 
 	updateBookmarksMenu();
+	updateProjectionMenu();
 
 #ifndef OSMARENDER
 	//TODO Osmarender rendering
@@ -624,6 +625,22 @@ void MainWindow::updateBookmarksMenu()
 	connect (menuBookmarks, SIGNAL(triggered(QAction *)), this, SLOT(bookmarkTriggered(QAction *)));
 }
 
+void MainWindow::updateProjectionMenu()
+{
+	QStringList Projections = MerkaartorPreferences::instance()->getProjectionTypes();
+	QActionGroup* actgrp = new QActionGroup(this);
+	for (int i=0; i<Projections.size(); i++) {
+		QAction* a = new QAction(Projections[i], mnuProjections);
+		actgrp->addAction(a);
+		a->setCheckable (true);
+		if (i == (int)MerkaartorPreferences::instance()->getProjectionType())
+			a->setChecked(true);
+		mnuProjections->addAction(a);
+	}
+
+	connect (mnuProjections, SIGNAL(triggered(QAction *)), this, SLOT(projectionTriggered(QAction *)));
+}
+
 void MainWindow::on_bookmarkAddAction_triggered()
 {
 	bool ok = true;
@@ -720,6 +737,16 @@ void MainWindow::bookmarkTriggered(QAction* anAction)
 	int idx = Bookmarks.indexOf(anAction->text()) + 1;
 	CoordBox Clip = CoordBox(Coord(angToRad(Bookmarks[idx].toDouble()),angToRad(Bookmarks[idx+1].toDouble())),
 		Coord(angToRad(Bookmarks[idx+2].toDouble()),angToRad(Bookmarks[idx+3].toDouble())));
-	view()->projection().setViewport(Clip, view()->rect());
+	theView->projection().setViewport(Clip, theView->rect());
+
+	invalidateView();
+}
+
+void MainWindow::projectionTriggered(QAction* anAction)
+{
+	QStringList Projections = MerkaartorPreferences::instance()->getProjectionTypes();
+	int idx = Projections.indexOf(anAction->text());
+	MerkaartorPreferences::instance()->setProjectionType((ProjectionType)idx);
+	theView->projection().setViewport(theView->projection().viewport(), theView->rect());
 	invalidateView();
 }
