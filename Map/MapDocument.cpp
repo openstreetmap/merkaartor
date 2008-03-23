@@ -181,7 +181,7 @@ QString MapDocument::exportOSM(const CoordBox& aCoordBox)
 	for (VisibleFeatureIterator i(this); !i.isEnd(); ++i) {
 		if (TrackPoint* P = dynamic_cast<TrackPoint*>(i.get())) {
 			if (aCoordBox.contains(P->position())) {
-				coreExport += P->exportOSM();
+				coreExport += P->exportOSM() + "\n";
 			}
 		} else
 			if (Road* G = dynamic_cast<Road*>(i.get())) {
@@ -191,7 +191,7 @@ QString MapDocument::exportOSM(const CoordBox& aCoordBox)
 							if (!aCoordBox.contains(P->position()))
 								coreExport += P->exportOSM();
 					}
-					coreExport += G->exportOSM();
+					coreExport += G->exportOSM() + "\n";
 				}
 			} else
 				//FIXME Not working for relation (not made of point?)
@@ -203,13 +203,13 @@ QString MapDocument::exportOSM(const CoordBox& aCoordBox)
 									for (unsigned int k=0; k < R->size(); k++) {
 										if (TrackPoint* P = dynamic_cast<TrackPoint*>(R->get(k)))
 											if (!aCoordBox.contains(P->position()))
-												coreExport += P->exportOSM();
+												coreExport += P->exportOSM() + "\n";
 									}
-									coreExport += R->exportOSM();
+									coreExport += R->exportOSM() + "\n";
 								}
 							}
 						}
-						coreExport += G->exportOSM();
+						coreExport += G->exportOSM() + "\n";
 					}
 				}
 	}
