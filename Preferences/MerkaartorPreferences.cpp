@@ -310,9 +310,9 @@ void MerkaartorPreferences::setTmsServers()
 		Servers.append(S.TmsName);
 		Servers.append(S.TmsAdress);
 		Servers.append(S.TmsPath);
-		Servers.append(QString(S.TmsTileSize));
-		Servers.append(QString(S.TmsMinZoom));
-		Servers.append(QString(S.TmsMaxZoom));
+		Servers.append(QString().setNum(S.TmsTileSize));
+		Servers.append(QString().setNum(S.TmsMinZoom));
+		Servers.append(QString().setNum(S.TmsMaxZoom));
 	}
 	Sets->setValue("TMS/servers", Servers);
 }
