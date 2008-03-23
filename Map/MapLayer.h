@@ -49,8 +49,14 @@ public:
 	virtual void setSelected(bool b);
 	virtual LayerWidget* newWidget(void) = 0;
 
+	virtual void setAlpha(const qreal alpha);
+	virtual qreal getAlpha() const;
+
 protected:
 	MapLayerPrivate* p;
+
+private:
+	qreal alpha;
 };
 
 class DrawingMapLayer : public MapLayer

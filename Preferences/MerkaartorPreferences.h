@@ -14,6 +14,7 @@
 
 #include <QtCore>
 #include <QtCore/QSettings>
+#include <QColor>
 
 #define WORLD_COORDBOX CoordBox(Coord(1.3, -1.3), Coord(-1.3, 1.3))
 
@@ -164,6 +165,13 @@ public:
 	ProjectionType getProjectionType() const;
 	QStringList getProjectionTypes();
 
+	QStringList getAlphaList() const;
+	void setAlphaList();
+	qreal getAlpha(QString lvl);
+	QHash<QString, qreal>* getAlphaPtr();
+	QColor getBgColor() const;
+	void setBgColor(const QColor theValue);
+
 protected:
 	QString version;
 	bool RightSideDriving;
@@ -182,6 +190,7 @@ protected:
 	void initialize();
 
 private:
+	QHash<QString, qreal> alpha;
 	WmsServerList* theWmsServerList;
 	TmsServerList* theTmsServerList;
 	QSettings * Sets;

@@ -84,7 +84,7 @@ class SortAccordingToRenderingPriority
 }
 
 MapLayer::MapLayer(const QString& aName)
-:  p(new MapLayerPrivate)
+:  p(new MapLayerPrivate), alpha(1.0)
 {
 	p->Name = aName;
 }
@@ -209,6 +209,16 @@ const MapFeature* MapLayer::get(unsigned int i) const
 LayerWidget* MapLayer::getWidget(void)
 {
 	return p->theWidget;
+}
+
+void MapLayer::setAlpha(const qreal a)
+{
+	alpha = a;
+}
+
+qreal MapLayer::getAlpha() const
+{
+	return alpha;
 }
 
 // DrawingMapLayer
@@ -411,3 +421,4 @@ void TrackMapLayer::extractLayer()
 
 	p->theDocument->add(extL);
 }
+

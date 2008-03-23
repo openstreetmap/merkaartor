@@ -14,7 +14,7 @@ class LayerWidget : public QAbstractButton
 	Q_OBJECT
 
 	public:
-		LayerWidget(QWidget* aParent = 0);
+		LayerWidget(MapLayer* aLayer, QWidget* aParent = 0);
 		virtual ~LayerWidget() {};
 
 		virtual QSize sizeHint () const;
@@ -24,11 +24,11 @@ class LayerWidget : public QAbstractButton
 		virtual void mouseReleaseEvent(QMouseEvent* anEvent);
 
 		virtual MapLayer* getMapLayer();
+		virtual	void initActions();
 
 	protected:
 		virtual void contextMenuEvent(QContextMenuEvent* anEvent);
 
-	protected:
 		virtual void checkStateSet();
 
 		MapLayer* theLayer;
@@ -39,6 +39,9 @@ class LayerWidget : public QAbstractButton
 
 	signals:
 		void layerChanged(LayerWidget *, bool adjustViewport);
+
+	protected slots:
+		void setOpacity(QAction*);
 };
 
 class DrawingLayerWidget : public LayerWidget
@@ -61,6 +64,9 @@ class TrackLayerWidget : public LayerWidget
 		TrackLayerWidget(TrackMapLayer* aLayer, QWidget* aParent = 0);
 		virtual ~TrackLayerWidget();
 
+	public:
+		virtual void initActions();
+
 	private slots:
 		void extractLayer(bool);
 };
@@ -74,7 +80,7 @@ class ImageLayerWidget : public LayerWidget
 		virtual ~ImageLayerWidget();
 
 	public:
-		void initActions();
+		virtual void initActions();
 
 	private:
 		//ImageMapLayer* theLayer;

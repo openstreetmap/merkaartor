@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>540</width>
-    <height>419</height>
+    <height>463</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -28,13 +28,98 @@
         <enum>QTabWidget::North</enum>
        </property>
        <property name="currentIndex" >
-        <number>3</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="tab_4" >
         <attribute name="title" >
          <string>Visual</string>
         </attribute>
         <layout class="QVBoxLayout" >
+         <item>
+          <widget class="QGroupBox" name="groupBox_4" >
+           <property name="title" >
+            <string>General</string>
+           </property>
+           <layout class="QVBoxLayout" >
+            <item>
+             <layout class="QHBoxLayout" >
+              <item>
+               <widget class="QLabel" name="label_8" >
+                <property name="text" >
+                 <string>Background color</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="edBgColor" />
+              </item>
+              <item>
+               <widget class="QPushButton" name="btColorChooser" >
+                <property name="text" >
+                 <string>Choose...</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" >
+              <item>
+               <widget class="QLabel" name="label_5" >
+                <property name="text" >
+                 <string>Zoom Out/in (%)</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="sbZoomOutPerc" />
+              </item>
+              <item>
+               <widget class="QSpinBox" name="sbZoomInPerc" >
+                <property name="minimum" >
+                 <number>100</number>
+                </property>
+                <property name="maximum" >
+                 <number>1000</number>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" >
+              <item>
+               <widget class="QLabel" name="label_9" >
+                <property name="text" >
+                 <string>Opacity low/high</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="sbAlphaLow" >
+                <property name="maximum" >
+                 <double>1.000000000000000</double>
+                </property>
+                <property name="singleStep" >
+                 <double>0.100000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="sbAlphaHigh" >
+                <property name="maximum" >
+                 <double>1.000000000000000</double>
+                </property>
+                <property name="singleStep" >
+                 <double>0.100000000000000</double>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
          <item>
           <widget class="QGroupBox" name="MapStyle" >
            <property name="title" >
@@ -106,42 +191,6 @@
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupBox_4" >
-           <property name="title" >
-            <string>Zoom factors percentage</string>
-           </property>
-           <layout class="QGridLayout" >
-            <item row="0" column="1" >
-             <widget class="QSpinBox" name="sbZoomInPerc" >
-              <property name="minimum" >
-               <number>100</number>
-              </property>
-              <property name="maximum" >
-               <number>1000</number>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0" >
-             <widget class="QLabel" name="label_5" >
-              <property name="text" >
-               <string>Zoom In</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0" >
-             <widget class="QLabel" name="label_6" >
-              <property name="text" >
-               <string>Zoom Out</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1" >
-             <widget class="QSpinBox" name="sbZoomOutPerc" />
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
           <spacer>
            <property name="orientation" >
             <enum>Qt::Vertical</enum>
@@ -149,7 +198,7 @@
            <property name="sizeHint" >
             <size>
              <width>20</width>
-             <height>0</height>
+             <height>40</height>
             </size>
            </property>
           </spacer>

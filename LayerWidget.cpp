@@ -14,14 +14,16 @@
 
 #define LINEHEIGHT 25
 
-LayerWidget::LayerWidget(QWidget* aParent)
-: QAbstractButton(aParent), ctxMenu(0)
+LayerWidget::LayerWidget(MapLayer* aLayer, QWidget* aParent)
+: QAbstractButton(aParent), theLayer(aLayer), ctxMenu(0)
 {
 	setCheckable(true);
 	setAutoExclusive(true) ;
 	setFocusPolicy(Qt::NoFocus);
 	visibleIcon = QPixmap(":Icons/eye.xpm");
 	hiddenIcon = QPixmap(":Icons/empty.xpm");
+
+	initActions();
 }
 
 QSize LayerWidget::minimumSizeHint () const
@@ -89,22 +91,49 @@ void LayerWidget::contextMenuEvent(QContextMenuEvent* anEvent)
 		ctxMenu->exec(anEvent->globalPos());
 }
 
+void LayerWidget::initActions()
+{
+	SAFE_DELETE(ctxMenu);
+	ctxMenu = new QMenu(this);
+
+	QStringList opStr;
+	opStr << tr("Low") << tr("High") << tr("Opaque");
+
+	QActionGroup* actgrp = new QActionGroup(this);
+	QMenu* alphaMenu = new QMenu("Opacity", this);
+	for (int i=0; i<opStr.size(); i++) {
+		QAction* act = new QAction(opStr[i], alphaMenu);
+		actgrp->addAction(act);
+		qreal a = MerkaartorPreferences::instance()->getAlpha(opStr[i]);
+		act->setData(a);
+		act->setCheckable(true);
+		if (theLayer->getAlpha() == a)
+			act->setChecked(true);
+		alphaMenu->addAction(act);
+	}
+	ctxMenu->addMenu(alphaMenu);
+	connect(alphaMenu, SIGNAL(triggered(QAction*)), this, SLOT(setOpacity(QAction*)));
+}
+
+void LayerWidget::setOpacity(QAction *act)
+{
+	theLayer->setAlpha(act->data().toDouble());
+	emit (layerChanged(this, false));
+}
 
 // DrawingLayerWidget
 
 DrawingLayerWidget::DrawingLayerWidget(DrawingMapLayer* aLayer, QWidget* aParent)
-: LayerWidget(aParent)
+	: LayerWidget(aLayer, aParent)
 {
-	theLayer = aLayer;
 	backColor = QColor(255,255,255);
 }
 
 // ImageLayerWidget
 
 ImageLayerWidget::ImageLayerWidget(ImageMapLayer* aLayer, QWidget* aParent)
-: LayerWidget(aParent) //, actgrWms(0)
+: LayerWidget(aLayer, aParent), wmsMenu(0) //, actgrWms(0)
 {
-	theLayer = aLayer;
 	backColor = QColor(128,128,128);
 	//actgrAdapter = new QActionGroup(this);
 
@@ -202,13 +231,15 @@ void ImageLayerWidget::setNone(bool)
 	emit (layerChanged(this, true));
 }
 */
+
 void ImageLayerWidget::initActions()
 {
 	//if (actgrWms)
 	//	delete actgrWms;
 	//actgrWms = new QActionGroup(this);
 
-	SAFE_DELETE(ctxMenu);
+	LayerWidget::initActions();
+	ctxMenu->addSeparator();
 
 	wmsMenu = new QMenu(MerkaartorPreferences::instance()->getBgTypes()[Bg_Wms], this);
 	WmsServerList* WmsServers = MerkaartorPreferences::instance()->getWmsServers();
@@ -249,7 +280,6 @@ void ImageLayerWidget::initActions()
 	actGoogle->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_Google_illegal));
 #endif
 
-	ctxMenu = new QMenu(this);
 	ctxMenu->addAction(actNone);
 
 	ctxMenu->addMenu(wmsMenu);
@@ -269,12 +299,16 @@ void ImageLayerWidget::initActions()
 
 // TrackLayerWidget
 
-TrackLayerWidget::TrackLayerWidget(TrackMapLayer* aLayer, QWidget* /* aParent */)
+TrackLayerWidget::TrackLayerWidget(TrackMapLayer* aLayer, QWidget* aParent)
+	: LayerWidget(aLayer, aParent)
 {
-	theLayer = aLayer;
 	backColor = QColor(255,255,255);
+}
 
-	ctxMenu = new QMenu(this);
+void TrackLayerWidget::initActions()
+{
+	LayerWidget::initActions();
+	ctxMenu->addSeparator();
 
 	QAction* actExtract = new QAction("Extract Drawing layer", ctxMenu);
 	ctxMenu->addAction(actExtract);
@@ -290,3 +324,5 @@ void TrackLayerWidget::extractLayer(bool)
 	((TrackMapLayer*)theLayer)->extractLayer();
 	emit (layerChanged(this, false));
 }
+
+

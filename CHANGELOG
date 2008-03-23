@@ -1,4 +1,6 @@
 v0.10
+	* ADD : per-layer transparency
+	* ADD : background color chooser
 	* FIX : redraw view when joining roads
 	* ADD : generalization of Tile servers (OSM is now part of that group)
 	* ADD : shift-click also prevents roads from selected (previously only alt-click)

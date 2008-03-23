@@ -60,6 +60,7 @@ void MerkaartorPreferences::save()
 	Sets->setValue("version/version", QString("%1.%2.%3").arg(MAJORVERSION).arg(MINORVERSION).arg(REVISION));
 	setWmsServers();
 	setTmsServers();
+	setAlphaList();
 	Sets->sync();
 }
 
@@ -84,6 +85,17 @@ void MerkaartorPreferences::initialize()
 		DefaultBookmarks << "London" << "51.47" << "-0.20" << "51.51" << "-0.08";
 	//	DefaultBookmarks << "Rotterdam" << "51.89" << "4.43" << "51.93" << "4.52";
 		setBookmarks(DefaultBookmarks);
+	}
+
+	QStringList alphaList = getAlphaList();
+	if (alphaList.size() == 0) {
+		alpha["Low"] = 0.33;
+		alpha["High"] = 0.66;
+		alpha["Opaque"] = 1.0;
+	} else {
+		for (int i=0; i<alphaList.size(); i+=2) {
+			alpha[alphaList[i]] = alphaList[i+1].toDouble();
+		}
 	}
 
 	if (version == "0") {
@@ -462,4 +474,41 @@ QStringList MerkaartorPreferences::getProjectionTypes()
 	return projTypes;
 }
 
+qreal MerkaartorPreferences::getAlpha(QString lvl)
+{
+	return alpha[lvl];
+}
 
+QStringList MerkaartorPreferences::getAlphaList() const
+{
+	return Sets->value("visual/alpha").toStringList();
+}
+
+void MerkaartorPreferences::setAlphaList()
+{
+	QStringList alphaList;
+	QHashIterator<QString, qreal> i(alpha);
+	while (i.hasNext()) {
+		i.next();
+		alphaList << i.key() << QString().setNum(i.value());
+	}
+	Sets->setValue("visual/alpha", alphaList);
+}
+
+QColor MerkaartorPreferences::getBgColor() const
+{
+	QString sColor = Sets->value("visual/BgColor").toString();
+	if (sColor.isEmpty())
+		return Qt::white;
+	return Sets->value("visual/BgColor").value<QColor>();
+}
+
+void MerkaartorPreferences::setBgColor(const QColor theValue)
+{
+	Sets->setValue("visual/BgColor", QVariant(theValue));
+}
+
+QHash< QString, qreal > * MerkaartorPreferences::getAlphaPtr()
+{
+	return &alpha;
+}

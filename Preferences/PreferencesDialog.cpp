@@ -16,6 +16,7 @@
 #include "PaintStyle/EditPaintStyle.h"
 
 #include <QFileDialog>
+#include <QColorDialog>
 
 PreferencesDialog::PreferencesDialog(QWidget* parent)
 	: QDialog(parent)
@@ -86,6 +87,10 @@ void PreferencesDialog::loadPrefs()
 	sbZoomInPerc->setValue(MerkaartorPreferences::instance()->getZoomInPerc());
 	sbZoomOutPerc->setValue(MerkaartorPreferences::instance()->getZoomOutPerc());
 	cbProjection->setCurrentIndex(MerkaartorPreferences::instance()->getProjectionType());
+
+	sbAlphaLow->setValue(MerkaartorPreferences::instance()->getAlpha("Low"));
+	sbAlphaHigh->setValue(MerkaartorPreferences::instance()->getAlpha("High"));
+	edBgColor->setText(QVariant(MerkaartorPreferences::instance()->getBgColor()).toString());
 }
 
 void PreferencesDialog::savePrefs()
@@ -118,6 +123,10 @@ void PreferencesDialog::savePrefs()
 	MerkaartorPreferences::instance()->setZoomInPerc(sbZoomInPerc->text().toInt());
 	MerkaartorPreferences::instance()->setZoomOutPerc(sbZoomOutPerc->text().toInt());
 	MerkaartorPreferences::instance()->setProjectionType((ProjectionType)cbProjection->currentIndex());
+	MerkaartorPreferences::instance()->getAlphaPtr()->insert("Low", sbAlphaLow->value());
+	MerkaartorPreferences::instance()->getAlphaPtr()->insert("High", sbAlphaHigh->value());
+	MerkaartorPreferences::instance()->setBgColor(QVariant(edBgColor->text()).value<QColor>());
+
 	MerkaartorPreferences::instance()->save();
 }
 
@@ -163,5 +172,13 @@ void PreferencesDialog::on_btAdapterSetup_clicked()
 			if (TMSPref->exec() == QDialog::Accepted) {
 			}
 			break;
+	}
+}
+
+void PreferencesDialog::on_btColorChooser_clicked()
+{
+	QColor color = QColorDialog::getColor(Qt::white, this);
+	if (color.isValid()) {
+		edBgColor->setText(QVariant(color).toString());
 	}
 }

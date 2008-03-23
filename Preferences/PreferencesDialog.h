@@ -36,6 +36,7 @@ public slots:
 	void on_buttonBox_clicked(QAbstractButton * button);
 	void on_BrowseStyle_clicked();
 	void on_btAdapterSetup_clicked();
+	void on_btColorChooser_clicked();
 
 private:
 	void loadPrefs();

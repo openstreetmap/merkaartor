@@ -117,7 +117,7 @@ void MapView::updateStaticBuffer(QPaintEvent * /* anEvent */)
 	QTime Start(QTime::currentTime());
 	QPainter P(StaticBuffer);
 	P.setRenderHint(QPainter::Antialiasing);
-	P.fillRect(StaticBuffer->rect(), QBrush(QColor(255, 255, 255)));
+	P.fillRect(StaticBuffer->rect(), QBrush(MerkaartorPreferences::instance()->getBgColor()));
 	if (theDocument) {
 		EditPaintStyle EP(P, projection());
 
@@ -128,6 +128,7 @@ void MapView::updateStaticBuffer(QPaintEvent * /* anEvent */)
 
 		if (layermanager) {
 			if (layermanager->getLayers().size() > 0) {
+				P.setOpacity(theDocument->getImageLayer()->getAlpha());
 				if (MerkaartorPreferences::instance()->getProjectionType() == Proj_Merkaartor) {
 					QRectF vlm = layermanager->getViewport();
 					Coord ctl = Coord(angToRad(vlm.bottomLeft().y()), angToRad(vlm.bottomLeft().x()));
@@ -158,12 +159,15 @@ void MapView::updateStaticBuffer(QPaintEvent * /* anEvent */)
 				}
 			}
 		}
-		for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
+		for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i) {
+			P.setOpacity(i.layer()->getAlpha());
 			i.get()->draw(P, projection());
+		}
 		for (unsigned int i = 0; i < EP.size(); ++i) {
 			PaintStyleLayer *Current = EP.get(i);
 			for (VisibleFeatureIterator i(theDocument);
 			     !i.isEnd(); ++i) {
+				P.setOpacity(i.layer()->getAlpha());
 				if (Road * R =
 				    dynamic_cast < Road * >(i.get()))
 					Current->draw(R);
