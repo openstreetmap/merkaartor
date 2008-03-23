@@ -1,4 +1,5 @@
 v0.10
+	* FIX : redraw view when joining roads
 	* ADD : generalization of Tile servers (OSM is now part of that group)
 	* ADD : shift-click also prevents roads from selected (previously only alt-click)
 	* ADD : configurable projection type (allow custom zoom in "Merkaartor" projection, for background also)

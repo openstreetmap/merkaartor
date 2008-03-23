@@ -434,7 +434,10 @@ void MainWindow::on_roadJoinAction_triggered()
 	if (theList->empty())
 		delete theList;
 	else
+	{
 		theDocument->history().add(theList);
+		invalidateView();
+	}
 }
 
 void MainWindow::on_roadSplitAction_triggered()
