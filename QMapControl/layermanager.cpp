@@ -135,6 +135,7 @@ void LayerManager::setView(const QPointF& coordinate, bool newImage)
 
 void LayerManager::setView(const QList<QPointF> coordinates)
 {
+	setMiddle(coordinates);
 	while ((!containsAll(coordinates)) && (getLayer()->getMapAdapter()->getAdaptedZoom() > getLayer()->getMapAdapter()->getAdaptedMinZoom()))
 	{
 		setMiddle(coordinates);
@@ -149,17 +150,16 @@ void LayerManager::setView(const QList<QPointF> coordinates)
 		//QCoreApplication::processEvents();
 	}
 
-	if (getLayer()->getMapAdapter()->getAdaptedZoom() > getLayer()->getMapAdapter()->getAdaptedMinZoom()) {
+// 	if (getLayer()->getMapAdapter()->getAdaptedZoom() > getLayer()->getMapAdapter()->getAdaptedMinZoom()) {
+// 		setMiddle(coordinates);
+// 		backZoomOut();
+// 	}
+
+	if ((!containsAll(coordinates)) && (getLayer()->getMapAdapter()->getAdaptedZoom() > getLayer()->getMapAdapter()->getAdaptedMinZoom()))
+	{
 		setMiddle(coordinates);
 		backZoomOut();
 	}
-
-	//if ((!containsAll(coordinates)) && (getLayer()->getMapAdapter()->getZoom() > getLayer()->getMapAdapter()->getAdaptedMinZoom()))
-	//{
-	//	setMiddle(coordinates);
-	//  backZoomOut();
-	//	//QCoreApplication::processEvents();
-	//}
 
 	parentWidget->update();
 }

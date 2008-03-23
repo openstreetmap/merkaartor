@@ -134,12 +134,24 @@ void MapView::updateStaticBuffer(QPaintEvent * /* anEvent */)
 					Coord cbr = Coord(angToRad(vlm.topRight().y()), angToRad(vlm.topRight().x()));
 					QPointF tl = projection().project(ctl);
 					QPointF br = projection().project(cbr);
+
 					QRect pr = QRectF(tl, br).toRect();
 					QSize ps = pr.size();
 					QPixmap pm(size());
 					QPainter pmp(&pm);
 					layermanager->drawImage(&pmp);
-					QPixmap pms = pm.scaled(ps /*, Qt::IgnoreAspectRatio, Qt::SmoothTransformation */ );
+
+					qreal ratio = qMax((qreal)width()/ps.width()*1.0, (qreal)height()/ps.height());
+					QPixmap pms;
+					if (ratio > 1.0) {
+						pms = pm.scaled(ps /*, Qt::IgnoreAspectRatio, Qt::SmoothTransformation */ );
+					} else {
+						QSizeF ds;
+						QRect dr;
+						ds = QSizeF(ratio*pm.width(), ratio*pm.height());
+						dr = QRect(QPoint((pm.width()/2)-(ds.width()/2), (pm.height()/2)-(ds.height()/2)), ds.toSize());
+						pms = pm.copy(dr).scaled(ps*ratio /*, Qt::IgnoreAspectRatio, Qt::SmoothTransformation */ );
+					}
 					P.drawPixmap((width()-pms.width())/2, (height()-pms.height())/2, pms);
 				} else {
 					layermanager->drawImage(&P);

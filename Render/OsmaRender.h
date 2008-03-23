@@ -13,6 +13,7 @@
 #define OSMARENDER_H
 
 #include "Map/Coord.h"
+#include "Preferences/MerkaartorPreferences.h"
 
 class MapDocument;
 class QWidget;

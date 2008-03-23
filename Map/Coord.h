@@ -4,8 +4,6 @@
 #include <math.h>
 #include <QRectF>
 
-#define WORLD_COORDBOX CoordBox(Coord(1.5, -1.5), Coord(-1.5, 1.5))
-
 inline double angToRad(double a)
 {
 	return a*M_PI/180;

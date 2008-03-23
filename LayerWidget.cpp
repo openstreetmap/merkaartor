@@ -102,7 +102,7 @@ DrawingLayerWidget::DrawingLayerWidget(DrawingMapLayer* aLayer, QWidget* aParent
 // ImageLayerWidget
 
 ImageLayerWidget::ImageLayerWidget(ImageMapLayer* aLayer, QWidget* aParent)
-: LayerWidget(aParent), actgrWms(0)
+: LayerWidget(aParent) //, actgrWms(0)
 {
 	theLayer = aLayer;
 	backColor = QColor(128,128,128);
@@ -113,10 +113,10 @@ ImageLayerWidget::ImageLayerWidget(ImageMapLayer* aLayer, QWidget* aParent)
 	actNone->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_None));
 	connect(actNone, SIGNAL(triggered(bool)), this, SLOT(setNone(bool)));
 
-	actOSM = new QAction(MerkaartorPreferences::instance()->getBgTypes()[Bg_OSM], this);
-	//actNone->setCheckable(true);
-	actOSM->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_OSM));
-	connect(actOSM, SIGNAL(triggered(bool)), this, SLOT(setOSM(bool)));
+// 	actOSM = new QAction(MerkaartorPreferences::instance()->getBgTypes()[Bg_OSM], this);
+// 	//actNone->setCheckable(true);
+// 	actOSM->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_OSM));
+// 	connect(actOSM, SIGNAL(triggered(bool)), this, SLOT(setOSM(bool)));
 
 #ifdef yahoo_illegal
 	actYahoo = new QAction(MerkaartorPreferences::instance()->getBgTypes()[Bg_Yahoo_illegal], this);
@@ -130,7 +130,7 @@ ImageLayerWidget::ImageLayerWidget(ImageMapLayer* aLayer, QWidget* aParent)
 	actGoogle->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_Google_illegal));
 	connect(actGoogle, SIGNAL(triggered(bool)), this, SLOT(setGoogle(bool)));
 #endif
-	initWmsActions();
+	initActions();
 }
 
 ImageLayerWidget::~ImageLayerWidget()
@@ -144,6 +144,19 @@ void ImageLayerWidget::setWms(QAction* act)
 	MerkaartorPreferences::instance()->setSelectedWmsServer(S.WmsName);
 
 	((ImageMapLayer *)theLayer)->setMapAdapter(Bg_Wms);
+	theLayer->setVisible(true);
+
+	this->update(rect());
+	emit (layerChanged(this, true));
+}
+
+void ImageLayerWidget::setTms(QAction* act)
+{
+	TmsServerList* L = MerkaartorPreferences::instance()->getTmsServers();
+	TmsServer S = L->value(act->data().toString());
+	MerkaartorPreferences::instance()->setSelectedTmsServer(S.TmsName);
+
+	((ImageMapLayer *)theLayer)->setMapAdapter(Bg_Tms);
 	theLayer->setVisible(true);
 
 	this->update(rect());
@@ -180,7 +193,7 @@ void ImageLayerWidget::setNone(bool)
 	emit (layerChanged(this, true));
 }
 
-void ImageLayerWidget::setOSM(bool)
+/*void ImageLayerWidget::setOSM(bool)
 {
 	((ImageMapLayer *)theLayer)->setMapAdapter(Bg_OSM);
 	theLayer->setVisible(true);
@@ -188,8 +201,8 @@ void ImageLayerWidget::setOSM(bool)
 	this->update(rect());
 	emit (layerChanged(this, true));
 }
-
-void ImageLayerWidget::initWmsActions()
+*/
+void ImageLayerWidget::initActions()
 {
 	//if (actgrWms)
 	//	delete actgrWms;
@@ -198,12 +211,11 @@ void ImageLayerWidget::initWmsActions()
 	SAFE_DELETE(ctxMenu);
 
 	wmsMenu = new QMenu(MerkaartorPreferences::instance()->getBgTypes()[Bg_Wms], this);
-
-	WmsServerList* Servers = MerkaartorPreferences::instance()->getWmsServers();
-	WmsServerListIterator i(*Servers);
-	while (i.hasNext()) {
-		i.next();
-		WmsServer S = i.value();
+	WmsServerList* WmsServers = MerkaartorPreferences::instance()->getWmsServers();
+	WmsServerListIterator wi(*WmsServers);
+	while (wi.hasNext()) {
+		wi.next();
+		WmsServer S = wi.value();
 		QAction* act = new QAction(S.WmsName, wmsMenu);
 		act->setData(S.WmsName);
 		//act->setCheckable(true);
@@ -214,6 +226,21 @@ void ImageLayerWidget::initWmsActions()
 			if (S.WmsName == MerkaartorPreferences::instance()->getSelectedWmsServer())
 				act->setChecked(true);
 	}
+
+	tmsMenu = new QMenu(MerkaartorPreferences::instance()->getBgTypes()[Bg_Tms], this);
+	TmsServerList* TmsServers = MerkaartorPreferences::instance()->getTmsServers();
+	TmsServerListIterator ti(*TmsServers);
+	while (ti.hasNext()) {
+		ti.next();
+		TmsServer S = ti.value();
+		QAction* act = new QAction(S.TmsName, tmsMenu);
+		act->setData(S.TmsName);
+		tmsMenu->addAction(act);
+		if (MerkaartorPreferences::instance()->getBgType() == Bg_Tms)
+			if (S.TmsName == MerkaartorPreferences::instance()->getSelectedTmsServer())
+				act->setChecked(true);
+	}
+
 	actNone->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_None));
 #ifdef yahoo_illegal
 	actYahoo->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_Yahoo_illegal));
@@ -228,7 +255,10 @@ void ImageLayerWidget::initWmsActions()
 	ctxMenu->addMenu(wmsMenu);
 	connect(wmsMenu, SIGNAL(triggered(QAction*)), this, SLOT(setWms(QAction*)));
 
-	ctxMenu->addAction(actOSM);
+	ctxMenu->addMenu(tmsMenu);
+	connect(tmsMenu, SIGNAL(triggered(QAction*)), this, SLOT(setTms(QAction*)));
+
+// 	ctxMenu->addAction(actOSM);
 #ifdef yahoo_illegal
 	ctxMenu->addAction(actYahoo);
 #endif

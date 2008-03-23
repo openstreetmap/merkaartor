@@ -27,10 +27,24 @@ WmsServer::WmsServer(QString Name, QString Adress, QString Path, QString Layers,
 	}
 }
 
+TmsServer::TmsServer()
+{
+	TmsServer("New Server", "", "", 256, 0, 17);
+}
+
+TmsServer::TmsServer(QString Name, QString Adress, QString Path, int tileSize, int minZoom, int maxZoom)
+	: TmsName(Name), TmsAdress(Adress), TmsPath(Path), TmsTileSize(tileSize), TmsMinZoom(minZoom), TmsMaxZoom(maxZoom)
+{
+	if (Name == "") {
+		TmsName = "New Server";
+	}
+}
+
 MerkaartorPreferences::MerkaartorPreferences()
 {
 	Sets = new QSettings();
 	theWmsServerList = new WmsServerList();
+	theTmsServerList = new TmsServerList();
 
 	version = Sets->value("version/version", "0").toString();
 	initialize();
@@ -45,14 +59,15 @@ void MerkaartorPreferences::save()
 {
 	Sets->setValue("version/version", QString("%1.%2.%3").arg(MAJORVERSION).arg(MINORVERSION).arg(REVISION));
 	setWmsServers();
- 	Sets->sync();
+	setTmsServers();
+	Sets->sync();
 }
 
 void MerkaartorPreferences::initialize()
 {
 	bgTypes.insert(Bg_None, "None");
 	bgTypes.insert(Bg_Wms, "WMS adapter");
-	bgTypes.insert(Bg_OSM, "OSM adapter");
+	bgTypes.insert(Bg_Tms, "TMS adapter");
 #ifdef yahoo_illegal
 	bgTypes.insert(Bg_Yahoo_illegal, "Illegal Yahoo adapter");
 #endif
@@ -73,24 +88,7 @@ void MerkaartorPreferences::initialize()
 
 	if (version == "0") {
 		QStringList Servers = Sets->value("WSM/servers").toStringList();
-		if (Servers.size() == 0) {
-			WmsServer demis("Demis", "www2.demis.nl", "/wms/wms.asp?wms=WorldMap&",
-				"Countries,Borders,Highways,Roads,Cities", "EPSG:4326", ",", "image/png");
-			theWmsServerList->insert("Demis", demis);
-			WmsServer oam("OpenAerialMap", "openaerialmap.org", "/wms/?",
-				"world", "EPSG:4326", ",", "image/jpeg");
-			theWmsServerList->insert("OpenAerialMap", oam);
-			WmsServer tu("Terraservice_Urban", "terraservice.net", "/ogcmap.ashx?",
-				"urbanarea", "EPSG:4326", ",", "image/jpeg");
-			theWmsServerList->insert("Terraservice_Urban", tu);
-			WmsServer tg("Terraservice_DRG", "terraservice.net", "/ogcmap.ashx?",
-				"drg", "EPSG:4326", ",", "image/jpeg");
-			theWmsServerList->insert("Terraservice_DRG", tg);
-			WmsServer tq("Terraservice_DOQ", "terraservice.net", "/ogcmap.ashx?",
-				"doq", "EPSG:4326", ",", "image/jpeg");
-			theWmsServerList->insert("Terraservice_DOQ", tq);
-			MerkaartorPreferences::instance()->setSelectedWmsServer("OpenAerialMap");
-		} else {
+		if (Servers.size() > 0) {
 			int selI = Sets->value("WSM/selected", "0").toInt();
 			QString selS;
 			for (int i=0; i<Servers.size()/6; i++) {
@@ -116,12 +114,45 @@ void MerkaartorPreferences::initialize()
 			}
 		}
 		save();
-	} else {
-		QStringList Servers = Sets->value("WSM/servers").toStringList();
-		for (int i=0; i<Servers.size(); i+=7) {
-			WmsServer S(Servers[i], Servers[i+1], Servers[i+2], Servers[i+3], Servers[i+4], Servers[i+5], Servers[i+6]);
-			theWmsServerList->insert(Servers[i], S);
-		}
+	}
+	QStringList Servers = Sets->value("WSM/servers").toStringList();
+	if (Servers.size() == 0) {
+		WmsServer demis("Demis", "www2.demis.nl", "/wms/wms.asp?wms=WorldMap&",
+						"Countries,Borders,Highways,Roads,Cities", "EPSG:4326", ",", "image/png");
+		theWmsServerList->insert("Demis", demis);
+		WmsServer oam("OpenAerialMap", "openaerialmap.org", "/wms/?",
+						"world", "EPSG:4326", ",", "image/jpeg");
+		theWmsServerList->insert("OpenAerialMap", oam);
+		WmsServer tu("Terraservice_Urban", "terraservice.net", "/ogcmap.ashx?",
+						"urbanarea", "EPSG:4326", ",", "image/jpeg");
+		theWmsServerList->insert("Terraservice_Urban", tu);
+		WmsServer tg("Terraservice_DRG", "terraservice.net", "/ogcmap.ashx?",
+						"drg", "EPSG:4326", ",", "image/jpeg");
+		theWmsServerList->insert("Terraservice_DRG", tg);
+		WmsServer tq("Terraservice_DOQ", "terraservice.net", "/ogcmap.ashx?",
+						"doq", "EPSG:4326", ",", "image/jpeg");
+		theWmsServerList->insert("Terraservice_DOQ", tq);
+		setSelectedWmsServer("OpenAerialMap");
+		save();
+	}
+	for (int i=0; i<Servers.size(); i+=7) {
+		WmsServer S(Servers[i], Servers[i+1], Servers[i+2], Servers[i+3], Servers[i+4], Servers[i+5], Servers[i+6]);
+		theWmsServerList->insert(Servers[i], S);
+	}
+	Servers = Sets->value("TMS/servers").toStringList();
+	if (Servers.size() == 0) {
+		TmsServer osmmapnik("OSM Mapnik", "tile.openstreetmap.org", "/%1/%2/%3.png", 256, 0, 17);
+		theTmsServerList->insert("OSM Mapnik", osmmapnik);
+		TmsServer osmth("OSM T@H", "tah.openstreetmap.org", "/Tiles/tile/%1/%2/%3.png", 256, 0, 17);
+		theTmsServerList->insert("OSM T@H", osmth);
+		TmsServer cycle("Gravitystorm Cycle", "thunderflames.org", "/tiles/cycle/%1/%2/%3.png", 256, 0, 14);
+		theTmsServerList->insert("Gravitystorm Cycle", cycle);
+		setSelectedTmsServer("OSM Mapnik");
+		save();
+	}
+	for (int i=0; i<Servers.size(); i+=6) {
+		TmsServer S(Servers[i], Servers[i+1], Servers[i+2], Servers[i+3].toInt(), Servers[i+4].toInt(), Servers[i+5].toInt());
+		theTmsServerList->insert(Servers[i], S);
 	}
 }
 
@@ -225,6 +256,8 @@ void MerkaartorPreferences::setBookmarks(const QStringList & theValue)
 	Sets->setValue("downloadosm/bookmarks", theValue);
 }
 
+/* WMS */
+
 WmsServerList* MerkaartorPreferences::getWmsServers() const
 {
 //	return Sets->value("WSM/servers").toStringList();
@@ -258,6 +291,43 @@ void MerkaartorPreferences::setSelectedWmsServer(const QString & theValue)
 {
 	Sets->setValue("WSM/selected", theValue);
 }
+
+/* TMS */
+
+TmsServerList* MerkaartorPreferences::getTmsServers() const
+{
+//	return Sets->value("WSM/servers").toStringList();
+	return theTmsServerList;
+}
+
+void MerkaartorPreferences::setTmsServers()
+{
+	QStringList Servers;
+	TmsServerListIterator i(*theTmsServerList);
+	while (i.hasNext()) {
+		i.next();
+		TmsServer S = i.value();
+		Servers.append(S.TmsName);
+		Servers.append(S.TmsAdress);
+		Servers.append(S.TmsPath);
+		Servers.append(QString(S.TmsTileSize));
+		Servers.append(QString(S.TmsMinZoom));
+		Servers.append(QString(S.TmsMaxZoom));
+	}
+	Sets->setValue("TMS/servers", Servers);
+}
+
+QString MerkaartorPreferences::getSelectedTmsServer() const
+{
+	return Sets->value("TMS/selected").toString();
+}
+
+void MerkaartorPreferences::setSelectedTmsServer(const QString & theValue)
+{
+	Sets->setValue("TMS/selected", theValue);
+}
+
+/* */
 
 bool MerkaartorPreferences::getBgVisible() const
 {

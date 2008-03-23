@@ -74,13 +74,14 @@ class ImageLayerWidget : public LayerWidget
 		virtual ~ImageLayerWidget();
 
 	public:
-		void initWmsActions();
+		void initActions();
 
 	private:
 		//ImageMapLayer* theLayer;
 
-		QActionGroup* actgrAdapter;
-		QActionGroup* actgrWms;
+// 		QActionGroup* actgrAdapter;
+// 		QActionGroup* actgrWms;
+// 		QActionGroup* actgrTms;
 #ifdef yahoo_illegal
 		QAction* actYahoo;
 #endif
@@ -88,18 +89,20 @@ class ImageLayerWidget : public LayerWidget
 		QAction* actGoogle;
 #endif
 		QAction* actNone;
-		QAction* actOSM;
+// 		QAction* actOSM;
 		QMenu* wmsMenu;
+		QMenu* tmsMenu;
 
 	private slots:
 		void setWms(QAction*);
+		void setTms(QAction*);
 #ifdef yahoo_illegal
 		void setYahoo(bool);
 #endif
 #ifdef google_illegal
 		void setGoogle(bool);
 #endif
-		void setOSM(bool);
+// 		void setOSM(bool);
 		void setNone(bool);
 };
 

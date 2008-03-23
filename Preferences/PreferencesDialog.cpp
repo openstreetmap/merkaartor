@@ -11,6 +11,7 @@
 //
 #include "Preferences/PreferencesDialog.h"
 #include "Preferences/WMSPreferencesDialog.h"
+#include "Preferences/TMSPreferencesDialog.h"
 #include "Preferences/MerkaartorPreferences.h"
 #include "PaintStyle/EditPaintStyle.h"
 
@@ -59,12 +60,14 @@ void PreferencesDialog::loadPrefs()
 	sbCacheSize->setValue(MerkaartorPreferences::instance()->getCacheSize());
 
 	cbMapAdapter->setCurrentIndex(MerkaartorPreferences::instance()->getBgType());
-	if (MerkaartorPreferences::instance()->getBgType() != Bg_Wms) {
-		btAdapterSetup->setEnabled(false);
-		//grpWmsServers->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-		//layout()->activate();
-		//QApplication::processEvents();
-		//setFixedSize(minimumSizeHint());
+	switch (MerkaartorPreferences::instance()->getBgType()) {
+		case Bg_Tms:
+		case Bg_Wms:
+			//grpWmsServers->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+			btAdapterSetup->setEnabled(true);
+			break;
+		default:
+			btAdapterSetup->setEnabled(false);
 	}
 
 	QString s = MerkaartorPreferences::instance()->getDefaultStyle();
@@ -124,6 +127,7 @@ void PreferencesDialog::on_cbMapAdapter_currentIndexChanged(int index)
 	btAdapterSetup->setEnabled(false);
 
 	switch (index) {
+		case Bg_Tms:
 		case Bg_Wms:
 			//grpWmsServers->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 			btAdapterSetup->setEnabled(true);
@@ -144,11 +148,19 @@ void PreferencesDialog::on_BrowseStyle_clicked()
 
 void PreferencesDialog::on_btAdapterSetup_clicked()
 {
+	WMSPreferencesDialog* WMSPref;
+	TMSPreferencesDialog* TMSPref;
 	switch (cbMapAdapter->currentIndex()) {
 		case Bg_Wms:
 			//grpWmsServers->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-			WMSPreferencesDialog* WMSPref = new WMSPreferencesDialog();
+			WMSPref = new WMSPreferencesDialog();
 			if (WMSPref->exec() == QDialog::Accepted) {
+			}
+			break;
+		case Bg_Tms:
+			//grpTmsServers->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+			TMSPref = new TMSPreferencesDialog();
+			if (TMSPref->exec() == QDialog::Accepted) {
 			}
 			break;
 	}

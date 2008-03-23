@@ -261,7 +261,7 @@ LayerWidget* ImageMapLayer::newWidget(void)
 
 void ImageMapLayer::updateWidget()
 {
-	((ImageLayerWidget*) p->theWidget)->initWmsActions();
+	((ImageLayerWidget*) p->theWidget)->initActions();
 	p->theWidget->update();
 }
 
@@ -285,6 +285,8 @@ void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 	MapAdapter* mapadapter_bg;
 	WmsServerList* wsl;
 	WmsServer ws;
+	TmsServerList* tsl;
+	TmsServer ts;
 
 	if (layermanager)
 		if (layermanager->getLayers().size() > 0) {
@@ -296,7 +298,7 @@ void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 	MerkaartorPreferences::instance()->setBgType(typ);
 	switch (p->bgType) {
 		case Bg_None:
-			setName("Background - None");
+			setName("Map - None");
 			p->Visible = false;
 			break;
 
@@ -308,14 +310,21 @@ void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 			p->layer_bg = new Layer("Custom Layer", mapadapter_bg, Layer::MapLayer);
 			p->layer_bg->setVisible(p->Visible);
 
-			setName("Background - WMS - " + ws.WmsName);
+			setName("Map - WMS - " + ws.WmsName);
 			break;
-		case Bg_OSM:
-			mapadapter_bg = new OSMMapAdapter();
+		case Bg_Tms:
+			tsl = MerkaartorPreferences::instance()->getTmsServers();
+			ts = tsl->value(MerkaartorPreferences::instance()->getSelectedTmsServer());
+			mapadapter_bg = new TileMapAdapter(ts.TmsAdress, ts.TmsPath, ts.TmsTileSize, ts.TmsMinZoom, ts.TmsMaxZoom);
 			p->layer_bg = new Layer("Custom Layer", mapadapter_bg, Layer::MapLayer);
 			p->layer_bg->setVisible(p->Visible);
 
-			setName("Background - OSM");
+			setName("Map - TWS - " + ts.TmsName);
+/*			mapadapter_bg = new OSMMapAdapter();
+			p->layer_bg = new Layer("Custom Layer", mapadapter_bg, Layer::MapLayer);
+			p->layer_bg->setVisible(p->Visible);
+
+			setName("Background - OSM");*/
 			break;
 #ifdef yahoo_illegal
 		case Bg_Yahoo_illegal:
@@ -323,7 +332,7 @@ void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 			p->layer_bg = new Layer("Custom Layer", mapadapter_bg, Layer::MapLayer);
 			p->layer_bg->setVisible(p->Visible);
 
-			setName("Background - Yahoo");
+			setName("Map - Yahoo");
 			break;
 #endif
 #ifdef google_illegal
@@ -332,7 +341,7 @@ void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 			p->layer_bg = new Layer("Custom Layer", mapadapter_bg, Layer::MapLayer);
 			p->layer_bg->setVisible(p->Visible);
 
-			setName("Background - Google");
+			setName("Map - Google");
 			break;
 #endif
 	}

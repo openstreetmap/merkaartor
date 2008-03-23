@@ -15,7 +15,9 @@
 #include <QtCore>
 #include <QtCore/QSettings>
 
-#define REVISION "1"
+#define WORLD_COORDBOX CoordBox(Coord(1.3, -1.3), Coord(-1.3, 1.3))
+
+#define REVISION "2"
 /**
 	@author cbro <cbro@semperpax.com>
 */
@@ -23,7 +25,7 @@
 enum ImageBackgroundType {
 	Bg_None,
 	Bg_Wms,
- 	Bg_OSM
+ 	Bg_Tms
 #ifdef yahoo_illegal
 	, Bg_Yahoo_illegal
 #endif
@@ -54,6 +56,23 @@ class WmsServer
 };
 typedef QMap<QString, WmsServer> WmsServerList;
 typedef QMapIterator<QString, WmsServer> WmsServerListIterator;
+
+class TmsServer
+{
+	public:
+		TmsServer();
+		TmsServer(QString Name, QString Adress, QString Path, int tileSize, int minZoom, int maxZoom);
+
+	public:
+		QString TmsName;
+		QString TmsAdress;
+		QString TmsPath;
+		int TmsTileSize;
+		int TmsMinZoom;
+		int TmsMaxZoom;
+};
+typedef QMap<QString, TmsServer> TmsServerList;
+typedef QMapIterator<QString, TmsServer> TmsServerListIterator;
 
 class MerkaartorPreferences
 {
@@ -98,10 +117,13 @@ public:
 	void setBookmarks(const QStringList & theValue);
 	QStringList getBookmarks() const;
 
-	WmsServerList* getWmsServers() const;
-
 	void setSelectedWmsServer(const QString & theValue);
 	QString getSelectedWmsServer() const;
+	WmsServerList* getWmsServers() const;
+
+	void setSelectedTmsServer(const QString & theValue);
+	QString getSelectedTmsServer() const;
+	TmsServerList* getTmsServers() const;
 
 	void setProxyPort(int theValue);
 	int getProxyPort() const;
@@ -156,10 +178,12 @@ protected:
 	QStringList Bookmarks;
 
 	void setWmsServers();
+	void setTmsServers();
 	void initialize();
 
 private:
 	WmsServerList* theWmsServerList;
+	TmsServerList* theTmsServerList;
 	QSettings * Sets;
 	QStringList bgTypes;
 	QStringList projTypes;

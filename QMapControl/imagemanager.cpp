@@ -26,7 +26,7 @@ ImageManager::ImageManager(QObject* parent)
 	:QObject(parent), emptyPixmap(QPixmap(1,1)), net(new MapNetwork(this))
 {
 	emptyPixmap.fill(Qt::transparent);
-	
+
 	if (QPixmapCache::cacheLimit() <= 20000)
 	{
 		QPixmapCache::setCacheLimit(20000);	// in kb
@@ -46,7 +46,7 @@ void ImageManager::setCacheDir(const QDir& path)
 		}
 	}
 }
-		
+
 void ImageManager::setCacheMaxSize(int max)
 {
 	cacheMaxSize = max*1024*1024;
@@ -63,10 +63,11 @@ QPixmap ImageManager::getImage(MapAdapter* anAdapter, int x, int y, int z)
 {
 // 	qDebug() << "ImageManager::getImage";
 	QPixmap pm;
-	
+
 	QString host = anAdapter->getHost();
 	QString url = anAdapter->getQuery(x, y, z);
-	QString hash = QString("%1_%2_%3_%4").arg(anAdapter->getName()).arg(x).arg(y).arg(z);
+	QString strHash = QString("%1%2").arg(host).arg(url);
+	QString hash = QString(strHash.toAscii().toBase64());
 
 	// is image in picture cache
 	if (QPixmapCache::find(hash, pm))
@@ -102,7 +103,7 @@ bool ImageManager::useDiskCache(QString filename)
 	int random = qrand() % 100;
 	QFileInfo info(cacheDir.absolutePath() + "/" + filename);
 	int days = info.lastModified().daysTo(QDateTime::currentDateTime());
-	
+
 	return  random < (10 * days) ? false : true;
 }
 
@@ -133,7 +134,7 @@ void ImageManager::receivedImage(const QPixmap pixmap, const QString& hash)
 			adaptCache();
 		}
 	}
-	
+
 	if (prefetch.contains(hash))
 	{
 		prefetch.remove(prefetch.indexOf(hash));

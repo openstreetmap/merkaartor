@@ -50,6 +50,7 @@ HEADERS += \
 ./Preferences/MerkaartorPreferences.h \
 ./Preferences/PreferencesDialog.h \
 ./Preferences/WMSPreferencesDialog.h \
+./Preferences/TMSPreferencesDialog.h \
 ./Utils/SelectionDialog.h
 
 #Source files
@@ -103,6 +104,7 @@ SOURCES += \
 ./Preferences/MerkaartorPreferences.cpp \
 ./Preferences/PreferencesDialog.cpp \
 ./Preferences/WMSPreferencesDialog.cpp \
+./Preferences/TMSPreferencesDialog.cpp \
 ./Utils/SelectionDialog.cpp
 
 #Forms
@@ -122,6 +124,7 @@ FORMS += \
 ./PaintStyle/PaintStyleEditor.ui \
 ./Preferences/PreferencesDialog.ui \
 ./Preferences/WMSPreferencesDialog.ui \
+./Preferences/TMSPreferencesDialog.ui \
 ./Utils/SelectionDialog.ui
 
 
