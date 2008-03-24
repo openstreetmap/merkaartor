@@ -1,7 +1,7 @@
 TEMPLATE = app
 TARGET = merkaartor
 QT += network xml core gui
-CONFIG += debug osmarender
+CONFIG += debug
 
 DEFINES += MAJORVERSION="0"
 DEFINES += MINORVERSION="10"
