@@ -1,4 +1,5 @@
 v0.10
+	* ADD : warn for older versions of Qt
 	* ADD : save mainwindow layout status (by Daniel van Gerpen)
 	* ADD : improved tag selection mechanism
 	* ADD : per-layer transparency
