@@ -62,29 +62,7 @@ bool canParseLiteral(const QString& Expression, int& idx, const QString& Literal
 	return false;
 }
 
-TagSelector* TagSelector::parse(const QString& Expression)
-{
-	int idx = 0;
-	std::vector<TagSelector*> Terms;
-	while (idx < Expression.length())
-	{
-		TagSelector* Current = TagSelectorIs::parse(Expression, idx);
-		if (!Current)
-			Current = TagSelectorIsOneOf::parse(Expression, idx);
-		if (!Current)
-			break;
-		Terms.push_back(Current);
-		if (!canParseLiteral(Expression,idx,"or"))
-			break;
-	}
-	if (Terms.size() == 1)
-		return Terms[0];
-	else if (Terms.size() > 1)
-		return new TagSelectorOr(Terms);	
-	return 0;
-}
-
-TagSelectorIs* TagSelectorIs::parse(const QString& Expression, int& idx)
+TagSelectorIs* parseTagSelectorIs(const QString& Expression, int& idx)
 {
 	QString Key, Value;
 	if (!canParseKey(Expression, idx, Key))
@@ -96,7 +74,7 @@ TagSelectorIs* TagSelectorIs::parse(const QString& Expression, int& idx)
 	return new TagSelectorIs(Key, Value);
 }
 
-TagSelectorIsOneOf* TagSelectorIsOneOf::parse(const QString& Expression, int& idx)
+TagSelectorIsOneOf* parseTagSelectorIsOneOf(const QString& Expression, int& idx)
 {
 	QString Key;
 	if (!canParseKey(Expression, idx, Key))
@@ -121,6 +99,66 @@ TagSelectorIsOneOf* TagSelectorIsOneOf::parse(const QString& Expression, int& id
 	return 0;
 }
 
+TagSelector* parseTagSelector(const QString& Expression, int& idx);
+
+TagSelector* parseFactor(const QString& Expression, int& idx)
+{
+	TagSelector* Current = 0;
+	if (canParseSymbol(Expression, idx, '('))
+	{
+		Current = parseTagSelector(Expression, idx);
+		canParseSymbol(Expression, idx, ')');
+	}
+	if (!Current)
+		Current = parseTagSelectorIs(Expression, idx);
+	if (!Current)
+		Current = parseTagSelectorIsOneOf(Expression, idx);
+	return Current;
+}
+
+TagSelector* parseTerm(const QString& Expression, int& idx)
+{
+	std::vector<TagSelector*> Factors;
+	while (idx < Expression.length())
+	{
+		TagSelector* Current = parseFactor(Expression, idx);
+		if (!Current)
+			break;
+		Factors.push_back(Current);
+		if (!canParseLiteral(Expression,idx,"and"))
+			break;
+	}
+	if (Factors.size() == 1)
+		return Factors[0];
+	else if (Factors.size() > 1)
+		return new TagSelectorAnd(Factors);
+	return 0;
+}
+
+TagSelector* parseTagSelector(const QString& Expression, int& idx)
+{	
+	std::vector<TagSelector*> Terms;
+	while (idx < Expression.length())
+	{
+		TagSelector* Current = parseTerm(Expression, idx);
+		if (!Current)
+			break;
+		Terms.push_back(Current);
+		if (!canParseLiteral(Expression,idx,"or"))
+			break;
+	}
+	if (Terms.size() == 1)
+		return Terms[0];
+	else if (Terms.size() > 1)
+		return new TagSelectorOr(Terms);	
+	return 0;
+}
+
+TagSelector* TagSelector::parse(const QString& Expression)
+{
+	int idx = 0;
+	return parseTagSelector(Expression,idx);
+}
 
 TagSelector::~TagSelector()
 {
@@ -144,7 +182,7 @@ bool TagSelectorIs::matches(const MapFeature* F) const
 	return F->tagValue(Key, "") == Value;
 }
 
-QString TagSelectorIs::asExpression() const
+QString TagSelectorIs::asExpression(bool) const
 {
 	QString R;
 	R += "[";
@@ -175,7 +213,7 @@ bool TagSelectorIsOneOf::matches(const MapFeature* F) const
 	return false;
 }
 
-QString TagSelectorIsOneOf::asExpression() const
+QString TagSelectorIsOneOf::asExpression(bool) const
 {
 	QString R;
 	R += "[";
@@ -221,14 +259,60 @@ bool TagSelectorOr::matches(const MapFeature* F) const
 	return false;
 }
 
-QString TagSelectorOr::asExpression() const
+QString TagSelectorOr::asExpression(bool Precedence) const
+{
+	QString R;
+	if (Precedence)
+		R += "(";
+	for (unsigned int i=0; i<Terms.size(); ++i)
+	{
+		if (i)
+			R += " or ";
+		R += Terms[i]->asExpression(false);
+	}
+	if (Precedence)
+		R += ")";
+	return R;
+}
+
+
+/* TAGSELECTOROR */
+
+TagSelectorAnd::TagSelectorAnd(const std::vector<TagSelector*> terms)
+: Terms(terms)
+{
+}
+
+TagSelectorAnd::~TagSelectorAnd()
+{
+	for (unsigned int i=0; i<Terms.size(); ++i)
+		delete Terms[i];
+}
+
+TagSelector* TagSelectorAnd::copy() const
+{
+	std::vector<TagSelector*> Copied;
+	for (unsigned int i=0; i<Terms.size(); ++i)
+		Copied.push_back(Terms[i]->copy());
+	return new TagSelectorAnd(Copied);
+}
+
+bool TagSelectorAnd::matches(const MapFeature* F) const
+{
+	for (unsigned int i=0; i<Terms.size(); ++i)
+		if (!Terms[i]->matches(F))
+			return false;
+	return true;
+}
+
+QString TagSelectorAnd::asExpression(bool Precedence) const
 {
 	QString R;
 	for (unsigned int i=0; i<Terms.size(); ++i)
 	{
 		if (i)
-			R += " or ";
-		R += Terms[i]->asExpression();
+			R += " and ";
+		R += Terms[i]->asExpression(true);
 	}
 	return R;
 }

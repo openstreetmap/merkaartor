@@ -14,7 +14,7 @@ class TagSelector
 
 		virtual TagSelector* copy() const = 0;
 		virtual bool matches(const MapFeature* F) const = 0;
-		virtual QString asExpression() const = 0;
+		virtual QString asExpression(bool Precedence) const = 0;
 
 		static TagSelector* parse(const QString& Expression);
 };
@@ -26,9 +26,8 @@ class TagSelectorIs : public TagSelector
 
 		virtual TagSelector* copy() const;
 		virtual bool matches(const MapFeature* F) const;
-		virtual QString asExpression() const;
+		virtual QString asExpression(bool Precedence) const;
 
-		static TagSelectorIs* parse(const QString& Expression, int& idx);
 	private:
 		QString Key, Value;
 };
@@ -40,9 +39,8 @@ class TagSelectorIsOneOf : public TagSelector
 
 		virtual TagSelector* copy() const;
 		virtual bool matches(const MapFeature* F) const;
-		virtual QString asExpression() const;
+		virtual QString asExpression(bool Precedence) const;
 
-		static TagSelectorIsOneOf* parse(const QString& Expression, int& idx);
 	private:
 		QString Key;
 		std::vector<QString> Values;
@@ -56,10 +54,25 @@ class TagSelectorOr : public TagSelector
 
 		virtual TagSelector* copy() const;
 		virtual bool matches(const MapFeature* F) const;
-		virtual QString asExpression() const;
+		virtual QString asExpression(bool Precedence) const;
 
 	private:
 		std::vector<TagSelector*> Terms;
 };
+
+class TagSelectorAnd : public TagSelector
+{
+	public:
+		TagSelectorAnd(const std::vector<TagSelector*> Terms);
+		~TagSelectorAnd();
+
+		virtual TagSelector* copy() const;
+		virtual bool matches(const MapFeature* F) const;
+		virtual QString asExpression(bool Precedence) const;
+
+	private:
+		std::vector<TagSelector*> Terms;
+};
+
 
 #endif

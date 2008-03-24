@@ -134,7 +134,7 @@ QString FeaturePainter::asXML() const
 		r += " drawTrafficDirectionMarks=\"no\"";
 	r += ">\n";
 	if (theSelector)
-		r += "  <selector expr=\""+theSelector->asExpression()+"\"/>\n";
+		r += "  <selector expr=\""+theSelector->asExpression(false)+"\"/>\n";
 	r += "</painter>\n";
 	return r;
 }
@@ -142,7 +142,7 @@ QString FeaturePainter::asXML() const
 QString FeaturePainter::userName() const
 {
 	if (theSelector)
-		return theSelector->asExpression();
+		return theSelector->asExpression(false);
 	return "Unnamed";
 }
 
