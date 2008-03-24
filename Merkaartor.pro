@@ -1,7 +1,7 @@
 TEMPLATE = app
 TARGET = ./release/merkaartor
 QT += network xml core gui
-CONFIG += debug
+CONFIG += release
 
 DEFINES += MAJORVERSION="0"
 DEFINES += MINORVERSION="10"

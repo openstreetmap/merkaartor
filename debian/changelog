@@ -1,3 +1,9 @@
+merkaartor (0.0.10-1) gutsy; urgency=low
+
+  * Upgrade to 0.0.10
+
+ -- Bart Vanhauwaert <bvh-osm@irule.be>  Mon, 24 Mar 2008 16:34:03 +0100
+
 merkaartor (0.0.9-1) gutsy; urgency=low
 
   * Upgrade to 0.0.9
