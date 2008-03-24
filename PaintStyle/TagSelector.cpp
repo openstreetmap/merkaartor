@@ -109,10 +109,14 @@ TagSelector* parseFactor(const QString& Expression, int& idx)
 		Current = parseTagSelector(Expression, idx);
 		canParseSymbol(Expression, idx, ')');
 	}
+	int Saved = idx;
 	if (!Current)
 		Current = parseTagSelectorIs(Expression, idx);
 	if (!Current)
+	{
+		idx = Saved;
 		Current = parseTagSelectorIsOneOf(Expression, idx);
+	}
 	return Current;
 }
 
