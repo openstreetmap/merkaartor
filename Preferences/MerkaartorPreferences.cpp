@@ -12,6 +12,8 @@
 
 #include "MerkaartorPreferences.h"
 
+#include <QtGui/QMainWindow>
+
 MerkaartorPreferences* MerkaartorPreferences::m_prefInstance = 0;
 
 WmsServer::WmsServer()
@@ -457,6 +459,25 @@ int MerkaartorPreferences::getZoomOutPerc() const
 void MerkaartorPreferences::setZoomOutPerc(int theValue)
 {
 	Sets->setValue("zoom/zoomOut", theValue);
+}
+
+void MerkaartorPreferences::saveMainWindowState(const QMainWindow * mainWindow)
+{
+	Sets->setValue("MainWindow/Position", mainWindow->pos());
+	Sets->setValue("MainWindow/Size", mainWindow->size());
+	Sets->setValue("MainWindow/State", mainWindow->saveState());
+}
+
+void MerkaartorPreferences::restoreMainWindowState(QMainWindow * mainWindow) const
+{
+	if (Sets->contains("MainWindow/Position"))
+		mainWindow->move( Sets->value("MainWindow/Position").toPoint());
+
+	if (Sets->contains("MainWindow/Size"))
+		mainWindow->resize( Sets->value("MainWindow/Size").toSize());
+	
+	if (Sets->contains("MainWindow/State"))
+		mainWindow->restoreState( Sets->value("MainWindow/State").toByteArray() );
 }
 
 void MerkaartorPreferences::setProjectionType(ProjectionType theValue)

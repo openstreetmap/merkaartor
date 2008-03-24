@@ -19,7 +19,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>27</height>
+     <height>29</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >
@@ -137,6 +137,9 @@
   <widget class="QToolBar" name="toolBar" >
    <property name="enabled" >
     <bool>true</bool>
+   </property>
+   <property name="windowTitle" >
+    <string>Tool Bar</string>
    </property>
    <property name="orientation" >
     <enum>Qt::Horizontal</enum>

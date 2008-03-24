@@ -16,6 +16,7 @@ LayerDock::LayerDock(MainWindow* aMain)
 {
 	setMinimumSize(220,100);
 	setWindowTitle(tr("Layers"));
+	setObjectName("layersDock");
 
 	createContent();
 }

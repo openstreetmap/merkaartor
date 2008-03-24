@@ -1,4 +1,5 @@
 v0.10
+	* ADD : save mainwindow layout status (by Daniel van Gerpen)
 	* ADD : improved tag selection mechanism
 	* ADD : per-layer transparency
 	* ADD : background color chooser

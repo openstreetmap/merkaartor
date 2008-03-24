@@ -78,6 +78,8 @@ MainWindow::MainWindow(void)
 	updateBookmarksMenu();
 	updateProjectionMenu();
 
+	MerkaartorPreferences::instance()->restoreMainWindowState( this );
+
 #ifndef OSMARENDER
 	//TODO Osmarender rendering
 	renderAction->setVisible(false);
@@ -607,6 +609,10 @@ void MainWindow::closeEvent(QCloseEvent * event)
 	if (hasUnsavedChanges(*theDocument) && !mayDiscardUnsavedChanges(this)) {
 		event->ignore();
 	}
+
+	MerkaartorPreferences::instance()->saveMainWindowState( this );
+
+	QMainWindow::closeEvent(event);
 }
 
 void MainWindow::on_renderAction_triggered()

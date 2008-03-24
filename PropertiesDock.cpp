@@ -27,8 +27,9 @@ PropertiesDock::PropertiesDock(MainWindow* aParent)
 	setMinimumSize(220,100);
 	switchToNoUi();
 	setWindowTitle(tr("Properties"));
+	setObjectName("propertiesDock");
 	theModel = new TagModel(aParent);
-    delegate = new EditCompleterDelegate(aParent);
+	delegate = new EditCompleterDelegate(aParent);
 
 	centerAction = new QAction("Center map", this);
 	connect(centerAction, SIGNAL(triggered()), this, SLOT(on_centerAction_triggered()));

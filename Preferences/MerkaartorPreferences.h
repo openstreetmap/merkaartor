@@ -16,6 +16,8 @@
 #include <QtCore/QSettings>
 #include <QColor>
 
+class QMainWindow;
+
 #define WORLD_COORDBOX CoordBox(Coord(1.3, -1.3), Coord(-1.3, 1.3))
 
 #define REVISION "2"
@@ -164,6 +166,10 @@ public:
 	void setProjectionType(ProjectionType theValue);
 	ProjectionType getProjectionType() const;
 	QStringList getProjectionTypes();
+	
+	/* MainWindow state */
+	void saveMainWindowState(const class QMainWindow * mainWindow);
+	void restoreMainWindowState(class QMainWindow * mainWindow) const;
 
 	QStringList getAlphaList() const;
 	void setAlphaList();
