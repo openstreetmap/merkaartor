@@ -18,7 +18,9 @@ FeaturePainter::FeaturePainter()
   ZoomLimitSet(false), ZoomUnder(0), ZoomUpper(10e6),
   DrawBackground(false), BackgroundScale(0), BackgroundOffset(3),
   DrawForeground(false), ForegroundScale(0), ForegroundOffset(2),
+  ForegroundDashSet(false),
   DrawTouchup(false), TouchupScale(0), TouchupOffset(1),
+  TouchupDashSet(false),
   ForegroundFill(false), DrawTrafficDirectionMarks(true),
   DrawIcon(false)
 {
@@ -34,6 +36,7 @@ FeaturePainter::FeaturePainter(const FeaturePainter& f)
   ForegroundDashSet(f.ForegroundDashSet), ForegroundDash(f.ForegroundDash), ForegroundWhite(f.ForegroundWhite),
   DrawTouchup(f.DrawTouchup), TouchupColor(f.TouchupColor),
   TouchupScale(f.TouchupScale), TouchupOffset(f.TouchupOffset),
+  TouchupDashSet(f.TouchupDashSet),
   TouchupDash(f.TouchupDash), TouchupWhite(f.TouchupWhite),
   ForegroundFill(f.ForegroundFill), ForegroundFillFillColor(f.ForegroundFillFillColor),
   DrawTrafficDirectionMarks(f.DrawTrafficDirectionMarks),
