@@ -1,5 +1,5 @@
 TEMPLATE = app
-TARGET = merkaartor
+TARGET = ./release/merkaartor
 QT += network xml core gui
 CONFIG += debug
 
