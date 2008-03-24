@@ -21,7 +21,7 @@ FeaturePainter::FeaturePainter()
   ForegroundDashSet(false),
   DrawTouchup(false), TouchupScale(0), TouchupOffset(1),
   TouchupDashSet(false),
-  ForegroundFill(false), DrawTrafficDirectionMarks(true),
+  ForegroundFill(false), DrawTrafficDirectionMarks(false),
   DrawIcon(false)
 {
 }
