@@ -10,6 +10,7 @@ class MapFeature;
 class Projection;
 class Relation;
 class Road;
+class TagSelector;
 class TrackPoint;
 class QPainter;
 class QPainterPath;
@@ -34,12 +35,15 @@ class FeaturePainter
 		typedef enum {NoZoomLimit, GlobalZoom, RegionalZoom, LocalZoom } ZoomType;
 
 		FeaturePainter();
+		FeaturePainter(const FeaturePainter& f);
+		FeaturePainter& operator=(const FeaturePainter& F);
+		~FeaturePainter();
 
+		void setSelector(const QString& aName);
+		void setSelector(TagSelector* aSelector);
 		bool isFilled() const;
 		bool matchesTag(const MapFeature* F) const;
 		bool matchesZoom(double PixelPerM) const;
-		FeaturePainter& selectOnTag(const QString& Tag, const QString& Value);
-		FeaturePainter& selectOnTag(const QString& Tag, const QString& Value1, const QString& Value2);
 		FeaturePainter& backgroundActive(bool b);
 		FeaturePainter& background(const QColor& Color, double Scale, double Offset);
 		FeaturePainter& foregroundActive(bool b);
@@ -56,8 +60,6 @@ class FeaturePainter
 		FeaturePainter& iconActive(bool b);
 
 		QString userName() const;
-		const std::vector<std::pair<QString, QString> >& tagSelectors() const;
-		void clearSelectors();
 		std::pair<double, double> zoomBoundaries() const;
 		LineParameters backgroundBoundary() const;
 		LineParameters foregroundBoundary() const;
@@ -77,8 +79,8 @@ class FeaturePainter
 		void drawTouchup(Road* R, QPainter& thePainter, const Projection& theProjection) const;
 		void drawTouchup(TrackPoint* R, QPainter& thePainter, const Projection& theProjection) const;
 	private:
-		std::vector<std::pair<QString, QString> > OneOfTheseTags;
 
+		TagSelector* theSelector;
 		bool ZoomLimitSet;
 		double ZoomUnder, ZoomUpper;
 		bool DrawBackground;

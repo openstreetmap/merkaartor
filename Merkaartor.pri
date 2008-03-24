@@ -40,6 +40,7 @@ HEADERS += \
 ./PaintStyle/EditPaintStyle.h \
 ./PaintStyle/PaintStyle.h \
 ./PaintStyle/PaintStyleEditor.h \ 
+./PaintStyle/TagSelector.h \
 ./PropertiesDock.h \
 ./Sync/DirtyList.h \
 ./Sync/SyncOSM.h \
@@ -91,6 +92,7 @@ SOURCES += \
 ./PaintStyle/EditPaintStyle.cpp \
 ./PaintStyle/PaintStyle.cpp \
 ./PaintStyle/PaintStyleEditor.cpp \
+./PaintStyle/TagSelector.cpp \
 ./Sync/DirtyList.cpp \
 ./Sync/SyncOSM.cpp \
 ./Main.cpp \

@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>713</width>
-    <height>562</height>
+    <width>766</width>
+    <height>569</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -147,32 +147,12 @@
          <item row="0" column="0" >
           <widget class="QLabel" name="label" >
            <property name="text" >
-            <string>Key</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="3" >
-          <widget class="QLineEdit" name="Value2" />
-         </item>
-         <item row="0" column="2" >
-          <widget class="QLabel" name="label_2" >
-           <property name="text" >
-            <string>Value</string>
+            <string>Tag selection</string>
            </property>
           </widget>
          </item>
          <item row="0" column="1" >
-          <widget class="QLineEdit" name="Key" />
-         </item>
-         <item row="0" column="3" >
-          <widget class="QLineEdit" name="Value1" />
-         </item>
-         <item row="1" column="2" >
-          <widget class="QLabel" name="label_3" >
-           <property name="text" >
-            <string>or</string>
-           </property>
-          </widget>
+          <widget class="QLineEdit" name="TagSelection" />
          </item>
         </layout>
        </item>
@@ -970,9 +950,7 @@
   <tabstop>AddButton</tabstop>
   <tabstop>RemoveButton</tabstop>
   <tabstop>PaintList</tabstop>
-  <tabstop>Key</tabstop>
-  <tabstop>Value1</tabstop>
-  <tabstop>Value2</tabstop>
+  <tabstop>TagSelection</tabstop>
   <tabstop>UpperZoomBoundary</tabstop>
   <tabstop>LowerZoomBoundary</tabstop>
   <tabstop>DrawBackground</tabstop>

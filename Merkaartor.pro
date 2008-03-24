@@ -1,8 +1,7 @@
 TEMPLATE = app
 TARGET = merkaartor
-DESTDIR = ./release
 QT += network xml core gui
-CONFIG += debug_and_release osmarender
+CONFIG += debug osmarender
 
 DEFINES += MAJORVERSION="0"
 DEFINES += MINORVERSION="10"

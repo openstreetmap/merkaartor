@@ -1,4 +1,5 @@
 v0.10
+	* ADD : improved tag selection mechanism
 	* ADD : per-layer transparency
 	* ADD : background color chooser
 	* FIX : redraw view when joining roads

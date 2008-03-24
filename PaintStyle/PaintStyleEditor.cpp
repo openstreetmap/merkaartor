@@ -11,7 +11,6 @@
 #include <QtGui/QPainter>
 #include <QtGui/QPixmap>
 #include <QtGui/QToolButton>
-#include <QCompleter>
 
 
 PaintStyleEditor::PaintStyleEditor(QWidget *aParent, const std::vector<FeaturePainter>& aPainters)
@@ -29,14 +28,6 @@ PaintStyleEditor::PaintStyleEditor(QWidget *aParent, const std::vector<FeaturePa
 	LowerZoomBoundary->setSpecialValueText(tr("Always"));
 	UpperZoomBoundary->setSpecialValueText(tr("Always"));
 	FreezeUpdate = false;
-
-	QCompleter* completer;
-	MainWindow* mw = (MainWindow *)aParent;
-
-	completer = new QCompleter(mw->document()->getTagList(), (QObject *)this);
-	completer->setCompletionMode(QCompleter::PopupCompletion);
-	completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
-	Key->setCompleter(completer);
 }
 
 static void makeBoundaryIcon(QToolButton* bt, QColor C)
@@ -79,18 +70,7 @@ void PaintStyleEditor::on_PaintList_itemClicked(QListWidgetItem* it)
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
-	if (FP.tagSelectors().size()) {
-		Key->setText(FP.tagSelectors()[0].first);
-		Value1->setText(FP.tagSelectors()[0].second);
-		if ((FP.tagSelectors().size() > 1) && (Key->text() == FP.tagSelectors()[0].first))
-			Value2->setText(FP.tagSelectors()[1].second);
-		else
-			Value2->setText("");
-	} else {
-		Key->setText("");
-		Value1->setText("");
-		Value2->setText("");
-	}
+	TagSelection->setText(FP.userName());
 	if (FP.zoomBoundaries().first == 0)
 		LowerZoomBoundary->setValue(0);
 	else
@@ -125,35 +105,7 @@ void PaintStyleEditor::on_PaintList_itemClicked(QListWidgetItem* it)
 	FreezeUpdate = false;
 }
 
-void PaintStyleEditor::on_Key_editingFinished()
-{
-	updatePaintList();
-
-	MainWindow* mw = (MainWindow *)(this->parent());
-
-	QCompleter* completer;
-	QCompleter* completer2;
-
-	QStringList sl = mw->document()->getTagValueList(Key->text());
-	completer = new QCompleter(sl, (QObject *)this);
-	completer->setCompletionMode(QCompleter::PopupCompletion);
-	completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
-	if (Value1->completer())
-		delete Value1->completer();
-	Value1->setCompleter(completer);
-
-	completer2 = new QCompleter(completer);
-	if (Value2->completer())
-		delete Value2->completer();
-	Value2->setCompleter(completer2);
-}
-
-void PaintStyleEditor::on_Value1_editingFinished()
-{
-	updatePaintList();
-}
-
-void PaintStyleEditor::on_Value2_editingFinished()
+void PaintStyleEditor::on_TagSelection_editingFinished()
 {
 	updatePaintList();
 }
@@ -391,10 +343,6 @@ void PaintStyleEditor::updatePaintList()
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
-	FP.clearSelectors();
-	if (Value2->text().isEmpty())
-		FP.selectOnTag(Key->text(), Value1->text());
-	else
-		FP.selectOnTag(Key->text(), Value1->text(), Value2->text());
+	FP.setSelector(TagSelection->text());
 	PaintList->currentItem()->setText(FP.userName());
 }

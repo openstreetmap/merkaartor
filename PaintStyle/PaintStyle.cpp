@@ -4,6 +4,7 @@
 #include "Map/TrackPoint.h"
 #include "Map/Relation.h"
 #include "Map/Road.h"
+#include "PaintStyle/TagSelector.h"
 #include "Utils/LineF.h"
 
 #include <QtCore/QString>
@@ -13,13 +14,76 @@
 #include <math.h>
 
 FeaturePainter::FeaturePainter()
-: ZoomLimitSet(false), ZoomUnder(0), ZoomUpper(10e6),
+: theSelector(0),
+  ZoomLimitSet(false), ZoomUnder(0), ZoomUpper(10e6),
   DrawBackground(false), BackgroundScale(0), BackgroundOffset(3),
   DrawForeground(false), ForegroundScale(0), ForegroundOffset(2),
   DrawTouchup(false), TouchupScale(0), TouchupOffset(1),
   ForegroundFill(false), DrawTrafficDirectionMarks(true),
   DrawIcon(false)
 {
+}
+
+FeaturePainter::FeaturePainter(const FeaturePainter& f)
+: theSelector(0),
+  ZoomLimitSet(f.ZoomLimitSet), ZoomUnder(f.ZoomUnder), ZoomUpper(f.ZoomUpper),
+  DrawBackground(f.DrawBackground), BackgroundColor(f.BackgroundColor),
+  BackgroundScale(f.BackgroundScale), BackgroundOffset(f.BackgroundOffset),
+  DrawForeground(f.DrawForeground), ForegroundColor(f.ForegroundColor),
+  ForegroundScale(f.ForegroundScale), ForegroundOffset(f.ForegroundOffset),
+  ForegroundDashSet(f.ForegroundDashSet), ForegroundDash(f.ForegroundDash), ForegroundWhite(f.ForegroundWhite),
+  DrawTouchup(f.DrawTouchup), TouchupColor(f.TouchupColor),
+  TouchupScale(f.TouchupScale), TouchupOffset(f.TouchupOffset),
+  TouchupDash(f.TouchupDash), TouchupWhite(f.TouchupWhite),
+  ForegroundFill(f.ForegroundFill), ForegroundFillFillColor(f.ForegroundFillFillColor),
+  DrawTrafficDirectionMarks(f.DrawTrafficDirectionMarks),
+  DrawIcon(f.DrawIcon), TrackPointIconName(f.TrackPointIconName)
+{
+	if (f.theSelector)
+		theSelector = f.theSelector->copy();
+
+}
+
+FeaturePainter& FeaturePainter::operator=(const FeaturePainter& f)
+{
+	if (&f == this) return *this;
+	delete theSelector;
+	if (f.theSelector)
+		theSelector = f.theSelector->copy();
+	else
+		theSelector = 0;
+	ZoomLimitSet = f.ZoomLimitSet;
+	ZoomUnder = f.ZoomUnder;
+	ZoomUpper = f.ZoomUpper;
+	DrawBackground = f.DrawBackground;
+	BackgroundColor = f.BackgroundColor;
+	BackgroundScale = f.BackgroundScale;
+	BackgroundOffset = f.BackgroundOffset;
+	DrawForeground = f.DrawForeground;
+	ForegroundColor = f.ForegroundColor;
+	ForegroundScale = f.ForegroundScale;
+	ForegroundOffset = f.ForegroundOffset;
+	ForegroundDashSet = f.ForegroundDashSet ;
+	ForegroundDash = f.ForegroundDash;
+	ForegroundWhite = f.ForegroundWhite;
+	DrawTouchup = f.DrawTouchup;
+	TouchupColor = f.TouchupColor;
+	TouchupScale = f.TouchupScale;
+	TouchupOffset = f.TouchupOffset;
+	TouchupDashSet = f.TouchupDashSet;
+	TouchupDash = f.TouchupDash;
+	TouchupWhite = f.TouchupWhite;
+	ForegroundFill = f.ForegroundFill;
+	ForegroundFillFillColor = f.ForegroundFillFillColor;
+	DrawTrafficDirectionMarks = f.DrawTrafficDirectionMarks;
+	DrawIcon = f.DrawIcon;
+	TrackPointIconName = f.TrackPointIconName;
+	return *this;
+}
+
+FeaturePainter::~FeaturePainter()
+{
+	delete theSelector;
 }
 
 QString paddedHexa(unsigned int i)
@@ -66,22 +130,17 @@ QString FeaturePainter::asXML() const
 	else
 		r += " drawTrafficDirectionMarks=\"no\"";
 	r += ">\n";
-	for (unsigned int i=0; i<OneOfTheseTags.size(); ++i)
-		r += "  <selector key=\""+OneOfTheseTags[i].first+"\" value=\""+OneOfTheseTags[i].second+"\"/>\n";
+	if (theSelector)
+		r += "  <selector expr=\""+theSelector->asExpression()+"\"/>\n";
 	r += "</painter>\n";
 	return r;
 }
 
 QString FeaturePainter::userName() const
 {
-	if (OneOfTheseTags.size())
-		return QString("%1 for %2").arg(OneOfTheseTags[0].second).arg(OneOfTheseTags[0].first);
+	if (theSelector)
+		return theSelector->asExpression();
 	return "Unnamed";
-}
-
-const std::vector<std::pair<QString,QString> >& FeaturePainter::tagSelectors() const
-{
-	return OneOfTheseTags;
 }
 
 std::pair<double, double> FeaturePainter::zoomBoundaries() const
@@ -96,11 +155,6 @@ QColor FeaturePainter::fillColor() const
 	if (!ForegroundFill)
 		return QColor();
 	return ForegroundFillFillColor;
-}
-
-void FeaturePainter::clearSelectors()
-{
-	OneOfTheseTags.clear();
 }
 
 bool FeaturePainter::isFilled() const
@@ -275,21 +329,21 @@ FeaturePainter& FeaturePainter::trackPointIcon(const QString& Filename)
 	return *this;
 }
 
-FeaturePainter& FeaturePainter::selectOnTag(const QString& Tag, const QString& Value)
+void FeaturePainter::setSelector(const QString& anExpression)
 {
-	OneOfTheseTags.push_back(std::make_pair(Tag,Value));
-	return *this;
+	delete theSelector;
+	theSelector = TagSelector::parse(anExpression);
 }
 
-FeaturePainter& FeaturePainter::selectOnTag(const QString& Tag, const QString& Value1, const QString& Value2)
+void FeaturePainter::setSelector(TagSelector* aSel)
 {
-	selectOnTag(Tag,Value1);
-	selectOnTag(Tag,Value2);
-	return *this;
+	delete theSelector;
+	theSelector = aSel;
 }
 
 bool FeaturePainter::matchesTag(const MapFeature* F) const
 {
+	if (!theSelector) return false;
 	// Special casing for multipolygon roads
 	if (const Road* R = dynamic_cast<const Road*>(F))
 	{
@@ -301,16 +355,14 @@ bool FeaturePainter::matchesTag(const MapFeature* F) const
 					return false;
 		}
 	}
-	for (unsigned int i=0; i<OneOfTheseTags.size(); ++i)
-		if (F->tagValue(OneOfTheseTags[i].first,QString::null) == OneOfTheseTags[i].second)
-			return true;
+	if (theSelector->matches(F))
+		return true;
 	// Special casing for multipolygon relations
 	if (const Relation* R = dynamic_cast<const Relation*>(F))
 	{
 		for (unsigned int i=0; i<R->size(); ++i)
-			for (unsigned int j=0; j<OneOfTheseTags.size(); ++j)
-				if (R->get(i)->tagValue(OneOfTheseTags[j].first,QString::null) == OneOfTheseTags[j].second)
-					return true;
+			if (theSelector->matches(R->get(i)))
+				return true;
 	}
 	return false;
 }

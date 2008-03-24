@@ -4,6 +4,7 @@
 #include "Map/TrackPoint.h"
 #include "Map/Relation.h"
 #include "Map/Road.h"
+#include "PaintStyle/TagSelector.h"
 #include "Utils/LineF.h"
 
 #include <QtCore/QFile>
@@ -272,15 +273,47 @@ void readFromNode(const QDomElement& e, FeaturePainter& FP)
 	if (e.attribute("drawTrafficDirectionMarks") == "yes")
 		FP.drawTrafficDirectionMarks();
 	QDomNode n = e.firstChild();
+	std::vector<std::pair<QString,QString> > Pairs;
 	while (!n.isNull())
 	{
 		if (n.isElement())
 		{
 			QDomElement t = n.toElement();
 			if (t.tagName() == "selector")
-				FP.selectOnTag(t.attribute("key"),t.attribute("value"));
+			{
+				if (t.attribute("key") != "")
+					Pairs.push_back(std::make_pair(t.attribute("key"),t.attribute("value")));
+				else
+				{
+					FP.setSelector(t.attribute("expr"));
+					return;
+				}
+			}
 		}
 		n = n.nextSibling();
+	}
+	if (Pairs.size() == 1)
+		FP.setSelector(new TagSelectorIs(Pairs[0].first,Pairs[0].second));
+	else if (Pairs.size())
+	{
+		bool Same = true;
+		for (unsigned int i=1; i<Pairs.size(); ++i)
+			if (Pairs[0].first != Pairs[i].first)
+				Same = false;
+		if (Same)
+		{
+			std::vector<QString> Options;
+			for (unsigned int i=0; i<Pairs.size(); ++i)
+				Options.push_back(Pairs[i].second);
+			FP.setSelector(new TagSelectorIsOneOf(Pairs[0].first,Options));
+		}
+		else
+		{
+			std::vector<TagSelector*> Options;
+			for (unsigned int i=0; i<Pairs.size(); ++i)
+				Options.push_back(new TagSelectorIs(Pairs[i].first,Pairs[i].second));
+			FP.setSelector(new TagSelectorOr(Options));
+		}
 	}
 }
 
