@@ -18,10 +18,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "layer.h"
+#include "Preferences/MerkaartorPreferences.h"
 
 Layer::Layer(QString layername, MapAdapter* mapadapter, enum LayerType layertype, bool takeevents)
 	:visible(true), layername(layername), layertype(layertype), mapAdapter(mapadapter), takeevents(takeevents), offscreenViewport(QRect(0,0,0,0))
-{	
+{
 // 	qDebug() << "creating new Layer: " << layername << ", type: " << contents;
 // 	qDebug() << this->layertype;
 }
@@ -40,7 +41,7 @@ void Layer::setSize(QSize size)
 // 	mat.rotate(45);
 // 	mat.translate(-480/2,-640/2);
 // 	screenmiddle = mat.map(screenmiddle);
-	
+
 }
 
 QString Layer::getLayername() const
@@ -62,7 +63,7 @@ void Layer::setVisible(bool visible)
 void Layer::addGeometry(Geometry* geom)
 {
 // 	qDebug() << geom->getName() << ", " << geom->getPoints().at(0)->getWidget();
-	
+
 	geometries.append(geom);
 	emit(updateRequest(geom->getBoundingBox()));
 	// a geometry can request a redraw, e.g. when its position has been changed
@@ -100,7 +101,7 @@ void Layer::mouseEvent(const QMouseEvent* evnt, const QPoint mapmiddle_px)
 	if (takesMouseEvents())
 	{
 		if (evnt->button() == Qt::LeftButton && evnt->type() == QEvent::MouseButtonPress)
-		{		
+		{
 			// check for collision
 			QPointF c = mapAdapter->displayToCoordinate(QPoint(evnt->x()-screenmiddle.x()+mapmiddle_px.x(),
 																					evnt->y()-screenmiddle.y()+mapmiddle_px.y()));
@@ -108,7 +109,7 @@ void Layer::mouseEvent(const QMouseEvent* evnt, const QPoint mapmiddle_px)
 			for (int i=0; i<geometries.count(); i++)
 			{
 				if (geometries.at(i)->isVisible() && geometries.at(i)->Touches(tmppoint, mapAdapter))
-				
+
 // 				if (geometries.at(i)->Touches(c, mapAdapter))
 				{
 					emit(geometryClickEvent(geometries.at(i), QPoint(evnt->x(), evnt->y())));
@@ -133,7 +134,7 @@ void Layer::drawYourImage(QPainter* painter, const QPoint mapmiddle_px) const
 // 			mat.translate(480/2, 640/2);
 // 			mat.rotate(45);
 // 			mat.translate(-480/2,-640/2);
-			
+
 // 			mapmiddle_px = mat.map(mapmiddle_px);
 // 			qDebug() << ":: " << mapmiddle_px;
 		_draw(painter, mapmiddle_px);
@@ -148,7 +149,7 @@ void Layer::drawYourGeometries(QPainter* painter, const QPoint mapmiddle_px, QRe
 		offset = mapmiddle_px;
 	else
 		offset = mapmiddle_px-screenmiddle;
-	
+
 	painter->translate(-mapmiddle_px+screenmiddle);
 	for (int i=0; i<geometries.count(); i++)
 	{
@@ -167,28 +168,28 @@ void Layer::_draw(QPainter* painter, const QPoint mapmiddle_px) const
 	int cross_x = int(mapmiddle_px.x())%tilesize;		// position on middle tile
 	int cross_y = int(mapmiddle_px.y())%tilesize;
 // 	qDebug() << screenmiddle << " - " << cross_x << ", " << cross_y;
-		
+
 		// calculate how many surrounding tiles have to be drawn to fill the display
 	int space_left = screenmiddle.x() - cross_x;
 	int tiles_left = space_left/tilesize;
-	if (space_left>0) 
+	if (space_left>0)
 		tiles_left+=1;
-	
-	int space_above = screenmiddle.y() - cross_y;	
+
+	int space_above = screenmiddle.y() - cross_y;
 	int tiles_above = space_above/tilesize;
-	if (space_above>0) 
+	if (space_above>0)
 		tiles_above+=1;
-			
+
 	int space_right = screenmiddle.x() - (tilesize-cross_x);
 	int tiles_right = space_right/tilesize;
-	if (space_right>0) 
+	if (space_right>0)
 		tiles_right+=1;
-			
+
 	int space_bottom = screenmiddle.y() - (tilesize-cross_y);
 	int tiles_bottom = space_bottom/tilesize;
-	if (space_bottom>0) 
+	if (space_bottom>0)
 		tiles_bottom+=1;
-			
+
 // 	int tiles_displayed = 0;
 	int mapmiddle_tile_x = mapmiddle_px.x()/tilesize;
 	int mapmiddle_tile_y = mapmiddle_px.y()/tilesize;
@@ -197,14 +198,18 @@ void Layer::_draw(QPainter* painter, const QPoint mapmiddle_px) const
 	const QPoint to =		QPoint((tiles_right+mapmiddle_tile_x+1)*tilesize, (tiles_bottom+mapmiddle_tile_y+1)*tilesize);
 
 	offscreenViewport = QRect(from, to);
-	
+
 	if (mapAdapter->isValid(mapmiddle_tile_x, mapmiddle_tile_y, mapAdapter->getZoom()))
 	{
 		painter->drawPixmap(-cross_x+size.width(),
 							-cross_y+size.height(),
 							ImageManager::instance()->getImage(mapAdapter, mapmiddle_tile_x, mapmiddle_tile_y, mapAdapter->getZoom()));
+		if (MerkaartorPreferences::instance()->getDrawTileBoundary()) {
+			painter->drawRect(-cross_x+size.width(),
+						   -cross_y+size.height(), tilesize, tilesize);
+		}
 	}
-	
+
 	for (i=-tiles_left+mapmiddle_tile_x; i<=tiles_right+mapmiddle_tile_x; i++)
 	{
 		for (j=-tiles_above+mapmiddle_tile_y; j<=tiles_bottom+mapmiddle_tile_y; j++)
@@ -213,18 +218,23 @@ void Layer::_draw(QPainter* painter, const QPoint mapmiddle_px) const
 			if (!(i==mapmiddle_tile_x && j==mapmiddle_tile_y))
 				if (mapAdapter->isValid(i, j, mapAdapter->getZoom()))
 			{
-				
+
 				painter->drawPixmap(((i-mapmiddle_tile_x)*tilesize)-cross_x+size.width(),
 											 ((j-mapmiddle_tile_y)*tilesize)-cross_y+size.height(),
 												ImageManager::instance()->getImage(mapAdapter, i, j, mapAdapter->getZoom()));
+				if (MerkaartorPreferences::instance()->getDrawTileBoundary()) {
+					painter->drawRect(((i-mapmiddle_tile_x)*tilesize)-cross_x+size.width(),
+										((j-mapmiddle_tile_y)*tilesize)-cross_y+size.height(),
+											tilesize, tilesize);
+				}
 // 			if (QCoreApplication::hasPendingEvents())
 // 				QCoreApplication::processEvents();
 			}
 		}
 	}
-	
+
 	return;
-	
+
 	// PREFETCHING
 	int upper = mapmiddle_tile_y-tiles_above-1;
 	int right = mapmiddle_tile_x+tiles_right+1;
@@ -255,7 +265,7 @@ void Layer::_draw(QPainter* painter, const QPoint mapmiddle_px) const
 		if (mapAdapter->isValid(i, j, mapAdapter->getZoom()))
 			ImageManager::instance()->prefetchImage(mapAdapter, i, j, mapAdapter->getZoom());
 	}
-	
+
 }
 
 QRect Layer::getOffscreenViewport() const
@@ -285,6 +295,6 @@ Layer::LayerType Layer::getLayertype() const
 
 void Layer::setMapAdapter(MapAdapter* mapadapter)
 {
-	
+
 	mapAdapter = mapadapter;
 }

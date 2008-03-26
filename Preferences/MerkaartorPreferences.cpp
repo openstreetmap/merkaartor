@@ -475,7 +475,7 @@ void MerkaartorPreferences::restoreMainWindowState(QMainWindow * mainWindow) con
 
 	if (Sets->contains("MainWindow/Size"))
 		mainWindow->resize( Sets->value("MainWindow/Size").toSize());
-	
+
 	if (Sets->contains("MainWindow/State"))
 		mainWindow->restoreState( Sets->value("MainWindow/State").toByteArray() );
 }
@@ -532,4 +532,10 @@ void MerkaartorPreferences::setBgColor(const QColor theValue)
 QHash< QString, qreal > * MerkaartorPreferences::getAlphaPtr()
 {
 	return &alpha;
+}
+
+
+bool MerkaartorPreferences::getDrawTileBoundary()
+{
+	return false;
 }

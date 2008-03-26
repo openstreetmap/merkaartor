@@ -23,7 +23,7 @@ LayerManager::LayerManager(QWidget* aParent, QSize size)
 	:scroll(QPoint(0,0)), size(size), whilenewscroll(QPoint(0,0))
 {
 // 	genauer berechnen?
-	offSize = size + QSize(256*2, 256*2);
+	offSize = size *2;
 	composedOffscreenImage = QPixmap(offSize);
 	composedOffscreenImage2 = QPixmap(offSize);
 	zoomImage = QPixmap(size);
@@ -472,7 +472,7 @@ void LayerManager::drawImage(QPainter* painter)
  */
 void LayerManager::setSize(QSize newSize)
 {
-	offSize = newSize + QSize(256*2, 256*2);
+	offSize = newSize *2;
 	composedOffscreenImage = QPixmap(offSize);
 	composedOffscreenImage2 = QPixmap(offSize);
 	zoomImage = QPixmap(newSize);

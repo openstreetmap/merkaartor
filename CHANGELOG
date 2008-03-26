@@ -1,3 +1,5 @@
+v0.11
+	* FIX : right background column not drawn in large resolution
 v0.10
 	* ADD : warn for older versions of Qt
 	* ADD : save mainwindow layout status (by Daniel van Gerpen)

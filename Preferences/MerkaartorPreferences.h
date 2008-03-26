@@ -166,7 +166,7 @@ public:
 	void setProjectionType(ProjectionType theValue);
 	ProjectionType getProjectionType() const;
 	QStringList getProjectionTypes();
-	
+
 	/* MainWindow state */
 	void saveMainWindowState(const class QMainWindow * mainWindow);
 	void restoreMainWindowState(class QMainWindow * mainWindow) const;
@@ -178,6 +178,7 @@ public:
 	QColor getBgColor() const;
 	void setBgColor(const QColor theValue);
 
+	bool getDrawTileBoundary();
 protected:
 	QString version;
 	bool RightSideDriving;
