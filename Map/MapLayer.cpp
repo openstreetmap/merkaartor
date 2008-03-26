@@ -329,7 +329,7 @@ void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 			p->layer_bg = new Layer("Custom Layer", mapadapter_bg, Layer::MapLayer);
 			p->layer_bg->setVisible(p->Visible);
 
-			setName("Map - TWS - " + ts.TmsName);
+			setName("Map - TMS - " + ts.TmsName);
 /*			mapadapter_bg = new OSMMapAdapter();
 			p->layer_bg = new Layer("Custom Layer", mapadapter_bg, Layer::MapLayer);
 			p->layer_bg->setVisible(p->Visible);
