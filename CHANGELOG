@@ -1,4 +1,5 @@
 v0.11
+	* FIX : don't force to enter an u/p for download
 	* FIX : right background column not drawn in large resolution
 v0.10
 	* ADD : warn for older versions of Qt

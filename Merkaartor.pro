@@ -4,7 +4,7 @@ QT += network xml core gui
 CONFIG += release
 
 DEFINES += MAJORVERSION="0"
-DEFINES += MINORVERSION="10"
+DEFINES += MINORVERSION="11"
 
 INCLUDEPATH += .
 DEPENDPATH += .
