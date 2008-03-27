@@ -280,4 +280,6 @@ void MapView::resizeEvent(QResizeEvent * event)
 	projection().zoom(1, QPoint(width() / 2, height() / 2), rect());
 
 	QWidget::resizeEvent(event);
+
+	invalidate();
 }
