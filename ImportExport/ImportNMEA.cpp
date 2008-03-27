@@ -100,7 +100,9 @@ TrackPoint* ImportNMEA::importGGA (QString line)
 		return NULL;
 
 
-	QDateTime date = QDateTime::fromString(tokens[9] + tokens[1], "ddMMyyHHmmss");
+	QDateTime date = QDateTime::fromString(tokens[9] + tokens[1], "ddMMyyHHmmss.zzz");
+	if (date.date().year() < 1970)
+		date = date.addYears(100);
 	date.setTimeSpec(Qt::UTC);
 
 	TrackPoint* Pt = new TrackPoint(Coord(angToRad(lat),angToRad(lon)));
@@ -132,7 +134,10 @@ TrackPoint* ImportNMEA::importRMC (QString line)
 		lon = -lon;
 	//int date = token[9];
 
-	QDateTime date = QDateTime::fromString(tokens[9] + tokens[1], "ddMMyyHHmmss");
+	QString strDate = tokens[9] + tokens[1];
+	QDateTime date = QDateTime::fromString(strDate, "ddMMyyHHmmss.zzz");
+	if (date.date().year() < 1970)
+		date = date.addYears(100);
 	date.setTimeSpec(Qt::UTC);
 
 	TrackPoint* Pt = new TrackPoint(Coord(angToRad(lat),angToRad(lon)));

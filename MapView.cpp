@@ -97,6 +97,8 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 {
 	updateStaticBuffer(anEvent);
 	QPainter P(this);
+	QRegion rg(rect());
+	P.setClipRegion(rg);
 	P.drawPixmap(QPoint(0, 0), *StaticBuffer);
 	if (theInteraction) {
 		P.setRenderHint(QPainter::Antialiasing);

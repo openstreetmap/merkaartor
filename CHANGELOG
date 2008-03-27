@@ -1,4 +1,6 @@
 v0.11
+	* FIX : clipping problem with selected features during resize
+	* FIX : NMEA import timestamps
 	* FIX : don't force to enter an u/p for download
 	* FIX : right background column not drawn in large resolution
 v0.10
