@@ -12,6 +12,8 @@ MOC_DIR += ./GeneratedFiles/release
 OBJECTS_DIR += release
 UI_DIR += ./GeneratedFiles
 
+TRANSLATIONS += merkaartor_de.ts
+
 #Include file(s)
 include(Merkaartor.pri)
 include(QMapControl.pri)

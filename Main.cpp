@@ -1,6 +1,9 @@
 #include <QtGui/QApplication>
 #include <QtGui/QMessageBox> 
 
+#include <QTranslator>
+#include <QLocale>
+
 #include "MainWindow.h" 
 
 int main(int argc, char** argv)
@@ -10,6 +13,14 @@ int main(int argc, char** argv)
 	QCoreApplication::setOrganizationName("BartVanhauwaert");
 	QCoreApplication::setOrganizationDomain("www.irule.be");
 	QCoreApplication::setApplicationName("Merkaartor");
+
+	QTranslator qtTranslator;
+	qtTranslator.load("qt_" + QLocale::system().name());
+	app.installTranslator(&qtTranslator);
+
+	QTranslator merkaartorTranslator;
+	merkaartorTranslator.load("merkaartor_" + QLocale::system().name());
+	app.installTranslator(&merkaartorTranslator);
 
 	MainWindow Main;
 
