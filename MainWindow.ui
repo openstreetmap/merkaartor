@@ -444,7 +444,7 @@
   </action>
   <action name="exportOSMAllAction" >
    <property name="text" >
-    <string>&amp;All..</string>
+    <string>&amp;All...</string>
    </property>
    <property name="statusTip" >
     <string>Export all visible layers to a file</string>

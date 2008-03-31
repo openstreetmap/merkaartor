@@ -675,7 +675,7 @@ void MainWindow::on_bookmarkAddAction_triggered()
 			}
 			if (Bookmarks.contains(text)) {
 				QString newBk = QInputDialog::getText(this, MainWindow::tr("Warning: Bookmark name already exists"),
-						MainWindow::tr("Enter a new one, keep the same to overwrite or Ccancel."), QLineEdit::Normal,
+						MainWindow::tr("Enter a new one, keep the same to overwrite or cancel."), QLineEdit::Normal,
 									   text, &ok);
 				if (ok && Bookmarks.contains(newBk)) {
 					int i = Bookmarks.indexOf(newBk);
