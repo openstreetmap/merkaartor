@@ -1,7 +1,7 @@
 TEMPLATE = app
 TARGET = ./release/merkaartor
 QT += network xml core gui
-CONFIG += debug_and_release 
+CONFIG += debug_and_release
 
 DEFINES += MAJORVERSION="0"
 DEFINES += MINORVERSION="11"
@@ -30,11 +30,11 @@ osmarender {
 }
 
 yahoo {
-    linux {
-        MERKAARTOR_SRC_DIR = "/var/src/merkaartor"
+    unix {
+        WEBKIT_SRC_DIR = "/var/src/WebKit"
     }
     win32 {
-        MERKAARTOR_SRC_DIR = "C:/home/cbrowet/Programming/merkaartor_webkit"
+        WEBKIT_SRC_DIR = "C:/home/cbrowet/Programming/merkaartor_webkit"
     }
 
     DEFINES += YAHOO
@@ -42,8 +42,9 @@ yahoo {
     HEADERS += QMapControl/yahoolegalmapadapter.h QMapControl/browserimagemanager.h
 
     lessThan(QT_MINOR_VERSION, 4) {
-        INCLUDEPATH += $$MERKAARTOR_SRC_DIR/WebKit/WebKit/qt/Api
-        LIBS += -L$$MERKAARTOR_SRC_DIR/WebKit/WebKitBuild/Release/lib -lQtWebKit
+		# NOTE: LD_LIBRARY_PATH must be set to $$WEBKIT_SRC_DIR/WebKitBuild/Release/lib prior to execution if not in ld.so-conf
+        INCLUDEPATH += $$WEBKIT_SRC_DIR/WebKit/qt/Api
+        LIBS += -L$$WEBKIT_SRC_DIR/WebKitBuild/Release/lib -lQtWebKit
     }
 }
 
