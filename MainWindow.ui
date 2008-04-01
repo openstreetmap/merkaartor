@@ -19,7 +19,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>29</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >
@@ -125,11 +125,18 @@
     <addaction name="separator" />
     <addaction name="toolsPreferencesAction" />
    </widget>
+   <widget class="QMenu" name="menu_Node" >
+    <property name="title" >
+     <string>&amp;Node</string>
+    </property>
+    <addaction name="nodeMergeAction" />
+   </widget>
    <addaction name="menuFile" />
    <addaction name="menuEdit" />
    <addaction name="menuView" />
    <addaction name="menuCreate" />
    <addaction name="menuRoad" />
+   <addaction name="menu_Node" />
    <addaction name="menuTools" />
    <addaction name="menuHelp" />
   </widget>
@@ -349,6 +356,9 @@
    <property name="text" >
     <string>Add</string>
    </property>
+   <property name="visible" >
+    <bool>false</bool>
+   </property>
   </action>
   <action name="createNodeAction" >
    <property name="text" >
@@ -476,6 +486,14 @@
   <action name="bookmarkRemoveAction" >
    <property name="text" >
     <string>&amp;Remove...</string>
+   </property>
+  </action>
+  <action name="nodeMergeAction" >
+   <property name="text" >
+    <string>&amp;Merge</string>
+   </property>
+   <property name="statusTip" >
+    <string>Merge the selected nodes (first selected will remain)</string>
    </property>
   </action>
  </widget>

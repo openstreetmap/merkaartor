@@ -2,8 +2,10 @@
 #include "Command/DocumentCommands.h"
 #include "Command/FeatureCommands.h"
 #include "Command/RoadCommands.h"
+#include "Command/RelationCommands.h"
 #include "Map/MapDocument.h"
 #include "Map/Road.h"
+#include "Map/Relation.h"
 #include "Map/TrackPoint.h"
 #include "PropertiesDock.h"
 
@@ -25,7 +27,7 @@ static bool canJoin(Road* R1, Road* R2)
 		(End2 == End1);
 }
 
-static void mergeTags(CommandList* L, Road* Dest, Road* Src)
+static void mergeTags(CommandList* L, MapFeature* Dest, MapFeature* Src)
 {
 	for (unsigned int i=0; i<Src->tagSize(); ++i)
 	{
@@ -176,7 +178,7 @@ static void splitRoad(MapLayer* theLayer, CommandList* theList, Road* In, const 
 		{
 			theList->add(new AddFeatureCommand(theLayer,FirstPart,true));
 			Result.push_back(FirstPart);
-		}	
+		}
 	}
 }
 
@@ -216,5 +218,22 @@ void breakRoads(MapLayer* theLayer, CommandList* theList, PropertiesDock* theDoc
 		for (unsigned int j=0; j<Roads[i]->size(); ++j)
 			for (unsigned int k=i+1; k<Roads.size(); ++k)
 				breakRoad(theLayer, theList, Roads[k],Roads[i]->get(j));
+}
+
+void mergeNodes(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)
+{
+	if (theDock->size() <= 1)
+		return;
+	std::vector<TrackPoint*> Nodes;
+	std::vector<MapFeature*> alt;
+	for (unsigned int i=0; i<theDock->size(); ++i)
+		if (TrackPoint* N = dynamic_cast<TrackPoint*>(theDock->selection(i)))
+			Nodes.push_back(N);
+	TrackPoint* merged = Nodes[0];
+	alt.push_back(merged);
+	for (unsigned int i=1; i<Nodes.size(); ++i) {
+		mergeTags(theList, merged, Nodes[i]);
+		theList->add(new RemoveFeatureCommand(theDocument, Nodes[i], alt));
+	}
 }
 

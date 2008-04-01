@@ -68,6 +68,7 @@ void PropertiesDock::checkMenuStatus()
 	Main->roadJoinAction->setEnabled(NumRoads > 1);
 	Main->roadSplitAction->setEnabled(NumRoads && NumPoints);
 	Main->roadBreakAction->setEnabled(NumRoads > 1);
+	Main->nodeMergeAction->setEnabled(NumPoints > 1);
 }
 
 unsigned int PropertiesDock::size() const
