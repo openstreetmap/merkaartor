@@ -272,7 +272,6 @@ QString MapFeature::tagOSM()
 	QString S;
 	for (unsigned int i=0; i<tagSize(); ++i)
 	{
-		if (tagKey(i) == "width") continue;
 		S += QString("<tag k=\"%1\" v=\"%2\"/>").arg(tagKey(i)).arg(tagValue(i));
 	}
 	return S;
