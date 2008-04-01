@@ -1,6 +1,7 @@
 v0.11
 	* ADD : merge nodes function
 	* FIX : don't ignore "width" tags on export
+	* ADD : translation capabilities
 	* FIX : Misaligned background after view resize
 	* FIX : clipping problem with selected features during resize
 	* FIX : NMEA import timestamps
