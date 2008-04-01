@@ -22,7 +22,7 @@
 
 #define MAX_REQ 8
 
-MapNetwork::MapNetwork(ImageManager* parent)
+MapNetwork::MapNetwork(IImageManager* parent)
 		: parent(parent), http(new QHttp(this)), loaded(0)
 {
 	connect(http, SIGNAL(requestFinished(int, bool)),

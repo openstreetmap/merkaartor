@@ -763,3 +763,7 @@ void MainWindow::projectionTriggered(QAction* anAction)
 	theView->projection().setViewport(theView->projection().viewport(), theView->rect());
 	invalidateView();
 }
+
+void MainWindow::on_nodeMergeAction_triggered()
+{
+}

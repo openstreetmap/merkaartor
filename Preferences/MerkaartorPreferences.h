@@ -29,10 +29,13 @@ enum ImageBackgroundType {
 	Bg_None,
 	Bg_Wms,
  	Bg_Tms
-#ifdef yahoo_illegal
+#ifdef YAHOO
+ 	, Bg_Yahoo
+#endif
+#ifdef YAHOO_ILLEGAL
 	, Bg_Yahoo_illegal
 #endif
-#ifdef google_illegal
+#ifdef GOOGLE_ILLEGAL
 	, Bg_Google_illegal
 #endif
 };

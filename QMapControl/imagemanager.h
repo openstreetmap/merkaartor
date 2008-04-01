@@ -29,21 +29,23 @@
 #include "mapnetwork.h"
 #include "mapadapter.h"
 
+#include "IImageManager.h"
+
 class MapNetwork;
 /**
 	@author Kai Winter <kaiwinter@gmx.de>
 */
-class ImageManager : public QObject
+class ImageManager : public IImageManager
 {
 	Q_OBJECT;
 	public:
 		static ImageManager* instance()
 		{
-			if(!m_Instance)
+			if(!m_ImageManagerInstance)
 			{
-				m_Instance = new ImageManager;
+				m_ImageManagerInstance = new ImageManager;
 			}
-			return m_Instance;
+			return m_ImageManagerInstance;
 		}
 		
 		~ImageManager();
@@ -97,7 +99,7 @@ class ImageManager : public QObject
 		MapNetwork* net;
 		QVector<QString> prefetch;
 	
-		static ImageManager* m_Instance;
+		static ImageManager* m_ImageManagerInstance;
 
 		QDir cacheDir;
 		QFileInfoList cacheInfo;

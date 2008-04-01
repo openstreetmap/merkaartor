@@ -10,6 +10,9 @@
 
 #include "QMapControl/layermanager.h"
 #include "QMapControl/imagemanager.h"
+#ifdef YAHOO
+	#include "QMapControl/browserimagemanager.h"
+#endif
 #include "Preferences/MerkaartorPreferences.h"
 
 
@@ -31,10 +34,16 @@ MapView::MapView(MainWindow* aMain) :
 	if (MerkaartorPreferences::instance()->getProxyUse()) {
 		ImageManager::instance()->setProxy(MerkaartorPreferences::instance()->getProxyHost(),
 			MerkaartorPreferences::instance()->getProxyPort());
+#ifdef YAHOO
+		BrowserImageManager::instance()->setProxy(MerkaartorPreferences::instance()->getProxyHost(),
+			MerkaartorPreferences::instance()->getProxyPort());
+#endif
 	} else {
 		ImageManager::instance()->setProxy("",0);
+#ifdef YAHOO
+		BrowserImageManager::instance()->setProxy("",0);
+#endif
 	}
-
 	layermanager = new LayerManager((QWidget *) this, size());
 
 	pbImages = new QProgressBar(Main);
@@ -47,6 +56,14 @@ MapView::MapView(MainWindow* aMain) :
 		this, SLOT(imageReceived()));
 	connect(ImageManager::instance(), SIGNAL(loadingFinished()),
 		this, SLOT(loadingFinished()));
+#ifdef YAHOO
+	connect(BrowserImageManager::instance(), SIGNAL(imageRequested()),
+		this, SLOT(imageRequested()));
+	connect(BrowserImageManager::instance(), SIGNAL(imageReceived()),
+		this, SLOT(imageReceived()));
+	connect(BrowserImageManager::instance(), SIGNAL(loadingFinished()),
+		this, SLOT(loadingFinished()));
+#endif
 
 }
 
@@ -130,34 +147,36 @@ void MapView::updateStaticBuffer(QPaintEvent * /* anEvent */)
 
 		if (layermanager) {
 			if (layermanager->getLayers().size() > 0) {
-				P.setOpacity(theDocument->getImageLayer()->getAlpha());
-				if (MerkaartorPreferences::instance()->getProjectionType() == Proj_Merkaartor) {
-					QRectF vlm = layermanager->getViewport();
-					Coord ctl = Coord(angToRad(vlm.bottomLeft().y()), angToRad(vlm.bottomLeft().x()));
-					Coord cbr = Coord(angToRad(vlm.topRight().y()), angToRad(vlm.topRight().x()));
-					QPointF tl = projection().project(ctl);
-					QPointF br = projection().project(cbr);
+				if (layermanager->getLayer()->isVisible()) {
+					P.setOpacity(theDocument->getImageLayer()->getAlpha());
+					if (MerkaartorPreferences::instance()->getProjectionType() == Proj_Merkaartor) {
+						QRectF vlm = layermanager->getViewport();
+						Coord ctl = Coord(angToRad(vlm.bottomLeft().y()), angToRad(vlm.bottomLeft().x()));
+						Coord cbr = Coord(angToRad(vlm.topRight().y()), angToRad(vlm.topRight().x()));
+						QPointF tl = projection().project(ctl);
+						QPointF br = projection().project(cbr);
 
-					QRect pr = QRectF(tl, br).toRect();
-					QSize ps = pr.size();
-					QPixmap pm(size());
-					QPainter pmp(&pm);
-					layermanager->drawImage(&pmp);
+						QRect pr = QRectF(tl, br).toRect();
+						QSize ps = pr.size();
+						QPixmap pm(size());
+						QPainter pmp(&pm);
+						layermanager->drawImage(&pmp);
 
-					qreal ratio = qMax((qreal)width()/ps.width()*1.0, (qreal)height()/ps.height());
-					QPixmap pms;
-					if (ratio > 1.0) {
-						pms = pm.scaled(ps /*, Qt::IgnoreAspectRatio, Qt::SmoothTransformation */ );
+						qreal ratio = qMax((qreal)width()/ps.width()*1.0, (qreal)height()/ps.height());
+						QPixmap pms;
+						if (ratio > 1.0) {
+							pms = pm.scaled(ps /*, Qt::IgnoreAspectRatio, Qt::SmoothTransformation */ );
+						} else {
+							QSizeF ds;
+							QRect dr;
+							ds = QSizeF(ratio*pm.width(), ratio*pm.height());
+							dr = QRect(QPoint((pm.width()/2)-(ds.width()/2), (pm.height()/2)-(ds.height()/2)), ds.toSize());
+							pms = pm.copy(dr).scaled(ps*ratio /*, Qt::IgnoreAspectRatio, Qt::SmoothTransformation */ );
+						}
+						P.drawPixmap((width()-pms.width())/2, (height()-pms.height())/2, pms);
 					} else {
-						QSizeF ds;
-						QRect dr;
-						ds = QSizeF(ratio*pm.width(), ratio*pm.height());
-						dr = QRect(QPoint((pm.width()/2)-(ds.width()/2), (pm.height()/2)-(ds.height()/2)), ds.toSize());
-						pms = pm.copy(dr).scaled(ps*ratio /*, Qt::IgnoreAspectRatio, Qt::SmoothTransformation */ );
+						layermanager->drawImage(&P);
 					}
-					P.drawPixmap((width()-pms.width())/2, (height()-pms.height())/2, pms);
-				} else {
-					layermanager->drawImage(&P);
 				}
 			}
 		}
@@ -184,9 +203,11 @@ void MapView::updateStaticBuffer(QPaintEvent * /* anEvent */)
 		}
 	}
 	QTime Stop(QTime::currentTime());
+#if QT_VERSION < 0x040400  // FIXME statusbar->showmessage in mapview::paintevent segfault on 4.4beta1
 	main()->statusBar()->clearMessage();
 	main()->statusBar()->showMessage(QString("Paint took %1ms").
 					 arg(Start.msecsTo(Stop)));
+#endif
 	StaticBufferUpToDate = true;
 }
 

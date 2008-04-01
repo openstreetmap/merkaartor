@@ -53,4 +53,7 @@
     	<file alias="Classic.mas">../Styles/Classic.mas</file>
     	<file alias="Mapnik.mas">../Styles/Mapnik.mas</file>
     </qresource>
+    <qresource prefix="/Html">
+    	<file alias="ymap.html">../ymap.html</file>
+    </qresource>
 </RCC>

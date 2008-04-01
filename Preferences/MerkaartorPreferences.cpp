@@ -71,10 +71,13 @@ void MerkaartorPreferences::initialize()
 	bgTypes.insert(Bg_None, "None");
 	bgTypes.insert(Bg_Wms, "WMS adapter");
 	bgTypes.insert(Bg_Tms, "TMS adapter");
-#ifdef yahoo_illegal
+#ifdef YAHOO
+	bgTypes.insert(Bg_Yahoo, "Yahoo adapter");
+#endif
+#ifdef YAHOO_ILLEGAL
 	bgTypes.insert(Bg_Yahoo_illegal, "Illegal Yahoo adapter");
 #endif
-#ifdef google_illegal
+#ifdef GOOGLE_ILLEGAL
 	bgTypes.insert(Bg_Google_illegal, "Illegal Google adapter");
 #endif
 

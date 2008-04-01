@@ -9,10 +9,13 @@
 #include "QMapControl/mapadapter.h"
 #include "QMapControl/osmmapadapter.h"
 #include "QMapControl/wmsmapadapter.h"
-#ifdef yahoo_illegal
+#ifdef YAHOO
+	#include "QMapControl/yahoolegalmapadapter.h"
+#endif
+#ifdef YAHOO_ILLEGAL
 	#include "QMapControl/yahoomapadapter.h"
 #endif
-#ifdef google_illegal
+#ifdef GOOGLE_ILLEGAL
 	#include "QMapControl/googlesatmapadapter.h"
 #endif
 #include "QMapControl/layer.h"
@@ -336,22 +339,31 @@ void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 
 			setName("Background - OSM");*/
 			break;
-#ifdef yahoo_illegal
-		case Bg_Yahoo_illegal:
-			mapadapter_bg = new YahooMapAdapter("us.maps3.yimg.com", "/aerial.maps.yimg.com/png?v=1.7&t=a&s=256&x=%2&y=%3&z=%1");
+#ifdef YAHOO
+		case Bg_Yahoo:
+			mapadapter_bg = new YahooLegalMapAdapter();
 			p->layer_bg = new Layer("Custom Layer", mapadapter_bg, Layer::MapLayer);
 			p->layer_bg->setVisible(p->Visible);
 
 			setName("Map - Yahoo");
 			break;
 #endif
-#ifdef google_illegal
+#ifdef YAHOO_ILLEGAL
+		case Bg_Yahoo_illegal:
+			mapadapter_bg = new YahooMapAdapter("us.maps3.yimg.com", "/aerial.maps.yimg.com/png?v=1.7&t=a&s=256&x=%2&y=%3&z=%1");
+			p->layer_bg = new Layer("Custom Layer", mapadapter_bg, Layer::MapLayer);
+			p->layer_bg->setVisible(p->Visible);
+
+			setName("Map - Illegal Yahoo");
+			break;
+#endif
+#ifdef GOOGLE_ILLEGAL
 		case Bg_Google_illegal:
 			mapadapter_bg = new GoogleSatMapAdapter();
 			p->layer_bg = new Layer("Custom Layer", mapadapter_bg, Layer::MapLayer);
 			p->layer_bg->setVisible(p->Visible);
 
-			setName("Map - Google");
+			setName("Map - Illegal Google");
 			break;
 #endif
 	}

@@ -28,6 +28,9 @@
 #include <QDebug>
 #include <cmath>
 
+#include "IImageManager.h"
+#include "imagemanager.h"
+
 //! Used to fit map servers into QMapControl
 /*!
  * MapAdapters are needed to convert between world- and display coordinates.
@@ -46,6 +49,7 @@
 class MapAdapter : public QObject
 {
 	friend class ImageManager;
+	friend class BrowserImageManager;
 	friend class Layer;
 
 Q_OBJECT
@@ -110,6 +114,8 @@ public:
 	 * @return the world coordinate
 	 */
 	virtual QPointF	displayToCoordinate(const QPoint& point) const = 0;
+
+	virtual IImageManager* getImageManager();
 
 protected:
 	QString name;

@@ -21,9 +21,10 @@
 
 #include <QDateTime>
 
-ImageManager* ImageManager::m_Instance = 0;
+ImageManager* ImageManager::m_ImageManagerInstance = 0;
+
 ImageManager::ImageManager(QObject* parent)
-	:QObject(parent), emptyPixmap(QPixmap(1,1)), net(new MapNetwork(this))
+	:IImageManager(parent), emptyPixmap(QPixmap(1,1)), net(new MapNetwork(this))
 {
 	emptyPixmap.fill(Qt::transparent);
 

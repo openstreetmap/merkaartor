@@ -26,24 +26,18 @@
 #include <QVector>
 #include <QQueue>
 #include <QPixmap>
-#include "imagemanager.h"
+#include <QMutex>
+
+#include "IImageManager.h"
 /**
 	@author Kai Winter <kaiwinter@gmx.de>
 */
-class LoadingRequest
-{
-	public:
-		LoadingRequest(QString h, QString H, QString U) : hash(h), host(H), url(U) {};
-	QString hash;
-	QString host;
-	QString url;
-};
 class ImageManager;
 class MapNetwork : QObject
 {
 	Q_OBJECT
 	public:
-		MapNetwork(ImageManager* parent);
+		MapNetwork(IImageManager* parent);
 		~MapNetwork();
 
 		void loadImage(const QString& hash, const QString& host, const QString& url);
@@ -63,7 +57,7 @@ class MapNetwork : QObject
 		void setProxy(QString host, int port);
 
 	private:
-		ImageManager* parent;
+		IImageManager* parent;
 		QHttp* http;
 		QMap<int, QString> loadingMap;
 		QQueue<LoadingRequest*> loadingRequests;

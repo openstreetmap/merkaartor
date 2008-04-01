@@ -88,10 +88,14 @@ class ImageLayerWidget : public LayerWidget
 // 		QActionGroup* actgrAdapter;
 // 		QActionGroup* actgrWms;
 // 		QActionGroup* actgrTms;
-#ifdef yahoo_illegal
+
+#ifdef YAHOO
+		QAction* actLegalYahoo;
+#endif
+#ifdef YAHOO_ILLEGAL
 		QAction* actYahoo;
 #endif
-#ifdef google_illegal
+#ifdef GOOGLE_ILLEGAL
 		QAction* actGoogle;
 #endif
 		QAction* actNone;
@@ -102,10 +106,13 @@ class ImageLayerWidget : public LayerWidget
 	private slots:
 		void setWms(QAction*);
 		void setTms(QAction*);
-#ifdef yahoo_illegal
+#ifdef YAHOO
+		void setLegalYahoo(bool);
+#endif
+#ifdef YAHOO_ILLEGAL
 		void setYahoo(bool);
 #endif
-#ifdef google_illegal
+#ifdef GOOGLE_ILLEGAL
 		void setGoogle(bool);
 #endif
 // 		void setOSM(bool);

@@ -147,13 +147,19 @@ ImageLayerWidget::ImageLayerWidget(ImageMapLayer* aLayer, QWidget* aParent)
 // 	actOSM->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_OSM));
 // 	connect(actOSM, SIGNAL(triggered(bool)), this, SLOT(setOSM(bool)));
 
-#ifdef yahoo_illegal
+#ifdef YAHOO
+	actLegalYahoo = new QAction(MerkaartorPreferences::instance()->getBgTypes()[Bg_Yahoo], this);
+	//actYahoo->setCheckable(true);
+	actLegalYahoo->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_Yahoo));
+	connect(actLegalYahoo, SIGNAL(triggered(bool)), this, SLOT(setLegalYahoo(bool)));
+#endif
+#ifdef YAHOO_ILLEGAL
 	actYahoo = new QAction(MerkaartorPreferences::instance()->getBgTypes()[Bg_Yahoo_illegal], this);
 	//actYahoo->setCheckable(true);
 	actYahoo->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_Yahoo_illegal));
 	connect(actYahoo, SIGNAL(triggered(bool)), this, SLOT(setYahoo(bool)));
 #endif
-#ifdef google_illegal
+#ifdef GOOGLE_ILLEGAL
 	actGoogle = new QAction(MerkaartorPreferences::instance()->getBgTypes()[Bg_Google_illegal], this);
 	//actGoogle->setCheckable(true);
 	actGoogle->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_Google_illegal));
@@ -192,7 +198,18 @@ void ImageLayerWidget::setTms(QAction* act)
 	emit (layerChanged(this, true));
 }
 
-#ifdef yahoo_illegal
+#ifdef YAHOO
+void ImageLayerWidget::setLegalYahoo(bool)
+{
+	((ImageMapLayer *)theLayer)->setMapAdapter(Bg_Yahoo);
+	theLayer->setVisible(true);
+
+	this->update(rect());
+	emit (layerChanged(this, true));
+}
+#endif
+
+#ifdef YAHOO_ILLEGAL
 void ImageLayerWidget::setYahoo(bool)
 {
 	((ImageMapLayer *)theLayer)->setMapAdapter(Bg_Yahoo_illegal);
@@ -203,7 +220,7 @@ void ImageLayerWidget::setYahoo(bool)
 }
 #endif
 
-#ifdef google_illegal
+#ifdef GOOGLE_ILLEGAL
 void ImageLayerWidget::setGoogle(bool)
 {
 	((ImageMapLayer *)theLayer)->setMapAdapter(Bg_Google_illegal);
@@ -273,10 +290,13 @@ void ImageLayerWidget::initActions()
 	}
 
 	actNone->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_None));
-#ifdef yahoo_illegal
+#ifdef YAHOO
+	actLegalYahoo->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_Yahoo));
+#endif
+#ifdef YAHOO_ILLEGAL
 	actYahoo->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_Yahoo_illegal));
 #endif
-#ifdef google_illegal
+#ifdef GOOGLE_ILLEGAL
 	actGoogle->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_Google_illegal));
 #endif
 
@@ -289,10 +309,13 @@ void ImageLayerWidget::initActions()
 	connect(tmsMenu, SIGNAL(triggered(QAction*)), this, SLOT(setTms(QAction*)));
 
 // 	ctxMenu->addAction(actOSM);
-#ifdef yahoo_illegal
+#ifdef YAHOO
+	ctxMenu->addAction(actLegalYahoo);
+#endif
+#ifdef YAHOO_ILLEGAL
 	ctxMenu->addAction(actYahoo);
 #endif
-#ifdef google_illegal
+#ifdef GOOGLE_ILLEGAL
 	ctxMenu->addAction(actGoogle);
 #endif
 }
