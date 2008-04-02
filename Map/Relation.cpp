@@ -134,7 +134,6 @@ void Relation::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeat
 				for (unsigned int j=0; j<Alternatives.size(); ++j)
 					theList->add(new RelationAddFeatureCommand(this, Role, Alternatives[j], i+j));
 			}
-			return;
 		}
 }
 

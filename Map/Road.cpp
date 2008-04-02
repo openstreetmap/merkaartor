@@ -281,7 +281,6 @@ void Road::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature,
 				for (unsigned int j=0; j<Alternatives.size(); ++j)
 					theList->add(new RoadAddTrackPointCommand(this, Alternatives[j], i+j));
 			}
-			return;
 		}
 }
 
