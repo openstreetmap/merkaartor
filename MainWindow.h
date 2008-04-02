@@ -61,12 +61,13 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_bookmarkRemoveAction_triggered();
 		virtual void on_nodeMergeAction_triggered();
 
+		virtual void on_preferencesChanged(void);
+
 	signals:
 		void remove_triggered();
 		void move_triggered();
 		void add_triggered();
 		void reverse_triggered();
-		void preferencesChanged();
 
 	public:
 		PropertiesDock* properties();

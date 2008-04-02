@@ -41,10 +41,9 @@ public slots:
 private:
 	void loadPrefs();
 	void savePrefs();
-public:
 
-private:
-
+signals:
+	void preferencesChanged(void);
 };
 
 #endif

@@ -520,21 +520,24 @@ void MainWindow::on_toolsPreferencesAction_triggered(unsigned int tabidx)
 {
 	PreferencesDialog* Pref = new PreferencesDialog();
 	Pref->tabPref->setCurrentIndex(tabidx);
+	connect (Pref, SIGNAL(preferencesChanged(void)), this, SLOT(on_preferencesChanged(void)));
 
-	if (Pref->exec() == QDialog::Accepted) {
-		theDocument->getImageLayer()->setMapAdapter(MerkaartorPreferences::instance()->getBgType());
-		theDocument->getImageLayer()->updateWidget();
-		adjustLayers(true);
+	Pref->exec();
+}
 
-		ImageManager::instance()->setCacheDir(MerkaartorPreferences::instance()->getCacheDir());
-		ImageManager::instance()->setCacheMaxSize(MerkaartorPreferences::instance()->getCacheSize());
-		if (MerkaartorPreferences::instance()->getProxyUse()) {
-			ImageManager::instance()->setProxy(MerkaartorPreferences::instance()->getProxyHost(),
-				MerkaartorPreferences::instance()->getProxyPort());
-		} else {
-			ImageManager::instance()->setProxy("",0);
-		}
-		emit(preferencesChanged());
+void MainWindow::on_preferencesChanged(void)
+{
+	theDocument->getImageLayer()->setMapAdapter(MerkaartorPreferences::instance()->getBgType());
+	theDocument->getImageLayer()->updateWidget();
+	adjustLayers(true);
+
+	ImageManager::instance()->setCacheDir(MerkaartorPreferences::instance()->getCacheDir());
+	ImageManager::instance()->setCacheMaxSize(MerkaartorPreferences::instance()->getCacheSize());
+	if (MerkaartorPreferences::instance()->getProxyUse()) {
+		ImageManager::instance()->setProxy(MerkaartorPreferences::instance()->getProxyHost(),
+			MerkaartorPreferences::instance()->getProxyPort());
+	} else {
+		ImageManager::instance()->setProxy("",0);
 	}
 }
 
