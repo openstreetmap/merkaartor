@@ -54,7 +54,7 @@ void TMSPreferencesDialog::on_btApplyTmsServer_clicked(void)
 void TMSPreferencesDialog::on_btShowCapabilities_clicked(void)
 {
 	if ((edTmsAdr->text() == "") || (edTmsPath->text() == "")) {
-		QMessageBox::critical(this, tr("Merkaartor: GetCapabilities"), tr("Adress and Path cannot be blank."), QMessageBox::Ok);
+		QMessageBox::critical(this, tr("Merkaartor: GetCapabilities"), tr("Address and Path cannot be blank."), QMessageBox::Ok);
 	}
 
 	http = new QHttp(this);

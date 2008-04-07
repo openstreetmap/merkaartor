@@ -302,7 +302,7 @@ void MainWindow::on_fileUploadAction_triggered()
 		if (QMessageBox::question(this,
 			"Old Qt version detected",
 			QString("Your setup uses Qt %1, which contains various known errors in uploading "
-			"data to Openstreetmap leading to 401 server response codes. Are you sure you want to continue (which is not "
+			"data to OpenStreetMap leading to 401 server response codes. Are you sure you want to continue (which is not "
 			"recommended).\n"
 			"For more information see http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor").arg(qVersion()),QMessageBox::Yes|QMessageBox::No) != QMessageBox::Yes)
 			return;
@@ -311,7 +311,7 @@ void MainWindow::on_fileUploadAction_triggered()
 	MerkaartorPreferences* p = MerkaartorPreferences::instance();
 	while (p->getOsmUser().isEmpty()) {
 		int ret = QMessageBox::warning(this, tr("Upload OSM"), tr("You don't seem to have specified your\n"
-			"Openstreetmap userid & password.\nDo you want to do this now?"), QMessageBox::Yes | QMessageBox::No);
+			"OpenStreetMap username and password.\nDo you want to do this now?"), QMessageBox::Yes | QMessageBox::No);
 		if (ret == QMessageBox::Yes) {
 			on_toolsPreferencesAction_triggered(1);
 		} else

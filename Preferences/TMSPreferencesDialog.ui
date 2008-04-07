@@ -100,7 +100,7 @@
          <item>
           <widget class="QLabel" name="label_5" >
            <property name="text" >
-            <string>Server adress:</string>
+            <string>Server address:</string>
            </property>
           </widget>
          </item>
