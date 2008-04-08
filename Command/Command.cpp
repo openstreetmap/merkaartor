@@ -1,10 +1,31 @@
 #include "Command/Command.h"
+#include "Map/MapDocument.h"
+#include "Command/DocumentCommands.h"
+#include "Command/RoadCommands.h"
+#include "Command/RelationCommands.h"
+#include "Command/TrackPointCommands.h"
+#include "Command/FeatureCommands.h"
 
 #include <QtGui/QAction>
+#include <QUuid>
 
 Command::~Command()
 {
 }
+
+void Command::setId(const QString& id)
+{
+	Id = id;
+}
+
+const QString& Command::id() const
+{
+	if (Id == "")
+		Id = QUuid::createUuid().toString();
+	return Id;
+}
+
+// COMMANDLIST
 
 CommandList::CommandList()
 : IsUpdateFromOSM(false)
@@ -61,6 +82,77 @@ bool CommandList::buildDirtyList(DirtyList& theList)
 	return Subs.size() == 0;
 }
 
+bool CommandList::toXML(QDomElement& xParent) const
+{
+	bool OK = true;
+
+	QDomElement e = xParent.ownerDocument().createElement("CommandList");
+	xParent.appendChild(e);
+
+	for (unsigned int i=0; i<Subs.size(); ++i) {
+		OK = Subs[i]->toXML(e);
+	}
+
+	return OK;
+}
+
+CommandList* CommandList::fromXML(MapDocument* d, QDomElement& e)
+{
+	CommandList* l = new CommandList();
+	l->setId(e.attribute("id"));
+
+	QDomElement c = e.firstChildElement();
+	while(!c.isNull()) {
+		if (c.tagName() == "AddFeatureCommand") {
+			AddFeatureCommand* C = AddFeatureCommand::fromXML(d, c);
+			l->add(C);
+		} else
+		if (c.tagName() == "MoveTrackPointCommand") {
+			MoveTrackPointCommand* C = MoveTrackPointCommand::fromXML(d, c);
+			l->add(C);
+		} else
+		if (c.tagName() == "RelationAddFeatureCommand") {
+			RelationAddFeatureCommand* C = RelationAddFeatureCommand::fromXML(d, c);
+			l->add(C);
+		} else
+		if (c.tagName() == "RelationRemoveFeatureCommand") {
+			RelationRemoveFeatureCommand* C = RelationRemoveFeatureCommand::fromXML(d, c);
+			l->add(C);
+		} else
+		if (c.tagName() == "RemoveFeatureCommand") {
+			RemoveFeatureCommand* C = RemoveFeatureCommand::fromXML(d, c);
+			l->add(C);
+		} else
+		if (c.tagName() == "RoadAddTrackPointCommand") {
+			RoadAddTrackPointCommand* C = RoadAddTrackPointCommand::fromXML(d, c);
+			l->add(C);
+		} else
+		if (c.tagName() == "RoadRemoveTrackPointCommand") {
+			RoadRemoveTrackPointCommand* C = RoadRemoveTrackPointCommand::fromXML(d, c);
+			l->add(C);
+		} else
+		if (c.tagName() == "ClearTagCommand") {
+			ClearTagCommand* C = ClearTagCommand::fromXML(d, c);
+			l->add(C);
+		//} else
+		//if (c.tagName() == "ClearTagsCommand") {
+		} else
+		if (c.tagName() == "SetTagCommand") {
+			SetTagCommand* C = SetTagCommand::fromXML(d, c);
+			l->add(C);
+		} else
+		if (c.tagName() == "CommandList") {
+			l->add(CommandList::fromXML(d, c));
+		}
+
+		c = c.nextSiblingElement();
+	}
+
+	return l;
+}
+
+
+// COMMANDHISTORY
 
 CommandHistory::CommandHistory()
 : Index(0), UndoAction(0), RedoAction(0)
@@ -143,6 +235,46 @@ unsigned int CommandHistory::buildDirtyList(DirtyList& theList)
 	return Index;
 }
 
+bool CommandHistory::toXML(QDomElement& xParent) const
+{
+	bool OK = true;
 
+	QDomElement e = xParent.namedItem("CommandHistory").toElement();
+	if (!e.isNull()) {
+		xParent.removeChild(e);
+	}
+
+	e = xParent.ownerDocument().createElement("CommandHistory");
+	xParent.appendChild(e);
+
+	//e.setAttribute("index", QString::number(Index));
+
+	for (unsigned int i=0; i<Index; ++i) {
+		OK = Subs[i]->toXML(e);
+	}
+
+	return OK;
+}
+
+CommandHistory* CommandHistory::fromXML(MapDocument* d, QDomElement& e)
+{
+	CommandHistory* h = new CommandHistory();
+
+	QDomElement c = e.firstChildElement();
+	while(!c.isNull()) {
+		if (c.tagName() == "CommandList") {
+			CommandList* l = CommandList::fromXML(d, c);
+			h->add(l);
+		} else
+		if (c.tagName() == "SetTagCommand") {
+			SetTagCommand* C = SetTagCommand::fromXML(d, c);
+			h->add(C);
+		}
+		c = c.nextSiblingElement();
+	}
+	//h->Index = e.attribute("index").toUInt();
+
+	return h;
+}
 
 

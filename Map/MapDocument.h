@@ -1,6 +1,8 @@
 #ifndef MAPDOCUMENT_H_
 #define MAPDOCUMENT_H_
 
+#include <QtXml>
+
 #include "Map/Coord.h"
 #include "PaintStyle/PaintStyle.h"
 #include "MainWindow.h"
@@ -20,6 +22,7 @@ class MapDocument
 {
 
 public:
+	MapDocument();
 	MapDocument(LayerDock* aDock);
 
 private:
@@ -36,10 +39,12 @@ public:
 	bool exists(MapLayer* aLayer) const;
 	bool exists(MapFeature* aFeature) const;
 	unsigned int layerSize() const;
+	MapLayer* getLayer(const QString& id);
 	MapLayer* getLayer(unsigned int i);
 	const MapLayer* getLayer(unsigned int i) const;
 
 	MapFeature* getFeature(const QString& id);
+	void setHistory(CommandHistory* h);
 	CommandHistory& history();
 	const CommandHistory& history() const;
 	void clear();
@@ -50,6 +55,9 @@ public:
 	ImageMapLayer* getImageLayer() const;
 
 	QString exportOSM(const CoordBox& aCoordBox = WORLD_COORDBOX);
+	bool toXML(QDomElement xParent);
+	static MapDocument* fromXML(const QDomElement e, LayerDock* aDock);
+
 	TrackMapLayer* importNMEA(const QString& filename);
 
 private:

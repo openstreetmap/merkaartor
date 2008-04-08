@@ -44,6 +44,9 @@ class MapView :	public QWidget
 
         LayerManager*	layermanager;
 
+		bool toXML(QDomElement xParent);
+		void fromXML(const QDomElement e);
+
 	private:
 		void updateStaticBuffer(QPaintEvent* anEvent);
 		MainWindow* Main;
@@ -52,7 +55,7 @@ class MapView :	public QWidget
 		Interaction* theInteraction;
 		QPixmap* StaticBuffer;
 		bool StaticBufferUpToDate;
-		
+
 		int numImages;
 		QProgressBar* pbImages;
 

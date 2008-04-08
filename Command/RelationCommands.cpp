@@ -31,6 +31,38 @@ bool RelationAddFeatureCommand::buildDirtyList(DirtyList& theList)
 	return theList.update(theRelation);
 }
 
+bool RelationAddFeatureCommand::toXML(QDomElement& xParent) const
+{
+	bool OK = true;
+
+	QDomElement e = xParent.ownerDocument().createElement("RelationAddFeatureCommand");
+	xParent.appendChild(e);
+
+	e.setAttribute("id", id());
+	e.setAttribute("relation", theRelation->xmlId());
+	e.setAttribute("role", Role);
+	e.setAttribute("feature", theMapFeature->xmlId());
+	e.setAttribute("pos", QString::number(Position));
+
+	return OK;
+}
+
+RelationAddFeatureCommand * RelationAddFeatureCommand::fromXML(MapDocument * d, QDomElement e)
+{
+	RelationAddFeatureCommand* a = new RelationAddFeatureCommand();
+	a->setId(e.attribute("id"));
+	a->theRelation = dynamic_cast<Relation*>(d->getFeature("rel"+e.attribute("relation")));
+	a->Role = e.attribute("role");
+	MapFeature* F;
+	if (!(F = d->getFeature("node_"+e.attribute("feature"))))
+		if (!(F = d->getFeature("way_"+e.attribute("feature"))))
+			if (!(F = d->getFeature("rel_"+e.attribute("feature"))))
+				return NULL;
+	a->theMapFeature = F;
+	a->Position = e.attribute("pos").toUInt();
+
+	return a;
+}
 
 /* ROADREMOVEMapFeatureCOMMAND */
 
@@ -61,6 +93,39 @@ void RelationRemoveFeatureCommand::redo()
 bool RelationRemoveFeatureCommand::buildDirtyList(DirtyList& theList)
 {
 	return theList.update(theRelation);
+}
+
+bool RelationRemoveFeatureCommand::toXML(QDomElement& xParent) const
+{
+	bool OK = true;
+
+	QDomElement e = xParent.ownerDocument().createElement("RelationRemoveFeatureCommand");
+	xParent.appendChild(e);
+
+	e.setAttribute("id", id());
+	e.setAttribute("relation", theRelation->xmlId());
+	e.setAttribute("feature", theMapFeature->xmlId());
+	e.setAttribute("index", QString::number(Idx));
+
+	return OK;
+}
+
+RelationRemoveFeatureCommand * RelationRemoveFeatureCommand::fromXML(MapDocument * d, QDomElement e)
+{
+	RelationRemoveFeatureCommand* a = new RelationRemoveFeatureCommand();
+
+	a->setId(e.attribute("id"));
+	a->theRelation = dynamic_cast<Relation*>(d->getFeature("rel"+e.attribute("relation")));
+	MapFeature* F;
+	if (!(F = d->getFeature("node_"+e.attribute("feature"))))
+		if (!(F = d->getFeature("way_"+e.attribute("feature"))))
+			if (!(F = d->getFeature("rel_"+e.attribute("feature"))))
+				return NULL;
+	a->theMapFeature = F;
+	a->Idx = e.attribute("index").toInt();
+	a->Role = a->theRelation->getRole(a->Idx);
+
+	return a;
 }
 
 

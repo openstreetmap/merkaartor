@@ -30,7 +30,10 @@ class TrackSegment : public MapFeature
 		void sortByTime();
 		virtual void partChanged(MapFeature* F, unsigned int ChangeId);
 
-		virtual QString exportOSM() {return QString("");};
+		virtual QString toXML(unsigned int) {return QString("");};
+		virtual bool toXML(QDomElement xParent);
+		static TrackSegment* fromXML(MapDocument* d, MapLayer* L, const QDomElement e);
+
 	private:
 		TrackSegmentPrivate* p;
 };

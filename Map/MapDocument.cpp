@@ -2,6 +2,7 @@
 #include "Map/MapLayer.h"
 #include "Map/MapFeature.h"
 #include "Command/Command.h"
+#include "Map/ImportOSM.h"
 
 #include "ImportExport/ImportNMEA.h"
 
@@ -19,22 +20,29 @@
 class MapDocumentPrivate
 {
 public:
+	MapDocumentPrivate()
+	: History(new CommandHistory()), bgLayer(0), theDock(0) {};
 	~MapDocumentPrivate()
 	{
-		History.cleanup();
+		History->cleanup();
 		for (unsigned int i=0; i<Layers.size(); ++i) {
 			if (theDock)
 				theDock->deleteLayer(Layers[i]);
 			delete Layers[i];
 		}
 	}
-	CommandHistory				History;
+	CommandHistory*				History;
 	std::vector<MapLayer*>		Layers;
 	QMultiMap<QString, QString> tagList;
 	ImageMapLayer*				bgLayer;
 	LayerDock*					theDock;
 
 };
+
+MapDocument::MapDocument()
+	: p(new MapDocumentPrivate)
+{
+}
 
 MapDocument::MapDocument(LayerDock* aDock)
 : p(new MapDocumentPrivate)
@@ -57,6 +65,77 @@ MapDocument::MapDocument(const MapDocument&, LayerDock*)
 MapDocument::~MapDocument()
 {
 	delete p;
+}
+
+bool MapDocument::toXML(QDomElement xParent)
+{
+	bool OK = true;
+
+	QDomElement mapDoc = xParent.namedItem("MapDocument").toElement();
+	if (!mapDoc.isNull()) {
+		xParent.removeChild(mapDoc);
+	}
+	mapDoc = xParent.ownerDocument().createElement("MapDocument");
+	xParent.appendChild(mapDoc);
+
+	for (unsigned int i=0; i<p->Layers.size(); ++i)
+		p->Layers[i]->toXML(mapDoc);
+
+	OK = history().toXML(mapDoc);
+
+	return OK;
+}
+
+MapDocument* MapDocument::fromXML(const QDomElement e, LayerDock* aDock)
+{
+	MapDocument* NewDoc = new MapDocument();
+	NewDoc->p->theDock = aDock;
+
+	CommandHistory* h;
+
+	QDomElement c = e.firstChildElement();
+	while(!c.isNull()) {
+/*		if (c.tagName() == "osm") {
+			MapLayer* NewLayer = new DrawingMapLayer( "Document" );
+			NewDoc->add(NewLayer);
+			QByteArray ba;
+			QTextStream out(&ba);
+			c.save(out,2);
+
+			bool importOK = importOSM(NULL, ba, NewDoc, NewLayer,NULL);
+			if (importOK == false) {
+				delete NewDoc;
+ 				delete NewLayer;
+				return NULL;
+			}
+		} else*/
+		if (c.tagName() == "DrawingMapLayer") {
+			/* DrawingMapLayer* l = */ DrawingMapLayer::fromXML(NewDoc, c);
+/*			if (l)
+				NewDoc->add(l);				*/
+		} else
+		if (c.tagName() == "ImageMapLayer") {
+			ImageMapLayer* l = ImageMapLayer::fromXML(NewDoc, c);
+			if (l) {
+				NewDoc->p->bgLayer = l;
+				NewDoc->add(l);
+			}
+		} else
+		if (c.tagName() == "TrackMapLayer") {
+			/* TrackMapLayer* l = */ TrackMapLayer::fromXML(NewDoc, c);
+/*			if (l)
+			NewDoc->add(l);				*/
+		} else
+		if (c.tagName() == "CommandHistory") {
+			h = CommandHistory::fromXML(NewDoc, c);
+		}
+		c = c.nextSiblingElement();
+	}
+
+	if (NewDoc)
+		NewDoc->setHistory(h);
+
+	return NewDoc;
 }
 
 void MapDocument::setLayerDock(LayerDock* aDock)
@@ -82,14 +161,20 @@ void MapDocument::clear()
 	add(l);
 }
 
+void MapDocument::setHistory(CommandHistory* h)
+{
+	delete p->History;
+	p->History = h;
+}
+
 CommandHistory& MapDocument::history()
 {
-	return p->History;
+	return *(p->History);
 }
 
 const CommandHistory& MapDocument::history() const
 {
-	return p->History;
+	return *(p->History);
 }
 
 void MapDocument::add(MapLayer* aLayer)
@@ -149,6 +234,15 @@ unsigned int MapDocument::layerSize() const
 	return p->Layers.size();
 }
 
+MapLayer* MapDocument::getLayer(const QString& id)
+{
+	for (unsigned int i=0; i<p->Layers.size(); ++i)
+	{
+		if (p->Layers[i]->id() == id) return p->Layers[i];
+	}
+	return 0;
+}
+
 MapLayer* MapDocument::getLayer(unsigned int i)
 {
 	return p->Layers[i];
@@ -181,7 +275,7 @@ QString MapDocument::exportOSM(const CoordBox& aCoordBox)
 	for (VisibleFeatureIterator i(this); !i.isEnd(); ++i) {
 		if (TrackPoint* P = dynamic_cast<TrackPoint*>(i.get())) {
 			if (aCoordBox.contains(P->position())) {
-				coreExport += P->exportOSM() + "\n";
+				coreExport += P->toXML(1) + "\n";
 			}
 		} else
 			if (Road* G = dynamic_cast<Road*>(i.get())) {
@@ -189,9 +283,9 @@ QString MapDocument::exportOSM(const CoordBox& aCoordBox)
 					for (unsigned int j=0; j < G->size(); j++) {
 						if (TrackPoint* P = dynamic_cast<TrackPoint*>(G->get(j)))
 							if (!aCoordBox.contains(P->position()))
-								coreExport += P->exportOSM();
+								coreExport += P->toXML(1);
 					}
-					coreExport += G->exportOSM() + "\n";
+					coreExport += G->toXML(1) + "\n";
 				}
 			} else
 				//FIXME Not working for relation (not made of point?)
@@ -203,13 +297,13 @@ QString MapDocument::exportOSM(const CoordBox& aCoordBox)
 									for (unsigned int k=0; k < R->size(); k++) {
 										if (TrackPoint* P = dynamic_cast<TrackPoint*>(R->get(k)))
 											if (!aCoordBox.contains(P->position()))
-												coreExport += P->exportOSM() + "\n";
+												coreExport += P->toXML(1) + "\n";
 									}
-									coreExport += R->exportOSM() + "\n";
+									coreExport += R->toXML(1) + "\n";
 								}
 							}
 						}
-						coreExport += G->exportOSM() + "\n";
+						coreExport += G->toXML(1) + "\n";
 					}
 				}
 	}
@@ -353,14 +447,6 @@ unsigned int FeatureIterator::index()
 
 /* RELATED */
 
-static CoordBox boundingBox(const MapLayer* theLayer)
-{
-	CoordBox Box(theLayer->get(0)->boundingBox());
-	for (unsigned int i=1; i<theLayer->size(); ++i)
-		Box.merge(theLayer->get(i)->boundingBox());
-	return Box;
-}
-
 std::pair<bool,CoordBox> boundingBox(const MapDocument* theDocument)
 {
 	unsigned int First;
@@ -369,10 +455,10 @@ std::pair<bool,CoordBox> boundingBox(const MapDocument* theDocument)
 			break;
 	if (First == theDocument->layerSize())
 		return std::make_pair(false,CoordBox(Coord(0,0),Coord(0,0)));
-	CoordBox BBox(boundingBox(theDocument->getLayer(First)));
+	CoordBox BBox(MapLayer::boundingBox(theDocument->getLayer(First)));
 	for (unsigned int i=First+1; i<theDocument->layerSize(); ++i)
 		if (theDocument->getLayer(i)->size())
-			BBox.merge(boundingBox(theDocument->getLayer(i)));
+			BBox.merge(MapLayer::boundingBox(theDocument->getLayer(i)));
 	return std::make_pair(true,BBox);
 }
 

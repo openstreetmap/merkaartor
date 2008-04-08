@@ -97,7 +97,7 @@ void LayerWidget::initActions()
 	ctxMenu = new QMenu(this);
 
 	QStringList opStr;
-	opStr << tr("Low") << tr("High") << tr("Opaque");
+	opStr << "Low" << "High" << "Opaque";
 
 	QActionGroup* actgrp = new QActionGroup(this);
 	QMenu* alphaMenu = new QMenu("Opacity", this);

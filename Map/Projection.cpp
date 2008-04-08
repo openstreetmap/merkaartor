@@ -9,7 +9,7 @@
 
 #include <math.h>
 
-#define LAYERMANAGER_OK (layermanager->getLayers().size() > 0)
+#define LAYERMANAGER_OK (layermanager && layermanager->getLayers().size() > 0)
 #define BGPROJ_SELECTED (MerkaartorPreferences::instance()->getProjectionType() == Proj_Background)
 
 // from wikipedia
@@ -232,3 +232,26 @@ void Projection::setCenter(Coord & Center, const QRect & Screen)
 	QPoint panDelta = (curCenterScreen - newCenterScreen).toPoint();
 	panScreen(panDelta, Screen);
 }
+
+bool Projection::toXML(QDomElement xParent) const
+{
+	bool OK = true;
+
+	QDomElement e = xParent.namedItem("Projection").toElement();
+	if (!e.isNull()) {
+		xParent.removeChild(e);
+	}
+	e = xParent.ownerDocument().createElement("Projection");
+	xParent.appendChild(e);
+
+	viewport().toXML("Viewport", e);
+
+	return OK;
+}
+
+void Projection::fromXML(QDomElement e, const QRect & Screen)
+{
+	CoordBox cb = CoordBox::fromXML(e.firstChildElement("Viewport"));
+	setViewport(cb, Screen);
+}
+

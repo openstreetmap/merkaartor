@@ -25,46 +25,6 @@
 #include <QtXml/QXmlAttributes>
 
 
-static TrackPoint* getTrackPointOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id)
-{
-	TrackPoint* Part = dynamic_cast<TrackPoint*>(theDocument->getFeature("node_"+Id));
-	if (!Part)
-	{
-		Part = new TrackPoint(Coord(0,0));
-		Part->setId("node_"+Id);
-		Part->setLastUpdated(MapFeature::NotYetDownloaded);
-		theList->add(new AddFeatureCommand(theLayer, Part, false));
-	}
-	return Part;
-}
-
-static Road* getWayOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id)
-{
-	Road* Part = dynamic_cast<Road*>(theDocument->getFeature("way_"+Id));
-	if (!Part)
-	{
-		Part = new Road;
-		Part->setId("way_"+Id);
-		Part->setLastUpdated(MapFeature::NotYetDownloaded);
-		theList->add(new AddFeatureCommand(theLayer, Part, false));
-	}
-	return Part;
-}
-
-static Relation* getRelationOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id)
-{
-	Relation* Part = dynamic_cast<Relation*>(theDocument->getFeature("rel_"+Id));
-	if (!Part)
-	{
-		Part = new Relation;
-		Part->setId("rel_"+Id);
-		Part->setLastUpdated(MapFeature::NotYetDownloaded);
-		theList->add(new AddFeatureCommand(theLayer, Part, false));
-	}
-	return Part;
-}
-
-
 OSMHandler::OSMHandler(MapDocument* aDoc, MapLayer* aLayer, MapLayer* aConflict, CommandList* aList)
 : theDocument(aDoc), theLayer(aLayer), conflictLayer(aConflict), theList(aList), Current(0)
 {
@@ -120,7 +80,7 @@ void OSMHandler::parseNd(const QXmlAttributes& atts)
 {
 	Road* R = dynamic_cast<Road*>(Current);
 	if (!R) return;
-	TrackPoint *Part = getTrackPointOrCreatePlaceHolder(theDocument, theLayer, theList, atts.value("ref"));
+	TrackPoint *Part = MapFeature::getTrackPointOrCreatePlaceHolder(theDocument, theLayer, theList, atts.value("ref"));
 	if (NewFeature)
 		R->add(Part);
 	else
@@ -174,11 +134,11 @@ void OSMHandler::parseMember(const QXmlAttributes& atts)
 	QString Type = atts.value("type");
 	MapFeature* F = 0;
 	if (Type == "node")
-		F = getTrackPointOrCreatePlaceHolder(theDocument, theLayer, theList, atts.value("ref"));
+		F = MapFeature::getTrackPointOrCreatePlaceHolder(theDocument, theLayer, theList, atts.value("ref"));
 	else if (Type == "way")
-		F = getWayOrCreatePlaceHolder(theDocument, theLayer, theList, atts.value("ref"));
+		F = MapFeature::getWayOrCreatePlaceHolder(theDocument, theLayer, theList, atts.value("ref"));
 	else if (Type == "relation")
-		F = getRelationOrCreatePlaceHolder(theDocument, theLayer, theList, atts.value("ref"));
+		F = MapFeature::getRelationOrCreatePlaceHolder(theDocument, theLayer, theList, atts.value("ref"));
 	if (F)
 	{
 		if (NewFeature)

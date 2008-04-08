@@ -3,8 +3,11 @@
 
 #include "Map/Coord.h"
 #include "Map/MapFeature.h"
+#include "Map/MapDocument.h"
+#include "Map/MapLayer.h"
 
 #include <QtCore/QDateTime>
+#include <QtXml>
 
 class TrackPoint : public MapFeature
 {
@@ -29,7 +32,10 @@ class TrackPoint : public MapFeature
 
 		virtual void partChanged(MapFeature* F, unsigned int ChangeId);
 
-		virtual QString exportOSM();
+		virtual QString toXML(unsigned int lvl=0);
+		virtual bool toXML(QDomElement xParent);
+		virtual bool toTrackXML(QDomElement xParent);
+		static TrackPoint* fromXML(MapDocument* d, MapLayer* L, const QDomElement e);
 
 	private:
 		Coord Position;

@@ -2,6 +2,7 @@
 #define MERKAARTOR_RELATIONS_H_
 
 #include "Map/MapFeature.h"
+#include "Map/MapDocument.h"
 
 class MainWindow;
 class RelationPrivate;
@@ -36,7 +37,9 @@ class Relation : public MapFeature
 		virtual void setLayer(MapLayer* aLayer);
 		virtual void partChanged(MapFeature* F, unsigned int ChangeId);
 
-		virtual QString exportOSM();
+		virtual QString toXML(unsigned int lvl=0);
+		virtual bool toXML(QDomElement xParent);
+		static Relation* fromXML(MapDocument* d, MapLayer* L, const QDomElement e);
 
 	private:
 		Relation(const Relation&);

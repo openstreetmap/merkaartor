@@ -1,4 +1,13 @@
 #include "Map/MapFeature.h"
+#include "Map/Relation.h"
+#include "Map/Road.h"
+#include "Map/TrackPoint.h"
+#include "Command/Command.h"
+#include "Command/DocumentCommands.h"
+#include "Command/FeatureCommands.h"
+#include "Command/RelationCommands.h"
+#include "Command/RoadCommands.h"
+#include "Command/TrackPointCommands.h"
 #include "Map/MapDocument.h"
 #include "Map/MapLayer.h"
 #include "PaintStyle/EditPaintStyle.h"
@@ -69,6 +78,11 @@ void MapFeature::setLayer(MapLayer* aLayer)
 	p->theLayer = aLayer;
 }
 
+MapLayer* MapFeature::layer()
+{
+	return p->theLayer;
+}
+
 void MapFeature::setLastUpdated(MapFeature::ActorType A)
 {
 	p->LastActor = A;
@@ -100,10 +114,24 @@ const QString& MapFeature::id() const
 	return p->Id;
 }
 
+QString MapFeature::xmlId() const
+{
+	return stripToOSMId(id());
+}
+
 void MapFeature::setTag(unsigned int idx, const QString& k, const QString& v)
 {
 	p->PixelPerMForPainter = -1;
-	p->Tags[idx] = std::make_pair(k,v);
+	for (unsigned int i=0; i<p->Tags.size(); ++i)
+		if (p->Tags[i].first == k)
+		{
+			p->Tags[i].second = v;
+			notifyChanges();
+			return;
+		}
+	p->Tags.insert(p->Tags.begin() + idx, std::make_pair(k,v));
+	if (p->theLayer)
+  		p->theLayer->getDocument()->addToTagList(k, v);
 	notifyChanges();
 }
 
@@ -267,14 +295,30 @@ void MapFeature::notifyParents(unsigned int Id)
 	}
 }
 
-QString MapFeature::tagOSM()
+QString MapFeature::tagsToXML(unsigned int lvl)
 {
 	QString S;
 	for (unsigned int i=0; i<tagSize(); ++i)
 	{
-		S += QString("<tag k=\"%1\" v=\"%2\"/>").arg(tagKey(i)).arg(tagValue(i));
+		S += QString(lvl*2, ' ') + QString("<tag k=\"%1\" v=\"%2\"/>\n").arg(tagKey(i)).arg(tagValue(i));
 	}
 	return S;
+}
+
+bool MapFeature::tagsToXML(QDomElement xParent)
+{
+	bool OK = true;
+
+	for (unsigned int i=0; i<tagSize(); ++i)
+	{
+		QDomElement e = xParent.ownerDocument().createElement("tag");
+		xParent.appendChild(e);
+
+		e.setAttribute("k", tagKey(i));
+		e.setAttribute("v", tagValue(i));
+	}
+
+	return OK;
 }
 
 QString MapFeature::stripToOSMId(const QString& id)
@@ -296,3 +340,59 @@ bool hasOSMId(const MapFeature* aFeature)
 		return true;
 	return false;
 }
+
+void MapFeature::tagsFromXML(MapDocument* d, MapFeature * f, QDomElement e)
+{
+	QDomElement c = e.firstChildElement();
+	while(!c.isNull()) {
+		if (c.tagName() == "tag") {
+			f->setTag(c.attribute("k"),c.attribute("v"));
+	  		d->addToTagList(c.attribute("k"), c.attribute("v"));
+		}
+		c = c.nextSiblingElement();
+	}
+}
+
+//Static
+TrackPoint* MapFeature::getTrackPointOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id)
+{
+	TrackPoint* Part = dynamic_cast<TrackPoint*>(theDocument->getFeature("node_"+Id));
+	if (!Part)
+	{
+		Part = new TrackPoint(Coord(0,0));
+		Part->setId("node_"+Id);
+		Part->setLastUpdated(MapFeature::NotYetDownloaded);
+		if (theList)
+			theList->add(new AddFeatureCommand(theLayer, Part, false));
+	}
+	return Part;
+}
+
+Road* MapFeature::getWayOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id)
+{
+	Road* Part = dynamic_cast<Road*>(theDocument->getFeature("way_"+Id));
+	if (!Part)
+	{
+		Part = new Road;
+		Part->setId("way_"+Id);
+		Part->setLastUpdated(MapFeature::NotYetDownloaded);
+		if (theList)
+			theList->add(new AddFeatureCommand(theLayer, Part, false));
+	}
+	return Part;
+}
+
+Relation* MapFeature::getRelationOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id)
+{
+	Relation* Part = dynamic_cast<Relation*>(theDocument->getFeature("rel_"+Id));
+	if (!Part)
+	{
+		Part = new Relation;
+		Part->setId("rel_"+Id);
+		Part->setLastUpdated(MapFeature::NotYetDownloaded);
+		if (theList)
+			theList->add(new AddFeatureCommand(theLayer, Part, false));
+	}
+	return Part;
+}
+

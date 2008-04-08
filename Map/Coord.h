@@ -3,6 +3,7 @@
 
 #include <math.h>
 #include <QRectF>
+#include <QtXml>
 
 inline double angToRad(double a)
 {
@@ -46,6 +47,9 @@ class Coord
 		{
 			return sqrt(Lat*Lat+Lon*Lon);
 		}
+
+		bool toXML(QString elName, QDomElement& xParent) const;
+		static Coord fromXML(QDomElement e);
 
 	private:
 		double Lat;
@@ -178,6 +182,9 @@ class CoordBox
 		{
 			return QRectF(BottomLeft.lon(), TopRight.lat(), lonDiff(), latDiff());
 		}
+
+		bool toXML(QString elName, QDomElement& xParent) const;
+		static CoordBox fromXML(QDomElement e);
 
 	private:
 		Coord BottomLeft, TopRight;

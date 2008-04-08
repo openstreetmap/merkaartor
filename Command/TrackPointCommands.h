@@ -9,10 +9,14 @@ class TrackPoint;
 class MoveTrackPointCommand : public Command
 {
 	public:
+		MoveTrackPointCommand() : OldPos(Coord(0.0, 0.0)), NewPos(Coord(0.0, 0.0)) {};
 		MoveTrackPointCommand(TrackPoint* aPt, const Coord& aPos);
 		void undo();
 		void redo();
 		bool buildDirtyList(DirtyList& theList);
+
+		virtual bool toXML(QDomElement& xParent) const;
+		static MoveTrackPointCommand* fromXML(MapDocument* d,QDomElement e);
 
 	private:
 		TrackPoint* thePoint;

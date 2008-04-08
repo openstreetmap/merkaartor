@@ -153,3 +153,36 @@ void TrackSegment::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* a
 void TrackSegment::partChanged(MapFeature*, unsigned int)
 {
 }
+
+bool TrackSegment::toXML(QDomElement xParent)
+{
+	bool OK = true;
+
+	QDomElement e = xParent.ownerDocument().createElement("trkseg");
+	xParent.appendChild(e);
+
+	e.setAttribute("xml:id", xmlId());
+
+	for (unsigned int i=0; i<size(); ++i) {
+		get(i)->toTrackXML(e);
+	}
+
+	return OK;
+}
+
+TrackSegment* TrackSegment::fromXML(MapDocument* d, MapLayer* L, const QDomElement e)
+{
+	TrackSegment* l = new TrackSegment();
+
+	QDomElement c = e.firstChildElement();
+	while(!c.isNull()) {
+		if (c.tagName() == "trkpt") {
+			TrackPoint* N = TrackPoint::fromXML(d, L, c);
+			l->add(N);
+			L->add(N);
+		}
+		c = c.nextSiblingElement();
+	}
+
+	return l;
+}

@@ -284,15 +284,70 @@ void Road::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature,
 		}
 }
 
-QString Road::exportOSM()
+QString Road::toXML(unsigned int lvl)
 {
-	QString S;
-	S += QString("<way id=\"%1\">").arg(stripToOSMId(id()));
+	QString S(lvl*2, ' ');
+	S += QString("<way id=\"%1\">\n").arg(stripToOSMId(id()));
 	for (unsigned int i=0; i<size(); ++i)
-		S+=QString("<nd ref=\"%1\"/>").arg(stripToOSMId(get(i)->id()));
-	S += tagOSM();
-	S += "</way>";
+		S += QString((lvl+1)*2, ' ') + QString("<nd ref=\"%1\"/>\n").arg(stripToOSMId(get(i)->id()));
+	S += tagsToXML(lvl+1);
+	S += QString(lvl*2, ' ') + "</way>\n";
 	return S;
+}
+
+bool Road::toXML(QDomElement xParent)
+{
+	bool OK = true;
+
+	QDomElement e = xParent.ownerDocument().createElement("way");
+	xParent.appendChild(e);
+
+	e.setAttribute("id", xmlId());
+
+	for (unsigned int i=0; i<size(); ++i) {
+		QDomElement n = xParent.ownerDocument().createElement("nd");
+		e.appendChild(n);
+
+		n.setAttribute("ref", get(i)->xmlId());
+	}
+
+	tagsToXML(e);
+
+	return OK;
+}
+
+Road * Road::fromXML(MapDocument* d, MapLayer * L, const QDomElement e)
+{
+	QString id = "way_"+e.attribute("id");
+	Road* R = dynamic_cast<Road*>(d->getFeature(id));
+
+	if (!R) {
+		R = new Road();
+		R->setId(id);
+		R->setLastUpdated(MapFeature::OSMServer);
+	}
+
+	QDomElement c = e.firstChildElement();
+	while(!c.isNull()) {
+		if (c.tagName() == "nd") {
+			QString nId = "node_"+c.attribute("ref");
+			TrackPoint* Part = dynamic_cast<TrackPoint*>(d->getFeature(nId));
+			if (!Part)
+			{
+				Part = new TrackPoint(Coord(0,0));
+				Part->setId(nId);
+				Part->setLastUpdated(MapFeature::NotYetDownloaded);
+				L->add(Part);
+			}
+			R->add(Part);
+		}
+		c = c.nextSiblingElement();
+	}
+	L->add(R);
+
+	MapFeature::tagsFromXML(d, R, e);
+
+	return R;
 }
 
 MapFeature::TrafficDirectionType trafficDirection(const Road* R)
@@ -384,3 +439,4 @@ const std::vector<Coord>& Road::smoothed() const
 		p->updateSmoothed(tagValue("smooth","") == "yes");
 	return p->Smoothed;
 }
+

@@ -52,7 +52,7 @@
 #include <QInputDialog>
 
 MainWindow::MainWindow(void)
-		: theDocument(0)
+		: theDocument(0), theXmlDoc(0)
 {
 	setupUi(this);
 	loadPainters(MerkaartorPreferences::instance()->getDefaultStyle());
@@ -168,7 +168,15 @@ static void changeCurrentDirToFile(const QString& s)
 }
 
 
-#define FILTER_LOAD_SUPPORTED \
+#define FILTER_OPEN_SUPPORTED \
+	"Supported formats (*.mdc *.gpx *.osm *.ngt *.nmea *.nme)\n" \
+	"Merkaartor document (*.mdc)\n" \
+	"GPS Exchange format (*.gpx)\n" \
+	"OpenStreetMap format (*.osm)\n" \
+	"Noni GPSPlot format (*.ngt)\n" \
+	"NMEA GPS log format (*.nmea *.nme)\n" \
+	"All Files (*)"
+#define FILTER_IMPORT_SUPPORTED \
 	"Supported formats (*.gpx *.osm *.ngt *.nmea *.nme)\n" \
 	"GPS Exchange format (*.gpx)\n" \
 	"OpenStreetMap format (*.osm)\n" \
@@ -181,7 +189,7 @@ void MainWindow::on_fileImportAction_triggered()
 	QString s = QFileDialog::getOpenFileName(
 					this,
 					tr("Open track file"),
-					"", tr(FILTER_LOAD_SUPPORTED));
+					"", tr(FILTER_IMPORT_SUPPORTED));
 	if (!s.isNull()) {
 		changeCurrentDirToFile(s);
 		bool OK = false;
@@ -234,49 +242,55 @@ void MainWindow::loadFile(const QString & fn)
 	changeCurrentDirToFile(fn);
 
 	theLayers->setUpdatesEnabled(false);
-	MapDocument* NewDoc = new MapDocument(theLayers);
 
-	QString NewLayerName = tr("Open %1").arg( fn.section('/', - 1));
-	MapLayer* NewLayer = NULL;
+	if (fn.endsWith(".mdc")) {
+		loadDocument(fn);
+	} else {
 
-	bool importOK = false;
+		MapDocument* NewDoc = new MapDocument(theLayers);
 
-	if (fn.endsWith(".gpx")) {
-		NewLayer = new TrackMapLayer( NewLayerName );
-		NewDoc->add(NewLayer);
-		importOK = importGPX(this, fn, NewDoc, NewLayer);
+		QString NewLayerName = tr("Open %1").arg( fn.section('/', - 1));
+		MapLayer* NewLayer = NULL;
+
+		bool importOK = false;
+
+		if (fn.endsWith(".gpx")) {
+			NewLayer = new TrackMapLayer( NewLayerName );
+			NewDoc->add(NewLayer);
+			importOK = importGPX(this, fn, NewDoc, NewLayer);
+		}
+		else if (fn.endsWith(".osm")) {
+			NewLayer = new DrawingMapLayer( NewLayerName );
+			NewDoc->add(NewLayer);
+			importOK = importOSM(this, fn, NewDoc, NewLayer);
+		}
+		else if (fn.endsWith(".ngt")) {
+			NewLayer = new TrackMapLayer( NewLayerName );
+			NewDoc->add(NewLayer);
+			importOK = importNGT(this, fn, NewDoc, NewLayer);
+		}
+		else if (fn.endsWith(".nmea") || (fn.endsWith(".nme"))) {
+			importOK = NewDoc->importNMEA(fn);
+		}
+
+		if (!importOK && NewLayer)
+			NewDoc->remove(NewLayer);
+
+		if (importOK == false) {
+			delete NewDoc;
+ 			delete NewLayer;
+			QMessageBox::warning(this, tr("No valid file"), tr("%1 could not be opened.").arg(fn));
+			return;
+		}
+
+		theProperties->setSelection(0);
+		delete theDocument;
+		theDocument = NewDoc;
+		theView->setDocument(theDocument);
+		on_viewZoomAllAction_triggered();
+		on_editPropertiesAction_triggered();
+		theDocument->history().setActions(editUndoAction, editRedoAction);
 	}
-	else if (fn.endsWith(".osm")) {
-		NewLayer = new DrawingMapLayer( NewLayerName );
-		NewDoc->add(NewLayer);
-		importOK = importOSM(this, fn, NewDoc, NewLayer);
-	}
-	else if (fn.endsWith(".ngt")) {
-		NewLayer = new TrackMapLayer( NewLayerName );
-		NewDoc->add(NewLayer);
-		importOK = importNGT(this, fn, NewDoc, NewLayer);
-	}
-	else if (fn.endsWith(".nmea") || (fn.endsWith(".nme"))) {
-		importOK = NewDoc->importNMEA(fn);
-	}
-
-	if (!importOK && NewLayer)
-		NewDoc->remove(NewLayer);
-
-	if (importOK == false) {
-		delete NewDoc;
- 		delete NewLayer;
-		QMessageBox::warning(this, tr("No valid file"), tr("%1 could not be opened.").arg(fn));
-		return;
-	}
-
-	theProperties->setSelection(0);
-	delete theDocument;
-	theDocument = NewDoc;
-	theView->setDocument(theDocument);
-	on_viewZoomAllAction_triggered();
-	on_editPropertiesAction_triggered();
-	theDocument->history().setActions(editUndoAction, editRedoAction);
 
 	theLayers->setUpdatesEnabled(true);
 }
@@ -289,7 +303,7 @@ void MainWindow::on_fileOpenAction_triggered()
 	QString fileName = QFileDialog::getOpenFileName(
 					this,
 					tr("Open track file"),
-					"", tr(FILTER_LOAD_SUPPORTED));
+					"", tr(FILTER_OPEN_SUPPORTED));
 
 	loadFile(fileName);
 }
@@ -541,6 +555,99 @@ void MainWindow::on_preferencesChanged(void)
 	}
 }
 
+void MainWindow::on_fileSaveAsAction_triggered()
+{
+	fileName = QFileDialog::getSaveFileName(this,
+		tr("Save Merkaartor document"), MerkaartorPreferences::instance()->getWorkingDir() + "/untitled.mdc", tr("Merkaartor documents Files (*.mdc)"));
+
+	if (fileName != "") {
+		saveDocument(fileName);
+	}
+}
+
+void MainWindow::on_fileSaveAction_triggered()
+{
+	if (fileName != "") {
+		saveDocument(fileName);
+	}
+}
+
+void MainWindow::saveDocument(QString fn)
+{
+	QFile file(fn);
+	if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+		return;
+
+	QApplication::setOverrideCursor(Qt::WaitCursor);
+
+	QDomElement root;
+	if (!theXmlDoc) {
+		theXmlDoc = new QDomDocument();
+		theXmlDoc->appendChild(theXmlDoc->createProcessingInstruction("xml", "version=\"1.0\""));
+		root = theXmlDoc->createElement("MerkaartorDocument");
+		root.setAttribute("version", "1.0");
+		root.setAttribute("creator", QString("Merkaartor v%1.%2").arg(MAJORVERSION).arg(MINORVERSION));
+
+		theXmlDoc->appendChild(root);
+	} else {
+		root = theXmlDoc->documentElement();
+	}
+
+	theDocument->toXML(root);
+	theView->toXML(root);
+
+	QTextStream out(&file);
+	theXmlDoc->save(out,2);
+	file.close();
+
+	fileName = fn;
+	setWindowTitle(QString("Merkaartor - %1").arg(fileName));
+
+	QApplication::restoreOverrideCursor();
+
+}
+
+void MainWindow::loadDocument(QString fn)
+{
+	QApplication::setOverrideCursor(Qt::WaitCursor);
+
+	theXmlDoc = new QDomDocument();
+	QFile file(fn);
+	if (!file.open(QIODevice::ReadOnly))
+		return;
+	if (!theXmlDoc->setContent(&file)) {
+		file.close();
+		return;
+	}
+	file.close();
+
+	QDomElement docElem = theXmlDoc->documentElement();
+
+	QDomElement e = docElem.firstChildElement();
+	while(!e.isNull()) {
+		if (e.tagName() == "MapDocument") {
+			MapDocument* newDoc = MapDocument::fromXML(e, theLayers);
+			if (newDoc) {
+				theProperties->setSelection(0);
+				delete theDocument;
+				theDocument = newDoc;
+				theView->setDocument(theDocument);
+				on_editPropertiesAction_triggered();
+				theDocument->history().setActions(editUndoAction, editRedoAction);
+			}
+		} else
+		if (e.tagName() == "MapView") {
+			view()->fromXML(e);
+		}
+
+		e = e.nextSiblingElement();
+	}
+	fileName = fn;
+	setWindowTitle(QString("Merkaartor - %1").arg(fileName));
+
+	QApplication::restoreOverrideCursor();
+}
+
 void MainWindow::on_exportOSMAllAction_triggered()
 {
 	QString fileName = QFileDialog::getSaveFileName(this,
@@ -615,6 +722,7 @@ void MainWindow::closeEvent(QCloseEvent * event)
 {
 	if (hasUnsavedChanges(*theDocument) && !mayDiscardUnsavedChanges(this)) {
 		event->ignore();
+		return;
 	}
 
 	MerkaartorPreferences::instance()->saveMainWindowState( this );

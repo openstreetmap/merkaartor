@@ -4,6 +4,7 @@
 #include "GeneratedFiles/ui_MainWindow.h"
 
 #include <QtGui/QMainWindow>
+#include <QtXml>
 
 class LayerDock;
 class MapDocument;
@@ -37,6 +38,8 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_fileUploadAction_triggered();
 		virtual void on_fileImportAction_triggered();
 		virtual void on_fileOpenAction_triggered();
+		virtual void on_fileSaveAsAction_triggered();
+		virtual void on_fileSaveAction_triggered();
 		virtual void on_helpAboutAction_triggered();
 		virtual void on_viewZoomAllAction_triggered();
 		virtual void on_viewZoomInAction_triggered();
@@ -83,12 +86,17 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 	public:
 		void invalidateView(bool UpdateDock = true);
 		void loadFile(const QString & fn);
+		void loadDocument(QString fn);
+		void saveDocument(QString fn);
+
 
 	private:
 		MapView* theView;
 		MapDocument* theDocument;
 		PropertiesDock* theProperties;
 		LayerDock* theLayers;
+		QDomDocument* theXmlDoc;
+		QString fileName;
 
 	private:
 		void updateBookmarksMenu();

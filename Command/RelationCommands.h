@@ -11,12 +11,16 @@ class MapFeature;
 class RelationAddFeatureCommand : public Command
 {
 	public:
+		RelationAddFeatureCommand() {};
 		RelationAddFeatureCommand(Relation* R, const QString& Role, MapFeature* W);
 		RelationAddFeatureCommand(Relation* R, const QString& Role, MapFeature* W, unsigned int Position);
 
 		virtual void undo();
 		virtual void redo();
 		virtual bool buildDirtyList(DirtyList& theList);
+
+		virtual bool toXML(QDomElement& xParent) const;
+		static RelationAddFeatureCommand* fromXML(MapDocument* d,QDomElement e);
 
 	private:
 		Relation* theRelation;
@@ -28,12 +32,16 @@ class RelationAddFeatureCommand : public Command
 class RelationRemoveFeatureCommand : public Command
 {
 	public:
+		RelationRemoveFeatureCommand() {};
 		RelationRemoveFeatureCommand(Relation* R, MapFeature* W);
 		RelationRemoveFeatureCommand(Relation* R, unsigned int anIdx);
 
 		virtual void undo();
 		virtual void redo();
 		virtual bool buildDirtyList(DirtyList& theList);
+
+		virtual bool toXML(QDomElement& xParent) const;
+		static RelationRemoveFeatureCommand* fromXML(MapDocument* d,QDomElement e);
 
 	private:
 		unsigned int Idx;

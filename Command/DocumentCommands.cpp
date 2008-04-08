@@ -2,6 +2,9 @@
 #include "Map/MapDocument.h"
 #include "Map/MapLayer.h"
 #include "Map/MapFeature.h"
+#include "Map/Road.h"
+#include "Map/TrackPoint.h"
+#include "Map/Relation.h"
 #include "Sync/DirtyList.h"
 
 AddFeatureCommand::AddFeatureCommand(MapLayer* aDocument, MapFeature* aFeature, bool aUserAdded)
@@ -35,7 +38,44 @@ bool AddFeatureCommand::buildDirtyList(DirtyList& theList)
 	return false;
 }
 
+bool AddFeatureCommand::toXML(QDomElement& xParent) const
+{
+	bool OK = true;
+
+	QDomElement e = xParent.ownerDocument().createElement("AddFeatureCommand");
+	xParent.appendChild(e);
+
+	e.setAttribute("id", id());
+	e.setAttribute("layer", theLayer->id());
+	e.setAttribute("feature", theFeature->xmlId());
+	e.setAttribute("useradded", QString(UserAdded ? "true" : "false"));
+	return OK;
+}
+
+AddFeatureCommand * AddFeatureCommand::fromXML(MapDocument* d, QDomElement e)
+{
+	AddFeatureCommand* a = new AddFeatureCommand();
+
+	a->setId(e.attribute("id"));
+	a->theLayer = d->getLayer(e.attribute("layer"));
+	MapFeature* F;
+	if (!(F = d->getFeature("node_"+e.attribute("feature"))))
+		if (!(F = d->getFeature("way_"+e.attribute("feature"))))
+			if (!(F = d->getFeature("rel_"+e.attribute("feature"))))
+				return NULL;
+	a->theFeature = F;
+	a->UserAdded = (e.attribute("useradded") == "true" ? true : false);
+	a->	RemoveOnDelete = false;
+
+	return a;
+}
+
 /* REMOVEFEATURECOMMAND */
+
+RemoveFeatureCommand::RemoveFeatureCommand()
+: theLayer(0), Idx(0), theFeature(0), CascadedCleanUp(0), RemoveExecuted(false), RemoveOnDelete(true)
+{
+}
 
 RemoveFeatureCommand::RemoveFeatureCommand(MapDocument *theDocument, MapFeature *aFeature)
 : theLayer(0), Idx(0), theFeature(aFeature), CascadedCleanUp(0), RemoveExecuted(false), RemoveOnDelete(true)
@@ -53,7 +93,7 @@ RemoveFeatureCommand::RemoveFeatureCommand(MapDocument *theDocument, MapFeature 
 }
 
 RemoveFeatureCommand::RemoveFeatureCommand(MapDocument *theDocument, MapFeature *aFeature, const std::vector<MapFeature*>& Alternatives)
-: theLayer(0), Idx(0), theFeature(aFeature), CascadedCleanUp(0), RemoveExecuted(false), RemoveOnDelete(true)
+: theLayer(0), Idx(0), theFeature(aFeature), CascadedCleanUp(0), RemoveExecuted(false), RemoveOnDelete(true), theAlternatives(Alternatives)
 {
 	CascadedCleanUp = new CommandList;
 	for (FeatureIterator it(theDocument); !it.isEnd(); ++it)
@@ -110,3 +150,71 @@ bool RemoveFeatureCommand::buildDirtyList(DirtyList &theList)
 		RemoveExecuted = theList.erase(theFeature);
 	return RemoveExecuted && (CascadedCleanUp == 0);
 }
+
+bool RemoveFeatureCommand::toXML(QDomElement& xParent) const
+{
+	bool OK = true;
+
+	QDomElement e = xParent.ownerDocument().createElement("RemoveFeatureCommand");
+	xParent.appendChild(e);
+
+	e.setAttribute("id", id());
+	e.setAttribute("layer", theLayer->id());
+//	e.setAttribute("feature", theFeature->xmlId());
+	e.setAttribute("index", QString::number(Idx));
+
+	QString S = theFeature->toXML();
+
+	QDomDocument xd;
+	xd.setContent(S);
+
+	QDomNode n = xParent.ownerDocument().importNode(xd.documentElement(), true);
+	e.appendChild(n);
+
+	if (CascadedCleanUp) {
+		QDomElement casc = xParent.ownerDocument().createElement("Cascaded");
+		e.appendChild(casc);
+
+		CascadedCleanUp->toXML(casc);
+	}
+// 	if (theAlternatives.size() > 0) {
+// 		std::vector<MapFeature*>::const_iterator myFeatIter;
+// 		for(myFeatIter = theAlternatives.begin();
+// 			myFeatIter != theAlternatives.end();
+// 			myFeatIter++)
+// 		{
+// 			QDomElement alt = xParent.ownerDocument().createElement("Alternative");
+// 			e.appendChild(alt);
+//
+// 			alt.setAttribute("id", id());
+// 		}
+// 	}
+
+	return OK;
+}
+
+RemoveFeatureCommand * RemoveFeatureCommand::fromXML(MapDocument* d, QDomElement e)
+{
+	RemoveFeatureCommand* a = new RemoveFeatureCommand();
+
+	a->setId(e.attribute("id"));
+	a->theLayer = d->getLayer(e.attribute("layer"));
+//	a->theFeature = d->getFeature(e.attribute("feature"));
+	a->Idx = e.attribute("index").toInt();
+	a->	RemoveOnDelete = true;
+
+	QDomElement c = e.firstChildElement();
+	if (c.tagName() == "way") {
+		a->theFeature = Road::fromXML(d, a->theLayer, c);
+	} else
+	if (c.tagName() == "relation") {
+		a->theFeature =  Relation::fromXML(d, a->theLayer, c);
+	} else
+	if (c.tagName() == "node") {
+		a->theFeature = TrackPoint::fromXML(d, a->theLayer, c);
+	}
+
+	return a;
+}
+
+

@@ -29,6 +29,7 @@
 class TileMapAdapter : public MapAdapter
 {
 Q_OBJECT
+friend class ImageMapLayer;
 public:
 	//! constructor
 	/*!

@@ -26,11 +26,16 @@ class Projection
 		void setCenter(Coord& Center, const QRect& Screen);
 
 		void setLayerManager(LayerManager* lm);
+
+		virtual bool toXML(QDomElement xParent) const;
+		void fromXML(QDomElement e, const QRect & Screen);
+
 	protected:
 		double ScaleLat, DeltaLat, ScaleLon, DeltaLon;
 		CoordBox Viewport;
 		QPoint screen_middle;
 		LayerManager* layermanager;
+
 	private:
 		void viewportRecalc(const QRect& Screen);
 		void layerManagerSetViewport(const CoordBox& Map, const QRect& Screen);

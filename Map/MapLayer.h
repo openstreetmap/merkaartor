@@ -10,10 +10,13 @@ class MapAdapter;
 class Layer;
 class LayerManager;
 class LayerWidget;
+class WMSMapAdapter;
+class TileMapAdapter;
 
 class MapLayer
 {
 public:
+	MapLayer();
 	MapLayer(const QString& aName);
 
 private:
@@ -52,11 +55,16 @@ public:
 	virtual void setAlpha(const qreal alpha);
 	virtual qreal getAlpha() const;
 
+	void setId(const QString& id);
+	const QString& id() const;
+
+	virtual bool toXML(QDomElement xParent) = 0;
+
+	static CoordBox boundingBox(const MapLayer* theLayer);
+
 protected:
 	MapLayerPrivate* p;
-
-private:
-	qreal alpha;
+	mutable QString Id;
 };
 
 class DrawingMapLayer : public MapLayer
@@ -67,11 +75,15 @@ public:
 
 	virtual void setVisible(bool b);
 	virtual LayerWidget* newWidget(void);
+
+	bool toXML(QDomElement xParent);
+	static DrawingMapLayer* fromXML(MapDocument* d, const QDomElement e);
 };
 
 class ImageMapLayer : public MapLayer, public QObject
 {
 public:
+	ImageMapLayer() : layermanager(0) {};
 	ImageMapLayer(const QString& aName);
 	virtual ~ImageMapLayer();
 
@@ -82,6 +94,13 @@ public:
 	virtual void setVisible(bool b);
 	virtual LayerWidget* newWidget(void);
 	virtual void updateWidget();
+
+	bool toXML(QDomElement xParent);
+	static ImageMapLayer* fromXML(MapDocument* d, const QDomElement e);
+
+private:
+	WMSMapAdapter* wmsa;
+	TileMapAdapter* tmsa;
 };
 
 class TrackMapLayer : public MapLayer
@@ -94,6 +113,9 @@ public:
 	virtual LayerWidget* newWidget(void);
 
 	void extractLayer();
+
+	bool toXML(QDomElement xParent);
+	static TrackMapLayer* fromXML(MapDocument* d, const QDomElement e);
 };
 
 #endif

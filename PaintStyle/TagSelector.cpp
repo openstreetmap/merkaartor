@@ -309,7 +309,7 @@ bool TagSelectorAnd::matches(const MapFeature* F) const
 	return true;
 }
 
-QString TagSelectorAnd::asExpression(bool Precedence) const
+QString TagSelectorAnd::asExpression(bool /* Precedence */) const
 {
 	QString R;
 	for (unsigned int i=0; i<Terms.size(); ++i)

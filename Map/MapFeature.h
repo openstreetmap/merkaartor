@@ -53,9 +53,11 @@ class MapFeature
 
 		void setId(const QString& id);
 		const QString& id() const;
+		QString xmlId() const;
 		ActorType lastUpdated() const;
 		void setLastUpdated(ActorType A);
 		virtual void setLayer(MapLayer* aLayer);
+		virtual MapLayer* layer();
 		virtual QString description() const = 0;
 		virtual RenderPriority renderPriority(double aPixelPerM) const = 0;
 
@@ -83,14 +85,20 @@ class MapFeature
 		void notifyChanges();
 		void notifyParents(unsigned int Id);
 
-		virtual QString exportOSM() = 0;
+		virtual QString toXML(unsigned int lvl=0) = 0;
+		virtual bool toXML(QDomElement xParent) = 0;
 
+		static TrackPoint* getTrackPointOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id);
+		static Road* getWayOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id);
+		static Relation* getRelationOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id);
 
 	private:
 		MapFeaturePrivate* p;
 
 	protected:
-		QString tagOSM();
+		QString tagsToXML(unsigned int lvl=0);
+		bool tagsToXML(QDomElement xParent);
+		static void tagsFromXML(MapDocument* d, MapFeature* f, QDomElement e);
 		static QString stripToOSMId(const QString& id);
 
 };

@@ -3,7 +3,9 @@
 
 #include <vector>
 
+#include "Map/MapDocument.h"
 #include "Map/MapFeature.h"
+#include "Map/MapLayer.h"
 
 class RoadPrivate;
 class TrackPoint;
@@ -40,7 +42,10 @@ class Road : public MapFeature
 
 		double area() const;
 
-		virtual QString exportOSM();
+		virtual QString toXML(unsigned int lvl=0);
+		virtual bool toXML(QDomElement xParent);
+		static Road* fromXML(MapDocument* d, MapLayer* L, const QDomElement e);
+
 	private:
 		RoadPrivate* p;
 };

@@ -1,5 +1,6 @@
 #include "Map/Relation.h"
 #include "Map/Road.h"
+#include "Map/TrackPoint.h"
 #include "MainWindow.h"
 #include "Command/DocumentCommands.h"
 #include "Command/RelationCommands.h"
@@ -210,10 +211,10 @@ void Relation::releaseMemberModel()
 	}
 }
 
-QString Relation::exportOSM()
+QString Relation::toXML(unsigned int lvl)
 {
 	QString S;
-	S += QString("<relation id=\"%1\">").arg(stripToOSMId(id()));
+	S += QString(lvl*2, ' ') + QString("<relation id=\"%1\">\n").arg(stripToOSMId(id()));
 	for (unsigned int i=0; i<size(); ++i)
 	{
 		QString Type("node");
@@ -221,13 +222,102 @@ QString Relation::exportOSM()
 			Type="way";
 		else if (dynamic_cast<const Relation*>(get(i)))
 			Type="relation";
-		S+=QString("<member type=\"%1\" ref=\"%2\" role=\"%3\"/>").arg(Type).arg(stripToOSMId(get(i)->id())).arg(getRole(i));
+		S += QString((lvl+1)*2, ' ') + QString("<member type=\"%1\" ref=\"%2\" role=\"%3\"/>").arg(Type).arg(stripToOSMId(get(i)->id())).arg(getRole(i));
 	}
-	S += tagOSM();
-	S += "</relation>";
+	S += tagsToXML(lvl+1);
+	S += QString(lvl*2, ' ') + "</relation>\n";
 	return S;
 }
 
+bool Relation::toXML(QDomElement xParent)
+{
+	bool OK = true;
+
+	QDomElement e = xParent.ownerDocument().createElement("relation");
+	xParent.appendChild(e);
+
+	e.setAttribute("id", xmlId());
+
+	for (unsigned int i=0; i<size(); ++i) {
+		QString Type("node");
+		if (dynamic_cast<const Road*>(get(i)))
+			Type="way";
+		else if (dynamic_cast<const Relation*>(get(i)))
+			Type="relation";
+
+		QDomElement n = xParent.ownerDocument().createElement("member");
+		e.appendChild(n);
+
+		n.setAttribute("type", Type);
+		n.setAttribute("ref", get(i)->xmlId());
+		n.setAttribute("role", getRole(i));
+	}
+
+	tagsToXML(e);
+
+	return OK;
+}
+
+Relation * Relation::fromXML(MapDocument * d, MapLayer * L, const QDomElement e)
+{
+	QString id = "rel_"+e.attribute("id");
+	Relation* R = dynamic_cast<Relation*>(d->getFeature(id));
+	if (!R) {
+		R = new Relation;
+		R->setId(id);
+		R->setLastUpdated(MapFeature::OSMServer);
+	}
+
+	QDomElement c = e.firstChildElement();
+	while(!c.isNull()) {
+		if (c.tagName() == "member") {
+			QString Type = c.attribute("type");
+			MapFeature* F = 0;
+			if (Type == "node") {
+				QString nId = "node_"+c.attribute("ref");
+				TrackPoint* Part = dynamic_cast<TrackPoint*>(d->getFeature(nId));
+				if (!Part)
+				{
+					Part = new TrackPoint(Coord(0,0));
+					Part->setId(nId);
+					Part->setLastUpdated(MapFeature::NotYetDownloaded);
+					L->add(Part);
+				}
+				F = Part;
+			} else if (Type == "way") {
+				QString rId = "way_"+c.attribute("ref");
+				Road* Part = dynamic_cast<Road*>(d->getFeature(rId));
+				if (!Part)
+				{
+					Part = new Road;
+					Part->setId(rId);
+					Part->setLastUpdated(MapFeature::NotYetDownloaded);
+				}
+				F = Part;
+			} else if (Type == "relation") {
+				QString RId = "rel_"+c.attribute("ref");
+				Relation* Part = dynamic_cast<Relation*>(d->getFeature(RId));
+				if (!Part)
+				{
+					Part = new Relation;
+					Part->setId(RId);
+					Part->setLastUpdated(MapFeature::NotYetDownloaded);
+				}
+				F = Part;
+			}
+			if (F)
+			{
+				R->add(e.attribute("role"),F);
+			}
+		}
+		c = c.nextSiblingElement();
+	}
+
+	L->add(R);
+	MapFeature::tagsFromXML(d, R, e);
+
+	return R;
+}
 
 RelationMemberModel::RelationMemberModel(RelationPrivate *aParent, MainWindow* aMain)
 : Parent(aParent), Main(aMain)
@@ -302,6 +392,8 @@ bool RelationMemberModel::setData(const QModelIndex &index, const QVariant &valu
 	}
 	return false;
 }
+
+
 
 
 

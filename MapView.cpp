@@ -88,13 +88,16 @@ void MapView::setDocument(MapDocument* aDoc)
 	theDocument = aDoc;
 
 	delete layermanager;
-	layermanager = new LayerManager((QWidget *) this, size());
+	layermanager = NULL;
 
-	if (theDocument->getImageLayer()->imageLayer())
-		layermanager->addLayer(theDocument->getImageLayer()->imageLayer());
-	theDocument->getImageLayer()->layermanager = layermanager;
+	if (theDocument->getImageLayer()) {
+		layermanager = new LayerManager((QWidget *) this, size());
+		if (theDocument->getImageLayer()->imageLayer())
+			layermanager->addLayer(theDocument->getImageLayer()->imageLayer());
+		theDocument->getImageLayer()->layermanager = layermanager;
+	}
+
 	projection().setLayerManager(layermanager);
-
 	projection().setViewport(WORLD_COORDBOX, rect());
 }
 
@@ -106,7 +109,8 @@ MapDocument *MapView::document()
 void MapView::invalidate()
 {
 	StaticBufferUpToDate = false;
-	layermanager->forceRedraw();
+	if (layermanager)
+		layermanager->forceRedraw();
 	update();
 }
 
@@ -297,10 +301,40 @@ void MapView::loadingFinished()
 void MapView::resizeEvent(QResizeEvent * event)
 {
 	StaticBufferUpToDate = false;
-	layermanager->setSize(size());
+	if (layermanager)
+		layermanager->setSize(size());
 	projection().zoom(1, QPoint(width() / 2, height() / 2), rect());
 
 	QWidget::resizeEvent(event);
 
+	invalidate();
+}
+
+bool MapView::toXML(QDomElement xParent)
+{
+	bool OK = true;
+
+	QDomElement e = xParent.namedItem("MapView").toElement();
+	if (!e.isNull()) {
+		xParent.removeChild(e);
+	}
+	e = xParent.ownerDocument().createElement("MapView");
+	xParent.appendChild(e);
+
+	projection().toXML(e);
+
+	return OK;
+}
+
+void MapView::fromXML(const QDomElement e)
+{
+	QDomElement c = e.firstChildElement();
+	while(!c.isNull()) {
+		if (c.tagName() == "Projection") {
+			projection().fromXML(c, rect());
+		}
+
+		c = c.nextSiblingElement();
+	}
 	invalidate();
 }

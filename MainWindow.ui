@@ -19,7 +19,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>27</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >
@@ -81,10 +81,10 @@
     <addaction name="viewZoomOutAction" />
     <addaction name="viewZoomInAction" />
     <addaction name="separator" />
+    <addaction name="mnuProjections" />
+    <addaction name="separator" />
     <addaction name="viewSetCoordinatesAction" />
     <addaction name="menuBookmarks" />
-    <addaction name="separator" />
-    <addaction name="mnuProjections" />
    </widget>
    <widget class="QMenu" name="menuFile" >
     <property name="title" >
@@ -100,7 +100,11 @@
     <addaction name="fileNewAction" />
     <addaction name="fileOpenAction" />
     <addaction name="fileImportAction" />
+    <addaction name="separator" />
+    <addaction name="fileSaveAction" />
+    <addaction name="fileSaveAsAction" />
     <addaction name="menuExport_OSM" />
+    <addaction name="separator" />
     <addaction name="renderAction" />
     <addaction name="separator" />
     <addaction name="fileDownloadAction" />
@@ -185,6 +189,9 @@
    </property>
    <property name="statusTip" >
     <string>Create a new document and import a file</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+O</string>
    </property>
   </action>
   <action name="viewZoomAllAction" >
@@ -401,6 +408,9 @@
    <property name="statusTip" >
     <string>Create a new document</string>
    </property>
+   <property name="shortcut" >
+    <string>Ctrl+N</string>
+   </property>
   </action>
   <action name="roadSplitAction" >
    <property name="text" >
@@ -494,6 +504,19 @@
    </property>
    <property name="statusTip" >
     <string>Merge the selected nodes (first selected will remain)</string>
+   </property>
+  </action>
+  <action name="fileSaveAsAction" >
+   <property name="text" >
+    <string>Save &amp;As...</string>
+   </property>
+  </action>
+  <action name="fileSaveAction" >
+   <property name="text" >
+    <string>&amp;Save</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+S</string>
    </property>
   </action>
  </widget>

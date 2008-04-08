@@ -29,6 +29,7 @@
 */
 class WMSMapAdapter : public MapAdapter
 {
+	friend class ImageMapLayer;
 	public:
 	//! constructor
 	/*!

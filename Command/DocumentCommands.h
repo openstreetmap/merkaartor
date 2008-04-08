@@ -12,12 +12,16 @@ class MapFeature;
 class AddFeatureCommand : public Command
 {
 	public:
+		AddFeatureCommand() {};
 		AddFeatureCommand(MapLayer* aDocument, MapFeature* aFeature, bool aUserAdded);
 		virtual ~AddFeatureCommand();
 
 		void undo();
 		void redo();
 		bool buildDirtyList(DirtyList& theList);
+
+		virtual bool toXML(QDomElement& xParent) const;
+		static AddFeatureCommand* fromXML(MapDocument* d,QDomElement e);
 
 	private:
 		MapLayer* theLayer;
@@ -29,6 +33,7 @@ class AddFeatureCommand : public Command
 class RemoveFeatureCommand : public Command
 {
 	public:
+		RemoveFeatureCommand();
 		RemoveFeatureCommand(MapDocument* theDocument, MapFeature* aFeature);
 		RemoveFeatureCommand(MapDocument* theDocument, MapFeature* aFeature, const std::vector<MapFeature*>& Alternatives);
 		virtual ~RemoveFeatureCommand();
@@ -37,6 +42,9 @@ class RemoveFeatureCommand : public Command
 		void redo();
 		bool buildDirtyList(DirtyList& theList);
 
+		virtual bool toXML(QDomElement& xParent) const;
+		static RemoveFeatureCommand* fromXML(MapDocument* d,QDomElement e);
+
 	private:
 		MapLayer* theLayer;
 		unsigned int Idx;
@@ -44,6 +52,7 @@ class RemoveFeatureCommand : public Command
 		CommandList* CascadedCleanUp;
 		bool RemoveExecuted;
 		bool RemoveOnDelete;
+		std::vector<MapFeature*> theAlternatives;
 };
 
 #endif
