@@ -322,23 +322,17 @@ QString MapDocument::exportOSM(const CoordBox& aCoordBox)
 	return theExport;
 }
 
-TrackMapLayer* MapDocument::importNMEA(const QString& filename)
+bool MapDocument::importNMEA(const QString& filename, TrackMapLayer* NewLayer)
 {
-	TrackMapLayer* NewLayer = new TrackMapLayer(QObject::tr("Import %1").arg(filename.right(filename.length() - filename.lastIndexOf('/') - 1)));
-
 	ImportNMEA imp;
 	if (!imp.loadFile(filename))
-		return NULL;
+		return false;
 	imp.import(NewLayer);
 
 	if (NewLayer->size())
-		add(NewLayer);
-	else {
-		delete NewLayer;
-		NewLayer = NULL;
-	}
-
-	return NewLayer;
+		return true;
+	else
+		return false;
 }
 
 

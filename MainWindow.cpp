@@ -210,12 +210,12 @@ void MainWindow::on_fileImportAction_triggered()
 				} else
 					if ((s.right(5).toLower() == ".nmea") || (s.right(4).toLower() == ".nme")) {
 						view()->setUpdatesEnabled(false);
-						if (theDocument->importNMEA(s))
+						if (theDocument->importNMEA(s, NewLayer))
 							OK = true;
 						view()->setUpdatesEnabled(true);
 					}
 		if (OK) {
-			on_viewZoomAllAction_triggered();
+			//on_viewZoomAllAction_triggered();
 			on_editPropertiesAction_triggered();
 			theDocument->history().setActions(editUndoAction, editRedoAction);
 		} else {
@@ -270,7 +270,9 @@ void MainWindow::loadFile(const QString & fn)
 			importOK = importNGT(this, fn, NewDoc, NewLayer);
 		}
 		else if (fn.endsWith(".nmea") || (fn.endsWith(".nme"))) {
-			importOK = NewDoc->importNMEA(fn);
+			NewLayer = new TrackMapLayer( NewLayerName );
+			NewDoc->add(NewLayer);
+			importOK = NewDoc->importNMEA(fn, (TrackMapLayer *)NewLayer);
 		}
 
 		if (!importOK && NewLayer)

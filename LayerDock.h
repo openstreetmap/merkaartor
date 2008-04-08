@@ -41,6 +41,7 @@ class LayerDock : public QDockWidget
 	private slots:
 		void layerChanged(LayerWidget*, bool adjustViewport);
 		void layerClosed(MapLayer*);
+		void layerZoom(MapLayer*);
 
 	signals:
 		void layersChanged(bool adjustViewport);

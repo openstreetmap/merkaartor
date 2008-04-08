@@ -130,12 +130,29 @@ void LayerWidget::close()
 	emit(layerClosed(theLayer));
 }
 
+void LayerWidget::zoomLayer(bool)
+{
+	emit (layerZoom(theLayer));
+}
+
+
 // DrawingLayerWidget
 
 DrawingLayerWidget::DrawingLayerWidget(DrawingMapLayer* aLayer, QWidget* aParent)
 	: LayerWidget(aLayer, aParent)
 {
 	backColor = QColor(255,255,255);
+	initActions();
+}
+
+void DrawingLayerWidget::initActions()
+{
+	LayerWidget::initActions();
+	ctxMenu->addSeparator();
+
+	QAction* actZoom = new QAction(tr("Zoom"), ctxMenu);
+	ctxMenu->addAction(actZoom);
+	connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
 }
 
 // ImageLayerWidget
@@ -335,6 +352,7 @@ TrackLayerWidget::TrackLayerWidget(TrackMapLayer* aLayer, QWidget* aParent)
 	: LayerWidget(aLayer, aParent)
 {
 	backColor = QColor(255,255,255);
+	initActions();
 }
 
 void TrackLayerWidget::initActions()
@@ -342,9 +360,13 @@ void TrackLayerWidget::initActions()
 	LayerWidget::initActions();
 	ctxMenu->addSeparator();
 
-	QAction* actExtract = new QAction("Extract Drawing layer", ctxMenu);
+	QAction* actExtract = new QAction(tr("Extract Drawing layer"), ctxMenu);
 	ctxMenu->addAction(actExtract);
 	connect(actExtract, SIGNAL(triggered(bool)), this, SLOT(extractLayer(bool)));
+
+	QAction* actZoom = new QAction(tr("Zoom"), ctxMenu);
+	ctxMenu->addAction(actZoom);
+	connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
 }
 
 TrackLayerWidget::~TrackLayerWidget()

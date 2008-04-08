@@ -2,6 +2,7 @@
 #include "LayerWidget.h"
 
 #include "MainWindow.h"
+#include "MapView.h"
 #include "Map/MapDocument.h"
 #include "Map/MapLayer.h"
 #include "PropertiesDock.h"
@@ -46,6 +47,7 @@ void LayerDock::addLayer(MapLayer* aLayer)
 
 	connect(w, SIGNAL(layerChanged(LayerWidget*,bool)), this, SLOT(layerChanged(LayerWidget*,bool)));
 	connect(w, SIGNAL(layerClosed(MapLayer*)), this, SLOT(layerClosed(MapLayer*)));
+	connect(w, SIGNAL(layerZoom(MapLayer*)), this, SLOT(layerZoom(MapLayer*)));
 
 	update();
 }
@@ -107,5 +109,12 @@ void LayerDock::layerClosed(MapLayer* l)
 	Main->document()->remove(l);
 	delete l;
 	Main->on_editPropertiesAction_triggered();
+}
+
+void LayerDock::layerZoom(MapLayer * l)
+{
+	CoordBox bb = MapLayer::boundingBox(l);
+	Main->view()->projection().setViewport(bb, Main->view()->rect());
+	emit(layersChanged(false));
 }
 

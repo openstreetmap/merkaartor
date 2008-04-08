@@ -58,7 +58,7 @@ public:
 	bool toXML(QDomElement xParent);
 	static MapDocument* fromXML(const QDomElement e, LayerDock* aDock);
 
-	TrackMapLayer* importNMEA(const QString& filename);
+	bool importNMEA(const QString& filename, TrackMapLayer* NewLayer);
 
 private:
 	MapDocumentPrivate* p;
