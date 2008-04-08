@@ -4,6 +4,7 @@
 #include "MainWindow.h"
 #include "Map/MapDocument.h"
 #include "Map/MapLayer.h"
+#include "PropertiesDock.h"
 
 #include <QPushButton>
 
@@ -44,6 +45,7 @@ void LayerDock::addLayer(MapLayer* aLayer)
 	w->setChecked(aLayer->isSelected());
 
 	connect(w, SIGNAL(layerChanged(LayerWidget*,bool)), this, SLOT(layerChanged(LayerWidget*,bool)));
+	connect(w, SIGNAL(layerClosed(MapLayer*)), this, SLOT(layerClosed(MapLayer*)));
 
 	update();
 }
@@ -98,5 +100,12 @@ MapLayer* LayerDock::activeLayer()
 void LayerDock::layerChanged(LayerWidget*, bool adjustViewport)
 {
 	emit(layersChanged(adjustViewport));
+}
+
+void LayerDock::layerClosed(MapLayer* l)
+{
+	Main->document()->remove(l);
+	delete l;
+	Main->on_editPropertiesAction_triggered();
 }
 

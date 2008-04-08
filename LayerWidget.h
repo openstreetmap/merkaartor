@@ -39,9 +39,11 @@ class LayerWidget : public QAbstractButton
 
 	signals:
 		void layerChanged(LayerWidget *, bool adjustViewport);
+		void layerClosed(MapLayer *);
 
 	protected slots:
 		void setOpacity(QAction*);
+		void close();
 };
 
 class DrawingLayerWidget : public LayerWidget

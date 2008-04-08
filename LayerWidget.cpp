@@ -113,12 +113,21 @@ void LayerWidget::initActions()
 	}
 	ctxMenu->addMenu(alphaMenu);
 	connect(alphaMenu, SIGNAL(triggered(QAction*)), this, SLOT(setOpacity(QAction*)));
+
+	QAction* closeAction = new QAction(tr("Delete"), this);
+	connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
+	ctxMenu->addAction(closeAction);
 }
 
 void LayerWidget::setOpacity(QAction *act)
 {
 	theLayer->setAlpha(act->data().toDouble());
 	emit (layerChanged(this, false));
+}
+
+void LayerWidget::close()
+{
+	emit(layerClosed(theLayer));
 }
 
 // DrawingLayerWidget

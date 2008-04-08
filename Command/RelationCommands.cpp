@@ -38,7 +38,7 @@ bool RelationAddFeatureCommand::toXML(QDomElement& xParent) const
 	QDomElement e = xParent.ownerDocument().createElement("RelationAddFeatureCommand");
 	xParent.appendChild(e);
 
-	e.setAttribute("id", id());
+	e.setAttribute("xml:id", id());
 	e.setAttribute("relation", theRelation->xmlId());
 	e.setAttribute("role", Role);
 	e.setAttribute("feature", theMapFeature->xmlId());
@@ -50,7 +50,7 @@ bool RelationAddFeatureCommand::toXML(QDomElement& xParent) const
 RelationAddFeatureCommand * RelationAddFeatureCommand::fromXML(MapDocument * d, QDomElement e)
 {
 	RelationAddFeatureCommand* a = new RelationAddFeatureCommand();
-	a->setId(e.attribute("id"));
+	a->setId(e.attribute("xml:id"));
 	a->theRelation = dynamic_cast<Relation*>(d->getFeature("rel"+e.attribute("relation")));
 	a->Role = e.attribute("role");
 	MapFeature* F;
@@ -102,7 +102,7 @@ bool RelationRemoveFeatureCommand::toXML(QDomElement& xParent) const
 	QDomElement e = xParent.ownerDocument().createElement("RelationRemoveFeatureCommand");
 	xParent.appendChild(e);
 
-	e.setAttribute("id", id());
+	e.setAttribute("xml:id", id());
 	e.setAttribute("relation", theRelation->xmlId());
 	e.setAttribute("feature", theMapFeature->xmlId());
 	e.setAttribute("index", QString::number(Idx));
@@ -114,7 +114,7 @@ RelationRemoveFeatureCommand * RelationRemoveFeatureCommand::fromXML(MapDocument
 {
 	RelationRemoveFeatureCommand* a = new RelationRemoveFeatureCommand();
 
-	a->setId(e.attribute("id"));
+	a->setId(e.attribute("xml:id"));
 	a->theRelation = dynamic_cast<Relation*>(d->getFeature("rel"+e.attribute("relation")));
 	MapFeature* F;
 	if (!(F = d->getFeature("node_"+e.attribute("feature"))))

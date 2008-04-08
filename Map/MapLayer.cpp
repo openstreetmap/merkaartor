@@ -286,7 +286,7 @@ bool DrawingMapLayer::toXML(QDomElement xParent)
 	QDomElement e = xParent.ownerDocument().createElement("DrawingMapLayer");
 	xParent.appendChild(e);
 
-	e.setAttribute("id", id());
+	e.setAttribute("xml:id", id());
 	e.setAttribute("name", p->Name);
 	e.setAttribute("alpha", QString::number(p->alpha,'f',2));
 	e.setAttribute("visible", QString((p->Visible ? "true" : "false")));
@@ -319,7 +319,7 @@ bool DrawingMapLayer::toXML(QDomElement xParent)
 DrawingMapLayer * DrawingMapLayer::fromXML(MapDocument* d, const QDomElement e)
 {
 	DrawingMapLayer* l = new DrawingMapLayer(e.attribute("name"));
-	l->setId(e.attribute("id"));
+	l->setId(e.attribute("xml:id"));
 	l->setAlpha(e.attribute("alpha").toDouble());
 	l->setVisible((e.attribute("visible") == "true" ? true : false));
 	l->setSelected((e.attribute("selected") == "true" ? true : false));
@@ -345,15 +345,15 @@ DrawingMapLayer * DrawingMapLayer::fromXML(MapDocument* d, const QDomElement e)
 		if (c.tagName() == "bound") {
 		} else
 		if (c.tagName() == "way") {
-			Road* R = Road::fromXML(d, l, c);
+			/* Road* R = */ Road::fromXML(d, l, c);
 //			l->add(R);
 		} else
 		if (c.tagName() == "relation") {
-			Relation* r = Relation::fromXML(d, l, c);
+			/* Relation* r = */ Relation::fromXML(d, l, c);
 //			l->add(r);
 		} else
 		if (c.tagName() == "node") {
-			TrackPoint* N = TrackPoint::fromXML(d, l, c);
+			/* TrackPoint* N = */ TrackPoint::fromXML(d, l, c);
 //			l->add(N);
 		}
 
@@ -501,7 +501,7 @@ bool ImageMapLayer::toXML(QDomElement xParent)
 	QDomElement e = xParent.ownerDocument().createElement("ImageMapLayer");
 	xParent.appendChild(e);
 
-	e.setAttribute("id", id());
+	e.setAttribute("xml:id", id());
 	e.setAttribute("name", p->Name);
 	e.setAttribute("alpha", QString::number(p->alpha,'f',2));
 	e.setAttribute("visible", QString((p->Visible ? "true" : "false")));
@@ -548,7 +548,7 @@ bool ImageMapLayer::toXML(QDomElement xParent)
 ImageMapLayer * ImageMapLayer::fromXML(MapDocument* /* d */, const QDomElement e)
 {
 	ImageMapLayer* l = new ImageMapLayer();
-	l->setId(e.attribute("id"));
+	l->setId(e.attribute("xml:id"));
 
 	QDomElement c = e.firstChildElement();
 
@@ -633,7 +633,7 @@ bool TrackMapLayer::toXML(QDomElement xParent)
 	QDomElement e = xParent.ownerDocument().createElement("TrackMapLayer");
 	xParent.appendChild(e);
 
-	e.setAttribute("id", id());
+	e.setAttribute("xml:id", id());
 	e.setAttribute("name", p->Name);
 	e.setAttribute("alpha", QString::number(p->alpha,'f',2));
 	e.setAttribute("visible", QString((p->Visible ? "true" : "false")));
@@ -662,7 +662,7 @@ bool TrackMapLayer::toXML(QDomElement xParent)
 TrackMapLayer * TrackMapLayer::fromXML(MapDocument* d, const QDomElement e)
 {
 	TrackMapLayer* l = new TrackMapLayer(e.attribute("name"));
-	l->setId(e.attribute("id"));
+	l->setId(e.attribute("xml:id"));
 	l->setAlpha(e.attribute("alpha").toDouble());
 	l->setVisible((e.attribute("visible") == "true" ? true : false));
 	l->setSelected((e.attribute("selected") == "true" ? true : false));

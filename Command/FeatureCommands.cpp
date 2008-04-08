@@ -67,7 +67,7 @@ bool SetTagCommand::toXML(QDomElement& xParent) const
 	QDomElement e = xParent.ownerDocument().createElement("SetTagCommand");
 	xParent.appendChild(e);
 
-	e.setAttribute("id", id());
+	e.setAttribute("xml:id", id());
 	e.setAttribute("feature", theFeature->xmlId());
 	e.setAttribute("idx", QString::number(theIdx));
 	e.setAttribute("key", theK);
@@ -79,14 +79,14 @@ bool SetTagCommand::toXML(QDomElement& xParent) const
 SetTagCommand * SetTagCommand::fromXML(MapDocument * d, QDomElement e)
 {
 	SetTagCommand* a = new SetTagCommand();
-	a->setId(e.attribute("id"));
+	a->setId(e.attribute("xml:id"));
 	MapFeature* F;
 	if (!(F = d->getFeature("node_"+e.attribute("feature"))))
 		if (!(F = d->getFeature("way_"+e.attribute("feature"))))
 			if (!(F = d->getFeature("rel_"+e.attribute("feature"))))
 				return NULL;
 	a->theFeature = F;
-	a->theIdx = e.attribute("id").toUInt();
+	a->theIdx = e.attribute("idx").toUInt();
 	a->theK = e.attribute("key");
 	a->theV = e.attribute("value");
 
@@ -122,7 +122,7 @@ SetTagCommand * SetTagCommand::fromXML(MapDocument * d, QDomElement e)
 //	QDomElement e = xParent.ownerDocument().createElement("ClearTagsCommand");
 //	xParent.appendChild(e);
 //
-//	e.setAttribute("id", id());
+//	e.setAttribute("xml:id", id());
 //	e.setAttribute("feature", theFeature->xmlId());
 //
 //	return OK;
@@ -131,7 +131,7 @@ SetTagCommand * SetTagCommand::fromXML(MapDocument * d, QDomElement e)
 //ClearTagsCommand * ClearTagsCommand::fromXML(MapDocument * d, QDomElement e)
 //{
 //	ClearTagsCommand* a = new ClearTagsCommand();
-//	a->setId(e.attribute("id"));
+//	a->setId(e.attribute("xml:id"));
 //	MapFeature* F;
 //	if (!(F = d->getFeature("node_"+e.attribute("feature"))))
 //		if (!(F = d->getFeature("way_"+e.attribute("feature"))))
@@ -167,7 +167,7 @@ bool ClearTagCommand::toXML(QDomElement& xParent) const
 	QDomElement e = xParent.ownerDocument().createElement("ClearTagCommand");
 	xParent.appendChild(e);
 
-	e.setAttribute("id", id());
+	e.setAttribute("xml:id", id());
 	e.setAttribute("feature", theFeature->xmlId());
 	e.setAttribute("idx", QString::number(theIdx));
 	e.setAttribute("key", theK);
@@ -179,14 +179,14 @@ bool ClearTagCommand::toXML(QDomElement& xParent) const
 ClearTagCommand * ClearTagCommand::fromXML(MapDocument * d, QDomElement e)
 {
 	ClearTagCommand* a = new ClearTagCommand();
-	a->setId(e.attribute("id"));
+	a->setId(e.attribute("xml:id"));
 	MapFeature* F;
 	if (!(F = d->getFeature("node_"+e.attribute("feature"))))
 		if (!(F = d->getFeature("way_"+e.attribute("feature"))))
 			if (!(F = d->getFeature("rel_"+e.attribute("feature"))))
 				return NULL;
 	a->theFeature = F;
-	a->theIdx = e.attribute("id").toUInt();
+	a->theIdx = e.attribute("idx").toUInt();
 	a->theK = e.attribute("key");
 	a->theV = e.attribute("value");
 

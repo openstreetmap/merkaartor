@@ -30,7 +30,7 @@ bool MoveTrackPointCommand::toXML(QDomElement& xParent) const
 	QDomElement e = xParent.ownerDocument().createElement("MoveTrackPointCommand");
 	xParent.appendChild(e);
 
-	e.setAttribute("id", id());
+	e.setAttribute("xml:id", id());
 	e.setAttribute("trackpoint", thePoint->xmlId());
 	OldPos.toXML("oldpos", e);
 	NewPos.toXML("newpos", e);
@@ -41,7 +41,7 @@ bool MoveTrackPointCommand::toXML(QDomElement& xParent) const
 MoveTrackPointCommand * MoveTrackPointCommand::fromXML(MapDocument * d, QDomElement e)
 {
 	MoveTrackPointCommand* a = new MoveTrackPointCommand();
-	a->setId(e.attribute("id"));
+	a->setId(e.attribute("xml:id"));
 	a->thePoint = dynamic_cast<TrackPoint*>(d->getFeature("node_"+e.attribute("trackpoint")));
 	a->OldPos = Coord::fromXML(e.firstChildElement("oldpos"));
 	a->NewPos = Coord::fromXML(e.firstChildElement("newpos"));

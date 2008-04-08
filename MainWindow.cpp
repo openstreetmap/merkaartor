@@ -569,6 +569,8 @@ void MainWindow::on_fileSaveAction_triggered()
 {
 	if (fileName != "") {
 		saveDocument(fileName);
+	} else {
+		on_fileSaveAsAction_triggered();
 	}
 }
 

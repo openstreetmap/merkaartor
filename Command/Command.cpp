@@ -99,7 +99,7 @@ bool CommandList::toXML(QDomElement& xParent) const
 CommandList* CommandList::fromXML(MapDocument* d, QDomElement& e)
 {
 	CommandList* l = new CommandList();
-	l->setId(e.attribute("id"));
+	l->setId(e.attribute("xml:id"));
 
 	QDomElement c = e.firstChildElement();
 	while(!c.isNull()) {

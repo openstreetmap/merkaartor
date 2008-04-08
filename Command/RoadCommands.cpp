@@ -38,7 +38,7 @@ bool RoadAddTrackPointCommand::toXML(QDomElement& xParent) const
 	QDomElement e = xParent.ownerDocument().createElement("RoadAddTrackPointCommand");
 	xParent.appendChild(e);
 
-	e.setAttribute("id", id());
+	e.setAttribute("xml:id", id());
 	e.setAttribute("road", theRoad->xmlId());
 	e.setAttribute("trackpoint", theTrackPoint->xmlId());
 	e.setAttribute("pos", QString::number(Position));
@@ -49,7 +49,7 @@ bool RoadAddTrackPointCommand::toXML(QDomElement& xParent) const
 RoadAddTrackPointCommand * RoadAddTrackPointCommand::fromXML(MapDocument * d, QDomElement e)
 {
 	RoadAddTrackPointCommand* a = new RoadAddTrackPointCommand();
-	a->setId(e.attribute("id"));
+	a->setId(e.attribute("xml:id"));
 	a->theRoad = dynamic_cast<Road*>(d->getFeature("way_"+e.attribute("road")));
 	a->theTrackPoint = dynamic_cast<TrackPoint*>(d->getFeature("node_"+e.attribute("trackpoint")));
 	a->Position = e.attribute("pos").toUInt();
@@ -94,7 +94,7 @@ bool RoadRemoveTrackPointCommand::toXML(QDomElement& xParent) const
 	QDomElement e = xParent.ownerDocument().createElement("RoadRemoveTrackPointCommand");
 	xParent.appendChild(e);
 
-	e.setAttribute("id", id());
+	e.setAttribute("xml:id", id());
 	e.setAttribute("road", theRoad->xmlId());
 	e.setAttribute("trackpoint", theTrackPoint->xmlId());
 	e.setAttribute("index", QString::number(Idx));
@@ -105,7 +105,7 @@ bool RoadRemoveTrackPointCommand::toXML(QDomElement& xParent) const
 RoadRemoveTrackPointCommand * RoadRemoveTrackPointCommand::fromXML(MapDocument * d, QDomElement e)
 {
 	RoadRemoveTrackPointCommand* a = new RoadRemoveTrackPointCommand();
-	a->setId(e.attribute("id"));
+	a->setId(e.attribute("xml:id"));
 	a->theRoad = dynamic_cast<Road*>(d->getFeature("way_"+e.attribute("road")));
 	a->theTrackPoint = dynamic_cast<TrackPoint*>(d->getFeature("node_"+e.attribute("trackpoint")));
 	a->Idx = e.attribute("index").toUInt();

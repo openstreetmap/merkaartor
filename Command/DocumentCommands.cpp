@@ -45,7 +45,7 @@ bool AddFeatureCommand::toXML(QDomElement& xParent) const
 	QDomElement e = xParent.ownerDocument().createElement("AddFeatureCommand");
 	xParent.appendChild(e);
 
-	e.setAttribute("id", id());
+	e.setAttribute("xml:id", id());
 	e.setAttribute("layer", theLayer->id());
 	e.setAttribute("feature", theFeature->xmlId());
 	e.setAttribute("useradded", QString(UserAdded ? "true" : "false"));
@@ -56,7 +56,7 @@ AddFeatureCommand * AddFeatureCommand::fromXML(MapDocument* d, QDomElement e)
 {
 	AddFeatureCommand* a = new AddFeatureCommand();
 
-	a->setId(e.attribute("id"));
+	a->setId(e.attribute("xml:id"));
 	a->theLayer = d->getLayer(e.attribute("layer"));
 	MapFeature* F;
 	if (!(F = d->getFeature("node_"+e.attribute("feature"))))
@@ -158,7 +158,7 @@ bool RemoveFeatureCommand::toXML(QDomElement& xParent) const
 	QDomElement e = xParent.ownerDocument().createElement("RemoveFeatureCommand");
 	xParent.appendChild(e);
 
-	e.setAttribute("id", id());
+	e.setAttribute("xml:id", id());
 	e.setAttribute("layer", theLayer->id());
 //	e.setAttribute("feature", theFeature->xmlId());
 	e.setAttribute("index", QString::number(Idx));
@@ -186,7 +186,7 @@ bool RemoveFeatureCommand::toXML(QDomElement& xParent) const
 // 			QDomElement alt = xParent.ownerDocument().createElement("Alternative");
 // 			e.appendChild(alt);
 //
-// 			alt.setAttribute("id", id());
+// 			alt.setAttribute("xml:id", id());
 // 		}
 // 	}
 
@@ -197,7 +197,7 @@ RemoveFeatureCommand * RemoveFeatureCommand::fromXML(MapDocument* d, QDomElement
 {
 	RemoveFeatureCommand* a = new RemoveFeatureCommand();
 
-	a->setId(e.attribute("id"));
+	a->setId(e.attribute("xml:id"));
 	a->theLayer = d->getLayer(e.attribute("layer"));
 //	a->theFeature = d->getFeature(e.attribute("feature"));
 	a->Idx = e.attribute("index").toInt();
@@ -206,12 +206,15 @@ RemoveFeatureCommand * RemoveFeatureCommand::fromXML(MapDocument* d, QDomElement
 	QDomElement c = e.firstChildElement();
 	if (c.tagName() == "way") {
 		a->theFeature = Road::fromXML(d, a->theLayer, c);
+		a->theLayer->remove(a->theFeature);
 	} else
 	if (c.tagName() == "relation") {
 		a->theFeature =  Relation::fromXML(d, a->theLayer, c);
+		a->theLayer->remove(a->theFeature);
 	} else
 	if (c.tagName() == "node") {
 		a->theFeature = TrackPoint::fromXML(d, a->theLayer, c);
+		a->theLayer->remove(a->theFeature);
 	}
 
 	return a;
