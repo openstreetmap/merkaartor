@@ -1,4 +1,5 @@
 v0.11
+	* ADD : french translation
 	* ADD : Merkaartor document (*.mdc)
 	* FIX : Apply button in Preferences now updates the main window immediately
 	* FIX : if a feature contains a node more than once, if the node is deleted, only the first occurence is removed

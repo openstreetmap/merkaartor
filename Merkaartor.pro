@@ -12,7 +12,9 @@ MOC_DIR += ./GeneratedFiles/release
 OBJECTS_DIR += release
 UI_DIR += ./GeneratedFiles
 
-TRANSLATIONS += merkaartor_de.ts
+TRANSLATIONS += \
+	merkaartor_de.ts \
+	merkaartor_fr.ts
 
 #Include file(s)
 include(Merkaartor.pri)
