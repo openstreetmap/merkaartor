@@ -35,6 +35,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_editMapStyleAction_triggered();
 		virtual void on_fileNewAction_triggered();
 		virtual void on_fileDownloadAction_triggered();
+		virtual void on_fileDownloadMoreAction_triggered();
 		virtual void on_fileUploadAction_triggered();
 		virtual void on_fileImportAction_triggered();
 		virtual void on_fileOpenAction_triggered();

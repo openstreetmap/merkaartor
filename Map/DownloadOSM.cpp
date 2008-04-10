@@ -341,7 +341,7 @@ QString Downloader::getURLToTrackPoints()
 	return URL;
 }
 
-bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort, const CoordBox& aBox , MapDocument* theDocument)
+bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort, const CoordBox& aBox , MapDocument* theDocument, MapLayer* theLayer)
 {
 	if (checkForConflicts(theDocument))
 	{
@@ -384,14 +384,7 @@ bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser
 		return false;
 	}
 	Downloader Down(aWeb, aUser, aPassword, UseProxy, ProxyHost, ProxyPort);
-	MapLayer* theLayer = new DrawingMapLayer("Download");
-	theDocument->add(theLayer);
 	bool OK = importOSM(aParent, Rcv.content(), theDocument, theLayer, &Down);
-	if (!OK)
-	{
-		theDocument->remove(theLayer);
-		delete theLayer;
-	}
 	return OK;
 }
 
@@ -442,6 +435,36 @@ bool checkForConflicts(MapDocument* theDocument)
 		if (it.get()->lastUpdated() == MapFeature::OSMServerConflict)
 			return true;
 	return false;
+}
+
+bool downloadMoreOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDocument)
+{
+	if (!theDocument->getLastDownloadLayer())
+		return false;
+
+	QString osmWebsite, osmUser, osmPwd, proxyHost;
+	int proxyPort;
+	bool useProxy;
+	static bool DownloadRaw = false;
+
+	osmWebsite = MerkaartorPreferences::instance()->getOsmWebsite();
+	osmUser = MerkaartorPreferences::instance()->getOsmUser();
+	osmPwd = MerkaartorPreferences::instance()->getOsmPassword();
+
+	useProxy = MerkaartorPreferences::instance()->getProxyUse();
+	proxyHost = MerkaartorPreferences::instance()->getProxyHost();
+	proxyPort = MerkaartorPreferences::instance()->getProxyPort();
+	aParent->view()->setUpdatesEnabled(false);
+
+	bool OK = true;
+	OK = downloadOSM(aParent,osmWebsite,osmUser,osmPwd,useProxy,proxyHost,proxyPort,aBox,theDocument,theDocument->getLastDownloadLayer());
+	aParent->view()->setUpdatesEnabled(true);
+	if (OK)
+	{
+		aParent->view()->projection().setViewport(aBox,aParent->view()->rect());
+		aParent->invalidateView();
+	}
+	return OK;
 }
 
 bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDocument)
@@ -524,14 +547,20 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 			Clip = CoordBox(Coord(R.x(),R.y()),Coord(R.x()+R.width(),R.y()+R.height()));
 		}
 		aParent->view()->setUpdatesEnabled(false);
-		OK = downloadOSM(aParent,osmWebsite,osmUser,osmPwd,useProxy,proxyHost,proxyPort,Clip,theDocument);
+		MapLayer* theLayer = new DrawingMapLayer("Download");
+		theDocument->add(theLayer);
+		OK = downloadOSM(aParent,osmWebsite,osmUser,osmPwd,useProxy,proxyHost,proxyPort,Clip,theDocument,theLayer);
 		if (OK && ui.IncludeTracks->isChecked())
 			OK = downloadTracksFromOSM(aParent,osmWebsite,osmUser,osmPwd,useProxy,proxyHost,proxyPort, Clip,theDocument);
 		aParent->view()->setUpdatesEnabled(true);
 		if (OK)
 		{
+			theDocument->setLastDownloadLayer(theLayer);
 			aParent->view()->projection().setViewport(Clip,aParent->view()->rect());
 			aParent->invalidateView();
+		} else {
+			theDocument->remove(theLayer);
+			delete theLayer;
 		}
 	}
 	delete dlg;

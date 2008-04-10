@@ -62,6 +62,7 @@ class Downloader : public QObject
 };
 
 bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDocument);
+bool downloadMoreOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDocument);
 
 bool checkForConflicts(MapDocument* theDocument);
 

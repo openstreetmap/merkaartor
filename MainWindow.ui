@@ -19,7 +19,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>21</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >
@@ -108,6 +108,7 @@
     <addaction name="renderAction" />
     <addaction name="separator" />
     <addaction name="fileDownloadAction" />
+    <addaction name="fileDownloadMoreAction" />
     <addaction name="fileUploadAction" />
     <addaction name="separator" />
     <addaction name="fileQuitAction" />
@@ -517,6 +518,23 @@
    </property>
    <property name="shortcut" >
     <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="fileDownloadMoreAction" >
+   <property name="text" >
+    <string>Download more</string>
+   </property>
+   <property name="toolTip" >
+    <string>Download the current view to the previous download layer</string>
+   </property>
+   <property name="statusTip" >
+    <string>Download the current view to the previous download layer</string>
+   </property>
+   <property name="whatsThis" >
+    <string>Download the current view to the previous download layer</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Shift+D</string>
    </property>
   </action>
  </widget>

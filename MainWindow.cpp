@@ -98,7 +98,7 @@ MainWindow::~MainWindow(void)
 void MainWindow::adjustLayers(bool adjustViewport)
 {
 	if (adjustViewport) {
-		if (MerkaartorPreferences::instance()->getProjectionType() == ProjectionType::Proj_Background)
+		if (MerkaartorPreferences::instance()->getProjectionType() == Proj_Background)
 			theView->projection().setViewport(theView->projection().viewport(), theView->rect());
 		else
 			theView->projection().zoom(1, QPoint(theView->width() / 2, theView->height() / 2), theView->rect());
@@ -346,6 +346,14 @@ void MainWindow::on_fileUploadAction_triggered()
 void MainWindow::on_fileDownloadAction_triggered()
 {
 	if (downloadOSM(this, theView->projection().viewport(), theDocument)) {
+		on_editPropertiesAction_triggered();
+	} else
+		QMessageBox::warning(this, tr("Error downloading"), tr("The map could not be downloaded"));
+}
+
+void MainWindow::on_fileDownloadMoreAction_triggered()
+{
+	if (downloadMoreOSM(this, theView->projection().viewport(), theDocument)) {
 		on_editPropertiesAction_triggered();
 	} else
 		QMessageBox::warning(this, tr("Error downloading"), tr("The map could not be downloaded"));

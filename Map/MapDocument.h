@@ -60,6 +60,8 @@ public:
 
 	bool importNMEA(const QString& filename, TrackMapLayer* NewLayer);
 
+	MapLayer* getLastDownloadLayer();
+	void setLastDownloadLayer(MapLayer * aLayer);
 private:
 	MapDocumentPrivate* p;
 	QStringList tagKeys;

@@ -21,7 +21,7 @@ class MapDocumentPrivate
 {
 public:
 	MapDocumentPrivate()
-	: History(new CommandHistory()), bgLayer(0), theDock(0) {};
+	: History(new CommandHistory()), bgLayer(0), theDock(0), lastDownloadLayer(0) {};
 	~MapDocumentPrivate()
 	{
 		History->cleanup();
@@ -36,6 +36,7 @@ public:
 	QMultiMap<QString, QString> tagList;
 	ImageMapLayer*				bgLayer;
 	LayerDock*					theDock;
+	MapLayer*					lastDownloadLayer;
 
 };
 
@@ -211,6 +212,8 @@ void MapDocument::remove(MapLayer* aLayer)
 	if (i != p->Layers.end()) {
 		p->Layers.erase(i);
 	}
+	if (aLayer == p->lastDownloadLayer)
+		p->lastDownloadLayer = NULL;
 	if (p->theDock)
 		p->theDock->deleteLayer(aLayer);
 }
@@ -459,4 +462,14 @@ std::pair<bool,CoordBox> boundingBox(const MapDocument* theDocument)
 bool hasUnsavedChanges(const MapDocument& aDoc)
 {
 	return aDoc.history().index();
+}
+
+MapLayer * MapDocument::getLastDownloadLayer()
+{
+	return p->lastDownloadLayer;
+}
+
+void MapDocument::setLastDownloadLayer(MapLayer * aLayer)
+{
+	p->lastDownloadLayer = aLayer;
 }
