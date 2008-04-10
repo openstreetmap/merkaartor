@@ -202,6 +202,8 @@ SlippyMapCache::SlippyMapCache()
 : QObject(0), DownloadBusy(false), theMap(0)
 {
 	Download.setHost("tile.openstreetmap.org");
+	// TODO Slippy map proxy
+	//Download.setProxy();
 	DownloadBuffer.setBuffer(&DownloadData);
 	DownloadBuffer.open(QIODevice::WriteOnly);
 	connect(&Download,SIGNAL(requestFinished(int,bool)),this,SLOT(on_requestFinished(int, bool)));

@@ -38,6 +38,7 @@ class MapView :	public QWidget
 		virtual void mouseReleaseEvent(QMouseEvent * event);
 		virtual void mouseMoveEvent(QMouseEvent* event);
 		virtual void wheelEvent(QWheelEvent* ev);
+		virtual void resizeEvent(QResizeEvent *event);
 
 		Projection& projection();
 		PropertiesDock* properties();
@@ -60,11 +61,9 @@ class MapView :	public QWidget
 		QProgressBar* pbImages;
 
 	private slots:
-			void imageRequested();
-			void imageReceived();
-        	void loadingFinished();
-	protected:
-		void resizeEvent(QResizeEvent *event);
+		void imageRequested();
+		void imageReceived();
+		void loadingFinished();
 };
 
 #endif

@@ -97,8 +97,12 @@ MainWindow::~MainWindow(void)
 
 void MainWindow::adjustLayers(bool adjustViewport)
 {
-	if (adjustViewport)
-		view()->projection().setViewport(view()->projection().viewport(), view()->rect());
+	if (adjustViewport) {
+		if (MerkaartorPreferences::instance()->getProjectionType() == ProjectionType::Proj_Background)
+			theView->projection().setViewport(theView->projection().viewport(), theView->rect());
+		else
+			theView->projection().zoom(1, QPoint(theView->width() / 2, theView->height() / 2), theView->rect());
+	}
 	invalidateView(true);
 }
 

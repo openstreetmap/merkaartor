@@ -16,7 +16,7 @@
 LayerDock::LayerDock(MainWindow* aMain)
 : QDockWidget(aMain), Main(aMain), Scroller(0), Content(0), Layout(0), butGroup(0)
 {
-	setMinimumSize(220,100);
+//	setMinimumSize(220,100);
 	setWindowTitle(tr("Layers"));
 	setObjectName("layersDock");
 

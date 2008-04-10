@@ -301,8 +301,8 @@ void MapView::loadingFinished()
 void MapView::resizeEvent(QResizeEvent * event)
 {
 	StaticBufferUpToDate = false;
-	if (layermanager)
-		layermanager->setSize(size());
+	//if (layermanager)
+	//	layermanager->setSize(size());
 	projection().zoom(1, QPoint(width() / 2, height() / 2), rect());
 
 	QWidget::resizeEvent(event);
