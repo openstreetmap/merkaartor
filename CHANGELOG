@@ -1,4 +1,5 @@
 v0.11
+	* ADD : OpenTopoMap WMS server to list of defaults; OpenAerialMap as TMS (existed as WMS already)
 	* ADD : "Download more" command. Adds to last download layer
 	* ADD : per-layer "zoom all"
 	* ADD : delete layer command
