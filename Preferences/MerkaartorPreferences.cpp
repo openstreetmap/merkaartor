@@ -119,6 +119,9 @@ void MerkaartorPreferences::initialize()
 				WmsServer oam("OpenAerialMap", "openaerialmap.org", "/wms/?",
 					"world", "EPSG:4326", ",", "image/jpeg");
 				theWmsServerList->insert("OpenAerialMap", oam);
+				WmsServer otm("OpenTopoMap", "opentopomap.org", "/wms/?",
+					"world", "EPSG:4326", ",", "image/jpeg");
+				theWmsServerList->insert("OpenTopoMap", otm);
 				WmsServer tu("Terraservice_Urban", "terraservice.net", "/ogcmap.ashx?",
 					"urbanarea", "EPSG:4326", ",", "image/jpeg");
 				theWmsServerList->insert("Terraservice_Urban", tu);
@@ -140,6 +143,9 @@ void MerkaartorPreferences::initialize()
 		WmsServer oam("OpenAerialMap", "openaerialmap.org", "/wms/?",
 						"world", "EPSG:4326", ",", "image/jpeg");
 		theWmsServerList->insert("OpenAerialMap", oam);
+		WmsServer otm("OpenTopoMap", "opentopomap.org", "/wms/?",
+						"world", "EPSG:4326", ",", "image/jpeg");
+		theWmsServerList->insert("OpenTopoMap", otm);
 		WmsServer tu("Terraservice_Urban", "terraservice.net", "/ogcmap.ashx?",
 						"urbanarea", "EPSG:4326", ",", "image/jpeg");
 		theWmsServerList->insert("Terraservice_Urban", tu);
@@ -164,6 +170,8 @@ void MerkaartorPreferences::initialize()
 		theTmsServerList->insert("OSM T@H", osmth);
 		TmsServer cycle("Gravitystorm Cycle", "thunderflames.org", "/tiles/cycle/%1/%2/%3.png", 256, 0, 14);
 		theTmsServerList->insert("Gravitystorm Cycle", cycle);
+		TmsServer oam("OpenAerialMap", "tile.openaerialmap.org", "/tiles/1.0.0/openaerialmap-900913/%1/%2/%3.png", 256, 0, 17);
+		theTmsServerList->insert("OpenAerialMap", oam);
 		setSelectedTmsServer("OSM Mapnik");
 		save();
 	}
