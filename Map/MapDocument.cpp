@@ -1,8 +1,9 @@
-#include "Map/MapDocument.h"
 #include "Map/MapLayer.h"
 #include "Map/MapFeature.h"
 #include "Command/Command.h"
 #include "Map/ImportOSM.h"
+
+#include "moc_MapDocument.cpp"
 
 #include "ImportExport/ImportNMEA.h"
 
@@ -50,10 +51,10 @@ MapDocument::MapDocument(LayerDock* aDock)
 {
 	p->theDock = aDock;
 
-	p->bgLayer = new ImageMapLayer("Background imagery");
+	p->bgLayer = new ImageMapLayer(tr("Background imagery"));
 	add(p->bgLayer);
 
-	DrawingMapLayer* l = new DrawingMapLayer("Generic layer");
+	DrawingMapLayer* l = new DrawingMapLayer(tr("Generic layer"));
 	l->setSelected(true);
 	add(l);
 }
@@ -92,7 +93,7 @@ MapDocument* MapDocument::fromXML(const QDomElement e, LayerDock* aDock)
 	MapDocument* NewDoc = new MapDocument();
 	NewDoc->p->theDock = aDock;
 
-	CommandHistory* h;
+	CommandHistory* h = 0;
 
 	QDomElement c = e.firstChildElement();
 	while(!c.isNull()) {
@@ -153,11 +154,11 @@ void MapDocument::clear()
 {
 	delete p;
 	p = new MapDocumentPrivate;
-	p->bgLayer = new ImageMapLayer("Background imagery");
+	p->bgLayer = new ImageMapLayer(tr("Background imagery"));
 	p->bgLayer->setMapAdapter(MerkaartorPreferences::instance()->getBgType());
 	add(p->bgLayer);
 
-	DrawingMapLayer* l = new DrawingMapLayer("Generic layer");
+	DrawingMapLayer* l = new DrawingMapLayer(tr("Generic layer"));
 	l->setSelected(true);
 	add(l);
 }

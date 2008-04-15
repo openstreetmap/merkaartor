@@ -3,8 +3,9 @@ TARGET = ./release/merkaartor
 QT += network xml core gui
 CONFIG += debug_and_release
 
-DEFINES += MAJORVERSION="0"
-DEFINES += MINORVERSION="11"
+VERSION="0.11"
+
+DEFINES += VERSION=\"\\\"$$VERSION\\\"\"
 
 INCLUDEPATH += .
 DEPENDPATH += .
@@ -16,13 +17,44 @@ TRANSLATIONS += \
 	merkaartor_de.ts \
 	merkaartor_fr.ts
 
+BINTRANSLATIONS += \
+	merkaartor_de.qm \
+	merkaartor_fr.qm
+
 #Include file(s)
 include(Merkaartor.pri)
 include(QMapControl.pri)
 include(ImportExport.pri)
 
+unix {
+    # Prefix: base instalation directory
+    count( PREFIX, 1 ) {
+        target.path = $${PREFIX}/bin
+        INSTALLS += target
+
+        isEmpty(TRANSDIR_MERKAARTOR) {
+            TRANSDIR_MERKAARTOR = $${PREFIX}/share/merkaartor/translations
+        }
+        isEmpty(TRANSDIR_SYSTEM) {
+            TRANSDIR_SYSTEM = $${PREFIX}/share/qt4/translations
+        }
+
+    }
+}
+
 win32-msvc* {
     DEFINES += _USE_MATH_DEFINES
+}
+
+count(TRANSDIR_MERKAARTOR, 1) {
+    translations.path =  $${TRANSDIR_MERKAARTOR}
+    translations.files = $${BINTRANSLATIONS}
+    DEFINES += TRANSDIR_MERKAARTOR=\"\\\"$$translations.path\\\"\"
+    INSTALLS += translations
+}
+
+count(TRANSDIR_SYSTEM, 1) {
+    DEFINES += TRANSDIR_SYSTEM=\"\\\"$${TRANSDIR_SYSTEM}\\\"\"
 }
 
 osmarender {

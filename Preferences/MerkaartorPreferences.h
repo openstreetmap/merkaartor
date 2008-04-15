@@ -20,7 +20,6 @@ class QMainWindow;
 
 #define WORLD_COORDBOX CoordBox(Coord(1.3, -1.3), Coord(-1.3, 1.3))
 
-#define REVISION "2"
 /**
 	@author cbro <cbro@semperpax.com>
 */
@@ -80,8 +79,9 @@ class TmsServer
 typedef QMap<QString, TmsServer> TmsServerList;
 typedef QMapIterator<QString, TmsServer> TmsServerListIterator;
 
-class MerkaartorPreferences
+class MerkaartorPreferences : public QObject
 {
+Q_OBJECT
 public:
 	MerkaartorPreferences();
 	~MerkaartorPreferences();

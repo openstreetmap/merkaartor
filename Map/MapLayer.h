@@ -80,8 +80,9 @@ public:
 	static DrawingMapLayer* fromXML(MapDocument* d, const QDomElement e);
 };
 
-class ImageMapLayer : public MapLayer, public QObject
+class ImageMapLayer : public QObject, public MapLayer
 {
+Q_OBJECT
 public:
 	ImageMapLayer() : layermanager(0) {};
 	ImageMapLayer(const QString& aName);
@@ -103,8 +104,9 @@ private:
 	TileMapAdapter* tmsa;
 };
 
-class TrackMapLayer : public MapLayer
+class TrackMapLayer : public QObject, public MapLayer
 {
+Q_OBJECT
 public:
 	TrackMapLayer(const QString& aName);
 	virtual ~TrackMapLayer();

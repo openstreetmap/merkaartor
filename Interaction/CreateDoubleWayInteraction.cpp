@@ -138,8 +138,8 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 				TrackPoint* B2 = new TrackPoint(view()->projection().inverse(
 					FB2.project(LastCursor)));
 
-				B1->setTag("created_by", QString("Merkaartor %1.%2").arg(MAJORVERSION).arg(MINORVERSION));
-				B2->setTag("created_by", QString("Merkaartor %1.%2").arg(MAJORVERSION).arg(MINORVERSION));
+				B1->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+				B2->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 				L->add(new AddFeatureCommand(Main->activeLayer(),B1,true));
 				L->add(new AddFeatureCommand(Main->activeLayer(),B2,true));
 				L->add(new RoadAddTrackPointCommand(R1,B1));
@@ -176,10 +176,10 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 				TrackPoint* B2 = new TrackPoint(view()->projection().inverse(
 					FB2.project(LastCursor)));
 				CommandList* L = new CommandList;
-				A1->setTag("created_by", QString("Merkaartor %1.%2").arg(MAJORVERSION).arg(MINORVERSION));
-				A2->setTag("created_by", QString("Merkaartor %1.%2").arg(MAJORVERSION).arg(MINORVERSION));
-				B1->setTag("created_by", QString("Merkaartor %1.%2").arg(MAJORVERSION).arg(MINORVERSION));
-				B2->setTag("created_by", QString("Merkaartor %1.%2").arg(MAJORVERSION).arg(MINORVERSION));
+				A1->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+				A2->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+				B1->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+				B2->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 				L->add(new AddFeatureCommand(Main->activeLayer(),A1,true));
 				L->add(new AddFeatureCommand(Main->activeLayer(),A2,true));
 				L->add(new AddFeatureCommand(Main->activeLayer(),B1,true));
@@ -190,9 +190,9 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 				L->add(new AddFeatureCommand(Main->activeLayer(),R1,true));
 				L->add(new AddFeatureCommand(Main->activeLayer(),R2,true));
 				R1->setTag("oneway","yes");
-				R1->setTag("created_by", QString("Merkaartor %1.%2").arg(MAJORVERSION).arg(MINORVERSION));
+				R1->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 				R2->setTag("oneway","yes");
-				R2->setTag("created_by", QString("Merkaartor %1.%2").arg(MAJORVERSION).arg(MINORVERSION));
+				R2->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 				L->add(new RoadAddTrackPointCommand(R1,A1));
 				L->add(new RoadAddTrackPointCommand(R1,B1));
 				L->add(new RoadAddTrackPointCommand(R2,B2));

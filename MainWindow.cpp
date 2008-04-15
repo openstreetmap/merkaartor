@@ -364,7 +364,7 @@ void MainWindow::on_helpAboutAction_triggered()
 	QDialog dlg(this);
 	Ui::AboutDialog About;
 	About.setupUi(&dlg);
-	About.Version->setText(About.Version->text().arg(MAJORVERSION).arg(MINORVERSION));
+	About.Version->setText(About.Version->text().arg(VERSION));
 	dlg.exec();
 }
 
@@ -602,7 +602,7 @@ void MainWindow::saveDocument(QString fn)
 		theXmlDoc->appendChild(theXmlDoc->createProcessingInstruction("xml", "version=\"1.0\""));
 		root = theXmlDoc->createElement("MerkaartorDocument");
 		root.setAttribute("version", "1.0");
-		root.setAttribute("creator", QString("Merkaartor v%1.%2").arg(MAJORVERSION).arg(MINORVERSION));
+		root.setAttribute("creator", QString("Merkaartor %1").arg(VERSION));
 
 		theXmlDoc->appendChild(root);
 	} else {

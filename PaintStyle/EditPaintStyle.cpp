@@ -22,10 +22,10 @@
 #define REGIONALZOOM	0.01
 #define GLOBALZOOM		0.002
 
-static bool localZoom(const Projection& theProjection)
-{
-	return theProjection.pixelPerM() < LOCALZOOM;
-}
+//static bool localZoom(const Projection& theProjection)
+//{
+//	return theProjection.pixelPerM() < LOCALZOOM;
+//}
 
 static bool regionalZoom(const Projection& theProjection)
 {

@@ -9,8 +9,8 @@
     </message>
     <message>
         <location filename="AboutDialog.ui" line="25"/>
-        <source>Merkaartor v%1.%2</source>
-        <translation>Merkaartor v%1.%2</translation>
+        <source>Merkaartor version %1</source>
+        <translation>Merkaartor Version %1</translation>
     </message>
     <message>
         <location filename="AboutDialog.ui" line="32"/>
@@ -229,7 +229,7 @@
     <message>
         <location filename="LayerWidget.cpp" line="153"/>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoom</translation>
     </message>
 </context>
 <context>
@@ -316,6 +316,44 @@
     </message>
 </context>
 <context>
+    <name>ImageMapLayer</name>
+    <message>
+        <location filename="Map/MapLayer.cpp" line="433"/>
+        <source>Map - None</source>
+        <translation>Karte - Keine</translation>
+    </message>
+    <message>
+        <location filename="Map/MapLayer.cpp" line="447"/>
+        <source>Map - WMS - %1</source>
+        <translation>Karte - WMS - %1</translation>
+    </message>
+    <message>
+        <location filename="Map/MapLayer.cpp" line="458"/>
+        <source>Map - TMS - %1</source>
+        <translation>Karte - TMS - %1</translation>
+    </message>
+    <message>
+        <location filename="Map/MapLayer.cpp" line="486"/>
+        <source>Custom Layer</source>
+        <translation>Spezialebene</translation>
+    </message>
+    <message>
+        <location filename="Map/MapLayer.cpp" line="471"/>
+        <source>Map - Yahoo</source>
+        <translation>Karte - Yahoo</translation>
+    </message>
+    <message>
+        <location filename="Map/MapLayer.cpp" line="480"/>
+        <source>Map - Illegal Yahoo</source>
+        <translation>Karte - Yahoo (ungültig)</translation>
+    </message>
+    <message>
+        <location filename="Map/MapLayer.cpp" line="489"/>
+        <source>Map - Illegal Google</source>
+        <translation>Karte - Google (ungültig)</translation>
+    </message>
+</context>
+<context>
     <name>LayerDock</name>
     <message>
         <location filename="LayerDock.cpp" line="20"/>
@@ -328,22 +366,27 @@
     <message>
         <location filename="LayerWidget.cpp" line="100"/>
         <source>Low</source>
-        <translation type="obsolete">Niedrig</translation>
+        <translation>Niedrig</translation>
     </message>
     <message>
         <location filename="LayerWidget.cpp" line="100"/>
         <source>High</source>
-        <translation type="obsolete">Hoch</translation>
+        <translation>Hoch</translation>
     </message>
     <message>
         <location filename="LayerWidget.cpp" line="100"/>
         <source>Opaque</source>
-        <translation type="obsolete">Undurchsichtig</translation>
+        <translation>Undurchsichtig</translation>
     </message>
     <message>
         <location filename="LayerWidget.cpp" line="117"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Löschen</translation>
+    </message>
+    <message>
+        <location filename="LayerWidget.cpp" line="103"/>
+        <source>Opacity</source>
+        <translation>Durchsichtigkeit</translation>
     </message>
 </context>
 <context>
@@ -465,7 +508,7 @@ Möchten Sie dies nun tun?</translation>
         <translation>Ein Lesezeichenname kann nicht leer sein.</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="518"/>
+        <location filename="Map/DownloadOSM.cpp" line="517"/>
         <source>Warning: Bookmark name already exists</source>
         <translation>Achtung: Lesezeichen mit diesem Namen existiert bereits</translation>
     </message>
@@ -612,7 +655,7 @@ Möchten Sie dies nun tun?</translation>
     <message>
         <location filename="MainWindow.ui" line="244"/>
         <source>Curved link</source>
-        <translation type="unfinished">Kurvige Verbindung</translation>
+        <translation>Kurvige Verbindung</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="255"/>
@@ -667,12 +710,12 @@ Möchten Sie dies nun tun?</translation>
     <message>
         <location filename="MainWindow.ui" line="304"/>
         <source>Link</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="310"/>
         <source>Create link</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung erstellen</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="313"/>
@@ -870,7 +913,7 @@ Möchten Sie dies nun tun?</translation>
         <translation>Unerwarteter HTTP-Statuscode (%1)</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="519"/>
+        <location filename="Map/DownloadOSM.cpp" line="518"/>
         <source>Enter a new one, keep the same to overwrite or cancel to not add.</source>
         <translation>Geben Sie einen neuen Namen ein, behalten sie den alten, um ihn zu ersetzen, oder brechen Sie ab.</translation>
     </message>
@@ -887,47 +930,98 @@ Möchten Sie dies nun tun?</translation>
     <message>
         <location filename="MainWindow.cpp" line="575"/>
         <source>Save Merkaartor document</source>
-        <translation type="unfinished"></translation>
+        <translation>Merkaartor-Dokument speichern</translation>
     </message>
     <message>
         <location filename="MainWindow.cpp" line="575"/>
         <source>Merkaartor documents Files (*.mdc)</source>
-        <translation type="unfinished"></translation>
+        <translation>Merkaartor-Dokumente (*.mdc)</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="195"/>
         <source>Ctrl+O</source>
-        <translation type="unfinished"></translation>
+        <translation>Strg+O</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="413"/>
         <source>Ctrl+N</source>
-        <translation type="unfinished"></translation>
+        <translation>Strg+N</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="512"/>
         <source>Save &amp;As...</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichern &amp;Als...</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="520"/>
         <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
+        <translation>Strg+S</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="525"/>
         <source>Download more</source>
-        <translation type="unfinished"></translation>
+        <translation>Mehr herunterladen</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="534"/>
         <source>Download the current view to the previous download layer</source>
-        <translation type="unfinished"></translation>
+        <translation>Herunterladen der aktuellen Ansicht in die vorhergehende Downloadebene</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="537"/>
         <source>Ctrl+Shift+D</source>
-        <translation type="unfinished"></translation>
+        <translation>Strg+Umschalt+D</translation>
+    </message>
+</context>
+<context>
+    <name>MapDocument</name>
+    <message>
+        <location filename="Map/MapDocument.cpp" line="157"/>
+        <source>Background imagery</source>
+        <translation>Hintergrundbilder</translation>
+    </message>
+    <message>
+        <location filename="Map/MapDocument.cpp" line="161"/>
+        <source>Generic layer</source>
+        <translation>Standardebene</translation>
+    </message>
+</context>
+<context>
+    <name>MerkaartorPreferences</name>
+    <message>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="72"/>
+        <source>None</source>
+        <translation>Keine</translation>
+    </message>
+    <message>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="73"/>
+        <source>WMS adapter</source>
+        <translation>WMS-Adapter</translation>
+    </message>
+    <message>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="74"/>
+        <source>TMS adapter</source>
+        <translation>TMS-Adapter</translation>
+    </message>
+    <message>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="76"/>
+        <source>Yahoo adapter</source>
+        <translation>Yahoo-Adapter</translation>
+    </message>
+    <message>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="79"/>
+        <source>Illegal Yahoo adapter</source>
+        <translation>Yahoo-Adapter (ungültig)</translation>
+    </message>
+    <message>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="82"/>
+        <source>Illegal Google adapter</source>
+        <translation>Google-Adapter (ungültig)</translation>
+    </message>
+    <message>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="86"/>
+        <source>Background</source>
+        <translation>Hintergrund</translation>
     </message>
 </context>
 <context>
@@ -998,7 +1092,7 @@ Möchten Sie dies nun tun?</translation>
     <message>
         <location filename="PaintStyle/PaintStyleEditor.ui" line="271"/>
         <source>Draw boundary with outside color</source>
-        <translation type="unfinished"></translation>
+        <translation>Umrandung zeichnen mit Außenfarbe</translation>
     </message>
     <message>
         <location filename="PaintStyle/PaintStyleEditor.ui" line="868"/>
@@ -1018,7 +1112,7 @@ Möchten Sie dies nun tun?</translation>
     <message>
         <location filename="PaintStyle/PaintStyleEditor.ui" line="414"/>
         <source>Draw boundary with color</source>
-        <translation type="unfinished"></translation>
+        <translation>Umrandung zeichnen mit Farbe</translation>
     </message>
     <message>
         <location filename="PaintStyle/PaintStyleEditor.ui" line="792"/>
@@ -1033,7 +1127,7 @@ Möchten Sie dies nun tun?</translation>
     <message>
         <location filename="PaintStyle/PaintStyleEditor.ui" line="633"/>
         <source>Draw steps on boundary line</source>
-        <translation type="unfinished"></translation>
+        <translation>Abschnitte auf Umrandungslinie zeichnen</translation>
     </message>
     <message>
         <location filename="PaintStyle/PaintStyleEditor.ui" line="852"/>
@@ -1235,14 +1329,6 @@ Möchten Sie dies nun tun?</translation>
         <location filename="PropertiesDock.cpp" line="283"/>
         <source>Properties - Road</source>
         <translation>Eigenschaften - Strasse</translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <location filename="Map/MapDocument.cpp" line="233"/>
-        <source>Import %1</source>
-        <translation type="obsolete">Importieren %1</translation>
     </message>
 </context>
 <context>
@@ -1510,16 +1596,32 @@ Möchten Sie dies nun tun?</translation>
     </message>
 </context>
 <context>
+    <name>TmsServer</name>
+    <message>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="42"/>
+        <source>New Server</source>
+        <translation>Neuer Server</translation>
+    </message>
+</context>
+<context>
     <name>TrackLayerWidget</name>
     <message>
         <location filename="LayerWidget.cpp" line="363"/>
         <source>Extract Drawing layer</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeichenebene extrahieren</translation>
     </message>
     <message>
         <location filename="LayerWidget.cpp" line="367"/>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoom</translation>
+    </message>
+</context>
+<context>
+    <name>TrackMapLayer</name>
+    <message>
+        <location filename="Map/MapLayer.cpp" line="598"/>
+        <source>Extract - %1</source>
+        <translation>Auszug - %1</translation>
     </message>
 </context>
 <context>
@@ -1695,6 +1797,14 @@ Möchten Sie dies nun tun?</translation>
         <location filename="Preferences/WMSPreferencesDialog.ui" line="197"/>
         <source>Remove</source>
         <translation>Entfernen</translation>
+    </message>
+</context>
+<context>
+    <name>WmsServer</name>
+    <message>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="29"/>
+        <source>New Server</source>
+        <translation>Neuer Server</translation>
     </message>
 </context>
 <context>

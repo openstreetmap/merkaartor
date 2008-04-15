@@ -445,7 +445,6 @@ bool downloadMoreOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* th
 	QString osmWebsite, osmUser, osmPwd, proxyHost;
 	int proxyPort;
 	bool useProxy;
-	static bool DownloadRaw = false;
 
 	osmWebsite = MerkaartorPreferences::instance()->getOsmWebsite();
 	osmUser = MerkaartorPreferences::instance()->getOsmUser();

@@ -15,11 +15,19 @@ int main(int argc, char** argv)
 	QCoreApplication::setApplicationName("Merkaartor");
 
 	QTranslator qtTranslator;
-	qtTranslator.load("qt_" + QLocale::system().name());
+	qtTranslator.load("qt_" + QLocale::system().name()
+#ifdef TRANSDIR_SYSTEM
+        , TRANSDIR_SYSTEM
+#endif
+        );
 	app.installTranslator(&qtTranslator);
 
 	QTranslator merkaartorTranslator;
-	merkaartorTranslator.load("merkaartor_" + QLocale::system().name());
+	merkaartorTranslator.load("merkaartor_" + QLocale::system().name()
+#ifdef TRANSDIR_MERKAARTOR
+        , TRANSDIR_MERKAARTOR
+#endif
+        );
 	app.installTranslator(&merkaartorTranslator);
 
 	MainWindow Main;

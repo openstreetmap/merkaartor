@@ -145,7 +145,7 @@ SetTagCommand * SetTagCommand::fromXML(MapDocument * d, QDomElement e)
 /* CLEARTAGCOMMAND */
 
 ClearTagCommand::ClearTagCommand(MapFeature* F, const QString& k)
-: TagCommand(F), theK(k), theV(F->tagValue(k, "")), theIdx(-1)
+: TagCommand(F), theIdx(-1), theK(k), theV(F->tagValue(k, ""))
 {
 	redo();
 }

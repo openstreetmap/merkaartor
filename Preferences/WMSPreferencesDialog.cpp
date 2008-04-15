@@ -68,7 +68,7 @@ void WMSPreferencesDialog::on_btShowCapabilities_clicked(void)
 
 	QHttpRequestHeader header("GET", url.path() + url.encodedQuery());
 	qDebug() << header.toString();
-	char *userAgent = "Mozilla/9.876 (X11; U; Linux 2.2.12-20 i686, en) Gecko/25250101 Netscape/5.432b1";
+	const char *userAgent = "Mozilla/9.876 (X11; U; Linux 2.2.12-20 i686, en) Gecko/25250101 Netscape/5.432b1";
 
 	header.setValue("Host", url.host());
 	header.setValue("User-Agent", userAgent);

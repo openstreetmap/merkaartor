@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="fr">
-<defaultcodec></defaultcodec>
 <context>
     <name>AboutDialog</name>
     <message>
@@ -10,8 +9,8 @@
     </message>
     <message>
         <location filename="AboutDialog.ui" line="25"/>
-        <source>Merkaartor v%1.%2</source>
-        <translation>Merkaartor v%1.%2</translation>
+        <source>Merkaartor version %1</source>
+        <translation type="unfinished">Merkaartor v%1.%2</translation>
     </message>
     <message>
         <location filename="AboutDialog.ui" line="32"/>
@@ -317,6 +316,44 @@
     </message>
 </context>
 <context>
+    <name>ImageMapLayer</name>
+    <message>
+        <location filename="Map/MapLayer.cpp" line="433"/>
+        <source>Map - None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Map/MapLayer.cpp" line="447"/>
+        <source>Map - WMS - %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Map/MapLayer.cpp" line="458"/>
+        <source>Map - TMS - %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Map/MapLayer.cpp" line="486"/>
+        <source>Custom Layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Map/MapLayer.cpp" line="471"/>
+        <source>Map - Yahoo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Map/MapLayer.cpp" line="480"/>
+        <source>Map - Illegal Yahoo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Map/MapLayer.cpp" line="489"/>
+        <source>Map - Illegal Google</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>LayerDock</name>
     <message>
         <location filename="LayerDock.cpp" line="20"/>
@@ -329,22 +366,27 @@
     <message>
         <location filename="LayerWidget.cpp" line="100"/>
         <source>Low</source>
-        <translation type="obsolete">Bas</translation>
+        <translation type="unfinished">Bas</translation>
     </message>
     <message>
         <location filename="LayerWidget.cpp" line="100"/>
         <source>High</source>
-        <translation type="obsolete">Haut</translation>
+        <translation type="unfinished">Haut</translation>
     </message>
     <message>
         <location filename="LayerWidget.cpp" line="100"/>
         <source>Opaque</source>
-        <translation type="obsolete">Opaque</translation>
+        <translation type="unfinished">Opaque</translation>
     </message>
     <message>
         <location filename="LayerWidget.cpp" line="117"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
+    </message>
+    <message>
+        <location filename="LayerWidget.cpp" line="103"/>
+        <source>Opacity</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -466,7 +508,7 @@ Voulez-vous faire cela maintenant ?</translation>
         <translation>Un nom de signet ne peut être vide.</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="518"/>
+        <location filename="Map/DownloadOSM.cpp" line="517"/>
         <source>Warning: Bookmark name already exists</source>
         <translation>Attention: Le nom de signet existe déjà</translation>
     </message>
@@ -881,7 +923,7 @@ Voulez-vous faire cela maintenant ?</translation>
         <translation>Status HTTP inattendu (%1)</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="519"/>
+        <location filename="Map/DownloadOSM.cpp" line="518"/>
         <source>Enter a new one, keep the same to overwrite or cancel to not add.</source>
         <translation>Entrez un nouveau, gardez le même pour remplacer ou annulez pour ne pas ajouter.</translation>
     </message>
@@ -936,6 +978,57 @@ Do you want to do this now?</source>
         <location filename="MainWindow.ui" line="537"/>
         <source>Ctrl+Shift+D</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>MapDocument</name>
+    <message>
+        <location filename="Map/MapDocument.cpp" line="157"/>
+        <source>Background imagery</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Map/MapDocument.cpp" line="161"/>
+        <source>Generic layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MerkaartorPreferences</name>
+    <message>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="72"/>
+        <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="73"/>
+        <source>WMS adapter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="74"/>
+        <source>TMS adapter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="76"/>
+        <source>Yahoo adapter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="79"/>
+        <source>Illegal Yahoo adapter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="82"/>
+        <source>Illegal Google adapter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="86"/>
+        <source>Background</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1519,6 +1612,14 @@ Do you want to do this now?</source>
     </message>
 </context>
 <context>
+    <name>TmsServer</name>
+    <message>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="42"/>
+        <source>New Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>TrackLayerWidget</name>
     <message>
         <location filename="LayerWidget.cpp" line="363"/>
@@ -1529,6 +1630,14 @@ Do you want to do this now?</source>
         <location filename="LayerWidget.cpp" line="367"/>
         <source>Zoom</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>TrackMapLayer</name>
+    <message>
+        <location filename="Map/MapLayer.cpp" line="598"/>
+        <source>Extract - %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1704,6 +1813,14 @@ Do you want to do this now?</source>
         <location filename="Preferences/WMSPreferencesDialog.ui" line="197"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
+    </message>
+</context>
+<context>
+    <name>WmsServer</name>
+    <message>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="29"/>
+        <source>New Server</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

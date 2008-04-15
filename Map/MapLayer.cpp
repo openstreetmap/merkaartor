@@ -1,4 +1,3 @@
-#include "Map/MapLayer.h"
 #include "Map/MapFeature.h"
 #include "Map/Road.h"
 #include "Map/Relation.h"
@@ -7,6 +6,8 @@
 #include "MapView.h"
 #include "LayerWidget.h"
 #include "Map/ImportOSM.h"
+
+#include "moc_MapLayer.cpp"
 
 #include "QMapControl/mapadapter.h"
 #include "QMapControl/osmmapadapter.h"
@@ -429,7 +430,7 @@ void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 	MerkaartorPreferences::instance()->setBgType(typ);
 	switch (p->bgType) {
 		case Bg_None:
-			setName("Map - None");
+			setName(tr("Map - None"));
 			p->Visible = false;
 			break;
 
@@ -443,7 +444,7 @@ void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 			p->layer_bg = new Layer(selws, mapadapter_bg, Layer::MapLayer);
 			p->layer_bg->setVisible(p->Visible);
 
-			setName("Map - WMS - " + ws.WmsName);
+			setName(tr("Map - WMS - %1").arg(ws.WmsName));
 			break;
 		case Bg_Tms:
 			tsl = MerkaartorPreferences::instance()->getTmsServers();
@@ -454,7 +455,7 @@ void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 			p->layer_bg = new Layer(selts, mapadapter_bg, Layer::MapLayer);
 			p->layer_bg->setVisible(p->Visible);
 
-			setName("Map - TMS - " + ts.TmsName);
+			setName(tr("Map - TMS - %1").arg(ts.TmsName));
 /*			mapadapter_bg = new OSMMapAdapter();
 			p->layer_bg = new Layer("Custom Layer", mapadapter_bg, Layer::MapLayer);
 			p->layer_bg->setVisible(p->Visible);
@@ -464,28 +465,28 @@ void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 #ifdef YAHOO
 		case Bg_Yahoo:
 			mapadapter_bg = new YahooLegalMapAdapter();
-			p->layer_bg = new Layer("Custom Layer", mapadapter_bg, Layer::MapLayer);
+			p->layer_bg = new Layer(tr("Custom Layer"), mapadapter_bg, Layer::MapLayer);
 			p->layer_bg->setVisible(p->Visible);
 
-			setName("Map - Yahoo");
+			setName(tr("Map - Yahoo"));
 			break;
 #endif
 #ifdef YAHOO_ILLEGAL
 		case Bg_Yahoo_illegal:
 			mapadapter_bg = new YahooMapAdapter("us.maps3.yimg.com", "/aerial.maps.yimg.com/png?v=1.7&t=a&s=256&x=%2&y=%3&z=%1");
-			p->layer_bg = new Layer("Custom Layer", mapadapter_bg, Layer::MapLayer);
+			p->layer_bg = new Layer(tr("Custom Layer"), mapadapter_bg, Layer::MapLayer);
 			p->layer_bg->setVisible(p->Visible);
 
-			setName("Map - Illegal Yahoo");
+			setName(tr("Map - Illegal Yahoo"));
 			break;
 #endif
 #ifdef GOOGLE_ILLEGAL
 		case Bg_Google_illegal:
 			mapadapter_bg = new GoogleSatMapAdapter();
-			p->layer_bg = new Layer("Custom Layer", mapadapter_bg, Layer::MapLayer);
+			p->layer_bg = new Layer(tr("Custom Layer"), mapadapter_bg, Layer::MapLayer);
 			p->layer_bg->setVisible(p->Visible);
 
-			setName("Map - Illegal Google");
+			setName(tr("Map - Illegal Google"));
 			break;
 #endif
 	}
@@ -594,16 +595,16 @@ LayerWidget* TrackMapLayer::newWidget(void)
 
 void TrackMapLayer::extractLayer()
 {
-	DrawingMapLayer* extL = new DrawingMapLayer("Extract - " + name());
+	DrawingMapLayer* extL = new DrawingMapLayer(tr("Extract - %1").arg(name()));
 	TrackPoint* P;
 
 	//P = new TrackPoint( ((TrackPoint *)get(0))->position() );
-	//P->setTag("created_by", QString("Merkaartor %1.%2").arg(MAJORVERSION).arg(MINORVERSION));
+	//P->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 	//extL->add(P);
 	//R->add(P);
 
 	//P = new TrackPoint( ((TrackPoint *)get(size()-1))->position() );
-	//P->setTag("created_by", QString("Merkaartor %1.%2").arg(MAJORVERSION).arg(MINORVERSION));
+	//P->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 	//extL->add(P);
 	//R->add(P);
 
@@ -612,11 +613,11 @@ void TrackMapLayer::extractLayer()
 		if (TrackSegment* S = dynamic_cast<TrackSegment*>(get(i))) {
 			Road* R = new Road();
 			R->setLastUpdated(MapFeature::OSMServer);
-			R->setTag("created_by", QString("Merkaartor %1.%2").arg(MAJORVERSION).arg(MINORVERSION));
+			R->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 
 			for (unsigned int j=0; j < S->size(); j++) {
 				P = new TrackPoint( S->get(j)->position() );
-				P->setTag("created_by", QString("Merkaartor %1.%2").arg(MAJORVERSION).arg(MINORVERSION));
+				P->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 				extL->add(P);
 				R->add(P);
 			}

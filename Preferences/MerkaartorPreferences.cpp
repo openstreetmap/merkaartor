@@ -10,35 +10,36 @@
 //
 //
 
-#include "MerkaartorPreferences.h"
+#include "moc_MerkaartorPreferences.cpp"
 
+#include <QtGui/QApplication>
 #include <QtGui/QMainWindow>
 
 MerkaartorPreferences* MerkaartorPreferences::m_prefInstance = 0;
 
 WmsServer::WmsServer()
 {
-	WmsServer("New Server", "", "", "", "", "", "");
+	WmsServer(QApplication::translate("WmsServer","New Server"), "", "", "", "", "", "");
 }
 
 WmsServer::WmsServer(QString Name, QString Adress, QString Path, QString Layers, QString Projections, QString Styles, QString ImgFormat)
 	: WmsName(Name), WmsAdress(Adress), WmsPath(Path), WmsLayers(Layers), WmsProjections(Projections), WmsStyles(Styles), WmsImgFormat(ImgFormat)
 {
 	if (Name == "") {
-		WmsName = "New Server";
+		WmsName = QApplication::translate("WmsServer","New Server");
 	}
 }
 
 TmsServer::TmsServer()
 {
-	TmsServer("New Server", "", "", 256, 0, 17);
+	TmsServer(QApplication::translate("TmsServer","New Server"), "", "", 256, 0, 17);
 }
 
 TmsServer::TmsServer(QString Name, QString Adress, QString Path, int tileSize, int minZoom, int maxZoom)
 	: TmsName(Name), TmsAdress(Adress), TmsPath(Path), TmsTileSize(tileSize), TmsMinZoom(minZoom), TmsMaxZoom(maxZoom)
 {
 	if (Name == "") {
-		TmsName = "New Server";
+		TmsName = QApplication::translate("TmsServer","New Server");
 	}
 }
 
@@ -59,7 +60,7 @@ MerkaartorPreferences::~MerkaartorPreferences()
 
 void MerkaartorPreferences::save()
 {
-	Sets->setValue("version/version", QString("%1.%2.%3").arg(MAJORVERSION).arg(MINORVERSION).arg(REVISION));
+	Sets->setValue("version/version", QString("%1").arg(VERSION));
 	setWmsServers();
 	setTmsServers();
 	setAlphaList();
@@ -68,21 +69,21 @@ void MerkaartorPreferences::save()
 
 void MerkaartorPreferences::initialize()
 {
-	bgTypes.insert(Bg_None, "None");
-	bgTypes.insert(Bg_Wms, "WMS adapter");
-	bgTypes.insert(Bg_Tms, "TMS adapter");
+	bgTypes.insert(Bg_None, tr("None"));
+	bgTypes.insert(Bg_Wms, tr("WMS adapter"));
+	bgTypes.insert(Bg_Tms, tr("TMS adapter"));
 #ifdef YAHOO
-	bgTypes.insert(Bg_Yahoo, "Yahoo adapter");
+	bgTypes.insert(Bg_Yahoo, tr("Yahoo adapter"));
 #endif
 #ifdef YAHOO_ILLEGAL
-	bgTypes.insert(Bg_Yahoo_illegal, "Illegal Yahoo adapter");
+	bgTypes.insert(Bg_Yahoo_illegal, tr("Illegal Yahoo adapter"));
 #endif
 #ifdef GOOGLE_ILLEGAL
-	bgTypes.insert(Bg_Google_illegal, "Illegal Google adapter");
+	bgTypes.insert(Bg_Google_illegal, tr("Illegal Google adapter"));
 #endif
 
 	projTypes.insert(Proj_Merkaartor, "Merkaartor");
-	projTypes.insert(Proj_Background, "Background");
+	projTypes.insert(Proj_Background, tr("Background"));
 
 	QStringList sl = getBookmarks();
 	if (sl.size() == 0) {

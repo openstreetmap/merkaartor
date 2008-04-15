@@ -18,9 +18,9 @@ class MapDocumentPrivate;
 class ImageMapLayer;
 class TrackMapLayer;
 
-class MapDocument
+class MapDocument : public QObject
 {
-
+Q_OBJECT
 public:
 	MapDocument();
 	MapDocument(LayerDock* aDock);

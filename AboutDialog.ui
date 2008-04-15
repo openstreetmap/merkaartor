@@ -22,7 +22,7 @@
    <item>
     <widget class="QLabel" name="Version" >
      <property name="text" >
-      <string>Merkaartor v%1.%2</string>
+      <string>Merkaartor version %1</string>
      </property>
     </widget>
    </item>
