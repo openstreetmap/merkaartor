@@ -1030,6 +1030,11 @@ Do you want to do this now?</source>
         <source>Background</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="42"/>
+        <source>New Server</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MultiProperties</name>
@@ -1339,14 +1344,6 @@ Do you want to do this now?</source>
     </message>
 </context>
 <context>
-    <name>QObject</name>
-    <message>
-        <location filename="Map/MapDocument.cpp" line="327"/>
-        <source>Import %1</source>
-        <translation type="obsolete">Importer %1</translation>
-    </message>
-</context>
-<context>
     <name>RelationProperties</name>
     <message>
         <location filename="RelationProperties.ui" line="13"/>
@@ -1613,11 +1610,6 @@ Do you want to do this now?</source>
 </context>
 <context>
     <name>TmsServer</name>
-    <message>
-        <location filename="Preferences/MerkaartorPreferences.cpp" line="42"/>
-        <source>New Server</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>TrackLayerWidget</name>
@@ -1817,11 +1809,6 @@ Do you want to do this now?</source>
 </context>
 <context>
     <name>WmsServer</name>
-    <message>
-        <location filename="Preferences/MerkaartorPreferences.cpp" line="29"/>
-        <source>New Server</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>landuse</name>

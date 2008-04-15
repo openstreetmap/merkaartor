@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="de">
+<defaultcodec></defaultcodec>
 <context>
     <name>AboutDialog</name>
     <message>
@@ -1023,6 +1024,11 @@ Möchten Sie dies nun tun?</translation>
         <source>Background</source>
         <translation>Hintergrund</translation>
     </message>
+    <message>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="42"/>
+        <source>New Server</source>
+        <translation>Neuer Server</translation>
+    </message>
 </context>
 <context>
     <name>MultiProperties</name>
@@ -1596,14 +1602,6 @@ Möchten Sie dies nun tun?</translation>
     </message>
 </context>
 <context>
-    <name>TmsServer</name>
-    <message>
-        <location filename="Preferences/MerkaartorPreferences.cpp" line="42"/>
-        <source>New Server</source>
-        <translation>Neuer Server</translation>
-    </message>
-</context>
-<context>
     <name>TrackLayerWidget</name>
     <message>
         <location filename="LayerWidget.cpp" line="363"/>
@@ -1797,14 +1795,6 @@ Möchten Sie dies nun tun?</translation>
         <location filename="Preferences/WMSPreferencesDialog.ui" line="197"/>
         <source>Remove</source>
         <translation>Entfernen</translation>
-    </message>
-</context>
-<context>
-    <name>WmsServer</name>
-    <message>
-        <location filename="Preferences/MerkaartorPreferences.cpp" line="29"/>
-        <source>New Server</source>
-        <translation>Neuer Server</translation>
     </message>
 </context>
 <context>

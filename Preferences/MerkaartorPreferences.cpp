@@ -19,27 +19,27 @@ MerkaartorPreferences* MerkaartorPreferences::m_prefInstance = 0;
 
 WmsServer::WmsServer()
 {
-	WmsServer(QApplication::translate("WmsServer","New Server"), "", "", "", "", "", "");
+	WmsServer(QApplication::translate("MerkaartorPreferences","New Server"), "", "", "", "", "", "");
 }
 
 WmsServer::WmsServer(QString Name, QString Adress, QString Path, QString Layers, QString Projections, QString Styles, QString ImgFormat)
 	: WmsName(Name), WmsAdress(Adress), WmsPath(Path), WmsLayers(Layers), WmsProjections(Projections), WmsStyles(Styles), WmsImgFormat(ImgFormat)
 {
 	if (Name == "") {
-		WmsName = QApplication::translate("WmsServer","New Server");
+		WmsName = QApplication::translate("MerkaartorPreferences","New Server");
 	}
 }
 
 TmsServer::TmsServer()
 {
-	TmsServer(QApplication::translate("TmsServer","New Server"), "", "", 256, 0, 17);
+	TmsServer(QApplication::translate("MerkaartorPreferences","New Server"), "", "", 256, 0, 17);
 }
 
 TmsServer::TmsServer(QString Name, QString Adress, QString Path, int tileSize, int minZoom, int maxZoom)
 	: TmsName(Name), TmsAdress(Adress), TmsPath(Path), TmsTileSize(tileSize), TmsMinZoom(minZoom), TmsMaxZoom(maxZoom)
 {
 	if (Name == "") {
-		TmsName = QApplication::translate("TmsServer","New Server");
+		TmsName = QApplication::translate("MerkaartorPreferences","New Server");
 	}
 }
 

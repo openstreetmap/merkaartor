@@ -91,18 +91,18 @@ void LayerWidget::contextMenuEvent(QContextMenuEvent* anEvent)
 		ctxMenu->exec(anEvent->globalPos());
 }
 
+#define NUMOP 3
 void LayerWidget::initActions()
 {
 	SAFE_DELETE(ctxMenu);
 	ctxMenu = new QMenu(this);
-
-	QStringList opStr;
-	opStr << tr("Low") << tr("High") << tr("Opaque");
+        static const char *opStr[NUMOP] = {
+		QT_TR_NOOP("Low"), QT_TR_NOOP("High"), QT_TR_NOOP("Opaque")};
 
 	QActionGroup* actgrp = new QActionGroup(this);
 	QMenu* alphaMenu = new QMenu(tr("Opacity"), this);
-	for (int i=0; i<opStr.size(); i++) {
-		QAction* act = new QAction(opStr[i], alphaMenu);
+	for (int i=0; i<NUMOP; i++) {
+		QAction* act = new QAction(tr(opStr[i]), alphaMenu);
 		actgrp->addAction(act);
 		qreal a = MerkaartorPreferences::instance()->getAlpha(opStr[i]);
 		act->setData(a);
