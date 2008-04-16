@@ -85,7 +85,7 @@ QPixmap BrowserImageManager::getImage(MapAdapter* anAdapter, int x, int y, int z
 	if (loadingRequests.size() <= MAX_REQ)
 		launchRequest();
 	else {
-		qDebug() << "queue full";
+		//qDebug() << "queue full";
 		return emptyPixmap;
 	}
 
@@ -98,12 +98,13 @@ void BrowserImageManager::launchRequest()
 		return;
 //	LoadingRequest* R = loadingRequests.dequeue();
 	LoadingRequest R = loadingRequests.head();
-	qDebug() << "getting: " << QString(R.host).append(R.url);
+//	qDebug() << "getting: " << QString(R.host).append(R.url);
 
 
 	QUrl u = QUrl( "file://" + QApplication::applicationDirPath() + "/" + R.url);
+//	QUrl u = QUrl( "file://C:/tmp.svg");
 //	QUrl u = QUrl( "http://maps.yahoo.com" );
-	qDebug() << u << endl;
+//	qDebug() << u << endl;
 
 #if QT_VERSION >= 0x040400
 	page->networkAccessManager()->setProxy(proxy);

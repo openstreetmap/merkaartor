@@ -613,6 +613,7 @@ void MainWindow::saveDocument(QString fn)
 	theView->toXML(root);
 
 	QTextStream out(&file);
+	out.setCodec("UTF-8");
 	theXmlDoc->save(out,2);
 	file.close();
 
@@ -675,6 +676,7 @@ void MainWindow::on_exportOSMAllAction_triggered()
 			return;
 
 		QTextStream out(&file);
+		out.setCodec("UTF-8");
 		out << theDocument->exportOSM();
 		file.close();
 	}

@@ -70,7 +70,9 @@ MapView::MapView(MainWindow* aMain) :
 MapView::~MapView()
 {
 	delete ImageManager::instance();
+#ifdef YAHOO
 	delete BrowserImageManager::instance();
+#endif
 	delete layermanager;
 	delete StaticBuffer;
 }
