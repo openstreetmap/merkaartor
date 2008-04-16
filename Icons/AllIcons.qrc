@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/Icons" >
+        <file>Merkaartor.xpm</file>
         <file>add.xpm</file>
         <file>empty.xpm</file>
         <file>eye.xpm</file>

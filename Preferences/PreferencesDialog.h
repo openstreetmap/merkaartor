@@ -17,7 +17,7 @@
 #include <QBuffer>
 
 
-#include "GeneratedFiles/ui_PreferencesDialog.h"
+#include <ui_PreferencesDialog.h>
 
 /**
 	@author cbro <cbro@semperpax.com>

@@ -17,7 +17,7 @@
 #include <QBuffer>
 
 
-#include "GeneratedFiles/ui_TMSPreferencesDialog.h"
+#include <ui_TMSPreferencesDialog.h>
 #include "Preferences/MerkaartorPreferences.h"
 
 /**

@@ -1,7 +1,7 @@
 #ifndef INTERACTION_CREATEROUNDABOUTINTERACTION_H
 #define INTERACTION_CREATEROUNDABOUTINTERACTION_H
 
-#include "GeneratedFiles/ui_CreateRoundaboutDock.h"
+#include <ui_CreateRoundaboutDock.h>
 #include "Interaction/Interaction.h"
 #include "Map/Coord.h"
 

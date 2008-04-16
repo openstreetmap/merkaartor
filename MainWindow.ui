@@ -12,6 +12,9 @@
   <property name="windowTitle" >
    <string>Merkaartor</string>
   </property>
+  <property name="windowIcon" >
+   <iconset resource="Icons/AllIcons.qrc" >:/Icons/Merkaartor.xpm</iconset>
+  </property>
   <widget class="QWidget" name="centralWidget" />
   <widget class="QMenuBar" name="menuBar" >
    <property name="geometry" >
@@ -19,7 +22,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>27</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >

@@ -1,7 +1,7 @@
 #ifndef MERKATOR_INTERACTION_CREATEDOUBLEWAYINTERACTION_H
 #define MERKATOR_INTERACTION_CREATEDOUBLEWAYINTERACTION_H
 
-#include "GeneratedFiles/ui_CreateDoubleWayDock.h"
+#include <ui_CreateDoubleWayDock.h>
 #include "Interaction/Interaction.h"
 
 class MainWindow;

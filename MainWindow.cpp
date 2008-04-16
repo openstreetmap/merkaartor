@@ -27,10 +27,10 @@
 #include "PaintStyle/EditPaintStyle.h"
 #include "PaintStyle/PaintStyleEditor.h"
 #include "Sync/SyncOSM.h"
-#include "GeneratedFiles/ui_AboutDialog.h"
-#include "GeneratedFiles/ui_UploadMapDialog.h"
-#include "GeneratedFiles/ui_SetPositionDialog.h"
-#include "GeneratedFiles/ui_SelectionDialog.h"
+#include <ui_AboutDialog.h>
+#include <ui_UploadMapDialog.h>
+#include <ui_SetPositionDialog.h>
+#include <ui_SelectionDialog.h>
 #include "Preferences/PreferencesDialog.h"
 #include "Preferences/MerkaartorPreferences.h"
 #include "Utils/SelectionDialog.h"

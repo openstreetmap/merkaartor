@@ -1,21 +1,29 @@
 TEMPLATE = app
-TARGET = ./release/merkaartor
+TARGET = merkaartor
+target.path = /usr/local/bin
+INSTALLS += target
+
 QT += network xml core gui
-CONFIG += debug_and_release
+CONFIG += release yahoo debug
+
+isEmpty(OUTPUT_DIR) {
+    CONFIG(release):OUTPUT_DIR=$$PWD/binaries/release
+    CONFIG(debug):OUTPUT_DIR=$$PWD/binaries/debug
+}
+DESTDIR = $$OUTPUT_DIR/bin
 
 VERSION="0.11"
-
 DEFINES += VERSION=\"\\\"$$VERSION\\\"\"
 
 INCLUDEPATH += .
 DEPENDPATH += .
-MOC_DIR += ./GeneratedFiles/release
-OBJECTS_DIR += release
-UI_DIR += ./GeneratedFiles
+MOC_DIR += tmp
+OBJECTS_DIR += obj
+UI_DIR += tmp
 
 TRANSLATIONS += \
-	merkaartor_de.ts \
-	merkaartor_fr.ts
+	merkaartor_fr.ts \ 
+	merkaartor_de.ts 
 
 BINTRANSLATIONS += \
 	merkaartor_de.qm \
@@ -64,21 +72,11 @@ osmarender {
 }
 
 yahoo {
-    unix {
-        WEBKIT_SRC_DIR = "/var/src/WebKit"
-    }
-    win32 {
-        WEBKIT_SRC_DIR = "C:/home/cbrowet/Programming/merkaartor_webkit"
-    }
-
     DEFINES += YAHOO
     SOURCES += QMapControl/yahoolegalmapadapter.cpp QMapControl/browserimagemanager.cpp
     HEADERS += QMapControl/yahoolegalmapadapter.h QMapControl/browserimagemanager.h
 
-    lessThan(QT_MINOR_VERSION, 4) {
-		# NOTE: LD_LIBRARY_PATH must be set to $$WEBKIT_SRC_DIR/WebKitBuild/Release/lib prior to execution if not in ld.so-conf
-        INCLUDEPATH += $$WEBKIT_SRC_DIR/WebKit/qt/Api
-        LIBS += -L$$WEBKIT_SRC_DIR/WebKitBuild/Release/lib -lQtWebKit
-    }
+	include(webkit/WebKit.pri)
+
 }
 

@@ -69,6 +69,8 @@ MapView::MapView(MainWindow* aMain) :
 
 MapView::~MapView()
 {
+	delete ImageManager::instance();
+	delete BrowserImageManager::instance();
 	delete layermanager;
 	delete StaticBuffer;
 }

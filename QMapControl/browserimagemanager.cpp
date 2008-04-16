@@ -51,6 +51,8 @@ BrowserImageManager::BrowserImageManager(QObject* parent)
 
 	QFile ymap(":/Html/ymap.html");
 	ymap.copy(QApplication::applicationDirPath() + "/ymap.html");
+
+//	browser->show();
 }
 
 BrowserImageManager::~BrowserImageManager()
@@ -98,11 +100,15 @@ void BrowserImageManager::launchRequest()
 	LoadingRequest R = loadingRequests.head();
 	qDebug() << "getting: " << QString(R.host).append(R.url);
 
-	QUrl u = QUrl( QApplication::applicationDirPath() + "/" + R.url);
+
+	QUrl u = QUrl( "file://" + QApplication::applicationDirPath() + "/" + R.url);
+//	QUrl u = QUrl( "http://maps.yahoo.com" );
 	qDebug() << u << endl;
 
 #if QT_VERSION >= 0x040400
 	page->networkAccessManager()->setProxy(proxy);
+#else
+	page->setNetworkProxy(proxy);
 #endif
 
 //	page->mainFrame()->load(u);
@@ -178,6 +184,8 @@ void BrowserImageManager::setProxy(QString host, int port)
 	if (!host.isEmpty()) {
 #if QT_VERSION >= 0x040400
 		proxy.setType(QNetworkProxy::HttpCachingProxy);
+#else
+		proxy.setType(QNetworkProxy::HttpProxy);
 #endif
 		proxy.setHostName(host);
 		proxy.setPort(port);

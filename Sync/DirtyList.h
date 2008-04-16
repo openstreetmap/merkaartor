@@ -12,7 +12,7 @@ class Way;
 class QProgressDialog;
 class QWidget;
 
-#include "GeneratedFiles/ui_SyncListDialog.h"
+#include <ui_SyncListDialog.h>
 
 #include <QtCore/QObject>
 #include <QtCore/QString>

@@ -1,7 +1,7 @@
 #ifndef MERKAARTOR_PAINTSTYLE_EDITOR_H_
 #define MERKAARTOR_PAINTSTYLE_EDITOR_H_
 
-#include "GeneratedFiles/ui_PaintStyleEditor.h"
+#include <ui_PaintStyleEditor.h>
 #include "PaintStyle/PaintStyle.h"
 
 #include <QtGui/QDialog>

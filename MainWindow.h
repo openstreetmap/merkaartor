@@ -1,7 +1,7 @@
 #ifndef MERKATOR_MAINWINDOW_H_
 #define MERKATOR_MAINWINDOW_H_
 
-#include "GeneratedFiles/ui_MainWindow.h"
+#include <ui_MainWindow.h>
 
 #include <QtGui/QMainWindow>
 #include <QtXml>

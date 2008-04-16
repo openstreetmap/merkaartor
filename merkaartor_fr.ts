@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="fr">
+<defaultcodec></defaultcodec>
 <context>
     <name>AboutDialog</name>
     <message>
@@ -10,7 +11,7 @@
     <message>
         <location filename="AboutDialog.ui" line="25"/>
         <source>Merkaartor version %1</source>
-        <translation type="unfinished">Merkaartor v%1.%2</translation>
+        <translation>Merkaartor version %1</translation>
     </message>
     <message>
         <location filename="AboutDialog.ui" line="32"/>
@@ -320,37 +321,37 @@
     <message>
         <location filename="Map/MapLayer.cpp" line="433"/>
         <source>Map - None</source>
-        <translation type="unfinished"></translation>
+        <translation>Carte - Aucune</translation>
     </message>
     <message>
         <location filename="Map/MapLayer.cpp" line="447"/>
         <source>Map - WMS - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Carte - WMS - %1</translation>
     </message>
     <message>
         <location filename="Map/MapLayer.cpp" line="458"/>
         <source>Map - TMS - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Carte - TMS - %1</translation>
     </message>
     <message>
         <location filename="Map/MapLayer.cpp" line="486"/>
         <source>Custom Layer</source>
-        <translation type="unfinished"></translation>
+        <translation>Couche individualisée</translation>
     </message>
     <message>
         <location filename="Map/MapLayer.cpp" line="471"/>
         <source>Map - Yahoo</source>
-        <translation type="unfinished"></translation>
+        <translation>Carte - Yahoo</translation>
     </message>
     <message>
         <location filename="Map/MapLayer.cpp" line="480"/>
         <source>Map - Illegal Yahoo</source>
-        <translation type="unfinished"></translation>
+        <translation>Carte - Illégal Yahoo</translation>
     </message>
     <message>
         <location filename="Map/MapLayer.cpp" line="489"/>
         <source>Map - Illegal Google</source>
-        <translation type="unfinished"></translation>
+        <translation>Carte - Illégal Google</translation>
     </message>
 </context>
 <context>
@@ -386,7 +387,7 @@
     <message>
         <location filename="LayerWidget.cpp" line="103"/>
         <source>Opacity</source>
-        <translation type="unfinished"></translation>
+        <translation>Opacité</translation>
     </message>
 </context>
 <context>
@@ -985,12 +986,12 @@ Do you want to do this now?</source>
     <message>
         <location filename="Map/MapDocument.cpp" line="157"/>
         <source>Background imagery</source>
-        <translation type="unfinished"></translation>
+        <translation>Image de fond</translation>
     </message>
     <message>
         <location filename="Map/MapDocument.cpp" line="161"/>
         <source>Generic layer</source>
-        <translation type="unfinished"></translation>
+        <translation>Couche générique</translation>
     </message>
 </context>
 <context>
@@ -998,42 +999,42 @@ Do you want to do this now?</source>
     <message>
         <location filename="Preferences/MerkaartorPreferences.cpp" line="72"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucune</translation>
     </message>
     <message>
         <location filename="Preferences/MerkaartorPreferences.cpp" line="73"/>
         <source>WMS adapter</source>
-        <translation type="unfinished"></translation>
+        <translation>Adapteur WMS</translation>
     </message>
     <message>
         <location filename="Preferences/MerkaartorPreferences.cpp" line="74"/>
         <source>TMS adapter</source>
-        <translation type="unfinished"></translation>
+        <translation>Adapteur TMS</translation>
     </message>
     <message>
         <location filename="Preferences/MerkaartorPreferences.cpp" line="76"/>
         <source>Yahoo adapter</source>
-        <translation type="unfinished"></translation>
+        <translation>Adapteur Yahoo</translation>
     </message>
     <message>
         <location filename="Preferences/MerkaartorPreferences.cpp" line="79"/>
         <source>Illegal Yahoo adapter</source>
-        <translation type="unfinished"></translation>
+        <translation>Adapteur Yahoo illégal</translation>
     </message>
     <message>
         <location filename="Preferences/MerkaartorPreferences.cpp" line="82"/>
         <source>Illegal Google adapter</source>
-        <translation type="unfinished"></translation>
+        <translation>Adapteur Google illégal</translation>
     </message>
     <message>
         <location filename="Preferences/MerkaartorPreferences.cpp" line="86"/>
         <source>Background</source>
-        <translation type="unfinished"></translation>
+        <translation>Fond</translation>
     </message>
     <message>
         <location filename="Preferences/MerkaartorPreferences.cpp" line="42"/>
         <source>New Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouveau serveur</translation>
     </message>
 </context>
 <context>
@@ -1609,9 +1610,6 @@ Do you want to do this now?</source>
     </message>
 </context>
 <context>
-    <name>TmsServer</name>
-</context>
-<context>
     <name>TrackLayerWidget</name>
     <message>
         <location filename="LayerWidget.cpp" line="363"/>
@@ -1629,7 +1627,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="Map/MapLayer.cpp" line="598"/>
         <source>Extract - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Extraction - %1</translation>
     </message>
 </context>
 <context>
@@ -1806,9 +1804,6 @@ Do you want to do this now?</source>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
-</context>
-<context>
-    <name>WmsServer</name>
 </context>
 <context>
     <name>landuse</name>

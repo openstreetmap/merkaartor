@@ -1,10 +1,10 @@
 #ifndef MERKATOR_PROPERTIESDOCK_H_
 #define MERKATOR_PROPERTIESDOCK_H_
 
-#include "GeneratedFiles/ui_TrackPointProperties.h"
-#include "GeneratedFiles/ui_RelationProperties.h"
-#include "GeneratedFiles/ui_RoadProperties.h"
-#include "GeneratedFiles/ui_MultiProperties.h"
+#include <ui_TrackPointProperties.h>
+#include <ui_RelationProperties.h>
+#include <ui_RoadProperties.h>
+#include <ui_MultiProperties.h>
 
 #include <QtGui/QDockWidget>
 

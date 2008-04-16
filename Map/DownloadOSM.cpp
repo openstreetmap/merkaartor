@@ -12,7 +12,7 @@
 #include "Utils/SlippyMapWidget.h"
 #include "Preferences/MerkaartorPreferences.h"
 
-#include "GeneratedFiles/ui_DownloadMapDialog.h"
+#include <ui_DownloadMapDialog.h>
 
 #include <QtCore/QBuffer>
 #include <QtCore/QSettings>
