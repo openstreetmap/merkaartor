@@ -764,7 +764,7 @@ Möchten Sie dies nun tun?</translation>
     <message>
         <location filename="MainWindow.ui" line="261"/>
         <source>Ctrl+Z</source>
-        <translation>Ctrl+Z</translation>
+        <translation>Strg+Z</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="269"/>
@@ -774,7 +774,7 @@ Möchten Sie dies nun tun?</translation>
     <message>
         <location filename="MainWindow.ui" line="272"/>
         <source>Ctrl+Y</source>
-        <translation>Ctrl+Y</translation>
+        <translation>Strg+Y</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="283"/>
@@ -804,7 +804,7 @@ Möchten Sie dies nun tun?</translation>
     <message>
         <location filename="MainWindow.ui" line="302"/>
         <source>Ctrl+D</source>
-        <translation>Ctrl+D</translation>
+        <translation>Strg+D</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="307"/>
@@ -839,7 +839,7 @@ Möchten Sie dies nun tun?</translation>
     <message>
         <location filename="MainWindow.ui" line="335"/>
         <source>Ctrl+U</source>
-        <translation>Ctrl+U</translation>
+        <translation>Strg+U</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="346"/>
@@ -997,26 +997,6 @@ Möchten Sie dies nun tun?</translation>
         <translation>Bitte lösen Sie zuerst die vorhandenen Konflikte auf</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="383"/>
-        <source>Download failed</source>
-        <translation type="obsolete">Herunterladen fehlgeschlagen</translation>
-    </message>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="380"/>
-        <source>Username/password invalid</source>
-        <translation type="obsolete">Benutzername/Passwort ungültig</translation>
-    </message>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="383"/>
-        <source>Unexpected http status code (%1)</source>
-        <translation type="obsolete">Unerwarteter HTTP-Statuscode (%1)</translation>
-    </message>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="518"/>
-        <source>Enter a new one, keep the same to overwrite or cancel to not add.</source>
-        <translation type="obsolete">Geben Sie einen neuen Namen ein, behalten sie den alten, um ihn zu ersetzen, oder brechen Sie ab.</translation>
-    </message>
-    <message>
         <location filename="MainWindow.ui" line="507"/>
         <source>&amp;Merge</source>
         <translation>&amp;Vereinigen</translation>
@@ -1039,12 +1019,12 @@ Möchten Sie dies nun tun?</translation>
     <message>
         <location filename="MainWindow.ui" line="198"/>
         <source>Ctrl+O</source>
-        <translation>Ctrl+O</translation>
+        <translation>Strg+O</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="416"/>
         <source>Ctrl+N</source>
-        <translation>Ctrl+N</translation>
+        <translation>Strg+N</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="515"/>
@@ -1054,7 +1034,7 @@ Möchten Sie dies nun tun?</translation>
     <message>
         <location filename="MainWindow.ui" line="523"/>
         <source>Ctrl+S</source>
-        <translation>Ctrl+S</translation>
+        <translation>Strg+S</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="528"/>
@@ -1069,47 +1049,7 @@ Möchten Sie dies nun tun?</translation>
     <message>
         <location filename="MainWindow.ui" line="540"/>
         <source>Ctrl+Shift+D</source>
-        <translation>Ctrl+Shift+D</translation>
-    </message>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="360"/>
-        <source>Downloading from OSM (connecting)</source>
-        <translation type="obsolete">Herunterladen von OSM (verbinden)</translation>
-    </message>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="395"/>
-        <source>Downloaded tracks</source>
-        <translation type="obsolete">Lade Fahrspuren herunter</translation>
-    </message>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="409"/>
-        <source>Downloading trackpoints %1-%2</source>
-        <translation type="obsolete">Lade Fahrspurpunkt %1 von %2 herunter</translation>
-    </message>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="549"/>
-        <source>Download</source>
-        <translation type="obsolete">Herunterladen</translation>
-    </message>
-    <message>
-        <location filename="Map/ImportOSM.cpp" line="226"/>
-        <source>downloading segment %1 of %2</source>
-        <translation type="obsolete">Lade Segment %1 von %2 herunter</translation>
-    </message>
-    <message>
-        <location filename="Map/ImportOSM.cpp" line="235"/>
-        <source>parsing segment %1 of %2</source>
-        <translation type="obsolete">Werte Segment %1 von %2 aus</translation>
-    </message>
-    <message>
-        <location filename="Map/ImportOSM.cpp" line="300"/>
-        <source>Parsing XML</source>
-        <translation type="obsolete">Werte XML aus</translation>
-    </message>
-    <message>
-        <location filename="Map/ImportOSM.cpp" line="306"/>
-        <source>Conflicts from %1</source>
-        <translation type="obsolete">Konflikte von %1</translation>
+        <translation>Strg+Umschalt+D</translation>
     </message>
 </context>
 <context>
@@ -1123,6 +1063,14 @@ Möchten Sie dies nun tun?</translation>
         <location filename="Map/MapDocument.cpp" line="161"/>
         <source>Generic layer</source>
         <translation>Standardebene</translation>
+    </message>
+</context>
+<context>
+    <name>MapView</name>
+    <message>
+        <location filename="MapView.cpp" line="217"/>
+        <source>Paint took %1ms</source>
+        <translation>Zeichnen benötigte %1ms</translation>
     </message>
 </context>
 <context>
@@ -1189,64 +1137,6 @@ Möchten Sie dies nun tun?</translation>
         <location filename="MultiProperties.ui" line="86"/>
         <source>Selected items</source>
         <translation>Ausgewählte Elemente</translation>
-    </message>
-</context>
-<context>
-    <name>OSMDownloader</name>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="348"/>
-        <source>Unresolved conflicts</source>
-        <translation type="obsolete">Unaufgelöste Konflikte</translation>
-    </message>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="348"/>
-        <source>Please resolve existing conflicts first</source>
-        <translation type="obsolete">Bitte lösen Sie zuerst die vorhandenen Konflikte auf</translation>
-    </message>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="360"/>
-        <source>Downloading from OSM (connecting)</source>
-        <translation type="obsolete">Herunterladen von OSM (verbinden)</translation>
-    </message>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="383"/>
-        <source>Download failed</source>
-        <translation type="obsolete">Herunterladen fehlgeschlagen</translation>
-    </message>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="380"/>
-        <source>Username/password invalid</source>
-        <translation type="obsolete">Benutzername/Passwort ungültig</translation>
-    </message>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="383"/>
-        <source>Unexpected http status code (%1)</source>
-        <translation type="obsolete">Unerwarteter HTTP-Statuscode (%1)</translation>
-    </message>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="395"/>
-        <source>Downloaded tracks</source>
-        <translation type="obsolete">Lade Fahrspuren herunter</translation>
-    </message>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="409"/>
-        <source>Downloading trackpoints %1-%2</source>
-        <translation type="obsolete">Lade Fahrspurpunkt %1 von %2 herunter</translation>
-    </message>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="517"/>
-        <source>Warning: Bookmark name already exists</source>
-        <translation type="obsolete">Achtung: Lesezeichen mit diesem Namen existiert bereits</translation>
-    </message>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="518"/>
-        <source>Enter a new one, keep the same to overwrite or cancel to not add.</source>
-        <translation type="obsolete">Geben Sie einen neuen Namen ein, behalten sie den alten, um ihn zu ersetzen, oder brechen Sie ab.</translation>
-    </message>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="549"/>
-        <source>Download</source>
-        <translation type="obsolete">Heruntergeladen</translation>
     </message>
 </context>
 <context>

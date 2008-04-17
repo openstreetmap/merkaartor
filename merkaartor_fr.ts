@@ -1097,6 +1097,14 @@ Do you want to do this now?</source>
     </message>
 </context>
 <context>
+    <name>MapView</name>
+    <message>
+        <location filename="MapView.cpp" line="217"/>
+        <source>Paint took %1ms</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MerkaartorPreferences</name>
     <message>
         <location filename="Preferences/MerkaartorPreferences.cpp" line="72"/>
@@ -1488,9 +1496,6 @@ Do you want to do this now?</source>
         <source>Properties - Road</source>
         <translation>Propriétés - Route</translation>
     </message>
-</context>
-<context>
-    <name>QApplication</name>
 </context>
 <context>
     <name>RelationProperties</name>

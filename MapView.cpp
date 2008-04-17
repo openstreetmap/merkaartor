@@ -213,7 +213,7 @@ void MapView::updateStaticBuffer(QPaintEvent * /* anEvent */)
 	QTime Stop(QTime::currentTime());
 #if QT_VERSION < 0x040400  // FIXME statusbar->showmessage in mapview::paintevent segfault on 4.4beta1
 	main()->statusBar()->clearMessage();
-	main()->statusBar()->showMessage(QString("Paint took %1ms").
+	main()->statusBar()->showMessage(tr("Paint took %1ms").
 					 arg(Start.msecsTo(Stop)));
 #endif
 	StaticBufferUpToDate = true;
