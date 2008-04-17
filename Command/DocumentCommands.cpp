@@ -204,18 +204,23 @@ RemoveFeatureCommand * RemoveFeatureCommand::fromXML(MapDocument* d, QDomElement
 	a->	RemoveOnDelete = true;
 
 	QDomElement c = e.firstChildElement();
-	if (c.tagName() == "way") {
-		a->theFeature = Road::fromXML(d, a->theLayer, c);
-		a->theLayer->remove(a->theFeature);
-	} else
-	if (c.tagName() == "relation") {
-		a->theFeature =  Relation::fromXML(d, a->theLayer, c);
-		a->theLayer->remove(a->theFeature);
-	} else
-	if (c.tagName() == "node") {
-		a->theFeature = TrackPoint::fromXML(d, a->theLayer, c);
-		a->theLayer->remove(a->theFeature);
+	while(!c.isNull()) {
+		if (c.tagName() == "way") {
+			a->theFeature = Road::fromXML(d, a->theLayer, c);
+		} else
+		if (c.tagName() == "relation") {
+			a->theFeature =  Relation::fromXML(d, a->theLayer, c);
+		} else
+		if (c.tagName() == "node") {
+			a->theFeature = TrackPoint::fromXML(d, a->theLayer, c);
+		} else
+		if (c.tagName() == "Cascaded") {
+			a->CascadedCleanUp = CommandList::fromXML(d, c.firstChildElement());
+		}
+		c = c.nextSiblingElement();
 	}
+	if (a->theFeature)
+		a->theLayer->remove(a->theFeature);
 
 	return a;
 }
