@@ -378,7 +378,7 @@ ImageMapLayer::ImageMapLayer(const QString & aName)
 
 ImageMapLayer::~ ImageMapLayer()
 {
-	if (layermanager->getLayers().size())
+	if (layermanager && layermanager->getLayers().size())
 		layermanager->removeLayer();
 	SAFE_DELETE(p->layer_bg);
 }
