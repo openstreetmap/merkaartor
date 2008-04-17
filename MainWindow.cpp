@@ -333,7 +333,7 @@ void MainWindow::on_fileUploadAction_triggered()
 		int ret = QMessageBox::warning(this, tr("Upload OSM"), tr("You don't seem to have specified your\n"
 			"OpenStreetMap username and password.\nDo you want to do this now?"), QMessageBox::Yes | QMessageBox::No);
 		if (ret == QMessageBox::Yes) {
-			on_toolsPreferencesAction_triggered(1);
+			toolsPreferencesAction_triggered(1);
 		} else
 			return;
 	}
@@ -544,16 +544,15 @@ void MainWindow::on_mapStyleLoadAction_triggered()
 	}
 }
 
-void MainWindow::on_toolsPreferencesAction_triggered(unsigned int tabidx)
+void MainWindow::toolsPreferencesAction_triggered(unsigned int tabidx)
 {
 	PreferencesDialog* Pref = new PreferencesDialog();
 	Pref->tabPref->setCurrentIndex(tabidx);
-	connect (Pref, SIGNAL(preferencesChanged(void)), this, SLOT(on_preferencesChanged(void)));
-
+	connect (Pref, SIGNAL(preferencesChanged()), this, SLOT(preferencesChanged()));
 	Pref->exec();
 }
 
-void MainWindow::on_preferencesChanged(void)
+void MainWindow::preferencesChanged(void)
 {
 	theDocument->getImageLayer()->setMapAdapter(MerkaartorPreferences::instance()->getBgType());
 	theDocument->getImageLayer()->updateWidget();

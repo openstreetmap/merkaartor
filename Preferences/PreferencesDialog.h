@@ -43,7 +43,7 @@ private:
 	void savePrefs();
 
 signals:
-	void preferencesChanged(void);
+	void preferencesChanged();
 };
 
 #endif
