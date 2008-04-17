@@ -1,10 +1,10 @@
 TEMPLATE = app
 TARGET = merkaartor
-target.path = /usr/local/bin
-INSTALLS += target
 
 QT += network xml core gui
-CONFIG += release yahoo debug
+CONFIG += release
+CONFIG += debug
+CONFIG += yahoo
 
 isEmpty(OUTPUT_DIR) {
     CONFIG(release):OUTPUT_DIR=$$PWD/binaries/release
@@ -35,10 +35,10 @@ include(QMapControl.pri)
 include(ImportExport.pri)
 
 unix {
+    target.path = /usr/local/bin
     # Prefix: base instalation directory
     count( PREFIX, 1 ) {
         target.path = $${PREFIX}/bin
-        INSTALLS += target
 
         isEmpty(TRANSDIR_MERKAARTOR) {
             TRANSDIR_MERKAARTOR = $${PREFIX}/share/merkaartor/translations
@@ -48,6 +48,7 @@ unix {
         }
 
     }
+    INSTALLS += target
 }
 
 win32-msvc* {
@@ -76,7 +77,6 @@ yahoo {
     SOURCES += QMapControl/yahoolegalmapadapter.cpp QMapControl/browserimagemanager.cpp
     HEADERS += QMapControl/yahoolegalmapadapter.h QMapControl/browserimagemanager.h
 
-	include(webkit/WebKit.pri)
-
+    include(webkit/WebKit.pri)
 }
 

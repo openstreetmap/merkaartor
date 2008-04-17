@@ -10,7 +10,7 @@
 //
 //
 
-#include "moc_MerkaartorPreferences.cpp"
+#include "MerkaartorPreferences.h"
 
 #include <QtGui/QApplication>
 #include <QtGui/QMainWindow>

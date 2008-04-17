@@ -197,11 +197,11 @@ bool Downloader::go(const QString& url)
 
 	if (Error)
 	{
-		QMessageBox::information(0,"error",Request.errorString());
+		QMessageBox::information(0,tr("error"),Request.errorString());
 	}
 	if (Content.size() != (int)Request.lastResponse().contentLength())
 	{
-		QMessageBox::information(0,"didn't download enough",QString("%1 %2").arg(Content.size()).arg(Request.lastResponse().contentLength()));
+		QMessageBox::information(0,tr("didn't download enough"),QString("%1 %2").arg(Content.size()).arg(Request.lastResponse().contentLength()));
 	}
 
 	if (Request.lastResponse().hasKey("Content-encoding"))
@@ -279,9 +279,9 @@ void Downloader::progress(int done, int total)
 	if (Animator)
 	{
 		if (done < 10240)
-			Animator->setLabelText(QString("Downloading from OSM (%1 bytes)").arg(done));
+			Animator->setLabelText(tr("Downloading from OSM (%1 bytes)").arg(done));
 		else
-			Animator->setLabelText(QString("Downloading from OSM (%1 kBytes)").arg(done/1024));
+			Animator->setLabelText(tr("Downloading from OSM (%1 kBytes)").arg(done/1024));
 		if (AnimationTimer && total != 0)
 		{
 			delete AnimationTimer;
@@ -345,7 +345,7 @@ bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser
 {
 	if (checkForConflicts(theDocument))
 	{
-		QMessageBox::warning(aParent,MainWindow::tr("Unresolved conflicts"), MainWindow::tr("Please resolve existing conflicts first"));
+		QMessageBox::warning(aParent,QApplication::translate("Downloader","Unresolved conflicts"), QApplication::translate("Downloader","Please resolve existing conflicts first"));
 		return false;
 	}
 	Downloader Rcv(aWeb, aUser, aPassword, UseProxy, ProxyHost, ProxyPort);
@@ -357,7 +357,7 @@ bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser
 	Bar->setTextVisible(false);
 	ProgressDialog->setBar(Bar);
 	ProgressDialog->setMinimumDuration(0);
-	ProgressDialog->setLabelText("Downloading from OSM (connecting)");
+	ProgressDialog->setLabelText(QApplication::translate("Downloader","Downloading from OSM (connecting)"));
 	ProgressDialog->setMaximum(11);
 	Rcv.setAnimator(ProgressDialog,Bar,true);
 
@@ -377,10 +377,10 @@ bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser
 	case 200:
 		break;
 	case 401:
-		QMessageBox::warning(aParent,MainWindow::tr("Download failed"),MainWindow::tr("Username/password invalid"));
+		QMessageBox::warning(aParent,QApplication::translate("Downloader","Download failed"),QApplication::translate("Downloader","Username/password invalid"));
 		return false;
 	default:
-		QMessageBox::warning(aParent,MainWindow::tr("Download failed"),MainWindow::tr("Unexpected http status code (%1)").arg(x));
+		QMessageBox::warning(aParent,QApplication::translate("Downloader","Download failed"),QApplication::translate("Downloader","Unexpected http status code (%1)").arg(x));
 		return false;
 	}
 	Downloader Down(aWeb, aUser, aPassword, UseProxy, ProxyHost, ProxyPort);
@@ -392,7 +392,7 @@ bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser
 bool downloadTracksFromOSM(QMainWindow* Main, const QString& aWeb, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort , const CoordBox& aBox , MapDocument* theDocument)
 {
 	Downloader theDownloader(aWeb, aUser, aPassword, UseProxy, ProxyHost, ProxyPort);
-	TrackMapLayer* trackLayer = new TrackMapLayer("Downloaded tracks");
+	TrackMapLayer* trackLayer = new TrackMapLayer(QApplication::translate("Downloader","Downloaded tracks"));
 	theDocument->add(trackLayer);
 	QProgressDialog ProgressDialog(Main);
 	ProgressDialog.setWindowModality(Qt::ApplicationModal);
@@ -406,7 +406,7 @@ bool downloadTracksFromOSM(QMainWindow* Main, const QString& aWeb, const QString
 	theDownloader.setAnimator(&ProgressDialog,Bar,true);
 	for (unsigned int Page=0; ;++Page)
 	{
-		ProgressDialog.setLabelText(QString("Downloading trackpoints %1-%2").arg(Page*5000+1).arg(Page*5000+5000));
+		ProgressDialog.setLabelText(QApplication::translate("Downloader","Downloading trackpoints %1-%2").arg(Page*5000+1).arg(Page*5000+5000));
 		QString URL = theDownloader.getURLToTrackPoints();
 		URL = URL.arg(radToAng(aBox.bottomLeft().lon())).
 				arg(radToAng(aBox.bottomLeft().lat())).
@@ -514,8 +514,8 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 			QString newBk = ui.NewBookmark->text();
 			bool ok = true;
 			if (Bookmarks.contains(newBk)) {
-				QString text = QInputDialog::getText(dlg, MainWindow::tr("Warning: Bookmark name already exists"),
-                                          MainWindow::tr("Enter a new one, keep the same to overwrite or cancel to not add."), QLineEdit::Normal,
+				QString text = QInputDialog::getText(dlg, QApplication::translate("Downloader","Warning: Bookmark name already exists"),
+                                          QApplication::translate("Downloader","Enter a new one, keep the same to overwrite or cancel to not add."), QLineEdit::Normal,
                                           newBk, &ok);
 			    if (ok && !text.isEmpty())
 			         newBk = text;
@@ -546,7 +546,7 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 			Clip = CoordBox(Coord(R.x(),R.y()),Coord(R.x()+R.width(),R.y()+R.height()));
 		}
 		aParent->view()->setUpdatesEnabled(false);
-		MapLayer* theLayer = new DrawingMapLayer("Download");
+		MapLayer* theLayer = new DrawingMapLayer(QApplication::translate("Downloader","Download"));
 		theDocument->add(theLayer);
 		OK = downloadOSM(aParent,osmWebsite,osmUser,osmPwd,useProxy,proxyHost,proxyPort,Clip,theDocument,theLayer);
 		if (OK && ui.IncludeTracks->isChecked())

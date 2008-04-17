@@ -7,7 +7,7 @@
 #include "LayerWidget.h"
 #include "Map/ImportOSM.h"
 
-#include "moc_MapLayer.cpp"
+#include "Map/MapLayer.h"
 
 #include "QMapControl/mapadapter.h"
 #include "QMapControl/osmmapadapter.h"

@@ -3,7 +3,7 @@
 #include "Command/Command.h"
 #include "Map/ImportOSM.h"
 
-#include "moc_MapDocument.cpp"
+#include "Map/MapDocument.h"
 
 #include "ImportExport/ImportNMEA.h"
 

@@ -223,7 +223,7 @@ static bool downloadToResolve(const QString& What, const std::vector<MapFeature*
 				URL+=",";
 				URL+=Resolution[i+j]->id().right(Resolution[i+j]->id().length()-Resolution[i+j]->id().lastIndexOf('_')-1);
 			}
-		dlg->setLabelText(QString("downloading segment %1 of %2").arg(i).arg(Resolution.size()));
+		dlg->setLabelText(QApplication::translate("Downloader","downloading segment %1 of %2").arg(i).arg(Resolution.size()));
 		if (theDownloader->go(URL))
 		{
 			if (theDownloader->resultCode() == 410)
@@ -232,7 +232,7 @@ static bool downloadToResolve(const QString& What, const std::vector<MapFeature*
 			{
 				QByteArray ba(theDownloader->content());
 				QBuffer  File(&ba);
-				dlg->setLabelText(QString("parsing segment %1 of %2").arg(i).arg(Resolution.size()));
+				dlg->setLabelText(QApplication::translate("Downloader","parsing segment %1 of %2").arg(i).arg(Resolution.size()));
 
 				QDomDocument DomDoc;
 				QString ErrorStr;
@@ -297,13 +297,13 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 	dlg->setBar(Bar);
 	dlg->setWindowModality(Qt::ApplicationModal);
 	dlg->setMinimumDuration(0);
-	dlg->setLabelText("Parsing XML");
+	dlg->setLabelText(QApplication::translate("Downloader","Parsing XML"));
 	dlg->show();
 	if (theDownloader)
 		theDownloader->setAnimator(dlg,Bar,false);
 	CommandList* theList = new CommandList;
 	theList->setIsUpdateFromOSM();
-	MapLayer* conflictLayer = new DrawingMapLayer("Conflicts from "+theLayer->name());
+	MapLayer* conflictLayer = new DrawingMapLayer(QApplication::translate("Downloader","Conflicts from %1").arg(theLayer->name()));
 	theDocument->add(conflictLayer);
 
 	OSMHandler theHandler(theDocument,theLayer,conflictLayer,theList);
