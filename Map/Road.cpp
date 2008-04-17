@@ -213,6 +213,22 @@ void Road::draw(QPainter& /* thePainter */, const Projection& )
 {
 }
 
+void Road::drawHover(QPainter& thePainter, const Projection& theProjection)
+{
+	// FIXME Selected route
+	QFont F(thePainter.font());
+	F.setPointSize(10);
+	F.setBold(true);
+	F.setWeight(QFont::Black);
+	thePainter.setFont(F);
+	QPen TP(MerkaartorPreferences::instance()->getHoverColor());
+	TP.setWidth(5);
+	thePainter.setPen(TP);
+	QPainterPath Pt;
+	buildPathFromRoad(this,theProjection,Pt);
+	thePainter.drawPath(Pt);
+}
+
 void Road::drawFocus(QPainter& thePainter, const Projection& theProjection)
 {
 	// FIXME Selected route
@@ -221,7 +237,7 @@ void Road::drawFocus(QPainter& thePainter, const Projection& theProjection)
 	F.setBold(true);
 	F.setWeight(QFont::Black);
 	thePainter.setFont(F);
-	QPen TP(QColor(0,0,255));
+	QPen TP(MerkaartorPreferences::instance()->getFocusColor());
 	TP.setWidth(5);
 	thePainter.setPen(TP);
 	QPainterPath Pt;

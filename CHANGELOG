@@ -1,4 +1,5 @@
 v0.11
+	* ADD : different colors for focus and hover
 	* ADD : Merkaartor icon
 	* FIX : unified version handling
 	* ADD : OpenTopoMap WMS server to list of defaults; OpenAerialMap as TMS (existed as WMS already)

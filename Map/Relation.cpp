@@ -109,6 +109,12 @@ void Relation::drawFocus(QPainter& P, const Projection& theProjection)
 		p->Members[i].second->drawFocus(P,theProjection);
 }
 
+void Relation::drawHover(QPainter& P, const Projection& theProjection)
+{
+	for (unsigned int i=0; i<p->Members.size(); ++i)
+		p->Members[i].second->drawHover(P,theProjection);
+}
+
 double Relation::pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection) const
 {
 	double Best = 1000000;

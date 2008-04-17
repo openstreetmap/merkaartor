@@ -536,6 +536,16 @@ QColor MerkaartorPreferences::getBgColor() const
 	return Sets->value("visual/BgColor").value<QColor>();
 }
 
+QColor MerkaartorPreferences::getFocusColor() const
+{
+	return Qt::blue;
+}
+
+QColor MerkaartorPreferences::getHoverColor() const
+{
+	return Qt::magenta;
+}
+
 void MerkaartorPreferences::setBgColor(const QColor theValue)
 {
 	Sets->setValue("visual/BgColor", QVariant(theValue));

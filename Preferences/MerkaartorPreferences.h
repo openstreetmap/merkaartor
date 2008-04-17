@@ -170,16 +170,19 @@ public:
 	ProjectionType getProjectionType() const;
 	QStringList getProjectionTypes();
 
-	/* MainWindow state */
-	void saveMainWindowState(const class QMainWindow * mainWindow);
-	void restoreMainWindowState(class QMainWindow * mainWindow) const;
-
 	QStringList getAlphaList() const;
 	void setAlphaList();
 	qreal getAlpha(QString lvl);
 	QHash<QString, qreal>* getAlphaPtr();
 	QColor getBgColor() const;
 	void setBgColor(const QColor theValue);
+
+	QColor getFocusColor() const;
+	QColor getHoverColor() const;
+
+	/* MainWindow state */
+	void saveMainWindowState(const class QMainWindow * mainWindow);
+	void restoreMainWindowState(class QMainWindow * mainWindow) const;
 
 	bool getDrawTileBoundary();
 protected:

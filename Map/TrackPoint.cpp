@@ -57,7 +57,17 @@ void TrackPoint::draw(QPainter& /* thePainter */, const Projection& /*theProject
 
 void TrackPoint::drawFocus(QPainter& thePainter, const Projection& theProjection)
 {
-	thePainter.setPen(QColor(0,0,255));
+	thePainter.setPen(MerkaartorPreferences::instance()->getFocusColor());
+	QPointF P(theProjection.project(Position));
+	QRectF R(P-QPointF(3,3),QSize(6,6));
+	thePainter.drawRect(R);
+	R.adjust(-7, -7, 7, 7);
+	thePainter.drawEllipse(R);
+}
+
+void TrackPoint::drawHover(QPainter& thePainter, const Projection& theProjection)
+{
+	thePainter.setPen(MerkaartorPreferences::instance()->getHoverColor());
 	QPointF P(theProjection.project(Position));
 	QRectF R(P-QPointF(3,3),QSize(6,6));
 	thePainter.drawRect(R);

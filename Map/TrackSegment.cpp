@@ -109,6 +109,11 @@ void TrackSegment::drawFocus(QPainter &, const Projection &)
 	// Can't be selection
 }
 
+void TrackSegment::drawHover(QPainter &, const Projection &)
+{
+	// Can't be selection
+}
+
 CoordBox TrackSegment::boundingBox() const
 {
 	if (p->Points.size())

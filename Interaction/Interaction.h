@@ -63,7 +63,7 @@ class GenericFeatureSnapInteraction : public Interaction
 		virtual void paintEvent(QPaintEvent* , QPainter& thePainter)
 		{
 			if (LastSnap)
-				LastSnap->drawFocus(thePainter, projection());
+				LastSnap->drawHover(thePainter, projection());
 		}
 		virtual void mousePressEvent(QMouseEvent * event)
 		{

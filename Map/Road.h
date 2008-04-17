@@ -22,6 +22,7 @@ class Road : public MapFeature
 		virtual CoordBox boundingBox() const;
 		virtual void draw(QPainter& P, const Projection& theProjection);
 		virtual void drawFocus(QPainter& P, const Projection& theProjection);
+		virtual void drawHover(QPainter& P, const Projection& theProjection);
 		virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection) const;
 		virtual void cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const std::vector<MapFeature*>& Alternatives);
 		virtual bool notEverythingDownloaded() const;
