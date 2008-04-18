@@ -1,7 +1,4 @@
 # Input
-yahoo {
-QT += webkit
-}
 HEADERS += QMapControl/curve.h \
            QMapControl/geometry.h \
            QMapControl/IImageManager.h \

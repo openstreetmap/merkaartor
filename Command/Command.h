@@ -40,7 +40,7 @@ class CommandList : public Command
 		void setIsUpdateFromOSM();
 
 		virtual bool toXML(QDomElement& xParent) const;
-		static CommandList* fromXML(MapDocument* d, QDomElement& e);
+		static CommandList* fromXML(MapDocument* d, const QDomElement& e);
 
 	private:
 		std::vector<Command*> Subs;

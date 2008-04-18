@@ -1,15 +1,27 @@
+# external supported variables:
+# NOUSEWEBKIT         - disable use of WebKit (Yahoo adapter)
+# NOWEBKIT            - disable building of own WebKit
+# TRANSDIR_MERKAARTOR - translations directory for merkaartor
+# TRANSDIR_SYSTEM     - translations directory for Qt itself
+# OUTPUT_DIR          - base directory for local output files
+# PREFIX              - base prefix for installation
+# NODEBUG             - no debug target
+
 TEMPLATE = app
 TARGET = merkaartor
 
 QT += network xml core gui
-CONFIG += release
-CONFIG += debug
-CONFIG += yahoo
 
-isEmpty(OUTPUT_DIR) {
-    CONFIG(release):OUTPUT_DIR=$$PWD/binaries/release
-    CONFIG(debug):OUTPUT_DIR=$$PWD/binaries/debug
+count(NODEBUG,0) {
+    CONFIG += debug
+    OUTPUT_DIR=$$PWD/binaries/debug
 }
+count(NODEBUG,1) {
+    CONFIG += release
+    DEFINES += NDEBUG
+    OUTPUT_DIR=$$PWD/binaries/release
+}
+
 DESTDIR = $$OUTPUT_DIR/bin
 
 VERSION="0.11"
@@ -18,7 +30,6 @@ DEFINES += VERSION=\"\\\"$$VERSION\\\"\"
 INCLUDEPATH += .
 DEPENDPATH += .
 MOC_DIR += tmp
-OBJECTS_DIR += obj
 UI_DIR += tmp
 
 TRANSLATIONS += \
@@ -72,11 +83,12 @@ osmarender {
     }
 }
 
-yahoo {
+isEmpty{NOUSEWEBKIT} {
     DEFINES += YAHOO
     SOURCES += QMapControl/yahoolegalmapadapter.cpp QMapControl/browserimagemanager.cpp
     HEADERS += QMapControl/yahoolegalmapadapter.h QMapControl/browserimagemanager.h
-
-    include(webkit/WebKit.pri)
+    isEmpty{NOWEBKIT} {
+        include(webkit/WebKit.pri)
+        QT += webkit
+    }
 }
-
