@@ -15,11 +15,13 @@ QT += network xml core gui
 count(NODEBUG,0) {
     CONFIG += debug
     OUTPUT_DIR=$$PWD/binaries/debug
+    OBJECTS_DIR += tmp/ob_debug
 }
 count(NODEBUG,1) {
     CONFIG += release
     DEFINES += NDEBUG
     OUTPUT_DIR=$$PWD/binaries/release
+    OBJECTS_DIR += tmp/obj_release
 }
 
 DESTDIR = $$OUTPUT_DIR/bin
