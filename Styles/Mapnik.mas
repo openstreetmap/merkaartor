@@ -482,6 +482,7 @@
   <selector expr="[sport] is swimming"/>
 </painter>
 <painter
+ zoomUnder="0.1" zoomUpper="1e+07"
  backgroundColor="#636363fc" backgroundScale="0.6" backgroundOffset="1"
  foregroundColor="#fdfdfdfc" foregroundScale="0.6" foregroundOffset="0"
  drawTrafficDirectionMarks="yes">
