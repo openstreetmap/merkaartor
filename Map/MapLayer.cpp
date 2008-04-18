@@ -429,6 +429,8 @@ void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 	p->bgType = typ;
 	MerkaartorPreferences::instance()->setBgType(typ);
 	switch (p->bgType) {
+		default:
+			p->bgType = Bg_None; /* no break */
 		case Bg_None:
 			setName(tr("Map - None"));
 			p->Visible = false;
