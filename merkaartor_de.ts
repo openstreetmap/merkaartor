@@ -577,52 +577,52 @@ Möchten Sie dies nun tun?</translation>
         <translation>Karten-Stil laden</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="688"/>
+        <location filename="MainWindow.cpp" line="687"/>
         <source>Export OSM</source>
         <translation>OSM exportieren</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="688"/>
+        <location filename="MainWindow.cpp" line="687"/>
         <source>OSM Files (*.osm)</source>
         <translation>OSM-Dateien (*.osm)</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="797"/>
+        <location filename="MainWindow.cpp" line="796"/>
         <source>Add Bookmark</source>
         <translation>Lesezeichen hinzufügen</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="798"/>
+        <location filename="MainWindow.cpp" line="797"/>
         <source>Specify the name of the bookmark.</source>
         <translation>Geben Sie den Namen des Lesezeichens an.</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="801"/>
+        <location filename="MainWindow.cpp" line="800"/>
         <source>Invalid bookmark name</source>
         <translation>Ungültiger Name für ein Lesezeichen</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="802"/>
+        <location filename="MainWindow.cpp" line="801"/>
         <source>Bookmark cannot be blank.</source>
         <translation>Ein Lesezeichenname kann nicht leer sein.</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="806"/>
+        <location filename="MainWindow.cpp" line="805"/>
         <source>Warning: Bookmark name already exists</source>
         <translation>Achtung: Lesezeichen mit diesem Namen existiert bereits</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="807"/>
+        <location filename="MainWindow.cpp" line="806"/>
         <source>Enter a new one, keep the same to overwrite or cancel.</source>
         <translation>Geben Sie einen neuen Namen ein, behalten sie den alten, um ihn zu ersetzen, oder brechen Sie ab.</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="854"/>
+        <location filename="MainWindow.cpp" line="853"/>
         <source>Remove Bookmark</source>
         <translation>Lesezeichen entfernen</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="855"/>
+        <location filename="MainWindow.cpp" line="854"/>
         <source>Select the bookmark to remove.</source>
         <translation>Wählen sie das Lesezeichen, dass Sie entfernen möchten.</translation>
     </message>
@@ -1007,12 +1007,12 @@ Möchten Sie dies nun tun?</translation>
         <translation>Die gewählten Knoten vereinigen (der zuerst gewählte bleibt erhalten)</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="575"/>
+        <location filename="MainWindow.cpp" line="574"/>
         <source>Save Merkaartor document</source>
         <translation>Merkaartor-Dokument speichern</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="575"/>
+        <location filename="MainWindow.cpp" line="574"/>
         <source>Merkaartor documents Files (*.mdc)</source>
         <translation>Merkaartor-Dokumente (*.mdc)</translation>
     </message>
@@ -1421,6 +1421,31 @@ Möchten Sie dies nun tun?</translation>
         <location filename="PropertiesDock.cpp" line="283"/>
         <source>Properties - Road</source>
         <translation>Eigenschaften - Strasse</translation>
+    </message>
+    <message>
+        <location filename="PropertiesDock.cpp" line="34"/>
+        <source>Center map</source>
+        <translation>Zentriere Karte</translation>
+    </message>
+    <message>
+        <location filename="PropertiesDock.cpp" line="36"/>
+        <source>Center &amp;&amp; Zoom map</source>
+        <translation>Zentriere &amp;und zoome Karte</translation>
+    </message>
+    <message>
+        <location filename="PropertiesDock.cpp" line="143"/>
+        <source>%1/%1 selected item(s)</source>
+        <translation>%1/%1 gewählte(n) Elemente(n)</translation>
+    </message>
+    <message>
+        <location filename="PropertiesDock.cpp" line="158"/>
+        <source>%1/%2 selected item(s)</source>
+        <translation>%1/%2 gewählte(n) Elemente(n)</translation>
+    </message>
+    <message>
+        <location filename="PropertiesDock.cpp" line="216"/>
+        <source>Selected items</source>
+        <translation>Ausgewählte Elemente</translation>
     </message>
 </context>
 <context>

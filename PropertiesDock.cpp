@@ -31,9 +31,9 @@ PropertiesDock::PropertiesDock(MainWindow* aParent)
 	theModel = new TagModel(aParent);
 	delegate = new EditCompleterDelegate(aParent);
 
-	centerAction = new QAction("Center map", this);
+	centerAction = new QAction(tr("Center map"), this);
 	connect(centerAction, SIGNAL(triggered()), this, SLOT(on_centerAction_triggered()));
-	centerZoomAction = new QAction("Center && Zoom map", this);
+	centerZoomAction = new QAction(tr("Center && Zoom map"), this);
 	connect(centerZoomAction, SIGNAL(triggered()), this, SLOT(on_centerZoomAction_triggered()));
 }
 
@@ -140,7 +140,7 @@ void PropertiesDock::fillMultiUiSelectionBox()
 			it->setData(Qt::UserRole,QVariant(i));
 			it->setSelected(true);
 		}
-		MultiUi.lbStatus->setText(QString("%1/%1 selected item(s)").arg(FullSelection.size()));
+		MultiUi.lbStatus->setText(tr("%1/%1 selected item(s)").arg(FullSelection.size()));
 		Main->setUpdatesEnabled(true);
 		NowShowing = MultiShowing;
 	}
@@ -155,7 +155,7 @@ void PropertiesDock::on_SelectionList_itemSelectionChanged()
 			if (MultiUi.SelectionList->item(i)->isSelected())
 				Selection.push_back(FullSelection[i]);
 		theModel->setFeature(Selection);
-		MultiUi.lbStatus->setText(QString("%1/%2 selected item(s)").arg(Selection.size()).arg(FullSelection.size()));
+		MultiUi.lbStatus->setText(tr("%1/%2 selected item(s)").arg(Selection.size()).arg(FullSelection.size()));
 		Main->view()->update();
 	}
 }
@@ -213,7 +213,7 @@ void PropertiesDock::switchToMultiUi()
 	MultiUi.setupUi(NewUi);
 	MultiUi.TagView->verticalHeader()->hide();
 	MultiUi.SelectionList->setContextMenuPolicy(Qt::CustomContextMenu);
-	MultiUi.lbStatus->setText("Selected items");
+	MultiUi.lbStatus->setText(tr("Selected items"));
 	setWidget(NewUi);
 	if (CurrentUi)
 		delete CurrentUi;

@@ -576,52 +576,52 @@ Voulez-vous faire cela maintenant ?</translation>
         <translation>Charger un Style de carte</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="688"/>
+        <location filename="MainWindow.cpp" line="687"/>
         <source>Export OSM</source>
         <translation>Exporter OSM</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="688"/>
+        <location filename="MainWindow.cpp" line="687"/>
         <source>OSM Files (*.osm)</source>
         <translation>Fichiers OSM (*.osm)</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="797"/>
+        <location filename="MainWindow.cpp" line="796"/>
         <source>Add Bookmark</source>
         <translation>Ajouter un signet</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="798"/>
+        <location filename="MainWindow.cpp" line="797"/>
         <source>Specify the name of the bookmark.</source>
         <translation>Spécifiez le nom du signet.</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="801"/>
+        <location filename="MainWindow.cpp" line="800"/>
         <source>Invalid bookmark name</source>
         <translation>Nom de signet invalide</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="802"/>
+        <location filename="MainWindow.cpp" line="801"/>
         <source>Bookmark cannot be blank.</source>
         <translation>Un nom de signet ne peut être vide.</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="806"/>
+        <location filename="MainWindow.cpp" line="805"/>
         <source>Warning: Bookmark name already exists</source>
         <translation>Attention: Le nom de signet existe déjà</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="807"/>
+        <location filename="MainWindow.cpp" line="806"/>
         <source>Enter a new one, keep the same to overwrite or cancel.</source>
         <translation>Entrez un nouveau nom, gardez le même pour remplacer ou annulez.</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="854"/>
+        <location filename="MainWindow.cpp" line="853"/>
         <source>Remove Bookmark</source>
         <translation>Supprimer le signet</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="855"/>
+        <location filename="MainWindow.cpp" line="854"/>
         <source>Select the bookmark to remove.</source>
         <translation>Sélectionnez le signet à supprimer.</translation>
     </message>
@@ -1033,12 +1033,12 @@ Do you want to do this now?</source>
         <translation>Il semble que vous n&apos;ayiez pas spécifiévos identifiant et mot-de-passe OpenStreetMap.Voulez-vous faire cela maintenant ?</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="575"/>
+        <location filename="MainWindow.cpp" line="574"/>
         <source>Save Merkaartor document</source>
         <translation>Enregistrer un document Merkaartor</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="575"/>
+        <location filename="MainWindow.cpp" line="574"/>
         <source>Merkaartor documents Files (*.mdc)</source>
         <translation>Fichiers document Merkaartor (*.mdc)</translation>
     </message>
@@ -1495,6 +1495,31 @@ Do you want to do this now?</source>
         <location filename="PropertiesDock.cpp" line="283"/>
         <source>Properties - Road</source>
         <translation>Propriétés - Route</translation>
+    </message>
+    <message>
+        <location filename="PropertiesDock.cpp" line="34"/>
+        <source>Center map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="PropertiesDock.cpp" line="36"/>
+        <source>Center &amp;&amp; Zoom map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="PropertiesDock.cpp" line="143"/>
+        <source>%1/%1 selected item(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="PropertiesDock.cpp" line="158"/>
+        <source>%1/%2 selected item(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="PropertiesDock.cpp" line="216"/>
+        <source>Selected items</source>
+        <translation type="unfinished">Eléments sélectionnés</translation>
     </message>
 </context>
 <context>
