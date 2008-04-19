@@ -21,7 +21,7 @@
 /**
 	@author cbro <cbro@semperpax.com>
 */
-        class EditCompleterDelegate : public QItemDelegate
+class EditCompleterDelegate : public QItemDelegate
 {
 Q_OBJECT
 public:

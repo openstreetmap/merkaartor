@@ -12,9 +12,13 @@ class MapFeature;
 
 class TagModel : public QAbstractTableModel
 {
+Q_OBJECT
 	public:
 		TagModel(MainWindow* aMain);
 		~TagModel();
+
+		inline static const QString newKeyText(void)
+		{ return tr("Edit this to add..."); }
 
 		void setFeature(const std::vector<MapFeature*> Features);
 		int rowCount(const QModelIndex &parent = QModelIndex()) const;

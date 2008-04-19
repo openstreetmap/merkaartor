@@ -101,8 +101,8 @@ QString Road::description() const
 {
 	QString s(tagValue("name",""));
 	if (!s.isEmpty())
-		return QString("%1 (road %2)").arg(s).arg(id());
-	return QString("road %1").arg(id());
+		return QApplication::translate("TrackMapLayer", "%1 (road %2)").arg(s).arg(id());
+	return QApplication::translate("TrackMapLayer", "road %1").arg(id());
 }
 
 RenderPriority Road::renderPriority(double aPixelPerM) const
@@ -455,4 +455,3 @@ const std::vector<Coord>& Road::smoothed() const
 		p->updateSmoothed(tagValue("smooth","") == "yes");
 	return p->Smoothed;
 }
-

@@ -47,7 +47,7 @@ MapView::MapView(MainWindow* aMain) :
 	layermanager = new LayerManager((QWidget *) this, size());
 
 	pbImages = new QProgressBar(Main);
-	pbImages->setFormat("tile %v / %m");
+	pbImages->setFormat(tr("tile %v / %m"));
 	Main->statusBar()->addPermanentWidget(pbImages);
 
 	connect(ImageManager::instance(), SIGNAL(imageRequested()),

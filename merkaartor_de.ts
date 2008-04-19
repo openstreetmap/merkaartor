@@ -280,7 +280,7 @@
     <message>
         <location filename="Map/DownloadOSM.cpp" line="395"/>
         <source>Downloaded tracks</source>
-        <translation>Lade Fahrspuren herunter</translation>
+        <translation>Heruntergeladene Fahrspuren</translation>
     </message>
     <message>
         <location filename="Map/DownloadOSM.cpp" line="409"/>
@@ -417,37 +417,37 @@
 <context>
     <name>ImageMapLayer</name>
     <message>
-        <location filename="Map/MapLayer.cpp" line="433"/>
+        <location filename="Map/MapLayer.cpp" line="435"/>
         <source>Map - None</source>
         <translation>Karte - Keine</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="447"/>
+        <location filename="Map/MapLayer.cpp" line="449"/>
         <source>Map - WMS - %1</source>
         <translation>Karte - WMS - %1</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="458"/>
+        <location filename="Map/MapLayer.cpp" line="460"/>
         <source>Map - TMS - %1</source>
         <translation>Karte - TMS - %1</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="486"/>
+        <location filename="Map/MapLayer.cpp" line="488"/>
         <source>Custom Layer</source>
         <translation>Spezialebene</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="471"/>
+        <location filename="Map/MapLayer.cpp" line="473"/>
         <source>Map - Yahoo</source>
         <translation>Karte - Yahoo</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="480"/>
+        <location filename="Map/MapLayer.cpp" line="482"/>
         <source>Map - Illegal Yahoo</source>
         <translation>Karte - Yahoo (ungültig)</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="489"/>
+        <location filename="Map/MapLayer.cpp" line="491"/>
         <source>Map - Illegal Google</source>
         <translation>Karte - Google (ungültig)</translation>
     </message>
@@ -498,7 +498,7 @@
     <message>
         <location filename="MainWindow.cpp" line="200"/>
         <source>Import %1</source>
-        <translation>Importieren %1</translation>
+        <translation>Importiert %1</translation>
     </message>
     <message>
         <location filename="MainWindow.cpp" line="228"/>
@@ -1071,6 +1071,11 @@ Möchten Sie dies nun tun?</translation>
         <location filename="MapView.cpp" line="217"/>
         <source>Paint took %1ms</source>
         <translation>Zeichnen benötigte %1ms</translation>
+    </message>
+    <message>
+        <location filename="MapView.cpp" line="50"/>
+        <source>tile %v / %m</source>
+        <translation>Kachel %v / %m</translation>
     </message>
 </context>
 <context>
@@ -1684,7 +1689,7 @@ Möchten Sie dies nun tun?</translation>
     <message>
         <location filename="Preferences/TMSPreferencesDialog.ui" line="123"/>
         <source>Tile size</source>
-        <translation>Tile-Grösse</translation>
+        <translation>Kachel-Größe</translation>
     </message>
     <message>
         <location filename="Preferences/TMSPreferencesDialog.ui" line="140"/>
@@ -1713,6 +1718,24 @@ Möchten Sie dies nun tun?</translation>
     </message>
 </context>
 <context>
+    <name>TagModel</name>
+    <message>
+        <location filename="TagModel.cpp" line="100"/>
+        <source>Key</source>
+        <translation>Schlüssel</translation>
+    </message>
+    <message>
+        <location filename="TagModel.cpp" line="102"/>
+        <source>Value</source>
+        <translation>Wert</translation>
+    </message>
+    <message>
+        <location filename="TagModel.h" line="21"/>
+        <source>Edit this to add...</source>
+        <translation>Ändere...</translation>
+    </message>
+</context>
+<context>
     <name>TrackLayerWidget</name>
     <message>
         <location filename="LayerWidget.cpp" line="363"/>
@@ -1728,9 +1751,29 @@ Möchten Sie dies nun tun?</translation>
 <context>
     <name>TrackMapLayer</name>
     <message>
-        <location filename="Map/MapLayer.cpp" line="598"/>
+        <location filename="Map/MapLayer.cpp" line="600"/>
         <source>Extract - %1</source>
         <translation>Auszug - %1</translation>
+    </message>
+    <message>
+        <location filename="Map/Road.cpp" line="104"/>
+        <source>%1 (road %2)</source>
+        <translation>%1 (Weg %2)</translation>
+    </message>
+    <message>
+        <location filename="Map/Road.cpp" line="105"/>
+        <source>road %1</source>
+        <translation>Weg %1</translation>
+    </message>
+    <message>
+        <location filename="Map/TrackPoint.cpp" line="91"/>
+        <source>%1 (node %2)</source>
+        <translation>%1 (Knoten %2)</translation>
+    </message>
+    <message>
+        <location filename="Map/TrackPoint.cpp" line="93"/>
+        <source>node %1</source>
+        <translation>Knoten %1</translation>
     </message>
 </context>
 <context>

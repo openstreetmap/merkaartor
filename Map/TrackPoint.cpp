@@ -88,9 +88,9 @@ QString TrackPoint::description() const
 {
 	QString s(tagValue("name",""));
 	if (!s.isEmpty())
-		return QString("%1 (node %2)").arg(s).arg(id());
+		return QApplication::translate("TrackMapLayer", "%1 (node %2)").arg(s).arg(id());
 	return
-		QString("node %1").arg(id());
+		QApplication::translate("TrackMapLayer", "node %1").arg(id());
 }
 
 void TrackPoint::partChanged(MapFeature*, unsigned int)
@@ -170,8 +170,3 @@ TrackPoint * TrackPoint::fromXML(MapDocument* d, MapLayer* L, const QDomElement 
 
 	return Pt;
 }
-
-
-
-
-

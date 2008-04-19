@@ -4,9 +4,6 @@
 #include "Map/MapDocument.h"
 #include "Map/MapFeature.h"
 
-#define NEW_KEY_TEXT "Edit this to add..."
-
-
 TagModel::TagModel(MainWindow* aMain)
 : Main(aMain)
 {
@@ -66,7 +63,7 @@ QVariant TagModel::data(const QModelIndex &index, int role) const
 		if ((unsigned int)index.row() >= Tags.size())
 		{
 			if (index.column() == 0)
-				return NEW_KEY_TEXT;
+				return newKeyText();
 			else
 				return "";
 		}
@@ -100,9 +97,9 @@ QVariant TagModel::headerData(int section, Qt::Orientation orientation, int role
 	if (orientation == Qt::Horizontal)
 	{
 		if (section == 0)
-			return "Key";
+			return tr("Key");
 		else
-			return "Value";
+			return tr("Value");
 	}
 	return QVariant();
 }
@@ -160,8 +157,3 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
 	}
 	return false;
 }
-
-
-
-
-

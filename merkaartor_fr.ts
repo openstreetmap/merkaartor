@@ -416,37 +416,37 @@
 <context>
     <name>ImageMapLayer</name>
     <message>
-        <location filename="Map/MapLayer.cpp" line="433"/>
+        <location filename="Map/MapLayer.cpp" line="435"/>
         <source>Map - None</source>
         <translation>Carte - Aucune</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="447"/>
+        <location filename="Map/MapLayer.cpp" line="449"/>
         <source>Map - WMS - %1</source>
         <translation>Carte - WMS - %1</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="458"/>
+        <location filename="Map/MapLayer.cpp" line="460"/>
         <source>Map - TMS - %1</source>
         <translation>Carte - TMS - %1</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="486"/>
+        <location filename="Map/MapLayer.cpp" line="488"/>
         <source>Custom Layer</source>
         <translation>Couche individualisée</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="471"/>
+        <location filename="Map/MapLayer.cpp" line="473"/>
         <source>Map - Yahoo</source>
         <translation>Carte - Yahoo</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="480"/>
+        <location filename="Map/MapLayer.cpp" line="482"/>
         <source>Map - Illegal Yahoo</source>
         <translation>Carte - Illégal Yahoo</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="489"/>
+        <location filename="Map/MapLayer.cpp" line="491"/>
         <source>Map - Illegal Google</source>
         <translation>Carte - Illégal Google</translation>
     </message>
@@ -540,15 +540,6 @@ Voulez-vous annuler le chargement d&apos;un nouveau document ou continuer et per
         <location filename="MainWindow.cpp" line="333"/>
         <source>Upload OSM</source>
         <translation>Téléverser OSM</translation>
-    </message>
-    <message>
-        <location filename="MainWindow.cpp" line="314"/>
-        <source>You don&apos;t seem to have specified your
-Openstreetmap userid &amp; password.
-Do you want to do this now?</source>
-        <translation type="obsolete">Il semble que vous n&apos;ayiez pas spécifié
-vos identifiant et mot-de-passe OpenStreetMap.
-Voulez-vous faire cela maintenant ?</translation>
     </message>
     <message>
         <location filename="MainWindow.cpp" line="359"/>
@@ -1006,26 +997,6 @@ Voulez-vous faire cela maintenant ?</translation>
         <translation>Veuillez d&apos;abord résoudre les conflits existants</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="383"/>
-        <source>Download failed</source>
-        <translation type="obsolete">Téléchargement échoué</translation>
-    </message>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="380"/>
-        <source>Username/password invalid</source>
-        <translation type="obsolete">Identifiant/mot-de-passe invalide</translation>
-    </message>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="383"/>
-        <source>Unexpected http status code (%1)</source>
-        <translation type="obsolete">Status HTTP inattendu (%1)</translation>
-    </message>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="518"/>
-        <source>Enter a new one, keep the same to overwrite or cancel to not add.</source>
-        <translation type="obsolete">Entrez un nouveau, gardez le même pour remplacer ou annulez pour ne pas ajouter.</translation>
-    </message>
-    <message>
         <location filename="MainWindow.cpp" line="334"/>
         <source>You don&apos;t seem to have specified your
 OpenStreetMap username and password.
@@ -1077,11 +1048,6 @@ Do you want to do this now?</source>
         <source>Ctrl+Shift+D</source>
         <translation></translation>
     </message>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="549"/>
-        <source>Download</source>
-        <translation type="obsolete">Télécharger</translation>
-    </message>
 </context>
 <context>
     <name>MapDocument</name>
@@ -1101,6 +1067,11 @@ Do you want to do this now?</source>
     <message>
         <location filename="MapView.cpp" line="217"/>
         <source>Paint took %1ms</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="MapView.cpp" line="50"/>
+        <source>tile %v / %m</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1168,49 +1139,6 @@ Do you want to do this now?</source>
         <location filename="MultiProperties.ui" line="86"/>
         <source>Selected items</source>
         <translation>Eléments sélectionnés</translation>
-    </message>
-</context>
-<context>
-    <name>OSMDownloader</name>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="348"/>
-        <source>Unresolved conflicts</source>
-        <translation type="obsolete">Conflits non-résolus</translation>
-    </message>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="348"/>
-        <source>Please resolve existing conflicts first</source>
-        <translation type="obsolete">Veuillez d&apos;abord résoudre les conflits existants</translation>
-    </message>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="383"/>
-        <source>Download failed</source>
-        <translation type="obsolete">Téléchargement échoué</translation>
-    </message>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="380"/>
-        <source>Username/password invalid</source>
-        <translation type="obsolete">Identifiant/mot-de-passe invalide</translation>
-    </message>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="383"/>
-        <source>Unexpected http status code (%1)</source>
-        <translation type="obsolete">Status HTTP inattendu (%1)</translation>
-    </message>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="517"/>
-        <source>Warning: Bookmark name already exists</source>
-        <translation type="obsolete">Attention: Le nom de signet existe déjà</translation>
-    </message>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="518"/>
-        <source>Enter a new one, keep the same to overwrite or cancel to not add.</source>
-        <translation type="obsolete">Entrez un nouveau, gardez le même pour remplacer ou annulez pour ne pas ajouter.</translation>
-    </message>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="549"/>
-        <source>Download</source>
-        <translation type="obsolete">Télécharger</translation>
     </message>
 </context>
 <context>
@@ -1788,6 +1716,24 @@ Do you want to do this now?</source>
     </message>
 </context>
 <context>
+    <name>TagModel</name>
+    <message>
+        <location filename="TagModel.cpp" line="100"/>
+        <source>Key</source>
+        <translation type="unfinished">Clef</translation>
+    </message>
+    <message>
+        <location filename="TagModel.cpp" line="102"/>
+        <source>Value</source>
+        <translation type="unfinished">Valeur</translation>
+    </message>
+    <message>
+        <location filename="TagModel.h" line="21"/>
+        <source>Edit this to add...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>TrackLayerWidget</name>
     <message>
         <location filename="LayerWidget.cpp" line="363"/>
@@ -1803,9 +1749,29 @@ Do you want to do this now?</source>
 <context>
     <name>TrackMapLayer</name>
     <message>
-        <location filename="Map/MapLayer.cpp" line="598"/>
+        <location filename="Map/MapLayer.cpp" line="600"/>
         <source>Extract - %1</source>
         <translation>Extraction - %1</translation>
+    </message>
+    <message>
+        <location filename="Map/Road.cpp" line="104"/>
+        <source>%1 (road %2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Map/Road.cpp" line="105"/>
+        <source>road %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Map/TrackPoint.cpp" line="91"/>
+        <source>%1 (node %2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Map/TrackPoint.cpp" line="93"/>
+        <source>node %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

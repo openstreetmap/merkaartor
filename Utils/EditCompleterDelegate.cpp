@@ -12,10 +12,9 @@
 #include "Utils/EditCompleterDelegate.h"
 #include "MainWindow.h"
 #include "Map/MapDocument.h"
+#include "TagModel.h"
 
 #include <QLineEdit>
-
-#define NEW_KEY_TEXT "Edit this to add..."
 
 EditCompleterDelegate::EditCompleterDelegate(QObject* parent): QItemDelegate(parent)
 {
@@ -53,19 +52,18 @@ QWidget* EditCompleterDelegate::createEditor(QWidget* parent, const QStyleOption
 void EditCompleterDelegate::setEditorData(QWidget* editor, const QModelIndex& index) const
 {
     QComboBox *edit = static_cast<QComboBox*>(editor);
-	if (index.model()->data(index).toString() != NEW_KEY_TEXT)
-    	edit->setEditText(index.model()->data(index).toString());
-	else
-		edit->clearEditText();
-	edit->lineEdit()->selectAll();
-
+    if (index.model()->data(index).toString() != TagModel::newKeyText())
+        edit->setEditText(index.model()->data(index).toString());
+    else
+        edit->clearEditText();
+    edit->lineEdit()->selectAll();
 }
 
 void EditCompleterDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const
 {
     QComboBox *edit = static_cast<QComboBox*>(editor);
-	if (!edit->currentText().isEmpty())
-    	model->setData(index, edit->currentText());
+    if (!edit->currentText().isEmpty())
+        model->setData(index, edit->currentText());
 }
 
 void EditCompleterDelegate::updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& /* index */) const
