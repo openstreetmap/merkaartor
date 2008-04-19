@@ -1051,6 +1051,23 @@ Möchten Sie dies nun tun?</translation>
         <source>Ctrl+Shift+D</source>
         <translation>Strg+Umschalt+D</translation>
     </message>
+    <message>
+        <location filename="MainWindow.cpp" line="323"/>
+        <source>Old Qt version detected</source>
+        <translation>Alte Qt-Version entdeckt</translation>
+    </message>
+    <message>
+        <location filename="MainWindow.cpp" line="327"/>
+        <source>Your setup uses Qt %1, which contains various known errors in uploading data to OpenStreetMap leading to 401 server response codes. Are you sure you want to continue (which is not recommended).
+For more information see http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor</source>
+        <translation>Ihr System nutzt Qt %1, welches verschiedene Fehler beim Hochladen von Daten zu OpenStreetMap enthält. Diese können zu 401-Fehlermeldungen führen. Wollen Sie fortfahren (nicht zu empfehlen).
+Für weitere Informationen lesen Sie http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor (englisch)</translation>
+    </message>
+    <message>
+        <location filename="MainWindow.cpp" line="574"/>
+        <source>untitled</source>
+        <translation>namenlos</translation>
+    </message>
 </context>
 <context>
     <name>MapDocument</name>

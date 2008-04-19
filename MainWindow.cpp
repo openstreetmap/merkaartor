@@ -320,8 +320,8 @@ void MainWindow::on_fileUploadAction_triggered()
 	if (QString(qVersion()) < "4.3.3")
 	{
 		if (QMessageBox::question(this,
-			"Old Qt version detected",
-			QString("Your setup uses Qt %1, which contains various known errors in uploading "
+			tr("Old Qt version detected"),
+			tr("Your setup uses Qt %1, which contains various known errors in uploading "
 			"data to OpenStreetMap leading to 401 server response codes. Are you sure you want to continue (which is not "
 			"recommended).\n"
 			"For more information see http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor").arg(qVersion()),QMessageBox::Yes|QMessageBox::No) != QMessageBox::Yes)
@@ -571,7 +571,7 @@ void MainWindow::preferencesChanged(void)
 void MainWindow::on_fileSaveAsAction_triggered()
 {
 	fileName = QFileDialog::getSaveFileName(this,
-		tr("Save Merkaartor document"), MerkaartorPreferences::instance()->getWorkingDir() + "/untitled.mdc", tr("Merkaartor documents Files (*.mdc)"));
+		tr("Save Merkaartor document"), QString("%1/%2.mdc").arg(MerkaartorPreferences::instance()->getWorkingDir()).arg(tr("untitled")), tr("Merkaartor documents Files (*.mdc)"));
 
 	if (fileName != "") {
 		saveDocument(fileName);
