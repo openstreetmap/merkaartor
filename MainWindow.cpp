@@ -173,27 +173,27 @@ static void changeCurrentDirToFile(const QString& s)
 
 
 #define FILTER_OPEN_SUPPORTED \
-	"Supported formats (*.mdc *.gpx *.osm *.ngt *.nmea *.nme)\n" \
+	tr("Supported formats (*.mdc *.gpx *.osm *.ngt *.nmea *.nme)\n" \
 	"Merkaartor document (*.mdc)\n" \
 	"GPS Exchange format (*.gpx)\n" \
 	"OpenStreetMap format (*.osm)\n" \
 	"Noni GPSPlot format (*.ngt)\n" \
 	"NMEA GPS log format (*.nmea *.nme)\n" \
-	"All Files (*)"
+	"All Files (*)")
 #define FILTER_IMPORT_SUPPORTED \
-	"Supported formats (*.gpx *.osm *.ngt *.nmea *.nme)\n" \
+	tr("Supported formats (*.gpx *.osm *.ngt *.nmea *.nme)\n" \
 	"GPS Exchange format (*.gpx)\n" \
 	"OpenStreetMap format (*.osm)\n" \
 	"Noni GPSPlot format (*.ngt)\n" \
 	"NMEA GPS log format (*.nmea *.nme)\n" \
-	"All Files (*)"
+	"All Files (*)")
 
 void MainWindow::on_fileImportAction_triggered()
 {
 	QString s = QFileDialog::getOpenFileName(
 					this,
 					tr("Open track file"),
-					"", tr(FILTER_IMPORT_SUPPORTED));
+					"", FILTER_IMPORT_SUPPORTED);
 	if (!s.isNull()) {
 		changeCurrentDirToFile(s);
 		bool OK = false;
@@ -309,7 +309,7 @@ void MainWindow::on_fileOpenAction_triggered()
 	QString fileName = QFileDialog::getOpenFileName(
 					this,
 					tr("Open track file"),
-					"", tr(FILTER_OPEN_SUPPORTED));
+					"", FILTER_OPEN_SUPPORTED);
 
 	loadFile(fileName);
 }

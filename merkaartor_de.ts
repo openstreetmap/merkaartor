@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="de">
-<defaultcodec></defaultcodec>
+<context>
+    <name>@default</name>
+    <message>
+        <location filename="MainWindow.cpp" line="183"/>
+        <source>Supported formats (*.mdc *.gpx *.osm *.ngt *.nmea *.nme)
+Merkaartor document (*.mdc)
+GPS Exchange format (*.gpx)
+OpenStreetMap format (*.osm)
+Noni GPSPlot format (*.ngt)
+NMEA GPS log format (*.nmea *.nme)
+All Files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="MainWindow.cpp" line="191"/>
+        <source>Supported formats (*.gpx *.osm *.ngt *.nmea *.nme)
+GPS Exchange format (*.gpx)
+OpenStreetMap format (*.osm)
+Noni GPSPlot format (*.ngt)
+NMEA GPS log format (*.nmea *.nme)
+All Files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 <context>
     <name>AboutDialog</name>
     <message>
