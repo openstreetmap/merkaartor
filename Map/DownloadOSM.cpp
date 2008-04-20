@@ -218,6 +218,7 @@ bool Downloader::go(const QString& url)
 	showDebug("GET", url, QByteArray() ,Content);
 #endif
 	Result = Request.lastResponse().statusCode();
+	ResultText = Request.lastResponse().reasonPhrase();
 	delete AnimationTimer;
 	AnimationTimer = 0;
 	return !Error;
@@ -258,6 +259,7 @@ bool Downloader::request(const QString& Method, const QString& URL, const QStrin
 	showDebug(Method,URL,Data,Content);
 #endif
 	Result = Request.lastResponse().statusCode();
+	ResultText = Request.lastResponse().reasonPhrase();
 	return !Error;
 }
 
@@ -296,6 +298,11 @@ void Downloader::progress(int done, int total)
 int Downloader::resultCode()
 {
 	return Result;
+}
+
+const QString &Downloader::resultText()
+{
+	return ResultText;
 }
 
 QString Downloader::getURLToFetch(const QString &What)
@@ -380,7 +387,7 @@ bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser
 		QMessageBox::warning(aParent,QApplication::translate("Downloader","Download failed"),QApplication::translate("Downloader","Username/password invalid"));
 		return false;
 	default:
-		QMessageBox::warning(aParent,QApplication::translate("Downloader","Download failed"),QApplication::translate("Downloader","Unexpected http status code (%1)").arg(x));
+		QMessageBox::warning(aParent,QApplication::translate("Downloader","Download failed"),QApplication::translate("Downloader","Unexpected http status code (%1)\nServer message is '%2'\nPossibly reducing the download area helps.").arg(x).arg(Rcv.resultText()));
 		return false;
 	}
 	Downloader Down(aWeb, aUser, aPassword, UseProxy, ProxyHost, ProxyPort);

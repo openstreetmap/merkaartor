@@ -29,6 +29,7 @@ class Downloader : public QObject
 		bool go(const QString& url);
 		QByteArray& content();
 		int resultCode();
+		const QString & resultText();
 		QString getURLToMap();
 		QString getURLToTrackPoints();
 		QString getURLToFetch(const QString& What);
@@ -53,6 +54,7 @@ class Downloader : public QObject
 		int ProxyPort;
 		QByteArray Content;
 		int Result;
+		QString ResultText;
 		int Id;
 		bool Error;
 		QEventLoop Loop;

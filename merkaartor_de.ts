@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="de">
+<defaultcodec></defaultcodec>
 <context>
     <name>@default</name>
     <message>
@@ -11,7 +12,13 @@ OpenStreetMap format (*.osm)
 Noni GPSPlot format (*.ngt)
 NMEA GPS log format (*.nmea *.nme)
 All Files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Unterstützte Formate (*.mdc *.gpx *.osm *.ngt *.nmea *.nme)￼
+Merkaartor-Dokument (*.mdc)￼
+GPS Exchange-Format (*.gpx)￼
+OpenStreetMap-Format (*.osm)￼
+Noni GPSPlot-Format (*.ngt)￼
+NMEA GPS-Logformat (*.nmea *.nme)￼
+Alle Dateien (*)</translation>
     </message>
     <message>
         <location filename="MainWindow.cpp" line="191"/>
@@ -21,7 +28,12 @@ OpenStreetMap format (*.osm)
 Noni GPSPlot format (*.ngt)
 NMEA GPS log format (*.nmea *.nme)
 All Files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Unterstützte Formate (*.gpx *.osm *.ngt *.nmea *.nme)￼
+GPS Exchange-Format (*.gpx)￼
+OpenStreetMap-Format (*.osm)￼
+Noni GPSPlot-Format (*.ngt)￼
+NMEA GPS-Logformat (*.nmea *.nme)￼
+All Files (*)</translation>
     </message>
 </context>
 <context>
@@ -261,67 +273,62 @@ All Files (*)</source>
         <translation>Nicht genügend Daten heruntergeladen</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="282"/>
+        <location filename="Map/DownloadOSM.cpp" line="284"/>
         <source>Downloading from OSM (%1 bytes)</source>
         <translation>Herunterladen von OSM (%1 Byte)</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="284"/>
+        <location filename="Map/DownloadOSM.cpp" line="286"/>
         <source>Downloading from OSM (%1 kBytes)</source>
         <translation>Herunterladen von OSM (%1 KByte)</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="348"/>
+        <location filename="Map/DownloadOSM.cpp" line="355"/>
         <source>Unresolved conflicts</source>
         <translation>Unaufgelöste Konflikte</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="348"/>
+        <location filename="Map/DownloadOSM.cpp" line="355"/>
         <source>Please resolve existing conflicts first</source>
         <translation>Bitte lösen Sie zuerst die vorhandenen Konflikte auf</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="360"/>
+        <location filename="Map/DownloadOSM.cpp" line="367"/>
         <source>Downloading from OSM (connecting)</source>
         <translation>Herunterladen von OSM (verbinden)</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="383"/>
+        <location filename="Map/DownloadOSM.cpp" line="390"/>
         <source>Download failed</source>
         <translation>Herunterladen fehlgeschlagen</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="380"/>
+        <location filename="Map/DownloadOSM.cpp" line="387"/>
         <source>Username/password invalid</source>
         <translation>Benutzername/Passwort ungültig</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="383"/>
-        <source>Unexpected http status code (%1)</source>
-        <translation>Unerwarteter HTTP-Statuscode (%1)</translation>
-    </message>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="395"/>
+        <location filename="Map/DownloadOSM.cpp" line="402"/>
         <source>Downloaded tracks</source>
         <translation>Heruntergeladene Fahrspuren</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="409"/>
+        <location filename="Map/DownloadOSM.cpp" line="416"/>
         <source>Downloading trackpoints %1-%2</source>
         <translation>Lade Fahrspurpunkt %1 von %2 herunter</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="517"/>
+        <location filename="Map/DownloadOSM.cpp" line="524"/>
         <source>Warning: Bookmark name already exists</source>
         <translation>Achtung: Lesezeichen mit diesem Namen existiert bereits</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="518"/>
+        <location filename="Map/DownloadOSM.cpp" line="525"/>
         <source>Enter a new one, keep the same to overwrite or cancel to not add.</source>
         <translation>Geben Sie einen neuen Namen ein, behalten sie den alten, um ihn zu ersetzen, oder brechen Sie ab.</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="549"/>
+        <location filename="Map/DownloadOSM.cpp" line="556"/>
         <source>Download</source>
         <translation>Heruntergeladen</translation>
     </message>
@@ -344,6 +351,15 @@ All Files (*)</source>
         <location filename="Map/ImportOSM.cpp" line="306"/>
         <source>Conflicts from %1</source>
         <translation>Konflikte von %1</translation>
+    </message>
+    <message>
+        <location filename="Map/DownloadOSM.cpp" line="390"/>
+        <source>Unexpected http status code (%1)
+Server message is &apos;%2&apos;
+Possibly reducing the download area helps.</source>
+        <translation>Unerwarteter HTTP-Statuscode (%1)
+Die Servernachricht ist &apos;%2&apos;
+Möglicherweise hilft eine Reduzierung des herunterzuladenden Gebietes.</translation>
     </message>
 </context>
 <context>

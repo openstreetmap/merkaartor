@@ -261,67 +261,62 @@ All Files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="282"/>
+        <location filename="Map/DownloadOSM.cpp" line="284"/>
         <source>Downloading from OSM (%1 bytes)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="284"/>
+        <location filename="Map/DownloadOSM.cpp" line="286"/>
         <source>Downloading from OSM (%1 kBytes)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="348"/>
+        <location filename="Map/DownloadOSM.cpp" line="355"/>
         <source>Unresolved conflicts</source>
         <translation type="unfinished">Conflits non-résolus</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="348"/>
+        <location filename="Map/DownloadOSM.cpp" line="355"/>
         <source>Please resolve existing conflicts first</source>
         <translation type="unfinished">Veuillez d&apos;abord résoudre les conflits existants</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="383"/>
+        <location filename="Map/DownloadOSM.cpp" line="390"/>
         <source>Download failed</source>
         <translation type="unfinished">Téléchargement échoué</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="380"/>
+        <location filename="Map/DownloadOSM.cpp" line="387"/>
         <source>Username/password invalid</source>
         <translation type="unfinished">Identifiant/mot-de-passe invalide</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="383"/>
-        <source>Unexpected http status code (%1)</source>
-        <translation type="unfinished">Status HTTP inattendu (%1)</translation>
-    </message>
-    <message>
-        <location filename="Map/DownloadOSM.cpp" line="517"/>
+        <location filename="Map/DownloadOSM.cpp" line="524"/>
         <source>Warning: Bookmark name already exists</source>
         <translation type="unfinished">Attention: Le nom de signet existe déjà</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="518"/>
+        <location filename="Map/DownloadOSM.cpp" line="525"/>
         <source>Enter a new one, keep the same to overwrite or cancel to not add.</source>
         <translation type="unfinished">Entrez un nouveau, gardez le même pour remplacer ou annulez pour ne pas ajouter.</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="549"/>
+        <location filename="Map/DownloadOSM.cpp" line="556"/>
         <source>Download</source>
         <translation type="unfinished">Télécharger</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="360"/>
+        <location filename="Map/DownloadOSM.cpp" line="367"/>
         <source>Downloading from OSM (connecting)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="395"/>
+        <location filename="Map/DownloadOSM.cpp" line="402"/>
         <source>Downloaded tracks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="409"/>
+        <location filename="Map/DownloadOSM.cpp" line="416"/>
         <source>Downloading trackpoints %1-%2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -343,6 +338,13 @@ All Files (*)</source>
     <message>
         <location filename="Map/ImportOSM.cpp" line="306"/>
         <source>Conflicts from %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Map/DownloadOSM.cpp" line="390"/>
+        <source>Unexpected http status code (%1)
+Server message is &apos;%2&apos;
+Possibly reducing the download area helps.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
