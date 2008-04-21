@@ -139,6 +139,20 @@
     </property>
     <addaction name="nodeMergeAction" />
    </widget>
+   <widget class="QMenu" name="windowAction" >
+    <property name="title" >
+     <string>&amp;Window</string>
+    </property>
+    <widget class="QMenu" name="menu_Docks" >
+     <property name="title" >
+      <string>&amp;Docks</string>
+     </property>
+     <addaction name="windowPropertiesAction" />
+     <addaction name="windowLayersAction" />
+     <addaction name="windowInfoAction" />
+    </widget>
+    <addaction name="menu_Docks" />
+   </widget>
    <addaction name="menuFile" />
    <addaction name="menuEdit" />
    <addaction name="menuView" />
@@ -146,6 +160,7 @@
    <addaction name="menuRoad" />
    <addaction name="menu_Node" />
    <addaction name="menuTools" />
+   <addaction name="windowAction" />
    <addaction name="menuHelp" />
   </widget>
   <widget class="QStatusBar" name="StatusBar" />
@@ -538,6 +553,53 @@
    </property>
    <property name="shortcut" >
     <string>Ctrl+Shift+D</string>
+   </property>
+  </action>
+  <action name="action_Docks" >
+   <property name="text" >
+    <string>&amp;Docks</string>
+   </property>
+  </action>
+  <action name="windowPropertiesAction" >
+   <property name="text" >
+    <string>Toggle &amp;Properties</string>
+   </property>
+   <property name="toolTip" >
+    <string>Hide/Show the Properties dock</string>
+   </property>
+   <property name="statusTip" >
+    <string>Hide/Show the Properties dock</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+P</string>
+   </property>
+  </action>
+  <action name="windowLayersAction" >
+   <property name="text" >
+    <string>Toggle &amp;Layers</string>
+   </property>
+   <property name="toolTip" >
+    <string>Hide/Show the Layers dock</string>
+   </property>
+   <property name="statusTip" >
+    <string>Hide/Show the Layers dock</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+L</string>
+   </property>
+  </action>
+  <action name="windowInfoAction" >
+   <property name="text" >
+    <string>Toggle &amp;Info</string>
+   </property>
+   <property name="toolTip" >
+    <string>Hide/Show the Info dock</string>
+   </property>
+   <property name="statusTip" >
+    <string>Hide/Show the Info dock</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+I</string>
    </property>
   </action>
  </widget>

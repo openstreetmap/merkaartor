@@ -87,6 +87,11 @@ PropertiesDock *MapView::properties()
 	return Main->properties();
 }
 
+InfoDock *MapView::info()
+{
+	return Main->info();
+}
+
 void MapView::setDocument(MapDocument* aDoc)
 {
 	theDocument = aDoc;

@@ -3,6 +3,7 @@
 #include "LayerDock.h"
 #include "MapView.h"
 #include "PropertiesDock.h"
+#include "InfoDock.h"
 #include "Command/Command.h"
 #include "Command/DocumentCommands.h"
 #include "Interaction/CreateAreaInteraction.h"
@@ -72,6 +73,11 @@ MainWindow::MainWindow(void)
 	theProperties->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 	addDockWidget(Qt::RightDockWidgetArea, theProperties);
 	on_editPropertiesAction_triggered();
+
+	theInfo = new InfoDock(this);
+	theInfo->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+	addDockWidget(Qt::RightDockWidgetArea, theInfo);
+
 	QDir::setCurrent(MerkaartorPreferences::instance()->getWorkingDir());
 
 	connect (theLayers, SIGNAL(layersChanged(bool)), this, SLOT(adjustLayers(bool)));
@@ -117,6 +123,11 @@ void MainWindow::invalidateView(bool UpdateDock)
 PropertiesDock* MainWindow::properties()
 {
 	return theProperties;
+}
+
+InfoDock* MainWindow::info()
+{
+	return theInfo;
 }
 
 MapDocument* MainWindow::document()
@@ -905,4 +916,19 @@ void MainWindow::on_nodeMergeAction_triggered()
 		theView->properties()->setSelection(F);
 		invalidateView();
 	}
+}
+
+void MainWindow::on_windowPropertiesAction_triggered()
+{
+	theProperties->setVisible(!theProperties->isVisible());
+}
+
+void MainWindow::on_windowLayersAction_triggered()
+{
+	theLayers->setVisible(!theLayers->isVisible());
+}
+
+void MainWindow::on_windowInfoAction_triggered()
+{
+	theInfo->setVisible(!theInfo->isVisible());
 }

@@ -11,6 +11,7 @@ class Interaction;
 class MainWindow;
 class MapDocument;
 class PropertiesDock;
+class InfoDock;
 class MapAdapter;
 class Layer;
 class LayerManager;
@@ -42,6 +43,8 @@ class MapView :	public QWidget
 
 		Projection& projection();
 		PropertiesDock* properties();
+
+		InfoDock* info();
 
         LayerManager*	layermanager;
 

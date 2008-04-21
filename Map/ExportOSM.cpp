@@ -62,7 +62,7 @@ QString exportOSM(const Relation& R)
 
 QString wrapOSM(const QString& S)
 {
-	return "<osm version=\"0.3\">"+S+"</osm>"+QChar(0);
+	return "<osm version=\"0.5\">"+S+"</osm>"+QChar(0);
 }
 
 

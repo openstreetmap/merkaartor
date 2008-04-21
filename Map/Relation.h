@@ -42,6 +42,8 @@ class Relation : public MapFeature
 		virtual bool toXML(QDomElement xParent);
 		static Relation* fromXML(MapDocument* d, MapLayer* L, const QDomElement e);
 
+		virtual QString toHtml();
+
 	private:
 		Relation(const Relation&);
 		RelationPrivate* p;

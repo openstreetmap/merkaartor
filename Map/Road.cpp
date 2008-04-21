@@ -101,8 +101,8 @@ QString Road::description() const
 {
 	QString s(tagValue("name",""));
 	if (!s.isEmpty())
-		return QApplication::translate("TrackMapLayer", "%1 (road %2)").arg(s).arg(id());
-	return QApplication::translate("TrackMapLayer", "road %1").arg(id());
+		return QApplication::translate("TrackMapLayer", "%1 (%2)").arg(s).arg(id());
+	return QApplication::translate("TrackMapLayer", "%1").arg(id());
 }
 
 RenderPriority Road::renderPriority(double aPixelPerM) const
@@ -319,6 +319,8 @@ bool Road::toXML(QDomElement xParent)
 	xParent.appendChild(e);
 
 	e.setAttribute("id", xmlId());
+	e.setAttribute("timestamp", time().toString(Qt::ISODate));
+	e.setAttribute("user", user());
 
 	for (unsigned int i=0; i<size(); ++i) {
 		QDomElement n = xParent.ownerDocument().createElement("nd");
@@ -335,6 +337,9 @@ bool Road::toXML(QDomElement xParent)
 Road * Road::fromXML(MapDocument* d, MapLayer * L, const QDomElement e)
 {
 	QString id = "way_"+e.attribute("id");
+	QDateTime time = QDateTime::fromString(e.attribute("timestamp"), Qt::ISODate);
+	QString user = e.attribute("user");
+
 	Road* R = dynamic_cast<Road*>(d->getFeature(id));
 
 	if (!R) {
@@ -342,6 +347,8 @@ Road * Road::fromXML(MapDocument* d, MapLayer * L, const QDomElement e)
 		R->setId(id);
 		R->setLastUpdated(MapFeature::OSMServer);
 	}
+	R->setTime(time);
+	R->setUser(user);
 
 	QDomElement c = e.firstChildElement();
 	while(!c.isNull()) {
@@ -454,4 +461,18 @@ const std::vector<Coord>& Road::smoothed() const
 	if (!p->SmoothedUpToDate)
 		p->updateSmoothed(tagValue("smooth","") == "yes");
 	return p->Smoothed;
+}
+
+QString Road::toHtml()
+{
+	QString D;
+
+	D += "<i>size: </i>" + QString::number(size()) + " nodes";
+	CoordBox bb = boundingBox();
+	D += "<br/>";
+	D += "<i>Topleft: </i>" + QString::number(radToAng(bb.topLeft().lat()), 'f', 4) + " / " + QString::number(radToAng(bb.topLeft().lon()), 'f', 4);
+	D += "<br/>";
+	D += "<i>Botright: </i>" + QString::number(radToAng(bb.bottomRight().lat()), 'f', 4) + " / " + QString::number(radToAng(bb.bottomRight().lon()), 'f', 4);
+
+	return MapFeature::toMainHtml("Way").arg(D);
 }

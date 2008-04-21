@@ -6,28 +6,18 @@
 #include <QtGui/QPainter>
 
 TrackPoint::TrackPoint(const Coord& aCoord)
-: Position(aCoord), Time(QDateTime::currentDateTime())
+: Position(aCoord)
 {
 }
 
 TrackPoint::TrackPoint(const TrackPoint& other)
-: MapFeature(other), Position(other.Position), Time(other.Time)
+: MapFeature(other), Position(other.Position)
 {
+	setTime(other.time());
 }
 
 TrackPoint::~TrackPoint(void)
 {
-}
-
-const QDateTime& TrackPoint::time() const
-{
-	return Time;
-}
-
-void TrackPoint::setTime(const QDateTime& time)
-{
-	Time = time;
-	notifyChanges();
 }
 
 const Coord& TrackPoint::position() const
@@ -88,9 +78,9 @@ QString TrackPoint::description() const
 {
 	QString s(tagValue("name",""));
 	if (!s.isEmpty())
-		return QApplication::translate("TrackMapLayer", "%1 (node %2)").arg(s).arg(id());
+		return QApplication::translate("TrackMapLayer", "%1 (%2)").arg(s).arg(id());
 	return
-		QApplication::translate("TrackMapLayer", "node %1").arg(id());
+		QApplication::translate("TrackMapLayer", "%1").arg(id());
 }
 
 void TrackPoint::partChanged(MapFeature*, unsigned int)
@@ -121,6 +111,8 @@ bool TrackPoint::toXML(QDomElement xParent)
 	e.setAttribute("id", xmlId());
 	e.setAttribute("lon",QString::number(radToAng(Position.lon()),'f',8));
 	e.setAttribute("lat", QString::number(radToAng(Position.lat()),'f',8));
+	e.setAttribute("timestamp", time().toString(Qt::ISODate));
+	e.setAttribute("user", user());
 
 	tagsToXML(e);
 
@@ -137,7 +129,7 @@ bool TrackPoint::toTrackXML(QDomElement xParent)
 	e.setAttribute("xml:id", xmlId());
 	e.setAttribute("lon",QString::number(radToAng(Position.lon()),'f',8));
 	e.setAttribute("lat", QString::number(radToAng(Position.lat()),'f',8));
-	e.setAttribute("time", Time.toString("yyyy-MM-ddTHH:mm:ssZ"));
+	e.setAttribute("time", time().toString(Qt::ISODate));
 
 	tagsToXML(e);
 
@@ -148,6 +140,12 @@ TrackPoint * TrackPoint::fromXML(MapDocument* d, MapLayer* L, const QDomElement 
 {
 	double Lat = e.attribute("lat").toDouble();
 	double Lon = e.attribute("lon").toDouble();
+	QDateTime time;
+	if (e.hasAttribute("timestamp"))
+		time = QDateTime::fromString(e.attribute("timestamp"), Qt::ISODate);
+	else
+		time = QDateTime::fromString(e.attribute("time"), Qt::ISODate);
+	QString user = e.attribute("user");
 
 	QString id;
 	if (e.hasAttribute("id"))
@@ -158,10 +156,14 @@ TrackPoint * TrackPoint::fromXML(MapDocument* d, MapLayer* L, const QDomElement 
 	if (!Pt) {
 		Pt = new TrackPoint(Coord(angToRad(Lat),angToRad(Lon)));
 		Pt->setId(id);
+		Pt->setTime(time);
+		Pt->setUser(user);
 		Pt->setLastUpdated(MapFeature::OSMServer);
 		L->add(Pt);
 	} else {
 		Pt->setPosition(Coord(angToRad(Lat), angToRad(Lon)));
+		Pt->setTime(time);
+		Pt->setUser(user);
 		if (Pt->lastUpdated() == MapFeature::NotYetDownloaded)
 			Pt->setLastUpdated(MapFeature::OSMServer);
 	}
@@ -169,4 +171,14 @@ TrackPoint * TrackPoint::fromXML(MapDocument* d, MapLayer* L, const QDomElement 
 	MapFeature::tagsFromXML(d, Pt, e);
 
 	return Pt;
+}
+
+QString TrackPoint::toHtml()
+{
+	QString D;
+
+	D += "<i>timestamp: </i>" + time().toString(Qt::ISODate) + "<br/>";
+	D += "<i>coord: </i>" + QString::number(radToAng(position().lat()), 'f', 4) + " / " + QString::number(radToAng(position().lon()), 'f', 4) + "";
+
+	return MapFeature::toMainHtml("Node").arg(D);
 }

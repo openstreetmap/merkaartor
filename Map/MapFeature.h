@@ -57,6 +57,10 @@ class MapFeature
 		QString xmlId() const;
 		ActorType lastUpdated() const;
 		void setLastUpdated(ActorType A);
+		const QDateTime& time() const;
+		void setTime(const QDateTime& aTime);
+		const QString& user() const;
+		void setUser(const QString& aUser);
 		virtual void setLayer(MapLayer* aLayer);
 		virtual MapLayer* layer();
 		virtual QString description() const = 0;
@@ -88,6 +92,9 @@ class MapFeature
 
 		virtual QString toXML(unsigned int lvl=0) = 0;
 		virtual bool toXML(QDomElement xParent) = 0;
+
+		virtual QString toMainHtml(QString type);
+		virtual QString toHtml() = 0;
 
 		static TrackPoint* getTrackPointOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id);
 		static Road* getWayOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id);

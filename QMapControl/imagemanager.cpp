@@ -67,7 +67,7 @@ QPixmap ImageManager::getImage(MapAdapter* anAdapter, int x, int y, int z)
 
 	QString host = anAdapter->getHost();
 	QString url = anAdapter->getQuery(x, y, z);
-	QString strHash = QString("%1%2").arg(host).arg(url);
+	QString strHash = QString("%1%2").arg(anAdapter->getName()).arg(url);
 	QString hash = QString(strHash.toAscii().toBase64());
 
 	// is image in picture cache

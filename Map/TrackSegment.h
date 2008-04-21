@@ -35,6 +35,8 @@ class TrackSegment : public MapFeature
 		virtual bool toXML(QDomElement xParent);
 		static TrackSegment* fromXML(MapDocument* d, MapLayer* L, const QDomElement e);
 
+		virtual QString toHtml() {return "";};
+
 	private:
 		TrackSegmentPrivate* p;
 };

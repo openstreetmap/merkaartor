@@ -42,6 +42,7 @@ HEADERS += \
 ./PaintStyle/PaintStyleEditor.h \ 
 ./PaintStyle/TagSelector.h \
 ./PropertiesDock.h \
+./InfoDock.h \
 ./Sync/DirtyList.h \
 ./Sync/SyncOSM.h \
 ./TagModel.h \
@@ -98,6 +99,7 @@ SOURCES += \
 ./Main.cpp \
 ./MainWindow.cpp \
 ./PropertiesDock.cpp \
+./InfoDock.cpp \
 ./TagModel.cpp \
 ./LayerDock.cpp \
 ./LayerWidget.cpp \

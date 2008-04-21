@@ -217,6 +217,9 @@ void MapDocument::remove(MapLayer* aLayer)
 		p->lastDownloadLayer = NULL;
 	if (p->theDock)
 		p->theDock->deleteLayer(aLayer);
+
+	//delete (p->History);
+	//p->History = new CommandHistory();
 }
 
 bool MapDocument::exists(MapLayer* L) const

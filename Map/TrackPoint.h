@@ -28,8 +28,6 @@ class TrackPoint : public MapFeature
 
 		const Coord& position() const;
 		void setPosition(const Coord& aCoord);
-		const QDateTime& time() const;
-		void setTime(const QDateTime& aTime);
 
 		virtual void partChanged(MapFeature* F, unsigned int ChangeId);
 
@@ -38,9 +36,10 @@ class TrackPoint : public MapFeature
 		virtual bool toTrackXML(QDomElement xParent);
 		static TrackPoint* fromXML(MapDocument* d, MapLayer* L, const QDomElement e);
 
+		virtual QString toHtml();
+
 	private:
 		Coord Position;
-		QDateTime Time;
 };
 
 #endif

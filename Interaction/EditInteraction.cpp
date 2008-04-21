@@ -2,6 +2,7 @@
 #include "MainWindow.h"
 #include "MapView.h"
 #include "PropertiesDock.h"
+#include "InfoDock.h"
 #include "Command/Command.h"
 #include "Command/DocumentCommands.h"
 #include "Command/FeatureCommands.h"
@@ -57,8 +58,13 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 			if (aLast)
 				view()->properties()->toggleSelection(aLast);
 		}
-		else
+		else {
 			view()->properties()->setSelection(aLast);
+			if (aLast)
+				view()->info()->setHtml(aLast->toHtml());
+			else
+				view()->info()->setHtml("");
+		}
 		if (!aLast)
 		{
 			EndDrag = StartDrag = projection().inverse(ev->pos());

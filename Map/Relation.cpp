@@ -243,6 +243,8 @@ bool Relation::toXML(QDomElement xParent)
 	xParent.appendChild(e);
 
 	e.setAttribute("id", xmlId());
+	e.setAttribute("timestamp", time().toString(Qt::ISODate));
+	e.setAttribute("user", user());
 
 	for (unsigned int i=0; i<size(); ++i) {
 		QString Type("node");
@@ -267,12 +269,17 @@ bool Relation::toXML(QDomElement xParent)
 Relation * Relation::fromXML(MapDocument * d, MapLayer * L, const QDomElement e)
 {
 	QString id = "rel_"+e.attribute("id");
+	QDateTime time = QDateTime::fromString(e.attribute("timestamp"), Qt::ISODate);
+	QString user = e.attribute("user");
+
 	Relation* R = dynamic_cast<Relation*>(d->getFeature(id));
 	if (!R) {
 		R = new Relation;
 		R->setId(id);
 		R->setLastUpdated(MapFeature::OSMServer);
 	}
+	R->setTime(time);
+	R->setUser(user);
 
 	QDomElement c = e.firstChildElement();
 	while(!c.isNull()) {
@@ -323,6 +330,20 @@ Relation * Relation::fromXML(MapDocument * d, MapLayer * L, const QDomElement e)
 	MapFeature::tagsFromXML(d, R, e);
 
 	return R;
+}
+
+QString Relation::toHtml()
+{
+	QString D;
+
+	D += "<i>size: </i>" + QString::number(size()) + " nodes";
+	CoordBox bb = boundingBox();
+	D += "<br/>";
+	D += "<i>Topleft: </i>" + QString::number(radToAng(bb.topLeft().lat()), 'f', 4) + " / " + QString::number(radToAng(bb.topLeft().lon()), 'f', 4);
+	D += "<br/>";
+	D += "<i>Botright: </i>" + QString::number(radToAng(bb.bottomRight().lat()), 'f', 4) + " / " + QString::number(radToAng(bb.bottomRight().lon()), 'f', 4);
+
+	return MapFeature::toMainHtml("Relation").arg(D);
 }
 
 RelationMemberModel::RelationMemberModel(RelationPrivate *aParent, MainWindow* aMain)
@@ -398,7 +419,6 @@ bool RelationMemberModel::setData(const QModelIndex &index, const QVariant &valu
 	}
 	return false;
 }
-
 
 
 

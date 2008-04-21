@@ -101,6 +101,9 @@ TrackPoint* ImportNMEA::importGGA (QString line)
 
 
 	QDateTime date = QDateTime::fromString(tokens[9] + tokens[1], "ddMMyyHHmmss.zzz");
+	if (!date.isValid())
+		return NULL;
+
 	if (date.date().year() < 1970)
 		date = date.addYears(100);
 	date.setTimeSpec(Qt::UTC);
@@ -136,6 +139,9 @@ TrackPoint* ImportNMEA::importRMC (QString line)
 
 	QString strDate = tokens[9] + tokens[1];
 	QDateTime date = QDateTime::fromString(strDate, "ddMMyyHHmmss.zzz");
+	if (!date.isValid())
+		return NULL;
+
 	if (date.date().year() < 1970)
 		date = date.addYears(100);
 	date.setTimeSpec(Qt::UTC);

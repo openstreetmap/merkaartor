@@ -32,12 +32,12 @@ class MapFeaturePrivate
 	public:
 		MapFeaturePrivate()
 			: LastActor(MapFeature::User), theLayer(0),
-			  PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
-			  theFeature(0), LastPartNotification(0) { }
+			  	PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
+				theFeature(0), LastPartNotification(0), Time(QDateTime::currentDateTime()) { }
 		MapFeaturePrivate(const MapFeaturePrivate& other)
 			: Tags(other.Tags), LastActor(MapFeature::User), theLayer(0),
-			  PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
-			  theFeature(0), LastPartNotification(0) { }
+			  	PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
+				theFeature(0), LastPartNotification(0), Time(QDateTime::currentDateTime()) { }
 
 		void updatePainters(double PixelPerM);
 
@@ -51,6 +51,8 @@ class MapFeaturePrivate
 		MapFeature* theFeature;
 		std::vector<MapFeature*> Parents;
 		unsigned int LastPartNotification;
+		QDateTime Time;
+		QString User;
 };
 
 MapFeature::MapFeature()
@@ -117,6 +119,28 @@ const QString& MapFeature::id() const
 QString MapFeature::xmlId() const
 {
 	return stripToOSMId(id());
+}
+
+const QDateTime& MapFeature::time() const
+{
+	return p->Time;
+}
+
+void MapFeature::setTime(const QDateTime& time)
+{
+	p->Time = time;
+	notifyChanges();
+}
+
+const QString& MapFeature::user() const
+{
+	return p->User;
+}
+
+void MapFeature::setUser(const QString& user)
+{
+	p->User = user;
+	notifyChanges();
 }
 
 void MapFeature::setTag(unsigned int idx, const QString& k, const QString& v)
@@ -396,3 +420,33 @@ Relation* MapFeature::getRelationOrCreatePlaceHolder(MapDocument *theDocument, M
 	return Part;
 }
 
+QString MapFeature::toMainHtml(QString type)
+{
+	QString S;
+
+	S += "<html><head/><body>";
+	S += "<small><i>" + type + "</i></small><br/>";
+	S += "<big><b>" + description() + "</b></big>";
+	S += "<br/>";
+	S += "<small><i>last: </i><b>" + time().toString(Qt::SystemLocaleDate) + "</b>";
+	if (!user().isEmpty())
+		S += " by <b>" + user() + "</b>";
+	S += "</small>";
+//	S += "<i>user: </i>" + user();
+	S += "<hr/>";
+	S += "%1";
+	int f = id().lastIndexOf("_");
+	if (f>0) {
+		S += "<hr/>";
+		S += "<a href='/api/0.5/" + type.toLower() + "/" + xmlId() + "/history'>History</a>";
+		if (type == "Node") {
+			S += "<br/>";
+			S += "<a href='/api/0.5/" + type.toLower() + "/" + xmlId() + "/ways'>Referenced by ways</a>";
+		}
+		S += "<br/>";
+		S += "<a href='/api/0.5/" + type.toLower() + "/" + xmlId() + "/relation'>Referenced by relation</a>";
+	}
+	S += "</body></html>";
+
+	return S;
+}

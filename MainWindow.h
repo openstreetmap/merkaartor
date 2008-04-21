@@ -11,6 +11,7 @@ class MapDocument;
 class MapLayer;
 class MapView;
 class PropertiesDock;
+class InfoDock;
 
 class MainWindow : public QMainWindow, public Ui::MainWindow
 {
@@ -64,6 +65,9 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_bookmarkRemoveAction_triggered();
 		virtual void on_nodeMergeAction_triggered();
 		virtual void on_toolsPreferencesAction_triggered() {toolsPreferencesAction_triggered();}
+		virtual void on_windowPropertiesAction_triggered();
+		virtual void on_windowLayersAction_triggered();
+		virtual void on_windowInfoAction_triggered();
 
 		virtual void preferencesChanged();
 		virtual void toolsPreferencesAction_triggered(unsigned int tabIdx = 0);
@@ -76,6 +80,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 
 	public:
 		PropertiesDock* properties();
+		InfoDock* info();
 		MapDocument* document();
 		MapLayer* activeLayer();
 		MapView* view();
@@ -96,6 +101,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		MapView* theView;
 		MapDocument* theDocument;
 		PropertiesDock* theProperties;
+		InfoDock* theInfo;
 		LayerDock* theLayers;
 		QDomDocument* theXmlDoc;
 		QString fileName;

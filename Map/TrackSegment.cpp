@@ -184,7 +184,7 @@ TrackSegment* TrackSegment::fromXML(MapDocument* d, MapLayer* L, const QDomEleme
 		if (c.tagName() == "trkpt") {
 			TrackPoint* N = TrackPoint::fromXML(d, L, c);
 			l->add(N);
-			L->add(N);
+//			L->add(N);
 		}
 		c = c.nextSiblingElement();
 	}

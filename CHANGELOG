@@ -1,4 +1,6 @@
 v0.11
+	* ADD : Information dock
+	* ADD : Dock menu / shortcuts
 	* ADD : different colors for focus and hover
 	* ADD : Merkaartor icon
 	* FIX : unified version handling
