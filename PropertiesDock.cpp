@@ -126,6 +126,17 @@ void PropertiesDock::toggleSelection(MapFeature* S)
 	fillMultiUiSelectionBox();
 }
 
+void PropertiesDock::addSelection(MapFeature* S)
+{
+	cleanUpUi();
+	std::vector<MapFeature*>::iterator i = std::find(Selection.begin(),Selection.end(),S);
+	if (i == Selection.end())
+		Selection.push_back(S);
+	FullSelection = Selection;
+	switchUi();
+	fillMultiUiSelectionBox();
+}
+
 void PropertiesDock::fillMultiUiSelectionBox()
 {
 	if (NowShowing == MultiShowing)

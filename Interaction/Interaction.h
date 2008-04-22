@@ -121,8 +121,7 @@ class GenericFeatureSnapInteraction : public Interaction
 				return;
 			}
 			bool NoRoads = 
-				(QApplication::keyboardModifiers() & Qt::AltModifier | 
-				QApplication::keyboardModifiers() & Qt::ShiftModifier);
+				( (QApplication::keyboardModifiers() & Qt::AltModifier) &&  (QApplication::keyboardModifiers() &Qt::ControlModifier) );
 			FeatureType* Prev = LastSnap;
 			LastSnap = 0;
 			if (!SnapActive) return;

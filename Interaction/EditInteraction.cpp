@@ -53,12 +53,18 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 {
 	if (ev->buttons() & Qt::LeftButton)
 	{
-		if (ev->modifiers() & Qt::ControlModifier)
-		{
-			if (aLast)
-				view()->properties()->toggleSelection(aLast);
-		}
-		else {
+		if (ev->modifiers()) {
+			if (ev->modifiers() & Qt::ControlModifier)
+			{
+				if (aLast)
+					view()->properties()->toggleSelection(aLast);
+			}
+			if (ev->modifiers() & Qt::ShiftModifier)
+			{
+				if (aLast)
+					view()->properties()->addSelection(aLast);
+			}
+		} else {
 			view()->properties()->setSelection(aLast);
 			if (aLast)
 				view()->info()->setHtml(aLast->toHtml());
@@ -82,8 +88,13 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* )
 		std::vector<MapFeature*> List;
 		CoordBox DragBox(StartDrag,projection().inverse(ev->pos()));
 		for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it)
-			if (DragBox.contains(it.get()->boundingBox()))
-				List.push_back(it.get());
+			if (ev->modifiers() & Qt::ShiftModifier) {
+				if (DragBox.intersects(it.get()->boundingBox()))
+					List.push_back(it.get());
+			} else {
+				if (DragBox.contains(it.get()->boundingBox()))
+					List.push_back(it.get());
+			}
 		view()->properties()->setSelection(List);
 		view()->properties()->checkMenuStatus();
 		Dragging = false;

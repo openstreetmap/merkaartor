@@ -30,6 +30,7 @@ class PropertiesDock : public QDockWidget
 				void setSelection(const std::vector<T*>& aFeatureList);
 		void setMultiSelection(const std::vector<MapFeature*>& aFeatureList);
 		void toggleSelection(MapFeature* aFeature);
+		void addSelection(MapFeature* aFeature);
 		MapFeature* selection(unsigned int idx);
 		unsigned int size() const;
 		void resetValues();
