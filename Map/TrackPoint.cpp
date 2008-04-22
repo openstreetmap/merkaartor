@@ -78,9 +78,9 @@ QString TrackPoint::description() const
 {
 	QString s(tagValue("name",""));
 	if (!s.isEmpty())
-		return QApplication::translate("TrackMapLayer", "%1 (%2)").arg(s).arg(id());
+		return QString("%1 (%2)").arg(s).arg(id());
 	return
-		QApplication::translate("TrackMapLayer", "%1").arg(id());
+		QString("%1").arg(id());
 }
 
 void TrackPoint::partChanged(MapFeature*, unsigned int)

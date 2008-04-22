@@ -1,6 +1,7 @@
 #include "SlippyMapWidget.h"
 
 #include <QtCore/QFile>
+#include <QtGui/QApplication>
 #include <QtGui/QPainter>
 #include <QtGui/QPixmap>
 #include <QtGui/QWheelEvent>
@@ -54,7 +55,7 @@ QPixmap* SlippyMapWidgetPrivate::getImage(int x, int y)
 	Painter.setPen(QColor(0,0,0));
 	Painter.fillRect(0,0,TILESIZE-1,TILESIZE-1,QColor(255,255,255));
 	Painter.drawRect(0,0,TILESIZE-1,TILESIZE-1);
-	Painter.drawText(10,TILESIZE/2,QString("Downloading %1,%2 (zoom %3)...").arg(x).arg(y).arg(Zoom));
+	Painter.drawText(10,TILESIZE/2,(QApplication::translate("Downloader","Downloading %1,%2 (zoom %3)...")).arg(x).arg(y).arg(Zoom));
 	return img;
 }
 
