@@ -1261,7 +1261,7 @@ For more information see http://wiki.openstreetmap.org/index.php/Problem_uploadi
     </message>
     <message>
         <location filename="Map/Road.cpp" line="470"/>
-        <source>%d nodes</source>
+        <source>%1 nodes</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

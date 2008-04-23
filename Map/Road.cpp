@@ -467,7 +467,7 @@ QString Road::toHtml()
 {
 	QString D;
 
-	D += "<i>"+QApplication::translate("MapFeature", "size")+": </i>" + QApplication::translate("MapFeature", "%d nodes").arg(size());
+	D += "<i>"+QApplication::translate("MapFeature", "size")+": </i>" + QApplication::translate("MapFeature", "%1 nodes").arg(size());
 	CoordBox bb = boundingBox();
 	D += "<br/>";
 	D += "<i>"+QApplication::translate("MapFeature", "Topleft")+": </i>" + QString::number(radToAng(bb.topLeft().lat()), 'f', 4) + " / " + QString::number(radToAng(bb.topLeft().lon()), 'f', 4);

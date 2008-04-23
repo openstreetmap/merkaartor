@@ -1278,8 +1278,8 @@ Für weitere Informationen lesen Sie http://wiki.openstreetmap.org/index.php/Pro
     </message>
     <message>
         <location filename="Map/Road.cpp" line="470"/>
-        <source>%d nodes</source>
-        <translation>%d Knoten</translation>
+        <source>%1 nodes</source>
+        <translation>%1 Knoten</translation>
     </message>
 </context>
 <context>
