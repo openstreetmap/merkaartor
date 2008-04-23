@@ -467,12 +467,12 @@ QString Road::toHtml()
 {
 	QString D;
 
-	D += "<i>size: </i>" + QString::number(size()) + " nodes";
+	D += "<i>"+QApplication::translate("MapFeature", "size")+": </i>" + QApplication::translate("MapFeature", "%d nodes").arg(size());
 	CoordBox bb = boundingBox();
 	D += "<br/>";
-	D += "<i>Topleft: </i>" + QString::number(radToAng(bb.topLeft().lat()), 'f', 4) + " / " + QString::number(radToAng(bb.topLeft().lon()), 'f', 4);
+	D += "<i>"+QApplication::translate("MapFeature", "Topleft")+": </i>" + QString::number(radToAng(bb.topLeft().lat()), 'f', 4) + " / " + QString::number(radToAng(bb.topLeft().lon()), 'f', 4);
 	D += "<br/>";
-	D += "<i>Botright: </i>" + QString::number(radToAng(bb.bottomRight().lat()), 'f', 4) + " / " + QString::number(radToAng(bb.bottomRight().lon()), 'f', 4);
+	D += "<i>"+QApplication::translate("MapFeature", "Botright")+": </i>" + QString::number(radToAng(bb.bottomRight().lat()), 'f', 4) + " / " + QString::number(radToAng(bb.bottomRight().lon()), 'f', 4);
 
-	return MapFeature::toMainHtml("Way").arg(D);
+	return MapFeature::toMainHtml(QApplication::translate("MapFeature", "Way"), "way").arg(D);
 }

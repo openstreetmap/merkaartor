@@ -78,7 +78,7 @@ void Relation::partChanged(MapFeature*, unsigned int ChangeId)
 
 QString Relation::description() const
 {
-	return QString("relationship %1").arg(id());
+	return QString(QApplication::translate("MapFeature", "relationship %1")).arg(id());
 }
 
 RenderPriority Relation::renderPriority(double /* aPixelPerM */) const
@@ -336,14 +336,14 @@ QString Relation::toHtml()
 {
 	QString D;
 
-	D += "<i>size: </i>" + QString::number(size()) + " nodes";
+	D += "<i>"+QApplication::translate("MapFeature", "size")+": </i>" + QString::number(size()) + " nodes";
 	CoordBox bb = boundingBox();
 	D += "<br/>";
-	D += "<i>Topleft: </i>" + QString::number(radToAng(bb.topLeft().lat()), 'f', 4) + " / " + QString::number(radToAng(bb.topLeft().lon()), 'f', 4);
+	D += "<i>"+QApplication::translate("MapFeature", "Topleft")+": </i>" + QString::number(radToAng(bb.topLeft().lat()), 'f', 4) + " / " + QString::number(radToAng(bb.topLeft().lon()), 'f', 4);
 	D += "<br/>";
-	D += "<i>Botright: </i>" + QString::number(radToAng(bb.bottomRight().lat()), 'f', 4) + " / " + QString::number(radToAng(bb.bottomRight().lon()), 'f', 4);
+	D += "<i>"+QApplication::translate("MapFeature", "Botright")+": </i>" + QString::number(radToAng(bb.bottomRight().lat()), 'f', 4) + " / " + QString::number(radToAng(bb.bottomRight().lon()), 'f', 4);
 
-	return MapFeature::toMainHtml("Relation").arg(D);
+	return MapFeature::toMainHtml(QApplication::translate("MapFeature", "Relation"),"relation").arg(D);
 }
 
 RelationMemberModel::RelationMemberModel(RelationPrivate *aParent, MainWindow* aMain)
@@ -389,9 +389,9 @@ QVariant RelationMemberModel::headerData(int section, Qt::Orientation orientatio
 	if (orientation == Qt::Horizontal)
 	{
 		if (section == 0)
-			return "Role";
+			return QApplication::translate("MapFeature", "Role");
 		else
-			return "Member";
+			return QApplication::translate("MapFeature", "Member");
 	}
 	return QVariant();
 }

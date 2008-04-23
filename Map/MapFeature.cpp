@@ -420,31 +420,31 @@ Relation* MapFeature::getRelationOrCreatePlaceHolder(MapDocument *theDocument, M
 	return Part;
 }
 
-QString MapFeature::toMainHtml(QString type)
+QString MapFeature::toMainHtml(QString type, QString systemtype)
 {
-	QString S;
-
-	S += "<html><head/><body>";
-	S += "<small><i>" + type + "</i></small><br/>";
-	S += "<big><b>" + description() + "</b></big>";
-	S += "<br/>";
-	S += "<small><i>last: </i><b>" + time().toString(Qt::SystemLocaleDate) + "</b>";
+	QString S =
+	"<html><head/><body>"
+	"<small><i>" + type + "</i></small><br/>"
+	"<big><b>" + description() + "</b></big>"
+	"<br/>"
+	"<small>";
 	if (!user().isEmpty())
-		S += " by <b>" + user() + "</b>";
-	S += "</small>";
-//	S += "<i>user: </i>" + user();
-	S += "<hr/>";
-	S += "%1";
+		S += QApplication::translate("MapFeature", "<i>last: </i><b>%1</b> by <b>%2</b>").arg(time().toString(Qt::SystemLocaleDate)).arg(user());
+        else
+		S += QApplication::translate("MapFeature", "<i>last: </i><b>%1</b>").arg(time().toString(Qt::SystemLocaleDate));
+	S += "</small>"
+	"<hr/>"
+	"%1";
 	int f = id().lastIndexOf("_");
 	if (f>0) {
-		S += "<hr/>";
-		S += "<a href='/api/0.5/" + type.toLower() + "/" + xmlId() + "/history'>History</a>";
-		if (type == "Node") {
-			S += "<br/>";
-			S += "<a href='/api/0.5/" + type.toLower() + "/" + xmlId() + "/ways'>Referenced by ways</a>";
+		S += "<hr/>"
+		"<a href='/api/0.5/" + systemtype + "/" + xmlId() + "/history'>"+QApplication::translate("MapFeature", "History")+"</a>";
+		if (systemtype == "node") {
+			S += "<br/>"
+			"<a href='/api/0.5/" + systemtype + "/" + xmlId() + "/ways'>"+QApplication::translate("MapFeature", "Referenced by ways")+"</a>";
 		}
-		S += "<br/>";
-		S += "<a href='/api/0.5/" + type.toLower() + "/" + xmlId() + "/relation'>Referenced by relation</a>";
+		S += "<br/>"
+		"<a href='/api/0.5/" + systemtype + "/" + xmlId() + "/relation'>"+QApplication::translate("MapFeature", "Referenced by relation")+"</a>";
 	}
 	S += "</body></html>";
 

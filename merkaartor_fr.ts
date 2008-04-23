@@ -1178,6 +1178,94 @@ For more information see http://wiki.openstreetmap.org/index.php/Problem_uploadi
     </message>
 </context>
 <context>
+    <name>MapFeature</name>
+    <message>
+        <location filename="Map/MapFeature.cpp" line="432"/>
+        <source>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; by &lt;b&gt;%2&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Map/MapFeature.cpp" line="434"/>
+        <source>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Map/MapFeature.cpp" line="441"/>
+        <source>History</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Map/MapFeature.cpp" line="444"/>
+        <source>Referenced by ways</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Map/MapFeature.cpp" line="447"/>
+        <source>Referenced by relation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Map/Relation.cpp" line="81"/>
+        <source>relationship %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Map/Road.cpp" line="470"/>
+        <source>size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Map/Road.cpp" line="473"/>
+        <source>Topleft</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Map/Road.cpp" line="475"/>
+        <source>Botright</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Map/Relation.cpp" line="346"/>
+        <source>Relation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Map/Relation.cpp" line="392"/>
+        <source>Role</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Map/Relation.cpp" line="394"/>
+        <source>Member</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Map/Road.cpp" line="477"/>
+        <source>Way</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Map/TrackPoint.cpp" line="180"/>
+        <source>timestamp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Map/TrackPoint.cpp" line="181"/>
+        <source>coord</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Map/TrackPoint.cpp" line="183"/>
+        <source>Node</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Map/Road.cpp" line="470"/>
+        <source>%d nodes</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MapView</name>
     <message>
         <location filename="MapView.cpp" line="222"/>
@@ -1528,27 +1616,27 @@ For more information see http://wiki.openstreetmap.org/index.php/Problem_uploadi
 <context>
     <name>PropertiesDock</name>
     <message>
-        <location filename="PropertiesDock.cpp" line="295"/>
+        <location filename="PropertiesDock.cpp" line="306"/>
         <source>Properties</source>
         <translation>Propriétés</translation>
     </message>
     <message>
-        <location filename="PropertiesDock.cpp" line="225"/>
+        <location filename="PropertiesDock.cpp" line="236"/>
         <source>Properties - Multiple elements</source>
         <translation>Propriétés - Eléments multiples</translation>
     </message>
     <message>
-        <location filename="PropertiesDock.cpp" line="244"/>
+        <location filename="PropertiesDock.cpp" line="255"/>
         <source>Properties - Trackpoint</source>
         <translation>Propriétés - Point de trace</translation>
     </message>
     <message>
-        <location filename="PropertiesDock.cpp" line="262"/>
+        <location filename="PropertiesDock.cpp" line="273"/>
         <source>Properties - Relation</source>
         <translation>Propriétés - Relation</translation>
     </message>
     <message>
-        <location filename="PropertiesDock.cpp" line="283"/>
+        <location filename="PropertiesDock.cpp" line="294"/>
         <source>Properties - Road</source>
         <translation>Propriétés - Route</translation>
     </message>
@@ -1563,17 +1651,17 @@ For more information see http://wiki.openstreetmap.org/index.php/Problem_uploadi
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="PropertiesDock.cpp" line="143"/>
+        <location filename="PropertiesDock.cpp" line="154"/>
         <source>%1/%1 selected item(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="PropertiesDock.cpp" line="158"/>
+        <location filename="PropertiesDock.cpp" line="169"/>
         <source>%1/%2 selected item(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="PropertiesDock.cpp" line="216"/>
+        <location filename="PropertiesDock.cpp" line="227"/>
         <source>Selected items</source>
         <translation type="unfinished">Eléments sélectionnés</translation>
     </message>

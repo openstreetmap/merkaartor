@@ -177,8 +177,8 @@ QString TrackPoint::toHtml()
 {
 	QString D;
 
-	D += "<i>timestamp: </i>" + time().toString(Qt::ISODate) + "<br/>";
-	D += "<i>coord: </i>" + QString::number(radToAng(position().lat()), 'f', 4) + " / " + QString::number(radToAng(position().lon()), 'f', 4) + "";
+	D += "<i>"+QApplication::translate("MapFeature", "timestamp")+": </i>" + time().toString(Qt::ISODate) + "<br/>";
+	D += "<i>"+QApplication::translate("MapFeature", "coord")+": </i>" + QString::number(radToAng(position().lat()), 'f', 4) + " / " + QString::number(radToAng(position().lon()), 'f', 4) + "";
 
-	return MapFeature::toMainHtml("Node").arg(D);
+	return MapFeature::toMainHtml(QApplication::translate("MapFeature", "Node"), "node").arg(D);
 }

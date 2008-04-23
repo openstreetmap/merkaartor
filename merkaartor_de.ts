@@ -1195,6 +1195,94 @@ Für weitere Informationen lesen Sie http://wiki.openstreetmap.org/index.php/Pro
     </message>
 </context>
 <context>
+    <name>MapFeature</name>
+    <message>
+        <location filename="Map/MapFeature.cpp" line="432"/>
+        <source>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; by &lt;b&gt;%2&lt;/b&gt;</source>
+        <translation>&lt;i&gt;Stand: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; von &lt;b&gt;%2&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <location filename="Map/MapFeature.cpp" line="434"/>
+        <source>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt;</source>
+        <translation>&lt;i&gt;Stand: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <location filename="Map/MapFeature.cpp" line="441"/>
+        <source>History</source>
+        <translation>Geschichte</translation>
+    </message>
+    <message>
+        <location filename="Map/MapFeature.cpp" line="444"/>
+        <source>Referenced by ways</source>
+        <translation>Benutzt von Wegen</translation>
+    </message>
+    <message>
+        <location filename="Map/MapFeature.cpp" line="447"/>
+        <source>Referenced by relation</source>
+        <translation>Benutzt in Relation</translation>
+    </message>
+    <message>
+        <location filename="Map/Relation.cpp" line="81"/>
+        <source>relationship %1</source>
+        <translation>Relation %1</translation>
+    </message>
+    <message>
+        <location filename="Map/Road.cpp" line="470"/>
+        <source>size</source>
+        <translation>Größe</translation>
+    </message>
+    <message>
+        <location filename="Map/Road.cpp" line="473"/>
+        <source>Topleft</source>
+        <translation>Oben Links</translation>
+    </message>
+    <message>
+        <location filename="Map/Road.cpp" line="475"/>
+        <source>Botright</source>
+        <translation>Unten Rechts</translation>
+    </message>
+    <message>
+        <location filename="Map/Relation.cpp" line="346"/>
+        <source>Relation</source>
+        <translation>Relation</translation>
+    </message>
+    <message>
+        <location filename="Map/Relation.cpp" line="392"/>
+        <source>Role</source>
+        <translation>Rolle</translation>
+    </message>
+    <message>
+        <location filename="Map/Relation.cpp" line="394"/>
+        <source>Member</source>
+        <translation>Mitglied</translation>
+    </message>
+    <message>
+        <location filename="Map/Road.cpp" line="477"/>
+        <source>Way</source>
+        <translation>Weg</translation>
+    </message>
+    <message>
+        <location filename="Map/TrackPoint.cpp" line="180"/>
+        <source>timestamp</source>
+        <translation>Zeit</translation>
+    </message>
+    <message>
+        <location filename="Map/TrackPoint.cpp" line="181"/>
+        <source>coord</source>
+        <translation>Koordinate</translation>
+    </message>
+    <message>
+        <location filename="Map/TrackPoint.cpp" line="183"/>
+        <source>Node</source>
+        <translation>Knoten</translation>
+    </message>
+    <message>
+        <location filename="Map/Road.cpp" line="470"/>
+        <source>%d nodes</source>
+        <translation>%d Knoten</translation>
+    </message>
+</context>
+<context>
     <name>MapView</name>
     <message>
         <location filename="MapView.cpp" line="222"/>
@@ -1545,27 +1633,27 @@ Für weitere Informationen lesen Sie http://wiki.openstreetmap.org/index.php/Pro
 <context>
     <name>PropertiesDock</name>
     <message>
-        <location filename="PropertiesDock.cpp" line="295"/>
+        <location filename="PropertiesDock.cpp" line="306"/>
         <source>Properties</source>
         <translation>Eigenschaften</translation>
     </message>
     <message>
-        <location filename="PropertiesDock.cpp" line="225"/>
+        <location filename="PropertiesDock.cpp" line="236"/>
         <source>Properties - Multiple elements</source>
         <translation>Eigenschaften - Mehrere Elemente</translation>
     </message>
     <message>
-        <location filename="PropertiesDock.cpp" line="244"/>
+        <location filename="PropertiesDock.cpp" line="255"/>
         <source>Properties - Trackpoint</source>
         <translation>Eigenschaften - Wegpunkt</translation>
     </message>
     <message>
-        <location filename="PropertiesDock.cpp" line="262"/>
+        <location filename="PropertiesDock.cpp" line="273"/>
         <source>Properties - Relation</source>
         <translation>Eigenschaften - Relation</translation>
     </message>
     <message>
-        <location filename="PropertiesDock.cpp" line="283"/>
+        <location filename="PropertiesDock.cpp" line="294"/>
         <source>Properties - Road</source>
         <translation>Eigenschaften - Strasse</translation>
     </message>
@@ -1580,17 +1668,17 @@ Für weitere Informationen lesen Sie http://wiki.openstreetmap.org/index.php/Pro
         <translation>Zentriere &amp;und zoome Karte</translation>
     </message>
     <message>
-        <location filename="PropertiesDock.cpp" line="143"/>
+        <location filename="PropertiesDock.cpp" line="154"/>
         <source>%1/%1 selected item(s)</source>
         <translation>%1/%1 gewählte(n) Elemente(n)</translation>
     </message>
     <message>
-        <location filename="PropertiesDock.cpp" line="158"/>
+        <location filename="PropertiesDock.cpp" line="169"/>
         <source>%1/%2 selected item(s)</source>
         <translation>%1/%2 gewählte(n) Elemente(n)</translation>
     </message>
     <message>
-        <location filename="PropertiesDock.cpp" line="216"/>
+        <location filename="PropertiesDock.cpp" line="227"/>
         <source>Selected items</source>
         <translation>Ausgewählte Elemente</translation>
     </message>

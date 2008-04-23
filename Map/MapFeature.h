@@ -93,7 +93,7 @@ class MapFeature
 		virtual QString toXML(unsigned int lvl=0) = 0;
 		virtual bool toXML(QDomElement xParent) = 0;
 
-		virtual QString toMainHtml(QString type);
+		virtual QString toMainHtml(QString type, QString systemtype);
 		virtual QString toHtml() = 0;
 
 		static TrackPoint* getTrackPointOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id);
