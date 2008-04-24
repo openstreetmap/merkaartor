@@ -24,6 +24,8 @@ count(NODEBUG,1) {
     OBJECTS_DIR += tmp/obj_release
 }
 
+CONFIG += yahoo
+
 DESTDIR = $$OUTPUT_DIR/bin
 
 VERSION="0.11"
@@ -85,11 +87,11 @@ osmarender {
     }
 }
 
-isEmpty{NOUSEWEBKIT} {
+isEmpty(NOUSEWEBKIT) {
     DEFINES += YAHOO
     SOURCES += QMapControl/yahoolegalmapadapter.cpp QMapControl/browserimagemanager.cpp
     HEADERS += QMapControl/yahoolegalmapadapter.h QMapControl/browserimagemanager.h
-    isEmpty{NOWEBKIT} {
+    isEmpty(NOWEBKIT) {
         include(webkit/WebKit.pri)
         QT += webkit
     }
