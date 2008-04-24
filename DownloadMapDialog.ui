@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>483</width>
-    <height>236</height>
+    <height>297</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -122,18 +122,14 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="QRadioButton" name="FromviewAndAdd" >
+         <widget class="QRadioButton" name="FromLink" >
           <property name="text" >
-           <string>Current view and add as bookmark</string>
+           <string>Use OSM link</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="NewBookmark" >
-          <property name="enabled" >
-           <bool>false</bool>
-          </property>
-         </widget>
+         <widget class="QLineEdit" name="Link" />
         </item>
        </layout>
       </item>
@@ -143,6 +139,20 @@
          <string>From the map below (map provided by the OpenStreetMap project)</string>
         </property>
        </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" >
+        <item>
+         <widget class="QCheckBox" name="AddBookmark" >
+          <property name="text" >
+           <string>Add as bookmark</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="NewBookmark" />
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>
@@ -213,22 +223,6 @@
     <hint type="destinationlabel" >
      <x>220</x>
      <y>193</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>FromviewAndAdd</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>NewBookmark</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>116</x>
-     <y>246</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>431</x>
-     <y>247</y>
     </hint>
    </hints>
   </connection>

@@ -500,76 +500,133 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 	for (int i=0; i<Bookmarks.size(); i+=5)
 		ui.Bookmarks->addItem(Bookmarks[i]);
 	ui.IncludeTracks->setChecked(DownloadRaw);
-	bool OK = true;
-	if (dlg->exec() == QDialog::Accepted)
-	{
-		DownloadRaw = false;
-		CoordBox Clip(Coord(0,0),Coord(0,0));
-		if (ui.FromBookmark->isChecked())
+	bool OK = true, retry = true;
+	while (retry) {
+		retry = false;
+		if (dlg->exec() == QDialog::Accepted)
 		{
-			unsigned int idx = ui.Bookmarks->currentIndex()*5+1;
-			Clip = CoordBox(Coord(angToRad(Bookmarks[idx].toDouble()),angToRad(Bookmarks[idx+1].toDouble())),
-				Coord(angToRad(Bookmarks[idx+2].toDouble()),angToRad(Bookmarks[idx+3].toDouble())));
-		}
-		else if (ui.FromView->isChecked())
-		{
-			Clip = aBox;
-		}
-		else if (ui.FromviewAndAdd->isChecked())
-		{
-			Clip = aBox;
-			QString newBk = ui.NewBookmark->text();
-			bool ok = true;
-			if (Bookmarks.contains(newBk)) {
-				QString text = QInputDialog::getText(dlg, QApplication::translate("Downloader","Warning: Bookmark name already exists"),
-                                          QApplication::translate("Downloader","Enter a new one, keep the same to overwrite or cancel to not add."), QLineEdit::Normal,
-                                          newBk, &ok);
-			    if (ok && !text.isEmpty())
-			         newBk = text;
-				else
-					ok = false;
-
+			DownloadRaw = false;
+			CoordBox Clip(Coord(0,0),Coord(0,0));
+			if (ui.FromBookmark->isChecked())
+			{
+				unsigned int idx = ui.Bookmarks->currentIndex()*5+1;
+				Clip = CoordBox(Coord(angToRad(Bookmarks[idx].toDouble()),angToRad(Bookmarks[idx+1].toDouble())),
+					Coord(angToRad(Bookmarks[idx+2].toDouble()),angToRad(Bookmarks[idx+3].toDouble())));
 			}
-			if (ok && Bookmarks.contains(newBk)) {
-				int i = Bookmarks.indexOf(newBk);
-				Bookmarks.removeAt(i);
-				Bookmarks.removeAt(i);
-				Bookmarks.removeAt(i);
-				Bookmarks.removeAt(i);
-				Bookmarks.removeAt(i);
+			else if (ui.FromView->isChecked())
+			{
+				Clip = aBox;
 			}
-			if (ok) {
-				Bookmarks.insert(0,newBk);
-				Bookmarks.insert(1,QString::number(radToAng(Clip.bottomLeft().lat())));
-				Bookmarks.insert(2,QString::number(radToAng(Clip.bottomLeft().lon())));
-				Bookmarks.insert(3,QString::number(radToAng(Clip.topRight().lat())));
-				Bookmarks.insert(4,QString::number(radToAng(Clip.topRight().lon())));
-				MerkaartorPreferences::instance()->setBookmarks(Bookmarks);
+			else if (ui.FromLink->isChecked()) {
+				int start, end;
+	
+				QString link = ui.Link->text();
+	
+				start = link.indexOf("lat=") + 4; // +4 because we don't need the "lat="
+				end = link.indexOf("&", start);
+				double lat = link.mid(start, end - start).toDouble();
+	
+				start = link.indexOf("lon=") + 4;
+				end = link.indexOf("&", start);
+				double lon = link.mid(start, end - start).toDouble();
+				
+				start = link.indexOf("zoom=") + 5;
+				end = link.indexOf("&", start);
+				int zoom = link.mid(start, end - start).toInt();
+	
+	
+				if (zoom <= 10) {
+					QMessageBox::warning(dlg, "Too low zoom-factor",
+						"Please use a higher zoom-factor!");
+					retry = true;
+				}
+				else {
+	
+					double zoomD;
+	
+					/* zoom-levels taken from http://wiki.openstreetmap.org/index.php/Zoom_levels */
+					if (zoom == 0) zoomD = 360;
+					else if (zoom == 1) zoomD = 180;
+					else if (zoom == 2) zoomD = 90;
+					else if (zoom == 3) zoomD = 45;
+					else if (zoom == 4) zoomD = 22.5;
+					else if (zoom == 5) zoomD = 11.25;
+					else if (zoom == 6) zoomD = 5.625;
+					else if (zoom == 7) zoomD = 2.813;
+					else if (zoom == 8) zoomD = 1.406;
+					else if (zoom == 9) zoomD = 0.703;
+					else if (zoom == 10) zoomD = 0.352;
+					else if (zoom == 11) zoomD = 0.176;
+					else if (zoom == 12) zoomD = 0.088;
+					else if (zoom == 13) zoomD = 0.044;
+					else if (zoom == 14) zoomD = 0.022;
+					else if (zoom == 15) zoomD = 0.011;
+					else if (zoom == 16) zoomD = 0.005;
+					else if (zoom == 17) zoomD = 0.003;
+					else if (zoom == 18) zoomD = 0.001;
+					
+					else zoomD = 0.011; // default (zoom = 15)
+	
+					/* the OSM link contains the coordinates from the middle of the visible map so we have to add and sub zoomD */
+					Clip = CoordBox(Coord(angToRad(lat-zoomD), angToRad(lon-zoomD)), Coord(angToRad(lat+zoomD), angToRad(lon+zoomD)));
+				}
+			}	
+			else if (ui.FromMap->isChecked())
+			{
+				QRectF R(SlippyMap->viewArea());
+				Clip = CoordBox(Coord(R.x(),R.y()),Coord(R.x()+R.width(),R.y()+R.height()));
 			}
-		}
-		else if (ui.FromMap->isChecked())
-		{
-			QRectF R(SlippyMap->viewArea());
-			Clip = CoordBox(Coord(R.x(),R.y()),Coord(R.x()+R.width(),R.y()+R.height()));
-		}
-		aParent->view()->setUpdatesEnabled(false);
-		MapLayer* theLayer = new DrawingMapLayer(QApplication::translate("Downloader","Download"));
-		theDocument->add(theLayer);
-		OK = downloadOSM(aParent,osmWebsite,osmUser,osmPwd,useProxy,proxyHost,proxyPort,Clip,theDocument,theLayer);
-		if (OK && ui.IncludeTracks->isChecked())
-			OK = downloadTracksFromOSM(aParent,osmWebsite,osmUser,osmPwd,useProxy,proxyHost,proxyPort, Clip,theDocument);
-		aParent->view()->setUpdatesEnabled(true);
-		if (OK)
-		{
-			theDocument->setLastDownloadLayer(theLayer);
-			aParent->view()->projection().setViewport(Clip,aParent->view()->rect());
-			aParent->invalidateView();
-		} else {
-			theDocument->remove(theLayer);
-			delete theLayer;
+			if (ui.AddBookmark->isChecked())
+			{
+				QString newBk = ui.NewBookmark->text();
+				bool ok = true;
+				if (Bookmarks.contains(newBk)) {
+					QString text = QInputDialog::getText(dlg, QApplication::translate("Downloader","Warning: Bookmark name already exists"),
+  	                                        QApplication::translate("Downloader","Enter a new one, keep the same to overwrite or cancel to not add."), QLineEdit::Normal,
+  	                                        newBk, &ok);
+				    if (ok && !text.isEmpty())
+				         newBk = text;
+					else
+						ok = false;
+	
+				}
+				if (ok && Bookmarks.contains(newBk)) {
+					int i = Bookmarks.indexOf(newBk);
+					Bookmarks.removeAt(i);
+					Bookmarks.removeAt(i);
+					Bookmarks.removeAt(i);
+					Bookmarks.removeAt(i);
+					Bookmarks.removeAt(i);
+				}
+				if (ok) {
+					Bookmarks.insert(0,newBk);
+					Bookmarks.insert(1,QString::number(radToAng(Clip.bottomLeft().lat())));
+					Bookmarks.insert(2,QString::number(radToAng(Clip.bottomLeft().lon())));
+					Bookmarks.insert(3,QString::number(radToAng(Clip.topRight().lat())));
+					Bookmarks.insert(4,QString::number(radToAng(Clip.topRight().lon())));
+					MerkaartorPreferences::instance()->setBookmarks(Bookmarks);
+				}
+			}
+			if (retry) continue;
+			aParent->view()->setUpdatesEnabled(false);
+			MapLayer* theLayer = new DrawingMapLayer(QApplication::translate("Downloader","Download"));
+			theDocument->add(theLayer);
+			OK = downloadOSM(aParent,osmWebsite,osmUser,osmPwd,useProxy,proxyHost,proxyPort,Clip,theDocument,theLayer);
+			if (OK && ui.IncludeTracks->isChecked())
+				OK = downloadTracksFromOSM(aParent,osmWebsite,osmUser,osmPwd,useProxy,proxyHost,proxyPort, Clip,theDocument);
+			aParent->view()->setUpdatesEnabled(true);
+			if (OK)
+			{
+				theDocument->setLastDownloadLayer(theLayer);
+				aParent->view()->projection().setViewport(Clip,aParent->view()->rect());
+				aParent->invalidateView();
+			} else {
+				retry = true;
+				theDocument->remove(theLayer);
+				delete theLayer;
+			}
 		}
 	}
 	delete dlg;
 	return OK;
-}
-
+}	

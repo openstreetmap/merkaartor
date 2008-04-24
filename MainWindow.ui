@@ -239,6 +239,9 @@
    <property name="text" >
     <string>Zoom &amp;out</string>
    </property>
+   <property name="shortcut" >
+    <string>-</string>
+   </property>
   </action>
   <action name="viewZoomInAction" >
    <property name="text" >
@@ -249,6 +252,9 @@
    </property>
    <property name="toolTip" >
     <string>Zoom in</string>
+   </property>
+   <property name="shortcut" >
+    <string>+</string>
    </property>
   </action>
   <action name="createWayAction" >
