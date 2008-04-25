@@ -245,55 +245,55 @@ bool DirtyListDescriber::showChanges(QWidget* aParent)
 
 bool DirtyListDescriber::addRoad(Road* R)
 {
-	Ui.ChangesList->addItem(QString("ADD road %1").arg(R->id()) + userName(R));
+	Ui.ChangesList->addItem(QApplication::translate("DirtyListExecutor","ADD road %1").arg(R->id()) + userName(R));
 	return false;
 }
 
 bool DirtyListDescriber::addPoint(TrackPoint* Pt)
 {
-	Ui.ChangesList->addItem(QString("ADD trackpoint %1").arg(Pt->id()) + userName(Pt));
+	Ui.ChangesList->addItem(QApplication::translate("DirtyListExecutor","ADD trackpoint %1").arg(Pt->id()) + userName(Pt));
 	return false;
 }
 
 bool DirtyListDescriber::addRelation(Relation* R)
 {
-	Ui.ChangesList->addItem(QString("ADD relation %1").arg(R->id()) + userName(R));
+	Ui.ChangesList->addItem(QApplication::translate("DirtyListExecutor","ADD relation %1").arg(R->id()) + userName(R));
 	return false;
 }
 
 bool DirtyListDescriber::updatePoint(TrackPoint* Pt)
 {
-	Ui.ChangesList->addItem(QString("UPDATE trackpoint %1").arg(Pt->id()) + userName(Pt));
+	Ui.ChangesList->addItem(QApplication::translate("DirtyListExecutor","UPDATE trackpoint %1").arg(Pt->id()) + userName(Pt));
 	return false;
 }
 
 bool DirtyListDescriber::updateRelation(Relation* R)
 {
-	Ui.ChangesList->addItem(QString("UPDATE relation %1").arg(R->id()) + userName(R));
+	Ui.ChangesList->addItem(QApplication::translate("DirtyListExecutor","UPDATE relation %1").arg(R->id()) + userName(R));
 	return false;
 }
 
 bool DirtyListDescriber::updateRoad(Road* R)
 {
-	Ui.ChangesList->addItem(QString("UPDATE road %1").arg(R->id()) + userName(R));
+	Ui.ChangesList->addItem(QApplication::translate("DirtyListExecutor","UPDATE road %1").arg(R->id()) + userName(R));
 	return false;
 }
 
 bool DirtyListDescriber::erasePoint(TrackPoint* Pt)
 {
-	Ui.ChangesList->addItem(QString("REMOVE trackpoint %1").arg(Pt->id()) + userName(Pt));
+	Ui.ChangesList->addItem(QApplication::translate("DirtyListExecutor","REMOVE trackpoint %1").arg(Pt->id()) + userName(Pt));
 	return false;
 }
 
 bool DirtyListDescriber::eraseRoad(Road* R)
 {
-	Ui.ChangesList->addItem(QString("REMOVE road %1").arg(R->id()) + userName(R));
+	Ui.ChangesList->addItem(QApplication::translate("DirtyListExecutor","REMOVE road %1").arg(R->id()) + userName(R));
 	return false;
 }
 
 bool DirtyListDescriber::eraseRelation(Relation* R)
 {
-	Ui.ChangesList->addItem(QString("REMOVE relation %1").arg(R->id()) + userName(R));
+	Ui.ChangesList->addItem(QApplication::translate("DirtyListExecutor","REMOVE relation %1").arg(R->id()) + userName(R));
 	return false;
 }
 
@@ -330,7 +330,9 @@ bool DirtyListExecutor::sendRequest(const QString& Method, const QString& URL, c
 		return true;
 	}
 	else
-		QMessageBox::warning(Progress,tr("Error uploading request"),tr("There was an error uploading this request (%1)").arg(x));
+	{
+		QMessageBox::warning(Progress,tr("Error uploading request"),tr("There was an error uploading this request (%1)\nServer message is '%2'").arg(x).arg(theDownloader->resultText()));
+	}
 	return false;
 
 }
@@ -349,7 +351,7 @@ bool DirtyListExecutor::executeChanges(QWidget* aParent)
 bool DirtyListExecutor::addRelation(Relation *R)
 {
 	Progress->setValue(++Done);
-	Progress->setLabelText(QString("ADD relation %1").arg(R->id()) + userName(R));
+	Progress->setLabelText(tr("ADD relation %1").arg(R->id()) + userName(R));
 	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 
 	QString DataIn, DataOut, OldId;
@@ -371,7 +373,7 @@ bool DirtyListExecutor::addRelation(Relation *R)
 bool DirtyListExecutor::addRoad(Road *R)
 {
 	Progress->setValue(++Done);
-	Progress->setLabelText(QString("ADD road %1").arg(R->id()) + userName(R));
+	Progress->setLabelText(tr("ADD road %1").arg(R->id()) + userName(R));
 	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 
 	QString DataIn, DataOut, OldId;
@@ -395,7 +397,7 @@ bool DirtyListExecutor::addRoad(Road *R)
 bool DirtyListExecutor::addPoint(TrackPoint* Pt)
 {
 	Progress->setValue(++Done);
-	Progress->setLabelText(QString("ADD trackpoint %1").arg(Pt->id()) + userName(Pt));
+	Progress->setLabelText(tr("ADD trackpoint %1").arg(Pt->id()) + userName(Pt));
 	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 
 	QString DataIn, DataOut, OldId;
@@ -420,7 +422,7 @@ bool DirtyListExecutor::addPoint(TrackPoint* Pt)
 bool DirtyListExecutor::updateRelation(Relation* R)
 {
 	Progress->setValue(++Done);
-	Progress->setLabelText(QString("UPDATE relation %1").arg(R->id()) + userName(R));
+	Progress->setLabelText(tr("UPDATE relation %1").arg(R->id()) + userName(R));
 	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 	QString URL = theDownloader->getURLToUpdate("relation",stripToOSMId(R->id()));
 	QString DataIn, DataOut;
@@ -437,7 +439,7 @@ bool DirtyListExecutor::updateRelation(Relation* R)
 bool DirtyListExecutor::updateRoad(Road* R)
 {
 	Progress->setValue(++Done);
-	Progress->setLabelText(QString("UPDATE road %1").arg(R->id()) + userName(R));
+	Progress->setLabelText(tr("UPDATE road %1").arg(R->id()) + userName(R));
 	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 //	QString URL("/api/0.3/way/%1");
 //	URL = URL.arg(stripToOSMId(R->id()));
@@ -455,7 +457,7 @@ bool DirtyListExecutor::updateRoad(Road* R)
 bool DirtyListExecutor::updatePoint(TrackPoint* Pt)
 {
 	Progress->setValue(++Done);
-	Progress->setLabelText(QString("UPDATE trackpoint %1").arg(Pt->id()) + userName(Pt));
+	Progress->setLabelText(tr("UPDATE trackpoint %1").arg(Pt->id()) + userName(Pt));
 	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 //	QString URL("/api/0.3/node/%1");
 //	URL = URL.arg(stripToOSMId(Pt->id()));
@@ -473,7 +475,7 @@ bool DirtyListExecutor::updatePoint(TrackPoint* Pt)
 bool DirtyListExecutor::erasePoint(TrackPoint *Pt)
 {
 	Progress->setValue(++Done);
-	Progress->setLabelText(QString("REMOVE trackpoint %1").arg(Pt->id()) + userName(Pt));
+	Progress->setLabelText(tr("REMOVE trackpoint %1").arg(Pt->id()) + userName(Pt));
 	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 //	QString URL("/api/0.3/node/%1");
 //	URL = URL.arg(stripToOSMId(Pt->id()));
@@ -490,7 +492,7 @@ bool DirtyListExecutor::erasePoint(TrackPoint *Pt)
 bool DirtyListExecutor::eraseRoad(Road *R)
 {
 	Progress->setValue(++Done);
-	Progress->setLabelText(QString("REMOVE road %1").arg(R->id()) + userName(R));
+	Progress->setLabelText(tr("REMOVE road %1").arg(R->id()) + userName(R));
 	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 //	QString URL("/api/0.3/way/%1");
 //	URL = URL.arg(stripToOSMId(R->id()));
@@ -507,7 +509,7 @@ bool DirtyListExecutor::eraseRoad(Road *R)
 bool DirtyListExecutor::eraseRelation(Relation *R)
 {
 	Progress->setValue(++Done);
-	Progress->setLabelText(QString("REMOVE relation %1").arg(R->id()) + userName(R));
+	Progress->setLabelText(tr("REMOVE relation %1").arg(R->id()) + userName(R));
 	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 	QString URL = theDownloader->getURLToDelete("relation",stripToOSMId(R->id()));
 	QString DataIn, DataOut;

@@ -536,8 +536,8 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 	
 	
 				if (zoom <= 10) {
-					QMessageBox::warning(dlg, "Too low zoom-factor",
-						"Please use a higher zoom-factor!");
+					QMessageBox::warning(dlg, QApplication::translate("Downloader", "Zoom factor too low"),
+						QApplication::translate("Downloader", "Please use a higher zoom factor!"));
 					retry = true;
 				}
 				else {
