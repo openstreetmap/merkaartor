@@ -379,12 +379,20 @@ MapFeature::TrafficDirectionType trafficDirection(const Road* R)
 	QString d;
 	unsigned int idx=R->findKey("oneway");
 	if (idx<R->tagSize())
+	{
 		d = R->tagValue(idx);
-	else
-		return MapFeature::UnknownDirection;
-	if ( (d == "yes") || (d == "1") ) return MapFeature::OneWay;
-	if (d == "no") return MapFeature::BothWays;
-	if (d == "-1") return MapFeature::OtherWay;
+		if ( (d == "yes") || (d == "1") || (d == "true")) return MapFeature::OneWay;
+		if (d == "-1") return MapFeature::OtherWay;
+		if ((d == "no") || (d == "false") || (d == "0")) return MapFeature::BothWays;
+	}
+
+	idx=R->findKey("junction");
+	if (idx<R->tagSize())
+	{
+		d = R->tagValue(idx);
+		if(d=="roundabout") return MapFeature::OneWay;
+		//TODO For motorway and motorway_link, this is still discussed on the wiki.
+	}
 	return MapFeature::UnknownDirection;
 }
 
