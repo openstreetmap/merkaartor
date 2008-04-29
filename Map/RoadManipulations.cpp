@@ -39,17 +39,9 @@ static void mergeTags(CommandList* L, MapFeature* Dest, MapFeature* Src)
 		else
 		{
 			QString v2 = Dest->tagValue(j);
-			if (v1 != v2)
+			if (v1 != v2 && k !="created_by")
 			{
-				for (unsigned int t=1; true; t++)
-				{
-					QString Prop = QString("%1_alt_%2").arg(k).arg(t);
-					if (Dest->findKey(Prop) == Dest->tagSize())
-					{
-						L->add(new SetTagCommand(Dest,Prop,v1));
-						break;
-					}
-				}
+				L->add(new SetTagCommand(Dest,k,QString("%1;%2").arg(v2).arg(v1)));
 			}
 		}
 	}
