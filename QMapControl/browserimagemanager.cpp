@@ -50,9 +50,6 @@ BrowserImageManager::BrowserImageManager(QObject* parent)
 	connect(page->mainFrame(), SIGNAL(loadDone(bool)), this, SLOT(pageLoadFinished(bool)));
 	connect(page, SIGNAL(loadFinished(bool)), this, SLOT(pageLoadFinished(bool)));
 
-	QFile ymap(":/Html/ymap.html");
-	ymap.copy(QApplication::applicationDirPath() + "/ymap.html");
-
 //	browser->show();
 }
 
@@ -102,7 +99,7 @@ void BrowserImageManager::launchRequest()
 //	qDebug() << "getting: " << QString(R.host).append(R.url);
 
 
-	QUrl u = QUrl( "file:///" + QApplication::applicationDirPath() + "/" + R.url);
+	QUrl u = QUrl( "qrc:" + R.url);
 //	QUrl u = QUrl( "file://C:/tmp.svg");
 //	QUrl u = QUrl( "http://maps.yahoo.com" );
 //	qDebug() << u << endl;
@@ -125,7 +122,7 @@ void BrowserImageManager::pageLoadFinished(bool)
 	page->mainFrame()->render(&P, QRegion(0,0,512,512));
 	P.end();
 	LoadingRequest R = loadingRequests.dequeue();
-	//pt.save("c:/tmp/"+R.hash+".png");
+	pt.save("c:/temp/tst/"+R.hash+".png");
 	receivedImage(pt, R.hash);
 
 	if (loadingRequests.isEmpty()) {
