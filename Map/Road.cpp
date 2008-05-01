@@ -227,6 +227,12 @@ void Road::drawHover(QPainter& thePainter, const Projection& theProjection)
 	QPainterPath Pt;
 	buildPathFromRoad(this,theProjection,Pt);
 	thePainter.drawPath(Pt);
+	TP.setWidth(15);
+	TP.setCapStyle(Qt::RoundCap);
+	thePainter.setPen(TP);
+	QPolygonF Pl;
+	buildPolygonFromRoad(this,theProjection,Pl);
+	thePainter.drawPoints(Pl);
 }
 
 void Road::drawFocus(QPainter& thePainter, const Projection& theProjection)
@@ -243,6 +249,12 @@ void Road::drawFocus(QPainter& thePainter, const Projection& theProjection)
 	QPainterPath Pt;
 	buildPathFromRoad(this,theProjection,Pt);
 	thePainter.drawPath(Pt);
+	TP.setWidth(15);
+	TP.setCapStyle(Qt::RoundCap);
+	thePainter.setPen(TP);
+	QPolygonF Pl;
+	buildPolygonFromRoad(this,theProjection,Pl);
+	thePainter.drawPoints(Pl);
 }
 
 double Road::pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection) const

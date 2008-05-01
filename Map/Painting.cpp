@@ -48,6 +48,12 @@ void buildPathFromRoad(Road *R, Projection const &theProjection, QPainterPath &P
 			Path.lineTo(theProjection.project(R->get(i)->position()));
 }
 
+void buildPolygonFromRoad(Road *R, Projection const &theProjection, QPolygonF &Polygon)
+{
+	for (unsigned int i=0; i<R->size(); ++i)
+		Polygon.append(theProjection.project(R->get(i)->position()));
+}
+
 void buildPathFromRelation(Relation *R, Projection const &theProjection, QPainterPath &Path)
 {
 	for (unsigned int i=0; i<R->size(); ++i)
