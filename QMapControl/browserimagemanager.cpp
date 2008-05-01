@@ -48,6 +48,7 @@ BrowserImageManager::BrowserImageManager(QObject* parent)
 	page->setViewportSize(QSize(1024, 1024));
 
 	connect(page->mainFrame(), SIGNAL(loadDone(bool)), this, SLOT(pageLoadFinished(bool)));
+	connect(page, SIGNAL(loadFinished(bool)), this, SLOT(pageLoadFinished(bool)));
 
 	QFile ymap(":/Html/ymap.html");
 	ymap.copy(QApplication::applicationDirPath() + "/ymap.html");
@@ -101,7 +102,7 @@ void BrowserImageManager::launchRequest()
 //	qDebug() << "getting: " << QString(R.host).append(R.url);
 
 
-	QUrl u = QUrl( "file://" + QApplication::applicationDirPath() + "/" + R.url);
+	QUrl u = QUrl( "file:///" + QApplication::applicationDirPath() + "/" + R.url);
 //	QUrl u = QUrl( "file://C:/tmp.svg");
 //	QUrl u = QUrl( "http://maps.yahoo.com" );
 //	qDebug() << u << endl;
