@@ -122,7 +122,7 @@ void BrowserImageManager::pageLoadFinished(bool)
 	page->mainFrame()->render(&P, QRegion(0,0,512,512));
 	P.end();
 	LoadingRequest R = loadingRequests.dequeue();
-	pt.save("c:/temp/tst/"+R.hash+".png");
+	//pt.save("c:/temp/tst/"+R.hash+".png");
 	receivedImage(pt, R.hash);
 
 	if (loadingRequests.isEmpty()) {
