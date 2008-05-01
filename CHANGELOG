@@ -1,4 +1,5 @@
 v0.11
+	* FIX : make the shortcuts for creating a new road and way less interfering
 	* ADD : support for OSM links in download dialog (Refs #812) (by Timo Schlüßler)
 	* ADD : shortcuts for zoom-in(+) and zoom-out(-) (by Timo Schlüßler)
 	* FIX : keyboard modifiers: ctrl-click toggle; shift-click add; ctrl-add-click prevents road selection; shift-drag selects features which intersects

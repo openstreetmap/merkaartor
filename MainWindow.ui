@@ -22,7 +22,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>21</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >
@@ -375,7 +375,7 @@
     <string>&amp;Road</string>
    </property>
    <property name="shortcut" >
-    <string>R</string>
+    <string>Ctrl+R</string>
    </property>
   </action>
   <action name="editAddAction" >
@@ -397,7 +397,7 @@
     <string>&amp;Node</string>
    </property>
    <property name="shortcut" >
-    <string>N</string>
+    <string>Ctrl+N</string>
    </property>
   </action>
   <action name="editReverseAction" >
