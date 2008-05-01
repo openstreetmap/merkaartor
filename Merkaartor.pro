@@ -7,6 +7,9 @@
 # PREFIX              - base prefix for installation
 # NODEBUG             - no debug target
 
+NOWEBKIT=$$(NOWEBKIT)
+NOUSEWEBKIT=$$(NOUSEWEBKIT)
+
 TEMPLATE = app
 TARGET = merkaartor
 
@@ -93,6 +96,6 @@ isEmpty(NOUSEWEBKIT) {
     HEADERS += QMapControl/yahoolegalmapadapter.h QMapControl/browserimagemanager.h
     isEmpty(NOWEBKIT) {
         include(webkit/WebKit.pri)
-        QT += webkit
     }
+    QT += webkit
 }
