@@ -87,6 +87,7 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
 			R->setLayer(Main->activeLayer());
 			R->add(First);
 			R->setTag("oneway","yes");
+			R->setTag("junction","roundabout");
 			R->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 			for (double a = Angle*3/2; a<2*3.141592; a+=Angle)
 			{
