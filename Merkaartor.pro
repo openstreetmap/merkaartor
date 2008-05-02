@@ -41,11 +41,13 @@ UI_DIR += tmp
 
 TRANSLATIONS += \
 	merkaartor_fr.ts \ 
-	merkaartor_de.ts 
+	merkaartor_de.ts \
+	merkaartor_pl.ts
 
 BINTRANSLATIONS += \
 	merkaartor_de.qm \
-	merkaartor_fr.qm
+	merkaartor_fr.qm \
+	merkaartor_pl.qm
 
 #Include file(s)
 include(Merkaartor.pri)

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="de">
-<defaultcodec></defaultcodec>
 <context>
     <name>@default</name>
     <message>
@@ -971,11 +970,6 @@ Möchten Sie dies nun tun?</translation>
         <translation>Del</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="378"/>
-        <source>R</source>
-        <translation>R</translation>
-    </message>
-    <message>
         <location filename="MainWindow.ui" line="389"/>
         <source>Add</source>
         <translation>Hinzufügen</translation>
@@ -984,11 +978,6 @@ Möchten Sie dies nun tun?</translation>
         <location filename="MainWindow.ui" line="397"/>
         <source>&amp;Node</source>
         <translation>&amp;Knoten</translation>
-    </message>
-    <message>
-        <location filename="MainWindow.ui" line="400"/>
-        <source>N</source>
-        <translation>N</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="411"/>
@@ -1252,6 +1241,11 @@ Für weitere Informationen lesen Sie http://wiki.openstreetmap.org/index.php/Pro
         <source>+</source>
         <translation>+</translation>
     </message>
+    <message>
+        <location filename="MainWindow.ui" line="378"/>
+        <source>Ctrl+R</source>
+        <translation>Strg+R</translation>
+    </message>
 </context>
 <context>
     <name>MapDocument</name>
@@ -1299,17 +1293,17 @@ Für weitere Informationen lesen Sie http://wiki.openstreetmap.org/index.php/Pro
         <translation>Relation %1</translation>
     </message>
     <message>
-        <location filename="Map/Road.cpp" line="470"/>
+        <location filename="Map/Road.cpp" line="490"/>
         <source>size</source>
         <translation>Größe</translation>
     </message>
     <message>
-        <location filename="Map/Road.cpp" line="473"/>
+        <location filename="Map/Road.cpp" line="493"/>
         <source>Topleft</source>
         <translation>Oben Links</translation>
     </message>
     <message>
-        <location filename="Map/Road.cpp" line="475"/>
+        <location filename="Map/Road.cpp" line="495"/>
         <source>Botright</source>
         <translation>Unten Rechts</translation>
     </message>
@@ -1329,7 +1323,7 @@ Für weitere Informationen lesen Sie http://wiki.openstreetmap.org/index.php/Pro
         <translation>Mitglied</translation>
     </message>
     <message>
-        <location filename="Map/Road.cpp" line="477"/>
+        <location filename="Map/Road.cpp" line="497"/>
         <source>Way</source>
         <translation>Weg</translation>
     </message>
@@ -1349,7 +1343,7 @@ Für weitere Informationen lesen Sie http://wiki.openstreetmap.org/index.php/Pro
         <translation>Knoten</translation>
     </message>
     <message>
-        <location filename="Map/Road.cpp" line="470"/>
+        <location filename="Map/Road.cpp" line="490"/>
         <source>%1 nodes</source>
         <translation>%1 Knoten</translation>
     </message>
