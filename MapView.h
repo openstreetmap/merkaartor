@@ -62,11 +62,13 @@ class MapView :	public QWidget
 
 		int numImages;
 		QProgressBar* pbImages;
+		QString StatusMessage;
 
 	private slots:
 		void imageRequested();
 		void imageReceived();
 		void loadingFinished();
+		void updateStatusMessage();
 };
 
 #endif

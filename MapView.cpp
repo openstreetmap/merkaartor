@@ -120,7 +120,7 @@ void MapView::invalidate()
 	StaticBufferUpToDate = false;
 	if (layermanager)
 		layermanager->forceRedraw();
-	update();
+	repaint();
 }
 
 void MapView::paintEvent(QPaintEvent * anEvent)
@@ -216,12 +216,15 @@ void MapView::updateStaticBuffer(QPaintEvent * /* anEvent */)
 		}
 	}
 	QTime Stop(QTime::currentTime());
-#if QT_VERSION < 0x040400  // FIXME statusbar->showmessage in mapview::paintevent segfault on 4.4beta1
-	main()->statusBar()->clearMessage();
-	main()->statusBar()->showMessage(tr("Paint took %1ms").
-					 arg(Start.msecsTo(Stop)));
-#endif
+//  statusbar->showmessage in mapview::paintevent segfault on 4.4beta1
+	StatusMessage = tr("Paint took %1ms").arg(Start.msecsTo(Stop));
+	QTimer::singleShot(0,this,SLOT(updateStatusMessage()));
 	StaticBufferUpToDate = true;
+}
+
+void MapView::updateStatusMessage()
+{
+	Main->statusBar()->showMessage(StatusMessage);
 }
 
 void MapView::mousePressEvent(QMouseEvent* event)
