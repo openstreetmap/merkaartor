@@ -86,3 +86,4 @@ void CoordBox::resize(double d)
 	TopRight.setLat(TopRight.lat()+dlat);
 	TopRight.setLon(TopRight.lon()+dlon);
 }
+

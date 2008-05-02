@@ -495,7 +495,10 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 	SlippyMapWidget* SlippyMap = new SlippyMapWidget(ui.groupBox);
 	SlippyMap->setMinimumHeight(256);
 	ui.vboxLayout1->addWidget(SlippyMap);
-
+	//SlippyMap->setObjectName(QString::fromUtf8("Slippy"));
+	QObject::connect(SlippyMap, SIGNAL(redraw()), ui.FromMap, SLOT(toggle()));
+	QMetaObject::connectSlotsByName(dlg);
+//paintEvent(QPaintEvent* ev)
 	QStringList Bookmarks = MerkaartorPreferences::instance()->getBookmarks();
 	for (int i=0; i<Bookmarks.size(); i+=5)
 		ui.Bookmarks->addItem(Bookmarks[i]);

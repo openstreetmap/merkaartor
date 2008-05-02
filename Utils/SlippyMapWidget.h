@@ -55,6 +55,8 @@ class SlippyMapCache : public QObject
 
 class SlippyMapWidget :	public QWidget
 {
+	Q_OBJECT
+
 	public:
 		SlippyMapWidget(QWidget* aParent);
 		~SlippyMapWidget();
@@ -66,10 +68,12 @@ class SlippyMapWidget :	public QWidget
 		virtual void mouseReleaseEvent(QMouseEvent* ev);
 
 		QRectF viewArea() const;
+	signals:
+		void redraw();
 
 	private:
 		SlippyMapWidgetPrivate* p;
-
+		bool first;
 		void ZoomTo(const QPoint & NewCenter, int NewZoom);
 };
 

@@ -69,6 +69,7 @@ SlippyMapWidget::SlippyMapWidget(QWidget* aParent)
 {
 	p = new SlippyMapWidgetPrivate(this);
 	resize(500,400);
+	first=true;
 }
 
 SlippyMapWidget::~SlippyMapWidget(void)
@@ -116,6 +117,9 @@ QRectF SlippyMapWidget::viewArea() const
 
 void SlippyMapWidget::paintEvent(QPaintEvent*)
 {
+	if(first==true)
+		first=false;
+	else	emit redraw();
 	QPainter Painter(this);
 	Painter.fillRect(QRect(0,0,width(),height()),QColor(255,255,255));
 	int LatRect = int(floor(p->Lat));

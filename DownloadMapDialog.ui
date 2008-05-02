@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>483</width>
-    <height>297</height>
+    <width>631</width>
+    <height>303</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -16,16 +16,7 @@
    <property name="spacing" >
     <number>6</number>
    </property>
-   <property name="leftMargin" >
-    <number>9</number>
-   </property>
-   <property name="topMargin" >
-    <number>9</number>
-   </property>
-   <property name="rightMargin" >
-    <number>9</number>
-   </property>
-   <property name="bottomMargin" >
+   <property name="margin" >
     <number>9</number>
    </property>
    <item>
@@ -43,16 +34,7 @@
       <property name="spacing" >
        <number>6</number>
       </property>
-      <property name="leftMargin" >
-       <number>9</number>
-      </property>
-      <property name="topMargin" >
-       <number>9</number>
-      </property>
-      <property name="rightMargin" >
-       <number>9</number>
-      </property>
-      <property name="bottomMargin" >
+      <property name="margin" >
        <number>9</number>
       </property>
       <item>
@@ -60,16 +42,7 @@
         <property name="spacing" >
          <number>6</number>
         </property>
-        <property name="leftMargin" >
-         <number>0</number>
-        </property>
-        <property name="topMargin" >
-         <number>0</number>
-        </property>
-        <property name="rightMargin" >
-         <number>0</number>
-        </property>
-        <property name="bottomMargin" >
+        <property name="margin" >
          <number>0</number>
         </property>
         <item>
@@ -82,7 +55,7 @@
         <item>
          <widget class="QComboBox" name="Bookmarks" >
           <property name="enabled" >
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
           <property name="sizePolicy" >
            <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
@@ -109,16 +82,7 @@
         <property name="spacing" >
          <number>6</number>
         </property>
-        <property name="leftMargin" >
-         <number>0</number>
-        </property>
-        <property name="topMargin" >
-         <number>0</number>
-        </property>
-        <property name="rightMargin" >
-         <number>0</number>
-        </property>
-        <property name="bottomMargin" >
+        <property name="margin" >
          <number>0</number>
         </property>
         <item>
@@ -147,6 +111,9 @@
           <property name="text" >
            <string>Add as bookmark</string>
           </property>
+          <property name="tristate" >
+           <bool>false</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -170,7 +137,7 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons" >
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>
@@ -211,18 +178,34 @@
    </hints>
   </connection>
   <connection>
-   <sender>FromBookmark</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>Bookmarks</receiver>
-   <slot>setEnabled(bool)</slot>
+   <sender>Bookmarks</sender>
+   <signal>highlighted(int)</signal>
+   <receiver>FromBookmark</receiver>
+   <slot>toggle()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>76</x>
-     <y>192</y>
+     <x>372</x>
+     <y>56</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>220</x>
-     <y>193</y>
+     <x>75</x>
+     <y>56</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Link</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>FromLink</receiver>
+   <slot>toggle()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>386</x>
+     <y>125</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>89</x>
+     <y>125</y>
     </hint>
    </hints>
   </connection>
