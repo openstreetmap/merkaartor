@@ -13,6 +13,7 @@ void joinRoads(MapDocument* theDocument, CommandList* theList, PropertiesDock* t
 void splitRoads(MapLayer* theLayer, CommandList* theList, PropertiesDock* theDock);
 void breakRoads(MapLayer* theLayer, CommandList* theList, PropertiesDock* theDock);
 void reversePoints(CommandList* theList, Road* R);
+void alignNodes(CommandList* theList, PropertiesDock* theDock);
 void mergeNodes(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock);
 
 #endif

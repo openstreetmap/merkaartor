@@ -1,4 +1,5 @@
 v0.11
+	* ADD : Align nodes function
 	* ADD : living_street as a predefined highway tag
 	* FIX : use CoordBox method to zoom a little instead of calling zoom
 	* ADD : caching mechanism for painters

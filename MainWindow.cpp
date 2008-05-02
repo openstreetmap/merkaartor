@@ -903,6 +903,21 @@ void MainWindow::projectionTriggered(QAction* anAction)
 	invalidateView();
 }
 
+void MainWindow::on_nodeAlignAction_triggered()
+{
+	CommandList* theList = new CommandList;
+	//MapFeature* F = theView->properties()->selection(0);
+	alignNodes(theList, theProperties);
+	if (theList->empty())
+		delete theList;
+	else
+	{
+		theDocument->history().add(theList);
+	//	theView->properties()->setSelection(F);
+		invalidateView();
+	}
+}
+
 void MainWindow::on_nodeMergeAction_triggered()
 {
 	CommandList* theList = new CommandList;

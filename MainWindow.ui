@@ -13,16 +13,26 @@
    <string>Merkaartor</string>
   </property>
   <property name="windowIcon" >
-   <iconset resource="Icons/AllIcons.qrc" >:/Icons/Merkaartor.xpm</iconset>
+   <iconset resource="Icons/AllIcons.qrc" >
+    <normaloff>:/Icons/Merkaartor.xpm</normaloff>:/Icons/Merkaartor.xpm</iconset>
   </property>
-  <widget class="QWidget" name="centralWidget" />
+  <widget class="QWidget" name="centralWidget" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>87</y>
+     <width>1000</width>
+     <height>486</height>
+    </rect>
+   </property>
+  </widget>
   <widget class="QMenuBar" name="menuBar" >
    <property name="geometry" >
     <rect>
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>19</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >
@@ -140,6 +150,7 @@
      <string>&amp;Node</string>
     </property>
     <addaction name="nodeMergeAction" />
+    <addaction name="nodeAlignAction" />
    </widget>
    <widget class="QMenu" name="windowAction" >
     <property name="title" >
@@ -165,10 +176,27 @@
    <addaction name="windowAction" />
    <addaction name="menuHelp" />
   </widget>
-  <widget class="QStatusBar" name="StatusBar" />
+  <widget class="QStatusBar" name="StatusBar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>573</y>
+     <width>1000</width>
+     <height>27</height>
+    </rect>
+   </property>
+  </widget>
   <widget class="QToolBar" name="toolBar" >
    <property name="enabled" >
     <bool>true</bool>
+   </property>
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>27</y>
+     <width>1000</width>
+     <height>60</height>
+    </rect>
    </property>
    <property name="windowTitle" >
     <string>Tool Bar</string>
@@ -275,7 +303,8 @@
   </action>
   <action name="editUndoAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >:/Icons/edit-undo.xpm</iconset>
+    <iconset resource="Icons/AllIcons.qrc" >
+     <normaloff>:/Icons/edit-undo.xpm</normaloff>:/Icons/edit-undo.xpm</iconset>
    </property>
    <property name="text" >
     <string>&amp;Undo</string>
@@ -286,7 +315,8 @@
   </action>
   <action name="editRedoAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >:/Icons/edit-redo.xpm</iconset>
+    <iconset resource="Icons/AllIcons.qrc" >
+     <normaloff>:/Icons/edit-redo.xpm</normaloff>:/Icons/edit-redo.xpm</iconset>
    </property>
    <property name="text" >
     <string>&amp;Redo</string>
@@ -297,7 +327,8 @@
   </action>
   <action name="editMoveAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >:/Icons/move.xpm</iconset>
+    <iconset resource="Icons/AllIcons.qrc" >
+     <normaloff>:/Icons/move.xpm</normaloff>:/Icons/move.xpm</iconset>
    </property>
    <property name="text" >
     <string>Move</string>
@@ -338,7 +369,8 @@
   </action>
   <action name="editPropertiesAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >:/Icons/toolselect.xpm</iconset>
+    <iconset resource="Icons/AllIcons.qrc" >
+     <normaloff>:/Icons/toolselect.xpm</normaloff>:/Icons/toolselect.xpm</iconset>
    </property>
    <property name="text" >
     <string>Select</string>
@@ -360,7 +392,8 @@
     <bool>false</bool>
    </property>
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >:/Icons/remove.xpm</iconset>
+    <iconset resource="Icons/AllIcons.qrc" >
+     <normaloff>:/Icons/remove.xpm</normaloff>:/Icons/remove.xpm</iconset>
    </property>
    <property name="text" >
     <string>R&amp;emove</string>
@@ -382,7 +415,8 @@
     <bool>false</bool>
    </property>
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >:/Icons/add.xpm</iconset>
+    <iconset resource="Icons/AllIcons.qrc" >
+     <normaloff>:/Icons/add.xpm</normaloff>:/Icons/add.xpm</iconset>
    </property>
    <property name="text" >
     <string>Add</string>
@@ -404,7 +438,8 @@
     <bool>false</bool>
    </property>
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >:/Icons/reverse.xpm</iconset>
+    <iconset resource="Icons/AllIcons.qrc" >
+     <normaloff>:/Icons/reverse.xpm</normaloff>:/Icons/reverse.xpm</iconset>
    </property>
    <property name="text" >
     <string>&amp;Reverse</string>
@@ -605,6 +640,14 @@
    </property>
    <property name="shortcut" >
     <string>Ctrl+I</string>
+   </property>
+  </action>
+  <action name="nodeAlignAction" >
+   <property name="text" >
+    <string>&amp;Align</string>
+   </property>
+   <property name="statusTip" >
+    <string>Align selected nodes. First two selected give the line.</string>
    </property>
   </action>
  </widget>

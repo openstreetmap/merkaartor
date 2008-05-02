@@ -63,6 +63,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_renderAction_triggered();
 		virtual void on_bookmarkAddAction_triggered();
 		virtual void on_bookmarkRemoveAction_triggered();
+		virtual void on_nodeAlignAction_triggered();
 		virtual void on_nodeMergeAction_triggered();
 		virtual void on_toolsPreferencesAction_triggered() {toolsPreferencesAction_triggered();}
 		virtual void on_windowPropertiesAction_triggered();

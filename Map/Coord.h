@@ -3,6 +3,7 @@
 
 #include <math.h>
 #include <QRectF>
+#include <QtDebug>
 #include <QtXml>
 
 inline double angToRad(double a)
@@ -14,6 +15,8 @@ inline double radToAng(double a)
 {
 	return a*180/M_PI;
 }
+
+
 
 class Coord
 {
@@ -81,6 +84,23 @@ inline Coord operator*(const Coord& A, double d)
 	return Coord(A.lat()*d,A.lon()*d);
 }
 
+inline Coord operator/(const Coord& A, double d)
+{
+	if(d==0)
+	{
+		qDebug()<<"Error: divide by 0"<<endl;
+		return A;
+	}
+	return Coord(A.lat()/d,A.lon()/d);
+}
+
+inline bool operator==(const Coord& A,const Coord& B)
+{
+	return A.lat()==B.lat() && A.lon()==B.lon();
+}
+
+double angle(Coord p1);
+void rotate(Coord & p1,double angle);
 
 class CoordBox
 {

@@ -1,4 +1,25 @@
 #include "Coord.h"
+/*
+double angle(Coord & vertex, Coord p1, Coord p2)
+{
+	p1=p1-vertex;
+	p2=p2-vertex;
+	return angle(p2)-angle(p1);
+}
+*/
+double angle(Coord p1)
+{
+	if(p1.length()==0) return 0;
+	p1=p1/p1.length();
+	if(p1.lat()>0) return acos(p1.lon());
+	return -acos(p1.lon());
+}
+
+void rotate(Coord & p1,double angle)
+{
+	Coord p1p(sin(angle)*p1.lon()+cos(angle)*p1.lat(),cos(angle)*p1.lon()-sin(angle)*p1.lat());
+	p1=p1p;
+}
 
 CoordBox::CoordBox(const Coord &C1, const Coord &C2)
 : BottomLeft(C1.lat()<C2.lat()?C1.lat():C2.lat() , C1.lon()<C2.lon()?C1.lon():C2.lon()),

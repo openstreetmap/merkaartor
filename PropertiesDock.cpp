@@ -69,6 +69,7 @@ void PropertiesDock::checkMenuStatus()
 	Main->roadSplitAction->setEnabled(NumRoads && NumPoints);
 	Main->roadBreakAction->setEnabled(NumRoads > 1);
 	Main->nodeMergeAction->setEnabled(NumPoints > 1);
+	Main->nodeAlignAction->setEnabled(NumPoints > 2);
 	Main->fileDownloadMoreAction->setEnabled(Main->document()->getLastDownloadLayer() != NULL);
 }
 

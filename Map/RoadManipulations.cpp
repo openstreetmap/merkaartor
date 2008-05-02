@@ -3,6 +3,7 @@
 #include "Command/FeatureCommands.h"
 #include "Command/RoadCommands.h"
 #include "Command/RelationCommands.h"
+#include "Command/TrackPointCommands.h"
 #include "Map/MapDocument.h"
 #include "Map/Road.h"
 #include "Map/Relation.h"
@@ -210,6 +211,37 @@ void breakRoads(MapLayer* theLayer, CommandList* theList, PropertiesDock* theDoc
 		for (unsigned int j=0; j<Roads[i]->size(); ++j)
 			for (unsigned int k=i+1; k<Roads.size(); ++k)
 				breakRoad(theLayer, theList, Roads[k],Roads[i]->get(j));
+}
+
+void alignNodes(CommandList* theList, PropertiesDock* theDock)
+{
+	if (theDock->size() < 3) //thre must be at least 3 nodes to align something
+		return;
+	
+	//We build a list of selected nodes
+	std::vector<TrackPoint*> Nodes;
+	for (unsigned int i=0; i<theDock->size(); ++i)
+		if (TrackPoint* N = dynamic_cast<TrackPoint*>(theDock->selection(i)))
+			Nodes.push_back(N);
+
+	//we check that we have at least 3 nodes and the first two can give a line
+	if(Nodes.size() < 3)
+		return;
+	if(Nodes[0]->position() == Nodes[1]->position())
+		return;
+
+	//we do the alignement
+	Coord pos(0,0);
+	const Coord p1(Nodes[0]->position());
+	const Coord p2(Nodes[1]->position()-p1);
+	for (unsigned int i=2; i<Nodes.size(); ++i) {
+		pos=Nodes[i]->position()-p1;
+		rotate(pos,-angle(p2));
+		pos.setLat(0);
+		rotate(pos,angle(p2));
+		pos=pos+p1;
+		theList->add(new MoveTrackPointCommand( Nodes[i], pos));
+	}
 }
 
 void mergeNodes(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)
