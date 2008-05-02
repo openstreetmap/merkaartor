@@ -32,10 +32,12 @@ class MapFeaturePrivate
 	public:
 		MapFeaturePrivate()
 			: LastActor(MapFeature::User), theLayer(0),
+				PossiblePaintersUpToDate(false),
 			  	PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
 				theFeature(0), LastPartNotification(0), Time(QDateTime::currentDateTime()) { }
 		MapFeaturePrivate(const MapFeaturePrivate& other)
 			: Tags(other.Tags), LastActor(MapFeature::User), theLayer(0),
+				PossiblePaintersUpToDate(false),
 			  	PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
 				theFeature(0), LastPartNotification(0), Time(QDateTime::currentDateTime()) { }
 
@@ -45,6 +47,8 @@ class MapFeaturePrivate
 		std::vector<std::pair<QString, QString> > Tags;
 		MapFeature::ActorType LastActor;
 		MapLayer* theLayer;
+		std::vector<FeaturePainter*> PossiblePainters;
+		bool PossiblePaintersUpToDate;
 		double PixelPerMForPainter;
 		FeaturePainter* CurrentPainter;
 		bool HasPainter;
@@ -184,6 +188,7 @@ void MapFeature::clearTags()
 
 void MapFeature::invalidatePainter()
 {
+	p->PossiblePaintersUpToDate = false;
 	p->PixelPerMForPainter = -1;
 }
 
@@ -239,22 +244,26 @@ QString MapFeature::tagValue(const QString& k, const QString& Default) const
 
 void MapFeaturePrivate::updatePainters(double PixelPerM)
 {
-	CurrentPainter = 0;
-	HasPainter = false;
-	PixelPerMForPainter = PixelPerM;
-	for (unsigned int i=0; i<EditPaintStyle::Painters.size(); ++i)
+	if (PixelPerMForPainter < 0)
 	{
-		FeaturePainter* Current = &EditPaintStyle::Painters[i];
-		if (Current->matchesTag(theFeature))
+		PossiblePainters.clear();
+		for (unsigned int i=0; i<EditPaintStyle::Painters.size(); ++i)
 		{
-			HasPainter = true;
-			if (Current->matchesZoom(PixelPerM))
-			{
-				CurrentPainter = Current;
-				return;
-			}
+			FeaturePainter* Current = &EditPaintStyle::Painters[i];
+			if (Current->matchesTag(theFeature))
+				PossiblePainters.push_back(Current);
 		}
+		PossiblePaintersUpToDate = true;
+		HasPainter = PossiblePainters.size();
 	}
+	CurrentPainter = 0;
+	PixelPerMForPainter = PixelPerM;
+	for (unsigned int i=0; i<PossiblePainters.size(); ++i)
+		if (PossiblePainters[i]->matchesZoom(PixelPerM))
+		{
+			CurrentPainter = PossiblePainters[i];
+			return;
+		}
 }
 
 FeaturePainter* MapFeature::getEditPainter(double PixelPerM) const

@@ -1,4 +1,5 @@
 v0.11
+	* ADD : caching mechanism for painters
 	* ADD : draw nodes of hovered/selected roads (by Vincent Meurisse)
 	* FIX : make the shortcuts for creating a new road and way less interfering
 	* ADD : support for OSM links in download dialog (Refs #812) (by Timo Schlüßler)
