@@ -182,6 +182,7 @@ class CoordBox
 		{
 			return QRectF(BottomLeft.lon(), TopRight.lat(), lonDiff(), latDiff());
 		}
+		void resize(double f);
 
 		bool toXML(QString elName, QDomElement& xParent) const;
 		static CoordBox fromXML(QDomElement e);

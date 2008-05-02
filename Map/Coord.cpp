@@ -56,3 +56,12 @@ Coord Coord::fromXML(QDomElement e)
 	return Coord(lat, lon);
 }
 
+void CoordBox::resize(double d)
+{
+	double dlat = (TopRight.lat()-BottomLeft.lat())*(d-1)/2;
+	double dlon = (TopRight.lon()-BottomLeft.lon())*(d-1)/2;
+	BottomLeft.setLat(BottomLeft.lat()-dlat);
+	BottomLeft.setLon(BottomLeft.lon()-dlon);
+	TopRight.setLat(TopRight.lat()+dlat);
+	TopRight.setLon(TopRight.lon()+dlon);
+}

@@ -383,8 +383,8 @@ void MainWindow::on_viewZoomAllAction_triggered()
 {
 	std::pair<bool, CoordBox> BBox(boundingBox(theDocument));
 	if (BBox.first) {
+		BBox.second.resize(1.01);
 		theView->projection().setViewport(BBox.second, theView->rect());
-		theView->projection().zoom(0.99, theView->rect().center(), theView->rect());
 		invalidateView();
 	}
 }
