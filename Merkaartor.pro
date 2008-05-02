@@ -7,9 +7,6 @@
 # PREFIX              - base prefix for installation
 # NODEBUG             - no debug target
 
-NOWEBKIT=$$(NOWEBKIT)
-NOUSEWEBKIT=$$(NOUSEWEBKIT)
-
 TEMPLATE = app
 TARGET = merkaartor
 
@@ -26,8 +23,6 @@ count(NODEBUG,1) {
     OUTPUT_DIR=$$PWD/binaries/release
     OBJECTS_DIR += tmp/obj_release
 }
-
-CONFIG += yahoo
 
 DESTDIR = $$OUTPUT_DIR/bin
 
