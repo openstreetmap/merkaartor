@@ -41,7 +41,7 @@
  backgroundColor="#777777ff" backgroundScale="1" backgroundOffset="1"
  foregroundColor="#ffffffff" foregroundScale="1" foregroundOffset="-1"
  drawTrafficDirectionMarks="yes">
-  <selector expr="[highway] isoneof (residential , unclassified)"/>
+  <selector expr="[highway] isoneof (residential , unclassified , service)"/>
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
