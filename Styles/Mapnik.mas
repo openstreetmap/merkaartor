@@ -104,6 +104,15 @@
   <selector expr="[railway] is rail"/>
 </painter>
 <painter
+ zoomUnder="0.02" zoomUpper="1e+07"
+ backgroundColor="#000000fc" backgroundScale="1" backgroundOffset="4"
+ foregroundColor="#ccccccfc" foregroundScale="1" foregroundOffset="2"
+ touchupColor="#000000fc" touchupScale="1" touchupOffset="2"
+ touchupDashDown="3" touchupDashUp="3"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[railway] is abandoned"/>
+</painter>
+<painter
  zoomUnder="0.04" zoomUpper="1e+07"
  backgroundColor="#000000fc" backgroundScale="0.5" backgroundOffset="4"
  foregroundColor="#fffffffc" foregroundScale="0.5" foregroundOffset="2"

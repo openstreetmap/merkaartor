@@ -57,7 +57,7 @@ void fillHighway(QComboBox* Box)
 	Box->addItem(QCoreApplication::translate("Highway","Residential road"), "residential");
 	Box->addItem(QCoreApplication::translate("Highway","Pedestrian priority road"), "living_street");
 	Box->addItem(QCoreApplication::translate("Highway","Service road"), "service");
-	Box->addItem(QCoreApplication::translate("Highway","Unsurfaced road"), "unsurfaced");
+	Box->addItem(QCoreApplication::translate("Highway","Unsurfaced road (old tag)"), "unsurfaced");
 	Box->addItem(QCoreApplication::translate("Highway","Track road"), "track");
 	Box->addItem(QCoreApplication::translate("Highway","Cycleway"), "cycleway");
 	Box->addItem(QCoreApplication::translate("Highway","Footway"), "footway");
