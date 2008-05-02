@@ -32,7 +32,6 @@ EditInteraction::EditInteraction(MapView* theView)
 EditInteraction::~EditInteraction(void)
 {
 	main()->editRemoveAction->setEnabled(false);
-	main()->editMoveAction->setEnabled(false);
 	main()->editAddAction->setEnabled(false);
 	main()->editReverseAction->setEnabled(false);
 }
