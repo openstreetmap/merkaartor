@@ -32,6 +32,14 @@
  zoomUnder="0.1" zoomUpper="1e+07"
  backgroundColor="#777777ff" backgroundScale="1" backgroundOffset="1"
  foregroundColor="#ffffffff" foregroundScale="1" foregroundOffset="-1"
+ fillColor="#ffffffff"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[highway] is residential and [area] is yes"/>
+</painter>
+<painter
+ zoomUnder="0.1" zoomUpper="1e+07"
+ backgroundColor="#777777ff" backgroundScale="1" backgroundOffset="1"
+ foregroundColor="#ffffffff" foregroundScale="1" foregroundOffset="-1"
  drawTrafficDirectionMarks="yes">
   <selector expr="[highway] isoneof (residential , unclassified)"/>
 </painter>
@@ -52,8 +60,23 @@
 <painter
  zoomUnder="0.1" zoomUpper="1e+07"
  foregroundColor="#aaaaaaff" foregroundScale="1" foregroundOffset="0"
+ fillColor="#aaaaaaff"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[highway] is pedestrian and [area] is yes"/>
+</painter>
+<painter
+ zoomUnder="0.1" zoomUpper="1e+07"
+ foregroundColor="#aaaaaaff" foregroundScale="1" foregroundOffset="0"
  drawTrafficDirectionMarks="yes">
   <selector expr="[highway] is pedestrian"/>
+</painter>
+<painter
+ zoomUnder="0.1" zoomUpper="1e+07"
+ foregroundColor="#aaaaaaff" foregroundScale="1" foregroundOffset="0"
+ touchupColor="#000000ff" touchupScale="1" touchupOffset="0"
+ touchupDashDown="0.03" touchupDashUp="0.3"
+ drawTrafficDirectionMarks="no">
+    <selector expr="[highway] is steps"/>
 </painter>
 <painter
  zoomUnder="0.01" zoomUpper="1e+07"
