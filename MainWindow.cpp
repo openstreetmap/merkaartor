@@ -12,6 +12,7 @@
 #include "Interaction/CreateRoundaboutInteraction.h"
 #include "Interaction/CreateSingleWayInteraction.h"
 #include "Interaction/EditInteraction.h"
+#include "Interaction/MoveTrackPointInteraction.h"
 #include "Interaction/ZoomInteraction.h"
 #include "Map/Coord.h"
 #include "Map/DownloadOSM.h"
@@ -162,13 +163,9 @@ void MainWindow::on_editRemoveAction_triggered()
 
 void MainWindow::on_editMoveAction_triggered()
 {
-	emit move_triggered();
+	view()->launch(new MoveTrackPointInteraction(view()));
 }
 
-void MainWindow::on_editAddAction_triggered()
-{
-	emit add_triggered();
-}
 
 void MainWindow::on_editReverseAction_triggered()
 {

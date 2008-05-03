@@ -18,8 +18,6 @@ class EditInteraction :	public FeatureSnapInteraction
 
 	public slots:
 		void on_remove_triggered();
-		void on_move_triggered();
-		void on_add_triggered();
 		void on_reverse_triggered();
 
 	private:

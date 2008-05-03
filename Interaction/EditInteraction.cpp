@@ -23,8 +23,6 @@ EditInteraction::EditInteraction(MapView* theView)
 : FeatureSnapInteraction(theView), Dragging(false), StartDrag(0,0), EndDrag(0,0)
 {
 	connect(main(),SIGNAL(remove_triggered()),this,SLOT(on_remove_triggered()));
-	connect(main(),SIGNAL(move_triggered()),this,SLOT(on_move_triggered()));
-	connect(main(),SIGNAL(add_triggered()),this,SLOT(on_add_triggered()));
 	connect(main(),SIGNAL(reverse_triggered()), this,SLOT(on_reverse_triggered()));
 	view()->properties()->checkMenuStatus();
 }
@@ -32,7 +30,6 @@ EditInteraction::EditInteraction(MapView* theView)
 EditInteraction::~EditInteraction(void)
 {
 	main()->editRemoveAction->setEnabled(false);
-	main()->editAddAction->setEnabled(false);
 	main()->editReverseAction->setEnabled(false);
 }
 
@@ -129,16 +126,6 @@ void EditInteraction::on_remove_triggered()
 		}
 	document()->history().add(theList);
 	view()->invalidate();
-}
-
-void EditInteraction::on_move_triggered()
-{
-	view()->launch(new MoveTrackPointInteraction(view()));
-}
-
-void EditInteraction::on_add_triggered()
-{
-//	view()->launch(new EditRoadInteraction(view(),dynamic_cast<Road*>(view()->properties()->selection(0))));
 }
 
 void EditInteraction::on_reverse_triggered()

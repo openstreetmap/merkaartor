@@ -179,3 +179,8 @@ void CreateAreaInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFeature
 	if (EndNow)
 		view()->launch(0);
 }
+
+QCursor CreateAreaInteraction::cursor() const
+{
+	return QCursor(Qt::CrossCursor);
+}

@@ -219,7 +219,6 @@
    <addaction name="editPropertiesAction" />
    <addaction name="editRemoveAction" />
    <addaction name="editMoveAction" />
-   <addaction name="editAddAction" />
    <addaction name="editReverseAction" />
   </widget>
   <action name="fileQuitAction" >
@@ -408,21 +407,6 @@
    </property>
    <property name="shortcut" >
     <string>Ctrl+R</string>
-   </property>
-  </action>
-  <action name="editAddAction" >
-   <property name="enabled" >
-    <bool>false</bool>
-   </property>
-   <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
-     <normaloff>:/Icons/add.xpm</normaloff>:/Icons/add.xpm</iconset>
-   </property>
-   <property name="text" >
-    <string>Add</string>
-   </property>
-   <property name="visible" >
-    <bool>false</bool>
    </property>
   </action>
   <action name="createNodeAction" >

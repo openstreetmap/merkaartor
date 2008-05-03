@@ -126,3 +126,8 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFe
 	else
 		Interaction::mousePressEvent(anEvent);
 }
+
+QCursor CreateSingleWayInteraction::cursor() const
+{
+	return QCursor(Qt::CrossCursor);
+}

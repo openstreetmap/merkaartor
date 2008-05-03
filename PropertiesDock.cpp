@@ -63,7 +63,6 @@ void PropertiesDock::checkMenuStatus()
 	Main->createRelationAction->setEnabled(Selection.size());
 	Main->editRemoveAction->setEnabled(Selection.size());
 	Main->editMoveAction->setEnabled(true);
-	Main->editAddAction->setEnabled(IsRoad);
 	Main->editReverseAction->setEnabled(IsRoad);
 	Main->roadJoinAction->setEnabled(NumRoads > 1);
 	Main->roadSplitAction->setEnabled(NumRoads && NumPoints);

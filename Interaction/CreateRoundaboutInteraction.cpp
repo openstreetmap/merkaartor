@@ -156,3 +156,8 @@ void CreateRoundaboutInteraction::paintEvent(QPaintEvent* , QPainter& thePainter
 		::draw(thePainter,TP,MapFeature::OneWay, Prev,Next,4,view()->projection());
 	}
 }
+
+QCursor CreateRoundaboutInteraction::cursor() const
+{
+	return QCursor(Qt::CrossCursor);
+}

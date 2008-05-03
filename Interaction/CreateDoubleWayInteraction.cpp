@@ -207,3 +207,8 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 	else
 		Interaction::mousePressEvent(anEvent);
 }
+
+QCursor CreateDoubleWayInteraction::cursor() const
+{
+	return QCursor(Qt::CrossCursor);
+}
