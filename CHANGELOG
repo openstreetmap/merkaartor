@@ -1,4 +1,7 @@
 v0.11
+	* FIX : Select dialog : fix the size of elements
+	* FIX : Roundabout creation. Add tag junction=roundabout
+	* FIX : Autoselect source in download dialog
 	* ADD : Align nodes function
 	* ADD : living_street as a predefined highway tag
 	* FIX : use CoordBox method to zoom a little instead of calling zoom
