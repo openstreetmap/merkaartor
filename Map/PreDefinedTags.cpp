@@ -54,6 +54,7 @@ void fillHighway(QComboBox* Box)
 	Box->addItem(QCoreApplication::translate("Highway","Ramp to primary road"), "primary_link");
 	Box->addItem(QCoreApplication::translate("Highway","Secondary road"), "secondary");
 	Box->addItem(QCoreApplication::translate("Highway","Tertiary road"), "tertiary");
+	Box->addItem(QCoreApplication::translate("Highway","Unclassified road"), "unclassified");
 	Box->addItem(QCoreApplication::translate("Highway","Residential road"), "residential");
 	Box->addItem(QCoreApplication::translate("Highway","Pedestrian priority road"), "living_street");
 	Box->addItem(QCoreApplication::translate("Highway","Service road"), "service");

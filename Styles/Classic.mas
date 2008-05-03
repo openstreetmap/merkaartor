@@ -60,6 +60,12 @@
 <painter
  zoomUnder="0.1" zoomUpper="1e+07"
  foregroundColor="#aaaaaaff" foregroundScale="1" foregroundOffset="0"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[highway] is living_street"/>
+</painter>
+<painter
+ zoomUnder="0.1" zoomUpper="1e+07"
+ foregroundColor="#aaaaaaff" foregroundScale="1" foregroundOffset="0"
  fillColor="#aaaaaaff"
  drawTrafficDirectionMarks="no">
   <selector expr="[highway] is pedestrian and [area] is yes"/>

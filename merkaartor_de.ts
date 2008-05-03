@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="de">
-<defaultcodec></defaultcodec>
 <context>
     <name>@default</name>
     <message>
@@ -485,49 +484,54 @@ Möglicherweise hilft eine Reduzierung des herunterzuladenden Gebietes.</transla
         <translation>Gemeindeverbindungsstraße</translation>
     </message>
     <message>
-        <location filename="Map/PreDefinedTags.cpp" line="57"/>
+        <location filename="Map/PreDefinedTags.cpp" line="58"/>
         <source>Residential road</source>
         <translation>Wohngebietsstraße</translation>
     </message>
     <message>
-        <location filename="Map/PreDefinedTags.cpp" line="59"/>
+        <location filename="Map/PreDefinedTags.cpp" line="60"/>
         <source>Service road</source>
         <translation>Erschließungsweg</translation>
     </message>
     <message>
-        <location filename="Map/PreDefinedTags.cpp" line="60"/>
+        <location filename="Map/PreDefinedTags.cpp" line="61"/>
         <source>Unsurfaced road (old tag)</source>
         <translation>Ungeteerte Strasse (veralted)</translation>
     </message>
     <message>
-        <location filename="Map/PreDefinedTags.cpp" line="61"/>
+        <location filename="Map/PreDefinedTags.cpp" line="62"/>
         <source>Track road</source>
         <translation>Feld- oder Waldweg</translation>
     </message>
     <message>
-        <location filename="Map/PreDefinedTags.cpp" line="62"/>
+        <location filename="Map/PreDefinedTags.cpp" line="63"/>
         <source>Cycleway</source>
         <translation>Radweg</translation>
     </message>
     <message>
-        <location filename="Map/PreDefinedTags.cpp" line="63"/>
+        <location filename="Map/PreDefinedTags.cpp" line="64"/>
         <source>Footway</source>
         <translation>Fuß-/Wanderweg</translation>
     </message>
     <message>
-        <location filename="Map/PreDefinedTags.cpp" line="64"/>
+        <location filename="Map/PreDefinedTags.cpp" line="65"/>
         <source>Bridleway</source>
         <translation>Reitweg</translation>
     </message>
     <message>
-        <location filename="Map/PreDefinedTags.cpp" line="65"/>
+        <location filename="Map/PreDefinedTags.cpp" line="66"/>
         <source>Steps</source>
         <translation>Treppe</translation>
     </message>
     <message>
-        <location filename="Map/PreDefinedTags.cpp" line="58"/>
+        <location filename="Map/PreDefinedTags.cpp" line="59"/>
         <source>Pedestrian priority road</source>
-        <translation>Fußgängerzone</translation>
+        <translation>Spielstraße</translation>
+    </message>
+    <message>
+        <location filename="Map/PreDefinedTags.cpp" line="57"/>
+        <source>Unclassified road</source>
+        <translation>Einfache Verbindungsstraße</translation>
     </message>
 </context>
 <context>
@@ -2266,42 +2270,42 @@ Für weitere Informationen lesen Sie http://wiki.openstreetmap.org/index.php/Pro
 <context>
     <name>landuse</name>
     <message>
-        <location filename="Map/PreDefinedTags.cpp" line="71"/>
+        <location filename="Map/PreDefinedTags.cpp" line="72"/>
         <source>Forest</source>
         <translation>Wald</translation>
     </message>
     <message>
-        <location filename="Map/PreDefinedTags.cpp" line="72"/>
+        <location filename="Map/PreDefinedTags.cpp" line="73"/>
         <source>Farm</source>
         <translation>Landwirtschaft</translation>
     </message>
     <message>
-        <location filename="Map/PreDefinedTags.cpp" line="73"/>
+        <location filename="Map/PreDefinedTags.cpp" line="74"/>
         <source>Recreation ground</source>
         <translation>Erholungsgebiet</translation>
     </message>
     <message>
-        <location filename="Map/PreDefinedTags.cpp" line="74"/>
+        <location filename="Map/PreDefinedTags.cpp" line="75"/>
         <source>Village green</source>
         <translation>Dorfwiese</translation>
     </message>
     <message>
-        <location filename="Map/PreDefinedTags.cpp" line="75"/>
+        <location filename="Map/PreDefinedTags.cpp" line="76"/>
         <source>Residential zone</source>
         <translation>Wohngebiet</translation>
     </message>
     <message>
-        <location filename="Map/PreDefinedTags.cpp" line="76"/>
+        <location filename="Map/PreDefinedTags.cpp" line="77"/>
         <source>Industrial zone</source>
         <translation>Industriegebiet</translation>
     </message>
     <message>
-        <location filename="Map/PreDefinedTags.cpp" line="77"/>
+        <location filename="Map/PreDefinedTags.cpp" line="78"/>
         <source>Retail zone</source>
         <translation>Läden</translation>
     </message>
     <message>
-        <location filename="Map/PreDefinedTags.cpp" line="78"/>
+        <location filename="Map/PreDefinedTags.cpp" line="79"/>
         <source>Commercial zone</source>
         <translation>Büros</translation>
     </message>
