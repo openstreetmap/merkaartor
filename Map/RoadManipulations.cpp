@@ -55,8 +55,9 @@ void reversePoints(CommandList* theList, Road* R)
 	{
 		TrackPoint* Pt = R->get(i-1);
 		Pts.push_back(Pt);
-		theList->add(new RoadRemoveTrackPointCommand(R,Pt));
 	}
+	for (unsigned int i=0; i<Pts.size(); ++i)
+		theList->add(new RoadRemoveTrackPointCommand(R,Pts[i]));
 	for (unsigned int i=0; i<Pts.size(); ++i)
 		theList->add(new RoadAddTrackPointCommand(R,Pts[i]));
 }

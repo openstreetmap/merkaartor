@@ -1,4 +1,5 @@
 v0.11
+	* FIX : Reverse on an area doesn't open it anymore 
 	* FIX : Select dialog : fix the size of elements
 	* FIX : Roundabout creation. Add tag junction=roundabout
 	* FIX : Autoselect source in download dialog
