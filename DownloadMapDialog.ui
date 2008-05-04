@@ -209,5 +209,21 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>Bookmarks</sender>
+   <signal>activated(int)</signal>
+   <receiver>FromBookmark</receiver>
+   <slot>toggle()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>372</x>
+     <y>56</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>75</x>
+     <y>56</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
 </ui>
