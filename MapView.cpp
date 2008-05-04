@@ -69,6 +69,8 @@ MapView::MapView(MainWindow* aMain) :
 
 MapView::~MapView()
 {
+	if(theInteraction)
+		delete theInteraction;
 	delete ImageManager::instance();
 #ifdef YAHOO
 	delete BrowserImageManager::instance();

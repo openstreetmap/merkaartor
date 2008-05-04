@@ -55,6 +55,8 @@ MerkaartorPreferences::MerkaartorPreferences()
 
 MerkaartorPreferences::~MerkaartorPreferences()
 {
+	delete theWmsServerList;
+	delete theTmsServerList;
 	delete Sets;
 }
 

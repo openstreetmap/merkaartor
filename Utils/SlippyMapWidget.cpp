@@ -204,7 +204,7 @@ void SlippyMapWidget::mouseMoveEvent(QMouseEvent* ev)
 /* SLIPPYMAPCACHE */
 
 SlippyMapCache::SlippyMapCache()
-: QObject(0), DownloadBusy(false), theMap(0)
+: QObject(0), DownloadId(0), DownloadBusy(false), theMap(0)
 {
 	Download.setHost("tile.openstreetmap.org");
 	// TODO Slippy map proxy

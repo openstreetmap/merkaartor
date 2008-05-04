@@ -99,6 +99,7 @@ MainWindow::~MainWindow(void)
 	MerkaartorPreferences::instance()->setWorkingDir(QDir::currentPath());
 	delete MerkaartorPreferences::instance();
 	delete theDocument;
+	delete theView;
 }
 
 
@@ -152,7 +153,6 @@ void MainWindow::on_editPropertiesAction_triggered()
 {
 	theProperties->setSelection(0);
 	invalidateView();
-	//TODO: Fix memleak
 	theView->launch(new EditInteraction(theView));
 }
 

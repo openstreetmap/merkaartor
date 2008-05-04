@@ -35,7 +35,7 @@
 
 Downloader::Downloader(const QString& aWeb, const QString& aUser, const QString& aPwd, bool aUseProxy, const QString& aProxyHost, int aProxyPort)
 : Port(80), Web(aWeb), User(aUser), Password(aPwd),
-  UseProxy(aUseProxy), ProxyHost(aProxyHost), ProxyPort(aProxyPort),
+  UseProxy(aUseProxy), ProxyHost(aProxyHost), ProxyPort(aProxyPort), Id(0),
   Error(false), Animator(0), AnimatorBar(0), AnimationTimer(0)
 {
 	int p = Web.lastIndexOf(':');

@@ -26,6 +26,7 @@ public:
 	~MapDocumentPrivate()
 	{
 		History->cleanup();
+		delete History;
 		for (unsigned int i=0; i<Layers.size(); ++i) {
 			if (theDock)
 				theDock->deleteLayer(Layers[i]);

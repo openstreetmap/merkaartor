@@ -29,8 +29,11 @@ EditInteraction::EditInteraction(MapView* theView)
 
 EditInteraction::~EditInteraction(void)
 {
-	main()->editRemoveAction->setEnabled(false);
-	main()->editReverseAction->setEnabled(false);
+	if(main())
+	{
+		main()->editRemoveAction->setEnabled(false);
+		main()->editReverseAction->setEnabled(false);
+	}
 }
 
 void EditInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
