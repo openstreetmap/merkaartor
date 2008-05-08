@@ -20,9 +20,9 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>87</y>
+     <y>83</y>
      <width>1000</width>
-     <height>486</height>
+     <height>492</height>
     </rect>
    </property>
   </widget>
@@ -32,7 +32,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>27</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >
@@ -180,9 +180,9 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>573</y>
+     <y>575</y>
      <width>1000</width>
-     <height>27</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>
@@ -193,9 +193,9 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>27</y>
+     <y>25</y>
      <width>1000</width>
-     <height>60</height>
+     <height>58</height>
     </rect>
    </property>
    <property name="windowTitle" >
@@ -456,15 +456,24 @@
    <property name="text" >
     <string>&amp;Split</string>
    </property>
+   <property name="shortcut" >
+    <string>Alt+S</string>
+   </property>
   </action>
   <action name="roadJoinAction" >
    <property name="text" >
     <string>&amp;Join</string>
    </property>
+   <property name="shortcut" >
+    <string>Alt+J</string>
+   </property>
   </action>
   <action name="roadBreakAction" >
    <property name="text" >
     <string>&amp;Break apart</string>
+   </property>
+   <property name="shortcut" >
+    <string>Alt+B</string>
    </property>
   </action>
   <action name="createRelationAction" >
@@ -547,6 +556,9 @@
    </property>
    <property name="statusTip" >
     <string>Merge the selected nodes (first selected will remain)</string>
+   </property>
+   <property name="shortcut" >
+    <string>Alt+M</string>
    </property>
   </action>
   <action name="fileSaveAsAction" >
@@ -632,6 +644,9 @@
    </property>
    <property name="statusTip" >
     <string>Align selected nodes. First two selected give the line.</string>
+   </property>
+   <property name="shortcut" >
+    <string>Alt+A</string>
    </property>
   </action>
  </widget>
