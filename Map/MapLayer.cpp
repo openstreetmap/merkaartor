@@ -216,6 +216,7 @@ MapFeature* MapLayer::get(const QString& id)
 
 const MapFeature* MapLayer::get(unsigned int i) const
 {
+	if(i>=p->Features.size()) return 0;
 	return p->Features[i];
 }
 
@@ -248,6 +249,7 @@ const QString& MapLayer::id() const
 
 CoordBox MapLayer::boundingBox(const MapLayer* theLayer)
 {
+	if(theLayer->size()==0) return CoordBox(Coord(0,0),Coord(0,0));
 	CoordBox Box(theLayer->get(0)->boundingBox());
 	for (unsigned int i=1; i<theLayer->size(); ++i)
 		Box.merge(theLayer->get(i)->boundingBox());
