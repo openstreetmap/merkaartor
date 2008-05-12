@@ -14,6 +14,12 @@ int main(int argc, char** argv)
 	QCoreApplication::setOrganizationDomain("www.irule.be");
 	QCoreApplication::setApplicationName("Merkaartor");
 
+#if defined(Q_OS_MAC)
+	QDir dir(QApplication::applicationDirPath());
+	dir.cdUp();
+	dir.cd("plugins");
+	QApplication::setLibraryPaths(QStringList(dir.absolutePath()));
+#endif
 	QTranslator qtTranslator;
 	qtTranslator.load("qt_" + QLocale::system().name()
 #ifdef TRANSDIR_SYSTEM
