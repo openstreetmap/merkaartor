@@ -46,7 +46,13 @@ const Projection& Interaction::projection() const
 
 void Interaction::mousePressEvent(QMouseEvent * anEvent)
 {
+#if defined(Q_OS_MAC)
+	// In the name of beautifull code, Steve, add a right mouse button
+	if ( (anEvent->modifiers() & Qt::MetaModifier) ||
+	   (anEvent->buttons() & Qt::RightButton) )
+#else
 	if (anEvent->buttons() & Qt::RightButton)
+#endif
 	{
 		Panning = true;
 		LastPan = anEvent->pos();
