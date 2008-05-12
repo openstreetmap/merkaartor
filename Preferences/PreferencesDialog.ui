@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>540</width>
-    <height>463</height>
+    <width>566</width>
+    <height>526</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -28,9 +28,17 @@
         <enum>QTabWidget::North</enum>
        </property>
        <property name="currentIndex" >
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="tab_4" >
+        <property name="geometry" >
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>534</width>
+          <height>432</height>
+         </rect>
+        </property>
         <attribute name="title" >
          <string>Visual</string>
         </attribute>
@@ -195,7 +203,7 @@
            <property name="orientation" >
             <enum>Qt::Vertical</enum>
            </property>
-           <property name="sizeHint" >
+           <property name="sizeHint" stdset="0" >
             <size>
              <width>20</width>
              <height>40</height>
@@ -206,6 +214,14 @@
         </layout>
        </widget>
        <widget class="QWidget" name="tab_3" >
+        <property name="geometry" >
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>534</width>
+          <height>432</height>
+         </rect>
+        </property>
         <attribute name="title" >
          <string>OSM</string>
         </attribute>
@@ -250,6 +266,13 @@
               </property>
              </widget>
             </item>
+            <item row="3" column="0" >
+             <widget class="QCheckBox" name="bbUse06Api" >
+              <property name="text" >
+               <string>Use 0.6 API</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </widget>
          </item>
@@ -258,7 +281,7 @@
            <property name="orientation" >
             <enum>Qt::Vertical</enum>
            </property>
-           <property name="sizeHint" >
+           <property name="sizeHint" stdset="0" >
             <size>
              <width>20</width>
              <height>0</height>
@@ -269,6 +292,14 @@
         </layout>
        </widget>
        <widget class="QWidget" name="tab" >
+        <property name="geometry" >
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>534</width>
+          <height>432</height>
+         </rect>
+        </property>
         <attribute name="title" >
          <string>Network</string>
         </attribute>
@@ -334,7 +365,7 @@
            <property name="orientation" >
             <enum>Qt::Vertical</enum>
            </property>
-           <property name="sizeHint" >
+           <property name="sizeHint" stdset="0" >
             <size>
              <width>20</width>
              <height>0</height>
@@ -345,6 +376,14 @@
         </layout>
        </widget>
        <widget class="QWidget" name="tab_2" >
+        <property name="geometry" >
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>534</width>
+          <height>432</height>
+         </rect>
+        </property>
         <attribute name="title" >
          <string>Background Image</string>
         </attribute>
@@ -438,7 +477,7 @@
            <property name="sizeType" >
             <enum>QSizePolicy::Expanding</enum>
            </property>
-           <property name="sizeHint" >
+           <property name="sizeHint" stdset="0" >
             <size>
              <width>496</width>
              <height>0</height>
@@ -464,7 +503,7 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons" >
-      <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>

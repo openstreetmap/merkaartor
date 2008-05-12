@@ -34,14 +34,21 @@ class MapFeaturePrivate
 			: LastActor(MapFeature::User), theLayer(0),
 				PossiblePaintersUpToDate(false),
 			  	PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
-				theFeature(0), LastPartNotification(0), Time(QDateTime::currentDateTime()) { }
+				theFeature(0), LastPartNotification(0), Time(QDateTime::currentDateTime()) 
+		{ 
+			initVersionNumber();
+		}
 		MapFeaturePrivate(const MapFeaturePrivate& other)
 			: Tags(other.Tags), LastActor(MapFeature::User), theLayer(0),
 				PossiblePaintersUpToDate(false),
 			  	PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
-				theFeature(0), LastPartNotification(0), Time(QDateTime::currentDateTime()) { }
+				theFeature(0), LastPartNotification(0), Time(QDateTime::currentDateTime()) 
+		{ 
+			initVersionNumber();
+		}
 
 		void updatePainters(double PixelPerM);
+		void initVersionNumber();
 
 		mutable QString Id;
 		std::vector<std::pair<QString, QString> > Tags;
@@ -57,7 +64,14 @@ class MapFeaturePrivate
 		unsigned int LastPartNotification;
 		QDateTime Time;
 		QString User;
+		int VersionNumber;
 };
+
+void MapFeaturePrivate::initVersionNumber()
+{
+	static int VN = -1;
+	VersionNumber = VN--;
+}
 
 MapFeature::MapFeature()
 : p(0)
@@ -77,6 +91,16 @@ MapFeature::~MapFeature(void)
 	if (p->theLayer)
 		p->theLayer->notifyIdUpdate(p->Id,0);
 	delete p;
+}
+
+void MapFeature::setVersionNumber(int vn)
+{
+	p->VersionNumber = vn;
+}
+
+int MapFeature::versionNumber() const
+{
+	return p->VersionNumber;
 }
 
 void MapFeature::setLayer(MapLayer* aLayer)

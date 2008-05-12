@@ -58,6 +58,7 @@ void PreferencesDialog::loadPrefs()
 	bbUseProxy->setChecked(MerkaartorPreferences::instance()->getProxyUse());
 	edProxyHost->setText(MerkaartorPreferences::instance()->getProxyHost());
 	edProxyPort->setText(QString().setNum(MerkaartorPreferences::instance()->getProxyPort()));
+	bbUse06Api->setChecked(MerkaartorPreferences::instance()->use06Api());
 
 	edCacheDir->setText(MerkaartorPreferences::instance()->getCacheDir());
 	sbCacheSize->setValue(MerkaartorPreferences::instance()->getCacheSize());
@@ -97,6 +98,7 @@ void PreferencesDialog::loadPrefs()
 
 void PreferencesDialog::savePrefs()
 {
+	MerkaartorPreferences::instance()->setUse06Api(bbUse06Api->isChecked());
 	MerkaartorPreferences::instance()->setOsmWebsite(edOsmUrl->text());
 	MerkaartorPreferences::instance()->setOsmUser(edOsmUser->text());
 	MerkaartorPreferences::instance()->setOsmPassword(edOsmPwd->text());

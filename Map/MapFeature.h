@@ -63,6 +63,8 @@ class MapFeature
 		void setUser(const QString& aUser);
 		virtual void setLayer(MapLayer* aLayer);
 		virtual MapLayer* layer();
+		int versionNumber() const;
+		void setVersionNumber(int vn);
 		virtual QString description() const = 0;
 		virtual RenderPriority renderPriority(double aPixelPerM) const = 0;
 

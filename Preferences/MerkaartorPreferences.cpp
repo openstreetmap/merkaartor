@@ -4,7 +4,7 @@
 // Description:
 //
 //
-// Author: cbro <cbro@semperpax.com>, (C) 2008
+// Author: cbro <cbro@semperpax.com>, bvh, (C) 2008
 //
 // Copyright: See COPYING file that comes with this distribution
 //
@@ -71,6 +71,7 @@ void MerkaartorPreferences::save()
 
 void MerkaartorPreferences::initialize()
 {
+	Use06Api = Sets->value("osm/use06api", "").toBool();
 	bgTypes.insert(Bg_None, tr("None"));
 	bgTypes.insert(Bg_Wms, tr("WMS adapter"));
 	bgTypes.insert(Bg_Tms, tr("TMS adapter"));
@@ -192,6 +193,17 @@ bool MerkaartorPreferences::getRightSideDriving() const
 void MerkaartorPreferences::setRightSideDriving(bool theValue)
 {
 	Sets->setValue("roadstructure/rightsidedriving", theValue);
+}
+
+bool MerkaartorPreferences::use06Api() const
+{
+	return Use06Api;
+}
+
+void MerkaartorPreferences::setUse06Api(bool b)
+{
+	Use06Api = b;
+	Sets->setValue("osm/use06api", b);
 }
 
 double MerkaartorPreferences::getDoubleRoadDistance() const

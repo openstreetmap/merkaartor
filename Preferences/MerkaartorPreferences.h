@@ -4,7 +4,7 @@
 // Description:
 //
 //
-// Author: cbro <cbro@semperpax.com>, (C) 2008
+// Author: cbro <cbro@semperpax.com>, bvh, (C) 2008
 //
 // Copyright: See COPYING file that comes with this distribution
 //
@@ -96,6 +96,9 @@ public:
 
 	void save();
 
+	bool use06Api() const;
+	void setUse06Api(bool b);
+
 	void setRightSideDriving(bool theValue);
 	bool getRightSideDriving() const;
 
@@ -186,6 +189,7 @@ public:
 
 	bool getDrawTileBoundary();
 protected:
+	bool Use06Api;
 	QString version;
 	bool RightSideDriving;
 	double DoubleRoadDistance;
