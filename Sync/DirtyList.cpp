@@ -383,7 +383,8 @@ bool DirtyListExecutor::stop()
 	Progress->setLabelText(tr("CLOSE changeset"));
 	QString URL = theDownloader->getURLToCloseChangeSet(ChangeSetId);
 	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
-	if (sendRequest("PUT",URL,QString(), QString()))
+	QString empty=QString();
+	if (sendRequest("PUT",URL,empty, empty))
 	{
 		ChangeSetId = "";
 		return true;
