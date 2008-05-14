@@ -381,7 +381,14 @@ bool DirtyListExecutor::stop()
 	Progress->setValue(++Done);
 	if (!MerkaartorPreferences::instance()->use06Api()) return true;
 	Progress->setLabelText(tr("CLOSE changeset"));
-	// TODO
+	QString URL = theDownloader->getURLToCloseChangeSet(ChangeSetId);
+	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
+	if (sendRequest("PUT",URL,QString(), QString()))
+	{
+		ChangeSetId = "";
+		return true;
+	}
+
 	return true;
 }
 

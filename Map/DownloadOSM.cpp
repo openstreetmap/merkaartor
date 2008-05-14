@@ -310,9 +310,9 @@ QString Downloader::getURLToOpenChangeSet()
 	return QString("/api/0.6/changeset/create");
 }
 
-QString Downloader::getURLToCloseChangeSet()
+QString Downloader::getURLToCloseChangeSet(const QString& Id)
 {
-	return QString("/api/0.6/changeset/close");
+	return QString("/api/0.6/changeset/%1/close").arg(Id);
 }
 QString Downloader::getURLToFetch(const QString &What)
 {
