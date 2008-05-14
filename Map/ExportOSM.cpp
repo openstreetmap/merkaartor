@@ -60,9 +60,12 @@ QString exportOSM(const Relation& R)
 }
 
 
-QString wrapOSM(const QString& S)
+QString wrapOSM(const QString& S, const QString& ChangeSetId)
 {
-	return "<osm version=\"0.5\">"+S+"</osm>"+QChar(0);
+	if (ChangeSetId.isEmpty())
+		return "<osm version=\"0.5\">"+S+"</osm>"+QChar(0);
+	else
+		return "<osm version=\"0.6\" changeset=\""+ChangeSetId+"\">"+S+"</osm>"+QChar(0);
 }
 
 

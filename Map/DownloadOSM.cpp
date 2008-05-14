@@ -305,6 +305,15 @@ const QString &Downloader::resultText()
 	return ResultText;
 }
 
+QString Downloader::getURLToOpenChangeSet()
+{
+	return QString("/api/0.6/changeset/create");
+}
+
+QString Downloader::getURLToCloseChangeSet()
+{
+	return QString("/api/0.6/changeset/close");
+}
 QString Downloader::getURLToFetch(const QString &What)
 {
 	QString URL = QString("/api/0.4/%1?%2=");
@@ -320,6 +329,8 @@ QString Downloader::getURLToFetch(const QString &What, const QString& Id)
 
 QString Downloader::getURLToCreate(const QString &What)
 {
+	if (MerkaartorPreferences::instance()->use06Api())
+		return QString("/api/0.6/%1/create").arg(What);
 	QString URL = QString("/api/0.5/%1/create");
 	return URL.arg(What);
 }
@@ -338,6 +349,8 @@ QString Downloader::getURLToDelete(const QString &What, const QString& Id)
 
 QString Downloader::getURLToMap()
 {
+	if (MerkaartorPreferences::instance()->use06Api())
+		return QString("/api/0.6/map?bbox=%1,%2,%3,%4");
 	QString URL = QString("/api/0.5/map?bbox=%1,%2,%3,%4");
 	return URL;
 }

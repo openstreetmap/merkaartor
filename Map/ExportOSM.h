@@ -11,7 +11,7 @@ QString exportOSM(const TrackPoint& Pt);
 QString exportOSM(const Road& R);
 QString exportOSM(const Relation& R);
 
-QString wrapOSM(const QString& S);
+QString wrapOSM(const QString& S, const QString& ChangeSetId);
 
 #endif
 

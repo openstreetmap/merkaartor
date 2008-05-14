@@ -37,6 +37,8 @@ class Downloader : public QObject
 		QString getURLToCreate(const QString& What);
 		QString getURLToUpdate(const QString& What, const QString& Id);
 		QString getURLToDelete(const QString& What, const QString& Id);
+		QString getURLToOpenChangeSet();
+		QString getURLToCloseChangeSet();
 		void setAnimator(QProgressDialog* Animator, QProgressBar* AnimatorBar, bool anAnimate);
 
 	public slots:

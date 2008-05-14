@@ -109,6 +109,8 @@ class DirtyListExecutor : public QObject, public DirtyListVisit
 		DirtyListExecutor(MapDocument* aDoc, const DirtyListBuild& aFuture, const QString& aWeb, const QString& aUser, const QString& aPwd, bool UseProxy, const QString& ProxyHost, int ProxyPort, unsigned int aTasks);
 		virtual ~DirtyListExecutor();
 
+		virtual bool start();
+		virtual bool stop();
 		virtual bool addPoint(TrackPoint* Pt);
 		virtual bool addRoad(Road* R);
 		virtual bool addRelation(Relation* R);
@@ -132,6 +134,7 @@ class DirtyListExecutor : public QObject, public DirtyListVisit
 		QString ProxyHost;
 		int ProxyPort;
 		Downloader* theDownloader;
+		QString ChangeSetId;
 };
 
 

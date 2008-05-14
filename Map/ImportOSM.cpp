@@ -39,14 +39,23 @@ void OSMHandler::parseTag(const QXmlAttributes &atts)
 		theList->add(new SetTagCommand(Current, atts.value("k"),atts.value("v")));
 }
 
+void parseStandardAttributes(const QXmlAttributes& atts, MapFeature* F)
+{
+	QString ts = atts.value("timestamp"); ts.truncate(19);
+	QDateTime time = QDateTime::fromString(ts, "yyyy-MM-ddTHH:mm:ss");
+	QString user = atts.value("user");
+	F->setTime(time);
+	F->setUser(user);
+	QString version = atts.value("version");
+	if (!version.isEmpty())
+		F->setVersionNumber(version.toInt());
+}
+
 void OSMHandler::parseNode(const QXmlAttributes& atts)
 {
 	double Lat = atts.value("lat").toDouble();
 	double Lon = atts.value("lon").toDouble();
 	QString id = "node_"+atts.value("id");
-        QString ts = atts.value("timestamp"); ts.truncate(19);
-	QDateTime time = QDateTime::fromString(ts, "yyyy-MM-ddTHH:mm:ss");
-	QString user = atts.value("user");
 	TrackPoint* Pt = dynamic_cast<TrackPoint*>(theDocument->getFeature(id));
 	if (Pt)
 	{
@@ -55,8 +64,6 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
 			// conflict
 			Pt->setLastUpdated(MapFeature::UserResolved);
 			Pt = new TrackPoint(Coord(angToRad(Lat),angToRad(Lon)));
-			Pt->setTime(time);
-			Pt->setUser(user);
 			theList->add(new AddFeatureCommand(conflictLayer, Pt, false));
 			NewFeature = true;
 			Pt->setId("conflict_"+id);
@@ -65,8 +72,6 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
 		else if (Pt->lastUpdated() != MapFeature::UserResolved)
 		{
 			theList->add(new MoveTrackPointCommand(Pt,Coord(angToRad(Lat),angToRad(Lon))));
-			Pt->setTime(time);
-			Pt->setUser(user);
 			NewFeature = false;
 			if (Pt->lastUpdated() == MapFeature::NotYetDownloaded)
 				Pt->setLastUpdated(MapFeature::OSMServer);
@@ -78,10 +83,9 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
 		theList->add(new AddFeatureCommand(theLayer,Pt, false));
 		NewFeature = true;
 		Pt->setId(id);
-		Pt->setTime(time);
-		Pt->setUser(user);
 		Pt->setLastUpdated(MapFeature::OSMServer);
 	}
+	parseStandardAttributes(atts,Pt);
 	Current = Pt;
 }
 
@@ -100,8 +104,6 @@ void OSMHandler::parseWay(const QXmlAttributes& atts)
 {
 	QString id = "way_"+atts.value("id");
         QString ts = atts.value("timestamp"); ts.truncate(19);
-	QDateTime time = QDateTime::fromString(ts, "yyyy-MM-ddTHH:mm:ss");
-	QString user = atts.value("user");
 	Road* R = dynamic_cast<Road*>(theDocument->getFeature(id));
 	if (R)
 	{
@@ -122,8 +124,6 @@ void OSMHandler::parseWay(const QXmlAttributes& atts)
 		}
 		else if (R->lastUpdated() != MapFeature::UserResolved)
 		{
-			R->setTime(time);
-			R->setUser(user);
 			while (R->size())
 				theList->add(new RoadRemoveTrackPointCommand(R,R->get(0)));
 			NewFeature = false;
@@ -136,9 +136,8 @@ void OSMHandler::parseWay(const QXmlAttributes& atts)
 		NewFeature = true;
 		R->setId(id);
 		R->setLastUpdated(MapFeature::OSMServer);
-		R->setTime(time);
-		R->setUser(user);
 	}
+	parseStandardAttributes(atts,R);
 	Current = R;
 }
 
@@ -168,8 +167,6 @@ void OSMHandler::parseRelation(const QXmlAttributes& atts)
 {
 	QString id = "rel_"+atts.value("id");
         QString ts = atts.value("timestamp"); ts.truncate(19);
-	QDateTime time = QDateTime::fromString(ts, "yyyy-MM-ddTHH:mm:ss");
-	QString user = atts.value("user");
 	Relation* R = dynamic_cast<Relation*>(theDocument->getFeature(id));
 	if (R)
 	{
@@ -190,8 +187,6 @@ void OSMHandler::parseRelation(const QXmlAttributes& atts)
 		}
 		else if (R->lastUpdated() != MapFeature::UserResolved)
 		{
-			R->setTime(time);
-			R->setUser(user);
 			while (R->size())
 				theList->add(new RelationRemoveFeatureCommand(R,R->get(0)));
 			NewFeature = false;
@@ -202,11 +197,10 @@ void OSMHandler::parseRelation(const QXmlAttributes& atts)
 		R = new Relation;
 		NewFeature = true;
 		R->setId(id);
-		R->setTime(time);
-		R->setUser(user);
 		theList->add(new AddFeatureCommand(theLayer,R, false));
 		R->setLastUpdated(MapFeature::OSMServer);
 	}
+	parseStandardAttributes(atts,R);
 	Current = R;
 }
 

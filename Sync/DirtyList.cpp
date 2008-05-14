@@ -341,10 +341,47 @@ bool DirtyListExecutor::executeChanges(QWidget* aParent)
 {
 	Progress = new QProgressDialog(aParent);
 	Progress->setMinimumDuration(0);
-	Progress->setMaximum(Tasks);
+	Progress->setMaximum(Tasks+2);
 	Progress->show();
+	if (!start())
+		return false;
 	document()->history().buildDirtyList(*this);
+	stop();
 	delete Progress;
+	return true;
+}
+
+bool DirtyListExecutor::start()
+{
+	ChangeSetId = "";
+	Progress->setValue(++Done);
+	if (!MerkaartorPreferences::instance()->use06Api()) return true;
+	Progress->setLabelText(tr("OPEN changeset"));
+	QString DataIn(
+		"<osm>"
+		"<changeset>"
+		"<tag k=\"created_by\" v=\"Merkaartor %1\"/>"
+		"<tag k=\"comment\" v=\"-\"/>"
+		"</changeset>"
+		"</osm>");
+	DataIn = DataIn.arg(VERSION);
+	QString DataOut;
+	QString URL = theDownloader->getURLToOpenChangeSet();
+	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
+	if (sendRequest("PUT",URL,DataIn, DataOut))
+	{
+		ChangeSetId = DataOut;
+		return true;
+	}
+	return false;
+}
+
+bool DirtyListExecutor::stop()
+{
+	Progress->setValue(++Done);
+	if (!MerkaartorPreferences::instance()->use06Api()) return true;
+	Progress->setLabelText(tr("CLOSE changeset"));
+	// TODO
 	return true;
 }
 
@@ -357,7 +394,7 @@ bool DirtyListExecutor::addRelation(Relation *R)
 	QString DataIn, DataOut, OldId;
 	OldId = R->id();
 	R->setId("0");
-	DataIn = wrapOSM(exportOSM(*R));
+	DataIn = wrapOSM(exportOSM(*R), ChangeSetId);
 	R->setId(OldId);
 	QString URL=theDownloader->getURLToCreate("relation");
 	if (sendRequest("PUT",URL,DataIn,DataOut))
@@ -365,6 +402,7 @@ bool DirtyListExecutor::addRelation(Relation *R)
 		// chop off extra spaces, newlines etc
 		R->setId("rel_"+QString::number(DataOut.toInt()));
 		R->setLastUpdated(MapFeature::OSMServer);
+		R->setVersionNumber(0);
 		return true;
 	}
 	return false;
@@ -379,15 +417,15 @@ bool DirtyListExecutor::addRoad(Road *R)
 	QString DataIn, DataOut, OldId;
 	OldId = R->id();
 	R->setId("0");
-	DataIn = wrapOSM(exportOSM(*R));
+	DataIn = wrapOSM(exportOSM(*R), ChangeSetId);
 	R->setId(OldId);
-//	QString URL("/api/0.3/way/0");
 	QString URL=theDownloader->getURLToCreate("way");
 	if (sendRequest("PUT",URL,DataIn,DataOut))
 	{
 		// chop off extra spaces, newlines etc
 		R->setId("way_"+QString::number(DataOut.toInt()));
 		R->setLastUpdated(MapFeature::OSMServer);
+		R->setVersionNumber(0);
 		return true;
 	}
 	return false;
@@ -403,15 +441,15 @@ bool DirtyListExecutor::addPoint(TrackPoint* Pt)
 	QString DataIn, DataOut, OldId;
 	OldId = Pt->id();
 	Pt->setId("0");
-	DataIn = wrapOSM(exportOSM(*Pt));
+	DataIn = wrapOSM(exportOSM(*Pt), ChangeSetId);
 	Pt->setId(OldId);
-//	QString URL("/api/0.3/node/0");
 	QString URL=theDownloader->getURLToCreate("node");
 	if (sendRequest("PUT",URL,DataIn,DataOut))
 	{
 		// chop off extra spaces, newlines etc
 		Pt->setId("node_"+QString::number(DataOut.toInt()));
 		Pt->setLastUpdated(MapFeature::OSMServer);
+		Pt->setVersionNumber(0);
 		return true;
 	}
 	return false;
@@ -426,7 +464,7 @@ bool DirtyListExecutor::updateRelation(Relation* R)
 	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 	QString URL = theDownloader->getURLToUpdate("relation",stripToOSMId(R->id()));
 	QString DataIn, DataOut;
-	DataIn = wrapOSM(exportOSM(*R));
+	DataIn = wrapOSM(exportOSM(*R), ChangeSetId);
 	if (sendRequest("PUT",URL,DataIn,DataOut))
 	{
 		R->setLastUpdated(MapFeature::OSMServer);
@@ -445,7 +483,7 @@ bool DirtyListExecutor::updateRoad(Road* R)
 //	URL = URL.arg(stripToOSMId(R->id()));
 	QString URL = theDownloader->getURLToUpdate("way",stripToOSMId(R->id()));
 	QString DataIn, DataOut;
-	DataIn = wrapOSM(exportOSM(*R));
+	DataIn = wrapOSM(exportOSM(*R), ChangeSetId);
 	if (sendRequest("PUT",URL,DataIn,DataOut))
 	{
 		R->setLastUpdated(MapFeature::OSMServer);
@@ -463,7 +501,7 @@ bool DirtyListExecutor::updatePoint(TrackPoint* Pt)
 //	URL = URL.arg(stripToOSMId(Pt->id()));
 	QString URL = theDownloader->getURLToUpdate("node",stripToOSMId(Pt->id()));
 	QString DataIn, DataOut;
-	DataIn = wrapOSM(exportOSM(*Pt));
+	DataIn = wrapOSM(exportOSM(*Pt), ChangeSetId);
 	if (sendRequest("PUT",URL,DataIn,DataOut))
 	{
 		Pt->setLastUpdated(MapFeature::OSMServer);
