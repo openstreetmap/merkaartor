@@ -202,7 +202,9 @@ bool MerkaartorPreferences::use06Api() const
 
 void MerkaartorPreferences::setUse06Api(bool b)
 {
-	Use06Api = b;
+	// ATTENTION this does not update Use06API member on purpose to force a
+	// restart before it takes effect. Mixing 0.5 api and 0.6 api in one session
+	//  is dangerous!!!
 	Sets->setValue("osm/use06api", b);
 }
 
