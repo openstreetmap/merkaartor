@@ -548,6 +548,8 @@ bool DirtyListExecutor::erasePoint(TrackPoint *Pt)
 //	URL = URL.arg(stripToOSMId(Pt->id()));
 	QString URL = theDownloader->getURLToDelete("node",stripToOSMId(Pt->id()));
 	QString DataIn, DataOut;
+	if (MerkaartorPreferences::instance()->use06Api())
+		DataIn = wrapOSM(exportOSM(*Pt), ChangeSetId);
 	if (sendRequest("DELETE",URL,DataIn,DataOut))
 	{
 		Pt->setLastUpdated(MapFeature::OSMServer);
@@ -565,6 +567,8 @@ bool DirtyListExecutor::eraseRoad(Road *R)
 //	URL = URL.arg(stripToOSMId(R->id()));
 	QString URL = theDownloader->getURLToDelete("way",stripToOSMId(R->id()));
 	QString DataIn, DataOut;
+	if (MerkaartorPreferences::instance()->use06Api())
+		DataIn = wrapOSM(exportOSM(*R), ChangeSetId);
 	if (sendRequest("DELETE",URL,DataIn,DataOut))
 	{
 		R->setLastUpdated(MapFeature::OSMServer);
@@ -580,6 +584,8 @@ bool DirtyListExecutor::eraseRelation(Relation *R)
 	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 	QString URL = theDownloader->getURLToDelete("relation",stripToOSMId(R->id()));
 	QString DataIn, DataOut;
+	if (MerkaartorPreferences::instance()->use06Api())
+		DataIn = wrapOSM(exportOSM(*R), ChangeSetId);
 	if (sendRequest("DELETE",URL,DataIn,DataOut))
 	{
 		R->setLastUpdated(MapFeature::OSMServer);
