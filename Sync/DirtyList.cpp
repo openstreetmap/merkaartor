@@ -319,7 +319,14 @@ DirtyListExecutor::~DirtyListExecutor()
 bool DirtyListExecutor::sendRequest(const QString& Method, const QString& URL, const QString& Data, QString& Rcv)
 {
 	if (!theDownloader->request(Method,URL,Data))
+	{
+		if (theDownloader->resultCode() == 401)
+			QMessageBox::warning(Progress,tr("Error uploading request"),
+				tr("Please check your username and password in the Preferences menu"));
+		else
+			QMessageBox::warning(Progress,tr("Error uploading request"),tr("There was an error uploading this request (%1)\nServer message is '%2'").arg(theDownloader->resultCode()).arg(theDownloader->resultText()));
 		return false;
+	}
 
 	QByteArray Content = theDownloader->content();
 	int x = theDownloader->resultCode();
@@ -343,10 +350,11 @@ bool DirtyListExecutor::executeChanges(QWidget* aParent)
 	Progress->setMinimumDuration(0);
 	Progress->setMaximum(Tasks+2);
 	Progress->show();
-	if (!start())
-		return false;
-	document()->history().buildDirtyList(*this);
-	stop();
+	if (start())
+	{
+		if (document()->history().buildDirtyList(*this))
+			stop();
+	}
 	delete Progress;
 	return true;
 }
