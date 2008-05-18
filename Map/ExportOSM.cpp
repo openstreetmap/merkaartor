@@ -22,18 +22,25 @@ static QString tagOSM(const MapFeature& F)
 	return S;
 }
 
+QString versionAttribute(const MapFeature& F)
+{
+	if (MerkaartorPreferences::instance()->use06Api())
+		return QString(" version=\"%1\"").arg(F.versionNumber());
+	return "";
+}
+
 QString exportOSM(const TrackPoint& Pt)
 {
-	QString S("<node id=\"%1\" lat=\"%2\" lon=\"%3\">");
+	QString S("<node id=\"%1\" lat=\"%2\" lon=\"%3\"%4>");
 	S+=tagOSM(Pt);
 	S+="</node>";
-	return S.arg(stripToOSMId(Pt.id())).arg(radToAng(Pt.position().lat()),0,'f',8).arg(radToAng(Pt.position().lon()),0,'f',8);
+	return S.arg(stripToOSMId(Pt.id())).arg(radToAng(Pt.position().lat()),0,'f',8).arg(radToAng(Pt.position().lon()),0,'f',8).arg(versionAttribute(Pt));
 }
 
 QString exportOSM(const Road& R)
 {
 	QString S;
-	S += QString("<way id=\"%1\">").arg(stripToOSMId(R.id()));
+	S += QString("<way id=\"%1\"%2>").arg(stripToOSMId(R.id())).arg(versionAttribute(R));
 	for (unsigned int i=0; i<R.size(); ++i)
 		S+=QString("<nd ref=\"%1\"/>").arg(stripToOSMId(R.get(i)->id()));
 	S += tagOSM(R);
@@ -44,7 +51,7 @@ QString exportOSM(const Road& R)
 QString exportOSM(const Relation& R)
 {
 	QString S;
-	S += QString("<relation id=\"%1\">").arg(stripToOSMId(R.id()));
+	S += QString("<relation id=\"%1\"%2>").arg(stripToOSMId(R.id())).arg(versionAttribute(R));
 	for (unsigned int i=0; i<R.size(); ++i)
 	{
 		QString Type("node");

@@ -337,6 +337,8 @@ QString Downloader::getURLToCreate(const QString &What)
 
 QString Downloader::getURLToUpdate(const QString &What, const QString& Id)
 {
+	if (MerkaartorPreferences::instance()->use06Api())
+		return QString("/api/0.6/%1/%2").arg(What).arg(Id);
 	QString URL = QString("/api/0.5/%1/%2");
 	return URL.arg(What).arg(Id);
 }

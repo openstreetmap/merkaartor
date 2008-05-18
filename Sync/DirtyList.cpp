@@ -383,8 +383,8 @@ bool DirtyListExecutor::stop()
 	Progress->setLabelText(tr("CLOSE changeset"));
 	QString URL = theDownloader->getURLToCloseChangeSet(ChangeSetId);
 	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
-	QString empty=QString();
-	if (sendRequest("PUT",URL,empty, empty))
+	QString DataIn, DataOut;
+	if (sendRequest("PUT",URL,DataIn,DataOut))
 	{
 		ChangeSetId = "";
 		return true;
@@ -476,6 +476,13 @@ bool DirtyListExecutor::updateRelation(Relation* R)
 	if (sendRequest("PUT",URL,DataIn,DataOut))
 	{
 		R->setLastUpdated(MapFeature::OSMServer);
+		if (MerkaartorPreferences::instance()->use06Api())
+		{
+			int NewVersion = DataOut.toInt();
+			if (NewVersion <= R->versionNumber())
+				NewVersion = R->versionNumber()+1;
+			R->setVersionNumber(NewVersion);
+		}
 		return true;
 	}
 	return true;
@@ -495,6 +502,13 @@ bool DirtyListExecutor::updateRoad(Road* R)
 	if (sendRequest("PUT",URL,DataIn,DataOut))
 	{
 		R->setLastUpdated(MapFeature::OSMServer);
+		if (MerkaartorPreferences::instance()->use06Api())
+		{
+			int NewVersion = DataOut.toInt();
+			if (NewVersion <= R->versionNumber())
+				NewVersion = R->versionNumber()+1;
+			R->setVersionNumber(NewVersion);
+		}
 		return true;
 	}
 	return true;
@@ -513,6 +527,13 @@ bool DirtyListExecutor::updatePoint(TrackPoint* Pt)
 	if (sendRequest("PUT",URL,DataIn,DataOut))
 	{
 		Pt->setLastUpdated(MapFeature::OSMServer);
+		if (MerkaartorPreferences::instance()->use06Api())
+		{
+			int NewVersion = DataOut.toInt();
+			if (NewVersion <= Pt->versionNumber())
+				NewVersion = Pt->versionNumber()+1;
+			Pt->setVersionNumber(NewVersion);
+		}
 		return true;
 	}
 	return false;
