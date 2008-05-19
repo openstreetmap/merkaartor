@@ -1,4 +1,5 @@
 v0.11
+	* FIX : upload order when merging nodes
 	* FIX : warn when using wrong credentials
 	* ADD : drag the map around with control key for poor Mac owners
 	* FIX : We can now select the move tool everytime

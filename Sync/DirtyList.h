@@ -53,6 +53,8 @@ class DirtyListVisit : public DirtyList
 		DirtyListVisit(MapDocument* aDoc, const DirtyListBuild& aFuture, bool aEraseFromHistory);
 
 		MapDocument* document();
+		bool runVisit();
+
 		virtual bool add(MapFeature* F);
 		virtual bool update(MapFeature* F);
 		virtual bool erase(MapFeature* F);
@@ -75,6 +77,7 @@ class DirtyListVisit : public DirtyList
 		std::vector<MapFeature*> Updated;
 		std::vector<MapFeature*> AlreadyAdded;
 		std::vector<bool> EraseResponse;
+		bool DeletePass;
 };
 
 class DirtyListDescriber : public DirtyListVisit

@@ -125,6 +125,14 @@ DirtyListVisit::DirtyListVisit(MapDocument* aDoc, const DirtyListBuild &aBuilder
 {
 }
 
+bool DirtyListVisit::runVisit()
+{
+	DeletePass = false;
+	document()->history().buildDirtyList(*this);
+	DeletePass = true;
+	return document()->history().buildDirtyList(*this);
+}
+
 MapDocument* DirtyListVisit::document()
 {
 	return theDocument;
@@ -137,6 +145,7 @@ bool DirtyListVisit::notYetAdded(MapFeature* F)
 
 bool DirtyListVisit::add(MapFeature* F)
 {
+	if (DeletePass) return false;
 	if (Future.willBeErased(F))
 		return EraseFromHistory;
 	for (unsigned int i=0; i<AlreadyAdded.size(); ++i)
@@ -179,6 +188,7 @@ bool DirtyListVisit::add(MapFeature* F)
 
 bool DirtyListVisit::update(MapFeature* F)
 {
+	if (DeletePass) return false;
 	if (Future.willBeErased(F) || Future.willBeAdded(F))
 		return EraseFromHistory;
 	if (!Future.updateNow(F))
@@ -199,6 +209,7 @@ bool DirtyListVisit::update(MapFeature* F)
 
 bool DirtyListVisit::erase(MapFeature* F)
 {
+	if (!DeletePass) return false;
 	if (Future.willBeAdded(F))
 		return EraseFromHistory;
 	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(F))
@@ -233,7 +244,7 @@ bool DirtyListDescriber::showChanges(QWidget* aParent)
 	QDialog* dlg = new QDialog(aParent);
 	Ui.setupUi(dlg);
 
-	document()->history().buildDirtyList(*this);
+	runVisit();
 
 	bool ok = (dlg->exec() == QDialog::Accepted);
 
@@ -352,7 +363,7 @@ bool DirtyListExecutor::executeChanges(QWidget* aParent)
 	Progress->show();
 	if (start())
 	{
-		if (document()->history().buildDirtyList(*this))
+		if (runVisit())
 			stop();
 	}
 	delete Progress;
