@@ -217,6 +217,26 @@ void MapView::updateStaticBuffer(QPaintEvent * /* anEvent */)
 			}
 		}
 	}
+	double Log = log10(200/projection().pixelPerM());
+	double RestLog = Log-floor(Log);
+	if (RestLog < log10(2.))
+		Log = floor(Log);
+	else if (RestLog < log10(5.))
+		Log = floor(Log)+log10(2.);
+	else
+		Log = floor(Log)+log10(5.);
+	double Length = pow(10.,Log);
+	P.setPen(QPen(QColor(0,0,0),2));
+	QPointF P1(20,height()-20);
+	QPointF P2(20+Length*projection().pixelPerM(),height()-20);
+	P.drawLine(P1-QPointF(0,5),P1+QPointF(0,5));
+	P.drawLine(P1,P2);
+	if (Length < 1000)
+		P.drawText(QRectF(P2-QPoint(100,40),QSize(200,30)),Qt::AlignHCenter | Qt::AlignBottom, QString("%1 m").arg(Length, 0, 'f', 0));
+	else
+		P.drawText(QRectF(P2-QPoint(100,40),QSize(200,30)),Qt::AlignHCenter | Qt::AlignBottom, QString("%1 km").arg(Length/1000, 0, 'f', 0));
+
+	P.drawLine(P2-QPointF(0,5),P2+QPointF(0,5));
 	QTime Stop(QTime::currentTime());
 //  statusbar->showmessage in mapview::paintevent segfault on 4.4beta1
 	StatusMessage = tr("Paint took %1ms").arg(Start.msecsTo(Stop));

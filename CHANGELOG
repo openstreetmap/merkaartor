@@ -1,4 +1,5 @@
 v0.11
+	* ADD : draw scale
 	* FIX : upload order when merging nodes
 	* FIX : warn when using wrong credentials
 	* ADD : drag the map around with control key for poor Mac owners
