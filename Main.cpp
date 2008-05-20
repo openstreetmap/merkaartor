@@ -38,10 +38,10 @@ int main(int argc, char** argv)
 
 	MainWindow Main;
 
-	const QStringList & params = QCoreApplication::arguments();
-	if (params.size() == 2)
-		Main.loadFile(params.at(1));
-	
+	QStringList fileNames = QCoreApplication::arguments();
+	fileNames.removeFirst();
+	Main.loadFiles(fileNames);
+
 	Main.show();
 
 	return app.exec();

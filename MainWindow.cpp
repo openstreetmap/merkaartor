@@ -198,44 +198,24 @@ static void changeCurrentDirToFile(const QString& s)
 
 void MainWindow::on_fileImportAction_triggered()
 {
-	QString s = QFileDialog::getOpenFileName(
+	QStringList fileNames = QFileDialog::getOpenFileNames(
 					this,
 					tr("Open track file"),
 					"", FILTER_IMPORT_SUPPORTED);
-	if (!s.isNull()) {
-		changeCurrentDirToFile(s);
-		bool OK = false;
-		TrackMapLayer* NewLayer = new TrackMapLayer(tr("Import %1").arg(s.right(s.length() - s.lastIndexOf('/') - 1)));
-		theDocument->add(NewLayer);
-		if (s.right(4).toLower() == ".gpx") {
-			OK = importGPX(this, s, theDocument, NewLayer);
-		} else
-			if (s.right(4).toLower() == ".osm") {
-				view()->setUpdatesEnabled(false);
-				OK = importOSM(this, s, theDocument, NewLayer);
-				view()->setUpdatesEnabled(true);
-			} else
-				if (s.right(4).toLower() == ".ngt") {
-					view()->setUpdatesEnabled(false);
-					OK = importNGT(this, s, theDocument, NewLayer);
-					view()->setUpdatesEnabled(true);
-				} else
-					if ((s.right(5).toLower() == ".nmea") || (s.right(4).toLower() == ".nme")) {
-						view()->setUpdatesEnabled(false);
-						if (theDocument->importNMEA(s, NewLayer))
-							OK = true;
-						view()->setUpdatesEnabled(true);
-					}
-		if (OK) {
-			//on_viewZoomAllAction_triggered();
-			on_editPropertiesAction_triggered();
-			theDocument->history().setActions(editUndoAction, editRedoAction);
-		} else {
-			theDocument->remove(NewLayer);
-			delete NewLayer;
-			QMessageBox::warning(this, tr("Not a valid file"), tr("The file could not be opened"));
-		}
-	}
+
+	if (fileNames.isEmpty())
+		return;
+
+	view()->setUpdatesEnabled(false);
+	theLayers->setUpdatesEnabled(false);
+
+	importFiles(theDocument, fileNames);
+
+	view()->setUpdatesEnabled(true);
+	theLayers->setUpdatesEnabled(true);
+
+	on_editPropertiesAction_triggered();
+	theDocument->history().setActions(editUndoAction, editRedoAction);
 }
 
 static bool mayDiscardUnsavedChanges(QWidget* aWidget)
@@ -246,67 +226,117 @@ static bool mayDiscardUnsavedChanges(QWidget* aWidget)
 								 QMessageBox::Discard | QMessageBox::Cancel, QMessageBox::Cancel) == QMessageBox::Discard;
 }
 
-void MainWindow::loadFile(const QString & fn)
+bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & fileNames)
 {
-	if (fn.isNull())
-		return;
+	bool foundImport = false;
 
-	changeCurrentDirToFile(fn);
+	QStringListIterator it(fileNames);
+	while (it.hasNext())
+	{
+		const QString & fn = it.next();
+		changeCurrentDirToFile(fn);
 
-	theLayers->setUpdatesEnabled(false);
-
-	if (fn.endsWith(".mdc")) {
-		loadDocument(fn);
-	} else {
-
-		MapDocument* NewDoc = new MapDocument(theLayers);
-
-		QString NewLayerName = tr("Open %1").arg( fn.section('/', - 1));
-		MapLayer* NewLayer = NULL;
+		QString newLayerName = fn.section('/', - 1);
+		MapLayer* newLayer = NULL;
 
 		bool importOK = false;
 
 		if (fn.endsWith(".gpx")) {
-			NewLayer = new TrackMapLayer( NewLayerName );
-			NewDoc->add(NewLayer);
-			importOK = importGPX(this, fn, NewDoc, NewLayer);
+			newLayer = new TrackMapLayer( newLayerName );
+			mapDocument->add(newLayer);
+			importOK = importGPX(this, fn, mapDocument, newLayer);
 		}
 		else if (fn.endsWith(".osm")) {
-			NewLayer = new DrawingMapLayer( NewLayerName );
-			NewDoc->add(NewLayer);
-			importOK = importOSM(this, fn, NewDoc, NewLayer);
+			newLayer = new DrawingMapLayer( newLayerName );
+			mapDocument->add(newLayer);
+			importOK = importOSM(this, fn, mapDocument, newLayer);
 		}
 		else if (fn.endsWith(".ngt")) {
-			NewLayer = new TrackMapLayer( NewLayerName );
-			NewDoc->add(NewLayer);
-			importOK = importNGT(this, fn, NewDoc, NewLayer);
+			newLayer = new TrackMapLayer( newLayerName );
+			mapDocument->add(newLayer);
+			importOK = importNGT(this, fn, mapDocument, newLayer);
 		}
 		else if (fn.endsWith(".nmea") || (fn.endsWith(".nme"))) {
-			NewLayer = new TrackMapLayer( NewLayerName );
-			NewDoc->add(NewLayer);
-			importOK = NewDoc->importNMEA(fn, (TrackMapLayer *)NewLayer);
+			newLayer = new TrackMapLayer( newLayerName );
+			mapDocument->add(newLayer);
+			importOK = mapDocument->importNMEA(fn, (TrackMapLayer *)newLayer);
 		}
 
-		if (!importOK && NewLayer)
-			NewDoc->remove(NewLayer);
+		if (!importOK && newLayer)
+			mapDocument->remove(newLayer);
 
-		if (importOK == false) {
-			delete NewDoc;
- 			delete NewLayer;
+		if (importOK)
+		{
+			foundImport = true;
+		}
+		else
+		{
+ 			delete newLayer;
 			QMessageBox::warning(this, tr("No valid file"), tr("%1 could not be opened.").arg(fn));
-			return;
 		}
-
-		theProperties->setSelection(0);
-		delete theDocument;
-		theDocument = NewDoc;
-		theView->setDocument(theDocument);
-		on_viewZoomAllAction_triggered();
-		on_editPropertiesAction_triggered();
-		theDocument->history().setActions(editUndoAction, editRedoAction);
 	}
 
+	return foundImport;
+}
+
+void MainWindow::loadFiles(const QStringList & fileList)
+{
+	if (fileList.isEmpty())
+		return;
+
+	QStringList fileNames(fileList);
+	theLayers->setUpdatesEnabled(false);
+	view()->setUpdatesEnabled(false);
+
+        // Load only the first merkaartor document
+	bool foundDocument = false;
+	QMutableStringListIterator it(fileNames);
+	while (it.hasNext())
+	{
+		const QString & fn = it.next();
+		if (fn.endsWith(".mdc") == false)
+			continue;
+
+		if (foundDocument == false)
+		{
+			changeCurrentDirToFile(fn);
+			loadDocument(fn);
+			foundDocument = true;
+		}
+			
+		it.remove();
+	}
+
+	MapDocument* newDoc = theDocument;
+	if (foundDocument == false)
+		newDoc = new MapDocument(theLayers);
+
+	bool foundImport = importFiles(newDoc, fileNames);
+
+	theProperties->setSelection(0);
+
+	if (foundDocument == false)
+	{
+ 		if (foundImport)
+		{
+			// only imported some tracks
+			delete theDocument;
+			theDocument = newDoc;
+			theView->setDocument(theDocument);
+		}
+		else
+		{
+			// we didn't really open anything successfully
+			delete newDoc;
+		}
+	}
+	
+	on_viewZoomAllAction_triggered();
+	on_editPropertiesAction_triggered();
+	theDocument->history().setActions(editUndoAction, editRedoAction);
+
 	theLayers->setUpdatesEnabled(true);
+	view()->setUpdatesEnabled(true);
 }
 
 void MainWindow::on_fileOpenAction_triggered()
@@ -314,12 +344,12 @@ void MainWindow::on_fileOpenAction_triggered()
 	if (hasUnsavedChanges(*theDocument) && !mayDiscardUnsavedChanges(this))
 		return;
 
-	QString fileName = QFileDialog::getOpenFileName(
+	QStringList fileNames = QFileDialog::getOpenFileNames(
 					this,
-					tr("Open track file"),
+					tr("Open track files"),
 					"", FILTER_OPEN_SUPPORTED);
 
-	loadFile(fileName);
+	loadFiles(fileNames);
 }
 
 void MainWindow::on_fileUploadAction_triggered()

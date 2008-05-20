@@ -1,4 +1,5 @@
 v0.11
+	* ADD : Open/Import multiple files
 	* ADD : draw scale
 	* FIX : upload order when merging nodes
 	* FIX : warn when using wrong credentials
