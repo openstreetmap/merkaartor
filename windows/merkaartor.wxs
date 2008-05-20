@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
    <Product  Id="6E5D622D-DBFC-4706-9F9B-598D11109DD2" 
-      Name="Merkaartor" Language="1033" Version="0.0.7.0" Manufacturer="Bart Vanhauwaert"
+      Name="Merkaartor" Language="1033" Version="0.0.11.0" Manufacturer="Bart Vanhauwaert"
       UpgradeCode="53335F6D-C3A4-4846-8AE9-97E6011C0970">
       <Package
          Description="A map editor for OpenStreetMap.org" InstallerVersion="100" Compressed="yes" />
@@ -21,22 +21,25 @@
          <Component Id="AllFiles" Guid="8874BD43-28FF-4420-B4E0-AE7D51E6590A">
 	    <RegistryValue Root="HKCU" Key="Software\Merkaartor" Name="Installed" Type="integer" Value="1"/>
             <File Id="QtCore" Name="QtCore4.dll"
-               Source="c:\Qt\431os\bin\QtCore4.dll" DiskId="1">
+               Source="c:\Qt\440os\bin\QtCore4.dll" DiskId="1">
             </File>
             <File Id="QtGui" Name="QtGui4.dll"
-               Source="c:\Qt\431os\bin\QtGui4.dll" DiskId="1">
+               Source="c:\Qt\440os\bin\QtGui4.dll" DiskId="1">
             </File>
             <File Id="QtXml" Name="QtXml4.dll"
-               Source="c:\Qt\431os\bin\QtXml4.dll" DiskId="1">
+               Source="c:\Qt\440os\bin\QtXml4.dll" DiskId="1">
             </File>
             <File Id="QtNetwork" Name="QtNetwork4.dll"
-               Source="c:\Qt\431os\bin\QtNetwork4.dll" DiskId="1">
+               Source="c:\Qt\440os\bin\QtNetwork4.dll" DiskId="1">
+            </File>
+            <File Id="QtWebKit" Name="QtWebKit4.dll"
+               Source="c:\Qt\440os\bin\QtWebKit4.dll" DiskId="1">
             </File>
             <File Id="mingwm10.dll" Name="mingwm10.dll"
                Source="c:\Qt\MinGW\bin\mingwm10.dll" DiskId="1">
             </File>
             <File Id="MerkaartorExe" Name="Merkaartor.exe"
-               Source="..\release\Merkaartor.exe" DiskId="1">
+               Source="..\binaries\release\bin\Merkaartor.exe" DiskId="1">
                <Shortcut Id="myshort" Directory="ProgramMenuFolder"
                      Name="Merkaartor" WorkingDirectory="INSTALLLOCATION"/>
             </File>         
