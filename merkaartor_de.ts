@@ -352,61 +352,76 @@ All Files (*)</translation>
 <context>
     <name>DirtyListExecutor</name>
     <message>
-        <location filename="Sync/DirtyList.cpp" line="334"/>
+        <location filename="Sync/DirtyList.cpp" line="352"/>
         <source>Error uploading request</source>
         <translation>Fehler beim Hochladen der Anforderung</translation>
     </message>
     <message>
-        <location filename="Sync/DirtyList.cpp" line="334"/>
+        <location filename="Sync/DirtyList.cpp" line="352"/>
         <source>There was an error uploading this request (%1)
 Server message is &apos;%2&apos;</source>
         <translation>Beim Hochladen der Arbeitsaufgabe ist ein Fehler aufgetreten (%1)
 Die Servernachricht ist &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="Sync/DirtyList.cpp" line="376"/>
+        <location filename="Sync/DirtyList.cpp" line="441"/>
         <source>ADD road %1</source>
         <translation>HINZUFÜGEN Straße %1</translation>
     </message>
     <message>
-        <location filename="Sync/DirtyList.cpp" line="400"/>
+        <location filename="Sync/DirtyList.cpp" line="465"/>
         <source>ADD trackpoint %1</source>
         <translation>HINZUFÜGEN Wegpunkt %1</translation>
     </message>
     <message>
-        <location filename="Sync/DirtyList.cpp" line="354"/>
+        <location filename="Sync/DirtyList.cpp" line="418"/>
         <source>ADD relation %1</source>
         <translation>HINZUFÜGEN Relation %1</translation>
     </message>
     <message>
-        <location filename="Sync/DirtyList.cpp" line="460"/>
+        <location filename="Sync/DirtyList.cpp" line="539"/>
         <source>UPDATE trackpoint %1</source>
         <translation>AKTUALISIEREN Wegpunkt %1</translation>
     </message>
     <message>
-        <location filename="Sync/DirtyList.cpp" line="425"/>
+        <location filename="Sync/DirtyList.cpp" line="490"/>
         <source>UPDATE relation %1</source>
         <translation>AKTUALISIEREN Relation %1</translation>
     </message>
     <message>
-        <location filename="Sync/DirtyList.cpp" line="442"/>
+        <location filename="Sync/DirtyList.cpp" line="514"/>
         <source>UPDATE road %1</source>
         <translation>AKTUALISIEREN Straße %1</translation>
     </message>
     <message>
-        <location filename="Sync/DirtyList.cpp" line="478"/>
+        <location filename="Sync/DirtyList.cpp" line="564"/>
         <source>REMOVE trackpoint %1</source>
         <translation>ENTFERNEN Wegpunkt %1</translation>
     </message>
     <message>
-        <location filename="Sync/DirtyList.cpp" line="495"/>
+        <location filename="Sync/DirtyList.cpp" line="583"/>
         <source>REMOVE road %1</source>
         <translation>ENTFERNEN Straße %1</translation>
     </message>
     <message>
-        <location filename="Sync/DirtyList.cpp" line="512"/>
+        <location filename="Sync/DirtyList.cpp" line="602"/>
         <source>REMOVE relation %1</source>
         <translation>ENTFERNEN Relation %1</translation>
+    </message>
+    <message>
+        <location filename="Sync/DirtyList.cpp" line="336"/>
+        <source>Please check your username and password in the Preferences menu</source>
+        <translation>Bitte Nutzername und Passwort in den Einstellungen überprüfen.</translation>
+    </message>
+    <message>
+        <location filename="Sync/DirtyList.cpp" line="378"/>
+        <source>OPEN changeset</source>
+        <translation>ÖFFNE Änderungssitzung</translation>
+    </message>
+    <message>
+        <location filename="Sync/DirtyList.cpp" line="402"/>
+        <source>CLOSE changeset</source>
+        <translation>SCHLIESSE Änderungssitzung</translation>
     </message>
 </context>
 <context>
@@ -475,77 +490,77 @@ Die Servernachricht ist &apos;%2&apos;</translation>
         <translation>Herunterladen von OSM (%1 KByte)</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="355"/>
+        <location filename="Map/DownloadOSM.cpp" line="372"/>
         <source>Unresolved conflicts</source>
         <translation>Unaufgelöste Konflikte</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="355"/>
+        <location filename="Map/DownloadOSM.cpp" line="372"/>
         <source>Please resolve existing conflicts first</source>
         <translation>Bitte lösen Sie zuerst die vorhandenen Konflikte auf</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="367"/>
+        <location filename="Map/DownloadOSM.cpp" line="384"/>
         <source>Downloading from OSM (connecting)</source>
         <translation>Herunterladen von OSM (verbinden)</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="390"/>
+        <location filename="Map/DownloadOSM.cpp" line="407"/>
         <source>Download failed</source>
         <translation>Herunterladen fehlgeschlagen</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="387"/>
+        <location filename="Map/DownloadOSM.cpp" line="404"/>
         <source>Username/password invalid</source>
         <translation>Benutzername/Passwort ungültig</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="402"/>
+        <location filename="Map/DownloadOSM.cpp" line="419"/>
         <source>Downloaded tracks</source>
         <translation>Heruntergeladene Fahrspuren</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="416"/>
+        <location filename="Map/DownloadOSM.cpp" line="433"/>
         <source>Downloading trackpoints %1-%2</source>
         <translation>Lade Fahrspurpunkt %1 von %2 herunter</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="584"/>
+        <location filename="Map/DownloadOSM.cpp" line="601"/>
         <source>Warning: Bookmark name already exists</source>
         <translation>Achtung: Lesezeichen mit diesem Namen existiert bereits</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="585"/>
+        <location filename="Map/DownloadOSM.cpp" line="602"/>
         <source>Enter a new one, keep the same to overwrite or cancel to not add.</source>
         <translation>Geben Sie einen neuen Namen ein, behalten sie den alten, um ihn zu ersetzen, oder brechen Sie ab.</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="612"/>
+        <location filename="Map/DownloadOSM.cpp" line="629"/>
         <source>Download</source>
         <translation>Heruntergeladen</translation>
     </message>
     <message>
-        <location filename="Map/ImportOSM.cpp" line="249"/>
+        <location filename="Map/ImportOSM.cpp" line="243"/>
         <source>downloading segment %1 of %2</source>
         <translation>Lade Segment %1 von %2 herunter</translation>
     </message>
     <message>
-        <location filename="Map/ImportOSM.cpp" line="258"/>
+        <location filename="Map/ImportOSM.cpp" line="252"/>
         <source>parsing segment %1 of %2</source>
         <translation>Werte Segment %1 von %2 aus</translation>
     </message>
     <message>
-        <location filename="Map/ImportOSM.cpp" line="323"/>
+        <location filename="Map/ImportOSM.cpp" line="317"/>
         <source>Parsing XML</source>
         <translation>Werte XML aus</translation>
     </message>
     <message>
-        <location filename="Map/ImportOSM.cpp" line="329"/>
+        <location filename="Map/ImportOSM.cpp" line="323"/>
         <source>Conflicts from %1</source>
         <translation>Konflikte von %1</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="390"/>
+        <location filename="Map/DownloadOSM.cpp" line="407"/>
         <source>Unexpected http status code (%1)
 Server message is &apos;%2&apos;
 Possibly reducing the download area helps.</source>
@@ -564,12 +579,12 @@ Möglicherweise hilft eine Reduzierung des herunterzuladenden Gebietes.</transla
         <translation>Herunterladen von %1,%2 (Zoom %3)</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="539"/>
+        <location filename="Map/DownloadOSM.cpp" line="556"/>
         <source>Zoom factor too low</source>
         <translation>Zoom-Faktor zu niedrig</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="540"/>
+        <location filename="Map/DownloadOSM.cpp" line="557"/>
         <source>Please use a higher zoom factor!</source>
         <translation>Bitte höheren Zoom-Faktor nutzen!</translation>
     </message>
@@ -770,32 +785,32 @@ Möglicherweise hilft eine Reduzierung des herunterzuladenden Gebietes.</transla
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="MainWindow.cpp" line="319"/>
+        <location filename="MainWindow.cpp" line="203"/>
         <source>Open track file</source>
         <translation>Track-Datei öffnen</translation>
     </message>
     <message>
         <location filename="MainWindow.cpp" line="208"/>
         <source>Import %1</source>
-        <translation>Importiert %1</translation>
+        <translation type="obsolete">Importiert %1</translation>
     </message>
     <message>
         <location filename="MainWindow.cpp" line="236"/>
         <source>Not a valid file</source>
-        <translation>Keine gültige Datei</translation>
+        <translation type="obsolete">Keine gültige Datei</translation>
     </message>
     <message>
         <location filename="MainWindow.cpp" line="236"/>
         <source>The file could not be opened</source>
-        <translation>Die Datei konnte nicht geöffnet werden</translation>
+        <translation type="obsolete">Die Datei konnte nicht geöffnet werden</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="243"/>
+        <location filename="MainWindow.cpp" line="223"/>
         <source>Unsaved changes</source>
         <translation>Ungespeicherte Änderungen</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="245"/>
+        <location filename="MainWindow.cpp" line="225"/>
         <source>The current map contains unsaved changes that will be lost when starting a new one.
 Do you want to cancel starting a new map or continue and discard the old changes?</source>
         <translation>Die aktuelle Karte enthält ungespeicherte Änderungen, die verlorengehen, wenn Sie eine neue beginnen.
@@ -804,25 +819,25 @@ Möchten sie das Beginnen einer neuen Karte abbrechen, oder fortfahren und die a
     <message>
         <location filename="MainWindow.cpp" line="264"/>
         <source>Open %1</source>
-        <translation>Öffnen %1</translation>
+        <translation type="obsolete">Öffnen %1</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="296"/>
+        <location filename="MainWindow.cpp" line="275"/>
         <source>No valid file</source>
         <translation>Keine gültige Datei</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="296"/>
+        <location filename="MainWindow.cpp" line="275"/>
         <source>%1 could not be opened.</source>
         <translation>%1 konnte nicht geöffnet werden.</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="341"/>
+        <location filename="MainWindow.cpp" line="371"/>
         <source>Upload OSM</source>
         <translation>OSM hochladen</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="342"/>
+        <location filename="MainWindow.cpp" line="372"/>
         <source>You don&apos;t seem to have specified your
 OpenStreetMap username and password.
 Do you want to do this now?</source>
@@ -831,77 +846,77 @@ für OpenStreetMap noch nicht angegeben.
 Möchten Sie dies nun tun?</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="367"/>
+        <location filename="MainWindow.cpp" line="397"/>
         <source>Error downloading</source>
         <translation>Herunterladen fehlgeschlagen</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="367"/>
+        <location filename="MainWindow.cpp" line="397"/>
         <source>The map could not be downloaded</source>
         <translation>Die Karte konnte nicht heruntergeladen werden</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="539"/>
+        <location filename="MainWindow.cpp" line="569"/>
         <source>Save map style</source>
         <translation>Karten-Stil speichern</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="546"/>
+        <location filename="MainWindow.cpp" line="576"/>
         <source>Merkaartor map style (*.mas)</source>
         <translation>Merkaartor-Karten-Stil (*.mas)</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="546"/>
+        <location filename="MainWindow.cpp" line="576"/>
         <source>Load map style</source>
         <translation>Karten-Stil laden</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="695"/>
+        <location filename="MainWindow.cpp" line="725"/>
         <source>Export OSM</source>
         <translation>OSM exportieren</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="695"/>
+        <location filename="MainWindow.cpp" line="725"/>
         <source>OSM Files (*.osm)</source>
         <translation>OSM-Dateien (*.osm)</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="804"/>
+        <location filename="MainWindow.cpp" line="834"/>
         <source>Add Bookmark</source>
         <translation>Lesezeichen hinzufügen</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="805"/>
+        <location filename="MainWindow.cpp" line="835"/>
         <source>Specify the name of the bookmark.</source>
         <translation>Geben Sie den Namen des Lesezeichens an.</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="808"/>
+        <location filename="MainWindow.cpp" line="838"/>
         <source>Invalid bookmark name</source>
         <translation>Ungültiger Name für ein Lesezeichen</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="809"/>
+        <location filename="MainWindow.cpp" line="839"/>
         <source>Bookmark cannot be blank.</source>
         <translation>Ein Lesezeichenname kann nicht leer sein.</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="813"/>
+        <location filename="MainWindow.cpp" line="843"/>
         <source>Warning: Bookmark name already exists</source>
         <translation>Achtung: Lesezeichen mit diesem Namen existiert bereits</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="814"/>
+        <location filename="MainWindow.cpp" line="844"/>
         <source>Enter a new one, keep the same to overwrite or cancel.</source>
         <translation>Geben Sie einen neuen Namen ein, behalten sie den alten, um ihn zu ersetzen, oder brechen Sie ab.</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="861"/>
+        <location filename="MainWindow.cpp" line="891"/>
         <source>Remove Bookmark</source>
         <translation>Lesezeichen entfernen</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="862"/>
+        <location filename="MainWindow.cpp" line="892"/>
         <source>Select the bookmark to remove.</source>
         <translation>Wählen sie das Lesezeichen, dass Sie entfernen möchten.</translation>
     </message>
@@ -1276,12 +1291,12 @@ Möchten Sie dies nun tun?</translation>
         <translation>Die gewählten Knoten vereinigen (der zuerst gewählte bleibt erhalten)</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="582"/>
+        <location filename="MainWindow.cpp" line="612"/>
         <source>Save Merkaartor document</source>
         <translation>Merkaartor-Dokument speichern</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="582"/>
+        <location filename="MainWindow.cpp" line="612"/>
         <source>Merkaartor documents Files (*.mdc)</source>
         <translation>Merkaartor-Dokumente (*.mdc)</translation>
     </message>
@@ -1321,19 +1336,19 @@ Möchten Sie dies nun tun?</translation>
         <translation>Strg+Umschalt+D</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="331"/>
+        <location filename="MainWindow.cpp" line="361"/>
         <source>Old Qt version detected</source>
         <translation>Alte Qt-Version entdeckt</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="335"/>
+        <location filename="MainWindow.cpp" line="365"/>
         <source>Your setup uses Qt %1, which contains various known errors in uploading data to OpenStreetMap leading to 401 server response codes. Are you sure you want to continue (which is not recommended).
 For more information see http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor</source>
         <translation>Ihr System nutzt Qt %1, welches verschiedene Fehler beim Hochladen von Daten zu OpenStreetMap enthält. Diese können zu 401-Fehlermeldungen führen. Wollen Sie fortfahren (nicht zu empfehlen).
 Für weitere Informationen lesen Sie http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor (englisch)</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="582"/>
+        <location filename="MainWindow.cpp" line="612"/>
         <source>untitled</source>
         <translation>namenlos</translation>
     </message>
@@ -1462,6 +1477,11 @@ Für weitere Informationen lesen Sie http://wiki.openstreetmap.org/index.php/Pro
         <source>Alt+A</source>
         <translation>Alt+A</translation>
     </message>
+    <message>
+        <location filename="MainWindow.cpp" line="349"/>
+        <source>Open track files</source>
+        <translation>Öffne Track-Dateien</translation>
+    </message>
 </context>
 <context>
     <name>MapDocument</name>
@@ -1567,7 +1587,7 @@ Für weitere Informationen lesen Sie http://wiki.openstreetmap.org/index.php/Pro
 <context>
     <name>MapView</name>
     <message>
-        <location filename="MapView.cpp" line="222"/>
+        <location filename="MapView.cpp" line="242"/>
         <source>Paint took %1ms</source>
         <translation>Zeichnen benötigte %1ms</translation>
     </message>
@@ -1832,89 +1852,94 @@ Für weitere Informationen lesen Sie http://wiki.openstreetmap.org/index.php/Pro
         <translation>Projektion auswählen</translation>
     </message>
     <message>
-        <location filename="Preferences/PreferencesDialog.ui" line="232"/>
+        <location filename="Preferences/PreferencesDialog.ui" line="244"/>
         <source>OSM</source>
         <translation>OSM</translation>
     </message>
     <message>
-        <location filename="Preferences/PreferencesDialog.ui" line="238"/>
+        <location filename="Preferences/PreferencesDialog.ui" line="252"/>
         <source>Website:</source>
         <translation>Website:</translation>
     </message>
     <message>
-        <location filename="Preferences/PreferencesDialog.ui" line="248"/>
+        <location filename="Preferences/PreferencesDialog.ui" line="262"/>
         <source>Username:</source>
         <translation>Benutzername:</translation>
     </message>
     <message>
-        <location filename="Preferences/PreferencesDialog.ui" line="258"/>
+        <location filename="Preferences/PreferencesDialog.ui" line="272"/>
         <source>Password:</source>
         <translation>Passwort:</translation>
     </message>
     <message>
-        <location filename="Preferences/PreferencesDialog.ui" line="304"/>
+        <location filename="Preferences/PreferencesDialog.ui" line="320"/>
         <source>Network</source>
         <translation>Netzwerk</translation>
     </message>
     <message>
-        <location filename="Preferences/PreferencesDialog.ui" line="310"/>
+        <location filename="Preferences/PreferencesDialog.ui" line="326"/>
         <source>Proxy settings</source>
         <translation>Proxy-Einstellungen</translation>
     </message>
     <message>
-        <location filename="Preferences/PreferencesDialog.ui" line="316"/>
+        <location filename="Preferences/PreferencesDialog.ui" line="332"/>
         <source>Use Proxy</source>
         <translation>Proxy verwenden</translation>
     </message>
     <message>
-        <location filename="Preferences/PreferencesDialog.ui" line="323"/>
+        <location filename="Preferences/PreferencesDialog.ui" line="339"/>
         <source>Host:</source>
         <translation>Host:</translation>
     </message>
     <message>
-        <location filename="Preferences/PreferencesDialog.ui" line="343"/>
+        <location filename="Preferences/PreferencesDialog.ui" line="359"/>
         <source>Port:</source>
         <translation>Port:</translation>
     </message>
     <message>
-        <location filename="Preferences/PreferencesDialog.ui" line="388"/>
+        <location filename="Preferences/PreferencesDialog.ui" line="404"/>
         <source>Background Image</source>
         <translation>Hintergrundbild</translation>
     </message>
     <message>
-        <location filename="Preferences/PreferencesDialog.ui" line="400"/>
+        <location filename="Preferences/PreferencesDialog.ui" line="416"/>
         <source>Tiles Caching</source>
         <translation>Kacheln cachen</translation>
     </message>
     <message>
-        <location filename="Preferences/PreferencesDialog.ui" line="406"/>
+        <location filename="Preferences/PreferencesDialog.ui" line="422"/>
         <source>Cache directory</source>
         <translation>Cache-Verzeichnis</translation>
     </message>
     <message>
-        <location filename="Preferences/PreferencesDialog.ui" line="416"/>
+        <location filename="Preferences/PreferencesDialog.ui" line="432"/>
         <source>Cache size (in Mb; 0 to disable)</source>
         <translation>Cache-Größe (in MB; 0 um keinen Cache zu verwenden)</translation>
     </message>
     <message>
-        <location filename="Preferences/PreferencesDialog.ui" line="431"/>
+        <location filename="Preferences/PreferencesDialog.ui" line="447"/>
         <source>Map Adapter</source>
         <translation>Kartenadapter</translation>
     </message>
     <message>
-        <location filename="Preferences/PreferencesDialog.ui" line="443"/>
+        <location filename="Preferences/PreferencesDialog.ui" line="459"/>
         <source>Select Adapter:</source>
         <translation>Adapter auswählen:</translation>
     </message>
     <message>
-        <location filename="Preferences/PreferencesDialog.ui" line="463"/>
+        <location filename="Preferences/PreferencesDialog.ui" line="479"/>
         <source>Setup...</source>
         <translation>Einrichten…</translation>
     </message>
     <message>
         <location filename="Preferences/PreferencesDialog.ui" line="272"/>
         <source>Use 0.6 API</source>
-        <translation>Nutze API 0.6</translation>
+        <translation type="obsolete">Nutze API 0.6</translation>
+    </message>
+    <message>
+        <location filename="Preferences/PreferencesDialog.ui" line="288"/>
+        <source>Use 0.6 API (only takes effect after program restart!)</source>
+        <translation>Nutze API 0.6 (benötigt Programmneustart zur Aktivierung!)</translation>
     </message>
 </context>
 <context>
