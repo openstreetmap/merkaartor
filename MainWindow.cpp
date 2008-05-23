@@ -403,6 +403,7 @@ void MainWindow::on_helpAboutAction_triggered()
 	Ui::AboutDialog About;
 	About.setupUi(&dlg);
 	About.Version->setText(About.Version->text().arg(VERSION));
+	About.QTVersion->setText(About.QTVersion->text().arg(qVersion()).arg(QT_VERSION_STR));
 	dlg.exec();
 }
 

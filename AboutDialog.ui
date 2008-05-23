@@ -27,6 +27,13 @@
     </widget>
    </item>
    <item>
+     <widget class="QLabel" name="QTVersion" >
+       <property name="text" >
+         <string>QT version %1 (build %2)</string>
+       </property>
+     </widget>
+   </item>
+   <item>
     <widget class="QLabel" name="label" >
      <property name="text" >
       <string>Copyright Bart Vanhauwaert and others, 2006, 2007, 2008</string>

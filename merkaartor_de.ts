@@ -49,24 +49,29 @@ All Files (*)</translation>
         <translation>Merkaartor Version %1</translation>
     </message>
     <message>
-        <location filename="AboutDialog.ui" line="32"/>
+        <location filename="AboutDialog.ui" line="39"/>
         <source>Copyright Bart Vanhauwaert and others, 2006, 2007, 2008</source>
         <translation>Copyright Bart Vanhauwaert und andere, 2006, 2007, 2008</translation>
     </message>
     <message>
-        <location filename="AboutDialog.ui" line="39"/>
+        <location filename="AboutDialog.ui" line="46"/>
         <source>This program is licensed under the GNU Public License v2</source>
         <translation>Dieses Programm ist unter der GNU Public License v2 lizenziert</translation>
     </message>
     <message>
-        <location filename="AboutDialog.ui" line="46"/>
+        <location filename="AboutDialog.ui" line="53"/>
         <source>http://www.irule.be/bvh/c++/merkaartor</source>
         <translation>http://www.irule.be/bvh/c++/merkaartor</translation>
     </message>
     <message>
-        <location filename="AboutDialog.ui" line="87"/>
+        <location filename="AboutDialog.ui" line="94"/>
         <source>OK</source>
         <translation>OK</translation>
+    </message>
+    <message>
+        <location filename="AboutDialog.ui" line="32"/>
+        <source>QT version %1 (build %2)</source>
+        <translation>QT-Version %1 (Build %2)</translation>
     </message>
 </context>
 <context>
@@ -790,21 +795,6 @@ Möglicherweise hilft eine Reduzierung des herunterzuladenden Gebietes.</transla
         <translation>Track-Datei öffnen</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="208"/>
-        <source>Import %1</source>
-        <translation type="obsolete">Importiert %1</translation>
-    </message>
-    <message>
-        <location filename="MainWindow.cpp" line="236"/>
-        <source>Not a valid file</source>
-        <translation type="obsolete">Keine gültige Datei</translation>
-    </message>
-    <message>
-        <location filename="MainWindow.cpp" line="236"/>
-        <source>The file could not be opened</source>
-        <translation type="obsolete">Die Datei konnte nicht geöffnet werden</translation>
-    </message>
-    <message>
         <location filename="MainWindow.cpp" line="223"/>
         <source>Unsaved changes</source>
         <translation>Ungespeicherte Änderungen</translation>
@@ -815,11 +805,6 @@ Möglicherweise hilft eine Reduzierung des herunterzuladenden Gebietes.</transla
 Do you want to cancel starting a new map or continue and discard the old changes?</source>
         <translation>Die aktuelle Karte enthält ungespeicherte Änderungen, die verlorengehen, wenn Sie eine neue beginnen.
 Möchten sie das Beginnen einer neuen Karte abbrechen, oder fortfahren und die alten Änderungen verwerfen?</translation>
-    </message>
-    <message>
-        <location filename="MainWindow.cpp" line="264"/>
-        <source>Open %1</source>
-        <translation type="obsolete">Öffnen %1</translation>
     </message>
     <message>
         <location filename="MainWindow.cpp" line="275"/>
@@ -856,67 +841,67 @@ Möchten Sie dies nun tun?</translation>
         <translation>Die Karte konnte nicht heruntergeladen werden</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="569"/>
+        <location filename="MainWindow.cpp" line="570"/>
         <source>Save map style</source>
         <translation>Karten-Stil speichern</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="576"/>
+        <location filename="MainWindow.cpp" line="577"/>
         <source>Merkaartor map style (*.mas)</source>
         <translation>Merkaartor-Karten-Stil (*.mas)</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="576"/>
+        <location filename="MainWindow.cpp" line="577"/>
         <source>Load map style</source>
         <translation>Karten-Stil laden</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="725"/>
+        <location filename="MainWindow.cpp" line="726"/>
         <source>Export OSM</source>
         <translation>OSM exportieren</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="725"/>
+        <location filename="MainWindow.cpp" line="726"/>
         <source>OSM Files (*.osm)</source>
         <translation>OSM-Dateien (*.osm)</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="834"/>
+        <location filename="MainWindow.cpp" line="835"/>
         <source>Add Bookmark</source>
         <translation>Lesezeichen hinzufügen</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="835"/>
+        <location filename="MainWindow.cpp" line="836"/>
         <source>Specify the name of the bookmark.</source>
         <translation>Geben Sie den Namen des Lesezeichens an.</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="838"/>
+        <location filename="MainWindow.cpp" line="839"/>
         <source>Invalid bookmark name</source>
         <translation>Ungültiger Name für ein Lesezeichen</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="839"/>
+        <location filename="MainWindow.cpp" line="840"/>
         <source>Bookmark cannot be blank.</source>
         <translation>Ein Lesezeichenname kann nicht leer sein.</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="843"/>
+        <location filename="MainWindow.cpp" line="844"/>
         <source>Warning: Bookmark name already exists</source>
         <translation>Achtung: Lesezeichen mit diesem Namen existiert bereits</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="844"/>
+        <location filename="MainWindow.cpp" line="845"/>
         <source>Enter a new one, keep the same to overwrite or cancel.</source>
         <translation>Geben Sie einen neuen Namen ein, behalten sie den alten, um ihn zu ersetzen, oder brechen Sie ab.</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="891"/>
+        <location filename="MainWindow.cpp" line="892"/>
         <source>Remove Bookmark</source>
         <translation>Lesezeichen entfernen</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="892"/>
+        <location filename="MainWindow.cpp" line="893"/>
         <source>Select the bookmark to remove.</source>
         <translation>Wählen sie das Lesezeichen, dass Sie entfernen möchten.</translation>
     </message>
@@ -1076,11 +1061,6 @@ Möchten Sie dies nun tun?</translation>
         <translation>Verschieben</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="307"/>
-        <source>M</source>
-        <translation type="obsolete">M</translation>
-    </message>
-    <message>
         <location filename="MainWindow.ui" line="341"/>
         <source>&amp;Import</source>
         <translation>&amp;Importieren</translation>
@@ -1116,11 +1096,6 @@ Möchten Sie dies nun tun?</translation>
         <translation>L</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="345"/>
-        <source>Edit</source>
-        <translation type="obsolete">Bearbeiten</translation>
-    </message>
-    <message>
         <location filename="MainWindow.ui" line="378"/>
         <source>Esc</source>
         <translation>Esc</translation>
@@ -1144,11 +1119,6 @@ Möchten Sie dies nun tun?</translation>
         <location filename="MainWindow.ui" line="401"/>
         <source>Del</source>
         <translation>Del</translation>
-    </message>
-    <message>
-        <location filename="MainWindow.ui" line="422"/>
-        <source>Add</source>
-        <translation type="obsolete">Hinzufügen</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="414"/>
@@ -1241,11 +1211,6 @@ Möchten Sie dies nun tun?</translation>
         <translation>Alle sichtbaren Ebenen in eine Datei exportieren</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="500"/>
-        <source>&amp;Select...</source>
-        <translation type="obsolete">&amp;Auswählen…</translation>
-    </message>
-    <message>
         <location filename="MainWindow.ui" line="532"/>
         <source>Render...</source>
         <translation>Rendern…</translation>
@@ -1291,12 +1256,12 @@ Möchten Sie dies nun tun?</translation>
         <translation>Die gewählten Knoten vereinigen (der zuerst gewählte bleibt erhalten)</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="612"/>
+        <location filename="MainWindow.cpp" line="613"/>
         <source>Save Merkaartor document</source>
         <translation>Merkaartor-Dokument speichern</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="612"/>
+        <location filename="MainWindow.cpp" line="613"/>
         <source>Merkaartor documents Files (*.mdc)</source>
         <translation>Merkaartor-Dokumente (*.mdc)</translation>
     </message>
@@ -1348,7 +1313,7 @@ For more information see http://wiki.openstreetmap.org/index.php/Problem_uploadi
 Für weitere Informationen lesen Sie http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor (englisch)</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="612"/>
+        <location filename="MainWindow.cpp" line="613"/>
         <source>untitled</source>
         <translation>namenlos</translation>
     </message>
@@ -1930,11 +1895,6 @@ Für weitere Informationen lesen Sie http://wiki.openstreetmap.org/index.php/Pro
         <location filename="Preferences/PreferencesDialog.ui" line="479"/>
         <source>Setup...</source>
         <translation>Einrichten…</translation>
-    </message>
-    <message>
-        <location filename="Preferences/PreferencesDialog.ui" line="272"/>
-        <source>Use 0.6 API</source>
-        <translation type="obsolete">Nutze API 0.6</translation>
     </message>
     <message>
         <location filename="Preferences/PreferencesDialog.ui" line="288"/>
