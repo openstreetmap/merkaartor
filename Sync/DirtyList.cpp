@@ -176,7 +176,7 @@ bool DirtyListVisit::add(MapFeature* F)
 	else if (Relation* Rel = dynamic_cast<Relation*>(F))
 	{
 		for (unsigned int i=0; i<Rel->size(); ++i)
-			if (!hasOSMId(R->get(i)) && notYetAdded(Rel->get(i)))
+			if (!hasOSMId(Rel->get(i)) && notYetAdded(Rel->get(i)))
 				add(Rel->get(i));
 		bool x = addRelation(Rel);
 		AlreadyAdded.push_back(F);
