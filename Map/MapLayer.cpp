@@ -7,7 +7,13 @@
 #include "LayerWidget.h"
 #include "Map/ImportOSM.h"
 
+#include "Command/DocumentCommands.h"
+#include "Command/FeatureCommands.h"
+#include "Command/RoadCommands.h"
+
 #include "Map/MapLayer.h"
+
+#include "Utils/LineF.h"
 
 #include "QMapControl/mapadapter.h"
 #include "QMapControl/osmmapadapter.h"
@@ -601,34 +607,56 @@ void TrackMapLayer::extractLayer()
 {
 	DrawingMapLayer* extL = new DrawingMapLayer(tr("Extract - %1").arg(name()));
 	TrackPoint* P;
+	QList<TrackPoint*> PL;
 
-	//P = new TrackPoint( ((TrackPoint *)get(0))->position() );
-	//P->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
-	//extL->add(P);
-	//R->add(P);
-
-	//P = new TrackPoint( ((TrackPoint *)get(size()-1))->position() );
-	//P->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
-	//extL->add(P);
-	//R->add(P);
-
+	const double radPer10M = (M_PI * 2 / 40080000) * 2;
 
 	for (unsigned int i=0; i < size(); i++) {
 		if (TrackSegment* S = dynamic_cast<TrackSegment*>(get(i))) {
-			Road* R = new Road();
-			R->setLastUpdated(MapFeature::OSMServer);
-			R->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 
-			for (unsigned int j=0; j < S->size(); j++) {
+			P = new TrackPoint( S->get(0)->position() );
+			P->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+			PL.append(P);
+			unsigned int startP = 0;
+
+			P = new TrackPoint( S->get(1)->position() );
+			P->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+			PL.append(P);
+			unsigned int endP = 1;
+
+			for (unsigned int j=2; j < S->size(); j++) {
 				P = new TrackPoint( S->get(j)->position() );
 				P->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
-				extL->add(P);
-				R->add(P);
+				PL.append(P);
+				endP = PL.size()-1;
+
+				LineF l(toQt(PL[startP]->position()), toQt(PL[endP]->position()));
+				for (unsigned int k=startP+1; k < endP; k++) {
+					double d = l.distance(toQt(PL[k]->position()));
+					if (d < radPer10M) {
+						TrackPoint* P = PL[k];
+						PL.removeAt(k);
+						delete P;
+						endP--;
+					} else
+						startP = k;
+				}
 			}
 
-				extL->add(R);
+			//extL->add(R);
 		}
 	}
+
+	CommandList* theList = new CommandList;
+	Road* R = new Road();
+	R->setLastUpdated(MapFeature::OSMServer);
+	R->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+	theList->add(new AddFeatureCommand(extL,R,true));
+	for (unsigned int i=0; i < PL.size(); i++) {
+		theList->add(new AddFeatureCommand(extL,PL[i],true));
+		theList->add(new RoadAddTrackPointCommand(R,PL[i]));
+	}
+	p->theDocument->history().add(theList);
 
 	p->theDocument->add(extL);
 }

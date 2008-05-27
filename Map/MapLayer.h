@@ -12,6 +12,7 @@ class LayerManager;
 class LayerWidget;
 class WMSMapAdapter;
 class TileMapAdapter;
+class TrackSegment;
 
 class MapLayer
 {

@@ -52,8 +52,8 @@ void OsmaRender::render(QWidget* aParent, MapDocument *aDoc, const CoordBox& aCo
 	if (!cur)
 	{
 		QMessageBox::warning(aParent, 
-			tr("Unable to read stylesheet"),
-			tr("Please make sure the Osmarender stylesheet is available at %1").arg(StyleSheetFileName));
+			QApplication::tr("Unable to read stylesheet"),
+			QApplication::tr("Please make sure the Osmarender stylesheet is available at %1").arg(StyleSheetFileName));
 		return;
 	}
 
