@@ -1,5 +1,6 @@
 #include "TagSelector.h"
 
+#include <QRegExp>
 #include "Map/MapFeature.h"
 
 void skipWhite(const QString& Expression, int& idx)
@@ -26,10 +27,22 @@ bool canParseValue(const QString& Expression, int& idx, QString& Key)
 {
 	Key = "";
 	skipWhite(Expression,idx);
+	unsigned short opened =0;
 	while (idx < Expression.length())
 	{
-		if ( (Expression[idx] == '_') || (Expression[idx].isLetterOrNumber()) )
+		if ( (Expression[idx] == '_') || (Expression[idx].isLetterOrNumber()) || (Expression[idx] == '*') || (Expression[idx] == '?') )
 			Key += Expression[idx++];
+		else if ( Expression[idx] == '[' )
+		{
+			opened++;
+			Key += Expression[idx++];
+		}
+		else if ( Expression[idx] == ']' )
+		{
+			if( opened == 0) break;
+			opened--;
+			Key += Expression[idx++];
+		}
 		else
 			break;
 	}
@@ -183,7 +196,9 @@ TagSelector* TagSelectorIs::copy() const
 
 bool TagSelectorIs::matches(const MapFeature* F) const
 {
-	return F->tagValue(Key, "") == Value;
+	QRegExp rx(Value);
+	rx.setPatternSyntax(QRegExp::Wildcard);
+	return rx.exactMatch(F->tagValue(Key, ""));
 }
 
 QString TagSelectorIs::asExpression(bool) const
@@ -212,8 +227,11 @@ bool TagSelectorIsOneOf::matches(const MapFeature* F) const
 {
 	QString V = F->tagValue(Key, "");
 	for (unsigned int i=0; i<Values.size(); ++i)
-		if (V == Values[i])
-			return true;
+	{
+		QRegExp rx(Values[i]);
+		rx.setPatternSyntax(QRegExp::Wildcard);
+		if(rx.exactMatch(V)) return true;
+	}
 	return false;
 }
 

@@ -268,6 +268,15 @@ QString MapFeature::tagValue(const QString& k, const QString& Default) const
 
 void MapFeaturePrivate::updatePainters(double PixelPerM)
 {
+	//if the object has no tags or only the created_by tag, we don't check for style
+	//search is about 15 times faster like that !!!
+	if(theFeature->tagSize()==0 || (theFeature->tagSize()==1 && theFeature->tagKey(0)=="created_by" ))
+	{
+		PossiblePainters.clear();
+		CurrentPainter = 0;
+		PixelPerMForPainter = PixelPerM;
+		return;
+	}
 	if (PixelPerMForPainter < 0)
 	{
 		PossiblePainters.clear();
