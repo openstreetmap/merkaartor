@@ -1,4 +1,5 @@
 v0.11
+	* ADD : Make URL in about window selectable (by Max Vasilev)
 	* FIX : Style definitions can now use *,? and [abc]
 	* ADD : Open/Import multiple files
 	* ADD : draw scale
