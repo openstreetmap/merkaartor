@@ -379,6 +379,7 @@ void MainWindow::on_fileUploadAction_triggered()
 	syncOSM(this, p->getOsmWebsite(), p->getOsmUser(), p->getOsmPassword(), p->getProxyUse(),
 		p->getProxyHost(), p->getProxyPort());
 
+	theDocument->history().updateActions();
 }
 
 void MainWindow::on_fileDownloadAction_triggered()

@@ -58,6 +58,7 @@ class CommandHistory
 		void redo();
 		void add(Command* aCommand);
 		void setActions(QAction* anUndo, QAction* aRedo);
+		void updateActions();
 		unsigned int buildDirtyList(DirtyList& theList);
 		unsigned int index() const;
 
@@ -65,7 +66,6 @@ class CommandHistory
 		static CommandHistory* fromXML(MapDocument* d, QDomElement& e);
 
 	private:
-		void updateActions();
 		std::vector<Command*> Subs;
 		unsigned int Index;
 		QAction* UndoAction;
