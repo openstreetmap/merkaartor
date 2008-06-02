@@ -4,6 +4,8 @@
 #include "Map/MapFeature.h"
 #include "Sync/DirtyList.h"
 
+#define TAG_UNDEF_VALUE "%%%%%"
+
 TagCommand::TagCommand(MapFeature* aF)
 : theFeature(aF), FirstRun(true)
 {
@@ -49,15 +51,22 @@ SetTagCommand::SetTagCommand(MapFeature* aF, const QString& k, const QString& v)
 
 void SetTagCommand::undo()
 {
-	theFeature->clearTag(theK);
+	if (oldV != TAG_UNDEF_VALUE)
+		theFeature->setTag(theK,oldV);
+	else
+		theFeature->clearTag(theK);
 }
 
 void SetTagCommand::redo()
 {
-	if (theIdx < 0)
+	oldV = TAG_UNDEF_VALUE;
+	if (theIdx < 0) {
+		oldV = theFeature->tagValue(theK, TAG_UNDEF_VALUE);
 		theFeature->setTag(theK,theV);
-	else
+	} else {
+		oldV = theFeature->tagValue(theIdx);
 		theFeature->setTag(theIdx,theK,theV);
+	}
 }
 
 bool SetTagCommand::toXML(QDomElement& xParent) const
@@ -72,6 +81,7 @@ bool SetTagCommand::toXML(QDomElement& xParent) const
 	e.setAttribute("idx", QString::number(theIdx));
 	e.setAttribute("key", theK);
 	e.setAttribute("value", theV);
+	e.setAttribute("oldvalue", oldV);
 
 	return OK;
 }
@@ -89,6 +99,8 @@ SetTagCommand * SetTagCommand::fromXML(MapDocument * d, QDomElement e)
 	a->theIdx = e.attribute("idx").toUInt();
 	a->theK = e.attribute("key");
 	a->theV = e.attribute("value");
+	if (e.hasAttribute("oldvalue"))
+		a->oldV = e.attribute("oldvalue");
 
 	return a;
 }
@@ -145,7 +157,7 @@ SetTagCommand * SetTagCommand::fromXML(MapDocument * d, QDomElement e)
 /* CLEARTAGCOMMAND */
 
 ClearTagCommand::ClearTagCommand(MapFeature* F, const QString& k)
-: TagCommand(F), theIdx(-1), theK(k), theV(F->tagValue(k, ""))
+: TagCommand(F), theIdx(F->findKey(k)), theK(k), theV(F->tagValue(k, ""))
 {
 	redo();
 }
