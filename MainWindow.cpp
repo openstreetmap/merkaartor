@@ -85,6 +85,7 @@ MainWindow::MainWindow(void)
 
 	updateBookmarksMenu();
 	updateProjectionMenu();
+	connect (menuBookmarks, SIGNAL(triggered(QAction *)), this, SLOT(bookmarkTriggered(QAction *)));
 
 	MerkaartorPreferences::instance()->restoreMainWindowState( this );
 
@@ -303,7 +304,7 @@ void MainWindow::loadFiles(const QStringList & fileList)
 			loadDocument(fn);
 			foundDocument = true;
 		}
-			
+
 		it.remove();
 	}
 
@@ -330,7 +331,7 @@ void MainWindow::loadFiles(const QStringList & fileList)
 			delete newDoc;
 		}
 	}
-	
+
 	on_viewZoomAllAction_triggered();
 	on_editPropertiesAction_triggered();
 	theDocument->history().setActions(editUndoAction, editRedoAction);
@@ -388,6 +389,8 @@ void MainWindow::on_fileDownloadAction_triggered()
 		on_editPropertiesAction_triggered();
 	} else
 		QMessageBox::warning(this, tr("Error downloading"), tr("The map could not be downloaded"));
+
+	updateBookmarksMenu();
 }
 
 void MainWindow::on_fileDownloadMoreAction_triggered()
@@ -797,13 +800,15 @@ void MainWindow::on_renderAction_triggered()
 
 void MainWindow::updateBookmarksMenu()
 {
+	for(int i=menuBookmarks->actions().count()-1; i > 2 ; i--) {
+		menuBookmarks->removeAction(menuBookmarks->actions()[3]);
+	}
+
 	QStringList Bookmarks = MerkaartorPreferences::instance()->getBookmarks();
 	for (int i=0; i<Bookmarks.size(); i+=5) {
 		QAction* a = new QAction(Bookmarks[i], menuBookmarks);
 		menuBookmarks->addAction(a);
 	}
-
-	connect (menuBookmarks, SIGNAL(triggered(QAction *)), this, SLOT(bookmarkTriggered(QAction *)));
 }
 
 void MainWindow::updateProjectionMenu()

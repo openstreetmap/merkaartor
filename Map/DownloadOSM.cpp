@@ -536,31 +536,31 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 			}
 			else if (ui.FromLink->isChecked()) {
 				int start, end;
-	
+
 				QString link = ui.Link->text();
-	
+
 				start = link.indexOf("lat=") + 4; // +4 because we don't need the "lat="
 				end = link.indexOf("&", start);
 				double lat = link.mid(start, end - start).toDouble();
-	
+
 				start = link.indexOf("lon=") + 4;
 				end = link.indexOf("&", start);
 				double lon = link.mid(start, end - start).toDouble();
-				
+
 				start = link.indexOf("zoom=") + 5;
 				end = link.indexOf("&", start);
 				int zoom = link.mid(start, end - start).toInt();
-	
-	
+
+
 				if (zoom <= 10) {
 					QMessageBox::warning(dlg, QApplication::translate("Downloader", "Zoom factor too low"),
 						QApplication::translate("Downloader", "Please use a higher zoom factor!"));
 					retry = true;
 				}
 				else {
-	
+
 					double zoomD;
-	
+
 					/* zoom-levels taken from http://wiki.openstreetmap.org/index.php/Zoom_levels */
 					if (zoom == 0) zoomD = 360;
 					else if (zoom == 1) zoomD = 180;
@@ -581,13 +581,13 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 					else if (zoom == 16) zoomD = 0.005;
 					else if (zoom == 17) zoomD = 0.003;
 					else if (zoom == 18) zoomD = 0.001;
-					
+
 					else zoomD = 0.011; // default (zoom = 15)
-	
+
 					/* the OSM link contains the coordinates from the middle of the visible map so we have to add and sub zoomD */
 					Clip = CoordBox(Coord(angToRad(lat-zoomD), angToRad(lon-zoomD)), Coord(angToRad(lat+zoomD), angToRad(lon+zoomD)));
 				}
-			}	
+			}
 			else if (ui.FromMap->isChecked())
 			{
 				QRectF R(SlippyMap->viewArea());
@@ -605,7 +605,7 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 				         newBk = text;
 					else
 						ok = false;
-	
+
 				}
 				if (ok && Bookmarks.contains(newBk)) {
 					int i = Bookmarks.indexOf(newBk);
@@ -622,6 +622,7 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 					Bookmarks.insert(3,QString::number(radToAng(Clip.topRight().lat())));
 					Bookmarks.insert(4,QString::number(radToAng(Clip.topRight().lon())));
 					MerkaartorPreferences::instance()->setBookmarks(Bookmarks);
+					MerkaartorPreferences::instance()->save();
 				}
 			}
 			if (retry) continue;
@@ -646,4 +647,4 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 	}
 	delete dlg;
 	return OK;
-}	
+}
