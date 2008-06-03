@@ -1,4 +1,5 @@
 v0.11
+	* ADD : Czech translation (Tom Mika)
 	* FIX : History window now displays UTF8
 	* FIX : Bookmark created from "Download from web" immediately added to bookmarks menu (by rullzer)
 	* FIX : Tags undo was pretty much broken
