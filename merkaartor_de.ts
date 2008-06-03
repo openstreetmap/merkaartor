@@ -320,12 +320,12 @@ All Files (*)</translation>
     <message>
         <location filename="Interaction/CreateDoubleWayDock.ui" line="25"/>
         <source>Driving at the right side of the road</source>
-        <translation>Rechtsverkehr auf der Strasse</translation>
+        <translation>Rechtsverkehr</translation>
     </message>
     <message>
         <location filename="Interaction/CreateDoubleWayDock.ui" line="40"/>
         <source>Distance between two roads</source>
-        <translation>Abstand zwischen zwei Strassen</translation>
+        <translation>Abstand zwischen zwei Straßen</translation>
     </message>
 </context>
 <context>
@@ -338,7 +338,7 @@ All Files (*)</translation>
     <message>
         <location filename="Interaction/CreateRoundaboutDock.ui" line="25"/>
         <source>Driving at the right side of the road</source>
-        <translation>Rechtsverkehr auf der Strasse</translation>
+        <translation>Rechtsverkehr</translation>
     </message>
 </context>
 <context>
@@ -657,7 +657,7 @@ Möglicherweise hilft eine Reduzierung des herunterzuladenden Gebietes.</transla
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="96"/>
         <source>Unsurfaced road (old tag)</source>
-        <translation>Ungeteerte Strasse (veralted)</translation>
+        <translation>Unbefestigte Straße (veraltet)</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="88"/>
@@ -1927,7 +1927,7 @@ Für weitere Informationen lesen Sie http://wiki.openstreetmap.org/index.php/Pro
     <message>
         <location filename="PropertiesDock.cpp" line="294"/>
         <source>Properties - Road</source>
-        <translation>Eigenschaften - Strasse</translation>
+        <translation>Eigenschaften - Straße</translation>
     </message>
     <message>
         <location filename="PropertiesDock.cpp" line="34"/>
@@ -2018,12 +2018,12 @@ Für weitere Informationen lesen Sie http://wiki.openstreetmap.org/index.php/Pro
     <message>
         <location filename="RoadProperties.ui" line="71"/>
         <source>One way</source>
-        <translation>Einbahnstrasse</translation>
+        <translation>Einbahnstraße</translation>
     </message>
     <message>
         <location filename="RoadProperties.ui" line="76"/>
         <source>Other way</source>
-        <translation>Einbahnstrasse umgekehrt</translation>
+        <translation>Einbahnstraße umgekehrt</translation>
     </message>
     <message>
         <location filename="RoadProperties.ui" line="84"/>
