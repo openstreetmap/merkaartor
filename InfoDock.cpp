@@ -57,7 +57,8 @@ void InfoDock::on_anchorClicked(const QUrl & link)
 
 	if (theDownloader.request("GET", link.path(), data)) {
 		QTextBrowser* b = new QTextBrowser;
-		b->append(theDownloader.content());
+		QString s = QString::fromUtf8(theDownloader.content().constData());
+		b->setPlainText(s);
 		b->setAttribute(Qt::WA_DeleteOnClose,true);
 		b->resize(640, 480);
 		b->show();
