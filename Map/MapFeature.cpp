@@ -171,35 +171,35 @@ void MapFeature::setUser(const QString& user)
 	notifyChanges();
 }
 
-void MapFeature::setTag(unsigned int idx, const QString& k, const QString& v)
+void MapFeature::setTag(unsigned int index, const QString& key, const QString& value)
 {
 	p->PixelPerMForPainter = -1;
 	for (unsigned int i=0; i<p->Tags.size(); ++i)
-		if (p->Tags[i].first == k)
+		if (p->Tags[i].first == key)
 		{
-			p->Tags[i].second = v;
+			p->Tags[i].second = value;
 			notifyChanges();
 			return;
 		}
-	p->Tags.insert(p->Tags.begin() + idx, std::make_pair(k,v));
+	p->Tags.insert(p->Tags.begin() + index, std::make_pair(key,value));
 	if (p->theLayer)
-  		p->theLayer->getDocument()->addToTagList(k, v);
+  		p->theLayer->getDocument()->addToTagList(key, value);
 	notifyChanges();
 }
 
-void MapFeature::setTag(const QString& k, const QString& v)
+void MapFeature::setTag(const QString& key, const QString& value)
 {
 	p->PixelPerMForPainter = -1;
 	for (unsigned int i=0; i<p->Tags.size(); ++i)
-		if (p->Tags[i].first == k)
+		if (p->Tags[i].first == key)
 		{
-			p->Tags[i].second = v;
+			p->Tags[i].second = value;
 			notifyChanges();
 			return;
 		}
-	p->Tags.push_back(std::make_pair(k,v));
+	p->Tags.push_back(std::make_pair(key,value));
 	if (p->theLayer)
-  		p->theLayer->getDocument()->addToTagList(k, v);
+  		p->theLayer->getDocument()->addToTagList(key, value);
 	notifyChanges();
 }
 

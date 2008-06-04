@@ -34,26 +34,60 @@ class RenderPriority
 		double InClassPriority;
 };
 
+/// Used to store objects of the map
 class MapFeature
 {
 	public:
 		typedef enum { User, UserResolved, OSMServer, OSMServerConflict, NotYetDownloaded } ActorType;
 		typedef enum { UnknownDirection, BothWays, OneWay, OtherWay } TrafficDirectionType;
 	public:
+		/// Constructor for an empty map feature
 		MapFeature();
+		/// Copy constructor
+		/// @param other the MapFeature
 		MapFeature(const MapFeature& other);
+		/// Destructor
 		virtual ~MapFeature() = 0;
 
+		/** Return the smalest box contening all the MapFeature
+		 * @return A coord box
+		 */
 		virtual CoordBox boundingBox() const = 0;
+		
+		/** Draw the feature using the given QPainer an Projection
+		 * @param P The QPaiter used to draw
+		 * @param theProjection the Projection used to convert real coordinates to screen coordinates
+		 */
 		virtual void draw(QPainter& P, const Projection& theProjection) = 0;
+		
+		/** Draw the feature using the given QPainer an Projection and with the focused draw
+		 * @param P The QPaiter used to draw
+		 * @param theProjection the Projection used to convert real coordinates to screen coordinates
+		 */
 		virtual void drawFocus(QPainter& P, const Projection& theProjection) = 0;
+		
+		/** Draw the feature using the given QPainer an Projection and with the hover draw
+		 * @param P The QPaiter used to draw
+		 * @param theProjection the Projection used to convert real coordinates to screen coordinates
+		 */
 		virtual void drawHover(QPainter& P, const Projection& theProjection) = 0;
 		virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection) const = 0;
 		virtual void cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const std::vector<MapFeature*>& Alternatives) = 0;
 		virtual bool notEverythingDownloaded() const = 0;
 
+		/** Set the id for the current feature.
+		 */
 		void setId(const QString& id);
+		
+		/** Give the id of the feature.
+		 *  If the feature has no id, a random id is generated
+		 * @return the id of the current feature
+		 */
 		const QString& id() const;
+		/** Give the id of the feature in a form suitable for xml integration.
+		 *  If the feature has no id, a random id is generated
+		 * @return the id of the current feature
+		 */
 		QString xmlId() const;
 		ActorType lastUpdated() const;
 		void setLastUpdated(ActorType A);
@@ -68,15 +102,66 @@ class MapFeature
 		virtual QString description() const = 0;
 		virtual RenderPriority renderPriority(double aPixelPerM) const = 0;
 
-		void setTag(const QString& k, const QString& v);
-		void setTag(unsigned int idx, const QString& k, const QString& v);
+		/** Set the tag "key=value" to the current object
+		 * If a tag with the same key exist, it is replaced
+		 * Otherwise the tag is added at the end
+		 * @param key the key of the tag
+		 * @param value the value corresponding to the key
+		 */
+		void setTag(const QString& key, const QString& value);
+		
+		/** Set the tag "key=value" at the position index
+		 * If a tag with the same key exist, it is replaced
+		 * Otherwise the tag is added at the index position
+		 * @param index the place for the given tag. Start at 0.
+		 * @param key the key of the tag
+		 * @param value the value corresponding to the key
+		*/
+		void setTag(unsigned int index, const QString& key, const QString& value);
+		
+		/** remove all the tags for the curent feature
+		 */
 		void clearTags();
+		
+		/** remove the tag with the key "k".
+		 * if no corresponding tag, don't do anything
+		 */
 		void clearTag(const QString& k);
+		
+		/** @return the number of tags for the current object
+		 */
 		unsigned int tagSize() const;
+		
+		/** if a tag with the key "k" exists, return its index.
+		 * if the key doesn't exist, return the number of tags 
+		 * @return index of tag
+		 */
 		unsigned int findKey(const QString& k) const;
+		
+		/** return the value of the tag at the position "i".
+		 * position start at 0.
+		 * Be carefull: no verification is made on i.
+		 * @return the value
+		 */
 		QString tagValue(unsigned int i) const;
+		
+		/** return the value of the tag with the key "k".
+		 * if such a tag doesn't exists, return Default.
+		 * @return value or Default
+		 */
 		QString tagValue(const QString& k, const QString& Default) const;
+		
+		/** return the value of the tag at the position "i".
+		 * position start at 0.
+		 * Be carefull: no verification is made on i.
+		 * @return the value
+		*/
 		QString tagKey(unsigned int i) const;
+		
+		/** remove the tag at the position "i".
+		 * position start at 0.
+		 * Be carefull: no verification is made on i.
+		 */
 		void removeTag(unsigned int i);
 
 		FeaturePainter* getEditPainter(double PixelPerM) const;
