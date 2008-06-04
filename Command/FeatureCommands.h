@@ -44,6 +44,7 @@ class SetTagCommand : public TagCommand
 		int theIdx;
 		QString theK;
 		QString theV;
+		QString oldK;
 		QString oldV;
 };
 
