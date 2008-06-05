@@ -85,7 +85,7 @@ void MerkaartorPreferences::initialize()
 	bgTypes.insert(Bg_Google_illegal, tr("Illegal Google adapter"));
 #endif
 
-	projTypes.insert(Proj_Merkaartor, "Merkaartor");
+	projTypes.insert(Proj_Merkaartor, tr("Merkaartor"));
 	projTypes.insert(Proj_Background, tr("Background"));
 
 	QStringList sl = getBookmarks();
