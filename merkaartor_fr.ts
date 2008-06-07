@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1" language="fr">
-<defaultcodec></defaultcodec>
+<!DOCTYPE TS><TS version="1.1">
 <context>
     <name>@default</name>
     <message>
-        <location filename="MainWindow.cpp" line="191"/>
+        <location filename="MainWindow.cpp" line="192"/>
         <source>Supported formats (*.mdc *.gpx *.osm *.ngt *.nmea *.nme)
 Merkaartor document (*.mdc)
 GPS Exchange format (*.gpx)
@@ -21,7 +20,7 @@ Format log GPS NMEA (*.nmea *.nme)
 Tous les fichiers (*)</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="199"/>
+        <location filename="MainWindow.cpp" line="200"/>
         <source>Supported formats (*.gpx *.osm *.ngt *.nmea *.nme)
 GPS Exchange format (*.gpx)
 OpenStreetMap format (*.osm)
@@ -50,24 +49,29 @@ Tous les fichiers (*)</translation>
         <translation>Merkaartor version %1</translation>
     </message>
     <message>
-        <location filename="AboutDialog.ui" line="32"/>
+        <location filename="AboutDialog.ui" line="39"/>
         <source>Copyright Bart Vanhauwaert and others, 2006, 2007, 2008</source>
         <translation>Copyright Bart Vanhauwaert et autres, 2006, 2007, 2008</translation>
     </message>
     <message>
-        <location filename="AboutDialog.ui" line="39"/>
+        <location filename="AboutDialog.ui" line="46"/>
         <source>This program is licensed under the GNU Public License v2</source>
         <translation>Ce programme est sous license &quot;GNU Public License v2&quot;</translation>
     </message>
     <message>
-        <location filename="AboutDialog.ui" line="46"/>
+        <location filename="AboutDialog.ui" line="53"/>
         <source>http://www.irule.be/bvh/c++/merkaartor</source>
         <translation>http://www.irule.be/bvh/c++/merkaartor</translation>
     </message>
     <message>
-        <location filename="AboutDialog.ui" line="87"/>
+        <location filename="AboutDialog.ui" line="97"/>
         <source>OK</source>
         <translation>OK</translation>
+    </message>
+    <message>
+        <location filename="AboutDialog.ui" line="32"/>
+        <source>QT version %1 (build %2)</source>
+        <translation>QT version %1 (build %2)</translation>
     </message>
 </context>
 <context>
@@ -75,222 +79,222 @@ Tous les fichiers (*)</translation>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="41"/>
         <source>College</source>
-        <translation type="unfinished"></translation>
+        <translation>Etablissement d&apos;enseignement supérieur</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="46"/>
         <source>Fire Station</source>
-        <translation type="unfinished"></translation>
+        <translation>Caserne de pompiers</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="48"/>
         <source>Fuel</source>
-        <translation type="unfinished"></translation>
+        <translation>Station essence</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="50"/>
         <source>Hospital</source>
-        <translation type="unfinished"></translation>
+        <translation>Hopital</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="51"/>
         <source>Library</source>
-        <translation type="unfinished"></translation>
+        <translation>Bibliothèque</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="53"/>
         <source>Parking</source>
-        <translation type="unfinished"></translation>
+        <translation>Parking</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="55"/>
         <source>Place of Worship</source>
-        <translation type="unfinished"></translation>
+        <translation>Lieu de culte</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="56"/>
         <source>Police Station</source>
-        <translation type="unfinished"></translation>
+        <translation>Police</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="57"/>
         <source>Post Box</source>
-        <translation type="unfinished"></translation>
+        <translation>Boîte aux lettres</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="58"/>
         <source>Post Office</source>
-        <translation type="unfinished"></translation>
+        <translation>Bureau de poste</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="60"/>
         <source>Pub</source>
-        <translation type="unfinished"></translation>
+        <translation>bistrot</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="62"/>
         <source>Public Telephone</source>
-        <translation type="unfinished"></translation>
+        <translation>Téléphone</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="63"/>
         <source>Recycling Facilities</source>
-        <translation type="unfinished"></translation>
+        <translation>Centre de recyclage</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="64"/>
         <source>Restaurant</source>
-        <translation type="unfinished"></translation>
+        <translation>Restaurant</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="65"/>
         <source>School</source>
-        <translation type="unfinished"></translation>
+        <translation>École</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="70"/>
         <source>University</source>
-        <translation type="unfinished"></translation>
+        <translation>Université</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="28"/>
         <source>Arts centre</source>
-        <translation type="unfinished"></translation>
+        <translation>Centre des arts</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="29"/>
         <source>ATM or cash point</source>
-        <translation type="unfinished"></translation>
+        <translation>Distributeur à billets</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="30"/>
         <source>Bank</source>
-        <translation type="unfinished"></translation>
+        <translation>Banque</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="31"/>
         <source>Bank with atm</source>
-        <translation type="unfinished"></translation>
+        <translation>Banque avec distributeur</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="32"/>
         <source>Beer garden</source>
-        <translation type="unfinished"></translation>
+        <translation>Jardin à bierre</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="33"/>
         <source>Parking for bicycles</source>
-        <translation type="unfinished"></translation>
+        <translation>Parking deux roues</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="34"/>
         <source>Bicycle Rental</source>
-        <translation type="unfinished"></translation>
+        <translation>Location de velos</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="35"/>
         <source>Bureau de change</source>
-        <translation type="unfinished"></translation>
+        <translation>Bureau de change</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="36"/>
         <source>Bus station</source>
-        <translation type="unfinished"></translation>
+        <translation>Gare routierre</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="37"/>
         <source>Cafe</source>
-        <translation type="unfinished"></translation>
+        <translation>Café</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="38"/>
         <source>Car Rental</source>
-        <translation type="unfinished"></translation>
+        <translation>Locations de voitures</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="39"/>
         <source>Car Sharing</source>
-        <translation type="unfinished"></translation>
+        <translation>Co-voiturage</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="40"/>
         <source>Cinema</source>
-        <translation type="unfinished"></translation>
+        <translation>Cinema</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="42"/>
         <source>Court house</source>
-        <translation type="unfinished"></translation>
+        <translation>Palais de justice</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="43"/>
         <source>Crematorium</source>
-        <translation type="unfinished"></translation>
+        <translation>Crématorium</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="44"/>
         <source>Source of drinking water</source>
-        <translation type="unfinished"></translation>
+        <translation>Source d&apos;eau potable</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="45"/>
         <source>Fast food</source>
-        <translation type="unfinished"></translation>
+        <translation>Fast food</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="47"/>
         <source>Fountain</source>
-        <translation type="unfinished"></translation>
+        <translation>Fontaine</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="49"/>
         <source>Small place of burial</source>
-        <translation type="unfinished"></translation>
+        <translation>Très petit cimetière</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="52"/>
         <source>Nightclub</source>
-        <translation type="unfinished"></translation>
+        <translation>Boite de nuit</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="54"/>
         <source>Pharmacy</source>
-        <translation type="unfinished"></translation>
+        <translation>Pharmacie</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="59"/>
         <source>Prison</source>
-        <translation type="unfinished"></translation>
+        <translation>Prison</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="61"/>
         <source>Public building</source>
-        <translation type="unfinished"></translation>
+        <translation>Batiment public</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="66"/>
         <source>Taxi</source>
-        <translation type="unfinished"></translation>
+        <translation>Station de taxi</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="67"/>
         <source>Theatre or opera house</source>
-        <translation type="unfinished"></translation>
+        <translation>Théatre</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="68"/>
         <source>Toilets</source>
-        <translation type="unfinished"></translation>
+        <translation>Toilettes publiques</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="69"/>
         <source>Town hall</source>
-        <translation type="unfinished"></translation>
+        <translation>Mairie</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="71"/>
         <source>Waste Disposal</source>
-        <translation type="unfinished"></translation>
+        <translation>Point de vidange des eaux usées</translation>
     </message>
 </context>
 <context>
@@ -355,59 +359,59 @@ Tous les fichiers (*)</translation>
     <message>
         <location filename="Sync/DirtyList.cpp" line="352"/>
         <source>Error uploading request</source>
-        <translation>Erreur durant le téléversage de la requête</translation>
+        <translation>Erreur durant l&apos;envoi de la requête</translation>
     </message>
     <message>
         <location filename="Sync/DirtyList.cpp" line="352"/>
         <source>There was an error uploading this request (%1)
 Server message is &apos;%2&apos;</source>
-        <translation type="unfinished">Une erreur s&apos;est produite durant le téléversage de cette requete (%1)
+        <translation>Une erreur s&apos;est produite durant l&apos;envoi de cette requete (%1)
 Le message du serveur est &apos;%2&apos;</translation>
     </message>
     <message>
         <location filename="Sync/DirtyList.cpp" line="441"/>
         <source>ADD road %1</source>
-        <translation type="unfinished"></translation>
+        <translation>AJOUT de la route %1</translation>
     </message>
     <message>
         <location filename="Sync/DirtyList.cpp" line="465"/>
         <source>ADD trackpoint %1</source>
-        <translation type="unfinished"></translation>
+        <translation>AJOUT du point %1</translation>
     </message>
     <message>
         <location filename="Sync/DirtyList.cpp" line="418"/>
         <source>ADD relation %1</source>
-        <translation type="unfinished"></translation>
+        <translation>AJOUT de la relation %1</translation>
     </message>
     <message>
         <location filename="Sync/DirtyList.cpp" line="539"/>
         <source>UPDATE trackpoint %1</source>
-        <translation type="unfinished"></translation>
+        <translation>MISE À JOUR du point %1</translation>
     </message>
     <message>
         <location filename="Sync/DirtyList.cpp" line="490"/>
         <source>UPDATE relation %1</source>
-        <translation type="unfinished"></translation>
+        <translation>MISE À JOUR  de la relation %1</translation>
     </message>
     <message>
         <location filename="Sync/DirtyList.cpp" line="514"/>
         <source>UPDATE road %1</source>
-        <translation type="unfinished"></translation>
+        <translation>MISE À JOUR de la route %1</translation>
     </message>
     <message>
         <location filename="Sync/DirtyList.cpp" line="564"/>
         <source>REMOVE trackpoint %1</source>
-        <translation type="unfinished"></translation>
+        <translation>SUPPRESSION du point %1</translation>
     </message>
     <message>
         <location filename="Sync/DirtyList.cpp" line="583"/>
         <source>REMOVE road %1</source>
-        <translation type="unfinished"></translation>
+        <translation>SUPPRESSION de la route %1</translation>
     </message>
     <message>
         <location filename="Sync/DirtyList.cpp" line="602"/>
         <source>REMOVE relation %1</source>
-        <translation type="unfinished"></translation>
+        <translation>SUPPRESSION de la relation %1</translation>
     </message>
     <message>
         <location filename="Sync/DirtyList.cpp" line="336"/>
@@ -417,12 +421,12 @@ Le message du serveur est &apos;%2&apos;</translation>
     <message>
         <location filename="Sync/DirtyList.cpp" line="378"/>
         <source>OPEN changeset</source>
-        <translation type="unfinished"></translation>
+        <translation>OUVERTURE de la serie de changements</translation>
     </message>
     <message>
         <location filename="Sync/DirtyList.cpp" line="402"/>
         <source>CLOSE changeset</source>
-        <translation type="unfinished"></translation>
+        <translation>FERMETURE de la serie de changement</translation>
     </message>
 </context>
 <context>
@@ -460,7 +464,7 @@ Le message du serveur est &apos;%2&apos;</translation>
     <message>
         <location filename="DownloadMapDialog.ui" line="91"/>
         <source>Use OSM link</source>
-        <translation type="unfinished">Utiliser un lien OSM</translation>
+        <translation>Utiliser un lien OSM</translation>
     </message>
     <message>
         <location filename="DownloadMapDialog.ui" line="112"/>
@@ -478,7 +482,7 @@ Le message du serveur est &apos;%2&apos;</translation>
     <message>
         <location filename="Map/DownloadOSM.cpp" line="204"/>
         <source>didn&apos;t download enough</source>
-        <translation type="unfinished">n&apos;a pas téléchargé suffisament</translation>
+        <translation>n&apos;a pas téléchargé suffisament</translation>
     </message>
     <message>
         <location filename="Map/DownloadOSM.cpp" line="284"/>
@@ -521,24 +525,24 @@ Le message du serveur est &apos;%2&apos;</translation>
         <translation>Entrez un nouveau, gardez le même pour remplacer ou annulez pour ne pas ajouter.</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="629"/>
+        <location filename="Map/DownloadOSM.cpp" line="630"/>
         <source>Download</source>
         <translation>Télécharger</translation>
     </message>
     <message>
         <location filename="Map/DownloadOSM.cpp" line="384"/>
         <source>Downloading from OSM (connecting)</source>
-        <translation type="unfinished">Téléchargement depuis OSM (connection)</translation>
+        <translation>Téléchargement depuis OSM (connection)</translation>
     </message>
     <message>
         <location filename="Map/DownloadOSM.cpp" line="419"/>
         <source>Downloaded tracks</source>
-        <translation type="unfinished">Traces téléchargées</translation>
+        <translation>Traces téléchargées</translation>
     </message>
     <message>
         <location filename="Map/DownloadOSM.cpp" line="433"/>
         <source>Downloading trackpoints %1-%2</source>
-        <translation type="unfinished">Téléchargement des noeuds %1-%2</translation>
+        <translation>Téléchargement des points %1-%2</translation>
     </message>
     <message>
         <location filename="Map/ImportOSM.cpp" line="243"/>
@@ -570,7 +574,7 @@ Le message du serveur est &apos;%2&apos;
 Reduire la taille de la surface téléchargée peut aider.</translation>
     </message>
     <message>
-        <location filename="InfoDock.cpp" line="66"/>
+        <location filename="InfoDock.cpp" line="67"/>
         <source>Unexpected http status code (%1)</source>
         <translation>Code status HTTP inattendu (%1)</translation>
     </message>
@@ -603,138 +607,138 @@ Reduire la taille de la surface téléchargée peut aider.</translation>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="77"/>
         <source>Motorway</source>
-        <translation type="unfinished"></translation>
+        <translation>Autoroute</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="78"/>
         <source>Ramp to motorway</source>
-        <translation type="unfinished"></translation>
+        <translation>Bretelle d&apos;autoroute</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="79"/>
         <source>Trunk road</source>
-        <translation type="unfinished"></translation>
+        <translation>Voie rapide</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="80"/>
         <source>Ramp to trunk road</source>
-        <translation type="unfinished"></translation>
+        <translation>Bretelle de voie rapide</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="81"/>
         <source>Primary road</source>
-        <translation type="unfinished"></translation>
+        <translation>Nationnale ou route principale</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="82"/>
         <source>Ramp to primary road</source>
-        <translation type="unfinished"></translation>
+        <translation>Bretelle pour nationale</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="83"/>
         <source>Secondary road</source>
-        <translation type="unfinished"></translation>
+        <translation>Départementale</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="84"/>
         <source>Tertiary road</source>
-        <translation type="unfinished"></translation>
+        <translation>Petite départementale ou communale</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="86"/>
         <source>Residential road</source>
-        <translation type="unfinished"></translation>
+        <translation>Route de desserte résidentielle</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="87"/>
         <source>Service road</source>
-        <translation type="unfinished"></translation>
+        <translation>Route de service</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="88"/>
         <source>Track road</source>
-        <translation type="unfinished"></translation>
+        <translation>Route privée sans revêtement</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="92"/>
         <source>Cycleway</source>
-        <translation type="unfinished"></translation>
+        <translation>Piste cyclable</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="91"/>
         <source>Footway</source>
-        <translation type="unfinished"></translation>
+        <translation>Chemin piéton</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="93"/>
         <source>Bridleway</source>
-        <translation type="unfinished"></translation>
+        <translation>Chemin pour cavaliers</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="94"/>
         <source>Steps</source>
-        <translation type="unfinished"></translation>
+        <translation>Escaliers</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="85"/>
         <source>Unclassified road</source>
-        <translation type="unfinished"></translation>
+        <translation>Route secondaire sans ligne de séparation</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="89"/>
         <source>Pedestrian priority road</source>
-        <translation type="unfinished"></translation>
+        <translation>Rue avec priorité aux piétons</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="90"/>
         <source>Pedestrian only road</source>
-        <translation type="unfinished"></translation>
+        <translation>Rue uniquement piétonne</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="95"/>
         <source>Bus guideway (not a bus way)</source>
-        <translation type="unfinished"></translation>
+        <translation>Route pour bus guidés (ce n&apos;est pas une voie de bus)</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="96"/>
         <source>Unsurfaced road (old tag)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sans revetement (tag suprimé)</translation>
     </message>
 </context>
 <context>
     <name>ImageMapLayer</name>
     <message>
-        <location filename="Map/MapLayer.cpp" line="439"/>
+        <location filename="Map/MapLayer.cpp" line="443"/>
         <source>Map - None</source>
         <translation>Carte - Aucune</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="453"/>
+        <location filename="Map/MapLayer.cpp" line="457"/>
         <source>Map - WMS - %1</source>
         <translation>Carte - WMS - %1</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="464"/>
+        <location filename="Map/MapLayer.cpp" line="468"/>
         <source>Map - TMS - %1</source>
         <translation>Carte - TMS - %1</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="492"/>
+        <location filename="Map/MapLayer.cpp" line="496"/>
         <source>Custom Layer</source>
         <translation>Couche individualisée</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="477"/>
+        <location filename="Map/MapLayer.cpp" line="481"/>
         <source>Map - Yahoo</source>
         <translation>Carte - Yahoo</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="486"/>
+        <location filename="Map/MapLayer.cpp" line="490"/>
         <source>Map - Illegal Yahoo</source>
         <translation>Carte - Illégal Yahoo</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="495"/>
+        <location filename="Map/MapLayer.cpp" line="499"/>
         <source>Map - Illegal Google</source>
         <translation>Carte - Illégal Google</translation>
     </message>
@@ -786,129 +790,129 @@ Reduire la taille de la surface téléchargée peut aider.</translation>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="MainWindow.cpp" line="319"/>
+        <location filename="MainWindow.cpp" line="204"/>
         <source>Open track file</source>
         <translation>Ouvrir un fichier de traces</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="208"/>
+        <location filename="" line="0"/>
         <source>Import %1</source>
-        <translation>Importer %1</translation>
+        <translation type="obsolete">Importer %1</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="236"/>
+        <location filename="" line="0"/>
         <source>Not a valid file</source>
-        <translation>Fichier invalide</translation>
+        <translation type="obsolete">Fichier invalide</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="236"/>
+        <location filename="" line="0"/>
         <source>The file could not be opened</source>
-        <translation>Le fichier ne peut pas être ouvert</translation>
+        <translation type="obsolete">Le fichier ne peut pas être ouvert</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="243"/>
+        <location filename="MainWindow.cpp" line="224"/>
         <source>Unsaved changes</source>
         <translation>Changement non-sauvés</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="245"/>
+        <location filename="MainWindow.cpp" line="226"/>
         <source>The current map contains unsaved changes that will be lost when starting a new one.
 Do you want to cancel starting a new map or continue and discard the old changes?</source>
         <translation>Le document contient des changements non-sauvegardés qui seront perdus.
 Voulez-vous annuler le chargement d&apos;un nouveau document ou continuer et perdre les changements ?</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="264"/>
+        <location filename="" line="0"/>
         <source>Open %1</source>
-        <translation>Ouvrir %1</translation>
+        <translation type="obsolete">Ouvrir %1</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="296"/>
+        <location filename="MainWindow.cpp" line="276"/>
         <source>No valid file</source>
         <translation>Fichier invalide</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="296"/>
+        <location filename="MainWindow.cpp" line="276"/>
         <source>%1 could not be opened.</source>
         <translation>%1 n&apos;a pas pu être ouvert.</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="341"/>
+        <location filename="MainWindow.cpp" line="372"/>
         <source>Upload OSM</source>
-        <translation>Téléverser OSM</translation>
+        <translation>envoyer les modification</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="367"/>
+        <location filename="MainWindow.cpp" line="401"/>
         <source>Error downloading</source>
         <translation>Erreur de téléchargement</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="367"/>
+        <location filename="MainWindow.cpp" line="401"/>
         <source>The map could not be downloaded</source>
         <translation>La carte n&apos;a pas pu être téléchargée</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="539"/>
+        <location filename="MainWindow.cpp" line="574"/>
         <source>Save map style</source>
         <translation>Sauvergarder le style de carte</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="546"/>
+        <location filename="MainWindow.cpp" line="581"/>
         <source>Merkaartor map style (*.mas)</source>
         <translation>Style de carte Merkaartor (*.mas)</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="546"/>
+        <location filename="MainWindow.cpp" line="581"/>
         <source>Load map style</source>
         <translation>Charger un Style de carte</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="695"/>
+        <location filename="MainWindow.cpp" line="730"/>
         <source>Export OSM</source>
         <translation>Exporter OSM</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="695"/>
+        <location filename="MainWindow.cpp" line="730"/>
         <source>OSM Files (*.osm)</source>
         <translation>Fichiers OSM (*.osm)</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="804"/>
+        <location filename="MainWindow.cpp" line="841"/>
         <source>Add Bookmark</source>
         <translation>Ajouter un signet</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="805"/>
+        <location filename="MainWindow.cpp" line="842"/>
         <source>Specify the name of the bookmark.</source>
         <translation>Spécifiez le nom du signet.</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="808"/>
+        <location filename="MainWindow.cpp" line="845"/>
         <source>Invalid bookmark name</source>
         <translation>Nom de signet invalide</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="809"/>
+        <location filename="MainWindow.cpp" line="846"/>
         <source>Bookmark cannot be blank.</source>
         <translation>Un nom de signet ne peut être vide.</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="813"/>
+        <location filename="MainWindow.cpp" line="850"/>
         <source>Warning: Bookmark name already exists</source>
         <translation>Attention: Le nom de signet existe déjà</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="814"/>
+        <location filename="MainWindow.cpp" line="851"/>
         <source>Enter a new one, keep the same to overwrite or cancel.</source>
         <translation>Entrez un nouveau nom, gardez le même pour remplacer ou annulez.</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="861"/>
+        <location filename="MainWindow.cpp" line="898"/>
         <source>Remove Bookmark</source>
         <translation>Supprimer le signet</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="862"/>
+        <location filename="MainWindow.cpp" line="899"/>
         <source>Select the bookmark to remove.</source>
         <translation>Sélectionnez le signet à supprimer.</translation>
     </message>
@@ -975,7 +979,7 @@ Voulez-vous annuler le chargement d&apos;un nouveau document ou continuer et per
     <message>
         <location filename="MainWindow.ui" line="414"/>
         <source>&amp;Node</source>
-        <translation>&amp;Noeud</translation>
+        <translation>&amp;Point</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="202"/>
@@ -1050,7 +1054,7 @@ Voulez-vous annuler le chargement d&apos;un nouveau document ou continuer et per
     <message>
         <location filename="MainWindow.ui" line="309"/>
         <source>&amp;Undo</source>
-        <translation>&amp;Défaire</translation>
+        <translation>&amp;Annuler</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="312"/>
@@ -1073,7 +1077,7 @@ Voulez-vous annuler le chargement d&apos;un nouveau document ou continuer et per
         <translation>Déplacer</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="307"/>
+        <location filename="" line="0"/>
         <source>M</source>
         <translation type="obsolete">M</translation>
     </message>
@@ -1113,7 +1117,7 @@ Voulez-vous annuler le chargement d&apos;un nouveau document ou continuer et per
         <translation>L</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="345"/>
+        <location filename="" line="0"/>
         <source>Edit</source>
         <translation type="obsolete">Editer</translation>
     </message>
@@ -1125,7 +1129,7 @@ Voulez-vous annuler le chargement d&apos;un nouveau document ou continuer et per
     <message>
         <location filename="MainWindow.ui" line="383"/>
         <source>&amp;Upload to web</source>
-        <translation>Télé&amp;verser sur le web</translation>
+        <translation>en&amp;voyer sur le web</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="386"/>
@@ -1143,17 +1147,17 @@ Voulez-vous annuler le chargement d&apos;un nouveau document ou continuer et per
         <translation>Del</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="378"/>
+        <location filename="" line="0"/>
         <source>R</source>
         <translation type="obsolete">R</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="389"/>
+        <location filename="" line="0"/>
         <source>Add</source>
         <translation type="obsolete">Ajouter</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="400"/>
+        <location filename="" line="0"/>
         <source>N</source>
         <translation type="obsolete">N</translation>
     </message>
@@ -1243,7 +1247,7 @@ Voulez-vous annuler le chargement d&apos;un nouveau document ou continuer et per
         <translation>Exporte toutes les couches visibles vers un fichier</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="500"/>
+        <location filename="" line="0"/>
         <source>&amp;Select...</source>
         <translation type="obsolete">&amp;Sélectionner...</translation>
     </message>
@@ -1280,7 +1284,7 @@ Voulez-vous annuler le chargement d&apos;un nouveau document ou continuer et per
     <message>
         <location filename="MainWindow.ui" line="558"/>
         <source>Merge the selected nodes (first selected will remain)</source>
-        <translation>Fusionne les noeuds sélectionnés (le premier sélectionné restera)</translation>
+        <translation>Fusionne les points sélectionnés (le premier sélectionné restera)</translation>
     </message>
     <message>
         <location filename="Sync/SyncOSM.cpp" line="15"/>
@@ -1293,19 +1297,19 @@ Voulez-vous annuler le chargement d&apos;un nouveau document ou continuer et per
         <translation>Veuillez d&apos;abord résoudre les conflits existants</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="342"/>
+        <location filename="MainWindow.cpp" line="373"/>
         <source>You don&apos;t seem to have specified your
 OpenStreetMap username and password.
 Do you want to do this now?</source>
         <translation>Il semble que vous n&apos;ayiez pas spécifiévos identifiant et mot-de-passe OpenStreetMap.Voulez-vous faire cela maintenant ?</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="582"/>
+        <location filename="MainWindow.cpp" line="617"/>
         <source>Save Merkaartor document</source>
         <translation>Enregistrer un document Merkaartor</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="582"/>
+        <location filename="MainWindow.cpp" line="617"/>
         <source>Merkaartor documents Files (*.mdc)</source>
         <translation>Fichiers document Merkaartor (*.mdc)</translation>
     </message>
@@ -1345,19 +1349,19 @@ Do you want to do this now?</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="331"/>
+        <location filename="MainWindow.cpp" line="362"/>
         <source>Old Qt version detected</source>
         <translation>Version ancienne de Qt détectée</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="335"/>
+        <location filename="MainWindow.cpp" line="366"/>
         <source>Your setup uses Qt %1, which contains various known errors in uploading data to OpenStreetMap leading to 401 server response codes. Are you sure you want to continue (which is not recommended).
 For more information see http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor</source>
         <translation>Votre installation utilise Qt %1, qui contient un certain nombre d&apos;erreur connue lors du téléversage vers OpenStreetMap, menant à des réponse au status 401 venant du serveur. Etes-vous certain de vouloir continuer (non recommandé) ?
 Pour plus d&apos;information, voir http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor (en anglais)</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="582"/>
+        <location filename="MainWindow.cpp" line="617"/>
         <source>untitled</source>
         <translation></translation>
     </message>
@@ -1454,7 +1458,7 @@ Pour plus d&apos;information, voir http://wiki.openstreetmap.org/index.php/Probl
     <message>
         <location filename="MainWindow.ui" line="476"/>
         <source>Alt+B</source>
-        <translation></translation>
+        <translation>Alt+C</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="524"/>
@@ -1469,7 +1473,7 @@ Pour plus d&apos;information, voir http://wiki.openstreetmap.org/index.php/Probl
     <message>
         <location filename="MainWindow.ui" line="561"/>
         <source>Alt+M</source>
-        <translation></translation>
+        <translation>Alt+F</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="643"/>
@@ -1479,12 +1483,17 @@ Pour plus d&apos;information, voir http://wiki.openstreetmap.org/index.php/Probl
     <message>
         <location filename="MainWindow.ui" line="646"/>
         <source>Align selected nodes. First two selected give the line.</source>
-        <translation>Aligne les noeuds sélectionnés. Les deux premiers sélectionnés indiquent la ligne.</translation>
+        <translation>Aligne les points sélectionnés. Les deux premiers sélectionnés indiquent la ligne.</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="649"/>
         <source>Alt+A</source>
         <translation></translation>
+    </message>
+    <message>
+        <location filename="MainWindow.cpp" line="350"/>
+        <source>Open track files</source>
+        <translation>Ouvrir des fichiers traces</translation>
     </message>
 </context>
 <context>
@@ -1503,27 +1512,27 @@ Pour plus d&apos;information, voir http://wiki.openstreetmap.org/index.php/Probl
 <context>
     <name>MapFeature</name>
     <message>
-        <location filename="Map/MapFeature.cpp" line="465"/>
+        <location filename="Map/MapFeature.cpp" line="474"/>
         <source>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; by &lt;b&gt;%2&lt;/b&gt;</source>
         <translation>&lt;i&gt;dernier: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; par &lt;b&gt;%2&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="Map/MapFeature.cpp" line="467"/>
+        <location filename="Map/MapFeature.cpp" line="476"/>
         <source>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt;</source>
         <translation>&lt;i&gt;dernier: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="Map/MapFeature.cpp" line="474"/>
+        <location filename="Map/MapFeature.cpp" line="483"/>
         <source>History</source>
         <translation>Historique</translation>
     </message>
     <message>
-        <location filename="Map/MapFeature.cpp" line="477"/>
+        <location filename="Map/MapFeature.cpp" line="486"/>
         <source>Referenced by ways</source>
         <translation>Référencé par les routes</translation>
     </message>
     <message>
-        <location filename="Map/MapFeature.cpp" line="480"/>
+        <location filename="Map/MapFeature.cpp" line="489"/>
         <source>Referenced by relation</source>
         <translation>Référencé par la relation</translation>
     </message>
@@ -1570,7 +1579,7 @@ Pour plus d&apos;information, voir http://wiki.openstreetmap.org/index.php/Probl
     <message>
         <location filename="Map/TrackPoint.cpp" line="180"/>
         <source>timestamp</source>
-        <translation type="unfinished"></translation>
+        <translation>Date et heure</translation>
     </message>
     <message>
         <location filename="Map/TrackPoint.cpp" line="181"/>
@@ -1580,12 +1589,12 @@ Pour plus d&apos;information, voir http://wiki.openstreetmap.org/index.php/Probl
     <message>
         <location filename="Map/TrackPoint.cpp" line="183"/>
         <source>Node</source>
-        <translation>Noeud</translation>
+        <translation>Point</translation>
     </message>
     <message>
         <location filename="Map/Road.cpp" line="490"/>
         <source>%1 nodes</source>
-        <translation>%1 noeuds</translation>
+        <translation>%1 points</translation>
     </message>
 </context>
 <context>
@@ -1642,6 +1651,11 @@ Pour plus d&apos;information, voir http://wiki.openstreetmap.org/index.php/Probl
         <location filename="Preferences/MerkaartorPreferences.cpp" line="42"/>
         <source>New Server</source>
         <translation>Nouveau serveur</translation>
+    </message>
+    <message>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="88"/>
+        <source>Merkaartor</source>
+        <translation>Merkaartor</translation>
     </message>
 </context>
 <context>
@@ -1943,7 +1957,7 @@ Pour plus d&apos;information, voir http://wiki.openstreetmap.org/index.php/Probl
     <message>
         <location filename="PropertiesDock.cpp" line="255"/>
         <source>Properties - Trackpoint</source>
-        <translation>Propriétés - Point de trace</translation>
+        <translation>Propriétés - Point</translation>
     </message>
     <message>
         <location filename="PropertiesDock.cpp" line="273"/>
@@ -1984,12 +1998,12 @@ Pour plus d&apos;information, voir http://wiki.openstreetmap.org/index.php/Probl
 <context>
     <name>QApplication</name>
     <message>
-        <location filename="Render/OsmaRender.cpp" line="56"/>
+        <location filename="Render/OsmaRender.cpp" line="55"/>
         <source>Unable to read stylesheet</source>
         <translation>Impossible de lire la feuille de style</translation>
     </message>
     <message>
-        <location filename="Render/OsmaRender.cpp" line="57"/>
+        <location filename="Render/OsmaRender.cpp" line="56"/>
         <source>Please make sure the Osmarender stylesheet is available at %1</source>
         <translation>Veuillez vous assurer que la feuille de style Osmarender est disponible à %1</translation>
     </message>
@@ -2037,7 +2051,7 @@ Pour plus d&apos;information, voir http://wiki.openstreetmap.org/index.php/Probl
     <message>
         <location filename="RoadProperties.ui" line="46"/>
         <source>xxx</source>
-        <translation type="unfinished"></translation>
+        <translation>xxx</translation>
     </message>
     <message>
         <location filename="RoadProperties.ui" line="53"/>
@@ -2293,7 +2307,7 @@ Pour plus d&apos;information, voir http://wiki.openstreetmap.org/index.php/Probl
 <context>
     <name>TrackMapLayer</name>
     <message>
-        <location filename="Map/MapLayer.cpp" line="604"/>
+        <location filename="Map/MapLayer.cpp" line="608"/>
         <source>Extract - %1</source>
         <translation>Extraction - %1</translation>
     </message>
@@ -2323,12 +2337,12 @@ Pour plus d&apos;information, voir http://wiki.openstreetmap.org/index.php/Probl
     <message>
         <location filename="TrackPointProperties.ui" line="57"/>
         <source>xxx</source>
-        <translation type="unfinished"></translation>
+        <translation>xxx</translation>
     </message>
     <message>
         <location filename="TrackPointProperties.ui" line="70"/>
         <source>Amenity</source>
-        <translation type="unfinished"></translation>
+        <translation>Agrément</translation>
     </message>
     <message>
         <location filename="TrackPointProperties.ui" line="87"/>
@@ -2376,7 +2390,7 @@ Pour plus d&apos;information, voir http://wiki.openstreetmap.org/index.php/Probl
     <message>
         <location filename="UploadMapDialog.ui" line="104"/>
         <source>99999; </source>
-        <translation type="unfinished"></translation>
+        <translation>99999; </translation>
     </message>
 </context>
 <context>
@@ -2478,92 +2492,92 @@ Pour plus d&apos;information, voir http://wiki.openstreetmap.org/index.php/Probl
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="109"/>
         <source>Forest</source>
-        <translation type="unfinished"></translation>
+        <translation>Forêt</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="108"/>
         <source>Farm</source>
-        <translation type="unfinished"></translation>
+        <translation>Ferme</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="114"/>
         <source>Recreation ground</source>
-        <translation type="unfinished"></translation>
+        <translation>Aire de jeux</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="119"/>
         <source>Village green</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="116"/>
         <source>Residential zone</source>
-        <translation type="unfinished"></translation>
+        <translation>Zone résidentielle</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="111"/>
         <source>Industrial zone</source>
-        <translation type="unfinished"></translation>
+        <translation>Zone industrielle</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="117"/>
         <source>Retail zone</source>
-        <translation type="unfinished"></translation>
+        <translation>Zone commerciale (magasins)</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="106"/>
         <source>Commercial zone</source>
-        <translation type="unfinished"></translation>
+        <translation>Zone tertiaire (bureaux)</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="102"/>
         <source>Allotments</source>
-        <translation type="unfinished"></translation>
+        <translation>Jardins familiaux</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="103"/>
         <source>Basin</source>
-        <translation type="unfinished"></translation>
+        <translation>Bassin</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="104"/>
         <source>Brownfield</source>
-        <translation type="unfinished"></translation>
+        <translation>Batiments rasés</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="105"/>
         <source>Cemetery</source>
-        <translation type="unfinished"></translation>
+        <translation>Cimetière</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="107"/>
         <source>Construction zone</source>
-        <translation type="unfinished"></translation>
+        <translation>Zone en construction</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="110"/>
         <source>Greenfield</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouvelle zone en développement</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="112"/>
         <source>Landfill</source>
-        <translation type="unfinished"></translation>
+        <translation>Décharge</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="113"/>
         <source>Military</source>
-        <translation type="unfinished"></translation>
+        <translation>Zone militaire</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="115"/>
         <source>Reservoir (water)</source>
-        <translation type="unfinished"></translation>
+        <translation>Réservoir d&apos;eau</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="118"/>
         <source>Surface mineral extraction</source>
-        <translation type="unfinished"></translation>
+        <translation>Carrière</translation>
     </message>
 </context>
 </TS>
