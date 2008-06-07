@@ -35,14 +35,16 @@ MOC_DIR += tmp
 UI_DIR += tmp
 
 TRANSLATIONS += \
-	merkaartor_fr.ts \ 
 	merkaartor_de.ts \
+	merkaartor_fr.ts \
+	merkaartor_it.ts \
 	merkaartor_pl.ts \
 	merkaartor_ru.ts
 
 BINTRANSLATIONS += \
 	merkaartor_de.qm \
 	merkaartor_fr.qm \
+	merkaartor_it.qm \
 	merkaartor_pl.qm \
 	merkaartor_ru.qm
 
