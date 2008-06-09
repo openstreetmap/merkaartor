@@ -42,6 +42,9 @@
         <file>Mapnik/station.png</file>
         <file>Mapnik/station_small.png</file>
         <file>Mapnik/tower.png</file>
+        <file>Places/place_hamlet.png</file> 
+        <file>Places/place_village.png</file> 
+        <file>Places/place_town.png</file> 
     </qresource>
     <qresource>
     	<file>Tiles/000.png</file>

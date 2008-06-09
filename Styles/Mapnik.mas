@@ -627,4 +627,27 @@
  drawTrafficDirectionMarks="no">
   <selector expr="[power] is tower"/>
 </painter>
+<painter
+ zoomUnder="0.00666667" zoomUpper="1e+07"
+ icon=":/Art/Places/place_town.png"
+ drawTrafficDirectionMarks="no">
+ <selector expr="[place] is town"/>
+</painter>
+<painter
+ zoomUnder="0.01" zoomUpper="1e+07"
+ icon=":/Art/Places/place_village.png"
+ drawTrafficDirectionMarks="no">
+ <selector expr="[place] is village"/>
+</painter>
+<painter
+ zoomUnder="0.02" zoomUpper="1e+07"
+ icon=":/Art/Places/place_hamlet.png"
+ drawTrafficDirectionMarks="no">
+ <selector expr="[place] is hamlet"/>
+</painter>
+<painter
+ icon=":/Art/Places/place_town.png"
+ drawTrafficDirectionMarks="no">
+ <selector expr="[place] is city"/>
+</painter>
 </mapStyle>
