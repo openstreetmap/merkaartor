@@ -232,9 +232,9 @@ void MapView::updateStaticBuffer(QPaintEvent * /* anEvent */)
 	P.drawLine(P1-QPointF(0,5),P1+QPointF(0,5));
 	P.drawLine(P1,P2);
 	if (Length < 1000)
-		P.drawText(QRectF(P2-QPoint(100,40),QSize(200,30)),Qt::AlignHCenter | Qt::AlignBottom, QString("%1 m").arg(Length, 0, 'f', 0));
+		P.drawText(QRectF(P2-QPoint(100,40),QSize(200,30)),Qt::AlignHCenter | Qt::AlignBottom, QString(tr("%1 m")).arg(Length, 0, 'f', 0));
 	else
-		P.drawText(QRectF(P2-QPoint(100,40),QSize(200,30)),Qt::AlignHCenter | Qt::AlignBottom, QString("%1 km").arg(Length/1000, 0, 'f', 0));
+		P.drawText(QRectF(P2-QPoint(100,40),QSize(200,30)),Qt::AlignHCenter | Qt::AlignBottom, QString(tr("%1 km")).arg(Length/1000, 0, 'f', 0));
 
 	P.drawLine(P2-QPointF(0,5),P2+QPointF(0,5));
 	QTime Stop(QTime::currentTime());
