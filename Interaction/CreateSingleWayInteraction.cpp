@@ -12,10 +12,16 @@
 #include <QtGui/QDockWidget>
 #include <QtGui/QPainter>
 
-CreateSingleWayInteraction::CreateSingleWayInteraction(MainWindow* aMain, MapView* aView, bool aCurved)
+CreateSingleWayInteraction::CreateSingleWayInteraction(MainWindow* aMain, MapView* aView, TrackPoint *firstNode, bool aCurved)
 	: GenericFeatureSnapInteraction<MapFeature>(aView), Main(aMain), theRoad(0), FirstPoint(0,0),
-	 FirstNode(0), HaveFirst(false), IsCurved(aCurved)
+	 FirstNode(firstNode), HaveFirst(false), IsCurved(aCurved)
 {
+	if (firstNode)
+	{
+		FirstPoint = firstNode->position();
+		LastCursor = view()->projection().project(FirstPoint);
+		HaveFirst = true;
+	}
 }
 
 CreateSingleWayInteraction::~CreateSingleWayInteraction()

@@ -486,12 +486,20 @@ void MainWindow::on_createRoundaboutAction_triggered()
 
 void MainWindow::on_createRoadAction_triggered()
 {
-	theView->launch(new CreateSingleWayInteraction(this, theView, false));
+	TrackPoint * firstPoint = NULL;	
+
+	if (theView->properties()->size() == 1)
+	{
+		MapFeature * feature = theView->properties()->selection(0);
+		firstPoint = dynamic_cast<TrackPoint*>(feature);
+	}
+	
+	theView->launch(new CreateSingleWayInteraction(this, theView, firstPoint, false));
 }
 
 void MainWindow::on_createCurvedRoadAction_triggered()
 {
-	theView->launch(new CreateSingleWayInteraction(this, theView, true));
+	theView->launch(new CreateSingleWayInteraction(this, theView, NULL, true));
 }
 
 void MainWindow::on_createAreaAction_triggered()
