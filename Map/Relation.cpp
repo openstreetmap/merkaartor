@@ -129,7 +129,7 @@ double Relation::pixelDistance(const QPointF& Target, double ClearEndDistance, c
 
 void Relation::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const std::vector<MapFeature*>& Alternatives)
 {
-	for (unsigned int i=0; i<p->Members.size(); ++i)
+	for (unsigned int i=0; i<p->Members.size();) {
 		if (p->Members[i].second == aFeature)
 		{
 			if ( (p->Members.size() == 1) && (Alternatives.size() == 0) )
@@ -139,9 +139,15 @@ void Relation::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeat
 				QString Role = p->Members[i].first;
 				theList->add(new RelationRemoveFeatureCommand(this, i, theDocument->getDirtyLayer()));
 				for (unsigned int j=0; j<Alternatives.size(); ++j)
-					theList->add(new RelationAddFeatureCommand(this, Role, Alternatives[j], i+j, theDocument->getDirtyLayer()));
+					if (i < p->Members.size())
+						if (p->Members[i+j].second != Alternatives[j])
+							if (p->Members[i+j-1].second != Alternatives[j])
+								theList->add(new RelationAddFeatureCommand(this, Role, Alternatives[j], i+j, theDocument->getDirtyLayer()));
+				continue;
 			}
 		}
+		++i;
+	}
 }
 
 bool Relation::notEverythingDownloaded() const

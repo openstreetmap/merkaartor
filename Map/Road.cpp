@@ -291,7 +291,7 @@ double Road::pixelDistance(const QPointF& Target, double ClearEndDistance, const
 
 void Road::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const std::vector<MapFeature*>& Proposals)
 {
-	for (unsigned int i=0; i<p->Nodes.size(); ++i)
+	for (unsigned int i=0; i<p->Nodes.size();) {
 		if (p->Nodes[i] == aFeature)
 		{
 			std::vector<TrackPoint*> Alternatives;
@@ -307,9 +307,15 @@ void Road::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature,
 			{
 				theList->add(new RoadRemoveTrackPointCommand(this, p->Nodes[i],theDocument->getDirtyLayer()));
 				for (unsigned int j=0; j<Alternatives.size(); ++j)
-					theList->add(new RoadAddTrackPointCommand(this, Alternatives[j], i+j,theDocument->getDirtyLayer()));
+					if (i < p->Nodes.size())
+						if (p->Nodes[i+j] != Alternatives[j])
+							if (p->Nodes[i+j-1] != Alternatives[j])
+								theList->add(new RoadAddTrackPointCommand(this, Alternatives[j], i+j,theDocument->getDirtyLayer()));
+				continue;
 			}
 		}
+		++i;
+	}
 }
 
 QString Road::toXML(unsigned int lvl)
