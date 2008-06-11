@@ -67,6 +67,8 @@ void MapNetwork::launchRequest()
 		loadingMap[getId] = R->hash;
 		vectorMutex.unlock();
 	}
+
+	delete R;
 }
 
 void MapNetwork::requestFinished(int id, bool error)
