@@ -114,9 +114,9 @@ void LayerWidget::initActions()
 	ctxMenu->addMenu(alphaMenu);
 	connect(alphaMenu, SIGNAL(triggered(QAction*)), this, SLOT(setOpacity(QAction*)));
 
-	QAction* closeAction = new QAction(tr("Delete"), this);
-	connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
-	ctxMenu->addAction(closeAction);
+	//QAction* closeAction = new QAction(tr("Delete"), this);
+	//connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
+	//ctxMenu->addAction(closeAction);
 }
 
 void LayerWidget::setOpacity(QAction *act)
@@ -367,6 +367,10 @@ void TrackLayerWidget::initActions()
 	QAction* actZoom = new QAction(tr("Zoom"), ctxMenu);
 	ctxMenu->addAction(actZoom);
 	connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
+
+	QAction* closeAction = new QAction(tr("Delete"), this);
+	connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
+	ctxMenu->addAction(closeAction);
 }
 
 TrackLayerWidget::~TrackLayerWidget()

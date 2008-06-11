@@ -12,11 +12,15 @@
 #include <utility>
 
 class QString;
+class Command;
 class CommandHistory;
 class MapDocument;
 class MapDocumentPrivate;
 class ImageMapLayer;
 class TrackMapLayer;
+class DrawingMapLayer;
+class DirtyMapLayer;
+class UploadedMapLayer;
 
 class MapDocument : public QObject
 {
@@ -47,12 +51,17 @@ public:
 	void setHistory(CommandHistory* h);
 	CommandHistory& history();
 	const CommandHistory& history() const;
+	void addHistory(Command* aCommand);
+	void redoHistory();
+	void undoHistory();
 	void clear();
 
 	void addToTagList(QString k, QString v);
 	QStringList getTagList() ;
 	QStringList getTagValueList(QString k) ;
 	ImageMapLayer* getImageLayer() const;
+	DirtyMapLayer* getDirtyLayer() const;
+	UploadedMapLayer* getUploadedLayer() const;
 
 	QString exportOSM(const CoordBox& aCoordBox = WORLD_COORDBOX);
 	bool toXML(QDomElement xParent);
@@ -62,10 +71,15 @@ public:
 
 	MapLayer* getLastDownloadLayer();
 	void setLastDownloadLayer(MapLayer * aLayer);
+
 private:
 	MapDocumentPrivate* p;
 	QStringList tagKeys;
 	QStringList tagValues;
+
+signals:
+	void historyChanged();
+
 };
 
 bool hasUnsavedChanges(const MapDocument& aDoc);

@@ -28,7 +28,7 @@ static bool canJoin(Road* R1, Road* R2)
 		(End2 == End1);
 }
 
-static void mergeTags(CommandList* L, MapFeature* Dest, MapFeature* Src)
+static void mergeTags(MapLayer* theLayer, CommandList* L, MapFeature* Dest, MapFeature* Src)
 {
 	for (unsigned int i=0; i<Src->tagSize(); ++i)
 	{
@@ -36,19 +36,19 @@ static void mergeTags(CommandList* L, MapFeature* Dest, MapFeature* Src)
 		QString v1 = Src->tagValue(i);
 		unsigned int j = Dest->findKey(k);
 		if (j == Dest->tagSize())
-			L->add(new SetTagCommand(Dest,k,v1));
+			L->add(new SetTagCommand(Dest,k,v1, theLayer));
 		else
 		{
 			QString v2 = Dest->tagValue(j);
 			if (v1 != v2 && k !="created_by")
 			{
-				L->add(new SetTagCommand(Dest,k,QString("%1;%2").arg(v2).arg(v1)));
+				L->add(new SetTagCommand(Dest,k,QString("%1;%2").arg(v2).arg(v1), theLayer));
 			}
 		}
 	}
 }
 
-void reversePoints(CommandList* theList, Road* R)
+void reversePoints(MapLayer* theLayer, CommandList* theList, Road* R)
 {
 	std::vector<TrackPoint*> Pts;
 	for (unsigned int i=R->size(); i; --i)
@@ -57,19 +57,19 @@ void reversePoints(CommandList* theList, Road* R)
 		Pts.push_back(Pt);
 	}
 	for (unsigned int i=0; i<Pts.size(); ++i)
-		theList->add(new RoadRemoveTrackPointCommand(R,Pts[i]));
+		theList->add(new RoadRemoveTrackPointCommand(R,Pts[i],theLayer));
 	for (unsigned int i=0; i<Pts.size(); ++i)
-		theList->add(new RoadAddTrackPointCommand(R,Pts[i]));
+		theList->add(new RoadAddTrackPointCommand(R,Pts[i],theLayer));
 }
 
-static void appendPoints(CommandList* L, Road* Dest, Road* Src)
+static void appendPoints(MapLayer* theLayer, CommandList* L, Road* Dest, Road* Src)
 {
-	L->add(new RoadRemoveTrackPointCommand(Src,(unsigned int)0));
+	L->add(new RoadRemoveTrackPointCommand(Src,(unsigned int)0,theLayer));
 	while (Src->size())
 	{
 		TrackPoint* Pt = Src->get(0);
-		L->add(new RoadRemoveTrackPointCommand(Src,(unsigned int)0));
-		L->add(new RoadAddTrackPointCommand(Dest,Pt));
+		L->add(new RoadRemoveTrackPointCommand(Src,(unsigned int)0,theLayer));
+		L->add(new RoadAddTrackPointCommand(Dest,Pt,theLayer));
 	}
 }
 
@@ -77,13 +77,13 @@ static Road* join(MapDocument* theDocument, CommandList* L, Road* R1, Road* R2)
 {
 	if (R1->size() == 0)
 	{
-		mergeTags(L,R2,R1);
+		mergeTags(theDocument->getDirtyLayer(),L,R2,R1);
 		L->add(new RemoveFeatureCommand(theDocument,R1));
 		return R2;
 	}
 	if (R2->size() == 0)
 	{
-		mergeTags(L,R1,R2);
+		mergeTags(theDocument->getDirtyLayer(),L,R1,R2);
 		L->add(new RemoveFeatureCommand(theDocument,R2));
 		return R1;
 	}
@@ -92,11 +92,11 @@ static Road* join(MapDocument* theDocument, CommandList* L, Road* R1, Road* R2)
 	TrackPoint* Start2 = R2->get(0);
 	TrackPoint* End2 = R2->get(R2->size()-1);
 	if ( (Start1 == Start2) || (Start1 == End2) )
-		reversePoints(L,R1);
+		reversePoints(theDocument->getDirtyLayer(),L,R1);
 	if ( (End1 == End2) || (Start1 == End2) )
-		reversePoints(L,R2);
-	appendPoints(L,R1,R2);
-	mergeTags(L,R1,R2);
+		reversePoints(theDocument->getDirtyLayer(),L,R2);
+	appendPoints(theDocument->getDirtyLayer(),L,R1,R2);
+	mergeTags(theDocument->getDirtyLayer(),L,R1,R2);
 	L->add(new RemoveFeatureCommand(theDocument,R2));
 	return R1;
 }
@@ -142,7 +142,7 @@ static void splitRoad(MapLayer* theLayer, CommandList* theList, Road* In, const 
 			while ( (i+1) < FirstPart->size() )
 			{
 				NextPart->add(FirstPart->get(i+1));
-				theList->add(new RoadRemoveTrackPointCommand(FirstPart,i+1));
+				theList->add(new RoadRemoveTrackPointCommand(FirstPart,i+1,theLayer));
 			}
 			if (In != FirstPart)
 			{
@@ -164,9 +164,9 @@ static void splitRoad(MapLayer* theLayer, CommandList* theList, Road* In, const 
 			for (unsigned int i=1; i<In->size(); ++i)
 				Target.push_back(In->get(i));
 			while (In->size())
-				theList->add(new RoadRemoveTrackPointCommand(In,(unsigned int)0));
+				theList->add(new RoadRemoveTrackPointCommand(In,(unsigned int)0,theLayer));
 			for (unsigned int i=0; i<Target.size(); ++i)
-				theList->add(new RoadAddTrackPointCommand(In,Target[i]));
+				theList->add(new RoadAddTrackPointCommand(In,Target[i],theLayer));
 		}
 		else
 		{
@@ -197,8 +197,8 @@ static void breakRoad(MapLayer* theLayer, CommandList* theList, Road* R, TrackPo
 		{
 			TrackPoint* New = new TrackPoint(*Pt);
 			theList->add(new AddFeatureCommand(theLayer,New,true));
-			theList->add(new RoadRemoveTrackPointCommand(R,i));
-			theList->add(new RoadAddTrackPointCommand(R,New,i));
+			theList->add(new RoadRemoveTrackPointCommand(R,i,theLayer));
+			theList->add(new RoadAddTrackPointCommand(R,New,i,theLayer));
 		}
 }
 
@@ -214,7 +214,7 @@ void breakRoads(MapLayer* theLayer, CommandList* theList, PropertiesDock* theDoc
 				breakRoad(theLayer, theList, Roads[k],Roads[i]->get(j));
 }
 
-void alignNodes(CommandList* theList, PropertiesDock* theDock)
+void alignNodes(MapLayer* theLayer, CommandList* theList, PropertiesDock* theDock)
 {
 	if (theDock->size() < 3) //thre must be at least 3 nodes to align something
 		return;
@@ -241,7 +241,7 @@ void alignNodes(CommandList* theList, PropertiesDock* theDock)
 		pos.setLat(0);
 		rotate(pos,angle(p2));
 		pos=pos+p1;
-		theList->add(new MoveTrackPointCommand( Nodes[i], pos));
+		theList->add(new MoveTrackPointCommand( Nodes[i], pos, theLayer ));
 	}
 }
 
@@ -257,7 +257,7 @@ void mergeNodes(MapDocument* theDocument, CommandList* theList, PropertiesDock* 
 	TrackPoint* merged = Nodes[0];
 	alt.push_back(merged);
 	for (unsigned int i=1; i<Nodes.size(); ++i) {
-		mergeTags(theList, merged, Nodes[i]);
+		mergeTags(theDocument->getDirtyLayer(), theList, merged, Nodes[i]);
 		theList->add(new RemoveFeatureCommand(theDocument, Nodes[i], alt));
 	}
 }

@@ -1,13 +1,21 @@
 #include "Command/Command.h"
 #include "Map/MapDocument.h"
+#include "Map/MapFeature.h"
 #include "Command/DocumentCommands.h"
 #include "Command/RoadCommands.h"
 #include "Command/RelationCommands.h"
 #include "Command/TrackPointCommands.h"
 #include "Command/FeatureCommands.h"
 
-#include <QtGui/QAction>
+#include <QAction>
+#include <QListWidget>
 #include <QUuid>
+
+Command::Command()
+{
+	description = QApplication::translate("Command", "No description");
+	mainFeature = NULL;
+}
 
 Command::~Command()
 {
@@ -25,11 +33,48 @@ const QString& Command::id() const
 	return Id;
 }
 
+QString Command::getDescription() 
+{
+	return description;
+}
+
+void Command::setDescription(QString desc) 
+{
+	description = desc;
+}
+
+MapFeature* Command::getFeature() 
+{
+	return mainFeature;
+}
+
+void Command::setFeature(MapFeature* feat) 
+{
+	mainFeature = feat;
+}
+
+bool Command::buildUndoList(QListWidget* theListWidget)
+{
+	QListWidgetItem* it = new QListWidgetItem(getDescription(), theListWidget);
+	if (getFeature())
+		it->setData(Qt::UserRole, getFeature()->id());
+
+	return true;
+}
+
+
 // COMMANDLIST
 
 CommandList::CommandList()
 : IsUpdateFromOSM(false)
 {
+}
+
+CommandList::CommandList(QString aDesc, MapFeature* aFeat)
+: IsUpdateFromOSM(false)
+{
+	description = aDesc;
+	mainFeature = aFeat;
 }
 
 CommandList::~CommandList(void)
@@ -89,6 +134,13 @@ bool CommandList::toXML(QDomElement& xParent) const
 	QDomElement e = xParent.ownerDocument().createElement("CommandList");
 	xParent.appendChild(e);
 
+	e.setAttribute("xml:id", id());
+	e.setAttribute("description", description);
+	if (mainFeature) {
+		e.setAttribute("feature", mainFeature->id());
+		e.setAttribute("featureclass", mainFeature->getClass());
+	}
+
 	for (unsigned int i=0; i<Subs.size(); ++i) {
 		OK = Subs[i]->toXML(e);
 	}
@@ -100,46 +152,68 @@ CommandList* CommandList::fromXML(MapDocument* d, const QDomElement& e)
 {
 	CommandList* l = new CommandList();
 	l->setId(e.attribute("xml:id"));
+	if (e.hasAttribute("description")) 
+		l->description = e.attribute("description");
+	if (e.hasAttribute("feature")) {
+		if (e.attribute("featureclass") == "TrackPoint") {
+			l->mainFeature = (MapFeature*) MapFeature::getTrackPointOrCreatePlaceHolder(d, (MapLayer *) d->getDirtyLayer(), NULL, e.attribute("feature"));
+		} else 
+		if (e.attribute("featureclass") == "Road") {
+			l->mainFeature = (MapFeature*) MapFeature::getWayOrCreatePlaceHolder(d, (MapLayer *) d->getDirtyLayer(), NULL, e.attribute("feature"));
+		} else 
+		if (e.attribute("featureclass") == "Relation") {
+			l->mainFeature = (MapFeature*) MapFeature::getRelationOrCreatePlaceHolder(d, (MapLayer *) d->getDirtyLayer(), NULL, e.attribute("feature"));
+		}
+	}
 
 	QDomElement c = e.firstChildElement();
 	while(!c.isNull()) {
 		if (c.tagName() == "AddFeatureCommand") {
 			AddFeatureCommand* C = AddFeatureCommand::fromXML(d, c);
-			l->add(C);
+			if (C)
+				l->add(C);
 		} else
 		if (c.tagName() == "MoveTrackPointCommand") {
 			MoveTrackPointCommand* C = MoveTrackPointCommand::fromXML(d, c);
-			l->add(C);
+			if (C)
+				l->add(C);
 		} else
 		if (c.tagName() == "RelationAddFeatureCommand") {
 			RelationAddFeatureCommand* C = RelationAddFeatureCommand::fromXML(d, c);
-			l->add(C);
+			if (C)
+				l->add(C);
 		} else
 		if (c.tagName() == "RelationRemoveFeatureCommand") {
 			RelationRemoveFeatureCommand* C = RelationRemoveFeatureCommand::fromXML(d, c);
-			l->add(C);
+			if (C)
+				l->add(C);
 		} else
 		if (c.tagName() == "RemoveFeatureCommand") {
 			RemoveFeatureCommand* C = RemoveFeatureCommand::fromXML(d, c);
-			l->add(C);
+			if (C)
+				l->add(C);
 		} else
 		if (c.tagName() == "RoadAddTrackPointCommand") {
 			RoadAddTrackPointCommand* C = RoadAddTrackPointCommand::fromXML(d, c);
-			l->add(C);
+			if (C)
+				l->add(C);
 		} else
 		if (c.tagName() == "RoadRemoveTrackPointCommand") {
 			RoadRemoveTrackPointCommand* C = RoadRemoveTrackPointCommand::fromXML(d, c);
-			l->add(C);
+			if (C)
+				l->add(C);
 		} else
 		if (c.tagName() == "ClearTagCommand") {
 			ClearTagCommand* C = ClearTagCommand::fromXML(d, c);
-			l->add(C);
+			if (C)
+				l->add(C);
 		//} else
 		//if (c.tagName() == "ClearTagsCommand") {
 		} else
 		if (c.tagName() == "SetTagCommand") {
 			SetTagCommand* C = SetTagCommand::fromXML(d, c);
-			l->add(C);
+			if (C)
+				l->add(C);
 		} else
 		if (c.tagName() == "CommandList") {
 			l->add(CommandList::fromXML(d, c));
@@ -235,6 +309,14 @@ unsigned int CommandHistory::buildDirtyList(DirtyList& theList)
 	return Index;
 }
 
+unsigned int CommandHistory::buildUndoList(QListWidget* theList)
+{
+	for (unsigned int i=0; i<Index; ++i)
+		Subs[i]->buildUndoList(theList);
+
+	return Index;
+}
+
 bool CommandHistory::toXML(QDomElement& xParent) const
 {
 	bool OK = true;
@@ -268,7 +350,8 @@ CommandHistory* CommandHistory::fromXML(MapDocument* d, QDomElement& e)
 		} else
 		if (c.tagName() == "SetTagCommand") {
 			SetTagCommand* C = SetTagCommand::fromXML(d, c);
-			h->add(C);
+			if (C)
+				h->add(C);
 		}
 		c = c.nextSiblingElement();
 	}

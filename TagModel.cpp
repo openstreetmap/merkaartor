@@ -3,6 +3,7 @@
 #include "Command/FeatureCommands.h"
 #include "Map/MapDocument.h"
 #include "Map/MapFeature.h"
+#include "Map/MapLayer.h"
 
 TagModel::TagModel(MainWindow* aMain)
 : Main(aMain)
@@ -121,14 +122,14 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
 			if (index.column() == 0)
 			{
 				beginInsertRows(QModelIndex(), Tags.size()+1, Tags.size()+1);
-				CommandList* L = new CommandList;
+				CommandList* L = new CommandList(MainWindow::tr("SetTag %1").arg(theFeatures[0]->id()), theFeatures[0]);
 				for (unsigned int i=0; i<theFeatures.size(); ++i)
 				{
-					L->add(new SetTagCommand(theFeatures[i],value.toString(),""));
+					L->add(new SetTagCommand(theFeatures[i],value.toString(),"", Main->document()->getDirtyLayer()));
 					theFeatures[i]->setLastUpdated(MapFeature::User);
 				}
 				Tags.push_back(std::make_pair(value.toString(),""));
-				Main->document()->history().add(L);
+				Main->document()->addHistory(L);
 				endInsertRows();
 			}
 			else
@@ -141,15 +142,15 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
 				Tags[index.row()].first = value.toString();
 			else
 				Tags[index.row()].second = value.toString();
-			CommandList* L = new CommandList;
+			CommandList* L = new CommandList(MainWindow::tr("SetTag %1").arg(theFeatures[0]->id()), theFeatures[0]);
 			for (unsigned int i=0; i<theFeatures.size(); ++i)
 			{
 				unsigned int j = theFeatures[i]->findKey(Original);
 				if (j<theFeatures[i]->tagSize())
-					L->add(new SetTagCommand(theFeatures[i],j , Tags[index.row()].first, Tags[index.row()].second));
+					L->add(new SetTagCommand(theFeatures[i],j , Tags[index.row()].first, Tags[index.row()].second, Main->document()->getDirtyLayer()));
 				theFeatures[i]->setLastUpdated(MapFeature::User);
 			}
-			Main->document()->history().add(L);
+			Main->document()->addHistory(L);
 			Main->invalidateView(false);
 		}
 		emit dataChanged(index, index);

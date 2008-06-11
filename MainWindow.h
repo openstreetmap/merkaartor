@@ -12,6 +12,7 @@ class MapLayer;
 class MapView;
 class PropertiesDock;
 class InfoDock;
+class DirtyDock;
 
 class MainWindow : public QMainWindow, public Ui::MainWindow
 {
@@ -68,6 +69,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_windowPropertiesAction_triggered();
 		virtual void on_windowLayersAction_triggered();
 		virtual void on_windowInfoAction_triggered();
+		virtual void on_windowDirtyAction_triggered();
 
 		virtual void preferencesChanged();
 		virtual void toolsPreferencesAction_triggered(unsigned int tabIdx = 0);
@@ -79,6 +81,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		void reverse_triggered();
 
 	public:
+		QString fileName;
 		PropertiesDock* properties();
 		InfoDock* info();
 		MapDocument* document();
@@ -95,7 +98,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		bool importFiles(MapDocument * mapDocument, const QStringList & filesNames);
 		void loadFiles(const QStringList & fileNames);
 		void loadDocument(QString fn);
-		void saveDocument(QString fn);
+		void saveDocument();
 
 
 	private:
@@ -103,9 +106,9 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		MapDocument* theDocument;
 		PropertiesDock* theProperties;
 		InfoDock* theInfo;
+		DirtyDock* theDirty;
 		LayerDock* theLayers;
 		QDomDocument* theXmlDoc;
-		QString fileName;
 
 	private:
 		void updateBookmarksMenu();

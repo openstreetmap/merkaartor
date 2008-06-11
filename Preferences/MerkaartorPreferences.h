@@ -188,6 +188,11 @@ public:
 	void restoreMainWindowState(class QMainWindow * mainWindow) const;
 
 	bool getDrawTileBoundary();
+
+	/* Data */
+	void setAutoSaveDoc(bool theValue);
+	bool getAutoSaveDoc() const;
+
 protected:
 	bool Use06Api;
 	QString version;

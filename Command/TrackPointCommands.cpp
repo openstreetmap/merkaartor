@@ -1,9 +1,10 @@
 #include "Command/TrackPointCommands.h"
 #include "Map/TrackPoint.h"
+#include "Map/MapLayer.h"
 #include "Sync/DirtyList.h"
 
-MoveTrackPointCommand::MoveTrackPointCommand(TrackPoint* aPt, const Coord& aPos)
-: thePoint(aPt), OldPos(aPt->position()), NewPos(aPos)
+MoveTrackPointCommand::MoveTrackPointCommand(TrackPoint* aPt, const Coord& aPos, MapLayer* aLayer)
+: theLayer(aLayer), oldLayer(0), thePoint(aPt), OldPos(aPt->position()), NewPos(aPos)
 {
 	redo();
 }
@@ -11,11 +12,20 @@ MoveTrackPointCommand::MoveTrackPointCommand(TrackPoint* aPt, const Coord& aPos)
 void MoveTrackPointCommand::undo()
 {
 	thePoint->setPosition(OldPos);
+	if (theLayer && oldLayer && (theLayer != oldLayer)) {
+		theLayer->remove(thePoint);
+		oldLayer->add(thePoint);
+	}
 }
 
 void MoveTrackPointCommand::redo()
 {
 	thePoint->setPosition(NewPos);
+	oldLayer = thePoint->layer();
+	if (theLayer && oldLayer && (theLayer != oldLayer)) {
+		oldLayer->remove(thePoint);
+		theLayer->add(thePoint);
+	}
 }
 
 bool MoveTrackPointCommand::buildDirtyList(DirtyList &theList)
@@ -34,6 +44,8 @@ bool MoveTrackPointCommand::toXML(QDomElement& xParent) const
 	e.setAttribute("trackpoint", thePoint->xmlId());
 	OldPos.toXML("oldpos", e);
 	NewPos.toXML("newpos", e);
+	if (oldLayer)
+		e.setAttribute("oldlayer", oldLayer->id());
 
 	return OK;
 }
@@ -42,9 +54,14 @@ MoveTrackPointCommand * MoveTrackPointCommand::fromXML(MapDocument * d, QDomElem
 {
 	MoveTrackPointCommand* a = new MoveTrackPointCommand();
 	a->setId(e.attribute("xml:id"));
-	a->thePoint = dynamic_cast<TrackPoint*>(d->getFeature("node_"+e.attribute("trackpoint")));
+	a->theLayer = d->getDirtyLayer();
+	a->thePoint = MapFeature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("trackpoint"));
 	a->OldPos = Coord::fromXML(e.firstChildElement("oldpos"));
 	a->NewPos = Coord::fromXML(e.firstChildElement("newpos"));
+	if (e.hasAttribute("oldlayer"))
+		a->oldLayer = d->getLayer(e.attribute("oldlayer"));
+	else
+		a->oldLayer = NULL;
 
 	return a;
 }

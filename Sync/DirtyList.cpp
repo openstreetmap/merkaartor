@@ -243,6 +243,7 @@ bool DirtyListDescriber::showChanges(QWidget* aParent)
 {
 	QDialog* dlg = new QDialog(aParent);
 	Ui.setupUi(dlg);
+	theListWidget = Ui.ChangesList;
 
 	runVisit();
 
@@ -256,59 +257,66 @@ bool DirtyListDescriber::showChanges(QWidget* aParent)
 
 bool DirtyListDescriber::addRoad(Road* R)
 {
-	Ui.ChangesList->addItem(QApplication::translate("DirtyListExecutor","ADD road %1").arg(R->id()) + userName(R));
+	QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","ADD road %1").arg(R->id()) + userName(R), theListWidget);
+	it->setData(Qt::UserRole, R->id());
 	return false;
 }
 
 bool DirtyListDescriber::addPoint(TrackPoint* Pt)
 {
-	Ui.ChangesList->addItem(QApplication::translate("DirtyListExecutor","ADD trackpoint %1").arg(Pt->id()) + userName(Pt));
+	QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","ADD trackpoint %1").arg(Pt->id()) + userName(Pt), theListWidget);
+	it->setData(Qt::UserRole, Pt->id());
 	return false;
 }
 
 bool DirtyListDescriber::addRelation(Relation* R)
 {
-	Ui.ChangesList->addItem(QApplication::translate("DirtyListExecutor","ADD relation %1").arg(R->id()) + userName(R));
+	QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","ADD relation %1").arg(R->id()) + userName(R), theListWidget);
+	it->setData(Qt::UserRole, R->id());
 	return false;
 }
 
 bool DirtyListDescriber::updatePoint(TrackPoint* Pt)
 {
-	Ui.ChangesList->addItem(QApplication::translate("DirtyListExecutor","UPDATE trackpoint %1").arg(Pt->id()) + userName(Pt));
+	QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","UPDATE trackpoint %1").arg(Pt->id()) + userName(Pt), theListWidget);
+	it->setData(Qt::UserRole, Pt->id());
 	return false;
 }
 
 bool DirtyListDescriber::updateRelation(Relation* R)
 {
-	Ui.ChangesList->addItem(QApplication::translate("DirtyListExecutor","UPDATE relation %1").arg(R->id()) + userName(R));
+	QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","UPDATE relation %1").arg(R->id()) + userName(R), theListWidget);
+	it->setData(Qt::UserRole, R->id());
 	return false;
 }
 
 bool DirtyListDescriber::updateRoad(Road* R)
 {
-	Ui.ChangesList->addItem(QApplication::translate("DirtyListExecutor","UPDATE road %1").arg(R->id()) + userName(R));
+	QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","UPDATE road %1").arg(R->id()) + userName(R), theListWidget);
+	it->setData(Qt::UserRole, R->id());
 	return false;
 }
 
 bool DirtyListDescriber::erasePoint(TrackPoint* Pt)
 {
-	Ui.ChangesList->addItem(QApplication::translate("DirtyListExecutor","REMOVE trackpoint %1").arg(Pt->id()) + userName(Pt));
+	QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","REMOVE trackpoint %1").arg(Pt->id()) + userName(Pt), theListWidget);
+	it->setData(Qt::UserRole, Pt->id());
 	return false;
 }
 
 bool DirtyListDescriber::eraseRoad(Road* R)
 {
-	Ui.ChangesList->addItem(QApplication::translate("DirtyListExecutor","REMOVE road %1").arg(R->id()) + userName(R));
+	QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","REMOVE road %1").arg(R->id()) + userName(R), theListWidget);
+	it->setData(Qt::UserRole, R->id());
 	return false;
 }
 
 bool DirtyListDescriber::eraseRelation(Relation* R)
 {
-	Ui.ChangesList->addItem(QApplication::translate("DirtyListExecutor","REMOVE relation %1").arg(R->id()) + userName(R));
+	QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","REMOVE relation %1").arg(R->id()) + userName(R), theListWidget);
+	it->setData(Qt::UserRole, R->id());
 	return false;
 }
-
-
 
 /* DIRTYLIST */
 
@@ -361,6 +369,7 @@ bool DirtyListExecutor::executeChanges(QWidget* aParent)
 	Progress->setMinimumDuration(0);
 	Progress->setMaximum(Tasks+2);
 	Progress->show();
+
 	if (start())
 	{
 		if (runVisit())
@@ -430,6 +439,8 @@ bool DirtyListExecutor::addRelation(Relation *R)
 		R->setId("rel_"+QString::number(DataOut.toInt()));
 		R->setLastUpdated(MapFeature::OSMServer);
 		R->setVersionNumber(0);
+		R->layer()->remove(R);
+		document()->getUploadedLayer()->add(R);
 		return true;
 	}
 	return false;
@@ -453,6 +464,8 @@ bool DirtyListExecutor::addRoad(Road *R)
 		R->setId("way_"+QString::number(DataOut.toInt()));
 		R->setLastUpdated(MapFeature::OSMServer);
 		R->setVersionNumber(0);
+		R->layer()->remove(R);
+		document()->getUploadedLayer()->add(R);
 		return true;
 	}
 	return false;
@@ -477,6 +490,8 @@ bool DirtyListExecutor::addPoint(TrackPoint* Pt)
 		Pt->setId("node_"+QString::number(DataOut.toInt()));
 		Pt->setLastUpdated(MapFeature::OSMServer);
 		Pt->setVersionNumber(0);
+		Pt->layer()->remove(Pt);
+		document()->getUploadedLayer()->add(Pt);
 		return true;
 	}
 	return false;
@@ -502,6 +517,8 @@ bool DirtyListExecutor::updateRelation(Relation* R)
 				NewVersion = R->versionNumber()+1;
 			R->setVersionNumber(NewVersion);
 		}
+		R->layer()->remove(R);
+		document()->getUploadedLayer()->add(R);
 		return true;
 	}
 	return true;
@@ -528,6 +545,8 @@ bool DirtyListExecutor::updateRoad(Road* R)
 				NewVersion = R->versionNumber()+1;
 			R->setVersionNumber(NewVersion);
 		}
+		R->layer()->remove(R);
+		document()->getUploadedLayer()->add(R);
 		return true;
 	}
 	return true;
@@ -553,6 +572,8 @@ bool DirtyListExecutor::updatePoint(TrackPoint* Pt)
 				NewVersion = Pt->versionNumber()+1;
 			Pt->setVersionNumber(NewVersion);
 		}
+		Pt->layer()->remove(Pt);
+		document()->getUploadedLayer()->add(Pt);
 		return true;
 	}
 	return false;

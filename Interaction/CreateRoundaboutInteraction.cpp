@@ -80,15 +80,15 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
 			QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
 			QPen TP(SomeBrush,projection().pixelPerM()*4);
 			QPointF Prev(CenterF.x()+cos(Modifier*Angle/2)*Radius,CenterF.y()+sin(Modifier*Angle/2)*Radius);
-			CommandList* L = new CommandList;
 			TrackPoint* First = new TrackPoint(view()->projection().inverse(Prev));
-			L->add(new AddFeatureCommand(Main->activeLayer(),First,true));
 			Road* R = new Road;
 			R->setLayer(Main->activeLayer());
 			R->add(First);
 			R->setTag("oneway","yes");
 			R->setTag("junction","roundabout");
 			R->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+			CommandList* L  = new CommandList(MainWindow::tr("Create Roundabout %1").arg(R->id()), R);
+			L->add(new AddFeatureCommand(Main->activeLayer(),First,true));
 			for (double a = Angle*3/2; a<2*3.141592; a+=Angle)
 			{
 				QPointF Next(CenterF.x()+cos(Modifier*a)*Radius,CenterF.y()+sin(Modifier*a)*Radius);
@@ -112,7 +112,7 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
 					}
 			}
 			Main->properties()->setSelection(R);
-			document()->history().add(L);
+			document()->addHistory(L);
 			view()->invalidate();
 			view()->launch(0);
 		}

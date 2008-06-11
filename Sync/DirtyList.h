@@ -36,12 +36,12 @@ class DirtyListBuild : public DirtyList
 		virtual bool update(MapFeature* F);
 		virtual bool erase(MapFeature* F);
 
-		bool willBeAdded(MapFeature* F) const;
-		bool willBeErased(MapFeature* F) const;
-		bool updateNow(MapFeature* F) const;
-		void resetUpdates();
+		virtual bool willBeAdded(MapFeature* F) const;
+		virtual bool willBeErased(MapFeature* F) const;
+		virtual bool updateNow(MapFeature* F) const;
+		virtual void resetUpdates();
 
-	private:
+	protected:
 		std::vector<MapFeature*> Added, Deleted;
 		std::vector<MapFeature*> Updated;
 		mutable std::vector<std::pair<unsigned int, unsigned int> > UpdateCounter;
@@ -100,9 +100,11 @@ class DirtyListDescriber : public DirtyListVisit
 
 	private:
 		Ui::SyncListDialog Ui;
+
+	protected:
+		QListWidget* theListWidget;
 		unsigned int Task;
 };
-
 
 class DirtyListExecutor : public QObject, public DirtyListVisit
 {

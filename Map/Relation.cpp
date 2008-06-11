@@ -137,9 +137,9 @@ void Relation::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeat
 			else
 			{
 				QString Role = p->Members[i].first;
-				theList->add(new RelationRemoveFeatureCommand(this, i));
+				theList->add(new RelationRemoveFeatureCommand(this, i, theDocument->getDirtyLayer()));
 				for (unsigned int j=0; j<Alternatives.size(); ++j)
-					theList->add(new RelationAddFeatureCommand(this, Role, Alternatives[j], i+j));
+					theList->add(new RelationAddFeatureCommand(this, Role, Alternatives[j], i+j, theDocument->getDirtyLayer()));
 			}
 		}
 }
@@ -277,6 +277,10 @@ Relation * Relation::fromXML(MapDocument * d, MapLayer * L, const QDomElement e)
 		R = new Relation;
 		R->setId(id);
 		R->setLastUpdated(MapFeature::OSMServer);
+	} else {
+		if (R->layer() != L) {
+			R->layer()->remove(R);
+		}
 	}
 	R->setTime(time);
 	R->setUser(user);
@@ -410,10 +414,10 @@ bool RelationMemberModel::setData(const QModelIndex &index, const QVariant &valu
 	if (index.isValid() && role == Qt::EditRole)
 	{
 		MapFeature* Tmp = Parent->Members[index.row()].second;
-		CommandList* L = new CommandList;
-		L->add(new RelationRemoveFeatureCommand(Parent->theRelation, index.row()));
-		L->add(new RelationAddFeatureCommand(Parent->theRelation,value.toString(),Tmp,index.row()));
-		Main->document()->history().add(L);
+		CommandList* L = new CommandList(MainWindow::tr("Relation Modified %1").arg(Parent->theRelation->id()), Parent->theRelation);
+		L->add(new RelationRemoveFeatureCommand(Parent->theRelation, index.row(), Main->document()->getDirtyLayer()));
+		L->add(new RelationAddFeatureCommand(Parent->theRelation,value.toString(),Tmp,index.row(), Main->document()->getDirtyLayer()));
+		Main->document()->addHistory(L);
 		emit dataChanged(index, index);
 		return true;
 	}

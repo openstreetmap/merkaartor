@@ -3,17 +3,18 @@
 
 #include "Command/Command.h"
 
-#include <QtCore/QString>
+#include <QString>
 
 class Relation;
 class MapFeature;
+class MapLayer;
 
 class RelationAddFeatureCommand : public Command
 {
 	public:
 		RelationAddFeatureCommand() {};
-		RelationAddFeatureCommand(Relation* R, const QString& Role, MapFeature* W);
-		RelationAddFeatureCommand(Relation* R, const QString& Role, MapFeature* W, unsigned int Position);
+		RelationAddFeatureCommand(Relation* R, const QString& Role, MapFeature* W, MapLayer* aLayer=NULL);
+		RelationAddFeatureCommand(Relation* R, const QString& Role, MapFeature* W, unsigned int Position, MapLayer* aLayer=NULL);
 
 		virtual void undo();
 		virtual void redo();
@@ -23,6 +24,8 @@ class RelationAddFeatureCommand : public Command
 		static RelationAddFeatureCommand* fromXML(MapDocument* d,QDomElement e);
 
 	private:
+		MapLayer* theLayer;
+		MapLayer* oldLayer;
 		Relation* theRelation;
 		QString Role;
 		MapFeature* theMapFeature;
@@ -33,8 +36,8 @@ class RelationRemoveFeatureCommand : public Command
 {
 	public:
 		RelationRemoveFeatureCommand() {};
-		RelationRemoveFeatureCommand(Relation* R, MapFeature* W);
-		RelationRemoveFeatureCommand(Relation* R, unsigned int anIdx);
+		RelationRemoveFeatureCommand(Relation* R, MapFeature* W, MapLayer* aLayer=NULL);
+		RelationRemoveFeatureCommand(Relation* R, unsigned int anIdx, MapLayer* aLayer=NULL);
 
 		virtual void undo();
 		virtual void redo();
@@ -44,6 +47,8 @@ class RelationRemoveFeatureCommand : public Command
 		static RelationRemoveFeatureCommand* fromXML(MapDocument* d,QDomElement e);
 
 	private:
+		MapLayer* theLayer;
+		MapLayer* oldLayer;
 		unsigned int Idx;
 		Relation* theRelation;
 		QString Role;

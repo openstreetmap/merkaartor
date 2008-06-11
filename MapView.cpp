@@ -109,7 +109,8 @@ void MapView::setDocument(MapDocument* aDoc)
 	}
 
 	projection().setLayerManager(layermanager);
-	projection().setViewport(WORLD_COORDBOX, rect());
+//	projection().setViewport(WORLD_COORDBOX, rect());
+	projection().setViewport(projection().viewport(), rect());
 }
 
 MapDocument *MapView::document()

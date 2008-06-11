@@ -318,7 +318,7 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 	dlg->show();
 	if (theDownloader)
 		theDownloader->setAnimator(dlg,Bar,false);
-	CommandList* theList = new CommandList;
+	CommandList* theList = new CommandList();
 	theList->setIsUpdateFromOSM();
 	MapLayer* conflictLayer = new DrawingMapLayer(QApplication::translate("Downloader","Conflicts from %1").arg(theLayer->name()));
 	theDocument->add(conflictLayer);
@@ -358,7 +358,7 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 	else
 	{
 		//FIXME Do we have to add a download to the undo list? + dirties the document
-		//theDocument->history().add(theList);
+		//theDocument->addHistory(theList);
 
                // If we decide not to, we should at least delete the object. Better not to
                // create theList at all.

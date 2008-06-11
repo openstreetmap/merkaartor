@@ -5,12 +5,13 @@
 #include "Map/Coord.h"
 
 class TrackPoint;
+class MapLayer;
 
 class MoveTrackPointCommand : public Command
 {
 	public:
 		MoveTrackPointCommand() : OldPos(Coord(0.0, 0.0)), NewPos(Coord(0.0, 0.0)) {};
-		MoveTrackPointCommand(TrackPoint* aPt, const Coord& aPos);
+		MoveTrackPointCommand(TrackPoint* aPt, const Coord& aPos, MapLayer* aLayer=NULL);
 		void undo();
 		void redo();
 		bool buildDirtyList(DirtyList& theList);
@@ -19,6 +20,8 @@ class MoveTrackPointCommand : public Command
 		static MoveTrackPointCommand* fromXML(MapDocument* d,QDomElement e);
 
 	private:
+		MapLayer* theLayer;
+		MapLayer* oldLayer;
 		TrackPoint* thePoint;
 		Coord OldPos, NewPos;
 };

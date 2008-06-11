@@ -58,14 +58,14 @@ void MoveTrackPointInteraction::snapMouseReleaseEvent(QMouseEvent * event, MapFe
 {
 	if (Moving.size())
 	{
-		CommandList* theList = new CommandList;
+		CommandList* theList = new CommandList(MainWindow::tr("Move Point %1").arg(Moving[0]->id()), Moving[0]);
 		Coord Diff(calculateNewPosition(event,Closer, theList)-StartDragPosition);
 		for (unsigned int i=0; i<Moving.size(); ++i)
 		{
 			Moving[i]->setPosition(OriginalPosition[i]);
-			theList->add(new MoveTrackPointCommand(Moving[i],OriginalPosition[i]+Diff));
+			theList->add(new MoveTrackPointCommand(Moving[i],OriginalPosition[i]+Diff, document()->getDirtyLayer()));
 		}
-		document()->history().add(theList);
+		document()->addHistory(theList);
 		view()->invalidate();
 	}
 	Moving.clear();
@@ -109,7 +109,7 @@ Coord MoveTrackPointInteraction::calculateNewPosition(QMouseEvent *event, MapFea
 		}
 		if (theList && (Moving.size() == 1))
 			theList->add(new
-				RoadAddTrackPointCommand(R,Moving[0],BestIdx));
+				RoadAddTrackPointCommand(R,Moving[0],BestIdx,document()->getDirtyLayer()));
 		return Coord(BestTarget.x(),BestTarget.y());
 	}
 	return projection().inverse(event->pos());

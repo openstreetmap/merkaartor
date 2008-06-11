@@ -31,14 +31,6 @@
         <number>1</number>
        </property>
        <widget class="QWidget" name="tab_4" >
-        <property name="geometry" >
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>542</width>
-          <height>450</height>
-         </rect>
-        </property>
         <attribute name="title" >
          <string>Visual</string>
         </attribute>
@@ -203,7 +195,7 @@
            <property name="orientation" >
             <enum>Qt::Vertical</enum>
            </property>
-           <property name="sizeHint" stdset="0" >
+           <property name="sizeHint" >
             <size>
              <width>20</width>
              <height>40</height>
@@ -214,16 +206,8 @@
         </layout>
        </widget>
        <widget class="QWidget" name="tab_3" >
-        <property name="geometry" >
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>542</width>
-          <height>450</height>
-         </rect>
-        </property>
         <attribute name="title" >
-         <string>OSM</string>
+         <string>Data</string>
         </attribute>
         <layout class="QVBoxLayout" >
          <item>
@@ -243,9 +227,9 @@
            <property name="title" >
             <string>OSM</string>
            </property>
-           <layout class="QVBoxLayout" name="verticalLayout" >
+           <layout class="QVBoxLayout" >
             <item>
-             <layout class="QGridLayout" name="gridLayout" >
+             <layout class="QGridLayout" >
               <item row="0" column="0" >
                <widget class="QLabel" name="label_12" >
                 <property name="text" >
@@ -293,11 +277,27 @@
           </widget>
          </item>
          <item>
+          <widget class="QGroupBox" name="groupBox_6" >
+           <property name="title" >
+            <string>Documents</string>
+           </property>
+           <layout class="QVBoxLayout" >
+            <item>
+             <widget class="QCheckBox" name="cbAutoSaveDoc" >
+              <property name="text" >
+               <string>Autosave documents after upload</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
           <spacer>
            <property name="orientation" >
             <enum>Qt::Vertical</enum>
            </property>
-           <property name="sizeHint" stdset="0" >
+           <property name="sizeHint" >
             <size>
              <width>20</width>
              <height>0</height>
@@ -308,14 +308,6 @@
         </layout>
        </widget>
        <widget class="QWidget" name="tab" >
-        <property name="geometry" >
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>542</width>
-          <height>450</height>
-         </rect>
-        </property>
         <attribute name="title" >
          <string>Network</string>
         </attribute>
@@ -381,7 +373,7 @@
            <property name="orientation" >
             <enum>Qt::Vertical</enum>
            </property>
-           <property name="sizeHint" stdset="0" >
+           <property name="sizeHint" >
             <size>
              <width>20</width>
              <height>0</height>
@@ -392,14 +384,6 @@
         </layout>
        </widget>
        <widget class="QWidget" name="tab_2" >
-        <property name="geometry" >
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>542</width>
-          <height>450</height>
-         </rect>
-        </property>
         <attribute name="title" >
          <string>Background Image</string>
         </attribute>
@@ -493,7 +477,7 @@
            <property name="sizeType" >
             <enum>QSizePolicy::Expanding</enum>
            </property>
-           <property name="sizeHint" stdset="0" >
+           <property name="sizeHint" >
             <size>
              <width>496</width>
              <height>0</height>
@@ -519,7 +503,7 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons" >
-      <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>

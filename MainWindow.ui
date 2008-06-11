@@ -649,7 +649,18 @@
     <string>Alt+A</string>
    </property>
   </action>
- </widget>
+  <action name="windowDirtyAction" >
+   <property name="text" >
+    <string>Toggle &amp;Undo</string>
+   </property>
+   <property name="toolTip" >
+    <string>Hide/Show the Undo dock</string>
+   </property>
+   <property name="statusTip" >
+    <string>Hide/Show the Undo dock</string>
+   </property>
+  </action>
+</widget>
  <resources>
   <include location="Icons/AllIcons.qrc" />
  </resources>

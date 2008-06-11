@@ -577,3 +577,14 @@ bool MerkaartorPreferences::getDrawTileBoundary()
 {
 	return false;
 }
+
+bool MerkaartorPreferences::getAutoSaveDoc() const
+{
+	return Sets->value("data/AutoSaveDoc", false).toBool();
+}
+
+void MerkaartorPreferences::setAutoSaveDoc(bool theValue)
+{
+	Sets->setValue("data/AutoSaveDoc", theValue);
+}
+

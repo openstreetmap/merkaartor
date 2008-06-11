@@ -118,7 +118,7 @@ void EditInteraction::on_remove_triggered()
 	if (Sel.size() == 0) return;
 	view()->properties()->setSelection(0);
 	view()->properties()->checkMenuStatus();
-	CommandList* theList = new CommandList;
+	CommandList* theList  = new CommandList(MainWindow::tr("Remove feature %1").arg(Sel[0]->id()), Sel[0]);
 	for (unsigned int i=0; i<Sel.size(); ++i)
 		if (document()->exists(Sel[i]))
 		{
@@ -127,7 +127,7 @@ void EditInteraction::on_remove_triggered()
 				it.get()->cascadedRemoveIfUsing(document(), Sel[i], theList, Alternatives);
 			theList->add(new RemoveFeatureCommand(document(), Sel[i]));
 		}
-	document()->history().add(theList);
+	document()->addHistory(theList);
 	view()->invalidate();
 }
 
@@ -136,9 +136,9 @@ void EditInteraction::on_reverse_triggered()
 	MapFeature* Selection = view()->properties()->selection(0);
 	if (Road* R = dynamic_cast<Road*>(Selection))
 	{
-		CommandList* theList = new CommandList;
-		reversePoints(theList,R);
-		document()->history().add(theList);
+		CommandList* theList  = new CommandList(MainWindow::tr("Reverse Road %1").arg(R->id()), R);
+		reversePoints(document()->getDirtyLayer(),theList,R);
+		document()->addHistory(theList);
 	}
 	view()->invalidate();
 }

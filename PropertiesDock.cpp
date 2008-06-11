@@ -356,9 +356,9 @@ void PropertiesDock::on_TrackPointLat_textChanged(const QString&)
 	if (Pt)
 	{
 		Pt->setLastUpdated(MapFeature::User);
-		Main->document()->history().add(
+		Main->document()->addHistory(
 			new MoveTrackPointCommand(Pt,
-				Coord(angToRad(TrackPointUi.Latitude->text().toDouble()),Pt->position().lon())));
+				Coord(angToRad(TrackPointUi.Latitude->text().toDouble()),Pt->position().lon()), Main->document()->getDirtyLayer() ));
 		Main->invalidateView(false);
 	}
 }
@@ -370,9 +370,9 @@ void PropertiesDock::on_TrackPointLon_textChanged(const QString&)
 	if (Pt)
 	{
 		Pt->setLastUpdated(MapFeature::User);
-		Main->document()->history().add(
+		Main->document()->addHistory(
 			new MoveTrackPointCommand(Pt,
-				Coord(Pt->position().lat(),angToRad(TrackPointUi.Longitude->text().toDouble()))));
+				Coord(Pt->position().lat(),angToRad(TrackPointUi.Longitude->text().toDouble())), Main->document()->getDirtyLayer() ));
 		Main->invalidateView(false);
 	}
 }
@@ -382,11 +382,11 @@ void PropertiesDock::on_RoadName_textChanged(const QString&)
 	if (selection(0))
 	{
 		if (RoadUi.Name->text().isEmpty())
-			Main->document()->history().add(
-				new ClearTagCommand(selection(0),"name"));
+			Main->document()->addHistory(
+				new ClearTagCommand(selection(0),"name",Main->document()->getDirtyLayer()));
 		else
-			Main->document()->history().add(
-				new SetTagCommand(selection(0),"name",RoadUi.Name->text()));
+			Main->document()->addHistory(
+				new SetTagCommand(selection(0),"name",RoadUi.Name->text(),Main->document()->getDirtyLayer()));
 		theModel->setFeature(Selection);
 	}
 }
@@ -399,13 +399,13 @@ void PropertiesDock::on_TrafficDirection_activated(int idx)
 		switch (idx)
 		{
 			case MapFeature::OneWay:
-				Main->document()->history().add(new SetTagCommand(R,"oneway","yes")); break;
+				Main->document()->addHistory(new SetTagCommand(R,"oneway","yes",Main->document()->getDirtyLayer())); break;
 			case MapFeature::BothWays:
-				Main->document()->history().add(new SetTagCommand(R,"oneway","no")); break;
+				Main->document()->addHistory(new SetTagCommand(R,"oneway","no",Main->document()->getDirtyLayer())); break;
 			case MapFeature::OtherWay:
-				Main->document()->history().add(new SetTagCommand(R,"oneway","-1")); break;
+				Main->document()->addHistory(new SetTagCommand(R,"oneway","-1",Main->document()->getDirtyLayer())); break;
 			default:
-				Main->document()->history().add(new ClearTagCommand(R,"oneway")); break;
+				Main->document()->addHistory(new ClearTagCommand(R,"oneway",Main->document()->getDirtyLayer())); break;
 		}
 		Main->invalidateView();
 	}
@@ -464,16 +464,16 @@ void PropertiesDock::on_RemoveTagButton_clicked()
 			QVariant Content(theModel->data(idx,Qt::DisplayRole));
 			if (Content.isValid())
 			{
-				CommandList* L = new CommandList;
 				QString KeyName = Content.toString();
+				CommandList* L = new CommandList(MainWindow::tr("Clear Tag '%1' on %2").arg(KeyName).arg(Selection[0]->id()), Selection[0]);
 				for (unsigned int i=0; i<Selection.size(); ++i)
 					if (Selection[i]->findKey(KeyName) < Selection[i]->tagSize())
-						L->add(new ClearTagCommand(Selection[i],KeyName));
+						L->add(new ClearTagCommand(Selection[i],KeyName,Main->document()->getDirtyLayer()));
 				if (L->empty())
 					delete L;
 				else
 				{
-					Main->document()->history().add(L);
+					Main->document()->addHistory(L);
 					Main->invalidateView();
 					return;
 				}

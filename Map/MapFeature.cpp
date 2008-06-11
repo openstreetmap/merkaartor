@@ -199,7 +199,8 @@ void MapFeature::setTag(const QString& key, const QString& value)
 		}
 	p->Tags.push_back(std::make_pair(key,value));
 	if (p->theLayer)
-  		p->theLayer->getDocument()->addToTagList(key, value);
+		if (p->theLayer->getDocument())
+  			p->theLayer->getDocument()->addToTagList(key, value);
 	notifyChanges();
 }
 
@@ -430,6 +431,8 @@ TrackPoint* MapFeature::getTrackPointOrCreatePlaceHolder(MapDocument *theDocumen
 		Part->setLastUpdated(MapFeature::NotYetDownloaded);
 		if (theList)
 			theList->add(new AddFeatureCommand(theLayer, Part, false));
+		else
+			theLayer->add(Part);
 	}
 	return Part;
 }
@@ -444,6 +447,8 @@ Road* MapFeature::getWayOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *
 		Part->setLastUpdated(MapFeature::NotYetDownloaded);
 		if (theList)
 			theList->add(new AddFeatureCommand(theLayer, Part, false));
+		else
+			theLayer->add(Part);
 	}
 	return Part;
 }
@@ -458,6 +463,8 @@ Relation* MapFeature::getRelationOrCreatePlaceHolder(MapDocument *theDocument, M
 		Part->setLastUpdated(MapFeature::NotYetDownloaded);
 		if (theList)
 			theList->add(new AddFeatureCommand(theLayer, Part, false));
+		else
+			theLayer->add(Part);
 	}
 	return Part;
 }

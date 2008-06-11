@@ -105,13 +105,13 @@ bool importGPX(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 		QMessageBox::information(aParent, "Parse error","Root is not a gpx node");
 		return false;
 	}
-	CommandList* theList = new CommandList;
+	CommandList* theList  = new CommandList(MainWindow::tr("Import GPX"), NULL);
 	importGPX(root, theDocument, theLayer, theList, MakeSegment);
 	delete theList;
 /*	if (theList->empty())
 		delete theList;
 	else
-		theDocument->history().add(theList);*/
+		theDocument->addHistory(theList);*/
 	return true;
 }
 

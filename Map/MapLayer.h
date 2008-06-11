@@ -33,7 +33,7 @@ public:
 
 	void add(MapFeature* aFeature);
 	void add(MapFeature* aFeature, unsigned int Idx);
-	void remove(MapFeature* aFeature);
+	virtual void remove(MapFeature* aFeature);
 	bool exists(MapFeature* aFeature) const;
 	unsigned int size() const;
 	MapFeature* get(unsigned int i);
@@ -63,6 +63,8 @@ public:
 
 	static CoordBox boundingBox(const MapLayer* theLayer);
 
+	virtual const QString className() = 0;
+
 protected:
 	MapLayerPrivate* p;
 	mutable QString Id;
@@ -77,8 +79,11 @@ public:
 	virtual void setVisible(bool b);
 	virtual LayerWidget* newWidget(void);
 
-	bool toXML(QDomElement xParent);
+	virtual bool toXML(QDomElement xParent);
 	static DrawingMapLayer* fromXML(MapDocument* d, const QDomElement e);
+	static DrawingMapLayer* doFromXML(DrawingMapLayer* l, MapDocument* d, const QDomElement e);
+
+	virtual const QString className() {return "DrawingMapLayer";};
 };
 
 class ImageMapLayer : public QObject, public MapLayer
@@ -97,8 +102,10 @@ public:
 	virtual LayerWidget* newWidget(void);
 	virtual void updateWidget();
 
-	bool toXML(QDomElement xParent);
+	virtual bool toXML(QDomElement xParent);
 	static ImageMapLayer* fromXML(MapDocument* d, const QDomElement e);
+
+	virtual const QString className() {return "ImageMapLayer";};
 
 private:
 	WMSMapAdapter* wmsa;
@@ -115,10 +122,34 @@ public:
 	virtual void setVisible(bool b);
 	virtual LayerWidget* newWidget(void);
 
-	void extractLayer();
+	virtual void extractLayer();
 
-	bool toXML(QDomElement xParent);
+	virtual bool toXML(QDomElement xParent);
 	static TrackMapLayer* fromXML(MapDocument* d, const QDomElement e);
+
+	virtual const QString className() {return "TrackMapLayer";};
+};
+
+class DirtyMapLayer : public DrawingMapLayer
+{
+public:
+	DirtyMapLayer(const QString& aName);
+	virtual ~DirtyMapLayer();
+
+	static DirtyMapLayer* fromXML(MapDocument* d, const QDomElement e);
+
+	virtual const QString className() {return "DirtyMapLayer";};
+};
+
+class UploadedMapLayer : public DrawingMapLayer
+{
+public:
+	UploadedMapLayer(const QString& aName);
+	virtual ~UploadedMapLayer();
+
+	static UploadedMapLayer* fromXML(MapDocument* d, const QDomElement e);
+
+	virtual const QString className() {return "UploadedMapLayer";};
 };
 
 #endif

@@ -22,7 +22,7 @@ class MapDocumentPrivate
 {
 public:
 	MapDocumentPrivate()
-	: History(new CommandHistory()), bgLayer(0), theDock(0), lastDownloadLayer(0) {};
+	: History(new CommandHistory()), imageLayer(0), dirtyLayer(0), uploadedLayer(0), theDock(0), lastDownloadLayer(0) {};
 	~MapDocumentPrivate()
 	{
 		History->cleanup();
@@ -36,7 +36,9 @@ public:
 	CommandHistory*				History;
 	std::vector<MapLayer*>		Layers;
 	QMultiMap<QString, QString> tagList;
-	ImageMapLayer*				bgLayer;
+	ImageMapLayer*				imageLayer;
+	DirtyMapLayer*				dirtyLayer;
+	UploadedMapLayer*			uploadedLayer;
 	LayerDock*					theDock;
 	MapLayer*					lastDownloadLayer;
 
@@ -45,6 +47,14 @@ public:
 MapDocument::MapDocument()
 	: p(new MapDocumentPrivate)
 {
+	p->imageLayer = new ImageMapLayer(tr("Background imagery"));
+	add(p->imageLayer);
+
+	p->dirtyLayer = new DirtyMapLayer(tr("Dirty layer"));
+	add(p->dirtyLayer);
+
+	p->uploadedLayer = new UploadedMapLayer("Uploaded layer");
+	add(p->uploadedLayer);
 }
 
 MapDocument::MapDocument(LayerDock* aDock)
@@ -52,12 +62,14 @@ MapDocument::MapDocument(LayerDock* aDock)
 {
 	p->theDock = aDock;
 
-	p->bgLayer = new ImageMapLayer(tr("Background imagery"));
-	add(p->bgLayer);
+	p->imageLayer = new ImageMapLayer(tr("Background imagery"));
+	add(p->imageLayer);
 
-	DrawingMapLayer* l = new DrawingMapLayer(tr("Generic layer"));
-	l->setSelected(true);
-	add(l);
+	p->dirtyLayer = new DirtyMapLayer(tr("Dirty layer"));
+	add(p->dirtyLayer);
+
+	p->uploadedLayer = new UploadedMapLayer("Uploaded layer");
+	add(p->uploadedLayer);
 }
 
 MapDocument::MapDocument(const MapDocument&, LayerDock*)
@@ -81,8 +93,9 @@ bool MapDocument::toXML(QDomElement xParent)
 	mapDoc = xParent.ownerDocument().createElement("MapDocument");
 	xParent.appendChild(mapDoc);
 
-	for (unsigned int i=0; i<p->Layers.size(); ++i)
+	for (unsigned int i=0; i<p->Layers.size(); ++i) {
 		p->Layers[i]->toXML(mapDoc);
+	}
 
 	OK = history().toXML(mapDoc);
 
@@ -91,8 +104,7 @@ bool MapDocument::toXML(QDomElement xParent)
 
 MapDocument* MapDocument::fromXML(const QDomElement e, LayerDock* aDock)
 {
-	MapDocument* NewDoc = new MapDocument();
-	NewDoc->p->theDock = aDock;
+	MapDocument* NewDoc = new MapDocument(aDock);
 
 	CommandHistory* h = 0;
 
@@ -112,17 +124,19 @@ MapDocument* MapDocument::fromXML(const QDomElement e, LayerDock* aDock)
 				return NULL;
 			}
 		} else*/
+		if (c.tagName() == "ImageMapLayer") {
+			/* ImageMapLayer* l = */ ImageMapLayer::fromXML(NewDoc, c);
+		} else
+		if (c.tagName() == "DirtyMapLayer") {
+			/* DirtyMapLayer* l = */ DirtyMapLayer::fromXML(NewDoc, c);
+		} else
+		if (c.tagName() == "UploadedMapLayer") {
+			/* UploadedMapLayer* l = */ UploadedMapLayer::fromXML(NewDoc, c);
+		} else
 		if (c.tagName() == "DrawingMapLayer") {
 			/* DrawingMapLayer* l = */ DrawingMapLayer::fromXML(NewDoc, c);
 /*			if (l)
 				NewDoc->add(l);				*/
-		} else
-		if (c.tagName() == "ImageMapLayer") {
-			ImageMapLayer* l = ImageMapLayer::fromXML(NewDoc, c);
-			if (l) {
-				NewDoc->p->bgLayer = l;
-				NewDoc->add(l);
-			}
 		} else
 		if (c.tagName() == "TrackMapLayer") {
 			/* TrackMapLayer* l = */ TrackMapLayer::fromXML(NewDoc, c);
@@ -135,8 +149,9 @@ MapDocument* MapDocument::fromXML(const QDomElement e, LayerDock* aDock)
 		c = c.nextSiblingElement();
 	}
 
-	if (NewDoc)
+	if (NewDoc) {
 		NewDoc->setHistory(h);
+	}
 
 	return NewDoc;
 }
@@ -155,19 +170,22 @@ void MapDocument::clear()
 {
 	delete p;
 	p = new MapDocumentPrivate;
-	p->bgLayer = new ImageMapLayer(tr("Background imagery"));
-	p->bgLayer->setMapAdapter(MerkaartorPreferences::instance()->getBgType());
-	add(p->bgLayer);
+	p->imageLayer = new ImageMapLayer(tr("Background imagery"));
+	p->imageLayer->setMapAdapter(MerkaartorPreferences::instance()->getBgType());
+	add(p->imageLayer);
 
-	DrawingMapLayer* l = new DrawingMapLayer(tr("Generic layer"));
-	l->setSelected(true);
-	add(l);
+	p->dirtyLayer = new DirtyMapLayer(tr("Dirty layer"));
+	add(p->dirtyLayer);
+
+	p->uploadedLayer = new UploadedMapLayer("Uploaded layer");
+	add(p->uploadedLayer);
 }
 
 void MapDocument::setHistory(CommandHistory* h)
 {
 	delete p->History;
 	p->History = h;
+	emit(historyChanged());
 }
 
 CommandHistory& MapDocument::history()
@@ -178,6 +196,24 @@ CommandHistory& MapDocument::history()
 const CommandHistory& MapDocument::history() const
 {
 	return *(p->History);
+}
+
+void MapDocument::addHistory(Command* aCommand)
+{
+	p->History->add(aCommand);
+	emit(historyChanged());
+}
+
+void MapDocument::redoHistory()
+{
+	p->History->redo();
+	emit(historyChanged());
+}
+
+void MapDocument::undoHistory()
+{
+	p->History->undo();
+	emit(historyChanged());
 }
 
 void MapDocument::add(MapLayer* aLayer)
@@ -219,6 +255,7 @@ void MapDocument::remove(MapLayer* aLayer)
 	if (p->theDock)
 		p->theDock->deleteLayer(aLayer);
 
+	//TODO remove history on the removed layer
 	//delete (p->History);
 	//p->History = new CommandHistory();
 }
@@ -266,14 +303,25 @@ MapFeature* MapDocument::getFeature(const QString& id)
 	for (unsigned int i=0; i<p->Layers.size(); ++i)
 	{
 		MapFeature* F = p->Layers[i]->get(id);
-		if (F) return F;
+		if (F) 
+			return F;
 	}
 	return 0;
 }
 
 ImageMapLayer* MapDocument::getImageLayer() const
 {
-	return p->bgLayer;
+	return p->imageLayer;
+}
+
+DirtyMapLayer* MapDocument::getDirtyLayer() const
+{
+	return p->dirtyLayer;
+}
+
+UploadedMapLayer* MapDocument::getUploadedLayer() const
+{
+	return p->uploadedLayer;
 }
 
 QString MapDocument::exportOSM(const CoordBox& aCoordBox)

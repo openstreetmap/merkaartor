@@ -10,12 +10,13 @@
 
 class MapFeature;
 class MapDocument;
+class MapLayer;
 
 class TagCommand : public Command
 {
 	public:
-		TagCommand(MapFeature* theFeature);
-		TagCommand() {};
+		TagCommand(MapFeature* aF, MapLayer* aLayer);
+		TagCommand();
 
 		virtual void undo() = 0;
 		virtual void redo() = 0;
@@ -25,14 +26,16 @@ class TagCommand : public Command
 		MapFeature* theFeature;
 		std::vector<std::pair<QString, QString> > Before, After;
 		bool FirstRun;
+		MapLayer* theLayer;
+		MapLayer* oldLayer;
 };
 
 class SetTagCommand : public TagCommand
 {
 	public:
 		SetTagCommand() {};
-		SetTagCommand(MapFeature* aF, unsigned int idx, const QString& k, const QString& v);
-		SetTagCommand(MapFeature* aF, const QString& k, const QString& v);
+		SetTagCommand(MapFeature* aF, unsigned int idx, const QString& k, const QString& v, MapLayer* aLayer=NULL);
+		SetTagCommand(MapFeature* aF, const QString& k, const QString& v, MapLayer* aLayer=NULL);
 
 		virtual void undo();
 		virtual void redo();
@@ -65,7 +68,7 @@ class ClearTagCommand : public TagCommand
 {
 	public:
 		ClearTagCommand() {};
-		ClearTagCommand(MapFeature* aF, const QString& k);
+		ClearTagCommand(MapFeature* aF, const QString& k, MapLayer* aLayer=NULL);
 
 		virtual void undo();
 		virtual void redo();

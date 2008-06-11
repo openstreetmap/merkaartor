@@ -2,6 +2,7 @@
 #include "Command/FeatureCommands.h"
 #include "Map/MapDocument.h"
 #include "Map/MapFeature.h"
+#include "Map/MapLayer.h"
 
 #include <QtCore/QCoreApplication>
 #include <QtGui/QComboBox>
@@ -143,7 +144,7 @@ void resetTagComboBox(QComboBox* Box, MapFeature* F, const QString& key)
 void tagComboBoxActivated(QComboBox* Box, int idx, MapFeature* F, const QString& key, MapDocument* doc)
 {
 	if (Box->itemData(idx) == "__unspecified")
-		doc->history().add(new ClearTagCommand(F,key));
+		doc->addHistory(new ClearTagCommand(F,key,doc->getDirtyLayer()));
 	else if (Box->itemData(idx) != "__unknown")
-		doc->history().add(new SetTagCommand(F,key,Box->itemData(idx).toString()));
+		doc->addHistory(new SetTagCommand(F,key,Box->itemData(idx).toString(),doc->getDirtyLayer()));
 }

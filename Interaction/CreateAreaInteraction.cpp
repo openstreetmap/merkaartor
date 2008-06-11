@@ -60,13 +60,13 @@ void CreateAreaInteraction::startNewRoad(QMouseEvent* anEvent, MapFeature* aFeat
 	else if (Road* aRoad = dynamic_cast<Road*>(aFeature))
 	{
 		Coord P(projection().inverse(anEvent->pos()));
-		CommandList* theList = new CommandList;
+		CommandList* theList  = new CommandList(MainWindow::tr("Create Area %1").arg(aRoad->description()), aRoad);
 		unsigned int SnapIdx = findSnapPointIndex(aRoad, P);
 		TrackPoint* N = new TrackPoint(P);
 		N->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 		theList->add(new AddFeatureCommand(main()->activeLayer(),N,true));
 		theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx));
-		document()->history().add(theList);
+		document()->addHistory(theList);
 		view()->invalidate();
 		FirstNode = N;
 	}
@@ -90,6 +90,8 @@ void CreateAreaInteraction::createNewRoad(CommandList* L)
 	}
 	L->add(new AddFeatureCommand(Main->activeLayer(),theRoad,true));
 	L->add(new RoadAddTrackPointCommand(theRoad,From));
+	L->setDescription(MainWindow::tr("Area: Create Road %1").arg(theRoad->description()));
+	L->setFeature(theRoad);
 }
 
 void CreateAreaInteraction::finishRoad(CommandList* L)
@@ -118,6 +120,8 @@ void CreateAreaInteraction::finishRoad(CommandList* L)
 	{
 		EndNow = true;
 	}
+	L->setDescription(MainWindow::tr("Area: Finish Road %1").arg(LastRoad->description()));
+	L->setFeature(LastRoad);
 }
 
 void CreateAreaInteraction::addToRoad(QMouseEvent* anEvent, MapFeature* Snap, CommandList* L)
@@ -129,13 +133,13 @@ void CreateAreaInteraction::addToRoad(QMouseEvent* anEvent, MapFeature* Snap, Co
 	else if (Road* aRoad = dynamic_cast<Road*>(Snap))
 	{
 		Coord P(projection().inverse(anEvent->pos()));
-		CommandList* theList = new CommandList;
 		unsigned int SnapIdx = findSnapPointIndex(aRoad, P);
 		TrackPoint* N = new TrackPoint(P);
 		N->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+		CommandList* theList  = new CommandList(MainWindow::tr("Area: Add node %1 to Road %2").arg(N->description()).arg(theRoad->description()), N);
 		theList->add(new AddFeatureCommand(main()->activeLayer(),N,true));
 		theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx));
-		document()->history().add(theList);
+		document()->addHistory(theList);
 		view()->invalidate();
 		To = N;
 	}
@@ -144,6 +148,8 @@ void CreateAreaInteraction::addToRoad(QMouseEvent* anEvent, MapFeature* Snap, Co
 		To = new TrackPoint(view()->projection().inverse(anEvent->pos()));
 		To->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 		L->add(new AddFeatureCommand(Main->activeLayer(),To,true));
+		L->setDescription(MainWindow::tr("Area: Add node %1 to Road %2").arg(To->description().arg(theRoad->description())));
+		L->setFeature(To);
 	}
 	L->add(new RoadAddTrackPointCommand(theRoad,To));
 	if (To == theRoad->get(0))
@@ -161,11 +167,11 @@ void CreateAreaInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFeature
 		}
 		else
 		{
-			CommandList* L = new CommandList;
+ 			CommandList* L  = new CommandList();
 			if (!theRoad)
 				createNewRoad(L);
 			addToRoad(anEvent, aFeature, L);
-			document()->history().add(L);
+			document()->addHistory(L);
 			view()->invalidate();
 			if (theRelation)
 				Main->properties()->setSelection(theRelation);

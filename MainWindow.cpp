@@ -4,6 +4,7 @@
 #include "MapView.h"
 #include "PropertiesDock.h"
 #include "InfoDock.h"
+#include "DirtyDock.h"
 #include "Command/Command.h"
 #include "Command/DocumentCommands.h"
 #include "Interaction/CreateAreaInteraction.h"
@@ -54,7 +55,7 @@
 #include <QInputDialog>
 
 MainWindow::MainWindow(void)
-		: theDocument(0), theXmlDoc(0)
+		: theDocument(0), theXmlDoc(0), fileName("")
 {
 	setupUi(this);
 	loadPainters(MerkaartorPreferences::instance()->getDefaultStyle());
@@ -69,6 +70,8 @@ MainWindow::MainWindow(void)
 	theDocument = new MapDocument(theLayers);
 	theView->setDocument(theDocument);
 	theDocument->history().setActions(editUndoAction, editRedoAction);
+	theView->projection().setViewport(WORLD_COORDBOX, theView->rect());
+
 
 	theProperties = new PropertiesDock(this);
 	theProperties->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
@@ -78,6 +81,12 @@ MainWindow::MainWindow(void)
 	theInfo = new InfoDock(this);
 	theInfo->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 	addDockWidget(Qt::RightDockWidgetArea, theInfo);
+
+	theDirty = new DirtyDock(this);
+	theDirty->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+	addDockWidget(Qt::RightDockWidgetArea, theDirty);
+
+	connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));
 
 	QDir::setCurrent(MerkaartorPreferences::instance()->getWorkingDir());
 
@@ -140,13 +149,13 @@ MapDocument* MainWindow::document()
 
 void MainWindow::on_editRedoAction_triggered()
 {
-	theDocument->history().redo();
+	theDocument->redoHistory();
 	invalidateView();
 }
 
 void MainWindow::on_editUndoAction_triggered()
 {
-	theDocument->history().undo();
+	theDocument->undoHistory();
 	invalidateView();
 }
 
@@ -324,15 +333,19 @@ void MainWindow::loadFiles(const QStringList & fileList)
 			delete theDocument;
 			theDocument = newDoc;
 			theView->setDocument(theDocument);
+			on_viewZoomAllAction_triggered();
 		}
 		else
 		{
 			// we didn't really open anything successfully
 			delete newDoc;
 		}
+	} else {
+		if (foundImport) {
+			on_viewZoomAllAction_triggered();
+		}
 	}
 
-	on_viewZoomAllAction_triggered();
 	on_editPropertiesAction_triggered();
 	theDocument->history().setActions(editUndoAction, editRedoAction);
 
@@ -381,6 +394,7 @@ void MainWindow::on_fileUploadAction_triggered()
 		p->getProxyHost(), p->getProxyPort());
 
 	theDocument->history().updateActions();
+	theDirty->updateList();
 }
 
 void MainWindow::on_fileDownloadAction_triggered()
@@ -470,6 +484,8 @@ void MainWindow::on_fileNewAction_triggered()
 		theDocument = new MapDocument(theLayers);
 		theView->setDocument(theDocument);
 		theDocument->history().setActions(editUndoAction, editRedoAction);
+		connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));
+		theDirty->updateList();
 		invalidateView();
 	}
 }
@@ -514,35 +530,35 @@ void MainWindow::on_createNodeAction_triggered()
 
 void MainWindow::on_roadJoinAction_triggered()
 {
-	CommandList* theList = new CommandList;
+	CommandList* theList = new CommandList(MainWindow::tr("Join Roads"), NULL);
 	joinRoads(theDocument, theList, theProperties);
 	if (theList->empty())
 		delete theList;
 	else
 	{
-		theDocument->history().add(theList);
+		theDocument->addHistory(theList);
 		invalidateView();
 	}
 }
 
 void MainWindow::on_roadSplitAction_triggered()
 {
-	CommandList* theList = new CommandList;
+	CommandList* theList = new CommandList(MainWindow::tr("Split Roads"), NULL);
 	splitRoads(activeLayer(), theList, theProperties);
 	if (theList->empty())
 		delete theList;
 	else
-		theDocument->history().add(theList);
+		theDocument->addHistory(theList);
 }
 
 void MainWindow::on_roadBreakAction_triggered()
 {
-	CommandList* theList = new CommandList;
+	CommandList* theList = new CommandList(MainWindow::tr("Break Roads"), NULL);
 	breakRoads(activeLayer(), theList, theProperties);
 	if (theList->empty())
 		delete theList;
 	else
-		theDocument->history().add(theList);
+		theDocument->addHistory(theList);
 }
 
 void MainWindow::on_createRelationAction_triggered()
@@ -550,7 +566,7 @@ void MainWindow::on_createRelationAction_triggered()
 	Relation* R = new Relation;
 	for (unsigned int i = 0; i < theProperties->size(); ++i)
 		R->add("", theProperties->selection(i));
-	theDocument->history().add(
+	theDocument->addHistory(
 		new AddFeatureCommand(theLayers->activeLayer(), R, true));
 	theProperties->setSelection(R);
 }
@@ -569,7 +585,9 @@ void MainWindow::on_editMapStyleAction_triggered()
 
 MapLayer* MainWindow::activeLayer()
 {
-	return theLayers->activeLayer();
+//	return theLayers->activeLayer();
+	//The "active" layer is always the dirty layer
+	return theDocument->getDirtyLayer();
 }
 
 MapView* MainWindow::view()
@@ -625,22 +643,22 @@ void MainWindow::on_fileSaveAsAction_triggered()
 		tr("Save Merkaartor document"), QString("%1/%2.mdc").arg(MerkaartorPreferences::instance()->getWorkingDir()).arg(tr("untitled")), tr("Merkaartor documents Files (*.mdc)"));
 
 	if (fileName != "") {
-		saveDocument(fileName);
+		saveDocument();
 	}
 }
 
 void MainWindow::on_fileSaveAction_triggered()
 {
 	if (fileName != "") {
-		saveDocument(fileName);
+		saveDocument();
 	} else {
 		on_fileSaveAsAction_triggered();
 	}
 }
 
-void MainWindow::saveDocument(QString fn)
+void MainWindow::saveDocument()
 {
-	QFile file(fn);
+	QFile file(fileName);
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
 		return;
 
@@ -667,7 +685,6 @@ void MainWindow::saveDocument(QString fn)
 	theXmlDoc->save(out,2);
 	file.close();
 
-	fileName = fn;
 	setWindowTitle(QString("Merkaartor - %1").arg(fileName));
 
 	QApplication::restoreOverrideCursor();
@@ -680,9 +697,14 @@ void MainWindow::loadDocument(QString fn)
 
 	theXmlDoc = new QDomDocument();
 	QFile file(fn);
-	if (!file.open(QIODevice::ReadOnly))
+	if (!file.open(QIODevice::ReadOnly)) {
+		QApplication::restoreOverrideCursor();
+		QMessageBox::critical(this, tr("Invalid file"), tr("%1 could not be opened.").arg(fn));
 		return;
+	}
 	if (!theXmlDoc->setContent(&file)) {
+		QApplication::restoreOverrideCursor();
+		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
 		file.close();
 		return;
 	}
@@ -701,6 +723,10 @@ void MainWindow::loadDocument(QString fn)
 				theView->setDocument(theDocument);
 				on_editPropertiesAction_triggered();
 				theDocument->history().setActions(editUndoAction, editRedoAction);
+				connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));
+				theDirty->updateList();
+			} else {
+				delete newDoc;
 			}
 		} else
 		if (e.tagName() == "MapView") {
@@ -947,14 +973,14 @@ void MainWindow::projectionTriggered(QAction* anAction)
 
 void MainWindow::on_nodeAlignAction_triggered()
 {
-	CommandList* theList = new CommandList;
 	//MapFeature* F = theView->properties()->selection(0);
-	alignNodes(theList, theProperties);
+	CommandList* theList = new CommandList(MainWindow::tr("Align Nodes"), NULL);
+	alignNodes(theDocument->getDirtyLayer(), theList, theProperties);
 	if (theList->empty())
 		delete theList;
 	else
 	{
-		theDocument->history().add(theList);
+		theDocument->addHistory(theList);
 	//	theView->properties()->setSelection(F);
 		invalidateView();
 	}
@@ -962,14 +988,14 @@ void MainWindow::on_nodeAlignAction_triggered()
 
 void MainWindow::on_nodeMergeAction_triggered()
 {
-	CommandList* theList = new CommandList;
 	MapFeature* F = theView->properties()->selection(0);
+	CommandList* theList = new CommandList(MainWindow::tr("Merge Nodes into %1").arg(F->id()), F);
 	mergeNodes(theDocument, theList, theProperties);
 	if (theList->empty())
 		delete theList;
 	else
 	{
-		theDocument->history().add(theList);
+		theDocument->addHistory(theList);
 		theView->properties()->setSelection(F);
 		invalidateView();
 	}
@@ -988,4 +1014,9 @@ void MainWindow::on_windowLayersAction_triggered()
 void MainWindow::on_windowInfoAction_triggered()
 {
 	theInfo->setVisible(!theInfo->isVisible());
+}
+
+void MainWindow::on_windowDirtyAction_triggered()
+{
+	theDirty->setVisible(!theDirty->isVisible());
 }

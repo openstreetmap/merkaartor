@@ -31,7 +31,7 @@ bool ImportNMEA::import(MapLayer* aLayer)
 	QTextStream in(source);
 
 	theLayer = dynamic_cast <TrackMapLayer *> (aLayer);
-	theList = new CommandList;
+	theList = new CommandList(MainWindow::tr("Import NMEA"), NULL);
 
 	TrackSegment* TS = new TrackSegment;
 

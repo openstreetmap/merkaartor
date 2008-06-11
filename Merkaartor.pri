@@ -53,7 +53,8 @@ HEADERS += \
 ./Preferences/PreferencesDialog.h \
 ./Preferences/WMSPreferencesDialog.h \
 ./Preferences/TMSPreferencesDialog.h \
-./Utils/SelectionDialog.h
+./Utils/SelectionDialog.h \
+./DirtyDock.h
 
 #Source files
 SOURCES += \
@@ -109,7 +110,8 @@ SOURCES += \
 ./Preferences/PreferencesDialog.cpp \
 ./Preferences/WMSPreferencesDialog.cpp \
 ./Preferences/TMSPreferencesDialog.cpp \
-./Utils/SelectionDialog.cpp
+./Utils/SelectionDialog.cpp \
+./DirtyDock.cpp \
 
 #Forms
 FORMS += \
@@ -129,7 +131,8 @@ FORMS += \
 ./Preferences/PreferencesDialog.ui \
 ./Preferences/WMSPreferencesDialog.ui \
 ./Preferences/TMSPreferencesDialog.ui \
-./Utils/SelectionDialog.ui
+./Utils/SelectionDialog.ui \
+./DirtyDock.ui
 
 
 #Resource file(s)

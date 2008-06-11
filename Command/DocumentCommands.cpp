@@ -95,7 +95,7 @@ RemoveFeatureCommand::RemoveFeatureCommand(MapDocument *theDocument, MapFeature 
 RemoveFeatureCommand::RemoveFeatureCommand(MapDocument *theDocument, MapFeature *aFeature, const std::vector<MapFeature*>& Alternatives)
 : theLayer(0), Idx(0), theFeature(aFeature), CascadedCleanUp(0), RemoveExecuted(false), RemoveOnDelete(true), theAlternatives(Alternatives)
 {
-	CascadedCleanUp = new CommandList;
+	CascadedCleanUp  = new CommandList(MainWindow::tr("Cascaded cleanup"), NULL);
 	for (FeatureIterator it(theDocument); !it.isEnd(); ++it)
 		it.get()->cascadedRemoveIfUsing(theDocument, aFeature, CascadedCleanUp, Alternatives);
 	if (CascadedCleanUp->empty())

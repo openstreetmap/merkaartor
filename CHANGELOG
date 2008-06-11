@@ -1,4 +1,7 @@
 v0.11
+	* FIX : segfault with MDC containing history where a feature is created and deleted 
+	* ADD : "Dirty" layer where all modified features go
+	* ADD : "Undo" dock with all undo actions
 	* FIX : Start new road from selected node
 	* FIX : German translation
 	* ADD : Czech translation (Tom Mika)

@@ -27,20 +27,20 @@ void CreateNodeInteraction::snapMouseReleaseEvent(QMouseEvent * ev, Road* aRoad)
 		if (aRoad)
 		{
 			main()->properties()->setSelection(0);
-			CommandList* theList = new CommandList;
+			CommandList* theList  = new CommandList(MainWindow::tr("Create node in Road: %1").arg(aRoad->id()), aRoad);
 			unsigned int SnapIdx = findSnapPointIndex(aRoad, P);
 			TrackPoint* N = new TrackPoint(P);
 			N->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 			theList->add(new AddFeatureCommand(main()->activeLayer(),N,true));
-			theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx));
-			document()->history().add(theList);
+			theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx,main()->activeLayer()));
+			document()->addHistory(theList);
 			view()->invalidate();
 		}
 		else
 		{
 			TrackPoint* N = new TrackPoint(P);
 			N->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
-			document()->history().add(new AddFeatureCommand(main()->activeLayer(),N,true));
+			document()->addHistory(new AddFeatureCommand(main()->activeLayer(),N,true));
 			view()->invalidate();
 		}
 	}

@@ -161,6 +161,10 @@ TrackPoint * TrackPoint::fromXML(MapDocument* d, MapLayer* L, const QDomElement 
 		Pt->setLastUpdated(MapFeature::OSMServer);
 		L->add(Pt);
 	} else {
+		if (Pt->layer() != L) {
+			Pt->layer()->remove(Pt);
+			L->add(Pt);
+		}
 		Pt->setPosition(Coord(angToRad(Lat), angToRad(Lon)));
 		Pt->setTime(time);
 		Pt->setUser(user);

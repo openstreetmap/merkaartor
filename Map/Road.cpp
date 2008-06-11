@@ -305,9 +305,9 @@ void Road::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature,
 				theList->add(new RemoveFeatureCommand(theDocument,this));
 			else
 			{
-				theList->add(new RoadRemoveTrackPointCommand(this, p->Nodes[i]));
+				theList->add(new RoadRemoveTrackPointCommand(this, p->Nodes[i],theDocument->getDirtyLayer()));
 				for (unsigned int j=0; j<Alternatives.size(); ++j)
-					theList->add(new RoadAddTrackPointCommand(this, Alternatives[j], i+j));
+					theList->add(new RoadAddTrackPointCommand(this, Alternatives[j], i+j,theDocument->getDirtyLayer()));
 			}
 		}
 }
@@ -358,6 +358,10 @@ Road * Road::fromXML(MapDocument* d, MapLayer * L, const QDomElement e)
 		R = new Road();
 		R->setId(id);
 		R->setLastUpdated(MapFeature::OSMServer);
+	} else {
+		if (R->layer() != L) {
+			R->layer()->remove(R);
+		}
 	}
 	R->setTime(time);
 	R->setUser(user);
@@ -366,6 +370,7 @@ Road * Road::fromXML(MapDocument* d, MapLayer * L, const QDomElement e)
 	while(!c.isNull()) {
 		if (c.tagName() == "nd") {
 			QString nId = "node_"+c.attribute("ref");
+			//TrackPoint* Part = MapFeature::getTrackPointOrCreatePlaceHolder(d, L, NULL, c.attribute("ref"));
 			TrackPoint* Part = dynamic_cast<TrackPoint*>(d->getFeature(nId));
 			if (!Part)
 			{

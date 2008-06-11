@@ -47,6 +47,7 @@ public:
 	MapLayerPrivate()
 		: RenderPriorityUpToDate(false)
 	{
+		theDocument = NULL;
 		layer_bg = NULL;
 		theWidget = NULL;
 		selected = false;
@@ -68,7 +69,7 @@ public:
 	Layer* layer_bg;
 
 	bool RenderPriorityUpToDate;
-        MapDocument* theDocument;
+	MapDocument* theDocument;
  	double RenderPriorityForPixelPerM;
 
  	void sortRenderingPriority(double PixelPerM);
@@ -292,7 +293,7 @@ bool DrawingMapLayer::toXML(QDomElement xParent)
 {
 	bool OK = true;
 
-	QDomElement e = xParent.ownerDocument().createElement("DrawingMapLayer");
+	QDomElement e = xParent.ownerDocument().createElement(className());
 	xParent.appendChild(e);
 
 	e.setAttribute("xml:id", id());
@@ -328,11 +329,20 @@ bool DrawingMapLayer::toXML(QDomElement xParent)
 DrawingMapLayer * DrawingMapLayer::fromXML(MapDocument* d, const QDomElement e)
 {
 	DrawingMapLayer* l = new DrawingMapLayer(e.attribute("name"));
+	d->add(l);
+	if (!DrawingMapLayer::doFromXML(l, d, e)) {
+		delete l;
+		return NULL;
+	}
+	return l;
+}
+
+DrawingMapLayer * DrawingMapLayer::doFromXML(DrawingMapLayer* l, MapDocument* d, const QDomElement e)
+{
 	l->setId(e.attribute("xml:id"));
 	l->setAlpha(e.attribute("alpha").toDouble());
 	l->setVisible((e.attribute("visible") == "true" ? true : false));
 	l->setSelected((e.attribute("selected") == "true" ? true : false));
-	d->add(l);
 
 	QDomElement c = e.firstChildElement();
 	if (c.tagName() != "osm")
@@ -511,7 +521,7 @@ bool ImageMapLayer::toXML(QDomElement xParent)
 {
 	bool OK = true;
 
-	QDomElement e = xParent.ownerDocument().createElement("ImageMapLayer");
+	QDomElement e = xParent.ownerDocument().createElement(className());
 	xParent.appendChild(e);
 
 	e.setAttribute("xml:id", id());
@@ -558,9 +568,9 @@ bool ImageMapLayer::toXML(QDomElement xParent)
 	return OK;
 }
 
-ImageMapLayer * ImageMapLayer::fromXML(MapDocument* /* d */, const QDomElement e)
+ImageMapLayer * ImageMapLayer::fromXML(MapDocument* d, const QDomElement e)
 {
-	ImageMapLayer* l = new ImageMapLayer();
+	ImageMapLayer* l = d->getImageLayer();
 	l->setId(e.attribute("xml:id"));
 
 	QDomElement c = e.firstChildElement();
@@ -647,16 +657,16 @@ void TrackMapLayer::extractLayer()
 		}
 	}
 
-	CommandList* theList = new CommandList;
+	CommandList* theList = new CommandList(MainWindow::tr("Extract Layer %1").arg(extL->name()), NULL);
 	Road* R = new Road();
 	R->setLastUpdated(MapFeature::OSMServer);
 	R->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 	theList->add(new AddFeatureCommand(extL,R,true));
-	for (unsigned int i=0; i < PL.size(); i++) {
+	for (int i=0; i < PL.size(); i++) {
 		theList->add(new AddFeatureCommand(extL,PL[i],true));
 		theList->add(new RoadAddTrackPointCommand(R,PL[i]));
 	}
-	p->theDocument->history().add(theList);
+	p->theDocument->addHistory(theList);
 
 	p->theDocument->add(extL);
 }
@@ -665,7 +675,7 @@ bool TrackMapLayer::toXML(QDomElement xParent)
 {
 	bool OK = true;
 
-	QDomElement e = xParent.ownerDocument().createElement("TrackMapLayer");
+	QDomElement e = xParent.ownerDocument().createElement(className());
 	xParent.appendChild(e);
 
 	e.setAttribute("xml:id", id());
@@ -724,3 +734,38 @@ TrackMapLayer * TrackMapLayer::fromXML(MapDocument* d, const QDomElement e)
 	return l;
 }
 
+// DirtyMapLayer
+
+DirtyMapLayer::DirtyMapLayer(const QString & aName)
+	: DrawingMapLayer(aName)
+{
+	p->Visible = true;
+}
+
+DirtyMapLayer::~ DirtyMapLayer()
+{
+}
+
+DirtyMapLayer* DirtyMapLayer::fromXML(MapDocument* d, const QDomElement e)
+{
+	DrawingMapLayer::doFromXML(d->getDirtyLayer(), d, e);
+	return d->getDirtyLayer();
+}
+
+// UploadedMapLayer
+
+UploadedMapLayer::UploadedMapLayer(const QString & aName)
+	: DrawingMapLayer(aName)
+{
+	p->Visible = true;
+}
+
+UploadedMapLayer::~ UploadedMapLayer()
+{
+}
+
+UploadedMapLayer* UploadedMapLayer::fromXML(MapDocument* d, const QDomElement e)
+{
+	DrawingMapLayer::doFromXML(d->getUploadedLayer(), d, e);
+	return d->getUploadedLayer();
+}

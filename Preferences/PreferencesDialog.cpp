@@ -94,6 +94,8 @@ void PreferencesDialog::loadPrefs()
 	sbAlphaLow->setValue(MerkaartorPreferences::instance()->getAlpha("Low"));
 	sbAlphaHigh->setValue(MerkaartorPreferences::instance()->getAlpha("High"));
 	edBgColor->setText(QVariant(MerkaartorPreferences::instance()->getBgColor()).toString());
+
+	cbAutoSaveDoc->setChecked(MerkaartorPreferences::instance()->getAutoSaveDoc());
 }
 
 void PreferencesDialog::savePrefs()
@@ -130,6 +132,8 @@ void PreferencesDialog::savePrefs()
 	MerkaartorPreferences::instance()->getAlphaPtr()->insert("Low", sbAlphaLow->value());
 	MerkaartorPreferences::instance()->getAlphaPtr()->insert("High", sbAlphaHigh->value());
 	MerkaartorPreferences::instance()->setBgColor(QVariant(edBgColor->text()).value<QColor>());
+
+	MerkaartorPreferences::instance()->setAutoSaveDoc(cbAutoSaveDoc->isChecked());
 
 	MerkaartorPreferences::instance()->save();
 }

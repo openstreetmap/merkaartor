@@ -183,6 +183,8 @@ class MapFeature
 		virtual QString toMainHtml(QString type, QString systemtype);
 		virtual QString toHtml() = 0;
 
+		virtual QString getClass() = 0;
+
 		static TrackPoint* getTrackPointOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id);
 		static Road* getWayOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id);
 		static Relation* getRelationOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id);

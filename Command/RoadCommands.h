@@ -5,13 +5,14 @@
 
 class Road;
 class TrackPoint;
+class MapLayer;
 
 class RoadAddTrackPointCommand : public Command
 {
 	public:
 		RoadAddTrackPointCommand() {};
-		RoadAddTrackPointCommand(Road* R, TrackPoint* W);
-		RoadAddTrackPointCommand(Road* R, TrackPoint* W, unsigned int Position);
+		RoadAddTrackPointCommand(Road* R, TrackPoint* W, MapLayer* aLayer=NULL);
+		RoadAddTrackPointCommand(Road* R, TrackPoint* W, unsigned int Position, MapLayer* aLayer=NULL);
 
 		virtual void undo();
 		virtual void redo();
@@ -21,6 +22,8 @@ class RoadAddTrackPointCommand : public Command
 		static RoadAddTrackPointCommand* fromXML(MapDocument* d,QDomElement e);
 
 	private:
+		MapLayer* theLayer;
+		MapLayer* oldLayer;
 		Road* theRoad;
 		TrackPoint* theTrackPoint;
 		unsigned int Position;
@@ -30,8 +33,8 @@ class RoadRemoveTrackPointCommand : public Command
 {
 	public:
 		RoadRemoveTrackPointCommand() {};
-		RoadRemoveTrackPointCommand(Road* R, TrackPoint* W);
-		RoadRemoveTrackPointCommand(Road* R, unsigned int anIdx);
+		RoadRemoveTrackPointCommand(Road* R, TrackPoint* W, MapLayer* aLayer=NULL);
+		RoadRemoveTrackPointCommand(Road* R, unsigned int anIdx, MapLayer* aLayer=NULL);
 
 		virtual void undo();
 		virtual void redo();
@@ -41,6 +44,8 @@ class RoadRemoveTrackPointCommand : public Command
 		static RoadRemoveTrackPointCommand* fromXML(MapDocument* d,QDomElement e);
 
 	private:
+		MapLayer* theLayer;
+		MapLayer* oldLayer;
 		unsigned int Idx;
 		Road* theRoad;
 		TrackPoint* theTrackPoint;

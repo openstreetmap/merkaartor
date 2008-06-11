@@ -126,7 +126,7 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 
 				TrackPoint* A1;
 				TrackPoint* A2;
-				CommandList* L = new CommandList;
+				CommandList* L  = new CommandList(MainWindow::tr("Add nodes to double-way Road %1").arg(R1->id()), R1);
 				A1 = R1->get(i1);
 				A2 = R2->get(i2-1);
 				L->add(new MoveTrackPointCommand(A1,view()->projection().inverse(
@@ -143,8 +143,8 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 				L->add(new AddFeatureCommand(Main->activeLayer(),B1,true));
 				L->add(new AddFeatureCommand(Main->activeLayer(),B2,true));
 				L->add(new RoadAddTrackPointCommand(R1,B1));
-				L->add(new RoadAddTrackPointCommand(R2,B2,0));
-				document()->history().add(L);
+				L->add(new RoadAddTrackPointCommand(R2,B2,(unsigned int)0));
+				document()->addHistory(L);
 				view()->invalidate();
 				FirstPoint = view()->projection().inverse(anEvent->pos());
 				FirstDistance = DockData.RoadDistance->text().toDouble();
@@ -175,7 +175,10 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 					FB1.project(LastCursor)));
 				TrackPoint* B2 = new TrackPoint(view()->projection().inverse(
 					FB2.project(LastCursor)));
-				CommandList* L = new CommandList;
+				R1 = new Road;
+				R2 = new Road;
+
+				CommandList* L  = new CommandList(MainWindow::tr("Create double-way Road %1").arg(R1->id()), R1);
 				A1->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 				A2->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 				B1->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
@@ -185,8 +188,6 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 				L->add(new AddFeatureCommand(Main->activeLayer(),B1,true));
 				L->add(new AddFeatureCommand(Main->activeLayer(),B2,true));
 
-				R1 = new Road;
-				R2 = new Road;
 				L->add(new AddFeatureCommand(Main->activeLayer(),R1,true));
 				L->add(new AddFeatureCommand(Main->activeLayer(),R2,true));
 				R1->setTag("oneway","yes");
@@ -197,7 +198,7 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 				L->add(new RoadAddTrackPointCommand(R1,B1));
 				L->add(new RoadAddTrackPointCommand(R2,B2));
 				L->add(new RoadAddTrackPointCommand(R2,A2));
-				document()->history().add(L);
+				document()->addHistory(L);
 				view()->invalidate();
 				FirstPoint = view()->projection().inverse(anEvent->pos());
 				FirstDistance = DockData.RoadDistance->text().toDouble();

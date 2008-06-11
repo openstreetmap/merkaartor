@@ -14,7 +14,7 @@ bool importNGT(QWidget* /* aParent */, const QString& aFilename, MapDocument* th
 	if (f.open(QIODevice::ReadOnly))
 	{
 		QTextStream s(&f);
-		CommandList* theList = new CommandList;
+		CommandList* theList  = new CommandList(MainWindow::tr("Import NGT"), NULL);
 		TrackSegment* theSegment = new TrackSegment;
 		while (!f.atEnd())
 		{
@@ -35,7 +35,7 @@ bool importNGT(QWidget* /* aParent */, const QString& aFilename, MapDocument* th
 		else
 		{
 			theList->add(new AddFeatureCommand(theLayer,theSegment,true));
-			theDocument->history().add(theList);
+			theDocument->addHistory(theList);
 		}
 		return true;
 	}

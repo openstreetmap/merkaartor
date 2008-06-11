@@ -21,9 +21,14 @@ inline double radToAng(double a)
 class Coord
 {
 	public:
+		Coord()
+			: Lat(0.0), Lon(0.0) {}
 		Coord(double aLat, double aLon)
-			: Lat(aLat), Lon(aLon)
+			: Lat(aLat), Lon(aLon) {}
+
+		bool isNull() const
 		{
+			return (Lat == 0.0) && (Lon == 0.0);
 		}
 
 		double lat() const
@@ -105,8 +110,13 @@ void rotate(Coord & p1,double angle);
 class CoordBox
 {
 	public:
+		CoordBox() {};
 		CoordBox(const Coord& C1, const Coord& C2);
 
+		bool isNull() const
+		{
+			return (BottomLeft.isNull() && TopRight.isNull());
+		}
 		void merge(const Coord& C)
 		{
 			if (C.lat() < BottomLeft.lat())
