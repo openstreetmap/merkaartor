@@ -64,6 +64,7 @@ public:
 	bool selected;
 	LayerWidget* theWidget;
 	qreal alpha;
+	unsigned int dirtyLevel;
 
 	ImageBackgroundType bgType;
 	Layer* layer_bg;
@@ -107,6 +108,7 @@ MapLayer::MapLayer(const QString& aName)
 {
 	p->Name = aName;
 	p->alpha = 1.0;
+	p->dirtyLevel = 0;
 }
 
 MapLayer::MapLayer(const MapLayer&)
@@ -187,6 +189,18 @@ void MapLayer::remove(MapFeature* aFeature)
 	}
 }
 
+void MapLayer::clear()
+{
+	std::vector<MapFeature*>::iterator i;
+	for (i=p->Features.begin(); i != p->Features.end();)
+	{
+		(*i)->setLayer(0);
+		notifyIdUpdate((*i)->id(),0);
+		p->RenderPriorityUpToDate = false;
+		i = p->Features.erase(i);
+	}
+}
+
 bool MapLayer::exists(MapFeature* F) const
 {
 	std::vector<MapFeature*>::iterator i = std::find(p->Features.begin(),p->Features.end(), F);
@@ -263,6 +277,30 @@ CoordBox MapLayer::boundingBox(const MapLayer* theLayer)
 	return Box;
 }
 
+unsigned int MapLayer::incDirtyLevel(unsigned int inc)
+{
+	return p->dirtyLevel += inc;
+}
+
+unsigned int MapLayer::decDirtyLevel(unsigned int inc)
+{
+	return p->dirtyLevel -= inc;
+}
+
+unsigned int MapLayer::setDirtyLevel(unsigned int newLevel)
+{
+	return (p->dirtyLevel = newLevel);
+}
+
+unsigned int MapLayer::getDirtyLevel()
+{
+	return p->dirtyLevel;
+}
+
+bool MapLayer::canDelete()
+{
+	return (p->dirtyLevel == 0);
+}
 
 // DrawingMapLayer
 
@@ -752,6 +790,14 @@ DirtyMapLayer* DirtyMapLayer::fromXML(MapDocument* d, const QDomElement e)
 	return d->getDirtyLayer();
 }
 
+LayerWidget* DirtyMapLayer::newWidget(void)
+{
+	p->theWidget = new DirtyLayerWidget(this);
+	return p->theWidget;
+}
+
+
+
 // UploadedMapLayer
 
 UploadedMapLayer::UploadedMapLayer(const QString & aName)
@@ -769,3 +815,10 @@ UploadedMapLayer* UploadedMapLayer::fromXML(MapDocument* d, const QDomElement e)
 	DrawingMapLayer::doFromXML(d->getUploadedLayer(), d, e);
 	return d->getUploadedLayer();
 }
+
+LayerWidget* UploadedMapLayer::newWidget(void)
+{
+	p->theWidget = new UploadedLayerWidget(this);
+	return p->theWidget;
+}
+

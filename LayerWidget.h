@@ -36,16 +36,20 @@ class LayerWidget : public QAbstractButton
 		QPixmap hiddenIcon;
 		QBrush backColor;
 		QMenu* ctxMenu;
+		QAction* closeAction;
+		QAction* actZoom;
 
 	signals:
 		void layerChanged(LayerWidget *, bool adjustViewport);
 		void layerClosed(MapLayer *);
+		void layerCleared(MapLayer *);
 		void layerZoom(MapLayer *);
 
 	protected slots:
 		void setOpacity(QAction*);
 		void zoomLayer(bool);
 		void close();
+		void clear();
 };
 
 class DrawingLayerWidget : public LayerWidget
@@ -126,6 +130,29 @@ class ImageLayerWidget : public LayerWidget
 		void setNone(bool);
 };
 
+class DirtyLayerWidget : public LayerWidget
+{
+	Q_OBJECT
+
+	public:
+		DirtyLayerWidget(DirtyMapLayer* aLayer, QWidget* aParent = 0);
+		virtual ~DirtyLayerWidget() {};
+
+	public:
+		virtual void initActions();
+};
+
+class UploadedLayerWidget : public LayerWidget
+{
+	Q_OBJECT
+
+	public:
+		UploadedLayerWidget(UploadedMapLayer* aLayer, QWidget* aParent = 0);
+		virtual ~UploadedLayerWidget() {};
+
+	public:
+		virtual void initActions();
+};
 
 
 #endif

@@ -15,6 +15,7 @@ AddFeatureCommand::AddFeatureCommand(MapLayer* aDocument, MapFeature* aFeature, 
 
 AddFeatureCommand::~AddFeatureCommand()
 {
+	theLayer->decDirtyLevel(commandDirtyLevel);
 	if (RemoveOnDelete)
 		delete theFeature;
 }
@@ -23,12 +24,14 @@ void AddFeatureCommand::undo()
 {
 	theLayer->remove(theFeature);
 	RemoveOnDelete = true;
+	decDirtyLevel(theLayer);
 }
 
 void AddFeatureCommand::redo()
 {
 	theLayer->add(theFeature);
 	RemoveOnDelete = false;
+	incDirtyLevel(theLayer);
 }
 
 bool AddFeatureCommand::buildDirtyList(DirtyList& theList)
@@ -114,10 +117,12 @@ RemoveFeatureCommand::RemoveFeatureCommand(MapDocument *theDocument, MapFeature 
 	}
 //	redo();
 	theLayer->remove(theFeature);
+	theLayer->incDirtyLevel();
 }
 
 RemoveFeatureCommand::~RemoveFeatureCommand()
 {
+	theLayer->decDirtyLevel(commandDirtyLevel);
 	delete CascadedCleanUp;
 	if (RemoveOnDelete)
 		delete theFeature;
@@ -128,12 +133,14 @@ void RemoveFeatureCommand::redo()
 	if (CascadedCleanUp)
 		CascadedCleanUp->redo();
 	theLayer->remove(theFeature);
+	incDirtyLevel(theLayer);
 	RemoveOnDelete = true;
 }
 
 void RemoveFeatureCommand::undo()
 {
 	theLayer->add(theFeature,Idx);
+	decDirtyLevel(theLayer);
 	if (CascadedCleanUp)
 		CascadedCleanUp->undo();
 	RemoveOnDelete = false;

@@ -17,6 +17,7 @@ class TagCommand : public Command
 	public:
 		TagCommand(MapFeature* aF, MapLayer* aLayer);
 		TagCommand();
+		~TagCommand(void);
 
 		virtual void undo() = 0;
 		virtual void redo() = 0;

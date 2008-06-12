@@ -12,6 +12,8 @@ class MoveTrackPointCommand : public Command
 	public:
 		MoveTrackPointCommand() : OldPos(Coord(0.0, 0.0)), NewPos(Coord(0.0, 0.0)) {};
 		MoveTrackPointCommand(TrackPoint* aPt, const Coord& aPos, MapLayer* aLayer=NULL);
+		virtual ~MoveTrackPointCommand();
+
 		void undo();
 		void redo();
 		bool buildDirtyList(DirtyList& theList);

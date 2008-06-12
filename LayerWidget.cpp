@@ -15,7 +15,7 @@
 #define LINEHEIGHT 25
 
 LayerWidget::LayerWidget(MapLayer* aLayer, QWidget* aParent)
-: QAbstractButton(aParent), theLayer(aLayer), ctxMenu(0)
+: QAbstractButton(aParent), theLayer(aLayer), ctxMenu(0), closeAction(0), actZoom(0)
 {
 	setCheckable(true);
 	setAutoExclusive(true) ;
@@ -87,8 +87,11 @@ MapLayer* LayerWidget::getMapLayer()
 
 void LayerWidget::contextMenuEvent(QContextMenuEvent* anEvent)
 {
-	if (ctxMenu)
+	if (ctxMenu) {
+		if (closeAction)
+			closeAction->setEnabled(theLayer->canDelete());
 		ctxMenu->exec(anEvent->globalPos());
+	}
 }
 
 #define NUMOP 3
@@ -114,9 +117,6 @@ void LayerWidget::initActions()
 	ctxMenu->addMenu(alphaMenu);
 	connect(alphaMenu, SIGNAL(triggered(QAction*)), this, SLOT(setOpacity(QAction*)));
 
-	//QAction* closeAction = new QAction(tr("Delete"), this);
-	//connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
-	//ctxMenu->addAction(closeAction);
 }
 
 void LayerWidget::setOpacity(QAction *act)
@@ -128,6 +128,11 @@ void LayerWidget::setOpacity(QAction *act)
 void LayerWidget::close()
 {
 	emit(layerClosed(theLayer));
+}
+
+void LayerWidget::clear()
+{
+	emit(layerCleared(theLayer));
 }
 
 void LayerWidget::zoomLayer(bool)
@@ -148,9 +153,15 @@ DrawingLayerWidget::DrawingLayerWidget(DrawingMapLayer* aLayer, QWidget* aParent
 void DrawingLayerWidget::initActions()
 {
 	LayerWidget::initActions();
+
+	closeAction = new QAction(tr("Delete"), this);
+	connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
+	ctxMenu->addAction(closeAction);
+	closeAction->setEnabled(theLayer->canDelete());
+
 	ctxMenu->addSeparator();
 
-	QAction* actZoom = new QAction(tr("Zoom"), ctxMenu);
+	actZoom = new QAction(tr("Zoom"), ctxMenu);
 	ctxMenu->addAction(actZoom);
 	connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
 }
@@ -364,13 +375,14 @@ void TrackLayerWidget::initActions()
 	ctxMenu->addAction(actExtract);
 	connect(actExtract, SIGNAL(triggered(bool)), this, SLOT(extractLayer(bool)));
 
-	QAction* actZoom = new QAction(tr("Zoom"), ctxMenu);
+	actZoom = new QAction(tr("Zoom"), ctxMenu);
 	ctxMenu->addAction(actZoom);
 	connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
 
-	QAction* closeAction = new QAction(tr("Delete"), this);
+	closeAction = new QAction(tr("Delete"), this);
 	connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
 	ctxMenu->addAction(closeAction);
+	closeAction->setEnabled(theLayer->canDelete());
 }
 
 TrackLayerWidget::~TrackLayerWidget()
@@ -383,4 +395,46 @@ void TrackLayerWidget::extractLayer(bool)
 	emit (layerChanged(this, false));
 }
 
+// DirtyLayerWidget
+
+DirtyLayerWidget::DirtyLayerWidget(DirtyMapLayer* aLayer, QWidget* aParent)
+	: LayerWidget(aLayer, aParent)
+{
+	backColor = QColor(255,255,255);
+	initActions();
+}
+
+void DirtyLayerWidget::initActions()
+{
+	LayerWidget::initActions();
+	ctxMenu->addSeparator();
+
+	actZoom = new QAction(tr("Zoom"), ctxMenu);
+	ctxMenu->addAction(actZoom);
+	connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
+}
+
+// UploadLayerWidget
+
+UploadedLayerWidget::UploadedLayerWidget(UploadedMapLayer* aLayer, QWidget* aParent)
+	: LayerWidget(aLayer, aParent)
+{
+	backColor = QColor(255,255,255);
+	initActions();
+}
+
+void UploadedLayerWidget::initActions()
+{
+	LayerWidget::initActions();
+	ctxMenu->addSeparator();
+
+	actZoom = new QAction(tr("Zoom"), ctxMenu);
+	ctxMenu->addAction(actZoom);
+	connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
+
+	closeAction = new QAction(tr("Clear"), this);
+	connect(closeAction, SIGNAL(triggered()), this, SLOT(clear()));
+	ctxMenu->addAction(closeAction);
+	closeAction->setEnabled(theLayer->canDelete());
+}
 

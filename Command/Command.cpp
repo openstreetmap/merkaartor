@@ -1,5 +1,6 @@
 #include "Command/Command.h"
 #include "Map/MapDocument.h"
+#include "Map/MapLayer.h"
 #include "Map/MapFeature.h"
 #include "Command/DocumentCommands.h"
 #include "Command/RoadCommands.h"
@@ -12,6 +13,7 @@
 #include <QUuid>
 
 Command::Command()
+	: commandDirtyLevel(0)
 {
 	description = QApplication::translate("Command", "No description");
 	mainFeature = NULL;
@@ -62,6 +64,23 @@ bool Command::buildUndoList(QListWidget* theListWidget)
 	return true;
 }
 
+unsigned int Command::incDirtyLevel(MapLayer* aLayer)
+{
+	aLayer->incDirtyLevel();
+	return ++commandDirtyLevel;
+}
+
+unsigned int Command::decDirtyLevel(MapLayer* aLayer)
+{
+	aLayer->decDirtyLevel();
+	return commandDirtyLevel;
+}
+
+unsigned int Command::getDirtyLevel()
+{
+	return commandDirtyLevel;
+}
+
 
 // COMMANDLIST
 
@@ -96,6 +115,11 @@ void CommandList::add(Command* aCommand)
 bool CommandList::empty() const
 {
 	return Subs.size() == 0;
+}
+
+unsigned int CommandList::size()
+{
+	return Subs.size();
 }
 
 void CommandList::redo()
@@ -235,7 +259,8 @@ CommandHistory::CommandHistory()
 
 CommandHistory::~CommandHistory()
 {
-	cleanup();
+	//FIXME Is there a point to this?
+	//cleanup();
 }
 
 void CommandHistory::cleanup()

@@ -47,6 +47,7 @@ void LayerDock::addLayer(MapLayer* aLayer)
 
 	connect(w, SIGNAL(layerChanged(LayerWidget*,bool)), this, SLOT(layerChanged(LayerWidget*,bool)));
 	connect(w, SIGNAL(layerClosed(MapLayer*)), this, SLOT(layerClosed(MapLayer*)));
+	connect(w, SIGNAL(layerCleared(MapLayer*)), this, SLOT(layerCleared(MapLayer*)));
 	connect(w, SIGNAL(layerZoom(MapLayer*)), this, SLOT(layerZoom(MapLayer*)));
 
 	update();
@@ -106,8 +107,15 @@ void LayerDock::layerChanged(LayerWidget*, bool adjustViewport)
 
 void LayerDock::layerClosed(MapLayer* l)
 {
+	Main->document()->getUploadedLayer()->clear();
 	Main->document()->remove(l);
 	delete l;
+	Main->on_editPropertiesAction_triggered();
+}
+
+void LayerDock::layerCleared(MapLayer* l)
+{
+	l->clear();
 	Main->on_editPropertiesAction_triggered();
 }
 

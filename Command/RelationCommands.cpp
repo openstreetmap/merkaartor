@@ -17,12 +17,18 @@ RelationAddFeatureCommand::RelationAddFeatureCommand(Relation* R, const QString&
 	redo();
 }
 
+RelationAddFeatureCommand::~RelationAddFeatureCommand(void)
+{
+	oldLayer->decDirtyLevel(commandDirtyLevel);
+}
+
 void RelationAddFeatureCommand::undo()
 {
 	theRelation->remove(Position);
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		theLayer->remove(theRelation);
 		oldLayer->add(theRelation);
+		decDirtyLevel(oldLayer);
 	}
 }
 
@@ -32,6 +38,7 @@ void RelationAddFeatureCommand::redo()
 	oldLayer = theRelation->layer();
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		oldLayer->remove(theRelation);
+		incDirtyLevel(oldLayer);
 		theLayer->add(theRelation);
 	}
 }
@@ -106,6 +113,11 @@ RelationRemoveFeatureCommand::RelationRemoveFeatureCommand(Relation* R, unsigned
 	redo();
 }
 
+RelationRemoveFeatureCommand::~RelationRemoveFeatureCommand(void)
+{
+	oldLayer->decDirtyLevel(commandDirtyLevel);
+}
+
 
 void RelationRemoveFeatureCommand::undo()
 {
@@ -113,6 +125,7 @@ void RelationRemoveFeatureCommand::undo()
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		theLayer->remove(theRelation);
 		oldLayer->add(theRelation);
+		decDirtyLevel(oldLayer);
 	}
 }
 
@@ -122,6 +135,7 @@ void RelationRemoveFeatureCommand::redo()
 	oldLayer = theRelation->layer();
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		oldLayer->remove(theRelation);
+		incDirtyLevel(oldLayer);
 		theLayer->add(theRelation);
 	}
 }

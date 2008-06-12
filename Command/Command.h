@@ -5,6 +5,7 @@
 #include <QtXml>
 
 class MapDocument;
+class MapLayer;
 class MapFeature;
 class DirtyList;
 
@@ -31,10 +32,15 @@ class Command
 		virtual MapFeature* getFeature();
 		virtual void setFeature(MapFeature* feat);
 
+		unsigned int incDirtyLevel(MapLayer* aLayer);
+		unsigned int decDirtyLevel(MapLayer* aLayer);
+		unsigned int getDirtyLevel();
+
 	protected:
 		mutable QString Id;
 		QString description;
 		MapFeature* mainFeature;
+		unsigned int commandDirtyLevel;
 };
 
 class CommandList : public Command
@@ -47,6 +53,7 @@ class CommandList : public Command
 		virtual void undo();
 		virtual void redo();
 		bool empty() const;
+		unsigned int size();
 		void add(Command* aCommand);
 		virtual bool buildDirtyList(DirtyList& theList);
 		void setIsUpdateFromOSM();

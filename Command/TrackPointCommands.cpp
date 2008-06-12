@@ -9,12 +9,18 @@ MoveTrackPointCommand::MoveTrackPointCommand(TrackPoint* aPt, const Coord& aPos,
 	redo();
 }
 
+MoveTrackPointCommand::~MoveTrackPointCommand(void)
+{
+	oldLayer->decDirtyLevel(commandDirtyLevel);
+}
+
 void MoveTrackPointCommand::undo()
 {
 	thePoint->setPosition(OldPos);
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		theLayer->remove(thePoint);
 		oldLayer->add(thePoint);
+		decDirtyLevel(oldLayer);
 	}
 }
 
@@ -24,6 +30,7 @@ void MoveTrackPointCommand::redo()
 	oldLayer = thePoint->layer();
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		oldLayer->remove(thePoint);
+		incDirtyLevel(oldLayer);
 		theLayer->add(thePoint);
 	}
 }

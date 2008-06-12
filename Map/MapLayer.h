@@ -34,6 +34,7 @@ public:
 	void add(MapFeature* aFeature);
 	void add(MapFeature* aFeature, unsigned int Idx);
 	virtual void remove(MapFeature* aFeature);
+	virtual void clear();
 	bool exists(MapFeature* aFeature) const;
 	unsigned int size() const;
 	MapFeature* get(unsigned int i);
@@ -64,6 +65,13 @@ public:
 	static CoordBox boundingBox(const MapLayer* theLayer);
 
 	virtual const QString className() = 0;
+
+	unsigned int incDirtyLevel(unsigned int inc=1);
+	unsigned int decDirtyLevel(unsigned int inc=1);
+	unsigned int getDirtyLevel();
+	unsigned int setDirtyLevel(unsigned int newLevel);
+
+	bool canDelete();
 
 protected:
 	MapLayerPrivate* p;
@@ -139,6 +147,7 @@ public:
 	static DirtyMapLayer* fromXML(MapDocument* d, const QDomElement e);
 
 	virtual const QString className() {return "DirtyMapLayer";};
+	virtual LayerWidget* newWidget(void);
 };
 
 class UploadedMapLayer : public DrawingMapLayer
@@ -150,6 +159,7 @@ public:
 	static UploadedMapLayer* fromXML(MapDocument* d, const QDomElement e);
 
 	virtual const QString className() {return "UploadedMapLayer";};
+	virtual LayerWidget* newWidget(void);
 };
 
 #endif

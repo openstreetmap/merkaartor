@@ -66,6 +66,7 @@ bool ImportNMEA::import(MapLayer* aLayer)
 	else
 		delete TS;
 
+	delete theList;
 	return true;
 }
 

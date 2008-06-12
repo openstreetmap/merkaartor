@@ -17,12 +17,18 @@ RoadAddTrackPointCommand::RoadAddTrackPointCommand(Road* R, TrackPoint* W, unsig
 	redo();
 }
 
+RoadAddTrackPointCommand::~RoadAddTrackPointCommand(void)
+{
+	oldLayer->decDirtyLevel(commandDirtyLevel);
+}
+
 void RoadAddTrackPointCommand::undo()
 {
 	theRoad->remove(Position);
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		theLayer->remove(theRoad);
 		oldLayer->add(theRoad);
+		decDirtyLevel(oldLayer);
 	}
 }
 
@@ -32,6 +38,7 @@ void RoadAddTrackPointCommand::redo()
 	oldLayer = theRoad->layer();
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		oldLayer->remove(theRoad);
+		incDirtyLevel(oldLayer);
 		theLayer->add(theRoad);
 	}
 }
@@ -88,6 +95,10 @@ RoadRemoveTrackPointCommand::RoadRemoveTrackPointCommand(Road* R, unsigned int a
 	redo();
 }
 
+RoadRemoveTrackPointCommand::~RoadRemoveTrackPointCommand(void)
+{
+	oldLayer->decDirtyLevel(commandDirtyLevel);
+}
 
 void RoadRemoveTrackPointCommand::undo()
 {
@@ -95,6 +106,7 @@ void RoadRemoveTrackPointCommand::undo()
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		theLayer->remove(theRoad);
 		oldLayer->add(theRoad);
+		decDirtyLevel(oldLayer);
 	}
 }
 
@@ -104,6 +116,7 @@ void RoadRemoveTrackPointCommand::redo()
 	oldLayer = theRoad->layer();
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		oldLayer->remove(theRoad);
+		incDirtyLevel(oldLayer);
 		theLayer->add(theRoad);
 	}
 }

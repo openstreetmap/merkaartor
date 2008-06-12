@@ -18,6 +18,11 @@ TagCommand::TagCommand()
 {
 }
 
+TagCommand::~TagCommand(void)
+{
+	oldLayer->decDirtyLevel(commandDirtyLevel);
+}
+
 //void TagCommand::undo()
 //{
 //	theFeature->clearTags();
@@ -73,6 +78,7 @@ void SetTagCommand::undo()
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		theLayer->remove(theFeature);
 		oldLayer->add(theFeature);
+		decDirtyLevel(oldLayer);
 	}
 }
 
@@ -94,7 +100,9 @@ void SetTagCommand::redo()
 	oldLayer = theFeature->layer();
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		oldLayer->remove(theFeature);
+		incDirtyLevel(oldLayer);
 		theLayer->add(theFeature);
+
 	}
 }
 
@@ -209,6 +217,7 @@ void ClearTagCommand::undo()
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		theLayer->remove(theFeature);
 		oldLayer->add(theFeature);
+		decDirtyLevel(oldLayer);
 	}
 }
 
@@ -218,6 +227,7 @@ void ClearTagCommand::redo()
 	oldLayer = theFeature->layer();
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		oldLayer->remove(theFeature);
+		incDirtyLevel(oldLayer);
 		theLayer->add(theFeature);
 	}
 }
