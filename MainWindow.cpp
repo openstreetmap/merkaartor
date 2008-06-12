@@ -55,7 +55,7 @@
 #include <QInputDialog>
 
 MainWindow::MainWindow(void)
-		: theDocument(0), theXmlDoc(0), fileName("")
+		: fileName(""), theDocument(0), theXmlDoc(0)
 {
 	setupUi(this);
 	loadPainters(MerkaartorPreferences::instance()->getDefaultStyle());
