@@ -15,7 +15,8 @@ AddFeatureCommand::AddFeatureCommand(MapLayer* aDocument, MapFeature* aFeature, 
 
 AddFeatureCommand::~AddFeatureCommand()
 {
-	theLayer->decDirtyLevel(commandDirtyLevel);
+	if (theLayer)
+		theLayer->decDirtyLevel(commandDirtyLevel);
 	if (RemoveOnDelete)
 		delete theFeature;
 }
@@ -122,7 +123,8 @@ RemoveFeatureCommand::RemoveFeatureCommand(MapDocument *theDocument, MapFeature 
 
 RemoveFeatureCommand::~RemoveFeatureCommand()
 {
-	theLayer->decDirtyLevel(commandDirtyLevel);
+	if (theLayer)
+		theLayer->decDirtyLevel(commandDirtyLevel);
 	delete CascadedCleanUp;
 	if (RemoveOnDelete)
 		delete theFeature;

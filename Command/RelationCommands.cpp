@@ -19,7 +19,8 @@ RelationAddFeatureCommand::RelationAddFeatureCommand(Relation* R, const QString&
 
 RelationAddFeatureCommand::~RelationAddFeatureCommand(void)
 {
-	oldLayer->decDirtyLevel(commandDirtyLevel);
+	if (oldLayer)
+		oldLayer->decDirtyLevel(commandDirtyLevel);
 }
 
 void RelationAddFeatureCommand::undo()

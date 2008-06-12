@@ -11,7 +11,8 @@ MoveTrackPointCommand::MoveTrackPointCommand(TrackPoint* aPt, const Coord& aPos,
 
 MoveTrackPointCommand::~MoveTrackPointCommand(void)
 {
-	oldLayer->decDirtyLevel(commandDirtyLevel);
+	if (oldLayer)
+		oldLayer->decDirtyLevel(commandDirtyLevel);
 }
 
 void MoveTrackPointCommand::undo()

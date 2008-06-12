@@ -20,7 +20,8 @@ TagCommand::TagCommand()
 
 TagCommand::~TagCommand(void)
 {
-	oldLayer->decDirtyLevel(commandDirtyLevel);
+	if (oldLayer)
+		oldLayer->decDirtyLevel(commandDirtyLevel);
 }
 
 //void TagCommand::undo()

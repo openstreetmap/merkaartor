@@ -19,7 +19,8 @@ RoadAddTrackPointCommand::RoadAddTrackPointCommand(Road* R, TrackPoint* W, unsig
 
 RoadAddTrackPointCommand::~RoadAddTrackPointCommand(void)
 {
-	oldLayer->decDirtyLevel(commandDirtyLevel);
+	if (oldLayer)
+		oldLayer->decDirtyLevel(commandDirtyLevel);
 }
 
 void RoadAddTrackPointCommand::undo()
@@ -97,7 +98,8 @@ RoadRemoveTrackPointCommand::RoadRemoveTrackPointCommand(Road* R, unsigned int a
 
 RoadRemoveTrackPointCommand::~RoadRemoveTrackPointCommand(void)
 {
-	oldLayer->decDirtyLevel(commandDirtyLevel);
+	if (oldLayer)
+		oldLayer->decDirtyLevel(commandDirtyLevel);
 }
 
 void RoadRemoveTrackPointCommand::undo()
