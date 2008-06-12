@@ -69,6 +69,10 @@ MainWindow::MainWindow(void)
 
 	theDocument = new MapDocument(theLayers);
 	theView->setDocument(theDocument);
+	addAction(viewMoveLeftAction);
+	addAction(viewMoveRightAction);
+	addAction(viewMoveUpAction);
+	addAction(viewMoveDownAction);
 	theDocument->history().setActions(editUndoAction, editRedoAction);
 	theView->projection().setViewport(WORLD_COORDBOX, theView->rect());
 
@@ -444,6 +448,33 @@ void MainWindow::on_viewZoomInAction_triggered()
 void MainWindow::on_viewZoomOutAction_triggered()
 {
 	theView->projection().zoom(0.75, theView->rect().center(), theView->rect());
+	invalidateView();
+}
+
+void MainWindow::on_viewMoveLeftAction_triggered()
+{
+	QPoint p(theView->rect().width()/4,0);
+	theView->projection().panScreen(p,  theView->rect());
+	invalidateView();
+}
+void MainWindow::on_viewMoveRightAction_triggered()
+{
+	QPoint p(-theView->rect().width()/4,0);
+	theView->projection().panScreen(p,  theView->rect());
+	invalidateView();
+}
+
+void MainWindow::on_viewMoveUpAction_triggered()
+{
+	QPoint p(0,theView->rect().height()/4);
+	theView->projection().panScreen(p,  theView->rect());
+	invalidateView();
+}
+
+void MainWindow::on_viewMoveDownAction_triggered()
+{
+	QPoint p(0,-theView->rect().height()/4);
+	theView->projection().panScreen(p,  theView->rect());
 	invalidateView();
 }
 

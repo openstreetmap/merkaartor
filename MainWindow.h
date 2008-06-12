@@ -48,6 +48,10 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_viewZoomInAction_triggered();
 		virtual void on_viewZoomOutAction_triggered();
 		virtual void on_viewZoomWindowAction_triggered();
+		virtual void on_viewMoveLeftAction_triggered();
+		virtual void on_viewMoveRightAction_triggered();
+		virtual void on_viewMoveUpAction_triggered();
+		virtual void on_viewMoveDownAction_triggered();
 		virtual void on_viewSetCoordinatesAction_triggered();
 		virtual void on_editRemoveAction_triggered();
 		virtual void on_editMoveAction_triggered();
