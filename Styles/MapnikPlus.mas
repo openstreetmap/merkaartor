@@ -1,0 +1,744 @@
+<mapStyle>
+<painter
+ backgroundColor="#506077fc" backgroundScale="1" backgroundOffset="6"
+ foregroundColor="#809bc0fc" foregroundScale="0.5" foregroundOffset="4"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[highway] isoneof (motorway , motorway_link)"/>
+</painter>
+<painter
+ backgroundColor="#477147fc" backgroundScale="1.5" backgroundOffset="4"
+ foregroundColor="#7fc97ffc" foregroundScale="1" foregroundOffset="3.5"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[highway] isoneof (trunk , trunk_link)"/>
+</painter>
+<painter
+ zoomUnder="0.01" zoomUpper="1e+07"
+ backgroundColor="#8d4346fc" backgroundScale="1.5" backgroundOffset="4"
+ foregroundColor="#e46d71fc" foregroundScale="1" foregroundOffset="3.5"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[highway] isoneof (primary , primary_link)"/>
+</painter>
+<painter
+ zoomUnder="0.02" zoomUpper="1e+07"
+ backgroundColor="#a37b48fc" backgroundScale="1.5" backgroundOffset="3"
+ foregroundColor="#fdbf6ffc" foregroundScale="1" foregroundOffset="2"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[highway] isoneof (secondary , secondary_link)"/>
+</painter>
+<painter
+ zoomUnder="0.05" zoomUpper="1e+07"
+ backgroundColor="#999999fc" backgroundScale="1.5" backgroundOffset="3"
+ foregroundColor="#ffffccfc" foregroundScale="1" foregroundOffset="2"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[highway] isoneof (tertiary , tertiary_link)"/>
+</painter>
+<painter
+ zoomUnder="0.1" zoomUpper="1e+07"
+ backgroundColor="#777777fc" backgroundScale="1.2" backgroundOffset="3"
+ foregroundColor="#fffffffc" foregroundScale="1" foregroundOffset="2"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[highway] is residential"/>
+</painter>
+<painter
+ zoomUnder="0.1" zoomUpper="1e+07"
+ backgroundColor="#777777fc" backgroundScale="1.2" backgroundOffset="3"
+ foregroundColor="#edededfc" foregroundScale="1" foregroundOffset="2"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[highway] is pedestrian"/>
+</painter>
+<painter
+ zoomUnder="0.1" zoomUpper="1e+07"
+ backgroundColor="#777777fc" backgroundScale="1.2" backgroundOffset="3"
+ foregroundColor="#fffffffc" foregroundScale="1" foregroundOffset="2"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[highway] is unclassified"/>
+</painter>
+<painter
+ zoomUnder="0.1" zoomUpper="1e+07"
+ backgroundColor="#777777fc" backgroundScale="1" backgroundOffset="1"
+ foregroundColor="#fffffffc" foregroundScale="1" foregroundOffset="-1"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[highway] is minor"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ foregroundColor="#0000fffc" foregroundScale="1" foregroundOffset="0"
+ foregroundDashDown="2" foregroundDashUp="2"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[highway] is cycleway"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ foregroundColor="#fa8072fc" foregroundScale="0.3" foregroundOffset="0"
+ foregroundDashDown="1" foregroundDashUp="1.8"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[highway] is footway"/>
+</painter>
+<painter
+ zoomUnder="0.1" zoomUpper="1e+07"
+ foregroundColor="#996600fc" foregroundScale="0.5" foregroundOffset="0"
+ foregroundDashDown="2" foregroundDashUp="2"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[highway] is track"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ foregroundColor="#00ff00fc" foregroundScale="0.4" foregroundOffset="0"
+ foregroundDashDown="2" foregroundDashUp="4"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[highway] is bridleway"/>
+</painter>
+<painter
+ zoomUnder="0.1" zoomUpper="1e+07"
+ foregroundColor="#aaaaaafc" foregroundScale="1" foregroundOffset="0"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[highway] is living_street"/>
+</painter>
+<painter
+ zoomUnder="0.02" zoomUpper="1e+07"
+ backgroundColor="#000000fc" backgroundScale="1" backgroundOffset="4"
+ foregroundColor="#fffffffc" foregroundScale="1" foregroundOffset="2"
+ touchupColor="#000000fc" touchupScale="1" touchupOffset="2"
+ touchupDashDown="3" touchupDashUp="3"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[railway] is rail"/>
+</painter>
+<painter
+ zoomUnder="0.02" zoomUpper="1e+07"
+ backgroundColor="#000000fc" backgroundScale="1" backgroundOffset="4"
+ foregroundColor="#ccccccfc" foregroundScale="1" foregroundOffset="2"
+ touchupColor="#000000fc" touchupScale="1" touchupOffset="2"
+ touchupDashDown="3" touchupDashUp="3"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[railway] is abandoned"/>
+</painter>
+<painter
+ zoomUnder="0.04" zoomUpper="1e+07"
+ backgroundColor="#000000fc" backgroundScale="0.5" backgroundOffset="4"
+ foregroundColor="#fffffffc" foregroundScale="0.5" foregroundOffset="2"
+ touchupColor="#000000fc" touchupScale="0.5" touchupOffset="2"
+ touchupDashDown="3" touchupDashUp="3"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[railway] is light_rail"/>
+</painter>
+<painter
+ zoomUnder="0.04" zoomUpper="1e+07"
+ backgroundColor="#606060fc" backgroundScale="0.5" backgroundOffset="4"
+ foregroundColor="#fffffffc" foregroundScale="0.5" foregroundOffset="2"
+ touchupColor="#606060fc" touchupScale="0.5" touchupOffset="2"
+ touchupDashDown="3" touchupDashUp="3"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[railway] is subway"/>
+</painter>
+<painter
+ zoomUnder="0.0666667" zoomUpper="1e+07"
+ backgroundColor="#808080fc" backgroundScale="0.3" backgroundOffset="3"
+ foregroundColor="#fffffffc" foregroundScale="0.3" foregroundOffset="1"
+ touchupColor="#808080fc" touchupScale="0.3" touchupOffset="2"
+ touchupDashDown="3" touchupDashUp="3"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[railway] is tram"/>
+</painter>
+<painter
+ zoomUnder="0.0666667" zoomUpper="1e+07"
+ backgroundColor="#808080fc" backgroundScale="0.2" backgroundOffset="2"
+ foregroundColor="#fffffffc" foregroundScale="0.2" foregroundOffset="0.75"
+ touchupColor="#808080fc" touchupScale="0.3" touchupOffset="2"
+ touchupDashDown="3" touchupDashUp="3"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[railway] is narrow_gauge"/>
+</painter>
+<painter
+ zoomUnder="0.0666667" zoomUpper="1e+07"
+ backgroundColor="#808080fc" backgroundScale="0.3" backgroundOffset="3"
+ foregroundColor="#fffffffc" foregroundScale="0.3" foregroundOffset="1"
+ touchupColor="#808080fc" touchupScale="0.3" touchupOffset="2"
+ touchupDashDown="3" touchupDashUp="3"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[railway] is funicular"/>
+</painter>
+<painter
+ zoomUnder="0.0666667" zoomUpper="1e+07"
+ backgroundColor="#d0d0d0fc" backgroundScale="0.3" backgroundOffset="3"
+ foregroundColor="#fffffffc" foregroundScale="0.3" foregroundOffset="1"
+ touchupColor="#d0d0d0fc" touchupScale="0.3" touchupOffset="2"
+ touchupDashDown="3" touchupDashUp="3"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[railway] is abandoned"/>
+</painter>
+<painter
+ zoomUnder="0.0666667" zoomUpper="1e+07"
+ backgroundColor="#d0d0d0fc" backgroundScale="0.3" backgroundOffset="3"
+ foregroundColor="#fffffffc" foregroundScale="0.3" foregroundOffset="1"
+ touchupColor="#d0d0d0fc" touchupScale="0.3" touchupOffset="2"
+ touchupDashDown="3" touchupDashUp="3"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[railway] is disused"/>
+</painter>
+<painter
+ zoomUnder="0.0666667" zoomUpper="1e+07"
+ backgroundColor="#808080fc" backgroundScale="0.3" backgroundOffset="3"
+ foregroundColor="#fffffffc" foregroundScale="0.3" foregroundOffset="1"
+ touchupColor="#808080fc" touchupScale="0.3" touchupOffset="2"
+ touchupDashDown="2" touchupDashUp="2"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[aerialway] is cable_car"/>
+</painter>
+<painter
+ zoomUnder="0.02" zoomUpper="1e+07"
+ fillColor="#b6fdb6cd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[leisure] is park"/>
+</painter>
+<painter
+ zoomUnder="0.02" zoomUpper="1e+07"
+ fillColor="#8ad3afcd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[leisure] is pitch"/>
+</painter>
+<painter
+ zoomUnder="0.02" zoomUpper="1e+07"
+ foregroundColor="#770000fc" foregroundScale="0" foregroundOffset="1"
+ fillColor="#ff777777"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[leisure] is track"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#aed1a0cd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[natural] is wood"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#aed1a0cd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[natural] is meadow"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ foregroundColor="#007700fc" foregroundScale="0" foregroundOffset="1"
+ fillColor="#bccf8f77"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[natural] is scrub"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ foregroundColor="#007700fc" foregroundScale="0" foregroundOffset="1"
+ fillColor="#55994477"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[natural] is heath"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#b5d0d0cd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[natural] is water"/>
+</painter>
+<painter
+ zoomUnder="0.03" zoomUpper="1e+07"
+ fillColor="#f7efb7cd"
+ icon=":/Art/Mapnik/parking.png"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[amenity] is parking"/>
+</painter>
+<painter
+ zoomUnder="0.01" zoomUpper="1e+07"
+ fillColor="#f6666677"
+ icon=":/Art/Mapnik/hospital.png"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[amenity] is hospital"/>
+</painter>
+<painter
+ zoomUnder="0.01" zoomUpper="1e+07"
+ fillColor="#f6666677"
+ icon=":/MapIcons/map-icons/square.small/health/pharmacy.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[amenity] is pharmacy"/>
+</painter>
+<painter
+ zoomUnder="0.02" zoomUpper="1e+07"
+ foregroundColor="#dbbaabfc" foregroundScale="0" foregroundOffset="1"
+ fillColor="#f0f0d977"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[amenity] is school"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#ead8bdcd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[landuse] is vineyard"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#8dc56ccd"
+ icon=":/Art/Mapnik/forest.png"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[landuse] is forest"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#b5d0d0cd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[landuse] is reservoir"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#ead8bdcd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[landuse] is farm"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#d0eba977"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[landuse] is recreation_ground"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#d0eba977"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[landuse] is greenfield"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#9d9d6c77"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[landuse] is brownfield"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#d0eba977"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[landuse] is grass"/>
+</painter>
+<painter
+ zoomUnder="0.01" zoomUpper="1e+07"
+ fillColor="#d0eba977"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[landuse] is village_green"/>
+</painter>
+<painter
+ fillColor="#c8b084cd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[landuse] is allotments"/>
+</painter>
+<painter
+ backgroundColor="#0000fffc" backgroundScale="0" backgroundOffset="3"
+ fillColor="#a0b6ffcd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[landuse] is basin"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#dcdcdc55"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[landuse] is residential"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#ffaeb9cd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[landuse] is industrial"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#f1dadacd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[landuse] is retail"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#efc8c8cd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[landuse] is commercial"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#edededcd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[landuse] is pedestrian"/>
+</painter>
+<painter
+ fillColor="#aacbafcd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[landuse] is cemetery"/>
+</painter>
+<painter
+ fillColor="#aacbafcd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[amenity] is grave_yard"/>
+</painter>
+<painter
+ zoomUnder="0.01" zoomUpper="1e+07"
+ fillColor="#d0eba977"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[leisure] is common"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#abdf96cd"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[leisure] is nature_reserve"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#dcdcdc55"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[place] is town"/>
+</painter>
+<painter
+ fillColor="#cc9999cd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[building] isoneof (yes , true)"/>
+</painter>
+<painter
+ fillColor="#cc9999cd"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[amenity] is public_building"/>
+</painter>
+<painter
+ fillColor="#cc9999cd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[building] is company"/>
+</painter>
+<painter
+ backgroundColor="#aa5500fc" backgroundScale="0" backgroundOffset="3"
+ fillColor="#ffc8aecd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[amenity] is university"/>
+</painter>
+<painter
+ fillColor="#33cc99cd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[leisure] is stadium"/>
+</painter>
+<painter
+ foregroundColor="#b5d0d0fc" foregroundScale="0" foregroundOffset="2"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[waterway] is river"/>
+</painter>
+<painter
+ foregroundColor="#b5d0d0fc" foregroundScale="0" foregroundOffset="2"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[waterway] is stream"/>
+</painter>
+<painter
+ foregroundColor="#b5d0d0fc" foregroundScale="0" foregroundOffset="1"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[waterway] is drain"/>
+</painter>
+<painter
+ foregroundColor="#b5d0d0fc" foregroundScale="0" foregroundOffset="1"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[waterway] is canal"/>
+</painter>
+<painter
+ fillColor="#444444cd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[sport] is basketball"/>
+</painter>
+<painter
+ fillColor="#c85656cd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[sport] is tennis"/>
+</painter>
+<painter
+ fillColor="#00aa7fcd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[sport] is soccer"/>
+</painter>
+<painter
+ fillColor="#00aa7fcd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[sport] is football"/>
+</painter>
+<painter
+ fillColor="#00aa7fcd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[sport] is athletics"/>
+</painter>
+<painter
+ fillColor="#00aa7fcd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[sport] is skating"/>
+</painter>
+<painter
+ zoomUnder="0.1" zoomUpper="1e+07"
+ backgroundColor="#707070fc" backgroundScale="0.5" backgroundOffset="0"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[power] is line"/>
+</painter>
+<painter
+ backgroundColor="#505050fc" backgroundScale="0.2" backgroundOffset="0"
+ fillColor="#b0b0b0cd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[power] is station"/>
+</painter>
+<painter
+ backgroundColor="#505050fc" backgroundScale="0.2" backgroundOffset="0"
+ fillColor="#b0b0b0cd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[power] is sub_station"/>
+</painter>
+<painter
+ fillColor="#ff8f8fcd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[military] is barracks"/>
+</painter>
+<painter
+ fillColor="#00c38fcd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[sport] is multi"/>
+</painter>
+<painter
+ backgroundColor="#0000fffc" backgroundScale="0" backgroundOffset="3"
+ fillColor="#a0b6ffcd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[sport] is swimming"/>
+</painter>
+<painter
+ zoomUnder="0.1" zoomUpper="1e+07"
+ backgroundColor="#636363fc" backgroundScale="0.6" backgroundOffset="1"
+ foregroundColor="#fdfdfdfc" foregroundScale="0.6" foregroundOffset="0"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[highway] is service"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ foregroundColor="#fa8072fc" foregroundScale="1" foregroundOffset="0"
+ foregroundDashDown="0.2" foregroundDashUp="1.3"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[highway] is steps"/>
+</painter>
+<painter
+ zoomUnder="0.03" zoomUpper="1e+07"
+ fillColor="#a2ef9477"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[leisure] is playground"/>
+</painter>
+<painter
+ zoomUnder="0.025" zoomUpper="1e+07"
+ backgroundColor="#b0b0c0fc" backgroundScale="4" backgroundOffset="4"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[aeroway] isoneof (runway , taxiway)"/>
+</painter>
+<painter
+ fillColor="#b5d0d0cd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[waterway] is riverbank"/>
+</painter>
+<painter
+ fillColor="#b5d0d0cd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[natural] is fell"/>
+</painter>
+<painter
+ fillColor="#f2efe9cd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[natural] is land"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ foregroundColor="#0000fffc" foregroundScale="1" foregroundOffset="0"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[route] is ferry"/>
+</painter>
+<painter
+ zoomUnder="0.01" zoomUpper="1e+07"
+ backgroundColor="#ff0000fc" backgroundScale="1.5" backgroundOffset="0"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[note] is FIXME"/>
+</painter>
+<painter
+ zoomUnder="0.03" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/airport.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[amenity] is airport"/>
+</painter>
+<painter
+ zoomUnder="0.06" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/post_office.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[amenity] is post_office"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/post_box.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[amenity] is post_box"/>
+</painter>
+<painter
+ zoomUnder="0.03" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/station.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[railway] is station"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/pint.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[amenity] is pub"/>
+</painter>
+<painter
+ zoomUnder="0.03" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/peak.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[natural] is peak"/>
+</painter>
+<painter
+ zoomUnder="0.03" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/tower.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[man_made] is mast"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/recycling.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[amenity] is recycling"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/bus_stop.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[amenity] is bus_stop"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/bus_stop.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[highway] is bus_stop"/>
+</painter>
+<painter
+ zoomUnder="0.15" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/place_of_worship.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[amenity] is place_of_worship"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/mini_round.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[highway] is mini_roundabout"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/power_tower.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[power] is tower"/>
+</painter>
+<painter
+ zoomUnder="0.00666667" zoomUpper="1e+07"
+ icon=":/Art/Places/place_town.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[place] is town"/>
+</painter>
+<painter
+ zoomUnder="0.01" zoomUpper="1e+07"
+ icon=":/Art/Places/place_village.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[place] is village"/>
+</painter>
+<painter
+ zoomUnder="0.02" zoomUpper="1e+07"
+ icon=":/Art/Places/place_hamlet.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[place] is hamlet"/>
+</painter>
+<painter
+ icon=":/Art/Places/place_town.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[place] is city"/>
+</painter>
+<painter
+ zoomUnder="0.01" zoomUpper="1e+07"
+ fillColor="#f6666677"
+ icon=":/MapIcons/map-icons/square.small/sightseeing/ruins.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[historic] is ruins"/>
+</painter>
+<painter
+ zoomUnder="0.01" zoomUpper="1e+07"
+ fillColor="#f6666677"
+ icon=":/MapIcons/map-icons/square.small/shopping/supermarket.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[shop] is supermarket"/>
+</painter>
+<painter
+ zoomUnder="0.01" zoomUpper="1e+07"
+ fillColor="#f6666677"
+ icon=":/MapIcons/map-icons/square.small/food/restaurant.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[amenity] is restaurant"/>
+</painter>
+<painter
+ zoomUnder="0.01" zoomUpper="1e+07"
+ fillColor="#f6666677"
+ icon=":/MapIcons/map-icons/square.small/food/snacks.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[amenity] is fast_food"/>
+</painter>
+<painter
+ zoomUnder="0.01" zoomUpper="1e+07"
+ fillColor="#f6666677"
+ icon=":/MapIcons/map-icons/square.small/food/cafe.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[amenity] is cafe"/>
+</painter>
+<painter
+ zoomUnder="0.01" zoomUpper="1e+07"
+ fillColor="#f6666677"
+ icon=":/MapIcons/map-icons/square.small/groceries/bakery.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[shop] is bakery"/>
+</painter>
+<painter
+ zoomUnder="0.01" zoomUpper="1e+07"
+ fillColor="#f6666677"
+ icon=":/MapIcons/map-icons/square.small/recreation/cinema.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[amenity] is cinema"/>
+</painter>
+<painter
+ zoomUnder="0.01" zoomUpper="1e+07"
+ fillColor="#f6666677"
+ icon=":/MapIcons/map-icons/square.small/recreation/nightclub.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[amenity] is nightclub"/>
+</painter>
+<painter
+ zoomUnder="0.01" zoomUpper="1e+07"
+ fillColor="#f6666677"
+ icon=":/MapIcons/map-icons/square.small/public/telephone.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[amenity] is telephone"/>
+</painter>
+<painter
+ zoomUnder="0.01" zoomUpper="1e+07"
+ fillColor="#f6666677"
+ icon=":/MapIcons/map-icons/square.small/public/firebrigade.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[amenity] is fire_station"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/MapIcons/map-icons/square.small/vehicle/fuel_station.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[amenity] is fuel"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/MapIcons/map-icons/square.small/accommodation/hotel.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[tourism] is hotel"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/MapIcons/map-icons/square.small/transport/taxi.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[amenity] is taxi"/>
+</painter>
+
+
+</mapStyle>
