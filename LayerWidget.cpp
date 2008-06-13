@@ -438,3 +438,28 @@ void UploadedLayerWidget::initActions()
 	closeAction->setEnabled(theLayer->canDelete());
 }
 
+// ExtractedLayerWidget
+
+ExtractedLayerWidget::ExtractedLayerWidget(ExtractedMapLayer* aLayer, QWidget* aParent)
+	: LayerWidget(aLayer, aParent)
+{
+	backColor = QColor(255,255,255);
+	initActions();
+}
+
+void ExtractedLayerWidget::initActions()
+{
+	LayerWidget::initActions();
+
+	closeAction = new QAction(tr("Delete"), this);
+	connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
+	ctxMenu->addAction(closeAction);
+	closeAction->setEnabled(theLayer->canDelete());
+
+	ctxMenu->addSeparator();
+
+	actZoom = new QAction(tr("Zoom"), ctxMenu);
+	ctxMenu->addAction(actZoom);
+	connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
+}
+

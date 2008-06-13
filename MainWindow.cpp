@@ -242,6 +242,8 @@ static bool mayDiscardUnsavedChanges(QWidget* aWidget)
 
 bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & fileNames)
 {
+	QApplication::setOverrideCursor(Qt::WaitCursor);
+
 	bool foundImport = false;
 
 	QStringListIterator it(fileNames);
@@ -289,6 +291,7 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 			QMessageBox::warning(this, tr("No valid file"), tr("%1 could not be opened.").arg(fn));
 		}
 	}
+	QApplication::restoreOverrideCursor();
 
 	return foundImport;
 }
@@ -299,6 +302,8 @@ void MainWindow::loadFiles(const QStringList & fileList)
 		return;
 
 	QStringList fileNames(fileList);
+
+	QApplication::setOverrideCursor(Qt::WaitCursor);
 	theLayers->setUpdatesEnabled(false);
 	view()->setUpdatesEnabled(false);
 
@@ -336,6 +341,7 @@ void MainWindow::loadFiles(const QStringList & fileList)
 			// only imported some tracks
 			delete theDocument;
 			theDocument = newDoc;
+			connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));
 			theView->setDocument(theDocument);
 			on_viewZoomAllAction_triggered();
 		}
@@ -355,6 +361,7 @@ void MainWindow::loadFiles(const QStringList & fileList)
 
 	theLayers->setUpdatesEnabled(true);
 	view()->setUpdatesEnabled(true);
+	QApplication::restoreOverrideCursor();
 }
 
 void MainWindow::on_fileOpenAction_triggered()
@@ -724,17 +731,13 @@ void MainWindow::saveDocument()
 
 void MainWindow::loadDocument(QString fn)
 {
-	QApplication::setOverrideCursor(Qt::WaitCursor);
-
 	theXmlDoc = new QDomDocument();
 	QFile file(fn);
 	if (!file.open(QIODevice::ReadOnly)) {
-		QApplication::restoreOverrideCursor();
 		QMessageBox::critical(this, tr("Invalid file"), tr("%1 could not be opened.").arg(fn));
 		return;
 	}
 	if (!theXmlDoc->setContent(&file)) {
-		QApplication::restoreOverrideCursor();
 		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
 		file.close();
 		return;
@@ -768,8 +771,6 @@ void MainWindow::loadDocument(QString fn)
 	}
 	fileName = fn;
 	setWindowTitle(QString("Merkaartor - %1").arg(fileName));
-
-	QApplication::restoreOverrideCursor();
 }
 
 void MainWindow::on_exportOSMAllAction_triggered()

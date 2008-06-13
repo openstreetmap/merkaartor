@@ -653,7 +653,7 @@ LayerWidget* TrackMapLayer::newWidget(void)
 
 void TrackMapLayer::extractLayer()
 {
-	DrawingMapLayer* extL = new DrawingMapLayer(tr("Extract - %1").arg(name()));
+	ExtractedMapLayer* extL = new ExtractedMapLayer(tr("Extract - %1").arg(name()));
 	TrackPoint* P;
 	QList<TrackPoint*> PL;
 
@@ -662,19 +662,27 @@ void TrackMapLayer::extractLayer()
 	for (unsigned int i=0; i < size(); i++) {
 		if (TrackSegment* S = dynamic_cast<TrackSegment*>(get(i))) {
 
+			if (S->size() < 2)
+				continue;
+
+			PL.clear();
+
 			P = new TrackPoint( S->get(0)->position() );
 			P->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+			P->setTime(S->get(0)->time());
 			PL.append(P);
 			unsigned int startP = 0;
 
 			P = new TrackPoint( S->get(1)->position() );
 			P->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+			P->setTime(S->get(1)->time());
 			PL.append(P);
 			unsigned int endP = 1;
 
 			for (unsigned int j=2; j < S->size(); j++) {
 				P = new TrackPoint( S->get(j)->position() );
 				P->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+				P->setTime(S->get(j)->time());
 				PL.append(P);
 				endP = PL.size()-1;
 
@@ -691,20 +699,19 @@ void TrackMapLayer::extractLayer()
 				}
 			}
 
-			//extL->add(R);
+			CommandList* theList = new CommandList(MainWindow::tr("Extracted Layer '%1'").arg(name()), NULL);
+			Road* R = new Road();
+			R->setLastUpdated(MapFeature::OSMServer);
+			R->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+			theList->add(new AddFeatureCommand(extL,R,true));
+			for (int i=0; i < PL.size(); i++) {
+				theList->add(new AddFeatureCommand(extL,PL[i],true));
+				theList->add(new RoadAddTrackPointCommand(R,PL[i]));
+			}
+			//p->theDocument->addHistory(theList);
+			delete theList;
 		}
 	}
-
-	CommandList* theList = new CommandList(MainWindow::tr("Extract Layer %1").arg(extL->name()), NULL);
-	Road* R = new Road();
-	R->setLastUpdated(MapFeature::OSMServer);
-	R->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
-	theList->add(new AddFeatureCommand(extL,R,true));
-	for (int i=0; i < PL.size(); i++) {
-		theList->add(new AddFeatureCommand(extL,PL[i],true));
-		theList->add(new RoadAddTrackPointCommand(R,PL[i]));
-	}
-	p->theDocument->addHistory(theList);
 
 	p->theDocument->add(extL);
 }
@@ -819,6 +826,35 @@ UploadedMapLayer* UploadedMapLayer::fromXML(MapDocument* d, const QDomElement e)
 LayerWidget* UploadedMapLayer::newWidget(void)
 {
 	p->theWidget = new UploadedLayerWidget(this);
+	return p->theWidget;
+}
+
+// ExtractedMapLayer
+
+ExtractedMapLayer::ExtractedMapLayer(const QString & aName)
+	: DrawingMapLayer(aName)
+{
+	p->Visible = true;
+}
+
+ExtractedMapLayer::~ ExtractedMapLayer()
+{
+}
+
+ExtractedMapLayer* ExtractedMapLayer::fromXML(MapDocument* d, const QDomElement e)
+{
+	ExtractedMapLayer* l = new ExtractedMapLayer(e.attribute("name"));
+	d->add(l);
+	if (!DrawingMapLayer::doFromXML(l, d, e)) {
+		delete l;
+		return NULL;
+	}
+	return l;
+}
+
+LayerWidget* ExtractedMapLayer::newWidget(void)
+{
+	p->theWidget = new ExtractedLayerWidget(this);
 	return p->theWidget;
 }
 

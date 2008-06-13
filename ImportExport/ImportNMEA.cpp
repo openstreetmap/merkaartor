@@ -28,6 +28,7 @@ ImportNMEA::~ImportNMEA()
 // import the  input
 bool ImportNMEA::import(MapLayer* aLayer)
 {
+	bool goodFix = false;
 	QTextStream in(source);
 
 	theLayer = dynamic_cast <TrackMapLayer *> (aLayer);
@@ -43,20 +44,33 @@ bool ImportNMEA::import(MapLayer* aLayer)
 
 		QString command = line.mid(3, 3);
 		if (command == "GSA") {
-			importGSA(line);
+			bool prevGoodFix = goodFix;
+			goodFix = importGSA(line);
+			if (!goodFix && prevGoodFix) {
+				if (TS->size())
+					theList->add(new AddFeatureCommand(theLayer,TS, true));
+				else
+					delete TS;
+				TS = new TrackSegment;
+			}
 		} else
 		if (command == "GSV") {
-			importGSV(line);
+			if (goodFix)
+				importGSV(line);
 		} else
 		if (command == "GGA") {
-/*			TrackPoint* p = importGGA(line);
-			if (p)
-				TS->add(p);*/
+			if (goodFix) {
+/*				TrackPoint* p = importGGA(line);
+				if (p)
+					TS->add(p);*/
+			}
 		} else
 		if (command == "RMC") {
-			TrackPoint* p = importRMC(line);
-			if (p)
-				TS->add(p);
+			if (goodFix) {
+				TrackPoint* p = importRMC(line);
+				if (p)
+					TS->add(p);
+			}
 		} else
 		{/* Not handled */}
 	}
@@ -70,9 +84,18 @@ bool ImportNMEA::import(MapLayer* aLayer)
 	return true;
 }
 
-bool ImportNMEA::importGSA (QString /* line */)
+bool ImportNMEA::importGSA (QString line)
 {
-	return true;
+	QStringList tokens = line.split(",");
+
+	QString autoSelectFix = tokens[1];
+	int Fix3D = tokens[2].toInt();
+
+	double PDOP = tokens[15].toDouble();
+	double HDOP = tokens[16].toDouble();
+	double VDOP = tokens[17].toDouble();
+
+	return (Fix3D == 1 ? false: true);
 }
 
 bool ImportNMEA::importGSV (QString /* line */)

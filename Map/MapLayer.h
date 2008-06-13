@@ -162,6 +162,18 @@ public:
 	virtual LayerWidget* newWidget(void);
 };
 
+class ExtractedMapLayer : public DrawingMapLayer
+{
+public:
+	ExtractedMapLayer(const QString& aName);
+	virtual ~ExtractedMapLayer();
+
+	static ExtractedMapLayer* fromXML(MapDocument* d, const QDomElement e);
+
+	virtual const QString className() {return "ExtractedMapLayer";};
+	virtual LayerWidget* newWidget(void);
+};
+
 #endif
 
 
