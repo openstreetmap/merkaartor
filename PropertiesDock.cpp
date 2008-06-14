@@ -42,16 +42,39 @@ PropertiesDock::~PropertiesDock(void)
 	delete theModel;
 }
 
+static bool isChildOfSingleRoad(MapFeature *mapFeature)
+{
+	unsigned int parents = mapFeature->sizeParents();
+
+	if (parents == 0)
+		return false;
+
+	unsigned int parentRoads = 0;
+
+	unsigned int i;
+	for (i=0; i<parents; i++)
+	{
+		MapFeature * parent = mapFeature->getParent(i);
+		bool isParentRoad = dynamic_cast<Road*>(parent) != 0;
+		if (isParentRoad)
+			parentRoads++;
+	}
+
+	return (parentRoads == 1);
+}
+
 void PropertiesDock::checkMenuStatus()
 {
 	bool IsPoint = false;
 	bool IsRoad = false;
+	bool IsParentRoad = false;
 	unsigned int NumRoads = 0;
 	unsigned int NumPoints = 0;
 	if (Selection.size() == 1)
 	{
 		IsPoint = dynamic_cast<TrackPoint*>(Selection[0]) != 0;
 		IsRoad = dynamic_cast<Road*>(Selection[0]) != 0;
+		IsParentRoad = IsPoint && isChildOfSingleRoad(Selection[0]);
 	}
 	for (unsigned int i=0; i<Selection.size(); ++i)
 	{
@@ -65,7 +88,7 @@ void PropertiesDock::checkMenuStatus()
 	Main->editMoveAction->setEnabled(true);
 	Main->editReverseAction->setEnabled(IsRoad);
 	Main->roadJoinAction->setEnabled(NumRoads > 1);
-	Main->roadSplitAction->setEnabled(NumRoads && NumPoints);
+	Main->roadSplitAction->setEnabled(IsParentRoad || (NumRoads && NumPoints));
 	Main->roadBreakAction->setEnabled(NumRoads > 1);
 	Main->nodeMergeAction->setEnabled(NumPoints > 1);
 	Main->nodeAlignAction->setEnabled(NumPoints > 2);

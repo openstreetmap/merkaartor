@@ -1,4 +1,5 @@
 v0.11
+	* ADD : Split a road by selecting only the node
 	* ADD : Arrow keys move the map (by Rainer Keller)
 	* FIX : when cascade removing, not all children are deleted if they are present multiple times + avoid having twice the same node contiguous in the a road/relation
 	* FIX : segfault with MDC containing history where a feature is created and deleted 

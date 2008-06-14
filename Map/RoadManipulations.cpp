@@ -153,18 +153,27 @@ static void splitRoad(MapLayer* theLayer, CommandList* theList, Road* In, const 
 			i=0;
 		}
 	}
+
 	if (FirstPart != In)
 	{
 		if (WasClosed)
 		{
 			std::vector<TrackPoint*> Target;
+
 			for (unsigned int i=0; i<FirstPart->size(); ++i)
 				Target.push_back(FirstPart->get(i));
-			delete FirstPart;
+
 			for (unsigned int i=1; i<In->size(); ++i)
 				Target.push_back(In->get(i));
+
+			while (FirstPart->size())
+				theList->add(new RoadRemoveTrackPointCommand(FirstPart,(unsigned int)0,theLayer));
+
 			while (In->size())
 				theList->add(new RoadRemoveTrackPointCommand(In,(unsigned int)0,theLayer));
+			
+			delete FirstPart;
+
 			for (unsigned int i=0; i<Target.size(); ++i)
 				theList->add(new RoadAddTrackPointCommand(In,Target[i],theLayer));
 		}
@@ -176,6 +185,33 @@ static void splitRoad(MapLayer* theLayer, CommandList* theList, Road* In, const 
 	}
 }
 
+static Road * GetSingleParentRoad(MapFeature * mapFeature)
+{
+	unsigned int parents = mapFeature->sizeParents();
+
+	if (parents == 0)
+		return NULL;
+
+	Road * parentRoad = NULL;
+
+	unsigned int i;
+	for (i=0; i<parents; i++)
+	{
+		MapFeature * parent = mapFeature->getParent(i);
+		Road * road = dynamic_cast<Road*>(parent);
+
+		if (road == NULL)
+			continue;
+
+		if (parentRoad)
+			return NULL;
+
+		parentRoad = road;
+	}
+
+	return parentRoad;
+}
+
 void splitRoads(MapLayer* theLayer, CommandList* theList, PropertiesDock* theDock)
 {
 	std::vector<Road*> Roads, Result;
@@ -185,6 +221,14 @@ void splitRoads(MapLayer* theLayer, CommandList* theList, PropertiesDock* theDoc
 			Roads.push_back(R);
 		else if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(theDock->selection(i)))
 			Points.push_back(Pt);
+
+	if (Roads.size() == 0 && Points.size() == 1)
+	{
+		Road * R = GetSingleParentRoad(Points[0]);
+		if (R)
+			Roads.push_back(R);
+	}
+
 	for (unsigned int i=0; i<Roads.size(); ++i)
 		splitRoad(theLayer, theList,Roads[i],Points, Result);
 	theDock->setSelection(Result);
