@@ -508,6 +508,30 @@ void MerkaartorPreferences::restoreMainWindowState(QMainWindow * mainWindow) con
 		mainWindow->restoreState( Sets->value("MainWindow/State").toByteArray() );
 }
 
+void MerkaartorPreferences::setInitialPosition(const CoordBox & cb)
+{
+	QStringList ip;
+	ip.append(QString::number(radToAng(cb.bottomLeft().lat())));
+	ip.append(QString::number(radToAng(cb.bottomLeft().lon())));
+	ip.append(QString::number(radToAng(cb.topRight().lat())));
+	ip.append(QString::number(radToAng(cb.topRight().lon())));
+
+	Sets->setValue("MainWindow/InitialPosition", ip);
+}
+
+CoordBox MerkaartorPreferences::getInitialPosition()
+{
+	if (Sets->contains("MainWindow/InitialPosition") == false)
+		return WORLD_COORDBOX;
+
+	const QStringList & ip = Sets->value("MainWindow/InitialPosition").toStringList();
+
+	const Coord bottomLeft(angToRad(ip[0].toDouble()), angToRad(ip[1].toDouble()));
+	const Coord topRight(angToRad(ip[2].toDouble()),angToRad(ip[3].toDouble()));
+
+	return CoordBox(bottomLeft, topRight);
+}
+
 void MerkaartorPreferences::setProjectionType(ProjectionType theValue)
 {
 	Sets->setValue("projection/Type", theValue);

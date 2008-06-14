@@ -74,7 +74,6 @@ MainWindow::MainWindow(void)
 	addAction(viewMoveUpAction);
 	addAction(viewMoveDownAction);
 	theDocument->history().setActions(editUndoAction, editRedoAction);
-	theView->projection().setViewport(WORLD_COORDBOX, theView->rect());
 
 
 	theProperties = new PropertiesDock(this);
@@ -101,6 +100,8 @@ MainWindow::MainWindow(void)
 	connect (menuBookmarks, SIGNAL(triggered(QAction *)), this, SLOT(bookmarkTriggered(QAction *)));
 
 	MerkaartorPreferences::instance()->restoreMainWindowState( this );
+	CoordBox initialPosition = MerkaartorPreferences::instance()->getInitialPosition();
+	theView->projection().setViewport(initialPosition, theView->rect());
 
 #ifndef OSMARENDER
 	//TODO Osmarender rendering
@@ -852,6 +853,9 @@ void MainWindow::closeEvent(QCloseEvent * event)
 	}
 
 	MerkaartorPreferences::instance()->saveMainWindowState( this );
+
+	CoordBox currentPosition = view()->projection().viewport();
+	MerkaartorPreferences::instance()->setInitialPosition( currentPosition );
 
 	QMainWindow::closeEvent(event);
 }

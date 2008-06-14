@@ -16,6 +16,7 @@
 #include <QtCore/QSettings>
 #include <QColor>
 
+#include "Map/Coord.h"
 class QMainWindow;
 
 #define WORLD_COORDBOX CoordBox(Coord(1.3, -1.3), Coord(-1.3, 1.3))
@@ -186,6 +187,9 @@ public:
 	/* MainWindow state */
 	void saveMainWindowState(const class QMainWindow * mainWindow);
 	void restoreMainWindowState(class QMainWindow * mainWindow) const;
+
+	void setInitialPosition(const CoordBox & coordBox);
+	CoordBox getInitialPosition();
 
 	bool getDrawTileBoundary();
 
