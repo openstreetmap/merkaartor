@@ -121,6 +121,32 @@
         <file>map-icons/square.small/misc/empty.png</file>
         <file>map-icons/square.small/misc/information.png</file>
         <file>map-icons/square.small/misc/landmark.png</file>
+        <file>map-icons/square.small/misc/landmark/barn.png</file>
+        <file>map-icons/square.small/misc/landmark/bunker.png</file>
+        <file>map-icons/square.small/misc/landmark/chimney.png</file>
+        <file>map-icons/square.small/misc/landmark/crane.png</file>
+        <file>map-icons/square.small/misc/landmark/empty.png</file>
+        <file>map-icons/square.small/misc/landmark/farm.png</file>
+        <file>map-icons/square.small/misc/landmark/gasometer.png</file>
+        <file>map-icons/square.small/misc/landmark/lighthouse.png</file>
+        <file>map-icons/square.small/misc/landmark/mine.png</file>
+        <file>map-icons/square.small/misc/landmark/mountain_pass.png</file>
+        <file>map-icons/square.small/misc/landmark/peak.png</file>
+        <file>map-icons/square.small/misc/landmark/peak_small.png</file>
+        <file>map-icons/square.small/misc/landmark/pier.png</file>
+        <file>map-icons/square.small/misc/landmark/plant.png</file>
+        <file>map-icons/square.small/misc/landmark/power
+        <file>map-icons/square.small/misc/landmark/power.png</file>
+        <file>map-icons/square.small/misc/landmark/range.png</file>
+        <file>map-icons/square.small/misc/landmark/reservoir_covered.png</file>
+        <file>map-icons/square.small/misc/landmark/spring.png</file>
+        <file>map-icons/square.small/misc/landmark/survey_point.png</file>
+        <file>map-icons/square.small/misc/landmark/tower.png</file>
+        <file>map-icons/square.small/misc/landmark/trees.png</file>
+        <file>map-icons/square.small/misc/landmark/wastewater_plant.png</file>
+        <file>map-icons/square.small/misc/landmark/water_tower.png</file>
+        <file>map-icons/square.small/misc/landmark/windmill.png</file>
+        <file>map-icons/square.small/misc/landmark/works.png</file>
         <file>map-icons/square.small/misc/lock_closed.png</file>
         <file>map-icons/square.small/misc/lock_open.png</file>
         <file>map-icons/square.small/misc/no_icon.png</file>
@@ -245,6 +271,24 @@
         <file>map-icons/square.small/wlan/open.png</file>
         <file>map-icons/square.small/wlan/pay.png</file>
         <file>map-icons/square.small/wlan/wep.png</file>
+	<file>map-icons/square.small/shopping/confectioner.png</file>
+	<file>map-icons/square.small/shopping/groceries/butcher.png</file>
+	<file>map-icons/square.small/shopping/groceries/fruits.png</file>
+	<file>map-icons/square.small/shopping/groceries/bakery.png</file>
+	<file>map-icons/square.small/shopping/computers.png</file>
+	<file>map-icons/square.small/shopping/supermarket.png</file>
+	<file>map-icons/square.small/public/recycling/trash-bin.png</file>
+	<file>map-icons/square.small/public/post_box.png</file>
+	<file>map-icons/square.small/public/recycling.png</file>
+	<file>map-icons/square.small/public/post_office.png</file>
+	<file>map-icons/square.small/public/administration/court_of_law.png</file>
+	<file>map-icons/square.small/public/administration/prison.png</file>
+	<file>map-icons/square.small/public/firebrigade.png</file>
+	<file>map-icons/square.small/public/telephone.png</file>
+	<file>map-icons/square.small/public/toilets.png</file>
+	<file>map-icons/square.small/public/recycling_small.png</file>
+	<file>map-icons/square.small/public/arts_centre.png</file>
+	<file>map-icons/square.small/public/police.png</file>
     </qresource>
     <qresource>
     	<file>Tiles/000.png</file>

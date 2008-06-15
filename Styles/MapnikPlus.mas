@@ -278,6 +278,12 @@
 </painter>
 <painter
  zoomUnder="0.002" zoomUpper="1e+07"
+ fillColor="#aaaaaacd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[landuse] is quarry"/>
+</painter>
+<painter
+ zoomUnder="0.002" zoomUpper="1e+07"
  fillColor="#b5d0d0cd"
  drawTrafficDirectionMarks="yes">
   <selector expr="[landuse] is reservoir"/>
@@ -668,6 +674,13 @@
 <painter
  zoomUnder="0.01" zoomUpper="1e+07"
  fillColor="#f6666677"
+ icon=":/MapIcons/map-icons/square.small/shopping/rental/library.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[amenity] is library"/>
+</painter>
+<painter
+ zoomUnder="0.01" zoomUpper="1e+07"
+ fillColor="#f6666677"
  icon=":/MapIcons/map-icons/square.small/food/restaurant.png"
  drawTrafficDirectionMarks="no">
   <selector expr="[amenity] is restaurant"/>
@@ -689,7 +702,7 @@
 <painter
  zoomUnder="0.01" zoomUpper="1e+07"
  fillColor="#f6666677"
- icon=":/MapIcons/map-icons/square.small/groceries/bakery.png"
+ icon=":/MapIcons/map-icons/square.small/shopping/groceries/bakery.png"
  drawTrafficDirectionMarks="no">
   <selector expr="[shop] is bakery"/>
 </painter>
@@ -739,6 +752,47 @@
  drawTrafficDirectionMarks="no">
   <selector expr="[amenity] is taxi"/>
 </painter>
-
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/MapIcons/map-icons/square.small/sightseeing/museum.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[tourism] is museum"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/MapIcons/map-icons/square.small/sightseeing.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[tourism] is attraction"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/MapIcons/map-icons/square.small/sightseeing/monument.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[historic] is monument"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/MapIcons/map-icons/square.small/sightseeing/castle.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[historic] is castle"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/MapIcons/map-icons/square.small/misc/landmark/spring.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[natural] is spring"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/tower.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[man_made] is tower"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/MapIcons/map-icons/square.small/money/bank.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[amenity] isoneof (bank , bank;atm)"/>
+</painter>
 
 </mapStyle>
