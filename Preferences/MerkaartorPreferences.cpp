@@ -612,3 +612,13 @@ void MerkaartorPreferences::setAutoSaveDoc(bool theValue)
 	Sets->setValue("data/AutoSaveDoc", theValue);
 }
 
+bool MerkaartorPreferences::getDownloadedVisible() const
+{
+	return Sets->value("visual/DownloadedVisible", true).toBool();
+}
+
+void MerkaartorPreferences::setDownloadedVisible(bool theValue)
+{
+	Sets->setValue("visual/DownloadedVisible", theValue);
+}
+

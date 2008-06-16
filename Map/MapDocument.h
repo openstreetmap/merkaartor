@@ -71,6 +71,8 @@ public:
 
 	MapLayer* getLastDownloadLayer();
 	void setLastDownloadLayer(MapLayer * aLayer);
+	void addDownloadBox(CoordBox aBox);
+	QList<CoordBox> *getDownloadBoxes();
 
 private:
 	MapDocumentPrivate* p;

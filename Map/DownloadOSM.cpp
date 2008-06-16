@@ -484,6 +484,7 @@ bool downloadMoreOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* th
 	aParent->view()->setUpdatesEnabled(true);
 	if (OK)
 	{
+		theDocument->addDownloadBox(aBox);
 		aParent->view()->projection().setViewport(aBox,aParent->view()->rect());
 		aParent->invalidateView();
 	}
@@ -636,6 +637,7 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 			if (OK)
 			{
 				theDocument->setLastDownloadLayer(theLayer);
+				theDocument->addDownloadBox(Clip);
 				aParent->view()->projection().setViewport(Clip,aParent->view()->rect());
 				aParent->invalidateView();
 			} else {

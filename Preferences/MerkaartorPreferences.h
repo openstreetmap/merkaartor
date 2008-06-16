@@ -184,6 +184,9 @@ public:
 	QColor getFocusColor() const;
 	QColor getHoverColor() const;
 
+	void setDownloadedVisible(bool theValue);
+	bool getDownloadedVisible() const;
+
 	/* MainWindow state */
 	void saveMainWindowState(const class QMainWindow * mainWindow);
 	void restoreMainWindowState(class QMainWindow * mainWindow) const;

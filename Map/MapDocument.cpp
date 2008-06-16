@@ -42,6 +42,8 @@ public:
 	LayerDock*					theDock;
 	MapLayer*					lastDownloadLayer;
 
+	QList<CoordBox>				downloadBoxes;
+
 };
 
 MapDocument::MapDocument()
@@ -385,6 +387,16 @@ bool MapDocument::importNMEA(const QString& filename, TrackMapLayer* NewLayer)
 		return true;
 	else
 		return false;
+}
+
+void MapDocument::addDownloadBox(CoordBox aBox)
+{
+	p->downloadBoxes.append(aBox);
+}
+
+QList<CoordBox> *MapDocument::getDownloadBoxes()
+{
+	return &(p->downloadBoxes);
 }
 
 

@@ -102,6 +102,7 @@ MainWindow::MainWindow(void)
 	MerkaartorPreferences::instance()->restoreMainWindowState( this );
 	CoordBox initialPosition = MerkaartorPreferences::instance()->getInitialPosition();
 	theView->projection().setViewport(initialPosition, theView->rect());
+	viewDownloadedAction->setChecked(MerkaartorPreferences::instance()->getDownloadedVisible());
 
 #ifndef OSMARENDER
 	//TODO Osmarender rendering
@@ -490,6 +491,14 @@ void MainWindow::on_viewZoomWindowAction_triggered()
 {
 	theView->launch(new ZoomInteraction(theView));
 }
+
+void MainWindow::on_viewDownloadedAction_triggered()
+{
+	MerkaartorPreferences::instance()->setDownloadedVisible(!MerkaartorPreferences::instance()->getDownloadedVisible());
+	viewDownloadedAction->setChecked(MerkaartorPreferences::instance()->getDownloadedVisible());
+	invalidateView();
+}
+
 
 void MainWindow::on_viewSetCoordinatesAction_triggered()
 {

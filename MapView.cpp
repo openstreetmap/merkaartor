@@ -217,6 +217,35 @@ void MapView::updateStaticBuffer(QPaintEvent * /* anEvent */)
 					Current->draw(RR);
 			}
 		}
+
+		// Download areas
+		if (MerkaartorPreferences::instance()->getDownloadedVisible()) {
+			QPixmap* pxDownloarAreas = new QPixmap(width(), height());
+			pxDownloarAreas->fill(Qt::transparent);
+			QPainter D(pxDownloarAreas);
+			QRegion r(0, 0, width(), height());
+
+			//QBrush b(Qt::red, Qt::DiagCrossPattern);
+			QBrush b(Qt::red, Qt::Dense7Pattern);
+
+			QList<CoordBox>::iterator bb;
+			for (bb = theDocument->getDownloadBoxes()->begin(); bb != theDocument->getDownloadBoxes()->end(); ++bb) {
+				if (projection().viewport().disjunctFrom(*bb)) continue;
+				QPolygonF poly;
+				poly << projection().project((*bb).topLeft());
+				poly << projection().project((*bb).bottomLeft());
+				poly << projection().project((*bb).bottomRight());
+				poly << projection().project((*bb).topRight());
+				poly << projection().project((*bb).topLeft());
+
+				r -= QRegion(poly.toPolygon());
+			}
+
+			D.setClipRegion(r);
+			D.setClipping(true);
+			D.fillRect(pxDownloarAreas->rect(), b);
+			P.drawPixmap(0, 0, *pxDownloarAreas);
+		}
 	}
 	double Log = log10(200/projection().pixelPerM());
 	double RestLog = Log-floor(Log);
