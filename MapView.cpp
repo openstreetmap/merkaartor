@@ -220,9 +220,9 @@ void MapView::updateStaticBuffer(QPaintEvent * /* anEvent */)
 
 		// Download areas
 		if (MerkaartorPreferences::instance()->getDownloadedVisible()) {
-			QPixmap* pxDownloarAreas = new QPixmap(width(), height());
-			pxDownloarAreas->fill(Qt::transparent);
-			QPainter D(pxDownloarAreas);
+			QPixmap* pxDownloadAreas = new QPixmap(width(), height());
+			pxDownloadAreas->fill(Qt::transparent);
+			QPainter D(pxDownloadAreas);
 			QRegion r(0, 0, width(), height());
 
 			//QBrush b(Qt::red, Qt::DiagCrossPattern);
@@ -243,8 +243,8 @@ void MapView::updateStaticBuffer(QPaintEvent * /* anEvent */)
 
 			D.setClipRegion(r);
 			D.setClipping(true);
-			D.fillRect(pxDownloarAreas->rect(), b);
-			P.drawPixmap(0, 0, *pxDownloarAreas);
+			D.fillRect(pxDownloadAreas->rect(), b);
+			P.drawPixmap(0, 0, *pxDownloadAreas);
 		}
 	}
 	double Log = log10(200/projection().pixelPerM());
