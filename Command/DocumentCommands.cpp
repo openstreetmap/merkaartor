@@ -38,7 +38,10 @@ void AddFeatureCommand::redo()
 bool AddFeatureCommand::buildDirtyList(DirtyList& theList)
 {
 	if (UserAdded)
-		return theList.add(theFeature);
+		if (theLayer->isUplodable())
+			return theList.add(theFeature);
+		else
+			return false;
 	return false;
 }
 
@@ -150,6 +153,9 @@ void RemoveFeatureCommand::undo()
 
 bool RemoveFeatureCommand::buildDirtyList(DirtyList &theList)
 {
+	if (!theLayer->isUplodable())
+		return false;
+
 	if (CascadedCleanUp && CascadedCleanUp->buildDirtyList(theList))
 	{
 		delete CascadedCleanUp;

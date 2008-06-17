@@ -28,7 +28,7 @@ static bool canJoin(Road* R1, Road* R2)
 		(End2 == End1);
 }
 
-static void mergeTags(MapLayer* theLayer, CommandList* L, MapFeature* Dest, MapFeature* Src)
+static void mergeTags(MapDocument* theDocument, CommandList* L, MapFeature* Dest, MapFeature* Src)
 {
 	for (unsigned int i=0; i<Src->tagSize(); ++i)
 	{
@@ -36,19 +36,19 @@ static void mergeTags(MapLayer* theLayer, CommandList* L, MapFeature* Dest, MapF
 		QString v1 = Src->tagValue(i);
 		unsigned int j = Dest->findKey(k);
 		if (j == Dest->tagSize())
-			L->add(new SetTagCommand(Dest,k,v1, theLayer));
+			L->add(new SetTagCommand(Dest,k,v1, theDocument->getDirtyOrOriginLayer(Dest->layer())));
 		else
 		{
 			QString v2 = Dest->tagValue(j);
 			if (v1 != v2 && k !="created_by")
 			{
-				L->add(new SetTagCommand(Dest,k,QString("%1;%2").arg(v2).arg(v1), theLayer));
+				L->add(new SetTagCommand(Dest,k,QString("%1;%2").arg(v2).arg(v1), theDocument->getDirtyOrOriginLayer(Dest->layer())));
 			}
 		}
 	}
 }
 
-void reversePoints(MapLayer* theLayer, CommandList* theList, Road* R)
+void reversePoints(MapDocument* theDocument, CommandList* theList, Road* R)
 {
 	std::vector<TrackPoint*> Pts;
 	for (unsigned int i=R->size(); i; --i)
@@ -57,19 +57,19 @@ void reversePoints(MapLayer* theLayer, CommandList* theList, Road* R)
 		Pts.push_back(Pt);
 	}
 	for (unsigned int i=0; i<Pts.size(); ++i)
-		theList->add(new RoadRemoveTrackPointCommand(R,Pts[i],theLayer));
+		theList->add(new RoadRemoveTrackPointCommand(R,Pts[i],theDocument->getDirtyOrOriginLayer(R->layer())));
 	for (unsigned int i=0; i<Pts.size(); ++i)
-		theList->add(new RoadAddTrackPointCommand(R,Pts[i],theLayer));
+		theList->add(new RoadAddTrackPointCommand(R,Pts[i],theDocument->getDirtyOrOriginLayer(R->layer())));
 }
 
-static void appendPoints(MapLayer* theLayer, CommandList* L, Road* Dest, Road* Src)
+static void appendPoints(MapDocument* theDocument, CommandList* L, Road* Dest, Road* Src)
 {
-	L->add(new RoadRemoveTrackPointCommand(Src,(unsigned int)0,theLayer));
+	L->add(new RoadRemoveTrackPointCommand(Src,(unsigned int)0,theDocument->getDirtyOrOriginLayer(Src->layer())));
 	while (Src->size())
 	{
 		TrackPoint* Pt = Src->get(0);
-		L->add(new RoadRemoveTrackPointCommand(Src,(unsigned int)0,theLayer));
-		L->add(new RoadAddTrackPointCommand(Dest,Pt,theLayer));
+		L->add(new RoadRemoveTrackPointCommand(Src,(unsigned int)0,theDocument->getDirtyOrOriginLayer(Src->layer())));
+		L->add(new RoadAddTrackPointCommand(Dest,Pt,theDocument->getDirtyOrOriginLayer(Src->layer())));
 	}
 }
 
@@ -77,13 +77,13 @@ static Road* join(MapDocument* theDocument, CommandList* L, Road* R1, Road* R2)
 {
 	if (R1->size() == 0)
 	{
-		mergeTags(theDocument->getDirtyLayer(),L,R2,R1);
+		mergeTags(theDocument,L,R2,R1);
 		L->add(new RemoveFeatureCommand(theDocument,R1));
 		return R2;
 	}
 	if (R2->size() == 0)
 	{
-		mergeTags(theDocument->getDirtyLayer(),L,R1,R2);
+		mergeTags(theDocument,L,R1,R2);
 		L->add(new RemoveFeatureCommand(theDocument,R2));
 		return R1;
 	}
@@ -92,11 +92,11 @@ static Road* join(MapDocument* theDocument, CommandList* L, Road* R1, Road* R2)
 	TrackPoint* Start2 = R2->get(0);
 	TrackPoint* End2 = R2->get(R2->size()-1);
 	if ( (Start1 == Start2) || (Start1 == End2) )
-		reversePoints(theDocument->getDirtyLayer(),L,R1);
+		reversePoints(theDocument,L,R1);
 	if ( (End1 == End2) || (Start1 == End2) )
-		reversePoints(theDocument->getDirtyLayer(),L,R2);
-	appendPoints(theDocument->getDirtyLayer(),L,R1,R2);
-	mergeTags(theDocument->getDirtyLayer(),L,R1,R2);
+		reversePoints(theDocument,L,R2);
+	appendPoints(theDocument,L,R1,R2);
+	mergeTags(theDocument,L,R1,R2);
 	L->add(new RemoveFeatureCommand(theDocument,R2));
 	return R1;
 }
@@ -127,7 +127,7 @@ void joinRoads(MapDocument* theDocument, CommandList* theList, PropertiesDock* t
 	theDock->setSelection(Input);
 }
 
-static void splitRoad(MapLayer* theLayer, CommandList* theList, Road* In, const std::vector<TrackPoint*>& Points, std::vector<Road*>& Result)
+static void splitRoad(MapDocument* theDocument, CommandList* theList, Road* In, const std::vector<TrackPoint*>& Points, std::vector<Road*>& Result)
 {
 	bool WasClosed = isClosed(In);
 	Road* FirstPart = In;
@@ -142,11 +142,11 @@ static void splitRoad(MapLayer* theLayer, CommandList* theList, Road* In, const 
 			while ( (i+1) < FirstPart->size() )
 			{
 				NextPart->add(FirstPart->get(i+1));
-				theList->add(new RoadRemoveTrackPointCommand(FirstPart,i+1,theLayer));
+				theList->add(new RoadRemoveTrackPointCommand(FirstPart,i+1,theDocument->getDirtyOrOriginLayer(FirstPart->layer())));
 			}
 			if (In != FirstPart)
 			{
-				theList->add(new AddFeatureCommand(theLayer,FirstPart,true));
+				theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(In->layer()),FirstPart,true));
 				Result.push_back(FirstPart);
 			}
 			FirstPart = NextPart;
@@ -167,19 +167,19 @@ static void splitRoad(MapLayer* theLayer, CommandList* theList, Road* In, const 
 				Target.push_back(In->get(i));
 
 			while (FirstPart->size())
-				theList->add(new RoadRemoveTrackPointCommand(FirstPart,(unsigned int)0,theLayer));
+				theList->add(new RoadRemoveTrackPointCommand(FirstPart,(unsigned int)0,theDocument->getDirtyOrOriginLayer(FirstPart->layer())));
 
 			while (In->size())
-				theList->add(new RoadRemoveTrackPointCommand(In,(unsigned int)0,theLayer));
+				theList->add(new RoadRemoveTrackPointCommand(In,(unsigned int)0,theDocument->getDirtyOrOriginLayer(FirstPart->layer())));
 			
 			delete FirstPart;
 
 			for (unsigned int i=0; i<Target.size(); ++i)
-				theList->add(new RoadAddTrackPointCommand(In,Target[i],theLayer));
+				theList->add(new RoadAddTrackPointCommand(In,Target[i],theDocument->getDirtyOrOriginLayer(FirstPart->layer())));
 		}
 		else
 		{
-			theList->add(new AddFeatureCommand(theLayer,FirstPart,true));
+			theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(In->layer()),FirstPart,true));
 			Result.push_back(FirstPart);
 		}
 	}
@@ -212,7 +212,7 @@ static Road * GetSingleParentRoad(MapFeature * mapFeature)
 	return parentRoad;
 }
 
-void splitRoads(MapLayer* theLayer, CommandList* theList, PropertiesDock* theDock)
+void splitRoads(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
 	std::vector<Road*> Roads, Result;
 	std::vector<TrackPoint*> Points;
@@ -230,23 +230,23 @@ void splitRoads(MapLayer* theLayer, CommandList* theList, PropertiesDock* theDoc
 	}
 
 	for (unsigned int i=0; i<Roads.size(); ++i)
-		splitRoad(theLayer, theList,Roads[i],Points, Result);
+		splitRoad(theDocument, theList,Roads[i],Points, Result);
 	theDock->setSelection(Result);
 }
 
-static void breakRoad(MapLayer* theLayer, CommandList* theList, Road* R, TrackPoint* Pt)
+static void breakRoad(MapDocument* theDocument, CommandList* theList, Road* R, TrackPoint* Pt)
 {
 	for (unsigned int i=0; i<R->size(); ++i)
 		if (R->get(i) == Pt)
 		{
 			TrackPoint* New = new TrackPoint(*Pt);
-			theList->add(new AddFeatureCommand(theLayer,New,true));
-			theList->add(new RoadRemoveTrackPointCommand(R,i,theLayer));
-			theList->add(new RoadAddTrackPointCommand(R,New,i,theLayer));
+			theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(R->layer()),New,true));
+			theList->add(new RoadRemoveTrackPointCommand(R,i,theDocument->getDirtyOrOriginLayer(R->layer())));
+			theList->add(new RoadAddTrackPointCommand(R,New,i,theDocument->getDirtyOrOriginLayer(R->layer())));
 		}
 }
 
-void breakRoads(MapLayer* theLayer, CommandList* theList, PropertiesDock* theDock)
+void breakRoads(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
 	std::vector<Road*> Roads;
 	for (unsigned int i=0; i<theDock->size(); ++i)
@@ -255,10 +255,10 @@ void breakRoads(MapLayer* theLayer, CommandList* theList, PropertiesDock* theDoc
 	for (unsigned int i=0; i<Roads.size(); ++i)
 		for (unsigned int j=0; j<Roads[i]->size(); ++j)
 			for (unsigned int k=i+1; k<Roads.size(); ++k)
-				breakRoad(theLayer, theList, Roads[k],Roads[i]->get(j));
+				breakRoad(theDocument, theList, Roads[k],Roads[i]->get(j));
 }
 
-void alignNodes(MapLayer* theLayer, CommandList* theList, PropertiesDock* theDock)
+void alignNodes(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
 	if (theDock->size() < 3) //thre must be at least 3 nodes to align something
 		return;
@@ -285,7 +285,7 @@ void alignNodes(MapLayer* theLayer, CommandList* theList, PropertiesDock* theDoc
 		pos.setLat(0);
 		rotate(pos,angle(p2));
 		pos=pos+p1;
-		theList->add(new MoveTrackPointCommand( Nodes[i], pos, theLayer ));
+		theList->add(new MoveTrackPointCommand( Nodes[i], pos, theDocument->getDirtyOrOriginLayer(Nodes[i]->layer()) ));
 	}
 }
 
@@ -301,7 +301,7 @@ void mergeNodes(MapDocument* theDocument, CommandList* theList, PropertiesDock* 
 	TrackPoint* merged = Nodes[0];
 	alt.push_back(merged);
 	for (unsigned int i=1; i<Nodes.size(); ++i) {
-		mergeTags(theDocument->getDirtyLayer(), theList, merged, Nodes[i]);
+		mergeTags(theDocument, theList, merged, Nodes[i]);
 		theList->add(new RemoveFeatureCommand(theDocument, Nodes[i], alt));
 	}
 }

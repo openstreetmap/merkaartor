@@ -10,10 +10,10 @@ class Road;
 #include <vector>
 
 void joinRoads(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock);
-void splitRoads(MapLayer* theLayer, CommandList* theList, PropertiesDock* theDock);
-void breakRoads(MapLayer* theLayer, CommandList* theList, PropertiesDock* theDock);
-void reversePoints(MapLayer* theLayer, CommandList* theList, Road* R);
-void alignNodes(MapLayer* theLayer, CommandList* theList, PropertiesDock* theDock);
+void splitRoads(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock);
+void breakRoads(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock);
+void reversePoints(MapDocument* theDocument, CommandList* theList, Road* R);
+void alignNodes(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock);
 void mergeNodes(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock);
 
 #endif

@@ -72,7 +72,7 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFe
 				TrackPoint* N = new TrackPoint(P);
 				N->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 				CommandList* theList  = new CommandList(MainWindow::tr("Create Node %1 in Road %2").arg(N->description()).arg(aRoad->description()), N);
-				theList->add(new AddFeatureCommand(main()->activeLayer(),N,true));
+				theList->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),N,true));
 				theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx));
 				document()->addHistory(theList);
 				view()->invalidate();
@@ -95,9 +95,9 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFe
 				{
 					From = new TrackPoint(FirstPoint);
 					From->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
-					L->add(new AddFeatureCommand(Main->activeLayer(),From,true));
+					L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),From,true));
 				}
-				L->add(new AddFeatureCommand(Main->activeLayer(),theRoad,true));
+				L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),theRoad,true));
 				L->add(new RoadAddTrackPointCommand(theRoad,From));
 				L->setDescription(MainWindow::tr("Create Road: %1").arg(theRoad->description()));
 				L->setFeature(theRoad);
@@ -112,7 +112,7 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFe
 				TrackPoint* N = new TrackPoint(P);
 				N->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 				CommandList* theList  = new CommandList(MainWindow::tr("Create Node %1 in Road %2").arg(N->description()).arg(aRoad->description()), N);
-				theList->add(new AddFeatureCommand(main()->activeLayer(),N,true));
+				theList->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),N,true));
 				theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx));
 				document()->addHistory(theList);
 				view()->invalidate();
@@ -122,7 +122,7 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFe
 			{
 				To = new TrackPoint(view()->projection().inverse(anEvent->pos()));
 				To->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
-				L->add(new AddFeatureCommand(Main->activeLayer(),To,true));
+				L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),To,true));
 				L->setDescription(MainWindow::tr("Create Node %1 in Road %2").arg(To->description()).arg(theRoad->description()));
 				L->setFeature(To);
 			}

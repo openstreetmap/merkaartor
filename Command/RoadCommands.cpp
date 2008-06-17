@@ -46,7 +46,12 @@ void RoadAddTrackPointCommand::redo()
 
 bool RoadAddTrackPointCommand::buildDirtyList(DirtyList& theList)
 {
-	return theList.update(theRoad);
+	if (!theRoad->layer())
+		return theList.update(theRoad);
+	if (theRoad->layer()->isUplodable())
+		return theList.update(theRoad);
+	else
+		return false;
 }
 
 bool RoadAddTrackPointCommand::toXML(QDomElement& xParent) const
@@ -60,6 +65,8 @@ bool RoadAddTrackPointCommand::toXML(QDomElement& xParent) const
 	e.setAttribute("road", theRoad->xmlId());
 	e.setAttribute("trackpoint", theTrackPoint->xmlId());
 	e.setAttribute("pos", QString::number(Position));
+	if (theLayer)
+		e.setAttribute("layer", theLayer->id());
 	if (oldLayer)
 		e.setAttribute("oldlayer", oldLayer->id());
 
@@ -70,10 +77,13 @@ RoadAddTrackPointCommand * RoadAddTrackPointCommand::fromXML(MapDocument * d, QD
 {
 	RoadAddTrackPointCommand* a = new RoadAddTrackPointCommand();
 	a->setId(e.attribute("xml:id"));
-	a->theLayer = d->getDirtyLayer();
 	a->theRoad = MapFeature::getWayOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("road"));
 	a->theTrackPoint = MapFeature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("trackpoint"));
 	a->Position = e.attribute("pos").toUInt();
+	if (e.hasAttribute("layer"))
+		a->theLayer = d->getLayer(e.attribute("layer"));
+	else
+		a->theLayer = NULL;
 	if (e.hasAttribute("oldlayer"))
 		a->oldLayer = d->getLayer(e.attribute("oldlayer"));
 	else
@@ -125,7 +135,12 @@ void RoadRemoveTrackPointCommand::redo()
 
 bool RoadRemoveTrackPointCommand::buildDirtyList(DirtyList& theList)
 {
-	return theList.update(theRoad);
+	if (!theRoad->layer())
+		return theList.update(theRoad);
+	if (theRoad->layer()->isUplodable())
+		return theList.update(theRoad);
+	else
+		return false;
 }
 
 bool RoadRemoveTrackPointCommand::toXML(QDomElement& xParent) const
@@ -139,6 +154,8 @@ bool RoadRemoveTrackPointCommand::toXML(QDomElement& xParent) const
 	e.setAttribute("road", theRoad->xmlId());
 	e.setAttribute("trackpoint", theTrackPoint->xmlId());
 	e.setAttribute("index", QString::number(Idx));
+	if (theLayer)
+		e.setAttribute("layer", theLayer->id());
 	if (oldLayer)
 		e.setAttribute("oldlayer", oldLayer->id());
 
@@ -149,10 +166,13 @@ RoadRemoveTrackPointCommand * RoadRemoveTrackPointCommand::fromXML(MapDocument *
 {
 	RoadRemoveTrackPointCommand* a = new RoadRemoveTrackPointCommand();
 	a->setId(e.attribute("xml:id"));
-	a->theLayer = d->getDirtyLayer();
 	a->theRoad = MapFeature::getWayOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("road"));
 	a->theTrackPoint = MapFeature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("trackpoint"));
 	a->Idx = e.attribute("index").toUInt();
+	if (e.hasAttribute("layer"))
+		a->theLayer = d->getLayer(e.attribute("layer"));
+	else
+		a->theLayer = NULL;
 	if (e.hasAttribute("oldlayer"))
 		a->oldLayer = d->getLayer(e.attribute("oldlayer"));
 	else

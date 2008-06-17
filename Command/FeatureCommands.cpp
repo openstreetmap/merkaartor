@@ -47,7 +47,10 @@ TagCommand::~TagCommand(void)
 //
 bool TagCommand::buildDirtyList(DirtyList& theList)
 {
-	return theList.update(theFeature);
+	if (theLayer->isUplodable())
+		return theList.update(theFeature);
+	else
+		return false;
 }
 
 SetTagCommand::SetTagCommand(MapFeature* aF, unsigned int idx, const QString& k, const QString& v, MapLayer* aLayer)
@@ -121,6 +124,8 @@ bool SetTagCommand::toXML(QDomElement& xParent) const
 	e.setAttribute("key", theK);
 	e.setAttribute("value", theV);
 	e.setAttribute("oldvalue", oldV);
+	if (theLayer)
+	    e.setAttribute("layer", theLayer->id());
 	if (oldLayer)
 	    e.setAttribute("oldlayer", oldLayer->id());
 
@@ -142,9 +147,12 @@ SetTagCommand * SetTagCommand::fromXML(MapDocument * d, QDomElement e)
 	a->theIdx = e.attribute("idx").toUInt();
 	a->theK = e.attribute("key");
 	a->theV = e.attribute("value");
-	a->theLayer = d->getDirtyLayer();
     if (e.hasAttribute("oldvalue"))
         a->oldV = e.attribute("oldvalue");
+	if (e.hasAttribute("layer"))
+		a->theLayer = d->getLayer(e.attribute("layer"));
+	else
+		a->theLayer = NULL;
 	if (e.hasAttribute("oldlayer"))
 		a->oldLayer = d->getLayer(e.attribute("oldlayer"));
 	else
@@ -245,6 +253,8 @@ bool ClearTagCommand::toXML(QDomElement& xParent) const
 	e.setAttribute("idx", QString::number(theIdx));
 	e.setAttribute("key", theK);
 	e.setAttribute("value", theV);
+	if (theLayer)
+	    e.setAttribute("layer", theLayer->id());
 	if (oldLayer)
 		e.setAttribute("oldlayer", oldLayer->id());
 
@@ -264,7 +274,10 @@ ClearTagCommand * ClearTagCommand::fromXML(MapDocument * d, QDomElement e)
 	a->theIdx = e.attribute("idx").toUInt();
 	a->theK = e.attribute("key");
 	a->theV = e.attribute("value");
-	a->theLayer = d->getDirtyLayer();
+	if (e.hasAttribute("layer"))
+		a->theLayer = d->getLayer(e.attribute("layer"));
+	else
+		a->theLayer = NULL;
 	if (e.hasAttribute("oldlayer"))
 		a->oldLayer = d->getLayer(e.attribute("oldlayer"));
 	else

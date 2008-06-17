@@ -137,7 +137,7 @@ void EditInteraction::on_reverse_triggered()
 	if (Road* R = dynamic_cast<Road*>(Selection))
 	{
 		CommandList* theList  = new CommandList(MainWindow::tr("Reverse Road %1").arg(R->id()), R);
-		reversePoints(document()->getDirtyLayer(),theList,R);
+		reversePoints(document(),theList,R);
 		document()->addHistory(theList);
 	}
 	view()->invalidate();

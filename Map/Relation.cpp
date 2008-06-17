@@ -137,12 +137,12 @@ void Relation::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeat
 			else
 			{
 				QString Role = p->Members[i].first;
-				theList->add(new RelationRemoveFeatureCommand(this, i, theDocument->getDirtyLayer()));
+				theList->add(new RelationRemoveFeatureCommand(this, i, theDocument->getDirtyOrOriginLayer(layer())));
 				for (unsigned int j=0; j<Alternatives.size(); ++j)
 					if (i < p->Members.size())
 						if (p->Members[i+j].second != Alternatives[j])
 							if (p->Members[i+j-1].second != Alternatives[j])
-								theList->add(new RelationAddFeatureCommand(this, Role, Alternatives[j], i+j, theDocument->getDirtyLayer()));
+								theList->add(new RelationAddFeatureCommand(this, Role, Alternatives[j], i+j, theDocument->getDirtyOrOriginLayer(Alternatives[j]->layer())));
 				continue;
 			}
 		}
@@ -421,8 +421,8 @@ bool RelationMemberModel::setData(const QModelIndex &index, const QVariant &valu
 	{
 		MapFeature* Tmp = Parent->Members[index.row()].second;
 		CommandList* L = new CommandList(MainWindow::tr("Relation Modified %1").arg(Parent->theRelation->id()), Parent->theRelation);
-		L->add(new RelationRemoveFeatureCommand(Parent->theRelation, index.row(), Main->document()->getDirtyLayer()));
-		L->add(new RelationAddFeatureCommand(Parent->theRelation,value.toString(),Tmp,index.row(), Main->document()->getDirtyLayer()));
+		L->add(new RelationRemoveFeatureCommand(Parent->theRelation, index.row(), Main->document()->getDirtyOrOriginLayer(Parent->theRelation->layer())));
+		L->add(new RelationAddFeatureCommand(Parent->theRelation,value.toString(),Tmp,index.row(), Main->document()->getDirtyOrOriginLayer(Parent->theRelation->layer())));
 		Main->document()->addHistory(L);
 		emit dataChanged(index, index);
 		return true;

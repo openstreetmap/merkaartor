@@ -125,7 +125,7 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
 				CommandList* L = new CommandList(MainWindow::tr("SetTag %1").arg(theFeatures[0]->id()), theFeatures[0]);
 				for (unsigned int i=0; i<theFeatures.size(); ++i)
 				{
-					L->add(new SetTagCommand(theFeatures[i],value.toString(),"", Main->document()->getDirtyLayer()));
+					L->add(new SetTagCommand(theFeatures[i],value.toString(),"", Main->document()->getDirtyOrOriginLayer(theFeatures[i]->layer())));
 					theFeatures[i]->setLastUpdated(MapFeature::User);
 				}
 				Tags.push_back(std::make_pair(value.toString(),""));
@@ -147,7 +147,7 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
 			{
 				unsigned int j = theFeatures[i]->findKey(Original);
 				if (j<theFeatures[i]->tagSize())
-					L->add(new SetTagCommand(theFeatures[i],j , Tags[index.row()].first, Tags[index.row()].second, Main->document()->getDirtyLayer()));
+					L->add(new SetTagCommand(theFeatures[i],j , Tags[index.row()].first, Tags[index.row()].second, Main->document()->getDirtyOrOriginLayer(theFeatures[i]->layer())));
 				theFeatures[i]->setLastUpdated(MapFeature::User);
 			}
 			Main->document()->addHistory(L);

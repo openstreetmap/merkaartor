@@ -592,7 +592,7 @@ void MainWindow::on_roadJoinAction_triggered()
 void MainWindow::on_roadSplitAction_triggered()
 {
 	CommandList* theList = new CommandList(MainWindow::tr("Split Roads"), NULL);
-	splitRoads(activeLayer(), theList, theProperties);
+	splitRoads(theDocument, theList, theProperties);
 	if (theList->empty())
 		delete theList;
 	else
@@ -602,7 +602,7 @@ void MainWindow::on_roadSplitAction_triggered()
 void MainWindow::on_roadBreakAction_triggered()
 {
 	CommandList* theList = new CommandList(MainWindow::tr("Break Roads"), NULL);
-	breakRoads(activeLayer(), theList, theProperties);
+	breakRoads(theDocument, theList, theProperties);
 	if (theList->empty())
 		delete theList;
 	else
@@ -631,12 +631,12 @@ void MainWindow::on_editMapStyleAction_triggered()
 	delete dlg;
 }
 
-MapLayer* MainWindow::activeLayer()
-{
-//	return theLayers->activeLayer();
-	//The "active" layer is always the dirty layer
-	return theDocument->getDirtyLayer();
-}
+//MapLayer* MainWindow::activeLayer()
+//{
+////	return theLayers->activeLayer();
+//	//The "active" layer is always the dirty layer
+//	return theDocument->getDirtyLayer();
+//}
 
 MapView* MainWindow::view()
 {
@@ -1020,7 +1020,7 @@ void MainWindow::on_nodeAlignAction_triggered()
 {
 	//MapFeature* F = theView->properties()->selection(0);
 	CommandList* theList = new CommandList(MainWindow::tr("Align Nodes"), NULL);
-	alignNodes(theDocument->getDirtyLayer(), theList, theProperties);
+	alignNodes(theDocument, theList, theProperties);
 	if (theList->empty())
 		delete theList;
 	else

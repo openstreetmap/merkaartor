@@ -46,7 +46,12 @@ void RelationAddFeatureCommand::redo()
 
 bool RelationAddFeatureCommand::buildDirtyList(DirtyList& theList)
 {
-	return theList.update(theRelation);
+	if (!theRelation->layer())
+		return theList.update(theRelation);
+	if (theRelation->layer()->isUplodable())
+		return theList.update(theRelation);
+	else
+		return false;
 }
 
 bool RelationAddFeatureCommand::toXML(QDomElement& xParent) const
@@ -61,6 +66,8 @@ bool RelationAddFeatureCommand::toXML(QDomElement& xParent) const
 	e.setAttribute("role", Role);
 	e.setAttribute("feature", theMapFeature->xmlId());
 	e.setAttribute("pos", QString::number(Position));
+	if (theLayer)
+		e.setAttribute("layer", theLayer->id());
 	if (oldLayer)
 		e.setAttribute("oldlayer", oldLayer->id());
 
@@ -71,7 +78,6 @@ RelationAddFeatureCommand * RelationAddFeatureCommand::fromXML(MapDocument * d, 
 {
 	RelationAddFeatureCommand* a = new RelationAddFeatureCommand();
 	a->setId(e.attribute("xml:id"));
-	a->theLayer = d->getDirtyLayer();
 	a->theRelation = MapFeature::getRelationOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("relation"));
 	MapFeature* F;
 	if (e.attribute("featureclass") == "TrackPoint") {
@@ -91,6 +97,10 @@ RelationAddFeatureCommand * RelationAddFeatureCommand::fromXML(MapDocument * d, 
 	a->Role = e.attribute("role");
 	a->theMapFeature = F;
 	a->Position = e.attribute("pos").toUInt();
+	if (e.hasAttribute("layer"))
+		a->theLayer = d->getLayer(e.attribute("layer"));
+	else
+		a->theLayer = NULL;
 	if (e.hasAttribute("oldlayer"))
 		a->oldLayer = d->getLayer(e.attribute("oldlayer"));
 	else
@@ -143,7 +153,12 @@ void RelationRemoveFeatureCommand::redo()
 
 bool RelationRemoveFeatureCommand::buildDirtyList(DirtyList& theList)
 {
-	return theList.update(theRelation);
+	if (!theRelation->layer())
+		return theList.update(theRelation);
+	if (theRelation->layer()->isUplodable())
+		return theList.update(theRelation);
+	else
+		return false;
 }
 
 bool RelationRemoveFeatureCommand::toXML(QDomElement& xParent) const
@@ -158,6 +173,8 @@ bool RelationRemoveFeatureCommand::toXML(QDomElement& xParent) const
 	e.setAttribute("feature", theMapFeature->xmlId());
 	e.setAttribute("featureclass", theMapFeature->getClass());
 	e.setAttribute("index", QString::number(Idx));
+	if (theLayer)
+		e.setAttribute("layer", theLayer->id());
 	if (oldLayer)
 		e.setAttribute("oldlayer", oldLayer->id());
 
@@ -169,7 +186,6 @@ RelationRemoveFeatureCommand * RelationRemoveFeatureCommand::fromXML(MapDocument
 	RelationRemoveFeatureCommand* a = new RelationRemoveFeatureCommand();
 
 	a->setId(e.attribute("xml:id"));
-	a->theLayer = d->getDirtyLayer();
 	a->theRelation = MapFeature::getRelationOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("relation"));
 	MapFeature* F;
 	if (e.attribute("featureclass") == "TrackPoint") {
@@ -189,6 +205,10 @@ RelationRemoveFeatureCommand * RelationRemoveFeatureCommand::fromXML(MapDocument
 	a->theMapFeature = F;
 	a->Idx = e.attribute("index").toInt();
 	a->Role = a->theRelation->getRole(a->Idx);
+	if (e.hasAttribute("layer"))
+		a->theLayer = d->getLayer(e.attribute("layer"));
+	else
+		a->theLayer = NULL;
 	if (e.hasAttribute("oldlayer"))
 		a->oldLayer = d->getLayer(e.attribute("oldlayer"));
 	else

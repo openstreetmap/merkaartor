@@ -61,6 +61,7 @@ public:
 	QStringList getTagValueList(QString k) ;
 	ImageMapLayer* getImageLayer() const;
 	DirtyMapLayer* getDirtyLayer() const;
+	MapLayer* getDirtyOrOriginLayer(MapLayer* aLayer);
 	UploadedMapLayer* getUploadedLayer() const;
 
 	QString exportOSM(const CoordBox& aCoordBox = WORLD_COORDBOX);

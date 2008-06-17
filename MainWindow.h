@@ -90,7 +90,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		PropertiesDock* properties();
 		InfoDock* info();
 		MapDocument* document();
-		MapLayer* activeLayer();
+		//MapLayer* activeLayer();
 		MapView* view();
 
 	public slots:

@@ -317,6 +317,14 @@ DirtyMapLayer* MapDocument::getDirtyLayer() const
 	return p->dirtyLayer;
 }
 
+MapLayer* MapDocument::getDirtyOrOriginLayer(MapLayer* aLayer) 
+{
+	if (aLayer->isUplodable())
+		return p->dirtyLayer;
+	else
+		return aLayer;
+}
+
 UploadedMapLayer* MapDocument::getUploadedLayer() const
 {
 	return p->uploadedLayer;

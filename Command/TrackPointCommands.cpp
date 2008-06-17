@@ -38,7 +38,12 @@ void MoveTrackPointCommand::redo()
 
 bool MoveTrackPointCommand::buildDirtyList(DirtyList &theList)
 {
-	return theList.update(thePoint);
+	if (!thePoint->layer())
+		return theList.update(thePoint);
+	if (thePoint->layer()->isUplodable())
+		return theList.update(thePoint);
+	else
+		return false;
 }
 
 bool MoveTrackPointCommand::toXML(QDomElement& xParent) const
@@ -52,6 +57,8 @@ bool MoveTrackPointCommand::toXML(QDomElement& xParent) const
 	e.setAttribute("trackpoint", thePoint->xmlId());
 	OldPos.toXML("oldpos", e);
 	NewPos.toXML("newpos", e);
+	if (theLayer)
+		e.setAttribute("layer", theLayer->id());
 	if (oldLayer)
 		e.setAttribute("oldlayer", oldLayer->id());
 
@@ -62,10 +69,13 @@ MoveTrackPointCommand * MoveTrackPointCommand::fromXML(MapDocument * d, QDomElem
 {
 	MoveTrackPointCommand* a = new MoveTrackPointCommand();
 	a->setId(e.attribute("xml:id"));
-	a->theLayer = d->getDirtyLayer();
 	a->thePoint = MapFeature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("trackpoint"));
 	a->OldPos = Coord::fromXML(e.firstChildElement("oldpos"));
 	a->NewPos = Coord::fromXML(e.firstChildElement("newpos"));
+	if (e.hasAttribute("layer"))
+		a->theLayer = d->getLayer(e.attribute("layer"));
+	else
+		a->theLayer = NULL;
 	if (e.hasAttribute("oldlayer"))
 		a->oldLayer = d->getLayer(e.attribute("oldlayer"));
 	else

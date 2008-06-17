@@ -654,6 +654,8 @@ LayerWidget* TrackMapLayer::newWidget(void)
 void TrackMapLayer::extractLayer()
 {
 	ExtractedMapLayer* extL = new ExtractedMapLayer(tr("Extract - %1").arg(name()));
+	CommandList* theList = new CommandList(MainWindow::tr("Extracted Layer '%1'").arg(name()), NULL);
+
 	TrackPoint* P;
 	QList<TrackPoint*> PL;
 
@@ -699,20 +701,21 @@ void TrackMapLayer::extractLayer()
 				}
 			}
 
-			CommandList* theList = new CommandList(MainWindow::tr("Extracted Layer '%1'").arg(name()), NULL);
 			Road* R = new Road();
 			R->setLastUpdated(MapFeature::OSMServer);
 			R->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 			theList->add(new AddFeatureCommand(extL,R,true));
 			for (int i=0; i < PL.size(); i++) {
 				theList->add(new AddFeatureCommand(extL,PL[i],true));
-				theList->add(new RoadAddTrackPointCommand(R,PL[i]));
+				theList->add(new RoadAddTrackPointCommand(R,PL[i],extL));
 			}
-			//p->theDocument->addHistory(theList);
-			delete theList;
 		}
 	}
 
+	if (theList->size()) {
+		p->theDocument->addHistory(theList);
+		//delete theList;
+	}
 	p->theDocument->add(extL);
 }
 

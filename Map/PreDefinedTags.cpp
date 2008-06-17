@@ -144,7 +144,7 @@ void resetTagComboBox(QComboBox* Box, MapFeature* F, const QString& key)
 void tagComboBoxActivated(QComboBox* Box, int idx, MapFeature* F, const QString& key, MapDocument* doc)
 {
 	if (Box->itemData(idx) == "__unspecified")
-		doc->addHistory(new ClearTagCommand(F,key,doc->getDirtyLayer()));
+		doc->addHistory(new ClearTagCommand(F,key,doc->getDirtyOrOriginLayer(F->layer())));
 	else if (Box->itemData(idx) != "__unknown")
-		doc->addHistory(new SetTagCommand(F,key,Box->itemData(idx).toString(),doc->getDirtyLayer()));
+		doc->addHistory(new SetTagCommand(F,key,Box->itemData(idx).toString(),doc->getDirtyOrOriginLayer(F->layer())));
 }

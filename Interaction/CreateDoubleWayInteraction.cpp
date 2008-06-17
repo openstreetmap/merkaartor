@@ -140,8 +140,8 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 
 				B1->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 				B2->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
-				L->add(new AddFeatureCommand(Main->activeLayer(),B1,true));
-				L->add(new AddFeatureCommand(Main->activeLayer(),B2,true));
+				L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),B1,true));
+				L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),B2,true));
 				L->add(new RoadAddTrackPointCommand(R1,B1));
 				L->add(new RoadAddTrackPointCommand(R2,B2,(unsigned int)0));
 				document()->addHistory(L);
@@ -183,13 +183,13 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 				A2->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 				B1->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 				B2->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
-				L->add(new AddFeatureCommand(Main->activeLayer(),A1,true));
-				L->add(new AddFeatureCommand(Main->activeLayer(),A2,true));
-				L->add(new AddFeatureCommand(Main->activeLayer(),B1,true));
-				L->add(new AddFeatureCommand(Main->activeLayer(),B2,true));
+				L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),A1,true));
+				L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),A2,true));
+				L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),B1,true));
+				L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),B2,true));
 
-				L->add(new AddFeatureCommand(Main->activeLayer(),R1,true));
-				L->add(new AddFeatureCommand(Main->activeLayer(),R2,true));
+				L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),R1,true));
+				L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),R2,true));
 				R1->setTag("oneway","yes");
 				R1->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 				R2->setTag("oneway","yes");
