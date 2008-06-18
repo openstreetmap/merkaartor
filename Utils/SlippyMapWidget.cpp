@@ -8,6 +8,8 @@
 
 #include <math.h>
 
+#include "Preferences/MerkaartorPreferences.h"
+
 #define TILESIZE 256
 #define MINZOOMLEVEL 0
 #define MAXZOOMLEVEL 17
@@ -69,7 +71,6 @@ SlippyMapWidget::SlippyMapWidget(QWidget* aParent)
 {
 	p = new SlippyMapWidgetPrivate(this);
 	resize(500,400);
-	first=true;
 }
 
 SlippyMapWidget::~SlippyMapWidget(void)
@@ -117,9 +118,6 @@ QRectF SlippyMapWidget::viewArea() const
 
 void SlippyMapWidget::paintEvent(QPaintEvent*)
 {
-	if(first==true)
-		first=false;
-	else	emit redraw();
 	QPainter Painter(this);
 	Painter.fillRect(QRect(0,0,width(),height()),QColor(255,255,255));
 	int LatRect = int(floor(p->Lat));
@@ -164,6 +162,7 @@ void SlippyMapWidget::wheelEvent(QWheelEvent* ev)
 {
 	int NewZoom = ev->delta()/120 + p->Zoom;
 	ZoomTo(ev->pos(), NewZoom);
+	emit redraw();
 }
 
 void SlippyMapWidget::mousePressEvent(QMouseEvent* ev)
@@ -181,6 +180,7 @@ void SlippyMapWidget::mousePressEvent(QMouseEvent* ev)
 		p->PreviousDrag = ev->pos();
 		p->InDrag = true;
 	}
+	emit redraw();
 }
 
 void SlippyMapWidget::mouseReleaseEvent(QMouseEvent*)
@@ -197,6 +197,7 @@ void SlippyMapWidget::mouseMoveEvent(QMouseEvent* ev)
 		p->Lon -= Delta.y()/(TILESIZE*1.);
 		p->PreviousDrag = ev->pos();
 		update();
+		emit redraw();
 	}
 }
 
@@ -207,8 +208,10 @@ SlippyMapCache::SlippyMapCache()
 : QObject(0), DownloadId(0), DownloadBusy(false), theMap(0)
 {
 	Download.setHost("tile.openstreetmap.org");
-	// TODO Slippy map proxy
-	//Download.setProxy();
+	if (MerkaartorPreferences::instance()->getProxyUse()) {
+		Download.setProxy(MerkaartorPreferences::instance()->getProxyHost(), MerkaartorPreferences::instance()->getProxyPort());
+	}
+
 	DownloadBuffer.setBuffer(&DownloadData);
 	DownloadBuffer.open(QIODevice::WriteOnly);
 	connect(&Download,SIGNAL(requestFinished(int,bool)),this,SLOT(on_requestFinished(int, bool)));

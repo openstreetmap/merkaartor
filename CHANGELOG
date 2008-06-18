@@ -1,4 +1,5 @@
 v0.11
+	* ADD : Proxy support to SlippyMapWidget + change the kind of download only when interacting with the slippy map
 	* ADD : when deleting roads, ask if nodes should be deleted also
 	* ADD : "View downloaded area": "dot" the areas not downloaded from OSM during the current session
 	* ADD : Save position of last edit session on exit

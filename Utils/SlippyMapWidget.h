@@ -73,7 +73,6 @@ class SlippyMapWidget :	public QWidget
 
 	private:
 		SlippyMapWidgetPrivate* p;
-		bool first;
 		void ZoomTo(const QPoint & NewCenter, int NewZoom);
 };
 
