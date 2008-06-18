@@ -10,6 +10,7 @@
 
 #include <QtGui/QPainter>
 #include <QtGui/QPainterPath>
+#include <QMessageBox>
 
 #include <algorithm>
 #include <vector>
@@ -317,6 +318,27 @@ void Road::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature,
 		++i;
 	}
 }
+
+bool Road::deleteChildren(MapDocument* theDocument, CommandList* theList)
+{
+	QMessageBox::StandardButton resp = QMessageBox::question(NULL, MainWindow::tr("Delete Children"),
+								 MainWindow::tr("Do you want to delete the children nodes also?"),
+								 QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes);
+	switch(resp) {
+		case QMessageBox::No:
+			return true;
+
+		case QMessageBox::Cancel:
+			return false;
+
+		case QMessageBox::Yes:
+			for (unsigned int i=0; i<p->Nodes.size(); ++i) {
+				theList->add(new RemoveFeatureCommand(theDocument, p->Nodes[i]));
+			}
+			return true;
+	}
+}
+
 
 QString Road::toXML(unsigned int lvl)
 {

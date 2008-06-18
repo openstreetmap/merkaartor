@@ -84,6 +84,9 @@ void MerkaartorPreferences::initialize()
 #ifdef GOOGLE_ILLEGAL
 	bgTypes.insert(Bg_Google_illegal, tr("Illegal Google adapter"));
 #endif
+#ifdef MSLIVEMAP_ILLEGAL
+	bgTypes.insert(Bg_MsVirtualEarth_illegal, tr("Illegal Ms Virtual Earth adapter"));
+#endif
 
 	projTypes.insert(Proj_Merkaartor, tr("Merkaartor"));
 	projTypes.insert(Proj_Background, tr("Background"));

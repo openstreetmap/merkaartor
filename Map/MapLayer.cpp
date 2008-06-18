@@ -27,6 +27,9 @@
 #ifdef GOOGLE_ILLEGAL
 	#include "QMapControl/googlesatmapadapter.h"
 #endif
+#ifdef MSLIVEMAP_ILLEGAL
+	#include "QMapControl/mslivemapadapter.h"
+#endif
 #include "QMapControl/layer.h"
 #include "QMapControl/layermanager.h"
 
@@ -545,6 +548,15 @@ void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 			p->layer_bg->setVisible(p->Visible);
 
 			setName(tr("Map - Illegal Google"));
+			break;
+#endif
+#ifdef MSLIVEMAP_ILLEGAL
+		case Bg_MsVirtualEarth_illegal:
+			mapadapter_bg = new MsLiveMapAdapter();
+			p->layer_bg = new Layer(tr("Custom Layer"), mapadapter_bg, Layer::MapLayer);
+			p->layer_bg->setVisible(p->Visible);
+
+			setName(tr("Map - Illegal Ms Virtual Earth"));
 			break;
 #endif
 	}

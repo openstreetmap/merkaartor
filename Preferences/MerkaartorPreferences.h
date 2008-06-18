@@ -38,6 +38,9 @@ enum ImageBackgroundType {
 #ifdef GOOGLE_ILLEGAL
 	, Bg_Google_illegal
 #endif
+#ifdef MSLIVEMAP_ILLEGAL
+	, Bg_MsVirtualEarth_illegal
+#endif
 };
 
 enum ProjectionType {

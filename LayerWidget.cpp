@@ -202,6 +202,12 @@ ImageLayerWidget::ImageLayerWidget(ImageMapLayer* aLayer, QWidget* aParent)
 	actGoogle->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_Google_illegal));
 	connect(actGoogle, SIGNAL(triggered(bool)), this, SLOT(setGoogle(bool)));
 #endif
+#ifdef MSLIVEMAP_ILLEGAL
+	actVirtEarth = new QAction(MerkaartorPreferences::instance()->getBgTypes()[Bg_MsVirtualEarth_illegal], this);
+	//actVirtEarth->setCheckable(true);
+	actVirtEarth->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_MsVirtualEarth_illegal));
+	connect(actVirtEarth, SIGNAL(triggered(bool)), this, SLOT(setMsVirtualEarth(bool)));
+#endif
 	initActions();
 }
 
@@ -261,6 +267,17 @@ void ImageLayerWidget::setYahoo(bool)
 void ImageLayerWidget::setGoogle(bool)
 {
 	((ImageMapLayer *)theLayer)->setMapAdapter(Bg_Google_illegal);
+	theLayer->setVisible(true);
+
+	this->update(rect());
+	emit (layerChanged(this, true));
+}
+#endif
+
+#ifdef MSLIVEMAP_ILLEGAL
+void ImageLayerWidget::setMsVirtualEarth(bool)
+{
+	((ImageMapLayer *)theLayer)->setMapAdapter(Bg_MsVirtualEarth_illegal);
 	theLayer->setVisible(true);
 
 	this->update(rect());
@@ -336,6 +353,9 @@ void ImageLayerWidget::initActions()
 #ifdef GOOGLE_ILLEGAL
 	actGoogle->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_Google_illegal));
 #endif
+#ifdef MSLIVEMAP_ILLEGAL
+	actVirtEarth->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_MsVirtualEarth_illegal));
+#endif
 
 	ctxMenu->addAction(actNone);
 
@@ -354,6 +374,9 @@ void ImageLayerWidget::initActions()
 #endif
 #ifdef GOOGLE_ILLEGAL
 	ctxMenu->addAction(actGoogle);
+#endif
+#ifdef MSLIVEMAP_ILLEGAL
+	ctxMenu->addAction(actVirtEarth);
 #endif
 }
 

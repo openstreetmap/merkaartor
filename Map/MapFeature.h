@@ -185,6 +185,8 @@ class MapFeature
 
 		virtual QString getClass() = 0;
 
+		virtual bool deleteChildren(MapDocument* , CommandList* ) { return true; };
+
 		static TrackPoint* getTrackPointOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id);
 		static Road* getWayOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id);
 		static Relation* getRelationOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id);

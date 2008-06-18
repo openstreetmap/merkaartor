@@ -45,6 +45,8 @@ class Road : public MapFeature
 
 		double area() const;
 
+		virtual bool deleteChildren(MapDocument* theDocument, CommandList* theList);
+
 		virtual QString toXML(unsigned int lvl=0);
 		virtual bool toXML(QDomElement xParent);
 		static Road* fromXML(MapDocument* d, MapLayer* L, const QDomElement e);

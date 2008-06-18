@@ -109,6 +109,9 @@ class ImageLayerWidget : public LayerWidget
 #ifdef GOOGLE_ILLEGAL
 		QAction* actGoogle;
 #endif
+#ifdef MSLIVEMAP_ILLEGAL
+		QAction* actVirtEarth;
+#endif
 		QAction* actNone;
 // 		QAction* actOSM;
 		QMenu* wmsMenu;
@@ -125,6 +128,9 @@ class ImageLayerWidget : public LayerWidget
 #endif
 #ifdef GOOGLE_ILLEGAL
 		void setGoogle(bool);
+#endif
+#ifdef MSLIVEMAP_ILLEGAL
+		void setMsVirtualEarth(bool);
 #endif
 // 		void setOSM(bool);
 		void setNone(bool);
