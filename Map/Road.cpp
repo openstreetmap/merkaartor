@@ -333,7 +333,8 @@ bool Road::deleteChildren(MapDocument* theDocument, CommandList* theList)
 
 		case QMessageBox::Yes:
 			for (unsigned int i=0; i<p->Nodes.size(); ++i) {
-				theList->add(new RemoveFeatureCommand(theDocument, p->Nodes[i]));
+				if (p->Nodes[i]->sizeParents() < 2)
+					theList->add(new RemoveFeatureCommand(theDocument, p->Nodes[i]));
 			}
 			return true;
 
