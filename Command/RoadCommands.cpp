@@ -48,7 +48,7 @@ bool RoadAddTrackPointCommand::buildDirtyList(DirtyList& theList)
 {
 	if (!theRoad->layer())
 		return theList.update(theRoad);
-	if (theRoad->layer()->isUplodable())
+	if (theRoad->layer()->isUploadable())
 		return theList.update(theRoad);
 	else
 		return false;
@@ -137,7 +137,7 @@ bool RoadRemoveTrackPointCommand::buildDirtyList(DirtyList& theList)
 {
 	if (!theRoad->layer())
 		return theList.update(theRoad);
-	if (theRoad->layer()->isUplodable())
+	if (theRoad->layer()->isUploadable())
 		return theList.update(theRoad);
 	else
 		return false;

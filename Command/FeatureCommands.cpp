@@ -47,7 +47,7 @@ TagCommand::~TagCommand(void)
 //
 bool TagCommand::buildDirtyList(DirtyList& theList)
 {
-	if (theLayer->isUplodable())
+	if (theLayer->isUploadable())
 		return theList.update(theFeature);
 	else
 		return false;

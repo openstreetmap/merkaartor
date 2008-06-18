@@ -336,6 +336,9 @@ bool Road::deleteChildren(MapDocument* theDocument, CommandList* theList)
 				theList->add(new RemoveFeatureCommand(theDocument, p->Nodes[i]));
 			}
 			return true;
+
+		default:
+			return false;
 	}
 }
 

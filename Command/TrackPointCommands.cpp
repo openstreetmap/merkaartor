@@ -40,7 +40,7 @@ bool MoveTrackPointCommand::buildDirtyList(DirtyList &theList)
 {
 	if (!thePoint->layer())
 		return theList.update(thePoint);
-	if (thePoint->layer()->isUplodable())
+	if (thePoint->layer()->isUploadable())
 		return theList.update(thePoint);
 	else
 		return false;

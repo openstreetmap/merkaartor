@@ -72,7 +72,7 @@ public:
 	unsigned int setDirtyLevel(unsigned int newLevel);
 
 	virtual bool canDelete();
-	virtual bool isUplodable() {return true;};
+	virtual bool isUploadable() {return true;};
 
 protected:
 	MapLayerPrivate* p;
@@ -174,7 +174,7 @@ public:
 	virtual const QString className() {return "ExtractedMapLayer";};
 	virtual LayerWidget* newWidget(void);
 
-	virtual bool isUplodable() {return false;};
+	virtual bool isUploadable() {return false;};
 };
 
 #endif

@@ -48,7 +48,7 @@ bool RelationAddFeatureCommand::buildDirtyList(DirtyList& theList)
 {
 	if (!theRelation->layer())
 		return theList.update(theRelation);
-	if (theRelation->layer()->isUplodable())
+	if (theRelation->layer()->isUploadable())
 		return theList.update(theRelation);
 	else
 		return false;
@@ -155,7 +155,7 @@ bool RelationRemoveFeatureCommand::buildDirtyList(DirtyList& theList)
 {
 	if (!theRelation->layer())
 		return theList.update(theRelation);
-	if (theRelation->layer()->isUplodable())
+	if (theRelation->layer()->isUploadable())
 		return theList.update(theRelation);
 	else
 		return false;

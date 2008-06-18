@@ -91,9 +91,9 @@ bool ImportNMEA::importGSA (QString line)
 	QString autoSelectFix = tokens[1];
 	int Fix3D = tokens[2].toInt();
 
-	double PDOP = tokens[15].toDouble();
-	double HDOP = tokens[16].toDouble();
-	double VDOP = tokens[17].toDouble();
+	// double PDOP = tokens[15].toDouble();
+	// double HDOP = tokens[16].toDouble();
+	// double VDOP = tokens[17].toDouble();
 
 	return (Fix3D == 1 ? false: true);
 }
