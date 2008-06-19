@@ -88,8 +88,8 @@ void TrackSegment::draw(QPainter &P, const Projection& theProjection)
 			H *= 0.5;
 			double A = angle(FromF-ToF);
 			QPointF T(DistFromCenter*cos(A),DistFromCenter*sin(A));
-			QPointF V1(theWidth*cos(A+3.141592/6),theWidth*sin(A+3.141592/6));
-			QPointF V2(theWidth*cos(A-3.141592/6),theWidth*sin(A-3.141592/6));
+			QPointF V1(theWidth*cos(A+M_PI/6),theWidth*sin(A+M_PI/6));
+			QPointF V2(theWidth*cos(A-M_PI/6),theWidth*sin(A-M_PI/6));
 			P.setPen(QPen(QColor(128,128,128),1));
 			P.drawLine(H-T,H-T+V1);
 			P.drawLine(H-T,H-T+V2);

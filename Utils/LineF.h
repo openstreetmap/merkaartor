@@ -25,14 +25,14 @@ inline double angle(const QPointF& A, const QPointF& B)
 	double x = A.x()*B.y()-A.y()*B.x();
 	// numerical stability : in extreme cases the argument of asin gets slightly larger than 1
 	if (fabs(d) < 0.00001)
-		return (x>0)?3.141592/2:-3.141592;
+		return (x>0)?M_PI_2:-M_PI;
 	x = asin(x/(length(A)*length(B)));
 	if (d<0)
 	{
 		if (x > 0)
-			x = 3.141592 - x;
+			x = M_PI - x;
 		else
-			x = -3.141592 - x;
+			x = -M_PI - x;
 	}
 	return x;
 

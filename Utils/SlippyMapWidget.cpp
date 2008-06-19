@@ -80,14 +80,14 @@ SlippyMapWidget::~SlippyMapWidget(void)
 
 static double ProjectF(double Lat)
 {
-	double LL = Lat/180*3.141592;
+	double LL = Lat/180*M_PI;
 	double Y = log(tan(LL) + (1/cos(LL)));
 	return Y;
 }
 
 static double ProjectMercToLat(double MercY)
 {
-	return( 180/3.141592* atan(sinh(MercY)));
+	return( 180/M_PI * atan(sinh(MercY)));
 }
 
 
@@ -109,10 +109,10 @@ QRectF SlippyMapWidget::viewArea() const
 	Unit = 360.0 / (1<<p->Zoom);
 	double Long1 = -180 + X1 * Unit;
 	double Long2 = -180 + X2 * Unit;
-	Long1 *= 3.141592/180;
-	Long2 *= 3.141592/180;
-	Lat1 *= 3.141592/180;
-	Lat2 *= 3.141592/180;
+	Long1 *= M_PI/180;
+	Long2 *= M_PI/180;
+	Lat1 *= M_PI/180;
+	Lat2 *= M_PI/180;
 	return QRectF(Lat2,Long1,Lat1-Lat2,Long2-Long1);
 }
 

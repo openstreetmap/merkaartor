@@ -73,8 +73,8 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
 			if (Radius<2.5)
 				Radius = 2.5;
 			double Angle = 2*acos(1-Precision/Radius);
-			double Steps = ceil(2*3.141592/Angle);
-			Angle = 2*3.141592/Steps;
+			double Steps = ceil(2*M_PI/Angle);
+			Angle = 2*M_PI/Steps;
 			Radius *= view()->projection().pixelPerM();
 			double Modifier = DockData.DriveRight->isChecked()?-1:1;
 			QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
@@ -89,7 +89,7 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
 			R->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 			CommandList* L  = new CommandList(MainWindow::tr("Create Roundabout %1").arg(R->id()), R);
 			L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),First,true));
-			for (double a = Angle*3/2; a<2*3.141592; a+=Angle)
+			for (double a = Angle*3/2; a<2*M_PI; a+=Angle)
 			{
 				QPointF Next(CenterF.x()+cos(Modifier*a)*Radius,CenterF.y()+sin(Modifier*a)*Radius);
 				TrackPoint* New = new TrackPoint(view()->projection().inverse(Next));
@@ -139,14 +139,14 @@ void CreateRoundaboutInteraction::paintEvent(QPaintEvent* , QPainter& thePainter
 		if (Radius<2)
 			Radius = 2;
 		double Angle = 2*acos(1-Precision/Radius);
-		double Steps = ceil(2*3.141592/Angle);
-		Angle = 2*3.141592/Steps;
+		double Steps = ceil(2*M_PI/Angle);
+		Angle = 2*M_PI/Steps;
 		Radius *= view()->projection().pixelPerM();
 		double Modifier = DockData.DriveRight->isChecked()?-1:1;
 		QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
 		QPen TP(SomeBrush,projection().pixelPerM()*4);
 		QPointF Prev(CenterF.x()+cos(Modifier*Angle/2)*Radius,CenterF.y()+sin(Modifier*Angle/2)*Radius);
-		for (double a = Angle*3/2; a<2*3.141592; a+=Angle)
+		for (double a = Angle*3/2; a<2*M_PI; a+=Angle)
 		{
 			QPointF Next(CenterF.x()+cos(Modifier*a)*Radius,CenterF.y()+sin(Modifier*a)*Radius);
 			::draw(thePainter,TP,MapFeature::OneWay, Prev,Next,4,view()->projection());

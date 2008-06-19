@@ -8,6 +8,8 @@
 #include <QtCore/QStringList>
 #include <QtCore/QTextStream>
 
+#include <math.h>
+
 bool importNGT(QWidget* /* aParent */, const QString& aFilename, MapDocument* theDocument, MapLayer* theLayer)
 {
 	QFile f(aFilename);
@@ -22,7 +24,7 @@ bool importNGT(QWidget* /* aParent */, const QString& aFilename, MapDocument* th
 			QStringList Items(Line.split('|'));
 			if (Items.count() >= 5)
 			{
-				TrackPoint* Pt = new TrackPoint(Coord(Items[4].toDouble()*3.141592,Items[3].toDouble()*3.141592));
+				TrackPoint* Pt = new TrackPoint(Coord(Items[4].toDouble()*M_PI,Items[3].toDouble()*M_PI));
 				theList->add(new AddFeatureCommand(theLayer,Pt, true));
 				theSegment->add(Pt);
 			}

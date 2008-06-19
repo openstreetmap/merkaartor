@@ -15,7 +15,6 @@
 // from wikipedia
 #define EQUATORIALRADIUS 6378137
 #define POLARRADIUS      6356752
-#define PI 3.14159265
 
 Projection::Projection(void)
 : ScaleLat(1000000), DeltaLat(0),
@@ -39,13 +38,13 @@ double Projection::pixelPerM() const
 
 double Projection::latAnglePerM() const
 {
-	double LengthOfOneDegreeLat = EQUATORIALRADIUS * PI / 180;
+	double LengthOfOneDegreeLat = EQUATORIALRADIUS * M_PI / 180;
 	return 1 / LengthOfOneDegreeLat;
 }
 
 double Projection::lonAnglePerM(double Lat) const
 {
-	double LengthOfOneDegreeLat = EQUATORIALRADIUS * PI / 180;
+	double LengthOfOneDegreeLat = EQUATORIALRADIUS * M_PI / 180;
 	double LengthOfOneDegreeLon = LengthOfOneDegreeLat * fabs(cos(Lat));
 	return 1 / LengthOfOneDegreeLon;
 }
@@ -116,7 +115,7 @@ void Projection::setViewport(const CoordBox & TargetMap,
 
 	Viewport = TargetMap;
 	Coord Center(Viewport.center());
-	double LengthOfOneDegreeLat = EQUATORIALRADIUS * PI / 180;
+	double LengthOfOneDegreeLat = EQUATORIALRADIUS * M_PI / 180;
 	double LengthOfOneDegreeLon =
 		LengthOfOneDegreeLat * fabs(cos(Center.lat()));
 	double Aspect = LengthOfOneDegreeLon / LengthOfOneDegreeLat;
