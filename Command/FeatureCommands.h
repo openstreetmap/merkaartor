@@ -52,19 +52,19 @@ class SetTagCommand : public TagCommand
 		QString oldV;
 };
 
-//class ClearTagsCommand : public TagCommand
-//{
-//	public:
-//		ClearTagsCommand() {};
-//		ClearTagsCommand(MapFeature* aF);
-//
-//		virtual void undo();
-//		virtual void redo();
-//
-//		virtual bool toXML(QDomElement& xParent) const;
-//		static ClearTagsCommand* fromXML(MapDocument* d,QDomElement e);
-//};
-//
+class ClearTagsCommand : public TagCommand
+{
+	public:
+		ClearTagsCommand() {};
+		ClearTagsCommand(MapFeature* aF, MapLayer* aLayer=NULL);
+
+		virtual void undo();
+		virtual void redo();
+
+		virtual bool toXML(QDomElement& xParent) const;
+		static ClearTagsCommand* fromXML(MapDocument* d,QDomElement e);
+};
+
 class ClearTagCommand : public TagCommand
 {
 	public:

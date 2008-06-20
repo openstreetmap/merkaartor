@@ -32,6 +32,7 @@ class PropertiesDock : public QDockWidget
 		void toggleSelection(MapFeature* aFeature);
 		void addSelection(MapFeature* aFeature);
 		MapFeature* selection(unsigned int idx);
+		QVector<MapFeature*> selection();
 		unsigned int size() const;
 		void resetValues();
 		void checkMenuStatus();

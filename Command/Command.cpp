@@ -231,8 +231,11 @@ CommandList* CommandList::fromXML(MapDocument* d, const QDomElement& e)
 			ClearTagCommand* C = ClearTagCommand::fromXML(d, c);
 			if (C)
 				l->add(C);
-		//} else
-		//if (c.tagName() == "ClearTagsCommand") {
+		} else
+		if (c.tagName() == "ClearTagsCommand") {
+			ClearTagsCommand* C = ClearTagsCommand::fromXML(d, c);
+			if (C)
+				l->add(C);
 		} else
 		if (c.tagName() == "SetTagCommand") {
 			SetTagCommand* C = SetTagCommand::fromXML(d, c);

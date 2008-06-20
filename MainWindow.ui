@@ -57,6 +57,12 @@
     </property>
     <addaction name="editUndoAction" />
     <addaction name="editRedoAction" />
+    <addaction name="separator" />
+    <addaction name="editCopyAction" />
+    <addaction name="editPasteMergeAction" />
+    <addaction name="editPasteOverwriteAction" />
+    <addaction name="editPasteFeaturesAction" />
+    <addaction name="separator" />
     <addaction name="editRemoveAction" />
     <addaction name="editMoveAction" />
     <addaction name="editPropertiesAction" />
@@ -103,6 +109,7 @@
      </property>
      <addaction name="exportOSMAllAction" />
      <addaction name="exportOSMViewportAction" />
+     <addaction name="exportOSMSelectedAction" />
     </widget>
     <addaction name="fileNewAction" />
     <addaction name="fileOpenAction" />
@@ -682,6 +689,64 @@
    </property>
    <property name="shortcut" >
     <string>Ctrl+Alt+A</string>
+   </property>
+  </action>
+  <action name="editCopyAction" >
+   <property name="icon" >
+    <iconset resource="Icons/AllIcons.qrc" >:/Icons/edit-copy.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Copy</string>
+   </property>
+   <property name="statusTip" >
+    <string>Copy the selected feature's tags to the clipboard; if the feature is a trackpoint, copy the coordinates, too.</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="editPasteOverwriteAction" >
+   <property name="text" >
+    <string>Paste Tags (Overwrite)</string>
+   </property>
+   <property name="statusTip" >
+    <string>Paste (and overwrite) the tags in the clipboard to the selected feature.</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+V, O</string>
+   </property>
+  </action>
+  <action name="editPasteMergeAction" >
+   <property name="icon" >
+    <iconset resource="Icons/AllIcons.qrc" >:/Icons/edit-paste.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Paste Tags (Merge)</string>
+   </property>
+   <property name="statusTip" >
+    <string>Merge the tags in the clipboard with the ones of the selected feature.</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+V, M</string>
+   </property>
+  </action>
+  <action name="exportOSMSelectedAction" >
+   <property name="text" >
+    <string>Selected...</string>
+   </property>
+  </action>
+  <action name="editPasteFeaturesAction" >
+   <property name="text" >
+    <string>Paste Features</string>
+   </property>
+   <property name="statusTip" >
+    <string>Paste the features in the clipboard; If the features'id are already in the document, overwrite them.</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+V, F</string>
+   </property>
+   <property name="visible" >
+    <bool>false</bool>
    </property>
   </action>
  </widget>

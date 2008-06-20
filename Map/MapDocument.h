@@ -65,6 +65,7 @@ public:
 	UploadedMapLayer* getUploadedLayer() const;
 
 	QString exportOSM(const CoordBox& aCoordBox = WORLD_COORDBOX);
+	QString exportOSM(QVector<MapFeature*> aFeatures);
 	bool toXML(QDomElement xParent);
 	static MapDocument* fromXML(const QDomElement e, LayerDock* aDock);
 

@@ -7,6 +7,7 @@
 #include "DirtyDock.h"
 #include "Command/Command.h"
 #include "Command/DocumentCommands.h"
+#include "Command/FeatureCommands.h"
 #include "Interaction/CreateAreaInteraction.h"
 #include "Interaction/CreateDoubleWayInteraction.h"
 #include "Interaction/CreateNodeInteraction.h"
@@ -53,6 +54,7 @@
 #include <QtGui/QMessageBox>
 #include <QtGui/QMouseEvent>
 #include <QInputDialog>
+#include <QClipboard>
 
 MainWindow::MainWindow(void)
 		: fileName(""), theDocument(0), theXmlDoc(0)
@@ -104,6 +106,8 @@ MainWindow::MainWindow(void)
 	theView->projection().setViewport(initialPosition, theView->rect());
 	viewDownloadedAction->setChecked(MerkaartorPreferences::instance()->getDownloadedVisible());
 
+	connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardChanged()));
+
 #ifndef OSMARENDER
 	//TODO Osmarender rendering
 	renderAction->setVisible(false);
@@ -151,6 +155,137 @@ InfoDock* MainWindow::info()
 MapDocument* MainWindow::document()
 {
 	return theDocument;
+}
+
+MapDocument* MainWindow::getDocumentFromClipboard()
+{
+	QClipboard *clipboard = QApplication::clipboard();
+	QDomDocument* theXmlDoc = new QDomDocument();
+	if (!theXmlDoc->setContent(clipboard->text())) {
+		QMessageBox::critical(this, tr("Clipboard invalid"), tr("Clipboard is not valid XML."));
+		return NULL;
+	}
+
+	QDomElement c = theXmlDoc->documentElement();
+
+	if (c.tagName() != "osm") {
+		QMessageBox::critical(this, tr("Clipboard invalid"), tr("Clipboard do not contain valid OSM."));
+		return NULL;
+	}
+
+	MapDocument* NewDoc = new MapDocument(NULL);
+	MapLayer* l = NewDoc->getDirtyLayer();
+
+	c = c.firstChildElement();
+	while(!c.isNull()) {
+		if (c.tagName() == "bound") {
+		} else
+		if (c.tagName() == "way") {
+			Road::fromXML(NewDoc, l, c);
+		} else
+		if (c.tagName() == "relation") {
+			Relation::fromXML(NewDoc, l, c);
+		} else
+		if (c.tagName() == "node") {
+			TrackPoint::fromXML(NewDoc, l, c);
+		}
+
+		c = c.nextSiblingElement();
+	}
+
+	return NewDoc;
+}
+
+void MainWindow::on_editCopyAction_triggered()
+{
+	QClipboard *clipboard = QApplication::clipboard();
+	clipboard->setText(theDocument->exportOSM(view()->properties()->selection()));
+	invalidateView();
+}
+
+void MainWindow::on_editPasteOverwriteAction_triggered()
+{
+	QVector<MapFeature*> sel = properties()->selection();
+	if (!sel.size())
+		return;
+
+	MapDocument* doc;
+	if (!(doc = getDocumentFromClipboard()))
+		return;
+
+	CommandList* theList = new CommandList();
+	theList->setDescription("Paste tags (overwrite)");
+
+	for(int i=0; i < sel.size(); ++i) {
+		theList->add(new ClearTagsCommand(sel[i], theDocument->getDirtyOrOriginLayer(sel[i]->layer())));
+		for (FeatureIterator k(doc); !k.isEnd(); ++k) {
+			MapFeature::mergeTags(theDocument, theList, sel[i], k.get());
+		}
+	}
+
+	if (theList->size())
+		document()->addHistory(theList);
+	else
+		delete theList;
+
+	delete doc;
+	invalidateView();
+}
+
+void MainWindow::on_editPasteMergeAction_triggered()
+{
+	QVector<MapFeature*> sel = properties()->selection();
+	if (!sel.size())
+		return;
+
+	MapDocument* doc;
+	if (!(doc = getDocumentFromClipboard()))
+		return;
+
+	CommandList* theList = new CommandList();
+	theList->setDescription("Paste tags (merge)");
+
+	for(int i=0; i < sel.size(); ++i) {
+		for (FeatureIterator k(doc); !k.isEnd(); ++k) {
+			MapFeature::mergeTags(theDocument, theList, sel[i], k.get());
+		}
+	}
+
+	if (theList->size())
+		document()->addHistory(theList);
+	else
+		delete theList;
+
+	delete doc;
+	invalidateView();
+}
+
+void MainWindow::on_editPasteFeaturesAction_triggered()
+{
+	invalidateView();
+}
+
+void MainWindow::clipboardChanged()
+{
+	editPasteFeaturesAction->setEnabled(false);
+	editPasteMergeAction->setEnabled(false);
+	editPasteOverwriteAction->setEnabled(false);
+
+	QClipboard *clipboard = QApplication::clipboard();
+	QDomDocument* theXmlDoc = new QDomDocument();
+	if (!theXmlDoc->setContent(clipboard->text())) {
+		return;
+	}
+
+	QDomElement c = theXmlDoc->documentElement();
+
+	if (c.tagName() != "osm") {
+		return;
+	}
+
+	editPasteFeaturesAction->setEnabled(true);
+	editPasteMergeAction->setEnabled(true);
+	editPasteOverwriteAction->setEnabled(true);
 }
 
 void MainWindow::on_editRedoAction_triggered()
@@ -812,6 +947,22 @@ void MainWindow::on_exportOSMViewportAction_triggered()
 
 		QTextStream out(&file);
 		out << theDocument->exportOSM(view()->projection().viewport());
+		file.close();
+	}
+}
+
+void MainWindow::on_exportOSMSelectedAction_triggered()
+{
+	QString fileName = QFileDialog::getSaveFileName(this,
+		tr("Export OSM"), MerkaartorPreferences::instance()->getWorkingDir() + "/untitled.osm", tr("OSM Files (*.osm)"));
+
+	if (fileName != "") {
+		QFile file(fileName);
+		if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+			return;
+
+		QTextStream out(&file);
+		out << theDocument->exportOSM(view()->properties()->selection());
 		file.close();
 	}
 }

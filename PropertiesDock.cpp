@@ -18,6 +18,7 @@
 #include <QtGui/QLineEdit>
 #include <QtGui/QListWidget>
 #include <QtGui/QTableView>
+#include <QClipboard>
 
 #include <algorithm>
 
@@ -93,6 +94,9 @@ void PropertiesDock::checkMenuStatus()
 	Main->nodeMergeAction->setEnabled(NumPoints > 1);
 	Main->nodeAlignAction->setEnabled(NumPoints > 2);
 	Main->fileDownloadMoreAction->setEnabled(Main->document()->getLastDownloadLayer() != NULL);
+
+	Main->editCopyAction->setEnabled(Selection.size());
+	Main->clipboardChanged();
 }
 
 unsigned int PropertiesDock::size() const
@@ -105,6 +109,11 @@ MapFeature* PropertiesDock::selection(unsigned int idx)
 	if (idx < Selection.size())
 		return Selection[idx];
 	return 0;
+}
+
+QVector<MapFeature*> PropertiesDock::selection()
+{
+	return QVector<MapFeature*>::fromStdVector(Selection);
 }
 
 void PropertiesDock::setSelection(MapFeature* S)

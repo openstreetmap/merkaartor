@@ -12,6 +12,9 @@
         <file>reverse.xpm</file>
         <file>edit-undo.xpm</file>
         <file>edit-redo.xpm</file>
+        <file>edit-copy.png</file>
+        <file>edit-cut.png</file>
+        <file>edit-paste.png</file>
     </qresource>
     <qresource prefix="/Art">
         <file>Mapnik/airport.png</file>

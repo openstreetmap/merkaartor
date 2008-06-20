@@ -28,26 +28,6 @@ static bool canJoin(Road* R1, Road* R2)
 		(End2 == End1);
 }
 
-static void mergeTags(MapDocument* theDocument, CommandList* L, MapFeature* Dest, MapFeature* Src)
-{
-	for (unsigned int i=0; i<Src->tagSize(); ++i)
-	{
-		QString k = Src->tagKey(i);
-		QString v1 = Src->tagValue(i);
-		unsigned int j = Dest->findKey(k);
-		if (j == Dest->tagSize())
-			L->add(new SetTagCommand(Dest,k,v1, theDocument->getDirtyOrOriginLayer(Dest->layer())));
-		else
-		{
-			QString v2 = Dest->tagValue(j);
-			if (v1 != v2 && k !="created_by")
-			{
-				L->add(new SetTagCommand(Dest,k,QString("%1;%2").arg(v2).arg(v1), theDocument->getDirtyOrOriginLayer(Dest->layer())));
-			}
-		}
-	}
-}
-
 void reversePoints(MapDocument* theDocument, CommandList* theList, Road* R)
 {
 	std::vector<TrackPoint*> Pts;
@@ -77,13 +57,13 @@ static Road* join(MapDocument* theDocument, CommandList* L, Road* R1, Road* R2)
 {
 	if (R1->size() == 0)
 	{
-		mergeTags(theDocument,L,R2,R1);
+		MapFeature::mergeTags(theDocument,L,R2,R1);
 		L->add(new RemoveFeatureCommand(theDocument,R1));
 		return R2;
 	}
 	if (R2->size() == 0)
 	{
-		mergeTags(theDocument,L,R1,R2);
+		MapFeature::mergeTags(theDocument,L,R1,R2);
 		L->add(new RemoveFeatureCommand(theDocument,R2));
 		return R1;
 	}
@@ -96,7 +76,7 @@ static Road* join(MapDocument* theDocument, CommandList* L, Road* R1, Road* R2)
 	if ( (End1 == End2) || (Start1 == End2) )
 		reversePoints(theDocument,L,R2);
 	appendPoints(theDocument,L,R1,R2);
-	mergeTags(theDocument,L,R1,R2);
+	MapFeature::mergeTags(theDocument,L,R1,R2);
 	L->add(new RemoveFeatureCommand(theDocument,R2));
 	return R1;
 }
@@ -301,7 +281,7 @@ void mergeNodes(MapDocument* theDocument, CommandList* theList, PropertiesDock* 
 	TrackPoint* merged = Nodes[0];
 	alt.push_back(merged);
 	for (unsigned int i=1; i<Nodes.size(); ++i) {
-		mergeTags(theDocument, theList, merged, Nodes[i]);
+		MapFeature::mergeTags(theDocument, theList, merged, Nodes[i]);
 		theList->add(new RemoveFeatureCommand(theDocument, Nodes[i], alt));
 	}
 }

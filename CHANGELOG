@@ -1,4 +1,6 @@
 v0.11
+	* ADD : clipboard-copy-paste support (Tags only for now). Clipboard format is xml OSM.
+	* ADD : "export selected to OSM"
 	* ADD : Proxy support to SlippyMapWidget + change the kind of download only when interacting with the slippy map
 	* ADD : when deleting roads, ask if nodes should be deleted also
 	* ADD : "View downloaded area": "dot" the areas not downloaded from OSM during the current session

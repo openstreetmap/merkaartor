@@ -35,6 +35,10 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_editUndoAction_triggered();
 		virtual void on_editRedoAction_triggered();
 		virtual void on_editMapStyleAction_triggered();
+		virtual void on_editCopyAction_triggered();
+		virtual void on_editPasteOverwriteAction_triggered();
+		virtual void on_editPasteMergeAction_triggered();
+		virtual void on_editPasteFeaturesAction_triggered();
 		virtual void on_fileNewAction_triggered();
 		virtual void on_fileDownloadAction_triggered();
 		virtual void on_fileDownloadMoreAction_triggered();
@@ -64,6 +68,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_mapStyleLoadAction_triggered();
 		virtual void on_exportOSMAllAction_triggered();
 		virtual void on_exportOSMViewportAction_triggered();
+		virtual void on_exportOSMSelectedAction_triggered();
 		virtual void on_editSelectAction_triggered();
 		virtual void on_renderAction_triggered();
 		virtual void on_bookmarkAddAction_triggered();
@@ -77,6 +82,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_windowDirtyAction_triggered();
 
 		virtual void preferencesChanged();
+		virtual void clipboardChanged();
 		virtual void toolsPreferencesAction_triggered(unsigned int tabIdx = 0);
 
 	signals:
@@ -118,6 +124,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 	private:
 		void updateBookmarksMenu();
 		void updateProjectionMenu();
+		MapDocument* getDocumentFromClipboard();
 
 	protected:
 		void closeEvent(QCloseEvent * event);

@@ -453,6 +453,27 @@ Road* MapFeature::getWayOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *
 	return Part;
 }
 
+void MapFeature::mergeTags(MapDocument* theDocument, CommandList* L, MapFeature* Dest, MapFeature* Src)
+{
+	for (unsigned int i=0; i<Src->tagSize(); ++i)
+	{
+		QString k = Src->tagKey(i);
+		QString v1 = Src->tagValue(i);
+		unsigned int j = Dest->findKey(k);
+		if (j == Dest->tagSize())
+			L->add(new SetTagCommand(Dest,k,v1, theDocument->getDirtyOrOriginLayer(Dest->layer())));
+		else
+		{
+			QString v2 = Dest->tagValue(j);
+			if (v1 != v2 && k !="created_by")
+			{
+				L->add(new SetTagCommand(Dest,k,QString("%1;%2").arg(v2).arg(v1), theDocument->getDirtyOrOriginLayer(Dest->layer())));
+			}
+		}
+	}
+}
+
+
 Relation* MapFeature::getRelationOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id)
 {
 	Relation* Part = dynamic_cast<Relation*>(theDocument->getFeature("rel_"+Id));

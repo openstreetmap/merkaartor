@@ -190,6 +190,7 @@ class MapFeature
 		static TrackPoint* getTrackPointOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id);
 		static Road* getWayOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id);
 		static Relation* getRelationOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id);
+		static void mergeTags(MapDocument* theDocument, CommandList* L, MapFeature* Dest, MapFeature* Src);
 
 	private:
 		MapFeaturePrivate* p;

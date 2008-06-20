@@ -116,8 +116,6 @@ void EditInteraction::on_remove_triggered()
 	for (unsigned int i=0; i<view()->properties()->size(); ++i)
 		Sel.push_back(view()->properties()->selection(i));
 	if (Sel.size() == 0) return;
-	view()->properties()->setSelection(0);
-	view()->properties()->checkMenuStatus();
 	CommandList* theList  = new CommandList(MainWindow::tr("Remove feature %1").arg(Sel[0]->id()), Sel[0]);
 	for (unsigned int i=0; i<Sel.size(); ++i)
 		if (document()->exists(Sel[i]))
@@ -134,6 +132,8 @@ void EditInteraction::on_remove_triggered()
 		document()->addHistory(theList);
 	else
 		delete theList;
+	view()->properties()->setSelection(0);
+	view()->properties()->checkMenuStatus();
 	view()->invalidate();
 }
 

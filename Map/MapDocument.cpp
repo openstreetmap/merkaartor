@@ -333,11 +333,12 @@ UploadedMapLayer* MapDocument::getUploadedLayer() const
 QString MapDocument::exportOSM(const CoordBox& aCoordBox)
 {
 	QString theExport, coreExport;
+	QVector<MapFeature*> theFeatures;
 
 	for (VisibleFeatureIterator i(this); !i.isEnd(); ++i) {
 		if (TrackPoint* P = dynamic_cast<TrackPoint*>(i.get())) {
 			if (aCoordBox.contains(P->position())) {
-				coreExport += P->toXML(1) + "\n";
+				theFeatures.append(P);
 			}
 		} else
 			if (Road* G = dynamic_cast<Road*>(i.get())) {
@@ -345,9 +346,9 @@ QString MapDocument::exportOSM(const CoordBox& aCoordBox)
 					for (unsigned int j=0; j < G->size(); j++) {
 						if (TrackPoint* P = dynamic_cast<TrackPoint*>(G->get(j)))
 							if (!aCoordBox.contains(P->position()))
-								coreExport += P->toXML(1);
+								theFeatures.append(P);
 					}
-					coreExport += G->toXML(1) + "\n";
+					theFeatures.append(G);
 				}
 			} else
 				//FIXME Not working for relation (not made of point?)
@@ -359,15 +360,66 @@ QString MapDocument::exportOSM(const CoordBox& aCoordBox)
 									for (unsigned int k=0; k < R->size(); k++) {
 										if (TrackPoint* P = dynamic_cast<TrackPoint*>(R->get(k)))
 											if (!aCoordBox.contains(P->position()))
-												coreExport += P->toXML(1) + "\n";
+												theFeatures.append(P);
 									}
-									coreExport += R->toXML(1) + "\n";
+									theFeatures.append(R);
 								}
 							}
 						}
-						coreExport += G->toXML(1) + "\n";
+						theFeatures.append(G);
 					}
 				}
+	}
+
+	return exportOSM(theFeatures);
+}
+
+QString MapDocument::exportOSM(QVector<MapFeature*> aFeatures)
+{
+	QString theExport, coreExport;
+	CoordBox aCoordBox;
+	QVector<MapFeature*> exportedFeatures;
+	QVector<MapFeature*>::Iterator i;
+
+	for (i = aFeatures.begin(); i != aFeatures.end(); ++i) {
+		if (TrackPoint* P = dynamic_cast<TrackPoint*>(*i)) {
+			if (!exportedFeatures.contains(*i))
+				exportedFeatures.append(*i);
+		} else {
+			if (Road* G = dynamic_cast<Road*>(*i)) {
+				for (unsigned int j=0; j < G->size(); j++) {
+					if (TrackPoint* P = dynamic_cast<TrackPoint*>(G->get(j))) {
+						if (!exportedFeatures.contains(P))
+							exportedFeatures.append(P);
+					}
+					if (!exportedFeatures.contains(G))
+						exportedFeatures.append(G);
+				}
+			} else {
+				//FIXME Not working for relation (not made of point?)
+				if (Relation* G = dynamic_cast<Relation*>(*i)) {
+					for (unsigned int j=0; j < G->size(); j++) {
+						if (Road* R = dynamic_cast<Road*>(G->get(j))) {
+							for (unsigned int k=0; k < R->size(); k++) {
+								if (TrackPoint* P = dynamic_cast<TrackPoint*>(R->get(k))) {
+									if (!exportedFeatures.contains(P))
+										exportedFeatures.append(P);
+								}
+							}
+						if (!exportedFeatures.contains(R))
+							exportedFeatures.append(R);
+						}
+					}
+					if (!exportedFeatures.contains(G))
+						exportedFeatures.append(G);
+				}
+			}
+		}
+	}
+
+	for (int i=0; i < exportedFeatures.size(); i++) {
+		aCoordBox.merge(exportedFeatures[i]->boundingBox());
+		coreExport += exportedFeatures[i]->toXML(1) + "\n";
 	}
 
 	theExport += "<?xml version='1.0' encoding='UTF-8'?>\n";

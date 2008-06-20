@@ -164,52 +164,94 @@ SetTagCommand * SetTagCommand::fromXML(MapDocument * d, QDomElement e)
 
 /* CLEARTAGSCOMMAND */
 
-//ClearTagsCommand::ClearTagsCommand(MapFeature* F)
-//: TagCommand(F)
-//{
-//	for (unsigned int i=0; i<theFeature->tagSize(); ++i)
-//		Before.push_back(std::make_pair(theFeature->tagKey(i),theFeature->tagValue(i)));
-//	redo();
-//}
-//
-//void ClearTagsCommand::undo()
-//{
-//	for (unsigned int i=0; i<Before.size(); ++i)
-//		theFeature->setTag(Before[i].first,Before[i].second);
-//}
-//
-//void ClearTagsCommand::redo()
-//{
-//	theFeature->clearTags();
-//}
-//
-//bool ClearTagsCommand::toXML(QDomElement& xParent) const
-//{
-//	bool OK = true;
-//
-//	QDomElement e = xParent.ownerDocument().createElement("ClearTagsCommand");
-//	xParent.appendChild(e);
-//
-//	e.setAttribute("xml:id", id());
-//	e.setAttribute("feature", theFeature->xmlId());
-//
-//	return OK;
-//}
-//
-//ClearTagsCommand * ClearTagsCommand::fromXML(MapDocument * d, QDomElement e)
-//{
-//	ClearTagsCommand* a = new ClearTagsCommand();
-//	a->setId(e.attribute("xml:id"));
-//	MapFeature* F;
-//	if (!(F = d->getFeature("node_"+e.attribute("feature"))))
-//		if (!(F = d->getFeature("way_"+e.attribute("feature"))))
-//			if (!(F = d->getFeature("rel_"+e.attribute("feature"))))
-//				return NULL;
-//	a->theFeature = F;
-//
-//	return a;
-//}
-//
+ClearTagsCommand::ClearTagsCommand(MapFeature* F, MapLayer* aLayer)
+: TagCommand(F, aLayer)
+{
+	for (unsigned int i=0; i<theFeature->tagSize(); ++i)
+		Before.push_back(std::make_pair(theFeature->tagKey(i),theFeature->tagValue(i)));
+	redo();
+}
+
+void ClearTagsCommand::undo()
+{
+	theFeature->clearTags();
+	for (unsigned int i=0; i<Before.size(); ++i)
+		theFeature->setTag(Before[i].first,Before[i].second);
+
+	if (theLayer && oldLayer && (theLayer != oldLayer)) {
+		theLayer->remove(theFeature);
+		oldLayer->add(theFeature);
+		decDirtyLevel(oldLayer);
+	}
+}
+
+void ClearTagsCommand::redo()
+{
+	theFeature->clearTags();
+
+	oldLayer = theFeature->layer();
+	if (theLayer && oldLayer && (theLayer != oldLayer)) {
+		oldLayer->remove(theFeature);
+		incDirtyLevel(oldLayer);
+		theLayer->add(theFeature);
+	}
+}
+
+bool ClearTagsCommand::toXML(QDomElement& xParent) const
+{
+	bool OK = true;
+
+	QDomElement e = xParent.ownerDocument().createElement("ClearTagsCommand");
+	xParent.appendChild(e);
+
+	e.setAttribute("xml:id", id());
+	e.setAttribute("feature", theFeature->xmlId());
+	if (theLayer)
+	    e.setAttribute("layer", theLayer->id());
+	if (oldLayer)
+		e.setAttribute("oldlayer", oldLayer->id());
+
+	for (unsigned int i=0; i<Before.size(); ++i)
+	{
+		QDomElement c = e.ownerDocument().createElement("tag");
+		e.appendChild(c);
+
+		c.setAttribute("k", Before[i].first);
+		c.setAttribute("v", Before[i].second);
+	}
+
+	return OK;
+}
+
+ClearTagsCommand * ClearTagsCommand::fromXML(MapDocument * d, QDomElement e)
+{
+	ClearTagsCommand* a = new ClearTagsCommand();
+	a->setId(e.attribute("xml:id"));
+	MapFeature* F;
+	if (!(F = d->getFeature("node_"+e.attribute("feature"))))
+		if (!(F = d->getFeature("way_"+e.attribute("feature"))))
+			if (!(F = d->getFeature("rel_"+e.attribute("feature"))))
+				return NULL;
+	a->theFeature = F;
+	if (e.hasAttribute("layer"))
+		a->theLayer = d->getLayer(e.attribute("layer"));
+	else
+		a->theLayer = NULL;
+	if (e.hasAttribute("oldlayer"))
+		a->oldLayer = d->getLayer(e.attribute("oldlayer"));
+	else
+		a->oldLayer = NULL;
+
+	QDomElement c = e.firstChildElement();
+	while(!c.isNull()) {
+		if (c.tagName() == "tag") {
+			a->Before.push_back(std::make_pair(c.attribute("k"),c.attribute("v")));
+		}
+		c = c.nextSiblingElement();
+	}
+	return a;
+}
+
 /* CLEARTAGCOMMAND */
 
 ClearTagCommand::ClearTagCommand(MapFeature* F, const QString& k, MapLayer* aLayer)
