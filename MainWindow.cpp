@@ -749,8 +749,10 @@ void MainWindow::on_createRelationAction_triggered()
 	Relation* R = new Relation;
 	for (unsigned int i = 0; i < theProperties->size(); ++i)
 		R->add("", theProperties->selection(i));
-	theDocument->addHistory(
-		new AddFeatureCommand(theLayers->activeLayer(), R, true));
+	CommandList* theList = new CommandList(MainWindow::tr("Create Relation %1").arg(R->description()), R);
+	theList->add(
+		new AddFeatureCommand(document()->getDirtyLayer(), R, true));
+	theDocument->addHistory(theList);
 	theProperties->setSelection(R);
 }
 

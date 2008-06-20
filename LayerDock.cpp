@@ -95,11 +95,6 @@ void LayerDock::resizeEvent(QResizeEvent* )
 {
 }
 
-MapLayer* LayerDock::activeLayer()
-{
- 	return ((LayerWidget *)butGroup->checkedButton())->getMapLayer();
-}
-
 void LayerDock::layerChanged(LayerWidget*, bool adjustViewport)
 {
 	emit(layersChanged(adjustViewport));

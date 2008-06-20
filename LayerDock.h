@@ -23,7 +23,6 @@ class LayerDock : public QDockWidget
 		void createContent();
 		//void updateContent();
 		void resizeEvent(QResizeEvent* anEvent);
-		MapLayer* activeLayer();
 
 		void clearLayers();
 		void addLayer(MapLayer* aLayer);
