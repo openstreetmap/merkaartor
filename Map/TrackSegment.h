@@ -15,7 +15,7 @@ class TrackSegment : public MapFeature
 		TrackSegment(const TrackSegment& other);
 
 	public:
-		virtual QString getClass() {return "TrackSegment";};
+		virtual QString getClass() const {return "TrackSegment";};
 
 		virtual CoordBox boundingBox() const;
 		virtual void draw(QPainter& P, const Projection& theProjection);

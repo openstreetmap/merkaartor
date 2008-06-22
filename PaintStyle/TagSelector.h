@@ -32,6 +32,29 @@ class TagSelectorIs : public TagSelector
 		QString Key, Value;
 };
 
+class TagSelectorTypeIs : public TagSelector
+{
+	public:
+		TagSelectorTypeIs(const QString& type);
+
+		virtual TagSelector* copy() const;
+		virtual bool matches(const MapFeature* F) const;
+		virtual QString asExpression(bool Precedence) const;
+
+	private:
+		QString Type;
+};
+
+class TagSelectorHasTags : public TagSelector
+{
+	public:
+		TagSelectorHasTags();
+
+		virtual TagSelector* copy() const;
+		virtual bool matches(const MapFeature* F) const;
+		virtual QString asExpression(bool Precedence) const;
+};
+
 class TagSelectorIsOneOf : public TagSelector
 {
 	public:

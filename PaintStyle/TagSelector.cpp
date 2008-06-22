@@ -87,6 +87,25 @@ TagSelectorIs* parseTagSelectorIs(const QString& Expression, int& idx)
 	return new TagSelectorIs(Key, Value);
 }
 
+TagSelectorTypeIs* parseTagSelectorTypeIs(const QString& Expression, int& idx)
+{
+	QString Type;
+	if (!canParseLiteral(Expression, idx, "Type"))
+		return 0;
+	if (!canParseLiteral(Expression, idx, "is"))
+		return 0;
+	if (!canParseValue(Expression, idx, Type))
+		return 0;
+	return new TagSelectorTypeIs(Type);
+}
+
+TagSelectorHasTags* parseTagSelectorHasTags(const QString& Expression, int& idx)
+{
+	if (!canParseLiteral(Expression, idx, "HasTags"))
+		return 0;
+	return new TagSelectorHasTags();
+}
+
 TagSelectorIsOneOf* parseTagSelectorIsOneOf(const QString& Expression, int& idx)
 {
 	QString Key;
@@ -128,6 +147,16 @@ TagSelector* parseFactor(const QString& Expression, int& idx)
 	if (!Current)
 	{
 		idx = Saved;
+		Current = parseTagSelectorTypeIs(Expression, idx);
+	}
+	if (!Current)
+	{
+		idx = Saved;
+		Current = parseTagSelectorHasTags(Expression, idx);
+	}
+	if (!Current)
+	{
+		idx = Saved;
 		Current = parseTagSelectorIsOneOf(Expression, idx);
 	}
 	return Current;
@@ -153,7 +182,7 @@ TagSelector* parseTerm(const QString& Expression, int& idx)
 }
 
 TagSelector* parseTagSelector(const QString& Expression, int& idx)
-{	
+{
 	std::vector<TagSelector*> Terms;
 	while (idx < Expression.length())
 	{
@@ -167,7 +196,7 @@ TagSelector* parseTagSelector(const QString& Expression, int& idx)
 	if (Terms.size() == 1)
 		return Terms[0];
 	else if (Terms.size() > 1)
-		return new TagSelectorOr(Terms);	
+		return new TagSelectorOr(Terms);
 	return 0;
 }
 
@@ -208,6 +237,54 @@ QString TagSelectorIs::asExpression(bool) const
 	R += Key;
 	R += "] is ";
 	R += Value;
+	return R;
+}
+
+/* TAGSELECTORTYPEIS */
+
+TagSelectorTypeIs::TagSelectorTypeIs(const QString& type)
+: Type(type)
+{
+}
+
+TagSelector* TagSelectorTypeIs::copy() const
+{
+	return new TagSelectorTypeIs(Type);
+}
+
+bool TagSelectorTypeIs::matches(const MapFeature* F) const
+{
+	return (F->getClass() == Type);
+}
+
+QString TagSelectorTypeIs::asExpression(bool) const
+{
+	QString R;
+	R += "Type is ";
+	R += Type;
+	return R;
+}
+
+/* TAGSELECTORHASTAGS */
+
+TagSelectorHasTags::TagSelectorHasTags()
+{
+}
+
+TagSelector* TagSelectorHasTags::copy() const
+{
+	return new TagSelectorHasTags();
+}
+
+bool TagSelectorHasTags::matches(const MapFeature* F) const
+{
+	return !(F->tagSize()==0 || (F->tagSize()==1 && F->tagKey(0)=="created_by" ));
+}
+
+QString TagSelectorHasTags::asExpression(bool) const
+{
+	QString R;
+	R += "HasTags";
 	return R;
 }
 

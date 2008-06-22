@@ -53,19 +53,19 @@ class MapFeature
 		 * @return A coord box
 		 */
 		virtual CoordBox boundingBox() const = 0;
-		
+
 		/** Draw the feature using the given QPainer an Projection
 		 * @param P The QPaiter used to draw
 		 * @param theProjection the Projection used to convert real coordinates to screen coordinates
 		 */
 		virtual void draw(QPainter& P, const Projection& theProjection) = 0;
-		
+
 		/** Draw the feature using the given QPainer an Projection and with the focused draw
 		 * @param P The QPaiter used to draw
 		 * @param theProjection the Projection used to convert real coordinates to screen coordinates
 		 */
 		virtual void drawFocus(QPainter& P, const Projection& theProjection) = 0;
-		
+
 		/** Draw the feature using the given QPainer an Projection and with the hover draw
 		 * @param P The QPaiter used to draw
 		 * @param theProjection the Projection used to convert real coordinates to screen coordinates
@@ -78,7 +78,7 @@ class MapFeature
 		/** Set the id for the current feature.
 		 */
 		void setId(const QString& id);
-		
+
 		/** Give the id of the feature.
 		 *  If the feature has no id, a random id is generated
 		 * @return the id of the current feature
@@ -109,7 +109,7 @@ class MapFeature
 		 * @param value the value corresponding to the key
 		 */
 		void setTag(const QString& key, const QString& value);
-		
+
 		/** Set the tag "key=value" at the position index
 		 * If a tag with the same key exist, it is replaced
 		 * Otherwise the tag is added at the index position
@@ -118,46 +118,46 @@ class MapFeature
 		 * @param value the value corresponding to the key
 		*/
 		void setTag(unsigned int index, const QString& key, const QString& value);
-		
+
 		/** remove all the tags for the curent feature
 		 */
 		void clearTags();
-		
+
 		/** remove the tag with the key "k".
 		 * if no corresponding tag, don't do anything
 		 */
 		void clearTag(const QString& k);
-		
+
 		/** @return the number of tags for the current object
 		 */
 		unsigned int tagSize() const;
-		
+
 		/** if a tag with the key "k" exists, return its index.
-		 * if the key doesn't exist, return the number of tags 
+		 * if the key doesn't exist, return the number of tags
 		 * @return index of tag
 		 */
 		unsigned int findKey(const QString& k) const;
-		
+
 		/** return the value of the tag at the position "i".
 		 * position start at 0.
 		 * Be carefull: no verification is made on i.
 		 * @return the value
 		 */
 		QString tagValue(unsigned int i) const;
-		
+
 		/** return the value of the tag with the key "k".
 		 * if such a tag doesn't exists, return Default.
 		 * @return value or Default
 		 */
 		QString tagValue(const QString& k, const QString& Default) const;
-		
+
 		/** return the value of the tag at the position "i".
 		 * position start at 0.
 		 * Be carefull: no verification is made on i.
 		 * @return the value
 		*/
 		QString tagKey(unsigned int i) const;
-		
+
 		/** remove the tag at the position "i".
 		 * position start at 0.
 		 * Be carefull: no verification is made on i.
@@ -183,7 +183,7 @@ class MapFeature
 		virtual QString toMainHtml(QString type, QString systemtype);
 		virtual QString toHtml() = 0;
 
-		virtual QString getClass() = 0;
+		virtual QString getClass() const = 0;
 
 		virtual bool deleteChildren(MapDocument* , CommandList* ) { return true; };
 

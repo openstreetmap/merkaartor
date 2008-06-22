@@ -237,4 +237,16 @@
  drawTrafficDirectionMarks="no">
  <selector expr="[place] is city"/>
 </painter>
+<painter
+ zoomUnder="0.142857" zoomUpper="1e+07"
+ icon=":/MapIcons/map-icons/square.small/misc/information.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="Type is TrackPoint and HasTags"/>
+</painter>
+<painter
+ zoomUnder="0.142857" zoomUpper="1e+07"
+ icon=":/MapIcons/map-icons/square.small/unknown.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="Type is TrackPoint"/>
+</painter>
 </mapStyle>

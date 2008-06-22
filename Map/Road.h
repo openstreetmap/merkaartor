@@ -19,7 +19,7 @@ class Road : public MapFeature
 		Road(const Road& other);
 
 	public:
-		virtual QString getClass() {return "Road";};
+		virtual QString getClass() const {return "Road";};
 
 		virtual CoordBox boundingBox() const;
 		virtual void draw(QPainter& P, const Projection& theProjection);

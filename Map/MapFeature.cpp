@@ -34,16 +34,16 @@ class MapFeaturePrivate
 			: LastActor(MapFeature::User), theLayer(0),
 				PossiblePaintersUpToDate(false),
 			  	PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
-				theFeature(0), LastPartNotification(0), Time(QDateTime::currentDateTime()) 
-		{ 
+				theFeature(0), LastPartNotification(0), Time(QDateTime::currentDateTime())
+		{
 			initVersionNumber();
 		}
 		MapFeaturePrivate(const MapFeaturePrivate& other)
 			: Tags(other.Tags), LastActor(MapFeature::User), theLayer(0),
 				PossiblePaintersUpToDate(false),
 			  	PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
-				theFeature(0), LastPartNotification(0), Time(QDateTime::currentDateTime()) 
-		{ 
+				theFeature(0), LastPartNotification(0), Time(QDateTime::currentDateTime())
+		{
 			initVersionNumber();
 		}
 
@@ -271,7 +271,8 @@ void MapFeaturePrivate::updatePainters(double PixelPerM)
 {
 	//if the object has no tags or only the created_by tag, we don't check for style
 	//search is about 15 times faster like that !!!
-	if(theFeature->tagSize()==0 || (theFeature->tagSize()==1 && theFeature->tagKey(0)=="created_by" ))
+	//However, still match features with no tags and no parent, i.e. "lost" trackpoints
+	if(theFeature->sizeParents() && (theFeature->tagSize()==0 || (theFeature->tagSize()==1 && theFeature->tagKey(0)=="created_by" )))
 	{
 		PossiblePainters.clear();
 		CurrentPainter = 0;
