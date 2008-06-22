@@ -72,7 +72,7 @@ int MapAdapter::getZoom() const
 
 int MapAdapter::getAdaptedZoom() const
 {
-	return max_zoom < min_zoom ? min_zoom - current_zoom : current_zoom;
+	return max_zoom < min_zoom ? min_zoom - current_zoom : current_zoom - min_zoom;
 }
 
 IImageManager* MapAdapter::getImageManager()
