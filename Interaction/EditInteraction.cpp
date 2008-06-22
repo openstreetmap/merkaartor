@@ -65,10 +65,6 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 			}
 		} else {
 			view()->properties()->setSelection(aLast);
-			if (aLast)
-				view()->info()->setHtml(aLast->toHtml());
-			else
-				view()->info()->setHtml("");
 		}
 		if (!aLast)
 		{

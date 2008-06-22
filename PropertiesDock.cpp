@@ -1,4 +1,5 @@
 #include "PropertiesDock.h"
+#include "InfoDock.h"
 #include "MainWindow.h"
 #include "MapView.h"
 #include "TagModel.h"
@@ -116,12 +117,12 @@ QVector<MapFeature*> PropertiesDock::selection()
 	return QVector<MapFeature*>::fromStdVector(Selection);
 }
 
-void PropertiesDock::setSelection(MapFeature* S)
+void PropertiesDock::setSelection(MapFeature*aFeature)
 {
 	cleanUpUi();
 	Selection.clear();
-	if (S)
-		Selection.push_back(S);
+	if (aFeature)
+		Selection.push_back(aFeature);
 	FullSelection = Selection;
 	switchUi();
 	fillMultiUiSelectionBox();
@@ -197,6 +198,8 @@ void PropertiesDock::on_SelectionList_itemSelectionChanged()
 		for (unsigned int i=0; i<FullSelection.size(); ++i)
 			if (MultiUi.SelectionList->item(i)->isSelected())
 				Selection.push_back(FullSelection[i]);
+		if (Selection.size() == 1)
+			Main->view()->info()->setHtml(Selection[0]->toHtml());
 		theModel->setFeature(Selection);
 		MultiUi.lbStatus->setText(tr("%1/%2 selected item(s)").arg(Selection.size()).arg(FullSelection.size()));
 		Main->view()->update();
@@ -345,6 +348,7 @@ void PropertiesDock::resetValues()
 	Selection.clear();
 	if (FullSelection.size() == 1)
 	{
+		Main->view()->info()->setHtml(FullSelection[0]->toHtml());
 		if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(FullSelection[0]))
 		{
 			TrackPointUi.Id->setText(Pt->id());
@@ -374,6 +378,7 @@ void PropertiesDock::resetValues()
 	}
 	else if (FullSelection.size() > 1)
 	{
+		Main->view()->info()->setHtml("");
 		MultiUi.TagView->setModel(theModel);
 		MultiUi.TagView->setItemDelegate(delegate);
 	}
