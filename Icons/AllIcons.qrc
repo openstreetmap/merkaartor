@@ -181,6 +181,14 @@
         <file>map-icons/square.small/recreation/shelter.png</file>
         <file>map-icons/square.small/recreation/theme_park.png</file>
         <file>map-icons/square.small/recreation/zoo.png</file>
+        <file>map-icons/square.small/recreation/theater.png</file>
+        <file>map-icons/square.small/recreation/park.png</file>
+        <file>map-icons/square.small/recreation/water_park.png</file>
+        <file>map-icons/square.small/recreation/garden.png</file>
+        <file>map-icons/square.small/recreation/picnic.png</file>
+        <file>map-icons/square.small/recreation/playground.png</file>
+        <file>map-icons/square.small/recreation/common.png</file>
+        <file>map-icons/square.small/recreation/nature_reserve.png</file>
         <file>map-icons/square.small/religion/cemetery.png</file>
         <file>map-icons/square.small/religion/chapel.png</file>
         <file>map-icons/square.small/religion/church.png</file>
@@ -250,6 +258,21 @@
         <file>map-icons/square.small/vehicle/parking.png</file>
         <file>map-icons/square.small/vehicle/repair_shop.png</file>
         <file>map-icons/square.small/vehicle/restrictions.png</file>
+        <file>map-icons/square.small/vehicle/restrictions/bollard-bw.png</file>
+        <file>map-icons/square.small/vehicle/restrictions/bollard.png</file>
+        <file>map-icons/square.small/vehicle/restrictions/dead_end.png</file>
+        <file>map-icons/square.small/vehicle/restrictions/incline.png</file>
+        <file>map-icons/square.small/vehicle/restrictions/motorbike.png</file>
+        <file>map-icons/square.small/vehicle/restrictions/parking.png</file>
+        <file>map-icons/square.small/vehicle/restrictions/play_street.png</file>
+        <file>map-icons/square.small/vehicle/restrictions/right_of_way.png</file>
+        <file>map-icons/square.small/vehicle/restrictions/road_works.png</file>
+        <file>map-icons/square.small/vehicle/restrictions/roundabout_left.png</file>
+        <file>map-icons/square.small/vehicle/restrictions/roundabout_right.png</file>
+        <file>map-icons/square.small/vehicle/restrictions/speed</file>
+        <file>map-icons/square.small/vehicle/restrictions/stop.png</file>
+        <file>map-icons/square.small/vehicle/restrictions/traffic_jam.png</file>
+        <file>map-icons/square.small/vehicle/restrictions/traffic-light.png</file>
         <file>map-icons/square.small/vehicle/services.png</file>
         <file>map-icons/square.small/vehicle/toll_station.png</file>
         <file>map-icons/square.small/vehicle/tunnel.png</file>

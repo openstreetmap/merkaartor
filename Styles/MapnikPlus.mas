@@ -795,6 +795,36 @@
   <selector expr="[amenity] isoneof (bank , bank;atm)"/>
 </painter>
 <painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/MapIcons/map-icons/square.small/vehicle/restrictions/traffic-light.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[highway] is traffic_signals"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/MapIcons/map-icons/square.small/sightseeing/memorial.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[historic] is memorial"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/MapIcons/map-icons/square.small/fixme.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[amenity] is shelter"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/MapIcons/map-icons/square.small/recreation/picnic.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[tourism] is picnic_site"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/Art/Mapnik/halt.png"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[railway] is tram_stop"/>
+</painter>
+<painter
  zoomUnder="0.142857" zoomUpper="1e+07"
  icon=":/MapIcons/map-icons/square.small/misc/information.png"
  drawTrafficDirectionMarks="no">
@@ -806,5 +836,4 @@
  drawTrafficDirectionMarks="no">
   <selector expr="Type is TrackPoint"/>
 </painter>
-
 </mapStyle>
