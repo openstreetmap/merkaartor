@@ -66,7 +66,7 @@ class IImageManager : public QObject
 		//QPixmap prefetchImage(const QString& host, const QString& path);
 		virtual QPixmap prefetchImage(MapAdapter* anAdapter, int x, int y, int z) = 0;
 
-		virtual void receivedImage(const QPixmap pixmap, const QString& url) = 0;
+		virtual void receivedImage(const QPixmap& pixmap, const QString& url) = 0;
 
 		/*!
 		 * This method is called by MapNetwork, after all images in its queue were loaded.

@@ -201,9 +201,10 @@ void Layer::_draw(QPainter* painter, const QPoint mapmiddle_px) const
 
 	if (mapAdapter->isValid(mapmiddle_tile_x, mapmiddle_tile_y, mapAdapter->getZoom()))
 	{
+		QPixmap pm = mapAdapter->getImageManager()->getImage(mapAdapter, mapmiddle_tile_x, mapmiddle_tile_y, mapAdapter->getZoom());
 		painter->drawPixmap(-cross_x+size.width(),
 							-cross_y+size.height(),
-							mapAdapter->getImageManager()->getImage(mapAdapter, mapmiddle_tile_x, mapmiddle_tile_y, mapAdapter->getZoom()));
+							pm);
 		if (MerkaartorPreferences::instance()->getDrawTileBoundary()) {
 			painter->drawRect(-cross_x+size.width(),
 						   -cross_y+size.height(), tilesize, tilesize);
@@ -218,10 +219,10 @@ void Layer::_draw(QPainter* painter, const QPoint mapmiddle_px) const
 			if (!(i==mapmiddle_tile_x && j==mapmiddle_tile_y))
 				if (mapAdapter->isValid(i, j, mapAdapter->getZoom()))
 			{
-
+				QPixmap pm = mapAdapter->getImageManager()->getImage(mapAdapter, i, j, mapAdapter->getZoom());
 				painter->drawPixmap(((i-mapmiddle_tile_x)*tilesize)-cross_x+size.width(),
 											 ((j-mapmiddle_tile_y)*tilesize)-cross_y+size.height(),
-												mapAdapter->getImageManager()->getImage(mapAdapter, i, j, mapAdapter->getZoom()));
+												pm);
 				if (MerkaartorPreferences::instance()->getDrawTileBoundary()) {
 					painter->drawRect(((i-mapmiddle_tile_x)*tilesize)-cross_x+size.width(),
 										((j-mapmiddle_tile_y)*tilesize)-cross_y+size.height(),

@@ -117,7 +117,7 @@ QPixmap ImageManager::prefetchImage(MapAdapter* anAdapter, int x, int y, int z)
 	return getImage(anAdapter, x, y, z);
 }
 
-void ImageManager::receivedImage(const QPixmap pixmap, const QString& hash)
+void ImageManager::receivedImage(const QPixmap& pixmap, const QString& hash)
 {
 // 	qDebug() << "ImageManager::receivedImage";
 	if (pixmap.isNull()) {
