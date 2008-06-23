@@ -54,20 +54,20 @@ class MapFeature
 		 */
 		virtual CoordBox boundingBox() const = 0;
 
-		/** Draw the feature using the given QPainer an Projection
-		 * @param P The QPaiter used to draw
+		/** Draw the feature using the given QPainter an Projection
+		 * @param P The QPainter used to draw
 		 * @param theProjection the Projection used to convert real coordinates to screen coordinates
 		 */
 		virtual void draw(QPainter& P, const Projection& theProjection) = 0;
 
-		/** Draw the feature using the given QPainer an Projection and with the focused draw
-		 * @param P The QPaiter used to draw
+		/** Draw the feature using the given QPainter an Projection and with the focused draw
+		 * @param P The QPainter used to draw
 		 * @param theProjection the Projection used to convert real coordinates to screen coordinates
 		 */
 		virtual void drawFocus(QPainter& P, const Projection& theProjection) = 0;
 
-		/** Draw the feature using the given QPainer an Projection and with the hover draw
-		 * @param P The QPaiter used to draw
+		/** Draw the feature using the given QPainter an Projection and with the hover draw
+		 * @param P The QPainter used to draw
 		 * @param theProjection the Projection used to convert real coordinates to screen coordinates
 		 */
 		virtual void drawHover(QPainter& P, const Projection& theProjection) = 0;
