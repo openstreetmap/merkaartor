@@ -147,7 +147,7 @@ QPixmap BrowserImageManager::prefetchImage(MapAdapter* anAdapter, int x, int y, 
 	return getImage(anAdapter, x, y, z);
 }
 
-void BrowserImageManager::receivedImage(const QPixmap pixmap, const QString& hash)
+void BrowserImageManager::receivedImage(const QPixmap& pixmap, const QString& hash)
 {
 // 	qDebug() << "BrowserImageManager::receivedImage";
 	if (pixmap.isNull()) {
