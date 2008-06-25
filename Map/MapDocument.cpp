@@ -382,7 +382,7 @@ QString MapDocument::exportOSM(QVector<MapFeature*> aFeatures)
 	QVector<MapFeature*>::Iterator i;
 
 	for (i = aFeatures.begin(); i != aFeatures.end(); ++i) {
-		if (TrackPoint* P = dynamic_cast<TrackPoint*>(*i)) {
+		if (/*TrackPoint* P = */dynamic_cast<TrackPoint*>(*i)) {
 			if (!exportedFeatures.contains(*i))
 				exportedFeatures.append(*i);
 		} else {
