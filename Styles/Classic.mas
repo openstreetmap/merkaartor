@@ -227,6 +227,12 @@
  <selector expr="[place] is village"/>
 </painter>
 <painter
+ zoomUnder="0.01" zoomUpper="1e+07"
+ icon=":/Art/Places/place_village.png"
+ drawTrafficDirectionMarks="no">
+ <selector expr="[place] is suburb"/>
+</painter>
+<painter
  zoomUnder="0.02" zoomUpper="1e+07"
  icon=":/Art/Places/place_hamlet.png"
  drawTrafficDirectionMarks="no">
