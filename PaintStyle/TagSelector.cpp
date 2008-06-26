@@ -1,6 +1,5 @@
 #include "TagSelector.h"
 
-#include <QRegExp>
 #include "Map/MapFeature.h"
 
 void skipWhite(const QString& Expression, int& idx)
@@ -216,6 +215,8 @@ TagSelector::~TagSelector()
 TagSelectorIs::TagSelectorIs(const QString& key, const QString& value)
 : Key(key), Value(value)
 {
+	rx = QRegExp(value);
+	rx.setPatternSyntax(QRegExp::Wildcard);
 }
 
 TagSelector* TagSelectorIs::copy() const
@@ -225,8 +226,6 @@ TagSelector* TagSelectorIs::copy() const
 
 bool TagSelectorIs::matches(const MapFeature* F) const
 {
-	QRegExp rx(Value);
-	rx.setPatternSyntax(QRegExp::Wildcard);
 	return rx.exactMatch(F->tagValue(Key, ""));
 }
 
@@ -293,6 +292,12 @@ QString TagSelectorHasTags::asExpression(bool) const
 TagSelectorIsOneOf::TagSelectorIsOneOf(const QString& key, const std::vector<QString>& values)
 : Key(key), Values(values)
 {
+	for (unsigned int i=0; i<values.size(); ++i)
+	{
+		QRegExp rx(Values[i]);
+		rx.setPatternSyntax(QRegExp::Wildcard);
+		rxv.append(rx);
+	}
 }
 
 TagSelector* TagSelectorIsOneOf::copy() const
@@ -303,11 +308,9 @@ TagSelector* TagSelectorIsOneOf::copy() const
 bool TagSelectorIsOneOf::matches(const MapFeature* F) const
 {
 	QString V = F->tagValue(Key, "");
-	for (unsigned int i=0; i<Values.size(); ++i)
+	for (unsigned int i=0; i<rxv.size(); ++i)
 	{
-		QRegExp rx(Values[i]);
-		rx.setPatternSyntax(QRegExp::Wildcard);
-		if(rx.exactMatch(V)) return true;
+		if(rxv[i].exactMatch(V)) return true;
 	}
 	return false;
 }

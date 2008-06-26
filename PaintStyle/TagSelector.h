@@ -4,6 +4,8 @@
 class MapFeature;
 
 #include <QtCore/QString>
+#include <QRegExp>
+#include <QVector>
 
 #include <vector>
 
@@ -29,6 +31,7 @@ class TagSelectorIs : public TagSelector
 		virtual QString asExpression(bool Precedence) const;
 
 	private:
+		QRegExp rx;
 		QString Key, Value;
 };
 
@@ -65,6 +68,7 @@ class TagSelectorIsOneOf : public TagSelector
 		virtual QString asExpression(bool Precedence) const;
 
 	private:
+		QVector<QRegExp> rxv;
 		QString Key;
 		std::vector<QString> Values;
 };
