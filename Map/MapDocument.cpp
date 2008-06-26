@@ -55,7 +55,7 @@ MapDocument::MapDocument()
 	p->dirtyLayer = new DirtyMapLayer(tr("Dirty layer"));
 	add(p->dirtyLayer);
 
-	p->uploadedLayer = new UploadedMapLayer("Uploaded layer");
+	p->uploadedLayer = new UploadedMapLayer(tr("Uploaded layer"));
 	add(p->uploadedLayer);
 }
 
@@ -70,7 +70,7 @@ MapDocument::MapDocument(LayerDock* aDock)
 	p->dirtyLayer = new DirtyMapLayer(tr("Dirty layer"));
 	add(p->dirtyLayer);
 
-	p->uploadedLayer = new UploadedMapLayer("Uploaded layer");
+	p->uploadedLayer = new UploadedMapLayer(tr("Uploaded layer"));
 	add(p->uploadedLayer);
 }
 
@@ -179,7 +179,7 @@ void MapDocument::clear()
 	p->dirtyLayer = new DirtyMapLayer(tr("Dirty layer"));
 	add(p->dirtyLayer);
 
-	p->uploadedLayer = new UploadedMapLayer("Uploaded layer");
+	p->uploadedLayer = new UploadedMapLayer(tr("Uploaded layer"));
 	add(p->uploadedLayer);
 }
 
