@@ -69,7 +69,6 @@ MoveTrackPointCommand * MoveTrackPointCommand::fromXML(MapDocument * d, QDomElem
 {
 	MoveTrackPointCommand* a = new MoveTrackPointCommand();
 	a->setId(e.attribute("xml:id"));
-	a->thePoint = MapFeature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("trackpoint"));
 	a->OldPos = Coord::fromXML(e.firstChildElement("oldpos"));
 	a->NewPos = Coord::fromXML(e.firstChildElement("newpos"));
 	if (e.hasAttribute("layer"))
@@ -80,6 +79,7 @@ MoveTrackPointCommand * MoveTrackPointCommand::fromXML(MapDocument * d, QDomElem
 		a->oldLayer = d->getLayer(e.attribute("oldlayer"));
 	else
 		a->oldLayer = NULL;
+	a->thePoint = MapFeature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("trackpoint"));
 
 	return a;
 }
