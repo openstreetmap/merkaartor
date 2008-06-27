@@ -48,6 +48,12 @@ enum ProjectionType {
 	Proj_Merkaartor
 };
 
+enum ExportType {
+	Export_All,
+	Export_Viewport,
+	Export_Selected
+};
+
 class WmsServer
 {
 	public:
@@ -202,6 +208,10 @@ public:
 	/* Data */
 	void setAutoSaveDoc(bool theValue);
 	bool getAutoSaveDoc() const;
+
+	/* Export Type */
+	void setExportType(ExportType theValue);
+	ExportType getExportType() const;
 
 protected:
 	bool Use06Api;

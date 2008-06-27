@@ -40,7 +40,10 @@ class TrackPoint : public MapFeature
 
 		virtual QString toHtml();
 
-	private:
+		virtual void toBinary(QDataStream& ds);
+		static TrackPoint* fromBinary(MapDocument* d, MapLayer* L, QDataStream& ds);
+
+private:
 		Coord Position;
 };
 

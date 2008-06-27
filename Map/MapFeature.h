@@ -88,6 +88,7 @@ class MapFeature
 		 *  If the feature has no id, a random id is generated
 		 * @return the id of the current feature
 		 */
+		qint64 idToLong() const;
 		QString xmlId() const;
 		ActorType lastUpdated() const;
 		void setLastUpdated(ActorType A);
@@ -183,6 +184,8 @@ class MapFeature
 		virtual QString toMainHtml(QString type, QString systemtype);
 		virtual QString toHtml() = 0;
 
+		virtual void toBinary(QDataStream& ds) = 0;
+
 		virtual QString getClass() const = 0;
 
 		virtual bool deleteChildren(MapDocument* , CommandList* ) { return true; };
@@ -198,7 +201,9 @@ class MapFeature
 	protected:
 		QString tagsToXML(unsigned int lvl=0);
 		bool tagsToXML(QDomElement xParent);
+		bool tagsToBinary(QDataStream& ds);
 		static void tagsFromXML(MapDocument* d, MapFeature* f, QDomElement e);
+		static void tagsFromBinary(MapDocument* d, MapFeature* f, QDataStream& ds);
 		static QString stripToOSMId(const QString& id);
 
 };

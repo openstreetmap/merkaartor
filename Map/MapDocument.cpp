@@ -6,6 +6,7 @@
 #include "Map/MapDocument.h"
 
 #include "ImportExport/ImportNMEA.h"
+#include "ImportExport/ImportExportOsmBin.h"
 
 #include <QtCore/QString>
 #include <QMultiMap>
@@ -22,7 +23,12 @@ class MapDocumentPrivate
 {
 public:
 	MapDocumentPrivate()
-	: History(new CommandHistory()), imageLayer(0), dirtyLayer(0), uploadedLayer(0), theDock(0), lastDownloadLayer(0) {};
+	: History(new CommandHistory()), imageLayer(0), dirtyLayer(0), uploadedLayer(0), theDock(0), lastDownloadLayer(0)
+	{
+    	tagList.insert("created_by", QString("Merkaartor %1").arg(VERSION));
+		tagKeys.append("created_by");
+		tagValues.append(QString("Merkaartor %1").arg(VERSION));
+	};
 	~MapDocumentPrivate()
 	{
 		History->cleanup();
@@ -35,7 +41,6 @@ public:
 	}
 	CommandHistory*				History;
 	std::vector<MapLayer*>		Layers;
-	QMultiMap<QString, QString> tagList;
 	ImageMapLayer*				imageLayer;
 	DirtyMapLayer*				dirtyLayer;
 	UploadedMapLayer*			uploadedLayer;
@@ -44,6 +49,9 @@ public:
 
 	QList<CoordBox>				downloadBoxes;
 
+	QMultiMap<QString, QString> tagList;
+	QList<QString>				tagKeys;
+	QList<QString>				tagValues;
 };
 
 MapDocument::MapDocument()
@@ -231,6 +239,52 @@ void MapDocument::addToTagList(QString k, QString v)
 	if (!p->tagList.contains(k, v)) {
     	p->tagList.insert(k, v);
 	}
+	if (!p->tagKeys.contains(k)) {
+		p->tagKeys.append(k);
+	}
+	if (!p->tagValues.contains(v)) {
+		p->tagValues.append(v);
+	}
+}
+
+QList<QString> MapDocument::getTagKeys()
+{
+	return p->tagKeys;
+}
+
+void MapDocument::setTagKeys(QList<QString> list)
+{
+	p->tagKeys = list;
+}
+
+QString MapDocument::getTagKey(int idx)
+{
+	return p->tagKeys[idx];
+}
+
+int MapDocument::getTagKeyIndex(QString k)
+{
+	return p->tagKeys.indexOf(k);
+}
+
+QList<QString> MapDocument::getTagValues()
+{
+	return p->tagValues;
+}
+
+void MapDocument::setTagValues(QList<QString> list)
+{
+	p->tagValues = list;
+}
+
+QString MapDocument::getTagValue(int idx)
+{
+	return p->tagValues[idx];
+}
+
+int MapDocument::getTagValueIndex(QString v)
+{
+	return p->tagValues.indexOf(v);
 }
 
 QStringList MapDocument::getTagList()
@@ -294,6 +348,15 @@ MapLayer* MapDocument::getLayer(unsigned int i)
 const MapLayer* MapDocument::getLayer(unsigned int i) const
 {
 	return p->Layers[i];
+}
+
+QVector<MapFeature*> MapDocument::getFeatures()
+{
+	QVector<MapFeature*> theFeatures;
+	for (VisibleFeatureIterator i(this); !i.isEnd(); ++i) {
+		theFeatures.append(i.get());	
+	}
+	return theFeatures;
 }
 
 MapFeature* MapDocument::getFeature(const QString& id)
@@ -438,7 +501,20 @@ QString MapDocument::exportOSM(QVector<MapFeature*> aFeatures)
 
 bool MapDocument::importNMEA(const QString& filename, TrackMapLayer* NewLayer)
 {
-	ImportNMEA imp;
+	ImportNMEA imp(this);
+	if (!imp.loadFile(filename))
+		return false;
+	imp.import(NewLayer);
+
+	if (NewLayer->size())
+		return true;
+	else
+		return false;
+}
+
+bool MapDocument::importOSB(const QString& filename, DrawingMapLayer* NewLayer)
+{
+	ImportExportOsmBin imp(this);
 	if (!imp.loadFile(filename))
 		return false;
 	imp.import(NewLayer);

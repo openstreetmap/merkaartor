@@ -186,3 +186,32 @@ QString TrackPoint::toHtml()
 
 	return MapFeature::toMainHtml(QApplication::translate("MapFeature", "Node"), "node").arg(D);
 }
+
+void TrackPoint::toBinary(QDataStream& ds)
+{
+	ds << (qint8)'N' << idToLong() << (qint32)(INT_MAX * (Position.lon() / M_PI)) << (qint32)(INT_MAX * (Position.lat() / M_PI_2));
+	tagsToBinary(ds);
+}
+
+TrackPoint* TrackPoint::fromBinary(MapDocument* d, MapLayer* L, QDataStream& ds)
+{
+	qint8	c;
+	qint64	id;
+	qint32	lon;
+	qint32	lat;
+
+	ds >> c; if (c != 'N') return NULL;
+	ds >> id;
+	ds >> lon;
+	ds >> lat;
+
+	Coord cd( ((double)lat / INT_MAX * M_PI_2), ((double)lon / INT_MAX * M_PI) );
+	TrackPoint* N = new TrackPoint(cd);
+	if (id < 1)
+		N->setId(QString::number(id));
+	else
+		N->setId("node_"+QString::number(id));
+	MapFeature::tagsFromBinary(d, N, ds);
+
+	return N;
+}

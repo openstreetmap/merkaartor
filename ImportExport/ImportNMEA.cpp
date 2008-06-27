@@ -15,8 +15,8 @@
 #include "../ImportExport/ImportNMEA.h"
 
 
-ImportNMEA::ImportNMEA()
- : IImportExport()
+ImportNMEA::ImportNMEA(MapDocument* doc)
+ : IImportExport(doc)
 {
 }
 
@@ -25,11 +25,19 @@ ImportNMEA::~ImportNMEA()
 {
 }
 
+// no export
+bool ImportNMEA::export_(const QVector<MapFeature *>& featList)
+{
+	IImportExport::export_(featList);
+
+	return false;
+}
+
 // import the  input
 bool ImportNMEA::import(MapLayer* aLayer)
 {
 	bool goodFix = false;
-	QTextStream in(source);
+	QTextStream in(Device);
 
 	theLayer = dynamic_cast <TrackMapLayer *> (aLayer);
 	theList = new CommandList(MainWindow::tr("Import NMEA"), NULL);

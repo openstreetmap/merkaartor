@@ -531,3 +531,50 @@ QString Road::toHtml()
 
 	return MapFeature::toMainHtml(QApplication::translate("MapFeature", "Way"), "way").arg(D);
 }
+
+void Road::toBinary(QDataStream& ds)
+{
+	ds << (qint8)'R';
+	ds << idToLong();
+	ds << (qint32)size();
+	for (int i=0; i < size(); ++i) {
+		ds << (qint64)(get(i)->idToLong());
+	}
+	tagsToBinary(ds);
+}
+
+Road* Road::fromBinary(MapDocument* d, MapLayer* L, QDataStream& ds)
+{
+	qint8	c;
+	qint64	id;
+	qint32	fSize;
+
+	ds >> c; if (c != 'R') return NULL;
+	ds >> id;
+	ds >> fSize;
+
+	Road* R = new Road();
+	R->setId(QString::number(id));
+	if (id < 0)
+		R->setId(QString::number(id));
+	else
+		R->setId("way_"+QString::number(id));
+
+	for (int i=0; i < fSize; ++i) {
+		qint64 refId;
+		ds >> refId;
+
+		QString sRefId;
+		if (refId < 0)
+			sRefId = QString::number(refId);
+		else
+			sRefId = "node_" + QString::number(refId);
+		TrackPoint* N = dynamic_cast<TrackPoint*> (d->getFeature(sRefId));
+		Q_ASSERT(N);
+		if (N)
+			R->add(N);
+	}
+	MapFeature::tagsFromBinary(d, R, ds);
+
+	return R;
+}

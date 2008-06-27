@@ -356,6 +356,80 @@ QString Relation::toHtml()
 	return MapFeature::toMainHtml(QApplication::translate("MapFeature", "Relation"),"relation").arg(D);
 }
 
+void Relation::toBinary(QDataStream& ds)
+{
+	ds << (qint8)'L';
+	ds << idToLong();
+	ds << size();
+	for (unsigned int i=0; i<size(); ++i) {
+		char Type='N';
+		if (dynamic_cast<const Road*>(get(i)))
+			Type='R';
+		else if (dynamic_cast<const Relation*>(get(i)))
+			Type='L';
+
+		ds << Type << get(i)->stripToOSMId(get(i)->id()) << getRole(i);
+	}
+
+	tagsToBinary(ds);
+}
+
+Relation* Relation::fromBinary(MapDocument* d, MapLayer* L, QDataStream& ds)
+{
+	qint8	c;
+	qint64	id;
+	qint32	fSize;
+
+	ds >> c; if (c != 'L') return NULL;
+	ds >> id;
+	ds >> fSize;
+
+	Relation* R = new Relation();
+	R->setId(QString::number(id));
+	if (id < 1)
+		R->setId(QString::number(id));
+	else
+		R->setId("rel_"+QString::number(id));
+
+	for (int i=0; i < fSize; ++i) {
+		qint8 Type;
+		qint64 refId;
+		QString Role;
+
+		ds >> Type;
+		ds >> refId;
+		ds >> Role;
+
+		QString sRefId;
+		if (refId < 0)
+			sRefId = QString::number(refId);
+		else
+			switch (Type) {
+				case 'N':
+					sRefId = "node_" + QString::number(refId);
+					break;
+				case 'R':
+					sRefId = "way" + QString::number(refId);
+					break;
+				case 'L':
+					sRefId = "rel" + QString::number(refId);
+					break;
+				default:
+					return NULL;
+			}
+
+		MapFeature* F = d->getFeature(sRefId);
+		Q_ASSERT(F);
+		if (F)
+			R->add(Role, F);
+	}
+	MapFeature::tagsFromBinary(d, R, ds);
+
+	return R;
+}
+
+/* RELATIONMODEL */
+
 RelationMemberModel::RelationMemberModel(RelationPrivate *aParent, MainWindow* aMain)
 : Parent(aParent), Main(aMain)
 {

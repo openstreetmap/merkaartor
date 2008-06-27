@@ -30,20 +30,28 @@ Interface for Import/Export
 */
 class IImportExport{
 public:
-	IImportExport() {};
-	virtual ~IImportExport() {};
+	IImportExport(MapDocument* doc)
+		: theDoc(doc) {};
+	virtual ~IImportExport();
 
 public:
 	// Specify the input as a QFile
 	virtual bool loadFile(QString filename);
+	// Specify the output as a QFile
+	virtual bool saveFile(QString filename);
 	// import the  input
 	virtual bool import(MapLayer* aLayer) = 0;
+	// export
+	virtual bool export_(const QVector<MapFeature *>& featList);
 
 	virtual CommandList* getCommandList();
 
 protected:
-	QIODevice* source;
+	MapDocument* theDoc;
+	QIODevice* Device;
 	CommandList* theList;
+	QVector<MapFeature*> theFeatures;
+	QString FileName;
 };
 
 #endif

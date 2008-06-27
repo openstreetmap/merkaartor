@@ -20,12 +20,14 @@
 class ImportNMEA : public IImportExport
 {
 public:
-    ImportNMEA();
+    ImportNMEA(MapDocument* doc);
 
     ~ImportNMEA();
 
 	// import the  input
 	virtual bool import(MapLayer* aLayer);
+	// export
+	virtual bool export_(const QVector<MapFeature *>& featList);
 
 private:
 	TrackMapLayer* theLayer;

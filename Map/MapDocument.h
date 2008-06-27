@@ -48,6 +48,7 @@ public:
 	const MapLayer* getLayer(unsigned int i) const;
 
 	MapFeature* getFeature(const QString& id);
+	QVector<MapFeature*> getFeatures();
 	void setHistory(CommandHistory* h);
 	CommandHistory& history();
 	const CommandHistory& history() const;
@@ -59,6 +60,15 @@ public:
 	void addToTagList(QString k, QString v);
 	QStringList getTagList() ;
 	QStringList getTagValueList(QString k) ;
+	QList<QString> getTagKeys();
+	void setTagKeys(QList<QString> list);
+	QString getTagKey(int idx);
+	int getTagKeyIndex(QString k);
+	int getTagValueIndex(QString v);
+	QList<QString> getTagValues();
+	void setTagValues(QList<QString> list);
+	QString getTagValue(int idx);
+
 	ImageMapLayer* getImageLayer() const;
 	DirtyMapLayer* getDirtyLayer() const;
 	MapLayer* getDirtyOrOriginLayer(MapLayer* aLayer);
@@ -70,6 +80,7 @@ public:
 	static MapDocument* fromXML(const QDomElement e, LayerDock* aDock);
 
 	bool importNMEA(const QString& filename, TrackMapLayer* NewLayer);
+	bool importOSB(const QString& filename, DrawingMapLayer* NewLayer);
 
 	MapLayer* getLastDownloadLayer();
 	void setLastDownloadLayer(MapLayer * aLayer);

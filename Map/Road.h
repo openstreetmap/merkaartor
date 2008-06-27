@@ -51,7 +51,10 @@ class Road : public MapFeature
 		virtual bool toXML(QDomElement xParent);
 		static Road* fromXML(MapDocument* d, MapLayer* L, const QDomElement e);
 
-	virtual QString toHtml();
+		virtual QString toHtml();
+	
+		virtual void toBinary(QDataStream& ds);
+		static Road* fromBinary(MapDocument* d, MapLayer* L, QDataStream& ds);
 
 	private:
 		RoadPrivate* p;

@@ -625,3 +625,14 @@ void MerkaartorPreferences::setDownloadedVisible(bool theValue)
 	Sets->setValue("visual/DownloadedVisible", theValue);
 }
 
+/* Export Type */
+void MerkaartorPreferences::setExportType(ExportType theValue)
+{
+	Sets->setValue("export/Type", theValue);
+}
+
+ExportType MerkaartorPreferences::getExportType() const
+{
+	return (ExportType)Sets->value("export/Type", 0).toInt();
+}
+

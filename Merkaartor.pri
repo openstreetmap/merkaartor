@@ -132,8 +132,8 @@ FORMS += \
 ./Preferences/WMSPreferencesDialog.ui \
 ./Preferences/TMSPreferencesDialog.ui \
 ./Utils/SelectionDialog.ui \
-./DirtyDock.ui
-
+./DirtyDock.ui \
+./ExportDialog.ui
 
 #Resource file(s)
 RESOURCES += .\Icons\AllIcons.qrc

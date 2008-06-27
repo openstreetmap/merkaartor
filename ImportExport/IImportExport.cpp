@@ -15,11 +15,32 @@
 #include "../ImportExport/IImportExport.h"
 
 
+IImportExport::~IImportExport()
+{
+	if (Device->isOpen())
+		Device->close();
+}
+
 // Specify the input as a QFile
 bool IImportExport::loadFile(QString filename)
 {
-	source = new QFile(filename);
-	return source->open(QIODevice::ReadOnly);
+	FileName = filename;
+	Device = new QFile(filename);
+	return Device->open(QIODevice::ReadOnly);
+}
+
+bool IImportExport::saveFile(QString filename)
+{
+	FileName = filename;
+	Device = new QFile(filename);
+	return Device->open(QIODevice::WriteOnly | QIODevice::Truncate);
+}
+
+bool IImportExport::export_(const QVector<MapFeature *>& featList)
+{
+	theFeatures = featList;
+
+	return true;
 }
 
 CommandList* IImportExport::getCommandList()

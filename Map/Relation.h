@@ -46,6 +46,9 @@ class Relation : public MapFeature
 
 		virtual QString toHtml();
 
+		virtual void toBinary(QDataStream& ds);
+		static Relation* fromBinary(MapDocument* d, MapLayer* L, QDataStream& ds);
+
 	private:
 		Relation(const Relation&);
 		RelationPrivate* p;

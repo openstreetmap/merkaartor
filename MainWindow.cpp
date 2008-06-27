@@ -8,6 +8,7 @@
 #include "Command/Command.h"
 #include "Command/DocumentCommands.h"
 #include "Command/FeatureCommands.h"
+#include "ImportExport/ImportExportOsmBin.h"
 #include "Interaction/CreateAreaInteraction.h"
 #include "Interaction/CreateDoubleWayInteraction.h"
 #include "Interaction/CreateNodeInteraction.h"
@@ -35,6 +36,7 @@
 #include <ui_UploadMapDialog.h>
 #include <ui_SetPositionDialog.h>
 #include <ui_SelectionDialog.h>
+#include <ui_ExportDialog.h>
 #include "Preferences/PreferencesDialog.h"
 #include "Preferences/MerkaartorPreferences.h"
 #include "Utils/SelectionDialog.h"
@@ -332,17 +334,19 @@ static void changeCurrentDirToFile(const QString& s)
 
 
 #define FILTER_OPEN_SUPPORTED \
-	tr("Supported formats (*.mdc *.gpx *.osm *.ngt *.nmea *.nme)\n" \
+	tr("Supported formats (*.mdc *.gpx *.osm *.osb *.ngt *.nmea *.nme)\n" \
 	"Merkaartor document (*.mdc)\n" \
 	"GPS Exchange format (*.gpx)\n" \
 	"OpenStreetMap format (*.osm)\n" \
+	"OpenStreetMap binary format (*.osb)\n" \
 	"Noni GPSPlot format (*.ngt)\n" \
 	"NMEA GPS log format (*.nmea *.nme)\n" \
 	"All Files (*)")
 #define FILTER_IMPORT_SUPPORTED \
-	tr("Supported formats (*.gpx *.osm *.ngt *.nmea *.nme)\n" \
+	tr("Supported formats (*.gpx *.osm *.osb *.ngt *.nmea *.nme)\n" \
 	"GPS Exchange format (*.gpx)\n" \
 	"OpenStreetMap format (*.osm)\n" \
+	"OpenStreetMap binary format (*.osb)\n" \
 	"Noni GPSPlot format (*.ngt)\n" \
 	"NMEA GPS log format (*.nmea *.nme)\n" \
 	"All Files (*)")
@@ -403,6 +407,11 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 			newLayer = new DrawingMapLayer( newLayerName );
 			mapDocument->add(newLayer);
 			importOK = importOSM(this, fn, mapDocument, newLayer);
+		}
+		else if (fn.endsWith(".osb")) {
+			newLayer = new DrawingMapLayer( newLayerName );
+			mapDocument->add(newLayer);
+			importOK = mapDocument->importOSB(fn, (DrawingMapLayer *)newLayer);
 		}
 		else if (fn.endsWith(".ngt")) {
 			newLayer = new TrackMapLayer( newLayerName );
@@ -920,8 +929,12 @@ void MainWindow::loadDocument(QString fn)
 	setWindowTitle(QString("Merkaartor - %1").arg(fileName));
 }
 
-void MainWindow::on_exportOSMAllAction_triggered()
+void MainWindow::on_exportOSMAction_triggered()
 {
+	QVector<MapFeature*> theFeatures;
+	if (!selectExportedFeatures(theFeatures))
+		return;
+
 	QString fileName = QFileDialog::getSaveFileName(this,
 		tr("Export OSM"), MerkaartorPreferences::instance()->getWorkingDir() + "/untitled.osm", tr("OSM Files (*.osm)"));
 
@@ -931,42 +944,102 @@ void MainWindow::on_exportOSMAllAction_triggered()
 			return;
 
 		QTextStream out(&file);
-		out.setCodec("UTF-8");
-		out << theDocument->exportOSM();
+		out << theDocument->exportOSM(theFeatures);
 		file.close();
 	}
 }
 
-void MainWindow::on_exportOSMViewportAction_triggered()
+void MainWindow::on_exportOSMBinAction_triggered()
 {
+	QVector<MapFeature*> theFeatures;
+	if (!selectExportedFeatures(theFeatures))
+		return;
+
 	QString fileName = QFileDialog::getSaveFileName(this,
-		tr("Export OSM"), MerkaartorPreferences::instance()->getWorkingDir() + "/untitled.osm", tr("OSM Files (*.osm)"));
+		tr("Export Binary OSM"), MerkaartorPreferences::instance()->getWorkingDir() + "/untitled.osb", tr("OSM Binary Files (*.osb)"));
 
 	if (fileName != "") {
-		QFile file(fileName);
-		if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-			return;
-
-		QTextStream out(&file);
-		out << theDocument->exportOSM(view()->projection().viewport());
-		file.close();
+		ImportExportOsmBin osb(document());
+		if (osb.saveFile(fileName)) {
+			osb.export_(theFeatures);
+		}
 	}
 }
 
-void MainWindow::on_exportOSMSelectedAction_triggered()
+bool MainWindow::selectExportedFeatures(QVector<MapFeature*>& theFeatures)
 {
-	QString fileName = QFileDialog::getSaveFileName(this,
-		tr("Export OSM"), MerkaartorPreferences::instance()->getWorkingDir() + "/untitled.osm", tr("OSM Files (*.osm)"));
+	QDialog dlg(this);
+	Ui::ExportDialog dlgExport;
+	dlgExport.setupUi(&dlg);
+	switch(MerkaartorPreferences::instance()->getExportType()) {
+		case Export_All:
+			dlgExport.rbAll->setChecked(true);
+			break;
+		case Export_Viewport:
+			dlgExport.rbViewport->setChecked(true);
+			break;
+		case Export_Selected:
+			dlgExport.rbSelected->setChecked(true);
+			break;
+		default:
+			return false;
 
-	if (fileName != "") {
-		QFile file(fileName);
-		if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-			return;
-
-		QTextStream out(&file);
-		out << theDocument->exportOSM(view()->properties()->selection());
-		file.close();
 	}
+	if (dlg.exec()) {
+		if (dlgExport.rbAll->isChecked()) {
+			theFeatures = document()->getFeatures();
+			MerkaartorPreferences::instance()->setExportType(Export_All);
+			return true;
+		}
+		if (dlgExport.rbViewport->isChecked()) {
+			CoordBox aCoordBox = view()->projection().viewport();
+
+			theFeatures.clear();
+			for (VisibleFeatureIterator i(document()); !i.isEnd(); ++i) {
+				if (TrackPoint* P = dynamic_cast<TrackPoint*>(i.get())) {
+					if (aCoordBox.contains(P->position())) {
+						theFeatures.append(P);
+					}
+				} else
+					if (Road* G = dynamic_cast<Road*>(i.get())) {
+						if (aCoordBox.intersects(G->boundingBox())) {
+							for (unsigned int j=0; j < G->size(); j++) {
+								if (TrackPoint* P = dynamic_cast<TrackPoint*>(G->get(j)))
+									if (!aCoordBox.contains(P->position()))
+										theFeatures.append(P);
+							}
+							theFeatures.append(G);
+						}
+					} else
+						//FIXME Not working for relation (not made of point?)
+						if (Relation* G = dynamic_cast<Relation*>(i.get())) {
+							if (aCoordBox.intersects(G->boundingBox())) {
+								for (unsigned int j=0; j < G->size(); j++) {
+									if (Road* R = dynamic_cast<Road*>(G->get(j))) {
+										if (!aCoordBox.contains(R->boundingBox())) {
+											for (unsigned int k=0; k < R->size(); k++) {
+												if (TrackPoint* P = dynamic_cast<TrackPoint*>(R->get(k)))
+													if (!aCoordBox.contains(P->position()))
+														theFeatures.append(P);
+											}
+											theFeatures.append(R);
+										}
+									}
+								}
+								theFeatures.append(G);
+							}
+						}
+			}
+			MerkaartorPreferences::instance()->setExportType(Export_Viewport);
+			return true;
+		}
+		if (dlgExport.rbSelected->isChecked()) {
+			theFeatures = view()->properties()->selection();
+			MerkaartorPreferences::instance()->setExportType(Export_Selected);
+			return true;
+		}
+	} else
+		return false;
 }
 
 void MainWindow::on_editSelectAction_triggered()

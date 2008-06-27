@@ -103,21 +103,21 @@
     <property name="title" >
      <string>&amp;File</string>
     </property>
-    <widget class="QMenu" name="menuExport_OSM" >
+    <widget class="QMenu" name="menuExport" >
      <property name="title" >
-      <string>&amp;Export OSM</string>
+      <string>Export</string>
      </property>
-     <addaction name="exportOSMAllAction" />
-     <addaction name="exportOSMViewportAction" />
-     <addaction name="exportOSMSelectedAction" />
+     <addaction name="exportOSMAction" />
+     <addaction name="exportOSMBinAction" />
     </widget>
     <addaction name="fileNewAction" />
     <addaction name="fileOpenAction" />
+    <addaction name="separator" />
     <addaction name="fileImportAction" />
+    <addaction name="menuExport" />
     <addaction name="separator" />
     <addaction name="fileSaveAction" />
     <addaction name="fileSaveAsAction" />
-    <addaction name="menuExport_OSM" />
     <addaction name="separator" />
     <addaction name="renderAction" />
     <addaction name="separator" />
@@ -495,6 +495,14 @@
     <string>Export all visible layers to a file</string>
    </property>
   </action>
+  <action name="exportOSMBinAllAction" >
+   <property name="text" >
+    <string>&amp;All...</string>
+   </property>
+   <property name="statusTip" >
+    <string>Export all visible layers to a file</string>
+   </property>
+  </action>
   <action name="editSelectAction" >
    <property name="text" >
     <string>&amp;Find...</string>
@@ -509,6 +517,14 @@
    </property>
   </action>
   <action name="exportOSMViewportAction" >
+   <property name="text" >
+    <string>&amp;Viewport...</string>
+   </property>
+   <property name="statusTip" >
+    <string>Export the features in the viewport to a file</string>
+   </property>
+  </action>
+  <action name="exportOSMBinViewportAction" >
    <property name="text" >
     <string>&amp;Viewport...</string>
    </property>
@@ -735,6 +751,11 @@
     <string>Selected...</string>
    </property>
   </action>
+  <action name="exportOSMBinSelectedAction" >
+   <property name="text" >
+    <string>Selected...</string>
+   </property>
+  </action>
   <action name="editPasteFeaturesAction" >
    <property name="text" >
     <string>Paste Features</string>
@@ -747,6 +768,16 @@
    </property>
    <property name="visible" >
     <bool>false</bool>
+   </property>
+  </action>
+  <action name="exportOSMAction" >
+   <property name="text" >
+    <string>OSM (XML)</string>
+   </property>
+  </action>
+  <action name="exportOSMBinAction" >
+   <property name="text" >
+    <string>OSM (Binary)</string>
    </property>
   </action>
  </widget>

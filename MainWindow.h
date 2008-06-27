@@ -10,6 +10,7 @@ class LayerDock;
 class MapDocument;
 class MapLayer;
 class MapView;
+class MapFeature;
 class PropertiesDock;
 class InfoDock;
 class DirtyDock;
@@ -66,9 +67,8 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_roadJoinAction_triggered();
 		virtual void on_mapStyleSaveAction_triggered();
 		virtual void on_mapStyleLoadAction_triggered();
-		virtual void on_exportOSMAllAction_triggered();
-		virtual void on_exportOSMViewportAction_triggered();
-		virtual void on_exportOSMSelectedAction_triggered();
+		virtual void on_exportOSMAction_triggered();
+		virtual void on_exportOSMBinAction_triggered();
 		virtual void on_editSelectAction_triggered();
 		virtual void on_renderAction_triggered();
 		virtual void on_bookmarkAddAction_triggered();
@@ -125,6 +125,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		void updateBookmarksMenu();
 		void updateProjectionMenu();
 		MapDocument* getDocumentFromClipboard();
+		bool selectExportedFeatures(QVector<MapFeature*>& theFeatures);
 
 	protected:
 		void closeEvent(QCloseEvent * event);
