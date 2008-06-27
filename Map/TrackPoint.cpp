@@ -193,7 +193,7 @@ void TrackPoint::toBinary(QDataStream& ds)
 	tagsToBinary(ds);
 }
 
-TrackPoint* TrackPoint::fromBinary(MapDocument* d, MapLayer* L, QDataStream& ds)
+TrackPoint* TrackPoint::fromBinary(MapDocument* d, MapLayer* /* L */, QDataStream& ds)
 {
 	qint8	c;
 	qint64	id;

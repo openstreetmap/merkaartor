@@ -4,7 +4,6 @@
 #include "Map/TrackPoint.h"
 #include "Map/Relation.h"
 #include "Map/Road.h"
-#include "PaintStyle/TagSelector.h"
 #include "Utils/LineF.h"
 
 #include <QtCore/QString>
@@ -344,9 +343,11 @@ void FeaturePainter::setSelector(TagSelector* aSel)
 	theSelector = aSel;
 }
 
-bool FeaturePainter::matchesTag(const MapFeature* F) const
+TagSelectorMatchResult FeaturePainter::matchesTag(const MapFeature* F) const
 {
-	if (!theSelector) return false;
+	TagSelectorMatchResult res;
+
+	if (!theSelector) return TagSelect_NoMatch;
 	// Special casing for multipolygon roads
 	if (const Road* R = dynamic_cast<const Road*>(F))
 	{
@@ -355,19 +356,19 @@ bool FeaturePainter::matchesTag(const MapFeature* F) const
 		{
 			if (const Relation* Parent = dynamic_cast<const Relation*>(R->getParent(i)))
 				if (Parent->tagValue("type","") == "multipolygon")
-					return false;
+					return TagSelect_NoMatch;
 		}
 	}
-	if (theSelector->matches(F))
-		return true;
+	if (res = theSelector->matches(F))
+		return res;
 	// Special casing for multipolygon relations
 	if (const Relation* R = dynamic_cast<const Relation*>(F))
 	{
 		for (unsigned int i=0; i<R->size(); ++i)
-			if (theSelector->matches(R->get(i)))
-				return true;
+			if (res = theSelector->matches(R->get(i)))
+				return res;
 	}
-	return false;
+	return TagSelect_NoMatch;
 }
 
 bool FeaturePainter::matchesZoom(double PixelPerM) const

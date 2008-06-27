@@ -39,7 +39,7 @@ class TrackSegment : public MapFeature
 
 		virtual QString toHtml() {return "";};
 
-		virtual void toBinary(QDataStream& ds) { return; };
+		virtual void toBinary(QDataStream& /* ds */) { return; };
 
 private:
 		TrackSegmentPrivate* p;

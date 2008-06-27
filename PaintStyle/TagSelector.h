@@ -9,13 +9,19 @@ class MapFeature;
 
 #include <vector>
 
+enum TagSelectorMatchResult {
+	TagSelect_NoMatch,
+	TagSelect_Match,
+	TagSelect_DefaultMatch
+};
+
 class TagSelector
 {
 	public:
 		virtual ~TagSelector() = 0;
 
 		virtual TagSelector* copy() const = 0;
-		virtual bool matches(const MapFeature* F) const = 0;
+		virtual TagSelectorMatchResult matches(const MapFeature* F) const = 0;
 		virtual QString asExpression(bool Precedence) const = 0;
 
 		static TagSelector* parse(const QString& Expression);
@@ -27,7 +33,7 @@ class TagSelectorIs : public TagSelector
 		TagSelectorIs(const QString& key, const QString& value);
 
 		virtual TagSelector* copy() const;
-		virtual bool matches(const MapFeature* F) const;
+		virtual TagSelectorMatchResult matches(const MapFeature* F) const;
 		virtual QString asExpression(bool Precedence) const;
 
 	private:
@@ -41,7 +47,7 @@ class TagSelectorTypeIs : public TagSelector
 		TagSelectorTypeIs(const QString& type);
 
 		virtual TagSelector* copy() const;
-		virtual bool matches(const MapFeature* F) const;
+		virtual TagSelectorMatchResult matches(const MapFeature* F) const;
 		virtual QString asExpression(bool Precedence) const;
 
 	private:
@@ -54,7 +60,7 @@ class TagSelectorHasTags : public TagSelector
 		TagSelectorHasTags();
 
 		virtual TagSelector* copy() const;
-		virtual bool matches(const MapFeature* F) const;
+		virtual TagSelectorMatchResult matches(const MapFeature* F) const;
 		virtual QString asExpression(bool Precedence) const;
 };
 
@@ -64,7 +70,7 @@ class TagSelectorIsOneOf : public TagSelector
 		TagSelectorIsOneOf(const QString& key, const std::vector<QString>& values);
 
 		virtual TagSelector* copy() const;
-		virtual bool matches(const MapFeature* F) const;
+		virtual TagSelectorMatchResult matches(const MapFeature* F) const;
 		virtual QString asExpression(bool Precedence) const;
 
 	private:
@@ -80,7 +86,7 @@ class TagSelectorOr : public TagSelector
 		~TagSelectorOr();
 
 		virtual TagSelector* copy() const;
-		virtual bool matches(const MapFeature* F) const;
+		virtual TagSelectorMatchResult matches(const MapFeature* F) const;
 		virtual QString asExpression(bool Precedence) const;
 
 	private:
@@ -94,11 +100,61 @@ class TagSelectorAnd : public TagSelector
 		~TagSelectorAnd();
 
 		virtual TagSelector* copy() const;
-		virtual bool matches(const MapFeature* F) const;
+		virtual TagSelectorMatchResult matches(const MapFeature* F) const;
 		virtual QString asExpression(bool Precedence) const;
 
 	private:
 		std::vector<TagSelector*> Terms;
+};
+
+class TagSelectorNot : public TagSelector
+{
+	public:
+		TagSelectorNot(TagSelector* Term);
+		~TagSelectorNot();
+
+		virtual TagSelector* copy() const;
+		virtual TagSelectorMatchResult matches(const MapFeature* F) const;
+		virtual QString asExpression(bool Precedence) const;
+
+	private:
+		TagSelector* Term;
+};
+
+class TagSelectorFalse : public TagSelector
+{
+	public:
+		TagSelectorFalse();
+		~TagSelectorFalse();
+
+		virtual TagSelector* copy() const;
+		virtual TagSelectorMatchResult matches(const MapFeature* F) const;
+		virtual QString asExpression(bool Precedence) const;
+};
+
+class TagSelectorTrue : public TagSelector
+{
+	public:
+		TagSelectorTrue();
+		~TagSelectorTrue();
+
+		virtual TagSelector* copy() const;
+		virtual TagSelectorMatchResult matches(const MapFeature* F) const;
+		virtual QString asExpression(bool Precedence) const;
+};
+
+class TagSelectorDefault : public TagSelector
+{
+	public:
+		TagSelectorDefault(TagSelector* Term);
+		~TagSelectorDefault();
+
+		virtual TagSelector* copy() const;
+		virtual TagSelectorMatchResult matches(const MapFeature* F) const;
+		virtual QString asExpression(bool Precedence) const;
+
+	private:
+		TagSelector* Term;
 };
 
 

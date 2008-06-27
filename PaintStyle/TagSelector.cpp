@@ -130,19 +130,53 @@ TagSelectorIsOneOf* parseTagSelectorIsOneOf(const QString& Expression, int& idx)
 	return 0;
 }
 
+TagSelectorFalse* parseTagSelectorFalse(const QString& Expression, int& idx)
+{
+	if (!canParseLiteral(Expression, idx, "false"))
+		return 0;
+	return new TagSelectorFalse();
+}
+
+TagSelectorTrue* parseTagSelectorTrue(const QString& Expression, int& idx)
+{
+	if (!canParseLiteral(Expression, idx, "true"))
+		return 0;
+	return new TagSelectorTrue();
+}
+
 TagSelector* parseTagSelector(const QString& Expression, int& idx);
 
 TagSelector* parseFactor(const QString& Expression, int& idx)
 {
 	TagSelector* Current = 0;
-	if (canParseSymbol(Expression, idx, '('))
-	{
-		Current = parseTagSelector(Expression, idx);
-		canParseSymbol(Expression, idx, ')');
+	if (canParseLiteral(Expression,idx,"[Default]")) {
+		TagSelector* defFactor = parseTagSelector(Expression, idx);
+		Current = new TagSelectorDefault(defFactor);
 	}
 	int Saved = idx;
-	if (!Current)
+	if (!Current) {
+		if (canParseSymbol(Expression, idx, '('))
+		{
+			Current = parseTagSelector(Expression, idx);
+			canParseSymbol(Expression, idx, ')');
+		}
+	}
+
+	if (!Current) {
+		idx = Saved;
 		Current = parseTagSelectorIs(Expression, idx);
+	}
+
+	if (!Current)
+	{
+		idx = Saved;
+		Current = parseTagSelectorFalse(Expression, idx);
+	}
+	if (!Current)
+	{
+		idx = Saved;
+		Current = parseTagSelectorTrue(Expression, idx);
+	}
 	if (!Current)
 	{
 		idx = Saved;
@@ -157,6 +191,13 @@ TagSelector* parseFactor(const QString& Expression, int& idx)
 	{
 		idx = Saved;
 		Current = parseTagSelectorIsOneOf(Expression, idx);
+	}
+	if (!Current)
+	{
+		if (canParseLiteral(Expression,idx,"not")) {
+			TagSelector* notFactor = parseFactor(Expression, idx);
+			Current = new TagSelectorNot(notFactor);
+		}
 	}
 	return Current;
 }
@@ -224,9 +265,9 @@ TagSelector* TagSelectorIs::copy() const
 	return new TagSelectorIs(Key,Value);
 }
 
-bool TagSelectorIs::matches(const MapFeature* F) const
+TagSelectorMatchResult TagSelectorIs::matches(const MapFeature* F) const
 {
-	return rx.exactMatch(F->tagValue(Key, ""));
+	return rx.exactMatch(F->tagValue(Key, "")) ? TagSelect_Match : TagSelect_NoMatch;
 }
 
 QString TagSelectorIs::asExpression(bool) const
@@ -251,9 +292,9 @@ TagSelector* TagSelectorTypeIs::copy() const
 	return new TagSelectorTypeIs(Type);
 }
 
-bool TagSelectorTypeIs::matches(const MapFeature* F) const
+TagSelectorMatchResult TagSelectorTypeIs::matches(const MapFeature* F) const
 {
-	return (F->getClass() == Type);
+	return (F->getClass() == Type) ? TagSelect_Match : TagSelect_NoMatch;
 }
 
 QString TagSelectorTypeIs::asExpression(bool) const
@@ -275,9 +316,9 @@ TagSelector* TagSelectorHasTags::copy() const
 	return new TagSelectorHasTags();
 }
 
-bool TagSelectorHasTags::matches(const MapFeature* F) const
+TagSelectorMatchResult TagSelectorHasTags::matches(const MapFeature* F) const
 {
-	return !(F->tagSize()==0 || (F->tagSize()==1 && F->tagKey(0)=="created_by" ));
+	return (F->tagSize()==0 || (F->tagSize()==1 && F->tagKey(0)=="created_by" )) ? TagSelect_NoMatch : TagSelect_Match;
 }
 
 QString TagSelectorHasTags::asExpression(bool) const
@@ -305,14 +346,14 @@ TagSelector* TagSelectorIsOneOf::copy() const
 	return new TagSelectorIsOneOf(Key,Values);
 }
 
-bool TagSelectorIsOneOf::matches(const MapFeature* F) const
+TagSelectorMatchResult TagSelectorIsOneOf::matches(const MapFeature* F) const
 {
 	QString V = F->tagValue(Key, "");
-	for (unsigned int i=0; i<rxv.size(); ++i)
+	for (int i=0; i<rxv.size(); ++i)
 	{
-		if(rxv[i].exactMatch(V)) return true;
+		if(rxv[i].exactMatch(V)) return TagSelect_Match;
 	}
-	return false;
+	return TagSelect_NoMatch;
 }
 
 QString TagSelectorIsOneOf::asExpression(bool) const
@@ -353,12 +394,12 @@ TagSelector* TagSelectorOr::copy() const
 	return new TagSelectorOr(Copied);
 }
 
-bool TagSelectorOr::matches(const MapFeature* F) const
+TagSelectorMatchResult TagSelectorOr::matches(const MapFeature* F) const
 {
 	for (unsigned int i=0; i<Terms.size(); ++i)
-		if (Terms[i]->matches(F))
-			return true;
-	return false;
+		if (Terms[i]->matches(F) == TagSelect_Match)
+			return TagSelect_Match;
+	return TagSelect_NoMatch;
 }
 
 QString TagSelectorOr::asExpression(bool Precedence) const
@@ -378,7 +419,7 @@ QString TagSelectorOr::asExpression(bool Precedence) const
 }
 
 
-/* TAGSELECTOROR */
+/* TAGSELECTORAND */
 
 TagSelectorAnd::TagSelectorAnd(const std::vector<TagSelector*> terms)
 : Terms(terms)
@@ -399,12 +440,12 @@ TagSelector* TagSelectorAnd::copy() const
 	return new TagSelectorAnd(Copied);
 }
 
-bool TagSelectorAnd::matches(const MapFeature* F) const
+TagSelectorMatchResult TagSelectorAnd::matches(const MapFeature* F) const
 {
 	for (unsigned int i=0; i<Terms.size(); ++i)
-		if (!Terms[i]->matches(F))
-			return false;
-	return true;
+		if (Terms[i]->matches(F) == TagSelect_NoMatch)
+			return TagSelect_NoMatch;
+	return TagSelect_Match;
 }
 
 QString TagSelectorAnd::asExpression(bool /* Precedence */) const
@@ -418,3 +459,122 @@ QString TagSelectorAnd::asExpression(bool /* Precedence */) const
 	}
 	return R;
 }
+
+/* TAGSELECTORNOT */
+
+TagSelectorNot::TagSelectorNot(TagSelector* term)
+: Term(term)
+{
+}
+
+TagSelectorNot::~TagSelectorNot()
+{
+	delete Term;
+}
+
+TagSelector* TagSelectorNot::copy() const
+{
+	return new TagSelectorNot(Term->copy());
+}
+
+TagSelectorMatchResult TagSelectorNot::matches(const MapFeature* F) const
+{
+	return (Term->matches(F) == TagSelect_Match) ? TagSelect_NoMatch : TagSelect_Match;
+}
+
+QString TagSelectorNot::asExpression(bool /* Precedence */) const
+{
+	QString R;
+	R += " not ";
+	R += Term->asExpression(true);
+	return R;
+}
+
+/* TAGSELECTORFALSE */
+
+TagSelectorFalse::TagSelectorFalse()
+{
+}
+
+TagSelectorFalse::~TagSelectorFalse()
+{
+}
+
+TagSelector* TagSelectorFalse::copy() const
+{
+	return new TagSelectorFalse();
+}
+
+TagSelectorMatchResult TagSelectorFalse::matches(const MapFeature* /* F */) const
+{
+	return TagSelect_NoMatch;
+}
+
+QString TagSelectorFalse::asExpression(bool /* Precedence */) const
+{
+	QString R;
+	R += " false ";
+	return R;
+}
+
+/* TAGSELECTORTRUE */
+
+TagSelectorTrue::TagSelectorTrue()
+{
+}
+
+TagSelectorTrue::~TagSelectorTrue()
+{
+}
+
+TagSelector* TagSelectorTrue::copy() const
+{
+	return new TagSelectorFalse();
+}
+
+TagSelectorMatchResult TagSelectorTrue::matches(const MapFeature* /* F */) const
+{
+	return TagSelect_Match;
+}
+
+QString TagSelectorTrue::asExpression(bool /* Precedence */) const
+{
+	QString R;
+	R += " true ";
+	return R;
+}
+
+/* TAGSELECTORDEFAULT */
+
+TagSelectorDefault::TagSelectorDefault(TagSelector* term)
+: Term(term)
+{
+}
+
+TagSelectorDefault::~TagSelectorDefault()
+{
+	delete Term;
+}
+
+TagSelector* TagSelectorDefault::copy() const
+{
+	return new TagSelectorDefault(Term->copy());
+}
+
+TagSelectorMatchResult TagSelectorDefault::matches(const MapFeature* F) const
+{
+	//return (Term->matches(F) == TagSelect_Match) ? TagSelect_DefaultMatch : TagSelect_NoMatch;
+	if (Term->matches(F) == TagSelect_Match)
+		return TagSelect_DefaultMatch;
+	else
+		return TagSelect_NoMatch;
+}
+
+QString TagSelectorDefault::asExpression(bool /* Precedence */) const
+{
+	QString R;
+	R += " [Default] ";
+	R += Term->asExpression(true);
+	return R;
+}
+

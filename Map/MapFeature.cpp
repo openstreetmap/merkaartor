@@ -11,6 +11,7 @@
 #include "Map/MapDocument.h"
 #include "Map/MapLayer.h"
 #include "PaintStyle/EditPaintStyle.h"
+#include "PaintStyle/TagSelector.h"
 
 #include <QtCore/QUuid>
 
@@ -296,12 +297,23 @@ void MapFeaturePrivate::updatePainters(double PixelPerM)
 	if (PixelPerMForPainter < 0)
 	{
 		PossiblePainters.clear();
+		std::vector<FeaturePainter*> DefaultPainters;
 		for (unsigned int i=0; i<EditPaintStyle::Painters.size(); ++i)
 		{
 			FeaturePainter* Current = &EditPaintStyle::Painters[i];
-			if (Current->matchesTag(theFeature))
-				PossiblePainters.push_back(Current);
+			switch (Current->matchesTag(theFeature)) {
+				case TagSelect_Match:
+					PossiblePainters.push_back(Current);
+					break;
+				case TagSelect_DefaultMatch:
+					DefaultPainters.push_back(Current);
+					break;
+				default:
+					break;
+			}
 		}
+		if (!PossiblePainters.size())
+			PossiblePainters = DefaultPainters;
 		PossiblePaintersUpToDate = true;
 		HasPainter = PossiblePainters.size();
 	}

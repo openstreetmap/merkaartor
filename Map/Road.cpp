@@ -537,13 +537,13 @@ void Road::toBinary(QDataStream& ds)
 	ds << (qint8)'R';
 	ds << idToLong();
 	ds << (qint32)size();
-	for (int i=0; i < size(); ++i) {
+	for (unsigned int i=0; i < size(); ++i) {
 		ds << (qint64)(get(i)->idToLong());
 	}
 	tagsToBinary(ds);
 }
 
-Road* Road::fromBinary(MapDocument* d, MapLayer* L, QDataStream& ds)
+Road* Road::fromBinary(MapDocument* d, MapLayer* /* L */, QDataStream& ds)
 {
 	qint8	c;
 	qint64	id;

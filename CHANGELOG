@@ -1,4 +1,5 @@
 v0.11
+	* ADD : "not", "true", "false", "[Default]" keywords to the Tag Selector; "[Default]" specifies the style for features not having a specific (i.e. non-default) style selected. Together with "Type Is", allows for "bug-fixing" styles "a la Maplint"
 	* ADD : Implementation of a binary OSM file format targeted to mobile devices (*.osb); so far, is ~3x smaller and loads ~5x faster; format subject to changes and documentation
 	* FIX : pixmap from background images were not freed, leading to ever growing memory consumption
 	* FIX : problem with map adapters having limited zoom range (e.g. Maplint 12-16)

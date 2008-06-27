@@ -6,6 +6,8 @@
 
 #include <vector>
 
+#include "PaintStyle/TagSelector.h"
+
 class MapFeature;
 class Projection;
 class Relation;
@@ -42,7 +44,7 @@ class FeaturePainter
 		void setSelector(const QString& aName);
 		void setSelector(TagSelector* aSelector);
 		bool isFilled() const;
-		bool matchesTag(const MapFeature* F) const;
+		TagSelectorMatchResult matchesTag(const MapFeature* F) const;
 		bool matchesZoom(double PixelPerM) const;
 		FeaturePainter& backgroundActive(bool b);
 		FeaturePainter& background(const QColor& Color, double Scale, double Offset);
