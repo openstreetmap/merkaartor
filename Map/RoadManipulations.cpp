@@ -122,7 +122,7 @@ static void splitRoad(MapDocument* theDocument, CommandList* theList, Road* In, 
 			while ( (i+1) < FirstPart->size() )
 			{
 				NextPart->add(FirstPart->get(i+1));
-				theList->add(new RoadRemoveTrackPointCommand(FirstPart,i+1,theDocument->getDirtyOrOriginLayer(FirstPart->layer())));
+				theList->add(new RoadRemoveTrackPointCommand(FirstPart,i+1,theDocument->getDirtyOrOriginLayer(In->layer())));
 			}
 			if (In != FirstPart)
 			{
