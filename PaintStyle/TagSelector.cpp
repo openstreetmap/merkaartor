@@ -29,7 +29,7 @@ bool canParseValue(const QString& Expression, int& idx, QString& Key)
 	unsigned short opened =0;
 	while (idx < Expression.length())
 	{
-		if ( ((Expression[idx] == '_') || (Expression[idx].isLetterOrNumber()) || (Expression[idx].isPunct()) || (Expression[idx] == '*') || (Expression[idx] == '?')) &&  ((Expression[idx] != '[') && (Expression[idx] != ']')) )
+		if ( ((Expression[idx] == '_') || (Expression[idx].isLetterOrNumber()) || (Expression[idx].isPunct()) || (Expression[idx] == '*') || (Expression[idx] == '?')) &&  ((Expression[idx] != '[') && (Expression[idx] != ']') && (Expression[idx] != ',')) )
 			Key += Expression[idx++];
 		else if ( Expression[idx] == '[' )
 		{
@@ -256,8 +256,10 @@ TagSelector::~TagSelector()
 TagSelectorIs::TagSelectorIs(const QString& key, const QString& value)
 : Key(key), Value(value)
 {
-	rx = QRegExp(value);
-	rx.setPatternSyntax(QRegExp::Wildcard);
+	if (value != "_NULL_") {
+		rx = QRegExp(value);
+		rx.setPatternSyntax(QRegExp::Wildcard);
+	}
 }
 
 TagSelector* TagSelectorIs::copy() const
@@ -267,6 +269,10 @@ TagSelector* TagSelectorIs::copy() const
 
 TagSelectorMatchResult TagSelectorIs::matches(const MapFeature* F) const
 {
+	if (Value == "_NULL_") {
+		QString val = F->tagValue(Key, "");
+		return val.isEmpty() ? TagSelect_Match : TagSelect_NoMatch;
+	}
 	return rx.exactMatch(F->tagValue(Key, "")) ? TagSelect_Match : TagSelect_NoMatch;
 }
 
