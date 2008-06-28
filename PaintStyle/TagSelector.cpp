@@ -29,7 +29,7 @@ bool canParseValue(const QString& Expression, int& idx, QString& Key)
 	unsigned short opened =0;
 	while (idx < Expression.length())
 	{
-		if ( (Expression[idx] == '_') || (Expression[idx].isLetterOrNumber()) || (Expression[idx] == '*') || (Expression[idx] == '?') )
+		if ( ((Expression[idx] == '_') || (Expression[idx].isLetterOrNumber()) || (Expression[idx].isPunct()) || (Expression[idx] == '*') || (Expression[idx] == '?')) &&  ((Expression[idx] != '[') && (Expression[idx] != ']')) )
 			Key += Expression[idx++];
 		else if ( Expression[idx] == '[' )
 		{
