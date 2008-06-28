@@ -29,7 +29,8 @@ bool canParseValue(const QString& Expression, int& idx, QString& Key)
 	unsigned short opened =0;
 	while (idx < Expression.length())
 	{
-		if ( ((Expression[idx] == '_') || (Expression[idx].isLetterOrNumber()) || (Expression[idx].isPunct()) || (Expression[idx] == '*') || (Expression[idx] == '?')) &&  ((Expression[idx] != '[') && (Expression[idx] != ']') && (Expression[idx] != ',')) )
+		if ( ((Expression[idx] == '_') || (Expression[idx].isLetterOrNumber()) || (Expression[idx].isPunct()) || (Expression[idx] == '*') || (Expression[idx] == '?')) 
+				&&  ( (Expression[idx] != '[') && (Expression[idx] != ']') && (Expression[idx] != ',') && (Expression[idx] != '(')&& (Expression[idx] != ')')) )
 			Key += Expression[idx++];
 		else if ( Expression[idx] == '[' )
 		{
@@ -286,6 +287,59 @@ QString TagSelectorIs::asExpression(bool) const
 	return R;
 }
 
+/* TAGSELECTORISONEOF */
+
+TagSelectorIsOneOf::TagSelectorIsOneOf(const QString& key, const std::vector<QString>& values)
+: Key(key), Values(values)
+{
+	for (unsigned int i=0; i<values.size(); ++i)
+	{
+		if (values[i] != "_NULL_") {
+			QRegExp rx(values[i]);
+			rx.setPatternSyntax(QRegExp::Wildcard);
+			rxv.append(rx);
+		}
+	}
+}
+
+TagSelector* TagSelectorIsOneOf::copy() const
+{
+	return new TagSelectorIsOneOf(Key,Values);
+}
+
+TagSelectorMatchResult TagSelectorIsOneOf::matches(const MapFeature* F) const
+{
+	QString V = F->tagValue(Key, "");
+	for (unsigned int i=0; i<Values.size(); ++i)
+	{
+		if (Values[i] == "_NULL_") {
+			if (V.isEmpty())
+				return TagSelect_Match;
+		}
+	}
+	for (int i=0; i<rxv.size(); ++i)
+	{
+		if(rxv[i].exactMatch(V)) return TagSelect_Match;
+	}
+	return TagSelect_NoMatch;
+}
+
+QString TagSelectorIsOneOf::asExpression(bool) const
+{
+	QString R;
+	R += "[";
+	R += Key;
+	R += "] isoneof (";
+	for (unsigned int i=0; i<Values.size(); ++i)
+	{
+		if (i)
+			R += " , ";
+		R += Values[i];
+	}
+	R += ")";
+	return R;
+}
+
 /* TAGSELECTORTYPEIS */
 
 TagSelectorTypeIs::TagSelectorTypeIs(const QString& type)
@@ -333,51 +387,6 @@ QString TagSelectorHasTags::asExpression(bool) const
 	R += "HasTags";
 	return R;
 }
-
-/* TAGSELECTORISONEOF */
-
-TagSelectorIsOneOf::TagSelectorIsOneOf(const QString& key, const std::vector<QString>& values)
-: Key(key), Values(values)
-{
-	for (unsigned int i=0; i<values.size(); ++i)
-	{
-		QRegExp rx(Values[i]);
-		rx.setPatternSyntax(QRegExp::Wildcard);
-		rxv.append(rx);
-	}
-}
-
-TagSelector* TagSelectorIsOneOf::copy() const
-{
-	return new TagSelectorIsOneOf(Key,Values);
-}
-
-TagSelectorMatchResult TagSelectorIsOneOf::matches(const MapFeature* F) const
-{
-	QString V = F->tagValue(Key, "");
-	for (int i=0; i<rxv.size(); ++i)
-	{
-		if(rxv[i].exactMatch(V)) return TagSelect_Match;
-	}
-	return TagSelect_NoMatch;
-}
-
-QString TagSelectorIsOneOf::asExpression(bool) const
-{
-	QString R;
-	R += "[";
-	R += Key;
-	R += "] isoneof (";
-	for (unsigned int i=0; i<Values.size(); ++i)
-	{
-		if (i)
-			R += " , ";
-		R += Values[i];
-	}
-	R += ")";
-	return R;
-}
-
 
 /* TAGSELECTOROR */
 
