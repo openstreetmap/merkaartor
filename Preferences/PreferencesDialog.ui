@@ -28,9 +28,17 @@
         <enum>QTabWidget::North</enum>
        </property>
        <property name="currentIndex" >
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="tab_4" >
+        <property name="geometry" >
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>540</width>
+          <height>448</height>
+         </rect>
+        </property>
         <attribute name="title" >
          <string>Visual</string>
         </attribute>
@@ -127,18 +135,25 @@
            </property>
            <layout class="QVBoxLayout" >
             <item>
-             <widget class="QRadioButton" name="StyleClassic" >
-              <property name="text" >
-               <string>Merkaartor classic</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="StyleMapnik" >
-              <property name="text" >
-               <string>Mapnik lookalike</string>
-              </property>
-             </widget>
+             <layout class="QHBoxLayout" name="horizontalLayout_2" >
+              <item>
+               <widget class="QRadioButton" name="StyleBuiltin" >
+                <property name="text" >
+                 <string>Built-in</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="cbStyles" >
+                <property name="sizePolicy" >
+                 <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
             <item>
              <layout class="QHBoxLayout" >
@@ -195,7 +210,7 @@
            <property name="orientation" >
             <enum>Qt::Vertical</enum>
            </property>
-           <property name="sizeHint" >
+           <property name="sizeHint" stdset="0" >
             <size>
              <width>20</width>
              <height>40</height>
@@ -206,6 +221,14 @@
         </layout>
        </widget>
        <widget class="QWidget" name="tab_3" >
+        <property name="geometry" >
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>540</width>
+          <height>448</height>
+         </rect>
+        </property>
         <attribute name="title" >
          <string>Data</string>
         </attribute>
@@ -297,7 +320,7 @@
            <property name="orientation" >
             <enum>Qt::Vertical</enum>
            </property>
-           <property name="sizeHint" >
+           <property name="sizeHint" stdset="0" >
             <size>
              <width>20</width>
              <height>0</height>
@@ -308,6 +331,14 @@
         </layout>
        </widget>
        <widget class="QWidget" name="tab" >
+        <property name="geometry" >
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>540</width>
+          <height>448</height>
+         </rect>
+        </property>
         <attribute name="title" >
          <string>Network</string>
         </attribute>
@@ -373,7 +404,7 @@
            <property name="orientation" >
             <enum>Qt::Vertical</enum>
            </property>
-           <property name="sizeHint" >
+           <property name="sizeHint" stdset="0" >
             <size>
              <width>20</width>
              <height>0</height>
@@ -384,6 +415,14 @@
         </layout>
        </widget>
        <widget class="QWidget" name="tab_2" >
+        <property name="geometry" >
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>540</width>
+          <height>448</height>
+         </rect>
+        </property>
         <attribute name="title" >
          <string>Background Image</string>
         </attribute>
@@ -477,7 +516,7 @@
            <property name="sizeType" >
             <enum>QSizePolicy::Expanding</enum>
            </property>
-           <property name="sizeHint" >
+           <property name="sizeHint" stdset="0" >
             <size>
              <width>496</width>
              <height>0</height>
@@ -503,7 +542,7 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons" >
-      <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>
@@ -528,8 +567,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>295</x>
-     <y>546</y>
+     <x>304</x>
+     <y>516</y>
     </hint>
     <hint type="destinationlabel" >
      <x>286</x>
@@ -544,12 +583,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>78</x>
-     <y>59</y>
+     <x>31</x>
+     <y>66</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>99</x>
-     <y>76</y>
+     <x>63</x>
+     <y>90</y>
     </hint>
    </hints>
   </connection>
@@ -560,12 +599,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>108</x>
-     <y>54</y>
+     <x>31</x>
+     <y>66</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>109</x>
-     <y>110</y>
+     <x>63</x>
+     <y>116</y>
     </hint>
    </hints>
   </connection>
@@ -576,12 +615,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>72</x>
-     <y>106</y>
+     <x>32</x>
+     <y>221</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>169</x>
-     <y>107</y>
+     <x>167</x>
+     <y>220</y>
     </hint>
    </hints>
   </connection>
@@ -592,12 +631,28 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>80</x>
-     <y>116</y>
+     <x>32</x>
+     <y>221</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>456</x>
-     <y>112</y>
+     <x>531</x>
+     <y>218</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>StyleBuiltin</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>cbStyles</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>50</x>
+     <y>196</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>131</x>
+     <y>200</y>
     </hint>
    </hints>
   </connection>

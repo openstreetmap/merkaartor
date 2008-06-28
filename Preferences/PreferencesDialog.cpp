@@ -22,6 +22,8 @@
 #include <QFileDialog>
 #include <QColorDialog>
 
+#define BUILTIN_STYLES_DIR ":/Styles"
+
 PreferencesDialog::PreferencesDialog(QWidget* parent)
 	: QDialog(parent)
 {
@@ -32,7 +34,10 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 	for (int i=0; i < MerkaartorPreferences::instance()->getProjectionTypes().size(); ++i) {
 		cbProjection->insertItem(i, MerkaartorPreferences::instance()->getProjectionTypes()[i]);
 	}
-
+	QDir intStyles(BUILTIN_STYLES_DIR);
+	for (int i=0; i < intStyles.entryList().size(); ++i) {
+		cbStyles->addItem(intStyles.entryList().at(i));
+	}
 	loadPrefs();
 }
 
@@ -81,12 +86,11 @@ void PreferencesDialog::loadPrefs()
 	QString s = MerkaartorPreferences::instance()->getDefaultStyle();
 	QString cs = MerkaartorPreferences::instance()->getCustomStyle();
 	CustomStyleName->setText(cs);
-	if (s == ":/Styles/Mapnik.mas")
-		StyleMapnik->setChecked(true);
-	else if (s== ":/Styles/Classic.mas")
-		StyleClassic->setChecked(true);
-	else
-	{
+	if (s.startsWith(BUILTIN_STYLES_DIR)) {
+		StyleBuiltin->setChecked(true);
+		cbStyles->setEnabled(true);
+		cbStyles->setCurrentIndex(cbStyles->findText(s.remove(QString(BUILTIN_STYLES_DIR) + "/")));
+	} else {
 		StyleCustom->setChecked(true);
 		CustomStyleName->setEnabled(true);
 		BrowseStyle->setEnabled(true);
@@ -119,10 +123,8 @@ void PreferencesDialog::savePrefs()
 
 	QString NewStyle;
 
-	if (StyleMapnik->isChecked())
-		NewStyle = ":/Styles/Mapnik.mas";
-	else if (StyleClassic->isChecked())
-		NewStyle = ":/Styles/Classic.mas";
+	if (StyleBuiltin->isChecked())
+		NewStyle = QString(BUILTIN_STYLES_DIR) + "/" + cbStyles->currentText();
 	else
 		NewStyle = CustomStyleName->text();
 
