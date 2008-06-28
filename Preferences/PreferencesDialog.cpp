@@ -75,6 +75,8 @@ void PreferencesDialog::loadPrefs()
 	}
 
 	QString s = MerkaartorPreferences::instance()->getDefaultStyle();
+	QString cs = MerkaartorPreferences::instance()->getCustomStyle();
+	CustomStyleName->setText(cs);
 	if (s == ":/Styles/Mapnik.mas")
 		StyleMapnik->setChecked(true);
 	else if (s== ":/Styles/Classic.mas")
@@ -83,7 +85,6 @@ void PreferencesDialog::loadPrefs()
 	{
 		StyleCustom->setChecked(true);
 		CustomStyleName->setEnabled(true);
-		CustomStyleName->setText(s);
 		BrowseStyle->setEnabled(true);
 	}
 
@@ -126,6 +127,7 @@ void PreferencesDialog::savePrefs()
 		MerkaartorPreferences::instance()->setDefaultStyle(NewStyle);
 		loadPainters(MerkaartorPreferences::instance()->getDefaultStyle());
 	}
+	MerkaartorPreferences::instance()->setCustomStyle(CustomStyleName->text());
 	MerkaartorPreferences::instance()->setZoomInPerc(sbZoomInPerc->text().toInt());
 	MerkaartorPreferences::instance()->setZoomOutPerc(sbZoomOutPerc->text().toInt());
 	MerkaartorPreferences::instance()->setProjectionType((ProjectionType)cbProjection->currentIndex());

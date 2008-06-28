@@ -173,6 +173,8 @@ public:
 	/* Visual */
 	QString getDefaultStyle() const;
 	void setDefaultStyle(const QString& aString);
+	QString getCustomStyle() const;
+	void setCustomStyle(const QString& aString);
 
 	void setZoomInPerc(int theValue);
 	int getZoomInPerc() const;

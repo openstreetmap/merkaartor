@@ -462,6 +462,16 @@ QString MerkaartorPreferences::getLastSearchValue() const
 
 /* Visuals */
 
+QString MerkaartorPreferences::getCustomStyle() const
+{
+	return Sets->value("style/Custom","").toString();
+}
+
+void MerkaartorPreferences::setCustomStyle(const QString& S)
+{
+	Sets->setValue("style/Custom",S);
+}
+
 QString MerkaartorPreferences::getDefaultStyle() const
 {
 	return Sets->value("style/Default",":/Styles/Classic.mas").toString();
