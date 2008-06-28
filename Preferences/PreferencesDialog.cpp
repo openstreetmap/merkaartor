@@ -15,6 +15,10 @@
 #include "Preferences/MerkaartorPreferences.h"
 #include "PaintStyle/EditPaintStyle.h"
 
+#include "MainWindow.h"
+#include "Map/MapDocument.h"
+#include "Map/MapFeature.h"
+
 #include <QFileDialog>
 #include <QColorDialog>
 
@@ -126,7 +130,11 @@ void PreferencesDialog::savePrefs()
 	{
 		MerkaartorPreferences::instance()->setDefaultStyle(NewStyle);
 		loadPainters(MerkaartorPreferences::instance()->getDefaultStyle());
-	}
+		for (FeatureIterator it(((MainWindow*)parent())->document()); !it.isEnd(); ++it)
+		{
+			it.get()->invalidatePainter();
+		}
+}
 	MerkaartorPreferences::instance()->setCustomStyle(CustomStyleName->text());
 	MerkaartorPreferences::instance()->setZoomInPerc(sbZoomInPerc->text().toInt());
 	MerkaartorPreferences::instance()->setZoomOutPerc(sbZoomOutPerc->text().toInt());

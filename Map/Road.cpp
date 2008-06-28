@@ -311,7 +311,8 @@ void Road::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature,
 						if (p->Nodes[i+j] != Alternatives[j])
 							if (p->Nodes[i+j-1] != Alternatives[j])
 								theList->add(new RoadAddTrackPointCommand(this, Alternatives[j], i+j,theDocument->getDirtyOrOriginLayer(Alternatives[j]->layer())));
-				theList->add(new RoadRemoveTrackPointCommand(this, (TrackPoint*)aFeature,theDocument->getDirtyOrOriginLayer(aFeature->layer())));			}
+				theList->add(new RoadRemoveTrackPointCommand(this, (TrackPoint*)aFeature,theDocument->getDirtyOrOriginLayer(aFeature->layer())));
+			}
 		}
 		++i;
 	}

@@ -809,7 +809,7 @@ void MainWindow::on_mapStyleLoadAction_triggered()
 
 void MainWindow::toolsPreferencesAction_triggered(unsigned int tabidx)
 {
-	PreferencesDialog* Pref = new PreferencesDialog();
+	PreferencesDialog* Pref = new PreferencesDialog(this);
 	Pref->tabPref->setCurrentIndex(tabidx);
 	connect (Pref, SIGNAL(preferencesChanged()), this, SLOT(preferencesChanged()));
 	Pref->exec();
