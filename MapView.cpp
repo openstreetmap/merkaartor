@@ -139,114 +139,8 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 	}
 }
 
-void MapView::updateStaticBuffer(QPaintEvent * /* anEvent */)
+void MapView::drawScale(QPainter & P)
 {
-	if (!StaticBuffer || (StaticBuffer->width() != width())
-	    || (StaticBuffer->height() != height())) {
-		delete StaticBuffer;
-		StaticBuffer = new QPixmap(width(), height());
-		StaticBufferUpToDate = false;
-	}
-	if (StaticBufferUpToDate)
-		return;
-	QTime Start(QTime::currentTime());
-	QPainter P(StaticBuffer);
-	P.setRenderHint(QPainter::Antialiasing);
-	P.fillRect(StaticBuffer->rect(), QBrush(MerkaartorPreferences::instance()->getBgColor()));
-	if (theDocument) {
-		EditPaintStyle EP(P, projection());
-
-		for (unsigned int i = 0; i < theDocument->layerSize(); ++i) {
-			theDocument->getLayer(i)->
-				sortRenderingPriority(projection().pixelPerM());
-		}
-
-		if (layermanager) {
-			if (layermanager->getLayers().size() > 0) {
-				if (layermanager->getLayer()->isVisible()) {
-					P.setOpacity(theDocument->getImageLayer()->getAlpha());
-					if (MerkaartorPreferences::instance()->getProjectionType() == Proj_Merkaartor) {
-						QRectF vlm = layermanager->getViewport();
-						Coord ctl = Coord(angToRad(vlm.bottomLeft().y()), angToRad(vlm.bottomLeft().x()));
-						Coord cbr = Coord(angToRad(vlm.topRight().y()), angToRad(vlm.topRight().x()));
-						QPointF tl = projection().project(ctl);
-						QPointF br = projection().project(cbr);
-
-						QRect pr = QRectF(tl, br).toRect();
-						QSize ps = pr.size();
-						QPixmap pm(size());
-						QPainter pmp(&pm);
-						layermanager->drawImage(&pmp);
-
-						qreal ratio = qMax((qreal)width()/ps.width()*1.0, (qreal)height()/ps.height());
-						QPixmap pms;
-						if (ratio > 1.0) {
-							pms = pm.scaled(ps /*, Qt::IgnoreAspectRatio, Qt::SmoothTransformation */ );
-						} else {
-							QSizeF ds;
-							QRect dr;
-							ds = QSizeF(ratio*pm.width(), ratio*pm.height());
-							dr = QRect(QPoint((pm.width()/2)-(ds.width()/2), (pm.height()/2)-(ds.height()/2)), ds.toSize());
-							pms = pm.copy(dr).scaled(ps*ratio /*, Qt::IgnoreAspectRatio, Qt::SmoothTransformation */ );
-						}
-						P.drawPixmap((width()-pms.width())/2, (height()-pms.height())/2, pms);
-					} else {
-						layermanager->drawImage(&P);
-					}
-				}
-			}
-		}
-		for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i) {
-			P.setOpacity(i.layer()->getAlpha());
-			i.get()->draw(P, projection());
-		}
-		for (unsigned int i = 0; i < EP.size(); ++i) {
-			PaintStyleLayer *Current = EP.get(i);
-			for (VisibleFeatureIterator i(theDocument);
-			     !i.isEnd(); ++i) {
-				P.setOpacity(i.layer()->getAlpha());
-				if (Road * R =
-				    dynamic_cast < Road * >(i.get()))
-					Current->draw(R);
-				else if (TrackPoint * Pt =
-					 dynamic_cast <
-					 TrackPoint * >(i.get()))
-					Current->draw(Pt);
-				else if (Relation * RR =
-					 dynamic_cast < Relation * >(i.get()))
-					Current->draw(RR);
-			}
-		}
-
-		// Download areas
-		if (MerkaartorPreferences::instance()->getDownloadedVisible()) {
-			QPixmap pxDownloadAreas(width(), height());
-			pxDownloadAreas.fill(Qt::transparent);
-			QPainter D(&pxDownloadAreas);
-			QRegion r(0, 0, width(), height());
-
-			//QBrush b(Qt::red, Qt::DiagCrossPattern);
-			QBrush b(Qt::red, Qt::Dense7Pattern);
-
-			QList<CoordBox>::iterator bb;
-			for (bb = theDocument->getDownloadBoxes()->begin(); bb != theDocument->getDownloadBoxes()->end(); ++bb) {
-				if (projection().viewport().disjunctFrom(*bb)) continue;
-				QPolygonF poly;
-				poly << projection().project((*bb).topLeft());
-				poly << projection().project((*bb).bottomLeft());
-				poly << projection().project((*bb).bottomRight());
-				poly << projection().project((*bb).topRight());
-				poly << projection().project((*bb).topLeft());
-
-				r -= QRegion(poly.toPolygon());
-			}
-
-			D.setClipRegion(r);
-			D.setClipping(true);
-			D.fillRect(pxDownloadAreas.rect(), b);
-			P.drawPixmap(0, 0, pxDownloadAreas);
-		}
-	}
 	double Log = log10(200/projection().pixelPerM());
 	double RestLog = Log-floor(Log);
 	if (RestLog < log10(2.))
@@ -255,6 +149,7 @@ void MapView::updateStaticBuffer(QPaintEvent * /* anEvent */)
 		Log = floor(Log)+log10(2.);
 	else
 		Log = floor(Log)+log10(5.);
+
 	double Length = pow(10.,Log);
 	P.setPen(QPen(QColor(0,0,0),2));
 	QPointF P1(20,height()-20);
@@ -267,10 +162,150 @@ void MapView::updateStaticBuffer(QPaintEvent * /* anEvent */)
 		P.drawText(QRectF(P2-QPoint(100,40),QSize(200,30)),Qt::AlignHCenter | Qt::AlignBottom, QString(tr("%1 km")).arg(Length/1000, 0, 'f', 0));
 
 	P.drawLine(P2-QPointF(0,5),P2+QPointF(0,5));
+}
+
+void MapView::sortRenderingPriorityInLayers()
+{
+	for (unsigned int i = 0; i < theDocument->layerSize(); ++i) {
+		theDocument->getLayer(i)->
+			sortRenderingPriority(projection().pixelPerM());
+	}
+}
+
+void MapView::drawLayersImage(QPainter & P)
+{
+	bool visible = (layermanager && layermanager->getLayers().size() && layermanager->getLayer()->isVisible());
+	if (visible == false)
+		return;
+
+	P.setOpacity(theDocument->getImageLayer()->getAlpha());
+
+	if (MerkaartorPreferences::instance()->getProjectionType() == Proj_Background)
+	{
+		layermanager->drawImage(&P);
+		return;
+	}
+
+	const QRectF vlm = layermanager->getViewport();
+	const Coord ctl = Coord(angToRad(vlm.bottomLeft().y()), angToRad(vlm.bottomLeft().x()));
+	const Coord cbr = Coord(angToRad(vlm.topRight().y()), angToRad(vlm.topRight().x()));
+
+	const QPointF tl = projection().project(ctl);
+	const QPointF br = projection().project(cbr);
+
+	const QRect pr = QRectF(tl, br).toRect();
+	const QSize ps = pr.size();
+	QPixmap pm(size());
+	QPainter pmp(&pm);
+	layermanager->drawImage(&pmp);
+
+	const qreal ratio = qMax((qreal)width()/ps.width()*1.0, (qreal)height()/ps.height());
+	QPixmap pms;
+	if (ratio > 1.0) {
+		pms = pm.scaled(ps /*, Qt::IgnoreAspectRatio, Qt::SmoothTransformation */ );
+	} else {
+		const QSizeF drawingSize = pm.size() * ratio;
+		const QSizeF originSize = pm.size()/2 - drawingSize/2;
+		const QPointF drawingOrigin = QPointF(originSize.width(), originSize.height());
+		const QRect drawingRect = QRect(drawingOrigin.toPoint(), drawingSize.toSize());
+
+		pms = pm.copy(drawingRect).scaled(ps*ratio /*, Qt::IgnoreAspectRatio, Qt::SmoothTransformation */ );
+	}
+
+	P.drawPixmap((width()-pms.width())/2, (height()-pms.height())/2, pms);
+}
+
+void MapView::drawFeatures(QPainter & P)
+{
+	for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
+	{
+		P.setOpacity(i.layer()->getAlpha());
+		i.get()->draw(P, projection());
+	}
+
+	EditPaintStyle EP(P, projection());
+	for (unsigned int i = 0; i < EP.size(); ++i)
+	{
+		PaintStyleLayer *Current = EP.get(i);
+		for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
+		{
+			P.setOpacity(i.layer()->getAlpha());
+			if (Road * R = dynamic_cast < Road * >(i.get()))
+				Current->draw(R);
+			else if (TrackPoint * Pt = dynamic_cast < TrackPoint * >(i.get()))
+				Current->draw(Pt);
+			else if (Relation * RR = dynamic_cast < Relation * >(i.get()))
+				Current->draw(RR);
+		}
+	}
+}
+
+void MapView::drawDownloadAreas(QPainter & P)
+{
+	if (MerkaartorPreferences::instance()->getDownloadedVisible() == false)
+		return;
+
+	QPixmap pxDownloadAreas(width(), height());
+	pxDownloadAreas.fill(Qt::transparent);
+	QPainter D(&pxDownloadAreas);
+	QRegion r(0, 0, width(), height());
+
+
+	//QBrush b(Qt::red, Qt::DiagCrossPattern);
+	QBrush b(Qt::red, Qt::Dense7Pattern);
+
+	QList<CoordBox>::iterator bb;
+	for (bb = theDocument->getDownloadBoxes()->begin(); bb != theDocument->getDownloadBoxes()->end(); ++bb) {
+		if (projection().viewport().disjunctFrom(*bb)) continue;
+		QPolygonF poly;
+		poly << projection().project((*bb).topLeft());
+		poly << projection().project((*bb).bottomLeft());
+		poly << projection().project((*bb).bottomRight());
+		poly << projection().project((*bb).topRight());
+		poly << projection().project((*bb).topLeft());
+
+		r -= QRegion(poly.toPolygon());
+	}
+
+	D.setClipRegion(r);
+	D.setClipping(true);
+	D.fillRect(pxDownloadAreas.rect(), b);
+	P.drawPixmap(0, 0, pxDownloadAreas);
+}
+
+
+void MapView::updateStaticBuffer(QPaintEvent* /* anEvent */)
+{
+	if (StaticBufferUpToDate)
+		return;
+
+	if (!StaticBuffer || (StaticBuffer->size() != size()))
+	{
+		delete StaticBuffer;
+		StaticBuffer = new QPixmap(size());
+	}
+
+	QTime Start(QTime::currentTime());
+	MerkaartorPreferences * prefs = MerkaartorPreferences::instance();
+
+	QPainter painter(StaticBuffer);
+	painter.setRenderHint(QPainter::Antialiasing);
+	painter.fillRect(StaticBuffer->rect(), QBrush(prefs->getBgColor()));
+
+	if (theDocument)
+	{
+		sortRenderingPriorityInLayers();
+		drawLayersImage(painter);
+		drawFeatures(painter);
+		drawDownloadAreas(painter);
+	}
+
+	drawScale(painter);
+
 	QTime Stop(QTime::currentTime());
-//  statusbar->showmessage in mapview::paintevent segfault on 4.4beta1
 	StatusMessage = tr("Paint took %1ms").arg(Start.msecsTo(Stop));
 	QTimer::singleShot(0,this,SLOT(updateStatusMessage()));
+
 	StaticBufferUpToDate = true;
 }
 

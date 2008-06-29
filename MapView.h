@@ -52,6 +52,11 @@ class MapView :	public QWidget
 		void fromXML(const QDomElement e);
 
 	private:
+		void sortRenderingPriorityInLayers();
+		void drawLayersImage(QPainter & painter);
+		void drawFeatures(QPainter & painter);
+		void drawDownloadAreas(QPainter & painter);
+		void drawScale(QPainter & painter);
 		void updateStaticBuffer(QPaintEvent* anEvent);
 		MainWindow* Main;
 		Projection theProjection;
