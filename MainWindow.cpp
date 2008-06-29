@@ -393,35 +393,35 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 		const QString & fn = it.next();
 		changeCurrentDirToFile(fn);
 
-		QString newLayerName = fn.section('/', - 1);
+		QString baseFileName = fn.section('/', - 1);
 		MapLayer* newLayer = NULL;
 
 		bool importOK = false;
 
 		if (fn.endsWith(".gpx")) {
-			newLayer = new TrackMapLayer( newLayerName );
+			newLayer = new TrackMapLayer( baseFileName );
 			mapDocument->add(newLayer);
-			importOK = importGPX(this, fn, mapDocument, newLayer);
+			importOK = importGPX(this, baseFileName, mapDocument, newLayer);
 		}
 		else if (fn.endsWith(".osm")) {
-			newLayer = new DrawingMapLayer( newLayerName );
+			newLayer = new DrawingMapLayer( baseFileName );
 			mapDocument->add(newLayer);
-			importOK = importOSM(this, fn, mapDocument, newLayer);
+			importOK = importOSM(this, baseFileName, mapDocument, newLayer);
 		}
 		else if (fn.endsWith(".osb")) {
-			newLayer = new DrawingMapLayer( newLayerName );
+			newLayer = new DrawingMapLayer( baseFileName );
 			mapDocument->add(newLayer);
-			importOK = mapDocument->importOSB(fn, (DrawingMapLayer *)newLayer);
+			importOK = mapDocument->importOSB(baseFileName, (DrawingMapLayer *)newLayer);
 		}
 		else if (fn.endsWith(".ngt")) {
-			newLayer = new TrackMapLayer( newLayerName );
+			newLayer = new TrackMapLayer( baseFileName );
 			mapDocument->add(newLayer);
-			importOK = importNGT(this, fn, mapDocument, newLayer);
+			importOK = importNGT(this, baseFileName, mapDocument, newLayer);
 		}
 		else if (fn.endsWith(".nmea") || (fn.endsWith(".nme"))) {
-			newLayer = new TrackMapLayer( newLayerName );
+			newLayer = new TrackMapLayer( baseFileName );
 			mapDocument->add(newLayer);
-			importOK = mapDocument->importNMEA(fn, (TrackMapLayer *)newLayer);
+			importOK = mapDocument->importNMEA(baseFileName, (TrackMapLayer *)newLayer);
 		}
 
 		if (!importOK && newLayer)
