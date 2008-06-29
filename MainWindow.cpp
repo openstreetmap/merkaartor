@@ -1038,8 +1038,8 @@ bool MainWindow::selectExportedFeatures(QVector<MapFeature*>& theFeatures)
 			MerkaartorPreferences::instance()->setExportType(Export_Selected);
 			return true;
 		}
-	} else
-		return false;
+	}
+	return false;
 }
 
 void MainWindow::on_editSelectAction_triggered()

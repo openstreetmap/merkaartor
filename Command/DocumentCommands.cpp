@@ -40,8 +40,6 @@ bool AddFeatureCommand::buildDirtyList(DirtyList& theList)
 	if (UserAdded)
 		if (theLayer->isUploadable())
 			return theList.add(theFeature);
-		else
-			return false;
 	return false;
 }
 

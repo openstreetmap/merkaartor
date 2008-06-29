@@ -359,13 +359,13 @@ TagSelectorMatchResult FeaturePainter::matchesTag(const MapFeature* F) const
 					return TagSelect_NoMatch;
 		}
 	}
-	if (res = theSelector->matches(F))
+	if ((res = theSelector->matches(F)))
 		return res;
 	// Special casing for multipolygon relations
 	if (const Relation* R = dynamic_cast<const Relation*>(F))
 	{
 		for (unsigned int i=0; i<R->size(); ++i)
-			if (res = theSelector->matches(R->get(i)))
+			if ((res = theSelector->matches(R->get(i))))
 				return res;
 	}
 	return TagSelect_NoMatch;

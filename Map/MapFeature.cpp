@@ -430,7 +430,7 @@ void MapFeature::tagsFromXML(MapDocument* d, MapFeature * f, QDomElement e)
 bool MapFeature::tagsToBinary(QDataStream& ds)
 {
 	bool OK = true;
-	quint32 k, v;
+	qint32 k, v;
 
 	ds << (qint32)tagSize();
 	for (unsigned int i=0; i<tagSize(); ++i) {
@@ -452,7 +452,7 @@ void MapFeature::tagsFromBinary(MapDocument* d, MapFeature * f, QDataStream& ds)
 	QString K, V;
 
 	ds >> numTags;
-	for (int i=0; i < numTags; ++i) {
+	for (unsigned int i=0; i < numTags; ++i) {
 		ds >> k;
 		ds >> v;
 		K = d->getTagKey(k);
