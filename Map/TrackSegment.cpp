@@ -78,15 +78,58 @@ bool TrackSegment::visibleLine(const CoordBox & viewport, const Coord & last, co
 	return viewport.intersects( CoordBox(last, here) );
 }
 
+static void configurePen(QPen & pen, double slope, double speed)
+{
+	// Encode speed in width of path ...
+	double penWidth = 1.0;
+	if (speed > 10.0)
+		penWidth = qMin(1.0+speed*0.02, 5.0);
+
+	// ... and slope in the color
+	unsigned int green = 0;
+	unsigned int red = 0;
+
+	if (slope > 2.0)
+	{
+		slope = qMin(slope, 20.0);
+		green = 48 + int(slope*79.0 / 20.0);
+	}
+	else if (slope < -2.0)
+	{
+		slope = qMax(slope, - 20.0);
+		red = 48 + int(-slope*79.0 / 20.0);
+	}
+
+	pen.setColor(QColor(128 + red, 128 + green, 128));
+
+	pen.setStyle(Qt::DotLine);
+	pen.setWidthF(penWidth);
+}
+
+void TrackSegment::drawDirectionMarkers(QPainter &P, QPen &pen, const QPointF & FromF, const QPointF & ToF)
+{
+	if (::distance(FromF,ToF) <= 30.0)
+		return;
+
+	const double DistFromCenter=10.0;
+	const double theWidth=5.0;
+	const double A = angle(FromF-ToF);
+
+	QPointF T(DistFromCenter*cos(A), DistFromCenter*sin(A));
+	QPointF V1(theWidth*cos(A+M_PI/6),theWidth*sin(A+M_PI/6));
+	QPointF V2(theWidth*cos(A-M_PI/6),theWidth*sin(A-M_PI/6));
+
+	pen.setStyle(Qt::SolidLine);
+	P.setPen(pen);
+
+	QPointF H((FromF+ToF) / 2);
+	P.drawLine(H-T,H-T+V1);
+	P.drawLine(H-T,H-T+V2);
+}
+
 void TrackSegment::draw(QPainter &P, const Projection& theProjection)
 {
-	const QColor grey = QColor(128,128,128);
-	const QColor green = QColor(128,196,128);
-	const QColor red = QColor(196,128,128);
-
-	double penWidth = 1.0;
-	QColor pathColor = grey;
-	QPen pathPen = QPen(pathColor, 1, Qt::DotLine);
+	QPen pen;
 
 	for (unsigned int i=1; i<p->Points.size(); ++i)
 	{
@@ -96,48 +139,18 @@ void TrackSegment::draw(QPainter &P, const Projection& theProjection)
 		if (visibleLine(theProjection.viewport(), last, here) == false)
 			continue;
 
-		const double slope = p->Points[i]->elevation() - p->Points[i-1]->elevation();
-		const double speed = p->Points[i]->speed();
-
-		penWidth = 1.0;
-		if (speed > 10.0)
-			penWidth += speed * 0.02;
-
-		if (penWidth > 5.0)
-			penWidth = 5.0;
-
-		if      (slope >  2.0) pathColor = green;
-		else if (slope < -2.0) pathColor = red;
-		else                   pathColor = grey;
-
-		pathPen.setWidthF(penWidth);
-		pathPen.setColor(pathColor);
-		P.setPen(pathPen);
-
 		QPointF FromF(theProjection.project(last));
 		QPointF ToF(theProjection.project(here));
+
+		const double distance = here.distanceFrom(last);
+		const double slope = (p->Points[i]->elevation() - p->Points[i-1]->elevation()) / (distance * 10.0);
+		const double speed = p->Points[i]->speed();
+
+		configurePen(pen, slope, speed);
+		P.setPen(pen);
+
 		P.drawLine(FromF,ToF);
-
-		if (distance(FromF,ToF) <= 30.0)
-			continue;
-
-		double DistFromCenter=10.0;
-		double theWidth=5.0;
-		QPointF H(FromF+ToF);
-		H *= 0.5;
-		double A = angle(FromF-ToF);
-		QPointF T(DistFromCenter*cos(A),DistFromCenter*sin(A));
-		QPointF V1(theWidth*cos(A+M_PI/6),theWidth*sin(A+M_PI/6));
-		QPointF V2(theWidth*cos(A-M_PI/6),theWidth*sin(A-M_PI/6));
-
-		pathPen.setStyle(Qt::SolidLine);
-		P.setPen(pathPen);
-
-		P.drawLine(H-T,H-T+V1);
-		P.drawLine(H-T,H-T+V2);
-
-		pathPen.setStyle(Qt::DotLine);
-		P.setPen(pathPen);
+		drawDirectionMarkers(P, pen, FromF, ToF);
 	}
 }
 

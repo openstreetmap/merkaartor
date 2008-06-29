@@ -133,7 +133,6 @@ bool importGPX(QWidget* aParent, const QString& aFilename, MapDocument* theDocum
 	QFile File(aFilename);
 	if (!File.open(QIODevice::ReadOnly))
 	{
-		qDebug() << "Could not open " << aFilename;
 		return false;
 	}
 	return importGPX(aParent, File, theDocument, theLayer, true);
