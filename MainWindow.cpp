@@ -411,7 +411,7 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 		else if (fn.endsWith(".osb")) {
 			newLayer = new DrawingMapLayer( baseFileName );
 			mapDocument->add(newLayer);
-			importOK = mapDocument->importOSB( baseFileName, (DrawingMapLayer *)newLayer);
+			importOK = mapDocument->importOSB(baseFileName, (DrawingMapLayer *)newLayer);
 		}
 		else if (fn.endsWith(".ngt")) {
 			newLayer = new TrackMapLayer( baseFileName );
@@ -421,7 +421,7 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 		else if (fn.endsWith(".nmea") || (fn.endsWith(".nme"))) {
 			newLayer = new TrackMapLayer( baseFileName );
 			mapDocument->add(newLayer);
-			importOK = mapDocument->importNMEA( baseFileName, (TrackMapLayer *)newLayer);
+			importOK = mapDocument->importNMEA(baseFileName, (TrackMapLayer *)newLayer);
 		}
 
 		if (!importOK && newLayer)
@@ -1038,8 +1038,8 @@ bool MainWindow::selectExportedFeatures(QVector<MapFeature*>& theFeatures)
 			MerkaartorPreferences::instance()->setExportType(Export_Selected);
 			return true;
 		}
-	}
-	return false;
+	} else
+		return false;
 }
 
 void MainWindow::on_editSelectAction_triggered()
