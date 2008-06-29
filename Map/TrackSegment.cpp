@@ -72,7 +72,14 @@ TrackPoint* TrackSegment::get(int i)
 
 void TrackSegment::draw(QPainter &P, const Projection& theProjection)
 {
-	P.setPen(QPen(QColor(128,128,128),1,Qt::DotLine));
+	const QColor grey = QColor(128,128,128);
+	const QColor green = QColor(128,196,128);
+	const QColor red = QColor(196,128,128);
+
+	double penWidth = 1.0;
+	QColor pathColor = grey;
+	QPen pathPen = QPen(pathColor, 1, Qt::DotLine);
+
 	for (unsigned int i=1; i<p->Points.size(); ++i)
 	{
 		const Coord & last = p->Points[i-1]->position();
@@ -81,6 +88,24 @@ void TrackSegment::draw(QPainter &P, const Projection& theProjection)
 		bool visible = (theProjection.viewport().contains(last) || theProjection.viewport().contains(here));
 		if (visible == false)
 			continue;
+
+		const double slope = p->Points[i]->elevation() - p->Points[i-1]->elevation();
+		const double speed = p->Points[i]->speed();
+
+		penWidth = 1.0;
+		if (speed > 10.0)
+			penWidth += speed * 0.02;
+
+		if (penWidth > 5.0)
+			penWidth = 5.0;
+
+		if      (slope >  2.0) pathColor = green;
+		else if (slope < -2.0) pathColor = red;
+		else                   pathColor = grey;
+
+		pathPen.setWidthF(penWidth);
+		pathPen.setColor(pathColor);
+		P.setPen(pathPen);
 
 		QPointF FromF(theProjection.project(last));
 		QPointF ToF(theProjection.project(here));
@@ -97,10 +122,15 @@ void TrackSegment::draw(QPainter &P, const Projection& theProjection)
 		QPointF T(DistFromCenter*cos(A),DistFromCenter*sin(A));
 		QPointF V1(theWidth*cos(A+M_PI/6),theWidth*sin(A+M_PI/6));
 		QPointF V2(theWidth*cos(A-M_PI/6),theWidth*sin(A-M_PI/6));
-		P.setPen(QPen(QColor(128,128,128),1));
+
+		pathPen.setStyle(Qt::SolidLine);
+		P.setPen(pathPen);
+
 		P.drawLine(H-T,H-T+V1);
 		P.drawLine(H-T,H-T+V2);
-		P.setPen(QPen(QColor(128,128,128),1,Qt::DotLine));
+
+		pathPen.setStyle(Qt::DotLine);
+		P.setPen(pathPen);
 	}
 }
 
