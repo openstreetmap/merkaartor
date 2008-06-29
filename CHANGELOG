@@ -1,4 +1,10 @@
 v0.11
+	* FIX : Show tracksegment even if it only intersects the viewport
+	* ADD : Encode speed and slope in track segments
+	* FIX : Handle relative paths when loading files
+	* FIX : Clip track segments on viewport
+	* ADD : Show length of selected way in info dock
+	* ADD : Display distance in CreateSingleWay
 	* FIX : "Dynamically" display all built-in styles in the preferences dialog rather than pre-defined ones
 	* ADD :  special value "_NULL_" to TagSelector; matches non-existent or empty tag
 	* FIX : allow punctuation in tag selector
