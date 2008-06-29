@@ -70,6 +70,14 @@ TrackPoint* TrackSegment::get(int i)
 	return p->Points[i];
 }
 
+bool TrackSegment::visibleLine(const CoordBox & viewport, const Coord & last, const Coord & here)
+{
+	if (viewport.contains(last) || viewport.contains(here))
+		return true;
+
+	return viewport.intersects( CoordBox(last, here) );
+}
+
 void TrackSegment::draw(QPainter &P, const Projection& theProjection)
 {
 	const QColor grey = QColor(128,128,128);
@@ -85,8 +93,7 @@ void TrackSegment::draw(QPainter &P, const Projection& theProjection)
 		const Coord & last = p->Points[i-1]->position();
 		const Coord & here = p->Points[i]->position();
 
-		bool visible = (theProjection.viewport().contains(last) || theProjection.viewport().contains(here));
-		if (visible == false)
+		if (visibleLine(theProjection.viewport(), last, here) == false)
 			continue;
 
 		const double slope = p->Points[i]->elevation() - p->Points[i-1]->elevation();

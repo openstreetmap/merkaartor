@@ -13,6 +13,7 @@ class TrackSegment : public MapFeature
 		~TrackSegment(void);
 	private:
 		TrackSegment(const TrackSegment& other);
+		bool visibleLine(const CoordBox & viewport, const Coord & last, const Coord & here);
 
 	public:
 		virtual QString getClass() const {return "TrackSegment";};
