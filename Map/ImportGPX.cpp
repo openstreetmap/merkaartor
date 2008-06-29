@@ -23,7 +23,11 @@ static TrackPoint* importTrkPt(const QDomElement& Root, MapDocument* /* theDocum
 	for(QDomNode n = Root.firstChild(); !n.isNull(); n = n.nextSibling())
 	{
 		QDomElement t = n.toElement();
-		if (!t.isNull() && t.tagName() == "time")
+
+		if (t.isNull())
+			continue;
+
+		if (t.tagName() == "time")
 		{
 			QString Value;
 			for (QDomNode s = t.firstChild(); !s.isNull(); s = s.nextSibling())
@@ -37,6 +41,14 @@ static TrackPoint* importTrkPt(const QDomElement& Root, MapDocument* /* theDocum
 				QDateTime dt(QDateTime::fromString(Value,"yyyy-MM-ddTHH:mm:ssZ"));
 				Pt->setTime(dt);
 			}
+		}
+		else if (t.tagName() == "ele")
+		{
+			Pt->setElevation( t.text().toDouble() );
+		}
+		else if (t.tagName() == "speed")
+		{
+			Pt->setSpeed( t.text().toDouble() );
 		}
 	}
 	return Pt;
@@ -120,7 +132,10 @@ bool importGPX(QWidget* aParent, const QString& aFilename, MapDocument* theDocum
 {
 	QFile File(aFilename);
 	if (!File.open(QIODevice::ReadOnly))
-		 return false;
+	{
+		qDebug() << "Could not open " << aFilename;
+		return false;
+	}
 	return importGPX(aParent, File, theDocument, theLayer, true);
 }
 

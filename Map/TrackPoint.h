@@ -31,6 +31,12 @@ class TrackPoint : public MapFeature
 		const Coord& position() const;
 		void setPosition(const Coord& aCoord);
 
+		double speed() const;
+		void setSpeed(double aSpeed);
+
+		double elevation() const;
+		void setElevation(double aElevation);
+
 		virtual void partChanged(MapFeature* F, unsigned int ChangeId);
 
 		virtual QString toXML(unsigned int lvl=0);
@@ -45,6 +51,8 @@ class TrackPoint : public MapFeature
 
 private:
 		Coord Position;
+		double Elevation;
+		double Speed;
 };
 
 #endif

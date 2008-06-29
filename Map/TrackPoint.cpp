@@ -6,12 +6,12 @@
 #include <QtGui/QPainter>
 
 TrackPoint::TrackPoint(const Coord& aCoord)
-: Position(aCoord)
+: Position(aCoord), Elevation(0.0), Speed(0.0)
 {
 }
 
 TrackPoint::TrackPoint(const TrackPoint& other)
-: MapFeature(other), Position(other.Position)
+: MapFeature(other), Position(other.Position), Elevation(0.0), Speed(0.0)
 {
 	setTime(other.time());
 }
@@ -29,6 +29,26 @@ void TrackPoint::setPosition(const Coord& aCoord)
 {
 	Position = aCoord;
 	notifyChanges();
+}
+
+double TrackPoint::speed() const
+{
+	return Speed;
+}
+
+void TrackPoint::setSpeed(double aSpeed)
+{
+	Speed = aSpeed;
+}
+
+double TrackPoint::elevation() const
+{
+	return Elevation;
+}
+
+void TrackPoint::setElevation(double aElevation)
+{
+	Elevation = aElevation;
 }
 
 bool TrackPoint::notEverythingDownloaded() const
@@ -182,7 +202,9 @@ QString TrackPoint::toHtml()
 	QString D;
 
 	D += "<i>"+QApplication::translate("MapFeature", "timestamp")+": </i>" + time().toString(Qt::ISODate) + "<br/>";
-	D += "<i>"+QApplication::translate("MapFeature", "coord")+": </i>" + QString::number(radToAng(position().lat()), 'f', 4) + " / " + QString::number(radToAng(position().lon()), 'f', 4) + "";
+	D += "<i>"+QApplication::translate("MapFeature", "coord")+": </i>" + QString::number(radToAng(position().lat()), 'f', 4) + " / " + QString::number(radToAng(position().lon()), 'f', 4) + "<br/>";
+	D += "<i>"+QApplication::translate("MapFeature", "elevation")+": </i>" + QString::number(elevation(), 'f', 4) + "<br/>";
+	D += "<i>"+QApplication::translate("MapFeature", "speed")+": </i>" + QString::number(speed(), 'f', 4) + "<br/>";
 
 	return MapFeature::toMainHtml(QApplication::translate("MapFeature", "Node"), "node").arg(D);
 }
