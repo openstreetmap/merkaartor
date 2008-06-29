@@ -17,6 +17,7 @@ class Road : public MapFeature
 		virtual ~Road();
 	private:
 		Road(const Road& other);
+		void updateMeta() const;
 
 	public:
 		virtual QString getClass() const {return "Road";};
@@ -44,6 +45,7 @@ class Road : public MapFeature
 		virtual void setLayer(MapLayer* aLayer);
 
 		double area() const;
+		double distance() const;
 
 		virtual bool deleteChildren(MapDocument* theDocument, CommandList* theList);
 

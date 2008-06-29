@@ -59,7 +59,7 @@ CoordBox CoordBox::fromXML(QDomElement e)
 	return CoordBox(tr, bl);
 }
 
-double Coord::distanceFrom(const Coord& other)
+double Coord::distanceFrom(const Coord& other) const
 {
 	double dlon = other.lon() - lon();
 

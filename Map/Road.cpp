@@ -19,7 +19,7 @@ class RoadPrivate
 {
 	public:
 		RoadPrivate()
-		: SmoothedUpToDate(false), BBox(Coord(0,0),Coord(0,0)), BBoxUpToDate(true), Area(0), AreaUpToDate(true)
+		: SmoothedUpToDate(false), BBox(Coord(0,0),Coord(0,0)), BBoxUpToDate(true), Area(0), Distance(0), MetaUpToDate(true)
 		{
 		}
 		std::vector<TrackPoint*> Nodes;
@@ -27,8 +27,10 @@ class RoadPrivate
  		bool SmoothedUpToDate;
 		CoordBox BBox;
 		bool BBoxUpToDate;
+
 		double Area;
-		bool AreaUpToDate;
+		double Distance;
+		bool MetaUpToDate;
 
 		void updateSmoothed(bool DoSmooth);
 		void addSmoothedBezier(unsigned int i, unsigned int j, unsigned int k, unsigned int l);
@@ -93,7 +95,7 @@ void Road::setLayer(MapLayer* L)
 void Road::partChanged(MapFeature*, unsigned int ChangeId)
 {
 	p->BBoxUpToDate = false;
-	p->AreaUpToDate = false;
+	p->MetaUpToDate = false;
 	p->SmoothedUpToDate = false;
 	notifyParents(ChangeId);
 }
@@ -119,7 +121,7 @@ void Road::add(TrackPoint* Pt)
 	p->Nodes.push_back(Pt);
 	Pt->setParent(this);
 	p->BBoxUpToDate = false;
-	p->AreaUpToDate = false;
+	p->MetaUpToDate = false;
 	p->SmoothedUpToDate = false;
 }
 
@@ -129,7 +131,7 @@ void Road::add(TrackPoint* Pt, unsigned int Idx)
 	std::rotate(p->Nodes.begin()+Idx,p->Nodes.end()-1,p->Nodes.end());
 	Pt->setParent(this);
 	p->BBoxUpToDate = false;
-	p->AreaUpToDate = false;
+	p->MetaUpToDate = false;
 	p->SmoothedUpToDate = false;
 }
 
@@ -147,7 +149,7 @@ void Road::remove(unsigned int idx)
 	p->Nodes.erase(p->Nodes.begin()+idx);
 	Pt->unsetParent(this);
 	p->BBoxUpToDate = false;
-	p->AreaUpToDate = false;
+	p->MetaUpToDate = false;
 	p->SmoothedUpToDate = false;
 }
 
@@ -193,20 +195,47 @@ CoordBox Road::boundingBox() const
 	return p->BBox;
 }
 
+void Road::updateMeta() const
+{
+	p->Area = 0;
+	p->Distance = 0;
+
+	if (p->Nodes.size() == 0)
+	{
+		p->MetaUpToDate = true;
+		return;
+	}
+
+	bool isArea = (p->Nodes[0] == p->Nodes[p->Nodes.size()-1]);
+
+	for (unsigned int i=0; (i+1)<p->Nodes.size(); ++i)
+	{
+		const Coord & here = p->Nodes[i]->position();
+		const Coord & next = p->Nodes[i+1]->position();
+
+		if (isArea)
+			p->Area += here.lat() * next.lon() - next.lat() * here.lon();
+
+		p->Distance += next.distanceFrom(here);
+	}
+
+	p->Area /= 2;
+	p->MetaUpToDate = true;
+}
+
+double Road::distance() const
+{
+	if (p->MetaUpToDate == false)
+		updateMeta();
+
+	return p->Distance;
+}
+
 double Road::area() const
 {
-	if (!p->AreaUpToDate)
-	{
-		p->Area = 0;
-		if (p->Nodes.size() && (p->Nodes[0] == p->Nodes[p->Nodes.size()-1]))
-		{
-			for (unsigned int i=0; (i+1)<p->Nodes.size(); ++i)
-				p->Area += p->Nodes[i]->position().lat() * p->Nodes[i+1]->position().lon()
-					- p->Nodes[i+1]->position().lat() * p->Nodes[i]->position().lon();
-			p->Area /= 2;
-		}
-		p->AreaUpToDate = true;
-	}
+	if (p->MetaUpToDate == false)
+		updateMeta();
+
 	return p->Area;
 }
 
@@ -263,7 +292,7 @@ double Road::pixelDistance(const QPointF& Target, double ClearEndDistance, const
 	double Best = 1000000;
 	for (unsigned int i=0; i<p->Nodes.size(); ++i)
 	{
-		double x = distance(Target,theProjection.project(p->Nodes[i]->position()));
+		double x = ::distance(Target,theProjection.project(p->Nodes[i]->position()));
 		if (x<ClearEndDistance)
 			return Best;
 	}
@@ -521,9 +550,17 @@ const std::vector<Coord>& Road::smoothed() const
 
 QString Road::toHtml()
 {
+	QString distanceLabel;
+	if (distance() < 1.0)
+		distanceLabel = QString("%1 m").arg(int(distance() * 1000));
+	else
+		distanceLabel = QString("%1 km").arg(distance(), 0, 'f', 3);
+
 	QString D;
 
-	D += "<i>"+QApplication::translate("MapFeature", "size")+": </i>" + QApplication::translate("MapFeature", "%1 nodes").arg(size());
+	D += "<i>"+QApplication::translate("MapFeature", "Length")+": </i>" + distanceLabel;
+	D += "<br/>";
+	D += "<i>"+QApplication::translate("MapFeature", "Size")+": </i>" + QApplication::translate("MapFeature", "%1 nodes").arg(size());
 	CoordBox bb = boundingBox();
 	D += "<br/>";
 	D += "<i>"+QApplication::translate("MapFeature", "Topleft")+": </i>" + QString::number(radToAng(bb.topLeft().lat()), 'f', 4) + " / " + QString::number(radToAng(bb.topLeft().lon()), 'f', 4);

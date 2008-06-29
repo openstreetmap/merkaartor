@@ -56,7 +56,7 @@ class Coord
 			return sqrt(Lat*Lat+Lon*Lon);
 		}
 
-		double distanceFrom(const Coord& other);
+		double distanceFrom(const Coord& other) const;
 
 		bool toXML(QString elName, QDomElement& xParent) const;
 		static Coord fromXML(QDomElement e);
