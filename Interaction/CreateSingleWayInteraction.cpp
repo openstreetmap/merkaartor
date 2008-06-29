@@ -36,6 +36,17 @@ void CreateSingleWayInteraction::paintEvent(QPaintEvent* anEvent, QPainter& theP
 		QPen TP(SomeBrush,projection().pixelPerM()*4+2);
 		QPointF PreviousPoint = view()->projection().project(FirstPoint);
 		::draw(thePainter,TP,MapFeature::UnknownDirection, PreviousPoint,LastCursor ,4 ,view()->projection());
+
+		Coord NewPoint = view()->projection().inverse(LastCursor);
+		const double distance = FirstPoint.distanceFrom(NewPoint);
+
+		QString distanceTag;
+		if (distance < 1.0)
+			distanceTag = QString("%1 m").arg(int(distance * 1000));
+		else
+			distanceTag = QString("%1 km").arg(distance, 0, 'f', 3);
+
+		thePainter.drawText(LastCursor + QPointF(10,-10), distanceTag);
 	}
 	GenericFeatureSnapInteraction<MapFeature>::paintEvent(anEvent,thePainter);
 }
