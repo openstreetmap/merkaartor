@@ -76,8 +76,10 @@ QPixmap ImageManager::getImage(MapAdapter* anAdapter, int x, int y, int z)
 
 	// disk cache?
 	if (useDiskCache(hash + ".png")) {
-		if (pm.load(cacheDir.absolutePath() + "/" + hash + ".png"))
+		if (pm.load(cacheDir.absolutePath() + "/" + hash + ".png")) {
+			QPixmapCache::insert(hash, pm);
 			return pm;
+		}
 		else
 			pm.fill(Qt::black);
 	}
