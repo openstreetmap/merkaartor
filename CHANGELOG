@@ -1,4 +1,5 @@
 v0.11
+	* ADD : context menu functionality to the map
 	* FIX : Show tracksegment even if it only intersects the viewport
 	* ADD : Encode speed and slope in track segments
 	* FIX : Handle relative paths when loading files

@@ -28,6 +28,7 @@ MapView::MapView(MainWindow* aMain) :
 {
 	setMouseTracking(true);
 	setAttribute(Qt::WA_OpaquePaintEvent);
+	setContextMenuPolicy(Qt::CustomContextMenu);
 
 	ImageManager::instance()->setCacheDir(MerkaartorPreferences::instance()->getCacheDir());
 	ImageManager::instance()->setCacheMaxSize(MerkaartorPreferences::instance()->getCacheSize());
@@ -372,6 +373,58 @@ Projection& MapView::projection()
 {
 	return theProjection;
 }
+
+void MapView::on_customContextMenuRequested(const QPoint & pos)
+{
+	if (EditInteraction* ei = dynamic_cast<EditInteraction*>(theInteraction)) {
+		QMenu menu;
+
+		//FIXME Some of these actions on WIN32-MSVC corrupts the heap.
+
+		//QMenu editMenu(tr("Edit"));
+		//for(int i=0; i<Main->menuEdit->actions().size(); ++i) {
+		//	if (Main->menuEdit->actions()[i]->isEnabled())
+		//		editMenu.addAction(Main->menuEdit->actions()[i]);
+		//}
+		//if (editMenu.actions().size())
+		//	menu.addMenu(&editMenu);
+
+		//QMenu createMenu(tr("Create"));
+		//for(int i=0; i<Main->menuCreate->actions().size(); ++i) {
+		//	if (Main->menuCreate->actions()[i]->isEnabled())
+		//		createMenu.addAction(Main->menuCreate->actions()[i]);
+		//}
+		//if (createMenu.actions().size())
+		//	menu.addMenu(&createMenu);
+
+		QMenu roadMenu(tr("Road"));
+		for(int i=0; i<Main->menuRoad->actions().size(); ++i) {
+			if (Main->menuRoad->actions()[i]->isEnabled())
+				roadMenu.addAction(Main->menuRoad->actions()[i]);
+		}
+		if (roadMenu.actions().size())
+			menu.addMenu(&roadMenu);
+
+		QMenu nodeMenu(tr("Node"));
+		for(int i=0; i<Main->menu_Node->actions().size(); ++i) {
+			if (Main->menu_Node->actions()[i]->isEnabled())
+				nodeMenu.addAction(Main->menu_Node->actions()[i]);
+		}
+		if (nodeMenu.actions().size())
+			menu.addMenu(&nodeMenu);
+
+		if (menu.actions().size()) {
+			if (menu.actions().size() == 1) {
+				for (int i=0; i < menu.actions()[0]->menu()->actions().size(); ++i) {
+					menu.addAction(menu.actions()[0]->menu()->actions()[i]);
+				}
+				menu.removeAction(menu.actions()[0]);
+			}
+			menu.exec(mapToGlobal(pos));
+		}
+	}
+}
+
 
 void MapView::imageRequested()
 {

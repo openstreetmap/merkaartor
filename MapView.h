@@ -74,6 +74,7 @@ class MapView :	public QWidget
 		void imageReceived();
 		void loadingFinished();
 		void updateStatusMessage();
+		void on_customContextMenuRequested(const QPoint & pos);
 };
 
 #endif

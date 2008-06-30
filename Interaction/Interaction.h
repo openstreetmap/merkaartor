@@ -47,7 +47,11 @@ class Interaction : public QObject
 	private:
 		MapView* theView;
 		bool Panning;
+		QPoint FirstPan;
 		QPoint LastPan;
+	signals:
+		void requestCustomContextMenu(const QPoint & pos);
+
 };
 
 template<class FeatureType>

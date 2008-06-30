@@ -13,6 +13,7 @@
 Interaction::Interaction(MapView* aView)
 : theView(aView), Panning(false)
 {
+	connect(this, SIGNAL(requestCustomContextMenu(const QPoint &)), theView, SLOT(on_customContextMenuRequested(const QPoint &)));
 }
 
 Interaction::~Interaction()
@@ -55,17 +56,19 @@ void Interaction::mousePressEvent(QMouseEvent * anEvent)
 #endif
 	{
 		Panning = true;
-		LastPan = anEvent->pos();
+		FirstPan = LastPan = anEvent->pos();
 	}
 }
 
-void Interaction::mouseReleaseEvent(QMouseEvent * )
+void Interaction::mouseReleaseEvent(QMouseEvent * anEvent)
 {
-	if (Panning)
-	{
-		Panning = false;
-		view()->invalidate();
+	if (Panning) {
+		if (FirstPan != LastPan)
+			view()->invalidate();
+		else
+			emit(requestCustomContextMenu(anEvent->pos()));
 	}
+	Panning = false;
 }
 
 void Interaction::mouseMoveEvent(QMouseEvent* anEvent)
