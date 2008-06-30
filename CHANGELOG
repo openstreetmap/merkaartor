@@ -1,4 +1,5 @@
 v0.11
+	* ADD : Basic support for waypoints/logpoints from gpx files
 	* ADD : altitude and velocity to NMEA import
 	* FIX : background image cache: delete older images from cache first
 	* ADD : context menu functionality to the map

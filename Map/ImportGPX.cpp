@@ -17,8 +17,11 @@ static TrackPoint* importTrkPt(const QDomElement& Root, MapDocument* /* theDocum
 {
 	double Lat = Root.attribute("lat").toDouble();
 	double Lon = Root.attribute("lon").toDouble();
+
 	TrackPoint* Pt = new TrackPoint(Coord(angToRad(Lat),angToRad(Lon)));
 	theList->add(new AddFeatureCommand(theLayer,Pt, true));
+	
+	WaypointData* waypointData = new WaypointData;
 
 	for(QDomNode n = Root.firstChild(); !n.isNull(); n = n.nextSibling())
 	{
@@ -50,7 +53,29 @@ static TrackPoint* importTrkPt(const QDomElement& Root, MapDocument* /* theDocum
 		{
 			Pt->setSpeed( t.text().toDouble() );
 		}
+		else if (t.tagName() == "name")
+		{
+			waypointData->name = t.text();	
+		}
+		else if (t.tagName() == "desc")
+		{
+			waypointData->description = t.text();
+		}
+		else if (t.tagName() == "cmt")
+		{
+			waypointData->comment = t.text();
+		}
 	}
+
+	if (waypointData->isEmpty())
+	{
+		delete waypointData;
+	}
+	else
+	{
+		Pt->setWaypoint(waypointData);
+	}
+
 	return Pt;
 }
 
@@ -89,8 +114,17 @@ static void importGPX(const QDomElement& Root, MapDocument* theDocument, MapLaye
 	for(QDomNode n = Root.firstChild(); !n.isNull(); n = n.nextSibling())
 	{
 		QDomElement t = n.toElement();
-		if (!t.isNull() && t.tagName() == "trk")
+		if (t.isNull())
+			continue;
+
+		if (t.tagName() == "trk")
+		{
 			importTrk(t,theDocument, theLayer, theList, MakeSegment);
+		}
+		else if (t.tagName() == "wpt")
+		{
+			importTrkPt(t,theDocument, theLayer, theList);
+		}
 	}
 }
 

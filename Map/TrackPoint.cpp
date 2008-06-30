@@ -6,18 +6,19 @@
 #include <QtGui/QPainter>
 
 TrackPoint::TrackPoint(const Coord& aCoord)
-: Position(aCoord), Elevation(0.0), Speed(0.0)
+: Position(aCoord), Elevation(0.0), Speed(0.0), wpt(NULL)
 {
 }
 
 TrackPoint::TrackPoint(const TrackPoint& other)
-: MapFeature(other), Position(other.Position), Elevation(0.0), Speed(0.0)
+: MapFeature(other), Position(other.Position), Elevation(0.0), Speed(0.0), wpt(NULL) 
 {
 	setTime(other.time());
 }
 
 TrackPoint::~TrackPoint(void)
 {
+	delete wpt;
 }
 
 const Coord& TrackPoint::position() const
@@ -49,6 +50,17 @@ double TrackPoint::elevation() const
 void TrackPoint::setElevation(double aElevation)
 {
 	Elevation = aElevation;
+}
+
+const WaypointData * TrackPoint::waypoint()
+{
+	return wpt;
+}
+
+void TrackPoint::setWaypoint(const WaypointData * newWaypoint)
+{
+	delete wpt;
+	wpt = newWaypoint;
 }
 
 bool TrackPoint::notEverythingDownloaded() const
@@ -205,6 +217,22 @@ QString TrackPoint::toHtml()
 	D += "<i>"+QApplication::translate("MapFeature", "coord")+": </i>" + QString::number(radToAng(position().lat()), 'f', 4) + " / " + QString::number(radToAng(position().lon()), 'f', 4) + "<br/>";
 	D += "<i>"+QApplication::translate("MapFeature", "elevation")+": </i>" + QString::number(elevation(), 'f', 4) + "<br/>";
 	D += "<i>"+QApplication::translate("MapFeature", "speed")+": </i>" + QString::number(speed(), 'f', 4) + "<br/>";
+
+	if (wpt)
+	{
+		
+		D += "<p><b>"+QApplication::translate("MapFeature", "Waypoint")+"</b><br/>";
+
+		if (wpt->name.size())
+			D += "<i>"+QApplication::translate("MapFeature", "name")+": </i>" + wpt->name + "<br/>";
+		
+		if (wpt->description.size())
+			D += "<i>"+QApplication::translate("MapFeature", "description")+": </i>" + wpt->description + "<br/>";
+		
+		if (wpt->comment.size())
+			D += "<i>"+QApplication::translate("MapFeature", "comment")+": </i>" + wpt->comment + "<br/>";
+		
+	}
 
 	return MapFeature::toMainHtml(QApplication::translate("MapFeature", "Node"), "node").arg(D);
 }
