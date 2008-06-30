@@ -287,7 +287,7 @@ void MapFeaturePrivate::updatePainters(double PixelPerM)
 	//if the object has no tags or only the created_by tag, we don't check for style
 	//search is about 15 times faster like that !!!
 	//However, still match features with no tags and no parent, i.e. "lost" trackpoints
-	if(theFeature->sizeParents() && (theFeature->tagSize()==0 || (theFeature->tagSize()==1 && theFeature->tagKey(0)=="created_by" )))
+	if(( ( (dynamic_cast<TrackMapLayer*>(theFeature->layer())) || theFeature->sizeParents() ) && (theFeature->tagSize()==0 || (theFeature->tagSize()==1 && theFeature->tagKey(0)=="created_by" ))))
 	{
 		PossiblePainters.clear();
 		CurrentPainter = 0;
