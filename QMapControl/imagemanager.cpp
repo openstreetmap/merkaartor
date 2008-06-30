@@ -41,7 +41,7 @@ void ImageManager::setCacheDir(const QDir& path)
 	if (!cacheDir.exists()) {
 		cacheDir.mkpath(cacheDir.absolutePath());
 	} else {
-		cacheInfo = cacheDir.entryInfoList(QDir::Files, QDir::Time);
+		cacheInfo = cacheDir.entryInfoList(QDir::Files, QDir::Time | QDir::Reversed);
 		for (int i=0; i<cacheInfo.size(); i++) {
 			cacheSize += cacheInfo[i].size();
 		}
