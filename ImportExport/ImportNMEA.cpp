@@ -16,7 +16,7 @@
 
 
 ImportNMEA::ImportNMEA(MapDocument* doc)
- : IImportExport(doc)
+ : IImportExport(doc), curAltitude(0.0)
 {
 }
 
@@ -68,9 +68,7 @@ bool ImportNMEA::import(MapLayer* aLayer)
 		} else
 		if (command == "GGA") {
 			if (goodFix) {
-/*				TrackPoint* p = importGGA(line);
-				if (p)
-					TS->add(p);*/
+				importGGA(line);
 			}
 		} else
 		if (command == "RMC") {
@@ -111,40 +109,27 @@ bool ImportNMEA::importGSV (QString /* line */)
 	return true;
 }
 
-TrackPoint* ImportNMEA::importGGA (QString line)
+void ImportNMEA::importGGA (QString line)
 {
 	QStringList tokens = line.split(",");
 
-	double lat = tokens[2].left(2).toDouble();
-	double lon = tokens[4].left(3).toDouble();
+	//double lat = tokens[2].left(2).toDouble();
+	//double lon = tokens[4].left(3).toDouble();
 
-	double latmin = tokens[2].mid(2).toDouble();
-	lat += latmin / 60.0;
-	if (tokens[3] != "N")
-		lat = -lat;
-	double lonmin = tokens[4].mid(3).toDouble();
-	lon += lonmin / 60.0;
-	if (tokens[5] != "E")
-		lon = -lon;
+	//double latmin = tokens[2].mid(2).toDouble();
+	//lat += latmin / 60.0;
+	//if (tokens[3] != "N")
+	//	lat = -lat;
+	//double lonmin = tokens[4].mid(3).toDouble();
+	//lon += lonmin / 60.0;
+	//if (tokens[5] != "E")
+	//	lon = -lon;
 
-		int fix = tokens[6].toInt();
+	int fix = tokens[6].toInt();
 	if (fix == 0)
-		return NULL;
+		return;
 
-
-	QDateTime date = QDateTime::fromString(tokens[9] + tokens[1], "ddMMyyHHmmss.zzz");
-	if (!date.isValid())
-		return NULL;
-
-	if (date.date().year() < 1970)
-		date = date.addYears(100);
-	date.setTimeSpec(Qt::UTC);
-
-	TrackPoint* Pt = new TrackPoint(Coord(angToRad(lat),angToRad(lon)));
-	theList->add(new AddFeatureCommand(theLayer,Pt, true));
-	Pt->setTime(date);
-
-	return Pt;
+	curAltitude = tokens[9].toDouble();
 }
 
 TrackPoint* ImportNMEA::importRMC (QString line)
@@ -167,6 +152,7 @@ TrackPoint* ImportNMEA::importRMC (QString line)
 	lon += lonmin / 60.0;
 	if (tokens[6] != "E")
 		lon = -lon;
+	double speed = tokens[7].toDouble() * 1.852;
 	//int date = token[9];
 
 	QString strDate = tokens[9] + tokens[1];
@@ -179,6 +165,8 @@ TrackPoint* ImportNMEA::importRMC (QString line)
 	date.setTimeSpec(Qt::UTC);
 
 	TrackPoint* Pt = new TrackPoint(Coord(angToRad(lat),angToRad(lon)));
+	Pt->setElevation(curAltitude);
+	Pt->setSpeed(speed);
 	theList->add(new AddFeatureCommand(theLayer,Pt, true));
 	Pt->setTime(date);
 
