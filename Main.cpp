@@ -5,6 +5,7 @@
 #include <QLocale>
 
 #include "MainWindow.h" 
+#include "Preferences/MerkaartorPreferences.h"
 
 int main(int argc, char** argv)
 {
@@ -41,6 +42,9 @@ int main(int argc, char** argv)
 	QStringList fileNames = QCoreApplication::arguments();
 	fileNames.removeFirst();
 	Main.loadFiles(fileNames);
+
+	if (fileNames.isEmpty())
+		QDir::setCurrent(MerkaartorPreferences::instance()->getWorkingDir());
 
 	Main.show();
 

@@ -94,9 +94,6 @@ MainWindow::MainWindow(void)
 	addDockWidget(Qt::RightDockWidgetArea, theDirty);
 
 	connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));
-
-	QDir::setCurrent(MerkaartorPreferences::instance()->getWorkingDir());
-
 	connect (theLayers, SIGNAL(layersChanged(bool)), this, SLOT(adjustLayers(bool)));
 
 	updateBookmarksMenu();
