@@ -8,7 +8,7 @@
 #include "Sync/DirtyList.h"
 
 AddFeatureCommand::AddFeatureCommand(MapLayer* aDocument, MapFeature* aFeature, bool aUserAdded)
-: theLayer(aDocument), theFeature(aFeature), UserAdded(aUserAdded), RemoveOnDelete(false)
+: theLayer(aDocument), theFeature(aFeature), UserAdded(aUserAdded)
 {
 	redo();
 }
@@ -17,21 +17,22 @@ AddFeatureCommand::~AddFeatureCommand()
 {
 	if (theLayer)
 		theLayer->decDirtyLevel(commandDirtyLevel);
-	if (RemoveOnDelete)
-		delete theFeature;
 }
 
 void AddFeatureCommand::undo()
 {
 	theLayer->remove(theFeature);
-	RemoveOnDelete = true;
+	if (oldLayer)
+		oldLayer->add(theFeature);
 	decDirtyLevel(theLayer);
 }
 
 void AddFeatureCommand::redo()
 {
+	oldLayer = theFeature->layer();
+	if (oldLayer) 
+		oldLayer->remove(theFeature);
 	theLayer->add(theFeature);
-	RemoveOnDelete = false;
 	incDirtyLevel(theLayer);
 }
 
@@ -52,8 +53,11 @@ bool AddFeatureCommand::toXML(QDomElement& xParent) const
 
 	e.setAttribute("xml:id", id());
 	e.setAttribute("layer", theLayer->id());
+	if (oldLayer)
+		e.setAttribute("oldlayer", oldLayer->id());
 	e.setAttribute("feature", theFeature->xmlId());
 	e.setAttribute("useradded", QString(UserAdded ? "true" : "false"));
+
 	return OK;
 }
 
@@ -63,14 +67,17 @@ AddFeatureCommand * AddFeatureCommand::fromXML(MapDocument* d, QDomElement e)
 
 	a->setId(e.attribute("xml:id"));
 	a->theLayer = d->getLayer(e.attribute("layer"));
+	if (e.hasAttribute("oldlayer"))
+		a->oldLayer = d->getLayer(e.attribute("oldlayer"));
+	else
+		a->oldLayer = NULL;
+
 	MapFeature* F;
-	if (!(F = d->getFeature("node_"+e.attribute("feature"))))
-		if (!(F = d->getFeature("way_"+e.attribute("feature"))))
-			if (!(F = d->getFeature("rel_"+e.attribute("feature"))))
-				return NULL;
+	if (!(F = d->getFeature(e.attribute("feature"), false)))
+		return NULL;
+
 	a->theFeature = F;
 	a->UserAdded = (e.attribute("useradded") == "true" ? true : false);
-	a->	RemoveOnDelete = false;
 
 	return a;
 }
@@ -78,27 +85,28 @@ AddFeatureCommand * AddFeatureCommand::fromXML(MapDocument* d, QDomElement e)
 /* REMOVEFEATURECOMMAND */
 
 RemoveFeatureCommand::RemoveFeatureCommand()
-: theLayer(0), Idx(0), theFeature(0), CascadedCleanUp(0), RemoveExecuted(false), RemoveOnDelete(true)
+: theLayer(0), Idx(0), theFeature(0), CascadedCleanUp(0), RemoveExecuted(false)
 {
 }
 
 RemoveFeatureCommand::RemoveFeatureCommand(MapDocument *theDocument, MapFeature *aFeature)
-: theLayer(0), Idx(0), theFeature(aFeature), CascadedCleanUp(0), RemoveExecuted(false), RemoveOnDelete(true)
+: theLayer(0), Idx(0), theFeature(aFeature), CascadedCleanUp(0), RemoveExecuted(false)
 {
 	for (FeatureIterator it(theDocument); !it.isEnd(); ++it)
 	{
 		if (it.get() == aFeature)
 		{
-			theLayer = it.layer();
+			oldLayer = it.layer();
 			Idx = it.index();
 			break;
 		}
 	}
+	theLayer = theDocument->getTrashLayer();
 	redo();
 }
 
 RemoveFeatureCommand::RemoveFeatureCommand(MapDocument *theDocument, MapFeature *aFeature, const std::vector<MapFeature*>& Alternatives)
-: theLayer(0), Idx(0), theFeature(aFeature), CascadedCleanUp(0), RemoveExecuted(false), RemoveOnDelete(true), theAlternatives(Alternatives)
+: theLayer(0), Idx(0), theFeature(aFeature), CascadedCleanUp(0), RemoveExecuted(false), theAlternatives(Alternatives)
 {
 	CascadedCleanUp  = new CommandList(MainWindow::tr("Cascaded cleanup"), NULL);
 	for (FeatureIterator it(theDocument); !it.isEnd(); ++it)
@@ -112,46 +120,46 @@ RemoveFeatureCommand::RemoveFeatureCommand(MapDocument *theDocument, MapFeature 
 	{
 		if (it.get() == aFeature)
 		{
-			theLayer = it.layer();
+			oldLayer = it.layer();
 			Idx = it.index();
 			break;
 		}
 	}
 //	redo();
-	theLayer->remove(theFeature);
-	theLayer->incDirtyLevel();
+	theLayer = theDocument->getTrashLayer();
+	oldLayer->remove(theFeature);
+	theLayer->add(theFeature);
+	oldLayer->incDirtyLevel();
 }
 
 RemoveFeatureCommand::~RemoveFeatureCommand()
 {
-	if (theLayer)
-		theLayer->decDirtyLevel(commandDirtyLevel);
+	if (oldLayer)
+		oldLayer->decDirtyLevel(commandDirtyLevel);
 	delete CascadedCleanUp;
-	if (RemoveOnDelete)
-		delete theFeature;
 }
 
 void RemoveFeatureCommand::redo()
 {
 	if (CascadedCleanUp)
 		CascadedCleanUp->redo();
-	theLayer->remove(theFeature);
-	incDirtyLevel(theLayer);
-	RemoveOnDelete = true;
+	oldLayer->remove(theFeature);
+	theLayer->add(theFeature);
+	incDirtyLevel(oldLayer);
 }
 
 void RemoveFeatureCommand::undo()
 {
-	theLayer->add(theFeature,Idx);
-	decDirtyLevel(theLayer);
+	theLayer->remove(theFeature);
+	oldLayer->add(theFeature,Idx);
+	decDirtyLevel(oldLayer);
 	if (CascadedCleanUp)
 		CascadedCleanUp->undo();
-	RemoveOnDelete = false;
 }
 
 bool RemoveFeatureCommand::buildDirtyList(DirtyList &theList)
 {
-	if (!theLayer->isUploadable())
+	if (!oldLayer->isUploadable())
 		return false;
 
 	if (CascadedCleanUp && CascadedCleanUp->buildDirtyList(theList))
@@ -172,17 +180,9 @@ bool RemoveFeatureCommand::toXML(QDomElement& xParent) const
 	xParent.appendChild(e);
 
 	e.setAttribute("xml:id", id());
-	e.setAttribute("layer", theLayer->id());
-//	e.setAttribute("feature", theFeature->xmlId());
+	e.setAttribute("layer", oldLayer->id());
+	e.setAttribute("feature", theFeature->xmlId());
 	e.setAttribute("index", QString::number(Idx));
-
-	QString S = theFeature->toXML();
-
-	QDomDocument xd;
-	xd.setContent(S);
-
-	QDomNode n = xParent.ownerDocument().importNode(xd.documentElement(), true);
-	e.appendChild(n);
 
 	if (CascadedCleanUp) {
 		QDomElement casc = xParent.ownerDocument().createElement("Cascaded");
@@ -211,29 +211,10 @@ RemoveFeatureCommand * RemoveFeatureCommand::fromXML(MapDocument* d, QDomElement
 	RemoveFeatureCommand* a = new RemoveFeatureCommand();
 
 	a->setId(e.attribute("xml:id"));
-	a->theLayer = d->getLayer(e.attribute("layer"));
-//	a->theFeature = d->getFeature(e.attribute("feature"));
+	a->oldLayer = d->getLayer(e.attribute("layer"));
+	a->theLayer = d->getTrashLayer();
+	a->theFeature = d->getFeature(e.attribute("feature"), false);
 	a->Idx = e.attribute("index").toInt();
-	a->	RemoveOnDelete = true;
-
-	QDomElement c = e.firstChildElement();
-	while(!c.isNull()) {
-		if (c.tagName() == "way") {
-			a->theFeature = Road::fromXML(d, a->theLayer, c);
-		} else
-		if (c.tagName() == "relation") {
-			a->theFeature =  Relation::fromXML(d, a->theLayer, c);
-		} else
-		if (c.tagName() == "node") {
-			a->theFeature = TrackPoint::fromXML(d, a->theLayer, c);
-		} else
-		if (c.tagName() == "Cascaded") {
-			a->CascadedCleanUp = CommandList::fromXML(d, c.firstChildElement());
-		}
-		c = c.nextSiblingElement();
-	}
-	if (a->theFeature)
-		a->theLayer->remove(a->theFeature);
 
 	return a;
 }

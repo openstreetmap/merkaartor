@@ -42,7 +42,7 @@ static bool isInterestingPoint(MapDocument* theDocument, TrackPoint* Pt)
 		return true;
 	// if the user has added special tags, that's fine also
 	for (unsigned int i=0; i<Pt->tagSize(); ++i)
-		if (Pt->tagKey(i) != "created_by")
+		if ((Pt->tagKey(i) != "created_by") && (Pt->tagKey(i) != "ele"))
 			return true;
 	// if it is part of a road, then too
 	for (unsigned int j=0; j<theDocument->layerSize(); ++j)
@@ -200,10 +200,17 @@ bool DirtyListVisit::update(MapFeature* F)
 		else
 			return EraseFromHistory;
 	}
-	else if (Road* R = dynamic_cast<Road*>(F))
+	else if (Road* R = dynamic_cast<Road*>(F)) {
+		for (unsigned int i=0; i<R->size(); ++i)
+			if (!hasOSMId(R->get(i)) && notYetAdded(R->get(i)))
+				add(R->get(i));
 		return updateRoad(R);
-	else if (Relation* S = dynamic_cast<Relation*>(F))
-		return updateRelation(S);
+	} else if (Relation* Rel = dynamic_cast<Relation*>(F)) {
+		for (unsigned int i=0; i<Rel->size(); ++i)
+			if (!hasOSMId(Rel->get(i)) && notYetAdded(Rel->get(i)))
+				add(Rel->get(i));
+		return updateRelation(Rel);
+	}
 	return EraseFromHistory;
 }
 

@@ -40,17 +40,19 @@ void LayerDock::clearLayers()
 void LayerDock::addLayer(MapLayer* aLayer)
 {
 	LayerWidget* w = aLayer->newWidget();
-	layerList.append(qMakePair(aLayer, w));
-	butGroup->addButton(w);
-	Layout->insertWidget(layerList.size()-1, w);
-	w->setChecked(aLayer->isSelected());
+	if (w) {
+		layerList.append(qMakePair(aLayer, w));
+		butGroup->addButton(w);
+		Layout->insertWidget(layerList.size()-1, w);
+		w->setChecked(aLayer->isSelected());
 
-	connect(w, SIGNAL(layerChanged(LayerWidget*,bool)), this, SLOT(layerChanged(LayerWidget*,bool)));
-	connect(w, SIGNAL(layerClosed(MapLayer*)), this, SLOT(layerClosed(MapLayer*)));
-	connect(w, SIGNAL(layerCleared(MapLayer*)), this, SLOT(layerCleared(MapLayer*)));
-	connect(w, SIGNAL(layerZoom(MapLayer*)), this, SLOT(layerZoom(MapLayer*)));
+		connect(w, SIGNAL(layerChanged(LayerWidget*,bool)), this, SLOT(layerChanged(LayerWidget*,bool)));
+		connect(w, SIGNAL(layerClosed(MapLayer*)), this, SLOT(layerClosed(MapLayer*)));
+		connect(w, SIGNAL(layerCleared(MapLayer*)), this, SLOT(layerCleared(MapLayer*)));
+		connect(w, SIGNAL(layerZoom(MapLayer*)), this, SLOT(layerZoom(MapLayer*)));
 
-	update();
+		update();
+	}
 }
 
 void LayerDock::deleteLayer(MapLayer* aLayer)

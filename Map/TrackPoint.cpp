@@ -11,7 +11,7 @@ TrackPoint::TrackPoint(const Coord& aCoord)
 }
 
 TrackPoint::TrackPoint(const TrackPoint& other)
-: MapFeature(other), Position(other.Position), Elevation(0.0), Speed(0.0), wpt(NULL) 
+: MapFeature(other), Position(other.Position), Elevation(other.Elevation), Speed(other.Speed), wpt(NULL)
 {
 	setTime(other.time());
 }
@@ -179,11 +179,9 @@ TrackPoint * TrackPoint::fromXML(MapDocument* d, MapLayer* L, const QDomElement 
 		time = QDateTime::fromString(e.attribute("time"), Qt::ISODate);
 	QString user = e.attribute("user");
 
-	QString id;
-	if (e.hasAttribute("id"))
-		id = "node_"+e.attribute("id");
-	else
-		id = "node_"+e.attribute("xml:id");
+	QString id = (e.hasAttribute("id") ? e.attribute("id") : e.attribute("xml:id"));
+	if (!id.startsWith('{'))
+		id = "node_" + id;
 	TrackPoint* Pt = dynamic_cast<TrackPoint*>(d->getFeature(id));
 	if (!Pt) {
 		Pt = new TrackPoint(Coord(angToRad(Lat),angToRad(Lon)));

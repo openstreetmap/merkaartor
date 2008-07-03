@@ -72,7 +72,7 @@ Road::Road(void)
 }
 
 Road::Road(const Road& other)
-: MapFeature(other), p(0)
+: MapFeature(other), p(new RoadPrivate)
 {
 }
 
@@ -338,7 +338,9 @@ void Road::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature,
 				for (unsigned int j=0; j<Alternatives.size(); ++j)
 					if (i < p->Nodes.size())
 						if (p->Nodes[i+j] != Alternatives[j])
-							if (p->Nodes[i+j-1] != Alternatives[j])
+							if ((i+j) == 0)
+								theList->add(new RoadAddTrackPointCommand(this, Alternatives[j], i+j,theDocument->getDirtyOrOriginLayer(Alternatives[j]->layer())));
+							else if (p->Nodes[i+j-1] != Alternatives[j])
 								theList->add(new RoadAddTrackPointCommand(this, Alternatives[j], i+j,theDocument->getDirtyOrOriginLayer(Alternatives[j]->layer())));
 				theList->add(new RoadRemoveTrackPointCommand(this, (TrackPoint*)aFeature,theDocument->getDirtyOrOriginLayer(aFeature->layer())));
 			}
@@ -408,7 +410,9 @@ bool Road::toXML(QDomElement xParent)
 
 Road * Road::fromXML(MapDocument* d, MapLayer * L, const QDomElement e)
 {
-	QString id = "way_"+e.attribute("id");
+	QString id = e.attribute("id");
+	if (!id.startsWith('{'))
+		id = "way_" + id;
 	QDateTime time = QDateTime::fromString(e.attribute("timestamp"), Qt::ISODate);
 	QString user = e.attribute("user");
 
@@ -419,9 +423,7 @@ Road * Road::fromXML(MapDocument* d, MapLayer * L, const QDomElement e)
 		R->setId(id);
 		R->setLastUpdated(MapFeature::OSMServer);
 	} else {
-		if (R->layer() != L) {
-			R->layer()->remove(R);
-		}
+		R->layer()->remove(R);
 	}
 	R->setTime(time);
 	R->setUser(user);
@@ -429,7 +431,9 @@ Road * Road::fromXML(MapDocument* d, MapLayer * L, const QDomElement e)
 	QDomElement c = e.firstChildElement();
 	while(!c.isNull()) {
 		if (c.tagName() == "nd") {
-			QString nId = "node_"+c.attribute("ref");
+			QString nId = c.attribute("ref");
+			if (!nId.startsWith('{'))
+				nId = "node_" + nId;
 			//TrackPoint* Part = MapFeature::getTrackPointOrCreatePlaceHolder(d, L, NULL, c.attribute("ref"));
 			TrackPoint* Part = dynamic_cast<TrackPoint*>(d->getFeature(nId));
 			if (!Part)

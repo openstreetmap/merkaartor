@@ -78,6 +78,14 @@ RelationAddFeatureCommand * RelationAddFeatureCommand::fromXML(MapDocument * d, 
 {
 	RelationAddFeatureCommand* a = new RelationAddFeatureCommand();
 	a->setId(e.attribute("xml:id"));
+	if (e.hasAttribute("layer"))
+		a->theLayer = d->getLayer(e.attribute("layer"));
+	else
+		a->theLayer = NULL;
+	if (e.hasAttribute("oldlayer"))
+		a->oldLayer = d->getLayer(e.attribute("oldlayer"));
+	else
+		a->oldLayer = NULL;
 	a->theRelation = MapFeature::getRelationOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("relation"));
 	MapFeature* F;
 	if (e.attribute("featureclass") == "TrackPoint") {
@@ -89,10 +97,8 @@ RelationAddFeatureCommand * RelationAddFeatureCommand::fromXML(MapDocument * d, 
 	if (e.attribute("featureclass") == "Relation") {
 		F = (MapFeature*) MapFeature::getRelationOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("road"));
 	} else {
-		if (!(F = d->getFeature("node_"+e.attribute("feature"))))
-			if (!(F = d->getFeature("way_"+e.attribute("feature"))))
-				if (!(F = d->getFeature("rel_"+e.attribute("feature"))))
-					return NULL;
+		if (!(F = d->getFeature(e.attribute("feature"), false)))
+			return NULL;
 	}
 	a->Role = e.attribute("role");
 	a->theMapFeature = F;
@@ -186,25 +192,6 @@ RelationRemoveFeatureCommand * RelationRemoveFeatureCommand::fromXML(MapDocument
 	RelationRemoveFeatureCommand* a = new RelationRemoveFeatureCommand();
 
 	a->setId(e.attribute("xml:id"));
-	a->theRelation = MapFeature::getRelationOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("relation"));
-	MapFeature* F;
-	if (e.attribute("featureclass") == "TrackPoint") {
-		F = (MapFeature*) MapFeature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("trackpoint"));
-	} else 
-	if (e.attribute("featureclass") == "Road") {
-		F = (MapFeature*) MapFeature::getWayOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("road"));
-	} else 
-	if (e.attribute("featureclass") == "Relation") {
-		F = (MapFeature*) MapFeature::getRelationOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("road"));
-	} else {
-		if (!(F = d->getFeature("node_"+e.attribute("feature"))))
-			if (!(F = d->getFeature("way_"+e.attribute("feature"))))
-				if (!(F = d->getFeature("rel_"+e.attribute("feature"))))
-					return NULL;
-	}
-	a->theMapFeature = F;
-	a->Idx = e.attribute("index").toInt();
-	a->Role = a->theRelation->getRole(a->Idx);
 	if (e.hasAttribute("layer"))
 		a->theLayer = d->getLayer(e.attribute("layer"));
 	else
@@ -213,6 +200,20 @@ RelationRemoveFeatureCommand * RelationRemoveFeatureCommand::fromXML(MapDocument
 		a->oldLayer = d->getLayer(e.attribute("oldlayer"));
 	else
 		a->oldLayer = NULL;
+	a->theRelation = MapFeature::getRelationOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("relation"));
+	MapFeature* F;
+	if (e.attribute("featureclass") == "TrackPoint") {
+		F = (MapFeature*) MapFeature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("feature"));
+	} else 
+	if (e.attribute("featureclass") == "Road") {
+		F = (MapFeature*) MapFeature::getWayOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("feature"));
+	} else 
+	if (e.attribute("featureclass") == "Relation") {
+		F = (MapFeature*) MapFeature::getRelationOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("feature"));
+	}
+	a->theMapFeature = F;
+	a->Idx = e.attribute("index").toInt();
+	a->Role = a->theRelation->getRole(a->Idx);
 
 	return a;
 }

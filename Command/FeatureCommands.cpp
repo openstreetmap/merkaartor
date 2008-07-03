@@ -137,8 +137,8 @@ SetTagCommand * SetTagCommand::fromXML(MapDocument * d, QDomElement e)
 	SetTagCommand* a = new SetTagCommand();
 	a->setId(e.attribute("xml:id"));
 	MapFeature* F;
-	if (!(F = d->getFeature("node_"+e.attribute("feature"))))
-		if (!(F = d->getFeature("way_"+e.attribute("feature"))))
+	if (!(F = d->getFeature(e.attribute("feature"), false)))
+		return NULL;
 	if (e.hasAttribute("oldkey"))
 		a->oldK = e.attribute("oldkey");
 			if (!(F = d->getFeature("rel_"+e.attribute("feature"))))
@@ -228,10 +228,8 @@ ClearTagsCommand * ClearTagsCommand::fromXML(MapDocument * d, QDomElement e)
 	ClearTagsCommand* a = new ClearTagsCommand();
 	a->setId(e.attribute("xml:id"));
 	MapFeature* F;
-	if (!(F = d->getFeature("node_"+e.attribute("feature"))))
-		if (!(F = d->getFeature("way_"+e.attribute("feature"))))
-			if (!(F = d->getFeature("rel_"+e.attribute("feature"))))
-				return NULL;
+	if (!(F = d->getFeature(e.attribute("feature"), false)))
+		return NULL;
 	a->theFeature = F;
 	if (e.hasAttribute("layer"))
 		a->theLayer = d->getLayer(e.attribute("layer"));
@@ -308,10 +306,8 @@ ClearTagCommand * ClearTagCommand::fromXML(MapDocument * d, QDomElement e)
 	ClearTagCommand* a = new ClearTagCommand();
 	a->setId(e.attribute("xml:id"));
 	MapFeature* F;
-	if (!(F = d->getFeature("node_"+e.attribute("feature"))))
-		if (!(F = d->getFeature("way_"+e.attribute("feature"))))
-			if (!(F = d->getFeature("rel_"+e.attribute("feature"))))
-				return NULL;
+	if (!(F = d->getFeature(e.attribute("feature"), false)))
+		return NULL;
 	a->theFeature = F;
 	a->theIdx = e.attribute("idx").toUInt();
 	a->theK = e.attribute("key");

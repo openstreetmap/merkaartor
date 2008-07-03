@@ -23,7 +23,7 @@ class MapDocumentPrivate
 {
 public:
 	MapDocumentPrivate()
-	: History(new CommandHistory()), imageLayer(0), dirtyLayer(0), uploadedLayer(0), theDock(0), lastDownloadLayer(0)
+	: History(new CommandHistory()), imageLayer(0), dirtyLayer(0), uploadedLayer(0), trashLayer(0), theDock(0), lastDownloadLayer(0)
 	{
     	tagList.insert("created_by", QString("Merkaartor %1").arg(VERSION));
 		tagKeys.append("created_by");
@@ -44,6 +44,7 @@ public:
 	ImageMapLayer*				imageLayer;
 	DirtyMapLayer*				dirtyLayer;
 	UploadedMapLayer*			uploadedLayer;
+	DeletedMapLayer*			trashLayer;
 	LayerDock*					theDock;
 	MapLayer*					lastDownloadLayer;
 
@@ -60,6 +61,9 @@ MapDocument::MapDocument()
 	p->imageLayer = new ImageMapLayer(tr("Background imagery"));
 	add(p->imageLayer);
 
+	p->trashLayer = new DeletedMapLayer(tr("Trash layer"));
+	add(p->trashLayer);
+
 	p->dirtyLayer = new DirtyMapLayer(tr("Dirty layer"));
 	add(p->dirtyLayer);
 
@@ -74,6 +78,9 @@ MapDocument::MapDocument(LayerDock* aDock)
 
 	p->imageLayer = new ImageMapLayer(tr("Background imagery"));
 	add(p->imageLayer);
+
+	p->trashLayer = new DeletedMapLayer(tr("Trash layer"));
+	add(p->trashLayer);
 
 	p->dirtyLayer = new DirtyMapLayer(tr("Dirty layer"));
 	add(p->dirtyLayer);
@@ -112,7 +119,7 @@ bool MapDocument::toXML(QDomElement xParent)
 	return OK;
 }
 
-MapDocument* MapDocument::fromXML(const QDomElement e, LayerDock* aDock)
+MapDocument* MapDocument::fromXML(const QDomElement e, double version, LayerDock* aDock)
 {
 	MapDocument* NewDoc = new MapDocument(aDock);
 
@@ -137,6 +144,9 @@ MapDocument* MapDocument::fromXML(const QDomElement e, LayerDock* aDock)
 		if (c.tagName() == "ImageMapLayer") {
 			/* ImageMapLayer* l = */ ImageMapLayer::fromXML(NewDoc, c);
 		} else
+		if (c.tagName() == "DeletedMapLayer") {
+			/* TrashMapLayer* l = */ DeletedMapLayer::fromXML(NewDoc, c);
+		} else
 		if (c.tagName() == "DirtyMapLayer") {
 			/* DirtyMapLayer* l = */ DirtyMapLayer::fromXML(NewDoc, c);
 		} else
@@ -145,22 +155,23 @@ MapDocument* MapDocument::fromXML(const QDomElement e, LayerDock* aDock)
 		} else
 		if (c.tagName() == "DrawingMapLayer") {
 			/* DrawingMapLayer* l = */ DrawingMapLayer::fromXML(NewDoc, c);
-/*			if (l)
-				NewDoc->add(l);				*/
 		} else
 		if (c.tagName() == "TrackMapLayer") {
 			/* TrackMapLayer* l = */ TrackMapLayer::fromXML(NewDoc, c);
-/*			if (l)
-			NewDoc->add(l);				*/
+		} else
+		if (c.tagName() == "ExtractedMapLayer") {
+			/* ExtractedMapLayer* l = */ ExtractedMapLayer::fromXML(NewDoc, c);
 		} else
 		if (c.tagName() == "CommandHistory") {
-			h = CommandHistory::fromXML(NewDoc, c);
+			if (version > 1.0)
+				h = CommandHistory::fromXML(NewDoc, c);
 		}
 		c = c.nextSiblingElement();
 	}
 
 	if (NewDoc) {
-		NewDoc->setHistory(h);
+		if (h)
+			NewDoc->setHistory(h);
 	}
 
 	return NewDoc;
@@ -359,13 +370,21 @@ QVector<MapFeature*> MapDocument::getFeatures()
 	return theFeatures;
 }
 
-MapFeature* MapDocument::getFeature(const QString& id)
+MapFeature* MapDocument::getFeature(const QString& id, bool exact)
 {
 	for (unsigned int i=0; i<p->Layers.size(); ++i)
 	{
 		MapFeature* F = p->Layers[i]->get(id);
 		if (F) 
 			return F;
+		if (!exact) {
+			if ((F = p->Layers[i]->get("node_"+id)))
+				return F;
+			if ((F = p->Layers[i]->get("way_"+id)))
+				return F;
+			if ((F = p->Layers[i]->get("rel_"+id)))
+				return F;
+		}
 	}
 	return 0;
 }
@@ -378,6 +397,11 @@ ImageMapLayer* MapDocument::getImageLayer() const
 DirtyMapLayer* MapDocument::getDirtyLayer() const
 {
 	return p->dirtyLayer;
+}
+
+DeletedMapLayer* MapDocument::getTrashLayer() const
+{
+	return p->trashLayer;
 }
 
 MapLayer* MapDocument::getDirtyOrOriginLayer(MapLayer* aLayer) 

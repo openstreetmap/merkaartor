@@ -28,17 +28,9 @@
         <enum>QTabWidget::North</enum>
        </property>
        <property name="currentIndex" >
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="tab_4" >
-        <property name="geometry" >
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>540</width>
-          <height>448</height>
-         </rect>
-        </property>
         <attribute name="title" >
          <string>Visual</string>
         </attribute>
@@ -135,7 +127,7 @@
            </property>
            <layout class="QVBoxLayout" >
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_2" >
+             <layout class="QHBoxLayout" >
               <item>
                <widget class="QRadioButton" name="StyleBuiltin" >
                 <property name="text" >
@@ -210,7 +202,7 @@
            <property name="orientation" >
             <enum>Qt::Vertical</enum>
            </property>
-           <property name="sizeHint" stdset="0" >
+           <property name="sizeHint" >
             <size>
              <width>20</width>
              <height>40</height>
@@ -221,14 +213,6 @@
         </layout>
        </widget>
        <widget class="QWidget" name="tab_3" >
-        <property name="geometry" >
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>540</width>
-          <height>448</height>
-         </rect>
-        </property>
         <attribute name="title" >
          <string>Data</string>
         </attribute>
@@ -316,11 +300,27 @@
           </widget>
          </item>
          <item>
+          <widget class="QGroupBox" name="groupBox_7" >
+           <property name="title" >
+            <string>Tracks</string>
+           </property>
+           <layout class="QVBoxLayout" >
+            <item>
+             <widget class="QCheckBox" name="cbAutoExtractTracks" >
+              <property name="text" >
+               <string>Automatically extract tracks on open</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
           <spacer>
            <property name="orientation" >
             <enum>Qt::Vertical</enum>
            </property>
-           <property name="sizeHint" stdset="0" >
+           <property name="sizeHint" >
             <size>
              <width>20</width>
              <height>0</height>
@@ -331,14 +331,6 @@
         </layout>
        </widget>
        <widget class="QWidget" name="tab" >
-        <property name="geometry" >
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>540</width>
-          <height>448</height>
-         </rect>
-        </property>
         <attribute name="title" >
          <string>Network</string>
         </attribute>
@@ -404,7 +396,7 @@
            <property name="orientation" >
             <enum>Qt::Vertical</enum>
            </property>
-           <property name="sizeHint" stdset="0" >
+           <property name="sizeHint" >
             <size>
              <width>20</width>
              <height>0</height>
@@ -415,14 +407,6 @@
         </layout>
        </widget>
        <widget class="QWidget" name="tab_2" >
-        <property name="geometry" >
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>540</width>
-          <height>448</height>
-         </rect>
-        </property>
         <attribute name="title" >
          <string>Background Image</string>
         </attribute>
@@ -516,7 +500,7 @@
            <property name="sizeType" >
             <enum>QSizePolicy::Expanding</enum>
            </property>
-           <property name="sizeHint" stdset="0" >
+           <property name="sizeHint" >
             <size>
              <width>496</width>
              <height>0</height>
@@ -542,7 +526,7 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons" >
-      <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>

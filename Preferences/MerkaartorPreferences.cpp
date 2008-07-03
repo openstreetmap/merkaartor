@@ -615,6 +615,8 @@ bool MerkaartorPreferences::getDrawTileBoundary()
 	return false;
 }
 
+/* DATA */
+
 bool MerkaartorPreferences::getAutoSaveDoc() const
 {
 	return Sets->value("data/AutoSaveDoc", false).toBool();
@@ -625,6 +627,17 @@ void MerkaartorPreferences::setAutoSaveDoc(bool theValue)
 	Sets->setValue("data/AutoSaveDoc", theValue);
 }
 
+void MerkaartorPreferences::setAutoExtractTracks(bool theValue)
+{
+	Sets->setValue("data/AutoExtractTracks", theValue);
+}
+
+bool MerkaartorPreferences::getAutoExtractTracks() const
+{
+	return Sets->value("data/AutoExtractTracks", true).toBool();
+}
+
+	
 bool MerkaartorPreferences::getDownloadedVisible() const
 {
 	return Sets->value("visual/DownloadedVisible", true).toBool();

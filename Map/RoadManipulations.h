@@ -15,6 +15,7 @@ void breakRoads(MapDocument* theDocument, CommandList* theList, PropertiesDock* 
 void reversePoints(MapDocument* theDocument, CommandList* theList, Road* R);
 void alignNodes(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock);
 void mergeNodes(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock);
+void commitFeatures(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock);
 
 #endif
 

@@ -12,6 +12,7 @@ class Relation : public MapFeature
 {
 	public:
 		Relation(void);
+		Relation(const Relation&);
 		virtual ~Relation(void);
 
 		virtual QString getClass() const {return "Relation";};
@@ -50,7 +51,6 @@ class Relation : public MapFeature
 		static Relation* fromBinary(MapDocument* d, MapLayer* L, QDataStream& ds);
 
 	private:
-		Relation(const Relation&);
 		RelationPrivate* p;
 };
 

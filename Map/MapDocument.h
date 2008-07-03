@@ -21,6 +21,7 @@ class TrackMapLayer;
 class DrawingMapLayer;
 class DirtyMapLayer;
 class UploadedMapLayer;
+class DeletedMapLayer;
 
 class MapDocument : public QObject
 {
@@ -47,7 +48,7 @@ public:
 	MapLayer* getLayer(unsigned int i);
 	const MapLayer* getLayer(unsigned int i) const;
 
-	MapFeature* getFeature(const QString& id);
+	MapFeature* getFeature(const QString& id, bool exact=true);
 	QVector<MapFeature*> getFeatures();
 	void setHistory(CommandHistory* h);
 	CommandHistory& history();
@@ -73,11 +74,12 @@ public:
 	DirtyMapLayer* getDirtyLayer() const;
 	MapLayer* getDirtyOrOriginLayer(MapLayer* aLayer);
 	UploadedMapLayer* getUploadedLayer() const;
+	DeletedMapLayer* getTrashLayer() const;
 
 	QString exportOSM(const CoordBox& aCoordBox = WORLD_COORDBOX);
 	QString exportOSM(QVector<MapFeature*> aFeatures);
 	bool toXML(QDomElement xParent);
-	static MapDocument* fromXML(const QDomElement e, LayerDock* aDock);
+	static MapDocument* fromXML(const QDomElement e, double version, LayerDock* aDock);
 
 	bool importNMEA(const QString& filename, TrackMapLayer* NewLayer);
 	bool importOSB(const QString& filename, DrawingMapLayer* NewLayer);

@@ -684,12 +684,18 @@ void TrackMapLayer::extractLayer()
 			P = new TrackPoint( S->get(0)->position() );
 			P->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 			P->setTime(S->get(0)->time());
+			P->setElevation(S->get(0)->elevation());
+			P->setSpeed(S->get(0)->speed());
+			//P->setTag("ele", QString::number(S->get(0)->elevation()));
 			PL.append(P);
 			unsigned int startP = 0;
 
 			P = new TrackPoint( S->get(1)->position() );
 			P->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 			P->setTime(S->get(1)->time());
+			P->setElevation(S->get(1)->elevation());
+			P->setSpeed(S->get(1)->speed());
+			//P->setTag("ele", QString::number(S->get(1)->elevation()));
 			PL.append(P);
 			unsigned int endP = 1;
 
@@ -697,6 +703,9 @@ void TrackMapLayer::extractLayer()
 				P = new TrackPoint( S->get(j)->position() );
 				P->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 				P->setTime(S->get(j)->time());
+				P->setElevation(S->get(j)->elevation());
+				P->setSpeed(S->get(j)->speed());
+				//P->setTag("ele", QString::number(S->get(j)->elevation()));
 				PL.append(P);
 				endP = PL.size()-1;
 
@@ -872,4 +881,33 @@ LayerWidget* ExtractedMapLayer::newWidget(void)
 	p->theWidget = new ExtractedLayerWidget(this);
 	return p->theWidget;
 }
+
+// DeletedMapLayer
+
+DeletedMapLayer::DeletedMapLayer(const QString & aName)
+	: DrawingMapLayer(aName)
+{
+	p->Visible = false;
+}
+
+DeletedMapLayer::~ DeletedMapLayer()
+{
+}
+
+DeletedMapLayer* DeletedMapLayer::fromXML(MapDocument* d, const QDomElement e)
+{
+	DeletedMapLayer* l = new DeletedMapLayer(e.attribute("name"));
+	d->add(l);
+	if (!DrawingMapLayer::doFromXML(l, d, e)) {
+		delete l;
+		return NULL;
+	}
+	return l;
+}
+
+LayerWidget* DeletedMapLayer::newWidget(void)
+{
+	return NULL;
+}
+
 

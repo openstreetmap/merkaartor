@@ -24,16 +24,17 @@ void syncOSM(MainWindow* theMain, const QString& aWeb, const QString& aUser, con
 		Future.resetUpdates();
 		DirtyListExecutor Exec(theMain->document(),Future,aWeb,aUser,aPwd, UseProxy, ProxyHost, ProxyPort,Describer.tasks());
 		Exec.executeChanges(theMain);
-	}
-	if (theMain->fileName != "") {
-		if (MerkaartorPreferences::instance()->getAutoSaveDoc()) {
-			theMain->saveDocument();
-		} else {
-			if (QMessageBox::warning(theMain,MainWindow::tr("Unsaved changes"), 
-					MainWindow::tr("It is strongly recommended to save the changes to your document after an upload.\nDo you want to do this now?"),
-					QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
-				theMain->saveDocument();
 
+		if (theMain->fileName != "") {
+			if (MerkaartorPreferences::instance()->getAutoSaveDoc()) {
+				theMain->saveDocument();
+			} else {
+				if (QMessageBox::warning(theMain,MainWindow::tr("Unsaved changes"), 
+						MainWindow::tr("It is strongly recommended to save the changes to your document after an upload.\nDo you want to do this now?"),
+						QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
+					theMain->saveDocument();
+
+				}
 			}
 		}
 	}

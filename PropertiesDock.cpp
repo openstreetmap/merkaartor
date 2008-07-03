@@ -71,6 +71,7 @@ void PropertiesDock::checkMenuStatus()
 	bool IsRoad = false;
 	bool IsParentRoad = false;
 	unsigned int NumRoads = 0;
+	unsigned int NumCommitableFeature = 0;
 	unsigned int NumPoints = 0;
 	if (Selection.size() == 1)
 	{
@@ -82,8 +83,11 @@ void PropertiesDock::checkMenuStatus()
 	{
 		if (dynamic_cast<TrackPoint*>(Selection[i]))
 			++NumPoints;
-		if (dynamic_cast<Road*>(Selection[i]))
+		if (dynamic_cast<Road*>(Selection[i])) {
 			++NumRoads;
+		if (!Selection[i]->layer()->isUploadable())
+			++NumCommitableFeature;
+		}
 	}
 	Main->createRelationAction->setEnabled(Selection.size());
 	Main->editRemoveAction->setEnabled(Selection.size());
@@ -92,6 +96,7 @@ void PropertiesDock::checkMenuStatus()
 	Main->roadJoinAction->setEnabled(NumRoads > 1);
 	Main->roadSplitAction->setEnabled(IsParentRoad || (NumRoads && NumPoints));
 	Main->roadBreakAction->setEnabled(NumRoads > 1);
+	Main->featureCommitAction->setEnabled(NumCommitableFeature);
 	Main->nodeMergeAction->setEnabled(NumPoints > 1);
 	Main->nodeAlignAction->setEnabled(NumPoints > 2);
 	Main->fileDownloadMoreAction->setEnabled(Main->document()->getLastDownloadLayer() != NULL);

@@ -14,9 +14,9 @@ class Road : public MapFeature
 {
 	public:
 		Road(void);
+		Road(const Road& other);
 		virtual ~Road();
 	private:
-		Road(const Road& other);
 		void updateMeta() const;
 
 	public:
@@ -58,7 +58,7 @@ class Road : public MapFeature
 		virtual void toBinary(QDataStream& ds);
 		static Road* fromBinary(MapDocument* d, MapLayer* L, QDataStream& ds);
 
-	private:
+	protected:
 		RoadPrivate* p;
 };
 

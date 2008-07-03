@@ -399,6 +399,9 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 			newLayer = new TrackMapLayer( baseFileName );
 			mapDocument->add(newLayer);
 			importOK = importGPX(this, baseFileName, mapDocument, newLayer);
+			if (importOK & MerkaartorPreferences::instance()->getAutoExtractTracks()) {
+				((TrackMapLayer *)newLayer)->extractLayer();
+			}
 		}
 		else if (fn.endsWith(".osm")) {
 			newLayer = new DrawingMapLayer( baseFileName );
@@ -414,11 +417,17 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 			newLayer = new TrackMapLayer( baseFileName );
 			mapDocument->add(newLayer);
 			importOK = importNGT(this, baseFileName, mapDocument, newLayer);
+			if (importOK & MerkaartorPreferences::instance()->getAutoExtractTracks()) {
+				((TrackMapLayer *)newLayer)->extractLayer();
+			}
 		}
 		else if (fn.endsWith(".nmea") || (fn.endsWith(".nme"))) {
 			newLayer = new TrackMapLayer( baseFileName );
 			mapDocument->add(newLayer);
 			importOK = mapDocument->importNMEA(baseFileName, (TrackMapLayer *)newLayer);
+			if (importOK & MerkaartorPreferences::instance()->getAutoExtractTracks()) {
+				((TrackMapLayer *)newLayer)->extractLayer();
+			}
 		}
 
 		if (!importOK && newLayer)
@@ -750,6 +759,16 @@ void MainWindow::on_roadBreakAction_triggered()
 		theDocument->addHistory(theList);
 }
 
+void MainWindow::on_featureCommitAction_triggered()
+{
+	CommandList* theList = new CommandList(MainWindow::tr("Commit Roads"), NULL);
+	commitFeatures(theDocument, theList, theProperties);
+	if (theList->empty())
+		delete theList;
+	else
+		theDocument->addHistory(theList);
+}
+
 void MainWindow::on_createRelationAction_triggered()
 {
 	Relation* R = new Relation;
@@ -860,12 +879,13 @@ void MainWindow::saveDocument()
 		theXmlDoc = new QDomDocument();
 		theXmlDoc->appendChild(theXmlDoc->createProcessingInstruction("xml", "version=\"1.0\""));
 		root = theXmlDoc->createElement("MerkaartorDocument");
-		root.setAttribute("version", "1.0");
+		root.setAttribute("version", "1.1");
 		root.setAttribute("creator", QString("Merkaartor %1").arg(VERSION));
 
 		theXmlDoc->appendChild(root);
 	} else {
 		root = theXmlDoc->documentElement();
+		root.setAttribute("version", "1.1");
 	}
 
 	theDocument->toXML(root);
@@ -898,11 +918,16 @@ void MainWindow::loadDocument(QString fn)
 	file.close();
 
 	QDomElement docElem = theXmlDoc->documentElement();
+	if (docElem.tagName() != "MerkaartorDocument") {
+		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid Merkaartor document.").arg(fn));
+		return;
+	}
+	double version = docElem.attribute("version").toDouble();
 
 	QDomElement e = docElem.firstChildElement();
 	while(!e.isNull()) {
 		if (e.tagName() == "MapDocument") {
-			MapDocument* newDoc = MapDocument::fromXML(e, theLayers);
+			MapDocument* newDoc = MapDocument::fromXML(e, version, theLayers);
 			if (newDoc) {
 				theProperties->setSelection(0);
 				delete theDocument;
@@ -1035,8 +1060,8 @@ bool MainWindow::selectExportedFeatures(QVector<MapFeature*>& theFeatures)
 			MerkaartorPreferences::instance()->setExportType(Export_Selected);
 			return true;
 		}
-	} else
-		return false;
+	}
+	return false;
 }
 
 void MainWindow::on_editSelectAction_triggered()

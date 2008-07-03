@@ -105,6 +105,7 @@ void PreferencesDialog::loadPrefs()
 	edBgColor->setText(QVariant(MerkaartorPreferences::instance()->getBgColor()).toString());
 
 	cbAutoSaveDoc->setChecked(MerkaartorPreferences::instance()->getAutoSaveDoc());
+	cbAutoExtractTracks->setChecked(MerkaartorPreferences::instance()->getAutoExtractTracks());
 }
 
 void PreferencesDialog::savePrefs()
@@ -146,6 +147,7 @@ void PreferencesDialog::savePrefs()
 	MerkaartorPreferences::instance()->setBgColor(QVariant(edBgColor->text()).value<QColor>());
 
 	MerkaartorPreferences::instance()->setAutoSaveDoc(cbAutoSaveDoc->isChecked());
+	MerkaartorPreferences::instance()->setAutoExtractTracks(cbAutoExtractTracks->isChecked());
 
 	MerkaartorPreferences::instance()->save();
 }

@@ -65,6 +65,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_roadSplitAction_triggered();
 		virtual void on_roadBreakAction_triggered();
 		virtual void on_roadJoinAction_triggered();
+		virtual void on_featureCommitAction_triggered();
 		virtual void on_mapStyleSaveAction_triggered();
 		virtual void on_mapStyleLoadAction_triggered();
 		virtual void on_exportOSMAction_triggered();

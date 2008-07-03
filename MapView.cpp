@@ -397,6 +397,14 @@ void MapView::on_customContextMenuRequested(const QPoint & pos)
 		//if (createMenu.actions().size())
 		//	menu.addMenu(&createMenu);
 
+		QMenu featureMenu(tr("Feature"));
+		for(int i=0; i<Main->menu_Feature->actions().size(); ++i) {
+			if (Main->menu_Feature->actions()[i]->isEnabled())
+				featureMenu.addAction(Main->menu_Feature->actions()[i]);
+		}
+		if (featureMenu.actions().size())
+			menu.addMenu(&featureMenu);
+
 		QMenu roadMenu(tr("Road"));
 		for(int i=0; i<Main->menuRoad->actions().size(); ++i) {
 			if (Main->menuRoad->actions()[i]->isEnabled())

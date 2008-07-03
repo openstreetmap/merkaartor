@@ -211,6 +211,9 @@ public:
 	void setAutoSaveDoc(bool theValue);
 	bool getAutoSaveDoc() const;
 
+	void setAutoExtractTracks(bool theValue);
+	bool getAutoExtractTracks() const;
+
 	/* Export Type */
 	void setExportType(ExportType theValue);
 	ExportType getExportType() const;

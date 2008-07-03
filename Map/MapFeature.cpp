@@ -40,10 +40,10 @@ class MapFeaturePrivate
 			initVersionNumber();
 		}
 		MapFeaturePrivate(const MapFeaturePrivate& other)
-			: Tags(other.Tags), LastActor(MapFeature::User), theLayer(0),
+			: Tags(other.Tags), LastActor(other.LastActor), theLayer(0),
 				PossiblePaintersUpToDate(false),
 			  	PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
-				theFeature(0), LastPartNotification(0), Time(QDateTime::currentDateTime())
+				theFeature(0), LastPartNotification(0), Time(other.Time)
 		{
 			initVersionNumber();
 		}
@@ -287,12 +287,19 @@ void MapFeaturePrivate::updatePainters(double PixelPerM)
 	//if the object has no tags or only the created_by tag, we don't check for style
 	//search is about 15 times faster like that !!!
 	//However, still match features with no tags and no parent, i.e. "lost" trackpoints
-	if(( ( (dynamic_cast<TrackMapLayer*>(theFeature->layer())) || theFeature->sizeParents() ) && (theFeature->tagSize()==0 || (theFeature->tagSize()==1 && theFeature->tagKey(0)=="created_by" ))))
+	if ( (dynamic_cast<TrackMapLayer*>(theFeature->layer())) || theFeature->sizeParents() ) 
 	{
-		PossiblePainters.clear();
-		CurrentPainter = 0;
-		PixelPerMForPainter = PixelPerM;
-		return;
+		unsigned int i;
+		for (i=0; i<theFeature->tagSize(); ++i)
+			if ((theFeature->tagKey(i) != "created_by") && (theFeature->tagKey(i) != "ele"))
+				break;
+
+		if (i == theFeature->tagSize()) {
+			PossiblePainters.clear();
+			CurrentPainter = 0;
+			PixelPerMForPainter = PixelPerM;
+			return;
+		}
 	}
 	if (PixelPerMForPainter < 0)
 	{
@@ -487,13 +494,20 @@ TrackPoint* MapFeature::getTrackPointOrCreatePlaceHolder(MapDocument *theDocumen
 	TrackPoint* Part = dynamic_cast<TrackPoint*>(theDocument->getFeature("node_"+Id));
 	if (!Part)
 	{
-		Part = new TrackPoint(Coord(0,0));
-		Part->setId("node_"+Id);
-		Part->setLastUpdated(MapFeature::NotYetDownloaded);
-		if (theList)
-			theList->add(new AddFeatureCommand(theLayer, Part, false));
-		else
-			theLayer->add(Part);
+		Part = dynamic_cast<TrackPoint*>(theDocument->getFeature(Id));
+		if (!Part)
+		{
+			Part = new TrackPoint(Coord(0,0));
+			if (Id.startsWith('{'))
+				Part->setId(Id);
+			else
+				Part->setId("node_"+Id);
+			Part->setLastUpdated(MapFeature::NotYetDownloaded);
+			if (theList)
+				theList->add(new AddFeatureCommand(theLayer, Part, false));
+			else
+				theLayer->add(Part);
+		}
 	}
 	return Part;
 }
@@ -503,13 +517,43 @@ Road* MapFeature::getWayOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *
 	Road* Part = dynamic_cast<Road*>(theDocument->getFeature("way_"+Id));
 	if (!Part)
 	{
-		Part = new Road;
-		Part->setId("way_"+Id);
-		Part->setLastUpdated(MapFeature::NotYetDownloaded);
-		if (theList)
-			theList->add(new AddFeatureCommand(theLayer, Part, false));
-		else
-			theLayer->add(Part);
+		Part = dynamic_cast<Road*>(theDocument->getFeature(Id));
+		if (!Part)
+		{
+			Part = new Road;
+			if (Id.startsWith('{'))
+				Part->setId(Id);
+			else
+				Part->setId("way_"+Id);
+			Part->setLastUpdated(MapFeature::NotYetDownloaded);
+			if (theList)
+				theList->add(new AddFeatureCommand(theLayer, Part, false));
+			else
+				theLayer->add(Part);
+		}
+	}
+	return Part;
+}
+
+Relation* MapFeature::getRelationOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id)
+{
+	Relation* Part = dynamic_cast<Relation*>(theDocument->getFeature("rel_"+Id));
+	if (!Part)
+	{
+		Part = dynamic_cast<Relation*>(theDocument->getFeature(Id));
+		if (!Part)
+		{
+			Part = new Relation;
+			if (Id.startsWith('{'))
+				Part->setId(Id);
+			else
+				Part->setId("rel_"+Id);
+			Part->setLastUpdated(MapFeature::NotYetDownloaded);
+			if (theList)
+				theList->add(new AddFeatureCommand(theLayer, Part, false));
+			else
+				theLayer->add(Part);
+		}
 	}
 	return Part;
 }
@@ -534,22 +578,6 @@ void MapFeature::mergeTags(MapDocument* theDocument, CommandList* L, MapFeature*
 	}
 }
 
-
-Relation* MapFeature::getRelationOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id)
-{
-	Relation* Part = dynamic_cast<Relation*>(theDocument->getFeature("rel_"+Id));
-	if (!Part)
-	{
-		Part = new Relation;
-		Part->setId("rel_"+Id);
-		Part->setLastUpdated(MapFeature::NotYetDownloaded);
-		if (theList)
-			theList->add(new AddFeatureCommand(theLayer, Part, false));
-		else
-			theLayer->add(Part);
-	}
-	return Part;
-}
 
 QString MapFeature::toMainHtml(QString type, QString systemtype)
 {

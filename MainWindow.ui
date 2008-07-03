@@ -165,10 +165,17 @@
     </widget>
     <addaction name="menu_Docks" />
    </widget>
+   <widget class="QMenu" name="menu_Feature" >
+    <property name="title" >
+     <string>&amp;Feature</string>
+    </property>
+    <addaction name="featureCommitAction" />
+   </widget>
    <addaction name="menuFile" />
    <addaction name="menuEdit" />
    <addaction name="menuView" />
    <addaction name="menuCreate" />
+   <addaction name="menu_Feature" />
    <addaction name="menuRoad" />
    <addaction name="menu_Node" />
    <addaction name="menuTools" />
@@ -778,6 +785,20 @@
   <action name="exportOSMBinAction" >
    <property name="text" >
     <string>OSM (Binary)</string>
+   </property>
+  </action>
+  <action name="featureCommitAction" >
+   <property name="text" >
+    <string>&amp;Commit to dirty layer</string>
+   </property>
+   <property name="toolTip" >
+    <string>Commit the selected feature from a non-uploadable layer (e.g.Track or Extract) to the dirty layer, ready for upload</string>
+   </property>
+   <property name="statusTip" >
+    <string>Commit the selected feature from a non-uploadable layer (e.g.Track or Extract) to the dirty layer, ready for upload</string>
+   </property>
+   <property name="whatsThis" >
+    <string>Commit the selected feature from a non-uploadable layer (e.g.Track or Extract) to the dirty layer, ready for upload</string>
    </property>
   </action>
  </widget>

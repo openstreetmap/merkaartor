@@ -286,3 +286,27 @@ void mergeNodes(MapDocument* theDocument, CommandList* theList, PropertiesDock* 
 	}
 }
 
+void commitFeatures(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)
+{
+	QVector<MapFeature*> alt;
+	QVector<MapFeature*> Features;
+
+	for (unsigned int i=0; i<theDock->size(); ++i)
+		if (!theDock->selection(i)->layer()->isUploadable())
+			Features.push_back(theDock->selection(i));
+	for (int i=0; i<Features.size(); ++i) {
+		if (TrackPoint* N = dynamic_cast<TrackPoint *>(Features[i])) {
+			theList->add(new AddFeatureCommand(theDocument->getDirtyLayer(),N,true));
+		}
+		if (Road* R = dynamic_cast<Road *>(Features[i])) {
+			theList->add(new AddFeatureCommand(theDocument->getDirtyLayer(),R,true));
+			for (unsigned int j=0; j < R->size(); ++j) {
+				if (!Features.contains(R->get(j))) {
+					if ( !(R->get(j)->layer()->isUploadable()) ) {
+						theList->add(new AddFeatureCommand(theDocument->getDirtyLayer(),R->get(j),true));
+					}
+				}
+			}
+		}
+	}
+}

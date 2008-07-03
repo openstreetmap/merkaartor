@@ -137,6 +137,7 @@ public:
 	static TrackMapLayer* fromXML(MapDocument* d, const QDomElement e);
 
 	virtual const QString className() {return "TrackMapLayer";};
+	virtual bool isUploadable() {return true;};
 };
 
 class DirtyMapLayer : public DrawingMapLayer
@@ -172,6 +173,20 @@ public:
 	static ExtractedMapLayer* fromXML(MapDocument* d, const QDomElement e);
 
 	virtual const QString className() {return "ExtractedMapLayer";};
+	virtual LayerWidget* newWidget(void);
+
+	virtual bool isUploadable() {return false;};
+};
+
+class DeletedMapLayer : public DrawingMapLayer
+{
+public:
+	DeletedMapLayer(const QString& aName);
+	virtual ~DeletedMapLayer();
+
+	static DeletedMapLayer* fromXML(MapDocument* d, const QDomElement e);
+
+	virtual const QString className() {return "DeletedMapLayer";};
 	virtual LayerWidget* newWidget(void);
 
 	virtual bool isUploadable() {return false;};

@@ -25,9 +25,9 @@ class AddFeatureCommand : public Command
 
 	private:
 		MapLayer* theLayer;
+		MapLayer* oldLayer;
 		MapFeature* theFeature;
 		bool UserAdded;
-		bool RemoveOnDelete;
 };
 
 class RemoveFeatureCommand : public Command
@@ -47,11 +47,11 @@ class RemoveFeatureCommand : public Command
 
 	private:
 		MapLayer* theLayer;
+		MapLayer* oldLayer;
 		unsigned int Idx;
 		MapFeature* theFeature;
 		CommandList* CascadedCleanUp;
 		bool RemoveExecuted;
-		bool RemoveOnDelete;
 		std::vector<MapFeature*> theAlternatives;
 };
 

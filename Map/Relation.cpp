@@ -51,8 +51,9 @@ Relation::Relation()
 }
 
 Relation::Relation(const Relation& other)
-: MapFeature(other), p(0)
+: MapFeature(other)
 {
+	p = new RelationPrivate(this);
 }
 
 Relation::~Relation()
@@ -274,7 +275,9 @@ bool Relation::toXML(QDomElement xParent)
 
 Relation * Relation::fromXML(MapDocument * d, MapLayer * L, const QDomElement e)
 {
-	QString id = "rel_"+e.attribute("id");
+	QString id = e.attribute("id");
+	if (!id.startsWith('{'))
+		id = "rel_" + id;
 	QDateTime time = QDateTime::fromString(e.attribute("timestamp"), Qt::ISODate);
 	QString user = e.attribute("user");
 
@@ -284,9 +287,7 @@ Relation * Relation::fromXML(MapDocument * d, MapLayer * L, const QDomElement e)
 		R->setId(id);
 		R->setLastUpdated(MapFeature::OSMServer);
 	} else {
-		if (R->layer() != L) {
-			R->layer()->remove(R);
-		}
+		R->layer()->remove(R);
 	}
 	R->setTime(time);
 	R->setUser(user);
@@ -297,7 +298,9 @@ Relation * Relation::fromXML(MapDocument * d, MapLayer * L, const QDomElement e)
 			QString Type = c.attribute("type");
 			MapFeature* F = 0;
 			if (Type == "node") {
-				QString nId = "node_"+c.attribute("ref");
+				QString nId = c.attribute("ref");
+				if (!nId.startsWith('{'))
+					nId = "node_" + nId;
 				TrackPoint* Part = dynamic_cast<TrackPoint*>(d->getFeature(nId));
 				if (!Part)
 				{
@@ -308,23 +311,29 @@ Relation * Relation::fromXML(MapDocument * d, MapLayer * L, const QDomElement e)
 				}
 				F = Part;
 			} else if (Type == "way") {
-				QString rId = "way_"+c.attribute("ref");
+				QString rId = c.attribute("ref");
+				if (!rId.startsWith('{'))
+					rId = "way_" + rId;
 				Road* Part = dynamic_cast<Road*>(d->getFeature(rId));
 				if (!Part)
 				{
 					Part = new Road;
 					Part->setId(rId);
 					Part->setLastUpdated(MapFeature::NotYetDownloaded);
+					L->add(Part);
 				}
 				F = Part;
 			} else if (Type == "relation") {
-				QString RId = "rel_"+c.attribute("ref");
+				QString RId = c.attribute("ref");
+				if (!RId.startsWith('{'))
+					RId = "rel_" + RId;
 				Relation* Part = dynamic_cast<Relation*>(d->getFeature(RId));
 				if (!Part)
 				{
 					Part = new Relation;
 					Part->setId(RId);
 					Part->setLastUpdated(MapFeature::NotYetDownloaded);
+					L->add(Part);
 				}
 				F = Part;
 			}
