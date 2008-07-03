@@ -80,7 +80,7 @@ body {
             //map.addTypeControl();
 
             // Set map type to either of: YAHOO_MAP_SAT, YAHOO_MAP_HYB, YAHOO_MAP_REG
-		map.setMapType(YAHOO_MAP_SAT);
+            map.setMapType(YAHOO_MAP_SAT);
 
             // Display the map centered on a geocoded location
             map.removeZoomScale();
@@ -90,6 +90,7 @@ body {
             // funny Yahoo bug seems to return 0 if your section is too small
             if( level == 0 ) level = 1;
             if (level>1) level--;
+            if (level == Infinity) level = undefined;
 
 /*            YEvent.Capture(map, EventsList.endMapDraw, function(event) {
                 alert('end draw');(event,map);});*/
