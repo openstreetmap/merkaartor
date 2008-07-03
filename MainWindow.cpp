@@ -494,6 +494,7 @@ void MainWindow::loadFiles(const QStringList & fileList)
 			delete theDocument;
 			theDocument = newDoc;
 			connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));
+			theDirty->updateList();
 			theView->setDocument(theDocument);
 			on_viewZoomAllAction_triggered();
 		}

@@ -6,19 +6,18 @@
 #include <QtGui/QPainter>
 
 TrackPoint::TrackPoint(const Coord& aCoord)
-: Position(aCoord), Elevation(0.0), Speed(0.0), wpt(NULL)
+: Position(aCoord), Elevation(0.0), Speed(0.0)
 {
 }
 
 TrackPoint::TrackPoint(const TrackPoint& other)
-: MapFeature(other), Position(other.Position), Elevation(other.Elevation), Speed(other.Speed), wpt(NULL)
+: MapFeature(other), Position(other.Position), Elevation(other.Elevation), Speed(other.Speed)
 {
 	setTime(other.time());
 }
 
 TrackPoint::~TrackPoint(void)
 {
-	delete wpt;
 }
 
 const Coord& TrackPoint::position() const
@@ -50,17 +49,6 @@ double TrackPoint::elevation() const
 void TrackPoint::setElevation(double aElevation)
 {
 	Elevation = aElevation;
-}
-
-const WaypointData * TrackPoint::waypoint()
-{
-	return wpt;
-}
-
-void TrackPoint::setWaypoint(const WaypointData * newWaypoint)
-{
-	delete wpt;
-	wpt = newWaypoint;
 }
 
 bool TrackPoint::notEverythingDownloaded() const
@@ -210,26 +198,23 @@ TrackPoint * TrackPoint::fromXML(MapDocument* d, MapLayer* L, const QDomElement 
 QString TrackPoint::toHtml()
 {
 	QString D;
+	unsigned int i;
 
 	D += "<i>"+QApplication::translate("MapFeature", "timestamp")+": </i>" + time().toString(Qt::ISODate) + "<br/>";
 	D += "<i>"+QApplication::translate("MapFeature", "coord")+": </i>" + QString::number(radToAng(position().lat()), 'f', 4) + " / " + QString::number(radToAng(position().lon()), 'f', 4) + "<br/>";
-	D += "<i>"+QApplication::translate("MapFeature", "elevation")+": </i>" + QString::number(elevation(), 'f', 4) + "<br/>";
-	D += "<i>"+QApplication::translate("MapFeature", "speed")+": </i>" + QString::number(speed(), 'f', 4) + "<br/>";
+	if (elevation())
+		D += "<i>"+QApplication::translate("MapFeature", "elevation")+": </i>" + QString::number(elevation(), 'f', 4) + "<br/>";
+	if (speed())
+		D += "<i>"+QApplication::translate("MapFeature", "speed")+": </i>" + QString::number(speed(), 'f', 4) + "<br/>";
 
-	if (wpt)
-	{
-		
+	if ((i = findKey("_waypoint_")) < tagSize()) {
 		D += "<p><b>"+QApplication::translate("MapFeature", "Waypoint")+"</b><br/>";
-
-		if (wpt->name.size())
-			D += "<i>"+QApplication::translate("MapFeature", "name")+": </i>" + wpt->name + "<br/>";
 		
-		if (wpt->description.size())
-			D += "<i>"+QApplication::translate("MapFeature", "description")+": </i>" + wpt->description + "<br/>";
+		if ((i = findKey("_description_")) < tagSize())
+			D += "<i>"+QApplication::translate("MapFeature", "description")+": </i>" + tagValue(i) + "<br/>";
 		
-		if (wpt->comment.size())
-			D += "<i>"+QApplication::translate("MapFeature", "comment")+": </i>" + wpt->comment + "<br/>";
-		
+		if ((i = findKey("_comment_")) < tagSize())
+			D += "<i>"+QApplication::translate("MapFeature", "comment")+": </i>" + tagValue(i) + "<br/>";
 	}
 
 	return MapFeature::toMainHtml(QApplication::translate("MapFeature", "Node"), "node").arg(D);

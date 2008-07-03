@@ -9,17 +9,6 @@
 #include <QtCore/QDateTime>
 #include <QtXml>
 
-// TODO: Maybe WayPoint should rather inherit from TrackPoint
-class WaypointData
-{
-public:
-	QString name;
-	QString description;
-	QString comment;
-
-	bool isEmpty() { return name.isEmpty() && description.isEmpty() && comment.isEmpty(); }
-};
-
 class TrackPoint : public MapFeature
 {
 	public:
@@ -48,9 +37,6 @@ class TrackPoint : public MapFeature
 		double elevation() const;
 		void setElevation(double aElevation);
 
-		const WaypointData * waypoint();
-		void setWaypoint(const WaypointData * newWaypoint);
-
 		virtual void partChanged(MapFeature* F, unsigned int ChangeId);
 
 		virtual QString toXML(unsigned int lvl=0);
@@ -68,8 +54,6 @@ private:
 
 		double Elevation;
 		double Speed;
-
-		const class WaypointData * wpt;
 };
 
 #endif

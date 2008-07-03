@@ -581,10 +581,17 @@ void MapFeature::mergeTags(MapDocument* theDocument, CommandList* L, MapFeature*
 
 QString MapFeature::toMainHtml(QString type, QString systemtype)
 {
+	QString desc;
+	QString name(tagValue("name",""));
+	if (!name.isEmpty())
+		desc = QString("<big><b>%1</b></big><br/><small>(%2)</small>").arg(name).arg(id());
+	else
+		desc = QString("<big><b>%1</b></big>").arg(id());
+
 	QString S =
 	"<html><head/><body>"
 	"<small><i>" + type + "</i></small><br/>"
-	"<big><b>" + description() + "</b></big>"
+	+ desc + 
 	"<br/>"
 	"<small>";
 	if (!user().isEmpty())

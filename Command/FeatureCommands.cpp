@@ -155,7 +155,7 @@ SetTagCommand * SetTagCommand::fromXML(MapDocument * d, QDomElement e)
 			if (!(F = d->getFeature("rel_"+e.attribute("feature"))))
 				return NULL;
 	a->theFeature = F;
-	a->theIdx = e.attribute("idx").toUInt();
+	a->theIdx = e.attribute("idx").toInt();
 	a->theK = e.attribute("key");
 	a->theV = e.attribute("value");
     if (e.hasAttribute("oldvalue"))
@@ -331,7 +331,7 @@ ClearTagCommand * ClearTagCommand::fromXML(MapDocument * d, QDomElement e)
 	if (!(F = d->getFeature(e.attribute("feature"), false)))
 		return NULL;
 	a->theFeature = F;
-	a->theIdx = e.attribute("idx").toUInt();
+	a->theIdx = e.attribute("idx").toInt();
 	a->theK = e.attribute("key");
 	a->theV = e.attribute("value");
 	if (e.hasAttribute("layer"))

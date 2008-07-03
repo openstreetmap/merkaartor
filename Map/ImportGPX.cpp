@@ -20,9 +20,10 @@ static TrackPoint* importTrkPt(const QDomElement& Root, MapDocument* /* theDocum
 
 	TrackPoint* Pt = new TrackPoint(Coord(angToRad(Lat),angToRad(Lon)));
 	theList->add(new AddFeatureCommand(theLayer,Pt, true));
-	
-	WaypointData* waypointData = new WaypointData;
 
+	if (Root.tagName() == "wpt")
+		Pt->setTag("_waypoint_", "yes");
+	
 	for(QDomNode n = Root.firstChild(); !n.isNull(); n = n.nextSibling())
 	{
 		QDomElement t = n.toElement();
@@ -55,25 +56,16 @@ static TrackPoint* importTrkPt(const QDomElement& Root, MapDocument* /* theDocum
 		}
 		else if (t.tagName() == "name")
 		{
-			waypointData->name = t.text();	
+			Pt->setTag("name", t.text());
 		}
 		else if (t.tagName() == "desc")
 		{
-			waypointData->description = t.text();
+			Pt->setTag("_description_", t.text());
 		}
 		else if (t.tagName() == "cmt")
 		{
-			waypointData->comment = t.text();
+			Pt->setTag("_comment_", t.text());
 		}
-	}
-
-	if (waypointData->isEmpty())
-	{
-		delete waypointData;
-	}
-	else
-	{
-		Pt->setWaypoint(waypointData);
 	}
 
 	return Pt;
