@@ -37,6 +37,7 @@ bool ImportNMEA::export_(const QVector<MapFeature *>& featList)
 bool ImportNMEA::import(MapLayer* aLayer)
 {
 	bool goodFix = false;
+	bool goodFix3D = true;
 	QTextStream in(Device);
 
 	theLayer = dynamic_cast <TrackMapLayer *> (aLayer);
@@ -52,6 +53,21 @@ bool ImportNMEA::import(MapLayer* aLayer)
 
 		QString command = line.mid(3, 3);
 		if (command == "GSA") {
+			bool prevGoodFix = goodFix3D;
+			goodFix3D = importGSA(line);
+			if (!goodFix3D && prevGoodFix) {
+				if (TS->size())
+					theList->add(new AddFeatureCommand(theLayer,TS, true));
+				else
+					delete TS;
+				TS = new TrackSegment;
+			}
+		} else
+		if (command == "GSV") {
+			if (goodFix && goodFix3D)
+				importGSV(line);
+		} else
+		if (command == "GGA") {
 			bool prevGoodFix = goodFix;
 			goodFix = importGSA(line);
 			if (!goodFix && prevGoodFix) {
@@ -62,17 +78,8 @@ bool ImportNMEA::import(MapLayer* aLayer)
 				TS = new TrackSegment;
 			}
 		} else
-		if (command == "GSV") {
-			if (goodFix)
-				importGSV(line);
-		} else
-		if (command == "GGA") {
-			if (goodFix) {
-				importGGA(line);
-			}
-		} else
 		if (command == "RMC") {
-			if (goodFix) {
+			if (goodFix && goodFix3D) {
 				TrackPoint* p = importRMC(line);
 				if (p)
 					TS->add(p);
@@ -109,7 +116,7 @@ bool ImportNMEA::importGSV (QString /* line */)
 	return true;
 }
 
-void ImportNMEA::importGGA (QString line)
+bool ImportNMEA::importGGA (QString line)
 {
 	QStringList tokens = line.split(",");
 
@@ -127,9 +134,11 @@ void ImportNMEA::importGGA (QString line)
 
 	int fix = tokens[6].toInt();
 	if (fix == 0)
-		return;
+		return false;
 
 	curAltitude = tokens[9].toDouble();
+
+	return true;
 }
 
 TrackPoint* ImportNMEA::importRMC (QString line)
