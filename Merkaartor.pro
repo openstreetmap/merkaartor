@@ -1,4 +1,5 @@
 # external supported variables:
+# passed on commandline like "qmake NOWEBKIT=1"
 # NOUSEWEBKIT         - disable use of WebKit (Yahoo adapter)
 # NOWEBKIT            - disable building of own WebKit
 # TRANSDIR_MERKAARTOR - translations directory for merkaartor
@@ -35,6 +36,7 @@ MOC_DIR += tmp
 UI_DIR += tmp
 
 TRANSLATIONS += \
+	merkaartor_cs.ts \
 	merkaartor_de.ts \
 	merkaartor_fr.ts \
 	merkaartor_it.ts \
@@ -42,6 +44,7 @@ TRANSLATIONS += \
 	merkaartor_ru.ts
 
 BINTRANSLATIONS += \
+	merkaartor_cs.ts \
 	merkaartor_de.qm \
 	merkaartor_fr.qm \
 	merkaartor_it.qm \
