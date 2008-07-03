@@ -162,6 +162,7 @@
      <addaction name="windowPropertiesAction" />
      <addaction name="windowLayersAction" />
      <addaction name="windowInfoAction" />
+     <addaction name="windowDirtyAction" />
     </widget>
     <addaction name="menu_Docks" />
    </widget>
@@ -551,7 +552,7 @@
   </action>
   <action name="viewMoveLeftAction" >
    <property name="text" >
-    <string>MoveLeft</string>
+    <string>Move view left</string>
    </property>
    <property name="shortcut" >
     <string>Left</string>
@@ -562,7 +563,7 @@
   </action>
   <action name="viewMoveRightAction" >
    <property name="text" >
-    <string>viewMoveRight</string>
+    <string>Move view right</string>
    </property>
    <property name="shortcut" >
     <string>Right</string>
@@ -573,7 +574,7 @@
   </action>
   <action name="viewMoveUpAction" >
    <property name="text" >
-    <string>viewMoveUp</string>
+    <string>Move view up</string>
    </property>
    <property name="shortcut" >
     <string>Up</string>
@@ -584,7 +585,7 @@
   </action>
   <action name="viewMoveDownAction" >
    <property name="text" >
-    <string>viewMoveDown</string>
+    <string>Move view down</string>
    </property>
    <property name="shortcut" >
     <string>Down</string>
@@ -701,6 +702,9 @@
    </property>
    <property name="statusTip" >
     <string>Hide/Show the Undo dock</string>
+   </property>
+   <property name="shortcut" >
+     <string>Ctrl+U</string>
    </property>
   </action>
   <action name="viewDownloadedAction" >

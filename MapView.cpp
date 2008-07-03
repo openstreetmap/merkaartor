@@ -376,7 +376,7 @@ Projection& MapView::projection()
 
 void MapView::on_customContextMenuRequested(const QPoint & pos)
 {
-	if (EditInteraction* ei = dynamic_cast<EditInteraction*>(theInteraction)) {
+	if (/*EditInteraction* ei = */dynamic_cast<EditInteraction*>(theInteraction)) {
 		QMenu menu;
 
 		//FIXME Some of these actions on WIN32-MSVC corrupts the heap.
