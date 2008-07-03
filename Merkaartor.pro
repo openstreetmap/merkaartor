@@ -44,7 +44,7 @@ TRANSLATIONS += \
 	merkaartor_ru.ts
 
 BINTRANSLATIONS += \
-	merkaartor_cs.ts \
+	merkaartor_cs.qm \
 	merkaartor_de.qm \
 	merkaartor_fr.qm \
 	merkaartor_it.qm \
