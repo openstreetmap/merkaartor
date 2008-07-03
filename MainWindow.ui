@@ -704,7 +704,7 @@
     <string>Hide/Show the Undo dock</string>
    </property>
    <property name="shortcut" >
-     <string>Ctrl+U</string>
+     <string>Ctrl+T</string>
    </property>
   </action>
   <action name="viewDownloadedAction" >
