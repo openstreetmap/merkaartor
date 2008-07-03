@@ -288,8 +288,8 @@ void PropertiesDock::switchToTrackPointUi()
 	if (CurrentUi)
 		delete CurrentUi;
 	CurrentUi = NewUi;
-	connect(TrackPointUi.Longitude,SIGNAL(textChanged(const QString&)),this, SLOT(on_TrackPointLon_textChanged(const QString&)));
-	connect(TrackPointUi.Latitude,SIGNAL(textChanged(const QString&)),this, SLOT(on_TrackPointLat_textChanged(const QString&)));
+	connect(TrackPointUi.Longitude,SIGNAL(editingFinished()),this, SLOT(on_TrackPointLon_editingFinished()));
+	connect(TrackPointUi.Latitude,SIGNAL(editingFinished()),this, SLOT(on_TrackPointLat_editingFinished()));
 	connect(TrackPointUi.RemoveTagButton,SIGNAL(clicked()),this, SLOT(on_RemoveTagButton_clicked()));
 	connect(TrackPointUi.Amenity,SIGNAL(activated(int)),this,SLOT(on_Amenity_activated(int)));
 	setWindowTitle(tr("Properties - Trackpoint"));
@@ -326,7 +326,7 @@ void PropertiesDock::switchToRoadUi()
 	if (CurrentUi)
 		delete CurrentUi;
 	CurrentUi = NewUi;
-	connect(RoadUi.Name,SIGNAL(textChanged(const QString&)),this, SLOT(on_RoadName_textChanged(const QString&)));
+	connect(RoadUi.Name,SIGNAL(editingFinished()),this, SLOT(on_RoadName_editingFinished()));
 	connect(RoadUi.TrafficDirection,SIGNAL(activated(int)), this, SLOT(on_TrafficDirection_activated(int)));
 	connect(RoadUi.Highway,SIGNAL(activated(int)), this, SLOT(on_Highway_activated(int)));
 	connect(RoadUi.LandUse,SIGNAL(activated(int)), this, SLOT(on_LandUse_activated(int)));
@@ -391,7 +391,7 @@ void PropertiesDock::resetValues()
 	Selection = Current;
 }
 
-void PropertiesDock::on_TrackPointLat_textChanged(const QString&)
+void PropertiesDock::on_TrackPointLat_editingFinished()
 {
 	if (TrackPointUi.Latitude->text().isEmpty()) return;
 	TrackPoint* Pt = dynamic_cast<TrackPoint*>(selection(0));
@@ -405,7 +405,7 @@ void PropertiesDock::on_TrackPointLat_textChanged(const QString&)
 	}
 }
 
-void PropertiesDock::on_TrackPointLon_textChanged(const QString&)
+void PropertiesDock::on_TrackPointLon_editingFinished()
 {
 	if (TrackPointUi.Longitude->text().isEmpty()) return;
 	TrackPoint* Pt = dynamic_cast<TrackPoint*>(selection(0));
@@ -419,7 +419,7 @@ void PropertiesDock::on_TrackPointLon_textChanged(const QString&)
 	}
 }
 
-void PropertiesDock::on_RoadName_textChanged(const QString&)
+void PropertiesDock::on_RoadName_editingFinished()
 {
 	if (selection(0))
 	{

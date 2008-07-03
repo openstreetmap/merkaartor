@@ -38,9 +38,9 @@ class PropertiesDock : public QDockWidget
 		void checkMenuStatus();
 
 	public slots:
-		void on_TrackPointLat_textChanged(const QString& s);
-		void on_TrackPointLon_textChanged(const QString& s);
-		void on_RoadName_textChanged(const QString& s);
+		void on_TrackPointLat_editingFinished();
+		void on_TrackPointLon_editingFinished();
+		void on_RoadName_editingFinished();
 		void on_TrafficDirection_activated(int idx);
 		void on_Highway_activated(int idx);
 		void on_Amenity_activated(int idx);

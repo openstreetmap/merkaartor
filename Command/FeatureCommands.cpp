@@ -110,6 +110,17 @@ void SetTagCommand::redo()
 	}
 }
 
+bool SetTagCommand::buildDirtyList(DirtyList& theList)
+{
+	if (theLayer->isUploadable())
+		if (theK.startsWith('_') && (theK.endsWith('_')))
+			return false;
+		else
+			return theList.update(theFeature);
+	else
+		return false;
+}
+
 bool SetTagCommand::toXML(QDomElement& xParent) const
 {
 	bool OK = true;
@@ -279,6 +290,17 @@ void ClearTagCommand::redo()
 		incDirtyLevel(oldLayer);
 		theLayer->add(theFeature);
 	}
+}
+
+bool ClearTagCommand::buildDirtyList(DirtyList& theList)
+{
+	if (theLayer->isUploadable())
+		if (theK.startsWith('_') && (theK.endsWith('_')))
+			return false;
+		else
+			return theList.update(theFeature);
+	else
+		return false;
 }
 
 bool ClearTagCommand::toXML(QDomElement& xParent) const

@@ -40,6 +40,7 @@ class SetTagCommand : public TagCommand
 
 		virtual void undo();
 		virtual void redo();
+		virtual bool buildDirtyList(DirtyList& theList);
 
 		virtual bool toXML(QDomElement& xParent) const;
 		static SetTagCommand* fromXML(MapDocument* d,QDomElement e);
@@ -73,6 +74,7 @@ class ClearTagCommand : public TagCommand
 
 		virtual void undo();
 		virtual void redo();
+		virtual bool buildDirtyList(DirtyList& theList);
 
 		virtual bool toXML(QDomElement& xParent) const;
 		static ClearTagCommand* fromXML(MapDocument* d,QDomElement e);
