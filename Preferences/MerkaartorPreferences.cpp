@@ -482,7 +482,18 @@ void MerkaartorPreferences::setDefaultStyle(const QString& S)
 	Sets->setValue("style/Default",S);
 }
 
-int MerkaartorPreferences::getZoomInPerc() const
+
+void MerkaartorPreferences::setDisableStyleForTracks(bool theValue)
+{
+	Sets->setValue("style/DisableStyleForTracks", theValue);
+}
+
+bool MerkaartorPreferences::getDisableStyleForTracks() const
+{
+	return Sets->value("style/DisableStyleForTracks", true).toBool();
+}
+
+	int MerkaartorPreferences::getZoomInPerc() const
 {
 	return Sets->value("zoom/zoomIn", "133").toInt();
 }

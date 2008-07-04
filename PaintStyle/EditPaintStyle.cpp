@@ -194,6 +194,11 @@ void EPTouchupLayer::draw(TrackPoint* Pt)
 		if (Draw)
 		{
 			QPointF P(p->theProjection.project(Pt->position()));
+
+			if (Pt->findKey("_waypoint_") != Pt->tagSize()) {
+				QRectF R(P-QPointF(4,4),QSize(8,8)); 
+				p->thePainter.fillRect(R,QColor(255,0,0,128)); 
+			}
 			
 			QRectF R(P-QPointF(2,2),QSize(4,4));
 			p->thePainter.fillRect(R,QColor(0,0,0,128));

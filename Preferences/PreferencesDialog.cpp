@@ -95,6 +95,7 @@ void PreferencesDialog::loadPrefs()
 		CustomStyleName->setEnabled(true);
 		BrowseStyle->setEnabled(true);
 	}
+	cbDisableStyleForTracks->setChecked(MerkaartorPreferences::instance()->getDisableStyleForTracks());
 
 	sbZoomInPerc->setValue(MerkaartorPreferences::instance()->getZoomInPerc());
 	sbZoomOutPerc->setValue(MerkaartorPreferences::instance()->getZoomOutPerc());
@@ -106,6 +107,7 @@ void PreferencesDialog::loadPrefs()
 
 	cbAutoSaveDoc->setChecked(MerkaartorPreferences::instance()->getAutoSaveDoc());
 	cbAutoExtractTracks->setChecked(MerkaartorPreferences::instance()->getAutoExtractTracks());
+
 }
 
 void PreferencesDialog::savePrefs()
@@ -129,15 +131,24 @@ void PreferencesDialog::savePrefs()
 	else
 		NewStyle = CustomStyleName->text();
 
+	bool PainterToInvalidate = false;
 	if (NewStyle != MerkaartorPreferences::instance()->getDefaultStyle())
 	{
 		MerkaartorPreferences::instance()->setDefaultStyle(NewStyle);
 		loadPainters(MerkaartorPreferences::instance()->getDefaultStyle());
+		PainterToInvalidate = true;
+	}
+	if (cbDisableStyleForTracks->isChecked() != MerkaartorPreferences::instance()->getDisableStyleForTracks()) {
+		MerkaartorPreferences::instance()->setDisableStyleForTracks(cbDisableStyleForTracks->isChecked());	
+		PainterToInvalidate = true;
+	}
+	if (PainterToInvalidate) {
 		for (FeatureIterator it(((MainWindow*)parent())->document()); !it.isEnd(); ++it)
 		{
 			it.get()->invalidatePainter();
 		}
-}
+	}
+
 	MerkaartorPreferences::instance()->setCustomStyle(CustomStyleName->text());
 	MerkaartorPreferences::instance()->setZoomInPerc(sbZoomInPerc->text().toInt());
 	MerkaartorPreferences::instance()->setZoomOutPerc(sbZoomOutPerc->text().toInt());

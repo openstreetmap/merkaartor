@@ -175,6 +175,8 @@ public:
 	void setDefaultStyle(const QString& aString);
 	QString getCustomStyle() const;
 	void setCustomStyle(const QString& aString);
+	void setDisableStyleForTracks(bool theValue);
+	bool getDisableStyleForTracks() const;
 
 	void setZoomInPerc(int theValue);
 	int getZoomInPerc() const;

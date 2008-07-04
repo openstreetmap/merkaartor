@@ -49,6 +49,7 @@ class MapFeaturePrivate
 		}
 
 		void updatePainters(double PixelPerM);
+		void blankPainters(double PixelPerM);
 		void initVersionNumber();
 
 		mutable QString Id;
@@ -287,20 +288,17 @@ void MapFeaturePrivate::updatePainters(double PixelPerM)
 	//if the object has no tags or only the created_by tag, we don't check for style
 	//search is about 15 times faster like that !!!
 	//However, still match features with no tags and no parent, i.e. "lost" trackpoints
-	if ( (dynamic_cast<TrackMapLayer*>(theFeature->layer())) || theFeature->sizeParents() ) 
-	{
+	if ( (dynamic_cast<TrackMapLayer*>(theFeature->layer())) && MerkaartorPreferences::instance()->getDisableStyleForTracks() ) return blankPainters(PixelPerM);
+
+	if ( (dynamic_cast<TrackMapLayer*>(theFeature->layer())) || theFeature->sizeParents() ) {
 		unsigned int i;
 		for (i=0; i<theFeature->tagSize(); ++i)
 			if ((theFeature->tagKey(i) != "created_by") && (theFeature->tagKey(i) != "ele"))
 				break;
 
-		if (i == theFeature->tagSize()) {
-			PossiblePainters.clear();
-			CurrentPainter = 0;
-			PixelPerMForPainter = PixelPerM;
-			return;
-		}
+		if (i == theFeature->tagSize()) return blankPainters(PixelPerM);
 	}
+
 	if (PixelPerMForPainter < 0)
 	{
 		PossiblePainters.clear();
@@ -332,6 +330,14 @@ void MapFeaturePrivate::updatePainters(double PixelPerM)
 			CurrentPainter = PossiblePainters[i];
 			return;
 		}
+}
+
+void MapFeaturePrivate::blankPainters(double PixelPerM)
+{
+	CurrentPainter = 0;
+	PixelPerMForPainter = PixelPerM;
+	PossiblePainters.clear();
+	HasPainter = false;
 }
 
 FeaturePainter* MapFeature::getEditPainter(double PixelPerM) const

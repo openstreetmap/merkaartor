@@ -28,7 +28,7 @@
         <enum>QTabWidget::North</enum>
        </property>
        <property name="currentIndex" >
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="tab_4" >
         <attribute name="title" >
@@ -174,6 +174,13 @@
                </widget>
               </item>
              </layout>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="cbDisableStyleForTracks" >
+              <property name="text" >
+               <string>Disable styles for track layers</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
