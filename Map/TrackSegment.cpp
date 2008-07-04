@@ -1,11 +1,13 @@
 #include "Map/TrackSegment.h"
 #include "Command/DocumentCommands.h"
+#include "Command/TrackSegmentCommands.h"
 #include "Map/Projection.h"
 #include "Map/TrackPoint.h"
 #include "Utils/LineF.h"
 
 #include <QtGui/QPainter>
 
+#include <algorithm>
 #include <vector>
 
 class TrackSegmentPrivate
@@ -58,6 +60,25 @@ RenderPriority TrackSegment::renderPriority(double) const
 void TrackSegment::add(TrackPoint* aPoint)
 {
 	p->Points.push_back(aPoint);
+}
+
+void TrackSegment::add(TrackPoint* Pt, unsigned int Idx)
+{
+	p->Points.push_back(Pt);
+	std::rotate(p->Points.begin()+Idx,p->Points.end()-1,p->Points.end());
+}
+
+unsigned int TrackSegment::find(TrackPoint* Pt) const
+{
+	for (unsigned int i=0; i<p->Points.size(); ++i)
+		if (p->Points[i] == Pt)
+			return i;
+	return p->Points.size();
+}
+
+void TrackSegment::remove(unsigned int idx)
+{
+	p->Points.erase(p->Points.begin()+idx);
 }
 
 unsigned int TrackSegment::size() const
@@ -187,26 +208,33 @@ double TrackSegment::pixelDistance(const QPointF& , double , const Projection&) 
 	return 1000000;
 }
 
-void TrackSegment::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const std::vector<MapFeature*>& /*Alternatives*/)
+void TrackSegment::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const std::vector<MapFeature*>& Proposals)
 {
-	for (unsigned int i=0; i<p->Points.size(); ++i)
-	{
-		// TODO don't remove whole list, but just the point in the list
+	for (unsigned int i=0; i<p->Points.size();) {
 		if (p->Points[i] == aFeature)
 		{
-			// TODO use alternative if available
-/*			TrackPoint* Alternative = 0;
-			if (Alternatives.size() == 1)
-				Alternative = dynamic_cast<TrackPoint*>(Alternatives[0]);
-			if (Alternative)
-*/
-			theList->add(new RemoveFeatureCommand(theDocument,this));
-			return;
-/*			if (p->Points.size() == 1)
+			std::vector<TrackPoint*> Alternatives;
+			for (unsigned int j=0; j<Proposals.size(); ++j)
+			{
+				TrackPoint* Pt = dynamic_cast<TrackPoint*>(Proposals[j]);
+				if (Pt)
+					Alternatives.push_back(Pt);
+			}
+			if ( (p->Points.size() == 1) && (Alternatives.size() == 0) )
 				theList->add(new RemoveFeatureCommand(theDocument,this));
 			else
-				theList->add(new   */
+			{
+				for (unsigned int j=0; j<Alternatives.size(); ++j)
+					if (i < p->Points.size())
+						if (p->Points[i+j] != Alternatives[j])
+							if ((i+j) == 0)
+								theList->add(new TrackSegmentAddTrackPointCommand(this, Alternatives[j], i+j,Alternatives[j]->layer()));
+							else if (p->Points[i+j-1] != Alternatives[j])
+								theList->add(new TrackSegmentAddTrackPointCommand(this, Alternatives[j], i+j,Alternatives[j]->layer()));
+				theList->add(new TrackSegmentRemoveTrackPointCommand(this, (TrackPoint*)aFeature,aFeature->layer()));
+			}
 		}
+		++i;
 	}
 }
 
@@ -234,12 +262,14 @@ TrackSegment* TrackSegment::fromXML(MapDocument* d, MapLayer* L, const QDomEleme
 {
 	TrackSegment* l = new TrackSegment();
 
+	if (e.hasAttribute("xml:id"))
+		l->setId(e.attribute("xml:id"));
+
 	QDomElement c = e.firstChildElement();
 	while(!c.isNull()) {
 		if (c.tagName() == "trkpt") {
 			TrackPoint* N = TrackPoint::fromXML(d, L, c);
 			l->add(N);
-//			L->add(N);
 		}
 		c = c.nextSiblingElement();
 	}

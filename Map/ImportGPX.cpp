@@ -19,6 +19,9 @@ static TrackPoint* importTrkPt(const QDomElement& Root, MapDocument* /* theDocum
 	double Lon = Root.attribute("lon").toDouble();
 
 	TrackPoint* Pt = new TrackPoint(Coord(angToRad(Lat),angToRad(Lon)));
+	if (Root.hasAttribute("xml:id"))
+		Pt->setId(Root.attribute("xml:id"));
+
 	theList->add(new AddFeatureCommand(theLayer,Pt, true));
 
 	if (Root.tagName() == "wpt")
@@ -75,6 +78,8 @@ static TrackPoint* importTrkPt(const QDomElement& Root, MapDocument* /* theDocum
 static void importTrkSeg(const QDomElement& Root, MapDocument* theDocument, MapLayer* theLayer, CommandList* theList, bool MakeSegment)
 {
 	TrackSegment* S = new TrackSegment;
+	if (Root.hasAttribute("xml:id"))
+		S->setId(Root.attribute("xml:id"));
 	for(QDomNode n = Root.firstChild(); !n.isNull(); n = n.nextSibling())
 	{
 		QDomElement t = n.toElement();

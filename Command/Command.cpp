@@ -4,6 +4,7 @@
 #include "Map/MapFeature.h"
 #include "Command/DocumentCommands.h"
 #include "Command/RoadCommands.h"
+#include "Command/TrackSegmentCommands.h"
 #include "Command/RelationCommands.h"
 #include "Command/TrackPointCommands.h"
 #include "Command/FeatureCommands.h"
@@ -224,6 +225,16 @@ CommandList* CommandList::fromXML(MapDocument* d, const QDomElement& e)
 		} else
 		if (c.tagName() == "RoadRemoveTrackPointCommand") {
 			RoadRemoveTrackPointCommand* C = RoadRemoveTrackPointCommand::fromXML(d, c);
+			if (C)
+				l->add(C);
+		} else
+		if (c.tagName() == "TrackSegmentAddTrackPointCommand") {
+			TrackSegmentAddTrackPointCommand* C = TrackSegmentAddTrackPointCommand::fromXML(d, c);
+			if (C)
+				l->add(C);
+		} else
+		if (c.tagName() == "TrackSegmentRemoveTrackPointCommand") {
+			TrackSegmentRemoveTrackPointCommand* C = TrackSegmentRemoveTrackPointCommand::fromXML(d, c);
 			if (C)
 				l->add(C);
 		} else

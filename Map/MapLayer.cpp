@@ -896,13 +896,8 @@ DeletedMapLayer::~ DeletedMapLayer()
 
 DeletedMapLayer* DeletedMapLayer::fromXML(MapDocument* d, const QDomElement e)
 {
-	DeletedMapLayer* l = new DeletedMapLayer(e.attribute("name"));
-	d->add(l);
-	if (!DrawingMapLayer::doFromXML(l, d, e)) {
-		delete l;
-		return NULL;
-	}
-	return l;
+	DrawingMapLayer::doFromXML(d->getTrashLayer(), d, e);
+	return d->getTrashLayer();
 }
 
 LayerWidget* DeletedMapLayer::newWidget(void)

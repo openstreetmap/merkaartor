@@ -5,6 +5,7 @@ HEADERS += \
 ./Command/FeatureCommands.h \
 ./Command/RelationCommands.h \
 ./Command/RoadCommands.h \
+./Command/TrackSegmentCommands.h \
 ./Command/TrackPointCommands.h \
 ./Interaction/CreateAreaInteraction.h \
 ./Interaction/CreateDoubleWayInteraction.h \
@@ -64,6 +65,7 @@ SOURCES += \
 ./Command/TrackPointCommands.cpp \
 ./Command/RelationCommands.cpp \
 ./Command/RoadCommands.cpp \
+./Command/TrackSegmentCommands.cpp \
 ./Map/Coord.cpp \
 ./Map/DownloadOSM.cpp \
 ./Map/ExportOSM.cpp \

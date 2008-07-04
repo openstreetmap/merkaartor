@@ -1,4 +1,6 @@
 v0.11
+	* FIX : Allow deletion of a node from a track without deleting the whole segment
+	* FIX : Add a preference option to disable styling for Track layers + re-inject default waypoint painting from dantje 
 	* ADD : non-uplodable tags; tags with key beginnig and ending with an underscore ("_") won't be uploaded
 	* ADD : ability to commit features from non-uplodable layers to the dirty layer, i.e. make them uploadable
 	* FIX : bump MDC documents to version 1.1 due to bug-fixes in history saving; history from version 1.0 MDC won't be imported.

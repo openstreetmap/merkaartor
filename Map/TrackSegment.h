@@ -31,6 +31,9 @@ class TrackSegment : public MapFeature
 		virtual RenderPriority renderPriority(double aPixelPerM) const;
 
 		void add(TrackPoint* aPoint);
+		void add(TrackPoint* Pt, unsigned int Idx);
+		unsigned int find(TrackPoint* Pt) const;
+		void remove(unsigned int idx);
 		unsigned int size() const;
 		TrackPoint* get(int i);
 		void sortByTime();
