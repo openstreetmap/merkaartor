@@ -368,9 +368,9 @@ bool CommandHistory::toXML(QDomElement& xParent) const
 	e = xParent.ownerDocument().createElement("CommandHistory");
 	xParent.appendChild(e);
 
-	//e.setAttribute("index", QString::number(Index));
+	e.setAttribute("index", QString::number(Index));
 
-	for (unsigned int i=0; i<Index; ++i) {
+	for (unsigned int i=0; i<Subs.size(); ++i) {
 		OK = Subs[i]->toXML(e);
 	}
 
@@ -394,7 +394,7 @@ CommandHistory* CommandHistory::fromXML(MapDocument* d, QDomElement& e)
 		}
 		c = c.nextSiblingElement();
 	}
-	//h->Index = e.attribute("index").toUInt();
+	h->Index = e.attribute("index").toUInt();
 
 	return h;
 }
