@@ -23,6 +23,8 @@ class Coord
 	public:
 		Coord()
 			: Lat(0.0), Lon(0.0) {}
+		Coord(const QPointF& P)
+			: Lat(P.x()), Lon(P.y()) {}
 		Coord(double aLat, double aLon)
 			: Lat(aLat), Lon(aLon) {}
 
@@ -60,6 +62,11 @@ class Coord
 
 		bool toXML(QString elName, QDomElement& xParent) const;
 		static Coord fromXML(QDomElement e);
+
+		QPointF toQPointF() const
+		{
+			return QPointF(Lat, Lon);
+		}
 
 	private:
 		double Lat;

@@ -91,12 +91,29 @@ TrackPoint* TrackSegment::get(int i)
 	return p->Points[i];
 }
 
-bool TrackSegment::visibleLine(const CoordBox & viewport, const Coord & last, const Coord & here)
+bool TrackSegment::visibleLine(const CoordBox & viewport, Coord & last, Coord & here)
 {
-	if (viewport.contains(last) || viewport.contains(here))
+	if (viewport.contains(last) && viewport.contains(here))
 		return true;
 
-	return viewport.intersects( CoordBox(last, here) );
+	Coord A, B;
+	LineF(last, here).intersectionWith(viewport, &A, &B);
+	if (A.isNull() && B.isNull()) 
+		return false;
+
+	if (!A.isNull() && !B.isNull()) {
+		last = A;
+		here = B;
+		return true;
+	}
+
+	if (viewport.contains(here))
+		last = A;
+	else
+		here = A;
+
+	return true;
+//	return viewport.intersects( CoordBox(last, here) );
 }
 
 static void configurePen(QPen & pen, double slope, double speed)
@@ -154,8 +171,8 @@ void TrackSegment::draw(QPainter &P, const Projection& theProjection)
 
 	for (unsigned int i=1; i<p->Points.size(); ++i)
 	{
-		const Coord & last = p->Points[i-1]->position();
-		const Coord & here = p->Points[i]->position();
+		Coord last = p->Points[i-1]->position();
+		Coord here = p->Points[i]->position();
 
 		if (visibleLine(theProjection.viewport(), last, here) == false)
 			continue;

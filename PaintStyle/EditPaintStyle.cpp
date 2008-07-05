@@ -170,7 +170,6 @@ void EPTouchupLayer::setP(EditPaintStylePrivate* ap)
 
 void EPTouchupLayer::draw(Road* R)
 {
-	if (p->theProjection.viewport().disjunctFrom(R->boundingBox())) return;
 	FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
 	if (paintsel)
 		paintsel->drawTouchup(R,p->thePainter,p->theProjection);
@@ -182,7 +181,6 @@ void EPTouchupLayer::draw(Relation* /* R */)
 
 void EPTouchupLayer::draw(TrackPoint* Pt)
 {
-	if (p->theProjection.viewport().disjunctFrom(Pt->boundingBox())) return;
 	FeaturePainter* paintsel = Pt->getEditPainter(p->theProjection.pixelPerM());
 	if (paintsel)
 		paintsel->drawTouchup(Pt,p->thePainter,p->theProjection);

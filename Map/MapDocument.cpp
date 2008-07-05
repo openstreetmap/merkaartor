@@ -669,13 +669,13 @@ std::pair<bool,CoordBox> boundingBox(const MapDocument* theDocument)
 {
 	unsigned int First;
 	for (First = 0; First < theDocument->layerSize(); ++First)
-		if (theDocument->getLayer(First)->size())
+		if (theDocument->getLayer(First)->size() && theDocument->getLayer(First) != theDocument->getTrashLayer())
 			break;
 	if (First == theDocument->layerSize())
 		return std::make_pair(false,CoordBox(Coord(0,0),Coord(0,0)));
 	CoordBox BBox(MapLayer::boundingBox(theDocument->getLayer(First)));
 	for (unsigned int i=First+1; i<theDocument->layerSize(); ++i)
-		if (theDocument->getLayer(i)->size())
+		if (theDocument->getLayer(i)->size() && theDocument->getLayer(First) != theDocument->getTrashLayer())
 			BBox.merge(MapLayer::boundingBox(theDocument->getLayer(i)));
 	return std::make_pair(true,BBox);
 }

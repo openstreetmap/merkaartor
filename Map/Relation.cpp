@@ -383,7 +383,7 @@ void Relation::toBinary(QDataStream& ds)
 	tagsToBinary(ds);
 }
 
-Relation* Relation::fromBinary(MapDocument* d, MapLayer* L, QDataStream& ds)
+Relation* Relation::fromBinary(MapDocument* d, MapLayer* /* L */, QDataStream& ds)
 {
 	qint8	c;
 	qint64	id;

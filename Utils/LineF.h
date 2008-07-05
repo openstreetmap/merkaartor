@@ -97,8 +97,29 @@ public:
 			return sqrt( (P.x()-P1.x())*(P.x()-P1.x()) + (P.y()-P1.y())*(P.y()-P1.y()) );
 	}
 
-	double capDistance(const QPointF& P) const
+	//double capDistance(const QPointF& P) const
+	//{
+	//	if (Valid)
+	//	{
+	//		double dx = P2.x()-P1.x();
+	//		double dy = P2.y()-P1.y();
+	//		double px = P.x()-P1.x();
+	//		double py = P.y()-P1.y();
+	//		if ( (dx*px+dy*py) < 0)
+	//			return ::distance(P,P1);
+	//		px = P.x()-P2.x();
+	//		py = P.y()-P2.y();
+	//		if ( (dx*px+dy*py) > 0)
+	//			return ::distance(P,P2);
+	//		return fabs(A*P.x()+B*P.y()+C);
+	//	}
+	//	else
+	//		return sqrt( (P.x()-A)*(P.x()-A) + (P.y()-B)*(P.y()-B) );
+	//}
+
+	double capDistance(const Coord& cd)
 	{
+		QPointF P(cd.lat(), cd.lon());
 		if (Valid)
 		{
 			double dx = P2.x()-P1.x();
@@ -115,11 +136,7 @@ public:
 		}
 		else
 			return sqrt( (P.x()-A)*(P.x()-A) + (P.y()-B)*(P.y()-B) );
-	}
-
-	double capDistance(const Coord& P)
-	{
-		return capDistance(QPointF(P.lat(),P.lon()));
+		//return capDistance(QPointF(P.lat(),P.lon()));
 	}
 
 	Coord project(const Coord& P)
@@ -139,6 +156,54 @@ public:
 			return QPointF(P.x()-A*SD,P.y()-B*SD);
 		}
 		return P1;
+	}
+
+	bool intersectsWith(const CoordBox& C) const
+	{
+		QPointF intersection;
+		if ( QLineF(P1, P2).intersect( QLineF( C.topLeft().toQPointF(), C.topRight().toQPointF() ), &intersection) == QLineF::BoundedIntersection ) return true;
+		if ( QLineF(P1, P2).intersect( QLineF( C.topRight().toQPointF(), C.bottomRight().toQPointF() ), &intersection) == QLineF::BoundedIntersection ) return true;
+		if ( QLineF(P1, P2).intersect( QLineF( C.bottomRight().toQPointF(), C.bottomLeft().toQPointF() ), &intersection) == QLineF::BoundedIntersection ) return true;
+		if ( QLineF(P1, P2).intersect( QLineF( C.bottomLeft().toQPointF(), C.topLeft().toQPointF() ), &intersection) == QLineF::BoundedIntersection ) return true;
+		return false;
+	}
+
+	void intersectionWith(const CoordBox& C, Coord* C1, Coord* C2) const
+	{
+		QPointF intersection;
+		bool hasC1 = false;
+
+		if ( QLineF(P1, P2).intersect( QLineF( C.topLeft().toQPointF(), C.topRight().toQPointF() ), &intersection) == QLineF::BoundedIntersection ) {
+			*C1 = intersection;
+			hasC1 = true;
+		}
+		if ( QLineF(P1, P2).intersect( QLineF( C.topRight().toQPointF(), C.bottomRight().toQPointF() ), &intersection) == QLineF::BoundedIntersection ) {
+			if (hasC1) {
+				*C2 = intersection;
+				return;
+			} else {
+				*C1 = intersection;
+				hasC1 = true;
+			}
+		}
+		if ( QLineF(P1, P2).intersect( QLineF( C.bottomRight().toQPointF(), C.bottomLeft().toQPointF() ), &intersection) == QLineF::BoundedIntersection ) {
+			if (hasC1) {
+				*C2 = intersection;
+				return;
+			} else {
+				*C1 = intersection;
+				hasC1 = true;
+			}
+		}
+		if ( QLineF(P1, P2).intersect( QLineF( C.bottomLeft().toQPointF(), C.topLeft().toQPointF() ), &intersection) == QLineF::BoundedIntersection ) {
+			if (hasC1) {
+				*C2 = intersection;
+				return;
+			} else {
+				*C1 = intersection;
+				hasC1 = true;
+			}
+		}
 	}
 
 	QPointF intersectionWith(const LineF& L)

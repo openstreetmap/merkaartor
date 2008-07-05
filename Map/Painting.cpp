@@ -34,7 +34,20 @@ static void buildCubicPath(QPainterPath& Path, const QPointF& P1, const QPointF&
 
 void buildPathFromRoad(Road *R, Projection const &theProjection, QPainterPath &Path)
 {
-	Path.moveTo(theProjection.project(R->get(0)->position()));
+	unsigned int first=0, last=R->size();
+	if (!theProjection.viewport().contains(R->boundingBox())) {
+		for (unsigned int i=0; i<R->size(); ++i) {
+			if (theProjection.viewport().contains(R->get(i)->boundingBox())) {
+				if (!first)
+					first=i;
+				last=i;
+			}
+		}
+		if (first) first--;
+		last=qMin(last+2, R->size());
+	}
+
+	Path.moveTo(theProjection.project(R->get(first)->position()));
 	if (R->smoothed().size())
 	{
 		for (unsigned int i=3; i<R->smoothed().size(); i+=3)
@@ -44,8 +57,8 @@ void buildPathFromRoad(Road *R, Projection const &theProjection, QPainterPath &P
 				theProjection.project(R->smoothed()[i]));
 	}
 	else
-		for (unsigned int i=1; i<R->size(); ++i)
-			Path.lineTo(theProjection.project(R->get(i)->position()));
+		for (unsigned int j=first+1; j<last; ++j)
+			Path.lineTo(theProjection.project(R->get(j)->position()));
 }
 
 void buildPolygonFromRoad(Road *R, Projection const &theProjection, QPolygonF &Polygon)

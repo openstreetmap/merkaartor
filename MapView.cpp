@@ -131,8 +131,6 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 {
 	updateStaticBuffer(anEvent);
 	QPainter P(this);
-	QRegion rg(rect());
-	P.setClipRegion(rg);
 	P.drawPixmap(QPoint(0, 0), *StaticBuffer);
 	if (theInteraction) {
 		P.setRenderHint(QPainter::Antialiasing);
@@ -230,6 +228,7 @@ void MapView::drawFeatures(QPainter & P)
 		PaintStyleLayer *Current = EP.get(i);
 		for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
 		{
+			if (projection().viewport().disjunctFrom((i.get())->boundingBox())) continue;
 			P.setOpacity(i.layer()->getAlpha());
 			if (Road * R = dynamic_cast < Road * >(i.get()))
 				Current->draw(R);
@@ -290,6 +289,10 @@ void MapView::updateStaticBuffer(QPaintEvent* /* anEvent */)
 	MerkaartorPreferences * prefs = MerkaartorPreferences::instance();
 
 	QPainter painter(StaticBuffer);
+	QRegion rg(rect());
+	painter.setClipRegion(rg);
+	painter.setClipping(true);
+
 	painter.setRenderHint(QPainter::Antialiasing);
 	painter.fillRect(StaticBuffer->rect(), QBrush(prefs->getBgColor()));
 
