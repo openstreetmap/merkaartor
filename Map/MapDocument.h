@@ -49,7 +49,7 @@ public:
 	const MapLayer* getLayer(unsigned int i) const;
 
 	MapFeature* getFeature(const QString& id, bool exact=true);
-	QVector<MapFeature*> getFeatures();
+	QVector<MapFeature*> getFeatures(QString* layerType=NULL);
 	void setHistory(CommandHistory* h);
 	CommandHistory& history();
 	const CommandHistory& history() const;

@@ -361,11 +361,15 @@ const MapLayer* MapDocument::getLayer(unsigned int i) const
 	return p->Layers[i];
 }
 
-QVector<MapFeature*> MapDocument::getFeatures()
+QVector<MapFeature*> MapDocument::getFeatures(QString* layerType)
 {
 	QVector<MapFeature*> theFeatures;
 	for (VisibleFeatureIterator i(this); !i.isEnd(); ++i) {
-		theFeatures.append(i.get());	
+		if (!layerType)
+			theFeatures.append(i.get());
+		else
+			if (i.get()->layer()->className() == *layerType)
+				theFeatures.append(i.get());
 	}
 	return theFeatures;
 }

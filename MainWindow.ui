@@ -13,9 +13,19 @@
    <string>Merkaartor</string>
   </property>
   <property name="windowIcon" >
-   <iconset resource="Icons/AllIcons.qrc" >:/Icons/Merkaartor.xpm</iconset>
+   <iconset resource="Icons/AllIcons.qrc" >
+    <normaloff>:/Icons/Merkaartor.xpm</normaloff>:/Icons/Merkaartor.xpm</iconset>
   </property>
-  <widget class="QWidget" name="centralWidget" />
+  <widget class="QWidget" name="centralWidget" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>73</y>
+     <width>1000</width>
+     <height>508</height>
+    </rect>
+   </property>
+  </widget>
   <widget class="QMenuBar" name="menuBar" >
    <property name="geometry" >
     <rect>
@@ -109,6 +119,7 @@
      </property>
      <addaction name="exportOSMAction" />
      <addaction name="exportOSMBinAction" />
+     <addaction name="exportGPXAction" />
     </widget>
     <addaction name="fileNewAction" />
     <addaction name="fileOpenAction" />
@@ -183,10 +194,27 @@
    <addaction name="windowAction" />
    <addaction name="menuHelp" />
   </widget>
-  <widget class="QStatusBar" name="StatusBar" />
+  <widget class="QStatusBar" name="StatusBar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>581</y>
+     <width>1000</width>
+     <height>19</height>
+    </rect>
+   </property>
+  </widget>
   <widget class="QToolBar" name="toolBar" >
    <property name="enabled" >
     <bool>true</bool>
+   </property>
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>21</y>
+     <width>1000</width>
+     <height>52</height>
+    </rect>
    </property>
    <property name="windowTitle" >
     <string>Tool Bar</string>
@@ -292,7 +320,8 @@
   </action>
   <action name="editUndoAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >:/Icons/edit-undo.xpm</iconset>
+    <iconset resource="Icons/AllIcons.qrc" >
+     <normaloff>:/Icons/edit-undo.xpm</normaloff>:/Icons/edit-undo.xpm</iconset>
    </property>
    <property name="text" >
     <string>&amp;Undo</string>
@@ -303,7 +332,8 @@
   </action>
   <action name="editRedoAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >:/Icons/edit-redo.xpm</iconset>
+    <iconset resource="Icons/AllIcons.qrc" >
+     <normaloff>:/Icons/edit-redo.xpm</normaloff>:/Icons/edit-redo.xpm</iconset>
    </property>
    <property name="text" >
     <string>&amp;Redo</string>
@@ -314,7 +344,8 @@
   </action>
   <action name="editMoveAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >:/Icons/move.xpm</iconset>
+    <iconset resource="Icons/AllIcons.qrc" >
+     <normaloff>:/Icons/move.xpm</normaloff>:/Icons/move.xpm</iconset>
    </property>
    <property name="text" >
     <string>Move</string>
@@ -355,7 +386,8 @@
   </action>
   <action name="editPropertiesAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >:/Icons/toolselect.xpm</iconset>
+    <iconset resource="Icons/AllIcons.qrc" >
+     <normaloff>:/Icons/toolselect.xpm</normaloff>:/Icons/toolselect.xpm</iconset>
    </property>
    <property name="text" >
     <string>Select</string>
@@ -377,7 +409,8 @@
     <bool>false</bool>
    </property>
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >:/Icons/remove.xpm</iconset>
+    <iconset resource="Icons/AllIcons.qrc" >
+     <normaloff>:/Icons/remove.xpm</normaloff>:/Icons/remove.xpm</iconset>
    </property>
    <property name="text" >
     <string>R&amp;emove</string>
@@ -407,7 +440,8 @@
     <bool>false</bool>
    </property>
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >:/Icons/reverse.xpm</iconset>
+    <iconset resource="Icons/AllIcons.qrc" >
+     <normaloff>:/Icons/reverse.xpm</normaloff>:/Icons/reverse.xpm</iconset>
    </property>
    <property name="text" >
     <string>&amp;Reverse</string>
@@ -704,7 +738,7 @@
     <string>Hide/Show the Undo dock</string>
    </property>
    <property name="shortcut" >
-     <string>Ctrl+T</string>
+    <string>Ctrl+T</string>
    </property>
   </action>
   <action name="viewDownloadedAction" >
@@ -720,7 +754,8 @@
   </action>
   <action name="editCopyAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >:/Icons/edit-copy.png</iconset>
+    <iconset resource="Icons/AllIcons.qrc" >
+     <normaloff>:/Icons/edit-copy.png</normaloff>:/Icons/edit-copy.png</iconset>
    </property>
    <property name="text" >
     <string>Copy</string>
@@ -745,7 +780,8 @@
   </action>
   <action name="editPasteMergeAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >:/Icons/edit-paste.png</iconset>
+    <iconset resource="Icons/AllIcons.qrc" >
+     <normaloff>:/Icons/edit-paste.png</normaloff>:/Icons/edit-paste.png</iconset>
    </property>
    <property name="text" >
     <string>Paste Tags (Merge)</string>
@@ -803,6 +839,11 @@
    </property>
    <property name="whatsThis" >
     <string>Commit the selected feature from a non-uploadable layer (e.g.Track or Extract) to the dirty layer, ready for upload</string>
+   </property>
+  </action>
+  <action name="exportGPXAction" >
+   <property name="text" >
+    <string>GPX</string>
    </property>
   </action>
  </widget>

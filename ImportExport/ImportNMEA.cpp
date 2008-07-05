@@ -69,7 +69,7 @@ bool ImportNMEA::import(MapLayer* aLayer)
 		} else
 		if (command == "GGA") {
 			bool prevGoodFix = goodFix;
-			goodFix = importGSA(line);
+			goodFix = importGGA(line);
 			if (!goodFix && prevGoodFix) {
 				if (TS->size())
 					theList->add(new AddFeatureCommand(theLayer,TS, true));
@@ -165,13 +165,13 @@ TrackPoint* ImportNMEA::importRMC (QString line)
 	//int date = token[9];
 
 	QString strDate = tokens[9] + tokens[1];
-	QDateTime date = QDateTime::fromString(strDate, "ddMMyyHHmmss.zzz");
+	QDateTime date = QDateTime::fromString(strDate, "ddMMyyHHmmss.zzz").toUTC();
 	if (!date.isValid())
 		return NULL;
 
 	if (date.date().year() < 1970)
 		date = date.addYears(100);
-	date.setTimeSpec(Qt::UTC);
+	//date.setTimeSpec(Qt::UTC);
 
 	TrackPoint* Pt = new TrackPoint(Coord(angToRad(lat),angToRad(lon)));
 	Pt->setElevation(curAltitude);

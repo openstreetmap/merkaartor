@@ -40,7 +40,7 @@ public:
 	// Specify the output as a QFile
 	virtual bool saveFile(QString filename);
 	// import the  input
-	virtual bool import(MapLayer* aLayer) = 0;
+	virtual bool import(MapLayer* /* aLayer */) { return false; };
 	// export
 	virtual bool export_(const QVector<MapFeature *>& featList);
 

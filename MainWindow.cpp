@@ -9,6 +9,7 @@
 #include "Command/DocumentCommands.h"
 #include "Command/FeatureCommands.h"
 #include "ImportExport/ImportExportOsmBin.h"
+#include "ImportExport/ExportGPX.h"
 #include "Interaction/CreateAreaInteraction.h"
 #include "Interaction/CreateDoubleWayInteraction.h"
 #include "Interaction/CreateNodeInteraction.h"
@@ -982,10 +983,39 @@ void MainWindow::on_exportOSMBinAction_triggered()
 		tr("Export Binary OSM"), MerkaartorPreferences::instance()->getWorkingDir() + "/untitled.osb", tr("OSM Binary Files (*.osb)"));
 
 	if (fileName != "") {
+		QApplication::setOverrideCursor(Qt::WaitCursor);
+	
 		ImportExportOsmBin osb(document());
 		if (osb.saveFile(fileName)) {
 			osb.export_(theFeatures);
 		}
+	
+		QApplication::restoreOverrideCursor();
+	}
+}
+
+void MainWindow::on_exportGPXAction_triggered()
+{
+	QVector<MapFeature*> theFeatures;
+
+	QString fileName = QFileDialog::getSaveFileName(this,
+		tr("Export GPX"), MerkaartorPreferences::instance()->getWorkingDir() + "/untitled.gpx", tr("GPX Files (*.gpx)"));
+
+	if (fileName != "") {
+		QApplication::setOverrideCursor(Qt::WaitCursor);
+
+		for (VisibleFeatureIterator i(document()); !i.isEnd(); ++i) {
+			if (dynamic_cast<TrackMapLayer*>(i.get()->layer())) {
+				theFeatures.push_back(i.get());
+			}
+		}
+
+		ExportGPX gpx(document());
+		if (gpx.saveFile(fileName)) {
+			gpx.export_(theFeatures);
+		}
+
+		QApplication::restoreOverrideCursor();
 	}
 }
 

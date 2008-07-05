@@ -269,7 +269,7 @@ bool TrackSegment::toXML(QDomElement xParent)
 	e.setAttribute("xml:id", xmlId());
 
 	for (unsigned int i=0; i<size(); ++i) {
-		get(i)->toTrackXML(e);
+		get(i)->toGPX(e);
 	}
 
 	return OK;
@@ -285,7 +285,7 @@ TrackSegment* TrackSegment::fromXML(MapDocument* d, MapLayer* L, const QDomEleme
 	QDomElement c = e.firstChildElement();
 	while(!c.isNull()) {
 		if (c.tagName() == "trkpt") {
-			TrackPoint* N = TrackPoint::fromXML(d, L, c);
+			TrackPoint* N = TrackPoint::fromGPX(d, L, c);
 			l->add(N);
 		}
 		c = c.nextSiblingElement();

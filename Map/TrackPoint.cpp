@@ -131,7 +131,7 @@ bool TrackPoint::toXML(QDomElement xParent)
 	e.setAttribute("id", xmlId());
 	e.setAttribute("lon",QString::number(radToAng(Position.lon()),'f',8));
 	e.setAttribute("lat", QString::number(radToAng(Position.lat()),'f',8));
-	e.setAttribute("timestamp", time().toString(Qt::ISODate));
+	e.setAttribute("timestamp", time().toUTC().toString(Qt::ISODate));
 	e.setAttribute("user", user());
 
 	tagsToXML(e);
@@ -139,19 +139,54 @@ bool TrackPoint::toXML(QDomElement xParent)
 	return OK;
 }
 
-bool TrackPoint::toTrackXML(QDomElement xParent)
+bool TrackPoint::toGPX(QDomElement xParent)
 {
 	bool OK = true;
 
-	QDomElement e = xParent.ownerDocument().createElement("trkpt");
+	QString s = tagValue("_waypoint_","");
+	QDomElement e;
+	if (!s.isEmpty()) 
+		e = xParent.ownerDocument().createElement("wpt");
+	else
+		e = xParent.ownerDocument().createElement("trkpt");
 	xParent.appendChild(e);
 
 	e.setAttribute("xml:id", xmlId());
 	e.setAttribute("lon",QString::number(radToAng(Position.lon()),'f',8));
 	e.setAttribute("lat", QString::number(radToAng(Position.lat()),'f',8));
-	e.setAttribute("time", time().toString(Qt::ISODate));
 
-	tagsToXML(e);
+	QDomElement c = xParent.ownerDocument().createElement("time");
+	e.appendChild(c);
+	QDomText v = c.ownerDocument().createTextNode(time().toString(Qt::ISODate)+"Z");
+	c.appendChild(v);
+
+	s = tagValue("name","");
+	if (!s.isEmpty()) {
+		QDomElement c = xParent.ownerDocument().createElement("name");
+		e.appendChild(c);
+		QDomText v = c.ownerDocument().createTextNode(s);
+		c.appendChild(v);
+	}
+	if (elevation()) {
+		QDomElement c = xParent.ownerDocument().createElement("ele");
+		e.appendChild(c);
+		QDomText v = c.ownerDocument().createTextNode(QString::number(elevation(),'f',6));
+		c.appendChild(v);
+	}
+	s = tagValue("_comment_","");
+	if (!s.isEmpty()) {
+		QDomElement c = xParent.ownerDocument().createElement("cmt");
+		e.appendChild(c);
+		QDomText v = c.ownerDocument().createTextNode(s);
+		c.appendChild(v);
+	}
+	s = tagValue("_description_","");
+	if (!s.isEmpty()) {
+		QDomElement c = xParent.ownerDocument().createElement("desc");
+		e.appendChild(c);
+		QDomText v = c.ownerDocument().createTextNode(s);
+		c.appendChild(v);
+	}
 
 	return OK;
 }
@@ -160,11 +195,9 @@ TrackPoint * TrackPoint::fromXML(MapDocument* d, MapLayer* L, const QDomElement 
 {
 	double Lat = e.attribute("lat").toDouble();
 	double Lon = e.attribute("lon").toDouble();
+
 	QDateTime time;
-	if (e.hasAttribute("timestamp"))
-		time = QDateTime::fromString(e.attribute("timestamp"), Qt::ISODate);
-	else
-		time = QDateTime::fromString(e.attribute("time"), Qt::ISODate);
+	time = QDateTime::fromString(e.attribute("timestamp"), Qt::ISODate);
 	QString user = e.attribute("user");
 
 	QString id = (e.hasAttribute("id") ? e.attribute("id") : e.attribute("xml:id"));
@@ -191,6 +224,57 @@ TrackPoint * TrackPoint::fromXML(MapDocument* d, MapLayer* L, const QDomElement 
 	}
 
 	MapFeature::tagsFromXML(d, Pt, e);
+
+	return Pt;
+}
+
+TrackPoint * TrackPoint::fromGPX(MapDocument* d, MapLayer* L, const QDomElement e)
+{
+	double Lat = e.attribute("lat").toDouble();
+	double Lon = e.attribute("lon").toDouble();
+
+	QString id = (e.hasAttribute("id") ? e.attribute("id") : e.attribute("xml:id"));
+	if (!id.startsWith('{'))
+		id = "node_" + id;
+	TrackPoint* Pt = dynamic_cast<TrackPoint*>(d->getFeature(id));
+	if (!Pt) {
+		Pt = new TrackPoint(Coord(angToRad(Lat),angToRad(Lon)));
+		Pt->setId(id);
+		Pt->setLastUpdated(MapFeature::OSMServer);
+		L->add(Pt);
+	} else {
+		if (Pt->layer() != L) {
+			Pt->layer()->remove(Pt);
+			L->add(Pt);
+		}
+		Pt->setPosition(Coord(angToRad(Lat), angToRad(Lon)));
+		if (Pt->lastUpdated() == MapFeature::NotYetDownloaded)
+			Pt->setLastUpdated(MapFeature::OSMServer);
+	}
+
+	if (e.tagName() == "wpt")
+		Pt->setTag("_waypoint_", "yes");
+
+	QDateTime time;
+	QDomElement c = e.firstChildElement();
+	while(!c.isNull()) {
+		if (c.tagName() == "time") {
+			QString dtm = c.text();
+			dtm.truncate(19);
+			Pt->setTime(QDateTime::fromString(dtm, Qt::ISODate));
+		} else
+		if (c.tagName() == "ele") {
+			Pt->setElevation(c.text().toFloat());
+		} else
+		if (c.tagName() == "cmt") {
+			Pt->setTag("_comment_", c.text());
+		} else
+		if (c.tagName() == "desc") {
+			Pt->setTag("_description_", c.text());
+		}
+
+		c = c.nextSiblingElement();
+	}
 
 	return Pt;
 }

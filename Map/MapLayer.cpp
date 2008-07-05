@@ -760,15 +760,26 @@ bool TrackMapLayer::toXML(QDomElement xParent)
 	o.setAttribute("xmlns", "http://www.topografix.com/GPX/1/1");
 	o.setAttribute("xmlns:rmc", "urn:net:trekbuddy:1.0:nmea:rmc");
 
+	QVector<TrackPoint*>	waypoints;
+	QVector<TrackSegment*>	segments;
+	std::vector<MapFeature*>::iterator it;
+	for(it = p->Features.begin(); it != p->Features.end(); it++) {
+		if (TrackSegment* S = dynamic_cast<TrackSegment*>(*it))
+			segments.push_back(S);
+		if (TrackPoint* P = dynamic_cast<TrackPoint*>(*it))
+			if (!P->tagValue("_waypoint_","").isEmpty())
+				waypoints.push_back(P);
+	}
+
+	for (int i=0; i < waypoints.size(); ++i) {
+		waypoints[i]->toGPX(o);
+	}
+
 	QDomElement t = o.ownerDocument().createElement("trk");
 	o.appendChild(t);
 
-	std::vector<MapFeature*>::iterator it;
-	for(it = p->Features.begin(); it != p->Features.end(); it++) {
-		TrackSegment* S = dynamic_cast<TrackSegment*>(*it);
-		if (S)
-			S->toXML(t);
-	}
+	for (int i=0; i < segments.size(); ++i)
+		segments[i]->toXML(t);
 
 	return OK;
 }
@@ -787,18 +798,26 @@ TrackMapLayer * TrackMapLayer::fromXML(MapDocument* d, const QDomElement e)
 		return NULL;
 
 	c = c.firstChildElement();
-	if (c.tagName() != "trk")
-		return NULL;
-
-	c = c.firstChildElement();
 	while(!c.isNull()) {
-		if (c.tagName() == "trkseg") {
-			TrackSegment* N = TrackSegment::fromXML(d, l, c);
-			l->add(N);
+		if (c.tagName() == "trk") {
+			QDomElement t = c.firstChildElement();
+			while(!t.isNull()) {
+				if (t.tagName() == "trkseg") {
+					TrackSegment* N = TrackSegment::fromXML(d, l, t);
+					l->add(N);
+				}
+
+				t = t.nextSiblingElement();
+			}
+		}
+		if (c.tagName() == "wpt") {
+			TrackPoint* N = TrackPoint::fromGPX(d, l, c);
+			//l->add(N);
 		}
 
 		c = c.nextSiblingElement();
 	}
+
 
 	return l;
 }

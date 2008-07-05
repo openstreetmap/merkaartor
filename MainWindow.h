@@ -70,6 +70,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_mapStyleLoadAction_triggered();
 		virtual void on_exportOSMAction_triggered();
 		virtual void on_exportOSMBinAction_triggered();
+		virtual void on_exportGPXAction_triggered();
 		virtual void on_editSelectAction_triggered();
 		virtual void on_renderAction_triggered();
 		virtual void on_bookmarkAddAction_triggered();
