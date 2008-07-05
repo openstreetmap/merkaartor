@@ -1,4 +1,5 @@
 v0.11
+	* ADD : Shift-Right button to drag-zoom
 	* FIX : Qt slows to a crawl when drawing lines offscreen to a large virtual canvas, clipping enabled or not (Qt bug?). Try to otimize roads/track segments drawing to cope with this.
 	* FIX : Save also the redo history in a MDC document
 	* FIX : Allow deletion of a node from a track without deleting the whole segment

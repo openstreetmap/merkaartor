@@ -52,6 +52,10 @@ class Interaction : public QObject
 	signals:
 		void requestCustomContextMenu(const QPoint & pos);
 
+	private:
+		bool Dragging;
+		Coord StartDrag;
+		Coord EndDrag;
 };
 
 template<class FeatureType>
@@ -64,8 +68,10 @@ class GenericFeatureSnapInteraction : public Interaction
 		{
 		}
 
-		virtual void paintEvent(QPaintEvent* , QPainter& thePainter)
+		virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
 		{
+			Interaction::paintEvent(anEvent, thePainter);
+
 			if (LastSnap)
 				LastSnap->drawHover(thePainter, projection());
 		}

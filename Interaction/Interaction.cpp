@@ -11,7 +11,7 @@
 #include <math.h>
 
 Interaction::Interaction(MapView* aView)
-: theView(aView), Panning(false)
+: theView(aView), Panning(false), Dragging(false), StartDrag(0,0), EndDrag(0,0)
 {
 	connect(this, SIGNAL(requestCustomContextMenu(const QPoint &)), theView, SLOT(on_customContextMenuRequested(const QPoint &)));
 }
@@ -55,8 +55,13 @@ void Interaction::mousePressEvent(QMouseEvent * anEvent)
 	if (anEvent->buttons() & Qt::RightButton)
 #endif
 	{
-		Panning = true;
-		FirstPan = LastPan = anEvent->pos();
+		if (anEvent->modifiers() & Qt::ShiftModifier) {
+			EndDrag = StartDrag = projection().inverse(anEvent->pos());
+			Dragging = true;
+		} else {
+			Panning = true;
+			FirstPan = LastPan = anEvent->pos();
+		}
 	}
 }
 
@@ -67,8 +72,16 @@ void Interaction::mouseReleaseEvent(QMouseEvent * anEvent)
 			view()->invalidate();
 		else
 			emit(requestCustomContextMenu(anEvent->pos()));
+		Panning = false;
 	}
-	Panning = false;
+	if (Dragging)
+	{
+		CoordBox DragBox(StartDrag,projection().inverse(anEvent->pos()));
+		Dragging = false;
+		view()->projection().setViewport(DragBox,view()->rect());
+		view()->invalidate();
+		view()->launch(0);
+	}
 }
 
 void Interaction::mouseMoveEvent(QMouseEvent* anEvent)
@@ -81,10 +94,20 @@ void Interaction::mouseMoveEvent(QMouseEvent* anEvent)
 		view()->invalidate();
 		LastPan = anEvent->pos();
 	}
+	if (Dragging)
+	{
+		EndDrag = projection().inverse(anEvent->pos());
+		view()->update();
+	}
 }
 
-void Interaction::paintEvent(QPaintEvent*, QPainter&)
+void Interaction::paintEvent(QPaintEvent*, QPainter& thePainter)
 {
+	if (Dragging)
+	{
+		thePainter.setPen(QPen(QColor(0,0,255),1,Qt::DotLine));
+		thePainter.drawRect(QRectF(projection().project(StartDrag),projection().project(EndDrag)));
+	}
 }
 
 QCursor Interaction::cursor() const
