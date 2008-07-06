@@ -894,9 +894,7 @@ void MainWindow::saveDocument()
 	theDocument->toXML(root);
 	theView->toXML(root);
 
-	QTextStream out(&file);
-	out.setCodec("UTF-8");
-	theXmlDoc->save(out,2);
+	file.write(theXmlDoc->toString().toUtf8());
 	file.close();
 
 	setWindowTitle(QString("Merkaartor - %1").arg(fileName));
@@ -968,8 +966,7 @@ void MainWindow::on_exportOSMAction_triggered()
 		if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
 			return;
 
-		QTextStream out(&file);
-		out << theDocument->exportOSM(theFeatures);
+		file.write(theDocument->exportOSM(theFeatures).toUtf8());
 		file.close();
 	}
 }

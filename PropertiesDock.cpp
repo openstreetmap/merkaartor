@@ -547,7 +547,7 @@ void PropertiesDock::on_centerAction_triggered()
 	Coord c = cb.center();
 	Main->view()->projection().setCenter(c, Main->view()->rect());
 	Main->setUpdatesEnabled(true);
-	Main->invalidateView();
+	Main->invalidateView(false);
 }
 
 void PropertiesDock::on_centerZoomAction_triggered()
@@ -564,5 +564,5 @@ void PropertiesDock::on_centerZoomAction_triggered()
 	cb = cb.zoomed(1.1);
 	Main->view()->projection().setViewport(cb, Main->view()->rect());
 	Main->setUpdatesEnabled(true);
-	Main->invalidateView();
+	Main->invalidateView(false);
 }

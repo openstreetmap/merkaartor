@@ -14,7 +14,6 @@
 #include <QMessageBox>
 #include <QDir>
 #include <QUrl>
-#include <QTextStream>
 #include <QTextEdit>
 #include <QComboBox>
 
