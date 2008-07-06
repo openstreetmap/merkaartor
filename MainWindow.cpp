@@ -10,6 +10,7 @@
 #include "Command/FeatureCommands.h"
 #include "ImportExport/ImportExportOsmBin.h"
 #include "ImportExport/ExportGPX.h"
+#include "ImportExport/ImportExportKML.h"
 #include "Interaction/CreateAreaInteraction.h"
 #include "Interaction/CreateDoubleWayInteraction.h"
 #include "Interaction/CreateNodeInteraction.h"
@@ -1015,6 +1016,27 @@ void MainWindow::on_exportGPXAction_triggered()
 			gpx.export_(theFeatures);
 		}
 
+		QApplication::restoreOverrideCursor();
+	}
+}
+
+void MainWindow::on_exportKMLAction_triggered()
+{
+	QVector<MapFeature*> theFeatures;
+	if (!selectExportedFeatures(theFeatures))
+		return;
+
+	QString fileName = QFileDialog::getSaveFileName(this,
+		tr("Export KML"), MerkaartorPreferences::instance()->getWorkingDir() + "/untitled.kml", tr("KML Files (*.kml)"));
+
+	if (fileName != "") {
+		QApplication::setOverrideCursor(Qt::WaitCursor);
+	
+		ImportExportKML kml(document());
+		if (kml.saveFile(fileName)) {
+			kml.export_(theFeatures);
+		}
+	
 		QApplication::restoreOverrideCursor();
 	}
 }

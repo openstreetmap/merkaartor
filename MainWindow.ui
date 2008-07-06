@@ -120,6 +120,7 @@
      <addaction name="exportOSMAction" />
      <addaction name="exportOSMBinAction" />
      <addaction name="exportGPXAction" />
+     <addaction name="exportKMLAction" />
     </widget>
     <addaction name="fileNewAction" />
     <addaction name="fileOpenAction" />
@@ -844,6 +845,11 @@
   <action name="exportGPXAction" >
    <property name="text" >
     <string>GPX</string>
+   </property>
+  </action>
+  <action name="exportKMLAction" >
+   <property name="text" >
+    <string>KML</string>
    </property>
   </action>
  </widget>

@@ -166,6 +166,7 @@ class MapFeature
 		void removeTag(unsigned int i);
 
 		FeaturePainter* getEditPainter(double PixelPerM) const;
+		FeaturePainter* getCurrentEditPainter() const;
 		bool hasEditPainter() const;
 		void invalidatePainter();
 

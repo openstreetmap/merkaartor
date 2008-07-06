@@ -80,7 +80,7 @@ class FeaturePainter
 		void drawForeground(Relation* R, QPainter& thePainter, const Projection& theProjection) const;
 		void drawTouchup(Road* R, QPainter& thePainter, const Projection& theProjection) const;
 		void drawTouchup(TrackPoint* R, QPainter& thePainter, const Projection& theProjection) const;
-	private:
+	public:
 
 		TagSelector* theSelector;
 		bool ZoomLimitSet;

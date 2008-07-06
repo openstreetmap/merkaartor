@@ -28,7 +28,6 @@ ExportGPX::~ExportGPX()
 // export
 bool ExportGPX::export_(const QVector<MapFeature *>& featList)
 {
-	QDataStream ds(Device);
 	QVector<TrackPoint*>	waypoints;
 	QVector<TrackSegment*>	segments;
 

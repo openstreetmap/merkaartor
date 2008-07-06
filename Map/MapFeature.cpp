@@ -347,6 +347,11 @@ FeaturePainter* MapFeature::getEditPainter(double PixelPerM) const
 	return p->CurrentPainter;
 }
 
+FeaturePainter* MapFeature::getCurrentEditPainter() const
+{
+	return p->CurrentPainter;
+}
+
 bool MapFeature::hasEditPainter() const
 {
 	return p->HasPainter;
