@@ -51,7 +51,8 @@ QPixmap LayerManager::getImage() const
 
 Layer* LayerManager::getLayer() const
 {
-	Q_ASSERT_X(layers.size()>0, "LayerManager::getLayer()", "No layers were added!");
+	if (!layers.size())
+		return NULL;
 	return layers.first();
 }
 

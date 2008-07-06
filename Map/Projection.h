@@ -1,6 +1,7 @@
 #ifndef MERKATOR_PROJECTION_H_
 #define MERKATOR_PROJECTION_H_
 
+#include "Preferences/MerkaartorPreferences.h"
 #include "Map/Coord.h"
 
 #include <QtCore/QPointF>
@@ -30,11 +31,14 @@ class Projection
 		virtual bool toXML(QDomElement xParent) const;
 		void fromXML(QDomElement e, const QRect & Screen);
 
+		void setProjectionType(ProjectionType aProjectionType);
+
 	protected:
 		double ScaleLat, DeltaLat, ScaleLon, DeltaLon;
 		CoordBox Viewport;
 		QPoint screen_middle;
 		LayerManager* layermanager;
+		ProjectionType theProjectionType;
 
 	private:
 		void viewportRecalc(const QRect& Screen);

@@ -848,6 +848,7 @@ void MainWindow::preferencesChanged(void)
 	} else {
 		ImageManager::instance()->setProxy("",0);
 	}
+	theView->projection().setProjectionType(MerkaartorPreferences::instance()->getProjectionType());
 }
 
 void MainWindow::on_fileSaveAsAction_triggered()
@@ -1310,6 +1311,7 @@ void MainWindow::projectionTriggered(QAction* anAction)
 	QStringList Projections = MerkaartorPreferences::instance()->getProjectionTypes();
 	int idx = Projections.indexOf(anAction->text());
 	MerkaartorPreferences::instance()->setProjectionType((ProjectionType)idx);
+	theView->projection().setProjectionType((ProjectionType)idx);
 	theView->projection().setViewport(theView->projection().viewport(), theView->rect());
 	invalidateView();
 }

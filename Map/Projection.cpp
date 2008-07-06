@@ -1,4 +1,3 @@
-#include "Preferences/MerkaartorPreferences.h"
 #include "Map/Projection.h"
 #include "Map/Coord.h"
 
@@ -9,8 +8,8 @@
 
 #include <math.h>
 
-#define LAYERMANAGER_OK (layermanager && layermanager->getLayers().size() > 0)
-#define BGPROJ_SELECTED (MerkaartorPreferences::instance()->getProjectionType() == Proj_Background)
+#define LAYERMANAGER_OK (layermanager && layermanager->getLayer())
+#define BGPROJ_SELECTED (theProjectionType == Proj_Background)
 
 // from wikipedia
 #define EQUATORIALRADIUS 6378137
@@ -21,6 +20,7 @@ Projection::Projection(void)
   ScaleLon(1000000), DeltaLon(0), Viewport(Coord(0, 0), Coord(0, 0)),
   layermanager(0)
 {
+	theProjectionType = MerkaartorPreferences::instance()->getProjectionType();
 }
 
 // Common routines
@@ -47,6 +47,11 @@ double Projection::lonAnglePerM(double Lat) const
 	double LengthOfOneDegreeLat = EQUATORIALRADIUS * M_PI / 180;
 	double LengthOfOneDegreeLon = LengthOfOneDegreeLat * fabs(cos(Lat));
 	return 1 / LengthOfOneDegreeLon;
+}
+
+void Projection::setProjectionType(ProjectionType aProjectionType)
+{
+	theProjectionType = aProjectionType;
 }
 
 QPointF Projection::project(const Coord & Map) const
