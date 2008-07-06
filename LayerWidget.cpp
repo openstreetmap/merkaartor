@@ -38,6 +38,9 @@ QSize LayerWidget::sizeHint () const
 
 void LayerWidget::paintEvent(QPaintEvent*)
 {
+	if (!isVisible())
+		return;
+
 	QPainter P(this);
 
 	P.drawLine(rect().bottomLeft(), rect().bottomRight());
@@ -127,6 +130,7 @@ void LayerWidget::setOpacity(QAction *act)
 
 void LayerWidget::close()
 {
+	setVisible(false);
 	emit(layerClosed(theLayer));
 }
 
@@ -154,16 +158,16 @@ void DrawingLayerWidget::initActions()
 {
 	LayerWidget::initActions();
 
-	closeAction = new QAction(tr("Delete"), this);
-	connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
-	ctxMenu->addAction(closeAction);
-	closeAction->setEnabled(theLayer->canDelete());
-
-	ctxMenu->addSeparator();
-
 	actZoom = new QAction(tr("Zoom"), ctxMenu);
 	ctxMenu->addAction(actZoom);
 	connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
+
+	ctxMenu->addSeparator();
+
+	closeAction = new QAction(tr("Close"), this);
+	connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
+	ctxMenu->addAction(closeAction);
+	closeAction->setEnabled(theLayer->canDelete());
 }
 
 // ImageLayerWidget
@@ -402,7 +406,9 @@ void TrackLayerWidget::initActions()
 	ctxMenu->addAction(actZoom);
 	connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
 
-	closeAction = new QAction(tr("Delete"), this);
+	ctxMenu->addSeparator();
+
+	closeAction = new QAction(tr("Close"), this);
 	connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
 	ctxMenu->addAction(closeAction);
 	closeAction->setEnabled(theLayer->canDelete());
@@ -474,15 +480,15 @@ void ExtractedLayerWidget::initActions()
 {
 	LayerWidget::initActions();
 
-	closeAction = new QAction(tr("Delete"), this);
-	connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
-	ctxMenu->addAction(closeAction);
-	closeAction->setEnabled(theLayer->canDelete());
-
-	ctxMenu->addSeparator();
-
 	actZoom = new QAction(tr("Zoom"), ctxMenu);
 	ctxMenu->addAction(actZoom);
 	connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
+
+	ctxMenu->addSeparator();
+
+	closeAction = new QAction(tr("Close"), this);
+	connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
+	ctxMenu->addAction(closeAction);
+	closeAction->setEnabled(theLayer->canDelete());
 }
 

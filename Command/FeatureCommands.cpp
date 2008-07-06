@@ -152,8 +152,8 @@ SetTagCommand * SetTagCommand::fromXML(MapDocument * d, QDomElement e)
 		return NULL;
 	if (e.hasAttribute("oldkey"))
 		a->oldK = e.attribute("oldkey");
-			if (!(F = d->getFeature("rel_"+e.attribute("feature"))))
-				return NULL;
+	if (!(F = d->getFeature(e.attribute("feature"), false)))
+		return NULL;
 	a->theFeature = F;
 	a->theIdx = e.attribute("idx").toInt();
 	a->theK = e.attribute("key");

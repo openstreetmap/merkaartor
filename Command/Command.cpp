@@ -273,17 +273,18 @@ CommandHistory::CommandHistory()
 
 CommandHistory::~CommandHistory()
 {
-	//FIXME Is there a point to this?
-	//cleanup();
+	cleanup();
 }
 
 void CommandHistory::cleanup()
 {
-	for (unsigned int i=Index; i<Subs.size(); ++i)
-		Subs[i]->redo();
+	//FIXME Is there a point to this?
+	//for (unsigned int i=Index; i<Subs.size(); ++i)
+	//	Subs[i]->redo();
 	for (unsigned int i=0; i<Subs.size(); ++i)
 		delete Subs[i];
 	Subs.clear();
+	Index = 0;
 }
 
 void CommandHistory::undo()
@@ -389,6 +390,11 @@ CommandHistory* CommandHistory::fromXML(MapDocument* d, QDomElement& e)
 		} else
 		if (c.tagName() == "SetTagCommand") {
 			SetTagCommand* C = SetTagCommand::fromXML(d, c);
+			if (C)
+				h->add(C);
+		}
+		if (c.tagName() == "ClearTagCommand") {
+			ClearTagCommand* C = ClearTagCommand::fromXML(d, c);
 			if (C)
 				h->add(C);
 		}

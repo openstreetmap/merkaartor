@@ -48,6 +48,7 @@ public:
 	MapDocument* getDocument();
 
 	LayerWidget* getWidget(void);
+	void deleteWidget(void);
 	virtual void updateWidget() {};
 
 	virtual void setVisible(bool b) = 0;

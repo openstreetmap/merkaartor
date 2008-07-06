@@ -249,6 +249,13 @@ LayerWidget* MapLayer::getWidget(void)
 	return p->theWidget;
 }
 
+void MapLayer::deleteWidget(void)
+{
+//	p->theWidget->deleteLater();
+	delete p->theWidget;
+	p->theWidget = NULL;
+}
+
 void MapLayer::setAlpha(const qreal a)
 {
 	p->alpha = a;
@@ -811,7 +818,7 @@ TrackMapLayer * TrackMapLayer::fromXML(MapDocument* d, const QDomElement e)
 			}
 		}
 		if (c.tagName() == "wpt") {
-			TrackPoint* N = TrackPoint::fromGPX(d, l, c);
+			/* TrackPoint* N = */ TrackPoint::fromGPX(d, l, c);
 			//l->add(N);
 		}
 

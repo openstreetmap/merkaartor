@@ -6,6 +6,7 @@
 #include "Map/MapDocument.h"
 #include "Map/MapLayer.h"
 #include "PropertiesDock.h"
+#include "Command/Command.h"
 
 #include <QPushButton>
 
@@ -59,10 +60,16 @@ void LayerDock::deleteLayer(MapLayer* aLayer)
 {
 	for (int i=layerList.size()-1; i >= 0; i--) {
 		if (layerList[i].first == aLayer) {
+			if (i) {
+				layerList[i-1].first->setSelected(true);
+				layerList[i-1].second->setChecked(true);
+			}
 			butGroup->removeButton(layerList[i].second);
 			Layout->removeWidget(layerList[i].second);
-			delete layerList[i].second;
+			disconnect(layerList[i].second);
+			layerList[i].second->setVisible(false);
 			layerList.removeAt(i);
+			//aLayer->deleteWidget();
 		}
 	}
 
@@ -104,9 +111,10 @@ void LayerDock::layerChanged(LayerWidget*, bool adjustViewport)
 
 void LayerDock::layerClosed(MapLayer* l)
 {
-	Main->document()->getUploadedLayer()->clear();
-	Main->document()->remove(l);
-	delete l;
+//	Main->document()->getUploadedLayer()->clear();
+	//Main->document()->remove(l);
+	//delete l;
+	l->clear();
 	Main->on_editPropertiesAction_triggered();
 }
 

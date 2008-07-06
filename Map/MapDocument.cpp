@@ -686,7 +686,8 @@ std::pair<bool,CoordBox> boundingBox(const MapDocument* theDocument)
 
 bool hasUnsavedChanges(const MapDocument& aDoc)
 {
-	return aDoc.history().index();
+//	return aDoc.history().index();
+	return (aDoc.getDirtyLayer()->size() > 0);
 }
 
 MapLayer * MapDocument::getLastDownloadLayer()

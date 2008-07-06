@@ -14,7 +14,6 @@ class TrackSegment : public MapFeature
 	private:
 		TrackSegment(const TrackSegment& other);
 
-		bool visibleLine(const CoordBox & viewport, Coord & last, Coord & here);
 		void drawDirectionMarkers(QPainter & P, QPen & pen, const QPointF & FromF, const QPointF & ToF);
 
 	public:

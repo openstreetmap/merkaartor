@@ -1,4 +1,5 @@
 #include "Coord.h"
+#include "Utils/LineF.h"
 
 #include <stdio.h>
 
@@ -110,5 +111,30 @@ void CoordBox::resize(double d)
 	BottomLeft.setLon(BottomLeft.lon()-dlon);
 	TopRight.setLat(TopRight.lat()+dlat);
 	TopRight.setLon(TopRight.lon()+dlon);
+}
+
+bool CoordBox::visibleLine(const CoordBox & viewport, Coord & last, Coord & here)
+{
+	if (viewport.contains(last) && viewport.contains(here))
+		return true;
+
+	Coord A, B;
+	LineF(last, here).intersectionWith(viewport, &A, &B);
+	if (A.isNull() && B.isNull()) 
+		return false;
+
+	if (!A.isNull() && !B.isNull()) {
+		last = A;
+		here = B;
+		return true;
+	}
+
+	if (viewport.contains(here))
+		last = A;
+	else
+		here = A;
+
+	return true;
+//	return viewport.intersects( CoordBox(last, here) );
 }
 

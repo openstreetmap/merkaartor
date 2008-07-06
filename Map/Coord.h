@@ -223,6 +223,8 @@ class CoordBox
 		}
 		void resize(double f);
 
+		static bool visibleLine(const CoordBox & viewport, Coord & last, Coord & here);
+
 		bool toXML(QString elName, QDomElement& xParent) const;
 		static CoordBox fromXML(QDomElement e);
 
