@@ -109,6 +109,8 @@ MainWindow::MainWindow(void)
 
 	connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardChanged()));
 
+	setWindowTitle(QString("Merkaartor - untitled"));
+
 #ifndef OSMARENDER
 	//TODO Osmarender rendering
 	renderAction->setVisible(false);
@@ -687,6 +689,10 @@ void MainWindow::on_fileNewAction_triggered()
 		theDocument->history().setActions(editUndoAction, editRedoAction);
 		connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));
 		theDirty->updateList();
+
+		fileName = "";
+		setWindowTitle(QString("Merkaartor - untitled"));
+
 		invalidateView();
 	}
 }
