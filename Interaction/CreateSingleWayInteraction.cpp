@@ -100,8 +100,11 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFe
 				theRoad->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 				if (IsCurved)
 					theRoad->setTag("smooth","yes");
-				if (FirstNode)
+				if (FirstNode) {
 					From = FirstNode;
+					if (!From->isDirty() && !From->hasOSMId() && From->isUploadable())
+						L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),From,true));
+				}
 				else
 				{
 					From = new TrackPoint(FirstPoint);
@@ -114,8 +117,11 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFe
 				L->setFeature(theRoad);
 			}
 			TrackPoint* To = 0;
-			if (Pt)
+			if (Pt) {
 				To = Pt;
+				if (!To->isDirty() && !To->hasOSMId() && To->isUploadable())
+					L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),To,true));
+			}
 			else if (Road* aRoad = dynamic_cast<Road*>(aFeature))
 			{
 				Coord P(projection().inverse(anEvent->pos()));

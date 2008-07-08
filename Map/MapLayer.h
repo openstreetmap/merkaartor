@@ -74,6 +74,7 @@ public:
 
 	virtual bool canDelete();
 	virtual bool isUploadable() {return true;};
+	virtual bool isTrack() {return false;};
 
 protected:
 	MapLayerPrivate* p;
@@ -139,6 +140,7 @@ public:
 
 	virtual const QString className() {return "TrackMapLayer";};
 	virtual bool isUploadable() {return true;};
+	virtual bool isTrack() {return true;};
 };
 
 class DirtyMapLayer : public DrawingMapLayer

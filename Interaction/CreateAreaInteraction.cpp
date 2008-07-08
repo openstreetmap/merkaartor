@@ -81,6 +81,8 @@ void CreateAreaInteraction::createNewRoad(CommandList* L)
 	{
 		From = FirstNode;
 		FirstNode = 0;
+		if (!From->isDirty() && !From->hasOSMId() && From->isUploadable())
+			L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),From,true));
 	}
 	else
 	{
@@ -150,6 +152,9 @@ void CreateAreaInteraction::addToRoad(QMouseEvent* anEvent, MapFeature* Snap, Co
 		L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),To,true));
 		L->setDescription(MainWindow::tr("Area: Add node %1 to Road %2").arg(To->description().arg(theRoad->description())));
 		L->setFeature(To);
+	} else {
+		if (!To->isDirty() && !To->hasOSMId() && To->isUploadable())
+			L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),To,true));
 	}
 	L->add(new RoadAddTrackPointCommand(theRoad,To));
 	if (To == theRoad->get(0))

@@ -166,7 +166,7 @@ bool DirtyListVisit::add(MapFeature* F)
 	else if (Road* R = dynamic_cast<Road*>(F))
 	{
 		for (unsigned int i=0; i<R->size(); ++i)
-			if (!hasOSMId(R->get(i)) && notYetAdded(R->get(i)))
+			if (!(R->get(i)->hasOSMId()) && notYetAdded(R->get(i)))
 				add(R->get(i));
 		bool x = addRoad(R);
 		AlreadyAdded.push_back(F);
@@ -176,7 +176,7 @@ bool DirtyListVisit::add(MapFeature* F)
 	else if (Relation* Rel = dynamic_cast<Relation*>(F))
 	{
 		for (unsigned int i=0; i<Rel->size(); ++i)
-			if (!hasOSMId(Rel->get(i)) && notYetAdded(Rel->get(i)))
+			if (!(Rel->get(i)->hasOSMId()) && notYetAdded(Rel->get(i)))
 				add(Rel->get(i));
 		bool x = addRelation(Rel);
 		AlreadyAdded.push_back(F);
@@ -202,12 +202,12 @@ bool DirtyListVisit::update(MapFeature* F)
 	}
 	else if (Road* R = dynamic_cast<Road*>(F)) {
 		for (unsigned int i=0; i<R->size(); ++i)
-			if (!hasOSMId(R->get(i)) && notYetAdded(R->get(i)))
+			if (!(R->get(i)->hasOSMId()) && notYetAdded(R->get(i)))
 				add(R->get(i));
 		return updateRoad(R);
 	} else if (Relation* Rel = dynamic_cast<Relation*>(F)) {
 		for (unsigned int i=0; i<Rel->size(); ++i)
-			if (!hasOSMId(Rel->get(i)) && notYetAdded(Rel->get(i)))
+			if (!(Rel->get(i)->hasOSMId()) && notYetAdded(Rel->get(i)))
 				add(Rel->get(i));
 		return updateRelation(Rel);
 	}

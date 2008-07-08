@@ -1,5 +1,6 @@
 #include "TagModel.h"
 #include "MainWindow.h"
+#include "Command/DocumentCommands.h"
 #include "Command/FeatureCommands.h"
 #include "Map/MapDocument.h"
 #include "Map/MapFeature.h"
@@ -122,9 +123,11 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
 			if (index.column() == 0)
 			{
 				beginInsertRows(QModelIndex(), Tags.size()+1, Tags.size()+1);
-				CommandList* L = new CommandList(MainWindow::tr("SetTag %1").arg(theFeatures[0]->id()), theFeatures[0]);
+				CommandList* L = new CommandList(MainWindow::tr("Set Tags on %1").arg(theFeatures[0]->id()), theFeatures[0]);
 				for (unsigned int i=0; i<theFeatures.size(); ++i)
 				{
+					if (!theFeatures[i]->isDirty() && !theFeatures[i]->hasOSMId() && theFeatures[i]->isUploadable())
+						L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),theFeatures[i],true));
 					L->add(new SetTagCommand(theFeatures[i],value.toString(),"", Main->document()->getDirtyOrOriginLayer(theFeatures[i]->layer())));
 					theFeatures[i]->setLastUpdated(MapFeature::User);
 				}
@@ -142,12 +145,15 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
 				Tags[index.row()].first = value.toString();
 			else
 				Tags[index.row()].second = value.toString();
-			CommandList* L = new CommandList(MainWindow::tr("SetTag %1").arg(theFeatures[0]->id()), theFeatures[0]);
+			CommandList* L = new CommandList(MainWindow::tr("Set Tags on  %1").arg(theFeatures[0]->id()), theFeatures[0]);
 			for (unsigned int i=0; i<theFeatures.size(); ++i)
 			{
 				unsigned int j = theFeatures[i]->findKey(Original);
-				if (j<theFeatures[i]->tagSize())
+				if (j<theFeatures[i]->tagSize()) {
+					if (!theFeatures[i]->isDirty() && !theFeatures[i]->hasOSMId() && theFeatures[i]->isUploadable())
+						L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),theFeatures[i],true));
 					L->add(new SetTagCommand(theFeatures[i],j , Tags[index.row()].first, Tags[index.row()].second, Main->document()->getDirtyOrOriginLayer(theFeatures[i]->layer())));
+				}
 				theFeatures[i]->setLastUpdated(MapFeature::User);
 			}
 			Main->document()->addHistory(L);

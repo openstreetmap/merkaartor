@@ -4,6 +4,7 @@
 #include "MapView.h"
 #include "TagModel.h"
 #include "Utils/EditCompleterDelegate.h"
+#include "Command/DocumentCommands.h"
 #include "Command/FeatureCommands.h"
 #include "Command/TrackPointCommands.h"
 #include "Map/Coord.h"
@@ -426,9 +427,13 @@ void PropertiesDock::on_RoadName_editingFinished()
 		if (RoadUi.Name->text().isEmpty())
 			Main->document()->addHistory(
 				new ClearTagCommand(selection(0),"name",Main->document()->getDirtyOrOriginLayer(selection(0)->layer())));
-		else
-			Main->document()->addHistory(
-				new SetTagCommand(selection(0),"name",RoadUi.Name->text(),Main->document()->getDirtyOrOriginLayer(selection(0)->layer())));
+		else {
+			CommandList* theList  = new CommandList(MainWindow::tr("Set Tag 'name' to '%1' on %2").arg(RoadUi.Name->text()).arg(selection(0)->description()), selection(0));
+			if (!selection(0)->isDirty() && !selection(0)->hasOSMId() && selection(0)->isUploadable())
+				theList->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),selection(0),true));
+			theList->add(new SetTagCommand(selection(0),"name",RoadUi.Name->text(),Main->document()->getDirtyOrOriginLayer(selection(0)->layer())));
+			Main->document()->addHistory(theList);
+		}
 		theModel->setFeature(Selection);
 	}
 }

@@ -150,7 +150,7 @@ qint64 MapFeature::idToLong() const
 {
 	bool ok;
 
-	if (hasOSMId(this)) {
+	if (hasOSMId()) {
 		QString s = stripToOSMId(id());
 		qint64 l = s.toLongLong(&ok);
 		Q_ASSERT(ok);
@@ -163,6 +163,17 @@ qint64 MapFeature::idToLong() const
 QString MapFeature::xmlId() const
 {
 	return stripToOSMId(id());
+}
+
+bool MapFeature::hasOSMId() const
+{
+	if (p->Id.left(5) == "node_")
+		return true;
+	if (p->Id.left(4) == "way_")
+		return true;
+	if (p->Id.left(4) == "rel_")
+		return true;
+	return false;
 }
 
 const QDateTime& MapFeature::time() const
@@ -185,6 +196,16 @@ void MapFeature::setUser(const QString& user)
 {
 	p->User = user;
 	notifyChanges();
+}
+
+bool MapFeature::isDirty()
+{
+	return (p->theLayer->className() == "DirtyMapLayer");
+}
+
+bool MapFeature::isUploadable()
+{
+	return (p->theLayer->isUploadable());
 }
 
 void MapFeature::setTag(unsigned int index, const QString& key, const QString& value)
@@ -288,9 +309,9 @@ void MapFeaturePrivate::updatePainters(double PixelPerM)
 	//if the object has no tags or only the created_by tag, we don't check for style
 	//search is about 15 times faster like that !!!
 	//However, still match features with no tags and no parent, i.e. "lost" trackpoints
-	if ( (dynamic_cast<TrackMapLayer*>(theFeature->layer())) && MerkaartorPreferences::instance()->getDisableStyleForTracks() ) return blankPainters(PixelPerM);
+	if ( (theFeature->layer()->isTrack()) && MerkaartorPreferences::instance()->getDisableStyleForTracks() ) return blankPainters(PixelPerM);
 
-	if ( (dynamic_cast<TrackMapLayer*>(theFeature->layer())) || theFeature->sizeParents() ) {
+	if ( (theFeature->layer()->isTrack()) || theFeature->sizeParents() ) {
 		unsigned int i;
 		for (i=0; i<theFeature->tagSize(); ++i)
 			if ((theFeature->tagKey(i) != "created_by") && (theFeature->tagKey(i) != "ele"))
@@ -485,18 +506,6 @@ QString MapFeature::stripToOSMId(const QString& id)
 	if (f>0)
 		return id.right(id.length()-(f+1));
 	return id;
-}
-
-bool hasOSMId(const MapFeature* aFeature)
-{
-	QString id = aFeature->id();
-	if (id.left(5) == "node_")
-		return true;
-	if (id.left(4) == "way_")
-		return true;
-	if (id.left(4) == "rel_")
-		return true;
-	return false;
 }
 
 //Static

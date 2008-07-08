@@ -90,6 +90,7 @@ class MapFeature
 		 */
 		qint64 idToLong() const;
 		QString xmlId() const;
+		bool hasOSMId() const;
 		ActorType lastUpdated() const;
 		void setLastUpdated(ActorType A);
 		const QDateTime& time() const;
@@ -164,6 +165,16 @@ class MapFeature
 		 * Be carefull: no verification is made on i.
 		 */
 		void removeTag(unsigned int i);
+
+		/** check if the feature is on the dirty layer
+		 * @return true if on the dirty layer
+		 */
+		bool isDirty();
+
+		/** check if the feature is on an uploadable layer
+		 * @return true if on an uploadable layer
+		 */
+		bool isUploadable();
 
 		FeaturePainter* getEditPainter(double PixelPerM) const;
 		FeaturePainter* getCurrentEditPainter() const;
