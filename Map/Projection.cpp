@@ -8,9 +8,6 @@
 
 #include <math.h>
 
-#define LAYERMANAGER_OK (layermanager && layermanager->getLayer())
-#define BGPROJ_SELECTED (theProjectionType == Proj_Background)
-
 // from wikipedia
 #define EQUATORIALRADIUS 6378137
 #define POLARRADIUS      6356752

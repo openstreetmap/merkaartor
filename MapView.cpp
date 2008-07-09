@@ -122,20 +122,30 @@ MapDocument *MapView::document()
 void MapView::invalidate()
 {
 	StaticBufferUpToDate = false;
-	if (layermanager)
+	if (LAYERMANAGER_OK && layermanager->getLayer()->isVisible())
 		layermanager->forceRedraw();
-	repaint();
+	update();
 }
 
 void MapView::paintEvent(QPaintEvent * anEvent)
 {
-	updateStaticBuffer(anEvent);
+	QTime Start(QTime::currentTime());
+
 	QPainter P(this);
+	P.fillRect(rect(), QBrush(MerkaartorPreferences::instance()->getBgColor()));
+
+	drawLayersImage(P);
+	
+	updateStaticBuffer(anEvent);
 	P.drawPixmap(QPoint(0, 0), *StaticBuffer);
 	if (theInteraction) {
 		P.setRenderHint(QPainter::Antialiasing);
 		theInteraction->paintEvent(anEvent, P);
 	}
+
+	QTime Stop(QTime::currentTime());
+	StatusMessage = tr("Paint took %1ms").arg(Start.msecsTo(Stop));
+	QTimer::singleShot(0,this,SLOT(updateStatusMessage()));
 }
 
 void MapView::drawScale(QPainter & P)
@@ -285,8 +295,9 @@ void MapView::updateStaticBuffer(QPaintEvent* /* anEvent */)
 		StaticBuffer = new QPixmap(size());
 	}
 
-	QTime Start(QTime::currentTime());
 	MerkaartorPreferences * prefs = MerkaartorPreferences::instance();
+
+	StaticBuffer->fill(Qt::transparent);
 
 	QPainter painter(StaticBuffer);
 	QRegion rg(rect());
@@ -294,21 +305,16 @@ void MapView::updateStaticBuffer(QPaintEvent* /* anEvent */)
 	painter.setClipping(true);
 
 	painter.setRenderHint(QPainter::Antialiasing);
-	painter.fillRect(StaticBuffer->rect(), QBrush(prefs->getBgColor()));
 
 	if (theDocument)
 	{
 		sortRenderingPriorityInLayers();
-		drawLayersImage(painter);
+		//drawLayersImage(painter);
 		drawFeatures(painter);
 		drawDownloadAreas(painter);
 	}
 
 	drawScale(painter);
-
-	QTime Stop(QTime::currentTime());
-	StatusMessage = tr("Paint took %1ms").arg(Start.msecsTo(Stop));
-	QTimer::singleShot(0,this,SLOT(updateStatusMessage()));
 
 	StaticBufferUpToDate = true;
 }

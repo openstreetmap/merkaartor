@@ -6,6 +6,9 @@
 
 #include <QtCore/QPointF>
 
+#define LAYERMANAGER_OK (layermanager && layermanager->getLayer())
+#define BGPROJ_SELECTED (theProjectionType == Proj_Background)
+
 class QRect;
 class LayerManager;
 
