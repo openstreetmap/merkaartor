@@ -487,7 +487,7 @@ void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 	QString selws, selts;
 
 	if (layermanager)
-		if (layermanager->getLayers().size() > 0) {
+		if (layermanager->getLayer()) {
 			layermanager->removeLayer();
 		}
 	SAFE_DELETE(p->layer_bg);
@@ -570,6 +570,7 @@ void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 	if (layermanager)
 		if (p->layer_bg) {
 			layermanager->addLayer(p->layer_bg);
+			layermanager->setSize();
 		}
 
 }

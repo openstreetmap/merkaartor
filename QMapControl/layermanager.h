@@ -156,6 +156,7 @@ class LayerManager : public QObject
 		void drawGeoms(QPainter* painter);
 		void drawImage(QPainter* painter);
 		void setSize(QSize newSize);
+		void setSize();
 
 	private:
 		LayerManager& operator=(const LayerManager& rhs);

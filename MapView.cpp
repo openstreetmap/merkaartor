@@ -137,6 +137,7 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 	drawLayersImage(P);
 	
 	updateStaticBuffer(anEvent);
+	P.setOpacity(1.0);
 	P.drawPixmap(QPoint(0, 0), *StaticBuffer);
 	if (theInteraction) {
 		P.setRenderHint(QPainter::Antialiasing);
@@ -228,7 +229,6 @@ void MapView::drawFeatures(QPainter & P)
 {
 	for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
 	{
-		P.setOpacity(i.layer()->getAlpha());
 		i.get()->draw(P, projection());
 	}
 
@@ -470,8 +470,8 @@ void MapView::loadingFinished()
 void MapView::resizeEvent(QResizeEvent * event)
 {
 	StaticBufferUpToDate = false;
-	//if (layermanager)
-	//	layermanager->setSize(size());
+	if (LAYERMANAGER_OK && layermanager->getLayer()->isVisible())
+		layermanager->setSize(size());
 	projection().zoom(1, QPoint(width() / 2, height() / 2), rect());
 
 	QWidget::resizeEvent(event);

@@ -471,6 +471,11 @@ void LayerManager::drawImage(QPainter* painter)
 /*!
     \fn LayerManager::resize(QSize newSize)
  */
+void LayerManager::setSize()
+{
+	setSize(parentWidget->size());
+}
+
 void LayerManager::setSize(QSize newSize)
 {
 	offSize = newSize *2;

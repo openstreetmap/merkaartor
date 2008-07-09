@@ -175,7 +175,7 @@ void Projection::zoom(double d, const QPointF & Around,
 
 void Projection::layerManagerViewportRecalc(const QRect & Screen)
 {
-	layermanager->setSize(Screen.size());
+//	layermanager->setSize(Screen.size());
 
 	QPointF tr = screenToCoordinate(Screen.topRight());
 	QPointF bl = screenToCoordinate(Screen.bottomLeft());
@@ -190,7 +190,7 @@ void Projection::layerManagerViewportRecalc(const QRect & Screen)
 
 void Projection::layerManagerSetViewport(const CoordBox & TargetMap, const QRect& Screen)
 {
-	layermanager->setSize(Screen.size());
+//	layermanager->setSize(Screen.size());
 
 	screen_middle = QPoint(Screen.width() / 2, Screen.height() / 2);
 //	QPoint screen_middle = QPoint(Screen.width() / 2, Screen.height() / 2);
