@@ -32,7 +32,8 @@ class MapView :	public QWidget
 		void launch(Interaction* anInteraction);
 		Interaction* interaction();
 
-		void invalidate();
+		void panScreen(QPoint delta) ;
+		void invalidate(bool updateStaticBuffer, bool updateMap);
 
 		virtual void paintEvent(QPaintEvent* anEvent);
 		virtual void mousePressEvent(QMouseEvent * event);
@@ -53,17 +54,20 @@ class MapView :	public QWidget
 
 	private:
 		void sortRenderingPriorityInLayers();
-		void drawLayersImage(QPainter & painter);
 		void drawFeatures(QPainter & painter);
 		void drawDownloadAreas(QPainter & painter);
 		void drawScale(QPainter & painter);
 		void updateStaticBuffer(QPaintEvent* anEvent);
+		void updateLayersImage(QPaintEvent* anEvent);
 		MainWindow* Main;
 		Projection theProjection;
 		MapDocument* theDocument;
 		Interaction* theInteraction;
 		QPixmap* StaticBuffer;
+		QPixmap* StaticMap;
 		bool StaticBufferUpToDate;
+		bool StaticMapUpToDate;
+		QPoint thePanDelta;
 
 		int numImages;
 		QProgressBar* pbImages;

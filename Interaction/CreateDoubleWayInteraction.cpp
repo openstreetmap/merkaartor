@@ -145,7 +145,7 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 				L->add(new RoadAddTrackPointCommand(R1,B1));
 				L->add(new RoadAddTrackPointCommand(R2,B2,(unsigned int)0));
 				document()->addHistory(L);
-				view()->invalidate();
+				view()->invalidate(true, false);
 				FirstPoint = view()->projection().inverse(anEvent->pos());
 				FirstDistance = DockData.RoadDistance->text().toDouble();
 			}
@@ -199,7 +199,7 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 				L->add(new RoadAddTrackPointCommand(R2,B2));
 				L->add(new RoadAddTrackPointCommand(R2,A2));
 				document()->addHistory(L);
-				view()->invalidate();
+				view()->invalidate(true, false);
 				FirstPoint = view()->projection().inverse(anEvent->pos());
 				FirstDistance = DockData.RoadDistance->text().toDouble();
 			}

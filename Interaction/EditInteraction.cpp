@@ -130,7 +130,7 @@ void EditInteraction::on_remove_triggered()
 		delete theList;
 	view()->properties()->setSelection(0);
 	view()->properties()->checkMenuStatus();
-	view()->invalidate();
+	view()->invalidate(true, false);
 }
 
 void EditInteraction::on_reverse_triggered()
@@ -142,5 +142,5 @@ void EditInteraction::on_reverse_triggered()
 		reversePoints(document(),theList,R);
 		document()->addHistory(theList);
 	}
-	view()->invalidate();
+	view()->invalidate(true, false);
 }

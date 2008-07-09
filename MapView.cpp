@@ -23,8 +23,8 @@
 #include <QtGui/QStatusBar>
 
 MapView::MapView(MainWindow* aMain) :
-	Main(aMain), theDocument(0), theInteraction(0), StaticBuffer(0),
-		StaticBufferUpToDate(false), numImages(0)
+	Main(aMain), theDocument(0), theInteraction(0), StaticBuffer(0), StaticMap(0), 
+		StaticBufferUpToDate(false), StaticMapUpToDate(false),numImages(0)
 {
 	setMouseTracking(true);
 	setAttribute(Qt::WA_OpaquePaintEvent);
@@ -78,6 +78,7 @@ MapView::~MapView()
 #endif
 	delete layermanager;
 	delete StaticBuffer;
+	delete StaticMap;
 }
 
 MainWindow *MapView::main()
@@ -119,12 +120,23 @@ MapDocument *MapView::document()
 	return theDocument;
 }
 
-void MapView::invalidate()
+void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
 {
-	StaticBufferUpToDate = false;
-	if (LAYERMANAGER_OK && layermanager->getLayer()->isVisible())
+	if (updateStaticBuffer)
+		StaticBufferUpToDate = false;
+	if (LAYERMANAGER_OK && layermanager->getLayer()->isVisible() && updateMap) {
+		thePanDelta = QPoint(0, 0);
 		layermanager->forceRedraw();
+		StaticMapUpToDate = false;
+	}
 	update();
+}
+
+void MapView::panScreen(QPoint delta) 
+{
+	thePanDelta += delta;
+	projection().panScreen(delta,rect());
+	invalidate(true, false);
 }
 
 void MapView::paintEvent(QPaintEvent * anEvent)
@@ -134,7 +146,11 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 	QPainter P(this);
 	P.fillRect(rect(), QBrush(MerkaartorPreferences::instance()->getBgColor()));
 
-	drawLayersImage(P);
+	if (LAYERMANAGER_OK && layermanager->getLayer()->isVisible()) {
+		updateLayersImage(anEvent);
+		P.setOpacity(theDocument->getImageLayer()->getAlpha());
+		P.drawPixmap(thePanDelta, *StaticMap);
+	}
 	
 	updateStaticBuffer(anEvent);
 	P.setOpacity(1.0);
@@ -182,16 +198,21 @@ void MapView::sortRenderingPriorityInLayers()
 	}
 }
 
-void MapView::drawLayersImage(QPainter & P)
+void MapView::updateLayersImage(QPaintEvent * anEvent)
 {
-	bool visible = (layermanager && layermanager->getLayers().size() && layermanager->getLayer()->isVisible());
-	if (visible == false)
+	if (StaticMapUpToDate)
 		return;
 
-	P.setOpacity(theDocument->getImageLayer()->getAlpha());
+	if (!StaticMap || (StaticMap->size() != size()))
+	{
+		delete StaticMap;
+		StaticMap = new QPixmap(size());
+	}
+	QPainter P(StaticMap);
 
 	if (MerkaartorPreferences::instance()->getProjectionType() == Proj_Background)
 	{
+		StaticMapUpToDate = true;
 		layermanager->drawImage(&P);
 		return;
 	}
@@ -223,6 +244,8 @@ void MapView::drawLayersImage(QPainter & P)
 	}
 
 	P.drawPixmap((width()-pms.width())/2, (height()-pms.height())/2, pms);
+
+	StaticMapUpToDate = true;
 }
 
 void MapView::drawFeatures(QPainter & P)
@@ -295,8 +318,6 @@ void MapView::updateStaticBuffer(QPaintEvent* /* anEvent */)
 		StaticBuffer = new QPixmap(size());
 	}
 
-	MerkaartorPreferences * prefs = MerkaartorPreferences::instance();
-
 	StaticBuffer->fill(Qt::transparent);
 
 	QPainter painter(StaticBuffer);
@@ -351,12 +372,12 @@ void MapView::wheelEvent(QWheelEvent* ev)
 		for (int i = 0; i < Steps; ++i) {
 			projection().zoom(MerkaartorPreferences::instance()->getZoomInPerc()/100.0, ev->pos(), rect());
 		}
-		invalidate();
+		invalidate(true, true);
 	} else if (Steps < 0) {
 		for (int i = 0; i < -Steps; ++i) {
 			projection().zoom(MerkaartorPreferences::instance()->getZoomOutPerc()/100.0, ev->pos(), rect());
 		}
-		invalidate();
+		invalidate(true, true);
 	}
 }
 
@@ -454,8 +475,7 @@ void MapView::imageRequested()
 void MapView::imageReceived()
 {
 	pbImages->setValue(pbImages->value()+1);
-
-	invalidate();
+	invalidate(false, true);
 }
 
 void MapView::loadingFinished()
@@ -464,7 +484,7 @@ void MapView::loadingFinished()
 	numImages = 0;
 	pbImages->reset();
 
-	invalidate();
+	//invalidate(false, true);
 }
 
 void MapView::resizeEvent(QResizeEvent * event)
@@ -476,7 +496,7 @@ void MapView::resizeEvent(QResizeEvent * event)
 
 	QWidget::resizeEvent(event);
 
-	invalidate();
+	invalidate(true, true);
 }
 
 bool MapView::toXML(QDomElement xParent)
@@ -505,5 +525,5 @@ void MapView::fromXML(const QDomElement e)
 
 		c = c.nextSiblingElement();
 	}
-	invalidate();
+	invalidate(true, true);
 }

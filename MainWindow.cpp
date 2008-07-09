@@ -139,7 +139,7 @@ void MainWindow::adjustLayers(bool adjustViewport)
 
 void MainWindow::invalidateView(bool UpdateDock)
 {
-	theView->invalidate();
+	theView->invalidate(true, true);
 	//theLayers->updateContent();
 	if (UpdateDock)
 		theProperties->resetValues();

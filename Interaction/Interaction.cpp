@@ -69,7 +69,7 @@ void Interaction::mouseReleaseEvent(QMouseEvent * anEvent)
 {
 	if (Panning) {
 		if (FirstPan != LastPan)
-			view()->invalidate();
+			view()->invalidate(true, true);
 		else
 			emit(requestCustomContextMenu(anEvent->pos()));
 		Panning = false;
@@ -79,7 +79,7 @@ void Interaction::mouseReleaseEvent(QMouseEvent * anEvent)
 		CoordBox DragBox(StartDrag,projection().inverse(anEvent->pos()));
 		Dragging = false;
 		view()->projection().setViewport(DragBox,view()->rect());
-		view()->invalidate();
+		view()->invalidate(true, true);
 		view()->launch(0);
 	}
 }
@@ -90,8 +90,7 @@ void Interaction::mouseMoveEvent(QMouseEvent* anEvent)
 	{
 		QPoint Delta = LastPan;
 		Delta -= anEvent->pos();
-		view()->projection().panScreen(-Delta,view()->rect());
-		view()->invalidate();
+		view()->panScreen(-Delta);
 		LastPan = anEvent->pos();
 	}
 	if (Dragging)

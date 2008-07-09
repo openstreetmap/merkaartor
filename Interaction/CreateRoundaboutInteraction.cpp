@@ -113,7 +113,7 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
 			}
 			Main->properties()->setSelection(R);
 			document()->addHistory(L);
-			view()->invalidate();
+			view()->invalidate(true, false);
 			view()->launch(0);
 		}
 	}

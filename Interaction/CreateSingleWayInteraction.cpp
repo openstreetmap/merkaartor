@@ -86,7 +86,7 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFe
 				theList->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),N,true));
 				theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx));
 				document()->addHistory(theList);
-				view()->invalidate();
+				view()->invalidate(true, false);
 				FirstNode = N;
 			}
 		}
@@ -132,7 +132,7 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFe
 				theList->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),N,true));
 				theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx));
 				document()->addHistory(theList);
-				view()->invalidate();
+				view()->invalidate(true, false);
 				To = N;
 			}
 			if (!To)
@@ -145,7 +145,7 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFe
 			}
 			L->add(new RoadAddTrackPointCommand(theRoad,To));
 			document()->addHistory(L);
-			view()->invalidate();
+			view()->invalidate(true, false);
 			Main->properties()->setSelection(theRoad);
 		}
 		FirstPoint = view()->projection().inverse(anEvent->pos());

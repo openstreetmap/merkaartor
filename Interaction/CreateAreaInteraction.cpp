@@ -67,7 +67,7 @@ void CreateAreaInteraction::startNewRoad(QMouseEvent* anEvent, MapFeature* aFeat
 		theList->add(new AddFeatureCommand(main()->document()->getDirtyLayer(),N,true));
 		theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx));
 		document()->addHistory(theList);
-		view()->invalidate();
+		view()->invalidate(true, false);
 		FirstNode = N;
 	}
 }
@@ -142,7 +142,7 @@ void CreateAreaInteraction::addToRoad(QMouseEvent* anEvent, MapFeature* Snap, Co
 		theList->add(new AddFeatureCommand(main()->document()->getDirtyLayer(),N,true));
 		theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx));
 		document()->addHistory(theList);
-		view()->invalidate();
+		view()->invalidate(true, false);
 		To = N;
 	}
 	if (!To)
@@ -177,7 +177,7 @@ void CreateAreaInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFeature
 				createNewRoad(L);
 			addToRoad(anEvent, aFeature, L);
 			document()->addHistory(L);
-			view()->invalidate();
+			view()->invalidate(true, false);
 			if (theRelation)
 				Main->properties()->setSelection(theRelation);
 			else

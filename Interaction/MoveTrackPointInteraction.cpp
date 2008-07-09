@@ -69,7 +69,7 @@ void MoveTrackPointInteraction::snapMouseReleaseEvent(QMouseEvent * event, MapFe
 				theList->add(new MoveTrackPointCommand(Moving[i],OriginalPosition[i]+Diff, document()->getDirtyOrOriginLayer(Moving[i]->layer())));
 		}
 		document()->addHistory(theList);
-		view()->invalidate();
+		view()->invalidate(true, false);
 	}
 	Moving.clear();
 	OriginalPosition.clear();
@@ -83,7 +83,7 @@ void MoveTrackPointInteraction::snapMouseMoveEvent(QMouseEvent* event, MapFeatur
 		Coord Diff = calculateNewPosition(event,Closer,0)-StartDragPosition;
 		for (unsigned int i=0; i<Moving.size(); ++i)
 			Moving[i]->setPosition(OriginalPosition[i]+Diff);
-		view()->invalidate();
+		view()->invalidate(true, false);
 	}
 }
 

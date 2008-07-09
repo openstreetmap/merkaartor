@@ -94,7 +94,7 @@ void LayerManager::scrollView(const QPoint& point)
 	if (!checkOffscreen())
 	{
 
-		newOffscreenImage();
+//		newOffscreenImage();
 	}
 	else
 	{
@@ -316,7 +316,7 @@ void LayerManager::zoomIn()
 
 	backZoomIn();
 
-	newOffscreenImage();
+	//newOffscreenImage();
 
 }
 
@@ -371,7 +371,7 @@ void LayerManager::zoomOut()
 
 	backZoomOut();
 
-	newOffscreenImage();
+	//newOffscreenImage();
 }
 
 void LayerManager::setZoom(int zoomlevel)
@@ -445,7 +445,6 @@ void LayerManager::forceRedraw()
 void LayerManager::removeZoomImage()
 {
 	zoomImage.fill(Qt::white);
-	forceRedraw();
 }
 
 void LayerManager::drawGeoms(QPainter* painter)
