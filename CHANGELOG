@@ -2,7 +2,7 @@ v0.11
 	* ADD : Export to KML
 	* ADD : Export to GPX + proper waypoint saving in MDC documents
 	* ADD : Shift-Right button to drag-zoom
-	* FIX : Qt slows to a crawl when drawing lines offscreen to a large virtual canvas, clipping enabled or not (Qt bug?). Try to otimize roads/track segments drawing to cope with this.
+	* FIX : Qt slows to a crawl when drawing lines offscreen to a large virtual canvas, clipping enabled or not (Qt bug?). Try to optimize roads/track segments drawing to cope with this.
 	* FIX : Save also the redo history in a MDC document
 	* FIX : Allow deletion of a node from a track without deleting the whole segment
 	* FIX : Add a preference option to disable styling for Track layers + re-inject default waypoint painting from dantje 

@@ -145,7 +145,7 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
 				Tags[index.row()].first = value.toString();
 			else
 				Tags[index.row()].second = value.toString();
-			CommandList* L = new CommandList(MainWindow::tr("Set Tags on  %1").arg(theFeatures[0]->id()), theFeatures[0]);
+			CommandList* L = new CommandList(MainWindow::tr("Set Tags on %1").arg(theFeatures[0]->id()), theFeatures[0]);
 			for (unsigned int i=0; i<theFeatures.size(); ++i)
 			{
 				unsigned int j = theFeatures[i]->findKey(Original);
