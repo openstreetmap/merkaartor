@@ -11,6 +11,7 @@
 #include "Map/MapDocument.h"
 #include "Map/MapFeature.h"
 #include "Map/Road.h"
+#include "Map/Relation.h"
 #include "Map/RoadManipulations.h"
 #include "Map/TrackPoint.h"
 
@@ -84,8 +85,37 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* )
 		CoordBox DragBox(StartDrag,projection().inverse(ev->pos()));
 		for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it)
 			if (ev->modifiers() & Qt::ShiftModifier) {
-				if (DragBox.intersects(it.get()->boundingBox()))
+				if (!DragBox.intersects(it.get()->boundingBox()))
+					continue;
+				if (DragBox.contains(it.get()->boundingBox()))
 					List.push_back(it.get());
+				else {
+					Coord A, B;
+					if (Road* R = dynamic_cast<Road*>(it.get())) {
+						for (unsigned int j=1; j<R->size(); ++j) {
+							A = R->get(j-1)->position();
+							B = R->get(j)->position();
+							if (CoordBox::visibleLine(DragBox, A, B)) {
+								List.push_back(R);
+								break;
+							}
+						}
+					} else 
+					if (Relation* r = dynamic_cast<Relation*>(it.get())) {
+						for (unsigned int k=0; k<r->size(); ++k) {
+							if (Road* R = dynamic_cast<Road*>(r->get(k))) {
+								for (unsigned int j=1; j<R->size(); ++j) {
+									A = R->get(j-1)->position();
+									B = R->get(j)->position();
+									if (CoordBox::visibleLine(DragBox, A, B)) {
+										List.push_back(r);
+										break;
+									}
+								}
+							}
+						}
+					}
+				}
 			} else {
 				if (DragBox.contains(it.get()->boundingBox()))
 					List.push_back(it.get());
