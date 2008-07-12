@@ -78,6 +78,9 @@ class DirtyListVisit : public DirtyList
 		std::vector<MapFeature*> AlreadyAdded;
 		std::vector<bool> EraseResponse;
 		bool DeletePass;
+		QMap<TrackPoint*, bool> TrackPointsToDelete;
+		QMap<Road*, bool> RoadsToDelete;
+		QMap<Relation*, bool> RelationsToDelete;
 };
 
 class DirtyListDescriber : public DirtyListVisit

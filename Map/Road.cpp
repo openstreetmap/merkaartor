@@ -246,6 +246,9 @@ void Road::draw(QPainter& /* thePainter */, const Projection& )
 void Road::drawHover(QPainter& thePainter, const Projection& theProjection)
 {
 	// FIXME Selected route
+	if (!size())
+		return;
+
 	QFont F(thePainter.font());
 	F.setPointSize(10);
 	F.setBold(true);
@@ -268,6 +271,9 @@ void Road::drawHover(QPainter& thePainter, const Projection& theProjection)
 void Road::drawFocus(QPainter& thePainter, const Projection& theProjection)
 {
 	// FIXME Selected route
+	if (!size())
+		return;
+
 	QFont F(thePainter.font());
 	F.setPointSize(10);
 	F.setBold(true);
@@ -361,12 +367,20 @@ bool Road::deleteChildren(MapDocument* theDocument, CommandList* theList)
 		case QMessageBox::Cancel:
 			return false;
 
-		case QMessageBox::Yes:
-			for (unsigned int i=0; i<p->Nodes.size(); ++i) {
-				if (p->Nodes[i]->sizeParents() < 2)
-					theList->add(new RemoveFeatureCommand(theDocument, p->Nodes[i]));
+		case QMessageBox::Yes: {
+			std::vector<MapFeature*> Alternatives;
+			QMap<MapFeature*, int> ToDelete;
+			for (int i=(int)p->Nodes.size()-1; i>=0; --i) {
+				TrackPoint* N = p->Nodes[i];
+				if (N->sizeParents() < 2) {
+					ToDelete[N] = i;
+				} 
+			}
+			for (int i=0; i<ToDelete.uniqueKeys().size(); ++i) {
+				theList->add(new RemoveFeatureCommand(theDocument, ToDelete.uniqueKeys()[i], Alternatives));
 			}
 			return true;
+		}
 
 		default:
 			return false;

@@ -148,9 +148,7 @@ void EditInteraction::on_remove_triggered()
 		{
 			if (Sel[i]->deleteChildren(document(), theList)) {
 				std::vector<MapFeature*> Alternatives;
-				for (FeatureIterator it(document()); !it.isEnd(); ++it)
-					it.get()->cascadedRemoveIfUsing(document(), Sel[i], theList, Alternatives);
-				theList->add(new RemoveFeatureCommand(document(), Sel[i]));
+				theList->add(new RemoveFeatureCommand(document(), Sel[i], Alternatives));
 			}
 		}
 

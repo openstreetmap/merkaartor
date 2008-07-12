@@ -192,7 +192,7 @@ public:
 	virtual const QString className() {return "DeletedMapLayer";};
 	virtual LayerWidget* newWidget(void);
 
-	virtual bool isUploadable() {return false;};
+	virtual bool isUploadable() {return true;};
 };
 
 #endif

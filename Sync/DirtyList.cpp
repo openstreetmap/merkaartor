@@ -130,6 +130,15 @@ bool DirtyListVisit::runVisit()
 	DeletePass = false;
 	document()->history().buildDirtyList(*this);
 	DeletePass = true;
+	for (int i=0; i<RelationsToDelete.uniqueKeys().size(); i++) {
+		RelationsToDelete[RelationsToDelete.uniqueKeys()[i]] = eraseRelation(RelationsToDelete.uniqueKeys()[i]);
+	}
+	for (int i=0; i<RoadsToDelete.uniqueKeys().size(); i++) {
+		RoadsToDelete[RoadsToDelete.uniqueKeys()[i]] = eraseRoad(RoadsToDelete.uniqueKeys()[i]);
+	}
+	for (int i=0; i<TrackPointsToDelete.uniqueKeys().size(); i++) {
+		TrackPointsToDelete[TrackPointsToDelete.uniqueKeys()[i]] = erasePoint(TrackPointsToDelete.uniqueKeys()[i]);
+	}
 	return document()->history().buildDirtyList(*this);
 }
 
@@ -216,21 +225,27 @@ bool DirtyListVisit::update(MapFeature* F)
 
 bool DirtyListVisit::erase(MapFeature* F)
 {
-	if (!DeletePass) return false;
+	if (DeletePass) {
+		if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(F))
+			return TrackPointsToDelete[Pt];
+		else if (Road* R = dynamic_cast<Road*>(F)) 
+			return RoadsToDelete[R];
+		else if (Relation* S = dynamic_cast<Relation*>(F)) 
+			return RelationsToDelete[S];
+	}
 	if (Future.willBeAdded(F))
 		return EraseFromHistory;
 	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(F))
 	{
-		if (isInterestingPoint(theDocument,Pt))
-			return erasePoint(Pt);
-		else
-			return EraseFromHistory;
+		if (isInterestingPoint(theDocument,Pt)) 
+			TrackPointsToDelete[Pt] = false;
 	}
-	else if (Road* R = dynamic_cast<Road*>(F))
-		return eraseRoad(R);
-	else if (Relation* S = dynamic_cast<Relation*>(F))
-		return eraseRelation(S);
-	return EraseFromHistory;
+	else if (Road* R = dynamic_cast<Road*>(F)) 
+		RoadsToDelete[R] = false;
+	else if (Relation* S = dynamic_cast<Relation*>(F)) 
+		RelationsToDelete[S] = false;
+
+	return false;
 }
 
 /* DIRTYLISTDESCRIBER */
