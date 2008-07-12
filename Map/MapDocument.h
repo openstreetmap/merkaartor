@@ -116,7 +116,7 @@ public:
 
 private:
 	MapDocument* theDocument;
-	unsigned int Layer;
+	QVector<MapFeature*> theFeatures;
 	unsigned int Idx;
 };
 
@@ -129,12 +129,11 @@ public:
 	bool isEnd() const;
 	FeatureIterator& operator ++();
 	MapFeature* get();
-	MapLayer* layer();
 	unsigned int index();
 
 private:
 	MapDocument* theDocument;
-	unsigned int Layer;
+	QVector<MapFeature*> theFeatures;
 	unsigned int Idx;
 };
 

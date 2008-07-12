@@ -567,48 +567,30 @@ QList<CoordBox> *MapDocument::getDownloadBoxes()
 /* VISIBLEFEATUREITERATOR */
 
 VisibleFeatureIterator::VisibleFeatureIterator(MapDocument *aDoc)
-: theDocument(aDoc), Layer(0), Idx(0)
+: theDocument(aDoc), Idx(0)
 {
-	while (Layer < theDocument->layerSize())
-	{
-		MapLayer* L = theDocument->getLayer(Layer);
-		if (L->isVisible() && L->size())
-			break;
-		++Layer;
+	for (unsigned int i=0; i<theDocument->layerSize(); ++i) {
+		if (!theDocument->getLayer(i)->isVisible())
+			continue;
+		for (unsigned int j=0; j<theDocument->getLayer(i)->size(); ++j)
+			theFeatures.push_back(theDocument->getLayer(i)->get(j));
 	}
 }
 
 MapFeature* VisibleFeatureIterator::get()
 {
-	return theDocument->getLayer(Layer)->get(Idx);
+	return theFeatures[Idx];
 }
 
 bool VisibleFeatureIterator::isEnd() const
 {
-	return Layer >= theDocument->layerSize();
+	return Idx >= (unsigned int)theFeatures.size();
 }
 
 VisibleFeatureIterator& VisibleFeatureIterator::operator++()
 {
 	++Idx;
-	if (Idx >= theDocument->getLayer(Layer)->size())
-	{
-		Idx = 0;
-		++Layer;
-		while (Layer < theDocument->layerSize())
-		{
-			MapLayer* L = theDocument->getLayer(Layer);
-			if (L->isVisible() && L->size())
-				break;
-			++Layer;
-		}
-	}
 	return *this;
-}
-
-MapLayer* VisibleFeatureIterator::layer()
-{
-	return theDocument->getLayer(Layer);
 }
 
 unsigned int VisibleFeatureIterator::index()
@@ -620,46 +602,27 @@ unsigned int VisibleFeatureIterator::index()
 /* FEATUREITERATOR */
 
 FeatureIterator::FeatureIterator(MapDocument *aDoc)
-: theDocument(aDoc), Layer(0), Idx(0)
+: theDocument(aDoc), Idx(0)
 {
-	while (Layer < theDocument->layerSize())
-	{
-		if (theDocument->getLayer(Layer)->size())
-			break;
-		++Layer;
-	}
+	for (unsigned int i=0; i<theDocument->layerSize(); ++i)
+		for (unsigned int j=0; j<theDocument->getLayer(i)->size(); ++j)
+			theFeatures.push_back(theDocument->getLayer(i)->get(j));
 }
 
 MapFeature* FeatureIterator::get()
 {
-	return theDocument->getLayer(Layer)->get(Idx);
+	return theFeatures[Idx];
 }
 
 bool FeatureIterator::isEnd() const
 {
-	return Layer >= theDocument->layerSize();
+	return Idx >= (unsigned int)theFeatures.size();
 }
 
 FeatureIterator& FeatureIterator::operator++()
 {
 	++Idx;
-	if (Idx >= theDocument->getLayer(Layer)->size())
-	{
-		Idx = 0;
-		++Layer;
-		while (Layer < theDocument->layerSize())
-		{
-			if (theDocument->getLayer(Layer)->size())
-				break;
-			++Layer;
-		}
-	}
 	return *this;
-}
-
-MapLayer* FeatureIterator::layer()
-{
-	return theDocument->getLayer(Layer);
 }
 
 unsigned int FeatureIterator::index()

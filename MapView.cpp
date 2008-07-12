@@ -198,7 +198,7 @@ void MapView::sortRenderingPriorityInLayers()
 	}
 }
 
-void MapView::updateLayersImage(QPaintEvent * anEvent)
+void MapView::updateLayersImage(QPaintEvent * /* anEvent */)
 {
 	if (StaticMapUpToDate)
 		return;
@@ -262,7 +262,7 @@ void MapView::drawFeatures(QPainter & P)
 		for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
 		{
 			if (projection().viewport().disjunctFrom((i.get())->boundingBox())) continue;
-			P.setOpacity(i.layer()->getAlpha());
+			P.setOpacity(i.get()->layer()->getAlpha());
 			if (Road * R = dynamic_cast < Road * >(i.get()))
 				Current->draw(R);
 			else if (TrackPoint * Pt = dynamic_cast < TrackPoint * >(i.get()))

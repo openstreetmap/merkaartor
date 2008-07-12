@@ -170,7 +170,7 @@ bool ImportExportKML::export_(const QVector<MapFeature *>& featList)
 }
 
 // import the  input
-bool ImportExportKML::import(MapLayer* aLayer)
+bool ImportExportKML::import(MapLayer* /* aLayer */)
 {
 	return false;
 }

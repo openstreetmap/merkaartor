@@ -92,15 +92,8 @@ RemoveFeatureCommand::RemoveFeatureCommand()
 RemoveFeatureCommand::RemoveFeatureCommand(MapDocument *theDocument, MapFeature *aFeature)
 : theLayer(0), Idx(0), theFeature(aFeature), CascadedCleanUp(0), RemoveExecuted(false)
 {
-	for (FeatureIterator it(theDocument); !it.isEnd(); ++it)
-	{
-		if (it.get() == aFeature)
-		{
-			oldLayer = it.layer();
-			Idx = it.index();
-			break;
-		}
-	}
+	oldLayer = aFeature->layer();
+	Idx = aFeature->layer()->get(aFeature);
 	theLayer = theDocument->getTrashLayer();
 	redo();
 }
@@ -116,15 +109,8 @@ RemoveFeatureCommand::RemoveFeatureCommand(MapDocument *theDocument, MapFeature 
 		delete CascadedCleanUp;
 		CascadedCleanUp = 0;
 	}
-	for (FeatureIterator it(theDocument); !it.isEnd(); ++it)
-	{
-		if (it.get() == aFeature)
-		{
-			oldLayer = it.layer();
-			Idx = it.index();
-			break;
-		}
-	}
+	oldLayer = aFeature->layer();
+	Idx = aFeature->layer()->get(aFeature);
 //	redo();
 	theLayer = theDocument->getTrashLayer();
 	oldLayer->remove(theFeature);
@@ -215,6 +201,14 @@ RemoveFeatureCommand * RemoveFeatureCommand::fromXML(MapDocument* d, QDomElement
 	a->theLayer = d->getTrashLayer();
 	a->theFeature = d->getFeature(e.attribute("feature"), false);
 	a->Idx = e.attribute("index").toInt();
+
+	QDomElement c = e.firstChildElement();
+	while(!c.isNull()) {
+		if (c.tagName() == "Cascaded") {
+			a->CascadedCleanUp = CommandList::fromXML(d, c.firstChildElement());
+		}
+		c = c.nextSiblingElement();
+	}
 
 	return a;
 }

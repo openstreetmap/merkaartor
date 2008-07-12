@@ -37,6 +37,7 @@ public:
 	virtual void clear();
 	bool exists(MapFeature* aFeature) const;
 	unsigned int size() const;
+	int get(MapFeature* aFeature);
 	MapFeature* get(unsigned int i);
 	const MapFeature* get(unsigned int i) const;
 	MapFeature* get(const QString& id);

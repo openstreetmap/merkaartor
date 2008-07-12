@@ -225,6 +225,15 @@ MapDocument* MapLayer::getDocument()
     return p->theDocument;
 }
 
+int MapLayer::get(MapFeature* aFeature)
+{
+	for (unsigned int i=0; i<p->Features.size(); ++i)
+		if (p->Features[i] == aFeature)
+			return i;
+
+	return -1;
+}
+
 MapFeature* MapLayer::get(unsigned int i)
 {
 	return p->Features[i];
