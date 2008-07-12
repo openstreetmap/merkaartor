@@ -693,6 +693,7 @@ void MainWindow::on_fileNewAction_triggered()
 		fileName = "";
 		setWindowTitle(QString("Merkaartor - untitled"));
 
+		on_editPropertiesAction_triggered();
 		invalidateView();
 	}
 }
