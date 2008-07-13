@@ -30,6 +30,7 @@ public:
 	const QString& name() const;
 	bool isVisible() const;
 	bool isSelected() const;
+	bool isEnabled() const;
 
 	void add(MapFeature* aFeature);
 	void add(MapFeature* aFeature, unsigned int Idx);
@@ -54,6 +55,7 @@ public:
 
 	virtual void setVisible(bool b) = 0;
 	virtual void setSelected(bool b);
+	virtual void setEnabled(bool b);
 	virtual LayerWidget* newWidget(void) = 0;
 
 	virtual void setAlpha(const qreal alpha);
@@ -193,7 +195,7 @@ public:
 	virtual const QString className() {return "DeletedMapLayer";};
 	virtual LayerWidget* newWidget(void);
 
-	virtual bool isUploadable() {return true;};
+	virtual bool isUploadable() {return false;};
 };
 
 #endif

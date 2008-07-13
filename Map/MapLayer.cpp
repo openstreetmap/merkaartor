@@ -54,6 +54,7 @@ public:
 		layer_bg = NULL;
 		theWidget = NULL;
 		selected = false;
+		Enabled = true;
 	}
 	~MapLayerPrivate()
 	{
@@ -65,6 +66,7 @@ public:
 	QString Name;
 	bool Visible;
 	bool selected;
+	bool Enabled;
 	LayerWidget* theWidget;
 	qreal alpha;
 	unsigned int dirtyLevel;
@@ -157,6 +159,15 @@ void MapLayer::setSelected(bool b) {
 bool MapLayer::isSelected() const
 {
 	return p->selected;
+}
+
+void MapLayer::setEnabled(bool b) {
+	p->Enabled = b;
+}
+
+bool MapLayer::isEnabled() const
+{
+	return p->Enabled;
 }
 
 void MapLayer::add(MapFeature* aFeature)
@@ -358,6 +369,7 @@ bool DrawingMapLayer::toXML(QDomElement xParent)
 	e.setAttribute("alpha", QString::number(p->alpha,'f',2));
 	e.setAttribute("visible", QString((p->Visible ? "true" : "false")));
 	e.setAttribute("selected", QString((p->selected ? "true" : "false")));
+	e.setAttribute("enabled", QString((p->Enabled ? "true" : "false")));
 
 	QDomElement o = xParent.ownerDocument().createElement("osm");
 	e.appendChild(o);
@@ -400,6 +412,7 @@ DrawingMapLayer * DrawingMapLayer::doFromXML(DrawingMapLayer* l, MapDocument* d,
 	l->setAlpha(e.attribute("alpha").toDouble());
 	l->setVisible((e.attribute("visible") == "true" ? true : false));
 	l->setSelected((e.attribute("selected") == "true" ? true : false));
+	l->setEnabled((e.attribute("enabled") == "false" ? false : true));
 
 	QDomElement c = e.firstChildElement();
 	if (c.tagName() != "osm")
@@ -596,6 +609,7 @@ bool ImageMapLayer::toXML(QDomElement xParent)
 	e.setAttribute("alpha", QString::number(p->alpha,'f',2));
 	e.setAttribute("visible", QString((p->Visible ? "true" : "false")));
 	e.setAttribute("selected", QString((p->selected ? "true" : "false")));
+	e.setAttribute("enabled", QString((p->Enabled ? "true" : "false")));
 
 	e.setAttribute("bgtype", QString::number((int)p->bgType));
 
@@ -652,6 +666,7 @@ ImageMapLayer * ImageMapLayer::fromXML(MapDocument* d, const QDomElement e)
 	l->setAlpha(e.attribute("alpha").toDouble());
 	l->setVisible((e.attribute("visible") == "true" ? true : false));
 	l->setSelected((e.attribute("selected") == "true" ? true : false));
+	l->setEnabled((e.attribute("enabled") == "false" ? false : true));
 
 	return l;
 }
@@ -769,6 +784,7 @@ bool TrackMapLayer::toXML(QDomElement xParent)
 	e.setAttribute("alpha", QString::number(p->alpha,'f',2));
 	e.setAttribute("visible", QString((p->Visible ? "true" : "false")));
 	e.setAttribute("selected", QString((p->selected ? "true" : "false")));
+	e.setAttribute("enabled", QString((p->Enabled ? "true" : "false")));
 
 	QDomElement o = xParent.ownerDocument().createElement("gpx");
 	e.appendChild(o);
@@ -808,6 +824,7 @@ TrackMapLayer * TrackMapLayer::fromXML(MapDocument* d, const QDomElement e)
 	l->setAlpha(e.attribute("alpha").toDouble());
 	l->setVisible((e.attribute("visible") == "true" ? true : false));
 	l->setSelected((e.attribute("selected") == "true" ? true : false));
+	l->setEnabled((e.attribute("enabled") == "false" ? false : true));
 	d->add(l);
 
 	QDomElement c = e.firstChildElement();
@@ -924,6 +941,7 @@ DeletedMapLayer::DeletedMapLayer(const QString & aName)
 	: DrawingMapLayer(aName)
 {
 	p->Visible = false;
+	p->Enabled = false;
 }
 
 DeletedMapLayer::~ DeletedMapLayer()

@@ -38,7 +38,7 @@ QSize LayerWidget::sizeHint () const
 
 void LayerWidget::paintEvent(QPaintEvent*)
 {
-	if (!isVisible())
+	if (!theLayer->isEnabled())
 		return;
 
 	QPainter P(this);
@@ -130,7 +130,6 @@ void LayerWidget::setOpacity(QAction *act)
 
 void LayerWidget::close()
 {
-	setVisible(false);
 	emit(layerClosed(theLayer));
 }
 

@@ -46,6 +46,7 @@ void LayerDock::addLayer(MapLayer* aLayer)
 		butGroup->addButton(w);
 		Layout->insertWidget(layerList.size()-1, w);
 		w->setChecked(aLayer->isSelected());
+		w->setVisible(aLayer->isEnabled());
 
 		connect(w, SIGNAL(layerChanged(LayerWidget*,bool)), this, SLOT(layerChanged(LayerWidget*,bool)));
 		connect(w, SIGNAL(layerClosed(MapLayer*)), this, SLOT(layerClosed(MapLayer*)));
@@ -115,7 +116,11 @@ void LayerDock::layerClosed(MapLayer* l)
 	//Main->document()->remove(l);
 	//delete l;
 	l->clear();
+	l->setEnabled(false);
+	l->getWidget()->setVisible(false);
 	Main->on_editPropertiesAction_triggered();
+
+	update();
 }
 
 void LayerDock::layerCleared(MapLayer* l)

@@ -31,8 +31,8 @@ void CreateNodeInteraction::snapMouseReleaseEvent(QMouseEvent * ev, Road* aRoad)
 			unsigned int SnapIdx = findSnapPointIndex(aRoad, P);
 			TrackPoint* N = new TrackPoint(P);
 			N->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
-			theList->add(new AddFeatureCommand(main()->document()->getDirtyLayer(),N,true));
-			theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx,main()->document()->getDirtyLayer()));
+			theList->add(new AddFeatureCommand(main()->document()->getDirtyOrOriginLayer(aRoad->layer()),N,true));
+			theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx,main()->document()->getDirtyOrOriginLayer(aRoad->layer())));
 			document()->addHistory(theList);
 			view()->invalidate(true, false);
 		}
