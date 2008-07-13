@@ -14,7 +14,26 @@ $ cd /home/me/src/Merkaartor-0.xx
 
 2. Run qmake
 
-$ qmake
+2.1 Yahoo imagery
+
+If you want Yahoo imagery and your QT is < 4.4:
+
+$ qmake All.pro
+
+If your QT is >= 4.4
+
+$ qmake Merkaartor.pro NOWEBKIT=1
+
+You don't need Yahoo imagery
+
+$ qmake Merkaartor.pro NOUSEWEBKIT=1
+
+2.2 Other qmake parameters for Merkaartor.pro
+
+PREFIX=<path>				- base prefix for installation (unix only)
+TRANSDIR_MERKAARTOR=<path>	- where will the Merkaartor translations be installed
+TRANSDIR_SYSTEM=<path>		- where your global Qt translation directory is
+NODEBUG=1					- release target
 
 On (K)ubuntu this will probably pick up the qmake from Qt3 so
 you need to explicitly run the correct one : /usr/share/qt4/bin/qmake
@@ -27,7 +46,7 @@ or
 $ nmake
 
 4. If you are lucky, you'll find an executable in the
-release subdirectory. Otherwise mail a complete error log to
+binaries subdirectory. Otherwise mail a complete error log to
 bvh-osm@irule.be
 
 Bart Vanhauwaert
