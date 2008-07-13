@@ -20,7 +20,7 @@
 #include "yahoolegalmapadapter.h"
 
 YahooLegalMapAdapter::YahooLegalMapAdapter()
- : TileMapAdapter("", "/Html/ymap.html?", 512, 17, 0)
+: TileMapAdapter("", "qrc:/Html/ymap.html?", 512, 17, 0)
 {
 	int zoom = max_zoom < min_zoom ? min_zoom - current_zoom : current_zoom;
 	numberOfTiles = pow(2, zoom+1.0);

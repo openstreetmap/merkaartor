@@ -50,7 +50,7 @@ BrowserImageManager::BrowserImageManager(QObject* parent)
 	connect(page->mainFrame(), SIGNAL(loadDone(bool)), this, SLOT(pageLoadFinished(bool)));
 	connect(page, SIGNAL(loadFinished(bool)), this, SLOT(pageLoadFinished(bool)));
 
-//	browser->show();
+	//browser->show();
 }
 
 BrowserImageManager::~BrowserImageManager()
@@ -96,10 +96,10 @@ void BrowserImageManager::launchRequest()
 		return;
 //	LoadingRequest* R = loadingRequests.dequeue();
 	LoadingRequest R = loadingRequests.head();
-//	qDebug() << "getting: " << QString(R.host).append(R.url);
+	qDebug() << "getting: " << QString(R.host).append(R.url);
 
 
-	QUrl u = QUrl( "qrc:" + R.url);
+	QUrl u = QUrl( R.url);
 //	QUrl u = QUrl( "file://C:/tmp.svg");
 //	QUrl u = QUrl( "http://maps.yahoo.com" );
 //	qDebug() << u << endl;

@@ -19,7 +19,7 @@ static QString tagOSM(const MapFeature& F)
 	{
 		if (F.tagKey(i).startsWith('_') && (F.tagKey(i).endsWith('_')))
 			continue;
-		S += QString("<tag k=\"%1\" v=\"%2\"/>").arg(F.tagKey(i)).arg(F.tagValue(i));
+		S += QString("<tag k=\"%1\" v=\"%2\"/>").arg(F.tagKey(i).replace("\"", "&quot;")).arg(F.tagValue(i).replace("\"", "&quot;"));
 	}
 	return S;
 }
