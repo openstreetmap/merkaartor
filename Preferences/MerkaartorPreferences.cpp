@@ -645,7 +645,7 @@ void MerkaartorPreferences::setAutoExtractTracks(bool theValue)
 
 bool MerkaartorPreferences::getAutoExtractTracks() const
 {
-	return Sets->value("data/AutoExtractTracks", true).toBool();
+	return Sets->value("data/AutoExtractTracks", false).toBool();
 }
 
 	
