@@ -250,7 +250,7 @@ bool Relation::toXML(QDomElement xParent)
 	xParent.appendChild(e);
 
 	e.setAttribute("id", xmlId());
-	e.setAttribute("timestamp", time().toString(Qt::ISODate));
+	e.setAttribute("timestamp", time().toString(Qt::ISODate)+"Z");
 	e.setAttribute("user", user());
 
 	for (unsigned int i=0; i<size(); ++i) {
@@ -278,7 +278,7 @@ Relation * Relation::fromXML(MapDocument * d, MapLayer * L, const QDomElement e)
 	QString id = e.attribute("id");
 	if (!id.startsWith('{'))
 		id = "rel_" + id;
-	QDateTime time = QDateTime::fromString(e.attribute("timestamp"), Qt::ISODate);
+	QDateTime time = QDateTime::fromString(e.attribute("timestamp").left(19), "yyyy-MM-ddTHH:mm:ss");
 	QString user = e.attribute("user");
 
 	Relation* R = dynamic_cast<Relation*>(d->getFeature(id));

@@ -131,7 +131,7 @@ bool TrackPoint::toXML(QDomElement xParent)
 	e.setAttribute("id", xmlId());
 	e.setAttribute("lon",QString::number(radToAng(Position.lon()),'f',8));
 	e.setAttribute("lat", QString::number(radToAng(Position.lat()),'f',8));
-	e.setAttribute("timestamp", time().toUTC().toString(Qt::ISODate));
+	e.setAttribute("timestamp", time().toString(Qt::ISODate)+"Z");
 	e.setAttribute("user", user());
 	e.setAttribute("actor", (int)lastUpdated());
 
@@ -198,7 +198,7 @@ TrackPoint * TrackPoint::fromXML(MapDocument* d, MapLayer* L, const QDomElement 
 	double Lon = e.attribute("lon").toDouble();
 
 	QDateTime time;
-	time = QDateTime::fromString(e.attribute("timestamp"), Qt::ISODate);
+	time = QDateTime::fromString(e.attribute("timestamp").left(19), "yyyy-MM-ddTHH:mm:ss");
 	QString user = e.attribute("user");
 	MapFeature::ActorType A = (MapFeature::ActorType)(e.attribute("actor", "2").toInt());
 
@@ -262,8 +262,7 @@ TrackPoint * TrackPoint::fromGPX(MapDocument* d, MapLayer* L, const QDomElement 
 	while(!c.isNull()) {
 		if (c.tagName() == "time") {
 			QString dtm = c.text();
-			dtm.truncate(19);
-			Pt->setTime(QDateTime::fromString(dtm, Qt::ISODate));
+			Pt->setTime(QDateTime::fromString(dtm.left(19), "yyyy-MM-ddTHH:mm:ss"));
 		} else
 		if (c.tagName() == "ele") {
 			Pt->setElevation(c.text().toFloat());
