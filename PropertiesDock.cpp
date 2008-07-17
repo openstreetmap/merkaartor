@@ -430,7 +430,7 @@ void PropertiesDock::on_RoadName_editingFinished()
 		else {
 			CommandList* theList  = new CommandList(MainWindow::tr("Set Tag 'name' to '%1' on %2").arg(RoadUi.Name->text()).arg(selection(0)->description()), selection(0));
 			if (!selection(0)->isDirty() && !selection(0)->hasOSMId() && selection(0)->isUploadable())
-				theList->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),selection(0),true));
+				theList->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),selection(0),false));
 			theList->add(new SetTagCommand(selection(0),"name",RoadUi.Name->text(),Main->document()->getDirtyOrOriginLayer(selection(0)->layer())));
 			Main->document()->addHistory(theList);
 		}

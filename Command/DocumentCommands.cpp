@@ -148,6 +148,9 @@ bool RemoveFeatureCommand::buildDirtyList(DirtyList &theList)
 	if (!oldLayer->isUploadable())
 		return false;
 
+	if (theFeature->lastUpdated() == MapFeature::OSMServerConflict)
+		return false;
+
 	if (CascadedCleanUp && CascadedCleanUp->buildDirtyList(theList))
 	{
 		delete CascadedCleanUp;

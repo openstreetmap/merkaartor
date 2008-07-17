@@ -133,6 +133,7 @@ bool TrackPoint::toXML(QDomElement xParent)
 	e.setAttribute("lat", QString::number(radToAng(Position.lat()),'f',8));
 	e.setAttribute("timestamp", time().toUTC().toString(Qt::ISODate));
 	e.setAttribute("user", user());
+	e.setAttribute("actor", (int)lastUpdated());
 
 	tagsToXML(e);
 
@@ -199,6 +200,7 @@ TrackPoint * TrackPoint::fromXML(MapDocument* d, MapLayer* L, const QDomElement 
 	QDateTime time;
 	time = QDateTime::fromString(e.attribute("timestamp"), Qt::ISODate);
 	QString user = e.attribute("user");
+	MapFeature::ActorType A = (MapFeature::ActorType)(e.attribute("actor", "2").toInt());
 
 	QString id = (e.hasAttribute("id") ? e.attribute("id") : e.attribute("xml:id"));
 	if (!id.startsWith('{'))
@@ -209,7 +211,7 @@ TrackPoint * TrackPoint::fromXML(MapDocument* d, MapLayer* L, const QDomElement 
 		Pt->setId(id);
 		Pt->setTime(time);
 		Pt->setUser(user);
-		Pt->setLastUpdated(MapFeature::OSMServer);
+		Pt->setLastUpdated(A);
 		L->add(Pt);
 	} else {
 		if (Pt->layer() != L) {
@@ -220,7 +222,7 @@ TrackPoint * TrackPoint::fromXML(MapDocument* d, MapLayer* L, const QDomElement 
 		Pt->setTime(time);
 		Pt->setUser(user);
 		if (Pt->lastUpdated() == MapFeature::NotYetDownloaded)
-			Pt->setLastUpdated(MapFeature::OSMServer);
+			Pt->setLastUpdated(A);
 	}
 
 	MapFeature::tagsFromXML(d, Pt, e);

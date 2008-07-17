@@ -127,7 +127,7 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
 				for (unsigned int i=0; i<theFeatures.size(); ++i)
 				{
 					if (!theFeatures[i]->isDirty() && !theFeatures[i]->hasOSMId() && theFeatures[i]->isUploadable())
-						L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),theFeatures[i],true));
+						L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),theFeatures[i],false));
 					L->add(new SetTagCommand(theFeatures[i],value.toString(),"", Main->document()->getDirtyOrOriginLayer(theFeatures[i]->layer())));
 					theFeatures[i]->setLastUpdated(MapFeature::User);
 				}
@@ -151,7 +151,7 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
 				unsigned int j = theFeatures[i]->findKey(Original);
 				if (j<theFeatures[i]->tagSize()) {
 					if (!theFeatures[i]->isDirty() && !theFeatures[i]->hasOSMId() && theFeatures[i]->isUploadable())
-						L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),theFeatures[i],true));
+						L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),theFeatures[i],false));
 					L->add(new SetTagCommand(theFeatures[i],j , Tags[index.row()].first, Tags[index.row()].second, Main->document()->getDirtyOrOriginLayer(theFeatures[i]->layer())));
 				}
 				theFeatures[i]->setLastUpdated(MapFeature::User);

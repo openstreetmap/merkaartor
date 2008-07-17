@@ -44,7 +44,7 @@ void LayerWidget::paintEvent(QPaintEvent*)
 	QPainter P(this);
 
 	P.drawLine(rect().bottomLeft(), rect().bottomRight());
-	if (theLayer->isSelected()) {
+	if (isChecked()) {
 		P.fillRect(rect().adjusted(20,0,0,-1),QBrush(palette().highlight()));
 //		P.fillRect(20, 1, width()-19, rect().height()-1, QBrush(palette().highlight()));
 		P.setPen(palette().highlightedText().color());
@@ -83,6 +83,13 @@ void LayerWidget::checkStateSet()
 	//emit (layerChanged(this));
 }
 
+void LayerWidget::nextCheckStateSet()
+{
+	setChecked(!isChecked());
+	theLayer->setSelected(isChecked());
+	//emit (layerChanged(this));
+}
+
 MapLayer* LayerWidget::getMapLayer()
 {
 	return theLayer;
@@ -91,6 +98,8 @@ MapLayer* LayerWidget::getMapLayer()
 void LayerWidget::contextMenuEvent(QContextMenuEvent* anEvent)
 {
 	if (ctxMenu) {
+		if (actZoom)
+			actZoom->setEnabled(theLayer->size());
 		if (closeAction)
 			closeAction->setEnabled(theLayer->canDelete());
 		ctxMenu->exec(anEvent->globalPos());

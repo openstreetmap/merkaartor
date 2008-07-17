@@ -63,11 +63,19 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
 		{
 			// conflict
 			Pt->setLastUpdated(MapFeature::UserResolved);
+			TrackPoint* userPt = Pt;
 			Pt = new TrackPoint(Coord(angToRad(Lat),angToRad(Lon)));
-			theList->add(new AddFeatureCommand(conflictLayer, Pt, false));
-			NewFeature = true;
 			Pt->setId("conflict_"+id);
 			Pt->setLastUpdated(MapFeature::OSMServerConflict);
+			parseStandardAttributes(atts,Pt);
+			if (Pt->time() > userPt->time()) {
+				theList->add(new AddFeatureCommand(conflictLayer, Pt, false));
+				NewFeature = true;
+			} else {
+				delete Pt;
+				Pt = userPt;
+				NewFeature = false;
+			}
 		}
 		else if (Pt->lastUpdated() != MapFeature::UserResolved)
 		{
