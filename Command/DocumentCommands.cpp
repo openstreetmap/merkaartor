@@ -151,6 +151,9 @@ bool RemoveFeatureCommand::buildDirtyList(DirtyList &theList)
 	if (theFeature->lastUpdated() == MapFeature::OSMServerConflict)
 		return false;
 
+	if (!theFeature->hasOSMId())
+		return false;
+
 	if (CascadedCleanUp && CascadedCleanUp->buildDirtyList(theList))
 	{
 		delete CascadedCleanUp;
