@@ -12,6 +12,16 @@ static QString stripToOSMId(const QString& id)
 	return id;
 }
 
+static const QString encodeAttributes(const QString & text)
+{
+	QString encodedString = text;
+
+	encodedString.replace("\"", "&quot;");
+	encodedString.replace("&", "&amp;");
+
+	return encodedString;
+};
+
 static QString tagOSM(const MapFeature& F)
 {
 	QString S;
@@ -19,7 +29,11 @@ static QString tagOSM(const MapFeature& F)
 	{
 		if (F.tagKey(i).startsWith('_') && (F.tagKey(i).endsWith('_')))
 			continue;
-		S += QString("<tag k=\"%1\" v=\"%2\"/>").arg(F.tagKey(i).replace("\"", "&quot;")).arg(F.tagValue(i).replace("\"", "&quot;"));
+
+		const QString & tagKey = encodeAttributes( F.tagKey(i) );
+		const QString & tagValue = encodeAttributes( F.tagValue(i) );
+
+		S += QString("<tag k=\"%1\" v=\"%2\"/>").arg( tagKey ).arg( tagValue );
 	}
 	return S;
 }
