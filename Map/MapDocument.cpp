@@ -510,6 +510,7 @@ QString MapDocument::exportOSM(QVector<MapFeature*> aFeatures)
 
 	if (exportedFeatures.size()) {
 		aCoordBox = exportedFeatures[0]->boundingBox();
+		coreExport += exportedFeatures[0]->toXML(1) + "\n";
 		for (int i=1; i < exportedFeatures.size(); i++) {
 			aCoordBox.merge(exportedFeatures[i]->boundingBox());
 			coreExport += exportedFeatures[i]->toXML(1) + "\n";

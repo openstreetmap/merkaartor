@@ -554,9 +554,9 @@ unsigned int findSnapPointIndex(const Road* R, Coord& P)
 	return BestIdx;
 }
 
-bool isClosed(const Road* R)
+bool Road::isClosed()
 {
-	return R->size() && (R->get(0) == R->get(R->size()-1));
+	return size() && (get(0) == get(size()-1));
 }
 
 const std::vector<Coord>& Road::smoothed() const

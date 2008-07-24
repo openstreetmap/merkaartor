@@ -40,6 +40,7 @@ class Road : public MapFeature
 		TrackPoint* get(unsigned int idx);
 		const TrackPoint* get(unsigned int Idx) const;
 		const std::vector<Coord>& smoothed() const;
+		bool isClosed();
 
 		virtual void partChanged(MapFeature* F, unsigned int ChangeId);
 		virtual void setLayer(MapLayer* aLayer);
@@ -65,7 +66,6 @@ class Road : public MapFeature
 MapFeature::TrafficDirectionType trafficDirection(const Road* R);
 double widthOf(const Road* R);
 unsigned int findSnapPointIndex(const Road* R, Coord& P);
-bool isClosed(const Road* R);
 
 #endif
 

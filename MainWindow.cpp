@@ -913,15 +913,17 @@ void MainWindow::saveDocument()
 
 void MainWindow::loadDocument(QString fn)
 {
-	theXmlDoc = new QDomDocument();
 	QFile file(fn);
 	if (!file.open(QIODevice::ReadOnly)) {
 		QMessageBox::critical(this, tr("Invalid file"), tr("%1 could not be opened.").arg(fn));
 		return;
 	}
+
+	theXmlDoc = new QDomDocument();
 	if (!theXmlDoc->setContent(&file)) {
 		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
 		file.close();
+		theXmlDoc = NULL;
 		return;
 	}
 	file.close();
