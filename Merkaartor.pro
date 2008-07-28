@@ -38,6 +38,7 @@ UI_DIR += tmp
 TRANSLATIONS += \
 	merkaartor_cs.ts \
 	merkaartor_de.ts \
+	merkaartor_cs.ts \
 	merkaartor_fr.ts \
 	merkaartor_it.ts \
 	merkaartor_pl.ts \
@@ -46,6 +47,7 @@ TRANSLATIONS += \
 BINTRANSLATIONS += \
 	merkaartor_cs.qm \
 	merkaartor_de.qm \
+	merkaartor_cs.ts \
 	merkaartor_fr.qm \
 	merkaartor_it.qm \
 	merkaartor_pl.qm \
