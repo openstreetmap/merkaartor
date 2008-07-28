@@ -1,4 +1,5 @@
 v0.11
+	* FIX : updated Czech translation file
 	* ADD : Export to KML
 	* ADD : Export to GPX + proper waypoint saving in MDC documents
 	* ADD : Shift-Right button to drag-zoom
