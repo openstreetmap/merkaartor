@@ -75,6 +75,10 @@ unix {
     INSTALLS += target
 }
 
+win32 {
+    RC_FILE = Icons/merkaartor-win32.rc
+}
+
 win32-msvc* {
     DEFINES += _USE_MATH_DEFINES
 }
