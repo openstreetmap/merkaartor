@@ -458,7 +458,7 @@ Všechny soubory (*)</translation>
     <message>
         <location filename="Sync/DirtyList.cpp" line="449"/>
         <source>ADD relation %1</source>
-        <translation>Přidat vazbu %1</translation>
+        <translation>Přidat vztah %1</translation>
     </message>
     <message>
         <location filename="Sync/DirtyList.cpp" line="474"/>
@@ -757,7 +757,7 @@ Možná pomůže zmenšení stahované oblasti.</translation>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="96"/>
         <source>Bus guideway (not a bus way)</source>
-        <translation>Bus guideway (not a bus way)</translation>
+        <translation>Speciální cesta pro autobus (né vyhrazený pruh)</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="93"/>
@@ -782,7 +782,7 @@ Možná pomůže zmenšení stahované oblasti.</translation>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="90"/>
         <source>Pedestrian priority road</source>
-        <translation>Pěší zóny</translation>
+        <translation>Pěší zóna</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="82"/>
@@ -797,17 +797,17 @@ Možná pomůže zmenšení stahované oblasti.</translation>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="83"/>
         <source>Ramp to primary road</source>
-        <translation>Nájezdy na silnici I. třídy</translation>
+        <translation>Nájezd na silnici I. třídy</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="81"/>
         <source>Ramp to trunk road</source>
-        <translation>Nájezd na víceproudé cesty</translation>
+        <translation>Nájezd na víceproudou cestu</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="87"/>
         <source>Residential road</source>
-        <translation>Komunikace k nemovitostem</translation>
+        <translation>Obecní komunikace</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="84"/>
@@ -832,17 +832,17 @@ Možná pomůže zmenšení stahované oblasti.</translation>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="89"/>
         <source>Track road</source>
-        <translation>Nezpevněné komunikace</translation>
+        <translation>Nezpevněná komunikace</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="80"/>
         <source>Trunk road</source>
-        <translation>Víceproudé cesty</translation>
+        <translation>Víceproudá cesta</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="86"/>
         <source>Unclassified road</source>
-        <translation>Neoznačené cesty</translation>
+        <translation>Neoznačená cesta</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="97"/>
@@ -2088,7 +2088,7 @@ Pro více informací navštivte http://wiki.openstreetmap.org/index.php/Problem_
     <message>
         <location filename="Map/MapFeature.cpp" line="633"/>
         <source>Referenced by relation</source>
-        <translation>Reference podle vazby</translation>
+        <translation>Reference podle vztahu</translation>
     </message>
     <message>
         <location filename="Map/MapFeature.cpp" line="630"/>
@@ -2098,12 +2098,12 @@ Pro více informací navštivte http://wiki.openstreetmap.org/index.php/Problem_
     <message>
         <location filename="Map/Relation.cpp" line="365"/>
         <source>Relation</source>
-        <translation>Vazba</translation>
+        <translation>Vztah</translation>
     </message>
     <message>
         <location filename="Map/Relation.cpp" line="82"/>
         <source>relationship %1</source>
-        <translation>vazba %1</translation>
+        <translation>vzájemný vztah %1</translation>
     </message>
     <message>
         <location filename="Map/Relation.cpp" line="485"/>
@@ -3128,7 +3128,7 @@ Pro více informací navštivte http://wiki.openstreetmap.org/index.php/Problem_
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="103"/>
         <source>Allotments</source>
-        <translation>Parcely</translation>
+        <translation>Místo pro pěstování květin, zeleniny</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="104"/>
@@ -3138,7 +3138,7 @@ Pro více informací navštivte http://wiki.openstreetmap.org/index.php/Problem_
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="105"/>
         <source>Brownfield</source>
-        <translation>Šedá průmyslová zóna</translation>
+        <translation>Přestavba</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="106"/>
@@ -3168,7 +3168,7 @@ Pro více informací navštivte http://wiki.openstreetmap.org/index.php/Problem_
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="111"/>
         <source>Greenfield</source>
-        <translation>Zelené pole</translation>
+        <translation>Výstavba na zelené louce</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="112"/>
@@ -3208,7 +3208,7 @@ Pro více informací navštivte http://wiki.openstreetmap.org/index.php/Problem_
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="119"/>
         <source>Surface mineral extraction</source>
-        <translation>Povrchová těžba minerálů</translation>
+        <translation>Povrchová těžba</translation>
     </message>
     <message>
         <location filename="Map/PreDefinedTags.cpp" line="120"/>
