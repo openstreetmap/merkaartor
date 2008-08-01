@@ -245,12 +245,6 @@
 </painter>
 <painter
  zoomUnder="0" zoomUpper="1e+07"
- icon=":/MapIcons/map-icons/square.small/misc/information.png"
- drawTrafficDirectionMarks="no">
-  <selector expr="[Default] Type is TrackPoint and HasTags"/>
-</painter>
-<painter
- zoomUnder="0" zoomUpper="1e+07"
  icon=":/MapIcons/map-icons/square.small/unknown.png"
  drawTrafficDirectionMarks="no">
   <selector expr="Type is TrackPoint and not HasTags"/>
