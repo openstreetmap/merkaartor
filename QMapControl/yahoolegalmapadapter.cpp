@@ -52,7 +52,7 @@ int YahooLegalMapAdapter::tilesonzoomlevel(int zoomlevel) const
 	return int(pow(2, zoomlevel+1.0));
 }
 
-QString YahooLegalMapAdapter::getQuery(int i, int j, int z) const
+QString YahooLegalMapAdapter::getQuery(int i, int j, int /* z */) const
 {
 	QPointF ul = displayToCoordinate(QPoint(i*tilesize, j*tilesize));
 	QPointF br = displayToCoordinate(QPoint((i+1)*tilesize, (j+1)*tilesize));
@@ -64,10 +64,10 @@ QString YahooLegalMapAdapter::getQ(QPointF ul, QPointF br) const
 						.append("WIDTH=").append(QString().setNum(tilesize))
 						.append("&HEIGHT=").append(QString().setNum(tilesize))
 						.append("&BBOX=")
-						 .append(loc.toString(ul.x())).append(",")
-						 .append(loc.toString(ul.y())).append(",")
-						 .append(loc.toString(br.x())).append(",")
-						 .append(loc.toString(br.y()));
+						 .append(loc.toString(ul.x(),'f',6)).append(",")
+						 .append(loc.toString(ul.y(),'f',6)).append(",")
+						 .append(loc.toString(br.x(),'f',6)).append(",")
+						 .append(loc.toString(br.y(),'f',6));
 }
 
 int YahooLegalMapAdapter::getyoffset(int y) const

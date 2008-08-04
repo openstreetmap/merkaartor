@@ -135,10 +135,11 @@ QPoint TileMapAdapter::coordinateToDisplay(const QPointF& coordinate) const
 
 }
 
-QPointF TileMapAdapter::displayToCoordinate(const QPoint& point) const
+QPointF TileMapAdapter::displayToCoordinate(const QPoint& pt) const
 {
-	double longitude = (point.x()*(360/(numberOfTiles*tilesize)))-180;
-	double latitude = rad_deg(atan(sinh((1-point.y()*(2/(numberOfTiles*tilesize)))*PI)));
+	QPointF point(pt);
+	double longitude = (point.x()*(360.0/(numberOfTiles*(double)tilesize)))-180.0;
+	double latitude = rad_deg(atan(sinh((1.0-point.y()*(2.0/(numberOfTiles*(double)tilesize)))*PI)));
 
 	return QPointF(longitude, latitude);
 
