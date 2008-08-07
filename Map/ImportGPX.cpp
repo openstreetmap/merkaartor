@@ -11,6 +11,7 @@
 #include <QtCore/QFile>
 #include <QtGui/QMessageBox>
 #include <QtXml/QDomDocument>
+#include <QProgressDialog>
 
 
 static TrackPoint* importTrkPt(const QDomElement& Root, MapDocument* /* theDocument */, MapLayer* theLayer, CommandList* theList)
@@ -19,6 +20,7 @@ static TrackPoint* importTrkPt(const QDomElement& Root, MapDocument* /* theDocum
 	double Lon = Root.attribute("lon").toDouble();
 
 	TrackPoint* Pt = new TrackPoint(Coord(angToRad(Lat),angToRad(Lon)));
+	Pt->setLastUpdated(MapFeature::Log);
 	if (Root.hasAttribute("xml:id"))
 		Pt->setId(Root.attribute("xml:id"));
 
@@ -63,11 +65,11 @@ static TrackPoint* importTrkPt(const QDomElement& Root, MapDocument* /* theDocum
 		}
 		else if (t.tagName() == "desc")
 		{
-			Pt->setTag("_description_", t.text());
+			Pt->setTag("_description_", t.text(), false);
 		}
 		else if (t.tagName() == "cmt")
 		{
-			Pt->setTag("_comment_", t.text());
+			Pt->setTag("_comment_", t.text(), false);
 		}
 	}
 
@@ -75,7 +77,7 @@ static TrackPoint* importTrkPt(const QDomElement& Root, MapDocument* /* theDocum
 }
 
 
-static void importTrkSeg(const QDomElement& Root, MapDocument* theDocument, MapLayer* theLayer, CommandList* theList, bool MakeSegment)
+static void importTrkSeg(const QDomElement& Root, MapDocument* theDocument, MapLayer* theLayer, CommandList* theList, bool MakeSegment, QProgressDialog & progress)
 {
 	TrackSegment* S = new TrackSegment;
 	if (Root.hasAttribute("xml:id"))
@@ -88,6 +90,10 @@ static void importTrkSeg(const QDomElement& Root, MapDocument* theDocument, MapL
 			TrackPoint* Pt = importTrkPt(t,theDocument, theLayer, theList);
 			if (MakeSegment)
 				S->add(Pt);
+			progress.setValue(progress.value()+1);
+			if (progress.wasCanceled()) {
+				return;
+			}
 		}
 	}
 	if (S->size())
@@ -96,17 +102,20 @@ static void importTrkSeg(const QDomElement& Root, MapDocument* theDocument, MapL
 		delete S;
 }
 
-static void importTrk(const QDomElement& Root, MapDocument* theDocument, MapLayer* theLayer, CommandList* theList, bool MakeSegment)
+static void importTrk(const QDomElement& Root, MapDocument* theDocument, MapLayer* theLayer, CommandList* theList, bool MakeSegment, QProgressDialog & progress)
 {
 	for(QDomNode n = Root.firstChild(); !n.isNull(); n = n.nextSibling())
 	{
 		QDomElement t = n.toElement();
-		if (!t.isNull() && t.tagName() == "trkseg")
-			importTrkSeg(t,theDocument, theLayer, theList, MakeSegment);
+		if (!t.isNull() && t.tagName() == "trkseg") {
+			importTrkSeg(t,theDocument, theLayer, theList, MakeSegment, progress);
+			if (progress.wasCanceled())
+				return;
+		}
 	}
 }
 
-static void importGPX(const QDomElement& Root, MapDocument* theDocument, MapLayer* theLayer, CommandList* theList, bool MakeSegment)
+static void importGPX(const QDomElement& Root, MapDocument* theDocument, MapLayer* theLayer, CommandList* theList, bool MakeSegment, QProgressDialog & progress)
 {
 	for(QDomNode n = Root.firstChild(); !n.isNull(); n = n.nextSibling())
 	{
@@ -116,12 +125,16 @@ static void importGPX(const QDomElement& Root, MapDocument* theDocument, MapLaye
 
 		if (t.tagName() == "trk")
 		{
-			importTrk(t,theDocument, theLayer, theList, MakeSegment);
+			importTrk(t,theDocument, theLayer, theList, MakeSegment, progress);
+
 		}
 		else if (t.tagName() == "wpt")
 		{
 			importTrkPt(t,theDocument, theLayer, theList);
+			progress.setValue(progress.value()+1);
 		}
+		if (progress.wasCanceled())
+			return;
 	}
 }
 
@@ -148,8 +161,20 @@ bool importGPX(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 		QMessageBox::information(aParent, "Parse error","Root is not a gpx node");
 		return false;
 	}
+
+	QProgressDialog progress("Importing GPX...", "Cancel", 0, 0);
+	progress.setWindowModality(Qt::WindowModal);
+	progress.setMaximum(progress.maximum() + DomDoc.elementsByTagName("trkpt").count());
+	progress.setMaximum(progress.maximum() + DomDoc.elementsByTagName("wpt").count());
+
 	CommandList* theList  = new CommandList(MainWindow::tr("Import GPX"), NULL);
-	importGPX(root, theDocument, theLayer, theList, MakeSegment);
+
+	importGPX(root, theDocument, theLayer, theList, MakeSegment, progress);
+
+	progress.setValue(progress.maximum());
+	if (progress.wasCanceled())
+		return false;
+
 	delete theList;
 /*	if (theList->empty())
 		delete theList;

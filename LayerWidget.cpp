@@ -23,7 +23,13 @@ LayerWidget::LayerWidget(MapLayer* aLayer, QWidget* aParent)
 	visibleIcon = QPixmap(":Icons/eye.xpm");
 	hiddenIcon = QPixmap(":Icons/empty.xpm");
 
-	initActions();
+	associatedMenu = new QMenu(aLayer->name());
+//	initActions();
+}
+
+LayerWidget::~LayerWidget()
+{
+	delete associatedMenu;
 }
 
 QSize LayerWidget::minimumSizeHint () const
@@ -111,8 +117,8 @@ void LayerWidget::initActions()
 {
 	SAFE_DELETE(ctxMenu);
 	ctxMenu = new QMenu(this);
-        static const char *opStr[NUMOP] = {
-		QT_TR_NOOP("Low"), QT_TR_NOOP("High"), QT_TR_NOOP("Opaque")};
+    static const char *opStr[NUMOP] = {
+	QT_TR_NOOP("Low"), QT_TR_NOOP("High"), QT_TR_NOOP("Opaque")};
 
 	QActionGroup* actgrp = new QActionGroup(this);
 	QMenu* alphaMenu = new QMenu(tr("Opacity"), this);
@@ -129,6 +135,7 @@ void LayerWidget::initActions()
 	ctxMenu->addMenu(alphaMenu);
 	connect(alphaMenu, SIGNAL(triggered(QAction*)), this, SLOT(setOpacity(QAction*)));
 
+	associatedMenu->addMenu(alphaMenu);
 }
 
 void LayerWidget::setOpacity(QAction *act)
@@ -152,6 +159,11 @@ void LayerWidget::zoomLayer(bool)
 	emit (layerZoom(theLayer));
 }
 
+QMenu* LayerWidget::getAssociatedMenu()
+{
+	return associatedMenu;
+}
+
 
 // DrawingLayerWidget
 
@@ -168,13 +180,16 @@ void DrawingLayerWidget::initActions()
 
 	actZoom = new QAction(tr("Zoom"), ctxMenu);
 	ctxMenu->addAction(actZoom);
+	associatedMenu->addAction(actZoom);
 	connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
 
 	ctxMenu->addSeparator();
+	associatedMenu->addSeparator();
 
 	closeAction = new QAction(tr("Close"), this);
 	connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
 	ctxMenu->addAction(closeAction);
+	associatedMenu->addAction(closeAction);
 	closeAction->setEnabled(theLayer->canDelete());
 }
 
@@ -323,6 +338,7 @@ void ImageLayerWidget::initActions()
 
 	LayerWidget::initActions();
 	ctxMenu->addSeparator();
+	associatedMenu->addSeparator();
 
 	wmsMenu = new QMenu(MerkaartorPreferences::instance()->getBgTypes()[Bg_Wms], this);
 	WmsServerList* WmsServers = MerkaartorPreferences::instance()->getWmsServers();
@@ -370,25 +386,32 @@ void ImageLayerWidget::initActions()
 #endif
 
 	ctxMenu->addAction(actNone);
+	associatedMenu->addAction(actNone);
 
 	ctxMenu->addMenu(wmsMenu);
+	associatedMenu->addMenu(wmsMenu);
 	connect(wmsMenu, SIGNAL(triggered(QAction*)), this, SLOT(setWms(QAction*)));
 
 	ctxMenu->addMenu(tmsMenu);
+	associatedMenu->addMenu(tmsMenu);
 	connect(tmsMenu, SIGNAL(triggered(QAction*)), this, SLOT(setTms(QAction*)));
 
 // 	ctxMenu->addAction(actOSM);
 #ifdef YAHOO
 	ctxMenu->addAction(actLegalYahoo);
+	associatedMenu->addAction(actLegalYahoo);
 #endif
 #ifdef YAHOO_ILLEGAL
 	ctxMenu->addAction(actYahoo);
+	associatedMenu->addAction(actYahoo);
 #endif
 #ifdef GOOGLE_ILLEGAL
 	ctxMenu->addAction(actGoogle);
+	associatedMenu->addAction(actGoogle);
 #endif
 #ifdef MSLIVEMAP_ILLEGAL
 	ctxMenu->addAction(actVirtEarth);
+	associatedMenu->addAction(actVirtEarth);
 #endif
 }
 
@@ -405,20 +428,25 @@ void TrackLayerWidget::initActions()
 {
 	LayerWidget::initActions();
 	ctxMenu->addSeparator();
+	associatedMenu->addSeparator();
 
 	QAction* actExtract = new QAction(tr("Extract Drawing layer"), ctxMenu);
 	ctxMenu->addAction(actExtract);
+	associatedMenu->addAction(actExtract);
 	connect(actExtract, SIGNAL(triggered(bool)), this, SLOT(extractLayer(bool)));
 
 	actZoom = new QAction(tr("Zoom"), ctxMenu);
 	ctxMenu->addAction(actZoom);
+	associatedMenu->addAction(actZoom);
 	connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
 
 	ctxMenu->addSeparator();
+	associatedMenu->addSeparator();
 
 	closeAction = new QAction(tr("Close"), this);
 	connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
 	ctxMenu->addAction(closeAction);
+	associatedMenu->addAction(closeAction);
 	closeAction->setEnabled(theLayer->canDelete());
 }
 
@@ -445,9 +473,11 @@ void DirtyLayerWidget::initActions()
 {
 	LayerWidget::initActions();
 	ctxMenu->addSeparator();
+	associatedMenu->addSeparator();
 
 	actZoom = new QAction(tr("Zoom"), ctxMenu);
 	ctxMenu->addAction(actZoom);
+	associatedMenu->addAction(actZoom);
 	connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
 }
 
@@ -464,14 +494,17 @@ void UploadedLayerWidget::initActions()
 {
 	LayerWidget::initActions();
 	ctxMenu->addSeparator();
+	associatedMenu->addSeparator();
 
 	actZoom = new QAction(tr("Zoom"), ctxMenu);
 	ctxMenu->addAction(actZoom);
+	associatedMenu->addAction(actZoom);
 	connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
 
 	closeAction = new QAction(tr("Clear"), this);
 	connect(closeAction, SIGNAL(triggered()), this, SLOT(clear()));
 	ctxMenu->addAction(closeAction);
+	associatedMenu->addAction(closeAction);
 	closeAction->setEnabled(theLayer->canDelete());
 }
 
@@ -490,13 +523,16 @@ void ExtractedLayerWidget::initActions()
 
 	actZoom = new QAction(tr("Zoom"), ctxMenu);
 	ctxMenu->addAction(actZoom);
+	associatedMenu->addAction(actZoom);
 	connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
 
 	ctxMenu->addSeparator();
+	associatedMenu->addSeparator();
 
 	closeAction = new QAction(tr("Close"), this);
 	connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
 	ctxMenu->addAction(closeAction);
+	associatedMenu->addAction(closeAction);
 	closeAction->setEnabled(theLayer->canDelete());
 }
 

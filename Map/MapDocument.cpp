@@ -10,6 +10,7 @@
 
 #include <QtCore/QString>
 #include <QMultiMap>
+#include <QProgressDialog>
 
 #include <algorithm>
 #include <map>
@@ -99,7 +100,7 @@ MapDocument::~MapDocument()
 	delete p;
 }
 
-bool MapDocument::toXML(QDomElement xParent)
+bool MapDocument::toXML(QDomElement xParent, QProgressDialog & progress)
 {
 	bool OK = true;
 
@@ -111,15 +112,19 @@ bool MapDocument::toXML(QDomElement xParent)
 	xParent.appendChild(mapDoc);
 
 	for (unsigned int i=0; i<p->Layers.size(); ++i) {
-		p->Layers[i]->toXML(mapDoc);
+		progress.setMaximum(progress.maximum() + p->Layers[i]->size());
 	}
 
-	OK = history().toXML(mapDoc);
+	for (unsigned int i=0; i<p->Layers.size(); ++i) {
+		p->Layers[i]->toXML(mapDoc, progress);
+	}
+
+	OK = history().toXML(mapDoc, progress);
 
 	return OK;
 }
 
-MapDocument* MapDocument::fromXML(const QDomElement e, double version, LayerDock* aDock)
+MapDocument* MapDocument::fromXML(const QDomElement e, double version, LayerDock* aDock, QProgressDialog & progress)
 {
 	MapDocument* NewDoc = new MapDocument(aDock);
 
@@ -127,46 +132,41 @@ MapDocument* MapDocument::fromXML(const QDomElement e, double version, LayerDock
 
 	QDomElement c = e.firstChildElement();
 	while(!c.isNull()) {
-/*		if (c.tagName() == "osm") {
-			MapLayer* NewLayer = new DrawingMapLayer( "Document" );
-			NewDoc->add(NewLayer);
-			QByteArray ba;
-			QTextStream out(&ba);
-			c.save(out,2);
-
-			bool importOK = importOSM(NULL, ba, NewDoc, NewLayer,NULL);
-			if (importOK == false) {
-				delete NewDoc;
- 				delete NewLayer;
-				return NULL;
-			}
-		} else*/
 		if (c.tagName() == "ImageMapLayer") {
-			/* ImageMapLayer* l = */ ImageMapLayer::fromXML(NewDoc, c);
+			/* ImageMapLayer* l = */ ImageMapLayer::fromXML(NewDoc, c, progress);
 		} else
 		if (c.tagName() == "DeletedMapLayer") {
-			/* TrashMapLayer* l = */ DeletedMapLayer::fromXML(NewDoc, c);
+			/* TrashMapLayer* l = */ DeletedMapLayer::fromXML(NewDoc, c, progress);
 		} else
 		if (c.tagName() == "DirtyMapLayer") {
-			/* DirtyMapLayer* l = */ DirtyMapLayer::fromXML(NewDoc, c);
+			/* DirtyMapLayer* l = */ DirtyMapLayer::fromXML(NewDoc, c, progress);
 		} else
 		if (c.tagName() == "UploadedMapLayer") {
-			/* UploadedMapLayer* l = */ UploadedMapLayer::fromXML(NewDoc, c);
+			/* UploadedMapLayer* l = */ UploadedMapLayer::fromXML(NewDoc, c, progress);
 		} else
 		if (c.tagName() == "DrawingMapLayer") {
-			/* DrawingMapLayer* l = */ DrawingMapLayer::fromXML(NewDoc, c);
+			/* DrawingMapLayer* l = */ DrawingMapLayer::fromXML(NewDoc, c, progress);
 		} else
 		if (c.tagName() == "TrackMapLayer") {
-			/* TrackMapLayer* l = */ TrackMapLayer::fromXML(NewDoc, c);
+			/* TrackMapLayer* l = */ TrackMapLayer::fromXML(NewDoc, c, progress);
 		} else
 		if (c.tagName() == "ExtractedMapLayer") {
-			/* ExtractedMapLayer* l = */ ExtractedMapLayer::fromXML(NewDoc, c);
+			/* ExtractedMapLayer* l = */ ExtractedMapLayer::fromXML(NewDoc, c, progress);
 		} else
 		if (c.tagName() == "CommandHistory") {
 			if (version > 1.0)
-				h = CommandHistory::fromXML(NewDoc, c);
+				h = CommandHistory::fromXML(NewDoc, c, progress);
 		}
+
+		if (progress.wasCanceled())
+			break;
+
 		c = c.nextSiblingElement();
+	}
+
+	if (progress.wasCanceled()) {
+		delete NewDoc;
+		NewDoc = NULL;
 	}
 
 	if (NewDoc) {
@@ -421,7 +421,7 @@ UploadedMapLayer* MapDocument::getUploadedLayer() const
 	return p->uploadedLayer;
 }
 
-QString MapDocument::exportOSM(const CoordBox& aCoordBox)
+QString MapDocument::exportOSM(const CoordBox& aCoordBox, bool renderBounds)
 {
 	QString theExport, coreExport;
 	QVector<MapFeature*> theFeatures;
@@ -462,13 +462,66 @@ QString MapDocument::exportOSM(const CoordBox& aCoordBox)
 				}
 	}
 
-	return exportOSM(theFeatures);
+	QVector<MapFeature*> exportedFeatures = exportCoreOSM(theFeatures);
+
+	if (exportedFeatures.size()) {
+		for (int i=0; i < exportedFeatures.size(); i++) {
+			coreExport += exportedFeatures[i]->toXML(1) + "\n";
+		}
+	}
+	theExport += "<?xml version='1.0' encoding='UTF-8'?>\n";
+	theExport += "<osm version='0.5' generator='Merkaartor'>\n";
+	theExport += "<bound box='";
+	theExport += QString().number(radToAng(aCoordBox.bottomLeft().lat()),'f',6) + ",";
+	theExport += QString().number(radToAng(aCoordBox.bottomLeft().lon()),'f',6) + ",";
+	theExport += QString().number(radToAng(aCoordBox.topRight().lat()),'f',6) + ",";
+	theExport += QString().number(radToAng(aCoordBox.topRight().lon()),'f',6);
+	theExport += "' origin='http://www.openstreetmap.org/api/0.5' />\n";
+	if (renderBounds) {
+		theExport += "<bounds ";
+		theExport += "minlat=\"" + QString().number(radToAng(aCoordBox.bottomLeft().lat()),'f',6) + "\" ";
+		theExport += "minlon=\"" + QString().number(radToAng(aCoordBox.bottomLeft().lon()),'f',6) + "\" ";
+		theExport += "maxlat=\"" + QString().number(radToAng(aCoordBox.topRight().lat()),'f',6) + "\" ";
+		theExport += "maxlon=\"" + QString().number(radToAng(aCoordBox.topRight().lon()),'f',6) + "\" ";
+		theExport += "/>\n";
+	}
+	theExport += coreExport;
+	theExport += "</osm>";
+
+	return theExport;
 }
 
 QString MapDocument::exportOSM(QVector<MapFeature*> aFeatures)
 {
 	QString theExport, coreExport;
+	QVector<MapFeature*> exportedFeatures = exportCoreOSM(aFeatures);
 	CoordBox aCoordBox;
+
+	if (exportedFeatures.size()) {
+		aCoordBox = exportedFeatures[0]->boundingBox();
+		coreExport += exportedFeatures[0]->toXML(1) + "\n";
+		for (int i=1; i < exportedFeatures.size(); i++) {
+			aCoordBox.merge(exportedFeatures[i]->boundingBox());
+			coreExport += exportedFeatures[i]->toXML(1) + "\n";
+		}
+	}
+	theExport += "<?xml version='1.0' encoding='UTF-8'?>\n";
+	theExport += "<osm version='0.5' generator='Merkaartor'>\n";
+	theExport += "<bound box='";
+	theExport += QString().number(radToAng(aCoordBox.bottomLeft().lat()),'f',6) + ",";
+	theExport += QString().number(radToAng(aCoordBox.bottomLeft().lon()),'f',6) + ",";
+	theExport += QString().number(radToAng(aCoordBox.topRight().lat()),'f',6) + ",";
+	theExport += QString().number(radToAng(aCoordBox.topRight().lon()),'f',6);
+	theExport += "' origin='http://www.openstreetmap.org/api/0.5' />\n";
+	theExport += coreExport;
+	theExport += "</osm>";
+
+	return theExport;
+}
+
+QVector<MapFeature*> MapDocument::exportCoreOSM(QVector<MapFeature*> aFeatures)
+{
+	QString coreExport;
 	QVector<MapFeature*> exportedFeatures;
 	QVector<MapFeature*>::Iterator i;
 
@@ -508,27 +561,7 @@ QString MapDocument::exportOSM(QVector<MapFeature*> aFeatures)
 		}
 	}
 
-	if (exportedFeatures.size()) {
-		aCoordBox = exportedFeatures[0]->boundingBox();
-		coreExport += exportedFeatures[0]->toXML(1) + "\n";
-		for (int i=1; i < exportedFeatures.size(); i++) {
-			aCoordBox.merge(exportedFeatures[i]->boundingBox());
-			coreExport += exportedFeatures[i]->toXML(1) + "\n";
-		}
-	}
-
-	theExport += "<?xml version='1.0' encoding='UTF-8'?>\n";
-	theExport += "<osm version='0.5' generator='Merkaartor'>\n";
-	theExport += "<bound box='";
-	theExport += QString().number(radToAng(aCoordBox.bottomLeft().lat())) + ",";
-	theExport += QString().number(radToAng(aCoordBox.bottomLeft().lon())) + ",";
-	theExport += QString().number(radToAng(aCoordBox.topRight().lat())) + ",";
-	theExport += QString().number(radToAng(aCoordBox.topRight().lon()));
-	theExport += "' origin='http://www.openstreetmap.org/api/0.5' />\n";
-	theExport += coreExport;
-	theExport += "</osm>";
-
-	return theExport;
+	return exportedFeatures;
 }
 
 bool MapDocument::importNMEA(const QString& filename, TrackMapLayer* NewLayer)

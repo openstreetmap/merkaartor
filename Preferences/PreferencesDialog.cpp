@@ -12,7 +12,6 @@
 #include "Preferences/PreferencesDialog.h"
 #include "Preferences/WMSPreferencesDialog.h"
 #include "Preferences/TMSPreferencesDialog.h"
-#include "Preferences/MerkaartorPreferences.h"
 #include "PaintStyle/EditPaintStyle.h"
 
 #include "MainWindow.h"
@@ -21,8 +20,7 @@
 
 #include <QFileDialog>
 #include <QColorDialog>
-
-#define BUILTIN_STYLES_DIR ":/Styles"
+#include <QMessageBox>
 
 PreferencesDialog::PreferencesDialog(QWidget* parent)
 	: QDialog(parent)
@@ -63,6 +61,8 @@ void PreferencesDialog::loadPrefs()
 	edOsmUrl->setText(MerkaartorPreferences::instance()->getOsmWebsite());
 	edOsmUser->setText(MerkaartorPreferences::instance()->getOsmUser());
     edOsmPwd->setText(MerkaartorPreferences::instance()->getOsmPassword());
+
+	edGpsPort->setText(M_PREFS->getGpsPort());
 
 	bbUseProxy->setChecked(MerkaartorPreferences::instance()->getProxyUse());
 	edProxyHost->setText(MerkaartorPreferences::instance()->getProxyHost());
@@ -108,6 +108,14 @@ void PreferencesDialog::loadPrefs()
 	cbAutoSaveDoc->setChecked(MerkaartorPreferences::instance()->getAutoSaveDoc());
 	cbAutoExtractTracks->setChecked(MerkaartorPreferences::instance()->getAutoExtractTracks());
 
+	ToolList* tl = MerkaartorPreferences::instance()->getTools();
+	ToolListIterator i(*tl);
+	while (i.hasNext()) {
+		i.next();
+		Tool t(i.value().ToolName, i.value().ToolPath);
+		theTools.push_back(t);
+		lvTools->addItem(t.ToolName);
+	}
 }
 
 void PreferencesDialog::savePrefs()
@@ -116,6 +124,8 @@ void PreferencesDialog::savePrefs()
 	MerkaartorPreferences::instance()->setOsmWebsite(edOsmUrl->text());
 	MerkaartorPreferences::instance()->setOsmUser(edOsmUser->text());
 	MerkaartorPreferences::instance()->setOsmPassword(edOsmPwd->text());
+	M_PREFS->setGpsPort(edGpsPort->text());
+
 	MerkaartorPreferences::instance()->setProxyUse(bbUseProxy->isChecked());
 	MerkaartorPreferences::instance()->setProxyHost(edProxyHost->text());
 	MerkaartorPreferences::instance()->setProxyPort(edProxyPort->text().toInt());
@@ -159,6 +169,13 @@ void PreferencesDialog::savePrefs()
 
 	MerkaartorPreferences::instance()->setAutoSaveDoc(cbAutoSaveDoc->isChecked());
 	MerkaartorPreferences::instance()->setAutoExtractTracks(cbAutoExtractTracks->isChecked());
+
+	ToolList* tl = MerkaartorPreferences::instance()->getTools();
+	tl->clear();
+	for (int i = 0; i < theTools.size(); ++i) {
+		Tool t(theTools[i]);
+		tl->insert(theTools[i].ToolName, t);
+	}
 
 	MerkaartorPreferences::instance()->save();
 }
@@ -215,3 +232,79 @@ void PreferencesDialog::on_btColorChooser_clicked()
 		edBgColor->setText(QVariant(color).toString());
 	}
 }
+
+/* Tools */
+void PreferencesDialog::on_btAddTool_clicked(void)
+{
+	for (int i=0; i<theTools.size(); ++i) {
+		if (theTools[i].ToolName == edToolName->text()) {
+		QMessageBox::critical(this, tr("Tool already exists"), 
+			tr("A tool of this name already exists.\nPlease select another name or click the <Apply> button if you want to modify the existing one"), QMessageBox::Ok);
+		return;
+		}
+	}
+	Tool t(edToolName->text(), edToolPath->text());
+	theTools.push_back(t);
+	lvTools->addItem(t.ToolName);
+
+	lvTools->setCurrentRow(theTools.size() - 1);
+	on_lvTools_itemClicked(lvTools->item(lvTools->currentRow()));
+}
+
+void PreferencesDialog::on_btDelTool_clicked(void)
+{
+	int idx = static_cast<unsigned int>(lvTools->currentRow());
+	if (idx >= theTools.size())
+		return;
+
+	if (theTools[idx].ToolName == "Inkscape") {
+		QMessageBox::critical(this, tr("Cannot delete preset tool"), 
+			tr("Cannot delete preset tool \"%1\"").arg(theTools[idx].ToolName), QMessageBox::Ok);
+		return;
+	}
+	theTools.erase(theTools.begin() + idx);
+	delete lvTools->takeItem(idx);
+	if (idx && (idx >= theTools.size()))
+		--idx;
+	lvTools->setCurrentRow(idx);
+	on_lvTools_itemClicked(lvTools->item(lvTools->currentRow()));
+}
+
+void PreferencesDialog::on_btApplyTool_clicked(void)
+{
+	int idx = static_cast<unsigned int>(lvTools->currentRow());
+	if (idx >= theTools.size())
+		return;
+
+	if ((theTools[idx].ToolName == "Inkscape") && edToolName->text() != theTools[idx].ToolName) {
+		QMessageBox::critical(this, tr("Cannot modify preset tool name"), 
+			tr("Cannot modify preset tool \"%1\"'s name").arg(theTools[idx].ToolName), QMessageBox::Ok);
+		return;
+	}
+	Tool& t(theTools[idx]);
+	t.ToolName = edToolName->text();
+	t.ToolPath = edToolPath->text();
+
+	lvTools->item(lvTools->currentRow())->setText(edToolName->text());
+}
+
+void PreferencesDialog::on_lvTools_itemClicked(QListWidgetItem* it)
+{
+	int idx = static_cast<unsigned int>(lvTools->row(it));
+	if (idx >= theTools.size())
+		return;
+
+	Tool& t(theTools[idx]);
+	edToolName->setText(t.ToolName);
+	edToolPath->setText(t.ToolPath);
+}
+
+void PreferencesDialog::on_btBrowse_clicked()
+{
+	QString s = QFileDialog::getOpenFileName(this,tr("Select tool executable"));
+	if (!s.isNull()) {
+		edToolPath->setText(s);
+	}
+}
+
+

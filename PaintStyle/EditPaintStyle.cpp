@@ -7,6 +7,8 @@
 #include "PaintStyle/TagSelector.h"
 #include "Utils/LineF.h"
 
+#include "Preferences/MerkaartorPreferences.h"
+
 #include <QtCore/QFile>
 #include <QtCore/QTextStream>
 #include <QtGui/QPainter>
@@ -73,6 +75,17 @@ class EPTouchupLayer : public PaintStyleLayer
 		EditPaintStylePrivate* p;
 };
 
+class EPLabelLayer : public PaintStyleLayer
+{
+	public:
+		void setP(EditPaintStylePrivate* p);
+		virtual void draw(Road* R);
+		virtual void draw(TrackPoint* Pt);
+		virtual void draw(Relation* R);
+	private:
+		EditPaintStylePrivate* p;
+};
+
 class EditPaintStylePrivate
 {
 	public:
@@ -82,6 +95,7 @@ class EditPaintStylePrivate
 			First.setP(this);
 			Second.setP(this);
 			Third.setP(this);
+			Fourth.setP(this);
 		}
 
 		QPainter& thePainter;
@@ -89,6 +103,7 @@ class EditPaintStylePrivate
 		EPBackgroundLayer First;
 		EPForegroundLayer Second;
 		EPTouchupLayer Third;
+		EPLabelLayer Fourth;
 };
 
 #define ALWAYS 10e6
@@ -110,7 +125,6 @@ void EPBackgroundLayer::setP(EditPaintStylePrivate* ap)
 
 void EPBackgroundLayer::draw(Road* R)
 {
-	if (p->theProjection.viewport().disjunctFrom(R->boundingBox())) return;
 	FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
 	if (paintsel)
 		paintsel->drawBackground(R,p->thePainter,p->theProjection);
@@ -127,7 +141,6 @@ void EPBackgroundLayer::draw(Road* R)
 
 void EPBackgroundLayer::draw(Relation* R)
 {
-	if (p->theProjection.viewport().disjunctFrom(R->boundingBox())) return;
 	FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
 	if (paintsel)
 		paintsel->drawBackground(R,p->thePainter,p->theProjection);
@@ -145,7 +158,6 @@ void EPForegroundLayer::setP(EditPaintStylePrivate* ap)
 
 void EPForegroundLayer::draw(Road* R)
 {
-	if (p->theProjection.viewport().disjunctFrom(R->boundingBox())) return;
 	FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
 	if (paintsel)
 		paintsel->drawForeground(R,p->thePainter,p->theProjection);
@@ -153,7 +165,6 @@ void EPForegroundLayer::draw(Road* R)
 
 void EPForegroundLayer::draw(Relation* R)
 {
-	if (p->theProjection.viewport().disjunctFrom(R->boundingBox())) return;
 	FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
 	if (paintsel)
 		paintsel->drawForeground(R,p->thePainter,p->theProjection);
@@ -186,22 +197,55 @@ void EPTouchupLayer::draw(TrackPoint* Pt)
 		paintsel->drawTouchup(Pt,p->thePainter,p->theProjection);
 	else if (!Pt->hasEditPainter())
 	{
-		bool Draw = p->theProjection.pixelPerM() > 1;
-		if (!Draw && !Pt->sizeParents() && (p->theProjection.pixelPerM() > LOCALZOOM) )
-			Draw = true;
-		if (Draw)
-		{
-			QPointF P(p->theProjection.project(Pt->position()));
+		if (M_PREFS->getTrackPointsVisible() || (Pt->lastUpdated() == MapFeature::Log && !M_PREFS->getTrackSegmentsVisible())) {
+			bool Draw = p->theProjection.pixelPerM() > 1;
+			if (!Draw && !Pt->sizeParents() && (p->theProjection.pixelPerM() > LOCALZOOM) )
+				Draw = true;
+			if (Pt->lastUpdated() == MapFeature::Log && !M_PREFS->getTrackSegmentsVisible())
+				Draw = true;
+			if (Draw)
+			{
+				QPointF P(p->theProjection.project(Pt->position()));
 
-			if (Pt->findKey("_waypoint_") != Pt->tagSize()) {
-				QRectF R(P-QPointF(4,4),QSize(8,8)); 
-				p->thePainter.fillRect(R,QColor(255,0,0,128)); 
+				if (Pt->findKey("_waypoint_") != Pt->tagSize()) {
+					QRectF R(P-QPointF(4,4),QSize(8,8)); 
+					p->thePainter.fillRect(R,QColor(255,0,0,128)); 
+				}
+				
+				QRectF R(P-QPointF(2,2),QSize(4,4));
+				p->thePainter.fillRect(R,QColor(0,0,0,128));
 			}
-			
-			QRectF R(P-QPointF(2,2),QSize(4,4));
-			p->thePainter.fillRect(R,QColor(0,0,0,128));
 		}
 	}
+}
+
+void EPLabelLayer::setP(EditPaintStylePrivate* ap)
+{
+	p = ap;
+}
+
+void EPLabelLayer::draw(Road* R)
+{
+	if (!M_PREFS->getNamesVisible())
+		return;
+
+	FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
+	if (paintsel)
+		paintsel->drawLabel(R,p->thePainter,p->theProjection);
+}
+
+void EPLabelLayer::draw(Relation* /* R */)
+{
+}
+
+void EPLabelLayer::draw(TrackPoint* Pt)
+{
+	if (!M_PREFS->getNamesVisible())
+		return;
+
+	FeaturePainter* paintsel = Pt->getEditPainter(p->theProjection.pixelPerM());
+	if (paintsel)
+		paintsel->drawLabel(Pt,p->thePainter,p->theProjection);
 }
 
 /* EDITPAINTSTYLE */
@@ -214,6 +258,7 @@ EditPaintStyle::EditPaintStyle(QPainter& P, const Projection& theProjection)
 	add(&p->First);
 	add(&p->Second);
 	add(&p->Third);
+	add(&p->Fourth);
 }
 
 EditPaintStyle::~EditPaintStyle(void)

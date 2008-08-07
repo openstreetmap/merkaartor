@@ -80,6 +80,8 @@ class FeaturePainter
 		void drawForeground(Relation* R, QPainter& thePainter, const Projection& theProjection) const;
 		void drawTouchup(Road* R, QPainter& thePainter, const Projection& theProjection) const;
 		void drawTouchup(TrackPoint* R, QPainter& thePainter, const Projection& theProjection) const;
+		void drawLabel(Road* R, QPainter& thePainter, const Projection& theProjection) const;
+		void drawLabel(TrackPoint* R, QPainter& thePainter, const Projection& theProjection) const;
 	public:
 
 		TagSelector* theSelector;

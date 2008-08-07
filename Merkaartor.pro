@@ -7,6 +7,7 @@
 # OUTPUT_DIR          - base directory for local output files
 # PREFIX              - base prefix for installation
 # NODEBUG             - no debug target
+# OSMARENDER          - enable osmarender
 
 TEMPLATE = app
 TARGET = merkaartor
@@ -27,11 +28,11 @@ count(NODEBUG,1) {
 
 DESTDIR = $$OUTPUT_DIR/bin
 
-VERSION="0.11"
+VERSION="0.12"
 DEFINES += VERSION=\"\\\"$$VERSION\\\"\"
 
-INCLUDEPATH += .
-DEPENDPATH += .
+INCLUDEPATH += . Render qextserialport GPS
+DEPENDPATH += . Render qextserialport GPS
 MOC_DIR += tmp
 UI_DIR += tmp
 
@@ -57,6 +58,9 @@ BINTRANSLATIONS += \
 include(Merkaartor.pri)
 include(QMapControl.pri)
 include(ImportExport.pri)
+include(Render/Render.pri)
+include(qextserialport/qextserialport.pri)
+include(GPS/GPS.pri)
 
 unix {
     target.path = /usr/local/bin
@@ -76,6 +80,8 @@ unix {
 }
 
 win32 {
+	INCLUDEPATH += $$OUTPUT_DIR/include
+	LIBS += -L$$OUTPUT_DIR/lib
     RC_FILE = Icons/merkaartor-win32.rc
 }
 
@@ -92,12 +98,6 @@ count(TRANSDIR_MERKAARTOR, 1) {
 
 count(TRANSDIR_SYSTEM, 1) {
     DEFINES += TRANSDIR_SYSTEM=\"\\\"$${TRANSDIR_SYSTEM}\\\"\"
-}
-
-osmarender {
-    !win32-g++ {
-        include(Render.pri)
-    }
 }
 
 isEmpty(NOUSEWEBKIT) {

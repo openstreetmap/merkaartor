@@ -15,6 +15,7 @@ class Projection;
 
 class QPointF;
 class QPainter;
+class QProgressDialog;
 
 class MapFeaturePrivate;
 
@@ -38,7 +39,7 @@ class RenderPriority
 class MapFeature
 {
 	public:
-		typedef enum { User, UserResolved, OSMServer, OSMServerConflict, NotYetDownloaded } ActorType;
+		typedef enum { User, UserResolved, OSMServer, OSMServerConflict, NotYetDownloaded, Log } ActorType;
 		typedef enum { UnknownDirection, BothWays, OneWay, OtherWay } TrafficDirectionType;
 	public:
 		/// Constructor for an empty map feature
@@ -110,7 +111,7 @@ class MapFeature
 		 * @param key the key of the tag
 		 * @param value the value corresponding to the key
 		 */
-		void setTag(const QString& key, const QString& value);
+		void setTag(const QString& key, const QString& value, bool addToTagList=true);
 
 		/** Set the tag "key=value" at the position index
 		 * If a tag with the same key exist, it is replaced
@@ -119,7 +120,7 @@ class MapFeature
 		 * @param key the key of the tag
 		 * @param value the value corresponding to the key
 		*/
-		void setTag(unsigned int index, const QString& key, const QString& value);
+		void setTag(unsigned int index, const QString& key, const QString& value, bool addToTagList=true);
 
 		/** remove all the tags for the curent feature
 		 */
@@ -190,8 +191,8 @@ class MapFeature
 		void notifyChanges();
 		void notifyParents(unsigned int Id);
 
-		virtual QString toXML(unsigned int lvl=0) = 0;
-		virtual bool toXML(QDomElement xParent) = 0;
+		virtual QString toXML(unsigned int lvl=0, QProgressDialog * progress=NULL) = 0;
+		virtual bool toXML(QDomElement xParent, QProgressDialog & progress) = 0;
 
 		virtual QString toMainHtml(QString type, QString systemtype);
 		virtual QString toHtml() = 0;

@@ -11,6 +11,7 @@
 #include <QtGui/QPainter>
 #include <QtGui/QPainterPath>
 #include <QMessageBox>
+#include <QProgressDialog>
 
 #include <algorithm>
 #include <vector>
@@ -388,8 +389,11 @@ bool Road::deleteChildren(MapDocument* theDocument, CommandList* theList)
 }
 
 
-QString Road::toXML(unsigned int lvl)
+QString Road::toXML(unsigned int lvl, QProgressDialog * progress)
 {
+	if (progress)
+		progress->setValue(progress->value()+1);
+
 	QString S(lvl*2, ' ');
 	S += QString("<way id=\"%1\">\n").arg(stripToOSMId(id()));
 	for (unsigned int i=0; i<size(); ++i)
@@ -399,7 +403,7 @@ QString Road::toXML(unsigned int lvl)
 	return S;
 }
 
-bool Road::toXML(QDomElement xParent)
+bool Road::toXML(QDomElement xParent, QProgressDialog & progress)
 {
 	bool OK = true;
 
@@ -419,6 +423,7 @@ bool Road::toXML(QDomElement xParent)
 
 	tagsToXML(e);
 
+	progress.setValue(progress.value()+1);
 	return OK;
 }
 

@@ -9,6 +9,7 @@
 #include "ExportOSM.h"
 
 #include <QtCore/QAbstractTableModel>
+#include <QProgressDialog>
 
 #include <algorithm>
 #include <utility>
@@ -224,8 +225,11 @@ void Relation::releaseMemberModel()
 	}
 }
 
-QString Relation::toXML(unsigned int lvl)
+QString Relation::toXML(unsigned int lvl, QProgressDialog * progress)
 {
+	if (progress)
+		progress->setValue(progress->value()+1);
+
 	QString S;
 	S += QString(lvl*2, ' ') + QString("<relation id=\"%1\">\n").arg(stripToOSMId(id()));
 	for (unsigned int i=0; i<size(); ++i)
@@ -242,7 +246,7 @@ QString Relation::toXML(unsigned int lvl)
 	return S;
 }
 
-bool Relation::toXML(QDomElement xParent)
+bool Relation::toXML(QDomElement xParent, QProgressDialog & progress)
 {
 	bool OK = true;
 
@@ -270,6 +274,7 @@ bool Relation::toXML(QDomElement xParent)
 
 	tagsToXML(e);
 
+	progress.setValue(progress.value()+1);
 	return OK;
 }
 

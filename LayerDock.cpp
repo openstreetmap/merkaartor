@@ -53,6 +53,8 @@ void LayerDock::addLayer(MapLayer* aLayer)
 		connect(w, SIGNAL(layerCleared(MapLayer*)), this, SLOT(layerCleared(MapLayer*)));
 		connect(w, SIGNAL(layerZoom(MapLayer*)), this, SLOT(layerZoom(MapLayer*)));
 
+		Main->menuLayers->addMenu(w->getAssociatedMenu());
+
 		update();
 	}
 }
@@ -69,6 +71,9 @@ void LayerDock::deleteLayer(MapLayer* aLayer)
 			Layout->removeWidget(layerList[i].second);
 			disconnect(layerList[i].second);
 			layerList[i].second->setVisible(false);
+
+			Main->menuLayers->removeAction(layerList[i].second->getAssociatedMenu()->menuAction());
+
 			layerList.removeAt(i);
 			//aLayer->deleteWidget();
 		}
@@ -105,8 +110,9 @@ void LayerDock::resizeEvent(QResizeEvent* )
 {
 }
 
-void LayerDock::layerChanged(LayerWidget*, bool adjustViewport)
+void LayerDock::layerChanged(LayerWidget* l, bool adjustViewport)
 {
+	l->getAssociatedMenu()->setTitle(l->getMapLayer()->name());
 	emit(layersChanged(adjustViewport));
 }
 
@@ -118,6 +124,7 @@ void LayerDock::layerClosed(MapLayer* l)
 	l->clear();
 	l->setEnabled(false);
 	l->getWidget()->setVisible(false);
+	l->getWidget()->getAssociatedMenu()->setVisible(false);
 	Main->on_editPropertiesAction_triggered();
 
 	update();

@@ -103,6 +103,9 @@
     <addaction name="viewZoomInAction" />
     <addaction name="separator" />
     <addaction name="viewDownloadedAction" />
+    <addaction name="viewNamesAction" />
+    <addaction name="viewTrackPointsAction" />
+    <addaction name="viewTrackSegmentsAction" />
     <addaction name="separator" />
     <addaction name="mnuProjections" />
     <addaction name="separator" />
@@ -122,16 +125,22 @@
      <addaction name="exportGPXAction" />
      <addaction name="exportKMLAction" />
     </widget>
+    <widget class="QMenu" name="menuRender" >
+     <property name="title" >
+      <string>Render</string>
+     </property>
+     <addaction name="renderNativeAction" />
+     <addaction name="renderSVGAction" />
+    </widget>
     <addaction name="fileNewAction" />
     <addaction name="fileOpenAction" />
     <addaction name="separator" />
     <addaction name="fileImportAction" />
     <addaction name="menuExport" />
+    <addaction name="menuRender" />
     <addaction name="separator" />
     <addaction name="fileSaveAction" />
     <addaction name="fileSaveAsAction" />
-    <addaction name="separator" />
-    <addaction name="renderAction" />
     <addaction name="separator" />
     <addaction name="fileDownloadAction" />
     <addaction name="fileDownloadMoreAction" />
@@ -175,8 +184,13 @@
      <addaction name="windowLayersAction" />
      <addaction name="windowInfoAction" />
      <addaction name="windowDirtyAction" />
+     <addaction name="windowGPSAction" />
     </widget>
     <addaction name="menu_Docks" />
+    <addaction name="windowToolbarAction" />
+    <addaction name="separator" />
+    <addaction name="windowHideAllAction" />
+    <addaction name="windowShowAllAction" />
    </widget>
    <widget class="QMenu" name="menu_Feature" >
     <property name="title" >
@@ -184,9 +198,27 @@
     </property>
     <addaction name="featureCommitAction" />
    </widget>
+   <widget class="QMenu" name="menuLayers" >
+    <property name="title" >
+     <string>&amp;Layers</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuGps" >
+    <property name="title" >
+     <string>Gps</string>
+    </property>
+    <addaction name="gpsConnectAction" />
+    <addaction name="gpsReplayAction" />
+    <addaction name="separator" />
+    <addaction name="gpsDisconnectAction" />
+    <addaction name="separator" />
+    <addaction name="gpsCenterAction" />
+   </widget>
    <addaction name="menuFile" />
    <addaction name="menuEdit" />
    <addaction name="menuView" />
+   <addaction name="menuGps" />
+   <addaction name="menuLayers" />
    <addaction name="menuCreate" />
    <addaction name="menu_Feature" />
    <addaction name="menuRoad" />
@@ -554,11 +586,6 @@
     <string>Find and select items</string>
    </property>
   </action>
-  <action name="renderAction" >
-   <property name="text" >
-    <string>Render...</string>
-   </property>
-  </action>
   <action name="exportOSMViewportAction" >
    <property name="text" >
     <string>&amp;Viewport...</string>
@@ -747,7 +774,7 @@
     <bool>true</bool>
    </property>
    <property name="text" >
-    <string>View &amp;downloaded areas</string>
+    <string>Show &amp;downloaded areas</string>
    </property>
    <property name="shortcut" >
     <string>Ctrl+Alt+A</string>
@@ -850,6 +877,118 @@
   <action name="exportKMLAction" >
    <property name="text" >
     <string>KML</string>
+   </property>
+  </action>
+  <action name="windowToolbarAction" >
+   <property name="text" >
+    <string>Toggle Toolbar</string>
+   </property>
+   <property name="toolTip" >
+    <string>Hide/Show the Toolbar</string>
+   </property>
+   <property name="statusTip" >
+    <string>Hide/Show the Toolbar</string>
+   </property>
+  </action>
+  <action name="windowHideAllAction" >
+   <property name="text" >
+    <string>Hide All</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="windowShowAllAction" >
+   <property name="text" >
+    <string>Show All</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+F</string>
+   </property>
+   <property name="visible" >
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="layersAddImageAction" >
+   <property name="text" >
+    <string>&amp;Image layer</string>
+   </property>
+  </action>
+  <action name="renderSVGAction" >
+   <property name="text" >
+    <string>Osmarender</string>
+   </property>
+  </action>
+  <action name="renderNativeAction" >
+   <property name="text" >
+    <string>Native</string>
+   </property>
+  </action>
+  <action name="viewTrackPointsAction" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Show track &amp;points</string>
+   </property>
+  </action>
+  <action name="viewNamesAction" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Show &amp;names</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Alt+N</string>
+   </property>
+  </action>
+  <action name="gpsConnectAction" >
+   <property name="text" >
+    <string>&amp;Start</string>
+   </property>
+  </action>
+  <action name="gpsReplayAction" >
+   <property name="text" >
+    <string>&amp;Replay...</string>
+   </property>
+  </action>
+  <action name="windowGPSAction" >
+   <property name="text" >
+    <string>Toggle &amp;GPS</string>
+   </property>
+   <property name="iconText" >
+    <string>Hide/Show the GPS dock</string>
+   </property>
+   <property name="toolTip" >
+    <string>Hide/Show the GPS dock</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+G</string>
+   </property>
+  </action>
+  <action name="gpsDisconnectAction" >
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
+   <property name="text" >
+    <string>S&amp;top</string>
+   </property>
+  </action>
+  <action name="gpsCenterAction" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>&amp;Center on GPS</string>
+   </property>
+  </action>
+  <action name="viewTrackSegmentsAction" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Show track &amp;segments</string>
    </property>
   </action>
  </widget>

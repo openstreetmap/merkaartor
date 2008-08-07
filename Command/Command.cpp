@@ -12,6 +12,7 @@
 #include <QAction>
 #include <QListWidget>
 #include <QUuid>
+#include <QProgressDialog>
 
 Command::Command()
 	: commandDirtyLevel(0)
@@ -357,7 +358,7 @@ unsigned int CommandHistory::buildUndoList(QListWidget* theList)
 	return Index;
 }
 
-bool CommandHistory::toXML(QDomElement& xParent) const
+bool CommandHistory::toXML(QDomElement& xParent, QProgressDialog & /*progress*/) const
 {
 	bool OK = true;
 
@@ -378,7 +379,7 @@ bool CommandHistory::toXML(QDomElement& xParent) const
 	return OK;
 }
 
-CommandHistory* CommandHistory::fromXML(MapDocument* d, QDomElement& e)
+CommandHistory* CommandHistory::fromXML(MapDocument* d, QDomElement& e, QProgressDialog & progress)
 {
 	CommandHistory* h = new CommandHistory();
 
@@ -398,6 +399,10 @@ CommandHistory* CommandHistory::fromXML(MapDocument* d, QDomElement& e)
 			if (C)
 				h->add(C);
 		}
+
+		if (progress.wasCanceled())
+			break;
+
 		c = c.nextSiblingElement();
 	}
 	h->Index = e.attribute("index").toUInt();

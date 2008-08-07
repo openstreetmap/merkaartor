@@ -35,6 +35,7 @@
 
 #include <QtCore/QString>
 #include <QMultiMap>
+#include <QProgressDialog>
 
 #include <algorithm>
 #include <map>
@@ -357,7 +358,7 @@ LayerWidget* DrawingMapLayer::newWidget(void)
 }
 
 
-bool DrawingMapLayer::toXML(QDomElement xParent)
+bool DrawingMapLayer::toXML(QDomElement xParent, QProgressDialog & progress)
 {
 	bool OK = true;
 
@@ -380,33 +381,33 @@ bool DrawingMapLayer::toXML(QDomElement xParent)
 		QDomElement bb = xParent.ownerDocument().createElement("bound");
 		o.appendChild(bb);
 		CoordBox layBB = boundingBox((const MapLayer*)this);
-		QString S = QString().number(radToAng(layBB.bottomLeft().lat())) + ",";
-		S += QString().number(radToAng(layBB.bottomLeft().lon())) + ",";
-		S += QString().number(radToAng(layBB.topRight().lat())) + ",";
-		S += QString().number(radToAng(layBB.topRight().lon()));
+		QString S = QString().number(radToAng(layBB.bottomLeft().lat()),'f',6) + ",";
+		S += QString().number(radToAng(layBB.bottomLeft().lon()),'f',6) + ",";
+		S += QString().number(radToAng(layBB.topRight().lat()),'f',6) + ",";
+		S += QString().number(radToAng(layBB.topRight().lon()),'f',6);
 		bb.setAttribute("box", S);
 		bb.setAttribute("origin", "http://www.openstreetmap.org/api/0.5");
 	}
 
 	std::vector<MapFeature*>::iterator it;
 	for(it = p->Features.begin(); it != p->Features.end(); it++)
-		(*it)->toXML(o);
+		(*it)->toXML(o, progress);
 
 	return OK;
 }
 
-DrawingMapLayer * DrawingMapLayer::fromXML(MapDocument* d, const QDomElement e)
+DrawingMapLayer * DrawingMapLayer::fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress)
 {
 	DrawingMapLayer* l = new DrawingMapLayer(e.attribute("name"));
 	d->add(l);
-	if (!DrawingMapLayer::doFromXML(l, d, e)) {
+	if (!DrawingMapLayer::doFromXML(l, d, e, progress)) {
 		delete l;
 		return NULL;
 	}
 	return l;
 }
 
-DrawingMapLayer * DrawingMapLayer::doFromXML(DrawingMapLayer* l, MapDocument* d, const QDomElement e)
+DrawingMapLayer * DrawingMapLayer::doFromXML(DrawingMapLayer* l, MapDocument* d, const QDomElement e, QProgressDialog & progress)
 {
 	l->setId(e.attribute("xml:id"));
 	l->setAlpha(e.attribute("alpha").toDouble());
@@ -436,15 +437,21 @@ DrawingMapLayer * DrawingMapLayer::doFromXML(DrawingMapLayer* l, MapDocument* d,
 		if (c.tagName() == "way") {
 			/* Road* R = */ Road::fromXML(d, l, c);
 //			l->add(R);
+			progress.setValue(progress.value()+1);
 		} else
 		if (c.tagName() == "relation") {
 			/* Relation* r = */ Relation::fromXML(d, l, c);
 //			l->add(r);
+			progress.setValue(progress.value()+1);
 		} else
 		if (c.tagName() == "node") {
 			/* TrackPoint* N = */ TrackPoint::fromXML(d, l, c);
 //			l->add(N);
+			progress.setValue(progress.value()+1);
 		}
+
+		if (progress.wasCanceled())
+			break;
 
 		c = c.nextSiblingElement();
 	}
@@ -454,8 +461,8 @@ DrawingMapLayer * DrawingMapLayer::doFromXML(DrawingMapLayer* l, MapDocument* d,
 
 // ImageMapLayer
 
-ImageMapLayer::ImageMapLayer(const QString & aName)
-	: MapLayer(aName), layermanager(0)
+ImageMapLayer::ImageMapLayer(const QString & aName, LayerManager* aLayerMgr)
+	: MapLayer(aName), layermanager(aLayerMgr)
 {
 	setMapAdapter(MerkaartorPreferences::instance()->getBgType());
 	if (MerkaartorPreferences::instance()->getBgType() == Bg_None)
@@ -466,8 +473,8 @@ ImageMapLayer::ImageMapLayer(const QString & aName)
 
 ImageMapLayer::~ ImageMapLayer()
 {
-	if (layermanager && layermanager->getLayers().size())
-		layermanager->removeLayer();
+	if (layermanager && p->layer_bg)
+		layermanager->removeLayer(p->layer_bg->getLayername());
 	SAFE_DELETE(p->layer_bg);
 }
 
@@ -507,10 +514,12 @@ void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 	TmsServerList* tsl;
 	TmsServer ts;
 	QString selws, selts;
+	int idx = -1;
 
 	if (layermanager)
-		if (layermanager->getLayer()) {
-			layermanager->removeLayer();
+		if (layermanager->getLayer(id())) {
+			idx = layermanager->getLayers().indexOf(id());
+			layermanager->removeLayer(id());
 		}
 	SAFE_DELETE(p->layer_bg);
 
@@ -531,7 +540,7 @@ void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 			wmsa = new WMSMapAdapter(ws.WmsAdress, ws.WmsPath, ws.WmsLayers, ws.WmsProjections,
 					ws.WmsStyles, ws.WmsImgFormat, 256);
 			mapadapter_bg = wmsa;
-			p->layer_bg = new Layer(selws, mapadapter_bg, Layer::MapLayer);
+			p->layer_bg = new Layer(id(), mapadapter_bg, Layer::MapLayer);
 			p->layer_bg->setVisible(p->Visible);
 
 			setName(tr("Map - WMS - %1").arg(ws.WmsName));
@@ -542,7 +551,7 @@ void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 			ts = tsl->value(selts);
 			tmsa = new TileMapAdapter(ts.TmsAdress, ts.TmsPath, ts.TmsTileSize, ts.TmsMinZoom, ts.TmsMaxZoom);
 			mapadapter_bg = tmsa;
-			p->layer_bg = new Layer(selts, mapadapter_bg, Layer::MapLayer);
+			p->layer_bg = new Layer(id(), mapadapter_bg, Layer::MapLayer);
 			p->layer_bg->setVisible(p->Visible);
 
 			setName(tr("Map - TMS - %1").arg(ts.TmsName));
@@ -555,7 +564,7 @@ void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 #ifdef YAHOO
 		case Bg_Yahoo:
 			mapadapter_bg = new YahooLegalMapAdapter();
-			p->layer_bg = new Layer(tr("Custom Layer"), mapadapter_bg, Layer::MapLayer);
+			p->layer_bg = new Layer(id(), mapadapter_bg, Layer::MapLayer);
 			p->layer_bg->setVisible(p->Visible);
 
 			setName(tr("Map - Yahoo"));
@@ -564,7 +573,7 @@ void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 #ifdef YAHOO_ILLEGAL
 		case Bg_Yahoo_illegal:
 			mapadapter_bg = new YahooMapAdapter("us.maps3.yimg.com", "/aerial.maps.yimg.com/png?v=1.7&t=a&s=256&x=%2&y=%3&z=%1");
-			p->layer_bg = new Layer(tr("Custom Layer"), mapadapter_bg, Layer::MapLayer);
+			p->layer_bg = new Layer(id(), mapadapter_bg, Layer::MapLayer);
 			p->layer_bg->setVisible(p->Visible);
 
 			setName(tr("Map - Illegal Yahoo"));
@@ -573,7 +582,7 @@ void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 #ifdef GOOGLE_ILLEGAL
 		case Bg_Google_illegal:
 			mapadapter_bg = new GoogleSatMapAdapter();
-			p->layer_bg = new Layer(tr("Custom Layer"), mapadapter_bg, Layer::MapLayer);
+			p->layer_bg = new Layer(id(), mapadapter_bg, Layer::MapLayer);
 			p->layer_bg->setVisible(p->Visible);
 
 			setName(tr("Map - Illegal Google"));
@@ -582,7 +591,7 @@ void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 #ifdef MSLIVEMAP_ILLEGAL
 		case Bg_MsVirtualEarth_illegal:
 			mapadapter_bg = new MsLiveMapAdapter();
-			p->layer_bg = new Layer(tr("Custom Layer"), mapadapter_bg, Layer::MapLayer);
+			p->layer_bg = new Layer(id(), mapadapter_bg, Layer::MapLayer);
 			p->layer_bg->setVisible(p->Visible);
 
 			setName(tr("Map - Illegal Ms Virtual Earth"));
@@ -591,13 +600,13 @@ void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 	}
 	if (layermanager)
 		if (p->layer_bg) {
-			layermanager->addLayer(p->layer_bg);
+			layermanager->addLayer(p->layer_bg, idx);
 			layermanager->setSize();
 		}
 
 }
 
-bool ImageMapLayer::toXML(QDomElement xParent)
+bool ImageMapLayer::toXML(QDomElement xParent, QProgressDialog & /* progress */)
 {
 	bool OK = true;
 
@@ -649,7 +658,7 @@ bool ImageMapLayer::toXML(QDomElement xParent)
 	return OK;
 }
 
-ImageMapLayer * ImageMapLayer::fromXML(MapDocument* d, const QDomElement e)
+ImageMapLayer * ImageMapLayer::fromXML(MapDocument* d, const QDomElement e, QProgressDialog & /* progress */)
 {
 	ImageMapLayer* l = d->getImageLayer();
 	l->setId(e.attribute("xml:id"));
@@ -772,7 +781,7 @@ void TrackMapLayer::extractLayer()
 	p->theDocument->add(extL);
 }
 
-bool TrackMapLayer::toXML(QDomElement xParent)
+bool TrackMapLayer::toXML(QDomElement xParent, QProgressDialog & progress)
 {
 	bool OK = true;
 
@@ -805,19 +814,19 @@ bool TrackMapLayer::toXML(QDomElement xParent)
 	}
 
 	for (int i=0; i < waypoints.size(); ++i) {
-		waypoints[i]->toGPX(o);
+		waypoints[i]->toGPX(o, progress);
 	}
 
 	QDomElement t = o.ownerDocument().createElement("trk");
 	o.appendChild(t);
 
 	for (int i=0; i < segments.size(); ++i)
-		segments[i]->toXML(t);
+		segments[i]->toXML(t, progress);
 
 	return OK;
 }
 
-TrackMapLayer * TrackMapLayer::fromXML(MapDocument* d, const QDomElement e)
+TrackMapLayer * TrackMapLayer::fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress)
 {
 	TrackMapLayer* l = new TrackMapLayer(e.attribute("name"));
 	l->setId(e.attribute("xml:id"));
@@ -837,7 +846,7 @@ TrackMapLayer * TrackMapLayer::fromXML(MapDocument* d, const QDomElement e)
 			QDomElement t = c.firstChildElement();
 			while(!t.isNull()) {
 				if (t.tagName() == "trkseg") {
-					TrackSegment* N = TrackSegment::fromXML(d, l, t);
+					TrackSegment* N = TrackSegment::fromXML(d, l, t, progress);
 					l->add(N);
 				}
 
@@ -847,7 +856,11 @@ TrackMapLayer * TrackMapLayer::fromXML(MapDocument* d, const QDomElement e)
 		if (c.tagName() == "wpt") {
 			/* TrackPoint* N = */ TrackPoint::fromGPX(d, l, c);
 			//l->add(N);
+			progress.setValue(progress.value()+1);
 		}
+
+		if (progress.wasCanceled())
+			break;
 
 		c = c.nextSiblingElement();
 	}
@@ -868,9 +881,9 @@ DirtyMapLayer::~ DirtyMapLayer()
 {
 }
 
-DirtyMapLayer* DirtyMapLayer::fromXML(MapDocument* d, const QDomElement e)
+DirtyMapLayer* DirtyMapLayer::fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress)
 {
-	DrawingMapLayer::doFromXML(d->getDirtyLayer(), d, e);
+	DrawingMapLayer::doFromXML(d->getDirtyLayer(), d, e, progress);
 	return d->getDirtyLayer();
 }
 
@@ -894,9 +907,9 @@ UploadedMapLayer::~ UploadedMapLayer()
 {
 }
 
-UploadedMapLayer* UploadedMapLayer::fromXML(MapDocument* d, const QDomElement e)
+UploadedMapLayer* UploadedMapLayer::fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress)
 {
-	DrawingMapLayer::doFromXML(d->getUploadedLayer(), d, e);
+	DrawingMapLayer::doFromXML(d->getUploadedLayer(), d, e, progress);
 	return d->getUploadedLayer();
 }
 
@@ -918,11 +931,11 @@ ExtractedMapLayer::~ ExtractedMapLayer()
 {
 }
 
-ExtractedMapLayer* ExtractedMapLayer::fromXML(MapDocument* d, const QDomElement e)
+ExtractedMapLayer* ExtractedMapLayer::fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress)
 {
 	ExtractedMapLayer* l = new ExtractedMapLayer(e.attribute("name"));
 	d->add(l);
-	if (!DrawingMapLayer::doFromXML(l, d, e)) {
+	if (!DrawingMapLayer::doFromXML(l, d, e, progress)) {
 		delete l;
 		return NULL;
 	}
@@ -948,9 +961,9 @@ DeletedMapLayer::~ DeletedMapLayer()
 {
 }
 
-DeletedMapLayer* DeletedMapLayer::fromXML(MapDocument* d, const QDomElement e)
+DeletedMapLayer* DeletedMapLayer::fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress)
 {
-	DrawingMapLayer::doFromXML(d->getTrashLayer(), d, e);
+	DrawingMapLayer::doFromXML(d->getTrashLayer(), d, e, progress);
 	return d->getTrashLayer();
 }
 

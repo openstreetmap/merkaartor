@@ -6,6 +6,8 @@
 class TrackSegmentPrivate;
 class TrackPoint;
 
+class QProgressDialog;
+
 class TrackSegment : public MapFeature
 {
 	public:
@@ -38,9 +40,9 @@ class TrackSegment : public MapFeature
 		void sortByTime();
 		virtual void partChanged(MapFeature* F, unsigned int ChangeId);
 
-		virtual QString toXML(unsigned int) {return QString("");};
-		virtual bool toXML(QDomElement xParent);
-		static TrackSegment* fromXML(MapDocument* d, MapLayer* L, const QDomElement e);
+		virtual QString toXML(unsigned int, QProgressDialog *) {return QString("");};
+		virtual bool toXML(QDomElement xParent, QProgressDialog & progress);
+		static TrackSegment* fromXML(MapDocument* d, MapLayer* L, const QDomElement e, QProgressDialog & progress);
 
 		virtual QString toHtml() {return "";};
 

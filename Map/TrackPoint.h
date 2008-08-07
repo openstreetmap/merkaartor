@@ -9,6 +9,8 @@
 #include <QtCore/QDateTime>
 #include <QtXml>
 
+class QProgressDialog;
+
 class TrackPoint : public MapFeature
 {
 	public:
@@ -39,9 +41,9 @@ class TrackPoint : public MapFeature
 
 		virtual void partChanged(MapFeature* F, unsigned int ChangeId);
 
-		virtual QString toXML(unsigned int lvl=0);
-		virtual bool toXML(QDomElement xParent);
-		virtual bool toGPX(QDomElement xParent);
+		virtual QString toXML(unsigned int lvl=0, QProgressDialog * progress=NULL);
+		virtual bool toXML(QDomElement xParent, QProgressDialog & progress);
+		virtual bool toGPX(QDomElement xParent, QProgressDialog & progress);
 		static TrackPoint* fromXML(MapDocument* d, MapLayer* L, const QDomElement e);
 		static TrackPoint* fromGPX(MapDocument* d, MapLayer* L, const QDomElement e);
 

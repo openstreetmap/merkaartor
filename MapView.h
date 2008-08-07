@@ -5,7 +5,6 @@
 
 #include <QtGui/QPixmap>
 #include <QtGui/QWidget>
-#include <QProgressBar>
 
 class Interaction;
 class MainWindow;
@@ -43,9 +42,9 @@ class MapView :	public QWidget
 		virtual void resizeEvent(QResizeEvent *event);
 
 		Projection& projection();
-		PropertiesDock* properties();
 
-		InfoDock* info();
+		PropertiesDock* properties();
+		//InfoDock* info();
 
         LayerManager*	layermanager;
 
@@ -70,7 +69,6 @@ class MapView :	public QWidget
 		QPoint thePanDelta;
 
 		int numImages;
-		QProgressBar* pbImages;
 		QString StatusMessage;
 
 	private slots:

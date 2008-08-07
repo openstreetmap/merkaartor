@@ -20,6 +20,8 @@
 #include <ui_TMSPreferencesDialog.h>
 #include "Preferences/MerkaartorPreferences.h"
 
+#include <vector>
+
 /**
 	@author cbro <cbro@semperpax.com>
 */

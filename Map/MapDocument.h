@@ -12,6 +12,8 @@
 #include <utility>
 
 class QString;
+class QProgressDialog;
+
 class Command;
 class CommandHistory;
 class MapDocument;
@@ -76,10 +78,11 @@ public:
 	UploadedMapLayer* getUploadedLayer() const;
 	DeletedMapLayer* getTrashLayer() const;
 
-	QString exportOSM(const CoordBox& aCoordBox = WORLD_COORDBOX);
+	QString exportOSM(const CoordBox& aCoordBox = WORLD_COORDBOX, bool renderBounds=false);
 	QString exportOSM(QVector<MapFeature*> aFeatures);
-	bool toXML(QDomElement xParent);
-	static MapDocument* fromXML(const QDomElement e, double version, LayerDock* aDock);
+	QVector<MapFeature*> exportCoreOSM(QVector<MapFeature*> aFeatures);
+	bool toXML(QDomElement xParent, QProgressDialog & progress);
+	static MapDocument* fromXML(const QDomElement e, double version, LayerDock* aDock, QProgressDialog & progress);
 
 	bool importNMEA(const QString& filename, TrackMapLayer* NewLayer);
 	bool importOSB(const QString& filename, DrawingMapLayer* NewLayer);

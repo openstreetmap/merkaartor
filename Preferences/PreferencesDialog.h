@@ -15,9 +15,11 @@
 #include <QWidget>
 #include <QHttp>
 #include <QBuffer>
+#include <QListWidgetItem>
 
 
 #include <ui_PreferencesDialog.h>
+#include "Preferences/MerkaartorPreferences.h"
 
 /**
 	@author cbro <cbro@semperpax.com>
@@ -38,9 +40,19 @@ public slots:
 	void on_btAdapterSetup_clicked();
 	void on_btColorChooser_clicked();
 
+	/* Tools */
+	void on_btAddTool_clicked(void);
+	void on_btDelTool_clicked(void);
+	void on_btApplyTool_clicked(void);
+	void on_lvTools_itemClicked(QListWidgetItem* it);
+	void on_btBrowse_clicked();
+
 private:
 	void loadPrefs();
 	void savePrefs();
+
+private:
+	QVector<Tool> theTools;
 
 signals:
 	void preferencesChanged();

@@ -4,6 +4,8 @@
 #include "Map/MapDocument.h"
 
 class QString;
+class QprogressDialog;
+
 class MapFeature;
 class MapLayerPrivate;
 class MapAdapter;
@@ -64,7 +66,7 @@ public:
 	void setId(const QString& id);
 	const QString& id() const;
 
-	virtual bool toXML(QDomElement xParent) = 0;
+	virtual bool toXML(QDomElement xParent, QProgressDialog & progress) = 0;
 
 	static CoordBox boundingBox(const MapLayer* theLayer);
 
@@ -93,9 +95,9 @@ public:
 	virtual void setVisible(bool b);
 	virtual LayerWidget* newWidget(void);
 
-	virtual bool toXML(QDomElement xParent);
-	static DrawingMapLayer* fromXML(MapDocument* d, const QDomElement e);
-	static DrawingMapLayer* doFromXML(DrawingMapLayer* l, MapDocument* d, const QDomElement e);
+	virtual bool toXML(QDomElement xParent, QProgressDialog & progress);
+	static DrawingMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
+	static DrawingMapLayer* doFromXML(DrawingMapLayer* l, MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
 	virtual const QString className() {return "DrawingMapLayer";};
 };
@@ -105,7 +107,7 @@ class ImageMapLayer : public QObject, public MapLayer
 Q_OBJECT
 public:
 	ImageMapLayer() : layermanager(0) {};
-	ImageMapLayer(const QString& aName);
+	ImageMapLayer(const QString& aName, LayerManager* aLayerMgr=NULL);
 	virtual ~ImageMapLayer();
 
 	Layer* imageLayer();
@@ -116,8 +118,8 @@ public:
 	virtual LayerWidget* newWidget(void);
 	virtual void updateWidget();
 
-	virtual bool toXML(QDomElement xParent);
-	static ImageMapLayer* fromXML(MapDocument* d, const QDomElement e);
+	virtual bool toXML(QDomElement xParent, QProgressDialog & progress);
+	static ImageMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
 	virtual const QString className() {return "ImageMapLayer";};
 
@@ -138,8 +140,8 @@ public:
 
 	virtual void extractLayer();
 
-	virtual bool toXML(QDomElement xParent);
-	static TrackMapLayer* fromXML(MapDocument* d, const QDomElement e);
+	virtual bool toXML(QDomElement xParent, QProgressDialog & progress);
+	static TrackMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
 	virtual const QString className() {return "TrackMapLayer";};
 	virtual bool isUploadable() {return true;};
@@ -152,7 +154,7 @@ public:
 	DirtyMapLayer(const QString& aName);
 	virtual ~DirtyMapLayer();
 
-	static DirtyMapLayer* fromXML(MapDocument* d, const QDomElement e);
+	static DirtyMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
 	virtual const QString className() {return "DirtyMapLayer";};
 	virtual LayerWidget* newWidget(void);
@@ -164,7 +166,7 @@ public:
 	UploadedMapLayer(const QString& aName);
 	virtual ~UploadedMapLayer();
 
-	static UploadedMapLayer* fromXML(MapDocument* d, const QDomElement e);
+	static UploadedMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
 	virtual const QString className() {return "UploadedMapLayer";};
 	virtual LayerWidget* newWidget(void);
@@ -176,7 +178,7 @@ public:
 	ExtractedMapLayer(const QString& aName);
 	virtual ~ExtractedMapLayer();
 
-	static ExtractedMapLayer* fromXML(MapDocument* d, const QDomElement e);
+	static ExtractedMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
 	virtual const QString className() {return "ExtractedMapLayer";};
 	virtual LayerWidget* newWidget(void);
@@ -190,7 +192,7 @@ public:
 	DeletedMapLayer(const QString& aName);
 	virtual ~DeletedMapLayer();
 
-	static DeletedMapLayer* fromXML(MapDocument* d, const QDomElement e);
+	static DeletedMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
 	virtual const QString className() {return "DeletedMapLayer";};
 	virtual LayerWidget* newWidget(void);

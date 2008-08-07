@@ -43,11 +43,24 @@ TmsServer::TmsServer(QString Name, QString Adress, QString Path, int tileSize, i
 	}
 }
 
+Tool::Tool(QString Name, QString Path)
+	: ToolName(Name), ToolPath(Path)
+{
+}
+
+Tool::Tool()
+	: ToolName(""), ToolPath("")
+{
+}
+
+/* MekaartorPreferences */
+
 MerkaartorPreferences::MerkaartorPreferences()
 {
 	Sets = new QSettings();
 	theWmsServerList = new WmsServerList();
 	theTmsServerList = new TmsServerList();
+	theToolList = new ToolList();
 
 	version = Sets->value("version/version", "0").toString();
 	initialize();
@@ -57,6 +70,7 @@ MerkaartorPreferences::~MerkaartorPreferences()
 {
 	delete theWmsServerList;
 	delete theTmsServerList;
+	delete theToolList;
 	delete Sets;
 }
 
@@ -65,6 +79,7 @@ void MerkaartorPreferences::save()
 	Sets->setValue("version/version", QString("%1").arg(VERSION));
 	setWmsServers();
 	setTmsServers();
+	setTools();
 	setAlphaList();
 	Sets->sync();
 }
@@ -108,6 +123,16 @@ void MerkaartorPreferences::initialize()
 		for (int i=0; i<alphaList.size(); i+=2) {
 			alpha[alphaList[i]] = alphaList[i+1].toDouble();
 		}
+	}
+
+	QStringList tl = Sets->value("Tools/list").toStringList();
+	for (int i=0; i<tl.size(); i+=TOOL_FIELD_SIZE) {
+		Tool t(tl[i], tl[i+1]);
+		theToolList->insert(tl[i], t);
+	}
+	if (!theToolList->contains("Inkscape")) {
+		Tool t("Inkscape", "");
+		theToolList->insert("Inkscape", t);
 	}
 
 	if (version == "0") {
@@ -229,36 +254,6 @@ QString MerkaartorPreferences::getWorkingDir() const
 void MerkaartorPreferences::setWorkingDir(const QString & theValue)
 {
 	Sets->setValue("general/workingdir", theValue);
-}
-
-QString MerkaartorPreferences::getOsmWebsite() const
-{
-	return Sets->value("osm/Website", "www.openstreetmap.org").toString();
-}
-
-void MerkaartorPreferences::setOsmWebsite(const QString & theValue)
-{
-	Sets->setValue("osm/Website", theValue);
-}
-
-QString MerkaartorPreferences::getOsmUser() const
-{
-	return Sets->value("osm/User").toString();
-}
-
-void MerkaartorPreferences::setOsmUser(const QString & theValue)
-{
-	Sets->setValue("osm/User", theValue);
-}
-
-QString MerkaartorPreferences::getOsmPassword() const
-{
-	return Sets->value("osm/Password").toString();
-}
-
-void MerkaartorPreferences::setOsmPassword(const QString & theValue)
-{
-	Sets->setValue("osm/Password", theValue);
 }
 
 bool MerkaartorPreferences::getProxyUse() const
@@ -628,6 +623,46 @@ bool MerkaartorPreferences::getDrawTileBoundary()
 
 /* DATA */
 
+QString MerkaartorPreferences::getOsmWebsite() const
+{
+	return Sets->value("osm/Website", "www.openstreetmap.org").toString();
+}
+
+void MerkaartorPreferences::setOsmWebsite(const QString & theValue)
+{
+	Sets->setValue("osm/Website", theValue);
+}
+
+QString MerkaartorPreferences::getOsmUser() const
+{
+	return Sets->value("osm/User").toString();
+}
+
+void MerkaartorPreferences::setOsmUser(const QString & theValue)
+{
+	Sets->setValue("osm/User", theValue);
+}
+
+QString MerkaartorPreferences::getOsmPassword() const
+{
+	return Sets->value("osm/Password").toString();
+}
+
+void MerkaartorPreferences::setOsmPassword(const QString & theValue)
+{
+	Sets->setValue("osm/Password", theValue);
+}
+
+QString MerkaartorPreferences::getGpsPort() const
+{
+	return Sets->value("gps/port", "/dev/rfcomm0").toString();
+}
+
+void MerkaartorPreferences::setGpsPort(const QString & theValue)
+{
+	Sets->setValue("gps/port", theValue);
+}
+
 bool MerkaartorPreferences::getAutoSaveDoc() const
 {
 	return Sets->value("data/AutoSaveDoc", false).toBool();
@@ -648,7 +683,7 @@ bool MerkaartorPreferences::getAutoExtractTracks() const
 	return Sets->value("data/AutoExtractTracks", false).toBool();
 }
 
-	
+
 bool MerkaartorPreferences::getDownloadedVisible() const
 {
 	return Sets->value("visual/DownloadedVisible", true).toBool();
@@ -657,6 +692,36 @@ bool MerkaartorPreferences::getDownloadedVisible() const
 void MerkaartorPreferences::setDownloadedVisible(bool theValue)
 {
 	Sets->setValue("visual/DownloadedVisible", theValue);
+}
+
+bool MerkaartorPreferences::getNamesVisible() const
+{
+	return Sets->value("visual/NamesVisible", false).toBool();
+}
+
+void MerkaartorPreferences::setNamesVisible(bool theValue)
+{
+	Sets->setValue("visual/NamesVisible", theValue);
+}
+
+bool MerkaartorPreferences::getTrackPointsVisible() const
+{
+	return Sets->value("visual/TrackPointsVisible", true).toBool();
+}
+
+void MerkaartorPreferences::setTrackPointsVisible(bool theValue)
+{
+	Sets->setValue("visual/TrackPointsVisible", theValue);
+}
+
+bool MerkaartorPreferences::getTrackSegmentsVisible() const
+{
+	return Sets->value("visual/TrackSegmentsVisible", true).toBool();
+}
+
+void MerkaartorPreferences::setTrackSegmentsVisible(bool theValue)
+{
+	Sets->setValue("visual/TrackSegmentsVisible", theValue);
 }
 
 /* Export Type */
@@ -668,5 +733,38 @@ void MerkaartorPreferences::setExportType(ExportType theValue)
 ExportType MerkaartorPreferences::getExportType() const
 {
 	return (ExportType)Sets->value("export/Type", 0).toInt();
+}
+
+/* Tools */
+ToolList* MerkaartorPreferences::getTools() const
+{
+	return theToolList;
+}
+
+void MerkaartorPreferences::setTools()
+{
+	QStringList tl;
+	ToolListIterator i(*theToolList);
+	while (i.hasNext()) {
+		i.next();
+		Tool t = i.value();
+		tl.append(t.ToolName);
+		tl.append(t.ToolPath);
+	}
+	Sets->setValue("Tools/list", tl);
+}
+
+Tool MerkaartorPreferences::getTool(QString toolName) const
+{
+	Tool ret;
+
+	ToolListIterator i(*theToolList);
+	while (i.hasNext()) {
+		i.next();
+		if (i.key() == toolName) {
+			ret = i.value();
+		}
+	}
+	return ret;
 }
 

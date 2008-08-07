@@ -9,6 +9,7 @@
 
 class RoadPrivate;
 class TrackPoint;
+class QProgressDialog;
 
 class Road : public MapFeature
 {
@@ -50,8 +51,8 @@ class Road : public MapFeature
 
 		virtual bool deleteChildren(MapDocument* theDocument, CommandList* theList);
 
-		virtual QString toXML(unsigned int lvl=0);
-		virtual bool toXML(QDomElement xParent);
+		virtual QString toXML(unsigned int lvl=0, QProgressDialog * progress=NULL);
+		virtual bool toXML(QDomElement xParent, QProgressDialog & progress);
 		static Road* fromXML(MapDocument* d, MapLayer* L, const QDomElement e);
 
 		virtual QString toHtml();

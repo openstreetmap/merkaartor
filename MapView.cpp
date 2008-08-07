@@ -7,6 +7,7 @@
 #include "Interaction/EditInteraction.h"
 #include "Interaction/Interaction.h"
 #include "PaintStyle/EditPaintStyle.h"
+#include "Map/Projection.h"
 
 #include "QMapControl/layermanager.h"
 #include "QMapControl/imagemanager.h"
@@ -46,11 +47,7 @@ MapView::MapView(MainWindow* aMain) :
 #endif
 	}
 	layermanager = new LayerManager((QWidget *) this, size());
-
-	pbImages = new QProgressBar(Main);
-	pbImages->setFormat(tr("tile %v / %m"));
-	Main->statusBar()->addPermanentWidget(pbImages);
-
+	
 	connect(ImageManager::instance(), SIGNAL(imageRequested()),
 		this, SLOT(imageRequested()));
 	connect(ImageManager::instance(), SIGNAL(imageReceived()),
@@ -91,10 +88,10 @@ PropertiesDock *MapView::properties()
 	return Main->properties();
 }
 
-InfoDock *MapView::info()
-{
-	return Main->info();
-}
+//InfoDock *MapView::info()
+//{
+//	return Main->info();
+//}
 
 void MapView::setDocument(MapDocument* aDoc)
 {
@@ -159,9 +156,15 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 		P.setRenderHint(QPainter::Antialiasing);
 		theInteraction->paintEvent(anEvent, P);
 	}
+	Main->ViewportStatusLabel->setText(QString("V:%1,%2,%3,%4")
+		.arg(QString::number(radToAng(theProjection.viewport().bottomLeft().lat()),'f',4)) 
+		.arg(QString::number(radToAng(theProjection.viewport().bottomLeft().lon()),'f',4))
+		.arg(QString::number(radToAng(theProjection.viewport().topRight().lat()),'f',4))
+		.arg(QString::number(radToAng(theProjection.viewport().topRight().lon()),'f',4))
+		);
 
 	QTime Stop(QTime::currentTime());
-	StatusMessage = tr("Paint took %1ms").arg(Start.msecsTo(Stop));
+	Main->PaintTimeLabel->setText(tr("%1ms").arg(Start.msecsTo(Stop)));
 	QTimer::singleShot(0,this,SLOT(updateStatusMessage()));
 }
 
@@ -230,7 +233,7 @@ void MapView::updateLayersImage(QPaintEvent * /* anEvent */)
 	QPainter pmp(&pm);
 	layermanager->drawImage(&pmp);
 
-	const qreal ratio = qMax((qreal)width()/ps.width()*1.0, (qreal)height()/ps.height());
+	const qreal ratio = qMax<const qreal>((qreal)width()/ps.width()*1.0, (qreal)height()/ps.height());
 	QPixmap pms;
 	if (ratio > 1.0) {
 		pms = pm.scaled(ps /*, Qt::IgnoreAspectRatio, Qt::SmoothTransformation */ );
@@ -427,6 +430,9 @@ void MapView::on_customContextMenuRequested(const QPoint & pos)
 		//if (createMenu.actions().size())
 		//	menu.addMenu(&createMenu);
 
+		menu.addAction(Main->viewZoomInAction);
+		menu.addAction(Main->viewZoomOutAction);
+
 		QMenu featureMenu(tr("Feature"));
 		for(int i=0; i<Main->menu_Feature->actions().size(); ++i) {
 			if (Main->menu_Feature->actions()[i]->isEnabled())
@@ -467,14 +473,14 @@ void MapView::on_customContextMenuRequested(const QPoint & pos)
 void MapView::imageRequested()
 {
 	++numImages;
-	pbImages->setRange(0, numImages);
+	Main->pbImages->setRange(0, numImages);
 	//pbImages->setValue(0);
-	pbImages->update();
+	Main->pbImages->update();
 }
 
 void MapView::imageReceived()
 {
-	pbImages->setValue(pbImages->value()+1);
+	Main->pbImages->setValue(Main->pbImages->value()+1);
 	invalidate(false, true);
 }
 
@@ -482,7 +488,7 @@ void MapView::loadingFinished()
 {
 	layermanager->removeZoomImage();
 	numImages = 0;
-	pbImages->reset();
+	Main->pbImages->reset();
 
 	//invalidate(false, true);
 }

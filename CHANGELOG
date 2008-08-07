@@ -1,5 +1,14 @@
+v0.12
+	* ADD : layer menu in menubar
+	* ADD : display viewport coordinates in status bar
+	* ADD : (almost) generalize progress dialogs
+	* ADD : support (initial) of GPS devices / NMEA log replay
+	* ADD : option to show/hide track segments
+	* ADD : option to show/hide non-stylized trackpoints
+	* ADD : option to show/hide street names on the map
+	* ADD : Render to bitmap via native engine.
+	* ADD : Render to SVG via Osmarender (requires libxml2/libxslt; inkscape required to generate bitmap). Closes #694
 v0.11
-	* FIX : updated Czech translation file
 	* ADD : Export to KML
 	* ADD : Export to GPX + proper waypoint saving in MDC documents
 	* ADD : Shift-Right button to drag-zoom

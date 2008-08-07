@@ -20,6 +20,8 @@
 #include <ui_WMSPreferencesDialog.h>
 #include "Preferences/MerkaartorPreferences.h"
 
+#include <vector>
+
 /**
 	@author cbro <cbro@semperpax.com>
 */

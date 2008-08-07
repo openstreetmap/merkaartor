@@ -51,7 +51,11 @@ void EditInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
 
 void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 {
+#ifdef _MOBILE
+	if (false)
+#else
 	if (ev->buttons() & Qt::LeftButton)
+#endif
 	{
 		if (ev->modifiers()) {
 			if (ev->modifiers() & Qt::ControlModifier)

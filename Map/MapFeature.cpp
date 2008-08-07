@@ -14,6 +14,7 @@
 #include "PaintStyle/TagSelector.h"
 
 #include <QtCore/QUuid>
+#include <QProgressDialog>
 
 #include <algorithm>
 
@@ -208,7 +209,7 @@ bool MapFeature::isUploadable()
 	return (p->theLayer->isUploadable());
 }
 
-void MapFeature::setTag(unsigned int index, const QString& key, const QString& value)
+void MapFeature::setTag(unsigned int index, const QString& key, const QString& value, bool addToTagList)
 {
 	p->PixelPerMForPainter = -1;
 	for (unsigned int i=0; i<p->Tags.size(); ++i)
@@ -219,12 +220,13 @@ void MapFeature::setTag(unsigned int index, const QString& key, const QString& v
 			return;
 		}
 	p->Tags.insert(p->Tags.begin() + index, std::make_pair(key,value));
-	if (p->theLayer)
-  		p->theLayer->getDocument()->addToTagList(key, value);
+	if (p->theLayer && addToTagList)
+		if (p->theLayer->getDocument())
+	  		p->theLayer->getDocument()->addToTagList(key, value);
 	notifyChanges();
 }
 
-void MapFeature::setTag(const QString& key, const QString& value)
+void MapFeature::setTag(const QString& key, const QString& value, bool addToTagList)
 {
 	p->PixelPerMForPainter = -1;
 	for (unsigned int i=0; i<p->Tags.size(); ++i)
@@ -235,7 +237,7 @@ void MapFeature::setTag(const QString& key, const QString& value)
 			return;
 		}
 	p->Tags.push_back(std::make_pair(key,value));
-	if (p->theLayer)
+	if (p->theLayer && addToTagList)
 		if (p->theLayer->getDocument())
   			p->theLayer->getDocument()->addToTagList(key, value);
 	notifyChanges();

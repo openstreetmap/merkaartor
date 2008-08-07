@@ -11,6 +11,7 @@ class DirtyList;
 
 class QAction;
 class QListWidget;
+class QProgressDialog;
 
 class Command
 {
@@ -82,8 +83,8 @@ class CommandHistory
 		unsigned int buildUndoList(QListWidget* theList);
 		unsigned int index() const;
 
-		virtual bool toXML(QDomElement& xParent) const;
-		static CommandHistory* fromXML(MapDocument* d, QDomElement& e);
+		virtual bool toXML(QDomElement& xParent, QProgressDialog & progress) const;
+		static CommandHistory* fromXML(MapDocument* d, QDomElement& e, QProgressDialog & progress);
 
 	private:
 		std::vector<Command*> Subs;

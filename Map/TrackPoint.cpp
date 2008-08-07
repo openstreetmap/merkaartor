@@ -4,6 +4,7 @@
 #include "Utils/LineF.h"
 
 #include <QtGui/QPainter>
+#include <QProgressDialog>
 
 TrackPoint::TrackPoint(const Coord& aCoord)
 : Position(aCoord), Elevation(0.0), Speed(0.0)
@@ -112,8 +113,11 @@ RenderPriority TrackPoint::renderPriority(double) const
 	return RenderPriority(RenderPriority::IsSingular,0);
 }
 
-QString TrackPoint::toXML(unsigned int lvl)
+QString TrackPoint::toXML(unsigned int lvl, QProgressDialog * progress)
 {
+	if (progress)
+		progress->setValue(progress->value()+1);
+
 	QString S(lvl*2, ' ');
 	S += "<node id=\"%1\" lat=\"%2\" lon=\"%3\">\n";
 	S += tagsToXML(lvl+1);
@@ -121,7 +125,7 @@ QString TrackPoint::toXML(unsigned int lvl)
 	return S.arg(stripToOSMId(id())).arg(radToAng(position().lat()),0,'f',8).arg(radToAng(position().lon()),0,'f',8);
 }
 
-bool TrackPoint::toXML(QDomElement xParent)
+bool TrackPoint::toXML(QDomElement xParent, QProgressDialog & progress)
 {
 	bool OK = true;
 
@@ -137,10 +141,11 @@ bool TrackPoint::toXML(QDomElement xParent)
 
 	tagsToXML(e);
 
+	progress.setValue(progress.value()+1);
 	return OK;
 }
 
-bool TrackPoint::toGPX(QDomElement xParent)
+bool TrackPoint::toGPX(QDomElement xParent, QProgressDialog & progress)
 {
 	bool OK = true;
 
@@ -189,6 +194,7 @@ bool TrackPoint::toGPX(QDomElement xParent)
 		c.appendChild(v);
 	}
 
+	progress.setValue(progress.value()+1);
 	return OK;
 }
 
@@ -238,21 +244,11 @@ TrackPoint * TrackPoint::fromGPX(MapDocument* d, MapLayer* L, const QDomElement 
 	QString id = (e.hasAttribute("id") ? e.attribute("id") : e.attribute("xml:id"));
 	if (!id.startsWith('{'))
 		id = "node_" + id;
-	TrackPoint* Pt = dynamic_cast<TrackPoint*>(d->getFeature(id));
-	if (!Pt) {
-		Pt = new TrackPoint(Coord(angToRad(Lat),angToRad(Lon)));
-		Pt->setId(id);
-		Pt->setLastUpdated(MapFeature::OSMServer);
-		L->add(Pt);
-	} else {
-		if (Pt->layer() != L) {
-			Pt->layer()->remove(Pt);
-			L->add(Pt);
-		}
-		Pt->setPosition(Coord(angToRad(Lat), angToRad(Lon)));
-		if (Pt->lastUpdated() == MapFeature::NotYetDownloaded)
-			Pt->setLastUpdated(MapFeature::OSMServer);
-	}
+
+	TrackPoint* Pt = new TrackPoint(Coord(angToRad(Lat),angToRad(Lon)));
+	Pt->setId(id);
+	Pt->setLastUpdated(MapFeature::Log);
+	L->add(Pt);
 
 	if (e.tagName() == "wpt")
 		Pt->setTag("_waypoint_", "yes");
@@ -268,10 +264,10 @@ TrackPoint * TrackPoint::fromGPX(MapDocument* d, MapLayer* L, const QDomElement 
 			Pt->setElevation(c.text().toFloat());
 		} else
 		if (c.tagName() == "cmt") {
-			Pt->setTag("_comment_", c.text());
+			Pt->setTag("_comment_", c.text(), false);
 		} else
 		if (c.tagName() == "desc") {
-			Pt->setTag("_description_", c.text());
+			Pt->setTag("_description_", c.text(), false);
 		}
 
 		c = c.nextSiblingElement();

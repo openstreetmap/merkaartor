@@ -143,10 +143,17 @@ class LayerManager : public QObject
 		 * If multiple layers are added, they are painted in the added order.
 		 * @param layer the layer which should be added
 		 */
-		void addLayer(Layer* layer);
-		//! removes a layer
+		void addLayer(Layer* layer, int pos=-1);
+		
+		//! removes the layer at pos 0
 		void removeLayer();
 		
+		//! remove the layer with the given name
+		/*!
+		 * @param  layername name of the layer to remove
+		 */
+		void removeLayer					(const QString&);
+
 		//! returns the current zoom level
 		/*!
 		 * @return returns the current zoom level

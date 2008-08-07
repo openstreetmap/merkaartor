@@ -17,6 +17,8 @@
 
 #include "ui_DirtyDock.h"
 
+#include <vector>
+
 class MainWindow;
 class MapFeature;
 

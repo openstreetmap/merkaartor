@@ -6,6 +6,7 @@
 #include "Utils/LineF.h"
 
 #include <QtGui/QPainter>
+#include <QProgressDialog>
 
 #include <algorithm>
 #include <vector>
@@ -144,6 +145,9 @@ void TrackSegment::draw(QPainter &P, const Projection& theProjection)
 {
 	QPen pen;
 
+	if (!M_PREFS->getTrackSegmentsVisible())
+		return; 
+
 	for (unsigned int i=1; i<p->Points.size(); ++i)
 	{
 		Coord last = p->Points[i-1]->position();
@@ -234,7 +238,7 @@ void TrackSegment::partChanged(MapFeature*, unsigned int)
 {
 }
 
-bool TrackSegment::toXML(QDomElement xParent)
+bool TrackSegment::toXML(QDomElement xParent, QProgressDialog & progress)
 {
 	bool OK = true;
 
@@ -244,13 +248,13 @@ bool TrackSegment::toXML(QDomElement xParent)
 	e.setAttribute("xml:id", xmlId());
 
 	for (unsigned int i=0; i<size(); ++i) {
-		get(i)->toGPX(e);
+		get(i)->toGPX(e, progress);
 	}
 
 	return OK;
 }
 
-TrackSegment* TrackSegment::fromXML(MapDocument* d, MapLayer* L, const QDomElement e)
+TrackSegment* TrackSegment::fromXML(MapDocument* d, MapLayer* L, const QDomElement e, QProgressDialog & progress)
 {
 	TrackSegment* l = new TrackSegment();
 
@@ -262,7 +266,12 @@ TrackSegment* TrackSegment::fromXML(MapDocument* d, MapLayer* L, const QDomEleme
 		if (c.tagName() == "trkpt") {
 			TrackPoint* N = TrackPoint::fromGPX(d, L, c);
 			l->add(N);
+			progress.setValue(progress.value()+1);
 		}
+
+		if (progress.wasCanceled())
+			break;
+
 		c = c.nextSiblingElement();
 	}
 

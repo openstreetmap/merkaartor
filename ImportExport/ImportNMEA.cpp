@@ -99,6 +99,9 @@ bool ImportNMEA::import(MapLayer* aLayer)
 
 bool ImportNMEA::importGSA (QString line)
 {
+	if (line.count('$') > 1)
+		return false;
+
 	QStringList tokens = line.split(",");
 
 	QString autoSelectFix = tokens[1];
@@ -118,6 +121,9 @@ bool ImportNMEA::importGSV (QString /* line */)
 
 bool ImportNMEA::importGGA (QString line)
 {
+	if (line.count('$') > 1)
+		return false;
+
 	QStringList tokens = line.split(",");
 
 	//double lat = tokens[2].left(2).toDouble();
@@ -143,6 +149,9 @@ bool ImportNMEA::importGGA (QString line)
 
 TrackPoint* ImportNMEA::importRMC (QString line)
 {
+	if (line.count('$') > 1)
+		return NULL;
+
 	QStringList tokens = line.split(",");
 	if (tokens.size() < 10)
 		return NULL;
@@ -174,6 +183,7 @@ TrackPoint* ImportNMEA::importRMC (QString line)
 	//date.setTimeSpec(Qt::UTC);
 
 	TrackPoint* Pt = new TrackPoint(Coord(angToRad(lat),angToRad(lon)));
+	Pt->setLastUpdated(MapFeature::Log);
 	Pt->setElevation(curAltitude);
 	Pt->setSpeed(speed);
 	theList->add(new AddFeatureCommand(theLayer,Pt, true));

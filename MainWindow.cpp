@@ -45,9 +45,14 @@
 #include "QMapControl/imagemanager.h"
 #include "QMapControl/mapadapter.h"
 #include "QMapControl/wmsmapadapter.h"
+
+#include "Render/NativeRenderDialog.h"
 #ifdef OSMARENDER
-	#include "Render/OsmaRender.h"
+	#include "Render/OsmaRenderDialog.h"
 #endif
+
+#include "qgps.h"
+#include "qgpsdevice.h"
 
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>
@@ -59,12 +64,27 @@
 #include <QtGui/QMouseEvent>
 #include <QInputDialog>
 #include <QClipboard>
+#include <QProgressDialog>
 
 MainWindow::MainWindow(void)
 		: fileName(""), theDocument(0), theXmlDoc(0)
 {
 	setupUi(this);
 	loadPainters(MerkaartorPreferences::instance()->getDefaultStyle());
+
+	ViewportStatusLabel = new QLabel(this);
+	pbImages = new QProgressBar(this);
+	PaintTimeLabel = new QLabel(this);
+	pbImages->setFormat(tr("tile %v / %m"));
+	//PaintTimeLabel->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
+	PaintTimeLabel->setMinimumWidth(23);
+	statusBar()->addPermanentWidget(ViewportStatusLabel);
+	statusBar()->addPermanentWidget(pbImages);
+	statusBar()->addPermanentWidget(PaintTimeLabel);
+#ifdef _MOBILE
+	ViewportStatusLabel->setVisible(false);
+	pbImages->setVisible(false);
+#endif
 
 	theView = new MapView(this);
 	setCentralWidget(theView);
@@ -95,6 +115,10 @@ MainWindow::MainWindow(void)
 	theDirty->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 	addDockWidget(Qt::RightDockWidgetArea, theDirty);
 
+	theGPS = new QGPS(this);
+	theGPS->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+	addDockWidget(Qt::RightDockWidgetArea, theGPS);
+
 	connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));
 	connect (theLayers, SIGNAL(layersChanged(bool)), this, SLOT(adjustLayers(bool)));
 
@@ -105,21 +129,37 @@ MainWindow::MainWindow(void)
 	MerkaartorPreferences::instance()->restoreMainWindowState( this );
 	CoordBox initialPosition = MerkaartorPreferences::instance()->getInitialPosition();
 	theView->projection().setViewport(initialPosition, theView->rect());
+
 	viewDownloadedAction->setChecked(MerkaartorPreferences::instance()->getDownloadedVisible());
+	viewNamesAction->setChecked(M_PREFS->getNamesVisible());
+	viewTrackPointsAction->setChecked(M_PREFS->getTrackPointsVisible());
+	viewTrackSegmentsAction->setChecked(M_PREFS->getTrackSegmentsVisible());
 
 	connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardChanged()));
 
 	setWindowTitle(QString("Merkaartor - untitled"));
 
+#ifdef _MOBILE
+	theProperties->setVisible(false);
+	theInfo->setVisible(false);
+	theLayers->setVisible(false);
+	theDirty->setVisible(false);
+	toolBar->setVisible(false);
+#endif
+
 #ifndef OSMARENDER
-	//TODO Osmarender rendering
-	renderAction->setVisible(false);
+	renderQVGAction->setVisible(false);
+#endif
+#if !defined(OSMARENDER)
+	menuRender->setVisible(false);
 #endif
 }
 
 MainWindow::~MainWindow(void)
 {
 	MerkaartorPreferences::instance()->setWorkingDir(QDir::currentPath());
+	if (theXmlDoc)
+		delete theXmlDoc;
 	delete MerkaartorPreferences::instance();
 	delete theDocument;
 	delete theView;
@@ -202,7 +242,7 @@ MapDocument* MainWindow::getDocumentFromClipboard()
 void MainWindow::on_editCopyAction_triggered()
 {
 	QClipboard *clipboard = QApplication::clipboard();
-	clipboard->setText(theDocument->exportOSM(view()->properties()->selection()));
+	clipboard->setText(theDocument->exportOSM(theProperties->selection()));
 	invalidateView();
 }
 
@@ -277,6 +317,7 @@ void MainWindow::clipboardChanged()
 	QClipboard *clipboard = QApplication::clipboard();
 	QDomDocument* theXmlDoc = new QDomDocument();
 	if (!theXmlDoc->setContent(clipboard->text())) {
+		delete theXmlDoc;
 		return;
 	}
 
@@ -289,6 +330,8 @@ void MainWindow::clipboardChanged()
 	editPasteFeaturesAction->setEnabled(true);
 	editPasteMergeAction->setEnabled(true);
 	editPasteOverwriteAction->setEnabled(true);
+
+	delete theXmlDoc;
 }
 
 void MainWindow::on_editRedoAction_triggered()
@@ -384,7 +427,7 @@ static bool mayDiscardUnsavedChanges(QWidget* aWidget)
 
 bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & fileNames)
 {
-	QApplication::setOverrideCursor(Qt::WaitCursor);
+	QApplication::setOverrideCursor(Qt::BusyCursor);
 
 	bool foundImport = false;
 
@@ -459,7 +502,7 @@ void MainWindow::loadFiles(const QStringList & fileList)
 
 	QStringList fileNames(fileList);
 
-	QApplication::setOverrideCursor(Qt::WaitCursor);
+	QApplication::setOverrideCursor(Qt::BusyCursor);
 	theLayers->setUpdatesEnabled(false);
 	view()->setUpdatesEnabled(false);
 
@@ -649,11 +692,31 @@ void MainWindow::on_viewZoomWindowAction_triggered()
 
 void MainWindow::on_viewDownloadedAction_triggered()
 {
-	MerkaartorPreferences::instance()->setDownloadedVisible(!MerkaartorPreferences::instance()->getDownloadedVisible());
-	viewDownloadedAction->setChecked(MerkaartorPreferences::instance()->getDownloadedVisible());
+	M_PREFS->setDownloadedVisible(!M_PREFS->getDownloadedVisible());
+	viewDownloadedAction->setChecked(M_PREFS->getDownloadedVisible());
 	invalidateView();
 }
 
+void MainWindow::on_viewNamesAction_triggered()
+{
+	M_PREFS->setNamesVisible(!M_PREFS->getNamesVisible());
+	viewNamesAction->setChecked(M_PREFS->getNamesVisible());
+	invalidateView();
+}
+
+void MainWindow::on_viewTrackPointsAction_triggered()
+{
+	M_PREFS->setTrackPointsVisible(!M_PREFS->getTrackPointsVisible());
+	viewTrackPointsAction->setChecked(M_PREFS->getTrackPointsVisible());
+	invalidateView();
+}
+
+void MainWindow::on_viewTrackSegmentsAction_triggered()
+{
+	M_PREFS->setTrackSegmentsVisible(!M_PREFS->getTrackSegmentsVisible());
+	viewTrackSegmentsAction->setChecked(M_PREFS->getTrackSegmentsVisible());
+	invalidateView();
+}
 
 void MainWindow::on_viewSetCoordinatesAction_triggered()
 {
@@ -683,6 +746,10 @@ void MainWindow::on_fileNewAction_triggered()
 	theView->launch(0);
 	theProperties->setSelection(0);
 	if (!hasUnsavedChanges(*theDocument) || mayDiscardUnsavedChanges(this)) {
+		if (theXmlDoc) {
+			delete theXmlDoc;
+			theXmlDoc = NULL;
+		}
 		delete theDocument;
 		theDocument = new MapDocument(theLayers);
 		theView->setDocument(theDocument);
@@ -710,14 +777,14 @@ void MainWindow::on_createRoundaboutAction_triggered()
 
 void MainWindow::on_createRoadAction_triggered()
 {
-	TrackPoint * firstPoint = NULL;	
+	TrackPoint * firstPoint = NULL;
 
-	if (theView->properties()->size() == 1)
+	if (theProperties->size() == 1)
 	{
-		MapFeature * feature = theView->properties()->selection(0);
+		MapFeature * feature = theProperties->selection(0);
 		firstPoint = dynamic_cast<TrackPoint*>(feature);
 	}
-	
+
 	theView->launch(new CreateSingleWayInteraction(this, theView, firstPoint, false));
 }
 
@@ -838,7 +905,12 @@ void MainWindow::toolsPreferencesAction_triggered(unsigned int tabidx)
 	PreferencesDialog* Pref = new PreferencesDialog(this);
 	Pref->tabPref->setCurrentIndex(tabidx);
 	connect (Pref, SIGNAL(preferencesChanged()), this, SLOT(preferencesChanged()));
+#ifdef _MOBILE
+	Pref->setModal(true);
+	Pref->showMaximized();
+#else
 	Pref->exec();
+#endif
 }
 
 void MainWindow::preferencesChanged(void)
@@ -883,7 +955,7 @@ void MainWindow::saveDocument()
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
 		return;
 
-	QApplication::setOverrideCursor(Qt::WaitCursor);
+	QApplication::setOverrideCursor(Qt::BusyCursor);
 
 	QDomElement root;
 	if (!theXmlDoc) {
@@ -899,11 +971,16 @@ void MainWindow::saveDocument()
 		root.setAttribute("version", "1.1");
 	}
 
-	theDocument->toXML(root);
+	QProgressDialog progress("Saving document...", "Cancel", 0, 0);
+	progress.setWindowModality(Qt::WindowModal);
+
+	theDocument->toXML(root, progress);
 	theView->toXML(root);
 
 	file.write(theXmlDoc->toString().toUtf8());
 	file.close();
+
+	progress.setValue(progress.maximum());
 
 	setWindowTitle(QString("Merkaartor - %1").arg(fileName));
 
@@ -923,6 +1000,7 @@ void MainWindow::loadDocument(QString fn)
 	if (!theXmlDoc->setContent(&file)) {
 		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
 		file.close();
+		delete theXmlDoc;
 		theXmlDoc = NULL;
 		return;
 	}
@@ -935,10 +1013,23 @@ void MainWindow::loadDocument(QString fn)
 	}
 	double version = docElem.attribute("version").toDouble();
 
+	QProgressDialog progress("Loading document...", "Cancel", 0, 0);
+	progress.setWindowModality(Qt::WindowModal);
+
+	progress.setMaximum(progress.maximum() + theXmlDoc->elementsByTagName("relation").count());
+	progress.setMaximum(progress.maximum() + theXmlDoc->elementsByTagName("way").count());
+	progress.setMaximum(progress.maximum() + theXmlDoc->elementsByTagName("node").count());
+	progress.setMaximum(progress.maximum() + theXmlDoc->elementsByTagName("trkpt").count());
+	progress.setMaximum(progress.maximum() + theXmlDoc->elementsByTagName("wpt").count());
+
 	QDomElement e = docElem.firstChildElement();
 	while(!e.isNull()) {
 		if (e.tagName() == "MapDocument") {
-			MapDocument* newDoc = MapDocument::fromXML(e, version, theLayers);
+			MapDocument* newDoc = MapDocument::fromXML(e, version, theLayers, progress);
+
+			if (progress.wasCanceled())
+				break;
+
 			if (newDoc) {
 				theProperties->setSelection(0);
 				delete theDocument;
@@ -948,18 +1039,20 @@ void MainWindow::loadDocument(QString fn)
 				theDocument->history().setActions(editUndoAction, editRedoAction);
 				connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));
 				theDirty->updateList();
-			} else {
-				delete newDoc;
-			}
+				fileName = fn;
+				setWindowTitle(QString("Merkaartor - %1").arg(fileName));
+			} 
 		} else
 		if (e.tagName() == "MapView") {
 			view()->fromXML(e);
 		}
 
+		if (progress.wasCanceled())
+			break;
+
 		e = e.nextSiblingElement();
 	}
-	fileName = fn;
-	setWindowTitle(QString("Merkaartor - %1").arg(fileName));
+	progress.reset();
 }
 
 void MainWindow::on_exportOSMAction_triggered()
@@ -991,13 +1084,13 @@ void MainWindow::on_exportOSMBinAction_triggered()
 		tr("Export Binary OSM"), MerkaartorPreferences::instance()->getWorkingDir() + "/untitled.osb", tr("OSM Binary Files (*.osb)"));
 
 	if (fileName != "") {
-		QApplication::setOverrideCursor(Qt::WaitCursor);
-	
+		QApplication::setOverrideCursor(Qt::BusyCursor);
+
 		ImportExportOsmBin osb(document());
 		if (osb.saveFile(fileName)) {
 			osb.export_(theFeatures);
 		}
-	
+
 		QApplication::restoreOverrideCursor();
 	}
 }
@@ -1010,7 +1103,7 @@ void MainWindow::on_exportGPXAction_triggered()
 		tr("Export GPX"), MerkaartorPreferences::instance()->getWorkingDir() + "/untitled.gpx", tr("GPX Files (*.gpx)"));
 
 	if (fileName != "") {
-		QApplication::setOverrideCursor(Qt::WaitCursor);
+		QApplication::setOverrideCursor(Qt::BusyCursor);
 
 		for (VisibleFeatureIterator i(document()); !i.isEnd(); ++i) {
 			if (dynamic_cast<TrackMapLayer*>(i.get()->layer())) {
@@ -1037,13 +1130,13 @@ void MainWindow::on_exportKMLAction_triggered()
 		tr("Export KML"), MerkaartorPreferences::instance()->getWorkingDir() + "/untitled.kml", tr("KML Files (*.kml)"));
 
 	if (fileName != "") {
-		QApplication::setOverrideCursor(Qt::WaitCursor);
-	
+		QApplication::setOverrideCursor(Qt::BusyCursor);
+
 		ImportExportKML kml(document());
 		if (kml.saveFile(fileName)) {
 			kml.export_(theFeatures);
 		}
-	
+
 		QApplication::restoreOverrideCursor();
 	}
 }
@@ -1116,7 +1209,7 @@ bool MainWindow::selectExportedFeatures(QVector<MapFeature*>& theFeatures)
 			return true;
 		}
 		if (dlgExport.rbSelected->isChecked()) {
-			theFeatures = view()->properties()->selection();
+			theFeatures = theProperties->selection();
 			MerkaartorPreferences::instance()->setExportType(Export_Selected);
 			return true;
 		}
@@ -1177,11 +1270,17 @@ void MainWindow::closeEvent(QCloseEvent * event)
 	QMainWindow::closeEvent(event);
 }
 
-void MainWindow::on_renderAction_triggered()
+void MainWindow::on_renderNativeAction_triggered()
+{
+	NativeRenderDialog osmR(theDocument, theView->projection().viewport(), this);
+	osmR.exec();
+}
+
+void MainWindow::on_renderSVGAction_triggered()
 {
 #ifdef OSMARENDER
-	OsmaRender osmR;
-	osmR.render(this, theDocument, view()->projection().viewport());
+	OsmaRenderDialog osmR(theDocument, theView->projection().viewport(), this);
+	osmR.exec();
 #endif
 }
 
@@ -1342,7 +1441,7 @@ void MainWindow::on_nodeAlignAction_triggered()
 
 void MainWindow::on_nodeMergeAction_triggered()
 {
-	MapFeature* F = theView->properties()->selection(0);
+	MapFeature* F = theProperties->selection(0);
 	CommandList* theList = new CommandList(MainWindow::tr("Merge Nodes into %1").arg(F->id()), F);
 	mergeNodes(theDocument, theList, theProperties);
 	if (theList->empty())
@@ -1350,7 +1449,7 @@ void MainWindow::on_nodeMergeAction_triggered()
 	else
 	{
 		theDocument->addHistory(theList);
-		theView->properties()->setSelection(F);
+		theProperties->setSelection(F);
 		invalidateView();
 	}
 }
@@ -1374,3 +1473,116 @@ void MainWindow::on_windowDirtyAction_triggered()
 {
 	theDirty->setVisible(!theDirty->isVisible());
 }
+
+void MainWindow::on_windowToolbarAction_triggered()
+{
+	toolBar->setVisible(!toolBar->isVisible());
+}
+
+void MainWindow::on_windowGPSAction_triggered()
+{
+	theGPS->setVisible(!theGPS->isVisible());
+}
+
+void MainWindow::on_windowHideAllAction_triggered()
+{
+	windowHideAllAction->setEnabled(false);
+	windowHideAllAction->setVisible(false);
+	windowShowAllAction->setEnabled(true);
+	windowShowAllAction->setVisible(true);
+
+//	toolBar->setVisible(false);
+	theInfo->setVisible(false);
+	theDirty->setVisible(false);
+	theLayers->setVisible(false);
+	theProperties->setVisible(false);
+}
+
+void MainWindow::on_windowShowAllAction_triggered()
+{
+	windowHideAllAction->setEnabled(true);
+	windowHideAllAction->setVisible(true);
+	windowShowAllAction->setEnabled(false);
+	windowShowAllAction->setVisible(false);
+
+//	toolBar->setVisible(true);
+	theInfo->setVisible(true);
+	theDirty->setVisible(true);
+	theLayers->setVisible(true);
+	theProperties->setVisible(true);
+}
+
+void MainWindow::on_layersAddImageAction_triggered()
+{
+	ImageMapLayer* il = new ImageMapLayer(tr("Background imagery"), theView->layermanager);
+	theDocument->add(il);
+}
+
+void MainWindow::on_gpsConnectAction_triggered()
+{
+	QGPSComDevice* aGps = new QGPSComDevice(M_PREFS->getGpsPort());
+	if (aGps->openDevice()) {
+		if (gpsCenterAction->isChecked()) {
+			connect(aGps, SIGNAL(updatePosition()), this, SLOT(updateGpsPosition()));
+		}
+		gpsDisconnectAction->setEnabled(true);
+		theGPS->setGpsDevice(aGps);
+		theGPS->resetGpsStatus();
+		theGPS->startGps();
+	} else
+		delete aGps;
+}
+
+void MainWindow::on_gpsReplayAction_triggered()
+{
+	QString fileName = QFileDialog::getOpenFileName(
+					this,
+					tr("Open NMEA log file"),
+					"", "NMEA GPS log format (*.nmea *.nme)" );
+
+	if (fileName.isEmpty())
+		return;
+
+	QGPSFileDevice* aGps = new QGPSFileDevice(fileName);
+	if (aGps->openDevice()) {
+		if (gpsCenterAction->isChecked()) {
+			connect(aGps, SIGNAL(updatePosition()), this, SLOT(updateGpsPosition()));
+		}
+		gpsDisconnectAction->setEnabled(true);
+		theGPS->setGpsDevice(aGps);
+		theGPS->resetGpsStatus();
+		theGPS->startGps();
+	}
+}
+
+void MainWindow::on_gpsDisconnectAction_triggered()
+{
+	disconnect(theGPS->getGpsDevice(), SIGNAL(updatePosition()), this, SLOT(updateGpsPosition()));
+	theGPS->stopGps();
+	theGPS->resetGpsStatus();
+	gpsDisconnectAction->setEnabled(false);
+}
+
+void MainWindow::on_gpsCenterAction_triggered()
+{
+	//gpsCenterAction->setChecked(!gpsCenterAction->isChecked());
+	if (gpsCenterAction->isChecked()) {
+		if (theGPS->getGpsDevice()) {
+			connect(theGPS->getGpsDevice(), SIGNAL(updatePosition()), this, SLOT(updateGpsPosition()));
+		}
+	} else {
+		if (theGPS->getGpsDevice()) {
+			disconnect(theGPS->getGpsDevice(), SIGNAL(updatePosition()), this, SLOT(updateGpsPosition()));
+		}
+	}
+}
+
+void MainWindow::updateGpsPosition()
+{
+	if (theGPS->getGpsDevice()->fixStatus() == QGPSDevice::StatusActive) {
+		Coord vp(angToRad(theGPS->getGpsDevice()->latitude()), angToRad(theGPS->getGpsDevice()->longitude()));
+		theView->projection().setCenter(vp, theView->rect());
+		theView->invalidate(true, true);
+	}
+}
+

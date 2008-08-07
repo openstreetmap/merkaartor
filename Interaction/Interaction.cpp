@@ -52,8 +52,12 @@ void Interaction::mousePressEvent(QMouseEvent * anEvent)
 	if ( (anEvent->modifiers() & Qt::MetaModifier) ||
 	   (anEvent->buttons() & Qt::RightButton) )
 #else
-	if (anEvent->buttons() & Qt::RightButton)
-#endif
+#ifdef _MOBILE
+		if (anEvent->buttons())
+#else
+		if (anEvent->buttons() & Qt::RightButton)
+#endif // _mobile
+#endif // Q_OS_MAC
 	{
 		if (anEvent->modifiers() & Qt::ShiftModifier) {
 			EndDrag = StartDrag = projection().inverse(anEvent->pos());

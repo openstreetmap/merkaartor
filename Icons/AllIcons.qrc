@@ -322,11 +322,16 @@
     	<file>Tiles/111.png</file>
     </qresource>
     <qresource prefix="/Styles">
+    <file alias="None.mas">../Styles/None.mas</file>
     	<file alias="Classic.mas">../Styles/Classic.mas</file>
+    	<file alias="Mobile.mas">../Styles/Mobile.mas</file>
     	<file alias="Mapnik.mas">../Styles/Mapnik.mas</file>
     	<file alias="MapnikPlus.mas">../Styles/MapnikPlus.mas</file>
     </qresource>
     <qresource prefix="/Html">
     	<file alias="ymap.html">../ymap.html</file>
+    </qresource>
+    <qresource prefix="/Gps">
+    	<file alias="Gps_Marker.svg">Gps_Marker.svg</file>
     </qresource>
 </RCC>

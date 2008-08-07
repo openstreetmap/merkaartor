@@ -47,13 +47,15 @@ HEADERS += \
 ./Sync/DirtyList.h \
 ./Sync/SyncOSM.h \
 ./TagModel.h \
-./Utils/LineF.h \
-./Utils/SlippyMapWidget.h \
-./Utils/EditCompleterDelegate.h \
 ./Preferences/MerkaartorPreferences.h \
 ./Preferences/PreferencesDialog.h \
 ./Preferences/WMSPreferencesDialog.h \
 ./Preferences/TMSPreferencesDialog.h \
+./Utils/LineF.h \
+./Utils/SlippyMapWidget.h \
+./Utils/EditCompleterDelegate.h \
+./Utils/PictureViewerDialog.h \
+./Utils/PixmapWidget.h \
 ./Utils/SelectionDialog.h \
 ./DirtyDock.h
 
@@ -108,11 +110,13 @@ SOURCES += \
 ./LayerWidget.cpp \
 ./Utils/SlippyMapWidget.cpp \
 ./Utils/EditCompleterDelegate.cpp \
+./Utils/PictureViewerDialog.cpp \
+./Utils/PixmapWidget.cpp \
+./Utils/SelectionDialog.cpp \
 ./Preferences/MerkaartorPreferences.cpp \
 ./Preferences/PreferencesDialog.cpp \
 ./Preferences/WMSPreferencesDialog.cpp \
 ./Preferences/TMSPreferencesDialog.cpp \
-./Utils/SelectionDialog.cpp \
 ./DirtyDock.cpp \
 
 #Forms
@@ -133,6 +137,7 @@ FORMS += \
 ./Preferences/PreferencesDialog.ui \
 ./Preferences/WMSPreferencesDialog.ui \
 ./Preferences/TMSPreferencesDialog.ui \
+./Utils/PictureViewerDialog.ui \
 ./Utils/SelectionDialog.ui \
 ./DirtyDock.ui \
 ./ExportDialog.ui

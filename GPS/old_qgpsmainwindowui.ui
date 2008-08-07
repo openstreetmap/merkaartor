@@ -1,0 +1,724 @@
+<ui version="4.0" >
+ <class>QGPSMainWindowUI</class>
+ <widget class="QDialog" name="QGPSMainWindowUI" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>561</width>
+    <height>462</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>QGPS - GPS Status</string>
+  </property>
+  <widget class="QWidget" name="widget" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>22</y>
+     <width>561</width>
+     <height>440</height>
+    </rect>
+   </property>
+   <widget class="QGroupBox" name="groupBox3" >
+    <property name="geometry" >
+     <rect>
+      <x>360</x>
+      <y>10</y>
+      <width>190</width>
+      <height>400</height>
+     </rect>
+    </property>
+    <property name="title" >
+     <string>Signal Strength</string>
+    </property>
+    <widget class="QProgressBar" name="progressBar2_3" >
+     <property name="geometry" >
+      <rect>
+       <x>39</x>
+       <y>91</y>
+       <width>140</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QProgressBar" name="progressBar2_4" >
+     <property name="geometry" >
+      <rect>
+       <x>39</x>
+       <y>121</y>
+       <width>140</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QProgressBar" name="progressBar2_5" >
+     <property name="geometry" >
+      <rect>
+       <x>39</x>
+       <y>151</y>
+       <width>140</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QProgressBar" name="progressBar2_6" >
+     <property name="geometry" >
+      <rect>
+       <x>39</x>
+       <y>181</y>
+       <width>140</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QProgressBar" name="progressBar2_7" >
+     <property name="geometry" >
+      <rect>
+       <x>39</x>
+       <y>211</y>
+       <width>140</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QProgressBar" name="progressBar2_8" >
+     <property name="geometry" >
+      <rect>
+       <x>39</x>
+       <y>241</y>
+       <width>140</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QProgressBar" name="progressBar2_9" >
+     <property name="geometry" >
+      <rect>
+       <x>39</x>
+       <y>271</y>
+       <width>140</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QProgressBar" name="progressBar2_10" >
+     <property name="geometry" >
+      <rect>
+       <x>39</x>
+       <y>301</y>
+       <width>140</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QProgressBar" name="progressBar2_11" >
+     <property name="geometry" >
+      <rect>
+       <x>39</x>
+       <y>331</y>
+       <width>140</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QProgressBar" name="progressBar2_12" >
+     <property name="geometry" >
+      <rect>
+       <x>39</x>
+       <y>361</y>
+       <width>140</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QProgressBar" name="progressBar2" >
+     <property name="geometry" >
+      <rect>
+       <x>40</x>
+       <y>30</y>
+       <width>140</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QProgressBar" name="progressBar2_2" >
+     <property name="geometry" >
+      <rect>
+       <x>39</x>
+       <y>61</y>
+       <width>140</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="grpPosition" >
+    <property name="geometry" >
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>340</width>
+      <height>70</height>
+     </rect>
+    </property>
+    <property name="title" >
+     <string>Position</string>
+    </property>
+    <widget class="QLabel" name="textLabel2" >
+     <property name="geometry" >
+      <rect>
+       <x>120</x>
+       <y>20</y>
+       <width>101</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text" >
+      <string>Longitude</string>
+     </property>
+     <property name="wordWrap" >
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="textLabel1" >
+     <property name="geometry" >
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>100</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text" >
+      <string>Latitude</string>
+     </property>
+     <property name="wordWrap" >
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="textLabel3" >
+     <property name="geometry" >
+      <rect>
+       <x>230</x>
+       <y>20</y>
+       <width>101</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text" >
+      <string>Altitude</string>
+     </property>
+     <property name="wordWrap" >
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="txtLatitude" >
+     <property name="geometry" >
+      <rect>
+       <x>10</x>
+       <y>40</y>
+       <width>101</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="readOnly" >
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="txtLongitude" >
+     <property name="geometry" >
+      <rect>
+       <x>120</x>
+       <y>40</y>
+       <width>101</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="readOnly" >
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="txtAltitude" >
+     <property name="geometry" >
+      <rect>
+       <x>230</x>
+       <y>40</y>
+       <width>101</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="readOnly" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox2" >
+    <property name="geometry" >
+     <rect>
+      <x>10</x>
+      <y>90</y>
+      <width>341</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="title" >
+     <string>Course</string>
+    </property>
+    <widget class="QLabel" name="textLabel4" >
+     <property name="geometry" >
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>101</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text" >
+      <string>Speed</string>
+     </property>
+     <property name="wordWrap" >
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="textLabel5" >
+     <property name="geometry" >
+      <rect>
+       <x>120</x>
+       <y>20</y>
+       <width>101</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text" >
+      <string>Heading</string>
+     </property>
+     <property name="wordWrap" >
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="textLabel6" >
+     <property name="geometry" >
+      <rect>
+       <x>230</x>
+       <y>20</y>
+       <width>102</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text" >
+      <string>Magnetic Variation</string>
+     </property>
+     <property name="wordWrap" >
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="txtSpeed" >
+     <property name="geometry" >
+      <rect>
+       <x>10</x>
+       <y>40</y>
+       <width>101</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="readOnly" >
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="txtHeading" >
+     <property name="geometry" >
+      <rect>
+       <x>120</x>
+       <y>40</y>
+       <width>101</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="readOnly" >
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="txtVariation" >
+     <property name="geometry" >
+      <rect>
+       <x>230</x>
+       <y>40</y>
+       <width>101</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="readOnly" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox4" >
+    <property name="geometry" >
+     <rect>
+      <x>10</x>
+      <y>170</y>
+      <width>341</width>
+      <height>240</height>
+     </rect>
+    </property>
+    <property name="title" >
+     <string>Satellites</string>
+    </property>
+    <widget class="QLabel" name="textLabel1_2" >
+     <property name="geometry" >
+      <rect>
+       <x>230</x>
+       <y>20</y>
+       <width>91</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text" >
+      <string>Active Satellites</string>
+     </property>
+     <property name="wordWrap" >
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="textLabel2_2" >
+     <property name="geometry" >
+      <rect>
+       <x>230</x>
+       <y>70</y>
+       <width>90</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text" >
+      <string>Fix Type</string>
+     </property>
+     <property name="wordWrap" >
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QGPSSatelliteTracker" native="1" name="satTracker" >
+     <property name="geometry" >
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>210</width>
+       <height>210</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="txtNumSats" >
+     <property name="geometry" >
+      <rect>
+       <x>230</x>
+       <y>40</y>
+       <width>100</width>
+       <height>21</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="txtFixType" >
+     <property name="geometry" >
+      <rect>
+       <x>230</x>
+       <y>90</y>
+       <width>101</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="readOnly" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="mnuMain" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>561</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="Device" >
+    <property name="title" >
+     <string>&amp;Device</string>
+    </property>
+    <addaction name="actStartGps" />
+    <addaction name="actStopGps" />
+    <addaction name="separator" />
+    <addaction name="actOpenFile" />
+    <addaction name="separator" />
+    <addaction name="actQuit" />
+   </widget>
+   <widget class="QMenu" name="Settings" >
+    <property name="title" >
+     <string>&amp;Settings</string>
+    </property>
+    <addaction name="actConfigureQgps" />
+   </widget>
+   <widget class="QMenu" name="Help" >
+    <property name="title" >
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="actAboutQgps" />
+    <addaction name="actAboutQt" />
+   </widget>
+   <addaction name="Device" />
+   <addaction name="Settings" />
+   <addaction name="Help" />
+  </widget>
+  <action name="fileSaveAsAction" >
+   <property name="text" >
+    <string>Save &amp;As...</string>
+   </property>
+   <property name="iconText" >
+    <string>Save As</string>
+   </property>
+   <property name="shortcut" >
+    <string/>
+   </property>
+   <property name="name" stdset="0" >
+    <string>fileSaveAsAction</string>
+   </property>
+  </action>
+  <action name="helpContentsAction" >
+   <property name="text" >
+    <string>&amp;Contents...</string>
+   </property>
+   <property name="iconText" >
+    <string>Contents</string>
+   </property>
+   <property name="shortcut" >
+    <string/>
+   </property>
+   <property name="name" stdset="0" >
+    <string>helpContentsAction</string>
+   </property>
+  </action>
+  <action name="helpIndexAction" >
+   <property name="text" >
+    <string>&amp;Index...</string>
+   </property>
+   <property name="iconText" >
+    <string>Index</string>
+   </property>
+   <property name="shortcut" >
+    <string/>
+   </property>
+   <property name="name" stdset="0" >
+    <string>helpIndexAction</string>
+   </property>
+  </action>
+  <action name="helpAboutAction" >
+   <property name="text" >
+    <string>&amp;About</string>
+   </property>
+   <property name="iconText" >
+    <string>About</string>
+   </property>
+   <property name="shortcut" >
+    <string/>
+   </property>
+   <property name="name" stdset="0" >
+    <string>helpAboutAction</string>
+   </property>
+  </action>
+  <action name="actStartGps" >
+   <property name="text" >
+    <string>Start GPS</string>
+   </property>
+   <property name="iconText" >
+    <string>Start GPS</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>actStartGps</string>
+   </property>
+  </action>
+  <action name="actStopGps" >
+   <property name="text" >
+    <string>Stop GPS</string>
+   </property>
+   <property name="iconText" >
+    <string>Stop GPS</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>actStopGps</string>
+   </property>
+  </action>
+  <action name="devicenew_itemAction" >
+   <property name="text" >
+    <string>new item</string>
+   </property>
+   <property name="iconText" >
+    <string>new item</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>devicenew_itemAction</string>
+   </property>
+  </action>
+  <action name="devicenew_itemAction_2" >
+   <property name="text" >
+    <string>new item</string>
+   </property>
+   <property name="iconText" >
+    <string>new item</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>devicenew_itemAction_2</string>
+   </property>
+  </action>
+  <action name="actOpenFile" >
+   <property name="text" >
+    <string>Open File...</string>
+   </property>
+   <property name="iconText" >
+    <string>Open File...</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>actOpenFile</string>
+   </property>
+  </action>
+  <action name="actQuit" >
+   <property name="text" >
+    <string>Quit</string>
+   </property>
+   <property name="iconText" >
+    <string>Quit</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>actQuit</string>
+   </property>
+  </action>
+  <action name="actConfigureQgps" >
+   <property name="text" >
+    <string>Configure QGPS...</string>
+   </property>
+   <property name="iconText" >
+    <string>Configure QGPS...</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>actConfigureQgps</string>
+   </property>
+  </action>
+  <action name="actAboutQgps" >
+   <property name="text" >
+    <string>About QGPS...</string>
+   </property>
+   <property name="iconText" >
+    <string>About QGPS...</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>actAboutQgps</string>
+   </property>
+  </action>
+  <action name="actAboutQt" >
+   <property name="text" >
+    <string>About Qt...</string>
+   </property>
+   <property name="iconText" >
+    <string>About Qt...</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>actAboutQt</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <customwidgets>
+  <customwidget>
+   <class>QGroupBox</class>
+   <extends>QGroupBox</extends>
+   <header>QGroupBox</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QMainWindow</class>
+   <extends>QWidget</extends>
+   <header>Qmainwindow.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QProgressBar</class>
+   <extends>QFrame</extends>
+   <header>QProgressBar</header>
+  </customwidget>
+  <customwidget>
+   <class>QGPSSatelliteTracker</class>
+   <extends>QWidget</extends>
+   <header>qgpssatellitetracker.h</header>
+  </customwidget>
+ </customwidgets>
+ <includes>
+  <include location="local" >qgpssatellitetracker.h</include>
+ </includes>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>fileSaveAsAction</sender>
+   <signal>activated()</signal>
+   <receiver>QGPSMainWindowUI</receiver>
+   <slot>fileSaveAs()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>helpIndexAction</sender>
+   <signal>activated()</signal>
+   <receiver>QGPSMainWindowUI</receiver>
+   <slot>helpIndex()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>helpContentsAction</sender>
+   <signal>activated()</signal>
+   <receiver>QGPSMainWindowUI</receiver>
+   <slot>helpContents()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>helpAboutAction</sender>
+   <signal>activated()</signal>
+   <receiver>QGPSMainWindowUI</receiver>
+   <slot>helpAbout()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

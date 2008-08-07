@@ -210,9 +210,12 @@ QRectF LayerManager::getViewport() const
 	return coordinateBB;
 }
 
-void LayerManager::addLayer(Layer* layer)
+void LayerManager::addLayer(Layer* layer, int pos)
 {
-	layers.append(layer);
+	if (pos  < 0)
+		layers.append(layer);
+	else
+		layers.insert(pos, layer);
 
 	layer->setSize(size);
 
@@ -232,6 +235,13 @@ void LayerManager::removeLayer()
 	Q_ASSERT_X(layers.size()>0, "LayerManager::removeLayer()", "No layers existing!");
 	ImageManager::instance()->abortLoading();
 	layers.removeAt(0);
+}
+
+void LayerManager::removeLayer(const QString& aLyerId)
+{
+	Q_ASSERT_X(layers.size()>0, "LayerManager::removeLayer()", "No layers existing!");
+	ImageManager::instance()->abortLoading();
+	layers.removeAt(getLayers().indexOf(aLyerId));
 }
 
 void LayerManager::newOffscreenImage(bool clearImage, bool showZoomImage)

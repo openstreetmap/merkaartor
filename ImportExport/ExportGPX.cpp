@@ -38,6 +38,10 @@ bool ExportGPX::export_(const QVector<MapFeature *>& featList)
 	QDomDocument theXmlDoc;
 	theXmlDoc.appendChild(theXmlDoc.createProcessingInstruction("xml", "version=\"1.0\""));
 
+	QProgressDialog progress("Exporting GPX...", "Cancel", 0, 0);
+	progress.setWindowModality(Qt::WindowModal);
+	progress.setMaximum(progress.maximum() + featList.count());
+
 	QDomElement o = theXmlDoc.createElement("gpx");
 	theXmlDoc.appendChild(o);
 	o.setAttribute("version", "1.1");
@@ -54,14 +58,18 @@ bool ExportGPX::export_(const QVector<MapFeature *>& featList)
 	}
 
 	for (int i=0; i < waypoints.size(); ++i) {
-		waypoints[i]->toGPX(o);
+		waypoints[i]->toGPX(o, progress);
 	}
 
 	QDomElement t = o.ownerDocument().createElement("trk");
 	o.appendChild(t);
 
 	for (int i=0; i < segments.size(); ++i)
-		segments[i]->toXML(t);
+		segments[i]->toXML(t, progress);
+
+	progress.setValue(progress.maximum());
+	if (progress.wasCanceled())
+		return false;
 
 	Device->write(theXmlDoc.toString().toUtf8());
 	return OK;

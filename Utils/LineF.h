@@ -6,6 +6,12 @@
 #include <QtCore/QPointF>
 
 #include <math.h>
+#ifndef M_PI
+#define M_PI        3.14159265358979323846
+#endif
+#ifndef M_PI_2
+#define M_PI_2		1.57079632679489661923
+#endif
 
 inline double distance(const QPointF& A, const QPointF& B)
 {
@@ -248,7 +254,7 @@ class BezierF
 		double distance(const QPointF& T) const
 		{
 			double LowestZ = ::distance(A,T);
-			for (double t=0;t<1.0125; t+=0.025)
+			for (qreal t=0;t<1.0125; t+=0.025)
 			{
 				QPointF P = A*(1-t)*(1-t)*(1-t) + 3*B*(1-t)*(1-t)*t + 3*C*(1-t)*t*t + D*t*t*t;
 				double z = ::distance(P,T);
@@ -262,7 +268,7 @@ class BezierF
 		{
 			double LowestZ = ::distance(A,T);
 			QPointF ClosestP(A);
-			for (double t=0;t<1.0125; t+=0.025)
+			for (qreal t=0;t<1.0125; t+=0.025)
 			{
 				QPointF P = A*(1-t)*(1-t)*(1-t) + 3*B*(1-t)*(1-t)*t + 3*C*(1-t)*t*t + D*t*t*t;
 				double z = ::distance(P,T);

@@ -15,7 +15,7 @@ class LayerWidget : public QAbstractButton
 
 	public:
 		LayerWidget(MapLayer* aLayer, QWidget* aParent = 0);
-		virtual ~LayerWidget() {};
+		virtual ~LayerWidget();
 
 		virtual QSize sizeHint () const;
 		virtual QSize minimumSizeHint () const;
@@ -25,6 +25,8 @@ class LayerWidget : public QAbstractButton
 
 		virtual MapLayer* getMapLayer();
 		virtual	void initActions();
+
+		QMenu* getAssociatedMenu();
 
 	protected:
 		virtual void contextMenuEvent(QContextMenuEvent* anEvent);
@@ -39,6 +41,7 @@ class LayerWidget : public QAbstractButton
 		QMenu* ctxMenu;
 		QAction* closeAction;
 		QAction* actZoom;
+		QMenu* associatedMenu;
 
 	signals:
 		void layerChanged(LayerWidget *, bool adjustViewport);

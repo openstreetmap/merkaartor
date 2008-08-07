@@ -558,6 +558,60 @@ void FeaturePainter::drawTouchup(Road* R, QPainter& thePainter, const Projection
 	}
 }
 
+void FeaturePainter::drawLabel(TrackPoint* Pt, QPainter& thePainter, const Projection& theProjection) const
+{
+}
+
+void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, const Projection& theProjection) const
+{
+	QString str = R->tagValue("name", "");
+	if (str.isEmpty())
+		return;
+
+	LineParameters lp = foregroundBoundary();
+	double PixelPerM = theProjection.pixelPerM();
+	double WW = PixelPerM*widthOf(R)*lp.Proportional+lp.Fixed;
+	if (WW < 10) return;
+
+	QPainterPath path;
+	buildPathFromRoad(R, theProjection, path);
+
+    QFont font("Arial");
+    QFontMetricsF metrics(font);
+	for (int i=24; i> 0; --i) {
+		font.setPointSize(i);
+		metrics = QFontMetricsF(font);
+		if ((metrics.width(str) < path.length()) && (metrics.height() < WW))
+			break;
+	}
+	thePainter.setFont(font);
+    qreal curLen = (path.length() - metrics.width(str)) / 2;
+	int modIncrement = 1;
+	qreal modAngle = 0;
+	if (cos(angToRad(path.angleAtPercent(0.5))) < 0) {
+		modIncrement = -1;
+		modAngle = 180.0;
+		curLen += metrics.width(str);
+	}
+	for (int i = 0; i < str.length(); ++i) {
+        qreal t = path.percentAtLength(curLen);
+        QPointF pt = path.pointAtPercent(t);
+        qreal angle = path.angleAtPercent(t);
+        QString txt;
+        txt.append(str[i]);
+        thePainter.save();
+        thePainter.translate(pt);
+        //qDebug()<<"txt = "<<txt<<", angle = "<<angle<<curLen<<t;
+        thePainter.rotate(-angle+modAngle);
+        //p->thePainter.drawText(QRect(0, modY, metrics.width(txt), WW), Qt::AlignVCenter, txt);
+        thePainter.drawText(0, 2, txt);
+        thePainter.restore();
+
+        qreal incremenet = metrics.width(txt);
+        curLen += (incremenet * modIncrement);
+    }
+}
+
 PaintStyleLayer::~PaintStyleLayer()
 {
 }

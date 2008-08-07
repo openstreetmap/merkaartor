@@ -5,6 +5,8 @@
 
 #include <QtGui/QMainWindow>
 #include <QtXml>
+#include <QProgressBar>
+#include <QLabel>
 
 class LayerDock;
 class MapDocument;
@@ -14,6 +16,7 @@ class MapFeature;
 class PropertiesDock;
 class InfoDock;
 class DirtyDock;
+class QGPS;
 
 class MainWindow : public QMainWindow, public Ui::MainWindow
 {
@@ -48,12 +51,16 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_fileOpenAction_triggered();
 		virtual void on_fileSaveAsAction_triggered();
 		virtual void on_fileSaveAction_triggered();
+		virtual void on_layersAddImageAction_triggered();
 		virtual void on_helpAboutAction_triggered();
 		virtual void on_viewZoomAllAction_triggered();
 		virtual void on_viewZoomInAction_triggered();
 		virtual void on_viewZoomOutAction_triggered();
 		virtual void on_viewZoomWindowAction_triggered();
 		virtual void on_viewDownloadedAction_triggered();
+		virtual void on_viewNamesAction_triggered();
+		virtual void on_viewTrackPointsAction_triggered();
+		virtual void on_viewTrackSegmentsAction_triggered();
 		virtual void on_viewMoveLeftAction_triggered();
 		virtual void on_viewMoveRightAction_triggered();
 		virtual void on_viewMoveUpAction_triggered();
@@ -72,8 +79,9 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_exportOSMBinAction_triggered();
 		virtual void on_exportGPXAction_triggered();
 		virtual void on_exportKMLAction_triggered();
+		virtual void on_renderNativeAction_triggered();
+		virtual void on_renderSVGAction_triggered();
 		virtual void on_editSelectAction_triggered();
-		virtual void on_renderAction_triggered();
 		virtual void on_bookmarkAddAction_triggered();
 		virtual void on_bookmarkRemoveAction_triggered();
 		virtual void on_nodeAlignAction_triggered();
@@ -83,7 +91,14 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_windowLayersAction_triggered();
 		virtual void on_windowInfoAction_triggered();
 		virtual void on_windowDirtyAction_triggered();
-
+		virtual void on_windowToolbarAction_triggered();
+		virtual void on_windowGPSAction_triggered();
+		virtual void on_windowHideAllAction_triggered();
+		virtual void on_windowShowAllAction_triggered();
+		virtual void on_gpsConnectAction_triggered();
+		virtual void on_gpsReplayAction_triggered();
+		virtual void on_gpsDisconnectAction_triggered();
+		virtual void on_gpsCenterAction_triggered();
 		virtual void preferencesChanged();
 		virtual void clipboardChanged();
 		virtual void toolsPreferencesAction_triggered(unsigned int tabIdx = 0);
@@ -102,10 +117,16 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		//MapLayer* activeLayer();
 		MapView* view();
 
+		QProgressBar* pbImages;
+		QString StatusMessage;
+		QLabel* ViewportStatusLabel;
+		QLabel* PaintTimeLabel;
+
 	public slots:
 		void adjustLayers(bool adjustViewport);
 		void bookmarkTriggered(QAction* anAction);
 		void projectionTriggered(QAction* anAction);
+		void updateGpsPosition();
 
 	public:
 		void invalidateView(bool UpdateDock = true);
@@ -122,6 +143,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		InfoDock* theInfo;
 		DirtyDock* theDirty;
 		LayerDock* theLayers;
+		QGPS* theGPS;
 		QDomDocument* theXmlDoc;
 
 	private:

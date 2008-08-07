@@ -46,7 +46,11 @@ int main(int argc, char** argv)
 	if (fileNames.isEmpty())
 		QDir::setCurrent(MerkaartorPreferences::instance()->getWorkingDir());
 
+#ifdef _MOBILE
+	Main.showMaximized();
+#else
 	Main.show();
+#endif
 
 	return app.exec();
 }

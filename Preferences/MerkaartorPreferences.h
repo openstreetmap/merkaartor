@@ -20,6 +20,8 @@
 class QMainWindow;
 
 #define WORLD_COORDBOX CoordBox(Coord(1.3, -1.3), Coord(-1.3, 1.3))
+#define BUILTIN_STYLES_DIR ":/Styles"
+#define M_PREFS MerkaartorPreferences::instance()
 
 /**
 	@author cbro <cbro@semperpax.com>
@@ -89,6 +91,20 @@ class TmsServer
 typedef QMap<QString, TmsServer> TmsServerList;
 typedef QMapIterator<QString, TmsServer> TmsServerListIterator;
 
+#define TOOL_FIELD_SIZE 2
+class Tool
+{
+	public:
+		Tool();
+		Tool(QString Name, QString Path);
+
+	public:
+		QString ToolName;
+		QString ToolPath;
+};
+typedef QMap<QString, Tool> ToolList;
+typedef QMapIterator<QString, Tool> ToolListIterator;
+
 class MerkaartorPreferences : public QObject
 {
 Q_OBJECT
@@ -117,15 +133,6 @@ public:
 
 	void setWorkingDir(const QString & theValue);
 	QString getWorkingDir() const;
-
-	void setOsmWebsite(const QString & theValue);
-	QString getOsmWebsite() const;
-
-	void setOsmUser(const QString & theValue);
-	QString getOsmUser() const;
-
-	void setOsmPassword(const QString & theValue);
-	QString getOsmPassword() const;
 
 	void setProxyUse(bool theValue);
 	bool getProxyUse() const;
@@ -200,6 +207,15 @@ public:
 	void setDownloadedVisible(bool theValue);
 	bool getDownloadedVisible() const;
 
+	void setNamesVisible(bool theValue);
+	bool getNamesVisible() const;
+
+	void setTrackPointsVisible(bool theValue);
+	bool getTrackPointsVisible() const;
+
+	void setTrackSegmentsVisible(bool theValue);
+	bool getTrackSegmentsVisible() const;
+
 	/* MainWindow state */
 	void saveMainWindowState(const class QMainWindow * mainWindow);
 	void restoreMainWindowState(class QMainWindow * mainWindow) const;
@@ -210,6 +226,18 @@ public:
 	bool getDrawTileBoundary();
 
 	/* Data */
+	void setOsmWebsite(const QString & theValue);
+	QString getOsmWebsite() const;
+
+	void setOsmUser(const QString & theValue);
+	QString getOsmUser() const;
+
+	void setOsmPassword(const QString & theValue);
+	QString getOsmPassword() const;
+
+	void setGpsPort(const QString & theValue);
+	QString getGpsPort() const;
+
 	void setAutoSaveDoc(bool theValue);
 	bool getAutoSaveDoc() const;
 
@@ -219,6 +247,10 @@ public:
 	/* Export Type */
 	void setExportType(ExportType theValue);
 	ExportType getExportType() const;
+
+	/* Tools */
+	ToolList* getTools() const;
+	Tool getTool(QString toolName) const;
 
 protected:
 	bool Use06Api;
@@ -236,12 +268,14 @@ protected:
 
 	void setWmsServers();
 	void setTmsServers();
+	void setTools();
 	void initialize();
 
 private:
 	QHash<QString, qreal> alpha;
 	WmsServerList* theWmsServerList;
 	TmsServerList* theTmsServerList;
+	ToolList* theToolList;
 	QSettings * Sets;
 	QStringList bgTypes;
 	QStringList projTypes;
