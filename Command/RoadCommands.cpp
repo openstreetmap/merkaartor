@@ -137,7 +137,7 @@ bool RoadRemoveTrackPointCommand::buildDirtyList(DirtyList& theList)
 {
 	if (!theRoad->layer())
 		return theList.update(theRoad);
-	if (theRoad->layer()->isUploadable() && theTrackPoint->layer()->isUploadable())
+	if (theRoad->layer()->isUploadable() && (theTrackPoint->layer()->isUploadable() || theTrackPoint->hasOSMId()))
 		return theList.update(theRoad);
 	else
 		return false;
