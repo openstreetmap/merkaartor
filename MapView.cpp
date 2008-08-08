@@ -259,7 +259,10 @@ void MapView::drawFeatures(QPainter & P)
 	}
 
 	EditPaintStyle EP(P, projection());
-	for (unsigned int i = 0; i < EP.size(); ++i)
+	unsigned int sz = EP.size();
+	if (!M_PREFS->getNamesVisible())
+		sz--;
+	for (unsigned int i = 0; i < sz; ++i)
 	{
 		PaintStyleLayer *Current = EP.get(i);
 		for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)

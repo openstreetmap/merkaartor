@@ -148,10 +148,7 @@ MainWindow::MainWindow(void)
 #endif
 
 #ifndef OSMARENDER
-	renderQVGAction->setVisible(false);
-#endif
-#if !defined(OSMARENDER)
-	menuRender->setVisible(false);
+	renderSVGAction->setVisible(false);
 #endif
 }
 
