@@ -443,7 +443,7 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 			newLayer = new TrackMapLayer( baseFileName );
 			mapDocument->add(newLayer);
 			importOK = importGPX(this, baseFileName, mapDocument, newLayer);
-			if (importOK & MerkaartorPreferences::instance()->getAutoExtractTracks()) {
+			if (importOK && MerkaartorPreferences::instance()->getAutoExtractTracks()) {
 				((TrackMapLayer *)newLayer)->extractLayer();
 			}
 		}
@@ -461,7 +461,7 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 			newLayer = new TrackMapLayer( baseFileName );
 			mapDocument->add(newLayer);
 			importOK = importNGT(this, baseFileName, mapDocument, newLayer);
-			if (importOK & MerkaartorPreferences::instance()->getAutoExtractTracks()) {
+			if (importOK && MerkaartorPreferences::instance()->getAutoExtractTracks()) {
 				((TrackMapLayer *)newLayer)->extractLayer();
 			}
 		}
@@ -469,7 +469,7 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 			newLayer = new TrackMapLayer( baseFileName );
 			mapDocument->add(newLayer);
 			importOK = mapDocument->importNMEA(baseFileName, (TrackMapLayer *)newLayer);
-			if (importOK & MerkaartorPreferences::instance()->getAutoExtractTracks()) {
+			if (importOK && MerkaartorPreferences::instance()->getAutoExtractTracks()) {
 				((TrackMapLayer *)newLayer)->extractLayer();
 			}
 		}
@@ -1038,7 +1038,7 @@ void MainWindow::loadDocument(QString fn)
 				theDirty->updateList();
 				fileName = fn;
 				setWindowTitle(QString("Merkaartor - %1").arg(fileName));
-			} 
+			}
 		} else
 		if (e.tagName() == "MapView") {
 			view()->fromXML(e);

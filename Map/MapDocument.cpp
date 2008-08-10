@@ -111,6 +111,8 @@ bool MapDocument::toXML(QDomElement xParent, QProgressDialog & progress)
 	mapDoc = xParent.ownerDocument().createElement("MapDocument");
 	xParent.appendChild(mapDoc);
 
+	mapDoc.setAttribute("lastdownloadlayer", p->lastDownloadLayer->id());
+
 	for (unsigned int i=0; i<p->Layers.size(); ++i) {
 		progress.setMaximum(progress.maximum() + p->Layers[i]->size());
 	}
@@ -170,6 +172,9 @@ MapDocument* MapDocument::fromXML(const QDomElement e, double version, LayerDock
 	}
 
 	if (NewDoc) {
+		if (e.hasAttribute("lastdownloadlayer"))
+			NewDoc->setLastDownloadLayer(NewDoc->getLayer(e.attribute("lastdownloadlayer")));
+
 		if (h)
 			NewDoc->setHistory(h);
 	}
@@ -600,6 +605,15 @@ QList<CoordBox> *MapDocument::getDownloadBoxes()
 	return &(p->downloadBoxes);
 }
 
+MapLayer * MapDocument::getLastDownloadLayer()
+{
+	return p->lastDownloadLayer;
+}
+
+void MapDocument::setLastDownloadLayer(MapLayer * aLayer)
+{
+	p->lastDownloadLayer = aLayer;
+}
 
 /* VISIBLEFEATUREITERATOR */
 
@@ -690,12 +704,3 @@ bool hasUnsavedChanges(const MapDocument& aDoc)
 	return (aDoc.getDirtyLayer()->size() > 0);
 }
 
-MapLayer * MapDocument::getLastDownloadLayer()
-{
-	return p->lastDownloadLayer;
-}
-
-void MapDocument::setLastDownloadLayer(MapLayer * aLayer)
-{
-	p->lastDownloadLayer = aLayer;
-}

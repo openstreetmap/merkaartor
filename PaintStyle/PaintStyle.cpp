@@ -584,6 +584,7 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, const Projection& 
 		if ((metrics.width(str) < path.length()) && (metrics.height() < WW))
 			break;
 	}
+	thePainter.setPen(Qt::black);
 	thePainter.setFont(font);
     qreal curLen = (path.length() - metrics.width(str)) / 2;
 	int modIncrement = 1;
