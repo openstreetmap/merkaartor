@@ -27,7 +27,7 @@ class CreateDoubleWayInteraction : public Interaction
 		MainWindow* Main;
 		QDockWidget* theDock;
 		Ui::CreateDoubleWayDock DockData;
-		QPointF LastCursor;
+		QPoint LastCursor;
 		Road* R1;
 		Road* R2;
 		Coord FirstPoint;

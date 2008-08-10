@@ -9,7 +9,7 @@ class QPixmap;
 class PixmapWidget : public QWidget
 {
 	Q_OBJECT
-	
+
 public:
 	PixmapWidget( QWidget *parent=0 );
 	~PixmapWidget();
@@ -20,7 +20,7 @@ public:
 
 public slots:
 	void setZoomFactor( float );
-	
+
 signals:
 	void zoomFactorChanged( float );
 
@@ -30,14 +30,14 @@ protected:
 	virtual void resizeEvent ( QResizeEvent * anEvent );
 
 	virtual void mousePressEvent ( QMouseEvent * anEvent ) ;
-	virtual void mouseReleaseEvent ( QMouseEvent * anEvent ); 
+	virtual void mouseReleaseEvent ( QMouseEvent * anEvent );
 	virtual void mouseMoveEvent ( QMouseEvent * anEvent );
 
 private:
 	QPixmap *m_pm;
 	double zoomFactor;
 	bool Panning;
-	QPointF Delta;
+	QPoint Delta;
 	QPoint FirstPan, LastPan;
 	bool done;
 };

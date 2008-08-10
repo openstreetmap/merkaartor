@@ -721,18 +721,18 @@ void MainWindow::on_viewSetCoordinatesAction_triggered()
 	Ui::SetPositionDialog Data;
 	Data.setupUi(Dlg);
 	CoordBox B(theView->projection().viewport());
-	Data.Longitude->setText(QString::number(radToAng(B.center().lon())));
-	Data.Latitude->setText(QString::number(radToAng(B.center().lat())));
-	Data.SpanLongitude->setText(QString::number(radToAng(B.lonDiff())));
-	Data.SpanLatitude->setText(QString::number(radToAng(B.latDiff())));
+	Data.Longitude->setText(QString::number(intToAng(B.center().lon())));
+	Data.Latitude->setText(QString::number(intToAng(B.center().lat())));
+	Data.SpanLongitude->setText(QString::number(intToAng(B.lonDiff())));
+	Data.SpanLatitude->setText(QString::number(intToAng(B.latDiff())));
 	if (Dlg->exec() == QDialog::Accepted) {
 		theView->projection().setViewport(CoordBox(
 											   Coord(
-												   angToRad(Data.Latitude->text().toDouble() - Data.SpanLatitude->text().toDouble() / 2),
-												   angToRad(Data.Longitude->text().toDouble() - Data.SpanLongitude->text().toDouble() / 2)),
+												   angToInt(Data.Latitude->text().toDouble() - Data.SpanLatitude->text().toDouble() / 2),
+												   angToInt(Data.Longitude->text().toDouble() - Data.SpanLongitude->text().toDouble() / 2)),
 											   Coord(
-												   angToRad(Data.Latitude->text().toDouble() + Data.SpanLatitude->text().toDouble() / 2),
-												   angToRad(Data.Longitude->text().toDouble() + Data.SpanLongitude->text().toDouble() / 2))), theView->rect());
+												   angToInt(Data.Latitude->text().toDouble() + Data.SpanLatitude->text().toDouble() / 2),
+												   angToInt(Data.Longitude->text().toDouble() + Data.SpanLongitude->text().toDouble() / 2))), theView->rect());
 		invalidateView();
 	}
 	delete Dlg;
@@ -1357,10 +1357,10 @@ void MainWindow::on_bookmarkAddAction_triggered()
 		CoordBox Clip = view()->projection().viewport();
 		int idx = Bookmarks.size();
 		Bookmarks.append(text);
-		Bookmarks.append(QString::number(radToAng(Clip.bottomLeft().lat())));
-		Bookmarks.append(QString::number(radToAng(Clip.bottomLeft().lon())));
-		Bookmarks.append(QString::number(radToAng(Clip.topRight().lat())));
-		Bookmarks.append(QString::number(radToAng(Clip.topRight().lon())));
+		Bookmarks.append(QString::number(intToAng(Clip.bottomLeft().lat())));
+		Bookmarks.append(QString::number(intToAng(Clip.bottomLeft().lon())));
+		Bookmarks.append(QString::number(intToAng(Clip.topRight().lat())));
+		Bookmarks.append(QString::number(intToAng(Clip.topRight().lon())));
 		MerkaartorPreferences::instance()->setBookmarks(Bookmarks);
 
 		QAction* a = new QAction(Bookmarks[idx], menuBookmarks);
@@ -1404,8 +1404,8 @@ void MainWindow::bookmarkTriggered(QAction* anAction)
 		return;
 	QStringList Bookmarks = MerkaartorPreferences::instance()->getBookmarks();
 	int idx = Bookmarks.indexOf(anAction->text()) + 1;
-	CoordBox Clip = CoordBox(Coord(angToRad(Bookmarks[idx].toDouble()),angToRad(Bookmarks[idx+1].toDouble())),
-		Coord(angToRad(Bookmarks[idx+2].toDouble()),angToRad(Bookmarks[idx+3].toDouble())));
+	CoordBox Clip = CoordBox(Coord(angToInt(Bookmarks[idx].toDouble()),angToInt(Bookmarks[idx+1].toDouble())),
+		Coord(angToInt(Bookmarks[idx+2].toDouble()),angToInt(Bookmarks[idx+3].toDouble())));
 	theView->projection().setViewport(Clip, theView->rect());
 
 	invalidateView();
@@ -1577,7 +1577,7 @@ void MainWindow::on_gpsCenterAction_triggered()
 void MainWindow::updateGpsPosition()
 {
 	if (theGPS->getGpsDevice()->fixStatus() == QGPSDevice::StatusActive) {
-		Coord vp(angToRad(theGPS->getGpsDevice()->latitude()), angToRad(theGPS->getGpsDevice()->longitude()));
+		Coord vp(angToInt(theGPS->getGpsDevice()->latitude()), angToInt(theGPS->getGpsDevice()->longitude()));
 		theView->projection().setCenter(vp, theView->rect());
 		theView->invalidate(true, true);
 	}

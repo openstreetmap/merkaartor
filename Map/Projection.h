@@ -21,7 +21,7 @@ class Projection
 		void setViewport(const CoordBox& Map, const QRect& Screen);
 		void panScreen(const QPoint& p, const QRect& Screen);
 		CoordBox viewport() const;
-		QPointF project(const Coord& Map) const;
+		QPoint project(const Coord& Map) const;
 		double pixelPerM() const;
 		double latAnglePerM() const;
 		double lonAnglePerM(double Lat) const;
@@ -37,7 +37,8 @@ class Projection
 		void setProjectionType(ProjectionType aProjectionType);
 
 	protected:
-		double ScaleLat, DeltaLat, ScaleLon, DeltaLon;
+		double ScaleLat, ScaleLon;
+		int DeltaLat, DeltaLon;
 		CoordBox Viewport;
 		QPoint screen_middle;
 		LayerManager* layermanager;

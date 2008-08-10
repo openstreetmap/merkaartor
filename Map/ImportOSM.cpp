@@ -64,7 +64,7 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
 			// conflict
 			Pt->setLastUpdated(MapFeature::UserResolved);
 			TrackPoint* userPt = Pt;
-			Pt = new TrackPoint(Coord(angToRad(Lat),angToRad(Lon)));
+			Pt = new TrackPoint(Coord(angToInt(Lat),angToInt(Lon)));
 			Pt->setId("conflict_"+id);
 			Pt->setLastUpdated(MapFeature::OSMServerConflict);
 			parseStandardAttributes(atts,Pt);
@@ -79,7 +79,7 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
 		}
 		else if (Pt->lastUpdated() != MapFeature::UserResolved)
 		{
-			theList->add(new MoveTrackPointCommand(Pt,Coord(angToRad(Lat),angToRad(Lon))));
+			theList->add(new MoveTrackPointCommand(Pt,Coord(angToInt(Lat),angToInt(Lon))));
 			NewFeature = false;
 			if (Pt->lastUpdated() == MapFeature::NotYetDownloaded)
 				Pt->setLastUpdated(MapFeature::OSMServer);
@@ -87,7 +87,7 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
 	}
 	else
 	{
-		Pt = new TrackPoint(Coord(angToRad(Lat),angToRad(Lon)));
+		Pt = new TrackPoint(Coord(angToInt(Lat),angToInt(Lon)));
 		theList->add(new AddFeatureCommand(theLayer,Pt, false));
 		NewFeature = true;
 		Pt->setId(id);

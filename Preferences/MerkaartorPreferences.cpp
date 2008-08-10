@@ -530,10 +530,10 @@ void MerkaartorPreferences::restoreMainWindowState(QMainWindow * mainWindow) con
 void MerkaartorPreferences::setInitialPosition(const CoordBox & cb)
 {
 	QStringList ip;
-	ip.append(QString::number(radToAng(cb.bottomLeft().lat())));
-	ip.append(QString::number(radToAng(cb.bottomLeft().lon())));
-	ip.append(QString::number(radToAng(cb.topRight().lat())));
-	ip.append(QString::number(radToAng(cb.topRight().lon())));
+	ip.append(QString::number(intToAng(cb.bottomLeft().lat())));
+	ip.append(QString::number(intToAng(cb.bottomLeft().lon())));
+	ip.append(QString::number(intToAng(cb.topRight().lat())));
+	ip.append(QString::number(intToAng(cb.topRight().lon())));
 
 	Sets->setValue("MainWindow/InitialPosition", ip);
 }
@@ -545,8 +545,8 @@ CoordBox MerkaartorPreferences::getInitialPosition()
 
 	const QStringList & ip = Sets->value("MainWindow/InitialPosition").toStringList();
 
-	const Coord bottomLeft(angToRad(ip[0].toDouble()), angToRad(ip[1].toDouble()));
-	const Coord topRight(angToRad(ip[2].toDouble()),angToRad(ip[3].toDouble()));
+	const Coord bottomLeft(angToInt(ip[0].toDouble()), angToInt(ip[1].toDouble()));
+	const Coord topRight(angToInt(ip[2].toDouble()),angToInt(ip[3].toDouble()));
 
 	return CoordBox(bottomLeft, topRight);
 }

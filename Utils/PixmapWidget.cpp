@@ -4,7 +4,7 @@
 
 #include "PixmapWidget.h"
 
-PixmapWidget::PixmapWidget( QWidget *parent ) 
+PixmapWidget::PixmapWidget( QWidget *parent )
 	: QWidget( parent ), zoomFactor(1.0), done(false)
 {
 }
@@ -44,7 +44,7 @@ void PixmapWidget::paintEvent( QPaintEvent * /*anEvent*/ )
 {
 	int xoffset, yoffset;
 	bool drawBorder = true;
-	
+
 	xoffset = Delta.x();
 	yoffset = Delta.y();
 
@@ -58,7 +58,7 @@ void PixmapWidget::paintEvent( QPaintEvent * /*anEvent*/ )
 	if( drawBorder )
 	{
 		p.setPen( Qt::black );
-		p.drawRect( xoffset-1, yoffset-1, m_pm->width()*zoomFactor+1, m_pm->height()*zoomFactor+1 );
+		p.drawRect( xoffset-1, yoffset-1, int(m_pm->width()*zoomFactor+1), int(m_pm->height()*zoomFactor+1) );
 	}
 }
 
@@ -71,13 +71,13 @@ void PixmapWidget::wheelEvent( QWheelEvent *anEvent )
 		f = 32.0/m_pm->width();
 
 
-	QPointF p = anEvent->pos() - Delta;
+	QPoint p = anEvent->pos() - Delta;
 	Delta -= (p / zoomFactor * f) - p;
 
 	setZoomFactor( f );
 }
 
-void PixmapWidget::mousePressEvent ( QMouseEvent * anEvent ) 
+void PixmapWidget::mousePressEvent ( QMouseEvent * anEvent )
 {
 	if (anEvent->buttons() & Qt::RightButton) {
 		Panning = true;
@@ -112,7 +112,7 @@ void PixmapWidget::resizeEvent ( QResizeEvent * anEvent )
 		double rw = (double)width() / (double)height();
 		zoomFactor = rd < rw ? (double)height() / (double)m_pm->height() : (double)width() / (double)m_pm->width();
 		done = true;
-		Delta = QPointF(((double)width() - (double)m_pm->width() * zoomFactor) /2, ((double)height() - (double)m_pm->height()* zoomFactor) / 2);
+		Delta = QPointF(((double)width() - (double)m_pm->width() * zoomFactor) /2, ((double)height() - (double)m_pm->height()* zoomFactor) / 2).toPoint();
 	}
 
 

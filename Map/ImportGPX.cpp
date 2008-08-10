@@ -19,7 +19,7 @@ static TrackPoint* importTrkPt(const QDomElement& Root, MapDocument* /* theDocum
 	double Lat = Root.attribute("lat").toDouble();
 	double Lon = Root.attribute("lon").toDouble();
 
-	TrackPoint* Pt = new TrackPoint(Coord(angToRad(Lat),angToRad(Lon)));
+	TrackPoint* Pt = new TrackPoint(Coord(angToInt(Lat),angToInt(Lon)));
 	Pt->setLastUpdated(MapFeature::Log);
 	if (Root.hasAttribute("xml:id"))
 		Pt->setId(Root.attribute("xml:id"));

@@ -472,17 +472,17 @@ QString MapDocument::exportOSM(const CoordBox& aCoordBox, bool renderBounds)
 	theExport += "<?xml version='1.0' encoding='UTF-8'?>\n";
 	theExport += "<osm version='0.5' generator='Merkaartor'>\n";
 	theExport += "<bound box='";
-	theExport += QString().number(radToAng(aCoordBox.bottomLeft().lat()),'f',6) + ",";
-	theExport += QString().number(radToAng(aCoordBox.bottomLeft().lon()),'f',6) + ",";
-	theExport += QString().number(radToAng(aCoordBox.topRight().lat()),'f',6) + ",";
-	theExport += QString().number(radToAng(aCoordBox.topRight().lon()),'f',6);
+	theExport += QString().number(intToAng(aCoordBox.bottomLeft().lat()),'f',6) + ",";
+	theExport += QString().number(intToAng(aCoordBox.bottomLeft().lon()),'f',6) + ",";
+	theExport += QString().number(intToAng(aCoordBox.topRight().lat()),'f',6) + ",";
+	theExport += QString().number(intToAng(aCoordBox.topRight().lon()),'f',6);
 	theExport += "' origin='http://www.openstreetmap.org/api/0.5' />\n";
 	if (renderBounds) {
 		theExport += "<bounds ";
-		theExport += "minlat=\"" + QString().number(radToAng(aCoordBox.bottomLeft().lat()),'f',6) + "\" ";
-		theExport += "minlon=\"" + QString().number(radToAng(aCoordBox.bottomLeft().lon()),'f',6) + "\" ";
-		theExport += "maxlat=\"" + QString().number(radToAng(aCoordBox.topRight().lat()),'f',6) + "\" ";
-		theExport += "maxlon=\"" + QString().number(radToAng(aCoordBox.topRight().lon()),'f',6) + "\" ";
+		theExport += "minlat=\"" + QString().number(intToAng(aCoordBox.bottomLeft().lat()),'f',6) + "\" ";
+		theExport += "minlon=\"" + QString().number(intToAng(aCoordBox.bottomLeft().lon()),'f',6) + "\" ";
+		theExport += "maxlat=\"" + QString().number(intToAng(aCoordBox.topRight().lat()),'f',6) + "\" ";
+		theExport += "maxlon=\"" + QString().number(intToAng(aCoordBox.topRight().lon()),'f',6) + "\" ";
 		theExport += "/>\n";
 	}
 	theExport += coreExport;
@@ -508,10 +508,10 @@ QString MapDocument::exportOSM(QVector<MapFeature*> aFeatures)
 	theExport += "<?xml version='1.0' encoding='UTF-8'?>\n";
 	theExport += "<osm version='0.5' generator='Merkaartor'>\n";
 	theExport += "<bound box='";
-	theExport += QString().number(radToAng(aCoordBox.bottomLeft().lat()),'f',6) + ",";
-	theExport += QString().number(radToAng(aCoordBox.bottomLeft().lon()),'f',6) + ",";
-	theExport += QString().number(radToAng(aCoordBox.topRight().lat()),'f',6) + ",";
-	theExport += QString().number(radToAng(aCoordBox.topRight().lon()),'f',6);
+	theExport += QString().number(intToAng(aCoordBox.bottomLeft().lat()),'f',6) + ",";
+	theExport += QString().number(intToAng(aCoordBox.bottomLeft().lon()),'f',6) + ",";
+	theExport += QString().number(intToAng(aCoordBox.topRight().lat()),'f',6) + ",";
+	theExport += QString().number(intToAng(aCoordBox.topRight().lon()),'f',6);
 	theExport += "' origin='http://www.openstreetmap.org/api/0.5' />\n";
 	theExport += coreExport;
 	theExport += "</osm>";

@@ -358,8 +358,8 @@ void PropertiesDock::resetValues()
 		if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(FullSelection[0]))
 		{
 			TrackPointUi.Id->setText(Pt->id());
-			TrackPointUi.Latitude->setText(QString::number(radToAng(Pt->position().lat()),'g',8));
-			TrackPointUi.Longitude->setText(QString::number(radToAng(Pt->position().lon()),'g',8));
+			TrackPointUi.Latitude->setText(QString::number(intToAng(Pt->position().lat()),'g',8));
+			TrackPointUi.Longitude->setText(QString::number(intToAng(Pt->position().lon()),'g',8));
 			TrackPointUi.TagView->setModel(theModel);
                         TrackPointUi.TagView->setItemDelegate(delegate);
 			resetTagComboBox(TrackPointUi.Amenity,Pt,"amenity");
@@ -401,7 +401,7 @@ void PropertiesDock::on_TrackPointLat_editingFinished()
 		Pt->setLastUpdated(MapFeature::User);
 		Main->document()->addHistory(
 			new MoveTrackPointCommand(Pt,
-				Coord(angToRad(TrackPointUi.Latitude->text().toDouble()),Pt->position().lon()), Main->document()->getDirtyOrOriginLayer(Pt->layer()) ));
+				Coord(angToInt(TrackPointUi.Latitude->text().toDouble()),Pt->position().lon()), Main->document()->getDirtyOrOriginLayer(Pt->layer()) ));
 		Main->invalidateView(false);
 	}
 }
@@ -415,7 +415,7 @@ void PropertiesDock::on_TrackPointLon_editingFinished()
 		Pt->setLastUpdated(MapFeature::User);
 		Main->document()->addHistory(
 			new MoveTrackPointCommand(Pt,
-				Coord(Pt->position().lat(),angToRad(TrackPointUi.Longitude->text().toDouble())), Main->document()->getDirtyOrOriginLayer(Pt->layer()) ));
+				Coord(Pt->position().lat(),angToInt(TrackPointUi.Longitude->text().toDouble())), Main->document()->getDirtyOrOriginLayer(Pt->layer()) ));
 		Main->invalidateView(false);
 	}
 }
@@ -564,7 +564,7 @@ void PropertiesDock::on_centerZoomAction_triggered()
 		idx = MultiUi.SelectionList->selectedItems()[i]->data(Qt::UserRole).toUInt();
 		cb.merge(FullSelection[idx]->boundingBox());
 	}
-	CoordBox min(cb.center()-0.00001, cb.center()+0.00001);
+	CoordBox min(cb.center()-10, cb.center()+10);
 	cb.merge(min);
 	cb = cb.zoomed(1.1);
 	Main->view()->projection().setViewport(cb, Main->view()->rect());

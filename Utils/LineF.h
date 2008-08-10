@@ -56,13 +56,19 @@ inline QPointF toQt(const Coord& C)
 
 inline Coord toCoord(const QPointF& F)
 {
-	return Coord(F.x(),F.y());
+	return Coord(int(F.x()),int(F.y()));
 }
 
 class LineF
 {
 public:
 	LineF(const QPointF& aP1, const QPointF& aP2)
+		: P1(aP1), P2(aP2), Valid(true)
+	{
+		init();
+	}
+
+	LineF(const QPoint& aP1, const QPoint& aP2)
 		: P1(aP1), P2(aP2), Valid(true)
 	{
 		init();
@@ -87,7 +93,7 @@ public:
 			A/=F;
 			B/=F;
 			C/=F;
-		}		
+		}
 	}
 
 	void slide(double d)
@@ -150,9 +156,9 @@ public:
 		if (Valid)
 		{
 			double SD = A*P.lat()+B*P.lon()+C;
-			return Coord(P.lat()-A*SD,P.lon()-B*SD);
+			return Coord(int(P.lat()-A*SD),int(P.lon()-B*SD));
 		}
-		return Coord(P1.x(),P1.y());
+		return Coord(int(P1.x()),int(P1.y()));
 	}
 	QPointF project(const QPointF& P)
 	{
@@ -162,6 +168,10 @@ public:
 			return QPointF(P.x()-A*SD,P.y()-B*SD);
 		}
 		return P1;
+	}
+	QPointF project(const QPoint& P)
+	{
+		return project(QPointF(P));
 	}
 
 	bool intersectsWith(const CoordBox& C) const
@@ -245,6 +255,10 @@ class BezierF
 			: A(aA), B(aB), C(aC), D(aD)
 		{
 		}
+		BezierF(const QPoint& aA, const QPoint& aB, const QPoint& aC, const QPoint& aD)
+			: A(aA), B(aB), C(aC), D(aD)
+		{
+		}
 
 		BezierF(const Coord& aA, const Coord& aB, const Coord& aC, const Coord& aD)
 			: A(toQt(aA)), B(toQt(aB)), C(toQt(aC)), D(toQt(aD))
@@ -283,7 +297,7 @@ class BezierF
 
 
 	private:
-		QPointF A,B,C,D;	
+		QPointF A,B,C,D;
 };
 
 #endif

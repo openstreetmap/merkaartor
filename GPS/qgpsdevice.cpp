@@ -42,7 +42,7 @@
 QGPSDevice::QGPSDevice()
 {
     mutex = new QMutex(QMutex::Recursive);
-    
+
     setLatitude(0);
     setLongitude(0);
     setAltitude(0);
@@ -62,7 +62,7 @@ QGPSDevice::QGPSDevice()
  * Accessor functions
  */
 
-int QGPSDevice::latDegrees()    { return (int) (abs(latitude()));													}  
+int QGPSDevice::latDegrees()    { return (int) (abs(latitude()));													}
 int QGPSDevice::latMinutes()    { return (int) (latitude() - latDegrees());											}
 int QGPSDevice::latSeconds()    { return (int) (((latitude() - latDegrees()) - latMinutes()) * 60);					}
 int QGPSDevice::longDegrees()   { return (int) (longitude());														}
@@ -139,7 +139,7 @@ void QGPSDevice::satInfo(int index, int &elev, int &azim, int &snr)
 void QGPSDevice::parseGGA(const char *ggaString)
 {
     mutex->lock();
-    
+
 	QString line(ggaString);
 	if (line.count('$') > 1)
 		return;
@@ -152,7 +152,7 @@ void QGPSDevice::parseGGA(const char *ggaString)
 	if (tokens[3] != "N")
 		lat = -lat;
     setLatitude(lat);
-	
+
 	if (!tokens[3].isEmpty())
 		if (tokens[3].at(0) == 'N')
 			setLatCardinal(CardinalNorth);
@@ -189,7 +189,7 @@ void QGPSDevice::parseGGA(const char *ggaString)
 
 	float altitude = tokens[9].toFloat();
 	setAltitude(altitude);
-    
+
     mutex->unlock();
 } // parseGGA()
 
@@ -205,7 +205,7 @@ void QGPSDevice::parseGGA(const char *ggaString)
  *  $GPGSA,A,3,04,05,,09,12,,,24,,,,,2.5,1.3,2.1*39
  *  |||||||||||||||||||||||||||||||||||||||||||||||
  *  01234567890123456789012345678901234567890123456
- *  |         |         |         |         | 
+ *  |         |         |         |         |
  *  0         10        20        30        40
  *
  *  GPGSA       -   Information about satellite status
@@ -222,11 +222,11 @@ void QGPSDevice::parseGGA(const char *ggaString)
  *
  * @param char  The full NMEA GPGSA string, from $ to checksum
  */
- 
+
 void QGPSDevice::parseGSA(const char *gsaString)
 {
     mutex->lock();
-     
+
 	QString line(gsaString);
 	if (line.count('$') > 1)
 		return;
@@ -245,12 +245,12 @@ void QGPSDevice::parseGSA(const char *gsaString)
     else if(fix == 2)
         setFixType(Fix2D);
     else
-        setFixType(Fix3D);        
+        setFixType(Fix3D);
 
 	for(int index = 0; index < 12; index ++) {
 		activeSats[index] = tokens[index+3].toInt();
 	}
-    
+
     mutex->unlock();
 } // parseGSA()
 
@@ -286,16 +286,9 @@ void QGPSDevice::parseGSA(const char *gsaString)
 void QGPSDevice::parseRMC(const char *rmcString)
 {
     mutex->lock();
-    
-    int j, k, commaPos;
-    char tempString[100];
-    int tempInt;
-    float tempFloat;
-    long tempLong;
-    
-    
+
     // Fix time
-    
+
 	QString line(rmcString);
 	if (line.count('$') > 1)
 		return;
@@ -307,9 +300,9 @@ void QGPSDevice::parseRMC(const char *rmcString)
 
 	if (cur_datetime.date().year() < 1970)
 		cur_datetime = cur_datetime.addYears(100);
-   
+
     // Fix status
-    
+
  	if (tokens[2] == "A")
     {
         setFixStatus(StatusActive);
@@ -318,16 +311,16 @@ void QGPSDevice::parseRMC(const char *rmcString)
     {
         setFixStatus(StatusVoid);
     }
-   
+
     // Latitude
-    
+
 	double lat = tokens[3].left(2).toDouble();
 	double latmin = tokens[3].mid(2).toDouble();
 	lat += latmin / 60.0;
 	if (tokens[4] != "N")
 		lat = -lat;
     setLatitude(lat);
-	
+
 	if (!tokens[4].isEmpty())
 		if (tokens[4].at(0) == 'N')
 			setLatCardinal(CardinalNorth);
@@ -352,20 +345,20 @@ void QGPSDevice::parseRMC(const char *rmcString)
 		else
 			setLatCardinal(CardinalNone);
 
-	
-        
+
+
     // Ground speed in km/h
-    
+
 	double speed = QString::number(tokens[7].toDouble() * 1.852, 'f', 1).toDouble();
 	setSpeed(speed);
-    
+
     // Heading
-    
+
  	double heading = tokens[8].toDouble();
 	setHeading(heading);
-    
+
     // Magnetic variation
-    
+
  	double magvar = tokens[10].toDouble();
 	setVariation(magvar);
 
@@ -376,7 +369,7 @@ void QGPSDevice::parseRMC(const char *rmcString)
 			setVarCardinal(CardinalWest);
 		else
 			setVarCardinal(CardinalNone);
-	   
+
     mutex->unlock();
 } // parseRMC()
 
@@ -401,7 +394,7 @@ void QGPSDevice::parseRMC(const char *rmcString)
  *  2           -   Number of GPGSV sentences for full data
  *  1           -   Current sentence (1 of 2, etc)
  *  08          -   Number of satellites in view
- *  
+ *
  *  01          -   Satellite PRN
  *  40          -   Elevation, degrees
  *  083         -   Azimuth, degrees
@@ -413,7 +406,7 @@ void QGPSDevice::parseRMC(const char *rmcString)
 void QGPSDevice::parseGSV(const char *gsvString)
 {
     mutex->lock();
- 
+
     int totalSentences;
     int currentSentence;
     int totalSatellites;
@@ -442,7 +435,7 @@ void QGPSDevice::parseGSV(const char *gsvString)
 		satArray[prn][1] = azim;
 		satArray[prn][2] = snr;
 	}
-    
+
     mutex->unlock();
 }
 
@@ -457,7 +450,7 @@ void QGPSDevice::startDevice()
     mutex->lock();
     stopLoop = false;
     mutex->unlock();
-    
+
     printf("We're starting...\n");
 
     start();
@@ -497,11 +490,11 @@ QGPSComDevice::QGPSComDevice(const QString &device)
 bool QGPSComDevice::openDevice()
 {
 	port = new QextSerialPort(device());
-	port->setBaudRate(BAUD4800);   
+	port->setBaudRate(BAUD4800);
 	port->setFlowControl(FLOW_OFF);
-	port->setParity(PAR_NONE);    
-	port->setDataBits(DATA_8);   
-	port->setStopBits(STOP_2);    
+	port->setParity(PAR_NONE);
+	port->setDataBits(DATA_8);
+	port->setStopBits(STOP_2);
 
 	return port->open(QIODevice::ReadOnly);
 }
@@ -525,18 +518,18 @@ void QGPSComDevice::run()
     char bufferChar;
     char bufferString[100];
     bool safeStopLoop = false;
-    
+
     do
     {
         mutex->lock();
         safeStopLoop = stopLoop;
         mutex->unlock();
-    
+
 	    if ((port->read(&bufferChar, 1)) < 1)
 			continue;
 
         if(bufferChar == '$')
-        {        
+        {
             index = 0;
             bufferString[index] = bufferChar;
 
@@ -552,7 +545,7 @@ void QGPSComDevice::run()
             } while(bufferChar != 0x0a && bufferChar != 0x0d);
 
             bufferString[index + 1] = '\0';
-            
+
             mutex->lock();
 
             if(bufferString[3] == 'G' && bufferString[4] == 'G' && bufferString[5] == 'A')
@@ -575,12 +568,12 @@ void QGPSComDevice::run()
                 //strcpy(nmeastr_rmc, bufferString);
                 parseRMC(bufferString);
             }
-            
+
             mutex->unlock();
-            
+
             emit updatePosition();
         }
-        
+
     } while(safeStopLoop == false);
 
 	closeDevice();
@@ -637,16 +630,16 @@ void QGPSFileDevice::run()
     char bufferChar;
     char bufferString[100];
     bool safeStopLoop = false;
-    
+
     do
     {
         mutex->lock();
         safeStopLoop = stopLoop;
         mutex->unlock();
-    
+
 	    theFile->read(&bufferChar, 1);
         if(bufferChar == '$')
-        {        
+        {
             index = 0;
             bufferString[index] = bufferChar;
 
@@ -661,7 +654,7 @@ void QGPSFileDevice::run()
             } while(bufferChar != 0x0a && bufferChar != 0x0d);
 
             bufferString[index + 1] = '\0';
-            
+
             mutex->lock();
 
             if(bufferString[3] == 'G' && bufferString[4] == 'G' && bufferString[5] == 'A')
@@ -684,13 +677,13 @@ void QGPSFileDevice::run()
                 //strcpy(nmeastr_rmc, bufferString);
                 parseRMC(bufferString);
             }
-            
+
             mutex->unlock();
-            
+
             emit updatePosition();
         }
 		msleep(100);
-        
+
     } while(safeStopLoop == false);
 
 	closeDevice();

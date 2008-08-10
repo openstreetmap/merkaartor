@@ -44,8 +44,8 @@ void RoadPrivate::addSmoothedBezier(unsigned int i, unsigned int j, unsigned int
 	Coord C(Nodes[k]->position());
 	Coord D(Nodes[l]->position());
 
-	Coord Ctrl1(B+(C-A)*(1.0/6));
-	Coord Ctrl2(C-(D-B)*(1.0/6));
+	Coord Ctrl1(B+(C-A)*(1/6));
+	Coord Ctrl2(C-(D-B)*(1/6));
 
 
 	Smoothed.push_back(Ctrl1);
@@ -375,7 +375,7 @@ bool Road::deleteChildren(MapDocument* theDocument, CommandList* theList)
 				TrackPoint* N = p->Nodes[i];
 				if (N->sizeParents() < 2) {
 					ToDelete[N] = i;
-				} 
+				}
 			}
 			for (int i=0; i<ToDelete.uniqueKeys().size(); ++i) {
 				theList->add(new RemoveFeatureCommand(theDocument, ToDelete.uniqueKeys()[i], Alternatives));
@@ -586,9 +586,9 @@ QString Road::toHtml()
 	D += "<i>"+QApplication::translate("MapFeature", "Size")+": </i>" + QApplication::translate("MapFeature", "%1 nodes").arg(size());
 	CoordBox bb = boundingBox();
 	D += "<br/>";
-	D += "<i>"+QApplication::translate("MapFeature", "Topleft")+": </i>" + QString::number(radToAng(bb.topLeft().lat()), 'f', 4) + " / " + QString::number(radToAng(bb.topLeft().lon()), 'f', 4);
+	D += "<i>"+QApplication::translate("MapFeature", "Topleft")+": </i>" + QString::number(intToAng(bb.topLeft().lat()), 'f', 4) + " / " + QString::number(intToAng(bb.topLeft().lon()), 'f', 4);
 	D += "<br/>";
-	D += "<i>"+QApplication::translate("MapFeature", "Botright")+": </i>" + QString::number(radToAng(bb.bottomRight().lat()), 'f', 4) + " / " + QString::number(radToAng(bb.bottomRight().lon()), 'f', 4);
+	D += "<i>"+QApplication::translate("MapFeature", "Botright")+": </i>" + QString::number(intToAng(bb.bottomRight().lat()), 'f', 4) + " / " + QString::number(intToAng(bb.bottomRight().lon()), 'f', 4);
 
 	return MapFeature::toMainHtml(QApplication::translate("MapFeature", "Way"), "way").arg(D);
 }

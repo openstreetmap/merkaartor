@@ -50,7 +50,7 @@ QString exportOSM(const TrackPoint& Pt)
 	QString S("<node id=\"%1\" lat=\"%2\" lon=\"%3\"%4>");
 	S+=tagOSM(Pt);
 	S+="</node>";
-	return S.arg(stripToOSMId(Pt.id())).arg(radToAng(Pt.position().lat()),0,'f',8).arg(radToAng(Pt.position().lon()),0,'f',8).arg(versionAttribute(Pt));
+	return S.arg(stripToOSMId(Pt.id())).arg(intToAng(Pt.position().lat()),0,'f',8).arg(intToAng(Pt.position().lon()),0,'f',8).arg(versionAttribute(Pt));
 }
 
 QString exportOSM(const Road& R)

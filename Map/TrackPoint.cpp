@@ -122,7 +122,7 @@ QString TrackPoint::toXML(unsigned int lvl, QProgressDialog * progress)
 	S += "<node id=\"%1\" lat=\"%2\" lon=\"%3\">\n";
 	S += tagsToXML(lvl+1);
 	S += QString(lvl*2, ' ') + "</node>\n";
-	return S.arg(stripToOSMId(id())).arg(radToAng(position().lat()),0,'f',8).arg(radToAng(position().lon()),0,'f',8);
+	return S.arg(stripToOSMId(id())).arg(intToAng(position().lat()),0,'f',8).arg(intToAng(position().lon()),0,'f',8);
 }
 
 bool TrackPoint::toXML(QDomElement xParent, QProgressDialog & progress)
@@ -133,8 +133,8 @@ bool TrackPoint::toXML(QDomElement xParent, QProgressDialog & progress)
 	xParent.appendChild(e);
 
 	e.setAttribute("id", xmlId());
-	e.setAttribute("lon",QString::number(radToAng(Position.lon()),'f',8));
-	e.setAttribute("lat", QString::number(radToAng(Position.lat()),'f',8));
+	e.setAttribute("lon",QString::number(intToAng(Position.lon()),'f',8));
+	e.setAttribute("lat", QString::number(intToAng(Position.lat()),'f',8));
 	e.setAttribute("timestamp", time().toString(Qt::ISODate)+"Z");
 	e.setAttribute("user", user());
 	e.setAttribute("actor", (int)lastUpdated());
@@ -151,15 +151,15 @@ bool TrackPoint::toGPX(QDomElement xParent, QProgressDialog & progress)
 
 	QString s = tagValue("_waypoint_","");
 	QDomElement e;
-	if (!s.isEmpty()) 
+	if (!s.isEmpty())
 		e = xParent.ownerDocument().createElement("wpt");
 	else
 		e = xParent.ownerDocument().createElement("trkpt");
 	xParent.appendChild(e);
 
 	e.setAttribute("xml:id", xmlId());
-	e.setAttribute("lon",QString::number(radToAng(Position.lon()),'f',8));
-	e.setAttribute("lat", QString::number(radToAng(Position.lat()),'f',8));
+	e.setAttribute("lon",QString::number(intToAng(Position.lon()),'f',8));
+	e.setAttribute("lat", QString::number(intToAng(Position.lat()),'f',8));
 
 	QDomElement c = xParent.ownerDocument().createElement("time");
 	e.appendChild(c);
@@ -213,7 +213,7 @@ TrackPoint * TrackPoint::fromXML(MapDocument* d, MapLayer* L, const QDomElement 
 		id = "node_" + id;
 	TrackPoint* Pt = dynamic_cast<TrackPoint*>(d->getFeature(id));
 	if (!Pt) {
-		Pt = new TrackPoint(Coord(angToRad(Lat),angToRad(Lon)));
+		Pt = new TrackPoint(Coord(angToInt(Lat),angToInt(Lon)));
 		Pt->setId(id);
 		Pt->setTime(time);
 		Pt->setUser(user);
@@ -224,7 +224,7 @@ TrackPoint * TrackPoint::fromXML(MapDocument* d, MapLayer* L, const QDomElement 
 			Pt->layer()->remove(Pt);
 			L->add(Pt);
 		}
-		Pt->setPosition(Coord(angToRad(Lat), angToRad(Lon)));
+		Pt->setPosition(Coord(angToInt(Lat), angToInt(Lon)));
 		Pt->setTime(time);
 		Pt->setUser(user);
 		if (Pt->lastUpdated() == MapFeature::NotYetDownloaded)
@@ -245,7 +245,7 @@ TrackPoint * TrackPoint::fromGPX(MapDocument* d, MapLayer* L, const QDomElement 
 	if (!id.startsWith('{'))
 		id = "node_" + id;
 
-	TrackPoint* Pt = new TrackPoint(Coord(angToRad(Lat),angToRad(Lon)));
+	TrackPoint* Pt = new TrackPoint(Coord(angToInt(Lat),angToInt(Lon)));
 	Pt->setId(id);
 	Pt->setLastUpdated(MapFeature::Log);
 	L->add(Pt);
@@ -282,7 +282,7 @@ QString TrackPoint::toHtml()
 	unsigned int i;
 
 	D += "<i>"+QApplication::translate("MapFeature", "timestamp")+": </i>" + time().toString(Qt::ISODate) + "<br/>";
-	D += "<i>"+QApplication::translate("MapFeature", "coord")+": </i>" + QString::number(radToAng(position().lat()), 'f', 4) + " / " + QString::number(radToAng(position().lon()), 'f', 4) + "<br/>";
+	D += "<i>"+QApplication::translate("MapFeature", "coord")+": </i>" + QString::number(intToAng(position().lat()), 'f', 4) + " / " + QString::number(intToAng(position().lon()), 'f', 4) + "<br/>";
 	if (elevation())
 		D += "<i>"+QApplication::translate("MapFeature", "elevation")+": </i>" + QString::number(elevation(), 'f', 4) + "<br/>";
 	if (speed())
@@ -290,10 +290,10 @@ QString TrackPoint::toHtml()
 
 	if ((i = findKey("_waypoint_")) < tagSize()) {
 		D += "<p><b>"+QApplication::translate("MapFeature", "Waypoint")+"</b><br/>";
-		
+
 		if ((i = findKey("_description_")) < tagSize())
 			D += "<i>"+QApplication::translate("MapFeature", "description")+": </i>" + tagValue(i) + "<br/>";
-		
+
 		if ((i = findKey("_comment_")) < tagSize())
 			D += "<i>"+QApplication::translate("MapFeature", "comment")+": </i>" + tagValue(i) + "<br/>";
 	}
@@ -319,7 +319,7 @@ TrackPoint* TrackPoint::fromBinary(MapDocument* d, MapLayer* /* L */, QDataStrea
 	ds >> lon;
 	ds >> lat;
 
-	Coord cd( ((double)lat / INT_MAX * M_PI_2), ((double)lon / INT_MAX * M_PI) );
+	Coord cd( (int((double)lat / INT_MAX * M_PI_2)), (int((double)lon / INT_MAX * M_PI)) );
 	TrackPoint* N = new TrackPoint(cd);
 	if (id < 1)
 		N->setId(QString::number(id));

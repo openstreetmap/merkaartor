@@ -182,7 +182,7 @@ TrackPoint* ImportNMEA::importRMC (QString line)
 		date = date.addYears(100);
 	//date.setTimeSpec(Qt::UTC);
 
-	TrackPoint* Pt = new TrackPoint(Coord(angToRad(lat),angToRad(lon)));
+	TrackPoint* Pt = new TrackPoint(Coord(angToInt(lat),angToInt(lon)));
 	Pt->setLastUpdated(MapFeature::Log);
 	Pt->setElevation(curAltitude);
 	Pt->setSpeed(speed);

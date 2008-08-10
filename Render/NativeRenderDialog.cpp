@@ -1,7 +1,7 @@
 //
 // C++ Implementation: NativeRenderDialog
 //
-// Description: 
+// Description:
 //
 //
 // Author: Chris Browet <cbro@semperpax.com>, (C) 2008
@@ -27,7 +27,7 @@
 #include <QPainter>
 
 NativeRenderDialog::NativeRenderDialog(MapDocument *aDoc, const CoordBox& aCoordBox, QWidget *parent)
-    :theDoc(aDoc), QDialog(parent)
+	:QDialog(parent), theDoc(aDoc)
 {
 	setupUi(this);
 
@@ -40,10 +40,10 @@ NativeRenderDialog::NativeRenderDialog(MapDocument *aDoc, const CoordBox& aCoord
 	cbShowBorders->setCheckState((Qt::CheckState)Sets->value("cbShowBorders", "1").toInt());
 	cbShowLicense->setCheckState((Qt::CheckState)Sets->value("cbShowLicense", "1").toInt());
 
-	sbMinLat->setValue(radToAng(aCoordBox.bottomLeft().lat()));
-	sbMaxLat->setValue(radToAng(aCoordBox.topLeft().lat()));
-	sbMinLon->setValue(radToAng(aCoordBox.topLeft().lon()));
-	sbMaxLon->setValue(radToAng(aCoordBox.topRight().lon()));
+	sbMinLat->setValue(intToAng(aCoordBox.bottomLeft().lat()));
+	sbMaxLat->setValue(intToAng(aCoordBox.topLeft().lat()));
+	sbMinLon->setValue(intToAng(aCoordBox.topLeft().lon()));
+	sbMaxLon->setValue(intToAng(aCoordBox.topRight().lon()));
 
 	calcRatio();
 	sbPreviewHeight->blockSignals(true);
@@ -81,11 +81,11 @@ void NativeRenderDialog::render()
 
 	Projection theProj;
 	CoordBox VP(Coord(
-		angToRad(sbMinLat->value()), 
-		angToRad(sbMinLon->value())
+		angToInt(sbMinLat->value()),
+		angToInt(sbMinLon->value())
 		), Coord(
-		angToRad(sbMaxLat->value()), 
-		angToRad(sbMaxLon->value())
+		angToInt(sbMaxLat->value()),
+		angToInt(sbMaxLon->value())
 	));
 
 	theProj.setViewport(VP, QRect(0, 0, w, h));
@@ -131,11 +131,11 @@ void NativeRenderDialog::render()
 void NativeRenderDialog::calcRatio()
 {
 	CoordBox theB(Coord(
-		angToRad(sbMinLat->value()), 
-		angToRad(sbMinLon->value())
+		angToInt(sbMinLat->value()),
+		angToInt(sbMinLon->value())
 		), Coord(
-		angToRad(sbMaxLat->value()), 
-		angToRad(sbMaxLon->value())
+		angToInt(sbMaxLat->value()),
+		angToInt(sbMaxLon->value())
 	));
 	Projection theProj;
 	theProj.setViewport(theB, QRect(0, 0, 800, 600));
@@ -165,13 +165,13 @@ void NativeRenderDialog::on_sbMaxLon_valueChanged(double /* v */)
 void NativeRenderDialog::on_sbPreviewWidth_valueChanged(int v)
 {
 	sbPreviewHeight->blockSignals(true);
-	sbPreviewHeight->setValue(v*ratio);
+	sbPreviewHeight->setValue(int(v*ratio));
 	sbPreviewHeight->blockSignals(false);
 }
 
 void NativeRenderDialog::on_sbPreviewHeight_valueChanged(int v)
 {
 	sbPreviewWidth->blockSignals(true);
-	sbPreviewWidth->setValue(v/ratio);
+	sbPreviewWidth->setValue(int(v/ratio));
 	sbPreviewWidth->blockSignals(false);
 }

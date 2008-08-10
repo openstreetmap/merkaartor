@@ -226,9 +226,6 @@ void EPLabelLayer::setP(EditPaintStylePrivate* ap)
 
 void EPLabelLayer::draw(Road* R)
 {
-	if (!M_PREFS->getNamesVisible())
-		return;
-
 	FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
 	if (paintsel)
 		paintsel->drawLabel(R,p->thePainter,p->theProjection);
@@ -240,9 +237,6 @@ void EPLabelLayer::draw(Relation* /* R */)
 
 void EPLabelLayer::draw(TrackPoint* Pt)
 {
-	if (!M_PREFS->getNamesVisible())
-		return;
-
 	FeaturePainter* paintsel = Pt->getEditPainter(p->theProjection.pixelPerM());
 	if (paintsel)
 		paintsel->drawLabel(Pt,p->thePainter,p->theProjection);

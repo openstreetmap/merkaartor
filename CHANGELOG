@@ -1,4 +1,5 @@
 v0.12
+	* ADD : switch to integer internal coordinates. Coordinates now vary from -INT_MAX to +INT_MAX rather than -M_PI / +M_PI
 	* FIX : 412 when uploading joined/splitted roads
 	* ADD : layer menu in menubar
 	* ADD : display viewport coordinates in status bar

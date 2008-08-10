@@ -19,7 +19,8 @@
 #include "Map/Coord.h"
 class QMainWindow;
 
-#define WORLD_COORDBOX CoordBox(Coord(1.3, -1.3), Coord(-1.3, 1.3))
+//#define WORLD_COORDBOX CoordBox(Coord(1.3, -1.3), Coord(-1.3, 1.3))
+#define WORLD_COORDBOX CoordBox(Coord(INT_MAX/2, -INT_MAX/2), Coord(-INT_MAX/2, INT_MAX/2))
 #define BUILTIN_STYLES_DIR ":/Styles"
 #define M_PREFS MerkaartorPreferences::instance()
 

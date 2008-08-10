@@ -1,7 +1,7 @@
 //
 // C++ Implementation: OsmaRenderDialog
 //
-// Description: 
+// Description:
 //
 //
 // Author: Chris Browet <cbro@semperpax.com>, (C) 2008
@@ -40,7 +40,7 @@ void xsltCallback (void * /*ctx*/, const char * /*msg*/, ...)
 }
 
 OsmaRenderDialog::OsmaRenderDialog(MapDocument *aDoc, const CoordBox& aCoordBox, QWidget *parent)
-    :theDoc(aDoc), QDialog(parent)
+	:QDialog(parent), theDoc(aDoc)
 {
 	setupUi(this);
 	buttonBox->addButton("Proceed...", QDialogButtonBox::ActionRole);
@@ -67,10 +67,10 @@ OsmaRenderDialog::OsmaRenderDialog(MapDocument *aDoc, const CoordBox& aCoordBox,
 		gbPreviewNOK->setVisible(true);
 	}
 
-	sbMinLat->setValue(radToAng(aCoordBox.bottomLeft().lat()));
-	sbMaxLat->setValue(radToAng(aCoordBox.topLeft().lat()));
-	sbMinLon->setValue(radToAng(aCoordBox.topLeft().lon()));
-	sbMaxLon->setValue(radToAng(aCoordBox.topRight().lon()));
+	sbMinLat->setValue(intToAng(aCoordBox.bottomLeft().lat()));
+	sbMaxLat->setValue(intToAng(aCoordBox.topLeft().lat()));
+	sbMinLon->setValue(intToAng(aCoordBox.topLeft().lon()));
+	sbMaxLon->setValue(intToAng(aCoordBox.topRight().lon()));
 
 #ifdef QGDAL_FEAT
 	QGDAL g;
@@ -124,14 +124,14 @@ void OsmaRenderDialog::render()
 	xmlDocPtr doc, xsl, res;
 
 	if (svgOutputFilename->text().isEmpty()) {
-		QMessageBox::warning(this, 
+		QMessageBox::warning(this,
 			QApplication::tr("Invalid filename"),
 			QApplication::tr("Please provide a valid output filename"));
 		return;
 	}
 
-	CoordBox theCoordBox(Coord(angToRad(sbMinLat->value()), angToRad(sbMinLon->value())), 
-		Coord(angToRad(sbMaxLat->value()), angToRad(sbMaxLon->value())));
+	CoordBox theCoordBox(Coord(angToInt(sbMinLat->value()), angToInt(sbMinLon->value())),
+		Coord(angToInt(sbMaxLat->value()), angToInt(sbMaxLon->value())));
 	QString theExport;
 	QFile file(QDir::tempPath()+"/tmp.osm");
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -146,7 +146,7 @@ void OsmaRenderDialog::render()
 	QString StyleSheetFileName = ":/osmarender/osmarender.xsl";
 	QFile xslFile(StyleSheetFileName);
 	if (!xslFile.open(QIODevice::ReadOnly)) {
-		QMessageBox::critical(this, 
+		QMessageBox::critical(this,
 			QApplication::tr("Unable to read stylesheet file"),
 			QApplication::tr("Please make sure the Osmarender stylesheet is available at %1").arg(StyleSheetFileName));
 		return;
@@ -157,7 +157,7 @@ void OsmaRenderDialog::render()
 	xsl = xmlParseMemory(theXsl.data(), theXsl.size());
 	if (!xsl)
 	{
-		QMessageBox::critical(this, 
+		QMessageBox::critical(this,
 			QApplication::tr("Unable to parse stylesheet xml"),
 			QApplication::tr("Please make sure the Osmarender stylesheet is available at %1").arg(StyleSheetFileName));
 		return;
@@ -165,7 +165,7 @@ void OsmaRenderDialog::render()
 	cur = xsltParseStylesheetDoc(xsl);
 	if (!cur)
 	{
-		QMessageBox::critical(this, 
+		QMessageBox::critical(this,
 			QApplication::tr("Unable to parse stylesheet"),
 			QApplication::tr("Please make sure the Osmarender stylesheet is available at %1").arg(StyleSheetFileName));
 		return;
@@ -174,7 +174,7 @@ void OsmaRenderDialog::render()
 	QString FeatureFileName = QString(":/osmarender/osm-map-features-z%1.xml").arg(sbZoom->value());
 	QFile xmlFile(FeatureFileName);
 	if (!xmlFile.open(QIODevice::ReadOnly)) {
-		QMessageBox::critical(this, 
+		QMessageBox::critical(this,
 			QApplication::tr("Unable to read feature xml file"),
 			QApplication::tr("Please make sure the feature xml is available at %1").arg(FeatureFileName));
 		return;
@@ -185,7 +185,7 @@ void OsmaRenderDialog::render()
 	doc = xmlParseMemory(theDoc.data(), theDoc.size());
 	if (!doc)
 	{
-		QMessageBox::critical(this, 
+		QMessageBox::critical(this,
 			QApplication::tr("Unable to parse feature xml"),
 			QApplication::tr("Please make sure the feature xml is available at %1").arg(FeatureFileName));
 		return;
@@ -264,7 +264,7 @@ void OsmaRenderDialog::render()
 
 	if (cbShowPreview->isChecked()) {
 		QStringList InkParam;
-		InkParam << "-z" <<  "-C" << "-f" <<  QDir::toNativeSeparators(svgOutputFilename->text()) 
+		InkParam << "-z" <<  "-C" << "-f" <<  QDir::toNativeSeparators(svgOutputFilename->text())
 			<< "-e" << QDir::toNativeSeparators(QDir::tempPath()+"/tmp.png")
 			<< "-d" << QString::number(sbDPI->value());
 			//<< "-w" <<  QString::number(sbPreviewWidth->value())
@@ -274,7 +274,7 @@ void OsmaRenderDialog::render()
 		QApplication::processEvents();
 
 		if (QProcess::execute(InkPath, InkParam) != 0)
-			QMessageBox::warning(this, 
+			QMessageBox::warning(this,
 				QApplication::tr("Unable to generate preview"),
 				QApplication::tr("Preview generation failed. Please ensure Inkscape is properly installed. at %1").arg(QDir::toNativeSeparators(InkPath)));
 

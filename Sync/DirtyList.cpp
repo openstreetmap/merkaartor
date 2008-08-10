@@ -131,12 +131,18 @@ bool DirtyListVisit::runVisit()
 	document()->history().buildDirtyList(*this);
 	DeletePass = true;
 	for (int i=0; i<RelationsToDelete.uniqueKeys().size(); i++) {
+		if (!RelationsToDelete.uniqueKeys()[i]->hasOSMId())
+			continue;
 		RelationsToDelete[RelationsToDelete.uniqueKeys()[i]] = eraseRelation(RelationsToDelete.uniqueKeys()[i]);
 	}
 	for (int i=0; i<RoadsToDelete.uniqueKeys().size(); i++) {
+		if (!RoadsToDelete.uniqueKeys()[i]->hasOSMId())
+			continue;
 		RoadsToDelete[RoadsToDelete.uniqueKeys()[i]] = eraseRoad(RoadsToDelete.uniqueKeys()[i]);
 	}
 	for (int i=0; i<TrackPointsToDelete.uniqueKeys().size(); i++) {
+		if (!TrackPointsToDelete.uniqueKeys()[i]->hasOSMId())
+			continue;
 		TrackPointsToDelete[TrackPointsToDelete.uniqueKeys()[i]] = erasePoint(TrackPointsToDelete.uniqueKeys()[i]);
 	}
 	return document()->history().buildDirtyList(*this);

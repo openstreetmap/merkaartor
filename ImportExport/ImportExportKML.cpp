@@ -102,7 +102,7 @@ bool ImportExportKML::export_(const QVector<MapFeature *>& featList)
 			QString s;
 			for (unsigned int j=0; j<R->size(); ++j) {
 				TrackPoint* N = dynamic_cast<TrackPoint*>(R->get(j));
-				s += QString(" %1,%2").arg(QString::number(radToAng(N->position().lon()),'f',8)).arg(QString::number(radToAng(N->position().lat()),'f',8));
+				s += QString(" %1,%2").arg(QString::number(intToAng(N->position().lon()),'f',8)).arg(QString::number(intToAng(N->position().lat()),'f',8));
 			}
 
 			QDomText v = theXmlDoc.createTextNode(s);
@@ -157,7 +157,7 @@ bool ImportExportKML::export_(const QVector<MapFeature *>& featList)
 			l.appendChild(c);
 			
 			QString s;
-			s += QString(" %1,%2").arg(QString::number(radToAng(N->position().lon()),'f',8)).arg(QString::number(radToAng(N->position().lat()),'f',8));
+			s += QString(" %1,%2").arg(QString::number(intToAng(N->position().lon()),'f',8)).arg(QString::number(intToAng(N->position().lat()),'f',8));
 
 			QDomText v = theXmlDoc.createTextNode(s);
 			c.appendChild(v);

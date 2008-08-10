@@ -136,7 +136,7 @@ void TrackSegment::drawDirectionMarkers(QPainter &P, QPen &pen, const QPointF & 
 	pen.setStyle(Qt::SolidLine);
 	P.setPen(pen);
 
-	QPointF H((FromF+ToF) / 2);
+	QPointF H((FromF+ToF) / 2.0);
 	P.drawLine(H-T,H-T+V1);
 	P.drawLine(H-T,H-T+V2);
 }
@@ -146,7 +146,7 @@ void TrackSegment::draw(QPainter &P, const Projection& theProjection)
 	QPen pen;
 
 	if (!M_PREFS->getTrackSegmentsVisible())
-		return; 
+		return;
 
 	for (unsigned int i=1; i<p->Points.size(); ++i)
 	{

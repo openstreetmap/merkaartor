@@ -14,7 +14,7 @@
 
 Projection::Projection(void)
 : ScaleLat(1000000), DeltaLat(0),
-  ScaleLon(1000000), DeltaLon(0), Viewport(Coord(0, 0), Coord(0, 0)),
+  ScaleLon(1000000), DeltaLon(0), Viewport(Coord(-1000, -1000), Coord(1000, 1000)),
   layermanager(0)
 {
 	theProjectionType = MerkaartorPreferences::instance()->getProjectionType();
@@ -30,7 +30,7 @@ void Projection::setLayerManager(LayerManager * lm)
 double Projection::pixelPerM() const
 {
 	double LatAngPerM = 1.0 / EQUATORIALRADIUS;
-	return LatAngPerM * ScaleLat;
+	return LatAngPerM / M_PI * INT_MAX * ScaleLat;
 }
 
 double Projection::latAnglePerM() const
@@ -51,15 +51,15 @@ void Projection::setProjectionType(ProjectionType aProjectionType)
 	theProjectionType = aProjectionType;
 }
 
-QPointF Projection::project(const Coord & Map) const
+QPoint Projection::project(const Coord & Map) const
 {
 	if (LAYERMANAGER_OK && BGPROJ_SELECTED)
 	{
-		const QPointF c(radToAng(Map.lon()), radToAng(Map.lat()));
+		const QPointF c(intToAng(Map.lon()), intToAng(Map.lat()));
 		return coordinateToScreen(c);
 	}
-	return QPointF(Map.lon() * ScaleLon + DeltaLon,
-				   -Map.lat() * ScaleLat + DeltaLat);
+	return QPoint(int(Map.lon() * ScaleLon + DeltaLon),
+				   int(-Map.lat() * ScaleLat + DeltaLat));
 
 }
 
@@ -68,10 +68,10 @@ Coord Projection::inverse(const QPointF & Screen) const
 	if (LAYERMANAGER_OK && BGPROJ_SELECTED)
 	{
 		QPointF c(screenToCoordinate(Screen));
-		return Coord(angToRad(c.y()),angToRad(c.x()));
+		return Coord(angToInt(c.y()),angToInt(c.x()));
 	}
-	return Coord(-(Screen.y() - DeltaLat) / ScaleLat,
-				 (Screen.x() - DeltaLon) / ScaleLon);
+	return Coord(int(-(Screen.y() - DeltaLat) / ScaleLat),
+				 int((Screen.x() - DeltaLon) / ScaleLon));
 
 }
 
@@ -119,13 +119,13 @@ void Projection::setViewport(const CoordBox & TargetMap,
 	Coord Center(Viewport.center());
 	double LengthOfOneDegreeLat = EQUATORIALRADIUS * M_PI / 180;
 	double LengthOfOneDegreeLon =
-		LengthOfOneDegreeLat * fabs(cos(Center.lat()));
+		LengthOfOneDegreeLat * fabs(cos(intToRad(Center.lat())));
 	double Aspect = LengthOfOneDegreeLon / LengthOfOneDegreeLat;
-	ScaleLon = Screen.width() / Viewport.lonDiff() * .9;
+	ScaleLon = Screen.width() / (double)Viewport.lonDiff() * .9;
 	ScaleLat = ScaleLon / Aspect;
 	if ((ScaleLat * Viewport.latDiff()) > Screen.height())
 	{
-		ScaleLat = Screen.height() / Viewport.latDiff();
+		ScaleLat = Screen.height() / (double)Viewport.latDiff();
 		ScaleLon = ScaleLat * Aspect;
 	}
 	double PLon = Center.lon() * ScaleLon;
@@ -180,12 +180,12 @@ void Projection::layerManagerViewportRecalc(const QRect & Screen)
 	QPointF tr = screenToCoordinate(Screen.topRight());
 	QPointF bl = screenToCoordinate(Screen.bottomLeft());
 
-	Coord trc = Coord(angToRad(tr.y()), angToRad(tr.x()));
-	Coord blc = Coord(angToRad(bl.y()), angToRad(bl.x()));
+	Coord trc = Coord(angToInt(tr.y()), angToInt(tr.x()));
+	Coord blc = Coord(angToInt(bl.y()), angToInt(bl.x()));
 
 	Viewport = CoordBox(trc, blc);
-	ScaleLat = Screen.height()/Viewport.latDiff();
-	ScaleLon = Screen.width()/Viewport.lonDiff();
+	ScaleLat = Screen.height()/(double)Viewport.latDiff();
+	ScaleLon = Screen.width()/(double)Viewport.lonDiff();
 }
 
 void Projection::layerManagerSetViewport(const CoordBox & TargetMap, const QRect& Screen)
@@ -197,10 +197,10 @@ void Projection::layerManagerSetViewport(const CoordBox & TargetMap, const QRect
 
 	QList < QPointF > ql;
 	Coord cbl(TargetMap.bottomLeft());
-	QPointF cblf = QPointF(radToAng(cbl.lon()), radToAng(cbl.lat()));
+	QPointF cblf = QPointF(intToAng(cbl.lon()), intToAng(cbl.lat()));
 	ql.append(cblf);
 	Coord ctr(TargetMap.topRight());
-	QPointF ctrf = QPointF(radToAng(ctr.lon()), radToAng(ctr.lat()));
+	QPointF ctrf = QPointF(intToAng(ctr.lon()), intToAng(ctr.lat()));
 	ql.append(ctrf);
 	layermanager->setView(ql);
 }
@@ -231,10 +231,10 @@ QPoint Projection::coordinateToScreen(QPointF click) const
 void Projection::setCenter(Coord & Center, const QRect & Screen)
 {
 	Coord curCenter(Viewport.center());
-	QPointF curCenterScreen = project(curCenter);
-	QPointF newCenterScreen = project(Center);
+	QPoint curCenterScreen = project(curCenter);
+	QPoint newCenterScreen = project(Center);
 
-	QPoint panDelta = (curCenterScreen - newCenterScreen).toPoint();
+	QPoint panDelta = (curCenterScreen - newCenterScreen);
 	panScreen(panDelta, Screen);
 }
 

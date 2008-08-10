@@ -1,7 +1,7 @@
 //
 // C++ Implementation: PictureViewerDialog
 //
-// Description: 
+// Description:
 //
 //
 // Author: Chris Browet <cbro@semperpax.com>, (C) 2008

@@ -157,10 +157,10 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 		theInteraction->paintEvent(anEvent, P);
 	}
 	Main->ViewportStatusLabel->setText(QString("V:%1,%2,%3,%4")
-		.arg(QString::number(radToAng(theProjection.viewport().bottomLeft().lat()),'f',4)) 
-		.arg(QString::number(radToAng(theProjection.viewport().bottomLeft().lon()),'f',4))
-		.arg(QString::number(radToAng(theProjection.viewport().topRight().lat()),'f',4))
-		.arg(QString::number(radToAng(theProjection.viewport().topRight().lon()),'f',4))
+		.arg(QString::number(intToAng(theProjection.viewport().bottomLeft().lat()),'f',4)) 
+		.arg(QString::number(intToAng(theProjection.viewport().bottomLeft().lon()),'f',4))
+		.arg(QString::number(intToAng(theProjection.viewport().topRight().lat()),'f',4))
+		.arg(QString::number(intToAng(theProjection.viewport().topRight().lon()),'f',4))
 		);
 
 	QTime Stop(QTime::currentTime());
@@ -221,8 +221,8 @@ void MapView::updateLayersImage(QPaintEvent * /* anEvent */)
 	}
 
 	const QRectF vlm = layermanager->getViewport();
-	const Coord ctl = Coord(angToRad(vlm.bottomLeft().y()), angToRad(vlm.bottomLeft().x()));
-	const Coord cbr = Coord(angToRad(vlm.topRight().y()), angToRad(vlm.topRight().x()));
+	const Coord ctl = Coord(angToInt(vlm.bottomLeft().y()), angToInt(vlm.bottomLeft().x()));
+	const Coord cbr = Coord(angToInt(vlm.topRight().y()), angToInt(vlm.topRight().x()));
 
 	const QPointF tl = projection().project(ctl);
 	const QPointF br = projection().project(cbr);
@@ -265,6 +265,7 @@ void MapView::drawFeatures(QPainter & P)
 	for (unsigned int i = 0; i < sz; ++i)
 	{
 		PaintStyleLayer *Current = EP.get(i);
+
 		for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
 		{
 			if (projection().viewport().disjunctFrom((i.get())->boundingBox())) continue;

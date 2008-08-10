@@ -19,12 +19,12 @@ static void buildCubicPath(QPainterPath& Path, const QPointF& P1, const QPointF&
 		Path.lineTo(P4);
 	else
 	{
-		QPointF H = (P2+P3)/2;
-		QPointF L2 = (P1+P2)/2;
-		QPointF R3 = (P3+P4)/2;
-		QPointF L3 = (L2+H)/2;
-		QPointF R2 = (H+R3)/2;
-		QPointF L4 = (L3+R2)/2;
+		QPointF H = (P2+P3)/2.0;
+		QPointF L2 = (P1+P2)/2.0;
+		QPointF R3 = (P3+P4)/2.0;
+		QPointF L3 = (L2+H)/2.0;
+		QPointF R2 = (H+R3)/2.0;
+		QPointF L4 = (L3+R2)/2.0;
 		buildCubicPath(Path,P1,L2,L3,L4);
 		buildCubicPath(Path,L4,R2,R3,P4);
 

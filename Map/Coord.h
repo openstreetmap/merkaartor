@@ -13,52 +13,67 @@ inline double angToRad(double a)
 {
 	return a*M_PI/180;
 }
+//
+//inline double radToAng(double a)
+//{
+//	return a*180/M_PI;
+//}
 
-inline double radToAng(double a)
+inline int angToInt(double a)
 {
-	return a*180/M_PI;
+	return int(a*INT_MAX/180);
 }
 
+inline double intToAng(int a)
+{
+	return double(a)*180/INT_MAX;
+}
 
+inline double intToRad(int a)
+{
+	return double(a)*M_PI/INT_MAX;
+}
 
 class Coord
 {
 	public:
 		Coord()
-			: Lat(0.0), Lon(0.0) {}
-		Coord(const QPointF& P)
+			: Lat(0), Lon(0) {}
+		Coord(const QPoint& P)
 			: Lat(P.x()), Lon(P.y()) {}
-		Coord(double aLat, double aLon)
+		Coord(const QPointF& P)
+			: Lat(int(P.x())), Lon(int(P.y())) {}
+		Coord(int aLat, int aLon)
 			: Lat(aLat), Lon(aLon) {}
 
 		bool isNull() const
 		{
-			return (Lat == 0.0) && (Lon == 0.0);
+			return (Lat == 0) && (Lon == 0);
 		}
 
-		double lat() const
+		int lat() const
 		{
 			return Lat;
 		}
 
-		double lon() const
+		int lon() const
 		{
 			return Lon;
 		}
 
-		void setLat(double l)
+		void setLat(int l)
 		{
 			Lat = l;
 		}
 
-		void setLon(double l)
+		void setLon(int l)
 		{
 			Lon = l;
 		}
 
 		double length() const
 		{
-			return sqrt(Lat*Lat+Lon*Lon);
+			return sqrt((double)(Lat*Lat+Lon*Lon));
 		}
 
 		double distanceFrom(const Coord& other) const;
@@ -72,8 +87,8 @@ class Coord
 		}
 
 	private:
-		double Lat;
-		double Lon;
+		int Lat;
+		int Lon;
 };
 
 inline Coord operator-(const Coord& A, const Coord& B)
@@ -81,7 +96,7 @@ inline Coord operator-(const Coord& A, const Coord& B)
 	return Coord(A.lat()-B.lat(),A.lon()-B.lon());
 }
 
-inline Coord operator-(const Coord& A, const double B)
+inline Coord operator-(const Coord& A, const int B)
 {
 	return Coord(A.lat()-B,A.lon()-B);
 }
@@ -91,17 +106,17 @@ inline Coord operator+(const Coord& A, const Coord& B)
 	return Coord(A.lat()+B.lat(),A.lon()+B.lon());
 }
 
-inline Coord operator+(const Coord& A, const double B)
+inline Coord operator+(const Coord& A, const int B)
 {
 	return Coord(A.lat()+B,A.lon()+B);
 }
 
-inline Coord operator*(const Coord& A, double d)
+inline Coord operator*(const Coord& A, int d)
 {
 	return Coord(A.lat()*d,A.lon()*d);
 }
 
-inline Coord operator/(const Coord& A, double d)
+inline Coord operator/(const Coord& A, int d)
 {
 	if(d==0)
 	{
@@ -182,11 +197,11 @@ class CoordBox
 			return Coord( (BottomLeft.lat()+TopRight.lat())/2,(BottomLeft.lon()+TopRight.lon())/2 );
 		}
 
-		double lonDiff() const
+		int lonDiff() const
 		{
 			return TopRight.lon()-BottomLeft.lon();
 		}
-		double latDiff() const
+		int latDiff() const
 		{
 			return TopRight.lat()-BottomLeft.lat();
 		}

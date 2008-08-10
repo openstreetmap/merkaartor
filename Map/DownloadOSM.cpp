@@ -374,7 +374,7 @@ bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser
 	}
 	Downloader Rcv(aWeb, aUser, aPassword, UseProxy, ProxyHost, ProxyPort);
 	QString URL = Rcv.getURLToMap();
-	URL = URL.arg(radToAng(aBox.bottomLeft().lon())).arg(radToAng(aBox.bottomLeft().lat())).arg(radToAng(aBox.topRight().lon())).arg(radToAng(aBox.topRight().lat()));
+	URL = URL.arg(intToAng(aBox.bottomLeft().lon())).arg(intToAng(aBox.bottomLeft().lat())).arg(intToAng(aBox.topRight().lon())).arg(intToAng(aBox.topRight().lat()));
 	QProgressDialog* ProgressDialog = new QProgressDialog(aParent);
 	ProgressDialog->setWindowModality(Qt::ApplicationModal);
 	QProgressBar* Bar = new QProgressBar(ProgressDialog);
@@ -432,10 +432,10 @@ bool downloadTracksFromOSM(QMainWindow* Main, const QString& aWeb, const QString
 	{
 		ProgressDialog.setLabelText(QApplication::translate("Downloader","Downloading trackpoints %1-%2").arg(Page*5000+1).arg(Page*5000+5000));
 		QString URL = theDownloader.getURLToTrackPoints();
-		URL = URL.arg(radToAng(aBox.bottomLeft().lon())).
-				arg(radToAng(aBox.bottomLeft().lat())).
-				arg(radToAng(aBox.topRight().lon())).
-				arg(radToAng(aBox.topRight().lat())).
+		URL = URL.arg(intToAng(aBox.bottomLeft().lon())).
+				arg(intToAng(aBox.bottomLeft().lat())).
+				arg(intToAng(aBox.topRight().lon())).
+				arg(intToAng(aBox.topRight().lat())).
 				arg(Page);
 		if (!theDownloader.go(URL))
 			return false;
@@ -531,8 +531,8 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 			if (ui.FromBookmark->isChecked())
 			{
 				unsigned int idx = ui.Bookmarks->currentIndex()*5+1;
-				Clip = CoordBox(Coord(angToRad(Bookmarks[idx].toDouble()),angToRad(Bookmarks[idx+1].toDouble())),
-					Coord(angToRad(Bookmarks[idx+2].toDouble()),angToRad(Bookmarks[idx+3].toDouble())));
+				Clip = CoordBox(Coord(angToInt(Bookmarks[idx].toDouble()),angToInt(Bookmarks[idx+1].toDouble())),
+					Coord(angToInt(Bookmarks[idx+2].toDouble()),angToInt(Bookmarks[idx+3].toDouble())));
 			}
 			else if (ui.FromView->isChecked())
 			{
@@ -589,12 +589,12 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 					else zoomD = 0.011; // default (zoom = 15)
 
 					/* the OSM link contains the coordinates from the middle of the visible map so we have to add and sub zoomD */
-					Clip = CoordBox(Coord(angToRad(lat-zoomD), angToRad(lon-zoomD)), Coord(angToRad(lat+zoomD), angToRad(lon+zoomD)));
+					Clip = CoordBox(Coord(angToInt(lat-zoomD), angToInt(lon-zoomD)), Coord(angToInt(lat+zoomD), angToInt(lon+zoomD)));
 				}
 			}
 			else if (ui.FromMap->isChecked())
 			{
-				QRectF R(SlippyMap->viewArea());
+				QRect R(SlippyMap->viewArea().toRect());
 				Clip = CoordBox(Coord(R.x(),R.y()),Coord(R.x()+R.width(),R.y()+R.height()));
 			}
 			if (ui.AddBookmark->isChecked())
@@ -621,10 +621,10 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 				}
 				if (ok) {
 					Bookmarks.insert(0,newBk);
-					Bookmarks.insert(1,QString::number(radToAng(Clip.bottomLeft().lat())));
-					Bookmarks.insert(2,QString::number(radToAng(Clip.bottomLeft().lon())));
-					Bookmarks.insert(3,QString::number(radToAng(Clip.topRight().lat())));
-					Bookmarks.insert(4,QString::number(radToAng(Clip.topRight().lon())));
+					Bookmarks.insert(1,QString::number(intToAng(Clip.bottomLeft().lat())));
+					Bookmarks.insert(2,QString::number(intToAng(Clip.bottomLeft().lon())));
+					Bookmarks.insert(3,QString::number(intToAng(Clip.topRight().lat())));
+					Bookmarks.insert(4,QString::number(intToAng(Clip.topRight().lon())));
 					MerkaartorPreferences::instance()->setBookmarks(Bookmarks);
 					MerkaartorPreferences::instance()->save();
 				}

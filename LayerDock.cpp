@@ -139,7 +139,7 @@ void LayerDock::layerCleared(MapLayer* l)
 void LayerDock::layerZoom(MapLayer * l)
 {
 	CoordBox bb = MapLayer::boundingBox(l);
-	CoordBox min(bb.center()-0.00001, bb.center()+0.00001);
+	CoordBox min(bb.center()-10, bb.center()+10);
 	bb.merge(min);
 	bb = bb.zoomed(1.1);
 	Main->view()->projection().setViewport(bb, Main->view()->rect());

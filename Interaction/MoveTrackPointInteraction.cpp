@@ -90,14 +90,14 @@ void MoveTrackPointInteraction::snapMouseMoveEvent(QMouseEvent* event, MapFeatur
 Coord MoveTrackPointInteraction::calculateNewPosition(QMouseEvent *event, MapFeature *aLast, CommandList* theList)
 {
 	Coord TargetC = projection().inverse(event->pos());
-	QPointF Target(TargetC.lat(),TargetC.lon());
+	QPoint Target(TargetC.lat(),TargetC.lon());
 	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(aLast))
 		return Pt->position();
 	else if (Road* R = dynamic_cast<Road*>(aLast))
 	{
 		LineF L1(R->get(0)->position(),R->get(1)->position());
 		double Dist = L1.distance(Target);
-		QPointF BestTarget = L1.project(Target);
+		QPoint BestTarget = L1.project(Target).toPoint();
 		unsigned int BestIdx = 1;
 		for (unsigned int i=2; i<R->size(); ++i)
 		{
@@ -106,7 +106,7 @@ Coord MoveTrackPointInteraction::calculateNewPosition(QMouseEvent *event, MapFea
 			if (Dist2 < Dist)
 			{
 				Dist = Dist2;
-				BestTarget = L2.project(Target);
+				BestTarget = L2.project(Target).toPoint();
 				BestIdx = i;
 			}
 		}

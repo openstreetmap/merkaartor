@@ -24,7 +24,7 @@ bool importNGT(QWidget* /* aParent */, const QString& aFilename, MapDocument* th
 			QStringList Items(Line.split('|'));
 			if (Items.count() >= 5)
 			{
-				TrackPoint* Pt = new TrackPoint(Coord(Items[4].toDouble()*M_PI,Items[3].toDouble()*M_PI));
+				TrackPoint* Pt = new TrackPoint(Coord(int(Items[4].toDouble()*INT_MAX), int(Items[3].toDouble()*INT_MAX)));
 				Pt->setLastUpdated(MapFeature::Log);
 				theList->add(new AddFeatureCommand(theLayer,Pt, true));
 				theSegment->add(Pt);

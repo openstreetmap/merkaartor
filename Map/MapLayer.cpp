@@ -381,10 +381,10 @@ bool DrawingMapLayer::toXML(QDomElement xParent, QProgressDialog & progress)
 		QDomElement bb = xParent.ownerDocument().createElement("bound");
 		o.appendChild(bb);
 		CoordBox layBB = boundingBox((const MapLayer*)this);
-		QString S = QString().number(radToAng(layBB.bottomLeft().lat()),'f',6) + ",";
-		S += QString().number(radToAng(layBB.bottomLeft().lon()),'f',6) + ",";
-		S += QString().number(radToAng(layBB.topRight().lat()),'f',6) + ",";
-		S += QString().number(radToAng(layBB.topRight().lon()),'f',6);
+		QString S = QString().number(intToAng(layBB.bottomLeft().lat()),'f',6) + ",";
+		S += QString().number(intToAng(layBB.bottomLeft().lon()),'f',6) + ",";
+		S += QString().number(intToAng(layBB.topRight().lat()),'f',6) + ",";
+		S += QString().number(intToAng(layBB.topRight().lon()),'f',6);
 		bb.setAttribute("box", S);
 		bb.setAttribute("origin", "http://www.openstreetmap.org/api/0.5");
 	}
