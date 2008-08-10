@@ -253,9 +253,19 @@ void MapView::updateLayersImage(QPaintEvent * /* anEvent */)
 
 void MapView::drawFeatures(QPainter & P)
 {
-	for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
+	QVector<MapFeature*> theFeatures;
+	for (unsigned int i=0; i<theDocument->layerSize(); ++i) {
+		if (!theDocument->getLayer(i)->isVisible())
+			continue;
+		for (unsigned int j=0; j<theDocument->getLayer(i)->size(); ++j) {
+			if (projection().viewport().disjunctFrom(theDocument->getLayer(i)->get(j)->boundingBox())) continue;
+			theFeatures.push_back(theDocument->getLayer(i)->get(j));
+		}
+	}
+
+	for (int i=0; i<theFeatures.size(); i++)
 	{
-		i.get()->draw(P, projection());
+		theFeatures[i]->draw(P, projection());
 	}
 
 	EditPaintStyle EP(P, projection());
@@ -266,15 +276,14 @@ void MapView::drawFeatures(QPainter & P)
 	{
 		PaintStyleLayer *Current = EP.get(i);
 
-		for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
+		for (int i=0; i<theFeatures.size(); i++)
 		{
-			if (projection().viewport().disjunctFrom((i.get())->boundingBox())) continue;
-			P.setOpacity(i.get()->layer()->getAlpha());
-			if (Road * R = dynamic_cast < Road * >(i.get()))
+			P.setOpacity(theFeatures[i]->layer()->getAlpha());
+			if (Road * R = dynamic_cast < Road * >(theFeatures[i]))
 				Current->draw(R);
-			else if (TrackPoint * Pt = dynamic_cast < TrackPoint * >(i.get()))
+			else if (TrackPoint * Pt = dynamic_cast < TrackPoint * >(theFeatures[i]))
 				Current->draw(Pt);
-			else if (Relation * RR = dynamic_cast < Relation * >(i.get()))
+			else if (Relation * RR = dynamic_cast < Relation * >(theFeatures[i]))
 				Current->draw(RR);
 		}
 	}

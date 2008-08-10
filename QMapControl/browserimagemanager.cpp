@@ -47,7 +47,9 @@ BrowserImageManager::BrowserImageManager(QObject* parent)
 	browser->setPage(page);
 	page->setViewportSize(QSize(1024, 1024));
 
+#ifndef QT_WEBKIT_LIB
 	connect(page->mainFrame(), SIGNAL(loadDone(bool)), this, SLOT(pageLoadFinished(bool)));
+#endif
 	connect(page, SIGNAL(loadFinished(bool)), this, SLOT(pageLoadFinished(bool)));
 
 	//browser->show();

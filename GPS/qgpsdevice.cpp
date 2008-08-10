@@ -25,7 +25,7 @@
 #include <QFile>
 #include <QStringList>
 
-#include <math.h>
+#include <cstdlib>
 
 #include "qgpsdevice.h"
 #include "qextserialport.h"
