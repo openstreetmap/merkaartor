@@ -21,6 +21,8 @@ PaintStyleEditor::PaintStyleEditor(QWidget *aParent, const std::vector<FeaturePa
 	ForegroundColor->setIconSize(QSize(36, 18));
 	TouchupColor->setIconSize(QSize(36, 18));
 	FillColor->setIconSize(QSize(36, 18));
+	LabelColor->setIconSize(QSize(36, 18));
+	LabelBackgroundlColor->setIconSize(QSize(36, 18));
 	for (unsigned int i = 0; i < thePainters.size(); ++i)
 		PaintList->addItem(thePainters[i].userName());
 	PaintList->setCurrentRow(0);
@@ -102,6 +104,14 @@ void PaintStyleEditor::on_PaintList_itemClicked(QListWidgetItem* it)
 	DrawIcon->setChecked(FP.isIconActive());
 	DrawIcon->setChecked(!FP.iconName().isEmpty());
 	IconName->setText(FP.iconName());
+	DrawLabel->setChecked(FP.labelBoundary().Draw);
+	makeBoundaryIcon(LabelColor, FP.labelBoundary().Color);
+	ProportionalLabel->setValue(FP.labelBoundary().Proportional);
+	FixedLabel->setValue(FP.labelBoundary().Fixed);
+	DrawLabelBackground->setChecked(FP.labelBackgroundColor().isValid());
+	makeBoundaryIcon(LabelBackgroundlColor, FP.labelBackgroundColor());
+	LabelFont->setCurrentFont(FP.getLabelFont());
+	
 	FreezeUpdate = false;
 }
 
@@ -335,6 +345,75 @@ void PaintStyleEditor::on_IconName_textEdited()
 		return;
 	FeaturePainter& FP(thePainters[idx]);
 	FP.trackPointIcon(IconName->text());
+}
+
+void PaintStyleEditor::on_DrawLabel_clicked(bool b)
+{
+	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	if (idx >= thePainters.size())
+		return;
+	thePainters[idx].labelActive(b);
+}
+
+
+void PaintStyleEditor::on_LabelColor_clicked()
+{
+	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	if (idx >= thePainters.size())
+		return;
+	FeaturePainter& FP(thePainters[idx]);
+	bool OK = false;
+	QRgb rgb = QColorDialog::getRgba(FP.labelBoundary().Color.rgba(), &OK, this);
+	if (OK) {
+		makeBoundaryIcon(LabelColor, QColor::fromRgba(rgb));
+		FP.label(QColor::fromRgba(rgb), ProportionalLabel->value(), FixedLabel->value());
+	}
+}
+
+void PaintStyleEditor::on_ProportionalLabel_valueChanged()
+{
+	if (FreezeUpdate)
+		return;
+	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	if (idx >= thePainters.size())
+		return;
+	FeaturePainter& FP(thePainters[idx]);
+	FP.label(FP.labelBoundary().Color, ProportionalLabel->value(), FixedLabel->value());
+}
+
+void PaintStyleEditor::on_FixedLabel_valueChanged()
+{
+	on_ProportionalLabel_valueChanged();
+}
+
+void PaintStyleEditor::on_DrawLabelBackground_clicked(bool b)
+{
+	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	if (idx >= thePainters.size())
+		return;
+	thePainters[idx].labelBackgroundActive(b);
+}
+
+void PaintStyleEditor::on_LabelBackgroundlColor_clicked()
+{
+	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	if (idx >= thePainters.size())
+		return;
+	FeaturePainter& FP(thePainters[idx]);
+	bool OK = false;
+	QRgb rgb = QColorDialog::getRgba(FP.labelBackgroundColor().rgba(), &OK, this);
+	if (OK) {
+		makeBoundaryIcon(LabelBackgroundlColor, QColor::fromRgba(rgb));
+		FP.labelBackground(QColor::fromRgba(rgb));
+	}
+}
+
+void PaintStyleEditor::on_LabelFont_currentFontChanged(const QFont & font)
+{
+	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	if (idx >= thePainters.size())
+		return;
+	thePainters[idx].setLabelFont(font.toString());
 }
 
 void PaintStyleEditor::updatePaintList()

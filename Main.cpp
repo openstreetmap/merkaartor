@@ -39,18 +39,18 @@ int main(int argc, char** argv)
 
 	MainWindow Main;
 
+#ifdef _MOBILE
+	Main.showMaximized();
+#else
+	Main.show();
+#endif
+
 	QStringList fileNames = QCoreApplication::arguments();
 	fileNames.removeFirst();
 	Main.loadFiles(fileNames);
 
 	if (fileNames.isEmpty())
 		QDir::setCurrent(MerkaartorPreferences::instance()->getWorkingDir());
-
-#ifdef _MOBILE
-	Main.showMaximized();
-#else
-	Main.show();
-#endif
 
 	return app.exec();
 }

@@ -45,8 +45,6 @@ void LayerDock::addLayer(MapLayer* aLayer)
 		layerList.append(qMakePair(aLayer, w));
 		butGroup->addButton(w);
 		Layout->insertWidget(layerList.size()-1, w);
-		w->setChecked(aLayer->isSelected());
-		w->setVisible(aLayer->isEnabled());
 
 		connect(w, SIGNAL(layerChanged(LayerWidget*,bool)), this, SLOT(layerChanged(LayerWidget*,bool)));
 		connect(w, SIGNAL(layerClosed(MapLayer*)), this, SLOT(layerClosed(MapLayer*)));
@@ -54,6 +52,11 @@ void LayerDock::addLayer(MapLayer* aLayer)
 		connect(w, SIGNAL(layerZoom(MapLayer*)), this, SLOT(layerZoom(MapLayer*)));
 
 		Main->menuLayers->addMenu(w->getAssociatedMenu());
+
+		//w->setChecked(aLayer->isSelected());
+		w->setVisible(aLayer->isEnabled());
+		w->setEnabled(aLayer->isEnabled());
+		w->getAssociatedMenu()->menuAction()->setVisible(aLayer->isEnabled());
 
 		update();
 	}

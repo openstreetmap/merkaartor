@@ -564,7 +564,7 @@ void PropertiesDock::on_centerZoomAction_triggered()
 		idx = MultiUi.SelectionList->selectedItems()[i]->data(Qt::UserRole).toUInt();
 		cb.merge(FullSelection[idx]->boundingBox());
 	}
-	CoordBox min(cb.center()-10, cb.center()+10);
+	CoordBox min(cb.center()-2000, cb.center()+2000);
 	cb.merge(min);
 	cb = cb.zoomed(1.1);
 	Main->view()->projection().setViewport(cb, Main->view()->rect());

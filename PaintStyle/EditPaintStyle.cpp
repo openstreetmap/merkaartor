@@ -315,6 +315,14 @@ void readFromNode(const QDomElement& e, FeaturePainter& FP)
 		FP.trackPointIcon(e.attribute("icon"));
 	if (e.attribute("drawTrafficDirectionMarks") == "yes")
 		FP.drawTrafficDirectionMarks();
+	if (e.hasAttribute("labelColor"))
+	{
+		FP.label(
+			toColor(e.attribute("labelColor")),e.attribute("labelScale").toDouble(),e.attribute("labelOffset").toDouble());
+		FP.setLabelFont(e.attribute("labelFont"));
+		if (e.hasAttribute("labelBackgroundColor"))
+			FP.labelBackground(toColor(e.attribute("labelBackgroundColor")));
+	}
 	QDomNode n = e.firstChild();
 	std::vector<std::pair<QString,QString> > Pairs;
 	while (!n.isNull())

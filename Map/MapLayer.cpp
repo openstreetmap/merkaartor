@@ -164,6 +164,10 @@ bool MapLayer::isSelected() const
 
 void MapLayer::setEnabled(bool b) {
 	p->Enabled = b;
+	if (p->theWidget) {
+		p->theWidget->setVisible(b);
+		p->theWidget->getAssociatedMenu()->menuAction()->setVisible(b);
+	}
 }
 
 bool MapLayer::isEnabled() const
@@ -401,6 +405,7 @@ DrawingMapLayer * DrawingMapLayer::fromXML(MapDocument* d, const QDomElement e, 
 	DrawingMapLayer* l = new DrawingMapLayer(e.attribute("name"));
 	d->add(l);
 	if (!DrawingMapLayer::doFromXML(l, d, e, progress)) {
+		d->remove(l);
 		delete l;
 		return NULL;
 	}
@@ -712,7 +717,7 @@ void TrackMapLayer::extractLayer()
 	TrackPoint* P;
 	QList<TrackPoint*> PL;
 
-	const double radPer10M = (M_PI * 2 / 40080000) * 2;
+	const double coordPer10M = (double(INT_MAX) * 2 / 40080000) * 2;
 
 	for (unsigned int i=0; i < size(); i++) {
 		if (TrackSegment* S = dynamic_cast<TrackSegment*>(get(i))) {
@@ -753,7 +758,7 @@ void TrackMapLayer::extractLayer()
 				LineF l(toQt(PL[startP]->position()), toQt(PL[endP]->position()));
 				for (unsigned int k=startP+1; k < endP; k++) {
 					double d = l.distance(toQt(PL[k]->position()));
-					if (d < radPer10M) {
+					if (d < coordPer10M) {
 						TrackPoint* P = PL[k];
 						PL.removeAt(k);
 						delete P;

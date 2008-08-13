@@ -111,7 +111,8 @@ bool MapDocument::toXML(QDomElement xParent, QProgressDialog & progress)
 	mapDoc = xParent.ownerDocument().createElement("MapDocument");
 	xParent.appendChild(mapDoc);
 
-	mapDoc.setAttribute("lastdownloadlayer", p->lastDownloadLayer->id());
+	if (p->lastDownloadLayer)
+		mapDoc.setAttribute("lastdownloadlayer", p->lastDownloadLayer->id());
 
 	for (unsigned int i=0; i<p->Layers.size(); ++i) {
 		progress.setMaximum(progress.maximum() + p->Layers[i]->size());

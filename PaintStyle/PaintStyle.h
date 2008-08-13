@@ -3,6 +3,7 @@
 
 #include <QtCore/QString>
 #include <QtGui/QColor>
+#include <QFont>
 
 #include <vector>
 
@@ -16,6 +17,7 @@ class TagSelector;
 class TrackPoint;
 class QPainter;
 class QPainterPath;
+class QFont;
 
 void buildPathFromRoad(Road *R, const Projection& theProjection, QPainterPath &Path);
 
@@ -60,15 +62,23 @@ class FeaturePainter
 		FeaturePainter& trackPointIcon(const QString& Filename);
 		FeaturePainter& fillActive(bool b);
 		FeaturePainter& iconActive(bool b);
+		FeaturePainter& labelActive(bool b);
+		FeaturePainter& label(const QColor& Color, double Scale, double Offset);
+		FeaturePainter& setLabelFont(const QString& descFont);
+		FeaturePainter& labelBackgroundActive(bool b);
+		FeaturePainter& labelBackground(const QColor& bgColor);
 
 		QString userName() const;
 		std::pair<double, double> zoomBoundaries() const;
 		LineParameters backgroundBoundary() const;
 		LineParameters foregroundBoundary() const;
+		LineParameters labelBoundary() const;
 		void clearForegroundDash();
 		LineParameters touchupBoundary() const;
 		void clearTouchupDash();
 		QColor fillColor() const;
+		QColor labelBackgroundColor() const;
+		QFont getLabelFont() const;
 		QString iconName() const;
 		bool isIconActive() const;
 
@@ -108,6 +118,13 @@ class FeaturePainter
 		bool DrawTrafficDirectionMarks;
 		bool DrawIcon;
 		QString TrackPointIconName;
+		bool DrawLabel;
+		QColor LabelColor;
+		double LabelScale;
+		double LabelOffset;
+		bool DrawLabelBackground;
+		QColor LabelBackgroundColor;
+		QFont LabelFont;
 };
 
 class PaintStyleLayer
