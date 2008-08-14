@@ -208,6 +208,9 @@ public:
 	void setDownloadedVisible(bool theValue);
 	bool getDownloadedVisible() const;
 
+	void setScaleVisible(bool theValue);
+	bool getScaleVisible() const;
+
 	void setNamesVisible(bool theValue);
 	bool getNamesVisible() const;
 

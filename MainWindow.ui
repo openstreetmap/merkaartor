@@ -103,6 +103,7 @@
     <addaction name="viewZoomInAction" />
     <addaction name="separator" />
     <addaction name="viewDownloadedAction" />
+    <addaction name="viewScaleAction" />
     <addaction name="viewNamesAction" />
     <addaction name="viewTrackPointsAction" />
     <addaction name="viewTrackSegmentsAction" />
@@ -931,6 +932,9 @@
    <property name="text" >
     <string>Show track &amp;points</string>
    </property>
+   <property name="shortcut" >
+    <string>Ctrl+Alt+P</string>
+   </property>
   </action>
   <action name="viewNamesAction" >
    <property name="checkable" >
@@ -989,6 +993,20 @@
    </property>
    <property name="text" >
     <string>Show track &amp;segments</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Alt+T</string>
+   </property>
+  </action>
+  <action name="viewScaleAction" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Show &amp;scale</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Alt+S</string>
    </property>
   </action>
  </widget>

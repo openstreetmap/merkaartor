@@ -131,6 +131,7 @@ MainWindow::MainWindow(void)
 	theView->projection().setViewport(initialPosition, theView->rect());
 
 	viewDownloadedAction->setChecked(MerkaartorPreferences::instance()->getDownloadedVisible());
+	viewScaleAction->setChecked(M_PREFS->getScaleVisible());
 	viewNamesAction->setChecked(M_PREFS->getNamesVisible());
 	viewTrackPointsAction->setChecked(M_PREFS->getTrackPointsVisible());
 	viewTrackSegmentsAction->setChecked(M_PREFS->getTrackSegmentsVisible());
@@ -691,6 +692,13 @@ void MainWindow::on_viewDownloadedAction_triggered()
 {
 	M_PREFS->setDownloadedVisible(!M_PREFS->getDownloadedVisible());
 	viewDownloadedAction->setChecked(M_PREFS->getDownloadedVisible());
+	invalidateView();
+}
+
+void MainWindow::on_viewScaleAction_triggered()
+{
+	M_PREFS->setScaleVisible(!M_PREFS->getScaleVisible());
+	viewScaleAction->setChecked(M_PREFS->getScaleVisible());
 	invalidateView();
 }
 

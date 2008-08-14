@@ -59,6 +59,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_viewZoomOutAction_triggered();
 		virtual void on_viewZoomWindowAction_triggered();
 		virtual void on_viewDownloadedAction_triggered();
+		virtual void on_viewScaleAction_triggered();
 		virtual void on_viewNamesAction_triggered();
 		virtual void on_viewTrackPointsAction_triggered();
 		virtual void on_viewTrackSegmentsAction_triggered();

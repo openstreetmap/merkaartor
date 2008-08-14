@@ -173,6 +173,9 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 
 void MapView::drawScale(QPainter & P)
 {
+	if (!M_PREFS->getScaleVisible())
+		return;
+
 	double Log = log10(200/projection().pixelPerM());
 	double RestLog = Log-floor(Log);
 	if (RestLog < log10(2.))

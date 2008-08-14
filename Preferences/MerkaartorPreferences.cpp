@@ -694,6 +694,16 @@ void MerkaartorPreferences::setDownloadedVisible(bool theValue)
 	Sets->setValue("visual/DownloadedVisible", theValue);
 }
 
+bool MerkaartorPreferences::getScaleVisible() const
+{
+	return Sets->value("visual/ScaleVisible", true).toBool();
+}
+
+void MerkaartorPreferences::setScaleVisible(bool theValue)
+{
+	Sets->setValue("visual/ScaleVisible", theValue);
+}
+
 bool MerkaartorPreferences::getNamesVisible() const
 {
 	return Sets->value("visual/NamesVisible", false).toBool();
