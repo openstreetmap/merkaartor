@@ -30,6 +30,8 @@ PaintStyleEditor::PaintStyleEditor(QWidget *aParent, const std::vector<FeaturePa
 	LowerZoomBoundary->setSpecialValueText(tr("Always"));
 	UpperZoomBoundary->setSpecialValueText(tr("Always"));
 	FreezeUpdate = false;
+
+	resize(1, 1);
 }
 
 static void makeBoundaryIcon(QToolButton* bt, QColor C)
@@ -51,6 +53,19 @@ void PaintStyleEditor::on_AddButton_clicked()
 	on_PaintList_itemClicked(PaintList->item(PaintList->currentRow()));
 }
 
+void PaintStyleEditor::on_DuplicateButton_clicked()
+{
+	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	if (idx >= thePainters.size())
+		return;
+	std::vector<FeaturePainter>::iterator theIterator = thePainters.begin();
+	thePainters.insert(thePainters.begin() + idx, FeaturePainter(thePainters[idx]));
+	idx++;
+	PaintList->insertItem(idx, thePainters[idx].userName());
+	PaintList->setCurrentRow(idx);
+	on_PaintList_itemClicked(PaintList->item(PaintList->currentRow()));
+}
+
 void PaintStyleEditor::on_RemoveButton_clicked()
 {
 	FreezeUpdate = true;
@@ -63,6 +78,32 @@ void PaintStyleEditor::on_RemoveButton_clicked()
 		--idx;
 	PaintList->setCurrentRow(idx);
 	on_PaintList_itemClicked(PaintList->item(PaintList->currentRow()));
+}
+
+void PaintStyleEditor::on_btUp_clicked()
+{
+	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	if (idx <= 0)
+		return;
+	FeaturePainter fp = thePainters[idx-1];
+	thePainters[idx-1] = thePainters[idx];
+	thePainters[idx] = fp;
+	PaintList->item(idx-1)->setText(thePainters[idx-1].userName());
+	PaintList->item(idx)->setText(thePainters[idx].userName());
+	PaintList->setCurrentRow(idx-1);
+}
+
+void PaintStyleEditor::on_btDown_clicked()
+{
+	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	if (idx >= thePainters.size())
+		return;
+	FeaturePainter fp = thePainters[idx+1];
+	thePainters[idx+1] = thePainters[idx];
+	thePainters[idx] = fp;
+	PaintList->item(idx+1)->setText(thePainters[idx+1].userName());
+	PaintList->item(idx)->setText(thePainters[idx].userName());
+	PaintList->setCurrentRow(idx+1);
 }
 
 void PaintStyleEditor::on_PaintList_itemClicked(QListWidgetItem* it)
@@ -425,3 +466,11 @@ void PaintStyleEditor::updatePaintList()
 	FP.setSelector(TagSelection->text());
 	PaintList->currentItem()->setText(FP.userName());
 }
+
+void PaintStyleEditor::on_buttonBox_clicked(QAbstractButton * button)
+{
+	if (buttonBox->buttonRole(button) == QDialogButtonBox::ApplyRole) {
+		emit(stylesApplied(&thePainters));
+	}
+}
+

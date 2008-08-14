@@ -1,4 +1,5 @@
 v0.12
+	* ADD : "Duplicate", "Apply", "Up", "Down" functionality to the style editor
 	* FIX : another try at solving the "long-ways-at-high-zoom-makes-Merkaartor-unusable" problem (closes #1110)
 	* ADD : names rendering in styles
 	* ADD : save last download layer to MDCs

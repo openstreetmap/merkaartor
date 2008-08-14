@@ -51,11 +51,17 @@ class PaintStyleEditor : public QDialog, public Ui::PaintStyleEditor
 		void on_LabelFont_currentFontChanged(const QFont & font);
 		void on_AddButton_clicked();
 		void on_RemoveButton_clicked();
+		void on_DuplicateButton_clicked();
+		void on_btUp_clicked();
+		void on_btDown_clicked();
+		void on_buttonBox_clicked(QAbstractButton * button);
 
 	public:
 		std::vector<FeaturePainter> thePainters;
 	private:
 		void updatePaintList();
+	signals:
+		void stylesApplied(std::vector<FeaturePainter>* thePainters);
 	private:
 		bool FreezeUpdate;
 };

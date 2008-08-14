@@ -17,6 +17,7 @@ class PropertiesDock;
 class InfoDock;
 class DirtyDock;
 class QGPS;
+class FeaturePainter;
 
 class MainWindow : public QMainWindow, public Ui::MainWindow
 {
@@ -127,6 +128,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		void bookmarkTriggered(QAction* anAction);
 		void projectionTriggered(QAction* anAction);
 		void updateGpsPosition();
+		void applyStyles(std::vector<FeaturePainter>* thePainters);
 
 	public:
 		void invalidateView(bool UpdateDock = true);

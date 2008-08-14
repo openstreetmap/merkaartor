@@ -858,13 +858,25 @@ void MainWindow::on_createRelationAction_triggered()
 void MainWindow::on_editMapStyleAction_triggered()
 {
 	PaintStyleEditor* dlg = new PaintStyleEditor(this, EditPaintStyle::Painters);
-	if (dlg->exec() == QDialog::Accepted) {
+	connect(dlg, SIGNAL(stylesApplied(std::vector<FeaturePainter>* )), this, SLOT(applyStyles(std::vector<FeaturePainter>* )));
+	std::vector<FeaturePainter> savePainters = EditPaintStyle::Painters;
+	if (dlg->exec() == QDialog::Accepted) 
 		EditPaintStyle::Painters = dlg->thePainters;
-		for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
-			i.get()->invalidatePainter();
-		invalidateView();
-	}
+	else
+		EditPaintStyle::Painters = savePainters;
+
+	for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
+		i.get()->invalidatePainter();
+	invalidateView();
 	delete dlg;
+}
+
+void MainWindow::applyStyles(std::vector<FeaturePainter>* thePainters)
+{
+	EditPaintStyle::Painters = *thePainters;
+	for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
+		i.get()->invalidatePainter();
+	invalidateView();
 }
 
 //MapLayer* MainWindow::activeLayer()
