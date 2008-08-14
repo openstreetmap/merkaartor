@@ -7,6 +7,7 @@
 
 #include <QtGui/QPainter>
 #include <QtGui/QPainterPath>
+#include <QLineF>
 
 #include <utility>
 
@@ -31,47 +32,141 @@ static void buildCubicPath(QPainterPath& Path, const QPointF& P1, const QPointF&
 	}
 }
 
-
-void buildPathFromRoad(Road *R, Projection const &theProjection, QPainterPath &Path)
-{
-	unsigned int first=0, last=R->size();
-	//if (!theProjection.viewport().contains(R->boundingBox())) {
-	//	for (unsigned int i=0; i<R->size(); ++i) {
-	//		if (theProjection.viewport().contains(R->get(i)->boundingBox())) {
-	//			if (!first)
-	//				first=i;
-	//			last=i;
-	//		}
-	//	}
-	//	if (first) first--;
-	//	last=qMin(last+2, R->size());
-	//}
-
-	Path.moveTo(theProjection.project(R->get(first)->position()));
-	if (R->smoothed().size())
-	{
-		for (unsigned int i=3; i<R->smoothed().size(); i+=3)
-			Path.cubicTo(
-				theProjection.project(R->smoothed()[i-2]),
-				theProjection.project(R->smoothed()[i-1]),
-				theProjection.project(R->smoothed()[i]));
-	}
-	else
-		for (unsigned int j=first+1; j<last; ++j)
-			Path.lineTo(theProjection.project(R->get(j)->position()));
-}
-
+//bool QRectInterstects(const QRect& r, const QLine& l, QPoint& a, QPoint& b)
+//{
+//	QLineF lF = QLineF(l);
+//	QPointF pF;
+//	bool hasP1 = false;
+//	bool hasP2 = false;
+//
+//	if (QLineF(r.topLeft(), r.bottomLeft()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
+//		a = pF.toPoint();
+//		hasP1 = true;
+//	} 
+//	if (QLineF(r.bottomLeft(), r.bottomRight()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
+//		if (hasP1) {
+//			b = pF.toPoint();
+//			hasP2 = true;
+//		} else {
+//			a = pF.toPoint();
+//			hasP1 = true;
+//		}
+//	} 
+//	if (QLineF(r.bottomRight(), r.topRight()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
+//		if (hasP1) {
+//			b = pF.toPoint();
+//			hasP2 = true;
+//		} else {
+//			a = pF.toPoint();
+//			hasP1 = true;
+//		}
+//	} 
+//	if (QLineF(r.topRight(), r.topLeft()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
+//		if (hasP1) {
+//			b = pF.toPoint();
+//			hasP2 = true;
+//		} else {
+//			a = pF.toPoint();
+//			hasP1 = true;
+//		}
+//	}
+//
+//	if (hasP1 && hasP2) {
+//		if (QLineF(a,b).angleTo(lF) > 15.0) {
+//			QPoint t = b;
+//			b = a;
+//			a = t;
+//		}
+//	}
+//	if (hasP1)
+//		return true;
+//	else
+//		return false;
+//}
+//
+//void buildPathFromRoad(Road *R, Projection const &theProjection, QPainterPath &Path, const QRect& clipRect)
+//{
+//	unsigned int first=0, last=R->size();
+//	//if (!theProjection.viewport().contains(R->boundingBox())) {
+//	//	for (unsigned int i=0; i<R->size(); ++i) {
+//	//		if (theProjection.viewport().contains(R->get(i)->boundingBox())) {
+//	//			if (!first)
+//	//				first=i;
+//	//			last=i;
+//	//		}
+//	//	}
+//	//	if (first) first--;
+//	//	last=qMin(last+2, R->size());
+//	//}
+//
+//	bool lastPointVisible = true;
+//	QPoint lastPoint = theProjection.project(R->get(first)->position());
+//	QPoint p = lastPoint;
+//
+//	if (!clipRect.contains(p)) {
+//		p.setX(qMax(clipRect.left(), p.x()));
+//		p.setX(qMin(clipRect.right(), p.x()));
+//		p.setY(qMax(clipRect.top(), p.y()));
+//		p.setY(qMin(clipRect.bottom(), p.y()));
+//		lastPointVisible = false;
+//	}
+//	Path.moveTo(p);
+//	if (R->smoothed().size())
+//	{
+//		for (unsigned int i=3; i<R->smoothed().size(); i+=3)
+//			Path.cubicTo(
+//				theProjection.project(R->smoothed()[i-2]),
+//				theProjection.project(R->smoothed()[i-1]),
+//				theProjection.project(R->smoothed()[i]));
+//	}
+//	else
+//		for (unsigned int j=first+1; j<last; ++j) {
+//			p = theProjection.project(R->get(j)->position());
+//			if (!clipRect.contains(p)) {
+//				if (!lastPointVisible) {
+//					QPoint a, b;
+//					if (QRectInterstects(clipRect, QLine(lastPoint, p), a, b)) {
+//						Path.lineTo(a);
+//						lastPoint = p;
+//						p = b;
+//					} else {
+//						lastPoint = p;
+//						p.setX(qMax(clipRect.left(), p.x()));
+//						p.setX(qMin(clipRect.right(), p.x()));
+//						p.setY(qMax(clipRect.top(), p.y()));
+//						p.setY(qMin(clipRect.bottom(), p.y()));
+//					}
+//				} else {
+//					QPoint a, b;
+//					QRectInterstects(clipRect, QLine(lastPoint, p), a, b);
+//					lastPoint = p;
+//					p = a;
+//				}
+//				lastPointVisible = false;
+//			} else {
+//				if (!lastPointVisible) {
+//					QPoint a, b;
+//					QRectInterstects(clipRect, QLine(lastPoint, p), a, b);
+//					Path.lineTo(a);
+//				}
+//				lastPoint = p;
+//				lastPointVisible = true;
+//			}
+//			Path.lineTo(p);
+//		}
+//}
+//
 void buildPolygonFromRoad(Road *R, Projection const &theProjection, QPolygonF &Polygon)
 {
 	for (unsigned int i=0; i<R->size(); ++i)
 		Polygon.append(theProjection.project(R->get(i)->position()));
 }
 
-void buildPathFromRelation(Relation *R, Projection const &theProjection, QPainterPath &Path)
+void buildPathFromRelation(Relation *R, QPainterPath &Path)
 {
 	for (unsigned int i=0; i<R->size(); ++i)
 		if (Road* M = dynamic_cast<Road*>(R->get(i)))
-			buildPathFromRoad(M, theProjection, Path);
+			Path.addPath(M->getPath());
 }
 
 

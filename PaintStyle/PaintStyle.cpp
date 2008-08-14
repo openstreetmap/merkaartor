@@ -482,12 +482,10 @@ void FeaturePainter::drawBackground(Road* R, QPainter& thePainter, const Project
 	if (WW < 0) return;
 	QPen thePen(BackgroundColor,WW);
 	thePen.setCapStyle(Qt::RoundCap);
-	QPainterPath Path;
-	buildPathFromRoad(R, theProjection, Path);
-	thePainter.strokePath(Path,thePen);
+	thePainter.strokePath(R->getPath(),thePen);
 }
 
-void FeaturePainter::drawBackground(Relation* R, QPainter& thePainter, const Projection& theProjection) const
+void FeaturePainter::drawBackground(Relation* R, QPainter& thePainter, const Projection& /* theProjection */) const
 {
 	if (!DrawBackground) return;
 //	double PixelPerM = theProjection.pixelPerM();
@@ -497,17 +495,19 @@ void FeaturePainter::drawBackground(Relation* R, QPainter& thePainter, const Pro
 	QPen thePen(BackgroundColor,WW);
 	thePen.setCapStyle(Qt::RoundCap);
 	QPainterPath Path;
-	buildPathFromRelation(R, theProjection, Path);
+	buildPathFromRelation(R, Path);
 	thePainter.strokePath(Path,thePen);
 }
 
 void FeaturePainter::drawForeground(Road* R, QPainter& thePainter, const Projection& theProjection) const
 {
 	if (!DrawForeground && !ForegroundFill) return;
+
+	double WW = 0.0;
 	if (DrawForeground)
 	{
 		double PixelPerM = theProjection.pixelPerM();
-		double WW = PixelPerM*widthOf(R)*ForegroundScale+ForegroundOffset;
+		WW = PixelPerM*widthOf(R)*ForegroundScale+ForegroundOffset;
 		if (WW < 0) return;
 		QPen thePen(ForegroundColor,WW);
 		thePen.setCapStyle(Qt::RoundCap);
@@ -528,19 +528,19 @@ void FeaturePainter::drawForeground(Road* R, QPainter& thePainter, const Project
 	}
 	else
 		thePainter.setBrush(QBrush(Qt::NoBrush));
-	QPainterPath Path;
-	buildPathFromRoad(R, theProjection, Path);
-	thePainter.drawPath(Path);
+	thePainter.drawPath(R->getPath());
 }
 
-void FeaturePainter::drawForeground(Relation* R, QPainter& thePainter, const Projection& theProjection) const
+void FeaturePainter::drawForeground(Relation* R, QPainter& thePainter, const Projection& /* theProjection */) const
 {
 	if (!DrawForeground && !ForegroundFill) return;
+
+	double WW = 0.0;
 	if (DrawForeground)
 	{
 //		double PixelPerM = theProjection.pixelPerM();
 //		double WW = PixelPerM*widthOf(R)*ForegroundScale+ForegroundOffset;
-		double WW = ForegroundOffset;
+		WW = ForegroundOffset;
 		if (WW < 0) return;
 		QPen thePen(ForegroundColor,WW);
 		thePen.setCapStyle(Qt::RoundCap);
@@ -562,7 +562,7 @@ void FeaturePainter::drawForeground(Relation* R, QPainter& thePainter, const Pro
 	else
 		thePainter.setBrush(QBrush(Qt::NoBrush));
 	QPainterPath Path;
-	buildPathFromRelation(R, theProjection, Path);
+	buildPathFromRelation(R, Path);
 	thePainter.drawPath(Path);
 }
 
@@ -595,9 +595,7 @@ void FeaturePainter::drawTouchup(Road* R, QPainter& thePainter, const Projection
 				Pattern << TouchupDash << TouchupWhite;
 				thePen.setDashPattern(Pattern);
 			}
-			QPainterPath Path;
-			buildPathFromRoad(R, theProjection, Path);
-			thePainter.strokePath(Path,thePen);
+			thePainter.strokePath(R->getPath(),thePen);
 		}
 	}
 	if (DrawTrafficDirectionMarks)
@@ -697,16 +695,13 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, const Projection& 
 	double WW = PixelPerM*widthOf(R)*lp.Proportional+lp.Fixed;
 	if (WW < 10) return;
 
-	QPainterPath path;
-	buildPathFromRoad(R, theProjection, path);
-
     QFont font = getLabelFont();
 	font.setPixelSize(WW);
     QFontMetrics metrics(font);
 	for (int i=WW-1; i> 0; --i) {
 		font.setPixelSize(i);
 		metrics = QFontMetrics(font);
-		if ((metrics.width(str) < path.length() - 5))
+		if ((metrics.width(str) < R->getPath().length() - 5))
 			break;
 	}
 	if (font.pixelSize() < 5)
@@ -716,19 +711,19 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, const Projection& 
 
 	thePainter.setPen(LabelColor);
 	thePainter.setFont(font);
-    qreal curLen = (path.length() - metrics.width(str)) / 2;
+    qreal curLen = (R->getPath().length() - metrics.width(str)) / 2;
 	int modIncrement = 1;
 	qreal modAngle = 0;
 	int modY = 0;
-	if (cos(angToRad(path.angleAtPercent(0.5))) < 0) {
+	if (cos(angToRad(R->getPath().angleAtPercent(0.5))) < 0) {
 		modIncrement = -1;
 		modAngle = 180.0;
 		curLen += metrics.width(str);
 	}
 	for (int i = 0; i < str.length(); ++i) {
-        qreal t = path.percentAtLength(curLen);
-        QPointF pt = path.pointAtPercent(t);
-        qreal angle = path.angleAtPercent(t);
+        qreal t = R->getPath().percentAtLength(curLen);
+        QPointF pt = R->getPath().pointAtPercent(t);
+        qreal angle = R->getPath().angleAtPercent(t);
         QString txt;
         txt.append(str[i]);
         thePainter.save();

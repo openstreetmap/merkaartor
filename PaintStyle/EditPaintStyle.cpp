@@ -133,9 +133,7 @@ void EPBackgroundLayer::draw(Road* R)
 		QPen thePen(QColor(0,0,0),1);
 		if (regionalZoom(p->theProjection))
 			thePen = QPen(QColor(0x77,0x77,0x77),1);
-		QPainterPath Path;
-		buildPathFromRoad(R, p->theProjection, Path);
-		p->thePainter.strokePath(Path,thePen);
+		p->thePainter.strokePath(R->getPath(),thePen);
 	}
 }
 

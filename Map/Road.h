@@ -51,6 +51,9 @@ class Road : public MapFeature
 
 		virtual bool deleteChildren(MapDocument* theDocument, CommandList* theList);
 
+		QPainterPath getPath();
+		void buildPath(Projection const &theProjection, const QRect& clipRect);
+
 		virtual QString toXML(unsigned int lvl=0, QProgressDialog * progress=NULL);
 		virtual bool toXML(QDomElement xParent, QProgressDialog & progress);
 		static Road* fromXML(MapDocument* d, MapLayer* L, const QDomElement e);

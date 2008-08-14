@@ -141,6 +141,9 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 	QTime Start(QTime::currentTime());
 
 	QPainter P(this);
+	QRegion rg(rect());
+	P.setClipRegion(rg);
+	P.setClipping(true);
 	P.fillRect(rect(), QBrush(MerkaartorPreferences::instance()->getBgColor()));
 
 	if (LAYERMANAGER_OK && layermanager->getLayer()->isVisible()) {
@@ -253,6 +256,8 @@ void MapView::updateLayersImage(QPaintEvent * /* anEvent */)
 
 void MapView::drawFeatures(QPainter & P)
 {
+	EditPaintStyle EP(P, projection());
+
 	QVector<MapFeature*> theFeatures;
 	for (unsigned int i=0; i<theDocument->layerSize(); ++i) {
 		if (!theDocument->getLayer(i)->isVisible())
@@ -260,6 +265,8 @@ void MapView::drawFeatures(QPainter & P)
 		for (unsigned int j=0; j<theDocument->getLayer(i)->size(); ++j) {
 			if (projection().viewport().disjunctFrom(theDocument->getLayer(i)->get(j)->boundingBox())) continue;
 			theFeatures.push_back(theDocument->getLayer(i)->get(j));
+			if (Road * R = dynamic_cast < Road * >(theDocument->getLayer(i)->get(j)))
+				R->buildPath(projection(), P.clipRegion().boundingRect());
 		}
 	}
 
@@ -268,7 +275,6 @@ void MapView::drawFeatures(QPainter & P)
 		theFeatures[i]->draw(P, projection());
 	}
 
-	EditPaintStyle EP(P, projection());
 	unsigned int sz = EP.size();
 	if (!M_PREFS->getNamesVisible())
 		sz--;

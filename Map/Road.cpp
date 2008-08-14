@@ -32,6 +32,7 @@ class RoadPrivate
 		double Area;
 		double Distance;
 		bool MetaUpToDate;
+		QPainterPath thePath;
 
 		void updateSmoothed(bool DoSmooth);
 		void addSmoothedBezier(unsigned int i, unsigned int j, unsigned int k, unsigned int l);
@@ -258,9 +259,9 @@ void Road::drawHover(QPainter& thePainter, const Projection& theProjection)
 	QPen TP(MerkaartorPreferences::instance()->getHoverColor());
 	TP.setWidth(5);
 	thePainter.setPen(TP);
-	QPainterPath Pt;
-	buildPathFromRoad(this,theProjection,Pt);
-	thePainter.drawPath(Pt);
+	QRect clipRect = thePainter.clipRegion().boundingRect().adjusted(-20, -20, 20, 20);
+	buildPath(theProjection, clipRect);
+	thePainter.drawPath(p->thePath);
 	TP.setWidth(15);
 	TP.setCapStyle(Qt::RoundCap);
 	thePainter.setPen(TP);
@@ -283,9 +284,9 @@ void Road::drawFocus(QPainter& thePainter, const Projection& theProjection)
 	QPen TP(MerkaartorPreferences::instance()->getFocusColor());
 	TP.setWidth(5);
 	thePainter.setPen(TP);
-	QPainterPath Pt;
-	buildPathFromRoad(this,theProjection,Pt);
-	thePainter.drawPath(Pt);
+	QRect clipRect = thePainter.clipRegion().boundingRect().adjusted(-20, -20, 20, 20);
+	buildPath(theProjection, clipRect);
+	thePainter.drawPath(p->thePath);
 	TP.setWidth(15);
 	TP.setCapStyle(Qt::RoundCap);
 	thePainter.setPen(TP);
@@ -355,6 +356,129 @@ void Road::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature,
 		++i;
 	}
 }
+
+QPainterPath Road::getPath()
+{
+	return p->thePath;
+}
+
+bool QRectInterstects(const QRect& r, const QLine& l, QPoint& a, QPoint& b)
+{
+	QLineF lF = QLineF(l);
+	QPointF pF;
+	bool hasP1 = false;
+	bool hasP2 = false;
+
+	if (QLineF(r.topLeft(), r.bottomLeft()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
+		a = pF.toPoint();
+		hasP1 = true;
+	} 
+	if (QLineF(r.bottomLeft(), r.bottomRight()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
+		if (hasP1) {
+			b = pF.toPoint();
+			hasP2 = true;
+		} else {
+			a = pF.toPoint();
+			hasP1 = true;
+		}
+	} 
+	if (QLineF(r.bottomRight(), r.topRight()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
+		if (hasP1) {
+			b = pF.toPoint();
+			hasP2 = true;
+		} else {
+			a = pF.toPoint();
+			hasP1 = true;
+		}
+	} 
+	if (QLineF(r.topRight(), r.topLeft()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
+		if (hasP1) {
+			b = pF.toPoint();
+			hasP2 = true;
+		} else {
+			a = pF.toPoint();
+			hasP1 = true;
+		}
+	}
+
+	if (hasP1 && hasP2) {
+		if (QLineF(a,b).angleTo(lF) > 15.0) {
+			QPoint t = b;
+			b = a;
+			a = t;
+		}
+	}
+	if (hasP1)
+		return true;
+	else
+		return false;
+}
+
+void Road::buildPath(Projection const &theProjection, const QRect& r)
+{
+	bool lastPointVisible = true;
+	QPoint lastPoint = theProjection.project(p->Nodes[0]->position());
+	QPoint aP = lastPoint;
+
+	double PixelPerM = theProjection.pixelPerM();
+	double WW = PixelPerM*widthOf(this)*10+10;
+	QRect clipRect = r.adjusted(-WW-20, -WW-20, WW+20, WW+20);
+
+	if (!clipRect.contains(aP)) {
+		aP.setX(qMax(clipRect.left(), aP.x()));
+		aP.setX(qMin(clipRect.right(), aP.x()));
+		aP.setY(qMax(clipRect.top(), aP.y()));
+		aP.setY(qMin(clipRect.bottom(), aP.y()));
+		lastPointVisible = false;
+	}
+	p->thePath = QPainterPath();
+	p->thePath.moveTo(aP);
+	if (smoothed().size())
+	{
+		for (unsigned int i=3; i<smoothed().size(); i+=3)
+			p->thePath.cubicTo(
+				theProjection.project(smoothed()[i-2]),
+				theProjection.project(smoothed()[i-1]),
+				theProjection.project(smoothed()[i]));
+	}
+	else
+		for (unsigned int j=1; j<size(); ++j) {
+			aP = theProjection.project(p->Nodes[j]->position());
+			if (!clipRect.contains(aP)) {
+				if (!lastPointVisible) {
+					QPoint a, b;
+					if (QRectInterstects(clipRect, QLine(lastPoint, aP), a, b)) {
+						p->thePath.lineTo(a);
+						lastPoint = aP;
+						aP = b;
+					} else {
+						lastPoint = aP;
+						aP.setX(qMax(clipRect.left(), aP.x()));
+						aP.setX(qMin(clipRect.right(), aP.x()));
+						aP.setY(qMax(clipRect.top(), aP.y()));
+						aP.setY(qMin(clipRect.bottom(), aP.y()));
+					}
+				} else {
+					QPoint a, b;
+					QRectInterstects(clipRect, QLine(lastPoint, aP), a, b);
+					lastPoint = aP;
+					aP = a;
+				}
+				lastPointVisible = false;
+			} else {
+				if (!lastPointVisible) {
+					QPoint a, b;
+					QRectInterstects(clipRect, QLine(lastPoint, aP), a, b);
+					p->thePath.lineTo(a);
+				}
+				lastPoint = aP;
+				lastPointVisible = true;
+			}
+			p->thePath.lineTo(aP);
+		}
+}
+
+
 
 bool Road::deleteChildren(MapDocument* theDocument, CommandList* theList)
 {

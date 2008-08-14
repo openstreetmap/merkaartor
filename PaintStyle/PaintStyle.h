@@ -19,8 +19,6 @@ class QPainter;
 class QPainterPath;
 class QFont;
 
-void buildPathFromRoad(Road *R, const Projection& theProjection, QPainterPath &Path);
-
 class LineParameters
 {
 	public:
