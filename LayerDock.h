@@ -38,6 +38,7 @@ class LayerDock : public QDockWidget
 		QList < QPair<MapLayer*, LayerWidget*> > layerList;
 
 	private slots:
+		void layerSelected(QAbstractButton * l);
 		void layerChanged(LayerWidget*, bool adjustViewport);
 		void layerClosed(MapLayer*);
 		void layerCleared(MapLayer*);

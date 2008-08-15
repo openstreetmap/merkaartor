@@ -7,6 +7,7 @@
 #include "Map/MapLayer.h"
 #include "PropertiesDock.h"
 #include "Command/Command.h"
+#include "InfoDock.h"
 
 #include <QPushButton>
 
@@ -100,6 +101,7 @@ void LayerDock::createContent()
 	Layout->setMargin(0);
 
 	butGroup = new QButtonGroup(Content);
+	connect(butGroup, SIGNAL(buttonClicked (QAbstractButton *)), this, SLOT(layerSelected(QAbstractButton *)));
 
 	Layout->addStretch();
 	setWidget(Scroller);
@@ -111,6 +113,12 @@ void LayerDock::createContent()
 
 void LayerDock::resizeEvent(QResizeEvent* )
 {
+}
+
+void LayerDock::layerSelected(QAbstractButton * l)
+{
+	if (Main->info())
+		Main->info()->setHtml(((LayerWidget*)l)->getMapLayer()->toHtml());
 }
 
 void LayerDock::layerChanged(LayerWidget* l, bool adjustViewport)

@@ -236,7 +236,7 @@ TrackPoint * TrackPoint::fromXML(MapDocument* d, MapLayer* L, const QDomElement 
 	return Pt;
 }
 
-TrackPoint * TrackPoint::fromGPX(MapDocument* d, MapLayer* L, const QDomElement e)
+TrackPoint * TrackPoint::fromGPX(MapDocument* /* d */, MapLayer* L, const QDomElement e)
 {
 	double Lat = e.attribute("lat").toDouble();
 	double Lon = e.attribute("lon").toDouble();

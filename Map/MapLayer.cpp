@@ -65,6 +65,7 @@ public:
 	std::vector<MapFeature*> Features;
 	std::map<QString, MapFeature*> IdMap;
 	QString Name;
+	QString Description;
 	bool Visible;
 	bool selected;
 	bool Enabled;
@@ -107,6 +108,8 @@ class SortAccordingToRenderingPriority
 MapLayer::MapLayer()
 :  p(new MapLayerPrivate)
 {
+	p->alpha = 1.0;
+	p->dirtyLevel = 0;
 }
 
 MapLayer::MapLayer(const QString& aName)
@@ -146,6 +149,16 @@ void MapLayer::setName(const QString& s)
 const QString& MapLayer::name() const
 {
 	return p->Name;
+}
+
+void MapLayer::setDescription(const QString& s)
+{
+	p->Description = s;
+}
+
+const QString& MapLayer::description() const
+{
+	return p->Description;
 }
 
 bool MapLayer::isVisible() const
@@ -336,6 +349,32 @@ bool MapLayer::canDelete()
 {
 	return (p->dirtyLevel == 0);
 }
+
+QString MapLayer::toMainHtml()
+{
+	QString desc;
+	desc = QString("<big><b>%1</b></big><br/>").arg(p->Name);
+	if (!p->Description.isEmpty())
+		desc += QString("<b>%1</b><br/>").arg(p->Description);
+	desc += QString("<small>(%1)</small>").arg(id());
+
+	QString S =
+	"<html><head/><body>"
+	"<small><i>" + className() + "</i></small><br/>"
+	+ desc;
+	S += "<hr/>";
+	S += "<i>"+QApplication::translate("MapLayer", "Size")+": </i>" + QApplication::translate("MapLayer", "%1 nodes").arg(QLocale().toString(size()));
+	S += "%1";
+	S += "</body></html>";
+
+	return S;
+}
+
+QString MapLayer::toHtml()
+{
+	return toMainHtml().arg("");
+}
+
 
 // DrawingMapLayer
 
@@ -688,8 +727,8 @@ ImageMapLayer * ImageMapLayer::fromXML(MapDocument* d, const QDomElement e, QPro
 
 // TrackMapLayer
 
-TrackMapLayer::TrackMapLayer(const QString & aName)
-	: MapLayer(aName)
+TrackMapLayer::TrackMapLayer(const QString & aName, const QString& filename)
+	: MapLayer(aName), Filename(filename)
 {
 	p->Visible = true;
 }
@@ -784,6 +823,11 @@ void TrackMapLayer::extractLayer()
 		//delete theList;
 	}
 	p->theDocument->add(extL);
+}
+
+const QString TrackMapLayer::getFilename()
+{
+	return Filename;
 }
 
 bool TrackMapLayer::toXML(QDomElement xParent, QProgressDialog & progress)

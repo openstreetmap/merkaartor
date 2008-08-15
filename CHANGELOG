@@ -1,4 +1,6 @@
 v0.12
+	* ADD : Create one layer per track during GPX import
+	* ADD : Info dock for layers
 	* ADD : menu option to show/hide scale
 	* ADD : "Duplicate", "Apply", "Up", "Down" functionality to the style editor
 	* FIX : another try at solving the "long-ways-at-high-zoom-makes-Merkaartor-unusable" problem (closes #1110)

@@ -441,11 +441,28 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 		bool importOK = false;
 
 		if (fn.endsWith(".gpx")) {
-			newLayer = new TrackMapLayer( baseFileName );
+			QVector<TrackMapLayer*> theTracklayers;
+			TrackMapLayer* newLayer = new TrackMapLayer( baseFileName + " - " + tr("Waypoints"), baseFileName);
 			mapDocument->add(newLayer);
-			importOK = importGPX(this, baseFileName, mapDocument, newLayer);
-			if (importOK && MerkaartorPreferences::instance()->getAutoExtractTracks()) {
-				((TrackMapLayer *)newLayer)->extractLayer();
+			theTracklayers.append(newLayer);
+			importOK = importGPX(this, baseFileName, mapDocument, theTracklayers);
+			if (!importOK) {
+				for (int i=0; i<theTracklayers.size(); i++) {
+					mapDocument->remove(theTracklayers[i]);
+					delete theTracklayers[i];
+				}
+			} else {
+				if (!newLayer->size()) {
+					mapDocument->remove(newLayer);
+					delete newLayer;
+				}
+				for (int i=1; i<theTracklayers.size(); i++) {
+					if (theTracklayers[i]->name().isEmpty())
+						theTracklayers[i]->setName(QString(baseFileName + " - " + tr("Track %1").arg(i)));
+					if (importOK && MerkaartorPreferences::instance()->getAutoExtractTracks()) {
+						theTracklayers[i]->extractLayer();
+					}
+				}
 			}
 		}
 		else if (fn.endsWith(".osm")) {

@@ -18,7 +18,7 @@ LayerWidget::LayerWidget(MapLayer* aLayer, QWidget* aParent)
 : QAbstractButton(aParent), theLayer(aLayer), ctxMenu(0), closeAction(0), actZoom(0)
 {
 	setCheckable(true);
-	setAutoExclusive(true) ;
+	//setAutoExclusive(true) ;
 	setFocusPolicy(Qt::NoFocus);
 	visibleIcon = QPixmap(":Icons/eye.xpm");
 	hiddenIcon = QPixmap(":Icons/empty.xpm");
@@ -78,22 +78,21 @@ void LayerWidget::mouseReleaseEvent(QMouseEvent* anEvent)
 	}
 	else
 	{
-		if (!(dynamic_cast<ImageLayerWidget *>(this)))
-			toggle();
+		QAbstractButton::mouseReleaseEvent(anEvent);
 	}
 }
 
 void LayerWidget::checkStateSet()
 {
-	theLayer->setSelected(isChecked());
-	//emit (layerChanged(this));
+	QAbstractButton::checkStateSet();
+	//emit (layerSelected(this));
 }
 
-void LayerWidget::nextCheckStateSet()
+void LayerWidget::nextCheckState()
 {
-	setChecked(!isChecked());
+	QAbstractButton::nextCheckState();
 	theLayer->setSelected(isChecked());
-	//emit (layerChanged(this));
+	//emit (layerSelected(this));
 }
 
 MapLayer* LayerWidget::getMapLayer()

@@ -111,12 +111,20 @@ static void importTrk(const QDomElement& Root, MapDocument* theDocument, MapLaye
 			importTrkSeg(t,theDocument, theLayer, theList, MakeSegment, progress);
 			if (progress.wasCanceled())
 				return;
+		} else
+		if (!t.isNull() && t.tagName() == "name") {
+			theLayer->setName(t.text());
+		} else
+		if (!t.isNull() && t.tagName() == "desc") {
+			theLayer->setDescription(t.text());
 		}
 	}
 }
 
-static void importGPX(const QDomElement& Root, MapDocument* theDocument, MapLayer* theLayer, CommandList* theList, bool MakeSegment, QProgressDialog & progress)
+static void importGPX(const QDomElement& Root, MapDocument* theDocument, QVector<TrackMapLayer*>& theTracklayers, CommandList* theList, bool MakeSegment, QProgressDialog & progress)
 {
+	unsigned int trkNum = 0;
+
 	for(QDomNode n = Root.firstChild(); !n.isNull(); n = n.nextSibling())
 	{
 		QDomElement t = n.toElement();
@@ -125,12 +133,19 @@ static void importGPX(const QDomElement& Root, MapDocument* theDocument, MapLaye
 
 		if (t.tagName() == "trk")
 		{
-			importTrk(t,theDocument, theLayer, theList, MakeSegment, progress);
-
+			TrackMapLayer* newLayer = new TrackMapLayer();
+			theDocument->add(newLayer);
+			importTrk(t,theDocument, newLayer, theList, MakeSegment, progress);
+			if (!newLayer->size()) {
+				theDocument->remove(newLayer);
+				delete newLayer;
+			} else {
+				theTracklayers.append(newLayer);
+			}
 		}
 		else if (t.tagName() == "wpt")
 		{
-			importTrkPt(t,theDocument, theLayer, theList);
+			importTrkPt(t,theDocument, theTracklayers[0], theList);
 			progress.setValue(progress.value()+1);
 		}
 		if (progress.wasCanceled())
@@ -138,7 +153,7 @@ static void importGPX(const QDomElement& Root, MapDocument* theDocument, MapLaye
 	}
 }
 
-bool importGPX(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapLayer* theLayer, bool MakeSegment)
+bool importGPX(QWidget* aParent, QIODevice& File, MapDocument* theDocument, QVector<TrackMapLayer*>& theTracklayers, bool MakeSegment)
 {
 	// TODO remove debug messageboxes
 	QDomDocument DomDoc;
@@ -169,7 +184,7 @@ bool importGPX(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 
 	CommandList* theList  = new CommandList(MainWindow::tr("Import GPX"), NULL);
 
-	importGPX(root, theDocument, theLayer, theList, MakeSegment, progress);
+	importGPX(root, theDocument, theTracklayers, theList, MakeSegment, progress);
 
 	progress.setValue(progress.maximum());
 	if (progress.wasCanceled())
@@ -184,18 +199,18 @@ bool importGPX(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 }
 
 
-bool importGPX(QWidget* aParent, const QString& aFilename, MapDocument* theDocument, MapLayer* theLayer)
+bool importGPX(QWidget* aParent, const QString& aFilename, MapDocument* theDocument, QVector<TrackMapLayer*>& theTracklayers)
 {
 	QFile File(aFilename);
 	if (!File.open(QIODevice::ReadOnly))
 	{
 		return false;
 	}
-	return importGPX(aParent, File, theDocument, theLayer, true);
+	return importGPX(aParent, File, theDocument, theTracklayers, true);
 }
 
-bool importGPX(QWidget* aParent, QByteArray& aFile, MapDocument* theDocument, MapLayer* theLayer, bool MakeSegment)
+bool importGPX(QWidget* aParent, QByteArray& aFile, MapDocument* theDocument, QVector<TrackMapLayer*>& theTracklayers, bool MakeSegment)
 {
 	QBuffer buf(&aFile);
-	return importGPX(aParent,buf, theDocument, theLayer, MakeSegment);
+	return importGPX(aParent,buf, theDocument, theTracklayers, MakeSegment);
 }

@@ -30,6 +30,8 @@ public:
 
 	void setName(const QString& aName);
 	const QString& name() const;
+	void setDescription(const QString& aDesc);
+	const QString& description() const;
 	bool isVisible() const;
 	bool isSelected() const;
 	bool isEnabled() const;
@@ -66,6 +68,8 @@ public:
 	void setId(const QString& id);
 	const QString& id() const;
 
+	virtual QString toMainHtml();
+	virtual QString toHtml();
 	virtual bool toXML(QDomElement xParent, QProgressDialog & progress) = 0;
 
 	static CoordBox boundingBox(const MapLayer* theLayer);
@@ -132,13 +136,14 @@ class TrackMapLayer : public QObject, public MapLayer
 {
 Q_OBJECT
 public:
-	TrackMapLayer(const QString& aName);
+	TrackMapLayer(const QString& aName="", const QString& filaname="");
 	virtual ~TrackMapLayer();
 
 	virtual void setVisible(bool b);
 	virtual LayerWidget* newWidget(void);
 
 	virtual void extractLayer();
+	virtual const QString getFilename();
 
 	virtual bool toXML(QDomElement xParent, QProgressDialog & progress);
 	static TrackMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
@@ -146,6 +151,9 @@ public:
 	virtual const QString className() {return "TrackMapLayer";};
 	virtual bool isUploadable() {return true;};
 	virtual bool isTrack() {return true;};
+
+protected:
+	QString Filename;
 };
 
 class DirtyMapLayer : public DrawingMapLayer

@@ -416,8 +416,9 @@ bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser
 bool downloadTracksFromOSM(QMainWindow* Main, const QString& aWeb, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort , const CoordBox& aBox , MapDocument* theDocument)
 {
 	Downloader theDownloader(aWeb, aUser, aPassword, UseProxy, ProxyHost, ProxyPort);
-	TrackMapLayer* trackLayer = new TrackMapLayer(QApplication::translate("Downloader","Downloaded tracks"));
-	theDocument->add(trackLayer);
+	QVector<TrackMapLayer*> theTracklayers;
+	//TrackMapLayer* trackLayer = new TrackMapLayer(QApplication::translate("Downloader","Downloaded tracks"));
+	//theDocument->add(trackLayer);
 	QProgressDialog ProgressDialog(Main);
 	ProgressDialog.setWindowModality(Qt::ApplicationModal);
 	QProgressBar* Bar = new QProgressBar(&ProgressDialog);
@@ -441,13 +442,14 @@ bool downloadTracksFromOSM(QMainWindow* Main, const QString& aWeb, const QString
 			return false;
 		if (theDownloader.resultCode() != 200)
 			return false;
-		unsigned int Before = trackLayer->size();
+		unsigned int Before = theTracklayers.size();
 		QByteArray Ar(theDownloader.content());
-		bool OK = importGPX(Main, Ar, theDocument, trackLayer, true);
+		bool OK = importGPX(Main, Ar, theDocument, theTracklayers, true);
 		if (!OK)
 			return false;
-		if (Before == trackLayer->size())
+		if (Before == theTracklayers.size())
 			break;
+		theTracklayers[theTracklayers.size()-1]->setName(QApplication::translate("Downloader", "Downloaded track - nodes %1-%2").arg(Page*5000+1).arg(Page*5000+5000));
 	}
 	return true;
 }

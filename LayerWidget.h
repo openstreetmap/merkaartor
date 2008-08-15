@@ -32,7 +32,7 @@ class LayerWidget : public QAbstractButton
 		virtual void contextMenuEvent(QContextMenuEvent* anEvent);
 
 		virtual void checkStateSet();
-		virtual void nextCheckStateSet();
+		virtual void nextCheckState();
 
 		MapLayer* theLayer;
 		QPixmap visibleIcon;
@@ -44,6 +44,7 @@ class LayerWidget : public QAbstractButton
 		QMenu* associatedMenu;
 
 	signals:
+		void layerSelected(LayerWidget *);
 		void layerChanged(LayerWidget *, bool adjustViewport);
 		void layerClosed(MapLayer *);
 		void layerCleared(MapLayer *);
