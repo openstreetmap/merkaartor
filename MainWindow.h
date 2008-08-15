@@ -63,6 +63,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_viewNamesAction_triggered();
 		virtual void on_viewTrackPointsAction_triggered();
 		virtual void on_viewTrackSegmentsAction_triggered();
+		virtual void on_viewRelationsAction_triggered();
 		virtual void on_viewMoveLeftAction_triggered();
 		virtual void on_viewMoveRightAction_triggered();
 		virtual void on_viewMoveUpAction_triggered();

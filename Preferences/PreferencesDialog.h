@@ -38,7 +38,10 @@ public slots:
 	void on_buttonBox_clicked(QAbstractButton * button);
 	void on_BrowseStyle_clicked();
 	void on_btAdapterSetup_clicked();
-	void on_btColorChooser_clicked();
+	void on_btBgColor_clicked();
+	void on_btFocusColor_clicked();
+	void on_btHoverColor_clicked();
+	void on_btRelationsColor_clicked();
 
 	/* Tools */
 	void on_btAddTool_clicked(void);
@@ -53,6 +56,10 @@ private:
 
 private:
 	QVector<Tool> theTools;
+	QColor BgColor;
+	QColor FocusColor;
+	QColor HoverColor;
+	QColor RelationsColor;
 
 signals:
 	void preferencesChanged();

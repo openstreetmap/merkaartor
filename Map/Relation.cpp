@@ -1,15 +1,18 @@
 #include "Map/Relation.h"
 #include "Map/Road.h"
 #include "Map/TrackPoint.h"
+#include "Map/Projection.h"
 #include "MainWindow.h"
 #include "Command/DocumentCommands.h"
 #include "Command/RelationCommands.h"
 #include "Map/MapDocument.h"
+#include "Utils/LineF.h"
 
 #include "ExportOSM.h"
 
 #include <QtCore/QAbstractTableModel>
 #include <QProgressDialog>
+#include <QPainter>
 
 #include <algorithm>
 #include <utility>
@@ -101,18 +104,29 @@ CoordBox Relation::boundingBox() const
 	}
 }
 
-void Relation::draw(QPainter&, const Projection&)
+void Relation::draw(QPainter& P, const Projection& theProjection)
 {
+	if (!M_PREFS->getRelationsVisible())
+		return;
+
+	P.setPen(QPen(M_PREFS->getRelationsColor(),2,Qt::DashLine));
+	P.drawRect(QRectF(theProjection.project(boundingBox().bottomLeft()),theProjection.project(boundingBox().topRight())));
 }
 
 void Relation::drawFocus(QPainter& P, const Projection& theProjection)
 {
+	P.setPen(QPen(M_PREFS->getFocusColor(),2,Qt::DashLine));
+	P.drawRect(QRectF(theProjection.project(boundingBox().bottomLeft()),theProjection.project(boundingBox().topRight())));
+
 	for (unsigned int i=0; i<p->Members.size(); ++i)
 		p->Members[i].second->drawFocus(P,theProjection);
 }
 
 void Relation::drawHover(QPainter& P, const Projection& theProjection)
 {
+	P.setPen(QPen(M_PREFS->getHoverColor(),2,Qt::DashLine));
+	P.drawRect(QRectF(theProjection.project(boundingBox().bottomLeft()),theProjection.project(boundingBox().topRight())));
+
 	for (unsigned int i=0; i<p->Members.size(); ++i)
 		p->Members[i].second->drawHover(P,theProjection);
 }
@@ -126,6 +140,21 @@ double Relation::pixelDistance(const QPointF& Target, double ClearEndDistance, c
 		if (Dist < Best)
 			Best = Dist;
 	}
+
+	double D;
+	LineF F(theProjection.project(boundingBox().topLeft()),theProjection.project(boundingBox().topRight()));
+	D = F.capDistance(Target);
+	if ((D < ClearEndDistance) && (D<Best)) Best = D;
+	F = LineF(theProjection.project(boundingBox().topLeft()),theProjection.project(boundingBox().bottomLeft()));
+	D = F.capDistance(Target);
+	if ((D < ClearEndDistance) && (D<Best)) Best = D;
+	F = LineF(theProjection.project(boundingBox().bottomRight()),theProjection.project(boundingBox().bottomLeft()));
+	D = F.capDistance(Target);
+	if ((D < ClearEndDistance) && (D<Best)) Best = D;
+	F = LineF(theProjection.project(boundingBox().bottomRight()),theProjection.project(boundingBox().topRight()));
+	D = F.capDistance(Target);
+	if ((D < ClearEndDistance) && (D<Best)) Best = D;
+
 	return Best + 0.1; // Make sure we select simple elements first
 }
 

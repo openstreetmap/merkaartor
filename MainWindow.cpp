@@ -135,6 +135,7 @@ MainWindow::MainWindow(void)
 	viewNamesAction->setChecked(M_PREFS->getNamesVisible());
 	viewTrackPointsAction->setChecked(M_PREFS->getTrackPointsVisible());
 	viewTrackSegmentsAction->setChecked(M_PREFS->getTrackSegmentsVisible());
+	viewRelationsAction->setChecked(M_PREFS->getRelationsVisible());
 
 	connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardChanged()));
 
@@ -737,6 +738,13 @@ void MainWindow::on_viewTrackSegmentsAction_triggered()
 {
 	M_PREFS->setTrackSegmentsVisible(!M_PREFS->getTrackSegmentsVisible());
 	viewTrackSegmentsAction->setChecked(M_PREFS->getTrackSegmentsVisible());
+	invalidateView();
+}
+
+void MainWindow::on_viewRelationsAction_triggered()
+{
+	M_PREFS->setRelationsVisible(!M_PREFS->getRelationsVisible());
+	viewRelationsAction->setChecked(M_PREFS->getRelationsVisible());
 	invalidateView();
 }
 

@@ -105,8 +105,10 @@
     <addaction name="viewDownloadedAction" />
     <addaction name="viewScaleAction" />
     <addaction name="viewNamesAction" />
+    <addaction name="separator" />
     <addaction name="viewTrackPointsAction" />
     <addaction name="viewTrackSegmentsAction" />
+    <addaction name="viewRelationsAction" />
     <addaction name="separator" />
     <addaction name="mnuProjections" />
     <addaction name="separator" />
@@ -1007,6 +1009,17 @@
    </property>
    <property name="shortcut" >
     <string>Ctrl+Alt+S</string>
+   </property>
+  </action>
+  <action name="viewRelationsAction" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Show &amp;relations</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Alt+R</string>
    </property>
   </action>
  </widget>

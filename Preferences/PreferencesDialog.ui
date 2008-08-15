@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>348</width>
-    <height>413</height>
+    <height>451</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -22,7 +22,7 @@
         <enum>QTabWidget::North</enum>
        </property>
        <property name="currentIndex" >
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="tab_4" >
         <property name="geometry" >
@@ -30,40 +30,19 @@
           <x>0</x>
           <y>0</y>
           <width>322</width>
-          <height>335</height>
+          <height>373</height>
          </rect>
         </property>
         <attribute name="title" >
          <string>Visual</string>
         </attribute>
-        <layout class="QVBoxLayout" >
+        <layout class="QVBoxLayout" name="verticalLayout_3" >
          <item>
           <widget class="QGroupBox" name="grpGeneral" >
            <property name="title" >
             <string>General</string>
            </property>
            <layout class="QVBoxLayout" >
-            <item>
-             <layout class="QHBoxLayout" >
-              <item>
-               <widget class="QLabel" name="label_8" >
-                <property name="text" >
-                 <string>Background color</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="edBgColor" />
-              </item>
-              <item>
-               <widget class="QPushButton" name="btColorChooser" >
-                <property name="text" >
-                 <string>Choose...</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
             <item>
              <layout class="QHBoxLayout" >
               <item>
@@ -118,6 +97,119 @@
                </widget>
               </item>
              </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBox_2" >
+           <property name="title" >
+            <string>Colors</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout" >
+            <item row="0" column="0" >
+             <widget class="QLabel" name="label_8" >
+              <property name="text" >
+               <string>Background</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1" >
+             <widget class="QLabel" name="label_19" >
+              <property name="text" >
+               <string>Hover</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2" >
+             <widget class="QLabel" name="label_20" >
+              <property name="text" >
+               <string>Focus</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="3" >
+             <widget class="QLabel" name="label_21" >
+              <property name="text" >
+               <string>Relations</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" >
+             <widget class="QToolButton" name="btBgColor" >
+              <property name="minimumSize" >
+               <size>
+                <width>45</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="text" >
+               <string>...</string>
+              </property>
+              <property name="iconSize" >
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1" >
+             <widget class="QToolButton" name="btHoverColor" >
+              <property name="minimumSize" >
+               <size>
+                <width>45</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="text" >
+               <string>...</string>
+              </property>
+              <property name="iconSize" >
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2" >
+             <widget class="QToolButton" name="btFocusColor" >
+              <property name="minimumSize" >
+               <size>
+                <width>45</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="text" >
+               <string>...</string>
+              </property>
+              <property name="iconSize" >
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="3" >
+             <widget class="QToolButton" name="btRelationsColor" >
+              <property name="minimumSize" >
+               <size>
+                <width>45</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="text" >
+               <string>...</string>
+              </property>
+              <property name="iconSize" >
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
@@ -227,7 +319,7 @@
           <x>0</x>
           <y>0</y>
           <width>322</width>
-          <height>335</height>
+          <height>373</height>
          </rect>
         </property>
         <attribute name="title" >
@@ -369,8 +461,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>414</width>
-          <height>321</height>
+          <width>322</width>
+          <height>373</height>
          </rect>
         </property>
         <attribute name="title" >
@@ -453,8 +545,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>414</width>
-          <height>321</height>
+          <width>322</width>
+          <height>373</height>
          </rect>
         </property>
         <attribute name="title" >
@@ -552,8 +644,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>414</width>
-          <height>321</height>
+          <width>322</width>
+          <height>373</height>
          </rect>
         </property>
         <attribute name="title" >

@@ -21,21 +21,36 @@
 #include <QFileDialog>
 #include <QColorDialog>
 #include <QMessageBox>
+#include <QPainter>
+
+static void makeBoundaryIcon(QToolButton* bt, QColor C)
+{
+	QPixmap pm(36, 18);
+	pm.fill(QColor(255, 255, 255));
+	QPainter p(&pm);
+	p.setPen(C);
+	p.setBrush(C);
+	p.drawRect(0, 6, 36, 6);
+	bt->setIcon(pm);
+}
 
 PreferencesDialog::PreferencesDialog(QWidget* parent)
 	: QDialog(parent)
 {
 	setupUi(this);
-	for (int i=0; i < MerkaartorPreferences::instance()->getBgTypes().size(); ++i) {
-		cbMapAdapter->insertItem(i, MerkaartorPreferences::instance()->getBgTypes()[i]);
+	for (int i=0; i < M_PREFS->getBgTypes().size(); ++i) {
+		cbMapAdapter->insertItem(i, M_PREFS->getBgTypes()[i]);
 	}
-	for (int i=0; i < MerkaartorPreferences::instance()->getProjectionTypes().size(); ++i) {
-		cbProjection->insertItem(i, MerkaartorPreferences::instance()->getProjectionTypes()[i]);
+	for (int i=0; i < M_PREFS->getProjectionTypes().size(); ++i) {
+		cbProjection->insertItem(i, M_PREFS->getProjectionTypes()[i]);
 	}
 	QDir intStyles(BUILTIN_STYLES_DIR);
 	for (int i=0; i < intStyles.entryList().size(); ++i) {
 		cbStyles->addItem(intStyles.entryList().at(i));
 	}
+	resize(1,1);
+	QApplication::processEvents();
+
 	loadPrefs();
 }
 
@@ -58,22 +73,22 @@ void PreferencesDialog::on_buttonBox_clicked(QAbstractButton * button)
 
 void PreferencesDialog::loadPrefs()
 {
-	edOsmUrl->setText(MerkaartorPreferences::instance()->getOsmWebsite());
-	edOsmUser->setText(MerkaartorPreferences::instance()->getOsmUser());
-    edOsmPwd->setText(MerkaartorPreferences::instance()->getOsmPassword());
+	edOsmUrl->setText(M_PREFS->getOsmWebsite());
+	edOsmUser->setText(M_PREFS->getOsmUser());
+    edOsmPwd->setText(M_PREFS->getOsmPassword());
 
 	edGpsPort->setText(M_PREFS->getGpsPort());
 
-	bbUseProxy->setChecked(MerkaartorPreferences::instance()->getProxyUse());
-	edProxyHost->setText(MerkaartorPreferences::instance()->getProxyHost());
-	edProxyPort->setText(QString().setNum(MerkaartorPreferences::instance()->getProxyPort()));
-	bbUse06Api->setChecked(MerkaartorPreferences::instance()->use06Api());
+	bbUseProxy->setChecked(M_PREFS->getProxyUse());
+	edProxyHost->setText(M_PREFS->getProxyHost());
+	edProxyPort->setText(QString().setNum(M_PREFS->getProxyPort()));
+	bbUse06Api->setChecked(M_PREFS->use06Api());
 
-	edCacheDir->setText(MerkaartorPreferences::instance()->getCacheDir());
-	sbCacheSize->setValue(MerkaartorPreferences::instance()->getCacheSize());
+	edCacheDir->setText(M_PREFS->getCacheDir());
+	sbCacheSize->setValue(M_PREFS->getCacheSize());
 
-	cbMapAdapter->setCurrentIndex(MerkaartorPreferences::instance()->getBgType());
-	switch (MerkaartorPreferences::instance()->getBgType()) {
+	cbMapAdapter->setCurrentIndex(M_PREFS->getBgType());
+	switch (M_PREFS->getBgType()) {
 		case Bg_Tms:
 		case Bg_Wms:
 			//grpWmsServers->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
@@ -83,8 +98,8 @@ void PreferencesDialog::loadPrefs()
 			btAdapterSetup->setEnabled(false);
 	}
 
-	QString s = MerkaartorPreferences::instance()->getDefaultStyle();
-	QString cs = MerkaartorPreferences::instance()->getCustomStyle();
+	QString s = M_PREFS->getDefaultStyle();
+	QString cs = M_PREFS->getCustomStyle();
 	CustomStyleName->setText(cs);
 	if (s.startsWith(BUILTIN_STYLES_DIR)) {
 		StyleBuiltin->setChecked(true);
@@ -95,20 +110,27 @@ void PreferencesDialog::loadPrefs()
 		CustomStyleName->setEnabled(true);
 		BrowseStyle->setEnabled(true);
 	}
-	cbDisableStyleForTracks->setChecked(MerkaartorPreferences::instance()->getDisableStyleForTracks());
+	cbDisableStyleForTracks->setChecked(M_PREFS->getDisableStyleForTracks());
 
-	sbZoomInPerc->setValue(MerkaartorPreferences::instance()->getZoomInPerc());
-	sbZoomOutPerc->setValue(MerkaartorPreferences::instance()->getZoomOutPerc());
-	cbProjection->setCurrentIndex(MerkaartorPreferences::instance()->getProjectionType());
+	sbZoomInPerc->setValue(M_PREFS->getZoomInPerc());
+	sbZoomOutPerc->setValue(M_PREFS->getZoomOutPerc());
+	cbProjection->setCurrentIndex(M_PREFS->getProjectionType());
 
-	sbAlphaLow->setValue(MerkaartorPreferences::instance()->getAlpha("Low"));
-	sbAlphaHigh->setValue(MerkaartorPreferences::instance()->getAlpha("High"));
-	edBgColor->setText(QVariant(MerkaartorPreferences::instance()->getBgColor()).toString());
+	sbAlphaLow->setValue(M_PREFS->getAlpha("Low"));
+	sbAlphaHigh->setValue(M_PREFS->getAlpha("High"));
+	BgColor = M_PREFS->getBgColor();
+	FocusColor = M_PREFS->getFocusColor();
+	HoverColor = M_PREFS->getHoverColor();
+	RelationsColor = M_PREFS->getRelationsColor();
+	makeBoundaryIcon(btBgColor, BgColor);
+	makeBoundaryIcon(btHoverColor, HoverColor);
+	makeBoundaryIcon(btFocusColor, FocusColor);
+	makeBoundaryIcon(btRelationsColor, RelationsColor);
 
-	cbAutoSaveDoc->setChecked(MerkaartorPreferences::instance()->getAutoSaveDoc());
-	cbAutoExtractTracks->setChecked(MerkaartorPreferences::instance()->getAutoExtractTracks());
+	cbAutoSaveDoc->setChecked(M_PREFS->getAutoSaveDoc());
+	cbAutoExtractTracks->setChecked(M_PREFS->getAutoExtractTracks());
 
-	ToolList* tl = MerkaartorPreferences::instance()->getTools();
+	ToolList* tl = M_PREFS->getTools();
 	ToolListIterator i(*tl);
 	while (i.hasNext()) {
 		i.next();
@@ -120,19 +142,19 @@ void PreferencesDialog::loadPrefs()
 
 void PreferencesDialog::savePrefs()
 {
-	MerkaartorPreferences::instance()->setUse06Api(bbUse06Api->isChecked());
-	MerkaartorPreferences::instance()->setOsmWebsite(edOsmUrl->text());
-	MerkaartorPreferences::instance()->setOsmUser(edOsmUser->text());
-	MerkaartorPreferences::instance()->setOsmPassword(edOsmPwd->text());
+	M_PREFS->setUse06Api(bbUse06Api->isChecked());
+	M_PREFS->setOsmWebsite(edOsmUrl->text());
+	M_PREFS->setOsmUser(edOsmUser->text());
+	M_PREFS->setOsmPassword(edOsmPwd->text());
 	M_PREFS->setGpsPort(edGpsPort->text());
 
-	MerkaartorPreferences::instance()->setProxyUse(bbUseProxy->isChecked());
-	MerkaartorPreferences::instance()->setProxyHost(edProxyHost->text());
-	MerkaartorPreferences::instance()->setProxyPort(edProxyPort->text().toInt());
-	MerkaartorPreferences::instance()->setBgType((ImageBackgroundType)cbMapAdapter->currentIndex());
+	M_PREFS->setProxyUse(bbUseProxy->isChecked());
+	M_PREFS->setProxyHost(edProxyHost->text());
+	M_PREFS->setProxyPort(edProxyPort->text().toInt());
+	M_PREFS->setBgType((ImageBackgroundType)cbMapAdapter->currentIndex());
 
-	MerkaartorPreferences::instance()->setCacheDir(edCacheDir->text());
-	MerkaartorPreferences::instance()->setCacheSize(sbCacheSize->value());
+	M_PREFS->setCacheDir(edCacheDir->text());
+	M_PREFS->setCacheSize(sbCacheSize->value());
 
 	QString NewStyle;
 
@@ -142,14 +164,14 @@ void PreferencesDialog::savePrefs()
 		NewStyle = CustomStyleName->text();
 
 	bool PainterToInvalidate = false;
-	if (NewStyle != MerkaartorPreferences::instance()->getDefaultStyle())
+	if (NewStyle != M_PREFS->getDefaultStyle())
 	{
-		MerkaartorPreferences::instance()->setDefaultStyle(NewStyle);
-		loadPainters(MerkaartorPreferences::instance()->getDefaultStyle());
+		M_PREFS->setDefaultStyle(NewStyle);
+		loadPainters(M_PREFS->getDefaultStyle());
 		PainterToInvalidate = true;
 	}
-	if (cbDisableStyleForTracks->isChecked() != MerkaartorPreferences::instance()->getDisableStyleForTracks()) {
-		MerkaartorPreferences::instance()->setDisableStyleForTracks(cbDisableStyleForTracks->isChecked());	
+	if (cbDisableStyleForTracks->isChecked() != M_PREFS->getDisableStyleForTracks()) {
+		M_PREFS->setDisableStyleForTracks(cbDisableStyleForTracks->isChecked());	
 		PainterToInvalidate = true;
 	}
 	if (PainterToInvalidate) {
@@ -159,25 +181,28 @@ void PreferencesDialog::savePrefs()
 		}
 	}
 
-	MerkaartorPreferences::instance()->setCustomStyle(CustomStyleName->text());
-	MerkaartorPreferences::instance()->setZoomInPerc(sbZoomInPerc->text().toInt());
-	MerkaartorPreferences::instance()->setZoomOutPerc(sbZoomOutPerc->text().toInt());
-	MerkaartorPreferences::instance()->setProjectionType((ProjectionType)cbProjection->currentIndex());
-	MerkaartorPreferences::instance()->getAlphaPtr()->insert("Low", sbAlphaLow->value());
-	MerkaartorPreferences::instance()->getAlphaPtr()->insert("High", sbAlphaHigh->value());
-	MerkaartorPreferences::instance()->setBgColor(QVariant(edBgColor->text()).value<QColor>());
+	M_PREFS->setCustomStyle(CustomStyleName->text());
+	M_PREFS->setZoomInPerc(sbZoomInPerc->text().toInt());
+	M_PREFS->setZoomOutPerc(sbZoomOutPerc->text().toInt());
+	M_PREFS->setProjectionType((ProjectionType)cbProjection->currentIndex());
+	M_PREFS->getAlphaPtr()->insert("Low", sbAlphaLow->value());
+	M_PREFS->getAlphaPtr()->insert("High", sbAlphaHigh->value());
+	M_PREFS->setBgColor(BgColor);
+	M_PREFS->setFocusColor(FocusColor);
+	M_PREFS->setHoverColor(HoverColor);
+	M_PREFS->setRelationsColor(RelationsColor);
 
-	MerkaartorPreferences::instance()->setAutoSaveDoc(cbAutoSaveDoc->isChecked());
-	MerkaartorPreferences::instance()->setAutoExtractTracks(cbAutoExtractTracks->isChecked());
+	M_PREFS->setAutoSaveDoc(cbAutoSaveDoc->isChecked());
+	M_PREFS->setAutoExtractTracks(cbAutoExtractTracks->isChecked());
 
-	ToolList* tl = MerkaartorPreferences::instance()->getTools();
+	ToolList* tl = M_PREFS->getTools();
 	tl->clear();
 	for (int i = 0; i < theTools.size(); ++i) {
 		Tool t(theTools[i]);
 		tl->insert(theTools[i].ToolName, t);
 	}
 
-	MerkaartorPreferences::instance()->save();
+	M_PREFS->save();
 }
 
 void PreferencesDialog::on_cbMapAdapter_currentIndexChanged(int index)
@@ -225,11 +250,43 @@ void PreferencesDialog::on_btAdapterSetup_clicked()
 	}
 }
 
-void PreferencesDialog::on_btColorChooser_clicked()
+void PreferencesDialog::on_btBgColor_clicked()
 {
-	QColor color = QColorDialog::getColor(Qt::white, this);
-	if (color.isValid()) {
-		edBgColor->setText(QVariant(color).toString());
+	bool OK = false;
+	QRgb rgb = QColorDialog::getRgba(BgColor.rgba(), &OK, this);
+	if (OK) {
+		BgColor = QColor::fromRgba(rgb);
+		makeBoundaryIcon(btBgColor, BgColor);
+	}
+}
+
+void PreferencesDialog::on_btFocusColor_clicked()
+{
+	bool OK = false;
+	QRgb rgb = QColorDialog::getRgba(FocusColor.rgba(), &OK, this);
+	if (OK) {
+		FocusColor = QColor::fromRgba(rgb);
+		makeBoundaryIcon(btFocusColor, FocusColor);
+	}
+}
+
+void PreferencesDialog::on_btHoverColor_clicked()
+{
+	bool OK = false;
+	QRgb rgb = QColorDialog::getRgba(HoverColor.rgba(), &OK, this);
+	if (OK) {
+		HoverColor = QColor::fromRgba(rgb);
+		makeBoundaryIcon(btHoverColor, HoverColor);
+	}
+}
+
+void PreferencesDialog::on_btRelationsColor_clicked()
+{
+	bool OK = false;
+	QRgb rgb = QColorDialog::getRgba(RelationsColor.rgba(), &OK, this);
+	if (OK) {
+		RelationsColor = QColor::fromRgba(rgb);
+		makeBoundaryIcon(btRelationsColor, RelationsColor);
 	}
 }
 

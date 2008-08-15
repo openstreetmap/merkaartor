@@ -597,17 +597,46 @@ QColor MerkaartorPreferences::getBgColor() const
 
 QColor MerkaartorPreferences::getFocusColor() const
 {
-	return Qt::blue;
+	QString sColor = Sets->value("visual/FocusColor").toString();
+	if (sColor.isEmpty())
+		return Qt::blue;
+	return Sets->value("visual/FocusColor").value<QColor>();
 }
 
 QColor MerkaartorPreferences::getHoverColor() const
 {
-	return Qt::magenta;
+	QString sColor = Sets->value("visual/HoverColor").toString();
+	if (sColor.isEmpty())
+		return Qt::magenta;
+	return Sets->value("visual/HoverColor").value<QColor>();
+}
+
+QColor MerkaartorPreferences::getRelationsColor() const
+{
+	QString sColor = Sets->value("visual/RelationsColor").toString();
+	if (sColor.isEmpty())
+		return QColor(0, 170, 0);
+	return Sets->value("visual/RelationsColor").value<QColor>();
 }
 
 void MerkaartorPreferences::setBgColor(const QColor theValue)
 {
 	Sets->setValue("visual/BgColor", QVariant(theValue));
+}
+
+void MerkaartorPreferences::setHoverColor(const QColor theValue)
+{
+	Sets->setValue("visual/HoverColor", QVariant(theValue));
+}
+
+void MerkaartorPreferences::setFocusColor(const QColor theValue)
+{
+	Sets->setValue("visual/FocusColor", QVariant(theValue));
+}
+
+void MerkaartorPreferences::setRelationsColor(const QColor theValue)
+{
+	Sets->setValue("visual/RelationsColor", QVariant(theValue));
 }
 
 QHash< QString, qreal > * MerkaartorPreferences::getAlphaPtr()
@@ -732,6 +761,16 @@ bool MerkaartorPreferences::getTrackSegmentsVisible() const
 void MerkaartorPreferences::setTrackSegmentsVisible(bool theValue)
 {
 	Sets->setValue("visual/TrackSegmentsVisible", theValue);
+}
+
+bool MerkaartorPreferences::getRelationsVisible() const
+{
+	return Sets->value("visual/RelationsVisible", false).toBool();
+}
+
+void MerkaartorPreferences::setRelationsVisible(bool theValue)
+{
+	Sets->setValue("visual/RelationsVisible", theValue);
 }
 
 /* Export Type */

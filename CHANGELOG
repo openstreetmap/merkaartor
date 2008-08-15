@@ -1,4 +1,6 @@
 v0.12
+	* ADD : menu option to show/hide a selectable relation bounding box
+	* ADD : preference option for focus/hover/relations colors
 	* ADD : Create one layer per track during GPX import
 	* ADD : Info dock for layers
 	* ADD : menu option to show/hide scale

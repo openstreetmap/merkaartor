@@ -123,8 +123,6 @@ static void importTrk(const QDomElement& Root, MapDocument* theDocument, MapLaye
 
 static void importGPX(const QDomElement& Root, MapDocument* theDocument, QVector<TrackMapLayer*>& theTracklayers, CommandList* theList, bool MakeSegment, QProgressDialog & progress)
 {
-	unsigned int trkNum = 0;
-
 	for(QDomNode n = Root.firstChild(); !n.isNull(); n = n.nextSibling())
 	{
 		QDomElement t = n.toElement();

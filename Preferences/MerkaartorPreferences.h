@@ -199,11 +199,15 @@ public:
 	void setAlphaList();
 	qreal getAlpha(QString lvl);
 	QHash<QString, qreal>* getAlphaPtr();
+
 	QColor getBgColor() const;
 	void setBgColor(const QColor theValue);
-
 	QColor getFocusColor() const;
+	void setFocusColor(const QColor theValue);
 	QColor getHoverColor() const;
+	void setHoverColor(const QColor theValue);
+	QColor getRelationsColor() const;
+	void setRelationsColor(const QColor theValue);
 
 	void setDownloadedVisible(bool theValue);
 	bool getDownloadedVisible() const;
@@ -219,6 +223,9 @@ public:
 
 	void setTrackSegmentsVisible(bool theValue);
 	bool getTrackSegmentsVisible() const;
+
+	void setRelationsVisible(bool theValue);
+	bool getRelationsVisible() const;
 
 	/* MainWindow state */
 	void saveMainWindowState(const class QMainWindow * mainWindow);
