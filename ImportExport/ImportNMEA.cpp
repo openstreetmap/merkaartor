@@ -103,6 +103,8 @@ bool ImportNMEA::importGSA (QString line)
 		return false;
 
 	QStringList tokens = line.split(",");
+	if (tokens.size() < 3)
+		return false;
 
 	QString autoSelectFix = tokens[1];
 	int Fix3D = tokens[2].toInt();
@@ -125,6 +127,9 @@ bool ImportNMEA::importGGA (QString line)
 		return false;
 
 	QStringList tokens = line.split(",");
+
+	if (tokens.size() < 10)
+		return false;
 
 	//double lat = tokens[2].left(2).toDouble();
 	//double lon = tokens[4].left(3).toDouble();

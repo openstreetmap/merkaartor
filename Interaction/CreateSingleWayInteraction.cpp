@@ -14,13 +14,20 @@
 
 CreateSingleWayInteraction::CreateSingleWayInteraction(MainWindow* aMain, MapView* aView, TrackPoint *firstNode, bool aCurved)
 	: GenericFeatureSnapInteraction<MapFeature>(aView), Main(aMain), theRoad(0), FirstPoint(0,0),
-	 FirstNode(firstNode), HaveFirst(false), IsCurved(aCurved)
+	 FirstNode(firstNode), HaveFirst(false), Prepend(false), IsCurved(aCurved)
 {
 	if (firstNode)
 	{
 		FirstPoint = firstNode->position();
 		LastCursor = view()->projection().project(FirstPoint);
 		HaveFirst = true;
+		HaveRoad = false;
+		if (theRoad = Road::GetSingleParentRoad(firstNode)) {
+			if (theRoad->isExtrimity(firstNode)) {
+				HaveRoad = true;
+				Prepend = (theRoad->get(0) == firstNode) ? true : false;
+			}
+		}
 	}
 }
 
@@ -119,8 +126,10 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFe
 			TrackPoint* To = 0;
 			if (Pt) {
 				To = Pt;
-				if (!To->isDirty() && !To->hasOSMId() && To->isUploadable())
+				if (!To->isDirty() && !To->hasOSMId() && To->isUploadable()) {
 					L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),To,true));
+					L->setDescription(MainWindow::tr("Create Node: %1").arg(To->description()));
+				}
 			}
 			else if (Road* aRoad = dynamic_cast<Road*>(aFeature))
 			{
@@ -143,7 +152,11 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFe
 				L->setDescription(MainWindow::tr("Create Node %1 in Road %2").arg(To->description()).arg(theRoad->description()));
 				L->setFeature(To);
 			}
-			L->add(new RoadAddTrackPointCommand(theRoad,To));
+			L->setDescription(MainWindow::tr("Add Node %1 to Road %2").arg(To->description()).arg(theRoad->description()));
+			if (Prepend)
+				L->add(new RoadAddTrackPointCommand(theRoad,To,(unsigned int)0));
+			else
+				L->add(new RoadAddTrackPointCommand(theRoad,To));
 			document()->addHistory(L);
 			view()->invalidate(true, false);
 			Main->properties()->setSelection(theRoad);

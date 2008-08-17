@@ -674,7 +674,7 @@ bool ImageMapLayer::toXML(QDomElement xParent, QProgressDialog & /* progress */)
 			c = e.ownerDocument().createElement("WmsServer");
 			e.appendChild(c);
 
-			c.setAttribute("name", p->layer_bg->getLayername());
+			c.setAttribute("name", M_PREFS->getSelectedWmsServer());
 			//e.setAttribute("adress", wmsa->host);
 			//e.setAttribute("path", wmsa->serverPath);
 			//e.setAttribute("layers", wmsa->wms_layers);
@@ -687,7 +687,7 @@ bool ImageMapLayer::toXML(QDomElement xParent, QProgressDialog & /* progress */)
 			c = e.ownerDocument().createElement("TmsServer");
 			e.appendChild(c);
 
-			c.setAttribute("name", p->layer_bg->getLayername());
+			c.setAttribute("name", M_PREFS->getSelectedTmsServer());
 			//e.setAttribute("adress", tmsa->host);
 			//e.setAttribute("path", tmsa->serverPath);
 			//e.setAttribute("path", tmsa->tilesize);

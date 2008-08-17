@@ -165,33 +165,6 @@ static void splitRoad(MapDocument* theDocument, CommandList* theList, Road* In, 
 	}
 }
 
-static Road * GetSingleParentRoad(MapFeature * mapFeature)
-{
-	unsigned int parents = mapFeature->sizeParents();
-
-	if (parents == 0)
-		return NULL;
-
-	Road * parentRoad = NULL;
-
-	unsigned int i;
-	for (i=0; i<parents; i++)
-	{
-		MapFeature * parent = mapFeature->getParent(i);
-		Road * road = dynamic_cast<Road*>(parent);
-
-		if (road == NULL)
-			continue;
-
-		if (parentRoad)
-			return NULL;
-
-		parentRoad = road;
-	}
-
-	return parentRoad;
-}
-
 void splitRoads(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
 	std::vector<Road*> Roads, Result;
@@ -204,7 +177,7 @@ void splitRoads(MapDocument* theDocument, CommandList* theList, PropertiesDock* 
 
 	if (Roads.size() == 0 && Points.size() == 1)
 	{
-		Road * R = GetSingleParentRoad(Points[0]);
+		Road * R = Road::GetSingleParentRoad(Points[0]);
 		if (R)
 			Roads.push_back(R);
 	}

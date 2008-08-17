@@ -123,8 +123,15 @@ MainWindow::MainWindow(void)
 	connect (theLayers, SIGNAL(layersChanged(bool)), this, SLOT(adjustLayers(bool)));
 
 	updateBookmarksMenu();
-	updateProjectionMenu();
 	connect (menuBookmarks, SIGNAL(triggered(QAction *)), this, SLOT(bookmarkTriggered(QAction *)));
+
+	updateRecentOpenMenu();
+	connect (menuRecentOpen, SIGNAL(triggered(QAction *)), this, SLOT(recentOpenTriggered(QAction *)));
+
+	updateRecentImportMenu();
+	connect (menuRecentImport, SIGNAL(triggered(QAction *)), this, SLOT(recentImportTriggered(QAction *)));
+
+	updateProjectionMenu();
 
 	MerkaartorPreferences::instance()->restoreMainWindowState( this );
 	CoordBox initialPosition = MerkaartorPreferences::instance()->getInitialPosition();
@@ -499,6 +506,20 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 		if (importOK)
 		{
 			foundImport = true;
+
+			QStringList RecentImport = M_PREFS->getRecentImport();
+			int idx = RecentImport.indexOf(fn);
+			if (idx  >= 0) {
+				RecentImport.move(idx, 0);
+			} else {		
+				if (RecentImport.size() == 4) 
+					RecentImport.removeLast();
+
+				RecentImport.insert(0, fn);
+			}
+			M_PREFS->setRecentImport(RecentImport);
+			
+			updateRecentImportMenu();
 		}
 		else
 		{
@@ -1095,6 +1116,20 @@ void MainWindow::loadDocument(QString fn)
 		e = e.nextSiblingElement();
 	}
 	progress.reset();
+
+	QStringList RecentOpen = M_PREFS->getRecentOpen();
+	int idx = RecentOpen.indexOf(fn);
+	if (idx  >= 0) {
+		RecentOpen.move(idx, 0);
+	} else {
+		if (RecentOpen.size() == 4) 
+			RecentOpen.removeLast();
+
+		RecentOpen.insert(0, fn);
+	}
+	M_PREFS->setRecentOpen(RecentOpen);
+	
+	updateRecentOpenMenu();
 }
 
 void MainWindow::on_exportOSMAction_triggered()
@@ -1339,6 +1374,44 @@ void MainWindow::updateBookmarksMenu()
 	}
 }
 
+void MainWindow::updateRecentOpenMenu()
+{
+	for(int i=menuRecentOpen->actions().count()-1; i >= 0; i--) {
+		menuRecentOpen->removeAction(menuRecentOpen->actions()[0]);
+	}
+
+	if (!M_PREFS->getRecentOpen().size()) {
+		menuRecentOpen->setEnabled(false);
+		return;
+	}
+
+	menuRecentOpen->setEnabled(true);
+	QStringList RecentOpen = M_PREFS->getRecentOpen();
+	for (int i=0; i<RecentOpen.size(); i++) {
+		QAction* a = new QAction(RecentOpen[i], menuRecentOpen);
+		menuRecentOpen->addAction(a);
+	}
+}
+
+void MainWindow::updateRecentImportMenu()
+{
+	for(int i=menuRecentImport->actions().count()-1; i >= 0; i--) {
+		menuRecentImport->removeAction(menuRecentImport->actions()[0]);
+	}
+
+	if (!M_PREFS->getRecentImport().size()) {
+		menuRecentImport->setEnabled(false);
+		return;
+	}
+
+	menuRecentImport->setEnabled(true);
+	QStringList RecentImport = M_PREFS->getRecentImport();
+	for (int i=0; i<RecentImport.size(); i++) {
+		QAction* a = new QAction(RecentImport[i], menuRecentImport);
+		menuRecentImport->addAction(a);
+	}
+}
+
 void MainWindow::updateProjectionMenu()
 {
 	QStringList Projections = MerkaartorPreferences::instance()->getProjectionTypes();
@@ -1454,6 +1527,30 @@ void MainWindow::bookmarkTriggered(QAction* anAction)
 	theView->projection().setViewport(Clip, theView->rect());
 
 	invalidateView();
+}
+
+void MainWindow::recentOpenTriggered(QAction* anAction)
+{
+	if (hasUnsavedChanges(*theDocument) && !mayDiscardUnsavedChanges(this))
+		return;
+
+	QStringList fileNames(anAction->text());
+	loadFiles(fileNames);
+}
+
+void MainWindow::recentImportTriggered(QAction* anAction)
+{
+	view()->setUpdatesEnabled(false);
+	theLayers->setUpdatesEnabled(false);
+
+	QStringList fileNames(anAction->text());
+	importFiles(theDocument, fileNames);
+
+	view()->setUpdatesEnabled(true);
+	theLayers->setUpdatesEnabled(true);
+
+	on_editPropertiesAction_triggered();
+	theDocument->history().setActions(editUndoAction, editRedoAction);
 }
 
 void MainWindow::projectionTriggered(QAction* anAction)

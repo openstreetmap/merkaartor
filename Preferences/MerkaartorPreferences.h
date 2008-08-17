@@ -263,6 +263,13 @@ public:
 	ToolList* getTools() const;
 	Tool getTool(QString toolName) const;
 
+	/* Recent */
+	void setRecentOpen(const QStringList & theValue);
+	QStringList getRecentOpen() const;
+
+	void setRecentImport(const QStringList & theValue);
+	QStringList getRecentImport() const;
+
 protected:
 	bool Use06Api;
 	QString version;

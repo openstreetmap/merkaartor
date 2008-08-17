@@ -29,6 +29,8 @@ class CreateSingleWayInteraction : public GenericFeatureSnapInteraction<MapFeatu
 		Coord FirstPoint;
 		TrackPoint* FirstNode;
 		bool HaveFirst;
+		bool HaveRoad;
+		bool Prepend;
 		bool IsCurved;
 };
 

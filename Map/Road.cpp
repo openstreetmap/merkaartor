@@ -763,3 +763,43 @@ Road* Road::fromBinary(MapDocument* d, MapLayer* /* L */, QDataStream& ds)
 
 	return R;
 }
+
+bool Road::isExtrimity(TrackPoint* node)
+{
+	if (p->Nodes[0] == node)
+		return true;
+
+	if (p->Nodes[p->Nodes.size()-1] == node)
+		return true;
+
+	return false;
+}
+
+Road * Road::GetSingleParentRoad(MapFeature * mapFeature)
+{
+	unsigned int parents = mapFeature->sizeParents();
+
+	if (parents == 0)
+		return NULL;
+
+	Road * parentRoad = NULL;
+
+	unsigned int i;
+	for (i=0; i<parents; i++)
+	{
+		MapFeature * parent = mapFeature->getParent(i);
+		Road * road = dynamic_cast<Road*>(parent);
+
+		if (road == NULL)
+			continue;
+
+		if (parentRoad)
+			return NULL;
+
+		if (road->layer()->isEnabled())
+			parentRoad = road;
+	}
+
+	return parentRoad;
+}
+

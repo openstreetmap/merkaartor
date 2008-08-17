@@ -63,6 +63,9 @@ class Road : public MapFeature
 		virtual void toBinary(QDataStream& ds);
 		static Road* fromBinary(MapDocument* d, MapLayer* L, QDataStream& ds);
 
+		bool isExtrimity(TrackPoint* node);
+		static Road * GetSingleParentRoad(MapFeature * mapFeature);
+
 	protected:
 		RoadPrivate* p;
 };

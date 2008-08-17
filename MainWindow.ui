@@ -135,10 +135,22 @@
      <addaction name="renderNativeAction" />
      <addaction name="renderSVGAction" />
     </widget>
+    <widget class="QMenu" name="menuRecentOpen" >
+     <property name="title" >
+      <string>Recent open</string>
+     </property>
+    </widget>
+    <widget class="QMenu" name="menuRecentImport" >
+     <property name="title" >
+      <string>Recent import</string>
+     </property>
+    </widget>
     <addaction name="fileNewAction" />
     <addaction name="fileOpenAction" />
-    <addaction name="separator" />
     <addaction name="fileImportAction" />
+    <addaction name="menuRecentOpen" />
+    <addaction name="menuRecentImport" />
+    <addaction name="separator" />
     <addaction name="menuExport" />
     <addaction name="menuRender" />
     <addaction name="separator" />

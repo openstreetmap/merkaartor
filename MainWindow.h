@@ -128,6 +128,8 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 	public slots:
 		void adjustLayers(bool adjustViewport);
 		void bookmarkTriggered(QAction* anAction);
+		void recentOpenTriggered(QAction* anAction);
+		void recentImportTriggered(QAction* anAction);
 		void projectionTriggered(QAction* anAction);
 		void updateGpsPosition();
 		void applyStyles(std::vector<FeaturePainter>* thePainters);
@@ -152,6 +154,8 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 
 	private:
 		void updateBookmarksMenu();
+		void updateRecentOpenMenu();
+		void updateRecentImportMenu();
 		void updateProjectionMenu();
 		MapDocument* getDocumentFromClipboard();
 		bool selectExportedFeatures(QVector<MapFeature*>& theFeatures);

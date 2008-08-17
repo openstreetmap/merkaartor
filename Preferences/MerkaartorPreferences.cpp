@@ -817,3 +817,25 @@ Tool MerkaartorPreferences::getTool(QString toolName) const
 	return ret;
 }
 
+/* Recent */
+QStringList MerkaartorPreferences::getRecentOpen() const
+{
+	return Sets->value("recent/open").toStringList();
+}
+
+void MerkaartorPreferences::setRecentOpen(const QStringList & theValue)
+{
+	Sets->setValue("recent/open", theValue);
+}
+
+QStringList MerkaartorPreferences::getRecentImport() const
+{
+	return Sets->value("recent/import").toStringList();
+}
+
+void MerkaartorPreferences::setRecentImport(const QStringList & theValue)
+{
+	Sets->setValue("recent/import", theValue);
+}
+
+
