@@ -82,7 +82,7 @@
  touchupColor="#000000ff" touchupScale="1" touchupOffset="0"
  touchupDashDown="0.03" touchupDashUp="0.3"
  drawTrafficDirectionMarks="no">
-    <selector expr="[highway] is steps"/>
+  <selector expr="[highway] is steps"/>
 </painter>
 <painter
  zoomUnder="0.01" zoomUpper="1e+07"
@@ -142,7 +142,7 @@
  foregroundColor="#000077ff" foregroundScale="0" foregroundOffset="1"
  fillColor="#7777ff77"
  drawTrafficDirectionMarks="yes">
-  <selector expr="[natural] is water"/>
+  <selector expr="[natural] is water or [landuse] is water"/>
 </painter>
 <painter
  zoomUnder="0.03" zoomUpper="1e+07"
@@ -218,35 +218,35 @@
  zoomUnder="0.00666667" zoomUpper="1e+07"
  icon=":/Art/Places/place_town.png"
  drawTrafficDirectionMarks="no">
- <selector expr="[place] is town"/>
+  <selector expr="[place] is town"/>
 </painter>
 <painter
  zoomUnder="0.01" zoomUpper="1e+07"
  icon=":/Art/Places/place_village.png"
  drawTrafficDirectionMarks="no">
- <selector expr="[place] is village"/>
+  <selector expr="[place] is village"/>
 </painter>
 <painter
  zoomUnder="0.01" zoomUpper="1e+07"
  icon=":/Art/Places/place_village.png"
  drawTrafficDirectionMarks="no">
- <selector expr="[place] is suburb"/>
+  <selector expr="[place] is suburb"/>
 </painter>
 <painter
  zoomUnder="0.02" zoomUpper="1e+07"
  icon=":/Art/Places/place_hamlet.png"
  drawTrafficDirectionMarks="no">
- <selector expr="[place] is hamlet"/>
+  <selector expr="[place] is hamlet"/>
 </painter>
 <painter
  icon=":/Art/Places/place_town.png"
  drawTrafficDirectionMarks="no">
- <selector expr="[place] is city"/>
+  <selector expr="[place] is city"/>
 </painter>
 <painter
  zoomUnder="0" zoomUpper="1e+07"
  icon=":/MapIcons/map-icons/square.small/unknown.png"
  drawTrafficDirectionMarks="no">
-  <selector expr="Type is TrackPoint and not HasTags"/>
+  <selector expr="Type is TrackPoint and  not HasTags"/>
 </painter>
 </mapStyle>
