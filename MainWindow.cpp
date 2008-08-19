@@ -1001,6 +1001,20 @@ void MainWindow::on_fileSaveAsAction_triggered()
 	if (fileName != "") {
 		saveDocument();
 	}
+
+	QStringList RecentOpen = M_PREFS->getRecentOpen();
+	int idx = RecentOpen.indexOf(fileName);
+	if (idx  >= 0) {
+		RecentOpen.move(idx, 0);
+	} else {
+		if (RecentOpen.size() == 4) 
+			RecentOpen.removeLast();
+
+		RecentOpen.insert(0, fileName);
+	}
+	M_PREFS->setRecentOpen(RecentOpen);
+	
+	updateRecentOpenMenu();
 }
 
 void MainWindow::on_fileSaveAction_triggered()

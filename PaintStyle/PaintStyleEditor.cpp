@@ -26,9 +26,11 @@ PaintStyleEditor::PaintStyleEditor(QWidget *aParent, const std::vector<FeaturePa
 	for (unsigned int i = 0; i < thePainters.size(); ++i)
 		PaintList->addItem(thePainters[i].userName());
 	PaintList->setCurrentRow(0);
-	on_PaintList_itemClicked(PaintList->item(PaintList->currentRow()));
 	LowerZoomBoundary->setSpecialValueText(tr("Always"));
 	UpperZoomBoundary->setSpecialValueText(tr("Always"));
+
+	on_PaintList_itemClicked(PaintList->item(PaintList->currentRow()));
+
 	FreezeUpdate = false;
 
 	resize(1, 1);
@@ -152,6 +154,8 @@ void PaintStyleEditor::on_PaintList_itemClicked(QListWidgetItem* it)
 	DrawLabelBackground->setChecked(FP.labelBackgroundColor().isValid());
 	makeBoundaryIcon(LabelBackgroundlColor, FP.labelBackgroundColor());
 	LabelFont->setCurrentFont(FP.getLabelFont());
+	LabelTag->setText(FP.getLabelTag());
+	LabelBackgroundTag->setText(FP.getLabelBackgroundTag());
 	
 	FreezeUpdate = false;
 }
@@ -396,6 +400,21 @@ void PaintStyleEditor::on_DrawLabel_clicked(bool b)
 	thePainters[idx].labelActive(b);
 }
 
+void PaintStyleEditor::on_LabelTag_textEdited()
+{
+	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	if (idx >= thePainters.size())
+		return;
+	thePainters[idx].labelTag(LabelTag->text());
+}
+
+void PaintStyleEditor::on_LabelBackgroundTag_textEdited()
+{
+	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	if (idx >= thePainters.size())
+		return;
+	thePainters[idx].labelBackgroundTag(LabelBackgroundTag->text());
+}
 
 void PaintStyleEditor::on_LabelColor_clicked()
 {

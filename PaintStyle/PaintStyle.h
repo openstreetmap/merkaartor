@@ -61,10 +61,12 @@ class FeaturePainter
 		FeaturePainter& fillActive(bool b);
 		FeaturePainter& iconActive(bool b);
 		FeaturePainter& labelActive(bool b);
+		FeaturePainter& labelTag(const QString& val);
 		FeaturePainter& label(const QColor& Color, double Scale, double Offset);
 		FeaturePainter& setLabelFont(const QString& descFont);
 		FeaturePainter& labelBackgroundActive(bool b);
 		FeaturePainter& labelBackground(const QColor& bgColor);
+		FeaturePainter& labelBackgroundTag(const QString& val);
 
 		QString userName() const;
 		std::pair<double, double> zoomBoundaries() const;
@@ -77,6 +79,8 @@ class FeaturePainter
 		QColor fillColor() const;
 		QColor labelBackgroundColor() const;
 		QFont getLabelFont() const;
+		QString getLabelTag() const;
+		QString getLabelBackgroundTag() const;
 		QString iconName() const;
 		bool isIconActive() const;
 
@@ -118,10 +122,12 @@ class FeaturePainter
 		QString TrackPointIconName;
 		bool DrawLabel;
 		QColor LabelColor;
+		QString LabelTag;
 		double LabelScale;
 		double LabelOffset;
 		bool DrawLabelBackground;
 		QColor LabelBackgroundColor;
+		QString LabelBackgroundTag;
 		QFont LabelFont;
 };
 

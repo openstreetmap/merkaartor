@@ -318,8 +318,11 @@ void readFromNode(const QDomElement& e, FeaturePainter& FP)
 		FP.label(
 			toColor(e.attribute("labelColor")),e.attribute("labelScale").toDouble(),e.attribute("labelOffset").toDouble());
 		FP.setLabelFont(e.attribute("labelFont"));
+		FP.labelTag(e.attribute("labelTag"));
 		if (e.hasAttribute("labelBackgroundColor"))
 			FP.labelBackground(toColor(e.attribute("labelBackgroundColor")));
+		if (e.hasAttribute("labelBackgroundTag"))
+			FP.labelBackgroundTag(e.attribute("labelBackgroundTag"));
 	}
 	QDomNode n = e.firstChild();
 	std::vector<std::pair<QString,QString> > Pairs;

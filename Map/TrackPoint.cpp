@@ -215,8 +215,6 @@ TrackPoint * TrackPoint::fromXML(MapDocument* d, MapLayer* L, const QDomElement 
 	if (!Pt) {
 		Pt = new TrackPoint(Coord(angToInt(Lat),angToInt(Lon)));
 		Pt->setId(id);
-		Pt->setTime(time);
-		Pt->setUser(user);
 		Pt->setLastUpdated(A);
 		L->add(Pt);
 	} else {
@@ -225,11 +223,11 @@ TrackPoint * TrackPoint::fromXML(MapDocument* d, MapLayer* L, const QDomElement 
 			L->add(Pt);
 		}
 		Pt->setPosition(Coord(angToInt(Lat), angToInt(Lon)));
-		Pt->setTime(time);
-		Pt->setUser(user);
 		if (Pt->lastUpdated() == MapFeature::NotYetDownloaded)
 			Pt->setLastUpdated(A);
 	}
+	Pt->setTime(time);
+	Pt->setUser(user);
 
 	MapFeature::tagsFromXML(d, Pt, e);
 

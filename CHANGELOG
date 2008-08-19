@@ -1,4 +1,5 @@
 v0.12
+	* FIX : manage road conflicts from downloads
 	* ADD : continue road if selected node belongs to only 1 road and is at one end
 	* ADD : MRU for opened and imported files
 	* ADD : menu option to show/hide a selectable relation bounding box

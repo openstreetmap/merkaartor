@@ -44,11 +44,13 @@ class PaintStyleEditor : public QDialog, public Ui::PaintStyleEditor
 		void on_IconName_textEdited();
 		void on_DrawLabel_clicked(bool b);
 		void on_LabelColor_clicked();
+		void on_LabelTag_textEdited();
 		void on_ProportionalLabel_valueChanged();
 		void on_FixedLabel_valueChanged();
 		void on_DrawLabelBackground_clicked(bool b);
 		void on_LabelBackgroundlColor_clicked();
 		void on_LabelFont_currentFontChanged(const QFont & font);
+		void on_LabelBackgroundTag_textEdited();
 		void on_AddButton_clicked();
 		void on_RemoveButton_clicked();
 		void on_DuplicateButton_clicked();

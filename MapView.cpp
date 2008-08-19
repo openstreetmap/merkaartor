@@ -283,6 +283,7 @@ void MapView::drawFeatures(QPainter & P)
 		sz--;
 	for (unsigned int i = 0; i < sz; ++i)
 	{
+		P.save();
 		PaintStyleLayer *Current = EP.get(i);
 
 		for (int i=0; i<theFeatures.size(); i++)
@@ -295,6 +296,7 @@ void MapView::drawFeatures(QPainter & P)
 			else if (Relation * RR = dynamic_cast < Relation * >(theFeatures[i]))
 				Current->draw(RR);
 		}
+		P.restore();
 	}
 }
 

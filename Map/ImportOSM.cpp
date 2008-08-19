@@ -103,8 +103,6 @@ void OSMHandler::parseNd(const QXmlAttributes& atts)
 	if (!R) return;
 	TrackPoint *Part = MapFeature::getTrackPointOrCreatePlaceHolder(theDocument, theLayer, theList, atts.value("ref"));
 	if (NewFeature)
-		R->add(Part);
-	else
 		theList->add(new RoadAddTrackPointCommand(R,Part));
 }
 
@@ -120,21 +118,25 @@ void OSMHandler::parseWay(const QXmlAttributes& atts)
 			R->setLastUpdated(MapFeature::UserResolved);
 			NewFeature = false;
 			// conflict
-/*				TrackPoint* Conflict = dynamic_cast<TrackPoint*>(theDocument->get("conflict_node_"+Root.attribute("from")));
-			if (Conflict) From = Conflict;
-			Conflict = dynamic_cast<TrackPoint*>(theDocument->get("conflict_node_"+Root.attribute("to")));
-			if (Conflict) To = Conflict;
-			Way* W = new Way(From,To);
-			W->setId("conflict_"+id);
-			loadSegmentTags(Root,W);
-			theList->add(new AddFeatureCommand(conflictLayer,W, false));
-			W->setLastUpdated(MapFeature::OSMServerConflict); */
+			Road* userRd = R;
+			R = new Road();
+			R->setId("conflict_"+id);
+			R->setLastUpdated(MapFeature::OSMServerConflict);
+			parseStandardAttributes(atts,R);
+			if (R->time() > userRd->time()) {
+				theList->add(new AddFeatureCommand(conflictLayer, R, false));
+				NewFeature = true;
+			} else {
+				delete R;
+				R = userRd;
+				NewFeature = false;
+			}
 		}
 		else if (R->lastUpdated() != MapFeature::UserResolved)
 		{
 			while (R->size())
 				theList->add(new RoadRemoveTrackPointCommand(R,R->get(0)));
-			NewFeature = false;
+			NewFeature = true;
 		}
 	}
 	else
@@ -376,6 +378,15 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 		if (!conflictLayer->size()) {
 			theDocument->remove(conflictLayer);
 			delete conflictLayer;
+		} else {
+			QMessageBox::warning(aParent,QApplication::translate("Downloader","Conflicts have been detected"), 
+				QApplication::translate("Downloader",
+				"This means that some of the feature you modified"
+				" since your last download have since been modified by someone else on the server.\n"
+				"The features have been duplicated as \"conflict_...\" on the \"Conflicts...\" layer.\n"
+				"Before being able to upload your changes, you will have to manually merge the two versions"
+				" and remove the one from the \"Conflicts...\" layer."
+				));
 		}
 	}
 	return true;

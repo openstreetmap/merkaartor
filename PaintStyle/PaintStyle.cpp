@@ -42,8 +42,8 @@ FeaturePainter::FeaturePainter(const FeaturePainter& f)
   ForegroundFill(f.ForegroundFill), ForegroundFillFillColor(f.ForegroundFillFillColor),
   DrawTrafficDirectionMarks(f.DrawTrafficDirectionMarks),
   DrawIcon(f.DrawIcon), TrackPointIconName(f.TrackPointIconName),
-  DrawLabel(f.DrawLabel), LabelColor(f.LabelColor), LabelScale(f.LabelScale), LabelOffset(f.LabelOffset),
-  DrawLabelBackground(f.DrawLabelBackground), LabelBackgroundColor(f.LabelBackgroundColor),
+  DrawLabel(f.DrawLabel), LabelTag(f.LabelTag), LabelColor(f.LabelColor), LabelScale(f.LabelScale), LabelOffset(f.LabelOffset),
+  DrawLabelBackground(f.DrawLabelBackground), LabelBackgroundColor(f.LabelBackgroundColor), LabelBackgroundTag(f.LabelBackgroundTag),
   LabelFont(f.LabelFont)
 {
 	if (f.theSelector)
@@ -92,6 +92,8 @@ FeaturePainter& FeaturePainter::operator=(const FeaturePainter& f)
 	DrawLabelBackground = f.DrawLabelBackground;
 	LabelBackgroundColor = f.LabelBackgroundColor;
 	LabelFont = f.LabelFont;
+	LabelTag = f.LabelTag;
+	LabelBackgroundTag = f.LabelBackgroundTag;
 	return *this;
 }
 
@@ -146,9 +148,12 @@ QString FeaturePainter::asXML() const
 	if (DrawLabel) {
 		r += " " + boundaryAsXML("label",LabelColor, LabelScale, LabelOffset);
 		r += " labelFont=\"" + LabelFont.toString() + "\"";
+		r += " labelTag=\"" + LabelTag + "\"";
 	}
-	if (DrawLabelBackground)
-		r += " labelBackgroundColor=\""+::asXML(LabelBackgroundColor)+"\"\n";
+	if (DrawLabelBackground) {
+		r += " labelBackgroundColor=\""+::asXML(LabelBackgroundColor)+"\"";
+		r += " labelBackgroundTag=\""+ LabelBackgroundTag +"\"\n";
+	}
 	r += ">\n";
 
 
@@ -299,6 +304,18 @@ FeaturePainter& FeaturePainter::labelActive(bool b)
 	return *this;
 }
 
+FeaturePainter& FeaturePainter::labelTag(const QString& val)
+{
+	LabelTag = val;
+	return *this;
+}
+
+FeaturePainter& FeaturePainter::labelBackgroundTag(const QString& val)
+{
+	LabelBackgroundTag = val;
+	return *this;
+}
+
 FeaturePainter& FeaturePainter::label(const QColor& Color, double Scale, double Offset)
 {
 	DrawLabel = true;
@@ -339,6 +356,16 @@ QColor FeaturePainter::labelBackgroundColor() const
 QFont FeaturePainter::getLabelFont() const
 {
 	return LabelFont;
+}
+
+QString FeaturePainter::getLabelTag() const
+{
+	return LabelTag;
+}
+
+QString FeaturePainter::getLabelBackgroundTag() const
+{
+	return LabelBackgroundTag;
 }
 
 LineParameters FeaturePainter::foregroundBoundary() const
@@ -637,13 +664,19 @@ void FeaturePainter::drawTouchup(Road* R, QPainter& thePainter, const Projection
 	}
 }
 
+#define LABEL_PATH_DISTANCE 3
+#define LABEL_STRAIGHT_DISTANCE 50
+#define BG_SPACING 6
+#define BG_PEN_SZ 2
+
 void FeaturePainter::drawLabel(TrackPoint* Pt, QPainter& thePainter, const Projection& theProjection) const
 {
 	if (!DrawLabel)
 		return;
 
-	QString str = Pt->tagValue("name", "");
-	if (str.isEmpty())
+	QString str = Pt->tagValue(getLabelTag(), "");
+	QString strBg = Pt->tagValue(getLabelBackgroundTag(), "");
+	if (str.isEmpty() && strBg.isEmpty())
 		return;
 
 	LineParameters lp = labelBoundary();
@@ -657,89 +690,190 @@ void FeaturePainter::drawLabel(TrackPoint* Pt, QPainter& thePainter, const Proje
 
 	int modX = 0;
 	int modY = 0;
-
-	modX = - (metrics.width(str)/2);
-	if (DrawIcon && (TrackPointIconName != "") )
-	{
-		QPixmap pm(TrackPointIconName);
-		modY = - pm.height();
-	}
-
-	thePainter.save();
-
 	QPainterPath textPath;
+	QPainterPath bgPath;
 	QPoint C(theProjection.project(Pt->position()));
 
-	textPath.addText(C.x() + modX, C.y() + modY, font, str);
-	thePainter.setPen(QPen(Qt::white, WW/5));
-//    thePainter.drawText(C.x() + modX, C.y() + modY, str);
-    thePainter.drawPath(textPath);
+	if (!str.isEmpty()) {
+		modX = - (metrics.width(str)/2);
+		if (DrawIcon && (TrackPointIconName != "") )
+		{
+			QPixmap pm(TrackPointIconName);
+			modY = - pm.height();
+			if (DrawLabelBackground)
+				modY -= BG_SPACING;
+		}
+
+		thePainter.save();
+
+		textPath.addText(modX, modY, font, str);
+		thePainter.translate(C);
+
+		thePainter.setPen(QPen(Qt::white, WW/5));
+		thePainter.drawPath(textPath);
+	} 
+	if (DrawLabelBackground && !strBg.isEmpty()) {
+		modX = - (metrics.width(strBg)/2);
+		if (DrawIcon && (TrackPointIconName != "") )
+		{
+			QPixmap pm(TrackPointIconName);
+			modY = - pm.height();
+			if (DrawLabelBackground)
+				modY -= BG_SPACING;
+		}
+
+		thePainter.save();
+		textPath.addText(modX, modY, font, strBg);
+		thePainter.translate(C);
+
+		bgPath.addRect(textPath.boundingRect().adjusted(-BG_SPACING, -BG_SPACING, BG_SPACING, BG_SPACING));
+		thePainter.setPen(QPen(LabelColor, BG_PEN_SZ));
+		thePainter.setBrush(LabelBackgroundColor);
+		thePainter.drawPath(bgPath);
+	}
 	thePainter.setPen(Qt::NoPen);
 	thePainter.setBrush(LabelColor);
-    thePainter.drawPath(textPath);
+	thePainter.drawPath(textPath);
 
 	thePainter.restore();
+
+	if (DrawLabelBackground && !strBg.isEmpty()) {
+		QRegion rg = thePainter.clipRegion();
+		rg -= textPath.boundingRect().toRect().translated(C);
+		thePainter.setClipRegion(rg);
+	}
 }
+
 
 void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, const Projection& theProjection) const
 {
 	if (!DrawLabel)
 		return;
-
-	QString str = R->tagValue("name", "");
-	if (str.isEmpty())
+	
+	QString str = R->tagValue(getLabelTag(), "");
+	QString strBg = R->tagValue(getLabelBackgroundTag(), "");
+	if (str.isEmpty() && strBg.isEmpty())
 		return;
 
 	LineParameters lp = labelBoundary();
 	double PixelPerM = theProjection.pixelPerM();
 	double WW = PixelPerM*widthOf(R)*lp.Proportional+lp.Fixed;
 	if (WW < 10) return;
+	double WWR = qMax(PixelPerM*widthOf(R)*BackgroundScale+BackgroundOffset, PixelPerM*widthOf(R)*ForegroundScale+ForegroundOffset);
 
     QFont font = getLabelFont();
-	font.setPixelSize(WW);
-    QFontMetrics metrics(font);
-	for (int i=WW-1; i> 0; --i) {
-		font.setPixelSize(i);
-		metrics = QFontMetrics(font);
-		if ((metrics.width(str) < R->getPath().length() - 5))
-			break;
+
+	if (!str.isEmpty()) {
+		QRegion rg = thePainter.clipRegion();
+		font.setPixelSize(WW);
+		QFontMetrics metrics(font);
+
+		for (int i=WW-1; i> 0; --i) {
+			font.setPixelSize(i);
+			metrics = QFontMetrics(font);
+			if ((metrics.width(str) < R->getPath().length() - 5) && (metrics.height() < WWR))
+				break;
+		}
+		if (font.pixelSize() >= 5) {
+			thePainter.setPen(LabelColor);
+			thePainter.setFont(font);
+			int repeat = (R->getPath().length() / (metrics.width(str) * LABEL_PATH_DISTANCE)) - 0.5;
+			int numSegment = repeat+1;
+			qreal lenSegment = R->getPath().length() / numSegment;
+			qreal startSegment = 0;
+			do {
+				QRegion rg = thePainter.clipRegion();
+
+				qreal curLen = startSegment + ((lenSegment - metrics.width(str)) / 2);
+				int modIncrement = 1;
+				qreal modAngle = 0;
+				int modY = 0;
+				if (cos(angToRad(R->getPath().angleAtPercent((startSegment+(lenSegment/2))/R->getPath().length()))) < 0) {
+					modIncrement = -1;
+					modAngle = 180.0;
+					curLen += metrics.width(str);
+				}
+				for (int i = 0; i < str.length(); ++i) {
+					qreal t = R->getPath().percentAtLength(curLen);
+					QPointF pt = R->getPath().pointAtPercent(t);
+					qreal angle = R->getPath().angleAtPercent(t);
+					QString txt;
+					txt.append(str[i]);
+					thePainter.save();
+					thePainter.translate(pt);
+					//qDebug()<<"txt = "<<txt<<", angle = "<<angle<<curLen<<t;
+					thePainter.rotate(-angle+modAngle);
+					//p->thePainter.drawText(QRect(0, modY, metrics.width(txt), WW), Qt::AlignVCenter, txt);
+					modY = (metrics.ascent()/2)-2;
+					thePainter.drawText(0, modY, txt);
+					thePainter.restore();
+
+					//rg -= QRect(0, modY, metrics.width(txt), metrics.height()).translated(pt.toPoint());
+
+					qreal incremenet = metrics.width(txt);
+					curLen += (incremenet * modIncrement);
+				}
+				startSegment += lenSegment;
+			} while (--repeat >= 0);
+		
+			thePainter.setClipRegion(rg);
+		}
+	} 
+	if (DrawLabelBackground && !strBg.isEmpty()) {
+		QRegion rg = thePainter.clipRegion();
+		font.setPixelSize(WW);
+		QFontMetrics metrics(font);
+
+		int repeat = (R->getPath().length() / (metrics.width(strBg) * LABEL_STRAIGHT_DISTANCE)) - 0.5;
+		int numSegment = repeat+1;
+		qreal lenSegment = R->getPath().length() / numSegment;
+		qreal startSegment = 0;
+		do {
+	
+			int modX = 0;
+			int modY = 0;
+
+			qreal curLen = startSegment + (lenSegment / 2);
+			qreal t = R->getPath().percentAtLength(curLen);
+			QPointF pt = R->getPath().pointAtPercent(t);
+
+			modX = - (metrics.width(strBg)/2);
+			//modX = WW;
+			modY = (metrics.ascent()/2);
+
+			QPainterPath textPath, bgPath;
+			textPath.addText(modX, modY, font, strBg);
+			bgPath.addRect(textPath.boundingRect().adjusted(-BG_SPACING, -BG_SPACING, BG_SPACING, BG_SPACING));
+
+			bool rgContains = false;
+			for (int i=0; i<rg.numRects(); i++) {
+				if (rg.rects()[i].contains(bgPath.boundingRect().toRect().translated(pt.toPoint()))) {
+					rgContains = true;
+					break;
+				}
+			}
+			if (rgContains) {
+				thePainter.save();
+				thePainter.translate(pt);
+
+				thePainter.setPen(QPen(LabelColor, BG_PEN_SZ));
+				thePainter.setBrush(LabelBackgroundColor);
+				thePainter.drawPath(bgPath);
+
+				thePainter.setPen(Qt::NoPen);
+				thePainter.setBrush(LabelColor);
+				thePainter.drawPath(textPath);
+
+				thePainter.restore();
+
+				rg -= bgPath.boundingRect().toRect().translated(pt.toPoint());
+			}
+
+			startSegment += lenSegment;
+		} while (--repeat >= 0);
+
+		thePainter.setClipRegion(rg);
 	}
-	if (font.pixelSize() < 5)
-		return;
-
-	thePainter.save();
-
-	thePainter.setPen(LabelColor);
-	thePainter.setFont(font);
-    qreal curLen = (R->getPath().length() - metrics.width(str)) / 2;
-	int modIncrement = 1;
-	qreal modAngle = 0;
-	int modY = 0;
-	if (cos(angToRad(R->getPath().angleAtPercent(0.5))) < 0) {
-		modIncrement = -1;
-		modAngle = 180.0;
-		curLen += metrics.width(str);
-	}
-	for (int i = 0; i < str.length(); ++i) {
-        qreal t = R->getPath().percentAtLength(curLen);
-        QPointF pt = R->getPath().pointAtPercent(t);
-        qreal angle = R->getPath().angleAtPercent(t);
-        QString txt;
-        txt.append(str[i]);
-        thePainter.save();
-        thePainter.translate(pt);
-        //qDebug()<<"txt = "<<txt<<", angle = "<<angle<<curLen<<t;
-        thePainter.rotate(-angle+modAngle);
-        //p->thePainter.drawText(QRect(0, modY, metrics.width(txt), WW), Qt::AlignVCenter, txt);
-		modY = (metrics.ascent()/2)-2;
-        thePainter.drawText(0, modY, txt);
-        thePainter.restore();
-
-        qreal incremenet = metrics.width(txt);
-        curLen += (incremenet * modIncrement);
-    }
-
-	thePainter.restore();
 }
 
 PaintStyleLayer::~PaintStyleLayer()
