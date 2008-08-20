@@ -268,7 +268,7 @@ CommandList* CommandList::fromXML(MapDocument* d, const QDomElement& e)
 // COMMANDHISTORY
 
 CommandHistory::CommandHistory()
-: Index(0), UndoAction(0), RedoAction(0)
+: Index(0), UndoAction(0), RedoAction(0), UploadAction(0)
 {
 }
 
@@ -316,10 +316,11 @@ void CommandHistory::add(Command* aCommand)
 	updateActions();
 }
 
-void CommandHistory::setActions(QAction* anUndo, QAction* aRedo)
+void CommandHistory::setActions(QAction* anUndo, QAction* aRedo, QAction* anUploadAction)
 {
 	UndoAction = anUndo;
 	RedoAction = aRedo;
+	UploadAction = anUploadAction;
 	updateActions();
 }
 
@@ -329,6 +330,8 @@ void CommandHistory::updateActions()
 		UndoAction->setEnabled(Index>0);
 	if (RedoAction)
 		RedoAction->setEnabled(Index<Subs.size());
+	if (UploadAction)
+		UploadAction->setEnabled(Index);
 }
 
 unsigned int CommandHistory::index() const

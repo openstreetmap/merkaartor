@@ -77,7 +77,7 @@ class CommandHistory
 		void undo();
 		void redo();
 		void add(Command* aCommand);
-		void setActions(QAction* anUndo, QAction* aRedo);
+		void setActions(QAction* anUndo, QAction* aRedo, QAction* anUploadAction);
 		void updateActions();
 		unsigned int buildDirtyList(DirtyList& theList);
 		unsigned int buildUndoList(QListWidget* theList);
@@ -91,6 +91,7 @@ class CommandHistory
 		unsigned int Index;
 		QAction* UndoAction;
 		QAction* RedoAction;
+		QAction* UploadAction;
 };
 
 #endif

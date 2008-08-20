@@ -99,7 +99,7 @@ MainWindow::MainWindow(void)
 	addAction(viewMoveRightAction);
 	addAction(viewMoveUpAction);
 	addAction(viewMoveDownAction);
-	theDocument->history().setActions(editUndoAction, editRedoAction);
+	theDocument->history().setActions(editUndoAction, editRedoAction, fileUploadAction);
 
 
 	theProperties = new PropertiesDock(this);
@@ -420,7 +420,7 @@ void MainWindow::on_fileImportAction_triggered()
 	theLayers->setUpdatesEnabled(true);
 
 	on_editPropertiesAction_triggered();
-	theDocument->history().setActions(editUndoAction, editRedoAction);
+	theDocument->history().setActions(editUndoAction, editRedoAction, fileUploadAction);
 }
 
 static bool mayDiscardUnsavedChanges(QWidget* aWidget)
@@ -594,7 +594,7 @@ void MainWindow::loadFiles(const QStringList & fileList)
 	}
 
 	on_editPropertiesAction_triggered();
-	theDocument->history().setActions(editUndoAction, editRedoAction);
+	theDocument->history().setActions(editUndoAction, editRedoAction, fileUploadAction);
 
 	theLayers->setUpdatesEnabled(true);
 	view()->setUpdatesEnabled(true);
@@ -804,7 +804,7 @@ void MainWindow::on_fileNewAction_triggered()
 		delete theDocument;
 		theDocument = new MapDocument(theLayers);
 		theView->setDocument(theDocument);
-		theDocument->history().setActions(editUndoAction, editRedoAction);
+		theDocument->history().setActions(editUndoAction, editRedoAction, fileUploadAction);
 		connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));
 		theDirty->updateList();
 
@@ -1113,7 +1113,7 @@ void MainWindow::loadDocument(QString fn)
 				theDocument = newDoc;
 				theView->setDocument(theDocument);
 				on_editPropertiesAction_triggered();
-				theDocument->history().setActions(editUndoAction, editRedoAction);
+				theDocument->history().setActions(editUndoAction, editRedoAction, fileUploadAction);
 				connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));
 				theDirty->updateList();
 				fileName = fn;
@@ -1564,7 +1564,7 @@ void MainWindow::recentImportTriggered(QAction* anAction)
 	theLayers->setUpdatesEnabled(true);
 
 	on_editPropertiesAction_triggered();
-	theDocument->history().setActions(editUndoAction, editRedoAction);
+	theDocument->history().setActions(editUndoAction, editRedoAction, fileUploadAction);
 }
 
 void MainWindow::projectionTriggered(QAction* anAction)
