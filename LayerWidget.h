@@ -24,6 +24,7 @@ class LayerWidget : public QAbstractButton
 		virtual void mouseReleaseEvent(QMouseEvent* anEvent);
 
 		virtual MapLayer* getMapLayer();
+		virtual void setLayerVisible(bool b);
 		virtual	void initActions();
 
 		QMenu* getAssociatedMenu();

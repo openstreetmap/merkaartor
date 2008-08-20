@@ -71,10 +71,8 @@ void LayerWidget::mouseReleaseEvent(QMouseEvent* anEvent)
 {
 	if (anEvent->pos().x()<20)
 	{
-		theLayer->setVisible(!theLayer->isVisible());
+		setLayerVisible(!theLayer->isVisible());
 		anEvent->ignore();
-		update();
-		emit(layerChanged(this, false));
 	}
 	else
 	{
@@ -163,13 +161,19 @@ QMenu* LayerWidget::getAssociatedMenu()
 	return associatedMenu;
 }
 
+void LayerWidget::setLayerVisible(bool b)
+{
+	theLayer->setVisible(b);
+	update();
+	emit(layerChanged(this, false));
+}
 
 // DrawingLayerWidget
 
 DrawingLayerWidget::DrawingLayerWidget(DrawingMapLayer* aLayer, QWidget* aParent)
 	: LayerWidget(aLayer, aParent)
 {
-	backColor = QColor(255,255,255);
+	backColor = QColor(165,209,255);
 	initActions();
 }
 
@@ -197,7 +201,7 @@ void DrawingLayerWidget::initActions()
 ImageLayerWidget::ImageLayerWidget(ImageMapLayer* aLayer, QWidget* aParent)
 : LayerWidget(aLayer, aParent), wmsMenu(0) //, actgrWms(0)
 {
-	backColor = QColor(128,128,128);
+	backColor = QColor(200,200,200);
 	//actgrAdapter = new QActionGroup(this);
 
 	actNone = new QAction(MerkaartorPreferences::instance()->getBgTypes()[Bg_None], this);
@@ -419,7 +423,7 @@ void ImageLayerWidget::initActions()
 TrackLayerWidget::TrackLayerWidget(TrackMapLayer* aLayer, QWidget* aParent)
 	: LayerWidget(aLayer, aParent)
 {
-	backColor = QColor(255,255,255);
+	backColor = QColor(122,204,166);
 	initActions();
 }
 
@@ -464,7 +468,7 @@ void TrackLayerWidget::extractLayer(bool)
 DirtyLayerWidget::DirtyLayerWidget(DirtyMapLayer* aLayer, QWidget* aParent)
 	: LayerWidget(aLayer, aParent)
 {
-	backColor = QColor(255,255,255);
+	backColor = QColor(200,200,200);
 	initActions();
 }
 
@@ -485,7 +489,7 @@ void DirtyLayerWidget::initActions()
 UploadedLayerWidget::UploadedLayerWidget(UploadedMapLayer* aLayer, QWidget* aParent)
 	: LayerWidget(aLayer, aParent)
 {
-	backColor = QColor(255,255,255);
+	backColor = QColor(200,200,200);
 	initActions();
 }
 
@@ -512,7 +516,7 @@ void UploadedLayerWidget::initActions()
 ExtractedLayerWidget::ExtractedLayerWidget(ExtractedMapLayer* aLayer, QWidget* aParent)
 	: LayerWidget(aLayer, aParent)
 {
-	backColor = QColor(255,255,255);
+	backColor = QColor(165,209,255);
 	initActions();
 }
 

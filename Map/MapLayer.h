@@ -26,6 +26,17 @@ private:
 	MapLayer(const MapLayer& aLayer);
 
 public:
+	enum LayerGroup {
+		None				= 0x00000000,
+		Default				= 0x00000001,
+		OSM					= 0x00000002,
+		Tracks				= 0x00000004,
+		All					= 0xffffffff
+	};
+
+	Q_DECLARE_FLAGS(LayerGroups, LayerGroup)
+
+public:
 	virtual ~MapLayer();
 
 	void setName(const QString& aName);
@@ -75,6 +86,7 @@ public:
 	static CoordBox boundingBox(const MapLayer* theLayer);
 
 	virtual const QString className() = 0;
+	virtual const LayerGroups classGroups() = 0;
 
 	unsigned int incDirtyLevel(unsigned int inc=1);
 	unsigned int decDirtyLevel(unsigned int inc=1);
@@ -104,6 +116,7 @@ public:
 	static DrawingMapLayer* doFromXML(DrawingMapLayer* l, MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
 	virtual const QString className() {return "DrawingMapLayer";};
+	virtual const LayerGroups classGroups() {return (MapLayer::OSM);};
 };
 
 class ImageMapLayer : public QObject, public MapLayer
@@ -126,6 +139,7 @@ public:
 	static ImageMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
 	virtual const QString className() {return "ImageMapLayer";};
+	virtual const LayerGroups classGroups() {return(MapLayer::Default);};
 
 private:
 	WMSMapAdapter* wmsa;
@@ -149,6 +163,8 @@ public:
 	static TrackMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
 	virtual const QString className() {return "TrackMapLayer";};
+	virtual const LayerGroups classGroups() {return(MapLayer::Tracks);};
+
 	virtual bool isUploadable() {return true;};
 	virtual bool isTrack() {return true;};
 
@@ -165,6 +181,8 @@ public:
 	static DirtyMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
 	virtual const QString className() {return "DirtyMapLayer";};
+	virtual const LayerGroups classGroups() {return(MapLayer::Default|MapLayer::OSM);};
+
 	virtual LayerWidget* newWidget(void);
 };
 
@@ -177,6 +195,7 @@ public:
 	static UploadedMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
 	virtual const QString className() {return "UploadedMapLayer";};
+	virtual const LayerGroups classGroups() {return(MapLayer::Default|MapLayer::OSM);};
 	virtual LayerWidget* newWidget(void);
 };
 
@@ -189,6 +208,7 @@ public:
 	static ExtractedMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
 	virtual const QString className() {return "ExtractedMapLayer";};
+	virtual const LayerGroups classGroups() {return(MapLayer::OSM);};
 	virtual LayerWidget* newWidget(void);
 
 	virtual bool isUploadable() {return false;};
@@ -203,6 +223,7 @@ public:
 	static DeletedMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
 	virtual const QString className() {return "DeletedMapLayer";};
+	virtual const LayerGroups classGroups() {return(MapLayer::None);};
 	virtual LayerWidget* newWidget(void);
 
 	virtual bool isUploadable() {return false;};

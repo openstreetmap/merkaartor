@@ -633,7 +633,7 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 			}
 			if (retry) continue;
 			aParent->view()->setUpdatesEnabled(false);
-			MapLayer* theLayer = new DrawingMapLayer(QApplication::translate("Downloader","Download"));
+			MapLayer* theLayer = new DrawingMapLayer(QApplication::translate("Downloader","%1 download").arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
 			theDocument->add(theLayer);
 			OK = downloadOSM(aParent,osmWebsite,osmUser,osmPwd,useProxy,proxyHost,proxyPort,Clip,theDocument,theLayer);
 			if (OK && ui.IncludeTracks->isChecked())

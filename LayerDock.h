@@ -6,10 +6,12 @@
 #include <QVBoxLayout>
 #include <QGroupBox>
 #include <QButtonGroup>
+#include <QTabBar>
 
 class MainWindow;
 class MapLayer;
 class LayerWidget;
+class LayerDockPrivate;
 
 class LayerDock : public QDockWidget
 {
@@ -28,24 +30,22 @@ class LayerDock : public QDockWidget
 		void addLayer(MapLayer* aLayer);
 		void deleteLayer(MapLayer* aLayer);
 
-	private:
-		MainWindow* Main;
-		QScrollArea* Scroller;
-		QGroupBox* Content;
-		QVBoxLayout* Layout;
-		QButtonGroup* butGroup;
-
-		QList < QPair<MapLayer*, LayerWidget*> > layerList;
-
 	private slots:
 		void layerSelected(QAbstractButton * l);
 		void layerChanged(LayerWidget*, bool adjustViewport);
 		void layerClosed(MapLayer*);
 		void layerCleared(MapLayer*);
 		void layerZoom(MapLayer*);
+		void tabChanged(int idx);
+		void tabContextMenuRequested(const QPoint& pos);
+		void TabShowAll(bool);
+		void TabHideAll(bool);
 
 	signals:
 		void layersChanged(bool adjustViewport);
+
+	protected:
+		LayerDockPrivate* p;
 };
 
 #endif

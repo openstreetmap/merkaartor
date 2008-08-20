@@ -15,9 +15,26 @@
 
 #define LINEHEIGHT 25
 
-LayerDock::LayerDock(MainWindow* aMain)
-: QDockWidget(aMain), Main(aMain), Scroller(0), Content(0), Layout(0), butGroup(0)
+class LayerDockPrivate
 {
+	public:
+		LayerDockPrivate(MainWindow* aMain) :
+		  Main(aMain), Scroller(0), Content(0), Layout(0), butGroup(0) {}
+	public:
+		MainWindow* Main;
+		QScrollArea* Scroller;
+		QWidget* Content;
+		QVBoxLayout* Layout;
+		QButtonGroup* butGroup;
+		QTabBar* tab;
+
+		QList < QPair<MapLayer*, LayerWidget*> > layerList;
+};
+
+LayerDock::LayerDock(MainWindow* aMain)
+: QDockWidget(aMain)
+{
+	p = new LayerDockPrivate(aMain);
 //	setMinimumSize(220,100);
 	setWindowTitle(tr("Layers"));
 	setObjectName("layersDock");
@@ -27,15 +44,16 @@ LayerDock::LayerDock(MainWindow* aMain)
 
 LayerDock::~LayerDock()
 {
+	delete p;
 }
 
 void LayerDock::clearLayers()
 {
-	for (int i=layerList.size()-1; i >= 0; i--) {
-		butGroup->removeButton(layerList[i].second);
-		Layout->removeWidget(layerList[i].second);
-		delete layerList[i].second;
-		layerList.removeAt(i);
+	for (int i=p->layerList.size()-1; i >= 0; i--) {
+		p->butGroup->removeButton(p->layerList[i].second);
+		p->Layout->removeWidget(p->layerList[i].second);
+		delete p->layerList[i].second;
+		p->layerList.removeAt(i);
 	}
 }
 
@@ -43,16 +61,16 @@ void LayerDock::addLayer(MapLayer* aLayer)
 {
 	LayerWidget* w = aLayer->newWidget();
 	if (w) {
-		layerList.append(qMakePair(aLayer, w));
-		butGroup->addButton(w);
-		Layout->insertWidget(layerList.size()-1, w);
+		p->layerList.append(qMakePair(aLayer, w));
+		p->butGroup->addButton(w);
+		p->Layout->insertWidget(p->layerList.size()-1, w);
 
 		connect(w, SIGNAL(layerChanged(LayerWidget*,bool)), this, SLOT(layerChanged(LayerWidget*,bool)));
 		connect(w, SIGNAL(layerClosed(MapLayer*)), this, SLOT(layerClosed(MapLayer*)));
 		connect(w, SIGNAL(layerCleared(MapLayer*)), this, SLOT(layerCleared(MapLayer*)));
 		connect(w, SIGNAL(layerZoom(MapLayer*)), this, SLOT(layerZoom(MapLayer*)));
 
-		Main->menuLayers->addMenu(w->getAssociatedMenu());
+		p->Main->menuLayers->addMenu(w->getAssociatedMenu());
 
 		//w->setChecked(aLayer->isSelected());
 		w->setVisible(aLayer->isEnabled());
@@ -65,20 +83,20 @@ void LayerDock::addLayer(MapLayer* aLayer)
 
 void LayerDock::deleteLayer(MapLayer* aLayer)
 {
-	for (int i=layerList.size()-1; i >= 0; i--) {
-		if (layerList[i].first == aLayer) {
+	for (int i=p->layerList.size()-1; i >= 0; i--) {
+		if (p->layerList[i].first == aLayer) {
 			if (i) {
-				layerList[i-1].first->setSelected(true);
-				layerList[i-1].second->setChecked(true);
+				p->layerList[i-1].first->setSelected(true);
+				p->layerList[i-1].second->setChecked(true);
 			}
-			butGroup->removeButton(layerList[i].second);
-			Layout->removeWidget(layerList[i].second);
-			disconnect(layerList[i].second);
-			layerList[i].second->setVisible(false);
+			p->butGroup->removeButton(p->layerList[i].second);
+			p->Layout->removeWidget(p->layerList[i].second);
+			disconnect(p->layerList[i].second);
+			p->layerList[i].second->setVisible(false);
 
-			Main->menuLayers->removeAction(layerList[i].second->getAssociatedMenu()->menuAction());
+			p->Main->menuLayers->removeAction(p->layerList[i].second->getAssociatedMenu()->menuAction());
 
-			layerList.removeAt(i);
+			p->layerList.removeAt(i);
 			//aLayer->deleteWidget();
 		}
 	}
@@ -88,26 +106,59 @@ void LayerDock::deleteLayer(MapLayer* aLayer)
 
 void LayerDock::createContent()
 {
-	delete Scroller;
+	delete p->Scroller;
 
-	Scroller = new QScrollArea;
-	Scroller->setBackgroundRole(QPalette::Base);
-	Scroller->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	QVBoxLayout scrollerLayout(Scroller);
-	Content = new QGroupBox();
-	Content->setFlat(true);
-	Layout = new QVBoxLayout(Content);
-	Layout->setSpacing(0);
-	Layout->setMargin(0);
+	QWidget* frame = new QWidget();
+	QHBoxLayout frameLayout(frame);
+	frameLayout.setMargin(0);
+	frameLayout.setSpacing(0);
 
-	butGroup = new QButtonGroup(Content);
-	connect(butGroup, SIGNAL(buttonClicked (QAbstractButton *)), this, SLOT(layerSelected(QAbstractButton *)));
+	p->tab = new QTabBar(frame);
+	p->tab->setShape(QTabBar::RoundedWest);
+	p->tab->setContextMenuPolicy(Qt::CustomContextMenu);
+	int t;
+	t = p->tab->addTab(tr("All"));
+	p->tab->setTabData(t, MapLayer::All);
+	t = p->tab->addTab(tr("Default"));
+	p->tab->setTabData(t, MapLayer::Default);
+	t = p->tab->addTab(tr("OSM"));
+	p->tab->setTabData(t, MapLayer::OSM);
+	t = p->tab->addTab(tr("Tracks"));
+	p->tab->setTabData(t, MapLayer::Tracks);
+	connect(p->tab, SIGNAL(currentChanged (int)), this, SLOT(tabChanged(int)));
+	connect(p->tab, SIGNAL(customContextMenuRequested (const QPoint&)), this, SLOT(tabContextMenuRequested(const QPoint&)));
 
-	Layout->addStretch();
-	setWidget(Scroller);
-	Scroller->setWidget(Content);
-	Scroller->setWidgetResizable(true);
+	QVBoxLayout* tabLayout = new QVBoxLayout();
+	tabLayout->addWidget(p->tab);
+	QSpacerItem* tabSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+	tabLayout->addItem(tabSpacer);
 
+	p->Scroller = new QScrollArea(frame);
+	p->Scroller->setBackgroundRole(QPalette::Base);
+	p->Scroller->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	QVBoxLayout scrollerLayout(p->Scroller);
+	scrollerLayout.setMargin(0);
+	scrollerLayout.setSpacing(0);
+
+	p->Content = new QWidget(p->Scroller);
+	p->Layout = new QVBoxLayout(p->Content);
+	p->Layout->setSpacing(0);
+	p->Layout->setMargin(0);
+
+	p->butGroup = new QButtonGroup(p->Content);
+	connect(p->butGroup, SIGNAL(buttonClicked (QAbstractButton *)), this, SLOT(layerSelected(QAbstractButton *)));
+
+	p->Layout->addStretch();
+
+
+	scrollerLayout.addWidget(p->Content);
+	frameLayout.addLayout(tabLayout);
+	frameLayout.addWidget(p->Scroller);
+ 
+	p->Scroller->setWidget(p->Content);
+	p->Scroller->setWidgetResizable(true);
+
+	setWidget(frame);
 	update();
 }
 
@@ -117,8 +168,8 @@ void LayerDock::resizeEvent(QResizeEvent* )
 
 void LayerDock::layerSelected(QAbstractButton * l)
 {
-	if (Main->info())
-		Main->info()->setHtml(((LayerWidget*)l)->getMapLayer()->toHtml());
+	if (p->Main->info())
+		p->Main->info()->setHtml(((LayerWidget*)l)->getMapLayer()->toHtml());
 }
 
 void LayerDock::layerChanged(LayerWidget* l, bool adjustViewport)
@@ -136,7 +187,7 @@ void LayerDock::layerClosed(MapLayer* l)
 	l->setEnabled(false);
 	l->getWidget()->setVisible(false);
 	l->getWidget()->getAssociatedMenu()->setVisible(false);
-	Main->on_editPropertiesAction_triggered();
+	p->Main->on_editPropertiesAction_triggered();
 
 	update();
 }
@@ -144,7 +195,7 @@ void LayerDock::layerClosed(MapLayer* l)
 void LayerDock::layerCleared(MapLayer* l)
 {
 	l->clear();
-	Main->on_editPropertiesAction_triggered();
+	p->Main->on_editPropertiesAction_triggered();
 }
 
 void LayerDock::layerZoom(MapLayer * l)
@@ -153,7 +204,53 @@ void LayerDock::layerZoom(MapLayer * l)
 	CoordBox min(bb.center()-10, bb.center()+10);
 	bb.merge(min);
 	bb = bb.zoomed(1.1);
-	Main->view()->projection().setViewport(bb, Main->view()->rect());
+	p->Main->view()->projection().setViewport(bb, p->Main->view()->rect());
 	emit(layersChanged(false));
 }
 
+void LayerDock::tabChanged(int idx)
+{
+	for (int i=p->layerList.size()-1; i >= 0; i--) {
+		if (p->layerList[i].first->classGroups() & p->tab->tabData(idx).toInt())
+			p->layerList[i].second->setVisible(true);
+		else
+			p->layerList[i].second->setVisible(false);
+	}
+}
+
+void LayerDock::tabContextMenuRequested(const QPoint& pos)
+{
+	int idx = p->tab->tabAt(pos);
+	p->tab->setCurrentIndex(idx);
+
+	QMenu* ctxMenu = new QMenu(this);
+
+	QAction* actTabShow = new QAction(tr("Show All"), ctxMenu);
+	ctxMenu->addAction(actTabShow);
+	connect(actTabShow, SIGNAL(triggered(bool)), this, SLOT(TabShowAll(bool)));
+
+	QAction* actTabHide = new QAction(tr("Hide All"), ctxMenu);
+	ctxMenu->addAction(actTabHide);
+	connect(actTabHide, SIGNAL(triggered(bool)), this, SLOT(TabHideAll(bool)));
+
+	ctxMenu->exec(mapToGlobal(pos));
+
+}
+
+void LayerDock::TabShowAll(bool)
+{
+	for (int i=p->layerList.size()-1; i >= 0; i--) {
+		if (p->layerList[i].first->classGroups() & p->tab->tabData(p->tab->currentIndex()).toInt()) {
+			p->layerList[i].second->setLayerVisible(true);
+		}
+	}
+}
+
+void LayerDock::TabHideAll(bool)
+{
+	for (int i=p->layerList.size()-1; i >= 0; i--) {
+		if (p->layerList[i].first->classGroups() & p->tab->tabData(p->tab->currentIndex()).toInt()) {
+			p->layerList[i].second->setLayerVisible(false);
+		}
+	}
+}
