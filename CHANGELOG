@@ -1,4 +1,5 @@
 v0.12
+	* ADD : +/- buttons on zooming slippy map so single button devices can use it too
 	* FIX : only activate upload menu when there is something to upload
 	* ADD : ability to use svg for node icons
 	* ADD : tab filtering and color code to Layer dock

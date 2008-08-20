@@ -138,6 +138,14 @@ void SlippyMapWidget::paintEvent(QPaintEvent*)
 				Painter.drawPixmap(x,y,*img);
 			delete img;
 		}
+	Painter.setPen(QPen(Qt::NoPen));
+	Painter.setBrush(QBrush(QColor(255,255,255,128)));
+	Painter.drawRect(width()-21,0,20,20);
+	Painter.drawRect(width()-21,height()-21,20,20);
+	Painter.setBrush(QBrush(QColor(0,0,0)));
+	Painter.drawRect(width()-19,8,16,4);
+	Painter.drawRect(width()-19,height()-13,16,4);
+	Painter.drawRect(width()-13,height()-19,4,16);
 }
 
 void SlippyMapWidget::ZoomTo(const QPoint & NewCenter, int NewZoom)
@@ -177,6 +185,21 @@ void SlippyMapWidget::mousePressEvent(QMouseEvent* ev)
 	}
 	else
 	{
+		if (ev->pos().x() > width()-20)
+		{
+			if (ev->pos().y() < 20)
+			{
+				ZoomTo(QPoint(width()/2,height()/2),p->Zoom-1);
+				emit redraw();
+				return;
+			}
+			else if (ev->pos().y() > height()-20)
+			{
+				ZoomTo(QPoint(width()/2,height()/2),p->Zoom+1);
+				emit redraw();
+				return;
+			}
+		}
 		p->PreviousDrag = ev->pos();
 		p->InDrag = true;
 	}
