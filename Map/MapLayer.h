@@ -102,6 +102,8 @@ protected:
 	mutable QString Id;
 };
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(MapLayer::LayerGroups)
+
 class DrawingMapLayer : public MapLayer
 {
 public:

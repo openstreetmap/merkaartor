@@ -154,7 +154,7 @@ void LayerDock::createContent()
 	scrollerLayout.addWidget(p->Content);
 	frameLayout.addLayout(tabLayout);
 	frameLayout.addWidget(p->Scroller);
- 
+
 	p->Scroller->setWidget(p->Content);
 	p->Scroller->setWidgetResizable(true);
 

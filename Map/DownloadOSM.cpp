@@ -442,7 +442,7 @@ bool downloadTracksFromOSM(QMainWindow* Main, const QString& aWeb, const QString
 			return false;
 		if (theDownloader.resultCode() != 200)
 			return false;
-		unsigned int Before = theTracklayers.size();
+		int Before = theTracklayers.size();
 		QByteArray Ar(theDownloader.content());
 		bool OK = importGPX(Main, Ar, theDocument, theTracklayers, true);
 		if (!OK)

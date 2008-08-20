@@ -372,7 +372,7 @@ bool QRectInterstects(const QRect& r, const QLine& l, QPoint& a, QPoint& b)
 	if (QLineF(r.topLeft(), r.bottomLeft()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
 		a = pF.toPoint();
 		hasP1 = true;
-	} 
+	}
 	if (QLineF(r.bottomLeft(), r.bottomRight()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
 		if (hasP1) {
 			b = pF.toPoint();
@@ -381,7 +381,7 @@ bool QRectInterstects(const QRect& r, const QLine& l, QPoint& a, QPoint& b)
 			a = pF.toPoint();
 			hasP1 = true;
 		}
-	} 
+	}
 	if (QLineF(r.bottomRight(), r.topRight()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
 		if (hasP1) {
 			b = pF.toPoint();
@@ -390,7 +390,7 @@ bool QRectInterstects(const QRect& r, const QLine& l, QPoint& a, QPoint& b)
 			a = pF.toPoint();
 			hasP1 = true;
 		}
-	} 
+	}
 	if (QLineF(r.topRight(), r.topLeft()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
 		if (hasP1) {
 			b = pF.toPoint();
@@ -422,7 +422,7 @@ void Road::buildPath(Projection const &theProjection, const QRect& r)
 
 	double PixelPerM = theProjection.pixelPerM();
 	double WW = PixelPerM*widthOf(this)*10+10;
-	QRect clipRect = r.adjusted(-WW-20, -WW-20, WW+20, WW+20);
+	QRect clipRect = r.adjusted(int(-WW-20), int(-WW-20), int(WW+20), int(WW+20));
 
 	if (!clipRect.contains(aP)) {
 		aP.setX(qMax(clipRect.left(), aP.x()));
@@ -566,7 +566,7 @@ Road * Road::fromXML(MapDocument* d, MapLayer * L, const QDomElement e)
 	if (e.hasAttribute("actor"))
 		A = (MapFeature::ActorType)(e.attribute("actor", "2").toInt());
 	else
-		if (L = d->getDirtyLayer())
+		if ((L = d->getDirtyLayer()))
 			A = MapFeature::User;
 		else
 			A = MapFeature::OSMServer;

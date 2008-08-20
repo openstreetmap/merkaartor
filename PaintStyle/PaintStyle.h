@@ -121,8 +121,8 @@ class FeaturePainter
 		bool DrawIcon;
 		QString TrackPointIconName;
 		bool DrawLabel;
-		QColor LabelColor;
 		QString LabelTag;
+		QColor LabelColor;
 		double LabelScale;
 		double LabelOffset;
 		bool DrawLabelBackground;

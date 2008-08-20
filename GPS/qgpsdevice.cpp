@@ -62,7 +62,7 @@ QGPSDevice::QGPSDevice()
  * Accessor functions
  */
 
-int QGPSDevice::latDegrees()    { return (int) (abs(latitude()));													}
+int QGPSDevice::latDegrees()    { return (int) (abs(int(latitude())));													}
 int QGPSDevice::latMinutes()    { return (int) (latitude() - latDegrees());											}
 int QGPSDevice::latSeconds()    { return (int) (((latitude() - latDegrees()) - latMinutes()) * 60);					}
 int QGPSDevice::longDegrees()   { return (int) (longitude());														}

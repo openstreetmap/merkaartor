@@ -695,7 +695,7 @@ void FeaturePainter::drawLabel(TrackPoint* Pt, QPainter& thePainter, const Proje
 	if (WW < 10) return;
 
 	QFont font = getLabelFont();
-	font.setPixelSize(WW);
+	font.setPixelSize(int(WW));
     QFontMetrics metrics(font);
 
 	int modX = 0;
@@ -721,7 +721,7 @@ void FeaturePainter::drawLabel(TrackPoint* Pt, QPainter& thePainter, const Proje
 
 		thePainter.setPen(QPen(Qt::white, WW/5));
 		thePainter.drawPath(textPath);
-	} 
+	}
 	if (DrawLabelBackground && !strBg.isEmpty()) {
 		modX = - (metrics.width(strBg)/2);
 		if (DrawIcon && (TrackPointIconName != "") )
@@ -759,7 +759,7 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, const Projection& 
 {
 	if (!DrawLabel)
 		return;
-	
+
 	QString str = R->tagValue(getLabelTag(), "");
 	QString strBg = R->tagValue(getLabelBackgroundTag(), "");
 	if (str.isEmpty() && strBg.isEmpty())
@@ -775,10 +775,10 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, const Projection& 
 
 	if (!str.isEmpty()) {
 		QRegion rg = thePainter.clipRegion();
-		font.setPixelSize(WW);
+		font.setPixelSize(int(WW));
 		QFontMetrics metrics(font);
 
-		for (int i=WW-1; i> 0; --i) {
+		for (int i=int(WW)-1; i> 0; --i) {
 			font.setPixelSize(i);
 			metrics = QFontMetrics(font);
 			if ((metrics.width(str) < R->getPath().length() - 5) && (metrics.height() < WWR))
@@ -787,7 +787,7 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, const Projection& 
 		if (font.pixelSize() >= 5) {
 			thePainter.setPen(LabelColor);
 			thePainter.setFont(font);
-			int repeat = (R->getPath().length() / (metrics.width(str) * LABEL_PATH_DISTANCE)) - 0.5;
+			int repeat = int((R->getPath().length() / (metrics.width(str) * LABEL_PATH_DISTANCE)) - 0.5);
 			int numSegment = repeat+1;
 			qreal lenSegment = R->getPath().length() / numSegment;
 			qreal startSegment = 0;
@@ -825,21 +825,21 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, const Projection& 
 				}
 				startSegment += lenSegment;
 			} while (--repeat >= 0);
-		
+
 			thePainter.setClipRegion(rg);
 		}
-	} 
+	}
 	if (DrawLabelBackground && !strBg.isEmpty()) {
 		QRegion rg = thePainter.clipRegion();
-		font.setPixelSize(WW);
+		font.setPixelSize(int(WW));
 		QFontMetrics metrics(font);
 
-		int repeat = (R->getPath().length() / (metrics.width(strBg) * LABEL_STRAIGHT_DISTANCE)) - 0.5;
+		int repeat = int((R->getPath().length() / (metrics.width(strBg) * LABEL_STRAIGHT_DISTANCE)) - 0.5);
 		int numSegment = repeat+1;
 		qreal lenSegment = R->getPath().length() / numSegment;
 		qreal startSegment = 0;
 		do {
-	
+
 			int modX = 0;
 			int modY = 0;
 

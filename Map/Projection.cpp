@@ -13,8 +13,8 @@
 #define POLARRADIUS      6356752
 
 Projection::Projection(void)
-: ScaleLat(1000000), DeltaLat(0),
-  ScaleLon(1000000), DeltaLon(0), Viewport(Coord(-1000, -1000), Coord(1000, 1000)),
+  : ScaleLat(1000000), ScaleLon(1000000),
+  DeltaLat(0), DeltaLon(0), Viewport(Coord(-1000, -1000), Coord(1000, 1000)),
   layermanager(0)
 {
 	theProjectionType = MerkaartorPreferences::instance()->getProjectionType();
@@ -130,8 +130,8 @@ void Projection::setViewport(const CoordBox & TargetMap,
 	}
 	double PLon = Center.lon() * ScaleLon;
 	double PLat = Center.lat() * ScaleLat;
-	DeltaLon = Screen.width() / 2 - PLon;
-	DeltaLat = Screen.height() - (Screen.height() / 2 - PLat);
+	DeltaLon = int(Screen.width() / 2 - PLon);
+	DeltaLat = int(Screen.height() - (Screen.height() / 2 - PLat));
 	viewportRecalc(Screen);
 }
 
@@ -160,8 +160,8 @@ void Projection::zoom(double d, const QPointF & Around,
 		ScaleLon *= d;
 		ScaleLat *= d;
 		Coord After = inverse(Around);
-		DeltaLat = Around.y() + Before.lat() * ScaleLat;
-		DeltaLon = Around.x() - Before.lon() * ScaleLon;
+		DeltaLat = int(Around.y() + Before.lat() * ScaleLat);
+		DeltaLon = int(Around.x() - Before.lon() * ScaleLon);
 		viewportRecalc(Screen);
 		if (LAYERMANAGER_OK) {
 			layerManagerSetViewport(Viewport, Screen);
