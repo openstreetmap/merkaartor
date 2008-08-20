@@ -5,6 +5,7 @@
 #include "Map/Relation.h"
 #include "Map/Road.h"
 #include "Utils/LineF.h"
+#include "Utils/SvgCache.h"
 
 #include <QtCore/QString>
 #include <QtGui/QPainter>
@@ -598,11 +599,20 @@ void FeaturePainter::drawTouchup(TrackPoint* Pt, QPainter& thePainter, const Pro
 {
 	if (DrawIcon && (TrackPointIconName != "") )
 	{
-
-		QPixmap pm(TrackPointIconName);
-		QPoint C(theProjection.project(Pt->position()));
-		thePainter.fillRect(QRect(C-QPoint(2,2),QSize(4,4)),QColor(0,0,0,128));
-		thePainter.drawPixmap( int(C.x()-pm.width()/2), int(C.y()-pm.height()/2) , pm);
+		if (TrackPointIconName.right(4).toUpper() == ".SVG")
+		{
+			QPixmap pm(getPixmapFromFile(TrackPointIconName,32));
+			QPoint C(theProjection.project(Pt->position()));
+			thePainter.fillRect(QRect(C-QPoint(2,2),QSize(4,4)),QColor(0,0,0,128));
+			thePainter.drawPixmap( int(C.x()-pm.width()/2), int(C.y()-pm.height()/2) , pm);
+		}
+		else
+		{
+			QPixmap pm(TrackPointIconName);
+			QPoint C(theProjection.project(Pt->position()));
+			thePainter.fillRect(QRect(C-QPoint(2,2),QSize(4,4)),QColor(0,0,0,128));
+			thePainter.drawPixmap( int(C.x()-pm.width()/2), int(C.y()-pm.height()/2) , pm);
+		}
 	}
 }
 

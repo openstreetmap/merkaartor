@@ -57,6 +57,7 @@ HEADERS += \
 ./Utils/PictureViewerDialog.h \
 ./Utils/PixmapWidget.h \
 ./Utils/SelectionDialog.h \
+./Utils/SvgCache.h \
 ./DirtyDock.h
 
 #Source files
@@ -113,6 +114,7 @@ SOURCES += \
 ./Utils/PictureViewerDialog.cpp \
 ./Utils/PixmapWidget.cpp \
 ./Utils/SelectionDialog.cpp \
+./Utils/SvgCache.cpp \
 ./Preferences/MerkaartorPreferences.cpp \
 ./Preferences/PreferencesDialog.cpp \
 ./Preferences/WMSPreferencesDialog.cpp \

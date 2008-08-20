@@ -1,4 +1,5 @@
 v0.12
+	* ADD : ability to use svg for node icons
 	* ADD : tab filtering and color code to Layer dock
 	* FIX : manage road conflicts from downloads
 	* ADD : continue road if selected node belongs to only 1 road and is at one end

@@ -12,7 +12,7 @@
 TEMPLATE = app
 TARGET = merkaartor
 
-QT += network xml core gui
+QT += svg network xml core gui
 
 count(NODEBUG,0) {
     CONFIG += debug
