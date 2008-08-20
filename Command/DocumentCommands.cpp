@@ -137,6 +137,8 @@ void RemoveFeatureCommand::redo()
 void RemoveFeatureCommand::undo()
 {
 	theLayer->remove(theFeature);
+	if (oldLayer->size() < Idx)
+		Idx = oldLayer->size();
 	oldLayer->add(theFeature,Idx);
 	decDirtyLevel(oldLayer);
 	if (CascadedCleanUp)

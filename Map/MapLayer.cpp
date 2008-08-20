@@ -200,8 +200,6 @@ void MapLayer::add(MapFeature* aFeature, unsigned int Idx)
 {
 	add(aFeature);
 	std::rotate(p->Features.begin()+Idx,p->Features.end()-1,p->Features.end());
-	aFeature->setLayer(this);
-	p->RenderPriorityUpToDate = false;
 }
 
 void MapLayer::notifyIdUpdate(const QString& id, MapFeature* aFeature)
@@ -531,7 +529,7 @@ LayerWidget* ImageMapLayer::newWidget(void)
 
 void ImageMapLayer::updateWidget()
 {
-	((ImageLayerWidget*) p->theWidget)->initActions();
+	//((ImageLayerWidget*) p->theWidget)->initActions();
 	p->theWidget->update();
 }
 

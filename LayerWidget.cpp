@@ -24,7 +24,6 @@ LayerWidget::LayerWidget(MapLayer* aLayer, QWidget* aParent)
 	hiddenIcon = QPixmap(":Icons/empty.xpm");
 
 	associatedMenu = new QMenu(aLayer->name());
-//	initActions();
 }
 
 LayerWidget::~LayerWidget()
@@ -100,6 +99,8 @@ MapLayer* LayerWidget::getMapLayer()
 
 void LayerWidget::contextMenuEvent(QContextMenuEvent* anEvent)
 {
+	initActions();
+
 	if (ctxMenu) {
 		if (actZoom)
 			actZoom->setEnabled(theLayer->size());
@@ -122,10 +123,10 @@ void LayerWidget::initActions()
 	for (int i=0; i<NUMOP; i++) {
 		QAction* act = new QAction(tr(opStr[i]), alphaMenu);
 		actgrp->addAction(act);
-		qreal a = MerkaartorPreferences::instance()->getAlpha(opStr[i]);
+		qreal a = M_PREFS->getAlpha(opStr[i]);
 		act->setData(a);
 		act->setCheckable(true);
-		if (theLayer->getAlpha() == a)
+		if (int(theLayer->getAlpha()*100) == int(a*100))
 			act->setChecked(true);
 		alphaMenu->addAction(act);
 	}
@@ -174,7 +175,6 @@ DrawingLayerWidget::DrawingLayerWidget(DrawingMapLayer* aLayer, QWidget* aParent
 	: LayerWidget(aLayer, aParent)
 {
 	backColor = QColor(165,209,255);
-	initActions();
 }
 
 void DrawingLayerWidget::initActions()
@@ -238,7 +238,6 @@ ImageLayerWidget::ImageLayerWidget(ImageMapLayer* aLayer, QWidget* aParent)
 	actVirtEarth->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_MsVirtualEarth_illegal));
 	connect(actVirtEarth, SIGNAL(triggered(bool)), this, SLOT(setMsVirtualEarth(bool)));
 #endif
-	initActions();
 }
 
 ImageLayerWidget::~ImageLayerWidget()
@@ -424,7 +423,6 @@ TrackLayerWidget::TrackLayerWidget(TrackMapLayer* aLayer, QWidget* aParent)
 	: LayerWidget(aLayer, aParent)
 {
 	backColor = QColor(122,204,166);
-	initActions();
 }
 
 void TrackLayerWidget::initActions()
@@ -469,7 +467,6 @@ DirtyLayerWidget::DirtyLayerWidget(DirtyMapLayer* aLayer, QWidget* aParent)
 	: LayerWidget(aLayer, aParent)
 {
 	backColor = QColor(200,200,200);
-	initActions();
 }
 
 void DirtyLayerWidget::initActions()
@@ -490,7 +487,6 @@ UploadedLayerWidget::UploadedLayerWidget(UploadedMapLayer* aLayer, QWidget* aPar
 	: LayerWidget(aLayer, aParent)
 {
 	backColor = QColor(200,200,200);
-	initActions();
 }
 
 void UploadedLayerWidget::initActions()
@@ -517,7 +513,6 @@ ExtractedLayerWidget::ExtractedLayerWidget(ExtractedMapLayer* aLayer, QWidget* a
 	: LayerWidget(aLayer, aParent)
 {
 	backColor = QColor(165,209,255);
-	initActions();
 }
 
 void ExtractedLayerWidget::initActions()

@@ -21,12 +21,12 @@ CreateSingleWayInteraction::CreateSingleWayInteraction(MainWindow* aMain, MapVie
 		FirstPoint = firstNode->position();
 		LastCursor = view()->projection().project(FirstPoint);
 		HaveFirst = true;
-		HaveRoad = false;
 		if (theRoad = Road::GetSingleParentRoad(firstNode)) {
 			if (theRoad->isExtrimity(firstNode)) {
-				HaveRoad = true;
 				Prepend = (theRoad->get(0) == firstNode) ? true : false;
-			}
+			} else
+				theRoad = NULL;
+
 		}
 	}
 }
