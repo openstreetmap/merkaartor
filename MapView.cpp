@@ -278,14 +278,26 @@ void MapView::drawFeatures(QPainter & P)
 		theFeatures[i]->draw(P, projection());
 	}
 
-	unsigned int sz = EP.size();
-	if (!M_PREFS->getNamesVisible())
-		sz--;
-	for (unsigned int i = 0; i < sz; ++i)
+	for (unsigned int i = 0; i < EP.size(); ++i)
 	{
-		P.save();
 		PaintStyleLayer *Current = EP.get(i);
 
+#ifndef NDEBUG
+		EPBackgroundLayer* bl = dynamic_cast<EPBackgroundLayer*> (Current);
+		if ((bl) && (!M_PREFS->getStyleBackgroundVisible()))
+			continue;
+		EPForegroundLayer* fl = dynamic_cast<EPForegroundLayer*> (Current);
+		if ((fl) && (!M_PREFS->getStyleForegroundVisible()))
+			continue;
+		EPTouchupLayer* tl = dynamic_cast<EPTouchupLayer*> (Current);
+		if ((tl) && (!M_PREFS->getStyleTouchupVisible()))
+			continue;
+#endif
+		EPLabelLayer* nl = dynamic_cast<EPLabelLayer*> (Current);
+		if ((nl) && (!M_PREFS->getNamesVisible()))
+			continue;
+
+		P.save();
 		for (int i=0; i<theFeatures.size(); i++)
 		{
 			P.setOpacity(theFeatures[i]->layer()->getAlpha());

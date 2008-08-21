@@ -42,6 +42,8 @@ class PaintStyleEditor : public QDialog, public Ui::PaintStyleEditor
 		void on_FillColor_clicked();
 		void on_DrawIcon_clicked(bool b);
 		void on_IconName_textEdited();
+		void on_ProportionalIcon_valueChanged();
+		void on_FixedIcon_valueChanged();
 		void on_DrawLabel_clicked(bool b);
 		void on_LabelColor_clicked();
 		void on_LabelTag_textEdited();

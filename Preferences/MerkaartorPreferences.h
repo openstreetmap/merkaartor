@@ -215,6 +215,12 @@ public:
 	void setScaleVisible(bool theValue);
 	bool getScaleVisible() const;
 
+	bool getStyleBackgroundVisible() const;
+	void setStyleBackgroundVisible(bool theValue);
+	bool getStyleForegroundVisible() const;
+	void setStyleForegroundVisible(bool theValue);
+	bool getStyleTouchupVisible() const;
+	void setStyleTouchupVisible(bool theValue);
 	void setNamesVisible(bool theValue);
 	bool getNamesVisible() const;
 

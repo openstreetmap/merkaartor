@@ -22,7 +22,7 @@ FeaturePainter::FeaturePainter()
   DrawTouchup(false), TouchupScale(0), TouchupOffset(1),
   TouchupDashSet(false),
   ForegroundFill(false), DrawTrafficDirectionMarks(false),
-  DrawIcon(false),
+  DrawIcon(false), IconScale(0), IconOffset(0),
   DrawLabel(false), LabelScale(0), LabelOffset(0),
   DrawLabelBackground(false)
 {
@@ -42,7 +42,7 @@ FeaturePainter::FeaturePainter(const FeaturePainter& f)
   TouchupDash(f.TouchupDash), TouchupWhite(f.TouchupWhite),
   ForegroundFill(f.ForegroundFill), ForegroundFillFillColor(f.ForegroundFillFillColor),
   DrawTrafficDirectionMarks(f.DrawTrafficDirectionMarks),
-  DrawIcon(f.DrawIcon), TrackPointIconName(f.TrackPointIconName),
+  DrawIcon(f.DrawIcon), IconName(f.IconName), IconScale(f.IconScale), IconOffset(f.IconOffset),
   DrawLabel(f.DrawLabel), LabelTag(f.LabelTag), LabelColor(f.LabelColor), LabelScale(f.LabelScale), LabelOffset(f.LabelOffset),
   DrawLabelBackground(f.DrawLabelBackground), LabelBackgroundColor(f.LabelBackgroundColor), LabelBackgroundTag(f.LabelBackgroundTag),
   LabelFont(f.LabelFont)
@@ -85,7 +85,9 @@ FeaturePainter& FeaturePainter::operator=(const FeaturePainter& f)
 	ForegroundFillFillColor = f.ForegroundFillFillColor;
 	DrawTrafficDirectionMarks = f.DrawTrafficDirectionMarks;
 	DrawIcon = f.DrawIcon;
-	TrackPointIconName = f.TrackPointIconName;
+	IconName = f.IconName;
+	IconScale = f.IconScale;
+	IconOffset = f.IconOffset;
 	DrawLabel = f.DrawLabel;
 	LabelColor = f.LabelColor;
 	LabelScale = f.LabelScale;
@@ -122,6 +124,12 @@ QString boundaryAsXML(const QString& name, const QColor& c, double Scale, double
 		name+"Color=\""+asXML(c)+"\" "+name+"Scale=\""+QString::number(Scale)+"\" "+name+"Offset=\""+QString::number(Offset)+"\"\n";
 }
 
+QString iconAsXML(const QString& name, const QString& fn, double Scale, double Offset)
+{
+	return
+		name+"=\""+fn+"\" "+name+"Scale=\""+QString::number(Scale)+"\" "+name+"Offset=\""+QString::number(Offset)+"\"\n";
+}
+
 QString FeaturePainter::asXML() const
 {
 	QString r;
@@ -140,8 +148,8 @@ QString FeaturePainter::asXML() const
 		r += " touchupDashDown=\""+QString::number(TouchupDash)+"\" touchupDashUp=\""+QString::number(TouchupWhite)+"\"\n";
 	if (ForegroundFill)
 		r += " fillColor=\""+::asXML(ForegroundFillFillColor)+"\"\n";
-	if (!TrackPointIconName.isEmpty() && DrawIcon)
-		r += " icon=\""+TrackPointIconName+"\"\n";
+	if (!IconName.isEmpty() && DrawIcon)
+		r += " " + iconAsXML("icon",IconName, IconScale, IconOffset);
 	if (DrawTrafficDirectionMarks)
 		r += " drawTrafficDirectionMarks=\"yes\"";
 	else
@@ -163,6 +171,7 @@ QString FeaturePainter::asXML() const
 	r += "</painter>\n";
 	return r;
 }
+
 
 QString FeaturePainter::userName() const
 {
@@ -417,26 +426,28 @@ LineParameters FeaturePainter::labelBoundary() const
 	return P;
 }
 
-bool FeaturePainter::isIconActive() const
+FeaturePainter& FeaturePainter::setIcon(const QString& Name, double Scale, double Offset)
 {
-	return DrawIcon;
+	DrawIcon = true;
+	IconName = Name;
+	IconScale = Scale;
+	IconOffset = Offset;
+	return *this;
 }
 
-QString FeaturePainter::iconName() const
+IconParameters FeaturePainter::icon() const
 {
-	return TrackPointIconName;
+	IconParameters P;
+	P.Draw = DrawIcon;
+	P.Name = IconName;
+	P.Proportional = IconScale;
+	P.Fixed = IconOffset;
+	return P;
 }
 
 FeaturePainter& FeaturePainter::iconActive(bool b)
 {
 	DrawIcon = b;
-	return *this;
-}
-
-FeaturePainter& FeaturePainter::trackPointIcon(const QString& Filename)
-{
-	DrawIcon = true;
-	TrackPointIconName = Filename;
 	return *this;
 }
 
@@ -597,23 +608,16 @@ void FeaturePainter::drawForeground(Relation* R, QPainter& thePainter, const Pro
 
 void FeaturePainter::drawTouchup(TrackPoint* Pt, QPainter& thePainter, const Projection& theProjection) const
 {
-	if (DrawIcon && (TrackPointIconName != "") )
+	if (DrawIcon && (IconName != "") )
 	{
-		if (TrackPointIconName.right(4).toUpper() == ".SVG")
-		{
-			QPixmap pm(getPixmapFromFile(TrackPointIconName,32));
-			QPoint C(theProjection.project(Pt->position()));
-			thePainter.fillRect(QRect(C-QPoint(2,2),QSize(4,4)),QColor(0,0,0,128));
-			thePainter.drawPixmap( int(C.x()-pm.width()/2), int(C.y()-pm.height()/2) , pm);
-		}
-		else
-		{
-			QPixmap pm(TrackPointIconName);
-			QPoint C(theProjection.project(Pt->position()));
-			thePainter.fillRect(QRect(C-QPoint(2,2),QSize(4,4)),QColor(0,0,0,128));
-			thePainter.drawPixmap( int(C.x()-pm.width()/2), int(C.y()-pm.height()/2) , pm);
-		}
-	}
+		double PixelPerM = theProjection.pixelPerM();
+		double WW = PixelPerM*IconScale+IconOffset;
+
+        QPixmap pm = getPixmapFromFile(IconName,WW);
+        QPoint C(theProjection.project(Pt->position()));
+        thePainter.fillRect(QRect(C-QPoint(2,2),QSize(4,4)),QColor(0,0,0,128));
+        thePainter.drawPixmap( int(C.x()-pm.width()/2), int(C.y()-pm.height()/2) , pm);
+    }
 }
 
 void FeaturePainter::drawTouchup(Road* R, QPainter& thePainter, const Projection& theProjection) const
@@ -706,9 +710,9 @@ void FeaturePainter::drawLabel(TrackPoint* Pt, QPainter& thePainter, const Proje
 
 	if (!str.isEmpty()) {
 		modX = - (metrics.width(str)/2);
-		if (DrawIcon && (TrackPointIconName != "") )
+		if (DrawIcon && (IconName != "") )
 		{
-			QPixmap pm(TrackPointIconName);
+			QPixmap pm(IconName);
 			modY = - pm.height();
 			if (DrawLabelBackground)
 				modY -= BG_SPACING;
@@ -724,9 +728,9 @@ void FeaturePainter::drawLabel(TrackPoint* Pt, QPainter& thePainter, const Proje
 	}
 	if (DrawLabelBackground && !strBg.isEmpty()) {
 		modX = - (metrics.width(strBg)/2);
-		if (DrawIcon && (TrackPointIconName != "") )
+		if (DrawIcon && (IconName != "") )
 		{
-			QPixmap pm(TrackPointIconName);
+			QPixmap pm(IconName);
 			modY = - pm.height();
 			if (DrawLabelBackground)
 				modY -= BG_SPACING;

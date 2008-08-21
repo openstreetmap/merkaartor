@@ -31,6 +31,15 @@ class LineParameters
 		double DashOff;
 };
 
+class IconParameters
+{
+	public:
+		bool Draw;
+		QString Name;
+		double Proportional;
+		double Fixed;
+};
+
 class FeaturePainter
 {
 	public:
@@ -60,6 +69,7 @@ class FeaturePainter
 		FeaturePainter& trackPointIcon(const QString& Filename);
 		FeaturePainter& fillActive(bool b);
 		FeaturePainter& iconActive(bool b);
+		FeaturePainter& setIcon(const QString& Name, double Scale, double Offset);
 		FeaturePainter& labelActive(bool b);
 		FeaturePainter& labelTag(const QString& val);
 		FeaturePainter& label(const QColor& Color, double Scale, double Offset);
@@ -73,6 +83,7 @@ class FeaturePainter
 		LineParameters backgroundBoundary() const;
 		LineParameters foregroundBoundary() const;
 		LineParameters labelBoundary() const;
+		IconParameters icon() const;
 		void clearForegroundDash();
 		LineParameters touchupBoundary() const;
 		void clearTouchupDash();
@@ -81,8 +92,6 @@ class FeaturePainter
 		QFont getLabelFont() const;
 		QString getLabelTag() const;
 		QString getLabelBackgroundTag() const;
-		QString iconName() const;
-		bool isIconActive() const;
 
 		QString asXML() const;
 
@@ -119,7 +128,9 @@ class FeaturePainter
 		QColor ForegroundFillFillColor;
 		bool DrawTrafficDirectionMarks;
 		bool DrawIcon;
-		QString TrackPointIconName;
+		QString IconName;
+		double IconScale;
+		double IconOffset;
 		bool DrawLabel;
 		QString LabelTag;
 		QColor LabelColor;

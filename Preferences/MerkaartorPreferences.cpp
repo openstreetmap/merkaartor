@@ -733,6 +733,36 @@ void MerkaartorPreferences::setScaleVisible(bool theValue)
 	Sets->setValue("visual/ScaleVisible", theValue);
 }
 
+bool MerkaartorPreferences::getStyleBackgroundVisible() const
+{
+	return Sets->value("visual/BackgroundVisible", true).toBool();
+}
+
+void MerkaartorPreferences::setStyleBackgroundVisible(bool theValue)
+{
+	Sets->setValue("visual/BackgroundVisible", theValue);
+}
+
+bool MerkaartorPreferences::getStyleForegroundVisible() const
+{
+	return Sets->value("visual/ForegroundVisible", true).toBool();
+}
+
+void MerkaartorPreferences::setStyleForegroundVisible(bool theValue)
+{
+	Sets->setValue("visual/ForegroundVisible", theValue);
+}
+
+bool MerkaartorPreferences::getStyleTouchupVisible() const
+{
+	return Sets->value("visual/TouchupVisible", true).toBool();
+}
+
+void MerkaartorPreferences::setStyleTouchupVisible(bool theValue)
+{
+	Sets->setValue("visual/TouchupVisible", theValue);
+}
+
 bool MerkaartorPreferences::getNamesVisible() const
 {
 	return Sets->value("visual/NamesVisible", false).toBool();

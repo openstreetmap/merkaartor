@@ -22,6 +22,52 @@ class EditPaintStyle : public PaintStyle
 		EditPaintStylePrivate* p;
 };
 
+/* FEATUREPAINTSELECTOR */
+
+class EPBackgroundLayer : public PaintStyleLayer
+{
+	public:
+		void setP(EditPaintStylePrivate* p);
+		virtual void draw(Road* R);
+		virtual void draw(TrackPoint* Pt);
+		virtual void draw(Relation* R);
+	private:
+		EditPaintStylePrivate* p;
+};
+
+class EPForegroundLayer : public PaintStyleLayer
+{
+	public:
+		void setP(EditPaintStylePrivate* p);
+		virtual void draw(Road* R);
+		virtual void draw(TrackPoint* Pt);
+		virtual void draw(Relation* R);
+	private:
+		EditPaintStylePrivate* p;
+};
+
+class EPTouchupLayer : public PaintStyleLayer
+{
+	public:
+		void setP(EditPaintStylePrivate* p);
+		virtual void draw(Road* R);
+		virtual void draw(TrackPoint* Pt);
+		virtual void draw(Relation* R);
+	private:
+		EditPaintStylePrivate* p;
+};
+
+class EPLabelLayer : public PaintStyleLayer
+{
+	public:
+		void setP(EditPaintStylePrivate* p);
+		virtual void draw(Road* R);
+		virtual void draw(TrackPoint* Pt);
+		virtual void draw(Relation* R);
+	private:
+		EditPaintStylePrivate* p;
+};
+
 void savePainters(const QString& filename);
 void loadPainters(const QString& filename);
 

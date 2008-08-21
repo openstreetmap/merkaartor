@@ -139,6 +139,9 @@ MainWindow::MainWindow(void)
 
 	viewDownloadedAction->setChecked(MerkaartorPreferences::instance()->getDownloadedVisible());
 	viewScaleAction->setChecked(M_PREFS->getScaleVisible());
+	viewStyleBackgroundAction->setChecked(M_PREFS->getStyleBackgroundVisible());
+	viewStyleForegroundAction->setChecked(M_PREFS->getStyleForegroundVisible());
+	viewStyleTouchupAction->setChecked(M_PREFS->getStyleTouchupVisible());
 	viewNamesAction->setChecked(M_PREFS->getNamesVisible());
 	viewTrackPointsAction->setChecked(M_PREFS->getTrackPointsVisible());
 	viewTrackSegmentsAction->setChecked(M_PREFS->getTrackSegmentsVisible());
@@ -158,6 +161,12 @@ MainWindow::MainWindow(void)
 
 #ifndef OSMARENDER
 	renderSVGAction->setVisible(false);
+#endif
+
+#ifdef NDEBUG
+	viewStyleBackgroundAction->setVisible(false);
+	viewStyleForegroundAction->setVisible(false);
+	viewStyleTouchupAction->setVisible(false);
 #endif
 }
 
@@ -738,6 +747,27 @@ void MainWindow::on_viewScaleAction_triggered()
 {
 	M_PREFS->setScaleVisible(!M_PREFS->getScaleVisible());
 	viewScaleAction->setChecked(M_PREFS->getScaleVisible());
+	invalidateView();
+}
+
+void MainWindow::on_viewStyleBackgroundAction_triggered()
+{
+	M_PREFS->setStyleBackgroundVisible(!M_PREFS->getStyleBackgroundVisible());
+	viewStyleBackgroundAction->setChecked(M_PREFS->getStyleBackgroundVisible());
+	invalidateView();
+}
+
+void MainWindow::on_viewStyleForegroundAction_triggered()
+{
+	M_PREFS->setStyleForegroundVisible(!M_PREFS->getStyleForegroundVisible());
+	viewStyleForegroundAction->setChecked(M_PREFS->getStyleForegroundVisible());
+	invalidateView();
+}
+
+void MainWindow::on_viewStyleTouchupAction_triggered()
+{
+	M_PREFS->setStyleTouchupVisible(!M_PREFS->getStyleTouchupVisible());
+	viewStyleTouchupAction->setChecked(M_PREFS->getStyleTouchupVisible());
 	invalidateView();
 }
 

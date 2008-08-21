@@ -39,53 +39,6 @@ static bool globalZoom(const Projection& theProjection)
 	return theProjection.pixelPerM() < GLOBALZOOM;
 }
 
-
-/* FEATUREPAINTSELECTOR */
-
-class EPBackgroundLayer : public PaintStyleLayer
-{
-	public:
-		void setP(EditPaintStylePrivate* p);
-		virtual void draw(Road* R);
-		virtual void draw(TrackPoint* Pt);
-		virtual void draw(Relation* R);
-	private:
-		EditPaintStylePrivate* p;
-};
-
-class EPForegroundLayer : public PaintStyleLayer
-{
-	public:
-		void setP(EditPaintStylePrivate* p);
-		virtual void draw(Road* R);
-		virtual void draw(TrackPoint* Pt);
-		virtual void draw(Relation* R);
-	private:
-		EditPaintStylePrivate* p;
-};
-
-class EPTouchupLayer : public PaintStyleLayer
-{
-	public:
-		void setP(EditPaintStylePrivate* p);
-		virtual void draw(Road* R);
-		virtual void draw(TrackPoint* Pt);
-		virtual void draw(Relation* R);
-	private:
-		EditPaintStylePrivate* p;
-};
-
-class EPLabelLayer : public PaintStyleLayer
-{
-	public:
-		void setP(EditPaintStylePrivate* p);
-		virtual void draw(Road* R);
-		virtual void draw(TrackPoint* Pt);
-		virtual void draw(Relation* R);
-	private:
-		EditPaintStylePrivate* p;
-};
-
 class EditPaintStylePrivate
 {
 	public:
@@ -310,7 +263,7 @@ void readFromNode(const QDomElement& e, FeaturePainter& FP)
 	if (e.hasAttribute("fillColor"))
 		FP.foregroundFill(toColor(e.attribute("fillColor")));
 	if (e.hasAttribute("icon"))
-		FP.trackPointIcon(e.attribute("icon"));
+		FP.setIcon(e.attribute("icon"),e.attribute("iconScale", "0.0").toDouble(),e.attribute("iconOffset", "0.0").toDouble());
 	if (e.attribute("drawTrafficDirectionMarks") == "yes")
 		FP.drawTrafficDirectionMarks();
 	if (e.hasAttribute("labelColor"))

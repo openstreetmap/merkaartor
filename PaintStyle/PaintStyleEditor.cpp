@@ -144,9 +144,10 @@ void PaintStyleEditor::on_PaintList_itemClicked(QListWidgetItem* it)
 	TouchupDashOff->setValue(FP.touchupBoundary().DashOff);
 	DrawFill->setChecked(FP.fillColor().isValid());
 	makeBoundaryIcon(FillColor, FP.fillColor());
-	DrawIcon->setChecked(FP.isIconActive());
-	DrawIcon->setChecked(!FP.iconName().isEmpty());
-	IconName->setText(FP.iconName());
+	DrawIcon->setChecked(FP.icon().Draw);
+	IconName->setText(FP.icon().Name);
+	ProportionalIcon->setValue(FP.icon().Proportional);
+	FixedIcon->setValue(FP.icon().Fixed);
 	DrawLabel->setChecked(FP.labelBoundary().Draw);
 	makeBoundaryIcon(LabelColor, FP.labelBoundary().Color);
 	ProportionalLabel->setValue(FP.labelBoundary().Proportional);
@@ -385,11 +386,23 @@ void PaintStyleEditor::on_DrawIcon_clicked(bool b)
 
 void PaintStyleEditor::on_IconName_textEdited()
 {
+	if (FreezeUpdate)
+		return;
 	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
-	FP.trackPointIcon(IconName->text());
+	FP.setIcon(IconName->text(), ProportionalIcon->value(), FixedIcon->value());
+}
+
+void PaintStyleEditor::on_ProportionalIcon_valueChanged()
+{
+	on_IconName_textEdited();
+}
+
+void PaintStyleEditor::on_FixedIcon_valueChanged()
+{
+	on_IconName_textEdited();
 }
 
 void PaintStyleEditor::on_DrawLabel_clicked(bool b)

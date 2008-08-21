@@ -103,12 +103,16 @@
     <addaction name="viewZoomInAction" />
     <addaction name="separator" />
     <addaction name="viewDownloadedAction" />
+    <addaction name="viewRelationsAction" />
+    <addaction name="separator" />
+    <addaction name="viewStyleForegroundAction" />
+    <addaction name="viewStyleBackgroundAction" />
+    <addaction name="viewStyleTouchupAction" />
     <addaction name="viewScaleAction" />
     <addaction name="viewNamesAction" />
     <addaction name="separator" />
     <addaction name="viewTrackPointsAction" />
     <addaction name="viewTrackSegmentsAction" />
-    <addaction name="viewRelationsAction" />
     <addaction name="separator" />
     <addaction name="mnuProjections" />
     <addaction name="separator" />
@@ -1032,6 +1036,30 @@
    </property>
    <property name="shortcut" >
     <string>Ctrl+Alt+R</string>
+   </property>
+  </action>
+  <action name="viewStyleForegroundAction" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Show roads background</string>
+   </property>
+  </action>
+  <action name="viewStyleBackgroundAction" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Show roads boundary</string>
+   </property>
+  </action>
+  <action name="viewStyleTouchupAction" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Show touchup</string>
    </property>
   </action>
  </widget>

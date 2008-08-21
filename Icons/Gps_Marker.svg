@@ -8,13 +8,14 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="744.09448819"
-   height="1052.3622047"
+   width="120"
+   height="144.75714"
    id="svg2"
    sodipodi:version="0.32"
    inkscape:version="0.46+devel"
    sodipodi:docname="Gps_Marker.svg"
-   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   version="1.0">
   <defs
      id="defs4">
     <inkscape:perspective
@@ -37,14 +38,14 @@
      inkscape:pageshadow="2"
      inkscape:zoom="0.7"
      inkscape:cx="357.34813"
-     inkscape:cy="587.48547"
+     inkscape:cy="344.52857"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1280"
      inkscape:window-height="998"
-     inkscape:window-x="-4"
-     inkscape:window-y="-4" />
+     inkscape:window-x="0"
+     inkscape:window-y="0" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -59,7 +60,8 @@
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
-     id="layer1">
+     id="layer1"
+     transform="translate(-399.99999,-87.605035)">
     <path
        style="opacity:1;fill:#b9c3e3;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.34249532;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 460,88.276283 L 420.67125,206.93379 L 499.32875,206.93379 L 460,88.276283 z"
