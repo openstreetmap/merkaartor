@@ -273,11 +273,6 @@ void MapView::drawFeatures(QPainter & P)
 		}
 	}
 
-	for (int i=0; i<theFeatures.size(); i++)
-	{
-		theFeatures[i]->draw(P, projection());
-	}
-
 	for (unsigned int i = 0; i < EP.size(); ++i)
 	{
 		PaintStyleLayer *Current = EP.get(i);
@@ -309,6 +304,11 @@ void MapView::drawFeatures(QPainter & P)
 				Current->draw(RR);
 		}
 		P.restore();
+	}
+	
+	for (int i=0; i<theFeatures.size(); i++)
+	{
+		theFeatures[i]->draw(P, projection());
 	}
 }
 

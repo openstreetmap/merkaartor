@@ -7,8 +7,6 @@
 #include "PaintStyle/TagSelector.h"
 #include "Utils/LineF.h"
 
-#include "Preferences/MerkaartorPreferences.h"
-
 #include <QtCore/QFile>
 #include <QtCore/QTextStream>
 #include <QtGui/QPainter>
@@ -57,6 +55,8 @@ class EditPaintStylePrivate
 		EPForegroundLayer Second;
 		EPTouchupLayer Third;
 		EPLabelLayer Fourth;
+		bool isTrackPointVisible;
+		bool isTrackSegmentVisible;
 };
 
 #define ALWAYS 10e6
@@ -146,13 +146,12 @@ void EPTouchupLayer::draw(TrackPoint* Pt)
 	FeaturePainter* paintsel = Pt->getEditPainter(p->theProjection.pixelPerM());
 	if (paintsel)
 		paintsel->drawTouchup(Pt,p->thePainter,p->theProjection);
-	else if (!Pt->hasEditPainter())
-	{
-		if (M_PREFS->getTrackPointsVisible() || (Pt->lastUpdated() == MapFeature::Log && !M_PREFS->getTrackSegmentsVisible())) {
+	else if (!Pt->hasEditPainter()) {
+		if (p->isTrackPointVisible || (Pt->lastUpdated() == MapFeature::Log && !p->isTrackSegmentVisible)) {
 			bool Draw = p->theProjection.pixelPerM() > 1;
 			if (!Draw && !Pt->sizeParents() && (p->theProjection.pixelPerM() > LOCALZOOM) )
 				Draw = true;
-			if (Pt->lastUpdated() == MapFeature::Log && !M_PREFS->getTrackSegmentsVisible())
+			if (Pt->lastUpdated() == MapFeature::Log && !p->isTrackSegmentVisible)
 				Draw = true;
 			if (Draw)
 			{
@@ -204,6 +203,9 @@ EditPaintStyle::EditPaintStyle(QPainter& P, const Projection& theProjection)
 	add(&p->Second);
 	add(&p->Third);
 	add(&p->Fourth);
+
+	p->isTrackPointVisible = M_PREFS->getTrackPointsVisible();
+	p->isTrackSegmentVisible = M_PREFS->getTrackSegmentsVisible();
 }
 
 EditPaintStyle::~EditPaintStyle(void)
