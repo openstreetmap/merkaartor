@@ -56,6 +56,7 @@ class LayerWidget : public QAbstractButton
 		void zoomLayer(bool);
 		void close();
 		void clear();
+		void associatedAboutToShow();
 };
 
 class DrawingLayerWidget : public LayerWidget

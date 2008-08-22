@@ -38,7 +38,8 @@ public:
 
 protected:
     HANDLE Win_Handle;
-    COMMCONFIG Win_CommConfig;
+    //COMMCONFIG Win_CommConfig;
+    DCB Win_CommConfig;
     COMMTIMEOUTS Win_CommTimeouts;
 
     virtual qint64 readData(char *data, qint64 maxSize);

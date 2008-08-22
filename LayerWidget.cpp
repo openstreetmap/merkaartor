@@ -24,6 +24,7 @@ LayerWidget::LayerWidget(MapLayer* aLayer, QWidget* aParent)
 	hiddenIcon = QPixmap(":Icons/empty.xpm");
 
 	associatedMenu = new QMenu(aLayer->name());
+	connect(associatedMenu, SIGNAL(aboutToShow()), this, SLOT(associatedAboutToShow()));
 }
 
 LayerWidget::~LayerWidget()
@@ -168,6 +169,12 @@ void LayerWidget::setLayerVisible(bool b)
 	update();
 	emit(layerChanged(this, false));
 }
+
+void LayerWidget::associatedAboutToShow()
+{
+	initActions();
+}
+
 
 // DrawingLayerWidget
 

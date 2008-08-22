@@ -157,6 +157,7 @@ MainWindow::MainWindow(void)
 	theLayers->setVisible(false);
 	theDirty->setVisible(false);
 	toolBar->setVisible(false);
+	theGPS->setVisible(false);
 #endif
 
 #ifndef OSMARENDER

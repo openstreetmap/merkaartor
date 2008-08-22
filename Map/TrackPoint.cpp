@@ -301,7 +301,7 @@ QString TrackPoint::toHtml()
 
 void TrackPoint::toBinary(QDataStream& ds)
 {
-	ds << (qint8)'N' << idToLong() << (qint32)(INT_MAX * (Position.lon() / M_PI)) << (qint32)(INT_MAX * (Position.lat() / M_PI_2));
+	ds << (qint8)'N' << idToLong() << (qint32)(Position.lon()) << (qint32)(Position.lat());
 	tagsToBinary(ds);
 }
 
@@ -317,7 +317,7 @@ TrackPoint* TrackPoint::fromBinary(MapDocument* d, MapLayer* /* L */, QDataStrea
 	ds >> lon;
 	ds >> lat;
 
-	Coord cd( (int((double)lat / INT_MAX * M_PI_2)), (int((double)lon / INT_MAX * M_PI)) );
+	Coord cd( lat, lon );
 	TrackPoint* N = new TrackPoint(cd);
 	if (id < 1)
 		N->setId(QString::number(id));
