@@ -13,6 +13,7 @@
 #include "Map/PreDefinedTags.h"
 #include "Map/Relation.h"
 #include "Map/Road.h"
+#include "Map/RoadManipulations.h"
 #include "Map/TrackPoint.h"
 
 #include <QtCore/QTimer>
@@ -86,17 +87,17 @@ void PropertiesDock::checkMenuStatus()
 			++NumPoints;
 		if (dynamic_cast<Road*>(Selection[i])) {
 			++NumRoads;
+		}
 		if (!Selection[i]->layer()->isUploadable())
 			++NumCommitableFeature;
-		}
 	}
 	Main->createRelationAction->setEnabled(Selection.size());
 	Main->editRemoveAction->setEnabled(Selection.size());
 	Main->editMoveAction->setEnabled(true);
 	Main->editReverseAction->setEnabled(IsRoad);
-	Main->roadJoinAction->setEnabled(NumRoads > 1);
+	Main->roadJoinAction->setEnabled(NumRoads > 1 && canJoinRoads(this));
 	Main->roadSplitAction->setEnabled(IsParentRoad || (NumRoads && NumPoints));
-	Main->roadBreakAction->setEnabled(NumRoads > 1);
+	Main->roadBreakAction->setEnabled(NumRoads > 1 && canBreakRoads(this));
 	Main->featureCommitAction->setEnabled(NumCommitableFeature);
 	Main->nodeMergeAction->setEnabled(NumPoints > 1);
 	Main->nodeAlignAction->setEnabled(NumPoints > 2);

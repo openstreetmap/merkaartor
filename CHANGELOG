@@ -1,4 +1,5 @@
 v0.12
+	* FIX : properly detect if roads are breakable/joinable and update menus accordingly
 	* FIX : Handle "NotYetDownloaded" for Relations
 	* ADD : scalable POI icons in styles
 	* ADD : +/- buttons on zooming slippy map so single button devices can use it too

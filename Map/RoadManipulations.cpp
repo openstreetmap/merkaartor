@@ -14,7 +14,7 @@
 
 #include <algorithm>
 
-static bool canJoin(Road* R1, Road* R2)
+bool canJoin(Road* R1, Road* R2)
 {
 	if ( (R1->size() == 0) || (R2->size() == 0) )
 		return true;
@@ -26,6 +26,44 @@ static bool canJoin(Road* R1, Road* R2)
 		(Start1 == End2) ||
 		(Start2 == End1) ||
 		(End2 == End1);
+}
+
+bool canBreak(Road* R1, Road* R2)
+{
+	if ( (R1->size() == 0) || (R2->size() == 0) )
+		return false;
+	for (unsigned int i=0; i<R1->size(); i++)
+		for (unsigned int j=0; j<R2->size(); j++)
+			if (R1->get(i) == R2->get(j))
+				return true;
+	return false;
+}
+
+bool canJoinRoads(PropertiesDock* theDock)
+{
+	std::vector<Road*> Input;
+	for (unsigned int i=0; i<theDock->size(); ++i)
+		if (Road* R = dynamic_cast<Road*>(theDock->selection(i)))
+			if (!R->isClosed())
+				Input.push_back(R);
+	for (unsigned int i=0; i<Input.size(); ++i)
+		for (unsigned int j=i+1; j<Input.size(); ++j)
+			if (canJoin(Input[i],Input[j]))
+				return true;
+	return false;
+}
+
+bool canBreakRoads(PropertiesDock* theDock)
+{
+	std::vector<Road*> Input;
+	for (unsigned int i=0; i<theDock->size(); ++i)
+		if (Road* R = dynamic_cast<Road*>(theDock->selection(i)))
+			Input.push_back(R);
+	for (unsigned int i=0; i<Input.size(); ++i)
+		for (unsigned int j=i+1; j<Input.size(); ++j)
+			if (canBreak(Input[i],Input[j]))
+				return true;
+	return false;
 }
 
 void reversePoints(MapDocument* theDocument, CommandList* theList, Road* R)
