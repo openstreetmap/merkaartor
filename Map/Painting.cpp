@@ -162,14 +162,6 @@ void buildPolygonFromRoad(Road *R, Projection const &theProjection, QPolygonF &P
 		Polygon.append(theProjection.project(R->get(i)->position()));
 }
 
-void buildPathFromRelation(Relation *R, QPainterPath &Path)
-{
-	for (unsigned int i=0; i<R->size(); ++i)
-		if (Road* M = dynamic_cast<Road*>(R->get(i)))
-			Path.addPath(M->getPath());
-}
-
-
 /// draws way with oneway markers
 void draw(QPainter& thePainter, QPen& thePen, MapFeature::TrafficDirectionType TT, const QPointF& FromF, const QPointF& ToF, double theWidth, const Projection&)
 {

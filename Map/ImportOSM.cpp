@@ -69,7 +69,8 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
 			Pt->setLastUpdated(MapFeature::OSMServerConflict);
 			parseStandardAttributes(atts,Pt);
 			if (Pt->time() > userPt->time()) {
-				theList->add(new AddFeatureCommand(conflictLayer, Pt, false));
+				if (conflictLayer)
+					theList->add(new AddFeatureCommand(conflictLayer, Pt, false));
 				NewFeature = true;
 			} else {
 				delete Pt;
@@ -124,7 +125,8 @@ void OSMHandler::parseWay(const QXmlAttributes& atts)
 			R->setLastUpdated(MapFeature::OSMServerConflict);
 			parseStandardAttributes(atts,R);
 			if (R->time() > userRd->time()) {
-				theList->add(new AddFeatureCommand(conflictLayer, R, false));
+				if (conflictLayer)
+					theList->add(new AddFeatureCommand(conflictLayer, R, false));
 				NewFeature = true;
 			} else {
 				delete R;
@@ -137,6 +139,8 @@ void OSMHandler::parseWay(const QXmlAttributes& atts)
 			while (R->size())
 				theList->add(new RoadRemoveTrackPointCommand(R,R->get(0)));
 			NewFeature = true;
+			if (R->lastUpdated() == MapFeature::NotYetDownloaded)
+				R->setLastUpdated(MapFeature::OSMServer);
 		}
 	}
 	else
@@ -200,6 +204,8 @@ void OSMHandler::parseRelation(const QXmlAttributes& atts)
 			while (R->size())
 				theList->add(new RelationRemoveFeatureCommand(R,R->get(0)));
 			NewFeature = false;
+			if (R->lastUpdated() == MapFeature::NotYetDownloaded)
+				R->setLastUpdated(MapFeature::OSMServer);
 		}
 	}
 	else
@@ -238,38 +244,43 @@ bool OSMHandler::endElement ( const QString &, const QString & /* localName */, 
 	return true;
 }
 
-static bool downloadToResolve(const QString& What, const std::vector<MapFeature*>& Resolution, QProgressDialog* dlg, MapDocument* theDocument, MapLayer* /* theLayer */, CommandList* theList, Downloader* theDownloader)
+static bool downloadToResolve(const std::vector<MapFeature*>& Resolution, QProgressDialog* dlg, MapDocument* theDocument, MapLayer* theLayer, CommandList* theList, Downloader* theDownloader)
 {
-	for (unsigned int i=0; i<Resolution.size(); i+=10 )
+	for (unsigned int i=0; i<Resolution.size(); i++ )
 	{
-		QString URL = theDownloader->getURLToFetch(What);
-		URL+=Resolution[i]->id().right(Resolution[i]->id().length()-Resolution[i]->id().lastIndexOf('_')-1);
-		for (unsigned int j=1; j<10; ++j)
-			if (i+j < Resolution.size())
-			{
-				URL+=",";
-				URL+=Resolution[i+j]->id().right(Resolution[i+j]->id().length()-Resolution[i+j]->id().lastIndexOf('_')-1);
-			}
-		dlg->setLabelText(QApplication::translate("Downloader","downloading segment %1 of %2").arg(i).arg(Resolution.size()));
+		if (Resolution[i]->lastUpdated() != MapFeature::NotYetDownloaded)
+			continue;
+
+		QString URL = theDownloader->getURLToFetchFull(Resolution[i]);
+		dlg->setLabelText(QApplication::translate("Downloader","downloading unresolved %1 of %2").arg(i).arg(Resolution.size()));
 		if (theDownloader->go(URL))
 		{
 			if (theDownloader->resultCode() == 410)
 				theList->add(new RemoveFeatureCommand(theDocument, Resolution[i], std::vector<MapFeature*>()));
 			else
 			{
+				dlg->setLabelText(QApplication::translate("Downloader","parsing unresolved %1 of %2").arg(i).arg(Resolution.size()));
+
 				QByteArray ba(theDownloader->content());
 				QBuffer  File(&ba);
-				dlg->setLabelText(QApplication::translate("Downloader","parsing segment %1 of %2").arg(i).arg(Resolution.size()));
+				File.open(QIODevice::ReadOnly);
 
-				QDomDocument DomDoc;
-				QString ErrorStr;
-				int ErrorLine;
-				int ErrorColumn;
-				if (DomDoc.setContent(&File, true, &ErrorStr, &ErrorLine,&ErrorColumn))
+				OSMHandler theHandler(theDocument,theLayer,NULL,theList);
+
+				QXmlSimpleReader xmlReader;
+				xmlReader.setContentHandler(&theHandler);
+				QXmlInputSource source;
+				QByteArray buf(File.read(10240));
+				source.setData(buf);
+				xmlReader.parse(&source,true);
+				while (!File.atEnd())
 				{
-					QDomElement root = DomDoc.documentElement();
-//					if (root.tagName() == "osm")
-//						importOSM(0, root, theDocument, theLayer, 0, theList, 0);
+					QByteArray buf(File.read(20480));
+					source.setData(buf);
+					xmlReader.parseContinue();
+					qApp->processEvents();
+					if (dlg->wasCanceled())
+						break;
 				}
 			}
 		}
@@ -289,16 +300,15 @@ static bool resolveNotYetDownloaded(QProgressDialog* dlg, MapDocument* theDocume
 		MustResolve.clear();
 		for (unsigned int i=0; i<theLayer->size(); ++i)
 		{
-			TrackPoint* P = dynamic_cast<TrackPoint*>(theLayer->get(i));
-			if (P && P->lastUpdated() == MapFeature::NotYetDownloaded)
-				MustResolve.push_back(P);
+			if (theLayer->get(i)->lastUpdated() == MapFeature::NotYetDownloaded)
+				MustResolve.push_back(theLayer->get(i));
 		}
 		if (MustResolve.size())
 		{
 			dlg->setMaximum(MustResolve.size());
 			dlg->setValue(0);
 			dlg->show();
-			if (!downloadToResolve("nodes",MustResolve,dlg,theDocument,theLayer, theList,theDownloader))
+			if (!downloadToResolve(MustResolve,dlg,theDocument,theLayer, theList,theDownloader))
 				return false;
 		}
 	}

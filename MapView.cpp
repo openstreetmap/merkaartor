@@ -270,6 +270,8 @@ void MapView::drawFeatures(QPainter & P)
 			theFeatures.push_back(theDocument->getLayer(i)->get(j));
 			if (Road * R = dynamic_cast < Road * >(theDocument->getLayer(i)->get(j)))
 				R->buildPath(projection(), P.clipRegion().boundingRect());
+			if (Relation * RR = dynamic_cast < Relation * >(theDocument->getLayer(i)->get(j)))
+				RR->buildPath(projection(), P.clipRegion().boundingRect());
 		}
 	}
 

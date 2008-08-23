@@ -42,6 +42,9 @@ class Relation : public MapFeature
 		virtual void setLayer(MapLayer* aLayer);
 		virtual void partChanged(MapFeature* F, unsigned int ChangeId);
 
+		QPainterPath getPath();
+		void buildPath(Projection const &theProjection, const QRect& r);
+
 		virtual QString toXML(unsigned int lvl=0, QProgressDialog * progress=NULL);
 		virtual bool toXML(QDomElement xParent, QProgressDialog & progress);
 		static Relation* fromXML(MapDocument* d, MapLayer* L, const QDomElement e);

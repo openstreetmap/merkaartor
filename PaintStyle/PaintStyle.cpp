@@ -533,9 +533,7 @@ void FeaturePainter::drawBackground(Relation* R, QPainter& thePainter, const Pro
 	if (WW < 0) return;
 	QPen thePen(BackgroundColor,WW);
 	thePen.setCapStyle(Qt::RoundCap);
-	QPainterPath Path;
-	buildPathFromRelation(R, Path);
-	thePainter.strokePath(Path,thePen);
+	thePainter.strokePath(R->getPath(),thePen);
 }
 
 void FeaturePainter::drawForeground(Road* R, QPainter& thePainter, const Projection& theProjection) const
@@ -600,9 +598,7 @@ void FeaturePainter::drawForeground(Relation* R, QPainter& thePainter, const Pro
 	}
 	else
 		thePainter.setBrush(QBrush(Qt::NoBrush));
-	QPainterPath Path;
-	buildPathFromRelation(R, Path);
-	thePainter.drawPath(Path);
+	thePainter.drawPath(R->getPath());
 }
 
 

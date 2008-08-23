@@ -314,12 +314,26 @@ QString Downloader::getURLToCloseChangeSet(const QString& Id)
 {
 	return QString("/api/0.6/changeset/%1/close").arg(Id);
 }
+
 QString Downloader::getURLToFetch(const QString &What)
 {
 	QString URL = QString("/api/0.4/%1?%2=");
 	return URL.arg(What).arg(What);
 }
 
+QString Downloader::getURLToFetchFull(MapFeature* aFeature)
+{
+	QString What;
+	if (aFeature->getClass() == "TrackPoint")
+		What = "node";
+	if (aFeature->getClass() == "Road")
+		What = "way";
+	if (aFeature->getClass() == "Relation")
+		What = "relation";
+	QString Id = aFeature->xmlId();
+	QString URL = QString("/api/0.5/%1/%2/full");
+	return URL.arg(What).arg(Id);
+}
 
 QString Downloader::getURLToFetch(const QString &What, const QString& Id)
 {

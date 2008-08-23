@@ -11,6 +11,7 @@ class QProgressDialog;
 class QTimer;
 class MainWindow;
 class CoordBox;
+class MapFeature;
 
 #include <QtCore/QByteArray>
 #include <QtCore/QEventLoop>
@@ -32,6 +33,7 @@ class Downloader : public QObject
 		const QString & resultText();
 		QString getURLToMap();
 		QString getURLToTrackPoints();
+		QString getURLToFetchFull(MapFeature* aFeature);
 		QString getURLToFetch(const QString& What);
 		QString getURLToFetch(const QString& What, const QString& Id);
 		QString getURLToCreate(const QString& What);

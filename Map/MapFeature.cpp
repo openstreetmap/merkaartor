@@ -632,7 +632,7 @@ QString MapFeature::toMainHtml(QString type, QString systemtype)
 			"<a href='/api/0.5/" + systemtype + "/" + xmlId() + "/ways'>"+QApplication::translate("MapFeature", "Referenced by ways")+"</a>";
 		}
 		S += "<br/>"
-		"<a href='/api/0.5/" + systemtype + "/" + xmlId() + "/relation'>"+QApplication::translate("MapFeature", "Referenced by relation")+"</a>";
+		"<a href='/api/0.5/" + systemtype + "/" + xmlId() + "/relations'>"+QApplication::translate("MapFeature", "Referenced by relation")+"</a>";
 	}
 	S += "</body></html>";
 

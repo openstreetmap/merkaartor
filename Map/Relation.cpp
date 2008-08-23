@@ -47,6 +47,7 @@ class RelationPrivate
 		std::vector<std::pair<QString, MapFeature*> > Members;
 		RelationMemberModel* theModel;
 		unsigned int ModelReferences;
+		QPainterPath thePath;
 };
 
 Relation::Relation()
@@ -253,6 +254,22 @@ void Relation::releaseMemberModel()
 		p->theModel = 0;
 	}
 }
+
+void Relation::buildPath(Projection const &theProjection, const QRect& r)
+{
+	p->thePath = QPainterPath();
+	for (unsigned int i=0; i<size(); ++i)
+		if (Road* M = dynamic_cast<Road*>(p->Members[i].second)) {
+			M->buildPath(theProjection, r);
+			p->thePath.addPath(M->getPath());
+		}
+}
+
+QPainterPath Relation::getPath()
+{
+	return p->thePath;
+}
+
 
 QString Relation::toXML(unsigned int lvl, QProgressDialog * progress)
 {

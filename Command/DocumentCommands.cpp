@@ -7,8 +7,8 @@
 #include "Map/Relation.h"
 #include "Sync/DirtyList.h"
 
-AddFeatureCommand::AddFeatureCommand(MapLayer* aDocument, MapFeature* aFeature, bool aUserAdded)
-: theLayer(aDocument), theFeature(aFeature), UserAdded(aUserAdded)
+AddFeatureCommand::AddFeatureCommand(MapLayer* aLayer, MapFeature* aFeature, bool aUserAdded)
+: theLayer(aLayer), theFeature(aFeature), UserAdded(aUserAdded)
 {
 	redo();
 }

@@ -14,7 +14,6 @@ class QPolygonF;
 class QPen;
 
 //void buildPathFromRoad(Road *R, Projection const &theProjection, QPainterPath &Path, const QRect& clipRect);
-void buildPathFromRelation(Relation *R, QPainterPath &Path);
 void buildPolygonFromRoad(Road *R, Projection const &theProjection, QPolygonF &Polygon);
 
 /// draws way with oneway markers
