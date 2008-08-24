@@ -15,6 +15,28 @@
 #include <QtGui/QApplication>
 #include <QtGui/QMainWindow>
 
+#define M_PARAM_IMPLEMENT_BOOL(Param, Category, Default) \
+	void MerkaartorPreferences::set##Param(bool theValue) \
+	{ \
+		Sets->setValue(#Category"/"#Param, theValue); \
+	} \
+	bool MerkaartorPreferences::get##Param() const \
+	{ \
+		return Sets->value(#Category"/"#Param, Default).toBool(); \
+	}
+
+#define M_PARAM_IMPLEMENT_STRING(Param, Category, Default) \
+	void MerkaartorPreferences::set##Param(const QString & theValue) \
+	{ \
+		Sets->setValue(#Category"/"#Param, theValue); \
+	} \
+	QString MerkaartorPreferences::get##Param() const \
+	{ \
+		return Sets->value(#Category"/"#Param, Default).toString(); \
+	}
+
+/***************************/
+
 MerkaartorPreferences* MerkaartorPreferences::m_prefInstance = 0;
 
 WmsServer::WmsServer()
@@ -868,4 +890,6 @@ void MerkaartorPreferences::setRecentImport(const QStringList & theValue)
 	Sets->setValue("recent/import", theValue);
 }
 
-
+M_PARAM_IMPLEMENT_BOOL(GpsSaveLog, gps, false)
+M_PARAM_IMPLEMENT_BOOL(GpsMapCenter, gps, false)
+M_PARAM_IMPLEMENT_STRING(GpsLogDir, gps, "")

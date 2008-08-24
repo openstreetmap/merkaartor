@@ -147,6 +147,8 @@ MainWindow::MainWindow(void)
 	viewTrackSegmentsAction->setChecked(M_PREFS->getTrackSegmentsVisible());
 	viewRelationsAction->setChecked(M_PREFS->getRelationsVisible());
 
+	gpsCenterAction->setChecked(M_PREFS->getGpsMapCenter());
+
 	connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardChanged()));
 
 	setWindowTitle(QString("Merkaartor - untitled"));
@@ -1706,15 +1708,19 @@ void MainWindow::on_gpsConnectAction_triggered()
 {
 	QGPSComDevice* aGps = new QGPSComDevice(M_PREFS->getGpsPort());
 	if (aGps->openDevice()) {
-		if (gpsCenterAction->isChecked()) {
-			connect(aGps, SIGNAL(updatePosition()), this, SLOT(updateGpsPosition()));
-		}
+		connect(aGps, SIGNAL(updatePosition()), this, SLOT(updateGpsPosition()));
+
+		gpsConnectAction->setEnabled(false);
+		gpsReplayAction->setEnabled(false);
 		gpsDisconnectAction->setEnabled(true);
 		theGPS->setGpsDevice(aGps);
 		theGPS->resetGpsStatus();
 		theGPS->startGps();
-	} else
+	} else {
+		QMessageBox::critical(this, tr("GPS error"),
+			tr("Unable to open GPS port."), QMessageBox::Ok);
 		delete aGps;
+	}
 }
 
 void MainWindow::on_gpsReplayAction_triggered()
@@ -1729,9 +1735,10 @@ void MainWindow::on_gpsReplayAction_triggered()
 
 	QGPSFileDevice* aGps = new QGPSFileDevice(fileName);
 	if (aGps->openDevice()) {
-		if (gpsCenterAction->isChecked()) {
-			connect(aGps, SIGNAL(updatePosition()), this, SLOT(updateGpsPosition()));
-		}
+		connect(aGps, SIGNAL(updatePosition()), this, SLOT(updateGpsPosition()));
+
+		gpsConnectAction->setEnabled(false);
+		gpsReplayAction->setEnabled(false);
 		gpsDisconnectAction->setEnabled(true);
 		theGPS->setGpsDevice(aGps);
 		theGPS->resetGpsStatus();
@@ -1744,29 +1751,38 @@ void MainWindow::on_gpsDisconnectAction_triggered()
 	disconnect(theGPS->getGpsDevice(), SIGNAL(updatePosition()), this, SLOT(updateGpsPosition()));
 	theGPS->stopGps();
 	theGPS->resetGpsStatus();
+	gpsConnectAction->setEnabled(true);
+	gpsReplayAction->setEnabled(true);
 	gpsDisconnectAction->setEnabled(false);
-}
-
-void MainWindow::on_gpsCenterAction_triggered()
-{
-	//gpsCenterAction->setChecked(!gpsCenterAction->isChecked());
-	if (gpsCenterAction->isChecked()) {
-		if (theGPS->getGpsDevice()) {
-			connect(theGPS->getGpsDevice(), SIGNAL(updatePosition()), this, SLOT(updateGpsPosition()));
-		}
-	} else {
-		if (theGPS->getGpsDevice()) {
-			disconnect(theGPS->getGpsDevice(), SIGNAL(updatePosition()), this, SLOT(updateGpsPosition()));
-		}
-	}
 }
 
 void MainWindow::updateGpsPosition()
 {
-	if (theGPS->getGpsDevice()->fixStatus() == QGPSDevice::StatusActive) {
-		Coord vp(angToInt(theGPS->getGpsDevice()->latitude()), angToInt(theGPS->getGpsDevice()->longitude()));
-		theView->projection().setCenter(vp, theView->rect());
-		theView->invalidate(true, true);
+	if (theGPS->getGpsDevice()) {
+		if (theGPS->getGpsDevice()->fixStatus() == QGPSDevice::StatusActive) {
+			if (gpsCenterAction->isChecked()) {
+				CoordBox vp = theView->projection().viewport();
+				QRect vpr = vp.toRect().adjusted(vp.lonDiff() / 4, vp.latDiff() / 4, -vp.lonDiff() / 4, -vp.latDiff() / 4);
+				Coord gpsCoord(angToInt(theGPS->getGpsDevice()->latitude()), angToInt(theGPS->getGpsDevice()->longitude()));
+				if (!vpr.contains(gpsCoord.toQPoint())) {
+					theView->projection().setCenter(gpsCoord, theView->rect());
+					theView->invalidate(true, true);
+				}
+			}
+		}
 	}
+	theView->update();
+}
+
+QGPS* MainWindow::gps()
+{
+	return theGPS;
+}
+
+void MainWindow::on_gpsCenterAction_triggered()
+{
+	M_PREFS->setGpsMapCenter(!M_PREFS->getGpsMapCenter());
+	gpsCenterAction->setChecked(M_PREFS->getGpsMapCenter());
+	invalidateView();
 }
 

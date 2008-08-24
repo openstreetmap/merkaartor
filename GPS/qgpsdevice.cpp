@@ -24,11 +24,14 @@
 #include <QMutex>
 #include <QFile>
 #include <QStringList>
+#include <QMessageBox>
 
 #include <cstdlib>
 
 #include "qgpsdevice.h"
 #include "qextserialport.h"
+
+#include "Preferences/MerkaartorPreferences.h"
 
 /**
  * QGPSDevice::QGPSDevice()
@@ -472,11 +475,20 @@ void QGPSDevice::stopDevice()
 /*** QGPSComDevice  ***/
 
 QGPSComDevice::QGPSComDevice(const QString &device)
-	: QGPSDevice()
+	: QGPSDevice(), LogFile(0)
 {
 	if(!device.isNull())
 	{
 		setDevice(device);
+	}
+}
+
+QGPSComDevice::~QGPSComDevice()
+{
+	if (LogFile) {
+		if (LogFile->isOpen())
+			LogFile->close();
+		delete LogFile;
 	}
 }
 
@@ -496,7 +508,21 @@ bool QGPSComDevice::openDevice()
 	port->setDataBits(DATA_8);
 	port->setStopBits(STOP_2);
 
-	return port->open(QIODevice::ReadOnly);
+	if (port->open(QIODevice::ReadOnly)) {
+		if (M_PREFS->getGpsSaveLog()) {
+			QString fn = "log-" + QDateTime::currentDateTime().toString(Qt::ISODate) + ".nmea";
+			fn.replace(':', '-');
+			LogFile = new QFile(M_PREFS->getGpsLogDir() + "/"+fn);
+			if (!LogFile->open(QIODevice::WriteOnly)) {
+				QMessageBox::critical(NULL, tr("GPS log error"),
+					tr("Unable to create GPS log file: %1.").arg(M_PREFS->getGpsLogDir() + "/"+fn), QMessageBox::Ok);
+				delete LogFile;
+				LogFile = NULL;
+			}
+		}
+		return true;
+	}
+	return false;
 }
 
 /**
@@ -508,6 +534,9 @@ bool QGPSComDevice::openDevice()
 bool QGPSComDevice::closeDevice()
 {
 	port->close();
+	LogFile->close();
+	delete LogFile;
+	LogFile = NULL;
 
 	return true;
 }
@@ -527,6 +556,9 @@ void QGPSComDevice::run()
 
 	    if ((port->read(&bufferChar, 1)) < 1)
 			continue;
+		
+		if (LogFile)
+			LogFile->write(&bufferChar, 1);
 
         if(bufferChar == '$')
         {
@@ -537,6 +569,8 @@ void QGPSComDevice::run()
             {
 				if ((port->read(&bufferChar, 1)) < 1)
 					continue;
+				if (LogFile)
+					LogFile->write(&bufferChar, 1);
                 if(bufferChar != '\0' && (isalnum(bufferChar) || isspace(bufferChar) || ispunct(bufferChar)))
                 {
                     index ++;

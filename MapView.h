@@ -56,6 +56,7 @@ class MapView :	public QWidget
 		void drawFeatures(QPainter & painter);
 		void drawDownloadAreas(QPainter & painter);
 		void drawScale(QPainter & painter);
+		void drawGPS(QPainter & painter);
 		void updateStaticBuffer(QPaintEvent* anEvent);
 		void updateLayersImage(QPaintEvent* anEvent);
 		MainWindow* Main;

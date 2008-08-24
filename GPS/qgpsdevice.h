@@ -21,6 +21,7 @@
 #include <QObject>
 #include <QThread>
 #include <QDateTime>
+#include <QFile>
 
 class QString;
 class QMutex;
@@ -178,12 +179,14 @@ Q_OBJECT
 
 public:
 	QGPSComDevice(const QString &device);
+	virtual ~QGPSComDevice();
 
 	virtual bool openDevice();
     virtual bool closeDevice();
 
 private:
 	QextSerialPort *port;
+	QFile* LogFile;
 
 	virtual void run();
 };        

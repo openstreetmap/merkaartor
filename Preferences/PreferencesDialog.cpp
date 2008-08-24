@@ -138,6 +138,9 @@ void PreferencesDialog::loadPrefs()
 		theTools.push_back(t);
 		lvTools->addItem(t.ToolName);
 	}
+
+	cbGgpsSaveLog->setChecked(M_PREFS->getGpsSaveLog());
+	edGpsLogDir->setText(M_PREFS->getGpsLogDir());
 }
 
 void PreferencesDialog::savePrefs()
@@ -201,6 +204,9 @@ void PreferencesDialog::savePrefs()
 		Tool t(theTools[i]);
 		tl->insert(theTools[i].ToolName, t);
 	}
+
+	M_PREFS->setGpsSaveLog(cbGgpsSaveLog->isChecked());
+	M_PREFS->setGpsLogDir(edGpsLogDir->text());
 
 	M_PREFS->save();
 }
@@ -361,6 +367,14 @@ void PreferencesDialog::on_btBrowse_clicked()
 	QString s = QFileDialog::getOpenFileName(this,tr("Select tool executable"));
 	if (!s.isNull()) {
 		edToolPath->setText(s);
+	}
+}
+
+void PreferencesDialog::on_btGpsLogDirBrowse_clicked()
+{
+	QString s = QFileDialog::getExistingDirectory(this,tr("Select Log directory"));
+	if (!s.isNull()) {
+		edGpsLogDir->setText(s);
 	}
 }
 

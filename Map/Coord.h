@@ -81,9 +81,14 @@ class Coord
 		bool toXML(QString elName, QDomElement& xParent) const;
 		static Coord fromXML(QDomElement e);
 
-		QPointF toQPointF() const
+		QPointF toPointF() const
 		{
 			return QPointF(Lat, Lon);
+		}
+
+		QPoint toQPoint() const
+		{
+			return QPoint(Lon, Lat);
 		}
 
 	private:
@@ -235,10 +240,16 @@ class CoordBox
 			return false;
 		}
 
-		QRectF toRectF()
+		QRectF toQRectF()
 		{
-			return QRectF(BottomLeft.lon(), TopRight.lat(), lonDiff(), latDiff());
+			return QRectF(BottomLeft.lon(), BottomLeft.lat(), lonDiff(), latDiff());
 		}
+
+		QRect toRect()
+		{
+			return QRect(BottomLeft.lon(), BottomLeft.lat(), lonDiff(), latDiff());
+		}
+
 		void resize(double f);
 
 		static bool visibleLine(const CoordBox & viewport, Coord & last, Coord & here);

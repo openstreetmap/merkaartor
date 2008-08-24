@@ -177,10 +177,10 @@ public:
 	bool intersectsWith(const CoordBox& C) const
 	{
 		QPointF intersection;
-		if ( QLineF(P1, P2).intersect( QLineF( C.topLeft().toQPointF(), C.topRight().toQPointF() ), &intersection) == QLineF::BoundedIntersection ) return true;
-		if ( QLineF(P1, P2).intersect( QLineF( C.topRight().toQPointF(), C.bottomRight().toQPointF() ), &intersection) == QLineF::BoundedIntersection ) return true;
-		if ( QLineF(P1, P2).intersect( QLineF( C.bottomRight().toQPointF(), C.bottomLeft().toQPointF() ), &intersection) == QLineF::BoundedIntersection ) return true;
-		if ( QLineF(P1, P2).intersect( QLineF( C.bottomLeft().toQPointF(), C.topLeft().toQPointF() ), &intersection) == QLineF::BoundedIntersection ) return true;
+		if ( QLineF(P1, P2).intersect( QLineF( C.topLeft().toPointF(), C.topRight().toPointF() ), &intersection) == QLineF::BoundedIntersection ) return true;
+		if ( QLineF(P1, P2).intersect( QLineF( C.topRight().toPointF(), C.bottomRight().toPointF() ), &intersection) == QLineF::BoundedIntersection ) return true;
+		if ( QLineF(P1, P2).intersect( QLineF( C.bottomRight().toPointF(), C.bottomLeft().toPointF() ), &intersection) == QLineF::BoundedIntersection ) return true;
+		if ( QLineF(P1, P2).intersect( QLineF( C.bottomLeft().toPointF(), C.topLeft().toPointF() ), &intersection) == QLineF::BoundedIntersection ) return true;
 		return false;
 	}
 
@@ -189,11 +189,11 @@ public:
 		QPointF intersection;
 		bool hasC1 = false;
 
-		if ( QLineF(P1, P2).intersect( QLineF( C.topLeft().toQPointF(), C.topRight().toQPointF() ), &intersection) == QLineF::BoundedIntersection ) {
+		if ( QLineF(P1, P2).intersect( QLineF( C.topLeft().toPointF(), C.topRight().toPointF() ), &intersection) == QLineF::BoundedIntersection ) {
 			*C1 = intersection;
 			hasC1 = true;
 		}
-		if ( QLineF(P1, P2).intersect( QLineF( C.topRight().toQPointF(), C.bottomRight().toQPointF() ), &intersection) == QLineF::BoundedIntersection ) {
+		if ( QLineF(P1, P2).intersect( QLineF( C.topRight().toPointF(), C.bottomRight().toPointF() ), &intersection) == QLineF::BoundedIntersection ) {
 			if (hasC1) {
 				*C2 = intersection;
 				return;
@@ -202,7 +202,7 @@ public:
 				hasC1 = true;
 			}
 		}
-		if ( QLineF(P1, P2).intersect( QLineF( C.bottomRight().toQPointF(), C.bottomLeft().toQPointF() ), &intersection) == QLineF::BoundedIntersection ) {
+		if ( QLineF(P1, P2).intersect( QLineF( C.bottomRight().toPointF(), C.bottomLeft().toPointF() ), &intersection) == QLineF::BoundedIntersection ) {
 			if (hasC1) {
 				*C2 = intersection;
 				return;
@@ -211,7 +211,7 @@ public:
 				hasC1 = true;
 			}
 		}
-		if ( QLineF(P1, P2).intersect( QLineF( C.bottomLeft().toQPointF(), C.topLeft().toQPointF() ), &intersection) == QLineF::BoundedIntersection ) {
+		if ( QLineF(P1, P2).intersect( QLineF( C.bottomLeft().toPointF(), C.topLeft().toPointF() ), &intersection) == QLineF::BoundedIntersection ) {
 			if (hasC1) {
 				*C2 = intersection;
 				return;

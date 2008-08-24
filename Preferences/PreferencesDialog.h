@@ -42,6 +42,9 @@ public slots:
 	void on_btFocusColor_clicked();
 	void on_btHoverColor_clicked();
 	void on_btRelationsColor_clicked();
+	
+	/* GPS */
+	void on_btGpsLogDirBrowse_clicked();
 
 	/* Tools */
 	void on_btAddTool_clicked(void);

@@ -8,6 +8,8 @@
 #include "Interaction/Interaction.h"
 #include "PaintStyle/EditPaintStyle.h"
 #include "Map/Projection.h"
+#include "GPS/qgps.h"
+#include "GPS/qgpsdevice.h"
 
 #include "QMapControl/layermanager.h"
 #include "QMapControl/imagemanager.h"
@@ -15,6 +17,7 @@
 	#include "QMapControl/browserimagemanager.h"
 #endif
 #include "Preferences/MerkaartorPreferences.h"
+#include "Utils/SvgCache.h"
 
 
 #include <QtCore/QTime>
@@ -159,6 +162,7 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 		P.setRenderHint(QPainter::Antialiasing);
 		theInteraction->paintEvent(anEvent, P);
 	}
+	drawGPS(P);
 	Main->ViewportStatusLabel->setText(QString("V:%1,%2,%3,%4")
 		.arg(QString::number(intToAng(theProjection.viewport().bottomLeft().lat()),'f',4)) 
 		.arg(QString::number(intToAng(theProjection.viewport().bottomLeft().lon()),'f',4))
@@ -197,6 +201,18 @@ void MapView::drawScale(QPainter & P)
 		P.drawText(QRectF(P2-QPoint(100,40),QSize(200,30)),Qt::AlignHCenter | Qt::AlignBottom, QString(tr("%1 km")).arg(Length/1000, 0, 'f', 0));
 
 	P.drawLine(P2-QPointF(0,5),P2+QPointF(0,5));
+}
+
+void MapView::drawGPS(QPainter & P)
+{
+	if (Main->gps()->getGpsDevice()) {
+		if (Main->gps()->getGpsDevice()->fixStatus() == QGPSDevice::StatusActive) {
+			Coord vp(angToInt(Main->gps()->getGpsDevice()->latitude()), angToInt(Main->gps()->getGpsDevice()->longitude()));
+			QPoint g = projection().project(vp);
+			QPixmap pm = getPixmapFromFile(":/Gps/Gps_Marker.svg", 32);
+			P.drawPixmap(g - QPoint(16, 16), pm);
+		}
+	}
 }
 
 void MapView::sortRenderingPriorityInLayers()

@@ -24,6 +24,12 @@ class QMainWindow;
 #define BUILTIN_STYLES_DIR ":/Styles"
 #define M_PREFS MerkaartorPreferences::instance()
 
+#define M_PARAM_DECLARE_BOOL(Param) \
+	void set##Param(bool theValue); \
+	bool get##Param() const; 
+#define M_PARAM_DECLARE_STRING(Param) \
+	void set##Param(const QString & theValue); \
+	QString get##Param() const; 
 /**
 	@author cbro <cbro@semperpax.com>
 */
@@ -275,6 +281,10 @@ public:
 
 	void setRecentImport(const QStringList & theValue);
 	QStringList getRecentImport() const;
+
+	M_PARAM_DECLARE_BOOL(GpsSaveLog)
+	M_PARAM_DECLARE_BOOL(GpsMapCenter)
+	M_PARAM_DECLARE_STRING(GpsLogDir)
 
 protected:
 	bool Use06Api;

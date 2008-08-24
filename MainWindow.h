@@ -119,6 +119,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		QString fileName;
 		PropertiesDock* properties();
 		InfoDock* info();
+		QGPS* gps();
 		MapDocument* document();
 		//MapLayer* activeLayer();
 		MapView* view();
