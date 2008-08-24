@@ -229,6 +229,8 @@
     <addaction name="gpsConnectAction" />
     <addaction name="gpsReplayAction" />
     <addaction name="separator" />
+    <addaction name="gpsRecordAction" />
+    <addaction name="gpsPauseAction" />
     <addaction name="gpsDisconnectAction" />
     <addaction name="separator" />
     <addaction name="gpsCenterAction" />
@@ -1060,6 +1062,28 @@
    </property>
    <property name="text" >
     <string>Show touchup</string>
+   </property>
+  </action>
+  <action name="gpsRecordAction" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
+   <property name="text" >
+    <string>Record</string>
+   </property>
+  </action>
+  <action name="gpsPauseAction" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
+   <property name="text" >
+    <string>Pause</string>
    </property>
   </action>
  </widget>

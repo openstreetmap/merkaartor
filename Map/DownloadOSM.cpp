@@ -530,7 +530,9 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 	Ui::DownloadMapDialog ui;
 	ui.setupUi(dlg);
 	SlippyMapWidget* SlippyMap = new SlippyMapWidget(ui.groupBox);
+#ifndef _MOBILE
 	SlippyMap->setMinimumHeight(256);
+#endif
 	ui.vboxLayout1->addWidget(SlippyMap);
 	QObject::connect(SlippyMap, SIGNAL(redraw()), ui.FromMap, SLOT(toggle()));
 	QStringList Bookmarks = MerkaartorPreferences::instance()->getBookmarks();
@@ -540,6 +542,9 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 	bool OK = true, retry = true;
 	while (retry) {
 		retry = false;
+#ifdef _MOBILE
+		dlg->setWindowState(Qt::WindowMaximized);
+#endif
 		if (dlg->exec() == QDialog::Accepted)
 		{
 			DownloadRaw = false;

@@ -67,7 +67,7 @@
 #include <QProgressDialog>
 
 MainWindow::MainWindow(void)
-		: fileName(""), theDocument(0), theXmlDoc(0)
+		: fileName(""), theDocument(0), theXmlDoc(0), gpsRecLayer(0), curGpsTrackSegment(0)
 {
 	setupUi(this);
 	loadPainters(MerkaartorPreferences::instance()->getDefaultStyle());
@@ -1002,11 +1002,9 @@ void MainWindow::toolsPreferencesAction_triggered(unsigned int tabidx)
 	Pref->tabPref->setCurrentIndex(tabidx);
 	connect (Pref, SIGNAL(preferencesChanged()), this, SLOT(preferencesChanged()));
 #ifdef _MOBILE
-	Pref->setModal(true);
-	Pref->showMaximized();
-#else
-	Pref->exec();
+	Pref->setWindowState(Qt::WindowMaximized);
 #endif
+	Pref->exec();
 }
 
 void MainWindow::preferencesChanged(void)
@@ -1713,6 +1711,8 @@ void MainWindow::on_gpsConnectAction_triggered()
 		gpsConnectAction->setEnabled(false);
 		gpsReplayAction->setEnabled(false);
 		gpsDisconnectAction->setEnabled(true);
+		gpsRecordAction->setEnabled(true);
+		gpsPauseAction->setEnabled(true);
 		theGPS->setGpsDevice(aGps);
 		theGPS->resetGpsStatus();
 		theGPS->startGps();
@@ -1740,6 +1740,8 @@ void MainWindow::on_gpsReplayAction_triggered()
 		gpsConnectAction->setEnabled(false);
 		gpsReplayAction->setEnabled(false);
 		gpsDisconnectAction->setEnabled(true);
+		gpsRecordAction->setEnabled(true);
+		gpsPauseAction->setEnabled(true);
 		theGPS->setGpsDevice(aGps);
 		theGPS->resetGpsStatus();
 		theGPS->startGps();
@@ -1754,20 +1756,31 @@ void MainWindow::on_gpsDisconnectAction_triggered()
 	gpsConnectAction->setEnabled(true);
 	gpsReplayAction->setEnabled(true);
 	gpsDisconnectAction->setEnabled(false);
+	gpsRecordAction->setEnabled(false);
+	gpsPauseAction->setEnabled(false);
+	gpsRecordAction->setChecked(false);
+	gpsPauseAction->setChecked(false);
 }
 
 void MainWindow::updateGpsPosition()
 {
 	if (theGPS->getGpsDevice()) {
 		if (theGPS->getGpsDevice()->fixStatus() == QGPSDevice::StatusActive) {
+			Coord gpsCoord(angToInt(theGPS->getGpsDevice()->latitude()), angToInt(theGPS->getGpsDevice()->longitude()));
 			if (gpsCenterAction->isChecked()) {
 				CoordBox vp = theView->projection().viewport();
 				QRect vpr = vp.toRect().adjusted(vp.lonDiff() / 4, vp.latDiff() / 4, -vp.lonDiff() / 4, -vp.latDiff() / 4);
-				Coord gpsCoord(angToInt(theGPS->getGpsDevice()->latitude()), angToInt(theGPS->getGpsDevice()->longitude()));
 				if (!vpr.contains(gpsCoord.toQPoint())) {
 					theView->projection().setCenter(gpsCoord, theView->rect());
 					theView->invalidate(true, true);
 				}
+			}
+
+			if (gpsRecordAction->isChecked() && !gpsPauseAction->isChecked()) {
+				TrackPoint* pt = new TrackPoint(gpsCoord);
+				gpsRecLayer->add(pt);
+				curGpsTrackSegment->add(pt);
+				theView->invalidate(true, false);
 			}
 		}
 	}
@@ -1786,3 +1799,36 @@ void MainWindow::on_gpsCenterAction_triggered()
 	invalidateView();
 }
 
+void MainWindow::on_gpsRecordAction_triggered()
+{
+	if (gpsRecordAction->isChecked()) {
+		if (theDocument) {
+			QString fn = "log-" + QDateTime::currentDateTime().toString(Qt::ISODate);
+			fn.replace(':', '-');
+
+			gpsRecLayer = new TrackMapLayer();
+			gpsRecLayer->setName(fn);
+			theDocument->add(gpsRecLayer);
+
+			curGpsTrackSegment = new TrackSegment();
+			gpsRecLayer->add(curGpsTrackSegment);
+		} else {
+			gpsRecordAction->setChecked(false);
+		}
+	} else {
+		gpsPauseAction->setChecked(false);
+	}
+}
+void MainWindow::on_gpsPauseAction_triggered()
+{
+	if (gpsPauseAction->isChecked()) {
+		if (!gpsRecordAction->isChecked()) {
+			gpsPauseAction->setChecked(false);
+		}
+	} else {
+		if (theDocument && gpsRecordAction->isChecked()) {
+			curGpsTrackSegment = new TrackSegment();
+			gpsRecLayer->add(curGpsTrackSegment);
+		}
+	}
+}

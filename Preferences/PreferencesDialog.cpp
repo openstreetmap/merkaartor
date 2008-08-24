@@ -149,6 +149,10 @@ void PreferencesDialog::savePrefs()
 	M_PREFS->setOsmWebsite(edOsmUrl->text());
 	M_PREFS->setOsmUser(edOsmUser->text());
 	M_PREFS->setOsmPassword(edOsmPwd->text());
+#ifdef Q_OS_WIN32
+	if (!edGpsPort->text().startsWith("\\\\.\\"))
+		edGpsPort->setText("\\\\.\\" + edGpsPort->text());
+#endif 
 	M_PREFS->setGpsPort(edGpsPort->text());
 
 	M_PREFS->setProxyUse(bbUseProxy->isChecked());

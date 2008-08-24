@@ -18,6 +18,8 @@ class InfoDock;
 class DirtyDock;
 class QGPS;
 class FeaturePainter;
+class TrackMapLayer;
+class TrackSegment;
 
 class MainWindow : public QMainWindow, public Ui::MainWindow
 {
@@ -103,6 +105,8 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_windowShowAllAction_triggered();
 		virtual void on_gpsConnectAction_triggered();
 		virtual void on_gpsReplayAction_triggered();
+		virtual void on_gpsRecordAction_triggered();
+		virtual void on_gpsPauseAction_triggered();
 		virtual void on_gpsDisconnectAction_triggered();
 		virtual void on_gpsCenterAction_triggered();
 		virtual void preferencesChanged();
@@ -155,6 +159,9 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		LayerDock* theLayers;
 		QGPS* theGPS;
 		QDomDocument* theXmlDoc;
+
+		TrackMapLayer* gpsRecLayer;
+		TrackSegment* curGpsTrackSegment;
 
 	private:
 		void updateBookmarksMenu();

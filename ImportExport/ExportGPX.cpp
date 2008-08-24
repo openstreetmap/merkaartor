@@ -30,6 +30,7 @@ bool ExportGPX::export_(const QVector<MapFeature *>& featList)
 {
 	QVector<TrackPoint*>	waypoints;
 	QVector<TrackSegment*>	segments;
+	QVector<MapLayer*>	tracks;
 
 	if(! IImportExport::export_(featList) ) return false;
 
@@ -50,8 +51,11 @@ bool ExportGPX::export_(const QVector<MapFeature *>& featList)
 	o.setAttribute("xmlns:rmc", "urn:net:trekbuddy:1.0:nmea:rmc");
 
 	for (int i=0; i<theFeatures.size(); ++i) {
-		if (TrackSegment* S = dynamic_cast<TrackSegment*>(theFeatures[i]))
+		if (TrackSegment* S = dynamic_cast<TrackSegment*>(theFeatures[i])) {
 			segments.push_back(S);
+			if (!tracks.contains(S->layer()))
+				tracks.push_back(S->layer());
+		}
 		if (TrackPoint* P = dynamic_cast<TrackPoint*>(theFeatures[i]))
 			if (!P->tagValue("_waypoint_","").isEmpty())
 				waypoints.push_back(P);
@@ -61,11 +65,19 @@ bool ExportGPX::export_(const QVector<MapFeature *>& featList)
 		waypoints[i]->toGPX(o, progress);
 	}
 
-	QDomElement t = o.ownerDocument().createElement("trk");
-	o.appendChild(t);
+	for (int i=0; i<tracks.size(); ++i) {
+		QDomElement t = o.ownerDocument().createElement("trk");
+		o.appendChild(t);
 
-	for (int i=0; i < segments.size(); ++i)
-		segments[i]->toXML(t, progress);
+		QDomElement n = o.ownerDocument().createElement("name");
+		t.appendChild(n);
+		QDomText v = o.ownerDocument().createTextNode(tracks[i]->name());
+		n.appendChild(v);
+
+		for (int j=0; j < segments.size(); ++j)
+			if (tracks[i]->exists(segments[j]))
+				segments[j]->toXML(t, progress);
+	}
 
 	progress.setValue(progress.maximum());
 	if (progress.wasCanceled())

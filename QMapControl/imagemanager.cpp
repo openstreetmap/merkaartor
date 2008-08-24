@@ -28,10 +28,17 @@ ImageManager::ImageManager(QObject* parent)
 {
 	emptyPixmap.fill(Qt::transparent);
 
+#ifndef _MOBILE
 	if (QPixmapCache::cacheLimit() <= 20000)
 	{
 		QPixmapCache::setCacheLimit(20000);	// in kb
 	}
+#else
+	if (QPixmapCache::cacheLimit() <= 2048)
+	{
+		QPixmapCache::setCacheLimit(2048);	// in kb
+	}
+#endif
 }
 
 void ImageManager::setCacheDir(const QDir& path)
