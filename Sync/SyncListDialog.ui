@@ -13,11 +13,11 @@
    <string>Dialog</string>
   </property>
   <layout class="QVBoxLayout" >
-   <property name="margin" >
-    <number>9</number>
-   </property>
    <property name="spacing" >
-    <number>6</number>
+    <number>4</number>
+   </property>
+   <property name="margin" >
+    <number>4</number>
    </property>
    <item>
     <widget class="QLabel" name="label" >
@@ -31,18 +31,18 @@
    </item>
    <item>
     <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
      <property name="spacing" >
       <number>6</number>
+     </property>
+     <property name="margin" >
+      <number>0</number>
      </property>
      <item>
       <spacer>
        <property name="orientation" >
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint" stdset="0" >
         <size>
          <width>131</width>
          <height>31</height>
@@ -104,6 +104,3 @@
   </connection>
  </connections>
 </ui>
-
-
-

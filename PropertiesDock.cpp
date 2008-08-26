@@ -26,7 +26,7 @@
 #include <algorithm>
 
 PropertiesDock::PropertiesDock(MainWindow* aParent)
-: QDockWidget(aParent), Main(aParent), CurrentUi(0), Selection(0), NowShowing(NoUiShowing)
+: MDockAncestor(aParent), Main(aParent), CurrentUi(0), Selection(0), NowShowing(NoUiShowing)
 {
 	setMinimumSize(220,100);
 	switchToNoUi();

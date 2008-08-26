@@ -41,21 +41,19 @@ void EditInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
 {
 	for (unsigned int i=0; i<view()->properties()->size(); ++i)
 		view()->properties()->selection(i)->drawFocus(thePainter, projection());
+#ifndef _MOBILE
 	if (Dragging)
 	{
 		thePainter.setPen(QPen(QColor(255,0,0),1,Qt::DotLine));
 		thePainter.drawRect(QRectF(projection().project(StartDrag),projection().project(EndDrag)));
 	}
+#endif
 	FeatureSnapInteraction::paintEvent(anEvent, thePainter);
 }
 
 void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 {
-#ifdef _MOBILE
-	if (false)
-#else
 	if (ev->buttons() & Qt::LeftButton)
-#endif
 	{
 		if (ev->modifiers()) {
 			if (ev->modifiers() & Qt::ControlModifier)
@@ -71,11 +69,13 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 		} else {
 			view()->properties()->setSelection(aLast);
 		}
+#ifndef _MOBILE
 		if (!aLast)
 		{
 			EndDrag = StartDrag = projection().inverse(ev->pos());
 			Dragging = true;
 		}
+#endif
 		view()->properties()->checkMenuStatus();
 		view()->update();
 	}
@@ -83,6 +83,7 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 
 void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* )
 {
+#ifndef _MOBILE
 	if (Dragging)
 	{
 		std::vector<MapFeature*> List;
@@ -129,15 +130,18 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* )
 		Dragging = false;
 		view()->update();
 	}
+#endif
 }
 
 void EditInteraction::snapMouseMoveEvent(QMouseEvent* event, MapFeature* )
 {
+#ifndef _MOBILE
 	if (Dragging)
 	{
 		EndDrag = projection().inverse(event->pos());
 		view()->update();
 	}
+#endif
 }
 
 void EditInteraction::on_remove_triggered()

@@ -1,4 +1,5 @@
 v0.12
+	* ADD : "visible" action in layers menu
 	* FIX : properly detect if roads are breakable/joinable and update menus accordingly
 	* FIX : Handle "NotYetDownloaded" for Relations
 	* ADD : scalable POI icons in styles

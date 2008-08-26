@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>631</width>
-    <height>303</height>
+    <width>604</width>
+    <height>336</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -14,10 +14,10 @@
   </property>
   <layout class="QVBoxLayout" >
    <property name="spacing" >
-    <number>6</number>
+    <number>4</number>
    </property>
    <property name="margin" >
-    <number>9</number>
+    <number>2</number>
    </property>
    <item>
     <widget class="QGroupBox" name="groupBox" >

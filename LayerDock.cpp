@@ -25,6 +25,7 @@ class LayerDockPrivate
 		QScrollArea* Scroller;
 		QWidget* Content;
 		QVBoxLayout* Layout;
+		QHBoxLayout* frameLayout;
 		QButtonGroup* butGroup;
 		QTabBar* tab;
 
@@ -32,7 +33,7 @@ class LayerDockPrivate
 };
 
 LayerDock::LayerDock(MainWindow* aMain)
-: QDockWidget(aMain)
+: MDockAncestor(aMain)
 {
 	p = new LayerDockPrivate(aMain);
 //	setMinimumSize(220,100);
@@ -109,9 +110,9 @@ void LayerDock::createContent()
 	delete p->Scroller;
 
 	QWidget* frame = new QWidget();
-	QHBoxLayout frameLayout(frame);
-	frameLayout.setMargin(0);
-	frameLayout.setSpacing(0);
+	p->frameLayout = new QHBoxLayout(frame);
+	p->frameLayout->setMargin(0);
+	p->frameLayout->setSpacing(0);
 
 	p->tab = new QTabBar(frame);
 	p->tab->setShape(QTabBar::RoundedWest);
@@ -133,14 +134,14 @@ void LayerDock::createContent()
 	QSpacerItem* tabSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 	tabLayout->addItem(tabSpacer);
 
+	p->frameLayout->addLayout(tabLayout);
+
 	p->Scroller = new QScrollArea(frame);
 	p->Scroller->setBackgroundRole(QPalette::Base);
 	p->Scroller->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	QVBoxLayout scrollerLayout(p->Scroller);
-	scrollerLayout.setMargin(0);
-	scrollerLayout.setSpacing(0);
+	p->Scroller->setWidgetResizable(true);
 
-	p->Content = new QWidget(p->Scroller);
+	p->Content = new QWidget();
 	p->Layout = new QVBoxLayout(p->Content);
 	p->Layout->setSpacing(0);
 	p->Layout->setMargin(0);
@@ -150,13 +151,9 @@ void LayerDock::createContent()
 
 	p->Layout->addStretch();
 
-
-	scrollerLayout.addWidget(p->Content);
-	frameLayout.addLayout(tabLayout);
-	frameLayout.addWidget(p->Scroller);
-
 	p->Scroller->setWidget(p->Content);
-	p->Scroller->setWidgetResizable(true);
+
+	p->frameLayout->addWidget(p->Scroller);
 
 	setWidget(frame);
 	update();

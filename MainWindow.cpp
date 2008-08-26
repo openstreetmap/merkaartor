@@ -90,8 +90,6 @@ MainWindow::MainWindow(void)
 	setCentralWidget(theView);
 
 	theLayers = new LayerDock(this);
-	theLayers->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-	addDockWidget(Qt::LeftDockWidgetArea, theLayers);
 
 	theDocument = new MapDocument(theLayers);
 	theView->setDocument(theDocument);
@@ -103,21 +101,11 @@ MainWindow::MainWindow(void)
 
 
 	theProperties = new PropertiesDock(this);
-	theProperties->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-	addDockWidget(Qt::RightDockWidgetArea, theProperties);
 	on_editPropertiesAction_triggered();
 
 	theInfo = new InfoDock(this);
-	theInfo->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-	addDockWidget(Qt::RightDockWidgetArea, theInfo);
-
 	theDirty = new DirtyDock(this);
-	theDirty->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-	addDockWidget(Qt::RightDockWidgetArea, theDirty);
-
 	theGPS = new QGPS(this);
-	theGPS->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-	addDockWidget(Qt::RightDockWidgetArea, theGPS);
 
 	connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));
 	connect (theLayers, SIGNAL(layersChanged(bool)), this, SLOT(adjustLayers(bool)));
@@ -132,10 +120,6 @@ MainWindow::MainWindow(void)
 	connect (menuRecentImport, SIGNAL(triggered(QAction *)), this, SLOT(recentImportTriggered(QAction *)));
 
 	updateProjectionMenu();
-
-	MerkaartorPreferences::instance()->restoreMainWindowState( this );
-	CoordBox initialPosition = MerkaartorPreferences::instance()->getInitialPosition();
-	theView->projection().setViewport(initialPosition, theView->rect());
 
 	viewDownloadedAction->setChecked(MerkaartorPreferences::instance()->getDownloadedVisible());
 	viewScaleAction->setChecked(M_PREFS->getScaleVisible());
@@ -153,7 +137,22 @@ MainWindow::MainWindow(void)
 
 	setWindowTitle(QString("Merkaartor - untitled"));
 
-#ifdef _MOBILE
+#ifndef _MOBILE
+	theLayers->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+	addDockWidget(Qt::LeftDockWidgetArea, theLayers);
+
+	theProperties->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+	addDockWidget(Qt::LeftDockWidgetArea, theProperties);
+
+	theInfo->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+	addDockWidget(Qt::RightDockWidgetArea, theInfo);
+
+	theDirty->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+	addDockWidget(Qt::RightDockWidgetArea, theDirty);
+
+	theGPS->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+	addDockWidget(Qt::RightDockWidgetArea, theGPS);
+#else
 	theProperties->setVisible(false);
 	theInfo->setVisible(false);
 	theLayers->setVisible(false);
@@ -171,6 +170,10 @@ MainWindow::MainWindow(void)
 	viewStyleForegroundAction->setVisible(false);
 	viewStyleTouchupAction->setVisible(false);
 #endif
+
+	MerkaartorPreferences::instance()->restoreMainWindowState( this );
+	CoordBox initialPosition = MerkaartorPreferences::instance()->getInitialPosition();
+	theView->projection().setViewport(initialPosition, theView->rect());
 }
 
 MainWindow::~MainWindow(void)

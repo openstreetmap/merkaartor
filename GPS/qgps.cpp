@@ -30,9 +30,11 @@
 //#include "Preferences/MerkaartorPreferences.h"
 
 QGPS::QGPS(QWidget *parent)
-    : QDockWidget(parent), gpsDevice(0)
+    : MDockAncestor(parent), gpsDevice(0)
 {
-	setupUi(this);
+	setupUi(getWidget());
+	setWindowTitle("GPS");
+	setObjectName("GPSMainWindow");
 
 	lblFixStatus->setText(tr("No Position Fix"));
 	lblFixTime->setText(tr("No UTC Time"));

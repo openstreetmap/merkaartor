@@ -118,6 +118,12 @@ void LayerWidget::initActions()
 	associatedMenu = new QMenu(theLayer->name());
 	//connect(associatedMenu, SIGNAL(aboutToShow()), this, SLOT(associatedAboutToShow()));
     
+	actVisible = new QAction(tr("Visible"), ctxMenu);
+	actVisible->setCheckable(true);
+	actVisible->setChecked(theLayer->isVisible());
+	associatedMenu->addAction(actVisible);
+	connect(actVisible, SIGNAL(triggered(bool)), this, SLOT(visibleLayer(bool)));
+
 	static const char *opStr[NUMOP] = {
 	QT_TR_NOOP("Low"), QT_TR_NOOP("High"), QT_TR_NOOP("Opaque")};
 
@@ -160,6 +166,11 @@ void LayerWidget::zoomLayer(bool)
 	emit (layerZoom(theLayer));
 }
 
+void LayerWidget::visibleLayer(bool)
+{
+	setLayerVisible(actVisible->isChecked());
+}
+
 QMenu* LayerWidget::getAssociatedMenu()
 {
 	return associatedMenu;
@@ -168,6 +179,7 @@ QMenu* LayerWidget::getAssociatedMenu()
 void LayerWidget::setLayerVisible(bool b)
 {
 	theLayer->setVisible(b);
+	actVisible->setChecked(b);
 	update();
 	emit(layerChanged(this, false));
 }

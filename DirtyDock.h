@@ -12,7 +12,7 @@
 #ifndef DIRTYDOCK_H
 #define DIRTYDOCK_H
 
-#include <QDockWidget>
+#include "Utils/MDockAncestor.h"
 #include <QTextBrowser>
 
 #include "ui_DirtyDock.h"
@@ -25,7 +25,7 @@ class MapFeature;
 /**
 	@author cbro <cbro@semperpax.com>
 */
-class DirtyDock : public QDockWidget
+class DirtyDock : public MDockAncestor
 {
 Q_OBJECT
 public:

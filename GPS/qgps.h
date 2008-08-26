@@ -22,7 +22,7 @@
 #ifndef QGPS_H
 #define QGPS_H
 
-#include <QDockWidget>
+#include "Utils/MDockAncestor.h"
 
 #include "ui_qgpsmainwindowui.h"
 
@@ -30,7 +30,7 @@ class QGPSDevice;
 class QLabel;
 class QString;
 
-class QGPS : public QDockWidget, public Ui_QGPSMainWindowUI
+class QGPS : public MDockAncestor, public Ui_QGPSMainWindowUI
 {
     Q_OBJECT
     

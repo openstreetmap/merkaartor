@@ -74,8 +74,10 @@ void Interaction::mouseReleaseEvent(QMouseEvent * anEvent)
 	if (Panning) {
 		if (FirstPan != LastPan)
 			view()->invalidate(true, true);
+#ifndef _MOBILE
 		else
 			emit(requestCustomContextMenu(anEvent->pos()));
+#endif
 		Panning = false;
 	}
 	if (Dragging)

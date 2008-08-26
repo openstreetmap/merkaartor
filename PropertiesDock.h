@@ -6,16 +6,16 @@
 #include <ui_RoadProperties.h>
 #include <ui_MultiProperties.h>
 
-#include <QtGui/QDockWidget>
-
 #include <vector>
+
+#include "Utils/MDockAncestor.h"
 
 class MainWindow;
 class MapFeature;
 class TagModel;
 class EditCompleterDelegate;
 
-class PropertiesDock : public QDockWidget
+class PropertiesDock : public MDockAncestor
 {
 	Q_OBJECT
 

@@ -24,7 +24,7 @@
 #include <QMessageBox>
 
 DirtyDock::DirtyDock(MainWindow* aParent)
-	: QDockWidget(aParent), Main(aParent)
+	: MDockAncestor(aParent), Main(aParent)
 {
 	setMinimumSize(220,100);
 	setWindowTitle(tr("Undo"));

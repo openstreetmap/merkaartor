@@ -1,7 +1,7 @@
 #ifndef MERKATOR_LAYERDOCK_H_
 #define MERKATOR_LAYERDOCK_H_
 
-#include <QtGui/QDockWidget>
+#include "Utils/MDockAncestor.h"
 #include <QtGui/QScrollArea>
 #include <QVBoxLayout>
 #include <QGroupBox>
@@ -13,7 +13,7 @@ class MapLayer;
 class LayerWidget;
 class LayerDockPrivate;
 
-class LayerDock : public QDockWidget
+class LayerDock : public MDockAncestor
 {
 	Q_OBJECT
 

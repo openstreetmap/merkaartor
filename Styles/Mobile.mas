@@ -1,35 +1,36 @@
 <mapStyle>
 <painter
- foregroundColor="#809bc0fc" foregroundScale="0.5" foregroundOffset="4"
+ foregroundColor="#809bc0fc" foregroundScale="0.5" foregroundOffset="1"
  drawTrafficDirectionMarks="yes">
   <selector expr="[highway] isoneof (motorway , motorway_link)"/>
 </painter>
 <painter
- backgroundColor="#477147fc" backgroundScale="1.5" backgroundOffset="4"
+ foregroundColor="#477147ff" foregroundScale="1" foregroundOffset="1"
  drawTrafficDirectionMarks="yes">
   <selector expr="[highway] isoneof (trunk , trunk_link)"/>
 </painter>
 <painter
  zoomUnder="0.01" zoomUpper="1e+07"
- foregroundColor="#e46d71fc" foregroundScale="1" foregroundOffset="3.5"
+ foregroundColor="#e46d71fc" foregroundScale="1" foregroundOffset="1"
  drawTrafficDirectionMarks="yes">
   <selector expr="[highway] isoneof (primary , primary_link)"/>
 </painter>
 <painter
  zoomUnder="0.02" zoomUpper="1e+07"
- foregroundColor="#fdbf6ffc" foregroundScale="1" foregroundOffset="2"
+ foregroundColor="#fdbf6ffc" foregroundScale="1" foregroundOffset="1"
  drawTrafficDirectionMarks="yes">
   <selector expr="[highway] isoneof (secondary , secondary_link)"/>
 </painter>
 <painter
  zoomUnder="0.05" zoomUpper="1e+07"
- backgroundColor="#d6d83ffc" backgroundScale="1.5" backgroundOffset="3"
+ foregroundColor="#e6e258ff" foregroundScale="1" foregroundOffset="1"
  drawTrafficDirectionMarks="yes">
   <selector expr="[highway] isoneof (tertiary , tertiary_link)"/>
 </painter>
 <painter
  zoomUnder="0.1" zoomUpper="1e+07"
- backgroundColor="#777777fc" backgroundScale="0.7" backgroundOffset="2"
+ backgroundColor="#777777fc" backgroundScale="0.7" backgroundOffset="1"
+ foregroundColor="#ffffffff" foregroundScale="0.5" foregroundOffset="2"
  drawTrafficDirectionMarks="yes">
   <selector expr="[highway] is residential"/>
 </painter>
@@ -229,14 +230,12 @@
 <painter
  zoomUnder="0.03" zoomUpper="1e+07"
  fillColor="#f7efb7cd"
- icon=":/Art/Mapnik/parking.png"
  drawTrafficDirectionMarks="yes">
   <selector expr="[amenity] is parking"/>
 </painter>
 <painter
  zoomUnder="0.01" zoomUpper="1e+07"
  fillColor="#f6666677"
- icon=":/Art/Mapnik/hospital.png"
  drawTrafficDirectionMarks="yes">
   <selector expr="[amenity] is hospital"/>
 </painter>
@@ -256,7 +255,6 @@
 <painter
  zoomUnder="0.002" zoomUpper="1e+07"
  fillColor="#8dc56ccd"
- icon=":/Art/Mapnik/forest.png"
  drawTrafficDirectionMarks="yes">
   <selector expr="[landuse] is forest"/>
 </painter>
@@ -536,127 +534,105 @@
 </painter>
 <painter
  zoomUnder="0.03" zoomUpper="1e+07"
- icon=":/Art/Mapnik/airport.png"
+ icon=":/Art/Mapnik/airport.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no">
   <selector expr="[amenity] is airport"/>
 </painter>
 <painter
  zoomUnder="0.06" zoomUpper="1e+07"
- icon=":/Art/Mapnik/post_office.png"
  drawTrafficDirectionMarks="no">
   <selector expr="[amenity] is post_office"/>
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
- icon=":/Art/Mapnik/post_box.png"
  drawTrafficDirectionMarks="no">
   <selector expr="[amenity] is post_box"/>
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
- icon=":/Art/Mapnik/fuel.png"
  drawTrafficDirectionMarks="no">
   <selector expr="[amenity] is fuel"/>
 </painter>
 <painter
  zoomUnder="0.03" zoomUpper="1e+07"
- icon=":/Art/Mapnik/station.png"
+ icon=":/Art/Mapnik/station.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no">
   <selector expr="[railway] is station"/>
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
- icon=":/Art/Mapnik/pint.png"
  drawTrafficDirectionMarks="no">
   <selector expr="[amenity] is pub"/>
 </painter>
 <painter
  zoomUnder="0.03" zoomUpper="1e+07"
- icon=":/Art/Mapnik/peak.png"
+ icon=":/Art/Mapnik/peak.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no">
   <selector expr="[natural] is peak"/>
 </painter>
 <painter
  zoomUnder="0.03" zoomUpper="1e+07"
- icon=":/Art/Mapnik/tower.png"
  drawTrafficDirectionMarks="no">
   <selector expr="[man_made] is mast"/>
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
- icon=":/Art/Mapnik/recycling.png"
  drawTrafficDirectionMarks="no">
   <selector expr="[amenity] is recycling"/>
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
- icon=":/Art/Mapnik/bus_stop.png"
  drawTrafficDirectionMarks="no">
   <selector expr="[amenity] is bus_stop"/>
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
- icon=":/Art/Mapnik/bus_stop.png"
  drawTrafficDirectionMarks="no">
   <selector expr="[highway] is bus_stop"/>
 </painter>
 <painter
  zoomUnder="0.15" zoomUpper="1e+07"
- icon=":/Art/Mapnik/place_of_worship.png"
+ icon=":/Art/Mapnik/place_of_worship.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no">
   <selector expr="[amenity] is place_of_worship"/>
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
- icon=":/Art/Mapnik/mini_round.png"
  drawTrafficDirectionMarks="no">
   <selector expr="[highway] is mini_roundabout"/>
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
- icon=":/Art/Mapnik/power_tower.png"
  drawTrafficDirectionMarks="no">
   <selector expr="[power] is tower"/>
 </painter>
 <painter
  zoomUnder="0.00666667" zoomUpper="1e+07"
- icon=":/Art/Places/place_town.png"
+ icon=":/Art/Places/place_town.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no">
   <selector expr="[place] is town"/>
 </painter>
 <painter
  zoomUnder="0.01" zoomUpper="1e+07"
- icon=":/Art/Places/place_village.png"
+ icon=":/Art/Places/place_village.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no">
   <selector expr="[place] is village"/>
 </painter>
 <painter
  zoomUnder="0.01" zoomUpper="1e+07"
- icon=":/Art/Places/place_village.png"
+ icon=":/Art/Places/place_village.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no">
   <selector expr="[place] is suburb"/>
 </painter>
 <painter
  zoomUnder="0.02" zoomUpper="1e+07"
- icon=":/Art/Places/place_hamlet.png"
+ icon=":/Art/Places/place_hamlet.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no">
   <selector expr="[place] is hamlet"/>
 </painter>
 <painter
- icon=":/Art/Places/place_town.png"
+ icon=":/Art/Places/place_town.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no">
   <selector expr="[place] is city"/>
-</painter>
-<painter
- zoomUnder="0" zoomUpper="1e+07"
- icon=":/MapIcons/map-icons/square.small/misc/information.png"
- drawTrafficDirectionMarks="no">
-  <selector expr=" [Default] Type is TrackPoint and HasTags"/>
-</painter>
-<painter
- zoomUnder="0" zoomUpper="1e+07"
- icon=":/MapIcons/map-icons/square.small/unknown.png"
- drawTrafficDirectionMarks="no">
-  <selector expr="Type is TrackPoint and  not HasTags"/>
 </painter>
 </mapStyle>

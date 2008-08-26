@@ -42,6 +42,7 @@ class LayerWidget : public QAbstractButton
 		QMenu* ctxMenu;
 		QAction* closeAction;
 		QAction* actZoom;
+		QAction* actVisible;
 		QMenu* associatedMenu;
 
 	signals:
@@ -54,6 +55,7 @@ class LayerWidget : public QAbstractButton
 	protected slots:
 		void setOpacity(QAction*);
 		void zoomLayer(bool);
+		void visibleLayer(bool);
 		void close();
 		void clear();
 		void associatedAboutToShow();

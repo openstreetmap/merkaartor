@@ -135,7 +135,7 @@ class GenericFeatureSnapInteraction : public Interaction
 			FeatureType* Prev = LastSnap;
 			LastSnap = 0;
 			if (!SnapActive) return;
-			QTime Start(QTime::currentTime());
+			//QTime Start(QTime::currentTime());
 			CoordBox HotZone(projection().inverse(event->pos()-QPointF(5,5)),projection().inverse(event->pos()+QPointF(5,5)));
 			double BestDistance = 5;
 			for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it)

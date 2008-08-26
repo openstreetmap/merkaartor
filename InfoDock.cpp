@@ -17,7 +17,7 @@
 #include <QMessageBox>
 
 InfoDock::InfoDock(MainWindow* aParent)
-	: QDockWidget(aParent), Main(aParent), theText(new QTextBrowser(this))
+	: MDockAncestor(aParent), Main(aParent), theText(new QTextBrowser(this))
 {
 	setMinimumSize(220,100);
 	setWindowTitle(tr("Info"));

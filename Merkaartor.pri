@@ -58,6 +58,7 @@ HEADERS += \
 ./Utils/PixmapWidget.h \
 ./Utils/SelectionDialog.h \
 ./Utils/SvgCache.h \
+./Utils/MDockAncestor.h \
 ./DirtyDock.h
 
 #Source files
@@ -115,6 +116,7 @@ SOURCES += \
 ./Utils/PixmapWidget.cpp \
 ./Utils/SelectionDialog.cpp \
 ./Utils/SvgCache.cpp \
+./Utils/MDockAncestor.cpp \
 ./Preferences/MerkaartorPreferences.cpp \
 ./Preferences/PreferencesDialog.cpp \
 ./Preferences/WMSPreferencesDialog.cpp \

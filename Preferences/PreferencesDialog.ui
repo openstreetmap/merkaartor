@@ -14,6 +14,12 @@
    <string>Preferences</string>
   </property>
   <layout class="QVBoxLayout" >
+   <property name="spacing" >
+    <number>4</number>
+   </property>
+   <property name="margin" >
+    <number>4</number>
+   </property>
    <item>
     <layout class="QVBoxLayout" >
      <item>
@@ -27,8 +33,8 @@
        <widget class="QWidget" name="tab_4" >
         <property name="geometry" >
          <rect>
-          <x>0</x>
-          <y>0</y>
+          <x>4</x>
+          <y>30</y>
           <width>322</width>
           <height>273</height>
          </rect>
@@ -251,8 +257,8 @@
        <widget class="QWidget" name="tab_5" >
         <property name="geometry" >
          <rect>
-          <x>0</x>
-          <y>0</y>
+          <x>4</x>
+          <y>30</y>
           <width>322</width>
           <height>273</height>
          </rect>
@@ -350,8 +356,8 @@
        <widget class="QWidget" name="tab_3" >
         <property name="geometry" >
          <rect>
-          <x>0</x>
-          <y>0</y>
+          <x>4</x>
+          <y>30</y>
           <width>322</width>
           <height>273</height>
          </rect>
@@ -472,8 +478,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>322</width>
-          <height>273</height>
+          <width>332</width>
+          <height>285</height>
          </rect>
         </property>
         <attribute name="title" >
@@ -552,8 +558,8 @@
        <widget class="QWidget" name="tab" >
         <property name="geometry" >
          <rect>
-          <x>0</x>
-          <y>0</y>
+          <x>4</x>
+          <y>30</y>
           <width>322</width>
           <height>273</height>
          </rect>
@@ -636,8 +642,8 @@
        <widget class="QWidget" name="tab_2" >
         <property name="geometry" >
          <rect>
-          <x>0</x>
-          <y>0</y>
+          <x>4</x>
+          <y>30</y>
           <width>322</width>
           <height>273</height>
          </rect>
@@ -735,8 +741,8 @@
        <widget class="QWidget" name="tabTools" >
         <property name="geometry" >
          <rect>
-          <x>0</x>
-          <y>0</y>
+          <x>4</x>
+          <y>30</y>
           <width>322</width>
           <height>273</height>
          </rect>

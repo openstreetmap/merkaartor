@@ -12,7 +12,7 @@
 #ifndef INFODOCK_H
 #define INFODOCK_H
 
-#include <QDockWidget>
+#include "Utils/MDockAncestor.h"
 #include <QTextBrowser>
 
 class MainWindow;
@@ -21,7 +21,7 @@ class MapFeature;
 /**
 	@author cbro <cbro@semperpax.com>
 */
-class InfoDock : public QDockWidget
+class InfoDock : public MDockAncestor
 {
 Q_OBJECT
 public:
