@@ -539,6 +539,7 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 	for (int i=0; i<Bookmarks.size(); i+=5)
 		ui.Bookmarks->addItem(Bookmarks[i]);
 	ui.IncludeTracks->setChecked(DownloadRaw);
+	ui.ResolveRelations->setChecked(M_PREFS->getResolveRelations());
 	bool OK = true, retry = true;
 	while (retry) {
 		retry = false;
@@ -654,6 +655,7 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 			aParent->view()->setUpdatesEnabled(false);
 			MapLayer* theLayer = new DrawingMapLayer(QApplication::translate("Downloader","%1 download").arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
 			theDocument->add(theLayer);
+			M_PREFS->setResolveRelations(ui.ResolveRelations->isChecked());
 			OK = downloadOSM(aParent,osmWebsite,osmUser,osmPwd,useProxy,proxyHost,proxyPort,Clip,theDocument,theLayer);
 			if (OK && ui.IncludeTracks->isChecked())
 				OK = downloadTracksFromOSM(aParent,osmWebsite,osmUser,osmPwd,useProxy,proxyHost,proxyPort, Clip,theDocument);

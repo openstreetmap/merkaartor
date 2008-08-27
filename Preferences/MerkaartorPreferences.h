@@ -286,6 +286,7 @@ public:
 	M_PARAM_DECLARE_BOOL(GpsMapCenter)
 	M_PARAM_DECLARE_STRING(GpsLogDir)
 
+	M_PARAM_DECLARE_BOOL(ResolveRelations)
 protected:
 	bool Use06Api;
 	QString version;

@@ -193,20 +193,24 @@ bool Relation::notEverythingDownloaded() const
 }
 
 
-void Relation::add(const QString& Role, MapFeature* Pt)
+void Relation::add(const QString& Role, MapFeature* F)
 {
-	p->Members.push_back(std::make_pair(Role,Pt));
+	p->Members.push_back(std::make_pair(Role,F));
+	F->setParent(this);
 }
 
-void Relation::add(const QString& Role, MapFeature* Pt, unsigned int Idx)
+void Relation::add(const QString& Role, MapFeature* F, unsigned int Idx)
 {
-	p->Members.push_back(std::make_pair(Role,Pt));
+	p->Members.push_back(std::make_pair(Role,F));
 	std::rotate(p->Members.begin()+Idx,p->Members.end()-1,p->Members.end());
+	F->setParent(this);
 }
 
 void Relation::remove(unsigned int Idx)
 {
 	p->Members.erase(p->Members.begin()+Idx);
+	MapFeature* F = p->Members[Idx].second;
+	F->unsetParent(this);
 }
 
 unsigned int Relation::size() const

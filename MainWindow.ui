@@ -26,7 +26,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QMenuBar" name="menuBar" >
+  <widget class="QMenuBar" name="theMenuBar" >
    <property name="geometry" >
     <rect>
      <x>0</x>

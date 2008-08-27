@@ -31,7 +31,9 @@ QWidget* MDockAncestor::getWidget()
 {
 	mainWidget = new QWidget();
 	mainWidget->setParent(this); 
+#ifndef _MOBILE
 	QDockWidget::setWidget(mainWidget); 
+#endif
 
 	return mainWidget;
 }

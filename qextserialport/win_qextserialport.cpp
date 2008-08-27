@@ -344,7 +344,7 @@ purpose within this class.  This function is meaningless on an unbuffered device
 only prints a warning message to that effect.
 */
 void Win_QextSerialPort::ungetChar(char c) {
-
+	Q_UNUSED(c);
     /*meaningless on unbuffered sequential device - return error and print a warning*/
     TTY_WARNING("Win_QextSerialPort: ungetChar() called on an unbuffered sequential device - operation is meaningless");
 }

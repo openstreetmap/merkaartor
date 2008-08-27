@@ -65,6 +65,7 @@
 #include <QInputDialog>
 #include <QClipboard>
 #include <QProgressDialog>
+#include <QMenuBar>
 
 MainWindow::MainWindow(void)
 		: fileName(""), theDocument(0), theXmlDoc(0), gpsRecLayer(0), curGpsTrackSegment(0)
@@ -152,6 +153,8 @@ MainWindow::MainWindow(void)
 
 	theGPS->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 	addDockWidget(Qt::RightDockWidgetArea, theGPS);
+
+	MerkaartorPreferences::instance()->restoreMainWindowState( this );
 #else
 	theProperties->setVisible(false);
 	theInfo->setVisible(false);
@@ -159,7 +162,12 @@ MainWindow::MainWindow(void)
 	theDirty->setVisible(false);
 	toolBar->setVisible(false);
 	theGPS->setVisible(false);
-#endif
+
+#ifdef _WINCE
+	windowPropertiesAction->setText(tr("Properties..."));
+	menuBar()->setDefaultAction(windowPropertiesAction);
+#endif // _WINCE
+#endif // _MOBILE
 
 #ifndef OSMARENDER
 	renderSVGAction->setVisible(false);
@@ -171,7 +179,6 @@ MainWindow::MainWindow(void)
 	viewStyleTouchupAction->setVisible(false);
 #endif
 
-	MerkaartorPreferences::instance()->restoreMainWindowState( this );
 	CoordBox initialPosition = MerkaartorPreferences::instance()->getInitialPosition();
 	theView->projection().setViewport(initialPosition, theView->rect());
 }

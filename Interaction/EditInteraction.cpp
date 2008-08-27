@@ -83,6 +83,7 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 
 void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* )
 {
+	Q_UNUSED(ev);
 #ifndef _MOBILE
 	if (Dragging)
 	{
@@ -133,8 +134,9 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* )
 #endif
 }
 
-void EditInteraction::snapMouseMoveEvent(QMouseEvent* event, MapFeature* )
+void EditInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, MapFeature* )
 {
+	Q_UNUSED(anEvent);
 #ifndef _MOBILE
 	if (Dragging)
 	{

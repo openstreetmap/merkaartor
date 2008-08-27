@@ -416,6 +416,10 @@ bool QRectInterstects(const QRect& r, const QLine& l, QPoint& a, QPoint& b)
 
 void Road::buildPath(Projection const &theProjection, const QRect& r)
 {
+	p->thePath = QPainterPath();
+	if (!p->Nodes.size())
+		return;
+
 	bool lastPointVisible = true;
 	QPoint lastPoint = theProjection.project(p->Nodes[0]->position());
 	QPoint aP = lastPoint;
@@ -431,7 +435,6 @@ void Road::buildPath(Projection const &theProjection, const QRect& r)
 		aP.setY(qMin(clipRect.bottom(), aP.y()));
 		lastPointVisible = false;
 	}
-	p->thePath = QPainterPath();
 	p->thePath.moveTo(aP);
 	if (smoothed().size())
 	{

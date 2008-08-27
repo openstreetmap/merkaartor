@@ -252,14 +252,14 @@ static bool downloadToResolve(const std::vector<MapFeature*>& Resolution, QProgr
 			continue;
 
 		QString URL = theDownloader->getURLToFetchFull(Resolution[i]);
-		dlg->setLabelText(QApplication::translate("Downloader","downloading unresolved %1 of %2").arg(i).arg(Resolution.size()));
+		dlg->setLabelText(QApplication::translate("Downloader","Downloading unresolved %1 of %2").arg(i).arg(Resolution.size()));
 		if (theDownloader->go(URL))
 		{
 			if (theDownloader->resultCode() == 410)
 				theList->add(new RemoveFeatureCommand(theDocument, Resolution[i], std::vector<MapFeature*>()));
 			else
 			{
-				dlg->setLabelText(QApplication::translate("Downloader","parsing unresolved %1 of %2").arg(i).arg(Resolution.size()));
+				dlg->setLabelText(QApplication::translate("Downloader","Parsing unresolved %1 of %2").arg(i).arg(Resolution.size()));
 
 				QByteArray ba(theDownloader->content());
 				QBuffer  File(&ba);
@@ -293,15 +293,17 @@ static bool downloadToResolve(const std::vector<MapFeature*>& Resolution, QProgr
 
 static bool resolveNotYetDownloaded(QProgressDialog* dlg, MapDocument* theDocument, MapLayer* theLayer, CommandList* theList, Downloader* theDownloader)
 {
-	if (theDownloader)
+	if (theDownloader && M_PREFS->getResolveRelations())
 	{
-		// resolve nodes FIXME make this for nodes only or templatize?
+
+		// resolving nodes and roads makes no sense since the OSM api guarantees that they will be all downloaded
 		std::vector<MapFeature*> MustResolve;
 		MustResolve.clear();
 		for (unsigned int i=0; i<theLayer->size(); ++i)
 		{
-			if (theLayer->get(i)->lastUpdated() == MapFeature::NotYetDownloaded)
-				MustResolve.push_back(theLayer->get(i));
+			Relation* RR = dynamic_cast<Relation*>(theLayer->get(i));
+			if (RR && RR->notEverythingDownloaded())
+					MustResolve.push_back(RR);
 		}
 		if (MustResolve.size())
 		{
@@ -398,6 +400,35 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 				" and remove the one from the \"Conflicts...\" layer."
 				));
 		}
+
+		// Check for empty Roads/Relations
+		std::vector<MapFeature*> EmptyFeature;
+		for (unsigned int i=0; i<theLayer->size(); ++i) {
+			if (Road* R = dynamic_cast<Road*>(theLayer->get(i)))
+				if (!R->size())
+					EmptyFeature.push_back(R);
+			if (Relation* RR = dynamic_cast<Relation*>(theLayer->get(i)))
+				if (!RR->size())
+					EmptyFeature.push_back(RR);
+		}
+		if (EmptyFeature.size()) {
+			if (QMessageBox::warning(aParent,QApplication::translate("Downloader","Empty roads/relations detected"), 
+					QApplication::translate("Downloader",
+					"Empty roads/relations are probably errors.\n"
+					"Do you want to mark them for deletion?"),
+					QMessageBox::Ok | QMessageBox::Cancel,
+					QMessageBox::Cancel
+					) == QMessageBox::Ok) {
+				for (unsigned int i=0; i<EmptyFeature.size(); i++ ) {
+					CommandList* emptyFeatureList = new CommandList();
+					emptyFeatureList->setDescription(QApplication::translate("Downloader","Remove empty feature %1").arg(EmptyFeature[i]->description()));
+					emptyFeatureList->setFeature(EmptyFeature[i]);
+					emptyFeatureList->add(new RemoveFeatureCommand(theDocument, EmptyFeature[i]));
+					theDocument->addHistory(emptyFeatureList);
+				}
+			}
+		}
+
 	}
 	return true;
 }
