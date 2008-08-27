@@ -402,7 +402,11 @@ bool QRectInterstects(const QRect& r, const QLine& l, QPoint& a, QPoint& b)
 	}
 
 	if (hasP1 && hasP2) {
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 4, 0))
 		if (QLineF(a,b).angleTo(lF) > 15.0) {
+#else
+		if (QLineF(a,b).angle(lF) > 15.0) {
+#endif
 			QPoint t = b;
 			b = a;
 			a = t;

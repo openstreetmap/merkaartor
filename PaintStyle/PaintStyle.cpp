@@ -856,7 +856,7 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, const Projection& 
 			bgPath.addRect(textPath.boundingRect().adjusted(-BG_SPACING, -BG_SPACING, BG_SPACING, BG_SPACING));
 
 			bool rgContains = false;
-			for (int i=0; i<rg.numRects(); i++) {
+			for (int i=0; i<rg.rects().size(); i++) {
 				if (rg.rects()[i].contains(bgPath.boundingRect().toRect().translated(pt.toPoint()))) {
 					rgContains = true;
 					break;
