@@ -140,7 +140,7 @@ void EditInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, MapFeature* )
 #ifndef _MOBILE
 	if (Dragging)
 	{
-		EndDrag = projection().inverse(event->pos());
+		EndDrag = projection().inverse(anEvent->pos());
 		view()->update();
 	}
 #endif
