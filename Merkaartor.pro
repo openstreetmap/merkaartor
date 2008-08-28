@@ -8,6 +8,7 @@
 # PREFIX              - base prefix for installation
 # NODEBUG             - no debug target
 # OSMARENDER          - enable osmarender
+# MOBILE              - enable MOBILE
 
 TEMPLATE = app
 TARGET = merkaartor
@@ -109,3 +110,12 @@ isEmpty(NOUSEWEBKIT) {
     }
     QT += webkit
 }
+
+count(MOBILE,1) {
+    DEFINES += _MOBILE
+    win32-wince* {
+        DEFINES += _WINCE
+    }
+}
+
+
