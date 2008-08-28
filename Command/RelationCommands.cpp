@@ -5,14 +5,19 @@
 #include "Map/MapLayer.h"
 #include "Sync/DirtyList.h"
 
+RelationAddFeatureCommand::RelationAddFeatureCommand(Relation* R)
+: Command(R), theLayer(0), oldLayer(0), theRelation(R), Role(""), theMapFeature(0), Position(0)
+{
+}
+
 RelationAddFeatureCommand::RelationAddFeatureCommand(Relation* R, const QString& aRole, MapFeature* W, MapLayer* aLayer)
-: theLayer(aLayer), oldLayer(0), theRelation(R), Role(aRole), theMapFeature(W), Position(theRelation->size())
+: Command(R), theLayer(aLayer), oldLayer(0), theRelation(R), Role(aRole), theMapFeature(W), Position(theRelation->size())
 {
 	redo();
 }
 
 RelationAddFeatureCommand::RelationAddFeatureCommand(Relation* R, const QString& aRole, MapFeature* W, unsigned int aPos, MapLayer* aLayer)
-: theLayer(aLayer), oldLayer(0), theRelation(R), Role(aRole), theMapFeature(W), Position(aPos)
+: Command(R), theLayer(aLayer), oldLayer(0), theRelation(R), Role(aRole), theMapFeature(W), Position(aPos)
 {
 	redo();
 }
@@ -25,6 +30,7 @@ RelationAddFeatureCommand::~RelationAddFeatureCommand(void)
 
 void RelationAddFeatureCommand::undo()
 {
+	Command::undo();
 	theRelation->remove(Position);
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		theLayer->remove(theRelation);
@@ -42,6 +48,7 @@ void RelationAddFeatureCommand::redo()
 		incDirtyLevel(oldLayer);
 		theLayer->add(theRelation);
 	}
+	Command::redo();
 }
 
 bool RelationAddFeatureCommand::buildDirtyList(DirtyList& theList)
@@ -71,6 +78,8 @@ bool RelationAddFeatureCommand::toXML(QDomElement& xParent) const
 	if (oldLayer)
 		e.setAttribute("oldlayer", oldLayer->id());
 
+	Command::toXML(e);
+
 	return OK;
 }
 
@@ -86,16 +95,16 @@ RelationAddFeatureCommand * RelationAddFeatureCommand::fromXML(MapDocument * d, 
 		a->oldLayer = d->getLayer(e.attribute("oldlayer"));
 	else
 		a->oldLayer = NULL;
-	a->theRelation = MapFeature::getRelationOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("relation"));
+	a->theRelation = MapFeature::getRelationOrCreatePlaceHolder(d, a->theLayer, e.attribute("relation"));
 	MapFeature* F;
 	if (e.attribute("featureclass") == "TrackPoint") {
-		F = (MapFeature*) MapFeature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("trackpoint"));
+		F = (MapFeature*) MapFeature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, e.attribute("trackpoint"));
 	} else 
 	if (e.attribute("featureclass") == "Road") {
-		F = (MapFeature*) MapFeature::getWayOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("road"));
+		F = (MapFeature*) MapFeature::getWayOrCreatePlaceHolder(d, a->theLayer, e.attribute("road"));
 	} else 
 	if (e.attribute("featureclass") == "Relation") {
-		F = (MapFeature*) MapFeature::getRelationOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("road"));
+		F = (MapFeature*) MapFeature::getRelationOrCreatePlaceHolder(d, a->theLayer, e.attribute("road"));
 	} else {
 		if (!(F = d->getFeature(e.attribute("feature"), false)))
 			return NULL;
@@ -112,20 +121,27 @@ RelationAddFeatureCommand * RelationAddFeatureCommand::fromXML(MapDocument * d, 
 	else
 		a->oldLayer = NULL;
 
+	Command::fromXML(d, e, a);
+
 	return a;
 }
 
 /* ROADREMOVEMapFeatureCOMMAND */
 
+RelationRemoveFeatureCommand::RelationRemoveFeatureCommand(Relation* R)
+: Command(R), theLayer(0), oldLayer(0), Idx(0), theRelation(R), theMapFeature(0)
+{
+}
+
 RelationRemoveFeatureCommand::RelationRemoveFeatureCommand(Relation* R, MapFeature* W, MapLayer* aLayer)
-: theLayer(aLayer), oldLayer(0), Idx(R->find(W)), theRelation(R), theMapFeature(W)
+: Command(R), theLayer(aLayer), oldLayer(0), Idx(R->find(W)), theRelation(R), theMapFeature(W)
 {
 	Role = R->getRole(Idx);
 	redo();
 }
 
 RelationRemoveFeatureCommand::RelationRemoveFeatureCommand(Relation* R, unsigned int anIdx, MapLayer* aLayer)
-: theLayer(aLayer), oldLayer(0), Idx(anIdx), theRelation(R), Role(R->getRole(anIdx)), theMapFeature(R->get(anIdx))
+: Command(R), theLayer(aLayer), oldLayer(0), Idx(anIdx), theRelation(R), Role(R->getRole(anIdx)), theMapFeature(R->get(anIdx))
 {
 	redo();
 }
@@ -138,6 +154,7 @@ RelationRemoveFeatureCommand::~RelationRemoveFeatureCommand(void)
 
 void RelationRemoveFeatureCommand::undo()
 {
+	Command::undo();
 	theRelation->add(Role,theMapFeature,Idx);
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		theLayer->remove(theRelation);
@@ -155,6 +172,7 @@ void RelationRemoveFeatureCommand::redo()
 		incDirtyLevel(oldLayer);
 		theLayer->add(theRelation);
 	}
+	Command::redo();
 }
 
 bool RelationRemoveFeatureCommand::buildDirtyList(DirtyList& theList)
@@ -184,6 +202,8 @@ bool RelationRemoveFeatureCommand::toXML(QDomElement& xParent) const
 	if (oldLayer)
 		e.setAttribute("oldlayer", oldLayer->id());
 
+	Command::toXML(e);
+
 	return OK;
 }
 
@@ -200,20 +220,22 @@ RelationRemoveFeatureCommand * RelationRemoveFeatureCommand::fromXML(MapDocument
 		a->oldLayer = d->getLayer(e.attribute("oldlayer"));
 	else
 		a->oldLayer = NULL;
-	a->theRelation = MapFeature::getRelationOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("relation"));
+	a->theRelation = MapFeature::getRelationOrCreatePlaceHolder(d, a->theLayer, e.attribute("relation"));
 	MapFeature* F;
 	if (e.attribute("featureclass") == "TrackPoint") {
-		F = (MapFeature*) MapFeature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("feature"));
+		F = (MapFeature*) MapFeature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, e.attribute("feature"));
 	} else 
 	if (e.attribute("featureclass") == "Road") {
-		F = (MapFeature*) MapFeature::getWayOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("feature"));
+		F = (MapFeature*) MapFeature::getWayOrCreatePlaceHolder(d, a->theLayer, e.attribute("feature"));
 	} else 
 	if (e.attribute("featureclass") == "Relation") {
-		F = (MapFeature*) MapFeature::getRelationOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("feature"));
+		F = (MapFeature*) MapFeature::getRelationOrCreatePlaceHolder(d, a->theLayer, e.attribute("feature"));
 	}
 	a->theMapFeature = F;
 	a->Idx = e.attribute("index").toInt();
 	a->Role = a->theRelation->getRole(a->Idx);
+
+	Command::fromXML(d, e, a);
 
 	return a;
 }

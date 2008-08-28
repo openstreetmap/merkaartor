@@ -25,18 +25,16 @@
 #include <QtXml/QXmlAttributes>
 
 
-OSMHandler::OSMHandler(MapDocument* aDoc, MapLayer* aLayer, MapLayer* aConflict, CommandList* aList)
-: theDocument(aDoc), theLayer(aLayer), conflictLayer(aConflict), theList(aList), Current(0)
+OSMHandler::OSMHandler(MapDocument* aDoc, MapLayer* aLayer, MapLayer* aConflict)
+: theDocument(aDoc), theLayer(aLayer), conflictLayer(aConflict), Current(0)
 {
 }
 
 void OSMHandler::parseTag(const QXmlAttributes &atts)
 {
 	if (!Current) return;
-	if (NewFeature)
-		Current->setTag(atts.value("k"),atts.value("v"));
-	else
-		theList->add(new SetTagCommand(Current, atts.value("k"),atts.value("v")));
+
+	Current->setTag(atts.value("k"),atts.value("v"));
 }
 
 void parseStandardAttributes(const QXmlAttributes& atts, MapFeature* F)
@@ -70,7 +68,7 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
 			parseStandardAttributes(atts,Pt);
 			if (Pt->time() > userPt->time()) {
 				if (conflictLayer)
-					theList->add(new AddFeatureCommand(conflictLayer, Pt, false));
+					conflictLayer->add(Pt);
 				NewFeature = true;
 			} else {
 				delete Pt;
@@ -80,7 +78,7 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
 		}
 		else if (Pt->lastUpdated() != MapFeature::UserResolved)
 		{
-			theList->add(new MoveTrackPointCommand(Pt,Coord(angToInt(Lat),angToInt(Lon))));
+			Pt->setPosition(Coord(angToInt(Lat),angToInt(Lon)));
 			NewFeature = false;
 			if (Pt->lastUpdated() == MapFeature::NotYetDownloaded)
 				Pt->setLastUpdated(MapFeature::OSMServer);
@@ -89,7 +87,7 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
 	else
 	{
 		Pt = new TrackPoint(Coord(angToInt(Lat),angToInt(Lon)));
-		theList->add(new AddFeatureCommand(theLayer,Pt, false));
+		theLayer->add(Pt);
 		NewFeature = true;
 		Pt->setId(id);
 		Pt->setLastUpdated(MapFeature::OSMServer);
@@ -102,9 +100,9 @@ void OSMHandler::parseNd(const QXmlAttributes& atts)
 {
 	Road* R = dynamic_cast<Road*>(Current);
 	if (!R) return;
-	TrackPoint *Part = MapFeature::getTrackPointOrCreatePlaceHolder(theDocument, theLayer, theList, atts.value("ref"));
+	TrackPoint *Part = MapFeature::getTrackPointOrCreatePlaceHolder(theDocument, theLayer, atts.value("ref"));
 	if (NewFeature)
-		theList->add(new RoadAddTrackPointCommand(R,Part));
+		R->add(Part);
 }
 
 void OSMHandler::parseWay(const QXmlAttributes& atts)
@@ -126,7 +124,7 @@ void OSMHandler::parseWay(const QXmlAttributes& atts)
 			parseStandardAttributes(atts,R);
 			if (R->time() > userRd->time()) {
 				if (conflictLayer)
-					theList->add(new AddFeatureCommand(conflictLayer, R, false));
+					conflictLayer->add(R);
 				NewFeature = true;
 			} else {
 				delete R;
@@ -137,7 +135,7 @@ void OSMHandler::parseWay(const QXmlAttributes& atts)
 		else if (R->lastUpdated() != MapFeature::UserResolved)
 		{
 			while (R->size())
-				theList->add(new RoadRemoveTrackPointCommand(R,R->get(0)));
+				R->remove(0);
 			NewFeature = true;
 			if (R->lastUpdated() == MapFeature::NotYetDownloaded)
 				R->setLastUpdated(MapFeature::OSMServer);
@@ -146,7 +144,7 @@ void OSMHandler::parseWay(const QXmlAttributes& atts)
 	else
 	{
 		R = new Road;
-		theList->add(new AddFeatureCommand(theLayer,R, false));
+		theLayer->add(R);
 		NewFeature = true;
 		R->setId(id);
 		R->setLastUpdated(MapFeature::OSMServer);
@@ -163,18 +161,14 @@ void OSMHandler::parseMember(const QXmlAttributes& atts)
 	QString Type = atts.value("type");
 	MapFeature* F = 0;
 	if (Type == "node")
-		F = MapFeature::getTrackPointOrCreatePlaceHolder(theDocument, theLayer, theList, atts.value("ref"));
+		F = MapFeature::getTrackPointOrCreatePlaceHolder(theDocument, theLayer, atts.value("ref"));
 	else if (Type == "way")
-		F = MapFeature::getWayOrCreatePlaceHolder(theDocument, theLayer, theList, atts.value("ref"));
+		F = MapFeature::getWayOrCreatePlaceHolder(theDocument, theLayer, atts.value("ref"));
 	else if (Type == "relation")
-		F = MapFeature::getRelationOrCreatePlaceHolder(theDocument, theLayer, theList, atts.value("ref"));
+		F = MapFeature::getRelationOrCreatePlaceHolder(theDocument, theLayer, atts.value("ref"));
+
 	if (F)
-	{
-		if (NewFeature)
-			R->add(atts.value("role"),F);
-		else
-			theList->add(new RelationAddFeatureCommand(R,atts.value("role"),F));
-	}
+		R->add(atts.value("role"),F);
 }
 
 void OSMHandler::parseRelation(const QXmlAttributes& atts)
@@ -202,7 +196,7 @@ void OSMHandler::parseRelation(const QXmlAttributes& atts)
 		else if (R->lastUpdated() != MapFeature::UserResolved)
 		{
 			while (R->size())
-				theList->add(new RelationRemoveFeatureCommand(R,R->get(0)));
+				R->remove(0);
 			NewFeature = false;
 			if (R->lastUpdated() == MapFeature::NotYetDownloaded)
 				R->setLastUpdated(MapFeature::OSMServer);
@@ -213,7 +207,7 @@ void OSMHandler::parseRelation(const QXmlAttributes& atts)
 		R = new Relation;
 		NewFeature = true;
 		R->setId(id);
-		theList->add(new AddFeatureCommand(theLayer,R, false));
+		theLayer->add(R);
 		R->setLastUpdated(MapFeature::OSMServer);
 	}
 	parseStandardAttributes(atts,R);
@@ -244,7 +238,7 @@ bool OSMHandler::endElement ( const QString &, const QString & /* localName */, 
 	return true;
 }
 
-static bool downloadToResolve(const std::vector<MapFeature*>& Resolution, QProgressDialog* dlg, MapDocument* theDocument, MapLayer* theLayer, CommandList* theList, Downloader* theDownloader)
+static bool downloadToResolve(const std::vector<MapFeature*>& Resolution, QProgressDialog* dlg, MapDocument* theDocument, MapLayer* theLayer, Downloader* theDownloader)
 {
 	for (unsigned int i=0; i<Resolution.size(); i++ )
 	{
@@ -255,8 +249,10 @@ static bool downloadToResolve(const std::vector<MapFeature*>& Resolution, QProgr
 		dlg->setLabelText(QApplication::translate("Downloader","Downloading unresolved %1 of %2").arg(i).arg(Resolution.size()));
 		if (theDownloader->go(URL))
 		{
-			if (theDownloader->resultCode() == 410)
-				theList->add(new RemoveFeatureCommand(theDocument, Resolution[i], std::vector<MapFeature*>()));
+			if (theDownloader->resultCode() == 410) {
+				theLayer->remove(Resolution[i]);
+				delete Resolution[i];
+			}
 			else
 			{
 				dlg->setLabelText(QApplication::translate("Downloader","Parsing unresolved %1 of %2").arg(i).arg(Resolution.size()));
@@ -265,7 +261,7 @@ static bool downloadToResolve(const std::vector<MapFeature*>& Resolution, QProgr
 				QBuffer  File(&ba);
 				File.open(QIODevice::ReadOnly);
 
-				OSMHandler theHandler(theDocument,theLayer,NULL,theList);
+				OSMHandler theHandler(theDocument,theLayer,NULL);
 
 				QXmlSimpleReader xmlReader;
 				xmlReader.setContentHandler(&theHandler);
@@ -291,7 +287,16 @@ static bool downloadToResolve(const std::vector<MapFeature*>& Resolution, QProgr
 	return true;
 }
 
-static bool resolveNotYetDownloaded(QProgressDialog* dlg, MapDocument* theDocument, MapLayer* theLayer, CommandList* theList, Downloader* theDownloader)
+static void recurseDelete (MapFeature* F, QVector<MapFeature*>& MustDelete)
+{
+	for (unsigned int i=0; i<F->sizeParents(); i++) {
+		recurseDelete(F->getParent(i), MustDelete);
+	}
+	if (!MustDelete.contains(F))
+		MustDelete.push_back(F);
+}
+
+static bool resolveNotYetDownloaded(QProgressDialog* dlg, MapDocument* theDocument, MapLayer* theLayer, Downloader* theDownloader)
 {
 	if (theDownloader && M_PREFS->getResolveRelations())
 	{
@@ -303,24 +308,26 @@ static bool resolveNotYetDownloaded(QProgressDialog* dlg, MapDocument* theDocume
 		{
 			Relation* RR = dynamic_cast<Relation*>(theLayer->get(i));
 			if (RR && RR->notEverythingDownloaded())
-					MustResolve.push_back(RR);
+				MustResolve.push_back(RR);
 		}
 		if (MustResolve.size())
 		{
 			dlg->setMaximum(MustResolve.size());
 			dlg->setValue(0);
 			dlg->show();
-			if (!downloadToResolve(MustResolve,dlg,theDocument,theLayer, theList,theDownloader))
+			if (!downloadToResolve(MustResolve,dlg,theDocument,theLayer, theDownloader))
 				return false;
 		}
 	}
-	for (unsigned int i=theLayer->size(); i; --i)
+	QVector<MapFeature*> MustDelete;
+	for (unsigned int i=0; i<theLayer->size(); i++) 
 	{
-		if (theLayer->get(i-1)->notEverythingDownloaded())
-		{
-//			bool x = theLayer->get(i-1)->notEverythingDownloaded();
-			theList->add(new RemoveFeatureCommand(theDocument,theLayer->get(i-1)));
-		}
+		if (theLayer->get(i)->notEverythingDownloaded())
+			recurseDelete(theLayer->get(i), MustDelete);
+	}
+	for (int i=0; i<MustDelete.size(); i++) {
+		theLayer->remove(MustDelete[i]);
+		delete MustDelete[i];
 	}
 	return true;
 }
@@ -340,12 +347,10 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 	dlg->show();
 	if (theDownloader)
 		theDownloader->setAnimator(dlg,Bar,false);
-	CommandList* theList = new CommandList();
-	theList->setIsUpdateFromOSM();
 	MapLayer* conflictLayer = new DrawingMapLayer(QApplication::translate("Downloader","Conflicts from %1").arg(theLayer->name()));
 	theDocument->add(conflictLayer);
 
-	OSMHandler theHandler(theDocument,theLayer,conflictLayer,theList);
+	OSMHandler theHandler(theDocument,theLayer,conflictLayer);
 
 	QXmlSimpleReader xmlReader;
 	xmlReader.setContentHandler(&theHandler);
@@ -368,25 +373,16 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 
 	bool WasCanceled = dlg->wasCanceled();
 	if (!WasCanceled)
-		WasCanceled = !resolveNotYetDownloaded(dlg,theDocument,theLayer,theList,theDownloader);
+		WasCanceled = !resolveNotYetDownloaded(dlg,theDocument,theLayer,theDownloader);
 	delete dlg;
 	if (WasCanceled)
 	{
 		theDocument->remove(conflictLayer);
 		delete conflictLayer;
-		delete theList;
 		return false;
 	}
 	else
 	{
-		//FIXME Do we have to add a download to the undo list? + dirties the document
-		//theDocument->addHistory(theList);
-
-		// If we decide not to, we should at least delete the object. Better not to
-		// create theList at all.
-				
-		delete theList;
-
 		if (!conflictLayer->size()) {
 			theDocument->remove(conflictLayer);
 			delete conflictLayer;

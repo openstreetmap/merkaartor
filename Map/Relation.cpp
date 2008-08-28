@@ -208,9 +208,9 @@ void Relation::add(const QString& Role, MapFeature* F, unsigned int Idx)
 
 void Relation::remove(unsigned int Idx)
 {
-	p->Members.erase(p->Members.begin()+Idx);
 	MapFeature* F = p->Members[Idx].second;
 	F->unsetParent(this);
+	p->Members.erase(p->Members.begin()+Idx);
 }
 
 unsigned int Relation::size() const

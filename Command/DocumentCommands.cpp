@@ -7,8 +7,13 @@
 #include "Map/Relation.h"
 #include "Sync/DirtyList.h"
 
+AddFeatureCommand::AddFeatureCommand(MapFeature* aFeature)
+: Command(aFeature), theLayer(0), theFeature(0), UserAdded(false)
+{
+}
+
 AddFeatureCommand::AddFeatureCommand(MapLayer* aLayer, MapFeature* aFeature, bool aUserAdded)
-: theLayer(aLayer), theFeature(aFeature), UserAdded(aUserAdded)
+: Command(aFeature), theLayer(aLayer), theFeature(aFeature), UserAdded(aUserAdded)
 {
 	redo();
 }
@@ -21,6 +26,7 @@ AddFeatureCommand::~AddFeatureCommand()
 
 void AddFeatureCommand::undo()
 {
+	Command::undo();
 	theLayer->remove(theFeature);
 	if (oldLayer)
 		oldLayer->add(theFeature);
@@ -34,6 +40,7 @@ void AddFeatureCommand::redo()
 		oldLayer->remove(theFeature);
 	theLayer->add(theFeature);
 	incDirtyLevel(theLayer);
+	Command::redo();
 }
 
 bool AddFeatureCommand::buildDirtyList(DirtyList& theList)
@@ -58,6 +65,8 @@ bool AddFeatureCommand::toXML(QDomElement& xParent) const
 	e.setAttribute("feature", theFeature->xmlId());
 	e.setAttribute("useradded", QString(UserAdded ? "true" : "false"));
 
+	Command::toXML(e);
+
 	return OK;
 }
 
@@ -79,18 +88,20 @@ AddFeatureCommand * AddFeatureCommand::fromXML(MapDocument* d, QDomElement e)
 	a->theFeature = F;
 	a->UserAdded = (e.attribute("useradded") == "true" ? true : false);
 
+	Command::fromXML(d, e, a);
+
 	return a;
 }
 
 /* REMOVEFEATURECOMMAND */
 
-RemoveFeatureCommand::RemoveFeatureCommand()
-: theLayer(0), Idx(0), theFeature(0), CascadedCleanUp(0), RemoveExecuted(false)
+RemoveFeatureCommand::RemoveFeatureCommand(MapFeature *aFeature)
+: Command(aFeature), theLayer(0), Idx(0), theFeature(aFeature), CascadedCleanUp(0), RemoveExecuted(false)
 {
 }
 
 RemoveFeatureCommand::RemoveFeatureCommand(MapDocument *theDocument, MapFeature *aFeature)
-: theLayer(0), Idx(0), theFeature(aFeature), CascadedCleanUp(0), RemoveExecuted(false)
+: Command(aFeature), theLayer(0), Idx(0), theFeature(aFeature), CascadedCleanUp(0), RemoveExecuted(false)
 {
 	oldLayer = aFeature->layer();
 	Idx = aFeature->layer()->get(aFeature);
@@ -99,7 +110,7 @@ RemoveFeatureCommand::RemoveFeatureCommand(MapDocument *theDocument, MapFeature 
 }
 
 RemoveFeatureCommand::RemoveFeatureCommand(MapDocument *theDocument, MapFeature *aFeature, const std::vector<MapFeature*>& Alternatives)
-: theLayer(0), Idx(0), theFeature(aFeature), CascadedCleanUp(0), RemoveExecuted(false), theAlternatives(Alternatives)
+: Command(aFeature), theLayer(0), Idx(0), theFeature(aFeature), CascadedCleanUp(0), RemoveExecuted(false), theAlternatives(Alternatives)
 {
 	CascadedCleanUp  = new CommandList(MainWindow::tr("Cascaded cleanup"), NULL);
 	for (FeatureIterator it(theDocument); !it.isEnd(); ++it)
@@ -116,6 +127,7 @@ RemoveFeatureCommand::RemoveFeatureCommand(MapDocument *theDocument, MapFeature 
 	oldLayer->remove(theFeature);
 	theLayer->add(theFeature);
 	oldLayer->incDirtyLevel();
+	Command::redo();
 }
 
 RemoveFeatureCommand::~RemoveFeatureCommand()
@@ -123,6 +135,10 @@ RemoveFeatureCommand::~RemoveFeatureCommand()
 	if (oldLayer)
 		oldLayer->decDirtyLevel(commandDirtyLevel);
 	delete CascadedCleanUp;
+	if (theFeature->layer() == theLayer->getDocument()->getTrashLayer()) {
+		theLayer->getDocument()->getTrashLayer()->remove(theFeature);
+		delete theFeature;
+	}
 }
 
 void RemoveFeatureCommand::redo()
@@ -132,10 +148,12 @@ void RemoveFeatureCommand::redo()
 	oldLayer->remove(theFeature);
 	theLayer->add(theFeature);
 	incDirtyLevel(oldLayer);
+	Command::redo();
 }
 
 void RemoveFeatureCommand::undo()
 {
+	Command::undo();
 	theLayer->remove(theFeature);
 	if (oldLayer->size() < Idx)
 		Idx = oldLayer->size();
@@ -197,6 +215,8 @@ bool RemoveFeatureCommand::toXML(QDomElement& xParent) const
 // 		}
 // 	}
 
+	Command::toXML(e);
+
 	return OK;
 }
 
@@ -217,6 +237,8 @@ RemoveFeatureCommand * RemoveFeatureCommand::fromXML(MapDocument* d, QDomElement
 		}
 		c = c.nextSiblingElement();
 	}
+
+	Command::fromXML(d, e, a);
 
 	return a;
 }

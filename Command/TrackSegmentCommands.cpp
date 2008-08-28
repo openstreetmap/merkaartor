@@ -5,14 +5,19 @@
 #include "Map/MapLayer.h"
 #include "Sync/DirtyList.h"
 
+TrackSegmentAddTrackPointCommand::TrackSegmentAddTrackPointCommand(TrackSegment* R) 
+: Command(R), theLayer(0), oldLayer(0), theTrackSegment(R), theTrackPoint(0), Position(0)
+{
+}
+
 TrackSegmentAddTrackPointCommand::TrackSegmentAddTrackPointCommand(TrackSegment* R, TrackPoint* W, MapLayer* aLayer)
-: theLayer(aLayer), oldLayer(0), theTrackSegment(R), theTrackPoint(W), Position(theTrackSegment->size())
+: Command(R), theLayer(aLayer), oldLayer(0), theTrackSegment(R), theTrackPoint(W), Position(theTrackSegment->size())
 {
 	redo();
 }
 
 TrackSegmentAddTrackPointCommand::TrackSegmentAddTrackPointCommand(TrackSegment* R, TrackPoint* W, unsigned int aPos, MapLayer* aLayer)
-: theLayer(aLayer), oldLayer(0), theTrackSegment(R), theTrackPoint(W), Position(aPos)
+: Command(R), theLayer(aLayer), oldLayer(0), theTrackSegment(R), theTrackPoint(W), Position(aPos)
 {
 	redo();
 }
@@ -81,7 +86,7 @@ TrackSegmentAddTrackPointCommand * TrackSegmentAddTrackPointCommand::fromXML(Map
 	else
 		a->oldLayer = NULL;
 	a->theTrackSegment = dynamic_cast<TrackSegment*>(d->getFeature(e.attribute("tracksegment")));
-	a->theTrackPoint = MapFeature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("trackpoint"));
+	a->theTrackPoint = MapFeature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, e.attribute("trackpoint"));
 	a->Position = e.attribute("pos").toUInt();
 
 	return a;
@@ -89,14 +94,19 @@ TrackSegmentAddTrackPointCommand * TrackSegmentAddTrackPointCommand::fromXML(Map
 
 /* TRACKSEGMENTREMOVETRACKPOINTCOMMAND */
 
+TrackSegmentRemoveTrackPointCommand::TrackSegmentRemoveTrackPointCommand(TrackSegment* R) 
+: Command(R), theLayer(0), oldLayer(0), Idx(0), theTrackSegment(R), theTrackPoint(0)
+{
+};
+
 TrackSegmentRemoveTrackPointCommand::TrackSegmentRemoveTrackPointCommand(TrackSegment* R, TrackPoint* W, MapLayer* aLayer)
-: theLayer(aLayer), oldLayer(0), Idx(R->find(W)), theTrackSegment(R), theTrackPoint(W)
+: Command(R), theLayer(aLayer), oldLayer(0), Idx(R->find(W)), theTrackSegment(R), theTrackPoint(W)
 {
 	redo();
 }
 
 TrackSegmentRemoveTrackPointCommand::TrackSegmentRemoveTrackPointCommand(TrackSegment* R, unsigned int anIdx, MapLayer* aLayer)
-: theLayer(aLayer), oldLayer(0), Idx(anIdx), theTrackSegment(R), theTrackPoint(R->get(anIdx))
+: Command(R), theLayer(aLayer), oldLayer(0), Idx(anIdx), theTrackSegment(R), theTrackPoint(R->get(anIdx))
 {
 	redo();
 }
@@ -165,7 +175,7 @@ TrackSegmentRemoveTrackPointCommand * TrackSegmentRemoveTrackPointCommand::fromX
 	else
 		a->oldLayer = NULL;
 	a->theTrackSegment = dynamic_cast<TrackSegment*>(d->getFeature(e.attribute("tracksegment")));
-	a->theTrackPoint = MapFeature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("trackpoint"));
+	a->theTrackPoint = MapFeature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, e.attribute("trackpoint"));
 	a->Idx = e.attribute("index").toUInt();
 
 	return a;

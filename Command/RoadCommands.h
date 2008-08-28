@@ -10,7 +10,7 @@ class MapLayer;
 class RoadAddTrackPointCommand : public Command
 {
 	public:
-		RoadAddTrackPointCommand() {};
+		RoadAddTrackPointCommand(Road* R = NULL);
 		RoadAddTrackPointCommand(Road* R, TrackPoint* W, MapLayer* aLayer=NULL);
 		RoadAddTrackPointCommand(Road* R, TrackPoint* W, unsigned int Position, MapLayer* aLayer=NULL);
 		~RoadAddTrackPointCommand(void);
@@ -33,7 +33,7 @@ class RoadAddTrackPointCommand : public Command
 class RoadRemoveTrackPointCommand : public Command
 {
 	public:
-		RoadRemoveTrackPointCommand() {};
+		RoadRemoveTrackPointCommand(Road* R = NULL);
 		RoadRemoveTrackPointCommand(Road* R, TrackPoint* W, MapLayer* aLayer=NULL);
 		RoadRemoveTrackPointCommand(Road* R, unsigned int anIdx, MapLayer* aLayer=NULL);
 		~RoadRemoveTrackPointCommand(void);

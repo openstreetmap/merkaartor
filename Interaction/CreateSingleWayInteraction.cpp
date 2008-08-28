@@ -163,8 +163,7 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFe
 		}
 		FirstPoint = view()->projection().inverse(anEvent->pos());
 	}
-	else
-		Interaction::mousePressEvent(anEvent);
+	LastCursor = anEvent->pos();
 }
 
 QCursor CreateSingleWayInteraction::cursor() const

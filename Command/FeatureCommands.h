@@ -16,7 +16,7 @@ class TagCommand : public Command
 {
 	public:
 		TagCommand(MapFeature* aF, MapLayer* aLayer);
-		TagCommand();
+		TagCommand(MapFeature* aF);
 		~TagCommand(void);
 
 		virtual void undo() = 0;
@@ -34,7 +34,7 @@ class TagCommand : public Command
 class SetTagCommand : public TagCommand
 {
 	public:
-		SetTagCommand() {};
+		SetTagCommand(MapFeature* aF);
 		SetTagCommand(MapFeature* aF, unsigned int idx, const QString& k, const QString& v, MapLayer* aLayer=NULL);
 		SetTagCommand(MapFeature* aF, const QString& k, const QString& v, MapLayer* aLayer=NULL);
 
@@ -56,7 +56,6 @@ class SetTagCommand : public TagCommand
 class ClearTagsCommand : public TagCommand
 {
 	public:
-		ClearTagsCommand() {};
 		ClearTagsCommand(MapFeature* aF, MapLayer* aLayer=NULL);
 
 		virtual void undo();
@@ -69,7 +68,7 @@ class ClearTagsCommand : public TagCommand
 class ClearTagCommand : public TagCommand
 {
 	public:
-		ClearTagCommand() {};
+		ClearTagCommand(MapFeature* aF);
 		ClearTagCommand(MapFeature* aF, const QString& k, MapLayer* aLayer=NULL);
 
 		virtual void undo();

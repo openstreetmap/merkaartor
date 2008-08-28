@@ -1752,6 +1752,7 @@ void MainWindow::on_gpsReplayAction_triggered()
 		gpsDisconnectAction->setEnabled(true);
 		gpsRecordAction->setEnabled(true);
 		gpsPauseAction->setEnabled(true);
+
 		theGPS->setGpsDevice(aGps);
 		theGPS->resetGpsStatus();
 		theGPS->startGps();
@@ -1760,9 +1761,6 @@ void MainWindow::on_gpsReplayAction_triggered()
 
 void MainWindow::on_gpsDisconnectAction_triggered()
 {
-	disconnect(theGPS->getGpsDevice(), SIGNAL(updatePosition()), this, SLOT(updateGpsPosition()));
-	theGPS->stopGps();
-	theGPS->resetGpsStatus();
 	gpsConnectAction->setEnabled(true);
 	gpsReplayAction->setEnabled(true);
 	gpsDisconnectAction->setEnabled(false);
@@ -1770,6 +1768,10 @@ void MainWindow::on_gpsDisconnectAction_triggered()
 	gpsPauseAction->setEnabled(false);
 	gpsRecordAction->setChecked(false);
 	gpsPauseAction->setChecked(false);
+
+	disconnect(theGPS->getGpsDevice(), SIGNAL(updatePosition()), this, SLOT(updateGpsPosition()));
+	theGPS->stopGps();
+	theGPS->resetGpsStatus();
 }
 
 void MainWindow::updateGpsPosition()

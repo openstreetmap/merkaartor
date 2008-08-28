@@ -12,7 +12,7 @@ class MapFeature;
 class AddFeatureCommand : public Command
 {
 	public:
-		AddFeatureCommand() {};
+		AddFeatureCommand(MapFeature* aFeature = NULL);
 		AddFeatureCommand(MapLayer* aDocument, MapFeature* aFeature, bool aUserAdded);
 		virtual ~AddFeatureCommand();
 
@@ -33,7 +33,7 @@ class AddFeatureCommand : public Command
 class RemoveFeatureCommand : public Command
 {
 	public:
-		RemoveFeatureCommand();
+		RemoveFeatureCommand(MapFeature* aFeature = NULL);
 		RemoveFeatureCommand(MapDocument* theDocument, MapFeature* aFeature);
 		RemoveFeatureCommand(MapDocument* theDocument, MapFeature* aFeature, const std::vector<MapFeature*>& Alternatives);
 		virtual ~RemoveFeatureCommand();

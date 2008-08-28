@@ -16,7 +16,7 @@ class QWidget;
 class OSMHandler : public QXmlDefaultHandler
 {
 	public:
-		OSMHandler(MapDocument* aDoc, MapLayer* aLayer, MapLayer* aConflict, CommandList* aList);
+		OSMHandler(MapDocument* aDoc, MapLayer* aLayer, MapLayer* aConflict);
 
 		virtual bool startElement ( const QString & namespaceURI, const QString & localName, const QString & qName, const QXmlAttributes & atts );
 		virtual bool endElement ( const QString & namespaceURI, const QString & localName, const QString & qName );
@@ -32,7 +32,6 @@ class OSMHandler : public QXmlDefaultHandler
 		MapDocument* theDocument;
 		MapLayer* theLayer;
 		MapLayer* conflictLayer;
-		CommandList* theList;
 		MapFeature* Current;
 		bool NewFeature;
 };

@@ -79,6 +79,10 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 		view()->properties()->checkMenuStatus();
 		view()->update();
 	}
+#ifdef _MOBILE
+	Interaction::mousePressEvent(ev);
+#endif
+
 }
 
 void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* )
@@ -132,6 +136,9 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* )
 		view()->update();
 	}
 #endif
+#ifdef _MOBILE
+	Interaction::mouseReleaseEvent(ev);
+#endif
 }
 
 void EditInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, MapFeature* )
@@ -143,6 +150,9 @@ void EditInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, MapFeature* )
 		EndDrag = projection().inverse(anEvent->pos());
 		view()->update();
 	}
+#endif
+#ifdef _MOBILE
+	Interaction::mouseMoveEvent(anEvent);
 #endif
 }
 

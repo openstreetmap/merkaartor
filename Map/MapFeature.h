@@ -203,9 +203,9 @@ class MapFeature
 
 		virtual bool deleteChildren(MapDocument* , CommandList* ) { return true; };
 
-		static TrackPoint* getTrackPointOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id);
-		static Road* getWayOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id);
-		static Relation* getRelationOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id);
+		static TrackPoint* getTrackPointOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, const QString& Id);
+		static Road* getWayOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, const QString& Id);
+		static Relation* getRelationOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, const QString& Id);
 		static void mergeTags(MapDocument* theDocument, CommandList* L, MapFeature* Dest, MapFeature* Src);
 
 	private:

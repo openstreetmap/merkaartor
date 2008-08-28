@@ -14,11 +14,10 @@
 #include <QUuid>
 #include <QProgressDialog>
 
-Command::Command()
-	: commandDirtyLevel(0)
+Command::Command(MapFeature* aF)
+	: mainFeature(aF), commandDirtyLevel(0), oldCreated("")
 {
 	description = QApplication::translate("Command", "No description");
-	mainFeature = NULL;
 }
 
 Command::~Command()
@@ -83,16 +82,61 @@ unsigned int Command::getDirtyLevel()
 	return commandDirtyLevel;
 }
 
+void Command::undo()
+{
+	if (mainFeature)
+		mainFeature->setTag("created_by", oldCreated);
+}
+
+void Command::redo()
+{
+	if (mainFeature) {
+		oldCreated = mainFeature->tagValue("created_by", TAG_UNDEF_VALUE);
+		mainFeature->setTag("created_by",QString("Merkaartor %1").arg(VERSION));
+	}
+}
+
+bool Command::toXML(QDomElement& xParent) const
+{
+	bool OK = true;
+
+	QDomElement e = xParent.ownerDocument().createElement("Command");
+	xParent.appendChild(e);
+
+	e.setAttribute("xml:id", id());
+	e.setAttribute("feature", mainFeature->xmlId());
+	e.setAttribute("oldCreated", oldCreated);
+
+	return OK;
+}
+
+void Command::fromXML(MapDocument* d, const QDomElement& e, Command* C)
+{
+	QDomElement c = e.firstChildElement();
+	while(!c.isNull()) {
+		if (c.tagName() == "Command") {
+			MapFeature* F;
+			if (!(F = d->getFeature(c.attribute("feature"), false)))
+				return;
+
+			C->setId(c.attribute("xml:id"));
+			if (c.hasAttribute("oldCreated"))
+				C->oldCreated = c.attribute("oldCreated");
+			C->mainFeature = F;
+		}
+		c = c.nextSiblingElement();
+	}
+}
 
 // COMMANDLIST
 
 CommandList::CommandList()
-: IsUpdateFromOSM(false)
+: Command(0), IsUpdateFromOSM(false)
 {
 }
 
 CommandList::CommandList(QString aDesc, MapFeature* aFeat)
-: IsUpdateFromOSM(false)
+: Command(0), IsUpdateFromOSM(false)
 {
 	description = aDesc;
 	mainFeature = aFeat;
@@ -182,13 +226,13 @@ CommandList* CommandList::fromXML(MapDocument* d, const QDomElement& e)
 		l->description = e.attribute("description");
 	if (e.hasAttribute("feature")) {
 		if (e.attribute("featureclass") == "TrackPoint") {
-			l->mainFeature = (MapFeature*) MapFeature::getTrackPointOrCreatePlaceHolder(d, (MapLayer *) d->getDirtyLayer(), NULL, e.attribute("feature"));
+			l->mainFeature = (MapFeature*) MapFeature::getTrackPointOrCreatePlaceHolder(d, (MapLayer *) d->getDirtyLayer(), e.attribute("feature"));
 		} else 
 		if (e.attribute("featureclass") == "Road") {
-			l->mainFeature = (MapFeature*) MapFeature::getWayOrCreatePlaceHolder(d, (MapLayer *) d->getDirtyLayer(), NULL, e.attribute("feature"));
+			l->mainFeature = (MapFeature*) MapFeature::getWayOrCreatePlaceHolder(d, (MapLayer *) d->getDirtyLayer(), e.attribute("feature"));
 		} else 
 		if (e.attribute("featureclass") == "Relation") {
-			l->mainFeature = (MapFeature*) MapFeature::getRelationOrCreatePlaceHolder(d, (MapLayer *) d->getDirtyLayer(), NULL, e.attribute("feature"));
+			l->mainFeature = (MapFeature*) MapFeature::getRelationOrCreatePlaceHolder(d, (MapLayer *) d->getDirtyLayer(), e.attribute("feature"));
 		}
 	}
 

@@ -5,14 +5,19 @@
 #include "Map/MapLayer.h"
 #include "Sync/DirtyList.h"
 
+RoadAddTrackPointCommand::RoadAddTrackPointCommand(Road* R)
+: Command (R), theLayer(0), oldLayer(0), theRoad(R), theTrackPoint(0), Position(0)
+{
+}
+
 RoadAddTrackPointCommand::RoadAddTrackPointCommand(Road* R, TrackPoint* W, MapLayer* aLayer)
-: theLayer(aLayer), oldLayer(0), theRoad(R), theTrackPoint(W), Position(theRoad->size())
+: Command (R), theLayer(aLayer), oldLayer(0), theRoad(R), theTrackPoint(W), Position(theRoad->size())
 {
 	redo();
 }
 
 RoadAddTrackPointCommand::RoadAddTrackPointCommand(Road* R, TrackPoint* W, unsigned int aPos, MapLayer* aLayer)
-: theLayer(aLayer), oldLayer(0), theRoad(R), theTrackPoint(W), Position(aPos)
+: Command(R), theLayer(aLayer), oldLayer(0), theRoad(R), theTrackPoint(W), Position(aPos)
 {
 	redo();
 }
@@ -25,6 +30,7 @@ RoadAddTrackPointCommand::~RoadAddTrackPointCommand(void)
 
 void RoadAddTrackPointCommand::undo()
 {
+	Command::undo();
 	theRoad->remove(Position);
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		theLayer->remove(theRoad);
@@ -42,6 +48,7 @@ void RoadAddTrackPointCommand::redo()
 		incDirtyLevel(oldLayer);
 		theLayer->add(theRoad);
 	}
+	Command::redo();
 }
 
 bool RoadAddTrackPointCommand::buildDirtyList(DirtyList& theList)
@@ -70,6 +77,8 @@ bool RoadAddTrackPointCommand::toXML(QDomElement& xParent) const
 	if (oldLayer)
 		e.setAttribute("oldlayer", oldLayer->id());
 
+	Command::toXML(e);
+
 	return OK;
 }
 
@@ -85,23 +94,30 @@ RoadAddTrackPointCommand * RoadAddTrackPointCommand::fromXML(MapDocument * d, QD
 		a->oldLayer = d->getLayer(e.attribute("oldlayer"));
 	else
 		a->oldLayer = NULL;
-	a->theRoad = MapFeature::getWayOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("road"));
-	a->theTrackPoint = MapFeature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("trackpoint"));
+	a->theRoad = MapFeature::getWayOrCreatePlaceHolder(d, a->theLayer, e.attribute("road"));
+	a->theTrackPoint = MapFeature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, e.attribute("trackpoint"));
 	a->Position = e.attribute("pos").toUInt();
+
+	Command::fromXML(d, e, a);
 
 	return a;
 }
 
 /* ROADREMOVETRACKPOINTCOMMAND */
 
+RoadRemoveTrackPointCommand::RoadRemoveTrackPointCommand(Road* R)
+: Command(R), theLayer(0), oldLayer(0), Idx(0), theRoad(R), theTrackPoint(0)
+{
+}
+
 RoadRemoveTrackPointCommand::RoadRemoveTrackPointCommand(Road* R, TrackPoint* W, MapLayer* aLayer)
-: theLayer(aLayer), oldLayer(0), Idx(R->find(W)), theRoad(R), theTrackPoint(W)
+: Command(R), theLayer(aLayer), oldLayer(0), Idx(R->find(W)), theRoad(R), theTrackPoint(W)
 {
 	redo();
 }
 
 RoadRemoveTrackPointCommand::RoadRemoveTrackPointCommand(Road* R, unsigned int anIdx, MapLayer* aLayer)
-: theLayer(aLayer), oldLayer(0), Idx(anIdx), theRoad(R), theTrackPoint(R->get(anIdx))
+: Command(R), theLayer(aLayer), oldLayer(0), Idx(anIdx), theRoad(R), theTrackPoint(R->get(anIdx))
 {
 	redo();
 }
@@ -114,6 +130,7 @@ RoadRemoveTrackPointCommand::~RoadRemoveTrackPointCommand(void)
 
 void RoadRemoveTrackPointCommand::undo()
 {
+	Command::undo();
 	theRoad->add(theTrackPoint,Idx);
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		theLayer->remove(theRoad);
@@ -131,6 +148,7 @@ void RoadRemoveTrackPointCommand::redo()
 		incDirtyLevel(oldLayer);
 		theLayer->add(theRoad);
 	}
+	Command::redo();
 }
 
 bool RoadRemoveTrackPointCommand::buildDirtyList(DirtyList& theList)
@@ -159,6 +177,8 @@ bool RoadRemoveTrackPointCommand::toXML(QDomElement& xParent) const
 	if (oldLayer)
 		e.setAttribute("oldlayer", oldLayer->id());
 
+	Command::toXML(e);
+
 	return OK;
 }
 
@@ -174,9 +194,11 @@ RoadRemoveTrackPointCommand * RoadRemoveTrackPointCommand::fromXML(MapDocument *
 		a->oldLayer = d->getLayer(e.attribute("oldlayer"));
 	else
 		a->oldLayer = NULL;
-	a->theRoad = MapFeature::getWayOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("road"));
-	a->theTrackPoint = MapFeature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, NULL, e.attribute("trackpoint"));
+	a->theRoad = MapFeature::getWayOrCreatePlaceHolder(d, a->theLayer, e.attribute("road"));
+	a->theTrackPoint = MapFeature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, e.attribute("trackpoint"));
 	a->Idx = e.attribute("index").toUInt();
+
+	Command::fromXML(d, e, a);
 
 	return a;
 }

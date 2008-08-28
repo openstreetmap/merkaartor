@@ -511,7 +511,7 @@ QString MapFeature::stripToOSMId(const QString& id)
 }
 
 //Static
-TrackPoint* MapFeature::getTrackPointOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id)
+TrackPoint* MapFeature::getTrackPointOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, const QString& Id)
 {
 	TrackPoint* Part = dynamic_cast<TrackPoint*>(theDocument->getFeature("node_"+Id));
 	if (!Part)
@@ -525,16 +525,13 @@ TrackPoint* MapFeature::getTrackPointOrCreatePlaceHolder(MapDocument *theDocumen
 			else
 				Part->setId("node_"+Id);
 			Part->setLastUpdated(MapFeature::NotYetDownloaded);
-			if (theList)
-				theList->add(new AddFeatureCommand(theLayer, Part, false));
-			else
-				theLayer->add(Part);
+			theLayer->add(Part);
 		}
 	}
 	return Part;
 }
 
-Road* MapFeature::getWayOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id)
+Road* MapFeature::getWayOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, const QString& Id)
 {
 	Road* Part = dynamic_cast<Road*>(theDocument->getFeature("way_"+Id));
 	if (!Part)
@@ -548,16 +545,13 @@ Road* MapFeature::getWayOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *
 			else
 				Part->setId("way_"+Id);
 			Part->setLastUpdated(MapFeature::NotYetDownloaded);
-			if (theList)
-				theList->add(new AddFeatureCommand(theLayer, Part, false));
-			else
-				theLayer->add(Part);
+			theLayer->add(Part);
 		}
 	}
 	return Part;
 }
 
-Relation* MapFeature::getRelationOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, CommandList *theList, const QString& Id)
+Relation* MapFeature::getRelationOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, const QString& Id)
 {
 	Relation* Part = dynamic_cast<Relation*>(theDocument->getFeature("rel_"+Id));
 	if (!Part)
@@ -571,10 +565,7 @@ Relation* MapFeature::getRelationOrCreatePlaceHolder(MapDocument *theDocument, M
 			else
 				Part->setId("rel_"+Id);
 			Part->setLastUpdated(MapFeature::NotYetDownloaded);
-			if (theList)
-				theList->add(new AddFeatureCommand(theLayer, Part, false));
-			else
-				theLayer->add(Part);
+			theLayer->add(Part);
 		}
 	}
 	return Part;

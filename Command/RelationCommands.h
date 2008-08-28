@@ -12,7 +12,7 @@ class MapLayer;
 class RelationAddFeatureCommand : public Command
 {
 	public:
-		RelationAddFeatureCommand() {};
+		RelationAddFeatureCommand(Relation* R = NULL);
 		RelationAddFeatureCommand(Relation* R, const QString& Role, MapFeature* W, MapLayer* aLayer=NULL);
 		RelationAddFeatureCommand(Relation* R, const QString& Role, MapFeature* W, unsigned int Position, MapLayer* aLayer=NULL);
 		~RelationAddFeatureCommand(void);
@@ -36,7 +36,7 @@ class RelationAddFeatureCommand : public Command
 class RelationRemoveFeatureCommand : public Command
 {
 	public:
-		RelationRemoveFeatureCommand() {};
+		RelationRemoveFeatureCommand(Relation* R = NULL);
 		RelationRemoveFeatureCommand(Relation* R, MapFeature* W, MapLayer* aLayer=NULL);
 		RelationRemoveFeatureCommand(Relation* R, unsigned int anIdx, MapLayer* aLayer=NULL);
 		~RelationRemoveFeatureCommand(void);

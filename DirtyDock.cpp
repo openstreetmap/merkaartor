@@ -30,9 +30,7 @@ DirtyDock::DirtyDock(MainWindow* aParent)
 	setWindowTitle(tr("Undo"));
 	setObjectName("dirtyDock");
 
-	QWidget *widget = new QWidget;
-	ui.setupUi(widget);
-	setWidget(widget);
+	ui.setupUi(getWidget());
 
 	centerAction = new QAction(tr("Center map"), this);
 	connect(centerAction, SIGNAL(triggered()), this, SLOT(on_centerAction_triggered()));

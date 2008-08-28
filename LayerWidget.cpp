@@ -15,7 +15,7 @@
 #define LINEHEIGHT 25
 
 LayerWidget::LayerWidget(MapLayer* aLayer, QWidget* aParent)
-: QAbstractButton(aParent), theLayer(aLayer), ctxMenu(0), associatedMenu(0), closeAction(0), actZoom(0)
+: QAbstractButton(aParent), theLayer(aLayer), ctxMenu(0), closeAction(0), actZoom(0), associatedMenu(0)
 {
 	setCheckable(true);
 	//setAutoExclusive(true) ;

@@ -72,26 +72,34 @@ class GenericFeatureSnapInteraction : public Interaction
 		{
 			Interaction::paintEvent(anEvent, thePainter);
 
+#ifndef _MOBILE
 			if (LastSnap)
 				LastSnap->drawHover(thePainter, projection());
+#endif
 		}
 		virtual void mousePressEvent(QMouseEvent * event)
 		{
 			updateSnap(event);
 			snapMousePressEvent(event,LastSnap);
+#ifndef _MOBILE
 			Interaction::mousePressEvent(event);
+#endif
 		}
 		virtual void mouseReleaseEvent(QMouseEvent * event)
 		{
 			updateSnap(event);
 			snapMouseReleaseEvent(event,LastSnap);
+#ifndef _MOBILE
 			Interaction::mouseReleaseEvent(event);
+#endif
 		}
 		virtual void mouseMoveEvent(QMouseEvent* event)
 		{
 			updateSnap(event);
 			snapMouseMoveEvent(event, LastSnap);
+#ifndef _MOBILE
 			Interaction::mouseMoveEvent(event);
+#endif
 		}
 		virtual void snapMousePressEvent(QMouseEvent * , FeatureType*)
 		{
