@@ -219,7 +219,7 @@ void MapView::sortRenderingPriorityInLayers()
 {
 	for (unsigned int i = 0; i < theDocument->layerSize(); ++i) {
 		theDocument->getLayer(i)->
-			sortRenderingPriority(projection().pixelPerM());
+			sortRenderingPriority(theProjection.pixelPerM());
 	}
 }
 
@@ -282,12 +282,12 @@ void MapView::drawFeatures(QPainter & P)
 		if (!theDocument->getLayer(i)->isVisible())
 			continue;
 		for (unsigned int j=0; j<theDocument->getLayer(i)->size(); ++j) {
-			if (projection().viewport().disjunctFrom(theDocument->getLayer(i)->get(j)->boundingBox())) continue;
+			if (theProjection.viewport().disjunctFrom(theDocument->getLayer(i)->get(j)->boundingBox())) continue;
 			theFeatures.push_back(theDocument->getLayer(i)->get(j));
 			if (Road * R = dynamic_cast < Road * >(theDocument->getLayer(i)->get(j)))
-				R->buildPath(projection(), P.clipRegion().boundingRect());
+				R->buildPath(theProjection, P.clipRegion().boundingRect());
 			if (Relation * RR = dynamic_cast < Relation * >(theDocument->getLayer(i)->get(j)))
-				RR->buildPath(projection(), P.clipRegion().boundingRect());
+				RR->buildPath(theProjection, P.clipRegion().boundingRect());
 		}
 	}
 
@@ -326,7 +326,7 @@ void MapView::drawFeatures(QPainter & P)
 	
 	for (int i=0; i<theFeatures.size(); i++)
 	{
-		theFeatures[i]->draw(P, projection());
+		theFeatures[i]->draw(P, theProjection);
 	}
 }
 

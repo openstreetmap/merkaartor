@@ -53,7 +53,7 @@ QGPS::QGPS(QWidget *parent)
 void QGPS::setGpsDevice(QGPSDevice * aDevice)
 {
 	if (gpsDevice)
-		disconnect(gpsDevice, SIGNAL(updatePosition()), this, SLOT(updateGpsStatus()));
+		disconnect(gpsDevice, SIGNAL(updateStatus()), this, SLOT(updateGpsStatus()));
 	gpsDevice = aDevice;
 }
 
@@ -61,7 +61,7 @@ void QGPS::startGps()
 {
 	if (gpsDevice) {
 		if (isVisible())
-			connect(gpsDevice, SIGNAL(updatePosition()), this, SLOT(updateGpsStatus()));
+			connect(gpsDevice, SIGNAL(updateStatus()), this, SLOT(updateGpsStatus()));
 		gpsDevice->startDevice();
 	}
 }
@@ -70,7 +70,7 @@ void QGPS::stopGps()
 {
 	if (gpsDevice) {
 	    gpsDevice->stopDevice();
-		disconnect(gpsDevice, SIGNAL(updatePosition()), this, SLOT(updateGpsStatus()));
+		disconnect(gpsDevice, SIGNAL(updateStatus()), this, SLOT(updateGpsStatus()));
 	}
 }
 
@@ -201,7 +201,7 @@ void QGPS::showEvent ( QShowEvent * anEvent )
 	QWidget::showEvent(anEvent);
 
 	if (gpsDevice)
-		connect(gpsDevice, SIGNAL(updatePosition()), this, SLOT(updateGpsStatus()));
+		connect(gpsDevice, SIGNAL(updateStatus()), this, SLOT(updateGpsStatus()));
 }
 
 void QGPS::hideEvent ( QHideEvent * anEvent )
@@ -209,5 +209,5 @@ void QGPS::hideEvent ( QHideEvent * anEvent )
 	QWidget::hideEvent(anEvent);
 
 	if (gpsDevice) 
-		disconnect(gpsDevice, SIGNAL(updatePosition()), this, SLOT(updateGpsStatus()));
+		disconnect(gpsDevice, SIGNAL(updateStatus()), this, SLOT(updateGpsStatus()));
 }

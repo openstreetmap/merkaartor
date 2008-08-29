@@ -1716,7 +1716,8 @@ void MainWindow::on_gpsConnectAction_triggered()
 {
 	QGPSComDevice* aGps = new QGPSComDevice(M_PREFS->getGpsPort());
 	if (aGps->openDevice()) {
-		connect(aGps, SIGNAL(updatePosition()), this, SLOT(updateGpsPosition()));
+		connect(aGps, SIGNAL(updatePosition(float, float, QDateTime, float, float, float)), 
+			this, SLOT(updateGpsPosition(float, float, QDateTime, float, float, float)));
 
 		gpsConnectAction->setEnabled(false);
 		gpsReplayAction->setEnabled(false);
@@ -1745,7 +1746,8 @@ void MainWindow::on_gpsReplayAction_triggered()
 
 	QGPSFileDevice* aGps = new QGPSFileDevice(fileName);
 	if (aGps->openDevice()) {
-		connect(aGps, SIGNAL(updatePosition()), this, SLOT(updateGpsPosition()));
+		connect(aGps, SIGNAL(updatePosition(float, float, QDateTime, float, float, float)), 
+			this, SLOT(updateGpsPosition(float, float, QDateTime, float, float, float)));
 
 		gpsConnectAction->setEnabled(false);
 		gpsReplayAction->setEnabled(false);
@@ -1769,31 +1771,34 @@ void MainWindow::on_gpsDisconnectAction_triggered()
 	gpsRecordAction->setChecked(false);
 	gpsPauseAction->setChecked(false);
 
-	disconnect(theGPS->getGpsDevice(), SIGNAL(updatePosition()), this, SLOT(updateGpsPosition()));
+	disconnect(theGPS->getGpsDevice(), SIGNAL(updatePosition(float, float, QDateTime, float, float, float)), 
+		this, SLOT(updateGpsPosition(float, float, QDateTime, float, float, float)));
 	theGPS->stopGps();
 	theGPS->resetGpsStatus();
 }
 
-void MainWindow::updateGpsPosition()
+void MainWindow::updateGpsPosition(float latitude, float longitude, QDateTime time, float altitude, float speed, float heading)
 {
+	Q_UNUSED(heading)
 	if (theGPS->getGpsDevice()) {
-		if (theGPS->getGpsDevice()->fixStatus() == QGPSDevice::StatusActive) {
-			Coord gpsCoord(angToInt(theGPS->getGpsDevice()->latitude()), angToInt(theGPS->getGpsDevice()->longitude()));
-			if (gpsCenterAction->isChecked()) {
-				CoordBox vp = theView->projection().viewport();
-				QRect vpr = vp.toRect().adjusted(vp.lonDiff() / 4, vp.latDiff() / 4, -vp.lonDiff() / 4, -vp.latDiff() / 4);
-				if (!vpr.contains(gpsCoord.toQPoint())) {
-					theView->projection().setCenter(gpsCoord, theView->rect());
-					theView->invalidate(true, true);
-				}
+		Coord gpsCoord(angToInt(latitude), angToInt(longitude));
+		if (gpsCenterAction->isChecked()) {
+			CoordBox vp = theView->projection().viewport();
+			QRect vpr = vp.toRect().adjusted(vp.lonDiff() / 4, vp.latDiff() / 4, -vp.lonDiff() / 4, -vp.latDiff() / 4);
+			if (!vpr.contains(gpsCoord.toQPoint())) {
+				theView->projection().setCenter(gpsCoord, theView->rect());
+				theView->invalidate(true, true);
 			}
+		}
 
-			if (gpsRecordAction->isChecked() && !gpsPauseAction->isChecked()) {
-				TrackPoint* pt = new TrackPoint(gpsCoord);
-				gpsRecLayer->add(pt);
-				curGpsTrackSegment->add(pt);
-				theView->invalidate(true, false);
-			}
+		if (gpsRecordAction->isChecked() && !gpsPauseAction->isChecked()) {
+			TrackPoint* pt = new TrackPoint(gpsCoord);
+			pt->setTime(time);
+			pt->setElevation(altitude);
+			pt->setSpeed(speed);
+			gpsRecLayer->add(pt);
+			curGpsTrackSegment->add(pt);
+			theView->invalidate(true, false);
 		}
 	}
 	theView->update();

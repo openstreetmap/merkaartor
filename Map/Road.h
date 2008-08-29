@@ -43,11 +43,38 @@ class Road : public MapFeature
 		const std::vector<Coord>& smoothed() const;
 		bool isClosed();
 
+		/** Set the tag "key=value" to the current object
+		 * If a tag with the same key exist, it is replaced
+		 * Otherwise the tag is added at the end
+		 * @param key the key of the tag
+		 * @param value the value corresponding to the key
+		 */
+		virtual void setTag(const QString& key, const QString& value, bool addToTagList=true);
+
+		/** Set the tag "key=value" at the position index
+		 * If a tag with the same key exist, it is replaced
+		 * Otherwise the tag is added at the index position
+		 * @param index the place for the given tag. Start at 0.
+		 * @param key the key of the tag
+		 * @param value the value corresponding to the key
+		*/
+		virtual void setTag(unsigned int index, const QString& key, const QString& value, bool addToTagList=true);
+
+		/** remove all the tags for the curent feature
+		 */
+		virtual void clearTags();
+
+		/** remove the tag with the key "k".
+		 * if no corresponding tag, don't do anything
+		 */
+		virtual void clearTag(const QString& k);
+
 		virtual void partChanged(MapFeature* F, unsigned int ChangeId);
 		virtual void setLayer(MapLayer* aLayer);
 
 		double area() const;
 		double distance() const;
+		double widthOf();
 
 		virtual bool deleteChildren(MapDocument* theDocument, CommandList* theList);
 
@@ -71,7 +98,6 @@ class Road : public MapFeature
 };
 
 MapFeature::TrafficDirectionType trafficDirection(const Road* R);
-double widthOf(const Road* R);
 unsigned int findSnapPointIndex(const Road* R, Coord& P);
 
 #endif

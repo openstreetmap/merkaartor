@@ -179,7 +179,7 @@ TrackPoint* ImportNMEA::importRMC (QString line)
 	//int date = token[9];
 
 	QString strDate = tokens[9] + tokens[1];
-	QDateTime date = QDateTime::fromString(strDate, "ddMMyyHHmmss.zzz").toUTC();
+	QDateTime date = QDateTime::fromString(strDate, "ddMMyyHHmmss.zzz");
 	if (!date.isValid())
 		return NULL;
 

@@ -139,7 +139,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		void recentOpenTriggered(QAction* anAction);
 		void recentImportTriggered(QAction* anAction);
 		void projectionTriggered(QAction* anAction);
-		void updateGpsPosition();
+        void updateGpsPosition(float latitude, float longitude, QDateTime time, float altitude, float speed, float heading);
 		void applyStyles(std::vector<FeaturePainter>* thePainters);
 
 	public:

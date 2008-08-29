@@ -139,13 +139,13 @@ void QGPSDevice::satInfo(int index, int &elev, int &azim, int &snr)
  *                          the $ and ending with the checksum
  */
 
-void QGPSDevice::parseGGA(const char *ggaString)
+bool QGPSDevice::parseGGA(const char *ggaString)
 {
     mutex->lock();
 
 	QString line(ggaString);
 	if (line.count('$') > 1)
-		return;
+		return false;
 
 	QStringList tokens = line.split(",");
 
@@ -154,7 +154,7 @@ void QGPSDevice::parseGGA(const char *ggaString)
 	lat += latmin / 60.0;
 	if (tokens[3] != "N")
 		lat = -lat;
-    setLatitude(lat);
+    //cur_latitude = lat;
 
 	if (!tokens[3].isEmpty())
 		if (tokens[3].at(0) == 'N')
@@ -170,7 +170,7 @@ void QGPSDevice::parseGGA(const char *ggaString)
 	lon += lonmin / 60.0;
 	if (tokens[5] != "E")
 		lon = -lon;
-    setLongitude(lon);
+    //cur_longitude = lon;
 
 	if (!tokens[5].isEmpty())
 		if (tokens[5].at(0) == 'E')
@@ -194,6 +194,8 @@ void QGPSDevice::parseGGA(const char *ggaString)
 	setAltitude(altitude);
 
     mutex->unlock();
+
+	return true;
 } // parseGGA()
 
 /**
@@ -226,13 +228,13 @@ void QGPSDevice::parseGGA(const char *ggaString)
  * @param char  The full NMEA GPGSA string, from $ to checksum
  */
 
-void QGPSDevice::parseGSA(const char *gsaString)
+bool QGPSDevice::parseGSA(const char *gsaString)
 {
     mutex->lock();
 
 	QString line(gsaString);
 	if (line.count('$') > 1)
-		return;
+		return false;
 
 	QStringList tokens = line.split(",");
 
@@ -255,6 +257,8 @@ void QGPSDevice::parseGSA(const char *gsaString)
 	}
 
     mutex->unlock();
+
+	return true;
 } // parseGSA()
 
 /**
@@ -286,7 +290,7 @@ void QGPSDevice::parseGSA(const char *gsaString)
  * @param char  Full RMC string, from $ to checksum
  */
 
-void QGPSDevice::parseRMC(const char *rmcString)
+bool QGPSDevice::parseRMC(const char *rmcString)
 {
     mutex->lock();
 
@@ -294,7 +298,7 @@ void QGPSDevice::parseRMC(const char *rmcString)
 
 	QString line(rmcString);
 	if (line.count('$') > 1)
-		return;
+		return false;
 
 	QStringList tokens = line.split(",");
 
@@ -322,7 +326,7 @@ void QGPSDevice::parseRMC(const char *rmcString)
 	lat += latmin / 60.0;
 	if (tokens[4] != "N")
 		lat = -lat;
-    setLatitude(lat);
+    cur_latitude = lat;
 
 	if (!tokens[4].isEmpty())
 		if (tokens[4].at(0) == 'N')
@@ -338,7 +342,7 @@ void QGPSDevice::parseRMC(const char *rmcString)
 	lon += lonmin / 60.0;
  	if (tokens[6] != "E")
 		lon = -lon;
-    setLongitude(lon);
+    cur_longitude = lon;
 
 	if (!tokens[6].isEmpty())
 		if (tokens[6].at(0) == 'E')
@@ -347,8 +351,6 @@ void QGPSDevice::parseRMC(const char *rmcString)
 			setLatCardinal(CardinalWest);
 		else
 			setLatCardinal(CardinalNone);
-
-
 
     // Ground speed in km/h
 
@@ -374,6 +376,8 @@ void QGPSDevice::parseRMC(const char *rmcString)
 			setVarCardinal(CardinalNone);
 
     mutex->unlock();
+
+	return true;
 } // parseRMC()
 
 /**
@@ -406,7 +410,7 @@ void QGPSDevice::parseRMC(const char *rmcString)
  *  *75         -   Checksum
  */
 
-void QGPSDevice::parseGSV(const char *gsvString)
+bool QGPSDevice::parseGSV(const char *gsvString)
 {
     mutex->lock();
 
@@ -417,7 +421,7 @@ void QGPSDevice::parseGSV(const char *gsvString)
 
 	QString line(gsvString);
 	if (line.count('$') > 1)
-		return;
+		return false;
 
 	QStringList tokens = line.split(",");
 
@@ -440,6 +444,8 @@ void QGPSDevice::parseGSV(const char *gsvString)
 	}
 
     mutex->unlock();
+
+	return true;
 }
 
 /**
@@ -600,12 +606,14 @@ void QGPSComDevice::run()
             else if(bufferString[3] == 'R' && bufferString[4] == 'M' && bufferString[5] == 'C')
             {
                 //strcpy(nmeastr_rmc, bufferString);
-                parseRMC(bufferString);
+                if (parseRMC(bufferString))
+					if (fixStatus() == QGPSDevice::StatusActive && fixType() == QGPSDevice::Fix3D)
+						emit updatePosition(latitude(), longitude(), dateTime(), altitude(), speed(), heading());
             }
 
             mutex->unlock();
 
-            emit updatePosition();
+            emit updateStatus();
         }
 
     } while(safeStopLoop == false);
@@ -709,12 +717,14 @@ void QGPSFileDevice::run()
             else if(bufferString[3] == 'R' && bufferString[4] == 'M' && bufferString[5] == 'C')
             {
                 //strcpy(nmeastr_rmc, bufferString);
-                parseRMC(bufferString);
-            }
+                if (parseRMC(bufferString))
+					if (fixStatus() == QGPSDevice::StatusActive && fixType() == QGPSDevice::Fix3D)
+						emit updatePosition(latitude(), longitude(), dateTime(), altitude(), speed(), heading());
+           }
 
             mutex->unlock();
 
-            emit updatePosition();
+            emit updateStatus();
         }
 		msleep(100);
 

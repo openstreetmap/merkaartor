@@ -90,7 +90,7 @@ bool ImportExportKML::export_(const QVector<MapFeature *>& featList)
 			} 
 			QDomElement width = theXmlDoc.createElement("width");
 			ls.appendChild(width);
-			v = theXmlDoc.createTextNode(QString::number(widthOf(R)));
+			v = theXmlDoc.createTextNode(QString::number(R->widthOf()));
 			width.appendChild(v);
 
 			QDomElement l = theXmlDoc.createElement("LineString");

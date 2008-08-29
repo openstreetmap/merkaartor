@@ -20,7 +20,8 @@ class RoadPrivate
 {
 	public:
 		RoadPrivate()
-		: SmoothedUpToDate(false), BBox(Coord(0,0),Coord(0,0)), BBoxUpToDate(true), Area(0), Distance(0), MetaUpToDate(true)
+		: SmoothedUpToDate(false), BBox(Coord(0,0),Coord(0,0)), BBoxUpToDate(true), Area(0), Distance(0), Width(0),
+			MetaUpToDate(true)
 		{
 		}
 		std::vector<TrackPoint*> Nodes;
@@ -31,6 +32,7 @@ class RoadPrivate
 
 		double Area;
 		double Distance;
+		double Width;
 		bool MetaUpToDate;
 		QPainterPath thePath;
 
@@ -429,7 +431,7 @@ void Road::buildPath(Projection const &theProjection, const QRect& r)
 	QPoint aP = lastPoint;
 
 	double PixelPerM = theProjection.pixelPerM();
-	double WW = PixelPerM*widthOf(this)*10+10;
+	double WW = PixelPerM*widthOf()*10+10;
 	QRect clipRect = r.adjusted(int(-WW-20), int(-WW-20), int(WW+20), int(WW+20));
 
 	if (!clipRect.contains(aP)) {
@@ -522,6 +524,58 @@ bool Road::deleteChildren(MapDocument* theDocument, CommandList* theList)
 	}
 }
 
+#define DEFAULTWIDTH 6
+#define LANEWIDTH 4
+
+double Road::widthOf()
+{
+	if (p->Width)
+		return p->Width;
+
+	QString s(tagValue("width",QString()));
+	if (!s.isNull())
+		p->Width = s.toDouble();
+	QString h = tagValue("highway",QString());
+	if ( (h == "motorway") || (h=="motorway_link") )
+		p->Width =  4*LANEWIDTH; // 3 lanes plus emergency
+	else if ( (h == "trunk") || (h=="trunk_link") )
+		p->Width =  3*LANEWIDTH; // 2 lanes plus emergency
+	else if ( (h == "primary") || (h=="primary_link") )
+		p->Width =  2*LANEWIDTH; // 2 lanes
+	else if (h == "secondary")
+		p->Width =  2*LANEWIDTH; // 2 lanes
+	else if (h == "tertiary")
+		p->Width =  1.5*LANEWIDTH; // shared middle lane
+	else if (h == "cycleway")
+		p->Width =  1.5;
+	p->Width = DEFAULTWIDTH;
+
+	return p->Width;
+}
+
+void Road::setTag(const QString& key, const QString& value, bool addToTagList)
+{
+	MapFeature::setTag(key, value, addToTagList);
+	p->Width = 0;
+}
+
+void Road::setTag(unsigned int index, const QString& key, const QString& value, bool addToTagList)
+{
+	MapFeature::setTag(index, key, value, addToTagList);
+	p->Width = 0;
+}
+
+void Road::clearTags()
+{
+	MapFeature::clearTags();
+	p->Width = 0;
+}
+
+void Road::clearTag(const QString& k)
+{
+	MapFeature::clearTag(k);
+	p->Width = 0;
+}
 
 QString Road::toXML(unsigned int lvl, QProgressDialog * progress)
 {
@@ -642,30 +696,6 @@ MapFeature::TrafficDirectionType trafficDirection(const Road* R)
 		//TODO For motorway and motorway_link, this is still discussed on the wiki.
 	}
 	return MapFeature::UnknownDirection;
-}
-
-#define DEFAULTWIDTH 6
-#define LANEWIDTH 4
-
-double widthOf(const Road* R)
-{
-	QString s(R->tagValue("width",QString()));
-	if (!s.isNull())
-		return s.toDouble();
-	QString h = R->tagValue("highway",QString());
-	if ( (h == "motorway") || (h=="motorway_link") )
-		return 4*LANEWIDTH; // 3 lanes plus emergency
-	else if ( (h == "trunk") || (h=="trunk_link") )
-		return 3*LANEWIDTH; // 2 lanes plus emergency
-	else if ( (h == "primary") || (h=="primary_link") )
-		return 2*LANEWIDTH; // 2 lanes
-	else if (h == "secondary")
-		return 2*LANEWIDTH; // 2 lanes
-	else if (h == "tertiary")
-		return 1.5*LANEWIDTH; // shared middle lane
-	else if (h == "cycleway")
-		return 1.5;
-	return DEFAULTWIDTH;
 }
 
 unsigned int findSnapPointIndex(const Road* R, Coord& P)

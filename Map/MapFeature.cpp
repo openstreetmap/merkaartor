@@ -36,7 +36,8 @@ class MapFeaturePrivate
 			: LastActor(MapFeature::User), theLayer(0),
 				PossiblePaintersUpToDate(false),
 			  	PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
-				theFeature(0), LastPartNotification(0), Time(QDateTime::currentDateTime())
+				theFeature(0), LastPartNotification(0), Time(QDateTime::currentDateTime()),
+				TagsSize(0)
 		{
 			initVersionNumber();
 		}
@@ -44,7 +45,8 @@ class MapFeaturePrivate
 			: Tags(other.Tags), LastActor(other.LastActor), theLayer(0),
 				PossiblePaintersUpToDate(false),
 			  	PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
-				theFeature(0), LastPartNotification(0), Time(other.Time)
+				theFeature(0), LastPartNotification(0), Time(other.Time),
+				TagsSize(other.TagsSize)
 		{
 			initVersionNumber();
 		}
@@ -55,6 +57,7 @@ class MapFeaturePrivate
 
 		mutable QString Id;
 		std::vector<std::pair<QString, QString> > Tags;
+		unsigned int TagsSize;
 		MapFeature::ActorType LastActor;
 		MapLayer* theLayer;
 		std::vector<FeaturePainter*> PossiblePainters;
@@ -220,6 +223,7 @@ void MapFeature::setTag(unsigned int index, const QString& key, const QString& v
 			return;
 		}
 	p->Tags.insert(p->Tags.begin() + index, std::make_pair(key,value));
+	p->TagsSize++;
 	if (p->theLayer && addToTagList)
 		if (p->theLayer->getDocument())
 	  		p->theLayer->getDocument()->addToTagList(key, value);
@@ -237,6 +241,7 @@ void MapFeature::setTag(const QString& key, const QString& value, bool addToTagL
 			return;
 		}
 	p->Tags.push_back(std::make_pair(key,value));
+	p->TagsSize++;
 	if (p->theLayer && addToTagList)
 		if (p->theLayer->getDocument())
   			p->theLayer->getDocument()->addToTagList(key, value);
@@ -247,6 +252,7 @@ void MapFeature::clearTags()
 {
 	p->PixelPerMForPainter = -1;
 	p->Tags.clear();
+	p->TagsSize = 0;
 	notifyChanges();
 }
 
@@ -263,14 +269,23 @@ void MapFeature::clearTag(const QString& k)
 		{
 			p->PixelPerMForPainter = -1;
 			p->Tags.erase(p->Tags.begin()+i);
+			p->TagsSize--;
 			notifyChanges();
 			return;
 		}
 }
 
+void MapFeature::removeTag(unsigned int idx)
+{
+	p->PixelPerMForPainter = -1;
+	p->Tags.erase(p->Tags.begin()+idx);
+	p->TagsSize--;
+	notifyChanges();
+}
+
 unsigned int MapFeature::tagSize() const
 {
-	return p->Tags.size();
+	return p->TagsSize;
 }
 
 QString MapFeature::tagValue(unsigned int i) const
@@ -285,22 +300,15 @@ QString MapFeature::tagKey(unsigned int i) const
 
 unsigned int MapFeature::findKey(const QString &k) const
 {
-	for (unsigned int i=0; i<p->Tags.size(); ++i)
+	for (unsigned int i=0; i<p->TagsSize; ++i)
 		if (p->Tags[i].first == k)
 			return i;
 	return p->Tags.size();
 }
 
-void MapFeature::removeTag(unsigned int idx)
-{
-	p->PixelPerMForPainter = -1;
-	p->Tags.erase(p->Tags.begin()+idx);
-	notifyChanges();
-}
-
 QString MapFeature::tagValue(const QString& k, const QString& Default) const
 {
-	for (unsigned int i=0; i<p->Tags.size(); ++i)
+	for (unsigned int i=0; i<p->TagsSize; ++i)
 		if (p->Tags[i].first == k)
 			return p->Tags[i].second;
 	return Default;
@@ -458,11 +466,11 @@ bool MapFeature::tagsToXML(QDomElement xParent)
 
 void MapFeature::tagsFromXML(MapDocument* d, MapFeature * f, QDomElement e)
 {
+	Q_UNUSED(d)
 	QDomElement c = e.firstChildElement();
 	while(!c.isNull()) {
 		if (c.tagName() == "tag") {
 			f->setTag(c.attribute("k"),c.attribute("v"));
-	  		d->addToTagList(c.attribute("k"), c.attribute("v"));
 		}
 		c = c.nextSiblingElement();
 	}

@@ -111,7 +111,7 @@ class MapFeature
 		 * @param key the key of the tag
 		 * @param value the value corresponding to the key
 		 */
-		void setTag(const QString& key, const QString& value, bool addToTagList=true);
+		virtual void setTag(const QString& key, const QString& value, bool addToTagList=true);
 
 		/** Set the tag "key=value" at the position index
 		 * If a tag with the same key exist, it is replaced
@@ -120,16 +120,16 @@ class MapFeature
 		 * @param key the key of the tag
 		 * @param value the value corresponding to the key
 		*/
-		void setTag(unsigned int index, const QString& key, const QString& value, bool addToTagList=true);
+		virtual void setTag(unsigned int index, const QString& key, const QString& value, bool addToTagList=true);
 
 		/** remove all the tags for the curent feature
 		 */
-		void clearTags();
+		virtual void clearTags();
 
 		/** remove the tag with the key "k".
 		 * if no corresponding tag, don't do anything
 		 */
-		void clearTag(const QString& k);
+		virtual void clearTag(const QString& k);
 
 		/** @return the number of tags for the current object
 		 */

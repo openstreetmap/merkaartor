@@ -111,7 +111,8 @@ class QGPSDevice : public QThread
 
     signals:
     
-        void  updatePosition();
+        void  updatePosition(float latitude, float longitude, QDateTime time, float altitude, float speed, float heading);
+        void  updateStatus();
         
     protected:
     
@@ -166,10 +167,10 @@ class QGPSDevice : public QThread
         FixMode cur_fixMode;
         FixStatus cur_fixStatus;
         
-        void parseGGA(const char *ggaString = 0);
-        void parseGSA(const char *gsaString = 0);
-        void parseGSV(const char *gsvString = 0);
-        void parseRMC(const char *gsvString = 0);
+        bool parseGGA(const char *ggaString = 0);
+        bool parseGSA(const char *gsaString = 0);
+        bool parseGSV(const char *gsvString = 0);
+        bool parseRMC(const char *gsvString = 0);
         
 };
         

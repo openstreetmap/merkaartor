@@ -517,11 +517,22 @@ void FeaturePainter::drawBackground(Road* R, QPainter& thePainter, const Project
 {
 	if (!DrawBackground) return;
 	double PixelPerM = theProjection.pixelPerM();
-	double WW = PixelPerM*widthOf(R)*BackgroundScale+BackgroundOffset;
+	double WW = PixelPerM*R->widthOf()*BackgroundScale+BackgroundOffset;
 	if (WW < 0) return;
 	QPen thePen(BackgroundColor,WW);
 	thePen.setCapStyle(Qt::RoundCap);
-	thePainter.strokePath(R->getPath(),thePen);
+	////thePainter.strokePath(R->getPath(),thePen);
+	thePainter.setPen(thePen);
+	thePainter.setBrush(Qt::NoBrush);
+	thePainter.drawPath(R->getPath());
+	//thePainter.setPen(thePen);
+	//QPointF p1, p2;
+	//p1 = QPointF(R->getPath().elementAt(0));
+	//for (int i=1; i<R->getPath().elementCount(); i++) {
+	//	p2 = QPointF(R->getPath().elementAt(i));
+	//	thePainter.drawLine(p1, p2);
+	//	p1 = p2;
+	//}
 }
 
 void FeaturePainter::drawBackground(Relation* R, QPainter& thePainter, const Projection& /* theProjection */) const
@@ -533,7 +544,9 @@ void FeaturePainter::drawBackground(Relation* R, QPainter& thePainter, const Pro
 	if (WW < 0) return;
 	QPen thePen(BackgroundColor,WW);
 	thePen.setCapStyle(Qt::RoundCap);
-	thePainter.strokePath(R->getPath(),thePen);
+	thePainter.setPen(thePen);
+	thePainter.setBrush(Qt::NoBrush);
+	thePainter.drawPath(R->getPath());
 }
 
 void FeaturePainter::drawForeground(Road* R, QPainter& thePainter, const Projection& theProjection) const
@@ -544,7 +557,7 @@ void FeaturePainter::drawForeground(Road* R, QPainter& thePainter, const Project
 	if (DrawForeground)
 	{
 		double PixelPerM = theProjection.pixelPerM();
-		WW = PixelPerM*widthOf(R)*ForegroundScale+ForegroundOffset;
+		WW = PixelPerM*R->widthOf()*ForegroundScale+ForegroundOffset;
 		if (WW < 0) return;
 		QPen thePen(ForegroundColor,WW);
 		thePen.setCapStyle(Qt::RoundCap);
@@ -557,14 +570,13 @@ void FeaturePainter::drawForeground(Road* R, QPainter& thePainter, const Project
 		thePainter.setPen(thePen);
 	}
 	else
-		thePainter.setPen(QPen(Qt::NoPen));
+		thePainter.setPen(Qt::NoPen);
 	if (ForegroundFill && (R->size() > 2))
 	{
-		QBrush theBrush(ForegroundFillFillColor);
-		thePainter.setBrush(theBrush);
+		thePainter.setBrush(ForegroundFillFillColor);
 	}
 	else
-		thePainter.setBrush(QBrush(Qt::NoBrush));
+		thePainter.setBrush(Qt::NoBrush);
 	thePainter.drawPath(R->getPath());
 }
 
@@ -590,14 +602,13 @@ void FeaturePainter::drawForeground(Relation* R, QPainter& thePainter, const Pro
 		thePainter.setPen(thePen);
 	}
 	else
-		thePainter.setPen(QPen(Qt::NoPen));
+		thePainter.setPen(Qt::NoPen);
 	if (ForegroundFill)
 	{
-		QBrush theBrush(ForegroundFillFillColor);
-		thePainter.setBrush(theBrush);
+		thePainter.setBrush(ForegroundFillFillColor);
 	}
 	else
-		thePainter.setBrush(QBrush(Qt::NoBrush));
+		thePainter.setBrush(Qt::NoBrush);
 	thePainter.drawPath(R->getPath());
 }
 
@@ -621,7 +632,7 @@ void FeaturePainter::drawTouchup(Road* R, QPainter& thePainter, const Projection
 	if (DrawTouchup)
 	{
 		double PixelPerM = theProjection.pixelPerM();
-		double WW = PixelPerM*widthOf(R)*TouchupScale+TouchupOffset;
+		double WW = PixelPerM*R->widthOf()*TouchupScale+TouchupOffset;
 		if (WW > 0)
 		{
 			QPen thePen(TouchupColor,WW);
@@ -637,7 +648,7 @@ void FeaturePainter::drawTouchup(Road* R, QPainter& thePainter, const Projection
 	}
 	if (DrawTrafficDirectionMarks)
 	{
-		double theWidth = theProjection.pixelPerM()*widthOf(R)-4;
+		double theWidth = theProjection.pixelPerM()*R->widthOf()-4;
 		if (theWidth > 8)
 			theWidth = 8;
 		double DistFromCenter = 2*(theWidth+4);
@@ -767,9 +778,9 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, const Projection& 
 
 	LineParameters lp = labelBoundary();
 	double PixelPerM = theProjection.pixelPerM();
-	double WW = PixelPerM*widthOf(R)*lp.Proportional+lp.Fixed;
+	double WW = PixelPerM*R->widthOf()*lp.Proportional+lp.Fixed;
 	if (WW < 10) return;
-	double WWR = qMax(PixelPerM*widthOf(R)*BackgroundScale+BackgroundOffset, PixelPerM*widthOf(R)*ForegroundScale+ForegroundOffset);
+	double WWR = qMax(PixelPerM*R->widthOf()*BackgroundScale+BackgroundOffset, PixelPerM*R->widthOf()*ForegroundScale+ForegroundOffset);
 
     QFont font = getLabelFont();
 

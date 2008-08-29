@@ -253,6 +253,7 @@ void MapDocument::add(MapLayer* aLayer)
 
 void MapDocument::addToTagList(QString k, QString v)
 {
+#ifndef _MOBILE
 	if (!p->tagList.contains(k, v)) {
     	p->tagList.insert(k, v);
 	}
@@ -262,6 +263,7 @@ void MapDocument::addToTagList(QString k, QString v)
 	if (!p->tagValues.contains(v)) {
 		p->tagValues.append(v);
 	}
+#endif
 }
 
 QList<QString> MapDocument::getTagKeys()
