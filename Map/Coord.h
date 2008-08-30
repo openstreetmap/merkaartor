@@ -21,7 +21,7 @@ inline double angToRad(double a)
 
 inline int angToInt(double a)
 {
-	return int(a*INT_MAX/180);
+	return static_cast<int>(a*INT_MAX/180);
 }
 
 inline double intToAng(int a)
@@ -32,6 +32,11 @@ inline double intToAng(int a)
 inline double intToRad(int a)
 {
 	return double(a)*M_PI/INT_MAX;
+}
+
+inline double radToInt(double x)
+{
+	return static_cast<int>(x*INT_MAX/M_PI);
 }
 
 class Coord
