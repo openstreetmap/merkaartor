@@ -34,7 +34,7 @@ inline double intToRad(int a)
 	return double(a)*M_PI/INT_MAX;
 }
 
-inline double radToInt(double x)
+inline int radToInt(double x)
 {
 	return static_cast<int>(x*INT_MAX/M_PI);
 }
