@@ -1,4 +1,5 @@
 v0.12
+	* FIX : make download dialog a less cluttered
 	* FIX : update the "created_by" tag at each update, not only add.
 	* ADD : Check if there are empty roads/relations during a download and propose to mark them for deletion
 	* ADD : "visible" action in layers menu

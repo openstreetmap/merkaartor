@@ -619,38 +619,6 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 				QRect R(SlippyMap->viewArea().toRect());
 				Clip = CoordBox(Coord(R.x(),R.y()),Coord(R.x()+R.width(),R.y()+R.height()));
 			}
-			if (ui.AddBookmark->isChecked())
-			{
-				QString newBk = ui.NewBookmark->text();
-				bool ok = true;
-				if (Bookmarks.contains(newBk)) {
-					QString text = QInputDialog::getText(dlg, QApplication::translate("Downloader","Warning: Bookmark name already exists"),
-  	                                        QApplication::translate("Downloader","Enter a new one, keep the same to overwrite or cancel to not add."), QLineEdit::Normal,
-  	                                        newBk, &ok);
-				    if (ok && !text.isEmpty())
-				         newBk = text;
-					else
-						ok = false;
-
-				}
-				if (ok && Bookmarks.contains(newBk)) {
-					int i = Bookmarks.indexOf(newBk);
-					Bookmarks.removeAt(i);
-					Bookmarks.removeAt(i);
-					Bookmarks.removeAt(i);
-					Bookmarks.removeAt(i);
-					Bookmarks.removeAt(i);
-				}
-				if (ok) {
-					Bookmarks.insert(0,newBk);
-					Bookmarks.insert(1,QString::number(intToAng(Clip.bottomLeft().lat())));
-					Bookmarks.insert(2,QString::number(intToAng(Clip.bottomLeft().lon())));
-					Bookmarks.insert(3,QString::number(intToAng(Clip.topRight().lat())));
-					Bookmarks.insert(4,QString::number(intToAng(Clip.topRight().lon())));
-					MerkaartorPreferences::instance()->setBookmarks(Bookmarks);
-					MerkaartorPreferences::instance()->save();
-				}
-			}
 			if (retry) continue;
 			aParent->view()->setUpdatesEnabled(false);
 			MapLayer* theLayer = new DrawingMapLayer(QApplication::translate("Downloader","%1 download").arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
