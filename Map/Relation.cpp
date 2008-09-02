@@ -77,7 +77,7 @@ void Relation::setLayer(MapLayer* L)
 	MapFeature::setLayer(L);
 }
 
-void Relation::partChanged(MapFeature*, unsigned int ChangeId)
+void Relation::partChanged(MapFeature* F, unsigned int ChangeId)
 {
 	notifyParents(ChangeId);
 }
@@ -211,6 +211,13 @@ void Relation::remove(unsigned int Idx)
 	MapFeature* F = p->Members[Idx].second;
 	F->unsetParent(this);
 	p->Members.erase(p->Members.begin()+Idx);
+}
+
+void Relation::remove(MapFeature* F)
+{
+	for (unsigned int i=p->Members.size(); i; --i)
+		if (F == p->Members[i-1].second)
+			remove(i-1);
 }
 
 unsigned int Relation::size() const
@@ -420,25 +427,33 @@ QString Relation::toHtml()
 	return MapFeature::toMainHtml(QApplication::translate("MapFeature", "Relation"),"relation").arg(D);
 }
 
-void Relation::toBinary(QDataStream& ds)
+void Relation::toBinary(QDataStream& ds, const QHash <QString, quint64>& theIndex)
 {
+	char Type;
+	quint64 ref;
+
 	ds << (qint8)'L';
 	ds << idToLong();
 	ds << size();
 	for (unsigned int i=0; i<size(); ++i) {
-		char Type='N';
-		if (dynamic_cast<const Road*>(get(i)))
+		if (dynamic_cast<const TrackPoint*>(get(i))) {
+			Type='N';
+			ref = theIndex["N" + QString::number(get(i)->idToLong())];
+		}
+		else if (dynamic_cast<const Road*>(get(i))) {
 			Type='R';
-		else if (dynamic_cast<const Relation*>(get(i)))
+			ref = theIndex["R" + QString::number(get(i)->idToLong())];
+		}
+		else if (dynamic_cast<const Relation*>(get(i))) {
 			Type='L';
-
-		ds << Type << get(i)->stripToOSMId(get(i)->id()) << getRole(i);
+			ref = theIndex["L" + QString::number(get(i)->idToLong())];
+		}
+		ds << (qint8) Type << ref << getRole(i);
+//		ds << Type << get(i)->idToLong() << getRole(i);
 	}
-
-	tagsToBinary(ds);
 }
 
-Relation* Relation::fromBinary(MapDocument* d, MapLayer* /* L */, QDataStream& ds)
+Relation* Relation::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds)
 {
 	qint8	c;
 	qint64	id;
@@ -464,30 +479,12 @@ Relation* Relation::fromBinary(MapDocument* d, MapLayer* /* L */, QDataStream& d
 		ds >> refId;
 		ds >> Role;
 
-		QString sRefId;
-		if (refId < 0)
-			sRefId = QString::number(refId);
-		else
-			switch (Type) {
-				case 'N':
-					sRefId = "node_" + QString::number(refId);
-					break;
-				case 'R':
-					sRefId = "way" + QString::number(refId);
-					break;
-				case 'L':
-					sRefId = "rel" + QString::number(refId);
-					break;
-				default:
-					return NULL;
-			}
-
-		MapFeature* F = d->getFeature(sRefId);
+		//MapFeature* F = d->getFeature(QString::number(refId), false);
+		MapFeature* F = L->getFeature(d, refId);
 		Q_ASSERT(F);
 		if (F)
 			R->add(Role, F);
 	}
-	MapFeature::tagsFromBinary(d, R, ds);
 
 	return R;
 }

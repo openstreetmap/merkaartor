@@ -204,7 +204,7 @@ class CoordBox
 
 		Coord center() const
 		{
-			return Coord( (BottomLeft.lat()+TopRight.lat())/2,(BottomLeft.lon()+TopRight.lon())/2 );
+			return Coord( BottomLeft.lat() + latDiff()/2, BottomLeft.lon() + lonDiff()/2 );		
 		}
 
 		int lonDiff() const

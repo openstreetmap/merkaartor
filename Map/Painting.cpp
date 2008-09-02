@@ -159,7 +159,7 @@ static void buildCubicPath(QPainterPath& Path, const QPointF& P1, const QPointF&
 void buildPolygonFromRoad(Road *R, Projection const &theProjection, QPolygonF &Polygon)
 {
 	for (unsigned int i=0; i<R->size(); ++i)
-		Polygon.append(theProjection.project(R->get(i)->position()));
+		Polygon.append(theProjection.project(R->getNode(i)->position()));
 }
 
 /// draws way with oneway markers

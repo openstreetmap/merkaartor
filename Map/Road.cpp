@@ -96,7 +96,7 @@ void Road::setLayer(MapLayer* L)
 	MapFeature::setLayer(L);
 }
 
-void Road::partChanged(MapFeature*, unsigned int ChangeId)
+void Road::partChanged(MapFeature* F, unsigned int ChangeId)
 {
 	p->BBoxUpToDate = false;
 	p->MetaUpToDate = false;
@@ -139,7 +139,7 @@ void Road::add(TrackPoint* Pt, unsigned int Idx)
 	p->SmoothedUpToDate = false;
 }
 
-unsigned int Road::find(TrackPoint* Pt) const
+unsigned int Road::find(MapFeature* Pt) const
 {
 	for (unsigned int i=0; i<p->Nodes.size(); ++i)
 		if (p->Nodes[i] == Pt)
@@ -157,17 +157,34 @@ void Road::remove(unsigned int idx)
 	p->SmoothedUpToDate = false;
 }
 
+void Road::remove(MapFeature* F)
+{
+	for (unsigned int i=p->Nodes.size(); i; --i)
+		if (p->Nodes[i-1] == F)
+			remove(i-1);
+}
+
 unsigned int Road::size() const
 {
 	return p->Nodes.size();
 }
 
-TrackPoint* Road::get(unsigned int idx)
+TrackPoint* Road::getNode(unsigned int idx)
 {
 	return p->Nodes[idx];
 }
 
-const TrackPoint* Road::get(unsigned int idx) const
+const TrackPoint* Road::getNode(unsigned int idx) const
+{
+	return p->Nodes[idx];
+}
+
+MapFeature* Road::get(unsigned int idx)
+{
+	return p->Nodes[idx];
+}
+
+const MapFeature* Road::get(unsigned int idx) const
 {
 	return p->Nodes[idx];
 }
@@ -719,12 +736,12 @@ unsigned int findSnapPointIndex(const Road* R, Coord& P)
 		P = toCoord(B.project(toQt(P)));
 		return BestIdx/3;
 	}
-	LineF L(R->get(0)->position(),R->get(1)->position());
+	LineF L(R->getNode(0)->position(),R->getNode(1)->position());
 	unsigned int BestIdx = 1;
 	double BestDistance = L.capDistance(P);
 	for (unsigned int i = 2; i<R->size(); ++i)
 	{
-		LineF L(R->get(i-1)->position(),R->get(i)->position());
+		LineF L(R->getNode(i-1)->position(),R->getNode(i)->position());
 		double Distance = L.capDistance(P);
 		if (Distance < BestDistance)
 		{
@@ -732,7 +749,7 @@ unsigned int findSnapPointIndex(const Road* R, Coord& P)
 			BestDistance = Distance;
 		}
 	}
-	LineF F(R->get(BestIdx-1)->position(),R->get(BestIdx)->position());
+	LineF F(R->getNode(BestIdx-1)->position(),R->getNode(BestIdx)->position());
 	P = F.project(Coord(P));
 	return BestIdx;
 }
@@ -771,18 +788,18 @@ QString Road::toHtml()
 	return MapFeature::toMainHtml(QApplication::translate("MapFeature", "Way"), "way").arg(D);
 }
 
-void Road::toBinary(QDataStream& ds)
+void Road::toBinary(QDataStream& ds, const QHash <QString, quint64>& theIndex)
 {
 	ds << (qint8)'R';
 	ds << idToLong();
 	ds << (qint32)size();
 	for (unsigned int i=0; i < size(); ++i) {
-		ds << (qint64)(get(i)->idToLong());
+//		ds << (qint64)(get(i)->idToLong());
+		ds << (qint64)(theIndex["N" + QString::number(get(i)->idToLong())]);
 	}
-	tagsToBinary(ds);
 }
 
-Road* Road::fromBinary(MapDocument* d, MapLayer* /* L */, QDataStream& ds)
+Road* Road::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds)
 {
 	qint8	c;
 	qint64	id;
@@ -803,17 +820,16 @@ Road* Road::fromBinary(MapDocument* d, MapLayer* /* L */, QDataStream& ds)
 		qint64 refId;
 		ds >> refId;
 
-		QString sRefId;
-		if (refId < 0)
-			sRefId = QString::number(refId);
-		else
-			sRefId = "node_" + QString::number(refId);
-		TrackPoint* N = dynamic_cast<TrackPoint*> (d->getFeature(sRefId));
+		//QString sRefId;
+		//if (refId < 0)
+		//	sRefId = QString::number(refId);
+		//else
+		//	sRefId = "node_" + QString::number(refId);
+//		TrackPoint* N = dynamic_cast<TrackPoint*> (d->getFeature(sRefId));
+		TrackPoint* N = dynamic_cast<TrackPoint*> (L->getFeature(d, refId));
 		Q_ASSERT(N);
-		if (N)
-			R->add(N);
+		R->add(N);
 	}
-	MapFeature::tagsFromBinary(d, R, ds);
 
 	return R;
 }

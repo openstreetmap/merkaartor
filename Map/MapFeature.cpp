@@ -112,6 +112,7 @@ int MapFeature::versionNumber() const
 void MapFeature::setLayer(MapLayer* aLayer)
 {
 	p->theLayer = aLayer;
+	notifyChanges();
 }
 
 MapLayer* MapFeature::layer()
@@ -473,40 +474,6 @@ void MapFeature::tagsFromXML(MapDocument* d, MapFeature * f, QDomElement e)
 			f->setTag(c.attribute("k"),c.attribute("v"));
 		}
 		c = c.nextSiblingElement();
-	}
-}
-
-bool MapFeature::tagsToBinary(QDataStream& ds)
-{
-	bool OK = true;
-	qint32 k, v;
-
-	ds << (qint32)tagSize();
-	for (unsigned int i=0; i<tagSize(); ++i) {
-		k = (qint32)(p->theLayer->getDocument()->getTagKeyIndex(tagKey(i)));
-		Q_ASSERT(!(k<0));
-		v = (qint32)(p->theLayer->getDocument()->getTagValueIndex(tagValue(i)));
-		Q_ASSERT(!(v<0));
-		ds << k;
-		ds << v;
-	}
-
-	return OK;
-}
-
-void MapFeature::tagsFromBinary(MapDocument* d, MapFeature * f, QDataStream& ds)
-{
-	quint32 numTags;
-	quint32 k,v;
-	QString K, V;
-
-	ds >> numTags;
-	for (unsigned int i=0; i < numTags; ++i) {
-		ds >> k;
-		ds >> v;
-		K = d->getTagKey(k);
-		V = d->getTagValue(v);
-		f->setTag(K,V);
 	}
 }
 

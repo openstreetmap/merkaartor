@@ -14,11 +14,18 @@
 
 #include <ImportExport/IImportExport.h>
 
+#define TILE_WIDTH (int(UINT_MAX/40000))
+#define REGION_WIDTH (int(UINT_MAX/500))
+#define NUM_TILES (int(UINT_MAX/TILE_WIDTH))
+#define NUM_REGIONS (int(UINT_MAX/REGION_WIDTH))
+
 /**
 	@author cbro <cbro@semperpax.com>
 */
 class ImportExportOsmBin : public IImportExport
 {
+	friend class OsbMapLayer;
+
 public:
     ImportExportOsmBin(MapDocument* doc);
 
@@ -31,24 +38,79 @@ public:
 	virtual bool export_(const QVector<MapFeature *>& featList);
 
 protected:
+	void addTileIndex(MapFeature* F, qint64 pos);
+	void tagsToBinary(MapFeature* F, QDataStream& ds);
+	void tagsFromBinary(MapFeature* F, QDataStream& ds);
+	
 	bool prepare();
 	bool writeHeader(QDataStream& ds);
+	bool writeIndex(QDataStream& ds);
 	bool writeTagLists(QDataStream& ds);
 	bool writeNodes(QDataStream& ds);
 	bool writeRoads(QDataStream& ds);
 	bool writeRelations(QDataStream& ds);
 
 	bool readHeader(QDataStream& ds);
+	bool readRegionToc(QDataStream& ds);
 	bool readTagLists(QDataStream& ds);
-	bool readNodes(QDataStream& ds, MapLayer* aLayer);
-	bool readRoads(QDataStream& ds, MapLayer* aLayer);
-	bool readRelations(QDataStream& ds, MapLayer* aLayer);
+	bool readNodes(QDataStream& ds, OsbMapLayer* aLayer);
+	bool readRoads(QDataStream& ds, OsbMapLayer* aLayer);
+	bool readRelations(QDataStream& ds, OsbMapLayer* aLayer);
+
+	bool loadRegion(qint32 rg);
+	bool loadTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer);
+	bool clearTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer);
+	MapFeature* getFeature(MapDocument* d, OsbMapLayer* theLayer, quint64 ref);
 
 protected:
-	QVector<TrackPoint*> theNodes;
-	QVector<Road*> theRoads;
-	QVector<Relation*> theRelations;
+	QMap< qint32, quint64 > theRegionToc;
+	QMap< qint32, quint64 > theTileToc;
+
+	QMap< qint32, QList< QPair < qint32, quint64 > > > theRegionIndex;
+	QMap< qint32, QList<quint64> > theTileIndex;
+
+	QHash <QString, quint64> theFeatureIndex;
+
+	QMap<quint64, TrackPoint*> theNodes;
+	QMap<quint64,Road*> theRoads;
+	QMap<quint64, Relation*> theRelations;
+
+	QList <quint64> theTagKeysIndex;
+	QList <quint64> theTagValuesIndex;
+
+	qint64 tocPos;
+	qint64 tagKeysPos;
+	qint64 tagValuesPos;
+};
+
+/*
+class OsbRegion
+{
+public:
+	OsbRegion(qint32 id);
+	addFeature(MapFeature* F);
+	bool read();
+
+protected:
+	qint32	rgId;
+	QIODevice* Device;
+	QDataStream ds;
+
+	QMap< qint32, QList<quint64> > theTileIndex;
+
+	QHash <QString, quint64> theFeatureIndex;
+
+	QMap<quint64, TrackPoint*> theNodes;
+	QMap<quint64,Road*> theRoads;
+	QMap<quint64, Relation*> theRelations;
+
+	QList <quint64> theTagKeysIndex;
+	QList <quint64> theTagValuesIndex;
+
+	qint64 tagKeysPos;
+	qint64 tagValuesPos;
 
 };
 
+*/
 #endif

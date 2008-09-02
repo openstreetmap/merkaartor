@@ -103,8 +103,8 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* )
 					Coord A, B;
 					if (Road* R = dynamic_cast<Road*>(it.get())) {
 						for (unsigned int j=1; j<R->size(); ++j) {
-							A = R->get(j-1)->position();
-							B = R->get(j)->position();
+							A = R->getNode(j-1)->position();
+							B = R->getNode(j)->position();
 							if (CoordBox::visibleLine(DragBox, A, B)) {
 								List.push_back(R);
 								break;
@@ -115,8 +115,8 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* )
 						for (unsigned int k=0; k<r->size(); ++k) {
 							if (Road* R = dynamic_cast<Road*>(r->get(k))) {
 								for (unsigned int j=1; j<R->size(); ++j) {
-									A = R->get(j-1)->position();
-									B = R->get(j)->position();
+									A = R->getNode(j-1)->position();
+									B = R->getNode(j)->position();
 									if (CoordBox::visibleLine(DragBox, A, B)) {
 										List.push_back(r);
 										break;

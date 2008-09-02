@@ -501,7 +501,7 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 			importOK = importOSM(this, baseFileName, mapDocument, newLayer);
 		}
 		else if (fn.endsWith(".osb")) {
-			newLayer = new DrawingMapLayer( baseFileName );
+			newLayer = new OsbMapLayer( baseFileName );
 			mapDocument->add(newLayer);
 			importOK = mapDocument->importOSB(baseFileName, (DrawingMapLayer *)newLayer);
 		}

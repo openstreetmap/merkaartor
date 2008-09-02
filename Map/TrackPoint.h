@@ -30,6 +30,13 @@ class TrackPoint : public MapFeature
 		virtual QString description() const;
 		virtual RenderPriority renderPriority(double aPixelPerM) const;
 
+		virtual unsigned int find(MapFeature* Pt) const;
+		virtual void remove(unsigned int idx);
+		virtual void remove(MapFeature* F);
+		virtual unsigned int size() const;
+		virtual MapFeature* get(unsigned int idx);
+		virtual const MapFeature* get(unsigned int Idx) const;
+
 		const Coord& position() const;
 		void setPosition(const Coord& aCoord);
 
@@ -49,8 +56,8 @@ class TrackPoint : public MapFeature
 
 		virtual QString toHtml();
 
-		virtual void toBinary(QDataStream& ds);
-		static TrackPoint* fromBinary(MapDocument* d, MapLayer* L, QDataStream& ds);
+		virtual void toBinary(QDataStream& ds, const QHash <QString, quint64>& theIndex);
+		static TrackPoint* fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds);
 
 private:
 		Coord Position;

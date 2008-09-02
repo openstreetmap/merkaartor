@@ -106,7 +106,7 @@ TrackSegmentRemoveTrackPointCommand::TrackSegmentRemoveTrackPointCommand(TrackSe
 }
 
 TrackSegmentRemoveTrackPointCommand::TrackSegmentRemoveTrackPointCommand(TrackSegment* R, unsigned int anIdx, MapLayer* aLayer)
-: Command(R), theLayer(aLayer), oldLayer(0), Idx(anIdx), theTrackSegment(R), theTrackPoint(R->get(anIdx))
+: Command(R), theLayer(aLayer), oldLayer(0), Idx(anIdx), theTrackSegment(R), theTrackPoint(dynamic_cast <TrackPoint*> (R->get(anIdx)))
 {
 	redo();
 }

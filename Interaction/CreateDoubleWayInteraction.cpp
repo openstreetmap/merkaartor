@@ -101,11 +101,11 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 			unsigned int i1 = R1->size()-1;
 			unsigned int i2 = 1;
 			LineF P1(
-				view()->projection().project(R1->get(i1-1)->position()),
-				view()->projection().project(R1->get(i1)->position()));
+				view()->projection().project(R1->getNode(i1-1)->position()),
+				view()->projection().project(R1->getNode(i1)->position()));
 			LineF P2(
-				view()->projection().project(R2->get(i2-1)->position()),
-				view()->projection().project(R2->get(i2)->position()));
+				view()->projection().project(R2->getNode(i2-1)->position()),
+				view()->projection().project(R2->getNode(i2)->position()));
 
 			Coord PreviousPoint = FirstPoint;
 			if (distance(view()->projection().project(PreviousPoint), LastCursor) > 1)
@@ -127,8 +127,8 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 				TrackPoint* A1;
 				TrackPoint* A2;
 				CommandList* L  = new CommandList(MainWindow::tr("Add nodes to double-way Road %1").arg(R1->id()), R1);
-				A1 = R1->get(i1);
-				A2 = R2->get(i2-1);
+				A1 = R1->getNode(i1);
+				A2 = R2->getNode(i2-1);
 				L->add(new MoveTrackPointCommand(A1,view()->projection().inverse(
 					P1.intersectionWith(N1))));
 				L->add(new MoveTrackPointCommand(A2,view()->projection().inverse(

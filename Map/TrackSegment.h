@@ -33,10 +33,14 @@ class TrackSegment : public MapFeature
 
 		void add(TrackPoint* aPoint);
 		void add(TrackPoint* Pt, unsigned int Idx);
-		unsigned int find(TrackPoint* Pt) const;
-		void remove(unsigned int idx);
-		unsigned int size() const;
-		TrackPoint* get(int i);
+		virtual unsigned int find(MapFeature* Pt) const;
+		virtual void remove(unsigned int idx);
+		virtual void remove(MapFeature* F);
+		virtual MapFeature* get(unsigned int idx);
+		virtual unsigned int size() const;
+		TrackPoint* getNode(unsigned int idx);
+		virtual const MapFeature* get(unsigned int Idx) const;
+
 		void sortByTime();
 		virtual void partChanged(MapFeature* F, unsigned int ChangeId);
 
@@ -46,7 +50,7 @@ class TrackSegment : public MapFeature
 
 		virtual QString toHtml() {return "";};
 
-		virtual void toBinary(QDataStream& /* ds */) { return; };
+		virtual void toBinary(QDataStream& /* ds */, const QHash <QString, quint64>& /*theIndex*/) { return; };
 
 private:
 		TrackSegmentPrivate* p;

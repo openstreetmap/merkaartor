@@ -46,7 +46,7 @@ void MoveTrackPointInteraction::snapMousePressEvent(QMouseEvent * event, MapFeat
 	else if (Road* R = dynamic_cast<Road*>(aLast))
 		for (unsigned int i=0; i<R->size(); ++i)
 			if (std::find(Moving.begin(),Moving.end(),R->get(i)) == Moving.end())
-				Moving.push_back(R->get(i));
+				Moving.push_back(R->getNode(i));
 	for (unsigned int i=0; i<Moving.size(); ++i)
 	{
 		OriginalPosition.push_back(Moving[i]->position());
@@ -95,13 +95,13 @@ Coord MoveTrackPointInteraction::calculateNewPosition(QMouseEvent *event, MapFea
 		return Pt->position();
 	else if (Road* R = dynamic_cast<Road*>(aLast))
 	{
-		LineF L1(R->get(0)->position(),R->get(1)->position());
+		LineF L1(R->getNode(0)->position(),R->getNode(1)->position());
 		double Dist = L1.distance(Target);
 		QPoint BestTarget = L1.project(Target).toPoint();
 		unsigned int BestIdx = 1;
 		for (unsigned int i=2; i<R->size(); ++i)
 		{
-			LineF L2(R->get(i-1)->position(),R->get(i)->position());
+			LineF L2(R->getNode(i-1)->position(),R->getNode(i)->position());
 			double Dist2 = L2.distance(Target);
 			if (Dist2 < Dist)
 			{

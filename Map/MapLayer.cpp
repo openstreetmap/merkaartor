@@ -33,6 +33,8 @@
 #include "QMapControl/layer.h"
 #include "QMapControl/layermanager.h"
 
+#include "ImportExport/ImportExportOsmBin.h"
+
 #include <QtCore/QString>
 #include <QMultiMap>
 #include <QProgressDialog>
@@ -764,30 +766,30 @@ void TrackMapLayer::extractLayer()
 
 			PL.clear();
 
-			P = new TrackPoint( S->get(0)->position() );
+			P = new TrackPoint( S->getNode(0)->position() );
 			P->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
-			P->setTime(S->get(0)->time());
-			P->setElevation(S->get(0)->elevation());
-			P->setSpeed(S->get(0)->speed());
+			P->setTime(S->getNode(0)->time());
+			P->setElevation(S->getNode(0)->elevation());
+			P->setSpeed(S->getNode(0)->speed());
 			//P->setTag("ele", QString::number(S->get(0)->elevation()));
 			PL.append(P);
 			unsigned int startP = 0;
 
-			P = new TrackPoint( S->get(1)->position() );
+			P = new TrackPoint( S->getNode(1)->position() );
 			P->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
-			P->setTime(S->get(1)->time());
-			P->setElevation(S->get(1)->elevation());
-			P->setSpeed(S->get(1)->speed());
+			P->setTime(S->getNode(1)->time());
+			P->setElevation(S->getNode(1)->elevation());
+			P->setSpeed(S->getNode(1)->speed());
 			//P->setTag("ele", QString::number(S->get(1)->elevation()));
 			PL.append(P);
 			unsigned int endP = 1;
 
 			for (unsigned int j=2; j < S->size(); j++) {
-				P = new TrackPoint( S->get(j)->position() );
+				P = new TrackPoint( S->getNode(j)->position() );
 				P->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
-				P->setTime(S->get(j)->time());
-				P->setElevation(S->get(j)->elevation());
-				P->setSpeed(S->get(j)->speed());
+				P->setTime(S->getNode(j)->time());
+				P->setElevation(S->getNode(j)->elevation());
+				P->setSpeed(S->getNode(j)->speed());
 				//P->setTag("ele", QString::number(S->get(j)->elevation()));
 				PL.append(P);
 				endP = PL.size()-1;
@@ -1019,4 +1021,83 @@ LayerWidget* DeletedMapLayer::newWidget(void)
 	return NULL;
 }
 
+// OsbMapLayer
+
+class OsbMapLayerPrivate
+{
+public:
+	ImportExportOsmBin* theImp;
+	QList<qint32> loadedTiles;
+	QList<qint32> loadedRegions;
+};
+
+OsbMapLayer::OsbMapLayer(const QString & aName)
+	: DrawingMapLayer(aName)
+{
+	p->Visible = true;
+	pp = new OsbMapLayerPrivate();
+	pp->theImp = new ImportExportOsmBin(NULL);
+	if (pp->theImp->loadFile(aName))
+		pp->theImp->import(this);
+}
+
+OsbMapLayer::~ OsbMapLayer()
+{
+	delete pp->theImp;
+	delete pp;
+}
+
+LayerWidget* OsbMapLayer::newWidget(void)
+{
+	p->theWidget = new DrawingLayerWidget(this);
+	return p->theWidget;
+}
+
+void OsbMapLayer::invalidate(MapDocument* d, CoordBox vp)
+{
+	if (!isVisible())
+		return;
+
+	QRectF r(vp.toQRectF());
+
+	int x1 = int((r.topLeft().x() + INT_MAX) / REGION_WIDTH);
+	int y1 = int((r.topLeft().y() + INT_MAX) / REGION_WIDTH);
+	int x2 = int((r.bottomRight().x() + INT_MAX) / REGION_WIDTH);
+	int y2 = int((r.bottomRight().y() + INT_MAX) / REGION_WIDTH);
+
+	for (int i=x1; i <= x2; ++i)
+		for (int j=y1; j <= y2; ++j)
+			if (!pp->loadedRegions.contains(j*NUM_REGIONS+i))
+				if (pp->theImp->loadRegion(j*NUM_REGIONS+i))
+					pp->loadedRegions.append(j*NUM_REGIONS+i);
+				else
+					return;
+
+	x1 = int((r.topLeft().x() + INT_MAX) / TILE_WIDTH);
+	y1 = int((r.topLeft().y() + INT_MAX) / TILE_WIDTH);
+	x2 = int((r.bottomRight().x() + INT_MAX) / TILE_WIDTH);
+	y2 = int((r.bottomRight().y() + INT_MAX) / TILE_WIDTH);
+
+	QList<qint32> toLoad;
+	for (int i=x1; i <= x2; ++i)
+		for (int j=y1; j <= y2; ++j)
+			toLoad.push_back(j*NUM_TILES+i);
+
+	for (int i=0; i<pp->loadedTiles.size(); ++i)
+		if (!toLoad.contains(pp->loadedTiles[i])) {
+			pp->theImp->clearTile(pp->loadedTiles[i], d, this);
+			pp->loadedTiles.removeAt(i);
+		}
+
+	for (int i=0; i<toLoad.size(); ++i)
+		if (!pp->loadedTiles.contains(toLoad[i]))
+			if (pp->theImp->loadTile(toLoad[i], d, this))
+				pp->loadedTiles.push_back(toLoad[i]);
+
+}
+
+MapFeature*  OsbMapLayer::getFeature(MapDocument* d, quint64 ref)
+{
+	return pp->theImp->getFeature(d, this, ref);
+}
 

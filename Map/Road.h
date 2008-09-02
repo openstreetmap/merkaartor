@@ -33,15 +33,19 @@ class Road : public MapFeature
 		virtual QString description() const;
 		virtual RenderPriority renderPriority(double aPixelPerM) const;
 
-		void add(TrackPoint* Pt);
-		void add(TrackPoint* Pt, unsigned int Idx);
-		void remove(unsigned int Idx);
-		unsigned int size() const;
-		unsigned int find(TrackPoint* Pt) const;
-		TrackPoint* get(unsigned int idx);
-		const TrackPoint* get(unsigned int Idx) const;
+		virtual void add(TrackPoint* Pt);
+		virtual void add(TrackPoint* Pt, unsigned int Idx);
+		virtual void remove(unsigned int Idx);
+		virtual void remove(MapFeature* F);
+		virtual unsigned int size() const;
+		virtual unsigned int find(MapFeature* Pt) const;
+		virtual MapFeature* get(unsigned int idx);
+		virtual const MapFeature* get(unsigned int Idx) const;
 		const std::vector<Coord>& smoothed() const;
 		bool isClosed();
+
+		TrackPoint* getNode(unsigned int idx);
+		const TrackPoint* getNode(unsigned int idx) const;
 
 		/** Set the tag "key=value" to the current object
 		 * If a tag with the same key exist, it is replaced
@@ -87,8 +91,8 @@ class Road : public MapFeature
 
 		virtual QString toHtml();
 	
-		virtual void toBinary(QDataStream& ds);
-		static Road* fromBinary(MapDocument* d, MapLayer* L, QDataStream& ds);
+		virtual void toBinary(QDataStream& ds, const QHash <QString, quint64>& theIndex);
+		static Road* fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds);
 
 		bool isExtrimity(TrackPoint* node);
 		static Road * GetSingleParentRoad(MapFeature * mapFeature);

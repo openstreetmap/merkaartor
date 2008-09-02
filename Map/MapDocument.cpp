@@ -587,15 +587,18 @@ bool MapDocument::importNMEA(const QString& filename, TrackMapLayer* NewLayer)
 
 bool MapDocument::importOSB(const QString& filename, DrawingMapLayer* NewLayer)
 {
-	ImportExportOsmBin imp(this);
-	if (!imp.loadFile(filename))
-		return false;
-	imp.import(NewLayer);
+	Q_UNUSED(filename)
+	Q_UNUSED(NewLayer)
+	//ImportExportOsmBin imp(this);
+	//if (!imp.loadFile(filename))
+	//	return false;
+	//imp.import(NewLayer);
 
-	if (NewLayer->size())
-		return true;
-	else
-		return false;
+	//if (NewLayer->size())
+	//	return true;
+	//else
+	//	return false;
+	return true;
 }
 
 void MapDocument::addDownloadBox(CoordBox aBox)

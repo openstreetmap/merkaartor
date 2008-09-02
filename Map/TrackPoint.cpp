@@ -21,6 +21,34 @@ TrackPoint::~TrackPoint(void)
 {
 }
 
+void TrackPoint::remove(unsigned int Idx)
+{
+}
+
+void TrackPoint::remove(MapFeature*)
+{
+}
+
+unsigned int TrackPoint::size() const
+{
+	return 0;
+}
+
+unsigned int TrackPoint::find(MapFeature* Pt) const
+{
+	return NULL;
+}
+
+MapFeature* TrackPoint::get(unsigned int idx)
+{
+	return NULL;
+}
+
+const MapFeature* TrackPoint::get(unsigned int Idx) const
+{
+	return NULL;
+}
+
 const Coord& TrackPoint::position() const
 {
 	return Position;
@@ -299,13 +327,13 @@ QString TrackPoint::toHtml()
 	return MapFeature::toMainHtml(QApplication::translate("MapFeature", "Node"), "node").arg(D);
 }
 
-void TrackPoint::toBinary(QDataStream& ds)
+void TrackPoint::toBinary(QDataStream& ds, const QHash <QString, quint64>& theIndex)
 {
+	Q_UNUSED(theIndex)
 	ds << (qint8)'N' << idToLong() << (qint32)(Position.lon()) << (qint32)(Position.lat());
-	tagsToBinary(ds);
 }
 
-TrackPoint* TrackPoint::fromBinary(MapDocument* d, MapLayer* /* L */, QDataStream& ds)
+TrackPoint* TrackPoint::fromBinary(MapDocument* d, OsbMapLayer* /* L */, QDataStream& ds)
 {
 	qint8	c;
 	qint64	id;
@@ -323,7 +351,6 @@ TrackPoint* TrackPoint::fromBinary(MapDocument* d, MapLayer* /* L */, QDataStrea
 		N->setId(QString::number(id));
 	else
 		N->setId("node_"+QString::number(id));
-	MapFeature::tagsFromBinary(d, N, ds);
 
 	return N;
 }

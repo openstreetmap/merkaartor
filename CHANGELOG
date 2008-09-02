@@ -1,4 +1,7 @@
 v0.12
+	* ADD : revised OSB format. Allows to use large map files directly from disk with low memory footprint.
+	* FIX : Native render doesn't render anything at high lat/long values (Closes #1135)
+	* FIX : Expand tables in the properties dock to the available width by default (Closes #1136)
 	* FIX : make download dialog a less cluttered
 	* FIX : update the "created_by" tag at each update, not only add.
 	* ADD : Check if there are empty roads/relations during a download and propose to mark them for deletion

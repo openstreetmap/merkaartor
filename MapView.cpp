@@ -277,6 +277,10 @@ void MapView::drawFeatures(QPainter & P)
 {
 	EditPaintStyle EP(P, projection());
 
+	for (unsigned int i=0; i<theDocument->layerSize(); ++i) {
+		theDocument->getLayer(i)->invalidate(theDocument, theProjection.viewport());
+	}
+
 	QVector<MapFeature*> theFeatures;
 	for (unsigned int i=0; i<theDocument->layerSize(); ++i) {
 		if (!theDocument->getLayer(i)->isVisible())

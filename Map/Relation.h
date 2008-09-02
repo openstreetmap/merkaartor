@@ -8,6 +8,7 @@ class MainWindow;
 class RelationPrivate;
 class QAbstractTableModel;
 class QProgressDialog;
+class OsbMapLayer;
 
 class Relation : public MapFeature
 {
@@ -29,11 +30,12 @@ class Relation : public MapFeature
 
 		void add(const QString& Role, MapFeature* Pt);
 		void add(const QString& Role, MapFeature* Pt, unsigned int Idx);
-		void remove(unsigned int Idx);
-		unsigned int size() const;
-		unsigned int find(MapFeature* Pt) const;
-		MapFeature* get(unsigned int idx);
-		const MapFeature* get(unsigned int Idx) const;
+		virtual void remove(unsigned int Idx);
+		virtual void remove(MapFeature* F);
+		virtual unsigned int size() const;
+		virtual unsigned int find(MapFeature* Pt) const;
+		virtual MapFeature* get(unsigned int idx);
+		virtual const MapFeature* get(unsigned int Idx) const;
 		const QString& getRole(unsigned int Idx) const;
 		QAbstractTableModel* referenceMemberModel(MainWindow* aMain);
 		void releaseMemberModel();
@@ -51,8 +53,8 @@ class Relation : public MapFeature
 
 		virtual QString toHtml();
 
-		virtual void toBinary(QDataStream& ds);
-		static Relation* fromBinary(MapDocument* d, MapLayer* L, QDataStream& ds);
+		virtual void toBinary(QDataStream& ds, const QHash <QString, quint64>& theIndex);
+		static Relation* fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds);
 
 	private:
 		RelationPrivate* p;

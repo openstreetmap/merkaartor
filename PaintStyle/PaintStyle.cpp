@@ -620,7 +620,7 @@ void FeaturePainter::drawTouchup(TrackPoint* Pt, QPainter& thePainter, const Pro
 		double PixelPerM = theProjection.pixelPerM();
 		double WW = PixelPerM*IconScale+IconOffset;
 
-        QPixmap pm = getPixmapFromFile(IconName,WW);
+        QPixmap pm = getPixmapFromFile(IconName,int(WW));
         QPoint C(theProjection.project(Pt->position()));
         thePainter.fillRect(QRect(C-QPoint(2,2),QSize(4,4)),QColor(0,0,0,128));
         thePainter.drawPixmap( int(C.x()-pm.width()/2), int(C.y()-pm.height()/2) , pm);
@@ -656,8 +656,8 @@ void FeaturePainter::drawTouchup(Road* R, QPainter& thePainter, const Projection
 		{
 			for (unsigned int i=1; i<R->size(); ++i)
 			{
-				QPointF FromF(theProjection.project(R->get(i-1)->position()));
-				QPointF ToF(theProjection.project(R->get(i)->position()));
+				QPointF FromF(theProjection.project(R->getNode(i-1)->position()));
+				QPointF ToF(theProjection.project(R->getNode(i)->position()));
 				if (distance(FromF,ToF) > (DistFromCenter*2+4))
 				{
 					QPointF H(FromF+ToF);

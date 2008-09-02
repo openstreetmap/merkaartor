@@ -1,7 +1,7 @@
 //
 // C++ Implementation: IImportExport
 //
-// Description: 
+// Description:
 //
 //
 // Author: cbro <cbro@semperpax.com>, (C) 2008
@@ -19,6 +19,7 @@ IImportExport::~IImportExport()
 {
 	if (Device->isOpen())
 		Device->close();
+	delete Device;
 }
 
 // Specify the input as a QFile

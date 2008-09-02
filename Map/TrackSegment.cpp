@@ -69,7 +69,7 @@ void TrackSegment::add(TrackPoint* Pt, unsigned int Idx)
 	std::rotate(p->Points.begin()+Idx,p->Points.end()-1,p->Points.end());
 }
 
-unsigned int TrackSegment::find(TrackPoint* Pt) const
+unsigned int TrackSegment::find(MapFeature* Pt) const
 {
 	for (unsigned int i=0; i<p->Points.size(); ++i)
 		if (p->Points[i] == Pt)
@@ -82,14 +82,31 @@ void TrackSegment::remove(unsigned int idx)
 	p->Points.erase(p->Points.begin()+idx);
 }
 
+void TrackSegment::remove(MapFeature* F)
+{
+	for (unsigned int i=p->Points.size(); i; --i)
+		if (p->Points[i-1] == F)
+			remove(i-1);
+}
+
 unsigned int TrackSegment::size() const
 {
 	return p->Points.size();
 }
 
-TrackPoint* TrackSegment::get(int i)
+MapFeature* TrackSegment::get(unsigned int i)
 {
 	return p->Points[i];
+}
+
+TrackPoint* TrackSegment::getNode(unsigned int i)
+{
+	return p->Points[i];
+}
+
+const MapFeature* TrackSegment::get(unsigned int Idx) const
+{
+	return p->Points[Idx];
 }
 
 static void configurePen(QPen & pen, double slope, double speed)
@@ -248,7 +265,7 @@ bool TrackSegment::toXML(QDomElement xParent, QProgressDialog & progress)
 	e.setAttribute("xml:id", xmlId());
 
 	for (unsigned int i=0; i<size(); ++i) {
-		get(i)->toGPX(e, progress);
+		dynamic_cast <TrackPoint*> (get(i))->toGPX(e, progress);
 	}
 
 	return OK;

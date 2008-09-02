@@ -350,6 +350,10 @@ void PropertiesDock::switchToNoUi()
 
 void PropertiesDock::resetValues()
 {
+	// Tables that might need column sizing
+	QTableView *CurrentTagView = NULL;
+	QTableView *CurrentMembersView = NULL;
+
 	// to prevent slots to change the values also
 	std::vector<MapFeature*> Current = Selection;
 	Selection.clear();
@@ -364,6 +368,7 @@ void PropertiesDock::resetValues()
 			TrackPointUi.TagView->setModel(theModel);
                         TrackPointUi.TagView->setItemDelegate(delegate);
 			resetTagComboBox(TrackPointUi.Amenity,Pt,"amenity");
+			CurrentTagView = TrackPointUi.TagView;
 		}
 		else if (Road* R = dynamic_cast<Road*>(FullSelection[0]))
 		{
@@ -374,6 +379,7 @@ void PropertiesDock::resetValues()
                         RoadUi.TagView->setItemDelegate(delegate);
                         resetTagComboBox(RoadUi.Highway,R,"highway");
 			resetTagComboBox(RoadUi.LandUse,R,"landuse");
+			CurrentTagView = RoadUi.TagView;
 		}
 		else if (Relation* R = dynamic_cast<Relation*>(FullSelection[0]))
 		{
@@ -381,6 +387,8 @@ void PropertiesDock::resetValues()
 			RelationUi.TagView->setModel(theModel);
                         RelationUi.TagView->setItemDelegate(delegate);
                         resetTagComboBox(RelationUi.LandUse,R,"landuse");
+			CurrentTagView     = RelationUi.TagView;
+			CurrentMembersView = RelationUi.MembersView;
 		}
 	}
 	else if (FullSelection.size() > 1)
@@ -391,6 +399,22 @@ void PropertiesDock::resetValues()
 	}
 	theModel->setFeature(Current);
 	Selection = Current;
+	
+	/* If we have standard TableViews in the current UI, set it so that the */
+	/* first column is the width of the default text (Edit this to add...)  */
+	/* And the rest of the space is assigned to the second column           */
+	if (CurrentTagView) {
+		CurrentTagView->setColumnWidth(
+			0, CurrentTagView->fontMetrics().width(theModel->newKeyText())+10
+		);
+		CurrentTagView->horizontalHeader()->setStretchLastSection(true);
+	}
+	if (CurrentMembersView) {
+		CurrentMembersView->setColumnWidth(
+			0, CurrentMembersView->fontMetrics().width(theModel->newKeyText())+10
+		);
+		CurrentMembersView->horizontalHeader()->setStretchLastSection(true);
+	}
 }
 
 void PropertiesDock::on_TrackPointLat_editingFinished()

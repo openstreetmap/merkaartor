@@ -135,7 +135,7 @@ void OSMHandler::parseWay(const QXmlAttributes& atts)
 		else if (R->lastUpdated() != MapFeature::UserResolved)
 		{
 			while (R->size())
-				R->remove(0);
+				R->remove((unsigned int)0);
 			NewFeature = true;
 			if (R->lastUpdated() == MapFeature::NotYetDownloaded)
 				R->setLastUpdated(MapFeature::OSMServer);
@@ -196,7 +196,7 @@ void OSMHandler::parseRelation(const QXmlAttributes& atts)
 		else if (R->lastUpdated() != MapFeature::UserResolved)
 		{
 			while (R->size())
-				R->remove(0);
+				R->remove((unsigned int)0);
 			NewFeature = false;
 			if (R->lastUpdated() == MapFeature::NotYetDownloaded)
 				R->setLastUpdated(MapFeature::OSMServer);

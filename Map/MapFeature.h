@@ -182,6 +182,13 @@ class MapFeature
 		bool hasEditPainter() const;
 		void invalidatePainter();
 
+		virtual void remove(unsigned int Idx) = 0;
+		virtual void remove(MapFeature* F) = 0;
+		virtual unsigned int size() const = 0;
+		virtual unsigned int find(MapFeature* Pt) const = 0;
+		virtual MapFeature* get(unsigned int idx) = 0;
+		virtual const MapFeature* get(unsigned int Idx) const = 0; 
+
 		void setParent(MapFeature* F);
 		void unsetParent(MapFeature* F);
 		unsigned int sizeParents() const;
@@ -197,7 +204,7 @@ class MapFeature
 		virtual QString toMainHtml(QString type, QString systemtype);
 		virtual QString toHtml() = 0;
 
-		virtual void toBinary(QDataStream& ds) = 0;
+		virtual void toBinary(QDataStream& ds, const QHash <QString, quint64>& theIndex) = 0;
 
 		virtual QString getClass() const = 0;
 
@@ -214,9 +221,7 @@ class MapFeature
 	protected:
 		QString tagsToXML(unsigned int lvl=0);
 		bool tagsToXML(QDomElement xParent);
-		bool tagsToBinary(QDataStream& ds);
 		static void tagsFromXML(MapDocument* d, MapFeature* f, QDomElement e);
-		static void tagsFromBinary(MapDocument* d, MapFeature* f, QDataStream& ds);
 		static QString stripToOSMId(const QString& id);
 
 };

@@ -15,6 +15,7 @@ class LayerWidget;
 class WMSMapAdapter;
 class TileMapAdapter;
 class TrackSegment;
+class OsbMapLayerPrivate;
 
 class MapLayer
 {
@@ -59,6 +60,8 @@ public:
 	MapFeature* get(const QString& id);
 	void notifyIdUpdate(const QString& id, MapFeature* aFeature);
 	void sortRenderingPriority(double PixelPerM);
+
+	virtual void invalidate(MapDocument*, CoordBox) {};
 	void invalidateRenderPriority();
 
 	void setDocument(MapDocument* aDocument);
@@ -229,6 +232,26 @@ public:
 	virtual LayerWidget* newWidget(void);
 
 	virtual bool isUploadable() {return false;};
+};
+
+class OsbMapLayer : public DrawingMapLayer
+{
+public:
+	OsbMapLayer(const QString& aName);
+	virtual ~OsbMapLayer();
+
+	virtual const QString className() {return "OsbMapLayer";};
+	virtual const LayerGroups classGroups() {return(MapLayer::OSM);};
+	virtual LayerWidget* newWidget(void);
+
+	virtual bool isUploadable() {return true;};
+
+	virtual void invalidate(MapDocument* d, CoordBox vp);
+	MapFeature*  getFeature(MapDocument* d, quint64 ref);
+
+protected:
+	OsbMapLayerPrivate* pp;
+
 };
 
 #endif

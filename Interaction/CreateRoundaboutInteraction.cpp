@@ -36,12 +36,12 @@ CreateRoundaboutInteraction::~CreateRoundaboutInteraction()
 
 void CreateRoundaboutInteraction::testIntersections(CommandList* L, Road* Left, unsigned int FromIdx, Road* Right, unsigned int RightIndex)
 {
-	LineF L1(view()->projection().project(Right->get(RightIndex-1)->position()),
-		view()->projection().project(Right->get(RightIndex)->position()));
+	LineF L1(view()->projection().project(Right->getNode(RightIndex-1)->position()),
+		view()->projection().project(Right->getNode(RightIndex)->position()));
 	for (unsigned int i=FromIdx; i<Left->size(); ++i)
 	{
-		LineF L2(view()->projection().project(Left->get(i-1)->position()),
-			view()->projection().project(Left->get(i)->position()));
+		LineF L2(view()->projection().project(Left->getNode(i-1)->position()),
+			view()->projection().project(Left->getNode(i)->position()));
 		QPointF Intersection(L1.intersectionWith(L2));
 		if (L1.segmentContains(Intersection) && L2.segmentContains(Intersection))
 		{
