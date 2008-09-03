@@ -69,7 +69,7 @@
  zoomUnder="0.1" zoomUpper="1e+07"
  backgroundColor="#777777fc" backgroundScale="1" backgroundOffset="1"
  foregroundColor="#fffffffc" foregroundScale="1" foregroundOffset="-1"
- drawTrafficDirectionMarks="yes" labelColor="#000000ff" labelScale="1" labelOffset="1"
+ drawTrafficDirectionMarks="yes" labelColor="#000000ff" labelScale="1" labelOffset="2"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[highway] is minor"/>
 </painter>
@@ -84,14 +84,16 @@
  zoomUnder="0.2" zoomUpper="1e+07"
  foregroundColor="#fa8072fc" foregroundScale="0.3" foregroundOffset="0"
  foregroundDashDown="1" foregroundDashUp="1.8"
- drawTrafficDirectionMarks="yes">
+ drawTrafficDirectionMarks="yes" labelColor="#000000ff" labelScale="1.1" labelOffset="3"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[highway] is footway"/>
 </painter>
 <painter
  zoomUnder="0.1" zoomUpper="1e+07"
  foregroundColor="#996600fc" foregroundScale="0.5" foregroundOffset="0"
  foregroundDashDown="2" foregroundDashUp="2"
- drawTrafficDirectionMarks="yes">
+ drawTrafficDirectionMarks="yes" labelColor="#000000ff" labelScale="1.2" labelOffset="3"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[highway] is track"/>
 </painter>
 <painter
@@ -104,7 +106,7 @@
 <painter
  zoomUnder="0.1" zoomUpper="1e+07"
  foregroundColor="#aaaaaafc" foregroundScale="1" foregroundOffset="0"
- drawTrafficDirectionMarks="yes" labelColor="#000000ff" labelScale="1" labelOffset="0"
+ drawTrafficDirectionMarks="yes" labelColor="#000000ff" labelScale="1" labelOffset="2"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[highway] is living_street"/>
 </painter>
