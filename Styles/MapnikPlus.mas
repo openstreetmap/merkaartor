@@ -2,62 +2,75 @@
 <painter
  backgroundColor="#506077fc" backgroundScale="1" backgroundOffset="6"
  foregroundColor="#809bc0fc" foregroundScale="0.5" foregroundOffset="4"
- drawTrafficDirectionMarks="yes">
+ drawTrafficDirectionMarks="yes" labelColor="#506077fc" labelScale="2" labelOffset="4"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="" labelBackgroundColor="#809bc0fc" labelBackgroundTag="ref"
+>
   <selector expr="[highway] isoneof (motorway , motorway_link)"/>
 </painter>
 <painter
  backgroundColor="#477147fc" backgroundScale="1.5" backgroundOffset="4"
  foregroundColor="#7fc97ffc" foregroundScale="1" foregroundOffset="3.5"
- drawTrafficDirectionMarks="yes">
+ drawTrafficDirectionMarks="yes" labelColor="#477147fc" labelScale="1.5" labelOffset="4"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelBackgroundColor="#7fc97ffc" labelBackgroundTag="ref"
+>
   <selector expr="[highway] isoneof (trunk , trunk_link)"/>
 </painter>
 <painter
  zoomUnder="0.01" zoomUpper="1e+07"
  backgroundColor="#8d4346fc" backgroundScale="1.5" backgroundOffset="4"
  foregroundColor="#e46d71fc" foregroundScale="1" foregroundOffset="3.5"
- drawTrafficDirectionMarks="yes">
+ drawTrafficDirectionMarks="yes" labelColor="#8d4346fc" labelScale="1.5" labelOffset="4"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelBackgroundColor="#e46d71fc" labelBackgroundTag="ref"
+>
   <selector expr="[highway] isoneof (primary , primary_link)"/>
 </painter>
 <painter
  zoomUnder="0.02" zoomUpper="1e+07"
  backgroundColor="#a37b48fc" backgroundScale="1.5" backgroundOffset="3"
  foregroundColor="#fdbf6ffc" foregroundScale="1" foregroundOffset="2"
- drawTrafficDirectionMarks="yes">
+ drawTrafficDirectionMarks="yes" labelColor="#a37b48fc" labelScale="1.3" labelOffset="4"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelBackgroundColor="#fdbf6ffc" labelBackgroundTag="ref"
+>
   <selector expr="[highway] isoneof (secondary , secondary_link)"/>
 </painter>
 <painter
  zoomUnder="0.05" zoomUpper="1e+07"
  backgroundColor="#999999fc" backgroundScale="1.5" backgroundOffset="3"
  foregroundColor="#ffffccfc" foregroundScale="1" foregroundOffset="2"
- drawTrafficDirectionMarks="yes">
+ drawTrafficDirectionMarks="yes" labelColor="#999999fc" labelScale="1.2" labelOffset="4"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelBackgroundColor="#ffffccfc" labelBackgroundTag="ref">
   <selector expr="[highway] isoneof (tertiary , tertiary_link)"/>
 </painter>
 <painter
  zoomUnder="0.1" zoomUpper="1e+07"
  backgroundColor="#777777fc" backgroundScale="1.2" backgroundOffset="3"
  foregroundColor="#fffffffc" foregroundScale="1" foregroundOffset="2"
- drawTrafficDirectionMarks="yes">
+ drawTrafficDirectionMarks="yes" labelColor="#000000ff" labelScale="1.2" labelOffset="3"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[highway] is residential"/>
 </painter>
 <painter
  zoomUnder="0.1" zoomUpper="1e+07"
  backgroundColor="#777777fc" backgroundScale="1.2" backgroundOffset="3"
  foregroundColor="#edededfc" foregroundScale="1" foregroundOffset="2"
- drawTrafficDirectionMarks="yes">
+ drawTrafficDirectionMarks="yes" labelColor="#000000ff" labelScale="1.2" labelOffset="3"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[highway] is pedestrian"/>
 </painter>
 <painter
  zoomUnder="0.1" zoomUpper="1e+07"
  backgroundColor="#777777fc" backgroundScale="1.2" backgroundOffset="3"
  foregroundColor="#fffffffc" foregroundScale="1" foregroundOffset="2"
- drawTrafficDirectionMarks="yes">
+ drawTrafficDirectionMarks="yes" labelColor="#000000ff" labelScale="1.2" labelOffset="3"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[highway] is unclassified"/>
 </painter>
 <painter
  zoomUnder="0.1" zoomUpper="1e+07"
  backgroundColor="#777777fc" backgroundScale="1" backgroundOffset="1"
  foregroundColor="#fffffffc" foregroundScale="1" foregroundOffset="-1"
- drawTrafficDirectionMarks="yes">
+ drawTrafficDirectionMarks="yes" labelColor="#000000ff" labelScale="1" labelOffset="1"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[highway] is minor"/>
 </painter>
 <painter
@@ -91,7 +104,8 @@
 <painter
  zoomUnder="0.1" zoomUpper="1e+07"
  foregroundColor="#aaaaaafc" foregroundScale="1" foregroundOffset="0"
- drawTrafficDirectionMarks="yes">
+ drawTrafficDirectionMarks="yes" labelColor="#000000ff" labelScale="1" labelOffset="0"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[highway] is living_street"/>
 </painter>
 <painter
@@ -238,15 +252,16 @@
 <painter
  zoomUnder="0.03" zoomUpper="1e+07"
  fillColor="#f7efb7cd"
- icon=":/Art/Mapnik/parking.png"
+ icon=":/Art/Mapnik/parking.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="yes">
   <selector expr="[amenity] is parking"/>
 </painter>
 <painter
  zoomUnder="0.01" zoomUpper="1e+07"
  fillColor="#f6666677"
- icon=":/Art/Mapnik/hospital.png"
- drawTrafficDirectionMarks="yes">
+ icon=":/Art/Mapnik/hospital.png" iconScale="0" iconOffset="0"
+ drawTrafficDirectionMarks="yes" labelColor="#ff0000ff" labelScale="7" labelOffset="5"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="">
   <selector expr="[amenity] is hospital"/>
 </painter>
 <painter
@@ -272,7 +287,7 @@
 <painter
  zoomUnder="0.002" zoomUpper="1e+07"
  fillColor="#8dc56ccd"
- icon=":/Art/Mapnik/forest.png"
+ icon=":/Art/Mapnik/forest.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="yes">
   <selector expr="[landuse] is forest"/>
 </painter>
@@ -391,7 +406,7 @@
  zoomUnder="0.002" zoomUpper="1e+07"
  fillColor="#dcdcdc55"
  drawTrafficDirectionMarks="yes">
-  <selector expr="[place] is town"/>
+  <selector expr="[place] is town and  not Type is TrackPoint"/>
 </painter>
 <painter
  fillColor="#cc9999cd"
@@ -558,109 +573,112 @@
 </painter>
 <painter
  zoomUnder="0.03" zoomUpper="1e+07"
- icon=":/Art/Mapnik/airport.png"
+ icon=":/Art/Mapnik/airport.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no">
   <selector expr="[amenity] is airport"/>
 </painter>
 <painter
  zoomUnder="0.06" zoomUpper="1e+07"
- icon=":/Art/Mapnik/post_office.png"
+ icon=":/Art/Mapnik/post_office.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no">
   <selector expr="[amenity] is post_office"/>
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
- icon=":/Art/Mapnik/post_box.png"
+ icon=":/Art/Mapnik/post_box.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no">
   <selector expr="[amenity] is post_box"/>
 </painter>
 <painter
  zoomUnder="0.03" zoomUpper="1e+07"
- icon=":/Art/Mapnik/station.png"
+ icon=":/Art/Mapnik/station.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no">
   <selector expr="[railway] is station"/>
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
- icon=":/Art/Mapnik/pint.png"
+ icon=":/Art/Mapnik/pint.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no">
   <selector expr="[amenity] is pub"/>
 </painter>
 <painter
  zoomUnder="0.03" zoomUpper="1e+07"
- icon=":/Art/Mapnik/peak.png"
+ icon=":/Art/Mapnik/peak.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no">
   <selector expr="[natural] is peak"/>
 </painter>
 <painter
  zoomUnder="0.03" zoomUpper="1e+07"
- icon=":/Art/Mapnik/tower.png"
+ icon=":/Art/Mapnik/tower.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no">
   <selector expr="[man_made] is mast"/>
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
- icon=":/Art/Mapnik/recycling.png"
+ icon=":/Art/Mapnik/recycling.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no">
   <selector expr="[amenity] is recycling"/>
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
- icon=":/Art/Mapnik/bus_stop.png"
+ icon=":/Art/Mapnik/bus_stop.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no">
   <selector expr="[amenity] is bus_stop"/>
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
- icon=":/Art/Mapnik/bus_stop.png"
+ icon=":/Art/Mapnik/bus_stop.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no">
   <selector expr="[highway] is bus_stop"/>
 </painter>
 <painter
  zoomUnder="0.15" zoomUpper="1e+07"
- icon=":/Art/Mapnik/place_of_worship.png"
+ icon=":/Art/Mapnik/place_of_worship.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no">
   <selector expr="[amenity] is place_of_worship"/>
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
- icon=":/Art/Mapnik/mini_round.png"
+ icon=":/Art/Mapnik/mini_round.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no">
   <selector expr="[highway] is mini_roundabout"/>
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
- icon=":/Art/Mapnik/power_tower.png"
+ icon=":/Art/Mapnik/power_tower.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no">
   <selector expr="[power] is tower"/>
 </painter>
 <painter
  zoomUnder="0.00666667" zoomUpper="1e+07"
- icon=":/Art/Places/place_town.png"
- drawTrafficDirectionMarks="no">
-  <selector expr="[place] is town"/>
+ icon=":/Art/Places/place_town.png" iconScale="0" iconOffset="0"
+ drawTrafficDirectionMarks="no" labelColor="#000000ff" labelScale="20" labelOffset="12"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
+  <selector expr="[place] is town and Type is TrackPoint"/>
 </painter>
 <painter
  zoomUnder="0.01" zoomUpper="1e+07"
- icon=":/Art/Places/place_village.png"
- drawTrafficDirectionMarks="no">
+ icon=":/Art/Places/place_village.png" iconScale="0" iconOffset="0"
+ drawTrafficDirectionMarks="no" labelColor="#585858ff" labelScale="15" labelOffset="10"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[place] is village"/>
 </painter>
 <painter
  zoomUnder="0.01" zoomUpper="1e+07"
- icon=":/Art/Places/place_village.png"
+ icon=":/Art/Places/place_village.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no">
   <selector expr="[place] is suburb"/>
 </painter>
 <painter
  zoomUnder="0.02" zoomUpper="1e+07"
- icon=":/Art/Places/place_hamlet.png"
+ icon=":/Art/Places/place_hamlet.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no">
   <selector expr="[place] is hamlet"/>
 </painter>
 <painter
- icon=":/Art/Places/place_town.png"
- drawTrafficDirectionMarks="no">
+ icon=":/Art/Places/place_town.png" iconScale="0" iconOffset="0"
+ drawTrafficDirectionMarks="no" labelColor="#000000ff" labelScale="5" labelOffset="25"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[place] is city"/>
 </painter>
 <painter
@@ -814,7 +832,7 @@
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
- icon=":/MapIcons/map-icons/square.small/fixme.png"
+ icon=":/MapIcons/map-icons/square.small/accommodation/shelter.png"
  drawTrafficDirectionMarks="no">
   <selector expr="[amenity] is shelter"/>
 </painter>
@@ -838,8 +856,8 @@
 </painter>
 <painter
  zoomUnder="0" zoomUpper="1e+07"
- icon=":/MapIcons/map-icons/square.small/unknown.png"
+ icon=":/MapIcons/map-icons/square.small/unknown.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no">
-  <selector expr="Type is TrackPoint and not HasTags"/>
+  <selector expr="Type is TrackPoint and  not HasTags"/>
 </painter>
 </mapStyle>
