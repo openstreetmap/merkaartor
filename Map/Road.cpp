@@ -96,7 +96,7 @@ void Road::setLayer(MapLayer* L)
 	MapFeature::setLayer(L);
 }
 
-void Road::partChanged(MapFeature* F, unsigned int ChangeId)
+void Road::partChanged(MapFeature*, unsigned int ChangeId)
 {
 	p->BBoxUpToDate = false;
 	p->MetaUpToDate = false;

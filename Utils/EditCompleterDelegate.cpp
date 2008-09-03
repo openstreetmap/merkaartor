@@ -15,6 +15,7 @@
 #include "TagModel.h"
 
 #include <QLineEdit>
+#include <QKeyEvent>
 
 EditCompleterDelegate::EditCompleterDelegate(QObject* parent): QItemDelegate(parent)
 {
@@ -71,3 +72,26 @@ void EditCompleterDelegate::updateEditorGeometry(QWidget* editor, const QStyleOp
     editor->setGeometry(option.rect);
 }
 
+/* On enter commit the current text and move to the next field */
+bool EditCompleterDelegate::eventFilter(QObject* object, QEvent* event)
+{
+	QWidget* editor = qobject_cast<QWidget*>(object);
+	if (!editor)
+			return false;
+
+	if (event->type() == QEvent::KeyPress) {
+		QKeyEvent *keyEvent = (QKeyEvent*)event;
+		switch (keyEvent->key()) {
+			case Qt::Key_Escape:
+				emit closeEditor(editor);
+				return true;
+
+			case Qt::Key_Enter:
+			case Qt::Key_Return:
+				emit commitData(editor);
+				emit closeEditor(editor, QAbstractItemDelegate::EditNextItem);
+				return true;
+			}
+		}
+        return false;
+}

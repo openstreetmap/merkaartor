@@ -9,6 +9,7 @@
 # NODEBUG             - no debug target
 # OSMARENDER          - enable osmarender
 # MOBILE              - enable MOBILE
+# GEOIMAGE            - enable geotagged images (needs exiv2)
 
 TEMPLATE = app
 TARGET = merkaartor
@@ -119,3 +120,8 @@ count(MOBILE,1) {
 }
 
 
+count(GEOIMAGE, 1) {
+	DEFINES += GEOIMAGE
+	LIBS += -lexiv2
+	include(GeoImage.pri)
+}

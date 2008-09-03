@@ -9,6 +9,9 @@
 TrackPoint::TrackPoint(const Coord& aCoord)
 : Position(aCoord), Elevation(0.0), Speed(0.0)
 {
+	#ifdef GEOIMAGE
+	ImageId = -1;
+	#endif
 }
 
 TrackPoint::TrackPoint(const TrackPoint& other)
@@ -21,7 +24,7 @@ TrackPoint::~TrackPoint(void)
 {
 }
 
-void TrackPoint::remove(unsigned int Idx)
+void TrackPoint::remove(unsigned int )
 {
 }
 
@@ -34,17 +37,17 @@ unsigned int TrackPoint::size() const
 	return 0;
 }
 
-unsigned int TrackPoint::find(MapFeature* Pt) const
+unsigned int TrackPoint::find(MapFeature* ) const
 {
 	return NULL;
 }
 
-MapFeature* TrackPoint::get(unsigned int idx)
+MapFeature* TrackPoint::get(unsigned int )
 {
 	return NULL;
 }
 
-const MapFeature* TrackPoint::get(unsigned int Idx) const
+const MapFeature* TrackPoint::get(unsigned int ) const
 {
 	return NULL;
 }
@@ -80,6 +83,18 @@ void TrackPoint::setElevation(double aElevation)
 	Elevation = aElevation;
 }
 
+#ifdef GEOIMAGE
+void TrackPoint::setImageId(int aImageId)
+{
+	ImageId = aImageId;
+}
+
+int TrackPoint::getImageId(void) const
+{
+	return ImageId;
+}
+#endif // GEOIMAGE
+
 bool TrackPoint::notEverythingDownloaded() const
 {
 	return lastUpdated() == MapFeature::NotYetDownloaded;
@@ -90,9 +105,22 @@ CoordBox TrackPoint::boundingBox() const
 	return CoordBox(Position,Position);
 }
 
+#ifndef GEOIMAGE
 void TrackPoint::draw(QPainter& /* thePainter */, const Projection& /*theProjection*/ )
 {
 }
+#else
+void TrackPoint::draw(QPainter& thePainter, const Projection& theProjection )
+{
+	if (ImageId != -1) {
+		QPointF me = theProjection.project(position());
+		thePainter.setPen(QPen(QColor(0, 0, 0), 2));
+		QRectF box(me - QPointF(5, 3), me + QPointF(5, 3));
+		thePainter.drawRect(box);
+	}
+}
+#endif // GEOIMAGE
+
 
 void TrackPoint::drawFocus(QPainter& thePainter, const Projection& theProjection)
 {
@@ -333,7 +361,7 @@ void TrackPoint::toBinary(QDataStream& ds, const QHash <QString, quint64>& theIn
 	ds << (qint8)'N' << idToLong() << (qint32)(Position.lon()) << (qint32)(Position.lat());
 }
 
-TrackPoint* TrackPoint::fromBinary(MapDocument* d, OsbMapLayer* /* L */, QDataStream& ds)
+TrackPoint* TrackPoint::fromBinary(MapDocument* /* d */, OsbMapLayer* /* L */, QDataStream& ds)
 {
 	qint8	c;
 	qint64	id;

@@ -363,7 +363,7 @@ bool ImportExportOsmBin::clearTile(qint32 tile, MapDocument* d, OsbMapLayer* the
 		ds >> id;
 		F = d->getFeature(QString::number(id), false);
 		if (F && tb.contains(F->boundingBox())) {
-			int j=0;
+			unsigned int j=0;
 			while (j < F->sizeParents()) {
 				if (F->getParent(j)->boundingBox().disjunctFrom(tb)) {
 					F->getParent(j)->remove(F);

@@ -16,6 +16,10 @@
 #include "Map/RoadManipulations.h"
 #include "Map/TrackPoint.h"
 
+#ifdef GEOIMAGE
+#include "GeoImageDock.h"
+#endif
+
 #include <QtCore/QTimer>
 #include <QtGui/QHeaderView>
 #include <QtGui/QLineEdit>
@@ -205,8 +209,14 @@ void PropertiesDock::on_SelectionList_itemSelectionChanged()
 		for (unsigned int i=0; i<FullSelection.size(); ++i)
 			if (MultiUi.SelectionList->item(i)->isSelected())
 				Selection.push_back(FullSelection[i]);
-		if (Selection.size() == 1)
+		if (Selection.size() == 1) {
 			Main->info()->setHtml(Selection[0]->toHtml());
+
+			#ifdef GEOIMAGE
+			TrackPoint *Pt;
+			if ((Pt = dynamic_cast<TrackPoint*>(Selection[0]))) Main->geoImage()->setImage(Pt->getImageId());
+			#endif
+		}
 		theModel->setFeature(Selection);
 		MultiUi.lbStatus->setText(tr("%1/%2 selected item(s)").arg(Selection.size()).arg(FullSelection.size()));
 		Main->view()->update();
@@ -369,6 +379,10 @@ void PropertiesDock::resetValues()
                         TrackPointUi.TagView->setItemDelegate(delegate);
 			resetTagComboBox(TrackPointUi.Amenity,Pt,"amenity");
 			CurrentTagView = TrackPointUi.TagView;
+ 
+ 			#ifdef GEOIMAGE
+ 			Main->geoImage()->setImage(Pt->getImageId());
+ 			#endif
 		}
 		else if (Road* R = dynamic_cast<Road*>(FullSelection[0]))
 		{
@@ -394,6 +408,9 @@ void PropertiesDock::resetValues()
 	else if (FullSelection.size() > 1)
 	{
 		Main->info()->setHtml("");
+		#ifdef GEOIMAGE
+		Main->geoImage()->setImage(-1);
+		#endif
 		MultiUi.TagView->setModel(theModel);
 		MultiUi.TagView->setItemDelegate(delegate);
 	}

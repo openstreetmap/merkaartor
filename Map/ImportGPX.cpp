@@ -88,6 +88,7 @@ static void importTrkSeg(const QDomElement& Root, MapDocument* theDocument, MapL
 		if (!t.isNull() && t.tagName() == "trkpt")
 		{
 			TrackPoint* Pt = importTrkPt(t,theDocument, theLayer, theList);
+			Pt->setParent(S);
 			if (MakeSegment)
 				S->add(Pt);
 			progress.setValue(progress.value()+1);

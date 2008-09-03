@@ -46,6 +46,10 @@
 #include "QMapControl/mapadapter.h"
 #include "QMapControl/wmsmapadapter.h"
 
+#ifdef GEOIMAGE
+#include "GeoImageDock.h"
+#endif
+
 #include "Render/NativeRenderDialog.h"
 #ifdef OSMARENDER
 	#include "Render/OsmaRenderDialog.h"
@@ -107,6 +111,12 @@ MainWindow::MainWindow(void)
 	theInfo = new InfoDock(this);
 	theDirty = new DirtyDock(this);
 	theGPS = new QGPS(this);
+
+	#ifdef GEOIMAGE
+	theGeoImage = new GeoImageDock(this);
+	theGeoImage->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+	addDockWidget(Qt::RightDockWidgetArea, theGeoImage);
+	#endif
 
 	connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));
 	connect (theLayers, SIGNAL(layersChanged(bool)), this, SLOT(adjustLayers(bool)));
@@ -222,6 +232,13 @@ InfoDock* MainWindow::info()
 {
 	return theInfo;
 }
+
+#ifdef GEOIMAGE
+GeoImageDock* MainWindow::geoImage()
+{
+	return theGeoImage;
+}
+#endif
 
 MapDocument* MainWindow::document()
 {
@@ -404,7 +421,7 @@ static void changeCurrentDirToFile(const QString& s)
 	MerkaartorPreferences::instance()->setWorkingDir(QDir::currentPath());
 }
 
-
+#ifndef GEOIMAGE
 #define FILTER_OPEN_SUPPORTED \
 	tr("Supported formats (*.mdc *.gpx *.osm *.osb *.ngt *.nmea *.nme)\n" \
 	"Merkaartor document (*.mdc)\n" \
@@ -414,6 +431,18 @@ static void changeCurrentDirToFile(const QString& s)
 	"Noni GPSPlot format (*.ngt)\n" \
 	"NMEA GPS log format (*.nmea *.nme)\n" \
 	"All Files (*)")
+#else
+#define FILTER_OPEN_SUPPORTED \
+	tr("Supported formats (*.mdc *.gpx *.osm *.osb *.ngt *.nmea *.nme *.jpg)\n" \
+	"Merkaartor document (*.mdc)\n" \
+	"GPS Exchange format (*.gpx)\n" \
+	"OpenStreetMap format (*.osm)\n" \
+	"OpenStreetMap binary format (*.osb)\n" \
+	"Noni GPSPlot format (*.ngt)\n" \
+	"NMEA GPS log format (*.nmea *.nme)\n" \
+	"Geotagged images (*.jpg)\n" \
+	"All Files (*)")
+#endif
 #define FILTER_IMPORT_SUPPORTED \
 	tr("Supported formats (*.gpx *.osm *.osb *.ngt *.nmea *.nme)\n" \
 	"GPS Exchange format (*.gpx)\n" \
@@ -556,10 +585,21 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 
 void MainWindow::loadFiles(const QStringList & fileList)
 {
-	if (fileList.isEmpty())
-		return;
 
 	QStringList fileNames(fileList);
+
+#ifdef GEOIMAGE
+	QStringList images = fileList.filter(".jpg", Qt::CaseInsensitive);
+	if (!images.isEmpty()) {
+		theGeoImage->loadImages(images, theDocument, theView);
+		QString cur;
+		foreach (cur, images)
+			fileNames.removeAll(cur);
+	}
+#endif
+	
+	if (fileNames.isEmpty())
+		return;
 
 	QApplication::setOverrideCursor(Qt::BusyCursor);
 	theLayers->setUpdatesEnabled(false);
@@ -571,6 +611,7 @@ void MainWindow::loadFiles(const QStringList & fileList)
 	while (it.hasNext())
 	{
 		const QString & fn = it.next();
+
 		if (fn.endsWith(".mdc") == false)
 			continue;
 

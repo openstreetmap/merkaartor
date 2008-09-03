@@ -21,6 +21,10 @@ class FeaturePainter;
 class TrackMapLayer;
 class TrackSegment;
 
+#ifdef GEOIMAGE
+class GeoImageDock;
+#endif
+
 class MainWindow : public QMainWindow, public Ui::MainWindow
 {
 	Q_OBJECT
@@ -124,6 +128,9 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		PropertiesDock* properties();
 		InfoDock* info();
 		QGPS* gps();
+		#ifdef GEOIMAGE
+		GeoImageDock* geoImage();
+		#endif
 		MapDocument* document();
 		//MapLayer* activeLayer();
 		MapView* view();
@@ -157,6 +164,9 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		InfoDock* theInfo;
 		DirtyDock* theDirty;
 		LayerDock* theLayers;
+		#ifdef GEOIMAGE
+		GeoImageDock* theGeoImage;
+		#endif
 		QGPS* theGPS;
 		QDomDocument* theXmlDoc;
 

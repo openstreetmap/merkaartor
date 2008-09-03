@@ -77,7 +77,7 @@ void Relation::setLayer(MapLayer* L)
 	MapFeature::setLayer(L);
 }
 
-void Relation::partChanged(MapFeature* F, unsigned int ChangeId)
+void Relation::partChanged(MapFeature*, unsigned int ChangeId)
 {
 	notifyParents(ChangeId);
 }
