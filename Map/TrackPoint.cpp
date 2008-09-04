@@ -361,12 +361,13 @@ void TrackPoint::toBinary(QDataStream& ds, const QHash <QString, quint64>& theIn
 	ds << (qint8)'N' << idToLong() << (qint32)(Position.lon()) << (qint32)(Position.lat());
 }
 
-TrackPoint* TrackPoint::fromBinary(MapDocument* /* d */, OsbMapLayer* /* L */, QDataStream& ds)
+TrackPoint* TrackPoint::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds)
 {
 	qint8	c;
 	qint64	id;
 	qint32	lon;
 	qint32	lat;
+	QString strId;
 
 	ds >> c; if (c != 'N') return NULL;
 	ds >> id;
@@ -374,11 +375,22 @@ TrackPoint* TrackPoint::fromBinary(MapDocument* /* d */, OsbMapLayer* /* L */, Q
 	ds >> lat;
 
 	Coord cd( lat, lon );
-	TrackPoint* N = new TrackPoint(cd);
 	if (id < 1)
-		N->setId(QString::number(id));
+		strId = QString::number(id);
 	else
-		N->setId("node_"+QString::number(id));
+		strId = QString("node_%1").arg(QString::number(id));
 
-	return N;
+	TrackPoint* Pt = dynamic_cast<TrackPoint*>(d->getFeature(strId));
+	if (!Pt) {
+		Pt = new TrackPoint(cd);
+		Pt->setId(strId);
+		Pt->setLastUpdated(MapFeature::OSMServer);
+		L->add(Pt);
+	} else {
+		Pt->setPosition(cd);
+		if (Pt->lastUpdated() == MapFeature::NotYetDownloaded)
+			Pt->setLastUpdated(MapFeature::OSMServer);
+	}
+
+	return Pt;
 }

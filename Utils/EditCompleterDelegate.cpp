@@ -91,7 +91,7 @@ bool EditCompleterDelegate::eventFilter(QObject* object, QEvent* event)
 				emit commitData(editor);
 				emit closeEditor(editor, QAbstractItemDelegate::EditNextItem);
 				return true;
-			}
 		}
-        return false;
+	}
+	return false;
 }

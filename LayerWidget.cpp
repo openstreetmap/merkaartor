@@ -561,3 +561,23 @@ void ExtractedLayerWidget::initActions()
 	closeAction->setEnabled(theLayer->canDelete());
 }
 
+// OsbLayerWidget
+
+OsbLayerWidget::OsbLayerWidget(OsbMapLayer* aLayer, QWidget* aParent)
+	: LayerWidget(aLayer, aParent)
+{
+	backColor = QColor(165,209,192);
+	initActions();
+}
+
+void OsbLayerWidget::initActions()
+{
+	LayerWidget::initActions();
+
+	closeAction = new QAction(tr("Close"), this);
+	connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
+	ctxMenu->addAction(closeAction);
+	associatedMenu->addAction(closeAction);
+	closeAction->setEnabled(theLayer->canDelete());
+}
+

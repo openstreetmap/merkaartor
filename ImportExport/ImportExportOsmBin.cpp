@@ -303,33 +303,7 @@ bool ImportExportOsmBin::loadTile(qint32 tile, MapDocument* d, OsbMapLayer* theL
 	for (int i=0; i<aTileList.size(); ++i) {
 		quint64 pos = aTileList[i];
 
-		Device->seek(pos);
-		ds >> c;
-		ds >> id;
-		F = d->getFeature(QString::number(id), false);
-		if (F)
-			continue;
-
-		Device->seek(pos);
-		switch (c) {
-			case 'N':
-				F = TrackPoint::fromBinary(d, theLayer, ds);
-				tagsFromBinary(F, ds);
-				theLayer->add(F);
-				break;
-			case 'R':
-				F = Road::fromBinary(d, theLayer, ds);
-				tagsFromBinary(F, ds);
-				theLayer->add(F);
-				break;
-			case 'L':
-				F = Relation::fromBinary(d, theLayer, ds);
-				tagsFromBinary(F, ds);
-				theLayer->add(F);
-				break;
-			default:
-				Q_ASSERT(false);
-		}
+		getFeature(d, theLayer, pos);
 	}
 
 	return true;
@@ -361,7 +335,7 @@ bool ImportExportOsmBin::clearTile(qint32 tile, MapDocument* d, OsbMapLayer* the
 		Device->seek(pos);
 		ds >> c;
 		ds >> id;
-		F = d->getFeature(QString::number(id), false);
+		F = theLayer->get(QString::number(id), false);
 		if (F && tb.contains(F->boundingBox())) {
 			unsigned int j=0;
 			while (j < F->sizeParents()) {
@@ -390,8 +364,20 @@ MapFeature*  ImportExportOsmBin::getFeature(MapDocument* d, OsbMapLayer* theLaye
 	Device->seek(ref);
 	ds >> c;
 	ds >> id;
-	F = d->getFeature(QString::number(id), false);
-	if (F) {
+	switch (c) {
+		case 'N':
+			F = d->getFeature(QString("node_%1").arg(QString::number(id)));
+			break;
+		case 'R':
+			F = d->getFeature(QString("way_%1").arg(QString::number(id)));
+			break;
+		case 'L':
+			F = d->getFeature(QString("rel_%1").arg(QString::number(id)));
+			break;
+		default:
+			Q_ASSERT(false);
+	}
+	if (F && (F->lastUpdated() != MapFeature::NotYetDownloaded)) {
 		Device->seek(cur_pos);
 		return F;
 	}
@@ -401,17 +387,14 @@ MapFeature*  ImportExportOsmBin::getFeature(MapDocument* d, OsbMapLayer* theLaye
 		case 'N':
 			F = TrackPoint::fromBinary(d, theLayer, ds);
 			tagsFromBinary(F, ds);
-			theLayer->add(F);
 			break;
 		case 'R':
 			F = Road::fromBinary(d, theLayer, ds);
 			tagsFromBinary(F, ds);
-			theLayer->add(F);
 			break;
 		case 'L':
 			F = Relation::fromBinary(d, theLayer, ds);
 			tagsFromBinary(F, ds);
-			theLayer->add(F);
 			break;
 		default:
 			Q_ASSERT(false);

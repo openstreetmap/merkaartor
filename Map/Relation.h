@@ -45,7 +45,7 @@ class Relation : public MapFeature
 		virtual void partChanged(MapFeature* F, unsigned int ChangeId);
 
 		QPainterPath getPath();
-		void buildPath(Projection const &theProjection, const QRect& r);
+		void buildPath(Projection const &theProjection, const QRegion& paintRegion);
 
 		virtual QString toXML(unsigned int lvl=0, QProgressDialog * progress=NULL);
 		virtual bool toXML(QDomElement xParent, QProgressDialog & progress);

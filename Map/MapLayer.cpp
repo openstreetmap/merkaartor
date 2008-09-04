@@ -268,11 +268,25 @@ MapFeature* MapLayer::get(unsigned int i)
 	return p->Features[i];
 }
 
-MapFeature* MapLayer::get(const QString& id)
+MapFeature* MapLayer::get(const QString& id, bool exact)
 {
-	std::map<QString, MapFeature*>::iterator i = p->IdMap.find(id);
+	std::map<QString, MapFeature*>::iterator i;
+	
+	i = p->IdMap.find(id);
 	if (i != p->IdMap.end())
 		return i->second;
+
+	if (!exact) {
+		i = p->IdMap.find(QString("node_"+id));
+		if (i != p->IdMap.end())
+			return i->second;
+		i = p->IdMap.find(QString("way_"+id));
+		if (i != p->IdMap.end())
+			return i->second;
+		i = p->IdMap.find(QString("rel_"+id));
+		if (i != p->IdMap.end())
+			return i->second;
+	}
 	return 0;
 }
 
@@ -1032,7 +1046,7 @@ public:
 };
 
 OsbMapLayer::OsbMapLayer(const QString & aName)
-	: DrawingMapLayer(aName)
+	: MapLayer(aName)
 {
 	p->Visible = true;
 	pp = new OsbMapLayerPrivate();
@@ -1049,7 +1063,7 @@ OsbMapLayer::~ OsbMapLayer()
 
 LayerWidget* OsbMapLayer::newWidget(void)
 {
-	p->theWidget = new DrawingLayerWidget(this);
+	p->theWidget = new OsbLayerWidget(this);
 	return p->theWidget;
 }
 
@@ -1099,5 +1113,50 @@ void OsbMapLayer::invalidate(MapDocument* d, CoordBox vp)
 MapFeature*  OsbMapLayer::getFeature(MapDocument* d, quint64 ref)
 {
 	return pp->theImp->getFeature(d, this, ref);
+}
+
+void OsbMapLayer::setVisible(bool b)
+{
+	p->Visible = b;
+}
+
+bool OsbMapLayer::toXML(QDomElement xParent, QProgressDialog & progress)
+{
+	bool OK = true;
+
+	QDomElement e = xParent.ownerDocument().createElement(className());
+	xParent.appendChild(e);
+
+	e.setAttribute("xml:id", id());
+	e.setAttribute("name", p->Name);
+	e.setAttribute("alpha", QString::number(p->alpha,'f',2));
+	e.setAttribute("visible", QString((p->Visible ? "true" : "false")));
+	e.setAttribute("selected", QString((p->selected ? "true" : "false")));
+	e.setAttribute("enabled", QString((p->Enabled ? "true" : "false")));
+
+	e.setAttribute("filename", pp->theImp->getFilename());
+
+	return OK;
+}
+
+OsbMapLayer * OsbMapLayer::fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress)
+{
+	OsbMapLayer* l = new OsbMapLayer(e.attribute("name"));
+
+	l->setId(e.attribute("xml:id"));
+	l->setAlpha(e.attribute("alpha").toDouble());
+	l->setVisible((e.attribute("visible") == "true" ? true : false));
+	l->setSelected((e.attribute("selected") == "true" ? true : false));
+	l->setEnabled((e.attribute("enabled") == "false" ? false : true));
+
+	if (l->pp->theImp->loadFile(e.attribute("filename")))
+		l->pp->theImp->import(l);
+	else {
+		delete l;
+		return NULL;
+	}
+
+	d->add(l);
+	return l;
 }
 

@@ -761,28 +761,24 @@ void MainWindow::on_viewZoomOutAction_triggered()
 void MainWindow::on_viewMoveLeftAction_triggered()
 {
 	QPoint p(theView->rect().width()/4,0);
-	theView->projection().panScreen(p,  theView->rect());
-	invalidateView();
+	theView->panScreen(p);
 }
 void MainWindow::on_viewMoveRightAction_triggered()
 {
 	QPoint p(-theView->rect().width()/4,0);
-	theView->projection().panScreen(p,  theView->rect());
-	invalidateView();
+	theView->panScreen(p);
 }
 
 void MainWindow::on_viewMoveUpAction_triggered()
 {
 	QPoint p(0,theView->rect().height()/4);
-	theView->projection().panScreen(p,  theView->rect());
-	invalidateView();
+	theView->panScreen(p);
 }
 
 void MainWindow::on_viewMoveDownAction_triggered()
 {
 	QPoint p(0,-theView->rect().height()/4);
-	theView->projection().panScreen(p,  theView->rect());
-	invalidateView();
+	theView->panScreen(p);
 }
 
 void MainWindow::on_viewZoomWindowAction_triggered()

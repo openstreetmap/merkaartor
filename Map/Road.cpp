@@ -278,8 +278,8 @@ void Road::drawHover(QPainter& thePainter, const Projection& theProjection)
 	QPen TP(MerkaartorPreferences::instance()->getHoverColor());
 	TP.setWidth(5);
 	thePainter.setPen(TP);
-	QRect clipRect = thePainter.clipRegion().boundingRect().adjusted(-20, -20, 20, 20);
-	buildPath(theProjection, clipRect);
+	QRegion clipRg = QRegion(thePainter.clipRegion().boundingRect().adjusted(-20, -20, 20, 20));
+	buildPath(theProjection, clipRg);
 	thePainter.drawPath(p->thePath);
 	TP.setWidth(15);
 	TP.setCapStyle(Qt::RoundCap);
@@ -303,8 +303,8 @@ void Road::drawFocus(QPainter& thePainter, const Projection& theProjection)
 	QPen TP(MerkaartorPreferences::instance()->getFocusColor());
 	TP.setWidth(5);
 	thePainter.setPen(TP);
-	QRect clipRect = thePainter.clipRegion().boundingRect().adjusted(-20, -20, 20, 20);
-	buildPath(theProjection, clipRect);
+	QRegion clipRg = QRegion(thePainter.clipRegion().boundingRect().adjusted(-20, -20, 20, 20));
+	buildPath(theProjection, clipRg);
 	thePainter.drawPath(p->thePath);
 	TP.setWidth(15);
 	TP.setCapStyle(Qt::RoundCap);
@@ -437,7 +437,7 @@ bool QRectInterstects(const QRect& r, const QLine& l, QPoint& a, QPoint& b)
 		return false;
 }
 
-void Road::buildPath(Projection const &theProjection, const QRect& r)
+void Road::buildPath(Projection const &theProjection, const QRegion& paintRegion)
 {
 	p->thePath = QPainterPath();
 	if (!p->Nodes.size())
@@ -449,7 +449,7 @@ void Road::buildPath(Projection const &theProjection, const QRect& r)
 
 	double PixelPerM = theProjection.pixelPerM();
 	double WW = PixelPerM*widthOf()*10+10;
-	QRect clipRect = r.adjusted(int(-WW-20), int(-WW-20), int(WW+20), int(WW+20));
+	QRect clipRect = paintRegion.boundingRect().adjusted(int(-WW-20), int(-WW-20), int(WW+20), int(WW+20));
 
 	if (!clipRect.contains(aP)) {
 		aP.setX(qMax(clipRect.left(), aP.x()));
@@ -804,17 +804,27 @@ Road* Road::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds)
 	qint8	c;
 	qint64	id;
 	qint32	fSize;
+	QString strId;
 
 	ds >> c; if (c != 'R') return NULL;
 	ds >> id;
 	ds >> fSize;
 
-	Road* R = new Road();
-	R->setId(QString::number(id));
-	if (id < 0)
-		R->setId(QString::number(id));
+	if (id < 1)
+		strId = QString::number(id);
 	else
-		R->setId("way_"+QString::number(id));
+		strId = QString("way_%1").arg(QString::number(id));
+
+	Road* R = dynamic_cast<Road*>(d->getFeature(strId));
+	if (!R) {
+		R = new Road();
+		R->setId(strId);
+		R->setLastUpdated(MapFeature::OSMServer);
+		L->add(R);
+	} else {
+		if (R->lastUpdated() == MapFeature::NotYetDownloaded)
+			R->setLastUpdated(MapFeature::OSMServer);
+	}
 
 	for (int i=0; i < fSize; ++i) {
 		qint64 refId;

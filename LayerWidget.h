@@ -181,6 +181,18 @@ class ExtractedLayerWidget : public LayerWidget
 		virtual void initActions();
 };
 
+class OsbLayerWidget : public LayerWidget
+{
+	Q_OBJECT
+
+	public:
+		OsbLayerWidget(OsbMapLayer* aLayer, QWidget* aParent = 0);
+		virtual ~OsbLayerWidget() {};
+
+	public:
+		virtual void initActions();
+};
+
 
 #endif
 

@@ -44,6 +44,9 @@ public:
 	// export
 	virtual bool export_(const QVector<MapFeature *>& featList);
 
+	// Return the filename
+	const QString& getFilename() const;
+
 	virtual CommandList* getCommandList();
 
 protected:

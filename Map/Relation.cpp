@@ -266,12 +266,12 @@ void Relation::releaseMemberModel()
 	}
 }
 
-void Relation::buildPath(Projection const &theProjection, const QRect& r)
+void Relation::buildPath(Projection const &theProjection, const QRegion& paintRegion)
 {
 	p->thePath = QPainterPath();
 	for (unsigned int i=0; i<size(); ++i)
 		if (Road* M = dynamic_cast<Road*>(p->Members[i].second)) {
-			M->buildPath(theProjection, r);
+			M->buildPath(theProjection, paintRegion);
 			p->thePath.addPath(M->getPath());
 		}
 }
@@ -458,17 +458,27 @@ Relation* Relation::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds)
 	qint8	c;
 	qint64	id;
 	qint32	fSize;
+	QString strId;
 
 	ds >> c; if (c != 'L') return NULL;
 	ds >> id;
 	ds >> fSize;
 
-	Relation* R = new Relation();
-	R->setId(QString::number(id));
 	if (id < 1)
-		R->setId(QString::number(id));
+		strId = QString::number(id);
 	else
-		R->setId("rel_"+QString::number(id));
+		strId = QString("rel_%1").arg(QString::number(id));
+
+	Relation* R = dynamic_cast<Relation*>(d->getFeature(strId));
+	if (!R) {
+		R = new Relation();
+		R->setId(strId);
+		R->setLastUpdated(MapFeature::OSMServer);
+		L->add(R);
+	} else {
+		if (R->lastUpdated() == MapFeature::NotYetDownloaded)
+			R->setLastUpdated(MapFeature::OSMServer);
+	}
 
 	for (int i=0; i < fSize; ++i) {
 		qint8 Type;

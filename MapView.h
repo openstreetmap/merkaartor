@@ -57,7 +57,7 @@ class MapView :	public QWidget
 		void drawDownloadAreas(QPainter & painter);
 		void drawScale(QPainter & painter);
 		void drawGPS(QPainter & painter);
-		void updateStaticBuffer(QPaintEvent* anEvent);
+		void updateStaticBuffer(const QRegion& invalidRegion);
 		void updateLayersImage(QPaintEvent* anEvent);
 		MainWindow* Main;
 		Projection theProjection;
@@ -67,7 +67,8 @@ class MapView :	public QWidget
 		QPixmap* StaticMap;
 		bool StaticBufferUpToDate;
 		bool StaticMapUpToDate;
-		QPoint thePanDelta;
+		QPoint thePanDelta, theLastDelta;
+		QRegion invalidRegion;
 
 		int numImages;
 		QString StatusMessage;

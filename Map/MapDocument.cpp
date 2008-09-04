@@ -156,6 +156,9 @@ MapDocument* MapDocument::fromXML(const QDomElement e, double version, LayerDock
 		if (c.tagName() == "ExtractedMapLayer") {
 			/* ExtractedMapLayer* l = */ ExtractedMapLayer::fromXML(NewDoc, c, progress);
 		} else
+		if (c.tagName() == "OsbMapLayer") {
+			/* OsbMapLayer* l = */ OsbMapLayer::fromXML(NewDoc, c, progress);
+		} else
 		if (c.tagName() == "CommandHistory") {
 			if (version > 1.0)
 				h = CommandHistory::fromXML(NewDoc, c, progress);

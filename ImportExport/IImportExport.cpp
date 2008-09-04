@@ -48,3 +48,8 @@ CommandList* IImportExport::getCommandList()
 {
 	return theList;
 }
+
+const QString& IImportExport::getFilename() const
+{
+	return FileName;
+}

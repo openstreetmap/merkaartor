@@ -57,7 +57,7 @@ public:
 	int get(MapFeature* aFeature);
 	MapFeature* get(unsigned int i);
 	const MapFeature* get(unsigned int i) const;
-	MapFeature* get(const QString& id);
+	MapFeature* get(const QString& id, bool exact=true);
 	void notifyIdUpdate(const QString& id, MapFeature* aFeature);
 	void sortRenderingPriority(double PixelPerM);
 
@@ -234,7 +234,7 @@ public:
 	virtual bool isUploadable() {return false;};
 };
 
-class OsbMapLayer : public DrawingMapLayer
+class OsbMapLayer : public MapLayer
 {
 public:
 	OsbMapLayer(const QString& aName);
@@ -244,10 +244,14 @@ public:
 	virtual const LayerGroups classGroups() {return(MapLayer::OSM);};
 	virtual LayerWidget* newWidget(void);
 
+	virtual void setVisible(bool b);
 	virtual bool isUploadable() {return true;};
 
 	virtual void invalidate(MapDocument* d, CoordBox vp);
 	MapFeature*  getFeature(MapDocument* d, quint64 ref);
+
+	virtual bool toXML(QDomElement xParent, QProgressDialog & progress);
+	static OsbMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
 protected:
 	OsbMapLayerPrivate* pp;
