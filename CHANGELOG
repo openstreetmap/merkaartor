@@ -1,4 +1,5 @@
 v0.12
+	* FIX : Upload of a modified single GPX track node was not working anymore (fixes #1141)
 	* ADD : Support for GeoTagged images. qmake GEOIMAGE=1 to activate. requires exiv2 (by Timo Schlüßler)
 	* ADD : Move to the next field on enter in properties dock tags (by Travers Carter) (Refs #1137)
 	* ADD : revised OSB format. Allows to use large map files directly from disk with low memory footprint.

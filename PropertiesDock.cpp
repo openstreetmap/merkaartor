@@ -471,8 +471,10 @@ void PropertiesDock::on_RoadName_editingFinished()
 				new ClearTagCommand(selection(0),"name",Main->document()->getDirtyOrOriginLayer(selection(0)->layer())));
 		else {
 			CommandList* theList  = new CommandList(MainWindow::tr("Set Tag 'name' to '%1' on %2").arg(RoadUi.Name->text()).arg(selection(0)->description()), selection(0));
-			if (!selection(0)->isDirty() && !selection(0)->hasOSMId() && selection(0)->isUploadable())
-				theList->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),selection(0),false));
+			if (!selection(0)->isDirty() && !selection(0)->hasOSMId() && selection(0)->isUploadable()) {
+				bool userAdded = !selection(0)->id().startsWith("conflict_");
+				theList->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),selection(0),userAdded));
+			}
 			theList->add(new SetTagCommand(selection(0),"name",RoadUi.Name->text(),Main->document()->getDirtyOrOriginLayer(selection(0)->layer())));
 			Main->document()->addHistory(theList);
 		}
