@@ -789,12 +789,6 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, const Projection& 
 		font.setPixelSize(int(WW));
 		QFontMetrics metrics(font);
 
-		for (int i=int(WW)-1; i> 0; --i) {
-			font.setPixelSize(i);
-			metrics = QFontMetrics(font);
-			if ((metrics.width(str) < R->getPath().length() - 5) && (metrics.height() < WWR))
-				break;
-		}
 		if (font.pixelSize() >= 5) {
 			thePainter.setPen(LabelColor);
 			thePainter.setFont(font);
