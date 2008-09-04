@@ -1034,17 +1034,17 @@ Möchten Sie dies nun tun?</translation>
     <message>
         <location filename="MainWindow.ui" line="425"/>
         <source>&amp;Road</source>
-        <translation>&amp;Straße</translation>
+        <translation>St&amp;raße</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="510"/>
         <source>&amp;Edit</source>
-        <translation>&amp;Bearbeiten</translation>
+        <translation>B&amp;earbeiten</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="84"/>
         <source>&amp;View</source>
-        <translation>&amp;Ansicht</translation>
+        <translation>Ansic&amp;ht</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="88"/>
@@ -1154,7 +1154,7 @@ Möchten Sie dies nun tun?</translation>
     <message>
         <location filename="MainWindow.ui" line="331"/>
         <source>Ctrl+Z</source>
-        <translation>Strg+Z</translation>
+        <translation>Ctrl+Z</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="340"/>
@@ -1164,7 +1164,7 @@ Möchten Sie dies nun tun?</translation>
     <message>
         <location filename="MainWindow.ui" line="343"/>
         <source>Ctrl+Y</source>
-        <translation>Strg+Y</translation>
+        <translation>Ctrl+Y</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="352"/>
@@ -1189,7 +1189,7 @@ Möchten Sie dies nun tun?</translation>
     <message>
         <location filename="MainWindow.ui" line="371"/>
         <source>Ctrl+D</source>
-        <translation>Strg+D</translation>
+        <translation>Ctrl+D</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="376"/>
@@ -1219,7 +1219,7 @@ Möchten Sie dies nun tun?</translation>
     <message>
         <location filename="MainWindow.ui" line="405"/>
         <source>Ctrl+U</source>
-        <translation>Strg+U</translation>
+        <translation>Ctrl+U</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="417"/>
@@ -1379,12 +1379,12 @@ Möchten Sie dies nun tun?</translation>
     <message>
         <location filename="MainWindow.ui" line="261"/>
         <source>Ctrl+O</source>
-        <translation>Strg+O</translation>
+        <translation>Ctrl+O</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="436"/>
         <source>Ctrl+N</source>
-        <translation>Strg+N</translation>
+        <translation>Ctrl+N</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="645"/>
@@ -1394,7 +1394,7 @@ Möchten Sie dies nun tun?</translation>
     <message>
         <location filename="MainWindow.ui" line="653"/>
         <source>Ctrl+S</source>
-        <translation>Strg+S</translation>
+        <translation>Ctrl+S</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="658"/>
@@ -1409,7 +1409,7 @@ Möchten Sie dies nun tun?</translation>
     <message>
         <location filename="MainWindow.ui" line="670"/>
         <source>Ctrl+Shift+D</source>
-        <translation>Strg+Umschalt+D</translation>
+        <translation>Ctrl+Shift+D</translation>
     </message>
     <message>
         <location filename="MainWindow.cpp" line="543"/>
@@ -1451,7 +1451,7 @@ Für weitere Informationen lesen Sie http://wiki.openstreetmap.org/index.php/Pro
     <message>
         <location filename="MainWindow.ui" line="689"/>
         <source>Ctrl+P</source>
-        <translation>Strg+P</translation>
+        <translation>Ctrl+P</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="694"/>
@@ -1466,7 +1466,7 @@ Für weitere Informationen lesen Sie http://wiki.openstreetmap.org/index.php/Pro
     <message>
         <location filename="MainWindow.ui" line="703"/>
         <source>Ctrl+L</source>
-        <translation>STRG+L</translation>
+        <translation>Ctrl+L</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="708"/>
@@ -1481,7 +1481,7 @@ Für weitere Informationen lesen Sie http://wiki.openstreetmap.org/index.php/Pro
     <message>
         <location filename="MainWindow.ui" line="717"/>
         <source>Ctrl+I</source>
-        <translation>Strg+I</translation>
+        <translation>Ctrl+I</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="291"/>
@@ -1496,7 +1496,7 @@ Für weitere Informationen lesen Sie http://wiki.openstreetmap.org/index.php/Pro
     <message>
         <location filename="MainWindow.ui" line="428"/>
         <source>Ctrl+R</source>
-        <translation>Strg+R</translation>
+        <translation>Ctrl+R</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="355"/>
@@ -1783,7 +1783,7 @@ Wollen Sie dies jetzt erledigen?</translation>
     <message>
         <location filename="MainWindow.ui" line="753"/>
         <source>Ctrl+Alt+A</source>
-        <translation>Strg+Alt+A</translation>
+        <translation>Ctrl+Alt+A</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="762"/>
@@ -1798,7 +1798,7 @@ Wollen Sie dies jetzt erledigen?</translation>
     <message>
         <location filename="MainWindow.ui" line="768"/>
         <source>Ctrl+C</source>
-        <translation>Strg+C</translation>
+        <translation>Ctrl+C</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="773"/>
@@ -1813,7 +1813,7 @@ Wollen Sie dies jetzt erledigen?</translation>
     <message>
         <location filename="MainWindow.ui" line="779"/>
         <source>Ctrl+V, O</source>
-        <translation>Strg+V, O</translation>
+        <translation>Ctrl+V, O</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="788"/>
@@ -1828,7 +1828,7 @@ Wollen Sie dies jetzt erledigen?</translation>
     <message>
         <location filename="MainWindow.ui" line="794"/>
         <source>Ctrl+V, M</source>
-        <translation>Strg+V, M</translation>
+        <translation>Ctrl+V, M</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="804"/>
@@ -1848,7 +1848,7 @@ Wollen Sie dies jetzt erledigen?</translation>
     <message>
         <location filename="MainWindow.ui" line="815"/>
         <source>Ctrl+V, F</source>
-        <translation>Strg+V, F</translation>
+        <translation>Ctrl+V, F</translation>
     </message>
     <message>
         <location filename="Map/MapLayer.cpp" line="701"/>
@@ -1933,7 +1933,7 @@ Wollen Sie dies jetzt erledigen?</translation>
     <message>
         <location filename="MainWindow.ui" line="742"/>
         <source>Ctrl+T</source>
-        <translation>Strg+T</translation>
+        <translation>Ctrl+T</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="847"/>
