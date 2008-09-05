@@ -207,3 +207,29 @@ private:
 
 	virtual void run();
 };        
+
+class QTcpSocket;
+
+class QGPSDDevice : public QGPSDevice
+{
+	Q_OBJECT
+
+	public:
+		QGPSDDevice(const QString& device);
+
+		virtual bool openDevice();
+		virtual bool closeDevice();
+
+	protected:
+		virtual void run();
+
+	public slots:
+		void onLinkReady();
+		void onDataAvailable();
+		void onWatch();
+	private:
+		void parse(const QString& s);
+		QTcpSocket* Server;
+		QByteArray Buffer;
+};
+

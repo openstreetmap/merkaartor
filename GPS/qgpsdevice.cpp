@@ -25,6 +25,9 @@
 #include <QFile>
 #include <QStringList>
 #include <QMessageBox>
+#include <QTcpSocket>
+#include <QTimer>
+#include <QHostAddress>
 
 #include <cstdlib>
 
@@ -672,6 +675,7 @@ void QGPSFileDevice::run()
     char bufferChar;
     char bufferString[100];
     bool safeStopLoop = false;
+    exec();
 
     do
     {
@@ -733,3 +737,103 @@ void QGPSFileDevice::run()
 	closeDevice();
 }
 
+/* GPSSDEVICE */
+
+#include <iostream>
+
+QGPSDDevice::QGPSDDevice(const QString& device)
+{
+	setDevice(device);
+}
+
+bool QGPSDDevice::openDevice()
+{
+	return true;
+}
+
+bool QGPSDDevice::closeDevice()
+{
+	return true;
+}
+
+void QGPSDDevice::run()
+{
+	QTcpSocket Link;
+	Server = &Link;
+	Link.connectToHost(QHostAddress("127.0.0.1"),2947);
+	connect(Server,SIGNAL(connected()),this,SLOT(onLinkReady()));
+	connect(Server,SIGNAL(readyRead()),this,SLOT(onDataAvailable()));
+	QTimer Watchdog;
+	connect(&Watchdog,SIGNAL(timeout()),this,SLOT(onWatch()));
+	Watchdog.start(100);
+	exec();
+}
+
+void QGPSDDevice::onDataAvailable()
+{
+	std::cout << "data available " << std::endl;
+	QByteArray ba(Server->readAll());
+	std::cout << ba.data() << std::endl;
+	Buffer.append(ba);	
+	int i = Buffer.indexOf("GPSD,O=");
+	if (i < 0)
+	{
+		Buffer.clear();
+		return;
+	}
+	Buffer.remove(i,7);
+	i = Buffer.indexOf(10,0);
+	if (i < 0)
+		return;
+	parse(QString::fromAscii(Buffer.data(),i));
+	Buffer.remove(0,i+1);	
+}
+
+void QGPSDDevice::parse(const QString& s)
+{
+	std::cout << " parsing " << s.toUtf8().data() << std::endl;
+	if (s.isEmpty()) return;
+	if (s[0] == '?') return;
+	QStringList Args(s.split(' '));
+	if (Args.count() < 5) return;
+	std::cout << "lat = " << Args[3].toDouble() << std::endl;
+	std::cout << "lon = " << Args[4].toDouble() << std::endl;
+	setLatitude(Args[3].toDouble());
+	setLongitude(Args[4].toDouble());
+	double Alt = 0;
+	if (Args.count() > 5)
+		Alt = Args[5].toDouble();
+	double Speed = 0;
+	if (Args.count() > 9)
+		Speed = Args[9].toDouble();
+	double Heading = 0;
+	if (Args.count() > 7)
+		Heading = Args[7].toDouble();
+	emit updatePosition(Args[3].toDouble(),
+		Args[4].toDouble(),
+		QDateTime::currentDateTime(),
+		Alt, Speed, Heading);
+	setHeading(Heading);
+	setAltitude(Alt);
+	setSpeed(Speed);
+	emit updateStatus();
+
+}
+
+void QGPSDDevice::onWatch()
+{
+	if (stopLoop)
+	{
+		std::cout << "loop stopped" << std::endl;
+		quit();
+	}
+}
+
+void QGPSDDevice::onLinkReady()
+{
+	std::cout << "connected" << std::endl;
+	if (!Server) return;
+	std::cout << "sending" << std::endl;
+	Server->write("w+");
+	Server->write("j=1");
+}
