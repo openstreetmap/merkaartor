@@ -92,7 +92,7 @@ class Road : public MapFeature
 		virtual QString toHtml();
 	
 		virtual void toBinary(QDataStream& ds, const QHash <QString, quint64>& theIndex);
-		static Road* fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds);
+		static Road* fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds, qint8 c, qint64 id);
 
 		bool isExtrimity(TrackPoint* node);
 		static Road * GetSingleParentRoad(MapFeature * mapFeature);

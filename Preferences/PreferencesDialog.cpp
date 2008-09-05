@@ -141,6 +141,7 @@ void PreferencesDialog::loadPrefs()
 
 	cbGgpsSaveLog->setChecked(M_PREFS->getGpsSaveLog());
 	edGpsLogDir->setText(M_PREFS->getGpsLogDir());
+	cbGpsSyncTime->setChecked(M_PREFS->getGpsSyncTime());
 }
 
 void PreferencesDialog::savePrefs()
@@ -211,6 +212,7 @@ void PreferencesDialog::savePrefs()
 
 	M_PREFS->setGpsSaveLog(cbGgpsSaveLog->isChecked());
 	M_PREFS->setGpsLogDir(edGpsLogDir->text());
+	M_PREFS->setGpsSyncTime(cbGpsSyncTime->isChecked());
 
 	M_PREFS->save();
 }

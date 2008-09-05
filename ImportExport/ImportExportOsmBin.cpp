@@ -26,10 +26,10 @@ ImportExportOsmBin::~ImportExportOsmBin()
 void ImportExportOsmBin::addTileIndex(MapFeature* F, qint64 pos)
 {
 	QRectF r = F->boundingBox().toQRectF();
-	int x1 = int((r.topLeft().x() + INT_MAX) / REGION_WIDTH);
-	int y1 = int((r.topLeft().y() + INT_MAX) / REGION_WIDTH);
-	int x2 = int((r.bottomRight().x() + INT_MAX) / REGION_WIDTH);
-	int y2 = int((r.bottomRight().y() + INT_MAX) / REGION_WIDTH);
+	int x1 = int((r.topLeft().x() + INT_MAX) / TILE_WIDTH);
+	int y1 = int((r.topLeft().y() + INT_MAX) / TILE_WIDTH);
+	int x2 = int((r.bottomRight().x() + INT_MAX) / TILE_WIDTH);
+	int y2 = int((r.bottomRight().y() + INT_MAX) / TILE_WIDTH);
 
 	for (int i=x1; i <= x2; ++i)
 		for (int j=y1; j <= y2; ++j)
@@ -42,9 +42,9 @@ void ImportExportOsmBin::tagsToBinary(MapFeature* F, QDataStream& ds)
 
 	ds << (qint32)F->tagSize();
 	for (unsigned int i=0; i<F->tagSize(); ++i) {
-		k = theTagKeysIndex[F->layer()->getDocument()->getTagKeyIndex(F->tagKey(i))];
+		k = theTagKeysIndex[F->tagKey(i)];
 		Q_ASSERT((k>0));
-		v = theTagValuesIndex[F->layer()->getDocument()->getTagValueIndex(F->tagValue(i))];
+		v = theTagValuesIndex[F->tagValue(i)];
 		Q_ASSERT((v>0));
 		ds << k;
 		ds << v;
@@ -63,12 +63,31 @@ void ImportExportOsmBin::tagsFromBinary(MapFeature * F, QDataStream& ds)
 		ds >> k;
 		ds >> v;
 		cur_pos = Device->pos();
-		Device->seek(k);
-		ds >> K;
-		Device->seek(v);
-		ds >> V;
+		if (keyTable.contains(k))
+			K = keyTable[k];
+		else {
+			Device->seek(k);
+			ds >> K;
+		}
+		if (valueTable.contains(v))
+			V = valueTable[v];
+		else {
+			Device->seek(v);
+			ds >> V;
+		}
 		F->setTag(K,V);
 		Device->seek(cur_pos);
+	}
+}
+
+void ImportExportOsmBin::tagsPopularity(MapFeature * F)
+{
+	int val;
+	for (int i=0; i<F->tagSize(); ++i) {
+		val = keyPopularity.value(F->tagKey(i));
+		keyPopularity.insert(F->tagKey(i), val + 1);
+		val = valuePopularity.value(F->tagValue(i));
+		valuePopularity.insert(F->tagValue(i), val + 1);
 	}
 }
 
@@ -76,6 +95,7 @@ bool ImportExportOsmBin::prepare()
 {
 	for (int i=0; i< theFeatures.size(); ++i) {
 		qint64 idx = theFeatures[i]->idToLong();
+		tagsPopularity(theFeatures[i]);
 		if (TrackPoint* N = dynamic_cast <TrackPoint*> (theFeatures[i])) {
 			theNodes[idx] = N;
 		}
@@ -129,17 +149,43 @@ bool ImportExportOsmBin::writeIndex(QDataStream& ds)
 
 bool ImportExportOsmBin::writeTagLists(QDataStream& ds)
 {
+	QMultiMap <qint32, QString> popularityKey;
+	QMultiMap <qint32, QString> popularityValue;
+
+	QMapIterator<QString, qint32> kpi(keyPopularity);
+	while (kpi.hasNext()) {
+		kpi.next();
+		popularityKey.insert(kpi.value(), kpi.key());
+	}
+
 	tagKeysPos = Device->pos();
 	ds << (qint32) theDoc->getTagKeys().size();
-	for (int i=0; i<theDoc->getTagKeys().size(); i++) {
-		theTagKeysIndex << Device->pos();
-		ds << theDoc->getTagKeys().at(i);
+
+	QMapIterator<qint32, QString> ki(popularityKey);
+	ki.toBack();
+	while (ki.hasPrevious()) {
+		ki.previous();
+
+		theTagKeysIndex[ki.value()] = Device->pos();
+		ds << ki.value();
 	}
+
+	QMapIterator<QString, qint32> vpi(valuePopularity);
+	while (vpi.hasNext()) {
+		vpi.next();
+		popularityValue.insert(vpi.value(), vpi.key());
+	}
+
 	tagValuesPos = Device->pos();
 	ds << (qint32) theDoc->getTagValues().size();
-	for (int i=0; i<theDoc->getTagValues().size(); i++) {
-		theTagValuesIndex << Device->pos();
-		ds << theDoc->getTagValues().at(i);
+
+	QMapIterator<qint32, QString> vi(popularityValue);
+	vi.toBack();
+	while (vi.hasPrevious()) {
+		vi.previous();
+
+		theTagValuesIndex[vi.value()] = Device->pos();
+		ds << vi.value();
 	}
 
 	return true;
@@ -219,53 +265,80 @@ bool ImportExportOsmBin::readRegionToc(QDataStream& ds)
 	return true;
 }
 
-bool ImportExportOsmBin::readTagLists(QDataStream& ds)
+bool ImportExportOsmBin::readPopularTagLists(QDataStream& ds)
 {
-	QList<QString> list;
+	qint32 tagKeysSize, tagValuesSize;
+	QString s;
+	quint64 cur_pos;
+	
+	Device->seek(tagKeysPos);
+	ds >> tagKeysSize;
 
-	ds >> list;
-	theDoc->setTagKeys(list);
-	ds >> list;
-	theDoc->setTagValues(list);
-
-	return true;
-}
-
-bool ImportExportOsmBin::readNodes(QDataStream& ds, OsbMapLayer* aLayer)
-{
-	int fSize;
-
-	ds >> fSize;
-	for (int i=0; i< fSize; ++i) {
-		if (TrackPoint* N = TrackPoint::fromBinary(theDoc, aLayer, ds))
-			aLayer->add(N);
+	for (int i=0; i<20 && i<tagKeysSize; ++i) {
+		cur_pos = Device->pos();
+		ds >> s;
+		keyTable.insert(cur_pos, s);
 	}
-	return true;
-}
+	
+	Device->seek(tagValuesPos);
+	ds >> tagValuesSize;
 
-bool ImportExportOsmBin::readRoads(QDataStream& ds, OsbMapLayer* aLayer)
-{
-	int fSize;
-
-	ds >> fSize;
-	for (int i=0; i< fSize; ++i) {
-		if (Road* R = Road::fromBinary(theDoc, aLayer, ds))
-			aLayer->add(R);
+	for (int i=0; i<20 && i<tagValuesSize; ++i) {
+		cur_pos = Device->pos();
+		ds >> s;
+		valueTable.insert(cur_pos, s);
 	}
+
 	return true;
 }
 
-bool ImportExportOsmBin::readRelations(QDataStream& ds, OsbMapLayer* aLayer)
-{
-	int fSize;
-
-	ds >> fSize;
-	for (int i=0; i< fSize; ++i) {
-		if (Relation* L = Relation::fromBinary(theDoc, aLayer, ds))
-			aLayer->add(L);
-	}
-	return true;
-}
+//bool ImportExportOsmBin::readTagLists(QDataStream& ds)
+//{
+//	QList<QString> list;
+//
+//	ds >> list;
+//	theDoc->setTagKeys(list);
+//	ds >> list;
+//	theDoc->setTagValues(list);
+//
+//	return true;
+//}
+//
+//bool ImportExportOsmBin::readNodes(QDataStream& ds, OsbMapLayer* aLayer)
+//{
+//	int fSize;
+//
+//	ds >> fSize;
+//	for (int i=0; i< fSize; ++i) {
+//		if (TrackPoint* N = TrackPoint::fromBinary(theDoc, aLayer, ds))
+//			aLayer->add(N);
+//	}
+//	return true;
+//}
+//
+//bool ImportExportOsmBin::readRoads(QDataStream& ds, OsbMapLayer* aLayer)
+//{
+//	int fSize;
+//
+//	ds >> fSize;
+//	for (int i=0; i< fSize; ++i) {
+//		if (Road* R = Road::fromBinary(theDoc, aLayer, ds))
+//			aLayer->add(R);
+//	}
+//	return true;
+//}
+//
+//bool ImportExportOsmBin::readRelations(QDataStream& ds, OsbMapLayer* aLayer)
+//{
+//	int fSize;
+//
+//	ds >> fSize;
+//	for (int i=0; i< fSize; ++i) {
+//		if (Relation* L = Relation::fromBinary(theDoc, aLayer, ds))
+//			aLayer->add(L);
+//	}
+//	return true;
+//}
 
 bool ImportExportOsmBin::loadRegion(qint32 rg)
 {
@@ -353,7 +426,7 @@ bool ImportExportOsmBin::clearTile(qint32 tile, MapDocument* d, OsbMapLayer* the
 	return true;
 }
 
-MapFeature*  ImportExportOsmBin::getFeature(MapDocument* d, OsbMapLayer* theLayer, quint64 ref)
+MapFeature* ImportExportOsmBin::getFeature(MapDocument* d, OsbMapLayer* theLayer, quint64 ref)
 {
 	QDataStream ds(Device);
 	MapFeature* F;
@@ -382,18 +455,17 @@ MapFeature*  ImportExportOsmBin::getFeature(MapDocument* d, OsbMapLayer* theLaye
 		return F;
 	}
 
-	Device->seek(ref);
 	switch (c) {
 		case 'N':
-			F = TrackPoint::fromBinary(d, theLayer, ds);
+			F = TrackPoint::fromBinary(d, theLayer, ds, c, id);
 			tagsFromBinary(F, ds);
 			break;
 		case 'R':
-			F = Road::fromBinary(d, theLayer, ds);
+			F = Road::fromBinary(d, theLayer, ds, c, id);
 			tagsFromBinary(F, ds);
 			break;
 		case 'L':
-			F = Relation::fromBinary(d, theLayer, ds);
+			F = Relation::fromBinary(d, theLayer, ds, c, id);
 			tagsFromBinary(F, ds);
 			break;
 		default:
@@ -439,6 +511,7 @@ bool ImportExportOsmBin::import(MapLayer* aLayer)
 
 	if (! readHeader(ds) ) return false;
 	if (! readRegionToc(ds) ) return false;
+	if (! readPopularTagLists(ds) ) return false;
 	//if (! readTagLists(ds) ) return false;
 
 	//if (! readNodes(ds, aLayer) ) return false;

@@ -893,4 +893,6 @@ void MerkaartorPreferences::setRecentImport(const QStringList & theValue)
 M_PARAM_IMPLEMENT_BOOL(GpsSaveLog, gps, false)
 M_PARAM_IMPLEMENT_BOOL(GpsMapCenter, gps, false)
 M_PARAM_IMPLEMENT_STRING(GpsLogDir, gps, "")
+M_PARAM_IMPLEMENT_BOOL(GpsSyncTime, gps, false)
+
 M_PARAM_IMPLEMENT_BOOL(ResolveRelations, downloadosm, false)

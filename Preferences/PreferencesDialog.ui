@@ -33,8 +33,8 @@
        <widget class="QWidget" name="tab_4" >
         <property name="geometry" >
          <rect>
-          <x>4</x>
-          <y>30</y>
+          <x>16</x>
+          <y>120</y>
           <width>322</width>
           <height>273</height>
          </rect>
@@ -257,8 +257,8 @@
        <widget class="QWidget" name="tab_5" >
         <property name="geometry" >
          <rect>
-          <x>4</x>
-          <y>30</y>
+          <x>16</x>
+          <y>120</y>
           <width>322</width>
           <height>273</height>
          </rect>
@@ -356,8 +356,8 @@
        <widget class="QWidget" name="tab_3" >
         <property name="geometry" >
          <rect>
-          <x>4</x>
-          <y>30</y>
+          <x>16</x>
+          <y>120</y>
           <width>322</width>
           <height>273</height>
          </rect>
@@ -541,6 +541,16 @@
           </layout>
          </item>
          <item>
+          <widget class="QCheckBox" name="cbGpsSyncTime" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
+           <property name="text" >
+            <string>Set system time to GPS</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <spacer name="verticalSpacer_2" >
            <property name="orientation" >
             <enum>Qt::Vertical</enum>
@@ -558,8 +568,8 @@
        <widget class="QWidget" name="tab" >
         <property name="geometry" >
          <rect>
-          <x>4</x>
-          <y>30</y>
+          <x>16</x>
+          <y>120</y>
           <width>322</width>
           <height>273</height>
          </rect>
@@ -642,8 +652,8 @@
        <widget class="QWidget" name="tab_2" >
         <property name="geometry" >
          <rect>
-          <x>4</x>
-          <y>30</y>
+          <x>16</x>
+          <y>120</y>
           <width>322</width>
           <height>273</height>
          </rect>
@@ -741,8 +751,8 @@
        <widget class="QWidget" name="tabTools" >
         <property name="geometry" >
          <rect>
-          <x>4</x>
-          <y>30</y>
+          <x>16</x>
+          <y>120</y>
           <width>322</width>
           <height>273</height>
          </rect>

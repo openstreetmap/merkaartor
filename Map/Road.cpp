@@ -799,15 +799,11 @@ void Road::toBinary(QDataStream& ds, const QHash <QString, quint64>& theIndex)
 	}
 }
 
-Road* Road::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds)
+Road* Road::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds, qint8 c, qint64 id)
 {
-	qint8	c;
-	qint64	id;
 	qint32	fSize;
 	QString strId;
 
-	ds >> c; if (c != 'R') return NULL;
-	ds >> id;
 	ds >> fSize;
 
 	if (id < 1)

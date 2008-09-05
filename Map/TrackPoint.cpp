@@ -361,16 +361,12 @@ void TrackPoint::toBinary(QDataStream& ds, const QHash <QString, quint64>& theIn
 	ds << (qint8)'N' << idToLong() << (qint32)(Position.lon()) << (qint32)(Position.lat());
 }
 
-TrackPoint* TrackPoint::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds)
+TrackPoint* TrackPoint::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds, qint8 c, qint64 id)
 {
-	qint8	c;
-	qint64	id;
 	qint32	lon;
 	qint32	lat;
 	QString strId;
 
-	ds >> c; if (c != 'N') return NULL;
-	ds >> id;
 	ds >> lon;
 	ds >> lat;
 

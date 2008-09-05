@@ -41,6 +41,7 @@ protected:
 	void addTileIndex(MapFeature* F, qint64 pos);
 	void tagsToBinary(MapFeature* F, QDataStream& ds);
 	void tagsFromBinary(MapFeature* F, QDataStream& ds);
+	void tagsPopularity(MapFeature * F);
 	
 	bool prepare();
 	bool writeHeader(QDataStream& ds);
@@ -52,10 +53,11 @@ protected:
 
 	bool readHeader(QDataStream& ds);
 	bool readRegionToc(QDataStream& ds);
-	bool readTagLists(QDataStream& ds);
-	bool readNodes(QDataStream& ds, OsbMapLayer* aLayer);
-	bool readRoads(QDataStream& ds, OsbMapLayer* aLayer);
-	bool readRelations(QDataStream& ds, OsbMapLayer* aLayer);
+	bool readPopularTagLists(QDataStream& ds);
+	//bool readTagLists(QDataStream& ds);
+	//bool readNodes(QDataStream& ds, OsbMapLayer* aLayer);
+	//bool readRoads(QDataStream& ds, OsbMapLayer* aLayer);
+	//bool readRelations(QDataStream& ds, OsbMapLayer* aLayer);
 
 	bool loadRegion(qint32 rg);
 	bool loadTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer);
@@ -63,6 +65,11 @@ protected:
 	MapFeature* getFeature(MapDocument* d, OsbMapLayer* theLayer, quint64 ref);
 
 protected:
+	QMap <QString, qint32> keyPopularity;
+	QMap <QString, qint32> valuePopularity;
+	QMap <quint64, QString> keyTable;
+	QMap <quint64, QString> valueTable;
+
 	QMap< qint32, quint64 > theRegionToc;
 	QMap< qint32, quint64 > theTileToc;
 
@@ -75,8 +82,8 @@ protected:
 	QMap<quint64,Road*> theRoads;
 	QMap<quint64, Relation*> theRelations;
 
-	QList <quint64> theTagKeysIndex;
-	QList <quint64> theTagValuesIndex;
+	QMap <QString, quint64> theTagKeysIndex;
+	QMap <QString, quint64> theTagValuesIndex;
 
 	qint64 tocPos;
 	qint64 tagKeysPos;

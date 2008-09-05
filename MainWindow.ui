@@ -204,6 +204,7 @@
      <addaction name="windowInfoAction" />
      <addaction name="windowDirtyAction" />
      <addaction name="windowGPSAction" />
+     <addaction name="windowGeoimageAction" />
     </widget>
     <addaction name="menu_Docks" />
     <addaction name="windowToolbarAction" />
@@ -1084,6 +1085,20 @@
    </property>
    <property name="text" >
     <string>Pause</string>
+   </property>
+  </action>
+  <action name="windowGeoimageAction" >
+   <property name="text" >
+    <string>Toggle GeoImage</string>
+   </property>
+   <property name="toolTip" >
+    <string>Hide/Show the GeoImage dock</string>
+   </property>
+   <property name="statusTip" >
+    <string>Hide/Show the GeoImage dock</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+I</string>
    </property>
   </action>
  </widget>

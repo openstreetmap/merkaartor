@@ -105,6 +105,9 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_windowDirtyAction_triggered();
 		virtual void on_windowToolbarAction_triggered();
 		virtual void on_windowGPSAction_triggered();
+#ifdef GEOIMAGE
+		virtual void on_windowGeoimageAction_triggered();
+#endif
 		virtual void on_windowHideAllAction_triggered();
 		virtual void on_windowShowAllAction_triggered();
 		virtual void on_gpsConnectAction_triggered();

@@ -285,6 +285,7 @@ public:
 	M_PARAM_DECLARE_BOOL(GpsSaveLog)
 	M_PARAM_DECLARE_BOOL(GpsMapCenter)
 	M_PARAM_DECLARE_STRING(GpsLogDir)
+	M_PARAM_DECLARE_BOOL(GpsSyncTime)
 
 	M_PARAM_DECLARE_BOOL(ResolveRelations)
 protected:

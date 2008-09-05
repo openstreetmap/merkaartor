@@ -183,6 +183,10 @@ MainWindow::MainWindow(void)
 	renderSVGAction->setVisible(false);
 #endif
 
+#ifndef GEOIMAGE
+	windowGeoimageAction->setVisible(false);
+#endif
+
 #ifdef NDEBUG
 	viewStyleBackgroundAction->setVisible(false);
 	viewStyleForegroundAction->setVisible(false);
@@ -1714,6 +1718,13 @@ void MainWindow::on_windowGPSAction_triggered()
 {
 	theGPS->setVisible(!theGPS->isVisible());
 }
+
+#ifdef GEOIMAGE
+void MainWindow::on_windowGeoimageAction_triggered()
+{
+	theGeoImage->setVisible(!theGeoImage->isVisible());
+}
+#endif
 
 void MainWindow::on_windowHideAllAction_triggered()
 {
