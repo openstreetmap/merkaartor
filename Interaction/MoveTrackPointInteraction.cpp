@@ -96,13 +96,13 @@ Coord MoveTrackPointInteraction::calculateNewPosition(QMouseEvent *event, MapFea
 	else if (Road* R = dynamic_cast<Road*>(aLast))
 	{
 		LineF L1(R->getNode(0)->position(),R->getNode(1)->position());
-		double Dist = L1.distance(Target);
+		double Dist = L1.capDistance(TargetC);
 		QPoint BestTarget = L1.project(Target).toPoint();
 		unsigned int BestIdx = 1;
 		for (unsigned int i=2; i<R->size(); ++i)
 		{
 			LineF L2(R->getNode(i-1)->position(),R->getNode(i)->position());
-			double Dist2 = L2.distance(Target);
+			double Dist2 = L2.capDistance(TargetC);
 			if (Dist2 < Dist)
 			{
 				Dist = Dist2;
