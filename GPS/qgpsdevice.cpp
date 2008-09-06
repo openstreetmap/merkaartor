@@ -837,16 +837,21 @@ void QGPSDDevice::parseY(const QString& s)
 {
 	for(int i = 0; i < 50; i ++)
 		satArray[i][0] = satArray[i][1] = satArray[i][2] = 0;
-	QStringList Args(s.split(' ',QString::SkipEmptyParts));
-	int j=0;
-	for (unsigned int i=5; i<Args.count(); i+=4)
+	QStringList Sats(s.split(':',QString::SkipEmptyParts));
+	for (int i=1; i<Sats.size(); ++i)
 	{
-		satArray[j][0] = Args[i-2].toDouble();
-		satArray[j][1] = Args[i-1].toDouble();
-		satArray[j][2] = Args[i].toDouble();
-		j++;
+		QStringList Items(Sats[i].split(' ',QString::SkipEmptyParts));
+		if (Items.count() < 5)
+			continue;
+		int id = Items[0].toInt();
+		if ( (id >= 0) && (id<50) )
+		{
+			satArray[id][0] = Items[1].toDouble();
+			satArray[id][1] = Items[2].toDouble();
+			satArray[id][2] = Items[3].toDouble();
+		}
 	}
-	setNumSatellites(j);
+	setNumSatellites(Sats.size());
 	emit updateStatus();
 }
 
