@@ -482,8 +482,13 @@ bool checkForConflicts(MapDocument* theDocument)
 
 bool downloadMoreOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDocument)
 {
-	if (!theDocument->getLastDownloadLayer())
-		return false;
+	MapLayer* theLayer;
+	if (!theDocument->getLastDownloadLayer()) {
+		theLayer = new DrawingMapLayer(QApplication::translate("Downloader","%1 download").arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
+		theDocument->add(theLayer);
+	} else
+		theLayer = theDocument->getLastDownloadLayer();
+
 
 	QString osmWebsite, osmUser, osmPwd, proxyHost;
 	int proxyPort;
@@ -499,10 +504,11 @@ bool downloadMoreOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* th
 	aParent->view()->setUpdatesEnabled(false);
 
 	bool OK = true;
-	OK = downloadOSM(aParent,osmWebsite,osmUser,osmPwd,useProxy,proxyHost,proxyPort,aBox,theDocument,theDocument->getLastDownloadLayer());
+	OK = downloadOSM(aParent,osmWebsite,osmUser,osmPwd,useProxy,proxyHost,proxyPort,aBox,theDocument,theLayer);
 	aParent->view()->setUpdatesEnabled(true);
 	if (OK)
 	{
+		theDocument->setLastDownloadLayer(theLayer);
 		theDocument->addDownloadBox(aBox);
 		aParent->view()->projection().setViewport(aBox,aParent->view()->rect());
 		aParent->invalidateView();

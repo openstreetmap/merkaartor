@@ -1,4 +1,5 @@
 v0.12
+	* FIX : 'Download more' should work without prior 'Download from web' (Closes #1028)
 	* FIX : Joining roads by moving a node from one road on top of another road gives incorrect node sequence (Fixes #1149)
 	* ADD : preliminary gpsd supprt
 	* FIX : Upload of a modified single GPX track node was not working anymore (fixes #1141)

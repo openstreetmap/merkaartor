@@ -105,7 +105,7 @@ void PropertiesDock::checkMenuStatus()
 	Main->featureCommitAction->setEnabled(NumCommitableFeature);
 	Main->nodeMergeAction->setEnabled(NumPoints > 1);
 	Main->nodeAlignAction->setEnabled(NumPoints > 2);
-	Main->fileDownloadMoreAction->setEnabled(Main->document()->getLastDownloadLayer() != NULL);
+	//Main->fileDownloadMoreAction->setEnabled(Main->document()->getLastDownloadLayer() != NULL);
 
 	Main->editCopyAction->setEnabled(Selection.size());
 	Main->clipboardChanged();
