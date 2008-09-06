@@ -210,6 +210,29 @@ private:
 
 class QTcpSocket;
 
+class QGPSDDevice;
+
+// We want these slots to be executed within the thread represented by
+// QGPSDDevice. Since that class itself lives in the main thread, we need
+// a forwarder that does live there as the receiver.
+
+class GPSSlotForwarder : public QObject
+{
+	Q_OBJECT
+
+	public:
+		GPSSlotForwarder(QGPSDDevice* Target);
+
+
+	public slots:
+		void onLinkReady();
+		void onDataAvailable();
+		void onStop();
+
+	private:
+		QGPSDDevice* Target;
+};
+
 class QGPSDDevice : public QGPSDevice
 {
 	Q_OBJECT
@@ -219,19 +242,25 @@ class QGPSDDevice : public QGPSDevice
 
 		virtual bool openDevice();
 		virtual bool closeDevice();
+		virtual void stopDevice();
 
 	protected:
 		virtual void run();
 
-	public slots:
+	signals:
+		void doStopDevice();
+
+	private:
 		void onLinkReady();
 		void onDataAvailable();
-		void onWatch();
-	private:
+		void onStop();
+
 		void parse(const QString& s);
 		void parseO(const QString& s);
 		void parseY(const QString& s);
 		QTcpSocket* Server;
 		QByteArray Buffer;
+
+		friend class GPSSlotForwarder;
 };
 

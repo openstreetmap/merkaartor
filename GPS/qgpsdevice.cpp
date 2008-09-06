@@ -737,6 +737,28 @@ void QGPSFileDevice::run()
 	closeDevice();
 }
 
+/* GPSSLOTFORWARDER */
+
+GPSSlotForwarder::GPSSlotForwarder(QGPSDDevice* aTarget)
+: Target(aTarget)
+{
+}
+
+void GPSSlotForwarder::onLinkReady()
+{
+	Target->onLinkReady();
+}
+
+void GPSSlotForwarder::onDataAvailable()
+{
+	Target->onDataAvailable();
+}
+
+void GPSSlotForwarder::onStop()
+{
+	Target->onStop();
+}
+
 /* GPSSDEVICE */
 
 #include <iostream>
@@ -756,39 +778,50 @@ bool QGPSDDevice::closeDevice()
 	return true;
 }
 
+// this function will be called outside this thread
+void QGPSDDevice::stopDevice()
+{
+	emit doStopDevice();
+}
+
+// this function will be called within this thread
+void QGPSDDevice::onStop()
+{
+	quit();
+}
+
 void QGPSDDevice::run()
 {
+	GPSSlotForwarder Forward(this);
 	QTcpSocket Link;
 	Server = &Link;
 	Link.connectToHost(QHostAddress("127.0.0.1"),2947);
-	connect(Server,SIGNAL(connected()),this,SLOT(onLinkReady()));
-	connect(Server,SIGNAL(readyRead()),this,SLOT(onDataAvailable()));
-	QTimer Watchdog;
-	connect(&Watchdog,SIGNAL(timeout()),this,SLOT(onWatch()));
-	Watchdog.start(100);
+	connect(Server,SIGNAL(connected()),&Forward,SLOT(onLinkReady()));
+	connect(Server,SIGNAL(readyRead()),&Forward,SLOT(onDataAvailable()));
+	connect(this,SIGNAL(doStopDevice()),&Forward,SLOT(onStop()));
 	exec();
 }
 
 void QGPSDDevice::onDataAvailable()
 {
 	QByteArray ba(Server->readAll());
-	Buffer.append(ba);	
+	Buffer.append(ba);
+	if (Buffer.length() > 4096)
+		// safety valve
+		Buffer.remove(0,Buffer.length()-4096);
 	int i = Buffer.indexOf("GPSD");
 	if (i < 0)
-	{
-		Buffer.clear();
 		return;
-	}
-	Buffer.remove(0,i+4);
-	i = Buffer.indexOf(10,0);
-	if (i < 0)
+	int j = Buffer.indexOf(10,i);
+	if (j < 0)
 		return;
-	parse(QString::fromAscii(Buffer.data(),i));
-	Buffer.remove(0,i+1);	
+	parse(QString::fromAscii(Buffer.data()+(i+5),(j-i-6)));
+	Buffer.remove(0,j+1);
 }
 
 void QGPSDDevice::parse(const QString& s)
 {
+	std::cout << "parsing " << s.toUtf8().data() << "*" << std::endl;
 	QStringList Args(s.split(',',QString::SkipEmptyParts));
 	for (unsigned int i=0; i<Args.count(); ++i)
 	{
@@ -845,12 +878,6 @@ void QGPSDDevice::parseO(const QString& s)
 	setSpeed(Speed);
 	emit updateStatus();
 
-}
-
-void QGPSDDevice::onWatch()
-{
-	if (stopLoop)
-		quit();
 }
 
 void QGPSDDevice::onLinkReady()
