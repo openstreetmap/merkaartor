@@ -71,6 +71,7 @@ class CommandList : public Command
 	private:
 		std::vector<Command*> Subs;
 		bool IsUpdateFromOSM;
+		unsigned int Size;
 };
 
 class CommandHistory
@@ -95,6 +96,7 @@ class CommandHistory
 	private:
 		std::vector<Command*> Subs;
 		unsigned int Index;
+		unsigned int Size;
 		QAction* UndoAction;
 		QAction* RedoAction;
 		QAction* UploadAction;

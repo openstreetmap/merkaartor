@@ -1122,6 +1122,8 @@ void OsbMapLayer::setVisible(bool b)
 
 bool OsbMapLayer::toXML(QDomElement xParent, QProgressDialog & progress)
 {
+	Q_UNUSED(progress);
+
 	bool OK = true;
 
 	QDomElement e = xParent.ownerDocument().createElement(className());
@@ -1141,6 +1143,8 @@ bool OsbMapLayer::toXML(QDomElement xParent, QProgressDialog & progress)
 
 OsbMapLayer * OsbMapLayer::fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress)
 {
+	Q_UNUSED(progress);
+
 	OsbMapLayer* l = new OsbMapLayer(e.attribute("name"));
 
 	l->setId(e.attribute("xml:id"));

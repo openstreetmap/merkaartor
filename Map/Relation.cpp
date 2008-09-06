@@ -455,6 +455,8 @@ void Relation::toBinary(QDataStream& ds, const QHash <QString, quint64>& theInde
 
 Relation* Relation::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds, qint8 c, qint64 id)
 {
+	Q_UNUSED(c);
+
 	qint32	fSize;
 	QString strId;
 

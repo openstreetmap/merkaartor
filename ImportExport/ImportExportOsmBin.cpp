@@ -83,7 +83,7 @@ void ImportExportOsmBin::tagsFromBinary(MapFeature * F, QDataStream& ds)
 void ImportExportOsmBin::tagsPopularity(MapFeature * F)
 {
 	int val;
-	for (int i=0; i<F->tagSize(); ++i) {
+	for (unsigned int i=0; i<F->tagSize(); ++i) {
 		val = keyPopularity.value(F->tagKey(i));
 		keyPopularity.insert(F->tagKey(i), val + 1);
 		val = valuePopularity.value(F->tagValue(i));
@@ -361,10 +361,7 @@ bool ImportExportOsmBin::loadRegion(qint32 rg)
 
 bool ImportExportOsmBin::loadTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer)
 {
-	qint8 c;
-	quint64 id;
 	QDataStream ds(Device);
-	MapFeature* F;
 
 	if (!theTileToc.contains(tile))
 		return false;
@@ -384,6 +381,8 @@ bool ImportExportOsmBin::loadTile(qint32 tile, MapDocument* d, OsbMapLayer* theL
 
 bool ImportExportOsmBin::clearTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer)
 {
+	Q_UNUSED(d);
+
 	qint8 c;
 	quint64 id;
 	QDataStream ds(Device);

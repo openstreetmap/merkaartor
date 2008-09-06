@@ -14,6 +14,10 @@
 #include <QUuid>
 #include <QProgressDialog>
 
+#include <algorithm>
+#include <utility>
+#include <vector>
+
 Command::Command(MapFeature* aF)
 	: mainFeature(aF), commandDirtyLevel(0), oldCreated("")
 {
@@ -131,12 +135,12 @@ void Command::fromXML(MapDocument* d, const QDomElement& e, Command* C)
 // COMMANDLIST
 
 CommandList::CommandList()
-: Command(0), IsUpdateFromOSM(false)
+: Command(0), Size(0), IsUpdateFromOSM(false)
 {
 }
 
 CommandList::CommandList(QString aDesc, MapFeature* aFeat)
-: Command(0), IsUpdateFromOSM(false)
+: Command(0), Size(0), IsUpdateFromOSM(false)
 {
 	description = aDesc;
 	mainFeature = aFeat;
@@ -156,45 +160,50 @@ void CommandList::setIsUpdateFromOSM()
 void CommandList::add(Command* aCommand)
 {
 	Subs.push_back(aCommand);
+	Size++;
 }
 
 bool CommandList::empty() const
 {
-	return Subs.size() == 0;
+	return Size == 0;
 }
 
 unsigned int CommandList::size()
 {
-	return Subs.size();
+	return Size;
 }
 
 void CommandList::redo()
 {
-	for (unsigned int i=0; i<Subs.size(); ++i)
+	for (unsigned int i=0; i<Size; ++i)
 		Subs[i]->redo();
 }
 
 void CommandList::undo()
 {
-	for (unsigned int i=Subs.size(); i; --i)
+	for (unsigned int i=Size; i; --i)
 		Subs[i-1]->undo();
 }
 
 bool CommandList::buildDirtyList(DirtyList& theList)
 {
-	if (IsUpdateFromOSM)
+	if (IsUpdateFromOSM) {
 		Subs.clear();
-	for (unsigned int i=0; i<Subs.size();)
+		Size = 0;
+	}
+	for (unsigned int i=0; i<Size;)
 	{
 		if (Subs[i]->buildDirtyList(theList))
 		{
-			delete Subs[i];
-			Subs.erase(Subs.begin()+i);
+			//delete Subs[i];
+			//Subs.erase(Subs.begin()+i);
+			std::rotate(Subs.begin()+i,Subs.begin()+i+1,Subs.end());
+			--Size;
 		}
 		else
 			++i;
 	}
-	return Subs.size() == 0;
+	return Size == 0;
 }
 
 bool CommandList::toXML(QDomElement& xParent) const
@@ -211,7 +220,7 @@ bool CommandList::toXML(QDomElement& xParent) const
 		e.setAttribute("featureclass", mainFeature->getClass());
 	}
 
-	for (unsigned int i=0; i<Subs.size(); ++i) {
+	for (unsigned int i=0; i<Size; ++i) {
 		OK = Subs[i]->toXML(e);
 	}
 
@@ -312,7 +321,7 @@ CommandList* CommandList::fromXML(MapDocument* d, const QDomElement& e)
 // COMMANDHISTORY
 
 CommandHistory::CommandHistory()
-: Index(0), UndoAction(0), RedoAction(0), UploadAction(0)
+: Index(0), Size(0), UndoAction(0), RedoAction(0), UploadAction(0)
 {
 }
 
@@ -330,6 +339,7 @@ void CommandHistory::cleanup()
 		delete Subs[i];
 	Subs.clear();
 	Index = 0;
+	Size = 0;
 }
 
 void CommandHistory::undo()
@@ -343,7 +353,7 @@ void CommandHistory::undo()
 
 void CommandHistory::redo()
 {
-	if (Index < Subs.size())
+	if (Index < Size)
 	{
 		Subs[Index++]->redo();
 		updateActions();
@@ -352,11 +362,14 @@ void CommandHistory::redo()
 
 void CommandHistory::add(Command* aCommand)
 {
-	for (unsigned int i=Index; i<Subs.size(); ++i)
-		delete Subs[i];
-	Subs.erase(Subs.begin()+Index,Subs.end());
-	Subs.push_back(aCommand);
-	Index = Subs.size();
+	//for (unsigned int i=Index; i<Subs.size(); ++i)
+	//	delete Subs[i];
+	//Subs.erase(Subs.begin()+Index,Subs.end());
+	//Subs.push_back(aCommand);
+	//Index = Subs.size();
+	Subs.insert(Subs.begin()+Index, aCommand);
+	Index++;
+	Size = Index;
 	updateActions();
 }
 
@@ -373,7 +386,7 @@ void CommandHistory::updateActions()
 	if (UndoAction)
 		UndoAction->setEnabled(Index>0);
 	if (RedoAction)
-		RedoAction->setEnabled(Index<Subs.size());
+		RedoAction->setEnabled(Index<Size);
 	if (UploadAction)
 		UploadAction->setEnabled(Index);
 }
@@ -388,9 +401,11 @@ unsigned int CommandHistory::buildDirtyList(DirtyList& theList)
 	for (unsigned int i=0; i<Index;)
 		if (Subs[i]->buildDirtyList(theList))
 		{
-			delete Subs[i];
-			Subs.erase(Subs.begin()+i);
+			//delete Subs[i];
+			//Subs.erase(Subs.begin()+i);
+			std::rotate(Subs.begin()+i,Subs.begin()+i+1,Subs.end());
 			--Index;
+			--Size;
 		}
 		else
 			++i;
@@ -419,7 +434,7 @@ bool CommandHistory::toXML(QDomElement& xParent, QProgressDialog & /*progress*/)
 
 	e.setAttribute("index", QString::number(Index));
 
-	for (unsigned int i=0; i<Subs.size(); ++i) {
+	for (unsigned int i=0; i<Size; ++i) {
 		OK = Subs[i]->toXML(e);
 	}
 

@@ -30,6 +30,7 @@ TrackSegmentAddTrackPointCommand::~TrackSegmentAddTrackPointCommand(void)
 
 void TrackSegmentAddTrackPointCommand::undo()
 {
+	Command::undo();
 	theTrackSegment->remove(Position);
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		theLayer->remove(theTrackSegment);
@@ -47,6 +48,7 @@ void TrackSegmentAddTrackPointCommand::redo()
 		incDirtyLevel(oldLayer);
 		theLayer->add(theTrackSegment);
 	}
+	Command::redo();
 }
 
 bool TrackSegmentAddTrackPointCommand::buildDirtyList(DirtyList& /* theList */)
@@ -119,6 +121,7 @@ TrackSegmentRemoveTrackPointCommand::~TrackSegmentRemoveTrackPointCommand(void)
 
 void TrackSegmentRemoveTrackPointCommand::undo()
 {
+	Command::undo();
 	theTrackSegment->add(theTrackPoint,Idx);
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		theLayer->remove(theTrackSegment);
@@ -136,6 +139,7 @@ void TrackSegmentRemoveTrackPointCommand::redo()
 		incDirtyLevel(oldLayer);
 		theLayer->add(theTrackSegment);
 	}
+	Command::redo();
 }
 
 bool TrackSegmentRemoveTrackPointCommand::buildDirtyList(DirtyList& /* theList */)
