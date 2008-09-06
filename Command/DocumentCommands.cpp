@@ -174,14 +174,13 @@ bool RemoveFeatureCommand::buildDirtyList(DirtyList &theList)
 	//if (!theFeature->hasOSMId())
 	//	return false;
 
-	if (CascadedCleanUp && CascadedCleanUp->buildDirtyList(theList))
-	{
-		delete CascadedCleanUp;
-		CascadedCleanUp = 0;
-	}
+	bool CascadedResult = true;
+	if (CascadedCleanUp)
+		CascadedResult = CascadedCleanUp->buildDirtyList(theList);
+
 	if (!RemoveExecuted)
 		RemoveExecuted = theList.erase(theFeature);
-	return RemoveExecuted && (CascadedCleanUp == 0);
+	return RemoveExecuted && CascadedResult;
 }
 
 bool RemoveFeatureCommand::toXML(QDomElement& xParent) const

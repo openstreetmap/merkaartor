@@ -177,6 +177,11 @@ class MapFeature
 		 */
 		bool isUploadable();
 
+		/** check if the feature is deleted
+		 * @return true if deleted
+		 */
+		bool isDeleted();
+
 		FeaturePainter* getEditPainter(double PixelPerM) const;
 		FeaturePainter* getCurrentEditPainter() const;
 		bool hasEditPainter() const;

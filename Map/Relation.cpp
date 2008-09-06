@@ -63,6 +63,8 @@ Relation::Relation(const Relation& other)
 
 Relation::~Relation()
 {
+	for (unsigned int i=0; i<p->Members.size(); ++i)
+		p->Members[i].second->unsetParent(this);
 	delete p;
 }
 

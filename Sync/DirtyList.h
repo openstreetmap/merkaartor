@@ -27,6 +27,7 @@ class DirtyList
 		virtual bool add(MapFeature* F) = 0;
 		virtual bool update(MapFeature* F) = 0;
 		virtual bool erase(MapFeature* F) = 0;
+		virtual bool noop(MapFeature* F) = 0;
 };
 
 class DirtyListBuild : public DirtyList
@@ -35,6 +36,7 @@ class DirtyListBuild : public DirtyList
 		virtual bool add(MapFeature* F);
 		virtual bool update(MapFeature* F);
 		virtual bool erase(MapFeature* F);
+		virtual bool noop(MapFeature*) {return false;};
 
 		virtual bool willBeAdded(MapFeature* F) const;
 		virtual bool willBeErased(MapFeature* F) const;
@@ -58,6 +60,7 @@ class DirtyListVisit : public DirtyList
 		virtual bool add(MapFeature* F);
 		virtual bool update(MapFeature* F);
 		virtual bool erase(MapFeature* F);
+		virtual bool noop(MapFeature* F);
 
 		virtual bool addPoint(TrackPoint* Pt) = 0;
 		virtual bool addRoad(Road* R) = 0;

@@ -82,6 +82,8 @@ Road::Road(const Road& other)
 
 Road::~Road(void)
 {
+	for (unsigned int i=0; i<p->Nodes.size(); ++i)
+		p->Nodes[i]->unsetParent(this);
 	delete p;
 }
 
@@ -358,8 +360,10 @@ void Road::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature,
 				if (Pt)
 					Alternatives.push_back(Pt);
 			}
-			if ( (p->Nodes.size() == 1) && (Alternatives.size() == 0) )
-				theList->add(new RemoveFeatureCommand(theDocument,this));
+			if ( (p->Nodes.size() == 1) && (Alternatives.size() == 0) ) {
+				if (!(layer() == theDocument->getTrashLayer()))
+					theList->add(new RemoveFeatureCommand(theDocument,this));
+			}
 			else
 			{
 				for (unsigned int j=0; j<Alternatives.size(); ++j)
@@ -530,8 +534,10 @@ bool Road::deleteChildren(MapDocument* theDocument, CommandList* theList)
 					ToDelete[N] = i;
 				}
 			}
-			for (int i=0; i<ToDelete.uniqueKeys().size(); ++i) {
-				theList->add(new RemoveFeatureCommand(theDocument, ToDelete.uniqueKeys()[i], Alternatives));
+			QList<MapFeature*> ToDeleteKeys = ToDelete.uniqueKeys();
+			for (int i=0; i<ToDeleteKeys.size(); ++i) {
+				if (!theDocument->getTrashLayer()->exists(ToDeleteKeys[i]))
+					theList->add(new RemoveFeatureCommand(theDocument, ToDeleteKeys[i], Alternatives));
 			}
 			return true;
 		}

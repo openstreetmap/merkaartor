@@ -58,7 +58,7 @@ bool RelationAddFeatureCommand::buildDirtyList(DirtyList& theList)
 	if (theRelation->layer()->isUploadable())
 		return theList.update(theRelation);
 	else
-		return false;
+		return theList.noop(theRelation);
 }
 
 bool RelationAddFeatureCommand::toXML(QDomElement& xParent) const
@@ -182,7 +182,7 @@ bool RelationRemoveFeatureCommand::buildDirtyList(DirtyList& theList)
 	if (theRelation->layer()->isUploadable())
 		return theList.update(theRelation);
 	else
-		return false;
+		return theList.noop(theRelation);
 }
 
 bool RelationRemoveFeatureCommand::toXML(QDomElement& xParent) const

@@ -50,7 +50,7 @@ bool MoveTrackPointCommand::buildDirtyList(DirtyList &theList)
 	if (thePoint->isUploadable())
 		return theList.update(thePoint);
 	else
-		return false;
+		return theList.noop(thePoint);
 }
 
 bool MoveTrackPointCommand::toXML(QDomElement& xParent) const

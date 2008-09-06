@@ -58,7 +58,7 @@ bool RoadAddTrackPointCommand::buildDirtyList(DirtyList& theList)
 	if (theRoad->layer()->isUploadable() && theTrackPoint->layer()->isUploadable())
 		return theList.update(theRoad);
 	else
-		return false;
+		return theList.noop(theRoad);
 }
 
 bool RoadAddTrackPointCommand::toXML(QDomElement& xParent) const
@@ -158,7 +158,7 @@ bool RoadRemoveTrackPointCommand::buildDirtyList(DirtyList& theList)
 	if (theRoad->layer()->isUploadable() && (theTrackPoint->layer()->isUploadable() || theTrackPoint->hasOSMId()))
 		return theList.update(theRoad);
 	else
-		return false;
+		return theList.noop(theRoad);
 }
 
 bool RoadRemoveTrackPointCommand::toXML(QDomElement& xParent) const

@@ -166,11 +166,12 @@ void EditInteraction::on_remove_triggered()
 	for (unsigned int i=0; i<Sel.size(); ++i)
 		if (document()->exists(Sel[i]))
 		{
-			if (Sel[i]->deleteChildren(document(), theList)) {
-				std::vector<MapFeature*> Alternatives;
-				theList->add(new RemoveFeatureCommand(document(), Sel[i], Alternatives));
-			}
+			std::vector<MapFeature*> Alternatives;
+			theList->add(new RemoveFeatureCommand(document(), Sel[i], Alternatives));
 		}
+	for (unsigned int i=0; i<Sel.size(); ++i)
+		if (document()->exists(Sel[i]))
+			Sel[i]->deleteChildren(document(), theList);
 
 	if (theList->size())
 		document()->addHistory(theList);

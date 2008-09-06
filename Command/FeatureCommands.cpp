@@ -47,7 +47,7 @@ bool TagCommand::buildDirtyList(DirtyList& theList)
 	if (theLayer->isUploadable())
 		return theList.update(theFeature);
 	else
-		return false;
+		return theList.noop(theFeature);
 }
 
 SetTagCommand::SetTagCommand(MapFeature* aF)
@@ -114,13 +114,10 @@ void SetTagCommand::redo()
 
 bool SetTagCommand::buildDirtyList(DirtyList& theList)
 {
-	if (theLayer->isUploadable())
-		if (theK.startsWith('_') && (theK.endsWith('_')))
-			return false;
-		else
-			return theList.update(theFeature);
+	if (theK.startsWith('_') && (theK.endsWith('_')))
+		return theList.noop(theFeature);
 	else
-		return false;
+		return theList.update(theFeature);
 }
 
 bool SetTagCommand::toXML(QDomElement& xParent) const
@@ -317,11 +314,11 @@ bool ClearTagCommand::buildDirtyList(DirtyList& theList)
 {
 	if (theLayer->isUploadable())
 		if (theK.startsWith('_') && (theK.endsWith('_')))
-			return false;
+		return theList.noop(theFeature);
 		else
 			return theList.update(theFeature);
 	else
-		return false;
+		return theList.noop(theFeature);
 }
 
 bool ClearTagCommand::toXML(QDomElement& xParent) const

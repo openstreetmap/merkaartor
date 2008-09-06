@@ -406,6 +406,8 @@ unsigned int CommandHistory::buildDirtyList(DirtyList& theList)
 			std::rotate(Subs.begin()+i,Subs.begin()+i+1,Subs.end());
 			--Index;
 			--Size;
+			if (!Size)
+				cleanup();
 		}
 		else
 			++i;

@@ -94,6 +94,8 @@ MapFeature::MapFeature(const MapFeature& other)
 
 MapFeature::~MapFeature(void)
 {
+	while (sizeParents())
+		getParent(0)->remove(this);
 	if (p->theLayer)
 		p->theLayer->notifyIdUpdate(p->Id,0);
 	delete p;
@@ -211,6 +213,11 @@ bool MapFeature::isDirty()
 bool MapFeature::isUploadable()
 {
 	return (p->theLayer->isUploadable());
+}
+
+bool MapFeature::isDeleted()
+{
+	return (p->theLayer->className() == "DeletedMapLayer");
 }
 
 void MapFeature::setTag(unsigned int index, const QString& key, const QString& value, bool addToTagList)

@@ -254,6 +254,14 @@ bool DirtyListVisit::erase(MapFeature* F)
 	return false;
 }
 
+bool DirtyListVisit::noop(MapFeature* F)
+{
+	if (!F->isDeleted() && !F->isUploadable())
+		return false;
+
+	return EraseFromHistory;
+}
+
 /* DIRTYLISTDESCRIBER */
 
 
