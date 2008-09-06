@@ -10,6 +10,7 @@
 # OSMARENDER          - enable osmarender
 # MOBILE              - enable MOBILE
 # GEOIMAGE            - enable geotagged images (needs exiv2)
+# GPSD                - use gpsd as location provider
 
 TEMPLATE = app
 TARGET = merkaartor
@@ -26,6 +27,10 @@ count(NODEBUG,1) {
     DEFINES += NDEBUG
     OUTPUT_DIR=$$PWD/binaries/release
     OBJECTS_DIR += tmp/obj_release
+}
+
+count(GPSD,1) {
+    DEFINES += USEGPSD
 }
 
 DESTDIR = $$OUTPUT_DIR/bin

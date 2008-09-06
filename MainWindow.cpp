@@ -1762,8 +1762,11 @@ void MainWindow::on_layersAddImageAction_triggered()
 
 void MainWindow::on_gpsConnectAction_triggered()
 {
+#ifdef USEGPSD
+	QGPSDDevice* aGps = new QGPSDDevice("gpsd");
+#else
 	QGPSComDevice* aGps = new QGPSComDevice(M_PREFS->getGpsPort());
-//	QGPSDDevice* aGps = new QGPSDDevice("gpsd");
+#endif
 	if (aGps->openDevice()) {
 		connect(aGps, SIGNAL(updatePosition(float, float, QDateTime, float, float, float)), 
 			this, SLOT(updateGpsPosition(float, float, QDateTime, float, float, float)));
