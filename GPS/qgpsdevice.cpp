@@ -771,17 +771,15 @@ void QGPSDDevice::run()
 
 void QGPSDDevice::onDataAvailable()
 {
-	std::cout << "data available " << std::endl;
 	QByteArray ba(Server->readAll());
-	std::cout << ba.data() << std::endl;
 	Buffer.append(ba);	
-	int i = Buffer.indexOf("GPSD,O=");
+	int i = Buffer.indexOf("GPSD");
 	if (i < 0)
 	{
 		Buffer.clear();
 		return;
 	}
-	Buffer.remove(i,7);
+	Buffer.remove(0,i+4);
 	i = Buffer.indexOf(10,0);
 	if (i < 0)
 		return;
@@ -791,13 +789,42 @@ void QGPSDDevice::onDataAvailable()
 
 void QGPSDDevice::parse(const QString& s)
 {
-	std::cout << " parsing " << s.toUtf8().data() << std::endl;
+	QStringList Args(s.split(',',QString::SkipEmptyParts));
+	for (unsigned int i=0; i<Args.count(); ++i)
+	{
+		QString Left(Args[i].left(2));
+		if (Left == "O=")
+			parseO(Args[i].right(Args[i].length()-2));
+		if (Left == "Y=")
+			parseY(Args[i].right(Args[i].length()-2));
+	}
+}
+
+void QGPSDDevice::parseY(const QString& s)
+{
+	for(int i = 0; i < 50; i ++)
+		satArray[i][0] = satArray[i][1] = satArray[i][2] = 0;
+	QStringList Args(s.split(' ',QString::SkipEmptyParts));
+	int j=0;
+	for (unsigned int i=5; i<Args.count(); i+=4)
+	{
+		satArray[j][0] = Args[i-2].toDouble();
+		satArray[j][1] = Args[i-1].toDouble();
+		satArray[j][2] = Args[i].toDouble();
+		j++;
+	}
+	setNumSatellites(j);
+	emit updateStatus();
+}
+
+void QGPSDDevice::parseO(const QString& s)
+{
 	if (s.isEmpty()) return;
+	setFixType(FixInvalid);
 	if (s[0] == '?') return;
-	QStringList Args(s.split(' '));
+	QStringList Args(s.split(' ',QString::SkipEmptyParts));
 	if (Args.count() < 5) return;
-	std::cout << "lat = " << Args[3].toDouble() << std::endl;
-	std::cout << "lon = " << Args[4].toDouble() << std::endl;
+	setFixType(Fix2D);
 	setLatitude(Args[3].toDouble());
 	setLongitude(Args[4].toDouble());
 	double Alt = 0;
@@ -823,17 +850,12 @@ void QGPSDDevice::parse(const QString& s)
 void QGPSDDevice::onWatch()
 {
 	if (stopLoop)
-	{
-		std::cout << "loop stopped" << std::endl;
 		quit();
-	}
 }
 
 void QGPSDDevice::onLinkReady()
 {
-	std::cout << "connected" << std::endl;
 	if (!Server) return;
-	std::cout << "sending" << std::endl;
 	Server->write("w+");
 	Server->write("j=1");
 }

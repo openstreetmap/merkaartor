@@ -229,6 +229,8 @@ class QGPSDDevice : public QGPSDevice
 		void onWatch();
 	private:
 		void parse(const QString& s);
+		void parseO(const QString& s);
+		void parseY(const QString& s);
 		QTcpSocket* Server;
 		QByteArray Buffer;
 };
