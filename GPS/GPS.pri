@@ -4,9 +4,11 @@ FORMS += \
 
 HEADERS += qgps.h \
            qgpssatellitetracker.h \
-           qgpsdevice.h 
+           qgpsdevice.h \
+	   SatelliteStrengthView.h
 
 SOURCES += qgps.cpp \
            qgpssatellitetracker.cpp \
-           qgpsdevice.cpp 
+           qgpsdevice.cpp \
+	   SatelliteStrengthView.cpp
 

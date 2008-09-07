@@ -26,6 +26,7 @@
 #include "qgps.h"
 #include "qgpsdevice.h"
 #include "qgpssatellitetracker.h"
+#include "SatelliteStrengthView.h"
 
 //#include "Preferences/MerkaartorPreferences.h"
 
@@ -89,10 +90,6 @@ void QGPS::resetGpsStatus()
 	lblFixTime->setText(tr("No UTC Time"));
 
 	satTracker->resetSatInfo();
-	int satIdx=1;
-	for (int i=satIdx; i<13; i++)
-		if (((QProgressBar*)(gbSignalStrength->children()[i]))->value() != 0)
-			((QProgressBar*)(gbSignalStrength->children()[i]))->setValue(0);
 }
 
 void QGPS::updateGpsStatus()
@@ -176,24 +173,24 @@ void QGPS::updateGpsStatus()
 		lblFixTime->setText(gpsDevice->dateTime().toString() + " UTC");
 
 	satTracker->resetSatInfo();
-	int satIdx = 1;
+	std::vector<Satellite> List;
 	for(int i = 1; i < 50; i ++)
-    {
-        int b, x, y;
+	{
+		int b, x, y;
 		gpsDevice->satInfo(i, b, x, y);
-		if (y>0) {
+		if (y>0)
 			satTracker->setSatInfo(i, b, x, y);
-			if (((QProgressBar*)(gbSignalStrength->children()[satIdx]))->value() != y)
-				((QProgressBar*)(gbSignalStrength->children()[satIdx++]))->setValue(y);
-			else
-				satIdx++;
+		if (y || b || x)
+		{
+			Satellite S;
+			S.Azimuth = x;
+			S.Elevation = b;
+			S.SignalStrength = y;
+			S.Id = i;
+			List.push_back(S);
 		}
-		if (satIdx >= 13)
-			break;
-    }
-	for (int i=satIdx; i<13; i++)
-		if (((QProgressBar*)(gbSignalStrength->children()[i]))->value() != 0)
-			((QProgressBar*)(gbSignalStrength->children()[i]))->setValue(0);
+	}
+	StrengthView->setSatellites(List);
 }
 
 void QGPS::showEvent ( QShowEvent * anEvent )

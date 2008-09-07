@@ -1,4 +1,5 @@
 v0.12
+	* ADD : nice satellite strength view widget
 	* FIX : OSM export doesn't handle quotes well (Fixes #1139)
 	* ADD : Allow osm API url in the "Use OSM link" text box
 	* FIX : 'Download more' should work without prior 'Download from web' (Closes #1028)
