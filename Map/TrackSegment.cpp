@@ -29,6 +29,8 @@ TrackSegment::TrackSegment(const TrackSegment& other)
 
 TrackSegment::~TrackSegment(void)
 {
+	for (unsigned int i=0; i<p->Points.size(); ++i)
+		p->Points[i]->unsetParent(this);
 	delete p;
 }
 
@@ -61,6 +63,7 @@ RenderPriority TrackSegment::renderPriority(double) const
 void TrackSegment::add(TrackPoint* aPoint)
 {
 	p->Points.push_back(aPoint);
+	aPoint->setParent(this);
 }
 
 void TrackSegment::add(TrackPoint* Pt, unsigned int Idx)
@@ -79,7 +82,9 @@ unsigned int TrackSegment::find(MapFeature* Pt) const
 
 void TrackSegment::remove(unsigned int idx)
 {
+	TrackPoint* Pt = p->Points[idx];
 	p->Points.erase(p->Points.begin()+idx);
+	Pt->unsetParent(this);
 }
 
 void TrackSegment::remove(MapFeature* F)

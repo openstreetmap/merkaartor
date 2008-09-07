@@ -8,6 +8,10 @@
 
 #include <vector>
 
+#define CAST_NODE(x) (dynamic_cast<TrackPoint*>(x))
+#define CAST_WAY(x) (dynamic_cast<Road*>(x))
+#define CAST_RELATION(x) (dynamic_cast<Relation*>(x))
+
 class CommandList;
 class MapDocument;
 class MapLayer;
@@ -209,7 +213,7 @@ class MapFeature
 		virtual QString toMainHtml(QString type, QString systemtype);
 		virtual QString toHtml() = 0;
 
-		virtual void toBinary(QDataStream& ds, const QHash <QString, quint64>& theIndex) = 0;
+		virtual void toBinary(QDataStream& ds, QHash <QString, quint64>& theIndex) = 0;
 
 		virtual QString getClass() const = 0;
 

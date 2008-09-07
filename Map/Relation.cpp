@@ -429,29 +429,30 @@ QString Relation::toHtml()
 	return MapFeature::toMainHtml(QApplication::translate("MapFeature", "Relation"),"relation").arg(D);
 }
 
-void Relation::toBinary(QDataStream& ds, const QHash <QString, quint64>& theIndex)
+void Relation::toBinary(QDataStream& ds, QHash <QString, quint64>& theIndex)
 {
-	char Type;
+	quint8 Type;
 	quint64 ref;
 
+	theIndex["L" + QString::number(idToLong())] = ds.device()->pos();
 	ds << (qint8)'L';
 	ds << idToLong();
 	ds << size();
 	for (unsigned int i=0; i<size(); ++i) {
 		if (dynamic_cast<const TrackPoint*>(get(i))) {
 			Type='N';
-			ref = theIndex["N" + QString::number(get(i)->idToLong())];
+			ref = get(i)->idToLong();
 		}
 		else if (dynamic_cast<const Road*>(get(i))) {
 			Type='R';
-			ref = theIndex["R" + QString::number(get(i)->idToLong())];
+			ref = get(i)->idToLong();
 		}
 		else if (dynamic_cast<const Relation*>(get(i))) {
 			Type='L';
-			ref = theIndex["L" + QString::number(get(i)->idToLong())];
+			ref = get(i)->idToLong();
 		}
-		ds << (qint8) Type << ref << getRole(i);
-//		ds << Type << get(i)->idToLong() << getRole(i);
+//		ds << (qint8) Type << ref << getRole(i);
+		ds << Type << get(i)->idToLong() << getRole(i);
 	}
 }
 
@@ -461,6 +462,9 @@ Relation* Relation::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds, 
 
 	qint32	fSize;
 	QString strId;
+	quint8 Type;
+	qint64 refId;
+	QString Role;
 
 	ds >> fSize;
 
@@ -478,20 +482,34 @@ Relation* Relation::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds, 
 	} else {
 		if (R->lastUpdated() == MapFeature::NotYetDownloaded)
 			R->setLastUpdated(MapFeature::OSMServer);
+		else  {
+			for (int i=0; i < fSize; ++i) {
+				ds >> Type;
+				ds >> refId;
+				ds >> Role;
+			}
+			return R;
+		}
 	}
 
 	for (int i=0; i < fSize; ++i) {
-		qint8 Type;
-		qint64 refId;
-		QString Role;
-
 		ds >> Type;
 		ds >> refId;
 		ds >> Role;
 
 		//MapFeature* F = d->getFeature(QString::number(refId), false);
-		MapFeature* F = L->getFeature(d, refId);
-		Q_ASSERT(F);
+		MapFeature* F;
+		switch (Type) {
+			case 'N':
+				F = L->get(QString("node_%1").arg(refId));
+				break;
+			case 'R':
+				F = L->get(QString("way_%1").arg(refId));
+				break;
+			case 'L':
+				F = L->get(QString("rel_%1").arg(refId));
+				break;
+		}
 		if (F)
 			R->add(Role, F);
 	}

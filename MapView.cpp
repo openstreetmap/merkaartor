@@ -184,11 +184,11 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 
 	drawGPS(P);
 
-	Main->ViewportStatusLabel->setText(QString("V:%1,%2,%3,%4")
-		.arg(QString::number(intToAng(theProjection.viewport().bottomLeft().lat()),'f',4)) 
-		.arg(QString::number(intToAng(theProjection.viewport().bottomLeft().lon()),'f',4))
-		.arg(QString::number(intToAng(theProjection.viewport().topRight().lat()),'f',4))
+	Main->ViewportStatusLabel->setText(QString("%1,%2,%3,%4")
+		.arg(QString::number(intToAng(theProjection.viewport().bottomLeft().lon()),'f',4)) 
+		.arg(QString::number(intToAng(theProjection.viewport().bottomLeft().lat()),'f',4))
 		.arg(QString::number(intToAng(theProjection.viewport().topRight().lon()),'f',4))
+		.arg(QString::number(intToAng(theProjection.viewport().topRight().lat()),'f',4))
 		);
 
 	QTime Stop(QTime::currentTime());

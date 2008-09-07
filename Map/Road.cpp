@@ -794,14 +794,15 @@ QString Road::toHtml()
 	return MapFeature::toMainHtml(QApplication::translate("MapFeature", "Way"), "way").arg(D);
 }
 
-void Road::toBinary(QDataStream& ds, const QHash <QString, quint64>& theIndex)
+void Road::toBinary(QDataStream& ds, QHash <QString, quint64>& theIndex)
 {
+	theIndex["R" + QString::number(idToLong())] = ds.device()->pos();
 	ds << (qint8)'R';
 	ds << idToLong();
 	ds << (qint32)size();
 	for (unsigned int i=0; i < size(); ++i) {
-//		ds << (qint64)(get(i)->idToLong());
-		ds << (qint64)(theIndex["N" + QString::number(get(i)->idToLong())]);
+		ds << (qint64)(get(i)->idToLong());
+//		ds << (qint64)(theIndex["N" + QString::number(get(i)->idToLong())]);
 	}
 }
 
@@ -811,6 +812,7 @@ Road* Road::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds, qint8 c,
 
 	qint32	fSize;
 	QString strId;
+	qint64 refId;
 
 	ds >> fSize;
 
@@ -828,10 +830,14 @@ Road* Road::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds, qint8 c,
 	} else {
 		if (R->lastUpdated() == MapFeature::NotYetDownloaded)
 			R->setLastUpdated(MapFeature::OSMServer);
+		else  {
+			for (int i=0; i < fSize; ++i)
+				ds >> refId;
+			return R;
+		}
 	}
 
 	for (int i=0; i < fSize; ++i) {
-		qint64 refId;
 		ds >> refId;
 
 		//QString sRefId;
@@ -839,8 +845,9 @@ Road* Road::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds, qint8 c,
 		//	sRefId = QString::number(refId);
 		//else
 		//	sRefId = "node_" + QString::number(refId);
+//		TrackPoint* N = dynamic_cast<TrackPoint*> (L->getFeature(d, refId)); QString("node_"+id));
 //		TrackPoint* N = dynamic_cast<TrackPoint*> (d->getFeature(sRefId));
-		TrackPoint* N = dynamic_cast<TrackPoint*> (L->getFeature(d, refId));
+		TrackPoint* N = dynamic_cast<TrackPoint*> (L->get(QString("node_%1").arg(refId)));
 		Q_ASSERT(N);
 		R->add(N);
 	}

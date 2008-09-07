@@ -53,7 +53,7 @@ class Relation : public MapFeature
 
 		virtual QString toHtml();
 
-		virtual void toBinary(QDataStream& ds, const QHash <QString, quint64>& theIndex);
+		virtual void toBinary(QDataStream& ds, QHash <QString, quint64>& theIndex);
 		static Relation* fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds, qint8 c, qint64 id);
 
 	private:

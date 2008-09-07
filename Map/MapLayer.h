@@ -248,7 +248,7 @@ public:
 	virtual bool isUploadable() {return true;};
 
 	virtual void invalidate(MapDocument* d, CoordBox vp);
-	MapFeature*  getFeature(MapDocument* d, quint64 ref);
+	MapFeature*  getFeatureByRef(MapDocument* d, quint64 ref);
 
 	virtual bool toXML(QDomElement xParent, QProgressDialog & progress);
 	static OsbMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);

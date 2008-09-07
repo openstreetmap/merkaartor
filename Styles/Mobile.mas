@@ -17,20 +17,19 @@
 </painter>
 <painter
  zoomUnder="0.02" zoomUpper="1e+07"
- foregroundColor="#fdbf6ffc" foregroundScale="1" foregroundOffset="1"
+ foregroundColor="#ffaa00fc" foregroundScale="1" foregroundOffset="1"
  drawTrafficDirectionMarks="yes">
   <selector expr="[highway] isoneof (secondary , secondary_link)"/>
 </painter>
 <painter
  zoomUnder="0.05" zoomUpper="1e+07"
- foregroundColor="#e6e258ff" foregroundScale="1" foregroundOffset="1"
+ foregroundColor="#f5f500ff" foregroundScale="1" foregroundOffset="1"
  drawTrafficDirectionMarks="yes">
   <selector expr="[highway] isoneof (tertiary , tertiary_link)"/>
 </painter>
 <painter
  zoomUnder="0.1" zoomUpper="1e+07"
- backgroundColor="#777777fc" backgroundScale="0.7" backgroundOffset="1"
- foregroundColor="#ffffffff" foregroundScale="0.5" foregroundOffset="2"
+ foregroundColor="#e2e2e2ff" foregroundScale="0.5" foregroundOffset="2"
  drawTrafficDirectionMarks="yes">
   <selector expr="[highway] is residential"/>
 </painter>
@@ -42,13 +41,13 @@
 </painter>
 <painter
  zoomUnder="0.1" zoomUpper="1e+07"
- backgroundColor="#777777fc" backgroundScale="1.2" backgroundOffset="3"
+ foregroundColor="#777777ff" foregroundScale="0.2" foregroundOffset="1"
  drawTrafficDirectionMarks="yes">
   <selector expr="[highway] is unclassified"/>
 </painter>
 <painter
  zoomUnder="0.1" zoomUpper="1e+07"
- backgroundColor="#777777fc" backgroundScale="1" backgroundOffset="1"
+ foregroundColor="#777777ff" foregroundScale="0" foregroundOffset="1"
  drawTrafficDirectionMarks="yes">
   <selector expr="[highway] is minor"/>
 </painter>
@@ -88,46 +87,31 @@
 </painter>
 <painter
  zoomUnder="0.02" zoomUpper="1e+07"
- backgroundColor="#000000fc" backgroundScale="1" backgroundOffset="4"
- foregroundColor="#fffffffc" foregroundScale="1" foregroundOffset="2"
- touchupColor="#000000fc" touchupScale="1" touchupOffset="2"
- touchupDashDown="3" touchupDashUp="3"
+ foregroundColor="#000000fc" foregroundScale="0.5" foregroundOffset="1"
  drawTrafficDirectionMarks="yes">
   <selector expr="[railway] is rail"/>
 </painter>
 <painter
  zoomUnder="0.02" zoomUpper="1e+07"
- backgroundColor="#000000fc" backgroundScale="1" backgroundOffset="4"
- foregroundColor="#ccccccfc" foregroundScale="1" foregroundOffset="2"
- touchupColor="#000000fc" touchupScale="1" touchupOffset="2"
- touchupDashDown="3" touchupDashUp="3"
+ foregroundColor="#ccccccfc" foregroundScale="0" foregroundOffset="1"
  drawTrafficDirectionMarks="yes">
   <selector expr="[railway] is abandoned"/>
 </painter>
 <painter
  zoomUnder="0.04" zoomUpper="1e+07"
- backgroundColor="#000000fc" backgroundScale="0.5" backgroundOffset="4"
- foregroundColor="#fffffffc" foregroundScale="0.5" foregroundOffset="2"
- touchupColor="#000000fc" touchupScale="0.5" touchupOffset="2"
- touchupDashDown="3" touchupDashUp="3"
+ foregroundColor="#434343fc" foregroundScale="0" foregroundOffset="1"
  drawTrafficDirectionMarks="yes">
   <selector expr="[railway] is light_rail"/>
 </painter>
 <painter
  zoomUnder="0.04" zoomUpper="1e+07"
- backgroundColor="#606060fc" backgroundScale="0.5" backgroundOffset="4"
- foregroundColor="#fffffffc" foregroundScale="0.5" foregroundOffset="2"
- touchupColor="#606060fc" touchupScale="0.5" touchupOffset="2"
- touchupDashDown="3" touchupDashUp="3"
+ foregroundColor="#6a6a6afc" foregroundScale="0.5" foregroundOffset="1"
  drawTrafficDirectionMarks="yes">
   <selector expr="[railway] is subway"/>
 </painter>
 <painter
  zoomUnder="0.0666667" zoomUpper="1e+07"
- backgroundColor="#808080fc" backgroundScale="0.3" backgroundOffset="3"
- foregroundColor="#fffffffc" foregroundScale="0.3" foregroundOffset="1"
- touchupColor="#808080fc" touchupScale="0.3" touchupOffset="2"
- touchupDashDown="3" touchupDashUp="3"
+ foregroundColor="#f1f1f1fc" foregroundScale="0" foregroundOffset="1"
  drawTrafficDirectionMarks="yes">
   <selector expr="[railway] is tram"/>
 </painter>

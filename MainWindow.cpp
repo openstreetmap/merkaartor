@@ -78,6 +78,7 @@ MainWindow::MainWindow(void)
 	loadPainters(MerkaartorPreferences::instance()->getDefaultStyle());
 
 	ViewportStatusLabel = new QLabel(this);
+	ViewportStatusLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
 	pbImages = new QProgressBar(this);
 	PaintTimeLabel = new QLabel(this);
 	pbImages->setFormat(tr("tile %v / %m"));

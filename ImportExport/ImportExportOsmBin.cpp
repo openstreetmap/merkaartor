@@ -23,7 +23,20 @@ ImportExportOsmBin::~ImportExportOsmBin()
 {
 }
 
-void ImportExportOsmBin::addTileIndex(MapFeature* F, qint64 pos)
+//void ImportExportOsmBin::addTileIndex(MapFeature* F, qint64 pos)
+//{
+//	QRectF r = F->boundingBox().toQRectF();
+//	int x1 = int((r.topLeft().x() + INT_MAX) / TILE_WIDTH);
+//	int y1 = int((r.topLeft().y() + INT_MAX) / TILE_WIDTH);
+//	int x2 = int((r.bottomRight().x() + INT_MAX) / TILE_WIDTH);
+//	int y2 = int((r.bottomRight().y() + INT_MAX) / TILE_WIDTH);
+//
+//	for (int i=x1; i <= x2; ++i)
+//		for (int j=y1; j <= y2; ++j)
+//			theTileIndex[j*NUM_TILES+i].push_back(pos);
+//}
+//
+void ImportExportOsmBin::addTileIndex(MapFeature* F)
 {
 	QRectF r = F->boundingBox().toQRectF();
 	int x1 = int((r.topLeft().x() + INT_MAX) / TILE_WIDTH);
@@ -32,16 +45,44 @@ void ImportExportOsmBin::addTileIndex(MapFeature* F, qint64 pos)
 	int y2 = int((r.bottomRight().y() + INT_MAX) / TILE_WIDTH);
 
 	for (int i=x1; i <= x2; ++i)
-		for (int j=y1; j <= y2; ++j)
-			theTileIndex[j*NUM_TILES+i].push_back(pos);
+		for (int j=y1; j <= y2; ++j) {
+			if (TrackPoint* N = CAST_NODE(F)) {
+				theTileNodesIndex[j*NUM_TILES+i].push_back(F);
+			}
+			if (Road* R = CAST_WAY(F)) {
+				for (unsigned int k=0; k<R->size(); ++k)
+					if (!theTileNodesIndex[j*NUM_TILES+i].contains(R->get(k)))
+						theTileNodesIndex[j*NUM_TILES+i].push_back(R->get(k));
+				theTileRoadsIndex[j*NUM_TILES+i].push_back(F);
+			}
+			if (Relation* L = CAST_RELATION(F)) {
+				//for (unsigned int k=0; k<L->size(); ++k) {
+				//	if (TrackPoint* N2 = CAST_NODE(L->get(k)))
+				//		if (!theTileNodesIndex[j*NUM_TILES+i].contains(N2))
+				//			theTileNodesIndex[j*NUM_TILES+i].push_back(N2);
+				//	if (Road* R2 = CAST_WAY(L->get(k)))
+				//		if (!theTileRoadsIndex[j*NUM_TILES+i].contains(R2))
+				//			theTileRoadsIndex[j*NUM_TILES+i].push_back(R2);
+				//	if (Relation* L2 = CAST_RELATION(L->get(k)))
+				//		if (!theTileRelationsIndex[j*NUM_TILES+i].contains(L2))
+				//			theTileRelationsIndex[j*NUM_TILES+i].push_back(L2);
+				//}
+				theTileRelationsIndex[j*NUM_TILES+i].push_back(F);
+			}
+		}
 }
 
 void ImportExportOsmBin::tagsToBinary(MapFeature* F, QDataStream& ds)
 {
 	qint64 k, v;
+	quint8 tagSize = (quint8)qMin(F->tagSize(), (unsigned int) 255);
+	if (F->tagValue("created_by", "dummy") != "dummy")
+		tagSize--;
 
-	ds << (qint32)F->tagSize();
+	ds << tagSize;
 	for (unsigned int i=0; i<F->tagSize(); ++i) {
+		if (F->tagKey(i) == "created_by")
+			continue;
 		k = theTagKeysIndex[F->tagKey(i)];
 		Q_ASSERT((k>0));
 		v = theTagValuesIndex[F->tagValue(i)];
@@ -53,7 +94,7 @@ void ImportExportOsmBin::tagsToBinary(MapFeature* F, QDataStream& ds)
 
 void ImportExportOsmBin::tagsFromBinary(MapFeature * F, QDataStream& ds)
 {
-	quint32 numTags;
+	quint8 numTags;
 	quint64 k,v;
 	QString K, V;
 	quint64 cur_pos;
@@ -93,16 +134,17 @@ void ImportExportOsmBin::tagsPopularity(MapFeature * F)
 
 bool ImportExportOsmBin::prepare()
 {
-	for (int i=0; i< theFeatures.size(); ++i) {
-		qint64 idx = theFeatures[i]->idToLong();
-		tagsPopularity(theFeatures[i]);
-		if (TrackPoint* N = dynamic_cast <TrackPoint*> (theFeatures[i])) {
+	for (int j=0; j< theFeatures.size(); ++j) {
+		qint64 idx = theFeatures[j]->idToLong();
+		tagsPopularity(theFeatures[j]);
+		addTileIndex(theFeatures[j]);
+		if (TrackPoint* N = CAST_NODE(theFeatures[j])) {
 			theNodes[idx] = N;
 		}
-		if (Road* R = dynamic_cast <Road*> (theFeatures[i])) {
+		if (Road* R = CAST_WAY(theFeatures[j])) {
 			theRoads[idx] = R;
 		}
-		if (Relation* L = dynamic_cast <Relation*> (theFeatures[i])) {
+		if (Relation* L = CAST_RELATION(theFeatures[j])) {
 			theRelations[idx] = L;
 		}
 	}
@@ -122,16 +164,32 @@ bool ImportExportOsmBin::writeHeader(QDataStream& ds)
 
 bool ImportExportOsmBin::writeIndex(QDataStream& ds)
 {
-	QMapIterator< qint32, QList<quint64> > i(theTileIndex);
-	while (i.hasNext()) {
-		i.next();
+	QMapIterator<qint32, QList<MapFeature*>> itN(theTileNodesIndex);
+	while(itN.hasNext()) {
+		itN.next();
+		theTileIndex[itN.key()] += itN.value();
+	}
+	QMapIterator<qint32, QList<MapFeature*>> itR(theTileRoadsIndex);
+	while(itR.hasNext()) {
+		itR.next();
+		theTileIndex[itR.key()] += itR.value();
+	}
+	QMapIterator<qint32, QList<MapFeature*>> itL(theTileRelationsIndex);
+	while(itL.hasNext()) {
+		itL.next();
+		theTileIndex[itL.key()] += itL.value();
+	}
 
-		int y = int(i.key() / NUM_TILES);
-		int x = (i.key() % NUM_TILES);
+	QMapIterator< qint32, QList<MapFeature*> > it(theTileIndex);
+	while (it.hasNext()) {
+		it.next();
+
+		int y = int(it.key() / NUM_TILES);
+		int x = (it.key() % NUM_TILES);
 		int rg = (y * NUM_REGIONS / NUM_TILES) * NUM_REGIONS + (x * NUM_REGIONS / NUM_TILES);
 
-		theRegionIndex[rg].append(QPair < qint32, quint64 > (i.key(), Device->pos()));
-		ds << i.value();
+		theRegionIndex[rg].append(QPair < qint32, quint64 > (it.key(), Device->pos()));
+		writeFeatures(it.value(), ds);
 	}
 
 	QMapIterator < qint32, QList< QPair < qint32, quint64 > > > j(theRegionIndex);
@@ -191,50 +249,63 @@ bool ImportExportOsmBin::writeTagLists(QDataStream& ds)
 	return true;
 }
 
-bool ImportExportOsmBin::writeNodes(QDataStream& ds)
+//bool ImportExportOsmBin::writeNodes(QDataStream& ds)
+//{
+//	ds << (qint32)theNodes.size();
+//	QMapIterator<quint64, TrackPoint*> i(theNodes);
+//	i.toBack();
+//	while (i.hasPrevious()) {
+//		i.previous();
+//
+//		addTileIndex(i.value(), Device->pos());
+//		theFeatureIndex["N" +  QString::number(i.value()->idToLong())] = Device->pos();
+//		i.value()->toBinary(ds, theFeatureIndex);
+//		tagsToBinary(i.value(), ds);
+//	}
+//	return true;
+//}
+//
+//bool ImportExportOsmBin::writeRoads(QDataStream& ds)
+//{
+//	ds << (qint32)theRoads.size();
+//	QMapIterator<quint64,Road*> i(theRoads);
+//	i.toBack();
+//	while (i.hasPrevious()) {
+//		i.previous();
+//
+//		addTileIndex(i.value(), Device->pos());
+//		theFeatureIndex["R" + QString::number(i.value()->idToLong())] = Device->pos();
+//		i.value()->toBinary(ds, theFeatureIndex);
+//		tagsToBinary(i.value(), ds);
+//	}
+//	return true;
+//}
+//
+//bool ImportExportOsmBin::writeRelations(QDataStream& ds)
+//{
+//	ds << (qint32)theRelations.size();
+//	QMapIterator<quint64,Relation*> i(theRelations);
+//	i.toBack();
+//	while (i.hasPrevious()) {
+//		i.previous();
+//
+//		addTileIndex(i.value(), Device->pos());
+//		theFeatureIndex["L" + QString::number(i.value()->idToLong())] = Device->pos();
+//		i.value()->toBinary(ds, theFeatureIndex);
+//		tagsToBinary(i.value(), ds);
+//	}
+//	return true;
+//}
+//
+bool ImportExportOsmBin::writeFeatures(QList<MapFeature*> theFeatList, QDataStream& ds)
 {
-	ds << (qint32)theNodes.size();
-	QMapIterator<quint64, TrackPoint*> i(theNodes);
-	i.toBack();
-	while (i.hasPrevious()) {
-		i.previous();
+	ds << (qint32)theFeatList.size();
+	QListIterator<MapFeature*> i(theFeatList);
+	while (i.hasNext()) {
+		MapFeature* F = i.next();
 
-		addTileIndex(i.value(), Device->pos());
-		theFeatureIndex["N" +  QString::number(i.value()->idToLong())] = Device->pos();
-		i.value()->toBinary(ds, theFeatureIndex);
-		tagsToBinary(i.value(), ds);
-	}
-	return true;
-}
-
-bool ImportExportOsmBin::writeRoads(QDataStream& ds)
-{
-	ds << (qint32)theRoads.size();
-	QMapIterator<quint64,Road*> i(theRoads);
-	i.toBack();
-	while (i.hasPrevious()) {
-		i.previous();
-
-		addTileIndex(i.value(), Device->pos());
-		theFeatureIndex["R" + QString::number(i.value()->idToLong())] = Device->pos();
-		i.value()->toBinary(ds, theFeatureIndex);
-		tagsToBinary(i.value(), ds);
-	}
-	return true;
-}
-
-bool ImportExportOsmBin::writeRelations(QDataStream& ds)
-{
-	ds << (qint32)theRelations.size();
-	QMapIterator<quint64,Relation*> i(theRelations);
-	i.toBack();
-	while (i.hasPrevious()) {
-		i.previous();
-
-		addTileIndex(i.value(), Device->pos());
-		theFeatureIndex["L" + QString::number(i.value()->idToLong())] = Device->pos();
-		i.value()->toBinary(ds, theFeatureIndex);
-		tagsToBinary(i.value(), ds);
+		F->toBinary(ds, theFeatureIndex);
+		tagsToBinary(F, ds);
 	}
 	return true;
 }
@@ -362,18 +433,18 @@ bool ImportExportOsmBin::loadRegion(qint32 rg)
 bool ImportExportOsmBin::loadTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer)
 {
 	QDataStream ds(Device);
+	quint32 featCount;
 
 	if (!theTileToc.contains(tile))
 		return false;
 
 	QList<quint64> aTileList;
-	Device->seek(theTileToc[tile]);
-	ds >> aTileList;
+	quint32 pos = theTileToc[tile];
+	Device->seek(pos);
+	ds >> featCount;
 
-	for (int i=0; i<aTileList.size(); ++i) {
-		quint64 pos = aTileList[i];
-
-		getFeature(d, theLayer, pos);
+	for (quint32 i=0; i<featCount; ++i) {
+		getFeature(d, theLayer);
 	}
 
 	return true;
@@ -397,17 +468,24 @@ bool ImportExportOsmBin::clearTile(qint32 tile, MapDocument* d, OsbMapLayer* the
 
 	Q_ASSERT(theTileToc.contains(tile));
 
-	QList<quint64> aTileList;
+	quint32 aTileSize;
 	Device->seek(theTileToc[tile]);
-	ds >> aTileList;
+	ds >> aTileSize;
 
-	for (int i=0; i<aTileList.size(); ++i) {
-		quint64 pos = aTileList[i];
-
-		Device->seek(pos);
+	for (int i=0; i<aTileSize; ++i) {
 		ds >> c;
 		ds >> id;
-		F = theLayer->get(QString::number(id), false);
+		switch (c) {
+			case 'N':
+				F = theLayer->get(QString("node_%1").arg(id));
+				break;
+			case 'R':
+				F = theLayer->get(QString("way_%1").arg(id));
+				break;
+			case 'L':
+				F = theLayer->get(QString("rel_%1").arg(id));
+				break;
+		}
 		if (F && tb.contains(F->boundingBox())) {
 			unsigned int j=0;
 			while (j < F->sizeParents()) {
@@ -471,7 +549,57 @@ MapFeature* ImportExportOsmBin::getFeature(MapDocument* d, OsbMapLayer* theLayer
 			Q_ASSERT(false);
 	}
 
-	Device->seek(cur_pos);
+	//Device->seek(cur_pos);
+	return F;
+}
+
+MapFeature* ImportExportOsmBin::getFeature(MapDocument* d, OsbMapLayer* theLayer)
+{
+	QDataStream ds(Device);
+	MapFeature* F;
+	qint8 c;
+	quint64 id;
+
+	ds >> c;
+	ds >> id;
+	//switch (c) {
+	//	case 'N':
+	//		F = d->getFeature(QString("node_%1").arg(QString::number(id)));
+	//		break;
+	//	case 'R':
+	//		F = d->getFeature(QString("way_%1").arg(QString::number(id)));
+	//		break;
+	//	case 'L':
+	//		F = d->getFeature(QString("rel_%1").arg(QString::number(id)));
+	//		break;
+	//	default:
+	//		Q_ASSERT(false);
+	//}
+	//if (F && (F->lastUpdated() != MapFeature::NotYetDownloaded)) {
+	//	Device->seek(cur_pos);
+	//	return F;
+	//}
+#ifndef NDEBUG
+	quint32 pos = Device->pos(); //1097543
+#endif
+	switch (c) {
+		case 'N':
+			F = TrackPoint::fromBinary(d, theLayer, ds, c, id);
+			tagsFromBinary(F, ds);
+			break;
+		case 'R':
+			F = Road::fromBinary(d, theLayer, ds, c, id);
+			tagsFromBinary(F, ds);
+			break;
+		case 'L':
+			F = Relation::fromBinary(d, theLayer, ds, c, id);
+			tagsFromBinary(F, ds);
+			break;
+		default:
+			Q_ASSERT(false);
+	}
+
+	//Device->seek(cur_pos);
 	return F;
 }
 
@@ -487,9 +615,9 @@ bool ImportExportOsmBin::export_(const QVector<MapFeature *>& featList)
 	if (! writeHeader(ds) ) return false;
 	if (! writeTagLists(ds) ) return false;
 
-	if (! writeNodes(ds) ) return false;
-	if (! writeRoads(ds) ) return false;
-	if (! writeRelations(ds) ) return false;
+	//if (! writeNodes(ds) ) return false;
+	//if (! writeRoads(ds) ) return false;
+	//if (! writeRelations(ds) ) return false;
 
 	if (! writeIndex(ds) ) return false;
 

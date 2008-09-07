@@ -355,15 +355,18 @@ QString TrackPoint::toHtml()
 	return MapFeature::toMainHtml(QApplication::translate("MapFeature", "Node"), "node").arg(D);
 }
 
-void TrackPoint::toBinary(QDataStream& ds, const QHash <QString, quint64>& theIndex)
+void TrackPoint::toBinary(QDataStream& ds, QHash <QString, quint64>& theIndex)
 {
-	Q_UNUSED(theIndex)
+	Q_UNUSED(theIndex);
+
+	theIndex["N" + QString::number(idToLong())] = ds.device()->pos();
 	ds << (qint8)'N' << idToLong() << (qint32)(Position.lon()) << (qint32)(Position.lat());
 }
 
 TrackPoint* TrackPoint::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds, qint8 c, qint64 id)
 {
 	Q_UNUSED(c);
+//	Q_ASSERT(id != 27145981);
 
 	qint32	lon;
 	qint32	lat;
@@ -378,7 +381,7 @@ TrackPoint* TrackPoint::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& 
 	else
 		strId = QString("node_%1").arg(QString::number(id));
 
-	TrackPoint* Pt = dynamic_cast<TrackPoint*>(d->getFeature(strId));
+	TrackPoint* Pt = CAST_NODE(d->getFeature(strId));
 	if (!Pt) {
 		Pt = new TrackPoint(cd);
 		Pt->setId(strId);

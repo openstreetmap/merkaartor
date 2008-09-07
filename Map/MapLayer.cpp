@@ -1108,9 +1108,15 @@ void OsbMapLayer::invalidate(MapDocument* d, CoordBox vp)
 			if (pp->theImp->loadTile(toLoad[i], d, this))
 				pp->loadedTiles.push_back(toLoad[i]);
 
+	for (unsigned int i=0; i<size(); ++i)
+	{
+		Relation* RR = dynamic_cast<Relation*>(get(i));
+		if (RR && RR->notEverythingDownloaded())
+			remove(RR);
+	}
 }
 
-MapFeature*  OsbMapLayer::getFeature(MapDocument* d, quint64 ref)
+MapFeature*  OsbMapLayer::getFeatureByRef(MapDocument* d, quint64 ref)
 {
 	return pp->theImp->getFeature(d, this, ref);
 }
