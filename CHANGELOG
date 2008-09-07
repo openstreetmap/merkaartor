@@ -1,4 +1,6 @@
 v0.12
+	* FIX : OSM export doesn't handle quotes well (Fixes #1139)
+	* ADD : Allow osm API url in the "Use OSM link" text box
 	* FIX : 'Download more' should work without prior 'Download from web' (Closes #1028)
 	* FIX : Joining roads by moving a node from one road on top of another road gives incorrect node sequence (Fixes #1149)
 	* ADD : preliminary gpsd supprt

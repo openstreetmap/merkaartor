@@ -18,6 +18,8 @@
 
 #include <algorithm>
 
+const QString encodeAttributes(const QString & text);
+
 static QString randomId()
 {
 	return QUuid::createUuid().toString();
@@ -451,7 +453,7 @@ QString MapFeature::tagsToXML(unsigned int lvl)
 	QString S;
 	for (unsigned int i=0; i<tagSize(); ++i)
 	{
-		S += QString(lvl*2, ' ') + QString("<tag k=\"%1\" v=\"%2\"/>\n").arg(tagKey(i)).arg(tagValue(i));
+		S += QString(lvl*2, ' ') + QString("<tag k=\"%1\" v=\"%2\"/>\n").arg(encodeAttributes(tagKey(i))).arg(encodeAttributes(tagValue(i)));
 	}
 	return S;
 }

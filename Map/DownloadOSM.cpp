@@ -379,16 +379,12 @@ QString Downloader::getURLToTrackPoints()
 	return URL;
 }
 
-bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort, const CoordBox& aBox , MapDocument* theDocument, MapLayer* theLayer)
+bool downloadOSM(QMainWindow* aParent, const QUrl& theUrl, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort, MapDocument* theDocument, MapLayer* theLayer)
 {
-	if (checkForConflicts(theDocument))
-	{
-		QMessageBox::warning(aParent,QApplication::translate("Downloader","Unresolved conflicts"), QApplication::translate("Downloader","Please resolve existing conflicts first"));
-		return false;
-	}
+	QString aWeb = theUrl.host();
+	QString URL = theUrl.path();
 	Downloader Rcv(aWeb, aUser, aPassword, UseProxy, ProxyHost, ProxyPort);
-	QString URL = Rcv.getURLToMap();
-	URL = URL.arg(intToAng(aBox.bottomLeft().lon())).arg(intToAng(aBox.bottomLeft().lat())).arg(intToAng(aBox.topRight().lon())).arg(intToAng(aBox.topRight().lat()));
+
 	QProgressDialog* ProgressDialog = new QProgressDialog(aParent);
 	ProgressDialog->setWindowModality(Qt::ApplicationModal);
 	QProgressBar* Bar = new QProgressBar(ProgressDialog);
@@ -424,6 +420,25 @@ bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser
 	Downloader Down(aWeb, aUser, aPassword, UseProxy, ProxyHost, ProxyPort);
 	bool OK = importOSM(aParent, Rcv.content(), theDocument, theLayer, &Down);
 	return OK;
+}
+
+bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort, const CoordBox& aBox , MapDocument* theDocument, MapLayer* theLayer)
+{
+	if (checkForConflicts(theDocument))
+	{
+		QMessageBox::warning(aParent,QApplication::translate("Downloader","Unresolved conflicts"), QApplication::translate("Downloader","Please resolve existing conflicts first"));
+		return false;
+	}
+	Downloader Rcv(aWeb, aUser, aPassword, UseProxy, ProxyHost, ProxyPort);
+	QString URL = Rcv.getURLToMap();
+	URL = URL.arg(intToAng(aBox.bottomLeft().lon())).arg(intToAng(aBox.bottomLeft().lat())).arg(intToAng(aBox.topRight().lon())).arg(intToAng(aBox.topRight().lat()));
+	
+	QUrl theUrl;
+	theUrl.setHost(aWeb);
+	theUrl.setPath(URL);
+	theUrl.setScheme("http");
+
+	return downloadOSM(aParent, theUrl, aUser, aPassword, UseProxy, ProxyHost, ProxyPort, theDocument, theLayer);
 }
 
 
@@ -546,7 +561,7 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 		ui.Bookmarks->addItem(Bookmarks[i]);
 	ui.IncludeTracks->setChecked(DownloadRaw);
 	ui.ResolveRelations->setChecked(M_PREFS->getResolveRelations());
-	bool OK = true, retry = true;
+	bool OK = true, retry = true, directAPI = false;
 	while (retry) {
 		retry = false;
 #ifdef _MOBILE
@@ -571,53 +586,57 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 
 				QString link = ui.Link->text();
 
-				start = link.indexOf("lat=") + 4; // +4 because we don't need the "lat="
-				end = link.indexOf("&", start);
-				double lat = link.mid(start, end - start).toDouble();
+				if (link.contains("/api/")) {
+					directAPI=true;
+				} else {
+					start = link.indexOf("lat=") + 4; // +4 because we don't need the "lat="
+					end = link.indexOf("&", start);
+					double lat = link.mid(start, end - start).toDouble();
 
-				start = link.indexOf("lon=") + 4;
-				end = link.indexOf("&", start);
-				double lon = link.mid(start, end - start).toDouble();
+					start = link.indexOf("lon=") + 4;
+					end = link.indexOf("&", start);
+					double lon = link.mid(start, end - start).toDouble();
 
-				start = link.indexOf("zoom=") + 5;
-				end = link.indexOf("&", start);
-				int zoom = link.mid(start, end - start).toInt();
+					start = link.indexOf("zoom=") + 5;
+					end = link.indexOf("&", start);
+					int zoom = link.mid(start, end - start).toInt();
 
 
-				if (zoom <= 10) {
-					QMessageBox::warning(dlg, QApplication::translate("Downloader", "Zoom factor too low"),
-						QApplication::translate("Downloader", "Please use a higher zoom factor!"));
-					retry = true;
-				}
-				else {
+					if (zoom <= 10) {
+						QMessageBox::warning(dlg, QApplication::translate("Downloader", "Zoom factor too low"),
+							QApplication::translate("Downloader", "Please use a higher zoom factor!"));
+						retry = true;
+					}
+					else {
 
-					double zoomD;
+						double zoomD;
 
-					/* zoom-levels taken from http://wiki.openstreetmap.org/index.php/Zoom_levels */
-					if (zoom == 0) zoomD = 360;
-					else if (zoom == 1) zoomD = 180;
-					else if (zoom == 2) zoomD = 90;
-					else if (zoom == 3) zoomD = 45;
-					else if (zoom == 4) zoomD = 22.5;
-					else if (zoom == 5) zoomD = 11.25;
-					else if (zoom == 6) zoomD = 5.625;
-					else if (zoom == 7) zoomD = 2.813;
-					else if (zoom == 8) zoomD = 1.406;
-					else if (zoom == 9) zoomD = 0.703;
-					else if (zoom == 10) zoomD = 0.352;
-					else if (zoom == 11) zoomD = 0.176;
-					else if (zoom == 12) zoomD = 0.088;
-					else if (zoom == 13) zoomD = 0.044;
-					else if (zoom == 14) zoomD = 0.022;
-					else if (zoom == 15) zoomD = 0.011;
-					else if (zoom == 16) zoomD = 0.005;
-					else if (zoom == 17) zoomD = 0.003;
-					else if (zoom == 18) zoomD = 0.001;
+						/* zoom-levels taken from http://wiki.openstreetmap.org/index.php/Zoom_levels */
+						if (zoom == 0) zoomD = 360;
+						else if (zoom == 1) zoomD = 180;
+						else if (zoom == 2) zoomD = 90;
+						else if (zoom == 3) zoomD = 45;
+						else if (zoom == 4) zoomD = 22.5;
+						else if (zoom == 5) zoomD = 11.25;
+						else if (zoom == 6) zoomD = 5.625;
+						else if (zoom == 7) zoomD = 2.813;
+						else if (zoom == 8) zoomD = 1.406;
+						else if (zoom == 9) zoomD = 0.703;
+						else if (zoom == 10) zoomD = 0.352;
+						else if (zoom == 11) zoomD = 0.176;
+						else if (zoom == 12) zoomD = 0.088;
+						else if (zoom == 13) zoomD = 0.044;
+						else if (zoom == 14) zoomD = 0.022;
+						else if (zoom == 15) zoomD = 0.011;
+						else if (zoom == 16) zoomD = 0.005;
+						else if (zoom == 17) zoomD = 0.003;
+						else if (zoom == 18) zoomD = 0.001;
 
-					else zoomD = 0.011; // default (zoom = 15)
+						else zoomD = 0.011; // default (zoom = 15)
 
-					/* the OSM link contains the coordinates from the middle of the visible map so we have to add and sub zoomD */
-					Clip = CoordBox(Coord(angToInt(lat-zoomD), angToInt(lon-zoomD)), Coord(angToInt(lat+zoomD), angToInt(lon+zoomD)));
+						/* the OSM link contains the coordinates from the middle of the visible map so we have to add and sub zoomD */
+						Clip = CoordBox(Coord(angToInt(lat-zoomD), angToInt(lon-zoomD)), Coord(angToInt(lat+zoomD), angToInt(lon+zoomD)));
+					}
 				}
 			}
 			else if (ui.FromMap->isChecked())
@@ -630,7 +649,10 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 			MapLayer* theLayer = new DrawingMapLayer(QApplication::translate("Downloader","%1 download").arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
 			theDocument->add(theLayer);
 			M_PREFS->setResolveRelations(ui.ResolveRelations->isChecked());
-			OK = downloadOSM(aParent,osmWebsite,osmUser,osmPwd,useProxy,proxyHost,proxyPort,Clip,theDocument,theLayer);
+			if (directAPI)
+				OK = downloadOSM(aParent,QUrl(ui.Link->text()),osmUser,osmPwd,useProxy,proxyHost,proxyPort,theDocument,theLayer);
+			else
+				OK = downloadOSM(aParent,osmWebsite,osmUser,osmPwd,useProxy,proxyHost,proxyPort,Clip,theDocument,theLayer);
 			if (OK && ui.IncludeTracks->isChecked())
 				OK = downloadTracksFromOSM(aParent,osmWebsite,osmUser,osmPwd,useProxy,proxyHost,proxyPort, Clip,theDocument);
 			aParent->view()->setUpdatesEnabled(true);

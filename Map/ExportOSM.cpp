@@ -12,14 +12,15 @@ static QString stripToOSMId(const QString& id)
 	return id;
 }
 
-static const QString encodeAttributes(const QString & text)
+const QString encodeAttributes(const QString & text)
 {
-	QString encodedString = text;
-
-	encodedString.replace("\"", "&quot;");
-	encodedString.replace("&", "&amp;");
-
-	return encodedString;
+	QString s = text;
+	s.replace( "&", "&amp;" );
+	s.replace( ">", "&gt;" );
+	s.replace( "<", "&lt;" );
+	s.replace( "\"", "&quot;" );
+	s.replace( "\'", "&apos;" );
+	return s;
 };
 
 static QString tagOSM(const MapFeature& F)
