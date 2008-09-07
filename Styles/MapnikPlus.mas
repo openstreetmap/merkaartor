@@ -442,23 +442,15 @@
 </painter>
 <painter
  foregroundColor="#b5d0d0fc" foregroundScale="0" foregroundOffset="2"
- drawTrafficDirectionMarks="yes">
-  <selector expr="[waterway] is river"/>
+ drawTrafficDirectionMarks="yes" labelColor="#6699ccff" labelScale="1.3" labelOffset="3"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
+  <selector expr="[waterway] isoneof (river , canal)"/>
 </painter>
 <painter
  foregroundColor="#b5d0d0fc" foregroundScale="0" foregroundOffset="2"
- drawTrafficDirectionMarks="yes">
-  <selector expr="[waterway] is stream"/>
-</painter>
-<painter
- foregroundColor="#b5d0d0fc" foregroundScale="0" foregroundOffset="1"
- drawTrafficDirectionMarks="yes">
-  <selector expr="[waterway] is drain"/>
-</painter>
-<painter
- foregroundColor="#b5d0d0fc" foregroundScale="0" foregroundOffset="1"
- drawTrafficDirectionMarks="yes">
-  <selector expr="[waterway] is canal"/>
+ drawTrafficDirectionMarks="yes" labelColor="#6699ccff" labelScale="1.1" labelOffset="3"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
+  <selector expr="[waterway] isoneof (stream , drain)"/>
 </painter>
 <painter
  fillColor="#444444cd"
@@ -643,7 +635,8 @@
 <painter
  zoomUnder="0.15" zoomUpper="1e+07"
  icon=":/Art/Mapnik/place_of_worship.png" iconScale="0" iconOffset="0"
- drawTrafficDirectionMarks="no">
+ drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3.0"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[amenity] is place_of_worship"/>
 </painter>
 <painter
@@ -661,32 +654,34 @@
 <painter
  zoomUnder="0.00666667" zoomUpper="1e+07"
  icon=":/Art/Places/place_town.png" iconScale="0" iconOffset="0"
- drawTrafficDirectionMarks="no" labelColor="#000000ff" labelScale="20" labelOffset="12"
+ drawTrafficDirectionMarks="no" labelColor="#000000dd" labelScale="20" labelOffset="12"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[place] is town and Type is TrackPoint"/>
 </painter>
 <painter
  zoomUnder="0.01" zoomUpper="1e+07"
  icon=":/Art/Places/place_village.png" iconScale="0" iconOffset="0"
- drawTrafficDirectionMarks="no" labelColor="#585858ff" labelScale="15" labelOffset="10"
+ drawTrafficDirectionMarks="no" labelColor="#585858dd" labelScale="15" labelOffset="10"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[place] is village"/>
 </painter>
 <painter
  zoomUnder="0.01" zoomUpper="1e+07"
  icon=":/Art/Places/place_village.png" iconScale="0" iconOffset="0"
- drawTrafficDirectionMarks="no">
+ drawTrafficDirectionMarks="no" labelColor="#333333dd" labelScale="4.0" labelOffset="3.5"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[place] is suburb"/>
 </painter>
 <painter
  zoomUnder="0.02" zoomUpper="1e+07"
  icon=":/Art/Places/place_hamlet.png" iconScale="0" iconOffset="0"
- drawTrafficDirectionMarks="no">
-  <selector expr="[place] is hamlet"/>
+ drawTrafficDirectionMarks="no" labelColor="#333333dd" labelScale="4.0" labelOffset="3.5"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
+  <selector expr="[place] isoneof (hamlet , locality)"/>
 </painter>
 <painter
  icon=":/Art/Places/place_town.png" iconScale="0" iconOffset="0"
- drawTrafficDirectionMarks="no" labelColor="#000000ff" labelScale="5" labelOffset="25"
+ drawTrafficDirectionMarks="no" labelColor="#000000dd" labelScale="5" labelOffset="25"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[place] is city"/>
 </painter>
@@ -694,7 +689,8 @@
  zoomUnder="0.01" zoomUpper="1e+07"
  fillColor="#f6666677"
  icon=":/MapIcons/map-icons/square.small/sightseeing/ruins.png"
- drawTrafficDirectionMarks="no">
+ drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3.0"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[historic] is ruins"/>
 </painter>
 <painter
@@ -797,37 +793,43 @@
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
  icon=":/MapIcons/map-icons/square.small/sightseeing/museum.png"
- drawTrafficDirectionMarks="no">
+ drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3.0"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[tourism] is museum"/>
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
  icon=":/MapIcons/map-icons/square.small/sightseeing.png"
- drawTrafficDirectionMarks="no">
+ drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3.0"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[tourism] is attraction"/>
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
  icon=":/MapIcons/map-icons/square.small/sightseeing/monument.png"
- drawTrafficDirectionMarks="no">
+ drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3.0"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[historic] is monument"/>
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
  icon=":/MapIcons/map-icons/square.small/sightseeing/castle.png"
- drawTrafficDirectionMarks="no">
+ drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3.0"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[historic] is castle"/>
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
  icon=":/MapIcons/map-icons/square.small/misc/landmark/spring.png"
- drawTrafficDirectionMarks="no">
+ drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3.0"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[natural] is spring"/>
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
  icon=":/Art/Mapnik/tower.png"
- drawTrafficDirectionMarks="no">
+ drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3.0"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[man_made] is tower"/>
 </painter>
 <painter
@@ -846,19 +848,22 @@
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
  icon=":/MapIcons/map-icons/square.small/sightseeing/memorial.png"
- drawTrafficDirectionMarks="no">
+ drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3.0"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[historic] is memorial"/>
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
  icon=":/MapIcons/map-icons/square.small/accommodation/shelter.png"
- drawTrafficDirectionMarks="no">
+ drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3.0"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[amenity] is shelter"/>
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
  icon=":/MapIcons/map-icons/square.small/recreation/picnic.png"
- drawTrafficDirectionMarks="no">
+ drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3.0"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[tourism] is picnic_site"/>
 </painter>
 <painter
@@ -867,6 +872,14 @@
  drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3.0"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[railway] is tram_stop"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ foregroundColor="#a020f055" foregroundScale="0.3" foregroundOffset="0"
+ foregroundDashDown="1" foregroundDashUp="1.8"
+ drawTrafficDirectionMarks="yes" labelColor="#000000dd" labelScale="1.1" labelOffset="3"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
+  <selector expr="[boundary] is administrative"/>
 </painter>
 <painter
  zoomUnder="0" zoomUpper="1e+07"
