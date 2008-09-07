@@ -1,4 +1,5 @@
 v0.12
+	* FIX : change serial port GPS readout from busy looping to signal wakeup
 	* FIX : make the heading appear in the satellite tracker
 	* ADD : nice satellite strength view widget
 	* FIX : OSM export doesn't handle quotes well (Fixes #1139)

@@ -36,6 +36,31 @@
 
 #include "Preferences/MerkaartorPreferences.h"
 
+#include <iostream>
+
+/* GPSSLOTFORWARDER */
+
+GPSSlotForwarder::GPSSlotForwarder(QGPSDevice* aTarget)
+: Target(aTarget)
+{
+}
+
+void GPSSlotForwarder::onLinkReady()
+{
+	Target->onLinkReady();
+}
+
+void GPSSlotForwarder::onDataAvailable()
+{
+	Target->onDataAvailable();
+}
+
+void GPSSlotForwarder::onStop()
+{
+	Target->onStop();
+}
+
+
 /**
  * QGPSDevice::QGPSDevice()
  *
@@ -472,13 +497,13 @@ void QGPSDevice::startDevice()
  * QGPSDevice::stopDevice()
  *
  * Stops execution of run() and ends thread execution
+ * This function will be called outside this thread
  */
 
 void QGPSDevice::stopDevice()
 {
-    mutex->lock();
-    stopLoop = true;
-    mutex->unlock();
+    // this is through a queued connection
+    emit doStopDevice();
 }
 
 /*** QGPSComDevice  ***/
@@ -550,78 +575,92 @@ bool QGPSComDevice::closeDevice()
 	return true;
 }
 
+void QGPSComDevice::onLinkReady()
+{
+}
+
+void QGPSComDevice::onStop()
+{
+	quit();
+}
+
+
 void QGPSComDevice::run()
 {
-    int  index = 0;
-    char bufferChar;
-    char bufferString[100];
-    bool safeStopLoop = false;
+	GPSSlotForwarder Forward(this);
+	connect(port,SIGNAL(readyRead()),&Forward,SLOT(onDataAvailable()));
+	connect(this,SIGNAL(doStopDevice()),&Forward,SLOT(onStop()));
+	exec();
+	closeDevice();
+}
 
-    do
-    {
-        mutex->lock();
-        safeStopLoop = stopLoop;
-        mutex->unlock();
+void QGPSComDevice::onDataAvailable()
+{
+	QByteArray ba(port->readAll());
+	// filter out unwanted characters
+	for (unsigned int i=ba.count(); i; --i)
+		if(ba[i-1] == '\0' || 
+			(!isalnum(ba[i-1]) && 
+			 !isspace(ba[i-1]) && 
+			 !ispunct(ba[i-1])))
+		{
+			ba.remove(i-1,1);
+		}
+	if (LogFile)
+		LogFile->write(ba);
+	Buffer.append(ba);
+	if (Buffer.length() > 4096)
+		// safety valve
+		Buffer.remove(0,Buffer.length()-4096);
+	while (Buffer.count())
+	{
+		// look for begin of sentence marker
+		int i = Buffer.indexOf('$');
+		if (i<0)
+		{
+			Buffer.clear();
+			return;
+		}
+		Buffer.remove(0,i);
+		// look for end of sentence marker
+		for (i=0; i<Buffer.count(); ++i)
+			if ( (Buffer[i] == (char)(0x0a)) || (Buffer[i] == (char)(0x0d)) )
+				break;
+		if (i == Buffer.count())
+			return;
+		parse(Buffer.mid(1,i-2));
+		Buffer.remove(0,i);
+	}
+}
 
-	    if ((port->read(&bufferChar, 1)) < 1)
-			continue;
-		
-		if (LogFile)
-			LogFile->write(&bufferChar, 1);
 
-        if(bufferChar == '$')
-        {
-            index = 0;
-            bufferString[index] = bufferChar;
-
-            do
-            {
-				if ((port->read(&bufferChar, 1)) < 1)
-					continue;
-				if (LogFile)
-					LogFile->write(&bufferChar, 1);
-                if(bufferChar != '\0' && (isalnum(bufferChar) || isspace(bufferChar) || ispunct(bufferChar)))
-                {
-                    index ++;
-                    bufferString[index] = bufferChar;
-                }
-            } while(bufferChar != 0x0a && bufferChar != 0x0d);
-
-            bufferString[index + 1] = '\0';
-
-            mutex->lock();
-
-            if(bufferString[3] == 'G' && bufferString[4] == 'G' && bufferString[5] == 'A')
-            {
+void QGPSComDevice::parse(const QByteArray& bufferString)
+{
+	if (bufferString.length() < 6) return;
+	if(bufferString[3] == 'G' && bufferString[4] == 'G' && bufferString[5] == 'A')
+	{
                 //strcpy(nmeastr_gga, bufferString);
-                parseGGA(bufferString);
-            }
+                parseGGA(bufferString.data());
+	}
             else if(bufferString[3] == 'G' && bufferString[4] == 'S' && bufferString[5] == 'V')
             {
                 //strcpy(nmeastr_gsv, bufferString);
-                parseGSV(bufferString);
+                parseGSV(bufferString.data());
             }
             else if(bufferString[3] == 'G' && bufferString[4] == 'S' && bufferString[5] == 'A')
             {
                 //strcpy(nmeastr_gsa, bufferString);
-                parseGSA(bufferString);
+                parseGSA(bufferString.data());
             }
             else if(bufferString[3] == 'R' && bufferString[4] == 'M' && bufferString[5] == 'C')
             {
                 //strcpy(nmeastr_rmc, bufferString);
-                if (parseRMC(bufferString))
-					if (fixStatus() == QGPSDevice::StatusActive && fixType() == QGPSDevice::Fix3D)
-						emit updatePosition(latitude(), longitude(), dateTime(), altitude(), speed(), heading());
+                if (parseRMC(bufferString.data()))
+		if (fixStatus() == QGPSDevice::StatusActive && fixType() == QGPSDevice::Fix3D)
+		emit updatePosition(latitude(), longitude(), dateTime(), altitude(), speed(), heading());
             }
 
-            mutex->unlock();
-
             emit updateStatus();
-        }
-
-    } while(safeStopLoop == false);
-
-	closeDevice();
 }
 
 /*** QGPSFileDevice  ***/
@@ -655,6 +694,15 @@ bool QGPSFileDevice::openDevice()
 	return true;
 }
 
+void QGPSFileDevice::onLinkReady()
+{
+}
+
+void QGPSFileDevice::onStop()
+{
+	quit();
+}
+
 /**
  * QGPSFileDevice::closeDevice()
  *
@@ -671,17 +719,22 @@ bool QGPSFileDevice::closeDevice()
 
 void QGPSFileDevice::run()
 {
+	GPSSlotForwarder Forward(this);
+	QTimer* t = new QTimer;
+	connect(t,SIGNAL(timeout()),&Forward,SLOT(onDataAvailable()));
+	connect(this,SIGNAL(doStopDevice()),&Forward,SLOT(onStop()));
+	t->start(100);
+	exec();
+	closeDevice();
+}
+
+void QGPSFileDevice::onDataAvailable()
+{
+
     int  index = 0;
     char bufferChar;
     char bufferString[100];
     bool safeStopLoop = false;
-    exec();
-
-    do
-    {
-        mutex->lock();
-        safeStopLoop = stopLoop;
-        mutex->unlock();
 
 	    theFile->read(&bufferChar, 1);
         if(bufferChar == '$')
@@ -728,40 +781,11 @@ void QGPSFileDevice::run()
 
             mutex->unlock();
 
-            emit updateStatus();
-        }
-		msleep(100);
-
-    } while(safeStopLoop == false);
-
-	closeDevice();
-}
-
-/* GPSSLOTFORWARDER */
-
-GPSSlotForwarder::GPSSlotForwarder(QGPSDDevice* aTarget)
-: Target(aTarget)
-{
-}
-
-void GPSSlotForwarder::onLinkReady()
-{
-	Target->onLinkReady();
-}
-
-void GPSSlotForwarder::onDataAvailable()
-{
-	Target->onDataAvailable();
-}
-
-void GPSSlotForwarder::onStop()
-{
-	Target->onStop();
+            emit updateStatus(); 
+	}
 }
 
 /* GPSSDEVICE */
-
-#include <iostream>
 
 QGPSDDevice::QGPSDDevice(const QString& device)
 {
@@ -778,11 +802,6 @@ bool QGPSDDevice::closeDevice()
 	return true;
 }
 
-// this function will be called outside this thread
-void QGPSDDevice::stopDevice()
-{
-	emit doStopDevice();
-}
 
 // this function will be called within this thread
 void QGPSDDevice::onStop()

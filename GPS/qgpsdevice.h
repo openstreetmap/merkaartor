@@ -27,6 +27,28 @@ class QString;
 class QMutex;
 class QextSerialPort;
 class QFile;
+ 
+class QGPSDevice;
+// We want these slots to be executed within the thread represented by
+// QGPSDDevice. Since that class itself lives in the main thread, we need
+// a forwarder that does live there as the receiver.
+
+class GPSSlotForwarder : public QObject
+{
+	Q_OBJECT
+
+	public:
+		GPSSlotForwarder(QGPSDevice* Target);
+
+
+	public slots:
+		void onLinkReady();
+		void onDataAvailable();
+		void onStop();
+
+	private:
+		QGPSDevice* Target;
+};
 
 class QGPSDevice : public QThread
 {
@@ -113,6 +135,8 @@ class QGPSDevice : public QThread
     
         void  updatePosition(float latitude, float longitude, QDateTime time, float altitude, float speed, float heading);
         void  updateStatus();
+	void doStopDevice();
+
         
     protected:
     
@@ -172,8 +196,14 @@ class QGPSDevice : public QThread
         bool parseGSV(const char *gsvString = 0);
         bool parseRMC(const char *gsvString = 0);
         
+	private:
+		virtual void onLinkReady() = 0;
+		virtual void onDataAvailable() = 0;
+		virtual void onStop() = 0;
+
+		friend class GPSSlotForwarder;
 };
-        
+      
 class QGPSComDevice : public QGPSDevice
 {
 Q_OBJECT
@@ -186,8 +216,15 @@ public:
     virtual bool closeDevice();
 
 private:
+		virtual void onLinkReady();
+		virtual void onDataAvailable();
+		virtual void onStop();
+
+		void parse(const QByteArray& array);
+
 	QextSerialPort *port;
 	QFile* LogFile;
+		QByteArray Buffer;
 
 	virtual void run();
 };        
@@ -203,6 +240,10 @@ public:
     virtual bool closeDevice();
 
 private:
+		virtual void onLinkReady();
+		virtual void onDataAvailable();
+		virtual void onStop();
+
 	QFile* theFile;
 
 	virtual void run();
@@ -211,28 +252,6 @@ private:
 class QTcpSocket;
 
 class QGPSDDevice;
-
-// We want these slots to be executed within the thread represented by
-// QGPSDDevice. Since that class itself lives in the main thread, we need
-// a forwarder that does live there as the receiver.
-
-class GPSSlotForwarder : public QObject
-{
-	Q_OBJECT
-
-	public:
-		GPSSlotForwarder(QGPSDDevice* Target);
-
-
-	public slots:
-		void onLinkReady();
-		void onDataAvailable();
-		void onStop();
-
-	private:
-		QGPSDDevice* Target;
-};
-
 class QGPSDDevice : public QGPSDevice
 {
 	Q_OBJECT
@@ -242,13 +261,9 @@ class QGPSDDevice : public QGPSDevice
 
 		virtual bool openDevice();
 		virtual bool closeDevice();
-		virtual void stopDevice();
 
 	protected:
 		virtual void run();
-
-	signals:
-		void doStopDevice();
 
 	private:
 		void onLinkReady();
