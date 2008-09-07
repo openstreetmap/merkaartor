@@ -44,7 +44,6 @@ int main(int argc, char** argv)
 #else
 	Main.show();
 #endif
-
 	QStringList fileNames = QCoreApplication::arguments();
 	fileNames.removeFirst();
 	Main.loadFiles(fileNames);

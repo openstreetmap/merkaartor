@@ -9,9 +9,9 @@ class Satellite
 {
 	public:
 		int Id;
-		float Azimuth;
-		float Elevation;
-		float SignalStrength;
+		int Azimuth;
+		int Elevation;
+		int SignalStrength;
 };
 
 void sortSatellitesById(std::vector<Satellite>& List);

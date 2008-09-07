@@ -23,6 +23,8 @@
 
 #include <QWidget>
 
+#include "SatelliteStrengthView.h"
+
 class QGPSSatelliteTracker : public QWidget
 {
     Q_OBJECT
@@ -32,13 +34,15 @@ class QGPSSatelliteTracker : public QWidget
         QGPSSatelliteTracker(QWidget *parent = 0);
     
         void paintEvent(QPaintEvent *);
-		void resetSatInfo();
-        void setSatInfo(int index = 0, int elevation = 0, int azimuth = 0, int snr = 0);
+
+	void setSatellites(const std::vector<Satellite>& aList);
+	void setHeading(int x);
         
     private:
-        void getCoordsFromPos(int elevation, int azimuth, int &x, int &y);
+        void getCoordsFromPos(int rad, int elevation, int azimuth, int &x, int &y);
         
-        int satArray[50][3];
+	std::vector<Satellite> List;
+	int Heading;
 };
 
 #endif

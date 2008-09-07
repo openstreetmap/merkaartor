@@ -28,6 +28,8 @@
 #include "qgpssatellitetracker.h"
 #include "SatelliteStrengthView.h"
 
+#include <iostream>
+
 //#include "Preferences/MerkaartorPreferences.h"
 
 QGPS::QGPS(QWidget *parent)
@@ -39,6 +41,15 @@ QGPS::QGPS(QWidget *parent)
 
 	lblFixStatus->setText(tr("No Position Fix"));
 	lblFixTime->setText(tr("No UTC Time"));
+
+    int w = fontMetrics().width("360N 60'60\" W");
+    txtLatitude->setFixedWidth(w);
+    txtLongitude->setFixedWidth(w);
+    txtAltitude->setFixedWidth(w);
+    txtSpeed->setFixedWidth(w);
+	txtNumSats->setFixedWidth(w);
+	txtFixType->setFixedWidth(w);
+	resetGpsStatus();
 
     //loadSettings();
 
@@ -81,15 +92,13 @@ void QGPS::resetGpsStatus()
     txtLongitude->setText("");
     txtAltitude->setText("");
     txtSpeed->setText("");
-    txtHeading->setText("");
-    txtVariation->setText("");
 	txtNumSats->setText("");
 	txtFixType->setText(tr("Invalid"));
 	
 	lblFixStatus->setText(tr("No Position Fix"));
 	lblFixTime->setText(tr("No UTC Time"));
 
-	satTracker->resetSatInfo();
+	satTracker->setSatellites(std::vector<Satellite>());
 }
 
 void QGPS::updateGpsStatus()
@@ -135,14 +144,6 @@ void QGPS::updateGpsStatus()
             .arg(gpsDevice->speed())
             .arg(tr("km/h")));
 
-    txtHeading->setText(
-        QString("%1").arg(gpsDevice->heading()));
-
-    txtVariation->setText(
-        QString("%1 %2")
-            .arg(gpsDevice->variation())
-            .arg(varCardinal));
-
 	txtNumSats->setText(
         QString("%1").arg(gpsDevice->numSatellites()));
 
@@ -172,14 +173,11 @@ void QGPS::updateGpsStatus()
 	else
 		lblFixTime->setText(gpsDevice->dateTime().toString() + " UTC");
 
-	satTracker->resetSatInfo();
 	std::vector<Satellite> List;
 	for(int i = 1; i < 50; i ++)
 	{
 		int b, x, y;
 		gpsDevice->satInfo(i, b, x, y);
-		if (y>0)
-			satTracker->setSatInfo(i, b, x, y);
 		if (y || b || x)
 		{
 			Satellite S;
@@ -191,6 +189,8 @@ void QGPS::updateGpsStatus()
 		}
 	}
 	StrengthView->setSatellites(List);
+	satTracker->setSatellites(List);
+	satTracker->setHeading(gpsDevice->heading());
 }
 
 void QGPS::showEvent ( QShowEvent * anEvent )
