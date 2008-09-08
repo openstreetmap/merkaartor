@@ -164,17 +164,17 @@ bool ImportExportOsmBin::writeHeader(QDataStream& ds)
 
 bool ImportExportOsmBin::writeIndex(QDataStream& ds)
 {
-	QMapIterator<qint32, QList<MapFeature*>> itN(theTileNodesIndex);
+	QMapIterator<qint32, QList<MapFeature*> > itN(theTileNodesIndex);
 	while(itN.hasNext()) {
 		itN.next();
 		theTileIndex[itN.key()] += itN.value();
 	}
-	QMapIterator<qint32, QList<MapFeature*>> itR(theTileRoadsIndex);
+	QMapIterator<qint32, QList<MapFeature*> > itR(theTileRoadsIndex);
 	while(itR.hasNext()) {
 		itR.next();
 		theTileIndex[itR.key()] += itR.value();
 	}
-	QMapIterator<qint32, QList<MapFeature*>> itL(theTileRelationsIndex);
+	QMapIterator<qint32, QList<MapFeature*> > itL(theTileRelationsIndex);
 	while(itL.hasNext()) {
 		itL.next();
 		theTileIndex[itL.key()] += itL.value();
