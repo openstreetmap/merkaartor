@@ -222,7 +222,7 @@ void MerkaartorPreferences::initialize()
 		theTmsServerList->insert("OSM Mapnik", osmmapnik);
 		TmsServer osmth("OSM T@H", "tah.openstreetmap.org", "/Tiles/tile/%1/%2/%3.png", 256, 0, 17);
 		theTmsServerList->insert("OSM T@H", osmth);
-		TmsServer cycle("Gravitystorm Cycle", "thunderflames.org", "/tiles/cycle/%1/%2/%3.png", 256, 0, 14);
+		TmsServer cycle("Cycle Map", "andy.sandbox.cloudmade.com", "/tiles/cycle/%1/%2/%3.png", 256, 0, 14);
 		theTmsServerList->insert("Gravitystorm Cycle", cycle);
 		TmsServer oam("OpenAerialMap", "tile.openaerialmap.org", "/tiles/1.0.0/openaerialmap-900913/%1/%2/%3.png", 256, 0, 17);
 		theTmsServerList->insert("OpenAerialMap", oam);
