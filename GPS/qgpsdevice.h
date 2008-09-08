@@ -45,6 +45,7 @@ class GPSSlotForwarder : public QObject
 		void onLinkReady();
 		void onDataAvailable();
 		void onStop();
+		void checkDataAvailable();
 
 	private:
 		QGPSDevice* Target;
@@ -140,6 +141,7 @@ class QGPSDevice : public QThread
         
     protected:
     
+		virtual void checkDataAvailable() {};
         virtual void run() = 0;
     
         int     fd;
@@ -216,17 +218,20 @@ public:
     virtual bool closeDevice();
 
 private:
-		virtual void onLinkReady();
-		virtual void onDataAvailable();
-		virtual void onStop();
+	virtual void onLinkReady();
+	virtual void onDataAvailable();
+	virtual void onStop();
 
-		void parse(const QByteArray& array);
+	void parse(const QByteArray& array);
 
 	QextSerialPort *port;
 	QFile* LogFile;
 		QByteArray Buffer;
 
 	virtual void run();
+
+protected:
+	virtual void checkDataAvailable();
 };        
 
 class QGPSFileDevice : public QGPSDevice

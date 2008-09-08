@@ -60,6 +60,10 @@ void GPSSlotForwarder::onStop()
 	Target->onStop();
 }
 
+void GPSSlotForwarder::checkDataAvailable()
+{
+	Target->checkDataAvailable();
+}
 
 /**
  * QGPSDevice::QGPSDevice()
@@ -588,10 +592,20 @@ void QGPSComDevice::onStop()
 void QGPSComDevice::run()
 {
 	GPSSlotForwarder Forward(this);
-	connect(port,SIGNAL(readyRead()),&Forward,SLOT(onDataAvailable()));
+
+	QTimer *timer = new QTimer(this);
+	connect(timer, SIGNAL(timeout()), &Forward, SLOT(checkDataAvailable()));
+	timer->start(150);
+
+//	connect(port,SIGNAL(readyRead()),&Forward,SLOT(onDataAvailable()));
 	connect(this,SIGNAL(doStopDevice()),&Forward,SLOT(onStop()));
 	exec();
 	closeDevice();
+}
+
+void QGPSComDevice::checkDataAvailable() {
+	if (port->bytesAvailable() > 0)
+		onDataAvailable();
 }
 
 void QGPSComDevice::onDataAvailable()
@@ -600,9 +614,9 @@ void QGPSComDevice::onDataAvailable()
 	// filter out unwanted characters
 	for (unsigned int i=ba.count(); i; --i)
 		if(ba[i-1] == '\0' || 
-			(!isalnum(ba[i-1]) && 
-			 !isspace(ba[i-1]) && 
-			 !ispunct(ba[i-1])))
+			(!isalnum((quint8)ba[i-1]) && 
+			 !isspace((quint8)ba[i-1]) && 
+			 !ispunct((quint8)ba[i-1])))
 		{
 			ba.remove(i-1,1);
 		}
@@ -628,7 +642,7 @@ void QGPSComDevice::onDataAvailable()
 				break;
 		if (i == Buffer.count())
 			return;
-		parse(Buffer.mid(1,i-2));
+		parse(Buffer.mid(0,i-2));
 		Buffer.remove(0,i);
 	}
 }
@@ -639,28 +653,27 @@ void QGPSComDevice::parse(const QByteArray& bufferString)
 	if (bufferString.length() < 6) return;
 	if(bufferString[3] == 'G' && bufferString[4] == 'G' && bufferString[5] == 'A')
 	{
-                //strcpy(nmeastr_gga, bufferString);
-                parseGGA(bufferString.data());
+        //strcpy(nmeastr_gga, bufferString);
+        parseGGA(bufferString.data());
 	}
-            else if(bufferString[3] == 'G' && bufferString[4] == 'S' && bufferString[5] == 'V')
-            {
-                //strcpy(nmeastr_gsv, bufferString);
-                parseGSV(bufferString.data());
-            }
-            else if(bufferString[3] == 'G' && bufferString[4] == 'S' && bufferString[5] == 'A')
-            {
-                //strcpy(nmeastr_gsa, bufferString);
-                parseGSA(bufferString.data());
-            }
-            else if(bufferString[3] == 'R' && bufferString[4] == 'M' && bufferString[5] == 'C')
-            {
-                //strcpy(nmeastr_rmc, bufferString);
-                if (parseRMC(bufferString.data()))
-		if (fixStatus() == QGPSDevice::StatusActive && fixType() == QGPSDevice::Fix3D)
-		emit updatePosition(latitude(), longitude(), dateTime(), altitude(), speed(), heading());
-            }
-
-            emit updateStatus();
+    else if(bufferString[3] == 'G' && bufferString[4] == 'S' && bufferString[5] == 'V')
+    {
+        //strcpy(nmeastr_gsv, bufferString);
+        parseGSV(bufferString.data());
+    }
+    else if(bufferString[3] == 'G' && bufferString[4] == 'S' && bufferString[5] == 'A')
+    {
+        //strcpy(nmeastr_gsa, bufferString);
+        parseGSA(bufferString.data());
+    }
+    else if(bufferString[3] == 'R' && bufferString[4] == 'M' && bufferString[5] == 'C')
+    {
+        //strcpy(nmeastr_rmc, bufferString);
+        if (parseRMC(bufferString.data()))
+			if (fixStatus() == QGPSDevice::StatusActive && fixType() == QGPSDevice::Fix3D)
+				emit updatePosition(latitude(), longitude(), dateTime(), altitude(), speed(), heading());
+	}
+	emit updateStatus();
 }
 
 /*** QGPSFileDevice  ***/
