@@ -614,8 +614,8 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 			}
 			else if (ui.FromMap->isChecked())
 			{
-				QRectF R(SlippyMap->viewArea());
-				Clip = CoordBox(Coord(radToInt(R.x()),radToInt(R.y())),Coord(radToInt(R.x()+R.width()),radToInt(R.y()+R.height())));
+				QRect R(SlippyMap->viewArea());
+				Clip = CoordBox(Coord(R.x(), R.y()), Coord(R.x()+R.width(), R.y()+R.height()));
 			}
 			if (retry) continue;
 			aParent->view()->setUpdatesEnabled(false);

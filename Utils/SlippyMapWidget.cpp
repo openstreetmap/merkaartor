@@ -78,42 +78,33 @@ SlippyMapWidget::~SlippyMapWidget(void)
 	delete p;
 }
 
-static double ProjectF(double Lat)
+/* http://wiki.openstreetmap.org/index.php/Slippy_map_tilenames#C.2FC.2B.2B */
+static double tile2lon(double x, int z)
 {
-	double LL = Lat/180*M_PI;
-	double Y = log(tan(LL) + (1/cos(LL)));
-	return Y;
+	return x / pow(2.0, z) * 360.0 - 180;
 }
 
-static double ProjectMercToLat(double MercY)
+/* http://wiki.openstreetmap.org/index.php/Slippy_map_tilenames#C.2FC.2B.2B */
+static double tile2lat(double y, int z)
 {
-	return( 180/M_PI * atan(sinh(MercY)));
+	double n = M_PI - 2.0 * M_PI * y / pow(2.0, z);
+	return 180.0 / M_PI * atan(0.5 * (exp(n) - exp(-n)));
 }
 
-
-QRectF SlippyMapWidget::viewArea() const
+QRect SlippyMapWidget::viewArea() const
 {
 	double X1 = p->Lat - (width()/2.0)/TILESIZE;
 	double Y1 = p->Lon - (height()/2.0)/TILESIZE;
 	double X2 = p->Lat + (width()/2.0)/TILESIZE;
 	double Y2 = p->Lon + (height()/2.0)/TILESIZE;
-	double Unit = 1.0 / (1 << p->Zoom);
-	double relY1 = Y1 * Unit;
-	double relY2 = Y2 * Unit;
-	double LimitY = ProjectF(85.0511);
-	double RangeY = 2 * LimitY;
-	relY1 = LimitY - RangeY * relY1;
-	relY2 = LimitY - RangeY * relY2;
-	double Lat1 = ProjectMercToLat(relY1);
-	double Lat2 = ProjectMercToLat(relY2);
-	Unit = 360.0 / (1<<p->Zoom);
-	double Long1 = -180 + X1 * Unit;
-	double Long2 = -180 + X2 * Unit;
-	Long1 *= M_PI/180;
-	Long2 *= M_PI/180;
-	Lat1 *= M_PI/180;
-	Lat2 *= M_PI/180;
-	return QRectF(Lat2,Long1,Lat1-Lat2,Long2-Long1);
+
+	int Lon1 = angToInt(tile2lon(X1, p->Zoom));
+	int Lat1 = angToInt(tile2lat(Y1, p->Zoom));
+
+	int Lon2 = angToInt(tile2lon(X2, p->Zoom));
+	int Lat2 = angToInt(tile2lat(Y2, p->Zoom));
+
+	return QRect(Lat2, Lon1, Lat1-Lat2, Lon2-Lon1);
 }
 
 void SlippyMapWidget::paintEvent(QPaintEvent*)
