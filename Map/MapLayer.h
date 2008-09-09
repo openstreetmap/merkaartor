@@ -253,6 +253,8 @@ public:
 	virtual bool toXML(QDomElement xParent, QProgressDialog & progress);
 	static OsbMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
+	virtual QString toHtml();
+
 protected:
 	OsbMapLayerPrivate* pp;
 

@@ -73,7 +73,7 @@ class GenericFeatureSnapInteraction : public Interaction
 			Interaction::paintEvent(anEvent, thePainter);
 
 #ifndef _MOBILE
-			if (LastSnap)
+			if (LastSnap && document()->exists(LastSnap))
 				LastSnap->drawHover(thePainter, projection());
 #endif
 		}

@@ -15,9 +15,10 @@
 #include <ImportExport/IImportExport.h>
 
 #define TILE_WIDTH (int(UINT_MAX/40000))
-#define REGION_WIDTH (int(UINT_MAX/500))
+#define REGION_WIDTH (int(UINT_MAX/1000))
 #define NUM_TILES (int(UINT_MAX/TILE_WIDTH))
 #define NUM_REGIONS (int(UINT_MAX/REGION_WIDTH))
+#define TILETOREGION_THRESHOLD 9
 
 /**
 	@author cbro <cbro@semperpax.com>
@@ -61,7 +62,8 @@ protected:
 	//bool readRoads(QDataStream& ds, OsbMapLayer* aLayer);
 	//bool readRelations(QDataStream& ds, OsbMapLayer* aLayer);
 
-	bool loadRegion(qint32 rg);
+	bool loadRegion(qint32 rg, MapDocument* d, OsbMapLayer* theLayer);
+	bool clearRegion(qint32 rg, MapDocument* d, OsbMapLayer* theLayer);
 	bool loadTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer);
 	bool clearTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer);
 	MapFeature* getFeature(MapDocument* d, OsbMapLayer* theLayer, quint64 ref);
@@ -90,6 +92,8 @@ protected:
 
 	QMap <QString, quint64> theTagKeysIndex;
 	QMap <QString, quint64> theTagValuesIndex;
+
+	QMap < MapFeature*, quint32 > featRefCount;
 
 	qint64 tocPos;
 	qint64 tagKeysPos;

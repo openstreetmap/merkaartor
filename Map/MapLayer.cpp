@@ -65,7 +65,7 @@ public:
 			delete Features[i];
 	}
 	std::vector<MapFeature*> Features;
-	std::map<QString, MapFeature*> IdMap;
+	QHash<QString, MapFeature*> IdMap;
 	QString Name;
 	QString Description;
 	bool Visible;
@@ -270,22 +270,22 @@ MapFeature* MapLayer::get(unsigned int i)
 
 MapFeature* MapLayer::get(const QString& id, bool exact)
 {
-	std::map<QString, MapFeature*>::iterator i;
+	QHash<QString, MapFeature*>::const_iterator i;
 	
 	i = p->IdMap.find(id);
 	if (i != p->IdMap.end())
-		return i->second;
+		return i.value();
 
 	if (!exact) {
 		i = p->IdMap.find(QString("node_"+id));
 		if (i != p->IdMap.end())
-			return i->second;
+			return i.value();
 		i = p->IdMap.find(QString("way_"+id));
 		if (i != p->IdMap.end())
-			return i->second;
+			return i.value();
 		i = p->IdMap.find(QString("rel_"+id));
 		if (i != p->IdMap.end())
-			return i->second;
+			return i.value();
 	}
 	return 0;
 }
@@ -377,7 +377,7 @@ QString MapLayer::toMainHtml()
 	"<small><i>" + className() + "</i></small><br/>"
 	+ desc;
 	S += "<hr/>";
-	S += "<i>"+QApplication::translate("MapLayer", "Size")+": </i>" + QApplication::translate("MapLayer", "%1 nodes").arg(QLocale().toString(size()));
+	S += "<i>"+QApplication::translate("MapLayer", "Size")+": </i>" + QApplication::translate("MapLayer", "%1 features").arg(QLocale().toString(size()))+"<br/>";
 	S += "%1";
 	S += "</body></html>";
 
@@ -1079,34 +1079,58 @@ void OsbMapLayer::invalidate(MapDocument* d, CoordBox vp)
 	int x2 = int((r.bottomRight().x() + INT_MAX) / REGION_WIDTH);
 	int y2 = int((r.bottomRight().y() + INT_MAX) / REGION_WIDTH);
 
+	QList<qint32> regionToLoad;
 	for (int i=x1; i <= x2; ++i)
 		for (int j=y1; j <= y2; ++j)
-			if (!pp->loadedRegions.contains(j*NUM_REGIONS+i))
-				if (pp->theImp->loadRegion(j*NUM_REGIONS+i))
-					pp->loadedRegions.append(j*NUM_REGIONS+i);
-				else
-					return;
+			regionToLoad.push_back(j*NUM_REGIONS+i);
+			//if (!pp->loadedRegions.contains(j*NUM_REGIONS+i))
+			//	if (pp->theImp->loadRegion(j*NUM_REGIONS+i))
+			//		pp->loadedRegions.append(j*NUM_REGIONS+i);
 
-	x1 = int((r.topLeft().x() + INT_MAX) / TILE_WIDTH);
+	x1 = int((r.topLeft().x() + INT_MAX) / TILE_WIDTH); 
 	y1 = int((r.topLeft().y() + INT_MAX) / TILE_WIDTH);
 	x2 = int((r.bottomRight().x() + INT_MAX) / TILE_WIDTH);
 	y2 = int((r.bottomRight().y() + INT_MAX) / TILE_WIDTH);
 
-	QList<qint32> toLoad;
+	QList<qint32> tileToLoad;
 	for (int i=x1; i <= x2; ++i)
 		for (int j=y1; j <= y2; ++j)
-			toLoad.push_back(j*NUM_TILES+i);
+			tileToLoad.push_back(j*NUM_TILES+i);
 
-	for (int i=0; i<pp->loadedTiles.size(); ++i)
-		if (!toLoad.contains(pp->loadedTiles[i])) {
-			pp->theImp->clearTile(pp->loadedTiles[i], d, this);
-			pp->loadedTiles.removeAt(i);
-		}
+	int span = (x2 - x1 + 1) * (y2 - y1 + 1);
+	if (span > TILETOREGION_THRESHOLD)
+		tileToLoad.clear();
 
-	for (int i=0; i<toLoad.size(); ++i)
-		if (!pp->loadedTiles.contains(toLoad[i]))
-			if (pp->theImp->loadTile(toLoad[i], d, this))
-				pp->loadedTiles.push_back(toLoad[i]);
+	int j;
+	j = 0;
+	while (j<pp->loadedRegions.size()) {
+		if (!regionToLoad.contains(pp->loadedRegions[j])) {
+			if (pp->theImp->clearRegion(pp->loadedRegions[j], d, this))
+				pp->loadedRegions.removeAt(j);
+			else 
+				++j;
+		} else
+			++j;
+	}
+	j = 0;
+	while (j<pp->loadedTiles.size()) {
+		if (!tileToLoad.contains(pp->loadedTiles[j])) {
+			if (pp->theImp->clearTile(pp->loadedTiles[j], d, this))
+				pp->loadedTiles.removeAt(j);
+			else 
+				++j;
+		} else
+			++j;
+	}
+
+	for (int i=0; i<regionToLoad.size(); ++i)
+		if (!pp->loadedRegions.contains(regionToLoad[i]))
+			if (pp->theImp->loadRegion(regionToLoad[i], d, this))
+				pp->loadedRegions.append(regionToLoad[i]);
+	for (int i=0; i<tileToLoad.size(); ++i)
+		if (!pp->loadedTiles.contains(tileToLoad[i]))
+			if (pp->theImp->loadTile(tileToLoad[i], d, this))
+				pp->loadedTiles.push_back(tileToLoad[i]);
 
 	for (unsigned int i=0; i<size(); ++i)
 	{
@@ -1168,5 +1192,15 @@ OsbMapLayer * OsbMapLayer::fromXML(MapDocument* d, const QDomElement e, QProgres
 
 	d->add(l);
 	return l;
+}
+
+QString OsbMapLayer::toHtml()
+{
+	QString S;
+
+	S += "<i>"+QApplication::translate("OsbMapLayer", "# of loaded Regions")+": </i>" + QApplication::translate("OsbMapLayer", "%1").arg(QLocale().toString(pp->loadedRegions.size()))+"<br/>";
+	S += "<i>"+QApplication::translate("OsbMapLayer", "# of loaded Tiles")+": </i>" + QApplication::translate("OsbMapLayer", "%1").arg(QLocale().toString(pp->loadedTiles.size()))+"<br/>";
+
+	return toMainHtml().arg(S);
 }
 
