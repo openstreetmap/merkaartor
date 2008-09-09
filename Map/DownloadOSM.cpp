@@ -431,7 +431,7 @@ bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser
 	}
 	Downloader Rcv(aWeb, aUser, aPassword, UseProxy, ProxyHost, ProxyPort);
 	QString URL = Rcv.getURLToMap();
-	URL = URL.arg(intToAng(aBox.bottomLeft().lon())).arg(intToAng(aBox.bottomLeft().lat())).arg(intToAng(aBox.topRight().lon())).arg(intToAng(aBox.topRight().lat()));
+	URL = URL.arg(intToAng(aBox.bottomLeft().lon()), 0, 'f').arg(intToAng(aBox.bottomLeft().lat()), 0, 'f').arg(intToAng(aBox.topRight().lon()), 0, 'f').arg(intToAng(aBox.topRight().lat()), 0, 'f');
 	
 	QUrl theUrl;
 	theUrl.setHost(aWeb);
@@ -582,25 +582,15 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 				Clip = aBox;
 			}
 			else if (ui.FromLink->isChecked()) {
-				int start, end;
-
 				QString link = ui.Link->text();
 
 				if (link.contains("/api/")) {
 					directAPI=true;
 				} else {
-					start = link.indexOf("lat=") + 4; // +4 because we don't need the "lat="
-					end = link.indexOf("&", start);
-					double lat = link.mid(start, end - start).toDouble();
-
-					start = link.indexOf("lon=") + 4;
-					end = link.indexOf("&", start);
-					double lon = link.mid(start, end - start).toDouble();
-
-					start = link.indexOf("zoom=") + 5;
-					end = link.indexOf("&", start);
-					int zoom = link.mid(start, end - start).toInt();
-
+					QUrl url = QUrl(link); 
+					double lat = url.queryItemValue("lat").toDouble(); 
+					double lon = url.queryItemValue("lon").toDouble(); 
+					int zoom = url.queryItemValue("zoom").toInt();
 
 					if (zoom <= 10) {
 						QMessageBox::warning(dlg, QApplication::translate("Downloader", "Zoom factor too low"),
@@ -608,34 +598,17 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 						retry = true;
 					}
 					else {
+						if (zoom < 1 || zoom > 18) // use default when not in bounds
+							zoom = 15;
 
-						double zoomD;
+						/* term to calculate the angle from the zoom-value */
+						double zoomLat = 360.0 / (double)(1 << zoom);
+						double zoomLon = zoomLat / fabs(cos(angToRad(lat)));
+						/* the following line is equal to the line above. (just for explanation) */
+						//double zoomLon = zoomLat / aParent->view()->projection().latAnglePerM() * aParent->view()->projection().lonAnglePerM(angToRad(lat));
 
-						/* zoom-levels taken from http://wiki.openstreetmap.org/index.php/Zoom_levels */
-						if (zoom == 0) zoomD = 360;
-						else if (zoom == 1) zoomD = 180;
-						else if (zoom == 2) zoomD = 90;
-						else if (zoom == 3) zoomD = 45;
-						else if (zoom == 4) zoomD = 22.5;
-						else if (zoom == 5) zoomD = 11.25;
-						else if (zoom == 6) zoomD = 5.625;
-						else if (zoom == 7) zoomD = 2.813;
-						else if (zoom == 8) zoomD = 1.406;
-						else if (zoom == 9) zoomD = 0.703;
-						else if (zoom == 10) zoomD = 0.352;
-						else if (zoom == 11) zoomD = 0.176;
-						else if (zoom == 12) zoomD = 0.088;
-						else if (zoom == 13) zoomD = 0.044;
-						else if (zoom == 14) zoomD = 0.022;
-						else if (zoom == 15) zoomD = 0.011;
-						else if (zoom == 16) zoomD = 0.005;
-						else if (zoom == 17) zoomD = 0.003;
-						else if (zoom == 18) zoomD = 0.001;
-
-						else zoomD = 0.011; // default (zoom = 15)
-
-						/* the OSM link contains the coordinates from the middle of the visible map so we have to add and sub zoomD */
-						Clip = CoordBox(Coord(angToInt(lat-zoomD), angToInt(lon-zoomD)), Coord(angToInt(lat+zoomD), angToInt(lon+zoomD)));
+						/* the OSM link contains the coordinates from the middle of the visible map so we have to add and sub zoomLon/zoomLat */
+						Clip = CoordBox(Coord(angToInt(lat-zoomLat), angToInt(lon-zoomLon)), Coord(angToInt(lat+zoomLat), angToInt(lon+zoomLon)));
 					}
 				}
 			}
