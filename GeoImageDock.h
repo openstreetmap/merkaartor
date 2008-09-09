@@ -14,14 +14,18 @@
 #define WARNING(title, message) { \
 	if (warning(tr(title), tr(message).arg(file))) \
 		continue; \
-	else \
-		 return; }
+	else { \
+		theView->invalidate(true, false); \
+		return; \
+	} \
+}
 
 class ImageView;
 
 class GeoImageDock : public QDockWidget
 {
 	Q_OBJECT
+
 public:
 	GeoImageDock(MainWindow *aMain);
 	~GeoImageDock(void);
@@ -29,14 +33,18 @@ public:
 	void loadImages(QStringList fileNames, MapDocument *theDocument, MapView *theView);
 	void setImage(int ImageId);
 
-protected:
-	//void resizeEvent(QResizeEvent *e);
+private slots:
+	void removeImages(void);
+	void toClipboard(void);
 
 private:
-	QList<QPair<QString, QPixmap> > Images;
+	QStringList Images;
 	int curImage;
 
 	ImageView *Image;
+
+	QList<MapLayer*> activeLayers;
+	MapView *theView;
 
 	bool warning(QString title, QString message);
 };
@@ -47,7 +55,7 @@ public:
 	ImageView(QWidget *parent);
 	~ImageView();
 
-	void setImage(QPair<QString, QPixmap> img);
+	void setImage(QString filename);
 
 protected:
 	void paintEvent(QPaintEvent *e);

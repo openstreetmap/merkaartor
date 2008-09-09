@@ -48,6 +48,7 @@ static TrackPoint* importTrkPt(const QDomElement& Root, MapDocument* /* theDocum
 			if (!Value.isEmpty())
 			{
 				QDateTime dt(QDateTime::fromString(Value.left(19),"yyyy-MM-ddTHH:mm:ss"));
+				dt.setTimeSpec(Qt::UTC);
 				Pt->setTime(dt);
 			}
 		}
