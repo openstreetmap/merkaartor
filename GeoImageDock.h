@@ -12,7 +12,8 @@
 
 
 #define WARNING(title, message) { \
-	if (warning(tr(title), tr(message).arg(file))) \
+	if (QMessageBox::warning(this, tr(title), tr(message).arg(file), \
+	 QMessageBox::Ignore | QMessageBox::Cancel, QMessageBox::Ignore) == QMessageBox::Ignore) \
 		continue; \
 	else { \
 		theView->invalidate(true, false); \
@@ -20,6 +21,17 @@
 	} \
 }
 
+#define QUESTION(title, message) { \
+	int replyButton = QMessageBox::question(this, title, message, \
+	 QMessageBox::Yes | QMessageBox::No | QMessageBox::Abort, QMessageBox::Yes ); \
+	if (replyButton == QMessageBox::No) \
+		continue; \
+	if (replyButton == QMessageBox::Abort) { \
+		theView->invalidate(true, false); \
+		return; \
+	} \
+}
+	
 class ImageView;
 
 class GeoImageDock : public QDockWidget
@@ -46,7 +58,6 @@ private:
 	QList<MapLayer*> activeLayers;
 	MapView *theView;
 
-	bool warning(QString title, QString message);
 };
 
 class ImageView : public QWidget

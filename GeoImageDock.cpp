@@ -8,6 +8,9 @@
 #include <QtGui/QMessageBox>
 #include <QtGui/QProgressDialog>
 #include <QtGui/QClipboard>
+#include <QtGui/QRadioButton>
+#include <QtGui/QTimeEdit>
+#include <QtGui/QDialogButtonBox>
 
 
 GeoImageDock::GeoImageDock(MainWindow *aMain)
@@ -89,15 +92,14 @@ void GeoImageDock::toClipboard(void)
 
 void GeoImageDock::loadImages(QStringList fileNames, MapDocument *theDocument, MapView *theView)
 {
-	QString file;
+	QString file, latS, lonS;
 	QDateTime time;
-	bool foundTime;
-
-	this->theView = theView;
+	int offset = -1;
 
 	Exiv2::Image::AutoPtr image;
 	Exiv2::ExifData *exifData;
-	Exiv2::ExifData::const_iterator i, end;
+
+	this->theView = theView;
 
 	MapLayer *theLayer;
 	{ // retrieve the target layer from the user
@@ -133,30 +135,34 @@ void GeoImageDock::loadImages(QStringList fileNames, MapDocument *theDocument, M
 	progress.setWindowModality(Qt::WindowModal);
 	progress.show();
 
-	bool ok;
-	int offset = -1;
-
 	foreach(file, fileNames) {
 		progress.setValue(fileNames.indexOf(file));
 
 		if (!QFile::exists(file))
-			WARNING("No such file", "Can't find image %1.");
+			WARNING("No such file", "Can't find image \"%1\".");
 
     	image = Exiv2::ImageFactory::open(file.toAscii().constData());
 		if (image.get() == 0)
-			WARNING("exiv2", "Error with exiv2 in %1.");
+			WARNING("exiv2", "Error with exiv2 in \"%1\".");
 		image->readMetadata();
 
-		exifData = &  image->exifData();
-		if (exifData->empty())
-			WARNING("exif missing", "No exif data in image %1.");
-		end = exifData->end();
-		foundTime = false;
-		
-		QString latS((*exifData)["Exif.GPSInfo.GPSLatitude"].toString().c_str());
-		QString lonS((*exifData)["Exif.GPSInfo.GPSLongitude"].toString().c_str());
-		QString timeStamp((*exifData)["Exif.Image.DateTime"].toString().c_str());
-		if (timeStamp.isEmpty()) timeStamp = QString((*exifData)["Exif.Photo.DateTimeOriginal"].toString().c_str());
+
+		exifData = & image->exifData();
+		if (exifData->empty()) {
+			QUESTION(tr("No EXIV"), tr("No EXIF header found in image \"%1\".\nDo you want to revert to improper file timestamp?").arg(file));
+
+			QFileInfo fileInfo(file);
+			time = fileInfo.created();
+		} else {
+			latS = (*exifData)["Exif.GPSInfo.GPSLatitude"].toString().c_str();
+			lonS = (*exifData)["Exif.GPSInfo.GPSLongitude"].toString().c_str();
+			QString timeStamp((*exifData)["Exif.Image.DateTime"].toString().c_str());
+			if (timeStamp.isEmpty())
+				timeStamp = QString((*exifData)["Exif.Photo.DateTimeOriginal"].toString().c_str());
+
+			if (!timeStamp.isEmpty())
+				time = QDateTime::fromString(timeStamp, "yyyy:MM:dd hh:mm:ss");
+		}
 
 		if (!latS.isEmpty() && !lonS.isEmpty()) {
 			double lat = 0.0, lon = 0.0, *cur;
@@ -174,27 +180,64 @@ void GeoImageDock::loadImages(QStringList fileNames, MapDocument *theDocument, M
 				p.append(curS.indexOf(" ", p.last()));
 
 				*cur = (double)curS.left(p.at(0)).toInt() / (double)curS.mid(p.at(0)+1, p.at(1)-p.at(0)-1).toInt() + // hours
-					(double)curS.mid(p.at(1)+1, p.at(2)-p.at(1)-1).toInt() / (double)curS.mid(p.at(2)+1, p.at(3)-p.at(2)-1).toInt() / 60.0 + // minutes
-					(double)curS.mid(p.at(3)+1, p.at(4)-p.at(3)-1).toInt() / (double)curS.mid(p.at(4)+1, p.at(5)-p.at(4)-1).toInt() / 60.0 / 60.0; // seconds
+				 (double)curS.mid(p.at(1)+1, p.at(2)-p.at(1)-1).toInt() / (double)curS.mid(p.at(2)+1, p.at(3)-p.at(2)-1).toInt() / 60.0 + // minutes
+				 (double)curS.mid(p.at(3)+1, p.at(4)-p.at(3)-1).toInt() / (double)curS.mid(p.at(4)+1, p.at(5)-p.at(4)-1).toInt() / 60.0 / 60.0; // seconds
 					
 				curS = lonS;
 				cur = &lon;
 			}
+
+			latS.clear(); // clear these to be empty for the next image
+			lonS.clear();
+
 			TrackPoint *Pt = new TrackPoint( Coord( angToInt(lat), angToInt(lon)));
 			Pt->setTag("Picture", "GeoTagged"); // Is this the nicest way to avoid the "?"-Image for this trackpoint?
 			Pt->setImageId(Images.size());
 			Images.append(file);
 			new AddFeatureCommand(theLayer, Pt, false);
-		} else if (!timeStamp.isEmpty()) {
+		} else if (!time.isNull()) {
 	
 			if (offset == -1) { // ask the user to specify an offset for the images
-				offset = QInputDialog::getInteger( NULL, tr("Set an offset"),
-				 tr("Specify an offset in seconds.\n(positive values will position the\nimages more to the end of the track):"),
-				 0, -(int) ((unsigned int)-1 /2), (int) ((unsigned int)-1 / 2), 1, &ok);
-				if (!ok) return;
+				QDialog dialog(this);
+				dialog.setWindowTitle(tr("Specify offset"));
+
+				QLabel position(tr("Position images more to the:"), &dialog);
+				QRadioButton positive(tr("end of the track"), &dialog);
+				QRadioButton negative(tr("beginning of the track"), &dialog);
+				QTimeEdit timeEdit(&dialog);
+				QDialogButtonBox buttons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, &dialog);
+
+				timeEdit.setDisplayFormat(tr("hh:mm:ss"));
+				positive.setChecked(true); // this is default
+
+				connect(&buttons, SIGNAL(accepted()), &dialog, SLOT(accept()));
+				connect(&buttons, SIGNAL(rejected()), &dialog, SLOT(reject()));
+
+				QVBoxLayout layout(&dialog); // very important to first declare the QVBoxLayout.
+				QHBoxLayout radioLayout; // otherwise there would be a segmentation fault when return;
+				radioLayout.addWidget(&positive);
+				radioLayout.addWidget(&negative);
+
+				layout.addWidget(&position);
+				layout.addLayout(&radioLayout);
+				layout.addWidget(&timeEdit);
+				layout.addWidget(&buttons);
+
+				dialog.setLayout(&layout);
+
+				if (dialog.exec()) { // we have to change the sign here because secsTo returns negative value
+					if (positive.isChecked())
+						offset = - timeEdit.time().secsTo(QTime(0, 0, 0));
+					if (negative.isChecked())
+						offset = timeEdit.time().secsTo(QTime(0, 0, 0));
+				} else {
+					theView->invalidate(true, false);
+					qDebug() << "return";
+					return;
+				}
 			}
 
-			time = QDateTime::fromString(timeStamp, "yyyy:MM:dd hh:mm:ss").addSecs(offset);
+			time = time.addSecs(offset);
 
 			MapFeature *feature = NULL;
 			TrackPoint *Pt, *bestPt = NULL;
@@ -213,23 +256,18 @@ void GeoImageDock::loadImages(QStringList fileNames, MapDocument *theDocument, M
 			}
 
 			if (!bestPt)
-				WARNING("No TrackPoints", "No TrackPoints found for image %1");
+				WARNING("No TrackPoints", "No TrackPoints found for image \"%1\"");
 
-			if (secondsTo >= 15) {
-				int button = QMessageBox::question(NULL, tr("Wrong image?"),
-				 tr("Image \"%1\" was taken %2 seconds before the next trackpoint was recorded.\n" \
-				 "Do you still want to use it?").arg(file).arg(abs(secondsTo)), QMessageBox::Yes | QMessageBox::No | QMessageBox::Abort, QMessageBox::No );
-				if (button == QMessageBox::Abort)
-					return;
-				if (button == QMessageBox::No)
-					continue;
-			}
+			if (secondsTo >= 15)
+				QUESTION(tr("Wrong image?"), tr("Image \"%1\" was taken %2 seconds before the next trackpoint was recorded.\n"
+				 "Do you still want to use it?").arg(file).arg(abs(secondsTo)));
 
 			bestPt->setImageId(Images.size());
 			Images.append(file);
-
+	
+			time = QDateTime(); // empty time to be null for the next image
 		} else
-			WARNING("No geo informations", "Image %1 is not a geotagged image.");
+			WARNING("No geo informations", "Image \"%1\" is not a geotagged image.");
 
 		if (progress.wasCanceled()) {
 			theView->invalidate(true, false);
@@ -242,14 +280,6 @@ void GeoImageDock::loadImages(QStringList fileNames, MapDocument *theDocument, M
 
 	theView->invalidate(true, false);
 
-}
-
-bool GeoImageDock::warning(QString title, QString message)
-{
-	if ( QMessageBox::warning ( NULL, title, message, QMessageBox::Ignore | QMessageBox::Cancel, QMessageBox::Ignore ) == QMessageBox::Ignore)
-		return true;
-	else
-		return false;
 }
 
 
