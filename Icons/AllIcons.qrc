@@ -334,4 +334,7 @@
     <qresource prefix="/Gps">
     	<file alias="Gps_Marker.svg">Gps_Marker.svg</file>
     </qresource>
+    <qresource prefix="/Utils">
+    	<file alias="Merkaartor_About.png">Mercator_100x100.png</file>
+    </qresource>
 </RCC>

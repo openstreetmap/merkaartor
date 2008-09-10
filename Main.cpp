@@ -40,7 +40,8 @@ int main(int argc, char** argv)
 	MainWindow Main;
 
 #ifdef _MOBILE
-	Main.showMaximized();
+//	Main.showMaximized();
+	Main.showFullScreen();
 #else
 	Main.show();
 #endif

@@ -5,33 +5,90 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>288</width>
-    <height>133</height>
+    <width>301</width>
+    <height>368</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>About Merkaartor</string>
   </property>
-  <layout class="QVBoxLayout" >
-   <property name="margin" >
-    <number>9</number>
-   </property>
-   <property name="spacing" >
-    <number>6</number>
-   </property>
+  <layout class="QVBoxLayout" name="verticalLayout_3" >
    <item>
-    <widget class="QLabel" name="Version" >
-     <property name="text" >
-      <string>Merkaartor version %1</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-     <widget class="QLabel" name="QTVersion" >
-       <property name="text" >
-         <string>QT version %1 (build %2)</string>
+    <layout class="QHBoxLayout" name="horizontalLayout" >
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_2" >
+       <item>
+        <widget class="QLabel" name="Version" >
+         <property name="text" >
+          <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;">&lt;span style=" font-style:italic;">Merkaartor version&lt;/span> &lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;">&lt;span style=" font-weight:600;">%1%2&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="QTVersion" >
+         <property name="text" >
+          <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;">&lt;span style=" font-style:italic;">QT version&lt;/span> &lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;">&lt;span style=" font-weight:600;">%1&lt;/span> (build &lt;span style=" font-weight:600;">%2&lt;/span>)&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer" >
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer" >
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
        </property>
-     </widget>
+       <property name="sizeHint" stdset="0" >
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="pxIcon" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+         <horstretch>100</horstretch>
+         <verstretch>100</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize" >
+        <size>
+         <width>100</width>
+         <height>100</height>
+        </size>
+       </property>
+       <property name="text" >
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <widget class="QLabel" name="label" >
@@ -50,7 +107,11 @@
    <item>
     <widget class="QLabel" name="label_2" >
      <property name="text" >
-      <string>http://www.irule.be/bvh/c++/merkaartor</string>
+      <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;a href="http://www.irule.be/bvh/c++/merkaartor">&lt;span style=" text-decoration: underline; color:#0000ff;">http://www.irule.be/bvh/c++/merkaartor&lt;/span>&lt;/a>&lt;/p>&lt;/body>&lt;/html></string>
      </property>
      <property name="textInteractionFlags" >
       <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
@@ -58,11 +119,33 @@
     </widget>
    </item>
    <item>
+    <widget class="QGroupBox" name="groupBox" >
+     <property name="title" >
+      <string>Changelog</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout" >
+      <item>
+       <widget class="QPlainTextEdit" name="txtChangelog" >
+        <property name="lineWrapMode" >
+         <enum>QPlainTextEdit::NoWrap</enum>
+        </property>
+        <property name="readOnly" >
+         <bool>true</bool>
+        </property>
+        <property name="tabStopWidth" >
+         <number>4</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <spacer>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0" >
       <size>
        <width>214</width>
        <height>16</height>
@@ -72,18 +155,18 @@
    </item>
    <item>
     <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
      <property name="spacing" >
       <number>6</number>
+     </property>
+     <property name="margin" >
+      <number>0</number>
      </property>
      <item>
       <spacer>
        <property name="orientation" >
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint" stdset="0" >
         <size>
          <width>131</width>
          <height>31</height>

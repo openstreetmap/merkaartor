@@ -37,6 +37,10 @@ static void makeBoundaryIcon(QToolButton* bt, QColor C)
 PreferencesDialog::PreferencesDialog(QWidget* parent)
 	: QDialog(parent)
 {
+#ifdef _MOBILE
+	setWindowState(Qt::WindowFullScreen);
+#endif
+
 	setupUi(this);
 	for (int i=0; i < M_PREFS->getBgTypes().size(); ++i) {
 		cbMapAdapter->insertItem(i, M_PREFS->getBgTypes()[i]);

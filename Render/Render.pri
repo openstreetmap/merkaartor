@@ -10,7 +10,7 @@ SOURCES += \
 FORMS += \
 	NativeRenderDialog.ui
 
-count(OSMARENDER,1) {
+contains(OSMARENDER,1) {
 
 	DEFINES += OSMARENDER
 

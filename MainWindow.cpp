@@ -737,8 +737,14 @@ void MainWindow::on_helpAboutAction_triggered()
 	QDialog dlg(this);
 	Ui::AboutDialog About;
 	About.setupUi(&dlg);
-	About.Version->setText(About.Version->text().arg(VERSION));
+	About.Version->setText(About.Version->text().arg(VERSION).arg(REVISION));
 	About.QTVersion->setText(About.QTVersion->text().arg(qVersion()).arg(QT_VERSION_STR));
+	QFile ct(":/Utils/CHANGELOG");
+	ct.open(QIODevice::ReadOnly);
+	QTextStream cl(&ct);
+	About.txtChangelog->setPlainText(cl.readAll());
+	QPixmap px(":/Utils/Merkaartor_About.png");
+	About.pxIcon->setPixmap(px);
 	dlg.exec();
 }
 
@@ -1054,9 +1060,6 @@ void MainWindow::toolsPreferencesAction_triggered(unsigned int tabidx)
 	PreferencesDialog* Pref = new PreferencesDialog(this);
 	Pref->tabPref->setCurrentIndex(tabidx);
 	connect (Pref, SIGNAL(preferencesChanged()), this, SLOT(preferencesChanged()));
-#ifdef _MOBILE
-	Pref->setWindowState(Qt::WindowMaximized);
-#endif
 	Pref->exec();
 }
 

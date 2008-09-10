@@ -8,7 +8,8 @@
 MDockAncestor::MDockAncestor(QWidget *parent)
 	: QDialog(parent)
 {
-	setWindowState(Qt::WindowMaximized);
+//	setWindowState(Qt::WindowMaximized);
+	setWindowState(Qt::WindowFullScreen);
 	theLayout = new QVBoxLayout(this);
 	theLayout->setSpacing(4);
 	theLayout->setMargin(4);

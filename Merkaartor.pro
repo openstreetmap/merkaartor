@@ -8,40 +8,49 @@
 # PREFIX              - base prefix for installation
 # NODEBUG             - no debug target
 # OSMARENDER          - enable osmarender
-# MOBILE              - enable MOBILE
+# GDAL    	      - enable GDAL
+# MOBILE    	      - enable MOBILE
 # GEOIMAGE            - enable geotagged images (needs exiv2)
 # GPSD                - use gpsd as location provider
+
+#Static config
+include (Config.pri)
+
+#Custom config
+include(Custom.pri)
+
+DEFINES += VERSION=\"\\\"$$VERSION\\\"\"
+DEFINES += REVISION=\"\\\"$$REVISION\\\"\"
 
 TEMPLATE = app
 TARGET = merkaartor
 
 QT += svg network xml core gui
 
-count(NODEBUG,0) {
+!contains(NODEBUG,1) {
     CONFIG += debug
     OUTPUT_DIR=$$PWD/binaries/debug
     OBJECTS_DIR += tmp/obj_debug
 }
-count(NODEBUG,1) {
+contains(NODEBUG,1) {
     CONFIG += release
     DEFINES += NDEBUG
     OUTPUT_DIR=$$PWD/binaries/release
     OBJECTS_DIR += tmp/obj_release
 }
 
-count(GPSD,1) {
+contains(GPSD,1) {
     DEFINES += USEGPSD
 }
 
 DESTDIR = $$OUTPUT_DIR/bin
 
-VERSION="0.12"
-DEFINES += VERSION=\"\\\"$$VERSION\\\"\"
 
 INCLUDEPATH += . Render qextserialport GPS
 DEPENDPATH += . Render qextserialport GPS
-MOC_DIR += tmp
-UI_DIR += tmp
+MOC_DIR = tmp
+UI_DIR = tmp
+RCC_DIR = tmp
 
 TRANSLATIONS += \
 	merkaartor_cs.ts \
@@ -69,6 +78,7 @@ include(Render/Render.pri)
 include(qextserialport/qextserialport.pri)
 include(GPS/GPS.pri)
 
+
 unix {
     target.path = /usr/local/bin
     # Prefix: base instalation directory
@@ -89,8 +99,9 @@ unix {
 win32 {
 	INCLUDEPATH += $$OUTPUT_DIR/include
 	LIBS += -L$$OUTPUT_DIR/lib
-    RC_FILE = Icons/merkaartor-win32.rc
+	RC_FILE = Icons/merkaartor-win32.rc
 }
+
 
 win32-msvc* {
     DEFINES += _USE_MATH_DEFINES
@@ -107,6 +118,12 @@ count(TRANSDIR_SYSTEM, 1) {
     DEFINES += TRANSDIR_SYSTEM=\"\\\"$${TRANSDIR_SYSTEM}\\\"\"
 }
 
+contains(GDAL,1) {
+	DEPENDPATH += ./QGDAL
+	INCLUDEPATH += ./QGDAL
+	include(QGDAL/qgdal.pri)
+}
+
 isEmpty(NOUSEWEBKIT) {
     DEFINES += YAHOO
     SOURCES += QMapControl/yahoolegalmapadapter.cpp QMapControl/browserimagemanager.cpp
@@ -117,16 +134,16 @@ isEmpty(NOUSEWEBKIT) {
     QT += webkit
 }
 
-count(MOBILE,1) {
+contains(MOBILE,1) {
     DEFINES += _MOBILE
     win32-wince* {
-        DEFINES += _WINCE
+      DEFINES += _WINCE
     }
 }
 
-
-count(GEOIMAGE, 1) {
+contains(GEOIMAGE, 1) {
 	DEFINES += GEOIMAGE
 	LIBS += -lexiv2
 	include(GeoImage.pri)
 }
+

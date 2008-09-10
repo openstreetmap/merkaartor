@@ -1,4 +1,5 @@
 v0.12
+	* FIX : make "About" dialog more useful
 	* FIX : show correct progress when downloading maps
 	* FIX : make yahoo maps line up for large views (sync from r10585 by Petr Dlouhy)
 	* FIX : GPX track timestamps are in UTC (see gpx 1.1 schema)
