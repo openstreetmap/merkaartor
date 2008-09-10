@@ -574,6 +574,8 @@ void MapView::imageRequested()
 	Main->pbImages->setRange(0, numImages);
 	//pbImages->setValue(0);
 	Main->pbImages->update();
+	if (Main->pbImages->value() < 0)
+		Main->pbImages->setValue(0);
 }
 
 void MapView::imageReceived()

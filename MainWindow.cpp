@@ -80,6 +80,7 @@ MainWindow::MainWindow(void)
 	ViewportStatusLabel = new QLabel(this);
 	ViewportStatusLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
 	pbImages = new QProgressBar(this);
+	pbImages->setMaximumWidth(200);
 	PaintTimeLabel = new QLabel(this);
 	pbImages->setFormat(tr("tile %v / %m"));
 	//PaintTimeLabel->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
