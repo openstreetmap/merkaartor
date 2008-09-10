@@ -1,4 +1,5 @@
 v0.12
+	* FIX : make yahoo maps line up for large views (sync from r10585 by Petr Dlouhy)
 	* FIX : GPX track timestamps are in UTC (see gpx 1.1 schema)
 	* FIX : change serial port GPS readout from busy looping to signal wakeup
 	* FIX : make the heading appear in the satellite tracker
