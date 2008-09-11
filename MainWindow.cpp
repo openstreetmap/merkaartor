@@ -114,11 +114,11 @@ MainWindow::MainWindow(void)
 	theDirty = new DirtyDock(this);
 	theGPS = new QGPS(this);
 
-	#ifdef GEOIMAGE
+#ifdef GEOIMAGE
 	theGeoImage = new GeoImageDock(this);
 	theGeoImage->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 	addDockWidget(Qt::RightDockWidgetArea, theGeoImage);
-	#endif
+#endif
 
 	connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));
 	connect (theLayers, SIGNAL(layersChanged(bool)), this, SLOT(adjustLayers(bool)));
@@ -1743,6 +1743,10 @@ void MainWindow::on_windowHideAllAction_triggered()
 	theDirty->setVisible(false);
 	theLayers->setVisible(false);
 	theProperties->setVisible(false);
+	theGPS->setVisible(false);
+#ifdef GEOIMAGE
+	theGeoImage->setVisible(false);
+#endif
 }
 
 void MainWindow::on_windowShowAllAction_triggered()
@@ -1757,6 +1761,10 @@ void MainWindow::on_windowShowAllAction_triggered()
 	theDirty->setVisible(true);
 	theLayers->setVisible(true);
 	theProperties->setVisible(true);
+	theGPS->setVisible(true);
+#ifdef GEOIMAGE
+	theGeoImage->setVisible(true);
+#endif
 }
 
 void MainWindow::on_layersAddImageAction_triggered()
