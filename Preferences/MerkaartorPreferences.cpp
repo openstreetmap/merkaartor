@@ -588,6 +588,18 @@ QStringList MerkaartorPreferences::getProjectionTypes()
 	return projTypes;
 }
 
+QString getDefaultLanguage()
+{
+	QSettings Sets;
+	return Sets.value("locale/language").toString();
+}
+
+void setDefaultLanguage(const QString& theValue)
+{
+	QSettings Sets;
+	Sets.setValue("locale/language", theValue);
+}
+
 qreal MerkaartorPreferences::getAlpha(QString lvl)
 {
 	return alpha[lvl];

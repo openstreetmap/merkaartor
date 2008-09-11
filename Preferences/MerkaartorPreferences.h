@@ -112,6 +112,12 @@ class Tool
 typedef QMap<QString, Tool> ToolList;
 typedef QMapIterator<QString, Tool> ToolListIterator;
 
+
+// Outside of merkaartorpreferences, because initializing it will need translations
+// Classic chicken & egg problem.
+QString getDefaultLanguage();
+void setDefaultLanguage(const QString& L);
+
 class MerkaartorPreferences : public QObject
 {
 Q_OBJECT

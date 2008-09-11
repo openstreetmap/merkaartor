@@ -75,8 +75,29 @@ void PreferencesDialog::on_buttonBox_clicked(QAbstractButton * button)
 		}
 }
 
+void initLanguages(QComboBox* aBox)
+{
+	aBox->addItem("English","-");
+	aBox->addItem("Czech","cs");
+	aBox->addItem("German","de");
+	aBox->addItem("French","fr");
+	aBox->addItem("Italian","it");
+	aBox->addItem("Polish","pl");
+	aBox->addItem("Russian","ru");
+}
+
 void PreferencesDialog::loadPrefs()
 {
+	initLanguages(Language);
+	QString CurrentLanguage(getDefaultLanguage());
+	int l;
+	for (l = 0; l < Language->count(); ++l)
+		if (CurrentLanguage == Language->itemData(l))
+			break;
+	SelectLanguage->setChecked(l < Language->count());
+	Language->setEnabled(l < Language->count());
+	if (l < Language->count())
+		Language->setCurrentIndex(l);
 	edOsmUrl->setText(M_PREFS->getOsmWebsite());
 	edOsmUser->setText(M_PREFS->getOsmUser());
     edOsmPwd->setText(M_PREFS->getOsmPassword());
@@ -150,6 +171,10 @@ void PreferencesDialog::loadPrefs()
 
 void PreferencesDialog::savePrefs()
 {
+	if (SelectLanguage->isChecked())
+		setDefaultLanguage(Language->itemData(Language->currentIndex()).toString());
+	else
+		setDefaultLanguage("");
 	M_PREFS->setUse06Api(bbUse06Api->isChecked());
 	M_PREFS->setOsmWebsite(edOsmUrl->text());
 	M_PREFS->setOsmUser(edOsmUser->text());

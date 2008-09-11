@@ -21,21 +21,33 @@ int main(int argc, char** argv)
 	dir.cd("plugins");
 	QApplication::setLibraryPaths(QStringList(dir.absolutePath()));
 #endif
-	QTranslator qtTranslator;
-	qtTranslator.load("qt_" + QLocale::system().name()
-#ifdef TRANSDIR_SYSTEM
-        , TRANSDIR_SYSTEM
-#endif
-        );
-	app.installTranslator(&qtTranslator);
 
-	QTranslator merkaartorTranslator;
-	merkaartorTranslator.load("merkaartor_" + QLocale::system().name()
-#ifdef TRANSDIR_MERKAARTOR
-        , TRANSDIR_MERKAARTOR
-#endif
-        );
-	app.installTranslator(&merkaartorTranslator);
+	QTranslator* qtTranslator = 0;
+	QTranslator* merkaartorTranslator = 0;
+
+	QString DefaultLanguage = getDefaultLanguage();
+	if (DefaultLanguage != "-")
+	{
+
+		if (DefaultLanguage == "")
+			DefaultLanguage = QLocale::system().name();
+
+		qtTranslator = new QTranslator;
+		qtTranslator->load("qt_" + DefaultLanguage
+	#ifdef TRANSDIR_SYSTEM
+			, TRANSDIR_SYSTEM
+	#endif
+			);
+		app.installTranslator(qtTranslator);
+
+		merkaartorTranslator = new QTranslator;
+		merkaartorTranslator->load("merkaartor_" + DefaultLanguage
+	#ifdef TRANSDIR_MERKAARTOR
+			, TRANSDIR_MERKAARTOR
+	#endif
+			);
+		app.installTranslator(merkaartorTranslator);
+	}
 
 	MainWindow Main;
 
@@ -52,7 +64,10 @@ int main(int argc, char** argv)
 	if (fileNames.isEmpty())
 		QDir::setCurrent(MerkaartorPreferences::instance()->getWorkingDir());
 
-	return app.exec();
+	int x = app.exec();
+	delete qtTranslator;
+	delete merkaartorTranslator;
+	return x;
 }
 
 
