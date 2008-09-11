@@ -590,7 +590,7 @@ QStringList MerkaartorPreferences::getProjectionTypes()
 
 bool MerkaartorPreferences::getTranslateTags() const
 {
-	return Sets->value("locale/translatetags").toBool();
+	return Sets->value("locale/translatetags", true).toBool();
 }
 
 void MerkaartorPreferences::setTranslateTags(bool b)

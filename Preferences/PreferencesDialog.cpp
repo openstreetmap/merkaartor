@@ -82,7 +82,7 @@ void initLanguages(QComboBox* aBox)
 	aBox->addItem("German","de");
 	aBox->addItem("French","fr");
 	aBox->addItem("Italian","it");
-	aBox->addItem("Polish","pl");
+//	aBox->addItem("Polish","pl");
 	aBox->addItem("Russian","ru");
 }
 

@@ -3455,7 +3455,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="GPS/qgps.cpp" line="167"/>
         <source>No Position Fix</source>
-        <translation>Kine Positionslösung</translation>
+        <translation>Keine Positionslösung</translation>
     </message>
     <message>
         <location filename="GPS/qgps.cpp" line="172"/>
