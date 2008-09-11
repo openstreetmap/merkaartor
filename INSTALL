@@ -1,6 +1,6 @@
 Need
 * Working C++ compiler
-* Qt 4.2 or later development environment
+* Qt 4.3.3 or later development environment
 
 On (K)ubuntu Edgy it is sufficient to install the qt4-dev package
 to satisfy these requirements.
@@ -16,15 +16,7 @@ $ cd /home/me/src/Merkaartor-0.xx
 
 2.1 Yahoo imagery
 
-If you want Yahoo imagery and your QT is < 4.4:
-
-$ qmake All.pro
-
-If your QT is >= 4.4
-
-$ qmake Merkaartor.pro NOWEBKIT=1
-
-You don't need Yahoo imagery
+If you want Yahoo imagery, Qt 4.4+ is requierd
 
 $ qmake Merkaartor.pro NOUSEWEBKIT=1
 
@@ -34,6 +26,8 @@ PREFIX=<path>				- base prefix for installation (unix only)
 TRANSDIR_MERKAARTOR=<path>	- where will the Merkaartor translations be installed
 TRANSDIR_SYSTEM=<path>		- where your global Qt translation directory is
 NODEBUG=1					- release target
+
+see http://wiki.openstreetmap.org/index.php/Merkaartor_doc_0.12 for the complete list
 
 On (K)ubuntu this will probably pick up the qmake from Qt3 so
 you need to explicitly run the correct one : /usr/share/qt4/bin/qmake

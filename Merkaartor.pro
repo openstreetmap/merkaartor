@@ -116,19 +116,10 @@ count(TRANSDIR_SYSTEM, 1) {
     DEFINES += TRANSDIR_SYSTEM=\"\\\"$${TRANSDIR_SYSTEM}\\\"\"
 }
 
-contains(GDAL,1) {
-	DEPENDPATH += ./QGDAL
-	INCLUDEPATH += ./QGDAL
-	include(QGDAL/qgdal.pri)
-}
-
 isEmpty(NOUSEWEBKIT) {
     DEFINES += YAHOO
     SOURCES += QMapControl/yahoolegalmapadapter.cpp QMapControl/browserimagemanager.cpp
     HEADERS += QMapControl/yahoolegalmapadapter.h QMapControl/browserimagemanager.h
-    isEmpty(NOWEBKIT) {
-        include(webkit/WebKit.pri)
-    }
     QT += webkit
 }
 
