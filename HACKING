@@ -6,6 +6,10 @@ This are some basic notes on hacking on merkaartor
 	see Map/PreDefinedTags.cpp fillHighway for filling combobox
 - adding landuse
 	see Map/PreDefinedTags.cpp fillLandUse for filling combobox
+- adding a language
+	edit Merkaartor.pro and add your language
+	edit Preferences/PreferencesDialog function initLanguages
+	lupdate -> linguist -> lrelease (see the Qt docs about these)
 
 If you want to change the default rendering of any of those
 items see the Styles/Classic.mas file.
