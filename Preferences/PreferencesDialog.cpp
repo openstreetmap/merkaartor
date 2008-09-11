@@ -98,6 +98,7 @@ void PreferencesDialog::loadPrefs()
 	Language->setEnabled(l < Language->count());
 	if (l < Language->count())
 		Language->setCurrentIndex(l);
+	TranslateTags->setChecked(M_PREFS->getTranslateTags());
 	edOsmUrl->setText(M_PREFS->getOsmWebsite());
 	edOsmUser->setText(M_PREFS->getOsmUser());
     edOsmPwd->setText(M_PREFS->getOsmPassword());
@@ -175,6 +176,7 @@ void PreferencesDialog::savePrefs()
 		setDefaultLanguage(Language->itemData(Language->currentIndex()).toString());
 	else
 		setDefaultLanguage("");
+	M_PREFS->setTranslateTags(TranslateTags->isChecked());
 	M_PREFS->setUse06Api(bbUse06Api->isChecked());
 	M_PREFS->setOsmWebsite(edOsmUrl->text());
 	M_PREFS->setOsmUser(edOsmUser->text());

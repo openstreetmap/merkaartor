@@ -588,6 +588,16 @@ QStringList MerkaartorPreferences::getProjectionTypes()
 	return projTypes;
 }
 
+bool MerkaartorPreferences::getTranslateTags() const
+{
+	return Sets->value("locale/translatetags").toBool();
+}
+
+void MerkaartorPreferences::setTranslateTags(bool b)
+{
+	Sets->setValue("locale/translatetags",b);
+}
+
 QString getDefaultLanguage()
 {
 	QSettings Sets;

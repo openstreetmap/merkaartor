@@ -1,4 +1,5 @@
 v0.12
+	* ADD : let the use choose between translating standard OSM tags
 	* ADD : ability to set language explicitly
 	* FIX : make "About" dialog more useful
 	* FIX : show correct progress when downloading maps

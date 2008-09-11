@@ -294,6 +294,7 @@ public:
 	M_PARAM_DECLARE_BOOL(GpsSyncTime)
 
 	M_PARAM_DECLARE_BOOL(ResolveRelations)
+	M_PARAM_DECLARE_BOOL(TranslateTags)
 protected:
 	bool Use06Api;
 	QString version;
