@@ -28,10 +28,10 @@ static QString translateTag(const char* Context, const char* src, bool DoIt)
 void addDefaults(QComboBox* Box, bool DoIt)
 {
 	Box->addItem(
-		translateTag("DefaultTags","Not specified", DoIt),
+		translateTag(QT_TRANSLATE_NOOP("DefaultTags","Not specified"), DoIt),
 		"__unspecified");
 	Box->addItem(
-		translateTag("DefaultTags","Unknown", DoIt),
+		translateTag(QT_TRANSLATE_NOOP("DefaultTags","Unknown"), DoIt),
 		"__unknown");
 }
 
