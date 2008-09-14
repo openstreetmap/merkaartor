@@ -464,18 +464,20 @@ void PropertiesDock::on_TrackPointLon_editingFinished()
 
 void PropertiesDock::on_RoadName_editingFinished()
 {
-	if (selection(0))
+	Road* R = CAST_WAY(selection(0));
+
+	if (R && RoadUi.Name->text() != R->tagValue("name", ""))
 	{
 		if (RoadUi.Name->text().isEmpty())
 			Main->document()->addHistory(
-				new ClearTagCommand(selection(0),"name",Main->document()->getDirtyOrOriginLayer(selection(0)->layer())));
+				new ClearTagCommand(selection(0),"name",Main->document()->getDirtyOrOriginLayer(R->layer())));
 		else {
-			CommandList* theList  = new CommandList(MainWindow::tr("Set Tag 'name' to '%1' on %2").arg(RoadUi.Name->text()).arg(selection(0)->description()), selection(0));
-			if (!selection(0)->isDirty() && !selection(0)->hasOSMId() && selection(0)->isUploadable()) {
-				bool userAdded = !selection(0)->id().startsWith("conflict_");
-				theList->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),selection(0),userAdded));
+			CommandList* theList  = new CommandList(MainWindow::tr("Set Tag 'name' to '%1' on %2").arg(RoadUi.Name->text()).arg(R->description()), selection(0));
+			if (!R->isDirty() && !R->hasOSMId() && R->isUploadable()) {
+				bool userAdded = !R->id().startsWith("conflict_");
+				theList->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),R,userAdded));
 			}
-			theList->add(new SetTagCommand(selection(0),"name",RoadUi.Name->text(),Main->document()->getDirtyOrOriginLayer(selection(0)->layer())));
+			theList->add(new SetTagCommand(R,"name",RoadUi.Name->text(),Main->document()->getDirtyOrOriginLayer(R->layer())));
 			Main->document()->addHistory(theList);
 		}
 		theModel->setFeature(Selection);
