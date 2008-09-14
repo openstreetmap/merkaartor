@@ -745,6 +745,7 @@ void MainWindow::on_helpAboutAction_triggered()
 	About.txtChangelog->setPlainText(cl.readAll());
 	QPixmap px(":/Utils/Merkaartor_About.png");
 	About.pxIcon->setPixmap(px);
+	About.lblUrl->setOpenExternalLinks(true);
 	dlg.exec();
 }
 

@@ -8,7 +8,6 @@ REVISION="-SVN"
 # OUTPUT_DIR          - base directory for local output files
 # PREFIX              - base prefix for installation
 # NOUSEWEBKIT=1         - disable use of WebKit (Yahoo adapter)
-# NOWEBKIT=1            - disable building of own WebKit
 # OSMARENDER=1          - enable osmarender
 # GDAL=1    	      - enable GDAL
 # MOBILE=1    	      - enable MOBILE

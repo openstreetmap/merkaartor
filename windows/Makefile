@@ -1,10 +1,14 @@
-ToWin = `cygpath --windows $1`
+#ToWin = `cygpath --windows $1`
+ToWin = $1
 DOSWIXDIR := c:\\Program Files\\Windows Installer XML v3\\
-LIGHT := "/c/Program Files/Windows Installer XML v3/bin/light.exe"
-CANDLE := "/c/Program Files/Windows Installer XML v3/bin/candle.exe"
+LIGHT := "c:/Program Files/Windows Installer XML v3/bin/light.exe"
+CANDLE := "c:/Program Files/Windows Installer XML v3/bin/candle.exe"
+LRELEASE := "lrelease.exe"
+VERSION=0.12
+REVISION=-beta1
 
 
-merkaartor.msi: merkaartor.wixobj Makefile banner.bmp dialog.bmp
+merkaartor-$(VERSION)$(REVISION).msi: merkaartor.wixobj Makefile banner.bmp dialog.bmp merkaartor.qm
 	$(LIGHT) $(call ToWin,$<) \
 		-dWixUILicenseRtf=..\\License.rtf \
 		-dWixUIBannerBmp=banner.bmp \
@@ -15,7 +19,13 @@ merkaartor.msi: merkaartor.wixobj Makefile banner.bmp dialog.bmp
 
 
 %.wixobj: %.wxs Makefile
-	$(CANDLE) $(call ToWin,$<) -out $(call ToWin,$@)
+	$(CANDLE) $(call ToWin,$<) \
+		-dVERSION=$(VERSION) \
+		-dREVISION=$(REVISION) \
+		-out $(call ToWin,$@)
+
+merkaartor.qm: 
+	$(LRELEASE) ..\\merkaartor.pro
 
 clean:
 	rm -rf merkaartor.msi merkaartor.wixobj
