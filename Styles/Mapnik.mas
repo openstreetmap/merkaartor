@@ -699,7 +699,7 @@
  zoomUnder="0.2" zoomUpper="1e+07"
  drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3.0"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="addr:housenumber">
-  <selector expr="[addr:housenumber] is *"/>
+  <selector expr="[addr:housenumber] is not _NULL_"/>
 </painter>
 <painter
  zoomUnder="0" zoomUpper="1e+07"
