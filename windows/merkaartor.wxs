@@ -21,22 +21,22 @@
          <Component Id="AllFiles" Guid="8874BD43-28FF-4420-B4E0-AE7D51E6590A">
 	    <RegistryValue Root="HKCU" Key="Software\Merkaartor" Name="Installed" Type="integer" Value="1"/>
             <File Id="QtCore" Name="QtCore4.dll"
-               Source="c:\Qt\440os\bin\QtCore4.dll" DiskId="1">
+               Source="c:\Qt\4.4.1_mingw\bin\QtCore4.dll" DiskId="1">
             </File>
             <File Id="QtGui" Name="QtGui4.dll"
-               Source="c:\Qt\440os\bin\QtGui4.dll" DiskId="1">
+               Source="c:\Qt\4.4.1_mingw\bin\QtGui4.dll" DiskId="1">
             </File>
             <File Id="QtXml" Name="QtXml4.dll"
-               Source="c:\Qt\440os\bin\QtXml4.dll" DiskId="1">
+               Source="c:\Qt\4.4.1_mingw\bin\QtXml4.dll" DiskId="1">
             </File>
             <File Id="QtNetwork" Name="QtNetwork4.dll"
-               Source="c:\Qt\440os\bin\QtNetwork4.dll" DiskId="1">
+               Source="c:\Qt\4.4.1_mingw\bin\QtNetwork4.dll" DiskId="1">
             </File>
             <File Id="QtWebKit" Name="QtWebKit4.dll"
-               Source="c:\Qt\440os\bin\QtWebKit4.dll" DiskId="1">
+               Source="c:\Qt\4.4.1_mingw\bin\QtWebKit4.dll" DiskId="1">
             </File>
             <File Id="mingwm10.dll" Name="mingwm10.dll"
-               Source="c:\Qt\MinGW\bin\mingwm10.dll" DiskId="1">
+               Source="c:\MinGW\bin\mingwm10.dll" DiskId="1">
             </File>
             <File Id="merkaartor_cs.qm" Name="merkaartor_cs.qm"
                Source="..\merkaartor_cs.qm" DiskId="1">

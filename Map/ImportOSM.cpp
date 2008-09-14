@@ -78,6 +78,8 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
 		}
 		else if (Pt->lastUpdated() != MapFeature::UserResolved)
 		{
+			Pt->layer()->remove(Pt);
+			theLayer->add(Pt);
 			Pt->setPosition(Coord(angToInt(Lat),angToInt(Lon)));
 			NewFeature = false;
 			if (Pt->lastUpdated() == MapFeature::NotYetDownloaded)
@@ -134,6 +136,8 @@ void OSMHandler::parseWay(const QXmlAttributes& atts)
 		}
 		else if (R->lastUpdated() != MapFeature::UserResolved)
 		{
+			R->layer()->remove(R);
+			theLayer->add(R);
 			while (R->size())
 				R->remove((unsigned int)0);
 			NewFeature = true;
@@ -326,7 +330,7 @@ static bool resolveNotYetDownloaded(QProgressDialog* dlg, MapDocument* theDocume
 			recurseDelete(theLayer->get(i), MustDelete);
 	}
 	for (int i=0; i<MustDelete.size(); i++) {
-		theLayer->remove(MustDelete[i]);
+		MustDelete[i]->layer()->remove(MustDelete[i]);
 		delete MustDelete[i];
 	}
 	return true;

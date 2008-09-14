@@ -515,10 +515,14 @@ bool ImportExportOsmBin::clearTile(qint32 tile, MapDocument* d, OsbMapLayer* the
 
 	for (quint32 i=0; i<theTileIndex[tile].size(); ++i) {
 		MapFeature* F = theTileIndex[tile][i];
-		int theCount = --featRefCount[F];
-		if (!(theCount)) {
-			theLayer->remove(F);
-			delete F;
+		if (F->layer() == theLayer) {
+			int theCount = --featRefCount[F];
+			if (!(theCount)) {
+				theLayer->remove(F);
+				delete F;
+				featRefCount.remove(F);
+			}
+		} else {
 			featRefCount.remove(F);
 		}
 	}
