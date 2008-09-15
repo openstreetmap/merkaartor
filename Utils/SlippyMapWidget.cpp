@@ -21,14 +21,23 @@ class SlippyMapWidgetPrivate
 {
 	public:
 		SlippyMapWidgetPrivate(SlippyMapWidget* w)
-			: theWidget(w), Zoom(1), Lat(1), Lon(1), InDrag(false)
+			: theWidget(w), InDrag(false)
 		{
+			Sets = new QSettings();
+			Sets->beginGroup("SlippyMapWidget");
+			Lat = Sets->value("Lat", 1).toDouble();
+			Lon = Sets->value("Lon", 1).toDouble();
+			Zoom = Sets->value("Zoom", 1).toDouble();
+
 			if (!theCache)
 				theCache = new SlippyMapCache;
 			theCache->setMap(this);
 		}
 		~SlippyMapWidgetPrivate()
 		{
+			Sets->setValue("Lat", Lat);
+			Sets->setValue("Lon", Lon);
+			Sets->setValue("Zoom", Zoom);
 			theCache->setMap(0);
 		}
 
@@ -41,6 +50,7 @@ class SlippyMapWidgetPrivate
 		QPoint PreviousDrag;
 		bool InDrag;
 		static SlippyMapCache* theCache;
+		QSettings* Sets;
 };
 
 SlippyMapCache* SlippyMapWidgetPrivate::theCache = 0;
