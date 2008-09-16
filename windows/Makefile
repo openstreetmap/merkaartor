@@ -4,8 +4,8 @@ DOSWIXDIR := c:\\Program Files\\Windows Installer XML v3\\
 LIGHT := "c:/Program Files/Windows Installer XML v3/bin/light.exe"
 CANDLE := "c:/Program Files/Windows Installer XML v3/bin/candle.exe"
 LRELEASE := "lrelease.exe"
-VERSION=0.12
-REVISION=-beta1
+VERSION=0.13
+REVISION=-SVN
 
 
 merkaartor-$(VERSION)$(REVISION).msi: merkaartor.wixobj Makefile banner.bmp dialog.bmp merkaartor.qm
@@ -18,7 +18,7 @@ merkaartor-$(VERSION)$(REVISION).msi: merkaartor.wixobj Makefile banner.bmp dial
 		-out $(call ToWin,$@)
 
 
-%.wixobj: %.wxs Makefile
+merkaartor.wixobj: merkaartor.wxs qt.wxi Makefile
 	$(CANDLE) $(call ToWin,$<) \
 		-dVERSION=$(VERSION) \
 		-dREVISION=$(REVISION) \

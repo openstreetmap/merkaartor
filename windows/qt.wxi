@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Include>
+  
+  <Fragment>
+    <DirectoryRef Id="INSTALLLOCATION">
+      <Component Id="QtMain" Guid="52e87a67-6e25-44fa-be0c-e373f859a9db">
+        <File Id="QtCore" Name="QtCore4.dll" DefaultLanguage="0"
+           Source="$(var.QtPath)\bin\QtCore4.dll" DiskId="1">
+        </File>
+        <File Id="QtGui" Name="QtGui4.dll" DefaultLanguage="0"
+           Source="$(var.QtPath)\bin\QtGui4.dll" DiskId="1">
+        </File>
+        <File Id="QtXml" Name="QtXml4.dll" DefaultLanguage="0"
+           Source="$(var.QtPath)\bin\QtXml4.dll" DiskId="1">
+        </File>
+        <File Id="QtNetwork" Name="QtNetwork4.dll" DefaultLanguage="0"
+           Source="$(var.QtPath)\bin\QtNetwork4.dll" DiskId="1">
+        </File>
+        <File Id="QtSvg" Name="QtSvg4.dll" DefaultLanguage="0"
+           Source="$(var.QtPath)\bin\QtSvg4.dll" DiskId="1">
+        </File>
+        <File Id="QtWebKit" Name="QtWebKit4.dll" DefaultLanguage="0"
+           Source="$(var.QtPath)\bin\QtWebKit4.dll" DiskId="1">
+        </File>
+      </Component>
+    </DirectoryRef>
+    
+    <DirectoryRef Id="QTIMAGEPLUGINDIR">
+
+      <Component Id="QtImagePlugins" Guid="a5b10390-c06f-4f0e-a745-e143260cc1fe">
+        <File Id="qgif4" Name="qgif4.dll"
+           Source="$(var.QtPath)\plugins\imageformats\qgif4.dll" DiskId="1">
+        </File>
+        <File Id="qico4" Name="qico4.dll"
+          Source="$(var.QtPath)\plugins\imageformats\qico4.dll" DiskId="1">
+        </File>
+        <File Id="qjpeg4" Name="qjpeg4.dll"
+          Source="$(var.QtPath)\plugins\imageformats\qjpeg4.dll" DiskId="1">
+        </File>
+        <File Id="qsvg4" Name="qsvg4.dll"
+           Source="$(var.QtPath)\plugins\imageformats\qsvg4.dll" DiskId="1">
+        </File>
+        <File Id="qtiff4" Name="qtif4.dll"
+           Source="$(var.QtPath)\plugins\imageformats\qtiff4.dll" DiskId="1">
+        </File>
+      </Component>
+        
+    </DirectoryRef>
+  </Fragment>
+
+</Include>
