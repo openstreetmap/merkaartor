@@ -88,8 +88,12 @@ unsigned int Command::getDirtyLevel()
 
 void Command::undo()
 {
-	if (mainFeature)
-		mainFeature->setTag("created_by", oldCreated);
+	if (mainFeature) {
+		if (oldCreated != TAG_UNDEF_VALUE)
+			mainFeature->setTag("created_by", oldCreated);
+		else
+			mainFeature->clearTag("created_by");
+	}
 }
 
 void Command::redo()
@@ -104,12 +108,14 @@ bool Command::toXML(QDomElement& xParent) const
 {
 	bool OK = true;
 
-	QDomElement e = xParent.ownerDocument().createElement("Command");
-	xParent.appendChild(e);
+	if (mainFeature) {
+		QDomElement e = xParent.ownerDocument().createElement("Command");
+		xParent.appendChild(e);
 
-	e.setAttribute("xml:id", id());
-	e.setAttribute("feature", mainFeature->xmlId());
-	e.setAttribute("oldCreated", oldCreated);
+		e.setAttribute("xml:id", id());
+		e.setAttribute("feature", mainFeature->xmlId());
+		e.setAttribute("oldCreated", oldCreated);
+	}
 
 	return OK;
 }

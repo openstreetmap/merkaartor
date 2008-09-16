@@ -156,15 +156,17 @@ void Projection::zoom(double d, const QPointF & Around,
 	}
 	else
 	{
-		Coord Before = inverse(Around);
-		ScaleLon *= d;
-		ScaleLat *= d;
-		Coord After = inverse(Around);
-		DeltaLat = int(Around.y() + Before.lat() * ScaleLat);
-		DeltaLon = int(Around.x() - Before.lon() * ScaleLon);
-		viewportRecalc(Screen);
-		if (LAYERMANAGER_OK) {
-			layerManagerSetViewport(Viewport, Screen);
+		if (ScaleLat * d < 1.0 && ScaleLon * d < 1.0) {
+			Coord Before = inverse(Around);
+			ScaleLon *= d;
+			ScaleLat *= d;
+			Coord After = inverse(Around);
+			DeltaLat = int(Around.y() + Before.lat() * ScaleLat);
+			DeltaLon = int(Around.x() - Before.lon() * ScaleLon);
+			viewportRecalc(Screen);
+			if (LAYERMANAGER_OK) {
+				layerManagerSetViewport(Viewport, Screen);
+			}
 		}
 
 	}
