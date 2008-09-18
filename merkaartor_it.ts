@@ -1001,6 +1001,16 @@ Do you still want to use it?</source>
         <translation>Immagine &quot;%1&quot; è stata presa %s dopo la registrazione dell&apos;ultimo punto.
 Vuoi continuare ad usarla?</translation>
     </message>
+    <message>
+        <location filename="GeoImageDock.cpp" line="27"/>
+        <source>Remove Images</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="GeoImageDock.cpp" line="28"/>
+        <source>Copy filename to clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Highway</name>
@@ -1108,17 +1118,17 @@ Vuoi continuare ad usarla?</translation>
 <context>
     <name>ImageMapLayer</name>
     <message>
-        <location filename="Map/MapLayer.cpp" line="595"/>
+        <location filename="Map/MapLayer.cpp" line="590"/>
         <source>Map - None</source>
         <translation>Mappa - nessuna</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="609"/>
+        <location filename="Map/MapLayer.cpp" line="604"/>
         <source>Map - WMS - %1</source>
         <translation>Mappa - WMS - %1</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="620"/>
+        <location filename="Map/MapLayer.cpp" line="615"/>
         <source>Map - TMS - %1</source>
         <translation>Mappa - TMS - %1</translation>
     </message>
@@ -1128,22 +1138,22 @@ Vuoi continuare ad usarla?</translation>
         <translation type="obsolete">Livello personalizzato</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="633"/>
+        <location filename="Map/MapLayer.cpp" line="628"/>
         <source>Map - Yahoo</source>
         <translation>Mappa - Yahoo</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="642"/>
+        <location filename="Map/MapLayer.cpp" line="637"/>
         <source>Map - Illegal Yahoo</source>
         <translation>Mappa - Yahoo illlegale</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="651"/>
+        <location filename="Map/MapLayer.cpp" line="646"/>
         <source>Map - Illegal Google</source>
         <translation>Mappa - Google illegale</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="660"/>
+        <location filename="Map/MapLayer.cpp" line="655"/>
         <source>Map - Illegal Ms Virtual Earth</source>
         <translation>Mappa - Ms Virtual Earth illegale</translation>
     </message>
@@ -1798,32 +1808,32 @@ Vuoi farlo adesso?</translation>
         <translation>Impossibile scaricare la mappa</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="1042"/>
+        <location filename="MainWindow.cpp" line="1043"/>
         <source>Save map style</source>
         <translation>Salva lo stile della mappa</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="1049"/>
+        <location filename="MainWindow.cpp" line="1050"/>
         <source>Merkaartor map style (*.mas)</source>
         <translation>Stile mappa Merkaator (*.mas)</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="1049"/>
+        <location filename="MainWindow.cpp" line="1050"/>
         <source>Load map style</source>
         <translation>Carica stile mappa</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="1086"/>
+        <location filename="MainWindow.cpp" line="1087"/>
         <source>Save Merkaartor document</source>
         <translation>Salva documento</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="1086"/>
+        <location filename="MainWindow.cpp" line="1087"/>
         <source>untitled</source>
         <translation>senza titolo</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="1086"/>
+        <location filename="MainWindow.cpp" line="1087"/>
         <source>Merkaartor documents Files (*.mdc)</source>
         <translation>Documento di Merkaartor (*.mdc)</translation>
     </message>
@@ -1983,22 +1993,22 @@ Vuoi farlo adesso?</translation>
         <translation>Gli appunti non contengono informazioni OSM valide.</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="951"/>
+        <location filename="MainWindow.cpp" line="952"/>
         <source>Join Roads</source>
         <translation>Unisci Strade</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="964"/>
+        <location filename="MainWindow.cpp" line="965"/>
         <source>Split Roads</source>
         <translation>Dividi Strade</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="974"/>
+        <location filename="MainWindow.cpp" line="975"/>
         <source>Break Roads</source>
         <translation>Rompi Strade</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="997"/>
+        <location filename="MainWindow.cpp" line="998"/>
         <source>Create Relation %1</source>
         <translation>Crea relazione %1</translation>
     </message>
@@ -2030,7 +2040,7 @@ Vuoi farlo adesso?</translation>
     <message>
         <location filename="MainWindow.ui" line="616"/>
         <source>Left</source>
-        <translation>Sinistra</translation>
+        <translation type="unfinished">Sinistra</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="558"/>
@@ -2040,7 +2050,7 @@ Vuoi farlo adesso?</translation>
     <message>
         <location filename="MainWindow.ui" line="627"/>
         <source>Right</source>
-        <translation>Destra</translation>
+        <translation type="unfinished">Destra</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="569"/>
@@ -2050,7 +2060,7 @@ Vuoi farlo adesso?</translation>
     <message>
         <location filename="MainWindow.ui" line="638"/>
         <source>Up</source>
-        <translation>Su</translation>
+        <translation type="unfinished">Su</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="580"/>
@@ -2060,7 +2070,7 @@ Vuoi farlo adesso?</translation>
     <message>
         <location filename="MainWindow.ui" line="649"/>
         <source>Down</source>
-        <translation>Giù</translation>
+        <translation type="unfinished">Giù</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="756"/>
@@ -2158,7 +2168,7 @@ Vuoi farlo adesso?</translation>
         <translation>Importa NGT</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="773"/>
+        <location filename="Map/MapLayer.cpp" line="768"/>
         <source>Extracted Layer &apos;%1&apos;</source>
         <translation>Livelli Estratti &apos;%1&apos;</translation>
     </message>
@@ -2215,7 +2225,7 @@ Vuoi farlo ora?</translation>
         <translation>Files OSM Binari (*.osb)</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="984"/>
+        <location filename="MainWindow.cpp" line="985"/>
         <source>Commit Roads</source>
         <translation>Deposita Strade</translation>
     </message>
@@ -2252,22 +2262,22 @@ Vuoi farlo ora?</translation>
     <message>
         <location filename="MainWindow.ui" line="613"/>
         <source>Move view left</source>
-        <translation>Sposta vista a sinistra</translation>
+        <translation type="unfinished">Sposta vista a sinistra</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="624"/>
         <source>Move view right</source>
-        <translation>Sposta vista a destra</translation>
+        <translation type="unfinished">Sposta vista a destra</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="635"/>
         <source>Move view up</source>
-        <translation>Sposta vista sù</translation>
+        <translation type="unfinished">Sposta vista sù</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="646"/>
         <source>Move view down</source>
-        <translation>Sposta vista giù</translation>
+        <translation type="unfinished">Sposta vista giù</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="765"/>
@@ -2555,14 +2565,14 @@ Vuoi farlo ora?</translation>
         <translation>Ctrl+E</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="1142"/>
+        <location filename="MainWindow.cpp" line="1115"/>
         <source>Unable to open save file</source>
-        <translation>Impossibile aprire il file</translation>
+        <translation type="obsolete">Impossibile aprire il file</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="1142"/>
+        <location filename="MainWindow.cpp" line="1115"/>
         <source>%1 could not be opened for writing.</source>
-        <translation>%1 non può essere aperto in modifica.</translation>
+        <translation type="obsolete">%1 non può essere aperto in modifica.</translation>
     </message>
 </context>
 <context>
@@ -2661,17 +2671,17 @@ Vuoi farlo ora?</translation>
         <translation>Via</translation>
     </message>
     <message>
-        <location filename="Map/TrackPoint.cpp" line="345"/>
+        <location filename="Map/TrackPoint.cpp" line="338"/>
         <source>timestamp</source>
         <translation>timestamp</translation>
     </message>
     <message>
-        <location filename="Map/TrackPoint.cpp" line="346"/>
+        <location filename="Map/TrackPoint.cpp" line="339"/>
         <source>coord</source>
         <translation>coordinate</translation>
     </message>
     <message>
-        <location filename="Map/TrackPoint.cpp" line="362"/>
+        <location filename="Map/TrackPoint.cpp" line="355"/>
         <source>Node</source>
         <translation>Nodo</translation>
     </message>
@@ -2686,27 +2696,27 @@ Vuoi farlo ora?</translation>
         <translation>Dimensione</translation>
     </message>
     <message>
-        <location filename="Map/TrackPoint.cpp" line="348"/>
+        <location filename="Map/TrackPoint.cpp" line="341"/>
         <source>elevation</source>
         <translation>altezza sul liv. del mare</translation>
     </message>
     <message>
-        <location filename="Map/TrackPoint.cpp" line="350"/>
+        <location filename="Map/TrackPoint.cpp" line="343"/>
         <source>speed</source>
         <translation>velocità</translation>
     </message>
     <message>
-        <location filename="Map/TrackPoint.cpp" line="353"/>
+        <location filename="Map/TrackPoint.cpp" line="346"/>
         <source>Waypoint</source>
         <translation>Waypoint</translation>
     </message>
     <message>
-        <location filename="Map/TrackPoint.cpp" line="356"/>
+        <location filename="Map/TrackPoint.cpp" line="349"/>
         <source>description</source>
         <translation>descrizione</translation>
     </message>
     <message>
-        <location filename="Map/TrackPoint.cpp" line="359"/>
+        <location filename="Map/TrackPoint.cpp" line="352"/>
         <source>comment</source>
         <translation>commento</translation>
     </message>
@@ -2907,17 +2917,17 @@ Vuoi farlo ora?</translation>
 <context>
     <name>OsbMapLayer</name>
     <message>
-        <location filename="Map/MapLayer.cpp" line="1206"/>
+        <location filename="Map/MapLayer.cpp" line="1201"/>
         <source># of loaded Regions</source>
         <translation># di Regioni caricate</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="1207"/>
+        <location filename="Map/MapLayer.cpp" line="1202"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="1207"/>
+        <location filename="Map/MapLayer.cpp" line="1202"/>
         <source># of loaded Tiles</source>
         <translation># di aree caricate</translation>
     </message>
@@ -4106,7 +4116,7 @@ Prego inserire un altro nome o clicca su pulsanre &lt;Applica&gt; se vuoi modifi
 <context>
     <name>TrackMapLayer</name>
     <message>
-        <location filename="Map/MapLayer.cpp" line="772"/>
+        <location filename="Map/MapLayer.cpp" line="767"/>
         <source>Extract - %1</source>
         <translation>Estrai - %1</translation>
     </message>

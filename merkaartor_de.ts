@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="de">
-<defaultcodec></defaultcodec>
 <context>
     <name></name>
     <message>
@@ -977,6 +976,16 @@ Soll es trotzdem benutzt werden?</translation>
 Do you still want to use it?</source>
         <translation>Das Bild &quot;%1&quot; wrude %2 nach dem letzten Trackpoint aufgenommen.
 Soll es trotzdem benutzt werden?</translation>
+    </message>
+    <message>
+        <location filename="GeoImageDock.cpp" line="27"/>
+        <source>Remove Images</source>
+        <translation>Entferne Bilder</translation>
+    </message>
+    <message>
+        <location filename="GeoImageDock.cpp" line="28"/>
+        <source>Copy filename to clipboard</source>
+        <translation>Kopiere Dateinamen in Zwischenablage</translation>
     </message>
 </context>
 <context>

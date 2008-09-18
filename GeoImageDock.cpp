@@ -24,8 +24,8 @@ GeoImageDock::GeoImageDock(MainWindow *aMain)
 
 	setContextMenuPolicy(Qt::ActionsContextMenu);
 
-	QAction *remImages = new QAction("Remove Images", this);
-	QAction *toClipboard = new QAction("Copy filename to clipboard", this);
+	QAction *remImages = new QAction(tr("Remove Images"), this);
+	QAction *toClipboard = new QAction(tr("Copy filename to clipboard"), this);
 
 	addAction(remImages);
 	addAction(toClipboard);
