@@ -74,6 +74,8 @@ MapView::MapView(MainWindow* aMain) :
 	connect(MoveUp, SIGNAL(activated()), this, SLOT(on_MoveUp_activated()));
 	MoveDown = new QShortcut(QKeySequence(Qt::Key_Down), this);
 	connect(MoveDown, SIGNAL(activated()), this, SLOT(on_MoveDown_activated()));
+
+	invalidRegion = QRegion(rect());
 }
 
 MapView::~MapView()
@@ -135,9 +137,6 @@ void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
 		StaticBufferUpToDate = false;
 	}
 	if (LAYERMANAGER_OK && layermanager->getLayer()->isVisible() && updateMap) {
-		invalidRegion = QRegion(rect());
-		theLastDelta = QPoint(0, 0);
-		thePanDelta = QPoint(0, 0);
 		layermanager->forceRedraw();
 		StaticMapUpToDate = false;
 	}
@@ -149,15 +148,17 @@ void MapView::panScreen(QPoint delta)
 	thePanDelta += delta;
 	projection().panScreen(delta,rect());
 
-	invalidRegion = QRegion();
+	QRegion panRg = QRegion(rect()) - invalidRegion;
+	QRect bbRect = panRg.boundingRect();
+
 	if (delta.x() < 0)
-		invalidRegion += QRect(rect().x() + rect().width() + delta.x(), rect().y(), -delta.x(), rect().height());
+		invalidRegion += QRect(bbRect.x() + bbRect.width() + delta.x(), bbRect.y(), -delta.x(), bbRect.height());
 	else
-		invalidRegion += QRect(rect().x(), rect().y(), delta.x(), rect().height());
+		invalidRegion += QRect(bbRect.x(), bbRect.y(), delta.x(), bbRect.height());
 	if (delta.y() < 0)
-		invalidRegion += QRect(rect().x(), rect().y() + rect().height() + delta.y(), rect().width(), -delta.y());
+		invalidRegion += QRect(bbRect.x(), bbRect.y() + bbRect.height() + delta.y(), bbRect.width(), -delta.y());
 	else
-		invalidRegion += QRect(rect().x(), rect().y(), rect().width(), delta.y());
+		invalidRegion += QRect(bbRect.x(), bbRect.y(), bbRect.width(), delta.y());
 
 	StaticBufferUpToDate = false;
 
@@ -168,6 +169,9 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 {
 	QTime Start(QTime::currentTime());
 
+	if (!(StaticBufferUpToDate && StaticMapUpToDate))
+		qDebug() << "PaintEvent: " << StaticBufferUpToDate << "; " << StaticMapUpToDate;
+
 	QPainter P(this);
 	QRegion rg(rect());
 	P.setClipRegion(rg);
@@ -176,15 +180,16 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 	P.fillRect(rect(), QBrush(MerkaartorPreferences::instance()->getBgColor()));
 
 	if (LAYERMANAGER_OK && layermanager->getLayer()->isVisible()) {
-		updateLayersImage(anEvent);
+		updateLayersImage();
 		P.setOpacity(theDocument->getImageLayer()->getAlpha());
 		P.drawPixmap(thePanDelta, *StaticMap);
 	}
 	
-	updateStaticBuffer(invalidRegion);
+	updateStaticBuffer();
 	P.setOpacity(1.0);
 	P.drawPixmap(QPoint(0, 0), *StaticBuffer);
 
+	drawDownloadAreas(P);
 	drawScale(P);
 
 	if (theInteraction) {
@@ -254,7 +259,7 @@ void MapView::sortRenderingPriorityInLayers()
 	}
 }
 
-void MapView::updateLayersImage(QPaintEvent * /* anEvent */)
+void MapView::updateLayersImage()
 {
 	if (StaticMapUpToDate)
 		return;
@@ -268,6 +273,7 @@ void MapView::updateLayersImage(QPaintEvent * /* anEvent */)
 
 	if (MerkaartorPreferences::instance()->getProjectionType() == Proj_Background)
 	{
+		thePanDelta = QPoint(0, 0);
 		StaticMapUpToDate = true;
 		layermanager->drawImage(&P);
 		return;
@@ -301,6 +307,7 @@ void MapView::updateLayersImage(QPaintEvent * /* anEvent */)
 
 	P.drawPixmap((width()-pms.width())/2, (height()-pms.height())/2, pms);
 
+	thePanDelta = QPoint(0, 0);
 	StaticMapUpToDate = true;
 }
 
@@ -411,17 +418,28 @@ void MapView::drawDownloadAreas(QPainter & P)
 }
 
 
-void MapView::updateStaticBuffer(const QRegion& invalidRegion)
+void MapView::updateStaticBuffer()
 {
 	if (StaticBufferUpToDate)
 		return;
 
 	QPixmap savPix;
-	QPoint pan = thePanDelta - theLastDelta;
-	if (!pan.isNull()) {
+	QPoint pan;
+	QRect bbRect;
+
+	QRegion panRg = QRegion(rect()) - invalidRegion;
+	if (!panRg.isEmpty()) {
+		//pan = (panRg.boundingRect().center() - rect().center()) * 2.0;
+		bbRect = panRg.boundingRect();
+		pan = bbRect.topLeft() - rect().topLeft() + bbRect.bottomRight() - rect().bottomRight();
 		savPix = StaticBuffer->copy();
-		theLastDelta = thePanDelta;
 	}
+
+	//pan = thePanDelta - theLastDelta;
+	//if (!pan.isNull()) {
+	//	savPix = StaticBuffer->copy();
+	//	theLastDelta = thePanDelta;
+	//}
 	if (!StaticBuffer || (StaticBuffer->size() != size()))
 	{
 		delete StaticBuffer;
@@ -432,11 +450,13 @@ void MapView::updateStaticBuffer(const QRegion& invalidRegion)
 
 	QPainter painter(StaticBuffer);
 
-	if (!pan.isNull())
+	painter.setClipping(true);
+	if (!panRg.isEmpty()) {
+		painter.setClipRegion(panRg);
 		painter.drawPixmap(pan, savPix);
+	}
 
 	painter.setClipRegion(invalidRegion);
-	painter.setClipping(true);
 
 	painter.setRenderHint(QPainter::Antialiasing);
 
@@ -445,9 +465,9 @@ void MapView::updateStaticBuffer(const QRegion& invalidRegion)
 		sortRenderingPriorityInLayers();
 		//drawLayersImage(painter);
 		drawFeatures(painter);
-		drawDownloadAreas(painter);
 	}
 
+	invalidRegion = QRegion();
 	StaticBufferUpToDate = true;
 }
 

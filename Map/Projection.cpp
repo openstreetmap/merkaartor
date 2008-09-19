@@ -87,7 +87,7 @@ void Projection::panScreen(const QPoint & p, const QRect & Screen)
 	DeltaLat += p.y();
 	viewportRecalc(Screen);
 	if (LAYERMANAGER_OK) {
-		layerManagerSetViewport(Viewport, Screen);
+		layermanager->setView(QPointF(intToAng(Viewport.center().lon()), intToAng(Viewport.center().lat())), false);
 	}
 }
 

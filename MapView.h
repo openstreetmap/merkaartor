@@ -58,8 +58,8 @@ class MapView :	public QWidget
 		void drawDownloadAreas(QPainter & painter);
 		void drawScale(QPainter & painter);
 		void drawGPS(QPainter & painter);
-		void updateStaticBuffer(const QRegion& invalidRegion);
-		void updateLayersImage(QPaintEvent* anEvent);
+		void updateStaticBuffer();
+		void updateLayersImage();
 		MainWindow* Main;
 		Projection theProjection;
 		MapDocument* theDocument;
