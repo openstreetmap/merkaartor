@@ -780,7 +780,7 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, const Projection& 
 	double PixelPerM = theProjection.pixelPerM();
 	double WW = PixelPerM*R->widthOf()*lp.Proportional+lp.Fixed;
 	if (WW < 10) return;
-	double WWR = qMax(PixelPerM*R->widthOf()*BackgroundScale+BackgroundOffset, PixelPerM*R->widthOf()*ForegroundScale+ForegroundOffset);
+	//double WWR = qMax(PixelPerM*R->widthOf()*BackgroundScale+BackgroundOffset, PixelPerM*R->widthOf()*ForegroundScale+ForegroundOffset);
 
     QFont font = getLabelFont();
 

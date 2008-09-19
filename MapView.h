@@ -5,6 +5,7 @@
 
 #include <QtGui/QPixmap>
 #include <QtGui/QWidget>
+#include <QShortcut>
 
 class Interaction;
 class MainWindow;
@@ -72,6 +73,17 @@ class MapView :	public QWidget
 
 		int numImages;
 		QString StatusMessage;
+
+		QShortcut* MoveLeft;
+		QShortcut* MoveRight;
+		QShortcut* MoveUp;
+		QShortcut* MoveDown;
+
+	public slots:
+		virtual void on_MoveLeft_activated();
+		virtual void on_MoveRight_activated();
+		virtual void on_MoveUp_activated();
+		virtual void on_MoveDown_activated();
 
 	private slots:
 		void imageRequested();

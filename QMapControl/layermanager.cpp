@@ -19,6 +19,9 @@
  ***************************************************************************/
 #include "layermanager.h"
 
+#include "imagemanager.h"
+#include "browserimagemanager.h"
+
 LayerManager::LayerManager(QWidget* aParent, QSize size)
 	:scroll(QPoint(0,0)), size(size), whilenewscroll(QPoint(0,0))
 {
@@ -162,6 +165,9 @@ void LayerManager::setView(const QList<QPointF> coordinates)
 		backZoomOut();
 	}
 
+	ImageManager::instance()->abortLoading();
+	BrowserImageManager::instance()->abortLoading();
+
 	parentWidget->update();
 }
 void LayerManager::setMiddle(QList<QPointF> coordinates)
@@ -234,6 +240,7 @@ void LayerManager::removeLayer()
 {
 	Q_ASSERT_X(layers.size()>0, "LayerManager::removeLayer()", "No layers existing!");
 	ImageManager::instance()->abortLoading();
+	BrowserImageManager::instance()->abortLoading();
 	layers.removeAt(0);
 }
 
@@ -241,6 +248,7 @@ void LayerManager::removeLayer(const QString& aLyerId)
 {
 	Q_ASSERT_X(layers.size()>0, "LayerManager::removeLayer()", "No layers existing!");
 	ImageManager::instance()->abortLoading();
+	BrowserImageManager::instance()->abortLoading();
 	layers.removeAt(getLayers().indexOf(aLyerId));
 }
 
@@ -307,6 +315,8 @@ void LayerManager::backZoomIn()
 void LayerManager::zoomIn()
 {
 	ImageManager::instance()->abortLoading();
+	BrowserImageManager::instance()->abortLoading();
+
 	zoomImageScroll = QPoint(0,0);
 
 	zoomImage.fill(Qt::white);
@@ -367,6 +377,8 @@ void LayerManager::backZoomOut()
 void LayerManager::zoomOut()
 {
 	ImageManager::instance()->abortLoading();
+	BrowserImageManager::instance()->abortLoading();
+
 	zoomImageScroll = QPoint(0,0);
 	QPixmap tmpImg = composedOffscreenImage.copy(screenmiddle.x()+scroll.x(),screenmiddle.y()+scroll.y(), size.width(), size.height());
 	QPainter painter(&zoomImage);

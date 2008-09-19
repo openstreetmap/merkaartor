@@ -66,6 +66,14 @@ MapView::MapView(MainWindow* aMain) :
 		this, SLOT(loadingFinished()));
 #endif
 
+	MoveRight = new QShortcut(QKeySequence(Qt::Key_Right), this);
+	connect(MoveRight, SIGNAL(activated()), this, SLOT(on_MoveRight_activated()));
+	MoveLeft = new QShortcut(QKeySequence(Qt::Key_Left), this);
+	connect(MoveLeft, SIGNAL(activated()), this, SLOT(on_MoveLeft_activated()));
+	MoveUp = new QShortcut(QKeySequence(Qt::Key_Up), this);
+	connect(MoveUp, SIGNAL(activated()), this, SLOT(on_MoveUp_activated()));
+	MoveDown = new QShortcut(QKeySequence(Qt::Key_Down), this);
+	connect(MoveDown, SIGNAL(activated()), this, SLOT(on_MoveDown_activated()));
 }
 
 MapView::~MapView()
@@ -122,10 +130,12 @@ MapDocument *MapView::document()
 
 void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
 {
-	invalidRegion = QRegion(rect());
-	if (updateStaticBuffer)
+	if (updateStaticBuffer) {
+		invalidRegion = QRegion(rect());
 		StaticBufferUpToDate = false;
+	}
 	if (LAYERMANAGER_OK && layermanager->getLayer()->isVisible() && updateMap) {
+		invalidRegion = QRegion(rect());
 		theLastDelta = QPoint(0, 0);
 		thePanDelta = QPoint(0, 0);
 		layermanager->forceRedraw();
@@ -410,7 +420,6 @@ void MapView::updateStaticBuffer(const QRegion& invalidRegion)
 	QPoint pan = thePanDelta - theLastDelta;
 	if (!pan.isNull()) {
 		savPix = StaticBuffer->copy();
-		pan = thePanDelta - theLastDelta;
 		theLastDelta = thePanDelta;
 	}
 	if (!StaticBuffer || (StaticBuffer->size() != size()))
@@ -422,6 +431,7 @@ void MapView::updateStaticBuffer(const QRegion& invalidRegion)
 	StaticBuffer->fill(Qt::transparent);
 
 	QPainter painter(StaticBuffer);
+
 	if (!pan.isNull())
 		painter.drawPixmap(pan, savPix);
 
@@ -633,3 +643,35 @@ void MapView::fromXML(const QDomElement e)
 	}
 	invalidate(true, true);
 }
+
+void MapView::on_MoveLeft_activated()
+{
+	QPoint p(rect().width()/4,0);
+	projection().panScreen(p, rect());
+
+	invalidate(true, true);
+}
+void MapView::on_MoveRight_activated()
+{
+	QPoint p(-rect().width()/4,0);
+	projection().panScreen(p, rect());
+
+	invalidate(true, true);
+}
+
+void MapView::on_MoveUp_activated()
+{
+	QPoint p(0,rect().height()/4);
+	projection().panScreen(p, rect());
+
+	invalidate(true, true);
+}
+
+void MapView::on_MoveDown_activated()
+{
+	QPoint p(0,-rect().height()/4);
+	projection().panScreen(p, rect());
+
+	invalidate(true, true);
+}
+

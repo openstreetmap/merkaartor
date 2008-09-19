@@ -177,8 +177,11 @@ void BrowserImageManager::loadingQueueEmpty()
 
 void BrowserImageManager::abortLoading()
 {
-	loadingRequests.clear();
-	loadingQueueEmpty();
+	if (!loadingRequests.isEmpty()) {
+		LoadingRequest R = loadingRequests.dequeue();
+		loadingRequests.clear();
+		loadingRequests.enqueue(R);
+	}
 }
 void BrowserImageManager::setProxy(QString host, int port)
 {

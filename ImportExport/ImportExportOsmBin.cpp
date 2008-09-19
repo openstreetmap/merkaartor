@@ -507,13 +507,10 @@ bool ImportExportOsmBin::clearTile(qint32 tile, MapDocument* d, OsbMapLayer* the
 {
 	Q_UNUSED(d);
 
-	qint8 c;
-	quint64 id;
 	QDataStream ds(Device);
-	MapFeature* F;
 	bool OK = true;
 
-	for (quint32 i=0; i<theTileIndex[tile].size(); ++i) {
+	for (qint32 i=0; i<theTileIndex[tile].size(); ++i) {
 		MapFeature* F = theTileIndex[tile][i];
 		if (F->layer() == theLayer) {
 			int theCount = --featRefCount[F];

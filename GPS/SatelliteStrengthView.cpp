@@ -23,6 +23,8 @@ void SatelliteStrengthView::setSatellites(const std::vector<Satellite>& aList)
 
 void SatelliteStrengthView::paintEvent(QPaintEvent* ev)
 {
+	Q_UNUSED(ev);
+
 	QPainter p(this);
 	p.drawLine(0,height()-1,width()-1,height()-1);
 	if (List.size())

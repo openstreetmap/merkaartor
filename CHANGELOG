@@ -1,5 +1,7 @@
 v0.13
 v0.12
+	* FIX : scroll redraw bug yahoo images don't redraw (fixes #1172)
+	* FIX : scroll redraw bug streetnames left behind (fixes #1171)
 	* ADD : SlippyMap remembers last used view
 	* FIX : remove support for internal webkit. As of now, Qt 4.4+ is required for Yahoo! imagery.
 	* ADD : let the use choose between translating standard OSM tags

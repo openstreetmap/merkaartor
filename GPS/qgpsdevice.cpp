@@ -747,7 +747,6 @@ void QGPSFileDevice::onDataAvailable()
     int  index = 0;
     char bufferChar;
     char bufferString[100];
-    bool safeStopLoop = false;
 
 	    theFile->read(&bufferChar, 1);
         if(bufferChar == '$')
@@ -855,7 +854,7 @@ void QGPSDDevice::parse(const QString& s)
 {
 	std::cout << "parsing " << s.toUtf8().data() << "*" << std::endl;
 	QStringList Args(s.split(',',QString::SkipEmptyParts));
-	for (unsigned int i=0; i<Args.count(); ++i)
+	for (int i=0; i<Args.count(); ++i)
 	{
 		QString Left(Args[i].left(2));
 		if (Left == "O=")

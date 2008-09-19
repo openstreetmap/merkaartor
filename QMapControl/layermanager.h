@@ -24,7 +24,6 @@
 #include <QMap>
 #include "layer.h"
 #include "mapadapter.h"
-#include "mapcontrol.h"
 
 class Layer;
 class MapAdapter;

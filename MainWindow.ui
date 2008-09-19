@@ -608,50 +608,6 @@
     <string>&amp;Remove...</string>
    </property>
   </action>
-  <action name="viewMoveLeftAction" >
-   <property name="text" >
-    <string>Move view left</string>
-   </property>
-   <property name="shortcut" >
-    <string>Left</string>
-   </property>
-   <property name="shortcutContext" >
-    <enum>Qt::WindowShortcut</enum>
-   </property>
-  </action>
-  <action name="viewMoveRightAction" >
-   <property name="text" >
-    <string>Move view right</string>
-   </property>
-   <property name="shortcut" >
-    <string>Right</string>
-   </property>
-   <property name="shortcutContext" >
-    <enum>Qt::WindowShortcut</enum>
-   </property>
-  </action>
-  <action name="viewMoveUpAction" >
-   <property name="text" >
-    <string>Move view up</string>
-   </property>
-   <property name="shortcut" >
-    <string>Up</string>
-   </property>
-   <property name="shortcutContext" >
-    <enum>Qt::WindowShortcut</enum>
-   </property>
-  </action>
-  <action name="viewMoveDownAction" >
-   <property name="text" >
-    <string>Move view down</string>
-   </property>
-   <property name="shortcut" >
-    <string>Down</string>
-   </property>
-   <property name="shortcutContext" >
-    <enum>Qt::WindowShortcut</enum>
-   </property>
-  </action>
   <action name="nodeMergeAction" >
    <property name="text" >
     <string>&amp;Merge</string>
