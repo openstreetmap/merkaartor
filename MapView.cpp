@@ -169,8 +169,8 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 {
 	QTime Start(QTime::currentTime());
 
-	if (!(StaticBufferUpToDate && StaticMapUpToDate))
-		qDebug() << "PaintEvent: " << StaticBufferUpToDate << "; " << StaticMapUpToDate;
+	//if (!(StaticBufferUpToDate && StaticMapUpToDate))
+	//	qDebug() << "PaintEvent: " << StaticBufferUpToDate << "; " << StaticMapUpToDate;
 
 	QPainter P(this);
 	QRegion rg(rect());

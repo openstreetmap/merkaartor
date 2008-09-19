@@ -1,5 +1,6 @@
 v0.13
 v0.12
+	* FIX : full zoom drawing bug yahoo images don't scale (fixes #1173)
 	* FIX : scroll redraw bug yahoo images don't redraw (fixes #1172)
 	* FIX : scroll redraw bug streetnames left behind (fixes #1171)
 	* ADD : SlippyMap remembers last used view

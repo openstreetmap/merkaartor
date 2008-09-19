@@ -41,6 +41,22 @@
 /**
 	@author Chris Browet <cbro@semperpax.com>
 */
+
+class BrowserWebPage : public QWebPage
+{
+	friend BrowserImageManager;
+
+	protected:
+		virtual void javaScriptConsoleMessage ( const QString & message, int lineNumber, const QString & sourceID );
+		virtual void javaScriptAlert ( QWebFrame * frame, const QString & msg ) ;
+
+	private:
+		double tllat, tllon;
+		double brlat, brlon;
+
+		int ox, oy, sw, sh;
+};
+
 class BrowserImageManager : public IImageManager
 {
 	Q_OBJECT;
@@ -108,7 +124,7 @@ class BrowserImageManager : public IImageManager
 
 		//QNetworkProxy* proxy;
 		QWebView *browser;
-		QWebPage* page;
+		BrowserWebPage* page;
 		QWebFrame *frame;
 		QNetworkAccessManager* qnam;
 		QNetworkProxy proxy;

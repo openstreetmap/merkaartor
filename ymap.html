@@ -74,9 +74,9 @@
         cx = map.convertXYLatLon(new YCoordPoint((xy0.x+xy1.x)/2, (xy0.y+xy1.y)/2));
         map.drawZoomAndCenter(cx,level)
       
-        dump(xy0.x + " " + xy0.y + " " + xy1.x + " " + xy1.y + "\n");
-        dump(tllat + " " + tllon + " " + brlat + " " + brlon + "\n");
-        dump((brlat + tllat)/2 + " " + (brlon + tllon)/2 + "\n");
+        alert("Size " + xy0.x + " " + xy0.y + " " + xy1.x + " " + xy1.y + "\n");
+        alert("Coord " + tllat + " " + tllon + " " + brlat + " " + brlon + "\n");
+        //alert((brlat + tllat)/2 + " " + (brlon + tllon)/2 + "\n");
         
         // Create a new size for the map. This makes the need of clipping the image unnecessary.
         new_width  = Math.abs( xy0.x - xy1.x);

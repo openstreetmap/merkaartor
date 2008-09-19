@@ -23,9 +23,62 @@
 #include <QDateTime>
 #include <QPixmapCache>
 #include <QPainter>
+#include <QMessageBox>
 
 #define MAX_REQ 1
+#define BROWSER_TILE_SIZE 512
 #define str(x) # x
+
+void BrowserWebPage::javaScriptConsoleMessage ( const QString & message, int lineNumber, const QString & sourceID )
+{
+	QString s = QString("%1 at %2, %3").arg(message).arg(QString::number(lineNumber)).arg(sourceID);
+	printf("%s\n", s);
+}
+
+void BrowserWebPage::javaScriptAlert ( QWebFrame * frame, const QString & msg ) 
+{
+	//QMessageBox::information(NULL, tr("Javascript alert"), msg);
+
+	if (msg.startsWith("Coord")) {
+
+		tllat = 90.0;
+		tllon = -180.0;
+		brlat = -90.0;
+		brlon = 180.0;
+		
+		QStringList tokens = msg.split(" ");
+		Q_ASSERT(tokens.size() == 5);
+
+		tllat = tokens[1].toDouble();
+		tllon = tokens[2].toDouble();
+		brlat = tokens[3].toDouble();
+		brlon = tokens[4].toDouble();
+
+		qDebug() << tllon << ", " << tllat << ", " << brlon << "," << brlat;
+	} else
+	if (msg.startsWith("Size")) {
+
+		sw = BROWSER_TILE_SIZE;
+		sh = BROWSER_TILE_SIZE;
+
+		QStringList tokens = msg.split(" ");
+		Q_ASSERT(tokens.size() == 5);
+
+		int ox, oy, x1, y1;
+		ox = tokens[1].toDouble();
+		oy = tokens[2].toDouble();
+		x1 = tokens[3].toDouble();
+		y1 = tokens[4].toDouble();
+
+		qDebug() << ox << ", " << oy << ", " << x1 << "," << y1;
+
+		sw = x1 - ox;
+		sh = y1 - oy;
+
+		qDebug() << sw << ", " << sh;
+	}
+}
+
 
 BrowserImageManager* BrowserImageManager::m_BrowserImageManagerInstance = 0;
 
@@ -43,7 +96,7 @@ BrowserImageManager::BrowserImageManager(QObject* parent)
 		delete browser;
 	browser = new QWebView();
 
-	page = new QWebPage();
+	page = new BrowserWebPage();
 	browser->setPage(page);
 	page->setViewportSize(QSize(1024, 1024));
 
@@ -118,11 +171,17 @@ void BrowserImageManager::launchRequest()
 
 void BrowserImageManager::pageLoadFinished(bool)
 {
-	QPixmap pt(512, 512);
+	QPixmap pt(page->sw, page->sh);
 	QPainter P;
 	P.begin(&pt);
-	page->mainFrame()->render(&P, QRegion(0,0,512,512));
+	page->mainFrame()->render(&P, QRegion(0,0,page->sw,page->sh));
 	P.end();
+	
+	if (page->sw != BROWSER_TILE_SIZE || page->sh != BROWSER_TILE_SIZE) {
+		QPixmap tmpPx = pt.scaled(QSize(BROWSER_TILE_SIZE, BROWSER_TILE_SIZE));
+		pt = tmpPx;
+	}
+
 	LoadingRequest R = loadingRequests.dequeue();
 	//pt.save("c:/temp/tst/"+R.hash+".png");
 	receivedImage(pt, R.hash);
