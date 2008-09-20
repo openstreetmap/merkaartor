@@ -12,6 +12,7 @@ class QTimer;
 class MainWindow;
 class CoordBox;
 class MapFeature;
+class MapLayer;
 
 #include <QtCore/QByteArray>
 #include <QtCore/QEventLoop>
@@ -69,6 +70,7 @@ class Downloader : public QObject
 
 bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDocument);
 bool downloadMoreOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDocument);
+bool downloadOSM(MainWindow* Main, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort , const quint32 region , MapDocument* theDocument, MapLayer* theLayer);
 
 bool checkForConflicts(MapDocument* theDocument);
 

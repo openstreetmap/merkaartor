@@ -11,6 +11,7 @@
 #include "Map/TrackSegment.h"
 #include "Utils/SlippyMapWidget.h"
 #include "Preferences/MerkaartorPreferences.h"
+#include "ImportExport/ImportExportOsmBin.h"
 
 #include <ui_DownloadMapDialog.h>
 
@@ -199,7 +200,7 @@ bool Downloader::go(const QString& url)
 	{
 		QMessageBox::information(0,tr("error"),Request.errorString());
 	}
-	if (Content.size() != (int)Request.lastResponse().contentLength())
+	if (Request.lastResponse().hasContentLength() && Content.size() != (int)Request.lastResponse().contentLength())
 	{
 		QMessageBox::information(0,tr("didn't download enough"),QString("%1 %2").arg(Content.size()).arg(Request.lastResponse().contentLength()));
 	}
@@ -441,6 +442,24 @@ bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser
 	return downloadOSM(aParent, theUrl, aUser, aPassword, UseProxy, ProxyHost, ProxyPort, theDocument, theLayer);
 }
 
+bool downloadOSM(MainWindow* Main, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort , const quint32 region , MapDocument* theDocument, MapLayer* theLayer)
+{
+	int y = int(region / NUM_REGIONS); //2565024
+	int x = (region % NUM_REGIONS);
+	CoordBox Clip = CoordBox(
+		Coord (y * REGION_WIDTH - INT_MAX, x * REGION_WIDTH - INT_MAX  ),
+		Coord ((y+1) * REGION_WIDTH - INT_MAX, (x+1) * REGION_WIDTH - INT_MAX )
+		);
+
+	QString aUrl(QString("http://xapi.openstreetmap.org/api/0.5/*[bbox=%1,%2,%3,%4]")
+		.arg(intToAng(Clip.bottomLeft().lon())).arg(intToAng(Clip.bottomLeft().lat()))
+		.arg(intToAng(Clip.topRight().lon())).arg(intToAng(Clip.topRight().lat()))
+		);
+	qDebug() << aUrl;
+	QUrl theUrl(aUrl);
+
+	return downloadOSM(Main,theUrl,aUser,aPassword,UseProxy,ProxyHost,ProxyPort,theDocument, theLayer);
+}
 
 bool downloadTracksFromOSM(QMainWindow* Main, const QString& aWeb, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort , const CoordBox& aBox , MapDocument* theDocument)
 {
@@ -561,7 +580,7 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 		ui.Bookmarks->addItem(Bookmarks[i]);
 	ui.IncludeTracks->setChecked(DownloadRaw);
 	ui.ResolveRelations->setChecked(M_PREFS->getResolveRelations());
-	bool OK = true, retry = true, directAPI = false;
+	bool OK = true, retry = true, directAPI = false, Regional=false;
 	while (retry) {
 		retry = false;
 #ifdef _MOBILE
@@ -587,28 +606,31 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 				if (link.contains("/api/")) {
 					directAPI=true;
 				} else {
-					QUrl url = QUrl(link); 
-					double lat = url.queryItemValue("lat").toDouble(); 
-					double lon = url.queryItemValue("lon").toDouble(); 
-					int zoom = url.queryItemValue("zoom").toInt();
+					link.toUInt(&Regional);
+					if (!Regional) {
+						QUrl url = QUrl(link); 
+						double lat = url.queryItemValue("lat").toDouble(); 
+						double lon = url.queryItemValue("lon").toDouble(); 
+						int zoom = url.queryItemValue("zoom").toInt();
 
-					if (zoom <= 10) {
-						QMessageBox::warning(dlg, QApplication::translate("Downloader", "Zoom factor too low"),
-							QApplication::translate("Downloader", "Please use a higher zoom factor!"));
-						retry = true;
-					}
-					else {
-						if (zoom < 1 || zoom > 18) // use default when not in bounds
-							zoom = 15;
+						if (zoom <= 10) {
+							QMessageBox::warning(dlg, QApplication::translate("Downloader", "Zoom factor too low"),
+								QApplication::translate("Downloader", "Please use a higher zoom factor!"));
+							retry = true;
+						}
+						else {
+							if (zoom < 1 || zoom > 18) // use default when not in bounds
+								zoom = 15;
 
-						/* term to calculate the angle from the zoom-value */
-						double zoomLat = 360.0 / (double)(1 << zoom);
-						double zoomLon = zoomLat / fabs(cos(angToRad(lat)));
-						/* the following line is equal to the line above. (just for explanation) */
-						//double zoomLon = zoomLat / aParent->view()->projection().latAnglePerM() * aParent->view()->projection().lonAnglePerM(angToRad(lat));
+							/* term to calculate the angle from the zoom-value */
+							double zoomLat = 360.0 / (double)(1 << zoom);
+							double zoomLon = zoomLat / fabs(cos(angToRad(lat)));
+							/* the following line is equal to the line above. (just for explanation) */
+							//double zoomLon = zoomLat / aParent->view()->projection().latAnglePerM() * aParent->view()->projection().lonAnglePerM(angToRad(lat));
 
-						/* the OSM link contains the coordinates from the middle of the visible map so we have to add and sub zoomLon/zoomLat */
-						Clip = CoordBox(Coord(angToInt(lat-zoomLat), angToInt(lon-zoomLon)), Coord(angToInt(lat+zoomLat), angToInt(lon+zoomLon)));
+							/* the OSM link contains the coordinates from the middle of the visible map so we have to add and sub zoomLon/zoomLat */
+							Clip = CoordBox(Coord(angToInt(lat-zoomLat), angToInt(lon-zoomLon)), Coord(angToInt(lat+zoomLat), angToInt(lon+zoomLon)));
+						}
 					}
 				}
 			}
@@ -624,6 +646,9 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 			M_PREFS->setResolveRelations(ui.ResolveRelations->isChecked());
 			if (directAPI)
 				OK = downloadOSM(aParent,QUrl(ui.Link->text()),osmUser,osmPwd,useProxy,proxyHost,proxyPort,theDocument,theLayer);
+			else
+			if (Regional)
+				OK = downloadOSM(aParent,osmUser,osmPwd,useProxy,proxyHost,proxyPort,ui.Link->text().toUInt(),theDocument,theLayer);
 			else
 				OK = downloadOSM(aParent,osmWebsite,osmUser,osmPwd,useProxy,proxyHost,proxyPort,Clip,theDocument,theLayer);
 			if (OK && ui.IncludeTracks->isChecked())

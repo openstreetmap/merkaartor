@@ -263,6 +263,13 @@ int MapLayer::get(MapFeature* aFeature)
 	return -1;
 }
 
+QVector<MapFeature*> MapLayer::get()
+{
+	QVector<MapFeature*> theList;
+	return theList.fromStdVector(p->Features);
+}
+
+
 MapFeature* MapLayer::get(unsigned int i)
 {
 	return p->Features[i];
@@ -505,6 +512,11 @@ DrawingMapLayer * DrawingMapLayer::doFromXML(DrawingMapLayer* l, MapDocument* d,
 		if (c.tagName() == "node") {
 			/* TrackPoint* N = */ TrackPoint::fromXML(d, l, c);
 //			l->add(N);
+			progress.setValue(progress.value()+1);
+		} else
+		if (c.tagName() == "trkseg") {
+			TrackSegment* T = TrackSegment::fromXML(d, l, c, progress);
+			l->add(T);
 			progress.setValue(progress.value()+1);
 		}
 

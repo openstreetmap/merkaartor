@@ -15,10 +15,19 @@
 #include <ImportExport/IImportExport.h>
 
 #define TILE_WIDTH (int(UINT_MAX/40000))
-#define REGION_WIDTH (int(UINT_MAX/1000))
+#define REGION_WIDTH (int(UINT_MAX/4000))
 #define NUM_TILES (int(UINT_MAX/TILE_WIDTH))
 #define NUM_REGIONS (int(UINT_MAX/REGION_WIDTH))
 #define TILETOREGION_THRESHOLD 9
+
+class OsbRegion 
+{
+};
+
+class OsbTile
+{
+};
+
 
 /**
 	@author cbro <cbro@semperpax.com>
@@ -37,6 +46,7 @@ public:
 
 	//export
 	virtual bool export_(const QVector<MapFeature *>& featList);
+	virtual bool export_(const QVector<MapFeature *>& featList, quint32 rg);
 
 protected:
 //	void addTileIndex(MapFeature* F, qint64 pos);
@@ -47,7 +57,7 @@ protected:
 	
 	bool prepare();
 	bool writeHeader(QDataStream& ds);
-	bool writeIndex(QDataStream& ds);
+	bool writeIndex(QDataStream& ds, int selRegion=-1);
 	bool writeTagLists(QDataStream& ds);
 	//bool writeNodes(QDataStream& ds);
 	//bool writeRoads(QDataStream& ds);

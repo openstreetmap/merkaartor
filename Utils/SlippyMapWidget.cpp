@@ -202,7 +202,6 @@ void SlippyMapWidget::mousePressEvent(QMouseEvent* ev)
 			}
 		}
 		p->PreviousDrag = ev->pos();
-		p->InDrag = true;
 	}
 	emit redraw();
 }
@@ -214,15 +213,21 @@ void SlippyMapWidget::mouseReleaseEvent(QMouseEvent*)
 
 void SlippyMapWidget::mouseMoveEvent(QMouseEvent* ev)
 {
-	if (p->InDrag)
+	QPoint Delta = ev->pos()-p->PreviousDrag;
+	if (!Delta.isNull())
 	{
-		QPoint Delta = ev->pos()-p->PreviousDrag;
+		p->InDrag = true;
 		p->Lat -= Delta.x()/(TILESIZE*1.);
 		p->Lon -= Delta.y()/(TILESIZE*1.);
 		p->PreviousDrag = ev->pos();
 		update();
 		emit redraw();
 	}
+}
+
+bool SlippyMapWidget::isDragging()
+{
+	return p->InDrag;
 }
 
 

@@ -16,14 +16,23 @@
    <iconset resource="Icons/AllIcons.qrc" >
     <normaloff>:/Icons/Merkaartor.xpm</normaloff>:/Icons/Merkaartor.xpm</iconset>
   </property>
-  <widget class="QWidget" name="centralWidget" />
+  <widget class="QWidget" name="centralWidget" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>73</y>
+     <width>1000</width>
+     <height>508</height>
+    </rect>
+   </property>
+  </widget>
   <widget class="QMenuBar" name="theMenuBar" >
    <property name="geometry" >
     <rect>
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >
@@ -174,6 +183,7 @@
     <addaction name="menuStyle_2" />
     <addaction name="separator" />
     <addaction name="toolsPreferencesAction" />
+    <addaction name="toolsWorldOsbAction" />
    </widget>
    <widget class="QMenu" name="menu_Node" >
     <property name="title" >
@@ -240,10 +250,27 @@
    <addaction name="windowAction" />
    <addaction name="menuHelp" />
   </widget>
-  <widget class="QStatusBar" name="StatusBar" />
+  <widget class="QStatusBar" name="StatusBar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>581</y>
+     <width>1000</width>
+     <height>19</height>
+    </rect>
+   </property>
+  </widget>
   <widget class="QToolBar" name="toolBar" >
    <property name="enabled" >
     <bool>true</bool>
+   </property>
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>21</y>
+     <width>1000</width>
+     <height>52</height>
+    </rect>
    </property>
    <property name="windowTitle" >
     <string>Tool Bar</string>
@@ -1029,6 +1056,11 @@
    </property>
    <property name="shortcut" >
     <string>Ctrl+E</string>
+   </property>
+  </action>
+  <action name="toolsWorldOsbAction" >
+   <property name="text" >
+    <string>World OSB manager...</string>
    </property>
   </action>
  </widget>

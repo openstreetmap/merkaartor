@@ -290,7 +290,7 @@ TrackPoint * TrackPoint::fromXML(MapDocument* d, MapLayer* L, const QDomElement 
 	return Pt;
 }
 
-TrackPoint * TrackPoint::fromGPX(MapDocument* /* d */, MapLayer* L, const QDomElement e)
+TrackPoint * TrackPoint::fromGPX(MapDocument* d, MapLayer* L, const QDomElement e)
 {
 	double Lat = e.attribute("lat").toDouble();
 	double Lon = e.attribute("lon").toDouble();
@@ -299,10 +299,17 @@ TrackPoint * TrackPoint::fromGPX(MapDocument* /* d */, MapLayer* L, const QDomEl
 	if (!id.startsWith('{'))
 		id = "node_" + id;
 
-	TrackPoint* Pt = new TrackPoint(Coord(angToInt(Lat),angToInt(Lon)));
-	Pt->setId(id);
-	Pt->setLastUpdated(MapFeature::Log);
-	L->add(Pt);
+	TrackPoint* Pt = dynamic_cast<TrackPoint*>(d->getFeature(id));
+	if (!Pt) {
+		Pt = new TrackPoint(Coord(angToInt(Lat),angToInt(Lon)));
+		Pt->setId(id);
+		Pt->setLastUpdated(MapFeature::Log);
+		L->add(Pt);
+	} else {
+		Pt->setPosition(Coord(angToInt(Lat), angToInt(Lon)));
+		if (Pt->lastUpdated() == MapFeature::NotYetDownloaded)
+			Pt->setLastUpdated(MapFeature::OSMServer);
+	}
 
 	if (e.tagName() == "wpt")
 		Pt->setTag("_waypoint_", "yes");

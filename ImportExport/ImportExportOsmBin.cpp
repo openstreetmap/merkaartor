@@ -184,7 +184,7 @@ bool ImportExportOsmBin::writeHeader(QDataStream& ds)
 	return true;
 }
 
-bool ImportExportOsmBin::writeIndex(QDataStream& ds)
+bool ImportExportOsmBin::writeIndex(QDataStream& ds, int selRegion)
 {
 	QMapIterator<qint32, QList<MapFeature*> > itN(theTileNodesIndex);
 	while(itN.hasNext()) {
@@ -215,8 +215,10 @@ bool ImportExportOsmBin::writeIndex(QDataStream& ds)
 			rg = (y * NUM_REGIONS / NUM_TILES) * NUM_REGIONS + (x * NUM_REGIONS / NUM_TILES);
 		}
 
-		theRegionIndex[rg].append(QPair < qint32, quint64 > (it.key(), Device->pos()));
-		writeFeatures(it.value(), ds);
+		if (rg == selRegion || selRegion == -1) {
+			theRegionIndex[rg].append(QPair < qint32, quint64 > (it.key(), Device->pos()));
+			writeFeatures(it.value(), ds);
+		}
 	}
 
 	QMapIterator < qint32, QList< QPair < qint32, quint64 > > > j(theRegionIndex);
@@ -654,6 +656,31 @@ bool ImportExportOsmBin::export_(const QVector<MapFeature *>& featList)
 	//if (! writeRelations(ds) ) return false;
 
 	if (! writeIndex(ds) ) return false;
+
+	Device->seek(HEADER_SIZE);
+	ds << tocPos;
+	ds << tagKeysPos;
+	ds << tagValuesPos;
+
+	return true;
+}
+
+bool ImportExportOsmBin::export_(const QVector<MapFeature *>& featList, quint32 rg)
+{
+	QDataStream ds(Device);
+	//theRegionToc.resize(TILE_WIDTH / REGION_WIDTH);
+
+	if(! IImportExport::export_(featList) ) return false;
+
+	if (! prepare() ) return false;
+	if (! writeHeader(ds) ) return false;
+	if (! writeTagLists(ds) ) return false;
+
+	//if (! writeNodes(ds) ) return false;
+	//if (! writeRoads(ds) ) return false;
+	//if (! writeRelations(ds) ) return false;
+
+	if (! writeIndex(ds, rg) ) return false;
 
 	Device->seek(HEADER_SIZE);
 	ds << tocPos;

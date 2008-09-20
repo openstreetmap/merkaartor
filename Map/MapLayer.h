@@ -55,6 +55,7 @@ public:
 	bool exists(MapFeature* aFeature) const;
 	unsigned int size() const;
 	int get(MapFeature* aFeature);
+	QVector<MapFeature*> get();
 	MapFeature* get(unsigned int i);
 	const MapFeature* get(unsigned int i) const;
 	MapFeature* get(const QString& id, bool exact=true);

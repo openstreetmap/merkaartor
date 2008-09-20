@@ -95,6 +95,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_nodeAlignAction_triggered();
 		virtual void on_nodeMergeAction_triggered();
 		virtual void on_toolsPreferencesAction_triggered() {toolsPreferencesAction_triggered();}
+		virtual void on_toolsWorldOsbAction_triggered();
 		virtual void on_windowPropertiesAction_triggered();
 		virtual void on_windowLayersAction_triggered();
 		virtual void on_windowInfoAction_triggered();

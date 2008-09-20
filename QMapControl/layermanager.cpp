@@ -168,7 +168,7 @@ void LayerManager::setView(const QList<QPointF> coordinates)
 	ImageManager::instance()->abortLoading();
 	BrowserImageManager::instance()->abortLoading();
 
-	//parentWidget->update();
+//	parentWidget->update();
 }
 void LayerManager::setMiddle(QList<QPointF> coordinates)
 {
