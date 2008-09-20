@@ -75,6 +75,7 @@ include(ImportExport.pri)
 include(Render/Render.pri)
 include(qextserialport/qextserialport.pri)
 include(GPS/GPS.pri)
+include(Tools/Tools.pri)
 
 
 unix {
