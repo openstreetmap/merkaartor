@@ -4,6 +4,7 @@
 #include "MapView.h"
 #include "TagModel.h"
 #include "Utils/EditCompleterDelegate.h"
+#include "Utils/ShortcutOverrideFilter.h"
 #include "Command/DocumentCommands.h"
 #include "Command/FeatureCommands.h"
 #include "Command/TrackPointCommands.h"
@@ -38,6 +39,17 @@ PropertiesDock::PropertiesDock(MainWindow* aParent)
 	setObjectName("propertiesDock");
 	theModel = new TagModel(aParent);
 	delegate = new EditCompleterDelegate(aParent);
+
+	// Set up the shortcut event filter for the tableviews
+	// This allows them to react to keys already bound to
+	// application wide shortcuts
+	shortcutFilter = new ShortcutOverrideFilter();
+	shortcutFilter->addOverride(Qt::Key_Up);
+	shortcutFilter->addOverride(Qt::Key_Down);
+	shortcutFilter->addOverride(Qt::Key_Left);
+	shortcutFilter->addOverride(Qt::Key_Right);
+	shortcutFilter->addOverride(Qt::Key_F2);
+	shortcutFilter->addOverride(Qt::Key_Delete);
 
 	centerAction = new QAction(tr("Center map"), this);
 	connect(centerAction, SIGNAL(triggered()), this, SLOT(on_centerAction_triggered()));
@@ -413,6 +425,7 @@ void PropertiesDock::resetValues()
 		#endif
 		MultiUi.TagView->setModel(theModel);
 		MultiUi.TagView->setItemDelegate(delegate);
+		CurrentTagView = MultiUi.TagView;
 	}
 	theModel->setFeature(Current);
 	Selection = Current;
@@ -425,12 +438,14 @@ void PropertiesDock::resetValues()
 			0, CurrentTagView->fontMetrics().width(theModel->newKeyText())+10
 		);
 		CurrentTagView->horizontalHeader()->setStretchLastSection(true);
+		CurrentTagView->installEventFilter(shortcutFilter);
 	}
 	if (CurrentMembersView) {
 		CurrentMembersView->setColumnWidth(
 			0, CurrentMembersView->fontMetrics().width(theModel->newKeyText())+10
 		);
 		CurrentMembersView->horizontalHeader()->setStretchLastSection(true);
+		CurrentMembersView->installEventFilter(shortcutFilter);
 	}
 }
 

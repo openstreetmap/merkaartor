@@ -79,13 +79,10 @@ bool EditCompleterDelegate::eventFilter(QObject* object, QEvent* event)
 	if (!editor)
 			return false;
 
+	// Note that keys already bound to shortcuts will be QEvent::ShortcutOverride not QEvent::KeyPress
 	if (event->type() == QEvent::KeyPress) {
 		QKeyEvent *keyEvent = (QKeyEvent*)event;
 		switch (keyEvent->key()) {
-			case Qt::Key_Escape:
-				emit closeEditor(editor);
-				return true;
-
 			case Qt::Key_Enter:
 			case Qt::Key_Return:
 				emit commitData(editor);
@@ -93,5 +90,5 @@ bool EditCompleterDelegate::eventFilter(QObject* object, QEvent* event)
 				return true;
 		}
 	}
-	return false;
+	return QItemDelegate::eventFilter(object, event);
 }

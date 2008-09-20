@@ -48,7 +48,11 @@
     </widget>
    </item>
    <item>
-    <widget class="QTableView" name="MembersView" />
+    <widget class="QTableView" name="MembersView" >
+     <property name="tabKeyNavigation" >
+      <bool>false</bool>
+     </property>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" >
@@ -92,7 +96,11 @@
     </layout>
    </item>
    <item>
-    <widget class="QTableView" name="TagView" />
+    <widget class="QTableView" name="TagView" >
+     <property name="tabKeyNavigation" >
+      <bool>false</bool>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

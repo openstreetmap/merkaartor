@@ -1,4 +1,5 @@
 v0.13
+	* ADD : Move to the next field on enter in properties dock tags - part 2 (by Travers Carter) (closes #1137)
 v0.12
 	* FIX : full zoom drawing bug yahoo images don't scale (fixes #1173)
 	* FIX : scroll redraw bug yahoo images don't redraw (fixes #1172)

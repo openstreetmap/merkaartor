@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "Utils/MDockAncestor.h"
+#include "Utils/ShortcutOverrideFilter.h"
 
 class MainWindow;
 class MapFeature;
@@ -76,6 +77,7 @@ class PropertiesDock : public MDockAncestor
 		EditCompleterDelegate* delegate;
 		QAction* centerAction;
 		QAction* centerZoomAction;
+		ShortcutOverrideFilter* shortcutFilter;
 
 		enum { NoUiShowing, TrackPointUiShowing, RoadUiShowing, RelationUiShowing, MultiShowing } NowShowing ;
 };

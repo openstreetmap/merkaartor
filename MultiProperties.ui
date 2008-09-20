@@ -61,7 +61,11 @@
     </layout>
    </item>
    <item>
-    <widget class="QTableView" name="TagView" />
+    <widget class="QTableView" name="TagView" >
+     <property name="tabKeyNavigation" >
+      <bool>false</bool>
+     </property>
+    </widget>
    </item>
    <item>
     <widget class="QLabel" name="lbStatus" >

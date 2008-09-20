@@ -52,6 +52,7 @@ HEADERS += \
 ./Preferences/WMSPreferencesDialog.h \
 ./Preferences/TMSPreferencesDialog.h \
 ./Utils/LineF.h \
+./Utils/ShortcutOverrideFilter.h \
 ./Utils/SlippyMapWidget.h \
 ./Utils/EditCompleterDelegate.h \
 ./Utils/PictureViewerDialog.h \
@@ -110,6 +111,7 @@ SOURCES += \
 ./TagModel.cpp \
 ./LayerDock.cpp \
 ./LayerWidget.cpp \
+./Utils/ShortcutOverrideFilter.cpp \
 ./Utils/SlippyMapWidget.cpp \
 ./Utils/EditCompleterDelegate.cpp \
 ./Utils/PictureViewerDialog.cpp \

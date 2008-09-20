@@ -44,7 +44,7 @@
 
 class BrowserWebPage : public QWebPage
 {
-	friend BrowserImageManager;
+	friend class BrowserImageManager;
 
 	protected:
 		virtual void javaScriptConsoleMessage ( const QString & message, int lineNumber, const QString & sourceID );
