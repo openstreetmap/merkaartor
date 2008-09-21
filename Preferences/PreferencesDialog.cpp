@@ -152,6 +152,9 @@ void PreferencesDialog::loadPrefs()
 	makeBoundaryIcon(btHoverColor, HoverColor);
 	makeBoundaryIcon(btFocusColor, FocusColor);
 	makeBoundaryIcon(btRelationsColor, RelationsColor);
+	HoverWidth->setValue(M_PREFS->getHoverWidth());
+	FocusWidth->setValue(M_PREFS->getFocusWidth());
+	RelationsWidth->setValue(M_PREFS->getRelationsWidth());
 
 	cbAutoSaveDoc->setChecked(M_PREFS->getAutoSaveDoc());
 	cbAutoExtractTracks->setChecked(M_PREFS->getAutoExtractTracks());
@@ -227,9 +230,9 @@ void PreferencesDialog::savePrefs()
 	M_PREFS->getAlphaPtr()->insert("Low", sbAlphaLow->value());
 	M_PREFS->getAlphaPtr()->insert("High", sbAlphaHigh->value());
 	M_PREFS->setBgColor(BgColor);
-	M_PREFS->setFocusColor(FocusColor);
-	M_PREFS->setHoverColor(HoverColor);
-	M_PREFS->setRelationsColor(RelationsColor);
+	M_PREFS->setFocusColor(FocusColor,FocusWidth->value());
+	M_PREFS->setHoverColor(HoverColor,HoverWidth->value());
+	M_PREFS->setRelationsColor(RelationsColor,RelationsWidth->value());
 
 	M_PREFS->setAutoSaveDoc(cbAutoSaveDoc->isChecked());
 	M_PREFS->setAutoExtractTracks(cbAutoExtractTracks->isChecked());

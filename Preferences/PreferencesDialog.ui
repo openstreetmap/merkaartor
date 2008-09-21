@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>505</width>
-    <height>357</height>
+    <width>648</width>
+    <height>494</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -20,9 +20,17 @@
       <enum>QTabWidget::North</enum>
      </property>
      <property name="currentIndex" >
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_7" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>618</width>
+        <height>415</height>
+       </rect>
+      </property>
       <attribute name="title" >
        <string>Locale</string>
       </attribute>
@@ -98,8 +106,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>483</width>
-        <height>283</height>
+        <width>618</width>
+        <height>415</height>
        </rect>
       </property>
       <attribute name="title" >
@@ -172,10 +180,16 @@
        </item>
        <item>
         <widget class="QGroupBox" name="groupBox_2" >
+         <property name="minimumSize" >
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
          <property name="title" >
           <string>Colors</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout" >
+         <layout class="QFormLayout" name="formLayout" >
           <item row="0" column="0" >
            <widget class="QLabel" name="label_8" >
             <property name="text" >
@@ -184,101 +198,199 @@
            </widget>
           </item>
           <item row="0" column="1" >
+           <layout class="QHBoxLayout" name="horizontalLayout_3" >
+            <item>
+             <widget class="QToolButton" name="btBgColor" >
+              <property name="minimumSize" >
+               <size>
+                <width>45</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="text" >
+               <string>...</string>
+              </property>
+              <property name="iconSize" >
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_2" >
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0" >
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="0" >
            <widget class="QLabel" name="label_19" >
             <property name="text" >
              <string>Hover</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="2" >
+          <item row="1" column="1" >
+           <layout class="QHBoxLayout" name="horizontalLayout_4" >
+            <item>
+             <widget class="QToolButton" name="btHoverColor" >
+              <property name="minimumSize" >
+               <size>
+                <width>45</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="text" >
+               <string>...</string>
+              </property>
+              <property name="iconSize" >
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="HoverWidth" />
+            </item>
+            <item>
+             <widget class="QLabel" name="label_18" >
+              <property name="text" >
+               <string>Pixels</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_3" >
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0" >
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item row="2" column="0" >
            <widget class="QLabel" name="label_20" >
             <property name="text" >
              <string>Focus</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="3" >
+          <item row="2" column="1" >
+           <layout class="QHBoxLayout" name="horizontalLayout_5" >
+            <item>
+             <widget class="QToolButton" name="btFocusColor" >
+              <property name="minimumSize" >
+               <size>
+                <width>45</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="text" >
+               <string>...</string>
+              </property>
+              <property name="iconSize" >
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="FocusWidth" />
+            </item>
+            <item>
+             <widget class="QLabel" name="label_22" >
+              <property name="text" >
+               <string>Pixels</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_4" >
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0" >
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item row="3" column="0" >
            <widget class="QLabel" name="label_21" >
             <property name="text" >
              <string>Relations</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0" >
-           <widget class="QToolButton" name="btBgColor" >
-            <property name="minimumSize" >
-             <size>
-              <width>45</width>
-              <height>25</height>
-             </size>
-            </property>
-            <property name="text" >
-             <string>...</string>
-            </property>
-            <property name="iconSize" >
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1" >
-           <widget class="QToolButton" name="btHoverColor" >
-            <property name="minimumSize" >
-             <size>
-              <width>45</width>
-              <height>25</height>
-             </size>
-            </property>
-            <property name="text" >
-             <string>...</string>
-            </property>
-            <property name="iconSize" >
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2" >
-           <widget class="QToolButton" name="btFocusColor" >
-            <property name="minimumSize" >
-             <size>
-              <width>45</width>
-              <height>25</height>
-             </size>
-            </property>
-            <property name="text" >
-             <string>...</string>
-            </property>
-            <property name="iconSize" >
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="3" >
-           <widget class="QToolButton" name="btRelationsColor" >
-            <property name="minimumSize" >
-             <size>
-              <width>45</width>
-              <height>25</height>
-             </size>
-            </property>
-            <property name="text" >
-             <string>...</string>
-            </property>
-            <property name="iconSize" >
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </widget>
+          <item row="3" column="1" >
+           <layout class="QHBoxLayout" name="horizontalLayout_6" >
+            <item>
+             <widget class="QToolButton" name="btRelationsColor" >
+              <property name="minimumSize" >
+               <size>
+                <width>45</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="text" >
+               <string>...</string>
+              </property>
+              <property name="iconSize" >
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="RelationsWidth" />
+            </item>
+            <item>
+             <widget class="QLabel" name="label_23" >
+              <property name="text" >
+               <string>Pixels</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_5" >
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0" >
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
           </item>
          </layout>
         </widget>
@@ -322,8 +434,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>483</width>
-        <height>283</height>
+        <width>618</width>
+        <height>415</height>
        </rect>
       </property>
       <attribute name="title" >
@@ -421,8 +533,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>483</width>
-        <height>283</height>
+        <width>618</width>
+        <height>415</height>
        </rect>
       </property>
       <attribute name="title" >
@@ -541,8 +653,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>483</width>
-        <height>283</height>
+        <width>618</width>
+        <height>415</height>
        </rect>
       </property>
       <attribute name="title" >
@@ -633,8 +745,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>483</width>
-        <height>283</height>
+        <width>618</width>
+        <height>415</height>
        </rect>
       </property>
       <attribute name="title" >
@@ -717,8 +829,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>483</width>
-        <height>283</height>
+        <width>618</width>
+        <height>415</height>
        </rect>
       </property>
       <attribute name="title" >
@@ -816,8 +928,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>483</width>
-        <height>283</height>
+        <width>618</width>
+        <height>415</height>
        </rect>
       </property>
       <attribute name="title" >

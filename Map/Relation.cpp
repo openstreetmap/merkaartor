@@ -112,13 +112,13 @@ void Relation::draw(QPainter& P, const Projection& theProjection)
 	if (!M_PREFS->getRelationsVisible())
 		return;
 
-	P.setPen(QPen(M_PREFS->getRelationsColor(),2,Qt::DashLine));
+	P.setPen(QPen(M_PREFS->getRelationsColor(),M_PREFS->getRelationsWidth(),Qt::DashLine));
 	P.drawRect(QRectF(theProjection.project(boundingBox().bottomLeft()),theProjection.project(boundingBox().topRight())));
 }
 
 void Relation::drawFocus(QPainter& P, const Projection& theProjection)
 {
-	P.setPen(QPen(M_PREFS->getFocusColor(),2,Qt::DashLine));
+	P.setPen(QPen(M_PREFS->getFocusColor(),M_PREFS->getFocusWidth(),Qt::DashLine));
 	P.drawRect(QRectF(theProjection.project(boundingBox().bottomLeft()),theProjection.project(boundingBox().topRight())));
 
 	for (unsigned int i=0; i<p->Members.size(); ++i)
@@ -127,7 +127,7 @@ void Relation::drawFocus(QPainter& P, const Projection& theProjection)
 
 void Relation::drawHover(QPainter& P, const Projection& theProjection)
 {
-	P.setPen(QPen(M_PREFS->getHoverColor(),2,Qt::DashLine));
+	P.setPen(QPen(M_PREFS->getHoverColor(),M_PREFS->getHoverWidth(),Qt::DashLine));
 	P.drawRect(QRectF(theProjection.project(boundingBox().bottomLeft()),theProjection.project(boundingBox().topRight())));
 
 	for (unsigned int i=0; i<p->Members.size(); ++i)

@@ -215,11 +215,14 @@ public:
 	QColor getBgColor() const;
 	void setBgColor(const QColor theValue);
 	QColor getFocusColor() const;
-	void setFocusColor(const QColor theValue);
+	int getFocusWidth() const;
+	void setFocusColor(const QColor theValue, int width);
 	QColor getHoverColor() const;
-	void setHoverColor(const QColor theValue);
+	int getHoverWidth() const;
+	void setHoverColor(const QColor theValue, int width);
 	QColor getRelationsColor() const;
-	void setRelationsColor(const QColor theValue);
+	int getRelationsWidth() const;
+	void setRelationsColor(const QColor theValue, int width);
 
 	void setDownloadedVisible(bool theValue);
 	bool getDownloadedVisible() const;

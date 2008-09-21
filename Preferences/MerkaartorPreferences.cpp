@@ -631,6 +631,21 @@ void MerkaartorPreferences::setAlphaList()
 	Sets->setValue("visual/alpha", alphaList);
 }
 
+int MerkaartorPreferences::getHoverWidth() const
+{
+	return Sets->value("visual/HoverWidth",1).toInt();
+}
+
+int MerkaartorPreferences::getFocusWidth() const
+{
+	return Sets->value("visual/FocusWidth",3).toInt();
+}
+
+int MerkaartorPreferences::getRelationsWidth() const
+{
+	return Sets->value("visual/RelationsWidth",3).toInt();
+}
+
 QColor MerkaartorPreferences::getBgColor() const
 {
 	QString sColor = Sets->value("visual/BgColor").toString();
@@ -668,19 +683,22 @@ void MerkaartorPreferences::setBgColor(const QColor theValue)
 	Sets->setValue("visual/BgColor", QVariant(theValue));
 }
 
-void MerkaartorPreferences::setHoverColor(const QColor theValue)
+void MerkaartorPreferences::setHoverColor(const QColor theValue, int Width)
 {
 	Sets->setValue("visual/HoverColor", QVariant(theValue));
+	Sets->setValue("visual/HoverWidth", Width);
 }
 
-void MerkaartorPreferences::setFocusColor(const QColor theValue)
+void MerkaartorPreferences::setFocusColor(const QColor theValue, int Width)
 {
 	Sets->setValue("visual/FocusColor", QVariant(theValue));
+	Sets->setValue("visual/FocusWidth", Width);
 }
 
-void MerkaartorPreferences::setRelationsColor(const QColor theValue)
+void MerkaartorPreferences::setRelationsColor(const QColor theValue, int Width)
 {
 	Sets->setValue("visual/RelationsColor", QVariant(theValue));
+	Sets->setValue("visual/RelationsWidth", Width);
 }
 
 QHash< QString, qreal > * MerkaartorPreferences::getAlphaPtr()
