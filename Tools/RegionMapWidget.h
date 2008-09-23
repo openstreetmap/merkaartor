@@ -31,6 +31,7 @@ class RegionMapWidget : public SlippyMapWidget
 		virtual void mouseReleaseEvent(QMouseEvent* ev);
 
 		QHash <quint32, bool> SelectedRegions;
+		QHash <quint32, bool> ExistingRegions;
 
 	private:
 		bool showGrid;

@@ -14,6 +14,8 @@
 
 #include <ui_WorldOsbManager.h>
 
+class QFile;
+
 class WorldOsbManager: public QDialog , public Ui::WorldOsbManager
 {
 	Q_OBJECT
@@ -22,7 +24,7 @@ class WorldOsbManager: public QDialog , public Ui::WorldOsbManager
 		WorldOsbManager(QWidget *parent = 0);
 
 		void DoIt();
-		void generateRegion(quint32 rg);
+		bool generateRegion(quint32 rg);
 
 	public slots:
 		virtual void on_cbShowGrid_toggled(bool checked);
@@ -30,6 +32,9 @@ class WorldOsbManager: public QDialog , public Ui::WorldOsbManager
 		virtual void on_WorldDirectoryBrowse_clicked();
 
 	protected:
+		QFile* WorldFile;
+
+		void readWorld();
 
 	private:
 };

@@ -20,8 +20,29 @@
 #define NUM_REGIONS (int(UINT_MAX/REGION_WIDTH))
 #define TILETOREGION_THRESHOLD 9
 
+class ImportExportOsmBin;
+
 class OsbRegion 
 {
+	public:
+		OsbRegion(ImportExportOsmBin* osb);
+		~OsbRegion();
+
+		bool load(qint32 rg, MapDocument* d, OsbMapLayer* theLayer);
+		bool loadTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer);
+		bool clearRegion(MapDocument* d, OsbMapLayer* theLayer);
+		bool clearTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer);
+
+	public:
+		qint32		region;
+		QIODevice*	device;
+		bool		isWorld;
+	
+		QList< QPair < qint32, quint64 > > theRegionIndex;
+		QMap< qint32, quint64 > theTileToc;
+
+		quint64 tocPos;
+		ImportExportOsmBin* theOsb;
 };
 
 class OsbTile
@@ -35,6 +56,8 @@ class OsbTile
 class ImportExportOsmBin : public IImportExport
 {
 	friend class OsbMapLayer;
+	friend class WorldOsbManager;
+	friend class OsbRegion;
 
 public:
     ImportExportOsmBin(MapDocument* doc);
@@ -64,6 +87,10 @@ protected:
 	//bool writeRelations(QDataStream& ds);
 	bool writeFeatures(QList<MapFeature*>, QDataStream& ds);
 
+	bool readWorld(QDataStream& ds);
+	void addWorldRegion(int region);
+	bool writeWorld(QDataStream& ds);
+
 	bool readHeader(QDataStream& ds);
 	bool readRegionToc(QDataStream& ds);
 	bool readPopularTagLists(QDataStream& ds);
@@ -73,11 +100,11 @@ protected:
 	//bool readRelations(QDataStream& ds, OsbMapLayer* aLayer);
 
 	bool loadRegion(qint32 rg, MapDocument* d, OsbMapLayer* theLayer);
-	bool clearRegion(qint32 rg, MapDocument* d, OsbMapLayer* theLayer);
 	bool loadTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer);
+	bool clearRegion(qint32 rg, MapDocument* d, OsbMapLayer* theLayer);
 	bool clearTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer);
-	MapFeature* getFeature(MapDocument* d, OsbMapLayer* theLayer, quint64 ref);
-	MapFeature* getFeature(MapDocument* d, OsbMapLayer* theLayer);
+	MapFeature* getFeature(OsbRegion* osr, MapDocument* d, OsbMapLayer* theLayer, quint64 ref);
+	MapFeature* getFeature(OsbRegion* osr, MapDocument* d, OsbMapLayer* theLayer);
 
 protected:
 	QMap <QString, qint32> keyPopularity;
@@ -86,10 +113,10 @@ protected:
 	QMap <quint64, QString> valueTable;
 
 	QMap< qint32, quint64 > theRegionToc;
-	QMap< qint32, quint64 > theTileToc;
+	QMap< qint32, OsbRegion* > theRegionList;
 
-	QMap< qint32, QList< QPair < qint32, quint64 > > > theRegionIndex;
 	QMap< qint32, QList<MapFeature*> > theTileIndex;
+	QMap< qint32, QList< QPair < qint32, quint64 > > > theRegionIndex;
 	QMap< qint32, QList<MapFeature*> > theTileNodesIndex;
 	QMap< qint32, QList<MapFeature*> > theTileRoadsIndex;
 	QMap< qint32, QList<MapFeature*> > theTileRelationsIndex;

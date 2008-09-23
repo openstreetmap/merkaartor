@@ -1152,10 +1152,10 @@ void OsbMapLayer::invalidate(MapDocument* d, CoordBox vp)
 	}
 }
 
-MapFeature*  OsbMapLayer::getFeatureByRef(MapDocument* d, quint64 ref)
-{
-	return pp->theImp->getFeature(d, this, ref);
-}
+//MapFeature*  OsbMapLayer::getFeatureByRef(MapDocument* d, quint64 ref)
+//{
+//	return pp->theImp->getFeature(d, this, ref);
+//}
 
 void OsbMapLayer::setVisible(bool b)
 {

@@ -69,11 +69,23 @@ void RegionMapWidget::paintEvent(QPaintEvent* anEvent)
 	for (qint64 x = l; x<= v.topRight().lon() / REGION_WIDTH; ++x)
 		for (qint64 y = t; y<= v.topRight().lat() / REGION_WIDTH; ++y) {
 			P.drawText((x * REGION_WIDTH - v.bottomLeft().lon()) * sx, 
-			height() - ((y * REGION_WIDTH - v.bottomLeft().lat()) * sy),
-			QString::number((y + NUM_REGIONS/2)*NUM_REGIONS + (x + NUM_REGIONS/2)));
+							height() - ((y * REGION_WIDTH - v.bottomLeft().lat()) * sy),
+							QString::number((y + NUM_REGIONS/2)*NUM_REGIONS + (x + NUM_REGIONS/2)));
 
+			if (ExistingRegions[(y + NUM_REGIONS/2)*NUM_REGIONS + (x + NUM_REGIONS/2)]) {
+				//qDebug() << (y + NUM_REGIONS/2)*NUM_REGIONS + (x + NUM_REGIONS/2);
+				P.save();
+				P.setPen(Qt::NoPen);
+				P.setBrush(QBrush(Qt::green, Qt::FDiagPattern));
+
+				P.drawRect(
+					QRect((x * REGION_WIDTH - v.bottomLeft().lon()) * sx, 
+							height() - ((y * REGION_WIDTH - v.bottomLeft().lat()) * sy), REGION_WIDTH * sx, -REGION_WIDTH * sy));
+
+				P.restore();
+			}
 			if (SelectedRegions[(y + NUM_REGIONS/2)*NUM_REGIONS + (x + NUM_REGIONS/2)]) {
-				qDebug() << (y + NUM_REGIONS/2)*NUM_REGIONS + (x + NUM_REGIONS/2);
+				//qDebug() << (y + NUM_REGIONS/2)*NUM_REGIONS + (x + NUM_REGIONS/2);
 				P.save();
 				P.setPen(Qt::NoPen);
 				P.setBrush(QBrush(Qt::blue, Qt::BDiagPattern));

@@ -14,6 +14,137 @@
 
 #include "../ImportExport/ImportExportOsmBin.h"
 
+OsbRegion::OsbRegion(ImportExportOsmBin* osb) 
+	: region(0), device(0), isWorld(false), theOsb(osb)
+{
+}
+
+OsbRegion::~OsbRegion()
+{
+	if (isWorld) {
+		if (device)
+			device->close();
+		delete device;
+	}
+}
+
+bool OsbRegion::load(qint32 rg, MapDocument* d, OsbMapLayer* theLayer) 
+{
+	region = rg;
+
+	quint64 tocPos = theOsb->theRegionToc[rg];
+	if (tocPos) {
+		QDataStream ds(device);
+		device->seek(tocPos);
+		QList< QPair < qint32, quint64 > > aTileList;
+
+		ds >> aTileList;
+
+		for (int i=0; i<aTileList.size(); ++i) {
+			theTileToc[aTileList[i].first] = aTileList[i].second;
+		}
+		theRegionIndex = aTileList;
+
+		bool OK;
+		qint32 theRegionTile = theRegionIndex[0].first;
+		if (theRegionTile < 0)
+			OK = loadTile(theRegionTile, d, theLayer);
+
+		return OK;
+	} else {
+		isWorld = true;
+
+		ImportExportOsmBin aOsb(NULL);
+		QFileInfo fi( *((QFile*)device) );
+		QString p = fi.absolutePath();
+		device = NULL;
+		aOsb.loadFile(QString("%1/%2.osb").arg(p).arg(QString::number(rg)));
+		if (!aOsb.import(NULL))
+			return false;
+
+		device = new QFile(QString("%1/%2.osb").arg(p).arg(QString::number(rg)));
+		device->open(QIODevice::ReadOnly);
+		if (!device->isOpen()) {
+			delete device;
+			device = NULL;
+			return false;
+		}
+
+		device->seek(aOsb.theRegionToc[rg]);
+		QList< QPair < qint32, quint64 > > aTileList;
+
+		QDataStream ds(device);
+		ds >> aTileList;
+
+		for (int i=0; i<aTileList.size(); ++i) {
+			theTileToc[aTileList[i].first] = aTileList[i].second;
+		}
+		theRegionIndex = aTileList;
+
+		bool OK = false;
+		qint32 theRegionTile = theRegionIndex[0].first;
+		if (theRegionTile < 0)
+			OK = loadTile(theRegionTile, d, theLayer);
+
+		return OK;
+	}
+}
+
+bool OsbRegion::loadTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer)
+{
+	if (!theTileToc.contains(tile))
+		return false;
+
+	QDataStream ds(device);
+	quint32 featCount;
+
+	quint32 pos = theTileToc[tile];
+	device->seek(pos);
+	ds >> featCount;
+
+	for (quint32 i=0; i<featCount; ++i) {
+		MapFeature* F = theOsb->getFeature(this, d, theLayer);
+		theOsb->theTileIndex[tile].push_back(F);
+		theOsb->featRefCount[F]++;
+	}
+
+	return true;
+}
+
+bool OsbRegion::clearRegion(MapDocument* d, OsbMapLayer* theLayer)
+{
+	bool OK;
+	qint32 theRegionTile = theRegionIndex[0].first;
+	if (theRegionTile < 0)
+		OK = clearTile(theRegionTile, d, theLayer);
+	return OK;
+}
+
+bool OsbRegion::clearTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer)
+{
+	Q_UNUSED(d);
+
+	QDataStream ds(device);
+	bool OK = true;
+
+	for (qint32 i=0; i<theOsb->theTileIndex[tile].size(); ++i) {
+		MapFeature* F = theOsb->theTileIndex[tile][i];
+		if (F->layer() == theLayer) {
+			int theCount = --theOsb->featRefCount[F];
+			if (!(theCount)) {
+				theLayer->remove(F);
+				delete F;
+				theOsb->featRefCount.remove(F);
+			}
+		} else {
+			theOsb->featRefCount.remove(F);
+		}
+	}
+	theOsb->theTileIndex.remove(tile);
+
+	return OK;
+}
+
 ImportExportOsmBin::ImportExportOsmBin(MapDocument* doc)
  : IImportExport(doc)
 {
@@ -125,21 +256,21 @@ void ImportExportOsmBin::tagsFromBinary(MapFeature * F, QDataStream& ds)
 	for (unsigned int i=0; i < numTags; ++i) {
 		ds >> k;
 		ds >> v;
-		cur_pos = Device->pos();
+		cur_pos = ds.device()->pos();
 		if (keyTable.contains(k))
 			K = keyTable[k];
 		else {
-			Device->seek(k);
+			ds.device()->seek(k);
 			ds >> K;
 		}
 		if (valueTable.contains(v))
 			V = valueTable[v];
 		else {
-			Device->seek(v);
+			ds.device()->seek(v);
 			ds >> V;
 		}
 		F->setTag(K,V);
-		Device->seek(cur_pos);
+		ds.device()->seek(cur_pos);
 	}
 }
 
@@ -225,13 +356,26 @@ bool ImportExportOsmBin::writeIndex(QDataStream& ds, int selRegion)
 	while (j.hasNext()) {
 		j.next();
 
-		theRegionToc[j.key()] = Device->pos();
+		theRegionToc[j.key()] = ds.device()->pos();
 		ds << j.value();
 	}
-	tocPos = Device->pos();
+	tocPos = ds.device()->pos();
 	ds << theRegionToc;
 
 	return true;
+}
+
+bool ImportExportOsmBin::readWorld(QDataStream& ds)
+{
+	if (! readHeader(ds) ) return false;
+	if (! readRegionToc(ds) ) return false;
+
+	return true;
+}
+
+void ImportExportOsmBin::addWorldRegion(int region)
+{
+	theRegionToc[region] = 0;
 }
 
 bool ImportExportOsmBin::writeTagLists(QDataStream& ds)
@@ -359,7 +503,7 @@ bool ImportExportOsmBin::readHeader(QDataStream& ds)
 
 bool ImportExportOsmBin::readRegionToc(QDataStream& ds)
 {
-	Device->seek(tocPos);
+	ds.device()->seek(tocPos);
 	ds >> theRegionToc;
 
 	return true;
@@ -371,6 +515,9 @@ bool ImportExportOsmBin::readPopularTagLists(QDataStream& ds)
 	QString s;
 	quint64 cur_pos;
 	
+	if (!tagKeysPos)
+		return true;
+
 	Device->seek(tagKeysPos);
 	ds >> tagKeysSize;
 
@@ -445,109 +592,51 @@ bool ImportExportOsmBin::loadRegion(qint32 rg, MapDocument* d, OsbMapLayer* theL
 	if (!theRegionToc.contains(rg))
 		return false;
 
-	QDataStream ds(Device);
-	Device->seek(theRegionToc[rg]);
-	QList< QPair < qint32, quint64 > > aTileList;
-
-	ds >> aTileList;
-
-	for (int i=0; i<aTileList.size(); ++i) {
-		theTileToc[aTileList[i].first] = aTileList[i].second;
-	}
-	theRegionIndex[rg] = aTileList;
-
-	bool OK;
-	qint32 theRegionTile = theRegionIndex[rg][0].first;
-	if (theRegionTile < 0)
-		OK = loadTile(theRegionTile, d, theLayer);
-
-	return OK;
-}
-
-bool ImportExportOsmBin::loadTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer)
-{
-	QDataStream ds(Device);
-	quint32 featCount;
-
-	if (!theTileToc.contains(tile))
+	OsbRegion* org = new OsbRegion(this);
+	org->device = Device;
+	if (!org->load(rg, d, theLayer)) {
+		delete org;
 		return false;
-
-	quint32 pos = theTileToc[tile];
-	Device->seek(pos);
-	ds >> featCount;
-
-	for (quint32 i=0; i<featCount; ++i) {
-		MapFeature* F = getFeature(d, theLayer);
-		theTileIndex[tile].push_back(F);
-		featRefCount[F]++;
 	}
-
-	//qDebug() << "--------- " << tile;
-	//QMapIterator<MapFeature*, quint32> itN(featRefCount);
-	//while(itN.hasNext()) {
-	//	itN.next();
-
-	//	if (itN.value() > 1)
-	//		qDebug() << itN.key()->id() << " - " << itN.value();
-	//}
+	theRegionList[rg] = org;
 
 	return true;
 }
 
+bool ImportExportOsmBin::loadTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer)
+{
+	int y = int(tile / NUM_TILES);
+	int x = (tile % NUM_TILES);
+	int rg = (y * NUM_REGIONS / NUM_TILES) * NUM_REGIONS + (x * NUM_REGIONS / NUM_TILES);
+	return theRegionList[rg]->loadTile(tile, d, theLayer);
+}
+
 bool ImportExportOsmBin::clearRegion(qint32 rg, MapDocument* d, OsbMapLayer* theLayer)
 {
-	bool OK;
-	qint32 theRegionTile = theRegionIndex[rg][0].first;
-	if (theRegionTile < 0)
-		OK = clearTile(theRegionTile, d, theLayer);
-	theRegionIndex.remove(rg);
+	theRegionList[rg]->clearRegion(d, theLayer);
+	delete theRegionList[rg];
+	theRegionList.remove(rg);
 
-	return OK;
+	return true;
 }
 
 bool ImportExportOsmBin::clearTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer)
 {
-	Q_UNUSED(d);
-
-	QDataStream ds(Device);
-	bool OK = true;
-
-	for (qint32 i=0; i<theTileIndex[tile].size(); ++i) {
-		MapFeature* F = theTileIndex[tile][i];
-		if (F->layer() == theLayer) {
-			int theCount = --featRefCount[F];
-			if (!(theCount)) {
-				theLayer->remove(F);
-				delete F;
-				featRefCount.remove(F);
-			}
-		} else {
-			featRefCount.remove(F);
-		}
-	}
-	theTileIndex.remove(tile);
-
-	//qDebug() << "--------- " << tile;
-	//QMapIterator<MapFeature*, quint32> itN(featRefCount);
-	//while(itN.hasNext()) {
-	//	itN.next();
-
-	//	if (itN.value() > 1)
-	//		qDebug() << itN.key()->id() << " - " << itN.value();
-	//}
-
-	return OK;
+	int y = int(tile / NUM_TILES);
+	int x = (tile % NUM_TILES);
+	int rg = (y * NUM_REGIONS / NUM_TILES) * NUM_REGIONS + (x * NUM_REGIONS / NUM_TILES);
+	return theRegionList[rg]->clearTile(tile, d, theLayer);
 }
 
-MapFeature* ImportExportOsmBin::getFeature(MapDocument* d, OsbMapLayer* theLayer, quint64 ref)
+MapFeature* ImportExportOsmBin::getFeature(OsbRegion* osr, MapDocument* d, OsbMapLayer* theLayer, quint64 ref)
 {
-	QDataStream ds(Device);
+	QDataStream ds(osr->device);
 	MapFeature* F;
 	qint8 c;
 	quint64 id;
-	quint64 cur_pos = Device->pos();
+	quint64 cur_pos = osr->device->pos();
 
-	Device->seek(ref);
+	osr->device->seek(ref);
 	ds >> c;
 	ds >> id;
 	switch (c) {
@@ -564,7 +653,7 @@ MapFeature* ImportExportOsmBin::getFeature(MapDocument* d, OsbMapLayer* theLayer
 			Q_ASSERT(false);
 	}
 	if (F && (F->lastUpdated() != MapFeature::NotYetDownloaded)) {
-		Device->seek(cur_pos);
+		osr->device->seek(cur_pos);
 		return F;
 	}
 
@@ -589,9 +678,9 @@ MapFeature* ImportExportOsmBin::getFeature(MapDocument* d, OsbMapLayer* theLayer
 	return F;
 }
 
-MapFeature* ImportExportOsmBin::getFeature(MapDocument* d, OsbMapLayer* theLayer)
+MapFeature* ImportExportOsmBin::getFeature(OsbRegion* osr, MapDocument* d, OsbMapLayer* theLayer)
 {
-	QDataStream ds(Device);
+	QDataStream ds(osr->device);
 	MapFeature* F;
 	qint8 c;
 	quint64 id;
@@ -616,7 +705,7 @@ MapFeature* ImportExportOsmBin::getFeature(MapDocument* d, OsbMapLayer* theLayer
 	//	return F;
 	//}
 #ifndef NDEBUG
-	quint32 pos = Device->pos(); //1097543
+	quint32 pos = osr->device->pos(); //1097543
 #endif
 	switch (c) {
 		case 'N':
@@ -708,3 +797,17 @@ bool ImportExportOsmBin::import(MapLayer* aLayer)
 
 	return true;
 }
+
+bool ImportExportOsmBin::writeWorld(QDataStream& ds)
+{
+	if (! writeHeader(ds) ) return false;
+	if (! writeIndex(ds) ) return false;
+
+	ds.device()->seek(HEADER_SIZE);
+	ds << tocPos;
+	ds << tagKeysPos;
+	ds << tagValuesPos;
+
+	return true;
+}
+
