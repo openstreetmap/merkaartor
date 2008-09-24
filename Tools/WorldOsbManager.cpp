@@ -41,6 +41,7 @@ void WorldOsbManager::on_buttonBox_clicked(QAbstractButton * button)
 		if ((button == buttonBox->button(QDialogButtonBox::Ok))) {
 			DoIt();
 		}
+	update();
 }
 
 void WorldOsbManager::on_WorldDirectoryBrowse_clicked()
@@ -69,7 +70,40 @@ void WorldOsbManager::DoIt()
 				QMessageBox::critical(this, tr("Region generation error"), 
 					tr("Error while generating region %1").arg(it.key()), QMessageBox::Ok);
 	}
+	QHashIterator<quint32, bool> itd(slippy->DeleteRegions);
+	while (itd.hasNext()) {
+		itd.next();
 
+		if (itd.value())
+			deleteRegion(itd.key());
+	}
+
+}
+
+bool WorldOsbManager::deleteRegion(quint32 rg)
+{
+	QFile::remove((WorldDirectory->text()+ "/"+ QString::number(rg) + ".osb"));
+
+	ImportExportOsmBin* osb = new ImportExportOsmBin(NULL);
+
+	QDataStream ds;
+	WorldFile = new QFile(WorldDirectory->text() + "/world.osb");
+	ds.setDevice(WorldFile);
+
+	WorldFile->open(QIODevice::ReadOnly);
+	if (WorldFile->isOpen())
+		osb->readWorld(ds);
+	WorldFile->close();
+
+	WorldFile->open(QIODevice::WriteOnly);
+	osb->removeWorldRegion(rg);
+	osb->writeWorld(ds);
+	WorldFile->close();
+
+	slippy->DeleteRegions[rg] = false;
+	slippy->ExistingRegions[rg] = false;
+
+	return true;
 }
 
 bool WorldOsbManager::generateRegion(quint32 rg)
@@ -136,6 +170,7 @@ bool WorldOsbManager::generateRegion(quint32 rg)
 	delete aDoc;
 
 	slippy->ExistingRegions[rg] = true;
+	slippy->SelectedRegions[rg] = false;
 	return true;
 }
 

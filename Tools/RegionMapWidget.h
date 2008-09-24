@@ -32,6 +32,7 @@ class RegionMapWidget : public SlippyMapWidget
 
 		QHash <quint32, bool> SelectedRegions;
 		QHash <quint32, bool> ExistingRegions;
+		QHash <quint32, bool> DeleteRegions;
 
 	private:
 		bool showGrid;

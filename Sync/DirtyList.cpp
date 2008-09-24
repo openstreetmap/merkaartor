@@ -286,7 +286,7 @@ bool DirtyListDescriber::showChanges(QWidget* aParent)
 	bool ok = (dlg->exec() == QDialog::Accepted);
 
 	Task = Ui.ChangesList->count();
-	delete dlg;
+	SAFE_DELETE(dlg);
 	return ok;
 }
 
@@ -411,7 +411,7 @@ bool DirtyListExecutor::executeChanges(QWidget* aParent)
 		if (runVisit())
 			stop();
 	}
-	delete Progress;
+	SAFE_DELETE(Progress);
 	return true;
 }
 

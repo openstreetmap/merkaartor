@@ -16,8 +16,6 @@
 #include <map>
 #include <vector>
 
-#define SAFE_DELETE(x) {delete (x); x = NULL;}
-
 /* MAPDOCUMENT */
 
 class MapDocumentPrivate

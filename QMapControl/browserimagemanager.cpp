@@ -31,8 +31,9 @@
 
 void BrowserWebPage::javaScriptConsoleMessage ( const QString & message, int lineNumber, const QString & sourceID )
 {
-	QString s = QString("%1 at %2, %3").arg(message).arg(QString::number(lineNumber)).arg(sourceID);
-	printf("%s\n", s);
+	// FIXME Seems to crash at times (see http://trac.openstreetmap.org/ticket/1194)
+	//QString s = QString("%1 at %2, %3").arg(message).arg(QString::number(lineNumber)).arg(sourceID);
+	//printf("%s\n", s);
 }
 
 void BrowserWebPage::javaScriptAlert ( QWebFrame * frame, const QString & msg ) 

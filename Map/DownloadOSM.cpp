@@ -220,8 +220,7 @@ bool Downloader::go(const QString& url)
 #endif
 	Result = Request.lastResponse().statusCode();
 	ResultText = Request.lastResponse().reasonPhrase();
-	delete AnimationTimer;
-	AnimationTimer = 0;
+	SAFE_DELETE(AnimationTimer);
 	return !Error;
 }
 
@@ -287,8 +286,7 @@ void Downloader::progress(int done, int total)
 			Animator->setLabelText(tr("Downloading from OSM (%1 kBytes)").arg(done/1024));
 		if (AnimationTimer && total != 0)
 		{
-			delete AnimationTimer;
-			AnimationTimer = 0;
+			SAFE_DELETE(AnimationTimer);
 			AnimatorBar->setMaximum(total);
 		}
 		if (!AnimationTimer && AnimatorBar)
@@ -399,10 +397,10 @@ bool downloadOSM(QMainWindow* aParent, const QUrl& theUrl, const QString& aUser,
 	if (!Rcv.go(URL))
 	{
 		aParent->setCursor(QCursor(Qt::ArrowCursor));
-		delete ProgressDialog;
+		SAFE_DELETE(ProgressDialog);
 		return false;
 	}
-	delete ProgressDialog;
+	SAFE_DELETE(ProgressDialog);
 #ifdef DEBUG_MAPCALL_ONLY
 	showDebug("GET", URL,QByteArray(), Rcv.content());
 #endif
@@ -663,7 +661,7 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 			} else {
 				retry = true;
 				theDocument->remove(theLayer);
-				delete theLayer;
+				SAFE_DELETE(theLayer);
 			}
 		}
 	}

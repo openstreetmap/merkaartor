@@ -30,6 +30,9 @@ class QMainWindow;
 #define M_PARAM_DECLARE_STRING(Param) \
 	void set##Param(const QString & theValue); \
 	QString get##Param() const; 
+
+#define SAFE_DELETE(x) {delete (x); x = NULL;}
+
 /**
 	@author cbro <cbro@semperpax.com>
 */

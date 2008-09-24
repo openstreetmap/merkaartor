@@ -89,6 +89,7 @@ protected:
 
 	bool readWorld(QDataStream& ds);
 	void addWorldRegion(int region);
+	void removeWorldRegion(int region);
 	bool writeWorld(QDataStream& ds);
 
 	bool readHeader(QDataStream& ds);

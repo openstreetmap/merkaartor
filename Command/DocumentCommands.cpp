@@ -117,7 +117,7 @@ RemoveFeatureCommand::RemoveFeatureCommand(MapDocument *theDocument, MapFeature 
 		it.get()->cascadedRemoveIfUsing(theDocument, aFeature, CascadedCleanUp, Alternatives);
 	if (CascadedCleanUp->empty())
 	{
-		delete CascadedCleanUp;
+		SAFE_DELETE(CascadedCleanUp);
 		CascadedCleanUp = 0;
 	}
 	oldLayer = aFeature->layer();
@@ -134,7 +134,7 @@ RemoveFeatureCommand::~RemoveFeatureCommand()
 {
 	if (oldLayer)
 		oldLayer->decDirtyLevel(commandDirtyLevel);
-	delete CascadedCleanUp;
+	SAFE_DELETE(CascadedCleanUp);
 	if (theLayer->getDocument()->getTrashLayer()->exists(theFeature)) {
 		theLayer->getDocument()->getTrashLayer()->remove(theFeature);
 		delete theFeature;

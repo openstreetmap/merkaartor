@@ -10,8 +10,6 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
 
-#define SAFE_DELETE(x) {delete (x); x = NULL;}
-
 #define LINEHEIGHT 25
 
 LayerWidget::LayerWidget(MapLayer* aLayer, QWidget* aParent)

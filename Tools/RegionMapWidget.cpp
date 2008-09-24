@@ -68,11 +68,12 @@ void RegionMapWidget::paintEvent(QPaintEvent* anEvent)
 	}
 	for (qint64 x = l; x<= v.topRight().lon() / REGION_WIDTH; ++x)
 		for (qint64 y = t; y<= v.topRight().lat() / REGION_WIDTH; ++y) {
+			quint32 rg = (y + NUM_REGIONS/2)*NUM_REGIONS + (x + NUM_REGIONS/2);
 			P.drawText((x * REGION_WIDTH - v.bottomLeft().lon()) * sx, 
 							height() - ((y * REGION_WIDTH - v.bottomLeft().lat()) * sy),
-							QString::number((y + NUM_REGIONS/2)*NUM_REGIONS + (x + NUM_REGIONS/2)));
+							QString::number(rg));
 
-			if (ExistingRegions[(y + NUM_REGIONS/2)*NUM_REGIONS + (x + NUM_REGIONS/2)]) {
+			if (ExistingRegions[rg] && !DeleteRegions[rg]) {
 				//qDebug() << (y + NUM_REGIONS/2)*NUM_REGIONS + (x + NUM_REGIONS/2);
 				P.save();
 				P.setPen(Qt::NoPen);
@@ -84,7 +85,7 @@ void RegionMapWidget::paintEvent(QPaintEvent* anEvent)
 
 				P.restore();
 			}
-			if (SelectedRegions[(y + NUM_REGIONS/2)*NUM_REGIONS + (x + NUM_REGIONS/2)]) {
+			if (SelectedRegions[rg] && !DeleteRegions[rg]) {
 				//qDebug() << (y + NUM_REGIONS/2)*NUM_REGIONS + (x + NUM_REGIONS/2);
 				P.save();
 				P.setPen(Qt::NoPen);
@@ -113,7 +114,14 @@ void RegionMapWidget::mouseReleaseEvent(QMouseEvent* ev)
 		int y = int(((qint64)Pt.lat()) / REGION_WIDTH);
 		int rg = (y + NUM_REGIONS/2)*NUM_REGIONS + (x + NUM_REGIONS/2);
 
-		SelectedRegions[rg] = !SelectedRegions[rg];
+		if (SelectedRegions[rg] && ExistingRegions[rg]) {
+			SelectedRegions[rg] = false;
+			DeleteRegions[rg] = true;
+		} else
+			if (!SelectedRegions[rg] && DeleteRegions[rg])
+				DeleteRegions[rg] = false;
+			else
+				SelectedRegions[rg] = !SelectedRegions[rg];
 
 		update();
 	}

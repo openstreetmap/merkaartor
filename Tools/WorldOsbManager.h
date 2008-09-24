@@ -25,6 +25,7 @@ class WorldOsbManager: public QDialog , public Ui::WorldOsbManager
 
 		void DoIt();
 		bool generateRegion(quint32 rg);
+		bool deleteRegion(quint32 rg);
 
 	public slots:
 		virtual void on_cbShowGrid_toggled(bool checked);

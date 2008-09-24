@@ -11,8 +11,6 @@
 
 #include <QPushButton>
 
-#define SAFE_DELETE(x) {delete (x); x = NULL;}
-
 #define LINEHEIGHT 25
 
 class LayerDockPrivate

@@ -65,8 +65,7 @@ bool OsbRegion::load(qint32 rg, MapDocument* d, OsbMapLayer* theLayer)
 		device = new QFile(QString("%1/%2.osb").arg(p).arg(QString::number(rg)));
 		device->open(QIODevice::ReadOnly);
 		if (!device->isOpen()) {
-			delete device;
-			device = NULL;
+			SAFE_DELETE(device);
 			return false;
 		}
 
@@ -376,6 +375,11 @@ bool ImportExportOsmBin::readWorld(QDataStream& ds)
 void ImportExportOsmBin::addWorldRegion(int region)
 {
 	theRegionToc[region] = 0;
+}
+
+void ImportExportOsmBin::removeWorldRegion(int region)
+{
+	theRegionToc.remove(region);
 }
 
 bool ImportExportOsmBin::writeTagLists(QDataStream& ds)

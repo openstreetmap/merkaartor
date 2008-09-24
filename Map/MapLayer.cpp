@@ -43,8 +43,6 @@
 #include <map>
 #include <vector>
 
-#define SAFE_DELETE(x) {delete (x); x = NULL;}
-
 /* MAPLAYER */
 
 class MapLayerPrivate
