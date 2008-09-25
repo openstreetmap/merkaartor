@@ -157,6 +157,7 @@ void PaintStyleEditor::on_PaintList_itemClicked(QListWidgetItem* it)
 	LabelFont->setCurrentFont(FP.getLabelFont());
 	LabelTag->setText(FP.getLabelTag());
 	LabelBackgroundTag->setText(FP.getLabelBackgroundTag());
+	LabelHalo->setChecked(FP.getLabelHalo());
 	
 	FreezeUpdate = false;
 }
@@ -411,6 +412,14 @@ void PaintStyleEditor::on_DrawLabel_clicked(bool b)
 	if (idx >= thePainters.size())
 		return;
 	thePainters[idx].labelActive(b);
+}
+
+void PaintStyleEditor::on_LabelHalo_clicked(bool b)
+{
+	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	if (idx >= thePainters.size())
+		return;
+	thePainters[idx].labelHalo(b);
 }
 
 void PaintStyleEditor::on_LabelTag_textEdited()

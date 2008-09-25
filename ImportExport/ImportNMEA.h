@@ -35,6 +35,7 @@ private:
 	bool importGSA (QString line);
 	bool importGSV (QString line);
 	bool importGGA (QString line);
+	bool importGLL (QString line);
 	TrackPoint* importRMC (QString line);
 
 	double curAltitude;

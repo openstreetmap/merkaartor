@@ -76,6 +76,7 @@ class QGPSDevice : public QThread
     
         enum FixType
         {
+            FixUnavailable,
             FixInvalid,
             Fix2D,
             Fix3D
@@ -194,6 +195,7 @@ class QGPSDevice : public QThread
         FixStatus cur_fixStatus;
         
         bool parseGGA(const char *ggaString = 0);
+        bool parseGLL(const char *ggaString = 0);
         bool parseGSA(const char *gsaString = 0);
         bool parseGSV(const char *gsvString = 0);
         bool parseRMC(const char *gsvString = 0);

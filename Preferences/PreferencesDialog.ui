@@ -20,15 +20,15 @@
       <enum>QTabWidget::North</enum>
      </property>
      <property name="currentIndex" >
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tab_7" >
       <property name="geometry" >
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>618</width>
-        <height>415</height>
+        <width>624</width>
+        <height>418</height>
        </rect>
       </property>
       <attribute name="title" >
@@ -106,8 +106,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>618</width>
-        <height>415</height>
+        <width>624</width>
+        <height>418</height>
        </rect>
       </property>
       <attribute name="title" >
@@ -434,8 +434,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>618</width>
-        <height>415</height>
+        <width>624</width>
+        <height>418</height>
        </rect>
       </property>
       <attribute name="title" >
@@ -533,8 +533,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>618</width>
-        <height>415</height>
+        <width>624</width>
+        <height>418</height>
        </rect>
       </property>
       <attribute name="title" >
@@ -653,8 +653,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>618</width>
-        <height>415</height>
+        <width>624</width>
+        <height>418</height>
        </rect>
       </property>
       <attribute name="title" >
@@ -745,8 +745,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>618</width>
-        <height>415</height>
+        <width>624</width>
+        <height>418</height>
        </rect>
       </property>
       <attribute name="title" >
@@ -829,8 +829,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>618</width>
-        <height>415</height>
+        <width>624</width>
+        <height>418</height>
        </rect>
       </property>
       <attribute name="title" >
@@ -928,8 +928,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>618</width>
-        <height>415</height>
+        <width>624</width>
+        <height>418</height>
        </rect>
       </property>
       <attribute name="title" >
@@ -1070,8 +1070,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>322</x>
-     <y>341</y>
+     <x>331</x>
+     <y>484</y>
     </hint>
     <hint type="destinationlabel" >
      <x>286</x>
@@ -1086,12 +1086,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>208</x>
-     <y>61</y>
+     <x>129</x>
+     <y>82</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>272</x>
-     <y>86</y>
+     <x>123</x>
+     <y>100</y>
     </hint>
    </hints>
   </connection>
@@ -1102,12 +1102,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>208</x>
-     <y>61</y>
+     <x>129</x>
+     <y>82</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>108</x>
-     <y>112</y>
+     <x>111</x>
+     <y>134</y>
     </hint>
    </hints>
   </connection>
@@ -1118,12 +1118,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>37</x>
-     <y>77</y>
+     <x>45</x>
+     <y>83</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>157</x>
-     <y>87</y>
+     <x>223</x>
+     <y>91</y>
     </hint>
    </hints>
   </connection>
@@ -1134,12 +1134,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>41</x>
-     <y>84</y>
+     <x>49</x>
+     <y>90</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>560</x>
-     <y>90</y>
+     <x>624</x>
+     <y>93</y>
     </hint>
    </hints>
   </connection>
@@ -1150,12 +1150,60 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>73</x>
-     <y>66</y>
+     <x>81</x>
+     <y>70</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>184</x>
-     <y>67</y>
+     <x>216</x>
+     <y>70</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>StyleCustom</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>CustomStyleName</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>51</x>
+     <y>109</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>109</x>
+     <y>108</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>StyleCustom</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>BrowseStyle</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>59</x>
+     <y>106</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>600</x>
+     <y>110</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>StyleBuiltin</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>cbStyles</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>66</x>
+     <y>75</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>112</x>
+     <y>77</y>
     </hint>
    </hints>
   </connection>

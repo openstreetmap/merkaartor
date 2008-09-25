@@ -426,33 +426,33 @@ static void changeCurrentDirToFile(const QString& s)
 
 #ifndef GEOIMAGE
 #define FILTER_OPEN_SUPPORTED \
-	tr("Supported formats (*.mdc *.gpx *.osm *.osb *.ngt *.nmea *.nme)\n" \
+	tr("Supported formats (*.mdc *.gpx *.osm *.osb *.ngt *.nmea *.nma)\n" \
 	"Merkaartor document (*.mdc)\n" \
 	"GPS Exchange format (*.gpx)\n" \
 	"OpenStreetMap format (*.osm)\n" \
 	"OpenStreetMap binary format (*.osb)\n" \
 	"Noni GPSPlot format (*.ngt)\n" \
-	"NMEA GPS log format (*.nmea *.nme)\n" \
+	"NMEA GPS log format (*.nmea *.nma)\n" \
 	"All Files (*)")
 #else
 #define FILTER_OPEN_SUPPORTED \
-	tr("Supported formats (*.mdc *.gpx *.osm *.osb *.ngt *.nmea *.nme *.jpg)\n" \
+	tr("Supported formats (*.mdc *.gpx *.osm *.osb *.ngt *.nmea *.nma *.jpg)\n" \
 	"Merkaartor document (*.mdc)\n" \
 	"GPS Exchange format (*.gpx)\n" \
 	"OpenStreetMap format (*.osm)\n" \
 	"OpenStreetMap binary format (*.osb)\n" \
 	"Noni GPSPlot format (*.ngt)\n" \
-	"NMEA GPS log format (*.nmea *.nme)\n" \
+	"NMEA GPS log format (*.nmea *.nma)\n" \
 	"Geotagged images (*.jpg)\n" \
 	"All Files (*)")
 #endif
 #define FILTER_IMPORT_SUPPORTED \
-	tr("Supported formats (*.gpx *.osm *.osb *.ngt *.nmea *.nme)\n" \
+	tr("Supported formats (*.gpx *.osm *.osb *.ngt *.nmea *.nma)\n" \
 	"GPS Exchange format (*.gpx)\n" \
 	"OpenStreetMap format (*.osm)\n" \
 	"OpenStreetMap binary format (*.osb)\n" \
 	"Noni GPSPlot format (*.ngt)\n" \
-	"NMEA GPS log format (*.nmea *.nme)\n" \
+	"NMEA GPS log format (*.nmea *.nma)\n" \
 	"All Files (*)")
 
 void MainWindow::on_fileImportAction_triggered()
@@ -545,7 +545,7 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 				((TrackMapLayer *)newLayer)->extractLayer();
 			}
 		}
-		else if (fn.endsWith(".nmea") || (fn.endsWith(".nme"))) {
+		else if (fn.endsWith(".nmea") || (fn.endsWith(".nma"))) {
 			newLayer = new TrackMapLayer( baseFileName );
 			mapDocument->add(newLayer);
 			importOK = mapDocument->importNMEA(baseFileName, (TrackMapLayer *)newLayer);
@@ -1786,7 +1786,7 @@ void MainWindow::on_gpsReplayAction_triggered()
 	QString fileName = QFileDialog::getOpenFileName(
 					this,
 					tr("Open NMEA log file"),
-					"", "NMEA GPS log format (*.nmea *.nme)" );
+					"", "NMEA GPS log format (*.nmea *.nma)" );
 
 	if (fileName.isEmpty())
 		return;

@@ -1,4 +1,6 @@
 v0.13
+	* ADD : add support for MTK-based GPSes
+	* ADD : add "Halo" label option to the style editor
 	* ADD : make focus and hover size configurable
 	* FIX : Windows crash when resaving changed scene truncates save file (closes #1164)
 	* ADD : Move to the next field on enter in properties dock tags - part 2 (by Travers Carter) (closes #1137)

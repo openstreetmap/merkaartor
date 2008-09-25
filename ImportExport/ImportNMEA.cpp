@@ -78,6 +78,17 @@ bool ImportNMEA::import(MapLayer* aLayer)
 				TS = new TrackSegment;
 			}
 		} else
+		if (command == "GLL") {
+			bool prevGoodFix = goodFix;
+			goodFix = importGLL(line);
+			if (!goodFix && prevGoodFix) {
+				if (TS->size())
+					theList->add(new AddFeatureCommand(theLayer,TS, true));
+				else
+					delete TS;
+				TS = new TrackSegment;
+			}
+		} else
 		if (command == "RMC") {
 			if (goodFix && goodFix3D) {
 				TrackPoint* p = importRMC(line);
@@ -152,6 +163,22 @@ bool ImportNMEA::importGGA (QString line)
 	return true;
 }
 
+bool ImportNMEA::importGLL (QString line)
+{
+	if (line.count('$') > 1)
+		return false;
+
+	QStringList tokens = line.split(",");
+
+	if (tokens.size() < 7)
+		return false;
+
+	if (tokens[6] != "A")
+		return false;
+
+	return true;
+}
+
 TrackPoint* ImportNMEA::importRMC (QString line)
 {
 	if (line.count('$') > 1)
@@ -162,7 +189,7 @@ TrackPoint* ImportNMEA::importRMC (QString line)
 		return NULL;
 
 	//int time = tokens[1];
-	if (tokens[2] == "V")
+	if (tokens[2] != "A")
 		return NULL;
 
 	double lat = tokens[3].left(2).toDouble();

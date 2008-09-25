@@ -276,6 +276,8 @@ void readFromNode(const QDomElement& e, FeaturePainter& FP)
 			toColor(e.attribute("labelColor")),e.attribute("labelScale").toDouble(),e.attribute("labelOffset").toDouble());
 		FP.setLabelFont(e.attribute("labelFont"));
 		FP.labelTag(e.attribute("labelTag"));
+		if (e.hasAttribute("labelHalo"))
+			FP.labelHalo((e.attribute("labelHalo") == "yes"));
 		if (e.hasAttribute("labelBackgroundColor"))
 			FP.labelBackground(toColor(e.attribute("labelBackgroundColor")));
 		if (e.hasAttribute("labelBackgroundTag"))

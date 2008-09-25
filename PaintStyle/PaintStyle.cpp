@@ -10,6 +10,7 @@
 #include <QtCore/QString>
 #include <QtGui/QPainter>
 #include <QtGui/QPainterPath>
+#include <QMatrix>
 
 #include <math.h>
 
@@ -24,7 +25,7 @@ FeaturePainter::FeaturePainter()
   ForegroundFill(false), DrawTrafficDirectionMarks(false),
   DrawIcon(false), IconScale(0), IconOffset(0),
   DrawLabel(false), LabelScale(0), LabelOffset(0),
-  DrawLabelBackground(false)
+  DrawLabelBackground(false), LabelHalo(false)
 {
 }
 
@@ -45,7 +46,7 @@ FeaturePainter::FeaturePainter(const FeaturePainter& f)
   DrawIcon(f.DrawIcon), IconName(f.IconName), IconScale(f.IconScale), IconOffset(f.IconOffset),
   DrawLabel(f.DrawLabel), LabelTag(f.LabelTag), LabelColor(f.LabelColor), LabelScale(f.LabelScale), LabelOffset(f.LabelOffset),
   DrawLabelBackground(f.DrawLabelBackground), LabelBackgroundColor(f.LabelBackgroundColor), LabelBackgroundTag(f.LabelBackgroundTag),
-  LabelFont(f.LabelFont)
+  LabelFont(f.LabelFont), LabelHalo(f.LabelHalo)
 {
 	if (f.theSelector)
 		theSelector = f.theSelector->copy();
@@ -97,6 +98,7 @@ FeaturePainter& FeaturePainter::operator=(const FeaturePainter& f)
 	LabelFont = f.LabelFont;
 	LabelTag = f.LabelTag;
 	LabelBackgroundTag = f.LabelBackgroundTag;
+	LabelHalo = f.LabelHalo;
 	return *this;
 }
 
@@ -158,6 +160,8 @@ QString FeaturePainter::asXML() const
 		r += " " + boundaryAsXML("label",LabelColor, LabelScale, LabelOffset);
 		r += " labelFont=\"" + LabelFont.toString() + "\"";
 		r += " labelTag=\"" + LabelTag + "\"";
+		if (LabelHalo)
+			r += " labelHalo=\"yes\"";
 	}
 	if (DrawLabelBackground) {
 		r += " labelBackgroundColor=\""+::asXML(LabelBackgroundColor)+"\"";
@@ -314,6 +318,12 @@ FeaturePainter& FeaturePainter::labelActive(bool b)
 	return *this;
 }
 
+FeaturePainter& FeaturePainter::labelHalo(bool b)
+{
+	LabelHalo = b;
+	return *this;
+}
+
 FeaturePainter& FeaturePainter::labelTag(const QString& val)
 {
 	LabelTag = val;
@@ -371,6 +381,11 @@ QFont FeaturePainter::getLabelFont() const
 QString FeaturePainter::getLabelTag() const
 {
 	return LabelTag;
+}
+
+bool FeaturePainter::getLabelHalo() const
+{
+	return LabelHalo;
 }
 
 QString FeaturePainter::getLabelBackgroundTag() const
@@ -730,8 +745,6 @@ void FeaturePainter::drawLabel(TrackPoint* Pt, QPainter& thePainter, const Proje
 		textPath.addText(modX, modY, font, str);
 		thePainter.translate(C);
 
-		thePainter.setPen(QPen(Qt::white, WW/5));
-		thePainter.drawPath(textPath);
 	}
 	if (DrawLabelBackground && !strBg.isEmpty()) {
 		modX = - (metrics.width(strBg)/2);
@@ -751,6 +764,10 @@ void FeaturePainter::drawLabel(TrackPoint* Pt, QPainter& thePainter, const Proje
 		thePainter.setPen(QPen(LabelColor, BG_PEN_SZ));
 		thePainter.setBrush(LabelBackgroundColor);
 		thePainter.drawPath(bgPath);
+	}
+	if (getLabelHalo()) {
+		thePainter.setPen(QPen(Qt::white, font.pixelSize()/5));
+		thePainter.drawPath(textPath);
 	}
 	thePainter.setPen(Qt::NoPen);
 	thePainter.setBrush(LabelColor);
@@ -782,6 +799,7 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, const Projection& 
 	if (WW < 10) return;
 	//double WWR = qMax(PixelPerM*R->widthOf()*BackgroundScale+BackgroundOffset, PixelPerM*R->widthOf()*ForegroundScale+ForegroundOffset);
 
+ 	QPainterPath textPath;
     QFont font = getLabelFont();
 
 	if (!str.isEmpty()) {
@@ -789,13 +807,14 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, const Projection& 
 		font.setPixelSize(int(WW));
 		QFontMetrics metrics(font);
 
-		if (font.pixelSize() >= 5) {
-			thePainter.setPen(LabelColor);
+		if (font.pixelSize() >= 5 && R->getPath().length() > metrics.width(str)) {
 			thePainter.setFont(font);
-			int repeat = int((R->getPath().length() / (metrics.width(str) * LABEL_PATH_DISTANCE)) - 0.5);
+
+			int repeat = int((R->getPath().length() / ((metrics.width(str) * LABEL_PATH_DISTANCE))) - 0.5);
 			int numSegment = repeat+1;
 			qreal lenSegment = R->getPath().length() / numSegment;
 			qreal startSegment = 0;
+		 	QPainterPath textPath;
 			do {
 				QRegion rg = thePainter.clipRegion();
 
@@ -812,25 +831,31 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, const Projection& 
 					qreal t = R->getPath().percentAtLength(curLen);
 					QPointF pt = R->getPath().pointAtPercent(t);
 					qreal angle = R->getPath().angleAtPercent(t);
-					QString txt;
-					txt.append(str[i]);
-					thePainter.save();
-					thePainter.translate(pt);
-					//qDebug()<<"txt = "<<txt<<", angle = "<<angle<<curLen<<t;
-					thePainter.rotate(-angle+modAngle);
-					//p->thePainter.drawText(QRect(0, modY, metrics.width(txt), WW), Qt::AlignVCenter, txt);
 					modY = (metrics.ascent()/2)-2;
-					thePainter.drawText(0, modY, txt);
-					thePainter.restore();
 
-					//rg -= QRect(0, modY, metrics.width(txt), metrics.height()).translated(pt.toPoint());
+					QMatrix m;
+					m.translate(pt.x(), pt.y() + modY);
+					m.rotate(-angle+modAngle);
 
-					qreal incremenet = metrics.width(txt);
+					QPainterPath charPath;
+					charPath.addText(0, 0, font, str.mid(i, 1));
+					charPath = charPath * m;
+					
+					textPath.addPath(charPath);
+
+					qreal incremenet = metrics.width(str[i]);
 					curLen += (incremenet * modIncrement);
 				}
 				startSegment += lenSegment;
 			} while (--repeat >= 0);
 
+			if (getLabelHalo()) {
+				thePainter.setPen(QPen(Qt::white, font.pixelSize()/6));
+				thePainter.drawPath(textPath);
+			}
+			thePainter.setPen(Qt::NoPen);
+			thePainter.setBrush(LabelColor);
+			thePainter.drawPath(textPath);
 			thePainter.setClipRegion(rg);
 		}
 	}
@@ -875,6 +900,10 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, const Projection& 
 				thePainter.setBrush(LabelBackgroundColor);
 				thePainter.drawPath(bgPath);
 
+				if (getLabelHalo()) {
+					thePainter.setPen(QPen(Qt::white, font.pixelSize()/5));
+					thePainter.drawPath(textPath);
+				}
 				thePainter.setPen(Qt::NoPen);
 				thePainter.setBrush(LabelColor);
 				thePainter.drawPath(textPath);

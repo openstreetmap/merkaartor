@@ -85,8 +85,13 @@ QGPSDevice::QGPSDevice()
     setSpeed(0);
     setVariation(0);
 
+	setFixMode(QGPSDevice::FixAuto);
+	setFixType(QGPSDevice::FixUnavailable);
+	setFixStatus(QGPSDevice::StatusVoid);
+
     stopLoop = false;
 
+	cur_numSatellites = 0;
     for(int i = 0; i < 50; i ++)
     {
         satArray[i][0] = satArray[i][1] = satArray[i][2] = 0;
@@ -224,6 +229,62 @@ bool QGPSDevice::parseGGA(const char *ggaString)
 
 	float altitude = tokens[9].toFloat();
 	setAltitude(altitude);
+
+    mutex->unlock();
+
+	return true;
+} // parseGGA()
+
+bool QGPSDevice::parseGLL(const char *ggaString)
+{
+    mutex->lock();
+
+	QString line(ggaString);
+	if (line.count('$') > 1)
+		return false;
+
+	QStringList tokens = line.split(",");
+
+	double lat = tokens[1].left(2).toDouble();
+	double latmin = tokens[1].mid(2).toDouble();
+	lat += latmin / 60.0;
+	if (tokens[2] != "N")
+		lat = -lat;
+    //cur_latitude = lat;
+
+	if (!tokens[2].isEmpty())
+		if (tokens[2].at(0) == 'N')
+			setLatCardinal(CardinalNorth);
+		else if (tokens[2].at(0) == 'S')
+			setLatCardinal(CardinalSouth);
+		else
+			setLatCardinal(CardinalNone);
+
+
+	double lon = tokens[3].left(3).toDouble();
+	double lonmin = tokens[3].mid(3).toDouble();
+	lon += lonmin / 60.0;
+	if (tokens[4] != "E")
+		lon = -lon;
+    //cur_longitude = lon;
+
+	if (!tokens[4].isEmpty())
+		if (tokens[4].at(0) == 'E')
+			setLatCardinal(CardinalEast);
+		else if (tokens[4].at(0) == 'W')
+			setLatCardinal(CardinalWest);
+		else
+			setLatCardinal(CardinalNone);
+
+
+ 	if (tokens[6] == "A")
+    {
+        setFixStatus(StatusActive);
+    }
+    else
+    {
+        setFixStatus(StatusVoid);
+    }
 
     mutex->unlock();
 
@@ -656,6 +717,11 @@ void QGPSComDevice::parse(const QByteArray& bufferString)
         //strcpy(nmeastr_gga, bufferString);
         parseGGA(bufferString.data());
 	}
+	else if(bufferString[3] == 'G' && bufferString[4] == 'L' && bufferString[5] == 'L')
+	{
+        //strcpy(nmeastr_gga, bufferString);
+        parseGLL(bufferString.data());
+	}
     else if(bufferString[3] == 'G' && bufferString[4] == 'S' && bufferString[5] == 'V')
     {
         //strcpy(nmeastr_gsv, bufferString);
@@ -670,7 +736,7 @@ void QGPSComDevice::parse(const QByteArray& bufferString)
     {
         //strcpy(nmeastr_rmc, bufferString);
         if (parseRMC(bufferString.data()))
-			if (fixStatus() == QGPSDevice::StatusActive && fixType() == QGPSDevice::Fix3D)
+			if (fixStatus() == QGPSDevice::StatusActive && (fixType() == QGPSDevice::Fix3D || fixType() == QGPSDevice::FixUnavailable))
 				emit updatePosition(latitude(), longitude(), dateTime(), altitude(), speed(), heading());
 	}
 	emit updateStatus();
@@ -773,6 +839,11 @@ void QGPSFileDevice::onDataAvailable()
                 //strcpy(nmeastr_gga, bufferString);
                 parseGGA(bufferString);
             }
+			else if(bufferString[3] == 'G' && bufferString[4] == 'L' && bufferString[5] == 'L')
+			{
+				//strcpy(nmeastr_gga, bufferString);
+				parseGLL(bufferString);
+			}
             else if(bufferString[3] == 'G' && bufferString[4] == 'S' && bufferString[5] == 'V')
             {
                 //strcpy(nmeastr_gsv, bufferString);
@@ -787,7 +858,7 @@ void QGPSFileDevice::onDataAvailable()
             {
                 //strcpy(nmeastr_rmc, bufferString);
                 if (parseRMC(bufferString))
-					if (fixStatus() == QGPSDevice::StatusActive && fixType() == QGPSDevice::Fix3D)
+					if (fixStatus() == QGPSDevice::StatusActive && (fixType() == QGPSDevice::Fix3D || fixType() == QGPSDevice::FixUnavailable))
 						emit updatePosition(latitude(), longitude(), dateTime(), altitude(), speed(), heading());
            }
 

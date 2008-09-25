@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>727</width>
-    <height>755</height>
+    <height>783</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -1085,6 +1085,49 @@
            </layout>
           </item>
           <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_5" >
+            <item>
+             <spacer name="horizontalSpacer_4" >
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType" >
+               <enum>QSizePolicy::Minimum</enum>
+              </property>
+              <property name="sizeHint" stdset="0" >
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="LabelHalo" >
+              <property name="enabled" >
+               <bool>false</bool>
+              </property>
+              <property name="text" >
+               <string>Halo</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_5" >
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0" >
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
            <layout class="QHBoxLayout" name="_4" >
             <property name="spacing" >
              <number>6</number>
@@ -1274,8 +1317,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>299</x>
-     <y>745</y>
+     <x>308</x>
+     <y>773</y>
     </hint>
     <hint type="destinationlabel" >
      <x>157</x>
@@ -1290,8 +1333,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>367</x>
-     <y>745</y>
+     <x>376</x>
+     <y>773</y>
     </hint>
     <hint type="destinationlabel" >
      <x>286</x>
@@ -1563,11 +1606,11 @@
    <hints>
     <hint type="sourcelabel" >
      <x>522</x>
-     <y>657</y>
+     <y>685</y>
     </hint>
     <hint type="destinationlabel" >
      <x>573</x>
-     <y>661</y>
+     <y>689</y>
     </hint>
    </hints>
   </connection>
@@ -1599,7 +1642,7 @@
     </hint>
     <hint type="destinationlabel" >
      <x>522</x>
-     <y>657</y>
+     <y>685</y>
     </hint>
    </hints>
   </connection>
@@ -1675,11 +1718,11 @@
    <hints>
     <hint type="sourcelabel" >
      <x>522</x>
-     <y>657</y>
+     <y>685</y>
     </hint>
     <hint type="destinationlabel" >
      <x>704</x>
-     <y>689</y>
+     <y>717</y>
     </hint>
    </hints>
   </connection>
@@ -1712,6 +1755,22 @@
     <hint type="destinationlabel" >
      <x>620</x>
      <y>493</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>DrawLabel</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>LabelHalo</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>342</x>
+     <y>564</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>381</x>
+     <y>649</y>
     </hint>
    </hints>
   </connection>

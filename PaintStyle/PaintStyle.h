@@ -77,6 +77,7 @@ class FeaturePainter
 		FeaturePainter& labelBackgroundActive(bool b);
 		FeaturePainter& labelBackground(const QColor& bgColor);
 		FeaturePainter& labelBackgroundTag(const QString& val);
+		FeaturePainter& labelHalo(bool b);
 
 		QString userName() const;
 		std::pair<double, double> zoomBoundaries() const;
@@ -92,6 +93,7 @@ class FeaturePainter
 		QFont getLabelFont() const;
 		QString getLabelTag() const;
 		QString getLabelBackgroundTag() const;
+		bool getLabelHalo() const;
 
 		QString asXML() const;
 
@@ -140,6 +142,7 @@ class FeaturePainter
 		QColor LabelBackgroundColor;
 		QString LabelBackgroundTag;
 		QFont LabelFont;
+		bool LabelHalo;
 };
 
 class PaintStyleLayer

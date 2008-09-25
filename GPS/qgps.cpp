@@ -148,6 +148,9 @@ void QGPS::updateGpsStatus()
         QString("%1").arg(gpsDevice->numSatellites()));
 
 	switch (gpsDevice->fixType()) {
+		case QGPSDevice::FixUnavailable:
+			txtFixType->setText(tr("Unavailable"));
+			break;
 		case QGPSDevice::FixInvalid:
 			txtFixType->setText(tr("Invalid"));
 			break;

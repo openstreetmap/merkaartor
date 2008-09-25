@@ -59,6 +59,7 @@ class PaintStyleEditor : public QDialog, public Ui::PaintStyleEditor
 		void on_btUp_clicked();
 		void on_btDown_clicked();
 		void on_buttonBox_clicked(QAbstractButton * button);
+		void on_LabelHalo_clicked(bool b);
 
 	public:
 		std::vector<FeaturePainter> thePainters;
