@@ -131,7 +131,10 @@ void MapFeature::setLastUpdated(MapFeature::ActorType A)
 
 MapFeature::ActorType MapFeature::lastUpdated() const
 {
-	return p->LastActor;
+	if (p->theLayer->className() == "DirtyMapLayer")
+		return MapFeature::User;
+	else
+		return p->LastActor;
 }
 
 void MapFeature::setId(const QString& id)

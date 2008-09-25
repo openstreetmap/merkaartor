@@ -94,8 +94,11 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
 		Pt->setId(id);
 		Pt->setLastUpdated(MapFeature::OSMServer);
 	}
-	parseStandardAttributes(atts,Pt);
-	Current = Pt;
+	if (NewFeature) {
+		parseStandardAttributes(atts,Pt);
+		Current = Pt;
+	} else
+		Current = NULL;
 }
 
 void OSMHandler::parseNd(const QXmlAttributes& atts)
@@ -153,8 +156,11 @@ void OSMHandler::parseWay(const QXmlAttributes& atts)
 		R->setId(id);
 		R->setLastUpdated(MapFeature::OSMServer);
 	}
-	parseStandardAttributes(atts,R);
-	Current = R;
+	if (NewFeature) {
+		parseStandardAttributes(atts,R);
+		Current = R;
+	} else
+		Current = NULL;
 }
 
 void OSMHandler::parseMember(const QXmlAttributes& atts)
@@ -185,7 +191,7 @@ void OSMHandler::parseRelation(const QXmlAttributes& atts)
 		if (R->lastUpdated() == MapFeature::User)
 		{
 			R->setLastUpdated(MapFeature::UserResolved);
-			NewFeature = true;
+			NewFeature = false;
 			// conflict
 /*				TrackPoint* Conflict = dynamic_cast<TrackPoint*>(theDocument->get("conflict_node_"+Root.attribute("from")));
 			if (Conflict) From = Conflict;
@@ -201,7 +207,7 @@ void OSMHandler::parseRelation(const QXmlAttributes& atts)
 		{
 			while (R->size())
 				R->remove((unsigned int)0);
-			NewFeature = false;
+			NewFeature = true;
 			if (R->lastUpdated() == MapFeature::NotYetDownloaded)
 				R->setLastUpdated(MapFeature::OSMServer);
 		}
@@ -214,8 +220,11 @@ void OSMHandler::parseRelation(const QXmlAttributes& atts)
 		theLayer->add(R);
 		R->setLastUpdated(MapFeature::OSMServer);
 	}
-	parseStandardAttributes(atts,R);
-	Current = R;
+	if (NewFeature) {
+		parseStandardAttributes(atts,R);
+		Current = R;
+	} else
+		Current = NULL;
 }
 
 bool OSMHandler::startElement ( const QString &, const QString & /* localName */, const QString & qName, const QXmlAttributes & atts )
