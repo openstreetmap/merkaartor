@@ -20,7 +20,9 @@
 #include "layermanager.h"
 
 #include "imagemanager.h"
+#ifdef YAHOO
 #include "browserimagemanager.h"
+#endif
 
 LayerManager::LayerManager(QWidget* aParent, QSize size)
 	:scroll(QPoint(0,0)), size(size), whilenewscroll(QPoint(0,0))
@@ -166,7 +168,9 @@ void LayerManager::setView(const QList<QPointF> coordinates)
 	}
 
 	ImageManager::instance()->abortLoading();
+#ifdef YAHOO
 	BrowserImageManager::instance()->abortLoading();
+#endif
 
 //	parentWidget->update();
 }
@@ -240,7 +244,9 @@ void LayerManager::removeLayer()
 {
 	Q_ASSERT_X(layers.size()>0, "LayerManager::removeLayer()", "No layers existing!");
 	ImageManager::instance()->abortLoading();
+#ifdef YAHOO
 	BrowserImageManager::instance()->abortLoading();
+#endif
 	layers.removeAt(0);
 }
 
@@ -248,7 +254,9 @@ void LayerManager::removeLayer(const QString& aLyerId)
 {
 	Q_ASSERT_X(layers.size()>0, "LayerManager::removeLayer()", "No layers existing!");
 	ImageManager::instance()->abortLoading();
+#ifdef YAHOO
 	BrowserImageManager::instance()->abortLoading();
+#endif
 	layers.removeAt(getLayers().indexOf(aLyerId));
 }
 
@@ -315,7 +323,9 @@ void LayerManager::backZoomIn()
 void LayerManager::zoomIn()
 {
 	ImageManager::instance()->abortLoading();
+#ifdef YAHOO
 	BrowserImageManager::instance()->abortLoading();
+#endif
 
 	zoomImageScroll = QPoint(0,0);
 
@@ -377,7 +387,9 @@ void LayerManager::backZoomOut()
 void LayerManager::zoomOut()
 {
 	ImageManager::instance()->abortLoading();
+#ifdef YAHOO
 	BrowserImageManager::instance()->abortLoading();
+#endif
 
 	zoomImageScroll = QPoint(0,0);
 	QPixmap tmpImg = composedOffscreenImage.copy(screenmiddle.x()+scroll.x(),screenmiddle.y()+scroll.y(), size.width(), size.height());
