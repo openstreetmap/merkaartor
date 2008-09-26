@@ -25,7 +25,7 @@ FeaturePainter::FeaturePainter()
   ForegroundFill(false), DrawTrafficDirectionMarks(false),
   DrawIcon(false), IconScale(0), IconOffset(0),
   DrawLabel(false), LabelScale(0), LabelOffset(0),
-  DrawLabelBackground(false), LabelHalo(false)
+  DrawLabelBackground(false), LabelHalo(false), LabelArea(false)
 {
 }
 
@@ -46,7 +46,7 @@ FeaturePainter::FeaturePainter(const FeaturePainter& f)
   DrawIcon(f.DrawIcon), IconName(f.IconName), IconScale(f.IconScale), IconOffset(f.IconOffset),
   DrawLabel(f.DrawLabel), LabelTag(f.LabelTag), LabelColor(f.LabelColor), LabelScale(f.LabelScale), LabelOffset(f.LabelOffset),
   DrawLabelBackground(f.DrawLabelBackground), LabelBackgroundColor(f.LabelBackgroundColor), LabelBackgroundTag(f.LabelBackgroundTag),
-  LabelFont(f.LabelFont), LabelHalo(f.LabelHalo)
+  LabelFont(f.LabelFont), LabelHalo(f.LabelHalo), LabelArea(f.LabelArea)
 {
 	if (f.theSelector)
 		theSelector = f.theSelector->copy();
@@ -99,6 +99,7 @@ FeaturePainter& FeaturePainter::operator=(const FeaturePainter& f)
 	LabelTag = f.LabelTag;
 	LabelBackgroundTag = f.LabelBackgroundTag;
 	LabelHalo = f.LabelHalo;
+	LabelArea = f.LabelArea;
 	return *this;
 }
 
@@ -162,6 +163,8 @@ QString FeaturePainter::asXML() const
 		r += " labelTag=\"" + LabelTag + "\"";
 		if (LabelHalo)
 			r += " labelHalo=\"yes\"";
+		if (LabelArea)
+			r += " labelArea=\"yes\"";
 	}
 	if (DrawLabelBackground) {
 		r += " labelBackgroundColor=\""+::asXML(LabelBackgroundColor)+"\"";
@@ -324,6 +327,12 @@ FeaturePainter& FeaturePainter::labelHalo(bool b)
 	return *this;
 }
 
+FeaturePainter& FeaturePainter::labelArea(bool b)
+{
+	LabelArea = b;
+	return *this;
+}
+
 FeaturePainter& FeaturePainter::labelTag(const QString& val)
 {
 	LabelTag = val;
@@ -386,6 +395,11 @@ QString FeaturePainter::getLabelTag() const
 bool FeaturePainter::getLabelHalo() const
 {
 	return LabelHalo;
+}
+
+bool FeaturePainter::getLabelArea() const
+{
+	return LabelArea;
 }
 
 QString FeaturePainter::getLabelBackgroundTag() const
@@ -705,16 +719,8 @@ void FeaturePainter::drawTouchup(Road* R, QPainter& thePainter, const Projection
 #define BG_SPACING 6
 #define BG_PEN_SZ 2
 
-void FeaturePainter::drawLabel(TrackPoint* Pt, QPainter& thePainter, const Projection& theProjection) const
+void FeaturePainter::drawPointLabel(QPoint C, QString str, QString strBg, QPainter& thePainter, const Projection& theProjection) const
 {
-	if (!DrawLabel)
-		return;
-
-	QString str = Pt->tagValue(getLabelTag(), "");
-	QString strBg = Pt->tagValue(getLabelBackgroundTag(), "");
-	if (str.isEmpty() && strBg.isEmpty())
-		return;
-
 	LineParameters lp = labelBoundary();
 	double PixelPerM = theProjection.pixelPerM();
 	double WW = PixelPerM*lp.Proportional+lp.Fixed;
@@ -728,7 +734,6 @@ void FeaturePainter::drawLabel(TrackPoint* Pt, QPainter& thePainter, const Proje
 	int modY = 0;
 	QPainterPath textPath;
 	QPainterPath bgPath;
-	QPoint C(theProjection.project(Pt->position()));
 
 	if (!str.isEmpty()) {
 		modX = - (metrics.width(str)/2);
@@ -783,6 +788,21 @@ void FeaturePainter::drawLabel(TrackPoint* Pt, QPainter& thePainter, const Proje
 }
 
 
+void FeaturePainter::drawLabel(TrackPoint* Pt, QPainter& thePainter, const Projection& theProjection) const
+{
+	if (!DrawLabel)
+		return;
+
+	QString str = Pt->tagValue(getLabelTag(), "");
+	QString strBg = Pt->tagValue(getLabelBackgroundTag(), "");
+
+	if (str.isEmpty() && strBg.isEmpty())
+		return;
+
+	QPoint C(theProjection.project(Pt->position()));
+	drawPointLabel(C, str, strBg, thePainter, theProjection);
+}
+
 void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, const Projection& theProjection) const
 {
 	if (!DrawLabel)
@@ -792,6 +812,12 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, const Projection& 
 	QString strBg = R->tagValue(getLabelBackgroundTag(), "");
 	if (str.isEmpty() && strBg.isEmpty())
 		return;
+
+	if (getLabelArea()) {
+		QPoint C(theProjection.project(R->boundingBox().center()));
+		drawPointLabel(C, str, strBg, thePainter, theProjection);
+		return;
+	}
 
 	LineParameters lp = labelBoundary();
 	double PixelPerM = theProjection.pixelPerM();

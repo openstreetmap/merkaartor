@@ -40,7 +40,9 @@ EditInteraction::~EditInteraction(void)
 void EditInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
 {
 	for (unsigned int i=0; i<view()->properties()->size(); ++i)
-		view()->properties()->selection(i)->drawFocus(thePainter, projection());
+		if (document()->exists(view()->properties()->selection(i)))
+			view()->properties()->selection(i)->drawFocus(thePainter, projection());
+
 #ifndef _MOBILE
 	if (Dragging)
 	{

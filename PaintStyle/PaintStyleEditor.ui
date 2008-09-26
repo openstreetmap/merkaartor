@@ -1113,6 +1113,16 @@
              </widget>
             </item>
             <item>
+             <widget class="QCheckBox" name="LabelArea" >
+              <property name="enabled" >
+               <bool>false</bool>
+              </property>
+              <property name="text" >
+               <string>Area</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <spacer name="horizontalSpacer_5" >
               <property name="orientation" >
                <enum>Qt::Horizontal</enum>
@@ -1771,6 +1781,22 @@
     <hint type="destinationlabel" >
      <x>381</x>
      <y>649</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>DrawLabel</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>LabelArea</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>324</x>
+     <y>562</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>435</x>
+     <y>646</y>
     </hint>
    </hints>
   </connection>

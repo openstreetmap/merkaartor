@@ -1113,20 +1113,20 @@ void OsbMapLayer::invalidate(MapDocument* d, CoordBox vp)
 
 	int j;
 	j = 0;
-	while (j<pp->loadedRegions.size()) {
-		if (!regionToLoad.contains(pp->loadedRegions[j])) {
-			if (pp->theImp->clearRegion(pp->loadedRegions[j], d, this))
-				pp->loadedRegions.removeAt(j);
+	while (j<pp->loadedTiles.size()) {
+		if (!tileToLoad.contains(pp->loadedTiles[j])) {
+			if (pp->theImp->clearTile(pp->loadedTiles[j], d, this))
+				pp->loadedTiles.removeAt(j);
 			else 
 				++j;
 		} else
 			++j;
 	}
 	j = 0;
-	while (j<pp->loadedTiles.size()) {
-		if (!tileToLoad.contains(pp->loadedTiles[j])) {
-			if (pp->theImp->clearTile(pp->loadedTiles[j], d, this))
-				pp->loadedTiles.removeAt(j);
+	while (j<pp->loadedRegions.size()) {
+		if (!regionToLoad.contains(pp->loadedRegions[j])) {
+			if (pp->theImp->clearRegion(pp->loadedRegions[j], d, this))
+				pp->loadedRegions.removeAt(j);
 			else 
 				++j;
 		} else

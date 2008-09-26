@@ -278,6 +278,8 @@ void readFromNode(const QDomElement& e, FeaturePainter& FP)
 		FP.labelTag(e.attribute("labelTag"));
 		if (e.hasAttribute("labelHalo"))
 			FP.labelHalo((e.attribute("labelHalo") == "yes"));
+		if (e.hasAttribute("labelArea"))
+			FP.labelArea((e.attribute("labelArea") == "yes"));
 		if (e.hasAttribute("labelBackgroundColor"))
 			FP.labelBackground(toColor(e.attribute("labelBackgroundColor")));
 		if (e.hasAttribute("labelBackgroundTag"))

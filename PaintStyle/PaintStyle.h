@@ -78,6 +78,7 @@ class FeaturePainter
 		FeaturePainter& labelBackground(const QColor& bgColor);
 		FeaturePainter& labelBackgroundTag(const QString& val);
 		FeaturePainter& labelHalo(bool b);
+		FeaturePainter& labelArea(bool b);
 
 		QString userName() const;
 		std::pair<double, double> zoomBoundaries() const;
@@ -94,6 +95,7 @@ class FeaturePainter
 		QString getLabelTag() const;
 		QString getLabelBackgroundTag() const;
 		bool getLabelHalo() const;
+		bool getLabelArea() const;
 
 		QString asXML() const;
 
@@ -104,7 +106,8 @@ class FeaturePainter
 		void drawTouchup(Road* R, QPainter& thePainter, const Projection& theProjection) const;
 		void drawTouchup(TrackPoint* R, QPainter& thePainter, const Projection& theProjection) const;
 		void drawLabel(Road* R, QPainter& thePainter, const Projection& theProjection) const;
-		void drawLabel(TrackPoint* R, QPainter& thePainter, const Projection& theProjection) const;
+		void drawPointLabel(QPoint C, QString str, QString strBG, QPainter& thePainter, const Projection& theProjection) const;
+		void drawLabel(TrackPoint* Pt, QPainter& thePainter, const Projection& theProjection) const;
 	public:
 
 		TagSelector* theSelector;
@@ -143,6 +146,7 @@ class FeaturePainter
 		QString LabelBackgroundTag;
 		QFont LabelFont;
 		bool LabelHalo;
+		bool LabelArea;
 };
 
 class PaintStyleLayer
