@@ -6,6 +6,16 @@
   <selector expr="[note] is FIXME*"/>
 </painter>
 <painter
+ zoomUnder="0.01" zoomUpper="1e+07"
+ fillColor="#edededfc"
+ backgroundColor="#777777fc" backgroundScale="1.2" backgroundOffset="3"
+ foregroundColor="#edededfc" foregroundScale="1" foregroundOffset="2"
+ drawTrafficDirectionMarks="no" labelColor="#333333fc" labelScale="5" labelOffset="5"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes" labelArea="yes">
+  <selector expr="[area] isoneof (yes , true)"/>
+</painter>
+
+<painter
  backgroundColor="#506077fc" backgroundScale="1" backgroundOffset="6"
  foregroundColor="#809bc0fc" foregroundScale="0.5" foregroundOffset="4"
  drawTrafficDirectionMarks="yes" labelColor="#506077fc" labelScale="2" labelOffset="4"
@@ -383,8 +393,8 @@
  zoomUnder="0.02" zoomUpper="1e+07"
  foregroundColor="#dbbaabfc" foregroundScale="0" foregroundOffset="1"
  fillColor="#f0f0d977"
- drawTrafficDirectionMarks="no" labelColor="#ff0000ff" labelScale="7" labelOffset="5"
- labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="">
+ drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="1.5" labelOffset="6"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes" labelArea="yes">
   <selector expr="[amenity] isoneof (school , university)"/>
 </painter>
 <painter
@@ -505,7 +515,8 @@
 <painter
  zoomUnder="0.002" zoomUpper="1e+07"
  fillColor="#ead8bdcd"
- drawTrafficDirectionMarks="yes">
+ drawTrafficDirectionMarks="no" labelColor="#333333fc" labelScale="7" labelOffset="5.5"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes" labelArea="yes">
   <selector expr="[landuse] is vineyard"/>
 </painter>
 <painter
@@ -518,7 +529,8 @@
 <painter
  zoomUnder="0.002" zoomUpper="1e+07"
  fillColor="#aaaaaacd"
- drawTrafficDirectionMarks="yes">
+ drawTrafficDirectionMarks="no" labelColor="#111111fc" labelScale="7" labelOffset="5.5"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes" labelArea="yes">
   <selector expr="[landuse] is quarry"/>
 </painter>
 <painter
@@ -536,7 +548,8 @@
 <painter
  zoomUnder="0.002" zoomUpper="1e+07"
  fillColor="#d0eba977"
- drawTrafficDirectionMarks="yes">
+ drawTrafficDirectionMarks="no" labelColor="#333333fc" labelScale="7" labelOffset="5.5"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes" labelArea="yes">
   <selector expr="[landuse] is recreation_ground"/>
 </painter>
 <painter
@@ -548,7 +561,8 @@
 <painter
  zoomUnder="0.002" zoomUpper="1e+07"
  fillColor="#9d9d6c77"
- drawTrafficDirectionMarks="yes">
+ drawTrafficDirectionMarks="no" labelColor="#333333fc" labelScale="7" labelOffset="5.5"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes" labelArea="yes">
   <selector expr="[landuse] is brownfield"/>
 </painter>
 <painter
@@ -606,7 +620,8 @@
 </painter>
 <painter
  fillColor="#aacbafcd"
- drawTrafficDirectionMarks="yes">
+ drawTrafficDirectionMarks="no" labelColor="#333333fc" labelScale="7" labelOffset="5.5"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes" labelArea="yes">
   <selector expr="[landuse] is cemetery"/>
 </painter>
 <painter
@@ -623,7 +638,8 @@
 </painter>
 <painter
  fillColor="#cc9999cd"
- drawTrafficDirectionMarks="yes">
+ drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="1.5" labelOffset="6"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes" labelArea="yes">
   <selector expr="[building] isoneof (yes , true)"/>
 </painter>
 <painter
@@ -634,7 +650,7 @@
 <painter
  fillColor="#33cc99cd"
  drawTrafficDirectionMarks="no" labelColor="#ff0000ff" labelScale="7" labelOffset="5"
- labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="">
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes" labelArea="yes">
   <selector expr="[leisure] is stadium"/>
 </painter>
 <painter
