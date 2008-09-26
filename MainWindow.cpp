@@ -1015,8 +1015,11 @@ MapView* MainWindow::view()
 void MainWindow::on_mapStyleSaveAction_triggered()
 {
 	QString f = QFileDialog::getSaveFileName(this, tr("Save map style"), QString(), tr("Merkaartor map style (*.mas)"));
-	if (!f.isNull())
+	if (!f.isNull()) {
+		if (!f.endsWith(".mas"))
+			f.append(".mas");
 		savePainters(f);
+	}
 }
 
 void MainWindow::on_mapStyleLoadAction_triggered()
