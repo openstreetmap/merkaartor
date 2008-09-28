@@ -73,7 +73,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_viewTrackPointsAction_triggered();
 		virtual void on_viewTrackSegmentsAction_triggered();
 		virtual void on_viewRelationsAction_triggered();
-		virtual void on_viewSetCoordinatesAction_triggered();
+		virtual void on_viewGotoAction_triggered();
 		virtual void on_editRemoveAction_triggered();
 		virtual void on_editMoveAction_triggered();
 		virtual void on_editReverseAction_triggered();

@@ -46,6 +46,7 @@
 #include "QMapControl/mapadapter.h"
 #include "QMapControl/wmsmapadapter.h"
 #include "Tools/WorldOsbManager.h"
+#include "GotoDialog.h"
 
 #ifdef GEOIMAGE
 #include "GeoImageDock.h"
@@ -836,25 +837,14 @@ void MainWindow::on_viewRelationsAction_triggered()
 	invalidateView();
 }
 
-void MainWindow::on_viewSetCoordinatesAction_triggered()
+void MainWindow::on_viewGotoAction_triggered()
 {
-	QDialog* Dlg = new QDialog(this);
-	Ui::SetPositionDialog Data;
-	Data.setupUi(Dlg);
-	CoordBox B(theView->projection().viewport());
-	Data.Longitude->setText(QString::number(intToAng(B.center().lon())));
-	Data.Latitude->setText(QString::number(intToAng(B.center().lat())));
-	Data.SpanLongitude->setText(QString::number(intToAng(B.lonDiff())));
-	Data.SpanLatitude->setText(QString::number(intToAng(B.latDiff())));
+	GotoDialog* Dlg = new GotoDialog(theView->projection(), this);
 	if (Dlg->exec() == QDialog::Accepted) {
-		theView->projection().setViewport(CoordBox(
-											   Coord(
-												   angToInt(Data.Latitude->text().toDouble() - Data.SpanLatitude->text().toDouble() / 2),
-												   angToInt(Data.Longitude->text().toDouble() - Data.SpanLongitude->text().toDouble() / 2)),
-											   Coord(
-												   angToInt(Data.Latitude->text().toDouble() + Data.SpanLatitude->text().toDouble() / 2),
-												   angToInt(Data.Longitude->text().toDouble() + Data.SpanLongitude->text().toDouble() / 2))), theView->rect());
-		invalidateView();
+		if (!Dlg->newViewport().isNull()) {
+			theView->projection().setViewport(Dlg->newViewport(), theView->rect());
+			invalidateView();
+		}
 	}
 	delete Dlg;
 }

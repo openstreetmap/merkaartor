@@ -60,7 +60,8 @@ HEADERS += \
 ./Utils/SelectionDialog.h \
 ./Utils/SvgCache.h \
 ./Utils/MDockAncestor.h \
-./DirtyDock.h
+./DirtyDock.h \
+./GotoDialog.h \
 
 #Source files
 SOURCES += \
@@ -124,6 +125,7 @@ SOURCES += \
 ./Preferences/WMSPreferencesDialog.cpp \
 ./Preferences/TMSPreferencesDialog.cpp \
 ./DirtyDock.cpp \
+./GotoDialog.cpp \
 
 #Forms
 FORMS += \
@@ -134,7 +136,7 @@ FORMS += \
 ./Sync/SyncListDialog.ui \
 ./TrackPointProperties.ui \
 ./UploadMapDialog.ui \
-./SetPositionDialog.ui \
+./GotoDialog.ui \
 ./MultiProperties.ui \
 ./RelationProperties.ui \
 ./Interaction/CreateDoubleWayDock.ui \

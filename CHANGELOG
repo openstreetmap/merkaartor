@@ -1,4 +1,5 @@
 v0.13
+	* ADD : enhanced Goto dialog
 	* ADD : add "Area" label option to the style editor (handle road label as trackpoints, with anchor at the center of the bounding box)
 	* ADD : add support for MTK-based GPSes
 	* ADD : add "Halo" label option to the style editor

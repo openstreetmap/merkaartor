@@ -116,7 +116,7 @@
     <addaction name="separator" />
     <addaction name="mnuProjections" />
     <addaction name="separator" />
-    <addaction name="viewSetCoordinatesAction" />
+    <addaction name="viewGotoAction" />
     <addaction name="menuBookmarks" />
    </widget>
    <widget class="QMenu" name="menuFile" >
@@ -503,9 +503,12 @@
     <string>&amp;Reverse</string>
    </property>
   </action>
-  <action name="viewSetCoordinatesAction" >
+  <action name="viewGotoAction" >
    <property name="text" >
-    <string>&amp;Set coordinates</string>
+    <string>&amp;Go To...</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+G</string>
    </property>
   </action>
   <action name="createDoubleWayAction" >
@@ -946,7 +949,7 @@
     <string>Hide/Show the GPS dock</string>
    </property>
    <property name="shortcut" >
-    <string>Ctrl+G</string>
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="gpsDisconnectAction" >
