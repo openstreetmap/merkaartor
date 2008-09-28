@@ -206,7 +206,7 @@ void LayerDock::layerZoom(MapLayer * l)
 void LayerDock::tabChanged(int idx)
 {
 	for (int i=p->layerList.size()-1; i >= 0; i--) {
-		if (p->layerList[i].first->classGroups() & p->tab->tabData(idx).toInt())
+		if ((p->layerList[i].first->isEnabled()) && (p->layerList[i].first->classGroups() & p->tab->tabData(idx).toInt()))
 			p->layerList[i].second->setVisible(true);
 		else
 			p->layerList[i].second->setVisible(false);
