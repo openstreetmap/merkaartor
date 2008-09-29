@@ -857,14 +857,14 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, const Projection& 
 					qreal t = R->getPath().percentAtLength(curLen);
 					QPointF pt = R->getPath().pointAtPercent(t);
 					qreal angle = R->getPath().angleAtPercent(t);
-					modY = (metrics.ascent()/2)-2;
+					modY = (metrics.ascent()/2)-3;
 
 					QMatrix m;
-					m.translate(pt.x(), pt.y() + modY);
+					m.translate(pt.x(), pt.y());
 					m.rotate(-angle+modAngle);
 
 					QPainterPath charPath;
-					charPath.addText(0, 0, font, str.mid(i, 1));
+					charPath.addText(0, modY, font, str.mid(i, 1));
 					charPath = charPath * m;
 					
 					textPath.addPath(charPath);
