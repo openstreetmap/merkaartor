@@ -82,7 +82,6 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
 			QPointF Prev(CenterF.x()+cos(Modifier*Angle/2)*Radius,CenterF.y()+sin(Modifier*Angle/2)*Radius);
 			TrackPoint* First = new TrackPoint(view()->projection().inverse(Prev));
 			Road* R = new Road;
-			R->setLayer(Main->document()->getDirtyLayer());
 			R->add(First);
 			R->setTag("oneway","yes");
 			R->setTag("junction","roundabout");
