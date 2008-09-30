@@ -4,12 +4,14 @@ DEPENDPATH += Tools
 #Header files
 HEADERS += \
 	RegionMapWidget.h \
-	WorldOsbManager.h 
+	WorldOsbManager.h \
+	ActionsDialog.h
 
 #Source files
 SOURCES += \
 	RegionMapWidget.cpp \
-	WorldOsbManager.cpp 
+	WorldOsbManager.cpp \
+	ActionsDialog.cpp
 
 #Forms
 FORMS += \

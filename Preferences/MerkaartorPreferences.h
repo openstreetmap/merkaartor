@@ -287,6 +287,9 @@ public:
 	ToolList* getTools() const;
 	Tool getTool(QString toolName) const;
 
+	QStringList getShortcuts() const;
+	void setShortcuts(const QStringList & theValue);
+
 	/* Recent */
 	void setRecentOpen(const QStringList & theValue);
 	QStringList getRecentOpen() const;

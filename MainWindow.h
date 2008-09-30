@@ -29,6 +29,8 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 {
 	Q_OBJECT
 
+	friend class ActionsDialog;
+
 	public:
 		MainWindow(void);
 	public:
@@ -50,6 +52,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_editPasteOverwriteAction_triggered();
 		virtual void on_editPasteMergeAction_triggered();
 		virtual void on_editPasteFeaturesAction_triggered();
+		
 		virtual void on_fileNewAction_triggered();
 		virtual void on_fileDownloadAction_triggered();
 		virtual void on_fileDownloadMoreAction_triggered();
@@ -58,6 +61,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_fileOpenAction_triggered();
 		virtual void on_fileSaveAsAction_triggered();
 		virtual void on_fileSaveAction_triggered();
+		
 		virtual void on_layersAddImageAction_triggered();
 		virtual void on_helpAboutAction_triggered();
 		virtual void on_viewZoomAllAction_triggered();
@@ -94,8 +98,11 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_bookmarkRemoveAction_triggered();
 		virtual void on_nodeAlignAction_triggered();
 		virtual void on_nodeMergeAction_triggered();
+
 		virtual void on_toolsPreferencesAction_triggered() {toolsPreferencesAction_triggered();}
 		virtual void on_toolsWorldOsbAction_triggered();
+		virtual void on_toolsShortcutsAction_triggered();
+		
 		virtual void on_windowPropertiesAction_triggered();
 		virtual void on_windowLayersAction_triggered();
 		virtual void on_windowInfoAction_triggered();
@@ -172,6 +179,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 
 		TrackMapLayer* gpsRecLayer;
 		TrackSegment* curGpsTrackSegment;
+		QHash<QString, QString> shortcutsDefault;
 
 	private:
 		void updateBookmarksMenu();

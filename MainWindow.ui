@@ -183,6 +183,8 @@
     <addaction name="menuStyle_2" />
     <addaction name="separator" />
     <addaction name="toolsPreferencesAction" />
+    <addaction name="toolsShortcutsAction" />
+    <addaction name="separator" />
     <addaction name="toolsWorldOsbAction" />
    </widget>
    <widget class="QMenu" name="menu_Node" >
@@ -420,7 +422,7 @@
   </action>
   <action name="fileDownloadAction" >
    <property name="text" >
-    <string>&amp;Download from web</string>
+    <string>&amp;Download</string>
    </property>
    <property name="shortcut" >
     <string>Ctrl+D</string>
@@ -454,7 +456,7 @@
   </action>
   <action name="fileUploadAction" >
    <property name="text" >
-    <string>&amp;Upload to web</string>
+    <string>&amp;Upload</string>
    </property>
    <property name="shortcut" >
     <string>Ctrl+U</string>
@@ -479,6 +481,9 @@
    <property name="text" >
     <string>&amp;Road</string>
    </property>
+   <property name="toolTip" >
+    <string>Create Road</string>
+   </property>
    <property name="shortcut" >
     <string>Ctrl+R</string>
    </property>
@@ -486,6 +491,9 @@
   <action name="createNodeAction" >
    <property name="text" >
     <string>&amp;Node</string>
+   </property>
+   <property name="toolTip" >
+    <string>Create Node</string>
    </property>
    <property name="shortcut" >
     <string>Ctrl+N</string>
@@ -502,6 +510,9 @@
    <property name="text" >
     <string>&amp;Reverse</string>
    </property>
+   <property name="toolTip" >
+    <string>Road Reverse</string>
+   </property>
   </action>
   <action name="viewGotoAction" >
    <property name="text" >
@@ -515,10 +526,16 @@
    <property name="text" >
     <string>&amp;Double carriage way</string>
    </property>
+   <property name="toolTip" >
+    <string>Create Double carriage way</string>
+   </property>
   </action>
   <action name="createRoundaboutAction" >
    <property name="text" >
     <string>&amp;Roundabout</string>
+   </property>
+   <property name="toolTip" >
+    <string>Create Roundabout</string>
    </property>
   </action>
   <action name="fileNewAction" >
@@ -533,6 +550,9 @@
    <property name="text" >
     <string>&amp;Split</string>
    </property>
+   <property name="toolTip" >
+    <string>Road Split</string>
+   </property>
    <property name="shortcut" >
     <string>Alt+S</string>
    </property>
@@ -540,6 +560,9 @@
   <action name="roadJoinAction" >
    <property name="text" >
     <string>&amp;Join</string>
+   </property>
+   <property name="toolTip" >
+    <string>Road Join</string>
    </property>
    <property name="shortcut" >
     <string>Alt+J</string>
@@ -549,6 +572,9 @@
    <property name="text" >
     <string>&amp;Break apart</string>
    </property>
+   <property name="toolTip" >
+    <string>Road Break apart</string>
+   </property>
    <property name="shortcut" >
     <string>Alt+B</string>
    </property>
@@ -557,10 +583,16 @@
    <property name="text" >
     <string>Re&amp;lation</string>
    </property>
+   <property name="toolTip" >
+    <string>Create Relation</string>
+   </property>
   </action>
   <action name="createAreaAction" >
    <property name="text" >
     <string>&amp;Area</string>
+   </property>
+   <property name="toolTip" >
+    <string>Create Area</string>
    </property>
   </action>
   <action name="editMapStyleAction" >
@@ -609,6 +641,9 @@
     <string>&amp;Find...</string>
    </property>
    <property name="toolTip" >
+    <string>Find</string>
+   </property>
+   <property name="statusTip" >
     <string>Find and select items</string>
    </property>
   </action>
@@ -642,6 +677,9 @@
    <property name="text" >
     <string>&amp;Merge</string>
    </property>
+   <property name="toolTip" >
+    <string>Node Merge</string>
+   </property>
    <property name="statusTip" >
     <string>Merge the selected nodes (first selected will remain)</string>
    </property>
@@ -667,7 +705,7 @@
     <string>Download more</string>
    </property>
    <property name="toolTip" >
-    <string>Download the current view to the previous download layer</string>
+    <string>Download more</string>
    </property>
    <property name="statusTip" >
     <string>Download the current view to the previous download layer</string>
@@ -729,6 +767,9 @@
   <action name="nodeAlignAction" >
    <property name="text" >
     <string>&amp;Align</string>
+   </property>
+   <property name="toolTip" >
+    <string>Node Align</string>
    </property>
    <property name="statusTip" >
     <string>Align selected nodes. First two selected give the line.</string>
@@ -842,7 +883,7 @@
     <string>&amp;Commit to dirty layer</string>
    </property>
    <property name="toolTip" >
-    <string>Commit the selected feature from a non-uploadable layer (e.g.Track or Extract) to the dirty layer, ready for upload</string>
+    <string>Commit feature to the dirty layer</string>
    </property>
    <property name="statusTip" >
     <string>Commit the selected feature from a non-uploadable layer (e.g.Track or Extract) to the dirty layer, ready for upload</string>
@@ -932,10 +973,16 @@
    <property name="text" >
     <string>&amp;Start</string>
    </property>
+   <property name="toolTip" >
+    <string>Start GPS</string>
+   </property>
   </action>
   <action name="gpsReplayAction" >
    <property name="text" >
     <string>&amp;Replay...</string>
+   </property>
+   <property name="toolTip" >
+    <string>Replay GPS</string>
    </property>
   </action>
   <action name="windowGPSAction" >
@@ -949,7 +996,7 @@
     <string>Hide/Show the GPS dock</string>
    </property>
    <property name="shortcut" >
-    <string>Ctrl+Y</string>
+    <string>Ctrl+W</string>
    </property>
   </action>
   <action name="gpsDisconnectAction" >
@@ -958,6 +1005,9 @@
    </property>
    <property name="text" >
     <string>S&amp;top</string>
+   </property>
+   <property name="toolTip" >
+    <string>Stop GPS</string>
    </property>
   </action>
   <action name="gpsCenterAction" >
@@ -1035,6 +1085,12 @@
    <property name="text" >
     <string>Record</string>
    </property>
+   <property name="iconText" >
+    <string>Record</string>
+   </property>
+   <property name="toolTip" >
+    <string>Record GPS</string>
+   </property>
   </action>
   <action name="gpsPauseAction" >
    <property name="checkable" >
@@ -1045,6 +1101,9 @@
    </property>
    <property name="text" >
     <string>Pause</string>
+   </property>
+   <property name="toolTip" >
+    <string>Pause GPS</string>
    </property>
   </action>
   <action name="windowGeoimageAction" >
@@ -1064,6 +1123,11 @@
   <action name="toolsWorldOsbAction" >
    <property name="text" >
     <string>World OSB manager...</string>
+   </property>
+  </action>
+  <action name="toolsShortcutsAction" >
+   <property name="text" >
+    <string>&amp;Shortcut Editor...</string>
    </property>
   </action>
  </widget>

@@ -930,6 +930,16 @@ void MerkaartorPreferences::setRecentImport(const QStringList & theValue)
 	Sets->setValue("recent/import", theValue);
 }
 
+QStringList MerkaartorPreferences::getShortcuts() const
+{
+	return Sets->value("Tools/shortcuts").toStringList();
+}
+
+void MerkaartorPreferences::setShortcuts(const QStringList & theValue)
+{
+	Sets->setValue("Tools/shortcuts", theValue);
+}
+
 M_PARAM_IMPLEMENT_BOOL(GpsSaveLog, gps, false)
 M_PARAM_IMPLEMENT_BOOL(GpsMapCenter, gps, false)
 M_PARAM_IMPLEMENT_STRING(GpsLogDir, gps, "")

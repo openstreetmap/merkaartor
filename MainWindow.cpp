@@ -45,6 +45,7 @@
 #include "QMapControl/mapadapter.h"
 #include "QMapControl/wmsmapadapter.h"
 #include "Tools/WorldOsbManager.h"
+#include "Tools/ActionsDialog.h"
 #include "GotoDialog.h"
 
 #ifdef GEOIMAGE
@@ -194,6 +195,16 @@ MainWindow::MainWindow(void)
 
 	CoordBox initialPosition = MerkaartorPreferences::instance()->getInitialPosition();
 	theView->projection().setViewport(initialPosition, theView->rect());
+
+	QList<QAction*> actions = findChildren<QAction*>();
+	for (int i=0; i<actions.size(); i++) {
+		shortcutsDefault[actions[i]->objectName()] = actions[i]->shortcut().toString();
+	}
+	QStringList shortcuts = M_PREFS->getShortcuts();
+	for (int i=0; i<shortcuts.size(); i+=2) {
+		QAction* act = findChild<QAction*>(shortcuts[i]);
+		act->setShortcut(QKeySequence(shortcuts[i+1]));
+	}
 }
 
 MainWindow::~MainWindow(void)
@@ -1026,6 +1037,72 @@ void MainWindow::on_toolsWorldOsbAction_triggered()
 {
 	WorldOsbManager osbMgr(this);
 	osbMgr.exec();
+}
+
+void MainWindow::on_toolsShortcutsAction_triggered()
+{
+	QList<QAction*> theActions;
+	theActions.append(fileNewAction);
+	theActions.append(fileOpenAction);
+	theActions.append(fileImportAction);
+	theActions.append(fileSaveAction);
+	theActions.append(fileSaveAsAction);
+	theActions.append(fileDownloadAction);
+	theActions.append(fileDownloadMoreAction);
+	theActions.append(fileUploadAction);
+	theActions.append(fileQuitAction);
+	theActions.append(editUndoAction);
+	theActions.append(editRedoAction);
+	theActions.append(editCopyAction);
+	theActions.append(editPasteMergeAction);
+	theActions.append(editPasteOverwriteAction);
+	theActions.append(editRemoveAction);
+	theActions.append(editMoveAction);
+	theActions.append(editPropertiesAction);
+	theActions.append(editSelectAction);
+	theActions.append(viewZoomAllAction);
+	theActions.append(viewZoomWindowAction);
+	theActions.append(viewZoomOutAction);
+	theActions.append(viewZoomInAction);
+	theActions.append(viewDownloadedAction);
+	theActions.append(viewRelationsAction);
+	theActions.append(viewScaleAction);
+	theActions.append(viewNamesAction);
+	theActions.append(viewTrackPointsAction);
+	theActions.append(viewTrackSegmentsAction);
+	theActions.append(viewGotoAction);
+	theActions.append(gpsConnectAction);
+	theActions.append(gpsReplayAction);
+	theActions.append(gpsRecordAction);
+	theActions.append(gpsPauseAction);
+	theActions.append(gpsDisconnectAction);
+	theActions.append(gpsCenterAction);
+	theActions.append(createNodeAction);
+	theActions.append(createRoadAction);
+	theActions.append(createDoubleWayAction);
+	theActions.append(createRoundaboutAction);
+	theActions.append(createAreaAction);
+	theActions.append(createRelationAction);
+	theActions.append(featureCommitAction);
+	theActions.append(roadSplitAction);
+	theActions.append(roadBreakAction);
+	theActions.append(roadJoinAction);
+	theActions.append(editReverseAction);
+	theActions.append(nodeMergeAction);
+	theActions.append(nodeAlignAction);
+	theActions.append(toolsPreferencesAction);
+	theActions.append(toolsShortcutsAction);
+	theActions.append(toolsWorldOsbAction);
+	theActions.append(windowPropertiesAction);
+	theActions.append(windowLayersAction);
+	theActions.append(windowInfoAction);
+	theActions.append(windowDirtyAction);
+	theActions.append(windowGPSAction);
+	theActions.append(windowGeoimageAction);
+	theActions.append(helpAboutAction);
+
+	ActionsDialog dlg(theActions, this);
+	dlg.exec();
 }
 
 void MainWindow::toolsPreferencesAction_triggered(unsigned int tabidx)
