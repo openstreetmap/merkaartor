@@ -36,7 +36,6 @@
 #include "Sync/SyncOSM.h"
 #include <ui_AboutDialog.h>
 #include <ui_UploadMapDialog.h>
-#include <ui_SetPositionDialog.h>
 #include <ui_SelectionDialog.h>
 #include <ui_ExportDialog.h>
 #include "Preferences/PreferencesDialog.h"
