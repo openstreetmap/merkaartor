@@ -125,9 +125,9 @@ p, li { white-space: pre-wrap; }
      </property>
      <layout class="QVBoxLayout" name="verticalLayout" >
       <item>
-       <widget class="QPlainTextEdit" name="txtChangelog" >
+       <widget class="QTextEdit" name="txtChangelog" >
         <property name="lineWrapMode" >
-         <enum>QPlainTextEdit::NoWrap</enum>
+         <enum>QTextEdit::NoWrap</enum>
         </property>
         <property name="readOnly" >
          <bool>true</bool>

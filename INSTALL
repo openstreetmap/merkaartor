@@ -22,6 +22,7 @@ PREFIX=<path>				- base prefix for installation (unix only)
 TRANSDIR_MERKAARTOR=<path>	- where will the Merkaartor translations be installed
 TRANSDIR_SYSTEM=<path>		- where your global Qt translation directory is
 NODEBUG=1					- release target
+NOUSEWEBKIT                 - disable use of WebKit (Yahoo adapter)
 
 see http://wiki.openstreetmap.org/index.php/Merkaartor_doc_0.12 for the complete list
 

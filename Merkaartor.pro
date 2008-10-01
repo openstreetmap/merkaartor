@@ -1,7 +1,6 @@
 # external supported variables:
 # passed on commandline like "qmake NOWEBKIT=1"
 # NOUSEWEBKIT         - disable use of WebKit (Yahoo adapter)
-# NOWEBKIT            - disable building of own WebKit
 # TRANSDIR_MERKAARTOR - translations directory for merkaartor
 # TRANSDIR_SYSTEM     - translations directory for Qt itself
 # OUTPUT_DIR          - base directory for local output files
@@ -19,6 +18,15 @@ include (Config.pri)
 #Custom config
 include(Custom.pri)
 
+#Qt Version
+QT_VERSION = $$[QT_VERSION]
+QT_VERSION = $$split(QT_VERSION, ".")
+QT_VER_MAJ = $$member(QT_VERSION, 0)
+QT_VER_MIN = $$member(QT_VERSION, 1)
+
+lessThan(QT_VER_MAJ, 4) | lessThan(QT_VER_MIN, 3) {
+    error(Merkaartor requires Qt 4.3 or newer but Qt $$[QT_VERSION] was detected.)
+}
 DEFINES += VERSION=\"\\\"$$VERSION\\\"\"
 DEFINES += REVISION=\"\\\"$$REVISION\\\"\"
 
@@ -29,14 +37,14 @@ QT += svg network xml core gui
 
 !contains(NODEBUG,1) {
     CONFIG += debug
-    OUTPUT_DIR=$$PWD/binaries/debug
-    OBJECTS_DIR += tmp/obj_debug
+    OUTPUT_DIR=$$PWD/binaries/$$(QMAKESPEC)/debug
+    OBJECTS_DIR += tmp/$$(QMAKESPEC)/obj_debug
 }
 contains(NODEBUG,1) {
     CONFIG += release
     DEFINES += NDEBUG
-    OUTPUT_DIR=$$PWD/binaries/release
-    OBJECTS_DIR += tmp/obj_release
+    OUTPUT_DIR=$$PWD/binaries/$$(QMAKESPEC)/release
+    OBJECTS_DIR += tmp/$$(QMAKESPEC)/obj_release
 }
 
 contains(GPSD,1) {
@@ -118,10 +126,12 @@ count(TRANSDIR_SYSTEM, 1) {
 }
 
 isEmpty(NOUSEWEBKIT) {
-    DEFINES += YAHOO
-    SOURCES += QMapControl/yahoolegalmapadapter.cpp QMapControl/browserimagemanager.cpp
-    HEADERS += QMapControl/yahoolegalmapadapter.h QMapControl/browserimagemanager.h
-    QT += webkit
+   greaterThan(QT_VER_MAJ, 3) : greaterThan(QT_VER_MIN, 3) {
+        DEFINES += YAHOO
+        SOURCES += QMapControl/yahoolegalmapadapter.cpp QMapControl/browserimagemanager.cpp
+        HEADERS += QMapControl/yahoolegalmapadapter.h QMapControl/browserimagemanager.h
+        QT += webkit
+    }
 }
 
 contains(MOBILE,1) {
@@ -136,4 +146,5 @@ contains(GEOIMAGE, 1) {
 	LIBS += -lexiv2
 	include(GeoImage.pri)
 }
+
 
