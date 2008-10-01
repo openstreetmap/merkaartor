@@ -6,7 +6,7 @@
 
 #include "MainWindow.h"
 #include "Preferences/MerkaartorPreferences.h"
-#include "actionsdialog.h"
+#include "ActionsDialog.h"
 
 ActionsDialog::ActionsDialog(QList<QAction *>& actions, MainWindow *parent)
     : QDialog(parent), Main(parent)
