@@ -7,6 +7,7 @@
 
 #include "ImportExport/ImportNMEA.h"
 #include "ImportExport/ImportExportOsmBin.h"
+#include "ImportExport/ImportExportKML.h"
 
 #include <QtCore/QString>
 #include <QMultiMap>
@@ -576,6 +577,19 @@ QVector<MapFeature*> MapDocument::exportCoreOSM(QVector<MapFeature*> aFeatures)
 bool MapDocument::importNMEA(const QString& filename, TrackMapLayer* NewLayer)
 {
 	ImportNMEA imp(this);
+	if (!imp.loadFile(filename))
+		return false;
+	imp.import(NewLayer);
+
+	if (NewLayer->size())
+		return true;
+	else
+		return false;
+}
+
+bool MapDocument::importKML(const QString& filename, TrackMapLayer* NewLayer)
+{
+	ImportExportKML imp(this);
 	if (!imp.loadFile(filename))
 		return false;
 	imp.import(NewLayer);

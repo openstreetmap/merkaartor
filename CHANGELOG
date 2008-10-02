@@ -1,4 +1,5 @@
 v0.13
+	* ADD : KML import
 	* ADD : display layer name in node info
 	* ADD : Shortcut editor
 	* FIX : crash after undo roundabout (closes #1218)

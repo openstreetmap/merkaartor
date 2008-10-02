@@ -14,6 +14,7 @@
 
 #include <ImportExport/IImportExport.h>
 
+class QDomDocument;
 /**
 	@author cbro <cbro@semperpax.com>
 */
@@ -29,7 +30,6 @@ public:
 
 	//export
 	virtual bool export_(const QVector<MapFeature *>& featList);
-
 };
 
 #endif

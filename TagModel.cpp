@@ -34,7 +34,8 @@ void TagModel::setFeature(const std::vector<MapFeature*> Features)
 				if (F->tagValue(i) != theFeatures[j]->tagValue(F->tagKey(i),""))
 					break;
 			if (j == theFeatures.size())
-				Tags.push_back(std::make_pair(F->tagKey(i),F->tagValue(i)));
+				if (!F->tagKey(i).startsWith("%kml:"))
+					Tags.push_back(std::make_pair(F->tagKey(i),F->tagValue(i)));
 		}
 		beginInsertRows(QModelIndex(),0,Tags.size());
 		endInsertRows();

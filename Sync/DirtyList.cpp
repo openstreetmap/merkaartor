@@ -210,9 +210,12 @@ bool DirtyListVisit::update(MapFeature* F)
 		return EraseFromHistory;
 	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(F))
 	{
-		if (isInterestingPoint(theDocument,Pt))
-			return updatePoint(Pt);
-		else
+		if (isInterestingPoint(theDocument,Pt)) {
+			if (!(Pt->hasOSMId()) && notYetAdded(Pt)) 
+				return addPoint(Pt);
+			else
+				return updatePoint(Pt);
+		} else
 			return EraseFromHistory;
 	}
 	else if (Road* R = dynamic_cast<Road*>(F)) {

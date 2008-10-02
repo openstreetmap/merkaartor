@@ -437,33 +437,36 @@ static void changeCurrentDirToFile(const QString& s)
 
 #ifndef GEOIMAGE
 #define FILTER_OPEN_SUPPORTED \
-	tr("Supported formats (*.mdc *.gpx *.osm *.osb *.ngt *.nmea *.nma)\n" \
+	tr("Supported formats (*.mdc *.gpx *.osm *.osb *.ngt *.nmea *.nma *.kml)\n" \
 	"Merkaartor document (*.mdc)\n" \
 	"GPS Exchange format (*.gpx)\n" \
 	"OpenStreetMap format (*.osm)\n" \
 	"OpenStreetMap binary format (*.osb)\n" \
 	"Noni GPSPlot format (*.ngt)\n" \
 	"NMEA GPS log format (*.nmea *.nma)\n" \
+	"KML file (*.kml)\n" \
 	"All Files (*)")
 #else
 #define FILTER_OPEN_SUPPORTED \
-	tr("Supported formats (*.mdc *.gpx *.osm *.osb *.ngt *.nmea *.nma *.jpg)\n" \
+	tr("Supported formats (*.mdc *.gpx *.osm *.osb *.ngt *.nmea *.nma *.kml *.jpg)\n" \
 	"Merkaartor document (*.mdc)\n" \
 	"GPS Exchange format (*.gpx)\n" \
 	"OpenStreetMap format (*.osm)\n" \
 	"OpenStreetMap binary format (*.osb)\n" \
 	"Noni GPSPlot format (*.ngt)\n" \
 	"NMEA GPS log format (*.nmea *.nma)\n" \
+	"KML file (*.kml)\n" \
 	"Geotagged images (*.jpg)\n" \
 	"All Files (*)")
 #endif
 #define FILTER_IMPORT_SUPPORTED \
-	tr("Supported formats (*.gpx *.osm *.osb *.ngt *.nmea *.nma)\n" \
+	tr("Supported formats (*.gpx *.osm *.osb *.ngt *.nmea *.nma *.kml)\n" \
 	"GPS Exchange format (*.gpx)\n" \
 	"OpenStreetMap format (*.osm)\n" \
 	"OpenStreetMap binary format (*.osb)\n" \
 	"Noni GPSPlot format (*.ngt)\n" \
 	"NMEA GPS log format (*.nmea *.nma)\n" \
+	"KML file (*.kml)\n" \
 	"All Files (*)")
 
 void MainWindow::on_fileImportAction_triggered()
@@ -512,6 +515,7 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 		MapLayer* newLayer = NULL;
 
 		bool importOK = false;
+		bool importAborted = false;
 
 		if (fn.endsWith(".gpx")) {
 			QVector<TrackMapLayer*> theTracklayers;
@@ -564,6 +568,30 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 				((TrackMapLayer *)newLayer)->extractLayer();
 			}
 		}
+		else if (fn.endsWith(".kml")) {
+			if (QMessageBox::warning(this, MainWindow::tr("Big Fat Copyright Warning"),
+					 MainWindow::tr(
+					 "You are trying to import a KML file. Please be aware that:\n"
+					 "\n"
+					 " - You cannot import to OSM a KML file created from Google Earth. While you might\n"
+					 "   think that nodes you created from GE are yours, they are not!\n"
+					 "   They are still a derivative work from GE, and, as such, cannot be used in OSM.\n"
+					 "\n"
+					 " - If you downloaded it from the Internet, chances are that there is a copyright ont it.\n"
+					 "   Please be absolutely sure that using those data in OSM is permitted by the author, or\n"
+					 "   that the data is public domain.\n"
+					 "\n"
+					 "If unsure, please seek advice on the \"legal\" or \"talk\" openstreetmap mailing lists.\n"
+					 "\n"
+					 "Are you absolutely sure this KML can legally be imported in OSM?"),
+					 QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes)
+			{
+				newLayer = new TrackMapLayer( baseFileName );
+				mapDocument->add(newLayer);
+				importOK = mapDocument->importKML(baseFileName, (TrackMapLayer *)newLayer);
+			} else
+				importAborted = true;
+		}
 
 		if (!importOK && newLayer)
 			mapDocument->remove(newLayer);
@@ -587,6 +615,7 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 			updateRecentImportMenu();
 		}
 		else
+		if (!importAborted)
 		{
  			delete newLayer;
 			QMessageBox::warning(this, tr("No valid file"), tr("%1 could not be opened.").arg(fn));

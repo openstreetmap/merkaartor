@@ -14,6 +14,7 @@
 
 #include "../ImportExport/ImportExportKML.h"
 
+bool parseContainer(QDomElement& e, MapLayer* aLayer);
 
 ImportExportKML::ImportExportKML(MapDocument* doc)
  : IImportExport(doc)
@@ -169,8 +170,152 @@ bool ImportExportKML::export_(const QVector<MapFeature *>& featList)
 
 }
 
-// import the  input
-bool ImportExportKML::import(MapLayer* /* aLayer */)
+// IMPORT
+
+QString kmlId;
+
+MapFeature* parsePoint(QDomElement& e, MapLayer* aLayer)
 {
-	return false;
+	TrackPoint* P = NULL;
+
+	QDomElement c = e.firstChildElement();
+	while(!c.isNull() && !P) {
+		if (c.tagName() == "coordinates") {
+			QDomText t = c.firstChild().toText();
+			QString s = t.nodeValue();
+			QStringList tokens = s.split(",");
+			double lon = tokens[0].toDouble();
+			double lat = tokens[1].toDouble();
+			Coord p(angToInt(lat), angToInt(lon));
+
+			P = new TrackPoint(p);
+			P->setTag("%kml:guid", kmlId);
+			aLayer->add(P);
+		}
+
+		c = c.nextSiblingElement();
+	}
+
+	return P;
 }
+
+MapFeature* parseGeometry(QDomElement& e, MapLayer* aLayer)
+{
+	MapFeature* F = NULL;
+	if (e.tagName() == "Point") {
+		F = parsePoint(e, aLayer);
+	}
+
+	return F;
+}
+
+bool parsePlacemark(QDomElement& e, MapLayer* aLayer)
+{
+	MapFeature* F = NULL;
+	QDomElement c = e.firstChildElement();
+	QString name;
+	QString address;
+	QString description;
+	QString phone;
+
+	while(!c.isNull()) {
+		if (c.tagName() == "name")
+			name = c.firstChild().toText().nodeValue();
+		else
+		if (c.tagName() == "address")
+			address = c.firstChild().toText().nodeValue();
+		else
+		if (c.tagName() == "description")
+			description = c.firstChild().toText().nodeValue();
+		else
+		if (c.tagName() == "phoneNumber")
+			phone = c.firstChild().toText().nodeValue();
+		else
+		F = parseGeometry(c, aLayer);
+
+		c = c.nextSiblingElement();
+	}
+
+	if (F) {
+		if (!name.isEmpty())
+			F->setTag("name", name);
+		if (!address.isEmpty())
+			F->setTag("addr:full", address);
+		if (!phone.isEmpty())
+			F->setTag("addr:phone_number", phone);
+		if (!description.isEmpty())
+			F->setTag("description", description);
+		return true;
+	} else
+		return false;
+}
+
+bool parseFeature(QDomElement& e, MapLayer* aLayer)
+{
+	bool ret= false;
+	QDomElement c = e.cloneNode().toElement();
+
+	while(!c.isNull()) {
+		if (c.tagName() == "Placemark")
+			ret = parsePlacemark(c, aLayer);
+		else
+			ret = parseContainer(c, aLayer);
+
+		c = c.nextSiblingElement();
+	}
+	return ret;
+}
+
+bool parseContainer(QDomElement& e, MapLayer* aLayer)
+{
+	if ((e.tagName() != "Document") && (e.tagName() != "Folder"))
+		return false;
+
+	bool ret= false;
+	QDomElement c = e.firstChildElement();
+
+	while(!c.isNull()) {
+		ret = parseFeature(c, aLayer);
+
+		c = c.nextSiblingElement();
+	}
+	return ret;
+}
+
+bool parseKML(QDomElement& e, MapLayer* aLayer)
+{
+	bool ret= false;
+	QDomElement c = e.firstChildElement();
+	
+	while(!c.isNull()) {
+		ret = parseFeature(c, aLayer);
+		if (!ret)
+			ret = parseGeometry(c, aLayer);
+
+		c = c.nextSiblingElement();
+	}
+	return ret;
+}
+
+// import the  input
+bool ImportExportKML::import(MapLayer* aLayer)
+{
+	QDomDocument* theXmlDoc = new QDomDocument();
+	if (!theXmlDoc->setContent(Device)) {
+		//QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
+		Device->close();
+		delete theXmlDoc;
+		theXmlDoc = NULL;
+		return false;
+	}
+	Device->close();
+
+	QDomElement docElem = theXmlDoc->documentElement();
+	if (docElem.tagName() != "kml") {
+		//QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid KML document.").arg(fn));
+		return false;
+	}
+	kmlId = QUuid::createUuid().toString();
+	return parseKML(docElem, aLayer);
+}
+

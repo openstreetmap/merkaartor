@@ -86,6 +86,7 @@ public:
 
 	bool importNMEA(const QString& filename, TrackMapLayer* NewLayer);
 	bool importOSB(const QString& filename, DrawingMapLayer* NewLayer);
+	bool importKML(const QString& filename, TrackMapLayer* NewLayer);
 
 	MapLayer* getLastDownloadLayer();
 	void setLastDownloadLayer(MapLayer * aLayer);
