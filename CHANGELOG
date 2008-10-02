@@ -1,4 +1,5 @@
 v0.13
+	* ADD : update info dock on hover
 	* ADD : KML import
 	* ADD : display layer name in node info
 	* ADD : Shortcut editor
@@ -11,6 +12,7 @@ v0.13
 	* FIX : Windows crash when resaving changed scene truncates save file (closes #1164)
 	* ADD : Move to the next field on enter in properties dock tags - part 2 (by Travers Carter) (closes #1137)
 v0.12
+	* FIX : upload of nodes coming from tracks
 	* FIX : full zoom drawing bug yahoo images don't scale (fixes #1173)
 	* FIX : scroll redraw bug yahoo images don't redraw (fixes #1172)
 	* FIX : scroll redraw bug streetnames left behind (fixes #1171)

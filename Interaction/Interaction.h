@@ -13,6 +13,7 @@ class QPainter;
 
 #include "MainWindow.h"
 #include "MapView.h"
+#include "InfoDock.h"
 #include "Map/MapDocument.h"
 #include "Map/MapFeature.h"
 #include "Map/Road.h"
@@ -73,8 +74,12 @@ class GenericFeatureSnapInteraction : public Interaction
 			Interaction::paintEvent(anEvent, thePainter);
 
 #ifndef _MOBILE
-			if (LastSnap && document()->exists(LastSnap))
+			if (LastSnap && document()->exists(LastSnap)) {
 				LastSnap->drawHover(thePainter, projection());
+				view()->setToolTip(LastSnap->toHtml());
+			} else {
+				view()->setToolTip("");
+			}
 #endif
 		}
 		virtual void mousePressEvent(QMouseEvent * event)
@@ -167,11 +172,21 @@ class GenericFeatureSnapInteraction : public Interaction
 					}
 				}
 			}
-/*			QTime Stop(QTime::currentTime());
-			main()->statusBar()->clearMessage();
-			main()->statusBar()->showMessage(QString("Update took %1ms").arg(Start.msecsTo(Stop))); */
 			if (Prev != LastSnap)
 				view()->update();
+
+			if (M_PREFS->getMapTooltip()) {
+				if (LastSnap)
+					view()->setToolTip(LastSnap->toHtml());
+				else
+					view()->setToolTip("");
+			}
+			if (M_PREFS->getInfoOnHover() && main()->info()->isVisible()) {
+				if (LastSnap) {
+					main()->info()->setHoverHtml(LastSnap->toHtml());
+				} else
+					main()->info()->unsetHoverHtml();
+			}
 		}
 
 		FeatureType* LastSnap;

@@ -85,6 +85,9 @@ class MapView :	public QWidget
 		virtual void on_MoveUp_activated();
 		virtual void on_MoveDown_activated();
 
+	protected:
+		bool event(QEvent *event);
+	
 	private slots:
 		void imageRequested();
 		void imageReceived();

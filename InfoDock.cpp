@@ -37,7 +37,23 @@ InfoDock::~InfoDock()
 
 void InfoDock::setHtml(QString html)
 {
+	currentHtml = html;
 	theText->setHtml(html);
+}
+
+void InfoDock::setHoverHtml(QString html)
+{
+	theText->setHtml(html);
+}
+
+void InfoDock::unsetHoverHtml()
+{
+	theText->setHtml(currentHtml);
+}
+
+QString InfoDock::getHtml()
+{
+	return theText->toHtml();
 }
 
 void InfoDock::on_anchorClicked(const QUrl & link)

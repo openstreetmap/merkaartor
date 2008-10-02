@@ -31,6 +31,9 @@ public:
 
 public:
 	void setHtml(QString html);
+	QString getHtml();
+	void setHoverHtml(QString html);
+	void unsetHoverHtml();
 
 private slots:
 	void on_anchorClicked(const QUrl & link);
@@ -38,6 +41,7 @@ private slots:
 private:
 	MainWindow* Main;
 	QTextBrowser* theText;
+	QString currentHtml;
 };
 
 #endif

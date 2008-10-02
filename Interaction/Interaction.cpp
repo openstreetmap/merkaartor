@@ -119,6 +119,3 @@ QCursor Interaction::cursor() const
 {
 	return QCursor(Qt::ArrowCursor);
 }
-
-
-

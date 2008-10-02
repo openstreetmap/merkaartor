@@ -304,6 +304,10 @@ public:
 
 	M_PARAM_DECLARE_BOOL(ResolveRelations)
 	M_PARAM_DECLARE_BOOL(TranslateTags)
+
+	M_PARAM_DECLARE_BOOL(MapTooltip)
+	M_PARAM_DECLARE_BOOL(InfoOnHover)
+
 protected:
 	bool Use06Api;
 	QString version;

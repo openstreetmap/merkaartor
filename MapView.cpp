@@ -20,11 +20,12 @@
 #include "Utils/SvgCache.h"
 
 
-#include <QtCore/QTime>
-#include <QtGui/QMainWindow>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QPainter>
-#include <QtGui/QStatusBar>
+#include <QTime>
+#include <QMainWindow>
+#include <QMouseEvent>
+#include <QPainter>
+#include <QStatusBar>
+#include <QToolTip>
 
 MapView::MapView(MainWindow* aMain) :
 	Main(aMain), theDocument(0), theInteraction(0), StaticBuffer(0), StaticMap(0), 
@@ -695,3 +696,18 @@ void MapView::on_MoveDown_activated()
 	invalidate(true, true);
 }
 
+bool MapView::event(QEvent *event)
+{
+	if (event->type() == QEvent::ToolTip) {
+		QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
+		 //Coord p = theProjection.inverse(helpEvent->pos());
+		if (M_PREFS->getMapTooltip()) {
+			if (!toolTip().isEmpty())
+				QToolTip::showText(helpEvent->globalPos(), toolTip());
+			else
+				QToolTip::hideText();
+		 }
+		return true;
+	} else
+		return QWidget::event(event);
+ }
