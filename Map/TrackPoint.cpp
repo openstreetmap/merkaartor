@@ -342,8 +342,10 @@ QString TrackPoint::toHtml()
 	QString D;
 	unsigned int i;
 
+
 	D += "<i>"+QApplication::translate("MapFeature", "timestamp")+": </i>" + time().toString(Qt::ISODate) + "<br/>";
 	D += "<i>"+QApplication::translate("MapFeature", "coord")+": </i>" + QString::number(intToAng(position().lat()), 'f', 4) + " / " + QString::number(intToAng(position().lon()), 'f', 4) + "<br/>";
+
 	if (elevation())
 		D += "<i>"+QApplication::translate("MapFeature", "elevation")+": </i>" + QString::number(elevation(), 'f', 4) + "<br/>";
 	if (speed())
@@ -358,7 +360,9 @@ QString TrackPoint::toHtml()
 		if ((i = findKey("_comment_")) < tagSize())
 			D += "<i>"+QApplication::translate("MapFeature", "comment")+": </i>" + tagValue(i) + "<br/>";
 	}
-
+	
+	D += "<i>"+QApplication::translate("MapFeature", "layer")+": </i>" + layer()->name() + "<br/>";
+	
 	return MapFeature::toMainHtml(QApplication::translate("MapFeature", "Node"), "node").arg(D);
 }
 
