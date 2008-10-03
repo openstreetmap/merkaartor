@@ -70,8 +70,8 @@ class CommandList : public Command
 
 	private:
 		std::vector<Command*> Subs;
-		bool IsUpdateFromOSM;
 		unsigned int Size;
+		bool IsUpdateFromOSM;
 };
 
 class CommandHistory

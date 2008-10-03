@@ -35,20 +35,20 @@ class MapFeaturePrivate
 {
 	public:
 		MapFeaturePrivate()
-			: LastActor(MapFeature::User), theLayer(0),
+			:  TagsSize(0), LastActor(MapFeature::User), theLayer(0),
 				PossiblePaintersUpToDate(false),
 			  	PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
-				theFeature(0), LastPartNotification(0), Time(QDateTime::currentDateTime()),
-				TagsSize(0)
+				theFeature(0), LastPartNotification(0),
+				Time(QDateTime::currentDateTime())
 		{
 			initVersionNumber();
 		}
 		MapFeaturePrivate(const MapFeaturePrivate& other)
-			: Tags(other.Tags), LastActor(other.LastActor), theLayer(0),
+			: Tags(other.Tags), TagsSize(other.TagsSize), LastActor(other.LastActor), theLayer(0),
 				PossiblePaintersUpToDate(false),
 			  	PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
-				theFeature(0), LastPartNotification(0), Time(other.Time),
-				TagsSize(other.TagsSize)
+				theFeature(0), LastPartNotification(0),
+				Time(other.Time)
 		{
 			initVersionNumber();
 		}

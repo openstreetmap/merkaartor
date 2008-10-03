@@ -115,7 +115,7 @@ class QGPSDevice : public QThread
         CardinalDirection longCardinal()    { return cur_longCardinal;  }
         CardinalDirection varCardinal()     { return cur_varCardinal;   }
         
-		bool isActiveSat(int prn);
+	bool isActiveSat(unsigned int prn);
         void satInfo(int index, int &elev, int &azim, int &snr);
         
         // some convinience functions

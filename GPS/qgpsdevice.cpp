@@ -109,7 +109,7 @@ int QGPSDevice::longDegrees()   { return (int) (longitude());														}
 int QGPSDevice::longMinutes()   { return (int) (longitude() - longDegrees());										}
 int QGPSDevice::longSeconds()   { return (int) (((longitude() - longDegrees()) - longMinutes()) * 60);				}
 
-bool QGPSDevice::isActiveSat(int prn)
+bool QGPSDevice::isActiveSat(unsigned int prn)
 {
 	for (int i=0; i<12; i++) {
 		if (activeSats[i] == prn)
