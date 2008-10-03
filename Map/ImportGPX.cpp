@@ -81,22 +81,48 @@ static TrackPoint* importTrkPt(const QDomElement& Root, MapDocument* /* theDocum
 static void importTrkSeg(const QDomElement& Root, MapDocument* theDocument, MapLayer* theLayer, CommandList* theList, bool MakeSegment, QProgressDialog & progress)
 {
 	TrackSegment* S = new TrackSegment;
+
 	if (Root.hasAttribute("xml:id"))
 		S->setId(Root.attribute("xml:id"));
+
+	TrackPoint* lastPoint = NULL;
+
 	for(QDomNode n = Root.firstChild(); !n.isNull(); n = n.nextSibling())
 	{
 		QDomElement t = n.toElement();
-		if (!t.isNull() && t.tagName() == "trkpt")
+		if (t.isNull() || t.tagName() != "trkpt")
+			continue;
+
+		progress.setValue(progress.value()+1);
+		if (progress.wasCanceled())
+			return;
+
+		TrackPoint* Pt = importTrkPt(t,theDocument, theLayer, theList);
+
+		if (MakeSegment == false)
+			continue;
+
+		if (lastPoint)
 		{
-			TrackPoint* Pt = importTrkPt(t,theDocument, theLayer, theList);
-			if (MakeSegment)
-				S->add(Pt);
-			progress.setValue(progress.value()+1);
-			if (progress.wasCanceled()) {
-				return;
+			double kilometer = Pt->position().distanceFrom( lastPoint->position() );
+
+			if (kilometer > 0.1)
+			{
+				if (S->size())
+					theList->add(new AddFeatureCommand(theLayer,S, true));
+				else
+					delete S;
+
+				S = new TrackSegment;
+				if (Root.hasAttribute("xml:id"))
+					S->setId(Root.attribute("xml:id"));
 			}
 		}
+
+		S->add(Pt);
+		lastPoint = Pt;
 	}
+
 	if (S->size())
 		theList->add(new AddFeatureCommand(theLayer,S, true));
 	else

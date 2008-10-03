@@ -1,4 +1,5 @@
 v0.13
+	* ADD : Raw tracks from OSM are split if trkpts are >100m apart
 	* ADD : update info dock on hover
 	* ADD : KML import
 	* ADD : display layer name in node info
