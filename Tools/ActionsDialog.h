@@ -24,6 +24,8 @@ protected slots:
 private slots:
     void recordAction(int row, int column);
     void validateAction(int row, int column);
+	void importShortcuts();
+	void exportShortcuts();
 
 private:
 	MainWindow* Main;
