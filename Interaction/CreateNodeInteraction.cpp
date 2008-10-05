@@ -34,6 +34,7 @@ void CreateNodeInteraction::snapMouseReleaseEvent(QMouseEvent * ev, Road* aRoad)
 			theList->add(new AddFeatureCommand(main()->document()->getDirtyOrOriginLayer(aRoad->layer()),N,true));
 			theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx,main()->document()->getDirtyOrOriginLayer(aRoad->layer())));
 			document()->addHistory(theList);
+			main()->properties()->setSelection(N);
 			view()->invalidate(true, false);
 		}
 		else
@@ -43,6 +44,7 @@ void CreateNodeInteraction::snapMouseReleaseEvent(QMouseEvent * ev, Road* aRoad)
 			CommandList* theList  = new CommandList(MainWindow::tr("Create point %1").arg(N->id()), aRoad);
 			theList->add(new AddFeatureCommand(main()->document()->getDirtyLayer(),N,true));
 			document()->addHistory(theList);
+			main()->properties()->setSelection(N);
 			view()->invalidate(true, false);
 		}
 	}

@@ -122,7 +122,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_gpsCenterAction_triggered();
 		virtual void preferencesChanged();
 		virtual void clipboardChanged();
-		virtual void toolsPreferencesAction_triggered(unsigned int tabIdx = 0);
+		virtual void toolsPreferencesAction_triggered(bool focusData=false);
 
 	signals:
 		void remove_triggered();

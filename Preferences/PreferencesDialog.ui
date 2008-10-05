@@ -20,7 +20,7 @@
       <enum>QTabWidget::North</enum>
      </property>
      <property name="currentIndex" >
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_7" >
       <property name="geometry" >
@@ -432,8 +432,8 @@
      <widget class="QWidget" name="tab_5" >
       <property name="geometry" >
        <rect>
-        <x>0</x>
-        <y>0</y>
+        <x>4</x>
+        <y>30</y>
         <width>624</width>
         <height>418</height>
        </rect>
@@ -528,7 +528,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_3" >
+     <widget class="QWidget" name="tabData" >
       <property name="geometry" >
        <rect>
         <x>0</x>
@@ -651,8 +651,8 @@
      <widget class="QWidget" name="tab_6" >
       <property name="geometry" >
        <rect>
-        <x>0</x>
-        <y>0</y>
+        <x>8</x>
+        <y>60</y>
         <width>624</width>
         <height>418</height>
        </rect>
@@ -743,8 +743,8 @@
      <widget class="QWidget" name="tab" >
       <property name="geometry" >
        <rect>
-        <x>0</x>
-        <y>0</y>
+        <x>8</x>
+        <y>60</y>
         <width>624</width>
         <height>418</height>
        </rect>
@@ -827,8 +827,8 @@
      <widget class="QWidget" name="tab_2" >
       <property name="geometry" >
        <rect>
-        <x>0</x>
-        <y>0</y>
+        <x>8</x>
+        <y>60</y>
         <width>624</width>
         <height>418</height>
        </rect>
@@ -926,8 +926,8 @@
      <widget class="QWidget" name="tabTools" >
       <property name="geometry" >
        <rect>
-        <x>0</x>
-        <y>0</y>
+        <x>8</x>
+        <y>60</y>
         <width>624</width>
         <height>418</height>
        </rect>

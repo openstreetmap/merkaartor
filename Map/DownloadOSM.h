@@ -32,6 +32,7 @@ class Downloader : public QObject
 		QByteArray& content();
 		int resultCode();
 		const QString & resultText();
+		const QString & errorText();
 		QString getURLToMap();
 		QString getURLToTrackPoints();
 		QString getURLToFetchFull(MapFeature* aFeature);
@@ -60,6 +61,7 @@ class Downloader : public QObject
 		QByteArray Content;
 		int Result;
 		QString ResultText;
+		QString ErrorText;
 		int Id;
 		bool Error;
 		QEventLoop Loop;

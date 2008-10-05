@@ -381,8 +381,12 @@ bool DirtyListExecutor::sendRequest(const QString& Method, const QString& URL, c
 		if (theDownloader->resultCode() == 401)
 			QMessageBox::warning(Progress,tr("Error uploading request"),
 				tr("Please check your username and password in the Preferences menu"));
-		else
-			QMessageBox::warning(Progress,tr("Error uploading request"),tr("There was an error uploading this request (%1)\nServer message is '%2'").arg(theDownloader->resultCode()).arg(theDownloader->resultText()));
+		else {
+			QString msg = tr("There was an error uploading this request (%1)\nServer message is '%2'").arg(theDownloader->resultCode()).arg(theDownloader->resultText());
+			if (!theDownloader->errorText().isEmpty())
+				msg += tr("\nAPI message is '%1'").arg(theDownloader->errorText());
+			QMessageBox::warning(Progress,tr("Error uploading request"), msg);
+		}
 		return false;
 	}
 

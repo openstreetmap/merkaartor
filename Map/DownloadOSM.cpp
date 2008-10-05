@@ -220,6 +220,7 @@ bool Downloader::go(const QString& url)
 #endif
 	Result = Request.lastResponse().statusCode();
 	ResultText = Request.lastResponse().reasonPhrase();
+	ErrorText = Request.lastResponse().value("Error");
 	SAFE_DELETE(AnimationTimer);
 	return !Error;
 }
@@ -260,6 +261,7 @@ bool Downloader::request(const QString& Method, const QString& URL, const QStrin
 #endif
 	Result = Request.lastResponse().statusCode();
 	ResultText = Request.lastResponse().reasonPhrase();
+	ErrorText = Request.lastResponse().value("Error");
 	return !Error;
 }
 
@@ -302,6 +304,11 @@ int Downloader::resultCode()
 const QString &Downloader::resultText()
 {
 	return ResultText;
+}
+
+const QString &Downloader::errorText()
+{
+	return ErrorText;
 }
 
 QString Downloader::getURLToOpenChangeSet()
@@ -413,7 +420,10 @@ bool downloadOSM(QMainWindow* aParent, const QUrl& theUrl, const QString& aUser,
 		QMessageBox::warning(aParent,QApplication::translate("Downloader","Download failed"),QApplication::translate("Downloader","Username/password invalid"));
 		return false;
 	default:
-		QMessageBox::warning(aParent,QApplication::translate("Downloader","Download failed"),QApplication::translate("Downloader","Unexpected http status code (%1)\nServer message is '%2'\nPossibly reducing the download area helps.").arg(x).arg(Rcv.resultText()));
+		QString msg = QApplication::translate("Downloader","Unexpected http status code (%1)\nServer message is '%2'").arg(x).arg(Rcv.resultText());
+		if (!Rcv.errorText().isEmpty())
+			msg += QApplication::translate("Downloader", "\nAPI message is '%1'").arg(Rcv.errorText());
+		QMessageBox::warning(aParent,QApplication::translate("Downloader","Download failed"), msg);
 		return false;
 	}
 	Downloader Down(aWeb, aUser, aPassword, UseProxy, ProxyHost, ProxyPort);
