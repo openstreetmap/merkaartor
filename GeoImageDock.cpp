@@ -235,7 +235,7 @@ void GeoImageDock::loadImages(QStringList fileNames, MapDocument *theDocument, M
 				if (dialog.exec()) { // we have to change the sign here because secsTo returns negative value
 					if (positive.isChecked())
 						offset = - timeEdit.time().secsTo(QTime(0, 0, 0));
-					if (negative.isChecked())
+					else if (negative.isChecked())
 						offset = timeEdit.time().secsTo(QTime(0, 0, 0));
 					else
 						offset = 0;
