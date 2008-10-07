@@ -141,6 +141,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		MapDocument* document();
 		//MapLayer* activeLayer();
 		MapView* view();
+		QByteArray fullscreenState;
 
 		QProgressBar* pbImages;
 		QString StatusMessage;

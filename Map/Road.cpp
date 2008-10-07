@@ -475,10 +475,11 @@ void Road::buildPath(Projection const &theProjection, const QRegion& paintRegion
 	else
 		for (unsigned int j=1; j<size(); ++j) {
 			aP = theProjection.project(p->Nodes[j]->position());
+			QLine l(lastPoint, aP);
 			if (!clipRect.contains(aP)) {
 				if (!lastPointVisible) {
 					QPoint a, b;
-					if (QRectInterstects(clipRect, QLine(lastPoint, aP), a, b)) {
+					if (QRectInterstects(clipRect, l, a, b)) {
 						p->thePath.lineTo(a);
 						lastPoint = aP;
 						aP = b;
@@ -491,7 +492,7 @@ void Road::buildPath(Projection const &theProjection, const QRegion& paintRegion
 					}
 				} else {
 					QPoint a, b;
-					QRectInterstects(clipRect, QLine(lastPoint, aP), a, b);
+					QRectInterstects(clipRect, l, a, b);
 					lastPoint = aP;
 					aP = a;
 				}
@@ -499,7 +500,7 @@ void Road::buildPath(Projection const &theProjection, const QRegion& paintRegion
 			} else {
 				if (!lastPointVisible) {
 					QPoint a, b;
-					QRectInterstects(clipRect, QLine(lastPoint, aP), a, b);
+					QRectInterstects(clipRect, l, a, b);
 					p->thePath.lineTo(a);
 				}
 				lastPoint = aP;
@@ -507,6 +508,8 @@ void Road::buildPath(Projection const &theProjection, const QRegion& paintRegion
 			}
 			p->thePath.lineTo(aP);
 		}
+		if (isClosed() && !lastPointVisible)
+			p->thePath.lineTo(firstPoint);
 }
 
 

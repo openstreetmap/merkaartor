@@ -17,7 +17,7 @@
 #include <QColor>
 
 #include "Map/Coord.h"
-class QMainWindow;
+class MainWindow;
 
 //#define WORLD_COORDBOX CoordBox(Coord(1.3, -1.3), Coord(-1.3, 1.3))
 #define WORLD_COORDBOX CoordBox(Coord(INT_MAX/2, -INT_MAX/2), Coord(-INT_MAX/2, INT_MAX/2))
@@ -252,8 +252,8 @@ public:
 	bool getRelationsVisible() const;
 
 	/* MainWindow state */
-	void saveMainWindowState(const class QMainWindow * mainWindow);
-	void restoreMainWindowState(class QMainWindow * mainWindow) const;
+	void saveMainWindowState(const class MainWindow * mainWindow);
+	void restoreMainWindowState(class MainWindow * mainWindow) const;
 
 	void setInitialPosition(const CoordBox & coordBox);
 	CoordBox getInitialPosition();

@@ -13,7 +13,8 @@
 #include "MerkaartorPreferences.h"
 
 #include <QtGui/QApplication>
-#include <QtGui/QMainWindow>
+
+#include "MainWindow.h"
 
 #define M_PARAM_IMPLEMENT_BOOL(Param, Category, Default) \
 	void MerkaartorPreferences::set##Param(bool theValue) \
@@ -530,14 +531,16 @@ void MerkaartorPreferences::setZoomOutPerc(int theValue)
 	Sets->setValue("zoom/zoomOut", theValue);
 }
 
-void MerkaartorPreferences::saveMainWindowState(const QMainWindow * mainWindow)
+void MerkaartorPreferences::saveMainWindowState(const MainWindow * mainWindow)
 {
 	Sets->setValue("MainWindow/Position", mainWindow->pos());
 	Sets->setValue("MainWindow/Size", mainWindow->size());
 	Sets->setValue("MainWindow/State", mainWindow->saveState());
+	Sets->setValue("MainWindow/Fullscreen", mainWindow->windowShowAllAction->isEnabled());
+	Sets->setValue("MainWindow/FullscreenState", mainWindow->fullscreenState);
 }
 
-void MerkaartorPreferences::restoreMainWindowState(QMainWindow * mainWindow) const
+void MerkaartorPreferences::restoreMainWindowState(MainWindow * mainWindow) const
 {
 	if (Sets->contains("MainWindow/Position"))
 		mainWindow->move( Sets->value("MainWindow/Position").toPoint());
@@ -547,6 +550,21 @@ void MerkaartorPreferences::restoreMainWindowState(QMainWindow * mainWindow) con
 
 	if (Sets->contains("MainWindow/State"))
 		mainWindow->restoreState( Sets->value("MainWindow/State").toByteArray() );
+
+	if (Sets->contains("MainWindow/FullscreenState"))
+		mainWindow->fullscreenState = Sets->value("MainWindow/FullscreenState").toByteArray();
+
+	if (Sets->value("MainWindow/Fullscreen", false).toBool()) {
+		mainWindow->windowHideAllAction->setEnabled(false);
+		mainWindow->windowHideAllAction->setVisible(false);
+		mainWindow->windowShowAllAction->setEnabled(true);
+		mainWindow->windowShowAllAction->setVisible(true);
+	} else {
+		mainWindow->windowHideAllAction->setEnabled(true);
+		mainWindow->windowHideAllAction->setVisible(true);
+		mainWindow->windowShowAllAction->setEnabled(false);
+		mainWindow->windowShowAllAction->setVisible(false);
+	}
 }
 
 void MerkaartorPreferences::setInitialPosition(const CoordBox & cb)

@@ -407,7 +407,7 @@ void MainWindow::on_editUndoAction_triggered()
 
 void MainWindow::on_editPropertiesAction_triggered()
 {
-	theProperties->setSelection(0);
+	//theProperties->setSelection(0);
 	invalidateView();
 	theView->launch(new EditInteraction(theView));
 }
@@ -1814,6 +1814,8 @@ void MainWindow::on_windowGeoimageAction_triggered()
 
 void MainWindow::on_windowHideAllAction_triggered()
 {
+	fullscreenState = saveState(1);
+
 	windowHideAllAction->setEnabled(false);
 	windowHideAllAction->setVisible(false);
 	windowShowAllAction->setEnabled(true);
@@ -1832,20 +1834,12 @@ void MainWindow::on_windowHideAllAction_triggered()
 
 void MainWindow::on_windowShowAllAction_triggered()
 {
+	restoreState(fullscreenState, 1);
+
 	windowHideAllAction->setEnabled(true);
 	windowHideAllAction->setVisible(true);
 	windowShowAllAction->setEnabled(false);
 	windowShowAllAction->setVisible(false);
-
-//	toolBar->setVisible(true);
-	theInfo->setVisible(true);
-	theDirty->setVisible(true);
-	theLayers->setVisible(true);
-	theProperties->setVisible(true);
-	theGPS->setVisible(true);
-#ifdef GEOIMAGE
-	theGeoImage->setVisible(true);
-#endif
 }
 
 void MainWindow::on_layersAddImageAction_triggered()
