@@ -273,6 +273,9 @@ public:
 	void setGpsPort(const QString & theValue);
 	QString getGpsPort() const;
 
+	void setMaxDistNodes(double theValue);
+	double getMaxDistNodes() const;
+
 	void setAutoSaveDoc(bool theValue);
 	bool getAutoSaveDoc() const;
 

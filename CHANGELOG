@@ -2,7 +2,7 @@ v0.13
 	* FIX : After coming out of fullscreen, revert to previous state rather than showing all docks
 	* FIX : do not unselect newly created features
 	* FIX : make moving images to start of track work
-	* ADD : Raw tracks from OSM are split if trkpts are >100m apart
+	* ADD : GPX tracks are split if trkpts are more than a certain distance apart (configurable)
 	* ADD : update info dock on hover
 	* ADD : KML import
 	* ADD : display layer name in node info

@@ -105,6 +105,8 @@ void PreferencesDialog::loadPrefs()
 
 	edGpsPort->setText(M_PREFS->getGpsPort());
 
+	edMaxDistNodes->setText(QString().setNum(M_PREFS->getMaxDistNodes()));
+
 	bbUseProxy->setChecked(M_PREFS->getProxyUse());
 	edProxyHost->setText(M_PREFS->getProxyHost());
 	edProxyPort->setText(QString().setNum(M_PREFS->getProxyPort()));
@@ -189,6 +191,8 @@ void PreferencesDialog::savePrefs()
 		edGpsPort->setText("\\\\.\\" + edGpsPort->text());
 #endif 
 	M_PREFS->setGpsPort(edGpsPort->text());
+
+	M_PREFS->setMaxDistNodes(edMaxDistNodes->text().toDouble());
 
 	M_PREFS->setProxyUse(bbUseProxy->isChecked());
 	M_PREFS->setProxyHost(edProxyHost->text());

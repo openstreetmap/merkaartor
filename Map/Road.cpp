@@ -464,6 +464,7 @@ void Road::buildPath(Projection const &theProjection, const QRegion& paintRegion
 		lastPointVisible = false;
 	}
 	p->thePath.moveTo(aP);
+	QPoint firstPoint = aP;
 	if (smoothed().size())
 	{
 		for (unsigned int i=3; i<smoothed().size(); i+=3)

@@ -106,7 +106,7 @@ static void importTrkSeg(const QDomElement& Root, MapDocument* theDocument, MapL
 		{
 			double kilometer = Pt->position().distanceFrom( lastPoint->position() );
 
-			if (kilometer > 0.1)
+			if (kilometer > M_PREFS->getMaxDistNodes())
 			{
 				if (S->size())
 					theList->add(new AddFeatureCommand(theLayer,S, true));
@@ -114,8 +114,6 @@ static void importTrkSeg(const QDomElement& Root, MapDocument* theDocument, MapL
 					delete S;
 
 				S = new TrackSegment;
-				if (Root.hasAttribute("xml:id"))
-					S->setId(Root.attribute("xml:id"));
 			}
 		}
 

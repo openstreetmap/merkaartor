@@ -772,6 +772,16 @@ void MerkaartorPreferences::setGpsPort(const QString & theValue)
 	Sets->setValue("gps/port", theValue);
 }
 
+double MerkaartorPreferences::getMaxDistNodes() const
+{
+	return Sets->value("data/MaxDistNodes", 0.1).toDouble();
+}
+
+void MerkaartorPreferences::setMaxDistNodes(double theValue)
+{
+	Sets->setValue("data/MaxDistNodes", theValue);
+}
+
 bool MerkaartorPreferences::getAutoSaveDoc() const
 {
 	return Sets->value("data/AutoSaveDoc", false).toBool();
