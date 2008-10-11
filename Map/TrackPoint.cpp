@@ -360,8 +360,11 @@ QString TrackPoint::toHtml()
 		if ((i = findKey("_comment_")) < tagSize())
 			D += "<i>"+QApplication::translate("MapFeature", "comment")+": </i>" + tagValue(i) + "<br/>";
 	}
-	
-	D += "<i>"+QApplication::translate("MapFeature", "layer")+": </i>" + layer()->name() + "<br/>";
+
+	D += "<i>"+QApplication::translate("MapFeature", "layer")+": </i>";
+	if (layer())
+		D += layer()->name();
+	D += "<br/>";
 	
 	return MapFeature::toMainHtml(QApplication::translate("MapFeature", "Node"), "node").arg(D);
 }

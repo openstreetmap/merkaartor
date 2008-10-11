@@ -1,4 +1,5 @@
 v0.13
+	* FIX : Verify selection is in layer before accessing (closes #1250)
 	* FIX : After coming out of fullscreen, revert to previous state rather than showing all docks
 	* FIX : do not unselect newly created features
 	* FIX : make moving images to start of track work

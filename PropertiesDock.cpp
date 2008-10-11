@@ -101,10 +101,10 @@ void PropertiesDock::checkMenuStatus()
 	{
 		if (dynamic_cast<TrackPoint*>(Selection[i]))
 			++NumPoints;
-		if (dynamic_cast<Road*>(Selection[i])) {
+		if (dynamic_cast<Road*>(Selection[i]))
 			++NumRoads;
-		}
-		if (!Selection[i]->layer()->isUploadable())
+
+		if (Selection[i]->layer() && !Selection[i]->layer()->isUploadable())
 			++NumCommitableFeature;
 	}
 	Main->createRelationAction->setEnabled(Selection.size());
