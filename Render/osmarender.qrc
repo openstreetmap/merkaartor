@@ -1,17 +1,18 @@
 <RCC>
     <qresource prefix="/osmarender">
-    	<file alias="osm-map-features-z6.xml">osmarender6/osm-map-features-z6.xml</file>
-    	<file alias="osm-map-features-z7.xml">osmarender6/osm-map-features-z7.xml</file>
-    	<file alias="osm-map-features-z8.xml">osmarender6/osm-map-features-z8.xml</file>
-    	<file alias="osm-map-features-z9.xml">osmarender6/osm-map-features-z9.xml</file>
-    	<file alias="osm-map-features-z10.xml">osmarender6/osm-map-features-z10.xml</file>
-    	<file alias="osm-map-features-z11.xml">osmarender6/osm-map-features-z11.xml</file>
-    	<file alias="osm-map-features-z12.xml">osmarender6/osm-map-features-z12.xml</file>
-    	<file alias="osm-map-features-z13.xml">osmarender6/osm-map-features-z13.xml</file>
-    	<file alias="osm-map-features-z14.xml">osmarender6/osm-map-features-z14.xml</file>
-    	<file alias="osm-map-features-z15.xml">osmarender6/osm-map-features-z15.xml</file>
-    	<file alias="osm-map-features-z16.xml">osmarender6/osm-map-features-z16.xml</file>
-	<file alias="osm-map-features-z17.xml">osmarender6/osm-map-features-z17.xml</file>
-    	<file alias="osmarender.xsl">osmarender6/osmarender.xsl</file>
+    	<file alias="osm-map-features-z6.xml">osmarender/stylesheets/osm-map-features-z6.xml</file>
+    	<file alias="osm-map-features-z7.xml">osmarender/stylesheets/osm-map-features-z7.xml</file>
+    	<file alias="osm-map-features-z8.xml">osmarender/stylesheets/osm-map-features-z8.xml</file>
+    	<file alias="osm-map-features-z9.xml">osmarender/stylesheets/osm-map-features-z9.xml</file>
+    	<file alias="osm-map-features-z10.xml">osmarender/stylesheets/osm-map-features-z10.xml</file>
+    	<file alias="osm-map-features-z11.xml">osmarender/stylesheets/osm-map-features-z11.xml</file>
+    	<file alias="osm-map-features-z12.xml">osmarender/stylesheets/osm-map-features-z12.xml</file>
+    	<file alias="osm-map-features-z13.xml">osmarender/stylesheets/osm-map-features-z13.xml</file>
+    	<file alias="osm-map-features-z14.xml">osmarender/stylesheets/osm-map-features-z14.xml</file>
+    	<file alias="osm-map-features-z15.xml">osmarender/stylesheets/osm-map-features-z15.xml</file>
+    	<file alias="osm-map-features-z16.xml">osmarender/stylesheets/osm-map-features-z16.xml</file>
+	    <file alias="osm-map-features-z17.xml">osmarender/stylesheets/osm-map-features-z17.xml</file>
+    	
+        <file alias="osmarender.xsl">osmarender/xslt/osmarender.xsl</file>
     </qresource>
 </RCC>
