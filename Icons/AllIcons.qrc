@@ -15,6 +15,7 @@
         <file>edit-copy.png</file>
         <file>edit-cut.png</file>
         <file>edit-paste.png</file>
+        <file>emblem-readonly.png</file>
     </qresource>
     <qresource prefix="/Art">
         <file>Mapnik/airport.png</file>

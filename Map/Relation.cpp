@@ -113,25 +113,55 @@ void Relation::draw(QPainter& P, const Projection& theProjection)
 		return;
 
 	P.setPen(QPen(M_PREFS->getRelationsColor(),M_PREFS->getRelationsWidth(),Qt::DashLine));
-	P.drawRect(QRectF(theProjection.project(boundingBox().bottomLeft()),theProjection.project(boundingBox().topRight())));
+	QRectF bb = QRectF(theProjection.project(boundingBox().bottomLeft()),theProjection.project(boundingBox().topRight()));
+	bb.adjust(-10, 10, 10, -10);
+	P.drawRect(bb);
 }
 
-void Relation::drawFocus(QPainter& P, const Projection& theProjection)
+void Relation::drawFocus(QPainter& P, const Projection& theProjection, bool solid)
 {
-	P.setPen(QPen(M_PREFS->getFocusColor(),M_PREFS->getFocusWidth(),Qt::DashLine));
-	P.drawRect(QRectF(theProjection.project(boundingBox().bottomLeft()),theProjection.project(boundingBox().topRight())));
+	QRectF bb = QRectF(theProjection.project(boundingBox().bottomLeft()),theProjection.project(boundingBox().topRight()));
+	bb.adjust(-10, 10, 10, -10);
+	if (!solid) {
+		QPen thePen(M_PREFS->getFocusColor(),M_PREFS->getFocusWidth());
+		thePen.setDashPattern(getParentDashes());
+		P.setPen(thePen);
+		P.drawRect(bb);
+	} else {
+		P.setPen(QPen(M_PREFS->getFocusColor(),M_PREFS->getFocusWidth(),Qt::DashLine));
+		P.drawRect(bb);
 
-	for (unsigned int i=0; i<p->Members.size(); ++i)
-		p->Members[i].second->drawFocus(P,theProjection);
+		for (unsigned int i=0; i<p->Members.size(); ++i)
+			p->Members[i].second->drawFocus(P,theProjection, solid);
+
+		if (M_PREFS->getShowParents()) {
+			for (unsigned int i=0; i<sizeParents(); ++i)
+				getParent(i)->drawFocus(P, theProjection, false);
+		}
+	}
 }
 
-void Relation::drawHover(QPainter& P, const Projection& theProjection)
+void Relation::drawHover(QPainter& P, const Projection& theProjection, bool solid)
 {
-	P.setPen(QPen(M_PREFS->getHoverColor(),M_PREFS->getHoverWidth(),Qt::DashLine));
-	P.drawRect(QRectF(theProjection.project(boundingBox().bottomLeft()),theProjection.project(boundingBox().topRight())));
+	QRectF bb = QRectF(theProjection.project(boundingBox().bottomLeft()),theProjection.project(boundingBox().topRight()));
+	bb.adjust(-10, 10, 10, -10);
+	if (!solid) {
+		QPen thePen(M_PREFS->getHoverColor(),M_PREFS->getHoverWidth());
+		thePen.setDashPattern(getParentDashes());
+		P.setPen(thePen);
+		P.drawRect(bb);
+	} else {
+		P.setPen(QPen(M_PREFS->getHoverColor(),M_PREFS->getHoverWidth(),Qt::DashLine));
+		P.drawRect(bb);
 
-	for (unsigned int i=0; i<p->Members.size(); ++i)
-		p->Members[i].second->drawHover(P,theProjection);
+		for (unsigned int i=0; i<p->Members.size(); ++i)
+			p->Members[i].second->drawHover(P,theProjection, solid);
+
+		if (M_PREFS->getShowParents()) {
+			for (unsigned int i=0; i<sizeParents(); ++i)
+				getParent(i)->drawHover(P, theProjection, false);
+		}
+	}
 }
 
 double Relation::pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection) const

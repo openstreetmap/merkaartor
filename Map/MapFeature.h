@@ -69,13 +69,13 @@ class MapFeature
 		 * @param P The QPainter used to draw
 		 * @param theProjection the Projection used to convert real coordinates to screen coordinates
 		 */
-		virtual void drawFocus(QPainter& P, const Projection& theProjection) = 0;
+		virtual void drawFocus(QPainter& P, const Projection& theProjection, bool solid=true) = 0;
 
 		/** Draw the feature using the given QPainter an Projection and with the hover draw
 		 * @param P The QPainter used to draw
 		 * @param theProjection the Projection used to convert real coordinates to screen coordinates
 		 */
-		virtual void drawHover(QPainter& P, const Projection& theProjection) = 0;
+		virtual void drawHover(QPainter& P, const Projection& theProjection, bool solid=true) = 0;
 		virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection) const = 0;
 		virtual void cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const std::vector<MapFeature*>& Alternatives) = 0;
 		virtual bool notEverythingDownloaded() const = 0;
@@ -190,6 +190,7 @@ class MapFeature
 		FeaturePainter* getCurrentEditPainter() const;
 		bool hasEditPainter() const;
 		void invalidatePainter();
+		QVector<qreal> getParentDashes() const;
 
 		virtual void remove(unsigned int Idx) = 0;
 		virtual void remove(MapFeature* F) = 0;

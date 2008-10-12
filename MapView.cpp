@@ -1,11 +1,12 @@
 #include "MapView.h"
 #include "MainWindow.h"
+#include "PropertiesDock.h"
 #include "Map/MapDocument.h"
 #include "Map/MapLayer.h"
 #include "Map/MapFeature.h"
 #include "Map/Relation.h"
-#include "Interaction/EditInteraction.h"
 #include "Interaction/Interaction.h"
+#include "Interaction/EditInteraction.h"
 #include "PaintStyle/EditPaintStyle.h"
 #include "Map/Projection.h"
 #include "GPS/qgps.h"
@@ -29,11 +30,12 @@
 
 MapView::MapView(MainWindow* aMain) :
 	Main(aMain), theDocument(0), theInteraction(0), StaticBuffer(0), StaticMap(0), 
-		StaticBufferUpToDate(false), StaticMapUpToDate(false),numImages(0)
+		StaticBufferUpToDate(false), StaticMapUpToDate(false),numImages(0),lockIcon(0)
 {
 	setMouseTracking(true);
 	setAttribute(Qt::WA_OpaquePaintEvent);
 	setContextMenuPolicy(Qt::CustomContextMenu);
+	setFocusPolicy(Qt::ClickFocus);
 
 	ImageManager::instance()->setCacheDir(MerkaartorPreferences::instance()->getCacheDir());
 	ImageManager::instance()->setCacheMaxSize(MerkaartorPreferences::instance()->getCacheSize());
@@ -515,14 +517,24 @@ void MapView::wheelEvent(QWheelEvent* ev)
 
 void MapView::launch(Interaction* anInteraction)
 {
+	EditInteraction* EI = dynamic_cast<EditInteraction*>(theInteraction);
+	if (EI)
+		theSnapList = EI->snapList();
+	if (!theSnapList.size())
+		theSnapList = Main->properties()->selection().toList();
 	if (theInteraction)
 		delete theInteraction;
 	theInteraction = anInteraction;
-	if (theInteraction)
+	EI = dynamic_cast<EditInteraction*>(theInteraction);
+	if (theInteraction) {
 		setCursor(theInteraction->cursor());
+		if (EI)
+			EI->setSnap(theSnapList);
+	}
 	else {
-		setCursor(QCursor(Qt::ArrowCursor));
-		launch(new EditInteraction(this));
+		//setCursor(QCursor(Qt::ArrowCursor));
+		//launch(new EditInteraction(this));
+		Q_ASSERT(theInteraction);
 	}
 }
 
@@ -709,5 +721,61 @@ bool MapView::event(QEvent *event)
 		 }
 		return true;
 	} else
-		return QWidget::event(event);
+    if ( event->type() == QEvent::KeyPress ) {
+		QKeyEvent *ke = static_cast< QKeyEvent* >( event );
+		if ( ke->key() == Qt::Key_Tab ) {
+			setFocus();
+			ke->accept();
+
+			if (!isSelectionLocked())
+				lockSelection();
+			else {
+				FeatureSnapInteraction* intr = dynamic_cast<FeatureSnapInteraction*>(interaction());
+				if (intr)
+					intr->nextSnap();
+			}
+
+			return true;
+		} else
+		if ( ke->key() == Qt::Key_Backtab ) {
+			setFocus();
+			ke->accept();
+
+			if (!isSelectionLocked())
+				lockSelection();
+			else {
+				FeatureSnapInteraction* intr = dynamic_cast<FeatureSnapInteraction*>(interaction());
+				if (intr)
+					intr->nextSnap();
+			}
+
+			return true;
+		} 
+	} 
+
+	return QWidget::event(event);
  }
+
+bool MapView::isSelectionLocked()
+{
+	return SelectionLocked;
+}
+
+void MapView::lockSelection()
+{
+	if (!SelectionLocked && Main->properties()->selection().size()) {
+		lockIcon = new QLabel(this);
+		lockIcon->setPixmap(QPixmap(":/Icons/emblem-readonly.png"));
+		Main->statusBar()->addWidget(lockIcon);
+		SelectionLocked = true;
+	}
+}
+
+void MapView::unlockSelection()
+{
+	if (SelectionLocked) {
+		Main->statusBar()->removeWidget(lockIcon);
+		SAFE_DELETE(lockIcon);
+		SelectionLocked = false;
+	}
+}

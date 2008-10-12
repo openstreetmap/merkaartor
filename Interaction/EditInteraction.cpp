@@ -39,10 +39,6 @@ EditInteraction::~EditInteraction(void)
 
 void EditInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
 {
-	for (unsigned int i=0; i<view()->properties()->size(); ++i)
-		if (document()->exists(view()->properties()->selection(i)))
-			view()->properties()->selection(i)->drawFocus(thePainter, projection());
-
 #ifndef _MOBILE
 	if (Dragging)
 	{
@@ -55,29 +51,32 @@ void EditInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
 
 void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 {
-	if (ev->buttons() & Qt::LeftButton)
-	{
-		if (ev->modifiers()) {
-			if (ev->modifiers() & Qt::ControlModifier)
-			{
-				if (aLast)
-					view()->properties()->toggleSelection(aLast);
-			}
-			if (ev->modifiers() & Qt::ShiftModifier)
-			{
-				if (aLast)
-					view()->properties()->addSelection(aLast);
-			}
-		} else {
-			view()->properties()->setSelection(aLast);
-		}
-#ifndef _MOBILE
-		if (!aLast)
+	if (!view()->isSelectionLocked()) {
+		if (ev->buttons() & Qt::LeftButton)
 		{
-			EndDrag = StartDrag = projection().inverse(ev->pos());
-			Dragging = true;
-		}
+			if (ev->modifiers()) {
+				if (ev->modifiers() & Qt::ControlModifier)
+				{
+					if (aLast)
+						view()->properties()->toggleSelection(aLast);
+				}
+				if (ev->modifiers() & Qt::ShiftModifier)
+				{
+					if (aLast)
+						view()->properties()->addSelection(aLast);
+				}
+			} else {
+				StackSnap = SnapList;
+				view()->properties()->setSelection(aLast);
+			}
+#ifndef _MOBILE
+			if (!aLast)
+			{
+				EndDrag = StartDrag = projection().inverse(ev->pos());
+				Dragging = true;
+			}
 #endif
+		}
 		view()->properties()->checkMenuStatus();
 		view()->update();
 	}

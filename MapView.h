@@ -6,16 +6,17 @@
 #include <QtGui/QPixmap>
 #include <QtGui/QWidget>
 #include <QShortcut>
+#include <QLabel>
 
-class Interaction;
 class MainWindow;
+class MapFeature;
 class MapDocument;
 class PropertiesDock;
 class InfoDock;
 class MapAdapter;
 class Layer;
 class LayerManager;
-
+class Interaction;
 
 class MapView :	public QWidget
 {
@@ -48,6 +49,9 @@ class MapView :	public QWidget
 		//InfoDock* info();
 
         LayerManager*	layermanager;
+		bool isSelectionLocked();
+		void lockSelection();
+		void unlockSelection();
 
 		bool toXML(QDomElement xParent);
 		void fromXML(const QDomElement e);
@@ -70,6 +74,9 @@ class MapView :	public QWidget
 		bool StaticMapUpToDate;
 		QPoint thePanDelta, theLastDelta;
 		QRegion invalidRegion;
+		bool SelectionLocked;
+		QLabel* lockIcon;
+		QList<MapFeature*> theSnapList;
 
 		int numImages;
 		QString StatusMessage;
@@ -87,7 +94,7 @@ class MapView :	public QWidget
 
 	protected:
 		bool event(QEvent *event);
-	
+
 	private slots:
 		void imageRequested();
 		void imageReceived();

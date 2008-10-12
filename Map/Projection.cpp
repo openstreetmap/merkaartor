@@ -121,7 +121,7 @@ void Projection::setViewport(const CoordBox & TargetMap,
 	double LengthOfOneDegreeLon =
 		LengthOfOneDegreeLat * fabs(cos(intToRad(Center.lat())));
 	double Aspect = LengthOfOneDegreeLon / LengthOfOneDegreeLat;
-	ScaleLon = Screen.width() / (double)Viewport.lonDiff() * .9;
+	ScaleLon = Screen.width() / (double)Viewport.lonDiff();
 	ScaleLat = ScaleLon / Aspect;
 	if ((ScaleLat * Viewport.latDiff()) > Screen.height())
 	{

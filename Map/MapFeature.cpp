@@ -42,6 +42,7 @@ class MapFeaturePrivate
 				Time(QDateTime::currentDateTime())
 		{
 			initVersionNumber();
+			parentDashes << 1 << 5;
 		}
 		MapFeaturePrivate(const MapFeaturePrivate& other)
 			: Tags(other.Tags), TagsSize(other.TagsSize), LastActor(other.LastActor), theLayer(0),
@@ -51,6 +52,7 @@ class MapFeaturePrivate
 				Time(other.Time)
 		{
 			initVersionNumber();
+			parentDashes << 1 << 5;
 		}
 
 		void updatePainters(double PixelPerM);
@@ -73,6 +75,8 @@ class MapFeaturePrivate
 		QDateTime Time;
 		QString User;
 		int VersionNumber;
+		QVector<qreal> parentDashes;
+
 };
 
 void MapFeaturePrivate::initVersionNumber()
@@ -495,6 +499,11 @@ QString MapFeature::stripToOSMId(const QString& id)
 	if (f>0)
 		return id.right(id.length()-(f+1));
 	return id;
+}
+
+QVector<qreal> MapFeature::getParentDashes() const
+{
+	return p->parentDashes;
 }
 
 //Static

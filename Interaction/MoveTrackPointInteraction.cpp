@@ -34,19 +34,26 @@ QCursor MoveTrackPointInteraction::cursor() const
 
 void MoveTrackPointInteraction::snapMousePressEvent(QMouseEvent * event, MapFeature* aLast)
 {
+	MapFeature* sel = aLast;
+	if (view()->isSelectionLocked()) {
+		sel = view()->properties()->selection(0);
+		if (!sel)
+			sel = aLast;
+	}
 	clearNoSnap();
 	Moving.clear();
 	OriginalPosition.clear();
 	StartDragPosition = projection().inverse(event->pos());
-	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(aLast))
+	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(sel))
 	{
 		Moving.push_back(Pt);
 		StartDragPosition = Pt->position();
 	}
-	else if (Road* R = dynamic_cast<Road*>(aLast))
+	else if (Road* R = dynamic_cast<Road*>(sel)) {
 		for (unsigned int i=0; i<R->size(); ++i)
 			if (std::find(Moving.begin(),Moving.end(),R->get(i)) == Moving.end())
 				Moving.push_back(R->getNode(i));
+	}
 	for (unsigned int i=0; i<Moving.size(); ++i)
 	{
 		OriginalPosition.push_back(Moving[i]->position());
@@ -117,6 +124,3 @@ Coord MoveTrackPointInteraction::calculateNewPosition(QMouseEvent *event, MapFea
 	}
 	return projection().inverse(event->pos());
 }
-
-
-

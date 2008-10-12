@@ -198,12 +198,12 @@ bool TrackSegment::notEverythingDownloaded() const
 	return false;
 }
 
-void TrackSegment::drawFocus(QPainter &, const Projection &)
+void TrackSegment::drawFocus(QPainter &, const Projection &, bool)
 {
 	// Can't be selection
 }
 
-void TrackSegment::drawHover(QPainter &, const Projection &)
+void TrackSegment::drawHover(QPainter &, const Projection &, bool)
 {
 	// Can't be selection
 }

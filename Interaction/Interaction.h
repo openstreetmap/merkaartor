@@ -14,6 +14,7 @@ class QPainter;
 #include "MainWindow.h"
 #include "MapView.h"
 #include "InfoDock.h"
+#include "PropertiesDock.h"
 #include "Map/MapDocument.h"
 #include "Map/MapFeature.h"
 #include "Map/Road.h"
@@ -24,6 +25,7 @@ class QPainter;
 #include <QtGui/QApplication>
 #include <QtGui/QCursor>
 #include <QtGui/QMouseEvent>
+#include <QList>
 
 #include <algorithm>
 
@@ -72,6 +74,10 @@ class GenericFeatureSnapInteraction : public Interaction
 		virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
 		{
 			Interaction::paintEvent(anEvent, thePainter);
+
+			for (unsigned int i=0; i<view()->properties()->size(); ++i)
+				if (document()->exists(view()->properties()->selection(i)))
+					view()->properties()->selection(i)->drawFocus(thePainter, projection());
 
 #ifndef _MOBILE
 			if (LastSnap && document()->exists(LastSnap)) {
@@ -127,6 +133,39 @@ class GenericFeatureSnapInteraction : public Interaction
 		{
 			NoSnap.clear();
 		}
+		void clearSnap()
+		{
+			StackSnap.clear();
+		}
+		QList<MapFeature*> snapList()
+		{
+			return StackSnap;
+		}
+		void addSnap(MapFeature* aSnap)
+		{
+			StackSnap.append(aSnap);
+		}
+		void setSnap(QList<MapFeature*> aSnapList)
+		{
+			StackSnap = aSnapList;
+			curStackSnap = 0;
+		}
+		void nextSnap()
+		{
+			curStackSnap++;
+			if (curStackSnap > StackSnap.size() -1)
+				curStackSnap = 0;
+			view()->properties()->setSelection(StackSnap[curStackSnap]);
+			view()->update();
+		}
+		void previousSnap()
+		{
+			curStackSnap--;
+			if (curStackSnap < 0)
+				curStackSnap = StackSnap.size() -1;
+			view()->properties()->setSelection(StackSnap[curStackSnap]);
+			view()->update();
+		}
 		void setDontSelectPoints(bool b)
 		{
 			NoSelectPoints = b;
@@ -150,6 +189,7 @@ class GenericFeatureSnapInteraction : public Interaction
 			if (!SnapActive) return;
 			//QTime Start(QTime::currentTime());
 			CoordBox HotZone(projection().inverse(event->pos()-QPointF(5,5)),projection().inverse(event->pos()+QPointF(5,5)));
+			SnapList.clear();
 			double BestDistance = 5;
 			for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it)
 			{
@@ -165,6 +205,7 @@ class GenericFeatureSnapInteraction : public Interaction
 					if (Pt->boundingBox().disjunctFrom(HotZone))
 						continue;
 					double Distance = Pt->pixelDistance(event->pos(), 5.01, projection());
+					SnapList.push_back(Pt);
 					if (Distance < BestDistance)
 					{
 						BestDistance = Distance;
@@ -172,8 +213,10 @@ class GenericFeatureSnapInteraction : public Interaction
 					}
 				}
 			}
-			if (Prev != LastSnap)
+			if (Prev != LastSnap) {
+				curStackSnap = SnapList.indexOf(LastSnap);
 				view()->update();
+			}
 
 			if (M_PREFS->getMapTooltip()) {
 				if (LastSnap)
@@ -195,6 +238,11 @@ class GenericFeatureSnapInteraction : public Interaction
 		bool NoSelectPoints;
 		bool NoSelectWays;
 		bool NoSelectRoads;
+
+	protected:
+		QList<MapFeature*> StackSnap;
+		QList<MapFeature*> SnapList;
+		int curStackSnap;
 };
 
 typedef GenericFeatureSnapInteraction<MapFeature> FeatureSnapInteraction;

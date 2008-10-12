@@ -1,4 +1,7 @@
 v0.13
+	* ADD : "locked selection". Pressing "Tab" enters lock mode. In this mode, only the features around last click can be selected. Repeatedly press "Tab" to select them in cycle.
+	* ADD : when hovering/focussing a feature, its parents appear in dotted lines
+	* FIX : initial viewport is really the one from previous session
 	* FIX : Verify selection is in layer before accessing (closes #1250)
 	* FIX : After coming out of fullscreen, revert to previous state rather than showing all docks
 	* FIX : do not unselect newly created features

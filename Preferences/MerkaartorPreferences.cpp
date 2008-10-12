@@ -15,6 +15,7 @@
 #include <QtGui/QApplication>
 
 #include "MainWindow.h"
+#include "MapView.h"
 
 #define M_PARAM_IMPLEMENT_BOOL(Param, Category, Default) \
 	void MerkaartorPreferences::set##Param(bool theValue) \
@@ -567,28 +568,38 @@ void MerkaartorPreferences::restoreMainWindowState(MainWindow * mainWindow) cons
 	}
 }
 
-void MerkaartorPreferences::setInitialPosition(const CoordBox & cb)
+void MerkaartorPreferences::setInitialPosition(MapView* vw)
 {
 	QStringList ip;
-	ip.append(QString::number(intToAng(cb.bottomLeft().lat())));
-	ip.append(QString::number(intToAng(cb.bottomLeft().lon())));
-	ip.append(QString::number(intToAng(cb.topRight().lat())));
-	ip.append(QString::number(intToAng(cb.topRight().lon())));
+	CoordBox cb = vw->projection().viewport();
+	ip.append(QString::number(cb.bottomLeft().lat()));
+	ip.append(QString::number(cb.bottomLeft().lon()));
+	ip.append(QString::number(cb.topRight().lat()));
+	ip.append(QString::number(cb.topRight().lon()));
 
 	Sets->setValue("MainWindow/InitialPosition", ip);
+	Sets->setValue("MainWindow/ViewRect", vw->rect());
 }
 
-CoordBox MerkaartorPreferences::getInitialPosition()
+void MerkaartorPreferences::initialPosition(MapView* vw)
 {
-	if (Sets->contains("MainWindow/InitialPosition") == false)
-		return WORLD_COORDBOX;
+	if (!Sets->contains("MainWindow/InitialPosition")) {
+		vw->projection().setViewport(WORLD_COORDBOX, vw->rect());
+		return;
+	}
 
 	const QStringList & ip = Sets->value("MainWindow/InitialPosition").toStringList();
 
-	const Coord bottomLeft(angToInt(ip[0].toDouble()), angToInt(ip[1].toDouble()));
-	const Coord topRight(angToInt(ip[2].toDouble()),angToInt(ip[3].toDouble()));
+	const Coord bottomLeft(ip[0].toInt(), ip[1].toInt());
+	const Coord topRight(ip[2].toInt(),ip[3].toInt());
 
-	return CoordBox(bottomLeft, topRight);
+	if (!Sets->contains("MainWindow/ViewSize"))
+		vw->projection().setViewport(CoordBox(bottomLeft, topRight), vw->rect());
+	else {
+		QRect rt = Sets->value("MainWindow/ViewRect").toRect();
+		vw->projection().setViewport(CoordBox(bottomLeft, topRight), rt);
+	}
+
 }
 
 void MerkaartorPreferences::setProjectionType(ProjectionType theValue)
@@ -948,6 +959,21 @@ void MerkaartorPreferences::setRecentOpen(const QStringList & theValue)
 	Sets->setValue("recent/open", theValue);
 }
 
+void MerkaartorPreferences::addRecentOpen(const QString & theValue)
+{
+	QStringList RecentOpen = getRecentOpen();
+	int idx = RecentOpen.indexOf(theValue);
+	if (idx  >= 0) {
+		RecentOpen.move(idx, 0);
+	} else {
+		if (RecentOpen.size() == 4) 
+			RecentOpen.removeLast();
+
+		RecentOpen.insert(0, theValue);
+	}
+	setRecentOpen(RecentOpen);
+}
+
 QStringList MerkaartorPreferences::getRecentImport() const
 {
 	return Sets->value("recent/import").toStringList();
@@ -956,6 +982,21 @@ QStringList MerkaartorPreferences::getRecentImport() const
 void MerkaartorPreferences::setRecentImport(const QStringList & theValue)
 {
 	Sets->setValue("recent/import", theValue);
+}
+
+void MerkaartorPreferences::addRecentImport(const QString & theValue)
+{
+	QStringList RecentImport = getRecentImport();
+	int idx = RecentImport.indexOf(theValue);
+	if (idx  >= 0) {
+		RecentImport.move(idx, 0);
+	} else {		
+		if (RecentImport.size() == 4) 
+			RecentImport.removeLast();
+
+		RecentImport.insert(0, theValue);
+	}
+	setRecentImport(RecentImport);			
 }
 
 QStringList MerkaartorPreferences::getShortcuts() const
@@ -977,3 +1018,4 @@ M_PARAM_IMPLEMENT_BOOL(ResolveRelations, downloadosm, false)
 
 M_PARAM_IMPLEMENT_BOOL(MapTooltip, visual, false)
 M_PARAM_IMPLEMENT_BOOL(InfoOnHover, visual, true)
+M_PARAM_IMPLEMENT_BOOL(ShowParents, visual, true)

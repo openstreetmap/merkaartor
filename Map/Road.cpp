@@ -266,7 +266,7 @@ void Road::draw(QPainter& /* thePainter */, const Projection& )
 {
 }
 
-void Road::drawHover(QPainter& thePainter, const Projection& theProjection)
+void Road::drawHover(QPainter& thePainter, const Projection& theProjection, bool solid)
 {
 	// FIXME Selected route
 	if (!size())
@@ -279,19 +279,29 @@ void Road::drawHover(QPainter& thePainter, const Projection& theProjection)
 	thePainter.setFont(F);
 	QPen TP(MerkaartorPreferences::instance()->getHoverColor());
 	TP.setWidth(MerkaartorPreferences::instance()->getHoverWidth());
+	if (!solid) {
+		TP.setDashPattern(getParentDashes());
+	}
 	thePainter.setPen(TP);
 	QRegion clipRg = QRegion(thePainter.clipRegion().boundingRect().adjusted(-20, -20, 20, 20));
 	buildPath(theProjection, clipRg);
 	thePainter.drawPath(p->thePath);
-	TP.setWidth(MerkaartorPreferences::instance()->getHoverWidth()*3);
-	TP.setCapStyle(Qt::RoundCap);
-	thePainter.setPen(TP);
-	QPolygonF Pl;
-	buildPolygonFromRoad(this,theProjection,Pl);
-	thePainter.drawPoints(Pl);
+	if (solid) {
+		TP.setWidth(MerkaartorPreferences::instance()->getHoverWidth()*3);
+		TP.setCapStyle(Qt::RoundCap);
+		thePainter.setPen(TP);
+		QPolygonF Pl;
+		buildPolygonFromRoad(this,theProjection,Pl);
+		thePainter.drawPoints(Pl);
+
+		if (M_PREFS->getShowParents()) {
+			for (unsigned int i=0; i<sizeParents(); ++i)
+				getParent(i)->drawHover(thePainter, theProjection, false);
+		}
+	}
 }
 
-void Road::drawFocus(QPainter& thePainter, const Projection& theProjection)
+void Road::drawFocus(QPainter& thePainter, const Projection& theProjection, bool solid)
 {
 	// FIXME Selected route
 	if (!size())
@@ -304,16 +314,26 @@ void Road::drawFocus(QPainter& thePainter, const Projection& theProjection)
 	thePainter.setFont(F);
 	QPen TP(MerkaartorPreferences::instance()->getFocusColor());
 	TP.setWidth(MerkaartorPreferences::instance()->getFocusWidth());
+	if (!solid) {
+		TP.setDashPattern(getParentDashes());
+	}
 	thePainter.setPen(TP);
 	QRegion clipRg = QRegion(thePainter.clipRegion().boundingRect().adjusted(-20, -20, 20, 20));
 	buildPath(theProjection, clipRg);
 	thePainter.drawPath(p->thePath);
-	TP.setWidth(MerkaartorPreferences::instance()->getFocusWidth()*3);
-	TP.setCapStyle(Qt::RoundCap);
-	thePainter.setPen(TP);
-	QPolygonF Pl;
-	buildPolygonFromRoad(this,theProjection,Pl);
-	thePainter.drawPoints(Pl);
+	if (solid) {
+		TP.setWidth(MerkaartorPreferences::instance()->getFocusWidth()*3);
+		TP.setCapStyle(Qt::RoundCap);
+		thePainter.setPen(TP);
+		QPolygonF Pl;
+		buildPolygonFromRoad(this,theProjection,Pl);
+		thePainter.drawPoints(Pl);
+
+		if (M_PREFS->getShowParents()) {
+			for (unsigned int i=0; i<sizeParents(); ++i)
+				getParent(i)->drawFocus(thePainter, theProjection, false);
+		}
+	}
 }
 
 double Road::pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection) const

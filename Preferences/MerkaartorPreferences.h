@@ -17,7 +17,9 @@
 #include <QColor>
 
 #include "Map/Coord.h"
+
 class MainWindow;
+class MapView;
 
 //#define WORLD_COORDBOX CoordBox(Coord(1.3, -1.3), Coord(-1.3, 1.3))
 #define WORLD_COORDBOX CoordBox(Coord(INT_MAX/2, -INT_MAX/2), Coord(-INT_MAX/2, INT_MAX/2))
@@ -255,8 +257,8 @@ public:
 	void saveMainWindowState(const class MainWindow * mainWindow);
 	void restoreMainWindowState(class MainWindow * mainWindow) const;
 
-	void setInitialPosition(const CoordBox & coordBox);
-	CoordBox getInitialPosition();
+	void setInitialPosition(MapView* vw);
+	void initialPosition(MapView* vw);
 
 	bool getDrawTileBoundary();
 
@@ -296,9 +298,11 @@ public:
 	/* Recent */
 	void setRecentOpen(const QStringList & theValue);
 	QStringList getRecentOpen() const;
+	void addRecentOpen(const QString & theValue);
 
 	void setRecentImport(const QStringList & theValue);
 	QStringList getRecentImport() const;
+	void addRecentImport(const QString & theValue);
 
 	M_PARAM_DECLARE_BOOL(GpsSaveLog)
 	M_PARAM_DECLARE_BOOL(GpsMapCenter)
@@ -310,6 +314,7 @@ public:
 
 	M_PARAM_DECLARE_BOOL(MapTooltip)
 	M_PARAM_DECLARE_BOOL(InfoOnHover)
+	M_PARAM_DECLARE_BOOL(ShowParents)
 
 protected:
 	bool Use06Api;

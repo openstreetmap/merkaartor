@@ -122,7 +122,7 @@ void TrackPoint::draw(QPainter& thePainter, const Projection& theProjection )
 #endif // GEOIMAGE
 
 
-void TrackPoint::drawFocus(QPainter& thePainter, const Projection& theProjection)
+void TrackPoint::drawFocus(QPainter& thePainter, const Projection& theProjection, bool solid)
 {
 	thePainter.setPen(MerkaartorPreferences::instance()->getFocusColor());
 	QPointF P(theProjection.project(Position));
@@ -130,9 +130,14 @@ void TrackPoint::drawFocus(QPainter& thePainter, const Projection& theProjection
 	thePainter.drawRect(R);
 	R.adjust(-7, -7, 7, 7);
 	thePainter.drawEllipse(R);
+
+	if (M_PREFS->getShowParents() && solid) {
+		for (unsigned int i=0; i<sizeParents(); ++i)
+			getParent(i)->drawFocus(thePainter, theProjection, false);
+	}
 }
 
-void TrackPoint::drawHover(QPainter& thePainter, const Projection& theProjection)
+void TrackPoint::drawHover(QPainter& thePainter, const Projection& theProjection, bool solid)
 {
 	thePainter.setPen(MerkaartorPreferences::instance()->getHoverColor());
 	QPointF P(theProjection.project(Position));
@@ -140,6 +145,11 @@ void TrackPoint::drawHover(QPainter& thePainter, const Projection& theProjection
 	thePainter.drawRect(R);
 	R.adjust(-7, -7, 7, 7);
 	thePainter.drawEllipse(R);
+
+	if (M_PREFS->getShowParents() && solid) {
+		for (unsigned int i=0; i<sizeParents(); ++i)
+			getParent(i)->drawHover(thePainter, theProjection, false);
+	}
 }
 
 double TrackPoint::pixelDistance(const QPointF& Target, double, const Projection& theProjection) const

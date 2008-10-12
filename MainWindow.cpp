@@ -193,8 +193,7 @@ MainWindow::MainWindow(void)
 	viewStyleTouchupAction->setVisible(false);
 #endif
 
-	CoordBox initialPosition = MerkaartorPreferences::instance()->getInitialPosition();
-	theView->projection().setViewport(initialPosition, theView->rect());
+	MerkaartorPreferences::instance()->initialPosition(theView);
 
 	QList<QAction*> actions = findChildren<QAction*>();
 	for (int i=0; i<actions.size(); i++) {
@@ -407,7 +406,9 @@ void MainWindow::on_editUndoAction_triggered()
 
 void MainWindow::on_editPropertiesAction_triggered()
 {
-	//theProperties->setSelection(0);
+	if (theView->interaction() && dynamic_cast<EditInteraction*>(theView->interaction()))
+		theProperties->setSelection(0);
+	theView->unlockSelection();
 	invalidateView();
 	theView->launch(new EditInteraction(theView));
 }
@@ -600,18 +601,7 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 		{
 			foundImport = true;
 
-			QStringList RecentImport = M_PREFS->getRecentImport();
-			int idx = RecentImport.indexOf(fn);
-			if (idx  >= 0) {
-				RecentImport.move(idx, 0);
-			} else {		
-				if (RecentImport.size() == 4) 
-					RecentImport.removeLast();
-
-				RecentImport.insert(0, fn);
-			}
-			M_PREFS->setRecentImport(RecentImport);
-			
+			M_PREFS->addRecentImport(fn);
 			updateRecentImportMenu();
 		}
 		else
@@ -1299,18 +1289,7 @@ void MainWindow::loadDocument(QString fn)
 	}
 	progress.reset();
 
-	QStringList RecentOpen = M_PREFS->getRecentOpen();
-	int idx = RecentOpen.indexOf(fn);
-	if (idx  >= 0) {
-		RecentOpen.move(idx, 0);
-	} else {
-		if (RecentOpen.size() == 4) 
-			RecentOpen.removeLast();
-
-		RecentOpen.insert(0, fn);
-	}
-	M_PREFS->setRecentOpen(RecentOpen);
-	
+	M_PREFS->addRecentOpen(fn);
 	updateRecentOpenMenu();
 }
 
@@ -1522,10 +1501,8 @@ void MainWindow::closeEvent(QCloseEvent * event)
 	}
 
 	MerkaartorPreferences::instance()->saveMainWindowState( this );
-
-	CoordBox currentPosition = view()->projection().viewport();
-	MerkaartorPreferences::instance()->setInitialPosition( currentPosition );
-
+	MerkaartorPreferences::instance()->setInitialPosition(theView);
+//4.3237,50.8753,4.3378,50.8838
 	QMainWindow::closeEvent(event);
 }
 
