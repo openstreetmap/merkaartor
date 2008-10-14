@@ -30,7 +30,7 @@
 
 MapView::MapView(MainWindow* aMain) :
 	Main(aMain), theDocument(0), theInteraction(0), StaticBuffer(0), StaticMap(0), 
-		StaticBufferUpToDate(false), StaticMapUpToDate(false),numImages(0),lockIcon(0)
+		StaticBufferUpToDate(false), StaticMapUpToDate(false),lockIcon(0),numImages(0)
 {
 	setMouseTracking(true);
 	setAttribute(Qt::WA_OpaquePaintEvent);
