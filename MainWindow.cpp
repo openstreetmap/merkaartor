@@ -483,7 +483,13 @@ void MainWindow::on_fileImportAction_triggered()
 	view()->setUpdatesEnabled(false);
 	theLayers->setUpdatesEnabled(false);
 
-	importFiles(theDocument, fileNames);
+	QStringList importedFiles;
+	importFiles(theDocument, fileNames, &importedFiles);
+
+	foreach (QString currentFileName, importedFiles)
+		M_PREFS->addRecentImport(currentFileName);
+
+	updateRecentImportMenu();
 
 	view()->setUpdatesEnabled(true);
 	theLayers->setUpdatesEnabled(true);
@@ -500,7 +506,7 @@ static bool mayDiscardUnsavedChanges(QWidget* aWidget)
 								 QMessageBox::Discard | QMessageBox::Cancel, QMessageBox::Cancel) == QMessageBox::Discard;
 }
 
-bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & fileNames)
+bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & fileNames, QStringList * importedFileNames )
 {
 	QApplication::setOverrideCursor(Qt::BusyCursor);
 
@@ -601,8 +607,8 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 		{
 			foundImport = true;
 
-			M_PREFS->addRecentImport(fn);
-			updateRecentImportMenu();
+			if (importedFileNames)
+				importedFileNames->append(fn);
 		}
 		else
 		if (!importAborted)
@@ -662,7 +668,13 @@ void MainWindow::loadFiles(const QStringList & fileList)
 	if (foundDocument == false)
 		newDoc = new MapDocument(theLayers);
 
-	bool foundImport = importFiles(newDoc, fileNames);
+	QStringList openedFiles;
+	bool foundImport = importFiles(newDoc, fileNames, &openedFiles);
+
+	foreach (QString currentFileName, openedFiles)
+		M_PREFS->addRecentOpen(currentFileName);
+
+	updateRecentOpenMenu();
 
 	theProperties->setSelection(0);
 
@@ -1159,18 +1171,7 @@ void MainWindow::on_fileSaveAsAction_triggered()
 		saveDocument();
 	}
 
-	QStringList RecentOpen = M_PREFS->getRecentOpen();
-	int idx = RecentOpen.indexOf(fileName);
-	if (idx  >= 0) {
-		RecentOpen.move(idx, 0);
-	} else {
-		if (RecentOpen.size() == 4) 
-			RecentOpen.removeLast();
-
-		RecentOpen.insert(0, fileName);
-	}
-	M_PREFS->setRecentOpen(RecentOpen);
-	
+	M_PREFS->addRecentOpen(fileName);
 	updateRecentOpenMenu();
 }
 

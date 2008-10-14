@@ -159,7 +159,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 
 	public:
 		void invalidateView(bool UpdateDock = true);
-		bool importFiles(MapDocument * mapDocument, const QStringList & filesNames);
+		bool importFiles(MapDocument * mapDocument, const QStringList & filesNames, QStringList * importedFileNames = NULL);
 		void loadFiles(const QStringList & fileNames);
 		void loadDocument(QString fn);
 		void saveDocument();
