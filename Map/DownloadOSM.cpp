@@ -45,8 +45,9 @@ Downloader::Downloader(const QString& aWeb, const QString& aUser, const QString&
 		Port = Web.right(Web.length()-(p+1)).toUInt();
 		Web = Web.left(p);
 	}
+
 	Request.setHost(Web,Port);
-	Request.setUser(User,Password);
+	Request.setUser(User.toUtf8(), Password.toUtf8());
 //	connect(&Request,SIGNAL(done(bool)), this,SLOT(allDone(bool)));
 	connect(&Request,SIGNAL(requestFinished(int, bool)),this,SLOT(on_requestFinished(int, bool)));
 	connect(&Request,SIGNAL(dataReadProgress(int, int)), this,SLOT(progress(int, int)));
