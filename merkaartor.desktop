@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Encoding=UTF-8
+Name=Merkaartor
+GenericName=Open Street Map Editor
+GenericName[tr]=Açık Sokak Haritası Düzenleyicisi
+Icon=merkaartor
+Exec=merkaartor
+Terminal=false
+StartupNotify=false
+Categories=Education;Science;Geography;Network;Graphics;Qt;
+
