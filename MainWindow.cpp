@@ -584,7 +584,7 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 					 "   think that nodes you created from GE are yours, they are not!\n"
 					 "   They are still a derivative work from GE, and, as such, cannot be used in OSM.\n"
 					 "\n"
-					 " - If you downloaded it from the Internet, chances are that there is a copyright ont it.\n"
+					 " - If you downloaded it from the Internet, chances are that there is a copyright on it.\n"
 					 "   Please be absolutely sure that using those data in OSM is permitted by the author, or\n"
 					 "   that the data is public domain.\n"
 					 "\n"
