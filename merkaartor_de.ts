@@ -808,7 +808,8 @@ Die Servernachricht ist &apos;%2&apos;</translation>
         <location filename="Sync/DirtyList.cpp" line="387"/>
         <source>
 API message is &apos;%1&apos;</source>
-        <translation>API-Meldung ist &apos;%1&apos;</translation>
+        <translation>
+API-Meldung ist &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -1036,13 +1037,15 @@ Wollen Sie diese zur Löschung markieren?</translation>
         <location filename="Map/DownloadOSM.cpp" line="424"/>
         <source>Unexpected http status code (%1)
 Server message is &apos;%2&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Unerwarteter HTTP-Status (%1)
+Servernachricht ist &apos;%2&apos;</translation>
     </message>
     <message>
         <location filename="Map/DownloadOSM.cpp" line="426"/>
         <source>
 API message is &apos;%1&apos;</source>
-        <translation>API-Meldung ist &apos;%1&apos;</translation>
+        <translation>
+API-Meldung ist &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -1223,32 +1226,32 @@ Soll es trotzdem benutzt werden?</translation>
     <message>
         <location filename="GotoDialog.cpp" line="96"/>
         <source>Invalid OSM url</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültige OSM-URL</translation>
     </message>
     <message>
         <location filename="GotoDialog.cpp" line="97"/>
         <source>The specified url is invalid!</source>
-        <translation type="unfinished"></translation>
+        <translation>The angegebene URL ist ungültig!</translation>
     </message>
     <message>
         <location filename="GotoDialog.cpp" line="126"/>
         <source>Invalid Coordinates format</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültiges Koordinatenformat</translation>
     </message>
     <message>
         <location filename="GotoDialog.cpp" line="118"/>
         <source>Coordinates must be: &apos;&lt;left lon&gt;, &lt;bottom lat&gt;, &lt;right lon&gt;, &lt;top lat&gt;&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Koordinatenformat: &apos;&lt;linke Länge&gt;, &lt;untere Breite&gt;, &lt;rechte Länge&gt;, &lt;obere Breite&gt;&apos;</translation>
     </message>
     <message>
         <location filename="GotoDialog.cpp" line="127"/>
         <source>Coordinates must be: &apos;&lt;center lat&gt;, &lt;center lon&gt;, &lt;span lat&gt;, &lt;span lon&gt;&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Koordinatenformat: &apos;&lt;Zentrumsbreite&gt;, &lt;Zentrumslänge&gt;,&lt;Breitenbereich&gt;,&lt;Längenbereich&gt;&apos;</translation>
     </message>
     <message>
         <location filename="GotoDialog.ui" line="13"/>
         <source>Go To</source>
-        <translation type="unfinished"></translation>
+        <translation>Gehe zu</translation>
     </message>
     <message>
         <location filename="GotoDialog.ui" line="27"/>
@@ -1258,7 +1261,7 @@ Soll es trotzdem benutzt werden?</translation>
     <message>
         <location filename="GotoDialog.ui" line="60"/>
         <source>OSM permalink</source>
-        <translation type="unfinished"></translation>
+        <translation>OSM-Permanentlink</translation>
     </message>
     <message>
         <location filename="GotoDialog.ui" line="87"/>
@@ -1278,12 +1281,12 @@ Soll es trotzdem benutzt werden?</translation>
     <message>
         <location filename="GotoDialog.ui" line="147"/>
         <source>OSM API Url</source>
-        <translation type="unfinished"></translation>
+        <translation>OSM API-URL</translation>
     </message>
     <message>
         <location filename="GotoDialog.ui" line="174"/>
         <source>OSM XAPI url</source>
-        <translation type="unfinished"></translation>
+        <translation>OSM XAPI-URL</translation>
     </message>
 </context>
 <context>
