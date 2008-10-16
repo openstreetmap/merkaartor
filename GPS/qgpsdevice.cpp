@@ -194,12 +194,14 @@ bool QGPSDevice::parseGGA(const char *ggaString)
     //cur_latitude = lat;
 
 	if (!tokens[3].isEmpty())
+	{
 		if (tokens[3].at(0) == 'N')
 			setLatCardinal(CardinalNorth);
 		else if (tokens[3].at(0) == 'S')
 			setLatCardinal(CardinalSouth);
 		else
 			setLatCardinal(CardinalNone);
+	}
 
 
 	double lon = tokens[4].left(3).toDouble();
@@ -210,13 +212,14 @@ bool QGPSDevice::parseGGA(const char *ggaString)
     //cur_longitude = lon;
 
 	if (!tokens[5].isEmpty())
+	{
 		if (tokens[5].at(0) == 'E')
 			setLatCardinal(CardinalEast);
 		else if (tokens[5].at(0) == 'W')
 			setLatCardinal(CardinalWest);
 		else
 			setLatCardinal(CardinalNone);
-
+	}
 
 	int fix = tokens[6].toInt();
 	setFixQuality(fix);
@@ -253,13 +256,14 @@ bool QGPSDevice::parseGLL(const char *ggaString)
     //cur_latitude = lat;
 
 	if (!tokens[2].isEmpty())
+	{
 		if (tokens[2].at(0) == 'N')
 			setLatCardinal(CardinalNorth);
 		else if (tokens[2].at(0) == 'S')
 			setLatCardinal(CardinalSouth);
 		else
 			setLatCardinal(CardinalNone);
-
+	}
 
 	double lon = tokens[3].left(3).toDouble();
 	double lonmin = tokens[3].mid(3).toDouble();
@@ -269,12 +273,14 @@ bool QGPSDevice::parseGLL(const char *ggaString)
     //cur_longitude = lon;
 
 	if (!tokens[4].isEmpty())
+	{
 		if (tokens[4].at(0) == 'E')
 			setLatCardinal(CardinalEast);
 		else if (tokens[4].at(0) == 'W')
 			setLatCardinal(CardinalWest);
 		else
 			setLatCardinal(CardinalNone);
+	}
 
 
  	if (tokens[6] == "A")
@@ -385,9 +391,9 @@ bool QGPSDevice::parseGSA(const char *gsaString)
 
 bool QGPSDevice::parseRMC(const char *rmcString)
 {
-    mutex->lock();
+	mutex->lock();
 
-    // Fix time
+	// Fix time
 
 	QString line(rmcString);
 	if (line.count('$') > 1)
@@ -401,74 +407,79 @@ bool QGPSDevice::parseRMC(const char *rmcString)
 	if (cur_datetime.date().year() < 1970)
 		cur_datetime = cur_datetime.addYears(100);
 
-    // Fix status
+	// Fix status
 
- 	if (tokens[2] == "A")
-    {
-        setFixStatus(StatusActive);
-    }
-    else
-    {
-        setFixStatus(StatusVoid);
-    }
+	if (tokens[2] == "A")
+	{
+		setFixStatus(StatusActive);
+	}
+	else
+	{
+		setFixStatus(StatusVoid);
+	}
 
-    // Latitude
+	// Latitude
 
 	double lat = tokens[3].left(2).toDouble();
 	double latmin = tokens[3].mid(2).toDouble();
 	lat += latmin / 60.0;
 	if (tokens[4] != "N")
 		lat = -lat;
-    cur_latitude = lat;
+	cur_latitude = lat;
 
 	if (!tokens[4].isEmpty())
+	{
 		if (tokens[4].at(0) == 'N')
 			setLatCardinal(CardinalNorth);
 		else if (tokens[4].at(0) == 'S')
 			setLatCardinal(CardinalSouth);
 		else
 			setLatCardinal(CardinalNone);
-
+	}
 
 	double lon = tokens[5].left(3).toDouble();
 	double lonmin = tokens[5].mid(3).toDouble();
 	lon += lonmin / 60.0;
- 	if (tokens[6] != "E")
+	if (tokens[6] != "E")
 		lon = -lon;
-    cur_longitude = lon;
+	cur_longitude = lon;
 
 	if (!tokens[6].isEmpty())
+	{
 		if (tokens[6].at(0) == 'E')
 			setLatCardinal(CardinalEast);
 		else if (tokens[6].at(0) == 'W')
 			setLatCardinal(CardinalWest);
 		else
 			setLatCardinal(CardinalNone);
+	}
 
-    // Ground speed in km/h
+	// Ground speed in km/h
 
 	double speed = QString::number(tokens[7].toDouble() * 1.852, 'f', 1).toDouble();
 	setSpeed(speed);
 
-    // Heading
+	// Heading
 
- 	double heading = tokens[8].toDouble();
+	double heading = tokens[8].toDouble();
 	setHeading(heading);
 
-    // Magnetic variation
+	// Magnetic variation
 
- 	double magvar = tokens[10].toDouble();
+	double magvar = tokens[10].toDouble();
 	setVariation(magvar);
 
 	if (!tokens[11].isEmpty())
+	{
 		if (tokens[11].at(0) == 'E')
 			setVarCardinal(CardinalEast);
 		else if (tokens[11].at(0) == 'W')
 			setVarCardinal(CardinalWest);
 		else
 			setVarCardinal(CardinalNone);
+	}
 
-    mutex->unlock();
+	mutex->unlock();
 
 	return true;
 } // parseRMC()

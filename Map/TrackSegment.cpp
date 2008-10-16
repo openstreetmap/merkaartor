@@ -243,12 +243,18 @@ void TrackSegment::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* a
 			else
 			{
 				for (unsigned int j=0; j<Alternatives.size(); ++j)
+				{
 					if (i < p->Points.size())
+					{
 						if (p->Points[i+j] != Alternatives[j])
+						{
 							if ((i+j) == 0)
 								theList->add(new TrackSegmentAddTrackPointCommand(this, Alternatives[j], i+j,Alternatives[j]->layer()));
 							else if (p->Points[i+j-1] != Alternatives[j])
 								theList->add(new TrackSegmentAddTrackPointCommand(this, Alternatives[j], i+j,Alternatives[j]->layer()));
+						}
+					}
+				}
 				theList->add(new TrackSegmentRemoveTrackPointCommand(this, (TrackPoint*)aFeature,aFeature->layer()));
 			}
 		}

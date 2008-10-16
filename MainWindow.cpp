@@ -438,37 +438,37 @@ static void changeCurrentDirToFile(const QString& s)
 
 #ifndef GEOIMAGE
 #define FILTER_OPEN_SUPPORTED \
-	tr("Supported formats (*.mdc *.gpx *.osm *.osb *.ngt *.nmea *.nma *.kml)\n" \
-	"Merkaartor document (*.mdc)\n" \
-	"GPS Exchange format (*.gpx)\n" \
-	"OpenStreetMap format (*.osm)\n" \
-	"OpenStreetMap binary format (*.osb)\n" \
-	"Noni GPSPlot format (*.ngt)\n" \
-	"NMEA GPS log format (*.nmea *.nma)\n" \
-	"KML file (*.kml)\n" \
-	"All Files (*)")
+	tr("Supported formats")+" (*.mdc *.gpx *.osm *.osb *.ngt *.nmea *.nma *.kml)\n" \
+	+tr("Merkaartor document (*.mdc)\n") \
+	+tr("GPS Exchange format (*.gpx)\n") \
+	+tr("OpenStreetMap format (*.osm)\n") \
+	+tr("OpenStreetMap binary format (*.osb)\n") \
+	+tr("Noni GPSPlot format (*.ngt)\n") \
+	+tr("NMEA GPS log format (*.nmea *.nma)\n") \
+	+tr("KML file (*.kml)\n") \
+	+tr("All Files (*)")
 #else
 #define FILTER_OPEN_SUPPORTED \
-	tr("Supported formats (*.mdc *.gpx *.osm *.osb *.ngt *.nmea *.nma *.kml *.jpg)\n" \
-	"Merkaartor document (*.mdc)\n" \
-	"GPS Exchange format (*.gpx)\n" \
-	"OpenStreetMap format (*.osm)\n" \
-	"OpenStreetMap binary format (*.osb)\n" \
-	"Noni GPSPlot format (*.ngt)\n" \
-	"NMEA GPS log format (*.nmea *.nma)\n" \
-	"KML file (*.kml)\n" \
-	"Geotagged images (*.jpg)\n" \
-	"All Files (*)")
+	tr("Supported formats")+" (*.mdc *.gpx *.osm *.osb *.ngt *.nmea *.nma *.kml *.jpg)\n" \
+	+tr("Merkaartor document (*.mdc)\n") \
+	+tr("GPS Exchange format (*.gpx)\n") \
+	+tr("OpenStreetMap format (*.osm)\n") \
+	+tr("OpenStreetMap binary format (*.osb)\n") \
+	+tr("Noni GPSPlot format (*.ngt)\n") \
+	+tr("NMEA GPS log format (*.nmea *.nma)\n") \
+	+tr("KML file (*.kml)\n") \
+	+tr("Geotagged images (*.jpg)\n") \
+	+tr("All Files (*)")
 #endif
 #define FILTER_IMPORT_SUPPORTED \
-	tr("Supported formats (*.gpx *.osm *.osb *.ngt *.nmea *.nma *.kml)\n" \
-	"GPS Exchange format (*.gpx)\n" \
-	"OpenStreetMap format (*.osm)\n" \
-	"OpenStreetMap binary format (*.osb)\n" \
-	"Noni GPSPlot format (*.ngt)\n" \
-	"NMEA GPS log format (*.nmea *.nma)\n" \
-	"KML file (*.kml)\n" \
-	"All Files (*)")
+	tr("Supported formats")+" (*.gpx *.osm *.osb *.ngt *.nmea *.nma *.kml)\n" \
+	+tr("GPS Exchange format (*.gpx)\n") \
+	+tr("OpenStreetMap format (*.osm)\n") \
+	+tr("OpenStreetMap binary format (*.osb)\n") \
+	+tr("Noni GPSPlot format (*.ngt)\n") \
+	+tr("NMEA GPS log format (*.nmea *.nma)\n") \
+	+tr("KML file (*.kml)\n") \
+	+tr("All Files (*)")
 
 void MainWindow::on_fileImportAction_triggered()
 {

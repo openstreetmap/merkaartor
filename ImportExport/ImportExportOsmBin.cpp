@@ -195,7 +195,7 @@ void ImportExportOsmBin::addTileIndex(MapFeature* F)
 					false)
 				tile = -rg;
 
-			if (TrackPoint* N = CAST_NODE(F)) {
+			if (/*TrackPoint* N = */CAST_NODE(F)) {
 				if (!theTileNodesIndex[tile].contains(F))
 					theTileNodesIndex[tile].push_back(F);
 			}
@@ -206,7 +206,7 @@ void ImportExportOsmBin::addTileIndex(MapFeature* F)
 				if (!theTileRoadsIndex[tile].contains(F))
 					theTileRoadsIndex[tile].push_back(F);
 			}
-			if (Relation* L = CAST_RELATION(F)) {
+			if (/*Relation* L = */CAST_RELATION(F)) {
 				//for (unsigned int k=0; k<L->size(); ++k) {
 				//	if (TrackPoint* N2 = CAST_NODE(L->get(k)))
 				//		if (!theTileNodesIndex[j*NUM_TILES+i].contains(N2))
@@ -708,9 +708,9 @@ MapFeature* ImportExportOsmBin::getFeature(OsbRegion* osr, MapDocument* d, OsbMa
 	//	Device->seek(cur_pos);
 	//	return F;
 	//}
-#ifndef NDEBUG
-	quint32 pos = osr->device->pos(); //1097543
-#endif
+//#ifndef NDEBUG
+//	quint32 pos = osr->device->pos(); //1097543
+//#endif
 	switch (c) {
 		case 'N':
 			F = TrackPoint::fromBinary(d, theLayer, ds, c, id);
