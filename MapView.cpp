@@ -532,9 +532,9 @@ void MapView::launch(Interaction* anInteraction)
 			EI->setSnap(theSnapList);
 	}
 	else {
-		//setCursor(QCursor(Qt::ArrowCursor));
-		//launch(new EditInteraction(this));
-		//Q_ASSERT(theInteraction);
+		setCursor(QCursor(Qt::ArrowCursor));
+		launch(new EditInteraction(this));
+		Q_ASSERT(theInteraction);
 	}
 }
 
