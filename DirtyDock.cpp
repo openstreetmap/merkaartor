@@ -62,7 +62,7 @@ void DirtyDock::updateList()
 			break;
 
 		default:
-			ui.label->setText(tr("There are <b>%1</b> objects in the dirty layer").arg(dirtyObjects));
+			ui.label->setText(tr("There are <b>%n</b> objects in the dirty layer", "", dirtyObjects));
 			break;
 	}
 
