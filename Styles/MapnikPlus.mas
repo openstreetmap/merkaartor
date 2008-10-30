@@ -124,9 +124,9 @@
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
- foregroundColor="#0000fffc" foregroundScale="1" foregroundOffset="0"
- foregroundDashDown="2" foregroundDashUp="2"
- drawTrafficDirectionMarks="yes" labelColor="#000000ff" labelScale="1.2" labelOffset="3"
+ foregroundColor="#0000fffc" foregroundScale="0.3" foregroundOffset="0"
+ foregroundDashDown="1" foregroundDashUp="1.8"
+ drawTrafficDirectionMarks="yes" labelColor="#000000ff" labelScale="1.1" labelOffset="3"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[highway] is cycleway"/>
 </painter>
