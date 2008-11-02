@@ -39,7 +39,7 @@ unsigned int TrackPoint::size() const
 
 unsigned int TrackPoint::find(MapFeature* ) const
 {
-	return NULL;
+	return 0;
 }
 
 MapFeature* TrackPoint::get(unsigned int )

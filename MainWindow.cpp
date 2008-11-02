@@ -1704,7 +1704,13 @@ void MainWindow::recentImportTriggered(QAction* anAction)
 	theLayers->setUpdatesEnabled(false);
 
 	QStringList fileNames(anAction->text());
-	importFiles(theDocument, fileNames);
+	QStringList importedFiles;
+	importFiles(theDocument, fileNames, &importedFiles);
+
+	foreach (QString currentFileName, importedFiles)
+		M_PREFS->addRecentImport(currentFileName);
+
+	updateRecentImportMenu();
 
 	view()->setUpdatesEnabled(true);
 	theLayers->setUpdatesEnabled(true);
@@ -1967,3 +1973,42 @@ void MainWindow::on_gpsPauseAction_triggered()
 		}
 	}
 }
+
+void MainWindow::on_toolTemplatesSaveAction_triggered()
+{
+	QString f = QFileDialog::getSaveFileName(this, tr("Save Tag Templates"), "", tr("Merkaartor tag templates (*.mat)"));
+	if (!f.isNull()) {
+		if (!f.endsWith(".mat"))
+			f.append(".mat");
+		theProperties->saveTemplates(f);
+	}
+}
+
+void MainWindow::on_toolTemplatesMergeAction_triggered()
+{
+	QString fileName = QFileDialog::getOpenFileName(
+					this,
+					tr("Open Tag Templates"),
+					"", "Merkaartor tag templates (*.mat)" );
+
+	if (fileName.isEmpty())
+		return;
+
+	theProperties->mergeTemplates(fileName);
+	theProperties->resetValues();
+}
+
+void MainWindow::on_toolTemplatesLoadAction_triggered()
+{
+	QString fileName = QFileDialog::getOpenFileName(
+					this,
+					tr("Open Tag Templates"),
+					"", "Merkaartor tag templates (*.mat)" );
+
+	if (fileName.isEmpty())
+		return;
+
+	theProperties->loadTemplates(fileName);
+	theProperties->resetValues();
+}
+

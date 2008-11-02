@@ -180,7 +180,16 @@
      <addaction name="mapStyleSaveAction" />
      <addaction name="mapStyleLoadAction" />
     </widget>
+    <widget class="QMenu" name="designerMenu" >
+     <property name="title" >
+      <string>Tag templates</string>
+     </property>
+     <addaction name="toolTemplatesSaveAction" />
+     <addaction name="toolTemplatesMergeAction" />
+     <addaction name="toolTemplatesLoadAction" />
+    </widget>
     <addaction name="menuStyle_2" />
+    <addaction name="designerMenu" />
     <addaction name="separator" />
     <addaction name="toolsPreferencesAction" />
     <addaction name="toolsShortcutsAction" />
@@ -597,17 +606,17 @@
   </action>
   <action name="editMapStyleAction" >
    <property name="text" >
-    <string>&amp;Edit</string>
+    <string>&amp;Edit...</string>
    </property>
   </action>
   <action name="mapStyleSaveAction" >
    <property name="text" >
-    <string>&amp;Save</string>
+    <string>&amp;Save...</string>
    </property>
   </action>
   <action name="mapStyleLoadAction" >
    <property name="text" >
-    <string>&amp;Load</string>
+    <string>&amp;Load...</string>
    </property>
   </action>
   <action name="createCurvedRoadAction" >
@@ -1128,6 +1137,21 @@
   <action name="toolsShortcutsAction" >
    <property name="text" >
     <string>&amp;Shortcut Editor...</string>
+   </property>
+  </action>
+  <action name="toolTemplatesLoadAction" >
+   <property name="text" >
+    <string>&amp;Load...</string>
+   </property>
+  </action>
+  <action name="toolTemplatesMergeAction" >
+   <property name="text" >
+    <string>&amp;Merge...</string>
+   </property>
+  </action>
+  <action name="toolTemplatesSaveAction" >
+   <property name="text" >
+    <string>&amp;Save...</string>
    </property>
   </action>
  </widget>

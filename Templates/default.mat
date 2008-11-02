@@ -1,0 +1,361 @@
+<?xml version="1.0"?>
+<templates>
+ <widgets>
+  <widget tag="name" type="edit" >
+   <description locale="en" >Name</description>
+  </widget>
+  <widget tag="highway" type="combo" >
+   <link src="http://wiki.openstreetmap.org/index.php/Key:highway" />
+   <description locale="en" >Highway type</description>
+   <description locale="fr" >Type de route</description>
+   <value tag="motorway" >
+    <link src="http://wiki.openstreetmap.org/index.php/Tag:highway=motorway" />
+    <description locale="en" >Motorway</description>
+   </value>
+   <value tag="motorway_link" >
+    <description locale="en" >Ramp to motorway</description>
+   </value>
+   <value tag="trunk" >
+    <description locale="en" >Trunk road</description>
+   </value>
+   <value tag="trunk_link" >
+    <description locale="en" >Ramp to trunk road</description>
+   </value>
+   <value tag="primary" >
+    <description locale="en" >Primary road</description>
+   </value>
+   <value tag="primary_link" >
+    <description locale="en" >Ramp to primary road</description>
+   </value>
+   <value tag="secondary" >
+    <description locale="en" >Secondary road</description>
+   </value>
+   <value tag="tertiary" >
+    <description locale="en" >Tertiary road</description>
+   </value>
+   <value tag="unclassified" >
+    <description locale="en" >Unclassified road</description>
+   </value>
+   <value tag="residential" >
+    <description locale="en" >Residential road</description>
+   </value>
+   <value tag="service" >
+    <description locale="en" >Service road</description>
+   </value>
+   <value tag="track" >
+    <description locale="en" >Track road</description>
+   </value>
+   <value tag="living_street" >
+    <description locale="en" >Pedestrian priority road</description>
+   </value>
+   <value tag="pedestrian" >
+    <description locale="en" >Pedestrian only road</description>
+   </value>
+   <value tag="footway" >
+    <description locale="en" >Footway</description>
+   </value>
+   <value tag="cycleway" >
+    <description locale="en" >Cycleway</description>
+   </value>
+   <value tag="bridleway" >
+    <description locale="en" >Bridleway</description>
+   </value>
+   <value tag="steps" >
+    <description locale="en" >Steps</description>
+   </value>
+   <value tag="bus_guideway" >
+    <description locale="en" >Bus guideway (not a bus way)</description>
+   </value>
+   <value tag="unsurfaced" >
+    <description locale="en" >Unsurfaced road (old tag)</description>
+   </value>
+  </widget>
+  <widget tag="landuse" type="combo" >
+   <link src="http://wiki.openstreetmap.org/index.php/Key:landuse" />
+   <description locale="en" >Landuse</description>
+   <selector expr="Type is Area" />
+   <value tag="allotments" >
+    <description locale="en" >Allotments</description>
+   </value>
+   <value tag="basin" >
+    <description locale="en" >Basin</description>
+   </value>
+   <value tag="brownfield" >
+    <description locale="en" >Brownfield</description>
+   </value>
+   <value tag="cemetery" >
+    <description locale="en" >Cemetery</description>
+   </value>
+   <value tag="commercial" >
+    <description locale="en" >Commercial zone</description>
+   </value>
+   <value tag="construction" >
+    <description locale="en" >Construction zone</description>
+   </value>
+   <value tag="farm" >
+    <description locale="en" >Farm</description>
+   </value>
+   <value tag="forest" >
+    <description locale="en" >Forest</description>
+   </value>
+   <value tag="greenfield" >
+    <description locale="en" >Greenfield</description>
+   </value>
+   <value tag="industrial" >
+    <description locale="en" >Industrial zone</description>
+   </value>
+   <value tag="landfill" >
+    <description locale="en" >Landfill</description>
+   </value>
+   <value tag="military" >
+    <description locale="en" >Military</description>
+   </value>
+   <value tag="recreation_ground" >
+    <description locale="en" >Recreation ground</description>
+   </value>
+   <value tag="reservoir" >
+    <description locale="en" >Reservoir (water)</description>
+   </value>
+   <value tag="residential" >
+    <description locale="en" >Residential zone</description>
+   </value>
+   <value tag="retail" >
+    <description locale="en" >Retail zone</description>
+   </value>
+   <value tag="quarry" >
+    <description locale="en" >Surface mineral extraction</description>
+   </value>
+   <value tag="village_green" >
+    <description locale="en" >Village green</description>
+   </value>
+  </widget>
+  <widget tag="oneway" type="yesno" >
+   <link src="http://wiki.openstreetmap.org/index.php/Key:oneway" />
+   <description locale="en" >Oneway</description>
+   <description locale="fr" >Sens unique</description>
+  </widget>
+  <widget tag="amenity" type="combo" >
+   <description locale="en" >Amenity</description>
+   <value tag="arts_centre" >
+    <description locale="en" >Arts centre</description>
+   </value>
+   <value tag="atm" >
+    <description locale="en" >ATM or cash point</description>
+   </value>
+   <value tag="bank" >
+    <description locale="en" >Bank</description>
+   </value>
+   <value tag="bank;atm" >
+    <description locale="en" >Bank with atm</description>
+   </value>
+   <value tag="biergarten" >
+    <description locale="en" >Beer garden</description>
+   </value>
+   <value tag="bicycle_parking" >
+    <description locale="en" >Parking for bicycles</description>
+   </value>
+   <value tag="bicycle_rental" >
+    <description locale="en" >Bicycle Rental</description>
+   </value>
+   <value tag="bureau_de_change" >
+    <description locale="en" >Bureau de change</description>
+   </value>
+   <value tag="bus_station" >
+    <description locale="en" >Bus station</description>
+   </value>
+   <value tag="cafe" >
+    <description locale="en" >Cafe</description>
+   </value>
+   <value tag="car_rental" >
+    <description locale="en" >Car Rental</description>
+   </value>
+   <value tag="car_sharing" >
+    <description locale="en" >Car Sharing</description>
+   </value>
+   <value tag="cinema" >
+    <description locale="en" >Cinema</description>
+   </value>
+   <value tag="college" >
+    <description locale="en" >College</description>
+   </value>
+   <value tag="courthouse" >
+    <description locale="en" >Court house</description>
+   </value>
+   <value tag="crematorium" >
+    <description locale="en" >Crematorium</description>
+   </value>
+   <value tag="drinking_water" >
+    <description locale="en" >Source of drinking water</description>
+   </value>
+   <value tag="Fast food" >
+    <description locale="en" >Fast food</description>
+   </value>
+   <value tag="fire_station" >
+    <description locale="en" >Fire Station</description>
+   </value>
+   <value tag="fountain" >
+    <description locale="en" >Fountain</description>
+   </value>
+   <value tag="fuel" >
+    <description locale="en" >Fuel</description>
+   </value>
+   <value tag="grave_yard" >
+    <description locale="en" >Small place of burial</description>
+   </value>
+   <value tag="hospital" >
+    <description locale="en" >Hospital</description>
+   </value>
+   <value tag="library" >
+    <description locale="en" >Library</description>
+   </value>
+   <value tag="nightclub" >
+    <description locale="en" >Nightclub</description>
+   </value>
+   <value tag="parking" >
+    <description locale="en" >Parking</description>
+   </value>
+   <value tag="pharmacy" >
+    <description locale="en" >Pharmacy</description>
+   </value>
+   <value tag="place_of_worship" >
+    <description locale="en" >Place of Worship</description>
+   </value>
+   <value tag="police" >
+    <description locale="en" >Police Station</description>
+   </value>
+   <value tag="post_box" >
+    <description locale="en" >Post Box</description>
+   </value>
+   <value tag="post_office" >
+    <description locale="en" >Post Office</description>
+   </value>
+   <value tag="prison" >
+    <description locale="en" >Prison</description>
+   </value>
+   <value tag="pub" >
+    <description locale="en" >Pub</description>
+   </value>
+   <value tag="public_building" >
+    <description locale="en" >Public building</description>
+   </value>
+   <value tag="telephone" >
+    <description locale="en" >Public Telephone</description>
+   </value>
+   <value tag="recycling" >
+    <description locale="en" >Recycling Facilities</description>
+   </value>
+   <value tag="restaurant" >
+    <description locale="en" >Restaurant</description>
+   </value>
+   <value tag="school" >
+    <description locale="en" >School</description>
+   </value>
+   <value tag="taxi" >
+    <description locale="en" >Taxi</description>
+   </value>
+   <value tag="theatre" >
+    <description locale="en" >Theatre or opera house</description>
+   </value>
+   <value tag="toilets" >
+    <description locale="en" >Toilets</description>
+   </value>
+   <value tag="townhall" >
+    <description locale="en" >Town hall</description>
+   </value>
+   <value tag="university" >
+    <description locale="en" >University</description>
+   </value>
+   <value tag="waste_disposal" >
+    <description locale="en" >Waste Disposal</description>
+   </value>
+  </widget>
+  <widget tag="religion" type="combo" >
+   <link src="http://wiki.openstreetmap.org/index.php/Key:religion" />
+   <description locale="en" >Religion</description>
+   <value tag="buddhist" >
+    <description locale="en" >Buddhist</description>
+   </value>
+   <value tag="christian" >
+    <description locale="en" >Christian</description>
+   </value>
+   <value tag="jewish" >
+    <description locale="en" >Jewish</description>
+   </value>
+   <value tag="muslim" >
+    <description locale="en" >Muslim</description>
+   </value>
+  </widget>
+  <widget tag="denomination" type="combo" id="denomination_christian" >
+   <link src="http://wiki.openstreetmap.org/index.php/Key:religion" />
+   <description locale="en" >Denomination</description>
+   <selector expr="[religion] is christian" />
+   <value tag="anglican" />
+   <value tag="baptist" />
+   <value tag="catholic" />
+   <value tag="evangelical" />
+   <value tag="greek_orthodox" />
+   <value tag="jehovahs_witness" />
+   <value tag="lutheran" />
+   <value tag="methodist" />
+   <value tag="mormon" />
+   <value tag="new_apostolic" />
+   <value tag="orthodox" />
+   <value tag="old_catholic" />
+   <value tag="pentecostal" />
+   <value tag="presbyterian" />
+   <value tag="protestant" />
+   <value tag="quaker" />
+   <value tag="roman_catholic" />
+   <value tag="russian_orthodox" />
+   <value tag="seventh_day_adventist" />
+  </widget>
+ </widgets>
+ <template>
+  <selector expr="[amenity] is place_of_worship" />
+  <description locale="en" >Place of Worship</description>
+  <widget tag="amenity" type="constant" >
+   <description locale="en" >Amenity</description>
+   <value tag="place_of_worship" >
+    <description locale="en" >Place of Worship</description>
+   </value>
+  </widget>
+  <widgetref id="religion" />
+  <widgetref id="denomination_christian" />
+ </template>
+ <template>
+  <selector expr="[Default] Type is Road" />
+  <description locale="en" >Generic Ways</description>
+  <widgetref id="name" />
+  <widgetref id="highway" />
+  <widgetref id="landuse" />
+  <widgetref id="oneway" />
+ </template>
+ <template>
+  <selector expr="[Default] Type is TrackPoint" />
+  <description locale="en" >Generic Nodes</description>
+  <widgetref id="amenity" />
+ </template>
+ <template>
+  <description locale="en" >Catholic chrurch</description>
+  <widget tag="amenity" type="constant" >
+   <description locale="en" >Amenity</description>
+   <value tag="place_of_worship" >
+    <description locale="en" >Place of Worship</description>
+   </value>
+  </widget>
+  <widget tag="religion" type="constant" >
+   <link src="http://wiki.openstreetmap.org/index.php/Key:religion" />
+   <description locale="en" >Religion</description>
+   <value tag="christian" >
+    <description locale="en" >Christian</description>
+   </value>
+  </widget>
+  <widget tag="denomination" type="constant" >
+   <link src="http://wiki.openstreetmap.org/index.php/Key:denomination" />
+   <description locale="en" >Denomination</description>
+   <value tag="catholic" >
+    <description locale="en" >Catholic</description>
+   </value>
+  </widget>
+ </template>
+</templates>

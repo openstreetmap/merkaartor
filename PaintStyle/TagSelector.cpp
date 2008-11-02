@@ -1,6 +1,7 @@
 #include "TagSelector.h"
 
 #include "Map/MapFeature.h"
+#include "Map/Road.h"
 
 void skipWhite(const QString& Expression, int& idx)
 {
@@ -354,7 +355,15 @@ TagSelector* TagSelectorTypeIs::copy() const
 
 TagSelectorMatchResult TagSelectorTypeIs::matches(const MapFeature* F) const
 {
-	return (F->getClass() == Type) ? TagSelect_Match : TagSelect_NoMatch;
+	if (F->getClass() == Type) 
+		return TagSelect_Match;
+	else
+		if (Type.toLower() == "area")
+			if (Road* R = dynamic_cast<Road*>((MapFeature*)F))
+				if (R->isClosed())
+					return TagSelect_Match;
+
+	return TagSelect_NoMatch;
 }
 
 QString TagSelectorTypeIs::asExpression(bool) const
@@ -494,6 +503,8 @@ TagSelector* TagSelectorNot::copy() const
 
 TagSelectorMatchResult TagSelectorNot::matches(const MapFeature* F) const
 {
+	if (!Term)
+		return TagSelect_NoMatch;
 	return (Term->matches(F) == TagSelect_Match) ? TagSelect_NoMatch : TagSelect_Match;
 }
 

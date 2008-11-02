@@ -11,11 +11,11 @@
 #include "Map/Coord.h"
 #include "Map/MapDocument.h"
 #include "Map/MapFeature.h"
-#include "Map/PreDefinedTags.h"
 #include "Map/Relation.h"
 #include "Map/Road.h"
 #include "Map/RoadManipulations.h"
 #include "Map/TrackPoint.h"
+#include "TagTemplate/TagTemplate.h"
 
 #ifdef GEOIMAGE
 #include "GeoImageDock.h"
@@ -27,11 +27,12 @@
 #include <QtGui/QListWidget>
 #include <QtGui/QTableView>
 #include <QClipboard>
+#include <QMessageBox>
 
 #include <algorithm>
 
 PropertiesDock::PropertiesDock(MainWindow* aParent)
-: MDockAncestor(aParent), Main(aParent), CurrentUi(0), Selection(0), NowShowing(NoUiShowing)
+: MDockAncestor(aParent), Main(aParent), CurrentUi(0), Selection(0), theTemplates(0), NowShowing(NoUiShowing)
 {
 	setMinimumSize(220,100);
 	switchToNoUi();
@@ -55,11 +56,14 @@ PropertiesDock::PropertiesDock(MainWindow* aParent)
 	connect(centerAction, SIGNAL(triggered()), this, SLOT(on_centerAction_triggered()));
 	centerZoomAction = new QAction(tr("Center && Zoom map"), this);
 	connect(centerZoomAction, SIGNAL(triggered()), this, SLOT(on_centerZoomAction_triggered()));
+
+	loadTemplates();
 }
 
 PropertiesDock::~PropertiesDock(void)
 {
 	delete theModel;
+	delete theTemplates;
 }
 
 static bool isChildOfSingleRoad(MapFeature *mapFeature)
@@ -267,11 +271,11 @@ void PropertiesDock::switchUi()
 	else if (FullSelection.size() == 1)
 	{
 		if (dynamic_cast<TrackPoint*>(FullSelection[0]))
-			switchToTrackPointUi();
+			switchToTrackPointUi(FullSelection[0]);
 		else if (dynamic_cast<Road*>(FullSelection[0]))
-			switchToRoadUi();
+			switchToRoadUi(FullSelection[0]);
 		else if (dynamic_cast<Relation*>(FullSelection[0]))
-			switchToRelationUi();
+			switchToRelationUi(FullSelection[0]);
 		else
 			switchToNoUi();
 	}
@@ -291,7 +295,7 @@ void PropertiesDock::switchToMultiUi()
 	MultiUi.lbStatus->setText(tr("Selected items"));
 	setWidget(NewUi);
 	if (CurrentUi)
-		delete CurrentUi;
+		CurrentUi->deleteLater();
 	CurrentUi = NewUi;
 	connect(MultiUi.RemoveTagButton,SIGNAL(clicked()),this, SLOT(on_RemoveTagButton_clicked()));
 	connect(MultiUi.SelectionList,SIGNAL(itemSelectionChanged()),this,SLOT(on_SelectionList_itemSelectionChanged()));
@@ -300,62 +304,56 @@ void PropertiesDock::switchToMultiUi()
 	setWindowTitle(tr("Properties - Multiple elements"));
 }
 
-void PropertiesDock::switchToTrackPointUi()
+void PropertiesDock::switchToTrackPointUi(MapFeature* F)
 {
-	if (NowShowing == TrackPointUiShowing) return;
 	NowShowing = TrackPointUiShowing;
 	QWidget* NewUi = new QWidget(this);
 	TrackPointUi.setupUi(NewUi);
-	fillAmenities(TrackPointUi.Amenity);
+	if (theTemplates)
+		TrackPointUi.variableLayout->addWidget(theTemplates->getWidget(F));
 	TrackPointUi.TagView->verticalHeader()->hide();
 	setWidget(NewUi);
 	if (CurrentUi)
-		delete CurrentUi;
+		CurrentUi->deleteLater();
 	CurrentUi = NewUi;
 	connect(TrackPointUi.Longitude,SIGNAL(editingFinished()),this, SLOT(on_TrackPointLon_editingFinished()));
 	connect(TrackPointUi.Latitude,SIGNAL(editingFinished()),this, SLOT(on_TrackPointLat_editingFinished()));
 	connect(TrackPointUi.RemoveTagButton,SIGNAL(clicked()),this, SLOT(on_RemoveTagButton_clicked()));
-	connect(TrackPointUi.Amenity,SIGNAL(activated(int)),this,SLOT(on_Amenity_activated(int)));
 	setWindowTitle(tr("Properties - Trackpoint"));
 }
 
-
-void PropertiesDock::switchToRelationUi()
+void PropertiesDock::switchToRoadUi(MapFeature* F)
 {
-	if (NowShowing == RelationUiShowing) return;
-	NowShowing = RelationUiShowing;
-	QWidget* NewUi = new QWidget(this);
-	RelationUi.setupUi(NewUi);
-	fillLandUse(RelationUi.LandUse);
-	RelationUi.TagView->verticalHeader()->hide();
-	setWidget(NewUi);
-	if (CurrentUi)
-		delete CurrentUi;
-	CurrentUi = NewUi;
-	connect(RelationUi.RemoveTagButton,SIGNAL(clicked()),this, SLOT(on_RemoveTagButton_clicked()));
-	connect(RelationUi.LandUse,SIGNAL(activated(int)), this, SLOT(on_LandUse_activated(int)));
-	setWindowTitle(tr("Properties - Relation"));
-}
-
-void PropertiesDock::switchToRoadUi()
-{
-	if (NowShowing == RoadUiShowing) return;
 	NowShowing = RoadUiShowing;
 	QWidget* NewUi = new QWidget(this);
 	RoadUi.setupUi(NewUi);
-	fillHighway(RoadUi.Highway);
-	fillLandUse(RoadUi.LandUse);
+	if (theTemplates)
+		RoadUi.variableLayout->addWidget(theTemplates->getWidget(F));
 	RoadUi.TagView->verticalHeader()->hide();
 	setWidget(NewUi);
 	if (CurrentUi)
-		delete CurrentUi;
+		CurrentUi->deleteLater();
 	CurrentUi = NewUi;
-	connect(RoadUi.Name,SIGNAL(editingFinished()),this, SLOT(on_RoadName_editingFinished()));
-	connect(RoadUi.TrafficDirection,SIGNAL(activated(int)), this, SLOT(on_TrafficDirection_activated(int)));
-	connect(RoadUi.Highway,SIGNAL(activated(int)), this, SLOT(on_Highway_activated(int)));
-	connect(RoadUi.LandUse,SIGNAL(activated(int)), this, SLOT(on_LandUse_activated(int)));
+	//connect(RoadUi.Name,SIGNAL(editingFinished()),this, SLOT(on_RoadName_editingFinished()));
 	connect(RoadUi.RemoveTagButton,SIGNAL(clicked()),this, SLOT(on_RemoveTagButton_clicked()));
 	setWindowTitle(tr("Properties - Road"));
+}
+
+void PropertiesDock::switchToRelationUi(MapFeature* F)
+{
+	//if (NowShowing == RelationUiShowing) return;
+	NowShowing = RelationUiShowing;
+	QWidget* NewUi = new QWidget(this);
+	RelationUi.setupUi(NewUi);
+	//fillLandUse(RelationUi.LandUse);
+	RelationUi.TagView->verticalHeader()->hide();
+	setWidget(NewUi);
+	if (CurrentUi)
+		CurrentUi->deleteLater();
+	CurrentUi = NewUi;
+	connect(RelationUi.RemoveTagButton,SIGNAL(clicked()),this, SLOT(on_RemoveTagButton_clicked()));
+	//connect(RelationUi.LandUse,SIGNAL(activated(int)), this, SLOT(on_LandUse_activated(int)));
+	setWindowTitle(tr("Properties - Relation"));
 }
 
 void PropertiesDock::switchToNoUi()
@@ -365,7 +363,7 @@ void PropertiesDock::switchToNoUi()
 	QWidget* NewUi = new QWidget(this);
 	setWidget(NewUi);
 	if (CurrentUi)
-		delete CurrentUi;
+		CurrentUi->deleteLater();
 	CurrentUi = NewUi;
 	setWindowTitle(tr("Properties"));
 }
@@ -382,14 +380,19 @@ void PropertiesDock::resetValues()
 	if (FullSelection.size() == 1)
 	{
 		Main->info()->setHtml(FullSelection[0]->toHtml());
+
 		if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(FullSelection[0]))
 		{
 			TrackPointUi.Id->setText(Pt->id());
 			TrackPointUi.Latitude->setText(QString::number(intToAng(Pt->position().lat()),'g',8));
 			TrackPointUi.Longitude->setText(QString::number(intToAng(Pt->position().lon()),'g',8));
 			TrackPointUi.TagView->setModel(theModel);
-                        TrackPointUi.TagView->setItemDelegate(delegate);
-			resetTagComboBox(TrackPointUi.Amenity,Pt,"amenity");
+			TrackPointUi.TagView->setItemDelegate(delegate);
+
+			QWidget* w = TrackPointUi.variableLayout->takeAt(0)->widget();
+			w->deleteLater();
+			TrackPointUi.variableLayout->addWidget(theTemplates->getWidget(Pt));
+
 			CurrentTagView = TrackPointUi.TagView;
  
  			#ifdef GEOIMAGE
@@ -399,23 +402,26 @@ void PropertiesDock::resetValues()
 		else if (Road* R = dynamic_cast<Road*>(FullSelection[0]))
 		{
 			RoadUi.Id->setText(R->id());
-			RoadUi.Name->setText(R->tagValue("name",""));
-			RoadUi.TrafficDirection->setCurrentIndex(trafficDirection(R));
+			//RoadUi.Name->setText(R->tagValue("name",""));
 			RoadUi.TagView->setModel(theModel);
-                        RoadUi.TagView->setItemDelegate(delegate);
-                        resetTagComboBox(RoadUi.Highway,R,"highway");
-			resetTagComboBox(RoadUi.LandUse,R,"landuse");
+			RoadUi.TagView->setItemDelegate(delegate);
+
+			QWidget* w = RoadUi.variableLayout->takeAt(0)->widget();
+			w->deleteLater();
+			RoadUi.variableLayout->addWidget(theTemplates->getWidget(R));
+
 			CurrentTagView = RoadUi.TagView;
 		}
 		else if (Relation* R = dynamic_cast<Relation*>(FullSelection[0]))
 		{
 			RelationUi.MembersView->setModel(R->referenceMemberModel(Main));
 			RelationUi.TagView->setModel(theModel);
-                        RelationUi.TagView->setItemDelegate(delegate);
-                        resetTagComboBox(RelationUi.LandUse,R,"landuse");
+			RelationUi.TagView->setItemDelegate(delegate);
 			CurrentTagView     = RelationUi.TagView;
 			CurrentMembersView = RelationUi.MembersView;
 		}
+
+		theTemplates->apply(FullSelection[0]);
 	}
 	else if (FullSelection.size() > 1)
 	{
@@ -475,73 +481,46 @@ void PropertiesDock::on_TrackPointLon_editingFinished()
 	}
 }
 
-void PropertiesDock::on_RoadName_editingFinished()
-{
-	Road* R = CAST_WAY(selection(0));
+//void PropertiesDock::on_RoadName_editingFinished()
+//{
+//	Road* R = CAST_WAY(selection(0));
+//
+//	if (R && RoadUi.Name->text() != R->tagValue("name", ""))
+//	{
+//		if (RoadUi.Name->text().isEmpty())
+//			Main->document()->addHistory(
+//				new ClearTagCommand(selection(0),"name",Main->document()->getDirtyOrOriginLayer(R->layer())));
+//		else {
+//			CommandList* theList  = new CommandList(MainWindow::tr("Set Tag 'name' to '%1' on %2").arg(RoadUi.Name->text()).arg(R->description()), selection(0));
+//			if (!R->isDirty() && !R->hasOSMId() && R->isUploadable()) {
+//				bool userAdded = !R->id().startsWith("conflict_");
+//				theList->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),R,userAdded));
+//			}
+//			theList->add(new SetTagCommand(R,"name",RoadUi.Name->text(),Main->document()->getDirtyOrOriginLayer(R->layer())));
+//			Main->document()->addHistory(theList);
+//		}
+//		theModel->setFeature(Selection);
+//	}
+//}
 
-	if (R && RoadUi.Name->text() != R->tagValue("name", ""))
-	{
-		if (RoadUi.Name->text().isEmpty())
-			Main->document()->addHistory(
-				new ClearTagCommand(selection(0),"name",Main->document()->getDirtyOrOriginLayer(R->layer())));
-		else {
-			CommandList* theList  = new CommandList(MainWindow::tr("Set Tag 'name' to '%1' on %2").arg(RoadUi.Name->text()).arg(R->description()), selection(0));
-			if (!R->isDirty() && !R->hasOSMId() && R->isUploadable()) {
-				bool userAdded = !R->id().startsWith("conflict_");
-				theList->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),R,userAdded));
-			}
-			theList->add(new SetTagCommand(R,"name",RoadUi.Name->text(),Main->document()->getDirtyOrOriginLayer(R->layer())));
-			Main->document()->addHistory(theList);
-		}
-		theModel->setFeature(Selection);
-	}
-}
-
-void PropertiesDock::on_TrafficDirection_activated(int idx)
+void PropertiesDock::on_tag_changed(QString k, QString v)
 {
-	Road* R = dynamic_cast<Road*>(selection(0));
-	if (R && (idx != trafficDirection(R)) )
-	{
-		switch (idx)
-		{
-			case MapFeature::OneWay:
-				Main->document()->addHistory(new SetTagCommand(R,"oneway","yes",Main->document()->getDirtyOrOriginLayer(R->layer()))); break;
-			case MapFeature::BothWays:
-				Main->document()->addHistory(new SetTagCommand(R,"oneway","no",Main->document()->getDirtyOrOriginLayer(R->layer()))); break;
-			case MapFeature::OtherWay:
-				Main->document()->addHistory(new SetTagCommand(R,"oneway","-1",Main->document()->getDirtyOrOriginLayer(R->layer()))); break;
-			default:
-				Main->document()->addHistory(new ClearTagCommand(R,"oneway",Main->document()->getDirtyOrOriginLayer(R->layer()))); break;
-		}
+	MapFeature* F = FullSelection[0];
+	if (F->tagValue(k, "__NULL__") != v) {
+		Main->document()->addHistory(new SetTagCommand(F,k,v,Main->document()->getDirtyOrOriginLayer(F->layer())));
 		Main->invalidateView();
+
+		resetValues();
 	}
 }
 
-void PropertiesDock::on_Highway_activated(int idx)
+void PropertiesDock::on_tag_cleared(QString k)
 {
-	if (Road* R = dynamic_cast<Road*>(selection(0)))
-	{
-		tagComboBoxActivated(RoadUi.Highway,idx,R,"highway",Main->document());
-		Main->invalidateView();
-	}
-}
-
-void PropertiesDock::on_Amenity_activated(int idx)
-{
-	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(selection(0)))
-	{
-		tagComboBoxActivated(TrackPointUi.Amenity,idx,Pt, "amenity",Main->document());
-		Main->invalidateView();
-	}
-}
-
-void PropertiesDock::on_LandUse_activated(int idx)
-{
-	if (Road* R = dynamic_cast<Road*>(selection(0)))
-		tagComboBoxActivated(RoadUi.LandUse,idx,R,"landuse",Main->document());
-	else if (Relation* Rel = dynamic_cast<Relation*>(selection(0)))
-		tagComboBoxActivated(RelationUi.LandUse,idx,Rel,"landuse",Main->document());
+	MapFeature* F = FullSelection[0];
+	Main->document()->addHistory(new ClearTagCommand(F,k,Main->document()->getDirtyOrOriginLayer(F->layer())));
 	Main->invalidateView();
+
+	resetValues();
 }
 
 void PropertiesDock::on_RemoveTagButton_clicked()
@@ -629,4 +608,112 @@ void PropertiesDock::on_centerZoomAction_triggered()
 	Main->view()->projection().setViewport(cb, Main->view()->rect());
 	Main->setUpdatesEnabled(true);
 	Main->invalidateView(false);
+}
+
+bool PropertiesDock::loadTemplates(const QString& filename)
+{
+	SAFE_DELETE(theTemplates);
+
+	QFile File;
+	if (!filename.isEmpty())
+		File.setFileName(filename);
+	else
+		File.setFileName(M_PREFS->getDefaultTemplate());
+
+	if (!File.open(QIODevice::ReadOnly)) {
+		QMessageBox::warning(Main,"Template read error", "Error reading template file");
+		return false;
+	}
+
+	QDomDocument DomDoc;
+	QString ErrorStr;
+	int ErrorLine;
+	int ErrorColumn;
+
+	if (!DomDoc.setContent(&File, true, &ErrorStr, &ErrorLine,&ErrorColumn))
+	{
+		File.close();
+		QMessageBox::warning(Main,"Parse error",
+			QString("Parse error at line %1, column %2:\n%3")
+                                  .arg(ErrorLine)
+                                  .arg(ErrorColumn)
+                                  .arg(ErrorStr));
+		return false;
+	}
+
+	QDomElement root = DomDoc.documentElement();
+	theTemplates = TagTemplates::fromXml(root);
+	if (theTemplates) {
+		connect(theTemplates, SIGNAL(tagChanged(QString, QString)), this, SLOT(on_tag_changed(QString, QString)));
+		connect(theTemplates, SIGNAL(tagCleared(QString)), this, SLOT(on_tag_cleared(QString)));
+		connect(theTemplates, SIGNAL(templateChanged(TagTemplate*)), this, SLOT(on_template_changed(TagTemplate*)));
+	} else {
+		QMessageBox::warning(Main,"Template read error", "Error parsing template file");
+		return false;
+	}
+
+	return true;
+}
+
+bool PropertiesDock::mergeTemplates(const QString& filename)
+{
+	QFile File;
+	if (!filename.isEmpty())
+		File.setFileName(filename);
+	else
+		return false;
+
+	if (!File.open(QIODevice::ReadOnly)) {
+		QMessageBox::warning(Main,"Template read error", "Error reading template file");
+		return false;
+	}
+
+	QDomDocument DomDoc;
+	QString ErrorStr;
+	int ErrorLine;
+	int ErrorColumn;
+
+	if (!DomDoc.setContent(&File, true, &ErrorStr, &ErrorLine,&ErrorColumn))
+	{
+		File.close();
+		QMessageBox::warning(Main,"Parse error",
+			QString("Parse error at line %1, column %2:\n%3")
+								  .arg(ErrorLine)
+								  .arg(ErrorColumn)
+								  .arg(ErrorStr));
+		return false;
+	}
+
+	QDomElement root = DomDoc.documentElement();
+	if (!theTemplates->mergeXml(root)) {
+		QMessageBox::warning(Main,"Template read error", "Error parsing template file");
+		return false;
+	}
+
+	return true;
+}
+
+bool PropertiesDock::saveTemplates(const QString& filename)
+{
+	QDomDocument theXmlDoc;
+	theXmlDoc.appendChild(theXmlDoc.createProcessingInstruction("xml", "version=\"1.0\""));
+
+	if (!theTemplates->toXML(theXmlDoc)) {
+		QMessageBox::warning(Main,"Tag templates write error", "Unable to generate XML document");
+		return false;
+	}
+
+	QFile File(filename);
+	if (!File.open(QIODevice::WriteOnly)) {
+		QMessageBox::warning(Main,"Tag templates write error", "Error opening template file for writing");
+		return false;
+	}
+	File.write(theXmlDoc.toString().toUtf8());
+
+	return true;
+}
+
+void PropertiesDock::on_template_changed(TagTemplate* aNewTemplate)
+{
+	resetValues();
 }

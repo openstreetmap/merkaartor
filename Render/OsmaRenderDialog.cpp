@@ -34,8 +34,15 @@
 	#include "qgdal.h"
 #endif
 
-void xsltCallback (void * /*ctx*/, const char * /*msg*/, ...)
+void xsltCallback (void * /*ctx*/, const char * msg, ...)
 {
+    char buf[1024];
+    va_list ap;
+    va_start( ap, msg );
+    vsnprintf( buf, 1024, msg, ap );
+	qDebug("%s", buf);
+    va_end( ap );
+
 	QCoreApplication::processEvents();
 }
 
@@ -214,6 +221,8 @@ void OsmaRenderDialog::render()
 	int i=-1;
 	params[++i] = "osmfile";
 	params[++i] = (const char *) value;
+	params[++i] = "symbolsDir";
+	params[++i] = (const char *) "xx";
 	if (cbShowGrid->checkState() != Qt::PartiallyChecked) {
 		params[++i] = "showGrid";
 		params[++i] = (const char *) (cbShowGrid->isChecked() ? "'yes'" : "'no'");

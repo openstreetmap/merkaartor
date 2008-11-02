@@ -30,7 +30,6 @@ HEADERS += \
 ./Map/MapLayer.h \
 ./Map/MapFeature.h \
 ./Map/Painting.h \
-./Map/PreDefinedTags.h \
 ./Map/Projection.h \
 ./Map/Relation.h \
 ./Map/Road.h \
@@ -82,7 +81,6 @@ SOURCES += \
 ./Map/MapLayer.cpp \
 ./Map/MapFeature.cpp \
 ./Map/Painting.cpp \
-./Map/PreDefinedTags.cpp \
 ./Map/Projection.cpp \
 ./Map/Relation.cpp \
 ./Map/Road.cpp \
@@ -132,13 +130,13 @@ FORMS += \
 ./AboutDialog.ui \
 ./DownloadMapDialog.ui \
 ./MainWindow.ui \
-./RoadProperties.ui \
+./MinimumRoadProperties.ui \
 ./Sync/SyncListDialog.ui \
-./TrackPointProperties.ui \
+./MinimumTrackPointProperties.ui \
 ./UploadMapDialog.ui \
 ./GotoDialog.ui \
 ./MultiProperties.ui \
-./RelationProperties.ui \
+./MinimumRelationProperties.ui \
 ./Interaction/CreateDoubleWayDock.ui \
 ./Interaction/CreateRoundaboutDock.ui \
 ./PaintStyle/PaintStyleEditor.ui \

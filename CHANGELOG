@@ -1,4 +1,7 @@
 v0.13
+	* ADD : Tag Templates (closes #1031)
+	* ADD : "Area" type to tag selector (matches closed roads); Use as "Type is Area".
+	* ADD : context menu to the slippy map to reset viewport to default (as a side effect, disable right mouse click for zoomout)
 	* ADD : "locked selection". Pressing "Tab" enters lock mode. In this mode, only the features around last click can be selected. Repeatedly press "Tab" to select them in cycle.
 	* ADD : when hovering/focussing a feature, its parents appear in dotted lines
 	* FIX : initial viewport is really the one from previous session

@@ -481,37 +481,6 @@ QString MerkaartorPreferences::getLastSearchValue() const
 
 /* Visuals */
 
-QString MerkaartorPreferences::getCustomStyle() const
-{
-	return Sets->value("style/Custom","").toString();
-}
-
-void MerkaartorPreferences::setCustomStyle(const QString& S)
-{
-	Sets->setValue("style/Custom",S);
-}
-
-QString MerkaartorPreferences::getDefaultStyle() const
-{
-	return Sets->value("style/Default",":/Styles/Classic.mas").toString();
-}
-
-void MerkaartorPreferences::setDefaultStyle(const QString& S)
-{
-	Sets->setValue("style/Default",S);
-}
-
-
-void MerkaartorPreferences::setDisableStyleForTracks(bool theValue)
-{
-	Sets->setValue("style/DisableStyleForTracks", theValue);
-}
-
-bool MerkaartorPreferences::getDisableStyleForTracks() const
-{
-	return Sets->value("style/DisableStyleForTracks", true).toBool();
-}
-
 	int MerkaartorPreferences::getZoomInPerc() const
 {
 	return Sets->value("zoom/zoomIn", "133").toInt();
@@ -1008,6 +977,15 @@ void MerkaartorPreferences::setShortcuts(const QStringList & theValue)
 {
 	Sets->setValue("Tools/shortcuts", theValue);
 }
+
+/* Styles */
+M_PARAM_IMPLEMENT_STRING(DefaultStyle, style, ":/Styles/Classic.mas")
+M_PARAM_IMPLEMENT_STRING(CustomStyle, style, "")
+M_PARAM_IMPLEMENT_BOOL(DisableStyleForTracks, style, true)
+
+/* Templates */
+M_PARAM_IMPLEMENT_STRING(DefaultTemplate, templates, ":/Templates/default.mat")
+M_PARAM_IMPLEMENT_STRING(CustomTemplate, templates, "")
 
 M_PARAM_IMPLEMENT_BOOL(GpsSaveLog, gps, false)
 M_PARAM_IMPLEMENT_BOOL(GpsMapCenter, gps, false)

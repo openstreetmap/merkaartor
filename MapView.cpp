@@ -534,7 +534,7 @@ void MapView::launch(Interaction* anInteraction)
 	else {
 		setCursor(QCursor(Qt::ArrowCursor));
 		launch(new EditInteraction(this));
-		Q_ASSERT(theInteraction);
+		//Q_ASSERT(theInteraction);
 	}
 }
 

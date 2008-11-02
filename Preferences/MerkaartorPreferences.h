@@ -24,6 +24,7 @@ class MapView;
 //#define WORLD_COORDBOX CoordBox(Coord(1.3, -1.3), Coord(-1.3, 1.3))
 #define WORLD_COORDBOX CoordBox(Coord(INT_MAX/2, -INT_MAX/2), Coord(-INT_MAX/2, INT_MAX/2))
 #define BUILTIN_STYLES_DIR ":/Styles"
+#define BUILTIN_TEMPLATES_DIR ":/Templates"
 #define M_PREFS MerkaartorPreferences::instance()
 
 #define M_PARAM_DECLARE_BOOL(Param) \
@@ -196,13 +197,6 @@ public:
 	QString getLastSearchValue() const;
 
 	/* Visual */
-	QString getDefaultStyle() const;
-	void setDefaultStyle(const QString& aString);
-	QString getCustomStyle() const;
-	void setCustomStyle(const QString& aString);
-	void setDisableStyleForTracks(bool theValue);
-	bool getDisableStyleForTracks() const;
-
 	void setZoomInPerc(int theValue);
 	int getZoomInPerc() const;
 	void setZoomOutPerc(int theValue);
@@ -303,6 +297,15 @@ public:
 	void setRecentImport(const QStringList & theValue);
 	QStringList getRecentImport() const;
 	void addRecentImport(const QString & theValue);
+
+	/* Styles */
+	M_PARAM_DECLARE_STRING(DefaultStyle)
+	M_PARAM_DECLARE_STRING(CustomStyle)
+	M_PARAM_DECLARE_BOOL(DisableStyleForTracks)
+
+	/* Templates */
+	M_PARAM_DECLARE_STRING(DefaultTemplate)
+	M_PARAM_DECLARE_STRING(CustomTemplate)
 
 	M_PARAM_DECLARE_BOOL(GpsSaveLog)
 	M_PARAM_DECLARE_BOOL(GpsMapCenter)

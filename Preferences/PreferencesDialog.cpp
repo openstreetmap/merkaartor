@@ -17,6 +17,7 @@
 #include "MainWindow.h"
 #include "Map/MapDocument.h"
 #include "Map/MapFeature.h"
+#include "PropertiesDock.h"
 
 #include <QFileDialog>
 #include <QColorDialog>
@@ -51,6 +52,10 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 	QDir intStyles(BUILTIN_STYLES_DIR);
 	for (int i=0; i < intStyles.entryList().size(); ++i) {
 		cbStyles->addItem(intStyles.entryList().at(i));
+	}
+	QDir intTemplates(BUILTIN_TEMPLATES_DIR);
+	for (int i=0; i < intTemplates.entryList().size(); ++i) {
+		cbTemplates->addItem(intTemplates.entryList().at(i));
 	}
 	resize(1,1);
 	QApplication::processEvents();
@@ -140,6 +145,19 @@ void PreferencesDialog::loadPrefs()
 	}
 	cbDisableStyleForTracks->setChecked(M_PREFS->getDisableStyleForTracks());
 
+	QString t = M_PREFS->getDefaultTemplate();
+	QString ct = M_PREFS->getCustomTemplate();
+	CustomTemplateName->setText(ct);
+	if (t.startsWith(BUILTIN_TEMPLATES_DIR)) {
+		TemplateBuiltin->setChecked(true);
+		cbTemplates->setEnabled(true);
+		cbTemplates->setCurrentIndex(cbTemplates->findText(t.remove(QString(BUILTIN_TEMPLATES_DIR) + "/")));
+	} else {
+		TemplateCustom->setChecked(true);
+		CustomTemplateName->setEnabled(true);
+		BrowseTemplate->setEnabled(true);
+	}
+
 	sbZoomInPerc->setValue(M_PREFS->getZoomInPerc());
 	sbZoomOutPerc->setValue(M_PREFS->getZoomOutPerc());
 	cbProjection->setCurrentIndex(M_PREFS->getProjectionType());
@@ -203,7 +221,6 @@ void PreferencesDialog::savePrefs()
 	M_PREFS->setCacheSize(sbCacheSize->value());
 
 	QString NewStyle;
-
 	if (StyleBuiltin->isChecked())
 		NewStyle = QString(BUILTIN_STYLES_DIR) + "/" + cbStyles->currentText();
 	else
@@ -227,7 +244,20 @@ void PreferencesDialog::savePrefs()
 		}
 	}
 
+	QString NewTemplate;
+	if (TemplateBuiltin->isChecked())
+		NewTemplate = QString(BUILTIN_TEMPLATES_DIR) + "/" + cbTemplates->currentText();
+	else
+		NewTemplate = CustomTemplateName->text();
+
+	if (NewTemplate != M_PREFS->getDefaultTemplate())
+	{
+		M_PREFS->setDefaultTemplate(NewTemplate);
+		((MainWindow*)parent())->properties()->loadTemplates(NewTemplate);
+	}
+
 	M_PREFS->setCustomStyle(CustomStyleName->text());
+	M_PREFS->setCustomTemplate(CustomTemplateName->text());
 	M_PREFS->setZoomInPerc(sbZoomInPerc->text().toInt());
 	M_PREFS->setZoomOutPerc(sbZoomOutPerc->text().toInt());
 	M_PREFS->setProjectionType((ProjectionType)cbProjection->currentIndex());
@@ -278,6 +308,13 @@ void PreferencesDialog::on_BrowseStyle_clicked()
 	QString s = QFileDialog::getOpenFileName(this,tr("Custom style"),"",tr("Merkaartor map style (*.mas)"));
 	if (!s.isNull())
 		CustomStyleName->setText(QDir::toNativeSeparators(s));
+}
+
+void PreferencesDialog::on_BrowseTemplate_clicked()
+{
+	QString s = QFileDialog::getOpenFileName(this,tr("Tag Template"),"",tr("Merkaartor tag template (*.mat)"));
+	if (!s.isNull())
+		CustomTemplateName->setText(QDir::toNativeSeparators(s));
 }
 
 void PreferencesDialog::on_btAdapterSetup_clicked()

@@ -1,10 +1,11 @@
 #include "SlippyMapWidget.h"
 
-#include <QtCore/QFile>
-#include <QtGui/QApplication>
-#include <QtGui/QPainter>
-#include <QtGui/QPixmap>
-#include <QtGui/QWheelEvent>
+#include <QFile>
+#include <QApplication>
+#include <QPainter>
+#include <QPixmap>
+#include <QWheelEvent>
+#include <QMenu>
 
 #include <math.h>
 
@@ -27,7 +28,7 @@ class SlippyMapWidgetPrivate
 			Sets->beginGroup("SlippyMapWidget");
 			Lat = Sets->value("Lat", 1).toDouble();
 			Lon = Sets->value("Lon", 1).toDouble();
-			Zoom = Sets->value("Zoom", 1).toDouble();
+			Zoom = Sets->value("Zoom", 1).toInt();
 
 			if (!theCache)
 				theCache = new SlippyMapCache;
@@ -80,6 +81,8 @@ SlippyMapWidget::SlippyMapWidget(QWidget* aParent)
 : QWidget(aParent)
 {
 	p = new SlippyMapWidgetPrivate(this);
+	setContextMenuPolicy (Qt::CustomContextMenu);
+	connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(on_customContextMenuRequested(const QPoint &)));
 	resize(500,400);
 }
 
@@ -180,10 +183,10 @@ void SlippyMapWidget::mousePressEvent(QMouseEvent* ev)
 	{
 		ZoomTo(ev->pos(), p->Zoom + 1);
 	}
-	else if (ev->button() == Qt::RightButton)
-	{
-		ZoomTo(ev->pos(), p->Zoom - 1);
-	}
+//	else if (ev->button() == Qt::RightButton)
+//	{
+//		ZoomTo(ev->pos(), p->Zoom - 1);
+//	}
 	else
 	{
 		if (ev->pos().x() > width()-20)
@@ -223,6 +226,25 @@ void SlippyMapWidget::mouseMoveEvent(QMouseEvent* ev)
 		update();
 		emit redraw();
 	}
+}
+
+void SlippyMapWidget::on_customContextMenuRequested(const QPoint & pos)
+{
+	QMenu menu;
+
+	QAction* resetViewAction = new QAction(tr("Reset view"), this);
+	connect(resetViewAction, SIGNAL(triggered(bool)), this, SLOT(on_resetViewAction_triggered(bool)));
+
+	menu.addAction(resetViewAction);
+	menu.exec(mapToGlobal(pos));
+}
+
+void SlippyMapWidget::on_resetViewAction_triggered(bool)
+{
+	p->Lat = 1.0;
+	p->Lon = 1.0;
+	p->Zoom = 1;
+	update();
 }
 
 bool SlippyMapWidget::isDragging()

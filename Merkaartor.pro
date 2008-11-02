@@ -84,6 +84,7 @@ include(Render/Render.pri)
 include(qextserialport/qextserialport.pri)
 include(GPS/GPS.pri)
 include(Tools/Tools.pri)
+include(TagTemplate/TagTemplate.pri)
 
 
 unix {

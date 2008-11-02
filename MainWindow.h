@@ -124,6 +124,10 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void clipboardChanged();
 		virtual void toolsPreferencesAction_triggered(bool focusData=false);
 
+		virtual void on_toolTemplatesSaveAction_triggered();
+		virtual void on_toolTemplatesMergeAction_triggered();
+		virtual void on_toolTemplatesLoadAction_triggered();
+
 	signals:
 		void remove_triggered();
 		void move_triggered();
