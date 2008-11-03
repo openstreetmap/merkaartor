@@ -20,7 +20,7 @@
     <number>4</number>
    </property>
    <item>
-    <layout class="QGridLayout" name="mainLayout" />
+    <layout class="QGridLayout" name="variableLayout" />
    </item>
    <item>
     <widget class="QLabel" name="MembersLabel" >

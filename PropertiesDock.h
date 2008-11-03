@@ -47,7 +47,6 @@ class PropertiesDock : public MDockAncestor
 	public slots:
 		void on_TrackPointLat_editingFinished();
 		void on_TrackPointLon_editingFinished();
-		//void on_RoadName_editingFinished();
 		void on_RemoveTagButton_clicked();
 		void on_SelectionList_itemSelectionChanged();
 		void on_SelectionList_itemDoubleClicked(QListWidgetItem* item);

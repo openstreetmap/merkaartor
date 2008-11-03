@@ -334,25 +334,23 @@ void PropertiesDock::switchToRoadUi(MapFeature* F)
 	if (CurrentUi)
 		CurrentUi->deleteLater();
 	CurrentUi = NewUi;
-	//connect(RoadUi.Name,SIGNAL(editingFinished()),this, SLOT(on_RoadName_editingFinished()));
 	connect(RoadUi.RemoveTagButton,SIGNAL(clicked()),this, SLOT(on_RemoveTagButton_clicked()));
 	setWindowTitle(tr("Properties - Road"));
 }
 
 void PropertiesDock::switchToRelationUi(MapFeature* F)
 {
-	//if (NowShowing == RelationUiShowing) return;
 	NowShowing = RelationUiShowing;
 	QWidget* NewUi = new QWidget(this);
 	RelationUi.setupUi(NewUi);
-	//fillLandUse(RelationUi.LandUse);
+	if (theTemplates)
+		RelationUi.variableLayout->addWidget(theTemplates->getWidget(F));
 	RelationUi.TagView->verticalHeader()->hide();
 	setWidget(NewUi);
 	if (CurrentUi)
 		CurrentUi->deleteLater();
 	CurrentUi = NewUi;
 	connect(RelationUi.RemoveTagButton,SIGNAL(clicked()),this, SLOT(on_RemoveTagButton_clicked()));
-	//connect(RelationUi.LandUse,SIGNAL(activated(int)), this, SLOT(on_LandUse_activated(int)));
 	setWindowTitle(tr("Properties - Relation"));
 }
 
@@ -480,28 +478,6 @@ void PropertiesDock::on_TrackPointLon_editingFinished()
 		Main->invalidateView(false);
 	}
 }
-
-//void PropertiesDock::on_RoadName_editingFinished()
-//{
-//	Road* R = CAST_WAY(selection(0));
-//
-//	if (R && RoadUi.Name->text() != R->tagValue("name", ""))
-//	{
-//		if (RoadUi.Name->text().isEmpty())
-//			Main->document()->addHistory(
-//				new ClearTagCommand(selection(0),"name",Main->document()->getDirtyOrOriginLayer(R->layer())));
-//		else {
-//			CommandList* theList  = new CommandList(MainWindow::tr("Set Tag 'name' to '%1' on %2").arg(RoadUi.Name->text()).arg(R->description()), selection(0));
-//			if (!R->isDirty() && !R->hasOSMId() && R->isUploadable()) {
-//				bool userAdded = !R->id().startsWith("conflict_");
-//				theList->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),R,userAdded));
-//			}
-//			theList->add(new SetTagCommand(R,"name",RoadUi.Name->text(),Main->document()->getDirtyOrOriginLayer(R->layer())));
-//			Main->document()->addHistory(theList);
-//		}
-//		theModel->setFeature(Selection);
-//	}
-//}
 
 void PropertiesDock::on_tag_changed(QString k, QString v)
 {

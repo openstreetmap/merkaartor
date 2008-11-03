@@ -1,6 +1,14 @@
 <?xml version="1.0"?>
 <templates>
  <widgets>
+  <widget tag="building" type="yesno">
+   <description locale="en" >Building</description>
+   <selector expr="Type is Area" />
+  </widget>
+  <widget tag="area" type="yesno">
+   <description locale="en" >Area</description>
+   <selector expr="Type is Area" />
+  </widget>
   <widget tag="name" type="edit" >
    <description locale="en" >Name</description>
   </widget>
@@ -73,7 +81,7 @@
   <widget tag="landuse" type="combo" >
    <link src="http://wiki.openstreetmap.org/index.php/Key:landuse" />
    <description locale="en" >Landuse</description>
-   <selector expr="Type is Area" />
+   <selector expr="Type is Area or Type is Relation" />
    <value tag="allotments" >
     <description locale="en" >Allotments</description>
    </value>
@@ -323,19 +331,6 @@
   <widgetref id="denomination_christian" />
  </template>
  <template>
-  <selector expr="[Default] Type is Road" />
-  <description locale="en" >Generic Ways</description>
-  <widgetref id="name" />
-  <widgetref id="highway" />
-  <widgetref id="landuse" />
-  <widgetref id="oneway" />
- </template>
- <template>
-  <selector expr="[Default] Type is TrackPoint" />
-  <description locale="en" >Generic Nodes</description>
-  <widgetref id="amenity" />
- </template>
- <template>
   <description locale="en" >Catholic chrurch</description>
   <widget tag="amenity" type="constant" >
    <description locale="en" >Amenity</description>
@@ -357,5 +352,25 @@
     <description locale="en" >Catholic</description>
    </value>
   </widget>
+ </template>
+ <template>
+  <selector expr="[Default] Type is Relation" />
+  <description locale="en" >Generic Relations</description>
+  <widgetref id="landuse" />
+ </template>
+ <template>
+  <selector expr="[Default] Type is Road" />
+  <description locale="en" >Generic Ways</description>
+  <widgetref id="name" />
+  <widgetref id="highway" />
+  <widgetref id="oneway" />
+  <widgetref id="landuse" />
+  <widgetref id="building" />
+  <widgetref id="area" />
+ </template>
+ <template>
+  <selector expr="[Default] Type is TrackPoint" />
+  <description locale="en" >Generic Nodes</description>
+  <widgetref id="amenity" />
  </template>
 </templates>
