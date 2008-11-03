@@ -120,8 +120,8 @@ void Relation::draw(QPainter& P, const Projection& theProjection)
 
 void Relation::drawFocus(QPainter& P, const Projection& theProjection, bool solid)
 {
-	QRectF bb = QRectF(theProjection.project(boundingBox().bottomLeft()),theProjection.project(boundingBox().topRight()));
-	bb.adjust(-10, 10, 10, -10);
+	QRectF bb = QRectF(theProjection.project(boundingBox().topLeft()),theProjection.project(boundingBox().bottomRight()));
+	bb.adjust(-10, -10, 10, 10);
 	if (!solid) {
 		QPen thePen(M_PREFS->getFocusColor(),M_PREFS->getFocusWidth());
 		thePen.setDashPattern(getParentDashes());
@@ -143,8 +143,8 @@ void Relation::drawFocus(QPainter& P, const Projection& theProjection, bool soli
 
 void Relation::drawHover(QPainter& P, const Projection& theProjection, bool solid)
 {
-	QRectF bb = QRectF(theProjection.project(boundingBox().bottomLeft()),theProjection.project(boundingBox().topRight()));
-	bb.adjust(-10, 10, 10, -10);
+	QRectF bb = QRectF(theProjection.project(boundingBox().topLeft()),theProjection.project(boundingBox().bottomRight()));
+	bb.adjust(-10, -10, 10, 10);
 	if (!solid) {
 		QPen thePen(M_PREFS->getHoverColor(),M_PREFS->getHoverWidth());
 		thePen.setDashPattern(getParentDashes());
@@ -175,16 +175,19 @@ double Relation::pixelDistance(const QPointF& Target, double ClearEndDistance, c
 	}
 
 	double D;
-	LineF F(theProjection.project(boundingBox().topLeft()),theProjection.project(boundingBox().topRight()));
+	QRectF bb = QRectF(theProjection.project(boundingBox().topLeft()),theProjection.project(boundingBox().bottomRight()));
+	bb.adjust(-10, -10, 10, 10);
+
+	LineF F(bb.topLeft(), bb.topRight());
 	D = F.capDistance(Target);
 	if ((D < ClearEndDistance) && (D<Best)) Best = D;
-	F = LineF(theProjection.project(boundingBox().topLeft()),theProjection.project(boundingBox().bottomLeft()));
+	F = LineF(bb.topLeft(), bb.bottomLeft());
 	D = F.capDistance(Target);
 	if ((D < ClearEndDistance) && (D<Best)) Best = D;
-	F = LineF(theProjection.project(boundingBox().bottomRight()),theProjection.project(boundingBox().bottomLeft()));
+	F = LineF(bb.bottomRight(), bb.bottomLeft());
 	D = F.capDistance(Target);
 	if ((D < ClearEndDistance) && (D<Best)) Best = D;
-	F = LineF(theProjection.project(boundingBox().bottomRight()),theProjection.project(boundingBox().topRight()));
+	F = LineF(bb.bottomRight(), bb.topRight());
 	D = F.capDistance(Target);
 	if ((D < ClearEndDistance) && (D<Best)) Best = D;
 
