@@ -25,6 +25,7 @@ OsbRegion::~OsbRegion()
 		if (device)
 			device->close();
 		delete device;
+		delete theOsb;
 	}
 }
 
@@ -54,12 +55,12 @@ bool OsbRegion::load(qint32 rg, MapDocument* d, OsbMapLayer* theLayer)
 	} else {
 		isWorld = true;
 
-		ImportExportOsmBin aOsb(NULL);
+		theOsb = new ImportExportOsmBin(NULL);
 		QFileInfo fi( *((QFile*)device) );
 		QString p = fi.absolutePath();
 		device = NULL;
-		aOsb.loadFile(QString("%1/%2.osb").arg(p).arg(QString::number(rg)));
-		if (!aOsb.import(NULL))
+		theOsb->loadFile(QString("%1/%2.osb").arg(p).arg(QString::number(rg)));
+		if (!theOsb->import(NULL))
 			return false;
 
 		device = new QFile(QString("%1/%2.osb").arg(p).arg(QString::number(rg)));
@@ -69,7 +70,7 @@ bool OsbRegion::load(qint32 rg, MapDocument* d, OsbMapLayer* theLayer)
 			return false;
 		}
 
-		device->seek(aOsb.theRegionToc[rg]);
+		device->seek(theOsb->theRegionToc[rg]);
 		QList< QPair < qint32, quint64 > > aTileList;
 
 		QDataStream ds(device);
@@ -104,7 +105,7 @@ bool OsbRegion::loadTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer)
 	for (quint32 i=0; i<featCount; ++i) {
 		MapFeature* F = theOsb->getFeature(this, d, theLayer);
 		theOsb->theTileIndex[tile].push_back(F);
-		theOsb->featRefCount[F]++;
+		theLayer->featRefCount[F]++;
 	}
 
 	return true;
@@ -128,15 +129,15 @@ bool OsbRegion::clearTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer)
 
 	for (qint32 i=0; i<theOsb->theTileIndex[tile].size(); ++i) {
 		MapFeature* F = theOsb->theTileIndex[tile][i];
-		if (F->layer() == theLayer) {
-			int theCount = --theOsb->featRefCount[F];
+		if (theLayer->featRefCount.contains(F)) {
+			int theCount = --theLayer->featRefCount[F];
 			if (!(theCount)) {
 				theLayer->remove(F);
 				delete F;
-				theOsb->featRefCount.remove(F);
+				theLayer->featRefCount.remove(F);
 			}
 		} else {
-			theOsb->featRefCount.remove(F);
+			theLayer->featRefCount.remove(F);
 		}
 	}
 	theOsb->theTileIndex.remove(tile);
@@ -612,11 +613,17 @@ bool ImportExportOsmBin::loadTile(qint32 tile, MapDocument* d, OsbMapLayer* theL
 	int y = int(tile / NUM_TILES);
 	int x = (tile % NUM_TILES);
 	int rg = (y * NUM_REGIONS / NUM_TILES) * NUM_REGIONS + (x * NUM_REGIONS / NUM_TILES);
+	if (!theRegionList.contains(rg))
+		return false;
+
 	return theRegionList[rg]->loadTile(tile, d, theLayer);
 }
 
 bool ImportExportOsmBin::clearRegion(qint32 rg, MapDocument* d, OsbMapLayer* theLayer)
 {
+	if (!theRegionList.contains(rg))
+		return false;
+
 	theRegionList[rg]->clearRegion(d, theLayer);
 	delete theRegionList[rg];
 	theRegionList.remove(rg);
@@ -629,6 +636,9 @@ bool ImportExportOsmBin::clearTile(qint32 tile, MapDocument* d, OsbMapLayer* the
 	int y = int(tile / NUM_TILES);
 	int x = (tile % NUM_TILES);
 	int rg = (y * NUM_REGIONS / NUM_TILES) * NUM_REGIONS + (x * NUM_REGIONS / NUM_TILES);
+	if (!theRegionList.contains(rg))
+		return true;
+
 	return theRegionList[rg]->clearTile(tile, d, theLayer);
 }
 
@@ -809,8 +819,8 @@ bool ImportExportOsmBin::writeWorld(QDataStream& ds)
 
 	ds.device()->seek(HEADER_SIZE);
 	ds << tocPos;
-	ds << tagKeysPos;
-	ds << tagValuesPos;
+	ds << (qint64)0;
+	ds << (qint64) 0;
 
 	return true;
 }

@@ -41,7 +41,8 @@ class TagTemplateWidget: public QObject
 	public:
 		QString id() {return (!theId.isEmpty() ? theId : theTag);};
 		QString tag() {return theTag;};
-		virtual QWidget*	getWidget(const MapFeature* F) {return NULL;};;
+		virtual QWidget*	getWidget(const MapFeature* F) {return NULL;};
+		virtual TagTemplateWidgetValue* getCurrentValue() {return NULL;};
 
 		virtual void apply(const MapFeature*) {};
 
@@ -76,7 +77,15 @@ class TagTemplateWidgetValue: public TagTemplateWidget
 	Q_OBJECT
 
 	public:
+		TagTemplateWidgetValue(const QString& aTagValue) : theTagValue(aTagValue) {};
+
+	public:
 		QString		theTagValue;
+
+	public:
+		virtual bool toXML(QDomElement& xParent);
+		static TagTemplateWidgetValue*		fromXml(const QDomElement& e);
+
 };
 
 Q_DECLARE_METATYPE( TagTemplateWidgetValue * );

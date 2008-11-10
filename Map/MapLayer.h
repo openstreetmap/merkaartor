@@ -256,6 +256,9 @@ public:
 
 	virtual QString toHtml();
 
+public:
+	QMap < MapFeature*, quint32 > featRefCount;
+
 protected:
 	OsbMapLayerPrivate* pp;
 

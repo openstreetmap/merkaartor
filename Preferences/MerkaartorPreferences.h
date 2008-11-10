@@ -260,6 +260,8 @@ public:
 	void setOsmWebsite(const QString & theValue);
 	QString getOsmWebsite() const;
 
+	M_PARAM_DECLARE_STRING(XapiWebSite)
+
 	void setOsmUser(const QString & theValue);
 	QString getOsmUser() const;
 
@@ -318,6 +320,15 @@ public:
 	M_PARAM_DECLARE_BOOL(MapTooltip)
 	M_PARAM_DECLARE_BOOL(InfoOnHover)
 	M_PARAM_DECLARE_BOOL(ShowParents)
+
+	/* World OSB manager */
+	M_PARAM_DECLARE_STRING(LastWorldOsbDir)
+
+	/* Mouse bevaviour */
+	M_PARAM_DECLARE_BOOL(MouseSingleButton)
+
+	/* Custom Style */
+	M_PARAM_DECLARE_BOOL(MerkaartorStyle)
 
 protected:
 	bool Use06Api;

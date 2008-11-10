@@ -18,6 +18,7 @@
 
 #include <QDialog>
 #include <QFile>
+#include <QFileInfo>
 #include <QFileDialog>
 #include <QMessageBox>
 
@@ -25,6 +26,10 @@ WorldOsbManager::WorldOsbManager(QWidget *parent)
 	:QDialog(parent), WorldFile(0)
 {
 	setupUi(this);
+	if (!M_PREFS->getLastWorldOsbDir().isEmpty()) {
+		WorldDirectory->setText(M_PREFS->getLastWorldOsbDir());
+		readWorld();
+	}
 }
 
 void WorldOsbManager::on_cbShowGrid_toggled(bool checked)
@@ -50,6 +55,7 @@ void WorldOsbManager::on_WorldDirectoryBrowse_clicked()
 	if (!s.isNull()) {
 		WorldDirectory->setText(s);
 		readWorld();
+		M_PREFS->setLastWorldOsbDir(s);
 	}
 }
 
@@ -187,5 +193,7 @@ void WorldOsbManager::readWorld()
 		it.next();
 
 		slippy->ExistingRegions[it.key()] = true;
+		QFileInfo fi(QString("%1/%2.osb").arg(WorldDirectory->text()).arg(it.key()));
+		slippy->DateRegions[it.key()] = fi.lastModified();
 	}
 }

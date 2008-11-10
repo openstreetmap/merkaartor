@@ -1,6 +1,29 @@
 <?xml version="1.0"?>
 <templates>
  <widgets>
+  <widget tag="place" type="combo">
+   <link src="http://wiki.openstreetmap.org/index.php/Key:place" />
+   <description locale="en" >Place</description>
+   <selector expr="Type is Area or Type is TrackPoint" />
+   <value tag="city" >
+    <description locale="en" >City (Pop. &gt; 100.000)</description>
+   </value>
+   <value tag="town" >
+    <description locale="en" >Town (10.000 &lt; Pop. &lt; 100.000)</description>
+   </value>
+   <value tag="village" >
+    <description locale="en" >Village (Pop. &lt; 10.000)</description>
+   </value>
+   <value tag="hamlet" >
+    <description locale="en" >Hamlet (a few houses)</description>
+   </value>
+   <value tag="suburb" >
+    <description locale="en" >Suburb</description>
+   </value>
+   <value tag="locality" >
+    <description locale="en" >Localiy (named place)</description>
+   </value>
+  </widget>
   <widget tag="building" type="yesno">
    <description locale="en" >Building</description>
    <selector expr="Type is Area" />
@@ -371,6 +394,11 @@
  <template>
   <selector expr="[Default] Type is TrackPoint" />
   <description locale="en" >Generic Nodes</description>
+  <widget tag="name" type="edit" >
+   <description locale="en" >Name</description>
+   <selector expr="not [place] is _NULL_" />
+  </widget>
   <widgetref id="amenity" />
+  <widgetref id="place" />
  </template>
 </templates>

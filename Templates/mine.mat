@@ -1,6 +1,29 @@
 <?xml version="1.0"?>
 <templates>
  <widgets>
+  <widget tag="place" type="combo" >
+   <link src="http://wiki.openstreetmap.org/index.php/Key:place" />
+   <description locale="en" >Place</description>
+   <selector expr="Type is Area or Type is TrackPoint" />
+   <value tag="city" >
+    <description locale="en" >City (Pop. > 100.000)</description>
+   </value>
+   <value tag="town" >
+    <description locale="en" >Town (10.000 &lt; Pop. &lt; 100.000)</description>
+   </value>
+   <value tag="village" >
+    <description locale="en" >Village (Pop. &lt; 10.000)</description>
+   </value>
+   <value tag="hamlet" >
+    <description locale="en" >Hamlet (a few houses)</description>
+   </value>
+   <value tag="suburb" >
+    <description locale="en" >Suburb</description>
+   </value>
+   <value tag="locality" >
+    <description locale="en" >Localiy (named place)</description>
+   </value>
+  </widget>
   <widget tag="building" type="yesno" >
    <description locale="en" >Building</description>
    <selector expr="Type is Area" />
@@ -317,6 +340,10 @@
    <value tag="russian_orthodox" />
    <value tag="seventh_day_adventist" />
   </widget>
+  <widget tag="name" type="edit" >
+   <description locale="en" >Name</description>
+   <selector expr=" not [place] is _NULL_" />
+  </widget>
   <widget tag="name:fr" type="edit" >
    <description locale="en" >Name (french)</description>
   </widget>
@@ -327,8 +354,10 @@
  <template>
   <selector expr="[amenity] is place_of_worship" />
   <description locale="en" >Place of Worship</description>
+  <widgetref id="name" />
   <widget tag="amenity" type="constant" >
    <description locale="en" >Amenity</description>
+   <link src="http://wiki.openstreetmap.org/index.php/Tag:amenity=place_of_worship" />
    <value tag="place_of_worship" >
     <description locale="en" >Place of Worship</description>
    </value>
@@ -338,6 +367,7 @@
  </template>
  <template>
   <description locale="en" >Catholic chrurch</description>
+  <widgetref id="name" />
   <widget tag="amenity" type="constant" >
    <description locale="en" >Amenity</description>
    <value tag="place_of_worship" >
@@ -377,7 +407,9 @@
  <template>
   <selector expr=" [Default] Type is TrackPoint" />
   <description locale="en" >Generic Nodes</description>
+  <widgetref id="name" />
   <widgetref id="amenity" />
+  <widgetref id="place" />
  </template>
  <template>
   <selector expr=" not [name:fr] is _NULL_ and  not [name:nl] is _NULL_" />

@@ -320,6 +320,7 @@ void MapView::drawFeatures(QPainter & P)
 
 	for (unsigned int i=0; i<theDocument->layerSize(); ++i) {
 		theDocument->getLayer(i)->invalidate(theDocument, theProjection.viewport());
+		Main->properties()->adjustSelection();
 	}
 
 	QVector <CoordBox> coordRegion;

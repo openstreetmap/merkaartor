@@ -81,17 +81,9 @@ void TagTemplateWidget::parseCommonElements(const QDomElement& e)
 		theSelector = aSel;
 	}
 	if (e.tagName() == "value") {
-		TagTemplateWidgetValue* aTCV = new TagTemplateWidgetValue();
-		aTCV->theTagValue = e.attribute("tag");
-
-		for(QDomNode d = e.firstChild(); !d.isNull(); d = d.nextSibling()) {
-			QDomElement c = d.toElement();
-			if (c.isNull())
-				continue;
-
-			aTCV->parseCommonElements(c);
-		}
-		theValues.append(aTCV);
+		TagTemplateWidgetValue* aTCV = TagTemplateWidgetValue::fromXml(e);
+		if (aTCV)
+			theValues.append(aTCV);
 	}
 }
 
@@ -124,13 +116,37 @@ void TagTemplateWidget::generateCommonElements(QDomElement& e)
 	}
 
 	for (int i=0; i<theValues.size(); ++i) {
-		QDomElement v = e.ownerDocument().createElement("value");
-		e.appendChild(v);
-
-		v.setAttribute("tag", theValues[i]->theTagValue);
-		theValues[i]->generateCommonElements(v);
+		theValues[i]->toXML(e);
 	}
 }
+
+/** TagTemplateWidgetValue **/
+
+TagTemplateWidgetValue* TagTemplateWidgetValue::fromXml(const QDomElement& e)
+{
+	TagTemplateWidgetValue* aTCV = new TagTemplateWidgetValue(e.attribute("tag"));
+
+	for(QDomNode d = e.firstChild(); !d.isNull(); d = d.nextSibling()) {
+		QDomElement c = d.toElement();
+		if (c.isNull())
+			continue;
+
+		aTCV->parseCommonElements(c);
+	}
+	return aTCV;
+}
+
+bool TagTemplateWidgetValue::toXML(QDomElement& xParent)
+{
+	QDomElement v = xParent.ownerDocument().createElement("value");
+	xParent.appendChild(v);
+
+	v.setAttribute("tag", theTagValue);
+	generateCommonElements(v);
+
+	return true;
+}
+
 
 /** TagTemplateWidgetCombo **/
 
@@ -174,7 +190,7 @@ QWidget* TagTemplateWidgetCombo::getWidget(const MapFeature* F)
 	aCombo->setEditable(true);
 	aLayout->addWidget(aCombo);
 
-	aCombo->addItem(tr("Undefined"), "__NULL__");
+	aCombo->addItem(tr("Undefined"), qVariantFromValue(new TagTemplateWidgetValue("__NULL__")));
 	QString val = F->tagValue(theTag, "__NULL__");
 	int idx = -1;
 	for (int i=0; i<theValues.size(); ++i) {
@@ -863,6 +879,7 @@ QWidget* TagTemplates::getWidget(const MapFeature* F)
 
 	theCombo = new QComboBox();
 	theCombo->setEditable(true);
+	theCombo->setInsertPolicy(QComboBox::InsertAtBottom);
 	QFont f = theCombo->font();
 	f.setPointSize(6);
 	theCombo->setFont(f);
@@ -927,9 +944,18 @@ QWidget* TagTemplates::getWidget(const MapFeature* F)
 
 void TagTemplates::on_combo_activated(int idx)
 {
-	forcedTemplate = theCombo->itemData(idx).value<TagTemplate*>();
+	if (idx > items.count() -1) {
+		TagTemplate* newTmpl = new TagTemplate(theCombo->currentText());
+		items.append(newTmpl);
 
-	emit templateChanged(forcedTemplate);
+		for (int i=0; i<curTemplate->theFields.count(); ++i) {
+			curTemplate->theFields[i]->getCurrentValue();
+		}
+	} else {
+		forcedTemplate = theCombo->itemData(idx).value<TagTemplate*>();
+
+		emit templateChanged(forcedTemplate);
+	}
 }
 
 TagTemplates* TagTemplates::fromXml(const QDomElement& e)

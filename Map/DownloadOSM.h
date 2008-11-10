@@ -33,6 +33,7 @@ class Downloader : public QObject
 		int resultCode();
 		const QString & resultText();
 		const QString & errorText();
+		const QString & locationText();
 		QString getURLToMap();
 		QString getURLToTrackPoints();
 		QString getURLToFetchFull(MapFeature* aFeature);
@@ -60,6 +61,7 @@ class Downloader : public QObject
 		int ProxyPort;
 		QByteArray Content;
 		int Result;
+		QString LocationText;
 		QString ResultText;
 		QString ErrorText;
 		int Id;

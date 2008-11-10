@@ -35,6 +35,7 @@ class PropertiesDock : public MDockAncestor
 		void setMultiSelection(const std::vector<MapFeature*>& aFeatureList);
 		void toggleSelection(MapFeature* aFeature);
 		void addSelection(MapFeature* aFeature);
+		void adjustSelection();
 		MapFeature* selection(unsigned int idx);
 		QVector<MapFeature*> selection();
 		unsigned int size() const;

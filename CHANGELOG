@@ -1,4 +1,5 @@
 v0.13
+	* ADD : Single mouse button preference (closes #1314)
 	* ADD : Tag Templates (closes #1031)
 	* ADD : "Area" type to tag selector (matches closed roads); Use as "Type is Area".
 	* ADD : context menu to the slippy map to reset viewport to default (as a side effect, disable right mouse click for zoomout)

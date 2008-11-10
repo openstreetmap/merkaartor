@@ -191,6 +191,8 @@ void PreferencesDialog::loadPrefs()
 	cbGgpsSaveLog->setChecked(M_PREFS->getGpsSaveLog());
 	edGpsLogDir->setText(M_PREFS->getGpsLogDir());
 	cbGpsSyncTime->setChecked(M_PREFS->getGpsSyncTime());
+
+	cbMouseSingleButton->setChecked(M_PREFS->getMouseSingleButton());
 }
 
 void PreferencesDialog::savePrefs()
@@ -204,6 +206,9 @@ void PreferencesDialog::savePrefs()
 	M_PREFS->setOsmWebsite(edOsmUrl->text());
 	M_PREFS->setOsmUser(edOsmUser->text());
 	M_PREFS->setOsmPassword(edOsmPwd->text());
+
+	M_PREFS->setXapiWebSite(M_PREFS->getXapiWebSite());
+
 #ifdef Q_OS_WIN32
 	if (!edGpsPort->text().startsWith("\\\\.\\"))
 		edGpsPort->setText("\\\\.\\" + edGpsPort->text());
@@ -281,6 +286,8 @@ void PreferencesDialog::savePrefs()
 	M_PREFS->setGpsSaveLog(cbGgpsSaveLog->isChecked());
 	M_PREFS->setGpsLogDir(edGpsLogDir->text());
 	M_PREFS->setGpsSyncTime(cbGpsSyncTime->isChecked());
+
+	M_PREFS->setMouseSingleButton(cbMouseSingleButton->isChecked());
 
 	M_PREFS->save();
 }

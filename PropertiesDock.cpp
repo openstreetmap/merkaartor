@@ -197,6 +197,26 @@ void PropertiesDock::addSelection(MapFeature* S)
 	fillMultiUiSelectionBox();
 }
 
+void PropertiesDock::adjustSelection()
+{
+	QVector<MapFeature*> aSelection;
+	int cnt = Selection.size();
+
+	for (unsigned int i=0; i<FullSelection.size(); ++i) {
+		if (Main->document()->exists(FullSelection[i])) {
+			aSelection.push_back(FullSelection[i]);
+		} else {
+			std::vector<MapFeature*>::iterator it = std::find(Selection.begin(),Selection.end(),FullSelection[i]);
+			if (it != Selection.end())
+				Selection.erase(it);
+		}
+	}
+
+	FullSelection = aSelection.toStdVector();
+	if (Selection.size() != cnt)
+		switchUi();
+}
+
 void PropertiesDock::fillMultiUiSelectionBox()
 {
 	if (NowShowing == MultiShowing)
@@ -389,7 +409,8 @@ void PropertiesDock::resetValues()
 
 			QWidget* w = TrackPointUi.variableLayout->takeAt(0)->widget();
 			w->deleteLater();
-			TrackPointUi.variableLayout->addWidget(theTemplates->getWidget(Pt));
+			if (theTemplates)
+				TrackPointUi.variableLayout->addWidget(theTemplates->getWidget(Pt));
 
 			CurrentTagView = TrackPointUi.TagView;
  
@@ -406,7 +427,8 @@ void PropertiesDock::resetValues()
 
 			QWidget* w = RoadUi.variableLayout->takeAt(0)->widget();
 			w->deleteLater();
-			RoadUi.variableLayout->addWidget(theTemplates->getWidget(R));
+			if (theTemplates)
+				RoadUi.variableLayout->addWidget(theTemplates->getWidget(R));
 
 			CurrentTagView = RoadUi.TagView;
 		}
@@ -415,11 +437,16 @@ void PropertiesDock::resetValues()
 			RelationUi.MembersView->setModel(R->referenceMemberModel(Main));
 			RelationUi.TagView->setModel(theModel);
 			RelationUi.TagView->setItemDelegate(delegate);
+
+			if (theTemplates)
+				RelationUi.variableLayout->addWidget(theTemplates->getWidget(R));
+			
 			CurrentTagView     = RelationUi.TagView;
 			CurrentMembersView = RelationUi.MembersView;
 		}
 
-		theTemplates->apply(FullSelection[0]);
+		if (theTemplates)
+			theTemplates->apply(FullSelection[0]);
 	}
 	else if (FullSelection.size() > 1)
 	{
@@ -671,6 +698,9 @@ bool PropertiesDock::mergeTemplates(const QString& filename)
 
 bool PropertiesDock::saveTemplates(const QString& filename)
 {
+	if (!theTemplates)
+		return false;
+
 	QDomDocument theXmlDoc;
 	theXmlDoc.appendChild(theXmlDoc.createProcessingInstruction("xml", "version=\"1.0\""));
 

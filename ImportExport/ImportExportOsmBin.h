@@ -131,8 +131,6 @@ protected:
 	QMap <QString, quint64> theTagKeysIndex;
 	QMap <QString, quint64> theTagValuesIndex;
 
-	QMap < MapFeature*, quint32 > featRefCount;
-
 	qint64 tocPos;
 	qint64 tagKeysPos;
 	qint64 tagValuesPos;

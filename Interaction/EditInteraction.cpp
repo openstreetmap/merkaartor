@@ -39,13 +39,11 @@ EditInteraction::~EditInteraction(void)
 
 void EditInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
 {
-#ifndef _MOBILE
 	if (Dragging)
 	{
 		thePainter.setPen(QPen(QColor(255,0,0),1,Qt::DotLine));
 		thePainter.drawRect(QRectF(projection().project(StartDrag),projection().project(EndDrag)));
 	}
-#endif
 	FeatureSnapInteraction::paintEvent(anEvent, thePainter);
 }
 
@@ -55,47 +53,42 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 		if (ev->buttons() & Qt::LeftButton)
 		{
 			if (ev->modifiers()) {
-				if (ev->modifiers() & Qt::ControlModifier)
-				{
-					if (aLast)
-						view()->properties()->toggleSelection(aLast);
-				}
-				if (ev->modifiers() & Qt::ShiftModifier)
-				{
-					if (aLast)
-						view()->properties()->addSelection(aLast);
-				}
+				if ((ev->modifiers() & Qt::ControlModifier) && aLast)
+					view()->properties()->toggleSelection(aLast);
+
+				if ((ev->modifiers() & Qt::ShiftModifier) && aLast)
+					view()->properties()->addSelection(aLast);
 			} else {
 				StackSnap = SnapList;
 				view()->properties()->setSelection(aLast);
 			}
-#ifndef _MOBILE
-			if (!aLast)
+			if (
+					(M_PREFS->getMouseSingleButton() && (ev->modifiers() & Qt::ShiftModifier) && !aLast) ||
+					(!M_PREFS->getMouseSingleButton() && !aLast)
+				)
 			{
 				EndDrag = StartDrag = projection().inverse(ev->pos());
 				Dragging = true;
 			}
-#endif
 		}
 		view()->properties()->checkMenuStatus();
 		view()->update();
 	}
-#ifdef _MOBILE
-	Interaction::mousePressEvent(ev);
-#endif
-
 }
 
 void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* )
 {
 	Q_UNUSED(ev);
-#ifndef _MOBILE
 	if (Dragging)
 	{
 		std::vector<MapFeature*> List;
 		CoordBox DragBox(StartDrag,projection().inverse(ev->pos()));
 		for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it)
-			if (ev->modifiers() & Qt::ShiftModifier) {
+			if (
+					(M_PREFS->getMouseSingleButton() && ev->modifiers().testFlag(Qt::ShiftModifier) && ev->modifiers().testFlag(Qt::AltModifier)) ||
+					(!M_PREFS->getMouseSingleButton() && ev->modifiers().testFlag(Qt::ShiftModifier))
+					)
+			{
 				if (!DragBox.intersects(it.get()->boundingBox()))
 					continue;
 				if (DragBox.contains(it.get()->boundingBox()))
@@ -136,25 +129,16 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* )
 		Dragging = false;
 		view()->update();
 	}
-#endif
-#ifdef _MOBILE
-	Interaction::mouseReleaseEvent(ev);
-#endif
 }
 
 void EditInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, MapFeature* )
 {
 	Q_UNUSED(anEvent);
-#ifndef _MOBILE
 	if (Dragging)
 	{
 		EndDrag = projection().inverse(anEvent->pos());
 		view()->update();
 	}
-#endif
-#ifdef _MOBILE
-	Interaction::mouseMoveEvent(anEvent);
-#endif
 }
 
 void EditInteraction::on_remove_triggered()

@@ -15,6 +15,7 @@
 #include "Utils/SlippyMapWidget.h"
 
 #include <QHash>
+#include <QDateTime>
 
 class RegionMapWidget : public SlippyMapWidget
 {
@@ -33,6 +34,7 @@ class RegionMapWidget : public SlippyMapWidget
 		QHash <quint32, bool> SelectedRegions;
 		QHash <quint32, bool> ExistingRegions;
 		QHash <quint32, bool> DeleteRegions;
+		QHash <quint32, QDateTime> DateRegions;
 
 	private:
 		bool showGrid;

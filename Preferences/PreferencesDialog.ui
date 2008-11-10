@@ -18,7 +18,7 @@
    <item>
     <widget class="QTabWidget" name="tabPref">
      <property name="currentIndex">
-      <number>3</number>
+      <number>1</number>
      </property>
      <property name="tabPosition">
       <enum>QTabWidget::North</enum>
@@ -159,6 +159,13 @@
              </widget>
             </item>
            </layout>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="cbMouseSingleButton">
+            <property name="text">
+             <string>Single mouse button interaction</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -597,7 +604,7 @@
      </widget>
      <widget class="QWidget" name="tabData">
       <attribute name="title">
-       <string>GPS</string>
+       <string>Data</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
@@ -733,7 +740,7 @@
      </widget>
      <widget class="QWidget" name="tab_6">
       <attribute name="title">
-       <string>Network</string>
+       <string>GPS</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
@@ -817,7 +824,7 @@
      </widget>
      <widget class="QWidget" name="tab">
       <attribute name="title">
-       <string>Background Image</string>
+       <string>Network</string>
       </attribute>
       <layout class="QVBoxLayout">
        <item>
@@ -893,7 +900,7 @@
      </widget>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
-       <string>Tools</string>
+       <string>Background Image</string>
       </attribute>
       <layout class="QVBoxLayout">
        <item>
@@ -984,7 +991,7 @@
      </widget>
      <widget class="QWidget" name="tabTools">
       <attribute name="title">
-       <string/>
+       <string>Tools</string>
       </attribute>
       <layout class="QHBoxLayout">
        <item>

@@ -722,6 +722,8 @@ void MerkaartorPreferences::setOsmWebsite(const QString & theValue)
 	Sets->setValue("osm/Website", theValue);
 }
 
+M_PARAM_IMPLEMENT_STRING(XapiWebSite, osm, "www.informationfreeway.org")
+
 QString MerkaartorPreferences::getOsmUser() const
 {
 	return Sets->value("osm/User").toString();
@@ -997,3 +999,20 @@ M_PARAM_IMPLEMENT_BOOL(ResolveRelations, downloadosm, false)
 M_PARAM_IMPLEMENT_BOOL(MapTooltip, visual, false)
 M_PARAM_IMPLEMENT_BOOL(InfoOnHover, visual, true)
 M_PARAM_IMPLEMENT_BOOL(ShowParents, visual, true)
+
+/* World OSB manager */
+M_PARAM_IMPLEMENT_STRING(LastWorldOsbDir, WOSB, "")
+
+/* Mouse bevaviour */
+#ifdef _MOBILE
+	M_PARAM_IMPLEMENT_BOOL(MouseSingleButton, Mouse, true)
+#else
+	M_PARAM_IMPLEMENT_BOOL(MouseSingleButton, Mouse, false)
+#endif
+
+/* Custom Style */
+#ifdef CUSTOM_STYLE
+	M_PARAM_IMPLEMENT_BOOL(MerkaartorStyle, visual, true)
+#else
+	M_PARAM_IMPLEMENT_BOOL(MerkaartorStyle, visual, false)
+#endif

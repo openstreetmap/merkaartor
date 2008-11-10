@@ -49,19 +49,22 @@ void Interaction::mousePressEvent(QMouseEvent * anEvent)
 {
 #if defined(Q_OS_MAC)
 	// In the name of beautifull code, Steve, add a right mouse button
-	if ( (anEvent->modifiers() & Qt::MetaModifier) ||
-	   (anEvent->buttons() & Qt::RightButton) )
+	if (	(anEvent->modifiers() & Qt::MetaModifier) ||
+			(M_PREFS->getMouseSingleButton() && (anEvent->buttons() & Qt::LeftButton)) ||
+			(!M_PREFS->getMouseSingleButton() && (anEvent->buttons() & Qt::RightButton))
+		)
 #else
-#ifdef _MOBILE
-		if (anEvent->buttons())
-#else
-		if (anEvent->buttons() & Qt::RightButton)
-#endif // _mobile
+	if (
+			(M_PREFS->getMouseSingleButton() && (anEvent->buttons() & Qt::LeftButton)) ||
+			(!M_PREFS->getMouseSingleButton() && (anEvent->buttons() & Qt::RightButton))
+		)
 #endif // Q_OS_MAC
 	{
-		if (anEvent->modifiers() & Qt::ShiftModifier) {
+		if (anEvent->modifiers() & Qt::ControlModifier) {
 			EndDrag = StartDrag = projection().inverse(anEvent->pos());
 			Dragging = true;
+		} else 
+		if (anEvent->modifiers() & Qt::ShiftModifier) {
 		} else {
 			Panning = true;
 			FirstPan = LastPan = anEvent->pos();
@@ -76,10 +79,11 @@ void Interaction::mouseReleaseEvent(QMouseEvent * anEvent)
 			view()->invalidate(true, true);
 #ifndef _MOBILE
 		else
-			emit(requestCustomContextMenu(anEvent->pos()));
+			if (anEvent->button() == Qt::RightButton)
+				emit(requestCustomContextMenu(anEvent->pos()));
 #endif
 		Panning = false;
-	}
+	} else
 	if (Dragging)
 	{
 		CoordBox DragBox(StartDrag,projection().inverse(anEvent->pos()));
@@ -87,7 +91,9 @@ void Interaction::mouseReleaseEvent(QMouseEvent * anEvent)
 		view()->projection().setViewport(DragBox,view()->rect());
 		view()->invalidate(true, true);
 		view()->launch(0);
-	}
+	} else
+		if (anEvent->button() == Qt::RightButton)
+			emit(requestCustomContextMenu(anEvent->pos()));
 }
 
 void Interaction::mouseMoveEvent(QMouseEvent* anEvent)
@@ -98,7 +104,7 @@ void Interaction::mouseMoveEvent(QMouseEvent* anEvent)
 		Delta -= anEvent->pos();
 		view()->panScreen(-Delta);
 		LastPan = anEvent->pos();
-	}
+	} else
 	if (Dragging)
 	{
 		EndDrag = projection().inverse(anEvent->pos());

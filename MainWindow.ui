@@ -191,10 +191,10 @@
     <addaction name="menuStyle_2" />
     <addaction name="designerMenu" />
     <addaction name="separator" />
-    <addaction name="toolsPreferencesAction" />
+    <addaction name="toolsWorldOsbAction" />
     <addaction name="toolsShortcutsAction" />
     <addaction name="separator" />
-    <addaction name="toolsWorldOsbAction" />
+    <addaction name="toolsPreferencesAction" />
    </widget>
    <widget class="QMenu" name="menu_Node" >
     <property name="title" >

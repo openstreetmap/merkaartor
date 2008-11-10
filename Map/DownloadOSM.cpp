@@ -220,6 +220,7 @@ bool Downloader::go(const QString& url)
 	showDebug("GET", url, QByteArray() ,Content);
 #endif
 	Result = Request.lastResponse().statusCode();
+	LocationText = Request.lastResponse().value("Location");
 	ResultText = Request.lastResponse().reasonPhrase();
 	ErrorText = Request.lastResponse().value("Error");
 	SAFE_DELETE(AnimationTimer);
@@ -310,6 +311,11 @@ const QString &Downloader::resultText()
 const QString &Downloader::errorText()
 {
 	return ErrorText;
+}
+
+const QString &Downloader::locationText()
+{
+	return LocationText;
 }
 
 QString Downloader::getURLToOpenChangeSet()
@@ -417,6 +423,22 @@ bool downloadOSM(QMainWindow* aParent, const QUrl& theUrl, const QString& aUser,
 	{
 	case 200:
 		break;
+	case 301:
+	case 302:
+	case 307:
+		aWeb = Rcv.locationText();
+		if (!aWeb.isEmpty()) {
+			QUrl aURL = theUrl;
+			aURL.setHost(aWeb);
+			return downloadOSM(aParent, aURL, aUser, aPassword, UseProxy, ProxyHost, ProxyPort, theDocument, theLayer);
+		} else {
+			QString msg = QApplication::translate("Downloader","Unexpected http status code (%1)\nServer message is '%2'").arg(x).arg(Rcv.resultText());
+			if (!Rcv.errorText().isEmpty())
+				msg += QApplication::translate("Downloader", "\nAPI message is '%1'").arg(Rcv.errorText());
+			QMessageBox::warning(aParent,QApplication::translate("Downloader","Download failed"), msg);
+			return false;
+		}
+		break;
 	case 401:
 		QMessageBox::warning(aParent,QApplication::translate("Downloader","Download failed"),QApplication::translate("Downloader","Username/password invalid"));
 		return false;
@@ -460,7 +482,8 @@ bool downloadOSM(MainWindow* Main, const QString& aUser, const QString& aPasswor
 		Coord ((y+1) * REGION_WIDTH - INT_MAX, (x+1) * REGION_WIDTH - INT_MAX )
 		);
 
-	QString aUrl(QString("http://xapi.openstreetmap.org/api/0.5/*[bbox=%1,%2,%3,%4]")
+	QString aUrl(QString("http://%1/api/0.5/*[bbox=%2,%3,%4,%5]")
+		.arg(M_PREFS->getXapiWebSite())
 		.arg(intToAng(Clip.bottomLeft().lon())).arg(intToAng(Clip.bottomLeft().lat()))
 		.arg(intToAng(Clip.topRight().lon())).arg(intToAng(Clip.topRight().lat()))
 		);
