@@ -102,12 +102,30 @@ QGPSDevice::QGPSDevice()
  * Accessor functions
  */
 
-int QGPSDevice::latDegrees()    { return (int) (abs(int(latitude())));													}
-int QGPSDevice::latMinutes()    { return (int) (latitude() - latDegrees());											}
-int QGPSDevice::latSeconds()    { return (int) (((latitude() - latDegrees()) - latMinutes()) * 60);					}
-int QGPSDevice::longDegrees()   { return (int) (longitude());														}
-int QGPSDevice::longMinutes()   { return (int) (longitude() - longDegrees());										}
-int QGPSDevice::longSeconds()   { return (int) (((longitude() - longDegrees()) - longMinutes()) * 60);				}
+int QGPSDevice::latDegrees()    { return (int) (fabs(latitude()));													}
+int QGPSDevice::latMinutes()
+{
+	double m = fabs(latitude()) - latDegrees();
+	return int(m * 60);
+}
+int QGPSDevice::latSeconds()
+{
+	double m = fabs(latitude()) - latDegrees();
+	double s = (m * 60) - int(m * 60);
+	return int(s * 60);
+}
+int QGPSDevice::longDegrees()    { return (int) (fabs(longitude()));													}
+int QGPSDevice::longMinutes()
+{
+	double m = fabs(longitude()) - longDegrees();
+	return int(m * 60);
+}
+int QGPSDevice::longSeconds()
+{
+	double m = fabs(longitude()) - longDegrees();
+	double s = (m * 60) - int(m * 60);
+	return int(s * 60);
+}
 
 bool QGPSDevice::isActiveSat(unsigned int prn)
 {

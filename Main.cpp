@@ -7,7 +7,7 @@
 #include "MainWindow.h" 
 #include "Preferences/MerkaartorPreferences.h"
 #ifdef CUSTOM_STYLE
-	#include "QtStyles/skulpture.h"
+	#include "QtStyles/skulpture/skulpture.h"
 #endif
 
 int main(int argc, char** argv)

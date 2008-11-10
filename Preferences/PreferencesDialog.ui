@@ -906,7 +906,7 @@
        <item>
         <widget class="QGroupBox" name="grpCaching">
          <property name="title">
-          <string>Tiles Caching</string>
+          <string>Tiles Caching (not active for Yahoo! due to legal restrictions)</string>
          </property>
          <layout class="QGridLayout">
           <item row="0" column="0">

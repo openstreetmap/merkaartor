@@ -1,4 +1,6 @@
 v0.13
+	* FIX : GPS dock coordinates display wrong (fixes #1303)
+	* FIX : Background Image: show warning about Yahoo non-cacheable (closes #1310)
 	* ADD : Single mouse button preference (closes #1314)
 	* ADD : Tag Templates (closes #1031)
 	* ADD : "Area" type to tag selector (matches closed roads); Use as "Type is Area".
