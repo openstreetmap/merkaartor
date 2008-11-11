@@ -129,11 +129,15 @@ bool OsbRegion::clearTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer)
 
 	for (qint32 i=0; i<theOsb->theTileIndex[tile].size(); ++i) {
 		MapFeature* F = theOsb->theTileIndex[tile][i];
-		if (theLayer->featRefCount.contains(F)) {
-			int theCount = --theLayer->featRefCount[F];
-			if (!(theCount)) {
-				theLayer->remove(F);
-				delete F;
+		if (F && theLayer->featRefCount.contains(F)) {
+			if (F->layer() == theLayer) {
+				int theCount = --theLayer->featRefCount[F];
+				if (!(theCount)) {
+					theLayer->remove(F);
+					delete F;
+					theLayer->featRefCount.remove(F);
+				}
+			} else {
 				theLayer->featRefCount.remove(F);
 			}
 		} else {

@@ -878,7 +878,8 @@ Road* Road::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds, qint8 c,
 		//	sRefId = "node_" + QString::number(refId);
 //		TrackPoint* N = dynamic_cast<TrackPoint*> (L->getFeature(d, refId)); QString("node_"+id));
 //		TrackPoint* N = dynamic_cast<TrackPoint*> (d->getFeature(sRefId));
-		TrackPoint* N = dynamic_cast<TrackPoint*> (L->get(QString("node_%1").arg(refId)));
+//		TrackPoint* N = dynamic_cast<TrackPoint*> (L->get(QString("node_%1").arg(refId)));
+		TrackPoint* N = dynamic_cast<TrackPoint*> (d->getFeature(QString("node_%1").arg(refId)));
 		Q_ASSERT(N);
 		R->add(N);
 	}

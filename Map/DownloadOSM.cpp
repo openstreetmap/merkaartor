@@ -285,9 +285,9 @@ void Downloader::progress(int done, int total)
 	if (Animator)
 	{
 		if (done < 10240)
-			Animator->setLabelText(tr("Downloading from OSM (%1 bytes)").arg(done));
+			Animator->setLabelText(tr("Downloading from OSM (%1 bytes)", "", done));
 		else
-			Animator->setLabelText(tr("Downloading from OSM (%1 kBytes)").arg(done/1024));
+			Animator->setLabelText(tr("Downloading from OSM (%1 kBytes)", "", (done/1024)));
 		if (AnimationTimer && total != 0)
 		{
 			SAFE_DELETE(AnimationTimer);
@@ -481,6 +481,13 @@ bool downloadOSM(MainWindow* Main, const QString& aUser, const QString& aPasswor
 		Coord (y * REGION_WIDTH - INT_MAX, x * REGION_WIDTH - INT_MAX  ),
 		Coord ((y+1) * REGION_WIDTH - INT_MAX, (x+1) * REGION_WIDTH - INT_MAX )
 		);
+
+	QString osmWebsite, osmUser, osmPwd;
+	osmWebsite = M_PREFS->getOsmWebsite();
+	osmUser = M_PREFS->getOsmUser();
+	osmPwd = M_PREFS->getOsmPassword();
+
+	return downloadOSM(Main,osmWebsite,osmUser,osmPwd,UseProxy,ProxyHost,ProxyPort,Clip,theDocument,theLayer);
 
 	QString aUrl(QString("http://%1/api/0.5/*[bbox=%2,%3,%4,%5]")
 		.arg(M_PREFS->getXapiWebSite())

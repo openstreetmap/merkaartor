@@ -534,13 +534,13 @@ Relation* Relation::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds, 
 		MapFeature* F;
 		switch (Type) {
 			case 'N':
-				F = L->get(QString("node_%1").arg(refId));
+				F = d->getFeature(QString("node_%1").arg(refId));
 				break;
 			case 'R':
-				F = L->get(QString("way_%1").arg(refId));
+				F = d->getFeature(QString("way_%1").arg(refId));
 				break;
 			case 'L':
-				F = L->get(QString("rel_%1").arg(refId));
+				F = d->getFeature(QString("rel_%1").arg(refId));
 				break;
 		}
 		if (F)

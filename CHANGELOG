@@ -1,4 +1,6 @@
 v0.13
+	* FIX : Plural/paucal forms in DownloadOSM.cpp (closes #1306)
+	* FIX : World OSM manager now uses standard API rather than the not quite stable XAPI service
 	* FIX : GPS dock coordinates display wrong (fixes #1303)
 	* FIX : Background Image: show warning about Yahoo non-cacheable (closes #1310)
 	* ADD : Single mouse button preference (closes #1314)
