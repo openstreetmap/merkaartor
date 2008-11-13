@@ -329,6 +329,7 @@
     	<file alias="Mapnik.mas">../Styles/Mapnik.mas</file>
     	<file alias="MapnikPlus.mas">../Styles/MapnikPlus.mas</file>
     	<file alias="Maxspeed.mas">../Styles/Maxspeed.mas</file>
+    	<file alias="Lighting.mas">../Styles/Lighting.mas</file>
     </qresource>
     <qresource prefix="/Html">
     	<file alias="ymap.html">../ymap.html</file>
