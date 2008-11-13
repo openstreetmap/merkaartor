@@ -135,6 +135,40 @@
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelBackgroundColor="#ffffff7c" labelBackgroundTag="maxspeed" labelHalo="yes">
   <selector expr="not [maxspeed] is _NULL_"/>
 </painter>
+
+<painter
+ zoomUnder="0.1" zoomUpper="1e+07"
+ backgroundColor="#ff0000fc" backgroundScale="1.2" backgroundOffset="3"
+ foregroundColor="#fffffffc" foregroundScale="1" foregroundOffset="2"
+ drawTrafficDirectionMarks="yes" labelColor="#ff0000ff" labelScale="1.2" labelOffset="3"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelBackgroundColor="#ffffff7c" labelBackgroundTag="maxheight" labelHalo="yes">
+  <selector expr="not [maxheight] is _NULL_"/>
+</painter>
+<painter
+ zoomUnder="0.1" zoomUpper="1e+07"
+ backgroundColor="#ff0000fc" backgroundScale="1.2" backgroundOffset="3"
+ foregroundColor="#fffffffc" foregroundScale="1" foregroundOffset="2"
+ drawTrafficDirectionMarks="yes" labelColor="#0000ffff" labelScale="1.2" labelOffset="3"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelBackgroundColor="#ffffff7c" labelBackgroundTag="maxwidth" labelHalo="yes">
+  <selector expr="not [maxwidth] is _NULL_"/>
+</painter>
+<painter
+ zoomUnder="0.1" zoomUpper="1e+07"
+ backgroundColor="#ff0000fc" backgroundScale="1.2" backgroundOffset="3"
+ foregroundColor="#fffffffc" foregroundScale="1" foregroundOffset="2"
+ drawTrafficDirectionMarks="yes" labelColor="#2020ffff" labelScale="1.2" labelOffset="3"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelBackgroundColor="#ffffff7c" labelBackgroundTag="maxweight" labelHalo="yes">
+  <selector expr="not [maxweight] is _NULL_"/>
+</painter>
+<painter
+ zoomUnder="0.1" zoomUpper="1e+07"
+ backgroundColor="#ff0000fc" backgroundScale="1.2" backgroundOffset="3"
+ foregroundColor="#fffffffc" foregroundScale="1" foregroundOffset="2"
+ drawTrafficDirectionMarks="yes" labelColor="#ff00ffff" labelScale="1.2" labelOffset="3"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelBackgroundColor="#ffffff7c" labelBackgroundTag="maxlength" labelHalo="yes">
+  <selector expr="not [maxlength] is _NULL_"/>
+</painter>
+
 <painter
  zoomUnder="0.1" zoomUpper="1e+07"
  backgroundColor="#777777fc" backgroundScale="1.2" backgroundOffset="3"
@@ -143,4 +177,5 @@
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[highway] isoneof (motorway, motorway_link, trunk, trunk_link, primary, primary_link, secondary, secondary_link, tertiary, tertiary_link, residential, unclassified, construction, road, pedestrian, minor, service)"/>
 </painter>
+
 </mapStyle>
