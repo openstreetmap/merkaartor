@@ -141,6 +141,6 @@
  foregroundColor="#fffffffc" foregroundScale="1" foregroundOffset="2"
  drawTrafficDirectionMarks="yes" labelColor="#000000ff" labelScale="1.2" labelOffset="3"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
-  <selector expr="[highway] isoneof (motorway, motorway_link, trunk, trunk_link, primary, primary_link, secondary, secondary_link, tertiary, tertiary_link, residential, unclassified, construction, road, pedestrian, minor)"/>
+  <selector expr="[highway] isoneof (motorway, motorway_link, trunk, trunk_link, primary, primary_link, secondary, secondary_link, tertiary, tertiary_link, residential, unclassified, construction, road, pedestrian, minor, service)"/>
 </painter>
 </mapStyle>
