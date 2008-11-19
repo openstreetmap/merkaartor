@@ -640,12 +640,7 @@
  fillColor="#cc9999cd"
  drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="1.5" labelOffset="6"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelArea="yes">
-  <selector expr="[building] isoneof (yes , true)"/>
-</painter>
-<painter
- fillColor="#cc9999cd"
- drawTrafficDirectionMarks="yes">
-  <selector expr="[building] is company"/>
+  <selector expr="not [building] is _NULL_"/>
 </painter>
 <painter
  fillColor="#33cc99cd"
