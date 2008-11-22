@@ -3,6 +3,7 @@
 
 #include <QTranslator>
 #include <QLocale>
+#include <QLibraryInfo>
 
 #include "MainWindow.h" 
 #include "Preferences/MerkaartorPreferences.h"
@@ -44,6 +45,8 @@ int main(int argc, char** argv)
 		qtTranslator->load("qt_" + DefaultLanguage
 	#ifdef TRANSDIR_SYSTEM
 			, TRANSDIR_SYSTEM
+	#else
+			, QLibraryInfo::location(QLibraryInfo::TranslationsPath)
 	#endif
 			);
 		app.installTranslator(qtTranslator);
