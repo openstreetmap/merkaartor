@@ -717,7 +717,7 @@
 </painter>
 <painter
  zoomUnder="0.1" zoomUpper="1e+07"
- backgroundColor="#707070fc" backgroundScale="0.5" backgroundOffset="0"
+ backgroundColor="#707070fc" backgroundScale="0.1" backgroundOffset="0"
  drawTrafficDirectionMarks="no">
   <selector expr="[power] is line"/>
 </painter>
