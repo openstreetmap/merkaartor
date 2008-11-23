@@ -10,6 +10,8 @@ class QProgressDialog;
 
 class TrackSegment : public MapFeature
 {
+	Q_OBJECT
+
 	public:
 		TrackSegment(void);
 		~TrackSegment(void);

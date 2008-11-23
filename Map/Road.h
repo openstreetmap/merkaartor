@@ -13,6 +13,8 @@ class QProgressDialog;
 
 class Road : public MapFeature
 {
+	Q_OBJECT
+
 	public:
 		Road(void);
 		Road(const Road& other);

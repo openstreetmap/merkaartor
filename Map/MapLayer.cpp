@@ -60,10 +60,11 @@ public:
 	~MapLayerPrivate()
 	{
 		for (unsigned int i=0; i<Features.size(); ++i)
-			delete Features[i];
+			if (Features[i])
+				delete Features[i];
 	}
-	std::vector<MapFeature*> Features;
-	QHash<QString, MapFeature*> IdMap;
+	std::vector<MapFeaturePtr> Features;
+	QHash<QString, MapFeaturePtr> IdMap;
 	QString Name;
 	QString Description;
 	bool Visible;
@@ -209,7 +210,7 @@ void MapLayer::notifyIdUpdate(const QString& id, MapFeature* aFeature)
 
 void MapLayer::remove(MapFeature* aFeature)
 {
-	std::vector<MapFeature*>::iterator i = std::find(p->Features.begin(),p->Features.end(), aFeature);
+	std::vector<MapFeaturePtr>::iterator i = std::find(p->Features.begin(),p->Features.end(), aFeature);
 	if (i != p->Features.end())
 	{
 		p->Features.erase(i);
@@ -221,7 +222,7 @@ void MapLayer::remove(MapFeature* aFeature)
 
 void MapLayer::clear()
 {
-	std::vector<MapFeature*>::iterator i;
+	std::vector<MapFeaturePtr>::iterator i;
 	for (i=p->Features.begin(); i != p->Features.end();)
 	{
 		(*i)->setLayer(0);
@@ -233,7 +234,7 @@ void MapLayer::clear()
 
 bool MapLayer::exists(MapFeature* F) const
 {
-	std::vector<MapFeature*>::iterator i = std::find(p->Features.begin(),p->Features.end(), F);
+	std::vector<MapFeaturePtr>::iterator i = std::find(p->Features.begin(),p->Features.end(), F);
 	return i != p->Features.end();
 }
 
@@ -261,10 +262,13 @@ int MapLayer::get(MapFeature* aFeature)
 	return -1;
 }
 
-QVector<MapFeature*> MapLayer::get()
+QVector<MapFeature *> MapLayer::get()
 {
-	QVector<MapFeature*> theList;
-	return theList.fromStdVector(p->Features);
+	QVector<MapFeature *> theList;
+	for (unsigned int i=0; i<p->Features.size(); ++i)
+		if (p->Features[i])
+			theList.append(p->Features[i]);
+	return theList;
 }
 
 
@@ -275,7 +279,7 @@ MapFeature* MapLayer::get(unsigned int i)
 
 MapFeature* MapLayer::get(const QString& id, bool exact)
 {
-	QHash<QString, MapFeature*>::const_iterator i;
+	QHash<QString, MapFeaturePtr>::const_iterator i;
 	
 	i = p->IdMap.find(id);
 	if (i != p->IdMap.end())
@@ -451,7 +455,7 @@ bool DrawingMapLayer::toXML(QDomElement xParent, QProgressDialog & progress)
 		bb.setAttribute("origin", "http://www.openstreetmap.org/api/0.5");
 	}
 
-	std::vector<MapFeature*>::iterator it;
+	std::vector<MapFeaturePtr>::iterator it;
 	for(it = p->Features.begin(); it != p->Features.end(); it++)
 		(*it)->toXML(o, progress);
 
@@ -877,11 +881,11 @@ bool TrackMapLayer::toXML(QDomElement xParent, QProgressDialog & progress)
 
 	QVector<TrackPoint*>	waypoints;
 	QVector<TrackSegment*>	segments;
-	std::vector<MapFeature*>::iterator it;
+	std::vector<MapFeaturePtr>::iterator it;
 	for(it = p->Features.begin(); it != p->Features.end(); it++) {
-		if (TrackSegment* S = dynamic_cast<TrackSegment*>(*it))
+		if (TrackSegment* S = qobject_cast<TrackSegment*>(*it))
 			segments.push_back(S);
-		if (TrackPoint* P = dynamic_cast<TrackPoint*>(*it))
+		if (TrackPoint* P = qobject_cast<TrackPoint*>(*it))
 			if (!P->tagValue("_waypoint_","").isEmpty())
 				waypoints.push_back(P);
 	}

@@ -12,6 +12,8 @@ class OsbMapLayer;
 
 class Relation : public MapFeature
 {
+	Q_OBJECT
+
 	public:
 		Relation(void);
 		Relation(const Relation&);

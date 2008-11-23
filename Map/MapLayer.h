@@ -1,6 +1,7 @@
 #ifndef MAPLAYER_H_
 #define MAPLAYER_H_
 
+#include "Map/MapTypedef.h"
 #include "Map/MapDocument.h"
 
 class QString;
@@ -17,8 +18,10 @@ class TileMapAdapter;
 class TrackSegment;
 class OsbMapLayerPrivate;
 
-class MapLayer
+class MapLayer : public QObject
 {
+	Q_OBJECT
+
 public:
 	MapLayer();
 	MapLayer(const QString& aName);
@@ -55,7 +58,7 @@ public:
 	bool exists(MapFeature* aFeature) const;
 	unsigned int size() const;
 	int get(MapFeature* aFeature);
-	QVector<MapFeature*> get();
+	QVector<MapFeature *> get();
 	MapFeature* get(unsigned int i);
 	const MapFeature* get(unsigned int i) const;
 	MapFeature* get(const QString& id, bool exact=true);
@@ -110,6 +113,8 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(MapLayer::LayerGroups)
 
 class DrawingMapLayer : public MapLayer
 {
+	Q_OBJECT
+
 public:
 	DrawingMapLayer(const QString& aName);
 	virtual ~DrawingMapLayer();
@@ -125,9 +130,9 @@ public:
 	virtual const LayerGroups classGroups() {return (MapLayer::OSM);};
 };
 
-class ImageMapLayer : public QObject, public MapLayer
+class ImageMapLayer : public MapLayer
 {
-Q_OBJECT
+	Q_OBJECT
 public:
 	ImageMapLayer() : layermanager(0) {};
 	ImageMapLayer(const QString& aName, LayerManager* aLayerMgr=NULL);
@@ -152,9 +157,9 @@ private:
 	TileMapAdapter* tmsa;
 };
 
-class TrackMapLayer : public QObject, public MapLayer
+class TrackMapLayer : public MapLayer
 {
-Q_OBJECT
+	Q_OBJECT
 public:
 	TrackMapLayer(const QString& aName="", const QString& filaname="");
 	virtual ~TrackMapLayer();
@@ -180,6 +185,7 @@ protected:
 
 class DirtyMapLayer : public DrawingMapLayer
 {
+	Q_OBJECT
 public:
 	DirtyMapLayer(const QString& aName);
 	virtual ~DirtyMapLayer();
@@ -194,6 +200,7 @@ public:
 
 class UploadedMapLayer : public DrawingMapLayer
 {
+	Q_OBJECT
 public:
 	UploadedMapLayer(const QString& aName);
 	virtual ~UploadedMapLayer();
@@ -207,6 +214,7 @@ public:
 
 class ExtractedMapLayer : public DrawingMapLayer
 {
+	Q_OBJECT
 public:
 	ExtractedMapLayer(const QString& aName);
 	virtual ~ExtractedMapLayer();
@@ -222,6 +230,7 @@ public:
 
 class DeletedMapLayer : public DrawingMapLayer
 {
+	Q_OBJECT
 public:
 	DeletedMapLayer(const QString& aName);
 	virtual ~DeletedMapLayer();
@@ -237,6 +246,7 @@ public:
 
 class OsbMapLayer : public MapLayer
 {
+	Q_OBJECT
 public:
 	OsbMapLayer(const QString& aName);
 	virtual ~OsbMapLayer();

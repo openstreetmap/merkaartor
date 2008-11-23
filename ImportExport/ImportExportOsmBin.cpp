@@ -747,7 +747,7 @@ MapFeature* ImportExportOsmBin::getFeature(OsbRegion* osr, MapDocument* d, OsbMa
 }
 
 // export
-bool ImportExportOsmBin::export_(const QVector<MapFeature *>& featList)
+bool ImportExportOsmBin::export_(const QVector<MapFeature*>& featList)
 {
 	QDataStream ds(Device);
 	//theRegionToc.resize(TILE_WIDTH / REGION_WIDTH);
@@ -772,7 +772,7 @@ bool ImportExportOsmBin::export_(const QVector<MapFeature *>& featList)
 	return true;
 }
 
-bool ImportExportOsmBin::export_(const QVector<MapFeature *>& featList, quint32 rg)
+bool ImportExportOsmBin::export_(const QVector<MapFeature*>& featList, quint32 rg)
 {
 	QDataStream ds(Device);
 	//theRegionToc.resize(TILE_WIDTH / REGION_WIDTH);

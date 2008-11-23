@@ -28,6 +28,7 @@ HEADERS += \
 ./Map/ImportNGT.h \
 ./Map/MapDocument.h \
 ./Map/MapLayer.h \
+./Map/MapTypedef.h \
 ./Map/MapFeature.h \
 ./Map/Painting.h \
 ./Map/Projection.h \

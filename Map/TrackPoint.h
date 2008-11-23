@@ -13,6 +13,8 @@ class QProgressDialog;
 
 class TrackPoint : public MapFeature
 {
+	Q_OBJECT
+
 	public:
 		TrackPoint(const Coord& aCoord);
 		TrackPoint(const TrackPoint& other);
