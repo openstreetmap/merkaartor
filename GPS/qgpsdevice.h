@@ -18,6 +18,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef QGPS_DEVICE_H
+#define QGPS_DEVICE_H
+
 #include <QObject>
 #include <QThread>
 #include <QDateTime>
@@ -286,3 +289,4 @@ class QGPSDDevice : public QGPSDevice
 		friend class GPSSlotForwarder;
 };
 
+#endif // QGPS_DEVICE_H
