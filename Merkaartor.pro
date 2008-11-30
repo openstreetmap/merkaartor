@@ -54,8 +54,8 @@ contains(GPSD,1) {
 DESTDIR = $$OUTPUT_DIR/bin
 
 
-INCLUDEPATH += . Render qextserialport GPS
-DEPENDPATH += . Render qextserialport GPS
+INCLUDEPATH += . Render qextserialport GPS NameFinder
+DEPENDPATH += . Render qextserialport GPS NameFinder
 MOC_DIR = tmp
 UI_DIR = tmp
 RCC_DIR = tmp
@@ -85,7 +85,7 @@ include(qextserialport/qextserialport.pri)
 include(GPS/GPS.pri)
 include(Tools/Tools.pri)
 include(TagTemplate/TagTemplate.pri)
-
+include(NameFinder/NameFinder.pri)
 
 unix {
     target.path = /usr/local/bin

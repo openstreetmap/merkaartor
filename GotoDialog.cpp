@@ -15,6 +15,8 @@
 
 #include "Preferences/MerkaartorPreferences.h"
 
+#include "NameFinder/namefinderwidget.h"
+
 GotoDialog::GotoDialog(const Projection& aProj, QWidget *parent)
 	:QDialog(parent), theProjection(aProj)
 {
@@ -40,6 +42,10 @@ GotoDialog::GotoDialog(const Projection& aProj, QWidget *parent)
 		}
 	}
 	coordBookmark->setCurrentIndex(selIdx);
+	
+	searchWidget = new NameFinder::NameFinderWidget(this);
+	connect(searchWidget, SIGNAL(selectionChanged()), this, SLOT(searchWidget_selectionChanged()));
+	verticalLayout_4->addWidget(searchWidget);
 
 	coordOSM->setText( QString("http://www.openstreetmap.org/?lat=%1&lon=%2&zoom=%3")
 		.arg(QString::number(intToAng(B.center().lat()), 'f', 4))
@@ -74,6 +80,11 @@ GotoDialog::GotoDialog(const Projection& aProj, QWidget *parent)
 	resize(1,1);
 }
 
+void GotoDialog::on_searchButton_clicked()
+{
+		QString foo = NameFinderEdit->text();
+		searchWidget->search(foo);
+}
 void GotoDialog::on_buttonBox_clicked(QAbstractButton * button)
 {
 	if (buttonBox->buttonRole(button) == QDialogButtonBox::AcceptRole) {
@@ -139,4 +150,17 @@ void GotoDialog::on_buttonBox_clicked(QAbstractButton * button)
 		accept();
 	}
 }
+
+void GotoDialog::searchWidget_selectionChanged()
+{
+	QPointF centerPoint = searchWidget->selectedCoords();
+	coordOSM->setText( QString("http://www.openstreetmap.org/?lat=%1&lon=%2&zoom=%3")
+		.arg(QString::number(centerPoint.x(), 'f', 4))
+		.arg(QString::number(centerPoint.y(), 'f', 4))
+		.arg(QString::number(15))
+		);
+	rbOSM->setChecked(true);
+	
+}
+
 

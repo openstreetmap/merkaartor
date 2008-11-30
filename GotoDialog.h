@@ -21,6 +21,11 @@
 #include <ui_GotoDialog.h>
 
 class CoordBox;
+class QItemSelection;
+namespace NameFinder
+{
+	class NameFinderWidget;
+}
 
 class GotoDialog: public QDialog , public Ui::GotoDialog
 {
@@ -30,15 +35,18 @@ public:
     GotoDialog(const Projection& aProj, QWidget *parent = 0);
 
 	const CoordBox& newViewport() const { return theNewViewport; };
+	NameFinder::NameFinderWidget *searchWidget;
 
 public slots:
 	void on_buttonBox_clicked(QAbstractButton * button);
+	void on_searchButton_clicked();
+	void searchWidget_selectionChanged();
 
 protected:
-
+	
 private:
 	Projection theProjection;
-	CoordBox theNewViewport;
+	CoordBox theNewViewport;	
 
 };
 

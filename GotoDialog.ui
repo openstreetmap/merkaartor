@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>426</width>
-    <height>251</height>
+    <height>637</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -191,17 +191,31 @@
     </widget>
    </item>
    <item>
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
+    <widget class="QGroupBox" name="searchBox" >
+     <property name="title" >
+      <string>Search</string>
      </property>
-     <property name="sizeHint" stdset="0" >
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
+     <layout class="QVBoxLayout" name="verticalLayout_3" >
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_4" >
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_7" >
+          <item>
+           <widget class="QLineEdit" name="NameFinderEdit" />
+          </item>
+          <item>
+           <widget class="QPushButton" name="searchButton" >
+            <property name="text" >
+             <string>Search</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item>
     <widget class="QDialogButtonBox" name="buttonBox" >
