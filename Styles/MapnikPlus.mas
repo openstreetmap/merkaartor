@@ -394,7 +394,7 @@
  zoomUnder="0.01" zoomUpper="1e+07"
  fillColor="#f6666677"
  icon=":/MapIcons/map-icons/square.small/health/pharmacy.png" iconScale="0" iconOffset="0"
- drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="7" labelOffset="5"
+ drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes">
   <selector expr="[amenity] is pharmacy"/>
 </painter>
