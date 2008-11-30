@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1" language="pl">
+<!DOCTYPE TS><TS version="1.1" language="pl_PL">
 <defaultcodec></defaultcodec>
 <context>
     <name></name>
@@ -66,7 +66,7 @@
         <location filename="MainWindow.cpp" line="461"/>
         <source>Geotagged images (*.jpg)
 </source>
-        <translation type="unfinished">Geotagged images (*.jpg)
+        <translation>Geolokalizowane obrazy (*.jpg)
 </translation>
     </message>
 </context>
@@ -212,7 +212,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="Tools/ActionsDialog.cpp" line="141"/>
         <source>untitled</source>
-        <translation type="unfinished">bez nazwy</translation>
+        <translation>bez nazwy</translation>
     </message>
     <message>
         <location filename="Tools/ActionsDialog.cpp" line="146"/>
@@ -261,7 +261,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="Interaction/CreateDoubleWayDock.ui" line="40"/>
         <source>Distance between two roads</source>
-        <translation>Odstęp między dwoma drogami</translation>
+        <translation>Odstęp między dwiema drogami</translation>
     </message>
 </context>
 <context>
@@ -479,7 +479,7 @@ API message is &apos;%1&apos;</source>
     <message>
         <location filename="Map/DownloadOSM.cpp" line="206"/>
         <source>didn&apos;t download enough</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie pobrano wystarczającej ilości danych</translation>
     </message>
     <message numerus="yes">
         <location filename="Map/DownloadOSM.cpp" line="288"/>
@@ -601,7 +601,8 @@ Do you want to mark them for deletion?</source>
         <location filename="Map/DownloadOSM.cpp" line="446"/>
         <source>Unexpected http status code (%1)
 Server message is &apos;%2&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Niespodziewany kod zwrotny http (%1)
+Komunikat serwera brzmi: %2</translation>
     </message>
     <message>
         <location filename="Map/DownloadOSM.cpp" line="448"/>
@@ -669,17 +670,17 @@ API message is &apos;%1&apos;</source>
     <message>
         <location filename="GeoImageDock.cpp" line="20"/>
         <source>Geo Images</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Geolokalizowane obrazy</translation>
     </message>
     <message>
         <location filename="GeoImageDock.cpp" line="27"/>
         <source>Remove Images</source>
-        <translation type="unfinished">Usuń obrazy</translation>
+        <translation>Usuń obrazy</translation>
     </message>
     <message>
         <location filename="GeoImageDock.cpp" line="28"/>
         <source>Copy filename to clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Skopiuj nazwę pliku do schowka</translation>
     </message>
     <message>
         <location filename="GeoImageDock.cpp" line="119"/>
@@ -689,48 +690,49 @@ API message is &apos;%1&apos;</source>
     <message>
         <location filename="GeoImageDock.cpp" line="119"/>
         <source>No suitable layer found. Please first download data from OSM server or open a track.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie znaleziono odpowiedniej warstwy. Proszę najpierw pobrać dane z OSM lub otworzyć ścieżkę.</translation>
     </message>
     <message>
         <location filename="GeoImageDock.cpp" line="124"/>
         <source>Load geotagged Images</source>
-        <translation type="unfinished"></translation>
+        <translation>Wczytaj geolokalizowane obrazy</translation>
     </message>
     <message>
         <location filename="GeoImageDock.cpp" line="125"/>
         <source>Select the layer to which the images belong:</source>
-        <translation type="unfinished"></translation>
+        <translation>Warstwa, na której powinny się znajdować obrazy:</translation>
     </message>
     <message>
         <location filename="GeoImageDock.cpp" line="134"/>
         <source>Loading Images ...</source>
-        <translation type="unfinished">Otwieranie obrazów...</translation>
+        <translation>Wczytywanie obrazów...</translation>
     </message>
     <message>
         <location filename="GeoImageDock.cpp" line="134"/>
         <source>Abort loading</source>
-        <translation type="unfinished"></translation>
+        <translation>Przerwij wczytywanie</translation>
     </message>
     <message>
         <location filename="GeoImageDock.cpp" line="164"/>
         <source>No EXIV</source>
-        <translation type="unfinished">Brak EXIV</translation>
+        <translation>Brak EXIV</translation>
     </message>
     <message>
         <location filename="GeoImageDock.cpp" line="164"/>
         <source>No EXIF header found in image &quot;%1&quot;.
 Do you want to revert to improper file timestamp?</source>
-        <translation type="unfinished">Nie znaleziono nagłówka EXIF w obrazie &quot;%1&quot;.</translation>
+        <translation>Nie znaleziono nagłówka EXIF w obrazie %1.
+Czy zamiast tego użyć znakowania czasem?</translation>
     </message>
     <message>
         <location filename="GeoImageDock.cpp" line="205"/>
         <source>Specify offset</source>
-        <translation type="unfinished"></translation>
+        <translation>Podaj przesunięcie</translation>
     </message>
     <message>
         <location filename="GeoImageDock.cpp" line="207"/>
         <source>Position images more to the:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ustaw obrazy bliżej:</translation>
     </message>
     <message>
         <location filename="GeoImageDock.cpp" line="208"/>
@@ -745,7 +747,7 @@ Do you want to revert to improper file timestamp?</source>
     <message>
         <location filename="GeoImageDock.cpp" line="213"/>
         <source>hh:mm:ss</source>
-        <translation>gg:mm:ss</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="GeoImageDock.cpp" line="274"/>
@@ -760,7 +762,7 @@ Do you want to revert to improper file timestamp?</source>
     <message>
         <location filename="GeoImageDock.cpp" line="278"/>
         <source>hh &apos;hours,&apos; mm &apos;minutes and&apos; ss &apos;seconds&apos;</source>
-        <translation>gg godzin, mm minut i ss sekund</translation>
+        <translation>hh godzin, mm minut i ss sekund</translation>
     </message>
     <message>
         <location filename="GeoImageDock.cpp" line="279"/>
@@ -783,27 +785,27 @@ Do you still want to use it?</source>
 <context>
     <name>GotoDialog</name>
     <message>
-        <location filename="GotoDialog.cpp" line="96"/>
+        <location filename="GotoDialog.cpp" line="107"/>
         <source>Invalid OSM url</source>
         <translation>Błędny adres OSM</translation>
     </message>
     <message>
-        <location filename="GotoDialog.cpp" line="97"/>
+        <location filename="GotoDialog.cpp" line="108"/>
         <source>The specified url is invalid!</source>
         <translation>Podany adres jest nieprawidłowy!</translation>
     </message>
     <message>
-        <location filename="GotoDialog.cpp" line="126"/>
+        <location filename="GotoDialog.cpp" line="137"/>
         <source>Invalid Coordinates format</source>
         <translation>Błędny format współrzędnych</translation>
     </message>
     <message>
-        <location filename="GotoDialog.cpp" line="118"/>
+        <location filename="GotoDialog.cpp" line="129"/>
         <source>Coordinates must be: &apos;&lt;left lon&gt;, &lt;bottom lat&gt;, &lt;right lon&gt;, &lt;top lat&gt;&apos;</source>
         <translation>Współrzędne muszą być w formacie: &lt;lewa wys.&gt;, &lt;dolna szer.&gt;, &lt;prawa wys.&gt;, &lt;górna szer.&gt;</translation>
     </message>
     <message>
-        <location filename="GotoDialog.cpp" line="127"/>
+        <location filename="GotoDialog.cpp" line="138"/>
         <source>Coordinates must be: &apos;&lt;center lat&gt;, &lt;center lon&gt;, &lt;span lat&gt;, &lt;span lon&gt;&apos;</source>
         <translation>Współrzędne muszą być w formacie: &lt;środkowa szerokość&gt;, &lt;środkowa wysokość&gt;, &lt;zasięg szerokości&gt;, &lt;zasięg wysokości&gt;</translation>
     </message>
@@ -847,41 +849,46 @@ Do you still want to use it?</source>
         <source>OSM XAPI url</source>
         <translation></translation>
     </message>
+    <message>
+        <location filename="GotoDialog.ui" line="209"/>
+        <source>Search</source>
+        <translation>Wyszukaj</translation>
+    </message>
 </context>
 <context>
     <name>ImageMapLayer</name>
     <message>
-        <location filename="Map/MapLayer.cpp" line="600"/>
+        <location filename="Map/MapLayer.cpp" line="604"/>
         <source>Map - None</source>
         <translation>Brak mapy</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="614"/>
+        <location filename="Map/MapLayer.cpp" line="618"/>
         <source>Map - WMS - %1</source>
         <translation>Mapa - WMS - %1</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="625"/>
+        <location filename="Map/MapLayer.cpp" line="629"/>
         <source>Map - TMS - %1</source>
         <translation>Mapa - TMS - %1</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="638"/>
+        <location filename="Map/MapLayer.cpp" line="642"/>
         <source>Map - Yahoo</source>
         <translation>Mapa - Yahoo</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="647"/>
+        <location filename="Map/MapLayer.cpp" line="651"/>
         <source>Map - Illegal Yahoo</source>
         <translation>Mapa - Nielegalna Yahoo</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="656"/>
+        <location filename="Map/MapLayer.cpp" line="660"/>
         <source>Map - Illegal Google</source>
         <translation>Mapa - Nielegalna Google</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="665"/>
+        <location filename="Map/MapLayer.cpp" line="669"/>
         <source>Map - Illegal Ms Virtual Earth</source>
         <translation>Mapa - Nielegalna Ms Virtual Earth</translation>
     </message>
@@ -970,7 +977,7 @@ Do you still want to use it?</source>
     <message>
         <location filename="Command/FeatureCommands.cpp" line="68"/>
         <source>Set Tag &apos;%1=%2&apos; on %3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ustaw znacznik %1=%2 na %3</translation>
     </message>
     <message>
         <location filename="PropertiesDock.cpp" line="556"/>
@@ -985,7 +992,7 @@ Do you still want to use it?</source>
     <message>
         <location filename="Interaction/CreateAreaInteraction.cpp" line="63"/>
         <source>Create Area %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Utwórz obszar %1</translation>
     </message>
     <message>
         <location filename="Interaction/CreateAreaInteraction.cpp" line="95"/>
@@ -1015,7 +1022,7 @@ Do you still want to use it?</source>
     <message>
         <location filename="Interaction/CreateNodeInteraction.cpp" line="30"/>
         <source>Create node in Road: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Utwórz węzeł w drodze %1</translation>
     </message>
     <message>
         <location filename="Interaction/CreateNodeInteraction.cpp" line="44"/>
@@ -1290,12 +1297,12 @@ Do you want to do this now?</source>
     <message>
         <location filename="MainWindow.cpp" line="1607"/>
         <source>Bookmark cannot be blank.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nazwa zakładki nie może być pusta.</translation>
     </message>
     <message>
         <location filename="MainWindow.cpp" line="1611"/>
         <source>Warning: Bookmark name already exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Uwaga! Zakładka o tej samej nazwie już istnieje.</translation>
     </message>
     <message>
         <location filename="MainWindow.cpp" line="1612"/>
@@ -1310,7 +1317,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="MainWindow.cpp" line="1660"/>
         <source>Select the bookmark to remove.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wybierz zakładkę do usunięcia.</translation>
     </message>
     <message>
         <location filename="MainWindow.cpp" line="1735"/>
@@ -1320,7 +1327,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="MainWindow.cpp" line="1750"/>
         <source>Merge Nodes into %1</source>
-        <translation type="unfinished">Scale węzły w %1</translation>
+        <translation type="unfinished">Scal węzły w %1</translation>
     </message>
     <message>
         <location filename="MainWindow.cpp" line="1831"/>
@@ -1340,7 +1347,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="MainWindow.cpp" line="1865"/>
         <source>Open NMEA log file</source>
-        <translation type="unfinished">Otórz log HMEA</translation>
+        <translation type="unfinished">Otwórz log NMEA</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="13"/>
@@ -1430,7 +1437,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="MainWindow.ui" line="731"/>
         <source>&amp;Docks</source>
-        <translation type="unfinished">&amp;Doki</translation>
+        <translation>&amp;Panele</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="229"/>
@@ -1490,12 +1497,12 @@ Do you want to do this now?</source>
     <message>
         <location filename="MainWindow.ui" line="340"/>
         <source>Zoom &amp;window</source>
-        <translation type="unfinished"></translation>
+        <translation>Powiększ &amp;okno</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="346"/>
         <source>Zoom window</source>
-        <translation type="unfinished"></translation>
+        <translation>Powiększa okno</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="349"/>
@@ -1715,7 +1722,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="MainWindow.ui" line="645"/>
         <source>Export all visible layers to a file</source>
-        <translation type="unfinished"></translation>
+        <translation>Eksportuje wszystkie widoczne warstwy do pliku</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="650"/>
@@ -1790,7 +1797,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="MainWindow.ui" line="736"/>
         <source>Toggle &amp;Properties</source>
-        <translation>Wyświetlaj &amp;właściwości</translation>
+        <translation>Przełącz panel &amp;właściwości</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="742"/>
@@ -1805,7 +1812,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="MainWindow.ui" line="750"/>
         <source>Toggle &amp;Layers</source>
-        <translation>Przełącz &amp;warstwy</translation>
+        <translation>Przełącz panel &amp;warstw</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="756"/>
@@ -1820,7 +1827,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="MainWindow.ui" line="764"/>
         <source>Toggle &amp;Info</source>
-        <translation>Przełącz &amp;informacje</translation>
+        <translation>Przełącz panel &amp;informacji</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="770"/>
@@ -1850,12 +1857,12 @@ Do you want to do this now?</source>
     <message>
         <location filename="MainWindow.ui" line="792"/>
         <source>Toggle &amp;Undo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Przełącz panel &amp;operacji</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="798"/>
         <source>Hide/Show the Undo dock</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wyświetla/ukrywa panel operacji</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="801"/>
@@ -1910,7 +1917,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="MainWindow.ui" line="850"/>
         <source>Merge the tags in the clipboard with the ones of the selected feature.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Scal etykiety w schowku z etykietami aktualnie wybranej cechy.</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="853"/>
@@ -2005,7 +2012,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="MainWindow.ui" line="956"/>
         <source>Native</source>
-        <translation>Wbudowane</translation>
+        <translation>Wbudowany</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="964"/>
@@ -2035,17 +2042,17 @@ Do you want to do this now?</source>
     <message>
         <location filename="MainWindow.ui" line="991"/>
         <source>&amp;Replay...</source>
-        <translation type="unfinished">&amp;Odtwórz...</translation>
+        <translation>&amp;Odtwórz...</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="999"/>
         <source>Toggle &amp;GPS</source>
-        <translation type="unfinished">Przełącz &amp;GPS</translation>
+        <translation>Przełącz panel &amp;GPS</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="1005"/>
         <source>Hide/Show the GPS dock</source>
-        <translation type="unfinished"></translation>
+        <translation>Wyświetla/ukrywa panel GPS</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="531"/>
@@ -2110,27 +2117,27 @@ Do you want to do this now?</source>
     <message>
         <location filename="MainWindow.ui" line="1098"/>
         <source>Record</source>
-        <translation type="unfinished"></translation>
+        <translation>Nagraj</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="1112"/>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Wstrzymaj</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="1120"/>
         <source>Toggle G&amp;eoImage</source>
-        <translation type="unfinished"></translation>
+        <translation>Przełącz panel o&amp;brazów</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="1126"/>
         <source>Hide/Show the GeoImage dock</source>
-        <translation type="unfinished"></translation>
+        <translation>Wyświetla/ukrywa panel obrazów</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="1129"/>
         <source>Ctrl+E</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="Map/ImportGPX.cpp" line="208"/>
@@ -2143,14 +2150,14 @@ Do you want to do this now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="778"/>
+        <location filename="Map/MapLayer.cpp" line="782"/>
         <source>Extracted Layer &apos;%1&apos;</source>
-        <translation type="unfinished">Wyodrębniono warstwę %1</translation>
+        <translation>Wyodrębnij warstwę %1</translation>
     </message>
     <message>
         <location filename="Map/Relation.cpp" line="619"/>
         <source>Relation Modified %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Zmodyfikuj relację %1</translation>
     </message>
     <message>
         <location filename="Map/Road.cpp" line="549"/>
@@ -2186,7 +2193,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="MainWindow.cpp" line="579"/>
         <source>Big Fat Copyright Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Ważne ostrzeżenie o prawach autorskich</translation>
     </message>
     <message>
         <location filename="MainWindow.cpp" line="593"/>
@@ -2203,7 +2210,15 @@ Do you want to do this now?</source>
 If unsure, please seek advice on the &quot;legal&quot; or &quot;talk&quot; openstreetmap mailing lists.
 
 Are you absolutely sure this KML can legally be imported in OSM?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Podjęto próbę importu pliku KML. Należy być świadomym tego, że:
+
+- nie wolno importować do OpenStreetMap plików KML utworzonych w Google Earth. Mogłoby się wydawać, iż węzły utworzone w Google Earth są wyłącznym tworem użytkownika, jednakże w rzeczywistością stanowią tzw. utwór zależny od Google Earth i jako taki nie można ich wykorzystać w OSM.
+
+- jeśli pobrano plik z Internetu, istnieje możliwość, że są objęte prawem autorskim. Proszę się w pełni upewnić, że użycie tych danych w projekcie OpenStreetMap jest dozwolone przez autora albo dane te w domenie publicznej.
+
+W razie wszelkich wątpliwości, proszę skontaktować się z listą dyskusyjną &quot;legal&quot; lub &quot;talk&quot;.
+
+Na pewno można legalnie zaimportować ten plik do OSM?</translation>
     </message>
     <message>
         <location filename="MainWindow.cpp" line="1213"/>
@@ -2228,17 +2243,17 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="MainWindow.ui" line="494"/>
         <source>Create Road</source>
-        <translation type="unfinished"></translation>
+        <translation>Tworzy drogę</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="505"/>
         <source>Create Node</source>
-        <translation type="unfinished"></translation>
+        <translation>Tworzy węzeł</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="523"/>
         <source>Road Reverse</source>
-        <translation type="unfinished"></translation>
+        <translation>Odwraca drogę</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="528"/>
@@ -2253,17 +2268,17 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="MainWindow.ui" line="547"/>
         <source>Create Roundabout</source>
-        <translation type="unfinished"></translation>
+        <translation>Tworzy rondo</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="563"/>
         <source>Road Split</source>
-        <translation type="unfinished"></translation>
+        <translation>Rozdziela drogę</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="574"/>
         <source>Road Join</source>
-        <translation type="unfinished"></translation>
+        <translation>Łączy drogi</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="585"/>
@@ -2273,12 +2288,12 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="MainWindow.ui" line="596"/>
         <source>Create Relation</source>
-        <translation type="unfinished"></translation>
+        <translation>Tworzy relację</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="604"/>
         <source>Create Area</source>
-        <translation type="unfinished"></translation>
+        <translation>Tworzy obszar</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="653"/>
@@ -2288,12 +2303,12 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="MainWindow.ui" line="690"/>
         <source>Node Merge</source>
-        <translation type="unfinished"></translation>
+        <translation>Scala węzły</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="781"/>
         <source>Node Align</source>
-        <translation type="unfinished"></translation>
+        <translation>Wyrównuje węzły</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="895"/>
@@ -2535,12 +2550,12 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
 <context>
     <name>MapLayer</name>
     <message>
-        <location filename="Map/MapLayer.cpp" line="385"/>
+        <location filename="Map/MapLayer.cpp" line="389"/>
         <source>Size</source>
         <translation>Rozmiar</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="385"/>
+        <location filename="Map/MapLayer.cpp" line="389"/>
         <source>%1 features</source>
         <translation>%1 cech</translation>
     </message>
@@ -2655,6 +2670,37 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     </message>
 </context>
 <context>
+    <name>NameFinder::NameFinderTableModel</name>
+    <message>
+        <location filename="NameFinder/namefindertablemodel.cpp" line="66"/>
+        <source>Name</source>
+        <translation>Nazwa</translation>
+    </message>
+    <message>
+        <location filename="NameFinder/namefindertablemodel.cpp" line="69"/>
+        <source>Type</source>
+        <translation>Typ</translation>
+    </message>
+    <message>
+        <location filename="NameFinder/namefindertablemodel.cpp" line="72"/>
+        <source>Near</source>
+        <translation>W pobliżu</translation>
+    </message>
+    <message>
+        <location filename="NameFinder/namefindertablemodel.cpp" line="75"/>
+        <source>Unknown field</source>
+        <translation>Nieznane pole</translation>
+    </message>
+</context>
+<context>
+    <name>NameFinderWidgetUi</name>
+    <message>
+        <location filename="NameFinder/namefinderwidget.ui" line="13"/>
+        <source>Form</source>
+        <translation>Okno formy</translation>
+    </message>
+</context>
+<context>
     <name>NativeRenderDialog</name>
     <message>
         <location filename="Render/NativeRenderDialog.ui" line="13"/>
@@ -2718,17 +2764,17 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
 <context>
     <name>OsbMapLayer</name>
     <message>
-        <location filename="Map/MapLayer.cpp" line="1211"/>
+        <location filename="Map/MapLayer.cpp" line="1215"/>
         <source># of loaded Regions</source>
         <translation># wczytanych regionów</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="1212"/>
+        <location filename="Map/MapLayer.cpp" line="1216"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="Map/MapLayer.cpp" line="1212"/>
+        <location filename="Map/MapLayer.cpp" line="1216"/>
         <source># of loaded Tiles</source>
         <translation># wczytanych kafli</translation>
     </message>
@@ -2738,7 +2784,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="Render/OsmaRenderDialog.cpp" line="102"/>
         <source>SVG output filename</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Podaj nazwę pliku SVG</translation>
     </message>
     <message>
         <location filename="Render/OsmaRenderDialog.cpp" line="102"/>
@@ -2748,18 +2794,19 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="Render/OsmaRenderDialog.cpp" line="325"/>
         <source>The SVG will have a size of approx. %1 x %2 pixels (without extras like scale, borders, ...)</source>
-        <translation type="unfinished"></translation>
+        <translation>Powstałe SVG będzie rozmiaru około %1 x %2 pikseli (bez dodatków typu skala, ramki, itp.)</translation>
     </message>
     <message>
         <location filename="Render/OsmaRenderDialog.cpp" line="328"/>
         <source>The bitmap will have a size of approx. %1 x %2 pixels (without extras like scale, borders, ...)
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Powstała bitmapa będzie rozmiaru około %1 x %2 pikseli (bez dodatków typu skala, ramki, itp.)
+</translation>
     </message>
     <message>
         <location filename="Render/OsmaRenderDialog.cpp" line="330"/>
         <source>It will be saved as &apos;%1&apos;.</source>
-        <translation>Zostanei zapisany jako &quot;%1&quot;.</translation>
+        <translation>Zostanie zapisany jako &quot;%1&quot;.</translation>
     </message>
     <message>
         <location filename="Render/OsmaRenderDialog.ui" line="13"/>
@@ -2879,7 +2926,7 @@ Scieżka podana w Narzędzia-&gt;Konfiguracja-&gt;Narzędzia nie jest poprawna.<
     <message>
         <location filename="PaintStyle/PaintStyleEditor.ui" line="122"/>
         <source>Tag selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybrana etykieta</translation>
     </message>
     <message>
         <location filename="PaintStyle/PaintStyleEditor.ui" line="198"/>
@@ -2974,12 +3021,12 @@ Scieżka podana w Narzędzia-&gt;Konfiguracja-&gt;Narzędzia nie jest poprawna.<
     <message>
         <location filename="PaintStyle/PaintStyleEditor.ui" line="1226"/>
         <source>Label with background tag</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Etykieta z tłem</translation>
     </message>
     <message>
         <location filename="PaintStyle/PaintStyleEditor.ui" line="1111"/>
         <source>Halo</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="PaintStyle/PaintStyleEditor.ui" line="1121"/>
@@ -3352,7 +3399,7 @@ Proszę wybrać inną nazwę lub kliknąć przycisk &lt;Zastosuj&gt; aby zmodyfi
     <message>
         <location filename="Preferences/PreferencesDialog.ui" line="166"/>
         <source>Single mouse button interaction</source>
-        <translation type="unfinished"></translation>
+        <translation>Obsługa pojedynczym klawiszem myszy</translation>
     </message>
     <message>
         <location filename="Preferences/PreferencesDialog.ui" line="909"/>
@@ -3433,7 +3480,7 @@ Proszę wybrać inną nazwę lub kliknąć przycisk &lt;Zastosuj&gt; aby zmodyfi
     <message>
         <location filename="Render/OsmaRenderDialog.cpp" line="177"/>
         <source>Please make sure the Osmarender stylesheet is available at %1</source>
-        <translation type="unfinished">Proszę upewnić się, że arkusz Osmarenderera jest dostępny w %1</translation>
+        <translation>Proszę upewnić się, że arkusz Osmarenderera jest dostępny w %1</translation>
     </message>
     <message>
         <location filename="Render/OsmaRenderDialog.cpp" line="168"/>
@@ -3577,12 +3624,12 @@ Proszę wybrać inną nazwę lub kliknąć przycisk &lt;Zastosuj&gt; aby zmodyfi
     <message>
         <location filename="GPS/qgpsmainwindowui.ui" line="120"/>
         <source>Fix Type</source>
-        <translation type="unfinished">Ustalenie</translation>
+        <translation>Rodzaj ustalenia</translation>
     </message>
     <message>
         <location filename="GPS/qgpsmainwindowui.ui" line="130"/>
         <source>Invalid</source>
-        <translation>Niepoprawny</translation>
+        <translation>Niepoprawne</translation>
     </message>
     <message>
         <location filename="GPS/qgpsmainwindowui.ui" line="137"/>
@@ -3598,6 +3645,14 @@ Proszę wybrać inną nazwę lub kliknąć przycisk &lt;Zastosuj&gt; aby zmodyfi
         <location filename="GPS/qgpsmainwindowui.ui" line="154"/>
         <source>Latitude</source>
         <translation>Szerokość geograficzna</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <location filename="NameFinder/xmlstreamreader.cpp" line="41"/>
+        <source>Not a proper results stream!</source>
+        <translation>Niepoprawny strumień!</translation>
     </message>
 </context>
 <context>
@@ -3862,7 +3917,7 @@ Proszę wybrać inną nazwę lub kliknąć przycisk &lt;Zastosuj&gt; aby zmodyfi
 <context>
     <name>TrackMapLayer</name>
     <message>
-        <location filename="Map/MapLayer.cpp" line="777"/>
+        <location filename="Map/MapLayer.cpp" line="781"/>
         <source>Extract - %1</source>
         <translation type="unfinished">Wyodrębnij - %1</translation>
     </message>
@@ -4070,12 +4125,12 @@ Proszę wybrać inną nazwę lub kliknąć przycisk &lt;Zastosuj&gt; aby zmodyfi
     <message>
         <location filename="Tools/WorldOsbManager.cpp" line="76"/>
         <source>Region generation error</source>
-        <translation type="unfinished"></translation>
+        <translation>Błąd podczas tworzenia regionu</translation>
     </message>
     <message>
         <location filename="Tools/WorldOsbManager.cpp" line="77"/>
         <source>Error while generating region %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Błąd podczas tworzenia regionu %1</translation>
     </message>
     <message>
         <location filename="Tools/WorldOsbManager.ui" line="13"/>
