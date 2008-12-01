@@ -740,6 +740,7 @@
 </painter>
 <painter
  zoomUnder="0.03" zoomUpper="1e+07"
+ backgroundColor="#505050fc" backgroundScale="1.2" backgroundOffset="4"
  fillColor="#a2ef9477"
  drawTrafficDirectionMarks="yes">
   <selector expr="[leisure] is playground"/>
@@ -927,7 +928,7 @@
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
- drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="1.5" labelOffset="6"
+ drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="1.5" labelOffset="8"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="addr:housenumber" labelHalo="yes">
   <selector expr=" not [addr:housenumber] is _NULL_"/>
 </painter>
