@@ -41,6 +41,8 @@ public slots:
 	void on_buttonBox_clicked(QAbstractButton * button);
 	void on_searchButton_clicked();
 	void searchWidget_selectionChanged();
+	void on_NameFinderEdit_textChanged(const QString & text);
+	void searchWidget_doubleClicked ();
 
 protected:
 	

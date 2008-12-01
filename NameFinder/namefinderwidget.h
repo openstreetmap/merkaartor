@@ -47,6 +47,7 @@ public:
 
 signals:
 	void selectionChanged();
+	void doubleClicked();
 
 protected:
         virtual void changeEvent(QEvent *e);
@@ -65,6 +66,7 @@ private:
 private slots:
         void display();
 	void selection_selectionChanged(const QItemSelection & selected, const QItemSelection & deselected);
+	void doubleClick();
     };
 }
 #endif // NAMEFINDERWIDGET_H

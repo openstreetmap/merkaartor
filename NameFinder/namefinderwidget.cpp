@@ -35,6 +35,7 @@ namespace NameFinder
 		m_ui->tableView->setModel ( model );
 		selection = m_ui->tableView->selectionModel();
 		connect(selection, SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), this,SLOT(selection_selectionChanged(const QItemSelection&,const QItemSelection&)));
+		connect(m_ui->tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT (doubleClick()));
 	}
 
 	NameFinderWidget::~NameFinderWidget()
@@ -87,5 +88,10 @@ namespace NameFinder
 	void NameFinderWidget::selection_selectionChanged(const QItemSelection & selected, const QItemSelection & deselected)
 	{
 		emit selectionChanged();
+	}
+
+	void NameFinderWidget::doubleClick()
+	{
+	    emit doubleClicked();
 	}
 }
