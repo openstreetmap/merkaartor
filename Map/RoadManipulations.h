@@ -18,6 +18,9 @@ void mergeNodes(MapDocument* theDocument, CommandList* theList, PropertiesDock* 
 void commitFeatures(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock);
 bool canJoinRoads(PropertiesDock* theDock);
 bool canBreakRoads(PropertiesDock* theDock);
+void addRelationMember(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock);
+void removeRelationMember(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock);
+
 
 #endif
 

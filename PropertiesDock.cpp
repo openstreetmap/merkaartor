@@ -80,11 +80,57 @@ static bool isChildOfSingleRoad(MapFeature *mapFeature)
 	{
 		MapFeature * parent = mapFeature->getParent(i);
 		bool isParentRoad = dynamic_cast<Road*>(parent) != 0;
-		if (isParentRoad)
+		if (isParentRoad) {
 			parentRoads++;
+			if (parentRoads > 1)
+				return false;
+		}
 	}
 
 	return (parentRoads == 1);
+}
+
+static bool isChildOfSingleRelation(MapFeature *mapFeature)
+{
+	unsigned int parents = mapFeature->sizeParents();
+
+	if (parents == 0)
+		return false;
+
+	unsigned int parentRelations = 0;
+
+	unsigned int i;
+	for (i=0; i<parents; i++)
+	{
+		MapFeature * parent = mapFeature->getParent(i);
+		bool isParentRelation = dynamic_cast<Relation*>(parent) != 0;
+		if (isParentRelation)
+			parentRelations++;
+			if (parentRelations > 1)
+				return false;
+	}
+
+	return (parentRelations == 1);
+}
+
+static bool isChildOfRelation(MapFeature *mapFeature)
+{
+	unsigned int parents = mapFeature->sizeParents();
+
+	if (parents == 0)
+		return false;
+
+	unsigned int parentRelations = 0;
+
+	unsigned int i;
+	for (i=0; i<parents; i++)
+	{
+		MapFeature * parent = mapFeature->getParent(i);
+		if (dynamic_cast<Relation*>(parent))
+			return true;
+	}
+
+	return false;
 }
 
 void PropertiesDock::checkMenuStatus()
@@ -92,14 +138,18 @@ void PropertiesDock::checkMenuStatus()
 	bool IsPoint = false;
 	bool IsRoad = false;
 	bool IsParentRoad = false;
+	bool IsParentRelation = false;
 	unsigned int NumRoads = 0;
 	unsigned int NumCommitableFeature = 0;
 	unsigned int NumPoints = 0;
+	unsigned int NumRelation = 0;
+	unsigned int NumRelationChild = 0;
 	if (Selection.size() == 1)
 	{
 		IsPoint = dynamic_cast<TrackPoint*>(Selection[0]) != 0;
 		IsRoad = dynamic_cast<Road*>(Selection[0]) != 0;
 		IsParentRoad = IsPoint && isChildOfSingleRoad(Selection[0]);
+		IsParentRelation = isChildOfSingleRelation(Selection[0]);
 	}
 	for (unsigned int i=0; i<Selection.size(); ++i)
 	{
@@ -107,6 +157,10 @@ void PropertiesDock::checkMenuStatus()
 			++NumPoints;
 		if (dynamic_cast<Road*>(Selection[i]))
 			++NumRoads;
+		if (dynamic_cast<Relation*>(Selection[i]))
+			++NumRelation;
+		if (isChildOfRelation(Selection[i]))
+			++NumRelationChild;
 
 		if (Selection[i]->layer() && !Selection[i]->layer()->isUploadable())
 			++NumCommitableFeature;
@@ -121,7 +175,8 @@ void PropertiesDock::checkMenuStatus()
 	Main->featureCommitAction->setEnabled(NumCommitableFeature);
 	Main->nodeMergeAction->setEnabled(NumPoints > 1);
 	Main->nodeAlignAction->setEnabled(NumPoints > 2);
-	//Main->fileDownloadMoreAction->setEnabled(Main->document()->getLastDownloadLayer() != NULL);
+	Main->relationAddMemberAction->setEnabled(NumRelation && Selection.size() > 1);
+	Main->relationRemoveMemberAction->setEnabled((NumRelation && Selection.size() > 1 && NumRelationChild) || IsParentRelation);
 
 	Main->editCopyAction->setEnabled(Selection.size());
 	Main->clipboardChanged();

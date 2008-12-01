@@ -321,3 +321,40 @@ void commitFeatures(MapDocument* theDocument, CommandList* theList, PropertiesDo
 		}
 	}
 }
+
+void addRelationMember(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)
+{
+	Relation* theRelation = NULL;
+	QVector<MapFeature*> Features;
+	for (unsigned int i=0; i<theDock->size(); ++i)
+		if ((theDock->selection(i)->getClass() == "Relation") && !theRelation)
+			theRelation = dynamic_cast<Relation*>(theDock->selection(i));
+		else 
+			Features.push_back(theDock->selection(i));
+
+	if (!(theRelation && Features.size())) return;
+
+	for (int i=0; i<Features.size(); ++i) {
+		theList->add(new RelationAddFeatureCommand(theRelation, "", Features[i], theDocument->getDirtyOrOriginLayer(theRelation->layer()))); 
+	}
+}
+
+void removeRelationMember(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)
+{
+	Relation* theRelation = NULL;
+	QVector<MapFeature*> Features;
+	for (unsigned int i=0; i<theDock->size(); ++i)
+		if ((theDock->selection(i)->getClass() == "Relation") && !theRelation)
+			theRelation = dynamic_cast<Relation*>(theDock->selection(i));
+		else 
+			Features.push_back(theDock->selection(i));
+
+	if (!(theRelation && Features.size())) return;
+
+	int idx;
+	for (int i=0; i<Features.size(); ++i) {
+		if ((idx = theRelation->find(Features[i])) != theRelation->size())
+			theList->add(new RelationRemoveFeatureCommand(theRelation, idx, theDocument->getDirtyOrOriginLayer(theRelation->layer()))); 
+	}
+}
+

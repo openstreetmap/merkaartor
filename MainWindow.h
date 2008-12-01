@@ -81,10 +81,16 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_editRemoveAction_triggered();
 		virtual void on_editMoveAction_triggered();
 		virtual void on_editReverseAction_triggered();
+
 		virtual void on_roadSplitAction_triggered();
 		virtual void on_roadBreakAction_triggered();
 		virtual void on_roadJoinAction_triggered();
 		virtual void on_featureCommitAction_triggered();
+		virtual void on_nodeAlignAction_triggered();
+		virtual void on_nodeMergeAction_triggered();
+		virtual void on_relationAddMemberAction_triggered();
+		virtual void on_relationRemoveMemberAction_triggered();
+
 		virtual void on_mapStyleSaveAction_triggered();
 		virtual void on_mapStyleLoadAction_triggered();
 		virtual void on_exportOSMAction_triggered();
@@ -96,8 +102,6 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_editSelectAction_triggered();
 		virtual void on_bookmarkAddAction_triggered();
 		virtual void on_bookmarkRemoveAction_triggered();
-		virtual void on_nodeAlignAction_triggered();
-		virtual void on_nodeMergeAction_triggered();
 
 		virtual void on_toolsPreferencesAction_triggered() {toolsPreferencesAction_triggered();}
 		virtual void on_toolsWorldOsbAction_triggered();

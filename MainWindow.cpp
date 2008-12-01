@@ -996,6 +996,56 @@ void MainWindow::on_featureCommitAction_triggered()
 		theDocument->addHistory(theList);
 }
 
+void MainWindow::on_nodeAlignAction_triggered()
+{
+	//MapFeature* F = theView->properties()->selection(0);
+	CommandList* theList = new CommandList(MainWindow::tr("Align Nodes"), NULL);
+	alignNodes(theDocument, theList, theProperties);
+	if (theList->empty())
+		delete theList;
+	else
+	{
+		theDocument->addHistory(theList);
+	//	theView->properties()->setSelection(F);
+		invalidateView();
+	}
+}
+
+void MainWindow::on_nodeMergeAction_triggered()
+{
+	MapFeature* F = theProperties->selection(0);
+	CommandList* theList = new CommandList(MainWindow::tr("Merge Nodes into %1").arg(F->id()), F);
+	mergeNodes(theDocument, theList, theProperties);
+	if (theList->empty())
+		delete theList;
+	else
+	{
+		theDocument->addHistory(theList);
+		theProperties->setSelection(F);
+		invalidateView();
+	}
+}
+
+void MainWindow::on_relationAddMemberAction_triggered()
+{
+	CommandList* theList = new CommandList(MainWindow::tr("Add member to relation"), NULL);
+	addRelationMember(theDocument, theList, theProperties);
+	if (theList->empty())
+		delete theList;
+	else
+		theDocument->addHistory(theList);
+}
+
+void MainWindow::on_relationRemoveMemberAction_triggered()
+{
+	CommandList* theList = new CommandList(MainWindow::tr("Remove member from relation"), NULL);
+	removeRelationMember(theDocument, theList, theProperties);
+	if (theList->empty())
+		delete theList;
+	else
+		theDocument->addHistory(theList);
+}
+
 void MainWindow::on_createRelationAction_triggered()
 {
 	Relation* R = new Relation;
@@ -1714,36 +1764,6 @@ void MainWindow::projectionTriggered(QAction* anAction)
 	theView->projection().setProjectionType((ProjectionType)idx);
 	theView->projection().setViewport(theView->projection().viewport(), theView->rect());
 	invalidateView();
-}
-
-void MainWindow::on_nodeAlignAction_triggered()
-{
-	//MapFeature* F = theView->properties()->selection(0);
-	CommandList* theList = new CommandList(MainWindow::tr("Align Nodes"), NULL);
-	alignNodes(theDocument, theList, theProperties);
-	if (theList->empty())
-		delete theList;
-	else
-	{
-		theDocument->addHistory(theList);
-	//	theView->properties()->setSelection(F);
-		invalidateView();
-	}
-}
-
-void MainWindow::on_nodeMergeAction_triggered()
-{
-	MapFeature* F = theProperties->selection(0);
-	CommandList* theList = new CommandList(MainWindow::tr("Merge Nodes into %1").arg(F->id()), F);
-	mergeNodes(theDocument, theList, theProperties);
-	if (theList->empty())
-		delete theList;
-	else
-	{
-		theDocument->addHistory(theList);
-		theProperties->setSelection(F);
-		invalidateView();
-	}
 }
 
 void MainWindow::on_windowPropertiesAction_triggered()

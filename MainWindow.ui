@@ -237,7 +237,7 @@
    </widget>
    <widget class="QMenu" name="menuGps" >
     <property name="title" >
-     <string>Gps</string>
+     <string>&amp;Gps</string>
     </property>
     <addaction name="gpsConnectAction" />
     <addaction name="gpsReplayAction" />
@@ -248,6 +248,13 @@
     <addaction name="separator" />
     <addaction name="gpsCenterAction" />
    </widget>
+   <widget class="QMenu" name="menuRelation" >
+    <property name="title" >
+     <string>Rel&amp;ation</string>
+    </property>
+    <addaction name="relationAddMemberAction" />
+    <addaction name="relationRemoveMemberAction" />
+   </widget>
    <addaction name="menuFile" />
    <addaction name="menuEdit" />
    <addaction name="menuView" />
@@ -255,8 +262,9 @@
    <addaction name="menuLayers" />
    <addaction name="menuCreate" />
    <addaction name="menu_Feature" />
-   <addaction name="menuRoad" />
    <addaction name="menu_Node" />
+   <addaction name="menuRoad" />
+   <addaction name="menuRelation" />
    <addaction name="menuTools" />
    <addaction name="windowAction" />
    <addaction name="menuHelp" />
@@ -1152,6 +1160,16 @@
   <action name="toolTemplatesSaveAction" >
    <property name="text" >
     <string>&amp;Save...</string>
+   </property>
+  </action>
+  <action name="relationAddMemberAction" >
+   <property name="text" >
+    <string>&amp;Add member</string>
+   </property>
+  </action>
+  <action name="relationRemoveMemberAction" >
+   <property name="text" >
+    <string>&amp;Remove member</string>
    </property>
   </action>
  </widget>

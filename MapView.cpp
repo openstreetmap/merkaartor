@@ -583,13 +583,6 @@ void MapView::on_customContextMenuRequested(const QPoint & pos)
 		if (featureMenu.actions().size())
 			menu.addMenu(&featureMenu);
 
-		QMenu roadMenu(tr("Road"));
-		for(int i=0; i<Main->menuRoad->actions().size(); ++i) {
-			if (Main->menuRoad->actions()[i]->isEnabled())
-				roadMenu.addAction(Main->menuRoad->actions()[i]);
-		}
-		if (roadMenu.actions().size())
-			menu.addMenu(&roadMenu);
 
 		QMenu nodeMenu(tr("Node"));
 		for(int i=0; i<Main->menu_Node->actions().size(); ++i) {
@@ -598,6 +591,22 @@ void MapView::on_customContextMenuRequested(const QPoint & pos)
 		}
 		if (nodeMenu.actions().size())
 			menu.addMenu(&nodeMenu);
+
+		QMenu roadMenu(tr("Road"));
+		for(int i=0; i<Main->menuRoad->actions().size(); ++i) {
+			if (Main->menuRoad->actions()[i]->isEnabled())
+				roadMenu.addAction(Main->menuRoad->actions()[i]);
+		}
+		if (roadMenu.actions().size())
+			menu.addMenu(&roadMenu);
+
+		QMenu relationMenu(tr("Relation"));
+		for(int i=0; i<Main->menuRelation->actions().size(); ++i) {
+			if (Main->menuRelation->actions()[i]->isEnabled())
+				relationMenu.addAction(Main->menuRelation->actions()[i]);
+		}
+		if (relationMenu.actions().size())
+			menu.addMenu(&relationMenu);
 
 		if (menu.actions().size()) {
 			if (menu.actions().size() == 1) {
