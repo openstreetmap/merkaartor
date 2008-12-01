@@ -438,6 +438,8 @@ void PropertiesDock::resetValues()
 			RelationUi.TagView->setModel(theModel);
 			RelationUi.TagView->setItemDelegate(delegate);
 
+			QWidget* w = RelationUi.variableLayout->takeAt(0)->widget();
+			w->deleteLater();
 			if (theTemplates)
 				RelationUi.variableLayout->addWidget(theTemplates->getWidget(R));
 			
