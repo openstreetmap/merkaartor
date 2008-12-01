@@ -174,8 +174,8 @@ void WMSPreferencesDialog::on_buttonBox_clicked(QAbstractButton * button)
 
 void WMSPreferencesDialog::loadPrefs()
 {
-	WmsServerList* L = MerkaartorPreferences::instance()->getWmsServers();
-	WmsServerListIterator i(*L);
+	WmsServerList L = MerkaartorPreferences::instance()->getWmsServers();
+	WmsServerListIterator i(L);
 	while (i.hasNext()) {
 		i.next();
 		addServer(i.value());
@@ -185,11 +185,11 @@ void WMSPreferencesDialog::loadPrefs()
 
 void WMSPreferencesDialog::savePrefs()
 {
-	WmsServerList* L = MerkaartorPreferences::instance()->getWmsServers();
-	L->clear();
+	WmsServerList& L = MerkaartorPreferences::instance()->getWmsServers();
+	L.clear();
 	for (unsigned int i = 0; i < theWmsServers.size(); ++i) {
 		WmsServer S(theWmsServers[i]);
-		L->insert(theWmsServers[i].WmsName, S);
+		L.insert(theWmsServers[i].WmsName, S);
 	}
 	MerkaartorPreferences::instance()->setSelectedWmsServer(getSelectedServer());
 	MerkaartorPreferences::instance()->save();

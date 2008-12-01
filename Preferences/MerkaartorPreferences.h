@@ -15,6 +15,8 @@
 #include <QtCore>
 #include <QtCore/QSettings>
 #include <QColor>
+#include <QHttp>
+#include <QBuffer>
 
 #include "Map/Coord.h"
 
@@ -68,6 +70,9 @@ enum ExportType {
 	Export_Viewport,
 	Export_Selected
 };
+
+typedef QMap<QString, CoordBox> BookmarkList;
+typedef QMapIterator<QString, CoordBox> BookmarkListIterator;
 
 class WmsServer
 {
@@ -141,6 +146,11 @@ public:
 
 	void save();
 
+	void toOsmPref(bool clear=false);
+	void fromOsmPref();
+	void putOsmPref(const QString& k, const QString& v);
+	void deleteOsmPref(const QString& k);
+
 	bool use06Api() const;
 	void setUse06Api(bool b);
 
@@ -158,20 +168,19 @@ public:
 
 	void setProxyHost(const QString & theValue);
 	QString getProxyHost() const;
+	void setProxyPort(int theValue);
+	int getProxyPort() const;
 
-	void setBookmarks(const QStringList & theValue);
-	QStringList getBookmarks() const;
+	void setBookmarks();
+	BookmarkList&  getBookmarks();
 
 	void setSelectedWmsServer(const QString & theValue);
 	QString getSelectedWmsServer() const;
-	WmsServerList* getWmsServers() const;
+	WmsServerList& getWmsServers();
 
 	void setSelectedTmsServer(const QString & theValue);
 	QString getSelectedTmsServer() const;
-	TmsServerList* getTmsServers() const;
-
-	void setProxyPort(int theValue);
-	int getProxyPort() const;
+	TmsServerList& getTmsServers();
 
 	void setBgVisible(bool theValue);
 	bool getBgVisible() const;
@@ -344,6 +353,13 @@ protected:
 	int ProxyPort;
 	QStringList Bookmarks;
 
+	QHttp httpRequest;
+	int OsmPrefLoadId;
+	int OsmPrefSaveId;
+	int OsmPrefDeleteId;
+	QBuffer OsmPrefContent;
+	QMap<QString, int> OsmPrefListsCount;
+
 	void setWmsServers();
 	void setTmsServers();
 	void setTools();
@@ -351,13 +367,21 @@ protected:
 
 private:
 	QHash<QString, qreal> alpha;
-	WmsServerList* theWmsServerList;
-	TmsServerList* theTmsServerList;
+	BookmarkList theBookmarks;
+	WmsServerList theWmsServerList;
+	TmsServerList theTmsServerList;
 	ToolList* theToolList;
 	QSettings * Sets;
 	QStringList bgTypes;
 	QStringList projTypes;
 	static MerkaartorPreferences* m_prefInstance;
+
+private slots:
+	void on_responseHeaderReceived(const QHttpResponseHeader & hdr);
+	void on_requestFinished ( int id, bool error );
+
+signals:
+	void bookmarkChanged();
 };
 
 #endif

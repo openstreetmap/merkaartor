@@ -267,8 +267,8 @@ ImageLayerWidget::~ImageLayerWidget()
 
 void ImageLayerWidget::setWms(QAction* act)
 {
-	WmsServerList* L = MerkaartorPreferences::instance()->getWmsServers();
-	WmsServer S = L->value(act->data().toString());
+	WmsServerList L = MerkaartorPreferences::instance()->getWmsServers();
+	WmsServer S = L.value(act->data().toString());
 	MerkaartorPreferences::instance()->setSelectedWmsServer(S.WmsName);
 
 	((ImageMapLayer *)theLayer)->setMapAdapter(Bg_Wms);
@@ -280,8 +280,8 @@ void ImageLayerWidget::setWms(QAction* act)
 
 void ImageLayerWidget::setTms(QAction* act)
 {
-	TmsServerList* L = MerkaartorPreferences::instance()->getTmsServers();
-	TmsServer S = L->value(act->data().toString());
+	TmsServerList L = MerkaartorPreferences::instance()->getTmsServers();
+	TmsServer S = L.value(act->data().toString());
 	MerkaartorPreferences::instance()->setSelectedTmsServer(S.TmsName);
 
 	((ImageMapLayer *)theLayer)->setMapAdapter(Bg_Tms);
@@ -364,8 +364,8 @@ void ImageLayerWidget::initActions()
 	associatedMenu->addSeparator();
 
 	wmsMenu = new QMenu(MerkaartorPreferences::instance()->getBgTypes()[Bg_Wms], this);
-	WmsServerList* WmsServers = MerkaartorPreferences::instance()->getWmsServers();
-	WmsServerListIterator wi(*WmsServers);
+	WmsServerList WmsServers = MerkaartorPreferences::instance()->getWmsServers();
+	WmsServerListIterator wi(WmsServers);
 	while (wi.hasNext()) {
 		wi.next();
 		WmsServer S = wi.value();
@@ -381,8 +381,8 @@ void ImageLayerWidget::initActions()
 	}
 
 	tmsMenu = new QMenu(MerkaartorPreferences::instance()->getBgTypes()[Bg_Tms], this);
-	TmsServerList* TmsServers = MerkaartorPreferences::instance()->getTmsServers();
-	TmsServerListIterator ti(*TmsServers);
+	TmsServerList TmsServers = MerkaartorPreferences::instance()->getTmsServers();
+	TmsServerListIterator ti(TmsServers);
 	while (ti.hasNext()) {
 		ti.next();
 		TmsServer S = ti.value();

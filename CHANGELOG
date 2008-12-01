@@ -1,4 +1,5 @@
 v0.13
+	* ADD : Automatically save/restore bookmarks, TMS servers & WMS servers to OSM user preferences (closes #1362)
 	* ADD : Add Name Finder service to "Go to" dialog.
 	* FIX : If TRANSDIR_SYSTEM isn't set use QLibraryInfo::TranslationsPath. (closes #1358)
 	* FIX : Plural/paucal forms in DownloadOSM.cpp (closes #1306)

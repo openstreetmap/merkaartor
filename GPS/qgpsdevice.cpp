@@ -662,8 +662,10 @@ bool QGPSComDevice::openDevice()
 bool QGPSComDevice::closeDevice()
 {
 	port->close();
-	LogFile->close();
-	delete LogFile;
+	if (LogFile && LogFile->isOpen()) {
+		LogFile->close();
+		delete LogFile;
+	}
 	LogFile = NULL;
 
 	return true;

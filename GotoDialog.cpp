@@ -27,19 +27,22 @@ GotoDialog::GotoDialog(const Projection& aProj, QWidget *parent)
 	OsmZoom = qMin(OsmZoom, 18);
 	OsmZoom = qMax(OsmZoom, 1);
 
+	int idx = 0;
 	int selIdx = -1;
 	double dist = 6372.795;
 	double d;
-	QStringList Bookmarks = M_PREFS->getBookmarks();
-	for (int i=0; i<Bookmarks.size(); i+=5) {
-		coordBookmark->addItem(Bookmarks[i], i);
-		int idx = i+1;
-		CoordBox C = CoordBox(Coord(angToInt(Bookmarks[idx].toDouble()),angToInt(Bookmarks[idx+1].toDouble())),
-			Coord(angToInt(Bookmarks[idx+2].toDouble()),angToInt(Bookmarks[idx+3].toDouble())));
+	QMap<QString, CoordBox> Bookmarks = M_PREFS->getBookmarks();
+	QMapIterator<QString, CoordBox> i(Bookmarks);
+	while (i.hasNext()) {
+		i.next();
+
+		coordBookmark->addItem(i.key());
+		CoordBox C = i.value();
 		if ((d = C.center().distanceFrom(B.center())) < dist) {
 			dist = d;
-			selIdx = i/5;
+			selIdx = idx;
 		}
+		++idx;
 	}
 	coordBookmark->setCurrentIndex(selIdx);
 	
@@ -89,10 +92,7 @@ void GotoDialog::on_buttonBox_clicked(QAbstractButton * button)
 {
 	if (buttonBox->buttonRole(button) == QDialogButtonBox::AcceptRole) {
 		if (rbBookmark->isChecked()) {
-			QStringList Bookmarks = MerkaartorPreferences::instance()->getBookmarks();
-			int idx = coordBookmark->itemData(coordBookmark->currentIndex()).toInt() + 1;
-			theNewViewport = CoordBox(Coord(angToInt(Bookmarks[idx].toDouble()),angToInt(Bookmarks[idx+1].toDouble())),
-				Coord(angToInt(Bookmarks[idx+2].toDouble()),angToInt(Bookmarks[idx+3].toDouble())));
+			theNewViewport = M_PREFS->getBookmarks()[coordBookmark->currentText()];
 		} else
 		if (rbOSM->isChecked()) {
 			QUrl url = QUrl(coordOSM->text()); 

@@ -614,9 +614,11 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 #endif
 	ui.vboxLayout1->addWidget(SlippyMap);
 	QObject::connect(SlippyMap, SIGNAL(redraw()), ui.FromMap, SLOT(toggle()));
-	QStringList Bookmarks = MerkaartorPreferences::instance()->getBookmarks();
-	for (int i=0; i<Bookmarks.size(); i+=5)
-		ui.Bookmarks->addItem(Bookmarks[i]);
+	QMapIterator<QString, CoordBox> i(M_PREFS->getBookmarks());
+	while (i.hasNext()) {
+		i.next();
+		ui.Bookmarks->addItem(i.key());
+	}
 	ui.IncludeTracks->setChecked(DownloadRaw);
 	ui.ResolveRelations->setChecked(M_PREFS->getResolveRelations());
 	bool OK = true, retry = true, directAPI = false, Regional=false;
@@ -631,9 +633,7 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 			CoordBox Clip(Coord(0,0),Coord(0,0));
 			if (ui.FromBookmark->isChecked())
 			{
-				unsigned int idx = ui.Bookmarks->currentIndex()*5+1;
-				Clip = CoordBox(Coord(angToInt(Bookmarks[idx].toDouble()),angToInt(Bookmarks[idx+1].toDouble())),
-					Coord(angToInt(Bookmarks[idx+2].toDouble()),angToInt(Bookmarks[idx+3].toDouble())));
+				Clip = M_PREFS->getBookmarks()[ui.Bookmarks->currentText()];
 			}
 			else if (ui.FromView->isChecked())
 			{

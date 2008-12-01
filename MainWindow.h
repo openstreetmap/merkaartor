@@ -186,8 +186,10 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		TrackSegment* curGpsTrackSegment;
 		QHash<QString, QString> shortcutsDefault;
 
-	private:
+	private slots:
 		void updateBookmarksMenu();
+
+	private:
 		void updateRecentOpenMenu();
 		void updateRecentImportMenu();
 		void updateProjectionMenu();

@@ -581,9 +581,9 @@ Layer* ImageMapLayer::imageLayer()
 void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 {
 	MapAdapter* mapadapter_bg;
-	WmsServerList* wsl;
+	WmsServerList wsl;
 	WmsServer ws;
-	TmsServerList* tsl;
+	TmsServerList tsl;
 	TmsServer ts;
 	QString selws, selts;
 	int idx = -1;
@@ -608,7 +608,7 @@ void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 		case Bg_Wms:
 			wsl = MerkaartorPreferences::instance()->getWmsServers();
 			selws = MerkaartorPreferences::instance()->getSelectedWmsServer();
-			ws = wsl->value(selws);
+			ws = wsl.value(selws);
 			wmsa = new WMSMapAdapter(ws.WmsAdress, ws.WmsPath, ws.WmsLayers, ws.WmsProjections,
 					ws.WmsStyles, ws.WmsImgFormat, 256);
 			mapadapter_bg = wmsa;
@@ -620,7 +620,7 @@ void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 		case Bg_Tms:
 			tsl = MerkaartorPreferences::instance()->getTmsServers();
 			selts = MerkaartorPreferences::instance()->getSelectedTmsServer();
-			ts = tsl->value(selts);
+			ts = tsl.value(selts);
 			tmsa = new TileMapAdapter(ts.TmsAdress, ts.TmsPath, ts.TmsTileSize, ts.TmsMinZoom, ts.TmsMaxZoom);
 			mapadapter_bg = tmsa;
 			p->layer_bg = new Layer(id(), mapadapter_bg, Layer::MapLayer);

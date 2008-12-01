@@ -12,7 +12,9 @@
 
 #include "MerkaartorPreferences.h"
 
-#include <QtGui/QApplication>
+#include <QApplication>
+#include <QByteArray>
+#include <QMessageBox>
 
 #include "MainWindow.h"
 #include "MapView.h"
@@ -82,18 +84,21 @@ Tool::Tool()
 MerkaartorPreferences::MerkaartorPreferences()
 {
 	Sets = new QSettings();
-	theWmsServerList = new WmsServerList();
-	theTmsServerList = new TmsServerList();
 	theToolList = new ToolList();
 
 	version = Sets->value("version/version", "0").toString();
+
+	connect(&httpRequest, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)), this, SLOT(on_responseHeaderReceived(const QHttpResponseHeader &)));
+	connect(&httpRequest,SIGNAL(requestFinished(int, bool)),this,SLOT(on_requestFinished(int, bool)));
+	if (getProxyUse())
+		httpRequest.setProxy(getProxyHost(),getProxyPort());
+
 	initialize();
+	fromOsmPref();
 }
 
 MerkaartorPreferences::~MerkaartorPreferences()
 {
-	delete theWmsServerList;
-	delete theTmsServerList;
 	delete theToolList;
 	delete Sets;
 }
@@ -106,6 +111,220 @@ void MerkaartorPreferences::save()
 	setTools();
 	setAlphaList();
 	Sets->sync();
+
+	if (getProxyUse())
+		httpRequest.setProxy(getProxyHost(),getProxyPort());
+	else
+		httpRequest.setProxy("",0);
+	toOsmPref(true);
+}
+
+void MerkaartorPreferences::toOsmPref(bool clear)
+{
+	if (getOsmUser().isEmpty() || getOsmPassword().isEmpty()) return;
+
+	QMap<QString, QString> OsmPref;
+
+	int i=0;
+	BookmarkListIterator bl(getBookmarks());
+	while(bl.hasNext()) {
+		bl.next();
+
+		QString k = QString("MerkaartorBookmark%1").arg(i, 3, 10, QLatin1Char('0'));
+		QString v = QString("%1;%2;%3;%4;%5")
+						.arg(bl.key())
+						.arg(intToAng(bl.value().bottomRight().lat()))
+						.arg(intToAng(bl.value().bottomRight().lon()))
+						.arg(intToAng(bl.value().topLeft().lat()))
+						.arg(intToAng(bl.value().topLeft().lon()));
+		OsmPref.insert(k, v);
+		++i;
+	}
+
+	i=0;
+	TmsServerListIterator tsl(getTmsServers());
+	while(tsl.hasNext()) {
+		tsl.next();
+
+		QString k = QString("MerkaartorTmsServer%1").arg(i, 3, 10, QLatin1Char('0'));
+		QString v;
+		TmsServer S = tsl.value();
+		v.append(S.TmsName + ";");
+		v.append(S.TmsAdress + ";");
+		v.append(S.TmsPath + ";");
+		v.append(QString::number(S.TmsTileSize) + ";");
+		v.append(QString::number(S.TmsMinZoom) + ";");
+		v.append(QString::number(S.TmsMaxZoom));
+
+		OsmPref.insert(k, v);
+		++i;
+	}
+
+	i=0;
+	WmsServerListIterator wsl(getWmsServers());
+	while(wsl.hasNext()) {
+		wsl.next();
+
+		QString k = QString("MerkaartorWmsServer%1").arg(i, 3, 10, QLatin1Char('0'));
+		QString v;
+		WmsServer S = wsl.value();
+		v.append(S.WmsName + ";");
+		v.append(S.WmsAdress + ";");
+		v.append(S.WmsPath + ";");
+		v.append(S.WmsLayers + ";");
+		v.append(S.WmsProjections + ";");
+		v.append(S.WmsStyles + ";");
+		v.append(S.WmsImgFormat);
+
+		OsmPref.insert(k, v);
+		++i;
+	}
+
+	QMapIterator<QString, QString> it(OsmPref);
+	while(it.hasNext()) {
+		it.next();
+		putOsmPref(it.key(), it.value());
+	}
+	for (int i=getBookmarks().size(); i<OsmPrefListsCount["MerkaartorBookmark"]; ++i) {
+		QString k = QString("MerkaartorBookmark%1").arg(i, 3, 10, QLatin1Char('0'));
+		deleteOsmPref(k);
+	}
+	for (int i=getBookmarks().size(); i<OsmPrefListsCount["MerkaartorTmsServer"]; ++i) {
+		QString k = QString("MerkaartorTmsServer%1").arg(i, 3, 10, QLatin1Char('0'));
+		deleteOsmPref(k);
+	}
+	for (int i=getBookmarks().size(); i<OsmPrefListsCount["MerkaartorWmsServer"]; ++i) {
+		QString k = QString("MerkaartorWmsServer%1").arg(i, 3, 10, QLatin1Char('0'));
+		deleteOsmPref(k);
+	}
+
+}
+
+void MerkaartorPreferences::putOsmPref(const QString& k, const QString& v)
+{
+	QUrl osmWeb;
+	osmWeb.setScheme("http");
+	osmWeb.setAuthority(getOsmWebsite());
+	if (osmWeb.port() == -1)
+		osmWeb.setPort(80);
+
+	QByteArray ba(v.toUtf8());
+	QBuffer Buf(&ba);
+
+	httpRequest.setHost(osmWeb.host(), osmWeb.port());
+	httpRequest.setUser(getOsmUser().toUtf8(), getOsmPassword().toUtf8());
+
+	QHttpRequestHeader Header("PUT", QString("/api/0.5/user/preferences/%1").arg(k));
+	if (osmWeb.port() == 80)
+		Header.setValue("Host",osmWeb.host());
+	else
+		Header.setValue("Host",osmWeb.host() + ':' + QString::number(osmWeb.port()));
+	OsmPrefSaveId = httpRequest.request(Header,ba);
+}
+
+void MerkaartorPreferences::deleteOsmPref(const QString& k)
+{
+	QUrl osmWeb;
+	osmWeb.setScheme("http");
+	osmWeb.setAuthority(getOsmWebsite());
+	if (osmWeb.port() == -1)
+		osmWeb.setPort(80);
+
+	httpRequest.setHost(osmWeb.host(), osmWeb.port());
+	httpRequest.setUser(getOsmUser().toUtf8(), getOsmPassword().toUtf8());
+
+	QHttpRequestHeader Header("DELETE", QString("/api/0.5/user/preferences/%1").arg(k));
+	if (osmWeb.port() == 80)
+		Header.setValue("Host",osmWeb.host());
+	else
+		Header.setValue("Host",osmWeb.host() + ':' + QString::number(osmWeb.port()));
+	httpRequest.request(Header);
+}
+
+void MerkaartorPreferences::fromOsmPref()
+{
+	if (getOsmUser().isEmpty() || getOsmPassword().isEmpty()) return;
+
+	QUrl osmWeb;
+	osmWeb.setScheme("http");
+	osmWeb.setAuthority(getOsmWebsite());
+	if (osmWeb.port() == -1)
+		osmWeb.setPort(80);
+
+	httpRequest.setHost(osmWeb.host(), osmWeb.port());
+	httpRequest.setUser(getOsmUser().toUtf8(), getOsmPassword().toUtf8());
+
+	QHttpRequestHeader Header("GET", "/api/0.5/user/preferences");
+	if (osmWeb.port() == 80)
+		Header.setValue("Host",osmWeb.host());
+	else
+		Header.setValue("Host",osmWeb.host() + ':' + QString::number(osmWeb.port()));
+	OsmPrefLoadId = httpRequest.request(Header, NULL, &OsmPrefContent);
+}
+
+void MerkaartorPreferences::on_responseHeaderReceived(const QHttpResponseHeader & hdr)
+{
+	qDebug() << hdr.statusCode();
+	switch (hdr.statusCode()) {
+		case 406:
+			QMessageBox::critical(NULL,QApplication::translate("MerkaartorPreferences","Preferences upload failed"), QApplication::translate("MerkaartorPreferences","Duplicate key"));
+			break;
+		case 413:
+			QMessageBox::critical(NULL,QApplication::translate("MerkaartorPreferences","Preferences upload failed"), QApplication::translate("MerkaartorPreferences","More than 150 preferences"));
+			break;
+		default:
+			break;
+	}
+}
+
+void MerkaartorPreferences::on_requestFinished ( int id, bool error )
+{
+	if (id == OsmPrefLoadId && !error) {
+		QMap<QString, QString> OsmPref;
+		bool ChangedBookmark = false;
+
+		QDomDocument aOsmPrefDoc;
+		aOsmPrefDoc.setContent(OsmPrefContent.buffer(), false);
+
+		OsmPrefListsCount["MerkaartorBookmark"] = 0;
+		OsmPrefListsCount["MerkaartorTmsServer"] = 0;
+		OsmPrefListsCount["MerkaartorWmsServer"] = 0;
+
+		QDomNodeList prefList = aOsmPrefDoc.elementsByTagName("preference");
+		for (int i=0; i < prefList.size(); ++i) {
+			QDomElement e = prefList.at(i).toElement();
+
+			if (e.attribute("k").startsWith("MerkaartorBookmark")) {
+				OsmPrefListsCount["MerkaartorBookmark"]++;
+				QStringList sl = e.attribute("v").split(";");
+				if (!theBookmarks.contains(sl[0])) {
+					ChangedBookmark = true;
+					theBookmarks[sl[0]] = CoordBox(Coord(angToInt(sl[1].toDouble()),angToInt(sl[2].toDouble())),
+											Coord(angToInt(sl[3].toDouble()),angToInt(sl[4].toDouble())));
+				}
+			}
+			if (e.attribute("k").startsWith("MerkaartorTmsServer")) {
+				OsmPrefListsCount["MerkaartorTmsServer"]++;
+				QStringList sl = e.attribute("v").split(";");
+				if (!theTmsServerList.contains(sl[0])) {
+					TmsServer S(sl[0], sl[1], sl[2], sl[3].toInt(), sl[4].toInt(), sl[5].toInt());
+					theTmsServerList[sl[0]] = S;
+				}
+			}
+			if (e.attribute("k").startsWith("MerkaartorWmsServer")) {
+				OsmPrefListsCount["MerkaartorWmsServer"]++;
+				QStringList sl = e.attribute("v").split(";");
+				if (!theWmsServerList.contains(sl[0])) {
+					WmsServer S(sl[0], sl[1], sl[2], sl[3], sl[4], sl[5], sl[6]);
+					theWmsServerList[sl[0]] = S;
+				}
+			}
+		}
+		if (ChangedBookmark) {
+			setBookmarks();	
+			emit(bookmarkChanged());
+		}
+	}
 }
 
 void MerkaartorPreferences::initialize()
@@ -130,12 +349,17 @@ void MerkaartorPreferences::initialize()
 	projTypes.insert(Proj_Merkaartor, tr("Merkaartor"));
 	projTypes.insert(Proj_Background, tr("Background"));
 
-	QStringList sl = getBookmarks();
+	QStringList sl = Sets->value("downloadosm/bookmarks").toStringList();
 	if (sl.size() == 0) {
 		QStringList DefaultBookmarks;
 		DefaultBookmarks << "London" << "51.47" << "-0.20" << "51.51" << "-0.08";
 	//	DefaultBookmarks << "Rotterdam" << "51.89" << "4.43" << "51.93" << "4.52";
-		setBookmarks(DefaultBookmarks);
+		Sets->setValue("downloadosm/bookmarks", DefaultBookmarks);
+		sl = DefaultBookmarks;
+	}
+	for (int i=0; i<sl.size(); i+=5) {
+		theBookmarks[sl[i]] = CoordBox(Coord(angToInt(sl[i+1].toDouble()),angToInt(sl[i+2].toDouble())),
+								Coord(angToInt(sl[i+3].toDouble()),angToInt(sl[i+4].toDouble())));
 	}
 
 	QStringList alphaList = getAlphaList();
@@ -166,27 +390,27 @@ void MerkaartorPreferences::initialize()
 			QString selS;
 			for (int i=0; i<Servers.size()/6; i++) {
 				WmsServer S(Servers[(i*6)], Servers[(i*6)+1], Servers[(i*6)+2], Servers[(i*6)+3], Servers[(i*6)+4], Servers[(i*6)+5], "image/png");
-				theWmsServerList->insert(Servers[(i*6)], S);
+				theWmsServerList.insert(Servers[(i*6)], S);
 				if (i == selI)
 					selS = Servers[(i*6)];
 			}
 			setSelectedWmsServer(selS);
-			if (!theWmsServerList->contains("OpenAerialMap")) {
+			if (!theWmsServerList.contains("OpenAerialMap")) {
 				WmsServer oam("OpenAerialMap", "openaerialmap.org", "/wms/?",
 					"world", "EPSG:4326", ",", "image/jpeg");
-				theWmsServerList->insert("OpenAerialMap", oam);
+				theWmsServerList.insert("OpenAerialMap", oam);
 				WmsServer otm("OpenTopoMap", "opentopomap.org", "/wms/?",
 					"world", "EPSG:4326", ",", "image/jpeg");
-				theWmsServerList->insert("OpenTopoMap", otm);
+				theWmsServerList.insert("OpenTopoMap", otm);
 				WmsServer tu("Terraservice_Urban", "terraservice.net", "/ogcmap.ashx?",
 					"urbanarea", "EPSG:4326", ",", "image/jpeg");
-				theWmsServerList->insert("Terraservice_Urban", tu);
+				theWmsServerList.insert("Terraservice_Urban", tu);
 				WmsServer tg("Terraservice_DRG", "terraservice.net", "/ogcmap.ashx?",
 					"drg", "EPSG:4326", ",", "image/jpeg");
-				theWmsServerList->insert("Terraservice_DRG", tg);
+				theWmsServerList.insert("Terraservice_DRG", tg);
 				WmsServer tq("Terraservice_DOQ", "terraservice.net", "/ogcmap.ashx?",
 					"doq", "EPSG:4326", ",", "image/jpeg");
-				theWmsServerList->insert("Terraservice_DOQ", tq);
+				theWmsServerList.insert("Terraservice_DOQ", tq);
 			}
 		}
 		save();
@@ -195,45 +419,45 @@ void MerkaartorPreferences::initialize()
 	if (Servers.size() == 0) {
 		WmsServer demis("Demis", "www2.demis.nl", "/wms/wms.asp?wms=WorldMap&",
 						"Countries,Borders,Highways,Roads,Cities", "EPSG:4326", ",", "image/png");
-		theWmsServerList->insert("Demis", demis);
+		theWmsServerList.insert("Demis", demis);
 		WmsServer oam("OpenAerialMap", "openaerialmap.org", "/wms/?",
 						"world", "EPSG:4326", ",", "image/jpeg");
-		theWmsServerList->insert("OpenAerialMap", oam);
+		theWmsServerList.insert("OpenAerialMap", oam);
 		WmsServer otm("OpenTopoMap", "opentopomap.org", "/wms/?",
 						"world", "EPSG:4326", ",", "image/jpeg");
-		theWmsServerList->insert("OpenTopoMap", otm);
+		theWmsServerList.insert("OpenTopoMap", otm);
 		WmsServer tu("Terraservice_Urban", "terraservice.net", "/ogcmap.ashx?",
 						"urbanarea", "EPSG:4326", ",", "image/jpeg");
-		theWmsServerList->insert("Terraservice_Urban", tu);
+		theWmsServerList.insert("Terraservice_Urban", tu);
 		WmsServer tg("Terraservice_DRG", "terraservice.net", "/ogcmap.ashx?",
 						"drg", "EPSG:4326", ",", "image/jpeg");
-		theWmsServerList->insert("Terraservice_DRG", tg);
+		theWmsServerList.insert("Terraservice_DRG", tg);
 		WmsServer tq("Terraservice_DOQ", "terraservice.net", "/ogcmap.ashx?",
 						"doq", "EPSG:4326", ",", "image/jpeg");
-		theWmsServerList->insert("Terraservice_DOQ", tq);
+		theWmsServerList.insert("Terraservice_DOQ", tq);
 		setSelectedWmsServer("OpenAerialMap");
 		save();
 	}
 	for (int i=0; i<Servers.size(); i+=7) {
 		WmsServer S(Servers[i], Servers[i+1], Servers[i+2], Servers[i+3], Servers[i+4], Servers[i+5], Servers[i+6]);
-		theWmsServerList->insert(Servers[i], S);
+		theWmsServerList.insert(Servers[i], S);
 	}
 	Servers = Sets->value("TMS/servers").toStringList();
 	if (Servers.size() == 0) {
 		TmsServer osmmapnik("OSM Mapnik", "tile.openstreetmap.org", "/%1/%2/%3.png", 256, 0, 17);
-		theTmsServerList->insert("OSM Mapnik", osmmapnik);
+		theTmsServerList.insert("OSM Mapnik", osmmapnik);
 		TmsServer osmth("OSM T@H", "tah.openstreetmap.org", "/Tiles/tile/%1/%2/%3.png", 256, 0, 17);
-		theTmsServerList->insert("OSM T@H", osmth);
+		theTmsServerList.insert("OSM T@H", osmth);
 		TmsServer cycle("Cycle Map", "andy.sandbox.cloudmade.com", "/tiles/cycle/%1/%2/%3.png", 256, 0, 14);
-		theTmsServerList->insert("Gravitystorm Cycle", cycle);
+		theTmsServerList.insert("Gravitystorm Cycle", cycle);
 		TmsServer oam("OpenAerialMap", "tile.openaerialmap.org", "/tiles/1.0.0/openaerialmap-900913/%1/%2/%3.png", 256, 0, 17);
-		theTmsServerList->insert("OpenAerialMap", oam);
+		theTmsServerList.insert("OpenAerialMap", oam);
 		setSelectedTmsServer("OSM Mapnik");
 		save();
 	}
 	for (int i=0; i<Servers.size(); i+=6) {
 		TmsServer S(Servers[i], Servers[i+1], Servers[i+2], Servers[i+3].toInt(), Servers[i+4].toInt(), Servers[i+5].toInt());
-		theTmsServerList->insert(Servers[i], S);
+		theTmsServerList.insert(Servers[i], S);
 	}
 }
 
@@ -310,19 +534,31 @@ void MerkaartorPreferences::setProxyPort(int theValue)
 	Sets->setValue("proxy/Port", theValue);
 }
 
-QStringList MerkaartorPreferences::getBookmarks() const
+BookmarkList& MerkaartorPreferences::getBookmarks()
 {
-	return Sets->value("downloadosm/bookmarks").toStringList();
+	//return Sets->value("downloadosm/bookmarks").toStringList();
+	return theBookmarks;
 }
 
-void MerkaartorPreferences::setBookmarks(const QStringList & theValue)
+void MerkaartorPreferences::setBookmarks()
 {
-	Sets->setValue("downloadosm/bookmarks", theValue);
+	QStringList bk;
+	QMapIterator<QString, CoordBox> i(theBookmarks);
+	while (i.hasNext()) {
+		i.next();
+		bk.append(i.key());
+		bk.append(QString::number(intToAng(i.value().bottomLeft().lat()), 'f', 4));
+		bk.append(QString::number(intToAng(i.value().bottomLeft().lon()), 'f', 4));
+		bk.append(QString::number(intToAng(i.value().topRight().lat()), 'f', 4));
+		bk.append(QString::number(intToAng(i.value().topRight().lon()), 'f', 4));
+	}
+	Sets->setValue("downloadosm/bookmarks", bk);
+	toOsmPref(true);
 }
 
 /* WMS */
 
-WmsServerList* MerkaartorPreferences::getWmsServers() const
+WmsServerList& MerkaartorPreferences::getWmsServers()
 {
 //	return Sets->value("WSM/servers").toStringList();
 	return theWmsServerList;
@@ -331,7 +567,7 @@ WmsServerList* MerkaartorPreferences::getWmsServers() const
 void MerkaartorPreferences::setWmsServers()
 {
 	QStringList Servers;
-	WmsServerListIterator i(*theWmsServerList);
+	WmsServerListIterator i(theWmsServerList);
 	while (i.hasNext()) {
 		i.next();
 		WmsServer S = i.value();
@@ -358,7 +594,7 @@ void MerkaartorPreferences::setSelectedWmsServer(const QString & theValue)
 
 /* TMS */
 
-TmsServerList* MerkaartorPreferences::getTmsServers() const
+TmsServerList& MerkaartorPreferences::getTmsServers()
 {
 //	return Sets->value("WSM/servers").toStringList();
 	return theTmsServerList;
@@ -367,16 +603,16 @@ TmsServerList* MerkaartorPreferences::getTmsServers() const
 void MerkaartorPreferences::setTmsServers()
 {
 	QStringList Servers;
-	TmsServerListIterator i(*theTmsServerList);
+	TmsServerListIterator i(theTmsServerList);
 	while (i.hasNext()) {
 		i.next();
 		TmsServer S = i.value();
 		Servers.append(S.TmsName);
 		Servers.append(S.TmsAdress);
 		Servers.append(S.TmsPath);
-		Servers.append(QString().setNum(S.TmsTileSize));
-		Servers.append(QString().setNum(S.TmsMinZoom));
-		Servers.append(QString().setNum(S.TmsMaxZoom));
+		Servers.append(QString::number(S.TmsTileSize));
+		Servers.append(QString::number(S.TmsMinZoom));
+		Servers.append(QString::number(S.TmsMaxZoom));
 	}
 	Sets->setValue("TMS/servers", Servers);
 }
