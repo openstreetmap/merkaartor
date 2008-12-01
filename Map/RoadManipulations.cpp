@@ -349,6 +349,8 @@ void removeRelationMember(MapDocument* theDocument, CommandList* theList, Proper
 		else 
 			Features.push_back(theDock->selection(i));
 
+	if (!theRelation && Features.size() == 1)
+		theRelation = MapFeature::GetSingleParentRelation(Features[0]);
 	if (!(theRelation && Features.size())) return;
 
 	int idx;

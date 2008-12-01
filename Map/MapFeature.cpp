@@ -506,6 +506,34 @@ QVector<qreal> MapFeature::getParentDashes() const
 	return p->parentDashes;
 }
 
+Relation * MapFeature::GetSingleParentRelation(MapFeature * mapFeature)
+{
+	unsigned int parents = mapFeature->sizeParents();
+
+	if (parents == 0)
+		return NULL;
+
+	Relation * parentRelation = NULL;
+
+	unsigned int i;
+	for (i=0; i<parents; i++)
+	{
+		MapFeature * parent = mapFeature->getParent(i);
+		Relation * rel = dynamic_cast<Relation*>(parent);
+
+		if (rel == NULL)
+			continue;
+
+		if (parentRelation)
+			return NULL;
+
+		if (rel->layer()->isEnabled())
+			parentRelation = rel;
+	}
+
+	return parentRelation;
+}
+
 //Static
 TrackPoint* MapFeature::getTrackPointOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, const QString& Id)
 {
