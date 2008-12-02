@@ -1,4 +1,5 @@
 v0.13
+	* FIX : if a style was selected for a node but no icon was defined, nothing was drawn
 	* ADD : Possibility to add/remove members from Relations (closes #1265)
 	* ADD : Automatically save/restore bookmarks, TMS servers & WMS servers to OSM user preferences (closes #1362)
 	* ADD : Add Name Finder service to "Go to" dialog.

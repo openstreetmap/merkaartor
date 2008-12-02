@@ -644,16 +644,39 @@ void FeaturePainter::drawForeground(Relation* R, QPainter& thePainter, const Pro
 
 void FeaturePainter::drawTouchup(TrackPoint* Pt, QPainter& thePainter, const Projection& theProjection) const
 {
+	bool IconError = false;
 	if (DrawIcon && (IconName != "") )
 	{
 		double PixelPerM = theProjection.pixelPerM();
 		double WW = PixelPerM*IconScale+IconOffset;
 
         QPixmap pm = getPixmapFromFile(IconName,int(WW));
-        QPoint C(theProjection.project(Pt->position()));
-        thePainter.fillRect(QRect(C-QPoint(2,2),QSize(4,4)),QColor(0,0,0,128));
-        thePainter.drawPixmap( int(C.x()-pm.width()/2), int(C.y()-pm.height()/2) , pm);
-    }
+		if (pm.isNull())
+			IconError = true;
+		else {
+			QPoint C(theProjection.project(Pt->position()));
+			thePainter.fillRect(QRect(C-QPoint(2,2),QSize(4,4)),QColor(0,0,0,128));
+			thePainter.drawPixmap( int(C.x()-pm.width()/2), int(C.y()-pm.height()/2) , pm);
+		}
+	}
+	if (!DrawIcon || (IconName == "") || IconError) 
+	{
+		QColor theColor = QColor(0,0,0,128);
+		if (DrawForeground)
+			theColor = ForegroundColor;
+		else 
+			if (DrawBackground)
+				theColor =BackgroundColor;
+
+		QPointF P(theProjection.project(Pt->position()));
+		if (Pt->findKey("_waypoint_") != Pt->tagSize()) {
+			QRectF R(P-QPointF(4,4),QSize(8,8)); 
+			thePainter.fillRect(R,QColor(255,0,0,128)); 
+		}
+		
+		QRectF R(P-QPointF(2,2),QSize(4,4));
+		thePainter.fillRect(R,theColor);
+	}
 }
 
 void FeaturePainter::drawTouchup(Road* R, QPainter& thePainter, const Projection& theProjection) const
