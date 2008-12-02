@@ -314,6 +314,10 @@
 	<file>map-icons/square.small/public/recycling_small.png</file>
 	<file>map-icons/square.small/public/arts_centre.png</file>
 	<file>map-icons/square.small/public/police.png</file>
+        <file>map-icons/classic.small/vehicle/restrictions/maxheight.png</file>
+        <file>map-icons/classic.small/vehicle/restrictions/maxlength.png</file>
+        <file>map-icons/classic.small/vehicle/restrictions/maxweight.png</file>
+        <file>map-icons/classic.small/vehicle/restrictions/maxwidth.png</file>
     </qresource>
     <qresource>
     	<file>Tiles/000.png</file>
