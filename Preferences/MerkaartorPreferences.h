@@ -35,6 +35,9 @@ class MapView;
 #define M_PARAM_DECLARE_STRING(Param) \
 	void set##Param(const QString & theValue); \
 	QString get##Param() const; 
+#define M_PARAM_DECLARE_INT(Param) \
+	void set##Param(const int theValue); \
+	int get##Param() const; 
 
 #define SAFE_DELETE(x) {delete (x); x = NULL;}
 
@@ -69,6 +72,12 @@ enum ExportType {
 	Export_All,
 	Export_Viewport,
 	Export_Selected
+};
+
+enum DirectionalArrowsShow {
+	DirectionalArrows_Never,
+	DirectionalArrows_Oneway,
+	DirectionalArrows_Always
 };
 
 typedef QMap<QString, CoordBox> BookmarkList;
@@ -246,6 +255,9 @@ public:
 	void setStyleTouchupVisible(bool theValue);
 	void setNamesVisible(bool theValue);
 	bool getNamesVisible() const;
+
+	DirectionalArrowsShow getDirectionalArrowsVisible();
+	void setDirectionalArrowsVisible(DirectionalArrowsShow theValue);
 
 	void setTrackPointsVisible(bool theValue);
 	bool getTrackPointsVisible() const;

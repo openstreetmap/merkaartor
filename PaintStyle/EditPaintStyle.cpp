@@ -137,6 +137,57 @@ void EPTouchupLayer::draw(Road* R)
 	FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
 	if (paintsel)
 		paintsel->drawTouchup(R,p->thePainter,p->theProjection);
+	else {
+		if ( M_PREFS->getDirectionalArrowsVisible() != DirectionalArrows_Never )
+		{
+			MapFeature::TrafficDirectionType TT = trafficDirection(R);
+			if ( (TT != MapFeature::UnknownDirection) || (M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Always) ) 
+			{
+				double theWidth = p->theProjection.pixelPerM()*R->widthOf()-4;
+				if (theWidth > 8)
+					theWidth = 8;
+				double DistFromCenter = 2*(theWidth+4);
+				if (theWidth > 0)
+				{
+					for (unsigned int i=1; i<R->size(); ++i)
+					{
+						QPointF FromF(p->theProjection.project(R->getNode(i-1)->position()));
+						QPointF ToF(p->theProjection.project(R->getNode(i)->position()));
+						if (distance(FromF,ToF) > (DistFromCenter*2+4))
+						{
+							QPointF H(FromF+ToF);
+							H *= 0.5;
+							double A = angle(FromF-ToF);
+							QPointF T(DistFromCenter*cos(A),DistFromCenter*sin(A));
+							QPointF V1(theWidth*cos(A+M_PI/6),theWidth*sin(A+M_PI/6));
+							QPointF V2(theWidth*cos(A-M_PI/6),theWidth*sin(A-M_PI/6));
+							if ( M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Oneway )
+							{
+								if ( (TT == MapFeature::OtherWay) || (TT == MapFeature::BothWays) )
+								{
+									p->thePainter.setPen(QColor(0,0,0));
+									p->thePainter.drawLine(H+T,H+T-V1);
+									p->thePainter.drawLine(H+T,H+T-V2);
+								}
+								if ( (TT == MapFeature::OneWay) || (TT == MapFeature::BothWays) )
+								{
+									p->thePainter.setPen(QColor(0,0,0));
+									p->thePainter.drawLine(H-T,H-T+V1);
+									p->thePainter.drawLine(H-T,H-T+V2);
+								}
+							} 
+							else
+							{
+								p->thePainter.setPen(QColor(255,0,0));
+								p->thePainter.drawLine(H-T,H-T+V1);
+								p->thePainter.drawLine(H-T,H-T+V2);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 void EPTouchupLayer::draw(Relation* /* R */)

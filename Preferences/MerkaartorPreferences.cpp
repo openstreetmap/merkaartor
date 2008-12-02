@@ -39,6 +39,16 @@
 		return Sets->value(#Category"/"#Param, Default).toString(); \
 	}
 
+#define M_PARAM_IMPLEMENT_INT(Param, Category, Default) \
+	void MerkaartorPreferences::set##Param(const int theValue) \
+	{ \
+		Sets->setValue(#Category"/"#Param, theValue); \
+	} \
+	int MerkaartorPreferences::get##Param() const \
+	{ \
+		return Sets->value(#Category"/"#Param, Default).toInt(); \
+	}
+
 /***************************/
 
 MerkaartorPreferences* MerkaartorPreferences::m_prefInstance = 0;
@@ -1110,6 +1120,17 @@ void MerkaartorPreferences::setRelationsVisible(bool theValue)
 {
 	Sets->setValue("visual/RelationsVisible", theValue);
 }
+
+DirectionalArrowsShow MerkaartorPreferences::getDirectionalArrowsVisible()
+{
+	return (DirectionalArrowsShow)Sets->value("visual/DirectionalArrowsVisible", DirectionalArrows_Oneway).toInt();
+}
+
+void MerkaartorPreferences::setDirectionalArrowsVisible(DirectionalArrowsShow theValue)
+{
+	Sets->setValue("visual/DirectionalArrowsVisible", theValue);
+}
+
 
 /* Export Type */
 void MerkaartorPreferences::setExportType(ExportType theValue)

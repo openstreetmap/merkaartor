@@ -97,6 +97,14 @@
      </property>
      <addaction name="separator" />
     </widget>
+    <widget class="QMenu" name="menuShow_directional_Arrows" >
+     <property name="title" >
+      <string>Show directional &amp;Arrows</string>
+     </property>
+     <addaction name="viewArrowsNeverAction" />
+     <addaction name="viewArrowsOnewayAction" />
+     <addaction name="viewArrowsAlwaysAction" />
+    </widget>
     <addaction name="viewZoomAllAction" />
     <addaction name="viewZoomWindowAction" />
     <addaction name="viewZoomOutAction" />
@@ -110,6 +118,7 @@
     <addaction name="viewStyleTouchupAction" />
     <addaction name="viewScaleAction" />
     <addaction name="viewNamesAction" />
+    <addaction name="menuShow_directional_Arrows" />
     <addaction name="separator" />
     <addaction name="viewTrackPointsAction" />
     <addaction name="viewTrackSegmentsAction" />
@@ -1170,6 +1179,30 @@
   <action name="relationRemoveMemberAction" >
    <property name="text" >
     <string>&amp;Remove member</string>
+   </property>
+  </action>
+  <action name="viewArrowsNeverAction" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>&amp;Never</string>
+   </property>
+  </action>
+  <action name="viewArrowsOnewayAction" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>for &amp;Oneway roads</string>
+   </property>
+  </action>
+  <action name="viewArrowsAlwaysAction" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>&amp;Always</string>
    </property>
   </action>
  </widget>

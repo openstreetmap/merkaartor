@@ -675,7 +675,7 @@ void FeaturePainter::drawTouchup(TrackPoint* Pt, QPainter& thePainter, const Pro
 		}
 		
 		QRectF R(P-QPointF(2,2),QSize(4,4));
-		thePainter.fillRect(R,theColor);
+			thePainter.fillRect(R,theColor);
 	}
 }
 
@@ -698,38 +698,50 @@ void FeaturePainter::drawTouchup(Road* R, QPainter& thePainter, const Projection
 			thePainter.strokePath(R->getPath(),thePen);
 		}
 	}
-	if (DrawTrafficDirectionMarks)
+	if ( ((DrawTrafficDirectionMarks) && (M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Oneway)) ||  M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Always)
 	{
-		double theWidth = theProjection.pixelPerM()*R->widthOf()-4;
-		if (theWidth > 8)
-			theWidth = 8;
-		double DistFromCenter = 2*(theWidth+4);
-		if (theWidth > 0)
+		MapFeature::TrafficDirectionType TT = trafficDirection(R);
+		if ( (TT != MapFeature::UnknownDirection) || (M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Always) ) 
 		{
-			for (unsigned int i=1; i<R->size(); ++i)
+			double theWidth = theProjection.pixelPerM()*R->widthOf()-4;
+			if (theWidth > 8)
+				theWidth = 8;
+			double DistFromCenter = 2*(theWidth+4);
+			if (theWidth > 0)
 			{
-				QPointF FromF(theProjection.project(R->getNode(i-1)->position()));
-				QPointF ToF(theProjection.project(R->getNode(i)->position()));
-				if (distance(FromF,ToF) > (DistFromCenter*2+4))
+				for (unsigned int i=1; i<R->size(); ++i)
 				{
-					QPointF H(FromF+ToF);
-					H *= 0.5;
-					double A = angle(FromF-ToF);
-					QPointF T(DistFromCenter*cos(A),DistFromCenter*sin(A));
-					QPointF V1(theWidth*cos(A+M_PI/6),theWidth*sin(A+M_PI/6));
-					QPointF V2(theWidth*cos(A-M_PI/6),theWidth*sin(A-M_PI/6));
-					MapFeature::TrafficDirectionType TT = trafficDirection(R);
-					if ( (TT == MapFeature::OtherWay) || (TT == MapFeature::BothWays) )
+					QPointF FromF(theProjection.project(R->getNode(i-1)->position()));
+					QPointF ToF(theProjection.project(R->getNode(i)->position()));
+					if (distance(FromF,ToF) > (DistFromCenter*2+4))
 					{
-						thePainter.setPen(QColor(0,0,0));
-						thePainter.drawLine(H+T,H+T-V1);
-						thePainter.drawLine(H+T,H+T-V2);
-					}
-					if ( (TT == MapFeature::OneWay) || (TT == MapFeature::BothWays) )
-					{
-						thePainter.setPen(QColor(0,0,0));
-						thePainter.drawLine(H-T,H-T+V1);
-						thePainter.drawLine(H-T,H-T+V2);
+						QPointF H(FromF+ToF);
+						H *= 0.5;
+						double A = angle(FromF-ToF);
+						QPointF T(DistFromCenter*cos(A),DistFromCenter*sin(A));
+						QPointF V1(theWidth*cos(A+M_PI/6),theWidth*sin(A+M_PI/6));
+						QPointF V2(theWidth*cos(A-M_PI/6),theWidth*sin(A-M_PI/6));
+						if ( M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Oneway )
+						{
+							if ( (TT == MapFeature::OtherWay) || (TT == MapFeature::BothWays) )
+							{
+								thePainter.setPen(QColor(0,0,0));
+								thePainter.drawLine(H+T,H+T-V1);
+								thePainter.drawLine(H+T,H+T-V2);
+							}
+							if ( (TT == MapFeature::OneWay) || (TT == MapFeature::BothWays) )
+							{
+								thePainter.setPen(QColor(0,0,0));
+								thePainter.drawLine(H-T,H-T+V1);
+								thePainter.drawLine(H-T,H-T+V2);
+							}
+						} 
+						else
+						{
+							thePainter.setPen(QColor(255,0,0));
+							thePainter.drawLine(H-T,H-T+V1);
+							thePainter.drawLine(H-T,H-T+V2);
+						}
 					}
 				}
 			}

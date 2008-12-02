@@ -1,4 +1,5 @@
 v0.13
+	* ADD : "View" - "Show directional Arrows" menu. "Never" obviously never shows the arrows, "Always" obviously always shows them, even for non-roads. "Oneway" is the equivalent of the existing and is the default. (closes #1316)
 	* FIX : if a style was selected for a node but no icon was defined, nothing was drawn
 	* ADD : Possibility to add/remove members from Relations (closes #1265)
 	* ADD : Automatically save/restore bookmarks, TMS servers & WMS servers to OSM user preferences (closes #1362)

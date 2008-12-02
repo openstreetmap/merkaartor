@@ -79,6 +79,8 @@ MainWindow::MainWindow(void)
 	setupUi(this);
 	loadPainters(MerkaartorPreferences::instance()->getDefaultStyle());
 
+	blockSignals(true);
+
 	ViewportStatusLabel = new QLabel(this);
 	ViewportStatusLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
 	pbImages = new QProgressBar(this);
@@ -143,6 +145,22 @@ MainWindow::MainWindow(void)
 	viewTrackSegmentsAction->setChecked(M_PREFS->getTrackSegmentsVisible());
 	viewRelationsAction->setChecked(M_PREFS->getRelationsVisible());
 
+	QActionGroup* actgrpArrows = new QActionGroup(this);
+	actgrpArrows->addAction(viewArrowsNeverAction);
+	actgrpArrows->addAction(viewArrowsOnewayAction);
+	actgrpArrows->addAction(viewArrowsAlwaysAction);
+	switch (M_PREFS->getDirectionalArrowsVisible()) {
+		case DirectionalArrows_Never:
+			viewArrowsNeverAction->setChecked(true);
+			break;
+		case DirectionalArrows_Oneway:
+			viewArrowsOnewayAction->setChecked(true);
+			break;
+		case DirectionalArrows_Always:
+			viewArrowsAlwaysAction->setChecked(true);
+			break;
+	}
+
 	gpsCenterAction->setChecked(M_PREFS->getGpsMapCenter());
 
 	connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardChanged()));
@@ -205,6 +223,8 @@ MainWindow::MainWindow(void)
 		QAction* act = findChild<QAction*>(shortcuts[i]);
 		act->setShortcut(QKeySequence(shortcuts[i+1]));
 	}
+
+	blockSignals(false);
 }
 
 MainWindow::~MainWindow(void)
@@ -889,6 +909,30 @@ void MainWindow::on_viewGotoAction_triggered()
 		}
 	}
 	delete Dlg;
+}
+
+void MainWindow::on_viewArrowsNeverAction_triggered(bool checked)
+{
+	if (checked) {
+		M_PREFS->setDirectionalArrowsVisible(DirectionalArrows_Never);
+		invalidateView();
+	}
+}
+
+void MainWindow::on_viewArrowsOnewayAction_triggered(bool checked)
+{
+	if (checked) {
+		M_PREFS->setDirectionalArrowsVisible(DirectionalArrows_Oneway);
+		invalidateView();
+	}
+}
+
+void MainWindow::on_viewArrowsAlwaysAction_triggered(bool checked)
+{
+	if (checked) {
+		M_PREFS->setDirectionalArrowsVisible(DirectionalArrows_Always);
+		invalidateView();
+	}
 }
 
 void MainWindow::on_fileNewAction_triggered()
