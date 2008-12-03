@@ -43,30 +43,37 @@ namespace NameFinder
 // TODO: error reporting - QMessageBox??
 	bool HttpQuery::startSearch ( QString question )
 	{
-		QObject::connect ( &connection, SIGNAL ( done ( bool ) ), this, SLOT ( httpDone ( bool ) ) );
+		connect(&connection, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)), this, SLOT(on_responseHeaderReceived(const QHttpResponseHeader &)));
+		connect(&connection,SIGNAL(requestFinished(int, bool)),this,SLOT(on_requestFinished(int, bool)));
 		//if (!myService.isValid() || myService.scheme() != "http" || myService.path().isEmpty())
 		//  return false;
 
-		myDevice->open ( QIODevice::ReadWrite );
 		myService.addQueryItem ( "find",question );
+		connection.setHost ( myService.host(), myService.port ( 80 ) );
 		if ( proxyEnabled )
 			connection.setProxy ( myProxy );
-		connection.setHost ( myService.host(), myService.port ( 80 ) );
-		connection.get ( myService.path() + "?" + myService.encodedQuery(), myDevice );
+		
+		QHttpRequestHeader request( "GET", myService.path() + "?" + myService.encodedQuery() );
+		request.setValue( "Host", myService.host() + ":" + myService.port ( 80 ) );
+		request.setValue( "Connection", "Keep-Alive" );
+		reqId = connection.request( request, NULL, myDevice ); 
 		connection.close();
 		return true;
 	}
 
-	void HttpQuery::httpDone ( bool error )
+	void HttpQuery::on_requestFinished ( int id, bool error )
 	{
-		myDevice->close();
-		emit done();
+		if ((id == reqId) && !error)
+			emit done();
 	}
 
-	void HttpQuery::setProxy ( QNetworkProxy proxy )
+	void HttpQuery::setProxy ( QString host, int port )
 	{
-		myProxy = proxy;
-		proxyEnabled = true;
+		if (!host.isEmpty()) {
+			myProxy.setType(QNetworkProxy::HttpProxy);
+			myProxy.setHostName(host);
+			myProxy.setPort(port);
+			proxyEnabled = true;
+		}
 	}
-
 }

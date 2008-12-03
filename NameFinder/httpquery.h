@@ -40,7 +40,7 @@ public:
 
         bool   startSearch(QString question);
         //! Sets up a network proxy
-        void setProxy(QNetworkProxy proxy);
+        void setProxy(QString host, int port);
 
 signals:
         void done();
@@ -56,9 +56,10 @@ private:
         //! Do we have an http proxy
         QNetworkProxy myProxy;
         bool proxyEnabled;
+		int reqId;
 
 private slots:
-        void httpDone(bool error);
+		void on_requestFinished ( int id, bool error );
     };
 
 }
