@@ -1586,6 +1586,7 @@ void MainWindow::on_editSelectAction_triggered()
 			}
 		}
 		theProperties->setMultiSelection(selection);
+		view()->properties()->checkMenuStatus();
 	}
 }
 
