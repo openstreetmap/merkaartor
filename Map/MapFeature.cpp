@@ -231,16 +231,19 @@ bool MapFeature::isDeleted()
 
 void MapFeature::setTag(unsigned int index, const QString& key, const QString& value, bool addToTagList)
 {
+	unsigned int i;
+
 	p->PixelPerMForPainter = -1;
-	for (unsigned int i=0; i<p->Tags.size(); ++i)
+	for (i=0; i<p->Tags.size(); ++i)
 		if (p->Tags[i].first == key)
 		{
 			p->Tags[i].second = value;
-			notifyChanges();
-			return;
+			break;
 		}
-	p->Tags.insert(p->Tags.begin() + index, std::make_pair(key,value));
-	p->TagsSize++;
+	if (i == p->Tags.size()) {
+		p->Tags.insert(p->Tags.begin() + index, std::make_pair(key,value));
+		p->TagsSize++;
+	}
 	if (p->theLayer && addToTagList)
 		if (p->theLayer->getDocument())
 	  		p->theLayer->getDocument()->addToTagList(key, value);
