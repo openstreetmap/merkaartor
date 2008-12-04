@@ -60,7 +60,8 @@ private:
 
 private slots:
 		void on_requestFinished ( int id, bool error );
-    };
+		void on_responseHeaderReceived(const QHttpResponseHeader & hdr);
+};
 
 }
 

@@ -24,6 +24,8 @@
 #include <QList>
 #include <iostream>
 
+#include "Preferences/MerkaartorPreferences.h"
+
 namespace NameFinder
 {
 	NameFinderWidget::NameFinderWidget ( QWidget *parent ) :
@@ -60,6 +62,8 @@ namespace NameFinder
 	void NameFinderWidget::search ( QString object )
 	{
 		query = new HttpQuery ( this, &buffer );
+		if (M_PREFS->getProxyUse())
+			query->setProxy(M_PREFS->getProxyHost(), M_PREFS->getProxyPort());
 		connect ( query, SIGNAL ( done() ), this, SLOT ( display() ) );
 		query->startSearch ( object );
 	}

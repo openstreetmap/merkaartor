@@ -274,8 +274,9 @@ void MerkaartorPreferences::fromOsmPref()
 
 void MerkaartorPreferences::on_responseHeaderReceived(const QHttpResponseHeader & hdr)
 {
-	qDebug() << hdr.statusCode();
 	switch (hdr.statusCode()) {
+		case 200:
+			break;
 		case 406:
 			QMessageBox::critical(NULL,QApplication::translate("MerkaartorPreferences","Preferences upload failed"), QApplication::translate("MerkaartorPreferences","Duplicate key"));
 			break;
@@ -283,6 +284,8 @@ void MerkaartorPreferences::on_responseHeaderReceived(const QHttpResponseHeader 
 			QMessageBox::critical(NULL,QApplication::translate("MerkaartorPreferences","Preferences upload failed"), QApplication::translate("MerkaartorPreferences","More than 150 preferences"));
 			break;
 		default:
+			qDebug() << hdr.statusCode();
+			qDebug() << hdr.reasonPhrase();
 			break;
 	}
 }

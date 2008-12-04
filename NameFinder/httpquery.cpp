@@ -54,11 +54,26 @@ namespace NameFinder
 			connection.setProxy ( myProxy );
 		
 		QHttpRequestHeader request( "GET", myService.path() + "?" + myService.encodedQuery() );
-		request.setValue( "Host", myService.host() + ":" + myService.port ( 80 ) );
+		if (myService.port(80) != 80)
+			request.setValue( "Host", myService.host() + ":" + myService.port ( 80 ) );
+		else
+			request.setValue( "Host", myService.host() );
 		request.setValue( "Connection", "Keep-Alive" );
 		reqId = connection.request( request, NULL, myDevice ); 
 		connection.close();
 		return true;
+	}
+
+	void HttpQuery::on_responseHeaderReceived(const QHttpResponseHeader & hdr)
+	{
+		switch (hdr.statusCode()) {
+			case 200:
+				break;
+			default:
+				qDebug() << hdr.statusCode();
+				qDebug() << hdr.reasonPhrase();
+				break;
+		}
 	}
 
 	void HttpQuery::on_requestFinished ( int id, bool error )
