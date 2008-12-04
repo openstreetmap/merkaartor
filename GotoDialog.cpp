@@ -167,10 +167,10 @@ void GotoDialog::searchWidget_selectionChanged()
 void GotoDialog::on_NameFinderEdit_textChanged(const QString & text)
 {
     if (!text.isEmpty()) {
-	searchButton->setDefault(true);
+		searchButton->setDefault(true);
     } else {
-	searchButton->setDefault(false);
-	buttonBox->button(QDialogButtonBox::Ok)->setDefault(true);
+		searchButton->setDefault(false);
+		buttonBox->button(QDialogButtonBox::Ok)->setDefault(true);
     }
 }
 
