@@ -28,43 +28,80 @@ EditCompleterDelegate::~EditCompleterDelegate()
 
 QWidget* EditCompleterDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& /* option */, const QModelIndex& index) const
 {
-    QCompleter* completer;
+    QCompleter* completer = NULL;
 
-    QComboBox *edit = new QComboBox(parent);
-    edit->setInsertPolicy(QComboBox::InsertAlphabetically);
+	QWidget* edit;
     MainWindow* mw = (MainWindow *)(this->parent());
     if (index.column() == 0) {
         completer = new QCompleter(mw->document()->getTagList(), (QObject *)this);
-        edit->insertItems(-1, mw->document()->getTagList());
+		QComboBox *cb = new QComboBox(parent);
+		cb->setInsertPolicy(QComboBox::InsertAlphabetically);
+        cb->insertItems(-1, mw->document()->getTagList());
+		cb->setEditable(true);
+		completer->setCompletionMode(QCompleter::InlineCompletion);
+		completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
+		cb->setCompleter(completer);
+
+		edit = cb;
     } else {
         QModelIndex i = index.model()->index(index.row(), 0);
         QString k = index.model()->data(i).toString();
-        QStringList sl = mw->document()->getTagValueList(k);
-        completer = new QCompleter(sl, (QObject *)this);
-        edit->insertItems(-1, mw->document()->getTagValueList(k));
+		if (
+				(k != "name") &&
+				(k != "created_by")
+			) {
+			QStringList sl = mw->document()->getTagValueList(k);
+			completer = new QCompleter(sl, (QObject *)this);
+
+			QComboBox *cb = new QComboBox(parent);
+			cb->setInsertPolicy(QComboBox::InsertAlphabetically);
+			cb->insertItems(-1, mw->document()->getTagValueList(k));
+			cb->setEditable(true);
+			completer->setCompletionMode(QCompleter::InlineCompletion);
+			completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
+			cb->setCompleter(completer);
+
+			edit = cb;
+		} else {
+			QLineEdit* le = new QLineEdit(parent);
+			if (
+					(k == "created_by")
+				) {
+				le->setEnabled(false);
+			}
+
+			edit = le;
+		}
     }
-    completer->setCompletionMode(QCompleter::InlineCompletion);
-    completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
-    edit->setCompleter(completer);
-    edit->setEditable(true);
     return edit;
 }
 
 void EditCompleterDelegate::setEditorData(QWidget* editor, const QModelIndex& index) const
 {
-    QComboBox *edit = static_cast<QComboBox*>(editor);
-    if (index.model()->data(index).toString() != TagModel::newKeyText())
-        edit->setEditText(index.model()->data(index).toString());
-    else
-        edit->clearEditText();
-    edit->lineEdit()->selectAll();
+	if (QComboBox *edit = dynamic_cast<QComboBox*>(editor)) {
+		if (index.model()->data(index).toString() != TagModel::newKeyText())
+			edit->setEditText(index.model()->data(index).toString());
+		else
+			edit->clearEditText();
+		edit->lineEdit()->selectAll();
+	} else
+	if (QLineEdit *edit = dynamic_cast<QLineEdit*>(editor)) {
+		edit->setText(index.model()->data(index).toString());
+	}
 }
 
 void EditCompleterDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const
 {
-    QComboBox *edit = static_cast<QComboBox*>(editor);
-    if (!edit->currentText().isEmpty())
-        model->setData(index, edit->currentText());
+	QString newVal;
+	if (QComboBox *edit = dynamic_cast<QComboBox*>(editor))
+		newVal = edit->currentText();
+	else
+	if (QLineEdit *edit = dynamic_cast<QLineEdit*>(editor)) 
+		newVal = edit->text();
+
+	if (newVal == index.model()->data(index).toString()) return;
+	if (!newVal.isEmpty())
+		model->setData(index, newVal);
 }
 
 void EditCompleterDelegate::updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& /* index */) const

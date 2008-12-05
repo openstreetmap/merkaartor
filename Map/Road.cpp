@@ -633,13 +633,18 @@ void Road::clearTag(const QString& k)
 
 QString Road::toXML(unsigned int lvl, QProgressDialog * progress)
 {
+	if (!size()) return "";
+
 	if (progress)
 		progress->setValue(progress->value()+1);
 
 	QString S(lvl*2, ' ');
 	S += QString("<way id=\"%1\">\n").arg(stripToOSMId(id()));
-	for (unsigned int i=0; i<size(); ++i)
-		S += QString((lvl+1)*2, ' ') + QString("<nd ref=\"%1\"/>\n").arg(stripToOSMId(get(i)->id()));
+
+	S += QString((lvl+1)*2, ' ') + QString("<nd ref=\"%1\"/>\n").arg(stripToOSMId(get(0)->id()));
+	for (unsigned int i=1; i<size(); ++i)
+		if (get(i)->id() != get(i-1)->id())
+			S += QString((lvl+1)*2, ' ') + QString("<nd ref=\"%1\"/>\n").arg(stripToOSMId(get(i)->id()));
 	S += tagsToXML(lvl+1);
 	S += QString(lvl*2, ' ') + "</way>\n";
 	return S;
@@ -648,6 +653,7 @@ QString Road::toXML(unsigned int lvl, QProgressDialog * progress)
 bool Road::toXML(QDomElement xParent, QProgressDialog & progress)
 {
 	bool OK = true;
+	if (!size()) return OK;
 
 	QDomElement e = xParent.ownerDocument().createElement("way");
 	xParent.appendChild(e);
@@ -657,11 +663,17 @@ bool Road::toXML(QDomElement xParent, QProgressDialog & progress)
 	e.setAttribute("user", user());
 	e.setAttribute("actor", (int)lastUpdated());
 
-	for (unsigned int i=0; i<size(); ++i) {
-		QDomElement n = xParent.ownerDocument().createElement("nd");
-		e.appendChild(n);
+	QDomElement n = xParent.ownerDocument().createElement("nd");
+	e.appendChild(n);
+	n.setAttribute("ref", get(0)->xmlId());
 
-		n.setAttribute("ref", get(i)->xmlId());
+	for (unsigned int i=1; i<size(); ++i) {
+		if (get(i)->xmlId() != get(i-1)->xmlId()) {
+			QDomElement n = xParent.ownerDocument().createElement("nd");
+			e.appendChild(n);
+
+			n.setAttribute("ref", get(i)->xmlId());
+		}
 	}
 
 	tagsToXML(e);
