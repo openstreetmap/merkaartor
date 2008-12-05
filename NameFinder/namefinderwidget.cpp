@@ -22,7 +22,7 @@
 #include "xmlstreamreader.h"
 #include "NameFinderResult.h"
 #include <QList>
-#include <iostream>
+#include <QHeaderView>
 
 #include "Preferences/MerkaartorPreferences.h"
 
@@ -35,6 +35,7 @@ namespace NameFinder
 		m_ui->setupUi ( this );
 		model = new NameFinderTableModel();
 		m_ui->tableView->setModel ( model );
+		m_ui->tableView->horizontalHeader()->setStretchLastSection(true);
 		selection = m_ui->tableView->selectionModel();
 		connect(selection, SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), this,SLOT(selection_selectionChanged(const QItemSelection&,const QItemSelection&)));
 		connect(m_ui->tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT (doubleClick()));
