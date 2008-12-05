@@ -36,6 +36,7 @@ namespace NameFinder
 		model = new NameFinderTableModel();
 		m_ui->tableView->setModel ( model );
 		m_ui->tableView->horizontalHeader()->setStretchLastSection(true);
+		m_ui->tableView->verticalHeader()->setVisible(false);
 		selection = m_ui->tableView->selectionModel();
 		connect(selection, SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), this,SLOT(selection_selectionChanged(const QItemSelection&,const QItemSelection&)));
 		connect(m_ui->tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT (doubleClick()));
