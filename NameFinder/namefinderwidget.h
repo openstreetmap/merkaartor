@@ -64,7 +64,8 @@ private:
 
 
 private slots:
-        void display();
+	void display();
+	void displayError(QHttp::Error);
 	void selection_selectionChanged(const QItemSelection & selected, const QItemSelection & deselected);
 	void doubleClick();
     };

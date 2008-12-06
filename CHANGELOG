@@ -1,4 +1,5 @@
 v0.13
+	* FIX : Connection error reporting in name finder service. (sponsored by today's power outage;)
 	* FIX : Ugly way to ensure ways with duplicate consecutive node will not be uploaded/exported/saved
 	* ADD : Do not auto-complete "name" tag + make "created_by" read-only
 	* FIX : Selecting elements with Find do not update the menus (closes #1375)

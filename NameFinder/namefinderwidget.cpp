@@ -21,8 +21,10 @@
 #include "ui_namefinderwidget.h"
 #include "xmlstreamreader.h"
 #include "NameFinderResult.h"
+
 #include <QList>
 #include <QHeaderView>
+#include <QMessageBox>
 
 #include "Preferences/MerkaartorPreferences.h"
 
@@ -67,6 +69,7 @@ namespace NameFinder
 		if (M_PREFS->getProxyUse())
 			query->setProxy(M_PREFS->getProxyHost(), M_PREFS->getProxyPort());
 		connect ( query, SIGNAL ( done() ), this, SLOT ( display() ) );
+		connect ( query, SIGNAL ( doneWithError(QHttp::Error) ), this, SLOT ( displayError(QHttp::Error) ));
 		query->startSearch ( object );
 	}
 
@@ -75,6 +78,28 @@ namespace NameFinder
 		XmlStreamReader *reader = new XmlStreamReader ( &buffer );
 		reader->read();
 		model->setResults ( new QList<NameFinderResult> ( reader->getResults() ) );
+	}
+
+	//! Displays a QMessageBox with the connection error
+	void NameFinderWidget::displayError(QHttp::Error error)
+	{
+		QMessageBox errorBox;
+		errorBox.setIcon(QMessageBox::Critical);
+		errorBox.setWindowTitle(tr("Error!"));
+		switch (error)
+		{
+		    case QHttp::HostNotFound:
+			errorBox.setText(tr("Name finder service host not found."));
+			break;
+		    case QHttp::ConnectionRefused:
+			errorBox.setText(tr("Name finder service host refused connection."));
+			break;
+		    case QHttp::AuthenticationRequiredError:
+			errorBox.setText(tr("Name finder service requires authentication."));
+		    default:
+			errorBox.setText(tr("Unknown error."));
+		}
+		errorBox.exec();
 	}
 
 	QPointF NameFinderWidget::selectedCoords()

@@ -43,7 +43,8 @@ public:
         void setProxy(QString host, int port);
 
 signals:
-        void done();
+	void done();
+	void doneWithError(QHttp::Error error);
 
 private:
         QHttp connection;

@@ -40,7 +40,7 @@ namespace NameFinder
 	HttpQuery::~HttpQuery()
 	{
 	}
-// TODO: error reporting - QMessageBox??
+
 	bool HttpQuery::startSearch ( QString question )
 	{
 		connect(&connection, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)), this, SLOT(on_responseHeaderReceived(const QHttpResponseHeader &)));
@@ -78,8 +78,12 @@ namespace NameFinder
 
 	void HttpQuery::on_requestFinished ( int id, bool error )
 	{
-		if ((id == reqId) && !error)
+		if ((id == reqId) && !error) {
 			emit done();
+		}
+		else if ((id == reqId) && error) {
+			emit doneWithError(connection.error());
+		}
 	}
 
 	void HttpQuery::setProxy ( QString host, int port )
