@@ -465,6 +465,8 @@ void MerkaartorPreferences::initialize()
 		theTmsServerList.insert("Gravitystorm Cycle", cycle);
 		TmsServer oam("OpenAerialMap", "tile.openaerialmap.org", "/tiles/1.0.0/openaerialmap-900913/%1/%2/%3.png", 256, 0, 17);
 		theTmsServerList.insert("OpenAerialMap", oam);
+		TmsServer npe("New Popular Edition (NPE) at zoom 14", "richard.dev.openstreetmap.org", "/npe/%1/%2/%3.jpg", 256, 0, 17);
+		theTmsServerList.insert("New Popular Edition (NPE) at zoom 14", npe);
 		setSelectedTmsServer("OSM Mapnik");
 		save();
 	}
