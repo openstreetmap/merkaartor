@@ -18,7 +18,7 @@
 <painter
  zoomUnder="0.1" zoomUpper="1e+07"
  backgroundColor="#777777fc" backgroundScale="1.2" backgroundOffset="3"
- foregroundColor="#00ffbffc" foregroundScale="1" foregroundOffset="2"
+ foregroundColor="#87ceebfc" foregroundScale="1" foregroundOffset="2"
  drawTrafficDirectionMarks="yes" labelColor="#000000ff" labelScale="1.2" labelOffset="3"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelBackgroundColor="#ffffff7c" labelBackgroundTag="maxspeed" labelHalo="yes">
   <selector expr="[maxspeed] is 110"/>
@@ -26,7 +26,7 @@
 <painter
  zoomUnder="0.1" zoomUpper="1e+07"
  backgroundColor="#777777fc" backgroundScale="1.2" backgroundOffset="3"
- foregroundColor="#00ff40fc" foregroundScale="1" foregroundOffset="2"
+ foregroundColor="#66cdaafc" foregroundScale="1" foregroundOffset="2"
  drawTrafficDirectionMarks="yes" labelColor="#000000ff" labelScale="1.2" labelOffset="3"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelBackgroundColor="#ffffff7c" labelBackgroundTag="maxspeed" labelHalo="yes">
   <selector expr="[maxspeed] is 100"/>
@@ -34,7 +34,7 @@
 <painter
  zoomUnder="0.1" zoomUpper="1e+07"
  backgroundColor="#777777fc" backgroundScale="1.2" backgroundOffset="3"
- foregroundColor="#00ff00fc" foregroundScale="1" foregroundOffset="2"
+ foregroundColor="#3cb371fc" foregroundScale="1" foregroundOffset="2"
  drawTrafficDirectionMarks="yes" labelColor="#000000ff" labelScale="1.2" labelOffset="3"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelBackgroundColor="#ffffff7c" labelBackgroundTag="maxspeed" labelHalo="yes">
   <selector expr="[maxspeed] is 90"/>
@@ -42,7 +42,7 @@
 <painter
  zoomUnder="0.1" zoomUpper="1e+07"
  backgroundColor="#777777fc" backgroundScale="1.2" backgroundOffset="3"
- foregroundColor="#60ff00fc" foregroundScale="1" foregroundOffset="2"
+ foregroundColor="#32cd32fc" foregroundScale="1" foregroundOffset="2"
  drawTrafficDirectionMarks="yes" labelColor="#000000ff" labelScale="1.2" labelOffset="3"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelBackgroundColor="#ffffff7c" labelBackgroundTag="maxspeed" labelHalo="yes">
   <selector expr="[maxspeed] is 80"/>
@@ -50,7 +50,7 @@
 <painter
  zoomUnder="0.1" zoomUpper="1e+07"
  backgroundColor="#777777fc" backgroundScale="1.2" backgroundOffset="3"
- foregroundColor="#9fff00fc" foregroundScale="1" foregroundOffset="2"
+ foregroundColor="#adff2ffc" foregroundScale="1" foregroundOffset="2"
  drawTrafficDirectionMarks="yes" labelColor="#000000ff" labelScale="1.2" labelOffset="3"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelBackgroundColor="#ffffff7c" labelBackgroundTag="maxspeed" labelHalo="yes">
   <selector expr="[maxspeed] is 70"/>
@@ -117,7 +117,15 @@
  foregroundColor="#aa5500fc" foregroundScale="1" foregroundOffset="2"
  drawTrafficDirectionMarks="yes" labelColor="#000000ff" labelScale="1.2" labelOffset="3"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelBackgroundColor="#ffffff7c" labelBackgroundTag="maxspeed" labelHalo="yes">
-  <selector expr="[maxspeed] is 7"/>
+  <selector expr="[maxspeed] isoneof (7,walk)"/>
+</painter>
+<painter
+ zoomUnder="0.1" zoomUpper="1e+07"
+ backgroundColor="#777777fc" backgroundScale="1.2" backgroundOffset="3"
+ foregroundColor="#905000fc" foregroundScale="1" foregroundOffset="2"
+ drawTrafficDirectionMarks="yes" labelColor="#000000ff" labelScale="1.2" labelOffset="3"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelBackgroundColor="#ffffff7c" labelBackgroundTag="maxspeed" labelHalo="yes">
+  <selector expr="[maxspeed] is 6"/>
 </painter>
 <painter
  zoomUnder="0.1" zoomUpper="1e+07"
@@ -126,6 +134,22 @@
  drawTrafficDirectionMarks="yes" labelColor="#000000ff" labelScale="1.2" labelOffset="3"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelBackgroundColor="#ffffff7c" labelBackgroundTag="maxspeed" labelHalo="yes">
   <selector expr="[maxspeed] is 5"/>
+</painter>
+<painter
+ zoomUnder="0.1" zoomUpper="1e+07"
+ backgroundColor="#777777fc" backgroundScale="1.2" backgroundOffset="3"
+ foregroundColor="#004000fc" foregroundScale="1" foregroundOffset="2"
+ drawTrafficDirectionMarks="yes" labelColor="#000000ff" labelScale="1.2" labelOffset="3"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelBackgroundColor="#ffffff7c" labelBackgroundTag="maxspeed" labelHalo="yes">
+  <selector expr="[maxspeed] isoneof (no,none,unlimited)"/>
+</painter>
+<painter
+ zoomUnder="0.1" zoomUpper="1e+07"
+ backgroundColor="#777777fc" backgroundScale="1.2" backgroundOffset="3"
+ foregroundColor="#cc00fffc" foregroundScale="1" foregroundOffset="2"
+ drawTrafficDirectionMarks="yes" labelColor="#000000ff" labelScale="1.2" labelOffset="3"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelBackgroundColor="#ffffff7c" labelBackgroundTag="maxspeed" labelHalo="yes">
+  <selector expr="[maxspeed] isoneof (variable,signals)"/>
 </painter>
 <painter
  zoomUnder="0.1" zoomUpper="1e+07"
