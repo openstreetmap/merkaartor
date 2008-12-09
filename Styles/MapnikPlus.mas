@@ -363,7 +363,7 @@
 <painter
  zoomUnder="0.03" zoomUpper="1e+07"
  icon=":/Art/Mapnik/peak.png" iconScale="0" iconOffset="0"
- drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3"
+ drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="4.0" labelOffset="9"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes">
   <selector expr="[natural] is peak"/>
 </painter>
