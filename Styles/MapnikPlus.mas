@@ -375,6 +375,15 @@
   <selector expr="[natural] is spring"/>
 </painter>
 <painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ foregroundColor="#797979fc" foregroundScale="0.3" foregroundOffset="1"
+ touchupColor="#000000ff" touchupScale="0.5" touchupOffset="1"
+ touchupDashDown="1" touchupDashUp="1"
+ drawTrafficDirectionMarks="yes" labelColor="#333333ff" labelScale="3.5" labelOffset="3"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes">
+  <selector expr="[natural] is cliff"/>
+</painter>
+<painter
  zoomUnder="0.03" zoomUpper="1e+07"
  fillColor="#f7efb7cd"
  icon=":/Art/Mapnik/parking.png" iconScale="0" iconOffset="0"
