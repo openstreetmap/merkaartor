@@ -1247,6 +1247,9 @@ M_PARAM_IMPLEMENT_STRING(DefaultStyle, style, ":/Styles/Classic.mas")
 M_PARAM_IMPLEMENT_STRING(CustomStyle, style, "")
 M_PARAM_IMPLEMENT_BOOL(DisableStyleForTracks, style, true)
 
+/* Visual */
+M_PARAM_IMPLEMENT_BOOL(BackgroundOverwriteStyle, visual, false)
+
 /* Templates */
 M_PARAM_IMPLEMENT_STRING(DefaultTemplate, templates, ":/Templates/default.mat")
 M_PARAM_IMPLEMENT_STRING(CustomTemplate, templates, "")

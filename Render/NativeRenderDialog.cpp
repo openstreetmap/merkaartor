@@ -103,10 +103,10 @@ void NativeRenderDialog::render()
 		i.get()->draw(P, theProj);
 	}
 
-	EditPaintStyle EP(P, theProj);
-	for (unsigned int i = 0; i < EP.size(); ++i)
+	M_STYLE->initialize(P, theProj);
+	for (unsigned int i = 0; i < M_STYLE->size(); ++i)
 	{
-		PaintStyleLayer *Current = EP.get(i);
+		PaintStyleLayer *Current = M_STYLE->get(i);
 		for (VisibleFeatureIterator i(theDoc); !i.isEnd(); ++i)
 		{
 			if (theProj.viewport().disjunctFrom((i.get())->boundingBox())) continue;

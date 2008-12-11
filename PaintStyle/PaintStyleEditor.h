@@ -13,9 +13,12 @@ class PaintStyleEditor : public QDialog, public Ui::PaintStyleEditor
 	Q_OBJECT
 
 	public:
-		PaintStyleEditor(QWidget* aParent, const std::vector<FeaturePainter>& aPainters);
+		PaintStyleEditor(QWidget* aParent, const GlobalPainter& aGlobalPainter, const QVector<FeaturePainter>& aPainters);
 
 	public slots:
+		void on_DrawGlobalBackground_clicked(bool b);
+		void on_GlobalBackgroundColor_clicked();
+
 		void on_PaintList_itemClicked(QListWidgetItem*);
 		void on_TagSelection_editingFinished();
 		void on_LowerZoomBoundary_valueChanged();
@@ -63,11 +66,12 @@ class PaintStyleEditor : public QDialog, public Ui::PaintStyleEditor
 		void on_LabelArea_clicked(bool b);
 
 	public:
-		std::vector<FeaturePainter> thePainters;
+		GlobalPainter	theGlobalPainter;
+		QVector<FeaturePainter> thePainters;
 	private:
 		void updatePaintList();
 	signals:
-		void stylesApplied(std::vector<FeaturePainter>* thePainters);
+		void stylesApplied(QVector<FeaturePainter>* thePainters);
 	private:
 		bool FreezeUpdate;
 };

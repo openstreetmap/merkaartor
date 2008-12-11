@@ -10,16 +10,39 @@ class QString;
 
 #include <vector>
 
+#define M_STYLE EditPaintStyle::instance()
+
 class EditPaintStyle : public PaintStyle
 {
 	public:
-		static std::vector<FeaturePainter> Painters;
-	public:
-		EditPaintStyle(QPainter& P, const Projection& theProjection);
+		static EditPaintStyle* instance() {
+			if (!m_EPSInstance) {
+				m_EPSInstance = new EditPaintStyle;
+			}
+
+			return m_EPSInstance;
+		}
+
+		EditPaintStyle();
 		virtual ~EditPaintStyle();
+		void initialize(QPainter& P, const Projection& theProjection);
+
+		int painterSize();
+		const GlobalPainter& getGlobalPainter() const;
+		void setGlobalPainter(GlobalPainter aGlobalPainter);
+		const FeaturePainter* getPainter(int i) const;
+		QVector<FeaturePainter> getPainters() const;
+		void setPainters(QVector<FeaturePainter> aPainters);
+
+		void savePainters(const QString& filename);
+		void loadPainters(const QString& filename);
 
 	private:
 		EditPaintStylePrivate* p;
+		QVector<FeaturePainter> Painters;
+		GlobalPainter globalPainter;
+		
+		static EditPaintStyle* m_EPSInstance;
 };
 
 /* FEATUREPAINTSELECTOR */
@@ -67,8 +90,5 @@ class EPLabelLayer : public PaintStyleLayer
 	private:
 		EditPaintStylePrivate* p;
 };
-
-void savePainters(const QString& filename);
-void loadPainters(const QString& filename);
 
 #endif

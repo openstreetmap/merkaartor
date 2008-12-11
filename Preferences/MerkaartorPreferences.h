@@ -326,6 +326,9 @@ public:
 	M_PARAM_DECLARE_STRING(CustomStyle)
 	M_PARAM_DECLARE_BOOL(DisableStyleForTracks)
 
+	/* Visual */
+	M_PARAM_DECLARE_BOOL(BackgroundOverwriteStyle)
+
 	/* Templates */
 	M_PARAM_DECLARE_STRING(DefaultTemplate)
 	M_PARAM_DECLARE_STRING(CustomTemplate)

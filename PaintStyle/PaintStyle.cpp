@@ -11,7 +11,7 @@
 #include <QtGui/QPainter>
 #include <QtGui/QPainterPath>
 #include <QMatrix>
-
+#include <QDomElement>
 #include <math.h>
 
 FeaturePainter::FeaturePainter()
@@ -121,6 +121,12 @@ QString asXML(const QColor& c)
 	return "#"+paddedHexa(c.red())+paddedHexa(c.green())+paddedHexa(c.blue())+paddedHexa(c.alpha());
 }
 
+QString colorAsXML(const QString& name, const QColor& c)
+{
+	return
+		name+"Color=\""+asXML(c)+"\"\n";
+}
+
 QString boundaryAsXML(const QString& name, const QColor& c, double Scale, double Offset)
 {
 	return
@@ -133,7 +139,18 @@ QString iconAsXML(const QString& name, const QString& fn, double Scale, double O
 		name+"=\""+fn+"\" "+name+"Scale=\""+QString::number(Scale)+"\" "+name+"Offset=\""+QString::number(Offset)+"\"\n";
 }
 
-QString FeaturePainter::asXML() const
+QColor toColor(const QString& s)
+{
+	return
+		QColor(
+			s.mid(1,2).toInt(0,16),
+			s.mid(3,2).toInt(0,16),
+			s.mid(5,2).toInt(0,16),
+			s.mid(7,2).toInt(0,16));
+}
+
+
+QString FeaturePainter::toXML() const
 {
 	QString r;
 	r += "<painter\n";
@@ -177,6 +194,97 @@ QString FeaturePainter::asXML() const
 		r += "  <selector expr=\""+theSelector->asExpression(false)+"\"/>\n";
 	r += "</painter>\n";
 	return r;
+}
+
+FeaturePainter FeaturePainter::fromXML(const QDomElement& e)
+{
+	FeaturePainter FP;
+
+	if (e.hasAttribute("zoomUnder") || e.hasAttribute("zoomUpper"))
+		FP.zoomBoundary(e.attribute("zoomUnder","0").toDouble(),e.attribute("zoomUpper","10e6").toDouble());
+	if (e.hasAttribute("foregroundColor"))
+	{
+		FP.foreground(
+			toColor(e.attribute("foregroundColor")),e.attribute("foregroundScale").toDouble(),e.attribute("foregroundOffset").toDouble());
+		if (e.hasAttribute("foregroundDashDown"))
+			FP.foregroundDash(e.attribute("foregroundDashDown").toDouble(),e.attribute("foregroundDashUp").toDouble());
+	}
+	if (e.hasAttribute("backgroundColor"))
+		FP.background(
+			toColor(e.attribute("backgroundColor")),e.attribute("backgroundScale").toDouble(),e.attribute("backgroundOffset").toDouble());
+	if (e.hasAttribute("touchupColor"))
+	{
+		FP.touchup(
+			toColor(e.attribute("touchupColor")),e.attribute("touchupScale").toDouble(),e.attribute("touchupOffset").toDouble());
+		if (e.hasAttribute("touchupDashDown"))
+			FP.touchupDash(e.attribute("touchupDashDown").toDouble(),e.attribute("touchupDashUp").toDouble());
+	}
+	if (e.hasAttribute("fillColor"))
+		FP.foregroundFill(toColor(e.attribute("fillColor")));
+	if (e.hasAttribute("icon"))
+		FP.setIcon(e.attribute("icon"),e.attribute("iconScale", "0.0").toDouble(),e.attribute("iconOffset", "0.0").toDouble());
+	if (e.attribute("drawTrafficDirectionMarks") == "yes")
+		FP.drawTrafficDirectionMarks();
+	if (e.hasAttribute("labelColor"))
+	{
+		FP.label(
+			toColor(e.attribute("labelColor")),e.attribute("labelScale").toDouble(),e.attribute("labelOffset").toDouble());
+		FP.setLabelFont(e.attribute("labelFont"));
+		FP.labelTag(e.attribute("labelTag"));
+		if (e.hasAttribute("labelHalo"))
+			FP.labelHalo((e.attribute("labelHalo") == "yes"));
+		if (e.hasAttribute("labelArea"))
+			FP.labelArea((e.attribute("labelArea") == "yes"));
+		if (e.hasAttribute("labelBackgroundColor"))
+			FP.labelBackground(toColor(e.attribute("labelBackgroundColor")));
+		if (e.hasAttribute("labelBackgroundTag"))
+			FP.labelBackgroundTag(e.attribute("labelBackgroundTag"));
+	}
+	QDomNode n = e.firstChild();
+	std::vector<std::pair<QString,QString> > Pairs;
+	while (!n.isNull())
+	{
+		if (n.isElement())
+		{
+			QDomElement t = n.toElement();
+			if (t.tagName() == "selector")
+			{
+				if (t.attribute("key") != "")
+					Pairs.push_back(std::make_pair(t.attribute("key"),t.attribute("value")));
+				else
+				{
+					FP.setSelector(t.attribute("expr"));
+					return FP;
+				}
+			}
+		}
+		n = n.nextSibling();
+	}
+	if (Pairs.size() == 1)
+		FP.setSelector(new TagSelectorIs(Pairs[0].first,Pairs[0].second));
+	else if (Pairs.size())
+	{
+		bool Same = true;
+		for (unsigned int i=1; i<Pairs.size(); ++i)
+			if (Pairs[0].first != Pairs[i].first)
+				Same = false;
+		if (Same)
+		{
+			std::vector<QString> Options;
+			for (unsigned int i=0; i<Pairs.size(); ++i)
+				Options.push_back(Pairs[i].second);
+			FP.setSelector(new TagSelectorIsOneOf(Pairs[0].first,Options));
+		}
+		else
+		{
+			std::vector<TagSelector*> Options;
+			for (unsigned int i=0; i<Pairs.size(); ++i)
+				Options.push_back(new TagSelectorIs(Pairs[i].first,Pairs[i].second));
+			FP.setSelector(new TagSelectorOr(Options));
+		}
+	}
+
+	return FP;
 }
 
 
@@ -228,7 +336,7 @@ FeaturePainter& FeaturePainter::fillActive(bool b)
 	return *this;
 }
 
-FeaturePainter& FeaturePainter::foregroundFill(const QColor& FillColor)
+FeaturePainter& FeaturePainter::foregroundFill(QColor FillColor)
 {
 	ForegroundFill = true;
 	ForegroundFillFillColor = FillColor;
@@ -241,7 +349,7 @@ FeaturePainter& FeaturePainter::backgroundActive(bool b)
 	return *this;
 }
 
-FeaturePainter& FeaturePainter::background(const QColor& Color, double Scale, double Offset)
+FeaturePainter& FeaturePainter::background(QColor Color, double Scale, double Offset)
 {
 	DrawBackground = true;
 	BackgroundColor = Color;
@@ -276,7 +384,7 @@ FeaturePainter& FeaturePainter::touchupDash(double Dash, double White)
 	return *this;
 }
 
-FeaturePainter& FeaturePainter::touchup(const QColor& Color, double Scale, double Offset)
+FeaturePainter& FeaturePainter::touchup(QColor Color, double Scale, double Offset)
 {
 	DrawTouchup = true;
 	TouchupColor = Color;
@@ -300,7 +408,7 @@ FeaturePainter& FeaturePainter::foregroundDash(double Dash, double White)
 	return *this;
 }
 
-FeaturePainter& FeaturePainter::foreground(const QColor& Color, double Scale, double Offset)
+FeaturePainter& FeaturePainter::foreground(QColor Color, double Scale, double Offset)
 {
 	DrawForeground = true;
 	ForegroundColor = Color;
@@ -345,7 +453,7 @@ FeaturePainter& FeaturePainter::labelBackgroundTag(const QString& val)
 	return *this;
 }
 
-FeaturePainter& FeaturePainter::label(const QColor& Color, double Scale, double Offset)
+FeaturePainter& FeaturePainter::label(QColor Color, double Scale, double Offset)
 {
 	DrawLabel = true;
 	LabelColor = Color;
@@ -362,7 +470,7 @@ FeaturePainter& FeaturePainter::labelBackgroundActive(bool b)
 	return *this;
 }
 
-FeaturePainter& FeaturePainter::labelBackground(const QColor& bgColor)
+FeaturePainter& FeaturePainter::labelBackground(QColor bgColor)
 {
 	DrawLabelBackground = true;
 	LabelBackgroundColor = bgColor;
@@ -981,6 +1089,79 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, const Projection& 
 	}
 }
 
+/* GlobalPainter */
+
+GlobalPainter::GlobalPainter()
+: DrawBackground(false)
+{
+}
+
+GlobalPainter::GlobalPainter(const GlobalPainter& f)
+: DrawBackground(f.DrawBackground), BackgroundColor(f.BackgroundColor)
+{
+}
+
+GlobalPainter& GlobalPainter::operator=(const GlobalPainter& f)
+{
+	if (&f == this) return *this;
+
+	DrawBackground = f.DrawBackground;
+	BackgroundColor = f.BackgroundColor;
+
+	return *this;
+}
+
+GlobalPainter::~GlobalPainter()
+{
+}
+
+QString GlobalPainter::toXML() const
+{
+	QString r;
+	r += "<global\n";
+	if (DrawBackground)
+		r += " " + colorAsXML("background",BackgroundColor);
+	r += "/>\n";
+	return r;
+}
+
+GlobalPainter GlobalPainter::fromXML(const QDomElement& e)
+{
+	GlobalPainter FP;
+
+	if (e.hasAttribute("backgroundColor")) {
+		FP.backgroundActive(true);
+		FP.background(toColor(e.attribute("backgroundColor")));
+	}
+
+	return FP;
+}
+
+GlobalPainter& GlobalPainter::backgroundActive(bool b)
+{
+	DrawBackground = b;
+	return *this;
+}
+
+bool GlobalPainter::getDrawBackground() const
+{
+	return DrawBackground;
+}
+
+GlobalPainter& GlobalPainter::background(QColor Color)
+{
+	DrawBackground = true;
+	BackgroundColor = Color;
+	return *this;
+}
+
+QColor GlobalPainter::getBackgroundColor() const
+{
+	return BackgroundColor;
+}
+
+/* */
+
 PaintStyleLayer::~PaintStyleLayer()
 {
 }
@@ -999,4 +1180,6 @@ PaintStyleLayer* PaintStyle::get(unsigned int i)
 {
 	return Layers[i];
 }
+
+
 

@@ -77,7 +77,7 @@ MainWindow::MainWindow(void)
 		: fileName(""), theDocument(0), theXmlDoc(0), gpsRecLayer(0), curGpsTrackSegment(0)
 {
 	setupUi(this);
-	loadPainters(MerkaartorPreferences::instance()->getDefaultStyle());
+	M_STYLE->loadPainters(MerkaartorPreferences::instance()->getDefaultStyle());
 
 	blockSignals(true);
 
@@ -229,6 +229,8 @@ MainWindow::MainWindow(void)
 
 MainWindow::~MainWindow(void)
 {
+	if (EditPaintStyle::instance())
+		delete EditPaintStyle::instance();
 	MerkaartorPreferences::instance()->setWorkingDir(QDir::currentPath());
 	if (theXmlDoc)
 		delete theXmlDoc;
@@ -1104,13 +1106,17 @@ void MainWindow::on_createRelationAction_triggered()
 
 void MainWindow::on_editMapStyleAction_triggered()
 {
-	PaintStyleEditor* dlg = new PaintStyleEditor(this, EditPaintStyle::Painters);
-	connect(dlg, SIGNAL(stylesApplied(std::vector<FeaturePainter>* )), this, SLOT(applyStyles(std::vector<FeaturePainter>* )));
-	std::vector<FeaturePainter> savePainters = EditPaintStyle::Painters;
-	if (dlg->exec() == QDialog::Accepted) 
-		EditPaintStyle::Painters = dlg->thePainters;
-	else
-		EditPaintStyle::Painters = savePainters;
+	PaintStyleEditor* dlg = new PaintStyleEditor(this, M_STYLE->getGlobalPainter(), M_STYLE->getPainters());
+	connect(dlg, SIGNAL(stylesApplied(QVector<FeaturePainter>* )), this, SLOT(applyStyles(QVector<FeaturePainter>* )));
+	GlobalPainter saveGlobalPainter = M_STYLE->getGlobalPainter();
+	QVector<FeaturePainter> savePainters = M_STYLE->getPainters();
+	if (dlg->exec() == QDialog::Accepted) {
+		M_STYLE->setGlobalPainter(dlg->theGlobalPainter);
+		M_STYLE->setPainters(dlg->thePainters);
+	} else {
+		M_STYLE->setGlobalPainter(saveGlobalPainter);
+		M_STYLE->setPainters(savePainters);
+	}
 
 	for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
 		i.get()->invalidatePainter();
@@ -1118,9 +1124,9 @@ void MainWindow::on_editMapStyleAction_triggered()
 	delete dlg;
 }
 
-void MainWindow::applyStyles(std::vector<FeaturePainter>* thePainters)
+void MainWindow::applyStyles(QVector<FeaturePainter>* thePainters)
 {
-	EditPaintStyle::Painters = *thePainters;
+	M_STYLE->setPainters(*thePainters);
 	for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
 		i.get()->invalidatePainter();
 	invalidateView();
@@ -1144,7 +1150,7 @@ void MainWindow::on_mapStyleSaveAction_triggered()
 	if (!f.isNull()) {
 		if (!f.endsWith(".mas"))
 			f.append(".mas");
-		savePainters(f);
+		M_STYLE->savePainters(f);
 	}
 }
 
@@ -1152,7 +1158,7 @@ void MainWindow::on_mapStyleLoadAction_triggered()
 {
 	QString f = QFileDialog::getOpenFileName(this, tr("Load map style"), QString(), tr("Merkaartor map style (*.mas)"));
 	if (!f.isNull()) {
-		loadPainters(f);
+		M_STYLE->loadPainters(f);
 		for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
 			i.get()->invalidatePainter();
 		invalidateView();

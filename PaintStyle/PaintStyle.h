@@ -18,6 +18,7 @@ class TrackPoint;
 class QPainter;
 class QPainterPath;
 class QFont;
+class QDomElement;
 
 class LineParameters
 {
@@ -56,14 +57,14 @@ class FeaturePainter
 		TagSelectorMatchResult matchesTag(const MapFeature* F) const;
 		bool matchesZoom(double PixelPerM) const;
 		FeaturePainter& backgroundActive(bool b);
-		FeaturePainter& background(const QColor& Color, double Scale, double Offset);
+		FeaturePainter& background(QColor Color, double Scale, double Offset);
 		FeaturePainter& foregroundActive(bool b);
-		FeaturePainter& foreground(const QColor& Color, double Scale, double Offset);
+		FeaturePainter& foreground(QColor Color, double Scale, double Offset);
 		FeaturePainter& foregroundDash(double Dash, double White);
 		FeaturePainter& touchupActive(bool b);
-		FeaturePainter& touchup(const QColor& Color, double Scale, double Offset);
+		FeaturePainter& touchup(QColor Color, double Scale, double Offset);
 		FeaturePainter& touchupDash(double Dash, double White);
-		FeaturePainter& foregroundFill(const QColor& FillColor);
+		FeaturePainter& foregroundFill(QColor FillColor);
 		FeaturePainter& zoomBoundary(double anUnder, double anUpper);
 		FeaturePainter& drawTrafficDirectionMarks();
 		FeaturePainter& trackPointIcon(const QString& Filename);
@@ -72,10 +73,10 @@ class FeaturePainter
 		FeaturePainter& setIcon(const QString& Name, double Scale, double Offset);
 		FeaturePainter& labelActive(bool b);
 		FeaturePainter& labelTag(const QString& val);
-		FeaturePainter& label(const QColor& Color, double Scale, double Offset);
+		FeaturePainter& label(QColor Color, double Scale, double Offset);
 		FeaturePainter& setLabelFont(const QString& descFont);
 		FeaturePainter& labelBackgroundActive(bool b);
-		FeaturePainter& labelBackground(const QColor& bgColor);
+		FeaturePainter& labelBackground(QColor bgColor);
 		FeaturePainter& labelBackgroundTag(const QString& val);
 		FeaturePainter& labelHalo(bool b);
 		FeaturePainter& labelArea(bool b);
@@ -97,7 +98,8 @@ class FeaturePainter
 		bool getLabelHalo() const;
 		bool getLabelArea() const;
 
-		QString asXML() const;
+		QString toXML() const;
+		static FeaturePainter fromXML(const QDomElement& e);
 
 		void drawBackground(Road* R, QPainter& thePainter, const Projection& theProjection) const;
 		void drawBackground(Relation* R, QPainter& thePainter, const Projection& theProjection) const;
@@ -108,8 +110,8 @@ class FeaturePainter
 		void drawLabel(Road* R, QPainter& thePainter, const Projection& theProjection) const;
 		void drawPointLabel(QPoint C, QString str, QString strBG, QPainter& thePainter, const Projection& theProjection) const;
 		void drawLabel(TrackPoint* Pt, QPainter& thePainter, const Projection& theProjection) const;
-	public:
 
+	public:
 		TagSelector* theSelector;
 		bool ZoomLimitSet;
 		double ZoomUnder, ZoomUpper;
@@ -149,6 +151,28 @@ class FeaturePainter
 		bool LabelArea;
 };
 
+class GlobalPainter
+{
+	public:
+		GlobalPainter();
+		GlobalPainter(const GlobalPainter& f);
+		GlobalPainter& operator=(const GlobalPainter& F);
+		~GlobalPainter();
+
+		GlobalPainter& backgroundActive(bool b);
+		GlobalPainter& background(QColor Color);
+
+		bool getDrawBackground() const;
+		QColor getBackgroundColor() const;
+
+		QString toXML() const;
+		static GlobalPainter fromXML(const QDomElement& e);
+
+	public:
+		bool DrawBackground;
+		QColor BackgroundColor;
+};
+
 class PaintStyleLayer
 {
 	public:
@@ -164,8 +188,8 @@ class PaintStyle
 		void add(PaintStyleLayer* aLayer);
 		unsigned int size() const;
 		PaintStyleLayer* get(unsigned int i);
-	private:
-		std::vector<PaintStyleLayer*> Layers;
+	protected:
+		QVector<PaintStyleLayer*> Layers;
 };
 
 #endif

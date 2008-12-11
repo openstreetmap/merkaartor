@@ -41,12 +41,12 @@ class TagTemplateWidget: public QObject
 	public:
 		QString id() {return (!theId.isEmpty() ? theId : theTag);};
 		QString tag() {return theTag;};
-		virtual QWidget*	getWidget(const MapFeature* F) {return NULL;};
+		virtual QWidget*	getWidget(const MapFeature* /* F */) {return NULL;};
 		virtual TagTemplateWidgetValue* getCurrentValue() {return NULL;};
 
 		virtual void apply(const MapFeature*) {};
 
-		virtual bool toXML(QDomElement& xParent, bool header) {return false;};
+		virtual bool toXML(QDomElement& /* xParent */, bool /* header */) {return false;};
 		static TagTemplateWidget*		fromXml(const QDomElement& e);
 
 		void parseCommonElements(const QDomElement& e);

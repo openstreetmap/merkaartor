@@ -120,8 +120,6 @@ static bool isChildOfRelation(MapFeature *mapFeature)
 	if (parents == 0)
 		return false;
 
-	unsigned int parentRelations = 0;
-
 	unsigned int i;
 	for (i=0; i<parents; i++)
 	{
@@ -776,7 +774,7 @@ bool PropertiesDock::saveTemplates(const QString& filename)
 	return true;
 }
 
-void PropertiesDock::on_template_changed(TagTemplate* aNewTemplate)
+void PropertiesDock::on_template_changed(TagTemplate* /* aNewTemplate */)
 {
 	resetValues();
 }

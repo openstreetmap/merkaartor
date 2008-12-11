@@ -165,6 +165,7 @@ void PreferencesDialog::loadPrefs()
 	sbAlphaLow->setValue(M_PREFS->getAlpha("Low"));
 	sbAlphaHigh->setValue(M_PREFS->getAlpha("High"));
 	BgColor = M_PREFS->getBgColor();
+	cbBackgroundOverwriteStyle->setChecked(M_PREFS->getBackgroundOverwriteStyle());
 	FocusColor = M_PREFS->getFocusColor();
 	HoverColor = M_PREFS->getHoverColor();
 	RelationsColor = M_PREFS->getRelationsColor();
@@ -235,7 +236,7 @@ void PreferencesDialog::savePrefs()
 	if (NewStyle != M_PREFS->getDefaultStyle())
 	{
 		M_PREFS->setDefaultStyle(NewStyle);
-		loadPainters(M_PREFS->getDefaultStyle());
+		M_STYLE->loadPainters(M_PREFS->getDefaultStyle());
 		PainterToInvalidate = true;
 	}
 	if (cbDisableStyleForTracks->isChecked() != M_PREFS->getDisableStyleForTracks()) {
@@ -269,6 +270,7 @@ void PreferencesDialog::savePrefs()
 	M_PREFS->getAlphaPtr()->insert("Low", sbAlphaLow->value());
 	M_PREFS->getAlphaPtr()->insert("High", sbAlphaHigh->value());
 	M_PREFS->setBgColor(BgColor);
+	M_PREFS->setBackgroundOverwriteStyle(cbBackgroundOverwriteStyle->isChecked());
 	M_PREFS->setFocusColor(FocusColor,FocusWidth->value());
 	M_PREFS->setHoverColor(HoverColor,HoverWidth->value());
 	M_PREFS->setRelationsColor(RelationsColor,RelationsWidth->value());

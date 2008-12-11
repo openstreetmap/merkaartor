@@ -167,7 +167,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		void recentImportTriggered(QAction* anAction);
 		void projectionTriggered(QAction* anAction);
         void updateGpsPosition(float latitude, float longitude, QDateTime time, float altitude, float speed, float heading);
-		void applyStyles(std::vector<FeaturePainter>* thePainters);
+		void applyStyles(QVector<FeaturePainter>* thePainters);
 
 	public:
 		void invalidateView(bool UpdateDock = true);

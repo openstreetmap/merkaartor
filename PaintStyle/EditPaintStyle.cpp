@@ -22,6 +22,8 @@
 #define REGIONALZOOM	0.01
 #define GLOBALZOOM		0.002
 
+EditPaintStyle* EditPaintStyle::m_EPSInstance = 0;
+
 //static bool localZoom(const Projection& theProjection)
 //{
 //	return theProjection.pixelPerM() < LOCALZOOM;
@@ -78,7 +80,7 @@ void EPBackgroundLayer::setP(EditPaintStylePrivate* ap)
 
 void EPBackgroundLayer::draw(Road* R)
 {
-	FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
+	const FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
 	if (paintsel)
 		paintsel->drawBackground(R,p->thePainter,p->theProjection);
 	else if (!globalZoom(p->theProjection) && !R->hasEditPainter())
@@ -94,7 +96,7 @@ void EPBackgroundLayer::draw(Road* R)
 
 void EPBackgroundLayer::draw(Relation* R)
 {
-	FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
+	const FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
 	if (paintsel)
 		paintsel->drawBackground(R,p->thePainter,p->theProjection);
 }
@@ -111,14 +113,14 @@ void EPForegroundLayer::setP(EditPaintStylePrivate* ap)
 
 void EPForegroundLayer::draw(Road* R)
 {
-	FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
+	const FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
 	if (paintsel)
 		paintsel->drawForeground(R,p->thePainter,p->theProjection);
 }
 
 void EPForegroundLayer::draw(Relation* R)
 {
-	FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
+	const FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
 	if (paintsel)
 		paintsel->drawForeground(R,p->thePainter,p->theProjection);
 }
@@ -134,7 +136,7 @@ void EPTouchupLayer::setP(EditPaintStylePrivate* ap)
 
 void EPTouchupLayer::draw(Road* R)
 {
-	FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
+	const FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
 	if (paintsel)
 		paintsel->drawTouchup(R,p->thePainter,p->theProjection);
 	else {
@@ -196,7 +198,7 @@ void EPTouchupLayer::draw(Relation* /* R */)
 
 void EPTouchupLayer::draw(TrackPoint* Pt)
 {
-	FeaturePainter* paintsel = Pt->getEditPainter(p->theProjection.pixelPerM());
+	const FeaturePainter* paintsel = Pt->getEditPainter(p->theProjection.pixelPerM());
 	if (paintsel)
 		paintsel->drawTouchup(Pt,p->thePainter,p->theProjection);
 	else if (!Pt->hasEditPainter()) {
@@ -229,7 +231,7 @@ void EPLabelLayer::setP(EditPaintStylePrivate* ap)
 
 void EPLabelLayer::draw(Road* R)
 {
-	FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
+	const FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
 	if (paintsel)
 		paintsel->drawLabel(R,p->thePainter,p->theProjection);
 }
@@ -240,17 +242,30 @@ void EPLabelLayer::draw(Relation* /* R */)
 
 void EPLabelLayer::draw(TrackPoint* Pt)
 {
-	FeaturePainter* paintsel = Pt->getEditPainter(p->theProjection.pixelPerM());
+	const FeaturePainter* paintsel = Pt->getEditPainter(p->theProjection.pixelPerM());
 	if (paintsel)
 		paintsel->drawLabel(Pt,p->thePainter,p->theProjection);
 }
 
 /* EDITPAINTSTYLE */
 
-std::vector<FeaturePainter> EditPaintStyle::Painters;
-
-EditPaintStyle::EditPaintStyle(QPainter& P, const Projection& theProjection)
+EditPaintStyle::EditPaintStyle()
+	: p(0)
 {
+}
+
+EditPaintStyle::~EditPaintStyle(void)
+{
+	delete p;
+}
+
+void EditPaintStyle::initialize(QPainter& P, const Projection& theProjection)
+{
+	if (p) {
+		Layers.clear();
+		delete p;
+	}
+
 	p = new EditPaintStylePrivate(P,theProjection);
 	add(&p->First);
 	add(&p->Second);
@@ -261,127 +276,24 @@ EditPaintStyle::EditPaintStyle(QPainter& P, const Projection& theProjection)
 	p->isTrackSegmentVisible = M_PREFS->getTrackSegmentsVisible();
 }
 
-EditPaintStyle::~EditPaintStyle(void)
-{
-	delete p;
-}
-
-
-
-void savePainters(const QString& filename)
+void EditPaintStyle::savePainters(const QString& filename)
 {
 	QFile data(filename);
 	if (data.open(QFile::WriteOnly | QFile::Truncate))
 	{
 		QTextStream out(&data);
 		out << "<mapStyle>\n";
-		for (unsigned int i=0; i<EditPaintStyle::Painters.size(); ++i)
+		out << globalPainter.toXML();
+		for (unsigned int i=0; i<Painters.size(); ++i)
 		{
-			QString s = EditPaintStyle::Painters[i].asXML();
+			QString s = Painters[i].toXML();
 			out << s;
 		}
 		out << "</mapStyle>\n";
 	}
 }
 
-QColor toColor(const QString& s)
-{
-	return
-		QColor(
-			s.mid(1,2).toInt(0,16),
-			s.mid(3,2).toInt(0,16),
-			s.mid(5,2).toInt(0,16),
-			s.mid(7,2).toInt(0,16));
-}
-
-void readFromNode(const QDomElement& e, FeaturePainter& FP)
-{
-	if (e.hasAttribute("zoomUnder") || e.hasAttribute("zoomUpper"))
-		FP.zoomBoundary(e.attribute("zoomUnder","0").toDouble(),e.attribute("zoomUpper","10e6").toDouble());
-	if (e.hasAttribute("foregroundColor"))
-	{
-		FP.foreground(
-			toColor(e.attribute("foregroundColor")),e.attribute("foregroundScale").toDouble(),e.attribute("foregroundOffset").toDouble());
-		if (e.hasAttribute("foregroundDashDown"))
-			FP.foregroundDash(e.attribute("foregroundDashDown").toDouble(),e.attribute("foregroundDashUp").toDouble());
-	}
-	if (e.hasAttribute("backgroundColor"))
-		FP.background(
-			toColor(e.attribute("backgroundColor")),e.attribute("backgroundScale").toDouble(),e.attribute("backgroundOffset").toDouble());
-	if (e.hasAttribute("touchupColor"))
-	{
-		FP.touchup(
-			toColor(e.attribute("touchupColor")),e.attribute("touchupScale").toDouble(),e.attribute("touchupOffset").toDouble());
-		if (e.hasAttribute("touchupDashDown"))
-			FP.touchupDash(e.attribute("touchupDashDown").toDouble(),e.attribute("touchupDashUp").toDouble());
-	}
-	if (e.hasAttribute("fillColor"))
-		FP.foregroundFill(toColor(e.attribute("fillColor")));
-	if (e.hasAttribute("icon"))
-		FP.setIcon(e.attribute("icon"),e.attribute("iconScale", "0.0").toDouble(),e.attribute("iconOffset", "0.0").toDouble());
-	if (e.attribute("drawTrafficDirectionMarks") == "yes")
-		FP.drawTrafficDirectionMarks();
-	if (e.hasAttribute("labelColor"))
-	{
-		FP.label(
-			toColor(e.attribute("labelColor")),e.attribute("labelScale").toDouble(),e.attribute("labelOffset").toDouble());
-		FP.setLabelFont(e.attribute("labelFont"));
-		FP.labelTag(e.attribute("labelTag"));
-		if (e.hasAttribute("labelHalo"))
-			FP.labelHalo((e.attribute("labelHalo") == "yes"));
-		if (e.hasAttribute("labelArea"))
-			FP.labelArea((e.attribute("labelArea") == "yes"));
-		if (e.hasAttribute("labelBackgroundColor"))
-			FP.labelBackground(toColor(e.attribute("labelBackgroundColor")));
-		if (e.hasAttribute("labelBackgroundTag"))
-			FP.labelBackgroundTag(e.attribute("labelBackgroundTag"));
-	}
-	QDomNode n = e.firstChild();
-	std::vector<std::pair<QString,QString> > Pairs;
-	while (!n.isNull())
-	{
-		if (n.isElement())
-		{
-			QDomElement t = n.toElement();
-			if (t.tagName() == "selector")
-			{
-				if (t.attribute("key") != "")
-					Pairs.push_back(std::make_pair(t.attribute("key"),t.attribute("value")));
-				else
-				{
-					FP.setSelector(t.attribute("expr"));
-					return;
-				}
-			}
-		}
-		n = n.nextSibling();
-	}
-	if (Pairs.size() == 1)
-		FP.setSelector(new TagSelectorIs(Pairs[0].first,Pairs[0].second));
-	else if (Pairs.size())
-	{
-		bool Same = true;
-		for (unsigned int i=1; i<Pairs.size(); ++i)
-			if (Pairs[0].first != Pairs[i].first)
-				Same = false;
-		if (Same)
-		{
-			std::vector<QString> Options;
-			for (unsigned int i=0; i<Pairs.size(); ++i)
-				Options.push_back(Pairs[i].second);
-			FP.setSelector(new TagSelectorIsOneOf(Pairs[0].first,Options));
-		}
-		else
-		{
-			std::vector<TagSelector*> Options;
-			for (unsigned int i=0; i<Pairs.size(); ++i)
-				Options.push_back(new TagSelectorIs(Pairs[i].first,Pairs[i].second));
-			FP.setSelector(new TagSelectorOr(Options));
-		}
-	}
-}
-
-void loadPainters(const QString& filename)
+void EditPaintStyle::loadPainters(const QString& filename)
 {
 	QDomDocument doc;
 	QFile file(filename);
@@ -393,19 +305,53 @@ void loadPainters(const QString& filename)
 		return;
 	}
 	file.close();
-	EditPaintStyle::Painters.clear();
+	Painters.clear();
 	QDomElement docElem = doc.documentElement();
 	QDomNode n = docElem.firstChild();
 	while(!n.isNull())
 	{
 		QDomElement e = n.toElement(); // try to convert the node to an element.
+		if(!e.isNull() && e.tagName() == "global")
+		{
+			globalPainter = GlobalPainter::fromXML(e);
+		} else
 		if(!e.isNull() && e.tagName() == "painter")
 		{
-			FeaturePainter FP;
-			readFromNode(e,FP);
-			EditPaintStyle::Painters.push_back(FP);
+			FeaturePainter FP = FeaturePainter::fromXML(e);
+			Painters.push_back(FP);
 		}
 		n = n.nextSibling();
 	}
 }
+
+int EditPaintStyle::painterSize()
+{
+	return Painters.size();
+}
+
+const GlobalPainter& EditPaintStyle::getGlobalPainter() const
+{
+	return globalPainter;
+}
+
+void EditPaintStyle::setGlobalPainter(GlobalPainter aGlobalPainter)
+{
+	globalPainter = aGlobalPainter;
+}
+
+const FeaturePainter* EditPaintStyle::getPainter(int i) const
+{
+	return &(Painters[i]);
+}
+
+QVector<FeaturePainter> EditPaintStyle::getPainters() const
+{
+	return Painters;
+}
+
+void EditPaintStyle::setPainters(QVector<FeaturePainter> aPainters)
+{
+	Painters = aPainters;
+}
+
 

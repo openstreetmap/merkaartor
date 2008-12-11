@@ -12,30 +12,6 @@
 #include <QtGui/QPixmap>
 #include <QtGui/QToolButton>
 
-
-PaintStyleEditor::PaintStyleEditor(QWidget *aParent, const std::vector<FeaturePainter>& aPainters)
-		: QDialog(aParent), thePainters(aPainters), FreezeUpdate(true)
-{
-	setupUi(this);
-	BackgroundColor->setIconSize(QSize(36, 18));
-	ForegroundColor->setIconSize(QSize(36, 18));
-	TouchupColor->setIconSize(QSize(36, 18));
-	FillColor->setIconSize(QSize(36, 18));
-	LabelColor->setIconSize(QSize(36, 18));
-	LabelBackgroundlColor->setIconSize(QSize(36, 18));
-	for (unsigned int i = 0; i < thePainters.size(); ++i)
-		PaintList->addItem(thePainters[i].userName());
-	PaintList->setCurrentRow(0);
-	LowerZoomBoundary->setSpecialValueText(tr("Always"));
-	UpperZoomBoundary->setSpecialValueText(tr("Always"));
-
-	on_PaintList_itemClicked(PaintList->item(PaintList->currentRow()));
-
-	FreezeUpdate = false;
-
-	resize(1, 1);
-}
-
 static void makeBoundaryIcon(QToolButton* bt, QColor C)
 {
 	QPixmap pm(36, 18);
@@ -45,6 +21,33 @@ static void makeBoundaryIcon(QToolButton* bt, QColor C)
 	p.setBrush(C);
 	p.drawRect(0, 6, 36, 6);
 	bt->setIcon(pm);
+}
+
+PaintStyleEditor::PaintStyleEditor(QWidget *aParent, const GlobalPainter& aGlobalPainter, const QVector<FeaturePainter>& aPainters)
+		: QDialog(aParent), theGlobalPainter(aGlobalPainter), thePainters(aPainters), FreezeUpdate(true)
+{
+	setupUi(this);
+	BackgroundColor->setIconSize(QSize(36, 18));
+	ForegroundColor->setIconSize(QSize(36, 18));
+	TouchupColor->setIconSize(QSize(36, 18));
+	FillColor->setIconSize(QSize(36, 18));
+	LabelColor->setIconSize(QSize(36, 18));
+	LabelBackgroundlColor->setIconSize(QSize(36, 18));
+	GlobalBackgroundColor->setIconSize(QSize(36, 18));
+
+	for (int i = 0; i < thePainters.size(); ++i)
+		PaintList->addItem(thePainters[i].userName());
+	PaintList->setCurrentRow(0);
+	LowerZoomBoundary->setSpecialValueText(tr("Always"));
+	UpperZoomBoundary->setSpecialValueText(tr("Always"));
+
+	DrawGlobalBackground->setChecked(theGlobalPainter.getDrawBackground());
+	makeBoundaryIcon(GlobalBackgroundColor, theGlobalPainter.getBackgroundColor());
+	on_PaintList_itemClicked(PaintList->item(PaintList->currentRow()));
+
+	FreezeUpdate = false;
+
+	resize(1, 1);
 }
 
 void PaintStyleEditor::on_AddButton_clicked()
@@ -57,10 +60,10 @@ void PaintStyleEditor::on_AddButton_clicked()
 
 void PaintStyleEditor::on_DuplicateButton_clicked()
 {
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
-	std::vector<FeaturePainter>::iterator theIterator = thePainters.begin();
+	//QVector<FeaturePainter>::iterator theIterator = thePainters.begin();
 	thePainters.insert(thePainters.begin() + idx, FeaturePainter(thePainters[idx]));
 	idx++;
 	PaintList->insertItem(idx, thePainters[idx].userName());
@@ -71,7 +74,7 @@ void PaintStyleEditor::on_DuplicateButton_clicked()
 void PaintStyleEditor::on_RemoveButton_clicked()
 {
 	FreezeUpdate = true;
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
 	thePainters.erase(thePainters.begin() + idx);
@@ -97,7 +100,7 @@ void PaintStyleEditor::on_btUp_clicked()
 
 void PaintStyleEditor::on_btDown_clicked()
 {
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter fp = thePainters[idx+1];
@@ -111,7 +114,7 @@ void PaintStyleEditor::on_btDown_clicked()
 void PaintStyleEditor::on_PaintList_itemClicked(QListWidgetItem* it)
 {
 	FreezeUpdate = true;
-	unsigned int idx = static_cast<unsigned int>(PaintList->row(it));
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
@@ -172,7 +175,7 @@ void PaintStyleEditor::on_LowerZoomBoundary_valueChanged()
 {
 	if (FreezeUpdate)
 		return;
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
@@ -191,9 +194,24 @@ void PaintStyleEditor::on_UpperZoomBoundary_valueChanged()
 	on_LowerZoomBoundary_valueChanged();
 }
 
+void PaintStyleEditor::on_DrawGlobalBackground_clicked(bool b)
+{
+	theGlobalPainter.backgroundActive(b);
+}
+
+void PaintStyleEditor::on_GlobalBackgroundColor_clicked()
+{
+	bool OK = false;
+	QRgb rgb = QColorDialog::getRgba(theGlobalPainter.getBackgroundColor().rgba(), &OK, this);
+	if (OK) {
+		makeBoundaryIcon(GlobalBackgroundColor, QColor::fromRgba(rgb));
+		theGlobalPainter.background(QColor::fromRgba(rgb));
+	}
+}
+
 void PaintStyleEditor::on_DrawBackground_clicked(bool b)
 {
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
 	thePainters[idx].backgroundActive(b);
@@ -217,7 +235,7 @@ void PaintStyleEditor::on_ProportionalBackground_valueChanged()
 {
 	if (FreezeUpdate)
 		return;
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
@@ -231,7 +249,7 @@ void PaintStyleEditor::on_FixedBackground_valueChanged()
 
 void PaintStyleEditor::on_DrawForeground_clicked(bool b)
 {
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
 	thePainters[idx].foregroundActive(b);
@@ -240,7 +258,7 @@ void PaintStyleEditor::on_DrawForeground_clicked(bool b)
 
 void PaintStyleEditor::on_ForegroundColor_clicked()
 {
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
@@ -256,7 +274,7 @@ void PaintStyleEditor::on_ProportionalForeground_valueChanged()
 {
 	if (FreezeUpdate)
 		return;
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
@@ -273,7 +291,7 @@ void PaintStyleEditor::on_ForegroundDashed_clicked()
 {
 	if (FreezeUpdate)
 		return;
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
@@ -295,7 +313,7 @@ void PaintStyleEditor::on_ForegroundDashOn_valueChanged()
 
 void PaintStyleEditor::on_DrawTouchup_clicked(bool b)
 {
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
 	thePainters[idx].touchupActive(b);
@@ -303,7 +321,7 @@ void PaintStyleEditor::on_DrawTouchup_clicked(bool b)
 
 void PaintStyleEditor::on_TouchupColor_clicked()
 {
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
@@ -319,7 +337,7 @@ void PaintStyleEditor::on_ProportionalTouchup_valueChanged()
 {
 	if (FreezeUpdate)
 		return;
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
@@ -336,7 +354,7 @@ void PaintStyleEditor::on_TouchupDashed_clicked()
 {
 	if (FreezeUpdate)
 		return;
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
@@ -358,7 +376,7 @@ void PaintStyleEditor::on_TouchupDashOn_valueChanged()
 
 void PaintStyleEditor::on_DrawFill_clicked(bool b)
 {
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
 	thePainters[idx].fillActive(b);
@@ -366,7 +384,7 @@ void PaintStyleEditor::on_DrawFill_clicked(bool b)
 
 void PaintStyleEditor::on_FillColor_clicked()
 {
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
@@ -380,7 +398,7 @@ void PaintStyleEditor::on_FillColor_clicked()
 
 void PaintStyleEditor::on_DrawIcon_clicked(bool b)
 {
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
 	thePainters[idx].iconActive(b);
@@ -390,7 +408,7 @@ void PaintStyleEditor::on_IconName_textEdited()
 {
 	if (FreezeUpdate)
 		return;
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
@@ -409,7 +427,7 @@ void PaintStyleEditor::on_FixedIcon_valueChanged()
 
 void PaintStyleEditor::on_DrawLabel_clicked(bool b)
 {
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
 	thePainters[idx].labelActive(b);
@@ -417,7 +435,7 @@ void PaintStyleEditor::on_DrawLabel_clicked(bool b)
 
 void PaintStyleEditor::on_LabelHalo_clicked(bool b)
 {
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
 	thePainters[idx].labelHalo(b);
@@ -425,7 +443,7 @@ void PaintStyleEditor::on_LabelHalo_clicked(bool b)
 
 void PaintStyleEditor::on_LabelArea_clicked(bool b)
 {
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
 	thePainters[idx].labelArea(b);
@@ -433,7 +451,7 @@ void PaintStyleEditor::on_LabelArea_clicked(bool b)
 
 void PaintStyleEditor::on_LabelTag_textEdited()
 {
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
 	thePainters[idx].labelTag(LabelTag->text());
@@ -441,7 +459,7 @@ void PaintStyleEditor::on_LabelTag_textEdited()
 
 void PaintStyleEditor::on_LabelBackgroundTag_textEdited()
 {
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
 	thePainters[idx].labelBackgroundTag(LabelBackgroundTag->text());
@@ -449,7 +467,7 @@ void PaintStyleEditor::on_LabelBackgroundTag_textEdited()
 
 void PaintStyleEditor::on_LabelColor_clicked()
 {
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
@@ -465,7 +483,7 @@ void PaintStyleEditor::on_ProportionalLabel_valueChanged()
 {
 	if (FreezeUpdate)
 		return;
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
@@ -479,7 +497,7 @@ void PaintStyleEditor::on_FixedLabel_valueChanged()
 
 void PaintStyleEditor::on_DrawLabelBackground_clicked(bool b)
 {
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
 	thePainters[idx].labelBackgroundActive(b);
@@ -487,7 +505,7 @@ void PaintStyleEditor::on_DrawLabelBackground_clicked(bool b)
 
 void PaintStyleEditor::on_LabelBackgroundlColor_clicked()
 {
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
@@ -501,7 +519,7 @@ void PaintStyleEditor::on_LabelBackgroundlColor_clicked()
 
 void PaintStyleEditor::on_LabelFont_currentFontChanged(const QFont & font)
 {
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
 	thePainters[idx].setLabelFont(font.toString());
@@ -509,7 +527,7 @@ void PaintStyleEditor::on_LabelFont_currentFontChanged(const QFont & font)
 
 void PaintStyleEditor::updatePaintList()
 {
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);

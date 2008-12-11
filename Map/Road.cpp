@@ -116,7 +116,7 @@ QString Road::description() const
 
 RenderPriority Road::renderPriority(double aPixelPerM) const
 {
-	FeaturePainter* thePainter = getEditPainter(aPixelPerM);
+	const FeaturePainter* thePainter = getEditPainter(aPixelPerM);
 	if (thePainter && thePainter->isFilled())
 		return RenderPriority(RenderPriority::IsArea,fabs(area()));
 	return RenderPriority(RenderPriority::IsLinear,0);

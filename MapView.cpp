@@ -180,7 +180,10 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 	P.setClipRegion(rg);
 	P.setClipping(true);
 
-	P.fillRect(rect(), QBrush(MerkaartorPreferences::instance()->getBgColor()));
+	if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
+		P.fillRect(rect(), QBrush(M_PREFS->getBgColor()));
+	else
+		P.fillRect(rect(), QBrush(M_STYLE->getGlobalPainter().getBackgroundColor()));
 
 	if (LAYERMANAGER_OK && layermanager->getLayer()->isVisible()) {
 		updateLayersImage();
@@ -316,7 +319,7 @@ void MapView::updateLayersImage()
 
 void MapView::drawFeatures(QPainter & P)
 {
-	EditPaintStyle EP(P, projection());
+	M_STYLE->initialize(P, projection());
 
 	for (unsigned int i=0; i<theDocument->layerSize(); ++i) {
 		theDocument->getLayer(i)->invalidate(theDocument, theProjection.viewport());
@@ -349,9 +352,9 @@ void MapView::drawFeatures(QPainter & P)
 		}
 	}
 
-	for (unsigned int i = 0; i < EP.size(); ++i)
+	for (unsigned int i = 0; i < M_STYLE->size(); ++i)
 	{
-		PaintStyleLayer *Current = EP.get(i);
+		PaintStyleLayer *Current = M_STYLE->get(i);
 
 #ifndef NDEBUG
 		EPBackgroundLayer* bl = dynamic_cast<EPBackgroundLayer*> (Current);

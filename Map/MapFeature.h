@@ -188,8 +188,8 @@ class MapFeature : public QObject
 		 */
 		bool isDeleted();
 
-		FeaturePainter* getEditPainter(double PixelPerM) const;
-		FeaturePainter* getCurrentEditPainter() const;
+		const FeaturePainter* getEditPainter(double PixelPerM) const;
+		const FeaturePainter* getCurrentEditPainter() const;
 		bool hasEditPainter() const;
 		void invalidatePainter();
 		QVector<qreal> getParentDashes() const;

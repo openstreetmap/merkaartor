@@ -64,10 +64,10 @@ class MapFeaturePrivate
 		unsigned int TagsSize;
 		MapFeature::ActorType LastActor;
 		MapLayer* theLayer;
-		std::vector<FeaturePainter*> PossiblePainters;
+		QVector<const FeaturePainter*> PossiblePainters;
 		bool PossiblePaintersUpToDate;
 		double PixelPerMForPainter;
-		FeaturePainter* CurrentPainter;
+		const FeaturePainter* CurrentPainter;
 		bool HasPainter;
 		MapFeature* theFeature;
 		std::vector<MapFeature*> Parents;
@@ -353,10 +353,10 @@ void MapFeaturePrivate::updatePainters(double PixelPerM)
 	if (PixelPerMForPainter < 0)
 	{
 		PossiblePainters.clear();
-		std::vector<FeaturePainter*> DefaultPainters;
-		for (unsigned int i=0; i<EditPaintStyle::Painters.size(); ++i)
+		QVector<const FeaturePainter*> DefaultPainters;
+		for (unsigned int i=0; i<M_STYLE->painterSize(); ++i)
 		{
-			FeaturePainter* Current = &EditPaintStyle::Painters[i];
+			const FeaturePainter* Current = M_STYLE->getPainter(i);
 			switch (Current->matchesTag(theFeature)) {
 				case TagSelect_Match:
 					PossiblePainters.push_back(Current);
@@ -391,14 +391,14 @@ void MapFeaturePrivate::blankPainters(double PixelPerM)
 	HasPainter = false;
 }
 
-FeaturePainter* MapFeature::getEditPainter(double PixelPerM) const
+const FeaturePainter* MapFeature::getEditPainter(double PixelPerM) const
 {
 	if (p->PixelPerMForPainter != PixelPerM)
 		p->updatePainters(PixelPerM);
 	return p->CurrentPainter;
 }
 
-FeaturePainter* MapFeature::getCurrentEditPainter() const
+const FeaturePainter* MapFeature::getCurrentEditPainter() const
 {
 	return p->CurrentPainter;
 }
