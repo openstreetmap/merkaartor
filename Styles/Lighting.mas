@@ -1,5 +1,9 @@
 <mapStyle>
 
+<global
+ backgroundColor="#6f6f6ffc"
+/>
+
 <painter
  zoomUnder="0.1" zoomUpper="1e+07"
  backgroundColor="#ffdf00fc" backgroundScale="1.2" backgroundOffset="3"
@@ -12,8 +16,8 @@
 <painter
  zoomUnder="0.1" zoomUpper="1e+07"
  backgroundColor="#000000fc" backgroundScale="1.2" backgroundOffset="3"
- foregroundColor="#777777fc" foregroundScale="1" foregroundOffset="2"
- drawTrafficDirectionMarks="yes" labelColor="#000000ff" labelScale="1.2" labelOffset="3"
+ foregroundColor="#666666fc" foregroundScale="1" foregroundOffset="2"
+ drawTrafficDirectionMarks="yes" labelColor="#ddddddff" labelScale="1.2" labelOffset="3"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelBackgroundColor="#ffffff7c">
   <selector expr="[lit] isoneof (0, false, no)"/>
 </painter>
