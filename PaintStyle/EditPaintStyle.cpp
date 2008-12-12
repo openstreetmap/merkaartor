@@ -305,6 +305,8 @@ void EditPaintStyle::loadPainters(const QString& filename)
 		return;
 	}
 	file.close();
+	GlobalPainter gp;
+	globalPainter = gp;
 	Painters.clear();
 	QDomElement docElem = doc.documentElement();
 	QDomNode n = docElem.firstChild();
