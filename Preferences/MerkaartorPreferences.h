@@ -162,6 +162,7 @@ public:
 
 	bool use06Api() const;
 	void setUse06Api(bool b);
+	const QString apiVersion() const;
 
 	void setRightSideDriving(bool theValue);
 	bool getRightSideDriving() const;

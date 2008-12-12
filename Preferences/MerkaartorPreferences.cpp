@@ -224,7 +224,7 @@ void MerkaartorPreferences::putOsmPref(const QString& k, const QString& v)
 	httpRequest.setHost(osmWeb.host(), osmWeb.port());
 	httpRequest.setUser(getOsmUser().toUtf8(), getOsmPassword().toUtf8());
 
-	QHttpRequestHeader Header("PUT", QString("/api/0.5/user/preferences/%1").arg(k));
+	QHttpRequestHeader Header("PUT", QString("/api/%1/user/preferences/%2").arg(apiVersion()).arg(k));
 	if (osmWeb.port() == 80)
 		Header.setValue("Host",osmWeb.host());
 	else
@@ -243,7 +243,7 @@ void MerkaartorPreferences::deleteOsmPref(const QString& k)
 	httpRequest.setHost(osmWeb.host(), osmWeb.port());
 	httpRequest.setUser(getOsmUser().toUtf8(), getOsmPassword().toUtf8());
 
-	QHttpRequestHeader Header("DELETE", QString("/api/0.5/user/preferences/%1").arg(k));
+	QHttpRequestHeader Header("DELETE", QString("/api/%1/user/preferences/%2").arg(apiVersion()).arg(k));
 	if (osmWeb.port() == 80)
 		Header.setValue("Host",osmWeb.host());
 	else
@@ -264,7 +264,7 @@ void MerkaartorPreferences::fromOsmPref()
 	httpRequest.setHost(osmWeb.host(), osmWeb.port());
 	httpRequest.setUser(getOsmUser().toUtf8(), getOsmPassword().toUtf8());
 
-	QHttpRequestHeader Header("GET", "/api/0.5/user/preferences");
+	QHttpRequestHeader Header("GET", QString("/api/%1/user/preferences/%2").arg(apiVersion()));
 	if (osmWeb.port() == 80)
 		Header.setValue("Host",osmWeb.host());
 	else
@@ -465,8 +465,10 @@ void MerkaartorPreferences::initialize()
 		theTmsServerList.insert("Gravitystorm Cycle", cycle);
 		TmsServer oam("OpenAerialMap", "tile.openaerialmap.org", "/tiles/1.0.0/openaerialmap-900913/%1/%2/%3.png", 256, 0, 17);
 		theTmsServerList.insert("OpenAerialMap", oam);
-		TmsServer npe("New Popular Edition (NPE) at zoom 14", "richard.dev.openstreetmap.org", "/npe/%1/%2/%3.jpg", 256, 0, 17);
+		TmsServer npe("New Popular Edition (NPE) at zoom 14", "richard.dev.openstreetmap.org", "/npe/%1/%2/%3.jpg", 256, 14, 14);
 		theTmsServerList.insert("New Popular Edition (NPE) at zoom 14", npe);
+		TmsServer osmmaplint("OSM Maplint", "tah.openstreetmap.org", "/Tiles/maplint/%1/%2/%3.png", 256, 12, 16);
+		theTmsServerList.insert("OSM Maplint", osmmaplint);
 		setSelectedTmsServer("OSM Mapnik");
 		save();
 	}
@@ -489,6 +491,14 @@ void MerkaartorPreferences::setRightSideDriving(bool theValue)
 bool MerkaartorPreferences::use06Api() const
 {
 	return Use06Api;
+}
+
+const QString MerkaartorPreferences::apiVersion() const
+{
+	if (Use06Api)
+		return "0.6";
+	else
+		return "0.5";
 }
 
 void MerkaartorPreferences::setUse06Api(bool b)
