@@ -264,7 +264,7 @@ void MerkaartorPreferences::fromOsmPref()
 	httpRequest.setHost(osmWeb.host(), osmWeb.port());
 	httpRequest.setUser(getOsmUser().toUtf8(), getOsmPassword().toUtf8());
 
-	QHttpRequestHeader Header("GET", QString("/api/%1/user/preferences/%2").arg(apiVersion()));
+	QHttpRequestHeader Header("GET", QString("/api/%1/user/preferences/").arg(apiVersion()));
 	if (osmWeb.port() == 80)
 		Header.setValue("Host",osmWeb.host());
 	else
