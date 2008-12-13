@@ -424,6 +424,9 @@ void MerkaartorPreferences::initialize()
 				WmsServer tq("Terraservice_DOQ", "terraservice.net", "/ogcmap.ashx?",
 					"doq", "EPSG:4326", ",", "image/jpeg");
 				theWmsServerList.insert("Terraservice_DOQ", tq);
+				WmsServer op("Oberpfalz Germany", "oberpfalz.geofabrik.de", "/wms/?",
+					"DOP20", "EPSG:4326", ",", "image/png");
+				theWmsServerList.insert("Oberpfalz_DOP20", op);
 			}
 		}
 		save();
@@ -448,6 +451,9 @@ void MerkaartorPreferences::initialize()
 		WmsServer tq("Terraservice_DOQ", "terraservice.net", "/ogcmap.ashx?",
 						"doq", "EPSG:4326", ",", "image/jpeg");
 		theWmsServerList.insert("Terraservice_DOQ", tq);
+		WmsServer op("Oberpfalz_DOP20", "oberpfalz.geofabrik.de", "/wms?",
+						"DOP20", "EPSG:4326", ",", "image/png");
+		theWmsServerList.insert("Oberpfalz_DOP20", op);
 		setSelectedWmsServer("OpenAerialMap");
 		save();
 	}
