@@ -222,13 +222,17 @@ void MerkaartorPreferences::putOsmPref(const QString& k, const QString& v)
 	QBuffer Buf(&ba);
 
 	httpRequest.setHost(osmWeb.host(), osmWeb.port());
-	httpRequest.setUser(getOsmUser().toUtf8(), getOsmPassword().toUtf8());
 
 	QHttpRequestHeader Header("PUT", QString("/api/%1/user/preferences/%2").arg(apiVersion()).arg(k));
 	if (osmWeb.port() == 80)
 		Header.setValue("Host",osmWeb.host());
 	else
 		Header.setValue("Host",osmWeb.host() + ':' + QString::number(osmWeb.port()));
+
+	QString auth = QString("%1:%2").arg(getOsmUser()).arg(getOsmPassword());
+	QByteArray ba_auth = auth.toUtf8().toBase64();
+	Header.setValue("Authorization", QString("Basic %1").arg(QString(ba_auth)));
+
 	OsmPrefSaveId = httpRequest.request(Header,ba);
 }
 
@@ -241,13 +245,17 @@ void MerkaartorPreferences::deleteOsmPref(const QString& k)
 		osmWeb.setPort(80);
 
 	httpRequest.setHost(osmWeb.host(), osmWeb.port());
-	httpRequest.setUser(getOsmUser().toUtf8(), getOsmPassword().toUtf8());
 
 	QHttpRequestHeader Header("DELETE", QString("/api/%1/user/preferences/%2").arg(apiVersion()).arg(k));
 	if (osmWeb.port() == 80)
 		Header.setValue("Host",osmWeb.host());
 	else
 		Header.setValue("Host",osmWeb.host() + ':' + QString::number(osmWeb.port()));
+
+	QString auth = QString("%1:%2").arg(getOsmUser()).arg(getOsmPassword());
+	QByteArray ba_auth = auth.toUtf8().toBase64();
+	Header.setValue("Authorization", QString("Basic %1").arg(QString(ba_auth)));
+
 	httpRequest.request(Header);
 }
 
@@ -262,13 +270,17 @@ void MerkaartorPreferences::fromOsmPref()
 		osmWeb.setPort(80);
 
 	httpRequest.setHost(osmWeb.host(), osmWeb.port());
-	httpRequest.setUser(getOsmUser().toUtf8(), getOsmPassword().toUtf8());
 
 	QHttpRequestHeader Header("GET", QString("/api/%1/user/preferences/").arg(apiVersion()));
 	if (osmWeb.port() == 80)
 		Header.setValue("Host",osmWeb.host());
 	else
 		Header.setValue("Host",osmWeb.host() + ':' + QString::number(osmWeb.port()));
+
+	QString auth = QString("%1:%2").arg(getOsmUser()).arg(getOsmPassword());
+	QByteArray ba_auth = auth.toUtf8().toBase64();
+	Header.setValue("Authorization", QString("Basic %1").arg(QString(ba_auth)));
+
 	OsmPrefLoadId = httpRequest.request(Header, NULL, &OsmPrefContent);
 }
 
@@ -494,9 +506,12 @@ void MerkaartorPreferences::setRightSideDriving(bool theValue)
 	Sets->setValue("roadstructure/rightsidedriving", theValue);
 }
 
-bool MerkaartorPreferences::use06Api() const
+double MerkaartorPreferences::apiVersionNum() const
 {
-	return Use06Api;
+	if (Use06Api)
+		return 0.6;
+	else
+		return 0.5;
 }
 
 const QString MerkaartorPreferences::apiVersion() const

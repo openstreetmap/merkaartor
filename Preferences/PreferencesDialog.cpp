@@ -115,7 +115,7 @@ void PreferencesDialog::loadPrefs()
 	bbUseProxy->setChecked(M_PREFS->getProxyUse());
 	edProxyHost->setText(M_PREFS->getProxyHost());
 	edProxyPort->setText(QString().setNum(M_PREFS->getProxyPort()));
-	bbUse06Api->setChecked(M_PREFS->use06Api());
+	bbUse06Api->setChecked((M_PREFS->apiVersionNum() > 0.5));
 
 	edCacheDir->setText(M_PREFS->getCacheDir());
 	sbCacheSize->setValue(M_PREFS->getCacheSize());

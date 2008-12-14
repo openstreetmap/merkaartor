@@ -426,8 +426,10 @@ bool DirtyListExecutor::start()
 {
 	ChangeSetId = "";
 	Progress->setValue(++Done);
-	if (!MerkaartorPreferences::instance()->use06Api()) return true;
+	if (!(M_PREFS->apiVersionNum() > 0.5)) return true;
 	Progress->setLabelText(tr("OPEN changeset"));
+	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
+
 	QString DataIn(
 		"<osm>"
 		"<changeset>"
@@ -438,7 +440,6 @@ bool DirtyListExecutor::start()
 	DataIn = DataIn.arg(VERSION);
 	QString DataOut;
 	QString URL = theDownloader->getURLToOpenChangeSet();
-	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 	if (sendRequest("PUT",URL,DataIn, DataOut))
 	{
 		ChangeSetId = DataOut;
@@ -450,10 +451,11 @@ bool DirtyListExecutor::start()
 bool DirtyListExecutor::stop()
 {
 	Progress->setValue(++Done);
-	if (!MerkaartorPreferences::instance()->use06Api()) return true;
+	if (!(M_PREFS->apiVersionNum() > 0.5)) return true;
 	Progress->setLabelText(tr("CLOSE changeset"));
-	QString URL = theDownloader->getURLToCloseChangeSet(ChangeSetId);
 	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
+
+	QString URL = theDownloader->getURLToCloseChangeSet(ChangeSetId);
 	QString DataIn, DataOut;
 	if (sendRequest("PUT",URL,DataIn,DataOut))
 	{
@@ -473,7 +475,7 @@ bool DirtyListExecutor::addRelation(Relation *R)
 	QString DataIn, DataOut, OldId;
 	OldId = R->id();
 	R->setId("0");
-	DataIn = wrapOSM(exportOSM(*R), ChangeSetId);
+	DataIn = wrapOSM(exportOSM(*R, ChangeSetId), ChangeSetId);
 	R->setId(OldId);
 	QString URL=theDownloader->getURLToCreate("relation");
 	if (sendRequest("PUT",URL,DataIn,DataOut))
@@ -498,7 +500,7 @@ bool DirtyListExecutor::addRoad(Road *R)
 	QString DataIn, DataOut, OldId;
 	OldId = R->id();
 	R->setId("0");
-	DataIn = wrapOSM(exportOSM(*R), ChangeSetId);
+	DataIn = wrapOSM(exportOSM(*R, ChangeSetId), ChangeSetId);
 	R->setId(OldId);
 	QString URL=theDownloader->getURLToCreate("way");
 	if (sendRequest("PUT",URL,DataIn,DataOut))
@@ -524,7 +526,7 @@ bool DirtyListExecutor::addPoint(TrackPoint* Pt)
 	QString DataIn, DataOut, OldId;
 	OldId = Pt->id();
 	Pt->setId("0");
-	DataIn = wrapOSM(exportOSM(*Pt), ChangeSetId);
+	DataIn = wrapOSM(exportOSM(*Pt, ChangeSetId), ChangeSetId);
 	Pt->setId(OldId);
 	QString URL=theDownloader->getURLToCreate("node");
 	if (sendRequest("PUT",URL,DataIn,DataOut))
@@ -549,11 +551,11 @@ bool DirtyListExecutor::updateRelation(Relation* R)
 	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 	QString URL = theDownloader->getURLToUpdate("relation",stripToOSMId(R->id()));
 	QString DataIn, DataOut;
-	DataIn = wrapOSM(exportOSM(*R), ChangeSetId);
+	DataIn = wrapOSM(exportOSM(*R, ChangeSetId), ChangeSetId);
 	if (sendRequest("PUT",URL,DataIn,DataOut))
 	{
 		R->setLastUpdated(MapFeature::OSMServer);
-		if (MerkaartorPreferences::instance()->use06Api())
+		if (M_PREFS->apiVersionNum() > 0.5)
 		{
 			int NewVersion = DataOut.toInt();
 			if (NewVersion <= R->versionNumber())
@@ -577,11 +579,11 @@ bool DirtyListExecutor::updateRoad(Road* R)
 //	URL = URL.arg(stripToOSMId(R->id()));
 	QString URL = theDownloader->getURLToUpdate("way",stripToOSMId(R->id()));
 	QString DataIn, DataOut;
-	DataIn = wrapOSM(exportOSM(*R), ChangeSetId);
+	DataIn = wrapOSM(exportOSM(*R, ChangeSetId), ChangeSetId);
 	if (sendRequest("PUT",URL,DataIn,DataOut))
 	{
 		R->setLastUpdated(MapFeature::OSMServer);
-		if (MerkaartorPreferences::instance()->use06Api())
+		if (M_PREFS->apiVersionNum() > 0.5)
 		{
 			int NewVersion = DataOut.toInt();
 			if (NewVersion <= R->versionNumber())
@@ -604,11 +606,11 @@ bool DirtyListExecutor::updatePoint(TrackPoint* Pt)
 //	URL = URL.arg(stripToOSMId(Pt->id()));
 	QString URL = theDownloader->getURLToUpdate("node",stripToOSMId(Pt->id()));
 	QString DataIn, DataOut;
-	DataIn = wrapOSM(exportOSM(*Pt), ChangeSetId);
+	DataIn = wrapOSM(exportOSM(*Pt, ChangeSetId), ChangeSetId);
 	if (sendRequest("PUT",URL,DataIn,DataOut))
 	{
 		Pt->setLastUpdated(MapFeature::OSMServer);
-		if (MerkaartorPreferences::instance()->use06Api())
+		if (M_PREFS->apiVersionNum() > 0.5)
 		{
 			int NewVersion = DataOut.toInt();
 			if (NewVersion <= Pt->versionNumber())
@@ -631,8 +633,8 @@ bool DirtyListExecutor::erasePoint(TrackPoint *Pt)
 //	URL = URL.arg(stripToOSMId(Pt->id()));
 	QString URL = theDownloader->getURLToDelete("node",stripToOSMId(Pt->id()));
 	QString DataIn, DataOut;
-	if (MerkaartorPreferences::instance()->use06Api())
-		DataIn = wrapOSM(exportOSM(*Pt), ChangeSetId);
+	if (M_PREFS->apiVersionNum() > 0.5)
+		DataIn = wrapOSM(exportOSM(*Pt, ChangeSetId), ChangeSetId);
 	if (sendRequest("DELETE",URL,DataIn,DataOut))
 	{
 		Pt->setLastUpdated(MapFeature::OSMServer);
@@ -650,8 +652,8 @@ bool DirtyListExecutor::eraseRoad(Road *R)
 //	URL = URL.arg(stripToOSMId(R->id()));
 	QString URL = theDownloader->getURLToDelete("way",stripToOSMId(R->id()));
 	QString DataIn, DataOut;
-	if (MerkaartorPreferences::instance()->use06Api())
-		DataIn = wrapOSM(exportOSM(*R), ChangeSetId);
+	if (M_PREFS->apiVersionNum() > 0.5)
+		DataIn = wrapOSM(exportOSM(*R, ChangeSetId), ChangeSetId);
 	if (sendRequest("DELETE",URL,DataIn,DataOut))
 	{
 		R->setLastUpdated(MapFeature::OSMServer);
@@ -667,8 +669,8 @@ bool DirtyListExecutor::eraseRelation(Relation *R)
 	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 	QString URL = theDownloader->getURLToDelete("relation",stripToOSMId(R->id()));
 	QString DataIn, DataOut;
-	if (MerkaartorPreferences::instance()->use06Api())
-		DataIn = wrapOSM(exportOSM(*R), ChangeSetId);
+	if (M_PREFS->apiVersionNum() > 0.5)
+		DataIn = wrapOSM(exportOSM(*R, ChangeSetId), ChangeSetId);
 	if (sendRequest("DELETE",URL,DataIn,DataOut))
 	{
 		R->setLastUpdated(MapFeature::OSMServer);

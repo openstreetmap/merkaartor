@@ -160,9 +160,10 @@ public:
 	void putOsmPref(const QString& k, const QString& v);
 	void deleteOsmPref(const QString& k);
 
-	bool use06Api() const;
+	//bool use06Api() const;
 	void setUse06Api(bool b);
 	const QString apiVersion() const;
+	double apiVersionNum() const;
 
 	void setRightSideDriving(bool theValue);
 	bool getRightSideDriving() const;

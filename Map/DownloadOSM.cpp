@@ -47,10 +47,11 @@ Downloader::Downloader(const QString& aWeb, const QString& aUser, const QString&
 	}
 
 	Request.setHost(Web,Port);
-	Request.setUser(User.toUtf8(), Password.toUtf8());
+	//IdAuth = Request.setUser(User.toUtf8(), Password.toUtf8());
 //	connect(&Request,SIGNAL(done(bool)), this,SLOT(allDone(bool)));
 	connect(&Request,SIGNAL(requestFinished(int, bool)),this,SLOT(on_requestFinished(int, bool)));
 	connect(&Request,SIGNAL(dataReadProgress(int, int)), this,SLOT(progress(int, int)));
+	connect(&Request, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)), this, SLOT(on_responseHeaderReceived(const QHttpResponseHeader &)));
 }
 
 
@@ -240,6 +241,11 @@ bool Downloader::request(const QString& Method, const QString& URL, const QStrin
 		Header.setValue("Host",Web);
 	else
 		Header.setValue("Host",Web+':'+QString::number(Port));
+	
+	QString auth = QString("%1:%2").arg(User).arg(Password);
+	QByteArray ba_auth = auth.toUtf8().toBase64();
+	Header.setValue("Authorization", QString("Basic %1").arg(QString(ba_auth)));
+
 	Content.clear();
 	Id = Request.request(Header,ba);
 
@@ -270,6 +276,24 @@ bool Downloader::request(const QString& Method, const QString& URL, const QStrin
 QByteArray& Downloader::content()
 {
 	return Content;
+}
+
+void Downloader::on_responseHeaderReceived(const QHttpResponseHeader & hdr)
+{
+	switch (hdr.statusCode()) {
+		//case 200:
+		//	break;
+		//case 406:
+		//	QMessageBox::critical(NULL,QApplication::translate("MerkaartorPreferences","Preferences upload failed"), QApplication::translate("MerkaartorPreferences","Duplicate key"));
+		//	break;
+		//case 413:
+		//	QMessageBox::critical(NULL,QApplication::translate("MerkaartorPreferences","Preferences upload failed"), QApplication::translate("MerkaartorPreferences","More than 150 preferences"));
+		//	break;
+		default:
+			qDebug() << hdr.statusCode();
+			qDebug() << hdr.reasonPhrase();
+			break;
+	}
 }
 
 void Downloader::on_requestFinished(int anId, bool anError)
@@ -320,12 +344,12 @@ const QString &Downloader::locationText()
 
 QString Downloader::getURLToOpenChangeSet()
 {
-	return QString("/api/0.6/changeset/create");
+	return QString("/api/%1/changeset/create").arg(M_PREFS->apiVersion());
 }
 
 QString Downloader::getURLToCloseChangeSet(const QString& Id)
 {
-	return QString("/api/0.6/changeset/%1/close").arg(Id);
+	return QString("/api/%1/changeset/%2/close").arg(M_PREFS->apiVersion()).arg(Id);
 }
 
 QString Downloader::getURLToFetch(const QString &What)
@@ -356,33 +380,26 @@ QString Downloader::getURLToFetch(const QString &What, const QString& Id)
 
 QString Downloader::getURLToCreate(const QString &What)
 {
-	if (MerkaartorPreferences::instance()->use06Api())
-		return QString("/api/0.6/%1/create").arg(What);
-	QString URL = QString("/api/0.5/%1/create");
-	return URL.arg(What);
+	QString URL = QString("/api/%1/%2/create");
+	return URL.arg(M_PREFS->apiVersion()).arg(What);
 }
 
 QString Downloader::getURLToUpdate(const QString &What, const QString& Id)
 {
-	if (MerkaartorPreferences::instance()->use06Api())
-		return QString("/api/0.6/%1/%2").arg(What).arg(Id);
-	QString URL = QString("/api/0.5/%1/%2");
-	return URL.arg(What).arg(Id);
+	QString URL = QString("/api/%1/%2/%3");
+	return URL.arg(M_PREFS->apiVersion()).arg(What).arg(Id);
 }
 
 QString Downloader::getURLToDelete(const QString &What, const QString& Id)
 {
-	if (MerkaartorPreferences::instance()->use06Api())
-		return QString("/api/0.6/%1/%2").arg(What).arg(Id);
-	QString URL = QString("/api/0.5/%1/%2");
-	return URL.arg(What).arg(Id);
+	QString URL = QString("/api/%1/%2/%3");
+	return URL.arg(M_PREFS->apiVersion()).arg(What).arg(Id);
 }
 
 QString Downloader::getURLToMap()
 {
-	if (MerkaartorPreferences::instance()->use06Api())
-		return QString("/api/0.6/map?bbox=%1,%2,%3,%4");
-	QString URL = QString("/api/0.5/map?bbox=%1,%2,%3,%4");
+	QString apiURL = QString("/api/%1").arg(M_PREFS->apiVersion());
+	QString URL = apiURL + QString("/map?bbox=%1,%2,%3,%4");
 	return URL;
 }
 

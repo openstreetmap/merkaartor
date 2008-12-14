@@ -49,6 +49,7 @@ class Downloader : public QObject
 	public slots:
 		void progress( int done, int total );
 		void on_requestFinished(int Id, bool Error);
+		void on_responseHeaderReceived(const QHttpResponseHeader & hdr);
 		void animate();
 		void on_Cancel_clicked();
 
@@ -65,6 +66,7 @@ class Downloader : public QObject
 		QString ResultText;
 		QString ErrorText;
 		int Id;
+		int IdAuth;
 		bool Error;
 		QEventLoop Loop;
 		QProgressDialog* Animator;

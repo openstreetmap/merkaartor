@@ -7,9 +7,9 @@ class TrackPoint;
 
 #include <QtCore/QString>
 
-QString exportOSM(const TrackPoint& Pt);
-QString exportOSM(const Road& R);
-QString exportOSM(const Relation& R);
+QString exportOSM(const TrackPoint& Pt, const QString&  ChangesetId);
+QString exportOSM(const Road& R, const QString&  ChangesetId);
+QString exportOSM(const Relation& R, const QString&  ChangesetId);
 
 QString wrapOSM(const QString& S, const QString& ChangeSetId);
 

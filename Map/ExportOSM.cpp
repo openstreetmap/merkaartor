@@ -4,6 +4,8 @@
 #include "Map/Road.h"
 #include "Map/TrackPoint.h"
 
+#include "Preferences/MerkaartorPreferences.h"
+
 static QString stripToOSMId(const QString& id)
 {
 	int f = id.lastIndexOf("_");
@@ -31,6 +33,9 @@ static QString tagOSM(const MapFeature& F)
 		if (F.tagKey(i).startsWith('_') && (F.tagKey(i).endsWith('_')))
 			continue;
 
+		if (M_PREFS->apiVersionNum() > 0.5 && F.tagKey(i) == "created_by")
+			continue;
+
 		const QString & tagKey = encodeAttributes( F.tagKey(i) );
 		const QString & tagValue = encodeAttributes( F.tagValue(i) );
 
@@ -41,25 +46,35 @@ static QString tagOSM(const MapFeature& F)
 
 QString versionAttribute(const MapFeature& F)
 {
-	if (MerkaartorPreferences::instance()->use06Api())
+	if (M_PREFS->apiVersionNum() > 0.5)
 		return QString(" version=\"%1\"").arg(F.versionNumber());
 	return "";
 }
 
-QString exportOSM(const TrackPoint& Pt)
+QString exportOSM(const TrackPoint& Pt, const QString& ChangesetId)
 {
-	QString S("<node id=\"%1\" lat=\"%2\" lon=\"%3\"%4>");
+	QString S;
+	if (ChangesetId.isEmpty())
+		S += QString("<node id=\"%1\" lat=\"%2\" lon=\"%3\"%4>")
+			.arg(stripToOSMId(Pt.id())).arg(intToAng(Pt.position().lat()),0,'f',8).arg(intToAng(Pt.position().lon()),0,'f',8).arg(versionAttribute(Pt));
+	else
+		S += QString("<node id=\"%1\" lat=\"%2\" lon=\"%3\"%4 changeset=\"%5\">")
+			.arg(stripToOSMId(Pt.id())).arg(intToAng(Pt.position().lat()),0,'f',8).arg(intToAng(Pt.position().lon()),0,'f',8).arg(versionAttribute(Pt))
+			.arg(ChangesetId);
 	S+=tagOSM(Pt);
 	S+="</node>";
-	return S.arg(stripToOSMId(Pt.id())).arg(intToAng(Pt.position().lat()),0,'f',8).arg(intToAng(Pt.position().lon()),0,'f',8).arg(versionAttribute(Pt));
+	return S;
 }
 
-QString exportOSM(const Road& R)
+QString exportOSM(const Road& R, const QString& ChangesetId)
 {
 	if (!R.size()) return "";
 
 	QString S;
-	S += QString("<way id=\"%1\"%2>").arg(stripToOSMId(R.id())).arg(versionAttribute(R));
+	if (ChangesetId.isEmpty())
+		S += QString("<way id=\"%1\"%2>").arg(stripToOSMId(R.id())).arg(versionAttribute(R));
+	else
+		S += QString("<way id=\"%1\"%2 changeset=\"%3\">").arg(stripToOSMId(R.id())).arg(versionAttribute(R)).arg(ChangesetId);
 	S+=QString("<nd ref=\"%1\"/>").arg(stripToOSMId(R.get(0)->id()));
 	for (unsigned int i=1; i<R.size(); ++i)
 		if (R.get(i)->id() != R.get(i-1)->id())
@@ -69,10 +84,13 @@ QString exportOSM(const Road& R)
 	return S;
 }
 
-QString exportOSM(const Relation& R)
+QString exportOSM(const Relation& R, const QString& ChangesetId)
 {
 	QString S;
-	S += QString("<relation id=\"%1\"%2>").arg(stripToOSMId(R.id())).arg(versionAttribute(R));
+	if (ChangesetId.isEmpty())
+		S += QString("<relation id=\"%1\"%2>").arg(stripToOSMId(R.id())).arg(versionAttribute(R));
+	else
+		S += QString("<relation id=\"%1\"%2 changeset=\"%3\">").arg(stripToOSMId(R.id())).arg(versionAttribute(R)).arg(ChangesetId);
 	for (unsigned int i=0; i<R.size(); ++i)
 	{
 		QString Type("node");
@@ -93,7 +111,8 @@ QString wrapOSM(const QString& S, const QString& ChangeSetId)
 	if (ChangeSetId.isEmpty())
 		return "<osm version=\"0.5\">"+S+"</osm>"+QChar(0);
 	else
-		return "<osm version=\"0.6\" changeset=\""+ChangeSetId+"\">"+S+"</osm>"+QChar(0);
+		return "<osm>"+S+"</osm>"+QChar(0);
+		//return "<osm version=\"0.6\" changeset=\""+ChangeSetId+"\">"+S+"</osm>"+QChar(0);
 }
 
 
