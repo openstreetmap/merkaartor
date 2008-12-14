@@ -41,9 +41,18 @@ class NameFinderWidget : public QWidget {
 public:
         explicit NameFinderWidget(QWidget *parent = 0);
         virtual ~NameFinderWidget();
-
+        /**
+         * Executes the search
+         * @param object Specifies a feature to search for, can be
+         * any string which the service recognizes.
+         * WARNING: this widget currently
+         * doesn't do any data validation on it!
+         */
         void search(QString object);
+        //! Returns the coordinates of selected map feature
 	QPointF selectedCoords();
+        //! Returns the zoom level of the selected map feature
+        int selectedZoom();
 
 signals:
 	void selectionChanged();

@@ -155,10 +155,11 @@ void GotoDialog::on_buttonBox_clicked(QAbstractButton * button)
 void GotoDialog::searchWidget_selectionChanged()
 {
 	QPointF centerPoint = searchWidget->selectedCoords();
+        int zoom = searchWidget->selectedZoom();
 	coordOSM->setText( QString("http://www.openstreetmap.org/?lat=%1&lon=%2&zoom=%3")
 		.arg(QString::number(centerPoint.x(), 'f', 4))
 		.arg(QString::number(centerPoint.y(), 'f', 4))
-		.arg(QString::number(15))
+                .arg(QString::number(zoom))
 		);
 	rbOSM->setChecked(true);
 	

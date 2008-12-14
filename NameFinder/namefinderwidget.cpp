@@ -116,6 +116,19 @@ namespace NameFinder
 
 	}
 
+        int NameFinderWidget::selectedZoom()
+        {
+                QModelIndexList selectedIndexes = selection->selectedIndexes();
+                QModelIndex selectedIndex;
+                NameFinderResult result;
+                foreach (selectedIndex, selectedIndexes)
+                {
+                        result = model->resultAt ( selectedIndex.row() );
+                        return result.zoom;
+                }
+                return 16;
+        }
+
 	void NameFinderWidget::selection_selectionChanged(const QItemSelection & selected, const QItemSelection & deselected)
 	{
 		emit selectionChanged();
