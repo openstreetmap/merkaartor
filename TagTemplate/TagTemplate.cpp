@@ -275,17 +275,22 @@ void TagTemplateWidgetCombo::on_combo_activated(int idx)
 	QComboBox* W = dynamic_cast<QComboBox*>(theMainWidget);
 	TagTemplateWidgetValue* aTCV = W->itemData(idx).value<TagTemplateWidgetValue*>();
 
-	if (!aTCV->theUrl.isEmpty()) {
-		((QLabel *)theLabelWidget)->setText(QString("<a href=\"%1\">%2</a>").arg(aTCV->theUrl.toString()).arg(theDescription));
-	} else {
-		if (!theUrl.isEmpty()) {
-			((QLabel *)theLabelWidget)->setText(QString("<a href=\"%1\">%2</a>").arg(theUrl.toString()).arg(theDescription));
+	QString val;
+	if (aTCV) {
+		if (!aTCV->theUrl.isEmpty()) {
+			((QLabel *)theLabelWidget)->setText(QString("<a href=\"%1\">%2</a>").arg(aTCV->theUrl.toString()).arg(theDescription));
 		} else {
-			((QLabel *)theLabelWidget)->setText(theDescription);
+			if (!theUrl.isEmpty()) {
+				((QLabel *)theLabelWidget)->setText(QString("<a href=\"%1\">%2</a>").arg(theUrl.toString()).arg(theDescription));
+			} else {
+				((QLabel *)theLabelWidget)->setText(theDescription);
+			}
 		}
-	}
 
-	QString val = aTCV->theTagValue;
+		val = aTCV->theTagValue;
+	} else
+		val = W->currentText();
+
 	if (val == "__NULL__")
 		emit tagCleared(theTag);
 	else
