@@ -4,12 +4,15 @@
   <widget tag="place" type="combo">
    <link src="http://wiki.openstreetmap.org/index.php/Key:place" />
    <description locale="en" >Place</description>
+   <description locale="pl" >Miejsca</description>
    <selector expr="Type is Area or Type is TrackPoint" />
    <value tag="city" >
     <description locale="en" >City (Pop. &gt; 100.000)</description>
+    <description locale="pl" >Miasto (ludność &gt; 100 000)</description>
    </value>
    <value tag="town" >
     <description locale="en" >Town (10.000 &lt; Pop. &lt; 100.000)</description>
+    <description locale="pl" >Miejscowość (ludność 10 000-100 000)</description>
    </value>
    <value tag="village" >
     <description locale="en" >Village (Pop. &lt; 10.000)</description>
@@ -26,43 +29,54 @@
   </widget>
   <widget tag="building" type="yesno">
    <description locale="en" >Building</description>
+   <description locale="pl" >Budynek</description>
    <selector expr="Type is Area" />
   </widget>
   <widget tag="area" type="yesno">
    <description locale="en" >Area</description>
+   <description locale="pl" >Obszar</description>
    <selector expr="Type is Area" />
   </widget>
   <widget tag="name" type="edit" >
    <description locale="en" >Name</description>
+   <description locale="pl" >Nazwa</description>
   </widget>
   <widget tag="highway" type="combo" >
    <link src="http://wiki.openstreetmap.org/index.php/Key:highway" />
    <description locale="en" >Highway type</description>
    <description locale="fr" >Type de route</description>
+   <description locale="pl" >Typ drogi</description>
    <value tag="motorway" >
     <link src="http://wiki.openstreetmap.org/index.php/Tag:highway=motorway" />
     <description locale="en" >Motorway</description>
+    <description locale="pl" >Autostrada</description>
    </value>
    <value tag="motorway_link" >
     <description locale="en" >Ramp to motorway</description>
+    <descritpion locale="pl" >Dojazd do autostrady</description>
    </value>
    <value tag="trunk" >
     <description locale="en" >Trunk road</description>
+    <description locale="pl" >Droga ekspresowa</description>
    </value>
    <value tag="trunk_link" >
     <description locale="en" >Ramp to trunk road</description>
+    <description locale="pl" >Dojazd do drogi ekspresowej</description>
    </value>
    <value tag="primary" >
     <description locale="en" >Primary road</description>
+    <description locale="pl" >Droga krajowa</description>
    </value>
    <value tag="primary_link" >
     <description locale="en" >Ramp to primary road</description>
    </value>
    <value tag="secondary" >
     <description locale="en" >Secondary road</description>
+    <description locale="pl" >Droga wojewódzka</description>
    </value>
    <value tag="tertiary" >
     <description locale="en" >Tertiary road</description>
+    <description locale="pl" >Droga powiatowa</description>
    </value>
    <value tag="unclassified" >
     <description locale="en" >Unclassified road</description>
@@ -87,6 +101,7 @@
    </value>
    <value tag="cycleway" >
     <description locale="en" >Cycleway</description>
+    <description locale="pl" >Droga rowerowa</description>
    </value>
    <value tag="bridleway" >
     <description locale="en" >Bridleway</description>
@@ -205,15 +220,18 @@
    </value>
    <value tag="cinema" >
     <description locale="en" >Cinema</description>
+    <description locale="pl" >Kino</description>
    </value>
    <value tag="college" >
     <description locale="en" >College</description>
    </value>
    <value tag="courthouse" >
     <description locale="en" >Court house</description>
+    <description locale="pl" >Sąd</description>
    </value>
    <value tag="crematorium" >
     <description locale="en" >Crematorium</description>
+    <description locale="pl" >Krematorium</description>
    </value>
    <value tag="drinking_water" >
     <description locale="en" >Source of drinking water</description>
@@ -226,6 +244,7 @@
    </value>
    <value tag="fountain" >
     <description locale="en" >Fountain</description>
+    <description locale="pl" >Fontanna</description>
    </value>
    <value tag="fuel" >
     <description locale="en" >Fuel</description>
