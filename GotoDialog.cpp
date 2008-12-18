@@ -155,7 +155,10 @@ void GotoDialog::on_buttonBox_clicked(QAbstractButton * button)
 void GotoDialog::searchWidget_selectionChanged()
 {
 	QPointF centerPoint = searchWidget->selectedCoords();
-        int zoom = searchWidget->selectedZoom();
+	int zoom = searchWidget->selectedZoom();
+	// The API doesn't like request for too large bounding boxes so reset to a default
+	if (zoom < 15)
+		zoom = 15;
 	coordOSM->setText( QString("http://www.openstreetmap.org/?lat=%1&lon=%2&zoom=%3")
 		.arg(QString::number(centerPoint.x(), 'f', 4))
 		.arg(QString::number(centerPoint.y(), 'f', 4))
