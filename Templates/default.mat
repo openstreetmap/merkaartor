@@ -16,12 +16,15 @@
    </value>
    <value tag="village" >
     <description locale="en" >Village (Pop. &lt; 10.000)</description>
+    <description locale="pl" >Wieś (ludność &lt; 10 000</description>
    </value>
    <value tag="hamlet" >
     <description locale="en" >Hamlet (a few houses)</description>
+    <description locale="pl" >Wólka</description>
    </value>
    <value tag="suburb" >
     <description locale="en" >Suburb</description>
+    <description locale="pl" >Dzielnica</description>
    </value>
    <value tag="locality" >
     <description locale="en" >Localiy (named place)</description>
@@ -53,7 +56,7 @@
    </value>
    <value tag="motorway_link" >
     <description locale="en" >Ramp to motorway</description>
-    <descritpion locale="pl" >Dojazd do autostrady</description>
+    <description locale="pl" >Dojazd do autostrady</description>
    </value>
    <value tag="trunk" >
     <description locale="en" >Trunk road</description>
@@ -69,6 +72,7 @@
    </value>
    <value tag="primary_link" >
     <description locale="en" >Ramp to primary road</description>
+    <description locale="pl" >Dojazd do drogi krajowej</description>
    </value>
    <value tag="secondary" >
     <description locale="en" >Secondary road</description>
@@ -80,24 +84,31 @@
    </value>
    <value tag="unclassified" >
     <description locale="en" >Unclassified road</description>
+    <description locale="pl" >Droga gminna	</description>
    </value>
    <value tag="residential" >
     <description locale="en" >Residential road</description>
+    <description locale="pl" >Droga lokalna</description>
    </value>
    <value tag="service" >
     <description locale="en" >Service road</description>
+    <description locale="pl" >Droga serwisowa</description>
    </value>
    <value tag="track" >
     <description locale="en" >Track road</description>
+    <description locale="pl" >Droga gruntowa</description>
    </value>
    <value tag="living_street" >
     <description locale="en" >Pedestrian priority road</description>
+    <description locale="pl" >Strefa zamieszkania</description>
    </value>
    <value tag="pedestrian" >
     <description locale="en" >Pedestrian only road</description>
+    <description locale="pl" >Ciąg pieszy</description>
    </value>
    <value tag="footway" >
     <description locale="en" >Footway</description>
+    <description locale="pl" >Droga dla pieszych</description>
    </value>
    <value tag="cycleway" >
     <description locale="en" >Cycleway</description>
@@ -105,9 +116,11 @@
    </value>
    <value tag="bridleway" >
     <description locale="en" >Bridleway</description>
+    <description locale="pl" >Ścieżka do jazdy konnej</description>
    </value>
    <value tag="steps" >
     <description locale="en" >Steps</description>
+    <description locale="pl" >Schody</description>
    </value>
    <value tag="bus_guideway" >
     <description locale="en" >Bus guideway (not a bus way)</description>
@@ -119,42 +132,54 @@
   <widget tag="landuse" type="combo" >
    <link src="http://wiki.openstreetmap.org/index.php/Key:landuse" />
    <description locale="en" >Landuse</description>
+   <description locale="pl" >Zagospodarowanie terenu</description>
    <selector expr="Type is Area or Type is Relation" />
    <value tag="allotments" >
     <description locale="en" >Allotments</description>
+    <description locale="pl" >Ogródki działkowe</description>
    </value>
    <value tag="basin" >
     <description locale="en" >Basin</description>
+    <description locale="pl" >Zbiornik wodny	</description>
    </value>
    <value tag="brownfield" >
     <description locale="en" >Brownfield</description>
    </value>
    <value tag="cemetery" >
     <description locale="en" >Cemetery</description>
+    <description locale="pl" >Cmentarz</description>
    </value>
    <value tag="commercial" >
     <description locale="en" >Commercial zone</description>
+    <description locale="pl" >Teren handlowy</description>
    </value>
    <value tag="construction" >
     <description locale="en" >Construction zone</description>
+    <description locale="pl" >Budowa</description>
    </value>
    <value tag="farm" >
     <description locale="en" >Farm</description>
+    <description locale="pl" >Gospodarstwo rolne</description>
    </value>
    <value tag="forest" >
     <description locale="en" >Forest</description>
+    <description locale="pl" >Las</description>
    </value>
    <value tag="greenfield" >
     <description locale="en" >Greenfield</description>
+    <description locale="pl" >Teren pod zabudowę</description>
    </value>
    <value tag="industrial" >
     <description locale="en" >Industrial zone</description>
+    <description locale="pl" >Teren przemysłowy</description>
    </value>
    <value tag="landfill" >
     <description locale="en" >Landfill</description>
+    <description locale="pl" >Wysypisko śmieci</description>
    </value>
    <value tag="military" >
     <description locale="en" >Military</description>
+    <description locale="pl" >Teren wojskowy</description>
    </value>
    <value tag="recreation_ground" >
     <description locale="en" >Recreation ground</description>
@@ -164,12 +189,14 @@
    </value>
    <value tag="residential" >
     <description locale="en" >Residential zone</description>
+    <description locale="pl" >Zabudowa mieszkaniowa</description>
    </value>
    <value tag="retail" >
     <description locale="en" >Retail zone</description>
    </value>
    <value tag="quarry" >
     <description locale="en" >Surface mineral extraction</description>
+    <description locale="pl" >Kamieniołom</description>
    </value>
    <value tag="village_green" >
     <description locale="en" >Village green</description>
@@ -179,44 +206,56 @@
    <link src="http://wiki.openstreetmap.org/index.php/Key:oneway" />
    <description locale="en" >Oneway</description>
    <description locale="fr" >Sens unique</description>
+   <description locale="pl" >Jednokierunkowa</description>
   </widget>
   <widget tag="amenity" type="combo" >
    <description locale="en" >Amenity</description>
    <value tag="arts_centre" >
     <description locale="en" >Arts centre</description>
+    <description locale="pl" >Centrum kultury/sztuki</description>
    </value>
    <value tag="atm" >
     <description locale="en" >ATM or cash point</description>
+    <description locale="pl" >Bankomat</description>
    </value>
    <value tag="bank" >
     <description locale="en" >Bank</description>
    </value>
    <value tag="bank;atm" >
-    <description locale="en" >Bank with atm</description>
+    <description locale="en" >Bank with ATM</description>
+    <description locale="pl" >Bank z bankomatem</description>
    </value>
    <value tag="biergarten" >
     <description locale="en" >Beer garden</description>
+    <description locale="pl" >Ogródek piwny</description>
    </value>
    <value tag="bicycle_parking" >
     <description locale="en" >Parking for bicycles</description>
+    <description locale="pl" >Parking rowerowy</description>
    </value>
    <value tag="bicycle_rental" >
     <description locale="en" >Bicycle Rental</description>
+    <description locale="pl" >Wypożyczalnia rowerów</description>
    </value>
    <value tag="bureau_de_change" >
     <description locale="en" >Bureau de change</description>
+    <description locale="pl" >Kantor</description>
    </value>
    <value tag="bus_station" >
     <description locale="en" >Bus station</description>
+    <description locale="pl" >Dworzec autobusowy</description>
    </value>
    <value tag="cafe" >
     <description locale="en" >Cafe</description>
+    <description locale="pl" >Kafejka</description>
    </value>
    <value tag="car_rental" >
     <description locale="en" >Car Rental</description>
+    <description locale="pl" >Wypożyczalnia samochodów</description>
    </value>
    <value tag="car_sharing" >
     <description locale="en" >Car Sharing</description>
+    <description locale="pl" >Wspóldzielenie samochodów</description>
    </value>
    <value tag="cinema" >
     <description locale="en" >Cinema</description>
@@ -224,6 +263,7 @@
    </value>
    <value tag="college" >
     <description locale="en" >College</description>
+    <description locale="pl" >Szkoła wyższa</description>
    </value>
    <value tag="courthouse" >
     <description locale="en" >Court house</description>
@@ -235,12 +275,14 @@
    </value>
    <value tag="drinking_water" >
     <description locale="en" >Source of drinking water</description>
+    <description locale="pl" >Źródło wody pitnej</description>
    </value>
    <value tag="Fast food" >
     <description locale="en" >Fast food</description>
    </value>
    <value tag="fire_station" >
     <description locale="en" >Fire Station</description>
+    <description locale="pl" >Straż pożarna</description>
    </value>
    <value tag="fountain" >
     <description locale="en" >Fountain</description>
@@ -248,72 +290,92 @@
    </value>
    <value tag="fuel" >
     <description locale="en" >Fuel</description>
+    <description locale="pl" >Stacja benzynowa</description>
    </value>
    <value tag="grave_yard" >
     <description locale="en" >Small place of burial</description>
+    <description locale="pl" >Cmentarz (mały)</description>
    </value>
    <value tag="hospital" >
     <description locale="en" >Hospital</description>
+    <description locale="pl" >Szpital</description>
    </value>
    <value tag="library" >
     <description locale="en" >Library</description>
+    <description locale="pl" >Biblioteka</description>
    </value>
    <value tag="nightclub" >
     <description locale="en" >Nightclub</description>
+    <description locale="pl" >Klub nocny</description>
    </value>
    <value tag="parking" >
     <description locale="en" >Parking</description>
    </value>
    <value tag="pharmacy" >
     <description locale="en" >Pharmacy</description>
+    <description locale="pl" >Apteka</description>
    </value>
    <value tag="place_of_worship" >
     <description locale="en" >Place of Worship</description>
+    <description locale="pl" >Miejsce kultu</description>
    </value>
    <value tag="police" >
     <description locale="en" >Police Station</description>
+    <description locale="pl" >Komenda policji</description>
    </value>
    <value tag="post_box" >
     <description locale="en" >Post Box</description>
+    <description locale="pl" >Skrzynka pocztowa</description>
    </value>
    <value tag="post_office" >
     <description locale="en" >Post Office</description>
+    <description locale="pl" >Poczta</description>
    </value>
    <value tag="prison" >
     <description locale="en" >Prison</description>
+    <description locale="pl" >Więzienie</description>
    </value>
    <value tag="pub" >
     <description locale="en" >Pub</description>
    </value>
    <value tag="public_building" >
     <description locale="en" >Public building</description>
+    <description locale="pl" >Budynek publiczny</description>
    </value>
    <value tag="telephone" >
     <description locale="en" >Public Telephone</description>
+    <description locale="pl" >Budka telefoniczna</description>
    </value>
    <value tag="recycling" >
     <description locale="en" >Recycling Facilities</description>
    </value>
    <value tag="restaurant" >
     <description locale="en" >Restaurant</description>
+    <description locale="pl" >Restauracja</description>
    </value>
    <value tag="school" >
     <description locale="en" >School</description>
+    <description locale="pl" >Szkoła</description>
    </value>
    <value tag="taxi" >
     <description locale="en" >Taxi</description>
+    <description locale="pl" >Postój taksówek</description>
    </value>
    <value tag="theatre" >
     <description locale="en" >Theatre or opera house</description>
+    <description locale="pl" >Teatr lub opera</description>
    </value>
    <value tag="toilets" >
     <description locale="en" >Toilets</description>
+    <description locale="pl" >Szalet</description>
    </value>
    <value tag="townhall" >
     <description locale="en" >Town hall</description>
+    <description locale="pl" >Ratusz</description>
    </value>
    <value tag="university" >
     <description locale="en" >University</description>
+    <description locale="pl" >Uniwersytet</description>
    </value>
    <value tag="waste_disposal" >
     <description locale="en" >Waste Disposal</description>
@@ -322,22 +384,28 @@
   <widget tag="religion" type="combo" >
    <link src="http://wiki.openstreetmap.org/index.php/Key:religion" />
    <description locale="en" >Religion</description>
+   <description locale="pl" >Religia</description>
    <value tag="buddhist" >
     <description locale="en" >Buddhist</description>
+    <description locale="pl" >Buddyzm</description>
    </value>
    <value tag="christian" >
     <description locale="en" >Christian</description>
+    <description locale="pl" >Chrześcijaństwo</description>
    </value>
    <value tag="jewish" >
     <description locale="en" >Jewish</description>
+    <description locale="pl" >Judaizm</description>
    </value>
    <value tag="muslim" >
     <description locale="en" >Muslim</description>
+    <description locale="pl" >Islam</description>
    </value>
   </widget>
   <widget tag="denomination" type="combo" id="denomination_christian" >
    <link src="http://wiki.openstreetmap.org/index.php/Key:religion" />
    <description locale="en" >Denomination</description>
+   <description locale="pl" >Wyznanie</description>
    <selector expr="[religion] is christian" />
    <value tag="anglican" />
    <value tag="baptist" />
@@ -363,46 +431,57 @@
  <template>
   <selector expr="[amenity] is place_of_worship" />
   <description locale="en" >Place of Worship</description>
+  <description locale="pl" >Miejsce kultu</description>
   <widget tag="amenity" type="constant" >
    <description locale="en" >Amenity</description>
    <value tag="place_of_worship" >
     <description locale="en" >Place of Worship</description>
+    <description locale="pl" >Miejsce kultu</description>
    </value>
   </widget>
   <widgetref id="religion" />
   <widgetref id="denomination_christian" />
  </template>
  <template>
-  <description locale="en" >Catholic chrurch</description>
+  <description locale="en" >Catholic church</description>
+  <description locale="pl" >Kościół katolicki</description>
   <widget tag="amenity" type="constant" >
    <description locale="en" >Amenity</description>
+   <description locale="pl" >Miejsce kultu</description>
    <value tag="place_of_worship" >
     <description locale="en" >Place of Worship</description>
+    <description locale="pl" >Miejsce kultu</description>
    </value>
   </widget>
   <widget tag="religion" type="constant" >
    <link src="http://wiki.openstreetmap.org/index.php/Key:religion" />
    <description locale="en" >Religion</description>
+   <description locale="pl" >Religia</description>
    <value tag="christian" >
     <description locale="en" >Christian</description>
+    <description locale="pl" >Chrześcijaństwo</description>
    </value>
   </widget>
   <widget tag="denomination" type="constant" >
    <link src="http://wiki.openstreetmap.org/index.php/Key:denomination" />
    <description locale="en" >Denomination</description>
+   <description locale="pl" >Wyznanie</description>
    <value tag="catholic" >
     <description locale="en" >Catholic</description>
+    <description locale="pl" >Katolickie</description>
    </value>
   </widget>
  </template>
  <template>
   <selector expr="[Default] Type is Relation" />
   <description locale="en" >Generic Relations</description>
+  <description locale="pl" >Ogólne relacje</description>
   <widgetref id="landuse" />
  </template>
  <template>
   <selector expr="[Default] Type is Road" />
   <description locale="en" >Generic Ways</description>
+  <description locale="pl" >Ogólne drogi</description>
   <widgetref id="name" />
   <widgetref id="highway" />
   <widgetref id="oneway" />
@@ -413,8 +492,10 @@
  <template>
   <selector expr="[Default] Type is TrackPoint" />
   <description locale="en" >Generic Nodes</description>
+  <description locale="pl" >Ogólne węzły</description>
   <widget tag="name" type="edit" >
    <description locale="en" >Name</description>
+   <description locale="pl" >Nazwa</description>
    <selector expr="not [place] is _NULL_" />
   </widget>
   <widgetref id="amenity" />

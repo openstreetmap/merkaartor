@@ -3,18 +3,22 @@
  <widgets>
   <widget id="name_bxl" tag="name" type="constant" >
    <description locale="en" >Name</description>
+   <description locale="pl" >Nazwa</description>
    <value tag="$[name:fr] - $[name:nl]" />
 
   </widget>
   <widget tag="name:fr" type="edit" >
    <description locale="en" >Name (french)</description>
+   <description locale="pl" >Nazwa (francuska)</description>
   </widget>
   <widget tag="name:nl" type="edit" >
    <description locale="en" >Name (dutch)</description>
+   <description locale="pl" >Nazwa (belgijska)</description>
   </widget>
  </widgets>
  <template>
   <description locale="en" >Brussels Ways</description>
+  <description locale="pl" >Drogi Brukselskie</description>
   <selector expr="not [name:fr] is _NULL_ and not [name:nl] is _NULL_" />
   <widgetref id="name_bxl" />
   <widgetref id="name:fr" />
