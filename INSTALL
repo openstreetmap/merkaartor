@@ -1,4 +1,4 @@
-Need
+Prerequisites:
 * Working C++ compiler
 * Qt 4.3.3 or later development environment
 
@@ -9,7 +9,7 @@ Instructions
 
 1. Change directory to the one in which you unpacked Merkaartor
 
-for example
+For example
 $ cd /home/me/src/Merkaartor-0.xx
 
 2. Run qmake
@@ -18,11 +18,11 @@ $ qmake Merkaartor.pro
 
 2.1 Other qmake parameters for Merkaartor.pro
 
-PREFIX=<path>				- base prefix for installation (unix only)
+PREFIX=<path>			- base prefix for installation (unix only)
 TRANSDIR_MERKAARTOR=<path>	- where will the Merkaartor translations be installed
 TRANSDIR_SYSTEM=<path>		- where your global Qt translation directory is
-NODEBUG=1					- release target
-NOUSEWEBKIT                 - disable use of WebKit (Yahoo adapter)
+NODEBUG=1			- release target
+NOUSEWEBKIT                 	- disable use of WebKit (Yahoo adapter)
 
 see http://wiki.openstreetmap.org/index.php/Merkaartor_doc_0.12 for the complete list
 
@@ -41,5 +41,4 @@ binaries subdirectory. Otherwise mail a complete error log to
 bvh-osm@irule.be
 
 Bart Vanhauwaert
-
 
