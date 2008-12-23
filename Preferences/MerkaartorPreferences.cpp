@@ -479,12 +479,12 @@ void MerkaartorPreferences::initialize()
 		theTmsServerList.insert("OSM Mapnik", osmmapnik);
 		TmsServer osmth("OSM T@H", "tah.openstreetmap.org", "/Tiles/tile/%1/%2/%3.png", 256, 0, 17);
 		theTmsServerList.insert("OSM T@H", osmth);
-		TmsServer cycle("Cycle Map", "andy.sandbox.cloudmade.com", "/tiles/cycle/%1/%2/%3.png", 256, 0, 14);
+		TmsServer cycle("Cycle Map", "andy.sandbox.cloudmade.com", "/tiles/cycle/%1/%2/%3.png", 256, 0, 17);
 		theTmsServerList.insert("Gravitystorm Cycle", cycle);
 		TmsServer oam("OpenAerialMap", "tile.openaerialmap.org", "/tiles/1.0.0/openaerialmap-900913/%1/%2/%3.png", 256, 0, 17);
 		theTmsServerList.insert("OpenAerialMap", oam);
-		TmsServer npe("New Popular Edition (NPE) at zoom 14", "richard.dev.openstreetmap.org", "/npe/%1/%2/%3.jpg", 256, 14, 14);
-		theTmsServerList.insert("New Popular Edition (NPE) at zoom 14", npe);
+		TmsServer npe("New Popular Edition (NPE)", "npe.openstreetmap.org", "/%1/%2/%3.png", 256, 6, 15);
+		theTmsServerList.insert("New Popular Edition (NPE)", npe);
 		TmsServer osmmaplint("OSM Maplint", "tah.openstreetmap.org", "/Tiles/maplint/%1/%2/%3.png", 256, 12, 16);
 		theTmsServerList.insert("OSM Maplint", osmmaplint);
 		setSelectedTmsServer("OSM Mapnik");
