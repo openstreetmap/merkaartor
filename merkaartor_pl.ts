@@ -309,8 +309,8 @@ p, li { white-space: pre-wrap; }
         <source>There are &lt;b&gt;%n&lt;/b&gt; objects in the dirty layer</source>
         <translation>
             <numerusform>Jest jeden obiektów w warstwie roboczej</numerusform>
-            <numerusform>Są &lt;b&gt;%1&lt;/b&gt; obiekty w warstwie roboczej</numerusform>
-            <numerusform>Jest &lt;b&gt;%1&lt;/b&gt; obiektów w warstwie roboczej</numerusform>
+            <numerusform>Są &lt;b&gt;%n&lt;/b&gt; obiekty w warstwie roboczej</numerusform>
+            <numerusform>Jest &lt;b&gt;%n&lt;/b&gt; obiektów w warstwie roboczej</numerusform>
         </translation>
     </message>
 </context>
@@ -338,47 +338,47 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>DirtyListExecutor</name>
     <message>
-        <location filename="Sync/DirtyList.cpp" line="495"/>
+        <location filename="Sync/DirtyList.cpp" line="497"/>
         <source>ADD road %1</source>
         <translation>DODAJ drogę %1</translation>
     </message>
     <message>
-        <location filename="Sync/DirtyList.cpp" line="521"/>
+        <location filename="Sync/DirtyList.cpp" line="523"/>
         <source>ADD trackpoint %1</source>
         <translation>DODAJ punkt trasy %1</translation>
     </message>
     <message>
-        <location filename="Sync/DirtyList.cpp" line="470"/>
+        <location filename="Sync/DirtyList.cpp" line="472"/>
         <source>ADD relation %1</source>
         <translation>DODAJ relację %1</translation>
     </message>
     <message>
-        <location filename="Sync/DirtyList.cpp" line="601"/>
+        <location filename="Sync/DirtyList.cpp" line="603"/>
         <source>UPDATE trackpoint %1</source>
         <translation>AKTUALIZUJ punkt trasy %1</translation>
     </message>
     <message>
-        <location filename="Sync/DirtyList.cpp" line="548"/>
+        <location filename="Sync/DirtyList.cpp" line="550"/>
         <source>UPDATE relation %1</source>
         <translation>AKTUALIZUJ relację %1</translation>
     </message>
     <message>
-        <location filename="Sync/DirtyList.cpp" line="574"/>
+        <location filename="Sync/DirtyList.cpp" line="576"/>
         <source>UPDATE road %1</source>
         <translation>AKTUALIZUJ drogę %1</translation>
     </message>
     <message>
-        <location filename="Sync/DirtyList.cpp" line="628"/>
+        <location filename="Sync/DirtyList.cpp" line="630"/>
         <source>REMOVE trackpoint %1</source>
         <translation>USUŃ punkt trasy %1</translation>
     </message>
     <message>
-        <location filename="Sync/DirtyList.cpp" line="647"/>
+        <location filename="Sync/DirtyList.cpp" line="649"/>
         <source>REMOVE road %1</source>
         <translation>USUŃ drogę %1</translation>
     </message>
     <message>
-        <location filename="Sync/DirtyList.cpp" line="666"/>
+        <location filename="Sync/DirtyList.cpp" line="668"/>
         <source>REMOVE relation %1</source>
         <translation>USUŃ relację %1</translation>
     </message>
@@ -405,7 +405,7 @@ Serwer odpowiedział: %2</translation>
         <translation>OTWÓRZ zestaw zmian</translation>
     </message>
     <message>
-        <location filename="Sync/DirtyList.cpp" line="454"/>
+        <location filename="Sync/DirtyList.cpp" line="455"/>
         <source>CLOSE changeset</source>
         <translation>ZAMKNIJ zestaw zmian</translation>
     </message>
@@ -462,7 +462,7 @@ API message is &apos;%1&apos;</source>
 <context>
     <name>Downloader</name>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="449"/>
+        <location filename="Map/DownloadOSM.cpp" line="466"/>
         <source>Download failed</source>
         <translation>Błąd podczas pobierania</translation>
     </message>
@@ -472,87 +472,87 @@ API message is &apos;%1&apos;</source>
         <translation type="unfinished">Nieoczekiwany status HTTP (%1)</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="202"/>
+        <location filename="Map/DownloadOSM.cpp" line="203"/>
         <source>error</source>
         <translation>błąd</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="206"/>
+        <location filename="Map/DownloadOSM.cpp" line="207"/>
         <source>didn&apos;t download enough</source>
         <translation>Nie pobrano wystarczającej ilości danych</translation>
     </message>
     <message numerus="yes">
-        <location filename="Map/DownloadOSM.cpp" line="288"/>
-        <source>Downloading from OSM (%1 bytes)</source>
+        <location filename="Map/DownloadOSM.cpp" line="312"/>
+        <source>Downloading from OSM (%n bytes)</source>
         <translation>
-            <numerusform>Pobieranie z OSM (%1 bajt)</numerusform>
-            <numerusform>Pobieranie z OSM (%1 bajty)</numerusform>
-            <numerusform>Pobieranie z OSM (%1 bajtów)</numerusform>
+            <numerusform>Pobieranie z OSM (%n bajt)</numerusform>
+            <numerusform>Pobieranie z OSM (%n bajty)</numerusform>
+            <numerusform>Pobieranie z OSM (%n bajtów)</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="Map/DownloadOSM.cpp" line="290"/>
-        <source>Downloading from OSM (%1 kBytes)</source>
+        <location filename="Map/DownloadOSM.cpp" line="314"/>
+        <source>Downloading from OSM (%n kBytes)</source>
         <translation>
-            <numerusform>Pobieranie z OSM (%1 kilobajt)</numerusform>
-            <numerusform>Pobieranie z OSM (%1 kilobajty)</numerusform>
-            <numerusform>Pobieranei z OSM (%1 kilobajtów)</numerusform>
+            <numerusform>Pobieranie z OSM (%n kilobajt)</numerusform>
+            <numerusform>Pobieranie z OSM (%n kilobajty)</numerusform>
+            <numerusform>Pobieranei z OSM (%n kilobajtów)</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="407"/>
+        <location filename="Map/DownloadOSM.cpp" line="424"/>
         <source>Downloading from OSM (connecting)</source>
         <translation>Łączenie z OSM</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="443"/>
+        <location filename="Map/DownloadOSM.cpp" line="460"/>
         <source>Username/password invalid</source>
         <translation>Nazwa użytkownika lub hasło niepoprawne.</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="461"/>
+        <location filename="Map/DownloadOSM.cpp" line="478"/>
         <source>Unresolved conflicts</source>
         <translation>Nierozwiązane konflikty</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="461"/>
+        <location filename="Map/DownloadOSM.cpp" line="478"/>
         <source>Please resolve existing conflicts first</source>
         <translation>Proszę najpierw rozwiązać wszystkie istniejące konflikty</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="521"/>
+        <location filename="Map/DownloadOSM.cpp" line="538"/>
         <source>Downloading trackpoints %1-%2</source>
         <translation>Pobieranie punktów trasy %1-%2</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="539"/>
+        <location filename="Map/DownloadOSM.cpp" line="556"/>
         <source>Downloaded track - nodes %1-%2</source>
         <translation>Pobranu trasę - węzły %1-%2</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="683"/>
+        <location filename="Map/DownloadOSM.cpp" line="700"/>
         <source>%1 download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="656"/>
+        <location filename="Map/DownloadOSM.cpp" line="673"/>
         <source>Zoom factor too low</source>
         <translation>Stopień powiększenia zbyt niski</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="657"/>
+        <location filename="Map/DownloadOSM.cpp" line="674"/>
         <source>Please use a higher zoom factor!</source>
         <translation>Proszę użyć większego powiększenia!</translation>
     </message>
     <message>
         <location filename="Map/ImportOSM.cpp" line="262"/>
         <source>Downloading unresolved %1 of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Pobieranie nierozwiązanych %1 z %2</translation>
     </message>
     <message>
         <location filename="Map/ImportOSM.cpp" line="271"/>
         <source>Parsing unresolved %1 of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Przetwarzanie nierozwiązanych %1 z %2</translation>
     </message>
     <message>
         <location filename="Map/ImportOSM.cpp" line="359"/>
@@ -599,14 +599,14 @@ Czy zaznaczyć je do usunięcia?</translation>
         <translation>Pobieranie %1,%2 (powiększenie %3)...</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="446"/>
+        <location filename="Map/DownloadOSM.cpp" line="463"/>
         <source>Unexpected http status code (%1)
 Server message is &apos;%2&apos;</source>
         <translation>Niespodziewany kod zwrotny http (%1)
 Komunikat serwera brzmi: %2</translation>
     </message>
     <message>
-        <location filename="Map/DownloadOSM.cpp" line="448"/>
+        <location filename="Map/DownloadOSM.cpp" line="465"/>
         <source>
 API message is &apos;%1&apos;</source>
         <translation>Komunikat API &quot;%1&quot;</translation>
@@ -835,7 +835,7 @@ Czy na pewno go wykorzystać?</translation>
     <message>
         <location filename="GotoDialog.ui" line="114"/>
         <source>latCent, lonCent, latSpan, lonSpan</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">latCent, lonCent, latZas, lonZas</translation>
     </message>
     <message>
         <location filename="GotoDialog.ui" line="133"/>
@@ -2656,62 +2656,62 @@ Na pewno można legalnie zaimportować ten plik do OSM?</translation>
         <translation>Nowy serwer</translation>
     </message>
     <message>
-        <location filename="Preferences/MerkaartorPreferences.cpp" line="346"/>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="358"/>
         <source>None</source>
         <translation>Brak</translation>
     </message>
     <message>
-        <location filename="Preferences/MerkaartorPreferences.cpp" line="347"/>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="359"/>
         <source>WMS adapter</source>
         <translation>Adapter WMS</translation>
     </message>
     <message>
-        <location filename="Preferences/MerkaartorPreferences.cpp" line="348"/>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="360"/>
         <source>TMS adapter</source>
         <translation>Adapter TMS</translation>
     </message>
     <message>
-        <location filename="Preferences/MerkaartorPreferences.cpp" line="350"/>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="362"/>
         <source>Yahoo adapter</source>
         <translation>Adapter Yahoo</translation>
     </message>
     <message>
-        <location filename="Preferences/MerkaartorPreferences.cpp" line="353"/>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="365"/>
         <source>Illegal Yahoo adapter</source>
         <translation>Nielegalny adapter Yahoo</translation>
     </message>
     <message>
-        <location filename="Preferences/MerkaartorPreferences.cpp" line="356"/>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="368"/>
         <source>Illegal Google adapter</source>
         <translation>Nielegalny adapter Google</translation>
     </message>
     <message>
-        <location filename="Preferences/MerkaartorPreferences.cpp" line="359"/>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="371"/>
         <source>Illegal Ms Virtual Earth adapter</source>
         <translation>Nielegalny adapter Ms Virtual Earth</translation>
     </message>
     <message>
-        <location filename="Preferences/MerkaartorPreferences.cpp" line="362"/>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="374"/>
         <source>Merkaartor</source>
         <translation>Merkaartor</translation>
     </message>
     <message>
-        <location filename="Preferences/MerkaartorPreferences.cpp" line="363"/>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="375"/>
         <source>Background</source>
         <translation>Tło</translation>
     </message>
     <message>
-        <location filename="Preferences/MerkaartorPreferences.cpp" line="284"/>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="296"/>
         <source>Preferences upload failed</source>
         <translation>Wysyłanie ustawień zakończone niepowodzeniem</translation>
     </message>
     <message>
-        <location filename="Preferences/MerkaartorPreferences.cpp" line="281"/>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="293"/>
         <source>Duplicate key</source>
         <translation>Zduplikowany klucz</translation>
     </message>
     <message>
-        <location filename="Preferences/MerkaartorPreferences.cpp" line="284"/>
+        <location filename="Preferences/MerkaartorPreferences.cpp" line="296"/>
         <source>More than 150 preferences</source>
         <translation>Więcej niż 150 ustawień</translation>
     </message>
@@ -3999,7 +3999,7 @@ Proszę wybrać inną nazwę lub kliknąć przycisk &lt;Zastosuj&gt; aby zmodyfi
 <context>
     <name>TagTemplates</name>
     <message>
-        <location filename="TagTemplate/TagTemplate.cpp" line="895"/>
+        <location filename="TagTemplate/TagTemplate.cpp" line="900"/>
         <source>Undefined</source>
         <translation>Niezdefiniowany</translation>
     </message>
