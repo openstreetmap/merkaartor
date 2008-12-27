@@ -85,6 +85,9 @@ class PropertiesDock : public MDockAncestor
 		ShortcutOverrideFilter* shortcutFilter;
 		TagTemplates* theTemplates;
 
+        QTableView *CurrentTagView;
+        QTableView *CurrentMembersView;
+
 		enum { NoUiShowing, TrackPointUiShowing, RoadUiShowing, RelationUiShowing, MultiShowing } NowShowing ;
 };
 

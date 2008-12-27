@@ -72,9 +72,12 @@
 #include <QClipboard>
 #include <QProgressDialog>
 #include <QMenuBar>
+#include <QTranslator>
+#include <QLocale>
 
 MainWindow::MainWindow(void)
-		: fileName(""), theDocument(0), theXmlDoc(0), gpsRecLayer(0), curGpsTrackSegment(0)
+        : fileName(""), theDocument(0), theXmlDoc(0), gpsRecLayer(0), curGpsTrackSegment(0),
+        qtTranslator(0), merkaartorTranslator(0)
 {
 	setupUi(this);
 	M_STYLE->loadPainters(MerkaartorPreferences::instance()->getDefaultStyle());
@@ -206,11 +209,11 @@ MainWindow::MainWindow(void)
 	windowGeoimageAction->setVisible(false);
 #endif
 
-#ifdef NDEBUG
+//#ifdef NDEBUG
 	viewStyleBackgroundAction->setVisible(false);
 	viewStyleForegroundAction->setVisible(false);
 	viewStyleTouchupAction->setVisible(false);
-#endif
+//#endif
 
 	MerkaartorPreferences::instance()->initialPosition(theView);
 
@@ -224,11 +227,33 @@ MainWindow::MainWindow(void)
 		act->setShortcut(QKeySequence(shortcuts[i+1]));
 	}
 
+#define NUMOP 3
+	static const char *opStr[NUMOP] = {
+		QT_TR_NOOP("Low"), QT_TR_NOOP("High"), QT_TR_NOOP("Opaque")};
+
+	int o = M_PREFS->getAreaOpacity();
+	QActionGroup* actgrp = new QActionGroup(this);
+	for (int i=0; i<NUMOP; i++) {
+		QAction* act = new QAction(tr(opStr[i]), mnuAreaOpacity);
+		actgrp->addAction(act);
+		qreal a = M_PREFS->getAlpha(opStr[i]);
+		act->setData(a);
+		act->setCheckable(true);
+		mnuAreaOpacity->addAction(act);
+		if (o == int(a*100))
+			act->setChecked(true);
+	}
+	connect(mnuAreaOpacity, SIGNAL(triggered(QAction*)), this, SLOT(setAreaOpacity(QAction*)));
+
+    updateLanguage();
+
 	blockSignals(false);
 }
 
 MainWindow::~MainWindow(void)
 {
+    theProperties->setSelection(NULL);
+
 	if (EditPaintStyle::instance())
 		delete EditPaintStyle::instance();
 	MerkaartorPreferences::instance()->setWorkingDir(QDir::currentPath());
@@ -237,8 +262,18 @@ MainWindow::~MainWindow(void)
 	delete MerkaartorPreferences::instance();
 	delete theDocument;
 	delete theView;
+
+    delete qtTranslator;
+    delete merkaartorTranslator;
 }
 
+void MainWindow::setAreaOpacity(QAction *act)
+{
+	qreal a = act->data().toDouble();
+	M_PREFS->setAreaOpacity(int(a*100));
+
+	theView->invalidate(true, false);
+}
 
 void MainWindow::adjustLayers(bool adjustViewport)
 {
@@ -2070,3 +2105,37 @@ void MainWindow::on_toolTemplatesLoadAction_triggered()
 	theProperties->resetValues();
 }
 
+void MainWindow::updateLanguage()
+{
+    if (qtTranslator) {
+        QCoreApplication::removeTranslator(qtTranslator);
+    }
+    if (merkaartorTranslator) {
+        QCoreApplication::removeTranslator(merkaartorTranslator);
+    }
+    QString DefaultLanguage = getDefaultLanguage();
+    if (DefaultLanguage != "-")
+    {
+        if (DefaultLanguage == "")
+            DefaultLanguage = QLocale::system().name();
+
+        qtTranslator = new QTranslator;
+        qtTranslator->load("qt_" + DefaultLanguage
+    #ifdef TRANSDIR_SYSTEM
+            , TRANSDIR_SYSTEM
+    #else
+            , QLibraryInfo::location(QLibraryInfo::TranslationsPath)
+    #endif
+            );
+        QCoreApplication::installTranslator(qtTranslator);
+
+        merkaartorTranslator = new QTranslator;
+        merkaartorTranslator->load("merkaartor_" + DefaultLanguage
+    #ifdef TRANSDIR_MERKAARTOR
+            , TRANSDIR_MERKAARTOR
+    #endif
+            );
+        QCoreApplication::installTranslator(merkaartorTranslator);
+    }
+    retranslateUi(this);
+}

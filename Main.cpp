@@ -1,8 +1,6 @@
 #include <QtGui/QApplication>
 #include <QtGui/QMessageBox> 
 
-#include <QTranslator>
-#include <QLocale>
 #include <QLibraryInfo>
 
 #include "MainWindow.h" 
@@ -31,35 +29,6 @@ int main(int argc, char** argv)
 		QApplication::setStyle(new SkulptureStyle);
 #endif
 
-	QTranslator* qtTranslator = 0;
-	QTranslator* merkaartorTranslator = 0;
-
-	QString DefaultLanguage = getDefaultLanguage();
-	if (DefaultLanguage != "-")
-	{
-
-		if (DefaultLanguage == "")
-			DefaultLanguage = QLocale::system().name();
-
-		qtTranslator = new QTranslator;
-		qtTranslator->load("qt_" + DefaultLanguage
-	#ifdef TRANSDIR_SYSTEM
-			, TRANSDIR_SYSTEM
-	#else
-			, QLibraryInfo::location(QLibraryInfo::TranslationsPath)
-	#endif
-			);
-		app.installTranslator(qtTranslator);
-
-		merkaartorTranslator = new QTranslator;
-		merkaartorTranslator->load("merkaartor_" + DefaultLanguage
-	#ifdef TRANSDIR_MERKAARTOR
-			, TRANSDIR_MERKAARTOR
-	#endif
-			);
-		app.installTranslator(merkaartorTranslator);
-	}
-
 	MainWindow Main;
 
 #ifdef _MOBILE
@@ -77,8 +46,6 @@ int main(int argc, char** argv)
 		QDir::setCurrent(MerkaartorPreferences::instance()->getWorkingDir());
 
 	int x = app.exec();
-	delete qtTranslator;
-	delete merkaartorTranslator;
 	return x;
 }
 

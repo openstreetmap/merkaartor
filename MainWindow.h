@@ -174,10 +174,14 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		bool importFiles(MapDocument * mapDocument, const QStringList & filesNames, QStringList * importedFileNames = NULL);
 		void loadFiles(const QStringList & fileNames);
 		void loadDocument(QString fn);
-		void saveDocument();
+        void saveDocument();
+        void updateLanguage();
 
 
-	private:
+    private:
+        QTranslator* qtTranslator;
+        QTranslator* merkaartorTranslator;
+
 		MapView* theView;
 		MapDocument* theDocument;
 		PropertiesDock* theProperties;
@@ -195,6 +199,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		QHash<QString, QString> shortcutsDefault;
 
 	private slots:
+		void setAreaOpacity(QAction*);
 		void updateBookmarksMenu();
 
 	private:

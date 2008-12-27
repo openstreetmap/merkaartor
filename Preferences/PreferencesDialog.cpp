@@ -201,7 +201,11 @@ void PreferencesDialog::savePrefs()
 	if (SelectLanguage->isChecked())
 		setDefaultLanguage(Language->itemData(Language->currentIndex()).toString());
 	else
-		setDefaultLanguage("");
+        setDefaultLanguage("");
+
+    ((MainWindow*)parent())->updateLanguage();
+    retranslateUi(this);
+
 	M_PREFS->setTranslateTags(TranslateTags->isChecked());
 	M_PREFS->setUse06Api(bbUse06Api->isChecked());
 	M_PREFS->setOsmWebsite(edOsmUrl->text());

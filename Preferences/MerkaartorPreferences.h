@@ -270,6 +270,8 @@ public:
 	void setRelationsVisible(bool theValue);
 	bool getRelationsVisible() const;
 
+    M_PARAM_DECLARE_INT(TagListFirstColumnWidth)
+
 	/* MainWindow state */
 	void saveMainWindowState(const class MainWindow * mainWindow);
 	void restoreMainWindowState(class MainWindow * mainWindow) const;
@@ -330,6 +332,7 @@ public:
 
 	/* Visual */
 	M_PARAM_DECLARE_BOOL(BackgroundOverwriteStyle)
+	M_PARAM_DECLARE_INT(AreaOpacity)
 
 	/* Templates */
 	M_PARAM_DECLARE_STRING(DefaultTemplate)

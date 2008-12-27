@@ -32,7 +32,9 @@
 #include <algorithm>
 
 PropertiesDock::PropertiesDock(MainWindow* aParent)
-: MDockAncestor(aParent), Main(aParent), CurrentUi(0), Selection(0), theTemplates(0), NowShowing(NoUiShowing)
+: MDockAncestor(aParent), Main(aParent), CurrentUi(0), Selection(0),
+    theTemplates(0), NowShowing(NoUiShowing),
+    CurrentTagView(0), CurrentMembersView(0)
 {
 	setMinimumSize(220,100);
 	switchToNoUi();
@@ -62,7 +64,7 @@ PropertiesDock::PropertiesDock(MainWindow* aParent)
 
 PropertiesDock::~PropertiesDock(void)
 {
-	delete theModel;
+    delete theModel;
 	delete theTemplates;
 }
 
@@ -339,7 +341,10 @@ void PropertiesDock::cleanUpUi()
 
 void PropertiesDock::switchUi()
 {
-	if (FullSelection.size() == 0)
+    if (CurrentTagView)
+        M_PREFS->setTagListFirstColumnWidth(CurrentTagView->columnWidth(0));
+
+    if (FullSelection.size() == 0)
 		switchToNoUi();
 	else if (FullSelection.size() == 1)
 	{
@@ -442,8 +447,8 @@ void PropertiesDock::switchToNoUi()
 void PropertiesDock::resetValues()
 {
 	// Tables that might need column sizing
-	QTableView *CurrentTagView = NULL;
-	QTableView *CurrentMembersView = NULL;
+    CurrentTagView = NULL;
+    CurrentMembersView = NULL;
 
 	// to prevent slots to change the values also
 	std::vector<MapFeature*> Current = Selection;
@@ -519,10 +524,15 @@ void PropertiesDock::resetValues()
 	/* If we have standard TableViews in the current UI, set it so that the */
 	/* first column is the width of the default text (Edit this to add...)  */
 	/* And the rest of the space is assigned to the second column           */
-	if (CurrentTagView) {
-		CurrentTagView->setColumnWidth(
-			0, CurrentTagView->fontMetrics().width(theModel->newKeyText())+10
-		);
+    if (CurrentTagView) {
+        if (M_PREFS->getTagListFirstColumnWidth())
+            CurrentTagView->setColumnWidth(
+                0, M_PREFS->getTagListFirstColumnWidth()
+            );
+        else
+            CurrentTagView->setColumnWidth(
+                0, CurrentTagView->fontMetrics().width(theModel->newKeyText())+10
+            );
 		CurrentTagView->horizontalHeader()->setStretchLastSection(true);
 		CurrentTagView->installEventFilter(shortcutFilter);
 	}

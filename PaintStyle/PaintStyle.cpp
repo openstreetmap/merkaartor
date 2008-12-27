@@ -714,6 +714,15 @@ void FeaturePainter::drawForeground(Road* R, QPainter& thePainter, const Project
 	}
 	else
 		thePainter.setBrush(Qt::NoBrush);
+
+	if (M_PREFS->getAreaOpacity() != 100 && ForegroundFill) {
+		thePainter.save();
+		thePainter.setOpacity(qreal(M_PREFS->getAreaOpacity()) / 100);
+	}
+	thePainter.drawPath(R->getPath());
+	if (M_PREFS->getAreaOpacity() != 100 && ForegroundFill) {
+		thePainter.restore();
+	}
 	thePainter.drawPath(R->getPath());
 }
 
@@ -746,7 +755,15 @@ void FeaturePainter::drawForeground(Relation* R, QPainter& thePainter, const Pro
 	}
 	else
 		thePainter.setBrush(Qt::NoBrush);
+
+	if (M_PREFS->getAreaOpacity() != 100 && ForegroundFill) {
+		thePainter.save();
+		thePainter.setOpacity(qreal(M_PREFS->getAreaOpacity()) / 100);
+	}
 	thePainter.drawPath(R->getPath());
+	if (M_PREFS->getAreaOpacity() != 100 && ForegroundFill) {
+		thePainter.restore();
+	}
 }
 
 

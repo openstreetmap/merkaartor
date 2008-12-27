@@ -1,4 +1,8 @@
 v0.13
+	* ADD : Area transparency
+	* ADD : Allow on-the-fly language change
+	* ADD : Remember tag view first column size
+	* FIX : Allow up to 999Mb for background image cache
 	* FIX : The API doesn't like some zoom levels return from the name finder service, so fall back to a default in that case.
 	* ADD : Allow canvas background to be set from a style. Background color is still overridable in the global preferences. (closes #1333)
 	* FIX : Change URL in about dialog to merkaartor.org.

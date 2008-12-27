@@ -1167,7 +1167,6 @@ void MerkaartorPreferences::setDirectionalArrowsVisible(DirectionalArrowsShow th
 	Sets->setValue("visual/DirectionalArrowsVisible", theValue);
 }
 
-
 /* Export Type */
 void MerkaartorPreferences::setExportType(ExportType theValue)
 {
@@ -1280,6 +1279,7 @@ M_PARAM_IMPLEMENT_BOOL(DisableStyleForTracks, style, true)
 
 /* Visual */
 M_PARAM_IMPLEMENT_BOOL(BackgroundOverwriteStyle, visual, false)
+M_PARAM_IMPLEMENT_INT(AreaOpacity, visual, 100)
 
 /* Templates */
 M_PARAM_IMPLEMENT_STRING(DefaultTemplate, templates, ":/Templates/default.mat")
@@ -1295,6 +1295,8 @@ M_PARAM_IMPLEMENT_BOOL(ResolveRelations, downloadosm, false)
 M_PARAM_IMPLEMENT_BOOL(MapTooltip, visual, false)
 M_PARAM_IMPLEMENT_BOOL(InfoOnHover, visual, true)
 M_PARAM_IMPLEMENT_BOOL(ShowParents, visual, true)
+
+M_PARAM_IMPLEMENT_INT(TagListFirstColumnWidth, visual, 0)
 
 /* World OSB manager */
 M_PARAM_IMPLEMENT_STRING(LastWorldOsbDir, WOSB, "")
