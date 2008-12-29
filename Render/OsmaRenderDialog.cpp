@@ -29,6 +29,7 @@
 #include <libxslt/xsltInternals.h>
 #include <libxslt/transform.h>
 #include <libxslt/xsltutils.h>
+#include <libexslt/exslt.h>
 
 #ifdef QGDAL_FEAT
 	#include "qgdal.h"
@@ -169,6 +170,7 @@ void OsmaRenderDialog::render()
 			QApplication::tr("Please make sure the Osmarender stylesheet is available at %1").arg(StyleSheetFileName));
 		return;
 	}
+	exsltCommonRegister();
 	cur = xsltParseStylesheetDoc(xsl);
 	if (!cur)
 	{

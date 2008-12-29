@@ -92,25 +92,22 @@ class GenericFeatureSnapInteraction : public Interaction
 		{
 			updateSnap(event);
 			snapMousePressEvent(event,LastSnap);
-#ifndef _MOBILE
-			Interaction::mousePressEvent(event);
-#endif
+			if (!(M_PREFS->getMouseSingleButton() && LastSnap))
+				Interaction::mousePressEvent(event);
 		}
 		virtual void mouseReleaseEvent(QMouseEvent * event)
 		{
 			updateSnap(event);
 			snapMouseReleaseEvent(event,LastSnap);
-#ifndef _MOBILE
-			Interaction::mouseReleaseEvent(event);
-#endif
+			if (!(M_PREFS->getMouseSingleButton() && LastSnap))
+				Interaction::mouseReleaseEvent(event);
 		}
 		virtual void mouseMoveEvent(QMouseEvent* event)
 		{
 			updateSnap(event);
 			snapMouseMoveEvent(event, LastSnap);
-#ifndef _MOBILE
-			Interaction::mouseMoveEvent(event);
-#endif
+			if (!(M_PREFS->getMouseSingleButton() && LastSnap))
+				Interaction::mouseMoveEvent(event);
 		}
 		virtual void snapMousePressEvent(QMouseEvent * , FeatureType*)
 		{

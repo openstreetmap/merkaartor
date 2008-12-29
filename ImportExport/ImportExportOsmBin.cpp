@@ -699,29 +699,25 @@ MapFeature* ImportExportOsmBin::getFeature(OsbRegion* osr, MapDocument* d, OsbMa
 MapFeature* ImportExportOsmBin::getFeature(OsbRegion* osr, MapDocument* d, OsbMapLayer* theLayer)
 {
 	QDataStream ds(osr->device);
-	MapFeature* F;
+	MapFeature* F, * oF;
 	qint8 c;
 	quint64 id;
 
 	ds >> c;
 	ds >> id;
-	//switch (c) {
-	//	case 'N':
-	//		F = d->getFeature(QString("node_%1").arg(QString::number(id)));
-	//		break;
-	//	case 'R':
-	//		F = d->getFeature(QString("way_%1").arg(QString::number(id)));
-	//		break;
-	//	case 'L':
-	//		F = d->getFeature(QString("rel_%1").arg(QString::number(id)));
-	//		break;
-	//	default:
-	//		Q_ASSERT(false);
-	//}
-	//if (F && (F->lastUpdated() != MapFeature::NotYetDownloaded)) {
-	//	Device->seek(cur_pos);
-	//	return F;
-	//}
+	switch (c) {
+		case 'N':
+			oF = d->getFeature(QString("node_%1").arg(QString::number(id)));
+			break;
+		case 'R':
+			oF = d->getFeature(QString("way_%1").arg(QString::number(id)));
+			break;
+		case 'L':
+			oF = d->getFeature(QString("rel_%1").arg(QString::number(id)));
+			break;
+		default:
+			Q_ASSERT(false);
+	}
 //#ifndef NDEBUG
 //	quint32 pos = osr->device->pos(); //1097543
 //#endif
@@ -742,8 +738,10 @@ MapFeature* ImportExportOsmBin::getFeature(OsbRegion* osr, MapDocument* d, OsbMa
 			Q_ASSERT(false);
 	}
 
-	//Device->seek(cur_pos);
-	return F;
+	if (oF && (oF->lastUpdated() != MapFeature::NotYetDownloaded))
+		return oF;
+	else
+		return F;
 }
 
 // export

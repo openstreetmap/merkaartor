@@ -23,7 +23,7 @@ GotoDialog::GotoDialog(const Projection& aProj, QWidget *parent)
 	setupUi(this);
 
 	CoordBox B = theProjection.viewport();
-	int OsmZoom = (log((360.0 / intToAng(B.latDiff()))) / log(2.0)) + 1;
+	int OsmZoom = int((log((360.0 / intToAng(B.latDiff()))) / log(2.0)) + 1);
 	OsmZoom = qMin(OsmZoom, 18);
 	OsmZoom = qMax(OsmZoom, 1);
 

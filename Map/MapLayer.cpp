@@ -59,7 +59,7 @@ public:
 	}
 	~MapLayerPrivate()
 	{
-		for (unsigned int i=0; i<Features.size(); ++i)
+		for (int i=0; i<Features.size(); ++i)
 			if (Features[i])
 				delete Features[i];
 	}
@@ -255,7 +255,7 @@ MapDocument* MapLayer::getDocument()
 
 int MapLayer::get(MapFeature* aFeature)
 {
-	for (unsigned int i=0; i<p->Features.size(); ++i)
+	for (int i=0; i<p->Features.size(); ++i)
 		if (p->Features[i] == aFeature)
 			return i;
 
@@ -265,7 +265,7 @@ int MapLayer::get(MapFeature* aFeature)
 QVector<MapFeature *> MapLayer::get()
 {
 	QVector<MapFeature *> theList;
-	for (unsigned int i=0; i<p->Features.size(); ++i)
+	for (int i=0; i<p->Features.size(); ++i)
 		if (p->Features[i])
 			theList.append(p->Features[i]);
 	return theList;
@@ -301,7 +301,7 @@ MapFeature* MapLayer::get(const QString& id, bool exact)
 
 const MapFeature* MapLayer::get(unsigned int i) const
 {
-	if(i>=p->Features.size()) return 0;
+	if((int)i>=p->Features.size()) return 0;
 	return p->Features[i];
 }
 

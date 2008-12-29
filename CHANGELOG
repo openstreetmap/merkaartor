@@ -1,4 +1,6 @@
 v0.13
+	* ADD : "Node" - "Detach" to remove a node from a road. Works the same way as "Split"
+	* FIX : Make Osmarender work again
 	* ADD : Area transparency
 	* ADD : Allow on-the-fly language change
 	* ADD : Remember tag view first column size

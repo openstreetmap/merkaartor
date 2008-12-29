@@ -29,7 +29,7 @@
 #include "Map/MapFeature.h"
 #include "Map/Relation.h"
 #include "Map/Road.h"
-#include "Map/RoadManipulations.h"
+#include "Map/FeatureManipulations.h"
 #include "Map/TrackPoint.h"
 #include "PaintStyle/EditPaintStyle.h"
 #include "PaintStyle/PaintStyleEditor.h"
@@ -76,8 +76,9 @@
 #include <QLocale>
 
 MainWindow::MainWindow(void)
-        : fileName(""), theDocument(0), theXmlDoc(0), gpsRecLayer(0), curGpsTrackSegment(0),
-        qtTranslator(0), merkaartorTranslator(0)
+		: fileName(""), theDocument(0), theXmlDoc(0),
+		gpsRecLayer(0),curGpsTrackSegment(0),
+		qtTranslator(0), merkaartorTranslator(0)
 {
 	setupUi(this);
 	M_STYLE->loadPainters(MerkaartorPreferences::instance()->getDefaultStyle());
@@ -1097,6 +1098,21 @@ void MainWindow::on_nodeMergeAction_triggered()
 	MapFeature* F = theProperties->selection(0);
 	CommandList* theList = new CommandList(MainWindow::tr("Merge Nodes into %1").arg(F->id()), F);
 	mergeNodes(theDocument, theList, theProperties);
+	if (theList->empty())
+		delete theList;
+	else
+	{
+		theDocument->addHistory(theList);
+		theProperties->setSelection(F);
+		invalidateView();
+	}
+}
+
+void MainWindow::on_nodeDetachAction_triggered()
+{
+	MapFeature* F = theProperties->selection(0);
+	CommandList* theList = new CommandList(MainWindow::tr("Detach Node %1").arg(F->id()), F);
+	detachNode(theDocument, theList, theProperties);
 	if (theList->empty())
 		delete theList;
 	else

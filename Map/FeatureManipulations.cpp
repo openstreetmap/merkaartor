@@ -1,4 +1,4 @@
-#include "Map/RoadManipulations.h"
+#include "Map/FeatureManipulations.h"
 #include "Command/DocumentCommands.h"
 #include "Command/FeatureCommands.h"
 #include "Command/RoadCommands.h"
@@ -63,6 +63,37 @@ bool canBreakRoads(PropertiesDock* theDock)
 		for (unsigned int j=i+1; j<Input.size(); ++j)
 			if (canBreak(Input[i],Input[j]))
 				return true;
+	return false;
+}
+
+bool canDetachNodes(PropertiesDock* theDock)
+{
+	std::vector<Road*> Roads, Result;
+	std::vector<TrackPoint*> Points;
+	for (unsigned int i=0; i<theDock->size(); ++i)
+		if (Road* R = dynamic_cast<Road*>(theDock->selection(i)))
+			Roads.push_back(R);
+		else if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(theDock->selection(i)))
+			Points.push_back(Pt);
+
+	if (Roads.size() > 1 && Points.size() > 1)
+		return false;
+
+	if (Roads.size() == 0 && Points.size()) {
+		for (unsigned int i=0; i<Points.size(); ++i) {
+			Road * R = Road::GetSingleParentRoad(Points[i]);
+			if (R)
+				return true;
+		}
+		return false;
+	}
+
+	if (Roads.size() && Points.size() == 1)
+		return true;
+
+	if (Roads.size() == 1 && Points.size())
+		return true;
+
 	return false;
 }
 
@@ -297,6 +328,48 @@ void mergeNodes(MapDocument* theDocument, CommandList* theList, PropertiesDock* 
 	}
 }
 
+void detachNode(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)
+{
+	std::vector<Road*> Roads, Result;
+	std::vector<TrackPoint*> Points;
+	for (unsigned int i=0; i<theDock->size(); ++i)
+		if (Road* R = dynamic_cast<Road*>(theDock->selection(i)))
+			Roads.push_back(R);
+		else if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(theDock->selection(i)))
+			Points.push_back(Pt);
+
+	if (Roads.size() > 1 && Points.size() > 1)
+		return;
+
+	if (Roads.size() == 0 && Points.size())
+	{
+		for (unsigned int i=0; i<Points.size(); ++i) {
+			Road * R = Road::GetSingleParentRoad(Points[i]);
+			if (R)
+				theList->add(new RoadRemoveTrackPointCommand(R, Points[i],
+					theDocument->getDirtyLayer()));
+		}
+	}
+
+	if (Roads.size() > 1 && Points.size() == 1)
+	{
+		for (unsigned int i=0; i<Roads.size(); ++i) {
+			if (Roads[i]->find(Points[0]) < Roads[i]->size())
+				theList->add(new RoadRemoveTrackPointCommand(Roads[i], Points[0],
+					theDocument->getDirtyLayer()));
+		}
+	}
+
+	if (Roads.size() == 1 && Points.size())
+	{
+		for (unsigned int i=0; i<Points.size(); ++i) {
+			if (Roads[0]->find(Points[i]) < Roads[0]->size())
+				theList->add(new RoadRemoveTrackPointCommand(Roads[0], Points[i],
+					theDocument->getDirtyLayer()));
+		}
+	}
+}
+
 void commitFeatures(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
 	QVector<MapFeature*> alt;
@@ -353,7 +426,7 @@ void removeRelationMember(MapDocument* theDocument, CommandList* theList, Proper
 		theRelation = MapFeature::GetSingleParentRelation(Features[0]);
 	if (!(theRelation && Features.size())) return;
 
-	int idx;
+	unsigned int idx;
 	for (int i=0; i<Features.size(); ++i) {
 		if ((idx = theRelation->find(Features[i])) != theRelation->size())
 			theList->add(new RelationRemoveFeatureCommand(theRelation, idx, theDocument->getDirtyOrOriginLayer(theRelation->layer()))); 

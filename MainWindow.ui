@@ -208,6 +208,7 @@
     </property>
     <addaction name="nodeMergeAction"/>
     <addaction name="nodeAlignAction"/>
+    <addaction name="nodeDetachAction"/>
    </widget>
    <widget class="QMenu" name="windowAction">
     <property name="title">
@@ -283,11 +284,11 @@
    <property name="windowTitle">
     <string>Tool Bar</string>
    </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
    <property name="toolButtonStyle">
     <enum>Qt::ToolButtonTextUnderIcon</enum>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -1183,6 +1184,17 @@
    </property>
    <property name="text">
     <string>&amp;Always</string>
+   </property>
+  </action>
+  <action name="nodeDetachAction">
+   <property name="text">
+    <string>&amp;Detach</string>
+   </property>
+   <property name="toolTip">
+    <string>Detach a node from a Road</string>
+   </property>
+   <property name="statusTip">
+    <string>Detach a node from a Road</string>
    </property>
   </action>
  </widget>

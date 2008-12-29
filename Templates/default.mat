@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF8"?>
 <templates>
  <widgets>
   <widget tag="place" type="combo">

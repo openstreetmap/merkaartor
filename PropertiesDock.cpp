@@ -13,7 +13,7 @@
 #include "Map/MapFeature.h"
 #include "Map/Relation.h"
 #include "Map/Road.h"
-#include "Map/RoadManipulations.h"
+#include "Map/FeatureManipulations.h"
 #include "Map/TrackPoint.h"
 #include "TagTemplate/TagTemplate.h"
 
@@ -33,8 +33,7 @@
 
 PropertiesDock::PropertiesDock(MainWindow* aParent)
 : MDockAncestor(aParent), Main(aParent), CurrentUi(0), Selection(0),
-    theTemplates(0), NowShowing(NoUiShowing),
-    CurrentTagView(0), CurrentMembersView(0)
+	theTemplates(0), CurrentTagView(0), CurrentMembersView(0), NowShowing(NoUiShowing)
 {
 	setMinimumSize(220,100);
 	switchToNoUi();
@@ -175,6 +174,7 @@ void PropertiesDock::checkMenuStatus()
 	Main->featureCommitAction->setEnabled(NumCommitableFeature);
 	Main->nodeMergeAction->setEnabled(NumPoints > 1);
 	Main->nodeAlignAction->setEnabled(NumPoints > 2);
+	Main->nodeDetachAction->setEnabled(NumPoints && canDetachNodes(this));
 	Main->relationAddMemberAction->setEnabled(NumRelation && Selection.size() > 1);
 	Main->relationRemoveMemberAction->setEnabled((NumRelation && Selection.size() > 1 && NumRelationChild) || IsParentRelation);
 
@@ -255,7 +255,7 @@ void PropertiesDock::addSelection(MapFeature* S)
 void PropertiesDock::adjustSelection()
 {
 	QVector<MapFeature*> aSelection;
-	int cnt = Selection.size();
+	unsigned int cnt = Selection.size();
 
 	for (unsigned int i=0; i<FullSelection.size(); ++i) {
 		if (Main->document()->exists(FullSelection[i])) {

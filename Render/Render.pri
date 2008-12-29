@@ -37,22 +37,22 @@ contains(OSMARENDER,1) {
 
 	win32-msvc* {
 		debug {
-			DEFINES += LIBXML_STATIC LIBXSLT_STATIC
-			LIBS += -llibxml2_a -llibxslt_a 
+                        DEFINES += LIBXML_STATIC LIBXSLT_STATIC LIBEXSLT_STATIC
+                        LIBS += -llibxml2_a -llibxslt_a -llibexslt_a
 			QMAKE_LFLAGS += /NODEFAULTLIB:MSVCRT
 		}
 		release {
-			LIBS += -llibxml2 -llibxslt 
+                        LIBS += -llibxml2 -llibxslt -llibexslt
 		}
 	}
 
 	win32-g++ {
-			LIBS += -llibxml2 -llibxslt 
+                        LIBS += -llibxml2 -llibxslt -llibexslt
 	}
 
 	unix {
-			DEFINES += LIBXML_STATIC LIBXSLT_STATIC
-			LIBS += -lxml2 -lxslt -lz
+                        DEFINES += LIBXML_STATIC LIBXSLT_STATIC LIBEXSLT_STATIC
+                        LIBS += -lxml2 -lxslt -lexslt -lz
 			INCLUDEPATH += /usr/include/libxml2
 	}
 }

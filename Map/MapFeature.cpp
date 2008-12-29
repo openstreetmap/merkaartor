@@ -354,7 +354,7 @@ void MapFeaturePrivate::updatePainters(double PixelPerM)
 	{
 		PossiblePainters.clear();
 		QVector<const FeaturePainter*> DefaultPainters;
-		for (unsigned int i=0; i<M_STYLE->painterSize(); ++i)
+		for (int i=0; i<M_STYLE->painterSize(); ++i)
 		{
 			const FeaturePainter* Current = M_STYLE->getPainter(i);
 			switch (Current->matchesTag(theFeature)) {
@@ -375,7 +375,7 @@ void MapFeaturePrivate::updatePainters(double PixelPerM)
 	}
 	CurrentPainter = 0;
 	PixelPerMForPainter = PixelPerM;
-	for (unsigned int i=0; i<PossiblePainters.size(); ++i)
+	for (int i=0; i<PossiblePainters.size(); ++i)
 		if (PossiblePainters[i]->matchesZoom(PixelPerM))
 		{
 			CurrentPainter = PossiblePainters[i];

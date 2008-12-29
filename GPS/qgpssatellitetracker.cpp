@@ -137,6 +137,6 @@ void QGPSSatelliteTracker::getCoordsFromPos(int rad, int elevation, int azimuth,
     elevation = 90 - elevation;
 
     // you should know this (slept too much in trig)
-    x = cos(theta*M_PI/180) * elevation * rad / 90;
-    y = sin(theta*M_PI/180) * elevation * rad / 90;
+	x = int(cos(theta*M_PI/180) * elevation * rad / 90);
+	y = int(sin(theta*M_PI/180) * elevation * rad / 90);
 }

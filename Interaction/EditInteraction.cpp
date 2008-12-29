@@ -12,7 +12,7 @@
 #include "Map/MapFeature.h"
 #include "Map/Road.h"
 #include "Map/Relation.h"
-#include "Map/RoadManipulations.h"
+#include "Map/FeatureManipulations.h"
 #include "Map/TrackPoint.h"
 
 #include <QtGui/QMouseEvent>
@@ -60,11 +60,12 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 					view()->properties()->addSelection(aLast);
 			} else {
 				StackSnap = SnapList;
-				view()->properties()->setSelection(aLast);
+//				if (aLast)
+//					view()->properties()->setSelection(aLast);
 			}
 			if (
-					(M_PREFS->getMouseSingleButton() && (ev->modifiers() & Qt::ShiftModifier) && !aLast) ||
-					(!M_PREFS->getMouseSingleButton() && !aLast)
+				(M_PREFS->getMouseSingleButton() && (ev->modifiers() & Qt::ShiftModifier) && !aLast) ||
+				(!M_PREFS->getMouseSingleButton() && !aLast)
 				)
 			{
 				EndDrag = StartDrag = projection().inverse(ev->pos());
@@ -76,7 +77,7 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 	}
 }
 
-void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* )
+void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* aLast)
 {
 	Q_UNUSED(ev);
 	if (Dragging)
@@ -85,9 +86,9 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* )
 		CoordBox DragBox(StartDrag,projection().inverse(ev->pos()));
 		for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it)
 			if (
-					(M_PREFS->getMouseSingleButton() && ev->modifiers().testFlag(Qt::ShiftModifier) && ev->modifiers().testFlag(Qt::AltModifier)) ||
-					(!M_PREFS->getMouseSingleButton() && ev->modifiers().testFlag(Qt::ShiftModifier))
-					)
+				(M_PREFS->getMouseSingleButton() && ev->modifiers().testFlag(Qt::ShiftModifier) && ev->modifiers().testFlag(Qt::AltModifier)) ||
+				(!M_PREFS->getMouseSingleButton() && ev->modifiers().testFlag(Qt::ShiftModifier))
+				)
 			{
 				if (!DragBox.intersects(it.get()->boundingBox()))
 					continue;
@@ -128,6 +129,12 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* )
 		view()->properties()->checkMenuStatus();
 		Dragging = false;
 		view()->update();
+	} else {
+		if (!panning() && !ev->modifiers()) {
+			view()->properties()->setSelection(aLast);
+			view()->properties()->checkMenuStatus();
+			view()->update();
+		}
 	}
 }
 

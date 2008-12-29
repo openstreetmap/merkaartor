@@ -219,7 +219,7 @@ void PaintStyleEditor::on_DrawBackground_clicked(bool b)
 
 void PaintStyleEditor::on_BackgroundColor_clicked()
 {
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);

@@ -92,6 +92,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_featureCommitAction_triggered();
 		virtual void on_nodeAlignAction_triggered();
 		virtual void on_nodeMergeAction_triggered();
+		virtual void on_nodeDetachAction_triggered();
 		virtual void on_relationAddMemberAction_triggered();
 		virtual void on_relationRemoveMemberAction_triggered();
 
@@ -179,9 +180,6 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 
 
     private:
-        QTranslator* qtTranslator;
-        QTranslator* merkaartorTranslator;
-
 		MapView* theView;
 		MapDocument* theDocument;
 		PropertiesDock* theProperties;
@@ -197,6 +195,9 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		TrackMapLayer* gpsRecLayer;
 		TrackSegment* curGpsTrackSegment;
 		QHash<QString, QString> shortcutsDefault;
+
+		QTranslator* qtTranslator;
+		QTranslator* merkaartorTranslator;
 
 	private slots:
 		void setAreaOpacity(QAction*);

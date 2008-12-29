@@ -34,7 +34,7 @@ HEADERS += \
 ./Map/Projection.h \
 ./Map/Relation.h \
 ./Map/Road.h \
-./Map/RoadManipulations.h \
+./Map/FeatureManipulations.h \
 ./Map/TrackPoint.h \
 ./Map/TrackSegment.h \
 ./MapView.h \
@@ -85,7 +85,7 @@ SOURCES += \
 ./Map/Projection.cpp \
 ./Map/Relation.cpp \
 ./Map/Road.cpp \
-./Map/RoadManipulations.cpp \
+./Map/FeatureManipulations.cpp \
 ./Map/TrackPoint.cpp \
 ./Map/TrackSegment.cpp \
 ./MapView.cpp \

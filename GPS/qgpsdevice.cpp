@@ -979,9 +979,9 @@ void QGPSDDevice::parseY(const QString& s)
 		int id = Items[0].toInt();
 		if ( (id >= 0) && (id<50) )
 		{
-			satArray[id][0] = Items[1].toDouble();
-			satArray[id][1] = Items[2].toDouble();
-			satArray[id][2] = Items[3].toDouble();
+			satArray[id][0] = int(Items[1].toDouble());
+			satArray[id][1] = int(Items[2].toDouble());
+			satArray[id][2] = int(Items[3].toDouble());
 		}
 	}
 	setNumSatellites(Sats.size());

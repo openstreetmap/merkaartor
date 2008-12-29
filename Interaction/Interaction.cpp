@@ -22,7 +22,7 @@ Interaction::~Interaction()
 
 bool Interaction::panning() const
 {
-	return Panning;
+	return (Panning && (LastPan != FirstPan));
 }
 
 MainWindow* Interaction::main()
@@ -55,8 +55,8 @@ void Interaction::mousePressEvent(QMouseEvent * anEvent)
 		)
 #else
 	if (
-			(M_PREFS->getMouseSingleButton() && (anEvent->buttons() & Qt::LeftButton)) ||
-			(!M_PREFS->getMouseSingleButton() && (anEvent->buttons() & Qt::RightButton))
+		(M_PREFS->getMouseSingleButton() && (anEvent->buttons() & Qt::LeftButton)) ||
+		(!M_PREFS->getMouseSingleButton() && (anEvent->buttons() & Qt::RightButton))
 		)
 #endif // Q_OS_MAC
 	{
@@ -87,10 +87,12 @@ void Interaction::mouseReleaseEvent(QMouseEvent * anEvent)
 	if (Dragging)
 	{
 		CoordBox DragBox(StartDrag,projection().inverse(anEvent->pos()));
+		if (!DragBox.isEmpty()) {
+			view()->projection().setViewport(DragBox,view()->rect());
+			view()->invalidate(true, true);
+			view()->launch(0);
+		}
 		Dragging = false;
-		view()->projection().setViewport(DragBox,view()->rect());
-		view()->invalidate(true, true);
-		view()->launch(0);
 	} else
 		if (anEvent->button() == Qt::RightButton)
 			emit(requestCustomContextMenu(anEvent->pos()));

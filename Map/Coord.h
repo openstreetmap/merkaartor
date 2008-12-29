@@ -154,6 +154,10 @@ class CoordBox
 		{
 			return (BottomLeft.isNull() && TopRight.isNull());
 		}
+		bool isEmpty() const
+		{
+			return (!lonDiff() || !latDiff());
+		}
 		void merge(const Coord& C)
 		{
 			if (C.lat() < BottomLeft.lat())

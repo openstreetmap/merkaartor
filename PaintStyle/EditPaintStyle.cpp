@@ -284,7 +284,7 @@ void EditPaintStyle::savePainters(const QString& filename)
 		QTextStream out(&data);
 		out << "<mapStyle>\n";
 		out << globalPainter.toXML();
-		for (unsigned int i=0; i<Painters.size(); ++i)
+		for (int i=0; i<Painters.size(); ++i)
 		{
 			QString s = Painters[i].toXML();
 			out << s;
