@@ -8,7 +8,7 @@ else
 endif
 
 configure: configure-stamp
-configure-stamp:
+configure-stamp: clean
 	dh_testdir
 	/usr/share/qt4/bin/qmake
 	touch configure-stamp
