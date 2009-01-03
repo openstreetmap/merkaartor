@@ -1154,7 +1154,7 @@ Więcej informacji znajdziesz na stronie http://wiki.openstreetmap.org/index.php
     <message>
         <location filename="MainWindow.cpp" line="800"/>
         <source>Upload OSM</source>
-        <translation type="unfinished"></translation>
+        <translation>Wysyłanie do OSM</translation>
     </message>
     <message>
         <location filename="MainWindow.cpp" line="801"/>
@@ -1717,7 +1717,7 @@ Czy chcesz to zrobić teraz?</translation>
     <message>
         <location filename="MainWindow.ui" line="640"/>
         <source>&amp;All...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Wszystko...</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="643"/>
@@ -1887,7 +1887,7 @@ Czy chcesz to zrobić teraz?</translation>
     <message>
         <location filename="MainWindow.ui" line="822"/>
         <source>Copy the selected feature&apos;s tags to the clipboard; if the feature is a trackpoint, copy the coordinates, too.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiuje tagi wybranej cechy do schowka; jeśli cecha jest punktem trasy kopiuje również jej współrzędne.</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="825"/>
@@ -1957,12 +1957,12 @@ Czy chcesz to zrobić teraz?</translation>
     <message>
         <location filename="MainWindow.ui" line="890"/>
         <source>&amp;Commit to dirty layer</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Wyślij do warstwy roboczej</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="899"/>
         <source>Commit the selected feature from a non-uploadable layer (e.g.Track or Extract) to the dirty layer, ready for upload</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Przesyła wybraną cechę z warstwy, która nie może zostać wysłana do OSM do warstwy roboczej</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="904"/>
@@ -2002,7 +2002,7 @@ Czy chcesz to zrobić teraz?</translation>
     <message>
         <location filename="MainWindow.ui" line="944"/>
         <source>&amp;Image layer</source>
-        <translation type="unfinished"></translation>
+        <translation>Warstwa z &amp;obrazami</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="949"/>
@@ -2072,7 +2072,7 @@ Czy chcesz to zrobić teraz?</translation>
     <message>
         <location filename="MainWindow.ui" line="1033"/>
         <source>Show track &amp;segments</source>
-        <translation type="unfinished">Wyświetlanie &amp;segmentów tras</translation>
+        <translation>Wyświetlanie &amp;segmentów tras</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="1036"/>
@@ -2183,7 +2183,8 @@ Czy chcesz to zrobić teraz?</translation>
         <location filename="Sync/SyncOSM.cpp" line="33"/>
         <source>It is strongly recommended to save the changes to your document after an upload.
 Do you want to do this now?</source>
-        <translation type="unfinished"></translation>
+        <translation>Zaleca się zapisanie zmian w dokumencie po ich wysłaniu.
+Czy zrobić to teraz?</translation>
     </message>
     <message>
         <location filename="TagModel.cpp" line="151"/>
@@ -2468,22 +2469,22 @@ Na pewno można legalnie zaimportować ten plik do OSM?</translation>
     <message>
         <location filename="MainWindow.ui" line="134"/>
         <source>&amp;Export</source>
-        <translation type="unfinished">&amp;Eksportuj</translation>
+        <translation>&amp;Eksportuj</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="143"/>
         <source>&amp;Render</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Renderuj</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="150"/>
         <source>Re&amp;cent open</source>
-        <translation type="unfinished"></translation>
+        <translation>Os&amp;tatnio otwierane</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="155"/>
         <source>Recen&amp;t import</source>
-        <translation type="unfinished"></translation>
+        <translation>Ostatnio i&amp;mportowane</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="416"/>
