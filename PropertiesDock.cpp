@@ -65,6 +65,7 @@ PropertiesDock::~PropertiesDock(void)
 {
     delete theModel;
 	delete theTemplates;
+	delete shortcutFilter;
 }
 
 static bool isChildOfSingleRoad(MapFeature *mapFeature)

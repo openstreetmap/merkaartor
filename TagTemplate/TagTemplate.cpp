@@ -36,6 +36,7 @@ TagTemplateWidget::~TagTemplateWidget()
 {
 	for (int i=0; i<theValues.size(); ++i)
 		delete theValues[i];
+	delete theSelector;
 }
 
 TagTemplateWidget* TagTemplateWidget::fromXml(const QDomElement& e)
@@ -77,8 +78,7 @@ void TagTemplateWidget::parseCommonElements(const QDomElement& e)
 		theUrl = QUrl(e.attribute("src"));
 	} else
 	if (e.tagName() == "selector") {
-		TagSelector* aSel = TagSelector::parse(e.attribute("expr"));
-		theSelector = aSel;
+		theSelector = TagSelector::parse(e.attribute("expr"));
 	}
 	if (e.tagName() == "value") {
 		TagTemplateWidgetValue* aTCV = TagTemplateWidgetValue::fromXml(e);

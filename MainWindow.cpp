@@ -263,6 +263,7 @@ MainWindow::~MainWindow(void)
 	delete MerkaartorPreferences::instance();
 	delete theDocument;
 	delete theView;
+	delete theProperties;
 
     delete qtTranslator;
     delete merkaartorTranslator;

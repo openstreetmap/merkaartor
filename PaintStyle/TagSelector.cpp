@@ -216,7 +216,7 @@ TagSelector* parseTerm(const QString& Expression, int& idx)
 		if (!canParseLiteral(Expression,idx,"and"))
 			break;
 	}
-	if (Factors.size() == 1)
+	if (Factors.size() == 1) 
 		return Factors[0];
 	else if (Factors.size() > 1)
 		return new TagSelectorAnd(Factors);
