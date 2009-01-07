@@ -45,7 +45,7 @@ TagTemplateWidget* TagTemplateWidget::fromXml(const QDomElement& e)
 		return NULL;
 	}
 
-	TagTemplateWidget* aTW;
+	TagTemplateWidget* aTW = NULL;
 	if (e.attribute("type") == "combo") {
 		aTW = TagTemplateWidgetCombo::fromXml(e);
 	} else
@@ -673,7 +673,7 @@ TagTemplate::TagTemplate(QString aName, QString aSelector)
 }
 
 TagTemplate::TagTemplate(const TagTemplate& aTemplate)
-	: theSelector(aTemplate.theSelector)
+	: QObject(), theSelector(aTemplate.theSelector)
 {
 }
 
