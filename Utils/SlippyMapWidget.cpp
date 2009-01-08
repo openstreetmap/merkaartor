@@ -40,6 +40,8 @@ class SlippyMapWidgetPrivate
 			Sets->setValue("Lon", Lon);
 			Sets->setValue("Zoom", Zoom);
 			theCache->setMap(0);
+			delete Sets;
+			delete theCache;
 		}
 
 		QPixmap* getImage(int x, int y);
@@ -341,6 +343,7 @@ QPixmap* SlippyMapCache::getDirty(int x, int y, int Zoom)
 	QPixmap* img = getImage(x/2,y/2,Zoom-1);
 	if (!img) return 0;
 	QPixmap* pm = new QPixmap(img->copy((x%2)*TILESIZE/2,(y%2)*TILESIZE/2,TILESIZE/2,TILESIZE/2).scaled(TILESIZE,TILESIZE));
+	delete img;
 	QByteArray Data;
 	QBuffer Buffer(&Data);
 	Buffer.open(QIODevice::WriteOnly);

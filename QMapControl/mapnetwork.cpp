@@ -34,6 +34,8 @@ MapNetwork::~MapNetwork()
 {
 	http->clearPendingRequests();
 	delete http;
+	while (!loadingRequests.isEmpty())
+		delete loadingRequests.dequeue();
 }
 
 
@@ -123,7 +125,9 @@ void MapNetwork::abortLoading()
 
 	if (vectorMutex.tryLock()) {
 		loadingMap.clear();
-		loadingRequests.clear();
+		while (!loadingRequests.isEmpty())
+			delete loadingRequests.dequeue();
+		//loadingRequests.clear();
 		vectorMutex.unlock();
 	}
 }

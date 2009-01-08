@@ -34,6 +34,7 @@ TagTemplateWidget::TagTemplateWidget()
 
 TagTemplateWidget::~TagTemplateWidget()
 {
+	delete theMainWidget;
 	for (int i=0; i<theValues.size(); ++i)
 		delete theValues[i];
 	delete theSelector;
@@ -841,7 +842,7 @@ void TagTemplate::on_tag_cleared(QString k)
 /** TagTemplates **/
 
 TagTemplates::TagTemplates()
-	: theWidget(0), curTemplate(0)
+	: theWidget(0), theFeature(0), curTemplate(0)
 {
 }
 
