@@ -31,6 +31,9 @@
 
 void BrowserWebPage::javaScriptConsoleMessage ( const QString & message, int lineNumber, const QString & sourceID )
 {
+	Q_UNUSED(message)
+	Q_UNUSED(lineNumber)
+	Q_UNUSED(sourceID)
 	// FIXME Seems to crash at times (see http://trac.openstreetmap.org/ticket/1194)
 	//QString s = QString("%1 at %2, %3").arg(message).arg(QString::number(lineNumber)).arg(sourceID);
 	//printf("%s\n", s);
@@ -38,6 +41,7 @@ void BrowserWebPage::javaScriptConsoleMessage ( const QString & message, int lin
 
 void BrowserWebPage::javaScriptAlert ( QWebFrame * frame, const QString & msg ) 
 {
+	Q_UNUSED(frame)
 	//QMessageBox::information(NULL, tr("Javascript alert"), msg);
 
 	if (msg.startsWith("Coord")) {

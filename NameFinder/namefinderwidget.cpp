@@ -131,6 +131,8 @@ namespace NameFinder
 
 	void NameFinderWidget::selection_selectionChanged(const QItemSelection & selected, const QItemSelection & deselected)
 	{
+		Q_UNUSED(selected)
+		Q_UNUSED(deselected)
 		emit selectionChanged();
 	}
 

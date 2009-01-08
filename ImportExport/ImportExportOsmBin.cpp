@@ -717,7 +717,7 @@ MapFeature* ImportExportOsmBin::getFeature(OsbRegion* osr, MapDocument* d, OsbMa
 			oF = d->getFeature(QString("rel_%1").arg(QString::number(id)));
 			break;
 		default:
-                    oF = NULL;
+			oF = NULL;
 			Q_ASSERT(false);
 	}
 //#ifndef NDEBUG
@@ -737,7 +737,7 @@ MapFeature* ImportExportOsmBin::getFeature(OsbRegion* osr, MapDocument* d, OsbMa
 			tagsFromBinary(F, ds);
 			break;
 		default:
-                    F = NULL;
+			F = NULL;
 			Q_ASSERT(false);
 	}
 

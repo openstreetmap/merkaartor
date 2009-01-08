@@ -37,6 +37,7 @@ namespace NameFinder
 
 	int NameFinderTableModel::rowCount ( const QModelIndex &parent ) const
 	{
+		Q_UNUSED(parent)
 		if ( myResults == NULL )
 			return 0;
 		if ( !myResults->isEmpty() )
@@ -46,6 +47,7 @@ namespace NameFinder
 
 	int NameFinderTableModel::columnCount ( const QModelIndex &parent ) const
 	{
+		Q_UNUSED(parent)
 		return showColumns;
 	}
 

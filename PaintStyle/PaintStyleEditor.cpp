@@ -113,6 +113,8 @@ void PaintStyleEditor::on_btDown_clicked()
 
 void PaintStyleEditor::on_PaintList_itemClicked(QListWidgetItem* it)
 {
+	Q_UNUSED(it)
+			
 	FreezeUpdate = true;
 	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())

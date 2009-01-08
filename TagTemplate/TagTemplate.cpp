@@ -665,11 +665,13 @@ TagTemplate::TagTemplate()
 TagTemplate::TagTemplate(QString aName)
 	: theWidget(0), theSelector(0)
 {
+	Q_UNUSED(aName)
 }
 
 TagTemplate::TagTemplate(QString aName, QString aSelector)
 	: theWidget(0)
 {
+	Q_UNUSED(aName)
 	theSelector = TagSelector::parse(aSelector);
 }
 
