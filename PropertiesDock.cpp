@@ -273,6 +273,15 @@ void PropertiesDock::adjustSelection()
 		switchUi();
 }
 
+bool PropertiesDock::isSelected(MapFeature *aFeature)
+{
+	std::vector<MapFeature*>::iterator i = std::find(Selection.begin(),Selection.end(),aFeature);
+	if (i == Selection.end())
+		return false;
+	else
+		return true;
+}
+
 void PropertiesDock::fillMultiUiSelectionBox()
 {
 	if (NowShowing == MultiShowing)

@@ -133,9 +133,15 @@ bool OsbRegion::clearTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer)
 			if (F->layer() == theLayer) {
 				int theCount = --theLayer->featRefCount[F];
 				if (!(theCount)) {
-					theLayer->remove(F);
-					delete F;
-					theLayer->featRefCount.remove(F);
+					quint32 j;
+					for (j=0; j<F->sizeParents(); ++j)
+						if (F->getParent(j)->layer() != theLayer)
+							break;
+					if (j == F->sizeParents()) {
+						theLayer->remove(F);
+						delete F;
+						theLayer->featRefCount.remove(F);
+					}
 				}
 			} else {
 				theLayer->featRefCount.remove(F);
@@ -260,21 +266,23 @@ void ImportExportOsmBin::tagsFromBinary(MapFeature * F, QDataStream& ds)
 	for (unsigned int i=0; i < numTags; ++i) {
 		ds >> k;
 		ds >> v;
-		cur_pos = ds.device()->pos();
-		if (keyTable.contains(k))
-			K = keyTable[k];
-		else {
-			ds.device()->seek(k);
-			ds >> K;
+		if (F) {
+			cur_pos = ds.device()->pos();
+			if (keyTable.contains(k))
+				K = keyTable[k];
+			else {
+				ds.device()->seek(k);
+				ds >> K;
+			}
+			if (valueTable.contains(v))
+				V = valueTable[v];
+			else {
+				ds.device()->seek(v);
+				ds >> V;
+			}
+			F->setTag(K,V);
+			ds.device()->seek(cur_pos);
 		}
-		if (valueTable.contains(v))
-			V = valueTable[v];
-		else {
-			ds.device()->seek(v);
-			ds >> V;
-		}
-		F->setTag(K,V);
-		ds.device()->seek(cur_pos);
 	}
 }
 
@@ -720,9 +728,10 @@ MapFeature* ImportExportOsmBin::getFeature(OsbRegion* osr, MapDocument* d, OsbMa
 			oF = NULL;
 			Q_ASSERT(false);
 	}
-//#ifndef NDEBUG
-//	quint32 pos = osr->device->pos(); //1097543
-//#endif
+	if (oF && (!(oF->isNull()))) {
+		theLayer = NULL;
+	}
+
 	switch (c) {
 		case 'N':
 			F = TrackPoint::fromBinary(d, theLayer, ds, c, id);
@@ -741,7 +750,7 @@ MapFeature* ImportExportOsmBin::getFeature(OsbRegion* osr, MapDocument* d, OsbMa
 			Q_ASSERT(false);
 	}
 
-	if (oF && (oF->lastUpdated() != MapFeature::NotYetDownloaded))
+	if (oF && (!(oF->isNull())))
 		return oF;
 	else
 		return F;

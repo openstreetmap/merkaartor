@@ -393,7 +393,7 @@ void CommandHistory::updateActions()
 		UndoAction->setEnabled(Index>0);
 	if (RedoAction)
 		RedoAction->setEnabled(Index<Size);
-	if (UploadAction)
+	if (UploadAction && !M_PREFS->getOfflineMode())
 		UploadAction->setEnabled(Index);
 }
 

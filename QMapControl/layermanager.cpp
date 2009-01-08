@@ -32,7 +32,7 @@ LayerManager::LayerManager(QWidget* aParent, QSize size)
 	composedOffscreenImage = QPixmap(offSize);
 	composedOffscreenImage2 = QPixmap(offSize);
 	zoomImage = QPixmap(size);
-	zoomImage.fill(Qt::white);
+	zoomImage.fill(Qt::transparent);
 
 	screenmiddle = QPoint(size.width()/2, size.height()/2);
         parentWidget = aParent;
@@ -265,13 +265,13 @@ void LayerManager::newOffscreenImage(bool clearImage, bool showZoomImage)
 // 	qDebug() << "LayerManager::newOffscreenImage()";
 // 	if (refreshMutex.tryLock())
 	{
-		QPainter painter(&composedOffscreenImage2);
 		whilenewscroll = mapmiddle_px;
 
-		if (clearImage)
-		{
-			composedOffscreenImage2.fill(Qt::white);
+		if (clearImage) {
+			composedOffscreenImage2.fill(Qt::transparent);
 		}
+
+		QPainter painter(&composedOffscreenImage2);
 		if (showZoomImage)
 		{
 			painter.drawPixmap(screenmiddle.x()-zoomImageScroll.x(), screenmiddle.y()-zoomImageScroll.y(),zoomImage);
@@ -329,7 +329,7 @@ void LayerManager::zoomIn()
 
 	zoomImageScroll = QPoint(0,0);
 
-	zoomImage.fill(Qt::white);
+	zoomImage.fill(Qt::transparent);
 	QPixmap tmpImg = composedOffscreenImage.copy(screenmiddle.x()+scroll.x(),screenmiddle.y()+scroll.y(), size.width(), size.height());
 
 	QPainter painter(&zoomImage);
@@ -478,7 +478,7 @@ void LayerManager::forceRedraw()
 }
 void LayerManager::removeZoomImage()
 {
-	zoomImage.fill(Qt::white);
+	zoomImage.fill(Qt::transparent);
 }
 
 void LayerManager::drawGeoms(QPainter* painter)
@@ -515,7 +515,7 @@ void LayerManager::setSize(QSize newSize)
 	composedOffscreenImage = QPixmap(offSize);
 	composedOffscreenImage2 = QPixmap(offSize);
 	zoomImage = QPixmap(newSize);
-	zoomImage.fill(Qt::white);
+	zoomImage.fill(Qt::transparent);
 
 	screenmiddle = QPoint(newSize.width()/2, newSize.height()/2);
 

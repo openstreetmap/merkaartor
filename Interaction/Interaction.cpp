@@ -100,17 +100,31 @@ void Interaction::mouseReleaseEvent(QMouseEvent * anEvent)
 
 void Interaction::mouseMoveEvent(QMouseEvent* anEvent)
 {
-	if (Panning)
+#if defined(Q_OS_MAC)
+	// In the name of beautifull code, Steve, add a right mouse button
+	if (	(anEvent->modifiers() & Qt::MetaModifier) ||
+			(M_PREFS->getMouseSingleButton() && (anEvent->buttons() & Qt::LeftButton)) ||
+			(!M_PREFS->getMouseSingleButton() && (anEvent->buttons() & Qt::RightButton))
+		)
+#else
+	if (
+		(M_PREFS->getMouseSingleButton() && (anEvent->buttons() & Qt::LeftButton)) ||
+		(!M_PREFS->getMouseSingleButton() && (anEvent->buttons() & Qt::RightButton))
+		)
+#endif // Q_OS_MAC
 	{
-		QPoint Delta = LastPan;
-		Delta -= anEvent->pos();
-		view()->panScreen(-Delta);
-		LastPan = anEvent->pos();
-	} else
-	if (Dragging)
-	{
-		EndDrag = projection().inverse(anEvent->pos());
-		view()->update();
+		if (Panning)
+		{
+			QPoint Delta = LastPan;
+			Delta -= anEvent->pos();
+			view()->panScreen(-Delta);
+			LastPan = anEvent->pos();
+		} else
+		if (Dragging)
+		{
+			EndDrag = projection().inverse(anEvent->pos());
+			view()->update();
+		}
 	}
 }
 

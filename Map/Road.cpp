@@ -191,6 +191,11 @@ const MapFeature* Road::get(unsigned int idx) const
 	return p->Nodes[idx];
 }
 
+bool Road::isNull() const
+{
+	return (p->Nodes.size() == 0);
+}
+
 bool Road::notEverythingDownloaded() const
 {
 	if (lastUpdated() == MapFeature::NotYetDownloaded)
@@ -535,7 +540,7 @@ void Road::buildPath(Projection const &theProjection, const QRegion& paintRegion
 			}
 			p->thePath.lineTo(aP);
 		}
-		if (isClosed() && !lastPointVisible)
+		if (area() > 0.0 && !lastPointVisible)
 			p->thePath.lineTo(firstPoint);
 }
 
@@ -803,11 +808,6 @@ unsigned int findSnapPointIndex(const Road* R, Coord& P)
 	return BestIdx;
 }
 
-bool Road::isClosed()
-{
-	return size() && (get(0) == get(size()-1));
-}
-
 const std::vector<Coord>& Road::smoothed() const
 {
 	if (!p->SmoothedUpToDate)
@@ -858,6 +858,12 @@ Road* Road::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds, qint8 c,
 	qint64 refId;
 
 	ds >> fSize;
+
+	if (!L) {
+		for (int i=0; i < fSize; ++i)
+			ds >> refId;
+		return NULL;
+	}
 
 	if (id < 1)
 		strId = QString::number(id);

@@ -20,33 +20,51 @@
 #include "MapView.h"
 
 #define M_PARAM_IMPLEMENT_BOOL(Param, Category, Default) \
+	bool mb_##Param = false; \
 	void MerkaartorPreferences::set##Param(bool theValue) \
 	{ \
+		m_##Param = theValue; \
 		Sets->setValue(#Category"/"#Param, theValue); \
 	} \
-	bool MerkaartorPreferences::get##Param() const \
+	bool MerkaartorPreferences::get##Param() \
 	{ \
-		return Sets->value(#Category"/"#Param, Default).toBool(); \
+		if (!::mb_##Param) { \
+			::mb_##Param = true; \
+			m_##Param = Sets->value(#Category"/"#Param, Default).toBool(); \
+		} \
+		return  m_##Param; \
 	}
 
 #define M_PARAM_IMPLEMENT_STRING(Param, Category, Default) \
-	void MerkaartorPreferences::set##Param(const QString & theValue) \
+	bool mb_##Param = false; \
+	void MerkaartorPreferences::set##Param(QString theValue) \
 	{ \
+		m_##Param = theValue; \
 		Sets->setValue(#Category"/"#Param, theValue); \
 	} \
-	QString MerkaartorPreferences::get##Param() const \
+	QString MerkaartorPreferences::get##Param() \
 	{ \
-		return Sets->value(#Category"/"#Param, Default).toString(); \
+		if (!::mb_##Param) { \
+			::mb_##Param = true; \
+			m_##Param = Sets->value(#Category"/"#Param, Default).toString(); \
+		} \
+		return  m_##Param; \
 	}
 
 #define M_PARAM_IMPLEMENT_INT(Param, Category, Default) \
-	void MerkaartorPreferences::set##Param(const int theValue) \
+	bool mb_##Param = false; \
+	void MerkaartorPreferences::set##Param(int theValue) \
 	{ \
+		m_##Param = theValue; \
 		Sets->setValue(#Category"/"#Param, theValue); \
 	} \
-	int MerkaartorPreferences::get##Param() const \
+	int MerkaartorPreferences::get##Param() \
 	{ \
-		return Sets->value(#Category"/"#Param, Default).toInt(); \
+		if (!::mb_##Param) { \
+			::mb_##Param = true; \
+			m_##Param = Sets->value(#Category"/"#Param, Default).toInt(); \
+		} \
+		return  m_##Param; \
 	}
 
 /***************************/
@@ -131,6 +149,8 @@ void MerkaartorPreferences::save()
 
 void MerkaartorPreferences::toOsmPref()
 {
+	if (getOfflineMode()) return;
+
 	if (getOsmUser().isEmpty() || getOsmPassword().isEmpty()) return;
 
 	QMap<QString, QString> OsmPref;
@@ -261,6 +281,8 @@ void MerkaartorPreferences::deleteOsmPref(const QString& k)
 
 void MerkaartorPreferences::fromOsmPref()
 {
+	if (getOfflineMode()) return;
+
 	if (getOsmUser().isEmpty() || getOsmPassword().isEmpty()) return;
 
 	QUrl osmWeb;
@@ -868,28 +890,6 @@ QStringList MerkaartorPreferences::getProjectionTypes()
 	return projTypes;
 }
 
-bool MerkaartorPreferences::getTranslateTags() const
-{
-	return Sets->value("locale/translatetags", true).toBool();
-}
-
-void MerkaartorPreferences::setTranslateTags(bool b)
-{
-	Sets->setValue("locale/translatetags",b);
-}
-
-QString getDefaultLanguage()
-{
-	QSettings Sets;
-	return Sets.value("locale/language").toString();
-}
-
-void setDefaultLanguage(const QString& theValue)
-{
-	QSettings Sets;
-	Sets.setValue("locale/language", theValue);
-}
-
 qreal MerkaartorPreferences::getAlpha(QString lvl)
 {
 	return alpha[lvl];
@@ -1297,6 +1297,7 @@ M_PARAM_IMPLEMENT_BOOL(InfoOnHover, visual, true)
 M_PARAM_IMPLEMENT_BOOL(ShowParents, visual, true)
 
 M_PARAM_IMPLEMENT_INT(TagListFirstColumnWidth, visual, 0)
+M_PARAM_IMPLEMENT_BOOL(TranslateTags, locale, true);
 
 /* World OSB manager */
 M_PARAM_IMPLEMENT_STRING(LastWorldOsbDir, WOSB, "")
@@ -1307,10 +1308,27 @@ M_PARAM_IMPLEMENT_STRING(LastWorldOsbDir, WOSB, "")
 #else
 	M_PARAM_IMPLEMENT_BOOL(MouseSingleButton, Mouse, false)
 #endif
+M_PARAM_IMPLEMENT_BOOL(SeparateMoveMode, Mouse, true)
 
 /* Custom Style */
-#ifdef CUSTOM_STYLE
-	M_PARAM_IMPLEMENT_BOOL(MerkaartorStyle, visual, true)
-#else
-	M_PARAM_IMPLEMENT_BOOL(MerkaartorStyle, visual, false)
-#endif
+M_PARAM_IMPLEMENT_BOOL(MerkaartorStyle, visual, false)
+
+/* Network */
+M_PARAM_IMPLEMENT_BOOL(OfflineMode, Network, false)
+
+/* */ 
+
+QString getDefaultLanguage()
+{
+	QSettings Sets;
+	return Sets.value("locale/language").toString();
+}
+
+void setDefaultLanguage(const QString& theValue)
+{
+	QSettings Sets;
+	Sets.setValue("locale/language", theValue);
+}
+
+
+

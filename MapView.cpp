@@ -274,6 +274,7 @@ void MapView::updateLayersImage()
 	{
 		delete StaticMap;
 		StaticMap = new QPixmap(size());
+		StaticMap->fill(Qt::transparent);
 	}
 	QPainter P(StaticMap);
 
@@ -295,6 +296,10 @@ void MapView::updateLayersImage()
 	const QRect pr = QRectF(tl, br).toRect();
 	const QSize ps = pr.size();
 	QPixmap pm(size());
+	if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
+		pm.fill(M_PREFS->getBgColor());
+	else
+		pm.fill(M_STYLE->getGlobalPainter().getBackgroundColor());
 	QPainter pmp(&pm);
 	layermanager->drawImage(&pmp);
 

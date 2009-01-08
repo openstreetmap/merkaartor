@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "imagemanager.h"
+#include "Preferences/MerkaartorPreferences.h"
 
 #include <QDateTime>
 
@@ -70,27 +71,31 @@ ImageManager::~ImageManager()
 QPixmap ImageManager::getImage(MapAdapter* anAdapter, int x, int y, int z)
 {
 // 	qDebug() << "ImageManager::getImage";
-	QPixmap pm;
-
+	
 	QString host = anAdapter->getHost();
 	QString url = anAdapter->getQuery(x, y, z);
 	QString strHash = QString("%1%2").arg(anAdapter->getName()).arg(url);
 	QString hash = QString(strHash.toAscii().toBase64());
 
+/*	QPixmap pm(anAdapter->getTileSize(), anAdapter->getTileSize());
+	pm.fill(Qt::black);*/
+	QPixmap pm(emptyPixmap);
+	
 	// is image in picture cache
 	if (QPixmapCache::find(hash, pm))
 		return pm;
 
 	// disk cache?
-	if (useDiskCache(hash + ".png")) {
+    if (useDiskCache(hash + ".png")) {
 		if (pm.load(cacheDir.absolutePath() + "/" + hash + ".png")) {
 			QPixmapCache::insert(hash, pm);
 			return pm;
 		}
-		else
-			pm.fill(Qt::black);
 	}
 
+	if (M_PREFS->getOfflineMode())
+		return pm;
+	
 	// currently loading?
 	if (!net->imageIsLoading(hash))
 	{
@@ -104,12 +109,17 @@ QPixmap ImageManager::getImage(MapAdapter* anAdapter, int x, int y, int z)
 
 bool ImageManager::useDiskCache(QString filename)
 {
+	qDebug() << cacheDir.absolutePath() << filename;
+
 	if (!cacheMaxSize)
 		return false;
 
 	if (!cacheDir.exists(filename))
 		return false;
 
+	if (M_PREFS->getOfflineMode())
+		return true;
+	
 	int random = qrand() % 100;
 	QFileInfo info(cacheDir.absolutePath() + "/" + filename);
 	int days = info.lastModified().daysTo(QDateTime::currentDateTime());

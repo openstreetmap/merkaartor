@@ -360,7 +360,7 @@ TagSelectorMatchResult TagSelectorTypeIs::matches(const MapFeature* F) const
 	else
 		if (Type.toLower() == "area")
 			if (Road* R = dynamic_cast<Road*>((MapFeature*)F))
-				if (R->isClosed())
+				if (R->area() > 0.0)
 					return TagSelect_Match;
 
 	return TagSelect_NoMatch;

@@ -61,6 +61,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_fileOpenAction_triggered();
 		virtual void on_fileSaveAsAction_triggered();
 		virtual void on_fileSaveAction_triggered();
+		virtual void on_fileWorkOfflineAction_triggered();
 		
 		virtual void on_layersAddImageAction_triggered();
 		virtual void on_helpAboutAction_triggered();
@@ -204,6 +205,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		void updateBookmarksMenu();
 
 	private:
+		void updateMenu();
 		void updateRecentOpenMenu();
 		void updateRecentImportMenu();
 		void updateProjectionMenu();

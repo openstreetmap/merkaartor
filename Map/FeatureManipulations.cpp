@@ -44,7 +44,7 @@ bool canJoinRoads(PropertiesDock* theDock)
 	std::vector<Road*> Input;
 	for (unsigned int i=0; i<theDock->size(); ++i)
 		if (Road* R = dynamic_cast<Road*>(theDock->selection(i)))
-			if (!R->isClosed())
+			if (!(R->area() > 0.0))
 				Input.push_back(R);
 	for (unsigned int i=0; i<Input.size(); ++i)
 		for (unsigned int j=i+1; j<Input.size(); ++j)
@@ -155,7 +155,7 @@ void joinRoads(MapDocument* theDocument, CommandList* theList, PropertiesDock* t
 	std::vector<Road*> Input;
 	for (unsigned int i=0; i<theDock->size(); ++i)
 		if (Road* R = dynamic_cast<Road*>(theDock->selection(i)))
-			if (!R->isClosed())
+			if (!(R->area() > 0.0))
 				Input.push_back(R);
 	while (Input.size() > 1)
 	{
@@ -178,7 +178,7 @@ void joinRoads(MapDocument* theDocument, CommandList* theList, PropertiesDock* t
 
 static void splitRoad(MapDocument* theDocument, CommandList* theList, Road* In, const std::vector<TrackPoint*>& Points, std::vector<Road*>& Result)
 {
-	bool WasClosed = In->isClosed();
+	bool WasClosed = (In->area() > 0.0);
 	Road* FirstPart = In;
 	Result.push_back(FirstPart);
 	for (unsigned int i=1; (i+1)<FirstPart->size(); ++i)

@@ -18,6 +18,7 @@ class CreateSingleWayInteraction : public GenericFeatureSnapInteraction<MapFeatu
 		~CreateSingleWayInteraction();
 
 		virtual void snapMousePressEvent(QMouseEvent * event, MapFeature* aLast);
+		virtual void snapMouseReleaseEvent(QMouseEvent * event, MapFeature* aLast);
 		virtual void snapMouseMoveEvent(QMouseEvent* event, MapFeature* aLast);
 		virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter);
 		virtual QCursor cursor() const;
@@ -31,6 +32,7 @@ class CreateSingleWayInteraction : public GenericFeatureSnapInteraction<MapFeatu
 		bool HaveFirst;
 		bool Prepend;
 		bool IsCurved;
+		bool Creating;
 };
 
 #endif // INTERACTION\CREATEDOUBLEWAYINTERACTION_H

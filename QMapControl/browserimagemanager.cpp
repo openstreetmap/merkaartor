@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "browserimagemanager.h"
+#include "Preferences/MerkaartorPreferences.h"
 
 #include <QApplication>
 #include <QDateTime>
@@ -122,7 +123,7 @@ BrowserImageManager::~BrowserImageManager()
 QPixmap BrowserImageManager::getImage(MapAdapter* anAdapter, int x, int y, int z)
 {
 // 	qDebug() << "BrowserImageManager::getImage";
-	QPixmap pm;
+	QPixmap pm(emptyPixmap);
 
 	QString host = anAdapter->getHost();
 	QString url = anAdapter->getQuery(x, y, z);
@@ -131,6 +132,9 @@ QPixmap BrowserImageManager::getImage(MapAdapter* anAdapter, int x, int y, int z
 
 	// is image in picture cache
 	if (QPixmapCache::find(hash, pm))
+		return pm;
+
+	if (M_PREFS->getOfflineMode())
 		return pm;
 
 	LoadingRequest LR(hash, host, url);

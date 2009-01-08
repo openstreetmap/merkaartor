@@ -149,6 +149,8 @@ MainWindow::MainWindow(void)
 	viewTrackSegmentsAction->setChecked(M_PREFS->getTrackSegmentsVisible());
 	viewRelationsAction->setChecked(M_PREFS->getRelationsVisible());
 
+	updateMenu();
+
 	QActionGroup* actgrpArrows = new QActionGroup(this);
 	actgrpArrows->addAction(viewArrowsNeverAction);
 	actgrpArrows->addAction(viewArrowsOnewayAction);
@@ -215,7 +217,7 @@ MainWindow::MainWindow(void)
 	viewStyleForegroundAction->setVisible(false);
 	viewStyleTouchupAction->setVisible(false);
 //#endif
-
+	
 	MerkaartorPreferences::instance()->initialPosition(theView);
 
 	QList<QAction*> actions = findChildren<QAction*>();
@@ -480,7 +482,8 @@ void MainWindow::on_editRemoveAction_triggered()
 
 void MainWindow::on_editMoveAction_triggered()
 {
-	view()->launch(new MoveTrackPointInteraction(view()));
+	if (M_PREFS->getSeparateMoveMode())
+		view()->launch(new MoveTrackPointInteraction(view()));
 }
 
 
@@ -615,9 +618,9 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 			importOK = importOSM(this, baseFileName, mapDocument, newLayer);
 		}
 		else if (fn.endsWith(".osb")) {
-			newLayer = new OsbMapLayer( baseFileName );
+			newLayer = new OsbMapLayer( baseFileName, fn );
 			mapDocument->add(newLayer);
-			importOK = mapDocument->importOSB(baseFileName, (DrawingMapLayer *)newLayer);
+			importOK = mapDocument->importOSB(fn, (DrawingMapLayer *)newLayer);
 		}
 		else if (fn.endsWith(".ngt")) {
 			newLayer = new TrackMapLayer( baseFileName );
@@ -829,6 +832,12 @@ void MainWindow::on_fileDownloadMoreAction_triggered()
 		on_editPropertiesAction_triggered();
 	} else
 		QMessageBox::warning(this, tr("Error downloading"), tr("The map could not be downloaded"));
+}
+
+void MainWindow::on_fileWorkOfflineAction_triggered()
+{
+	M_PREFS->setOfflineMode(!M_PREFS->getOfflineMode());
+	updateMenu();
 }
 
 void MainWindow::on_helpAboutAction_triggered()
@@ -1241,7 +1250,6 @@ void MainWindow::on_toolsShortcutsAction_triggered()
 	theActions.append(editPasteMergeAction);
 	theActions.append(editPasteOverwriteAction);
 	theActions.append(editRemoveAction);
-	theActions.append(editMoveAction);
 	theActions.append(editPropertiesAction);
 	theActions.append(editSelectAction);
 	theActions.append(viewZoomAllAction);
@@ -1313,6 +1321,8 @@ void MainWindow::preferencesChanged(void)
 		ImageManager::instance()->setProxy("",0);
 	}
 	theView->projection().setProjectionType(MerkaartorPreferences::instance()->getProjectionType());
+	
+	updateMenu();
 }
 
 void MainWindow::on_fileSaveAsAction_triggered()
@@ -2155,4 +2165,26 @@ void MainWindow::updateLanguage()
         QCoreApplication::installTranslator(merkaartorTranslator);
     }
     retranslateUi(this);
+}
+
+void MainWindow::updateMenu()
+{
+	qDebug() << "updateMenu()";
+
+	if (M_PREFS->getOfflineMode()) {
+		fileWorkOfflineAction->setChecked(true);
+		fileDownloadAction->setEnabled(false);
+		fileDownloadMoreAction->setEnabled(false);
+		fileUploadAction->setEnabled(false);
+	} else {
+		fileWorkOfflineAction->setChecked(false);
+		fileDownloadAction->setEnabled(true);
+		fileDownloadMoreAction->setEnabled(true);
+		fileUploadAction->setEnabled(true);
+	}
+	
+	if (M_PREFS->getSeparateMoveMode())
+		editMoveAction->setVisible(true);
+	else
+		editMoveAction->setVisible(false);
 }

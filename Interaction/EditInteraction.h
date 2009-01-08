@@ -16,6 +16,9 @@ class EditInteraction :	public FeatureSnapInteraction
 		virtual void snapMouseReleaseEvent(QMouseEvent * event, MapFeature* aLast);
 		virtual void snapMouseMoveEvent(QMouseEvent* event, MapFeature* aLast);
 
+	private:
+		QCursor moveCursor() const;
+
 	public slots:
 		void on_remove_triggered();
 		void on_reverse_triggered();
@@ -24,6 +27,13 @@ class EditInteraction :	public FeatureSnapInteraction
 		bool Dragging;
 		Coord StartDrag;
 		Coord EndDrag;
+
+		Coord calculateNewPosition(QMouseEvent* event, MapFeature* aLast, CommandList* theList);
+		std::vector<TrackPoint*> Moving;
+		std::vector<Coord> OriginalPosition;
+		Coord StartDragPosition;
+
+		bool MoveMode;
 };
 
 #endif

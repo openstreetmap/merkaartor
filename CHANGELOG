@@ -1,4 +1,8 @@
 v0.13
+	* FIX : Cache preferences values for quicker access.
+	* FIX : Crash wen reloading MDC when no layer specified in the command XML (fixes #1434)
+	* ADD : "Offline" mode switch.
+	* ADD : Add a "Separate Move Mode" preference to remove "Move" mode. Moving features will be done from the "Edit" mode if deactivated.
 	* ADD : "Node" - "Detach" to remove a node from a road. Works the same way as "Split"
 	* FIX : Make Osmarender work again
 	* ADD : Area transparency

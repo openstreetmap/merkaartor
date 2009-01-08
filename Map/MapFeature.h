@@ -200,6 +200,7 @@ class MapFeature : public QObject
 		virtual unsigned int find(MapFeature* Pt) const = 0;
 		virtual MapFeature* get(unsigned int idx) = 0;
 		virtual const MapFeature* get(unsigned int Idx) const = 0; 
+		virtual bool isNull() const = 0;
 
 		void setParent(MapFeature* F);
 		void unsetParent(MapFeature* F);

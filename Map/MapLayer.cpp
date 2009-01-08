@@ -559,6 +559,8 @@ LayerWidget* ImageMapLayer::newWidget(void)
 
 void ImageMapLayer::updateWidget()
 {
+	qDebug() << "updateWidget";
+
 	//((ImageLayerWidget*) p->theWidget)->initActions();
 	p->theWidget->update();
 }
@@ -580,6 +582,8 @@ Layer* ImageMapLayer::imageLayer()
 
 void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 {
+	qDebug() << "setMapAdapter";
+
 	MapAdapter* mapadapter_bg;
 	WmsServerList wsl;
 	WmsServer ws;
@@ -1065,7 +1069,15 @@ OsbMapLayer::OsbMapLayer(const QString & aName)
 	p->Visible = true;
 	pp = new OsbMapLayerPrivate();
 	pp->theImp = new ImportExportOsmBin(NULL);
-	if (pp->theImp->loadFile(aName))
+}
+
+OsbMapLayer::OsbMapLayer(const QString & aName, const QString & filename)
+	: MapLayer(aName)
+{
+	p->Visible = true;
+	pp = new OsbMapLayerPrivate();
+	pp->theImp = new ImportExportOsmBin(NULL);
+	if (pp->theImp->loadFile(filename))
 		pp->theImp->import(this);
 }
 

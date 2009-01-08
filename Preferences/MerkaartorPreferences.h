@@ -30,14 +30,23 @@ class MapView;
 #define M_PREFS MerkaartorPreferences::instance()
 
 #define M_PARAM_DECLARE_BOOL(Param) \
-	void set##Param(bool theValue); \
-	bool get##Param() const; 
+	private: \
+		bool m_##Param; \
+	public: \
+		void set##Param(bool theValue); \
+		bool get##Param(); 
 #define M_PARAM_DECLARE_STRING(Param) \
-	void set##Param(const QString & theValue); \
-	QString get##Param() const; 
+	private: \
+		QString m_##Param; \
+	public: \
+		void set##Param(QString theValue); \
+		QString get##Param(); 
 #define M_PARAM_DECLARE_INT(Param) \
-	void set##Param(const int theValue); \
-	int get##Param() const; 
+	private: \
+		int m_##Param; \
+	public: \
+		void set##Param(int theValue); \
+		int get##Param(); 
 
 #define SAFE_DELETE(x) {delete (x); x = NULL;}
 
@@ -355,9 +364,13 @@ public:
 
 	/* Mouse bevaviour */
 	M_PARAM_DECLARE_BOOL(MouseSingleButton)
-
+	M_PARAM_DECLARE_BOOL(SeparateMoveMode)
+		
 	/* Custom Style */
 	M_PARAM_DECLARE_BOOL(MerkaartorStyle)
+
+	/* Network */
+	M_PARAM_DECLARE_BOOL(OfflineMode)
 
 protected:
 	bool Use06Api;

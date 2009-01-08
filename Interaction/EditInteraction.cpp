@@ -7,6 +7,7 @@
 #include "Command/DocumentCommands.h"
 #include "Command/FeatureCommands.h"
 #include "Command/RoadCommands.h"
+#include "Command/TrackPointCommands.h"
 #include "Interaction/MoveTrackPointInteraction.h"
 #include "Map/MapDocument.h"
 #include "Map/MapFeature.h"
@@ -14,6 +15,8 @@
 #include "Map/Relation.h"
 #include "Map/FeatureManipulations.h"
 #include "Map/TrackPoint.h"
+#include "Map/Projection.h"
+#include "Utils/LineF.h"
 
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
@@ -21,7 +24,8 @@
 #include <vector>
 
 EditInteraction::EditInteraction(MapView* theView)
-: FeatureSnapInteraction(theView), Dragging(false), StartDrag(0,0), EndDrag(0,0)
+: FeatureSnapInteraction(theView), Dragging(false), StartDrag(0,0), EndDrag(0,0),
+  StartDragPosition(0,0), MoveMode(false)
 {
 	connect(main(),SIGNAL(remove_triggered()),this,SLOT(on_remove_triggered()));
 	connect(main(),SIGNAL(reverse_triggered()), this,SLOT(on_reverse_triggered()));
@@ -37,6 +41,43 @@ EditInteraction::~EditInteraction(void)
 	}
 }
 
+QCursor EditInteraction::moveCursor() const
+{
+	QPixmap pm(":/Icons/move.xpm");
+	return QCursor(pm);
+}
+
+Coord EditInteraction::calculateNewPosition(QMouseEvent *event, MapFeature *aLast, CommandList* theList)
+{
+	Coord TargetC = projection().inverse(event->pos());
+	QPoint Target(TargetC.lat(),TargetC.lon());
+	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(aLast))
+		return Pt->position();
+	else if (Road* R = dynamic_cast<Road*>(aLast))
+	{
+		LineF L1(R->getNode(0)->position(),R->getNode(1)->position());
+		double Dist = L1.capDistance(TargetC);
+		QPoint BestTarget = L1.project(Target).toPoint();
+		unsigned int BestIdx = 1;
+		for (unsigned int i=2; i<R->size(); ++i)
+		{
+			LineF L2(R->getNode(i-1)->position(),R->getNode(i)->position());
+			double Dist2 = L2.capDistance(TargetC);
+			if (Dist2 < Dist)
+			{
+				Dist = Dist2;
+				BestTarget = L2.project(Target).toPoint();
+				BestIdx = i;
+			}
+		}
+		if (theList && (Moving.size() == 1))
+			theList->add(new
+				RoadAddTrackPointCommand(R,Moving[0],BestIdx,document()->getDirtyOrOriginLayer(R->layer())));
+		return Coord(BestTarget.x(),BestTarget.y());
+	}
+	return projection().inverse(event->pos());
+}
+
 void EditInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
 {
 	if (Dragging)
@@ -49,6 +90,33 @@ void EditInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
 
 void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 {
+	if (MoveMode) {
+		MapFeature* sel = aLast;
+		if (view()->isSelectionLocked()) {
+			sel = view()->properties()->selection(0);
+			if (!sel)
+				sel = aLast;
+		}
+		clearNoSnap();
+		Moving.clear();
+		OriginalPosition.clear();
+		StartDragPosition = projection().inverse(ev->pos());
+		if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(sel))
+		{
+			Moving.push_back(Pt);
+			StartDragPosition = Pt->position();
+		}
+		else if (Road* R = dynamic_cast<Road*>(sel)) {
+			for (unsigned int i=0; i<R->size(); ++i)
+				if (std::find(Moving.begin(),Moving.end(),R->get(i)) == Moving.end())
+					Moving.push_back(R->getNode(i));
+		}
+		for (unsigned int i=0; i<Moving.size(); ++i)
+		{
+			OriginalPosition.push_back(Moving[i]->position());
+			addToNoSnap(Moving[i]);
+		}
+	} else
 	if (!view()->isSelectionLocked()) {
 		if (ev->buttons() & Qt::LeftButton)
 		{
@@ -80,6 +148,26 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* aLast)
 {
 	Q_UNUSED(ev);
+	if (MoveMode) {
+		if (Moving.size())
+		{
+			CommandList* theList = new CommandList(MainWindow::tr("Move Point %1").arg(Moving[0]->id()), Moving[0]);
+			Coord Diff(calculateNewPosition(ev, aLast, theList)-StartDragPosition);
+			for (unsigned int i=0; i<Moving.size(); ++i)
+			{
+				Moving[i]->setPosition(OriginalPosition[i]);
+				if (Moving[i]->layer()->isTrack())
+					theList->add(new MoveTrackPointCommand(Moving[i],OriginalPosition[i]+Diff, Moving[i]->layer()));
+				else
+					theList->add(new MoveTrackPointCommand(Moving[i],OriginalPosition[i]+Diff, document()->getDirtyOrOriginLayer(Moving[i]->layer())));
+			}
+			document()->addHistory(theList);
+			view()->invalidate(true, false);
+		}
+		Moving.clear();
+		OriginalPosition.clear();
+		clearNoSnap();
+	} else
 	if (Dragging)
 	{
 		std::vector<MapFeature*> List;
@@ -132,19 +220,42 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* aLast
 	} else {
 		if (!panning() && !ev->modifiers()) {
 			view()->properties()->setSelection(aLast);
+			if (view()->properties()->isSelected(aLast) && !M_PREFS->getSeparateMoveMode()) {
+				MoveMode = true;
+				view()->setCursor(moveCursor());
+			}
 			view()->properties()->checkMenuStatus();
 			view()->update();
 		}
 	}
 }
 
-void EditInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, MapFeature* )
+void EditInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, MapFeature* aLast)
 {
 	Q_UNUSED(anEvent);
+	if (MoveMode) {
+		if (Moving.size())
+		{
+			Coord Diff = calculateNewPosition(anEvent, aLast, 0)-StartDragPosition;
+			for (unsigned int i=0; i<Moving.size(); ++i)
+				Moving[i]->setPosition(OriginalPosition[i]+Diff);
+			view()->invalidate(true, false);
+		} else
+		if (!aLast && !M_PREFS->getSeparateMoveMode())
+		{
+			view()->setCursor(cursor());
+			MoveMode = false;
+		}
+	} else
 	if (Dragging)
 	{
 		EndDrag = projection().inverse(anEvent->pos());
 		view()->update();
+	} else
+	if (aLast && view()->properties()->isSelected(aLast) && !M_PREFS->getSeparateMoveMode())
+	{
+		view()->setCursor(moveCursor());
+		MoveMode = true;
 	}
 }
 

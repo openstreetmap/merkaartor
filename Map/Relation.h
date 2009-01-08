@@ -38,6 +38,8 @@ class Relation : public MapFeature
 		virtual unsigned int find(MapFeature* Pt) const;
 		virtual MapFeature* get(unsigned int idx);
 		virtual const MapFeature* get(unsigned int Idx) const;
+		virtual bool isNull() const;
+
 		const QString& getRole(unsigned int Idx) const;
 		QAbstractTableModel* referenceMemberModel(MainWindow* aMain);
 		void releaseMemberModel();

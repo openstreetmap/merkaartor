@@ -38,6 +38,7 @@ class TrackPoint : public MapFeature
 		virtual unsigned int size() const;
 		virtual MapFeature* get(unsigned int idx);
 		virtual const MapFeature* get(unsigned int Idx) const;
+		virtual bool isNull() const;
 
 		const Coord& position() const;
 		void setPosition(const Coord& aCoord);

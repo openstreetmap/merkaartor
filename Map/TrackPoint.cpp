@@ -52,6 +52,11 @@ const MapFeature* TrackPoint::get(unsigned int ) const
 	return NULL;
 }
 
+bool TrackPoint::isNull() const
+{
+	return Position.isNull();
+}
+
 const Coord& TrackPoint::position() const
 {
 	return Position;
@@ -398,6 +403,9 @@ TrackPoint* TrackPoint::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& 
 
 	ds >> lon;
 	ds >> lat;
+
+	if (!L)
+		return NULL;
 
 	Coord cd( lat, lon );
 	if (id < 1)

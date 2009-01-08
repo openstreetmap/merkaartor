@@ -90,7 +90,7 @@ RelationAddFeatureCommand * RelationAddFeatureCommand::fromXML(MapDocument * d, 
 	if (e.hasAttribute("layer"))
 		a->theLayer = d->getLayer(e.attribute("layer"));
 	else
-		a->theLayer = NULL;
+		a->theLayer = d->getDirtyLayer();
 	if (e.hasAttribute("oldlayer"))
 		a->oldLayer = d->getLayer(e.attribute("oldlayer"));
 	else
@@ -112,14 +112,6 @@ RelationAddFeatureCommand * RelationAddFeatureCommand::fromXML(MapDocument * d, 
 	a->Role = e.attribute("role");
 	a->theMapFeature = F;
 	a->Position = e.attribute("pos").toUInt();
-	if (e.hasAttribute("layer"))
-		a->theLayer = d->getLayer(e.attribute("layer"));
-	else
-		a->theLayer = NULL;
-	if (e.hasAttribute("oldlayer"))
-		a->oldLayer = d->getLayer(e.attribute("oldlayer"));
-	else
-		a->oldLayer = NULL;
 
 	Command::fromXML(d, e, a);
 
@@ -215,7 +207,7 @@ RelationRemoveFeatureCommand * RelationRemoveFeatureCommand::fromXML(MapDocument
 	if (e.hasAttribute("layer"))
 		a->theLayer = d->getLayer(e.attribute("layer"));
 	else
-		a->theLayer = NULL;
+		a->theLayer = d->getDirtyLayer();
 	if (e.hasAttribute("oldlayer"))
 		a->oldLayer = d->getLayer(e.attribute("oldlayer"));
 	else

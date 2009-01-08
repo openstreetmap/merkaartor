@@ -42,6 +42,7 @@ class TrackSegment : public MapFeature
 		virtual unsigned int size() const;
 		TrackPoint* getNode(unsigned int idx);
 		virtual const MapFeature* get(unsigned int Idx) const;
+		virtual bool isNull() const;
 
 		void sortByTime();
 		virtual void partChanged(MapFeature* F, unsigned int ChangeId);

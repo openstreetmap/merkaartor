@@ -14,7 +14,7 @@
 
 CreateSingleWayInteraction::CreateSingleWayInteraction(MainWindow* aMain, MapView* aView, TrackPoint *firstNode, bool aCurved)
 	: GenericFeatureSnapInteraction<MapFeature>(aView), Main(aMain), theRoad(0), FirstPoint(0,0),
-	 FirstNode(firstNode), HaveFirst(false), Prepend(false), IsCurved(aCurved)
+	 FirstNode(firstNode), HaveFirst(false), Prepend(false), IsCurved(aCurved), Creating(false)
 {
 	if (firstNode)
 	{
@@ -75,8 +75,15 @@ void CreateSingleWayInteraction::snapMouseMoveEvent(QMouseEvent* ev, MapFeature*
 
 void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFeature* aFeature)
 {
-	if (anEvent->buttons() & Qt::LeftButton)
+	if ((anEvent->buttons() & Qt::LeftButton) )
+		Creating = true;
+}
+
+void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, MapFeature* aFeature)
+{
+	if ( Creating && !panning() )
 	{
+
 		TrackPoint* Pt = dynamic_cast<TrackPoint*>(aFeature);
 		if (!HaveFirst)
 		{
@@ -139,7 +146,7 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFe
 				N->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 				CommandList* theList  = new CommandList(MainWindow::tr("Create Node %1 in Road %2").arg(N->description()).arg(aRoad->description()), N);
 				theList->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),N,true));
-				theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx));
+				theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx,Main->document()->getDirtyLayer()));
 				document()->addHistory(theList);
 				view()->invalidate(true, false);
 				To = N;
@@ -154,15 +161,16 @@ void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFe
 			}
 			L->setDescription(MainWindow::tr("Add Node %1 to Road %2").arg(To->description()).arg(theRoad->description()));
 			if (Prepend)
-				L->add(new RoadAddTrackPointCommand(theRoad,To,(unsigned int)0));
+				L->add(new RoadAddTrackPointCommand(theRoad,To,(unsigned int)0,Main->document()->getDirtyLayer()));
 			else
-				L->add(new RoadAddTrackPointCommand(theRoad,To));
+				L->add(new RoadAddTrackPointCommand(theRoad,To,Main->document()->getDirtyLayer()));
 			document()->addHistory(L);
 			view()->invalidate(true, false);
 			Main->properties()->setSelection(theRoad);
 		}
 		FirstPoint = view()->projection().inverse(anEvent->pos());
 	}
+	Creating = false;
 	LastCursor = anEvent->pos();
 }
 

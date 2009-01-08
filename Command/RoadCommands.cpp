@@ -89,7 +89,7 @@ RoadAddTrackPointCommand * RoadAddTrackPointCommand::fromXML(MapDocument * d, QD
 	if (e.hasAttribute("layer"))
 		a->theLayer = d->getLayer(e.attribute("layer"));
 	else
-		a->theLayer = NULL;
+		a->theLayer = d->getDirtyLayer();
 	if (e.hasAttribute("oldlayer"))
 		a->oldLayer = d->getLayer(e.attribute("oldlayer"));
 	else
@@ -189,7 +189,7 @@ RoadRemoveTrackPointCommand * RoadRemoveTrackPointCommand::fromXML(MapDocument *
 	if (e.hasAttribute("layer"))
 		a->theLayer = d->getLayer(e.attribute("layer"));
 	else
-		a->theLayer = NULL;
+		a->theLayer = d->getDirtyLayer();
 	if (e.hasAttribute("oldlayer"))
 		a->oldLayer = d->getLayer(e.attribute("oldlayer"));
 	else

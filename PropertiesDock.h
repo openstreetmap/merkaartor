@@ -38,6 +38,7 @@ class PropertiesDock : public MDockAncestor
 		void adjustSelection();
 		MapFeature* selection(unsigned int idx);
 		QVector<MapFeature*> selection();
+		bool isSelected(MapFeature *aFeature);
 		unsigned int size() const;
 		void resetValues();
 		void checkMenuStatus();

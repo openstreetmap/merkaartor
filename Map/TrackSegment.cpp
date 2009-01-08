@@ -114,6 +114,11 @@ const MapFeature* TrackSegment::get(unsigned int Idx) const
 	return p->Points[Idx];
 }
 
+bool TrackSegment::isNull() const
+{
+	return (p->Points.size() == 0);
+}
+
 static void configurePen(QPen & pen, double slope, double speed)
 {
 	// Encode speed in width of path ...

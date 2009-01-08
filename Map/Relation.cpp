@@ -278,6 +278,11 @@ const MapFeature* Relation::get(unsigned int idx) const
 	return p->Members[idx].second;
 }
 
+bool Relation::isNull() const
+{
+	return (p->Members.size() == 0);
+}
+
 const QString& Relation::getRole(unsigned int idx) const
 {
 	return p->Members[idx].first;
@@ -500,6 +505,15 @@ Relation* Relation::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds, 
 	QString Role;
 
 	ds >> fSize;
+
+	if (!L) {
+		for (int i=0; i < fSize; ++i) {
+			ds >> Type;
+			ds >> refId;
+			ds >> Role;
+		}
+		return NULL;
+	}
 
 	if (id < 1)
 		strId = QString::number(id);

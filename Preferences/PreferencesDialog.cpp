@@ -194,6 +194,8 @@ void PreferencesDialog::loadPrefs()
 	cbGpsSyncTime->setChecked(M_PREFS->getGpsSyncTime());
 
 	cbMouseSingleButton->setChecked(M_PREFS->getMouseSingleButton());
+	cbSeparateMoveMode->setChecked(M_PREFS->getSeparateMoveMode());
+	cbCustomStyle->setChecked(M_PREFS->getMerkaartorStyle());
 }
 
 void PreferencesDialog::savePrefs()
@@ -294,6 +296,8 @@ void PreferencesDialog::savePrefs()
 	M_PREFS->setGpsSyncTime(cbGpsSyncTime->isChecked());
 
 	M_PREFS->setMouseSingleButton(cbMouseSingleButton->isChecked());
+	M_PREFS->setSeparateMoveMode(cbSeparateMoveMode->isChecked());
+	M_PREFS->setMerkaartorStyle(cbCustomStyle->isChecked());
 
 	M_PREFS->save();
 }

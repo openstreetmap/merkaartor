@@ -34,7 +34,8 @@ TagTemplateWidget::TagTemplateWidget()
 
 TagTemplateWidget::~TagTemplateWidget()
 {
-	delete theMainWidget;
+	// No need to delete; will be destroyed automatically by parent + crash if no active widget.
+	// delete theMainWidget;   
 	for (int i=0; i<theValues.size(); ++i)
 		delete theValues[i];
 	delete theSelector;

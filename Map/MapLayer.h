@@ -249,6 +249,7 @@ class OsbMapLayer : public MapLayer
 	Q_OBJECT
 public:
 	OsbMapLayer(const QString& aName);
+	OsbMapLayer(const QString& aName, const QString& filename);
 	virtual ~OsbMapLayer();
 
 	virtual const QString className() {return "OsbMapLayer";};
