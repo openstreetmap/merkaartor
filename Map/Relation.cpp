@@ -464,7 +464,7 @@ QString Relation::toHtml()
 
 void Relation::toBinary(QDataStream& ds, QHash <QString, quint64>& theIndex)
 {
-	quint8 Type;
+	quint8 Type = '\0';
 	quint64 ref;
 
 	theIndex["L" + QString::number(idToLong())] = ds.device()->pos();
@@ -542,6 +542,9 @@ Relation* Relation::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds, 
 			case 'L':
 				F = d->getFeature(QString("rel_%1").arg(refId));
 				break;
+    	default: 
+				F = NULL;
+      	break;
 		}
 		if (F)
 			R->add(Role, F);

@@ -221,7 +221,7 @@ RelationRemoveFeatureCommand * RelationRemoveFeatureCommand::fromXML(MapDocument
 	else
 		a->oldLayer = NULL;
 	a->theRelation = MapFeature::getRelationOrCreatePlaceHolder(d, a->theLayer, e.attribute("relation"));
-	MapFeature* F;
+	MapFeature* F = NULL;
 	if (e.attribute("featureclass") == "TrackPoint") {
 		F = (MapFeature*) MapFeature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, e.attribute("feature"));
 	} else 

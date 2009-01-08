@@ -126,10 +126,10 @@ void MerkaartorPreferences::save()
 		httpRequest.setProxy(getProxyHost(),getProxyPort());
 	else
 		httpRequest.setProxy("",0);
-	toOsmPref(true);
+	toOsmPref();
 }
 
-void MerkaartorPreferences::toOsmPref(bool clear)
+void MerkaartorPreferences::toOsmPref()
 {
 	if (getOsmUser().isEmpty() || getOsmPassword().isEmpty()) return;
 
@@ -599,7 +599,7 @@ void MerkaartorPreferences::setBookmarks()
 		bk.append(QString::number(intToAng(i.value().topRight().lon()), 'f', 4));
 	}
 	Sets->setValue("downloadosm/bookmarks", bk);
-	toOsmPref(true);
+	toOsmPref();
 }
 
 /* WMS */

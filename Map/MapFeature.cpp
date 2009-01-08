@@ -92,7 +92,7 @@ MapFeature::MapFeature()
 	 p->theFeature = this;
 }
 
-MapFeature::MapFeature(const MapFeature& other)
+MapFeature::MapFeature(const MapFeature& other) : QObject()
 {
 	p = new MapFeaturePrivate(*other.p);
 	p->theFeature = this;

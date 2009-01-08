@@ -122,7 +122,7 @@ MapLayer::MapLayer(const QString& aName)
 }
 
 MapLayer::MapLayer(const MapLayer&)
-: p(0)
+: QObject(), p(0)
 {
 }
 

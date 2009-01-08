@@ -155,7 +155,7 @@ public:
 
 	void save();
 
-	void toOsmPref(bool clear=false);
+	void toOsmPref();
 	void fromOsmPref();
 	void putOsmPref(const QString& k, const QString& v);
 	void deleteOsmPref(const QString& k);

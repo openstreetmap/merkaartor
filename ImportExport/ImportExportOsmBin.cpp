@@ -46,7 +46,7 @@ bool OsbRegion::load(qint32 rg, MapDocument* d, OsbMapLayer* theLayer)
 		}
 		theRegionIndex = aTileList;
 
-		bool OK;
+		bool OK = true;
 		qint32 theRegionTile = theRegionIndex[0].first;
 		if (theRegionTile < 0)
 			OK = loadTile(theRegionTile, d, theLayer);
@@ -113,7 +113,7 @@ bool OsbRegion::loadTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer)
 
 bool OsbRegion::clearRegion(MapDocument* d, OsbMapLayer* theLayer)
 {
-	bool OK;
+	bool OK = true;
 	qint32 theRegionTile = theRegionIndex[0].first;
 	if (theRegionTile < 0)
 		OK = clearTile(theRegionTile, d, theLayer);
@@ -668,6 +668,7 @@ MapFeature* ImportExportOsmBin::getFeature(OsbRegion* osr, MapDocument* d, OsbMa
 			F = d->getFeature(QString("rel_%1").arg(QString::number(id)));
 			break;
 		default:
+			F = NULL;
 			Q_ASSERT(false);
 	}
 	if (F && (F->lastUpdated() != MapFeature::NotYetDownloaded)) {
@@ -716,6 +717,7 @@ MapFeature* ImportExportOsmBin::getFeature(OsbRegion* osr, MapDocument* d, OsbMa
 			oF = d->getFeature(QString("rel_%1").arg(QString::number(id)));
 			break;
 		default:
+                    oF = NULL;
 			Q_ASSERT(false);
 	}
 //#ifndef NDEBUG
@@ -735,6 +737,7 @@ MapFeature* ImportExportOsmBin::getFeature(OsbRegion* osr, MapDocument* d, OsbMa
 			tagsFromBinary(F, ds);
 			break;
 		default:
+                    F = NULL;
 			Q_ASSERT(false);
 	}
 
