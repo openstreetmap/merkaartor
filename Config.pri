@@ -13,3 +13,4 @@ REVISION="-SVN"
 # MOBILE=1    	      - enable MOBILE
 # GEOIMAGE=1            - enable geotagged images (needs exiv2)
 # GPSD=1                - use gpsd as location provider
+# NVIDIA_HACK=1         - used to solve nvidia specific slowdown

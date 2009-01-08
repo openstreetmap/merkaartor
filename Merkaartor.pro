@@ -11,6 +11,7 @@
 # MOBILE    	      - enable MOBILE
 # GEOIMAGE            - enable geotagged images (needs exiv2)
 # GPSD                - use gpsd as location provider
+# NVIDIA_HACK         - used to solve nvidia specific slowdown
 
 #Static config
 include (Config.pri)
@@ -49,6 +50,10 @@ contains(NODEBUG,1) {
 
 contains(GPSD,1) {
     DEFINES += USEGPSD
+}
+
+contains(NVIDIA_HACK,1) {
+    DEFINES += ENABLE_NVIDIA_HACK
 }
 
 DESTDIR = $$OUTPUT_DIR/bin
