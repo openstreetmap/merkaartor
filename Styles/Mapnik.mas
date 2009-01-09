@@ -1,4 +1,6 @@
 <mapStyle>
+<global
+/>
 <painter
  zoomUnder="0.01" zoomUpper="1e+07"
  backgroundColor="#ff0000fc" backgroundScale="1.5" backgroundOffset="0"
@@ -44,7 +46,8 @@
  backgroundColor="#999999fc" backgroundScale="1.5" backgroundOffset="3"
  foregroundColor="#ffffccfc" foregroundScale="1" foregroundOffset="2"
  drawTrafficDirectionMarks="yes" labelColor="#999999fc" labelScale="1.2" labelOffset="4"
- labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelBackgroundColor="#ffffccfc" labelBackgroundTag="ref">
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelBackgroundColor="#ffffccfc" labelBackgroundTag="ref"
+>
   <selector expr="[highway] isoneof (tertiary , tertiary_link)"/>
 </painter>
 <painter
@@ -227,8 +230,9 @@
  zoomUnder="0.02" zoomUpper="1e+07"
  fillColor="#b6fdb6cd"
  drawTrafficDirectionMarks="no" labelColor="#aaaaaafc" labelScale="2.5" labelOffset="1.5"
- labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="" labelBackgroundColor="" labelBackgroundTag="name">
-  <selector expr="[leisure] is park"/>
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="" labelBackgroundColor="#00000000" labelBackgroundTag="name"
+>
+  <selector expr="[leisure] isoneof (park , garden)"/>
 </painter>
 <painter
  zoomUnder="0.02" zoomUpper="1e+07"
@@ -272,15 +276,16 @@
 <painter
  zoomUnder="0.002" zoomUpper="1e+07"
  fillColor="#b5d0d0cd"
- drawTrafficDirectionMarks="no" labelColor="#6699ccfc" labelScale="4.0" labelOffset="3.0"
- labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="" labelBackgroundColor="" labelBackgroundTag="name">
+ drawTrafficDirectionMarks="no" labelColor="#6699ccfc" labelScale="4" labelOffset="3"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="" labelBackgroundColor="#00000000" labelBackgroundTag="name"
+>
   <selector expr="[natural] is water"/>
 </painter>
 <painter
  zoomUnder="0.03" zoomUpper="1e+07"
  fillColor="#f7efb7cd"
  icon=":/Art/Mapnik/parking.png" iconScale="0" iconOffset="0"
- drawTrafficDirectionMarks="yes" labelColor="#333333ff" labelScale="3.5" labelOffset="3.0"
+ drawTrafficDirectionMarks="yes" labelColor="#333333ff" labelScale="3.5" labelOffset="3"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[amenity] is parking"/>
 </painter>
@@ -605,14 +610,14 @@
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
  icon=":/Art/Mapnik/pint.png" iconScale="0" iconOffset="0"
- drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3.0"
+ drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[amenity] is pub"/>
 </painter>
 <painter
  zoomUnder="0.03" zoomUpper="1e+07"
  icon=":/Art/Mapnik/peak.png" iconScale="0" iconOffset="0"
- drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3.0"
+ drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[natural] is peak"/>
 </painter>
@@ -631,21 +636,21 @@
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
  icon=":/Art/Mapnik/bus_stop.png" iconScale="0" iconOffset="0"
- drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3.0"
+ drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[amenity] is bus_stop"/>
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
  icon=":/Art/Mapnik/bus_stop.png" iconScale="0" iconOffset="0"
- drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3.0"
+ drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[highway] is bus_stop"/>
 </painter>
 <painter
  zoomUnder="0.15" zoomUpper="1e+07"
  icon=":/Art/Mapnik/place_of_worship.png" iconScale="0" iconOffset="0"
- drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3.0"
+ drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[amenity] is place_of_worship"/>
 </painter>
@@ -678,14 +683,14 @@
 <painter
  zoomUnder="0.01" zoomUpper="1e+07"
  icon=":/Art/Places/place_village.png" iconScale="0" iconOffset="0"
- drawTrafficDirectionMarks="no" labelColor="#333333dd" labelScale="4.0" labelOffset="3.5"
+ drawTrafficDirectionMarks="no" labelColor="#333333dd" labelScale="4" labelOffset="3.5"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[place] is suburb"/>
 </painter>
 <painter
  zoomUnder="0.02" zoomUpper="1e+07"
  icon=":/Art/Places/place_hamlet.png" iconScale="0" iconOffset="0"
- drawTrafficDirectionMarks="no" labelColor="#333333dd" labelScale="4.0" labelOffset="3.5"
+ drawTrafficDirectionMarks="no" labelColor="#333333dd" labelScale="4" labelOffset="3.5"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[place] isoneof (hamlet , locality)"/>
 </painter>
@@ -697,9 +702,9 @@
 </painter>
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
- drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="1.5" labelOffset="8.0"
+ drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="1.5" labelOffset="8"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="addr:housenumber">
-  <selector expr="not [addr:housenumber] is _NULL_"/>
+  <selector expr=" not [addr:housenumber] is _NULL_"/>
 </painter>
 <painter
  zoomUnder="0" zoomUpper="1e+07"

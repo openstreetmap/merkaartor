@@ -329,24 +329,24 @@ bool ImportExportOsmBin::writeHeader(QDataStream& ds)
 
 bool ImportExportOsmBin::writeIndex(QDataStream& ds, int selRegion)
 {
-	QMapIterator<qint32, QList<MapFeature*> > itN(theTileNodesIndex);
+	QMapIterator<qint32, QList<MapFeaturePtr> > itN(theTileNodesIndex);
 	while(itN.hasNext()) {
 		itN.next();
 		theTileIndex[itN.key()] += itN.value();
 	}
-	QMapIterator<qint32, QList<MapFeature*> > itR(theTileRoadsIndex);
+	QMapIterator<qint32, QList<MapFeaturePtr> > itR(theTileRoadsIndex);
 	while(itR.hasNext()) {
 		itR.next();
 		theTileIndex[itR.key()] += itR.value();
 	}
-	QMapIterator<qint32, QList<MapFeature*> > itL(theTileRelationsIndex);
+	QMapIterator<qint32, QList<MapFeaturePtr> > itL(theTileRelationsIndex);
 	while(itL.hasNext()) {
 		itL.next();
 		theTileIndex[itL.key()] += itL.value();
 	}
 
 	int x, y, rg;
-	QMapIterator< qint32, QList<MapFeature*> > it(theTileIndex);
+	QMapIterator< qint32, QList<MapFeaturePtr> > it(theTileIndex);
 	while (it.hasNext()) {
 		it.next();
 
@@ -487,10 +487,10 @@ bool ImportExportOsmBin::writeTagLists(QDataStream& ds)
 //	return true;
 //}
 //
-bool ImportExportOsmBin::writeFeatures(QList<MapFeature*> theFeatList, QDataStream& ds)
+bool ImportExportOsmBin::writeFeatures(QList<MapFeaturePtr> theFeatList, QDataStream& ds)
 {
 	ds << (qint32)theFeatList.size();
-	QListIterator<MapFeature*> i(theFeatList);
+	QListIterator<MapFeaturePtr> i(theFeatList);
 	while (i.hasNext()) {
 		MapFeature* F = i.next();
 

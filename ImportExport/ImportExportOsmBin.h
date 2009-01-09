@@ -85,7 +85,7 @@ protected:
 	//bool writeNodes(QDataStream& ds);
 	//bool writeRoads(QDataStream& ds);
 	//bool writeRelations(QDataStream& ds);
-	bool writeFeatures(QList<MapFeature*>, QDataStream& ds);
+	bool writeFeatures(QList<MapFeaturePtr>, QDataStream& ds);
 
 	bool readWorld(QDataStream& ds);
 	void addWorldRegion(int region);
@@ -116,17 +116,17 @@ protected:
 	QMap< qint32, quint64 > theRegionToc;
 	QMap< qint32, OsbRegion* > theRegionList;
 
-	QMap< qint32, QList<MapFeature*> > theTileIndex;
+	QMap< qint32, QList<MapFeaturePtr> > theTileIndex;
 	QMap< qint32, QList< QPair < qint32, quint64 > > > theRegionIndex;
-	QMap< qint32, QList<MapFeature*> > theTileNodesIndex;
-	QMap< qint32, QList<MapFeature*> > theTileRoadsIndex;
-	QMap< qint32, QList<MapFeature*> > theTileRelationsIndex;
+	QMap< qint32, QList<MapFeaturePtr> > theTileNodesIndex;
+	QMap< qint32, QList<MapFeaturePtr> > theTileRoadsIndex;
+	QMap< qint32, QList<MapFeaturePtr> > theTileRelationsIndex;
 
 	QHash <QString, quint64> theFeatureIndex;
 
-	QMap<quint64, TrackPoint*> theNodes;
-	QMap<quint64,Road*> theRoads;
-	QMap<quint64, Relation*> theRelations;
+	QMap<quint64, TrackPointPtr> theNodes;
+	QMap<quint64,RoadPtr> theRoads;
+	QMap<quint64, RelationPtr> theRelations;
 
 	QMap <QString, quint64> theTagKeysIndex;
 	QMap <QString, quint64> theTagValuesIndex;

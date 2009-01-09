@@ -75,6 +75,8 @@
 #include <QTranslator>
 #include <QLocale>
 
+SlippyMapCache* SlippyMapWidget::theSlippyCache = 0;
+
 MainWindow::MainWindow(void)
 		: fileName(""), theDocument(0), theXmlDoc(0),
 		gpsRecLayer(0),curGpsTrackSegment(0),
@@ -84,6 +86,8 @@ MainWindow::MainWindow(void)
 	M_STYLE->loadPainters(MerkaartorPreferences::instance()->getDefaultStyle());
 
 	blockSignals(true);
+
+	SlippyMapWidget::theSlippyCache = new SlippyMapCache;
 
 	ViewportStatusLabel = new QLabel(this);
 	ViewportStatusLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
@@ -269,6 +273,8 @@ MainWindow::~MainWindow(void)
 
     delete qtTranslator;
     delete merkaartorTranslator;
+
+	delete SlippyMapWidget::theSlippyCache;
 }
 
 void MainWindow::setAreaOpacity(QAction *act)

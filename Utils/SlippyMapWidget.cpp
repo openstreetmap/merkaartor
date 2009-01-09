@@ -29,19 +29,13 @@ class SlippyMapWidgetPrivate
 			Lat = Sets->value("Lat", 1).toDouble();
 			Lon = Sets->value("Lon", 1).toDouble();
 			Zoom = Sets->value("Zoom", 1).toInt();
-
-			if (!theCache)
-				theCache = new SlippyMapCache;
-			theCache->setMap(this);
 		}
 		~SlippyMapWidgetPrivate()
 		{
 			Sets->setValue("Lat", Lat);
 			Sets->setValue("Lon", Lon);
 			Sets->setValue("Zoom", Zoom);
-			theCache->setMap(0);
 			delete Sets;
-			delete theCache;
 		}
 
 		QPixmap* getImage(int x, int y);
@@ -52,18 +46,15 @@ class SlippyMapWidgetPrivate
 		double Lat,Lon;
 		QPoint PreviousDrag;
 		bool InDrag;
-		static SlippyMapCache* theCache;
 		QSettings* Sets;
 };
-
-SlippyMapCache* SlippyMapWidgetPrivate::theCache = 0;
 
 QPixmap* SlippyMapWidgetPrivate::getImage(int x, int y)
 {
 	int Max = 1 << Zoom;
 	if (x<0 || x>=Max) return 0;
 	if (y<0 || y>=Max) return 0;
-	QPixmap* img = theCache->getImage(x,y,Zoom);
+	QPixmap* img = theWidget->theSlippyCache->getImage(x,y,Zoom);
 	if (img) return img;
 	img = new QPixmap(TILESIZE,TILESIZE);
 	QPainter Painter(img);
@@ -83,6 +74,7 @@ SlippyMapWidget::SlippyMapWidget(QWidget* aParent)
 : QWidget(aParent)
 {
 	p = new SlippyMapWidgetPrivate(this);
+	theSlippyCache->setMap(p);
 	setContextMenuPolicy (Qt::CustomContextMenu);
 	connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(on_customContextMenuRequested(const QPoint &)));
 	resize(500,400);
@@ -90,6 +82,7 @@ SlippyMapWidget::SlippyMapWidget(QWidget* aParent)
 
 SlippyMapWidget::~SlippyMapWidget(void)
 {
+	theSlippyCache->setMap(0);
 	delete p;
 }
 

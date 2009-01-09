@@ -652,16 +652,39 @@ void buildPathFromRelation(Relation *R, const Projection &theProjection, QPainte
 */
 void FeaturePainter::drawBackground(Road* R, QPainter& thePainter, const Projection& theProjection) const
 {
-	if (!DrawBackground) return;
-	double PixelPerM = theProjection.pixelPerM();
-	double WW = PixelPerM*R->widthOf()*BackgroundScale+BackgroundOffset;
-	if (WW < 0) return;
-	QPen thePen(BackgroundColor,WW);
-	thePen.setCapStyle(Qt::RoundCap);
-	////thePainter.strokePath(R->getPath(),thePen);
-	thePainter.setPen(thePen);
-	thePainter.setBrush(Qt::NoBrush);
+	if (!DrawBackground && !ForegroundFill) return;
+
+	thePainter.setPen(Qt::NoPen);
+	if (DrawBackground)
+	{
+		double PixelPerM = theProjection.pixelPerM();
+		double WW = PixelPerM*R->widthOf()*BackgroundScale+BackgroundOffset;
+		if (WW >= 0)
+		{
+			QPen thePen(BackgroundColor,WW);
+			thePen.setCapStyle(Qt::RoundCap);
+			////thePainter.strokePath(R->getPath(),thePen);
+			thePainter.setPen(thePen);
+		}
+	}
+
+	if (ForegroundFill && (R->size() > 2))
+	{
+		thePainter.setBrush(ForegroundFillFillColor);
+	}
+	else
+		thePainter.setBrush(Qt::NoBrush);
+
+	if (M_PREFS->getAreaOpacity() != 100 && ForegroundFill) {
+		thePainter.save();
+		thePainter.setOpacity(qreal(M_PREFS->getAreaOpacity()) / 100);
+	}
 	thePainter.drawPath(R->getPath());
+	if (M_PREFS->getAreaOpacity() != 100 && ForegroundFill) {
+		thePainter.restore();
+	}
+	//thePainter.setBrush(Qt::NoBrush);
+	//thePainter.drawPath(R->getPath());
 	//thePainter.setPen(thePen);
 	//QPointF p1, p2;
 	//p1 = QPointF(R->getPath().elementAt(0));
@@ -688,7 +711,7 @@ void FeaturePainter::drawBackground(Relation* R, QPainter& thePainter, const Pro
 
 void FeaturePainter::drawForeground(Road* R, QPainter& thePainter, const Projection& theProjection) const
 {
-	if (!DrawForeground && !ForegroundFill) return;
+	if (!DrawForeground) return;
 
 	double WW = 0.0;
 	if (DrawForeground)
@@ -708,21 +731,21 @@ void FeaturePainter::drawForeground(Road* R, QPainter& thePainter, const Project
 	}
 	else
 		thePainter.setPen(Qt::NoPen);
-	if (ForegroundFill && (R->size() > 2))
-	{
-		thePainter.setBrush(ForegroundFillFillColor);
-	}
-	else
+	//if (ForegroundFill && (R->size() > 2))
+	//{
+	//	thePainter.setBrush(ForegroundFillFillColor);
+	//}
+	//else
 		thePainter.setBrush(Qt::NoBrush);
 
-	if (M_PREFS->getAreaOpacity() != 100 && ForegroundFill) {
-		thePainter.save();
-		thePainter.setOpacity(qreal(M_PREFS->getAreaOpacity()) / 100);
-	}
-	thePainter.drawPath(R->getPath());
-	if (M_PREFS->getAreaOpacity() != 100 && ForegroundFill) {
-		thePainter.restore();
-	}
+	//if (M_PREFS->getAreaOpacity() != 100 && ForegroundFill) {
+	//	thePainter.save();
+	//	thePainter.setOpacity(qreal(M_PREFS->getAreaOpacity()) / 100);
+	//}
+	//thePainter.drawPath(R->getPath());
+	//if (M_PREFS->getAreaOpacity() != 100 && ForegroundFill) {
+	//	thePainter.restore();
+	//}
 	thePainter.drawPath(R->getPath());
 }
 

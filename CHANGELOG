@@ -1,4 +1,5 @@
 v0.13
+	* FIX : Make sure areas are rendered before anything else.
 	* FIX : Add NVIDIA_HACK in Config.pri to (hopefully) help with Nvidia slowdowns.
 	* FIX : Cache preferences values for quicker access.
 	* FIX : Crash wen reloading MDC when no layer specified in the command XML (fixes #1434)

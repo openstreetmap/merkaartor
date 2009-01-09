@@ -71,6 +71,8 @@ class SlippyMapWidget :	public QWidget
 
 		QRect viewArea() const;
 
+		static SlippyMapCache* theSlippyCache;
+
 	signals:
 		void redraw();
 
