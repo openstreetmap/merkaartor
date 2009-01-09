@@ -75,6 +75,7 @@ void CreateSingleWayInteraction::snapMouseMoveEvent(QMouseEvent* ev, MapFeature*
 
 void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFeature* aFeature)
 {
+	Q_UNUSED(aFeature)
 	if ((anEvent->buttons() & Qt::LeftButton) )
 		Creating = true;
 }

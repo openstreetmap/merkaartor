@@ -74,14 +74,27 @@
 #include <QMenuBar>
 #include <QTranslator>
 #include <QLocale>
+#include <QMessageBox>
 
 SlippyMapCache* SlippyMapWidget::theSlippyCache = 0;
+
+class MainWindowPrivate
+{
+	public:
+		MainWindowPrivate::MainWindowPrivate()
+			: lastPrefTabIndex(0)
+		{
+		}
+		int lastPrefTabIndex;
+};
 
 MainWindow::MainWindow(void)
 		: fileName(""), theDocument(0), theXmlDoc(0),
 		gpsRecLayer(0),curGpsTrackSegment(0),
 		qtTranslator(0), merkaartorTranslator(0)
 {
+	p = new MainWindowPrivate;
+
 	setupUi(this);
 	M_STYLE->loadPainters(MerkaartorPreferences::instance()->getDefaultStyle());
 
@@ -275,6 +288,8 @@ MainWindow::~MainWindow(void)
     delete merkaartorTranslator;
 
 	delete SlippyMapWidget::theSlippyCache;
+
+	delete p;
 }
 
 void MainWindow::setAreaOpacity(QAction *act)
@@ -1308,8 +1323,11 @@ void MainWindow::toolsPreferencesAction_triggered(bool focusData)
 	PreferencesDialog* Pref = new PreferencesDialog(this);
 	if (focusData)
 		Pref->tabPref->setCurrentWidget(Pref->tabData);
+	else
+		Pref->tabPref->setCurrentIndex(p->lastPrefTabIndex);
 	connect (Pref, SIGNAL(preferencesChanged()), this, SLOT(preferencesChanged()));
 	Pref->exec();
+	p->lastPrefTabIndex = Pref->tabPref->currentIndex();
 }
 
 void MainWindow::preferencesChanged(void)
@@ -2153,21 +2171,29 @@ void MainWindow::updateLanguage()
             DefaultLanguage = QLocale::system().name();
 
         qtTranslator = new QTranslator;
-        qtTranslator->load("qt_" + DefaultLanguage
+        bool ret = qtTranslator->load("qt_" + DefaultLanguage
     #ifdef TRANSDIR_SYSTEM
             , TRANSDIR_SYSTEM
     #else
             , QLibraryInfo::location(QLibraryInfo::TranslationsPath)
     #endif
             );
-        QCoreApplication::installTranslator(qtTranslator);
+        if (ret)
+	        QCoreApplication::installTranslator(qtTranslator);
 
         merkaartorTranslator = new QTranslator;
-        merkaartorTranslator->load("merkaartor_" + DefaultLanguage
+        ret &= merkaartorTranslator->load("merkaartor_" + DefaultLanguage
     #ifdef TRANSDIR_MERKAARTOR
             , TRANSDIR_MERKAARTOR
+    #else
+            , QCoreApplication::applicationDirPath()
     #endif
             );
+        if (!ret)
+        {
+			QMessageBox::warning(this, tr("Error"), tr("Could not load the selected language. Go to Tools, Preferences to select another language or check whether the translation file is missing."));
+        	return;   // Language could not be loaded, do nothing (need to restart programme)
+		}
         QCoreApplication::installTranslator(merkaartorTranslator);
     }
     retranslateUi(this);

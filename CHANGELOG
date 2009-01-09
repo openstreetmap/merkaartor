@@ -1,4 +1,7 @@
 v0.13
+	* FIX : Remember last selected preferences tab page (not stored over an application restart) (by Yves Goergen)
+	* FIX : Look into application directory for translations by default (by Yves Goergen; fixes #1297)
+	* FIX : Don't draw the node dot if there is an icon
 	* FIX : Make sure areas are rendered before anything else.
 	* FIX : Add NVIDIA_HACK in Config.pri to (hopefully) help with Nvidia slowdowns.
 	* FIX : Cache preferences values for quicker access.

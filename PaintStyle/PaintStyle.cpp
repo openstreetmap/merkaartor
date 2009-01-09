@@ -803,7 +803,8 @@ void FeaturePainter::drawTouchup(TrackPoint* Pt, QPainter& thePainter, const Pro
 			IconError = true;
 		else {
 			QPoint C(theProjection.project(Pt->position()));
-			thePainter.fillRect(QRect(C-QPoint(2,2),QSize(4,4)),QColor(0,0,0,128));
+			// cbro-20090109: Don't draw the dot if there is an icon
+			// thePainter.fillRect(QRect(C-QPoint(2,2),QSize(4,4)),QColor(0,0,0,128));
 			thePainter.drawPixmap( int(C.x()-pm.width()/2), int(C.y()-pm.height()/2) , pm);
 		}
 	}

@@ -8,6 +8,7 @@
 #include <QProgressBar>
 #include <QLabel>
 
+class MainWindowPrivate;
 class LayerDock;
 class MapDocument;
 class MapLayer;
@@ -145,6 +146,8 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		void reverse_triggered();
 
 	public:
+		MainWindowPrivate* p;
+
 		QString fileName;
 		PropertiesDock* properties();
 		InfoDock* info();
