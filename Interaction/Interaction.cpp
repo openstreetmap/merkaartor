@@ -120,7 +120,7 @@ void Interaction::mouseMoveEvent(QMouseEvent* anEvent)
 			view()->panScreen(-Delta);
 			LastPan = anEvent->pos();
 #if defined(ENABLE_NVIDIA_HACK)
-			view()->invalidate(true, true);
+			view()->invalidate(true, false);
 #endif // ENABLE_NVIDIA_HACK
 		} else
 		if (Dragging)
