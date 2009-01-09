@@ -2201,8 +2201,6 @@ void MainWindow::updateLanguage()
 
 void MainWindow::updateMenu()
 {
-	qDebug() << "updateMenu()";
-
 	if (M_PREFS->getOfflineMode()) {
 		fileWorkOfflineAction->setChecked(true);
 		fileDownloadAction->setEnabled(false);

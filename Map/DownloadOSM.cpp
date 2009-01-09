@@ -600,7 +600,8 @@ bool downloadMoreOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* th
 	{
 		theDocument->setLastDownloadLayer(theLayer);
 		theDocument->addDownloadBox(aBox);
-		aParent->view()->projection().setViewport(aBox,aParent->view()->rect());
+		// Don't jump around on Download More
+		// aParent->view()->projection().setViewport(aBox,aParent->view()->rect());
 		aParent->invalidateView();
 	}
 	return OK;

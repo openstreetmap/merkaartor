@@ -559,8 +559,6 @@ LayerWidget* ImageMapLayer::newWidget(void)
 
 void ImageMapLayer::updateWidget()
 {
-	qDebug() << "updateWidget";
-
 	//((ImageLayerWidget*) p->theWidget)->initActions();
 	p->theWidget->update();
 }
@@ -582,8 +580,6 @@ Layer* ImageMapLayer::imageLayer()
 
 void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 {
-	qDebug() << "setMapAdapter";
-
 	MapAdapter* mapadapter_bg;
 	WmsServerList wsl;
 	WmsServer ws;
