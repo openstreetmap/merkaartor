@@ -111,6 +111,7 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 			for (unsigned int i=0; i<R->size(); ++i)
 				if (std::find(Moving.begin(),Moving.end(),R->get(i)) == Moving.end())
 					Moving.push_back(R->getNode(i));
+			addToNoSnap(R);
 		}
 		for (unsigned int i=0; i<Moving.size(); ++i)
 		{

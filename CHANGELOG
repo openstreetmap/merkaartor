@@ -1,4 +1,5 @@
 v0.13
+	* FIX : Don't snap to the road being moved (by Yves Goergen)
 	* ADD : Merge multiple nodes when dragging one node onto another (by Yves Goergen)
 	* FIX : Don't jump around on Download More
 	* FIX : Remember last selected preferences tab page (not stored over an application restart) (by Yves Goergen)
