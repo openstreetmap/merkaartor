@@ -81,7 +81,7 @@ SlippyMapCache* SlippyMapWidget::theSlippyCache = 0;
 class MainWindowPrivate
 {
 	public:
-		MainWindowPrivate::MainWindowPrivate()
+		MainWindowPrivate()
 			: lastPrefTabIndex(0)
 		{
 		}
