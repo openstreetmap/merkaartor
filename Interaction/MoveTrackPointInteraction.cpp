@@ -115,7 +115,7 @@ void MoveTrackPointInteraction::snapMouseReleaseEvent(QMouseEvent * event, MapFe
 					// from MainWindow::on_nodeMergeAction_triggered()
 					// Merge all nodes into the first node that has been found (not the node being moved)
 					MapFeature* F = samePosPts[0];
-					// Make a separate undo command list for this action
+					// Change the command description to reflect the merge
 					theList->setDescription(MainWindow::tr("Merge Nodes into %1").arg(F->id()));
 					theList->setFeature(F);
 					
