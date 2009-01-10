@@ -255,9 +255,6 @@ static bool downloadToResolve(const std::vector<MapFeature*>& Resolution, QProgr
 {
 	for (unsigned int i=0; i<Resolution.size(); i++ )
 	{
-		if (Resolution[i]->lastUpdated() != MapFeature::NotYetDownloaded)
-			continue;
-
 		QString URL = theDownloader->getURLToFetchFull(Resolution[i]);
 		dlg->setLabelText(QApplication::translate("Downloader","Downloading unresolved %1 of %2").arg(i).arg(Resolution.size()));
 		if (theDownloader->go(URL))
@@ -311,10 +308,10 @@ static void recurseDelete (MapFeature* F, QVector<MapFeature*>& MustDelete)
 
 static bool resolveNotYetDownloaded(QProgressDialog* dlg, MapDocument* theDocument, MapLayer* theLayer, Downloader* theDownloader)
 {
+	// resolving nodes and roads makes no sense since the OSM api guarantees that they will be all downloaded,
+	//  so only resolve for relations if the ResolveRelations pref is set
 	if (theDownloader && M_PREFS->getResolveRelations())
 	{
-
-		// resolving nodes and roads makes no sense since the OSM api guarantees that they will be all downloaded
 		std::vector<MapFeature*> MustResolve;
 		MustResolve.clear();
 		for (unsigned int i=0; i<theLayer->size(); ++i)

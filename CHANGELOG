@@ -1,4 +1,5 @@
 v0.13
+	* FIX : Make "Resolve Relations" work as intended (fixes #1449)
 	* FIX : Don't snap to the road being moved (by Yves Goergen)
 	* ADD : Merge multiple nodes when dragging one node onto another (by Yves Goergen)
 	* FIX : Don't jump around on Download More
