@@ -133,7 +133,9 @@ MapLayer::~MapLayer()
 
 void MapLayer::sortRenderingPriority(double aPixelPerM)
 {
-	if (!p->RenderPriorityUpToDate || (aPixelPerM != p->RenderPriorityForPixelPerM) )
+	// No need to resort after a zoom, is there?
+	// if (!p->RenderPriorityUpToDate || (aPixelPerM != p->RenderPriorityForPixelPerM) )
+	if (!p->RenderPriorityUpToDate)
 		p->sortRenderingPriority(aPixelPerM);
 }
 
