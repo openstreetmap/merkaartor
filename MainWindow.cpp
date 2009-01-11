@@ -847,10 +847,9 @@ void MainWindow::on_fileDownloadAction_triggered()
 
 void MainWindow::on_fileDownloadMoreAction_triggered()
 {
-	if (downloadMoreOSM(this, theView->projection().viewport(), theDocument)) {
-		on_editPropertiesAction_triggered();
-	} else
+	if (!downloadMoreOSM(this, theView->projection().viewport(), theDocument)) {
 		QMessageBox::warning(this, tr("Error downloading"), tr("The map could not be downloaded"));
+	}
 }
 
 void MainWindow::on_fileWorkOfflineAction_triggered()
