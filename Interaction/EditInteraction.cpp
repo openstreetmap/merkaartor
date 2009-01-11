@@ -26,7 +26,7 @@
 
 EditInteraction::EditInteraction(MapView* theView)
 : FeatureSnapInteraction(theView), Dragging(false), StartDrag(0,0), EndDrag(0,0),
-  StartDragPosition(0,0), MoveMode(false)
+  StartDragPosition(0,0), MoveMode(false), Moved(false)
 {
 	connect(main(),SIGNAL(remove_triggered()),this,SLOT(on_remove_triggered()));
 	connect(main(),SIGNAL(reverse_triggered()), this,SLOT(on_reverse_triggered()));
@@ -151,7 +151,8 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* aLast
 {
 	Q_UNUSED(ev);
 	if (MoveMode) {
-		if (Moving.size())
+		// Check if we actually moved 
+		if (Moving.size() && Moved)
 		{
 			CommandList* theList = new CommandList(MainWindow::tr("Move Point %1").arg(Moving[0]->id()), Moving[0]);
 			Coord Diff(calculateNewPosition(ev, aLast, theList)-StartDragPosition);
@@ -225,6 +226,7 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* aLast
 		Moving.clear();
 		OriginalPosition.clear();
 		clearNoSnap();
+		Moved = false;
 	} else
 	if (Dragging)
 	{
@@ -276,10 +278,11 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* aLast
 		Dragging = false;
 		view()->update();
 	} else {
-		if (!panning() && !ev->modifiers()) {
+		if (!panning()) {
 			view()->properties()->setSelection(aLast);
 			if (view()->properties()->isSelected(aLast) && !M_PREFS->getSeparateMoveMode()) {
 				MoveMode = true;
+				Moved = false;
 				view()->setCursor(moveCursor());
 			}
 			view()->properties()->checkMenuStatus();
@@ -292,17 +295,19 @@ void EditInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, MapFeature* aLast
 {
 	Q_UNUSED(anEvent);
 	if (MoveMode) {
-		if (Moving.size())
+		if (anEvent->buttons() & Qt::LeftButton && Moving.size())
 		{
+			Moved = true;
 			Coord Diff = calculateNewPosition(anEvent, aLast, 0)-StartDragPosition;
 			for (unsigned int i=0; i<Moving.size(); ++i)
 				Moving[i]->setPosition(OriginalPosition[i]+Diff);
 			view()->invalidate(true, false);
 		} else
-		if (!aLast && !M_PREFS->getSeparateMoveMode())
+		if ((!aLast || !(view()->properties()->isSelected(aLast))) && !M_PREFS->getSeparateMoveMode())
 		{
 			view()->setCursor(cursor());
 			MoveMode = false;
+			Moved = false;
 		}
 	} else
 	if (Dragging)
@@ -314,6 +319,12 @@ void EditInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, MapFeature* aLast
 	{
 		view()->setCursor(moveCursor());
 		MoveMode = true;
+		Moved = false;
+	} else
+	{
+		view()->setCursor(cursor());
+		MoveMode = false;
+		Moved = false;
 	}
 }
 

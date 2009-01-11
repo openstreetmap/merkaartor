@@ -34,6 +34,7 @@ class EditInteraction :	public FeatureSnapInteraction
 		Coord StartDragPosition;
 
 		bool MoveMode;
+		bool Moved;
 };
 
 #endif
