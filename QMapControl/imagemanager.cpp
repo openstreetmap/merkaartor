@@ -109,7 +109,7 @@ QPixmap ImageManager::getImage(MapAdapter* anAdapter, int x, int y, int z)
 
 bool ImageManager::useDiskCache(QString filename)
 {
-	qDebug() << cacheDir.absolutePath() << filename;
+	// qDebug() << cacheDir.absolutePath() << filename;
 
 	if (!cacheMaxSize)
 		return false;

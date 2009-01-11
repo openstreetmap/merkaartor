@@ -19,6 +19,7 @@
  ***************************************************************************/
 #include "mapnetwork.h"
 #include <QWaitCondition>
+#include <QUrl>
 
 #define MAX_REQ 8
 
@@ -58,11 +59,14 @@ void MapNetwork::launchRequest()
 	if (loadingRequests.isEmpty())
 		return;
 	LoadingRequest* R = loadingRequests.dequeue();
-	qDebug() << "getting: " << QString(R->host).append(R->url);
-	http->setHost(R->host);
+
+    QUrl U("http://" + QString(R->host).append(R->url));
+	qDebug() << "getting: " << U.host() << " ; " << U.path();
+	http->setHost(U.host(), U.port() == -1 ? 80 : U.port());
+
 	QHttpRequestHeader header("GET", R->url);
-	header.setValue("User-Agent", "Mozilla");
-	header.setValue("Host", R->host);
+	header.setValue("Host", U.host());
+    header.setValue("User-Agent", "Mozilla");
 	int getId = http->request(header);
 
 	if (vectorMutex.tryLock()) {

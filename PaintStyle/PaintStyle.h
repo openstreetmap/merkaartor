@@ -98,8 +98,8 @@ class FeaturePainter
 		bool getLabelHalo() const;
 		bool getLabelArea() const;
 
-		QString toXML() const;
-		static FeaturePainter fromXML(const QDomElement& e);
+		QString toXML(QString filename) const;
+		static FeaturePainter fromXML(const QDomElement& e, QString filename);
 
 		void drawBackground(Road* R, QPainter& thePainter, const Projection& theProjection) const;
 		void drawBackground(Relation* R, QPainter& thePainter, const Projection& theProjection) const;

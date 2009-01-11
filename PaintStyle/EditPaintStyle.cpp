@@ -286,7 +286,7 @@ void EditPaintStyle::savePainters(const QString& filename)
 		out << globalPainter.toXML();
 		for (int i=0; i<Painters.size(); ++i)
 		{
-			QString s = Painters[i].toXML();
+			QString s = Painters[i].toXML(filename);
 			out << s;
 		}
 		out << "</mapStyle>\n";
@@ -319,7 +319,7 @@ void EditPaintStyle::loadPainters(const QString& filename)
 		} else
 		if(!e.isNull() && e.tagName() == "painter")
 		{
-			FeaturePainter FP = FeaturePainter::fromXML(e);
+			FeaturePainter FP = FeaturePainter::fromXML(e, filename);
 			Painters.push_back(FP);
 		}
 		n = n.nextSibling();

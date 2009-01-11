@@ -1,4 +1,5 @@
 v0.13
+	* FIX : Allow port number in WMS/TMS server address (fixes #1479)
 	* ADD : Save relative icon filenames in map styles if not builtin (closes #1463) 
 	* FIX : Don't loose selection(s) on "download more" (fixes #1470)
 	* FIX : Make at least docks translated after a restart (refs #1432)
