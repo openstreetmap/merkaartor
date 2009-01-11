@@ -100,6 +100,8 @@ MainWindow::MainWindow(void)
 
 	blockSignals(true);
 
+    updateLanguage();
+
 	SlippyMapWidget::theSlippyCache = new SlippyMapCache;
 
 	ViewportStatusLabel = new QLabel(this);
@@ -264,8 +266,6 @@ MainWindow::MainWindow(void)
 			act->setChecked(true);
 	}
 	connect(mnuAreaOpacity, SIGNAL(triggered(QAction*)), this, SLOT(setAreaOpacity(QAction*)));
-
-    updateLanguage();
 
 	blockSignals(false);
 }

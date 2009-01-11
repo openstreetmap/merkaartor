@@ -1,4 +1,5 @@
 v0.13
+	* FIX : Make at least docks translated after a restart (refs #1432)
 	* FIX : Do not re-sort features when zooming or when latitude changes.
 	* FIX : Make "Resolve Relations" work as intended (fixes #1449)
 	* FIX : Don't snap to the road being moved (by Yves Goergen)
