@@ -76,7 +76,7 @@ double Coord::distanceFrom(const Coord& other) const
 	const double t1 = clat2 * sdlon;
 	const double t2 = clat1 * slat2 - slat1 * clat2 * cdlon;
 	const double t3 = slat1 * slat2 + clat1 * clat2 * cdlon;
-        const double dist = atan2(sqrt(t1*t1 + t2*t2), t3);
+	const double dist = atan2(sqrt(t1*t1 + t2*t2), t3);
 
 	const double earthRadius = 6372.795;
 	return dist * earthRadius;

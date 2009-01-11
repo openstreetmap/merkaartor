@@ -194,7 +194,6 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		GeoImageDock* theGeoImage;
 		#endif
 		QGPS* theGPS;
-		QDomDocument* theXmlDoc;
 
 		TrackMapLayer* gpsRecLayer;
 		TrackSegment* curGpsTrackSegment;

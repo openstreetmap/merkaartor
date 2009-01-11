@@ -278,7 +278,7 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* aLast
 		Dragging = false;
 		view()->update();
 	} else {
-		if (!panning()) {
+		if (!panning() && !ev->modifiers()) {
 			view()->properties()->setSelection(aLast);
 			if (view()->properties()->isSelected(aLast) && !M_PREFS->getSeparateMoveMode()) {
 				MoveMode = true;

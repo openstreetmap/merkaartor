@@ -116,9 +116,10 @@ QString Road::description() const
 
 RenderPriority Road::renderPriority(double aPixelPerM) const
 {
+	double a = area();
 	const FeaturePainter* thePainter = getEditPainter(aPixelPerM);
-	if (thePainter && thePainter->isFilled())
-		return RenderPriority(RenderPriority::IsArea,fabs(area()));
+	if (thePainter && a)
+		return RenderPriority(RenderPriority::IsArea,fabs(a));
 	return RenderPriority(RenderPriority::IsLinear,0);
 }
 
@@ -241,13 +242,15 @@ void Road::updateMeta() const
 		const Coord & here = p->Nodes[i]->position();
 		const Coord & next = p->Nodes[i+1]->position();
 
-		if (isArea)
-			p->Area += here.lat() * next.lon() - next.lat() * here.lon();
-
 		p->Distance += next.distanceFrom(here);
+		//if (isArea)
+			//p->Area += here.lat() * next.lon() - next.lat() * here.lon();
+
 	}
 
-	p->Area /= 2;
+	if (isArea)
+		p->Area = p->Distance;
+	//p->Area /= 2;
 	p->MetaUpToDate = true;
 }
 

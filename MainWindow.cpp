@@ -89,7 +89,7 @@ class MainWindowPrivate
 };
 
 MainWindow::MainWindow(void)
-		: fileName(""), theDocument(0), theXmlDoc(0),
+		: fileName(""), theDocument(0),
 		gpsRecLayer(0),curGpsTrackSegment(0),
 		qtTranslator(0), merkaartorTranslator(0)
 {
@@ -277,8 +277,6 @@ MainWindow::~MainWindow(void)
 	if (EditPaintStyle::instance())
 		delete EditPaintStyle::instance();
 	MerkaartorPreferences::instance()->setWorkingDir(QDir::currentPath());
-	if (theXmlDoc)
-		delete theXmlDoc;
 	delete MerkaartorPreferences::instance();
 	delete theDocument;
 	delete theView;
@@ -1009,10 +1007,6 @@ void MainWindow::on_fileNewAction_triggered()
 	theView->launch(0);
 	theProperties->setSelection(0);
 	if (!hasUnsavedChanges(*theDocument) || mayDiscardUnsavedChanges(this)) {
-		if (theXmlDoc) {
-			delete theXmlDoc;
-			theXmlDoc = NULL;
-		}
 		delete theDocument;
 		theDocument = new MapDocument(theLayers);
 		theView->setDocument(theDocument);
@@ -1376,18 +1370,15 @@ void MainWindow::saveDocument()
 	QApplication::setOverrideCursor(Qt::BusyCursor);
 
 	QDomElement root;
-	if (!theXmlDoc) {
-		theXmlDoc = new QDomDocument();
-		theXmlDoc->appendChild(theXmlDoc->createProcessingInstruction("xml", "version=\"1.0\""));
-		root = theXmlDoc->createElement("MerkaartorDocument");
-		root.setAttribute("version", "1.1");
-		root.setAttribute("creator", QString("Merkaartor %1").arg(VERSION));
+	QDomDocument* theXmlDoc;
 
-		theXmlDoc->appendChild(root);
-	} else {
-		root = theXmlDoc->documentElement();
-		root.setAttribute("version", "1.1");
-	}
+	theXmlDoc = new QDomDocument();
+	theXmlDoc->appendChild(theXmlDoc->createProcessingInstruction("xml", "version=\"1.0\""));
+	root = theXmlDoc->createElement("MerkaartorDocument");
+	root.setAttribute("version", "1.1");
+	root.setAttribute("creator", QString("Merkaartor %1").arg(VERSION));
+
+	theXmlDoc->appendChild(root);
 
 	QProgressDialog progress("Saving document...", "Cancel", 0, 0);
 	progress.setWindowModality(Qt::WindowModal);
@@ -1402,6 +1393,7 @@ void MainWindow::saveDocument()
 	}
 	file.write(theXmlDoc->toString().toUtf8());
 	file.close();
+	delete theXmlDoc;
 
 	progress.setValue(progress.maximum());
 
@@ -1419,7 +1411,7 @@ void MainWindow::loadDocument(QString fn)
 		return;
 	}
 
-	theXmlDoc = new QDomDocument();
+	QDomDocument* theXmlDoc = new QDomDocument();
 	if (!theXmlDoc->setContent(&file)) {
 		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
 		file.close();
@@ -1476,6 +1468,7 @@ void MainWindow::loadDocument(QString fn)
 		e = e.nextSiblingElement();
 	}
 	progress.reset();
+	delete theXmlDoc;
 
 	M_PREFS->addRecentOpen(fn);
 	updateRecentOpenMenu();
