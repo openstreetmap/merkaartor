@@ -150,7 +150,7 @@ QColor toColor(const QString& s)
 }
 
 
-QString FeaturePainter::toXML() const
+QString FeaturePainter::toXML(QString filename) const
 {
 	QString r;
 	r += "<painter\n";
@@ -169,7 +169,15 @@ QString FeaturePainter::toXML() const
 	if (ForegroundFill)
 		r += " fillColor=\""+::asXML(ForegroundFillFillColor)+"\"\n";
 	if (!IconName.isEmpty() && DrawIcon)
-		r += " " + iconAsXML("icon",IconName, IconScale, IconOffset);
+	{
+		QString iconFilename;
+        if (!IconName.startsWith(':')) {
+            iconFilename = QFileInfo(filename).absoluteDir().relativeFilePath(QFileInfo(IconName).absoluteFilePath());
+        } else {
+            iconFilename = IconName;
+        }
+		r += " " + iconAsXML("icon",iconFilename, IconScale, IconOffset);
+	}
 	if (DrawTrafficDirectionMarks)
 		r += " drawTrafficDirectionMarks=\"yes\"";
 	else
@@ -196,7 +204,7 @@ QString FeaturePainter::toXML() const
 	return r;
 }
 
-FeaturePainter FeaturePainter::fromXML(const QDomElement& e)
+FeaturePainter FeaturePainter::fromXML(const QDomElement& e, QString filename)
 {
 	FeaturePainter FP;
 
@@ -222,7 +230,12 @@ FeaturePainter FeaturePainter::fromXML(const QDomElement& e)
 	if (e.hasAttribute("fillColor"))
 		FP.foregroundFill(toColor(e.attribute("fillColor")));
 	if (e.hasAttribute("icon"))
-		FP.setIcon(e.attribute("icon"),e.attribute("iconScale", "0.0").toDouble(),e.attribute("iconOffset", "0.0").toDouble());
+	{
+		QString iconFilename = e.attribute("icon");
+		if (!QFileInfo(iconFilename).isAbsolute())
+			iconFilename = QFileInfo(filename).absolutePath().append("/").append(iconFilename);
+		FP.setIcon(iconFilename,e.attribute("iconScale", "0.0").toDouble(),e.attribute("iconOffset", "0.0").toDouble());
+	}
 	if (e.attribute("drawTrafficDirectionMarks") == "yes")
 		FP.drawTrafficDirectionMarks();
 	if (e.hasAttribute("labelColor"))
