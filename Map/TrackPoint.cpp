@@ -17,6 +17,9 @@ TrackPoint::TrackPoint(const Coord& aCoord)
 TrackPoint::TrackPoint(const TrackPoint& other)
 : MapFeature(other), Position(other.Position), Elevation(other.Elevation), Speed(other.Speed)
 {
+	#ifdef GEOIMAGE
+	ImageId = other.ImageId;
+	#endif
 	setTime(other.time());
 }
 
