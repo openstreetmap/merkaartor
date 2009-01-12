@@ -1,4 +1,5 @@
 v0.13
+	* ADD : Custom Qt style (skulpture by Christoph Feck) to bypass Qt expanding dock problem on linux. Enable via preferences-visual. (fixes #1482)
 	* FIX : Allow port number in WMS/TMS server address (fixes #1479)
 	* ADD : Save relative icon filenames in map styles if not builtin (closes #1463) 
 	* FIX : Don't loose selection(s) on "download more" (fixes #1470)

@@ -91,6 +91,7 @@ include(GPS/GPS.pri)
 include(Tools/Tools.pri)
 include(TagTemplate/TagTemplate.pri)
 include(NameFinder/NameFinder.pri)
+include(QtStyles/QtStyles.pri)
 
 unix {
     target.path = /usr/local/bin

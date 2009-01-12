@@ -5,9 +5,6 @@
 
 #include "MainWindow.h" 
 #include "Preferences/MerkaartorPreferences.h"
-#ifdef CUSTOM_STYLE
-	#include "QtStyles/skulpture/skulpture.h"
-#endif
 
 int main(int argc, char** argv)
 {
@@ -22,11 +19,6 @@ int main(int argc, char** argv)
 	dir.cdUp();
 	dir.cd("plugins");
 	QApplication::setLibraryPaths(QStringList(dir.absolutePath()));
-#endif
-
-#ifdef CUSTOM_STYLE
-	if (M_PREFS->getMerkaartorStyle())
-		QApplication::setStyle(new SkulptureStyle);
 #endif
 
 	MainWindow Main;

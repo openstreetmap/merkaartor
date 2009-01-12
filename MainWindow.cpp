@@ -76,6 +76,8 @@
 #include <QLocale>
 #include <QMessageBox>
 
+#include "QtStyles/skulpture/skulpture.h"
+
 SlippyMapCache* SlippyMapWidget::theSlippyCache = 0;
 
 class MainWindowPrivate
@@ -86,6 +88,7 @@ class MainWindowPrivate
 		{
 		}
 		int lastPrefTabIndex;
+		QString defStyle;
 };
 
 MainWindow::MainWindow(void)
@@ -94,6 +97,10 @@ MainWindow::MainWindow(void)
 		qtTranslator(0), merkaartorTranslator(0)
 {
 	p = new MainWindowPrivate;
+
+	p->defStyle = QApplication::style()->objectName();
+	if (M_PREFS->getMerkaartorStyle())
+		QApplication::setStyle(new SkulptureStyle);
 
 	setupUi(this);
 	M_STYLE->loadPainters(MerkaartorPreferences::instance()->getDefaultStyle());
@@ -1325,19 +1332,24 @@ void MainWindow::toolsPreferencesAction_triggered(bool focusData)
 
 void MainWindow::preferencesChanged(void)
 {
-	theDocument->getImageLayer()->setMapAdapter(MerkaartorPreferences::instance()->getBgType());
+	if (M_PREFS->getMerkaartorStyle())
+		QApplication::setStyle(new SkulptureStyle);
+	else
+		QApplication::setStyle(p->defStyle);
+
+	theDocument->getImageLayer()->setMapAdapter(M_PREFS->getBgType());
 	theDocument->getImageLayer()->updateWidget();
 	adjustLayers(true);
 
-	ImageManager::instance()->setCacheDir(MerkaartorPreferences::instance()->getCacheDir());
-	ImageManager::instance()->setCacheMaxSize(MerkaartorPreferences::instance()->getCacheSize());
-	if (MerkaartorPreferences::instance()->getProxyUse()) {
-		ImageManager::instance()->setProxy(MerkaartorPreferences::instance()->getProxyHost(),
-			MerkaartorPreferences::instance()->getProxyPort());
+	ImageManager::instance()->setCacheDir(M_PREFS->getCacheDir());
+	ImageManager::instance()->setCacheMaxSize(M_PREFS->getCacheSize());
+	if (M_PREFS->getProxyUse()) {
+		ImageManager::instance()->setProxy(M_PREFS->getProxyHost(),
+			M_PREFS->getProxyPort());
 	} else {
 		ImageManager::instance()->setProxy("",0);
 	}
-	theView->projection().setProjectionType(MerkaartorPreferences::instance()->getProjectionType());
+	theView->projection().setProjectionType(M_PREFS->getProjectionType());
 	
 	updateMenu();
 }
