@@ -38,8 +38,8 @@ class QGPS : public MDockAncestor, public Ui_QGPSMainWindowUI
     
         QGPS(QWidget *parent = 0);
 
-		void setGpsDevice(QGPSDevice * aDevice);
-		QGPSDevice* getGpsDevice() { return gpsDevice; }
+	void setGpsDevice(QGPSDevice * aDevice);
+	QGPSDevice* getGpsDevice() { return gpsDevice; }
         void resetGpsStatus();
         
     private:
@@ -49,14 +49,14 @@ class QGPS : public MDockAncestor, public Ui_QGPSMainWindowUI
         
     public slots:
     
-        void updateGpsStatus();
-        void startGps();
-        void stopGps();
+	void updateGpsStatus();
+	void startGps();
+	void stopGps();
 
-	protected:
+    protected:
 
-		virtual void showEvent ( QShowEvent * anEvent );
-		virtual void hideEvent ( QHideEvent * anEvent );
+	virtual void showEvent ( QShowEvent * anEvent );
+	virtual void hideEvent ( QHideEvent * anEvent );
         
 };
 
