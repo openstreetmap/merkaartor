@@ -67,20 +67,20 @@ UI_DIR = tmp
 RCC_DIR = tmp
 
 TRANSLATIONS += \
-	merkaartor_cs.ts \
-	merkaartor_de.ts \
-	merkaartor_fr.ts \
-	merkaartor_it.ts \
-	merkaartor_pl.ts \
-	merkaartor_ru.ts
+	translations/merkaartor_cs.ts \
+	translations/merkaartor_de.ts \
+	translations/merkaartor_fr.ts \
+	translations/merkaartor_it.ts \
+	translations/merkaartor_pl.ts \
+	translations/merkaartor_ru.ts
 
 BINTRANSLATIONS += \
-	merkaartor_cs.qm \
-	merkaartor_de.qm \
-	merkaartor_fr.qm \
-	merkaartor_it.qm \
-	merkaartor_pl.qm \
-	merkaartor_ru.qm
+	translations/merkaartor_cs.qm \
+	translations/merkaartor_de.qm \
+	translations/merkaartor_fr.qm \
+	translations/merkaartor_it.qm \
+	translations/merkaartor_pl.qm \
+	translations/merkaartor_ru.qm
 
 #Include file(s)
 include(Merkaartor.pri)
