@@ -7852,6 +7852,9 @@ SkulptureStyle::Private::~Private()
 {
 	delete shortcut_handler;
 	delete settings;
+	QList<int> keys = draw_hash.keys();
+	for (int i=0; i<keys.size(); i++)
+		delete draw_hash.take(keys.value(i));
 }
 
 
