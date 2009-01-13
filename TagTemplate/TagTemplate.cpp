@@ -683,6 +683,7 @@ TagTemplate::TagTemplate(const TagTemplate& aTemplate)
 
 TagTemplate::~TagTemplate()
 {
+	delete theSelector;
 }
 
 TagSelectorMatchResult TagTemplate::matchesTag(const MapFeature* F)

@@ -83,7 +83,7 @@ class TagSelectorOr : public TagSelector
 {
 	public:
 		TagSelectorOr(const std::vector<TagSelector*> Terms);
-		~TagSelectorOr();
+		virtual ~TagSelectorOr();
 
 		virtual TagSelector* copy() const;
 		virtual TagSelectorMatchResult matches(const MapFeature* F) const;
@@ -97,7 +97,7 @@ class TagSelectorAnd : public TagSelector
 {
 	public:
 		TagSelectorAnd(const std::vector<TagSelector*> Terms);
-		~TagSelectorAnd();
+		virtual ~TagSelectorAnd();
 
 		virtual TagSelector* copy() const;
 		virtual TagSelectorMatchResult matches(const MapFeature* F) const;
@@ -111,7 +111,7 @@ class TagSelectorNot : public TagSelector
 {
 	public:
 		TagSelectorNot(TagSelector* Term);
-		~TagSelectorNot();
+		virtual ~TagSelectorNot();
 
 		virtual TagSelector* copy() const;
 		virtual TagSelectorMatchResult matches(const MapFeature* F) const;
@@ -125,7 +125,6 @@ class TagSelectorFalse : public TagSelector
 {
 	public:
 		TagSelectorFalse();
-		~TagSelectorFalse();
 
 		virtual TagSelector* copy() const;
 		virtual TagSelectorMatchResult matches(const MapFeature* F) const;
@@ -136,7 +135,6 @@ class TagSelectorTrue : public TagSelector
 {
 	public:
 		TagSelectorTrue();
-		~TagSelectorTrue();
 
 		virtual TagSelector* copy() const;
 		virtual TagSelectorMatchResult matches(const MapFeature* F) const;
@@ -147,7 +145,7 @@ class TagSelectorDefault : public TagSelector
 {
 	public:
 		TagSelectorDefault(TagSelector* Term);
-		~TagSelectorDefault();
+		virtual ~TagSelectorDefault();
 
 		virtual TagSelector* copy() const;
 		virtual TagSelectorMatchResult matches(const MapFeature* F) const;

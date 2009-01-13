@@ -522,10 +522,6 @@ TagSelectorFalse::TagSelectorFalse()
 {
 }
 
-TagSelectorFalse::~TagSelectorFalse()
-{
-}
-
 TagSelector* TagSelectorFalse::copy() const
 {
 	return new TagSelectorFalse();
@@ -546,10 +542,6 @@ QString TagSelectorFalse::asExpression(bool /* Precedence */) const
 /* TAGSELECTORTRUE */
 
 TagSelectorTrue::TagSelectorTrue()
-{
-}
-
-TagSelectorTrue::~TagSelectorTrue()
 {
 }
 
