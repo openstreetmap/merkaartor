@@ -1321,7 +1321,10 @@ M_PARAM_IMPLEMENT_BOOL(OfflineMode, Network, false)
 QString getDefaultLanguage()
 {
 	QSettings Sets;
-	return Sets.value("locale/language").toString();
+	QString lang = Sets.value("locale/language").toString();
+	if (lang == "")
+		lang = QLocale::system().name().split("_")[0];
+	return lang;
 }
 
 void setDefaultLanguage(const QString& theValue)

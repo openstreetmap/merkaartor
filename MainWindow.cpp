@@ -2176,9 +2176,6 @@ void MainWindow::updateLanguage()
     QString DefaultLanguage = getDefaultLanguage();
     if (DefaultLanguage != "-")
     {
-        if (DefaultLanguage == "")
-            DefaultLanguage = QLocale::system().name();
-
         qtTranslator = new QTranslator;
         bool ret = qtTranslator->load("qt_" + DefaultLanguage
     #ifdef TRANSDIR_SYSTEM
