@@ -49,6 +49,8 @@ class Road : public MapFeature
 
 		TrackPoint* getNode(unsigned int idx);
 		const TrackPoint* getNode(unsigned int idx) const;
+		
+		bool isNodeAtEnd(TrackPoint* node);
 
 		/** Set the tag "key=value" to the current object
 		 * If a tag with the same key exist, it is replaced
@@ -99,6 +101,7 @@ class Road : public MapFeature
 
 		bool isExtrimity(TrackPoint* node);
 		static Road * GetSingleParentRoad(MapFeature * mapFeature);
+		static Road * GetSingleParentRoadInner(MapFeature * mapFeature);
 
 	protected:
 		RoadPrivate* p;

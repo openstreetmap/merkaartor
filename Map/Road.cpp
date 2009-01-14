@@ -947,3 +947,35 @@ Road * Road::GetSingleParentRoad(MapFeature * mapFeature)
 	return parentRoad;
 }
 
+Road * Road::GetSingleParentRoadInner(MapFeature * mapFeature)
+{
+	unsigned int parents = mapFeature->sizeParents();
+
+	if (parents == 0)
+		return NULL;
+
+	Road * parentRoad = NULL;
+	TrackPoint* trackPoint = dynamic_cast<TrackPoint*>(mapFeature);
+
+	unsigned int i;
+	for (i=0; i<parents; i++)
+	{
+		MapFeature * parent = mapFeature->getParent(i);
+		Road * road = dynamic_cast<Road*>(parent);
+
+		if (road == NULL)
+			continue;
+
+		if (road->isExtrimity(trackPoint))
+			continue;
+		
+		if (parentRoad)
+			return NULL;
+
+		if (road->layer()->isEnabled())
+			parentRoad = road;
+	}
+
+	return parentRoad;
+}
+

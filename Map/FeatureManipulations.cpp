@@ -246,7 +246,7 @@ void splitRoads(MapDocument* theDocument, CommandList* theList, PropertiesDock* 
 
 	if (Roads.size() == 0 && Points.size() == 1)
 	{
-		Road * R = Road::GetSingleParentRoad(Points[0]);
+		Road * R = Road::GetSingleParentRoadInner(Points[0]);
 		if (R)
 			Roads.push_back(R);
 	}
