@@ -929,7 +929,6 @@
 <painter
  zoomUnder="0.2" zoomUpper="1e+07"
  foregroundColor="#a020f055" foregroundScale="0.3" foregroundOffset="0"
- foregroundDashDown="1" foregroundDashUp="1.8"
  drawTrafficDirectionMarks="yes" labelColor="#000000dd" labelScale="1.1" labelOffset="3"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes">
   <selector expr="[boundary] is administrative"/>
