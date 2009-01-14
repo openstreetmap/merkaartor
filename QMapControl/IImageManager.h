@@ -23,6 +23,7 @@
 #include <QObject>
 #include <QPixmap>
 #include <QDebug>
+#include <QDir>
 
 class MapAdapter;
 class LoadingRequest
@@ -50,7 +51,7 @@ class IImageManager : public QObject
 {
 	Q_OBJECT;
 	public:
-		IImageManager(QObject* parent = 0) : QObject(parent) {};
+		IImageManager(QObject* parent = 0);
 		virtual ~IImageManager() {};
 
 		//! returns a QPixmap of the asked image
@@ -91,6 +92,19 @@ class IImageManager : public QObject
 		 */
 		virtual void setProxy(QString host, int port) = 0;
 
+		void setCacheDir(const QDir& path);
+		void setCacheMaxSize(int max);
+
+	protected:
+
+		QDir cacheDir;
+		QFileInfoList cacheInfo;
+		int cacheSize;
+		int	cacheMaxSize;
+
+		bool useDiskCache(QString filename);
+		void adaptCache();
+		
 	signals:
 		void imageRequested();
 		void imageReceived();

@@ -39,6 +39,10 @@ MapView::MapView(MainWindow* aMain) :
 
 	ImageManager::instance()->setCacheDir(MerkaartorPreferences::instance()->getCacheDir());
 	ImageManager::instance()->setCacheMaxSize(MerkaartorPreferences::instance()->getCacheSize());
+#ifdef YAHOO
+	BrowserImageManager::instance()->setCacheDir(MerkaartorPreferences::instance()->getCacheDir());
+	BrowserImageManager::instance()->setCacheMaxSize(MerkaartorPreferences::instance()->getCacheSize());
+#endif
 	if (MerkaartorPreferences::instance()->getProxyUse()) {
 		ImageManager::instance()->setProxy(MerkaartorPreferences::instance()->getProxyHost(),
 			MerkaartorPreferences::instance()->getProxyPort());
@@ -278,23 +282,6 @@ void MapView::updateLayersImage()
 	}
 	QPainter P(StaticMap);
 
-	if (MerkaartorPreferences::instance()->getProjectionType() == Proj_Background)
-	{
-		thePanDelta = QPoint(0, 0);
-		StaticMapUpToDate = true;
-		layermanager->drawImage(&P);
-		return;
-	}
-
-	const QRectF vlm = layermanager->getViewport();
-	const Coord ctl = Coord(angToInt(vlm.bottomLeft().y()), angToInt(vlm.bottomLeft().x()));
-	const Coord cbr = Coord(angToInt(vlm.topRight().y()), angToInt(vlm.topRight().x()));
-
-	const QPointF tl = projection().project(ctl);
-	const QPointF br = projection().project(cbr);
-
-	const QRect pr = QRectF(tl, br).toRect();
-	const QSize ps = pr.size();
 	QPixmap pm(size());
 	if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
 		pm.fill(M_PREFS->getBgColor());
@@ -303,20 +290,34 @@ void MapView::updateLayersImage()
 	QPainter pmp(&pm);
 	layermanager->drawImage(&pmp);
 
-	const qreal ratio = qMax<const qreal>((qreal)width()/ps.width()*1.0, (qreal)height()/ps.height());
-	QPixmap pms;
-	if (ratio > 1.0) {
-		pms = pm.scaled(ps /*, Qt::IgnoreAspectRatio, Qt::SmoothTransformation */ );
+	if (MerkaartorPreferences::instance()->getProjectionType() == Proj_Merkaartor) {
+		const QRectF vlm = layermanager->getViewport();
+		const Coord ctl = Coord(angToInt(vlm.bottomLeft().y()), angToInt(vlm.bottomLeft().x()));
+		const Coord cbr = Coord(angToInt(vlm.topRight().y()), angToInt(vlm.topRight().x()));
+
+		const QPointF tl = projection().project(ctl);
+		const QPointF br = projection().project(cbr);
+
+		const QRect pr = QRectF(tl, br).toRect();
+		const QSize ps = pr.size();
+
+		const qreal ratio = qMax<const qreal>((qreal)width()/ps.width()*1.0, (qreal)height()/ps.height());
+		QPixmap pms;
+		if (ratio > 1.0) {
+			pms = pm.scaled(ps /*, Qt::IgnoreAspectRatio, Qt::SmoothTransformation */ );
+		} else {
+			const QSizeF drawingSize = pm.size() * ratio;
+			const QSizeF originSize = pm.size()/2 - drawingSize/2;
+			const QPointF drawingOrigin = QPointF(originSize.width(), originSize.height());
+			const QRect drawingRect = QRect(drawingOrigin.toPoint(), drawingSize.toSize());
+
+			pms = pm.copy(drawingRect).scaled(ps*ratio /*, Qt::IgnoreAspectRatio, Qt::SmoothTransformation */ );
+		}
+
+		P.drawPixmap((width()-pms.width())/2, (height()-pms.height())/2, pms);
 	} else {
-		const QSizeF drawingSize = pm.size() * ratio;
-		const QSizeF originSize = pm.size()/2 - drawingSize/2;
-		const QPointF drawingOrigin = QPointF(originSize.width(), originSize.height());
-		const QRect drawingRect = QRect(drawingOrigin.toPoint(), drawingSize.toSize());
-
-		pms = pm.copy(drawingRect).scaled(ps*ratio /*, Qt::IgnoreAspectRatio, Qt::SmoothTransformation */ );
+		P.drawPixmap((width()-pm.width())/2, (height()-pm.height())/2, pm);
 	}
-
-	P.drawPixmap((width()-pms.width())/2, (height()-pms.height())/2, pms);
 
 	thePanDelta = QPoint(0, 0);
 	StaticMapUpToDate = true;

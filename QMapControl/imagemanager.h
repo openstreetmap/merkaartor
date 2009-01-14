@@ -24,7 +24,6 @@
 #include <QPixmapCache>
 #include <QDebug>
 #include <QMutex>
-#include <QDir>
 #include <QFileInfo>
 #include "mapnetwork.h"
 #include "mapadapter.h"
@@ -88,9 +87,6 @@ class ImageManager : public IImageManager
 		 */
 		void setProxy(QString host, int port);
 
-		void setCacheDir(const QDir& path);
-		void setCacheMaxSize(int max);
-
 	private:
 		ImageManager(QObject* parent = 0);
 		ImageManager(const ImageManager&);
@@ -101,14 +97,6 @@ class ImageManager : public IImageManager
 	
 		static ImageManager* m_ImageManagerInstance;
 
-		QDir cacheDir;
-		QFileInfoList cacheInfo;
-		int cacheSize;
-		int	cacheMaxSize;
-
-		bool useDiskCache(QString filename);
-		void adaptCache();
-		
 	signals:
 		void imageRequested();
 		void imageReceived();

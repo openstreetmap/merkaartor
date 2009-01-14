@@ -127,13 +127,20 @@ QPixmap BrowserImageManager::getImage(MapAdapter* anAdapter, int x, int y, int z
 
 	QString host = anAdapter->getHost();
 	QString url = anAdapter->getQuery(x, y, z);
-	QString strHash = QString("Yahoo_%1_%2_%3").arg(x).arg(y).arg(z);
+	QString strHash = QString("%1;%2;%3;%4;%5").arg(anAdapter->getName()).arg(QString::number(x)).arg(QString::number(y)).arg(QString::number(z)).arg(anAdapter->getTileSize());
 	QString hash = QString(strHash.toAscii().toBase64());
 
 	// is image in picture cache
 	if (QPixmapCache::find(hash, pm))
 		return pm;
 
+	// disk cache?
+    if (useDiskCache(hash + ".png")) {
+		if (pm.load(cacheDir.absolutePath() + "/" + hash + ".png")) {
+			QPixmapCache::insert(hash, pm);
+			return pm;
+		}
+	}
 	if (M_PREFS->getOfflineMode())
 		return pm;
 
@@ -210,7 +217,9 @@ void BrowserImageManager::slotLoadProgress(int p)
 //QPixmap BrowserImageManager::prefetchImage(const QString& host, const QString& url)
 QPixmap BrowserImageManager::prefetchImage(MapAdapter* anAdapter, int x, int y, int z)
 {
-	QString strHash = QString("Yahoo_%1_%2_%3").arg(x).arg(y).arg(z);
+	QString host = anAdapter->getHost();
+	QString url = anAdapter->getQuery(x, y, z);
+	QString strHash = QString("%1;%2;%3;%4;%5").arg(anAdapter->getName()).arg(QString::number(x)).arg(QString::number(y)).arg(QString::number(z)).arg(anAdapter->getTileSize());
 	QString hash = QString(strHash.toAscii().toBase64());
 
 	prefetch.append(hash);
@@ -226,6 +235,16 @@ void BrowserImageManager::receivedImage(const QPixmap& pixmap, const QString& ha
 		QPixmapCache::insert(hash, pm);
 	} else {
 		QPixmapCache::insert(hash, pixmap);
+		QString strHash = QByteArray::fromBase64(hash.toAscii());
+
+		if (cacheMaxSize && !strHash.startsWith("yahoolegal")) {
+			pixmap.save(cacheDir.absolutePath() + "/" + hash + ".png");
+			QFileInfo info(cacheDir.absolutePath() + "/" + hash + ".png");
+			cacheInfo.append(info);
+			cacheSize += info.size();
+
+			adaptCache();
+		}
 	}
 
 	if (prefetch.contains(hash))
@@ -251,6 +270,7 @@ void BrowserImageManager::abortLoading()
 		loadingRequests.enqueue(R);
 	}
 }
+
 void BrowserImageManager::setProxy(QString host, int port)
 {
 	if (!host.isEmpty()) {

@@ -42,26 +42,6 @@ ImageManager::ImageManager(QObject* parent)
 #endif
 }
 
-void ImageManager::setCacheDir(const QDir& path)
-{
-	cacheDir = path;
-	cacheSize = 0;
-	if (!cacheDir.exists()) {
-		cacheDir.mkpath(cacheDir.absolutePath());
-	} else {
-		cacheInfo = cacheDir.entryInfoList(QDir::Files, QDir::Time | QDir::Reversed);
-		for (int i=0; i<cacheInfo.size(); i++) {
-			cacheSize += cacheInfo[i].size();
-		}
-	}
-}
-
-void ImageManager::setCacheMaxSize(int max)
-{
-	cacheMaxSize = max*1024*1024;
-}
-
-
 ImageManager::~ImageManager()
 {
 	delete net;
@@ -107,30 +87,13 @@ QPixmap ImageManager::getImage(MapAdapter* anAdapter, int x, int y, int z)
 	return pm;
 }
 
-bool ImageManager::useDiskCache(QString filename)
-{
-	// qDebug() << cacheDir.absolutePath() << filename;
-
-	if (!cacheMaxSize)
-		return false;
-
-	if (!cacheDir.exists(filename))
-		return false;
-
-	if (M_PREFS->getOfflineMode())
-		return true;
-	
-	int random = qrand() % 100;
-	QFileInfo info(cacheDir.absolutePath() + "/" + filename);
-	int days = info.lastModified().daysTo(QDateTime::currentDateTime());
-
-	return  random < (10 * days) ? false : true;
-}
-
 //QPixmap ImageManager::prefetchImage(const QString& host, const QString& url)
 QPixmap ImageManager::prefetchImage(MapAdapter* anAdapter, int x, int y, int z)
 {
-	QString hash = QString("%1_%2_%3_%4").arg(anAdapter->getName()).arg(x).arg(y).arg(z);
+	QString host = anAdapter->getHost();
+	QString url = anAdapter->getQuery(x, y, z);
+	QString strHash = QString("%1%2").arg(anAdapter->getName()).arg(url);
+	QString hash = QString(strHash.toAscii().toBase64());
 
 	prefetch.append(hash);
 	return getImage(anAdapter, x, y, z);
@@ -160,16 +123,6 @@ void ImageManager::receivedImage(const QPixmap& pixmap, const QString& hash)
 		prefetch.remove(prefetch.indexOf(hash));
 	}
 	emit(imageReceived());
-}
-
-void ImageManager::adaptCache()
-{
-	QFileInfo info;
-	while (cacheSize > cacheMaxSize) {
-		info = cacheInfo.takeFirst();
-		cacheDir.remove(info.fileName());
-		cacheSize -= info.size();
-	}
 }
 
 void ImageManager::loadingQueueEmpty()

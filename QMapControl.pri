@@ -24,6 +24,7 @@ HEADERS += QMapControl/curve.h \
            QMapControl/tilemapadapter.h 
 SOURCES += QMapControl/curve.cpp \
            QMapControl/geometry.cpp \
+           QMapControl/IImageManager.cpp \
            QMapControl/imagemanager.cpp \
 #           QMapControl/browserimagemanager.cpp \
            QMapControl/layer.cpp \

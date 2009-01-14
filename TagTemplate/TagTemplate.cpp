@@ -503,7 +503,7 @@ void TagTemplateWidgetConstant::apply(const MapFeature* F)
 			break;
 		}
 		newVal.replace(subst.cap(0), rep);
-		pos += subst.matchedLength();
+		pos += rep.length();
 	}
 	if (!Regexp || (Regexp && OK)) {
 		((QLabel*)theMainWidget)->setText(QString("<b>%1</b>").arg(newVal));

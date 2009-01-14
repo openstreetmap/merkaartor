@@ -1,14 +1,18 @@
-INCLUDEPATH += QtStyles QtStyles/skulpture
-DEPENDPATH += QtStyles QtStyles/skulpture
+INCLUDEPATH += QtStyles \
+	QtStyles/skulpture
+	#QtStyles/skulpture22
+DEPENDPATH += \
+	QtStyles QtStyles/skulpture
+	#QtStyles QtStyles/skulpture22
 
 #Header files
 HEADERS += \
-	skulpture/skulpture.h \
-	skulpture/skulpture_p.h \
+	skulpture.h \
+	skulpture_p.h \
 
 #Source files
 SOURCES += \
-	skulpture/skulpture.cpp \
+	skulpture.cpp \
 
 #Forms
 FORMS += 

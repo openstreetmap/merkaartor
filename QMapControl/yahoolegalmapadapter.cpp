@@ -22,6 +22,8 @@
 YahooLegalMapAdapter::YahooLegalMapAdapter()
 : TileMapAdapter("", "qrc:/Html/ymap.html?", 512, 17, 0)
 {
+	name = "yahoolegal";
+
 	int zoom = max_zoom < min_zoom ? min_zoom - current_zoom : current_zoom;
 	numberOfTiles = pow(2, zoom+1.0);
 }

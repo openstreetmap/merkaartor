@@ -42,6 +42,7 @@
 #include "Preferences/MerkaartorPreferences.h"
 #include "Utils/SelectionDialog.h"
 #include "QMapControl/imagemanager.h"
+#include "QMapControl/browserimagemanager.h"
 #include "QMapControl/mapadapter.h"
 #include "QMapControl/wmsmapadapter.h"
 #include "Tools/WorldOsbManager.h"
@@ -1343,6 +1344,10 @@ void MainWindow::preferencesChanged(void)
 
 	ImageManager::instance()->setCacheDir(M_PREFS->getCacheDir());
 	ImageManager::instance()->setCacheMaxSize(M_PREFS->getCacheSize());
+#ifdef YAHOO
+	BrowserImageManager::instance()->setCacheDir(M_PREFS->getCacheDir());
+	BrowserImageManager::instance()->setCacheMaxSize(M_PREFS->getCacheSize());
+#endif
 	if (M_PREFS->getProxyUse()) {
 		ImageManager::instance()->setProxy(M_PREFS->getProxyHost(),
 			M_PREFS->getProxyPort());
