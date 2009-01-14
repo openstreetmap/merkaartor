@@ -67,6 +67,22 @@
 		return  m_##Param; \
 	}
 
+#define M_PARAM_IMPLEMENT_DOUBLE(Param, Category, Default) \
+	bool mb_##Param = false; \
+	void MerkaartorPreferences::set##Param(double theValue) \
+	{ \
+		m_##Param = theValue; \
+		Sets->setValue(#Category"/"#Param, theValue); \
+	} \
+	double MerkaartorPreferences::get##Param() \
+	{ \
+		if (!::mb_##Param) { \
+			::mb_##Param = true; \
+			m_##Param = Sets->value(#Category"/"#Param, Default).toDouble(); \
+		} \
+		return  m_##Param; \
+	}
+
 /***************************/
 
 MerkaartorPreferences* MerkaartorPreferences::m_prefInstance = 0;
@@ -1036,15 +1052,7 @@ void MerkaartorPreferences::setGpsPort(const QString & theValue)
 	Sets->setValue("gps/port", theValue);
 }
 
-double MerkaartorPreferences::getMaxDistNodes() const
-{
-	return Sets->value("data/MaxDistNodes", 0.1).toDouble();
-}
-
-void MerkaartorPreferences::setMaxDistNodes(double theValue)
-{
-	Sets->setValue("data/MaxDistNodes", theValue);
-}
+M_PARAM_IMPLEMENT_DOUBLE(MaxDistNodes, data, 0.0)
 
 bool MerkaartorPreferences::getAutoSaveDoc() const
 {

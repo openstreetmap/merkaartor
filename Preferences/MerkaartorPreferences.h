@@ -47,6 +47,12 @@ class MapView;
 	public: \
 		void set##Param(int theValue); \
 		int get##Param(); 
+#define M_PARAM_DECLARE_DOUBLE(Param) \
+	private: \
+		double m_##Param; \
+	public: \
+		void set##Param(double theValue); \
+		double get##Param(); 
 
 #define SAFE_DELETE(x) {delete (x); x = NULL;}
 
@@ -305,8 +311,7 @@ public:
 	void setGpsPort(const QString & theValue);
 	QString getGpsPort() const;
 
-	void setMaxDistNodes(double theValue);
-	double getMaxDistNodes() const;
+	M_PARAM_DECLARE_DOUBLE(MaxDistNodes)
 
 	void setAutoSaveDoc(bool theValue);
 	bool getAutoSaveDoc() const;
