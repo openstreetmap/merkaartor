@@ -492,6 +492,8 @@ bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser
 
 bool downloadOSM(MainWindow* Main, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort , const quint32 region , MapDocument* theDocument, MapLayer* theLayer)
 {
+	Q_UNUSED(aUser)
+	Q_UNUSED(aPassword)
 	int y = int(region / NUM_REGIONS); //2565024
 	int x = (region % NUM_REGIONS);
 	CoordBox Clip = CoordBox(
@@ -506,15 +508,16 @@ bool downloadOSM(MainWindow* Main, const QString& aUser, const QString& aPasswor
 
 	return downloadOSM(Main,osmWebsite,osmUser,osmPwd,UseProxy,ProxyHost,ProxyPort,Clip,theDocument,theLayer);
 
-	QString aUrl(QString("http://%1/api/0.5/*[bbox=%2,%3,%4,%5]")
-		.arg(M_PREFS->getXapiWebSite())
-		.arg(intToAng(Clip.bottomLeft().lon())).arg(intToAng(Clip.bottomLeft().lat()))
-		.arg(intToAng(Clip.topRight().lon())).arg(intToAng(Clip.topRight().lat()))
-		);
-	qDebug() << aUrl;
-	QUrl theUrl(aUrl);
-
-	return downloadOSM(Main,theUrl,aUser,aPassword,UseProxy,ProxyHost,ProxyPort,theDocument, theLayer);
+// This code will never be reached. Can It be removed?
+//	QString aUrl(QString("http://%1/api/0.5/*[bbox=%2,%3,%4,%5]")
+//		.arg(M_PREFS->getXapiWebSite())
+//		.arg(intToAng(Clip.bottomLeft().lon())).arg(intToAng(Clip.bottomLeft().lat()))
+//		.arg(intToAng(Clip.topRight().lon())).arg(intToAng(Clip.topRight().lat()))
+//		);
+//	qDebug() << aUrl;
+//	QUrl theUrl(aUrl);
+//
+//	return downloadOSM(Main,theUrl,aUser,aPassword,UseProxy,ProxyHost,ProxyPort,theDocument, theLayer);
 }
 
 bool downloadTracksFromOSM(QMainWindow* Main, const QString& aWeb, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort , const CoordBox& aBox , MapDocument* theDocument)

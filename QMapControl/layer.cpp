@@ -236,6 +236,7 @@ void Layer::_draw(QPainter* painter, const QPoint mapmiddle_px) const
 
 	return;
 
+/* The rest of the code will never be reached. Can it be removed?
 	// PREFETCHING
 	int upper = mapmiddle_tile_y-tiles_above-1;
 	int right = mapmiddle_tile_x+tiles_right+1;
@@ -266,7 +267,7 @@ void Layer::_draw(QPainter* painter, const QPoint mapmiddle_px) const
 		if (mapAdapter->isValid(i, j, mapAdapter->getZoom()))
 			mapAdapter->getImageManager()->prefetchImage(mapAdapter, i, j, mapAdapter->getZoom());
 	}
-
+*/
 }
 
 QRect Layer::getOffscreenViewport() const

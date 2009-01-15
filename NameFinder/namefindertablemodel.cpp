@@ -66,13 +66,13 @@ namespace NameFinder
 			{
 				case 0:
 					return QString ( tr ( "Name" ) );
-					break;
+					//break;
 				case 1:
 					return QString ( tr ( "Type" ) );
-					break;
+					//break;
 				case 2:
 					return QString ( tr ( "Near" ) );
-					break;
+					//break;
 				default:
 					return QString ( tr ( "Unknown field" ) );
 			}

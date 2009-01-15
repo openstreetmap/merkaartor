@@ -5010,7 +5010,7 @@ QSize SkulptureStyle::sizeFromContents(ContentsType type, const QStyleOption *op
         case CT_CheckBox:
         case CT_RadioButton:
             return ParentStyle::sizeFromContents(type, option, contentsSize, widget) + QSize(0, 2 * d->widgetSize - 4);
-            break;
+            //break;
 
         case CT_ToolButton:
             if (option && option->type == QStyleOption::SO_ToolButton) {

@@ -838,7 +838,7 @@ void MerkaartorPreferences::restoreMainWindowState(MainWindow * mainWindow) cons
 	if (Sets->contains("MainWindow/Size"))
 		mainWindow->resize( Sets->value("MainWindow/Size").toSize());
 
-	if (Sets->contains("MainWindow/State"))
+	if (Sets->contains("MainWindow/State")) 
 		mainWindow->restoreState( Sets->value("MainWindow/State").toByteArray() );
 
 	if (Sets->contains("MainWindow/FullscreenState"))
