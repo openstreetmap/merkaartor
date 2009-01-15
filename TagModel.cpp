@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "TagModel.h"
 #include "MainWindow.h"
 #include "Command/DocumentCommands.h"
@@ -37,6 +38,7 @@ void TagModel::setFeature(const std::vector<MapFeature*> Features)
 				if (!F->tagKey(i).startsWith("%kml:"))
 					Tags.push_back(std::make_pair(F->tagKey(i),F->tagValue(i)));
 		}
+		std::sort(Tags.begin(), Tags.end());
 		beginInsertRows(QModelIndex(),0,Tags.size());
 		endInsertRows();
 	}
