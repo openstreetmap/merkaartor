@@ -1,4 +1,5 @@
 v0.13
+	* FIX : Don't allow templates combo to grow depending on content (fixes #1482)
 	* FIX : Allow disabling "Don't connect GPX nodes separated more than.." by setting it to 0. (fixes #1488)
 	* FIX : getDefaultLanguage() returns an invalid value with 2-parts language definition (like en_GB) (by Lukasz Jernas) (closes #1417)
 	* ADD : Single-node splitting of roads even with a connection to the extremity of another road (by Yves Goergen) (closes #1419)

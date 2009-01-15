@@ -190,6 +190,7 @@ QWidget* TagTemplateWidgetCombo::getWidget(const MapFeature* F)
 
 	QComboBox* aCombo = new QComboBox();
 	aCombo->setEditable(true);
+	aCombo->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
 	aLayout->addWidget(aCombo);
 
 	aCombo->addItem(tr("Undefined"), qVariantFromValue(new TagTemplateWidgetValue("__NULL__")));
