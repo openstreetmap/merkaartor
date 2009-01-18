@@ -74,6 +74,14 @@ static bool isChildOfSingleRoadInner(MapFeature *mapFeature)
 	return Road::GetSingleParentRoadInner(mapFeature) != NULL;
 }
 
+static bool isChildOfArea(MapFeature *mapFeature)
+{
+	Road* R =  Road::GetSingleParentRoadInner(mapFeature);
+	if (R)
+		return (R->area() > 0.0);
+	return false;
+}
+
 static bool isChildOfSingleRoad(MapFeature *mapFeature)
 {
 	return Road::GetSingleParentRoad(mapFeature) != NULL;
@@ -127,11 +135,13 @@ void PropertiesDock::checkMenuStatus()
 	bool IsParentRoad = false;
 	bool IsParentRoadInner = false;
 	bool IsParentRelation = false;
+	bool IsParentArea = false;
 	unsigned int NumRoads = 0;
 	unsigned int NumCommitableFeature = 0;
 	unsigned int NumPoints = 0;
 	unsigned int NumRelation = 0;
 	unsigned int NumRelationChild = 0;
+	unsigned int NumAreas = 0;
 	if (Selection.size() == 1)
 	{
 		IsPoint = dynamic_cast<TrackPoint*>(Selection[0]) != 0;
@@ -139,13 +149,17 @@ void PropertiesDock::checkMenuStatus()
 		IsParentRoad = IsPoint && isChildOfSingleRoad(Selection[0]);
 		IsParentRoadInner = IsPoint && isChildOfSingleRoadInner(Selection[0]);
 		IsParentRelation = isChildOfSingleRelation(Selection[0]);
+		IsParentArea = isChildOfArea(Selection[0]);
 	}
 	for (unsigned int i=0; i<Selection.size(); ++i)
 	{
 		if (dynamic_cast<TrackPoint*>(Selection[i]))
 			++NumPoints;
-		if (dynamic_cast<Road*>(Selection[i]))
-			++NumRoads;
+		if (Road* R = dynamic_cast<Road*>(Selection[i]))
+			if (R->area() > 0.0)
+				++NumAreas;
+			else
+				++NumRoads;
 		if (dynamic_cast<Relation*>(Selection[i]))
 			++NumRelation;
 		if (isChildOfRelation(Selection[i]))
@@ -159,8 +173,8 @@ void PropertiesDock::checkMenuStatus()
 	Main->editMoveAction->setEnabled(true);
 	Main->editReverseAction->setEnabled(IsRoad);
 	Main->roadJoinAction->setEnabled(NumRoads > 1 && canJoinRoads(this));
-	Main->roadSplitAction->setEnabled(IsParentRoadInner || (NumRoads && NumPoints));
-	Main->roadBreakAction->setEnabled(NumRoads > 1 && canBreakRoads(this));
+	Main->roadSplitAction->setEnabled((IsParentRoadInner && !IsParentArea) || (NumRoads && NumPoints) || (NumAreas && NumPoints));
+	Main->roadBreakAction->setEnabled(IsParentRoadInner || (NumRoads == 1 && NumPoints) || (NumRoads > 1 && canBreakRoads(this)));
 	Main->featureCommitAction->setEnabled(NumCommitableFeature);
 	Main->nodeMergeAction->setEnabled(NumPoints > 1);
 	Main->nodeAlignAction->setEnabled(NumPoints > 2);

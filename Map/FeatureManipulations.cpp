@@ -262,18 +262,44 @@ static void breakRoad(MapDocument* theDocument, CommandList* theList, Road* R, T
 		if (R->get(i) == Pt)
 		{
 			TrackPoint* New = new TrackPoint(*Pt);
+			copyTags(New,Pt);
 			theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(R->layer()),New,true));
 			theList->add(new RoadRemoveTrackPointCommand(R,i,theDocument->getDirtyOrOriginLayer(R->layer())));
 			theList->add(new RoadAddTrackPointCommand(R,New,i,theDocument->getDirtyOrOriginLayer(R->layer())));
 		}
+		if (!Pt->sizeParents())
+			theList->add(new RemoveFeatureCommand(theDocument,Pt));
 }
 
 void breakRoads(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
-	std::vector<Road*> Roads;
+	std::vector<Road*> Roads, Result;
+	std::vector<TrackPoint*> Points;
 	for (unsigned int i=0; i<theDock->size(); ++i)
 		if (Road* R = dynamic_cast<Road*>(theDock->selection(i)))
 			Roads.push_back(R);
+		else if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(theDock->selection(i)))
+			Points.push_back(Pt);
+
+	if (Roads.size() == 0 && Points.size() == 1)
+	{
+		for (unsigned int i=0; i<Points[0]->sizeParents() ; ++i) {
+			Road * R = dynamic_cast<Road*>(Points[0]->getParent(i));
+			if (R)
+				Roads.push_back(R);
+		}
+	}
+
+	if (Roads.size() == 1 && Points.size() ) {
+		splitRoad(theDocument, theList,Roads[0],Points, Result);
+		if (Roads[0]->area() > 0.0) {
+			for (unsigned int i=0; i<Points.size(); ++i)
+				breakRoad(theDocument, theList, Roads[0],Points[i]);
+		} else {
+			Roads = Result;
+		}
+	} 
+
 	for (unsigned int i=0; i<Roads.size(); ++i)
 		for (unsigned int j=0; j<Roads[i]->size(); ++j)
 			for (unsigned int k=i+1; k<Roads.size(); ++k)
