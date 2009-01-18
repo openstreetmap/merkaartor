@@ -1,4 +1,8 @@
 v0.13
+	* ADD : Relation member context menu for center and zoom on the properties
+	dock
+	* ADD : Allow to remove a member from a relation thru the properties dock.
+	* FIX : switch to skulpture 2.2 custom style by default
 	* FIX : Don't allow templates combo to grow depending on content (fixes #1482)
 	* FIX : Allow disabling "Don't connect GPX nodes separated more than.." by setting it to 0. (fixes #1488)
 	* FIX : getDefaultLanguage() returns an invalid value with 2-parts language definition (like en_GB) (by Lukasz Jernas) (closes #1417)

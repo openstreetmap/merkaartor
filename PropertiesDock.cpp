@@ -8,6 +8,7 @@
 #include "Command/DocumentCommands.h"
 #include "Command/FeatureCommands.h"
 #include "Command/TrackPointCommands.h"
+#include "Command/RelationCommands.h"
 #include "Map/Coord.h"
 #include "Map/MapDocument.h"
 #include "Map/MapFeature.h"
@@ -426,6 +427,9 @@ void PropertiesDock::switchToRelationUi(MapFeature* F)
 	if (CurrentUi)
 		CurrentUi->deleteLater();
 	CurrentUi = NewUi;
+	RelationUi.MembersView->setContextMenuPolicy(Qt::CustomContextMenu);
+	connect(RelationUi.MembersView, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(on_Member_customContextMenuRequested(const QPoint &)));
+	connect(RelationUi.RemoveMemberButton,SIGNAL(clicked()),this, SLOT(on_RemoveMemberButton_clicked()));
 	connect(RelationUi.RemoveTagButton,SIGNAL(clicked()),this, SLOT(on_RemoveTagButton_clicked()));
 	setWindowTitle(tr("Properties - Relation"));
 }
@@ -633,6 +637,52 @@ void PropertiesDock::on_RemoveTagButton_clicked()
 	}
 }
 
+void PropertiesDock::on_RemoveMemberButton_clicked()
+{
+	if (CurrentMembersView)
+	{
+		Relation* R = dynamic_cast<Relation*>(Selection[0]);
+		if (R) {
+			QModelIndexList indexes = CurrentMembersView->selectionModel()->selectedIndexes();
+			QModelIndex index;
+
+			foreach(index, indexes)
+			{
+				QModelIndex idx = index.sibling(index.row(),0);
+				QVariant Content(R->referenceMemberModel(Main)->data(idx,Qt::UserRole));
+				if (Content.isValid())
+				{
+					MapFeature* F = Content.value<MapFeature*>();
+					if (F) {
+						CommandList* L = new CommandList(MainWindow::tr("Remove member '%1' on %2").arg(F->description()).arg(R->description()), R);
+						if (R->find(F) < R->size())
+							L->add(new RelationRemoveFeatureCommand(R,F,Main->document()->getDirtyOrOriginLayer(R->layer())));
+						if (L->empty())
+							delete L;
+						else
+						{
+							Main->document()->addHistory(L);
+							Main->invalidateView();
+							return;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+void PropertiesDock::on_Member_customContextMenuRequested(const QPoint & pos)
+{
+	QModelIndex ix = CurrentMembersView->indexAt(pos);
+	if (ix.isValid()) {
+		QMenu menu(CurrentMembersView);
+		menu.addAction(centerAction);
+		menu.addAction(centerZoomAction);
+		menu.exec(CurrentMembersView->mapToGlobal(pos));
+	}
+}
+
 void PropertiesDock::on_SelectionList_customContextMenuRequested(const QPoint & pos)
 {
 	QListWidgetItem *it = MultiUi.SelectionList->itemAt(pos);
@@ -646,12 +696,37 @@ void PropertiesDock::on_SelectionList_customContextMenuRequested(const QPoint & 
 
 void PropertiesDock::on_centerAction_triggered()
 {
-	Main->setUpdatesEnabled(false);
-	unsigned int idx = MultiUi.SelectionList->selectedItems()[0]->data(Qt::UserRole).toUInt();
-	CoordBox cb = FullSelection[idx]->boundingBox();
-	for (int i=1; i < MultiUi.SelectionList->selectedItems().size(); i++) {
-		idx = MultiUi.SelectionList->selectedItems()[i]->data(Qt::UserRole).toUInt();
-		cb.merge(FullSelection[idx]->boundingBox());
+	CoordBox cb;
+	if (CurrentMembersView)
+	{
+		Relation* R = dynamic_cast<Relation*>(Selection[0]);
+		if (R) {
+			QModelIndexList indexes = CurrentMembersView->selectionModel()->selectedIndexes();
+			QModelIndex index;
+
+			foreach(index, indexes)
+			{
+				QModelIndex idx = index.sibling(index.row(),0);
+				QVariant Content(R->referenceMemberModel(Main)->data(idx,Qt::UserRole));
+				if (Content.isValid())
+				{
+					MapFeature* F = Content.value<MapFeature*>();
+					if (F) {
+						setSelection(F);
+						cb = F->boundingBox();
+					}
+				}
+			}
+		}
+	} else
+	if (CurrentTagView) {
+		Main->setUpdatesEnabled(false);
+		unsigned int idx = MultiUi.SelectionList->selectedItems()[0]->data(Qt::UserRole).toUInt();
+		cb = FullSelection[idx]->boundingBox();
+		for (int i=1; i < MultiUi.SelectionList->selectedItems().size(); i++) {
+			idx = MultiUi.SelectionList->selectedItems()[i]->data(Qt::UserRole).toUInt();
+			cb.merge(FullSelection[idx]->boundingBox());
+		}
 	}
 	Coord c = cb.center();
 	Main->view()->projection().setCenter(c, Main->view()->rect());
@@ -661,16 +736,44 @@ void PropertiesDock::on_centerAction_triggered()
 
 void PropertiesDock::on_centerZoomAction_triggered()
 {
-	Main->setUpdatesEnabled(false);
-	unsigned int idx = MultiUi.SelectionList->selectedItems()[0]->data(Qt::UserRole).toUInt();
-	CoordBox cb = FullSelection[idx]->boundingBox();
-	for (int i=1; i < MultiUi.SelectionList->selectedItems().size(); i++) {
-		idx = MultiUi.SelectionList->selectedItems()[i]->data(Qt::UserRole).toUInt();
-		cb.merge(FullSelection[idx]->boundingBox());
+	CoordBox cb;
+	if (CurrentMembersView)
+	{
+		Relation* R = dynamic_cast<Relation*>(Selection[0]);
+		if (R) {
+			QModelIndexList indexes = CurrentMembersView->selectionModel()->selectedIndexes();
+			QModelIndex index;
+
+			foreach(index, indexes)
+			{
+				QModelIndex idx = index.sibling(index.row(),0);
+				QVariant Content(R->referenceMemberModel(Main)->data(idx,Qt::UserRole));
+				if (Content.isValid())
+				{
+					MapFeature* F = Content.value<MapFeature*>();
+					if (F) {
+						setSelection(F);
+						cb = F->boundingBox();
+						CoordBox min(cb.center()-2000, cb.center()+2000);
+						cb.merge(min);
+						cb = cb.zoomed(1.1);
+					}
+				}
+			}
+		}
+	} else
+	if (CurrentTagView) {
+		Main->setUpdatesEnabled(false);
+		unsigned int idx = MultiUi.SelectionList->selectedItems()[0]->data(Qt::UserRole).toUInt();
+		CoordBox cb = FullSelection[idx]->boundingBox();
+		for (int i=1; i < MultiUi.SelectionList->selectedItems().size(); i++) {
+			idx = MultiUi.SelectionList->selectedItems()[i]->data(Qt::UserRole).toUInt();
+			cb.merge(FullSelection[idx]->boundingBox());
+		}
+		CoordBox min(cb.center()-2000, cb.center()+2000);
+		cb.merge(min);
+		cb = cb.zoomed(1.1);
 	}
-	CoordBox min(cb.center()-2000, cb.center()+2000);
-	cb.merge(min);
-	cb = cb.zoomed(1.1);
 	Main->view()->projection().setViewport(cb, Main->view()->rect());
 	Main->setUpdatesEnabled(true);
 	Main->invalidateView(false);

@@ -64,4 +64,6 @@ class Relation : public MapFeature
 		RelationPrivate* p;
 };
 
+Q_DECLARE_METATYPE( Relation * );
+
 #endif

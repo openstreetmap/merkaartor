@@ -441,7 +441,7 @@ Relation * Relation::fromXML(MapDocument * d, MapLayer * L, const QDomElement e)
 			}
 			if (F)
 			{
-				R->add(e.attribute("role"),F);
+				R->add(c.attribute("role"),F);
 			}
 		}
 		c = c.nextSiblingElement();
@@ -599,8 +599,14 @@ QVariant RelationMemberModel::data(const QModelIndex &index, int role) const
 	}
 	else if (role == Qt::EditRole)
 	{
-		if ( (index.column() == 0) && (index.row() < (int)Parent->Members.size()) )
+		if ( (index.column() == 0) )
 			return Parent->Members[index.row()].first;
+	}
+	else if (role == Qt::UserRole)
+	{
+		QVariant v;
+		v.setValue(Parent->Members[index.row()].second);
+		return v;
 	}
 	return QVariant();
 }

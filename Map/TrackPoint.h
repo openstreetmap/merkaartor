@@ -77,6 +77,8 @@ private:
 		#endif
 };
 
+Q_DECLARE_METATYPE( TrackPoint * );
+
 #endif
 
 

@@ -1,9 +1,9 @@
 INCLUDEPATH += QtStyles \
-	QtStyles/skulpture
-	#QtStyles/skulpture22
+	#QtStyles/skulpture
+	QtStyles/skulpture22
 DEPENDPATH += \
-	QtStyles QtStyles/skulpture
-	#QtStyles QtStyles/skulpture22
+	#QtStyles QtStyles/skulpture
+	QtStyles QtStyles/skulpture22
 
 #Header files
 HEADERS += \

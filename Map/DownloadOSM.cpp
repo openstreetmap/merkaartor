@@ -718,7 +718,10 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 			{
 				theDocument->setLastDownloadLayer(theLayer);
 				theDocument->addDownloadBox(Clip);
-				aParent->view()->projection().setViewport(Clip,aParent->view()->rect());
+                if (directAPI)
+                    aParent->on_viewZoomAllAction_triggered();
+                else
+                    aParent->view()->projection().setViewport(Clip,aParent->view()->rect());
 				aParent->invalidateView();
 			} else {
 				retry = true;

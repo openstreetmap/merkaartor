@@ -240,6 +240,8 @@ class MapFeature : public QObject
 
 };
 
+Q_DECLARE_METATYPE( MapFeature * );
+
 void copyTags(MapFeature* Dest, MapFeature* Src);
 bool hasOSMId(const MapFeature* aFeature);
 

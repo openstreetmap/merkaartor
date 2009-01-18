@@ -107,6 +107,8 @@ class Road : public MapFeature
 		RoadPrivate* p;
 };
 
+Q_DECLARE_METATYPE( Road * );
+
 MapFeature::TrafficDirectionType trafficDirection(const Road* R);
 unsigned int findSnapPointIndex(const Road* R, Coord& P);
 
