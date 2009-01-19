@@ -156,10 +156,16 @@ void PropertiesDock::checkMenuStatus()
 		if (dynamic_cast<TrackPoint*>(Selection[i]))
 			++NumPoints;
 		if (Road* R = dynamic_cast<Road*>(Selection[i]))
+		{
 			if (R->area() > 0.0)
+			{
 				++NumAreas;
+			}
 			else
+			{
 				++NumRoads;
+			}
+		}
 		if (dynamic_cast<Relation*>(Selection[i]))
 			++NumRelation;
 		if (isChildOfRelation(Selection[i]))
