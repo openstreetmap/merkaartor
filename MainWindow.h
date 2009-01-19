@@ -105,7 +105,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		virtual void on_exportGPXAction_triggered();
 		virtual void on_exportKMLAction_triggered();
 		virtual void on_renderNativeAction_triggered();
-		virtual void on_renderSVGAction_triggered();
+		virtual void on_renderOsmarenderAction_triggered();
 		virtual void on_editSelectAction_triggered();
 		virtual void on_bookmarkAddAction_triggered();
 		virtual void on_bookmarkRemoveAction_triggered();

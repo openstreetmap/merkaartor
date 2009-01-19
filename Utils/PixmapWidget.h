@@ -5,6 +5,7 @@
 #include <QString>
 
 class QPixmap;
+class QSvgRenderer;
 
 class PixmapWidget : public QWidget
 {
@@ -17,6 +18,9 @@ public:
 	void loadFile( const QString &filename );
 	void setPixmap( const QPixmap &aPix );
 	QPixmap* pixmap();
+
+	bool isPixmap();
+	bool isSvg();
 
 public slots:
 	void setZoomFactor( float );
@@ -35,6 +39,7 @@ protected:
 
 private:
 	QPixmap *m_pm;
+	QSvgRenderer *m_svgr;
 	double zoomFactor;
 	bool Panning;
 	QPoint Delta;

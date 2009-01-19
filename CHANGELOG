@@ -1,4 +1,5 @@
 v0.13
+	* ADD : Native SVG renderer
 	* ADD : Allow to break roads (and areas) with a single node (fixes #1505)
 	* ADD : Relation member context menu for center and zoom on the properties
 	dock

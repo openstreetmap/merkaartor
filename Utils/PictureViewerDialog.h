@@ -24,6 +24,9 @@ public:
     PictureViewerDialog(const QString& title, const QString &filename, QWidget *parent=NULL);
 	PictureViewerDialog(const QString& title, const QPixmap& thePixmap, QWidget *parent=NULL);
 
+private:
+	QString m_filename;
+
 public slots:
 	void on_buttonBox_clicked(QAbstractButton * button);
 

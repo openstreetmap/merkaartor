@@ -1710,7 +1710,7 @@ void MainWindow::on_renderNativeAction_triggered()
 	osmR.exec();
 }
 
-void MainWindow::on_renderSVGAction_triggered()
+void MainWindow::on_renderOsmarenderAction_triggered()
 {
 #ifdef OSMARENDER
 	OsmaRenderDialog osmR(theDocument, theView->projection().viewport(), this);

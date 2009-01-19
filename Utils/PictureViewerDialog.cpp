@@ -12,9 +12,10 @@
 #include "PictureViewerDialog.h"
 
 #include <QFileDialog>
+#include <QFile>
 
 PictureViewerDialog::PictureViewerDialog(const QString& title, const QString &filename, QWidget *parent)
-    :QDialog(parent)
+    :QDialog(parent), m_filename(filename)
 {
 	setupUi(this);
 
@@ -34,9 +35,16 @@ PictureViewerDialog::PictureViewerDialog(const QString& title, const QPixmap& th
 void PictureViewerDialog::on_buttonBox_clicked(QAbstractButton * button)
 {
 	if (buttonBox->buttonRole(button) == QDialogButtonBox::AcceptRole) {
-		QString s = QFileDialog::getSaveFileName(this,tr("Output filename"),"",tr("Image files (*.png *.jpg)"));
-		if (!s.isNull()) {
-			pixWidget->pixmap()->save(s);
+		if (m_filename.endsWith("svg", Qt::CaseInsensitive)) {
+			QString s = QFileDialog::getSaveFileName(this,tr("Output filename"),"",tr("SVG files (*.svg)"));
+			if (!s.isNull()) {
+				QFile(m_filename).copy(s);
+			}
+		} else {
+			QString s = QFileDialog::getSaveFileName(this,tr("Output filename"),"",tr("Image files (*.png *.jpg)"));
+			if (!s.isNull()) {
+				pixWidget->pixmap()->save(s);
+			}
 		}
 	}
 }

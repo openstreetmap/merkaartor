@@ -11,7 +11,9 @@
 //
 #include "NativeRenderDialog.h"
 
+#include "MainWindow.h"
 #include "Map/MapDocument.h"
+#include "MapView.h"
 #include "PaintStyle/EditPaintStyle.h"
 #include "Map/Projection.h"
 #include "Map/MapLayer.h"
@@ -25,6 +27,7 @@
 
 #include <QProgressDialog>
 #include <QPainter>
+#include <QSvgGenerator>
 
 NativeRenderDialog::NativeRenderDialog(MapDocument *aDoc, const CoordBox& aCoordBox, QWidget *parent)
 	:QDialog(parent), theDoc(aDoc)
@@ -34,6 +37,9 @@ NativeRenderDialog::NativeRenderDialog(MapDocument *aDoc, const CoordBox& aCoord
 	buttonBox->addButton("Proceed...", QDialogButtonBox::ActionRole);
 	Sets = new QSettings();
 	Sets->beginGroup("NativeRenderDialog");
+
+	rbSVG->setChecked(Sets->value("rbSVG", true).toBool());
+	rbBitmap->setChecked(Sets->value("rbBitmap", false).toBool());
 
 	cbShowScale->setCheckState((Qt::CheckState)Sets->value("cbShowScale", "1").toInt());
 	cbShowGrid->setCheckState((Qt::CheckState)Sets->value("cbShowGrid", "1").toInt());
@@ -45,11 +51,12 @@ NativeRenderDialog::NativeRenderDialog(MapDocument *aDoc, const CoordBox& aCoord
 	sbMinLon->setValue(intToAng(aCoordBox.topLeft().lon()));
 	sbMaxLon->setValue(intToAng(aCoordBox.topRight().lon()));
 
-	calcRatio();
 	sbPreviewHeight->blockSignals(true);
 	sbPreviewHeight->setValue(Sets->value("sbPreviewHeight", "600").toInt());
 	sbPreviewHeight->blockSignals(false);
 	sbPreviewWidth->setValue(Sets->value("sbPreviewWidth", "800").toInt());
+
+	calcRatio();
 
 	resize(1,1);
 }
@@ -57,6 +64,8 @@ NativeRenderDialog::NativeRenderDialog(MapDocument *aDoc, const CoordBox& aCoord
 void NativeRenderDialog::on_buttonBox_clicked(QAbstractButton * button)
 {
 	if (buttonBox->buttonRole(button) == QDialogButtonBox::ActionRole) {
+		Sets->setValue("rbSVG", rbSVG->isChecked());
+		Sets->setValue("rbBitmap", rbBitmap->isChecked());
 		Sets->setValue("cbShowScale", cbShowScale->checkState());
 		Sets->setValue("cbShowGrid", cbShowGrid->checkState());
 		Sets->setValue("cbShowBorders", cbShowBorders->checkState());
@@ -70,16 +79,26 @@ void NativeRenderDialog::on_buttonBox_clicked(QAbstractButton * button)
 
 void NativeRenderDialog::render()
 {
+	QSvgGenerator svgg;
+	QPixmap bitmap;
+	QPainter P;
+
 	int w = sbPreviewWidth->value();
 	int h = sbPreviewHeight->value();
 
-	QPixmap pix(w, h);
-	pix.fill(MerkaartorPreferences::instance()->getBgColor());
+	if (rbSVG->isChecked()) {
+		svgg.setFileName(QDir::tempPath()+"/tmp.svg");
+		svgg.setSize(QSize(w,h));
 
-	QPainter P(&pix);
-	P.setRenderHint(QPainter::Antialiasing);
+		P.begin(&svgg);
+	} else {
+		QPixmap pix(w, h);
+		bitmap = pix;
+		P.begin(&bitmap);
+		P.setRenderHint(QPainter::Antialiasing);
+	}
 
-	Projection theProj;
+	MainWindow* mw = dynamic_cast<MainWindow*>(parentWidget());
 	CoordBox VP(Coord(
 		angToInt(sbMinLat->value()),
 		angToInt(sbMinLon->value())
@@ -88,7 +107,9 @@ void NativeRenderDialog::render()
 		angToInt(sbMaxLon->value())
 	));
 
-	theProj.setViewport(VP, QRect(0, 0, w, h));
+	Projection aProj;
+	QRect theR(0, 0, w, h);
+	aProj.setViewport(VP, theR);
 
 	QApplication::setOverrideCursor(Qt::BusyCursor);
 	QProgressDialog progress("Working. Please Wait...", "Cancel", 0, 0);
@@ -98,34 +119,29 @@ void NativeRenderDialog::render()
 
 	QApplication::processEvents();
 
-	for (VisibleFeatureIterator i(theDoc); !i.isEnd(); ++i)
-	{
-		i.get()->draw(P, theProj);
-	}
+	QRegion rg(theR);
+	P.setClipRegion(rg);
+	P.setClipping(true);
 
-	M_STYLE->initialize(P, theProj);
-	for (unsigned int i = 0; i < M_STYLE->size(); ++i)
-	{
-		PaintStyleLayer *Current = M_STYLE->get(i);
-		for (VisibleFeatureIterator i(theDoc); !i.isEnd(); ++i)
-		{
-			if (theProj.viewport().disjunctFrom((i.get())->boundingBox())) continue;
-			P.setOpacity(i.get()->layer()->getAlpha());
-			if (Road * R = dynamic_cast < Road * >(i.get()))
-				Current->draw(R);
-			else if (TrackPoint * Pt = dynamic_cast < TrackPoint * >(i.get()))
-				Current->draw(Pt);
-			else if (Relation * RR = dynamic_cast < Relation * >(i.get()))
-				Current->draw(RR);
-		}
-	}
+	if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
+		P.fillRect(theR, QBrush(M_PREFS->getBgColor()));
+	else
+		P.fillRect(theR, QBrush(M_STYLE->getGlobalPainter().getBackgroundColor()));
+
+	mw->view()->drawFeatures(P, aProj);
 
 	P.end();
+
 	progress.reset();
 	QApplication::restoreOverrideCursor();
 
-	PictureViewerDialog vwDlg("Native rendering", pix, this);
-	vwDlg.exec();
+	if (rbSVG->isChecked()) {
+		PictureViewerDialog vwDlg("Native rendering", QDir::tempPath()+"/tmp.svg", this);
+		vwDlg.exec();
+	} else {
+		PictureViewerDialog vwDlg("Native rendering", bitmap, this);
+		vwDlg.exec();
+	}
 }
 
 void NativeRenderDialog::calcRatio()
@@ -138,7 +154,9 @@ void NativeRenderDialog::calcRatio()
 		angToInt(sbMaxLon->value())
 	));
 	Projection theProj;
-	theProj.setViewport(theB, QRect(0, 0, 800, 600));
+	int w = sbPreviewWidth->value();
+	int h = sbPreviewHeight->value();
+	theProj.setViewport(theB, QRect(0, 0, w, h));
 	ratio = (theB.latDiff() / theProj.latAnglePerM()) / (theB.lonDiff() / theProj.lonAnglePerM((theB.bottomLeft().lat() + theB.topRight().lat())/2));
 }
 

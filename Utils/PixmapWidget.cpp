@@ -1,17 +1,33 @@
 #include <QPixmap>
 #include <QPainter>
 #include <QWheelEvent>
+#include <QSvgRenderer>
 
 #include "PixmapWidget.h"
+#include "Preferences/MerkaartorPreferences.h"
 
 PixmapWidget::PixmapWidget( QWidget *parent )
-	: QWidget( parent ), zoomFactor(1.0), done(false)
+	: QWidget( parent ), zoomFactor(1.0), done(false), m_pm(0), m_svgr(0)
 {
 }
 
 void PixmapWidget::loadFile( const QString &filename )
 {
 	m_pm = new QPixmap( filename );
+	// All that follows in not used, as QPixmap loads SVG
+	//   but could be useful if we want to do a real SVG preview
+	if (m_pm->isNull()) {
+		SAFE_DELETE(m_pm);
+		m_svgr = new QSvgRenderer(filename, this);
+		if (m_svgr->isValid())
+			SAFE_DELETE(m_svgr);
+	}
+
+	if (!m_pm && m_svgr) {
+		m_pm = new QPixmap(width(), height());
+		QPainter p(m_pm);
+		m_svgr->render(&p);
+	}
 }
 
 void PixmapWidget::setPixmap( const QPixmap &aPix )
@@ -22,6 +38,16 @@ void PixmapWidget::setPixmap( const QPixmap &aPix )
 QPixmap* PixmapWidget::pixmap()
 {
 	return m_pm;
+}
+
+bool PixmapWidget::isPixmap()
+{
+	return (m_pm != NULL && m_svgr == NULL);
+}
+
+bool PixmapWidget::isSvg()
+{
+	return (m_svgr != NULL);
 }
 
 PixmapWidget::~PixmapWidget()
@@ -79,7 +105,11 @@ void PixmapWidget::wheelEvent( QWheelEvent *anEvent )
 
 void PixmapWidget::mousePressEvent ( QMouseEvent * anEvent )
 {
-	if (anEvent->buttons() & Qt::RightButton) {
+	if (
+		((anEvent->buttons() & Qt::RightButton) && !M_PREFS->getMouseSingleButton()) ||
+		((anEvent->buttons() & Qt::LeftButton) && M_PREFS->getMouseSingleButton())
+		)
+	{
 		Panning = true;
 		LastPan = anEvent->pos();
 	}
@@ -87,7 +117,11 @@ void PixmapWidget::mousePressEvent ( QMouseEvent * anEvent )
 
 void PixmapWidget::mouseReleaseEvent ( QMouseEvent * anEvent )
 {
-	if (anEvent->buttons() & Qt::RightButton) {
+	if (
+		((anEvent->buttons() & Qt::RightButton) && !M_PREFS->getMouseSingleButton()) ||
+		((anEvent->buttons() & Qt::LeftButton) && M_PREFS->getMouseSingleButton())
+		)
+	{
 		if (Panning) {
 			Panning = false;
 		}
@@ -96,7 +130,11 @@ void PixmapWidget::mouseReleaseEvent ( QMouseEvent * anEvent )
 
 void PixmapWidget::mouseMoveEvent ( QMouseEvent * anEvent )
 {
-	if (anEvent->buttons() & Qt::RightButton) {
+	if (
+		((anEvent->buttons() & Qt::RightButton) && !M_PREFS->getMouseSingleButton()) ||
+		((anEvent->buttons() & Qt::LeftButton) && M_PREFS->getMouseSingleButton())
+		)
+	{
 		if (Panning) {
 			Delta += anEvent->pos() - LastPan;
 			LastPan = anEvent->pos();

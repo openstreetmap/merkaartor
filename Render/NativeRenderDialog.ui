@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>NativeRenderDialog</class>
- <widget class="QDialog" name="NativeRenderDialog" >
-  <property name="geometry" >
+ <widget class="QDialog" name="NativeRenderDialog">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,81 +10,104 @@
     <height>205</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Native rendering</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" >
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QGroupBox" name="groupBox" >
-     <property name="title" >
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Render type</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QRadioButton" name="rbSVG">
+        <property name="text">
+         <string>SVG</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QRadioButton" name="rbBitmap">
+        <property name="text">
+         <string>Bitmap</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
       <string>Render options</string>
      </property>
-     <layout class="QVBoxLayout" >
+     <layout class="QVBoxLayout">
       <item>
-       <layout class="QHBoxLayout" >
+       <layout class="QHBoxLayout">
         <item>
-         <layout class="QVBoxLayout" >
+         <layout class="QVBoxLayout">
           <item>
-           <layout class="QHBoxLayout" >
+           <layout class="QHBoxLayout">
             <item>
-             <widget class="QLabel" name="label_3" >
-              <property name="sizePolicy" >
-               <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+             <widget class="QLabel" name="label_3">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="minimumSize" >
+              <property name="minimumSize">
                <size>
                 <width>60</width>
                 <height>0</height>
                </size>
               </property>
-              <property name="text" >
+              <property name="text">
                <string>min lat/Lon</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="sbMinLat" >
-              <property name="minimumSize" >
+             <widget class="QDoubleSpinBox" name="sbMinLat">
+              <property name="minimumSize">
                <size>
                 <width>60</width>
                 <height>0</height>
                </size>
               </property>
-              <property name="decimals" >
+              <property name="decimals">
                <number>6</number>
               </property>
-              <property name="minimum" >
+              <property name="minimum">
                <double>-90.000000000000000</double>
               </property>
-              <property name="maximum" >
+              <property name="maximum">
                <double>90.000000000000000</double>
               </property>
-              <property name="singleStep" >
+              <property name="singleStep">
                <double>0.010000000000000</double>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="sbMinLon" >
-              <property name="minimumSize" >
+             <widget class="QDoubleSpinBox" name="sbMinLon">
+              <property name="minimumSize">
                <size>
                 <width>60</width>
                 <height>0</height>
                </size>
               </property>
-              <property name="decimals" >
+              <property name="decimals">
                <number>6</number>
               </property>
-              <property name="minimum" >
+              <property name="minimum">
                <double>-180.000000000000000</double>
               </property>
-              <property name="maximum" >
+              <property name="maximum">
                <double>180.000000000000000</double>
               </property>
-              <property name="singleStep" >
+              <property name="singleStep">
                <double>0.010000000000000</double>
               </property>
              </widget>
@@ -91,66 +115,66 @@
            </layout>
           </item>
           <item>
-           <layout class="QHBoxLayout" >
+           <layout class="QHBoxLayout">
             <item>
-             <widget class="QLabel" name="label_4" >
-              <property name="sizePolicy" >
-               <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+             <widget class="QLabel" name="label_4">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="minimumSize" >
+              <property name="minimumSize">
                <size>
                 <width>60</width>
                 <height>0</height>
                </size>
               </property>
-              <property name="text" >
+              <property name="text">
                <string>max lat/Lon</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="sbMaxLat" >
-              <property name="minimumSize" >
+             <widget class="QDoubleSpinBox" name="sbMaxLat">
+              <property name="minimumSize">
                <size>
                 <width>60</width>
                 <height>0</height>
                </size>
               </property>
-              <property name="decimals" >
+              <property name="decimals">
                <number>6</number>
               </property>
-              <property name="minimum" >
+              <property name="minimum">
                <double>-90.000000000000000</double>
               </property>
-              <property name="maximum" >
+              <property name="maximum">
                <double>90.000000000000000</double>
               </property>
-              <property name="singleStep" >
+              <property name="singleStep">
                <double>0.010000000000000</double>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="sbMaxLon" >
-              <property name="minimumSize" >
+             <widget class="QDoubleSpinBox" name="sbMaxLon">
+              <property name="minimumSize">
                <size>
                 <width>60</width>
                 <height>0</height>
                </size>
               </property>
-              <property name="decimals" >
+              <property name="decimals">
                <number>6</number>
               </property>
-              <property name="minimum" >
+              <property name="minimum">
                <double>-180.000000000000000</double>
               </property>
-              <property name="maximum" >
+              <property name="maximum">
                <double>180.000000000000000</double>
               </property>
-              <property name="singleStep" >
+              <property name="singleStep">
                <double>0.010000000000000</double>
               </property>
              </widget>
@@ -160,62 +184,62 @@
          </layout>
         </item>
         <item>
-         <widget class="Line" name="line" >
-          <property name="orientation" >
+         <widget class="Line" name="line">
+          <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
          </widget>
         </item>
         <item>
-         <layout class="QVBoxLayout" >
+         <layout class="QVBoxLayout">
           <item>
-           <widget class="QCheckBox" name="cbShowScale" >
-            <property name="enabled" >
+           <widget class="QCheckBox" name="cbShowScale">
+            <property name="enabled">
              <bool>false</bool>
             </property>
-            <property name="text" >
+            <property name="text">
              <string>Show Scale</string>
             </property>
-            <property name="tristate" >
+            <property name="tristate">
              <bool>true</bool>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="cbShowGrid" >
-            <property name="enabled" >
+           <widget class="QCheckBox" name="cbShowGrid">
+            <property name="enabled">
              <bool>false</bool>
             </property>
-            <property name="text" >
+            <property name="text">
              <string>Show Grid</string>
             </property>
-            <property name="tristate" >
+            <property name="tristate">
              <bool>true</bool>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="cbShowBorders" >
-            <property name="enabled" >
+           <widget class="QCheckBox" name="cbShowBorders">
+            <property name="enabled">
              <bool>false</bool>
             </property>
-            <property name="text" >
+            <property name="text">
              <string>Show Borders</string>
             </property>
-            <property name="tristate" >
+            <property name="tristate">
              <bool>true</bool>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="cbShowLicense" >
-            <property name="enabled" >
+           <widget class="QCheckBox" name="cbShowLicense">
+            <property name="enabled">
              <bool>false</bool>
             </property>
-            <property name="text" >
+            <property name="text">
              <string>Show License</string>
             </property>
-            <property name="tristate" >
+            <property name="tristate">
              <bool>true</bool>
             </property>
            </widget>
@@ -225,43 +249,43 @@
        </layout>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout" >
+       <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QLabel" name="label" >
-          <property name="text" >
+         <widget class="QLabel" name="label">
+          <property name="text">
            <string>Width x Height (px)</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="sbPreviewWidth" >
-          <property name="maximum" >
+         <widget class="QSpinBox" name="sbPreviewWidth">
+          <property name="maximum">
            <number>99999</number>
           </property>
-          <property name="singleStep" >
+          <property name="singleStep">
            <number>32</number>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="label_2" >
-          <property name="sizePolicy" >
-           <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+         <widget class="QLabel" name="label_2">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="text" >
+          <property name="text">
            <string>X</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="sbPreviewHeight" >
-          <property name="maximum" >
+         <widget class="QSpinBox" name="sbPreviewHeight">
+          <property name="maximum">
            <number>99999</number>
           </property>
-          <property name="singleStep" >
+          <property name="singleStep">
            <number>32</number>
           </property>
          </widget>
@@ -272,11 +296,11 @@
     </widget>
    </item>
    <item>
-    <widget class="QDialogButtonBox" name="buttonBox" >
-     <property name="orientation" >
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="standardButtons" >
+     <property name="standardButtons">
       <set>QDialogButtonBox::Close</set>
      </property>
     </widget>
@@ -291,11 +315,11 @@
    <receiver>NativeRenderDialog</receiver>
    <slot>accept()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>275</x>
      <y>193</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>157</x>
      <y>274</y>
     </hint>
@@ -307,11 +331,11 @@
    <receiver>NativeRenderDialog</receiver>
    <slot>reject()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>343</x>
      <y>193</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>286</x>
      <y>274</y>
     </hint>

@@ -323,19 +323,19 @@ void MapView::updateLayersImage()
 	StaticMapUpToDate = true;
 }
 
-void MapView::drawFeatures(QPainter & P)
+void MapView::drawFeatures(QPainter & P, Projection& aProj)
 {
-	M_STYLE->initialize(P, projection());
+	M_STYLE->initialize(P, aProj);
 
 	for (unsigned int i=0; i<theDocument->layerSize(); ++i) {
-		theDocument->getLayer(i)->invalidate(theDocument, theProjection.viewport());
+		theDocument->getLayer(i)->invalidate(theDocument, aProj.viewport());
 		Main->properties()->adjustSelection();
 	}
 
 	QVector <CoordBox> coordRegion;
 	for (int i=0; i < P.clipRegion().rects().size(); ++i) {
-		Coord tl = theProjection.inverse(P.clipRegion().rects()[i].topLeft());
-		Coord br = theProjection.inverse(P.clipRegion().rects()[i].bottomRight());
+		Coord tl = aProj.inverse(P.clipRegion().rects()[i].topLeft());
+		Coord br = aProj.inverse(P.clipRegion().rects()[i].bottomRight());
 		coordRegion += CoordBox(tl, br);
 	}
 
@@ -351,9 +351,9 @@ void MapView::drawFeatures(QPainter & P)
 			if (OK) {
 				theFeatures.push_back(theDocument->getLayer(i)->get(j));
 				if (Road * R = dynamic_cast < Road * >(theDocument->getLayer(i)->get(j)))
-					R->buildPath(theProjection, P.clipRegion());
+					R->buildPath(aProj, P.clipRegion());
 				if (Relation * RR = dynamic_cast < Relation * >(theDocument->getLayer(i)->get(j)))
-					RR->buildPath(theProjection, P.clipRegion());
+					RR->buildPath(aProj, P.clipRegion());
 			}
 		}
 	}
@@ -393,7 +393,7 @@ void MapView::drawFeatures(QPainter & P)
 	
 	for (int i=0; i<theFeatures.size(); i++)
 	{
-		theFeatures[i]->draw(P, theProjection);
+		theFeatures[i]->draw(P, aProj);
 	}
 }
 
@@ -477,7 +477,7 @@ void MapView::updateStaticBuffer()
 	{
 		sortRenderingPriorityInLayers();
 		//drawLayersImage(painter);
-		drawFeatures(painter);
+		drawFeatures(painter, theProjection);
 	}
 
 	invalidRegion = QRegion();
