@@ -34,7 +34,7 @@ NativeRenderDialog::NativeRenderDialog(MapDocument *aDoc, const CoordBox& aCoord
 {
 	setupUi(this);
 
-	buttonBox->addButton("Proceed...", QDialogButtonBox::ActionRole);
+	buttonBox->addButton(tr("Proceed..."), QDialogButtonBox::ActionRole);
 	Sets = new QSettings();
 	Sets->beginGroup("NativeRenderDialog");
 

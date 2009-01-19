@@ -51,7 +51,7 @@ OsmaRenderDialog::OsmaRenderDialog(MapDocument *aDoc, const CoordBox& aCoordBox,
 	:QDialog(parent), theDoc(aDoc)
 {
 	setupUi(this);
-	buttonBox->addButton("Proceed...", QDialogButtonBox::ActionRole);
+	buttonBox->addButton(tr("Proceed..."), QDialogButtonBox::ActionRole);
 
 	SvgSets = new QSettings();
 	SvgSets->beginGroup("OsmaRenderDialog");
