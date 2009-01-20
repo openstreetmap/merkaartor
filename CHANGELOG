@@ -1,4 +1,5 @@
 v0.13
+	* FIX : Add missing tr() calls in render dialogs.
 	* FIX : Messagebox-Cancel after deleting a line did not work (fixes #1392)
 	* ADD : Native SVG renderer
 	* ADD : Allow to break roads (and areas) with a single node (fixes #1505)
