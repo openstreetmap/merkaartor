@@ -7,7 +7,7 @@
 #include "Preferences/MerkaartorPreferences.h"
 
 PixmapWidget::PixmapWidget( QWidget *parent )
-	: QWidget( parent ), zoomFactor(1.0), done(false), m_pm(0), m_svgr(0)
+	: QWidget( parent ), m_pm(0), m_svgr(0), zoomFactor(1.0), done(false)
 {
 }
 

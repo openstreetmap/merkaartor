@@ -64,7 +64,7 @@ PropertiesDock::PropertiesDock(MainWindow* aParent)
 
 PropertiesDock::~PropertiesDock(void)
 {
-    delete theModel;
+	delete theModel;
 	delete theTemplates;
 	delete shortcutFilter;
 }
