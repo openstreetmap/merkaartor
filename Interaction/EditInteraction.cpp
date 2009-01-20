@@ -335,22 +335,27 @@ void EditInteraction::on_remove_triggered()
 		Sel.push_back(view()->properties()->selection(i));
 	if (Sel.size() == 0) return;
 	CommandList* theList  = new CommandList(MainWindow::tr("Remove feature %1").arg(Sel[0]->id()), Sel[0]);
-	for (unsigned int i=0; i<Sel.size(); ++i)
-		if (document()->exists(Sel[i]))
-		{
+	bool deleteChildrenOK = true;
+	for (unsigned int i=0; i<Sel.size() && deleteChildrenOK; ++i) {
+		if (document()->exists(Sel[i])) {
 			std::vector<MapFeature*> Alternatives;
 			theList->add(new RemoveFeatureCommand(document(), Sel[i], Alternatives));
-		}
-	for (unsigned int i=0; i<Sel.size(); ++i)
-		if (document()->exists(Sel[i]))
-			Sel[i]->deleteChildren(document(), theList);
 
-	if (theList->size())
-		document()->addHistory(theList);
-	else
+			deleteChildrenOK = Sel[i]->deleteChildren(document(), theList);
+		}
+	}
+
+	if (!deleteChildrenOK) {
+		theList->undo();
 		delete theList;
-	view()->properties()->setSelection(0);
-	view()->properties()->checkMenuStatus();
+	} else
+		if (theList->size()) {
+			document()->addHistory(theList);
+			view()->properties()->setSelection(0);
+			view()->properties()->checkMenuStatus();
+		}
+		else
+			delete theList;
 	view()->invalidate(true, false);
 }
 

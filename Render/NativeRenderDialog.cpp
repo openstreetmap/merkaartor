@@ -112,7 +112,7 @@ void NativeRenderDialog::render()
 	aProj.setViewport(VP, theR);
 
 	QApplication::setOverrideCursor(Qt::BusyCursor);
-	QProgressDialog progress("Working. Please Wait...", "Cancel", 0, 0);
+	QProgressDialog progress(tr("Working. Please Wait..."), tr("Cancel"), 0, 0);
 	progress.setWindowModality(Qt::WindowModal);
 	progress.setCancelButton(NULL);
 	progress.show();
@@ -136,10 +136,10 @@ void NativeRenderDialog::render()
 	QApplication::restoreOverrideCursor();
 
 	if (rbSVG->isChecked()) {
-		PictureViewerDialog vwDlg("Native rendering", QDir::tempPath()+"/tmp.svg", this);
+		PictureViewerDialog vwDlg(tr("Native rendering"), QDir::tempPath()+"/tmp.svg", this);
 		vwDlg.exec();
 	} else {
-		PictureViewerDialog vwDlg("Native rendering", bitmap, this);
+		PictureViewerDialog vwDlg(tr("Native rendering"), bitmap, this);
 		vwDlg.exec();
 	}
 }
