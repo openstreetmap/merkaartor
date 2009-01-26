@@ -1,4 +1,6 @@
 v0.13
+	* ADD : Generalize the concept of download progress window
+	* FIX : If one of the translation composant (Qt or Merkaartor) is missing, allow the other to be loaded.
 	* FIX : Add missing tr() calls in render dialogs.
 	* FIX : Messagebox-Cancel after deleting a line did not work (fixes #1392)
 	* ADD : Native SVG renderer

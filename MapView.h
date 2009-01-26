@@ -79,7 +79,6 @@ class MapView :	public QWidget
 		QList<MapFeature*> theSnapList;
 
 		int numImages;
-		QString StatusMessage;
 
 		QShortcut* MoveLeft;
 		QShortcut* MoveRight;
@@ -99,7 +98,6 @@ class MapView :	public QWidget
 		void imageRequested();
 		void imageReceived();
 		void loadingFinished();
-		void updateStatusMessage();
 		void on_customContextMenuRequested(const QPoint & pos);
 };
 

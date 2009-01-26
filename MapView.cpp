@@ -218,7 +218,6 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 
 	QTime Stop(QTime::currentTime());
 	Main->PaintTimeLabel->setText(tr("%1ms").arg(Start.msecsTo(Stop)));
-	QTimer::singleShot(0,this,SLOT(updateStatusMessage()));
 }
 
 void MapView::drawScale(QPainter & P)
@@ -482,11 +481,6 @@ void MapView::updateStaticBuffer()
 
 	invalidRegion = QRegion();
 	StaticBufferUpToDate = true;
-}
-
-void MapView::updateStatusMessage()
-{
-	Main->statusBar()->showMessage(StatusMessage);
 }
 
 void MapView::mousePressEvent(QMouseEvent* event)

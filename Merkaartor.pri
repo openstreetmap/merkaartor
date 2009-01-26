@@ -18,6 +18,7 @@ HEADERS += \
 ./Interaction/ZoomInteraction.h \
 ./LayerDock.h \
 ./LayerWidget.h \
+./IProgressWindow.h \
 ./MainWindow.h \
 ./Map/Coord.h \
 ./Map/DownloadOSM.h \

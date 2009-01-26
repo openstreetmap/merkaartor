@@ -12,11 +12,12 @@
 #ifndef WORLDOSBMANAGER_H
 #define WORLDOSBMANAGER_H
 
+#include "IProgressWindow.h"
 #include <ui_WorldOsbManager.h>
 
 class QFile;
 
-class WorldOsbManager: public QDialog , public Ui::WorldOsbManager
+class WorldOsbManager: public QDialog , public Ui::WorldOsbManager, public IProgressWindow
 {
 	Q_OBJECT
 

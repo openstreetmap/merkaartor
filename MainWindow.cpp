@@ -98,6 +98,10 @@ MainWindow::MainWindow(void)
 		qtTranslator(0), merkaartorTranslator(0)
 {
 	p = new MainWindowPrivate;
+	
+	theProgressDialog = NULL;
+	theProgressBar = NULL;
+	theProgressLabel = NULL;
 
 	p->defStyle = QApplication::style()->objectName();
 	if (M_PREFS->getMerkaartorStyle())
@@ -108,25 +112,26 @@ MainWindow::MainWindow(void)
 
 	blockSignals(true);
 
-    updateLanguage();
-
-	SlippyMapWidget::theSlippyCache = new SlippyMapCache;
-
 	ViewportStatusLabel = new QLabel(this);
-	ViewportStatusLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
 	pbImages = new QProgressBar(this);
-	pbImages->setMaximumWidth(200);
 	PaintTimeLabel = new QLabel(this);
-	pbImages->setFormat(tr("tile %v / %m"));
-	//PaintTimeLabel->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
-	PaintTimeLabel->setMinimumWidth(23);
 	statusBar()->addPermanentWidget(ViewportStatusLabel);
 	statusBar()->addPermanentWidget(pbImages);
 	statusBar()->addPermanentWidget(PaintTimeLabel);
+
+	updateLanguage();
+
+	ViewportStatusLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
+	pbImages->setMaximumWidth(200);
+	pbImages->setFormat(tr("tile %v / %m"));
+	//PaintTimeLabel->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
+	PaintTimeLabel->setMinimumWidth(23);
 #ifdef _MOBILE
 	ViewportStatusLabel->setVisible(false);
 	pbImages->setVisible(false);
 #endif
+
+	SlippyMapWidget::theSlippyCache = new SlippyMapCache;
 
 	theView = new MapView(this);
 	setCentralWidget(theView);
@@ -845,19 +850,55 @@ void MainWindow::on_fileUploadAction_triggered()
 
 void MainWindow::on_fileDownloadAction_triggered()
 {
+	theProgressDialog = new QProgressDialog(this);
+	theProgressDialog->setWindowModality(Qt::ApplicationModal);
+	theProgressDialog->setMinimumDuration(0);
+
+	theProgressBar = new QProgressBar(theProgressDialog);
+	theProgressBar->setTextVisible(false);
+	theProgressDialog->setBar(theProgressBar);
+
+	theProgressLabel = new QLabel();
+	theProgressLabel->setAlignment(Qt::AlignCenter);
+	theProgressDialog->setLabel(theProgressLabel);
+	
+	theProgressDialog->setMaximum(11);
+
 	if (downloadOSM(this, theView->projection().viewport(), theDocument)) {
 		on_editPropertiesAction_triggered();
 	} else
 		QMessageBox::warning(this, tr("Error downloading"), tr("The map could not be downloaded"));
+
+	SAFE_DELETE(theProgressDialog);
+	theProgressBar = NULL;
+	theProgressLabel = NULL;
 
 	updateBookmarksMenu();
 }
 
 void MainWindow::on_fileDownloadMoreAction_triggered()
 {
+	theProgressDialog = new QProgressDialog(this);
+	theProgressDialog->setWindowModality(Qt::ApplicationModal);
+	theProgressDialog->setMinimumDuration(0);
+
+	theProgressBar = new QProgressBar(theProgressDialog);
+	theProgressBar->setTextVisible(false);
+	theProgressDialog->setBar(theProgressBar);
+
+	theProgressLabel = new QLabel();
+	theProgressLabel->setAlignment(Qt::AlignCenter);
+	theProgressDialog->setLabel(theProgressLabel);
+	
+	theProgressDialog->setMaximum(11);
+
 	if (!downloadMoreOSM(this, theView->projection().viewport(), theDocument)) {
 		QMessageBox::warning(this, tr("Error downloading"), tr("The map could not be downloaded"));
 	}
+
+	SAFE_DELETE(theProgressDialog);
+	theProgressBar = NULL;
+	theProgressLabel = NULL;
 }
 
 void MainWindow::on_fileWorkOfflineAction_triggered()
@@ -2177,30 +2218,37 @@ void MainWindow::updateLanguage()
     if (DefaultLanguage != "-")
     {
         qtTranslator = new QTranslator;
-        bool ret = qtTranslator->load("qt_" + DefaultLanguage
+        bool retQt = qtTranslator->load("qt_" + DefaultLanguage
     #ifdef TRANSDIR_SYSTEM
             , TRANSDIR_SYSTEM
     #else
             , QLibraryInfo::location(QLibraryInfo::TranslationsPath)
     #endif
             );
-        if (ret)
+        if (retQt)
 	        QCoreApplication::installTranslator(qtTranslator);
 
         merkaartorTranslator = new QTranslator;
-        ret &= merkaartorTranslator->load("merkaartor_" + DefaultLanguage
+		// Do not prevent Merkaartor translations to be loaded, even if there is no Qt translation for the language.
+        bool retM = merkaartorTranslator->load("merkaartor_" + DefaultLanguage
     #ifdef TRANSDIR_MERKAARTOR
             , TRANSDIR_MERKAARTOR
     #else
             , QCoreApplication::applicationDirPath()
     #endif
             );
-        if (!ret)
+		if (retM)
+			QCoreApplication::installTranslator(merkaartorTranslator);
+
+		if (!retQt && !retM)
         {
 			QMessageBox::warning(this, tr("Error"), tr("Could not load the selected language. Go to Tools, Preferences to select another language or check whether the translation file is missing."));
-        	return;   // Language could not be loaded, do nothing (need to restart programme)
-		}
-        QCoreApplication::installTranslator(merkaartorTranslator);
+		} else
+			if (!retQt)
+				statusBar()->showMessage(tr("Warning! Could not load the Qt translations for the \"%1\" language.").arg(DefaultLanguage), 15000);
+			else
+				if (!retM)
+					statusBar()->showMessage(tr("Warning! Could not load the Merkaartor translations for the \"%1\" language.").arg(DefaultLanguage), 15000);
     }
     retranslateUi(this);
 }

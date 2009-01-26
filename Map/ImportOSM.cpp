@@ -251,12 +251,20 @@ bool OSMHandler::endElement ( const QString &, const QString & /* localName */, 
 	return true;
 }
 
-static bool downloadToResolve(const std::vector<MapFeature*>& Resolution, QProgressDialog* dlg, MapDocument* theDocument, MapLayer* theLayer, Downloader* theDownloader)
+static bool downloadToResolve(const std::vector<MapFeature*>& Resolution, QWidget* aParent, MapDocument* theDocument, MapLayer* theLayer, Downloader* theDownloader)
 {
+	IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(aParent);
+	if (!aProgressWindow)
+		return false;
+
+	QProgressDialog* dlg = aProgressWindow->getProgressDialog();
+	QProgressBar* Bar = aProgressWindow->getProgressBar();
+	QLabel* Lbl = aProgressWindow->getProgressLabel();
+
 	for (unsigned int i=0; i<Resolution.size(); i++ )
 	{
 		QString URL = theDownloader->getURLToFetchFull(Resolution[i]);
-		dlg->setLabelText(QApplication::translate("Downloader","Downloading unresolved %1 of %2").arg(i).arg(Resolution.size()));
+		Lbl->setText(QApplication::translate("Downloader","Downloading unresolved %1 of %2").arg(i).arg(Resolution.size()));
 		if (theDownloader->go(URL))
 		{
 			if (theDownloader->resultCode() == 410) {
@@ -265,7 +273,7 @@ static bool downloadToResolve(const std::vector<MapFeature*>& Resolution, QProgr
 			}
 			else
 			{
-				dlg->setLabelText(QApplication::translate("Downloader","Parsing unresolved %1 of %2").arg(i).arg(Resolution.size()));
+				Lbl->setText(QApplication::translate("Downloader","Parsing unresolved %1 of %2").arg(i).arg(Resolution.size()));
 
 				QByteArray ba(theDownloader->content());
 				QBuffer  File(&ba);
@@ -285,14 +293,14 @@ static bool downloadToResolve(const std::vector<MapFeature*>& Resolution, QProgr
 					source.setData(buf);
 					xmlReader.parseContinue();
 					qApp->processEvents();
-					if (dlg->wasCanceled())
+					if (dlg && dlg->wasCanceled())
 						break;
 				}
 			}
 		}
 		else
 			return false;
-		dlg->setValue(i);
+		Bar->setValue(i);
 	}
 	return true;
 }
@@ -306,12 +314,19 @@ static void recurseDelete (MapFeature* F, QVector<MapFeature*>& MustDelete)
 		MustDelete.push_back(F);
 }
 
-static bool resolveNotYetDownloaded(QProgressDialog* dlg, MapDocument* theDocument, MapLayer* theLayer, Downloader* theDownloader)
+static bool resolveNotYetDownloaded(QWidget* aParent, MapDocument* theDocument, MapLayer* theLayer, Downloader* theDownloader)
 {
 	// resolving nodes and roads makes no sense since the OSM api guarantees that they will be all downloaded,
 	//  so only resolve for relations if the ResolveRelations pref is set
 	if (theDownloader && M_PREFS->getResolveRelations())
 	{
+		IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(aParent);
+		if (!aProgressWindow)
+			return false;
+
+		QProgressBar* Bar = aProgressWindow->getProgressBar();
+		QLabel* Lbl = aProgressWindow->getProgressLabel();
+
 		std::vector<MapFeature*> MustResolve;
 		MustResolve.clear();
 		for (unsigned int i=0; i<theLayer->size(); ++i)
@@ -322,10 +337,9 @@ static bool resolveNotYetDownloaded(QProgressDialog* dlg, MapDocument* theDocume
 		}
 		if (MustResolve.size())
 		{
-			dlg->setMaximum(MustResolve.size());
-			dlg->setValue(0);
-			dlg->show();
-			if (!downloadToResolve(MustResolve,dlg,theDocument,theLayer, theDownloader))
+			Bar->setMaximum(MustResolve.size());
+			Bar->setValue(0);
+			if (!downloadToResolve(MustResolve,aParent,theDocument,theLayer, theDownloader))
 				return false;
 		}
 	}
@@ -348,15 +362,21 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 	QString ErrorStr;
 	/* int ErrorLine; */
 	/* int ErrorColumn; */
-	QProgressDialog* dlg = new QProgressDialog(aParent);
-	QProgressBar* Bar = new QProgressBar(dlg);
-	dlg->setBar(Bar);
-	dlg->setWindowModality(Qt::ApplicationModal);
-	dlg->setMinimumDuration(0);
-	dlg->setLabelText(QApplication::translate("Downloader","Parsing XML"));
-	dlg->show();
+
+	IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(aParent);
+	if (!aProgressWindow)
+		return false;
+
+	QProgressDialog* dlg = aProgressWindow->getProgressDialog();
+
+	QProgressBar* Bar = aProgressWindow->getProgressBar();
+	Bar->setTextVisible(false);
+
+	QLabel* Lbl = aProgressWindow->getProgressLabel();
+	Lbl->setText(QApplication::translate("Downloader","Parsing XML"));
+
 	if (theDownloader)
-		theDownloader->setAnimator(dlg,Bar,false);
+		theDownloader->setAnimator(Lbl,Bar,false);
 	MapLayer* conflictLayer = new DrawingMapLayer(QApplication::translate("Downloader","Conflicts from %1").arg(theLayer->name()));
 	theDocument->add(conflictLayer);
 
@@ -377,14 +397,15 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 		xmlReader.parseContinue();
 		Bar->setValue(Bar->value()+buf.size());
 		qApp->processEvents();
-		if (dlg->wasCanceled())
+		if (dlg && dlg->wasCanceled())
 			break;
 	}
 
-	bool WasCanceled = dlg->wasCanceled();
+	bool WasCanceled = false;
+	if (dlg)
+		WasCanceled = dlg->wasCanceled();
 	if (!WasCanceled)
-		WasCanceled = !resolveNotYetDownloaded(dlg,theDocument,theLayer,theDownloader);
-	delete dlg;
+		WasCanceled = !resolveNotYetDownloaded(aParent,theDocument,theLayer,theDownloader);
 	if (WasCanceled)
 	{
 		theDocument->remove(conflictLayer);

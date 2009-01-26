@@ -1,6 +1,7 @@
 #ifndef MERKATOR_MAINWINDOW_H_
 #define MERKATOR_MAINWINDOW_H_
 
+#include "IProgressWindow.h"
 #include <ui_MainWindow.h>
 
 #include <QtGui/QMainWindow>
@@ -26,7 +27,7 @@ class TrackSegment;
 class GeoImageDock;
 #endif
 
-class MainWindow : public QMainWindow, public Ui::MainWindow
+class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWindow
 {
 	Q_OBJECT
 

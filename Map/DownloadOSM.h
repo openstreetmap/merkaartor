@@ -7,6 +7,7 @@ class QHttp;
 class QString;
 class QMainWindow;
 class QProgressBar;
+class QLabel;
 class QProgressDialog;
 class QTimer;
 class MainWindow;
@@ -44,7 +45,7 @@ class Downloader : public QObject
 		QString getURLToDelete(const QString& What, const QString& Id);
 		QString getURLToOpenChangeSet();
 		QString getURLToCloseChangeSet(const QString& Id);
-		void setAnimator(QProgressDialog* Animator, QProgressBar* AnimatorBar, bool anAnimate);
+		void setAnimator(QLabel* AnimatorLabel, QProgressBar* AnimatorBar, bool anAnimate);
 
 	public slots:
 		void progress( int done, int total );
@@ -69,14 +70,14 @@ class Downloader : public QObject
 		int IdAuth;
 		bool Error;
 		QEventLoop Loop;
-		QProgressDialog* Animator;
+		QLabel* AnimatorLabel;
 		QProgressBar* AnimatorBar;
 		QTimer *AnimationTimer;
 };
 
-bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDocument);
-bool downloadMoreOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDocument);
-bool downloadOSM(MainWindow* Main, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort , const quint32 region , MapDocument* theDocument, MapLayer* theLayer);
+bool downloadOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDocument);
+bool downloadMoreOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDocument);
+bool downloadOSM(QWidget* Main, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort , const quint32 region , MapDocument* theDocument, MapLayer* theLayer);
 
 bool checkForConflicts(MapDocument* theDocument);
 

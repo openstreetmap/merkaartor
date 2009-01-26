@@ -366,6 +366,7 @@ public:
 
 	/* World OSB manager */
 	M_PARAM_DECLARE_STRING(LastWorldOsbDir)
+	M_PARAM_DECLARE_INT(TileToRegionThreshold)
 
 	/* Mouse bevaviour */
 	M_PARAM_DECLARE_BOOL(MouseSingleButton)

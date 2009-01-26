@@ -26,10 +26,18 @@ WorldOsbManager::WorldOsbManager(QWidget *parent)
 	:QDialog(parent), WorldFile(0)
 {
 	setupUi(this);
+
 	if (!M_PREFS->getLastWorldOsbDir().isEmpty()) {
 		WorldDirectory->setText(M_PREFS->getLastWorldOsbDir());
 		readWorld();
 	}
+
+	theProgressDialog = NULL;
+	theProgressBar = pbInfo;
+	theProgressLabel = lbInfo;
+
+	theProgressLabel->setVisible(false);
+	theProgressBar->setVisible(false);
 }
 
 void WorldOsbManager::on_cbShowGrid_toggled(bool checked)
@@ -67,6 +75,10 @@ void WorldOsbManager::DoIt()
 			tr("Please provide a valid directory name."), QMessageBox::Ok);
 		return;
 	}
+
+	theProgressLabel->setVisible(true);
+	theProgressBar->setVisible(true);
+
 	QHashIterator<quint32, bool> it(slippy->SelectedRegions);
 	while (it.hasNext()) {
 		it.next();
@@ -76,6 +88,9 @@ void WorldOsbManager::DoIt()
 				QMessageBox::critical(this, tr("Region generation error"), 
 					tr("Error while generating region %1").arg(it.key()), QMessageBox::Ok);
 	}
+	theProgressLabel->setVisible(false);
+	theProgressBar->setVisible(false);
+
 	QHashIterator<quint32, bool> itd(slippy->DeleteRegions);
 	while (itd.hasNext()) {
 		itd.next();
@@ -118,6 +133,9 @@ bool WorldOsbManager::generateRegion(quint32 rg)
 	int proxyPort;
 	bool useProxy;
 
+	theProgressLabel->setText("");
+	theProgressBar->reset();
+
 	MapDocument * aDoc = new MapDocument();
 	DrawingMapLayer* aLayer = new DrawingMapLayer("Tmp");
 	aDoc->add(aLayer);
@@ -130,7 +148,7 @@ bool WorldOsbManager::generateRegion(quint32 rg)
 	proxyHost = M_PREFS->getProxyHost();
 	proxyPort = M_PREFS->getProxyPort();
 
-	if (!downloadOSM((MainWindow*) parent(), osmUser, osmPwd, useProxy, proxyHost, proxyPort, rg , aDoc, aLayer)) {
+	if (!downloadOSM(this, osmUser, osmPwd, useProxy, proxyHost, proxyPort, rg , aDoc, aLayer)) {
 		aDoc->remove(aLayer);
 		delete aLayer;
 		delete aDoc;
@@ -177,6 +195,11 @@ bool WorldOsbManager::generateRegion(quint32 rg)
 
 	slippy->ExistingRegions[rg] = true;
 	slippy->SelectedRegions[rg] = false;
+	slippy->DateRegions[rg] = QDateTime::currentDateTime();
+	
+	theProgressLabel->setText("");
+	theProgressBar->reset();
+
 	return true;
 }
 

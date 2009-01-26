@@ -1122,7 +1122,7 @@ void OsbMapLayer::invalidate(MapDocument* d, CoordBox vp)
 			tileToLoad.push_back(j*NUM_TILES+i);
 
 	int span = (x2 - x1 + 1) * (y2 - y1 + 1);
-	if (span > TILETOREGION_THRESHOLD)
+	if (span > M_PREFS->getTileToRegionThreshold())
 		tileToLoad.clear();
 
 	int j;

@@ -1309,6 +1309,7 @@ M_PARAM_IMPLEMENT_BOOL(TranslateTags, locale, true);
 
 /* World OSB manager */
 M_PARAM_IMPLEMENT_STRING(LastWorldOsbDir, WOSB, "")
+M_PARAM_IMPLEMENT_INT(TileToRegionThreshold, WOSB, 9)
 
 /* Mouse bevaviour */
 #ifdef _MOBILE

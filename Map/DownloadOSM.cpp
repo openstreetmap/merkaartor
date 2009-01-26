@@ -13,17 +13,19 @@
 #include "Preferences/MerkaartorPreferences.h"
 #include "ImportExport/ImportExportOsmBin.h"
 
+#include "IProgressWindow.h"
+
 #include <ui_DownloadMapDialog.h>
 
-#include <QtCore/QBuffer>
-#include <QtCore/QSettings>
-#include <QtCore/QTimer>
-#include <QtGui/QComboBox>
-#include <QtGui/QMainWindow>
-#include <QtGui/QMessageBox>
-#include <QtGui/QProgressBar>
-#include <QtGui/QProgressDialog>
-#include <QtGui/QStatusBar>
+#include <QBuffer>
+#include <QSettings>
+#include <QTimer>
+#include <QComboBox>
+#include <QMessageBox>
+#include <QProgressBar>
+#include <QLabel>
+#include <QProgressDialog>
+#include <QStatusBar>
 #include <QInputDialog>
 
 #include "zlib/zlib.h"
@@ -37,7 +39,7 @@
 Downloader::Downloader(const QString& aWeb, const QString& aUser, const QString& aPwd, bool aUseProxy, const QString& aProxyHost, int aProxyPort)
 : Port(80), Web(aWeb), User(aUser), Password(aPwd),
   UseProxy(aUseProxy), ProxyHost(aProxyHost), ProxyPort(aProxyPort), Id(0),
-  Error(false), Animator(0), AnimatorBar(0), AnimationTimer(0)
+  Error(false), AnimatorLabel(0), AnimatorBar(0), AnimationTimer(0)
 {
 	int p = Web.lastIndexOf(':');
 	if (p != -1)
@@ -61,21 +63,21 @@ void Downloader::animate()
 		AnimatorBar->setValue((AnimatorBar->value()+1) % AnimatorBar->maximum());
 }
 
-void Downloader::setAnimator(QProgressDialog *anAnimator,  QProgressBar* aBar, bool anAnimate)
+void Downloader::setAnimator(QLabel* anAnimatorLabel, QProgressBar* anAnimatorBar, bool anAnimate)
 {
-	Animator = anAnimator;
-	AnimatorBar = aBar;
-	if (Animator && anAnimate)
+	AnimatorLabel = anAnimatorLabel;
+	AnimatorBar = anAnimatorBar;
+	if (AnimatorBar && anAnimate)
 	{
 		if (AnimationTimer)
 			delete AnimationTimer;
 		AnimationTimer = new QTimer(this);
 		connect(AnimationTimer,SIGNAL(timeout()),this,SLOT(animate()));
 	}
-	if (Animator)
+	if (AnimatorBar)
 	{
-		Animator->setValue(0);
-		connect(Animator,SIGNAL(canceled()),this,SLOT(on_Cancel_clicked()));
+		AnimatorBar->setValue(0);
+		connect(AnimatorBar,SIGNAL(canceled()),this,SLOT(on_Cancel_clicked()));
 		qApp->processEvents();
 	}
 }
@@ -306,12 +308,12 @@ void Downloader::on_requestFinished(int anId, bool anError)
 
 void Downloader::progress(int done, int total)
 {
-	if (Animator)
+	if (AnimatorLabel && AnimatorBar)
 	{
 		if (done < 10240)
-			Animator->setLabelText(tr("Downloading from OSM (%n bytes)", "", done));
+			AnimatorLabel->setText(tr("Downloading from OSM (%n bytes)", "", done));
 		else
-			Animator->setLabelText(tr("Downloading from OSM (%n kBytes)", "", (done/1024)));
+			AnimatorLabel->setText(tr("Downloading from OSM (%n kBytes)", "", (done/1024)));
 		if (AnimationTimer && total != 0)
 		{
 			SAFE_DELETE(AnimationTimer);
@@ -409,29 +411,34 @@ QString Downloader::getURLToTrackPoints()
 	return URL;
 }
 
-bool downloadOSM(QMainWindow* aParent, const QUrl& theUrl, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort, MapDocument* theDocument, MapLayer* theLayer)
+bool downloadOSM(QWidget* aParent, const QUrl& theUrl, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort, MapDocument* theDocument, MapLayer* theLayer)
 {
 	QString aWeb = theUrl.host();
 	QString URL = theUrl.path();
 	Downloader Rcv(aWeb, aUser, aPassword, UseProxy, ProxyHost, ProxyPort);
 
-	QProgressDialog* ProgressDialog = new QProgressDialog(aParent);
-	ProgressDialog->setWindowModality(Qt::ApplicationModal);
-	QProgressBar* Bar = new QProgressBar(ProgressDialog);
-	Bar->setTextVisible(false);
-	ProgressDialog->setBar(Bar);
-	ProgressDialog->setMinimumDuration(0);
-	ProgressDialog->setLabelText(QApplication::translate("Downloader","Downloading from OSM (connecting)"));
-	ProgressDialog->setMaximum(11);
-	Rcv.setAnimator(ProgressDialog,Bar,true);
+	IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(aParent);
+	if (!aProgressWindow)
+		return false;
 
+	QProgressDialog* dlg = aProgressWindow->getProgressDialog();
+
+	QProgressBar* Bar = aProgressWindow->getProgressBar();
+	Bar->setTextVisible(false);
+	Bar->setMaximum(11);
+
+	QLabel* Lbl = aProgressWindow->getProgressLabel();
+	Lbl->setText(QApplication::translate("Downloader","Downloading from OSM (connecting)"));
+
+	if (dlg)
+		dlg->show();
+
+	Rcv.setAnimator(Lbl, Bar, true);
 	if (!Rcv.go(URL))
 	{
 		aParent->setCursor(QCursor(Qt::ArrowCursor));
-		SAFE_DELETE(ProgressDialog);
 		return false;
 	}
-	SAFE_DELETE(ProgressDialog);
 #ifdef DEBUG_MAPCALL_ONLY
 	showDebug("GET", URL,QByteArray(), Rcv.content());
 #endif
@@ -471,7 +478,7 @@ bool downloadOSM(QMainWindow* aParent, const QUrl& theUrl, const QString& aUser,
 	return OK;
 }
 
-bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort, const CoordBox& aBox , MapDocument* theDocument, MapLayer* theLayer)
+bool downloadOSM(QWidget* aParent, const QString& aWeb, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort, const CoordBox& aBox , MapDocument* theDocument, MapLayer* theLayer)
 {
 	if (checkForConflicts(theDocument))
 	{
@@ -490,7 +497,7 @@ bool downloadOSM(QMainWindow* aParent, const QString& aWeb, const QString& aUser
 	return downloadOSM(aParent, theUrl, aUser, aPassword, UseProxy, ProxyHost, ProxyPort, theDocument, theLayer);
 }
 
-bool downloadOSM(MainWindow* Main, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort , const quint32 region , MapDocument* theDocument, MapLayer* theLayer)
+bool downloadOSM(QWidget* Main, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort , const quint32 region , MapDocument* theDocument, MapLayer* theLayer)
 {
 	Q_UNUSED(aUser)
 	Q_UNUSED(aPassword)
@@ -520,25 +527,33 @@ bool downloadOSM(MainWindow* Main, const QString& aUser, const QString& aPasswor
 //	return downloadOSM(Main,theUrl,aUser,aPassword,UseProxy,ProxyHost,ProxyPort,theDocument, theLayer);
 }
 
-bool downloadTracksFromOSM(QMainWindow* Main, const QString& aWeb, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort , const CoordBox& aBox , MapDocument* theDocument)
+bool downloadTracksFromOSM(QWidget* Main, const QString& aWeb, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort , const CoordBox& aBox , MapDocument* theDocument)
 {
 	Downloader theDownloader(aWeb, aUser, aPassword, UseProxy, ProxyHost, ProxyPort);
 	QVector<TrackMapLayer*> theTracklayers;
 	//TrackMapLayer* trackLayer = new TrackMapLayer(QApplication::translate("Downloader","Downloaded tracks"));
 	//theDocument->add(trackLayer);
-	QProgressDialog ProgressDialog(Main);
-	ProgressDialog.setWindowModality(Qt::ApplicationModal);
-	QProgressBar* Bar = new QProgressBar(&ProgressDialog);
+
+	IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(Main);
+	if (!aProgressWindow)
+		return false;
+
+	QProgressDialog* dlg = aProgressWindow->getProgressDialog();
+
+	QProgressBar* Bar = aProgressWindow->getProgressBar();
 	Bar->setTextVisible(false);
-	ProgressDialog.setBar(Bar);
-	ProgressDialog.setMinimumDuration(0);
-	ProgressDialog.setMaximum(11);
-	ProgressDialog.setValue(1);
-	ProgressDialog.show();
-	theDownloader.setAnimator(&ProgressDialog,Bar,true);
+	Bar->setMaximum(11);
+
+	QLabel* Lbl = aProgressWindow->getProgressLabel();
+	Lbl->setText(QApplication::translate("Downloader","Parsing XML"));
+
+	if (dlg)
+		dlg->show();
+
+	theDownloader.setAnimator(Lbl,Bar,true);
 	for (unsigned int Page=0; ;++Page)
 	{
-		ProgressDialog.setLabelText(QApplication::translate("Downloader","Downloading trackpoints %1-%2").arg(Page*5000+1).arg(Page*5000+5000));
+		Lbl->setText(QApplication::translate("Downloader","Downloading trackpoints %1-%2").arg(Page*5000+1).arg(Page*5000+5000));
 		QString URL = theDownloader.getURLToTrackPoints();
 		URL = URL.arg(intToAng(aBox.bottomLeft().lon())).
 				arg(intToAng(aBox.bottomLeft().lat())).
@@ -573,8 +588,9 @@ bool checkForConflicts(MapDocument* theDocument)
 	return false;
 }
 
-bool downloadMoreOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDocument)
+bool downloadMoreOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDocument)
 {
+	MainWindow* Main = dynamic_cast<MainWindow*>(aParent);
 	MapLayer* theLayer;
 	if (!theDocument->getLastDownloadLayer()) {
 		theLayer = new DrawingMapLayer(QApplication::translate("Downloader","%1 download").arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
@@ -594,29 +610,30 @@ bool downloadMoreOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* th
 	useProxy = MerkaartorPreferences::instance()->getProxyUse();
 	proxyHost = MerkaartorPreferences::instance()->getProxyHost();
 	proxyPort = MerkaartorPreferences::instance()->getProxyPort();
-	aParent->view()->setUpdatesEnabled(false);
+	Main->view()->setUpdatesEnabled(false);
 
 	bool OK = true;
 	OK = downloadOSM(aParent,osmWebsite,osmUser,osmPwd,useProxy,proxyHost,proxyPort,aBox,theDocument,theLayer);
-	aParent->view()->setUpdatesEnabled(true);
+	Main->view()->setUpdatesEnabled(true);
 	if (OK)
 	{
 		theDocument->setLastDownloadLayer(theLayer);
 		theDocument->addDownloadBox(aBox);
 		// Don't jump around on Download More
 		// aParent->view()->projection().setViewport(aBox,aParent->view()->rect());
-		aParent->invalidateView();
+		Main->invalidateView();
 	}
 	return OK;
 }
 
-bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDocument)
+bool downloadOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDocument)
 {
 	QString osmWebsite, osmUser, osmPwd, proxyHost;
 	int proxyPort;
 	bool useProxy;
 	static bool DownloadRaw = false;
 
+	MainWindow* Main = dynamic_cast<MainWindow*>(aParent);
 	QDialog * dlg = new QDialog(aParent);
 
 	osmWebsite = MerkaartorPreferences::instance()->getOsmWebsite();
@@ -700,7 +717,7 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 				Clip = CoordBox(Coord(R.x(), R.y()), Coord(R.x()+R.width(), R.y()+R.height()));
 			}
 			if (retry) continue;
-			aParent->view()->setUpdatesEnabled(false);
+			Main->view()->setUpdatesEnabled(false);
 			MapLayer* theLayer = new DrawingMapLayer(QApplication::translate("Downloader","%1 download").arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
 			theDocument->add(theLayer);
 			M_PREFS->setResolveRelations(ui.ResolveRelations->isChecked());
@@ -713,16 +730,16 @@ bool downloadOSM(MainWindow* aParent, const CoordBox& aBox , MapDocument* theDoc
 				OK = downloadOSM(aParent,osmWebsite,osmUser,osmPwd,useProxy,proxyHost,proxyPort,Clip,theDocument,theLayer);
 			if (OK && ui.IncludeTracks->isChecked())
 				OK = downloadTracksFromOSM(aParent,osmWebsite,osmUser,osmPwd,useProxy,proxyHost,proxyPort, Clip,theDocument);
-			aParent->view()->setUpdatesEnabled(true);
+			Main->view()->setUpdatesEnabled(true);
 			if (OK)
 			{
 				theDocument->setLastDownloadLayer(theLayer);
 				theDocument->addDownloadBox(Clip);
                 if (directAPI)
-                    aParent->on_viewZoomAllAction_triggered();
+                    Main->on_viewZoomAllAction_triggered();
                 else
-                    aParent->view()->projection().setViewport(Clip,aParent->view()->rect());
-				aParent->invalidateView();
+                    Main->view()->projection().setViewport(Clip,Main->view()->rect());
+				Main->invalidateView();
 			} else {
 				retry = true;
 				theDocument->remove(theLayer);
