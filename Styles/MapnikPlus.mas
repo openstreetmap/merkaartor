@@ -422,6 +422,18 @@
   <selector expr="[amenity] is taxi"/>
 </painter>
 <painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/MapIcons/map-icons/square.small/public/arts_centre.png" iconScale="0" iconOffset="0"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[amenity] is arts_centre"/>
+</painter>
+<painter
+ zoomUnder="0.2" zoomUpper="1e+07"
+ icon=":/MapIcons/map-icons/square.small/recreation/theater.png" iconScale="0" iconOffset="0"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[amenity] is theatre"/>
+</painter>
+<painter
  fillColor="#aacbafcd"
  drawTrafficDirectionMarks="yes">
   <selector expr="[amenity] is grave_yard"/>
