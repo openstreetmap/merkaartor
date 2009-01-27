@@ -42,7 +42,9 @@
 #include "Preferences/MerkaartorPreferences.h"
 #include "Utils/SelectionDialog.h"
 #include "QMapControl/imagemanager.h"
-#include "QMapControl/browserimagemanager.h"
+#ifdef YAHOO
+	#include "QMapControl/browserimagemanager.h"
+#endif
 #include "QMapControl/mapadapter.h"
 #include "QMapControl/wmsmapadapter.h"
 #include "Tools/WorldOsbManager.h"
