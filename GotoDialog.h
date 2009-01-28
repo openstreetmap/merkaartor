@@ -48,7 +48,9 @@ protected:
 	
 private:
 	Projection theProjection;
-	CoordBox theNewViewport;	
+	CoordBox theNewViewport;
+
+	void changeEvent(QEvent*);
 
 };
 

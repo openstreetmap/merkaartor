@@ -36,11 +36,7 @@ QGPS::QGPS(QWidget *parent)
     : MDockAncestor(parent), gpsDevice(0)
 {
 	setupUi(getWidget());
-	setWindowTitle("GPS");
 	setObjectName("GPSMainWindow");
-
-	lblFixStatus->setText(tr("No Position Fix"));
-	lblFixTime->setText(tr("No UTC Time"));
 
     int w = fontMetrics().width("360N 60'60\" W");
     txtLatitude->setFixedWidth(w);
@@ -50,6 +46,8 @@ QGPS::QGPS(QWidget *parent)
 	txtNumSats->setFixedWidth(w);
 	txtFixType->setFixedWidth(w);
 	resetGpsStatus();
+
+	retranslateUi();
 
     //loadSettings();
 
@@ -210,4 +208,19 @@ void QGPS::hideEvent ( QHideEvent * anEvent )
 
 	if (gpsDevice) 
 		disconnect(gpsDevice, SIGNAL(updateStatus()), this, SLOT(updateGpsStatus()));
+}
+
+void QGPS::changeEvent(QEvent * event)
+{
+	if (event->type() == QEvent::LanguageChange)
+		retranslateUi();
+	MDockAncestor::changeEvent(event);
+}
+
+void QGPS::retranslateUi()
+{
+	setWindowTitle("GPS");
+	lblFixStatus->setText(tr("No Position Fix"));
+	lblFixTime->setText(tr("No UTC Time"));
+
 }

@@ -58,6 +58,8 @@ private:
 	void loadPrefs();
 	void savePrefs();
 
+	void changeEvent(QEvent *);
+
 private:
 	QVector<Tool> theTools;
 	QColor BgColor;

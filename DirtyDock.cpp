@@ -27,19 +27,20 @@ DirtyDock::DirtyDock(MainWindow* aParent)
 	: MDockAncestor(aParent), Main(aParent)
 {
 	setMinimumSize(220,100);
-	setWindowTitle(tr("Undo"));
 	setObjectName("dirtyDock");
 
 	ui.setupUi(getWidget());
 
-	centerAction = new QAction(tr("Center map"), this);
+	centerAction = new QAction(NULL, this);
 	connect(centerAction, SIGNAL(triggered()), this, SLOT(on_centerAction_triggered()));
-	centerZoomAction = new QAction(tr("Center && Zoom map"), this);
+	centerZoomAction = new QAction(NULL, this);
 	connect(centerZoomAction, SIGNAL(triggered()), this, SLOT(on_centerZoomAction_triggered()));
 
 	connect(ui.ChangesList, SIGNAL(itemSelectionChanged()), this, SLOT(on_ChangesList_itemSelectionChanged()));
 	connect(ui.ChangesList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(on_ChangesList_itemDoubleClicked(QListWidgetItem*)));
 	connect(ui.ChangesList, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(on_ChangesList_customContextMenuRequested(const QPoint &)));
+
+	retranslateUi();
 }
 
 
@@ -157,4 +158,19 @@ void DirtyDock::on_centerZoomAction_triggered()
 		Main->invalidateView();
 	}
 	Main->setUpdatesEnabled(true);
+}
+
+void DirtyDock::changeEvent(QEvent * event)
+{
+	if (event->type() == QEvent::LanguageChange)
+		retranslateUi();
+	MDockAncestor::changeEvent(event);
+}
+
+void DirtyDock::retranslateUi()
+{
+	setWindowTitle(tr("Undo"));
+	centerAction->setText(tr("Center map"));
+	centerZoomAction->setText(tr("Center && Zoom map"));
+	updateList();
 }

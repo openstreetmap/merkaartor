@@ -48,6 +48,9 @@ private:
 	QAction* centerZoomAction;
 	
 	std::vector<MapFeature*> Selection;
+public:
+	void changeEvent(QEvent*);
+	void retranslateUi();
 };
 
 #endif

@@ -46,6 +46,9 @@ class QGPS : public MDockAncestor, public Ui_QGPSMainWindowUI
     
         QGPSDevice  *gpsDevice;      
         QString     serialPort;
+	
+	void changeEvent(QEvent*);
+	void retranslateUi();
         
     public slots:
     

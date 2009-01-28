@@ -476,4 +476,10 @@ void PreferencesDialog::on_btGpsLogDirBrowse_clicked()
 	}
 }
 
+void PreferencesDialog::changeEvent(QEvent * event)
+{
+	if (event->type() == QEvent::LanguageChange)
+		retranslateUi(this);
+	QDialog::changeEvent(event);
+}
 

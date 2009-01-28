@@ -182,3 +182,10 @@ void GotoDialog::searchWidget_doubleClicked()
 {
     buttonBox->button(QDialogButtonBox::Ok)->click();
 }
+
+void GotoDialog::changeEvent(QEvent * event)
+{
+        if (event->type() == QEvent::LanguageChange)
+                retranslateUi(this);
+}
+

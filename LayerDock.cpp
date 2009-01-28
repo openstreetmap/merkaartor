@@ -35,10 +35,11 @@ LayerDock::LayerDock(MainWindow* aMain)
 {
 	p = new LayerDockPrivate(aMain);
 //	setMinimumSize(220,100);
-	setWindowTitle(tr("Layers"));
 	setObjectName("layersDock");
 
 	createContent();
+
+	retranslateUi();
 }
 
 LayerDock::~LayerDock()
@@ -116,14 +117,15 @@ void LayerDock::createContent()
 	p->tab->setShape(QTabBar::RoundedWest);
 	p->tab->setContextMenuPolicy(Qt::CustomContextMenu);
 	int t;
-	t = p->tab->addTab(tr("All"));
+	t = p->tab->addTab(NULL);
 	p->tab->setTabData(t, MapLayer::All);
-	t = p->tab->addTab(tr("Default"));
+	t = p->tab->addTab(NULL);
 	p->tab->setTabData(t, MapLayer::Default);
-	t = p->tab->addTab(tr("OSM"));
+	t = p->tab->addTab(NULL);
 	p->tab->setTabData(t, MapLayer::OSM);
-	t = p->tab->addTab(tr("Tracks"));
+	t = p->tab->addTab(NULL);
 	p->tab->setTabData(t, MapLayer::Tracks);
+	retranslateTabBar();
 	connect(p->tab, SIGNAL(currentChanged (int)), this, SLOT(tabChanged(int)));
 	connect(p->tab, SIGNAL(customContextMenuRequested (const QPoint&)), this, SLOT(tabContextMenuRequested(const QPoint&)));
 
@@ -248,4 +250,25 @@ void LayerDock::TabHideAll(bool)
 			p->layerList[i].second->setLayerVisible(false);
 		}
 	}
+}
+
+void LayerDock::changeEvent(QEvent * event)
+{
+	if (event->type() == QEvent::LanguageChange)
+		retranslateUi();
+	MDockAncestor::changeEvent(event);
+}
+
+void LayerDock::retranslateUi()
+{
+	setWindowTitle(tr("Layers"));
+	retranslateTabBar();
+}
+
+void LayerDock::retranslateTabBar()
+{
+	p->tab->setTabText(0, tr("All"));
+	p->tab->setTabText(1, tr("Default"));
+	p->tab->setTabText(2, tr("OSM"));
+	p->tab->setTabText(3, tr("Tracks"));
 }

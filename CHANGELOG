@@ -1,4 +1,5 @@
 v0.13
+	* FIX : Implement dynamic UI translation (fixes #1432)
 	* ADD : Generalize the concept of download progress window
 	* FIX : If one of the translation composant (Qt or Merkaartor) is missing, allow the other to be loaded.
 	* FIX : Add missing tr() calls in render dialogs.

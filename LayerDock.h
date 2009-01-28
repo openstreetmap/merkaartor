@@ -46,6 +46,11 @@ class LayerDock : public MDockAncestor
 
 	protected:
 		LayerDockPrivate* p;
+
+	private:
+		void changeEvent(QEvent*);
+		void retranslateUi();
+		void retranslateTabBar();
 };
 
 #endif

@@ -71,6 +71,8 @@ class PropertiesDock : public MDockAncestor
 		void switchToMultiUi();
 		void switchToRelationUi(MapFeature* F);
 		void fillMultiUiSelectionBox();
+		void changeEvent(QEvent*);
+		void retranslateUi();
 
 		MainWindow* Main;
 		QWidget* CurrentUi;
@@ -88,8 +90,8 @@ class PropertiesDock : public MDockAncestor
 		ShortcutOverrideFilter* shortcutFilter;
 		TagTemplates* theTemplates;
 
-        QTableView *CurrentTagView;
-        QTableView *CurrentMembersView;
+		QTableView *CurrentTagView;
+		QTableView *CurrentMembersView;
 
 		enum { NoUiShowing, TrackPointUiShowing, RoadUiShowing, RelationUiShowing, MultiShowing } NowShowing ;
 };

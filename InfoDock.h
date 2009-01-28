@@ -34,6 +34,8 @@ public:
 	QString getHtml();
 	void setHoverHtml(QString html);
 	void unsetHoverHtml();
+        void changeEvent(QEvent *);
+        void retranslateUi();
 
 private slots:
 	void on_anchorClicked(const QUrl & link);

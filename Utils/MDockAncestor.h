@@ -16,6 +16,7 @@ class MDockAncestor : public QDockWidget
 
 	protected:
 		QWidget* mainWidget;
+		virtual void retranslateUi() = 0;
 };
 
 #else
@@ -35,6 +36,7 @@ class MDockAncestor : public QDialog
 	protected:
 		QVBoxLayout* theLayout;
 		QWidget* mainWidget;
+		virtual void retranslateUi() = 0;
 };
 
 #endif

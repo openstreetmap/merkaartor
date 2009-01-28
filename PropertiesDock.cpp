@@ -38,7 +38,6 @@ PropertiesDock::PropertiesDock(MainWindow* aParent)
 {
 	setMinimumSize(220,100);
 	switchToNoUi();
-	setWindowTitle(tr("Properties"));
 	setObjectName("propertiesDock");
 	theModel = new TagModel(aParent);
 	delegate = new EditCompleterDelegate(aParent);
@@ -54,12 +53,14 @@ PropertiesDock::PropertiesDock(MainWindow* aParent)
 	shortcutFilter->addOverride(Qt::Key_F2);
 	shortcutFilter->addOverride(Qt::Key_Delete);
 
-	centerAction = new QAction(tr("Center map"), this);
+	centerAction = new QAction(NULL, this);
 	connect(centerAction, SIGNAL(triggered()), this, SLOT(on_centerAction_triggered()));
-	centerZoomAction = new QAction(tr("Center && Zoom map"), this);
+	centerZoomAction = new QAction(NULL, this);
 	connect(centerZoomAction, SIGNAL(triggered()), this, SLOT(on_centerZoomAction_triggered()));
 
 	loadTemplates();
+
+	retranslateUi();
 }
 
 PropertiesDock::~PropertiesDock(void)
@@ -909,3 +910,20 @@ void PropertiesDock::on_template_changed(TagTemplate* /* aNewTemplate */)
 {
 	resetValues();
 }
+
+void PropertiesDock::changeEvent(QEvent * event)
+{
+	if (event->type() == QEvent::LanguageChange)
+		retranslateUi();
+	MDockAncestor::changeEvent(event);
+}
+
+void PropertiesDock::retranslateUi()
+{
+	setWindowTitle(tr("Properties"));
+	centerAction->setText(tr("Center map"));
+        centerZoomAction->setText(tr("Center && Zoom map"));
+
+
+}
+

@@ -28,6 +28,7 @@ InfoDock::InfoDock(MainWindow* aParent)
 	setWidget(theText);
 
 	connect(theText, SIGNAL(anchorClicked(const QUrl &)), this, SLOT(on_anchorClicked(const QUrl &)));
+	retranslateUi();
 }
 
 
@@ -84,4 +85,15 @@ void InfoDock::on_anchorClicked(const QUrl & link)
 	}
 }
 
+void InfoDock::changeEvent(QEvent *event)
+{
+	if (event->type() == QEvent::LanguageChange)
+		retranslateUi();
+	MDockAncestor::changeEvent(event);
+}
+
+void InfoDock::retranslateUi()
+{
+	setWindowTitle(tr("Info"));
+}
 
