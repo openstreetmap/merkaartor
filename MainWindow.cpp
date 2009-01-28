@@ -137,6 +137,7 @@ MainWindow::MainWindow(void)
 
 	theView = new MapView(this);
 	setCentralWidget(theView);
+	connect (theView, SIGNAL(interactionChanged(Interaction*)), this, SLOT(mapView_interactionChanged(Interaction*)));
 
 	theLayers = new LayerDock(this);
 
@@ -2253,6 +2254,15 @@ void MainWindow::updateLanguage()
 					statusBar()->showMessage(tr("Warning! Could not load the Merkaartor translations for the \"%1\" language.").arg(DefaultLanguage), 15000);
     }
     retranslateUi(this);
+}
+
+void MainWindow::mapView_interactionChanged(Interaction* anInteraction)
+{
+	editPropertiesAction->setChecked(dynamic_cast<EditInteraction*>(anInteraction) != NULL);
+	editMoveAction->setChecked(dynamic_cast<MoveTrackPointInteraction*>(anInteraction) != NULL);
+	createNodeAction->setChecked(dynamic_cast<CreateNodeInteraction*>(anInteraction) != NULL);
+	createRoadAction->setChecked(dynamic_cast<CreateSingleWayInteraction*>(anInteraction) != NULL);
+	createAreaAction->setChecked(dynamic_cast<CreateAreaInteraction*>(anInteraction) != NULL);
 }
 
 void MainWindow::updateMenu()

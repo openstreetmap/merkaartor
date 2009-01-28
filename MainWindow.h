@@ -22,6 +22,7 @@ class QGPS;
 class FeaturePainter;
 class TrackMapLayer;
 class TrackSegment;
+class Interaction;
 
 #ifdef GEOIMAGE
 class GeoImageDock;
@@ -206,6 +207,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 	private slots:
 		void setAreaOpacity(QAction*);
 		void updateBookmarksMenu();
+		void mapView_interactionChanged(Interaction* anInteraction);
 
 	private:
 		void updateMenu();

@@ -90,6 +90,9 @@ class MapView :	public QWidget
 		virtual void on_MoveRight_activated();
 		virtual void on_MoveUp_activated();
 		virtual void on_MoveDown_activated();
+	
+	signals:
+		void interactionChanged(Interaction* anInteraction);
 
 	protected:
 		bool event(QEvent *event);

@@ -532,6 +532,7 @@ void MapView::launch(Interaction* anInteraction)
 	EI = dynamic_cast<EditInteraction*>(theInteraction);
 	if (theInteraction) {
 		setCursor(theInteraction->cursor());
+		emit interactionChanged(anInteraction);
 		if (EI)
 			EI->setSnap(theSnapList);
 	}

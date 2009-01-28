@@ -16,6 +16,37 @@
         <file>edit-cut.png</file>
         <file>edit-paste.png</file>
         <file>emblem-readonly.png</file>
+        <file>actions/align_nodes.png</file>
+        <file>actions/break_apart_roads.png</file>
+        <file>actions/create_area.png</file>
+        <file>actions/create_node.png</file>
+        <file>actions/create_road.png</file>
+        <file>actions/detach_node.png</file>
+        <file>actions/download.png</file>
+        <file>actions/download_more.png</file>
+        <file>actions/edit_copy.png</file>
+        <file>actions/edit_delete.png</file>
+        <file>actions/edit_move.png</file>
+        <file>actions/edit_paste.png</file>
+        <file>actions/edit_paste_tags.png</file>
+        <file>actions/join_roads.png</file>
+        <file>actions/redo.png</file>
+        <file>actions/reverse_road.png</file>
+        <file>actions/save.png</file>
+        <file>actions/select.png</file>
+        <file>actions/split_road.png</file>
+        <file>actions/undo.png</file>
+        <file>actions/upload.png</file>
+        <file>actions/document_import.png</file>
+        <file>actions/document_new.png</file>
+        <file>actions/document_open.png</file>
+        <file>actions/find.png</file>
+        <file>actions/goto.png</file>
+        <file>actions/offline.png</file>
+        <file>actions/preferences.png</file>
+        <file>actions/zoom_fit_best.png</file>
+        <file>actions/zoom_in.png</file>
+        <file>actions/zoom_out.png</file>
     </qresource>
     <qresource prefix="/Art">
         <file>Mapnik/airport.png</file>
