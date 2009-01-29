@@ -14,9 +14,7 @@ tar:
 po_changed:
 	make potemplate
 	make ts
-	make updatets
-	make pot po
-	make ts
+	make ts_changed
 
 # special case: the ts files have been used for updating translations
 ts_changed:
