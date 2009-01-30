@@ -77,7 +77,8 @@ void Downloader::setAnimator(QLabel* anAnimatorLabel, QProgressBar* anAnimatorBa
 	if (AnimatorBar)
 	{
 		AnimatorBar->setValue(0);
-		connect(AnimatorBar,SIGNAL(canceled()),this,SLOT(on_Cancel_clicked()));
+		//QProgressBar does not have a canceled() signal!!!
+		//connect(AnimatorBar,SIGNAL(canceled()),this,SLOT(on_Cancel_clicked()));
 		qApp->processEvents();
 	}
 }
