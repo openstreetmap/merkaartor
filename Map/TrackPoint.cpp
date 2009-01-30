@@ -15,7 +15,7 @@ TrackPoint::TrackPoint(const Coord& aCoord)
 }
 
 TrackPoint::TrackPoint(const TrackPoint& other)
-: MapFeature(other), Position(other.Position), Elevation(other.Elevation), Speed(other.Speed)
+: MapFeature(other), Position(other.Position), Elevation(other.Elevation), Speed(other.Speed), Projected(other.Projected)
 {
 	#ifdef GEOIMAGE
 	ImageId = other.ImageId;
@@ -68,7 +68,28 @@ const Coord& TrackPoint::position() const
 void TrackPoint::setPosition(const Coord& aCoord)
 {
 	Position = aCoord;
+	Projected = QPoint();
 	notifyChanges();
+}
+
+const QPoint& TrackPoint::projection() const
+{
+	return Projected;
+}
+
+void TrackPoint::setProjection(const QPoint& aProjection)
+{
+	Projected = aProjection;
+}
+
+const ProjectionType TrackPoint::projectionType() const
+{
+	return ProjectedType;
+}
+
+void TrackPoint::setProjectionType(const ProjectionType aProjectionType)
+{
+	ProjectedType = aProjectionType;
 }
 
 double TrackPoint::speed() const
@@ -121,9 +142,9 @@ void TrackPoint::draw(QPainter& /* thePainter */, const Projection& /*theProject
 void TrackPoint::draw(QPainter& thePainter, const Projection& theProjection )
 {
 	if (ImageId != -1) {
-		QPointF me = theProjection.project(position());
+		QPoint me = theProjection.project(this);
 		thePainter.setPen(QPen(QColor(0, 0, 0), 2));
-		QRectF box(me - QPointF(5, 3), me + QPointF(5, 3));
+		QRect box(me - QPoint(5, 3), me + QPoint(5, 3));
 		thePainter.drawRect(box);
 	}
 }
@@ -133,8 +154,8 @@ void TrackPoint::draw(QPainter& thePainter, const Projection& theProjection )
 void TrackPoint::drawFocus(QPainter& thePainter, const Projection& theProjection, bool solid)
 {
 	thePainter.setPen(MerkaartorPreferences::instance()->getFocusColor());
-	QPointF P(theProjection.project(Position));
-	QRectF R(P-QPointF(3,3),QSize(6,6));
+	QPoint P(theProjection.project(this));
+	QRect R(P-QPoint(3,3),QSize(6,6));
 	thePainter.drawRect(R);
 	R.adjust(-7, -7, 7, 7);
 	thePainter.drawEllipse(R);
@@ -148,8 +169,8 @@ void TrackPoint::drawFocus(QPainter& thePainter, const Projection& theProjection
 void TrackPoint::drawHover(QPainter& thePainter, const Projection& theProjection, bool solid)
 {
 	thePainter.setPen(MerkaartorPreferences::instance()->getHoverColor());
-	QPointF P(theProjection.project(Position));
-	QRectF R(P-QPointF(3,3),QSize(6,6));
+	QPoint P(theProjection.project(this));
+	QRect R(P-QPoint(3,3),QSize(6,6));
 	thePainter.drawRect(R);
 	R.adjust(-7, -7, 7, 7);
 	thePainter.drawEllipse(R);

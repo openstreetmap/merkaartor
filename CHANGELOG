@@ -1,4 +1,7 @@
 v0.13
+	* ADD : Initial support for multiple projections via proj4. Enable in Config.pri with PROJ=1
+	* FIX : Crash during OSM import (fixes #1536)
+	* ADD : Option (in Manager) to autoload/autoshow the World
 	* FIX : Implement dynamic UI translation (fixes #1432)
 	* ADD : Generalize the concept of download progress window
 	* FIX : If one of the translation composant (Qt or Merkaartor) is missing, allow the other to be loaded.

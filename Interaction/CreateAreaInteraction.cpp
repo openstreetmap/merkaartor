@@ -41,7 +41,7 @@ void CreateAreaInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainte
 void CreateAreaInteraction::snapMouseMoveEvent(QMouseEvent* ev, MapFeature* aFeature)
 {
 	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(aFeature))
-		LastCursor = view()->projection().project(Pt->position());
+		LastCursor = view()->projection().project(Pt);
 	else if (Road* R = dynamic_cast<Road*>(aFeature))
 	{
 		Coord P(projection().inverse(ev->pos()));

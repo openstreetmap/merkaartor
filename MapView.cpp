@@ -289,7 +289,9 @@ void MapView::updateLayersImage()
 	QPainter pmp(&pm);
 	layermanager->drawImage(&pmp);
 
+#ifndef USE_PROJ
 	if (MerkaartorPreferences::instance()->getProjectionType() == Proj_Merkaartor) {
+#endif
 		const QRectF vlm = layermanager->getViewport();
 		const Coord ctl = Coord(angToInt(vlm.bottomLeft().y()), angToInt(vlm.bottomLeft().x()));
 		const Coord cbr = Coord(angToInt(vlm.topRight().y()), angToInt(vlm.topRight().x()));
@@ -314,9 +316,11 @@ void MapView::updateLayersImage()
 		}
 
 		P.drawPixmap((width()-pms.width())/2, (height()-pms.height())/2, pms);
+#ifndef USE_PROJ
 	} else {
 		P.drawPixmap((width()-pm.width())/2, (height()-pm.height())/2, pm);
 	}
+#endif
 
 	thePanDelta = QPoint(0, 0);
 	StaticMapUpToDate = true;
@@ -650,14 +654,18 @@ void MapView::loadingFinished()
 	//invalidate(false, true);
 }
 
-void MapView::resizeEvent(QResizeEvent * event)
+void MapView::resizeEvent(QResizeEvent * ev)
 {
 	StaticBufferUpToDate = false;
 	if (LAYERMANAGER_OK && layermanager->getLayer()->isVisible())
 		layermanager->setSize(size());
+#ifndef USE_PROJ
 	projection().zoom(1, QPoint(width() / 2, height() / 2), rect());
+#else
+	projection().resize(ev->oldSize(), ev->size());
+#endif
 
-	QWidget::resizeEvent(event);
+	QWidget::resizeEvent(ev);
 
 	invalidate(true, true);
 }

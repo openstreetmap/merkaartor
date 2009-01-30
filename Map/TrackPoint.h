@@ -1,6 +1,8 @@
 #ifndef MERKATOR_TRACKPOINT_H_
 #define MERKATOR_TRACKPOINT_H_
 
+#include "Preferences/MerkaartorPreferences.h"
+
 #include "Map/Coord.h"
 #include "Map/MapFeature.h"
 #include "Map/MapDocument.h"
@@ -42,6 +44,10 @@ class TrackPoint : public MapFeature
 
 		const Coord& position() const;
 		void setPosition(const Coord& aCoord);
+		const QPoint& projection() const;
+		void setProjection(const QPoint& aProjection);
+		const ProjectionType projectionType() const;
+		void setProjectionType(const ProjectionType aProjectionType);
 
 		double speed() const;
 		void setSpeed(double aSpeed);
@@ -72,6 +78,8 @@ private:
 
 		double Elevation;
 		double Speed;
+		QPoint Projected;
+		ProjectionType ProjectedType;
 		#ifdef GEOIMAGE
 		int ImageId;
 		#endif

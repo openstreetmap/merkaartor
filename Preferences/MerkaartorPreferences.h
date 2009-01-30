@@ -78,10 +78,14 @@ enum ImageBackgroundType {
 #endif
 };
 
+#ifndef USE_PROJ
 enum ProjectionType {
  	Proj_Background,
 	Proj_Merkaartor
 };
+#else
+typedef QString ProjectionType;
+#endif
 
 enum ExportType {
 	Export_All,
@@ -365,8 +369,11 @@ public:
 	M_PARAM_DECLARE_BOOL(ShowParents)
 
 	/* World OSB manager */
-	M_PARAM_DECLARE_STRING(LastWorldOsbDir)
 	M_PARAM_DECLARE_INT(TileToRegionThreshold)
+
+	M_PARAM_DECLARE_STRING(WorldOsbUri)
+	M_PARAM_DECLARE_BOOL(WorldOsbAutoload)
+	M_PARAM_DECLARE_BOOL(WorldOsbAutoshow)
 
 	/* Mouse bevaviour */
 	M_PARAM_DECLARE_BOOL(MouseSingleButton)

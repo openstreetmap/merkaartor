@@ -101,11 +101,11 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 			unsigned int i1 = R1->size()-1;
 			unsigned int i2 = 1;
 			LineF P1(
-				view()->projection().project(R1->getNode(i1-1)->position()),
-				view()->projection().project(R1->getNode(i1)->position()));
+				view()->projection().project(R1->getNode(i1-1)),
+				view()->projection().project(R1->getNode(i1)));
 			LineF P2(
-				view()->projection().project(R2->getNode(i2-1)->position()),
-				view()->projection().project(R2->getNode(i2)->position()));
+				view()->projection().project(R2->getNode(i2-1)),
+				view()->projection().project(R2->getNode(i2)));
 
 			Coord PreviousPoint = FirstPoint;
 			if (distance(view()->projection().project(PreviousPoint), LastCursor) > 1)

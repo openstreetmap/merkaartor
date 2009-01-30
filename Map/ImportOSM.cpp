@@ -375,6 +375,9 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 	QLabel* Lbl = aProgressWindow->getProgressLabel();
 	Lbl->setText(QApplication::translate("Downloader","Parsing XML"));
 
+	if (dlg)
+		dlg->show();
+
 	if (theDownloader)
 		theDownloader->setAnimator(Lbl,Bar,false);
 	MapLayer* conflictLayer = new DrawingMapLayer(QApplication::translate("Downloader","Conflicts from %1").arg(theLayer->name()));

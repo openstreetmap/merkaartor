@@ -27,10 +27,22 @@ WorldOsbManager::WorldOsbManager(QWidget *parent)
 {
 	setupUi(this);
 
-	if (!M_PREFS->getLastWorldOsbDir().isEmpty()) {
-		WorldDirectory->setText(M_PREFS->getLastWorldOsbDir());
+	QUrl u;
+	if (!M_PREFS->getWorldOsbUri().isEmpty()) {
+		//u = QUrl(M_PREFS->getWorldOsbUri());
+		//if (!u.isValid()) {
+		//	u = QUrl::fromLocalFile(M_PREFS->getWorldOsbUri());
+		//	if (!u.isValid()) {
+		//		u = QUrl();
+		//	}
+		//}
+
+		WorldURI->setText(M_PREFS->getWorldOsbUri());
 		readWorld();
 	}
+
+	cbAutoload->setChecked(M_PREFS->getWorldOsbAutoload());
+	cbAutoshow->setChecked(M_PREFS->getWorldOsbAutoshow());
 
 	theProgressDialog = NULL;
 	theProgressBar = pbInfo;
@@ -38,6 +50,12 @@ WorldOsbManager::WorldOsbManager(QWidget *parent)
 
 	theProgressLabel->setVisible(false);
 	theProgressBar->setVisible(false);
+}
+
+WorldOsbManager::~WorldOsbManager()
+{
+	M_PREFS->setWorldOsbAutoload(cbAutoload->isChecked());
+	M_PREFS->setWorldOsbAutoshow(cbAutoshow->isChecked());
 }
 
 void WorldOsbManager::on_cbShowGrid_toggled(bool checked)
@@ -61,16 +79,19 @@ void WorldOsbManager::on_WorldDirectoryBrowse_clicked()
 {
 	QString s = QFileDialog::getExistingDirectory(this,tr("Select OSB World directory"));
 	if (!s.isNull()) {
-		WorldDirectory->setText(s);
+		//QUrl u = QUrl::fromLocalFile(s);
+		//WorldURI->setText(u.toString());
+		WorldURI->setText(s);
 		readWorld();
-		M_PREFS->setLastWorldOsbDir(s);
+		//M_PREFS->setWorldOsbUri(u.toString());
+		M_PREFS->setWorldOsbUri(s);
 	}
 }
 
 
 void WorldOsbManager::DoIt()
 {
-	if (WorldDirectory->text().isEmpty()) {
+	if (WorldURI->text().isEmpty()) {
 		QMessageBox::critical(this, tr("Invalid OSB World directory name"), 
 			tr("Please provide a valid directory name."), QMessageBox::Ok);
 		return;
@@ -103,12 +124,12 @@ void WorldOsbManager::DoIt()
 
 bool WorldOsbManager::deleteRegion(quint32 rg)
 {
-	QFile::remove((WorldDirectory->text()+ "/"+ QString::number(rg) + ".osb"));
+	QFile::remove((WorldURI->text()+ "/"+ QString::number(rg) + ".osb"));
 
 	ImportExportOsmBin* osb = new ImportExportOsmBin(NULL);
 
 	QDataStream ds;
-	WorldFile = new QFile(WorldDirectory->text() + "/world.osb");
+	WorldFile = new QFile(WorldURI->text() + "/world.osb");
 	ds.setDevice(WorldFile);
 
 	WorldFile->open(QIODevice::ReadOnly);
@@ -156,7 +177,7 @@ bool WorldOsbManager::generateRegion(quint32 rg)
 	}
 
 	ImportExportOsmBin* osb = new ImportExportOsmBin(aDoc);
-	if (!osb->saveFile(WorldDirectory->text()+ "/"+ QString::number(rg) + ".osb")) {
+	if (!osb->saveFile(WorldURI->text()+ "/"+ QString::number(rg) + ".osb")) {
 		aDoc->remove(aLayer);
 		delete aLayer;
 		delete aDoc;
@@ -176,7 +197,7 @@ bool WorldOsbManager::generateRegion(quint32 rg)
 	osb = new ImportExportOsmBin(aDoc);
 
 	QDataStream ds;
-	WorldFile = new QFile(WorldDirectory->text() + "/world.osb");
+	WorldFile = new QFile(WorldURI->text() + "/world.osb");
 	ds.setDevice(WorldFile);
 
 	WorldFile->open(QIODevice::ReadOnly);
@@ -206,7 +227,7 @@ bool WorldOsbManager::generateRegion(quint32 rg)
 void WorldOsbManager::readWorld()
 {
 	ImportExportOsmBin theOsb(NULL);
-	if (!theOsb.loadFile(WorldDirectory->text() + "/world.osb"))
+	if (!theOsb.loadFile(WorldURI->text() + "/world.osb"))
 		return;
 	if (!theOsb.import(NULL))
 		return;
@@ -216,7 +237,7 @@ void WorldOsbManager::readWorld()
 		it.next();
 
 		slippy->ExistingRegions[it.key()] = true;
-		QFileInfo fi(QString("%1/%2.osb").arg(WorldDirectory->text()).arg(it.key()));
+		QFileInfo fi(QString("%1/%2.osb").arg(WorldURI->text()).arg(it.key()));
 		slippy->DateRegions[it.key()] = fi.lastModified();
 	}
 }

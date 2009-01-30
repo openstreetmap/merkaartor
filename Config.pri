@@ -8,9 +8,10 @@ REVISION="-SVN"
 # OUTPUT_DIR          - base directory for local output files
 # PREFIX              - base prefix for installation
 # NOUSEWEBKIT=1         - disable use of WebKit (Yahoo adapter)
-# OSMARENDER=1          - enable osmarender
+# OSMARENDER=1        - enable osmarender (requires libxml2 / libxslt)
 # GDAL=1    	      - enable GDAL
 # MOBILE=1    	      - enable MOBILE
-# GEOIMAGE=1            - enable geotagged images (needs exiv2)
-# GPSD=1                - use gpsd as location provider
-# NVIDIA_HACK=1         - used to solve nvidia specific slowdown
+# GEOIMAGE=1          - enable geotagged images (requires exiv2)
+# GPSD=1              - use gpsd as location provider
+# NVIDIA_HACK=1       - used to solve nvidia specific slowdown
+# PROJ=1    	      - use PROJ4 library for projections (requires proj4)

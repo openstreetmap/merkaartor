@@ -23,6 +23,7 @@ class WorldOsbManager: public QDialog , public Ui::WorldOsbManager, public IProg
 
 	public:
 		WorldOsbManager(QWidget *parent = 0);
+		~WorldOsbManager();
 
 		void DoIt();
 		bool generateRegion(quint32 rg);

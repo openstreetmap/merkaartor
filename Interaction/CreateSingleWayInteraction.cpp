@@ -61,7 +61,7 @@ void CreateSingleWayInteraction::paintEvent(QPaintEvent* anEvent, QPainter& theP
 void CreateSingleWayInteraction::snapMouseMoveEvent(QMouseEvent* ev, MapFeature* aFeature)
 {
 	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(aFeature))
-		LastCursor = view()->projection().project(Pt->position());
+		LastCursor = view()->projection().project(Pt);
 	else if (Road* R = dynamic_cast<Road*>(aFeature))
 	{
 		Coord P(projection().inverse(ev->pos()));

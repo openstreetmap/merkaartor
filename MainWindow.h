@@ -210,6 +210,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 		void mapView_interactionChanged(Interaction* anInteraction);
 
 	private:
+		void createProgressDialog();
 		void updateMenu();
 		void updateRecentOpenMenu();
 		void updateRecentImportMenu();

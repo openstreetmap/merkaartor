@@ -1,7 +1,8 @@
 #include "Map/Projection.h"
-#include "Map/Coord.h"
+#include "Map/TrackPoint.h"
 
-#include <QtCore/QRect>
+#include <QRect>
+#include <QRectF>
 
 #include "QMapControl/mapadapter.h"
 #include "QMapControl/layermanager.h"
@@ -18,6 +19,14 @@ Projection::Projection(void)
   layermanager(0)
 {
 	theProjectionType = MerkaartorPreferences::instance()->getProjectionType();
+#ifdef USE_PROJ
+	theProj = pj_init_plus(
+		QString("+proj=%1 +a=%2 +b=%3 %4").arg("merc").arg(double(INT_MAX)/M_PI).arg(double(INT_MAX)/M_PI)
+		.arg("+lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +no_defs")
+		.toLatin1()
+	);
+	theProjectionType = "Mercator";
+#endif
 }
 
 // Common routines
@@ -29,8 +38,7 @@ void Projection::setLayerManager(LayerManager * lm)
 
 double Projection::pixelPerM() const
 {
-	double LatAngPerM = 1.0 / EQUATORIALRADIUS;
-	return LatAngPerM / M_PI * INT_MAX * ScaleLat;
+	return PixelPerM;
 }
 
 double Projection::latAnglePerM() const
@@ -51,8 +59,50 @@ void Projection::setProjectionType(ProjectionType aProjectionType)
 	theProjectionType = aProjectionType;
 }
 
+#ifdef USE_PROJ
+QPoint Projection::projProject(const Coord & Map) const
+{
+	projUV in;
+
+	in.u = intToRad(Map.lon());
+	in.v = intToRad(Map.lat());
+
+	projUV out = pj_fwd(in, theProj);
+
+	return QPoint(out.u, out.v);
+}
+
+Coord Projection::projInverse(const QPointF & pProj) const
+{
+	projUV in;
+	in.u = pProj.x();
+	in.v = pProj.y();
+
+	projUV out = pj_inv(in, theProj);
+
+	return Coord(radToInt(out.v), radToInt(out.u));
+}
+
+#endif
+
+
 QPoint Projection::project(const Coord & Map) const
 {
+#ifdef USE_PROJ
+	projUV in;
+
+	in.u = intToRad(Map.lon());
+	in.v = intToRad(Map.lat());
+
+	//qDebug() << "prj: " << intToAng(Map.lon()) << " : " << intToAng(Map.lat());
+	projUV out = pj_fwd(in, theProj);
+	//qDebug() << "prj: "<< out.u << " : " << out.v;
+
+	QPoint p(int(out.u * ScaleLon + DeltaLon),
+				   int(-out.v * ScaleLat + DeltaLat));
+
+	return p;
+#else
 	if (LAYERMANAGER_OK && BGPROJ_SELECTED)
 	{
 		const QPointF c(intToAng(Map.lon()), intToAng(Map.lat()));
@@ -60,11 +110,50 @@ QPoint Projection::project(const Coord & Map) const
 	}
 	return QPoint(int(Map.lon() * ScaleLon + DeltaLon),
 				   int(-Map.lat() * ScaleLat + DeltaLat));
+#endif
+}
 
+QPoint Projection::project(TrackPoint* aNode) const
+{
+#ifdef USE_PROJ
+	if (aNode && aNode->projectionType() == theProjectionType && !aNode->projection().isNull())
+		return QPoint(int(aNode->projection().x() * ScaleLon + DeltaLon),
+					   int(-aNode->projection().y() * ScaleLat + DeltaLat));
+
+	projUV in;
+
+	in.u = intToRad(aNode->position().lon());
+	in.v = intToRad(aNode->position().lat());
+
+	//qDebug() << "prj: " << intToAng(Map.lon()) << " : " << intToAng(Map.lat());
+	projUV out = pj_fwd(in, theProj);
+	//qDebug() << "prj: "<< out.u << " : " << out.v;
+
+	aNode->setProjectionType(theProjectionType);
+	aNode->setProjection(QPoint(int(out.u), int(out.v)));
+
+	QPoint p(int(out.u * ScaleLon + DeltaLon),
+				   int(-out.v * ScaleLat + DeltaLat));
+	return p;
+#else
+	return project(aNode->position());
+#endif
 }
 
 Coord Projection::inverse(const QPointF & Screen) const
 {
+#ifdef USE_PROJ
+	projUV in;
+
+	in.u = (Screen.x() - DeltaLon ) / ScaleLon;
+	in.v = -(Screen.y() - DeltaLat) / ScaleLat;
+
+	//qDebug() << "inv: "<< in.u << " : " << in.v;
+	projUV out = pj_inv(in, theProj);
+	//qDebug() << "inv: "<< out.u * RAD_TO_DEG << " : " << out.v * RAD_TO_DEG;
+
+	return Coord(radToInt(out.v), radToInt(out.u));
+#else
 	if (LAYERMANAGER_OK && BGPROJ_SELECTED)
 	{
 		QPointF c(screenToCoordinate(Screen));
@@ -72,11 +161,19 @@ Coord Projection::inverse(const QPointF & Screen) const
 	}
 	return Coord(int(-(Screen.y() - DeltaLat) / ScaleLat),
 				 int((Screen.x() - DeltaLon) / ScaleLon));
-
+#endif
 }
 
 void Projection::panScreen(const QPoint & p, const QRect & Screen)
 {
+#ifdef USE_PROJ
+	DeltaLon += p.x();
+	DeltaLat += p.y();
+	viewportRecalc(Screen);
+	if (LAYERMANAGER_OK) {
+		layermanager->setView(QPointF(intToAng(Viewport.center().lon()), intToAng(Viewport.center().lat())), false);
+	}
+#else
 	if (LAYERMANAGER_OK && BGPROJ_SELECTED) {
 		layermanager->scrollView(-p);
 		layerManagerViewportRecalc(Screen);
@@ -89,6 +186,7 @@ void Projection::panScreen(const QPoint & p, const QRect & Screen)
 	if (LAYERMANAGER_OK) {
 		layermanager->setView(QPointF(intToAng(Viewport.center().lon()), intToAng(Viewport.center().lat())), false);
 	}
+#endif
 }
 
 CoordBox Projection::viewport() const
@@ -108,13 +206,13 @@ void Projection::viewportRecalc(const QRect & Screen)
 void Projection::setViewport(const CoordBox & TargetMap,
 									const QRect & Screen)
 {
+#ifndef USE_PROJ
 	if (LAYERMANAGER_OK)
 		layerManagerSetViewport(TargetMap, Screen);
 	if (LAYERMANAGER_OK && BGPROJ_SELECTED) {
 		layerManagerViewportRecalc(Screen);
 		return;
 	}
-
 	Viewport = TargetMap;
 	Coord Center(Viewport.center());
 	double LengthOfOneDegreeLat = EQUATORIALRADIUS * M_PI / 180;
@@ -123,21 +221,78 @@ void Projection::setViewport(const CoordBox & TargetMap,
 	double Aspect = LengthOfOneDegreeLon / LengthOfOneDegreeLat;
 	ScaleLon = Screen.width() / (double)Viewport.lonDiff();
 	ScaleLat = ScaleLon / Aspect;
+	
 	if ((ScaleLat * Viewport.latDiff()) > Screen.height())
 	{
 		ScaleLat = Screen.height() / (double)Viewport.latDiff();
 		ScaleLon = ScaleLat * Aspect;
 	}
+
+	double LatAngPerM = 1.0 / EQUATORIALRADIUS;
+	PixelPerM = LatAngPerM / M_PI * INT_MAX * ScaleLat;
+
 	double PLon = Center.lon() * ScaleLon;
 	double PLat = Center.lat() * ScaleLat;
 	DeltaLon = int(Screen.width() / 2 - PLon);
 	DeltaLat = int(Screen.height() - (Screen.height() / 2 - PLat));
 	viewportRecalc(Screen);
+#else
+	QPointF bl = projProject(TargetMap.bottomLeft());
+	QPointF tr = projProject(TargetMap.topRight());
+	QRectF pViewport = QRectF(bl, QSizeF(tr.x() - bl.x(), tr.y() - bl.y()));
+
+	Coord Center(TargetMap.center());
+	QPointF pCenter(pViewport.center());
+
+	double Aspect = (double)Screen.width() / Screen.height();
+	double pAspect = pViewport.width() / pViewport.height();
+
+	double wv, hv;
+	if (pAspect > Aspect) {
+		wv = TargetMap.lonDiff();
+		hv = TargetMap.latDiff() * pAspect / Aspect;
+	} else {
+		wv = TargetMap.lonDiff() * Aspect / pAspect;
+		hv = TargetMap.latDiff();
+	}
+
+	Viewport = CoordBox(
+			Coord(Center.lat() - hv/2, Center.lon() - wv/2),
+			Coord(Center.lat() + hv/2, Center.lon() + wv/2)
+		);
+
+	bl = projProject(Viewport.bottomLeft());
+	tr = projProject(Viewport.topRight());
+	pViewport = QRectF(bl, QSizeF(tr.x() - bl.x(), tr.y() - bl.y()));
+
+	ScaleLon = Screen.width() / pViewport.width();
+	ScaleLat = Screen.height() / pViewport.height();
+
+	double PLon = pCenter.x() * ScaleLon;
+	double PLat = pCenter.y() * ScaleLat;
+	DeltaLon = int(Screen.width() / 2 - PLon);
+	DeltaLat = int(Screen.height() - (Screen.height() / 2 - PLat));
+
+	double LengthOfOneDegreeLat = EQUATORIALRADIUS * M_PI / 180;
+	double LengthOfOneDegreeLon =
+		LengthOfOneDegreeLat * fabs(cos(intToRad(Center.lat())));
+	double degAspect = LengthOfOneDegreeLon / LengthOfOneDegreeLat;
+	double so = Screen.width() / (double)Viewport.lonDiff();
+	double sa = so / degAspect;
+
+	double LatAngPerM = 1.0 / EQUATORIALRADIUS;
+	PixelPerM = LatAngPerM / M_PI * INT_MAX * sa;
+	
+	viewportRecalc(Screen);
+	if (LAYERMANAGER_OK)
+		layerManagerSetViewport(Viewport, Screen);
+#endif
 }
 
 void Projection::zoom(double d, const QPointF & Around,
 							 const QRect & Screen)
 {
+#ifndef USE_PROJ
 	if (LAYERMANAGER_OK && BGPROJ_SELECTED)
 	{
 		screen_middle = QPoint(Screen.width() / 2, Screen.height() / 2);
@@ -160,16 +315,66 @@ void Projection::zoom(double d, const QPointF & Around,
 			Coord Before = inverse(Around);
 			ScaleLon *= d;
 			ScaleLat *= d;
-			Coord After = inverse(Around);
 			DeltaLat = int(Around.y() + Before.lat() * ScaleLat);
 			DeltaLon = int(Around.x() - Before.lon() * ScaleLon);
+
+			double LatAngPerM = 1.0 / EQUATORIALRADIUS;
+			PixelPerM = LatAngPerM / M_PI * INT_MAX * ScaleLat;
+
 			viewportRecalc(Screen);
 			if (LAYERMANAGER_OK) {
 				layerManagerSetViewport(Viewport, Screen);
 			}
 		}
-
 	}
+#else
+	if (ScaleLat * d < 1.0 && ScaleLon * d < 1.0) {
+		Coord Before = inverse(Around);
+		QPoint pBefore = projProject(Before);
+		ScaleLon *= d;
+		ScaleLat *= d;
+
+		DeltaLat = int(Around.y() + pBefore.y() * ScaleLat);
+		DeltaLon = int(Around.x() - pBefore.x() * ScaleLon);
+
+		//double nx1 = Around.x() / ScaleLon;
+		//double ny1 = Around.y() / ScaleLat;
+
+		//ScaleLon *= d;
+		//ScaleLat *= d;
+
+		//double nx2 = Around.x() / ScaleLon;
+		//double ny2 = Around.y() / ScaleLat;
+
+		//DeltaLon -= (nx1 - nx2) * ScaleLon;
+		//DeltaLat += (ny1 - ny2) * ScaleLat;
+
+		double LengthOfOneDegreeLat = EQUATORIALRADIUS * M_PI / 180;
+		double LengthOfOneDegreeLon =
+			LengthOfOneDegreeLat * fabs(cos(intToRad(Before.lat())));
+		double degAspect = LengthOfOneDegreeLon / LengthOfOneDegreeLat;
+		double so = Screen.width() / (double)Viewport.lonDiff();
+		double sa = so / degAspect;
+
+		double LatAngPerM = 1.0 / EQUATORIALRADIUS;
+		PixelPerM = LatAngPerM / M_PI * INT_MAX * sa;
+
+		viewportRecalc(Screen);
+		if (LAYERMANAGER_OK) {
+			layerManagerSetViewport(Viewport, Screen);
+		}
+	}
+#endif
+}
+
+void Projection::resize(QSize oldS, QSize newS)
+{
+#ifdef USE_PROJ
+	viewportRecalc(QRect(QPoint(0,0), newS));
+	if (LAYERMANAGER_OK) {
+		layerManagerSetViewport(Viewport, QRect(QPoint(0,0), newS));
+	}
+#endif
 }
 
 
@@ -188,6 +393,9 @@ void Projection::layerManagerViewportRecalc(const QRect & Screen)
 	Viewport = CoordBox(trc, blc);
 	ScaleLat = Screen.height()/(double)Viewport.latDiff();
 	ScaleLon = Screen.width()/(double)Viewport.lonDiff();
+
+	double LatAngPerM = 1.0 / EQUATORIALRADIUS;
+	PixelPerM = LatAngPerM / M_PI * INT_MAX * ScaleLat;
 }
 
 void Projection::layerManagerSetViewport(const CoordBox & TargetMap, const QRect& Screen)

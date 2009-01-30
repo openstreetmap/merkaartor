@@ -349,7 +349,7 @@ double Road::pixelDistance(const QPointF& Target, double ClearEndDistance, const
 	double Best = 1000000;
 	for (unsigned int i=0; i<p->Nodes.size(); ++i)
 	{
-		double x = ::distance(Target,theProjection.project(p->Nodes[i]->position()));
+		double x = ::distance(Target,theProjection.project(p->Nodes[i]));
 		if (x<ClearEndDistance)
 			return Best;
 	}
@@ -368,7 +368,7 @@ double Road::pixelDistance(const QPointF& Target, double ClearEndDistance, const
 	else
 		for (unsigned int i=1; i<p->Nodes.size(); ++i)
 		{
-			LineF F(theProjection.project(p->Nodes[i-1]->position()),theProjection.project(p->Nodes[i]->position()));
+			LineF F(theProjection.project(p->Nodes[i-1]),theProjection.project(p->Nodes[i]));
 			double D = F.capDistance(Target);
 			if (D < ClearEndDistance)
 				Best = D;
@@ -483,7 +483,7 @@ void Road::buildPath(Projection const &theProjection, const QRegion& paintRegion
 		return;
 
 	bool lastPointVisible = true;
-	QPoint lastPoint = theProjection.project(p->Nodes[0]->position());
+	QPoint lastPoint = theProjection.project(p->Nodes[0]);
 	QPoint aP = lastPoint;
 
 	double PixelPerM = theProjection.pixelPerM();
@@ -509,7 +509,7 @@ void Road::buildPath(Projection const &theProjection, const QRegion& paintRegion
 	}
 	else
 		for (unsigned int j=1; j<size(); ++j) {
-			aP = theProjection.project(p->Nodes[j]->position());
+			aP = theProjection.project(p->Nodes[j]);
 			QLine l(lastPoint, aP);
 			if (!clipRect.contains(aP)) {
 				if (!lastPointVisible) {

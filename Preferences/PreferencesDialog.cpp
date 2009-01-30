@@ -160,7 +160,9 @@ void PreferencesDialog::loadPrefs()
 
 	sbZoomInPerc->setValue(M_PREFS->getZoomInPerc());
 	sbZoomOutPerc->setValue(M_PREFS->getZoomOutPerc());
+#ifndef USE_PROJ
 	cbProjection->setCurrentIndex(M_PREFS->getProjectionType());
+#endif
 
 	sbAlphaLow->setValue(M_PREFS->getAlpha("Low"));
 	sbAlphaHigh->setValue(M_PREFS->getAlpha("High"));

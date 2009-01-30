@@ -306,6 +306,23 @@ MainWindow::~MainWindow(void)
 	delete p;
 }
 
+void MainWindow::createProgressDialog()
+{
+	theProgressDialog = new QProgressDialog(this);
+	theProgressDialog->setWindowModality(Qt::ApplicationModal);
+	theProgressDialog->setMinimumDuration(0);
+
+	theProgressBar = new QProgressBar(theProgressDialog);
+	theProgressBar->setTextVisible(false);
+	theProgressDialog->setBar(theProgressBar);
+
+	theProgressLabel = new QLabel();
+	theProgressLabel->setAlignment(Qt::AlignCenter);
+	theProgressDialog->setLabel(theProgressLabel);
+	
+	theProgressDialog->setMaximum(11);
+}
+
 void MainWindow::setAreaOpacity(QAction *act)
 {
 	qreal a = act->data().toDouble();
@@ -317,10 +334,14 @@ void MainWindow::setAreaOpacity(QAction *act)
 void MainWindow::adjustLayers(bool adjustViewport)
 {
 	if (adjustViewport) {
+#ifndef USE_PROJ
 		if (MerkaartorPreferences::instance()->getProjectionType() == Proj_Background)
 			theView->projection().setViewport(theView->projection().viewport(), theView->rect());
 		else
 			theView->projection().zoom(1, QPoint(theView->width() / 2, theView->height() / 2), theView->rect());
+#else
+		theView->projection().resize(theView->size(), theView->size());
+#endif
 	}
 	invalidateView(true);
 }
@@ -606,6 +627,7 @@ static bool mayDiscardUnsavedChanges(QWidget* aWidget)
 
 bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & fileNames, QStringList * importedFileNames )
 {
+	createProgressDialog();
 	QApplication::setOverrideCursor(Qt::BusyCursor);
 
 	bool foundImport = false;
@@ -716,6 +738,7 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 		}
 	}
 	QApplication::restoreOverrideCursor();
+	SAFE_DELETE(theProgressDialog);
 
 	return foundImport;
 }
@@ -853,19 +876,7 @@ void MainWindow::on_fileUploadAction_triggered()
 
 void MainWindow::on_fileDownloadAction_triggered()
 {
-	theProgressDialog = new QProgressDialog(this);
-	theProgressDialog->setWindowModality(Qt::ApplicationModal);
-	theProgressDialog->setMinimumDuration(0);
-
-	theProgressBar = new QProgressBar(theProgressDialog);
-	theProgressBar->setTextVisible(false);
-	theProgressDialog->setBar(theProgressBar);
-
-	theProgressLabel = new QLabel();
-	theProgressLabel->setAlignment(Qt::AlignCenter);
-	theProgressDialog->setLabel(theProgressLabel);
-	
-	theProgressDialog->setMaximum(11);
+	createProgressDialog();
 
 	if (downloadOSM(this, theView->projection().viewport(), theDocument)) {
 		on_editPropertiesAction_triggered();
@@ -881,19 +892,7 @@ void MainWindow::on_fileDownloadAction_triggered()
 
 void MainWindow::on_fileDownloadMoreAction_triggered()
 {
-	theProgressDialog = new QProgressDialog(this);
-	theProgressDialog->setWindowModality(Qt::ApplicationModal);
-	theProgressDialog->setMinimumDuration(0);
-
-	theProgressBar = new QProgressBar(theProgressDialog);
-	theProgressBar->setTextVisible(false);
-	theProgressDialog->setBar(theProgressBar);
-
-	theProgressLabel = new QLabel();
-	theProgressLabel->setAlignment(Qt::AlignCenter);
-	theProgressDialog->setLabel(theProgressLabel);
-	
-	theProgressDialog->setMaximum(11);
+	createProgressDialog();
 
 	if (!downloadMoreOSM(this, theView->projection().viewport(), theDocument)) {
 		QMessageBox::warning(this, tr("Error downloading"), tr("The map could not be downloaded"));
@@ -1816,6 +1815,7 @@ void MainWindow::updateRecentImportMenu()
 
 void MainWindow::updateProjectionMenu()
 {
+#ifndef USE_PROJ
 	QStringList Projections = MerkaartorPreferences::instance()->getProjectionTypes();
 	QActionGroup* actgrp = new QActionGroup(this);
 	for (int i=0; i<Projections.size(); i++) {
@@ -1828,6 +1828,7 @@ void MainWindow::updateProjectionMenu()
 	}
 
 	connect (mnuProjections, SIGNAL(triggered(QAction *)), this, SLOT(projectionTriggered(QAction *)));
+#endif
 }
 
 void MainWindow::on_bookmarkAddAction_triggered()

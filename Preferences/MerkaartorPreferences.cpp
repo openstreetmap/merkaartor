@@ -360,6 +360,7 @@ void MerkaartorPreferences::on_requestFinished ( int id, bool error )
 			if (e.attribute("k").startsWith("MerkaartorBookmark")) {
 				OsmPrefListsCount["MerkaartorBookmark"]++;
 				QStringList sl = e.attribute("v").split(";");
+				if (sl.size() < 5) continue;
 				if (!theBookmarks.contains(sl[0])) {
 					ChangedBookmark = true;
 					theBookmarks[sl[0]] = CoordBox(Coord(angToInt(sl[1].toDouble()),angToInt(sl[2].toDouble())),
@@ -369,6 +370,7 @@ void MerkaartorPreferences::on_requestFinished ( int id, bool error )
 			if (e.attribute("k").startsWith("MerkaartorTmsServer")) {
 				OsmPrefListsCount["MerkaartorTmsServer"]++;
 				QStringList sl = e.attribute("v").split(";");
+				if (sl.size() < 6) continue;
 				if (!theTmsServerList.contains(sl[0])) {
 					TmsServer S(sl[0], sl[1], sl[2], sl[3].toInt(), sl[4].toInt(), sl[5].toInt());
 					theTmsServerList[sl[0]] = S;
@@ -377,6 +379,7 @@ void MerkaartorPreferences::on_requestFinished ( int id, bool error )
 			if (e.attribute("k").startsWith("MerkaartorWmsServer")) {
 				OsmPrefListsCount["MerkaartorWmsServer"]++;
 				QStringList sl = e.attribute("v").split(";");
+				if (sl.size() < 7) continue;
 				if (!theWmsServerList.contains(sl[0])) {
 					WmsServer S(sl[0], sl[1], sl[2], sl[3], sl[4], sl[5], sl[6]);
 					theWmsServerList[sl[0]] = S;
@@ -409,8 +412,10 @@ void MerkaartorPreferences::initialize()
 	bgTypes.insert(Bg_MsVirtualEarth_illegal, tr("Illegal Ms Virtual Earth adapter"));
 #endif
 
+#ifndef USE_PROJ
 	projTypes.insert(Proj_Merkaartor, tr("Merkaartor"));
 	projTypes.insert(Proj_Background, tr("Background"));
+#endif
 
 	QStringList sl = Sets->value("downloadosm/bookmarks").toStringList();
 	if (sl.size() == 0) {
@@ -1308,8 +1313,11 @@ M_PARAM_IMPLEMENT_INT(TagListFirstColumnWidth, visual, 0)
 M_PARAM_IMPLEMENT_BOOL(TranslateTags, locale, true);
 
 /* World OSB manager */
-M_PARAM_IMPLEMENT_STRING(LastWorldOsbDir, WOSB, "")
 M_PARAM_IMPLEMENT_INT(TileToRegionThreshold, WOSB, 9)
+
+M_PARAM_IMPLEMENT_STRING(WorldOsbUri, WOSB, "")
+M_PARAM_IMPLEMENT_BOOL(WorldOsbAutoload, WOSB, false)
+M_PARAM_IMPLEMENT_BOOL(WorldOsbAutoshow, WOSB, false)
 
 /* Mouse bevaviour */
 #ifdef _MOBILE

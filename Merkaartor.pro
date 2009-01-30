@@ -12,6 +12,7 @@
 # GEOIMAGE            - enable geotagged images (needs exiv2)
 # GPSD                - use gpsd as location provider
 # NVIDIA_HACK         - used to solve nvidia specific slowdown
+# PROJ                - use PROJ4 library for projections
 
 #Static config
 include (Config.pri)
@@ -155,4 +156,9 @@ contains(GEOIMAGE, 1) {
 	include(GeoImage.pri)
 }
 
+
+contains (PROJ, 1) {
+	DEFINES += USE_PROJ
+	LIBS += -lproj
+}
 

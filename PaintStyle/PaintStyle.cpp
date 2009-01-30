@@ -650,9 +650,9 @@ bool FeaturePainter::matchesZoom(double PixelPerM) const
 /*
 void buildPathFromRoad(Road *R, const Projection &theProjection, QPainterPath &Path)
 {
-	Path.moveTo(theProjection.project(R->get(0)->position()));
+	Path.moveTo(theProjection.project(R->get(0)));
 	for (unsigned int i=1; i<R->size(); ++i)
-		Path.lineTo(theProjection.project(R->get(i)->position()));
+		Path.lineTo(theProjection.project(R->get(i)));
 }
 
 void buildPathFromRelation(Relation *R, const Projection &theProjection, QPainterPath &Path)
@@ -815,7 +815,7 @@ void FeaturePainter::drawTouchup(TrackPoint* Pt, QPainter& thePainter, const Pro
 		if (pm.isNull())
 			IconError = true;
 		else {
-			QPoint C(theProjection.project(Pt->position()));
+			QPoint C(theProjection.project(Pt));
 			// cbro-20090109: Don't draw the dot if there is an icon
 			// thePainter.fillRect(QRect(C-QPoint(2,2),QSize(4,4)),QColor(0,0,0,128));
 			thePainter.drawPixmap( int(C.x()-pm.width()/2), int(C.y()-pm.height()/2) , pm);
@@ -830,7 +830,7 @@ void FeaturePainter::drawTouchup(TrackPoint* Pt, QPainter& thePainter, const Pro
 			if (DrawBackground)
 				theColor =BackgroundColor;
 
-		QPointF P(theProjection.project(Pt->position()));
+		QPointF P(theProjection.project(Pt));
 		if (Pt->findKey("_waypoint_") != Pt->tagSize()) {
 			QRectF R(P-QPointF(4,4),QSize(8,8)); 
 			thePainter.fillRect(R,QColor(255,0,0,128)); 
@@ -873,8 +873,8 @@ void FeaturePainter::drawTouchup(Road* R, QPainter& thePainter, const Projection
 			{
 				for (unsigned int i=1; i<R->size(); ++i)
 				{
-					QPointF FromF(theProjection.project(R->getNode(i-1)->position()));
-					QPointF ToF(theProjection.project(R->getNode(i)->position()));
+					QPointF FromF(theProjection.project(R->getNode(i-1)));
+					QPointF ToF(theProjection.project(R->getNode(i)));
 					if (distance(FromF,ToF) > (DistFromCenter*2+4))
 					{
 						QPointF H(FromF+ToF);
@@ -996,7 +996,7 @@ void FeaturePainter::drawLabel(TrackPoint* Pt, QPainter& thePainter, const Proje
 	if (str.isEmpty() && strBg.isEmpty())
 		return;
 
-	QPoint C(theProjection.project(Pt->position()));
+	QPoint C(theProjection.project(Pt));
 	drawPointLabel(C, str, strBg, thePainter, theProjection);
 }
 

@@ -153,8 +153,8 @@ void EPTouchupLayer::draw(Road* R)
 				{
 					for (unsigned int i=1; i<R->size(); ++i)
 					{
-						QPointF FromF(p->theProjection.project(R->getNode(i-1)->position()));
-						QPointF ToF(p->theProjection.project(R->getNode(i)->position()));
+						QPointF FromF(p->theProjection.project(R->getNode(i-1)));
+						QPointF ToF(p->theProjection.project(R->getNode(i)));
 						if (distance(FromF,ToF) > (DistFromCenter*2+4))
 						{
 							QPointF H(FromF+ToF);
@@ -210,7 +210,7 @@ void EPTouchupLayer::draw(TrackPoint* Pt)
 				Draw = true;
 			if (Draw)
 			{
-				QPointF P(p->theProjection.project(Pt->position()));
+				QPointF P(p->theProjection.project(Pt));
 
 				if (Pt->findKey("_waypoint_") != Pt->tagSize()) {
 					QRectF R(P-QPointF(4,4),QSize(8,8)); 

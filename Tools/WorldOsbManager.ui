@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>582</width>
-    <height>389</height>
+    <height>609</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -21,12 +21,12 @@
      <item>
       <widget class="QLabel" name="label" >
        <property name="text" >
-        <string>World Directory</string>
+        <string>World URI</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="WorldDirectory" >
+      <widget class="QLineEdit" name="WorldURI" >
        <property name="enabled" >
         <bool>true</bool>
        </property>
@@ -51,7 +51,40 @@
     </layout>
    </item>
    <item>
-    <widget class="RegionMapWidget" native="1" name="slippy" />
+    <layout class="QHBoxLayout" name="horizontalLayout_8" >
+     <item>
+      <widget class="QCheckBox" name="cbAutoload" >
+       <property name="text" >
+        <string>Auto-load</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="cbAutoshow" >
+       <property name="text" >
+        <string>Auto-show</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2" >
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0" >
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="RegionMapWidget" native="1" name="slippy" >
+     <zorder></zorder>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout" >
