@@ -379,7 +379,7 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 		dlg->show();
 
 	if (theDownloader)
-		theDownloader->setAnimator(Lbl,Bar,false);
+		theDownloader->setAnimator(dlg,Lbl,Bar,false);
 	MapLayer* conflictLayer = new DrawingMapLayer(QApplication::translate("Downloader","Conflicts from %1").arg(theLayer->name()));
 	theDocument->add(conflictLayer);
 

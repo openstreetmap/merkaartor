@@ -72,13 +72,14 @@ MapDocument::MapDocument()
 
 	if (M_PREFS->getWorldOsbAutoload() && !M_PREFS->getWorldOsbUri().isEmpty()) {
 		MapLayer* newLayer = new OsbMapLayer( "World", M_PREFS->getWorldOsbUri() + "/world.osb" );
-		add(newLayer);
-		importOSB("world.osb", (DrawingMapLayer*)newLayer);
-
 		if (M_PREFS->getWorldOsbAutoshow())
 			newLayer->setVisible(true);
 		else
 			newLayer->setVisible(false);
+		newLayer->setReadonly(true);
+
+		add(newLayer);
+		importOSB("world.osb", (DrawingMapLayer*)newLayer);
 	}
 }
 
@@ -101,13 +102,14 @@ MapDocument::MapDocument(LayerDock* aDock)
 
 	if (M_PREFS->getWorldOsbAutoload() && !M_PREFS->getWorldOsbUri().isEmpty()) {
 		MapLayer* newLayer = new OsbMapLayer( "World", M_PREFS->getWorldOsbUri() + "/world.osb" );
-		add(newLayer);
-		importOSB("world.osb", (DrawingMapLayer*)newLayer);
-
 		if (M_PREFS->getWorldOsbAutoshow())
 			newLayer->setVisible(true);
 		else
 			newLayer->setVisible(false);
+		newLayer->setReadonly(true);
+
+		add(newLayer);
+		importOSB("world.osb", (DrawingMapLayer*)newLayer);
 	}
 
 }

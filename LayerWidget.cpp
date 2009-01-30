@@ -95,7 +95,7 @@ MapLayer* LayerWidget::getMapLayer()
 
 void LayerWidget::contextMenuEvent(QContextMenuEvent* anEvent)
 {
-	initActions();
+	//initActions();
 
 	if (ctxMenu) {
 		if (actZoom)
@@ -121,6 +121,13 @@ void LayerWidget::initActions()
 	actVisible->setChecked(theLayer->isVisible());
 	associatedMenu->addAction(actVisible);
 	connect(actVisible, SIGNAL(triggered(bool)), this, SLOT(visibleLayer(bool)));
+
+	actReadonly = new QAction(tr("Readonly"), ctxMenu);
+	actReadonly->setCheckable(true);
+	actReadonly->setChecked(theLayer->isReadonly());
+	associatedMenu->addAction(actReadonly);
+	ctxMenu->addAction(actReadonly);
+	connect(actReadonly, SIGNAL(triggered(bool)), this, SLOT(readonlyLayer(bool)));
 
 	static const char *opStr[NUMOP] = {
 	QT_TR_NOOP("Low"), QT_TR_NOOP("High"), QT_TR_NOOP("Opaque")};
@@ -169,6 +176,11 @@ void LayerWidget::visibleLayer(bool)
 	setLayerVisible(actVisible->isChecked());
 }
 
+void LayerWidget::readonlyLayer(bool)
+{
+	theLayer->setReadonly(actReadonly->isChecked());
+}
+
 QMenu* LayerWidget::getAssociatedMenu()
 {
 	return associatedMenu;
@@ -178,6 +190,14 @@ void LayerWidget::setLayerVisible(bool b)
 {
 	theLayer->setVisible(b);
 	actVisible->setChecked(b);
+	update();
+	emit(layerChanged(this, false));
+}
+
+void LayerWidget::setLayerReadonly(bool b)
+{
+	theLayer->setReadonly(b);
+	actReadonly->setChecked(b);
 	update();
 	emit(layerChanged(this, false));
 }
@@ -360,6 +380,9 @@ void ImageLayerWidget::initActions()
 	//actgrWms = new QActionGroup(this);
 
 	LayerWidget::initActions();
+
+	actReadonly->setVisible(false);
+
 	ctxMenu->addSeparator();
 	associatedMenu->addSeparator();
 
@@ -571,6 +594,9 @@ OsbLayerWidget::OsbLayerWidget(OsbMapLayer* aLayer, QWidget* aParent)
 void OsbLayerWidget::initActions()
 {
 	LayerWidget::initActions();
+
+	ctxMenu->addSeparator();
+	associatedMenu->addSeparator();
 
 	closeAction = new QAction(tr("Close"), this);
 	connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));

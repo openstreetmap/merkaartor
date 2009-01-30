@@ -25,6 +25,7 @@ class LayerWidget : public QAbstractButton
 
 		virtual MapLayer* getMapLayer();
 		virtual void setLayerVisible(bool b);
+		virtual void setLayerReadonly(bool b);
 		virtual	void initActions();
 
 		QMenu* getAssociatedMenu();
@@ -43,6 +44,7 @@ class LayerWidget : public QAbstractButton
 		QAction* closeAction;
 		QAction* actZoom;
 		QAction* actVisible;
+		QAction* actReadonly;
 		QMenu* associatedMenu;
 
 	signals:
@@ -56,6 +58,7 @@ class LayerWidget : public QAbstractButton
 		void setOpacity(QAction*);
 		void zoomLayer(bool);
 		void visibleLayer(bool);
+		void readonlyLayer(bool);
 		void close();
 		void clear();
 		void associatedAboutToShow();

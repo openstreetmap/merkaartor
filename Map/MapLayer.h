@@ -78,6 +78,7 @@ public:
 	virtual void setVisible(bool b) = 0;
 	virtual void setSelected(bool b);
 	virtual void setEnabled(bool b);
+	virtual void setReadonly(bool b);
 	virtual LayerWidget* newWidget(void) = 0;
 
 	virtual void setAlpha(const qreal alpha);
@@ -102,6 +103,7 @@ public:
 
 	virtual bool canDelete();
 	virtual bool isUploadable() {return true;};
+	virtual bool isReadonly() const;
 	virtual bool isTrack() {return false;};
 
 protected:

@@ -56,6 +56,7 @@ public:
 		theWidget = NULL;
 		selected = false;
 		Enabled = true;
+		Readonly = false;
 	}
 	~MapLayerPrivate()
 	{
@@ -70,6 +71,7 @@ public:
 	bool Visible;
 	bool selected;
 	bool Enabled;
+	bool Readonly;
 	LayerWidget* theWidget;
 	qreal alpha;
 	unsigned int dirtyLevel;
@@ -189,6 +191,15 @@ void MapLayer::setEnabled(bool b) {
 bool MapLayer::isEnabled() const
 {
 	return p->Enabled;
+}
+
+void MapLayer::setReadonly(bool b) {
+	p->Readonly = b;
+}
+
+bool MapLayer::isReadonly() const
+{
+	return p->Readonly;
 }
 
 void MapLayer::add(MapFeature* aFeature)
@@ -761,6 +772,7 @@ TrackMapLayer::TrackMapLayer(const QString & aName, const QString& filename)
 	: MapLayer(aName), Filename(filename)
 {
 	p->Visible = true;
+	p->Readonly = M_PREFS->getReadonlyTracksDefault();
 }
 
 TrackMapLayer::~ TrackMapLayer()

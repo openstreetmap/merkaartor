@@ -1,4 +1,6 @@
 v0.13
+	* ADD : Readonly layers + Preferences to default track layers to readonly (fixes #1460)
+	* FIX : Make upload dialog modal
 	* ADD : Initial support for multiple projections via proj4. Enable in Config.pri with PROJ=1
 	* FIX : Crash during OSM import (fixes #1536)
 	* ADD : Option (in Manager) to autoload/autoshow the World

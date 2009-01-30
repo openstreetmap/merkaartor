@@ -63,7 +63,7 @@ void Downloader::animate()
 		AnimatorBar->setValue((AnimatorBar->value()+1) % AnimatorBar->maximum());
 }
 
-void Downloader::setAnimator(QLabel* anAnimatorLabel, QProgressBar* anAnimatorBar, bool anAnimate)
+void Downloader::setAnimator(QProgressDialog *anAnimator, QLabel* anAnimatorLabel, QProgressBar* anAnimatorBar, bool anAnimate)
 {
 	AnimatorLabel = anAnimatorLabel;
 	AnimatorBar = anAnimatorBar;
@@ -77,8 +77,8 @@ void Downloader::setAnimator(QLabel* anAnimatorLabel, QProgressBar* anAnimatorBa
 	if (AnimatorBar)
 	{
 		AnimatorBar->setValue(0);
-		//QProgressBar does not have a canceled() signal!!!
-		//connect(AnimatorBar,SIGNAL(canceled()),this,SLOT(on_Cancel_clicked()));
+		if (anAnimator)
+			connect(anAnimator,SIGNAL(canceled()),this,SLOT(on_Cancel_clicked()));
 		qApp->processEvents();
 	}
 }
@@ -434,7 +434,7 @@ bool downloadOSM(QWidget* aParent, const QUrl& theUrl, const QString& aUser, con
 	if (dlg)
 		dlg->show();
 
-	Rcv.setAnimator(Lbl, Bar, true);
+	Rcv.setAnimator(dlg, Lbl, Bar, true);
 	if (!Rcv.go(URL))
 	{
 		aParent->setCursor(QCursor(Qt::ArrowCursor));
@@ -551,7 +551,7 @@ bool downloadTracksFromOSM(QWidget* Main, const QString& aWeb, const QString& aU
 	if (dlg)
 		dlg->show();
 
-	theDownloader.setAnimator(Lbl,Bar,true);
+	theDownloader.setAnimator(dlg,Lbl,Bar,true);
 	for (unsigned int Page=0; ;++Page)
 	{
 		Lbl->setText(QApplication::translate("Downloader","Downloading trackpoints %1-%2").arg(Page*5000+1).arg(Page*5000+5000));
@@ -623,6 +623,10 @@ bool downloadMoreOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDo
 		// Don't jump around on Download More
 		// aParent->view()->projection().setViewport(aBox,aParent->view()->rect());
 		Main->invalidateView();
+	} else
+	{
+		theDocument->remove(theLayer);
+		delete theLayer;
 	}
 	return OK;
 }

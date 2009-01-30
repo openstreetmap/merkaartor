@@ -385,6 +385,9 @@ public:
 	/* Network */
 	M_PARAM_DECLARE_BOOL(OfflineMode)
 
+	/* Track */
+	M_PARAM_DECLARE_BOOL(ReadonlyTracksDefault)
+
 protected:
 	bool Use06Api;
 	QString version;

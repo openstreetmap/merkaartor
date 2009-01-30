@@ -409,6 +409,7 @@ bool DirtyListExecutor::sendRequest(const QString& Method, const QString& URL, c
 bool DirtyListExecutor::executeChanges(QWidget* aParent)
 {
 	Progress = new QProgressDialog(aParent);
+	Progress->setWindowModality(Qt::WindowModal);
 	Progress->setMinimumDuration(0);
 	Progress->setMaximum(Tasks+2);
 	Progress->show();

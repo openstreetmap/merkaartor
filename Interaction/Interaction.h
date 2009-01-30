@@ -193,6 +193,8 @@ class GenericFeatureSnapInteraction : public Interaction
 				FeatureType* Pt = dynamic_cast<FeatureType*>(it.get());
 				if (Pt)
 				{
+					if (Pt->layer()->isReadonly())
+						continue;
 					if ( (NoRoads || NoSelectRoads) && dynamic_cast<Road*>(Pt))
 						continue;
 					if (NoSelectPoints && dynamic_cast<TrackPoint*>(Pt))

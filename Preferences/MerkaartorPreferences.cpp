@@ -887,13 +887,12 @@ void MerkaartorPreferences::initialPosition(MapView* vw)
 	const Coord bottomLeft(ip[0].toInt(), ip[1].toInt());
 	const Coord topRight(ip[2].toInt(),ip[3].toInt());
 
-	if (!Sets->contains("MainWindow/ViewSize"))
+	if (!Sets->contains("MainWindow/ViewRect"))
 		vw->projection().setViewport(CoordBox(bottomLeft, topRight), vw->rect());
 	else {
 		QRect rt = Sets->value("MainWindow/ViewRect").toRect();
 		vw->projection().setViewport(CoordBox(bottomLeft, topRight), rt);
 	}
-
 }
 
 void MerkaartorPreferences::setProjectionType(ProjectionType theValue)
@@ -1332,6 +1331,9 @@ M_PARAM_IMPLEMENT_BOOL(MerkaartorStyle, visual, false)
 
 /* Network */
 M_PARAM_IMPLEMENT_BOOL(OfflineMode, Network, false)
+
+/* Track */
+M_PARAM_IMPLEMENT_BOOL(ReadonlyTracksDefault, data, false)
 
 /* */ 
 
