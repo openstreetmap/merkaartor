@@ -3,14 +3,21 @@
 #include "Map/MapLayer.h"
 #include "Sync/DirtyList.h"
 
+MoveTrackPointCommand::MoveTrackPointCommand() 
+: Command(0), theLayer(0), oldLayer(0), OldPos(Coord(0, 0)), NewPos(Coord(0, 0))
+{
+}
+
 MoveTrackPointCommand::MoveTrackPointCommand(TrackPoint* aPt) 
 : Command(aPt), theLayer(0), oldLayer(0), OldPos(Coord(0, 0)), NewPos(Coord(0, 0))
 {
+	description = MainWindow::tr("Move node %1").arg(aPt->description());
 }
 
 MoveTrackPointCommand::MoveTrackPointCommand(TrackPoint* aPt, const Coord& aPos, MapLayer* aLayer)
 : Command(aPt), theLayer(aLayer), oldLayer(0), thePoint(aPt), OldPos(aPt->position()), NewPos(aPos)
 {
+	description = MainWindow::tr("Move node %1").arg(aPt->description());
 	redo();
 }
 
@@ -89,6 +96,8 @@ MoveTrackPointCommand * MoveTrackPointCommand::fromXML(MapDocument * d, QDomElem
 	else
 		a->oldLayer = NULL;
 	a->thePoint = MapFeature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, e.attribute("trackpoint"));
+
+	a->description = MainWindow::tr("Move node %1").arg(a->thePoint->description());
 
 	Command::fromXML(d, e, a);
 

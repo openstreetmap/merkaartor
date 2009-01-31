@@ -10,7 +10,8 @@ class MapLayer;
 class MoveTrackPointCommand : public Command
 {
 	public:
-		MoveTrackPointCommand(TrackPoint* aPt = NULL);
+		MoveTrackPointCommand();
+		MoveTrackPointCommand(TrackPoint* aPt);
 		MoveTrackPointCommand(TrackPoint* aPt, const Coord& aPos, MapLayer* aLayer=NULL);
 		virtual ~MoveTrackPointCommand();
 

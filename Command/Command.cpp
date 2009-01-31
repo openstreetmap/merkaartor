@@ -469,6 +469,11 @@ CommandHistory* CommandHistory::fromXML(MapDocument* d, QDomElement& e, QProgres
 			if (C)
 				h->add(C);
 		}
+		if (c.tagName() == "MoveTrackPointCommand") {
+			MoveTrackPointCommand* C = MoveTrackPointCommand::fromXML(d, c);
+			if (C)
+				h->add(C);
+		}
 
 		if (progress.wasCanceled())
 			break;

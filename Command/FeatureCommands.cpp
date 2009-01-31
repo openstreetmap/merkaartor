@@ -171,6 +171,8 @@ SetTagCommand * SetTagCommand::fromXML(MapDocument * d, QDomElement e)
 	else
 		a->oldLayer = NULL;
 
+	a->description = MainWindow::tr("Set Tag '%1=%2' on %3").arg(a->theK).arg(a->theV).arg(a->theFeature->description());
+
 	Command::fromXML(d, e, a);
 
 	return a;
@@ -363,6 +365,8 @@ ClearTagCommand * ClearTagCommand::fromXML(MapDocument * d, QDomElement e)
 		a->oldLayer = d->getLayer(e.attribute("oldlayer"));
 	else
 		a->oldLayer = NULL;
+
+	a->description = MainWindow::tr("Clear Tag '%1' on %2").arg(a->theK).arg(a->theFeature->description());
 
 	Command::fromXML(d, e, a);
 
