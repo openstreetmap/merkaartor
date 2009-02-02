@@ -627,6 +627,11 @@ bool MapDocument::importKML(const QString& filename, TrackMapLayer* NewLayer)
 
 bool MapDocument::importSHP(const QString& filename, DrawingMapLayer* NewLayer)
 {
+#ifndef USE_GDAL
+	Q_UNUSED(filename)
+	Q_UNUSED(NewLayer)
+	return false; //???
+#endif
 #ifdef USE_GDAL
 	ImportExportSHP imp(this);
 	if (!imp.loadFile(filename))
