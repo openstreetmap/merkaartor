@@ -1295,11 +1295,7 @@ M_PARAM_IMPLEMENT_BOOL(DisableStyleForTracks, style, true)
 /* Visual */
 M_PARAM_IMPLEMENT_BOOL(BackgroundOverwriteStyle, visual, false)
 M_PARAM_IMPLEMENT_INT(AreaOpacity, visual, 100)
-#ifdef USE_GDAL
-	M_PARAM_IMPLEMENT_BOOL(UseShapefileForBackground, visual, true)
-#else
-	M_PARAM_IMPLEMENT_BOOL(UseShapefileForBackground, visual, false)
-#endif
+M_PARAM_IMPLEMENT_BOOL(UseShapefileForBackground, visual, false)
 
 /* Templates */
 M_PARAM_IMPLEMENT_STRING(DefaultTemplate, templates, ":/Templates/default.mat")
