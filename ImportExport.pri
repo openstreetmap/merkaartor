@@ -13,3 +13,10 @@ ImportExport/ImportNMEA.cpp \
 ImportExport/ExportGPX.cpp \
 ImportExport/ImportExportKML.cpp \
 ImportExport/ImportExportOsmBin.cpp
+
+contains (GDAL, 1) {
+	HEADERS += \
+	ImportExport/ImportExportSHP.h
+	SOURCES += \
+	ImportExport/ImportExportSHP.cpp
+}

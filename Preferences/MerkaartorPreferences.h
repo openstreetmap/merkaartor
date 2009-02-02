@@ -64,6 +64,9 @@ enum ImageBackgroundType {
 	Bg_None,
 	Bg_Wms,
  	Bg_Tms
+#ifdef USE_GDAL
+	, Bg_Shp
+#endif
 #ifdef YAHOO
  	, Bg_Yahoo
 #endif
@@ -351,6 +354,7 @@ public:
 	/* Visual */
 	M_PARAM_DECLARE_BOOL(BackgroundOverwriteStyle)
 	M_PARAM_DECLARE_INT(AreaOpacity)
+	M_PARAM_DECLARE_BOOL(UseShapefileForBackground)
 
 	/* Templates */
 	M_PARAM_DECLARE_STRING(DefaultTemplate)

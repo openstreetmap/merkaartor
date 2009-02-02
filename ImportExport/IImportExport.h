@@ -30,8 +30,7 @@ Interface for Import/Export
 */
 class IImportExport{
 public:
-	IImportExport(MapDocument* doc)
-		: theDoc(doc) {};
+	IImportExport(MapDocument* doc);
 	virtual ~IImportExport();
 
 public:

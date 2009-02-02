@@ -557,7 +557,7 @@ static void changeCurrentDirToFile(const QString& s)
 
 #ifndef GEOIMAGE
 #define FILTER_OPEN_SUPPORTED \
-	tr("Supported formats")+" (*.mdc *.gpx *.osm *.osb *.ngt *.nmea *.nma *.kml)\n" \
+	tr("Supported formats")+" (*.mdc *.gpx *.osm *.osb *.ngt *.nmea *.nma *.kml *.shp)\n" \
 	+tr("Merkaartor document (*.mdc)\n") \
 	+tr("GPS Exchange format (*.gpx)\n") \
 	+tr("OpenStreetMap format (*.osm)\n") \
@@ -565,10 +565,11 @@ static void changeCurrentDirToFile(const QString& s)
 	+tr("Noni GPSPlot format (*.ngt)\n") \
 	+tr("NMEA GPS log format (*.nmea *.nma)\n") \
 	+tr("KML file (*.kml)\n") \
+	+tr("ESRI Shapefile (*.shp)\n") \
 	+tr("All Files (*)")
 #else
 #define FILTER_OPEN_SUPPORTED \
-	tr("Supported formats")+" (*.mdc *.gpx *.osm *.osb *.ngt *.nmea *.nma *.kml *.jpg)\n" \
+	tr("Supported formats")+" (*.mdc *.gpx *.osm *.osb *.ngt *.nmea *.nma *.kml *.shp *.jpg)\n" \
 	+tr("Merkaartor document (*.mdc)\n") \
 	+tr("GPS Exchange format (*.gpx)\n") \
 	+tr("OpenStreetMap format (*.osm)\n") \
@@ -577,16 +578,18 @@ static void changeCurrentDirToFile(const QString& s)
 	+tr("NMEA GPS log format (*.nmea *.nma)\n") \
 	+tr("KML file (*.kml)\n") \
 	+tr("Geotagged images (*.jpg)\n") \
+	+tr("ESRI Shapefile (*.shp)\n") \
 	+tr("All Files (*)")
 #endif
 #define FILTER_IMPORT_SUPPORTED \
-	tr("Supported formats")+" (*.gpx *.osm *.osb *.ngt *.nmea *.nma *.kml)\n" \
+	tr("Supported formats")+" (*.gpx *.osm *.osb *.ngt *.nmea *.nma *.kml *.shp)\n" \
 	+tr("GPS Exchange format (*.gpx)\n") \
 	+tr("OpenStreetMap format (*.osm)\n") \
 	+tr("OpenStreetMap binary format (*.osb)\n") \
 	+tr("Noni GPSPlot format (*.ngt)\n") \
 	+tr("NMEA GPS log format (*.nmea *.nma)\n") \
 	+tr("KML file (*.kml)\n") \
+	+tr("ESRI Shapefile (*.shp)\n") \
 	+tr("All Files (*)")
 
 void MainWindow::on_fileImportAction_triggered()
@@ -719,6 +722,13 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 			} else
 				importAborted = true;
 		}
+#ifdef USE_GDAL
+		else if (fn.endsWith(".shp")) {
+			newLayer = new DrawingMapLayer( baseFileName );
+			mapDocument->add(newLayer);
+			importOK = mapDocument->importSHP(baseFileName, (DrawingMapLayer *)newLayer);
+		}
+#endif
 
 		if (!importOK && newLayer)
 			mapDocument->remove(newLayer);

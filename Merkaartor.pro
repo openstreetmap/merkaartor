@@ -7,12 +7,12 @@
 # PREFIX              - base prefix for installation
 # NODEBUG             - no debug target
 # OSMARENDER          - enable osmarender
+# PROJ                - use PROJ4 library for projections
 # GDAL    	      - enable GDAL
 # MOBILE    	      - enable MOBILE
 # GEOIMAGE            - enable geotagged images (needs exiv2)
 # GPSD                - use gpsd as location provider
 # NVIDIA_HACK         - used to solve nvidia specific slowdown
-# PROJ                - use PROJ4 library for projections
 
 #Static config
 include (Config.pri)
@@ -60,7 +60,6 @@ contains(NVIDIA_HACK,1) {
 
 DESTDIR = $$OUTPUT_DIR/bin
 
-
 INCLUDEPATH += . Render qextserialport GPS NameFinder
 DEPENDPATH += . Render qextserialport GPS NameFinder
 MOC_DIR = tmp
@@ -96,20 +95,18 @@ include(NameFinder/NameFinder.pri)
 include(QtStyles/QtStyles.pri)
 
 unix {
-    target.path = /usr/local/bin
     # Prefix: base instalation directory
-    count( PREFIX, 1 ) {
-        target.path = $${PREFIX}/bin
+    isEmpty( PREFIX ) {
+		PREFIX = /usr/local
+	}
+    target.path = $${PREFIX}/bin
 
-        isEmpty(TRANSDIR_MERKAARTOR) {
-            TRANSDIR_MERKAARTOR = $${PREFIX}/share/merkaartor/translations
-        }
-        isEmpty(TRANSDIR_SYSTEM) {
-            TRANSDIR_SYSTEM = $${PREFIX}/share/qt4/translations
-        }
-
+    isEmpty(TRANSDIR_MERKAARTOR) {
+        TRANSDIR_MERKAARTOR = $${PREFIX}/share/merkaartor/translations
     }
-    INSTALLS += target
+    isEmpty(TRANSDIR_SYSTEM) {
+        TRANSDIR_SYSTEM = $${PREFIX}/share/qt4/translations
+    }
 }
 
 win32 {
@@ -118,21 +115,19 @@ win32 {
 	RC_FILE = Icons/merkaartor-win32.rc
 }
 
+INSTALLS += target
 
 win32-msvc* {
     DEFINES += _USE_MATH_DEFINES
 }
 
-count(TRANSDIR_MERKAARTOR, 1) {
-    translations.path =  $${TRANSDIR_MERKAARTOR}
-    translations.files = $${BINTRANSLATIONS}
-    DEFINES += TRANSDIR_MERKAARTOR=\"\\\"$$translations.path\\\"\"
-    INSTALLS += translations
-}
 
-count(TRANSDIR_SYSTEM, 1) {
-    DEFINES += TRANSDIR_SYSTEM=\"\\\"$${TRANSDIR_SYSTEM}\\\"\"
-}
+translations.path =  $${TRANSDIR_MERKAARTOR}
+translations.files = $${BINTRANSLATIONS}
+DEFINES += TRANSDIR_MERKAARTOR=\"\\\"$$translations.path\\\"\"
+INSTALLS += translations
+
+DEFINES += TRANSDIR_SYSTEM=\"\\\"$${TRANSDIR_SYSTEM}\\\"\"
 
 isEmpty(NOUSEWEBKIT) {
    greaterThan(QT_VER_MAJ, 3) : greaterThan(QT_VER_MIN, 3) {
@@ -156,9 +151,54 @@ contains(GEOIMAGE, 1) {
 	include(GeoImage.pri)
 }
 
-
 contains (PROJ, 1) {
 	DEFINES += USE_PROJ
 	LIBS += -lproj
 }
+
+contains (GDAL, 1) {
+	DEFINES += USE_GDAL
+	win32 {
+		LIBS += -lgdal_i
+		world_shp.path = share/world_shp
+	}
+	unix {
+		LIBS += -lgdal
+		world_shp.path = $${PREFIX}/share/merkaartor/world_shp
+	}
+	
+	world_shp.files = \
+		share/world_shp/world_adm0.shp \
+		share/world_shp/world_adm0.shx \
+		share/world_shp/world_adm0.dbf
+
+	DEFINES += WORLD_SHP=\"\\\"$$world_shp.path/world_adm0.shp\\\"\"
+	INSTALLS += world_shp
+}
+
+#   INCLUDEPATH += binaries/win32-g++/debug/include
+#   LIBS += -Lbinaries/win32-g++/debug/lib
+
+#   DESTDIR = binaries/win32-g++/debug/bin
+
+
+!isEmpty(TRANSLATIONS) {
+
+  isEmpty(QMAKE_LRELEASE) {
+    win32:QMAKE_LRELEASE = $$[QT_INSTALL_BINS]\lrelease.exe
+    else:QMAKE_LRELEASE = $$[QT_INSTALL_BINS]/lrelease
+  }
+
+ TS_DIR = translations
+
+  TSQM.name = lrelease ${QMAKE_FILE_IN}
+  TSQM.input = TRANSLATIONS
+  TSQM.output = $$TS_DIR/${QMAKE_FILE_BASE}.qm
+  TSQM.commands = $$QMAKE_LRELEASE ${QMAKE_FILE_IN}
+  TSQM.CONFIG = no_link
+  QMAKE_EXTRA_COMPILERS += TSQM
+  PRE_TARGETDEPS += compiler_TSQM_make_all
+
+} else:message(No translation files in project)
+
 

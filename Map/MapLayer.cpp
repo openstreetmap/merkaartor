@@ -18,6 +18,9 @@
 #include "QMapControl/mapadapter.h"
 #include "QMapControl/osmmapadapter.h"
 #include "QMapControl/wmsmapadapter.h"
+#ifdef USE_GDAL
+	#include "ImportExport/ImportExportSHP.h"
+#endif
 #ifdef YAHOO
 	#include "QMapControl/yahoolegalmapadapter.h"
 #endif
@@ -554,6 +557,17 @@ ImageMapLayer::ImageMapLayer(const QString & aName, LayerManager* aLayerMgr)
 		setVisible(false);
 	else
 		setVisible(MerkaartorPreferences::instance()->getBgVisible());
+
+#ifdef USE_GDAL
+	ImportExportSHP s(NULL);
+	QString fn = WORLD_SHP;
+	if (QDir::isRelativePath(fn))
+		fn = QCoreApplication::applicationDirPath() + "/" + WORLD_SHP;
+	s.loadFile(fn);
+	s.import(this);
+#endif
+
+	setReadonly(true);
 }
 
 ImageMapLayer::~ ImageMapLayer()
@@ -561,6 +575,16 @@ ImageMapLayer::~ ImageMapLayer()
 	if (layermanager && p->layer_bg)
 		layermanager->removeLayer(p->layer_bg->getLayername());
 	SAFE_DELETE(p->layer_bg);
+	clear();
+}
+
+unsigned int ImageMapLayer::size() const
+{
+	return p->Features.size();
+	//if (p->bgType == Bg_Shp)
+	//	return p->Features.size();
+	//else
+	//	return 0;
 }
 
 LayerWidget* ImageMapLayer::newWidget(void)
@@ -582,7 +606,8 @@ void ImageMapLayer::setVisible(bool b)
 	if (p->bgType == Bg_None)
 		p->Visible = false;
 	else
-	p->layer_bg->setVisible(b);
+		if (p->layer_bg)
+			p->layer_bg->setVisible(b);
 	MerkaartorPreferences::instance()->setBgVisible(p->Visible);
 }
 
@@ -646,6 +671,12 @@ void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 
 			setName("Background - OSM");*/
 			break;
+#ifdef USE_GDAL
+		case Bg_Shp:
+
+			setName(tr("Map - Shape"));
+			break;
+#endif
 #ifdef YAHOO
 		case Bg_Yahoo:
 			mapadapter_bg = new YahooLegalMapAdapter();

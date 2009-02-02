@@ -184,10 +184,14 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 	P.setClipRegion(rg);
 	P.setClipping(true);
 
-	if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
-		P.fillRect(rect(), QBrush(M_PREFS->getBgColor()));
-	else
-		P.fillRect(rect(), QBrush(M_STYLE->getGlobalPainter().getBackgroundColor()));
+	if (M_PREFS->getUseShapefileForBackground() && theDocument->getImageLayer()->isVisible()) {
+		P.fillRect(rect(), QBrush(QColor(181, 208, 208)));
+	} else {
+		if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
+			P.fillRect(rect(), QBrush(M_PREFS->getBgColor()));
+		else
+			P.fillRect(rect(), QBrush(M_STYLE->getGlobalPainter().getBackgroundColor()));
+	}
 
 	if (LAYERMANAGER_OK && layermanager->getLayer()->isVisible()) {
 		updateLayersImage();
@@ -305,14 +309,22 @@ void MapView::updateLayersImage()
 		const qreal ratio = qMax<const qreal>((qreal)width()/ps.width()*1.0, (qreal)height()/ps.height());
 		QPixmap pms;
 		if (ratio > 1.0) {
+#ifndef USE_PROJ
 			pms = pm.scaled(ps /*, Qt::IgnoreAspectRatio, Qt::SmoothTransformation */ );
+#else
+			pms = pm.scaled(ps, Qt::KeepAspectRatio, Qt::FastTransformation );
+#endif
 		} else {
 			const QSizeF drawingSize = pm.size() * ratio;
 			const QSizeF originSize = pm.size()/2 - drawingSize/2;
 			const QPointF drawingOrigin = QPointF(originSize.width(), originSize.height());
 			const QRect drawingRect = QRect(drawingOrigin.toPoint(), drawingSize.toSize());
 
+#ifndef USE_PROJ
 			pms = pm.copy(drawingRect).scaled(ps*ratio /*, Qt::IgnoreAspectRatio, Qt::SmoothTransformation */ );
+#else
+			pms = pm.copy(drawingRect).scaled(ps*ratio, Qt::KeepAspectRatio, Qt::FastTransformation );
+#endif
 		}
 
 		P.drawPixmap((width()-pms.width())/2, (height()-pms.height())/2, pms);

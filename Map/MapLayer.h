@@ -56,7 +56,7 @@ public:
 	virtual void remove(MapFeature* aFeature);
 	virtual void clear();
 	bool exists(MapFeature* aFeature) const;
-	unsigned int size() const;
+	virtual unsigned int size() const;
 	int get(MapFeature* aFeature);
 	QVector<MapFeature *> get();
 	MapFeature* get(unsigned int i);
@@ -147,6 +147,7 @@ public:
 	virtual void setVisible(bool b);
 	virtual LayerWidget* newWidget(void);
 	virtual void updateWidget();
+	virtual unsigned int size() const;
 
 	virtual bool toXML(QDomElement xParent, QProgressDialog & progress);
 	static ImageMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);

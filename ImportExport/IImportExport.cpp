@@ -14,10 +14,14 @@
 
 #include "../ImportExport/IImportExport.h"
 
+IImportExport::IImportExport(MapDocument* doc)
+		: theDoc(doc), Device(0)
+{
+}
 
 IImportExport::~IImportExport()
 {
-	if (Device->isOpen())
+	if (Device && Device->isOpen())
 		Device->close();
 	delete Device;
 }

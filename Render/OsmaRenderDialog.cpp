@@ -31,10 +31,6 @@
 #include <libxslt/xsltutils.h>
 #include <libexslt/exslt.h>
 
-#ifdef QGDAL_FEAT
-	#include "qgdal.h"
-#endif
-
 void xsltCallback (void * /*ctx*/, const char * msg, ...)
 {
     char buf[1024];
@@ -79,14 +75,6 @@ OsmaRenderDialog::OsmaRenderDialog(MapDocument *aDoc, const CoordBox& aCoordBox,
 	sbMaxLat->setValue(intToAng(aCoordBox.topLeft().lat()));
 	sbMinLon->setValue(intToAng(aCoordBox.topLeft().lon()));
 	sbMaxLon->setValue(intToAng(aCoordBox.topRight().lon()));
-
-#ifdef QGDAL_FEAT
-	QGDAL g;
-//	if (g.load("/xxvar/src/merkaartor_trunk/Data/SP27GTIF.TIF")) {
-	if (g.load("c:/home/cbrowet/src/merkaartor_trunk/Data/SP27GTIF.TIF")) {
-		g.printInfo();
-	}
-#endif
 
 	sbDPI->setValue(SvgSets->value("sbDPI", "90").toInt());
 	if (SvgSets->value("cbShowPreview", "false").toBool()) {

@@ -112,6 +112,9 @@ class ImageLayerWidget : public LayerWidget
 // 		QActionGroup* actgrWms;
 // 		QActionGroup* actgrTms;
 
+#ifdef USE_GDAL
+		QAction* actShape;
+#endif
 #ifdef YAHOO
 		QAction* actLegalYahoo;
 #endif
@@ -132,6 +135,9 @@ class ImageLayerWidget : public LayerWidget
 	private slots:
 		void setWms(QAction*);
 		void setTms(QAction*);
+#ifdef USE_GDAL
+		void setShape(bool);
+#endif
 #ifdef YAHOO
 		void setLegalYahoo(bool);
 #endif

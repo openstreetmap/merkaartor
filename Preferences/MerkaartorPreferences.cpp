@@ -399,6 +399,9 @@ void MerkaartorPreferences::initialize()
 	bgTypes.insert(Bg_None, tr("None"));
 	bgTypes.insert(Bg_Wms, tr("WMS adapter"));
 	bgTypes.insert(Bg_Tms, tr("TMS adapter"));
+#ifdef USE_GDAL
+	bgTypes.insert(Bg_Shp, tr("Shape adapter"));
+#endif
 #ifdef YAHOO
 	bgTypes.insert(Bg_Yahoo, tr("Yahoo adapter"));
 #endif
@@ -1292,6 +1295,11 @@ M_PARAM_IMPLEMENT_BOOL(DisableStyleForTracks, style, true)
 /* Visual */
 M_PARAM_IMPLEMENT_BOOL(BackgroundOverwriteStyle, visual, false)
 M_PARAM_IMPLEMENT_INT(AreaOpacity, visual, 100)
+#ifdef USE_GDAL
+	M_PARAM_IMPLEMENT_BOOL(UseShapefileForBackground, visual, true)
+#else
+	M_PARAM_IMPLEMENT_BOOL(UseShapefileForBackground, visual, false)
+#endif
 
 /* Templates */
 M_PARAM_IMPLEMENT_STRING(DefaultTemplate, templates, ":/Templates/default.mat")

@@ -254,6 +254,12 @@ ImageLayerWidget::ImageLayerWidget(ImageMapLayer* aLayer, QWidget* aParent)
 // 	actOSM->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_OSM));
 // 	connect(actOSM, SIGNAL(triggered(bool)), this, SLOT(setOSM(bool)));
 
+#ifdef USE_GDAL
+	actShape = new QAction(MerkaartorPreferences::instance()->getBgTypes()[Bg_Shp], this);
+	//actShape->setCheckable(true);
+	actShape->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_Shp));
+	connect(actShape, SIGNAL(triggered(bool)), this, SLOT(setShape(bool)));
+#endif
 #ifdef YAHOO
 	actLegalYahoo = new QAction(MerkaartorPreferences::instance()->getBgTypes()[Bg_Yahoo], this);
 	//actYahoo->setCheckable(true);
@@ -310,6 +316,17 @@ void ImageLayerWidget::setTms(QAction* act)
 	this->update(rect());
 	emit (layerChanged(this, true));
 }
+
+#ifdef USE_GDAL
+void ImageLayerWidget::setShape(bool)
+{
+	((ImageMapLayer *)theLayer)->setMapAdapter(Bg_Shp);
+	theLayer->setVisible(true);
+
+	this->update(rect());
+	emit (layerChanged(this, true));
+}
+#endif
 
 #ifdef YAHOO
 void ImageLayerWidget::setLegalYahoo(bool)
@@ -418,6 +435,9 @@ void ImageLayerWidget::initActions()
 	}
 
 	actNone->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_None));
+#ifdef USE_GDAL
+	actShape->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_Shp));
+#endif
 #ifdef YAHOO
 	actLegalYahoo->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_Yahoo));
 #endif
@@ -443,6 +463,10 @@ void ImageLayerWidget::initActions()
 	connect(tmsMenu, SIGNAL(triggered(QAction*)), this, SLOT(setTms(QAction*)));
 
 // 	ctxMenu->addAction(actOSM);
+#ifdef USE_GDAL
+	ctxMenu->addAction(actShape);
+	associatedMenu->addAction(actShape);
+#endif
 #ifdef YAHOO
 	ctxMenu->addAction(actLegalYahoo);
 	associatedMenu->addAction(actLegalYahoo);

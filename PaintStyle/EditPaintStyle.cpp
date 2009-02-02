@@ -4,6 +4,7 @@
 #include "Map/TrackPoint.h"
 #include "Map/Relation.h"
 #include "Map/Road.h"
+#include "Map/MapLayer.h"
 #include "PaintStyle/TagSelector.h"
 #include "Utils/LineF.h"
 
@@ -83,13 +84,23 @@ void EPBackgroundLayer::draw(Road* R)
 	const FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
 	if (paintsel)
 		paintsel->drawBackground(R,p->thePainter,p->theProjection);
-	else if (!globalZoom(p->theProjection) && !R->hasEditPainter())
+	else if (/*!globalZoom(p->theProjection) && */!R->hasEditPainter()) //FIXME Untagged roads level of zoom?
 	{
 		QPen thePen(QColor(0,0,0),1);
-		if (regionalZoom(p->theProjection))
-			thePen = QPen(QColor(0x77,0x77,0x77),1);
+
+		if (dynamic_cast<ImageMapLayer*>(R->layer()) && M_PREFS->getUseShapefileForBackground()) {
+			thePen = QPen(QColor(0xc0,0xc0,0xc0),1);
+			if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
+				p->thePainter.setBrush(M_PREFS->getBgColor());
+			else
+				p->thePainter.setBrush(QBrush(M_STYLE->getGlobalPainter().getBackgroundColor()));
+		} else {
+			if (regionalZoom(p->theProjection))
+				thePen = QPen(QColor(0x77,0x77,0x77),1);
+			p->thePainter.setBrush(Qt::NoBrush);
+		}
+
 		p->thePainter.setPen(thePen);
-		p->thePainter.setBrush(Qt::NoBrush);
 		p->thePainter.drawPath(R->getPath());
 	}
 }

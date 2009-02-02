@@ -8,6 +8,7 @@
 #include "ImportExport/ImportNMEA.h"
 #include "ImportExport/ImportExportOsmBin.h"
 #include "ImportExport/ImportExportKML.h"
+#include "ImportExport/ImportExportSHP.h"
 
 #include <QtCore/QString>
 #include <QMultiMap>
@@ -111,7 +112,6 @@ MapDocument::MapDocument(LayerDock* aDock)
 		add(newLayer);
 		importOSB("world.osb", (DrawingMapLayer*)newLayer);
 	}
-
 }
 
 MapDocument::MapDocument(const MapDocument&, LayerDock*)
@@ -623,6 +623,21 @@ bool MapDocument::importKML(const QString& filename, TrackMapLayer* NewLayer)
 		return true;
 	else
 		return false;
+}
+
+bool MapDocument::importSHP(const QString& filename, DrawingMapLayer* NewLayer)
+{
+#ifdef USE_GDAL
+	ImportExportSHP imp(this);
+	if (!imp.loadFile(filename))
+		return false;
+	imp.import(NewLayer);
+
+	if (NewLayer->size())
+		return true;
+	else
+		return false;
+#endif
 }
 
 bool MapDocument::importOSB(const QString& filename, DrawingMapLayer* NewLayer)

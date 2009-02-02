@@ -21,7 +21,7 @@ inline double angToRad(double a)
 
 inline int angToInt(double a)
 {
-	return static_cast<int>(a*INT_MAX/180);
+	return static_cast<int>(a*INT_MAX/180.0);
 }
 
 inline double intToAng(int a)
