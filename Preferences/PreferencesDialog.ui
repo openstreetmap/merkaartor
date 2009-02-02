@@ -20,17 +20,9 @@
       <enum>QTabWidget::North</enum>
      </property>
      <property name="currentIndex" >
-      <number>4</number>
+      <number>7</number>
      </property>
      <widget class="QWidget" name="tab_7" >
-      <property name="geometry" >
-       <rect>
-        <x>8</x>
-        <y>60</y>
-        <width>624</width>
-        <height>436</height>
-       </rect>
-      </property>
       <attribute name="title" >
        <string>Locale</string>
       </attribute>
@@ -102,14 +94,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="tab_4" >
-      <property name="geometry" >
-       <rect>
-        <x>4</x>
-        <y>30</y>
-        <width>624</width>
-        <height>436</height>
-       </rect>
-      </property>
       <attribute name="title" >
        <string>Visual</string>
       </attribute>
@@ -462,14 +446,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="tab_5" >
-      <property name="geometry" >
-       <rect>
-        <x>4</x>
-        <y>30</y>
-        <width>624</width>
-        <height>436</height>
-       </rect>
-      </property>
       <attribute name="title" >
        <string>Style</string>
       </attribute>
@@ -564,14 +540,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="tabTemplate" >
-      <property name="geometry" >
-       <rect>
-        <x>4</x>
-        <y>30</y>
-        <width>624</width>
-        <height>436</height>
-       </rect>
-      </property>
       <attribute name="title" >
        <string>Template</string>
       </attribute>
@@ -659,14 +627,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="tabData" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>624</width>
-        <height>436</height>
-       </rect>
-      </property>
       <attribute name="title" >
        <string>Data</string>
       </attribute>
@@ -808,14 +768,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="tab_6" >
-      <property name="geometry" >
-       <rect>
-        <x>4</x>
-        <y>30</y>
-        <width>624</width>
-        <height>436</height>
-       </rect>
-      </property>
       <attribute name="title" >
        <string>GPS</string>
       </attribute>
@@ -900,14 +852,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="tab" >
-      <property name="geometry" >
-       <rect>
-        <x>4</x>
-        <y>30</y>
-        <width>624</width>
-        <height>436</height>
-       </rect>
-      </property>
       <attribute name="title" >
        <string>Network</string>
       </attribute>
@@ -984,14 +928,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="tab_2" >
-      <property name="geometry" >
-       <rect>
-        <x>4</x>
-        <y>30</y>
-        <width>624</width>
-        <height>436</height>
-       </rect>
-      </property>
       <attribute name="title" >
        <string>Background Image</string>
       </attribute>
@@ -1036,32 +972,43 @@
            <property name="title" >
             <string>Map Adapter</string>
            </property>
-           <layout class="QHBoxLayout" >
+           <layout class="QVBoxLayout" name="verticalLayout_8" >
             <item>
-             <widget class="QLabel" name="label_4" >
-              <property name="maximumSize" >
-               <size>
-                <width>16777215</width>
-                <height>16777215</height>
-               </size>
-              </property>
+             <widget class="QCheckBox" name="cbUseShapefileForBackground" >
               <property name="text" >
-               <string>Select Adapter:</string>
-              </property>
-              <property name="buddy" >
-               <cstring>cbMapAdapter</cstring>
+               <string>Enable use of Shape background (needs restart)</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QComboBox" name="cbMapAdapter" />
-            </item>
-            <item>
-             <widget class="QPushButton" name="btAdapterSetup" >
-              <property name="text" >
-               <string>Setup...</string>
-              </property>
-             </widget>
+             <layout class="QHBoxLayout" name="horizontalLayout_8" >
+              <item>
+               <widget class="QLabel" name="label_4" >
+                <property name="maximumSize" >
+                 <size>
+                  <width>16777215</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text" >
+                 <string>Select Adapter:</string>
+                </property>
+                <property name="buddy" >
+                 <cstring>cbMapAdapter</cstring>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="cbMapAdapter" />
+              </item>
+              <item>
+               <widget class="QPushButton" name="btAdapterSetup" >
+                <property name="text" >
+                 <string>Setup...</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
            </layout>
           </widget>
@@ -1087,14 +1034,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="tabTools" >
-      <property name="geometry" >
-       <rect>
-        <x>4</x>
-        <y>30</y>
-        <width>624</width>
-        <height>436</height>
-       </rect>
-      </property>
       <attribute name="title" >
        <string>Tools</string>
       </attribute>

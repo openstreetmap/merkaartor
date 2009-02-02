@@ -559,12 +559,14 @@ ImageMapLayer::ImageMapLayer(const QString & aName, LayerManager* aLayerMgr)
 		setVisible(MerkaartorPreferences::instance()->getBgVisible());
 
 #ifdef USE_GDAL
-	ImportExportSHP s(NULL);
-	QString fn = WORLD_SHP;
-	if (QDir::isRelativePath(fn))
-		fn = QCoreApplication::applicationDirPath() + "/" + WORLD_SHP;
-	s.loadFile(fn);
-	s.import(this);
+	if (M_PREFS->getUseShapefileForBackground()) {
+		ImportExportSHP s(NULL);
+		QString fn = WORLD_SHP;
+		if (QDir::isRelativePath(fn))
+			fn = QCoreApplication::applicationDirPath() + "/" + WORLD_SHP;
+		s.loadFile(fn);
+		s.import(this);
+	}
 #endif
 
 	setReadonly(true);
@@ -580,11 +582,11 @@ ImageMapLayer::~ ImageMapLayer()
 
 unsigned int ImageMapLayer::size() const
 {
-	return p->Features.size();
-	//if (p->bgType == Bg_Shp)
-	//	return p->Features.size();
-	//else
-	//	return 0;
+	//return p->Features.size();
+	if (p->bgType == Bg_Shp)
+		return p->Features.size();
+	else
+		return 0;
 }
 
 LayerWidget* ImageMapLayer::newWidget(void)
@@ -673,8 +675,12 @@ void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 			break;
 #ifdef USE_GDAL
 		case Bg_Shp:
-
-			setName(tr("Map - Shape"));
+			if (!M_PREFS->getUseShapefileForBackground()) {
+				p->bgType = Bg_None;
+				setName(tr("Map - None"));
+				p->Visible = false;
+			} else
+				setName(tr("Map - Shape"));
 			break;
 #endif
 #ifdef YAHOO

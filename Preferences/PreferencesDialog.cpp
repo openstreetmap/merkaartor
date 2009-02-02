@@ -199,6 +199,11 @@ void PreferencesDialog::loadPrefs()
 	cbMouseSingleButton->setChecked(M_PREFS->getMouseSingleButton());
 	cbSeparateMoveMode->setChecked(M_PREFS->getSeparateMoveMode());
 	cbCustomStyle->setChecked(M_PREFS->getMerkaartorStyle());
+
+	cbUseShapefileForBackground->setChecked(M_PREFS->getUseShapefileForBackground());
+#ifndef USE_GDAL
+	cbUseShapefileForBackground->setVisible(false);
+#endif
 }
 
 void PreferencesDialog::savePrefs()
@@ -302,6 +307,8 @@ void PreferencesDialog::savePrefs()
 	M_PREFS->setMouseSingleButton(cbMouseSingleButton->isChecked());
 	M_PREFS->setSeparateMoveMode(cbSeparateMoveMode->isChecked());
 	M_PREFS->setMerkaartorStyle(cbCustomStyle->isChecked());
+
+	M_PREFS->setUseShapefileForBackground(cbUseShapefileForBackground->isChecked());
 
 	M_PREFS->save();
 }
