@@ -104,9 +104,6 @@ unix {
     isEmpty(TRANSDIR_MERKAARTOR) {
         TRANSDIR_MERKAARTOR = $${PREFIX}/share/merkaartor/translations
     }
-    isEmpty(TRANSDIR_SYSTEM) {
-        TRANSDIR_SYSTEM = $${PREFIX}/share/qt4/translations
-    }
 }
 
 win32 {
@@ -127,7 +124,9 @@ translations.files = $${BINTRANSLATIONS}
 DEFINES += TRANSDIR_MERKAARTOR=\"\\\"$$translations.path\\\"\"
 INSTALLS += translations
 
-DEFINES += TRANSDIR_SYSTEM=\"\\\"$${TRANSDIR_SYSTEM}\\\"\"
+count(TRANSDIR_SYSTEM, 1) {
+	DEFINES += TRANSDIR_SYSTEM=\"\\\"$${TRANSDIR_SYSTEM}\\\"\"
+}
 
 isEmpty(NOUSEWEBKIT) {
    greaterThan(QT_VER_MAJ, 3) : greaterThan(QT_VER_MIN, 3) {
@@ -153,13 +152,15 @@ contains(GEOIMAGE, 1) {
 
 contains (PROJ, 1) {
 	DEFINES += USE_PROJ
-	LIBS += -lproj
+	win32-msvc*:LIBS += -lproj_i
+	!win32-msvc*:LIBS += -lproj
 }
 
 contains (GDAL, 1) {
 	DEFINES += USE_GDAL
 	win32 {
-		LIBS += -lgdal_i
+		win32-msvc*:LIBS += -lgdal_i
+		win32-g++:LIBS += -lgdal
 		world_shp.path = share/world_shp
 	}
 	unix {
