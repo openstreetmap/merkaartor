@@ -582,12 +582,12 @@ ImageMapLayer::~ ImageMapLayer()
 
 unsigned int ImageMapLayer::size() const
 {
+#ifdef USE_GDAL
 	//return p->Features.size();
-	#ifdef USE_GDAL
 	if (p->bgType == Bg_Shp)
 		return p->Features.size();
 	else
-	#endif
+#endif
 		return 0;
 }
 
