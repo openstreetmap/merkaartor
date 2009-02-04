@@ -325,7 +325,7 @@ static bool resolveNotYetDownloaded(QWidget* aParent, MapDocument* theDocument, 
 			return false;
 
 		QProgressBar* Bar = aProgressWindow->getProgressBar();
-		QLabel* Lbl = aProgressWindow->getProgressLabel();
+		//QLabel* Lbl = aProgressWindow->getProgressLabel();
 
 		std::vector<MapFeature*> MustResolve;
 		MustResolve.clear();

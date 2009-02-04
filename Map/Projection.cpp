@@ -374,6 +374,9 @@ void Projection::resize(QSize oldS, QSize newS)
 	if (LAYERMANAGER_OK) {
 		layerManagerSetViewport(Viewport, QRect(QPoint(0,0), newS));
 	}
+#else
+	Q_UNUSED(oldS)
+	Q_UNUSED(newS)
 #endif
 }
 

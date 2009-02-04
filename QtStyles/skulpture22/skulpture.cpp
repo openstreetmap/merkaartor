@@ -1355,6 +1355,7 @@ static QPainterPath button_path(const QRectF &rect, qreal k)
 
 static QBrush button_gradient(const QRectF &rect, const QColor &color, const QStyleOptionButton *option)
 {
+	Q_UNUSED(option)
     qreal ch = color.hueF();
     qreal cs = color.saturationF() * 1.0;
     qreal cv = color.valueF() * 1.0;
@@ -3779,7 +3780,7 @@ void paintPanelLineEdit(QPainter *painter, const QStyleOptionFrame *option, cons
 			return;
 		}
                 // we need to adjust shadows to the real frame, not that of the line edit
-                int left = widget->geometry().left(), right = widget->geometry().right();
+                int left = widget->geometry().left()/*, right = widget->geometry().right()*/;
 		QComboBox *combo = qobject_cast<QComboBox *>(widget->parent());
                 int parentFrameWidth;
                 if (combo) {
@@ -4513,6 +4514,7 @@ QVariant readKdeSetting(const QString &entry)
 
 QVariant readKdeSetting(const QString &entry)
 {
+	Q_UNUSED(entry)
     return QVariant();
 }
 

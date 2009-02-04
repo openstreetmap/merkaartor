@@ -82,7 +82,7 @@ void TrackPoint::setProjection(const QPoint& aProjection)
 	Projected = aProjection;
 }
 
-const ProjectionType TrackPoint::projectionType() const
+ProjectionType TrackPoint::projectionType() const
 {
 	return ProjectedType;
 }
