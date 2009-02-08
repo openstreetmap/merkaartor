@@ -2244,13 +2244,15 @@ void MainWindow::updateLanguage()
 
         merkaartorTranslator = new QTranslator;
 		// Do not prevent Merkaartor translations to be loaded, even if there is no Qt translation for the language.
-        bool retM = merkaartorTranslator->load("merkaartor_" + DefaultLanguage
+
+		// First, try in the app dir
+        bool retM = merkaartorTranslator->load("merkaartor_" + DefaultLanguage, QCoreApplication::applicationDirPath());
     #ifdef TRANSDIR_MERKAARTOR
-            , TRANSDIR_MERKAARTOR
-    #else
-            , QCoreApplication::applicationDirPath()
+		if (!retM)
+			// Next, try the TRANSDIR_MERKAARTOR, if defined
+		    retM = merkaartorTranslator->load("merkaartor_" + DefaultLanguage, TRANSDIR_MERKAARTOR);
     #endif
-            );
+
 		if (retM)
 			QCoreApplication::installTranslator(merkaartorTranslator);
 
