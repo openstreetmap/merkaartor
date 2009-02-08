@@ -255,6 +255,8 @@ public:
 
 	QColor getBgColor() const;
 	void setBgColor(const QColor theValue);
+	QColor getWaterColor() const;
+	void setWaterColor(const QColor theValue);
 	QColor getFocusColor() const;
 	int getFocusWidth() const;
 	void setFocusColor(const QColor theValue, int width);
@@ -355,6 +357,7 @@ public:
 	M_PARAM_DECLARE_BOOL(BackgroundOverwriteStyle)
 	M_PARAM_DECLARE_INT(AreaOpacity)
 	M_PARAM_DECLARE_BOOL(UseShapefileForBackground)
+	M_PARAM_DECLARE_BOOL(DrawingHack)
 
 	/* Templates */
 	M_PARAM_DECLARE_STRING(DefaultTemplate)

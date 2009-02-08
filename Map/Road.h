@@ -81,7 +81,9 @@ class Road : public MapFeature
 		virtual void partChanged(MapFeature* F, unsigned int ChangeId);
 		virtual void setLayer(MapLayer* aLayer);
 
+		bool isCoastline() const;
 		double area() const;
+		bool isClosed() const;
 		double distance() const;
 		double widthOf();
 

@@ -88,16 +88,18 @@ void EPBackgroundLayer::draw(Road* R)
 	{
 		QPen thePen(QColor(0,0,0),1);
 
+		p->thePainter.setBrush(Qt::NoBrush);
 		if (dynamic_cast<ImageMapLayer*>(R->layer()) && M_PREFS->getUseShapefileForBackground()) {
 			thePen = QPen(QColor(0xc0,0xc0,0xc0),1);
-			if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
-				p->thePainter.setBrush(M_PREFS->getBgColor());
-			else
-				p->thePainter.setBrush(QBrush(M_STYLE->getGlobalPainter().getBackgroundColor()));
+			if (!R->isCoastline()) {
+				if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
+					p->thePainter.setBrush(M_PREFS->getBgColor());
+				else
+					p->thePainter.setBrush(QBrush(M_STYLE->getGlobalPainter().getBackgroundColor()));
+			}
 		} else {
 			if (regionalZoom(p->theProjection))
 				thePen = QPen(QColor(0x77,0x77,0x77),1);
-			p->thePainter.setBrush(Qt::NoBrush);
 		}
 
 		p->thePainter.setPen(thePen);

@@ -151,8 +151,8 @@ void DirtyDock::on_centerZoomAction_triggered()
 		}
 	}
 	if (!cb.isNull()) {
-		CoordBox min(cb.center()-10, cb.center()+10);
-		cb.merge(min);
+		CoordBox mini(cb.center()-10, cb.center()+10);
+		cb.merge(mini);
 		cb = cb.zoomed(1.1);
 		Main->view()->projection().setViewport(cb, Main->view()->rect());
 		Main->invalidateView();

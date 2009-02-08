@@ -88,6 +88,10 @@ void WorldOsbManager::on_WorldDirectoryBrowse_clicked()
 	}
 }
 
+void WorldOsbManager::on_btGotoViewport_clicked()
+{
+}
+
 
 void WorldOsbManager::DoIt()
 {

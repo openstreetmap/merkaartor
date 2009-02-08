@@ -957,6 +957,14 @@ QColor MerkaartorPreferences::getBgColor() const
 	return Sets->value("visual/BgColor").value<QColor>();
 }
 
+QColor MerkaartorPreferences::getWaterColor() const
+{
+	QString sColor = Sets->value("visual/WaterColor").toString();
+	if (sColor.isEmpty())
+		return QColor(181, 208, 208);
+	return Sets->value("visual/WaterColor").value<QColor>();
+}
+
 QColor MerkaartorPreferences::getFocusColor() const
 {
 	QString sColor = Sets->value("visual/FocusColor").toString();
@@ -984,6 +992,11 @@ QColor MerkaartorPreferences::getRelationsColor() const
 void MerkaartorPreferences::setBgColor(const QColor theValue)
 {
 	Sets->setValue("visual/BgColor", QVariant(theValue));
+}
+
+void MerkaartorPreferences::setWaterColor(const QColor theValue)
+{
+	Sets->setValue("visual/WaterColor", QVariant(theValue));
 }
 
 void MerkaartorPreferences::setHoverColor(const QColor theValue, int Width)
@@ -1296,6 +1309,7 @@ M_PARAM_IMPLEMENT_BOOL(DisableStyleForTracks, style, true)
 M_PARAM_IMPLEMENT_BOOL(BackgroundOverwriteStyle, visual, false)
 M_PARAM_IMPLEMENT_INT(AreaOpacity, visual, 100)
 M_PARAM_IMPLEMENT_BOOL(UseShapefileForBackground, visual, false)
+M_PARAM_IMPLEMENT_BOOL(DrawingHack, visual, true)
 
 /* Templates */
 M_PARAM_IMPLEMENT_STRING(DefaultTemplate, templates, ":/Templates/default.mat")

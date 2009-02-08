@@ -33,6 +33,7 @@ class WorldOsbManager: public QDialog , public Ui::WorldOsbManager, public IProg
 		virtual void on_cbShowGrid_toggled(bool checked);
 		virtual void on_buttonBox_clicked(QAbstractButton * button);
 		virtual void on_WorldDirectoryBrowse_clicked();
+		virtual void on_btGotoViewport_clicked();
 
 	protected:
 		QFile* WorldFile;

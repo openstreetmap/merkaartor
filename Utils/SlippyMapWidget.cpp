@@ -242,6 +242,10 @@ void SlippyMapWidget::on_resetViewAction_triggered(bool)
 	update();
 }
 
+void SlippyMapWidget::on_btGotoViewport_clicked()
+{
+}
+
 bool SlippyMapWidget::isDragging()
 {
 	return p->InDrag;

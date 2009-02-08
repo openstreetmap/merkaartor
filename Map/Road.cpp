@@ -30,6 +30,7 @@ class RoadPrivate
 		CoordBox BBox;
 		bool BBoxUpToDate;
 
+		bool IsCoastline;
 		double Area;
 		double Distance;
 		double Width;
@@ -228,6 +229,7 @@ void Road::updateMeta() const
 {
 	p->Area = 0;
 	p->Distance = 0;
+	p->IsCoastline = false;
 
 	if (p->Nodes.size() == 0)
 	{
@@ -251,6 +253,10 @@ void Road::updateMeta() const
 	if (isArea)
 		p->Area = p->Distance;
 	//p->Area /= 2;
+
+	if (tagValue("natural","") == "coastline")
+		p->IsCoastline = true;
+
 	p->MetaUpToDate = true;
 }
 
@@ -260,6 +266,19 @@ double Road::distance() const
 		updateMeta();
 
 	return p->Distance;
+}
+
+bool Road::isCoastline() const
+{
+	if (p->MetaUpToDate == false)
+		updateMeta();
+
+	return p->IsCoastline;
+}
+
+bool Road::isClosed() const
+{
+	return (p->Area > 0.0);
 }
 
 double Road::area() const
@@ -291,6 +310,7 @@ void Road::drawHover(QPainter& thePainter, const Projection& theProjection, bool
 		TP.setDashPattern(getParentDashes());
 	}
 	thePainter.setPen(TP);
+	thePainter.setBrush(Qt::NoBrush);
 	QRegion clipRg = QRegion(thePainter.clipRegion().boundingRect().adjusted(-20, -20, 20, 20));
 	buildPath(theProjection, clipRg);
 	thePainter.drawPath(p->thePath);
@@ -326,6 +346,7 @@ void Road::drawFocus(QPainter& thePainter, const Projection& theProjection, bool
 		TP.setDashPattern(getParentDashes());
 	}
 	thePainter.setPen(TP);
+	thePainter.setBrush(Qt::NoBrush);
 	QRegion clipRg = QRegion(thePainter.clipRegion().boundingRect().adjusted(-20, -20, 20, 20));
 	buildPath(theProjection, clipRg);
 	thePainter.drawPath(p->thePath);
@@ -490,12 +511,15 @@ void Road::buildPath(Projection const &theProjection, const QRegion& paintRegion
 	double WW = PixelPerM*widthOf()*10+10;
 	QRect clipRect = paintRegion.boundingRect().adjusted(int(-WW-20), int(-WW-20), int(WW+20), int(WW+20));
 
-	if (!clipRect.contains(aP)) {
-		aP.setX(qMax(clipRect.left(), aP.x()));
-		aP.setX(qMin(clipRect.right(), aP.x()));
-		aP.setY(qMax(clipRect.top(), aP.y()));
-		aP.setY(qMin(clipRect.bottom(), aP.y()));
-		lastPointVisible = false;
+
+	if (M_PREFS->getDrawingHack()) {
+		if (!clipRect.contains(aP)) {
+			aP.setX(qMax(clipRect.left(), aP.x()));
+			aP.setX(qMin(clipRect.right(), aP.x()));
+			aP.setY(qMax(clipRect.top(), aP.y()));
+			aP.setY(qMin(clipRect.bottom(), aP.y()));
+			lastPointVisible = false;
+		}
 	}
 	p->thePath.moveTo(aP);
 	QPoint firstPoint = aP;
@@ -510,36 +534,38 @@ void Road::buildPath(Projection const &theProjection, const QRegion& paintRegion
 	else
 		for (unsigned int j=1; j<size(); ++j) {
 			aP = theProjection.project(p->Nodes[j]);
-			QLine l(lastPoint, aP);
-			if (!clipRect.contains(aP)) {
-				if (!lastPointVisible) {
-					QPoint a, b;
-					if (QRectInterstects(clipRect, l, a, b)) {
-						p->thePath.lineTo(a);
-						lastPoint = aP;
-						aP = b;
+			if (M_PREFS->getDrawingHack()) {
+				QLine l(lastPoint, aP);
+				if (!clipRect.contains(aP)) {
+					if (!lastPointVisible) {
+						QPoint a, b;
+						if (QRectInterstects(clipRect, l, a, b)) {
+							p->thePath.lineTo(a);
+							lastPoint = aP;
+							aP = b;
+						} else {
+							lastPoint = aP;
+							aP.setX(qMax(clipRect.left(), aP.x()));
+							aP.setX(qMin(clipRect.right(), aP.x()));
+							aP.setY(qMax(clipRect.top(), aP.y()));
+							aP.setY(qMin(clipRect.bottom(), aP.y()));
+						}
 					} else {
+						QPoint a, b;
+						QRectInterstects(clipRect, l, a, b);
 						lastPoint = aP;
-						aP.setX(qMax(clipRect.left(), aP.x()));
-						aP.setX(qMin(clipRect.right(), aP.x()));
-						aP.setY(qMax(clipRect.top(), aP.y()));
-						aP.setY(qMin(clipRect.bottom(), aP.y()));
+						aP = a;
 					}
+					lastPointVisible = false;
 				} else {
-					QPoint a, b;
-					QRectInterstects(clipRect, l, a, b);
+					if (!lastPointVisible) {
+						QPoint a, b;
+						QRectInterstects(clipRect, l, a, b);
+						p->thePath.lineTo(a);
+					}
 					lastPoint = aP;
-					aP = a;
+					lastPointVisible = true;
 				}
-				lastPointVisible = false;
-			} else {
-				if (!lastPointVisible) {
-					QPoint a, b;
-					QRectInterstects(clipRect, l, a, b);
-					p->thePath.lineTo(a);
-				}
-				lastPoint = aP;
-				lastPointVisible = true;
 			}
 			p->thePath.lineTo(aP);
 		}
@@ -618,24 +644,28 @@ double Road::widthOf()
 void Road::setTag(const QString& key, const QString& value, bool addToTagList)
 {
 	MapFeature::setTag(key, value, addToTagList);
+	p->MetaUpToDate = false;
 	p->Width = 0;
 }
 
 void Road::setTag(unsigned int index, const QString& key, const QString& value, bool addToTagList)
 {
 	MapFeature::setTag(index, key, value, addToTagList);
+	p->MetaUpToDate = false;
 	p->Width = 0;
 }
 
 void Road::clearTags()
 {
 	MapFeature::clearTags();
+	p->MetaUpToDate = false;
 	p->Width = 0;
 }
 
 void Road::clearTag(const QString& k)
 {
 	MapFeature::clearTag(k);
+	p->MetaUpToDate = false;
 	p->Width = 0;
 }
 

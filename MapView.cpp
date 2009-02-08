@@ -29,7 +29,7 @@
 #include <QToolTip>
 
 MapView::MapView(MainWindow* aMain) :
-	Main(aMain), theDocument(0), theInteraction(0), StaticBuffer(0), StaticMap(0), 
+	QWidget(aMain), Main(aMain), theDocument(0), theInteraction(0), StaticBackground(0), StaticBuffer(0), StaticMap(0), 
 		StaticBufferUpToDate(false), StaticMapUpToDate(false), SelectionLocked(false),lockIcon(0), numImages(0)
 {
 	setMouseTracking(true);
@@ -94,6 +94,7 @@ MapView::~MapView()
 	delete BrowserImageManager::instance();
 #endif
 	delete layermanager;
+	delete StaticBackground;
 	delete StaticBuffer;
 	delete StaticMap;
 }
@@ -179,29 +180,30 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 	//if (!(StaticBufferUpToDate && StaticMapUpToDate))
 	//	qDebug() << "PaintEvent: " << StaticBufferUpToDate << "; " << StaticMapUpToDate;
 
-	QPainter P(this);
+	QPainter P;
+	P.begin(this);
 	QRegion rg(rect());
 	P.setClipRegion(rg);
 	P.setClipping(true);
 
-	if (M_PREFS->getUseShapefileForBackground() && theDocument->getImageLayer()->isVisible()) {
-		P.fillRect(rect(), QBrush(QColor(181, 208, 208)));
-	} else {
-		if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
-			P.fillRect(rect(), QBrush(M_PREFS->getBgColor()));
-		else
-			P.fillRect(rect(), QBrush(M_STYLE->getGlobalPainter().getBackgroundColor()));
-	}
-
 	if (LAYERMANAGER_OK && layermanager->getLayer()->isVisible()) {
 		updateLayersImage();
+	}
+
+	if (!StaticBufferUpToDate) {
+		buildFeatureSet(theProjection);
+		updateStaticBackground();
+		updateStaticBuffer();
+	}
+
+	P.drawPixmap(QPoint(0, 0), *StaticBackground);
+
+	if (LAYERMANAGER_OK && layermanager->getLayer()->isVisible()) {
 		P.setOpacity(theDocument->getImageLayer()->getAlpha());
 		P.drawPixmap(thePanDelta, *StaticMap);
+		P.setOpacity(1.0);
 	}
-	
-	updateStaticBuffer();
-	P.setOpacity(1.0);
-	P.drawPixmap(QPoint(0, 0), *StaticBuffer);
+    P.drawPixmap(QPoint(0, 0), *StaticBuffer);
 
 	drawDownloadAreas(P);
 	drawScale(P);
@@ -212,6 +214,8 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 	}
 
 	drawGPS(P);
+
+	P.end();
 
 	Main->ViewportStatusLabel->setText(QString("%1,%2,%3,%4")
 		.arg(QString::number(intToAng(theProjection.viewport().bottomLeft().lon()),'f',4)) 
@@ -338,9 +342,10 @@ void MapView::updateLayersImage()
 	StaticMapUpToDate = true;
 }
 
-void MapView::drawFeatures(QPainter & P, Projection& aProj)
+void MapView::buildFeatureSet(Projection& aProj)
 {
-	M_STYLE->initialize(P, aProj);
+	theFeatures.clear();
+	theCoastlines.clear();
 
 	for (unsigned int i=0; i<theDocument->layerSize(); ++i) {
 		theDocument->getLayer(i)->invalidate(theDocument, aProj.viewport());
@@ -348,13 +353,12 @@ void MapView::drawFeatures(QPainter & P, Projection& aProj)
 	}
 
 	QVector <CoordBox> coordRegion;
-	for (int i=0; i < P.clipRegion().rects().size(); ++i) {
-		Coord tl = aProj.inverse(P.clipRegion().rects()[i].topLeft());
-		Coord br = aProj.inverse(P.clipRegion().rects()[i].bottomRight());
+	for (int i=0; i < invalidRegion.rects().size(); ++i) {
+		Coord tl = aProj.inverse(invalidRegion.rects()[i].topLeft());
+		Coord br = aProj.inverse(invalidRegion.rects()[i].bottomRight());
 		coordRegion += CoordBox(tl, br);
 	}
 
-	QVector<MapFeature*> theFeatures;
 	for (unsigned int i=0; i<theDocument->layerSize(); ++i) {
 		if (!theDocument->getLayer(i)->isVisible())
 			continue;
@@ -364,14 +368,326 @@ void MapView::drawFeatures(QPainter & P, Projection& aProj)
 				if (coordRegion[k].intersects(theDocument->getLayer(i)->get(j)->boundingBox()))
 					OK = true;
 			if (OK) {
-				theFeatures.push_back(theDocument->getLayer(i)->get(j));
-				if (Road * R = dynamic_cast < Road * >(theDocument->getLayer(i)->get(j)))
-					R->buildPath(aProj, P.clipRegion());
-				if (Relation * RR = dynamic_cast < Relation * >(theDocument->getLayer(i)->get(j)))
-					RR->buildPath(aProj, P.clipRegion());
+				if (Road * R = dynamic_cast < Road * >(theDocument->getLayer(i)->get(j))) {
+					R->buildPath(aProj, invalidRegion);
+					theFeatures.push_back(R);
+					if (R->isCoastline())
+						theCoastlines.push_back(R);
+				} else
+				if (Relation * RR = dynamic_cast < Relation * >(theDocument->getLayer(i)->get(j))) {
+					RR->buildPath(aProj, invalidRegion);
+					theFeatures.push_back(RR);
+				} else {
+					theFeatures.push_back(theDocument->getLayer(i)->get(j));
+				}
 			}
 		}
 	}
+}
+
+bool testColor(const QImage& theImage, const QPoint& P, const QRgb& targetColor)
+{
+	if (!theImage.rect().contains(P)) return false;
+	return (theImage.pixel(P) == targetColor);
+}
+
+void floodFill(QImage& theImage, const QPoint& P, const QRgb& targetColor, const QRgb& replaceColor)
+{
+	if (!testColor(theImage, P, targetColor)) return;
+
+	QStack<QPoint> theStack;
+	QPoint aP;
+	QPainter theP(&theImage);
+	theP.setPen(QPen(QColor::fromRgb(replaceColor), 1));
+	theP.setBrush(Qt::NoBrush);
+
+	theStack.push(P);
+	while (!theStack.isEmpty()) {
+		aP = theStack.pop();
+        QPoint W = aP;
+        QPoint E = aP;
+        if (testColor(theImage, aP + QPoint(0, 1), targetColor))
+            theStack.push(aP + QPoint(0, 1));
+        if (testColor(theImage, aP + QPoint(0, -1), targetColor))
+            theStack.push(aP + QPoint(0, -1));
+        while (testColor(theImage, W + QPoint(-1, 0),targetColor) && W.x() > 0) {
+            W += QPoint(-1, 0);
+            if (testColor(theImage, W + QPoint(0, 1), targetColor))
+                theStack.push(W + QPoint(0, 1));
+            if (testColor(theImage, W + QPoint(0, -1), targetColor))
+                theStack.push(W + QPoint(0, -1));
+        }
+        while (testColor(theImage, E + QPoint(1, 0), targetColor) && E.x() < theImage.width()-1) {
+            E += QPoint(1, 0);
+            if (testColor(theImage, E + QPoint(0, 1), targetColor))
+                theStack.push(E + QPoint(0, 1));
+            if (testColor(theImage, E + QPoint(0, -1), targetColor))
+                theStack.push(E + QPoint(0, -1));
+        }
+        theP.drawLine(W, E);
+	}
+}
+
+void MapView::drawBackground(QPainter & theP, Projection& aProj)
+{
+	QColor theFillColor;
+	
+	double PixelPerM = aProj.pixelPerM();
+	double WW = PixelPerM*30.0 + 2.0;
+
+    theP.setRenderHint(QPainter::Antialiasing);
+	QPen thePen(M_PREFS->getWaterColor(), WW);
+	thePen.setCapStyle(Qt::RoundCap);
+	thePen.setJoinStyle(Qt::RoundJoin);
+    theP.setPen(thePen);
+	theP.setBrush(Qt::NoBrush);
+	theP.setClipRegion(invalidRegion);
+
+	if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
+		theFillColor = M_PREFS->getBgColor();
+	else
+		theFillColor = M_STYLE->getGlobalPainter().getBackgroundColor();
+	theP.fillRect(rect(), theFillColor);
+
+	if (theCoastlines.isEmpty()) {
+		if (M_PREFS->getUseShapefileForBackground() && theDocument->getImageLayer()->isVisible()) {
+			theP.fillRect(rect(), M_PREFS->getWaterColor());
+		}
+		return;
+	}
+
+	QList<QPainterPath*> theCoasts;
+	for (int i=0; i<theCoastlines.size(); i++) {
+		if (theCoastlines[i]->getPath().elementCount() < 2) continue;
+
+		QPainterPath* aPath = new QPainterPath;
+		for (int j=1; j < theCoastlines[i]->getPath().elementCount(); j++) {
+
+			QLineF l(QPointF(theCoastlines[i]->getPath().elementAt(j)), QPointF(theCoastlines[i]->getPath().elementAt(j-1)));
+			QLineF l1 = l.normalVector().unitVector();
+            l1.setLength(WW / 2.0);
+			if (j == 1) {
+				QLineF l3(l1);
+				l3.translate(l.p2() - l.p1());
+				aPath->moveTo(l3.p2());
+			} else
+				if (j < theCoastlines[i]->getPath().elementCount() - 1) {
+					QLineF l4(QPointF(theCoastlines[i]->getPath().elementAt(j)), QPointF(theCoastlines[i]->getPath().elementAt(j+1)));
+					double theAngle = (l4.angle() - l.angle()) / 2.0;
+					if (theAngle < 0.0) theAngle += 180.0;
+					l1.setAngle(l.angle() + theAngle);
+				}
+            //theP.drawEllipse(l2.p2(), 5, 5);
+			aPath->lineTo(l1.p2());
+
+		}
+		theCoasts.append(aPath);
+	}
+
+	for (int i=0; i < theCoasts.size(); i++) {
+		theP.drawPath(*theCoasts[i]);
+		delete theCoasts[i];
+	}
+}
+
+//void MapView::drawBackground(QPainter & P, Projection& aProj)
+//{
+//	QImage theImage(size(), QImage::Format_RGB32);
+//	QList <QPoint> theFloodStarts;
+//	QColor theFillColor;
+//	
+//	QPainter theP;
+//	theP.begin(&theImage);
+//    theP.setRenderHint(QPainter::Antialiasing);
+//    theP.setPen(QPen(M_PREFS->getWaterColor(), 1));
+//	theP.setBrush(Qt::NoBrush);
+//
+//	if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
+//		theFillColor = M_PREFS->getBgColor();
+//	else
+//		theFillColor = M_STYLE->getGlobalPainter().getBackgroundColor();
+//	theP.fillRect(rect(), theFillColor);
+//
+//	if (theCoastlines.isEmpty()) {
+//		if (M_PREFS->getUseShapefileForBackground() && theDocument->getImageLayer()->isVisible()) {
+//			theP.fillRect(rect(), M_PREFS->getWaterColor());
+//		}
+//		P.drawImage(QPoint(0, 0), theImage);
+//		return;
+//	}
+//
+//	for (int i=0; i<theCoastlines.size(); i++) {
+//		if (theCoastlines[i]->getPath().elementCount() < 2) continue;
+//
+//		for (int j=1; j < theCoastlines[i]->getPath().elementCount(); j++) {
+//			QLineF l(QPointF(theCoastlines[i]->getPath().elementAt(j)), QPointF(theCoastlines[i]->getPath().elementAt(j-1)));
+//			QLineF l1 = l.normalVector().unitVector();
+//			QLineF l2(l1);
+//			l2.translate(-l1.p1());
+//            //l2.setP2(l2.p2() * 2.0);
+//			QPointF p2 = QPointF(l.p1().x() + ((l.p2().x() - l.p1().x()) / 2.0), l.p1().y() + ((l.p2().y() - l.p1().y()) / 2.0));
+//			//l2.translate(l1.p1());
+//			l2.translate(p2);
+//            theFloodStarts.append(l2.p2().toPoint());
+//            //theP.drawEllipse(l2.p2(), 5, 5);
+//		}
+//		theP.drawPath(theCoastlines[i]->getPath());
+//	}
+//	theP.end();
+//
+//	for (int i=0; i < theFloodStarts.size(); i++) {
+//		floodFill(theImage, theFloodStarts[i], theFillColor.rgb(), M_PREFS->getWaterColor().rgb() );
+//	}
+//	P.drawImage(QPoint(0, 0), theImage);
+//}
+//
+//void MapView::drawBackground(QPainter & P, Projection& aProj)
+//{
+//	/*
+//	p->thePath = QPainterPath();
+//	if (!p->Nodes.size())
+//		return;
+//
+//	bool lastPointVisible = true;
+//	QPoint lastPoint = theProjection.project(p->Nodes[0]);
+//	QPoint aP = lastPoint;
+//
+//	double PixelPerM = theProjection.pixelPerM();
+//	double WW = PixelPerM*widthOf()*10+10;
+//	QRect clipRect = paintRegion.boundingRect().adjusted(int(-WW-20), int(-WW-20), int(WW+20), int(WW+20));
+//
+//
+//	if (M_PREFS->getDrawingHack()) {
+//		if (!clipRect.contains(aP)) {
+//			aP.setX(qMax(clipRect.left(), aP.x()));
+//			aP.setX(qMin(clipRect.right(), aP.x()));
+//			aP.setY(qMax(clipRect.top(), aP.y()));
+//			aP.setY(qMin(clipRect.bottom(), aP.y()));
+//			lastPointVisible = false;
+//		}
+//	}
+//	p->thePath.moveTo(aP);
+//	QPoint firstPoint = aP;
+//	if (smoothed().size())
+//	{
+//		for (unsigned int i=3; i<smoothed().size(); i+=3)
+//			p->thePath.cubicTo(
+//				theProjection.project(smoothed()[i-2]),
+//				theProjection.project(smoothed()[i-1]),
+//				theProjection.project(smoothed()[i]));
+//	}
+//	else
+//		for (unsigned int j=1; j<size(); ++j) {
+//			aP = theProjection.project(p->Nodes[j]);
+//			if (M_PREFS->getDrawingHack()) {
+//				QLine l(lastPoint, aP);
+//				if (!clipRect.contains(aP)) {
+//					if (!lastPointVisible) {
+//						QPoint a, b;
+//						if (QRectInterstects(clipRect, l, a, b)) {
+//							p->thePath.lineTo(a);
+//							lastPoint = aP;
+//							aP = b;
+//						} else {
+//							lastPoint = aP;
+//							aP.setX(qMax(clipRect.left(), aP.x()));
+//							aP.setX(qMin(clipRect.right(), aP.x()));
+//							aP.setY(qMax(clipRect.top(), aP.y()));
+//							aP.setY(qMin(clipRect.bottom(), aP.y()));
+//						}
+//					} else {
+//						QPoint a, b;
+//						QRectInterstects(clipRect, l, a, b);
+//						lastPoint = aP;
+//						aP = a;
+//					}
+//					lastPointVisible = false;
+//				} else {
+//					if (!lastPointVisible) {
+//						QPoint a, b;
+//						QRectInterstects(clipRect, l, a, b);
+//						p->thePath.lineTo(a);
+//					}
+//					lastPoint = aP;
+//					lastPointVisible = true;
+//				}
+//			}
+//			p->thePath.lineTo(aP);
+//		}
+//		if (area() > 0.0 && !lastPointVisible)
+//			p->thePath.lineTo(firstPoint);
+//*/
+//		
+//	if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
+//		P.fillRect(rect(), QBrush(M_PREFS->getBgColor()));
+//	else
+//		P.fillRect(rect(), QBrush(M_STYLE->getGlobalPainter().getBackgroundColor()));
+//
+//	if (theCoastlines.isEmpty()) {
+//		if (M_PREFS->getUseShapefileForBackground() && theDocument->getImageLayer()->isVisible()) {
+//			P.fillRect(rect(), QBrush(M_PREFS->getWaterColor()));
+//		}
+//		return;
+//	}
+//
+//	QPainterPath theCoast;
+//	QRect clipRect = rect().adjusted(int(-40), int(-40), int(40), int(40));
+//	QPointF firstPoint, lastPoint;
+//	QList<Road*> aCoastlines;
+//	QList < QPair <TrackPoint*, Road*> > aStartPoints;
+//	QList < QPair <TrackPoint*, Road*> > aEndPoints;
+//
+//	for (int i=0; i < theCoastlines.size(); i++) {
+//		if (theCoastlines[i]->isClosed()) {
+//			theCoast.addPath(theCoastlines[i]->getPath());
+//			continue;
+//		}
+//		aStartPoints.append(qMakePair(dynamic_cast<TrackPoint*>(theCoastlines[i]->get(0)), theCoastlines[i]));
+//		aEndPoints.append(qMakePair(dynamic_cast<TrackPoint*>(theCoastlines[i]->get(theCoastlines[i]->size()-1)), theCoastlines[i]));
+//	}
+//
+//	int curIndex, tmpIndex;
+//	for (int i=0; i < aStartPoints.size(); i++) {
+//		if ((curIndex = aCoastlines.indexOf(aStartPoints[i].second)) == -1) {
+//			aCoastlines.append(aStartPoints[i].second);
+//			curIndex = aStartPoints.size()-1;
+//		}
+//		for (int j=0; j < aEndPoints.size(); j++) {
+//			if (aEndPoints[j].first == aStartPoints[i].first)
+//				if ((tmpIndex = aCoastlines.indexOf(aEndPoints[j].second)) == -1)
+//					aCoastlines.insert(curIndex, aEndPoints[j].second);
+//				else
+//					aCoastlines.move(tmpIndex, curIndex);
+//		}
+//	}
+//
+//	QList<QPainterPath*> theIncompleteCoasts;
+//	QPainterPath* curPath = NULL;
+//	for (int i=0; i<aCoastlines.size(); i++) {
+//		if (aCoastlines[i]->getPath().elementAt(0) != lastPoint) {
+//			if (curPath)
+//				theCoast.addPath(*curPath);
+//			curPath = new QPainterPath;
+//			theIncompleteCoasts.append(curPath);
+//			lastPoint = QPointF(aCoastlines[i]->getPath().elementAt(0));
+//		}
+//		curPath->moveTo(lastPoint);
+//		for (int j=1; j < aCoastlines[i]->getPath().elementCount(); j++) {
+//			lastPoint = QPointF(aCoastlines[i]->getPath().elementAt(j));
+//			curPath->lineTo(lastPoint);
+//		}
+//	}
+//	if (curPath)
+//		theCoast.addPath(*curPath);
+//
+//	P.setBrush(M_PREFS->getWaterColor());
+//	P.setPen(QPen(M_PREFS->getWaterColor(), 1));
+//	P.drawPath(theCoast);
+//}
+
+void MapView::drawFeatures(QPainter & P, Projection& aProj)
+{
+	M_STYLE->initialize(P, aProj);
 
 	for (unsigned int i = 0; i < M_STYLE->size(); ++i)
 	{
@@ -445,12 +761,41 @@ void MapView::drawDownloadAreas(QPainter & P)
 	P.drawPixmap(0, 0, pxDownloadAreas);
 }
 
+void MapView::updateStaticBackground()
+{
+	QPixmap savPix;
+	QPoint pan;
+	QRect bbRect;
+
+	QRegion panRg = QRegion(rect()) - invalidRegion;
+	if (!panRg.isEmpty()) {
+		//pan = (panRg.boundingRect().center() - rect().center()) * 2.0;
+		bbRect = panRg.boundingRect();
+		pan = bbRect.topLeft() - rect().topLeft() + bbRect.bottomRight() - rect().bottomRight();
+		savPix = StaticBackground->copy();
+	}
+
+	if (!StaticBackground || (StaticBackground->size() != size()))
+	{
+		delete StaticBackground;
+		StaticBackground = new QPixmap(size());
+	}
+
+	//StaticBackground->fill(Qt::transparent);
+
+	QPainter painter(StaticBackground);
+
+	painter.setClipping(true);
+	if (!panRg.isEmpty()) {
+		painter.setClipRegion(panRg);
+		painter.drawPixmap(pan, savPix);
+	}
+
+	drawBackground(painter, theProjection);
+}
 
 void MapView::updateStaticBuffer()
 {
-	if (StaticBufferUpToDate)
-		return;
-
 	QPixmap savPix;
 	QPoint pan;
 	QRect bbRect;
@@ -463,11 +808,6 @@ void MapView::updateStaticBuffer()
 		savPix = StaticBuffer->copy();
 	}
 
-	//pan = thePanDelta - theLastDelta;
-	//if (!pan.isNull()) {
-	//	savPix = StaticBuffer->copy();
-	//	theLastDelta = thePanDelta;
-	//}
 	if (!StaticBuffer || (StaticBuffer->size() != size()))
 	{
 		delete StaticBuffer;
@@ -491,7 +831,6 @@ void MapView::updateStaticBuffer()
 	if (theDocument)
 	{
 		sortRenderingPriorityInLayers();
-		//drawLayersImage(painter);
 		drawFeatures(painter, theProjection);
 	}
 

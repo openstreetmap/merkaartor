@@ -3,13 +3,14 @@
 
 #include "Map/Projection.h"
 
-#include <QtGui/QPixmap>
-#include <QtGui/QWidget>
+#include <QPixmap>
+#include <QWidget>
 #include <QShortcut>
 #include <QLabel>
 
 class MainWindow;
 class MapFeature;
+class Road;
 class MapDocument;
 class PropertiesDock;
 class InfoDock;
@@ -32,7 +33,9 @@ class MapView :	public QWidget
 		MapDocument* document();
 		void launch(Interaction* anInteraction);
 		Interaction* interaction();
+		
 		void drawFeatures(QPainter & painter, Projection& aProj);
+		void drawBackground(QPainter & painter, Projection& aProj);
 
 		void panScreen(QPoint delta) ;
 		void invalidate(bool updateStaticBuffer, bool updateMap);
@@ -59,15 +62,18 @@ class MapView :	public QWidget
 
 	private:
 		void sortRenderingPriorityInLayers();
+		void buildFeatureSet(Projection& aProj);
 		void drawDownloadAreas(QPainter & painter);
 		void drawScale(QPainter & painter);
 		void drawGPS(QPainter & painter);
+		void updateStaticBackground();
 		void updateStaticBuffer();
 		void updateLayersImage();
 		MainWindow* Main;
 		Projection theProjection;
 		MapDocument* theDocument;
 		Interaction* theInteraction;
+		QPixmap* StaticBackground;
 		QPixmap* StaticBuffer;
 		QPixmap* StaticMap;
 		bool StaticBufferUpToDate;
@@ -77,6 +83,9 @@ class MapView :	public QWidget
 		bool SelectionLocked;
 		QLabel* lockIcon;
 		QList<MapFeature*> theSnapList;
+		QList<MapFeature*> theFeatures;
+		QList<Road*> theCoastlines;
+
 
 		int numImages;
 

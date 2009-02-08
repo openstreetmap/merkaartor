@@ -203,7 +203,8 @@ void ImportExportOsmBin::addTileIndex(MapFeature* F)
 					(F->tagValue("waterway", "") == "river") ||
 					(F->tagValue("waterway", "") == "riverbank") ||
 					(F->tagValue("waterway", "") == "canal") ||
-					false)
+                    (F->tagValue("natural", "") == "coastline") ||
+                    false)
 				tile = -rg;
 
 			if (/*TrackPoint* N = */CAST_NODE(F)) {

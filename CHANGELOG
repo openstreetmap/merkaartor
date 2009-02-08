@@ -1,4 +1,5 @@
 v0.13
+	* ADD : Outline coastlines
 	* ADD : Include build of translations during make
 	* ADD : Use a builtin shapefile of the world as a background 
 	* ADD : Support for ESRI shapefile import (and, potentially, every GDAL supported file formats) via the GDAL library
