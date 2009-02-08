@@ -15,6 +15,8 @@
 #include "IProgressWindow.h"
 #include <ui_WorldOsbManager.h>
 
+#include <QRectF>
+
 class QFile;
 
 class WorldOsbManager: public QDialog , public Ui::WorldOsbManager, public IProgressWindow
@@ -29,11 +31,12 @@ class WorldOsbManager: public QDialog , public Ui::WorldOsbManager, public IProg
 		bool generateRegion(quint32 rg);
 		bool deleteRegion(quint32 rg);
 
+		void setViewport(const QRectF& theViewport);
+
 	public slots:
 		virtual void on_cbShowGrid_toggled(bool checked);
 		virtual void on_buttonBox_clicked(QAbstractButton * button);
 		virtual void on_WorldDirectoryBrowse_clicked();
-		virtual void on_btGotoViewport_clicked();
 
 	protected:
 		QFile* WorldFile;

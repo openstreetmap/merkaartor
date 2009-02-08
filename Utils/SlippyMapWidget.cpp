@@ -29,6 +29,9 @@ class SlippyMapWidgetPrivate
 			Lat = Sets->value("Lat", 1).toDouble();
 			Lon = Sets->value("Lon", 1).toDouble();
 			Zoom = Sets->value("Zoom", 1).toInt();
+			VpLat = Lat;
+			VpLon = Lon;
+			VpZoom = Zoom;
 		}
 		~SlippyMapWidgetPrivate()
 		{
@@ -42,8 +45,8 @@ class SlippyMapWidgetPrivate
 		void newData(int x, int y, int zoom);
 
 		SlippyMapWidget* theWidget;
-		unsigned int Zoom;
-		double Lat,Lon;
+		unsigned int Zoom, VpZoom;
+		double Lat,Lon, VpLat, VpLon;
 		QPoint PreviousDrag;
 		bool InDrag;
 		QSettings* Sets;
@@ -99,6 +102,17 @@ static double tile2lat(double y, int z)
 	return 180.0 / M_PI * atan(0.5 * (exp(n) - exp(-n)));
 }
 
+static int long2tile(double lon, int z) 
+{ 
+	return (int)(floor((lon + 180.0) / 360.0 * pow(2.0, z))); 
+}
+
+static int lat2tile(double lat, int z)
+{ 
+	return (int)(floor((1.0 - log( tan(lat * M_PI/180.0) + 1.0 / cos(lat * M_PI/180.0)) / M_PI) / 2.0 * pow(2.0, z))); 
+}
+
+
 QRect SlippyMapWidget::viewArea() const
 {
 	double X1 = p->Lat - (width()/2.0)/TILESIZE;
@@ -112,7 +126,21 @@ QRect SlippyMapWidget::viewArea() const
 	int Lon2 = angToInt(tile2lon(X2, p->Zoom));
 	int Lat2 = angToInt(tile2lat(Y2, p->Zoom));
 
-	return QRect(Lat2, Lon1, Lat1-Lat2, Lon2-Lon1);
+	return QRect(Lon1, Lat2, Lon2-Lon1, Lat1-Lat2);
+}
+
+void SlippyMapWidget::setViewportArea(QRectF theRect)
+{
+	double zoom = 360.0 / intToAng(theRect.width());
+	zoom = log10(zoom)/log10(2.0);
+	if (zoom < MINZOOMLEVEL)
+		zoom = MINZOOMLEVEL;
+	if (zoom > MAXZOOMLEVEL)
+		zoom = MAXZOOMLEVEL;
+	p->VpZoom = int(zoom);
+
+	p->VpLon = long2tile(intToAng(theRect.topRight().x()), p->VpZoom);
+	p->VpLat = lat2tile(intToAng(theRect.topRight().y()), p->VpZoom);
 }
 
 void SlippyMapWidget::paintEvent(QPaintEvent*)
@@ -141,10 +169,18 @@ void SlippyMapWidget::paintEvent(QPaintEvent*)
 	Painter.setBrush(QBrush(QColor(255,255,255,128)));
 	Painter.drawRect(width()-21,0,20,20);
 	Painter.drawRect(width()-21,height()-21,20,20);
+	Painter.drawRect(width()-21,(height()/2)-10,20,20);
+
+
 	Painter.setBrush(QBrush(QColor(0,0,0)));
 	Painter.drawRect(width()-19,8,16,4);
 	Painter.drawRect(width()-19,height()-13,16,4);
 	Painter.drawRect(width()-13,height()-19,4,16);
+
+	Painter.setFont(QFont("Times", 19, QFont::Bold));
+	Painter.setPen(QPen(Qt::black, 3));
+	Painter.setBrush(Qt::NoBrush);
+	Painter.drawText(QPoint(width()-21,(height()/2)+10), "V");
 }
 
 void SlippyMapWidget::ZoomTo(const QPoint & NewCenter, int NewZoom)
@@ -198,6 +234,15 @@ void SlippyMapWidget::mousePressEvent(QMouseEvent* ev)
 				emit redraw();
 				return;
 			}
+			else if ((ev->pos().y() > (height()/2)-20) && (ev->pos().y() < (height()/2)))
+			{
+				p->Lat = p->VpLon;
+				p->Lon = p->VpLat;
+				p->Zoom = p->VpZoom;
+				update();
+				emit redraw();
+				return;
+			}
 		}
 		p->PreviousDrag = ev->pos();
 	}
@@ -240,10 +285,6 @@ void SlippyMapWidget::on_resetViewAction_triggered(bool)
 	p->Lon = 1.0;
 	p->Zoom = 1;
 	update();
-}
-
-void SlippyMapWidget::on_btGotoViewport_clicked()
-{
 }
 
 bool SlippyMapWidget::isDragging()

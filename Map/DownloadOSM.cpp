@@ -655,6 +655,8 @@ bool downloadOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDocume
 #ifndef _MOBILE
 	SlippyMap->setMinimumHeight(256);
 #endif
+	CoordBox Clip(aBox);
+	SlippyMap->setViewportArea(Clip.toQRectF());
 	ui.vboxLayout1->addWidget(SlippyMap);
 	QObject::connect(SlippyMap, SIGNAL(redraw()), ui.FromMap, SLOT(toggle()));
 	QMapIterator<QString, CoordBox> i(M_PREFS->getBookmarks());
@@ -673,7 +675,6 @@ bool downloadOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDocume
 		if (dlg->exec() == QDialog::Accepted)
 		{
 			DownloadRaw = false;
-			CoordBox Clip(Coord(0,0),Coord(0,0));
 			if (ui.FromBookmark->isChecked())
 			{
 				Clip = M_PREFS->getBookmarks()[ui.Bookmarks->currentText()];
@@ -719,7 +720,7 @@ bool downloadOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDocume
 			else if (ui.FromMap->isChecked())
 			{
 				QRect R(SlippyMap->viewArea());
-				Clip = CoordBox(Coord(R.x(), R.y()), Coord(R.x()+R.width(), R.y()+R.height()));
+				Clip = CoordBox(Coord(R.y(), R.x()), Coord(R.y()+R.height(), R.x()+R.width()));
 			}
 			if (retry) continue;
 			Main->view()->setUpdatesEnabled(false);
@@ -755,3 +756,4 @@ bool downloadOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDocume
 	delete dlg;
 	return OK;
 }
+

@@ -1304,6 +1304,7 @@ void MainWindow::on_mapStyleLoadAction_triggered()
 void MainWindow::on_toolsWorldOsbAction_triggered()
 {
 	WorldOsbManager osbMgr(this);
+	osbMgr.setViewport(theView->projection().viewport().toQRectF());
 	osbMgr.exec();
 }
 

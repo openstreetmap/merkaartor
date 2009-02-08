@@ -44,7 +44,7 @@ void RegionMapWidget::paintEvent(QPaintEvent* anEvent)
 
 	QPainter P(this);
 	QRect R(viewArea());
-	CoordBox v = CoordBox(Coord(R.x(), R.y()), Coord(R.x()+R.width(), R.y()+R.height()));
+	CoordBox v = CoordBox(Coord(R.y(), R.x()), Coord(R.y()+R.height(), R.x()+R.width()));
 	P.setPen(QPen(Qt::blue,2));
 	P.setBrush(Qt::NoBrush);
 
@@ -110,7 +110,7 @@ void RegionMapWidget::mouseReleaseEvent(QMouseEvent* ev)
 {
 	if (!isDragging()) {
 		QRect R(viewArea());
-		CoordBox v = CoordBox(Coord(R.x(), R.y()), Coord(R.x()+R.width(), R.y()+R.height()));
+		CoordBox v = CoordBox(Coord(R.y(), R.x()), Coord(R.y()+R.height(), R.x()+R.width()));
 		QPointF P = ev->pos();
 
 		Coord Pt(((height()-P.y()) / height() * v.latDiff()) + v.bottomLeft().lat(), (P.x() / width() * v.lonDiff()) + v.bottomLeft().lon());

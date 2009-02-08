@@ -204,6 +204,7 @@ void ImportExportOsmBin::addTileIndex(MapFeature* F)
 					(F->tagValue("waterway", "") == "riverbank") ||
 					(F->tagValue("waterway", "") == "canal") ||
                     (F->tagValue("natural", "") == "coastline") ||
+                    (F->tagValue("landuse", "__NULL__") != "__NULL__") ||
                     false)
 				tile = -rg;
 

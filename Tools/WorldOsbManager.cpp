@@ -58,6 +58,11 @@ WorldOsbManager::~WorldOsbManager()
 	M_PREFS->setWorldOsbAutoshow(cbAutoshow->isChecked());
 }
 
+void WorldOsbManager::setViewport(const QRectF& theViewport)
+{
+	slippy->setViewportArea(theViewport);
+}
+
 void WorldOsbManager::on_cbShowGrid_toggled(bool checked)
 {
 	slippy->setShowGrid(checked);
@@ -87,11 +92,6 @@ void WorldOsbManager::on_WorldDirectoryBrowse_clicked()
 		M_PREFS->setWorldOsbUri(s);
 	}
 }
-
-void WorldOsbManager::on_btGotoViewport_clicked()
-{
-}
-
 
 void WorldOsbManager::DoIt()
 {
@@ -217,10 +217,12 @@ bool WorldOsbManager::generateRegion(quint32 rg)
 	aDoc->remove(aLayer);
 	delete aLayer;
 	delete aDoc;
+	delete osb;
 
 	slippy->ExistingRegions[rg] = true;
 	slippy->SelectedRegions[rg] = false;
 	slippy->DateRegions[rg] = QDateTime::currentDateTime();
+	slippy->update();
 	
 	theProgressLabel->setText("");
 	theProgressBar->reset();

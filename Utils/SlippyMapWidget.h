@@ -69,6 +69,7 @@ class SlippyMapWidget :	public QWidget
 
 		bool isDragging();
 
+		void setViewportArea(QRectF theRect);
 		QRect viewArea() const;
 
 		static SlippyMapCache* theSlippyCache;
@@ -83,7 +84,6 @@ class SlippyMapWidget :	public QWidget
 	private slots:
 		virtual void on_customContextMenuRequested(const QPoint & pos);
 		virtual void on_resetViewAction_triggered(bool);
-		virtual void on_btGotoViewport_clicked();
 };
 
 #endif
