@@ -73,7 +73,8 @@
         <location filename="../MainWindow.cpp" line="593"/>
         <source>ESRI Shapefile (*.shp)
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Plik kszałtów ESRI (*.shp)
+</translation>
     </message>
 </context>
 <context>
@@ -904,7 +905,7 @@ Czy na pewno go wykorzystać?</translation>
     <message>
         <location filename="../Map/MapLayer.cpp" line="685"/>
         <source>Map - Shape</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapa - Kszałt</translation>
     </message>
 </context>
 <context>
@@ -3794,7 +3795,7 @@ Proszę wybrać inną nazwę lub kliknąć przycisk &lt;Zastosuj&gt; aby zmodyfi
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="938"/>
         <source>Tiles Caching (not active for Yahoo! due to legal restrictions)</source>
-        <translation>Buforowanie kafli (niekatywne dla Yahoo! z powodów prawnych)</translation>
+        <translation>Buforowanie kafli (nieaktywne dla Yahoo! z powodów prawnych)</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="233"/>
@@ -3809,7 +3810,7 @@ Proszę wybrać inną nazwę lub kliknąć przycisk &lt;Zastosuj&gt; aby zmodyfi
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="181"/>
         <source>Use custom Qt style</source>
-        <translation type="unfinished"></translation>
+        <translation>Użyj wbudowanego stylu Qt</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="728"/>
