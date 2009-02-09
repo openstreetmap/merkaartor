@@ -232,8 +232,10 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* aLast
 	{
 		std::vector<MapFeature*> List;
 		CoordBox DragBox(StartDrag,projection().inverse(ev->pos()));
-		for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it)
-			if (
+		for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it) {
+			if (it.get()->layer()->isReadonly())
+				continue;
+			else if (
 				(M_PREFS->getMouseSingleButton() && ev->modifiers().testFlag(Qt::ShiftModifier) && ev->modifiers().testFlag(Qt::AltModifier)) ||
 				(!M_PREFS->getMouseSingleButton() && ev->modifiers().testFlag(Qt::ShiftModifier))
 				)
@@ -273,6 +275,7 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* aLast
 				if (DragBox.contains(it.get()->boundingBox()))
 					List.push_back(it.get());
 			}
+		}
 		view()->properties()->setSelection(List);
 		view()->properties()->checkMenuStatus();
 		Dragging = false;
