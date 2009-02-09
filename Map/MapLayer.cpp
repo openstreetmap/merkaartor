@@ -1172,8 +1172,8 @@ void OsbMapLayer::invalidate(MapDocument* d, CoordBox vp)
 		for (int j=y1; j <= y2; ++j)
 			tileToLoad.push_back(j*NUM_TILES+i);
 
-	int span = (x2 - x1 + 1) * (y2 - y1 + 1);
-	if (span > M_PREFS->getTileToRegionThreshold())
+	//int span = (x2 - x1 + 1) * (y2 - y1 + 1);
+        if (intToAng(vp.lonDiff()) > M_PREFS->getTileToRegionThreshold())
 		tileToLoad.clear();
 
 	int j;

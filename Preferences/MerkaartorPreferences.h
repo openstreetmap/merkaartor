@@ -376,7 +376,7 @@ public:
 	M_PARAM_DECLARE_BOOL(ShowParents)
 
 	/* World OSB manager */
-	M_PARAM_DECLARE_INT(TileToRegionThreshold)
+	M_PARAM_DECLARE_DOUBLE(TileToRegionThreshold)
 
 	M_PARAM_DECLARE_STRING(WorldOsbUri)
 	M_PARAM_DECLARE_BOOL(WorldOsbAutoload)

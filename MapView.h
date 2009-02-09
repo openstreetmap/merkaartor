@@ -34,8 +34,9 @@ class MapView :	public QWidget
 		void launch(Interaction* anInteraction);
 		Interaction* interaction();
 		
-		void drawFeatures(QPainter & painter, Projection& aProj);
+		void buildFeatureSet(QRegion invalidRegion, Projection& aProj);
 		void drawBackground(QPainter & painter, Projection& aProj);
+		void drawFeatures(QPainter & painter, Projection& aProj);
 
 		void panScreen(QPoint delta) ;
 		void invalidate(bool updateStaticBuffer, bool updateMap);
@@ -62,7 +63,6 @@ class MapView :	public QWidget
 
 	private:
 		void sortRenderingPriorityInLayers();
-		void buildFeatureSet(Projection& aProj);
 		void drawDownloadAreas(QPainter & painter);
 		void drawScale(QPainter & painter);
 		void drawGPS(QPainter & painter);

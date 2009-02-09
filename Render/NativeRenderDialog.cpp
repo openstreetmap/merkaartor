@@ -123,13 +123,14 @@ void NativeRenderDialog::render()
 	P.setClipRegion(rg);
 	P.setClipping(true);
 
-	if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
-		P.fillRect(theR, QBrush(M_PREFS->getBgColor()));
-	else
-		P.fillRect(theR, QBrush(M_STYLE->getGlobalPainter().getBackgroundColor()));
+	double oldTileToRegionThreshold = M_PREFS->getTileToRegionThreshold();
+	M_PREFS->setTileToRegionThreshold(360.0);
 
+	mw->view()->buildFeatureSet(rg, aProj);
+	mw->view()->drawBackground(P, aProj);
 	mw->view()->drawFeatures(P, aProj);
 
+	M_PREFS->setTileToRegionThreshold(oldTileToRegionThreshold);
 	P.end();
 
 	progress.reset();

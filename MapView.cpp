@@ -191,7 +191,7 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 	}
 
 	if (!StaticBufferUpToDate) {
-		buildFeatureSet(theProjection);
+		buildFeatureSet(invalidRegion, theProjection);
 		updateStaticBackground();
 		updateStaticBuffer();
 	}
@@ -342,7 +342,7 @@ void MapView::updateLayersImage()
 	StaticMapUpToDate = true;
 }
 
-void MapView::buildFeatureSet(Projection& aProj)
+void MapView::buildFeatureSet(QRegion invalidRegion, Projection& aProj)
 {
 	theFeatures.clear();
 	theCoastlines.clear();
@@ -435,23 +435,21 @@ void MapView::drawBackground(QPainter & theP, Projection& aProj)
 	double PixelPerM = aProj.pixelPerM();
 	double WW = PixelPerM*30.0 + 2.0;
 
-    theP.setRenderHint(QPainter::Antialiasing);
 	QPen thePen(M_PREFS->getWaterColor(), WW);
 	thePen.setCapStyle(Qt::RoundCap);
 	thePen.setJoinStyle(Qt::RoundJoin);
     theP.setPen(thePen);
 	theP.setBrush(Qt::NoBrush);
-	theP.setClipRegion(invalidRegion);
 
 	if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
 		theFillColor = M_PREFS->getBgColor();
 	else
 		theFillColor = M_STYLE->getGlobalPainter().getBackgroundColor();
-	theP.fillRect(rect(), theFillColor);
+	theP.fillRect(theP.clipRegion().boundingRect(), theFillColor);
 
 	if (theCoastlines.isEmpty()) {
 		if (M_PREFS->getUseShapefileForBackground() && theDocument->getImageLayer()->isVisible() && !LAYERMANAGER_OK) {
-			theP.fillRect(rect(), M_PREFS->getWaterColor());
+			theP.fillRect(theP.clipRegion().boundingRect(), M_PREFS->getWaterColor());
 		}
 		return;
 	}
@@ -791,6 +789,9 @@ void MapView::updateStaticBackground()
 		painter.drawPixmap(pan, savPix);
 	}
 
+	painter.setClipRegion(invalidRegion);
+	painter.setRenderHint(QPainter::Antialiasing);
+
 	drawBackground(painter, theProjection);
 }
 
@@ -825,7 +826,6 @@ void MapView::updateStaticBuffer()
 	}
 
 	painter.setClipRegion(invalidRegion);
-
 	painter.setRenderHint(QPainter::Antialiasing);
 
 	if (theDocument)
