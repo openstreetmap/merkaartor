@@ -226,9 +226,15 @@
    </value>
    <value tag="bus_guideway" >
     <description locale="en" >Bus guideway (not a bus way)</description>
+    <description locale="cs" >Speciální cesta pro autobus (né vyhrazený pruh)</description>
+    <description locale="de" >Spurbus-Strecke</description>
+    <description locale="it" >Tramvia (non una strada per autobus)</description>
    </value>
    <value tag="unsurfaced" >
     <description locale="en" >Unsurfaced road (old tag)</description>
+    <description locale="cs" >Unsurfaced road (stará značka)</description>
+    <description locale="de" >Unbefestigte Straße (veraltet)</description>
+    <description locale="it" >Non asfaltata (vecchio tag)</description>
    </value>
   </widget>
   <widget tag="landuse" type="combo" >
@@ -257,6 +263,9 @@
    </value>
    <value tag="brownfield" >
     <description locale="en" >Brownfield</description>
+    <description locale="cs" >Přestavba</description>
+    <description locale="de" >Baulücke</description>
+    <description locale="it" >Campo</description>
    </value>
    <value tag="cemetery" >
     <description locale="en" >Cemetery</description>
@@ -339,9 +348,15 @@
    </value>
    <value tag="recreation_ground" >
     <description locale="en" >Recreation ground</description>
+    <description locale="cs" >Rekreační oblast</description>
+    <description locale="de" >Erholungsgebiet</description>
+    <description locale="it" >Zona di svago</description>
    </value>
    <value tag="reservoir" >
     <description locale="en" >Reservoir (water)</description>
+    <description locale="cs" >Přehrada</description>
+    <description locale="de" >Speicherbecken</description>
+    <description locale="it" >Riserva (acqua)</description>
    </value>
    <value tag="residential" >
     <description locale="en" >Residential zone</description>
@@ -354,6 +369,9 @@
    </value>
    <value tag="retail" >
     <description locale="en" >Retail zone</description>
+    <description locale="cs" >Nákupní zóna</description>
+    <description locale="de" >Läden</description>
+    <description locale="it" >Zona particolareggiata</description>
    </value>
    <value tag="quarry" >
     <description locale="en" >Surface mineral extraction</description>
@@ -365,6 +383,9 @@
    </value>
    <value tag="village_green" >
     <description locale="en" >Village green</description>
+    <description locale="cs" >Městská zeleň</description>
+    <description locale="de" >Dorfwiese</description>
+    <description locale="it" >Villaggio verde</description>
    </value>
   </widget>
   <widget tag="oneway" type="yesno" >
@@ -402,9 +423,15 @@
    </value>
    <value tag="bank" >
     <description locale="en" >Bank</description>
+    <description locale="cs" >Banka</description>
+    <description locale="de" >Bank</description>
+    <description locale="it" >Banca</description>
    </value>
    <value tag="bank;atm" >
     <description locale="en" >Bank with atm</description>
+    <description locale="cs" >Banka s bankomatem</description>
+    <description locale="de" >Bank mit Geldautomat</description>
+    <description locale="it" >Banca con Bancomat</description>
    </value>
    <value tag="biergarten" >
     <description locale="en" >Beer garden</description>
@@ -522,6 +549,9 @@
    </value>
    <value tag="Fast food" >
     <description locale="en" >Fast food</description>
+    <description locale="cs" >Rychlé občerstvení</description>
+    <description locale="de" >Schnellimbiss</description>
+    <description locale="it" >Fast food</description>
    </value>
    <value tag="fire_station" >
     <description locale="en" >Fire Station</description>
@@ -534,7 +564,7 @@
    </value>
    <value tag="fountain" >
     <description locale="en" >Fountain</description>
-    <description locale="ar" >نبع ماء</description>
+    <description locale="ar" >نافورة</description>
     <description locale="cs" >Fontána, kašna</description>
     <description locale="de" >Springbrunnen</description>
     <description locale="fr" >Fontaine</description>
@@ -587,6 +617,9 @@
    </value>
    <value tag="parking" >
     <description locale="en" >Parking</description>
+    <description locale="cs" >Parkoviště</description>
+    <description locale="de" >Parkplatz</description>
+    <description locale="it" >Parcheggio</description>
    </value>
    <value tag="pharmacy" >
     <description locale="en" >Pharmacy</description>
@@ -626,7 +659,7 @@
    </value>
    <value tag="post_office" >
     <description locale="en" >Post Office</description>
-    <description locale="ar" >مركز بريدي</description>
+    <description locale="ar" >مكتب البريد</description>
     <description locale="cs" >Pošta</description>
     <description locale="de" >Postamt</description>
     <description locale="fr" >Bureau de poste</description>
@@ -635,7 +668,7 @@
    </value>
    <value tag="prison" >
     <description locale="en" >Prison</description>
-    <description locale="ar" >حبس</description>
+    <description locale="ar" >سجن</description>
     <description locale="cs" >Věznice</description>
     <description locale="de" >Gefängnis</description>
     <description locale="fr" >Prison</description>
@@ -644,6 +677,9 @@
    </value>
    <value tag="pub" >
     <description locale="en" >Pub</description>
+    <description locale="cs" >Hospoda</description>
+    <description locale="de" >Kneipe</description>
+    <description locale="it" >Bar</description>
    </value>
    <value tag="public_building" >
     <description locale="en" >Public building</description>
@@ -665,6 +701,9 @@
    </value>
    <value tag="recycling" >
     <description locale="en" >Recycling Facilities</description>
+    <description locale="cs" >Recyklační místo</description>
+    <description locale="de" >Recycling-Einrichtung</description>
+    <description locale="it" >Impianti di riciclaggio</description>
    </value>
    <value tag="restaurant" >
     <description locale="en" >Restaurant</description>
@@ -730,6 +769,9 @@
    </value>
    <value tag="waste_disposal" >
     <description locale="en" >Waste Disposal</description>
+    <description locale="cs" >Kanál, místo pro odpadky</description>
+    <description locale="de" >Müllkippe</description>
+    <description locale="it" >Smaltimento rifiuti</description>
    </value>
   </widget>
   <widget tag="religion" type="combo" >
@@ -848,6 +890,9 @@
  </template>
  <template>
   <description locale="en" >Catholic church</description>
+  <description locale="ar" >كنيسة كثليك</description>
+  <description locale="de" >Katholische Kirche</description>
+  <description locale="pl" >Kościół katolicki</description>
   <widgetref id="name" />
   <widget tag="amenity" type="constant" >
    <description locale="en" >Amenity</description>
