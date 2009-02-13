@@ -5,6 +5,7 @@
 #include "PropertiesDock.h"
 #include "InfoDock.h"
 #include "DirtyDock.h"
+#include "StyleDock.h"
 #include "Command/Command.h"
 #include "Command/DocumentCommands.h"
 #include "Command/FeatureCommands.h"
@@ -92,6 +93,7 @@ class MainWindowPrivate
 		}
 		int lastPrefTabIndex;
 		QString defStyle;
+        StyleDock* theStyle;
 };
 
 MainWindow::MainWindow(void)
@@ -151,7 +153,8 @@ MainWindow::MainWindow(void)
 
 	theInfo = new InfoDock(this);
 	theDirty = new DirtyDock(this);
-	theGPS = new QGPS(this);
+    p->theStyle = new StyleDock(this);
+    theGPS = new QGPS(this);
 
 #ifdef GEOIMAGE
 	theGeoImage = new GeoImageDock(this);
@@ -173,6 +176,9 @@ MainWindow::MainWindow(void)
 	connect (menuRecentImport, SIGNAL(triggered(QAction *)), this, SLOT(recentImportTriggered(QAction *)));
 
 	updateProjectionMenu();
+
+	updateStyleMenu();
+	connect (menuStyles, SIGNAL(triggered(QAction *)), this, SLOT(styleTriggered(QAction *)));
 
 	viewDownloadedAction->setChecked(MerkaartorPreferences::instance()->getDownloadedVisible());
 	viewScaleAction->setChecked(M_PREFS->getScaleVisible());
@@ -221,10 +227,14 @@ MainWindow::MainWindow(void)
 	theDirty->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 	addDockWidget(Qt::RightDockWidgetArea, theDirty);
 
-	theGPS->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    p->theStyle->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    addDockWidget(Qt::RightDockWidgetArea, p->theStyle);
+
+    theGPS->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 	addDockWidget(Qt::RightDockWidgetArea, theGPS);
 
 	MerkaartorPreferences::instance()->restoreMainWindowState( this );
+
 #else
 	theProperties->setVisible(false);
 	theInfo->setVisible(false);
@@ -284,7 +294,23 @@ MainWindow::MainWindow(void)
 	connect(mnuAreaOpacity, SIGNAL(triggered(QAction*)), this, SLOT(setAreaOpacity(QAction*)));
 
 	blockSignals(false);
+
+	QTimer::singleShot( 0, this, SLOT(delayedInit()) );
 }
+
+void MainWindow::delayedInit()
+{
+	windowPropertiesAction->setChecked(theProperties->isVisible());
+	windowLayersAction->setChecked(theLayers->isVisible());
+	windowInfoAction->setChecked(theInfo->isVisible());
+	windowDirtyAction->setChecked(theDirty->isVisible());
+	windowGPSAction->setChecked(theGPS->isVisible());
+#ifdef GEOIMAGE
+	windowGeoimageAction->setChecked(theGeoImage->isVisible());
+#endif
+	windowStylesAction->setChecked(p->theStyle->isVisible());
+}
+
 
 MainWindow::~MainWindow(void)
 {
@@ -1282,12 +1308,13 @@ MapView* MainWindow::view()
 
 void MainWindow::on_mapStyleSaveAction_triggered()
 {
-	QString f = QFileDialog::getSaveFileName(this, tr("Save map style"), QString(), tr("Merkaartor map style (*.mas)"));
+	QString f = QFileDialog::getSaveFileName(this, tr("Save map style"), M_PREFS->M_PREFS->getCustomStyle(), tr("Merkaartor map style (*.mas)"));
 	if (!f.isNull()) {
 		if (!f.endsWith(".mas"))
 			f.append(".mas");
 		M_STYLE->savePainters(f);
 	}
+	updateStyleMenu();
 }
 
 void MainWindow::on_mapStyleLoadAction_triggered()
@@ -1410,6 +1437,7 @@ void MainWindow::preferencesChanged(void)
 	}
 	theView->projection().setProjectionType(M_PREFS->getProjectionType());
 	
+	updateStyleMenu();
 	updateMenu();
 }
 
@@ -1842,6 +1870,40 @@ void MainWindow::updateProjectionMenu()
 #endif
 }
 
+void MainWindow::updateStyleMenu()
+{
+	for(int i=menuStyles->actions().count()-1; i > 4 ; i--) {
+		menuStyles->removeAction(menuStyles->actions()[5]);
+	}
+	p->theStyle->clearItems();
+
+	QActionGroup* actgrp = new QActionGroup(this);
+	QDir intStyles(BUILTIN_STYLES_DIR);
+    for (int i=0; i < intStyles.entryList().size(); ++i) {
+		QAction* a = new QAction(intStyles.entryList().at(i) + " (int)", menuStyles);
+		actgrp->addAction(a);
+		a->setCheckable(true);
+		a->setData(QVariant(intStyles.entryInfoList().at(i).absoluteFilePath()));
+		menuStyles->addAction(a);
+		if (intStyles.entryInfoList().at(i).absoluteFilePath() == M_PREFS->getDefaultStyle())
+			a->setChecked(true);
+		p->theStyle->addItem(a);
+	}
+    if (!M_PREFS->getCustomStyle().isEmpty()) {
+        QDir customStyles(M_PREFS->getCustomStyle(), "*.mas");
+        for (int i=0; i < customStyles.entryList().size(); ++i) {
+ 			QAction* a = new QAction(customStyles.entryList().at(i), menuStyles);
+			actgrp->addAction(a);
+			a->setCheckable(true);
+			a->setData(QVariant(customStyles.entryInfoList().at(i).absoluteFilePath()));
+			menuStyles->addAction(a);
+			if (customStyles.entryInfoList().at(i).absoluteFilePath() == M_PREFS->getDefaultStyle())
+				a->setChecked(true);
+			p->theStyle->addItem(a);
+       }
+    }
+}
+
 void MainWindow::on_bookmarkAddAction_triggered()
 {
 	bool ok = true;
@@ -1968,24 +2030,48 @@ void MainWindow::projectionTriggered(QAction* anAction)
 	invalidateView();
 }
 
+void MainWindow::styleTriggered(QAction* anAction)
+{
+	if (!anAction->isCheckable())
+		return;
+
+	QString NewStyle = anAction->data().toString();
+	if (NewStyle != M_PREFS->getDefaultStyle())
+	{
+		M_PREFS->setDefaultStyle(NewStyle);
+		M_STYLE->loadPainters(M_PREFS->getDefaultStyle());
+		for (FeatureIterator it(document()); !it.isEnd(); ++it)
+		{
+			it.get()->invalidatePainter();
+		}
+	}
+	p->theStyle->setCurrent(anAction);
+
+	invalidateView(false);
+}
+
 void MainWindow::on_windowPropertiesAction_triggered()
 {
 	theProperties->setVisible(!theProperties->isVisible());
+	windowPropertiesAction->setChecked(theProperties->isVisible());
 }
 
 void MainWindow::on_windowLayersAction_triggered()
 {
 	theLayers->setVisible(!theLayers->isVisible());
+	windowLayersAction->setChecked(theLayers->isVisible());
 }
 
 void MainWindow::on_windowInfoAction_triggered()
 {
 	theInfo->setVisible(!theInfo->isVisible());
+	windowInfoAction->setChecked(theInfo->isVisible());
 }
 
 void MainWindow::on_windowDirtyAction_triggered()
 {
 	theDirty->setVisible(!theDirty->isVisible());
+	windowDirtyAction->setChecked(theDirty->isVisible());
 }
 
 void MainWindow::on_windowToolbarAction_triggered()
@@ -1996,14 +2082,22 @@ void MainWindow::on_windowToolbarAction_triggered()
 void MainWindow::on_windowGPSAction_triggered()
 {
 	theGPS->setVisible(!theGPS->isVisible());
+	windowGPSAction->setChecked(theGPS->isVisible());
 }
 
 #ifdef GEOIMAGE
 void MainWindow::on_windowGeoimageAction_triggered()
 {
 	theGeoImage->setVisible(!theGeoImage->isVisible());
+	windowGeoimageAction->setChecked(theGeoImage->isVisible());
 }
 #endif
+
+void MainWindow::on_windowStylesAction_triggered()
+{
+	p->theStyle->setVisible(!p->theStyle->isVisible());
+	windowStylesAction->setChecked(p->theStyle->isVisible());
+}
 
 void MainWindow::on_windowHideAllAction_triggered()
 {

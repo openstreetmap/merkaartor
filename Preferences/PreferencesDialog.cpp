@@ -49,18 +49,36 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 	for (int i=0; i < M_PREFS->getProjectionTypes().size(); ++i) {
 		cbProjection->insertItem(i, M_PREFS->getProjectionTypes()[i]);
 	}
-	QDir intStyles(BUILTIN_STYLES_DIR);
-	for (int i=0; i < intStyles.entryList().size(); ++i) {
-		cbStyles->addItem(intStyles.entryList().at(i));
-	}
-	QDir intTemplates(BUILTIN_TEMPLATES_DIR);
+    QDir intTemplates(BUILTIN_TEMPLATES_DIR);
 	for (int i=0; i < intTemplates.entryList().size(); ++i) {
 		cbTemplates->addItem(intTemplates.entryList().at(i));
 	}
+
 	resize(1,1);
 	QApplication::processEvents();
 
 	loadPrefs();
+}
+
+void PreferencesDialog::updateStyles()
+{
+    cbStyles->clear();
+    QDir intStyles(BUILTIN_STYLES_DIR);
+    for (int i=0; i < intStyles.entryList().size(); ++i) {
+        cbStyles->addItem(intStyles.entryList().at(i) + " (int)", QVariant(intStyles.entryInfoList().at(i).absoluteFilePath()));
+    }
+    if (!CustomStylesDir->text().isEmpty()) {
+        QDir customStyles(CustomStylesDir->text(), "*.mas");
+        for (int i=0; i < customStyles.entryList().size(); ++i) {
+            cbStyles->addItem(customStyles.entryList().at(i), QVariant(customStyles.entryInfoList().at(i).absoluteFilePath()));
+        }
+    }
+
+    int idx = cbStyles->findData(M_PREFS->getDefaultStyle());
+    if (idx == -1)
+        idx = 0;
+
+    cbStyles->setCurrentIndex(idx);
 }
 
 PreferencesDialog::~PreferencesDialog()
@@ -133,16 +151,11 @@ void PreferencesDialog::loadPrefs()
 
 	QString s = M_PREFS->getDefaultStyle();
 	QString cs = M_PREFS->getCustomStyle();
-	CustomStyleName->setText(cs);
-	if (s.startsWith(BUILTIN_STYLES_DIR)) {
-		StyleBuiltin->setChecked(true);
-		cbStyles->setEnabled(true);
-		cbStyles->setCurrentIndex(cbStyles->findText(s.remove(QString(BUILTIN_STYLES_DIR) + "/")));
-	} else {
-		StyleCustom->setChecked(true);
-		CustomStyleName->setEnabled(true);
-		BrowseStyle->setEnabled(true);
-	}
+    if (QFileInfo(cs).isFile())
+        cs = QFileInfo(cs).absolutePath();
+    CustomStylesDir->setText(cs);
+    updateStyles();
+
 	cbDisableStyleForTracks->setChecked(M_PREFS->getDisableStyleForTracks());
 
 	QString t = M_PREFS->getDefaultTemplate();
@@ -240,11 +253,9 @@ void PreferencesDialog::savePrefs()
 	M_PREFS->setCacheDir(edCacheDir->text());
 	M_PREFS->setCacheSize(sbCacheSize->value());
 
+    M_PREFS->setCustomStyle(CustomStylesDir->text());
 	QString NewStyle;
-	if (StyleBuiltin->isChecked())
-		NewStyle = QString(BUILTIN_STYLES_DIR) + "/" + cbStyles->currentText();
-	else
-		NewStyle = CustomStyleName->text();
+    NewStyle = cbStyles->itemData(cbStyles->currentIndex()).toString();
 
 	bool PainterToInvalidate = false;
 	if (NewStyle != M_PREFS->getDefaultStyle())
@@ -276,7 +287,7 @@ void PreferencesDialog::savePrefs()
 		((MainWindow*)parent())->properties()->loadTemplates(NewTemplate);
 	}
 
-	M_PREFS->setCustomStyle(CustomStyleName->text());
+    M_PREFS->setCustomStyle(CustomStylesDir->text());
 	M_PREFS->setCustomTemplate(CustomTemplateName->text());
 	M_PREFS->setZoomInPerc(sbZoomInPerc->text().toInt());
 	M_PREFS->setZoomOutPerc(sbZoomOutPerc->text().toInt());
@@ -333,9 +344,11 @@ void PreferencesDialog::on_cbMapAdapter_currentIndexChanged(int index)
 
 void PreferencesDialog::on_BrowseStyle_clicked()
 {
-	QString s = QFileDialog::getOpenFileName(this,tr("Custom style"),"",tr("Merkaartor map style (*.mas)"));
+    QString s = QFileDialog::getExistingDirectory(this,tr("Custom styles directory"),"");
 	if (!s.isNull())
-		CustomStyleName->setText(QDir::toNativeSeparators(s));
+        CustomStylesDir->setText(QDir::toNativeSeparators(s));
+
+    updateStyles();
 }
 
 void PreferencesDialog::on_BrowseTemplate_clicked()

@@ -125,6 +125,8 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 #ifdef GEOIMAGE
 		virtual void on_windowGeoimageAction_triggered();
 #endif
+		virtual void on_windowStylesAction_triggered();
+		
 		virtual void on_windowHideAllAction_triggered();
 		virtual void on_windowShowAllAction_triggered();
 		virtual void on_gpsConnectAction_triggered();
@@ -173,6 +175,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 		void recentOpenTriggered(QAction* anAction);
 		void recentImportTriggered(QAction* anAction);
 		void projectionTriggered(QAction* anAction);
+		void styleTriggered(QAction* anAction);
         void updateGpsPosition(float latitude, float longitude, QDateTime time, float altitude, float speed, float heading);
 		void applyStyles(QVector<FeaturePainter>* thePainters);
 
@@ -205,6 +208,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 		QTranslator* merkaartorTranslator;
 
 	private slots:
+		void delayedInit();
 		void setAreaOpacity(QAction*);
 		void updateBookmarksMenu();
 		void mapView_interactionChanged(Interaction* anInteraction);
@@ -215,6 +219,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 		void updateRecentOpenMenu();
 		void updateRecentImportMenu();
 		void updateProjectionMenu();
+		void updateStyleMenu();
 		MapDocument* getDocumentFromClipboard();
 		bool selectExportedFeatures(QVector<MapFeature*>& theFeatures);
 

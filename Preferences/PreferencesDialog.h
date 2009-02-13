@@ -55,7 +55,8 @@ public slots:
 	void on_btBrowse_clicked();
 
 private:
-	void loadPrefs();
+    void updateStyles();
+    void loadPrefs();
 	void savePrefs();
 
 	void changeEvent(QEvent *);

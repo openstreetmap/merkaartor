@@ -369,13 +369,13 @@ void Projection::zoom(double d, const QPointF & Around,
 
 void Projection::resize(QSize oldS, QSize newS)
 {
+	Q_UNUSED(oldS)
 #ifdef USE_PROJ
 	viewportRecalc(QRect(QPoint(0,0), newS));
 	if (LAYERMANAGER_OK) {
 		layerManagerSetViewport(Viewport, QRect(QPoint(0,0), newS));
 	}
 #else
-	Q_UNUSED(oldS)
 	Q_UNUSED(newS)
 #endif
 }
