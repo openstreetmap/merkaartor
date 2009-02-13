@@ -4,21 +4,44 @@
   <widget tag="place" type="combo" >
    <link src="http://wiki.openstreetmap.org/index.php/Key:place" />
    <description locale="en" >Place</description>
+   <description locale="ar" >مكان</description>
+   <description locale="de" >Ort</description>
+   <description locale="fr" >Lieu</description>
+   <description locale="pl" >Miejsca</description>
    <selector expr="Type is Area or Type is TrackPoint" />
    <value tag="city" >
-    <description locale="en" >City (Pop. > 100.000)</description>
+    <description locale="en" >City (Pop. &gt; 100.000)</description>
+    <description locale="ar" >مدينة (عدد السكان يزيد عن مئة ألف)</description>
+    <description locale="de" >Großstadt (Einw. &gt; 100.000)</description>
+    <description locale="fr" >Ville (Pop. &gt; 100.000)</description>
+    <description locale="pl" >Miasto (ludność &gt; 100 000)</description>
    </value>
    <value tag="town" >
     <description locale="en" >Town (10.000 &lt; Pop. &lt; 100.000)</description>
+    <description locale="ar" >بلدة (أكثر من 10000 نسمة و أقل من 100000)</description>
+    <description locale="de" >Stadt (10.000 &lt; Einw. &lt; 100.000)</description>
+    <description locale="pl" >Miejscowość (ludność 10 000-100 000)</description>
    </value>
    <value tag="village" >
     <description locale="en" >Village (Pop. &lt; 10.000)</description>
+    <description locale="ar" >قرية (أقل من 10000 نسمة)</description>
+    <description locale="de" >Ortschaft (Einw. &lt; 10.000)</description>
+    <description locale="fr" >Village (Pop. &lt; 10.000)</description>
+    <description locale="pl" >Wieś (ludność &lt; 10 000</description>
    </value>
    <value tag="hamlet" >
     <description locale="en" >Hamlet (a few houses)</description>
+    <description locale="ar" >مجموعة بيوت</description>
+    <description locale="de" >Weiler (ein paar Häuser)</description>
+    <description locale="fr" >Hameau</description>
+    <description locale="pl" >Wólka</description>
    </value>
    <value tag="suburb" >
     <description locale="en" >Suburb</description>
+    <description locale="ar" >ضاحية</description>
+    <description locale="de" >Stadtteil</description>
+    <description locale="fr" >Banlieue</description>
+    <description locale="pl" >Dzielnica</description>
    </value>
    <value tag="locality" >
     <description locale="en" >Localiy (named place)</description>
@@ -26,73 +49,180 @@
   </widget>
   <widget tag="building" type="yesno" >
    <description locale="en" >Building</description>
+   <description locale="ar" >مبنى</description>
+   <description locale="de" >Gebäude</description>
+   <description locale="fr" >Bâtiment</description>
+   <description locale="pl" >Budynek</description>
    <selector expr="Type is Area" />
   </widget>
   <widget tag="area" type="yesno" >
    <description locale="en" >Area</description>
+   <description locale="ar" >مساحة</description>
+   <description locale="de" >Fläche</description>
+   <description locale="fr" >Aire</description>
+   <description locale="pl" >Obszar</description>
    <selector expr="Type is Area" />
   </widget>
   <widget tag="name" type="edit" >
    <description locale="en" >Name</description>
+   <description locale="ar" >الإسم</description>
+   <description locale="de" >Name</description>
+   <description locale="fr" >Nom</description>
+   <description locale="pl" >Nazwa</description>
   </widget>
   <widget tag="highway" type="combo" >
    <link src="http://wiki.openstreetmap.org/index.php/Key:highway" />
    <description locale="en" >Highway type</description>
+   <description locale="de" >Straßentyp</description>
    <description locale="fr" >Type de route</description>
+   <description locale="pl" >Typ drogi</description>
    <value tag="motorway" >
     <link src="http://wiki.openstreetmap.org/index.php/Tag:highway=motorway" />
     <description locale="en" >Motorway</description>
+    <description locale="cs" >Dálnice</description>
+    <description locale="de" >Autobahn</description>
+    <description locale="fr" >Autoroute</description>
+    <description locale="it" >Autostrada</description>
+    <description locale="pl" >Autostrada</description>
    </value>
    <value tag="motorway_link" >
     <description locale="en" >Ramp to motorway</description>
+    <description locale="cs" >Dálniční nájezd</description>
+    <description locale="de" >Autobahnanschlussstelle</description>
+    <description locale="it" >Svincolo per l'autostrada</description>
+    <description locale="pl" >Dojazd do autostrady</description>
    </value>
    <value tag="trunk" >
     <description locale="en" >Trunk road</description>
+    <description locale="cs" >Víceproudá cesta</description>
+    <description locale="de" >Schnellstraße</description>
+    <description locale="it" >Strada principale</description>
+    <description locale="pl" >Droga ekspresowa</description>
    </value>
    <value tag="trunk_link" >
     <description locale="en" >Ramp to trunk road</description>
+    <description locale="cs" >Nájezd na víceproudou cestu</description>
+    <description locale="de" >Schnellstraßenanschlussstelle</description>
+    <description locale="it" >Svincolo per la strada principale</description>
+    <description locale="pl" >Dojazd do drogi ekspresowej</description>
    </value>
    <value tag="primary" >
     <description locale="en" >Primary road</description>
+    <description locale="ar" >طريق رئيسية</description>
+    <description locale="cs" >Silnice I. třídy</description>
+    <description locale="de" >Bundesstraße</description>
+    <description locale="fr" >Route nationale</description>
+    <description locale="it" >Strada primaria</description>
+    <description locale="pl" >Droga krajowa</description>
    </value>
    <value tag="primary_link" >
     <description locale="en" >Ramp to primary road</description>
+    <description locale="ar" >طلعة إلى طريق رئيسية</description>
+    <description locale="cs" >Nájezd na silnici I. třídy</description>
+    <description locale="de" >Bundesstraßenanschlussstelle</description>
+    <description locale="it" >Svincolo per strada primaria</description>
+    <description locale="pl" >Dojazd do drogi krajowej</description>
    </value>
    <value tag="secondary" >
     <description locale="en" >Secondary road</description>
+    <description locale="ar" >طريق ثانوية</description>
+    <description locale="cs" >Silnice II. třídy</description>
+    <description locale="de" >Landesstraße</description>
+    <description locale="it" >Strada secondaria</description>
+    <description locale="pl" >Droga wojewódzka</description>
    </value>
    <value tag="tertiary" >
     <description locale="en" >Tertiary road</description>
+    <description locale="ar" >طريق ثلاثية</description>
+    <description locale="cs" >Silnice III. třídy</description>
+    <description locale="de" >Kreisstraße</description>
+    <description locale="it" >Strada terziaria</description>
+    <description locale="pl" >Droga powiatowa</description>
    </value>
    <value tag="unclassified" >
     <description locale="en" >Unclassified road</description>
+    <description locale="cs" >Neoznačená cesta</description>
+    <description locale="de" >Ortsverbindungsstraße</description>
+    <description locale="fr" >Route non-classée</description>
+    <description locale="it" >Strada non classificata</description>
+    <description locale="pl" >Droga gminna</description>
    </value>
    <value tag="residential" >
     <description locale="en" >Residential road</description>
+    <description locale="ar" >طريق سكن</description>
+    <description locale="cs" >Obecní komunikace</description>
+    <description locale="de" >Ortsstraße</description>
+    <description locale="fr" >Rue résidentielle</description>
+    <description locale="it" >Strada residenziale</description>
+    <description locale="pl" >Droga lokalna</description>
    </value>
    <value tag="service" >
     <description locale="en" >Service road</description>
+    <description locale="cs" >Účelová komunikace</description>
+    <description locale="de" >Zufahrtstraße</description>
+    <description locale="fr" >Route d'accès</description>
+    <description locale="it" >Strada di servizio</description>
+    <description locale="pl" >Droga serwisowa</description>
    </value>
    <value tag="track" >
     <description locale="en" >Track road</description>
+    <description locale="cs" >Nezpevněná komunikace</description>
+    <description locale="de" >Feld- oder Waldweg</description>
+    <description locale="fr" >Chemin</description>
+    <description locale="it" >Strada forestale</description>
+    <description locale="pl" >Droga gruntowa</description>
    </value>
    <value tag="living_street" >
     <description locale="en" >Pedestrian priority road</description>
+    <description locale="ar" >طريق أولوية للمشاة</description>
+    <description locale="cs" >Pěší zóna</description>
+    <description locale="de" >Spielstraße</description>
+    <description locale="fr" >Rue à majorité piétonne</description>
+    <description locale="it" >Strada pedonale con traffico limitato</description>
+    <description locale="pl" >Strefa zamieszkania</description>
    </value>
    <value tag="pedestrian" >
     <description locale="en" >Pedestrian only road</description>
+    <description locale="ar" >طريق فقط للمشاة</description>
+    <description locale="cs" >Komunikace pouze pro chodce</description>
+    <description locale="de" >Fußgängerzone</description>
+    <description locale="fr" >Rue exclusivement piétonne</description>
+    <description locale="it" >Strada pedonale</description>
+    <description locale="pl" >Ciąg pieszy</description>
    </value>
    <value tag="footway" >
     <description locale="en" >Footway</description>
+    <description locale="ar" >طريق للمشاة</description>
+    <description locale="cs" >Stezka pro chodce</description>
+    <description locale="de" >Fuß-/Wanderweg</description>
+    <description locale="fr" >Voie piétonne</description>
+    <description locale="it" >Sentiero</description>
+    <description locale="pl" >Droga dla pieszych</description>
    </value>
    <value tag="cycleway" >
     <description locale="en" >Cycleway</description>
+    <description locale="ar" >طريق فقط للدراجات</description>
+    <description locale="cs" >Cyklostezka</description>
+    <description locale="de" >Radweg</description>
+    <description locale="fr" >Voie cyclable</description>
+    <description locale="it" >Ciclabile</description>
+    <description locale="pl" >Droga rowerowa</description>
    </value>
    <value tag="bridleway" >
     <description locale="en" >Bridleway</description>
+    <description locale="cs" >Cesta pro koně</description>
+    <description locale="de" >Reitweg</description>
+    <description locale="fr" >Chemin équestre</description>
+    <description locale="it" >Strada per cavalli</description>
+    <description locale="pl" >Ścieżka do jazdy konnej</description>
    </value>
    <value tag="steps" >
     <description locale="en" >Steps</description>
+    <description locale="ar" >درجات</description>
+    <description locale="cs" >Schodiště</description>
+    <description locale="de" >Treppe</description>
+    <description locale="it" >Passi</description>
+    <description locale="pl" >Schody</description>
    </value>
    <value tag="bus_guideway" >
     <description locale="en" >Bus guideway (not a bus way)</description>
@@ -104,42 +234,108 @@
   <widget tag="landuse" type="combo" >
    <link src="http://wiki.openstreetmap.org/index.php/Key:landuse" />
    <description locale="en" >Landuse</description>
+   <description locale="ar" >إستعمال الأرض</description>
+   <description locale="de" >Landnutzung</description>
+   <description locale="fr" >Utilisation du sol</description>
+   <description locale="pl" >Zagospodarowanie terenu</description>
    <selector expr="Type is Area or Type is Relation" />
    <value tag="allotments" >
     <description locale="en" >Allotments</description>
+    <description locale="cs" >Místo pro pěstování květin, zeleniny</description>
+    <description locale="de" >Schrebergärten</description>
+    <description locale="it" >Concessioni</description>
+    <description locale="pl" >Ogródki działkowe</description>
    </value>
    <value tag="basin" >
     <description locale="en" >Basin</description>
+    <description locale="ar" >حوض</description>
+    <description locale="cs" >Bazén</description>
+    <description locale="de" >Wasserbecken</description>
+    <description locale="fr" >Bassin</description>
+    <description locale="it" >Bacino</description>
+    <description locale="pl" >Zbiornik wodny</description>
    </value>
    <value tag="brownfield" >
     <description locale="en" >Brownfield</description>
    </value>
    <value tag="cemetery" >
     <description locale="en" >Cemetery</description>
+    <description locale="ar" >مقبرة</description>
+    <description locale="cs" >Hřbitov</description>
+    <description locale="de" >Friedhof</description>
+    <description locale="fr" >Cimetière</description>
+    <description locale="it" >Cimitero</description>
+    <description locale="pl" >Cmentarz</description>
    </value>
    <value tag="commercial" >
     <description locale="en" >Commercial zone</description>
+    <description locale="ar" >منطقة تجارية</description>
+    <description locale="cs" >Obchodní zóna</description>
+    <description locale="de" >Büros</description>
+    <description locale="fr" >Zone tertiaire (bureaux)</description>
+    <description locale="it" >Zona commerciale</description>
+    <description locale="pl" >Teren handlowy</description>
    </value>
    <value tag="construction" >
     <description locale="en" >Construction zone</description>
+    <description locale="ar" >منطقة تعمير</description>
+    <description locale="cs" >Staveniště</description>
+    <description locale="de" >Baustelle</description>
+    <description locale="fr" >Site &quot;en construction&quot;</description>
+    <description locale="it" >Zona in costruzione</description>
+    <description locale="pl" >Budowa</description>
    </value>
    <value tag="farm" >
     <description locale="en" >Farm</description>
+    <description locale="ar" >مزرعة</description>
+    <description locale="cs" >Zemědělství</description>
+    <description locale="de" >Landwirtschaft</description>
+    <description locale="fr" >Ferme</description>
+    <description locale="it" >Fattoria</description>
+    <description locale="pl" >Gospodarstwo rolne</description>
    </value>
    <value tag="forest" >
     <description locale="en" >Forest</description>
+    <description locale="ar" >غابة</description>
+    <description locale="cs" >Les</description>
+    <description locale="de" >Wald</description>
+    <description locale="fr" >Forêt</description>
+    <description locale="it" >Foresta</description>
+    <description locale="pl" >Las</description>
    </value>
    <value tag="greenfield" >
     <description locale="en" >Greenfield</description>
+    <description locale="ar" >حقل أخضر</description>
+    <description locale="cs" >Výstavba na zelené louce</description>
+    <description locale="de" >Bauland</description>
+    <description locale="fr" >Espace vert</description>
+    <description locale="it" >Campo verde</description>
+    <description locale="pl" >Teren pod zabudowę</description>
    </value>
    <value tag="industrial" >
     <description locale="en" >Industrial zone</description>
+    <description locale="ar" >منطقة صناعية</description>
+    <description locale="cs" >Průmyslová zóna</description>
+    <description locale="de" >Industriegebiet</description>
+    <description locale="fr" >Zone industrielle</description>
+    <description locale="it" >Zona industriale</description>
+    <description locale="pl" >Teren przemysłowy</description>
    </value>
    <value tag="landfill" >
     <description locale="en" >Landfill</description>
+    <description locale="cs" >Skládka</description>
+    <description locale="de" >Deponie</description>
+    <description locale="it" >Terra</description>
+    <description locale="pl" >Wysypisko śmieci</description>
    </value>
    <value tag="military" >
     <description locale="en" >Military</description>
+    <description locale="ar" >عسكري</description>
+    <description locale="cs" >Vojenský prostor</description>
+    <description locale="de" >Militär</description>
+    <description locale="fr" >Militaire</description>
+    <description locale="it" >Zona militare</description>
+    <description locale="pl" >Teren wojskowy</description>
    </value>
    <value tag="recreation_ground" >
     <description locale="en" >Recreation ground</description>
@@ -149,12 +345,23 @@
    </value>
    <value tag="residential" >
     <description locale="en" >Residential zone</description>
+    <description locale="ar" >منطقة سكنية</description>
+    <description locale="cs" >Obytná zóna</description>
+    <description locale="de" >Wohngebiet</description>
+    <description locale="fr" >Zone résidentielle</description>
+    <description locale="it" >Zona residenziale</description>
+    <description locale="pl" >Zabudowa mieszkaniowa</description>
    </value>
    <value tag="retail" >
     <description locale="en" >Retail zone</description>
    </value>
    <value tag="quarry" >
     <description locale="en" >Surface mineral extraction</description>
+    <description locale="cs" >Povrchová těžba</description>
+    <description locale="de" >Steinbruch</description>
+    <description locale="fr" >Mine à ciel ouvert</description>
+    <description locale="it" >Superficie di estrazione di minerali</description>
+    <description locale="pl" >Kamieniołom</description>
    </value>
    <value tag="village_green" >
     <description locale="en" >Village green</description>
@@ -163,15 +370,35 @@
   <widget tag="oneway" type="yesno" >
    <link src="http://wiki.openstreetmap.org/index.php/Key:oneway" />
    <description locale="en" >Oneway</description>
+   <description locale="ar" >إتجاه واحد</description>
+   <description locale="de" >Einbahnstraße</description>
    <description locale="fr" >Sens unique</description>
+   <description locale="pl" >Jednokierunkowa</description>
   </widget>
   <widget tag="amenity" type="combo" >
    <description locale="en" >Amenity</description>
+   <description locale="cs" >Občanská vybavenost</description>
+   <description locale="de" >Nutzung</description>
+   <description locale="fr" >Équipement</description>
+   <description locale="it" >Attrattiva</description>
+   <description locale="pl" >Miejsce kultu</description>
    <value tag="arts_centre" >
     <description locale="en" >Arts centre</description>
+    <description locale="ar" >مركز ثقافي</description>
+    <description locale="cs" >Centrum umění</description>
+    <description locale="de" >Kulturzentrum</description>
+    <description locale="fr" >Centre culturel</description>
+    <description locale="it" >Centro culturale</description>
+    <description locale="pl" >Centrum kultury/sztuki</description>
    </value>
    <value tag="atm" >
     <description locale="en" >ATM or cash point</description>
+    <description locale="ar" >آلة دفع نقود أو نقطة دفع نقدي</description>
+    <description locale="cs" >Bankomat, výběr v hotovosti</description>
+    <description locale="de" >Geldautomat</description>
+    <description locale="fr" >DAB ou point de payement</description>
+    <description locale="it" >Bancomat o ritiro contanti</description>
+    <description locale="pl" >Bankomat</description>
    </value>
    <value tag="bank" >
     <description locale="en" >Bank</description>
@@ -181,120 +408,325 @@
    </value>
    <value tag="biergarten" >
     <description locale="en" >Beer garden</description>
+    <description locale="ar" >جنينة جعة</description>
+    <description locale="cs" >Letní hospoda</description>
+    <description locale="de" >Biergarten</description>
+    <description locale="it" >Giardino della birra</description>
+    <description locale="pl" >Ogródek piwny</description>
    </value>
    <value tag="bicycle_parking" >
     <description locale="en" >Parking for bicycles</description>
+    <description locale="ar" >موقف للدراجات</description>
+    <description locale="cs" >Parkování pro kola</description>
+    <description locale="de" >Fahrradstellplatz</description>
+    <description locale="fr" >Parking pour vélos</description>
+    <description locale="it" >Parcheggio per biciclette</description>
+    <description locale="pl" >Parking rowerowy</description>
    </value>
    <value tag="bicycle_rental" >
     <description locale="en" >Bicycle Rental</description>
+    <description locale="ar" >إستئجار دراجة</description>
+    <description locale="cs" >Půjčovna kol</description>
+    <description locale="de" >Fahrradmietstation</description>
+    <description locale="fr" >Location de vélos</description>
+    <description locale="it" >Noleggio biciclette</description>
+    <description locale="pl" >Wypożyczalnia rowerów</description>
    </value>
    <value tag="bureau_de_change" >
     <description locale="en" >Bureau de change</description>
+    <description locale="ar" >صرّاف</description>
+    <description locale="cs" >Směnárna</description>
+    <description locale="de" >Wechselstube</description>
+    <description locale="fr" >Bureau de change</description>
+    <description locale="it" >Cambio valuta</description>
+    <description locale="pl" >Kantor</description>
    </value>
    <value tag="bus_station" >
     <description locale="en" >Bus station</description>
+    <description locale="ar" >محطة نقليات عامة</description>
+    <description locale="cs" >Autobusové nádraží</description>
+    <description locale="de" >Bushaltestelle</description>
+    <description locale="fr" >Gare routière</description>
+    <description locale="it" >Stazione autobus</description>
+    <description locale="pl" >Dworzec autobusowy</description>
    </value>
    <value tag="cafe" >
     <description locale="en" >Cafe</description>
+    <description locale="ar" >قهوة إستراحة</description>
+    <description locale="cs" >Kavárna</description>
+    <description locale="de" >Cafe</description>
+    <description locale="fr" >Café</description>
+    <description locale="it" >Cafè</description>
+    <description locale="pl" >Kafejka</description>
    </value>
    <value tag="car_rental" >
     <description locale="en" >Car Rental</description>
+    <description locale="ar" >إستئجار سيارة</description>
+    <description locale="cs" >Půjčovna aut</description>
+    <description locale="de" >Autovermietung</description>
+    <description locale="fr" >Location de voiture</description>
+    <description locale="it" >Noleggo auto</description>
+    <description locale="pl" >Wypożyczalnia samochodów</description>
    </value>
    <value tag="car_sharing" >
     <description locale="en" >Car Sharing</description>
+    <description locale="cs" >Sdílení aut</description>
+    <description locale="de" >Autotausch</description>
+    <description locale="fr" >Co-voiturage</description>
+    <description locale="it" >Car Sharing</description>
+    <description locale="pl" >Wspóldzielenie samochodów</description>
    </value>
    <value tag="cinema" >
     <description locale="en" >Cinema</description>
+    <description locale="ar" >سينما</description>
+    <description locale="cs" >Kino</description>
+    <description locale="de" >Kino</description>
+    <description locale="fr" >Cinéma</description>
+    <description locale="it" >Cinema</description>
+    <description locale="pl" >Kino</description>
    </value>
    <value tag="college" >
     <description locale="en" >College</description>
+    <description locale="ar" >كلّية</description>
+    <description locale="cs" >Střední škola</description>
+    <description locale="de" >College</description>
+    <description locale="fr" >Établissement d'enseignement supérieur</description>
+    <description locale="it" >College</description>
+    <description locale="pl" >Szkoła wyższa</description>
    </value>
    <value tag="courthouse" >
     <description locale="en" >Court house</description>
+    <description locale="ar" >محكمة</description>
+    <description locale="cs" >Soud</description>
+    <description locale="de" >Gericht</description>
+    <description locale="fr" >Palais de justice</description>
+    <description locale="it" >Corte</description>
+    <description locale="pl" >Sąd</description>
    </value>
    <value tag="crematorium" >
     <description locale="en" >Crematorium</description>
+    <description locale="cs" >Krematorium</description>
+    <description locale="de" >Krematorium</description>
+    <description locale="fr" >Crématorium</description>
+    <description locale="it" >Crematorio</description>
+    <description locale="pl" >Krematorium</description>
    </value>
    <value tag="drinking_water" >
     <description locale="en" >Source of drinking water</description>
+    <description locale="ar" >نبع ماء صالحة للشرب</description>
+    <description locale="cs" >Zdroj pitné vody</description>
+    <description locale="de" >Trinkwasser</description>
+    <description locale="fr" >Source d'eau potable</description>
+    <description locale="it" >Fonte di acqua potabile</description>
+    <description locale="pl" >Źródło wody pitnej</description>
    </value>
    <value tag="Fast food" >
     <description locale="en" >Fast food</description>
    </value>
    <value tag="fire_station" >
     <description locale="en" >Fire Station</description>
+    <description locale="ar" >إطفائية</description>
+    <description locale="cs" >Požární stanice</description>
+    <description locale="de" >Feuerwehr</description>
+    <description locale="fr" >Caserne de pompiers</description>
+    <description locale="it" >Pompieri</description>
+    <description locale="pl" >Straż pożarna</description>
    </value>
    <value tag="fountain" >
     <description locale="en" >Fountain</description>
+    <description locale="ar" >نبع ماء</description>
+    <description locale="cs" >Fontána, kašna</description>
+    <description locale="de" >Springbrunnen</description>
+    <description locale="fr" >Fontaine</description>
+    <description locale="it" >Fontana</description>
+    <description locale="pl" >Fontanna</description>
    </value>
    <value tag="fuel" >
     <description locale="en" >Fuel</description>
+    <description locale="ar" >وقود</description>
+    <description locale="cs" >Benzinka</description>
+    <description locale="de" >Tankstelle</description>
+    <description locale="fr" >Station service</description>
+    <description locale="it" >Benzina</description>
+    <description locale="pl" >Stacja benzynowa</description>
    </value>
    <value tag="grave_yard" >
     <description locale="en" >Small place of burial</description>
+    <description locale="cs" >Malý hřbitov</description>
+    <description locale="de" >Grabstelle</description>
+    <description locale="fr" >Petit cimetière</description>
+    <description locale="it" >Piccolo luogo di sepoltura</description>
+    <description locale="pl" >Cmentarz (mały)</description>
    </value>
    <value tag="hospital" >
     <description locale="en" >Hospital</description>
+    <description locale="ar" >مستشفى</description>
+    <description locale="cs" >Nemocnice</description>
+    <description locale="de" >Krankenhaus</description>
+    <description locale="fr" >Hôpital</description>
+    <description locale="it" >Ospedale</description>
+    <description locale="pl" >Szpital</description>
    </value>
    <value tag="library" >
     <description locale="en" >Library</description>
+    <description locale="ar" >مكتبة عامة</description>
+    <description locale="cs" >Knihovna</description>
+    <description locale="de" >Bibliothek</description>
+    <description locale="fr" >Bibliothèque</description>
+    <description locale="it" >Biblioteca</description>
+    <description locale="pl" >Biblioteka</description>
    </value>
    <value tag="nightclub" >
     <description locale="en" >Nightclub</description>
+    <description locale="ar" >نادي ليلي</description>
+    <description locale="cs" >Noční podnik</description>
+    <description locale="de" >Nachtclub</description>
+    <description locale="fr" >Boîte de nuit</description>
+    <description locale="it" >Nightclub</description>
+    <description locale="pl" >Klub nocny</description>
    </value>
    <value tag="parking" >
     <description locale="en" >Parking</description>
    </value>
    <value tag="pharmacy" >
     <description locale="en" >Pharmacy</description>
+    <description locale="ar" >صيدلية</description>
+    <description locale="cs" >Lékarna</description>
+    <description locale="de" >Apotheke</description>
+    <description locale="fr" >Pharmacie</description>
+    <description locale="it" >Farmacia</description>
+    <description locale="pl" >Apteka</description>
    </value>
    <value tag="place_of_worship" >
     <description locale="en" >Place of Worship</description>
+    <description locale="ar" >معبد</description>
+    <description locale="cs" >Bohoslužebné místo</description>
+    <description locale="de" >Anbetungsort</description>
+    <description locale="fr" >Lieu de culte</description>
+    <description locale="it" >Luogo di culto</description>
+    <description locale="pl" >Miejsce kultu</description>
    </value>
    <value tag="police" >
     <description locale="en" >Police Station</description>
+    <description locale="ar" >مركز شرطة</description>
+    <description locale="cs" >Policejní stanice</description>
+    <description locale="de" >Polizeistation</description>
+    <description locale="fr" >Poste de police</description>
+    <description locale="it" >Stazione di polizia</description>
+    <description locale="pl" >Komenda policji</description>
    </value>
    <value tag="post_box" >
     <description locale="en" >Post Box</description>
+    <description locale="ar" >صندوق بريد</description>
+    <description locale="cs" >Poštovní schránka</description>
+    <description locale="de" >Briefkasten</description>
+    <description locale="fr" >Boîte aux lettres</description>
+    <description locale="it" >Cassetta delle lettere</description>
+    <description locale="pl" >Skrzynka pocztowa</description>
    </value>
    <value tag="post_office" >
     <description locale="en" >Post Office</description>
+    <description locale="ar" >مركز بريدي</description>
+    <description locale="cs" >Pošta</description>
+    <description locale="de" >Postamt</description>
+    <description locale="fr" >Bureau de poste</description>
+    <description locale="it" >Ufficio postale</description>
+    <description locale="pl" >Poczta</description>
    </value>
    <value tag="prison" >
     <description locale="en" >Prison</description>
+    <description locale="ar" >حبس</description>
+    <description locale="cs" >Věznice</description>
+    <description locale="de" >Gefängnis</description>
+    <description locale="fr" >Prison</description>
+    <description locale="it" >Prigione</description>
+    <description locale="pl" >Więzienie</description>
    </value>
    <value tag="pub" >
     <description locale="en" >Pub</description>
    </value>
    <value tag="public_building" >
     <description locale="en" >Public building</description>
+    <description locale="ar" >مبنى عام</description>
+    <description locale="cs" >Státní úřad</description>
+    <description locale="de" >Öffentliches Gebäude</description>
+    <description locale="fr" >Bâtiment public</description>
+    <description locale="it" >Edificio pubblico</description>
+    <description locale="pl" >Budynek publiczny</description>
    </value>
    <value tag="telephone" >
     <description locale="en" >Public Telephone</description>
+    <description locale="ar" >هاتف عمومي</description>
+    <description locale="cs" >Veřejný telefon</description>
+    <description locale="de" >Telefon</description>
+    <description locale="fr" >Téléphone public</description>
+    <description locale="it" >Telefono pubblico</description>
+    <description locale="pl" >Budka telefoniczna</description>
    </value>
    <value tag="recycling" >
     <description locale="en" >Recycling Facilities</description>
    </value>
    <value tag="restaurant" >
     <description locale="en" >Restaurant</description>
+    <description locale="ar" >مطعم</description>
+    <description locale="cs" >Restaurace</description>
+    <description locale="de" >Restaurant</description>
+    <description locale="fr" >Restaurant</description>
+    <description locale="it" >Ristorante</description>
+    <description locale="pl" >Restauracja</description>
    </value>
    <value tag="school" >
     <description locale="en" >School</description>
+    <description locale="ar" >مدرسة</description>
+    <description locale="cs" >Škola</description>
+    <description locale="de" >Schule</description>
+    <description locale="fr" >École</description>
+    <description locale="it" >Scuola</description>
+    <description locale="pl" >Szkoła</description>
    </value>
    <value tag="taxi" >
     <description locale="en" >Taxi</description>
+    <description locale="ar" >تاكسي</description>
+    <description locale="cs" >Taxi</description>
+    <description locale="de" >Taxi</description>
+    <description locale="fr" >Taxi</description>
+    <description locale="it" >Taxi</description>
+    <description locale="pl" >Postój taksówek</description>
    </value>
    <value tag="theatre" >
     <description locale="en" >Theatre or opera house</description>
+    <description locale="ar" >مسرح أو مسرح غنائي</description>
+    <description locale="cs" >Divadlo nebo opera</description>
+    <description locale="de" >Theater oder Oper</description>
+    <description locale="fr" >Théatre ou Opéra</description>
+    <description locale="it" >Teatro</description>
+    <description locale="pl" >Teatr lub opera</description>
    </value>
    <value tag="toilets" >
     <description locale="en" >Toilets</description>
+    <description locale="cs" >Veřejné záchody</description>
+    <description locale="de" >Toiletten</description>
+    <description locale="fr" >Toilettes</description>
+    <description locale="it" >Toilets</description>
+    <description locale="pl" >Szalet</description>
    </value>
    <value tag="townhall" >
     <description locale="en" >Town hall</description>
+    <description locale="ar" >بلدية</description>
+    <description locale="cs" >Radnice</description>
+    <description locale="de" >Rathaus</description>
+    <description locale="fr" >Mairie</description>
+    <description locale="it" >Municipio</description>
+    <description locale="pl" >Ratusz</description>
    </value>
    <value tag="university" >
     <description locale="en" >University</description>
+    <description locale="ar" >جامعة</description>
+    <description locale="cs" >Univerzita, vysoká škola</description>
+    <description locale="de" >Universität</description>
+    <description locale="fr" >École supérieure/Université</description>
+    <description locale="it" >Università</description>
+    <description locale="pl" >Uniwersytet</description>
    </value>
    <value tag="waste_disposal" >
     <description locale="en" >Waste Disposal</description>
@@ -303,22 +735,46 @@
   <widget tag="religion" type="combo" >
    <link src="http://wiki.openstreetmap.org/index.php/Key:religion" />
    <description locale="en" >Religion</description>
+   <description locale="ar" >الديانة</description>
+   <description locale="de" >Religion</description>
+   <description locale="fr" >Religion</description>
+   <description locale="pl" >Religia</description>
    <value tag="buddhist" >
     <description locale="en" >Buddhist</description>
+    <description locale="ar" >بوذي</description>
+    <description locale="de" >Buddistisch</description>
+    <description locale="fr" >Boudhiste</description>
+    <description locale="pl" >Buddyzm</description>
    </value>
    <value tag="christian" >
     <description locale="en" >Christian</description>
+    <description locale="ar" >نصراني</description>
+    <description locale="de" >Christlich</description>
+    <description locale="fr" >Chrétien</description>
+    <description locale="pl" >Chrześcijaństwo</description>
    </value>
    <value tag="jewish" >
     <description locale="en" >Jewish</description>
+    <description locale="ar" >يهودي</description>
+    <description locale="de" >Jüddisch</description>
+    <description locale="fr" >Juif</description>
+    <description locale="pl" >Judaizm</description>
    </value>
    <value tag="muslim" >
     <description locale="en" >Muslim</description>
+    <description locale="ar" >مسلم</description>
+    <description locale="de" >Islamisch</description>
+    <description locale="fr" >Musulman</description>
+    <description locale="pl" >Islam</description>
    </value>
   </widget>
   <widget tag="denomination" type="combo" id="denomination_christian" >
    <link src="http://wiki.openstreetmap.org/index.php/Key:religion" />
    <description locale="en" >Denomination</description>
+   <description locale="ar" >تسمية</description>
+   <description locale="de" >Konfession</description>
+   <description locale="fr" >Dénomination</description>
+   <description locale="pl" >Wyznanie</description>
    <selector expr="[religion] is christian" />
    <value tag="anglican" />
    <value tag="baptist" />
@@ -342,24 +798,49 @@
   </widget>
   <widget tag="name" type="edit" >
    <description locale="en" >Name</description>
+   <description locale="ar" >الإسم</description>
+   <description locale="de" >Name</description>
+   <description locale="fr" >Nom</description>
+   <description locale="pl" >Nazwa</description>
    <selector expr=" not [place] is _NULL_" />
   </widget>
   <widget tag="name:fr" type="edit" >
    <description locale="en" >Name (french)</description>
+   <description locale="de" >Name (franz.)</description>
+   <description locale="pl" >Nazwa (francuska)</description>
   </widget>
   <widget tag="name:nl" type="edit" >
    <description locale="en" >Name (dutch)</description>
+   <description locale="de" >Name (niederl.)</description>
+   <description locale="pl" >Nazwa (belgijska)</description>
   </widget>
  </widgets>
  <template>
   <selector expr="[amenity] is place_of_worship" />
   <description locale="en" >Place of Worship</description>
+  <description locale="ar" >معبد</description>
+  <description locale="cs" >Bohoslužebné místo</description>
+  <description locale="de" >Anbetungsort</description>
+  <description locale="fr" >Lieu de culte</description>
+  <description locale="it" >Luogo di culto</description>
+  <description locale="pl" >Miejsce kultu</description>
   <widgetref id="name" />
   <widget tag="amenity" type="constant" >
    <description locale="en" >Amenity</description>
+   <description locale="cs" >Občanská vybavenost</description>
+   <description locale="de" >Nutzung</description>
+   <description locale="fr" >Équipement</description>
+   <description locale="it" >Attrattiva</description>
+   <description locale="pl" >Miejsce kultu</description>
    <link src="http://wiki.openstreetmap.org/index.php/Tag:amenity=place_of_worship" />
    <value tag="place_of_worship" >
     <description locale="en" >Place of Worship</description>
+    <description locale="ar" >معبد</description>
+    <description locale="cs" >Bohoslužebné místo</description>
+    <description locale="de" >Anbetungsort</description>
+    <description locale="fr" >Lieu de culte</description>
+    <description locale="it" >Luogo di culto</description>
+    <description locale="pl" >Miejsce kultu</description>
    </value>
   </widget>
   <widgetref id="religion" />
@@ -370,33 +851,64 @@
   <widgetref id="name" />
   <widget tag="amenity" type="constant" >
    <description locale="en" >Amenity</description>
+   <description locale="cs" >Občanská vybavenost</description>
+   <description locale="de" >Nutzung</description>
+   <description locale="fr" >Équipement</description>
+   <description locale="it" >Attrattiva</description>
+   <description locale="pl" >Miejsce kultu</description>
    <value tag="place_of_worship" >
     <description locale="en" >Place of Worship</description>
+    <description locale="ar" >معبد</description>
+    <description locale="cs" >Bohoslužebné místo</description>
+    <description locale="de" >Anbetungsort</description>
+    <description locale="fr" >Lieu de culte</description>
+    <description locale="it" >Luogo di culto</description>
+    <description locale="pl" >Miejsce kultu</description>
    </value>
   </widget>
   <widget tag="religion" type="constant" >
    <link src="http://wiki.openstreetmap.org/index.php/Key:religion" />
    <description locale="en" >Religion</description>
+   <description locale="ar" >الديانة</description>
+   <description locale="de" >Religion</description>
+   <description locale="fr" >Religion</description>
+   <description locale="pl" >Religia</description>
    <value tag="christian" >
     <description locale="en" >Christian</description>
+    <description locale="ar" >نصراني</description>
+    <description locale="de" >Christlich</description>
+    <description locale="fr" >Chrétien</description>
+    <description locale="pl" >Chrześcijaństwo</description>
    </value>
   </widget>
   <widget tag="denomination" type="constant" >
    <link src="http://wiki.openstreetmap.org/index.php/Key:denomination" />
    <description locale="en" >Denomination</description>
+   <description locale="ar" >تسمية</description>
+   <description locale="de" >Konfession</description>
+   <description locale="fr" >Dénomination</description>
+   <description locale="pl" >Wyznanie</description>
    <value tag="catholic" >
     <description locale="en" >Catholic</description>
+    <description locale="ar" >كثليك</description>
+    <description locale="de" >Katholisch</description>
+    <description locale="fr" >Catholique</description>
+    <description locale="pl" >Katolickie</description>
    </value>
   </widget>
  </template>
  <template>
   <selector expr=" [Default] Type is Relation" />
   <description locale="en" >Generic Relations</description>
+  <description locale="de" >Generische Relation</description>
+  <description locale="pl" >Ogólne relacje</description>
   <widgetref id="landuse" />
  </template>
  <template>
   <selector expr=" [Default] Type is Road" />
   <description locale="en" >Generic Ways</description>
+  <description locale="de" >Generische Wege</description>
+  <description locale="pl" >Ogólne drogi</description>
   <widgetref id="name" />
   <widgetref id="highway" />
   <widgetref id="oneway" />
@@ -407,6 +919,8 @@
  <template>
   <selector expr=" [Default] Type is TrackPoint" />
   <description locale="en" >Generic Nodes</description>
+  <description locale="de" >Generischer Knoten</description>
+  <description locale="pl" >Ogólne węzły</description>
   <widgetref id="name" />
   <widgetref id="amenity" />
   <widgetref id="place" />
@@ -414,8 +928,14 @@
  <template>
   <selector expr=" not [name:fr] is _NULL_ and  not [name:nl] is _NULL_" />
   <description locale="en" >Brussels Ways</description>
+  <description locale="de" >Brüsseler Wege</description>
+  <description locale="pl" >Drogi Brukselskie</description>
   <widget tag="name" type="constant" id="name_bxl" >
    <description locale="en" >Name</description>
+   <description locale="ar" >الإسم</description>
+   <description locale="de" >Name</description>
+   <description locale="fr" >Nom</description>
+   <description locale="pl" >Nazwa</description>
    <value tag="$[name:fr] - $[name:nl]" />
   </widget>
   <widgetref id="name:fr" />
