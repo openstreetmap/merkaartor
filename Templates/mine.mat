@@ -44,7 +44,7 @@
     <description locale="pl" >Dzielnica</description>
    </value>
    <value tag="locality" >
-    <description locale="en" >Localiy (named place)</description>
+    <description locale="en" >Locality (named place)</description>
    </value>
   </widget>
   <widget tag="building" type="yesno" >
@@ -847,7 +847,7 @@
   <widgetref id="denomination_christian" />
  </template>
  <template>
-  <description locale="en" >Catholic chrurch</description>
+  <description locale="en" >Catholic church</description>
   <widgetref id="name" />
   <widget tag="amenity" type="constant" >
    <description locale="en" >Amenity</description>
