@@ -44,7 +44,7 @@
     <description locale="pl" >Dzielnica</description>
    </value>
    <value tag="locality" >
-    <description locale="en" >Localiy (named place)</description>
+    <description locale="en" >Locality (named place)</description>
    </value>
   </widget>
   <widget tag="building" type="yesno">
