@@ -1,5 +1,5 @@
 LUPDATE = lupdate
-LRELEASE = lrealease
+LRELEASE = lrelease
 
 TEMPLATES = ../Templates/*.mat
 TEMPLATES_PO = templates_*.po
@@ -25,7 +25,7 @@ updatets:
 	pushd .. && ${LUPDATE} -noobsolete Merkaartor.pro && popd
 
 release:
-	pushd .. && ${LRELEASE} -noobsolete Merkaartor.pro && popd
+	pushd .. && ${LRELEASE} Merkaartor.pro && popd
 
 clean:
-	@-${rm} *.po *.pot *.qm *.tar.gz
+	@-${RM} *.po *.pot *.qm *.tar.gz

@@ -1,0 +1,25 @@
+Merkaartor stores translations in the .ts files from Qt and the .mat files of
+templates. Translations can be done using linguist and hand written XML directly
+in SVN or using Launchpad (preferred way) at
+https://translations.launchpad.net/merkaartor/trunk
+
+The script in this directory allows to convert between the two XML file types
+and the standard gettext .po files.
+
+The templates and the main translations are separated in two different sets
+(name templates and merkaartor). These two should not be mixed.
+
+Synchronisation may be like following:
+  - Update whole merkaartor svn using "svn update" in root directory
+  - Remove old stuff: make clean
+  - Download po-files from Launchpad and store them in this directory
+  - Call conversion: make
+  - Checkin modified templates (in ../Templates) and .ts files
+  - Upload changed .po and .pot files to launchpad
+
+Conflict solving:
+  - When no translations have been changed in SVN, then "all p(o)" may be
+    choosen
+  - When local changes have been done, conflicts should be solved one-by-one
+  - "all up(s)tream" should only be choosen when you synchonised data directly
+    before you started to make local translations.

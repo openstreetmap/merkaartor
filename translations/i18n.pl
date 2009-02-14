@@ -4,7 +4,7 @@ use utf8;
 use encoding "utf8";
 use Term::ReadKey;
 
-my $nocontext = 0;
+my $nocontext = 1;
 my $waswarn = 0;
 my $mail = "Merkaartor <merkaartor\@openstreetmap.org>";
 my %pokeys = (
@@ -122,11 +122,12 @@ sub loadfiles($$@)
       while(<FILE>)
       {
         ++$linenum;
-        if(/<name>(.*)<\/name>/) {$ctx = $1; }
+        if(/<name>(.*)<\/name>/) { $ctx = $1; }
         elsif(/<location filename="(.*?)" line="(.*?)"\/>/) { $loc = "$1:$2"; }
         elsif(/context>/){$ctx = undef;}
         elsif(/message( numerus="yes")?>/)
         {
+          my $n = $1;
           if($source)
           {
             $source = maketxt($source);
@@ -138,32 +139,32 @@ sub loadfiles($$@)
               {
                 copystring(\%all, $source, $i ? "$l.$i" : $l, maketxt($trans[$i]), $txt, $ctx, 0);
               }
-              if($#trans > 0)
+              if(defined($numerus))
               {
                 copystring(\%all, $source, "en.1", $source, $txt, $ctx, 0);
               }
             }
             copystring(\%all, $source, "_file", $loc, $txt, $ctx, 0) if $loc;
-            copystring(\%all, $source, "_src", "$file:$linenum", $txt, $ctx, 0);
+            copystring(\%all, $source, "_src.$l", "$file:$linenum", $txt, $ctx, 0);
           }
           @trans = undef;
-          $loc = $ctx = $issource = $istrans = $source = $numerus = $fuzzy = undef;
-          $numerus = 0 if $1;
+          $loc = $issource = $istrans = $source = $numerus = $fuzzy = undef;
+          $numerus = 0 if $n;
         }
         elsif(/<TS .* language="(.*)">/) { $l = getlang($1); ++$lang->{$l}; }
         elsif(/<\?xml/ || /<!DOCTYPE/ || /<\/TS>/ || /<defaultcodec>/){} # ignore
         # source
         elsif(/<source>(.*)<\/source>/){$source = $1;}
-        elsif(/<source>(.*)/){$source = $1; $issource = 1;}
+        elsif(/<source>(.*)/){$source = "$1\n"; $issource = 1;}
         elsif($issource && /(.*)<\/source>/){$source .= $1; $issource = undef;}
         elsif($issource){$source .= $_;}
         # translation
-        elsif($numerus && /translation(?: type="(unfinished|obsolete)")?>/) {$fuzzy=$1;}
-        elsif($numerus && /<numerusform>(.*)<\/numerusform>/){$trans[$numerus++] = $2;}
-        elsif($numerus && /<numerusform>(.*)/){$trans[$numerus] = $2; $istrans = 1;}
-        elsif($numerus && $istrans && /(.*)<\/numerusform>/){$trans[$numerus++] .= $1; $istrans = undef;}
+        elsif(defined($numerus) && /translation(?: type="(unfinished|obsolete)")?>/) {$fuzzy=$1;}
+        elsif(defined($numerus) && /<numerusform>(.*)<\/numerusform>/){$trans[$numerus++] = $1;}
+        elsif(defined($numerus) && /<numerusform>(.*)/){$trans[$numerus] = "$1\n"; $istrans = 1;}
+        elsif(defined($numerus) && $istrans && /(.*)<\/numerusform>/){$trans[$numerus++] .= $1; $istrans = undef;}
         elsif(/<translation(?: type="(unfinished|obsolete)")?>(.*)<\/translation>/){$trans[0] = $2;$fuzzy=$1;}
-        elsif(/<translation(?: type="(unfinished|obsolete)")?>(.*)/){$trans[0] = $2; $istrans = 1;$fuzzy=$1;}
+        elsif(/<translation(?: type="(unfinished|obsolete)")?>(.*)/){$trans[0] = "$2\n"; $istrans = 1;$fuzzy=$1;}
         elsif($istrans && /(.*)<\/translation>/){$trans[0] .= $1; $istrans = undef;}
         elsif($istrans){$trans[$numerus ? $numerus : 0] .= $_;}
         else
@@ -185,6 +186,7 @@ sub loadfiles($$@)
 my $alwayspo = 0;
 my $alwaysup = 0;
 my $noask = 0;
+my $conflicts;
 sub copystring($$$$$$$)
 {
   my ($data, $en, $l, $str, $txt, $context, $ispo) = @_;
@@ -193,48 +195,63 @@ sub copystring($$$$$$$)
 
   if(exists($data->{$en}{$l}) && $data->{$en}{$l} ne $str)
   {
+    return if !$str;
     if($l =~ /^_/)
     {
-      $data->{$en}{$l} .= ";$str";
+      $data->{$en}{$l} .= ";$str" if !($data->{$en}{$l} =~ /$str/);
+    }
+    elsif(!$data->{$en}{$l})
+    {
+      $data->{$en}{$l} = $str;
     }
     else
     {
+
       my $f = $data->{$en}{_file} || "";
-      $f = ($f ? "$f;".$data->{$en}{_src} : $data->{$en}{_src}) if $data->{$en}{_src};
+      $f = ($f ? "$f;".$data->{$en}{"_src.$l"} : $data->{$en}{"_src.$l"}) if $data->{$en}{"_src.$l"};
       my $isotherpo = ($f =~ /\.po\:/);
       my $pomode = ($ispo && !$isotherpo) || (!$ispo && $isotherpo);
-      if($pomode && $alwaysup)
-      { $data->{$en}{$l} = $str if $isotherpo; }
-      elsif($pomode && $alwayspo)
-      { $data->{$en}{$l} = $str if $ispo; }
-      elsif($noask)
-      { ++$waswarn; }
+
+      my $mis = "String mismatch for '$en' **$str** ($txt) != **$data->{$en}{$l}** ($f)\n";
+      my $replace = 0;
+
+      if(($conflicts{$l}{$str} || "") eq $data->{$en}{$l}) {}
+      elsif($pomode && $alwaysup) { $replace=$isotherpo; }
+      elsif($pomode && $alwayspo) { $replace=$ispo; }
+      elsif($noask) { print $mis; ++$waswarn; }
       else
       {
         ReadMode 4; # Turn off controls keys
-        print "String mismatch for '$en' $str ($txt) != $data->{$en}{$l} ($f)\n";
         my $arg = "(l)eft, (r)ight";
         $arg .= ", (p)o, (u)pstream[ts/mat], all p(o), all up(s)tream" if $pomode;
         $arg .= ", e(x)it: ";
-        print $arg;
+        print "$mis$arg";
         while((my $c = getc()))
         {
-          if($c eq "l") { $data->{$en}{$l} = $str; last; }
-          elsif($c eq "r") { last; }
-          elsif($c eq "p" && $pomode)
-          { $data->{$en}{$l} = $str if $ispo; last; }
-          elsif($c eq "u" && $pomode)
-          { $data->{$en}{$l} = $str if $isotherpo; last; }
-          elsif($c eq "o" && $pomode)
-          { $alwayspo = 1; $data->{$en}{$l} = $str if $ispo; last; }
-          elsif($c eq "s" && $pomode)
-          { $alwaysup = 1; $data->{$en}{$l} = $str if $isotherpo; last; }
-          elsif($c eq "x")
-          { $noask = 1; ++$waswarn; last; }
-          print $arg;
+          if($c eq "l") { $replace=1; }
+          elsif($c eq "r") {}
+          elsif($c eq "p" && $pomode) { $replace=$ispo; }
+          elsif($c eq "u" && $pomode) { $replace=$isotherpo; }
+          elsif($c eq "o" && $pomode) { $alwayspo = 1; $replace=$ispo; }
+          elsif($c eq "s" && $pomode) { $alwaysup = 1; $replace=$isotherpo; }
+          elsif($c eq "x") { $noask = 1; ++$waswarn; }
+          else { print "\n$arg"; next; }
+          last;
         }
         print("\n");
         ReadMode 0; # Turn on controls keys
+      }
+      if(!$noask)
+      {
+        if($replace)
+        {
+          $data->{$en}{$l} = $str;
+          $conflicts{$l}{$data->{$en}{$l}} = $str;
+        }
+        else
+        {
+          $conflicts{$l}{$str} = $data->{$en}{$l};
+        }
       }
     }
   }
@@ -244,7 +261,6 @@ sub copystring($$$$$$$)
   }
 }
 
-# TODO: Parse PO header strings
 sub checkpo($$$$$)
 {
   my ($postate, $data, $l, $txt, $keys) = @_;
@@ -266,7 +282,7 @@ sub checkpo($$$$$)
       { copystring($data, $postate->{msgid}, "$l.1", $postate->{msgstr_1},$txt,$postate->{context}, 1); }
       if($postate->{msgid_1})
       { copystring($data, $postate->{msgid}, "en.1", $postate->{msgid_1},$txt,$postate->{context}, 1); }
-      copystring($data, $postate->{msgid}, "_src", $postate->{src},$txt,$postate->{context}, 1);
+      copystring($data, $postate->{msgid}, "_src.$l", $postate->{src},$txt,$postate->{context}, 1);
     }
     elsif($postate->{msgstr} && !$postate->{msgid})
     {
@@ -291,22 +307,25 @@ sub createpos($$@)
   my ($data, $keys, @files) = @_;
   foreach my $file (@files)
   {
+    my $head;
     my $la;
     if($file =~ /[-_](.._..)\.po$/ || $file =~ /^(?:.*\/)?(.._..)\.po$/ ||
     $file =~ /[-_](..)\.po$/ || $file =~ /^(?:.*\/)?(..)\.po$/)
     {
       $la = $1;
+      $head = "# translation into language $la file $file\n";
     }
     elsif($file =~ /\.pot$/)
     {
       $la = "en";
+      $head = "# template file $file\n";
     }
     else
     {
       die "Language for file $file unknown.";
     }
     die "Could not open outfile $file\n" if !open FILE,">:utf8",$file;
-    print FILE "msgid \"\"\nmsgstr \"\"\n";
+    print FILE "${head}msgid \"\"\nmsgstr \"\"\n";
     my %k;
     foreach my $k (keys %{$keys->{$la}}) { $k{$k} = $keys->{$la}{$k}; }
     foreach my $k (keys %defkeys) { $k{$k} = $defkeys{$k}; }
@@ -316,10 +335,11 @@ sub createpos($$@)
     }
     print FILE "\n";
 
-    foreach my $en (keys %{$data})
+    foreach my $en (sort keys %{$data})
     {
       my $ctx;
-      $ctx = $1 if $en =~ s/^___(.*)___//;
+      my $ennc = $en;
+      $ctx = $1 if $ennc =~ s/^___(.*)___//;
       my $str = ($la ne "en" && exists($data->{$en}{$la})) ? $data->{$en}{$la} : "";
       if($data->{$en}{_file})
       {
@@ -334,9 +354,9 @@ sub createpos($$@)
         # print FILE "#: unknown:0\n"
       }
       print FILE "msgctxt \"$ctx\"\n" if $ctx;
-      print FILE "msgid \"$en\"\n";
+      print FILE "msgid \"$ennc\"\n";
       print FILE "msgid_plural \"$data->{$en}{\"en.1\"}\"\n" if $data->{$en}{"en.1"};
-      if($data->{$en}{"$la.1"})
+      if($la ne "en" && $data->{$en}{"$la.1"})
       {
         print FILE "msgstr[0] \"$str\"\n";
         print FILE "msgstr[1] \"$data->{$en}{\"$la.1\"}\"\n" if $data->{$en}{"$la.1"};
@@ -428,6 +448,46 @@ sub createmat($@)
   }
 }
 
+sub makenumerus($$$$)
+{
+  my ($data, $first, $last,$l) = @_;
+  my $repl = $first.makexml($data->{$l}).$last;
+  for($i = 1; exists($data->{"$l.$i"}); ++$i)
+  {
+    $repl .= "\n".$first.makexml($data->{"$l.$i"}).$last;
+  }
+  return $repl;
+}
+
+sub convert_ts_message($$$$)
+{
+  my ($content,$data,$l,$ctx) = @_;
+  $content =~ /<source>(.*)<\/source>/s;
+  my $source = ($ctx ? "___${ctx}___" : "") .maketxt($1);
+  if(exists($data->{$source}{$l}))
+  {
+    if($content =~ /numerus="yes"/)
+    {
+      $content =~ s/( +<numerusform>).*(<\/numerusform>)/makenumerus($data->{$source},$1,$2,$l)/se;
+    }
+    else
+    {
+      my $repl = makexml($data->{$source}{$l});
+      $content =~ s/(<translation).*(<\/translation>)/$1>$repl$2/;
+    }
+  }
+  return $content;
+}
+
+sub convert_ts_context($$$)
+{
+  my ($content,$data,$l) = @_;
+  my $ctx;
+  $ctx = $1 if(!$nocontext && $content =~ /<name>(.*)<\/name>/);
+  $content =~ s/(<message.*?>.*?<\/message>)/convert_ts_message($1,$data,$l,$ctx)/seg;
+  return $content;
+}
+
 sub createts($@)
 {
   my ($data, @files) = @_;
@@ -439,10 +499,12 @@ sub createts($@)
     die "Could not open $file\n" if !open FILE,"<:utf8",$file;
     my $content = <FILE>;
     close FILE;
-    foreach my $en (keys %{$data})
+    if(!($content =~ /<TS .* language="(.*)">/))
     {
-#TODO
+      die "Could not find language for $file.";
     }
+    my $l = getlang($1);
+    $content =~ s/(<context>.*?<\/context>)/convert_ts_context($1,$data,$l)/seg;
 
     die "Could not open output $file\n" if !open FILE,">:utf8",$file;
     print FILE $content;
@@ -476,5 +538,5 @@ sub main
   createpos(\%data, \%pokeys, @cpo);
 
   createmat(\%data, @mat) if @mat;
-  createts(\%data, @mat) if @ts;
+  createts(\%data, @ts) if @ts;
 }
