@@ -2,20 +2,27 @@
 
 use utf8;
 use encoding "utf8";
+use Term::ReadKey;
 
+my $nocontext = 0;
+my $waswarn = 0;
 my $mail = "Merkaartor <merkaartor\@openstreetmap.org>";
 my %pokeys = (
+);
+
+# don't copy these from files
+my %defkeys = (
+  "X-Generator" => "Merkaartor translation convert",
+  "MIME-Version" => "1.0",
+  "Content-Type" => "text/plain; charset=UTF-8",
+  "Content-Transfer-Encoding" => "8bit",
   "Project-Id-Version" => "merkaartor_templates 1.0",
   "Report-Msgid-Bugs-To" => $mail,
   "POT-Creation-Date" => getdate(),
   "PO-Revision-Date" => getdate(),
-  "Last-Translator" => $mail,
-  "Language-Team" => $mail,
-  "MIME-Version" => "1.0",
-  "Content-Type" => "text/plain; charset=UTF-8",
-  "Content-Transfer-Encoding" => "8bit",
-  "X-Launchpad-Export-Date" => getdate(),
-  "X-Generator" => "Merkaartor translation convert"
+#  "Last-Translator" => $mail,
+#  "Language-Team" => $mail,
+#  "X-Launchpad-Export-Date" => getdate(),
 );
 
 main();
@@ -58,9 +65,9 @@ sub loadfiles($$@)
           my $en = $desc{"en"};
           die "No english string found in previous block line $linenum in $file: $line" if(!$en);
           delete $desc{"en"};
-          foreach my $l (keys %desc)
+          foreach my $l (reverse sort keys %desc)
           {
-            copystring(\%all, $en, $l, $desc{$l}, "line $linenum in $file", undef);
+            copystring(\%all, $en, $l, $desc{$l}, "line $linenum in $file", undef, 0);
             ++$lang->{$l} if !($l =~ /^_/);
           }
           %desc = ();
@@ -81,14 +88,14 @@ sub loadfiles($$@)
         chomp;
         if($_ =~ /^#/ || !$_)
         {
-          checkpo(\%postate, \%all, $l, "line $linenum in $file");
+          checkpo(\%postate, \%all, $l, "line $linenum in $file", $keys);
           $postate{fuzzy} = ($_ =~ /fuzzy/);
         }
         elsif($_ =~ /^"(.*)"$/) {$postate{last} .= $1;}
         elsif($_ =~ /^(msg.+) "(.*)"$/)
         {
           my ($n, $d) = ($1, $2);
-          checkpo(\%postate, \%all, $l, "line $linenum in $file");
+          checkpo(\%postate, \%all, $l, "line $linenum in $file", $keys);
           $postate{last} = $d;
           $postate{type} = $n;
           $postate{src} = $fn if($n eq "msgid");
@@ -98,17 +105,18 @@ sub loadfiles($$@)
           die "Strange line $linenum in $file: $_.";
         }
       }
-      checkpo(\%postate, \%all, $l, "line $linenum in $file");
+      checkpo(\%postate, \%all, $l, "line $linenum in $file", $keys);
     }
     elsif($file =~ /\.ts$/)
     {
       my $linenum = 0;
+      my $l;
       my $ctx;
       my $loc;
       my $issource;
       my $istrans;
       my $source;
-      my $trans;
+      my @trans;
       my $fuzzy;
       my $numerus;
       while(<FILE>)
@@ -121,22 +129,43 @@ sub loadfiles($$@)
         {
           if($source)
           {
+            $source = maketxt($source);
+            if(!$fuzzy)
+            {
+              my $txt = "line $linenum in $file";
+              $txt .= ", $loc" if($loc);
+              for($i = 0; $i <= $#trans; ++$i)
+              {
+                copystring(\%all, $source, $i ? "$l.$i" : $l, maketxt($trans[$i]), $txt, $ctx, 0);
+              }
+              if($#trans > 0)
+              {
+                copystring(\%all, $source, "en.1", $source, $txt, $ctx, 0);
+              }
+            }
+            copystring(\%all, $source, "_file", $loc, $txt, $ctx, 0) if $loc;
+            copystring(\%all, $source, "_src", "$file:$linenum", $txt, $ctx, 0);
           }
-          $loc = $ctx = $issource = $istrans = $source = $trans = $fuzzy = undef;
-          $numerus = $1;
+          @trans = undef;
+          $loc = $ctx = $issource = $istrans = $source = $numerus = $fuzzy = undef;
+          $numerus = 0 if $1;
         }
-        elsif(/<\?xml/ || /<!DOCTYPE/ || /<\/TS>/){} # ignore
+        elsif(/<TS .* language="(.*)">/) { $l = getlang($1); ++$lang->{$l}; }
+        elsif(/<\?xml/ || /<!DOCTYPE/ || /<\/TS>/ || /<defaultcodec>/){} # ignore
         # source
         elsif(/<source>(.*)<\/source>/){$source = $1;}
         elsif(/<source>(.*)/){$source = $1; $issource = 1;}
         elsif($issource && /(.*)<\/source>/){$source .= $1; $issource = undef;}
         elsif($issource){$source .= $_;}
         # translation
-        elsif(/<translation( type="unfinished")?>(.*)<\/translation>/){$trans = $2;$fuzzy=$1;}
-        elsif(/<translation( type="unfinished")?>(.*)/){$trans = $2; $istrans = 1;$fuzzy=$1;}
-        elsif($istrans && /(.*)<\/translation>/){$trans .= $1; $istrans = undef;}
-        elsif($istrans){$trans .= $_;}
-# TODO handle numerus
+        elsif($numerus && /translation(?: type="(unfinished|obsolete)")?>/) {$fuzzy=$1;}
+        elsif($numerus && /<numerusform>(.*)<\/numerusform>/){$trans[$numerus++] = $2;}
+        elsif($numerus && /<numerusform>(.*)/){$trans[$numerus] = $2; $istrans = 1;}
+        elsif($numerus && $istrans && /(.*)<\/numerusform>/){$trans[$numerus++] .= $1; $istrans = undef;}
+        elsif(/<translation(?: type="(unfinished|obsolete)")?>(.*)<\/translation>/){$trans[0] = $2;$fuzzy=$1;}
+        elsif(/<translation(?: type="(unfinished|obsolete)")?>(.*)/){$trans[0] = $2; $istrans = 1;$fuzzy=$1;}
+        elsif($istrans && /(.*)<\/translation>/){$trans[0] .= $1; $istrans = undef;}
+        elsif($istrans){$trans[$numerus ? $numerus : 0] .= $_;}
         else
         {
           die "Strange line $linenum in $file: $_.";
@@ -153,11 +182,14 @@ sub loadfiles($$@)
   return %all;
 }
 
-sub copystring($$$$$$)
+my $alwayspo = 0;
+my $alwaysup = 0;
+my $noask = 0;
+sub copystring($$$$$$$)
 {
-  my ($data, $en, $l, $str, $txt, $context) = @_;
+  my ($data, $en, $l, $str, $txt, $context, $ispo) = @_;
 
-  $en = "___${context}___$en" if $context;
+  $en = "___${context}___$en" if $context && !$nocontext;
 
   if(exists($data->{$en}{$l}) && $data->{$en}{$l} ne $str)
   {
@@ -167,8 +199,43 @@ sub copystring($$$$$$)
     }
     else
     {
-      my $f = $data->{$en}{_file} || $data->{$en}{_src} || "";
-      warn "String mismatch for $en $txt: $data->{$en}{$l} != $str ($f)";
+      my $f = $data->{$en}{_file} || "";
+      $f = ($f ? "$f;".$data->{$en}{_src} : $data->{$en}{_src}) if $data->{$en}{_src};
+      my $isotherpo = ($f =~ /\.po\:/);
+      my $pomode = ($ispo && !$isotherpo) || (!$ispo && $isotherpo);
+      if($pomode && $alwaysup)
+      { $data->{$en}{$l} = $str if $isotherpo; }
+      elsif($pomode && $alwayspo)
+      { $data->{$en}{$l} = $str if $ispo; }
+      elsif($noask)
+      { ++$waswarn; }
+      else
+      {
+        ReadMode 4; # Turn off controls keys
+        print "String mismatch for '$en' $str ($txt) != $data->{$en}{$l} ($f)\n";
+        my $arg = "(l)eft, (r)ight";
+        $arg .= ", (p)o, (u)pstream[ts/mat], all p(o), all up(s)tream" if $pomode;
+        $arg .= ", e(x)it: ";
+        print $arg;
+        while((my $c = getc()))
+        {
+          if($c eq "l") { $data->{$en}{$l} = $str; last; }
+          elsif($c eq "r") { last; }
+          elsif($c eq "p" && $pomode)
+          { $data->{$en}{$l} = $str if $ispo; last; }
+          elsif($c eq "u" && $pomode)
+          { $data->{$en}{$l} = $str if $isotherpo; last; }
+          elsif($c eq "o" && $pomode)
+          { $alwayspo = 1; $data->{$en}{$l} = $str if $ispo; last; }
+          elsif($c eq "s" && $pomode)
+          { $alwaysup = 1; $data->{$en}{$l} = $str if $isotherpo; last; }
+          elsif($c eq "x")
+          { $noask = 1; ++$waswarn; last; }
+          print $arg;
+        }
+        print("\n");
+        ReadMode 0; # Turn on controls keys
+      }
     }
   }
   else
@@ -178,9 +245,9 @@ sub copystring($$$$$$)
 }
 
 # TODO: Parse PO header strings
-sub checkpo($$$$)
+sub checkpo($$$$$)
 {
-  my ($postate, $data, $l,$txt) = @_;
+  my ($postate, $data, $l, $txt, $keys) = @_;
   if($postate->{type} eq "msgid") {$postate->{msgid} = $postate->{last};$postate->{msgid_pl}="";}
   elsif($postate->{type} eq "msgid_plural") {$postate->{msgid_1} = $postate->{last};}
   elsif($postate->{type} eq "msgstr[0]") {$postate->{msgstr} = $postate->{last};}
@@ -194,12 +261,21 @@ sub checkpo($$$$)
     elsif($postate->{type}) { die "Strange type $postate->{type} found\n" }
     if((!$postate->{fuzzy}) && $postate->{msgstr} && $postate->{msgid})
     {
-      copystring($data, $postate->{msgid}, "_src", $postate->{src},$txt,$postate->{context});
-      copystring($data, $postate->{msgid}, $l, $postate->{msgstr},$txt,$postate->{context});
+      copystring($data, $postate->{msgid}, $l, $postate->{msgstr},$txt,$postate->{context}, 1);
       if($postate->{msgstr_1})
-      { copystring($data, $postate->{msgid}, "$l.1", $postate->{msgstr_1},$txt,$postate->{context}); }
+      { copystring($data, $postate->{msgid}, "$l.1", $postate->{msgstr_1},$txt,$postate->{context}, 1); }
       if($postate->{msgid_1})
-      { copystring($data, $postate->{msgid}, "en.1", $postate->{msgid_1},$txt,$postate->{context}); }
+      { copystring($data, $postate->{msgid}, "en.1", $postate->{msgid_1},$txt,$postate->{context}, 1); }
+      copystring($data, $postate->{msgid}, "_src", $postate->{src},$txt,$postate->{context}, 1);
+    }
+    elsif($postate->{msgstr} && !$postate->{msgid})
+    {
+      my %k = ($postate->{msgstr} =~ /(.+?): +(.+?)\\n/g);
+      # take the first one!
+      for $a (sort keys %k)
+      {
+        $keys->{$l}{$a} = $k{$a} if !$keys->{$l}{$a};
+      }
     }
     delete $postate->{msgid};
     delete $postate->{msgstr};
@@ -231,9 +307,12 @@ sub createpos($$@)
     }
     die "Could not open outfile $file\n" if !open FILE,">:utf8",$file;
     print FILE "msgid \"\"\nmsgstr \"\"\n";
-    foreach my $k (sort keys %{$keys})
+    my %k;
+    foreach my $k (keys %{$keys->{$la}}) { $k{$k} = $keys->{$la}{$k}; }
+    foreach my $k (keys %defkeys) { $k{$k} = $defkeys{$k}; }
+    foreach my $k (sort keys %k)
     {
-      print FILE "\"$keys->{$k}\\n\"\n";
+      print FILE "\"$k: $k{$k}\\n\"\n";
     }
     print FILE "\n";
 
@@ -281,6 +360,8 @@ sub maketxt($)
   $str =~ s/&lt;/</g;
   $str =~ s/"/\\"/g;
   $str =~ s/&quot;/\\"/g;
+  $str =~ s/&apos;/'/g;
+  $str =~ s/&amp;/&/g;
   $str =~ s/\n/\\n/g;
   return $str;
 }
@@ -288,11 +369,21 @@ sub maketxt($)
 sub makexml($)
 {
   my ($str) = @_;
+  $str =~ s/&/&amp;/g;
   $str =~ s/</&lt;/g;
   $str =~ s/>/&gt;/g;
   $str =~ s/\\"/&quot;/g;
+  $str =~ s/'/&apos;/g;
   $str =~ s/\\n/\n/g;
   return $str;
+}
+
+sub getlang($)
+{
+  my ($l) = @_;
+  if($l eq "ru_RU") {$l = "ru";}
+  elsif($l eq "pl_PL") {$l = "pl";}
+  return $l;
 }
 
 sub replacemat($$$$)
@@ -365,20 +456,23 @@ sub main
   my @mat;
   my @po;
   my @ts;
+  my $basename = shift @ARGV;
   foreach my $f (@ARGV)
   {
-    if($f =~ /\.mat$/) { push(@mat, $f); }
+    if($f =~ /\*/) { printf "Skipping $f\n"; }
+    elsif($f =~ /\.mat$/) { push(@mat, $f); }
     elsif($f =~ /\.po$/) { push(@po, $f); }
     elsif($f =~ /\.ts$/) { push(@ts, $f); }
+    else { die "unknown file extsion."; }
   }
   my %data = loadfiles(\%lang,\%pokeys, @mat,@ts,@po);
   my @cpo;
-  my $basename = "templates";
   foreach my $la (sort keys %lang)
   {
     push(@cpo, "${basename}_$la.po");
   }
   push(@cpo, "$basename.pot");
+  die "There have been warning. No output.\n" if $waswarn;
   createpos(\%data, \%pokeys, @cpo);
 
   createmat(\%data, @mat) if @mat;
