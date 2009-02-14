@@ -211,7 +211,8 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 		void delayedInit();
 		void setAreaOpacity(QAction*);
 		void updateBookmarksMenu();
-		void mapView_interactionChanged(Interaction* anInteraction);
+        void updateWindowMenu(bool b=false);
+        void mapView_interactionChanged(Interaction* anInteraction);
 
 	private:
 		void createProgressDialog();

@@ -9,10 +9,10 @@
 class MDockAncestor : public QDockWidget
 {
 	public:
-		MDockAncestor(QWidget *parent = 0) : QDockWidget(parent) {};
-		void setWidget ( QWidget * widget ) { QDockWidget::setWidget(widget); };
+        MDockAncestor(QWidget *parent = 0) : QDockWidget(parent) {}
+        void setWidget ( QWidget * widget ) { QDockWidget::setWidget(widget); }
 		QWidget* getWidget();
-		void setAllowedAreas ( Qt::DockWidgetAreas areas )  { QDockWidget::setAllowedAreas(areas); };
+        void setAllowedAreas ( Qt::DockWidgetAreas areas )  { QDockWidget::setAllowedAreas(areas); }
 
 	protected:
 		QWidget* mainWidget;

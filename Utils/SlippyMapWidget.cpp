@@ -131,7 +131,7 @@ QRect SlippyMapWidget::viewArea() const
 
 void SlippyMapWidget::setViewportArea(QRectF theRect)
 {
-	double zoom = 360.0 / intToAng(theRect.width());
+    double zoom = 360.0 / intToAng(int(theRect.width()));
 	zoom = log10(zoom)/log10(2.0);
 	if (zoom < MINZOOMLEVEL)
 		zoom = MINZOOMLEVEL;
@@ -139,8 +139,8 @@ void SlippyMapWidget::setViewportArea(QRectF theRect)
 		zoom = MAXZOOMLEVEL;
 	p->VpZoom = int(zoom);
 
-	p->VpLon = long2tile(intToAng(theRect.topRight().x()), p->VpZoom);
-	p->VpLat = lat2tile(intToAng(theRect.topRight().y()), p->VpZoom);
+    p->VpLon = long2tile(intToAng(int(theRect.topRight().x())), p->VpZoom);
+    p->VpLat = lat2tile(intToAng(int(theRect.topRight().y())), p->VpZoom);
 }
 
 void SlippyMapWidget::paintEvent(QPaintEvent*)

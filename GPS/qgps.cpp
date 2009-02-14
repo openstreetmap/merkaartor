@@ -191,7 +191,7 @@ void QGPS::updateGpsStatus()
 	}
 	StrengthView->setSatellites(List);
 	satTracker->setSatellites(List);
-	satTracker->setHeading(gpsDevice->heading());
+    satTracker->setHeading((int)gpsDevice->heading());
 }
 
 void QGPS::showEvent ( QShowEvent * anEvent )

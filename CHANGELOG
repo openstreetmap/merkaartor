@@ -1,4 +1,6 @@
 v0.13
+	* FIX : Tweaked windows menu to be "standard"
+	* ADD : Splash screen
 	* ADD : Styles dock + list of styles in "Tools-Styles" for quick style switching. As a consequence, a directory must be defined in the preferences where all custom styles will be stored.
 	* ADD : Add a button to the Slippy map allowing to go to the current viewport.
 	* ADD : Outline coastlines

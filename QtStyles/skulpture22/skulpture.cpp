@@ -6626,7 +6626,7 @@ static QRect progressBarContentsRect(const QStyleOptionProgressBarV2 *option, bo
                 qreal progress = qreal(option->progress - option->minimum) / (option->maximum - option->minimum);
                 if (option->version >= 2 && option->orientation == Qt::Vertical) {
                     if (contentsCentered) {
-                        int adjustment = (contentsRect.height() / 2) * (1.0 - progress);
+                        int adjustment = int((contentsRect.height() / 2) * (1.0 - progress));
                         contentsRect.adjust(0, adjustment, 0, -adjustment);
                     } else {
                         int contentsHeight = qMax(1, int(contentsRect.height() * progress + 0.5));
@@ -6638,7 +6638,7 @@ static QRect progressBarContentsRect(const QStyleOptionProgressBarV2 *option, bo
                     }
                 } else {
                     if (contentsCentered) {
-                        int adjustment = (contentsRect.width() / 2) * (1.0 - progress);
+                        int adjustment = int((contentsRect.width() / 2) * (1.0 - progress));
                         contentsRect.adjust(adjustment, 0, -adjustment, 0);
                     } else {
                         int contentsWidth = qMax(1, int(contentsRect.width() * progress + 0.5));

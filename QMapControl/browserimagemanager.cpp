@@ -71,10 +71,10 @@ void BrowserWebPage::javaScriptAlert ( QWebFrame * frame, const QString & msg )
 		Q_ASSERT(tokens.size() == 5);
 
 		int ox, oy, x1, y1;
-		ox = tokens[1].toDouble();
-		oy = tokens[2].toDouble();
-		x1 = tokens[3].toDouble();
-		y1 = tokens[4].toDouble();
+        ox = tokens[1].toInt();
+        oy = tokens[2].toInt();
+        x1 = tokens[3].toInt();
+        y1 = tokens[4].toInt();
 
 		qDebug() << ox << ", " << oy << ", " << x1 << "," << y1;
 

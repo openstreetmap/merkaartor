@@ -375,4 +375,7 @@
     <qresource prefix="/Utils">
     	<file alias="Merkaartor_About.png">Mercator_100x100.png</file>
     </qresource>
+    <qresource prefix="/Splash">
+    	<file alias="Mercator_splash.png">Mercator_splash.png</file>
+    </qresource>
 </RCC>

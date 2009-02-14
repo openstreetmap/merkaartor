@@ -172,7 +172,8 @@ qint64 MapFeature::idToLong() const
 		Q_ASSERT(ok);
 		return l;
 	} else {
-		return (((qint64)this) * -1);
+        qint32 t = (qint32)this;
+        return (t * -1);
 	}
 }
 

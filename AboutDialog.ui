@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>301</width>
+    <width>336</width>
     <height>368</height>
    </rect>
   </property>
@@ -93,7 +93,7 @@ p, li { white-space: pre-wrap; }
    <item>
     <widget class="QLabel" name="label" >
      <property name="text" >
-      <string>Copyright Bart Vanhauwaert and others, 2006, 2007, 2008</string>
+      <string>Copyright Bart Vanhauwaert, Chris Browet and others, 2006-2009</string>
      </property>
     </widget>
    </item>

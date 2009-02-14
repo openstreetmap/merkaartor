@@ -69,7 +69,7 @@ QPoint Projection::projProject(const Coord & Map) const
 
 	projUV out = pj_fwd(in, theProj);
 
-	return QPoint(out.u, out.v);
+    return QPoint((int)out.u, int(out.v));
 }
 
 Coord Projection::projInverse(const QPointF & pProj) const
@@ -257,8 +257,8 @@ void Projection::setViewport(const CoordBox & TargetMap,
 	}
 
 	Viewport = CoordBox(
-			Coord(Center.lat() - hv/2, Center.lon() - wv/2),
-			Coord(Center.lat() + hv/2, Center.lon() + wv/2)
+            Coord(int(Center.lat() - hv/2), int(Center.lon() - wv/2)),
+            Coord(int(Center.lat() + hv/2), int(Center.lon() + wv/2))
 		);
 
 	bl = projProject(Viewport.bottomLeft());

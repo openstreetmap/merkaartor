@@ -142,24 +142,33 @@ MainWindow::MainWindow(void)
 	connect (theView, SIGNAL(interactionChanged(Interaction*)), this, SLOT(mapView_interactionChanged(Interaction*)));
 
 	theLayers = new LayerDock(this);
+    connect(theLayers, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
 
 	theDocument = new MapDocument(theLayers);
 	theView->setDocument(theDocument);
 	theDocument->history().setActions(editUndoAction, editRedoAction, fileUploadAction);
 
-
 	theProperties = new PropertiesDock(this);
+    connect(theProperties, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
 	on_editPropertiesAction_triggered();
 
 	theInfo = new InfoDock(this);
-	theDirty = new DirtyDock(this);
+    connect(theInfo, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
+
+    theDirty = new DirtyDock(this);
+    connect(theDirty, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
+
     p->theStyle = new StyleDock(this);
+    connect(p->theStyle, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
+
     theGPS = new QGPS(this);
+    connect(theGPS, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
 
 #ifdef GEOIMAGE
 	theGeoImage = new GeoImageDock(this);
 	theGeoImage->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 	addDockWidget(Qt::RightDockWidgetArea, theGeoImage);
+    connect(theGeoImage, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
 #endif
 
 	connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));
@@ -300,15 +309,7 @@ MainWindow::MainWindow(void)
 
 void MainWindow::delayedInit()
 {
-	windowPropertiesAction->setChecked(theProperties->isVisible());
-	windowLayersAction->setChecked(theLayers->isVisible());
-	windowInfoAction->setChecked(theInfo->isVisible());
-	windowDirtyAction->setChecked(theDirty->isVisible());
-	windowGPSAction->setChecked(theGPS->isVisible());
-#ifdef GEOIMAGE
-	windowGeoimageAction->setChecked(theGeoImage->isVisible());
-#endif
-	windowStylesAction->setChecked(p->theStyle->isVisible());
+    updateWindowMenu();
 }
 
 
@@ -1880,7 +1881,7 @@ void MainWindow::updateStyleMenu()
 	QActionGroup* actgrp = new QActionGroup(this);
 	QDir intStyles(BUILTIN_STYLES_DIR);
     for (int i=0; i < intStyles.entryList().size(); ++i) {
-		QAction* a = new QAction(intStyles.entryList().at(i) + " (int)", menuStyles);
+		QAction* a = new QAction(QString(tr("%1 (int)")).arg(intStyles.entryList().at(i)), menuStyles);
 		actgrp->addAction(a);
 		a->setCheckable(true);
 		a->setData(QVariant(intStyles.entryInfoList().at(i).absoluteFilePath()));
@@ -1902,6 +1903,19 @@ void MainWindow::updateStyleMenu()
 			p->theStyle->addItem(a);
        }
     }
+}
+
+void MainWindow::updateWindowMenu(bool)
+{
+    windowPropertiesAction->setChecked(theProperties->isVisible());
+    windowLayersAction->setChecked(theLayers->isVisible());
+    windowInfoAction->setChecked(theInfo->isVisible());
+    windowDirtyAction->setChecked(theDirty->isVisible());
+    windowGPSAction->setChecked(theGPS->isVisible());
+#ifdef GEOIMAGE
+    windowGeoimageAction->setChecked(theGeoImage->isVisible());
+#endif
+    windowStylesAction->setChecked(p->theStyle->isVisible());
 }
 
 void MainWindow::on_bookmarkAddAction_triggered()
