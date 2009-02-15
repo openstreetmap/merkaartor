@@ -88,24 +88,25 @@ sub loadfiles($$@)
         chomp;
         if($_ =~ /^#/ || !$_)
         {
-          checkpo(\%postate, \%all, $l, "line $linenum in $file", $keys);
-          $postate{fuzzy} = ($_ =~ /fuzzy/);
+          checkpo(\%postate, \%all, $l, "line $linenum in $file", $keys, 1);
+          $postate{fuzzy} = 1 if ($_ =~ /fuzzy/);
         }
         elsif($_ =~ /^"(.*)"$/) {$postate{last} .= $1;}
         elsif($_ =~ /^(msg.+) "(.*)"$/)
         {
           my ($n, $d) = ($1, $2);
-          checkpo(\%postate, \%all, $l, "line $linenum in $file", $keys);
+          my $new = $n eq "msgid";
+          checkpo(\%postate, \%all, $l, "line $linenum in $file", $keys, $new);
           $postate{last} = $d;
           $postate{type} = $n;
-          $postate{src} = $fn if($n eq "msgid");
+          $postate{src} = $fn if $new;
         }
         else
         {
           die "Strange line $linenum in $file: $_.";
         }
       }
-      checkpo(\%postate, \%all, $l, "line $linenum in $file", $keys);
+      checkpo(\%postate, \%all, $l, "line $linenum in $file", $keys, 1);
     }
     elsif($file =~ /\.ts$/)
     {
@@ -262,25 +263,24 @@ sub copystring($$$$$$$)
   }
 }
 
-sub checkpo($$$$$)
+sub checkpo($$$$$$)
 {
-  my ($postate, $data, $l, $txt, $keys) = @_;
-  if($postate->{type} eq "msgid") {$postate->{msgid} = $postate->{last};$postate->{msgid_pl}="";}
+  my ($postate, $data, $l, $txt, $keys, $new) = @_;
+
+  if($postate->{type} eq "msgid") {$postate->{msgid} = $postate->{last};}
   elsif($postate->{type} eq "msgid_plural") {$postate->{msgid_1} = $postate->{last};}
-  elsif($postate->{type} eq "msgstr[0]") {$postate->{msgstr} = $postate->{last};}
-  elsif($postate->{type} eq "msgstr[1]") {$postate->{msgstr_1} = $postate->{last};}
-  elsif($postate->{type} eq "msgstr[2]") {$postate->{msgstr_2} = $postate->{last};}
-  elsif($postate->{type} eq "msgstr[3]") {$postate->{msgstr_3} = $postate->{last};}
+  elsif($postate->{type} =~ /^msgstr(\[0\])?$/) {$postate->{msgstr} = $postate->{last};}
+  elsif($postate->{type} =~ /^msgstr\[(.+)\]$/) {$postate->{"msgstr_$1"} = $postate->{last};}
   elsif($postate->{type} eq "msgctxt") {$postate->{context} = $postate->{last};}
-  else
+  elsif($postate->{type}) { die "Strange type $postate->{type} found\n" }
+
+  if($new)
   {
-    if($postate->{type} eq "msgstr") {$postate->{msgstr} = $postate->{last};}
-    elsif($postate->{type}) { die "Strange type $postate->{type} found\n" }
     if((!$postate->{fuzzy}) && $postate->{msgstr} && $postate->{msgid})
     {
       copystring($data, $postate->{msgid}, $l, $postate->{msgstr},$txt,$postate->{context}, 1);
-      if($postate->{msgstr_1})
-      { copystring($data, $postate->{msgid}, "$l.1", $postate->{msgstr_1},$txt,$postate->{context}, 1); }
+      for($i = 1; exists($postate->{"msgstr_$i"}); ++$i)
+      { copystring($data, $postate->{msgid}, "$l.$i", $postate->{"msgstr_$i"},$txt,$postate->{context}, 1); }
       if($postate->{msgid_1})
       { copystring($data, $postate->{msgid}, "en.1", $postate->{msgid_1},$txt,$postate->{context}, 1); }
       copystring($data, $postate->{msgid}, "_src.$l", $postate->{src},$txt,$postate->{context}, 1);
@@ -294,12 +294,11 @@ sub checkpo($$$$$)
         $keys->{$l}{$a} = $k{$a} if !$keys->{$l}{$a};
       }
     }
-    delete $postate->{msgid};
-    delete $postate->{msgstr};
-    delete $postate->{msgid_1};
-    delete $postate->{msgstr_1};
-    delete $postate->{context};
-    $postate->{type} = "";
+    foreach my $k (keys %{$postate})
+    {
+      delete $postate->{$k};
+    }
+    $postate->{type} = $postate->{last} = "";
   }
 }
 
@@ -357,12 +356,11 @@ sub createpos($$@)
       print FILE "msgctxt \"$ctx\"\n" if $ctx;
       print FILE "msgid \"$ennc\"\n";
       print FILE "msgid_plural \"$data->{$en}{\"en.1\"}\"\n" if $data->{$en}{"en.1"};
-      if($la ne "en" && $data->{$en}{"$la.1"})
+      if($la ne "en" && (exists($data->{$en}{"$la.1"}) || $data->{$en}{"en.1"}))
       {
         print FILE "msgstr[0] \"$str\"\n";
-        print FILE "msgstr[1] \"$data->{$en}{\"$la.1\"}\"\n" if $data->{$en}{"$la.1"};
-        print FILE "msgstr[2] \"$data->{$en}{\"$la.2\"}\"\n" if $data->{$en}{"$la.2"};
-        print FILE "msgstr[3] \"$data->{$en}{\"$la.3\"}\"\n" if $data->{$en}{"$la.3"};
+        for($i = 1; exists($data->{$en}{"$la.$i"}); ++$i)
+        { print FILE "msgstr[$i] \"$data->{$en}{\"$la.$i\"}\"\n"; }
       }
       else
       {
