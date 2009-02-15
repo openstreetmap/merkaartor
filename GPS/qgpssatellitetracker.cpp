@@ -92,7 +92,7 @@ void QGPSSatelliteTracker::paintEvent(QPaintEvent *)
 	float fy = sin(Alfa)*rad*3/4;
     painter.drawLine(0,0,int(fx),int(fy));
     painter.drawLine(int(fx),int(fy),
-        int(fx+cos(int(Alfa+3.1415*5/6)*8)),int(fy+sin(Alfa+3.1415*5/6)*8));
+        int(fx+cos(Alfa+3.1415*5/6)*8),int(fy+sin(Alfa+3.1415*5/6)*8));
     painter.drawLine(int(fx),int(fy),
         int(fx+cos(Alfa-3.1415*5/6)*8),int(fy+sin(Alfa-3.1415*5/6)*8));
     }

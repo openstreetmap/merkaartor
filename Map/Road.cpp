@@ -962,12 +962,12 @@ Road * Road::GetSingleParentRoad(MapFeature * mapFeature)
 	for (i=0; i<parents; i++)
 	{
 		MapFeature * parent = mapFeature->getParent(i);
-		Road * road = dynamic_cast<Road*>(parent);
+		Road * road = CAST_WAY(parent);
 
 		if (road == NULL)
 			continue;
 
-		if (parentRoad)
+		if (parentRoad && road != parentRoad)
 			return NULL;
 
 		if (road->layer()->isEnabled())
@@ -996,10 +996,10 @@ Road * Road::GetSingleParentRoadInner(MapFeature * mapFeature)
 		if (road == NULL)
 			continue;
 
-		if (road->isExtrimity(trackPoint))
+		if (road->isExtrimity(trackPoint) && !road->isClosed())
 			continue;
 		
-		if (parentRoad)
+		if (parentRoad && road != parentRoad)
 			return NULL;
 
 		if (road->layer()->isEnabled())

@@ -44,7 +44,7 @@ bool canJoinRoads(PropertiesDock* theDock)
 	std::vector<Road*> Input;
 	for (unsigned int i=0; i<theDock->size(); ++i)
 		if (Road* R = dynamic_cast<Road*>(theDock->selection(i)))
-			if (!(R->area() > 0.0))
+			if (!(R->isClosed()))
 				Input.push_back(R);
 	for (unsigned int i=0; i<Input.size(); ++i)
 		for (unsigned int j=i+1; j<Input.size(); ++j)
@@ -178,7 +178,43 @@ void joinRoads(MapDocument* theDocument, CommandList* theList, PropertiesDock* t
 
 static void splitRoad(MapDocument* theDocument, CommandList* theList, Road* In, const std::vector<TrackPoint*>& Points, std::vector<Road*>& Result)
 {
-	bool WasClosed = (In->area() > 0.0);
+	unsigned int pos;
+	if (In->isClosed()) {  // Special case: If area, rotate the area so that the start node is the first point of splitting
+
+		QList<TrackPoint*> Target;
+		for (unsigned int i=0; i < Points.size(); i++)
+			if ((pos = In->find(Points[i])) != In->size()) {
+				for (unsigned int j=pos+1; j<In->size(); ++j)
+					Target.push_back(In->getNode(j));
+				for (unsigned int j=1; j<= pos; ++j)
+					Target.push_back(In->getNode(j));
+				break;
+			}
+		if (pos == In->size())
+			return;
+
+		if (Points.size() == 1) // Special case: For a 1 point area splitting, de-close the road, i.e. duplicate the selected node 
+		{
+			TrackPoint* N = new TrackPoint(*(In->getNode(pos)));
+			theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(In->layer()),N,true));
+
+			Target.prepend(N);
+		} else // otherwise, just close the modified area
+			Target.prepend(In->getNode(pos));
+
+		// Now, reconstruct the road/area
+		while (In->size())
+			theList->add(new RoadRemoveTrackPointCommand(In,(unsigned int)0,theDocument->getDirtyOrOriginLayer(In->layer())));
+
+		for (int i=0; i<Target.size(); ++i)
+			theList->add(new RoadAddTrackPointCommand(In,Target[i],theDocument->getDirtyOrOriginLayer(In->layer())));
+
+		if (Points.size() == 1) {  // For 1-point, we are done
+			Result.push_back(In);
+			return;
+		}
+	}
+
 	Road* FirstPart = In;
 	Result.push_back(FirstPart);
 	for (unsigned int i=1; (i+1)<FirstPart->size(); ++i)
@@ -187,49 +223,20 @@ static void splitRoad(MapDocument* theDocument, CommandList* theList, Road* In, 
 		{
 			Road* NextPart = new Road;
 			copyTags(NextPart,FirstPart);
-			NextPart->add(FirstPart->getNode(i));
+			theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(In->layer()),NextPart,true));
+			theList->add(new RoadAddTrackPointCommand(NextPart, FirstPart->getNode(i), theDocument->getDirtyOrOriginLayer(In->layer())));
+            for (unsigned int j=0; j < In->sizeParents(); j++) {
+				Relation* L = CAST_RELATION(In->getParent(j));
+				theList->add(new RelationAddFeatureCommand(L, L->getRole(L->find(In)), NextPart, theDocument->getDirtyOrOriginLayer(In->layer())));
+            }
 			while ( (i+1) < FirstPart->size() )
 			{
-				NextPart->add(FirstPart->getNode(i+1));
+				theList->add(new RoadAddTrackPointCommand(NextPart, FirstPart->getNode(i+1), theDocument->getDirtyOrOriginLayer(In->layer())));
 				theList->add(new RoadRemoveTrackPointCommand(FirstPart,i+1,theDocument->getDirtyOrOriginLayer(In->layer())));
 			}
-			if (In != FirstPart)
-			{
-				theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(In->layer()),FirstPart,true));
-				Result.push_back(FirstPart);
-			}
+			Result.push_back(NextPart);
 			FirstPart = NextPart;
 			i=0;
-		}
-	}
-
-	if (FirstPart != In)
-	{
-		if (WasClosed && (Points.size() == 1))
-		{
-			std::vector<TrackPoint*> Target;
-
-			for (unsigned int i=0; i<FirstPart->size(); ++i)
-				Target.push_back(FirstPart->getNode(i));
-
-			for (unsigned int i=1; i<In->size(); ++i)
-				Target.push_back(In->getNode(i));
-
-			while (FirstPart->size())
-				FirstPart->remove((unsigned int)0);
-
-			while (In->size())
-				theList->add(new RoadRemoveTrackPointCommand(In,(unsigned int)0,theDocument->getDirtyOrOriginLayer(In->layer())));
-			
-			delete FirstPart;
-
-			for (unsigned int i=0; i<Target.size(); ++i)
-				theList->add(new RoadAddTrackPointCommand(In,Target[i],theDocument->getDirtyOrOriginLayer(In->layer())));
-		}
-		else
-		{
-			theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(In->layer()),FirstPart,true));
-			Result.push_back(FirstPart);
 		}
 	}
 }

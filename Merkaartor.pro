@@ -62,9 +62,9 @@ DESTDIR = $$OUTPUT_DIR/bin
 
 INCLUDEPATH += . Render qextserialport GPS NameFinder
 DEPENDPATH += . Render qextserialport GPS NameFinder
-MOC_DIR = tmp
-UI_DIR = tmp
-RCC_DIR = tmp
+UI_DIR += tmp/$$(QMAKESPEC)
+MOC_DIR += tmp/$$(QMAKESPEC)
+RCC_DIR += tmp/$$(QMAKESPEC)
 
 TRANSLATIONS += \
 	translations/merkaartor_ar.ts \

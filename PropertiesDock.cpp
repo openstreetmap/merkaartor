@@ -154,7 +154,7 @@ void PropertiesDock::checkMenuStatus()
 	}
 	for (unsigned int i=0; i<Selection.size(); ++i)
 	{
-		if (dynamic_cast<TrackPoint*>(Selection[i]))
+		if (CAST_NODE(Selection[i]))
 			++NumPoints;
 		if (Road* R = dynamic_cast<Road*>(Selection[i]))
 		{
@@ -167,7 +167,7 @@ void PropertiesDock::checkMenuStatus()
 				++NumRoads;
 			}
 		}
-		if (dynamic_cast<Relation*>(Selection[i]))
+		if (CAST_RELATION(Selection[i]))
 			++NumRelation;
 		if (isChildOfRelation(Selection[i]))
 			++NumRelationChild;
