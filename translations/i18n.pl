@@ -467,12 +467,18 @@ sub convert_ts_message($$$$)
   {
     if($content =~ /numerus="yes"/)
     {
-      $content =~ s/( +<numerusform>).*(<\/numerusform>)/makenumerus($data->{$source},$1,$2,$l)/se;
+      if(!($content =~ s/( +<numerusform>).*(<\/numerusform>)/makenumerus($data->{$source},$1,$2,$l)/se))
+      {
+        die sprintf "Could not replace string '%.10s'",$source;
+      }
     }
     else
     {
       my $repl = makexml($data->{$source}{$l});
-      $content =~ s/(<translation).*(<\/translation>)/$1>$repl$2/;
+      if(!($content =~ s/(<translation).*(<\/translation>)/$1>$repl$2/s))
+      {
+        die sprintf "Could not replace string '%.10s'",$source;
+      }
     }
   }
   return $content;
