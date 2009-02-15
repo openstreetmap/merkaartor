@@ -98,15 +98,16 @@ void PreferencesDialog::on_buttonBox_clicked(QAbstractButton * button)
 		}
 }
 
-void initLanguages(QComboBox* aBox)
+void PreferencesDialog::initLanguages(QComboBox* aBox)
 {
-	aBox->addItem("English","-");
-	aBox->addItem("Czech","cs");
-	aBox->addItem("German","de");
-	aBox->addItem("French","fr");
-	aBox->addItem("Italian","it");
-	aBox->addItem("Polish","pl");
-	aBox->addItem("Russian","ru");
+	aBox->addItem(tr("English"),"-");
+	aBox->addItem(tr("Arabic"),"ar");
+	aBox->addItem(tr("Czech"),"cs");
+	aBox->addItem(tr("German"),"de");
+	aBox->addItem(tr("French"),"fr");
+	aBox->addItem(tr("Italian"),"it");
+	aBox->addItem(tr("Polish"),"pl");
+	aBox->addItem(tr("Russian"),"ru");
 }
 
 void PreferencesDialog::loadPrefs()

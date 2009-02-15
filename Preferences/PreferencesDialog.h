@@ -55,8 +55,9 @@ public slots:
 	void on_btBrowse_clicked();
 
 private:
-    void updateStyles();
-    void loadPrefs();
+	void updateStyles();
+	void loadPrefs();
+	void initLanguages(QComboBox*);
 	void savePrefs();
 
 	void changeEvent(QEvent *);

@@ -89,7 +89,7 @@
     <description locale="en" >Ramp to motorway</description>
     <description locale="cs" >Dálniční nájezd</description>
     <description locale="de" >Autobahnanschlussstelle</description>
-    <description locale="it" >Svincolo per l'autostrada</description>
+    <description locale="it" >Svincolo per l&apos;autostrada</description>
     <description locale="pl" >Dojazd do autostrady</description>
    </value>
    <value tag="trunk" >
@@ -160,7 +160,7 @@
     <description locale="en" >Service road</description>
     <description locale="cs" >Účelová komunikace</description>
     <description locale="de" >Zufahrtstraße</description>
-    <description locale="fr" >Route d'accès</description>
+    <description locale="fr" >Route d&apos;accès</description>
     <description locale="it" >Strada di servizio</description>
     <description locale="pl" >Droga serwisowa</description>
    </value>
@@ -518,7 +518,7 @@
     <description locale="ar" >كلّية</description>
     <description locale="cs" >Střední škola</description>
     <description locale="de" >College</description>
-    <description locale="fr" >Établissement d'enseignement supérieur</description>
+    <description locale="fr" >Établissement d&apos;enseignement supérieur</description>
     <description locale="it" >College</description>
     <description locale="pl" >Szkoła wyższa</description>
    </value>
@@ -544,7 +544,7 @@
     <description locale="ar" >نبع ماء صالحة للشرب</description>
     <description locale="cs" >Zdroj pitné vody</description>
     <description locale="de" >Trinkwasser</description>
-    <description locale="fr" >Source d'eau potable</description>
+    <description locale="fr" >Source d&apos;eau potable</description>
     <description locale="it" >Fonte di acqua potabile</description>
     <description locale="pl" >Źródło wody pitnej</description>
    </value>

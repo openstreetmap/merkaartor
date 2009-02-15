@@ -12,8 +12,8 @@ CALL = perl i18n.pl
 update: updatets templates main release
 
 tar:
-	tar -czf templates_`date "+%Y-%m-%d"`.tar.gz templates.pot templates_*.po
-	tar -czf merkaartor_`date "+%Y-%m-%d"`.tar.gz merkaartor.pot merkaartor_*.po
+	-tar -czf templates_`date "+%Y-%m-%d"`.tar.gz templates.pot templates_*.po
+	-tar -czf merkaartor_`date "+%Y-%m-%d"`.tar.gz merkaartor.pot merkaartor_*.po
 
 templates:
 	${CALL} templates ${TEMPLATES} ${TEMPLATES_LAUNCHPAD_PO} ${TEMPLATES_PO}

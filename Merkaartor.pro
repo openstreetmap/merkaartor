@@ -67,6 +67,7 @@ UI_DIR = tmp
 RCC_DIR = tmp
 
 TRANSLATIONS += \
+	translations/merkaartor_ar.ts \
 	translations/merkaartor_cs.ts \
 	translations/merkaartor_de.ts \
 	translations/merkaartor_fr.ts \
@@ -75,6 +76,7 @@ TRANSLATIONS += \
 	translations/merkaartor_ru.ts
 
 BINTRANSLATIONS += \
+	translations/merkaartor_ar.qm \
 	translations/merkaartor_cs.qm \
 	translations/merkaartor_de.qm \
 	translations/merkaartor_fr.qm \

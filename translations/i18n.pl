@@ -128,6 +128,7 @@ sub loadfiles($$@)
         elsif(/message( numerus="yes")?>/)
         {
           my $n = $1;
+          die "No language found in file $file." if !$l;
           if($source)
           {
             $source = maketxt($source);
