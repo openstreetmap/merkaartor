@@ -271,7 +271,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../Interaction/CreateDoubleWayDock.ui" line="40"/>
         <source>Distance between two roads</source>
-        <translation>Distance entre les deux routes</translation>
+        <translation>Distance entre deux routes</translation>
     </message>
 </context>
 <context>
@@ -446,7 +446,7 @@ Le message de l&apos;API est le suivant &apos;%1&apos;</translation>
     <message>
         <location filename="../DownloadMapDialog.ui" line="61"/>
         <source>Current view</source>
-        <translation>Vue courante</translation>
+        <translation>Vue actuelle</translation>
     </message>
     <message>
         <location filename="../DownloadMapDialog.ui" line="85"/>
@@ -494,7 +494,7 @@ Le message de l&apos;API est le suivant &apos;%1&apos;</translation>
     <message>
         <location filename="../Map/DownloadOSM.cpp" line="474"/>
         <source>Download failed</source>
-        <translation>Téléchargement échoué</translation>
+        <translation>Échec du téléchargement</translation>
     </message>
     <message>
         <location filename="../Map/DownloadOSM.cpp" line="468"/>
@@ -1232,7 +1232,7 @@ Voulez-vous annuler le chargement d&apos;un nouveau document ou continuer et per
     <message>
         <location filename="../MainWindow.ui" line="416"/>
         <source>Curved link</source>
-        <translation>Segment courbe</translation>
+        <translation>Liaison courbe</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="932"/>
@@ -1571,7 +1571,7 @@ Pour plus d&apos;information, voir http://wiki.openstreetmap.org/index.php/Probl
     <message>
         <location filename="../MainWindow.ui" line="769"/>
         <source>Find and select items</source>
-        <translation>Trouve et sélectionne des éléments</translation>
+        <translation>Recherche et sélectionne des éléments</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="809"/>
@@ -1853,7 +1853,7 @@ Voulez-vous le faire maintenant ?</translation>
     <message>
         <location filename="../MainWindow.cpp" line="1602"/>
         <source>Export Binary OSM</source>
-        <translation>Exporter OSM Binaire</translation>
+        <translation>Exporter OSM binaire</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="1602"/>
@@ -2325,7 +2325,7 @@ En cas de doute, demandez un avis sur les listes de diffusion OSM &quot;legal&qu
     <message>
         <location filename="../MainWindow.ui" line="482"/>
         <source>Download map data for a new area</source>
-        <translation>Télécharge des données carte pour une nouvelle surface</translation>
+        <translation>Télécharger des données cartographique pour une nouvelle aire</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="511"/>
@@ -2638,7 +2638,7 @@ En cas de doute, demandez un avis sur les listes de diffusion OSM &quot;legal&qu
     <message>
         <location filename="../Map/MapDocument.cpp" line="231"/>
         <source>Dirty layer</source>
-        <translation>Couche Modifications</translation>
+        <translation>Calque des brouillons</translation>
     </message>
     <message>
         <location filename="../Map/MapDocument.cpp" line="95"/>
@@ -2890,7 +2890,7 @@ En cas de doute, demandez un avis sur les listes de diffusion OSM &quot;legal&qu
     <message>
         <location filename="../Preferences/MerkaartorPreferences.cpp" line="331"/>
         <source>Duplicate key</source>
-        <translation>Doublon de clé</translation>
+        <translation>Dupliquer la clé</translation>
     </message>
     <message>
         <location filename="../Preferences/MerkaartorPreferences.cpp" line="334"/>
@@ -3336,7 +3336,7 @@ Le chemin référencé dans Outils-Préférences-[Outils] n&apos;est pas valide.
     <message>
         <location filename="../PaintStyle/PaintStyleEditor.ui" line="1250"/>
         <source>Draw with background color</source>
-        <translation>Dessiner avec la couleur de fond</translation>
+        <translation>Dessiner avec la couleur d&apos;arrière-plan</translation>
     </message>
     <message>
         <location filename="../PaintStyle/PaintStyleEditor.ui" line="1306"/>
@@ -3374,7 +3374,7 @@ Le chemin référencé dans Outils-Préférences-[Outils] n&apos;est pas valide.
     <message>
         <location filename="../Utils/PictureViewerDialog.ui" line="13"/>
         <source>Dialog</source>
-        <translation>Dialogue</translation>
+        <translation>Boîte de dialogue</translation>
     </message>
     <message>
         <location filename="../Utils/PictureViewerDialog.cpp" line="39"/>
@@ -4019,7 +4019,7 @@ Veuillez choisir un autre nom ou cliquer sur le boutton &lt;Appliquer&gt; si vou
     <message>
         <location filename="../GPS/qgpsmainwindowui.ui" line="120"/>
         <source>Fix Type</source>
-        <translation>Type de mise au point</translation>
+        <translation>Type d&apos;acquisition</translation>
     </message>
     <message>
         <location filename="../GPS/qgpsmainwindowui.ui" line="130"/>
@@ -4171,7 +4171,7 @@ Veuillez choisir un autre nom ou cliquer sur le boutton &lt;Appliquer&gt; si vou
     <message>
         <location filename="../Sync/SyncListDialog.ui" line="13"/>
         <source>Dialog</source>
-        <translation>Dialogue</translation>
+        <translation>Boîte de dialogue</translation>
     </message>
     <message>
         <location filename="../Sync/SyncListDialog.ui" line="25"/>
@@ -4204,7 +4204,7 @@ Veuillez choisir un autre nom ou cliquer sur le boutton &lt;Appliquer&gt; si vou
     <message>
         <location filename="../Preferences/TMSPreferencesDialog.cpp" line="88"/>
         <source>Download failed: %1.</source>
-        <translation>Téléchargement échoué: %1.</translation>
+        <translation>Le téléchargement a échoué: %1.</translation>
     </message>
     <message>
         <location filename="../Preferences/TMSPreferencesDialog.cpp" line="97"/>
@@ -4377,7 +4377,7 @@ Veuillez choisir un autre nom ou cliquer sur le boutton &lt;Appliquer&gt; si vou
     <message>
         <location filename="../UploadMapDialog.ui" line="13"/>
         <source>Dialog</source>
-        <translation>Dialogue</translation>
+        <translation>Boîte de dialogue</translation>
     </message>
     <message>
         <location filename="../UploadMapDialog.ui" line="36"/>
@@ -4438,7 +4438,7 @@ Veuillez choisir un autre nom ou cliquer sur le boutton &lt;Appliquer&gt; si vou
     <message>
         <location filename="../Preferences/WMSPreferencesDialog.cpp" line="89"/>
         <source>Download failed: %1.</source>
-        <translation>Téléchargement échoué: %1.</translation>
+        <translation>Le téléchargement a échoué: %1.</translation>
     </message>
     <message>
         <location filename="../Preferences/WMSPreferencesDialog.cpp" line="98"/>
@@ -4548,7 +4548,7 @@ Veuillez choisir un autre nom ou cliquer sur le boutton &lt;Appliquer&gt; si vou
     <message>
         <location filename="../Tools/WorldOsbManager.ui" line="13"/>
         <source>Dialog</source>
-        <translation>Dialogue</translation>
+        <translation>Boîte de dialogue</translation>
     </message>
     <message>
         <location filename="../Tools/WorldOsbManager.ui" line="24"/>

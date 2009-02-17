@@ -1169,7 +1169,7 @@ Anulować tworzenie nowej mapy czy porzucić poprzednie zmiany?</translation>
     <message>
         <location filename="../MainWindow.cpp" line="877"/>
         <source>Open track files</source>
-        <translation type="unfinished">Otwórz ścieżkę</translation>
+        <translation>Otwórz pliki ze ścieżkami</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="889"/>
@@ -1224,7 +1224,7 @@ Czy chcesz to zrobić teraz?</translation>
     <message>
         <location filename="../MainWindow.cpp" line="1185"/>
         <source>Commit Roads</source>
-        <translation type="unfinished"></translation>
+        <translation>Wyślij drogi</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="1263"/>
@@ -1549,7 +1549,7 @@ Czy chcesz to zrobić teraz?</translation>
     <message>
         <location filename="../MainWindow.ui" line="416"/>
         <source>Curved link</source>
-        <translation type="unfinished"></translation>
+        <translation>Zakrzywiony łącznik</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="932"/>
@@ -1594,12 +1594,12 @@ Czy chcesz to zrobić teraz?</translation>
     <message>
         <location filename="../MainWindow.ui" line="490"/>
         <source>Link</source>
-        <translation type="unfinished">Dowiązanie</translation>
+        <translation>Łącznik</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="496"/>
         <source>Create link</source>
-        <translation type="unfinished"></translation>
+        <translation>Utwórz łącznik</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="499"/>
@@ -1709,7 +1709,7 @@ Czy chcesz to zrobić teraz?</translation>
     <message>
         <location filename="../MainWindow.ui" line="729"/>
         <source>&amp;Curved road</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Zakrzywiona droga</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="738"/>
@@ -2231,7 +2231,7 @@ Na pewno można legalnie zaimportować ten plik do OSM?</translation>
     <message>
         <location filename="../MainWindow.ui" line="1054"/>
         <source>Commit feature to the dirty layer</source>
-        <translation type="unfinished"></translation>
+        <translation>Wyślij cechę na warstwę roboczą</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1145"/>
@@ -2381,7 +2381,7 @@ Na pewno można legalnie zaimportować ten plik do OSM?</translation>
     <message>
         <location filename="../MainWindow.ui" line="100"/>
         <source>Set Areas &amp;opacity</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieprzeźroczystośc obszarów</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="133"/>
@@ -2451,7 +2451,7 @@ Na pewno można legalnie zaimportować ten plik do OSM?</translation>
     <message>
         <location filename="../Interaction/MoveTrackPointInteraction.cpp" line="109"/>
         <source>Do you want to merge all nodes at the drop position?</source>
-        <translation type="unfinished">Czy scalić węzły na tej pozycji?</translation>
+        <translation>Czy na pewno scalić wszystkie węzły w miejscu docelowym?</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="2370"/>
@@ -2511,7 +2511,7 @@ Na pewno można legalnie zaimportować ten plik do OSM?</translation>
     <message>
         <location filename="../MainWindow.ui" line="598"/>
         <source>Reverse road direction</source>
-        <translation type="unfinished"></translation>
+        <translation>Odwróć kierunek drogi</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="650"/>
@@ -2521,7 +2521,7 @@ Na pewno można legalnie zaimportować ten plik do OSM?</translation>
     <message>
         <location filename="../MainWindow.ui" line="665"/>
         <source>Join connected roads to a single road</source>
-        <translation type="unfinished"></translation>
+        <translation>Złącz połączone drogi w jedną</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="680"/>
@@ -2556,7 +2556,7 @@ Na pewno można legalnie zaimportować ten plik do OSM?</translation>
     <message>
         <location filename="../MainWindow.ui" line="964"/>
         <source>Copy selected features and tags to the clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Skopiuje zaznaczoną cechę i znaczniki do schowka</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="993"/>
@@ -2591,7 +2591,7 @@ Na pewno można legalnie zaimportować ten plik do OSM?</translation>
     <message>
         <location filename="../PropertiesDock.cpp" line="678"/>
         <source>Remove member &apos;%1&apos; on %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Usuń członka %1 z %2</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="863"/>
@@ -2611,7 +2611,7 @@ Na pewno można legalnie zaimportować ten plik do OSM?</translation>
     <message>
         <location filename="../MainWindow.ui" line="1285"/>
         <source>G&amp;eoImage</source>
-        <translation type="unfinished"></translation>
+        <translation>G&amp;eobraz</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1393"/>
@@ -2901,7 +2901,7 @@ Na pewno można legalnie zaimportować ten plik do OSM?</translation>
     <message>
         <location filename="../Preferences/MerkaartorPreferences.cpp" line="403"/>
         <source>Shape adapter</source>
-        <translation type="unfinished"></translation>
+        <translation>Adapter kształtu</translation>
     </message>
 </context>
 <context>
@@ -3041,7 +3041,7 @@ Na pewno można legalnie zaimportować ten plik do OSM?</translation>
     <message>
         <location filename="../Render/NativeRenderDialog.cpp" line="37"/>
         <source>Proceed...</source>
-        <translation type="unfinished"></translation>
+        <translation>Kontynuuj...</translation>
     </message>
     <message>
         <location filename="../Render/NativeRenderDialog.cpp" line="115"/>
@@ -3056,7 +3056,7 @@ Na pewno można legalnie zaimportować ten plik do OSM?</translation>
     <message>
         <location filename="../Render/NativeRenderDialog.ui" line="20"/>
         <source>Render type</source>
-        <translation type="unfinished"></translation>
+        <translation>Typ renderingu</translation>
     </message>
     <message>
         <location filename="../Render/NativeRenderDialog.ui" line="26"/>
@@ -3209,7 +3209,7 @@ Scieżka podana w Narzędzia-&gt;Konfiguracja-&gt;Narzędzia nie jest poprawna.<
     <message>
         <location filename="../Render/OsmaRenderDialog.cpp" line="50"/>
         <source>Proceed...</source>
-        <translation type="unfinished"></translation>
+        <translation>Kontynuuj...</translation>
     </message>
 </context>
 <context>
@@ -3740,7 +3740,7 @@ Proszę wybrać inną nazwę lub kliknąć przycisk &lt;Zastosuj&gt; aby zmodyfi
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="729"/>
         <source>Track layers readonly by default</source>
-        <translation type="unfinished"></translation>
+        <translation>Warstwy ścieżek domyślnie są tylko do odczytu</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="740"/>
@@ -3755,7 +3755,7 @@ Proszę wybrać inną nazwę lub kliknąć przycisk &lt;Zastosuj&gt; aby zmodyfi
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="465"/>
         <source>Custom styles directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Katalog z własnymi stylami</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="499"/>
@@ -3891,7 +3891,7 @@ Proszę wybrać inną nazwę lub kliknąć przycisk &lt;Zastosuj&gt; aby zmodyfi
     <message>
         <location filename="../Render/OsmaRenderDialog.cpp" line="175"/>
         <source>Unable to read feature xml file</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można odczytać danych XML cechy</translation>
     </message>
     <message>
         <location filename="../Render/OsmaRenderDialog.cpp" line="187"/>
@@ -3901,7 +3901,7 @@ Proszę wybrać inną nazwę lub kliknąć przycisk &lt;Zastosuj&gt; aby zmodyfi
     <message>
         <location filename="../Render/OsmaRenderDialog.cpp" line="186"/>
         <source>Unable to parse feature xml</source>
-        <translation type="unfinished">Nie można przetworzyć cechy</translation>
+        <translation>Nie można przetworzyć danych XML cechy</translation>
     </message>
     <message>
         <location filename="../Render/OsmaRenderDialog.cpp" line="277"/>
@@ -4569,12 +4569,12 @@ Proszę wybrać inną nazwę lub kliknąć przycisk &lt;Zastosuj&gt; aby zmodyfi
     <message>
         <location filename="../Tools/WorldOsbManager.ui" line="58"/>
         <source>Auto-load</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatyczne wczytywanie</translation>
     </message>
     <message>
         <location filename="../Tools/WorldOsbManager.ui" line="65"/>
         <source>Auto-show</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatyczne wyświetlanie</translation>
     </message>
     <message>
         <location filename="../Tools/WorldOsbManager.ui" line="126"/>

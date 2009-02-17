@@ -101,7 +101,12 @@ p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Merkaartor version&lt;/span&gt; &lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%1%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Merkaartor version&lt;/span&gt; &lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%1%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../AboutDialog.ui" line="35"/>
@@ -111,12 +116,17 @@ p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;QT version&lt;/span&gt; &lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%1&lt;/span&gt; (build &lt;span style=&quot; font-weight:600;&quot;&gt;%2&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;QT version&lt;/span&gt; &lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%1&lt;/span&gt; (build &lt;span style=&quot; font-weight:600;&quot;&gt;%2&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../AboutDialog.ui" line="87"/>
         <source>TextLabel</source>
-        <translation></translation>
+        <translation>Etichetta di testo</translation>
     </message>
     <message>
         <location filename="../AboutDialog.ui" line="124"/>
@@ -130,7 +140,11 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://merkaartor.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://merkaartor.org/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://merkaartor.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://merkaartor.org/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../AboutDialog.ui" line="96"/>
@@ -158,7 +172,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../Tools/ActionsDialog.cpp" line="40"/>
         <source>&amp;Export</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Esporta</translation>
     </message>
     <message>
         <location filename="../Tools/ActionsDialog.cpp" line="41"/>
@@ -304,8 +318,8 @@ p, li { white-space: pre-wrap; }
         <location filename="../DirtyDock.cpp" line="66"/>
         <source>There are &lt;b&gt;%n&lt;/b&gt; objects in the dirty layer</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>Ci sono &lt;b&gt;%n&lt;/b&gt; oggetti nel Livello delle Modifiche</numerusform>
+            <numerusform>Ci sono &lt;b&gt;%n&lt;/b&gt; oggetti nel Livello delle Modifiche</numerusform>
         </translation>
     </message>
 </context>
@@ -408,7 +422,8 @@ Il server ha risposto con &quot;%2&quot;</translation>
         <location filename="../Sync/DirtyList.cpp" line="387"/>
         <source>
 API message is &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>
+Messaggio delle API &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -581,16 +596,16 @@ Vuoi segnarle per la rimozione?</translation>
         <location filename="../Map/DownloadOSM.cpp" line="315"/>
         <source>Downloading from OSM (%n bytes)</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>Scaricamento da OSM in corso (%n bytes)</numerusform>
+            <numerusform>Scaricamento da OSM in corso (%n bytes)</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../Map/DownloadOSM.cpp" line="317"/>
         <source>Downloading from OSM (%n kBytes)</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>Scaricamento da OSM in corso (%n kBytes)</numerusform>
+            <numerusform>Scaricamento da OSM in corso (%n kBytes)</numerusform>
         </translation>
     </message>
     <message>
@@ -604,7 +619,8 @@ Messaggio del Server: &apos;%2&apos;</translation>
         <location filename="../Map/DownloadOSM.cpp" line="473"/>
         <source>
 API message is &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>
+Messaggio delle API &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -820,17 +836,17 @@ Vuoi continuare ad usarla?</translation>
     <message>
         <location filename="../GotoDialog.ui" line="60"/>
         <source>OSM permalink</source>
-        <translation type="unfinished"></translation>
+        <translation>permalink OSM</translation>
     </message>
     <message>
         <location filename="../GotoDialog.ui" line="87"/>
         <source>lonMin, latMin, lonMax, latMax</source>
-        <translation type="unfinished"></translation>
+        <translation>lonMin, latMin, lonMax, latMax</translation>
     </message>
     <message>
         <location filename="../GotoDialog.ui" line="114"/>
         <source>latCent, lonCent, latSpan, lonSpan</source>
-        <translation type="unfinished"></translation>
+        <translation>latCent, lonCent, latDimen, lonDimen</translation>
     </message>
     <message>
         <location filename="../GotoDialog.ui" line="133"/>
@@ -840,12 +856,12 @@ Vuoi continuare ad usarla?</translation>
     <message>
         <location filename="../GotoDialog.ui" line="147"/>
         <source>OSM API Url</source>
-        <translation type="unfinished"></translation>
+        <translation>Url API OSM</translation>
     </message>
     <message>
         <location filename="../GotoDialog.ui" line="174"/>
         <source>OSM XAPI url</source>
-        <translation type="unfinished"></translation>
+        <translation>Url XAPI OSM</translation>
     </message>
     <message>
         <location filename="../GotoDialog.ui" line="209"/>
@@ -981,7 +997,8 @@ Vuoi continuare ad usarla?</translation>
         <location filename="../Main.cpp" line="23"/>
         <source>Merkaartor v%1%2
 Initializing...</source>
-        <translation type="unfinished"></translation>
+        <translation>Merkaartor v%1%2
+Caricamento...</translation>
     </message>
 </context>
 <context>
@@ -2134,7 +2151,7 @@ Vuoi farlo ora?</translation>
     <message>
         <location filename="../Command/TrackPointCommands.cpp" line="100"/>
         <source>Move node %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Sposta nodo %1</translation>
     </message>
     <message>
         <location filename="../Interaction/MoveTrackPointInteraction.cpp" line="108"/>
@@ -2181,57 +2198,68 @@ Vuoi farlo ora?</translation>
 If unsure, please seek advice on the &quot;legal&quot; or &quot;talk&quot; openstreetmap mailing lists.
 
 Are you absolutely sure this KML can legally be imported in OSM?</source>
-        <translation type="unfinished"></translation>
+        <translation>Stai provando ad importare un file KML. Prego sii al corrente di:
+ - Non puoi importare in OSM un file KML creato da Google Earth. Mentre puoi
+   pensare che i nodi creati con GE siano di tua proprietà, non lo sono!
+   Essi sono un lavoro derivato da GE, e, di conseguenza, non possono essere usati in OSM.
+
+ - Se hai scaricato il file da Internet, ci sono buone probabilità che esso sia coperto da copyright.
+   Sii assolutamente sicuro che l&apos;utilizzo di questi dati in OSM sia concesso dall&apos;autore, o
+   che i dati siano di pubblico dominio.
+
+Se non ne sei sicuro, discutine sulle mailing list &quot;leagal&quot; o &quot;talk-it&quot; di openstreetmap.
+
+Sei assolutamente sicuro che questo file KML può essere importato legalmente in OSM?</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="1226"/>
         <source>Detach Node %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Stacca Nodo %1</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="1240"/>
         <source>Add member to relation</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi elemento alla relazione</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="1250"/>
         <source>Remove member from relation</source>
-        <translation type="unfinished"></translation>
+        <translation>Rimuovi membro dalla relazione</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="2296"/>
         <source>Save Tag Templates</source>
-        <translation type="unfinished"></translation>
+        <translation>Salva Template dei Tag</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="2296"/>
         <source>Merkaartor tag templates (*.mat)</source>
-        <translation type="unfinished"></translation>
+        <translation>Template dei Tag di Merkaartor (*.mat)</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="2322"/>
         <source>Open Tag Templates</source>
-        <translation type="unfinished"></translation>
+        <translation>Apri Template dei Tag</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="2370"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Errore</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="2370"/>
         <source>Could not load the selected language. Go to Tools, Preferences to select another language or check whether the translation file is missing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile caricare la lingua selezionata. Vai in Strumenti, Preferenze e seleziona un&apos;altra lingua o controlla che il file di traduzione sia installato correttamente.</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="2373"/>
         <source>Warning! Could not load the Qt translations for the &quot;%1&quot; language.</source>
-        <translation type="unfinished"></translation>
+        <translation>Attenzione! Impossibile caricare la traduzione di Qt per la lingua &quot;%1&quot;.</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="2376"/>
         <source>Warning! Could not load the Merkaartor translations for the &quot;%1&quot; language.</source>
-        <translation type="unfinished"></translation>
+        <translation>Attenzione! Impossibile caricare la traduzione di Merkaartor per la lingua &quot;%1&quot;.</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="92"/>
@@ -2246,22 +2274,22 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="133"/>
         <source>&amp;Export</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Esporta</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="142"/>
         <source>&amp;Render</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Rappresenta</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="149"/>
         <source>Re&amp;cent open</source>
-        <translation type="unfinished"></translation>
+        <translation>Aperti di Re&amp;cente</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="154"/>
         <source>Recen&amp;t import</source>
-        <translation type="unfinished"></translation>
+        <translation>Impor&amp;tati di Recente</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="178"/>
@@ -2271,7 +2299,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="192"/>
         <source>Tag templates</source>
-        <translation type="unfinished"></translation>
+        <translation>Template dei Tag</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="238"/>
@@ -2301,7 +2329,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="482"/>
         <source>Download map data for a new area</source>
-        <translation type="unfinished"></translation>
+        <translation>Scarica dati mappa per una nuova area</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="511"/>
@@ -2316,27 +2344,27 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="526"/>
         <source>Upload changes to the server</source>
-        <translation type="unfinished"></translation>
+        <translation>Carica le modifiche sul server</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="544"/>
         <source>Remove selected features</source>
-        <translation type="unfinished"></translation>
+        <translation>Rimuovi caratteristica selezionata</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="562"/>
         <source>Create new road</source>
-        <translation type="unfinished"></translation>
+        <translation>Crea nuova strada</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="580"/>
         <source>Create new node</source>
-        <translation type="unfinished"></translation>
+        <translation>Crea nuovo nodo</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="598"/>
         <source>Reverse road direction</source>
-        <translation type="unfinished"></translation>
+        <translation>Inverti direzione strada</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="607"/>
@@ -2356,22 +2384,22 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="650"/>
         <source>Split road into separate (connected) roads</source>
-        <translation type="unfinished"></translation>
+        <translation>Suddividi strada in strade (connesse) diverse</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="665"/>
         <source>Join connected roads to a single road</source>
-        <translation type="unfinished"></translation>
+        <translation>Unisci le strade connesse in una solo strada</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="680"/>
         <source>Break</source>
-        <translation type="unfinished"></translation>
+        <translation>Suddividi</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="683"/>
         <source>Break apart connected roads</source>
-        <translation type="unfinished"></translation>
+        <translation>Suddividi le strade connesse</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="694"/>
@@ -2381,7 +2409,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="709"/>
         <source>Create new area</source>
-        <translation type="unfinished"></translation>
+        <translation>Crea nuova area</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="714"/>
@@ -2411,27 +2439,27 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="826"/>
         <source>Save to file</source>
-        <translation type="unfinished"></translation>
+        <translation>Salva su file</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="841"/>
         <source>Download more map data for the current area</source>
-        <translation type="unfinished"></translation>
+        <translation>Scarica dati aggiuntivi mappa per l&apos;area corrente</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="863"/>
         <source>&amp;Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Proprietà</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="897"/>
         <source>&amp;Info</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Informazioni</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="918"/>
         <source>Align nodes</source>
-        <translation type="unfinished"></translation>
+        <translation>Allinea i nodi</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="961"/>
@@ -2441,7 +2469,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="964"/>
         <source>Copy selected features and tags to the clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Copia le caratteristiche selezionate e tag negli appunti</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="975"/>
@@ -2456,22 +2484,22 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="993"/>
         <source>Paste tags</source>
-        <translation type="unfinished"></translation>
+        <translation>Incolla i tag</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="996"/>
         <source>Paste tags from the clipboard (Merge with existing tags)</source>
-        <translation type="unfinished"></translation>
+        <translation>Incolla i tag dagli appunti (uniscili a quelli esistenti)</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1024"/>
         <source>Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>Incolla</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1027"/>
         <source>Paste features from the clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Incolla caratteristiche dagli appunti</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1054"/>
@@ -2491,7 +2519,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="1161"/>
         <source>&amp;GPS</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;GPS</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1170"/>
@@ -2516,7 +2544,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="1285"/>
         <source>G&amp;eoImage</source>
-        <translation type="unfinished"></translation>
+        <translation>Immagine G&amp;eoreferenziata</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1299"/>
@@ -2566,7 +2594,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="1365"/>
         <source>Detach node from a road</source>
-        <translation type="unfinished"></translation>
+        <translation>Stacca il nodo da una strada</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1368"/>
@@ -2581,27 +2609,27 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="1385"/>
         <source>SVG</source>
-        <translation type="unfinished"></translation>
+        <translation>SVG</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1393"/>
         <source>&amp;Styles</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Stili</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1399"/>
         <source>Hide/Show the Styles dock</source>
-        <translation type="unfinished"></translation>
+        <translation>Nascondi/Mostra strumento per lo Stile</translation>
     </message>
     <message>
         <location filename="../PropertiesDock.cpp" line="678"/>
         <source>Remove member &apos;%1&apos; on %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Rimuovi membro &apos;%1&apos; da %2</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="1884"/>
         <source>%1 (int)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (int)</translation>
     </message>
 </context>
 <context>
@@ -2752,7 +2780,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../Map/TrackPoint.cpp" line="403"/>
         <source>layer</source>
-        <translation type="unfinished"></translation>
+        <translation>livello</translation>
     </message>
 </context>
 <context>
@@ -2861,22 +2889,22 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../Preferences/MerkaartorPreferences.cpp" line="334"/>
         <source>Preferences upload failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Caricamento Preferenze fallito</translation>
     </message>
     <message>
         <location filename="../Preferences/MerkaartorPreferences.cpp" line="331"/>
         <source>Duplicate key</source>
-        <translation type="unfinished"></translation>
+        <translation>Chiave duplicata</translation>
     </message>
     <message>
         <location filename="../Preferences/MerkaartorPreferences.cpp" line="334"/>
         <source>More than 150 preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>Più di 150 preferenze</translation>
     </message>
     <message>
         <location filename="../Preferences/MerkaartorPreferences.cpp" line="403"/>
         <source>Shape adapter</source>
-        <translation type="unfinished"></translation>
+        <translation>Adattatore Forma</translation>
     </message>
 </context>
 <context>
@@ -2917,12 +2945,12 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../NameFinder/namefindertablemodel.cpp" line="74"/>
         <source>Near</source>
-        <translation type="unfinished"></translation>
+        <translation>Vicino</translation>
     </message>
     <message>
         <location filename="../NameFinder/namefindertablemodel.cpp" line="77"/>
         <source>Unknown field</source>
-        <translation type="unfinished"></translation>
+        <translation>Campo sconosciuto</translation>
     </message>
 </context>
 <context>
@@ -2930,27 +2958,27 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../NameFinder/namefinderwidget.cpp" line="88"/>
         <source>Error!</source>
-        <translation type="unfinished"></translation>
+        <translation>Errore!</translation>
     </message>
     <message>
         <location filename="../NameFinder/namefinderwidget.cpp" line="92"/>
         <source>Name finder service host not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Servizio ricerca nome server non trovato.</translation>
     </message>
     <message>
         <location filename="../NameFinder/namefinderwidget.cpp" line="95"/>
         <source>Name finder service host refused connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Servizio ricerca nome il server ha rifiutato la connessione.</translation>
     </message>
     <message>
         <location filename="../NameFinder/namefinderwidget.cpp" line="98"/>
         <source>Name finder service requires authentication.</source>
-        <translation type="unfinished"></translation>
+        <translation>Servizio ricerca nome richiede l&apos;autenticazione.</translation>
     </message>
     <message>
         <location filename="../NameFinder/namefinderwidget.cpp" line="100"/>
         <source>Unknown error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Errore sconosciuto.</translation>
     </message>
 </context>
 <context>
@@ -3016,12 +3044,12 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../Render/NativeRenderDialog.cpp" line="37"/>
         <source>Proceed...</source>
-        <translation type="unfinished"></translation>
+        <translation>Procedi...</translation>
     </message>
     <message>
         <location filename="../Render/NativeRenderDialog.cpp" line="115"/>
         <source>Working. Please Wait...</source>
-        <translation type="unfinished"></translation>
+        <translation>In corso. Prego Attendere...</translation>
     </message>
     <message>
         <location filename="../Render/NativeRenderDialog.cpp" line="115"/>
@@ -3031,17 +3059,17 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../Render/NativeRenderDialog.ui" line="20"/>
         <source>Render type</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipo Presentazione</translation>
     </message>
     <message>
         <location filename="../Render/NativeRenderDialog.ui" line="26"/>
         <source>SVG</source>
-        <translation type="unfinished"></translation>
+        <translation>SVG</translation>
     </message>
     <message>
         <location filename="../Render/NativeRenderDialog.ui" line="33"/>
         <source>Bitmap</source>
-        <translation type="unfinished"></translation>
+        <translation>Bitmap</translation>
     </message>
 </context>
 <context>
@@ -3184,7 +3212,7 @@ Il percorso indicato in Strumenti-Preferenze-[Strumenti] non è corretto.</trans
     <message>
         <location filename="../Render/OsmaRenderDialog.cpp" line="50"/>
         <source>Proceed...</source>
-        <translation type="unfinished"></translation>
+        <translation>Procedi...</translation>
     </message>
 </context>
 <context>
@@ -3322,17 +3350,17 @@ Il percorso indicato in Strumenti-Preferenze-[Strumenti] non è corretto.</trans
     <message>
         <location filename="../PaintStyle/PaintStyleEditor.ui" line="20"/>
         <source>Global</source>
-        <translation type="unfinished"></translation>
+        <translation>Globale</translation>
     </message>
     <message>
         <location filename="../PaintStyle/PaintStyleEditor.ui" line="1191"/>
         <source>Halo</source>
-        <translation type="unfinished"></translation>
+        <translation>Alone</translation>
     </message>
     <message>
         <location filename="../PaintStyle/PaintStyleEditor.ui" line="1201"/>
         <source>Area</source>
-        <translation type="unfinished"></translation>
+        <translation>Area</translation>
     </message>
 </context>
 <context>
@@ -3355,7 +3383,7 @@ Il percorso indicato in Strumenti-Preferenze-[Strumenti] non è corretto.</trans
     <message>
         <location filename="../Utils/PictureViewerDialog.cpp" line="39"/>
         <source>SVG files (*.svg)</source>
-        <translation type="unfinished"></translation>
+        <translation>File SVG (*.svg)</translation>
     </message>
 </context>
 <context>
@@ -3670,112 +3698,112 @@ Prego inserire un altro nome o clicca su pulsanre &lt;Applica&gt; se vuoi modifi
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="465"/>
         <source>Custom styles directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Cartella stili personalizzati</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="551"/>
         <source>Tag Template</source>
-        <translation type="unfinished"></translation>
+        <translation>Template dei Tag</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.cpp" line="357"/>
         <source>Merkaartor tag template (*.mat)</source>
-        <translation type="unfinished"></translation>
+        <translation>Template dei Tag di Merkaartor (*.mat)</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="168"/>
         <source>Separate Move mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Modalità Spostamento separato</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="175"/>
         <source>Single mouse button interaction</source>
-        <translation type="unfinished"></translation>
+        <translation>Iterazione singolo pulsante del mouse</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="182"/>
         <source>Use custom Qt style</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilizza stile Qt personalizzato</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="234"/>
         <source>Overwrite style</source>
-        <translation type="unfinished"></translation>
+        <translation>Sovrascrivi stile</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="393"/>
         <source>Pixels</source>
-        <translation type="unfinished"></translation>
+        <translation>Pixels</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="499"/>
         <source>Current style</source>
-        <translation type="unfinished"></translation>
+        <translation>Stile corrente</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="545"/>
         <source>Template</source>
-        <translation type="unfinished"></translation>
+        <translation>Template</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="729"/>
         <source>Track layers readonly by default</source>
-        <translation type="unfinished"></translation>
+        <translation>Livelli Tracce in sola lettura per default</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="740"/>
         <source>Don&apos;t connect GPX nodes separated by more than (in km; 0 to disable)</source>
-        <translation type="unfinished"></translation>
+        <translation>Non connettere i nodi GPX separati da più di (in km: 0 per disabilitare)</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="939"/>
         <source>Tiles Caching (not active for Yahoo! due to legal restrictions)</source>
-        <translation type="unfinished"></translation>
+        <translation>Cache delle Tile (non attiva per Yahoo! a causa di restrizioni legali)</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="980"/>
         <source>Enable use of Shape background (needs restart)</source>
-        <translation type="unfinished"></translation>
+        <translation>Abilita l&apos;utilizzo della Forma per lo sfondo</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.cpp" line="103"/>
         <source>English</source>
-        <translation type="unfinished"></translation>
+        <translation>Inglese</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.cpp" line="104"/>
         <source>Arabic</source>
-        <translation type="unfinished"></translation>
+        <translation>Arabo</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.cpp" line="105"/>
         <source>Czech</source>
-        <translation type="unfinished"></translation>
+        <translation>Ceco</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.cpp" line="106"/>
         <source>German</source>
-        <translation type="unfinished"></translation>
+        <translation>Tedesco</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.cpp" line="107"/>
         <source>French</source>
-        <translation type="unfinished"></translation>
+        <translation>Francese</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.cpp" line="108"/>
         <source>Italian</source>
-        <translation type="unfinished"></translation>
+        <translation>Italiano</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.cpp" line="109"/>
         <source>Polish</source>
-        <translation type="unfinished"></translation>
+        <translation>Polacco</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.cpp" line="110"/>
         <source>Russian</source>
-        <translation type="unfinished"></translation>
+        <translation>Russo</translation>
     </message>
 </context>
 <context>
@@ -3934,7 +3962,7 @@ Prego inserire un altro nome o clicca su pulsanre &lt;Applica&gt; se vuoi modifi
     <message>
         <location filename="../GPS/qgps.cpp" line="150"/>
         <source>Unavailable</source>
-        <translation type="unfinished"></translation>
+        <translation>Non disponibile</translation>
     </message>
 </context>
 <context>
@@ -3960,7 +3988,7 @@ Prego inserire un altro nome o clicca su pulsanre &lt;Applica&gt; se vuoi modifi
     <message>
         <location filename="../GPS/qgpsmainwindowui.ui" line="28"/>
         <source>TextLabel</source>
-        <translation></translation>
+        <translation>Etichetta di testo</translation>
     </message>
     <message>
         <location filename="../GPS/qgpsmainwindowui.ui" line="79"/>
@@ -4023,7 +4051,7 @@ Prego inserire un altro nome o clicca su pulsanre &lt;Applica&gt; se vuoi modifi
     <message>
         <location filename="../NameFinder/xmlstreamreader.cpp" line="41"/>
         <source>Not a proper results stream!</source>
-        <translation type="unfinished"></translation>
+        <translation>Flusso dati di risposta non corretto!</translation>
     </message>
 </context>
 <context>
@@ -4123,7 +4151,7 @@ Prego inserire un altro nome o clicca su pulsanre &lt;Applica&gt; se vuoi modifi
     <message>
         <location filename="../Utils/SlippyMapWidget.cpp" line="275"/>
         <source>Reset view</source>
-        <translation type="unfinished"></translation>
+        <translation>Reimposta vista</translation>
     </message>
 </context>
 <context>
@@ -4131,7 +4159,7 @@ Prego inserire un altro nome o clicca su pulsanre &lt;Applica&gt; se vuoi modifi
     <message>
         <location filename="../StyleDock.cpp" line="101"/>
         <source>Styles</source>
-        <translation type="unfinished"></translation>
+        <translation>Stili</translation>
     </message>
 </context>
 <context>
@@ -4273,7 +4301,7 @@ Prego inserire un altro nome o clicca su pulsanre &lt;Applica&gt; se vuoi modifi
     <message>
         <location filename="../TagTemplate/TagTemplate.cpp" line="196"/>
         <source>Undefined</source>
-        <translation type="unfinished"></translation>
+        <translation>Non definito</translation>
     </message>
 </context>
 <context>
@@ -4281,7 +4309,7 @@ Prego inserire un altro nome o clicca su pulsanre &lt;Applica&gt; se vuoi modifi
     <message>
         <location filename="../TagTemplate/TagTemplate.cpp" line="906"/>
         <source>Undefined</source>
-        <translation type="unfinished"></translation>
+        <translation>Non definito</translation>
     </message>
 </context>
 <context>
@@ -4499,27 +4527,27 @@ Prego inserire un altro nome o clicca su pulsanre &lt;Applica&gt; se vuoi modifi
     <message>
         <location filename="../Tools/WorldOsbManager.cpp" line="85"/>
         <source>Select OSB World directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleziona cartella OSB del Mondo</translation>
     </message>
     <message>
         <location filename="../Tools/WorldOsbManager.cpp" line="99"/>
         <source>Invalid OSB World directory name</source>
-        <translation type="unfinished"></translation>
+        <translation>Cartella OSB del Mondo non valida</translation>
     </message>
     <message>
         <location filename="../Tools/WorldOsbManager.cpp" line="100"/>
         <source>Please provide a valid directory name.</source>
-        <translation type="unfinished"></translation>
+        <translation>Prego specificare una cartella valida.</translation>
     </message>
     <message>
         <location filename="../Tools/WorldOsbManager.cpp" line="113"/>
         <source>Region generation error</source>
-        <translation type="unfinished"></translation>
+        <translation>Errore generazione regione</translation>
     </message>
     <message>
         <location filename="../Tools/WorldOsbManager.cpp" line="114"/>
         <source>Error while generating region %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Errore nella generazione della regione %1</translation>
     </message>
     <message>
         <location filename="../Tools/WorldOsbManager.ui" line="13"/>
@@ -4529,7 +4557,7 @@ Prego inserire un altro nome o clicca su pulsanre &lt;Applica&gt; se vuoi modifi
     <message>
         <location filename="../Tools/WorldOsbManager.ui" line="24"/>
         <source>World URI</source>
-        <translation type="unfinished"></translation>
+        <translation>URI del Mondo</translation>
     </message>
     <message>
         <location filename="../Tools/WorldOsbManager.ui" line="47"/>
@@ -4539,12 +4567,12 @@ Prego inserire un altro nome o clicca su pulsanre &lt;Applica&gt; se vuoi modifi
     <message>
         <location filename="../Tools/WorldOsbManager.ui" line="58"/>
         <source>Auto-load</source>
-        <translation type="unfinished"></translation>
+        <translation>Auto-carica</translation>
     </message>
     <message>
         <location filename="../Tools/WorldOsbManager.ui" line="65"/>
         <source>Auto-show</source>
-        <translation type="unfinished"></translation>
+        <translation>Auto-visualizza</translation>
     </message>
     <message>
         <location filename="../Tools/WorldOsbManager.ui" line="94"/>
@@ -4554,7 +4582,7 @@ Prego inserire un altro nome o clicca su pulsanre &lt;Applica&gt; se vuoi modifi
     <message>
         <location filename="../Tools/WorldOsbManager.ui" line="126"/>
         <source>TextLabel</source>
-        <translation></translation>
+        <translation>Etichetta di testo</translation>
     </message>
 </context>
 </TS>

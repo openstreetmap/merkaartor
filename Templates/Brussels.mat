@@ -6,6 +6,7 @@
    <description locale="ar" >الإسم</description>
    <description locale="de" >Name</description>
    <description locale="fr" >Nom</description>
+   <description locale="it" >Nome</description>
    <description locale="pl" >Nazwa</description>
    <value tag="$[name:fr] - $[name:nl]" />
 
@@ -13,17 +14,23 @@
   <widget tag="name:fr" type="edit" >
    <description locale="en" >Name (french)</description>
    <description locale="de" >Name (franz.)</description>
+   <description locale="fr" >Nom (français)</description>
+   <description locale="it" >Nome (francese)</description>
    <description locale="pl" >Nazwa (francuska)</description>
   </widget>
   <widget tag="name:nl" type="edit" >
    <description locale="en" >Name (dutch)</description>
    <description locale="de" >Name (niederl.)</description>
+   <description locale="fr" >Nom (néérlandais)</description>
+   <description locale="it" >Nome (olandese)</description>
    <description locale="pl" >Nazwa (belgijska)</description>
   </widget>
  </widgets>
  <template>
   <description locale="en" >Brussels Ways</description>
   <description locale="de" >Brüsseler Wege</description>
+  <description locale="fr" >Rues de Bruxelles</description>
+  <description locale="it" >Strade di Bruxelles</description>
   <description locale="pl" >Drogi Brukselskie</description>
   <selector expr="not [name:fr] is _NULL_ and not [name:nl] is _NULL_" />
   <widgetref id="name_bxl" />
