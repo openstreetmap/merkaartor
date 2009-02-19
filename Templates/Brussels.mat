@@ -5,6 +5,7 @@
    <description locale="en" >Name</description>
    <description locale="ar" >الإسم</description>
    <description locale="de" >Name</description>
+   <description locale="es" >Nombre</description>
    <description locale="fr" >Nom</description>
    <description locale="it" >Nome</description>
    <description locale="pl" >Nazwa</description>
@@ -13,14 +14,18 @@
   </widget>
   <widget tag="name:fr" type="edit" >
    <description locale="en" >Name (french)</description>
+   <description locale="ar" >الإسم (فرنسي)</description>
    <description locale="de" >Name (franz.)</description>
+   <description locale="es" >Nombre (francés)</description>
    <description locale="fr" >Nom (français)</description>
    <description locale="it" >Nome (francese)</description>
    <description locale="pl" >Nazwa (francuska)</description>
   </widget>
   <widget tag="name:nl" type="edit" >
    <description locale="en" >Name (dutch)</description>
+   <description locale="ar" >الإسم (هولّندية)</description>
    <description locale="de" >Name (niederl.)</description>
+   <description locale="es" >Nombre (alemán)</description>
    <description locale="fr" >Nom (néérlandais)</description>
    <description locale="it" >Nome (olandese)</description>
    <description locale="pl" >Nazwa (belgijska)</description>

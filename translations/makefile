@@ -3,19 +3,19 @@ LRELEASE = lrelease
 
 TEMPLATES = ../Templates/*.mat
 TEMPLATES_PO = templates_*.po
-TEMPLATES_LAUNCHPAD_PO = templates-*.po
+TEMPLATES_LAUNCHPAD_PO = templates-*.po templates/*.po
 MAIN = *.ts
 MAIN_PO = merkaartor_*.po
-MAIN_LAUNCHPAD_PO = merkaartor-*.po
+MAIN_LAUNCHPAD_PO = merkaartor-*.po merkaartor/*.po
 CALL = perl i18n.pl
 
-update: updatets templates main release
+update: updatets template main release
 
 tar:
 	-tar -czf templates_`date "+%Y-%m-%d"`.tar.gz templates.pot templates_*.po
 	-tar -czf merkaartor_`date "+%Y-%m-%d"`.tar.gz merkaartor.pot merkaartor_*.po
 
-templates:
+template:
 	${CALL} templates ${TEMPLATES} ${TEMPLATES_LAUNCHPAD_PO} ${TEMPLATES_PO}
 
 main:

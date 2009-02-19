@@ -391,7 +391,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../Sync/DirtyList.cpp" line="403"/>
         <source>Error uploading request</source>
-        <translation>×طأ عند رفع المطلب</translation>
+        <translation>خطأ عندتحميل المطلب</translation>
     </message>
     <message>
         <location filename="../Sync/DirtyList.cpp" line="383"/>
@@ -1560,7 +1560,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="523"/>
         <source>&amp;Upload</source>
-        <translation>&amp;إرفع</translation>
+        <translation>&amp;حمّل</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="526"/>
@@ -2343,17 +2343,17 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>تمّ إستخراج الطبقة &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../Map/Relation.cpp" line="642"/>
+        <location filename="../Map/Relation.cpp" line="695"/>
         <source>Relation Modified %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="583"/>
+        <location filename="../Map/Road.cpp" line="526"/>
         <source>Delete Children</source>
         <translation>أمحي المتفرعين</translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="584"/>
+        <location filename="../Map/Road.cpp" line="527"/>
         <source>Do you want to delete the children nodes also?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2632,7 +2632,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="../Map/MapDocument.cpp" line="234"/>
         <source>Uploaded layer</source>
-        <translation type="unfinished"></translation>
+        <translation>حمّلت الطبقة</translation>
     </message>
 </context>
 <context>
@@ -2668,52 +2668,52 @@ Do you want to do this now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Map/Relation.cpp" line="460"/>
+        <location filename="../Map/Relation.cpp" line="513"/>
         <source>size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="866"/>
+        <location filename="../Map/Road.cpp" line="809"/>
         <source>Topleft</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="868"/>
+        <location filename="../Map/Road.cpp" line="811"/>
         <source>Botright</source>
         <translation>أسفل اليمين</translation>
     </message>
     <message>
-        <location filename="../Map/Relation.cpp" line="467"/>
+        <location filename="../Map/Relation.cpp" line="520"/>
         <source>Relation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Map/Relation.cpp" line="621"/>
+        <location filename="../Map/Relation.cpp" line="674"/>
         <source>Role</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Map/Relation.cpp" line="623"/>
+        <location filename="../Map/Relation.cpp" line="676"/>
         <source>Member</source>
         <translation>العضو</translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="861"/>
+        <location filename="../Map/Road.cpp" line="804"/>
         <source>Length</source>
         <translation>الطول</translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="863"/>
+        <location filename="../Map/Road.cpp" line="806"/>
         <source>Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="863"/>
+        <location filename="../Map/Road.cpp" line="806"/>
         <source>%1 nodes</source>
         <translation>%1 عقد</translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="870"/>
+        <location filename="../Map/Road.cpp" line="813"/>
         <source>Way</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2794,22 +2794,22 @@ Do you want to do this now?</source>
         <translation>%1 كلم</translation>
     </message>
     <message>
-        <location filename="../MapView.cpp" line="937"/>
+        <location filename="../MapView.cpp" line="938"/>
         <source>Feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MapView.cpp" line="946"/>
+        <location filename="../MapView.cpp" line="947"/>
         <source>Node</source>
         <translation>العقدة</translation>
     </message>
     <message>
-        <location filename="../MapView.cpp" line="954"/>
+        <location filename="../MapView.cpp" line="955"/>
         <source>Road</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MapView.cpp" line="962"/>
+        <location filename="../MapView.cpp" line="963"/>
         <source>Relation</source>
         <translation type="unfinished"></translation>
     </message>

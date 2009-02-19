@@ -353,7 +353,10 @@ sub createpos($$@)
         next;
         # print FILE "#: unknown:0\n"
       }
-      print FILE "#, c-format\n" if $ennc =~ /\%[0-9n]/;
+      if($ennc =~ /\%[0-9n]/)
+      { print FILE "#, c-format, qt-format\n"; }
+      elsif($ennc =~ /\%[ds]/)
+      { print FILE "#, c-format\n"; }
       print FILE "msgctxt \"$ctx\"\n" if $ctx;
       print FILE "msgid \"$ennc\"\n";
       print FILE "msgid_plural \"$data->{$en}{\"en.1\"}\"\n" if $data->{$en}{"en.1"};

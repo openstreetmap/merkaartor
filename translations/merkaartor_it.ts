@@ -149,7 +149,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../AboutDialog.ui" line="96"/>
         <source>Copyright Bart Vanhauwaert, Chris Browet and others, 2006-2009</source>
-        <translation type="unfinished"></translation>
+        <translation>Copyright Bart Vanhauwaert, Chris Browet e altri, 2006-2009</translation>
     </message>
 </context>
 <context>
@@ -1822,17 +1822,17 @@ Vuoi farlo adesso?</translation>
         <translation>Livelli Estratti &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../Map/Relation.cpp" line="642"/>
+        <location filename="../Map/Relation.cpp" line="695"/>
         <source>Relation Modified %1</source>
         <translation>Relazione Modificate %1</translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="583"/>
+        <location filename="../Map/Road.cpp" line="526"/>
         <source>Delete Children</source>
         <translation>Elimina Figli</translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="584"/>
+        <location filename="../Map/Road.cpp" line="527"/>
         <source>Do you want to delete the children nodes also?</source>
         <translation>Vuoi eliminare anche i nodi figli?</translation>
     </message>
@@ -2688,42 +2688,42 @@ Sei assolutamente sicuro che questo file KML può essere importato legalmente in
         <translation>relazione %1</translation>
     </message>
     <message>
-        <location filename="../Map/Relation.cpp" line="460"/>
+        <location filename="../Map/Relation.cpp" line="513"/>
         <source>size</source>
         <translation>dimensione</translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="866"/>
+        <location filename="../Map/Road.cpp" line="809"/>
         <source>Topleft</source>
         <translation>Alto sinistra</translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="868"/>
+        <location filename="../Map/Road.cpp" line="811"/>
         <source>Botright</source>
         <translation>Basso destra</translation>
     </message>
     <message>
-        <location filename="../Map/Relation.cpp" line="467"/>
+        <location filename="../Map/Relation.cpp" line="520"/>
         <source>Relation</source>
         <translation>Relazione</translation>
     </message>
     <message>
-        <location filename="../Map/Relation.cpp" line="621"/>
+        <location filename="../Map/Relation.cpp" line="674"/>
         <source>Role</source>
         <translation>Ruolo</translation>
     </message>
     <message>
-        <location filename="../Map/Relation.cpp" line="623"/>
+        <location filename="../Map/Relation.cpp" line="676"/>
         <source>Member</source>
         <translation>Membro</translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="863"/>
+        <location filename="../Map/Road.cpp" line="806"/>
         <source>%1 nodes</source>
         <translation>%1 nodi</translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="870"/>
+        <location filename="../Map/Road.cpp" line="813"/>
         <source>Way</source>
         <translation>Via</translation>
     </message>
@@ -2743,12 +2743,12 @@ Sei assolutamente sicuro che questo file KML può essere importato legalmente in
         <translation>Nodo</translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="861"/>
+        <location filename="../Map/Road.cpp" line="804"/>
         <source>Length</source>
         <translation>Lunghezza</translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="863"/>
+        <location filename="../Map/Road.cpp" line="806"/>
         <source>Size</source>
         <translation>Dimensione</translation>
     </message>
@@ -2809,17 +2809,17 @@ Sei assolutamente sicuro che questo file KML può essere importato legalmente in
         <translation>%1 km</translation>
     </message>
     <message>
-        <location filename="../MapView.cpp" line="937"/>
+        <location filename="../MapView.cpp" line="938"/>
         <source>Feature</source>
         <translation>Caratteristica</translation>
     </message>
     <message>
-        <location filename="../MapView.cpp" line="954"/>
+        <location filename="../MapView.cpp" line="955"/>
         <source>Road</source>
         <translation>Strada</translation>
     </message>
     <message>
-        <location filename="../MapView.cpp" line="946"/>
+        <location filename="../MapView.cpp" line="947"/>
         <source>Node</source>
         <translation>Nodo</translation>
     </message>
@@ -2829,7 +2829,7 @@ Sei assolutamente sicuro che questo file KML può essere importato legalmente in
         <translation>%1ms</translation>
     </message>
     <message>
-        <location filename="../MapView.cpp" line="962"/>
+        <location filename="../MapView.cpp" line="963"/>
         <source>Relation</source>
         <translation>Relazione</translation>
     </message>

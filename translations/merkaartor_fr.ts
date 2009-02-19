@@ -126,7 +126,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../AboutDialog.ui" line="87"/>
         <source>TextLabel</source>
-        <translation type="unfinished"></translation>
+        <translation>TextLabel</translation>
     </message>
     <message>
         <location filename="../AboutDialog.ui" line="124"/>
@@ -318,8 +318,8 @@ p, li { white-space: pre-wrap; }
         <location filename="../DirtyDock.cpp" line="66"/>
         <source>There are &lt;b&gt;%n&lt;/b&gt; objects in the dirty layer</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>Il y a &lt;b&gt;%n&lt;/b&gt; objet dans la couche &quot;Modification&quot;</numerusform>
+            <numerusform>Il y a &lt;b&gt;%n&lt;/b&gt; objets dans la couche &quot;Modification&quot;</numerusform>
         </translation>
     </message>
 </context>
@@ -712,7 +712,7 @@ Le message de l&apos;API est le suivant &apos;%1&apos;</translation>
     <message>
         <location filename="../GeoImageDock.cpp" line="125"/>
         <source>Select the layer to which the images belong:</source>
-        <translation>Séléctionnez la couche à laquelle l&apos;image appartient:</translation>
+        <translation>Séléctionnez lcalque auquel l&apos;image appartient:</translation>
     </message>
     <message>
         <location filename="../GeoImageDock.cpp" line="134"/>
@@ -930,7 +930,7 @@ Voulez vous quand même l&apos;utiliser ?</translation>
     <message>
         <location filename="../LayerDock.cpp" line="270"/>
         <source>All</source>
-        <translation>Toutes</translation>
+        <translation>Tous</translation>
     </message>
     <message>
         <location filename="../LayerDock.cpp" line="271"/>
@@ -997,7 +997,8 @@ Voulez vous quand même l&apos;utiliser ?</translation>
         <location filename="../Main.cpp" line="23"/>
         <source>Merkaartor v%1%2
 Initializing...</source>
-        <translation type="unfinished"></translation>
+        <translation>Merkaartor v%1%2
+En initialisation...</translation>
     </message>
 </context>
 <context>
@@ -1342,7 +1343,7 @@ Voulez-vous annuler le chargement d&apos;un nouveau document ou continuer et per
     <message>
         <location filename="../MainWindow.ui" line="677"/>
         <source>&amp;Break apart</source>
-        <translation>&amp;Casser</translation>
+        <translation>&amp;Séparer à part</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="691"/>
@@ -1362,7 +1363,7 @@ Voulez-vous annuler le chargement d&apos;un nouveau document ou continuer et per
     <message>
         <location filename="../MainWindow.ui" line="729"/>
         <source>&amp;Curved road</source>
-        <translation>Route &amp;courbe</translation>
+        <translation>Route &amp;sinueuse</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="738"/>
@@ -1826,17 +1827,17 @@ Voulez-vous le faire maintenant ?</translation>
         <translation>Couche Extraite &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../Map/Relation.cpp" line="642"/>
+        <location filename="../Map/Relation.cpp" line="695"/>
         <source>Relation Modified %1</source>
         <translation>Relation Modifiée %1</translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="583"/>
+        <location filename="../Map/Road.cpp" line="526"/>
         <source>Delete Children</source>
-        <translation>Supprimer les enfants</translation>
+        <translation>Supprimer les dérivés</translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="584"/>
+        <location filename="../Map/Road.cpp" line="527"/>
         <source>Do you want to delete the children nodes also?</source>
         <translation>Voulez-vous également supprimer les nœuds enfants?</translation>
     </message>
@@ -1958,7 +1959,7 @@ Voulez-vous le faire maintenant ?</translation>
     <message>
         <location filename="../MainWindow.cpp" line="2172"/>
         <source>GPS error</source>
-        <translation>Erreur GPS</translation>
+        <translation>Erreur du GPS</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="2173"/>
@@ -2008,7 +2009,7 @@ Voulez-vous le faire maintenant ?</translation>
     <message>
         <location filename="../MainWindow.ui" line="1105"/>
         <source>&amp;Image layer</source>
-        <translation>Couche &amp;image</translation>
+        <translation>Calque &amp;image</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1110"/>
@@ -2043,7 +2044,7 @@ Voulez-vous le faire maintenant ?</translation>
     <message>
         <location filename="../MainWindow.ui" line="1142"/>
         <source>&amp;Start</source>
-        <translation>&amp;Démarrer</translation>
+        <translation>Démarrer</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1150"/>
@@ -2068,7 +2069,7 @@ Voulez-vous le faire maintenant ?</translation>
     <message>
         <location filename="../MainWindow.ui" line="1189"/>
         <source>&amp;Center on GPS</source>
-        <translation>&amp;Centrer sur le GPS</translation>
+        <translation>&amp;Centrer sur l&apos;instrument GPS</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1197"/>
@@ -2225,17 +2226,17 @@ En cas de doute, demandez un avis sur les listes de diffusion OSM &quot;legal&qu
     <message>
         <location filename="../MainWindow.cpp" line="2296"/>
         <source>Save Tag Templates</source>
-        <translation type="unfinished"></translation>
+        <translation>Sauvergarder Template d&apos;étiquette</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="2296"/>
         <source>Merkaartor tag templates (*.mat)</source>
-        <translation type="unfinished"></translation>
+        <translation>Template d&apos;étiquette Merkaartor (*.mat)</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="2322"/>
         <source>Open Tag Templates</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir Template d&apos;étiquette</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="2370"/>
@@ -2295,7 +2296,7 @@ En cas de doute, demandez un avis sur les listes de diffusion OSM &quot;legal&qu
     <message>
         <location filename="../MainWindow.ui" line="192"/>
         <source>Tag templates</source>
-        <translation type="unfinished"></translation>
+        <translation>Template d&apos;étiquette</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="238"/>
@@ -2470,17 +2471,17 @@ En cas de doute, demandez un avis sur les listes de diffusion OSM &quot;legal&qu
     <message>
         <location filename="../MainWindow.ui" line="975"/>
         <source>Paste Tags (&amp;Overwrite)</source>
-        <translation type="unfinished"></translation>
+        <translation>Coller Étiquettes (&amp;Écraser)</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="990"/>
         <source>Paste Tags (&amp;Merge)</source>
-        <translation type="unfinished"></translation>
+        <translation>Coller Étiquettes (&amp;Fusionner)</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="993"/>
         <source>Paste tags</source>
-        <translation type="unfinished"></translation>
+        <translation>Coller Étiquettes</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="996"/>
@@ -2545,7 +2546,7 @@ En cas de doute, demandez un avis sur les listes de diffusion OSM &quot;legal&qu
     <message>
         <location filename="../MainWindow.ui" line="1299"/>
         <source>World OSB manager...</source>
-        <translation type="unfinished"></translation>
+        <translation>Gestionnaire &quot;World OSB&quot;...</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1304"/>
@@ -2615,17 +2616,17 @@ En cas de doute, demandez un avis sur les listes de diffusion OSM &quot;legal&qu
     <message>
         <location filename="../MainWindow.ui" line="1399"/>
         <source>Hide/Show the Styles dock</source>
-        <translation type="unfinished"></translation>
+        <translation>Cacher/Afficher l&apos;encart Styles</translation>
     </message>
     <message>
         <location filename="../PropertiesDock.cpp" line="678"/>
         <source>Remove member &apos;%1&apos; on %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Retire le membre &apos;%1&apos; de %2</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="1884"/>
         <source>%1 (int)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (int)</translation>
     </message>
 </context>
 <context>
@@ -2684,37 +2685,37 @@ En cas de doute, demandez un avis sur les listes de diffusion OSM &quot;legal&qu
         <translation>relation %1</translation>
     </message>
     <message>
-        <location filename="../Map/Relation.cpp" line="460"/>
+        <location filename="../Map/Relation.cpp" line="513"/>
         <source>size</source>
         <translation>taille</translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="866"/>
+        <location filename="../Map/Road.cpp" line="809"/>
         <source>Topleft</source>
         <translation>HautGauche</translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="868"/>
+        <location filename="../Map/Road.cpp" line="811"/>
         <source>Botright</source>
         <translation>BasDroit</translation>
     </message>
     <message>
-        <location filename="../Map/Relation.cpp" line="467"/>
+        <location filename="../Map/Relation.cpp" line="520"/>
         <source>Relation</source>
         <translation>Relation</translation>
     </message>
     <message>
-        <location filename="../Map/Relation.cpp" line="621"/>
+        <location filename="../Map/Relation.cpp" line="674"/>
         <source>Role</source>
         <translation>Role</translation>
     </message>
     <message>
-        <location filename="../Map/Relation.cpp" line="623"/>
+        <location filename="../Map/Relation.cpp" line="676"/>
         <source>Member</source>
         <translation>Membre</translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="870"/>
+        <location filename="../Map/Road.cpp" line="813"/>
         <source>Way</source>
         <translation>Route</translation>
     </message>
@@ -2734,17 +2735,17 @@ En cas de doute, demandez un avis sur les listes de diffusion OSM &quot;legal&qu
         <translation>Noeud</translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="863"/>
+        <location filename="../Map/Road.cpp" line="806"/>
         <source>%1 nodes</source>
         <translation>%1 nœuds</translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="861"/>
+        <location filename="../Map/Road.cpp" line="804"/>
         <source>Length</source>
         <translation>Longueur</translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="863"/>
+        <location filename="../Map/Road.cpp" line="806"/>
         <source>Size</source>
         <translation>Taille</translation>
     </message>
@@ -2805,17 +2806,17 @@ En cas de doute, demandez un avis sur les listes de diffusion OSM &quot;legal&qu
         <translation>%1 km</translation>
     </message>
     <message>
-        <location filename="../MapView.cpp" line="937"/>
+        <location filename="../MapView.cpp" line="938"/>
         <source>Feature</source>
         <translation>Objet</translation>
     </message>
     <message>
-        <location filename="../MapView.cpp" line="954"/>
+        <location filename="../MapView.cpp" line="955"/>
         <source>Road</source>
         <translation>Route</translation>
     </message>
     <message>
-        <location filename="../MapView.cpp" line="946"/>
+        <location filename="../MapView.cpp" line="947"/>
         <source>Node</source>
         <translation>Noeud</translation>
     </message>
@@ -2825,7 +2826,7 @@ En cas de doute, demandez un avis sur les listes de diffusion OSM &quot;legal&qu
         <translation>%1ms</translation>
     </message>
     <message>
-        <location filename="../MapView.cpp" line="962"/>
+        <location filename="../MapView.cpp" line="963"/>
         <source>Relation</source>
         <translation>Relation</translation>
     </message>
@@ -2995,7 +2996,7 @@ En cas de doute, demandez un avis sur les listes de diffusion OSM &quot;legal&qu
     <message>
         <location filename="../Render/NativeRenderDialog.ui" line="43"/>
         <source>Render options</source>
-        <translation>Options de rendu</translation>
+        <translation>Options du rendu</translation>
     </message>
     <message>
         <location filename="../Render/NativeRenderDialog.ui" line="67"/>
@@ -3186,7 +3187,7 @@ En cas de doute, demandez un avis sur les listes de diffusion OSM &quot;legal&qu
     <message>
         <location filename="../Render/OsmaRenderDialog.ui" line="365"/>
         <source>Preview</source>
-        <translation>Prévisualisation</translation>
+        <translation>Aperçu</translation>
     </message>
     <message>
         <location filename="../Render/OsmaRenderDialog.ui" line="319"/>
@@ -3306,7 +3307,7 @@ Le chemin référencé dans Outils-Préférences-[Outils] n&apos;est pas valide.
     <message>
         <location filename="../PaintStyle/PaintStyleEditor.ui" line="532"/>
         <source>Boundary</source>
-        <translation>Frontière</translation>
+        <translation>Bordure</translation>
     </message>
     <message>
         <location filename="../PaintStyle/PaintStyleEditor.ui" line="672"/>
@@ -3331,7 +3332,7 @@ Le chemin référencé dans Outils-Préférences-[Outils] n&apos;est pas valide.
     <message>
         <location filename="../PaintStyle/PaintStyleEditor.ui" line="1075"/>
         <source>Label tag</source>
-        <translation>Étiquette du label</translation>
+        <translation>Marquage de l&apos;étiquette</translation>
     </message>
     <message>
         <location filename="../PaintStyle/PaintStyleEditor.ui" line="1250"/>
@@ -3351,12 +3352,12 @@ Le chemin référencé dans Outils-Préférences-[Outils] n&apos;est pas valide.
     <message>
         <location filename="../PaintStyle/PaintStyleEditor.ui" line="1191"/>
         <source>Halo</source>
-        <translation>Halo</translation>
+        <translation>Auréole</translation>
     </message>
     <message>
         <location filename="../PaintStyle/PaintStyleEditor.ui" line="1201"/>
         <source>Area</source>
-        <translation>Zone</translation>
+        <translation>Aire</translation>
     </message>
 </context>
 <context>
@@ -3417,7 +3418,7 @@ Le chemin référencé dans Outils-Préférences-[Outils] n&apos;est pas valide.
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="583"/>
         <source>Custom</source>
-        <translation>Personnel</translation>
+        <translation>Personnalisé</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="418"/>
@@ -3604,7 +3605,7 @@ Veuillez choisir un autre nom ou cliquer sur le boutton &lt;Appliquer&gt; si vou
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="78"/>
         <source>Translate standard tags</source>
-        <translation>Traduire les étiquettes standards</translation>
+        <translation>Traduire les marquages standards</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="200"/>
@@ -3714,7 +3715,7 @@ Veuillez choisir un autre nom ou cliquer sur le boutton &lt;Appliquer&gt; si vou
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="175"/>
         <source>Single mouse button interaction</source>
-        <translation type="unfinished"></translation>
+        <translation>Interaction avec un seul bouton de souris</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="182"/>
@@ -3759,7 +3760,7 @@ Veuillez choisir un autre nom ou cliquer sur le boutton &lt;Appliquer&gt; si vou
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="980"/>
         <source>Enable use of Shape background (needs restart)</source>
-        <translation type="unfinished"></translation>
+        <translation>Active l&apos;arrière-plan &quot;Shape&quot; (nécessite un redémarrage)</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.cpp" line="103"/>
@@ -3900,17 +3901,17 @@ Veuillez choisir un autre nom ou cliquer sur le boutton &lt;Appliquer&gt; si vou
     <message>
         <location filename="../Render/OsmaRenderDialog.cpp" line="186"/>
         <source>Unable to parse feature xml</source>
-        <translation>Impossible d&apos;analyser le XML du fichier &apos;feature&apos;</translation>
+        <translation>Impossible d&apos;analyser le XML de caractéristique</translation>
     </message>
     <message>
         <location filename="../Render/OsmaRenderDialog.cpp" line="277"/>
         <source>Unable to generate preview</source>
-        <translation>Impossible de générer une prévisualisation</translation>
+        <translation>Impossible de générer un apperçu</translation>
     </message>
     <message>
         <location filename="../Render/OsmaRenderDialog.cpp" line="278"/>
         <source>Preview generation failed. Please ensure Inkscape is properly installed. at %1</source>
-        <translation>La génération de la prévisualisation a échouée. Veuillez vous assurer qu&apos;Inkscape est proprement installé à %1</translation>
+        <translation>La génération de l&apos;apperçu a échouée. Veuillez vous assurer qu&apos;Inkscape est proprement installé à %1</translation>
     </message>
 </context>
 <context>
@@ -3984,7 +3985,7 @@ Veuillez choisir un autre nom ou cliquer sur le boutton &lt;Appliquer&gt; si vou
     <message>
         <location filename="../GPS/qgpsmainwindowui.ui" line="28"/>
         <source>TextLabel</source>
-        <translation type="unfinished"></translation>
+        <translation>TextLabel</translation>
     </message>
     <message>
         <location filename="../GPS/qgpsmainwindowui.ui" line="79"/>
@@ -4047,7 +4048,7 @@ Veuillez choisir un autre nom ou cliquer sur le boutton &lt;Appliquer&gt; si vou
     <message>
         <location filename="../NameFinder/xmlstreamreader.cpp" line="41"/>
         <source>Not a proper results stream!</source>
-        <translation type="unfinished"></translation>
+        <translation>Flux de résultats impropre !</translation>
     </message>
 </context>
 <context>
@@ -4523,12 +4524,12 @@ Veuillez choisir un autre nom ou cliquer sur le boutton &lt;Appliquer&gt; si vou
     <message>
         <location filename="../Tools/WorldOsbManager.cpp" line="85"/>
         <source>Select OSB World directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionnez le répertoire &quot;OSB Mondial&quot;</translation>
     </message>
     <message>
         <location filename="../Tools/WorldOsbManager.cpp" line="99"/>
         <source>Invalid OSB World directory name</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire &quot;OSB Mondial&quot; non valable</translation>
     </message>
     <message>
         <location filename="../Tools/WorldOsbManager.cpp" line="100"/>
@@ -4578,7 +4579,7 @@ Veuillez choisir un autre nom ou cliquer sur le boutton &lt;Appliquer&gt; si vou
     <message>
         <location filename="../Tools/WorldOsbManager.ui" line="126"/>
         <source>TextLabel</source>
-        <translation type="unfinished"></translation>
+        <translation>TextLabel</translation>
     </message>
 </context>
 </TS>

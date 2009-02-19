@@ -1728,7 +1728,7 @@ Für weitere Informationen lesen Sie http://wiki.openstreetmap.org/index.php/Pro
         <translation>NGT importieren</translation>
     </message>
     <message>
-        <location filename="../Map/Relation.cpp" line="642"/>
+        <location filename="../Map/Relation.cpp" line="695"/>
         <source>Relation Modified %1</source>
         <translation>Relation %1 geändert</translation>
     </message>
@@ -1825,12 +1825,12 @@ Wollen Sie dies jetzt erledigen?</translation>
         <translation>Extrahierte Ebene &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="583"/>
+        <location filename="../Map/Road.cpp" line="526"/>
         <source>Delete Children</source>
         <translation>Unterknoten löschen</translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="584"/>
+        <location filename="../Map/Road.cpp" line="527"/>
         <source>Do you want to delete the children nodes also?</source>
         <translation>Möchten Sie die Unterknoten auch löschen?</translation>
     </message>
@@ -2680,37 +2680,37 @@ Sind Sie sicher diese KML-Daten dürfen legal in OSM importiert werden?</transla
         <translation>Relation %1</translation>
     </message>
     <message>
-        <location filename="../Map/Relation.cpp" line="460"/>
+        <location filename="../Map/Relation.cpp" line="513"/>
         <source>size</source>
         <translation>Größe</translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="866"/>
+        <location filename="../Map/Road.cpp" line="809"/>
         <source>Topleft</source>
         <translation>Oben Links</translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="868"/>
+        <location filename="../Map/Road.cpp" line="811"/>
         <source>Botright</source>
         <translation>Unten Rechts</translation>
     </message>
     <message>
-        <location filename="../Map/Relation.cpp" line="467"/>
+        <location filename="../Map/Relation.cpp" line="520"/>
         <source>Relation</source>
         <translation>Relation</translation>
     </message>
     <message>
-        <location filename="../Map/Relation.cpp" line="621"/>
+        <location filename="../Map/Relation.cpp" line="674"/>
         <source>Role</source>
         <translation>Rolle</translation>
     </message>
     <message>
-        <location filename="../Map/Relation.cpp" line="623"/>
+        <location filename="../Map/Relation.cpp" line="676"/>
         <source>Member</source>
         <translation>Mitglied</translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="870"/>
+        <location filename="../Map/Road.cpp" line="813"/>
         <source>Way</source>
         <translation>Weg</translation>
     </message>
@@ -2730,17 +2730,17 @@ Sind Sie sicher diese KML-Daten dürfen legal in OSM importiert werden?</transla
         <translation>Knoten</translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="863"/>
+        <location filename="../Map/Road.cpp" line="806"/>
         <source>%1 nodes</source>
         <translation>%1 Knoten</translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="861"/>
+        <location filename="../Map/Road.cpp" line="804"/>
         <source>Length</source>
         <translation>Länge</translation>
     </message>
     <message>
-        <location filename="../Map/Road.cpp" line="863"/>
+        <location filename="../Map/Road.cpp" line="806"/>
         <source>Size</source>
         <translation>Größe</translation>
     </message>
@@ -2801,17 +2801,17 @@ Sind Sie sicher diese KML-Daten dürfen legal in OSM importiert werden?</transla
         <translation>%1 km</translation>
     </message>
     <message>
-        <location filename="../MapView.cpp" line="937"/>
+        <location filename="../MapView.cpp" line="938"/>
         <source>Feature</source>
         <translation>Merkmal</translation>
     </message>
     <message>
-        <location filename="../MapView.cpp" line="954"/>
+        <location filename="../MapView.cpp" line="955"/>
         <source>Road</source>
         <translation>Straße</translation>
     </message>
     <message>
-        <location filename="../MapView.cpp" line="946"/>
+        <location filename="../MapView.cpp" line="947"/>
         <source>Node</source>
         <translation>Knoten</translation>
     </message>
@@ -2821,7 +2821,7 @@ Sind Sie sicher diese KML-Daten dürfen legal in OSM importiert werden?</transla
         <translation>%1ms</translation>
     </message>
     <message>
-        <location filename="../MapView.cpp" line="962"/>
+        <location filename="../MapView.cpp" line="963"/>
         <source>Relation</source>
         <translation>Relation</translation>
     </message>
