@@ -70,7 +70,7 @@ TRANSLATIONS += \
 	translations/merkaartor_ar.ts \
 	translations/merkaartor_cs.ts \
 	translations/merkaartor_de.ts \
-	translations/merkaartor_es.ts
+	translations/merkaartor_es.ts \
 	translations/merkaartor_fr.ts \
 	translations/merkaartor_it.ts \
 	translations/merkaartor_pl.ts \
@@ -80,7 +80,7 @@ BINTRANSLATIONS += \
 	translations/merkaartor_ar.qm \
 	translations/merkaartor_cs.qm \
 	translations/merkaartor_de.qm \
-	translations/merkaartor_es.ts
+	translations/merkaartor_es.ts \
 	translations/merkaartor_fr.qm \
 	translations/merkaartor_it.qm \
 	translations/merkaartor_pl.qm \
