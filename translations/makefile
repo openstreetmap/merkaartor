@@ -9,6 +9,7 @@ MAIN_PO = merkaartor_*.po
 MAIN_LAUNCHPAD_PO = merkaartor-*.po merkaartor/*.po
 CALL = perl i18n.pl
 TARCALL = perl maketar.pl
+CD = cd
 
 update: updatets template main release
 
