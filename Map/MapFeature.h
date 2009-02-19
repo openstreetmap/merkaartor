@@ -228,6 +228,8 @@ class MapFeature : public QObject
 		static Road* getWayOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, const QString& Id);
 		static Relation* getRelationOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, const QString& Id);
 		static void mergeTags(MapDocument* theDocument, CommandList* L, MapFeature* Dest, MapFeature* Src);
+		static bool QRectInterstects(const QRect& r, const QLine& l, QPoint& a, QPoint& b);
+
 
 	private:
 		MapFeaturePrivate* p;

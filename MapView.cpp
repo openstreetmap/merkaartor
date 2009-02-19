@@ -714,8 +714,9 @@ void MapView::drawFeatures(QPainter & P, Projection& aProj)
 				Current->draw(R);
 			else if (TrackPoint * Pt = dynamic_cast < TrackPoint * >(theFeatures[i]))
 				Current->draw(Pt);
+			/* //It is non-sense to paint a relation, isn't it? (The drawing of the boundaries is in Relation::draw)
 			else if (Relation * RR = dynamic_cast < Relation * >(theFeatures[i]))
-				Current->draw(RR);
+				Current->draw(RR); */
 		}
 		P.restore();
 	}

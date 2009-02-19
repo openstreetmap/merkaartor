@@ -312,7 +312,7 @@ void Road::drawHover(QPainter& thePainter, const Projection& theProjection, bool
 	thePainter.setPen(TP);
 	thePainter.setBrush(Qt::NoBrush);
 	QRegion clipRg = QRegion(thePainter.clipRegion().boundingRect().adjusted(-20, -20, 20, 20));
-	buildPath(theProjection, clipRg);
+	//buildPath(theProjection, clipRg);
 	thePainter.drawPath(p->thePath);
 	if (solid) {
 		TP.setWidth(MerkaartorPreferences::instance()->getHoverWidth()*3);
@@ -348,7 +348,7 @@ void Road::drawFocus(QPainter& thePainter, const Projection& theProjection, bool
 	thePainter.setPen(TP);
 	thePainter.setBrush(Qt::NoBrush);
 	QRegion clipRg = QRegion(thePainter.clipRegion().boundingRect().adjusted(-20, -20, 20, 20));
-	buildPath(theProjection, clipRg);
+	//buildPath(theProjection, clipRg);
 	thePainter.drawPath(p->thePath);
 	if (solid) {
 		TP.setWidth(MerkaartorPreferences::instance()->getFocusWidth()*3);
@@ -438,63 +438,6 @@ void Road::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature,
 QPainterPath Road::getPath()
 {
 	return p->thePath;
-}
-
-bool QRectInterstects(const QRect& r, const QLine& l, QPoint& a, QPoint& b)
-{
-	QLineF lF = QLineF(l);
-	QPointF pF;
-	bool hasP1 = false;
-	bool hasP2 = false;
-
-	if (QLineF(r.topLeft(), r.bottomLeft()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
-		a = pF.toPoint();
-		hasP1 = true;
-	}
-	if (QLineF(r.bottomLeft(), r.bottomRight()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
-		if (hasP1) {
-			b = pF.toPoint();
-			hasP2 = true;
-		} else {
-			a = pF.toPoint();
-			hasP1 = true;
-		}
-	}
-	if (QLineF(r.bottomRight(), r.topRight()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
-		if (hasP1) {
-			b = pF.toPoint();
-			hasP2 = true;
-		} else {
-			a = pF.toPoint();
-			hasP1 = true;
-		}
-	}
-	if (QLineF(r.topRight(), r.topLeft()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
-		if (hasP1) {
-			b = pF.toPoint();
-			hasP2 = true;
-		} else {
-			a = pF.toPoint();
-			hasP1 = true;
-		}
-	}
-
-	if (hasP1 && hasP2) {
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 4, 0))
-		double la1 = QLineF(a,b).angleTo(lF);
-#else
-		double la1 = QLineF(a,b).angle(lF);
-#endif
-		if (la1 > 15.0 && la1 < 345.0) {
-			QPoint t = b;
-			b = a;
-			a = t;
-		}
-	}
-	if (hasP1)
-		return true;
-	else
-		return false;
 }
 
 void Road::buildPath(Projection const &theProjection, const QRegion& paintRegion)

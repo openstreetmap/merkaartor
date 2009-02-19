@@ -1,4 +1,5 @@
 v0.13
+	* FIX : Painting slowdowns (+ memory consumption) when relations are involved (fixes #1528)
 	* FIX : Splitted roads not added to Relation (fixes #1586)
 	* FIX : Tweaked windows menu to be "standard"
 	* ADD : Splash screen

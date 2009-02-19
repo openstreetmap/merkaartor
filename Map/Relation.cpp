@@ -113,23 +113,19 @@ void Relation::draw(QPainter& P, const Projection& theProjection)
 		return;
 
 	P.setPen(QPen(M_PREFS->getRelationsColor(),M_PREFS->getRelationsWidth(),Qt::DashLine));
-	QRectF bb = QRectF(theProjection.project(boundingBox().bottomLeft()),theProjection.project(boundingBox().topRight()));
-	bb.adjust(-10, 10, 10, -10);
-	P.drawRect(bb);
+	P.drawPath(p->thePath);
 }
 
 void Relation::drawFocus(QPainter& P, const Projection& theProjection, bool solid)
 {
-	QRectF bb = QRectF(theProjection.project(boundingBox().topLeft()),theProjection.project(boundingBox().bottomRight()));
-	bb.adjust(-10, -10, 10, 10);
 	if (!solid) {
 		QPen thePen(M_PREFS->getFocusColor(),M_PREFS->getFocusWidth());
 		thePen.setDashPattern(getParentDashes());
 		P.setPen(thePen);
-		P.drawRect(bb);
+		P.drawPath(p->thePath);
 	} else {
 		P.setPen(QPen(M_PREFS->getFocusColor(),M_PREFS->getFocusWidth(),Qt::DashLine));
-		P.drawRect(bb);
+		P.drawPath(p->thePath);
 
 		for (unsigned int i=0; i<p->Members.size(); ++i)
 			p->Members[i].second->drawFocus(P,theProjection, solid);
@@ -143,16 +139,14 @@ void Relation::drawFocus(QPainter& P, const Projection& theProjection, bool soli
 
 void Relation::drawHover(QPainter& P, const Projection& theProjection, bool solid)
 {
-	QRectF bb = QRectF(theProjection.project(boundingBox().topLeft()),theProjection.project(boundingBox().bottomRight()));
-	bb.adjust(-10, -10, 10, 10);
 	if (!solid) {
 		QPen thePen(M_PREFS->getHoverColor(),M_PREFS->getHoverWidth());
 		thePen.setDashPattern(getParentDashes());
 		P.setPen(thePen);
-		P.drawRect(bb);
+		P.drawPath(p->thePath);
 	} else {
 		P.setPen(QPen(M_PREFS->getHoverColor(),M_PREFS->getHoverWidth(),Qt::DashLine));
-		P.drawRect(bb);
+		P.drawPath(p->thePath);
 
 		for (unsigned int i=0; i<p->Members.size(); ++i)
 			p->Members[i].second->drawHover(P,theProjection, solid);
@@ -309,11 +303,70 @@ void Relation::releaseMemberModel()
 void Relation::buildPath(Projection const &theProjection, const QRegion& paintRegion)
 {
 	p->thePath = QPainterPath();
-	for (unsigned int i=0; i<size(); ++i)
-		if (Road* M = dynamic_cast<Road*>(p->Members[i].second)) {
-			M->buildPath(theProjection, paintRegion);
-			p->thePath.addPath(M->getPath());
+	QRect bb = QRect(theProjection.project(boundingBox().topLeft()),theProjection.project(boundingBox().bottomRight()));
+	bb.adjust(-10, -10, 10, 10);
+	QList<QPoint> corners;
+
+	corners << bb.bottomLeft() << bb.topLeft() << bb.topRight() << bb.bottomRight() << bb.bottomLeft();
+
+	bool lastPointVisible = true;
+	QPoint lastPoint = corners[0];
+	QPoint aP = lastPoint;
+
+	double PixelPerM = theProjection.pixelPerM();
+	double WW = PixelPerM*10+10;
+	QRect clipRect = paintRegion.boundingRect().adjusted(int(-WW-20), int(-WW-20), int(WW+20), int(WW+20));
+
+
+	if (M_PREFS->getDrawingHack()) {
+		if (!clipRect.contains(aP)) {
+			aP.setX(qMax(clipRect.left(), aP.x()));
+			aP.setX(qMin(clipRect.right(), aP.x()));
+			aP.setY(qMax(clipRect.top(), aP.y()));
+			aP.setY(qMin(clipRect.bottom(), aP.y()));
+			lastPointVisible = false;
 		}
+	}
+	p->thePath.moveTo(aP);
+	QPoint firstPoint = aP;
+
+	for (unsigned int j=1; j<corners.size(); ++j) {
+		aP = corners[j];
+		if (M_PREFS->getDrawingHack()) {
+			QLine l(lastPoint, aP);
+			if (!clipRect.contains(aP)) {
+				if (!lastPointVisible) {
+					QPoint a, b;
+					if (QRectInterstects(clipRect, l, a, b)) {
+						p->thePath.lineTo(a);
+						lastPoint = aP;
+						aP = b;
+					} else {
+						lastPoint = aP;
+						aP.setX(qMax(clipRect.left(), aP.x()));
+						aP.setX(qMin(clipRect.right(), aP.x()));
+						aP.setY(qMax(clipRect.top(), aP.y()));
+						aP.setY(qMin(clipRect.bottom(), aP.y()));
+					}
+				} else {
+					QPoint a, b;
+					QRectInterstects(clipRect, l, a, b);
+					lastPoint = aP;
+					aP = a;
+				}
+				lastPointVisible = false;
+			} else {
+				if (!lastPointVisible) {
+					QPoint a, b;
+					QRectInterstects(clipRect, l, a, b);
+					p->thePath.lineTo(a);
+				}
+				lastPoint = aP;
+				lastPointVisible = true;
+			}
+		}
+		p->thePath.lineTo(aP);
+	}
 }
 
 QPainterPath Relation::getPath()
