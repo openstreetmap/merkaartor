@@ -534,7 +534,7 @@ sub main
     elsif($f =~ /\.mat$/) { push(@mat, $f); }
     elsif($f =~ /\.po$/) { push(@po, $f); }
     elsif($f =~ /\.ts$/) { push(@ts, $f); }
-    else { die "unknown file extsion."; }
+    else { die "unknown file extension."; }
   }
   my %data = loadfiles(\%lang,\%pokeys, @mat,@ts,@po);
   my @cpo;
