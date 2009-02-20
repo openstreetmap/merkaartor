@@ -122,6 +122,7 @@ sub loadfiles($$@)
       my $numerus;
       while(<FILE>)
       {
+        s/\r//g;
         ++$linenum;
         if(/<name>(.*)<\/name>/) { $ctx = $1; }
         elsif(/<location filename="(.*?)" line="(.*?)"\/>/) { $loc = "$1:$2"; }
