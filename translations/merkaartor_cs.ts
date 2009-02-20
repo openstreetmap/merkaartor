@@ -121,7 +121,7 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://merkaartor.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://merkaartor.org/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;p, li { white-space: pre-wrap; }&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://merkaartor.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://merkaartor.org/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../AboutDialog.ui" line="96"/>
@@ -400,7 +400,8 @@ Hlášení serveru je &apos;%2&apos;</translation>
         <location filename="../Sync/DirtyList.cpp" line="387"/>
         <source>
 API message is &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>
+Hlášení API je &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -561,7 +562,7 @@ Dříve než budete moci odeslat vaše změny, musíte ručně sloučit dvě ver
         <location filename="../Map/ImportOSM.cpp" line="448"/>
         <source>Empty roads/relations are probably errors.
 Do you want to mark them for deletion?</source>
-        <translation>Prázné cesty/vztahy jsou pravděpodobně chyba.
+        <translation>Prázné cesty/vazby jsou pravděpodobně chyba.
 Chcete je označit pro smazání?</translation>
     </message>
     <message>
@@ -591,13 +592,14 @@ Chcete je označit pro smazání?</translation>
         <location filename="../Map/DownloadOSM.cpp" line="471"/>
         <source>Unexpected http status code (%1)
 Server message is &apos;%2&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Neočekávaný http stavový kód (%1)
+Hlášení serveru je  &apos;%2&apos;</translation>
     </message>
     <message>
         <location filename="../Map/DownloadOSM.cpp" line="473"/>
         <source>
 API message is &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Hlášení API je  &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -974,7 +976,8 @@ Chcete ho ještě používat?</translation>
         <location filename="../Main.cpp" line="23"/>
         <source>Merkaartor v%1%2
 Initializing...</source>
-        <translation type="unfinished"></translation>
+        <translation>Merkaartor v%1%2
+Inicializace...</translation>
     </message>
 </context>
 <context>
@@ -2174,7 +2177,16 @@ Pro více informací navštivte http://wiki.openstreetmap.org/index.php/Problem_
 If unsure, please seek advice on the &quot;legal&quot; or &quot;talk&quot; openstreetmap mailing lists.
 
 Are you absolutely sure this KML can legally be imported in OSM?</source>
-        <translation type="unfinished"></translation>
+        <translation>Pokoušíte se importovat KML soubor. Prosím uvědomte si že:
+- Nemůžete importovat do OSM soubor KML vytvořený v Google Earth.
+I když si myslíte, že uzly které jste vytvořili v GE jsou vaše, nejsou!
+Je to pouze odvozené dílo z GE a jako takové nemůže být použité v OSM.
+
+- Pokud jste ho stáhli z internetu, je velká pravděpodobnost, že je zatížen copyrightem.
+Prosím buďte si absolutně jisti, že použití těchto dat v OSM je povoleno autorem,
+nebo že tyto data jsou public domain.
+
+Pokud si nejste jisti , prosím požádejte o radu v &quot;legal&quot; nebo &quot;talk&quot; openstreetmap mailing listu. Jste si opravdu absolutně jisti, že tento KLM může být legálně importován do OSM?</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="1226"/>
