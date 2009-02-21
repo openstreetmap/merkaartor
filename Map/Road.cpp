@@ -312,7 +312,7 @@ void Road::drawHover(QPainter& thePainter, const Projection& theProjection, bool
 	thePainter.setPen(TP);
 	thePainter.setBrush(Qt::NoBrush);
 	QRegion clipRg = QRegion(thePainter.clipRegion().boundingRect().adjusted(-20, -20, 20, 20));
-	//buildPath(theProjection, clipRg);
+	buildPath(theProjection, clipRg);
 	thePainter.drawPath(p->thePath);
 	if (solid) {
 		TP.setWidth(MerkaartorPreferences::instance()->getHoverWidth()*3);
@@ -348,7 +348,7 @@ void Road::drawFocus(QPainter& thePainter, const Projection& theProjection, bool
 	thePainter.setPen(TP);
 	thePainter.setBrush(Qt::NoBrush);
 	QRegion clipRg = QRegion(thePainter.clipRegion().boundingRect().adjusted(-20, -20, 20, 20));
-	//buildPath(theProjection, clipRg);
+	buildPath(theProjection, clipRg);
 	thePainter.drawPath(p->thePath);
 	if (solid) {
 		TP.setWidth(MerkaartorPreferences::instance()->getFocusWidth()*3);
