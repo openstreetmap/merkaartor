@@ -369,6 +369,8 @@ public:
 	M_PARAM_DECLARE_BOOL(GpsSyncTime)
 
 	M_PARAM_DECLARE_BOOL(ResolveRelations)
+	M_PARAM_DECLARE_BOOL(DeleteIncompleteRelations)
+
 	M_PARAM_DECLARE_BOOL(TranslateTags)
 
 	M_PARAM_DECLARE_BOOL(MapTooltip)

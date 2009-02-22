@@ -195,6 +195,8 @@ class GenericFeatureSnapInteraction : public Interaction
 				{
 					if (Pt->layer()->isReadonly())
 						continue;
+					if (Pt->notEverythingDownloaded())
+						continue;
 					if ( (NoRoads || NoSelectRoads) && dynamic_cast<Road*>(Pt))
 						continue;
 					if (NoSelectPoints && dynamic_cast<TrackPoint*>(Pt))

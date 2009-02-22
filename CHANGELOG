@@ -1,4 +1,5 @@
 v0.13
+	* FIX : Do not remove incomplete downloaded relation; make them readonly and display them in red (temporary)
 	* FIX : Painting slowdowns (+ memory consumption) when relations are involved (fixes #1528)
 	* FIX : Splitted roads not added to Relation (fixes #1586)
 	* FIX : Tweaked windows menu to be "standard"

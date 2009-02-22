@@ -109,15 +109,22 @@ CoordBox Relation::boundingBox() const
 
 void Relation::draw(QPainter& P, const Projection& theProjection)
 {
+	Q_UNUSED(theProjection)
+
 	if (!M_PREFS->getRelationsVisible())
 		return;
 
-	P.setPen(QPen(M_PREFS->getRelationsColor(),M_PREFS->getRelationsWidth(),Qt::DashLine));
+	if (notEverythingDownloaded())
+		P.setPen(QPen(Qt::red,M_PREFS->getRelationsWidth(),Qt::DashLine));
+	else
+		P.setPen(QPen(M_PREFS->getRelationsColor(),M_PREFS->getRelationsWidth(),Qt::DashLine));
 	P.drawPath(p->thePath);
 }
 
 void Relation::drawFocus(QPainter& P, const Projection& theProjection, bool solid)
 {
+	QRegion clipRg = QRegion(P.clipRegion().boundingRect().adjusted(-20, -20, 20, 20));
+	buildPath(theProjection, clipRg);
 	if (!solid) {
 		QPen thePen(M_PREFS->getFocusColor(),M_PREFS->getFocusWidth());
 		thePen.setDashPattern(getParentDashes());
@@ -139,6 +146,8 @@ void Relation::drawFocus(QPainter& P, const Projection& theProjection, bool soli
 
 void Relation::drawHover(QPainter& P, const Projection& theProjection, bool solid)
 {
+	QRegion clipRg = QRegion(P.clipRegion().boundingRect().adjusted(-20, -20, 20, 20));
+	buildPath(theProjection, clipRg);
 	if (!solid) {
 		QPen thePen(M_PREFS->getHoverColor(),M_PREFS->getHoverWidth());
 		thePen.setDashPattern(getParentDashes());
@@ -213,7 +222,7 @@ void Relation::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeat
 
 bool Relation::notEverythingDownloaded() const
 {
-	if (lastUpdated() == MapFeature::NotYetDownloaded)
+	if (lastUpdated() == MapFeature::NotYetDownloaded || lastUpdated() == MapFeature::NotEverythingDownloaded)
 		return true;
 	for (unsigned int i=0; i<p->Members.size(); ++i)
 		if (p->Members[i].second->notEverythingDownloaded())
@@ -330,7 +339,7 @@ void Relation::buildPath(Projection const &theProjection, const QRegion& paintRe
 	p->thePath.moveTo(aP);
 	QPoint firstPoint = aP;
 
-	for (unsigned int j=1; j<corners.size(); ++j) {
+	for (int j=1; j<corners.size(); ++j) {
 		aP = corners[j];
 		if (M_PREFS->getDrawingHack()) {
 			QLine l(lastPoint, aP);

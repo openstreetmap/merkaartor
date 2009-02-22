@@ -1321,6 +1321,7 @@ M_PARAM_IMPLEMENT_STRING(GpsLogDir, gps, "")
 M_PARAM_IMPLEMENT_BOOL(GpsSyncTime, gps, false)
 
 M_PARAM_IMPLEMENT_BOOL(ResolveRelations, downloadosm, false)
+M_PARAM_IMPLEMENT_BOOL(DeleteIncompleteRelations, downloadosm, false)
 
 M_PARAM_IMPLEMENT_BOOL(MapTooltip, visual, false)
 M_PARAM_IMPLEMENT_BOOL(InfoOnHover, visual, true)

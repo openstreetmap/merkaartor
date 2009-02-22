@@ -297,6 +297,7 @@ static bool downloadToResolve(const std::vector<MapFeature*>& Resolution, QWidge
 						break;
 				}
 			}
+			Resolution[i]->setLastUpdated(MapFeature::OSMServer);
 		}
 		else
 			return false;
@@ -307,6 +308,11 @@ static bool downloadToResolve(const std::vector<MapFeature*>& Resolution, QWidge
 
 static void recurseDelete (MapFeature* F, QVector<MapFeature*>& MustDelete)
 {
+	if (CAST_RELATION(F) && !M_PREFS->getDeleteIncompleteRelations()) {    // Do not systematically delete incomplete relations
+		F->setLastUpdated(MapFeature::NotEverythingDownloaded);
+		return;
+	}
+
 	for (unsigned int i=0; i<F->sizeParents(); i++) {
 		recurseDelete(F->getParent(i), MustDelete);
 	}
@@ -329,9 +335,9 @@ static bool resolveNotYetDownloaded(QWidget* aParent, MapDocument* theDocument, 
 
 		std::vector<MapFeature*> MustResolve;
 		MustResolve.clear();
-		for (unsigned int i=0; i<theLayer->size(); ++i)
+		for (FeatureIterator it(theDocument); !it.isEnd(); ++it)
 		{
-			Relation* RR = dynamic_cast<Relation*>(theLayer->get(i));
+			Relation* RR = CAST_RELATION(it.get());
 			if (RR && RR->notEverythingDownloaded())
 				MustResolve.push_back(RR);
 		}
@@ -346,8 +352,9 @@ static bool resolveNotYetDownloaded(QWidget* aParent, MapDocument* theDocument, 
 	QVector<MapFeature*> MustDelete;
 	for (unsigned int i=0; i<theLayer->size(); i++) 
 	{
-		if (theLayer->get(i)->notEverythingDownloaded())
+		if (theLayer->get(i)->notEverythingDownloaded()) {
 			recurseDelete(theLayer->get(i), MustDelete);
+		}
 	}
 	for (int i=0; i<MustDelete.size(); i++) {
 		MustDelete[i]->layer()->remove(MustDelete[i]);
@@ -438,7 +445,7 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 				if (!R->size())
 					EmptyFeature.push_back(R);
 			if (Relation* RR = dynamic_cast<Relation*>(theLayer->get(i)))
-				if (!RR->size())
+				if (!RR->size() && !RR->notEverythingDownloaded())
 					EmptyFeature.push_back(RR);
 		}
 		if (EmptyFeature.size()) {

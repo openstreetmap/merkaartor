@@ -45,7 +45,7 @@ class MapFeature : public QObject
 	Q_OBJECT
 
 	public:
-		typedef enum { User, UserResolved, OSMServer, OSMServerConflict, NotYetDownloaded, Log } ActorType;
+		typedef enum { User, UserResolved, OSMServer, OSMServerConflict, NotYetDownloaded, Log, NotEverythingDownloaded } ActorType;
 		typedef enum { UnknownDirection, BothWays, OneWay, OtherWay } TrafficDirectionType;
 	public:
 		/// Constructor for an empty map feature
