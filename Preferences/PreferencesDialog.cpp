@@ -54,6 +54,10 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 		cbTemplates->addItem(intTemplates.entryList().at(i));
 	}
 
+#ifdef FORCED_CUSTOM_STYLE
+    cbCustomStyle->hide();
+#endif
+
 	resize(1,1);
 	QApplication::processEvents();
 

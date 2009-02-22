@@ -13,6 +13,7 @@
 # GEOIMAGE            - enable geotagged images (needs exiv2)
 # GPSD                - use gpsd as location provider
 # NVIDIA_HACK         - used to solve nvidia specific slowdown
+# FORCE_CUSTOM_STYLE  - force custom style (recommended on Linux until the "expanding dock" is solved upstream)
 
 #Static config
 include (Config.pri)
@@ -52,6 +53,10 @@ contains(NODEBUG,1) {
 
 contains(GPSD,1) {
     DEFINES += USEGPSD
+}
+
+contains(FORCE_CUSTOM_STYLE,1) {
+    DEFINES += FORCED_CUSTOM_STYLE
 }
 
 contains(NVIDIA_HACK,1) {

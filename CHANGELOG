@@ -1,4 +1,5 @@
 v0.13
+	* ADD : Allow to force the custom Qt style thru Config.pri
 	* FIX : Do not remove incomplete downloaded relation; make them readonly and display them in red (temporary)
 	* FIX : Painting slowdowns (+ memory consumption) when relations are involved (fixes #1528)
 	* FIX : Splitted roads not added to Relation (fixes #1586)

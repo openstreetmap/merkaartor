@@ -108,7 +108,9 @@ MainWindow::MainWindow(void)
 	theProgressLabel = NULL;
 
 	p->defStyle = QApplication::style()->objectName();
+#ifndef FORCED_CUSTOM_STYLE
 	if (M_PREFS->getMerkaartorStyle())
+#endif
 		QApplication::setStyle(new SkulptureStyle);
 
 	setupUi(this);
@@ -1415,10 +1417,18 @@ void MainWindow::toolsPreferencesAction_triggered(bool focusData)
 
 void MainWindow::preferencesChanged(void)
 {
-	if (M_PREFS->getMerkaartorStyle())
-		QApplication::setStyle(new SkulptureStyle);
-	else
-		QApplication::setStyle(p->defStyle);
+#ifndef FORCED_CUSTOM_STYLE
+    if (!M_PREFS->getMerkaartorStyle())
+    {
+        if (QApplication::style()->objectName() != p->defStyle)
+            QApplication::setStyle(p->defStyle);
+    }
+    else
+#endif
+    {
+        if (QApplication::style()->objectName() != "")
+            QApplication::setStyle(new SkulptureStyle);
+    }
 
 	theDocument->getImageLayer()->setMapAdapter(M_PREFS->getBgType());
 	theDocument->getImageLayer()->updateWidget();
