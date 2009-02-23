@@ -1817,10 +1817,10 @@ void MainWindow::updateBookmarksMenu()
 		menuBookmarks->removeAction(menuBookmarks->actions()[3]);
 	}
 
-	QMapIterator<QString, CoordBox> i(MerkaartorPreferences::instance()->getBookmarks());
-	while (i.hasNext()) {
-		i.next();
-		QAction* a = new QAction(i.key(), menuBookmarks);
+	QMapIterator<QString, CoordBox> it(MerkaartorPreferences::instance()->getBookmarks());
+	while (it.hasNext()) {
+		it.next();
+		QAction* a = new QAction(it.key(), menuBookmarks);
 		menuBookmarks->addAction(a);
 	}
 }
@@ -2138,6 +2138,7 @@ void MainWindow::on_windowHideAllAction_triggered()
 	theLayers->setVisible(false);
 	theProperties->setVisible(false);
 	theGPS->setVisible(false);
+	p->theStyle->setVisible(false);
 #ifdef GEOIMAGE
 	theGeoImage->setVisible(false);
 #endif
