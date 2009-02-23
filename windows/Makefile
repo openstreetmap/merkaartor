@@ -5,7 +5,7 @@ LIGHT := "c:/Program Files/Windows Installer XML v3/bin/light.exe"
 CANDLE := "c:/Program Files/Windows Installer XML v3/bin/candle.exe"
 LRELEASE := "lrelease.exe"
 VERSION=0.13
-REVISION=-SVN
+REVISION=-rc1
 
 
 merkaartor-$(VERSION)$(REVISION).msi: merkaartor.wixobj Makefile banner.bmp dialog.bmp merkaartor.qm

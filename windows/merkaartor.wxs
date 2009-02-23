@@ -6,8 +6,14 @@
    <Product  Id="6E5D622D-DBFC-4706-9F9B-598D11109DD2" Name="$(var.PackageName)" 
       Language="1033" Version="0.12.0.2" Manufacturer="Bart Vanhauwaert"
       UpgradeCode="53335F6D-C3A4-4846-8AE9-97E6011C0970">
+
       <Package 
          Description="A map editor for OpenStreetMap.org" InstallerVersion="100" Compressed="yes" />
+
+      <!--Set the icon for the msi and Add/Remove programs-->
+      <Icon Id='Merkaartor.exe' SourceFile='..\Icons\Mercator_16x16.ico'/>
+      <Property Id="ARPPRODUCTICON" Value="Merkaartor.exe" />
+      <Property Id="ALLUSERS" Value="1"/>
 
       <Media Id="1" Cabinet="Product.cab" EmbedCab="yes" />
       
@@ -16,11 +22,29 @@
          </Directory>
          <Directory Id="ProgramFilesFolder">
             <Directory Id="INSTALLLOCATION" Name="Merkaartor">
+                <Directory Id="MERKAARTORHARE" Name="share">
+                   <Directory Id="WORLD_SHP" Name="world_shp" />
+                </Directory>
                 <Directory Id="QTIMAGEPLUGINDIR" Name="imageformats">
                 </Directory>
             </Directory>
          </Directory>
       </Directory>
+
+      <DirectoryRef Id="WORLD_SHP">
+         <Component Id="World_shp" Guid="406fac4e-54cf-4901-b4b7-936f75a69e15">
+            <File Id="world_adm0.dbf" Name="world_adm0.dbf"
+               Source="$(var.SharePath)\world_shp\world_adm0.dbf" DiskId="1">
+            </File>
+            <File Id="world_adm0.shp" Name="world_adm0.shp"
+               Source="$(var.SharePath)\world_shp\world_adm0.shp" DiskId="1">
+            </File>
+            <File Id="world_adm0.shx" Name="world_adm0.shx"
+               Source="$(var.SharePath)\world_shp\world_adm0.shx" DiskId="1">
+            </File>
+         </Component>
+      </DirectoryRef>
+
       <DirectoryRef Id="INSTALLLOCATION">
          <Component Id="Merkaartor" Guid="8874BD43-28FF-4420-B4E0-AE7D51E6590A">
 	          <RegistryValue Root="HKCU" Key="Software\Merkaartor" Name="Installed" Type="integer" Value="1"/>
@@ -28,16 +52,22 @@
                Source="$(var.QtPath)\bin\mingwm10.dll" DiskId="1">
             </File>
             <File Id="merkaartor_cs.qm" Name="merkaartor_cs.qm"
-               Source="..\merkaartor_cs.qm" DiskId="1">
+               Source="..\translations\merkaartor_cs.qm" DiskId="1">
             </File>
             <File Id="merkaartor_de.qm" Name="merkaartor_de.qm"
-               Source="..\merkaartor_de.qm" DiskId="1">
+               Source="..\translations\merkaartor_de.qm" DiskId="1">
             </File>
             <File Id="merkaartor_fr.qm" Name="merkaartor_fr.qm"
-               Source="..\merkaartor_fr.qm" DiskId="1">
+               Source="..\translations\merkaartor_fr.qm" DiskId="1">
+            </File>
+            <File Id="merkaartor_it.qm" Name="merkaartor_it.qm"
+               Source="..\translations\merkaartor_it.qm" DiskId="1">
             </File>
             <File Id="merkaartor_ru.qm" Name="merkaartor_ru.qm"
-               Source="..\merkaartor_ru.qm" DiskId="1">
+               Source="..\translations\merkaartor_ru.qm" DiskId="1">
+            </File>
+            <File Id="merkaartor_pl.qm" Name="merkaartor_pl.qm"
+               Source="..\translations\merkaartor_pl.qm" DiskId="1">
             </File>
             <File Id="libexslt.dll" Name="libexslt.dll"
                Source="$(var.DllPath)\libexslt.dll" DiskId="1">
@@ -47,6 +77,12 @@
             </File>
             <File Id="libxslt.dll" Name="libxslt.dll"
                Source="$(var.DllPath)\libxslt.dll" DiskId="1">
+            </File>
+            <File Id="libproj.dll" Name="libproj.dll"
+               Source="$(var.DllPath)\libproj.dll" DiskId="1">
+            </File>
+            <File Id="libgdal1.dll" Name="libgdal-1.dll"
+               Source="$(var.DllPath)\libgdal-1.dll" DiskId="1">
             </File>
             <File Id="MerkaartorExe" Name="Merkaartor.exe"
                Source="$(var.BinPath)\Merkaartor.exe" DiskId="1">
@@ -59,6 +95,10 @@
       <Feature Id="MerkaartorFeature" Title="Merkaartor editor" Level="1"
          Display="expand" ConfigurableDirectory="INSTALLLOCATION">
          <ComponentRef Id="Merkaartor" />
+      </Feature>
+      <Feature Id="ftWorld_Shp" Title="World Shape file" Level="1"
+         Display="expand" ConfigurableDirectory="WORLD_SHP">
+         <ComponentRef Id="World_shp" />
       </Feature>
      <Feature Id="QtMainFeature" Title="Main Qt DLLs" Level="1"
         Display="expand" ConfigurableDirectory="INSTALLLOCATION">
