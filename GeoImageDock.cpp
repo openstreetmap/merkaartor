@@ -139,11 +139,16 @@ void GeoImageDock::loadImages(QStringList fileNames, MapDocument *theDocument, M
 		progress.setValue(fileNames.indexOf(file));
 
 		if (!QFile::exists(file))
-			WARNING("No such file", "Can't find image \"%1\".");
+			WARNING(tr("No such file"), tr("Can't find image \"%1\"."));
 
-    	image = Exiv2::ImageFactory::open(file.toAscii().constData());
+		try {
+			image = Exiv2::ImageFactory::open(file.toStdString());
+		}
+		catch (Exiv2::Error error)
+			WARNING(tr("Exiv2"), tr("Error while opening \"%2\":\n%1").arg(error.what()));
 		if (image.get() == 0)
-			WARNING("exiv2", "Error with exiv2 in \"%1\".");
+			WARNING(tr("Exiv2"), tr("Error while loading EXIF-data from \"%1\"."));
+
 		image->readMetadata();
 
 		exifData = & image->exifData();
@@ -161,7 +166,7 @@ void GeoImageDock::loadImages(QStringList fileNames, MapDocument *theDocument, M
 			}
 		}
 		if (exifData->empty() || ((latS.isEmpty() || lonS.isEmpty()) && time.isNull()) ) {
-			QUESTION(tr("No EXIV"), tr("No EXIF header found in image \"%1\".\nDo you want to revert to improper file timestamp?").arg(file), timeQuestion);
+			QUESTION(tr("No EXIF"), tr("No EXIF header found in image \"%1\".\nDo you want to revert to improper file timestamp?").arg(file), timeQuestion);
 
 			QFileInfo fileInfo(file);
 			time = fileInfo.created();
@@ -264,7 +269,7 @@ void GeoImageDock::loadImages(QStringList fileNames, MapDocument *theDocument, M
 			}
 
 			if (!bestPt)
-				WARNING("No TrackPoints", "No TrackPoints found for image \"%1\"");
+				WARNING(tr("No TrackPoints"), tr("No TrackPoints found for image \"%1\""));
 
 			if (abs(secondsTo) >= 15) {
 				QTime difference = QTime().addSecs(abs(secondsTo));
@@ -287,7 +292,7 @@ void GeoImageDock::loadImages(QStringList fileNames, MapDocument *theDocument, M
 	
 			time = QDateTime(); // empty time to be null for the next image
 		} else
-			WARNING("No geo informations", "Image \"%1\" is not a geotagged image.");
+			WARNING(tr("No geo informations"), tr("Image \"%1\" is not a geotagged image."));
 
 		if (progress.wasCanceled()) {
 			theView->invalidate(true, false);

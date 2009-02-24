@@ -12,7 +12,7 @@
 
 
 #define WARNING(title, message) { \
-	if (QMessageBox::warning(this, tr(title), tr(message).arg(file), \
+	if (QMessageBox::warning(this, title, message.arg(file), \
 	 QMessageBox::Ignore | QMessageBox::Cancel, QMessageBox::Ignore) == QMessageBox::Ignore) \
 		continue; \
 	else { \
