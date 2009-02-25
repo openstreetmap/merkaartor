@@ -125,6 +125,10 @@ MainWindow::MainWindow(void)
 	statusBar()->addPermanentWidget(pbImages);
 	statusBar()->addPermanentWidget(PaintTimeLabel);
 
+	QList<QAction*> actions = findChildren<QAction*>();
+	for (int i=0; i<actions.size(); i++) {
+		shortcutsDefault[actions[i]->objectName()] = actions[i]->shortcut().toString();
+	}
 	updateLanguage();
 
 	ViewportStatusLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
@@ -276,15 +280,6 @@ MainWindow::MainWindow(void)
 	
 	MerkaartorPreferences::instance()->initialPosition(theView);
 
-	QList<QAction*> actions = findChildren<QAction*>();
-	for (int i=0; i<actions.size(); i++) {
-		shortcutsDefault[actions[i]->objectName()] = actions[i]->shortcut().toString();
-	}
-	QStringList shortcuts = M_PREFS->getShortcuts();
-	for (int i=0; i<shortcuts.size(); i+=2) {
-		QAction* act = findChild<QAction*>(shortcuts[i]);
-		act->setShortcut(QKeySequence(shortcuts[i+1]));
-	}
 
 #define NUMOP 3
 	static const char *opStr[NUMOP] = {
@@ -2387,6 +2382,12 @@ void MainWindow::updateLanguage()
 					statusBar()->showMessage(tr("Warning! Could not load the Merkaartor translations for the \"%1\" language.").arg(DefaultLanguage), 15000);
     }
     retranslateUi(this);
+
+	QStringList shortcuts = M_PREFS->getShortcuts();
+	for (int i=0; i<shortcuts.size(); i+=2) {
+		QAction* act = findChild<QAction*>(shortcuts[i]);
+		act->setShortcut(QKeySequence(shortcuts[i+1]));
+	}
 }
 
 void MainWindow::mapView_interactionChanged(Interaction* anInteraction)

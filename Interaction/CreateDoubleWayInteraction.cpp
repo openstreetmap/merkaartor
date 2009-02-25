@@ -37,6 +37,11 @@ CreateDoubleWayInteraction::~CreateDoubleWayInteraction()
 
 void CreateDoubleWayInteraction::paintEvent(QPaintEvent* /* anEvent */, QPainter& thePainter)
 {
+	if (R1 && (!R1->layer() || R1->isDeleted())) { // The roads were begon and then undoed. Restarting....
+		HaveFirst = false;
+		R1 = R2 = NULL;
+	}
+
 	double rB = view()->projection().pixelPerM()*DockData.RoadDistance->text().toDouble()/2;
 	if (!HaveFirst)
 	{
@@ -45,7 +50,12 @@ void CreateDoubleWayInteraction::paintEvent(QPaintEvent* /* anEvent */, QPainter
 	}
 	else
 	{
-		Coord PreviousPoint = FirstPoint;
+		Coord PreviousPoint;
+		if (R1 && R1->size())
+			PreviousPoint = PreviousPoints[R1->size()-1];
+		else
+			PreviousPoint = FirstPoint;
+
 		if (distance(view()->projection().project(PreviousPoint), LastCursor) > 1)
 		{
 			double rA = FirstDistance * view()->projection().pixelPerM()/2;
@@ -62,7 +72,7 @@ void CreateDoubleWayInteraction::paintEvent(QPaintEvent* /* anEvent */, QPainter
 			QPointF B1(FB1.project(LastCursor));
 			QPointF B2(FB2.project(LastCursor));
 
-      QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
+			QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
 			QPen TP(SomeBrush,projection().pixelPerM()*4);
 			if (DockData.DriveRight->isChecked())
 			{
@@ -107,7 +117,7 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 				view()->projection().project(R2->getNode(i2-1)),
 				view()->projection().project(R2->getNode(i2)));
 
-			Coord PreviousPoint = FirstPoint;
+			Coord PreviousPoint = PreviousPoints[R1->size()-1];
 			if (distance(view()->projection().project(PreviousPoint), LastCursor) > 1)
 			{
 				double rB = view()->projection().pixelPerM()*DockData.RoadDistance->text().toDouble()/2;
@@ -146,7 +156,8 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 				L->add(new RoadAddTrackPointCommand(R2,B2,(unsigned int)0));
 				document()->addHistory(L);
 				view()->invalidate(true, false);
-				FirstPoint = view()->projection().inverse(anEvent->pos());
+				//FirstPoint = view()->projection().inverse(anEvent->pos());
+				PreviousPoints[R1->size()-1] = view()->projection().inverse(anEvent->pos());
 				FirstDistance = DockData.RoadDistance->text().toDouble();
 			}
 		}
@@ -200,7 +211,8 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 				L->add(new RoadAddTrackPointCommand(R2,A2));
 				document()->addHistory(L);
 				view()->invalidate(true, false);
-				FirstPoint = view()->projection().inverse(anEvent->pos());
+				//FirstPoint = view()->projection().inverse(anEvent->pos());
+				PreviousPoints[R1->size()-1] = view()->projection().inverse(anEvent->pos());
 				FirstDistance = DockData.RoadDistance->text().toDouble();
 			}
 		}

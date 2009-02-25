@@ -37,11 +37,20 @@ CreateSingleWayInteraction::~CreateSingleWayInteraction()
 
 void CreateSingleWayInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
 {
+	if (theRoad && (!theRoad->layer() || theRoad->isDeleted())) { // The road was begon and then undoed. Restarting....
+		HaveFirst = false;
+		theRoad = NULL;
+	}
+
 	if (HaveFirst)
 	{
-	  QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
+		QPointF PreviousPoint;
+		if (theRoad && theRoad->size())
+			PreviousPoint = view()->projection().project(CAST_NODE(theRoad->get(theRoad->size()-1))->position());
+		else
+			PreviousPoint = view()->projection().project(FirstPoint);
+		QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
 		QPen TP(SomeBrush,projection().pixelPerM()*4+2);
-		QPointF PreviousPoint = view()->projection().project(FirstPoint);
 		::draw(thePainter,TP,MapFeature::UnknownDirection, PreviousPoint,LastCursor ,4 ,view()->projection());
 
 		Coord NewPoint = view()->projection().inverse(LastCursor);
@@ -84,7 +93,6 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Map
 {
 	if ( Creating && !panning() )
 	{
-
 		TrackPoint* Pt = dynamic_cast<TrackPoint*>(aFeature);
 		if (!HaveFirst)
 		{

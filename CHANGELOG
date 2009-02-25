@@ -1,4 +1,6 @@
 v0.13
+	* FIX : Handle Undoes while creating single/double roads (fixes #1621)
+	* FIX : Re-apply custom shortcuts after retranslateUI (fixes #1620)
 	* FIX : Insufficent precision for WMS bbox requests at high zoom (fixes #1618)
 	* ADD : Allow to force the custom Qt style thru Config.pri
 	* FIX : Do not remove incomplete downloaded relation; make them readonly and display them in red (temporary)

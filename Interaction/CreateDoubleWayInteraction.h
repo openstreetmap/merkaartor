@@ -33,6 +33,7 @@ class CreateDoubleWayInteraction : public Interaction
 		Coord FirstPoint;
 		double FirstDistance;
 		bool HaveFirst;
+		QHash<int, Coord> PreviousPoints;
 };
 
 #endif // INTERACTION\CREATEDOUBLEWAYINTERACTION_H
