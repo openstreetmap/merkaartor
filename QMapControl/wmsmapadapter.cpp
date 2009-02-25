@@ -20,7 +20,7 @@
 #include "wmsmapadapter.h"
 
 WMSMapAdapter::WMSMapAdapter(QString host, QString serverPath, QString wlayers, QString wSrs, QString wStyles, QString wImgFormat, int tilesize)
- : MapAdapter(host, serverPath, tilesize, 0, 17)
+ : MapAdapter(host, serverPath, tilesize, 0, 99)
 {
 	name = "WMS-"+ host;
 
@@ -112,8 +112,8 @@ QString WMSMapAdapter::getQ(double ux, double uy, double ox, double oy) const
 						.append("&WIDTH=").append(wms_width)
 						.append("&HEIGHT=").append(wms_height)
 						.append("&BBOX=")
-						 .append(loc.toString(ux)).append(",")
-						 .append(loc.toString(uy)).append(",")
-						 .append(loc.toString(ox)).append(",")
-						 .append(loc.toString(oy));
+						.append(loc.toString(ux, 'f', 8)).append(",")
+						.append(loc.toString(uy, 'f', 8)).append(",")
+						.append(loc.toString(ox, 'f', 8)).append(",")
+						.append(loc.toString(oy, 'f', 8));
 }
