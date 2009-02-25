@@ -3,68 +3,77 @@
 <context>
     <name></name>
     <message>
-        <location filename="../MainWindow.cpp" line="614"/>
+        <location filename="../MainWindow.cpp" line="609"/>
         <source>Supported formats</source>
-        <translation type="unfinished"></translation>
+        <translation>Podporované formáty</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="603"/>
+        <location filename="../MainWindow.cpp" line="598"/>
         <source>Merkaartor document (*.mdc)
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Merkaartor dokument (*.mdc)
+</translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="611"/>
+        <source>GPS Exchange format (*.gpx)
+</source>
+        <translation>GPS Exchange formát (*.gpx)
+</translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="612"/>
+        <source>OpenStreetMap format (*.osm)
+</source>
+        <translation>OpenStreetMap formát (*.osm)
+</translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="613"/>
+        <source>OpenStreetMap binary format (*.osb)
+</source>
+        <translation>OpenStreetMap binární formát (*.osb)
+</translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="614"/>
+        <source>Noni GPSPlot format (*.ngt)
+</source>
+        <translation>Noni GPSPlot formát (*.ngt)
+</translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="615"/>
+        <source>NMEA GPS log format (*.nmea *.nma)
+</source>
+        <translation>NMEA GPS log formát (*.nmea *.nma)
+</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="616"/>
-        <source>GPS Exchange format (*.gpx)
+        <source>KML file (*.kml)
 </source>
-        <translation type="unfinished"></translation>
+        <translation>KML soubor (*.kml)
+</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="617"/>
-        <source>OpenStreetMap format (*.osm)
+        <source>ESRI Shapefile (*.shp)
 </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../MainWindow.cpp" line="618"/>
-        <source>OpenStreetMap binary format (*.osb)
-</source>
-        <translation type="unfinished"></translation>
+        <translation>ESRI Shapefile (*.shp)
+</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="619"/>
-        <source>Noni GPSPlot format (*.ngt)
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../MainWindow.cpp" line="620"/>
-        <source>NMEA GPS log format (*.nmea *.nma)
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../MainWindow.cpp" line="621"/>
-        <source>KML file (*.kml)
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../MainWindow.cpp" line="622"/>
-        <source>ESRI Shapefile (*.shp)
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../MainWindow.cpp" line="624"/>
         <source>All Files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Všechny soubory (*)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="610"/>
+        <location filename="../MainWindow.cpp" line="605"/>
         <source>Geotagged images (*.jpg)
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Geotaggované obrázky (*.jpg)
+</translation>
     </message>
 </context>
 <context>
@@ -599,7 +608,8 @@ Hlášení serveru je  &apos;%2&apos;</translation>
         <location filename="../Map/DownloadOSM.cpp" line="473"/>
         <source>
 API message is &apos;%1&apos;</source>
-        <translation>Hlášení API je  &apos;%1&apos;</translation>
+        <translation>
+Hlášení API je &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -692,11 +702,6 @@ API message is &apos;%1&apos;</source>
         <location filename="../GeoImageDock.cpp" line="134"/>
         <source>Abort loading</source>
         <translation>Zrušit nahrávání</translation>
-    </message>
-    <message>
-        <location filename="../GeoImageDock.cpp" line="169"/>
-        <source>No EXIV</source>
-        <translation type="obsolete">Není EXIV</translation>
     </message>
     <message>
         <location filename="../GeoImageDock.cpp" line="169"/>
@@ -939,7 +944,7 @@ Chcete ho ještě používat?</translation>
     <message>
         <location filename="../Map/MapLayer.cpp" line="685"/>
         <source>Map - Shape</source>
-        <translation>Mapa - Shape </translation>
+        <translation>Mapa - Shape</translation>
     </message>
 </context>
 <context>
@@ -1054,12 +1059,12 @@ Inicializace...</translation>
         <translation>&amp;Přidat...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1944"/>
+        <location filename="../MainWindow.cpp" line="1939"/>
         <source>Add Bookmark</source>
         <translation>Přidat záložku</translation>
     </message>
     <message>
-        <location filename="../Interaction/CreateDoubleWayInteraction.cpp" line="129"/>
+        <location filename="../Interaction/CreateDoubleWayInteraction.cpp" line="139"/>
         <source>Add nodes to double-way Road %1</source>
         <translation>Přidány uzly do dvojité cesty %1</translation>
     </message>
@@ -1069,7 +1074,7 @@ Inicializace...</translation>
         <translation>&amp;Zarovnat</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1198"/>
+        <location filename="../MainWindow.cpp" line="1193"/>
         <source>Align Nodes</source>
         <translation>Zarovnat Uzly</translation>
     </message>
@@ -1129,7 +1134,7 @@ Inicializace...</translation>
         <translation>Oblast: Ukončena cesta %1</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1949"/>
+        <location filename="../MainWindow.cpp" line="1944"/>
         <source>Bookmark cannot be blank.</source>
         <translation>Záložka nemůže být prázdná.</translation>
     </message>
@@ -1144,7 +1149,7 @@ Inicializace...</translation>
         <translation>R&amp;ozpojit</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1177"/>
+        <location filename="../MainWindow.cpp" line="1172"/>
         <source>Break Roads</source>
         <translation>Cesty přerušeny</translation>
     </message>
@@ -1159,22 +1164,22 @@ Inicializace...</translation>
         <translation>Zrušen klíč &apos;%1&apos; on %2</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="420"/>
+        <location filename="../MainWindow.cpp" line="415"/>
         <source>Clipboard do not contain valid OSM.</source>
         <translation>Schránka neobsahuje platný OSM.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="420"/>
+        <location filename="../MainWindow.cpp" line="415"/>
         <source>Clipboard invalid</source>
         <translation>Špatný obsah schránky</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="413"/>
+        <location filename="../MainWindow.cpp" line="408"/>
         <source>Clipboard is not valid XML.</source>
         <translation>Ve schránce není platný XML.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1187"/>
+        <location filename="../MainWindow.cpp" line="1182"/>
         <source>Commit Roads</source>
         <translation>Převést cesty</translation>
     </message>
@@ -1214,7 +1219,7 @@ Inicializace...</translation>
         <translation>Vytvořena oblast %1</translation>
     </message>
     <message>
-        <location filename="../Interaction/CreateDoubleWayInteraction.cpp" line="181"/>
+        <location filename="../Interaction/CreateDoubleWayInteraction.cpp" line="192"/>
         <source>Create double-way Road %1</source>
         <translation>Vytvořena dvojitá cesta %1</translation>
     </message>
@@ -1229,7 +1234,7 @@ Inicializace...</translation>
         <translation>Vytvořen uzel v cestě: %1</translation>
     </message>
     <message>
-        <location filename="../Interaction/CreateSingleWayInteraction.cpp" line="160"/>
+        <location filename="../Interaction/CreateSingleWayInteraction.cpp" line="168"/>
         <source>Create Node %1 in Road %2</source>
         <translation>Vytvořen uzel %1 v cestě %2</translation>
     </message>
@@ -1239,12 +1244,12 @@ Inicializace...</translation>
         <translation>Vytvořen bod %1</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1265"/>
+        <location filename="../MainWindow.cpp" line="1260"/>
         <source>Create Relation %1</source>
         <translation>Vytvořena vazba %1</translation>
     </message>
     <message>
-        <location filename="../Interaction/CreateSingleWayInteraction.cpp" line="131"/>
+        <location filename="../Interaction/CreateSingleWayInteraction.cpp" line="139"/>
         <source>Create Road: %1</source>
         <translation>Vytvořena cesta: %1</translation>
     </message>
@@ -1399,12 +1404,12 @@ Inicializace...</translation>
         <translation>&amp;Upravit</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1954"/>
+        <location filename="../MainWindow.cpp" line="1949"/>
         <source>Enter a new one, keep the same to overwrite or cancel.</source>
         <translation>Vložte nové, ponechte stávající pro přepsání nebo zrušte akci.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="937"/>
+        <location filename="../MainWindow.cpp" line="932"/>
         <source>Error downloading</source>
         <translation>Chyba stahování</translation>
     </message>
@@ -1419,22 +1424,22 @@ Inicializace...</translation>
         <translation>Exportovat všechny viditelné vrstvy do souboru</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1612"/>
+        <location filename="../MainWindow.cpp" line="1607"/>
         <source>Export Binary OSM</source>
         <translation>Exportovat Binární OSM</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1631"/>
+        <location filename="../MainWindow.cpp" line="1626"/>
         <source>Export GPX</source>
         <translation>Exportovat GPX</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1658"/>
+        <location filename="../MainWindow.cpp" line="1653"/>
         <source>Export KML</source>
         <translation>Exportovat KML</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1593"/>
+        <location filename="../MainWindow.cpp" line="1588"/>
         <source>Export OSM</source>
         <translation>Exportovat OSM</translation>
     </message>
@@ -1479,7 +1484,7 @@ Inicializace...</translation>
         <translation>GPX</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1631"/>
+        <location filename="../MainWindow.cpp" line="1626"/>
         <source>GPX Files (*.gpx)</source>
         <translation>GPX Soubory (*.gpx)</translation>
     </message>
@@ -1519,7 +1524,7 @@ Inicializace...</translation>
         <translation>Importovat soubor do aktuálního dokumentu</translation>
     </message>
     <message>
-        <location filename="../Map/ImportGPX.cpp" line="209"/>
+        <location filename="../Map/ImportGPX.cpp" line="208"/>
         <source>Import GPX</source>
         <translation>Importovat GPX</translation>
     </message>
@@ -1534,12 +1539,12 @@ Inicializace...</translation>
         <translation>Importovat NMEA</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1948"/>
+        <location filename="../MainWindow.cpp" line="1943"/>
         <source>Invalid bookmark name</source>
         <translation>Neplatné jméno záložky</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1535"/>
+        <location filename="../MainWindow.cpp" line="1530"/>
         <source>Invalid file</source>
         <translation>Neplatný soubor</translation>
     </message>
@@ -1556,7 +1561,7 @@ Chcete to udělat hned?</translation>
         <translation>&amp;Spojit</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1154"/>
+        <location filename="../MainWindow.cpp" line="1149"/>
         <source>Join Roads</source>
         <translation>Cesty spojeny</translation>
     </message>
@@ -1566,7 +1571,7 @@ Chcete to udělat hned?</translation>
         <translation>KML</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1658"/>
+        <location filename="../MainWindow.cpp" line="1653"/>
         <source>KML Files (*.kml)</source>
         <translation>KML Soubory (*.kml)</translation>
     </message>
@@ -1581,7 +1586,7 @@ Chcete to udělat hned?</translation>
         <translation>Odkaz</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1325"/>
+        <location filename="../MainWindow.cpp" line="1320"/>
         <source>Load map style</source>
         <translation>Nahrát mapový styl</translation>
     </message>
@@ -1591,7 +1596,7 @@ Chcete to udělat hned?</translation>
         <translation>&amp;Spojit</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1213"/>
+        <location filename="../MainWindow.cpp" line="1208"/>
         <source>Merge Nodes into %1</source>
         <translation>Sloučit Uzly do %1</translation>
     </message>
@@ -1611,12 +1616,12 @@ Chcete to udělat hned?</translation>
         <translation>Merkaartor</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1458"/>
+        <location filename="../MainWindow.cpp" line="1453"/>
         <source>Merkaartor documents Files (*.mdc)</source>
         <translation>Soubory Merkaartor documents (*.mdc)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1325"/>
+        <location filename="../MainWindow.cpp" line="1320"/>
         <source>Merkaartor map style (*.mas)</source>
         <translation>Merkaartor mapový styl (*.mas)</translation>
     </message>
@@ -1636,12 +1641,12 @@ Chcete to udělat hned?</translation>
         <translation>&amp;Uzel</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="776"/>
+        <location filename="../MainWindow.cpp" line="771"/>
         <source>No valid file</source>
         <translation>Neplatný soubor</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="891"/>
+        <location filename="../MainWindow.cpp" line="886"/>
         <source>Old Qt version detected</source>
         <translation>Detekována stará verze Qt</translation>
     </message>
@@ -1651,12 +1656,12 @@ Chcete to udělat hned?</translation>
         <translation>&amp;Otevřít</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="628"/>
+        <location filename="../MainWindow.cpp" line="623"/>
         <source>Open track file</source>
         <translation>Otevřít soubor s tratí</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="879"/>
+        <location filename="../MainWindow.cpp" line="874"/>
         <source>Open track files</source>
         <translation>Otevřít soubory s tratí</translation>
     </message>
@@ -1666,12 +1671,12 @@ Chcete to udělat hned?</translation>
         <translation>OSM (Binární)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1612"/>
+        <location filename="../MainWindow.cpp" line="1607"/>
         <source>OSM Binary Files (*.osb)</source>
         <translation>OSM Binární soubory (*.osb)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1593"/>
+        <location filename="../MainWindow.cpp" line="1588"/>
         <source>OSM Files (*.osm)</source>
         <translation>OSM Soubory (*.osm)</translation>
     </message>
@@ -1736,7 +1741,7 @@ Chcete to udělat hned?</translation>
         <translation>&amp;Odebrat...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1992"/>
+        <location filename="../MainWindow.cpp" line="1987"/>
         <source>Remove Bookmark</source>
         <translation>Odebrat záložku</translation>
     </message>
@@ -1776,12 +1781,12 @@ Chcete to udělat hned?</translation>
         <translation>Uložit &amp;jako...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1314"/>
+        <location filename="../MainWindow.cpp" line="1309"/>
         <source>Save map style</source>
         <translation>Uložit mapový styl</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1458"/>
+        <location filename="../MainWindow.cpp" line="1453"/>
         <source>Save Merkaartor document</source>
         <translation>Uložit dokument Merkaartoru</translation>
     </message>
@@ -1791,7 +1796,7 @@ Chcete to udělat hned?</translation>
         <translation>Vybrané...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1993"/>
+        <location filename="../MainWindow.cpp" line="1988"/>
         <source>Select the bookmark to remove.</source>
         <translation>Vyberte záložku k odebrání.</translation>
     </message>
@@ -1811,7 +1816,7 @@ Chcete to udělat hned?</translation>
         <translation>Nastaven klíč &apos;%1=%2&apos; na %3</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1945"/>
+        <location filename="../MainWindow.cpp" line="1940"/>
         <source>Specify the name of the bookmark.</source>
         <translation>Zadejte jméno záložky.</translation>
     </message>
@@ -1821,7 +1826,7 @@ Chcete to udělat hned?</translation>
         <translation>&amp;Rozdělit</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1167"/>
+        <location filename="../MainWindow.cpp" line="1162"/>
         <source>Split Roads</source>
         <translation>Cesty rozděleny</translation>
     </message>
@@ -1831,14 +1836,14 @@ Chcete to udělat hned?</translation>
         <translation>&amp;Styl</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="656"/>
+        <location filename="../MainWindow.cpp" line="651"/>
         <source>The current map contains unsaved changes that will be lost when starting a new one.
 Do you want to cancel starting a new map or continue and discard the old changes?</source>
         <translation>Aktuální mapa obsahuje neuložené změny, které budou ztraceny, pokud se otevře nová.
 Chcete zrušit vytváření nové mapy nebo pokračovat a zahodit staré změny?</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="937"/>
+        <location filename="../MainWindow.cpp" line="932"/>
         <source>The map could not be downloaded</source>
         <translation>Mapa nemohla být stáhnuta</translation>
     </message>
@@ -1863,12 +1868,12 @@ Chcete zrušit vytváření nové mapy nebo pokračovat a zahodit staré změny?
         <translation>Neuložené změny</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1458"/>
+        <location filename="../MainWindow.cpp" line="1453"/>
         <source>untitled</source>
         <translation>nepojmenovaný</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="901"/>
+        <location filename="../MainWindow.cpp" line="896"/>
         <source>Upload OSM</source>
         <translation>Odeslat OSM</translation>
     </message>
@@ -1883,7 +1888,7 @@ Chcete zrušit vytváření nové mapy nebo pokračovat a zahodit staré změny?
         <translation>&amp;Zobrazení...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1953"/>
+        <location filename="../MainWindow.cpp" line="1948"/>
         <source>Warning: Bookmark name already exists</source>
         <translation>Varování: Jméno záložky už existuje</translation>
     </message>
@@ -1893,7 +1898,7 @@ Chcete zrušit vytváření nové mapy nebo pokračovat a zahodit staré změny?
         <translation>&amp;Okno</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="902"/>
+        <location filename="../MainWindow.cpp" line="897"/>
         <source>You don&apos;t seem to have specified your
 OpenStreetMap username and password.
 Do you want to do this now?</source>
@@ -1902,7 +1907,7 @@ OpenStreetMap  uživatelské jméno a heslo.
 Chcete to udělat nyní?</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="895"/>
+        <location filename="../MainWindow.cpp" line="890"/>
         <source>Your setup uses Qt %1, which contains various known errors in uploading data to OpenStreetMap leading to 401 server response codes. Are you sure you want to continue (which is not recommended).
 For more information see http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor</source>
         <translation>Vaše nastavení používá Qt %1, které obsahuje různé známe chyby v odesílání dat do OpenStreetMap, vedoucích k chybovému hlášení serveru 401. Jste si jisti, že chcete pokračovat (což není doporučené).
@@ -1939,67 +1944,67 @@ Pro více informací navštivte http://wiki.openstreetmap.org/index.php/Problem_
         <translation>Zobrazit výběr</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1519"/>
+        <location filename="../MainWindow.cpp" line="1514"/>
         <source>%1 could not be opened.</source>
         <translation>%1 nemohl být otevřen.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1535"/>
+        <location filename="../MainWindow.cpp" line="1530"/>
         <source>%1 is not a valid Merkaartor document.</source>
         <translation>%1 není platný dokument Merkaartoru.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1525"/>
+        <location filename="../MainWindow.cpp" line="1520"/>
         <source>%1 is not a valid XML file.</source>
         <translation>%1 není platný XML soubor.</translation>
     </message>
     <message>
-        <location filename="../Interaction/CreateSingleWayInteraction.cpp" line="139"/>
+        <location filename="../Interaction/CreateSingleWayInteraction.cpp" line="147"/>
         <source>Create Node: %1</source>
         <translation>Vytvořit uzel: %1</translation>
     </message>
     <message>
-        <location filename="../Interaction/CreateSingleWayInteraction.cpp" line="163"/>
+        <location filename="../Interaction/CreateSingleWayInteraction.cpp" line="171"/>
         <source>Add Node %1 to Road %2</source>
         <translation>Přidán uzel %1 do cesty %2</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="132"/>
+        <location filename="../MainWindow.cpp" line="136"/>
         <source>tile %v / %m</source>
         <translation>dlaždice %v / %m</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="258"/>
+        <location filename="../MainWindow.cpp" line="262"/>
         <source>Properties...</source>
         <translation>Vlastnosti...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="681"/>
+        <location filename="../MainWindow.cpp" line="676"/>
         <source>Waypoints</source>
         <translation>Waypoint</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="697"/>
+        <location filename="../MainWindow.cpp" line="692"/>
         <source>Track %1</source>
         <translation>Trať %1</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2159"/>
+        <location filename="../MainWindow.cpp" line="2154"/>
         <source>Background imagery</source>
         <translation>Zobrazování pozadí</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2183"/>
+        <location filename="../MainWindow.cpp" line="2178"/>
         <source>GPS error</source>
         <translation>chyba GPS</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2184"/>
+        <location filename="../MainWindow.cpp" line="2179"/>
         <source>Unable to open GPS port.</source>
         <translation>Nemohu otevřít GPS port.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2193"/>
+        <location filename="../MainWindow.cpp" line="2188"/>
         <source>Open NMEA log file</source>
         <translation>Otevřít NMEA log soubor</translation>
     </message>
@@ -2146,7 +2151,7 @@ Pro více informací navštivte http://wiki.openstreetmap.org/index.php/Problem_
     <message>
         <location filename="../MainWindow.ui" line="1246"/>
         <source>Show touchup</source>
-        <translation></translation>
+        <translation>Zobraz dotyk</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1260"/>
@@ -2169,12 +2174,12 @@ Pro více informací navštivte http://wiki.openstreetmap.org/index.php/Problem_
         <translation>Ctrl+E</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1500"/>
+        <location filename="../MainWindow.cpp" line="1495"/>
         <source>Unable to open save file</source>
         <translation>Nemohu otevřít uložený soubor</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1500"/>
+        <location filename="../MainWindow.cpp" line="1495"/>
         <source>%1 could not be opened for writing.</source>
         <translation>%1 nemůže být otevřen pro zápis.</translation>
     </message>
@@ -2194,27 +2199,27 @@ Pro více informací navštivte http://wiki.openstreetmap.org/index.php/Problem_
         <translation>Chcete sloučit všechny uzly na [drop] pozici?</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="291"/>
+        <location filename="../MainWindow.cpp" line="286"/>
         <source>Low</source>
         <translation>Nízké</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="291"/>
+        <location filename="../MainWindow.cpp" line="286"/>
         <source>High</source>
         <translation>Vysoké</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="291"/>
+        <location filename="../MainWindow.cpp" line="286"/>
         <source>Opaque</source>
         <translation>Neprůhledné</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="731"/>
+        <location filename="../MainWindow.cpp" line="726"/>
         <source>Big Fat Copyright Warning</source>
         <translation>Big Fat Copyright Warning</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="745"/>
+        <location filename="../MainWindow.cpp" line="740"/>
         <source>You are trying to import a KML file. Please be aware that:
 
  - You cannot import to OSM a KML file created from Google Earth. While you might
@@ -2228,64 +2233,64 @@ Pro více informací navštivte http://wiki.openstreetmap.org/index.php/Problem_
 If unsure, please seek advice on the &quot;legal&quot; or &quot;talk&quot; openstreetmap mailing lists.
 
 Are you absolutely sure this KML can legally be imported in OSM?</source>
-        <translation>Pokoušíte se importovat KML soubor. Prosím uvědomte si že:
-- Nemůžete importovat do OSM soubor KML vytvořený v Google Earth.
-I když si myslíte, že uzly které jste vytvořili v GE jsou vaše, nejsou!
-Je to pouze odvozené dílo z GE a jako takové nemůže být použité v OSM.
+        <translation>Pokoušíte se importovat KML soubor. Prosím uvědomte si že: 
+- Nemůžete importovat do OSM soubor KML vytvořený v Google Earth. 
+I když si myslíte, že uzly které jste vytvořili v GE jsou vaše, nejsou! 
+Je to pouze odvozené dílo z GE a jako takové nemůže být použité v OSM.￼ 
 
-- Pokud jste ho stáhli z internetu, je velká pravděpodobnost, že je zatížen copyrightem.
-Prosím buďte si absolutně jisti, že použití těchto dat v OSM je povoleno autorem,
+￼￼ - Pokud jste ho stáhli z internetu, je velká pravděpodobnost, že je zatížen copyrightem. 
+Prosím buďte si absolutně jisti, že použití těchto dat v OSM je povoleno autorem, 
 nebo že tyto data jsou public domain.
 
 Pokud si nejste jisti , prosím požádejte o radu v &quot;legal&quot; nebo &quot;talk&quot; openstreetmap mailing listu. Jste si opravdu absolutně jisti, že tento KLM může být legálně importován do OSM?</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1228"/>
+        <location filename="../MainWindow.cpp" line="1223"/>
         <source>Detach Node %1</source>
         <translation>Odpojit uzel %1</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1242"/>
+        <location filename="../MainWindow.cpp" line="1237"/>
         <source>Add member to relation</source>
         <translation>Přidat člena do vazby</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1252"/>
+        <location filename="../MainWindow.cpp" line="1247"/>
         <source>Remove member from relation</source>
         <translation>Odebrat člena z vazby</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2307"/>
+        <location filename="../MainWindow.cpp" line="2302"/>
         <source>Save Tag Templates</source>
         <translation>Uložit šablonu značek</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2307"/>
+        <location filename="../MainWindow.cpp" line="2302"/>
         <source>Merkaartor tag templates (*.mat)</source>
         <translation>Merkaartor šablona značek (*.mat)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2333"/>
+        <location filename="../MainWindow.cpp" line="2328"/>
         <source>Open Tag Templates</source>
         <translation>Otevřít šablonu značek</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2381"/>
+        <location filename="../MainWindow.cpp" line="2376"/>
         <source>Error</source>
         <translation>Chyba</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2381"/>
+        <location filename="../MainWindow.cpp" line="2376"/>
         <source>Could not load the selected language. Go to Tools, Preferences to select another language or check whether the translation file is missing.</source>
         <translation>Nemohu nahrát zvolený jazyk. Vyberte jiný jazyk Nástroje, Předvolby nebo zkontrolujte jestli nechybi překladový soubor.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2384"/>
+        <location filename="../MainWindow.cpp" line="2379"/>
         <source>Warning! Could not load the Qt translations for the &quot;%1&quot; language.</source>
         <translation>Varování! Nemohu nahrát Qt překlad pro &quot;%1&quot; jazyk.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2387"/>
+        <location filename="../MainWindow.cpp" line="2382"/>
         <source>Warning! Could not load the Merkaartor translations for the &quot;%1&quot; language.</source>
         <translation>Varování! Nemohu nahrát překlad Merkaartoru pro &quot;%1&quot; jazyk.</translation>
     </message>
@@ -2512,7 +2517,7 @@ Pokud si nejste jisti , prosím požádejte o radu v &quot;legal&quot; nebo &quo
     <message>
         <location filename="../MainWindow.ui" line="993"/>
         <source>Paste tags</source>
-        <translation>Vložit klíče </translation>
+        <translation>Vložit klíče</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="996"/>
@@ -2655,7 +2660,7 @@ Pokud si nejste jisti , prosím požádejte o radu v &quot;legal&quot; nebo &quo
         <translation>Odebrat člena  &apos;%1&apos; z %2</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1894"/>
+        <location filename="../MainWindow.cpp" line="1889"/>
         <source>%1 (int)</source>
         <translation>%1 (int)</translation>
     </message>
@@ -4439,7 +4444,7 @@ Prosím vyberte jiné jméno nebo použíjte &lt;Apply&gt; tlačítko, jetliže 
     <message>
         <location filename="../UploadMapDialog.ui" line="104"/>
         <source>99999; </source>
-        <translation>99999;</translation>
+        <translation>99999; </translation>
     </message>
 </context>
 <context>

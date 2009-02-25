@@ -77,6 +77,7 @@
   <widget tag="area" type="yesno">
    <description locale="en" >Area</description>
    <description locale="ar" >مساحة</description>
+   <description locale="bs" >Područje</description>
    <description locale="de" >Fläche</description>
    <description locale="es" >Área</description>
    <description locale="fr" >Aire</description>
@@ -312,6 +313,7 @@
     <description locale="es" >Zona industrial abandonada</description>
     <description locale="fr" >Terrain en friche</description>
     <description locale="it" >Campo</description>
+    <description locale="pl" >Teren poprzemysłowy</description>
    </value>
    <value tag="cemetery" >
     <description locale="en" >Cemetery</description>
@@ -609,6 +611,7 @@
    <value tag="college" >
     <description locale="en" >College</description>
     <description locale="ar" >كلّية</description>
+    <description locale="bs" >Koledž</description>
     <description locale="cs" >Střední škola</description>
     <description locale="de" >College</description>
     <description locale="es" >Instituto</description>
@@ -832,6 +835,7 @@
     <description locale="de" >Recycling-Einrichtung</description>
     <description locale="fr" >Point de collecte pour le recyclage</description>
     <description locale="it" >Impianti di riciclaggio</description>
+    <description locale="pl" >Centrum recyklingowe</description>
    </value>
    <value tag="restaurant" >
     <description locale="en" >Restaurant</description>

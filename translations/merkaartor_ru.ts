@@ -3,65 +3,65 @@
 <context>
     <name></name>
     <message>
-        <location filename="../MainWindow.cpp" line="614"/>
+        <location filename="../MainWindow.cpp" line="609"/>
         <source>Supported formats</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="603"/>
+        <location filename="../MainWindow.cpp" line="598"/>
         <source>Merkaartor document (*.mdc)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="616"/>
+        <location filename="../MainWindow.cpp" line="611"/>
         <source>GPS Exchange format (*.gpx)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="617"/>
+        <location filename="../MainWindow.cpp" line="612"/>
         <source>OpenStreetMap format (*.osm)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="618"/>
+        <location filename="../MainWindow.cpp" line="613"/>
         <source>OpenStreetMap binary format (*.osb)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="619"/>
+        <location filename="../MainWindow.cpp" line="614"/>
         <source>Noni GPSPlot format (*.ngt)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="620"/>
+        <location filename="../MainWindow.cpp" line="615"/>
         <source>NMEA GPS log format (*.nmea *.nma)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="621"/>
+        <location filename="../MainWindow.cpp" line="616"/>
         <source>KML file (*.kml)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="624"/>
+        <location filename="../MainWindow.cpp" line="619"/>
         <source>All Files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="610"/>
+        <location filename="../MainWindow.cpp" line="605"/>
         <source>Geotagged images (*.jpg)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="622"/>
+        <location filename="../MainWindow.cpp" line="617"/>
         <source>ESRI Shapefile (*.shp)
 </source>
         <translation type="unfinished"></translation>
@@ -120,9 +120,11 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://merkaartor.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://merkaartor.org/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body&gt;
-&lt;a href=&quot;http://www.merkaartor.org&quot;&gt;http://www.merkaartor.org&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://merkaartor.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://merkaartor.org/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../AboutDialog.ui" line="124"/>
@@ -678,7 +680,7 @@ Do you want to mark them for deletion?</source>
     <message>
         <location filename="../GeoImageDock.cpp" line="28"/>
         <source>Copy filename to clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Копировать имя файла в буфер</translation>
     </message>
     <message>
         <location filename="../GeoImageDock.cpp" line="119"/>
@@ -708,7 +710,7 @@ Do you want to mark them for deletion?</source>
     <message>
         <location filename="../GeoImageDock.cpp" line="134"/>
         <source>Abort loading</source>
-        <translation type="unfinished"></translation>
+        <translation>Отмена загрузки</translation>
     </message>
     <message>
         <location filename="../GeoImageDock.cpp" line="169"/>
@@ -1032,7 +1034,7 @@ Initializing...</source>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../MainWindow.cpp" line="628"/>
+        <location filename="../MainWindow.cpp" line="623"/>
         <source>Open track file</source>
         <translation>Открыть трек файл</translation>
     </message>
@@ -1042,45 +1044,45 @@ Initializing...</source>
         <translation>Несохранённые изменения</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="656"/>
+        <location filename="../MainWindow.cpp" line="651"/>
         <source>The current map contains unsaved changes that will be lost when starting a new one.
 Do you want to cancel starting a new map or continue and discard the old changes?</source>
         <translation>Текущая карта содержит несохранённые ихменения, которые будут потеряны, если начать редактирование новой карты. Хотите отменить начало создания новой карты или продолжить и потерять все изменения?</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="776"/>
+        <location filename="../MainWindow.cpp" line="771"/>
         <source>No valid file</source>
         <translation>Неверный файл</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1519"/>
+        <location filename="../MainWindow.cpp" line="1514"/>
         <source>%1 could not be opened.</source>
         <translation>%1 не может быть открыт.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="879"/>
+        <location filename="../MainWindow.cpp" line="874"/>
         <source>Open track files</source>
         <translation>Открыть трек файлы</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="891"/>
+        <location filename="../MainWindow.cpp" line="886"/>
         <source>Old Qt version detected</source>
         <translation>Обнаружена старая версия Qt</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="895"/>
+        <location filename="../MainWindow.cpp" line="890"/>
         <source>Your setup uses Qt %1, which contains various known errors in uploading data to OpenStreetMap leading to 401 server response codes. Are you sure you want to continue (which is not recommended).
 For more information see http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor</source>
         <translation>У вас усиановлена Qt версии %1, которая содержит различные известные ошибки при публикации данных на сервера OpenStreetMap, начинающиеся с кода ответа сервера 401. Вы уверены, что хотите продолжить работу? Однако это не рекомендуется.
 Для получания дополнительной информации, смотрите http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="901"/>
+        <location filename="../MainWindow.cpp" line="896"/>
         <source>Upload OSM</source>
         <translation>Опубликование данных OSM</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="902"/>
+        <location filename="../MainWindow.cpp" line="897"/>
         <source>You don&apos;t seem to have specified your
 OpenStreetMap username and password.
 Do you want to do this now?</source>
@@ -1089,92 +1091,92 @@ Do you want to do this now?</source>
 Желаете это сделать сейчас?</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="937"/>
+        <location filename="../MainWindow.cpp" line="932"/>
         <source>Error downloading</source>
         <translation>Ошибка загрузки</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="937"/>
+        <location filename="../MainWindow.cpp" line="932"/>
         <source>The map could not be downloaded</source>
         <translation>Карта не может быть загружена</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1314"/>
+        <location filename="../MainWindow.cpp" line="1309"/>
         <source>Save map style</source>
         <translation>Сохранить стиль карты</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1325"/>
+        <location filename="../MainWindow.cpp" line="1320"/>
         <source>Merkaartor map style (*.mas)</source>
         <translation>Стиль карты Merkaartor (*.mas)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1325"/>
+        <location filename="../MainWindow.cpp" line="1320"/>
         <source>Load map style</source>
         <translation>Открыть стиль карты</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1458"/>
+        <location filename="../MainWindow.cpp" line="1453"/>
         <source>Save Merkaartor document</source>
         <translation>Сохранить документ Merkaartor</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1458"/>
+        <location filename="../MainWindow.cpp" line="1453"/>
         <source>untitled</source>
         <translation>документ Merkaartor</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1458"/>
+        <location filename="../MainWindow.cpp" line="1453"/>
         <source>Merkaartor documents Files (*.mdc)</source>
         <translation>Документы Merkaartor  (*.mdc)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1593"/>
+        <location filename="../MainWindow.cpp" line="1588"/>
         <source>Export OSM</source>
         <translation>Экспорт OSM</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1593"/>
+        <location filename="../MainWindow.cpp" line="1588"/>
         <source>OSM Files (*.osm)</source>
         <translation>Файлы OSM (*.osm)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1944"/>
+        <location filename="../MainWindow.cpp" line="1939"/>
         <source>Add Bookmark</source>
         <translation>Добавить закладку</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1945"/>
+        <location filename="../MainWindow.cpp" line="1940"/>
         <source>Specify the name of the bookmark.</source>
         <translation>Укажите имя закладки.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1948"/>
+        <location filename="../MainWindow.cpp" line="1943"/>
         <source>Invalid bookmark name</source>
         <translation>Неверное имя закладки</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1949"/>
+        <location filename="../MainWindow.cpp" line="1944"/>
         <source>Bookmark cannot be blank.</source>
         <translation>Закладка не может быть пустой.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1953"/>
+        <location filename="../MainWindow.cpp" line="1948"/>
         <source>Warning: Bookmark name already exists</source>
         <translation>Внимание: такое имя закладки уже существует</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1954"/>
+        <location filename="../MainWindow.cpp" line="1949"/>
         <source>Enter a new one, keep the same to overwrite or cancel.</source>
         <translation>Введите новое значение, оставте тоже самое, что бы перезаписать или нажмите отмена, что бы не добавлять.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1992"/>
+        <location filename="../MainWindow.cpp" line="1987"/>
         <source>Remove Bookmark</source>
         <translation>Удалить закладку</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1993"/>
+        <location filename="../MainWindow.cpp" line="1988"/>
         <source>Select the bookmark to remove.</source>
         <translation>Выберите закладку для удалени.</translation>
     </message>
@@ -1486,7 +1488,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="../MainWindow.ui" line="729"/>
         <source>&amp;Curved road</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Извилистая дорога</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="738"/>
@@ -1656,25 +1658,25 @@ Do you want to do this now?</source>
     <message>
         <location filename="../Interaction/CreateAreaInteraction.cpp" line="95"/>
         <source>Area: Create Road %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Площадь: Создать догогу %1</translation>
     </message>
     <message>
         <location filename="../Interaction/CreateAreaInteraction.cpp" line="125"/>
         <source>Area: Finish Road %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Площадь: Закончить дорогу %1</translation>
     </message>
     <message>
         <location filename="../Interaction/CreateAreaInteraction.cpp" line="153"/>
         <source>Area: Add node %1 to Road %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Площадь: Добавить узел %1 на дорогу %2</translation>
     </message>
     <message>
-        <location filename="../Interaction/CreateDoubleWayInteraction.cpp" line="129"/>
+        <location filename="../Interaction/CreateDoubleWayInteraction.cpp" line="139"/>
         <source>Add nodes to double-way Road %1</source>
         <translation>Добавить узлы к двойной дороге %1</translation>
     </message>
     <message>
-        <location filename="../Interaction/CreateDoubleWayInteraction.cpp" line="181"/>
+        <location filename="../Interaction/CreateDoubleWayInteraction.cpp" line="192"/>
         <source>Create double-way Road %1</source>
         <translation>Создать Двойную дорогу %1</translation>
     </message>
@@ -1694,12 +1696,12 @@ Do you want to do this now?</source>
         <translation>Создать кольцевую развязку %1</translation>
     </message>
     <message>
-        <location filename="../Interaction/CreateSingleWayInteraction.cpp" line="160"/>
+        <location filename="../Interaction/CreateSingleWayInteraction.cpp" line="168"/>
         <source>Create Node %1 in Road %2</source>
         <translation>Создать Узел %1 в Дороге %2</translation>
     </message>
     <message>
-        <location filename="../Interaction/CreateSingleWayInteraction.cpp" line="131"/>
+        <location filename="../Interaction/CreateSingleWayInteraction.cpp" line="139"/>
         <source>Create Road: %1</source>
         <translation>Создать Дорогу: %1</translation>
     </message>
@@ -1719,97 +1721,97 @@ Do you want to do this now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="420"/>
+        <location filename="../MainWindow.cpp" line="415"/>
         <source>Clipboard invalid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="413"/>
+        <location filename="../MainWindow.cpp" line="408"/>
         <source>Clipboard is not valid XML.</source>
-        <translation type="unfinished"></translation>
+        <translation>В буфере обмена некорректный XML</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="420"/>
+        <location filename="../MainWindow.cpp" line="415"/>
         <source>Clipboard do not contain valid OSM.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1154"/>
+        <location filename="../MainWindow.cpp" line="1149"/>
         <source>Join Roads</source>
         <translation>Объединить дороги</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1167"/>
+        <location filename="../MainWindow.cpp" line="1162"/>
         <source>Split Roads</source>
         <translation>Разделить дороги</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1177"/>
+        <location filename="../MainWindow.cpp" line="1172"/>
         <source>Break Roads</source>
-        <translation type="unfinished"></translation>
+        <translation>Разорвать дороги</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1187"/>
+        <location filename="../MainWindow.cpp" line="1182"/>
         <source>Commit Roads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1265"/>
+        <location filename="../MainWindow.cpp" line="1260"/>
         <source>Create Relation %1</source>
         <translation>Создать Связь %1</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1535"/>
+        <location filename="../MainWindow.cpp" line="1530"/>
         <source>Invalid file</source>
         <translation>Неверный файл</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1525"/>
+        <location filename="../MainWindow.cpp" line="1520"/>
         <source>%1 is not a valid XML file.</source>
         <translation>%1 - не верный XML файл.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1535"/>
+        <location filename="../MainWindow.cpp" line="1530"/>
         <source>%1 is not a valid Merkaartor document.</source>
         <translation>%1 - не верный документ Merkaartor.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1612"/>
+        <location filename="../MainWindow.cpp" line="1607"/>
         <source>Export Binary OSM</source>
         <translation>Бинарный экспорт OSM</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1612"/>
+        <location filename="../MainWindow.cpp" line="1607"/>
         <source>OSM Binary Files (*.osb)</source>
         <translation>Бинарные файлы OSM (*.osb)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1631"/>
+        <location filename="../MainWindow.cpp" line="1626"/>
         <source>Export GPX</source>
         <translation>Экспорт GPX</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1631"/>
+        <location filename="../MainWindow.cpp" line="1626"/>
         <source>GPX Files (*.gpx)</source>
         <translation>Файлы GPX (*.gpx)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1658"/>
+        <location filename="../MainWindow.cpp" line="1653"/>
         <source>Export KML</source>
         <translation>Экспорт KML</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1658"/>
+        <location filename="../MainWindow.cpp" line="1653"/>
         <source>KML Files (*.kml)</source>
         <translation>Файлы KML (*.kml)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1198"/>
+        <location filename="../MainWindow.cpp" line="1193"/>
         <source>Align Nodes</source>
         <translation>Выровнять узлы</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1213"/>
+        <location filename="../MainWindow.cpp" line="1208"/>
         <source>Merge Nodes into %1</source>
         <translation>Объеденить узлы в %1</translation>
     </message>
@@ -1909,7 +1911,7 @@ Do you want to do this now?</source>
         <translation>KML</translation>
     </message>
     <message>
-        <location filename="../Map/ImportGPX.cpp" line="209"/>
+        <location filename="../Map/ImportGPX.cpp" line="208"/>
         <source>Import GPX</source>
         <translation>Импорт GPX</translation>
     </message>
@@ -1951,42 +1953,42 @@ Do you want to do this now?</source>
         <translation>Установлен тег для %1</translation>
     </message>
     <message>
-        <location filename="../Interaction/CreateSingleWayInteraction.cpp" line="139"/>
+        <location filename="../Interaction/CreateSingleWayInteraction.cpp" line="147"/>
         <source>Create Node: %1</source>
         <translation>Создать Узел: %1</translation>
     </message>
     <message>
-        <location filename="../Interaction/CreateSingleWayInteraction.cpp" line="163"/>
+        <location filename="../Interaction/CreateSingleWayInteraction.cpp" line="171"/>
         <source>Add Node %1 to Road %2</source>
         <translation>Добавить Узел %1 к Дороге %2</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="132"/>
+        <location filename="../MainWindow.cpp" line="136"/>
         <source>tile %v / %m</source>
         <translation>часть карты %v / %m</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="258"/>
+        <location filename="../MainWindow.cpp" line="262"/>
         <source>Properties...</source>
         <translation>Свойства...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="681"/>
+        <location filename="../MainWindow.cpp" line="676"/>
         <source>Waypoints</source>
         <translation>Маршрутные точки</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="697"/>
+        <location filename="../MainWindow.cpp" line="692"/>
         <source>Track %1</source>
         <translation>Трек %1</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="731"/>
+        <location filename="../MainWindow.cpp" line="726"/>
         <source>Big Fat Copyright Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Big Fat Copyright Warning</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="745"/>
+        <location filename="../MainWindow.cpp" line="740"/>
         <source>You are trying to import a KML file. Please be aware that:
 
  - You cannot import to OSM a KML file created from Google Earth. While you might
@@ -2003,32 +2005,32 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1500"/>
+        <location filename="../MainWindow.cpp" line="1495"/>
         <source>Unable to open save file</source>
         <translation>Невозможно открыть сохранённый файл</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1500"/>
+        <location filename="../MainWindow.cpp" line="1495"/>
         <source>%1 could not be opened for writing.</source>
         <translation>%1 не может быть открыт для записи.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2159"/>
+        <location filename="../MainWindow.cpp" line="2154"/>
         <source>Background imagery</source>
         <translation>Фоновая картинка</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2183"/>
+        <location filename="../MainWindow.cpp" line="2178"/>
         <source>GPS error</source>
         <translation>ошибка GPS</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2184"/>
+        <location filename="../MainWindow.cpp" line="2179"/>
         <source>Unable to open GPS port.</source>
         <translation>Невозможно открыть порт GPS.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2193"/>
+        <location filename="../MainWindow.cpp" line="2188"/>
         <source>Open NMEA log file</source>
         <translation>Открыть файл журнала NMEA</translation>
     </message>
@@ -2283,17 +2285,17 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>&amp;Загрузить</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2307"/>
+        <location filename="../MainWindow.cpp" line="2302"/>
         <source>Save Tag Templates</source>
         <translation>Сохранить шаблоны тегов</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2307"/>
+        <location filename="../MainWindow.cpp" line="2302"/>
         <source>Merkaartor tag templates (*.mat)</source>
         <translation>Шаблоны тегов Merkaartor (*.mat)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2333"/>
+        <location filename="../MainWindow.cpp" line="2328"/>
         <source>Open Tag Templates</source>
         <translation>Открыть шаблоны тегов</translation>
     </message>
@@ -2323,12 +2325,12 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>О&amp;бъединить...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1242"/>
+        <location filename="../MainWindow.cpp" line="1237"/>
         <source>Add member to relation</source>
         <translation>Добавить члена в связь</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1252"/>
+        <location filename="../MainWindow.cpp" line="1247"/>
         <source>Remove member from relation</source>
         <translation>Удалить члена из связи</translation>
     </message>
@@ -2388,42 +2390,42 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="291"/>
+        <location filename="../MainWindow.cpp" line="286"/>
         <source>Low</source>
         <translation>слабо</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="291"/>
+        <location filename="../MainWindow.cpp" line="286"/>
         <source>High</source>
         <translation>сильно</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="291"/>
+        <location filename="../MainWindow.cpp" line="286"/>
         <source>Opaque</source>
         <translation>непрозрачный</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1228"/>
+        <location filename="../MainWindow.cpp" line="1223"/>
         <source>Detach Node %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2381"/>
+        <location filename="../MainWindow.cpp" line="2376"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2381"/>
+        <location filename="../MainWindow.cpp" line="2376"/>
         <source>Could not load the selected language. Go to Tools, Preferences to select another language or check whether the translation file is missing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2384"/>
+        <location filename="../MainWindow.cpp" line="2379"/>
         <source>Warning! Could not load the Qt translations for the &quot;%1&quot; language.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2387"/>
+        <location filename="../MainWindow.cpp" line="2382"/>
         <source>Warning! Could not load the Merkaartor translations for the &quot;%1&quot; language.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2440,7 +2442,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="142"/>
         <source>&amp;Render</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Изобразить</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="149"/>
@@ -2465,7 +2467,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="455"/>
         <source>&amp;Move</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Переместить</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="482"/>
@@ -2475,7 +2477,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="511"/>
         <source>&amp;Select</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Выбрать</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="526"/>
@@ -2515,12 +2517,12 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="680"/>
         <source>Break</source>
-        <translation type="unfinished"></translation>
+        <translation>Разрыв</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="683"/>
         <source>Break apart connected roads</source>
-        <translation type="unfinished"></translation>
+        <translation>Разорвать соединённый дороги</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="709"/>
@@ -2540,22 +2542,22 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="863"/>
         <source>&amp;Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Свойства</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="897"/>
         <source>&amp;Info</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Информация</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="918"/>
         <source>Align nodes</source>
-        <translation type="unfinished"></translation>
+        <translation>Выровнять узлы</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="961"/>
         <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Копировать</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="964"/>
@@ -2595,7 +2597,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="1161"/>
         <source>&amp;GPS</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;GPS</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1285"/>
@@ -2605,7 +2607,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="1362"/>
         <source>&amp;Detach</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Отделить</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1365"/>
@@ -2620,7 +2622,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="1380"/>
         <source>&amp;Work Offline</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Работать оффлайн</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1385"/>
@@ -2630,7 +2632,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="1393"/>
         <source>&amp;Styles</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Стили</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1399"/>
@@ -2643,9 +2645,9 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1894"/>
+        <location filename="../MainWindow.cpp" line="1889"/>
         <source>%1 (int)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (int)</translation>
     </message>
 </context>
 <context>
@@ -3085,7 +3087,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../Render/NativeRenderDialog.ui" line="33"/>
         <source>Bitmap</source>
-        <translation type="unfinished"></translation>
+        <translation>Точечный рисунок</translation>
     </message>
 </context>
 <context>
@@ -3101,7 +3103,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../Map/MapLayer.cpp" line="1276"/>
         <source># of loaded Regions</source>
-        <translation type="unfinished"></translation>
+        <translation># загруженных Регионов</translation>
     </message>
     <message>
         <location filename="../Map/MapLayer.cpp" line="1277"/>
@@ -3573,7 +3575,8 @@ The path indicated in Tools-Preferences-[Tools] is not valid.</source>
         <location filename="../Preferences/PreferencesDialog.cpp" line="432"/>
         <source>A tool of this name already exists.
 Please select another name or click the &lt;Apply&gt; button if you want to modify the existing one</source>
-        <translation type="unfinished"></translation>
+        <translation>Инструмент с таким именем уже существует.
+Выберите другое имя, либо нажмите &lt;Apply&gt;, если хотите изменить существующее</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.cpp" line="451"/>
@@ -4008,7 +4011,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../GPS/qgpsmainwindowui.ui" line="79"/>
         <source>99 99&apos; 99&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>99 99&apos; 99&quot;</translation>
     </message>
     <message>
         <location filename="../GPS/qgpsmainwindowui.ui" line="69"/>
@@ -4023,17 +4026,17 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../GPS/qgpsmainwindowui.ui" line="96"/>
         <source>1000 meter</source>
-        <translation type="unfinished"></translation>
+        <translation>1000 метров</translation>
     </message>
     <message>
         <location filename="../GPS/qgpsmainwindowui.ui" line="103"/>
         <source># Satellites</source>
-        <translation type="unfinished"></translation>
+        <translation># Спутники</translation>
     </message>
     <message>
         <location filename="../GPS/qgpsmainwindowui.ui" line="113"/>
         <source>00</source>
-        <translation type="unfinished"></translation>
+        <translation>00</translation>
     </message>
     <message>
         <location filename="../GPS/qgpsmainwindowui.ui" line="120"/>
@@ -4053,7 +4056,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../GPS/qgpsmainwindowui.ui" line="147"/>
         <source>000 km/h</source>
-        <translation type="unfinished"></translation>
+        <translation>000 км/ч</translation>
     </message>
     <message>
         <location filename="../GPS/qgpsmainwindowui.ui" line="154"/>
@@ -4587,12 +4590,12 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../Tools/WorldOsbManager.ui" line="58"/>
         <source>Auto-load</source>
-        <translation type="unfinished"></translation>
+        <translation>Автозагрузка</translation>
     </message>
     <message>
         <location filename="../Tools/WorldOsbManager.ui" line="65"/>
         <source>Auto-show</source>
-        <translation type="unfinished"></translation>
+        <translation>Автоотображение</translation>
     </message>
     <message>
         <location filename="../Tools/WorldOsbManager.ui" line="126"/>
