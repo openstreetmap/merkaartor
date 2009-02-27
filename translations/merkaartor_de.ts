@@ -1275,7 +1275,7 @@ Möchten Sie dies nun tun?</translation>
     <message>
         <location filename="../MainWindow.ui" line="416"/>
         <source>Curved link</source>
-        <translation>Kurvige Verbindung</translation>
+        <translation>Gekrümmte Verbindung</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="932"/>
@@ -1360,7 +1360,7 @@ Möchten Sie dies nun tun?</translation>
     <message>
         <location filename="../MainWindow.ui" line="615"/>
         <source>&amp;Double carriage way</source>
-        <translation>&amp;Getrennte Fahrspuren</translation>
+        <translation>&amp;Getrennte Fahrbahnen</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="623"/>
@@ -2553,7 +2553,7 @@ Sind Sie sicher diese KML-Daten dürfen legal in OSM importiert werden?</transla
     <message>
         <location filename="../MainWindow.ui" line="562"/>
         <source>Create new road</source>
-        <translation>Neuen Weg erstellen</translation>
+        <translation>Neue Straße erstellen</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="580"/>
@@ -2668,7 +2668,7 @@ Sind Sie sicher diese KML-Daten dürfen legal in OSM importiert werden?</transla
     <message>
         <location filename="../MainWindow.cpp" line="1889"/>
         <source>%1 (int)</source>
-        <translation>%1 (Zahl)</translation>
+        <translation>%1 (intern)</translation>
     </message>
 </context>
 <context>
@@ -3797,7 +3797,7 @@ Wählen Sie einen anderen Namen oder klicken Sie den Knopf &lt;Übernehmen&gt;, 
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="465"/>
         <source>Custom styles directory</source>
-        <translation>Eigenes Stileverzeichnis</translation>
+        <translation>Eigenes Verzeichnis für Stile</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="499"/>

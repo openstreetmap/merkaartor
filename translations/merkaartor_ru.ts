@@ -303,7 +303,7 @@ p, li { white-space: pre-wrap; }
         <location filename="../DirtyDock.cpp" line="66"/>
         <source>There are &lt;b&gt;%n&lt;/b&gt; objects in the dirty layer</source>
         <translation type="unfinished">
-            <numerusform>Объектов в слое черновика: &lt;b&gt;%1&lt;/b&gt;</numerusform>
+            <numerusform></numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>

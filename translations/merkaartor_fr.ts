@@ -728,7 +728,7 @@ Le message de l&apos;API est le suivant &apos;%1&apos;</translation>
         <location filename="../GeoImageDock.cpp" line="169"/>
         <source>No EXIF header found in image &quot;%1&quot;.
 Do you want to revert to improper file timestamp?</source>
-        <translation>Aucun entête EXIV trouvé dans l&apos;image &quot;%1&quot;.
+        <translation>Aucun entête EXIF trouvé dans l&apos;image &quot;%1&quot;.
 Voulez-vous revenir à l&apos;horodatage incorrect du fichier ?</translation>
     </message>
     <message>

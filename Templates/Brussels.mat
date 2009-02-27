@@ -4,6 +4,7 @@
   <widget id="name_bxl" tag="name" type="constant" >
    <description locale="en" >Name</description>
    <description locale="ar" >الإسم</description>
+   <description locale="cs" >Jméno</description>
    <description locale="de" >Name</description>
    <description locale="es" >Nombre</description>
    <description locale="fr" >Nom</description>

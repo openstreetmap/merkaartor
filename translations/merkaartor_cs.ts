@@ -305,7 +305,7 @@ p, li { white-space: pre-wrap; }
         <source>There are &lt;b&gt;%n&lt;/b&gt; objects in the dirty layer</source>
         <translation type="unfinished">
             <numerusform>&lt;b&gt;%n&lt;/b&gt; objekt v pracovní vrstvě</numerusform>
-            <numerusform></numerusform>
+            <numerusform>&lt;b&gt;%n&lt;/b&gt; objekty v pracovní vrstvě</numerusform>
             <numerusform>&lt;b&gt;%n&lt;/b&gt; objektů v pracovní vrstvě</numerusform>
         </translation>
     </message>
@@ -584,8 +584,8 @@ Chcete je označit pro smazání?</translation>
         <source>Downloading from OSM (%n bytes)</source>
         <translation type="unfinished">
             <numerusform>Stahování z OSM (%n B)</numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>Stahování z OSM (%n B)</numerusform>
+            <numerusform>Stahování z OSM (%n B)</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -593,8 +593,8 @@ Chcete je označit pro smazání?</translation>
         <source>Downloading from OSM (%n kBytes)</source>
         <translation type="unfinished">
             <numerusform>Stahování z OSM (%n kB)</numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>Stahování z OSM (%n kB)</numerusform>
+            <numerusform>Stahování z OSM (%n kB)</numerusform>
         </translation>
     </message>
     <message>
@@ -602,7 +602,7 @@ Chcete je označit pro smazání?</translation>
         <source>Unexpected http status code (%1)
 Server message is &apos;%2&apos;</source>
         <translation>Neočekávaný http stavový kód (%1)
-Hlášení serveru je  &apos;%2&apos;</translation>
+Hlášení serveru je &apos;%2&apos;</translation>
     </message>
     <message>
         <location filename="../Map/DownloadOSM.cpp" line="473"/>
@@ -707,7 +707,7 @@ Hlášení API je &apos;%1&apos;</translation>
         <location filename="../GeoImageDock.cpp" line="169"/>
         <source>No EXIF header found in image &quot;%1&quot;.
 Do you want to revert to improper file timestamp?</source>
-        <translation>Žádná EXIV hlavička nenalezena v obrázku  &quot;%1&quot;.
+        <translation>Žádná EXIF hlavička nenalezena v obrázku &quot;%1&quot;.
 Do you want to revert to improper file timestamp?</translation>
     </message>
     <message>
@@ -2657,7 +2657,7 @@ Pokud si nejste jisti , prosím požádejte o radu v &quot;legal&quot; nebo &quo
     <message>
         <location filename="../PropertiesDock.cpp" line="678"/>
         <source>Remove member &apos;%1&apos; on %2</source>
-        <translation>Odebrat člena  &apos;%1&apos; z %2</translation>
+        <translation>Odebrat člena &apos;%1&apos; z %2</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="1889"/>

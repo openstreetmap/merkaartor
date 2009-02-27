@@ -5,6 +5,7 @@
    <link src="http://wiki.openstreetmap.org/index.php/Key:place" />
    <description locale="en" >Place</description>
    <description locale="ar" >مكان</description>
+   <description locale="cs" >Písto</description>
    <description locale="de" >Ort</description>
    <description locale="fr" >Lieu</description>
    <description locale="it" >Luogo</description>
@@ -13,6 +14,7 @@
    <value tag="city" >
     <description locale="en" >City (Pop. &gt; 100.000)</description>
     <description locale="ar" >مدينة (عدد السكان يزيد عن مئة ألف)</description>
+    <description locale="cs" >Město &gt; 100.000 obyvatel</description>
     <description locale="de" >Großstadt (Einw. &gt; 100.000)</description>
     <description locale="es" >Ciudad (Pob. &gt; 100.000)</description>
     <description locale="fr" >Ville (Pop. &gt; 100.000)</description>
@@ -22,6 +24,7 @@
    <value tag="town" >
     <description locale="en" >Town (10.000 &lt; Pop. &lt; 100.000)</description>
     <description locale="ar" >بلدة (أكثر من 10000 نسمة و أقل من 100000)</description>
+    <description locale="cs" >Město (10.000 - 100.000 obyvatel)</description>
     <description locale="de" >Stadt (10.000 &lt; Einw. &lt; 100.000)</description>
     <description locale="es" >Villa (10.000 &lt; Pob. &lt; 100.000)</description>
     <description locale="fr" >Ville (de 10.000 à 100.000 habitants)</description>
@@ -31,6 +34,7 @@
    <value tag="village" >
     <description locale="en" >Village (Pop. &lt; 10.000)</description>
     <description locale="ar" >قرية (أقل من 10000 نسمة)</description>
+    <description locale="cs" >Vesnice (do 10.000 Obyvatel)</description>
     <description locale="de" >Ortschaft (Einw. &lt; 10.000)</description>
     <description locale="es" >Pueblo (Pob. &lt;10.000)</description>
     <description locale="fr" >Village (Pop. &lt; 10.000)</description>
@@ -40,6 +44,7 @@
    <value tag="hamlet" >
     <description locale="en" >Hamlet (a few houses)</description>
     <description locale="ar" >مجموعة بيوت</description>
+    <description locale="cs" >Ves (několik domů)</description>
     <description locale="de" >Weiler (ein paar Häuser)</description>
     <description locale="es" >Aldea (pocas casas)</description>
     <description locale="fr" >Hameau</description>
@@ -49,6 +54,7 @@
    <value tag="suburb" >
     <description locale="en" >Suburb</description>
     <description locale="ar" >ضاحية</description>
+    <description locale="cs" >Předměstí</description>
     <description locale="de" >Stadtteil</description>
     <description locale="es" >Barrio</description>
     <description locale="fr" >Banlieue</description>
@@ -58,6 +64,7 @@
    <value tag="locality" >
     <description locale="en" >Locality (named place)</description>
     <description locale="ar" >المحلة (مكان/محلة ذات إسم)</description>
+    <description locale="cs" >Lokalita (pojmenované místo)</description>
     <description locale="de" >Ort (benannter Platz)</description>
     <description locale="fr" >Lieu-dit</description>
     <description locale="it" >Località (nome luogo)</description>
@@ -67,6 +74,7 @@
   <widget tag="building" type="yesno" >
    <description locale="en" >Building</description>
    <description locale="ar" >مبنى</description>
+   <description locale="cs" >Budova</description>
    <description locale="de" >Gebäude</description>
    <description locale="es" >Edificio</description>
    <description locale="fr" >Bâtiment</description>
@@ -78,6 +86,7 @@
    <description locale="en" >Area</description>
    <description locale="ar" >مساحة</description>
    <description locale="bs" >Područje</description>
+   <description locale="cs" >Oblast</description>
    <description locale="de" >Fläche</description>
    <description locale="es" >Área</description>
    <description locale="fr" >Aire</description>
@@ -88,6 +97,7 @@
   <widget tag="name" type="edit" >
    <description locale="en" >Name</description>
    <description locale="ar" >الإسم</description>
+   <description locale="cs" >Jméno</description>
    <description locale="de" >Name</description>
    <description locale="es" >Nombre</description>
    <description locale="fr" >Nom</description>
@@ -98,6 +108,7 @@
    <link src="http://wiki.openstreetmap.org/index.php/Key:highway" />
    <description locale="en" >Highway type</description>
    <description locale="ar" >نوع الطريق</description>
+   <description locale="cs" >Typ silnice</description>
    <description locale="de" >Straßentyp</description>
    <description locale="fr" >Type de route</description>
    <description locale="it" >Tipo strada</description>
@@ -282,6 +293,7 @@
    <link src="http://wiki.openstreetmap.org/index.php/Key:landuse" />
    <description locale="en" >Landuse</description>
    <description locale="ar" >إستعمال الأرض</description>
+   <description locale="cs" >Využití plochy</description>
    <description locale="de" >Landnutzung</description>
    <description locale="fr" >Utilisation du sol</description>
    <description locale="it" >Suolo</description>
@@ -467,6 +479,7 @@
    <link src="http://wiki.openstreetmap.org/index.php/Key:oneway" />
    <description locale="en" >Oneway</description>
    <description locale="ar" >إتجاه واحد</description>
+   <description locale="cs" >Jednosměrka</description>
    <description locale="de" >Einbahnstraße</description>
    <description locale="fr" >Sens unique</description>
    <description locale="it" >Senso unico</description>
@@ -923,6 +936,7 @@
    <link src="http://wiki.openstreetmap.org/index.php/Key:religion" />
    <description locale="en" >Religion</description>
    <description locale="ar" >الديانة</description>
+   <description locale="cs" >Náboženství</description>
    <description locale="de" >Religion</description>
    <description locale="es" >Religión</description>
    <description locale="fr" >Religion</description>
@@ -931,6 +945,7 @@
    <value tag="buddhist" >
     <description locale="en" >Buddhist</description>
     <description locale="ar" >بوذي</description>
+    <description locale="cs" >Budhistický</description>
     <description locale="de" >Buddistisch</description>
     <description locale="es" >Budista</description>
     <description locale="fr" >Boudhiste</description>
@@ -940,6 +955,7 @@
    <value tag="christian" >
     <description locale="en" >Christian</description>
     <description locale="ar" >نصراني</description>
+    <description locale="cs" >Křesťanský</description>
     <description locale="de" >Christlich</description>
     <description locale="es" >Cristiano</description>
     <description locale="fr" >Chrétien</description>
@@ -949,7 +965,8 @@
    <value tag="jewish" >
     <description locale="en" >Jewish</description>
     <description locale="ar" >يهودي</description>
-    <description locale="de" >Jüddisch</description>
+    <description locale="cs" >Židovský</description>
+    <description locale="de" >Jüdisch</description>
     <description locale="es" >Judío</description>
     <description locale="fr" >Juif</description>
     <description locale="it" >Ebraico</description>
@@ -958,6 +975,7 @@
    <value tag="muslim" >
     <description locale="en" >Muslim</description>
     <description locale="ar" >مسلم</description>
+    <description locale="cs" >Muslimský</description>
     <description locale="de" >Islamisch</description>
     <description locale="es" >Musulmán</description>
     <description locale="fr" >Musulman</description>
@@ -969,6 +987,7 @@
    <link src="http://wiki.openstreetmap.org/index.php/Key:religion" />
    <description locale="en" >Denomination</description>
    <description locale="ar" >تسمية</description>
+   <description locale="cs" >Denominace</description>
    <description locale="de" >Konfession</description>
    <description locale="es" >Denominación</description>
    <description locale="fr" >Dénomination</description>
@@ -998,6 +1017,7 @@
   <widget tag="name" type="edit" >
    <description locale="en" >Name</description>
    <description locale="ar" >الإسم</description>
+   <description locale="cs" >Jméno</description>
    <description locale="de" >Name</description>
    <description locale="es" >Nombre</description>
    <description locale="fr" >Nom</description>
@@ -1061,6 +1081,7 @@
  <template>
   <description locale="en" >Catholic church</description>
   <description locale="ar" >كنيسة كثليك</description>
+  <description locale="cs" >Katolický kostel</description>
   <description locale="de" >Katholische Kirche</description>
   <description locale="es" >Iglesia Católica</description>
   <description locale="fr" >Eglise catholique</description>
@@ -1090,6 +1111,7 @@
    <link src="http://wiki.openstreetmap.org/index.php/Key:religion" />
    <description locale="en" >Religion</description>
    <description locale="ar" >الديانة</description>
+   <description locale="cs" >Náboženství</description>
    <description locale="de" >Religion</description>
    <description locale="es" >Religión</description>
    <description locale="fr" >Religion</description>
@@ -1098,6 +1120,7 @@
    <value tag="christian" >
     <description locale="en" >Christian</description>
     <description locale="ar" >نصراني</description>
+    <description locale="cs" >Křesťanský</description>
     <description locale="de" >Christlich</description>
     <description locale="es" >Cristiano</description>
     <description locale="fr" >Chrétien</description>
@@ -1109,6 +1132,7 @@
    <link src="http://wiki.openstreetmap.org/index.php/Key:denomination" />
    <description locale="en" >Denomination</description>
    <description locale="ar" >تسمية</description>
+   <description locale="cs" >Denominace</description>
    <description locale="de" >Konfession</description>
    <description locale="es" >Denominación</description>
    <description locale="fr" >Dénomination</description>
@@ -1117,6 +1141,7 @@
    <value tag="catholic" >
     <description locale="en" >Catholic</description>
     <description locale="ar" >كثليك</description>
+    <description locale="cs" >Katolický</description>
     <description locale="de" >Katholisch</description>
     <description locale="es" >Católico</description>
     <description locale="fr" >Catholique</description>
@@ -1128,6 +1153,7 @@
  <template>
   <selector expr=" [Default] Type is Relation" />
   <description locale="en" >Generic Relations</description>
+  <description locale="cs" >Obecné vazby</description>
   <description locale="de" >Generische Relation</description>
   <description locale="fr" >Relations génériques</description>
   <description locale="it" >Relazioni Generiche</description>
@@ -1137,6 +1163,7 @@
  <template>
   <selector expr=" [Default] Type is Road" />
   <description locale="en" >Generic Ways</description>
+  <description locale="cs" >Obecné cesty</description>
   <description locale="de" >Generische Wege</description>
   <description locale="fr" >Routes génériques</description>
   <description locale="it" >Strade Generiche</description>
@@ -1151,6 +1178,7 @@
  <template>
   <selector expr=" [Default] Type is TrackPoint" />
   <description locale="en" >Generic Nodes</description>
+  <description locale="cs" >Obecné uzly</description>
   <description locale="de" >Generischer Knoten</description>
   <description locale="fr" >Nœuds génériques</description>
   <description locale="it" >Nodi Generici</description>
@@ -1169,6 +1197,7 @@
   <widget tag="name" type="constant" id="name_bxl" >
    <description locale="en" >Name</description>
    <description locale="ar" >الإسم</description>
+   <description locale="cs" >Jméno</description>
    <description locale="de" >Name</description>
    <description locale="es" >Nombre</description>
    <description locale="fr" >Nom</description>

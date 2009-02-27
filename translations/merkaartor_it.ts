@@ -723,7 +723,7 @@ Messaggio delle API &apos;%1&apos;</translation>
         <location filename="../GeoImageDock.cpp" line="169"/>
         <source>No EXIF header found in image &quot;%1&quot;.
 Do you want to revert to improper file timestamp?</source>
-        <translation>Nessuna intestazione EXIV trovata nell&apos;immagine &quot;%1&quot;.
+        <translation>Nessuna intestazione EXIF trovata nell&apos;immagine &quot;%1&quot;.
 Vuoi tornare al timestamp invalido?</translation>
     </message>
     <message>
