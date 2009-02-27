@@ -23,7 +23,7 @@ my $temp = "templates";
 copy($files{$temp}{"pot"}, "upl/$temp/$temp.pot");
 foreach my $t (keys %{$files{$temp}})
 {
-  next if $t =~ /\.pot$/;
+  next if $t eq "pot";
   copy($files{$temp}{$t}, "upl/$temp/$t.po");
 }
 
@@ -31,7 +31,7 @@ $temp = "merkaartor";
 copy($files{$temp}{"pot"}, "upl/$temp/$temp.pot");
 foreach my $t (keys %{$files{$temp}})
 {
-  next if $t =~ /\.pot$/;
+  next if $t eq "pot";
   copy($files{$temp}{$t}, "upl/$temp/$t.po") if -f "${temp}_$t.ts";
 }
 
