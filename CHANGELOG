@@ -1,4 +1,5 @@
 v0.13
+	* ADD : Images can be dropped on TrackPoints to add the coordinates from the trackpoint to the image and then load it as geotagged image
 	* FIX : trackpoints which are associated with an image are highlighted according to the Style's settings (but not by painting an reactangle in paintEvent manually)
 	* FIX : Much better zoom (and image-moving) for ImageView in GeoImageDock
 	* FIX : Long image filenames are cutted to fit the GeoImageDock (fixes #1452)
