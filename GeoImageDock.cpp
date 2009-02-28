@@ -465,11 +465,9 @@ void ImageView::resizeEvent(QResizeEvent * /* e */)
 void ImageView::mouseDoubleClickEvent(QMouseEvent * /* e */)
 {
 	if (QApplication::keyboardModifiers() == Qt::ControlModifier)
-		//zoom((int)(-0.0625 * image.width())); // zoom in 16 steps
-		zoom(-1); // zoom difference in percent
+		zoom(-1);
 	else
-		//zoom((int)(0.0625 * image.width())); // zoom in 16 steps
-		zoom(1); // zoom difference in percent
+		zoom(1);
 }
 
 void ImageView::mousePressEvent(QMouseEvent * e)
@@ -490,8 +488,7 @@ void ImageView::mouseMoveEvent(QMouseEvent * e)
 
 void ImageView::wheelEvent(QWheelEvent *e)
 {
-	//zoom((int)((double)e->delta() / 8.0 / 360.0 * (double)image.width())); // one wheel rotation are 16 steps
-	zoom(e->delta() / 8.0 / 360.0 * 200);
+	zoom(e->delta() / 8.0 / 360.0 * 10.0); // one wheel rotation is about 10 steps
 }
 
 void ImageView::zoom(double levelStep)
@@ -502,7 +499,7 @@ void ImageView::zoom(double levelStep)
 	// zoomValue (in percent) increases/decreases following this function: 100 * sqrt(2)^x
 	// round about it results in -> 100% 150% 200% 300% 400% 550% 800% (see zooming values e.g. in gimp)
 	double newZoom = zoomLevel * pow(sqrt(2), levelStep);
-	if (newZoom > 256 || newZoom < 0.8) // only zoom up to 256000 % or down to 80%
+	if (newZoom > 256 || newZoom < 0.8) // only zoom up to 25600 % or down to 80%
 		return;
 	QPoint zoomValue((1 / newZoom) * image.width(), (1 / newZoom) * image.height());
 
