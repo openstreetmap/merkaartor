@@ -55,11 +55,6 @@ class TrackPoint : public MapFeature
 		double elevation() const;
 		void setElevation(double aElevation);
 
-		#ifdef GEOIMAGE
-		int getImageId() const;
-		void setImageId(int aImageId);
-		#endif
-
 		virtual void partChanged(MapFeature* F, unsigned int ChangeId);
 
 		virtual QString toXML(unsigned int lvl=0, QProgressDialog * progress=NULL);
@@ -80,9 +75,6 @@ private:
 		double Speed;
 		QPoint Projected;
 		ProjectionType ProjectedType;
-		#ifdef GEOIMAGE
-		int ImageId;
-		#endif
 };
 
 Q_DECLARE_METATYPE( TrackPoint * );

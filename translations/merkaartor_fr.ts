@@ -695,150 +695,156 @@ Le message de l&apos;API est le suivant &apos;%1&apos;</translation>
         <translation>Copie du nom de fichier dans le presse-papier</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="119"/>
+        <location filename="../GeoImageDock.cpp" line="140"/>
         <source>No layers</source>
         <translation>Aucuns calques</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="119"/>
+        <location filename="../GeoImageDock.cpp" line="140"/>
         <source>No suitable layer found. Please first download data from OSM server or open a track.</source>
         <translation>Aucun calque approprié n&apos;a été trouvé. Veuillez d&apos;abord télécharger des données depuis le serveur OSM ou bien ouvrir une trace GPS.</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="124"/>
+        <location filename="../GeoImageDock.cpp" line="158"/>
         <source>Load geotagged Images</source>
         <translation>Charger les images georeférencées</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="125"/>
+        <location filename="../GeoImageDock.cpp" line="159"/>
         <source>Select the layer to which the images belong:</source>
         <translation>Séléctionnez lcalque auquel l&apos;image appartient:</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="134"/>
+        <location filename="../GeoImageDock.cpp" line="167"/>
         <source>Loading Images ...</source>
         <translation>Chargement des images...</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="134"/>
+        <location filename="../GeoImageDock.cpp" line="167"/>
         <source>Abort loading</source>
         <translation>Interrompre le chargement</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="169"/>
+        <location filename="../GeoImageDock.cpp" line="202"/>
         <source>No EXIF header found in image &quot;%1&quot;.
 Do you want to revert to improper file timestamp?</source>
         <translation>Aucun entête EXIF trouvé dans l&apos;image &quot;%1&quot;.
 Voulez-vous revenir à l&apos;horodatage incorrect du fichier ?</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="210"/>
+        <location filename="../GeoImageDock.cpp" line="253"/>
         <source>Specify offset</source>
         <translation>Spécifiez le décallage</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="212"/>
+        <location filename="../GeoImageDock.cpp" line="255"/>
         <source>Position images more to the:</source>
         <translation>Positionner les images plus vers:</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="213"/>
+        <location filename="../GeoImageDock.cpp" line="256"/>
         <source>end of the track</source>
         <translation>la fin de la trace</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="214"/>
+        <location filename="../GeoImageDock.cpp" line="257"/>
         <source>beginning of the track</source>
         <translation>début de la trace</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="218"/>
+        <location filename="../GeoImageDock.cpp" line="261"/>
         <source>hh:mm:ss</source>
         <translation>hh:mm:ss</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="279"/>
+        <location filename="../GeoImageDock.cpp" line="322"/>
         <source>ss &apos;seconds&apos;</source>
         <translation>ss &apos;secondes&apos;</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="281"/>
+        <location filename="../GeoImageDock.cpp" line="324"/>
         <source>mm &apos;minutes and&apos; ss &apos;seconds&apos;</source>
         <translation>mm &apos;minutes et&apos; ss &apos;secondes&apos;</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="283"/>
+        <location filename="../GeoImageDock.cpp" line="326"/>
         <source>hh &apos;hours,&apos; mm &apos;minutes and&apos; ss &apos;seconds&apos;</source>
         <translation>hh &apos;heures,&apos; mm &apos;minutes et&apos; ss &apos;secondes&apos;</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="284"/>
+        <location filename="../GeoImageDock.cpp" line="327"/>
         <source>Wrong image?</source>
         <translation>Pas la bonne image ?</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="285"/>
+        <location filename="../GeoImageDock.cpp" line="328"/>
         <source>Image &quot;%1&quot; was taken %2 before the next trackpoint was recorded.
 Do you still want to use it?</source>
         <translation>L&apos;image &quot;%1&quot; a été prise %2 avant que le point de traçe suivant ne soit enregistré.
 Voulez vous quand même l&apos;utiliser ?</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="286"/>
+        <location filename="../GeoImageDock.cpp" line="329"/>
         <source>Image &quot;%1&quot; was taken %2 after the last trackpoint was recorded.
 Do you still want to use it?</source>
         <translation>L&apos;image &quot;%1&quot; a été prise %2 après que le point de traçe suivant ne soit enregistré.
 Voulez vous quand même l&apos;utiliser ?</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="142"/>
+        <location filename="../GeoImageDock.cpp" line="175"/>
         <source>No such file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="142"/>
+        <location filename="../GeoImageDock.cpp" line="175"/>
         <source>Can&apos;t find image &quot;%1&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="150"/>
+        <location filename="../GeoImageDock.cpp" line="364"/>
         <source>Exiv2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="148"/>
+        <location filename="../GeoImageDock.cpp" line="181"/>
         <source>Error while opening &quot;%2&quot;:
 %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="272"/>
+        <location filename="../GeoImageDock.cpp" line="315"/>
         <source>No TrackPoints</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="272"/>
+        <location filename="../GeoImageDock.cpp" line="315"/>
         <source>No TrackPoints found for image &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="295"/>
+        <location filename="../GeoImageDock.cpp" line="337"/>
         <source>No geo informations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="295"/>
+        <location filename="../GeoImageDock.cpp" line="337"/>
         <source>Image &quot;%1&quot; is not a geotagged image.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="150"/>
+        <location filename="../GeoImageDock.cpp" line="364"/>
         <source>Error while loading EXIF-data from &quot;%1&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="169"/>
+        <location filename="../GeoImageDock.cpp" line="202"/>
         <source>No EXIF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../GeoImageDock.cpp" line="360"/>
+        <source>Error while opening &quot;%1&quot;:
+%2</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -956,6 +962,14 @@ Voulez vous quand même l&apos;utiliser ?</translation>
         <location filename="../Map/MapLayer.cpp" line="685"/>
         <source>Map - Shape</source>
         <translation>Carte - Forme</translation>
+    </message>
+</context>
+<context>
+    <name>ImageView</name>
+    <message>
+        <location filename="../GeoImageDock.cpp" line="448"/>
+        <source>...</source>
+        <translation type="obsolete">...</translation>
     </message>
 </context>
 <context>
@@ -2287,22 +2301,22 @@ En cas de doute, demandez un avis sur les listes de diffusion OSM &quot;legal&qu
         <translation>Ouvrir Template d&apos;étiquette</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2376"/>
+        <location filename="../MainWindow.cpp" line="2382"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2376"/>
+        <location filename="../MainWindow.cpp" line="2382"/>
         <source>Could not load the selected language. Go to Tools, Preferences to select another language or check whether the translation file is missing.</source>
         <translation>Impossible de charger la langue sélectionnée. Cliquez sur Outils, Préférences pour sélectionner une autre langue ou vérifiez que le fichier de traduction n&apos;est pas manquant.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2379"/>
+        <location filename="../MainWindow.cpp" line="2385"/>
         <source>Warning! Could not load the Qt translations for the &quot;%1&quot; language.</source>
         <translation>Avertissement ! impossible de télécharger les traductions de Qt pour la langue &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2382"/>
+        <location filename="../MainWindow.cpp" line="2388"/>
         <source>Warning! Could not load the Merkaartor translations for the &quot;%1&quot; language.</source>
         <translation>Avertissement ! impossible de télécharger les traductions de Merkaartor pour la langue &quot;%1&quot;.</translation>
     </message>
@@ -2768,17 +2782,17 @@ En cas de doute, demandez un avis sur les listes de diffusion OSM &quot;legal&qu
         <translation>Route</translation>
     </message>
     <message>
-        <location filename="../Map/TrackPoint.cpp" line="385"/>
+        <location filename="../Map/TrackPoint.cpp" line="354"/>
         <source>timestamp</source>
         <translation>horodatage</translation>
     </message>
     <message>
-        <location filename="../Map/TrackPoint.cpp" line="386"/>
+        <location filename="../Map/TrackPoint.cpp" line="355"/>
         <source>coord</source>
         <translation>coordonnées</translation>
     </message>
     <message>
-        <location filename="../Map/TrackPoint.cpp" line="408"/>
+        <location filename="../Map/TrackPoint.cpp" line="377"/>
         <source>Node</source>
         <translation>Noeud</translation>
     </message>
@@ -2798,32 +2812,32 @@ En cas de doute, demandez un avis sur les listes de diffusion OSM &quot;legal&qu
         <translation>Taille</translation>
     </message>
     <message>
-        <location filename="../Map/TrackPoint.cpp" line="389"/>
+        <location filename="../Map/TrackPoint.cpp" line="358"/>
         <source>elevation</source>
         <translation>élévation</translation>
     </message>
     <message>
-        <location filename="../Map/TrackPoint.cpp" line="391"/>
+        <location filename="../Map/TrackPoint.cpp" line="360"/>
         <source>speed</source>
         <translation>vitesse</translation>
     </message>
     <message>
-        <location filename="../Map/TrackPoint.cpp" line="394"/>
+        <location filename="../Map/TrackPoint.cpp" line="363"/>
         <source>Waypoint</source>
         <translation>Noeud intermédiaire</translation>
     </message>
     <message>
-        <location filename="../Map/TrackPoint.cpp" line="397"/>
+        <location filename="../Map/TrackPoint.cpp" line="366"/>
         <source>description</source>
         <translation>description</translation>
     </message>
     <message>
-        <location filename="../Map/TrackPoint.cpp" line="400"/>
+        <location filename="../Map/TrackPoint.cpp" line="369"/>
         <source>comment</source>
         <translation>commentaire</translation>
     </message>
     <message>
-        <location filename="../Map/TrackPoint.cpp" line="403"/>
+        <location filename="../Map/TrackPoint.cpp" line="372"/>
         <source>layer</source>
         <translation>calque</translation>
     </message>
@@ -2844,39 +2858,49 @@ En cas de doute, demandez un avis sur les listes de diffusion OSM &quot;legal&qu
 <context>
     <name>MapView</name>
     <message>
-        <location filename="../MapView.cpp" line="252"/>
+        <location filename="../MapView.cpp" line="259"/>
         <source>%1 m</source>
         <translation>%1 m</translation>
     </message>
     <message>
-        <location filename="../MapView.cpp" line="254"/>
+        <location filename="../MapView.cpp" line="261"/>
         <source>%1 km</source>
         <translation>%1 km</translation>
     </message>
     <message>
-        <location filename="../MapView.cpp" line="938"/>
+        <location filename="../MapView.cpp" line="945"/>
         <source>Feature</source>
         <translation>Objet</translation>
     </message>
     <message>
-        <location filename="../MapView.cpp" line="955"/>
+        <location filename="../MapView.cpp" line="962"/>
         <source>Road</source>
         <translation>Route</translation>
     </message>
     <message>
-        <location filename="../MapView.cpp" line="947"/>
+        <location filename="../MapView.cpp" line="954"/>
         <source>Node</source>
         <translation>Noeud</translation>
     </message>
     <message>
-        <location filename="../MapView.cpp" line="228"/>
+        <location filename="../MapView.cpp" line="235"/>
         <source>%1ms</source>
         <translation>%1ms</translation>
     </message>
     <message>
-        <location filename="../MapView.cpp" line="963"/>
+        <location filename="../MapView.cpp" line="970"/>
         <source>Relation</source>
         <translation>Relation</translation>
+    </message>
+    <message>
+        <location filename="../MapView.cpp" line="1068"/>
+        <source>Add trackpoint position to image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MapView.cpp" line="1070"/>
+        <source>Cancel</source>
+        <translation type="unfinished">Annuler</translation>
     </message>
 </context>
 <context>

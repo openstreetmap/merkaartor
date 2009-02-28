@@ -1,4 +1,10 @@
 v0.13
+	* FIX : trackpoints which are associated with an image are highlighted according to the Style's settings (but not by painting an reactangle in paintEvent manually)
+	* FIX : Much better zoom (and image-moving) for ImageView in GeoImageDock
+	* FIX : Long image filenames are cutted to fit the GeoImageDock (fixes #1452)
+	* FIX : ImageView in GeoImageDock draws images using an antialiasing painter and images are not copied when displaying them which results in faster drawing. (fixes #1452)
+	* FIX : If there is only one opened layer, GeoImage uses it automatically (without asking the user) (fixes #1450)
+	* FIX : Loading images with non-ascii filenames is now supported by GeoImage (fixes #1359)
 	* FIX : Handle Undoes while creating single/double roads (fixes #1621)
 	* FIX : Re-apply custom shortcuts after retranslateUI (fixes #1620)
 	* FIX : Insufficent precision for WMS bbox requests at high zoom (fixes #1618)

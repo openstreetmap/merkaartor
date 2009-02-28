@@ -48,8 +48,10 @@ public:
 	GeoImageDock(MainWindow *aMain);
 	~GeoImageDock(void);
 
-	void loadImages(QStringList fileNames, MapDocument *theDocument, MapView *theView);
-	void setImage(int ImageId);
+	void loadImages(QStringList fileNames);
+	void setImage(TrackPoint *Pt);
+
+	void addGeoDataToImage(Coord pos, const QString & file);
 
 private slots:
 	void removeImages(void);
@@ -61,8 +63,9 @@ private:
 
 	ImageView *Image;
 
-	QList<MapLayer*> activeLayers;
-	MapView *theView;
+	// first: TrackPoint::id(); second.first: image filename; second.second: true if we have to delete the TrackPoint
+	QList<QPair<QString, QPair<QString, bool> > > usedTrackPoints;
+	MainWindow *Main;
 
 };
 
@@ -83,13 +86,14 @@ protected:
 	void resizeEvent(QResizeEvent *e);
 
 private:
-	QPixmap image;
+	QImage image;
 	QString name;
 	QPoint mousePos;
-	QRect area, rect;
+	QRect rect;
+	QRectF area;
 
-	double aspect;
-	
-	void zoom(int level);
+	double zoomLevel; // zoom in percent
+
+	void zoom(double levelStep); // zoom levelStep steps
 
 };

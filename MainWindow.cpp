@@ -785,7 +785,7 @@ void MainWindow::loadFiles(const QStringList & fileList)
 #ifdef GEOIMAGE
 	QStringList images = fileList.filter(".jpg", Qt::CaseInsensitive);
 	if (!images.isEmpty()) {
-		theGeoImage->loadImages(images, theDocument, theView);
+		theGeoImage->loadImages(images);
 		QString cur;
 		foreach (cur, images)
 			fileNames.removeAll(cur);

@@ -12,6 +12,10 @@
 #include "GPS/qgps.h"
 #include "GPS/qgpsdevice.h"
 
+#ifdef GEOIMAGE
+#include "GeoImageDock.h"
+#endif
+
 #include "QMapControl/layermanager.h"
 #include "QMapControl/imagemanager.h"
 #ifdef YAHOO
@@ -36,6 +40,9 @@ MapView::MapView(MainWindow* aMain) :
 	setAttribute(Qt::WA_OpaquePaintEvent);
 	setContextMenuPolicy(Qt::CustomContextMenu);
 	setFocusPolicy(Qt::ClickFocus);
+#ifdef GEOIMAGE
+	setAcceptDrops(true);
+#endif
 
 	ImageManager::instance()->setCacheDir(MerkaartorPreferences::instance()->getCacheDir());
 	ImageManager::instance()->setCacheMaxSize(MerkaartorPreferences::instance()->getCacheSize());
@@ -1021,6 +1028,50 @@ void MapView::resizeEvent(QResizeEvent * ev)
 
 	invalidate(true, true);
 }
+
+#ifdef GEOIMAGE
+void MapView::dragEnterEvent(QDragEnterEvent *event)
+{
+	if (event->mimeData()->hasUrls() && event->mimeData()->urls().first().toLocalFile().endsWith(".jpg", Qt::CaseInsensitive))
+		event->accept();
+	else
+		event->ignore();
+}
+
+void MapView::dragMoveEvent(QDragMoveEvent *event)
+{
+	{
+		QMouseEvent mE(QEvent::MouseMove, event->pos(), Qt::LeftButton, Qt::LeftButton, qApp->keyboardModifiers());
+		mouseMoveEvent(&mE);
+	}
+	TrackPoint *tP;
+	for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it) {
+		if ((tP = qobject_cast<TrackPoint*>(it.get())) && tP->pixelDistance(event->pos(), 5.01, projection()) < 5.01) {
+			dropTarget = tP;
+			QRect acceptedRect(tP->projection() - QPoint(3.5, 3.5), tP->projection() + QPoint(3.5, 3.5));
+			event->acceptProposedAction();
+			event->accept(acceptedRect);
+			return;
+		}
+	}
+	event->ignore();
+}
+
+void MapView::dropEvent(QDropEvent *event)
+{
+	// first save the image url because the even->mimeData() releases its data very soon
+	// this is probably because the drop action ends with calling of this event
+	// so the program that started the drag-action thinks the data isn't needed anymore
+	QUrl imageUrl = event->mimeData()->urls().first();
+
+	QMenu menu(this);
+	QAction *add = menu.addAction(tr("Add trackpoint position to image"));
+	menu.addSeparator();
+	menu.addAction(tr("Cancel"));
+	if (menu.exec(QCursor::pos()) == add)
+		Main->geoImage()->addGeoDataToImage(dropTarget->position(), imageUrl.toLocalFile());
+}
+#endif // GEOIMAGE
 
 bool MapView::toXML(QDomElement xParent)
 {

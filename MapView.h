@@ -47,6 +47,11 @@ class MapView :	public QWidget
 		virtual void mouseMoveEvent(QMouseEvent* event);
 		virtual void wheelEvent(QWheelEvent* ev);
 		virtual void resizeEvent(QResizeEvent *event);
+		#ifdef GEOIMAGE
+		virtual void dragEnterEvent(QDragEnterEvent *event);
+		virtual void dragMoveEvent(QDragMoveEvent *event);
+		virtual void dropEvent(QDropEvent *event);
+		#endif // GEOIMAGE
 
 		Projection& projection();
 
@@ -86,6 +91,9 @@ class MapView :	public QWidget
 		QList<MapFeature*> theFeatures;
 		QList<Road*> theCoastlines;
 
+		#ifdef GEOIMAGE
+		TrackPoint *dropTarget;
+		#endif
 
 		int numImages;
 

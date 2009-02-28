@@ -619,4 +619,9 @@
  drawTrafficDirectionMarks="no">
   <selector expr="[place] is city"/>
 </painter>
+<painter
+ icon=":Icons/geotagged.png" iconScale="0" iconOffset="15"
+ drawTrafficDirectionMarks="no">
+  <selector expr="[Picture] isoneof (GeoTagged)"/>
+</painter>
 </mapStyle>

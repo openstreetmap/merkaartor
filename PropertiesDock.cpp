@@ -325,7 +325,7 @@ void PropertiesDock::on_SelectionList_itemSelectionChanged()
 
 			#ifdef GEOIMAGE
 			TrackPoint *Pt;
-			if ((Pt = dynamic_cast<TrackPoint*>(Selection[0]))) Main->geoImage()->setImage(Pt->getImageId());
+			if ((Pt = dynamic_cast<TrackPoint*>(Selection[0]))) Main->geoImage()->setImage(Pt);
 			#endif
 		}
 		theModel->setFeature(Selection);
@@ -496,7 +496,7 @@ void PropertiesDock::resetValues()
 			CurrentTagView = TrackPointUi.TagView;
  
  			#ifdef GEOIMAGE
- 			Main->geoImage()->setImage(Pt->getImageId());
+ 			Main->geoImage()->setImage(Pt);
  			#endif
 		}
 		else if (Road* R = dynamic_cast<Road*>(FullSelection[0]))
@@ -535,7 +535,7 @@ void PropertiesDock::resetValues()
 	{
 		Main->info()->setHtml("");
 		#ifdef GEOIMAGE
-		Main->geoImage()->setImage(-1);
+		Main->geoImage()->setImage(NULL);
 		#endif
 		MultiUi.TagView->setModel(theModel);
 		MultiUi.TagView->setItemDelegate(delegate);

@@ -9,17 +9,11 @@
 TrackPoint::TrackPoint(const Coord& aCoord)
 : Position(aCoord), Elevation(0.0), Speed(0.0)
 {
-	#ifdef GEOIMAGE
-	ImageId = -1;
-	#endif
 }
 
 TrackPoint::TrackPoint(const TrackPoint& other)
 : MapFeature(other), Position(other.Position), Elevation(other.Elevation), Speed(other.Speed), Projected(other.Projected)
 {
-	#ifdef GEOIMAGE
-	ImageId = other.ImageId;
-	#endif
 	setTime(other.time());
 }
 
@@ -112,18 +106,6 @@ void TrackPoint::setElevation(double aElevation)
 	Elevation = aElevation;
 }
 
-#ifdef GEOIMAGE
-void TrackPoint::setImageId(int aImageId)
-{
-	ImageId = aImageId;
-}
-
-int TrackPoint::getImageId(void) const
-{
-	return ImageId;
-}
-#endif // GEOIMAGE
-
 bool TrackPoint::notEverythingDownloaded() const
 {
 	return lastUpdated() == MapFeature::NotYetDownloaded;
@@ -134,22 +116,9 @@ CoordBox TrackPoint::boundingBox() const
 	return CoordBox(Position,Position);
 }
 
-#ifndef GEOIMAGE
 void TrackPoint::draw(QPainter& /* thePainter */, const Projection& /*theProjection*/ )
 {
 }
-#else
-void TrackPoint::draw(QPainter& thePainter, const Projection& theProjection )
-{
-	if (ImageId != -1) {
-		QPoint me = theProjection.project(this);
-		thePainter.setPen(QPen(QColor(0, 0, 0), 2));
-		QRect box(me - QPoint(5, 3), me + QPoint(5, 3));
-		thePainter.drawRect(box);
-	}
-}
-#endif // GEOIMAGE
-
 
 void TrackPoint::drawFocus(QPainter& thePainter, const Projection& theProjection, bool solid)
 {

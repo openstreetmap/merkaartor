@@ -47,6 +47,7 @@
         <file>actions/zoom_fit_best.png</file>
         <file>actions/zoom_in.png</file>
         <file>actions/zoom_out.png</file>
+        <file>geotagged.png</file>
     </qresource>
     <qresource prefix="/Art">
         <file>Mapnik/airport.png</file>
