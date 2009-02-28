@@ -1328,7 +1328,7 @@ M_PARAM_IMPLEMENT_BOOL(InfoOnHover, visual, true)
 M_PARAM_IMPLEMENT_BOOL(ShowParents, visual, true)
 
 M_PARAM_IMPLEMENT_INT(TagListFirstColumnWidth, visual, 0)
-M_PARAM_IMPLEMENT_BOOL(TranslateTags, locale, true);
+M_PARAM_IMPLEMENT_BOOL(TranslateTags, locale, true)
 
 /* World OSB manager */
 M_PARAM_IMPLEMENT_DOUBLE(TileToRegionThreshold, WOSB, 0.02)

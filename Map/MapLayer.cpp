@@ -600,7 +600,7 @@ LayerWidget* ImageMapLayer::newWidget(void)
 
 void ImageMapLayer::updateWidget()
 {
-	//((ImageLayerWidget*) p->theWidget)->initActions();
+    ((ImageLayerWidget*) p->theWidget)->initActions();
 	p->theWidget->update();
 }
 

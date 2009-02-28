@@ -163,7 +163,7 @@ QWidget* TagTemplateWidgetCombo::getWidget(const MapFeature* F)
 
 	QString lang = getDefaultLanguage();
 	QString defLang = "en";
-	if (lang == "-")
+    if (lang == "-" || !M_PREFS->getTranslateTags())
 		lang = "en";
 
 	theWidget = new QWidget();
@@ -313,8 +313,8 @@ QWidget* TagTemplateWidgetYesno::getWidget(const MapFeature* F)
 
 	QString lang = getDefaultLanguage();
 	QString defLang = "en";
-	if (lang == "-")
-		lang = "en";
+    if (lang == "-" || !M_PREFS->getTranslateTags())
+        lang = "en";
 
 	theWidget = new QWidget();
 	QHBoxLayout* aLayout = new QHBoxLayout(theWidget);
@@ -425,8 +425,8 @@ QWidget* TagTemplateWidgetConstant::getWidget(const MapFeature* F)
 
 	QString lang = getDefaultLanguage();
 	QString defLang = "en";
-	if (lang == "-")
-		lang = "en";
+    if (lang == "-" || !M_PREFS->getTranslateTags())
+        lang = "en";
 
 	theWidget = new QWidget();
 	QHBoxLayout* aLayout = new QHBoxLayout(theWidget);
@@ -557,8 +557,8 @@ QWidget* TagTemplateWidgetEdit::getWidget(const MapFeature* F)
 
 	QString lang = getDefaultLanguage();
 	QString defLang = "en";
-	if (lang == "-")
-		lang = "en";
+    if (lang == "-" || !M_PREFS->getTranslateTags())
+        lang = "en";
 
 	theWidget = new QWidget();
 	QHBoxLayout* aLayout = new QHBoxLayout(theWidget);
@@ -719,8 +719,8 @@ QWidget* TagTemplate::getWidget(const MapFeature* F)
 {
 	QString lang = getDefaultLanguage();
 	QString defLang = "en";
-	if (lang == "-")
-		lang = "en";
+    if (lang == "-" || !M_PREFS->getTranslateTags())
+        lang = "en";
 
 	theWidget = new QWidget();
 	//if (theDescriptions.count(lang))
@@ -863,8 +863,8 @@ QWidget* TagTemplates::getWidget(const MapFeature* F)
 {
 	QString lang = getDefaultLanguage();
 	QString defLang = "en";
-	if (lang == "-")
-		lang = "en";
+    if (lang == "-" || !M_PREFS->getTranslateTags())
+        lang = "en";
 
 	if (curTemplate) {
 		disconnect(curTemplate, 0, this, 0);

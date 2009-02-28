@@ -25,8 +25,8 @@
                 <Directory Id="MERKAARTORHARE" Name="share">
                    <Directory Id="WORLD_SHP" Name="world_shp" />
                 </Directory>
-                <Directory Id="QTIMAGEPLUGINDIR" Name="imageformats">
-                </Directory>
+                <Directory Id="QTIMAGEPLUGINDIR" Name="imageformats" />
+                <Directory Id="QTTRANSLATIONS" Name="translations" />
             </Directory>
          </Directory>
       </Directory>
@@ -51,24 +51,6 @@
             <File Id="mingwm10.dll" Name="mingwm10.dll"
                Source="$(var.QtPath)\bin\mingwm10.dll" DiskId="1">
             </File>
-            <File Id="merkaartor_cs.qm" Name="merkaartor_cs.qm"
-               Source="..\translations\merkaartor_cs.qm" DiskId="1">
-            </File>
-            <File Id="merkaartor_de.qm" Name="merkaartor_de.qm"
-               Source="..\translations\merkaartor_de.qm" DiskId="1">
-            </File>
-            <File Id="merkaartor_fr.qm" Name="merkaartor_fr.qm"
-               Source="..\translations\merkaartor_fr.qm" DiskId="1">
-            </File>
-            <File Id="merkaartor_it.qm" Name="merkaartor_it.qm"
-               Source="..\translations\merkaartor_it.qm" DiskId="1">
-            </File>
-            <File Id="merkaartor_ru.qm" Name="merkaartor_ru.qm"
-               Source="..\translations\merkaartor_ru.qm" DiskId="1">
-            </File>
-            <File Id="merkaartor_pl.qm" Name="merkaartor_pl.qm"
-               Source="..\translations\merkaartor_pl.qm" DiskId="1">
-            </File>
             <File Id="libexslt.dll" Name="libexslt.dll"
                Source="$(var.DllPath)\libexslt.dll" DiskId="1">
             </File>
@@ -92,7 +74,36 @@
          </Component>
       </DirectoryRef>
 
-      <Feature Id="MerkaartorFeature" Title="Merkaartor editor" Level="1"
+      <DirectoryRef Id="QTTRANSLATIONS">
+         <Component Id="MerkaartorTranslationsCt" Guid="8BA3BDF5-D15B-46e0-8581-2BF72A4B6940">
+            <File Id="merkaartor_ar.qm" Name="merkaartor_ar.qm"
+               Source="..\translations\merkaartor_ar.qm" DiskId="1">
+            </File>
+            <File Id="merkaartor_cs.qm" Name="merkaartor_cs.qm"
+               Source="..\translations\merkaartor_cs.qm" DiskId="1">
+            </File>
+            <File Id="merkaartor_de.qm" Name="merkaartor_de.qm"
+               Source="..\translations\merkaartor_de.qm" DiskId="1">
+            </File>
+            <File Id="merkaartor_es.qm" Name="merkaartor_es.qm"
+               Source="..\translations\merkaartor_es.qm" DiskId="1">
+            </File>
+            <File Id="merkaartor_fr.qm" Name="merkaartor_fr.qm"
+               Source="..\translations\merkaartor_fr.qm" DiskId="1">
+            </File>
+            <File Id="merkaartor_it.qm" Name="merkaartor_it.qm"
+               Source="..\translations\merkaartor_it.qm" DiskId="1">
+            </File>
+            <File Id="merkaartor_ru.qm" Name="merkaartor_ru.qm"
+               Source="..\translations\merkaartor_ru.qm" DiskId="1">
+            </File>
+            <File Id="merkaartor_pl.qm" Name="merkaartor_pl.qm"
+               Source="..\translations\merkaartor_pl.qm" DiskId="1">
+            </File>
+         </Component>
+      </DirectoryRef>
+      
+	  <Feature Id="MerkaartorFeature" Title="Merkaartor editor" Level="1"
          Display="expand" ConfigurableDirectory="INSTALLLOCATION">
          <ComponentRef Id="Merkaartor" />
       </Feature>
@@ -107,6 +118,11 @@
      <Feature Id="QtImagePluginsFeature" Title="Qt Image Plugins DLLs" Level="1"
         Display="expand" ConfigurableDirectory="QTIMAGEPLUGINDIR">
        <ComponentRef Id="QtImagePlugins" />
+     </Feature>
+     <Feature Id="TranslationsFeature" Title="Translation files" Level="1"
+        Display="expand" ConfigurableDirectory="QTTRANSLATIONS">
+       <ComponentRef Id="QtTranslations" />
+       <ComponentRef Id="MerkaartorTranslationsCt" />
      </Feature>
 
      <UIRef Id="WixUI_Mondo"/>

@@ -128,15 +128,15 @@ public:
 	static DrawingMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
 	static DrawingMapLayer* doFromXML(DrawingMapLayer* l, MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
-	virtual const QString className() {return "DrawingMapLayer";};
-	virtual const LayerGroups classGroups() {return (MapLayer::OSM);};
+    virtual const QString className() {return "DrawingMapLayer";}
+    virtual const LayerGroups classGroups() {return (MapLayer::OSM);}
 };
 
 class ImageMapLayer : public MapLayer
 {
 	Q_OBJECT
 public:
-	ImageMapLayer() : layermanager(0) {};
+    ImageMapLayer() : layermanager(0) {}
 	ImageMapLayer(const QString& aName, LayerManager* aLayerMgr=NULL);
 	virtual ~ImageMapLayer();
 
@@ -152,8 +152,8 @@ public:
 	virtual bool toXML(QDomElement xParent, QProgressDialog & progress);
 	static ImageMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
-	virtual const QString className() {return "ImageMapLayer";};
-	virtual const LayerGroups classGroups() {return(MapLayer::Default);};
+    virtual const QString className() {return "ImageMapLayer";}
+    virtual const LayerGroups classGroups() {return(MapLayer::Default);}
 
 private:
 	WMSMapAdapter* wmsa;

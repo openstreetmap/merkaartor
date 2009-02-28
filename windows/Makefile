@@ -5,7 +5,7 @@ LIGHT := "c:/Program Files/Windows Installer XML v3/bin/light.exe"
 CANDLE := "c:/Program Files/Windows Installer XML v3/bin/candle.exe"
 LRELEASE := "lrelease.exe"
 VERSION=0.13
-REVISION=-rc1
+REVISION=
 
 
 merkaartor-$(VERSION)$(REVISION).msi: merkaartor.wixobj Makefile banner.bmp dialog.bmp merkaartor.qm
@@ -28,4 +28,4 @@ merkaartor.qm:
 	$(LRELEASE) ..\\merkaartor.pro
 
 clean:
-	rm -rf merkaartor.msi merkaartor.wixobj
+	rm -rf *.msi *.wixobj *.wixpdb
