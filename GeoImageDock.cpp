@@ -3,6 +3,7 @@
 #include "Map/TrackPoint.h"
 #include "Map/MapLayer.h"
 #include "Command/DocumentCommands.h"
+#include "LayerWidget.h"
 
 #include <QtGui/QInputDialog>
 #include <QtGui/QMessageBox>
@@ -164,6 +165,15 @@ void GeoImageDock::loadImages(QStringList fileNames)
 		}
 	}
 
+	if (theLayer->isReadonly()) { // nodes from readonly layers can not be selected and therefore associated images can not be displayed
+		if (QMessageBox::question(this, tr("Layer is readonly"),
+		 tr("The used layer is not writeable. Should it be made writeable?\nIf not, you can't load images that belongs to it."),
+		 QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Yes) == QMessageBox::Yes)
+			theLayer->getWidget()->setLayerReadonly(false); // this makes/updates both the widget and the layer with readonly = false
+		else
+			return;
+	}
+
 	QProgressDialog progress(tr("Loading Images ..."), tr("Abort loading"), 0, fileNames.size());
 	progress.setWindowModality(Qt::WindowModal);
 	progress.show();
@@ -241,7 +251,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
 			if (it.isEnd())
 				Pt = new TrackPoint(newPos);
 
-			Pt->setTag("Picture", "GeoTagged"); // Is this the nicest way to avoid the "?"-Image for this trackpoint?
+			Pt->setTag("Picture", "GeoTagged");
 			usedTrackPoints << qMakePair(Pt->id(), qMakePair(file, it.isEnd()));
 			if (it.isEnd())
 				theLayer->add(Pt);
@@ -331,6 +341,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
 			}
 
 			usedTrackPoints << qMakePair(bestPt->id(), qMakePair(file, false));
+			bestPt->setTag("Picture", "GeoTagged");
 	
 			time = QDateTime(); // empty time to be null for the next image
 		} else
