@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Include>
+  
+  <Fragment>
+ 
+    <DirectoryRef Id="QTTRANSLATIONS">
+
+      <Component Id="QtTranslations" Guid="242D55F8-C191-497c-9B30-FC7A04642404">
+        <File Id="qt_ar.qm" Name="qt_ar.qm"
+           Source="$(var.QtPath)\translations\qt_ar.qm" DiskId="1">
+        </File>
+        <File Id="qt_de.qm" Name="qt_de.qm"
+           Source="$(var.QtPath)\translations\qt_de.qm" DiskId="1">
+        </File>
+        <File Id="qt_es.qm" Name="qt_es.qm"
+           Source="$(var.QtPath)\translations\qt_es.qm" DiskId="1">
+        </File>
+        <File Id="qt_fr.qm" Name="qt_fr.qm"
+           Source="$(var.QtPath)\translations\qt_fr.qm" DiskId="1">
+        </File>
+        <File Id="qt_iw.qm" Name="qt_iw.qm"
+           Source="$(var.QtPath)\translations\qt_iw.qm" DiskId="1">
+        </File>
+        <File Id="qt_ja_jp.qm" Name="qt_ja_jp.qm"
+           Source="$(var.QtPath)\translations\qt_ja_jp.qm" DiskId="1">
+        </File>
+        <File Id="qt_pl.qm" Name="qt_pl.qm"
+           Source="$(var.QtPath)\translations\qt_pl.qm" DiskId="1">
+        </File>
+        <File Id="qt_pt.qm" Name="qt_pt.qm"
+           Source="$(var.QtPath)\translations\qt_pt.qm" DiskId="1">
+        </File>
+        <File Id="qt_ru.qm" Name="qt_ru.qm"
+           Source="$(var.QtPath)\translations\qt_ru.qm" DiskId="1">
+        </File>
+        <File Id="qt_sk.qm" Name="qt_sk.qm"
+           Source="$(var.QtPath)\translations\qt_sk.qm" DiskId="1">
+        </File>
+        <File Id="qt_sv.qm" Name="qt_sv.qm"
+           Source="$(var.QtPath)\translations\qt_sv.qm" DiskId="1">
+        </File>
+        <File Id="qt_uk.qm" Name="qt_uk.qm"
+           Source="$(var.QtPath)\translations\qt_uk.qm" DiskId="1">
+        </File>
+        <File Id="qt_zh_CN.qm" Name="qt_zh_CN.qm"
+           Source="$(var.QtPath)\translations\qt_zh_CN.qm" DiskId="1">
+        </File>
+        <File Id="qt_zh_TW.qm" Name="qt_zh_TW.qm"
+           Source="$(var.QtPath)\translations\qt_zh_TW.qm" DiskId="1">
+        </File>
+      </Component>
+        
+    </DirectoryRef>
+  </Fragment>
+
+</Include>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Include>
+  
+  <Fragment>
+    <DirectoryRef Id="INSTALLLOCATION">
+      <Component Id="QtMainD" Guid="E3F4CAB2-4BF4-4762-BBAD-9BBE79297C0B" >
+        <File Id="QtCore" Name="QtCored4.dll" DefaultLanguage="0"
+           Source="$(var.QtPath)\bin\QtCored4.dll" DiskId="1">
+        </File>
+        <File Id="QtGui" Name="QtGuid4.dll" DefaultLanguage="0"
+           Source="$(var.QtPath)\bin\QtGuid4.dll" DiskId="1">
+        </File>
+        <File Id="QtXml" Name="QtXmld4.dll" DefaultLanguage="0"
+           Source="$(var.QtPath)\bin\QtXmld4.dll" DiskId="1">
+        </File>
+        <File Id="QtNetwork" Name="QtNetworkd4.dll" DefaultLanguage="0"
+           Source="$(var.QtPath)\bin\QtNetworkd4.dll" DiskId="1">
+        </File>
+        <File Id="QtSvg" Name="QtSvgd4.dll" DefaultLanguage="0"
+           Source="$(var.QtPath)\bin\QtSvgd4.dll" DiskId="1">
+        </File>
+        <File Id="QtWebKit" Name="QtWebKitd4.dll" DefaultLanguage="0"
+           Source="$(var.QtPath)\bin\QtWebKitd4.dll" DiskId="1">
+        </File>
+      </Component>
+    </DirectoryRef>
+    
+    <DirectoryRef Id="QTIMAGEPLUGINDIR">
+
+      <Component Id="QtImagePluginsD" Guid="F4605BFD-99B0-4339-88BC-54E8670DAA30" >
+        <File Id="qgif4" Name="qgifd4.dll"
+           Source="$(var.QtPath)\plugins\imageformats\qgifd4.dll" DiskId="1">
+        </File>
+        <File Id="qico4" Name="qicod4.dll"
+          Source="$(var.QtPath)\plugins\imageformats\qicod4.dll" DiskId="1">
+        </File>
+        <File Id="qjpeg4" Name="qjpegd4.dll"
+          Source="$(var.QtPath)\plugins\imageformats\qjpegd4.dll" DiskId="1">
+        </File>
+        <File Id="qsvg4" Name="qsvgd4.dll"
+           Source="$(var.QtPath)\plugins\imageformats\qsvgd4.dll" DiskId="1">
+        </File>
+        <File Id="qtiff4" Name="qtifd4.dll"
+           Source="$(var.QtPath)\plugins\imageformats\qtiffd4.dll" DiskId="1">
+        </File>
+      </Component>
+    </DirectoryRef>
+ 
+  </Fragment>
+
+</Include>

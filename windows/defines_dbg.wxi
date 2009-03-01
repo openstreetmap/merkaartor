@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Include>
+
+  <?define PackageName = "Merkaartor for Windows $(var.VERSION)$(var.REVISION) (Debug version)" ?>
+  <?define SourcePath = ".."?>
+
+  <!-- Specify here the paths to the elements of the package -->
+  <?define QtPath = "c:\Qt\443_MG" ?>
+  <?define MingwPath = "c:\MinGw" ?>
+  <?define TranslationsPath = "$(var.SourcePath)" ?>
+  <?define BinPath = "$(var.SourcePath)\binaries\win32-g++\debug\bin" ?>
+  <?define DllPath = "$(var.SourcePath)\binaries\win32-g++\release\bin" ?>
+  <?define SharePath = "$(var.SourcePath)\share" ?>
+
+</Include>

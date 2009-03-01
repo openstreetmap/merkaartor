@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 
-<?include defines.wxi?>
+<?include defines_dbg.wxi?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-   <Product  Id="132E9A8B-1BF6-4d55-893E-110D662FD355" Name="$(var.PackageName)" 
+   <Product  Id="31B4DFCE-89B4-493e-9DA9-511CCDC13E9C" Name="$(var.PackageName)" 
       Language="1033" Version="0.12.0.2" Manufacturer="Bart Vanhauwaert"
       UpgradeCode="4892C085-55A9-413b-9C7B-42E33ED7D7D2">
 
@@ -12,6 +12,7 @@
 
       <!--Set the icon for the msi and Add/Remove programs-->
       <Icon Id='Merkaartor.exe' SourceFile='..\Icons\Mercator_16x16.ico'/>
+      <Icon Id='MainIcon' SourceFile='..\Icons\Mercator_48x48.ico'/>
       <Property Id="ARPPRODUCTICON" Value="Merkaartor.exe" />
       <Property Id="ALLUSERS" Value="1"/>
 
@@ -69,13 +70,20 @@
       </DirectoryRef>
 
       <DirectoryRef Id="INSTALLLOCATION">
-         <Component Id="Merkaartor" Guid="5FDB24DB-CE92-433c-8AC4-288551C6AF7B">
+         <Component Id="Merkaartor" Guid="23E47A10-B9C8-406f-AC6B-3BF68B288470">
 	          <RegistryValue Root="HKCU" Key="Software\Merkaartor" Name="Installed" Type="integer" Value="1"/>
             <File Id="MerkaartorExe" Name="Merkaartor.exe"
                Source="$(var.BinPath)\Merkaartor.exe" DiskId="1">
-               <Shortcut Id="myshort" Directory="ProgramMenuFolder"
-                     Name="Merkaartor" WorkingDirectory="INSTALLLOCATION"/>
             </File>         
+            <File Id="merkaartor.cmd" Name="merkaartor.cmd"
+               Source="merkaartor.cmd" DiskId="1">
+               <Shortcut Id="myshort" Directory="ProgramMenuFolder"
+                     Name="Merkaartor (Debug)" WorkingDirectory="INSTALLLOCATION"
+					 Icon="MainIcon" />
+            </File>
+            <File Id="gdb.exe" Name="gdb.exe"
+               Source="$(var.MingwPath)\bin\gdb.exe" DiskId="1">
+            </File>
          </Component>
       </DirectoryRef>
  
@@ -119,11 +127,11 @@
       </Feature>
      <Feature Id="QtMainFeature" Title="Main Qt DLLs" Level="1"
         Display="expand" ConfigurableDirectory="INSTALLLOCATION">
-       <ComponentRef Id="QtMain" />
+       <ComponentRef Id="QtMainD" />
      </Feature>
      <Feature Id="QtImagePluginsFeature" Title="Qt Image Plugins DLLs" Level="1"
         Display="expand" ConfigurableDirectory="QTIMAGEPLUGINDIR">
-       <ComponentRef Id="QtImagePlugins" />
+       <ComponentRef Id="QtImagePluginsD" />
      </Feature>
      <Feature Id="TranslationsFeature" Title="Translation files" Level="1"
         Display="expand" ConfigurableDirectory="QTTRANSLATIONS">
@@ -135,7 +143,7 @@
 
    </Product>
 
-   <?include qt.wxi?>
+   <?include qt_dbg.wxi?>
    <?include qttrans.wxi?>
 
 </Wix>
