@@ -150,10 +150,6 @@ MainWindow::MainWindow(void)
 	theLayers = new LayerDock(this);
     connect(theLayers, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
 
-	theDocument = new MapDocument(theLayers);
-	theView->setDocument(theDocument);
-	theDocument->history().setActions(editUndoAction, editRedoAction, fileUploadAction);
-
 	theProperties = new PropertiesDock(this);
     connect(theProperties, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
 	on_editPropertiesAction_triggered();
@@ -302,6 +298,8 @@ MainWindow::MainWindow(void)
 	blockSignals(false);
 
 	QTimer::singleShot( 0, this, SLOT(delayedInit()) );
+
+	on_fileNewAction_triggered();
 }
 
 void MainWindow::delayedInit()
@@ -1090,9 +1088,20 @@ void MainWindow::on_fileNewAction_triggered()
 {
 	theView->launch(0);
 	theProperties->setSelection(0);
-	if (!hasUnsavedChanges(*theDocument) || mayDiscardUnsavedChanges(this)) {
+	if (!theDocument || !hasUnsavedChanges(*theDocument) || mayDiscardUnsavedChanges(this)) {
 		delete theDocument;
 		theDocument = new MapDocument(theLayers);
+		if (M_PREFS->getWorldOsbAutoload() && !M_PREFS->getWorldOsbUri().isEmpty()) {
+			MapLayer* newLayer = new OsbMapLayer( "World", M_PREFS->getWorldOsbUri() + "/world.osb" );
+			if (M_PREFS->getWorldOsbAutoshow())
+				newLayer->setVisible(true);
+			else
+				newLayer->setVisible(false);
+			newLayer->setReadonly(true);
+
+			theDocument->add(newLayer);
+		}
+
 		theView->setDocument(theDocument);
 		theDocument->history().setActions(editUndoAction, editRedoAction, fileUploadAction);
 		connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));

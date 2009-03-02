@@ -70,18 +70,6 @@ MapDocument::MapDocument()
 
 	p->uploadedLayer = new UploadedMapLayer(tr("Uploaded layer"));
 	add(p->uploadedLayer);
-
-	if (M_PREFS->getWorldOsbAutoload() && !M_PREFS->getWorldOsbUri().isEmpty()) {
-		MapLayer* newLayer = new OsbMapLayer( "World", M_PREFS->getWorldOsbUri() + "/world.osb" );
-		if (M_PREFS->getWorldOsbAutoshow())
-			newLayer->setVisible(true);
-		else
-			newLayer->setVisible(false);
-		newLayer->setReadonly(true);
-
-		add(newLayer);
-		importOSB("world.osb", (DrawingMapLayer*)newLayer);
-	}
 }
 
 MapDocument::MapDocument(LayerDock* aDock)
@@ -100,18 +88,6 @@ MapDocument::MapDocument(LayerDock* aDock)
 
 	p->uploadedLayer = new UploadedMapLayer(tr("Uploaded layer"));
 	add(p->uploadedLayer);
-
-	if (M_PREFS->getWorldOsbAutoload() && !M_PREFS->getWorldOsbUri().isEmpty()) {
-		MapLayer* newLayer = new OsbMapLayer( "World", M_PREFS->getWorldOsbUri() + "/world.osb" );
-		if (M_PREFS->getWorldOsbAutoshow())
-			newLayer->setVisible(true);
-		else
-			newLayer->setVisible(false);
-		newLayer->setReadonly(true);
-
-		add(newLayer);
-		importOSB("world.osb", (DrawingMapLayer*)newLayer);
-	}
 }
 
 MapDocument::MapDocument(const MapDocument&, LayerDock*)

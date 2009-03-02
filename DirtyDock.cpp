@@ -51,6 +51,9 @@ DirtyDock::~DirtyDock()
 
 void DirtyDock::updateList()
 {
+	if (!Main->document())
+		return;
+
 	int dirtyObjects = Main->document()->getDirtyLayer()->size();
 
 	switch (dirtyObjects)
