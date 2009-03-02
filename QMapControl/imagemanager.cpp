@@ -21,6 +21,7 @@
 #include "Preferences/MerkaartorPreferences.h"
 
 #include <QDateTime>
+#include <QCryptographicHash>
 
 ImageManager* ImageManager::m_ImageManagerInstance = 0;
 
@@ -56,6 +57,11 @@ QPixmap ImageManager::getImage(MapAdapter* anAdapter, int x, int y, int z)
 	QString url = anAdapter->getQuery(x, y, z);
 	QString strHash = QString("%1%2").arg(anAdapter->getName()).arg(url);
 	QString hash = QString(strHash.toAscii().toBase64());
+	if (hash.size() > 255) {
+		QCryptographicHash crypt(QCryptographicHash::Md5);
+		crypt.addData(hash.toLatin1());
+		hash = QString(crypt.result().toHex());
+	}
 
 /*	QPixmap pm(anAdapter->getTileSize(), anAdapter->getTileSize());
 	pm.fill(Qt::black);*/

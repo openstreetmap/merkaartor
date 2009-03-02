@@ -173,7 +173,6 @@ MainWindow::MainWindow(void)
     connect(theGeoImage, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
 #endif
 
-	connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));
 	connect (theLayers, SIGNAL(layersChanged(bool)), this, SLOT(adjustLayers(bool)));
 
 	connect (MerkaartorPreferences::instance(), SIGNAL(bookmarkChanged()), this, SLOT(updateBookmarksMenu()));

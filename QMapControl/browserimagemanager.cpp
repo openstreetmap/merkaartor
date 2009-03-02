@@ -25,6 +25,7 @@
 #include <QPixmapCache>
 #include <QPainter>
 #include <QMessageBox>
+#include <QCryptographicHash>
 
 #define MAX_REQ 1
 #define BROWSER_TILE_SIZE 512
@@ -129,6 +130,11 @@ QPixmap BrowserImageManager::getImage(MapAdapter* anAdapter, int x, int y, int z
 	QString url = anAdapter->getQuery(x, y, z);
 	QString strHash = QString("%1;%2;%3;%4;%5").arg(anAdapter->getName()).arg(QString::number(x)).arg(QString::number(y)).arg(QString::number(z)).arg(anAdapter->getTileSize());
 	QString hash = QString(strHash.toAscii().toBase64());
+	if (hash.size() > 255) {
+		QCryptographicHash crypt(QCryptographicHash::Md5);
+		crypt.addData(hash.toLatin1());
+		hash = QString(crypt.result().toHex());
+	}
 
 	// is image in picture cache
 	if (QPixmapCache::find(hash, pm))
@@ -171,9 +177,6 @@ void BrowserImageManager::launchRequest()
 
 
 	QUrl u = QUrl( R.url);
-//	QUrl u = QUrl( "file://C:/tmp.svg");
-//	QUrl u = QUrl( "http://maps.yahoo.com" );
-//	qDebug() << u << endl;
 
 #if QT_VERSION >= 0x040400
 	page->networkAccessManager()->setProxy(proxy);
