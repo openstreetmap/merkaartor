@@ -273,7 +273,8 @@ MainWindow::MainWindow(void)
 	viewStyleTouchupAction->setVisible(false);
 //#endif
 	
-	MerkaartorPreferences::instance()->initialPosition(theView);
+    on_fileNewAction_triggered();
+    MerkaartorPreferences::instance()->initialPosition(theView);
 
 
 #define NUMOP 3
@@ -297,8 +298,6 @@ MainWindow::MainWindow(void)
 	blockSignals(false);
 
 	QTimer::singleShot( 0, this, SLOT(delayedInit()) );
-
-	on_fileNewAction_triggered();
 }
 
 void MainWindow::delayedInit()
