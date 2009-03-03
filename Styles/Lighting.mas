@@ -47,9 +47,4 @@
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
   <selector expr="[highway] isoneof (motorway , motorway_link , trunk , trunk_link , primary , primary_link , secondary , secondary_link , tertiary , tertiary_link , residential , unclassified , construction , road , pedestrian , minor , service , living_street)"/>
 </painter>
-<painter
- icon=":Icons/geotagged.png" iconScale="0" iconOffset="15"
- drawTrafficDirectionMarks="no">
-  <selector expr="[Picture] isoneof (GeoTagged)"/>
-</painter>
 </mapStyle>

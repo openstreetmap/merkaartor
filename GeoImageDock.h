@@ -50,21 +50,35 @@ public:
 
 	void loadImages(QStringList fileNames);
 	void setImage(TrackPoint *Pt);
+	void setImage(int ImageId);
 
 	void addGeoDataToImage(Coord pos, const QString & file);
 
 private slots:
 	void removeImages(void);
 	void toClipboard(void);
+	void selectNext(void);
+	void selectPrevious(void);
 
 private:
+
 	QStringList Images;
 	int curImage;
+	bool updateByMe;
 
 	ImageView *Image;
 
-	// first: TrackPoint::id(); second.first: image filename; second.second: true if we have to delete the TrackPoint
-	QList<QPair<QString, QPair<QString, bool> > > usedTrackPoints;
+	struct TrackPointData {
+		TrackPointData(const QString & mId, const QString & mFilename, const QDateTime & mTimestamp, bool mInserted)
+	 	 : id(mId), filename(mFilename), inserted(mInserted), timestamp(mTimestamp) { }
+		bool operator<(const TrackPointData & other) const { return timestamp < other.timestamp; }
+		QString id;
+		QString filename;
+		bool inserted;
+		QDateTime timestamp;
+	};
+	QList<TrackPointData> usedTrackPoints;
+
 	MainWindow *Main;
 
 };

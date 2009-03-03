@@ -116,9 +116,21 @@ CoordBox TrackPoint::boundingBox() const
 	return CoordBox(Position,Position);
 }
 
+#ifdef GEOIMAGE
+void TrackPoint::draw(QPainter& thePainter , const Projection& theProjection )
+{
+	if (!tagValue("Picture", "").isEmpty()) {
+		QPoint me = theProjection.project(this);
+		thePainter.setPen(QPen(QColor(0, 0, 0), 2));
+		QRect box(me - QPoint(5, 3), me + QPoint(5, 3));
+		thePainter.drawRect(box);
+	}
+}
+#else
 void TrackPoint::draw(QPainter& /* thePainter */, const Projection& /*theProjection*/ )
 {
 }
+#endif
 
 void TrackPoint::drawFocus(QPainter& thePainter, const Projection& theProjection, bool solid)
 {

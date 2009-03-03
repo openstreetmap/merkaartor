@@ -4,6 +4,7 @@
 #include "Map/MapLayer.h"
 #include "Command/DocumentCommands.h"
 #include "LayerWidget.h"
+#include "PropertiesDock.h"
 
 #include <QtGui/QInputDialog>
 #include <QtGui/QMessageBox>
@@ -18,6 +19,7 @@ GeoImageDock::GeoImageDock(MainWindow *aMain)
 	: QDockWidget(aMain), Main(aMain)
 {
 	curImage = -1;
+	updateByMe = false;
 	setWindowTitle(tr("Geo Images"));
 	Image = new ImageView(this);
 	setWidget(Image);
@@ -27,12 +29,20 @@ GeoImageDock::GeoImageDock(MainWindow *aMain)
 
 	QAction *remImages = new QAction(tr("Remove Images"), this);
 	QAction *toClipboard = new QAction(tr("Copy filename to clipboard"), this);
+	QAction *nextImage = new QAction(tr("Select next image"), Main); // make it available from everywhere
+	nextImage->setShortcut(tr("PgDown"));
+	QAction *previousImage = new QAction(tr("Select previous image"), Main); // make it available from everywhere
+	previousImage->setShortcut(tr("PgUp"));
 
 	addAction(remImages);
 	addAction(toClipboard);
+	addAction(nextImage);
+	addAction(previousImage);
 
 	connect(remImages, SIGNAL(triggered()), this, SLOT(removeImages()));
 	connect(toClipboard, SIGNAL(triggered()), this, SLOT(toClipboard()));
+	connect(nextImage, SIGNAL(triggered()), this, SLOT(selectNext()));
+	connect(previousImage, SIGNAL(triggered()), this, SLOT(selectPrevious()));
 }
 
 GeoImageDock::~GeoImageDock(void)
@@ -42,6 +52,8 @@ GeoImageDock::~GeoImageDock(void)
 
 void GeoImageDock::setImage(TrackPoint *Pt)
 {
+	if (updateByMe)
+		return;
 	if (!Pt) {
 		Image->setImage("");
 		curImage = -1;
@@ -51,7 +63,7 @@ void GeoImageDock::setImage(TrackPoint *Pt)
 	int ImageId;
 	QString id = Pt->id();
 	for (ImageId = 0; ImageId < usedTrackPoints.size(); ImageId++) // search for an entry in our list
-		if (usedTrackPoints.at(ImageId).first == id)
+		if (usedTrackPoints.at(ImageId).id == id)
 			break;
 
 	if (ImageId == curImage)
@@ -63,7 +75,27 @@ void GeoImageDock::setImage(TrackPoint *Pt)
 		return;
 	}
 
-	Image->setImage(usedTrackPoints.at(ImageId).second.first);
+	Image->setImage(usedTrackPoints.at(ImageId).filename);
+	curImage = ImageId;
+}
+void GeoImageDock::setImage(int ImageId)
+{
+	VisibleFeatureIterator it(Main->document());
+	for (; !it.isEnd(); ++it) // find TrackPoint
+		if (usedTrackPoints.at(ImageId).id == it.get()->id())
+			break;
+
+	if (it.isEnd()) // haven't found one
+		return;
+
+	updateByMe = true;
+	if (!Main->properties()->isSelected(it.get())) {
+		Main->properties()->setSelection(it.get());
+		Main->view()->invalidate(true, false);
+	}
+	updateByMe = false;
+
+	Image->setImage(usedTrackPoints.at(ImageId).filename);
 	curImage = ImageId;
 }
 
@@ -72,12 +104,12 @@ void GeoImageDock::removeImages(void)
 	int i;
 
 	for (i = 0; i < usedTrackPoints.size(); i++) {
-		TrackPoint *Pt = dynamic_cast<TrackPoint*>(Main->document()->getFeature(usedTrackPoints.at(i).first));
+		TrackPoint *Pt = dynamic_cast<TrackPoint*>(Main->document()->getFeature(usedTrackPoints.at(i).id));
 		if (!Pt) {
 			qWarning("This should not happen. See %s::%d!", __FILE__, __LINE__);
 			continue;
 		}
-		if (usedTrackPoints.at(i).second.second) {
+		if (usedTrackPoints.at(i).inserted) {
 			Pt->layer()->remove(Pt);
 			delete Pt;
 		}
@@ -97,9 +129,25 @@ void GeoImageDock::toClipboard(void)
 	if (curImage != -1) {
 		QClipboard *clipboard = QApplication::clipboard();
 
-		clipboard->setText(usedTrackPoints.at(curImage).second.first);
+		clipboard->setText(usedTrackPoints.at(curImage).filename);
 	}
 }
+
+void GeoImageDock::selectNext(void)
+{
+	if (++curImage >= usedTrackPoints.size())
+		curImage = 0;
+
+	setImage(curImage);
+}
+void GeoImageDock::selectPrevious(void)
+{
+	if (--curImage < 0)
+		curImage = usedTrackPoints.size() - 1;
+
+	setImage(curImage);
+}
+
 
 void GeoImageDock::loadImages(QStringList fileNames)
 {
@@ -243,17 +291,18 @@ void GeoImageDock::loadImages(QStringList fileNames)
 
 			Coord newPos(angToInt(lat), angToInt(lon));
 			TrackPoint *Pt;
-			VisibleFeatureIterator it(Main->document());
-			for (; !it.isEnd(); ++it) // use existing TrackPoint if there is one in small distance 
-				if ((Pt = qobject_cast<TrackPoint*>(it.get())) &&
+			QVector<MapFeature*>::ConstIterator it = theLayer->get().constBegin();
+			QVector<MapFeature*>::ConstIterator end = theLayer->get().constEnd();
+			for (; it != end; it++) // use existing TrackPoint if there is one in small distance 
+				if ((Pt = qobject_cast<TrackPoint*>(*it)) &&
 				 Pt->position().distanceFrom(newPos) <= .002)
 					break;
-			if (it.isEnd())
+			if (it == end)
 				Pt = new TrackPoint(newPos);
 
 			Pt->setTag("Picture", "GeoTagged");
-			usedTrackPoints << qMakePair(Pt->id(), qMakePair(file, it.isEnd()));
-			if (it.isEnd())
+			usedTrackPoints << TrackPointData(Pt->id(), file, QFileInfo(file).created(), it == end);
+			if (it == end)
 				theLayer->add(Pt);
 				//new AddFeatureCommand(theLayer, Pt, false);
 		} else if (!time.isNull()) {
@@ -340,7 +389,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
 				 noMatchQuestion);
 			}
 
-			usedTrackPoints << qMakePair(bestPt->id(), qMakePair(file, false));
+			usedTrackPoints << TrackPointData(bestPt->id(), file, time, false);
 			bestPt->setTag("Picture", "GeoTagged");
 	
 			time = QDateTime(); // empty time to be null for the next image
@@ -355,6 +404,9 @@ void GeoImageDock::loadImages(QStringList fileNames)
 	}
 
 	progress.setValue(fileNames.size());
+
+	qSort(usedTrackPoints); // sort them chronological
+	curImage = -1; // the sorting invalidates curImage
 
 	theView->invalidate(true, false);
 
@@ -501,7 +553,7 @@ void ImageView::wheelEvent(QWheelEvent *e)
 
 void ImageView::zoom(double levelStep)
 {
-	if (name.isEmpty())
+	if (name.isEmpty() || !rect.isValid())
 		return;
 
 	// zoomValue (in percent) increases/decreases following this function: 100 * sqrt(2)^x
@@ -510,10 +562,10 @@ void ImageView::zoom(double levelStep)
 	if (newZoom > 256 || newZoom < 0.8) // only zoom up to 25600 % or down to 80%
 		return;
 
+	QRectF oldArea = area;
 	QPointF center = area.center();
 	area.setWidth(1 / newZoom * image.width());
 	area.setHeight(1 / newZoom * image.height());
-	rect.translate(-rect.topLeft());
 	double rAspect = (double)rect.height() / (double)rect.width(); // ensure that area has the same aspect as rect has
 	double aAspect = (double)area.height() / (double)area.width();
 	if (rAspect > aAspect)
@@ -523,9 +575,10 @@ void ImageView::zoom(double levelStep)
 	area.moveCenter(center);
 
 	if (levelStep > 0 ) {
-		QPoint cursor = mapFromGlobal(QCursor::pos());
-		area.translate(((double)cursor.x() - (double)rect.width() / 2.0) / (double)rect.width() * (((1 / zoomLevel)-(1 / newZoom)) * (double)image.width()),
-			((double)cursor.y() - (double)rect.height() / 2.0) / (double)rect.height() * (((1 / zoomLevel)-(1/newZoom))*(double)image.height()) );
+		QPointF cursor = mapFromGlobal(QCursor::pos());
+		QPointF old = cursor / (double)rect.width() * oldArea.width() + oldArea.topLeft(); // map to image coordinates
+		QPointF neu = cursor / (double)rect.width() * area.width() + area.topLeft(); // map to image coordinates
+		area.translate(old - neu); // ensure that the point under cursor doesn't move
 	}
 	zoomLevel = newZoom;
 
