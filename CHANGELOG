@@ -1,4 +1,5 @@
 v0.13
+	* FIX : GeoTagged images are drawn to the full size of GeoImageDock
 	* FIX : Background images with a too long hash filename were not cached.
 	* FIX : Tracklayers are (after asking the user) made writeable when opening geotagged images to it
 	* ADD : Images can be dropped on TrackPoints to add the coordinates from the trackpoint to the image and then load it as geotagged image (see #1602)

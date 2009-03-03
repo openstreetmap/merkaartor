@@ -467,10 +467,7 @@ void ImageView::resizeEvent(QResizeEvent * /* e */)
 	if (image.height() == 0 || image.width() == 0) return;
 	rect = geometry();
 	rect.translate(-rect.topLeft());
-	double aspect = (double)image.height() / (double)image.width();
-
-	if (aspect * (double)rect.width() > rect.height()) rect.setWidth((int)((double)rect.height() / aspect));
-	else rect.setHeight((int)((double)rect.width() * aspect));
+	zoom(0); // update zoom
 }
 
 void ImageView::mouseDoubleClickEvent(QMouseEvent * /* e */)
@@ -512,11 +509,17 @@ void ImageView::zoom(double levelStep)
 	double newZoom = zoomLevel * pow(sqrt(2), levelStep);
 	if (newZoom > 256 || newZoom < 0.8) // only zoom up to 25600 % or down to 80%
 		return;
-	QPoint zoomValue((1 / newZoom) * image.width(), (1 / newZoom) * image.height());
 
 	QPointF center = area.center();
-	area.setWidth(zoomValue.x());
-	area.setHeight(zoomValue.y());
+	area.setWidth(1 / newZoom * image.width());
+	area.setHeight(1 / newZoom * image.height());
+	rect.translate(-rect.topLeft());
+	double rAspect = (double)rect.height() / (double)rect.width(); // ensure that area has the same aspect as rect has
+	double aAspect = (double)area.height() / (double)area.width();
+	if (rAspect > aAspect)
+		area.setHeight(area.width() * rAspect);
+	else if (rAspect < aAspect)
+		area.setWidth(area.height() / rAspect);
 	area.moveCenter(center);
 
 	if (levelStep > 0 ) {
@@ -525,6 +528,7 @@ void ImageView::zoom(double levelStep)
 			((double)cursor.y() - (double)rect.height() / 2.0) / (double)rect.height() * (((1 / zoomLevel)-(1/newZoom))*(double)image.height()) );
 	}
 	zoomLevel = newZoom;
+
 	update();
 }
 
