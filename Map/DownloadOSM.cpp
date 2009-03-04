@@ -625,8 +625,10 @@ bool downloadMoreOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDo
 		Main->invalidateView();
 	} else
 	{
-		theDocument->remove(theLayer);
-		delete theLayer;
+		if (theLayer != theDocument->getLastDownloadLayer()) {
+			theDocument->remove(theLayer);
+			delete theLayer;
+		}
 	}
 	return OK;
 }
