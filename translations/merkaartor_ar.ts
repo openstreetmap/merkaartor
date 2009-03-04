@@ -3,67 +3,67 @@
 <context>
     <name></name>
     <message>
-        <location filename="../MainWindow.cpp" line="609"/>
+        <location filename="../MainWindow.cpp" line="605"/>
         <source>Supported formats</source>
         <translation>التنسيقات المتوفّرة</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="619"/>
+        <location filename="../MainWindow.cpp" line="615"/>
         <source>All Files (*)</source>
         <translation>كلّ الملفات (*)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="598"/>
+        <location filename="../MainWindow.cpp" line="594"/>
         <source>Merkaartor document (*.mdc)
 </source>
         <translation>مستند Merkaartor (*.mdc)
 </translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="611"/>
+        <location filename="../MainWindow.cpp" line="607"/>
         <source>GPS Exchange format (*.gpx)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="612"/>
+        <location filename="../MainWindow.cpp" line="608"/>
         <source>OpenStreetMap format (*.osm)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="613"/>
+        <location filename="../MainWindow.cpp" line="609"/>
         <source>OpenStreetMap binary format (*.osb)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="614"/>
+        <location filename="../MainWindow.cpp" line="610"/>
         <source>Noni GPSPlot format (*.ngt)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="615"/>
+        <location filename="../MainWindow.cpp" line="611"/>
         <source>NMEA GPS log format (*.nmea *.nma)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="616"/>
+        <location filename="../MainWindow.cpp" line="612"/>
         <source>KML file (*.kml)
 </source>
         <translation>مستند KML (*.kml)
 </translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="617"/>
+        <location filename="../MainWindow.cpp" line="613"/>
         <source>ESRI Shapefile (*.shp)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="605"/>
+        <location filename="../MainWindow.cpp" line="601"/>
         <source>Geotagged images (*.jpg)
 </source>
         <translation type="unfinished"></translation>
@@ -215,12 +215,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../Tools/ActionsDialog.cpp" line="141"/>
         <source>untitled</source>
-        <translation type="unfinished"></translation>
+        <translation>غير معنون</translation>
     </message>
     <message>
         <location filename="../Tools/ActionsDialog.cpp" line="146"/>
         <source>Unable to open save file</source>
-        <translation type="unfinished"></translation>
+        <translation>غير قادر على فتح ملف الحفظ</translation>
     </message>
     <message>
         <location filename="../Tools/ActionsDialog.cpp" line="146"/>
@@ -283,17 +283,17 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>DirtyDock</name>
     <message>
-        <location filename="../DirtyDock.cpp" line="59"/>
+        <location filename="../DirtyDock.cpp" line="62"/>
         <source>There is &lt;b&gt;no&lt;/b&gt; object in the dirty layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DirtyDock.cpp" line="62"/>
+        <location filename="../DirtyDock.cpp" line="65"/>
         <source>There is &lt;b&gt;one&lt;/b&gt; object in the dirty layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../DirtyDock.cpp" line="66"/>
+        <location filename="../DirtyDock.cpp" line="69"/>
         <source>There are &lt;b&gt;%n&lt;/b&gt; objects in the dirty layer</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -305,17 +305,17 @@ p, li { white-space: pre-wrap; }
         </translation>
     </message>
     <message>
-        <location filename="../DirtyDock.cpp" line="172"/>
+        <location filename="../DirtyDock.cpp" line="175"/>
         <source>Undo</source>
         <translation>تراجع</translation>
     </message>
     <message>
-        <location filename="../DirtyDock.cpp" line="173"/>
+        <location filename="../DirtyDock.cpp" line="176"/>
         <source>Center map</source>
         <translation>حدّد مركز الخريطة</translation>
     </message>
     <message>
-        <location filename="../DirtyDock.cpp" line="174"/>
+        <location filename="../DirtyDock.cpp" line="177"/>
         <source>Center &amp;&amp; Zoom map</source>
         <translation>حدّد مركز و كبر/صغر الخريطة</translation>
     </message>
@@ -620,7 +620,7 @@ Do you want to mark them for deletion?</source>
     <message>
         <location filename="../Utils/SlippyMapWidget.cpp" line="67"/>
         <source>Downloading %1,%2 (zoom %3)...</source>
-        <translation type="unfinished"></translation>
+        <translation>جاري تنزيل %1,%2 (نسبة التكبير/التصغير %3)...</translation>
     </message>
 </context>
 <context>
@@ -680,168 +680,201 @@ Do you want to mark them for deletion?</source>
 <context>
     <name>GeoImageDock</name>
     <message>
-        <location filename="../GeoImageDock.cpp" line="20"/>
+        <location filename="../GeoImageDock.cpp" line="23"/>
         <source>Geo Images</source>
         <translation>صور جغرافية</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="27"/>
+        <location filename="../GeoImageDock.cpp" line="30"/>
         <source>Remove Images</source>
-        <translation type="unfinished"></translation>
+        <translation>أحذف الصور</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="28"/>
+        <location filename="../GeoImageDock.cpp" line="31"/>
         <source>Copy filename to clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="140"/>
+        <location filename="../GeoImageDock.cpp" line="189"/>
         <source>No layers</source>
         <translation>لا طبقات</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="140"/>
+        <location filename="../GeoImageDock.cpp" line="189"/>
         <source>No suitable layer found. Please first download data from OSM server or open a track.</source>
         <translation>لم أجد طبقة مناسبة. الرجاء أولاً تنزيل معطياة من الخادم OSM أو فتح ممر.</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="158"/>
+        <location filename="../GeoImageDock.cpp" line="207"/>
         <source>Load geotagged Images</source>
         <translation>حمّل صور جغرافية معلّمة</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="159"/>
+        <location filename="../GeoImageDock.cpp" line="208"/>
         <source>Select the layer to which the images belong:</source>
         <translation>إختر الطبقة اللتي تنتمي إليها الصورة:</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="167"/>
+        <location filename="../GeoImageDock.cpp" line="225"/>
         <source>Loading Images ...</source>
         <translation>جاري تحميل الصور...</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="167"/>
+        <location filename="../GeoImageDock.cpp" line="225"/>
         <source>Abort loading</source>
         <translation>إجهاض عملية التحميل</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="202"/>
+        <location filename="../GeoImageDock.cpp" line="260"/>
         <source>No EXIF header found in image &quot;%1&quot;.
 Do you want to revert to improper file timestamp?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="253"/>
+        <location filename="../GeoImageDock.cpp" line="312"/>
         <source>Specify offset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="255"/>
+        <location filename="../GeoImageDock.cpp" line="314"/>
         <source>Position images more to the:</source>
         <translation>ضع الصور غالباً في:</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="256"/>
+        <location filename="../GeoImageDock.cpp" line="315"/>
         <source>end of the track</source>
         <translation>آخر الممر</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="257"/>
+        <location filename="../GeoImageDock.cpp" line="316"/>
         <source>beginning of the track</source>
         <translation>بداية الممر</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="261"/>
+        <location filename="../GeoImageDock.cpp" line="320"/>
         <source>hh:mm:ss</source>
         <translation>س.س.د.د.ث.ث.</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="322"/>
+        <location filename="../GeoImageDock.cpp" line="381"/>
         <source>ss &apos;seconds&apos;</source>
         <translation>ث.ث. &apos;ثواني&apos;</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="324"/>
+        <location filename="../GeoImageDock.cpp" line="383"/>
         <source>mm &apos;minutes and&apos; ss &apos;seconds&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="326"/>
+        <location filename="../GeoImageDock.cpp" line="385"/>
         <source>hh &apos;hours,&apos; mm &apos;minutes and&apos; ss &apos;seconds&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="327"/>
+        <location filename="../GeoImageDock.cpp" line="386"/>
         <source>Wrong image?</source>
         <translation>الصورة غير الصحيحة ؟</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="328"/>
+        <location filename="../GeoImageDock.cpp" line="387"/>
         <source>Image &quot;%1&quot; was taken %2 before the next trackpoint was recorded.
 Do you still want to use it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="329"/>
+        <location filename="../GeoImageDock.cpp" line="388"/>
         <source>Image &quot;%1&quot; was taken %2 after the last trackpoint was recorded.
 Do you still want to use it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="175"/>
+        <location filename="../GeoImageDock.cpp" line="233"/>
         <source>No such file</source>
-        <translation type="unfinished"></translation>
+        <translation>لا ملف كهذا</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="175"/>
+        <location filename="../GeoImageDock.cpp" line="233"/>
         <source>Can&apos;t find image &quot;%1&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>غير قادر للعثور على الصورة  &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="364"/>
+        <location filename="../GeoImageDock.cpp" line="427"/>
         <source>Exiv2</source>
-        <translation type="unfinished"></translation>
+        <translation>Exiv2</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="181"/>
+        <location filename="../GeoImageDock.cpp" line="239"/>
         <source>Error while opening &quot;%2&quot;:
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>خطأ عند محاولة فتح &quot;%2&quot;:
+%1</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="315"/>
+        <location filename="../GeoImageDock.cpp" line="374"/>
         <source>No TrackPoints</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="315"/>
+        <location filename="../GeoImageDock.cpp" line="374"/>
         <source>No TrackPoints found for image &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="337"/>
+        <location filename="../GeoImageDock.cpp" line="397"/>
         <source>No geo informations</source>
-        <translation type="unfinished"></translation>
+        <translation>لا يوجد معلومات جغرافية</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="337"/>
+        <location filename="../GeoImageDock.cpp" line="397"/>
         <source>Image &quot;%1&quot; is not a geotagged image.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="364"/>
+        <location filename="../GeoImageDock.cpp" line="427"/>
         <source>Error while loading EXIF-data from &quot;%1&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="202"/>
+        <location filename="../GeoImageDock.cpp" line="260"/>
         <source>No EXIF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="360"/>
+        <location filename="../GeoImageDock.cpp" line="423"/>
         <source>Error while opening &quot;%1&quot;:
 %2</source>
+        <translation type="unfinished">خطأ عند محاولة فتح &quot;%2&quot;:
+%2 {1&quot;?}</translation>
+    </message>
+    <message>
+        <location filename="../GeoImageDock.cpp" line="32"/>
+        <source>Select next image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../GeoImageDock.cpp" line="33"/>
+        <source>PgDown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../GeoImageDock.cpp" line="34"/>
+        <source>Select previous image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../GeoImageDock.cpp" line="35"/>
+        <source>PgUp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../GeoImageDock.cpp" line="217"/>
+        <source>Layer is readonly</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../GeoImageDock.cpp" line="218"/>
+        <source>The used layer is not writeable. Should it be made writeable?
+If not, you can&apos;t load images that belongs to it.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -860,7 +893,7 @@ Do you still want to use it?</source>
     <message>
         <location filename="../GotoDialog.cpp" line="138"/>
         <source>Invalid Coordinates format</source>
-        <translation type="unfinished"></translation>
+        <translation>بنية الإحداثيات غير صحيحة</translation>
     </message>
     <message>
         <location filename="../GotoDialog.cpp" line="130"/>
@@ -870,7 +903,7 @@ Do you still want to use it?</source>
     <message>
         <location filename="../GotoDialog.cpp" line="139"/>
         <source>Coordinates must be: &apos;&lt;center lat&gt;, &lt;center lon&gt;, &lt;span lat&gt;, &lt;span lon&gt;&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>يجب أن تكون الإحداثيات على الشكل التالي: &apos;&lt;مركز خط العرض&gt;, &lt;مركز خط الطول&gt;, &lt;إمتداد خط العرض&gt;, &lt;إمتداد خط الطول&gt;&apos;</translation>
     </message>
     <message>
         <location filename="../GotoDialog.ui" line="13"/>
@@ -905,7 +938,7 @@ Do you still want to use it?</source>
     <message>
         <location filename="../GotoDialog.ui" line="147"/>
         <source>OSM API Url</source>
-        <translation type="unfinished"></translation>
+        <translation>OSM API Url</translation>
     </message>
     <message>
         <location filename="../GotoDialog.ui" line="174"/>
@@ -962,14 +995,6 @@ Do you still want to use it?</source>
     </message>
 </context>
 <context>
-    <name>ImageView</name>
-    <message>
-        <location filename="../GeoImageDock.cpp" line="448"/>
-        <source>...</source>
-        <translation type="obsolete">...</translation>
-    </message>
-</context>
-<context>
     <name>InfoDock</name>
     <message>
         <location filename="../InfoDock.cpp" line="97"/>
@@ -982,7 +1007,7 @@ Do you still want to use it?</source>
     <message>
         <location filename="../LayerDock.cpp" line="225"/>
         <source>Show All</source>
-        <translation type="unfinished"></translation>
+        <translation>أعرض الكلّ</translation>
     </message>
     <message>
         <location filename="../LayerDock.cpp" line="229"/>
@@ -1054,7 +1079,8 @@ Do you still want to use it?</source>
         <location filename="../Main.cpp" line="23"/>
         <source>Merkaartor v%1%2
 Initializing...</source>
-        <translation type="unfinished"></translation>
+        <translation>Merkaartor v%1%2
+تهيئة...</translation>
     </message>
 </context>
 <context>
@@ -1165,7 +1191,7 @@ Initializing...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1208"/>
+        <location filename="../MainWindow.cpp" line="1215"/>
         <source>Merge Nodes into %1</source>
         <translation>أدمج العقد إلى %1</translation>
     </message>
@@ -1185,37 +1211,37 @@ Initializing...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="262"/>
+        <location filename="../MainWindow.cpp" line="257"/>
         <source>Properties...</source>
-        <translation type="unfinished"></translation>
+        <translation>الخصائص...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="286"/>
+        <location filename="../MainWindow.cpp" line="282"/>
         <source>Low</source>
         <translation>منحفض</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="286"/>
+        <location filename="../MainWindow.cpp" line="282"/>
         <source>High</source>
         <translation>عالي</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="286"/>
+        <location filename="../MainWindow.cpp" line="282"/>
         <source>Opaque</source>
         <translation>غير شفاف</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="415"/>
+        <location filename="../MainWindow.cpp" line="411"/>
         <source>Clipboard invalid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="408"/>
+        <location filename="../MainWindow.cpp" line="404"/>
         <source>Clipboard is not valid XML.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="415"/>
+        <location filename="../MainWindow.cpp" line="411"/>
         <source>Clipboard do not contain valid OSM.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1225,18 +1251,18 @@ Initializing...</source>
         <translation>تغييرات غير محفوطة</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="651"/>
+        <location filename="../MainWindow.cpp" line="647"/>
         <source>The current map contains unsaved changes that will be lost when starting a new one.
 Do you want to cancel starting a new map or continue and discard the old changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="726"/>
+        <location filename="../MainWindow.cpp" line="722"/>
         <source>Big Fat Copyright Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>تحذيرمشدد عن حقوق المؤلف</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="740"/>
+        <location filename="../MainWindow.cpp" line="736"/>
         <source>You are trying to import a KML file. Please be aware that:
 
  - You cannot import to OSM a KML file created from Google Earth. While you might
@@ -1253,77 +1279,77 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1149"/>
+        <location filename="../MainWindow.cpp" line="1156"/>
         <source>Join Roads</source>
         <translation>ألصق الطرقات</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1162"/>
+        <location filename="../MainWindow.cpp" line="1169"/>
         <source>Split Roads</source>
         <translation>إفسخ الطرقات</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1172"/>
+        <location filename="../MainWindow.cpp" line="1179"/>
         <source>Break Roads</source>
         <translation>أفصل الطرقات</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1182"/>
+        <location filename="../MainWindow.cpp" line="1189"/>
         <source>Commit Roads</source>
         <translation>أودع الطرقات</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1193"/>
+        <location filename="../MainWindow.cpp" line="1200"/>
         <source>Align Nodes</source>
         <translation>إصطف العقد</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1223"/>
+        <location filename="../MainWindow.cpp" line="1230"/>
         <source>Detach Node %1</source>
-        <translation type="unfinished"></translation>
+        <translation>أفصل العقدة %1</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1237"/>
+        <location filename="../MainWindow.cpp" line="1244"/>
         <source>Add member to relation</source>
         <translation>أضف العضو إلى العلاقة</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1247"/>
+        <location filename="../MainWindow.cpp" line="1254"/>
         <source>Remove member from relation</source>
-        <translation type="unfinished"></translation>
+        <translation>أحذف العضو من العلاقة</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1260"/>
+        <location filename="../MainWindow.cpp" line="1267"/>
         <source>Create Relation %1</source>
         <translation>أنشئ العلاقة Join</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1939"/>
+        <location filename="../MainWindow.cpp" line="1946"/>
         <source>Add Bookmark</source>
         <translation>أضف إشارة مرجعية</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1940"/>
+        <location filename="../MainWindow.cpp" line="1947"/>
         <source>Specify the name of the bookmark.</source>
         <translation>حدد إسم الإشارة المرجعية</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1948"/>
+        <location filename="../MainWindow.cpp" line="1955"/>
         <source>Warning: Bookmark name already exists</source>
         <translation>تحذير: إسم الإشارة المرجعية موجود مسبقاً</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1949"/>
+        <location filename="../MainWindow.cpp" line="1956"/>
         <source>Enter a new one, keep the same to overwrite or cancel.</source>
         <translation>أدخل واحداً جديداً، حافظ على الحالي للكتابة عليه أو ألغي.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1987"/>
+        <location filename="../MainWindow.cpp" line="1994"/>
         <source>Remove Bookmark</source>
         <translation>إزالة الإشارة المرجعية</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1988"/>
+        <location filename="../MainWindow.cpp" line="1995"/>
         <source>Select the bookmark to remove.</source>
         <translation>إختر الإشارة المرجعية لحذفها.</translation>
     </message>
@@ -1365,17 +1391,17 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="87"/>
         <source>Set &amp;projection</source>
-        <translation type="unfinished"></translation>
+        <translation>عيّن الإ&amp;سقاة</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="92"/>
         <source>Show directional &amp;Arrows</source>
-        <translation type="unfinished"></translation>
+        <translation>أعرض &amp;أسهم الإتجاه</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="100"/>
         <source>Set Areas &amp;opacity</source>
-        <translation type="unfinished"></translation>
+        <translation>عيّن غموض ال&amp;مساحة</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="129"/>
@@ -1405,7 +1431,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="178"/>
         <source>T&amp;ools</source>
-        <translation type="unfinished"></translation>
+        <translation>ال&amp;عدة</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="182"/>
@@ -1435,7 +1461,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="238"/>
         <source>Fea&amp;ture</source>
-        <translation type="unfinished"></translation>
+        <translation>ال&amp;خصوصية</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="880"/>
@@ -1450,7 +1476,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="262"/>
         <source>Rel&amp;ation</source>
-        <translation type="unfinished"></translation>
+        <translation>ال&amp;علاقة</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="287"/>
@@ -1625,7 +1651,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="526"/>
         <source>Upload changes to the server</source>
-        <translation type="unfinished"></translation>
+        <translation>حمّل التغييرات إلى المخدم</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="529"/>
@@ -1675,7 +1701,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="598"/>
         <source>Reverse road direction</source>
-        <translation type="unfinished"></translation>
+        <translation>أعكس إتجاه الطريق</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="607"/>
@@ -1780,12 +1806,12 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="706"/>
         <source>&amp;Area</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;المساحة</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="709"/>
         <source>Create new area</source>
-        <translation type="unfinished"></translation>
+        <translation>إنشئ مساحة جديدة</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="714"/>
@@ -1840,7 +1866,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="782"/>
         <source>&amp;Viewport...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;نافذة الرؤية</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="785"/>
@@ -1890,7 +1916,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="826"/>
         <source>Save to file</source>
-        <translation type="unfinished"></translation>
+        <translation>إحفظ في ملف</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="829"/>
@@ -1970,7 +1996,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="921"/>
         <source>Align selected nodes. First two selected give the line.</source>
-        <translation type="unfinished"></translation>
+        <translation>صفّ العقد المحددة في خط جالس. الأثنتين المختارة أولاً تعطيك الخط.</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="924"/>
@@ -2060,7 +2086,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="1012"/>
         <source>Selected...</source>
-        <translation type="unfinished"></translation>
+        <translation>المختارة...</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1021"/>
@@ -2070,7 +2096,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="1024"/>
         <source>Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>ألصق</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1027"/>
@@ -2090,7 +2116,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="1041"/>
         <source>OSM (XML)</source>
-        <translation type="unfinished"></translation>
+        <translation>OSM (XML)</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1046"/>
@@ -2115,12 +2141,12 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="1065"/>
         <source>GPX</source>
-        <translation type="unfinished"></translation>
+        <translation>GPX</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1070"/>
         <source>KML</source>
-        <translation type="unfinished"></translation>
+        <translation>KML</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1075"/>
@@ -2130,7 +2156,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="1081"/>
         <source>Hide/Show the Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>إطهار/إخفاء شريط الأدوات</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1086"/>
@@ -2145,7 +2171,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="1094"/>
         <source>Show All</source>
-        <translation type="unfinished"></translation>
+        <translation>أعرض الكلّ</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1105"/>
@@ -2175,7 +2201,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="1134"/>
         <source>Show &amp;names</source>
-        <translation type="unfinished"></translation>
+        <translation>أ&amp;عرض الأسماء</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1137"/>
@@ -2190,7 +2216,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="1145"/>
         <source>Start GPS</source>
-        <translation type="unfinished"></translation>
+        <translation>إبدء تشغيل جهاز الــGPS</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1150"/>
@@ -2220,12 +2246,12 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="1178"/>
         <source>S&amp;top</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;قفّ</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1181"/>
         <source>Stop GPS</source>
-        <translation type="unfinished"></translation>
+        <translation>قِفّ  تشغيل جهاز الــGPS</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1189"/>
@@ -2245,7 +2271,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="1208"/>
         <source>Show &amp;scale</source>
-        <translation type="unfinished"></translation>
+        <translation>أعرض ال&amp;مقياس</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1211"/>
@@ -2255,7 +2281,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="1219"/>
         <source>Show &amp;relations</source>
-        <translation type="unfinished"></translation>
+        <translation>أعر&amp;ض العلاقات</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1222"/>
@@ -2300,7 +2326,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="1285"/>
         <source>G&amp;eoImage</source>
-        <translation type="unfinished"></translation>
+        <translation>صورة &amp;جغرافية</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1291"/>
@@ -2335,7 +2361,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="1329"/>
         <source>&amp;Remove member</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;أحذف العضو</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1337"/>
@@ -2360,12 +2386,12 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../MainWindow.ui" line="1365"/>
         <source>Detach node from a road</source>
-        <translation type="unfinished"></translation>
+        <translation>أفصل العقدة من الطريق</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1368"/>
         <source>Detach a node from a Road</source>
-        <translation type="unfinished"></translation>
+        <translation>أفصل عقدة من الطريق</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="1380"/>
@@ -2390,12 +2416,12 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../Map/ImportGPX.cpp" line="208"/>
         <source>Import GPX</source>
-        <translation type="unfinished"></translation>
+        <translation>إستيراد GPX</translation>
     </message>
     <message>
         <location filename="../Map/ImportNGT.cpp" line="19"/>
         <source>Import NGT</source>
-        <translation type="unfinished"></translation>
+        <translation>إسيراد NGT</translation>
     </message>
     <message>
         <location filename="../Map/MapLayer.cpp" line="835"/>
@@ -2415,7 +2441,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../Map/Road.cpp" line="527"/>
         <source>Do you want to delete the children nodes also?</source>
-        <translation type="unfinished"></translation>
+        <translation>هل تريد أيضاً محو العقد المتفرعة ؟</translation>
     </message>
     <message>
         <location filename="../PropertiesDock.cpp" line="678"/>
@@ -2444,253 +2470,253 @@ Do you want to do this now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="623"/>
+        <location filename="../MainWindow.cpp" line="619"/>
         <source>Open track file</source>
         <translation>إفتح ملف ممر</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="676"/>
+        <location filename="../MainWindow.cpp" line="672"/>
         <source>Waypoints</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="692"/>
+        <location filename="../MainWindow.cpp" line="688"/>
         <source>Track %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="771"/>
+        <location filename="../MainWindow.cpp" line="767"/>
         <source>No valid file</source>
         <translation>ملف غير صالح</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1514"/>
+        <location filename="../MainWindow.cpp" line="1521"/>
         <source>%1 could not be opened.</source>
         <translation>لم أستطع فتح %1</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="874"/>
+        <location filename="../MainWindow.cpp" line="870"/>
         <source>Open track files</source>
         <translation>إفتح ملفات ممرات</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="886"/>
+        <location filename="../MainWindow.cpp" line="882"/>
         <source>Old Qt version detected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="890"/>
+        <location filename="../MainWindow.cpp" line="886"/>
         <source>Your setup uses Qt %1, which contains various known errors in uploading data to OpenStreetMap leading to 401 server response codes. Are you sure you want to continue (which is not recommended).
 For more information see http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="896"/>
+        <location filename="../MainWindow.cpp" line="892"/>
         <source>Upload OSM</source>
         <translation>حمّل OSM</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="897"/>
+        <location filename="../MainWindow.cpp" line="893"/>
         <source>You don&apos;t seem to have specified your
 OpenStreetMap username and password.
 Do you want to do this now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="932"/>
+        <location filename="../MainWindow.cpp" line="928"/>
         <source>Error downloading</source>
         <translation>خطأ عند التنزيل</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="932"/>
+        <location filename="../MainWindow.cpp" line="928"/>
         <source>The map could not be downloaded</source>
         <translation>لم أتمكن من تنزيل الخريطة</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1309"/>
+        <location filename="../MainWindow.cpp" line="1316"/>
         <source>Save map style</source>
-        <translation type="unfinished"></translation>
+        <translation>إحفظ زيّ الخريطة</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1320"/>
+        <location filename="../MainWindow.cpp" line="1327"/>
         <source>Merkaartor map style (*.mas)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1320"/>
+        <location filename="../MainWindow.cpp" line="1327"/>
         <source>Load map style</source>
         <translation>حمّل زيّ الخريطة</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1453"/>
+        <location filename="../MainWindow.cpp" line="1460"/>
         <source>Save Merkaartor document</source>
         <translation>إحفظ المستند Merkaartor</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1453"/>
+        <location filename="../MainWindow.cpp" line="1460"/>
         <source>untitled</source>
-        <translation type="unfinished"></translation>
+        <translation>غير معنون</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1453"/>
+        <location filename="../MainWindow.cpp" line="1460"/>
         <source>Merkaartor documents Files (*.mdc)</source>
         <translation>ملفات مستند  (*.mdc) Merkaartor</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1495"/>
+        <location filename="../MainWindow.cpp" line="1502"/>
         <source>Unable to open save file</source>
-        <translation type="unfinished"></translation>
+        <translation>غير قادر على فتح ملف الحفظ</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1495"/>
+        <location filename="../MainWindow.cpp" line="1502"/>
         <source>%1 could not be opened for writing.</source>
         <translation>إستحالة فتح %1 للكتابة.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1530"/>
+        <location filename="../MainWindow.cpp" line="1537"/>
         <source>Invalid file</source>
         <translation>الملف غير صحيح</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1520"/>
+        <location filename="../MainWindow.cpp" line="1527"/>
         <source>%1 is not a valid XML file.</source>
         <translation>ليس %1 ملف XML صالح.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1530"/>
+        <location filename="../MainWindow.cpp" line="1537"/>
         <source>%1 is not a valid Merkaartor document.</source>
         <translation>ليس %1 مستند صالح من النوع Merkaartor</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1588"/>
+        <location filename="../MainWindow.cpp" line="1595"/>
         <source>Export OSM</source>
         <translation>صدّر OSM</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1588"/>
+        <location filename="../MainWindow.cpp" line="1595"/>
         <source>OSM Files (*.osm)</source>
         <translation>ملفات  (*.osm)OSM</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1607"/>
+        <location filename="../MainWindow.cpp" line="1614"/>
         <source>Export Binary OSM</source>
-        <translation type="unfinished"></translation>
+        <translation>صدّر  ثنائيOSM</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1607"/>
+        <location filename="../MainWindow.cpp" line="1614"/>
         <source>OSM Binary Files (*.osb)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1626"/>
+        <location filename="../MainWindow.cpp" line="1633"/>
         <source>Export GPX</source>
-        <translation type="unfinished"></translation>
+        <translation>صدّر  GPX</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1626"/>
+        <location filename="../MainWindow.cpp" line="1633"/>
         <source>GPX Files (*.gpx)</source>
-        <translation type="unfinished"></translation>
+        <translation>GPX ملفات الــ (*.gpx)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1653"/>
+        <location filename="../MainWindow.cpp" line="1660"/>
         <source>Export KML</source>
-        <translation type="unfinished"></translation>
+        <translation>صدّر KML</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1653"/>
+        <location filename="../MainWindow.cpp" line="1660"/>
         <source>KML Files (*.kml)</source>
-        <translation type="unfinished"></translation>
+        <translation>KML الملفات (*.kml)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1943"/>
+        <location filename="../MainWindow.cpp" line="1950"/>
         <source>Invalid bookmark name</source>
         <translation>إسم الإشارة المرجعية غير صالح</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1944"/>
+        <location filename="../MainWindow.cpp" line="1951"/>
         <source>Bookmark cannot be blank.</source>
         <translation>لا تستطيع الإشارة المرجعية أن تكون خالية من التعبير.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2154"/>
+        <location filename="../MainWindow.cpp" line="2161"/>
         <source>Background imagery</source>
-        <translation type="unfinished"></translation>
+        <translation>الصور الخلفية</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2178"/>
+        <location filename="../MainWindow.cpp" line="2185"/>
         <source>GPS error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2179"/>
+        <location filename="../MainWindow.cpp" line="2186"/>
         <source>Unable to open GPS port.</source>
-        <translation type="unfinished"></translation>
+        <translation>غير قادر على فتح منفذ جهاز تحديد المواقع العالمي.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2188"/>
+        <location filename="../MainWindow.cpp" line="2195"/>
         <source>Open NMEA log file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2302"/>
+        <location filename="../MainWindow.cpp" line="2309"/>
         <source>Save Tag Templates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2302"/>
+        <location filename="../MainWindow.cpp" line="2309"/>
         <source>Merkaartor tag templates (*.mat)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2328"/>
+        <location filename="../MainWindow.cpp" line="2335"/>
         <source>Open Tag Templates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2382"/>
+        <location filename="../MainWindow.cpp" line="2389"/>
         <source>Error</source>
         <translation>خطأ</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2382"/>
+        <location filename="../MainWindow.cpp" line="2389"/>
         <source>Could not load the selected language. Go to Tools, Preferences to select another language or check whether the translation file is missing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2385"/>
+        <location filename="../MainWindow.cpp" line="2392"/>
         <source>Warning! Could not load the Qt translations for the &quot;%1&quot; language.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2388"/>
+        <location filename="../MainWindow.cpp" line="2395"/>
         <source>Warning! Could not load the Merkaartor translations for the &quot;%1&quot; language.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1889"/>
+        <location filename="../MainWindow.cpp" line="1896"/>
         <source>%1 (int)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (int)</translation>
     </message>
 </context>
 <context>
     <name>MapDocument</name>
     <message>
-        <location filename="../Map/MapDocument.cpp" line="227"/>
+        <location filename="../Map/MapDocument.cpp" line="203"/>
         <source>Background imagery</source>
-        <translation type="unfinished"></translation>
+        <translation>الصور الخلفية</translation>
     </message>
     <message>
-        <location filename="../Map/MapDocument.cpp" line="95"/>
+        <location filename="../Map/MapDocument.cpp" line="83"/>
         <source>Trash layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Map/MapDocument.cpp" line="231"/>
+        <location filename="../Map/MapDocument.cpp" line="207"/>
         <source>Dirty layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Map/MapDocument.cpp" line="234"/>
+        <location filename="../Map/MapDocument.cpp" line="210"/>
         <source>Uploaded layer</source>
         <translation>حمّلت الطبقة</translation>
     </message>
@@ -2725,17 +2751,17 @@ Do you want to do this now?</source>
     <message>
         <location filename="../Map/Relation.cpp" line="89"/>
         <source>relationship %1</source>
-        <translation type="unfinished"></translation>
+        <translation>العلاقة %1</translation>
     </message>
     <message>
         <location filename="../Map/Relation.cpp" line="522"/>
         <source>size</source>
-        <translation type="unfinished"></translation>
+        <translation>القياس</translation>
     </message>
     <message>
         <location filename="../Map/Road.cpp" line="809"/>
         <source>Topleft</source>
-        <translation type="unfinished"></translation>
+        <translation>أعلى اليسار</translation>
     </message>
     <message>
         <location filename="../Map/Road.cpp" line="811"/>
@@ -2745,12 +2771,12 @@ Do you want to do this now?</source>
     <message>
         <location filename="../Map/Relation.cpp" line="529"/>
         <source>Relation</source>
-        <translation type="unfinished"></translation>
+        <translation>العلاقة</translation>
     </message>
     <message>
         <location filename="../Map/Relation.cpp" line="683"/>
         <source>Role</source>
-        <translation type="unfinished"></translation>
+        <translation>الدور</translation>
     </message>
     <message>
         <location filename="../Map/Relation.cpp" line="685"/>
@@ -2778,47 +2804,47 @@ Do you want to do this now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Map/TrackPoint.cpp" line="354"/>
+        <location filename="../Map/TrackPoint.cpp" line="366"/>
         <source>timestamp</source>
-        <translation type="unfinished"></translation>
+        <translation>دمغة الزمن</translation>
     </message>
     <message>
-        <location filename="../Map/TrackPoint.cpp" line="355"/>
+        <location filename="../Map/TrackPoint.cpp" line="367"/>
         <source>coord</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Map/TrackPoint.cpp" line="358"/>
+        <location filename="../Map/TrackPoint.cpp" line="370"/>
         <source>elevation</source>
-        <translation type="unfinished"></translation>
+        <translation>الإرتفاع</translation>
     </message>
     <message>
-        <location filename="../Map/TrackPoint.cpp" line="360"/>
+        <location filename="../Map/TrackPoint.cpp" line="372"/>
         <source>speed</source>
-        <translation type="unfinished"></translation>
+        <translation>السرعة</translation>
     </message>
     <message>
-        <location filename="../Map/TrackPoint.cpp" line="363"/>
+        <location filename="../Map/TrackPoint.cpp" line="375"/>
         <source>Waypoint</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Map/TrackPoint.cpp" line="366"/>
+        <location filename="../Map/TrackPoint.cpp" line="378"/>
         <source>description</source>
-        <translation type="unfinished"></translation>
+        <translation>الوصف</translation>
     </message>
     <message>
-        <location filename="../Map/TrackPoint.cpp" line="369"/>
+        <location filename="../Map/TrackPoint.cpp" line="381"/>
         <source>comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Map/TrackPoint.cpp" line="372"/>
+        <location filename="../Map/TrackPoint.cpp" line="384"/>
         <source>layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Map/TrackPoint.cpp" line="377"/>
+        <location filename="../Map/TrackPoint.cpp" line="389"/>
         <source>Node</source>
         <translation>العقدة</translation>
     </message>
@@ -2856,7 +2882,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="../MapView.cpp" line="945"/>
         <source>Feature</source>
-        <translation type="unfinished"></translation>
+        <translation>الخصوصية</translation>
     </message>
     <message>
         <location filename="../MapView.cpp" line="954"/>
@@ -2866,12 +2892,12 @@ Do you want to do this now?</source>
     <message>
         <location filename="../MapView.cpp" line="962"/>
         <source>Road</source>
-        <translation type="unfinished"></translation>
+        <translation>الطريق</translation>
     </message>
     <message>
         <location filename="../MapView.cpp" line="970"/>
         <source>Relation</source>
-        <translation type="unfinished"></translation>
+        <translation>العلاقة</translation>
     </message>
     <message>
         <location filename="../MapView.cpp" line="1068"/>
@@ -2881,7 +2907,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="../MapView.cpp" line="1070"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>ألغي</translation>
     </message>
 </context>
 <context>
@@ -2904,7 +2930,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="../Preferences/MerkaartorPreferences.cpp" line="334"/>
         <source>More than 150 preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>أكثر من 150 تفضيلات</translation>
     </message>
     <message>
         <location filename="../Preferences/MerkaartorPreferences.cpp" line="399"/>
@@ -2934,17 +2960,17 @@ Do you want to do this now?</source>
     <message>
         <location filename="../Preferences/MerkaartorPreferences.cpp" line="409"/>
         <source>Illegal Yahoo adapter</source>
-        <translation type="unfinished"></translation>
+        <translation>محوّل Yahoo غير شرعي</translation>
     </message>
     <message>
         <location filename="../Preferences/MerkaartorPreferences.cpp" line="412"/>
         <source>Illegal Google adapter</source>
-        <translation type="unfinished"></translation>
+        <translation>محوّل Google غير شرعي</translation>
     </message>
     <message>
         <location filename="../Preferences/MerkaartorPreferences.cpp" line="415"/>
         <source>Illegal Ms Virtual Earth adapter</source>
-        <translation type="unfinished"></translation>
+        <translation>محوّل Ms Virtual Earth غير شرعي</translation>
     </message>
     <message>
         <location filename="../Preferences/MerkaartorPreferences.cpp" line="419"/>
@@ -2977,7 +3003,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="../MultiProperties.ui" line="73"/>
         <source>Selected items</source>
-        <translation type="unfinished"></translation>
+        <translation>البنود المختارة</translation>
     </message>
 </context>
 <context>
@@ -2990,7 +3016,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="../NameFinder/namefindertablemodel.cpp" line="71"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>النوع</translation>
     </message>
     <message>
         <location filename="../NameFinder/namefindertablemodel.cpp" line="74"/>
@@ -3000,7 +3026,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="../NameFinder/namefindertablemodel.cpp" line="77"/>
         <source>Unknown field</source>
-        <translation type="unfinished"></translation>
+        <translation>حقل غير معروف</translation>
     </message>
 </context>
 <context>
@@ -3028,7 +3054,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="../NameFinder/namefinderwidget.cpp" line="100"/>
         <source>Unknown error.</source>
-        <translation type="unfinished"></translation>
+        <translation>خطأ غير معروف.</translation>
     </message>
 </context>
 <context>
@@ -3044,17 +3070,17 @@ Do you want to do this now?</source>
     <message>
         <location filename="../Render/NativeRenderDialog.cpp" line="37"/>
         <source>Proceed...</source>
-        <translation type="unfinished"></translation>
+        <translation>كمّل...</translation>
     </message>
     <message>
         <location filename="../Render/NativeRenderDialog.cpp" line="115"/>
         <source>Working. Please Wait...</source>
-        <translation type="unfinished"></translation>
+        <translation>قيد العمل. الرجاء الإنتظار....</translation>
     </message>
     <message>
         <location filename="../Render/NativeRenderDialog.cpp" line="115"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>ألغي</translation>
     </message>
     <message>
         <location filename="../Render/NativeRenderDialog.ui" line="14"/>
@@ -3064,7 +3090,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="../Render/NativeRenderDialog.ui" line="20"/>
         <source>Render type</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع الطلاء</translation>
     </message>
     <message>
         <location filename="../Render/NativeRenderDialog.ui" line="26"/>
@@ -3079,22 +3105,22 @@ Do you want to do this now?</source>
     <message>
         <location filename="../Render/NativeRenderDialog.ui" line="43"/>
         <source>Render options</source>
-        <translation type="unfinished"></translation>
+        <translation>خيارات الطلاء</translation>
     </message>
     <message>
         <location filename="../Render/NativeRenderDialog.ui" line="67"/>
         <source>min lat/Lon</source>
-        <translation type="unfinished"></translation>
+        <translation>خطّ العرض/الطول الأدنى</translation>
     </message>
     <message>
         <location filename="../Render/NativeRenderDialog.ui" line="134"/>
         <source>max lat/Lon</source>
-        <translation type="unfinished"></translation>
+        <translation>خطّ العرض/الطول الأقصى</translation>
     </message>
     <message>
         <location filename="../Render/NativeRenderDialog.ui" line="201"/>
         <source>Show Scale</source>
-        <translation type="unfinished"></translation>
+        <translation>أعرض المياس</translation>
     </message>
     <message>
         <location filename="../Render/NativeRenderDialog.ui" line="214"/>
@@ -3114,7 +3140,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="../Render/NativeRenderDialog.ui" line="256"/>
         <source>Width x Height (px)</source>
-        <translation type="unfinished"></translation>
+        <translation>العرض ء الطول (px)</translation>
     </message>
     <message>
         <location filename="../Render/NativeRenderDialog.ui" line="279"/>
@@ -3153,7 +3179,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="../Render/OsmaRenderDialog.cpp" line="50"/>
         <source>Proceed...</source>
-        <translation type="unfinished"></translation>
+        <translation>كمّل...</translation>
     </message>
     <message>
         <location filename="../Render/OsmaRenderDialog.cpp" line="91"/>
@@ -3163,7 +3189,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="../Render/OsmaRenderDialog.cpp" line="91"/>
         <source>SVG file (*.svg)</source>
-        <translation type="unfinished"></translation>
+        <translation>SVG ملف (*.svg)</translation>
     </message>
     <message>
         <location filename="../Render/OsmaRenderDialog.cpp" line="315"/>
@@ -3179,7 +3205,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="../Render/OsmaRenderDialog.cpp" line="320"/>
         <source>It will be saved as &apos;%1&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>سيتم حفظه كــ &apos;%1&apos;.</translation>
     </message>
     <message>
         <location filename="../Render/OsmaRenderDialog.ui" line="13"/>
@@ -3199,32 +3225,32 @@ Do you want to do this now?</source>
     <message>
         <location filename="../Render/OsmaRenderDialog.ui" line="42"/>
         <source>Osmarender options</source>
-        <translation type="unfinished"></translation>
+        <translation>Osmarenderخيارات</translation>
     </message>
     <message>
         <location filename="../Render/OsmaRenderDialog.ui" line="54"/>
         <source>Zoom level</source>
-        <translation type="unfinished"></translation>
+        <translation>مستوى التكبير/التصغير</translation>
     </message>
     <message>
         <location filename="../Render/OsmaRenderDialog.ui" line="81"/>
         <source>Scale</source>
-        <translation type="unfinished"></translation>
+        <translation>المقياس</translation>
     </message>
     <message>
         <location filename="../Render/OsmaRenderDialog.ui" line="126"/>
         <source>min lat/Lon</source>
-        <translation type="unfinished"></translation>
+        <translation>خطّ العرض/الطول الأدنى</translation>
     </message>
     <message>
         <location filename="../Render/OsmaRenderDialog.ui" line="193"/>
         <source>max lat/Lon</source>
-        <translation type="unfinished"></translation>
+        <translation>خطّ العرض/الطول الأقصى</translation>
     </message>
     <message>
         <location filename="../Render/OsmaRenderDialog.ui" line="257"/>
         <source>Show Scale</source>
-        <translation type="unfinished"></translation>
+        <translation>أعرض المياس</translation>
     </message>
     <message>
         <location filename="../Render/OsmaRenderDialog.ui" line="267"/>
@@ -3249,7 +3275,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="../Render/OsmaRenderDialog.ui" line="319"/>
         <source>Generate PNG preview</source>
-        <translation type="unfinished"></translation>
+        <translation>أنشئ رؤية  PNG</translation>
     </message>
     <message>
         <location filename="../Render/OsmaRenderDialog.ui" line="328"/>
@@ -3298,7 +3324,7 @@ The path indicated in Tools-Preferences-[Tools] is not valid.</source>
     <message>
         <location filename="../PaintStyle/PaintStyleEditor.ui" line="94"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>أحذف</translation>
     </message>
     <message>
         <location filename="../PaintStyle/PaintStyleEditor.ui" line="101"/>
@@ -3313,7 +3339,7 @@ The path indicated in Tools-Preferences-[Tools] is not valid.</source>
     <message>
         <location filename="../PaintStyle/PaintStyleEditor.ui" line="254"/>
         <source>meter/pixel</source>
-        <translation type="unfinished"></translation>
+        <translation>متر/بكسل</translation>
     </message>
     <message>
         <location filename="../PaintStyle/PaintStyleEditor.ui" line="224"/>
@@ -3338,7 +3364,7 @@ The path indicated in Tools-Preferences-[Tools] is not valid.</source>
     <message>
         <location filename="../PaintStyle/PaintStyleEditor.ui" line="1135"/>
         <source>Fixed thickness</source>
-        <translation type="unfinished"></translation>
+        <translation>سماكة مثبتة</translation>
     </message>
     <message>
         <location filename="../PaintStyle/PaintStyleEditor.ui" line="836"/>
@@ -3353,7 +3379,7 @@ The path indicated in Tools-Preferences-[Tools] is not valid.</source>
     <message>
         <location filename="../PaintStyle/PaintStyleEditor.ui" line="491"/>
         <source>Fill area</source>
-        <translation type="unfinished"></translation>
+        <translation>إملئ المساحة</translation>
     </message>
     <message>
         <location filename="../PaintStyle/PaintStyleEditor.ui" line="532"/>
@@ -3398,7 +3424,7 @@ The path indicated in Tools-Preferences-[Tools] is not valid.</source>
     <message>
         <location filename="../PaintStyle/PaintStyleEditor.ui" line="1201"/>
         <source>Area</source>
-        <translation type="unfinished"></translation>
+        <translation>المساحة</translation>
     </message>
     <message>
         <location filename="../PaintStyle/PaintStyleEditor.ui" line="1250"/>
@@ -3421,12 +3447,12 @@ The path indicated in Tools-Preferences-[Tools] is not valid.</source>
     <message>
         <location filename="../Utils/PictureViewerDialog.cpp" line="39"/>
         <source>SVG files (*.svg)</source>
-        <translation type="unfinished"></translation>
+        <translation>SVG ملفات (*.svg)</translation>
     </message>
     <message>
         <location filename="../Utils/PictureViewerDialog.cpp" line="44"/>
         <source>Image files (*.png *.jpg)</source>
-        <translation type="unfinished"></translation>
+        <translation>ملفات الصور (*.png *.jpg)</translation>
     </message>
     <message>
         <location filename="../Utils/PictureViewerDialog.ui" line="13"/>
@@ -3496,7 +3522,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="15"/>
         <source>Preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>التفضيلات</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="28"/>
@@ -3511,7 +3537,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="43"/>
         <source>Use language</source>
-        <translation type="unfinished"></translation>
+        <translation>إستعمل اللغة</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="78"/>
@@ -3521,7 +3547,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="99"/>
         <source>Visual</source>
-        <translation type="unfinished"></translation>
+        <translation>مرئي</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="105"/>
@@ -3591,22 +3617,22 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="362"/>
         <source>Relations</source>
-        <translation type="unfinished"></translation>
+        <translation>العلاقات</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="418"/>
         <source>Projection</source>
-        <translation type="unfinished"></translation>
+        <translation>الإسقاط</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="424"/>
         <source>Select Projection</source>
-        <translation type="unfinished"></translation>
+        <translation>إختر الإسقاط</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="451"/>
         <source>Style</source>
-        <translation type="unfinished"></translation>
+        <translation>الزيّ</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="457"/>
@@ -3626,7 +3652,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="545"/>
         <source>Template</source>
-        <translation type="unfinished"></translation>
+        <translation>القالب</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="559"/>
@@ -3656,12 +3682,12 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="662"/>
         <source>Username:</source>
-        <translation type="unfinished"></translation>
+        <translation>إسم المستخدم:</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="672"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>كلمة المرور:</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="688"/>
@@ -3701,12 +3727,12 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="773"/>
         <source>GPS</source>
-        <translation type="unfinished"></translation>
+        <translation>GPSجهاز تحديد المواقع العالمي</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="781"/>
         <source>Serial port</source>
-        <translation type="unfinished"></translation>
+        <translation>المنفذ التسلسلي</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="795"/>
@@ -3731,7 +3757,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="869"/>
         <source>Use Proxy</source>
-        <translation type="unfinished"></translation>
+        <translation>إستعمل الوكيل</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="876"/>
@@ -3741,7 +3767,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="896"/>
         <source>Port:</source>
-        <translation type="unfinished"></translation>
+        <translation>المنفذ:</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="933"/>
@@ -3776,7 +3802,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="995"/>
         <source>Select Adapter:</source>
-        <translation type="unfinished"></translation>
+        <translation>إختر المحول:</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="1008"/>
@@ -3786,7 +3812,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="1039"/>
         <source>Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>الأدوات/العدة</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="1057"/>
@@ -3811,7 +3837,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../Preferences/PreferencesDialog.ui" line="1130"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>أحذف</translation>
     </message>
     <message>
         <location filename="../Preferences/PreferencesDialog.cpp" line="107"/>
@@ -3851,7 +3877,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../Preferences/PreferencesDialog.cpp" line="114"/>
         <source>Russian</source>
-        <translation type="unfinished"></translation>
+        <translation>روسي</translation>
     </message>
 </context>
 <context>
@@ -3869,7 +3895,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../PropertiesDock.cpp" line="393"/>
         <source>Selected items</source>
-        <translation type="unfinished"></translation>
+        <translation>البنود المختارة</translation>
     </message>
     <message>
         <location filename="../PropertiesDock.cpp" line="402"/>
@@ -3894,7 +3920,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../PropertiesDock.cpp" line="923"/>
         <source>Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>الخصائص</translation>
     </message>
     <message>
         <location filename="../PropertiesDock.cpp" line="924"/>
@@ -3990,12 +4016,12 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../GPS/qgps.cpp" line="143"/>
         <source>km/h</source>
-        <translation type="unfinished"></translation>
+        <translation>كلم/س</translation>
     </message>
     <message>
         <location filename="../GPS/qgps.cpp" line="150"/>
         <source>Unavailable</source>
-        <translation type="unfinished"></translation>
+        <translation>غير متوفر</translation>
     </message>
     <message>
         <location filename="../GPS/qgps.cpp" line="156"/>
@@ -4071,7 +4097,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../GPS/qgpsmainwindowui.ui" line="120"/>
         <source>Fix Type</source>
-        <translation type="unfinished"></translation>
+        <translation>ثبّت النوع</translation>
     </message>
     <message>
         <location filename="../GPS/qgpsmainwindowui.ui" line="130"/>
@@ -4081,7 +4107,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../GPS/qgpsmainwindowui.ui" line="137"/>
         <source>Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>السرعة</translation>
     </message>
     <message>
         <location filename="../GPS/qgpsmainwindowui.ui" line="147"/>
@@ -4135,7 +4161,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../MinimumRoadProperties.ui" line="33"/>
         <source>xxx</source>
-        <translation type="unfinished"></translation>
+        <translation>xxx</translation>
     </message>
     <message>
         <location filename="../MinimumRoadProperties.ui" line="40"/>
@@ -4158,7 +4184,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../GPS/SatelliteStrengthView.cpp" line="50"/>
         <source>No satellites</source>
-        <translation type="unfinished"></translation>
+        <translation>لا يوجد أقمار إصطناعية</translation>
     </message>
 </context>
 <context>
@@ -4166,7 +4192,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../Utils/SelectionDialog.ui" line="13"/>
         <source>Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>الخيار</translation>
     </message>
     <message>
         <location filename="../Utils/SelectionDialog.ui" line="27"/>
@@ -4176,7 +4202,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../Utils/SelectionDialog.ui" line="34"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>القيمة</translation>
     </message>
     <message>
         <location filename="../Utils/SelectionDialog.ui" line="47"/>
@@ -4191,7 +4217,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../Utils/SelectionDialog.ui" line="73"/>
         <source>Maximum returned results</source>
-        <translation type="unfinished"></translation>
+        <translation>عدد النتائج العائدة الأقصى</translation>
     </message>
 </context>
 <context>
@@ -4207,7 +4233,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../StyleDock.cpp" line="101"/>
         <source>Styles</source>
-        <translation type="unfinished"></translation>
+        <translation>الأزياء</translation>
     </message>
 </context>
 <context>
@@ -4238,7 +4264,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../Sync/SyncListDialog.ui" line="63"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>ألغي</translation>
     </message>
 </context>
 <context>
@@ -4251,7 +4277,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../Preferences/TMSPreferencesDialog.cpp" line="56"/>
         <source>Address and Path cannot be blank.</source>
-        <translation type="unfinished"></translation>
+        <translation>لا يمكن ترك العنوان و الدرب فارغاً.</translation>
     </message>
     <message>
         <location filename="../Preferences/TMSPreferencesDialog.cpp" line="88"/>
@@ -4278,7 +4304,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../Preferences/TMSPreferencesDialog.ui" line="64"/>
         <source>Server list:</source>
-        <translation type="unfinished"></translation>
+        <translation>لائحة المخدمين:</translation>
     </message>
     <message>
         <location filename="../Preferences/TMSPreferencesDialog.ui" line="86"/>
@@ -4288,7 +4314,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../Preferences/TMSPreferencesDialog.ui" line="103"/>
         <source>Server address:</source>
-        <translation type="unfinished"></translation>
+        <translation>عنوان المخدم:</translation>
     </message>
     <message>
         <location filename="../Preferences/TMSPreferencesDialog.ui" line="113"/>
@@ -4323,7 +4349,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../Preferences/TMSPreferencesDialog.ui" line="187"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>أحذف</translation>
     </message>
 </context>
 <context>
@@ -4336,7 +4362,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../TagModel.cpp" line="107"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>القيمة</translation>
     </message>
     <message>
         <location filename="../TagModel.h" line="21"/>
@@ -4349,7 +4375,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../TagTemplate/TagTemplate.cpp" line="196"/>
         <source>Undefined</source>
-        <translation type="unfinished"></translation>
+        <translation>غير معرف</translation>
     </message>
 </context>
 <context>
@@ -4357,7 +4383,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../TagTemplate/TagTemplate.cpp" line="906"/>
         <source>Undefined</source>
-        <translation type="unfinished"></translation>
+        <translation>غير معرف</translation>
     </message>
 </context>
 <context>
@@ -4411,7 +4437,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../MinimumTrackPointProperties.ui" line="57"/>
         <source>xxx</source>
-        <translation type="unfinished"></translation>
+        <translation>xxx</translation>
     </message>
     <message>
         <location filename="../MinimumTrackPointProperties.ui" line="80"/>
@@ -4439,22 +4465,22 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../UploadMapDialog.ui" line="49"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>كلمة المرور</translation>
     </message>
     <message>
         <location filename="../UploadMapDialog.ui" line="56"/>
         <source>Username</source>
-        <translation type="unfinished"></translation>
+        <translation>إسم المستخدم</translation>
     </message>
     <message>
         <location filename="../UploadMapDialog.ui" line="63"/>
         <source>Use proxy</source>
-        <translation type="unfinished"></translation>
+        <translation>إستعمل الوكيل</translation>
     </message>
     <message>
         <location filename="../UploadMapDialog.ui" line="88"/>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation>المنفذ</translation>
     </message>
     <message>
         <location filename="../UploadMapDialog.ui" line="104"/>
@@ -4485,7 +4511,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../Preferences/WMSPreferencesDialog.cpp" line="57"/>
         <source>Address and Path cannot be blank.</source>
-        <translation type="unfinished"></translation>
+        <translation>لا يمكن ترك العنوان و الدرب فارغاً.</translation>
     </message>
     <message>
         <location filename="../Preferences/WMSPreferencesDialog.cpp" line="89"/>
@@ -4512,7 +4538,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../Preferences/WMSPreferencesDialog.ui" line="64"/>
         <source>Server list:</source>
-        <translation type="unfinished"></translation>
+        <translation>لائحة المخدمين:</translation>
     </message>
     <message>
         <location filename="../Preferences/WMSPreferencesDialog.ui" line="86"/>
@@ -4522,7 +4548,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../Preferences/WMSPreferencesDialog.ui" line="103"/>
         <source>Server address:</source>
-        <translation type="unfinished"></translation>
+        <translation>عنوان المخدم:</translation>
     </message>
     <message>
         <location filename="../Preferences/WMSPreferencesDialog.ui" line="113"/>
@@ -4532,7 +4558,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../Preferences/WMSPreferencesDialog.ui" line="123"/>
         <source>Show Capabilities</source>
-        <translation type="unfinished"></translation>
+        <translation>أعرض القدرات</translation>
     </message>
     <message>
         <location filename="../Preferences/WMSPreferencesDialog.ui" line="130"/>
@@ -4542,17 +4568,17 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../Preferences/WMSPreferencesDialog.ui" line="140"/>
         <source>Projection:</source>
-        <translation type="unfinished"></translation>
+        <translation>الإسقاط:</translation>
     </message>
     <message>
         <location filename="../Preferences/WMSPreferencesDialog.ui" line="150"/>
         <source>Styles:</source>
-        <translation type="unfinished"></translation>
+        <translation>الأزياء:</translation>
     </message>
     <message>
         <location filename="../Preferences/WMSPreferencesDialog.ui" line="160"/>
         <source>Image format</source>
-        <translation type="unfinished"></translation>
+        <translation>بنية الصورة</translation>
     </message>
     <message>
         <location filename="../Preferences/WMSPreferencesDialog.ui" line="183"/>
@@ -4567,7 +4593,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../Preferences/WMSPreferencesDialog.ui" line="197"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>أحذف</translation>
     </message>
 </context>
 <context>
@@ -4595,7 +4621,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../Tools/WorldOsbManager.cpp" line="114"/>
         <source>Error while generating region %1</source>
-        <translation type="unfinished"></translation>
+        <translation>خطأ عند إنشاء المنطقة %1</translation>
     </message>
     <message>
         <location filename="../Tools/WorldOsbManager.ui" line="13"/>

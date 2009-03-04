@@ -10,12 +10,14 @@
    <description locale="fr" >Nom</description>
    <description locale="it" >Nome</description>
    <description locale="pl" >Nazwa</description>
+   <description locale="sl" >Ime</description>
    <value tag="$[name:fr] - $[name:nl]" />
 
   </widget>
   <widget tag="name:fr" type="edit" >
    <description locale="en" >Name (french)</description>
    <description locale="ar" >الإسم (فرنسي)</description>
+   <description locale="cs" >Jméno (francouzky)</description>
    <description locale="de" >Name (franz.)</description>
    <description locale="es" >Nombre (francés)</description>
    <description locale="fr" >Nom (français)</description>
@@ -25,6 +27,7 @@
   <widget tag="name:nl" type="edit" >
    <description locale="en" >Name (dutch)</description>
    <description locale="ar" >الإسم (هولّندية)</description>
+   <description locale="cs" >Jméno (nizozemsky)</description>
    <description locale="de" >Name (niederl.)</description>
    <description locale="es" >Nombre (alemán)</description>
    <description locale="fr" >Nom (néérlandais)</description>
@@ -34,6 +37,7 @@
  </widgets>
  <template>
   <description locale="en" >Brussels Ways</description>
+  <description locale="cs" >[Belgické cesty]</description>
   <description locale="de" >Brüsseler Wege</description>
   <description locale="fr" >Rues de Bruxelles</description>
   <description locale="it" >Strade di Bruxelles</description>

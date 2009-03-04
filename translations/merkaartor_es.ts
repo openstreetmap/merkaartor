@@ -3,70 +3,70 @@
 <context>
     <name></name>
     <message>
-        <location filename="../MainWindow.cpp" line="609"/>
+        <location filename="../MainWindow.cpp" line="605"/>
         <source>Supported formats</source>
         <translation>Formatos soportados</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="598"/>
+        <location filename="../MainWindow.cpp" line="594"/>
         <source>Merkaartor document (*.mdc)
 </source>
         <translation>Documento Merkaartor (*.mdc)
 </translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="611"/>
+        <location filename="../MainWindow.cpp" line="607"/>
         <source>GPS Exchange format (*.gpx)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="612"/>
+        <location filename="../MainWindow.cpp" line="608"/>
         <source>OpenStreetMap format (*.osm)
 </source>
         <translation>Formato OpenStreetMap (*.osm)
 </translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="613"/>
+        <location filename="../MainWindow.cpp" line="609"/>
         <source>OpenStreetMap binary format (*.osb)
 </source>
         <translation>Formato binario OpenStreetMap (*.osb)
 </translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="614"/>
+        <location filename="../MainWindow.cpp" line="610"/>
         <source>Noni GPSPlot format (*.ngt)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="615"/>
+        <location filename="../MainWindow.cpp" line="611"/>
         <source>NMEA GPS log format (*.nmea *.nma)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="616"/>
+        <location filename="../MainWindow.cpp" line="612"/>
         <source>KML file (*.kml)
 </source>
         <translation>Archivo KML (*.kml)
 </translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="617"/>
+        <location filename="../MainWindow.cpp" line="613"/>
         <source>ESRI Shapefile (*.shp)
 </source>
         <translation>Archivo de forma ESRI (*.shp)
 </translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="619"/>
+        <location filename="../MainWindow.cpp" line="615"/>
         <source>All Files (*)</source>
         <translation>Todos los archivos (*)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="605"/>
+        <location filename="../MainWindow.cpp" line="601"/>
         <source>Geotagged images (*.jpg)
 </source>
         <translation>Imágenes geoetiquetadas (*.jpg)
@@ -273,17 +273,17 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>DirtyDock</name>
     <message>
-        <location filename="../DirtyDock.cpp" line="59"/>
+        <location filename="../DirtyDock.cpp" line="62"/>
         <source>There is &lt;b&gt;no&lt;/b&gt; object in the dirty layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DirtyDock.cpp" line="62"/>
+        <location filename="../DirtyDock.cpp" line="65"/>
         <source>There is &lt;b&gt;one&lt;/b&gt; object in the dirty layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../DirtyDock.cpp" line="66"/>
+        <location filename="../DirtyDock.cpp" line="69"/>
         <source>There are &lt;b&gt;%n&lt;/b&gt; objects in the dirty layer</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -291,17 +291,17 @@ p, li { white-space: pre-wrap; }
         </translation>
     </message>
     <message>
-        <location filename="../DirtyDock.cpp" line="172"/>
+        <location filename="../DirtyDock.cpp" line="175"/>
         <source>Undo</source>
         <translation>Deshacer</translation>
     </message>
     <message>
-        <location filename="../DirtyDock.cpp" line="173"/>
+        <location filename="../DirtyDock.cpp" line="176"/>
         <source>Center map</source>
         <translation>Centrar mapa</translation>
     </message>
     <message>
-        <location filename="../DirtyDock.cpp" line="174"/>
+        <location filename="../DirtyDock.cpp" line="177"/>
         <source>Center &amp;&amp; Zoom map</source>
         <translation type="unfinished"></translation>
     </message>
@@ -656,168 +656,199 @@ Do you want to mark them for deletion?</source>
 <context>
     <name>GeoImageDock</name>
     <message>
-        <location filename="../GeoImageDock.cpp" line="20"/>
+        <location filename="../GeoImageDock.cpp" line="23"/>
         <source>Geo Images</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="27"/>
+        <location filename="../GeoImageDock.cpp" line="30"/>
         <source>Remove Images</source>
         <translation>Eliminar Imágenes</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="28"/>
+        <location filename="../GeoImageDock.cpp" line="31"/>
         <source>Copy filename to clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="140"/>
+        <location filename="../GeoImageDock.cpp" line="189"/>
         <source>No layers</source>
         <translation>Sin capas</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="140"/>
+        <location filename="../GeoImageDock.cpp" line="189"/>
         <source>No suitable layer found. Please first download data from OSM server or open a track.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="158"/>
+        <location filename="../GeoImageDock.cpp" line="207"/>
         <source>Load geotagged Images</source>
         <translation>Cargar imágenes geoetiquetadas</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="159"/>
+        <location filename="../GeoImageDock.cpp" line="208"/>
         <source>Select the layer to which the images belong:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="167"/>
+        <location filename="../GeoImageDock.cpp" line="225"/>
         <source>Loading Images ...</source>
         <translation>Cargando imágenes ...</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="167"/>
+        <location filename="../GeoImageDock.cpp" line="225"/>
         <source>Abort loading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="202"/>
+        <location filename="../GeoImageDock.cpp" line="260"/>
         <source>No EXIF header found in image &quot;%1&quot;.
 Do you want to revert to improper file timestamp?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="253"/>
+        <location filename="../GeoImageDock.cpp" line="312"/>
         <source>Specify offset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="255"/>
+        <location filename="../GeoImageDock.cpp" line="314"/>
         <source>Position images more to the:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="256"/>
+        <location filename="../GeoImageDock.cpp" line="315"/>
         <source>end of the track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="257"/>
+        <location filename="../GeoImageDock.cpp" line="316"/>
         <source>beginning of the track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="261"/>
+        <location filename="../GeoImageDock.cpp" line="320"/>
         <source>hh:mm:ss</source>
         <translation>hh:mm:ss</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="322"/>
+        <location filename="../GeoImageDock.cpp" line="381"/>
         <source>ss &apos;seconds&apos;</source>
         <translation>ss &apos;segundos&apos;</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="324"/>
+        <location filename="../GeoImageDock.cpp" line="383"/>
         <source>mm &apos;minutes and&apos; ss &apos;seconds&apos;</source>
         <translation>mm &apos;minutos y&apos; ss &apos;segundos&apos;</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="326"/>
+        <location filename="../GeoImageDock.cpp" line="385"/>
         <source>hh &apos;hours,&apos; mm &apos;minutes and&apos; ss &apos;seconds&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="327"/>
+        <location filename="../GeoImageDock.cpp" line="386"/>
         <source>Wrong image?</source>
         <translation>¿Imagen incorrecta?</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="328"/>
+        <location filename="../GeoImageDock.cpp" line="387"/>
         <source>Image &quot;%1&quot; was taken %2 before the next trackpoint was recorded.
 Do you still want to use it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="329"/>
+        <location filename="../GeoImageDock.cpp" line="388"/>
         <source>Image &quot;%1&quot; was taken %2 after the last trackpoint was recorded.
 Do you still want to use it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="175"/>
+        <location filename="../GeoImageDock.cpp" line="233"/>
         <source>No such file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="175"/>
+        <location filename="../GeoImageDock.cpp" line="233"/>
         <source>Can&apos;t find image &quot;%1&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="364"/>
+        <location filename="../GeoImageDock.cpp" line="427"/>
         <source>Exiv2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="181"/>
+        <location filename="../GeoImageDock.cpp" line="239"/>
         <source>Error while opening &quot;%2&quot;:
 %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="315"/>
+        <location filename="../GeoImageDock.cpp" line="374"/>
         <source>No TrackPoints</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="315"/>
+        <location filename="../GeoImageDock.cpp" line="374"/>
         <source>No TrackPoints found for image &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="337"/>
+        <location filename="../GeoImageDock.cpp" line="397"/>
         <source>No geo informations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="337"/>
+        <location filename="../GeoImageDock.cpp" line="397"/>
         <source>Image &quot;%1&quot; is not a geotagged image.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="364"/>
+        <location filename="../GeoImageDock.cpp" line="427"/>
         <source>Error while loading EXIF-data from &quot;%1&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="202"/>
+        <location filename="../GeoImageDock.cpp" line="260"/>
         <source>No EXIF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="360"/>
+        <location filename="../GeoImageDock.cpp" line="423"/>
         <source>Error while opening &quot;%1&quot;:
 %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../GeoImageDock.cpp" line="32"/>
+        <source>Select next image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../GeoImageDock.cpp" line="33"/>
+        <source>PgDown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../GeoImageDock.cpp" line="34"/>
+        <source>Select previous image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../GeoImageDock.cpp" line="35"/>
+        <source>PgUp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../GeoImageDock.cpp" line="217"/>
+        <source>Layer is readonly</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../GeoImageDock.cpp" line="218"/>
+        <source>The used layer is not writeable. Should it be made writeable?
+If not, you can&apos;t load images that belongs to it.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -935,14 +966,6 @@ Do you still want to use it?</source>
         <location filename="../Map/MapLayer.cpp" line="721"/>
         <source>Map - Illegal Ms Virtual Earth</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ImageView</name>
-    <message>
-        <location filename="../GeoImageDock.cpp" line="448"/>
-        <source>...</source>
-        <translation type="obsolete">...</translation>
     </message>
 </context>
 <context>
@@ -1142,7 +1165,7 @@ Inciando...</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1208"/>
+        <location filename="../MainWindow.cpp" line="1215"/>
         <source>Merge Nodes into %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1162,42 +1185,42 @@ Inciando...</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="262"/>
+        <location filename="../MainWindow.cpp" line="257"/>
         <source>Properties...</source>
         <translation>Propiedades...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="286"/>
+        <location filename="../MainWindow.cpp" line="282"/>
         <source>Low</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="286"/>
+        <location filename="../MainWindow.cpp" line="282"/>
         <source>High</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="286"/>
+        <location filename="../MainWindow.cpp" line="282"/>
         <source>Opaque</source>
         <translation>Opaco</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="415"/>
+        <location filename="../MainWindow.cpp" line="411"/>
         <source>Clipboard invalid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="408"/>
+        <location filename="../MainWindow.cpp" line="404"/>
         <source>Clipboard is not valid XML.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="415"/>
+        <location filename="../MainWindow.cpp" line="411"/>
         <source>Clipboard do not contain valid OSM.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="623"/>
+        <location filename="../MainWindow.cpp" line="619"/>
         <source>Open track file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1207,28 +1230,28 @@ Inciando...</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="651"/>
+        <location filename="../MainWindow.cpp" line="647"/>
         <source>The current map contains unsaved changes that will be lost when starting a new one.
 Do you want to cancel starting a new map or continue and discard the old changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="676"/>
+        <location filename="../MainWindow.cpp" line="672"/>
         <source>Waypoints</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="692"/>
+        <location filename="../MainWindow.cpp" line="688"/>
         <source>Track %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="726"/>
+        <location filename="../MainWindow.cpp" line="722"/>
         <source>Big Fat Copyright Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="740"/>
+        <location filename="../MainWindow.cpp" line="736"/>
         <source>You are trying to import a KML file. Please be aware that:
 
  - You cannot import to OSM a KML file created from Google Earth. While you might
@@ -1245,290 +1268,290 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="771"/>
+        <location filename="../MainWindow.cpp" line="767"/>
         <source>No valid file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1514"/>
+        <location filename="../MainWindow.cpp" line="1521"/>
         <source>%1 could not be opened.</source>
         <translation>%1 no pudo ser abierto</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="874"/>
+        <location filename="../MainWindow.cpp" line="870"/>
         <source>Open track files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="886"/>
+        <location filename="../MainWindow.cpp" line="882"/>
         <source>Old Qt version detected</source>
         <translation>Detectada versión antigua de Qt</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="890"/>
+        <location filename="../MainWindow.cpp" line="886"/>
         <source>Your setup uses Qt %1, which contains various known errors in uploading data to OpenStreetMap leading to 401 server response codes. Are you sure you want to continue (which is not recommended).
 For more information see http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="896"/>
+        <location filename="../MainWindow.cpp" line="892"/>
         <source>Upload OSM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="897"/>
+        <location filename="../MainWindow.cpp" line="893"/>
         <source>You don&apos;t seem to have specified your
 OpenStreetMap username and password.
 Do you want to do this now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="932"/>
+        <location filename="../MainWindow.cpp" line="928"/>
         <source>Error downloading</source>
         <translation>Error descargando</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="932"/>
+        <location filename="../MainWindow.cpp" line="928"/>
         <source>The map could not be downloaded</source>
         <translation>El mapa no pudo ser descargado</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1149"/>
+        <location filename="../MainWindow.cpp" line="1156"/>
         <source>Join Roads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1162"/>
+        <location filename="../MainWindow.cpp" line="1169"/>
         <source>Split Roads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1172"/>
+        <location filename="../MainWindow.cpp" line="1179"/>
         <source>Break Roads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1182"/>
+        <location filename="../MainWindow.cpp" line="1189"/>
         <source>Commit Roads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1193"/>
+        <location filename="../MainWindow.cpp" line="1200"/>
         <source>Align Nodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1223"/>
+        <location filename="../MainWindow.cpp" line="1230"/>
         <source>Detach Node %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1237"/>
+        <location filename="../MainWindow.cpp" line="1244"/>
         <source>Add member to relation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1247"/>
+        <location filename="../MainWindow.cpp" line="1254"/>
         <source>Remove member from relation</source>
         <translation>Eliminar miembro de la relación</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1260"/>
+        <location filename="../MainWindow.cpp" line="1267"/>
         <source>Create Relation %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1309"/>
+        <location filename="../MainWindow.cpp" line="1316"/>
         <source>Save map style</source>
         <translation>Guardar estilo de mapa</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1320"/>
+        <location filename="../MainWindow.cpp" line="1327"/>
         <source>Merkaartor map style (*.mas)</source>
         <translation>Estilo de mapa Merkaartor (*.mas)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1320"/>
+        <location filename="../MainWindow.cpp" line="1327"/>
         <source>Load map style</source>
         <translation>Cargar estilo de mapa</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1453"/>
+        <location filename="../MainWindow.cpp" line="1460"/>
         <source>Save Merkaartor document</source>
         <translation>Guardar documento Merkaartor</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1453"/>
+        <location filename="../MainWindow.cpp" line="1460"/>
         <source>untitled</source>
         <translation>sin nombre</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1453"/>
+        <location filename="../MainWindow.cpp" line="1460"/>
         <source>Merkaartor documents Files (*.mdc)</source>
         <translation>Archivos de documentos Merkaartor (*.mdc)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1495"/>
+        <location filename="../MainWindow.cpp" line="1502"/>
         <source>Unable to open save file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1495"/>
+        <location filename="../MainWindow.cpp" line="1502"/>
         <source>%1 could not be opened for writing.</source>
         <translation>%1 no pudo ser abierto para su escritura.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1530"/>
+        <location filename="../MainWindow.cpp" line="1537"/>
         <source>Invalid file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1520"/>
+        <location filename="../MainWindow.cpp" line="1527"/>
         <source>%1 is not a valid XML file.</source>
         <translation>%1 no es un archivo XML válido</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1530"/>
+        <location filename="../MainWindow.cpp" line="1537"/>
         <source>%1 is not a valid Merkaartor document.</source>
         <translation>%1 no es un documento de Merkaartor válido</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1588"/>
+        <location filename="../MainWindow.cpp" line="1595"/>
         <source>Export OSM</source>
         <translation>Export arOSM</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1588"/>
+        <location filename="../MainWindow.cpp" line="1595"/>
         <source>OSM Files (*.osm)</source>
         <translation>Archivos OSM (*.osm)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1607"/>
+        <location filename="../MainWindow.cpp" line="1614"/>
         <source>Export Binary OSM</source>
         <translation>Exportar Binarios OSM</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1607"/>
+        <location filename="../MainWindow.cpp" line="1614"/>
         <source>OSM Binary Files (*.osb)</source>
         <translation>Archivos Binarios OSM (*.osb)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1626"/>
+        <location filename="../MainWindow.cpp" line="1633"/>
         <source>Export GPX</source>
         <translation>Exportar GPX</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1626"/>
+        <location filename="../MainWindow.cpp" line="1633"/>
         <source>GPX Files (*.gpx)</source>
         <translation>Archivos GPX (*.gpx)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1653"/>
+        <location filename="../MainWindow.cpp" line="1660"/>
         <source>Export KML</source>
         <translation>Exportar KML</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1653"/>
+        <location filename="../MainWindow.cpp" line="1660"/>
         <source>KML Files (*.kml)</source>
         <translation>Archivos KML (*.kml)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1889"/>
+        <location filename="../MainWindow.cpp" line="1896"/>
         <source>%1 (int)</source>
         <translation>%1 (entero)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1939"/>
+        <location filename="../MainWindow.cpp" line="1946"/>
         <source>Add Bookmark</source>
         <translation>Añadir Marcador</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1940"/>
+        <location filename="../MainWindow.cpp" line="1947"/>
         <source>Specify the name of the bookmark.</source>
         <translation>Especificar el nombre del marcador</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1943"/>
+        <location filename="../MainWindow.cpp" line="1950"/>
         <source>Invalid bookmark name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1944"/>
+        <location filename="../MainWindow.cpp" line="1951"/>
         <source>Bookmark cannot be blank.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1948"/>
+        <location filename="../MainWindow.cpp" line="1955"/>
         <source>Warning: Bookmark name already exists</source>
         <translation>Aviso: El nombre del Marcador ya existe</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1949"/>
+        <location filename="../MainWindow.cpp" line="1956"/>
         <source>Enter a new one, keep the same to overwrite or cancel.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1987"/>
+        <location filename="../MainWindow.cpp" line="1994"/>
         <source>Remove Bookmark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1988"/>
+        <location filename="../MainWindow.cpp" line="1995"/>
         <source>Select the bookmark to remove.</source>
         <translation>Seleccionar el marcador a eliminar.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2154"/>
+        <location filename="../MainWindow.cpp" line="2161"/>
         <source>Background imagery</source>
         <translation>Imágenes de Fondo</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2178"/>
+        <location filename="../MainWindow.cpp" line="2185"/>
         <source>GPS error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2179"/>
+        <location filename="../MainWindow.cpp" line="2186"/>
         <source>Unable to open GPS port.</source>
         <translation>Incapaz de abrir el puerto GPS.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2188"/>
+        <location filename="../MainWindow.cpp" line="2195"/>
         <source>Open NMEA log file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2302"/>
+        <location filename="../MainWindow.cpp" line="2309"/>
         <source>Save Tag Templates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2302"/>
+        <location filename="../MainWindow.cpp" line="2309"/>
         <source>Merkaartor tag templates (*.mat)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2328"/>
+        <location filename="../MainWindow.cpp" line="2335"/>
         <source>Open Tag Templates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2382"/>
+        <location filename="../MainWindow.cpp" line="2389"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2382"/>
+        <location filename="../MainWindow.cpp" line="2389"/>
         <source>Could not load the selected language. Go to Tools, Preferences to select another language or check whether the translation file is missing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2385"/>
+        <location filename="../MainWindow.cpp" line="2392"/>
         <source>Warning! Could not load the Qt translations for the &quot;%1&quot; language.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="2388"/>
+        <location filename="../MainWindow.cpp" line="2395"/>
         <source>Warning! Could not load the Merkaartor translations for the &quot;%1&quot; language.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2652,22 +2675,22 @@ Do you want to do this now?</source>
 <context>
     <name>MapDocument</name>
     <message>
-        <location filename="../Map/MapDocument.cpp" line="227"/>
+        <location filename="../Map/MapDocument.cpp" line="203"/>
         <source>Background imagery</source>
         <translation>Imágenes de Fondo</translation>
     </message>
     <message>
-        <location filename="../Map/MapDocument.cpp" line="95"/>
+        <location filename="../Map/MapDocument.cpp" line="83"/>
         <source>Trash layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Map/MapDocument.cpp" line="231"/>
+        <location filename="../Map/MapDocument.cpp" line="207"/>
         <source>Dirty layer</source>
         <translation>Capa sucia</translation>
     </message>
     <message>
-        <location filename="../Map/MapDocument.cpp" line="234"/>
+        <location filename="../Map/MapDocument.cpp" line="210"/>
         <source>Uploaded layer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2755,47 +2778,47 @@ Do you want to do this now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Map/TrackPoint.cpp" line="354"/>
+        <location filename="../Map/TrackPoint.cpp" line="366"/>
         <source>timestamp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Map/TrackPoint.cpp" line="355"/>
+        <location filename="../Map/TrackPoint.cpp" line="367"/>
         <source>coord</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Map/TrackPoint.cpp" line="358"/>
+        <location filename="../Map/TrackPoint.cpp" line="370"/>
         <source>elevation</source>
         <translation>elevación</translation>
     </message>
     <message>
-        <location filename="../Map/TrackPoint.cpp" line="360"/>
+        <location filename="../Map/TrackPoint.cpp" line="372"/>
         <source>speed</source>
         <translation>velocidad</translation>
     </message>
     <message>
-        <location filename="../Map/TrackPoint.cpp" line="363"/>
+        <location filename="../Map/TrackPoint.cpp" line="375"/>
         <source>Waypoint</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Map/TrackPoint.cpp" line="366"/>
+        <location filename="../Map/TrackPoint.cpp" line="378"/>
         <source>description</source>
         <translation>descripción</translation>
     </message>
     <message>
-        <location filename="../Map/TrackPoint.cpp" line="369"/>
+        <location filename="../Map/TrackPoint.cpp" line="381"/>
         <source>comment</source>
         <translation>comentario</translation>
     </message>
     <message>
-        <location filename="../Map/TrackPoint.cpp" line="372"/>
+        <location filename="../Map/TrackPoint.cpp" line="384"/>
         <source>layer</source>
         <translation>capa</translation>
     </message>
     <message>
-        <location filename="../Map/TrackPoint.cpp" line="377"/>
+        <location filename="../Map/TrackPoint.cpp" line="389"/>
         <source>Node</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2858,7 +2881,7 @@ Do you want to do this now?</source>
     <message>
         <location filename="../MapView.cpp" line="1070"/>
         <source>Cancel</source>
-        <translation type="unfinished">Cancelar</translation>
+        <translation>Cancelar</translation>
     </message>
 </context>
 <context>
