@@ -535,7 +535,7 @@ void PropertiesDock::resetValues()
 	{
 		Main->info()->setHtml("");
 		#ifdef GEOIMAGE
-		Main->geoImage()->setImage(NULL);
+		Main->geoImage()->setImage((TrackPoint *)NULL);
 		#endif
 		MultiUi.TagView->setModel(theModel);
 		MultiUi.TagView->setItemDelegate(delegate);
