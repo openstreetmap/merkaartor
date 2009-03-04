@@ -504,7 +504,7 @@ Hlášení API je &apos;%1&apos;</translation>
         <translation>Vyřešte prosím nejprve existující konflikty</translation>
     </message>
     <message>
-        <location filename="../Map/DownloadOSM.cpp" line="701"/>
+        <location filename="../Map/DownloadOSM.cpp" line="703"/>
         <source>Please use a higher zoom factor!</source>
         <translation>Prosím použijte větší přiblížení!</translation>
     </message>
@@ -524,7 +524,7 @@ Hlášení API je &apos;%1&apos;</translation>
         <translation>Neplatné uživatelské jméno/heslo</translation>
     </message>
     <message>
-        <location filename="../Map/DownloadOSM.cpp" line="700"/>
+        <location filename="../Map/DownloadOSM.cpp" line="702"/>
         <source>Zoom factor too low</source>
         <translation>Zvětšení je příliš malé</translation>
     </message>
@@ -534,7 +534,7 @@ Hlášení API je &apos;%1&apos;</translation>
         <translation>Stažené tratě - uzly %1-%2</translation>
     </message>
     <message>
-        <location filename="../Map/DownloadOSM.cpp" line="727"/>
+        <location filename="../Map/DownloadOSM.cpp" line="729"/>
         <source>%1 download</source>
         <translation>%1 staženo</translation>
     </message>
@@ -711,59 +711,59 @@ Do you want to revert to improper file timestamp?</source>
 Do you want to revert to improper file timestamp?</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="312"/>
+        <location filename="../GeoImageDock.cpp" line="314"/>
         <source>Specify offset</source>
         <translation>Zadejte offset</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="314"/>
+        <location filename="../GeoImageDock.cpp" line="316"/>
         <source>Position images more to the:</source>
         <translation>Pozice obrázku více k:</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="315"/>
+        <location filename="../GeoImageDock.cpp" line="317"/>
         <source>end of the track</source>
         <translation>konec tratě</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="316"/>
+        <location filename="../GeoImageDock.cpp" line="318"/>
         <source>beginning of the track</source>
         <translation>začátek tratě</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="320"/>
+        <location filename="../GeoImageDock.cpp" line="322"/>
         <source>hh:mm:ss</source>
         <translation>hh:mm:ss</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="381"/>
+        <location filename="../GeoImageDock.cpp" line="383"/>
         <source>ss &apos;seconds&apos;</source>
         <translation>ss &apos;sekund&apos;</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="383"/>
+        <location filename="../GeoImageDock.cpp" line="385"/>
         <source>mm &apos;minutes and&apos; ss &apos;seconds&apos;</source>
         <translation>mm &apos;minut a&apos; ss &apos;sekund&apos;</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="385"/>
+        <location filename="../GeoImageDock.cpp" line="387"/>
         <source>hh &apos;hours,&apos; mm &apos;minutes and&apos; ss &apos;seconds&apos;</source>
         <translation>hh &apos;hodin,&apos; mm &apos;minut a&apos; ss &apos;sekund&apos;</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="386"/>
+        <location filename="../GeoImageDock.cpp" line="388"/>
         <source>Wrong image?</source>
         <translation>Špatný obrázek?</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="387"/>
+        <location filename="../GeoImageDock.cpp" line="389"/>
         <source>Image &quot;%1&quot; was taken %2 before the next trackpoint was recorded.
 Do you still want to use it?</source>
         <translation>Obrázek &quot;%1&quot; byl pořízen %2 dříve než byl zaznamenán další traťový bod.
 Chcete ho ještě používat?</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="388"/>
+        <location filename="../GeoImageDock.cpp" line="390"/>
         <source>Image &quot;%1&quot; was taken %2 after the last trackpoint was recorded.
 Do you still want to use it?</source>
         <translation>Obrázek &quot;%1&quot; byl pořízen %2 až po zaznamenáni posledního traťového bodu.
@@ -790,7 +790,7 @@ Chcete ho ještě používat?</translation>
         <translation>Nemohu najít obrázek &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="427"/>
+        <location filename="../GeoImageDock.cpp" line="429"/>
         <source>Exiv2</source>
         <translation>Exiv2</translation>
     </message>
@@ -802,27 +802,27 @@ Chcete ho ještě používat?</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="374"/>
+        <location filename="../GeoImageDock.cpp" line="376"/>
         <source>No TrackPoints</source>
         <translation>Žádné body cesty</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="374"/>
+        <location filename="../GeoImageDock.cpp" line="376"/>
         <source>No TrackPoints found for image &quot;%1&quot;</source>
         <translation>Žádné body cesty pro obrázek &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="397"/>
+        <location filename="../GeoImageDock.cpp" line="399"/>
         <source>No geo informations</source>
         <translation>Žádné geo informace</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="397"/>
+        <location filename="../GeoImageDock.cpp" line="399"/>
         <source>Image &quot;%1&quot; is not a geotagged image.</source>
         <translation>Obrázek &quot;%1&quot; neni geotagovaný obrázek</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="427"/>
+        <location filename="../GeoImageDock.cpp" line="429"/>
         <source>Error while loading EXIF-data from &quot;%1&quot;.</source>
         <translation>Chyba při nahrávání EXIF-dat z &quot;%1&quot;.</translation>
     </message>
@@ -832,7 +832,7 @@ Chcete ho ještě používat?</translation>
         <translation>Bez EXIFu</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="423"/>
+        <location filename="../GeoImageDock.cpp" line="425"/>
         <source>Error while opening &quot;%1&quot;:
 %2</source>
         <translation type="unfinished">Chyba při otevírání &quot;%2&quot;:

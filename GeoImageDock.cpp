@@ -243,25 +243,27 @@ void GeoImageDock::loadImages(QStringList fileNames)
 		image->readMetadata();
 
 		exifData = image->exifData();
+		time = QDateTime();
 		if (!exifData.empty()) {
 			latS = QString::fromStdString(exifData["Exif.GPSInfo.GPSLatitude"].toString());
 			lonS = QString::fromStdString(exifData["Exif.GPSInfo.GPSLongitude"].toString());
 
-			if (latS.isEmpty() || lonS.isEmpty()) {
-				QString timeStamp = QString::fromStdString(exifData["Exif.Image.DateTime"].toString());
-				if (timeStamp.isEmpty())
-					timeStamp = QString::fromStdString(exifData["Exif.Photo.DateTimeOriginal"].toString());
+			QString timeStamp = QString::fromStdString(exifData["Exif.Image.DateTime"].toString());
+			if (timeStamp.isEmpty())
+				timeStamp = QString::fromStdString(exifData["Exif.Photo.DateTimeOriginal"].toString());
 
-				if (!timeStamp.isEmpty())
-					time = QDateTime::fromString(timeStamp, "yyyy:MM:dd hh:mm:ss");
-			}
+			if (!timeStamp.isEmpty())
+				time = QDateTime::fromString(timeStamp, "yyyy:MM:dd hh:mm:ss");
 		}
 		if (exifData.empty() || ((latS.isEmpty() || lonS.isEmpty()) && time.isNull()) ) {
+			// this question is asked when the file timestamp is used to find out to which node the image belongs
 			QUESTION(tr("No EXIF"), tr("No EXIF header found in image \"%1\".\nDo you want to revert to improper file timestamp?").arg(file), timeQuestion);
-
-			QFileInfo fileInfo(file);
-			time = fileInfo.created();
+			time = QFileInfo(file).created();
 		}
+		if (time.isNull()) // if time is still null, we use the file date as reference for image sorting (and not for finding out to which node the image belongs)
+			// so we don't have to ask a question here
+			time = QFileInfo(file).created();
+
 
 		if (!latS.isEmpty() && !lonS.isEmpty()) {
 			double lat = 0.0, lon = 0.0, *cur;
@@ -301,7 +303,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
 				Pt = new TrackPoint(newPos);
 
 			Pt->setTag("Picture", "GeoTagged");
-			usedTrackPoints << TrackPointData(Pt->id(), file, QFileInfo(file).created(), it == end);
+			usedTrackPoints << TrackPointData(Pt->id(), file, time, it == end);
 			if (it == end)
 				theLayer->add(Pt);
 				//new AddFeatureCommand(theLayer, Pt, false);

@@ -532,12 +532,12 @@ Le message de l&apos;API est le suivant &apos;%1&apos;</translation>
         <translation>Téléchargement de %1,%2 (zoom %3)...</translation>
     </message>
     <message>
-        <location filename="../Map/DownloadOSM.cpp" line="700"/>
+        <location filename="../Map/DownloadOSM.cpp" line="702"/>
         <source>Zoom factor too low</source>
         <translation>Rapport de zoom trop petit</translation>
     </message>
     <message>
-        <location filename="../Map/DownloadOSM.cpp" line="701"/>
+        <location filename="../Map/DownloadOSM.cpp" line="703"/>
         <source>Please use a higher zoom factor!</source>
         <translation>Veuillez utiliser un facteur de zoom plus grand!</translation>
     </message>
@@ -547,7 +547,7 @@ Le message de l&apos;API est le suivant &apos;%1&apos;</translation>
         <translation>Trace - Nœud téléchargés %1-%2</translation>
     </message>
     <message>
-        <location filename="../Map/DownloadOSM.cpp" line="727"/>
+        <location filename="../Map/DownloadOSM.cpp" line="729"/>
         <source>%1 download</source>
         <translation>%1 téléchargement</translation>
     </message>
@@ -732,59 +732,59 @@ Do you want to revert to improper file timestamp?</source>
 Voulez-vous revenir à l&apos;horodatage incorrect du fichier ?</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="312"/>
+        <location filename="../GeoImageDock.cpp" line="314"/>
         <source>Specify offset</source>
         <translation>Spécifiez le décallage</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="314"/>
+        <location filename="../GeoImageDock.cpp" line="316"/>
         <source>Position images more to the:</source>
         <translation>Positionner les images plus vers:</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="315"/>
+        <location filename="../GeoImageDock.cpp" line="317"/>
         <source>end of the track</source>
         <translation>la fin de la trace</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="316"/>
+        <location filename="../GeoImageDock.cpp" line="318"/>
         <source>beginning of the track</source>
         <translation>début de la trace</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="320"/>
+        <location filename="../GeoImageDock.cpp" line="322"/>
         <source>hh:mm:ss</source>
         <translation>hh:mm:ss</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="381"/>
+        <location filename="../GeoImageDock.cpp" line="383"/>
         <source>ss &apos;seconds&apos;</source>
         <translation>ss &apos;secondes&apos;</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="383"/>
+        <location filename="../GeoImageDock.cpp" line="385"/>
         <source>mm &apos;minutes and&apos; ss &apos;seconds&apos;</source>
         <translation>mm &apos;minutes et&apos; ss &apos;secondes&apos;</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="385"/>
+        <location filename="../GeoImageDock.cpp" line="387"/>
         <source>hh &apos;hours,&apos; mm &apos;minutes and&apos; ss &apos;seconds&apos;</source>
         <translation>hh &apos;heures,&apos; mm &apos;minutes et&apos; ss &apos;secondes&apos;</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="386"/>
+        <location filename="../GeoImageDock.cpp" line="388"/>
         <source>Wrong image?</source>
         <translation>Pas la bonne image ?</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="387"/>
+        <location filename="../GeoImageDock.cpp" line="389"/>
         <source>Image &quot;%1&quot; was taken %2 before the next trackpoint was recorded.
 Do you still want to use it?</source>
         <translation>L&apos;image &quot;%1&quot; a été prise %2 avant que le point de traçe suivant ne soit enregistré.
 Voulez vous quand même l&apos;utiliser ?</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="388"/>
+        <location filename="../GeoImageDock.cpp" line="390"/>
         <source>Image &quot;%1&quot; was taken %2 after the last trackpoint was recorded.
 Do you still want to use it?</source>
         <translation>L&apos;image &quot;%1&quot; a été prise %2 après que le point de traçe suivant ne soit enregistré.
@@ -801,7 +801,7 @@ Voulez vous quand même l&apos;utiliser ?</translation>
         <translation>Impossible de trouver l&apos;image &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="427"/>
+        <location filename="../GeoImageDock.cpp" line="429"/>
         <source>Exiv2</source>
         <translation>Exiv2</translation>
     </message>
@@ -813,27 +813,27 @@ Voulez vous quand même l&apos;utiliser ?</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="374"/>
+        <location filename="../GeoImageDock.cpp" line="376"/>
         <source>No TrackPoints</source>
         <translation>Pas de points de trace</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="374"/>
+        <location filename="../GeoImageDock.cpp" line="376"/>
         <source>No TrackPoints found for image &quot;%1&quot;</source>
         <translation>Pas de points de trace trouvé pour l&apos;image &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="397"/>
+        <location filename="../GeoImageDock.cpp" line="399"/>
         <source>No geo informations</source>
         <translation>Pas d&apos;information géographique</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="397"/>
+        <location filename="../GeoImageDock.cpp" line="399"/>
         <source>Image &quot;%1&quot; is not a geotagged image.</source>
         <translation>L&apos;image &quot;%1&quot; n&apos;est pas une image geotaggée.</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="427"/>
+        <location filename="../GeoImageDock.cpp" line="429"/>
         <source>Error while loading EXIF-data from &quot;%1&quot;.</source>
         <translation>Erreur lors du chargement des données EXIF de &quot;%1&quot;.</translation>
     </message>
@@ -843,7 +843,7 @@ Voulez vous quand même l&apos;utiliser ?</translation>
         <translation>Pas d&apos;EXIF</translation>
     </message>
     <message>
-        <location filename="../GeoImageDock.cpp" line="423"/>
+        <location filename="../GeoImageDock.cpp" line="425"/>
         <source>Error while opening &quot;%1&quot;:
 %2</source>
         <translation type="unfinished">Erreur lors du chargement de &quot;%2&quot;.
