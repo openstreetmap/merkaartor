@@ -124,16 +124,17 @@ static void appendPoints(MapDocument* theDocument, CommandList* L, Road* Dest, R
 
 static Road* join(MapDocument* theDocument, CommandList* L, Road* R1, Road* R2)
 {
+	std::vector<MapFeature*> Alternatives;
 	if (R1->size() == 0)
 	{
 		MapFeature::mergeTags(theDocument,L,R2,R1);
-		L->add(new RemoveFeatureCommand(theDocument,R1));
+		L->add(new RemoveFeatureCommand(theDocument,R1,Alternatives));
 		return R2;
 	}
 	if (R2->size() == 0)
 	{
 		MapFeature::mergeTags(theDocument,L,R1,R2);
-		L->add(new RemoveFeatureCommand(theDocument,R2));
+		L->add(new RemoveFeatureCommand(theDocument,R2,Alternatives));
 		return R1;
 	}
 	MapFeature* Start1 = R1->get(0);
@@ -146,7 +147,7 @@ static Road* join(MapDocument* theDocument, CommandList* L, Road* R1, Road* R2)
 		reversePoints(theDocument,L,R2);
 	appendPoints(theDocument,L,R1,R2);
 	MapFeature::mergeTags(theDocument,L,R1,R2);
-	L->add(new RemoveFeatureCommand(theDocument,R2));
+	L->add(new RemoveFeatureCommand(theDocument,R2,Alternatives));
 	return R1;
 }
 

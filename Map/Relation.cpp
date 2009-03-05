@@ -103,9 +103,16 @@ CoordBox Relation::boundingBox() const
 		return CoordBox(Coord(0,0),Coord(0,0));
 	else
 	{
-		CoordBox Clip(p->Members[0].second->boundingBox());
-		for (unsigned int i=1; i<p->Members.size(); ++i)
-			Clip.merge(p->Members[i].second->boundingBox());
+		CoordBox Clip;
+		bool haveFirst = false;
+		for (unsigned int i=0; i<p->Members.size(); ++i)
+			if (p->Members[i].second && !p->Members[i].second->notEverythingDownloaded()) {
+				if (!haveFirst) {
+					Clip = p->Members[i].second->boundingBox();
+					haveFirst = true;
+				} else
+					Clip.merge(p->Members[i].second->boundingBox());
+			}
 		return Clip;
 	}
 }
@@ -229,7 +236,7 @@ void Relation::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeat
 
 bool Relation::notEverythingDownloaded() const
 {
-	if (lastUpdated() == MapFeature::NotYetDownloaded || lastUpdated() == MapFeature::NotEverythingDownloaded)
+	if (lastUpdated() == MapFeature::NotYetDownloaded)
 		return true;
 	for (unsigned int i=0; i<p->Members.size(); ++i)
 		if (p->Members[i].second)

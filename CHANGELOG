@@ -1,4 +1,6 @@
 v0.13
+	* FIX : Remove the deleted road from parent when joining
+	* FIX : allow to split/join roads belonging to not-completely-downloaded relations
 	* FIX : Avert crashes by using guarded pointers
 	* FIX : In case of a failed "Download more", do not delete layer if it was a previously existing one.
 	* FIX : GeoTagged images are drawn to the full size of GeoImageDock

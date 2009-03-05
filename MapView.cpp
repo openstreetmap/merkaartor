@@ -366,27 +366,23 @@ void MapView::buildFeatureSet(QRegion invalidRegion, Projection& aProj)
 		coordRegion += CoordBox(tl, br);
 	}
 
-	for (unsigned int i=0; i<theDocument->layerSize(); ++i) {
-		if (!theDocument->getLayer(i)->isVisible())
-			continue;
-		for (unsigned int j=0; j<theDocument->getLayer(i)->size(); ++j) {
-			bool OK = false;
-			for (int k=0; k<coordRegion.size() && !OK; ++k)
-				if (coordRegion[k].intersects(theDocument->getLayer(i)->get(j)->boundingBox()))
-					OK = true;
-			if (OK) {
-				if (Road * R = dynamic_cast < Road * >(theDocument->getLayer(i)->get(j))) {
-					R->buildPath(aProj, invalidRegion);
-					theFeatures.push_back(R);
-					if (R->isCoastline())
-						theCoastlines.push_back(R);
-				} else
-				if (Relation * RR = dynamic_cast < Relation * >(theDocument->getLayer(i)->get(j))) {
-					RR->buildPath(aProj, invalidRegion);
-					theFeatures.push_back(RR);
-				} else {
-					theFeatures.push_back(theDocument->getLayer(i)->get(j));
-				}
+	for (VisibleFeatureIterator vit(theDocument); !vit.isEnd(); ++vit) {
+		bool OK = false;
+		for (int k=0; k<coordRegion.size() && !OK; ++k)
+			if (coordRegion[k].intersects(vit.get()->boundingBox()))
+				OK = true;
+		if (OK) {
+			if (Road * R = dynamic_cast < Road * >(vit.get())) {
+				R->buildPath(aProj, invalidRegion);
+				theFeatures.push_back(R);
+				if (R->isCoastline())
+					theCoastlines.push_back(R);
+			} else
+			if (Relation * RR = dynamic_cast < Relation * >(vit.get())) {
+				RR->buildPath(aProj, invalidRegion);
+				theFeatures.push_back(RR);
+			} else {
+				theFeatures.push_back(vit.get());
 			}
 		}
 	}

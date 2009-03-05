@@ -666,7 +666,8 @@ VisibleFeatureIterator::VisibleFeatureIterator(MapDocument *aDoc)
 		if (!theDocument->getLayer(i)->isVisible())
 			continue;
 		for (unsigned int j=0; j<theDocument->getLayer(i)->size(); ++j)
-			theFeatures.push_back(theDocument->getLayer(i)->get(j));
+			if (theDocument->getLayer(i)->get(j)->lastUpdated() != MapFeature::NotYetDownloaded)
+				theFeatures.push_back(theDocument->getLayer(i)->get(j));
 	}
 }
 
@@ -699,7 +700,8 @@ FeatureIterator::FeatureIterator(MapDocument *aDoc)
 {
 	for (unsigned int i=0; i<theDocument->layerSize(); ++i)
 		for (unsigned int j=0; j<theDocument->getLayer(i)->size(); ++j)
-			theFeatures.push_back(theDocument->getLayer(i)->get(j));
+			if (theDocument->getLayer(i)->get(j)->lastUpdated() != MapFeature::NotYetDownloaded)
+				theFeatures.push_back(theDocument->getLayer(i)->get(j));
 }
 
 MapFeature* FeatureIterator::get()

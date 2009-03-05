@@ -308,11 +308,6 @@ static bool downloadToResolve(const std::vector<MapFeature*>& Resolution, QWidge
 
 static void recurseDelete (MapFeature* F, QVector<MapFeature*>& MustDelete)
 {
-	if (CAST_RELATION(F) && !M_PREFS->getDeleteIncompleteRelations()) {    // Do not systematically delete incomplete relations
-		F->setLastUpdated(MapFeature::NotEverythingDownloaded);
-		return;
-	}
-
 	for (unsigned int i=0; i<F->sizeParents(); i++) {
 		recurseDelete(F->getParent(i), MustDelete);
 	}
@@ -349,16 +344,18 @@ static bool resolveNotYetDownloaded(QWidget* aParent, MapDocument* theDocument, 
 				return false;
 		}
 	}
-	QVector<MapFeature*> MustDelete;
-	for (unsigned int i=0; i<theLayer->size(); i++) 
-	{
-		if (theLayer->get(i)->notEverythingDownloaded()) {
-			recurseDelete(theLayer->get(i), MustDelete);
+	if (M_PREFS->getDeleteIncompleteRelations()) {
+		QVector<MapFeature*> MustDelete;
+		for (unsigned int i=0; i<theLayer->size(); i++) 
+		{
+			if (theLayer->get(i)->notEverythingDownloaded()) {
+				recurseDelete(theLayer->get(i), MustDelete);
+			}
 		}
-	}
-	for (int i=0; i<MustDelete.size(); i++) {
-		MustDelete[i]->layer()->remove(MustDelete[i]);
-		delete MustDelete[i];
+		for (int i=0; i<MustDelete.size(); i++) {
+			MustDelete[i]->layer()->remove(MustDelete[i]);
+			delete MustDelete[i];
+		}
 	}
 	return true;
 }
@@ -441,12 +438,8 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 		// Check for empty Roads/Relations
 		std::vector<MapFeature*> EmptyFeature;
 		for (unsigned int i=0; i<theLayer->size(); ++i) {
-			if (Road* R = dynamic_cast<Road*>(theLayer->get(i)))
-				if (!R->size())
-					EmptyFeature.push_back(R);
-			if (Relation* RR = dynamic_cast<Relation*>(theLayer->get(i)))
-				if (!RR->size() && !RR->notEverythingDownloaded())
-					EmptyFeature.push_back(RR);
+			if (!theLayer->get(i)->size() && !theLayer->get(i)->notEverythingDownloaded() && !CAST_NODE(theLayer->get(i)))
+					EmptyFeature.push_back(theLayer->get(i));
 		}
 		if (EmptyFeature.size()) {
 			if (QMessageBox::warning(aParent,QApplication::translate("Downloader","Empty roads/relations detected"), 
