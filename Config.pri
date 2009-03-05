@@ -1,5 +1,5 @@
 VERSION="0.13"
-REVISION="-rc1"
+REVISION="-rc5"
 
 # NODEBUG=1             - no debug target
 # TRANSDIR_MERKAARTOR - translations directory for merkaartor
@@ -8,7 +8,7 @@ REVISION="-rc1"
 # OUTPUT_DIR          - base directory for local output files
 # PREFIX              - base prefix for installation
 # NOUSEWEBKIT=1         - disable use of WebKit (Yahoo adapter)
-OSMARENDER=1        - enable osmarender (requires libxml2 / libxslt)
+#OSMARENDER=1        - enable osmarender (requires libxml2 / libxslt)
 # MOBILE=1    	      - enable MOBILE
 # GEOIMAGE=1          - enable geotagged images (requires exiv2)
 # GPSD=1              - use gpsd as location provider

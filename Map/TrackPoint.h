@@ -22,7 +22,7 @@ class TrackPoint : public MapFeature
 		TrackPoint(const TrackPoint& other);
 		virtual ~TrackPoint();
 
-		virtual QString getClass() const {return "TrackPoint";};
+		virtual QString getClass() const {return "TrackPoint";}
 
 		virtual CoordBox boundingBox() const;
 		virtual void draw(QPainter& P, const Projection& theProjection);

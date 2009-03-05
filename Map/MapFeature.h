@@ -221,7 +221,7 @@ class MapFeature : public QObject
 
 		virtual QString getClass() const = 0;
 
-		virtual bool deleteChildren(MapDocument* , CommandList* ) { return true; };
+		virtual bool deleteChildren(MapDocument* , CommandList* ) { return true; }
 
 		static Relation * GetSingleParentRelation(MapFeature * mapFeature);
 		static TrackPoint* getTrackPointOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *theLayer, const QString& Id);

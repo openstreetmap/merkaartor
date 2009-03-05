@@ -23,7 +23,7 @@ class Road : public MapFeature
 		void updateMeta() const;
 
 	public:
-		virtual QString getClass() const {return "Road";};
+		virtual QString getClass() const {return "Road";}
 
 		virtual CoordBox boundingBox() const;
 		virtual void draw(QPainter& P, const Projection& theProjection);

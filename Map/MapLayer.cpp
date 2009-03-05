@@ -236,6 +236,19 @@ void MapLayer::remove(MapFeature* aFeature)
 	}
 }
 
+void MapLayer::deleteFeature(MapFeature* aFeature)
+{
+	int i = p->Features.indexOf(aFeature);
+	if (i != -1)
+	{
+		p->Features.removeAt(i);
+		aFeature->setLayer(0);
+		notifyIdUpdate(aFeature->id(),0);
+		p->RenderPriorityUpToDate = false;
+	}
+	delete aFeature;
+}
+
 void MapLayer::clear()
 {
 	QList<MapFeaturePtr>::iterator i;

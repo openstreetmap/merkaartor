@@ -19,7 +19,7 @@ class Relation : public MapFeature
 		Relation(const Relation&);
 		virtual ~Relation(void);
 
-		virtual QString getClass() const {return "Relation";};
+		virtual QString getClass() const {return "Relation";}
 
 		virtual CoordBox boundingBox() const;
 		virtual void draw(QPainter& P, const Projection& theProjection);

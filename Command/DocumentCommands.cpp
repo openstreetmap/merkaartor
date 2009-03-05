@@ -136,8 +136,7 @@ RemoveFeatureCommand::~RemoveFeatureCommand()
 		oldLayer->decDirtyLevel(commandDirtyLevel);
 	SAFE_DELETE(CascadedCleanUp);
 	if (theLayer->getDocument()->getTrashLayer()->exists(theFeature)) {
-		theLayer->getDocument()->getTrashLayer()->remove(theFeature);
-		delete theFeature;
+		theLayer->getDocument()->getTrashLayer()->deleteFeature(theFeature);
 	}
 }
 

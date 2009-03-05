@@ -138,9 +138,8 @@ bool OsbRegion::clearTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer)
 						if (F->getParent(j)->layer() != theLayer)
 							break;
 					if (j == F->sizeParents()) {
-						theLayer->remove(F);
+						theLayer->deleteFeature(F);
 						theLayer->featRefCount.remove(F);
-						delete F;
 					}
 				}
 			} else {

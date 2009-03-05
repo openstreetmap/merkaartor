@@ -24,7 +24,7 @@ class RoadPrivate
 			MetaUpToDate(true)
 		{
 		}
-		std::vector<TrackPoint*> Nodes;
+		std::vector<TrackPointPtr> Nodes;
  		std::vector<Coord> Smoothed;
  		bool SmoothedUpToDate;
 		CoordBox BBox;
@@ -84,7 +84,8 @@ Road::Road(const Road& other)
 Road::~Road(void)
 {
 	for (unsigned int i=0; i<p->Nodes.size(); ++i)
-		p->Nodes[i]->unsetParent(this);
+		if (p->Nodes[i])
+			p->Nodes[i]->unsetParent(this);
 	delete p;
 }
 
@@ -92,10 +93,12 @@ void Road::setLayer(MapLayer* L)
 {
 	if (L)
 		for (unsigned int i=0; i<p->Nodes.size(); ++i)
-			p->Nodes[i]->setParent(this);
+			if (p->Nodes[i])
+				p->Nodes[i]->setParent(this);
 	else
 		for (unsigned int i=0; i<p->Nodes.size(); ++i)
-			p->Nodes[i]->unsetParent(this);
+			if (p->Nodes[i])
+				p->Nodes[i]->unsetParent(this);
 	MapFeature::setLayer(L);
 }
 
@@ -153,9 +156,11 @@ unsigned int Road::find(MapFeature* Pt) const
 
 void Road::remove(unsigned int idx)
 {
-	TrackPoint* Pt = p->Nodes[idx];
+	if (p->Nodes[idx]) {
+		TrackPoint* Pt = p->Nodes[idx];
+		Pt->unsetParent(this);
+	}
 	p->Nodes.erase(p->Nodes.begin()+idx);
-	Pt->unsetParent(this);
 	p->BBoxUpToDate = false;
 	p->MetaUpToDate = false;
 	p->SmoothedUpToDate = false;
@@ -203,7 +208,7 @@ bool Road::notEverythingDownloaded() const
 	if (lastUpdated() == MapFeature::NotYetDownloaded)
 		return true;
 	for (unsigned int i=0; i<p->Nodes.size(); ++i)
-		if (p->Nodes[i]->notEverythingDownloaded())
+		if (p->Nodes[i] && p->Nodes[i]->notEverythingDownloaded())
 			return true;
 	return false;
 }
@@ -241,13 +246,14 @@ void Road::updateMeta() const
 
 	for (unsigned int i=0; (i+1)<p->Nodes.size(); ++i)
 	{
-		const Coord & here = p->Nodes[i]->position();
-		const Coord & next = p->Nodes[i+1]->position();
+		if (p->Nodes[i] && p->Nodes[i+1]) {
+			const Coord & here = p->Nodes[i]->position();
+			const Coord & next = p->Nodes[i+1]->position();
 
-		p->Distance += next.distanceFrom(here);
-		//if (isArea)
-			//p->Area += here.lat() * next.lon() - next.lat() * here.lon();
-
+			p->Distance += next.distanceFrom(here);
+			//if (isArea)
+				//p->Area += here.lat() * next.lon() - next.lat() * here.lon();
+		}
 	}
 
 	if (isArea)
@@ -370,9 +376,11 @@ double Road::pixelDistance(const QPointF& Target, double ClearEndDistance, const
 	double Best = 1000000;
 	for (unsigned int i=0; i<p->Nodes.size(); ++i)
 	{
-		double x = ::distance(Target,theProjection.project(p->Nodes[i]));
-		if (x<ClearEndDistance)
-			return Best;
+		if (p->Nodes[i]) {
+			double x = ::distance(Target,theProjection.project(p->Nodes[i]));
+			if (x<ClearEndDistance)
+				return Best;
+		}
 	}
 	if (smoothed().size())
 		for (unsigned int i=3; i <p->Smoothed.size(); i += 3)
@@ -389,10 +397,12 @@ double Road::pixelDistance(const QPointF& Target, double ClearEndDistance, const
 	else
 		for (unsigned int i=1; i<p->Nodes.size(); ++i)
 		{
-			LineF F(theProjection.project(p->Nodes[i-1]),theProjection.project(p->Nodes[i]));
-			double D = F.capDistance(Target);
-			if (D < ClearEndDistance)
-				Best = D;
+			if (p->Nodes[i] && p->Nodes[i-1]) {
+				LineF F(theProjection.project(p->Nodes[i-1]),theProjection.project(p->Nodes[i]));
+				double D = F.capDistance(Target);
+				if (D < ClearEndDistance)
+					Best = D;
+			}
 		}
 	return Best;
 }

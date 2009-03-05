@@ -21,7 +21,7 @@ class TrackSegment : public MapFeature
 		void drawDirectionMarkers(QPainter & P, QPen & pen, const QPointF & FromF, const QPointF & ToF);
 
 	public:
-		virtual QString getClass() const {return "TrackSegment";};
+		virtual QString getClass() const {return "TrackSegment";}
 
 		virtual CoordBox boundingBox() const;
 		virtual void draw(QPainter& P, const Projection& theProjection);
@@ -47,13 +47,13 @@ class TrackSegment : public MapFeature
 		void sortByTime();
 		virtual void partChanged(MapFeature* F, unsigned int ChangeId);
 
-		virtual QString toXML(unsigned int, QProgressDialog *) {return QString("");};
+		virtual QString toXML(unsigned int, QProgressDialog *) {return QString("");}
 		virtual bool toXML(QDomElement xParent, QProgressDialog & progress);
 		static TrackSegment* fromXML(MapDocument* d, MapLayer* L, const QDomElement e, QProgressDialog & progress);
 
-		virtual QString toHtml() {return "";};
+		virtual QString toHtml() {return "";}
 
-		virtual void toBinary(QDataStream& /* ds */, QHash <QString, quint64>& /*theIndex*/) { return; };
+		virtual void toBinary(QDataStream& /* ds */, QHash <QString, quint64>& /*theIndex*/) { return; }
 
 private:
 		TrackSegmentPrivate* p;

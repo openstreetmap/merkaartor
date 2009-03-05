@@ -44,7 +44,7 @@ class RelationPrivate
 			delete theModel;
 		}
 		Relation* theRelation;
-		std::vector<std::pair<QString, MapFeature*> > Members;
+		std::vector<std::pair<QString, MapFeaturePtr> > Members;
 		RelationMemberModel* theModel;
 		unsigned int ModelReferences;
 		QPainterPath thePath;
@@ -64,7 +64,8 @@ Relation::Relation(const Relation& other)
 Relation::~Relation()
 {
 	for (unsigned int i=0; i<p->Members.size(); ++i)
-		p->Members[i].second->unsetParent(this);
+		if (p->Members[i].second)
+			p->Members[i].second->unsetParent(this);
 	delete p;
 }
 
@@ -72,10 +73,12 @@ void Relation::setLayer(MapLayer* L)
 {
 	if (L)
 		for (unsigned int i=0; i<p->Members.size(); ++i)
-			p->Members[i].second->setParent(this);
+			if (p->Members[i].second)
+				p->Members[i].second->setParent(this);
 	else
 		for (unsigned int i=0; i<p->Members.size(); ++i)
-			p->Members[i].second->unsetParent(this);
+			if (p->Members[i].second)
+				p->Members[i].second->unsetParent(this);
 	MapFeature::setLayer(L);
 }
 
@@ -135,7 +138,8 @@ void Relation::drawFocus(QPainter& P, const Projection& theProjection, bool soli
 		P.drawPath(p->thePath);
 
 		for (unsigned int i=0; i<p->Members.size(); ++i)
-			p->Members[i].second->drawFocus(P,theProjection, solid);
+			if (p->Members[i].second)
+				p->Members[i].second->drawFocus(P,theProjection, solid);
 
 		if (M_PREFS->getShowParents()) {
 			for (unsigned int i=0; i<sizeParents(); ++i)
@@ -158,7 +162,8 @@ void Relation::drawHover(QPainter& P, const Projection& theProjection, bool soli
 		P.drawPath(p->thePath);
 
 		for (unsigned int i=0; i<p->Members.size(); ++i)
-			p->Members[i].second->drawHover(P,theProjection, solid);
+			if (p->Members[i].second)
+				p->Members[i].second->drawHover(P,theProjection, solid);
 
 		if (M_PREFS->getShowParents()) {
 			for (unsigned int i=0; i<sizeParents(); ++i)
@@ -172,9 +177,11 @@ double Relation::pixelDistance(const QPointF& Target, double ClearEndDistance, c
 	double Best = 1000000;
 	for (unsigned int i=0; i<p->Members.size(); ++i)
 	{
-		double Dist = p->Members[i].second->pixelDistance(Target, ClearEndDistance, theProjection);
-		if (Dist < Best)
-			Best = Dist;
+		if (p->Members[i].second) {
+			double Dist = p->Members[i].second->pixelDistance(Target, ClearEndDistance, theProjection);
+			if (Dist < Best)
+				Best = Dist;
+		}
 	}
 
 	double D;
@@ -200,7 +207,7 @@ double Relation::pixelDistance(const QPointF& Target, double ClearEndDistance, c
 void Relation::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const std::vector<MapFeature*>& Alternatives)
 {
 	for (unsigned int i=0; i<p->Members.size();) {
-		if (p->Members[i].second == aFeature)
+		if (p->Members[i].second && p->Members[i].second == aFeature)
 		{
 			if ( (p->Members.size() == 1) && (Alternatives.size() == 0) )
 				theList->add(new RemoveFeatureCommand(theDocument,this));
@@ -225,7 +232,8 @@ bool Relation::notEverythingDownloaded() const
 	if (lastUpdated() == MapFeature::NotYetDownloaded || lastUpdated() == MapFeature::NotEverythingDownloaded)
 		return true;
 	for (unsigned int i=0; i<p->Members.size(); ++i)
-		if (p->Members[i].second->notEverythingDownloaded())
+		if (p->Members[i].second)
+			if (p->Members[i].second->notEverythingDownloaded())
 			return true;
 	return false;
 }
@@ -246,8 +254,10 @@ void Relation::add(const QString& Role, MapFeature* F, unsigned int Idx)
 
 void Relation::remove(unsigned int Idx)
 {
-	MapFeature* F = p->Members[Idx].second;
-	F->unsetParent(this);
+	if (p->Members[Idx].second) {
+		MapFeature* F = p->Members[Idx].second;
+		F->unsetParent(this);
+	}
 	p->Members.erase(p->Members.begin()+Idx);
 }
 
@@ -667,7 +677,7 @@ QVariant RelationMemberModel::data(const QModelIndex &index, int role) const
 	else if (role == Qt::UserRole)
 	{
 		QVariant v;
-		v.setValue(Parent->Members[index.row()].second);
+		v.setValue((MapFeature *)(Parent->Members[index.row()].second));
 		return v;
 	}
 	return QVariant();

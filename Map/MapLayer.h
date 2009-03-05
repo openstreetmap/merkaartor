@@ -54,6 +54,7 @@ public:
 	void add(MapFeature* aFeature);
 	void add(MapFeature* aFeature, unsigned int Idx);
 	virtual void remove(MapFeature* aFeature);
+	virtual void deleteFeature(MapFeature* aFeature);
 	virtual void clear();
 	bool exists(MapFeature* aFeature) const;
 	virtual unsigned int size() const;
@@ -65,7 +66,7 @@ public:
 	void notifyIdUpdate(const QString& id, MapFeature* aFeature);
 	void sortRenderingPriority(double PixelPerM);
 
-	virtual void invalidate(MapDocument*, CoordBox) {};
+	virtual void invalidate(MapDocument*, CoordBox) {}
 	void invalidateRenderPriority();
 
 	void setDocument(MapDocument* aDocument);
@@ -73,7 +74,7 @@ public:
 
 	LayerWidget* getWidget(void);
 	void deleteWidget(void);
-	virtual void updateWidget() {};
+	virtual void updateWidget() {}
 
 	virtual void setVisible(bool b) = 0;
 	virtual void setSelected(bool b);
@@ -102,9 +103,9 @@ public:
 	unsigned int setDirtyLevel(unsigned int newLevel);
 
 	virtual bool canDelete();
-	virtual bool isUploadable() {return true;};
+	virtual bool isUploadable() {return true;}
 	virtual bool isReadonly() const;
-	virtual bool isTrack() {return false;};
+	virtual bool isTrack() {return false;}
 
 protected:
 	MapLayerPrivate* p;
@@ -176,11 +177,11 @@ public:
 	virtual bool toXML(QDomElement xParent, QProgressDialog & progress);
 	static TrackMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
-	virtual const QString className() {return "TrackMapLayer";};
-	virtual const LayerGroups classGroups() {return(MapLayer::Tracks);};
+	virtual const QString className() {return "TrackMapLayer";}
+	virtual const LayerGroups classGroups() {return(MapLayer::Tracks);}
 
-	virtual bool isUploadable() {return true;};
-	virtual bool isTrack() {return true;};
+	virtual bool isUploadable() {return true;}
+	virtual bool isTrack() {return true;}
 
 protected:
 	QString Filename;
@@ -195,8 +196,8 @@ public:
 
 	static DirtyMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
-	virtual const QString className() {return "DirtyMapLayer";};
-	virtual const LayerGroups classGroups() {return(MapLayer::Default|MapLayer::OSM);};
+	virtual const QString className() {return "DirtyMapLayer";}
+	virtual const LayerGroups classGroups() {return(MapLayer::Default|MapLayer::OSM);}
 
 	virtual LayerWidget* newWidget(void);
 };
@@ -210,8 +211,8 @@ public:
 
 	static UploadedMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
-	virtual const QString className() {return "UploadedMapLayer";};
-	virtual const LayerGroups classGroups() {return(MapLayer::Default|MapLayer::OSM);};
+	virtual const QString className() {return "UploadedMapLayer";}
+	virtual const LayerGroups classGroups() {return(MapLayer::Default|MapLayer::OSM);}
 	virtual LayerWidget* newWidget(void);
 };
 
@@ -224,11 +225,11 @@ public:
 
 	static ExtractedMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
-	virtual const QString className() {return "ExtractedMapLayer";};
-	virtual const LayerGroups classGroups() {return(MapLayer::OSM);};
+	virtual const QString className() {return "ExtractedMapLayer";}
+	virtual const LayerGroups classGroups() {return(MapLayer::OSM);}
 	virtual LayerWidget* newWidget(void);
 
-	virtual bool isUploadable() {return false;};
+	virtual bool isUploadable() {return false;}
 };
 
 class DeletedMapLayer : public DrawingMapLayer
@@ -240,11 +241,11 @@ public:
 
 	static DeletedMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
-	virtual const QString className() {return "DeletedMapLayer";};
-	virtual const LayerGroups classGroups() {return(MapLayer::None);};
+	virtual const QString className() {return "DeletedMapLayer";}
+	virtual const LayerGroups classGroups() {return(MapLayer::None);}
 	virtual LayerWidget* newWidget(void);
 
-	virtual bool isUploadable() {return false;};
+	virtual bool isUploadable() {return false;}
 };
 
 class OsbMapLayer : public MapLayer
@@ -255,12 +256,12 @@ public:
 	OsbMapLayer(const QString& aName, const QString& filename);
 	virtual ~OsbMapLayer();
 
-	virtual const QString className() {return "OsbMapLayer";};
-	virtual const LayerGroups classGroups() {return(MapLayer::OSM);};
+	virtual const QString className() {return "OsbMapLayer";}
+	virtual const LayerGroups classGroups() {return(MapLayer::OSM);}
 	virtual LayerWidget* newWidget(void);
 
 	virtual void setVisible(bool b);
-	virtual bool isUploadable() {return true;};
+	virtual bool isUploadable() {return true;}
 
 	virtual void invalidate(MapDocument* d, CoordBox vp);
 	//MapFeature*  getFeatureByRef(MapDocument* d, quint64 ref);
