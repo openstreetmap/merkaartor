@@ -44,10 +44,12 @@ TagCommand::~TagCommand(void)
 //
 bool TagCommand::buildDirtyList(DirtyList& theList)
 {
+	if (theFeature->lastUpdated() == MapFeature::NotYetDownloaded)
+		return theList.noop(theFeature);
 	if (theLayer->isUploadable())
 		return theList.update(theFeature);
-	else
-		return theList.noop(theFeature);
+
+	return theList.noop(theFeature);
 }
 
 SetTagCommand::SetTagCommand(MapFeature* aF)
@@ -114,6 +116,8 @@ void SetTagCommand::redo()
 
 bool SetTagCommand::buildDirtyList(DirtyList& theList)
 {
+	if (theFeature->lastUpdated() == MapFeature::NotYetDownloaded)
+		return theList.noop(theFeature);
 	if (theK.startsWith('_') && (theK.endsWith('_')))
 		return theList.noop(theFeature);
 	else
@@ -314,6 +318,8 @@ void ClearTagCommand::redo()
 
 bool ClearTagCommand::buildDirtyList(DirtyList& theList)
 {
+	if (theFeature->lastUpdated() == MapFeature::NotYetDownloaded)
+		return theList.noop(theFeature);
 	if (theLayer->isUploadable())
 		if (theK.startsWith('_') && (theK.endsWith('_')))
 		return theList.noop(theFeature);

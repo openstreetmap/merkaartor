@@ -53,12 +53,14 @@ void RelationAddFeatureCommand::redo()
 
 bool RelationAddFeatureCommand::buildDirtyList(DirtyList& theList)
 {
+	if (theRelation->lastUpdated() == MapFeature::NotYetDownloaded)
+		return theList.noop(theRelation);
 	if (!theRelation->layer())
 		return theList.update(theRelation);
 	if (theRelation->layer()->isUploadable())
 		return theList.update(theRelation);
-	else
-		return theList.noop(theRelation);
+
+	return theList.noop(theRelation);
 }
 
 bool RelationAddFeatureCommand::toXML(QDomElement& xParent) const
@@ -169,12 +171,14 @@ void RelationRemoveFeatureCommand::redo()
 
 bool RelationRemoveFeatureCommand::buildDirtyList(DirtyList& theList)
 {
+	if (theRelation->lastUpdated() == MapFeature::NotYetDownloaded)
+		return theList.noop(theRelation);
 	if (!theRelation->layer())
 		return theList.update(theRelation);
 	if (theRelation->layer()->isUploadable())
 		return theList.update(theRelation);
-	else
-		return theList.noop(theRelation);
+
+	return theList.noop(theRelation);
 }
 
 bool RelationRemoveFeatureCommand::toXML(QDomElement& xParent) const

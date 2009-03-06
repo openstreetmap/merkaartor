@@ -52,12 +52,14 @@ void MoveTrackPointCommand::redo()
 
 bool MoveTrackPointCommand::buildDirtyList(DirtyList &theList)
 {
+	if (thePoint->lastUpdated() == MapFeature::NotYetDownloaded)
+		return theList.noop(thePoint);
 	if (!thePoint->layer())
 		return theList.update(thePoint);
 	if (thePoint->isUploadable())
 		return theList.update(thePoint);
-	else
-		return theList.noop(thePoint);
+
+	return theList.noop(thePoint);
 }
 
 bool MoveTrackPointCommand::toXML(QDomElement& xParent) const
