@@ -205,6 +205,8 @@ void OSMHandler::parseRelation(const QXmlAttributes& atts)
 		}
 		else if (R->lastUpdated() != MapFeature::UserResolved)
 		{
+			R->layer()->remove(R);
+			theLayer->add(R);
 			while (R->size())
 				R->remove((unsigned int)0);
 			NewFeature = true;
