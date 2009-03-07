@@ -1,4 +1,5 @@
 v0.13
+	* FIX : Hardening upload process
 	* FIX : Remove the deleted road from parent when joining
 	* FIX : allow to split/join roads belonging to not-completely-downloaded relations
 	* FIX : Avert crashes by using guarded pointers

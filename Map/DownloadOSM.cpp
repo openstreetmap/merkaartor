@@ -581,7 +581,7 @@ bool downloadTracksFromOSM(QWidget* Main, const QString& aWeb, const QString& aU
 bool checkForConflicts(MapDocument* theDocument)
 {
 	for (FeatureIterator it(theDocument); !it.isEnd(); ++it) {
-		if (it.get()->layer() == theDocument->getTrashLayer())
+		if (it.get()->isDeleted())
 			continue;
 		if (it.get()->lastUpdated() == MapFeature::OSMServerConflict)
 			return true;

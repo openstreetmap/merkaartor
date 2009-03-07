@@ -214,6 +214,8 @@ bool TrackPoint::toXML(QDomElement xParent, QProgressDialog & progress)
 	e.setAttribute("timestamp", time().toString(Qt::ISODate)+"Z");
 	e.setAttribute("user", user());
 	e.setAttribute("actor", (int)lastUpdated());
+	if (isDeleted())
+		e.setAttribute("deleted","true");
 
 	tagsToXML(e);
 
@@ -278,6 +280,7 @@ TrackPoint * TrackPoint::fromXML(MapDocument* d, MapLayer* L, const QDomElement 
 {
 	double Lat = e.attribute("lat").toDouble();
 	double Lon = e.attribute("lon").toDouble();
+	bool Deleted = (e.attribute("deleted") == "true");
 
 	QDateTime time;
 	time = QDateTime::fromString(e.attribute("timestamp").left(19), "yyyy-MM-ddTHH:mm:ss");
@@ -302,6 +305,7 @@ TrackPoint * TrackPoint::fromXML(MapDocument* d, MapLayer* L, const QDomElement 
 		if (Pt->lastUpdated() == MapFeature::NotYetDownloaded)
 			Pt->setLastUpdated(A);
 	}
+	Pt->setDeleted(Deleted);
 	Pt->setTime(time);
 	Pt->setUser(user);
 

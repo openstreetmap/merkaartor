@@ -105,7 +105,7 @@ RemoveFeatureCommand::RemoveFeatureCommand(MapDocument *theDocument, MapFeature 
 {
 	oldLayer = aFeature->layer();
 	Idx = aFeature->layer()->get(aFeature);
-	theLayer = theDocument->getTrashLayer();
+	theLayer = theDocument->getDirtyOrOriginLayer();
 	redo();
 }
 
@@ -123,9 +123,10 @@ RemoveFeatureCommand::RemoveFeatureCommand(MapDocument *theDocument, MapFeature 
 	oldLayer = aFeature->layer();
 	Idx = aFeature->layer()->get(aFeature);
 //	redo();
-	theLayer = theDocument->getTrashLayer();
+	theLayer = theDocument->getDirtyOrOriginLayer();
 	oldLayer->remove(theFeature);
 	theLayer->add(theFeature);
+	theFeature->setDeleted(true);
 	oldLayer->incDirtyLevel();
 	Command::redo();
 }
@@ -135,8 +136,8 @@ RemoveFeatureCommand::~RemoveFeatureCommand()
 	if (oldLayer)
 		oldLayer->decDirtyLevel(commandDirtyLevel);
 	SAFE_DELETE(CascadedCleanUp);
-	if (theLayer->getDocument()->getTrashLayer()->exists(theFeature)) {
-		theLayer->getDocument()->getTrashLayer()->deleteFeature(theFeature);
+	if (theLayer->getDocument()->exists(theFeature)) {
+		theLayer->getDocument()->deleteFeature(theFeature);
 	}
 }
 
@@ -146,6 +147,7 @@ void RemoveFeatureCommand::redo()
 		CascadedCleanUp->redo();
 	oldLayer->remove(theFeature);
 	theLayer->add(theFeature);
+	theFeature->setDeleted(true);
 	incDirtyLevel(oldLayer);
 	Command::redo();
 }
@@ -157,6 +159,7 @@ void RemoveFeatureCommand::undo()
 	if (oldLayer->size() < Idx)
 		Idx = oldLayer->size();
 	oldLayer->add(theFeature,Idx);
+	theFeature->setDeleted(false);
 	decDirtyLevel(oldLayer);
 	if (CascadedCleanUp)
 		CascadedCleanUp->undo();
@@ -224,7 +227,7 @@ RemoveFeatureCommand * RemoveFeatureCommand::fromXML(MapDocument* d, QDomElement
 
 	a->setId(e.attribute("xml:id"));
 	a->oldLayer = d->getLayer(e.attribute("layer"));
-	a->theLayer = d->getTrashLayer();
+	a->theLayer = d->getDirtyOrOriginLayer();
 	a->theFeature = d->getFeature(e.attribute("feature"), false);
 	a->Idx = e.attribute("index").toInt();
 

@@ -239,6 +239,7 @@ public:
 	DeletedMapLayer(const QString& aName);
 	virtual ~DeletedMapLayer();
 
+	virtual bool toXML(QDomElement xParent, QProgressDialog & progress);
 	static DeletedMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
 	virtual const QString className() {return "DeletedMapLayer";}

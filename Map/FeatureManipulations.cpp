@@ -381,7 +381,7 @@ void detachNode(MapDocument* theDocument, CommandList* theList, PropertiesDock* 
 			Road * R = Road::GetSingleParentRoad(Points[i]);
 			if (R)
 				theList->add(new RoadRemoveTrackPointCommand(R, Points[i],
-					theDocument->getDirtyLayer()));
+					theDocument->getDirtyOrOriginLayer(R)));
 		}
 	}
 
@@ -390,7 +390,7 @@ void detachNode(MapDocument* theDocument, CommandList* theList, PropertiesDock* 
 		for (unsigned int i=0; i<Roads.size(); ++i) {
 			if (Roads[i]->find(Points[0]) < Roads[i]->size())
 				theList->add(new RoadRemoveTrackPointCommand(Roads[i], Points[0],
-					theDocument->getDirtyLayer()));
+					theDocument->getDirtyOrOriginLayer(Roads[i])));
 		}
 	}
 
@@ -399,7 +399,7 @@ void detachNode(MapDocument* theDocument, CommandList* theList, PropertiesDock* 
 		for (unsigned int i=0; i<Points.size(); ++i) {
 			if (Roads[0]->find(Points[i]) < Roads[0]->size())
 				theList->add(new RoadRemoveTrackPointCommand(Roads[0], Points[i],
-					theDocument->getDirtyLayer()));
+					theDocument->getDirtyOrOriginLayer(Roads[0])));
 		}
 	}
 }
@@ -414,14 +414,14 @@ void commitFeatures(MapDocument* theDocument, CommandList* theList, PropertiesDo
 			Features.push_back(theDock->selection(i));
 	for (int i=0; i<Features.size(); ++i) {
 		if (TrackPoint* N = dynamic_cast<TrackPoint *>(Features[i])) {
-			theList->add(new AddFeatureCommand(theDocument->getDirtyLayer(),N,true));
+			theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),N,true));
 		}
 		if (Road* R = dynamic_cast<Road *>(Features[i])) {
-			theList->add(new AddFeatureCommand(theDocument->getDirtyLayer(),R,true));
+			theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),R,true));
 			for (unsigned int j=0; j < R->size(); ++j) {
 				if (!Features.contains(R->get(j))) {
 					if ( !(R->get(j)->layer()->isUploadable()) ) {
-						theList->add(new AddFeatureCommand(theDocument->getDirtyLayer(),R->get(j),true));
+						theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),R->get(j),true));
 					}
 				}
 			}

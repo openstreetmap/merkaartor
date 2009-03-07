@@ -46,7 +46,7 @@ void CreateRoundaboutInteraction::testIntersections(CommandList* L, Road* Left, 
 		if (L1.segmentContains(Intersection) && L2.segmentContains(Intersection))
 		{
 			TrackPoint* Pt = new TrackPoint(view()->projection().inverse(Intersection));
-			L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),Pt,true));
+			L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),Pt,true));
 			L->add(new RoadAddTrackPointCommand(Left,Pt,i));
 			L->add(new RoadAddTrackPointCommand(Right,Pt,RightIndex));
 			testIntersections(L,Left,i+2,Right,RightIndex);
@@ -87,17 +87,17 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
 			R->setTag("junction","roundabout");
 			R->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 			CommandList* L  = new CommandList(MainWindow::tr("Create Roundabout %1").arg(R->id()), R);
-			L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),First,true));
+			L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),First,true));
 			for (double a = Angle*3/2; a<2*M_PI; a+=Angle)
 			{
 				QPointF Next(CenterF.x()+cos(Modifier*a)*Radius,CenterF.y()+sin(Modifier*a)*Radius);
 				TrackPoint* New = new TrackPoint(view()->projection().inverse(Next));
 				New->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
-				L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),New,true));
+				L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),New,true));
 				R->add(New);
 			}
 			R->add(First);
-			L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),R,true));
+			L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),R,true));
 			for (FeatureIterator it(document()); !it.isEnd(); ++it)
 			{
 				Road* W1 = dynamic_cast<Road*>(it.get());

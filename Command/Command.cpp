@@ -141,12 +141,12 @@ void Command::fromXML(MapDocument* d, const QDomElement& e, Command* C)
 // COMMANDLIST
 
 CommandList::CommandList()
-: Command(0), Size(0), IsUpdateFromOSM(false)
+: Command(0), Size(0)
 {
 }
 
 CommandList::CommandList(QString aDesc, MapFeature* aFeat)
-: Command(0), Size(0), IsUpdateFromOSM(false)
+: Command(0), Size(0)
 {
 	description = aDesc;
 	mainFeature = aFeat;
@@ -156,11 +156,6 @@ CommandList::~CommandList(void)
 {
 	for (unsigned int i=0; i<Subs.size(); ++i)
 		delete Subs[i];
-}
-
-void CommandList::setIsUpdateFromOSM()
-{
-	IsUpdateFromOSM = true;
 }
 
 void CommandList::add(Command* aCommand)
@@ -193,10 +188,6 @@ void CommandList::undo()
 
 bool CommandList::buildDirtyList(DirtyList& theList)
 {
-	if (IsUpdateFromOSM) {
-		Subs.clear();
-		Size = 0;
-	}
 	for (unsigned int i=0; i<Size;)
 	{
 		if (Subs[i]->buildDirtyList(theList))
@@ -209,6 +200,7 @@ bool CommandList::buildDirtyList(DirtyList& theList)
 		else
 			++i;
 	}
+	
 	return Size == 0;
 }
 
@@ -241,13 +233,13 @@ CommandList* CommandList::fromXML(MapDocument* d, const QDomElement& e)
 		l->description = e.attribute("description");
 	if (e.hasAttribute("feature")) {
 		if (e.attribute("featureclass") == "TrackPoint") {
-			l->mainFeature = (MapFeature*) MapFeature::getTrackPointOrCreatePlaceHolder(d, (MapLayer *) d->getDirtyLayer(), e.attribute("feature"));
+			l->mainFeature = (MapFeature*) MapFeature::getTrackPointOrCreatePlaceHolder(d, (MapLayer *) d->getDirtyOrOriginLayer(), e.attribute("feature"));
 		} else 
 		if (e.attribute("featureclass") == "Road") {
-			l->mainFeature = (MapFeature*) MapFeature::getWayOrCreatePlaceHolder(d, (MapLayer *) d->getDirtyLayer(), e.attribute("feature"));
+			l->mainFeature = (MapFeature*) MapFeature::getWayOrCreatePlaceHolder(d, (MapLayer *) d->getDirtyOrOriginLayer(), e.attribute("feature"));
 		} else 
 		if (e.attribute("featureclass") == "Relation") {
-			l->mainFeature = (MapFeature*) MapFeature::getRelationOrCreatePlaceHolder(d, (MapLayer *) d->getDirtyLayer(), e.attribute("feature"));
+			l->mainFeature = (MapFeature*) MapFeature::getRelationOrCreatePlaceHolder(d, (MapLayer *) d->getDirtyOrOriginLayer(), e.attribute("feature"));
 		}
 	}
 
@@ -417,6 +409,7 @@ unsigned int CommandHistory::buildDirtyList(DirtyList& theList)
 		}
 		else
 			++i;
+
 	return Index;
 }
 

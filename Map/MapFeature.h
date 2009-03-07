@@ -176,17 +176,26 @@ class MapFeature : public QObject
 		/** check if the feature is on the dirty layer
 		 * @return true if on the dirty layer
 		 */
-		bool isDirty();
+		bool isDirty() const;
 
 		/** check if the feature is on an uploadable layer
 		 * @return true if on an uploadable layer
 		 */
-		bool isUploadable();
+		bool isUploadable() const;
 
-		/** check if the feature is deleted
-		 * @return true if deleted
+		/** set the logical delete state of the feature
 		 */
-		bool isDeleted();
+		void setDeleted(bool delState);
+
+		/** check if the feature is logically deleted
+		 * @return true if logically deleted
+		 */
+		bool isDeleted() const;
+
+		/** check if the feature has been uploaded
+		 * @return true if uploaded
+		 */
+		bool isUploaded() const;
 
 		const FeaturePainter* getEditPainter(double PixelPerM) const;
 		const FeaturePainter* getCurrentEditPainter() const;

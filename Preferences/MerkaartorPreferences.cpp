@@ -1041,6 +1041,7 @@ void MerkaartorPreferences::setOsmWebsite(const QString & theValue)
 }
 
 M_PARAM_IMPLEMENT_STRING(XapiWebSite, osm, "www.informationfreeway.org")
+M_PARAM_IMPLEMENT_BOOL(AutoHistoryCleanup, data, true);
 
 QString MerkaartorPreferences::getOsmUser() const
 {

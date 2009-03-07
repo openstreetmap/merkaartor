@@ -68,12 +68,17 @@ DirtyList::~DirtyList()
 
 bool DirtyListBuild::add(MapFeature* F)
 {
+	if (!F->isDirty()) return false;
+	if (F->hasOSMId()) return false;
+
 	Added.push_back(F);
 	return false;
 }
 
 bool DirtyListBuild::update(MapFeature* F)
 {
+	if (!F->isDirty()) return false;
+
 	for (unsigned int i=0; i<Updated.size(); ++i)
 		if (Updated[i] == F)
 		{
@@ -87,6 +92,8 @@ bool DirtyListBuild::update(MapFeature* F)
 
 bool DirtyListBuild::erase(MapFeature* F)
 {
+	if (!F->isDirty()) return false;
+
 	Deleted.push_back(F);
 	return false;
 }
@@ -161,6 +168,9 @@ bool DirtyListVisit::notYetAdded(MapFeature* F)
 bool DirtyListVisit::add(MapFeature* F)
 {
 	if (DeletePass) return false;
+	if (!F->isDirty()) return false;
+	if (F->hasOSMId()) return false;
+
 	if (Future.willBeErased(F))
 		return EraseFromHistory;
 	for (unsigned int i=0; i<AlreadyAdded.size(); ++i)
@@ -204,6 +214,8 @@ bool DirtyListVisit::add(MapFeature* F)
 bool DirtyListVisit::update(MapFeature* F)
 {
 	if (DeletePass) return false;
+	if (!F->isDirty()) return false;
+
 	if (Future.willBeErased(F) || Future.willBeAdded(F))
 		return EraseFromHistory;
 	if (!Future.updateNow(F))
@@ -234,6 +246,8 @@ bool DirtyListVisit::update(MapFeature* F)
 
 bool DirtyListVisit::erase(MapFeature* F)
 {
+	if (!F->isDirty()) return false;
+
 	if (DeletePass) {
 		if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(F))
 			return TrackPointsToDelete[Pt];
@@ -259,6 +273,8 @@ bool DirtyListVisit::erase(MapFeature* F)
 
 bool DirtyListVisit::noop(MapFeature* F)
 {
+	if (!F->isDirty()) return false;
+
 	if (!F->isDeleted() && !F->isUploadable())
 		return false;
 
@@ -362,7 +378,7 @@ bool DirtyListDescriber::eraseRelation(Relation* R)
 
 DirtyListExecutor::DirtyListExecutor(MapDocument* aDoc, const DirtyListBuild& aFuture, const QString& aWeb, const QString& aUser, const QString& aPwd,
 									 bool aUseProxy, const QString& aProxyHost, int aProxyPort, unsigned int aTasks)
-: DirtyListVisit(aDoc, aFuture, true), Tasks(aTasks), Done(0), Web(aWeb), User(aUser), Pwd(aPwd),
+: DirtyListVisit(aDoc, aFuture, false), Tasks(aTasks), Done(0), Web(aWeb), User(aUser), Pwd(aPwd),
   UseProxy(aUseProxy), ProxyHost(aProxyHost), ProxyPort(aProxyPort), theDownloader(0)
 {
 	theDownloader = new Downloader(Web, User, Pwd, UseProxy, ProxyHost, ProxyPort);
@@ -376,34 +392,47 @@ DirtyListExecutor::~DirtyListExecutor()
 
 bool DirtyListExecutor::sendRequest(const QString& Method, const QString& URL, const QString& Data, QString& Rcv)
 {
-	if (!theDownloader->request(Method,URL,Data))
-	{
-		if (theDownloader->resultCode() == 401)
-			QMessageBox::warning(Progress,tr("Error uploading request"),
-				tr("Please check your username and password in the Preferences menu"));
-		else {
-			QString msg = tr("There was an error uploading this request (%1)\nServer message is '%2'").arg(theDownloader->resultCode()).arg(theDownloader->resultText());
-			if (!theDownloader->errorText().isEmpty())
-				msg += tr("\nAPI message is '%1'").arg(theDownloader->errorText());
-			QMessageBox::warning(Progress,tr("Error uploading request"), msg);
+	if (inError())
+		return false;
+
+	QMessageBox::StandardButton theChoice = QMessageBox::Retry;
+	while (theChoice == QMessageBox::Retry) {
+		if (!theDownloader->request(Method,URL,Data))
+		{
+			if (theDownloader->resultCode() == 401) {
+				QMessageBox::warning(Progress,tr("Error uploading request"),
+					tr("Please check your username and password in the Preferences menu"));
+				theChoice = QMessageBox::Abort;
+			} else {
+				QString msg = tr("There was an error uploading this request (%1)\nServer message is '%2'").arg(theDownloader->resultCode()).arg(theDownloader->resultText());
+				if (!theDownloader->errorText().isEmpty())
+					msg += tr("\nAPI message is '%1'").arg(theDownloader->errorText());
+				theChoice = QMessageBox::warning(Progress,tr("Error uploading request"), msg, QMessageBox::Abort | QMessageBox::Retry | QMessageBox::Ignore);
+				continue;
+			}
 		}
+
+		QByteArray Content = theDownloader->content();
+		int x = theDownloader->resultCode();
+
+		if (x==200)
+		{
+			Rcv = QString::fromUtf8(Content.data());
+			break;
+		}
+		else
+		{
+			theChoice = QMessageBox::warning(Progress,tr("Error uploading request"),
+							tr("There was an error uploading this request (%1)\nServer message is '%2'").arg(x).arg(theDownloader->resultText()),
+							QMessageBox::Abort | QMessageBox::Retry | QMessageBox::Ignore);
+			continue;
+		}
+	}
+	if (theChoice == QMessageBox::Abort) {
+		errorAbort = true;
 		return false;
 	}
-
-	QByteArray Content = theDownloader->content();
-	int x = theDownloader->resultCode();
-
-	if (x==200)
-	{
-		Rcv = QString::fromUtf8(Content.data());
-		return true;
-	}
-	else
-	{
-		QMessageBox::warning(Progress,tr("Error uploading request"),tr("There was an error uploading this request (%1)\nServer message is '%2'").arg(x).arg(theDownloader->resultText()));
-	}
-	return false;
-
+	return true;
 }
 
 bool DirtyListExecutor::executeChanges(QWidget* aParent)
@@ -470,6 +499,8 @@ bool DirtyListExecutor::stop()
 bool DirtyListExecutor::addRelation(Relation *R)
 {
 	Progress->setValue(++Done);
+	if (!R->isDirty()) return false;
+
 	Progress->setLabelText(tr("ADD relation %1").arg(R->id()) + userName(R));
 	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 
@@ -495,6 +526,8 @@ bool DirtyListExecutor::addRelation(Relation *R)
 bool DirtyListExecutor::addRoad(Road *R)
 {
 	Progress->setValue(++Done);
+	if (!R->isDirty()) return false;
+
 	Progress->setLabelText(tr("ADD road %1").arg(R->id()) + userName(R));
 	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 
@@ -521,6 +554,8 @@ bool DirtyListExecutor::addRoad(Road *R)
 bool DirtyListExecutor::addPoint(TrackPoint* Pt)
 {
 	Progress->setValue(++Done);
+	if (!Pt->isDirty()) return false;
+
 	Progress->setLabelText(tr("ADD trackpoint %1").arg(Pt->id()) + userName(Pt));
 	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 
@@ -548,6 +583,8 @@ bool DirtyListExecutor::addPoint(TrackPoint* Pt)
 bool DirtyListExecutor::updateRelation(Relation* R)
 {
 	Progress->setValue(++Done);
+	if (!R->isDirty()) return false;
+
 	Progress->setLabelText(tr("UPDATE relation %1").arg(R->id()) + userName(R));
 	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 	QString URL = theDownloader->getURLToUpdate("relation",stripToOSMId(R->id()));
@@ -574,6 +611,8 @@ bool DirtyListExecutor::updateRelation(Relation* R)
 bool DirtyListExecutor::updateRoad(Road* R)
 {
 	Progress->setValue(++Done);
+	if (!R->isDirty()) return false;
+
 	Progress->setLabelText(tr("UPDATE road %1").arg(R->id()) + userName(R));
 	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 //	QString URL("/api/0.3/way/%1");
@@ -601,6 +640,8 @@ bool DirtyListExecutor::updateRoad(Road* R)
 bool DirtyListExecutor::updatePoint(TrackPoint* Pt)
 {
 	Progress->setValue(++Done);
+	if (!Pt->isDirty()) return false;
+
 	Progress->setLabelText(tr("UPDATE trackpoint %1").arg(Pt->id()) + userName(Pt));
 	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 //	QString URL("/api/0.3/node/%1");
@@ -628,6 +669,8 @@ bool DirtyListExecutor::updatePoint(TrackPoint* Pt)
 bool DirtyListExecutor::erasePoint(TrackPoint *Pt)
 {
 	Progress->setValue(++Done);
+	if (!Pt->isDirty()) return false;
+
 	Progress->setLabelText(tr("REMOVE trackpoint %1").arg(Pt->id()) + userName(Pt));
 	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 //	QString URL("/api/0.3/node/%1");
@@ -639,6 +682,8 @@ bool DirtyListExecutor::erasePoint(TrackPoint *Pt)
 	if (sendRequest("DELETE",URL,DataIn,DataOut))
 	{
 		Pt->setLastUpdated(MapFeature::OSMServer);
+		Pt->layer()->remove(Pt);
+		document()->getUploadedLayer()->add(Pt);
 		return true;
 	}
 	return false;
@@ -647,6 +692,8 @@ bool DirtyListExecutor::erasePoint(TrackPoint *Pt)
 bool DirtyListExecutor::eraseRoad(Road *R)
 {
 	Progress->setValue(++Done);
+	if (!R->isDirty()) return false;
+
 	Progress->setLabelText(tr("REMOVE road %1").arg(R->id()) + userName(R));
 	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 //	QString URL("/api/0.3/way/%1");
@@ -658,6 +705,8 @@ bool DirtyListExecutor::eraseRoad(Road *R)
 	if (sendRequest("DELETE",URL,DataIn,DataOut))
 	{
 		R->setLastUpdated(MapFeature::OSMServer);
+		R->layer()->remove(R);
+		document()->getUploadedLayer()->add(R);
 		return true;
 	}
 	return false;
@@ -666,6 +715,8 @@ bool DirtyListExecutor::eraseRoad(Road *R)
 bool DirtyListExecutor::eraseRelation(Relation *R)
 {
 	Progress->setValue(++Done);
+	if (!R->isDirty()) return false;
+
 	Progress->setLabelText(tr("REMOVE relation %1").arg(R->id()) + userName(R));
 	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 	QString URL = theDownloader->getURLToDelete("relation",stripToOSMId(R->id()));
@@ -675,6 +726,8 @@ bool DirtyListExecutor::eraseRelation(Relation *R)
 	if (sendRequest("DELETE",URL,DataIn,DataOut))
 	{
 		R->setLastUpdated(MapFeature::OSMServer);
+		R->layer()->remove(R);
+		document()->getUploadedLayer()->add(R);
 		return true;
 	}
 	return false;

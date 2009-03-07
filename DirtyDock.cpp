@@ -40,6 +40,11 @@ DirtyDock::DirtyDock(MainWindow* aParent)
 	connect(ui.ChangesList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(on_ChangesList_itemDoubleClicked(QListWidgetItem*)));
 	connect(ui.ChangesList, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(on_ChangesList_customContextMenuRequested(const QPoint &)));
 
+	if (M_PREFS->getAutoHistoryCleanup())
+		ui.pbCleanupHistory->setVisible(false);
+	else
+		connect(ui.pbCleanupHistory, SIGNAL(clicked()), this, SLOT(on_pbCleanupHistory_clicked()));
+
 	retranslateUi();
 }
 
@@ -54,7 +59,7 @@ void DirtyDock::updateList()
 	if (!Main->document())
 		return;
 
-	int dirtyObjects = Main->document()->getDirtyLayer()->size();
+	int dirtyObjects = Main->document()->getDirtyOrOriginLayer()->size();
 
 	switch (dirtyObjects)
 	{
@@ -70,9 +75,18 @@ void DirtyDock::updateList()
 			break;
 	}
 
+	if (M_PREFS->getAutoHistoryCleanup() && !dirtyObjects)
+		Main->document()->history().cleanup();
+	
 	ui.ChangesList->clear();
-
 	Main->document()->history().buildUndoList(ui.ChangesList);
+
+	if (!M_PREFS->getAutoHistoryCleanup()) {
+		if (!dirtyObjects && ui.ChangesList->count())
+			ui.pbCleanupHistory->setEnabled(true);
+		else
+			ui.pbCleanupHistory->setEnabled(false);
+	}
 }
 
 void DirtyDock::on_ChangesList_itemSelectionChanged()
@@ -161,6 +175,12 @@ void DirtyDock::on_centerZoomAction_triggered()
 		Main->invalidateView();
 	}
 	Main->setUpdatesEnabled(true);
+}
+
+void DirtyDock::on_pbCleanupHistory_clicked()
+{
+	Main->document()->history().cleanup();
+	updateList();
 }
 
 void DirtyDock::changeEvent(QEvent * event)

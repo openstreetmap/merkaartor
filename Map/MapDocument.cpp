@@ -24,7 +24,7 @@ class MapDocumentPrivate
 {
 public:
 	MapDocumentPrivate()
-	: History(new CommandHistory()), imageLayer(0), dirtyLayer(0), uploadedLayer(0), trashLayer(0), theDock(0), lastDownloadLayer(0)
+	: History(new CommandHistory()), imageLayer(0), dirtyLayer(0), uploadedLayer(0)/*, trashLayer(0)*/, theDock(0), lastDownloadLayer(0)
 	{
     	tagList.insert("created_by", QString("Merkaartor %1").arg(VERSION));
 		tagKeys.append("created_by");
@@ -45,7 +45,7 @@ public:
 	ImageMapLayer*				imageLayer;
 	DirtyMapLayer*				dirtyLayer;
 	UploadedMapLayer*			uploadedLayer;
-	DeletedMapLayer*			trashLayer;
+	//DeletedMapLayer*			trashLayer;
 	LayerDock*					theDock;
 	MapLayer*					lastDownloadLayer;
 
@@ -62,8 +62,8 @@ MapDocument::MapDocument()
 	p->imageLayer = new ImageMapLayer(tr("Background imagery"));
 	add(p->imageLayer);
 
-	p->trashLayer = new DeletedMapLayer(tr("Trash layer"));
-	add(p->trashLayer);
+	//p->trashLayer = new DeletedMapLayer(tr("Trash layer"));
+	//add(p->trashLayer);
 
 	p->dirtyLayer = new DirtyMapLayer(tr("Dirty layer"));
 	add(p->dirtyLayer);
@@ -80,8 +80,8 @@ MapDocument::MapDocument(LayerDock* aDock)
 	p->imageLayer = new ImageMapLayer(tr("Background imagery"));
 	add(p->imageLayer);
 
-	p->trashLayer = new DeletedMapLayer(tr("Trash layer"));
-	add(p->trashLayer);
+	//p->trashLayer = new DeletedMapLayer(tr("Trash layer"));
+	//add(p->trashLayer);
 
 	p->dirtyLayer = new DirtyMapLayer(tr("Dirty layer"));
 	add(p->dirtyLayer);
@@ -348,6 +348,15 @@ bool MapDocument::exists(MapFeature* F) const
 	return false;
 }
 
+void MapDocument::deleteFeature(MapFeature* aFeature)
+{
+	for (unsigned int i=0; i<p->Layers.size(); ++i)
+		if (p->Layers[i]->exists(aFeature)) {
+			p->Layers[i]->deleteFeature(aFeature);
+			return;
+		}
+}
+
 unsigned int MapDocument::layerSize() const
 {
 	return p->Layers.size();
@@ -409,22 +418,30 @@ ImageMapLayer* MapDocument::getImageLayer() const
 	return p->imageLayer;
 }
 
-DirtyMapLayer* MapDocument::getDirtyLayer() const
-{
-	return p->dirtyLayer;
-}
+//DirtyMapLayer* MapDocument::getDirtyLayer() const
+//{
+//	return p->dirtyLayer;
+//}
 
-DeletedMapLayer* MapDocument::getTrashLayer() const
-{
-	return p->trashLayer;
-}
+//DeletedMapLayer* MapDocument::getTrashLayer() const
+//{
+//	return p->trashLayer;
+//}
 
-MapLayer* MapDocument::getDirtyOrOriginLayer(MapLayer* aLayer) 
+MapLayer* MapDocument::getDirtyOrOriginLayer(MapLayer* aLayer) const
 {
-	if (aLayer->isUploadable())
+	if (!aLayer || aLayer->isUploadable())
 		return p->dirtyLayer;
 	else
 		return aLayer;
+}
+
+MapLayer* MapDocument::getDirtyOrOriginLayer(MapFeature* F) const
+{
+	if (!F || !F->layer() || F->layer()->isUploadable())
+		return p->dirtyLayer;
+	else
+		return F->layer();
 }
 
 UploadedMapLayer* MapDocument::getUploadedLayer() const
@@ -666,7 +683,8 @@ VisibleFeatureIterator::VisibleFeatureIterator(MapDocument *aDoc)
 		if (!theDocument->getLayer(i)->isVisible())
 			continue;
 		for (unsigned int j=0; j<theDocument->getLayer(i)->size(); ++j)
-			if (theDocument->getLayer(i)->get(j)->lastUpdated() != MapFeature::NotYetDownloaded)
+			if ((theDocument->getLayer(i)->get(j)->lastUpdated() != MapFeature::NotYetDownloaded) &&
+					!theDocument->getLayer(i)->get(j)->isDeleted())
 				theFeatures.push_back(theDocument->getLayer(i)->get(j));
 	}
 }
@@ -731,13 +749,13 @@ std::pair<bool,CoordBox> boundingBox(const MapDocument* theDocument)
 {
 	unsigned int First;
 	for (First = 0; First < theDocument->layerSize(); ++First)
-		if (theDocument->getLayer(First)->size() && theDocument->getLayer(First) != theDocument->getTrashLayer())
+		if (theDocument->getLayer(First)->size())
 			break;
 	if (First == theDocument->layerSize())
 		return std::make_pair(false,CoordBox(Coord(0,0),Coord(0,0)));
 	CoordBox BBox(MapLayer::boundingBox(theDocument->getLayer(First)));
 	for (unsigned int i=First+1; i<theDocument->layerSize(); ++i)
-		if (theDocument->getLayer(i)->size() && theDocument->getLayer(First) != theDocument->getTrashLayer())
+		if (theDocument->getLayer(i)->size())
 			BBox.merge(MapLayer::boundingBox(theDocument->getLayer(i)));
 	return std::make_pair(true,BBox);
 }
@@ -745,6 +763,6 @@ std::pair<bool,CoordBox> boundingBox(const MapDocument* theDocument)
 bool hasUnsavedChanges(const MapDocument& aDoc)
 {
 //	return aDoc.history().index();
-	return (aDoc.getDirtyLayer()->size() > 0);
+	return (aDoc.getDirtyOrOriginLayer()->size() > 0);
 }
 

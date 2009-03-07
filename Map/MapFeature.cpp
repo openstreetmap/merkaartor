@@ -39,7 +39,7 @@ class MapFeaturePrivate
 				PossiblePaintersUpToDate(false),
 			  	PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
 				theFeature(0), LastPartNotification(0),
-				Time(QDateTime::currentDateTime())
+				Time(QDateTime::currentDateTime()), Deleted(false)
 		{
 			initVersionNumber();
 			parentDashes << 1 << 5;
@@ -49,7 +49,7 @@ class MapFeaturePrivate
 				PossiblePaintersUpToDate(false),
 			  	PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
 				theFeature(0), LastPartNotification(0),
-				Time(other.Time)
+				Time(other.Time), Deleted(false)
 		{
 			initVersionNumber();
 			parentDashes << 1 << 5;
@@ -76,6 +76,7 @@ class MapFeaturePrivate
 		QString User;
 		int VersionNumber;
 		QVector<qreal> parentDashes;
+		bool Deleted;
 
 };
 
@@ -214,19 +215,29 @@ void MapFeature::setUser(const QString& user)
 	notifyChanges();
 }
 
-bool MapFeature::isDirty()
+bool MapFeature::isDirty() const
 {
 	return (p->theLayer->className() == "DirtyMapLayer");
 }
 
-bool MapFeature::isUploadable()
+bool MapFeature::isUploaded() const
+{
+	return (p->theLayer->className() == "UploadedMapLayer");
+}
+
+bool MapFeature::isUploadable() const
 {
 	return (p->theLayer->isUploadable());
 }
 
-bool MapFeature::isDeleted()
+void MapFeature::setDeleted(bool delState)
 {
-	return (p->theLayer->className() == "DeletedMapLayer");
+	p->Deleted = delState;
+}
+
+bool MapFeature::isDeleted() const
+{
+	return p->Deleted;
 }
 
 void MapFeature::setTag(unsigned int index, const QString& key, const QString& value, bool addToTagList)

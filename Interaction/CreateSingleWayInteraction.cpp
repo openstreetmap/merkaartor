@@ -106,7 +106,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Map
 				TrackPoint* N = new TrackPoint(P);
 				N->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 				CommandList* theList  = new CommandList(MainWindow::tr("Create Node %1 in Road %2").arg(N->description()).arg(aRoad->description()), N);
-				theList->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),N,true));
+				theList->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),N,true));
 				theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx));
 				document()->addHistory(theList);
 				view()->invalidate(true, false);
@@ -126,15 +126,15 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Map
 				if (FirstNode) {
 					From = FirstNode;
 					if (!From->isDirty() && !From->hasOSMId() && From->isUploadable())
-						L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),From,true));
+						L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),From,true));
 				}
 				else
 				{
 					From = new TrackPoint(FirstPoint);
 					From->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
-					L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),From,true));
+					L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),From,true));
 				}
-				L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),theRoad,true));
+				L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),theRoad,true));
 				L->add(new RoadAddTrackPointCommand(theRoad,From));
 				L->setDescription(MainWindow::tr("Create Road: %1").arg(theRoad->description()));
 				L->setFeature(theRoad);
@@ -143,7 +143,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Map
 			if (Pt) {
 				To = Pt;
 				if (!To->isDirty() && !To->hasOSMId() && To->isUploadable()) {
-					L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),To,true));
+					L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),To,true));
 					L->setDescription(MainWindow::tr("Create Node: %1").arg(To->description()));
 				}
 			}
@@ -154,8 +154,8 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Map
 				TrackPoint* N = new TrackPoint(P);
 				N->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 				CommandList* theList  = new CommandList(MainWindow::tr("Create Node %1 in Road %2").arg(N->description()).arg(aRoad->description()), N);
-				theList->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),N,true));
-				theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx,Main->document()->getDirtyLayer()));
+				theList->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),N,true));
+				theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx,Main->document()->getDirtyOrOriginLayer(aRoad)));
 				document()->addHistory(theList);
 				view()->invalidate(true, false);
 				To = N;
@@ -164,15 +164,15 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Map
 			{
 				To = new TrackPoint(view()->projection().inverse(anEvent->pos()));
 				To->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
-				L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),To,true));
+				L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),To,true));
 				L->setDescription(MainWindow::tr("Create Node %1 in Road %2").arg(To->description()).arg(theRoad->description()));
 				L->setFeature(To);
 			}
 			L->setDescription(MainWindow::tr("Add Node %1 to Road %2").arg(To->description()).arg(theRoad->description()));
 			if (Prepend)
-				L->add(new RoadAddTrackPointCommand(theRoad,To,(unsigned int)0,Main->document()->getDirtyLayer()));
+				L->add(new RoadAddTrackPointCommand(theRoad,To,(unsigned int)0,Main->document()->getDirtyOrOriginLayer(theRoad)));
 			else
-				L->add(new RoadAddTrackPointCommand(theRoad,To,Main->document()->getDirtyLayer()));
+				L->add(new RoadAddTrackPointCommand(theRoad,To,Main->document()->getDirtyOrOriginLayer(theRoad)));
 			document()->addHistory(L);
 			view()->invalidate(true, false);
 			Main->properties()->setSelection(theRoad);

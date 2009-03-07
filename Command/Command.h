@@ -63,7 +63,6 @@ class CommandList : public Command
 		unsigned int size();
 		void add(Command* aCommand);
 		virtual bool buildDirtyList(DirtyList& theList);
-		void setIsUpdateFromOSM();
 
 		virtual bool toXML(QDomElement& xParent) const;
 		static CommandList* fromXML(MapDocument* d, const QDomElement& e);
@@ -71,7 +70,6 @@ class CommandList : public Command
 	private:
 		std::vector<Command*> Subs;
 		unsigned int Size;
-		bool IsUpdateFromOSM;
 };
 
 class CommandHistory

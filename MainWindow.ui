@@ -1399,7 +1399,7 @@
     <string>Hide/Show the Styles dock</string>
    </property>
    <property name="shortcut" >
-    <string>Ctrl+Y</string>
+    <string>Ctrl+B</string>
    </property>
   </action>
  </widget>

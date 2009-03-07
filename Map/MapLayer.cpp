@@ -371,9 +371,18 @@ const QString& MapLayer::id() const
 CoordBox MapLayer::boundingBox(const MapLayer* theLayer)
 {
 	if(theLayer->size()==0) return CoordBox(Coord(0,0),Coord(0,0));
-	CoordBox Box(theLayer->get(0)->boundingBox());
-	for (unsigned int i=1; i<theLayer->size(); ++i)
-		Box.merge(theLayer->get(i)->boundingBox());
+	CoordBox Box;
+	bool haveFirst = false;
+	for (unsigned int i=0; i<theLayer->size(); ++i) {
+		if (theLayer->get(i)->isDeleted())
+			continue;
+		if (haveFirst)
+			Box.merge(theLayer->get(i)->boundingBox());
+		else {
+			Box = theLayer->get(i)->boundingBox();
+			haveFirst = true;
+		}
+	}
 	return Box;
 }
 
@@ -1026,8 +1035,8 @@ DirtyMapLayer::~ DirtyMapLayer()
 
 DirtyMapLayer* DirtyMapLayer::fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress)
 {
-	DrawingMapLayer::doFromXML(d->getDirtyLayer(), d, e, progress);
-	return d->getDirtyLayer();
+	DrawingMapLayer::doFromXML(dynamic_cast<DrawingMapLayer*>(d->getDirtyOrOriginLayer()), d, e, progress);
+	return dynamic_cast<DirtyMapLayer*>(d->getDirtyOrOriginLayer());
 }
 
 LayerWidget* DirtyMapLayer::newWidget(void)
@@ -1104,10 +1113,16 @@ DeletedMapLayer::~ DeletedMapLayer()
 {
 }
 
+bool DeletedMapLayer::toXML(QDomElement , QProgressDialog & )
+{
+	return true;
+}
+
 DeletedMapLayer* DeletedMapLayer::fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress)
 {
-	DrawingMapLayer::doFromXML(d->getTrashLayer(), d, e, progress);
-	return d->getTrashLayer();
+	/* Only keep DeletedMapLayer for backward compatibility with MDC */
+	DrawingMapLayer::doFromXML(dynamic_cast<DrawingMapLayer*>(d->getDirtyOrOriginLayer()), d, e, progress);
+	return NULL;
 }
 
 LayerWidget* DeletedMapLayer::newWidget(void)

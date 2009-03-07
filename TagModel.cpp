@@ -131,7 +131,7 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
 				{
 					if (!theFeatures[i]->isDirty() && !theFeatures[i]->hasOSMId() && theFeatures[i]->isUploadable()) {
 						bool userAdded = !theFeatures[i]->id().startsWith("conflict_");
-						L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),theFeatures[i],userAdded));
+						L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),theFeatures[i],userAdded));
 					}
 					L->add(new SetTagCommand(theFeatures[i],value.toString(),"", Main->document()->getDirtyOrOriginLayer(theFeatures[i]->layer())));
 					theFeatures[i]->setLastUpdated(MapFeature::User);
@@ -157,7 +157,7 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
 				if (j<theFeatures[i]->tagSize()) {
 					if (!theFeatures[i]->isDirty() && !theFeatures[i]->hasOSMId() && theFeatures[i]->isUploadable()) {
 						bool userAdded = !theFeatures[i]->id().startsWith("conflict_");
-						L->add(new AddFeatureCommand(Main->document()->getDirtyLayer(),theFeatures[i],userAdded));
+						L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),theFeatures[i],userAdded));
 					}
 					L->add(new SetTagCommand(theFeatures[i],j , Tags[index.row()].first, Tags[index.row()].second, Main->document()->getDirtyOrOriginLayer(theFeatures[i]->layer())));
 				}

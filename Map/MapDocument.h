@@ -45,6 +45,7 @@ public:
 	void remove(MapLayer* aLayer);
 	bool exists(MapLayer* aLayer) const;
 	bool exists(MapFeature* aFeature) const;
+	void deleteFeature(MapFeature* aFeature);
 	unsigned int layerSize() const;
 	MapLayer* getLayer(const QString& id);
 	MapLayer* getLayer(unsigned int i);
@@ -73,10 +74,11 @@ public:
 	QString getTagValue(int idx);
 
 	ImageMapLayer* getImageLayer() const;
-	DirtyMapLayer* getDirtyLayer() const;
-	MapLayer* getDirtyOrOriginLayer(MapLayer* aLayer);
+	//DirtyMapLayer* getDirtyLayer() const;
+	MapLayer* getDirtyOrOriginLayer(MapLayer* aLayer = NULL) const;
+	MapLayer* getDirtyOrOriginLayer(MapFeature* F) const;
 	UploadedMapLayer* getUploadedLayer() const;
-	DeletedMapLayer* getTrashLayer() const;
+	//DeletedMapLayer* getTrashLayer() const;
 
 	QString exportOSM(const CoordBox& aCoordBox = WORLD_COORDBOX, bool renderBounds=false);
 	QString exportOSM(QVector<MapFeature*> aFeatures);

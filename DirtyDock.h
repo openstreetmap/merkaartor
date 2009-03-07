@@ -40,6 +40,7 @@ public slots:
 	void on_ChangesList_customContextMenuRequested(const QPoint & pos);
 	void on_centerAction_triggered();
 	void on_centerZoomAction_triggered();
+	void on_pbCleanupHistory_clicked();
 
 private:
 	MainWindow* Main;

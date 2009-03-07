@@ -413,7 +413,7 @@ MapDocument* MainWindow::getDocumentFromClipboard()
 	}
 
 	MapDocument* NewDoc = new MapDocument(NULL);
-	MapLayer* l = NewDoc->getDirtyLayer();
+	MapLayer* l = NewDoc->getDirtyOrOriginLayer();
 
 	c = c.firstChildElement();
 	while(!c.isNull()) {
@@ -1266,7 +1266,7 @@ void MainWindow::on_createRelationAction_triggered()
 		R->add("", theProperties->selection(i));
 	CommandList* theList = new CommandList(MainWindow::tr("Create Relation %1").arg(R->description()), R);
 	theList->add(
-		new AddFeatureCommand(document()->getDirtyLayer(), R, true));
+		new AddFeatureCommand(document()->getDirtyOrOriginLayer(), R, true));
 	theDocument->addHistory(theList);
 	theProperties->setSelection(R);
 }

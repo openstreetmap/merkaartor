@@ -42,7 +42,7 @@ void CreateNodeInteraction::snapMouseReleaseEvent(QMouseEvent * ev, Road* aRoad)
 			TrackPoint* N = new TrackPoint(P);
 			N->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 			CommandList* theList  = new CommandList(MainWindow::tr("Create point %1").arg(N->id()), aRoad);
-			theList->add(new AddFeatureCommand(main()->document()->getDirtyLayer(),N,true));
+			theList->add(new AddFeatureCommand(main()->document()->getDirtyOrOriginLayer(),N,true));
 			document()->addHistory(theList);
 			main()->properties()->setSelection(N);
 			view()->invalidate(true, false);

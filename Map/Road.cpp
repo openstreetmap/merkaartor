@@ -420,7 +420,7 @@ void Road::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature,
 					Alternatives.push_back(Pt);
 			}
 			if ( (p->Nodes.size() == 1) && (Alternatives.size() == 0) ) {
-				if (!(layer() == theDocument->getTrashLayer()))
+				if (!isDeleted())
 					theList->add(new RemoveFeatureCommand(theDocument,this));
 			}
 			else
@@ -554,7 +554,7 @@ bool Road::deleteChildren(MapDocument* theDocument, CommandList* theList)
 			}
 			QList<MapFeature*> ToDeleteKeys = ToDelete.uniqueKeys();
 			for (int i=0; i<ToDeleteKeys.size(); ++i) {
-				if (!theDocument->getTrashLayer()->exists(ToDeleteKeys[i]))
+				if (!ToDeleteKeys[i]->isDeleted())
 					theList->add(new RemoveFeatureCommand(theDocument, ToDeleteKeys[i], Alternatives));
 			}
 			return true;
@@ -653,6 +653,8 @@ bool Road::toXML(QDomElement xParent, QProgressDialog & progress)
 	e.setAttribute("timestamp", time().toString(Qt::ISODate)+"Z");
 	e.setAttribute("user", user());
 	e.setAttribute("actor", (int)lastUpdated());
+	if (isDeleted())
+		e.setAttribute("deleted","true");
 
 	QDomElement n = xParent.ownerDocument().createElement("nd");
 	e.appendChild(n);
@@ -680,11 +682,12 @@ Road * Road::fromXML(MapDocument* d, MapLayer * L, const QDomElement e)
 		id = "way_" + id;
 	QDateTime time = QDateTime::fromString(e.attribute("timestamp").left(19), "yyyy-MM-ddTHH:mm:ss");
 	QString user = e.attribute("user");
+	bool Deleted = (e.attribute("deleted") == "true");
 	MapFeature::ActorType A;
 	if (e.hasAttribute("actor"))
 		A = (MapFeature::ActorType)(e.attribute("actor", "2").toInt());
 	else
-		if ((L = d->getDirtyLayer()))
+		if ((L = d->getDirtyOrOriginLayer()))
 			A = MapFeature::User;
 		else
 			A = MapFeature::OSMServer;
@@ -706,6 +709,7 @@ Road * Road::fromXML(MapDocument* d, MapLayer * L, const QDomElement e)
 	}
 	R->setTime(time);
 	R->setUser(user);
+	R->setDeleted(Deleted);
 
 	QDomElement c = e.firstChildElement();
 	while(!c.isNull()) {
