@@ -49,6 +49,9 @@ void WMSPreferencesDialog::on_btApplyWmsServer_clicked(void)
 	WS.WmsProjections = edWmsProj->text();
 	WS.WmsStyles = edWmsStyles->text();
 	WS.WmsImgFormat = edWmsImgFormat->text();
+
+	lvWmsServers->currentItem()->setText(WS.WmsName);
+	selectedServer = WS.WmsName;
 }
 
 void WMSPreferencesDialog::on_btShowCapabilities_clicked(void)
@@ -157,8 +160,10 @@ QString WMSPreferencesDialog::getSelectedServer()
 void WMSPreferencesDialog::setSelectedServer(QString theValue)
 {
 	QList<QListWidgetItem *> L = lvWmsServers->findItems(theValue, Qt::MatchExactly);
-	lvWmsServers->setCurrentItem(L[0]);
-	on_lvWmsServers_itemClicked(L[0]);
+	if (L.size()) {
+		lvWmsServers->setCurrentItem(L[0]);
+		on_lvWmsServers_itemClicked(L[0]);
+	}
 }
 
 void WMSPreferencesDialog::on_buttonBox_clicked(QAbstractButton * button)

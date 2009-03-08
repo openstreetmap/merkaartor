@@ -48,6 +48,9 @@ void TMSPreferencesDialog::on_btApplyTmsServer_clicked(void)
 	WS.TmsTileSize = sbTileSize->value();
 	WS.TmsMinZoom = sbMinZoom->value();
 	WS.TmsMaxZoom = sbMaxZoom->value();
+
+	lvTmsServers->currentItem()->setText(WS.TmsName);
+	selectedServer = WS.TmsName;
 }
 
 void TMSPreferencesDialog::on_btShowCapabilities_clicked(void)
