@@ -726,6 +726,7 @@ void MapView::drawFeatures(QPainter & P, Projection& aProj)
 	
 	for (int i=0; i<theFeatures.size(); i++)
 	{
+		P.setOpacity(theFeatures[i]->layer()->getAlpha());
 		theFeatures[i]->draw(P, aProj);
 	}
 }
