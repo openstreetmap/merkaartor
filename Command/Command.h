@@ -48,6 +48,8 @@ class Command
 		MapFeature* mainFeature;
 		unsigned int commandDirtyLevel;
 		QString oldCreated;
+		bool isUndone;
+		Command* postUploadCommand;
 };
 
 class CommandList : public Command

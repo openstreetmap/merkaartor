@@ -518,7 +518,8 @@ bool DirtyListExecutor::addRelation(Relation *R)
 		R->setVersionNumber(0);
 		R->layer()->remove(R);
 		document()->getUploadedLayer()->add(R);
-		return true;
+		R->setUploaded(true);
+		return EraseFromHistory;
 	}
 	return false;
 }
@@ -545,7 +546,8 @@ bool DirtyListExecutor::addRoad(Road *R)
 		R->setVersionNumber(0);
 		R->layer()->remove(R);
 		document()->getUploadedLayer()->add(R);
-		return true;
+		R->setUploaded(true);
+		return EraseFromHistory;
 	}
 	return false;
 }
@@ -573,7 +575,8 @@ bool DirtyListExecutor::addPoint(TrackPoint* Pt)
 		Pt->setVersionNumber(0);
 		Pt->layer()->remove(Pt);
 		document()->getUploadedLayer()->add(Pt);
-		return true;
+		Pt->setUploaded(true);
+		return EraseFromHistory;
 	}
 	return false;
 }
@@ -602,7 +605,8 @@ bool DirtyListExecutor::updateRelation(Relation* R)
 		}
 		R->layer()->remove(R);
 		document()->getUploadedLayer()->add(R);
-		return true;
+		R->setUploaded(true);
+		return EraseFromHistory;
 	}
 	return true;
 }
@@ -632,7 +636,8 @@ bool DirtyListExecutor::updateRoad(Road* R)
 		}
 		R->layer()->remove(R);
 		document()->getUploadedLayer()->add(R);
-		return true;
+		R->setUploaded(true);
+		return EraseFromHistory;
 	}
 	return true;
 }
@@ -661,7 +666,8 @@ bool DirtyListExecutor::updatePoint(TrackPoint* Pt)
 		}
 		Pt->layer()->remove(Pt);
 		document()->getUploadedLayer()->add(Pt);
-		return true;
+		Pt->setUploaded(true);
+		return EraseFromHistory;
 	}
 	return false;
 }
@@ -684,7 +690,8 @@ bool DirtyListExecutor::erasePoint(TrackPoint *Pt)
 		Pt->setLastUpdated(MapFeature::OSMServer);
 		Pt->layer()->remove(Pt);
 		document()->getUploadedLayer()->add(Pt);
-		return true;
+		Pt->setUploaded(true);
+		return EraseFromHistory;
 	}
 	return false;
 }
@@ -707,7 +714,8 @@ bool DirtyListExecutor::eraseRoad(Road *R)
 		R->setLastUpdated(MapFeature::OSMServer);
 		R->layer()->remove(R);
 		document()->getUploadedLayer()->add(R);
-		return true;
+		R->setUploaded(true);
+		return EraseFromHistory;
 	}
 	return false;
 }
@@ -728,7 +736,8 @@ bool DirtyListExecutor::eraseRelation(Relation *R)
 		R->setLastUpdated(MapFeature::OSMServer);
 		R->layer()->remove(R);
 		document()->getUploadedLayer()->add(R);
-		return true;
+		R->setUploaded(true);
+		return EraseFromHistory;
 	}
 	return false;
 }

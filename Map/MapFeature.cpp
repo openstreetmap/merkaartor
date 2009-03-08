@@ -77,6 +77,7 @@ class MapFeaturePrivate
 		int VersionNumber;
 		QVector<qreal> parentDashes;
 		bool Deleted;
+		bool Uploaded;
 
 };
 
@@ -220,9 +221,14 @@ bool MapFeature::isDirty() const
 	return (p->theLayer->className() == "DirtyMapLayer");
 }
 
+void MapFeature::setUploaded(bool state)
+{
+	p->Uploaded = state;
+}
+
 bool MapFeature::isUploaded() const
 {
-	return (p->theLayer->className() == "UploadedMapLayer");
+	return p->Uploaded;
 }
 
 bool MapFeature::isUploadable() const

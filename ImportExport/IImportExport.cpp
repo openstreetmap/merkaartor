@@ -41,7 +41,7 @@ bool IImportExport::saveFile(QString filename)
 	return Device->open(QIODevice::WriteOnly | QIODevice::Truncate);
 }
 
-bool IImportExport::export_(const QVector<MapFeature *>& featList)
+bool IImportExport::export_(const QList<MapFeature *>& featList)
 {
 	theFeatures = featList;
 

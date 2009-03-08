@@ -25,7 +25,7 @@ public:
     ~ExportGPX();
 
 	//export
-	virtual bool export_(const QVector<MapFeature *>& featList);
+	virtual bool export_(const QList<MapFeature *>& featList);
 };
 
 #endif

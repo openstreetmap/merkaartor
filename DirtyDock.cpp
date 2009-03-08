@@ -60,6 +60,11 @@ void DirtyDock::updateList()
 		return;
 
 	int dirtyObjects = Main->document()->getDirtyOrOriginLayer()->size();
+	//QList<MapFeature *> dirtyList = Main->document()->getDirtyOrOriginLayer()->get();
+	//QList<MapFeature *>::const_iterator i;
+	//for (i = dirtyList.constBegin(); i != dirtyList.constEnd(); i++)
+	//	if (!(*i)->isDeleted())
+	//		++dirtyObjects;
 
 	switch (dirtyObjects)
 	{
@@ -74,15 +79,12 @@ void DirtyDock::updateList()
 			ui.label->setText(tr("There are <b>%n</b> objects in the dirty layer", "", dirtyObjects));
 			break;
 	}
-
-	if (M_PREFS->getAutoHistoryCleanup() && !dirtyObjects)
-		Main->document()->history().cleanup();
 	
 	ui.ChangesList->clear();
 	Main->document()->history().buildUndoList(ui.ChangesList);
 
 	if (!M_PREFS->getAutoHistoryCleanup()) {
-		if (!dirtyObjects && ui.ChangesList->count())
+		if (!dirtyObjects)
 			ui.pbCleanupHistory->setEnabled(true);
 		else
 			ui.pbCleanupHistory->setEnabled(false);
@@ -180,6 +182,7 @@ void DirtyDock::on_centerZoomAction_triggered()
 void DirtyDock::on_pbCleanupHistory_clicked()
 {
 	Main->document()->history().cleanup();
+	Main->document()->history().updateActions();
 	updateList();
 }
 

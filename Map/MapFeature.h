@@ -192,6 +192,8 @@ class MapFeature : public QObject
 		 */
 		bool isDeleted() const;
 
+		void setUploaded(bool state);
+
 		/** check if the feature has been uploaded
 		 * @return true if uploaded
 		 */

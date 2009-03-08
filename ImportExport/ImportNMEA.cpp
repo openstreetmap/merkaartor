@@ -26,7 +26,7 @@ ImportNMEA::~ImportNMEA()
 }
 
 // no export
-bool ImportNMEA::export_(const QVector<MapFeature *>& featList)
+bool ImportNMEA::export_(const QList<MapFeature *>& featList)
 {
 	IImportExport::export_(featList);
 

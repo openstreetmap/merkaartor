@@ -52,7 +52,7 @@ public:
 	const MapLayer* getLayer(unsigned int i) const;
 
 	MapFeature* getFeature(const QString& id, bool exact=true);
-	QVector<MapFeature*> getFeatures(QString* layerType=NULL);
+	QList<MapFeature*> getFeatures(QString* layerType=NULL);
 	void setHistory(CommandHistory* h);
 	CommandHistory& history();
 	const CommandHistory& history() const;
@@ -81,8 +81,8 @@ public:
 	//DeletedMapLayer* getTrashLayer() const;
 
 	QString exportOSM(const CoordBox& aCoordBox = WORLD_COORDBOX, bool renderBounds=false);
-	QString exportOSM(QVector<MapFeature*> aFeatures);
-	QVector<MapFeature*> exportCoreOSM(QVector<MapFeature*> aFeatures);
+	QString exportOSM(QList<MapFeature*> aFeatures);
+	QList<MapFeature*> exportCoreOSM(QList<MapFeature*> aFeatures);
 	bool toXML(QDomElement xParent, QProgressDialog & progress);
 	static MapDocument* fromXML(const QDomElement e, double version, LayerDock* aDock, QProgressDialog & progress);
 
@@ -124,7 +124,7 @@ public:
 
 private:
 	MapDocument* theDocument;
-	QVector<MapFeature*> theFeatures;
+	QList<MapFeature*> theFeatures;
 	unsigned int Idx;
 };
 
@@ -141,7 +141,7 @@ public:
 
 private:
 	MapDocument* theDocument;
-	QVector<MapFeature*> theFeatures;
+	QList<MapFeature*> theFeatures;
 	unsigned int Idx;
 };
 

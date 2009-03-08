@@ -444,7 +444,7 @@ void MainWindow::on_editCopyAction_triggered()
 
 void MainWindow::on_editPasteOverwriteAction_triggered()
 {
-	QVector<MapFeature*> sel = properties()->selection();
+	QList<MapFeature*> sel = properties()->selection();
 	if (!sel.size())
 		return;
 
@@ -473,7 +473,7 @@ void MainWindow::on_editPasteOverwriteAction_triggered()
 
 void MainWindow::on_editPasteMergeAction_triggered()
 {
-	QVector<MapFeature*> sel = properties()->selection();
+	QList<MapFeature*> sel = properties()->selection();
 	if (!sel.size())
 		return;
 
@@ -900,6 +900,8 @@ void MainWindow::on_fileUploadAction_triggered()
 	syncOSM(this, p->getOsmWebsite(), p->getOsmUser(), p->getOsmPassword(), p->getProxyUse(),
 		p->getProxyHost(), p->getProxyPort());
 
+	if (M_PREFS->getAutoHistoryCleanup() && !theDocument->getDirtyOrOriginLayer()->size())
+		theDocument->history().cleanup();
 	theDocument->history().updateActions();
 	theDirty->updateList();
 }
@@ -1587,7 +1589,7 @@ void MainWindow::loadDocument(QString fn)
 
 void MainWindow::on_exportOSMAction_triggered()
 {
-	QVector<MapFeature*> theFeatures;
+	QList<MapFeature*> theFeatures;
 	if (!selectExportedFeatures(theFeatures))
 		return;
 
@@ -1606,7 +1608,7 @@ void MainWindow::on_exportOSMAction_triggered()
 
 void MainWindow::on_exportOSMBinAction_triggered()
 {
-	QVector<MapFeature*> theFeatures;
+	QList<MapFeature*> theFeatures;
 	if (!selectExportedFeatures(theFeatures))
 		return;
 
@@ -1627,7 +1629,7 @@ void MainWindow::on_exportOSMBinAction_triggered()
 
 void MainWindow::on_exportGPXAction_triggered()
 {
-	QVector<MapFeature*> theFeatures;
+	QList<MapFeature*> theFeatures;
 
 	QString fileName = QFileDialog::getSaveFileName(this,
 		tr("Export GPX"), MerkaartorPreferences::instance()->getWorkingDir() + "/untitled.gpx", tr("GPX Files (*.gpx)"));
@@ -1652,7 +1654,7 @@ void MainWindow::on_exportGPXAction_triggered()
 
 void MainWindow::on_exportKMLAction_triggered()
 {
-	QVector<MapFeature*> theFeatures;
+	QList<MapFeature*> theFeatures;
 	if (!selectExportedFeatures(theFeatures))
 		return;
 
@@ -1671,7 +1673,7 @@ void MainWindow::on_exportKMLAction_triggered()
 	}
 }
 
-bool MainWindow::selectExportedFeatures(QVector<MapFeature*>& theFeatures)
+bool MainWindow::selectExportedFeatures(QList<MapFeature*>& theFeatures)
 {
 	QDialog dlg(this);
 	Ui::ExportDialog dlgExport;

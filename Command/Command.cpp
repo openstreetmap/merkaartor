@@ -19,7 +19,7 @@
 #include <vector>
 
 Command::Command(MapFeature* aF)
-	: mainFeature(aF), commandDirtyLevel(0), oldCreated("")
+	: mainFeature(aF), commandDirtyLevel(0), oldCreated(""), isUndone(false), postUploadCommand(0)
 {
 	description = QApplication::translate("Command", "No description");
 }
@@ -94,6 +94,7 @@ void Command::undo()
 		else
 			mainFeature->clearTag("created_by");
 	}
+	isUndone = true;
 }
 
 void Command::redo()
@@ -102,6 +103,7 @@ void Command::redo()
 		oldCreated = mainFeature->tagValue("created_by", TAG_UNDEF_VALUE);
 		mainFeature->setTag("created_by",QString("Merkaartor %1").arg(VERSION));
 	}
+	isUndone = false;
 }
 
 bool Command::toXML(QDomElement& xParent) const
@@ -115,6 +117,8 @@ bool Command::toXML(QDomElement& xParent) const
 		e.setAttribute("xml:id", id());
 		e.setAttribute("feature", mainFeature->xmlId());
 		e.setAttribute("oldCreated", oldCreated);
+		if (isUndone)
+			e.setAttribute("undone", "true");
 	}
 
 	return OK;
@@ -132,6 +136,8 @@ void Command::fromXML(MapDocument* d, const QDomElement& e, Command* C)
 			C->setId(c.attribute("xml:id"));
 			if (c.hasAttribute("oldCreated"))
 				C->oldCreated = c.attribute("oldCreated");
+			if (c.hasAttribute("undone"))
+				C->isUndone = (c.attribute("undone") == "true" ? true : false);
 			C->mainFeature = F;
 		}
 		c = c.nextSiblingElement();
@@ -386,7 +392,7 @@ void CommandHistory::updateActions()
 	if (RedoAction)
 		RedoAction->setEnabled(Index<Size);
 	if (UploadAction && !M_PREFS->getOfflineMode())
-		UploadAction->setEnabled(Index);
+		UploadAction->setEnabled(Subs.size());
 }
 
 unsigned int CommandHistory::index() const
@@ -396,7 +402,7 @@ unsigned int CommandHistory::index() const
 
 unsigned int CommandHistory::buildDirtyList(DirtyList& theList)
 {
-	for (unsigned int i=0; i<Index;)
+	for (unsigned int i=0; i<Subs.size();)
 		if (Subs[i]->buildDirtyList(theList))
 		{
 			//delete Subs[i];

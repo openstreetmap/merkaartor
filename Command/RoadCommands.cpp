@@ -53,6 +53,8 @@ void RoadAddTrackPointCommand::redo()
 
 bool RoadAddTrackPointCommand::buildDirtyList(DirtyList& theList)
 {
+	if (isUndone)
+		return false;
 	if (theRoad->lastUpdated() == MapFeature::NotYetDownloaded)
 		return theList.noop(theRoad);
 	if (!theRoad->layer())
@@ -155,6 +157,8 @@ void RoadRemoveTrackPointCommand::redo()
 
 bool RoadRemoveTrackPointCommand::buildDirtyList(DirtyList& theList)
 {
+	if (isUndone)
+		return false;
 	if (theRoad->lastUpdated() == MapFeature::NotYetDownloaded)
 		return theList.noop(theRoad);
 	if (!theRoad->layer())

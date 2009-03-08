@@ -886,7 +886,7 @@ void MapView::launch(Interaction* anInteraction)
 	if (EI)
 		theSnapList = EI->snapList();
 	if (!theSnapList.size())
-		theSnapList = Main->properties()->selection().toList();
+		theSnapList = Main->properties()->selection();
 	if (theInteraction)
 		delete theInteraction;
 	theInteraction = anInteraction;

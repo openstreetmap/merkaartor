@@ -406,8 +406,8 @@ void detachNode(MapDocument* theDocument, CommandList* theList, PropertiesDock* 
 
 void commitFeatures(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
-	QVector<MapFeature*> alt;
-	QVector<MapFeature*> Features;
+	QList<MapFeature*> alt;
+	QList<MapFeature*> Features;
 
 	for (unsigned int i=0; i<theDock->size(); ++i)
 		if (!theDock->selection(i)->layer()->isUploadable())
@@ -432,7 +432,7 @@ void commitFeatures(MapDocument* theDocument, CommandList* theList, PropertiesDo
 void addRelationMember(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
 	Relation* theRelation = NULL;
-	QVector<MapFeature*> Features;
+	QList<MapFeature*> Features;
 	for (unsigned int i=0; i<theDock->size(); ++i)
 		if ((theDock->selection(i)->getClass() == "Relation") && !theRelation)
 			theRelation = dynamic_cast<Relation*>(theDock->selection(i));
@@ -449,7 +449,7 @@ void addRelationMember(MapDocument* theDocument, CommandList* theList, Propertie
 void removeRelationMember(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
 	Relation* theRelation = NULL;
-	QVector<MapFeature*> Features;
+	QList<MapFeature*> Features;
 	for (unsigned int i=0; i<theDock->size(); ++i)
 		if ((theDock->selection(i)->getClass() == "Relation") && !theRelation)
 			theRelation = dynamic_cast<Relation*>(theDock->selection(i));

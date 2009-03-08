@@ -28,10 +28,10 @@ ImportExportKML::~ImportExportKML()
 
 
 // export
-bool ImportExportKML::export_(const QVector<MapFeature *>& featList)
+bool ImportExportKML::export_(const QList<MapFeature *>& featList)
 {
-	QVector<TrackPoint*>	waypoints;
-	QVector<TrackSegment*>	segments;
+	QList<TrackPoint*>	waypoints;
+	QList<TrackSegment*>	segments;
 	QDomElement k;
 	QDomText v;
 

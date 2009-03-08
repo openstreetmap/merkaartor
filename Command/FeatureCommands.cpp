@@ -44,6 +44,8 @@ TagCommand::~TagCommand(void)
 //
 bool TagCommand::buildDirtyList(DirtyList& theList)
 {
+	if (isUndone)
+		return false;
 	if (theFeature->lastUpdated() == MapFeature::NotYetDownloaded)
 		return theList.noop(theFeature);
 	if (theLayer->isUploadable())
@@ -55,12 +57,14 @@ bool TagCommand::buildDirtyList(DirtyList& theList)
 SetTagCommand::SetTagCommand(MapFeature* aF)
 : TagCommand(aF, 0), theIdx(0), theK(""), theV("")
 {
+	oldLayer = theFeature->layer();
 }
 
 SetTagCommand::SetTagCommand(MapFeature* aF, unsigned int idx, const QString& k, const QString& v, MapLayer* aLayer)
 : TagCommand(aF, aLayer), theIdx(idx), theK(k), theV(v)
 {
 	description = MainWindow::tr("Set Tag '%1=%2' on %3").arg(k).arg(v).arg(aF->description());
+	oldLayer = theFeature->layer();
 	redo();
 }
 
@@ -68,20 +72,24 @@ SetTagCommand::SetTagCommand(MapFeature* aF, const QString& k, const QString& v,
 : TagCommand(aF, aLayer), theIdx(-1), theK(k), theV(v)
 {
 	description = MainWindow::tr("Set Tag '%1=%2' on %3").arg(k).arg(v).arg(aF->description());
+	oldLayer = theFeature->layer();
 	redo();
 }
 
 void SetTagCommand::undo()
 {
 	Command::undo();
+	if (theFeature->isUploaded()) {
+		theLayer = theLayer->getDocument()->getUploadedLayer();
+		oldLayer = theLayer->getDocument()->getDirtyOrOriginLayer();
+	}
 	if (oldV != TAG_UNDEF_VALUE && oldK != KEY_UNDEF_VALUE)
 	{
 		if(oldK!=theK) theFeature->clearTag(theK);
 		theFeature->setTag(theIdx,oldK,oldV);
 	}
 	else
-		theFeature->clearTag(theK);
-
+	theFeature->clearTag(theK);
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		theLayer->remove(theFeature);
 		oldLayer->add(theFeature);
@@ -104,7 +112,6 @@ void SetTagCommand::redo()
 		theFeature->setTag(theIdx,theK,theV);
 	}
 
-	oldLayer = theFeature->layer();
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		oldLayer->remove(theFeature);
 		incDirtyLevel(oldLayer);
@@ -116,6 +123,8 @@ void SetTagCommand::redo()
 
 bool SetTagCommand::buildDirtyList(DirtyList& theList)
 {
+	if (isUndone)
+		return false;
 	if (theFeature->lastUpdated() == MapFeature::NotYetDownloaded)
 		return theList.noop(theFeature);
 	if (theK.startsWith('_') && (theK.endsWith('_')))
@@ -190,12 +199,17 @@ ClearTagsCommand::ClearTagsCommand(MapFeature* F, MapLayer* aLayer)
 {
 	for (unsigned int i=0; i<theFeature->tagSize(); ++i)
 		Before.push_back(std::make_pair(theFeature->tagKey(i),theFeature->tagValue(i)));
+	oldLayer = theFeature->layer();
 	redo();
 }
 
 void ClearTagsCommand::undo()
 {
 	Command::undo();
+	if (theFeature->isUploaded()) {
+		theLayer = theLayer->getDocument()->getUploadedLayer();
+		oldLayer = theLayer->getDocument()->getDirtyOrOriginLayer();
+	}
 	theFeature->clearTags();
 	for (unsigned int i=0; i<Before.size(); ++i)
 		theFeature->setTag(Before[i].first,Before[i].second);
@@ -211,7 +225,6 @@ void ClearTagsCommand::redo()
 {
 	theFeature->clearTags();
 
-	oldLayer = theFeature->layer();
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		oldLayer->remove(theFeature);
 		incDirtyLevel(oldLayer);
@@ -284,18 +297,24 @@ ClearTagsCommand * ClearTagsCommand::fromXML(MapDocument * d, QDomElement e)
 ClearTagCommand::ClearTagCommand(MapFeature* F)
 : TagCommand(F, 0), theIdx(0), theK(""), theV("")
 {
+	oldLayer = theFeature->layer();
 }
 
 ClearTagCommand::ClearTagCommand(MapFeature* F, const QString& k, MapLayer* aLayer)
 : TagCommand(F, aLayer), theIdx(F->findKey(k)), theK(k), theV(F->tagValue(k, ""))
 {
 	description = MainWindow::tr("Clear Tag '%1' on %2").arg(k).arg(F->description());
+	oldLayer = theFeature->layer();
 	redo();
 }
 
 void ClearTagCommand::undo()
 {
 	Command::undo();
+	if (theFeature->isUploaded()) {
+		theLayer = theLayer->getDocument()->getUploadedLayer();
+		oldLayer = theLayer->getDocument()->getDirtyOrOriginLayer();
+	}
 	theFeature->setTag(theIdx,theK,theV);
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		theLayer->remove(theFeature);
@@ -307,7 +326,6 @@ void ClearTagCommand::undo()
 void ClearTagCommand::redo()
 {
 	theFeature->clearTag(theK);
-	oldLayer = theFeature->layer();
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		oldLayer->remove(theFeature);
 		incDirtyLevel(oldLayer);
@@ -318,6 +336,8 @@ void ClearTagCommand::redo()
 
 bool ClearTagCommand::buildDirtyList(DirtyList& theList)
 {
+	if (isUndone)
+		return false;
 	if (theFeature->lastUpdated() == MapFeature::NotYetDownloaded)
 		return theList.noop(theFeature);
 	if (theLayer->isUploadable())

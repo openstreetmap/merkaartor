@@ -26,11 +26,11 @@ ExportGPX::~ExportGPX()
 }
 
 // export
-bool ExportGPX::export_(const QVector<MapFeature *>& featList)
+bool ExportGPX::export_(const QList<MapFeature *>& featList)
 {
-	QVector<TrackPoint*>	waypoints;
-	QVector<TrackSegment*>	segments;
-	QVector<MapLayer*>	tracks;
+	QList<TrackPoint*>	waypoints;
+	QList<TrackSegment*>	segments;
+	QList<MapLayer*>	tracks;
 
 	if(! IImportExport::export_(featList) ) return false;
 

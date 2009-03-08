@@ -16,7 +16,7 @@ TagModel::~TagModel(void)
 {
 }
 
-void TagModel::setFeature(const std::vector<MapFeature*> Features)
+void TagModel::setFeature(const QList<MapFeature*> Features)
 {
 	if (theFeatures.size())
 	{
@@ -30,7 +30,7 @@ void TagModel::setFeature(const std::vector<MapFeature*> Features)
 		MapFeature* F = theFeatures[0];
 		for (unsigned int i=0; i<F->tagSize(); ++i)
 		{
-			unsigned int j=0;
+			int j=0;
 			for (j=1; j<theFeatures.size(); ++j)
 				if (F->tagValue(i) != theFeatures[j]->tagValue(F->tagKey(i),""))
 					break;
@@ -61,11 +61,11 @@ QVariant TagModel::data(const QModelIndex &index, int role) const
 		return QVariant();
 	if (!index.isValid())
 		return QVariant();
-	if ((unsigned int)index.row() > Tags.size())
+	if (index.row() > Tags.size())
 		return QVariant();
 	if (role == Qt::DisplayRole)
 	{
-		if ((unsigned int)index.row() >= Tags.size())
+		if (index.row() >= Tags.size())
 		{
 			if (index.column() == 0)
 				return newKeyText();
@@ -82,7 +82,7 @@ QVariant TagModel::data(const QModelIndex &index, int role) const
 	}
 	else if (role == Qt::EditRole)
 	{
-		if ((unsigned int)index.row() >= Tags.size())
+		if (index.row() >= Tags.size())
 			return "";
 		else
 		{
@@ -127,7 +127,7 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
 			{
 				beginInsertRows(QModelIndex(), Tags.size()+1, Tags.size()+1);
 				CommandList* L = new CommandList(MainWindow::tr("Set Tags on %1").arg(theFeatures[0]->id()), theFeatures[0]);
-				for (unsigned int i=0; i<theFeatures.size(); ++i)
+				for (int i=0; i<theFeatures.size(); ++i)
 				{
 					if (!theFeatures[i]->isDirty() && !theFeatures[i]->hasOSMId() && theFeatures[i]->isUploadable()) {
 						bool userAdded = !theFeatures[i]->id().startsWith("conflict_");
@@ -151,7 +151,7 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
 			else
 				Tags[index.row()].second = value.toString();
 			CommandList* L = new CommandList(MainWindow::tr("Set Tags on %1").arg(theFeatures[0]->id()), theFeatures[0]);
-			for (unsigned int i=0; i<theFeatures.size(); ++i)
+			for (int i=0; i<theFeatures.size(); ++i)
 			{
 				unsigned int j = theFeatures[i]->findKey(Original);
 				if (j<theFeatures[i]->tagSize()) {

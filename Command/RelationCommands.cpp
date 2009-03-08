@@ -53,6 +53,8 @@ void RelationAddFeatureCommand::redo()
 
 bool RelationAddFeatureCommand::buildDirtyList(DirtyList& theList)
 {
+	if (isUndone)
+		return false;
 	if (theRelation->lastUpdated() == MapFeature::NotYetDownloaded)
 		return theList.noop(theRelation);
 	if (!theRelation->layer())
@@ -171,6 +173,8 @@ void RelationRemoveFeatureCommand::redo()
 
 bool RelationRemoveFeatureCommand::buildDirtyList(DirtyList& theList)
 {
+	if (isUndone)
+		return false;
 	if (theRelation->lastUpdated() == MapFeature::NotYetDownloaded)
 		return theList.noop(theRelation);
 	if (!theRelation->layer())

@@ -381,9 +381,9 @@ const MapLayer* MapDocument::getLayer(unsigned int i) const
 	return p->Layers[i];
 }
 
-QVector<MapFeature*> MapDocument::getFeatures(QString* layerType)
+QList<MapFeature*> MapDocument::getFeatures(QString* layerType)
 {
-	QVector<MapFeature*> theFeatures;
+	QList<MapFeature*> theFeatures;
 	for (VisibleFeatureIterator i(this); !i.isEnd(); ++i) {
 		if (!layerType)
 			theFeatures.append(i.get());
@@ -452,7 +452,7 @@ UploadedMapLayer* MapDocument::getUploadedLayer() const
 QString MapDocument::exportOSM(const CoordBox& aCoordBox, bool renderBounds)
 {
 	QString theExport, coreExport;
-	QVector<MapFeature*> theFeatures;
+	QList<MapFeature*> theFeatures;
 
 	for (VisibleFeatureIterator i(this); !i.isEnd(); ++i) {
 		if (TrackPoint* P = dynamic_cast<TrackPoint*>(i.get())) {
@@ -490,7 +490,7 @@ QString MapDocument::exportOSM(const CoordBox& aCoordBox, bool renderBounds)
 				}
 	}
 
-	QVector<MapFeature*> exportedFeatures = exportCoreOSM(theFeatures);
+	QList<MapFeature*> exportedFeatures = exportCoreOSM(theFeatures);
 
 	if (exportedFeatures.size()) {
 		for (int i=0; i < exportedFeatures.size(); i++) {
@@ -519,10 +519,10 @@ QString MapDocument::exportOSM(const CoordBox& aCoordBox, bool renderBounds)
 	return theExport;
 }
 
-QString MapDocument::exportOSM(QVector<MapFeature*> aFeatures)
+QString MapDocument::exportOSM(QList<MapFeature*> aFeatures)
 {
 	QString theExport, coreExport;
-	QVector<MapFeature*> exportedFeatures = exportCoreOSM(aFeatures);
+	QList<MapFeature*> exportedFeatures = exportCoreOSM(aFeatures);
 	CoordBox aCoordBox;
 
 	if (exportedFeatures.size()) {
@@ -547,11 +547,11 @@ QString MapDocument::exportOSM(QVector<MapFeature*> aFeatures)
 	return theExport;
 }
 
-QVector<MapFeature*> MapDocument::exportCoreOSM(QVector<MapFeature*> aFeatures)
+QList<MapFeature*> MapDocument::exportCoreOSM(QList<MapFeature*> aFeatures)
 {
 	QString coreExport;
-	QVector<MapFeature*> exportedFeatures;
-	QVector<MapFeature*>::Iterator i;
+	QList<MapFeature*> exportedFeatures;
+	QList<MapFeature*>::Iterator i;
 
 	for (i = aFeatures.begin(); i != aFeatures.end(); ++i) {
 		if (/*TrackPoint* P = */dynamic_cast<TrackPoint*>(*i)) {

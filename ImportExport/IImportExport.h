@@ -41,7 +41,7 @@ public:
 	// import the  input
 	virtual bool import(MapLayer* /* aLayer */) { return false; };
 	// export
-	virtual bool export_(const QVector<MapFeature *>& featList);
+	virtual bool export_(const QList<MapFeature *>& featList);
 
 	// Return the filename
 	const QString& getFilename() const;
@@ -52,7 +52,7 @@ protected:
 	MapDocument* theDoc;
 	QIODevice* Device;
 	CommandList* theList;
-	QVector<MapFeature*> theFeatures;
+	QList<MapFeature*> theFeatures;
 	QString FileName;
 };
 

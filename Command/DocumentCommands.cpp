@@ -27,24 +27,48 @@ AddFeatureCommand::~AddFeatureCommand()
 void AddFeatureCommand::undo()
 {
 	Command::undo();
-	theLayer->remove(theFeature);
-	if (oldLayer)
-		oldLayer->add(theFeature);
-	decDirtyLevel(theLayer);
+	if (theFeature->isUploaded() || postUploadCommand) {
+		if (postUploadCommand)
+			postUploadCommand->redo();
+		else
+			postUploadCommand = new RemoveFeatureCommand(theLayer->getDocument(), theFeature);
+	} else {
+		if (oldLayer) {
+			theLayer->remove(theFeature);
+			oldLayer->add(theFeature);
+		} else
+			theFeature->setDeleted(true);
+
+		decDirtyLevel(theLayer);
+	}
 }
 
 void AddFeatureCommand::redo()
 {
-	oldLayer = theFeature->layer();
-	if (oldLayer) 
-		oldLayer->remove(theFeature);
-	theLayer->add(theFeature);
-	incDirtyLevel(theLayer);
+	if (postUploadCommand)
+		postUploadCommand->undo();
+	else {
+		oldLayer = theFeature->layer();
+		if (oldLayer && oldLayer != theLayer)
+			oldLayer->remove(theFeature);
+		else {
+			theFeature->setDeleted(false);
+			oldLayer = NULL;
+		}
+		theLayer->add(theFeature);
+		incDirtyLevel(theLayer);
+	}
 	Command::redo();
 }
 
 bool AddFeatureCommand::buildDirtyList(DirtyList& theList)
 {
+	//if (isUndone && postUploadCommand) {
+	//	return postUploadCommand->buildDirtyList(theList);
+	//}
+	if (isUndone)
+		return false;
+
 	if (UserAdded)
 		if (theLayer->isUploadable())
 			return theList.add(theFeature);
@@ -103,8 +127,6 @@ RemoveFeatureCommand::RemoveFeatureCommand(MapFeature *aFeature)
 RemoveFeatureCommand::RemoveFeatureCommand(MapDocument *theDocument, MapFeature *aFeature)
 : Command(aFeature), theLayer(0), Idx(0), theFeature(aFeature), CascadedCleanUp(0), RemoveExecuted(false)
 {
-	oldLayer = aFeature->layer();
-	Idx = aFeature->layer()->get(aFeature);
 	theLayer = theDocument->getDirtyOrOriginLayer();
 	redo();
 }
@@ -120,15 +142,8 @@ RemoveFeatureCommand::RemoveFeatureCommand(MapDocument *theDocument, MapFeature 
 		SAFE_DELETE(CascadedCleanUp);
 		CascadedCleanUp = 0;
 	}
-	oldLayer = aFeature->layer();
-	Idx = aFeature->layer()->get(aFeature);
-//	redo();
 	theLayer = theDocument->getDirtyOrOriginLayer();
-	oldLayer->remove(theFeature);
-	theLayer->add(theFeature);
-	theFeature->setDeleted(true);
-	oldLayer->incDirtyLevel();
-	Command::redo();
+	redo();
 }
 
 RemoveFeatureCommand::~RemoveFeatureCommand()
@@ -136,37 +151,58 @@ RemoveFeatureCommand::~RemoveFeatureCommand()
 	if (oldLayer)
 		oldLayer->decDirtyLevel(commandDirtyLevel);
 	SAFE_DELETE(CascadedCleanUp);
-	if (theLayer->getDocument()->exists(theFeature)) {
+	if (theLayer->getDocument()->exists(theFeature) && theFeature->isDeleted()) {
 		theLayer->getDocument()->deleteFeature(theFeature);
 	}
 }
 
 void RemoveFeatureCommand::redo()
 {
-	if (CascadedCleanUp)
-		CascadedCleanUp->redo();
-	oldLayer->remove(theFeature);
-	theLayer->add(theFeature);
-	theFeature->setDeleted(true);
-	incDirtyLevel(oldLayer);
+	if (postUploadCommand)
+		postUploadCommand->undo();
+	else {
+		if (CascadedCleanUp)
+			CascadedCleanUp->redo();
+		oldLayer = theFeature->layer();
+		Idx = theFeature->layer()->get(theFeature);
+		oldLayer->remove(theFeature);
+		theLayer->add(theFeature);
+		theFeature->setDeleted(true);
+		incDirtyLevel(oldLayer);
+	}
 	Command::redo();
 }
 
 void RemoveFeatureCommand::undo()
 {
 	Command::undo();
-	theLayer->remove(theFeature);
-	if (oldLayer->size() < Idx)
-		Idx = oldLayer->size();
-	oldLayer->add(theFeature,Idx);
-	theFeature->setDeleted(false);
-	decDirtyLevel(oldLayer);
-	if (CascadedCleanUp)
-		CascadedCleanUp->undo();
+	if (theFeature->isUploaded() || postUploadCommand) {
+		if (postUploadCommand)
+			postUploadCommand->redo();
+		else {
+			theFeature->setId("");
+			theFeature->setDeleted(false);
+			postUploadCommand = new AddFeatureCommand(theLayer, theFeature, true);
+		}
+	} else {
+		theLayer->remove(theFeature);
+		if (oldLayer->size() < Idx)
+			Idx = oldLayer->size();
+		oldLayer->add(theFeature,Idx);
+		theFeature->setDeleted(false);
+		decDirtyLevel(oldLayer);
+		if (CascadedCleanUp)
+			CascadedCleanUp->undo();
+	}
 }
 
 bool RemoveFeatureCommand::buildDirtyList(DirtyList &theList)
 {
+	//if (isUndone && postUploadCommand) {
+	//	return postUploadCommand->buildDirtyList(theList);
+	//}
+	if (isUndone)
+		return false;
 	if (!oldLayer->isUploadable())
 		return false;
 

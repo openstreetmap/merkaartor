@@ -52,6 +52,8 @@ void MoveTrackPointCommand::redo()
 
 bool MoveTrackPointCommand::buildDirtyList(DirtyList &theList)
 {
+	if (isUndone)
+		return false;
 	if (thePoint->lastUpdated() == MapFeature::NotYetDownloaded)
 		return theList.noop(thePoint);
 	if (!thePoint->layer())

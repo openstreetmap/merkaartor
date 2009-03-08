@@ -33,7 +33,7 @@
 #include <algorithm>
 
 PropertiesDock::PropertiesDock(MainWindow* aParent)
-: MDockAncestor(aParent), Main(aParent), CurrentUi(0), Selection(0),
+: MDockAncestor(aParent), Main(aParent), CurrentUi(0),
 	theTemplates(0), CurrentTagView(0), CurrentMembersView(0), NowShowing(NoUiShowing)
 {
 	setMinimumSize(220,100);
@@ -152,7 +152,7 @@ void PropertiesDock::checkMenuStatus()
 		IsParentRelation = isChildOfSingleRelation(Selection[0]);
 		IsParentArea = isChildOfArea(Selection[0]);
 	}
-	for (unsigned int i=0; i<Selection.size(); ++i)
+	for (int i=0; i<Selection.size(); ++i)
 	{
 		if (CAST_NODE(Selection[i]))
 			++NumPoints;
@@ -198,16 +198,16 @@ unsigned int PropertiesDock::size() const
 	return Selection.size();
 }
 
-MapFeature* PropertiesDock::selection(unsigned int idx)
+MapFeature* PropertiesDock::selection(int idx)
 {
 	if (idx < Selection.size())
 		return Selection[idx];
 	return 0;
 }
 
-QVector<MapFeature*> PropertiesDock::selection()
+QList<MapFeature*> PropertiesDock::selection()
 {
-	return QVector<MapFeature*>::fromStdVector(Selection);
+	return Selection;
 }
 
 void PropertiesDock::setSelection(MapFeature*aFeature)
@@ -230,7 +230,7 @@ void PropertiesDock::setMultiSelection(const std::vector<MapFeature*>& aFeatureL
 	FullSelection = Selection;
 	switchToMultiUi();
 	// to prevent slots to change the values also
-	std::vector<MapFeature*> Current = Selection;
+	QList<MapFeature*> Current = Selection;
 	Selection.clear();
 	MultiUi.TagView->setModel(theModel);
 	MultiUi.TagView->setItemDelegate(delegate);
@@ -242,7 +242,7 @@ void PropertiesDock::setMultiSelection(const std::vector<MapFeature*>& aFeatureL
 void PropertiesDock::toggleSelection(MapFeature* S)
 {
 	cleanUpUi();
-	std::vector<MapFeature*>::iterator i = std::find(Selection.begin(),Selection.end(),S);
+	QList<MapFeature*>::iterator i = std::find(Selection.begin(),Selection.end(),S);
 	if (i == Selection.end())
 		Selection.push_back(S);
 	else
@@ -255,7 +255,7 @@ void PropertiesDock::toggleSelection(MapFeature* S)
 void PropertiesDock::addSelection(MapFeature* S)
 {
 	cleanUpUi();
-	std::vector<MapFeature*>::iterator i = std::find(Selection.begin(),Selection.end(),S);
+	QList<MapFeature*>::iterator i = std::find(Selection.begin(),Selection.end(),S);
 	if (i == Selection.end())
 		Selection.push_back(S);
 	FullSelection = Selection;
@@ -265,27 +265,27 @@ void PropertiesDock::addSelection(MapFeature* S)
 
 void PropertiesDock::adjustSelection()
 {
-	QVector<MapFeature*> aSelection;
+	QList<MapFeature*> aSelection;
 	unsigned int cnt = Selection.size();
 
-	for (unsigned int i=0; i<FullSelection.size(); ++i) {
+	for (int i=0; i<FullSelection.size(); ++i) {
 		if (Main->document()->exists(FullSelection[i])) {
 			aSelection.push_back(FullSelection[i]);
 		} else {
-			std::vector<MapFeature*>::iterator it = std::find(Selection.begin(),Selection.end(),FullSelection[i]);
+			QList<MapFeature*>::iterator it = std::find(Selection.begin(),Selection.end(),FullSelection[i]);
 			if (it != Selection.end())
 				Selection.erase(it);
 		}
 	}
 
-	FullSelection = aSelection.toStdVector();
+	FullSelection = aSelection;
 	if (Selection.size() != cnt)
 		switchUi();
 }
 
 bool PropertiesDock::isSelected(MapFeature *aFeature)
 {
-	std::vector<MapFeature*>::iterator i = std::find(Selection.begin(),Selection.end(),aFeature);
+	QList<MapFeature*>::iterator i = std::find(Selection.begin(),Selection.end(),aFeature);
 	if (i == Selection.end())
 		return false;
 	else
@@ -300,7 +300,7 @@ void PropertiesDock::fillMultiUiSelectionBox()
 		NowShowing = NoUiShowing;
 		Main->setUpdatesEnabled(false);
 		MultiUi.SelectionList->clear();
-		for (unsigned int i=0; i<FullSelection.size(); ++i)
+		for (int i=0; i<FullSelection.size(); ++i)
 		{
 			QListWidgetItem* it = new QListWidgetItem(FullSelection[i]->description(),MultiUi.SelectionList);
 			it->setData(Qt::UserRole,QVariant(i));
@@ -317,7 +317,7 @@ void PropertiesDock::on_SelectionList_itemSelectionChanged()
 	if (NowShowing == MultiShowing)
 	{
 		Selection.clear();
-		for (unsigned int i=0; i<FullSelection.size(); ++i)
+		for (int i=0; i<FullSelection.size(); ++i)
 			if (MultiUi.SelectionList->item(i)->isSelected())
 				Selection.push_back(FullSelection[i]);
 		if (Selection.size() == 1) {
@@ -474,7 +474,7 @@ void PropertiesDock::resetValues()
     CurrentMembersView = NULL;
 
 	// to prevent slots to change the values also
-	std::vector<MapFeature*> Current = Selection;
+	QList<MapFeature*> Current = Selection;
 	Selection.clear();
 	if (FullSelection.size() == 1)
 	{
@@ -642,7 +642,7 @@ void PropertiesDock::on_RemoveTagButton_clicked()
 			{
 				QString KeyName = Content.toString();
 				CommandList* L = new CommandList(MainWindow::tr("Clear Tag '%1' on %2").arg(KeyName).arg(Selection[0]->id()), Selection[0]);
-				for (unsigned int i=0; i<Selection.size(); ++i)
+				for (int i=0; i<Selection.size(); ++i)
 					if (Selection[i]->findKey(KeyName) < Selection[i]->tagSize())
 						L->add(new ClearTagCommand(Selection[i],KeyName,Main->document()->getDirtyOrOriginLayer(Selection[i]->layer())));
 				if (L->empty())

@@ -78,7 +78,7 @@ class DirtyListVisit : public DirtyList
 		virtual bool eraseRoad(Road* R) = 0;
 		virtual bool eraseRelation(Relation* R) = 0;
 
-	private:
+	protected:
 		bool notYetAdded(MapFeature* F);
 		MapDocument* theDocument;
 		const DirtyListBuild& Future;

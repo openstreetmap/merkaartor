@@ -36,8 +36,8 @@ class PropertiesDock : public MDockAncestor
 		void toggleSelection(MapFeature* aFeature);
 		void addSelection(MapFeature* aFeature);
 		void adjustSelection();
-		MapFeature* selection(unsigned int idx);
-		QVector<MapFeature*> selection();
+		MapFeature* selection(int idx);
+		QList<MapFeature*> selection();
 		bool isSelected(MapFeature *aFeature);
 		unsigned int size() const;
 		void resetValues();
@@ -76,8 +76,8 @@ class PropertiesDock : public MDockAncestor
 
 		MainWindow* Main;
 		QWidget* CurrentUi;
-		std::vector<MapFeature*> Selection;
-		std::vector<MapFeature*> FullSelection;
+		QList<MapFeature*> Selection;
+		QList<MapFeature*> FullSelection;
 		Ui::TrackPointProperties TrackPointUi;
 		Ui::RoadProperties RoadUi;
 		Ui::MultiProperties MultiUi;

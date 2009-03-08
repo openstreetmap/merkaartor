@@ -20,7 +20,7 @@ Q_OBJECT
 		inline static const QString newKeyText(void)
 		{ return tr("Edit this to add..."); }
 
-		void setFeature(const std::vector<MapFeature*> Features);
+		void setFeature(const QList<MapFeature*> Features);
 		int rowCount(const QModelIndex &parent = QModelIndex()) const;
 		int columnCount(const QModelIndex &parent = QModelIndex()) const;
 		QVariant data(const QModelIndex &index, int role) const;
@@ -29,8 +29,8 @@ Q_OBJECT
 		bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 	private:
 		MainWindow* Main;
-		std::vector<MapFeature*> theFeatures;
-		std::vector<std::pair<QString, QString> > Tags;
+		QList<MapFeature*> theFeatures;
+		QList<std::pair<QString, QString> > Tags;
 };
 
 #endif

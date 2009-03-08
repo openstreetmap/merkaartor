@@ -291,9 +291,9 @@ int MapLayer::get(MapFeature* aFeature)
 	return -1;
 }
 
-QVector<MapFeature *> MapLayer::get()
+QList<MapFeature *> MapLayer::get()
 {
-	QVector<MapFeature *> theList;
+	QList<MapFeature *> theList;
 	for (int i=0; i<p->Features.size(); ++i)
 		if (p->Features[i])
 			theList.append(p->Features[i]);
@@ -954,8 +954,8 @@ bool TrackMapLayer::toXML(QDomElement xParent, QProgressDialog & progress)
 	o.setAttribute("xmlns", "http://www.topografix.com/GPX/1/1");
 	o.setAttribute("xmlns:rmc", "urn:net:trekbuddy:1.0:nmea:rmc");
 
-	QVector<TrackPoint*>	waypoints;
-	QVector<TrackSegment*>	segments;
+	QList<TrackPoint*>	waypoints;
+	QList<TrackSegment*>	segments;
 	QList<MapFeaturePtr>::iterator it;
 	for(it = p->Features.begin(); it != p->Features.end(); it++) {
 		if (TrackSegment* S = qobject_cast<TrackSegment*>(*it))

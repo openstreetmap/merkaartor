@@ -222,7 +222,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 		void updateProjectionMenu();
 		void updateStyleMenu();
 		MapDocument* getDocumentFromClipboard();
-		bool selectExportedFeatures(QVector<MapFeature*>& theFeatures);
+		bool selectExportedFeatures(QList<MapFeature*>& theFeatures);
 
 	protected:
 		void closeEvent(QCloseEvent * event);

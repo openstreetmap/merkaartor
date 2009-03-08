@@ -68,8 +68,8 @@ public:
 	virtual bool import(MapLayer* aLayer);
 
 	//export
-	virtual bool export_(const QVector<MapFeature *>& featList);
-	virtual bool export_(const QVector<MapFeature *>& featList, quint32 rg);
+	virtual bool export_(const QList<MapFeature *>& featList);
+	virtual bool export_(const QList<MapFeature *>& featList, quint32 rg);
 
 protected:
 //	void addTileIndex(MapFeature* F, qint64 pos);
