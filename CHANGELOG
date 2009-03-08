@@ -1,4 +1,5 @@
 v0.13
+	* FIX : Do not zoom out after a viewport download in background projection (fixes #1638)
 	* FIX : Remove layer from "downloaded areas" on close (fixes #1636)
 	* FIX : Crash on layer close
 	* FIX : Hardening upload process

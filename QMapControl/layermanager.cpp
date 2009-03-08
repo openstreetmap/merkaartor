@@ -193,7 +193,7 @@ void LayerManager::setMiddle(QList<QPointF> coordinates)
 
 bool LayerManager::containsAll(QList<QPointF> coordinates) const
 {
-	QRectF bb = getViewport();
+	QRectF bb = getViewport().adjusted(-0.01, -0.01, 0.01, 0.01);
 	bool containsall = true;
 	for (int i=0; i<coordinates.size(); i++)
 	{
