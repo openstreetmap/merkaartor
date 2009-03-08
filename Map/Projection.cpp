@@ -210,6 +210,7 @@ void Projection::setViewport(const CoordBox & TargetMap,
 	if (LAYERMANAGER_OK)
 		layerManagerSetViewport(TargetMap, Screen);
 	if (LAYERMANAGER_OK && BGPROJ_SELECTED) {
+		layermanager->zoomIn();
 		layerManagerViewportRecalc(Screen);
 		return;
 	}
