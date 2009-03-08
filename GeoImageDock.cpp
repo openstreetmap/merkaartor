@@ -293,8 +293,8 @@ void GeoImageDock::loadImages(QStringList fileNames)
 
 			Coord newPos(angToInt(lat), angToInt(lon));
 			TrackPoint *Pt;
-			QVector<MapFeature*>::ConstIterator it = theLayer->get().constBegin();
-			QVector<MapFeature*>::ConstIterator end = theLayer->get().constEnd();
+            QList<MapFeature*>::ConstIterator it = theLayer->get().constBegin();
+            QList<MapFeature*>::ConstIterator end = theLayer->get().constEnd();
 			for (; it != end; it++) // use existing TrackPoint if there is one in small distance 
 				if ((Pt = qobject_cast<TrackPoint*>(*it)) &&
 				 Pt->position().distanceFrom(newPos) <= .002)
