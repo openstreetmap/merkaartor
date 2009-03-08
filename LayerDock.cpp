@@ -185,6 +185,7 @@ void LayerDock::layerClosed(MapLayer* l)
 	l->getWidget()->setVisible(false);
 	l->getWidget()->getAssociatedMenu()->setVisible(false);
 	p->Main->on_editPropertiesAction_triggered();
+	p->Main->document()->removeDownloadBox(l);
 
 	update();
 }

@@ -744,8 +744,9 @@ void MapView::drawDownloadAreas(QPainter & P)
 	//QBrush b(Qt::red, Qt::DiagCrossPattern);
 	QBrush b(Qt::red, Qt::Dense7Pattern);
 
-	QList<CoordBox>::iterator bb;
-	for (bb = theDocument->getDownloadBoxes()->begin(); bb != theDocument->getDownloadBoxes()->end(); ++bb) {
+	QList<CoordBox> db = theDocument->getDownloadBoxes();
+	QList<CoordBox>::const_iterator bb;
+	for (bb = db.constBegin(); bb != db.constEnd(); ++bb) {
 		if (projection().viewport().disjunctFrom(*bb)) continue;
 		QPolygonF poly;
 		poly << projection().project((*bb).topLeft());

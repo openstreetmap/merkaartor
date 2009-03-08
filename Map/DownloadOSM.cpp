@@ -619,7 +619,7 @@ bool downloadMoreOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDo
 	if (OK)
 	{
 		theDocument->setLastDownloadLayer(theLayer);
-		theDocument->addDownloadBox(aBox);
+		theDocument->addDownloadBox(theLayer, aBox);
 		// Don't jump around on Download More
 		// aParent->view()->projection().setViewport(aBox,aParent->view()->rect());
 		Main->invalidateView();
@@ -742,7 +742,7 @@ bool downloadOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDocume
 			if (OK)
 			{
 				theDocument->setLastDownloadLayer(theLayer);
-				theDocument->addDownloadBox(Clip);
+				theDocument->addDownloadBox(theLayer, Clip);
                 if (directAPI)
                     Main->on_viewZoomAllAction_triggered();
                 else

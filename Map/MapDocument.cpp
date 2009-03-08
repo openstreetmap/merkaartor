@@ -49,7 +49,7 @@ public:
 	LayerDock*					theDock;
 	MapLayer*					lastDownloadLayer;
 
-	QList<CoordBox>				downloadBoxes;
+	QHash<MapLayer*, CoordBox>				downloadBoxes;
 
 	QMultiMap<QString, QString> tagList;
 	QList<QString>				tagKeys;
@@ -654,14 +654,19 @@ bool MapDocument::importOSB(const QString& filename, DrawingMapLayer* NewLayer)
 	return true;
 }
 
-void MapDocument::addDownloadBox(CoordBox aBox)
+void MapDocument::addDownloadBox(MapLayer* l, CoordBox aBox)
 {
-	p->downloadBoxes.append(aBox);
+	p->downloadBoxes.insert(l, aBox);
 }
 
-QList<CoordBox> *MapDocument::getDownloadBoxes()
+void MapDocument::removeDownloadBox(MapLayer* l)
 {
-	return &(p->downloadBoxes);
+	p->downloadBoxes.remove(l);
+}
+
+const QList<CoordBox> MapDocument::getDownloadBoxes() const
+{
+	return p->downloadBoxes.values();
 }
 
 MapLayer * MapDocument::getLastDownloadLayer()
