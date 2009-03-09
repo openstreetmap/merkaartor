@@ -50,6 +50,7 @@ class Command
 		QString oldCreated;
 		bool isUndone;
 		Command* postUploadCommand;
+		bool wasUploaded;
 };
 
 class CommandList : public Command

@@ -141,7 +141,8 @@ RemoveFeatureCommand::RemoveFeatureCommand(MapDocument *theDocument, MapFeature 
 	{
 		SAFE_DELETE(CascadedCleanUp);
 		CascadedCleanUp = 0;
-	}
+	} else
+		CascadedCleanUp->undo();
 	theLayer = theDocument->getDirtyOrOriginLayer();
 	redo();
 }

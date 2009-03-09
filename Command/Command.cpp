@@ -89,6 +89,7 @@ unsigned int Command::getDirtyLevel()
 void Command::undo()
 {
 	if (mainFeature) {
+		mainFeature->setUploaded(wasUploaded);
 		if (oldCreated != TAG_UNDEF_VALUE)
 			mainFeature->setTag("created_by", oldCreated);
 		else
@@ -102,6 +103,8 @@ void Command::redo()
 	if (mainFeature) {
 		oldCreated = mainFeature->tagValue("created_by", TAG_UNDEF_VALUE);
 		mainFeature->setTag("created_by",QString("Merkaartor %1").arg(VERSION));
+		wasUploaded = mainFeature->isUploaded();
+		mainFeature->setUploaded(false);
 	}
 	isUndone = false;
 }
