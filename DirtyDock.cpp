@@ -59,12 +59,7 @@ void DirtyDock::updateList()
 	if (!Main->document())
 		return;
 
-	int dirtyObjects = Main->document()->getDirtyOrOriginLayer()->size();
-	//QList<MapFeature *> dirtyList = Main->document()->getDirtyOrOriginLayer()->get();
-	//QList<MapFeature *>::const_iterator i;
-	//for (i = dirtyList.constBegin(); i != dirtyList.constEnd(); i++)
-	//	if (!(*i)->isDeleted())
-	//		++dirtyObjects;
+	int dirtyObjects = Main->document()->getDirtyOrOriginLayer()->getDirtySize();
 
 	switch (dirtyObjects)
 	{

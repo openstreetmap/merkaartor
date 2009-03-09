@@ -406,6 +406,18 @@ unsigned int MapLayer::getDirtyLevel()
 	return p->dirtyLevel;
 }
 
+unsigned int MapLayer::getDirtySize()
+{
+	int dirtyObjects = 0;
+
+	QList<MapFeaturePtr>::const_iterator i;
+	for (i = p->Features.constBegin(); i != p->Features.constEnd(); i++)
+		if (!(*i)->isDeleted() || ((*i)->isDeleted() && (*i)->hasOSMId()))
+			++dirtyObjects;
+
+	return dirtyObjects;
+}
+
 bool MapLayer::canDelete()
 {
 	return (p->dirtyLevel == 0);

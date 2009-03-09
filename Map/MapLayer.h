@@ -101,6 +101,7 @@ public:
 	unsigned int decDirtyLevel(unsigned int inc=1);
 	unsigned int getDirtyLevel();
 	unsigned int setDirtyLevel(unsigned int newLevel);
+	unsigned int getDirtySize();
 
 	virtual bool canDelete();
 	virtual bool isUploadable() {return true;}
