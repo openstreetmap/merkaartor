@@ -837,39 +837,40 @@ Soll es trotzdem verwendet werden?</translation>
         <location filename="../GeoImageDock.cpp" line="425"/>
         <source>Error while opening &quot;%1&quot;:
 %2</source>
-        <translation type="unfinished">Fehler beim öffnen von &quot;%2&quot;:
-%2 {1&quot;?}</translation>
+        <translation>Fehler beim Öffnen von &quot;%1&quot;:
+%2</translation>
     </message>
     <message>
         <location filename="../GeoImageDock.cpp" line="32"/>
         <source>Select next image</source>
-        <translation type="unfinished"></translation>
+        <translation>Nächstes Bild wählen</translation>
     </message>
     <message>
         <location filename="../GeoImageDock.cpp" line="33"/>
         <source>PgDown</source>
-        <translation type="unfinished"></translation>
+        <translation>BildHoch</translation>
     </message>
     <message>
         <location filename="../GeoImageDock.cpp" line="34"/>
         <source>Select previous image</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorheriges Bild wählen</translation>
     </message>
     <message>
         <location filename="../GeoImageDock.cpp" line="35"/>
         <source>PgUp</source>
-        <translation type="unfinished"></translation>
+        <translation>BildRunter</translation>
     </message>
     <message>
         <location filename="../GeoImageDock.cpp" line="217"/>
         <source>Layer is readonly</source>
-        <translation type="unfinished"></translation>
+        <translation>Ebene ist nur lesbar</translation>
     </message>
     <message>
         <location filename="../GeoImageDock.cpp" line="218"/>
         <source>The used layer is not writeable. Should it be made writeable?
 If not, you can&apos;t load images that belongs to it.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die benutzte Ebene ist nicht schreibbar. Soll sie schreibbar gemacht werden?
+Falls nicht, können Sie keine zugehörigen Bilder laden.</translation>
     </message>
 </context>
 <context>
@@ -2913,7 +2914,7 @@ Sind Sie sicher diese KML-Daten dürfen legal in OSM importiert werden?</transla
     <message>
         <location filename="../MapView.cpp" line="1068"/>
         <source>Add trackpoint position to image</source>
-        <translation type="unfinished"></translation>
+        <translation>GPS-Punktposition zum Bild hinzufügen</translation>
     </message>
     <message>
         <location filename="../MapView.cpp" line="1070"/>

@@ -846,39 +846,40 @@ Voulez vous quand même l&apos;utiliser ?</translation>
         <location filename="../GeoImageDock.cpp" line="425"/>
         <source>Error while opening &quot;%1&quot;:
 %2</source>
-        <translation type="unfinished">Erreur lors du chargement de &quot;%2&quot;.
-%2 {1&quot;?}</translation>
+        <translation>Erreur à l&apos;ouverture de &quot;%1&quot;.
+%2</translation>
     </message>
     <message>
         <location filename="../GeoImageDock.cpp" line="32"/>
         <source>Select next image</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner l&apos;image suivante</translation>
     </message>
     <message>
         <location filename="../GeoImageDock.cpp" line="33"/>
         <source>PgDown</source>
-        <translation type="unfinished"></translation>
+        <translation>PgDown</translation>
     </message>
     <message>
         <location filename="../GeoImageDock.cpp" line="34"/>
         <source>Select previous image</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner l&apos;image précédente</translation>
     </message>
     <message>
         <location filename="../GeoImageDock.cpp" line="35"/>
         <source>PgUp</source>
-        <translation type="unfinished"></translation>
+        <translation>PgUp</translation>
     </message>
     <message>
         <location filename="../GeoImageDock.cpp" line="217"/>
         <source>Layer is readonly</source>
-        <translation type="unfinished"></translation>
+        <translation>La couche est en lecture seule</translation>
     </message>
     <message>
         <location filename="../GeoImageDock.cpp" line="218"/>
         <source>The used layer is not writeable. Should it be made writeable?
 If not, you can&apos;t load images that belongs to it.</source>
-        <translation type="unfinished"></translation>
+        <translation>La couche utilisée est en lecture seule. La rendre inscriptible?
+Sinon, vous ne pourrez pas charger les images lui appartenant.</translation>
     </message>
 </context>
 <context>
@@ -2920,7 +2921,7 @@ En cas de doute, demandez un avis sur les listes de diffusion OSM &quot;legal&qu
     <message>
         <location filename="../MapView.cpp" line="1068"/>
         <source>Add trackpoint position to image</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter la position du noeud à l&apos;image</translation>
     </message>
     <message>
         <location filename="../MapView.cpp" line="1070"/>

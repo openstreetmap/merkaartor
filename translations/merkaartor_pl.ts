@@ -849,39 +849,40 @@ Czy na pewno go wykorzystać?</translation>
         <location filename="../GeoImageDock.cpp" line="425"/>
         <source>Error while opening &quot;%1&quot;:
 %2</source>
-        <translation type="unfinished">Błąd podczas otwierania %2:
-%2 {1&quot;?}</translation>
+        <translation>Błąd podczas otwierania &quot;%1&quot;:
+%2</translation>
     </message>
     <message>
         <location filename="../GeoImageDock.cpp" line="32"/>
         <source>Select next image</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz następny obraz</translation>
     </message>
     <message>
         <location filename="../GeoImageDock.cpp" line="33"/>
         <source>PgDown</source>
-        <translation type="unfinished"></translation>
+        <translation>PageDown</translation>
     </message>
     <message>
         <location filename="../GeoImageDock.cpp" line="34"/>
         <source>Select previous image</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz poprzedni obraz</translation>
     </message>
     <message>
         <location filename="../GeoImageDock.cpp" line="35"/>
         <source>PgUp</source>
-        <translation type="unfinished"></translation>
+        <translation>PageUp</translation>
     </message>
     <message>
         <location filename="../GeoImageDock.cpp" line="217"/>
         <source>Layer is readonly</source>
-        <translation type="unfinished"></translation>
+        <translation>Warstwa jest tylko do odczytu</translation>
     </message>
     <message>
         <location filename="../GeoImageDock.cpp" line="218"/>
         <source>The used layer is not writeable. Should it be made writeable?
 If not, you can&apos;t load images that belongs to it.</source>
-        <translation type="unfinished"></translation>
+        <translation>Używana warstwa jest tylko do odczytu. Czy pozwolić ma możliwość zapisu?
+W przeciwnym razie nie będzie można wczytać obrazów należących do tej warstwy.</translation>
     </message>
 </context>
 <context>
@@ -2920,7 +2921,7 @@ Na pewno można legalnie zaimportować ten plik do OSM?</translation>
     <message>
         <location filename="../MapView.cpp" line="1068"/>
         <source>Add trackpoint position to image</source>
-        <translation type="unfinished"></translation>
+        <translation>Dodaj punkt trasy do obrazu</translation>
     </message>
     <message>
         <location filename="../MapView.cpp" line="1070"/>

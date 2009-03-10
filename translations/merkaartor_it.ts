@@ -846,39 +846,40 @@ Vuoi continuare ad usarla?</translation>
         <location filename="../GeoImageDock.cpp" line="425"/>
         <source>Error while opening &quot;%1&quot;:
 %2</source>
-        <translation type="unfinished">Errore nell&apos;aprire &quot;%2&quot;:
-%2 {1&quot;?}</translation>
+        <translation>Errore durante l&apos;apertura di &quot;%1&quot;:
+%2</translation>
     </message>
     <message>
         <location filename="../GeoImageDock.cpp" line="32"/>
         <source>Select next image</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleziona immagine successiva</translation>
     </message>
     <message>
         <location filename="../GeoImageDock.cpp" line="33"/>
         <source>PgDown</source>
-        <translation type="unfinished"></translation>
+        <translation>Pag. Giù</translation>
     </message>
     <message>
         <location filename="../GeoImageDock.cpp" line="34"/>
         <source>Select previous image</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleziona immagine precedente</translation>
     </message>
     <message>
         <location filename="../GeoImageDock.cpp" line="35"/>
         <source>PgUp</source>
-        <translation type="unfinished"></translation>
+        <translation>Pag Su</translation>
     </message>
     <message>
         <location filename="../GeoImageDock.cpp" line="217"/>
         <source>Layer is readonly</source>
-        <translation type="unfinished"></translation>
+        <translation>Livello in sola lettura</translation>
     </message>
     <message>
         <location filename="../GeoImageDock.cpp" line="218"/>
         <source>The used layer is not writeable. Should it be made writeable?
 If not, you can&apos;t load images that belongs to it.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il livello utilizzato non è modificabile. Vorresti renderlo tale?
+Se rispondi no, non potra caricare le immagini al suo interno.</translation>
     </message>
 </context>
 <context>
@@ -2921,7 +2922,7 @@ Sei assolutamente sicuro che questo file KML può essere importato legalmente in
     <message>
         <location filename="../MapView.cpp" line="1068"/>
         <source>Add trackpoint position to image</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi posizione trackpoint all&apos;immagine</translation>
     </message>
     <message>
         <location filename="../MapView.cpp" line="1070"/>
