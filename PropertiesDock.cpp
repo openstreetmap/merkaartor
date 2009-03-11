@@ -488,7 +488,8 @@ void PropertiesDock::resetValues()
 			TrackPointUi.TagView->setModel(theModel);
 			TrackPointUi.TagView->setItemDelegate(delegate);
 
-			QWidget* w = TrackPointUi.variableLayout->takeAt(0)->widget();
+			QWidget* w = TrackPointUi.variableLayout->itemAt(0)->widget();
+			w->hide();
 			w->deleteLater();
 			if (theTemplates)
 				TrackPointUi.variableLayout->addWidget(theTemplates->getWidget(Pt));
@@ -506,7 +507,8 @@ void PropertiesDock::resetValues()
 			RoadUi.TagView->setModel(theModel);
 			RoadUi.TagView->setItemDelegate(delegate);
 
-			QWidget* w = RoadUi.variableLayout->takeAt(0)->widget();
+			QWidget* w = RoadUi.variableLayout->itemAt(0)->widget();
+			w->hide();
 			w->deleteLater();
 			if (theTemplates)
 				RoadUi.variableLayout->addWidget(theTemplates->getWidget(R));
@@ -519,7 +521,8 @@ void PropertiesDock::resetValues()
 			RelationUi.TagView->setModel(theModel);
 			RelationUi.TagView->setItemDelegate(delegate);
 
-			QWidget* w = RelationUi.variableLayout->takeAt(0)->widget();
+			QWidget* w = RelationUi.variableLayout->itemAt(0)->widget();
+			w->hide();
 			w->deleteLater();
 			if (theTemplates)
 				RelationUi.variableLayout->addWidget(theTemplates->getWidget(R));
@@ -600,8 +603,6 @@ void PropertiesDock::on_tag_changed(QString k, QString v)
 	if (F->tagValue(k, "__NULL__") != v) {
 		Main->document()->addHistory(new SetTagCommand(F,k,v,Main->document()->getDirtyOrOriginLayer(F->layer())));
 		Main->invalidateView();
-
-		resetValues();
 	}
 }
 
@@ -610,8 +611,6 @@ void PropertiesDock::on_tag_cleared(QString k)
 	MapFeature* F = FullSelection[0];
 	Main->document()->addHistory(new ClearTagCommand(F,k,Main->document()->getDirtyOrOriginLayer(F->layer())));
 	Main->invalidateView();
-
-	resetValues();
 }
 
 void PropertiesDock::on_RemoveTagButton_clicked()

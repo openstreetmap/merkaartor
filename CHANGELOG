@@ -1,4 +1,5 @@
 v0.13
+    * FIX : Workaround for a crash with templates on Qt 4.5
 	* FIX : Crash after TMS/WMS server renaming (fixes #1634)
 	* FIX : Download opaqueness applied to relations (fixes #1637)
 	* FIX : Do not zoom out after a viewport download in background projection (fixes #1638)

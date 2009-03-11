@@ -95,7 +95,7 @@ class TagTemplateWidgetCombo: public TagTemplateWidget
 	Q_OBJECT
 
 	public:
-		~TagTemplateWidgetCombo();
+		virtual ~TagTemplateWidgetCombo();
 
 	public:
 		QWidget*	getWidget(const MapFeature* F);
