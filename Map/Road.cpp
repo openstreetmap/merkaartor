@@ -927,7 +927,8 @@ Road * Road::GetSingleParentRoad(MapFeature * mapFeature)
 		if (parentRoad && road != parentRoad)
 			return NULL;
 
-		if (road->layer()->isEnabled())
+		//FIXME This test shouldn't be necessary, but there is at least a case where the road has a NULL layer. The root cause must be found.
+		if (!(road->isDeleted()) && road->layer() && road->layer()->isEnabled())
 			parentRoad = road;
 	}
 
@@ -959,7 +960,8 @@ Road * Road::GetSingleParentRoadInner(MapFeature * mapFeature)
 		if (parentRoad && road != parentRoad)
 			return NULL;
 
-		if (road->layer()->isEnabled())
+		//FIXME This test shouldn't be necessary, but there is at least a case where the road has a NULL layer. The root cause must be found.
+		if (!(road->isDeleted()) && road->layer() && road->layer()->isEnabled())
 			parentRoad = road;
 	}
 
