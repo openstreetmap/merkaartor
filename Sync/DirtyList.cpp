@@ -168,6 +168,7 @@ bool DirtyListVisit::notYetAdded(MapFeature* F)
 bool DirtyListVisit::add(MapFeature* F)
 {
 	if (DeletePass) return false;
+	if (F->isDeleted()) return false;
 	if (!F->isDirty()) return false;
 	if (F->hasOSMId()) return false;
 
@@ -215,6 +216,7 @@ bool DirtyListVisit::update(MapFeature* F)
 {
 	if (DeletePass) return false;
 	if (!F->isDirty()) return false;
+	if (F->isDeleted()) return false;
 
 	if (Future.willBeErased(F) || Future.willBeAdded(F))
 		return EraseFromHistory;

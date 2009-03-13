@@ -723,7 +723,8 @@ FeatureIterator::FeatureIterator(MapDocument *aDoc)
 {
 	for (unsigned int i=0; i<theDocument->layerSize(); ++i)
 		for (unsigned int j=0; j<theDocument->getLayer(i)->size(); ++j)
-			if (theDocument->getLayer(i)->get(j)->lastUpdated() != MapFeature::NotYetDownloaded)
+			if ((theDocument->getLayer(i)->get(j)->lastUpdated() != MapFeature::NotYetDownloaded) &&
+					!theDocument->getLayer(i)->get(j)->isDeleted())
 				theFeatures.push_back(theDocument->getLayer(i)->get(j));
 }
 
