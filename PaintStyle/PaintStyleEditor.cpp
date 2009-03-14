@@ -101,7 +101,7 @@ void PaintStyleEditor::on_btUp_clicked()
 void PaintStyleEditor::on_btDown_clicked()
 {
 	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
+	if (idx >= thePainters.size()-1)
 		return;
 	FeaturePainter fp = thePainters[idx+1];
 	thePainters[idx+1] = thePainters[idx];
