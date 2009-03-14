@@ -26,6 +26,9 @@ void syncOSM(MainWindow* theMain, const QString& aWeb, const QString& aUser, con
 		DirtyListExecutor Exec(theMain->document(),Future,aWeb,aUser,aPwd, UseProxy, ProxyHost, ProxyPort,Describer.tasks());
 		Exec.executeChanges(theMain);
 
+		if (M_PREFS->getAutoHistoryCleanup() && !theMain->document()->getDirtyOrOriginLayer()->getDirtySize())
+			theMain->document()->history().cleanup();
+
 		if (theMain->fileName != "") {
 			if (MerkaartorPreferences::instance()->getAutoSaveDoc()) {
 				theMain->saveDocument();
@@ -38,8 +41,6 @@ void syncOSM(MainWindow* theMain, const QString& aWeb, const QString& aUser, con
 				}
 			}
 		}
-		if (M_PREFS->getAutoHistoryCleanup() && !theMain->document()->getDirtyOrOriginLayer()->getDirtySize())
-			theMain->document()->history().cleanup();
 	}
 }
 

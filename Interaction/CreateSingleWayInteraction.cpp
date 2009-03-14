@@ -45,7 +45,7 @@ void CreateSingleWayInteraction::paintEvent(QPaintEvent* anEvent, QPainter& theP
 	if (HaveFirst)
 	{
 		QPointF PreviousPoint;
-		if (theRoad && theRoad->size())
+		if (theRoad && theRoad->size() && !Prepend)
 			PreviousPoint = view()->projection().project(CAST_NODE(theRoad->get(theRoad->size()-1))->position());
 		else
 			PreviousPoint = view()->projection().project(FirstPoint);

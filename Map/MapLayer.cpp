@@ -412,7 +412,7 @@ unsigned int MapLayer::getDirtySize()
 
 	QList<MapFeaturePtr>::const_iterator i;
 	for (i = p->Features.constBegin(); i != p->Features.constEnd(); i++)
-		if (!(*i)->isDeleted() || ((*i)->isDeleted() && (*i)->hasOSMId()))
+		if (!((*i)->isDeleted()) || ((*i)->isDeleted() && (*i)->hasOSMId()))
 			++dirtyObjects;
 
 	return dirtyObjects;
