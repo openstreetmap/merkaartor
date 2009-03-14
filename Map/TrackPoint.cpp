@@ -143,7 +143,8 @@ void TrackPoint::drawFocus(QPainter& thePainter, const Projection& theProjection
 
 	if (M_PREFS->getShowParents() && solid) {
 		for (unsigned int i=0; i<sizeParents(); ++i)
-			getParent(i)->drawFocus(thePainter, theProjection, false);
+			if (!getParent(i)->isDeleted())
+				getParent(i)->drawFocus(thePainter, theProjection, false);
 	}
 }
 
@@ -158,7 +159,8 @@ void TrackPoint::drawHover(QPainter& thePainter, const Projection& theProjection
 
 	if (M_PREFS->getShowParents() && solid) {
 		for (unsigned int i=0; i<sizeParents(); ++i)
-			getParent(i)->drawHover(thePainter, theProjection, false);
+			if (!getParent(i)->isDeleted())
+				getParent(i)->drawHover(thePainter, theProjection, false);
 	}
 }
 

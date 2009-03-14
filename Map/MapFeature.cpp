@@ -39,7 +39,7 @@ class MapFeaturePrivate
 				PossiblePaintersUpToDate(false),
 			  	PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
 				theFeature(0), LastPartNotification(0),
-				Time(QDateTime::currentDateTime()), Deleted(false)
+				Time(QDateTime::currentDateTime()), Deleted(false), Uploaded(false)
 		{
 			initVersionNumber();
 			parentDashes << 1 << 5;
@@ -49,7 +49,7 @@ class MapFeaturePrivate
 				PossiblePaintersUpToDate(false),
 			  	PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
 				theFeature(0), LastPartNotification(0),
-				Time(other.Time), Deleted(false)
+				Time(other.Time), Deleted(false), Uploaded(false)
 		{
 			initVersionNumber();
 			parentDashes << 1 << 5;

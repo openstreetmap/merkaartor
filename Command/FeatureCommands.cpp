@@ -89,7 +89,8 @@ void SetTagCommand::undo()
 		theFeature->setTag(theIdx,oldK,oldV);
 	}
 	else
-	theFeature->clearTag(theK);
+		theFeature->clearTag(theK);
+
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		theLayer->remove(theFeature);
 		oldLayer->add(theFeature);

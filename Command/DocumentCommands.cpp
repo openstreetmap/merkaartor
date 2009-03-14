@@ -127,7 +127,7 @@ RemoveFeatureCommand::RemoveFeatureCommand(MapFeature *aFeature)
 RemoveFeatureCommand::RemoveFeatureCommand(MapDocument *theDocument, MapFeature *aFeature)
 : Command(aFeature), theLayer(0), Idx(0), theFeature(aFeature), CascadedCleanUp(0), RemoveExecuted(false)
 {
-	theLayer = theDocument->getDirtyOrOriginLayer();
+	theLayer = theDocument->getDirtyOrOriginLayer(aFeature->layer());
 	redo();
 }
 
@@ -143,7 +143,7 @@ RemoveFeatureCommand::RemoveFeatureCommand(MapDocument *theDocument, MapFeature 
 		CascadedCleanUp = 0;
 	} else
 		CascadedCleanUp->undo();
-	theLayer = theDocument->getDirtyOrOriginLayer();
+	theLayer = theDocument->getDirtyOrOriginLayer(aFeature->layer());
 	redo();
 }
 

@@ -330,7 +330,8 @@ void Road::drawHover(QPainter& thePainter, const Projection& theProjection, bool
 
 		if (M_PREFS->getShowParents()) {
 			for (unsigned int i=0; i<sizeParents(); ++i)
-				getParent(i)->drawHover(thePainter, theProjection, false);
+				if (!getParent(i)->isDeleted())
+					getParent(i)->drawHover(thePainter, theProjection, false);
 		}
 	}
 }
@@ -366,7 +367,8 @@ void Road::drawFocus(QPainter& thePainter, const Projection& theProjection, bool
 
 		if (M_PREFS->getShowParents()) {
 			for (unsigned int i=0; i<sizeParents(); ++i)
-				getParent(i)->drawFocus(thePainter, theProjection, false);
+				if (!getParent(i)->isDeleted())
+					getParent(i)->drawFocus(thePainter, theProjection, false);
 		}
 	}
 }

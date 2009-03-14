@@ -145,12 +145,13 @@ void Relation::drawFocus(QPainter& P, const Projection& theProjection, bool soli
 		P.drawPath(p->thePath);
 
 		for (unsigned int i=0; i<p->Members.size(); ++i)
-			if (p->Members[i].second)
+			if (p->Members[i].second && !p->Members[i].second->isDeleted())
 				p->Members[i].second->drawFocus(P,theProjection, solid);
 
 		if (M_PREFS->getShowParents()) {
 			for (unsigned int i=0; i<sizeParents(); ++i)
-				getParent(i)->drawFocus(P, theProjection, false);
+				if (!getParent(i)->isDeleted())
+					getParent(i)->drawFocus(P, theProjection, false);
 		}
 	}
 }
@@ -169,12 +170,13 @@ void Relation::drawHover(QPainter& P, const Projection& theProjection, bool soli
 		P.drawPath(p->thePath);
 
 		for (unsigned int i=0; i<p->Members.size(); ++i)
-			if (p->Members[i].second)
+			if (p->Members[i].second && !p->Members[i].second->isDeleted())
 				p->Members[i].second->drawHover(P,theProjection, solid);
 
 		if (M_PREFS->getShowParents()) {
 			for (unsigned int i=0; i<sizeParents(); ++i)
-				getParent(i)->drawHover(P, theProjection, false);
+				if (!getParent(i)->isDeleted())
+					getParent(i)->drawHover(P, theProjection, false);
 		}
 	}
 }

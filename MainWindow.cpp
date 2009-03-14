@@ -900,8 +900,6 @@ void MainWindow::on_fileUploadAction_triggered()
 	syncOSM(this, p->getOsmWebsite(), p->getOsmUser(), p->getOsmPassword(), p->getProxyUse(),
 		p->getProxyHost(), p->getProxyPort());
 
-	if (M_PREFS->getAutoHistoryCleanup() && !theDocument->getDirtyOrOriginLayer()->getDirtySize())
-		theDocument->history().cleanup();
 	theDocument->history().updateActions();
 	theDirty->updateList();
 }

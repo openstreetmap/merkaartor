@@ -3,6 +3,7 @@
 #include "MainWindow.h"
 #include "Command/Command.h"
 #include "Map/MapDocument.h"
+#include "Map/MapLayer.h"
 #include "Map/DownloadOSM.h"
 #include "Sync/DirtyList.h"
 
@@ -37,6 +38,8 @@ void syncOSM(MainWindow* theMain, const QString& aWeb, const QString& aUser, con
 				}
 			}
 		}
+		if (M_PREFS->getAutoHistoryCleanup() && !theMain->document()->getDirtyOrOriginLayer()->getDirtySize())
+			theMain->document()->history().cleanup();
 	}
 }
 
