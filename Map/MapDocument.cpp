@@ -656,7 +656,7 @@ bool MapDocument::importOSB(const QString& filename, DrawingMapLayer* NewLayer)
 
 void MapDocument::addDownloadBox(MapLayer* l, CoordBox aBox)
 {
-	p->downloadBoxes.insert(l, aBox);
+	p->downloadBoxes.insertMulti(l, aBox);
 }
 
 void MapDocument::removeDownloadBox(MapLayer* l)
