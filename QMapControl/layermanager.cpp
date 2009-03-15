@@ -20,7 +20,7 @@
 #include "layermanager.h"
 
 #include "imagemanager.h"
-#ifdef YAHOO
+#ifdef USE_WEBKIT
 #include "browserimagemanager.h"
 #endif
 
@@ -101,20 +101,20 @@ void LayerManager::scrollView(const QPoint& point)
 
 //		newOffscreenImage();
 	}
-	else
-	{
-		moveWidgets();
-	}
+	//else
+	//{
+	//	moveWidgets();
+	//}
 }
 
-void LayerManager::moveWidgets()
-{
-	QListIterator<Layer*> it(layers);
-	while (it.hasNext())
-	{
-		it.next()->moveWidgets(mapmiddle_px);
-	}
-}
+//void LayerManager::moveWidgets()
+//{
+//	QListIterator<Layer*> it(layers);
+//	while (it.hasNext())
+//	{
+//		it.next()->moveWidgets(mapmiddle_px);
+//	}
+//}
 
 void LayerManager::setView(const QPointF& coordinate, bool newImage)
 {
@@ -168,7 +168,7 @@ void LayerManager::setView(const QList<QPointF> coordinates)
 	}
 
 	ImageManager::instance()->abortLoading();
-#ifdef YAHOO
+#ifdef USE_WEBKIT
 	BrowserImageManager::instance()->abortLoading();
 #endif
 
@@ -244,7 +244,7 @@ void LayerManager::removeLayer()
 {
 	Q_ASSERT_X(layers.size()>0, "LayerManager::removeLayer()", "No layers existing!");
 	ImageManager::instance()->abortLoading();
-#ifdef YAHOO
+#ifdef USE_WEBKIT
 	BrowserImageManager::instance()->abortLoading();
 #endif
 	layers.removeAt(0);
@@ -254,7 +254,7 @@ void LayerManager::removeLayer(const QString& aLyerId)
 {
 	Q_ASSERT_X(layers.size()>0, "LayerManager::removeLayer()", "No layers existing!");
 	ImageManager::instance()->abortLoading();
-#ifdef YAHOO
+#ifdef USE_WEBKIT
 	BrowserImageManager::instance()->abortLoading();
 #endif
 	layers.removeAt(getLayers().indexOf(aLyerId));
@@ -306,7 +306,7 @@ void LayerManager::backZoomIn()
 {
 	QListIterator<Layer*> it(layers);
 	//TODO: remove hack, that mapadapters wont get set zoom multiple times
-	QList<const MapAdapter*> doneadapters;
+	QList<const IMapAdapter*> doneadapters;
 	while (it.hasNext())
 	{
 		Layer* l = it.next();
@@ -323,7 +323,7 @@ void LayerManager::backZoomIn()
 void LayerManager::zoomIn()
 {
 	ImageManager::instance()->abortLoading();
-#ifdef YAHOO
+#ifdef USE_WEBKIT
 	BrowserImageManager::instance()->abortLoading();
 #endif
 
@@ -370,7 +370,7 @@ void LayerManager::backZoomOut()
 {
 	QListIterator<Layer*> it(layers);
 	//TODO: remove hack, that mapadapters wont get set zoom multiple times
-	QList<const MapAdapter*> doneadapters;
+	QList<const IMapAdapter*> doneadapters;
 	while (it.hasNext())
 	{
 		Layer* l = it.next();
@@ -387,7 +387,7 @@ void LayerManager::backZoomOut()
 void LayerManager::zoomOut()
 {
 	ImageManager::instance()->abortLoading();
-#ifdef YAHOO
+#ifdef USE_WEBKIT
 	BrowserImageManager::instance()->abortLoading();
 #endif
 
@@ -437,18 +437,18 @@ void LayerManager::setZoom(int zoomlevel)
 	}
 }
 
-void LayerManager::mouseEvent(const QMouseEvent* evnt)
-{
-	QListIterator<Layer*> it(layers);
-	while (it.hasNext())
-	{
-		Layer* l = it.next();
-		if (l->isVisible())
-		{
-			l->mouseEvent(evnt, mapmiddle_px);
-		}
-	}
-}
+//void LayerManager::mouseEvent(const QMouseEvent* evnt)
+//{
+//	QListIterator<Layer*> it(layers);
+//	while (it.hasNext())
+//	{
+//		Layer* l = it.next();
+//		if (l->isVisible())
+//		{
+//			l->mouseEvent(evnt, mapmiddle_px);
+//		}
+//	}
+//}
 
 void LayerManager::updateRequest(QRectF rect)
 {
@@ -481,18 +481,18 @@ void LayerManager::removeZoomImage()
 	zoomImage.fill(Qt::transparent);
 }
 
-void LayerManager::drawGeoms(QPainter* painter)
-{
-	QListIterator<Layer*> it(layers);
-	while (it.hasNext())
-	{
-		Layer* l = it.next();
-		if (l->getLayertype() == Layer::GeometryLayer && l->isVisible())
-		{
-			l->drawYourGeometries(painter, mapmiddle_px, getLayer()->getOffscreenViewport());
-		}
-	}
-}
+//void LayerManager::drawGeoms(QPainter* painter)
+//{
+//	QListIterator<Layer*> it(layers);
+//	while (it.hasNext())
+//	{
+//		Layer* l = it.next();
+//		if (l->getLayertype() == Layer::GeometryLayer && l->isVisible())
+//		{
+//			l->drawYourGeometries(painter, mapmiddle_px, getLayer()->getOffscreenViewport());
+//		}
+//	}
+//}
 void LayerManager::drawImage(QPainter* painter)
 {
 	painter->drawPixmap(-scroll.x()-screenmiddle.x(),

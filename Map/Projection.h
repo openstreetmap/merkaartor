@@ -45,7 +45,7 @@ class Projection
 		virtual bool toXML(QDomElement xParent) const;
 		void fromXML(QDomElement e, const QRect & Screen);
 
-		void setProjectionType(ProjectionType aProjectionType);
+		bool setProjectionType(ProjectionType aProjectionType);
 
 	protected:
 		double ScaleLat, ScaleLon;
@@ -56,6 +56,7 @@ class Projection
 		LayerManager* layermanager;
 		ProjectionType theProjectionType;
 #ifdef USE_PROJ
+		projPJ theWmsProj;
 		projPJ theProj;
 #endif
 

@@ -36,7 +36,7 @@
 #include <QNetworkProxy>
 
 #include "IImageManager.h"
-#include "mapadapter.h"
+#include "IMapAdapter.h"
 
 /**
 	@author Chris Browet <cbro@semperpax.com>
@@ -80,10 +80,10 @@ class BrowserImageManager : public IImageManager
 		 * @return the pixmap of the asked image
 		 */
 		//QPixmap getImage(const QString& host, const QString& path);
-		QPixmap getImage(MapAdapter* anAdapter, int x, int y, int z);
+		QPixmap getImage(IMapAdapter* anAdapter, int x, int y, int z);
 
 		//QPixmap prefetchImage(const QString& host, const QString& path);
-		QPixmap prefetchImage(MapAdapter* anAdapter, int x, int y, int z);
+		QPixmap prefetchImage(IMapAdapter* anAdapter, int x, int y, int z);
 
 		void receivedImage(const QPixmap& pixmap, const QString& url);
 

@@ -18,7 +18,7 @@
 
 #include "QMapControl/layermanager.h"
 #include "QMapControl/imagemanager.h"
-#ifdef YAHOO
+#ifdef USE_WEBKIT
 	#include "QMapControl/browserimagemanager.h"
 #endif
 #include "Preferences/MerkaartorPreferences.h"
@@ -46,20 +46,20 @@ MapView::MapView(MainWindow* aMain) :
 
 	ImageManager::instance()->setCacheDir(MerkaartorPreferences::instance()->getCacheDir());
 	ImageManager::instance()->setCacheMaxSize(MerkaartorPreferences::instance()->getCacheSize());
-#ifdef YAHOO
+#ifdef USE_WEBKIT
 	BrowserImageManager::instance()->setCacheDir(MerkaartorPreferences::instance()->getCacheDir());
 	BrowserImageManager::instance()->setCacheMaxSize(MerkaartorPreferences::instance()->getCacheSize());
 #endif
 	if (MerkaartorPreferences::instance()->getProxyUse()) {
 		ImageManager::instance()->setProxy(MerkaartorPreferences::instance()->getProxyHost(),
 			MerkaartorPreferences::instance()->getProxyPort());
-#ifdef YAHOO
+#ifdef USE_WEBKIT
 		BrowserImageManager::instance()->setProxy(MerkaartorPreferences::instance()->getProxyHost(),
 			MerkaartorPreferences::instance()->getProxyPort());
 #endif
 	} else {
 		ImageManager::instance()->setProxy("",0);
-#ifdef YAHOO
+#ifdef USE_WEBKIT
 		BrowserImageManager::instance()->setProxy("",0);
 #endif
 	}
@@ -71,7 +71,7 @@ MapView::MapView(MainWindow* aMain) :
 		this, SLOT(imageReceived()));
 	connect(ImageManager::instance(), SIGNAL(loadingFinished()),
 		this, SLOT(loadingFinished()));
-#ifdef YAHOO
+#ifdef USE_WEBKIT
 	connect(BrowserImageManager::instance(), SIGNAL(imageRequested()),
 		this, SLOT(imageRequested()));
 	connect(BrowserImageManager::instance(), SIGNAL(imageReceived()),
@@ -97,7 +97,7 @@ MapView::~MapView()
 	if(theInteraction)
 		delete theInteraction;
 	delete ImageManager::instance();
-#ifdef YAHOO
+#ifdef USE_WEBKIT
 	delete BrowserImageManager::instance();
 #endif
 	delete layermanager;
@@ -297,10 +297,10 @@ void MapView::updateLayersImage()
 	QPainter P(StaticMap);
 
 	QPixmap pm(size());
-	if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
-		pm.fill(M_PREFS->getBgColor());
-	else
-		pm.fill(M_STYLE->getGlobalPainter().getBackgroundColor());
+	//if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
+	//	pm.fill(M_PREFS->getBgColor());
+	//else
+	//	pm.fill(M_STYLE->getGlobalPainter().getBackgroundColor());
 	QPainter pmp(&pm);
 	layermanager->drawImage(&pmp);
 

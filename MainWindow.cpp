@@ -35,15 +35,21 @@
 #include "PaintStyle/EditPaintStyle.h"
 #include "PaintStyle/PaintStyleEditor.h"
 #include "Sync/SyncOSM.h"
+#include "QMapControl/layer.h"
 #include <ui_AboutDialog.h>
 #include <ui_UploadMapDialog.h>
 #include <ui_SelectionDialog.h>
 #include <ui_ExportDialog.h>
 #include "Preferences/PreferencesDialog.h"
 #include "Preferences/MerkaartorPreferences.h"
+#ifdef USE_PROJ
+#include "Preferences/ProjectionsList.h"
+#endif
+#include "Preferences/WMSPreferencesDialog.h"
+#include "Preferences/TMSPreferencesDialog.h"
 #include "Utils/SelectionDialog.h"
 #include "QMapControl/imagemanager.h"
-#ifdef YAHOO
+#ifdef USE_WEBKIT
 	#include "QMapControl/browserimagemanager.h"
 #endif
 #include "QMapControl/mapadapter.h"
@@ -243,8 +249,6 @@ MainWindow::MainWindow(void)
     theGPS->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 	addDockWidget(Qt::RightDockWidgetArea, theGPS);
 
-	MerkaartorPreferences::instance()->restoreMainWindowState( this );
-
 #else
 	theProperties->setVisible(false);
 	theInfo->setVisible(false);
@@ -273,8 +277,13 @@ MainWindow::MainWindow(void)
 	viewStyleTouchupAction->setVisible(false);
 //#endif
 	
-    on_fileNewAction_triggered();
-    MerkaartorPreferences::instance()->initialPosition(theView);
+	on_fileNewAction_triggered();
+	MerkaartorPreferences::instance()->restoreMainWindowState( this );
+	if (!M_PREFS->getProjectionsList().getProjections().size()) {
+		QMessageBox::critical(this, tr("Cannot load Projections file"), tr("\"Projections.xml\" could not be opened anywhere. Aborting."));
+		exit(1);
+	}
+	M_PREFS->initialPosition(theView);
 
 
 #define NUMOP 3
@@ -298,6 +307,7 @@ MainWindow::MainWindow(void)
 	blockSignals(false);
 
 	QTimer::singleShot( 0, this, SLOT(delayedInit()) );
+
 }
 
 void MainWindow::delayedInit()
@@ -360,7 +370,10 @@ void MainWindow::adjustLayers(bool adjustViewport)
 		else
 			theView->projection().zoom(1, QPoint(theView->width() / 2, theView->height() / 2), theView->rect());
 #else
-		theView->projection().resize(theView->size(), theView->size());
+		CoordBox theVp = theView->projection().viewport();
+		if (theDocument->getImageLayer()->imageLayer())
+			theView->projection().setProjectionType(theDocument->getImageLayer()->imageLayer()->getMapAdapter()->projection());
+		theView->projection().setViewport(theVp, theView->rect());
 #endif
 	}
 	invalidateView(true);
@@ -1109,7 +1122,7 @@ void MainWindow::on_fileNewAction_triggered()
 		setWindowTitle(QString("Merkaartor - untitled"));
 
 		on_editPropertiesAction_triggered();
-		invalidateView();
+		adjustLayers(true);
 	}
 }
 
@@ -1340,6 +1353,26 @@ void MainWindow::on_toolsWorldOsbAction_triggered()
 	osbMgr.exec();
 }
 
+void MainWindow::on_toolsWMSServersAction_triggered()
+{
+	WMSPreferencesDialog* WMSPref;
+	WMSPref = new WMSPreferencesDialog();
+	if (WMSPref->exec() == QDialog::Accepted) {
+		theDocument->getImageLayer()->updateWidget();
+		adjustLayers(true);
+	}
+}
+
+void MainWindow::on_toolsTMSServersAction_triggered()
+{
+	TMSPreferencesDialog* TMSPref;
+	TMSPref = new TMSPreferencesDialog();
+	if (TMSPref->exec() == QDialog::Accepted) {
+		theDocument->getImageLayer()->updateWidget();
+		adjustLayers(true);
+	}
+}
+
 void MainWindow::on_toolsShortcutsAction_triggered()
 {
 	QList<QAction*> theActions;
@@ -1432,13 +1465,9 @@ void MainWindow::preferencesChanged(void)
             QApplication::setStyle(new SkulptureStyle);
     }
 
-	theDocument->getImageLayer()->setMapAdapter(M_PREFS->getBgType());
-	theDocument->getImageLayer()->updateWidget();
-	adjustLayers(true);
-
 	ImageManager::instance()->setCacheDir(M_PREFS->getCacheDir());
 	ImageManager::instance()->setCacheMaxSize(M_PREFS->getCacheSize());
-#ifdef YAHOO
+#ifdef USE_WEBKIT
 	BrowserImageManager::instance()->setCacheDir(M_PREFS->getCacheDir());
 	BrowserImageManager::instance()->setCacheMaxSize(M_PREFS->getCacheSize());
 #endif
@@ -1448,7 +1477,8 @@ void MainWindow::preferencesChanged(void)
 	} else {
 		ImageManager::instance()->setProxy("",0);
 	}
-	theView->projection().setProjectionType(M_PREFS->getProjectionType());
+	if (!theView->projection().setProjectionType(M_PREFS->getProjectionType()))
+		QMessageBox::critical(this, tr("Invalid projection"), tr("Unable to set projection \"%1\".").arg(M_PREFS->getProjectionType()));
 	
 	updateStyleMenu();
 	updateMenu();
@@ -1867,9 +1897,9 @@ void MainWindow::updateRecentImportMenu()
 
 void MainWindow::updateProjectionMenu()
 {
+	QActionGroup* actgrp = new QActionGroup(this);
 #ifndef USE_PROJ
 	QStringList Projections = MerkaartorPreferences::instance()->getProjectionTypes();
-	QActionGroup* actgrp = new QActionGroup(this);
 	for (int i=0; i<Projections.size(); i++) {
 		QAction* a = new QAction(Projections[i], mnuProjections);
 		actgrp->addAction(a);
@@ -1878,9 +1908,17 @@ void MainWindow::updateProjectionMenu()
 			a->setChecked(true);
 		mnuProjections->addAction(a);
 	}
-
-	connect (mnuProjections, SIGNAL(triggered(QAction *)), this, SLOT(projectionTriggered(QAction *)));
+#else
+	foreach (QString name, M_PREFS->getProjectionsList().getProjections().keys()) {
+		QAction* a = new QAction(name, mnuProjections);
+		actgrp->addAction(a);
+		a->setCheckable (true);
+		if (M_PREFS->getProjectionType() == name)
+			a->setChecked(true);
+		mnuProjections->addAction(a);
+	}
 #endif
+	connect (mnuProjections, SIGNAL(triggered(QAction *)), this, SLOT(projectionTriggered(QAction *)));
 }
 
 void MainWindow::updateStyleMenu()
@@ -2048,10 +2086,17 @@ void MainWindow::recentImportTriggered(QAction* anAction)
 
 void MainWindow::projectionTriggered(QAction* anAction)
 {
+#ifndef USE_PROJ
 	QStringList Projections = MerkaartorPreferences::instance()->getProjectionTypes();
 	int idx = Projections.indexOf(anAction->text());
 	MerkaartorPreferences::instance()->setProjectionType((ProjectionType)idx);
 	theView->projection().setProjectionType((ProjectionType)idx);
+#else
+	if(theView->projection().setProjectionType((ProjectionType)anAction->text()))
+		M_PREFS->setProjectionType(anAction->text());
+	else
+		QMessageBox::critical(this, tr("Invalid projection"), tr("Unable to set projection \"%1\".").arg(anAction->text()));
+#endif
 	theView->projection().setViewport(theView->projection().viewport(), theView->rect());
 	invalidateView();
 }

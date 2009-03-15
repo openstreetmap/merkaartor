@@ -191,7 +191,7 @@ void TMSPreferencesDialog::savePrefs()
 		TmsServer S(theTmsServers[i]);
 		L.insert(theTmsServers[i].TmsName, S);
 	}
-	MerkaartorPreferences::instance()->setSelectedTmsServer(getSelectedServer());
+	//MerkaartorPreferences::instance()->setSelectedTmsServer(getSelectedServer());
 	MerkaartorPreferences::instance()->save();
 }
 

@@ -367,9 +367,6 @@
     	<file alias="Maxspeed.mas">../Styles/Maxspeed.mas</file>
     	<file alias="Lighting.mas">../Styles/Lighting.mas</file>
     </qresource>
-    <qresource prefix="/Html">
-    	<file alias="ymap.html">../ymap.html</file>
-    </qresource>
     <qresource prefix="/Gps">
     	<file alias="Gps_Marker.svg">Gps_Marker.svg</file>
     </qresource>

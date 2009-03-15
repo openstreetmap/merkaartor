@@ -10,22 +10,41 @@
 #include <math.h>
 
 // from wikipedia
-#define EQUATORIALRADIUS 6378137
-#define POLARRADIUS      6356752
+#define EQUATORIALRADIUS 6378137.0
+#define POLARRADIUS      6356752.0
+
+extern "C" {
+	const char * projFinder(const char* s)
+	{
+		QString projDir;
+		if (QDir::isRelativePath(SHARE_DIR))
+			projDir = QDir::toNativeSeparators(QCoreApplication::applicationDirPath() + "/" + QString(SHARE_DIR) + "/proj/" + s);
+		else
+			projDir = QDir::toNativeSeparators(QString(SHARE_DIR) + "/proj/" + s);
+
+		qDebug() << projDir.toLatin1().constData();
+		return projDir.toLatin1().constData();
+	}
+}
 
 Projection::Projection(void)
   : ScaleLat(1000000), ScaleLon(1000000),
   DeltaLat(0), DeltaLon(0), Viewport(Coord(-1000, -1000), Coord(1000, 1000)),
   layermanager(0)
 {
-	theProjectionType = MerkaartorPreferences::instance()->getProjectionType();
+	theProjectionType = M_PREFS->getProjectionType();
 #ifdef USE_PROJ
-	theProj = pj_init_plus(
-		QString("+proj=%1 +a=%2 +b=%3 %4").arg("merc").arg(double(INT_MAX)/M_PI).arg(double(INT_MAX)/M_PI)
-		.arg("+lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +no_defs")
-		.toLatin1()
-	);
-	theProjectionType = "Mercator";
+	pj_set_finder(&projFinder);
+	theProj = pj_init_plus(QString("%1 -m %2").arg(M_PREFS->getProjection(theProjectionType))
+		.arg((double(INT_MAX)/M_PI) / EQUATORIALRADIUS, 6, 'f').toLatin1());
+	if (!theProj)
+		theProj = pj_init_plus(QString("%1 -m %2").arg(M_PREFS->getProjection("mercator"))
+			.arg((double(INT_MAX)/M_PI) / EQUATORIALRADIUS, 6, 'f').toLatin1());
+	if (!theProj) {
+		int *i = pj_get_errno_ref();
+		qDebug() << "Proj error: " << *i << " : " << pj_strerrno(*i);
+		exit(1);
+	}
 #endif
 }
 
@@ -54,9 +73,19 @@ double Projection::lonAnglePerM(double Lat) const
 	return 1 / LengthOfOneDegreeLon;
 }
 
-void Projection::setProjectionType(ProjectionType aProjectionType)
+bool Projection::setProjectionType(ProjectionType aProjectionType)
 {
 	theProjectionType = aProjectionType;
+#ifdef USE_PROJ
+	projPJ aNewProj = pj_init_plus(QString("%1 -m %2").arg(M_PREFS->getProjection(theProjectionType))
+		.arg((double(INT_MAX)/M_PI) / EQUATORIALRADIUS, 6, 'f').toLatin1().data());
+	if (aNewProj) {
+		pj_free(theProj);
+		theProj = aNewProj;
+	} else
+		return false;
+#endif
+	return true;
 }
 
 #ifdef USE_PROJ
@@ -68,15 +97,23 @@ QPoint Projection::projProject(const Coord & Map) const
 	in.v = intToRad(Map.lat());
 
 	projUV out = pj_fwd(in, theProj);
-
-    return QPoint((int)out.u, int(out.v));
+	if (pj_is_latlong(theProj)) {
+		return QPoint(radToInt(out.u), radToInt(out.v));
+	} else {
+	    return QPoint((int)out.u, int(out.v));
+	}
 }
 
 Coord Projection::projInverse(const QPointF & pProj) const
 {
 	projUV in;
-	in.u = pProj.x();
-	in.v = pProj.y();
+	if (pj_is_latlong(theProj)) {
+		in.v = intToRad(pProj.y());
+		in.u = intToRad(pProj.x());
+	} else {
+		in.u = pProj.x();
+		in.v = pProj.y();
+	}
 
 	projUV out = pj_inv(in, theProj);
 
@@ -89,19 +126,8 @@ Coord Projection::projInverse(const QPointF & pProj) const
 QPoint Projection::project(const Coord & Map) const
 {
 #ifdef USE_PROJ
-	projUV in;
-
-	in.u = intToRad(Map.lon());
-	in.v = intToRad(Map.lat());
-
-	//qDebug() << "prj: " << intToAng(Map.lon()) << " : " << intToAng(Map.lat());
-	projUV out = pj_fwd(in, theProj);
-	//qDebug() << "prj: "<< out.u << " : " << out.v;
-
-	QPoint p(int(out.u * ScaleLon + DeltaLon),
-				   int(-out.v * ScaleLat + DeltaLat));
-
-	return p;
+	QPoint p = projProject(Map);
+	return QPoint(int(p.x() * ScaleLon + DeltaLon), int(-p.y() * ScaleLat + DeltaLat));
 #else
 	if (LAYERMANAGER_OK && BGPROJ_SELECTED)
 	{
@@ -116,25 +142,20 @@ QPoint Projection::project(const Coord & Map) const
 QPoint Projection::project(TrackPoint* aNode) const
 {
 #ifdef USE_PROJ
-	if (aNode && aNode->projectionType() == theProjectionType && !aNode->projection().isNull())
-		return QPoint(int(aNode->projection().x() * ScaleLon + DeltaLon),
-					   int(-aNode->projection().y() * ScaleLat + DeltaLat));
+	if (!pj_is_latlong(theProj)) {
+		if (aNode && aNode->projectionType() == theProjectionType && !aNode->projection().isNull())
+			return QPoint(int(aNode->projection().x() * ScaleLon + DeltaLon),
+						   int(-aNode->projection().y() * ScaleLat + DeltaLat));
+	}
 
-	projUV in;
+	QPoint p = projProject(aNode->position());
 
-	in.u = intToRad(aNode->position().lon());
-	in.v = intToRad(aNode->position().lat());
+	if (!pj_is_latlong(theProj)) {
+		aNode->setProjectionType(theProjectionType);
+		aNode->setProjection(p);
+	}
 
-	//qDebug() << "prj: " << intToAng(Map.lon()) << " : " << intToAng(Map.lat());
-	projUV out = pj_fwd(in, theProj);
-	//qDebug() << "prj: "<< out.u << " : " << out.v;
-
-	aNode->setProjectionType(theProjectionType);
-	aNode->setProjection(QPoint(int(out.u), int(out.v)));
-
-	QPoint p(int(out.u * ScaleLon + DeltaLon),
-				   int(-out.v * ScaleLat + DeltaLat));
-	return p;
+	return QPoint(int(p.x() * ScaleLon + DeltaLon), int(-p.y() * ScaleLat + DeltaLat));
 #else
 	return project(aNode->position());
 #endif
@@ -143,16 +164,8 @@ QPoint Projection::project(TrackPoint* aNode) const
 Coord Projection::inverse(const QPointF & Screen) const
 {
 #ifdef USE_PROJ
-	projUV in;
-
-	in.u = (Screen.x() - DeltaLon ) / ScaleLon;
-	in.v = -(Screen.y() - DeltaLat) / ScaleLat;
-
-	//qDebug() << "inv: "<< in.u << " : " << in.v;
-	projUV out = pj_inv(in, theProj);
-	//qDebug() << "inv: "<< out.u * RAD_TO_DEG << " : " << out.v * RAD_TO_DEG;
-
-	return Coord(radToInt(out.v), radToInt(out.u));
+	Coord c = projInverse(QPointF((Screen.x() - DeltaLon ) / ScaleLon, -(Screen.y() - DeltaLat) / ScaleLat));
+	return c;
 #else
 	if (LAYERMANAGER_OK && BGPROJ_SELECTED)
 	{
@@ -329,7 +342,7 @@ void Projection::zoom(double d, const QPointF & Around,
 		}
 	}
 #else
-	if (ScaleLat * d < 1.0 && ScaleLon * d < 1.0) {
+	if (ScaleLat * d < 100 && ScaleLon * d < 100) {
 		Coord Before = inverse(Around);
 		QPoint pBefore = projProject(Before);
 		ScaleLon *= d;

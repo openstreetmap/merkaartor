@@ -19,6 +19,8 @@
 #include "MainWindow.h"
 #include "MapView.h"
 
+#include "IMapAdapter.h"
+
 #define M_PARAM_IMPLEMENT_BOOL(Param, Category, Default) \
 	bool mb_##Param = false; \
 	void MerkaartorPreferences::set##Param(bool theValue) \
@@ -86,19 +88,6 @@
 /***************************/
 
 MerkaartorPreferences* MerkaartorPreferences::m_prefInstance = 0;
-
-WmsServer::WmsServer()
-{
-	WmsServer(QApplication::translate("MerkaartorPreferences","New Server"), "", "", "", "", "", "");
-}
-
-WmsServer::WmsServer(QString Name, QString Adress, QString Path, QString Layers, QString Projections, QString Styles, QString ImgFormat)
-	: WmsName(Name), WmsAdress(Adress), WmsPath(Path), WmsLayers(Layers), WmsProjections(Projections), WmsStyles(Styles), WmsImgFormat(ImgFormat)
-{
-	if (Name == "") {
-		WmsName = QApplication::translate("MerkaartorPreferences","New Server");
-	}
-}
 
 TmsServer::TmsServer()
 {
@@ -396,28 +385,12 @@ void MerkaartorPreferences::on_requestFinished ( int id, bool error )
 void MerkaartorPreferences::initialize()
 {
 	Use06Api = Sets->value("osm/use06api", "").toBool();
-	bgTypes.insert(Bg_None, tr("None"));
-	bgTypes.insert(Bg_Wms, tr("WMS adapter"));
-	bgTypes.insert(Bg_Tms, tr("TMS adapter"));
-#ifdef USE_GDAL
-	bgTypes.insert(Bg_Shp, tr("Shape adapter"));
-#endif
-#ifdef YAHOO
-	bgTypes.insert(Bg_Yahoo, tr("Yahoo adapter"));
-#endif
-#ifdef YAHOO_ILLEGAL
-	bgTypes.insert(Bg_Yahoo_illegal, tr("Illegal Yahoo adapter"));
-#endif
-#ifdef GOOGLE_ILLEGAL
-	bgTypes.insert(Bg_Google_illegal, tr("Illegal Google adapter"));
-#endif
-#ifdef MSLIVEMAP_ILLEGAL
-	bgTypes.insert(Bg_MsVirtualEarth_illegal, tr("Illegal Ms Virtual Earth adapter"));
-#endif
 
 #ifndef USE_PROJ
 	projTypes.insert(Proj_Merkaartor, tr("Merkaartor"));
 	projTypes.insert(Proj_Background, tr("Background"));
+#else
+	loadProjections();
 #endif
 
 	QStringList sl = Sets->value("downloadosm/bookmarks").toStringList();
@@ -731,19 +704,35 @@ void MerkaartorPreferences::setBgVisible(bool theValue)
 	Sets->setValue("backgroundImage/Visible", theValue);
 }
 
-void MerkaartorPreferences::setBgType(ImageBackgroundType theValue)
+/* Plugins */
+
+void MerkaartorPreferences::addBackgroundPlugin(IMapAdapter* aPlugin)
 {
-	Sets->setValue("backgroundImage/Type", theValue);
+	mBackgroundPlugins.insert(aPlugin->getId(), aPlugin);
 }
 
-ImageBackgroundType MerkaartorPreferences::getBgType() const
+IMapAdapter* MerkaartorPreferences::getBackgroundPlugin(const QUuid& anAdapterUid)
 {
-	return (ImageBackgroundType)Sets->value("backgroundImage/Type", 0).toInt();
+	if (mBackgroundPlugins.contains(anAdapterUid))
+		return mBackgroundPlugins[anAdapterUid];
+	else
+		return NULL;
 }
 
-QStringList MerkaartorPreferences::getBgTypes()
+void MerkaartorPreferences::setBackgroundPlugin(const QUuid & theValue)
 {
-	return bgTypes;
+	Sets->setValue("backgroundImage/BackgroundPlugin", theValue.toString());
+}
+
+QUuid MerkaartorPreferences::getBackgroundPlugin() const
+{
+	QString s = Sets->value("backgroundImage/BackgroundPlugin", "").toString();
+	return QUuid(s);
+}
+
+QMap<QUuid, IMapAdapter *> MerkaartorPreferences::getBackgroundPlugins()
+{
+	return mBackgroundPlugins;
 }
 
 void MerkaartorPreferences::setCacheDir(const QString & theValue)
@@ -774,7 +763,7 @@ void MerkaartorPreferences::setLastMaxSearchResults(int theValue)
 
 int MerkaartorPreferences::getLastMaxSearchResults() const
 {
-	return (ImageBackgroundType)Sets->value("search/LastMax", 100).toInt();
+	return Sets->value("search/LastMax", 100).toInt();
 }
 
 void MerkaartorPreferences::setLastSearchName(const QString & theValue)
@@ -905,13 +894,31 @@ void MerkaartorPreferences::setProjectionType(ProjectionType theValue)
 
 ProjectionType MerkaartorPreferences::getProjectionType() const
 {
+#ifdef USE_PROJ
+	QString theProjName = Sets->value("projection/Type", "Mercator").toString();
+	QString theProj = theProjectionsList.getProjection(theProjName);
+	return (ProjectionType)theProjName;
+#else
 	return (ProjectionType)Sets->value("projection/Type", 0).toInt();
+#endif
 }
 
+#ifndef USE_PROJ
 QStringList MerkaartorPreferences::getProjectionTypes()
 {
 	return projTypes;
 }
+#else
+ProjectionsList MerkaartorPreferences::getProjectionsList()
+{
+	return theProjectionsList;
+}
+
+QString MerkaartorPreferences::getProjection(QString aProj)
+{
+	return theProjectionsList.getProjection(aProj);
+}
+#endif
 
 qreal MerkaartorPreferences::getAlpha(QString lvl)
 {
@@ -1354,6 +1361,37 @@ M_PARAM_IMPLEMENT_BOOL(OfflineMode, Network, false)
 
 /* Track */
 M_PARAM_IMPLEMENT_BOOL(ReadonlyTracksDefault, data, false)
+
+/* Projections */
+void MerkaartorPreferences::loadProjections()
+{
+	QString fn = QString(SHARE_DIR) + "/Projections.xml";
+	if (QDir::isRelativePath(fn))
+		fn = QCoreApplication::applicationDirPath() + "/" + fn;
+
+	QFile file(fn);
+	if (!file.open(QIODevice::ReadOnly)) {
+//		QMessageBox::critical(this, tr("Invalid file"), tr("%1 could not be opened.").arg(fn));
+		return;
+	}
+
+	QDomDocument* theXmlDoc = new QDomDocument();
+	if (!theXmlDoc->setContent(&file)) {
+//		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
+		file.close();
+		delete theXmlDoc;
+		theXmlDoc = NULL;
+		return;
+	}
+	file.close();
+
+	QDomElement docElem = theXmlDoc->documentElement();
+	theProjectionsList = ProjectionsList::fromXml(docElem);
+}
+
+void MerkaartorPreferences::saveProjections()
+{
+}
 
 /* */ 
 

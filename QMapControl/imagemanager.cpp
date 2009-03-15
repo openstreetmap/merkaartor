@@ -49,7 +49,7 @@ ImageManager::~ImageManager()
 }
 
 //QPixmap ImageManager::getImage(const QString& host, const QString& url)
-QPixmap ImageManager::getImage(MapAdapter* anAdapter, int x, int y, int z)
+QPixmap ImageManager::getImage(IMapAdapter* anAdapter, int x, int y, int z)
 {
 // 	qDebug() << "ImageManager::getImage";
 	
@@ -94,7 +94,7 @@ QPixmap ImageManager::getImage(MapAdapter* anAdapter, int x, int y, int z)
 }
 
 //QPixmap ImageManager::prefetchImage(const QString& host, const QString& url)
-QPixmap ImageManager::prefetchImage(MapAdapter* anAdapter, int x, int y, int z)
+QPixmap ImageManager::prefetchImage(IMapAdapter* anAdapter, int x, int y, int z)
 {
 	QString host = anAdapter->getHost();
 	QString url = anAdapter->getQuery(x, y, z);

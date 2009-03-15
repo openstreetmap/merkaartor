@@ -17,41 +17,71 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef CURVE_H
-#define CURVE_H
+#include "mapadapter.h"
 
-#include "geometry.h"
-#include "point.h"
-
-//! A Curve Geometry, implemented to fullfil OGC Spec
-/*!
- * The Curve class is used by LineString as parent class.
- * This class could not be used directly.
- * 
- * From the OGC Candidate Implementation Specification:
- * "A Curve is a 1-dimensional geometric object usually stored as a sequence of Points, with the subtype of Curve
- * specifying the form of the interpolation between Points. This specification defines only one subclass of Curve,
- * LineString, which uses a linear interpolation between Points."
- *	@author Kai Winter <kaiwinter@gmx.de>
-*/
-class Curve : public Geometry
+MapAdapter::MapAdapter(const QString& host, const QString& serverPath, int tilesize, int minZoom, int maxZoom)
+	:host(host), serverPath(serverPath), tilesize(tilesize), min_zoom(minZoom), max_zoom(maxZoom), theImageManager(0)
 {
-	Q_OBJECT
-	public:
-		virtual ~Curve();
-	
-		double Length;
+	current_zoom = min_zoom;
+	loc = QLocale(QLocale::English);
+}
 
-// 		virtual	Geometry	Clone();
-// 		virtual	QRectF	GetBoundingBox();
-		
-// 		virtual Point EndPoint() = 0;
-// 		virtual Point StartPoint() = 0;
-// 		virtual Point Value() = 0;
-		
-	protected:
-		Curve(QString name = QString());
-		virtual void draw(QPainter* painter, const MapAdapter* mapadapter, const QRect &screensize, const QPoint offset) = 0;
-};
+MapAdapter::~MapAdapter()
+{
+}
 
-#endif
+QString MapAdapter::getName() const
+{
+	return name;
+}
+
+QString MapAdapter::getHost() const
+{
+	return host;
+}
+
+int MapAdapter::getTileSize() const
+{
+	return tilesize;
+}
+
+int MapAdapter::getMinZoom() const
+{
+	return min_zoom;
+}
+
+int MapAdapter::getMaxZoom() const
+{
+	return max_zoom;
+}
+
+int MapAdapter::getAdaptedMinZoom() const
+{
+	return 0;
+}
+
+int MapAdapter::getAdaptedMaxZoom() const
+{
+	return max_zoom > min_zoom ? max_zoom - min_zoom : min_zoom - max_zoom;
+}
+
+int MapAdapter::getZoom() const
+{
+	return current_zoom;
+}
+
+int MapAdapter::getAdaptedZoom() const
+{
+	return max_zoom < min_zoom ? min_zoom - current_zoom : current_zoom - min_zoom;
+}
+
+IImageManager* MapAdapter::getImageManager()
+{
+	return theImageManager;
+}
+
+void MapAdapter::setImageManager(IImageManager* anImageManager)
+{
+	theImageManager = anImageManager;
+}
+

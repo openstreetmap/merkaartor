@@ -17,6 +17,7 @@ class WMSMapAdapter;
 class TileMapAdapter;
 class TrackSegment;
 class OsbMapLayerPrivate;
+class IMapAdapter;
 
 class MapLayer : public QObject
 {
@@ -143,7 +144,7 @@ public:
 	virtual ~ImageMapLayer();
 
 	Layer* imageLayer();
-	void setMapAdapter(ImageBackgroundType typ);
+	void setMapAdapter(const QUuid& theAdapterUid);
 	LayerManager* layermanager;
 
 	virtual void setVisible(bool b);
@@ -280,6 +281,8 @@ protected:
 	OsbMapLayerPrivate* pp;
 
 };
+
+Q_DECLARE_METATYPE ( QUuid )
 
 #endif
 

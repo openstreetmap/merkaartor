@@ -106,52 +106,18 @@ class ImageLayerWidget : public LayerWidget
 		virtual void initActions();
 
 	private:
-		//ImageMapLayer* theLayer;
-
-// 		QActionGroup* actgrAdapter;
-// 		QActionGroup* actgrWms;
-// 		QActionGroup* actgrTms;
-
 #ifdef USE_GDAL
 		QAction* actShape;
 #endif
-#ifdef YAHOO
-		QAction* actLegalYahoo;
-#endif
-#ifdef YAHOO_ILLEGAL
-		QAction* actYahoo;
-#endif
-#ifdef GOOGLE_ILLEGAL
-		QAction* actGoogle;
-#endif
-#ifdef MSLIVEMAP_ILLEGAL
-		QAction* actVirtEarth;
-#endif
 		QAction* actNone;
-// 		QAction* actOSM;
 		QMenu* wmsMenu;
 		QMenu* tmsMenu;
 
 	private slots:
 		void setWms(QAction*);
 		void setTms(QAction*);
-#ifdef USE_GDAL
-		void setShape(bool);
-#endif
-#ifdef YAHOO
-		void setLegalYahoo(bool);
-#endif
-#ifdef YAHOO_ILLEGAL
-		void setYahoo(bool);
-#endif
-#ifdef GOOGLE_ILLEGAL
-		void setGoogle(bool);
-#endif
-#ifdef MSLIVEMAP_ILLEGAL
-		void setMsVirtualEarth(bool);
-#endif
-// 		void setOSM(bool);
-		void setNone(bool);
+
+		void setBackground(QAction*);
 };
 
 class DirtyLayerWidget : public LayerWidget

@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2007 by Kai Winter   *
- *   kaiwinter@gmx.de   *
+ *   Copyright (C) 2008 by Chris Browet                                    *
+ *   cbro@semperpax.com                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,18 +17,50 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#include "curve.h"
+#ifndef YAHOOLEGALMAPADAPTER_H
+#define YAHOOLEGALMAPADAPTER_H
 
-Curve::Curve(QString name)
- : Geometry(name)
+#include "tilemapadapter.h"
+
+//! MapAdapter for WMS servers
+/*!
+ * Use this derived MapAdapter to display maps from WMS servers
+ *	@author Kai Winter <kaiwinter@gmx.de>
+*/
+class YahooLegalMapAdapter : public TileMapAdapter
 {
-}
+	public:
+		//! constructor
+		/*! 
+	 	 * This construct a Yahoo Adapter
+		 */
+		YahooLegalMapAdapter();
+		YahooLegalMapAdapter(QString host, QString url);
+		virtual ~YahooLegalMapAdapter();
+
+		//! returns the unique identifier (Uuid) of this MapAdapter
+		/*!
+		 * @return  the unique identifier (Uuid) of this MapAdapter
+		 */
+		virtual QUuid	getId		() const;
+
+		//! returns the type of this MapAdapter
+		/*!
+		 * @return  the type of this MapAdapter
+		 */
+		virtual IMapAdapter::Type	getType		() const;
 
 
-Curve::~Curve()
-{
-}
+		bool isValid(int x, int y, int z) const;
 
-// Geometry		Curve::Clone(){}
+	protected:
+		virtual QString getQuery(int x, int y, int z) const;
+		virtual int tilesonzoomlevel(int zoomlevel) const;
+		virtual int getyoffset(int y) const;
 
-// QRectF	Curve::GetBoundingBox(){}
+	private:
+		virtual QString getQ(QPointF ul, QPointF br) const;
+
+};
+
+#endif

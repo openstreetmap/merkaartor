@@ -115,6 +115,9 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 		virtual void on_toolsPreferencesAction_triggered() {toolsPreferencesAction_triggered();}
 		virtual void on_toolsWorldOsbAction_triggered();
 		virtual void on_toolsShortcutsAction_triggered();
+		virtual void on_toolsWMSServersAction_triggered();
+		virtual void on_toolsTMSServersAction_triggered();
+		virtual void toolsPreferencesAction_triggered(bool focusData=false);
 		
 		virtual void on_windowPropertiesAction_triggered();
 		virtual void on_windowLayersAction_triggered();
@@ -137,7 +140,6 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 		virtual void on_gpsCenterAction_triggered();
 		virtual void preferencesChanged();
 		virtual void clipboardChanged();
-		virtual void toolsPreferencesAction_triggered(bool focusData=false);
 
 		virtual void on_toolTemplatesSaveAction_triggered();
 		virtual void on_toolTemplatesMergeAction_triggered();

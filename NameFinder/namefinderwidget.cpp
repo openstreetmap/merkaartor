@@ -75,9 +75,9 @@ namespace NameFinder
 
 	void NameFinderWidget::display()
 	{
-		XmlStreamReader *reader = new XmlStreamReader ( &buffer );
-		reader->read();
-		model->setResults ( new QList<NameFinderResult> ( reader->getResults() ) );
+		XmlStreamReader reader ( &buffer );
+		reader.read();
+		model->setResults ( new QList<NameFinderResult> ( reader.getResults() ) );
 	}
 
 	//! Displays a QMessageBox with the connection error

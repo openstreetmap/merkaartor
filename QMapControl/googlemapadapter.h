@@ -1,22 +1,22 @@
-#ifndef OSMMAPADAPTER_H
-#define OSMMAPADAPTER_H
+#ifndef GOOGLEMAPADAPTER_H
+#define GOOGLEMAPADAPTER_H
 
 #include "tilemapadapter.h"
-//! MapAdapter for OpenStreetMap
+//! MapAdapter for Google
 /*!
  * This is a conveniece class, which extends and configures a TileMapAdapter
  *	@author Kai Winter <kaiwinter@gmx.de>
 */
-class OSMMapAdapter : public TileMapAdapter
+class GoogleMapAdapter : public TileMapAdapter
 {
 	Q_OBJECT
 	public:
 		//! constructor
 		/*! 
-		 * This construct a OpenStreetmap Adapter
+		 * This construct a Google Adapter
 		 */
-		OSMMapAdapter();
-		virtual ~OSMMapAdapter();
+		GoogleMapAdapter();
+		virtual ~GoogleMapAdapter();
 };
 
 #endif

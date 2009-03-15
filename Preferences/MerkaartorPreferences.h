@@ -17,17 +17,26 @@
 #include <QColor>
 #include <QHttp>
 #include <QBuffer>
+#include <QUuid>
 
 #include "Map/Coord.h"
+#include "Preferences/WmsServersList.h"
+#include "Preferences/ProjectionsList.h"
 
 class MainWindow;
 class MapView;
+class IMapAdapter;
 
 //#define WORLD_COORDBOX CoordBox(Coord(1.3, -1.3), Coord(-1.3, 1.3))
 #define WORLD_COORDBOX CoordBox(Coord(INT_MAX/2, -INT_MAX/2), Coord(-INT_MAX/2, INT_MAX/2))
 #define BUILTIN_STYLES_DIR ":/Styles"
 #define BUILTIN_TEMPLATES_DIR ":/Templates"
 #define M_PREFS MerkaartorPreferences::instance()
+
+#define NONE_ADAPTER_UUID QUuid("{8F5D3625-F987-45c5-A50B-17D88384F97D}")
+#define SHAPE_ADAPTER_UUID QUuid("{AFB0324E-34D0-4267-BB8A-CF56CD2D7012}")
+#define WMS_ADAPTER_UUID QUuid("{E238750A-AC27-429e-995C-A60C17B9A1E0}")
+#define TMS_ADAPTER_UUID QUuid("{CA8A07EC-A466-462b-929F-3805BC9DEC95}")
 
 #define M_PARAM_DECLARE_BOOL(Param) \
 	private: \
@@ -60,27 +69,6 @@ class MapView;
 	@author cbro <cbro@semperpax.com>
 */
 
-enum ImageBackgroundType {
-	Bg_None,
-	Bg_Wms,
- 	Bg_Tms
-#ifdef USE_GDAL
-	, Bg_Shp
-#endif
-#ifdef YAHOO
- 	, Bg_Yahoo
-#endif
-#ifdef YAHOO_ILLEGAL
-	, Bg_Yahoo_illegal
-#endif
-#ifdef GOOGLE_ILLEGAL
-	, Bg_Google_illegal
-#endif
-#ifdef MSLIVEMAP_ILLEGAL
-	, Bg_MsVirtualEarth_illegal
-#endif
-};
-
 #ifndef USE_PROJ
 enum ProjectionType {
  	Proj_Background,
@@ -104,24 +92,6 @@ enum DirectionalArrowsShow {
 
 typedef QMap<QString, CoordBox> BookmarkList;
 typedef QMapIterator<QString, CoordBox> BookmarkListIterator;
-
-class WmsServer
-{
-	public:
-		WmsServer();
-		WmsServer(QString Name, QString Adress, QString Path, QString Layers, QString Projections, QString Styles, QString ImgFormat);
-
-	public:
-		QString WmsName;
-		QString WmsAdress;
-		QString WmsPath;
-		QString WmsLayers;
-		QString WmsProjections;
-		QString WmsStyles;
-		QString WmsImgFormat;
-};
-typedef QMap<QString, WmsServer> WmsServerList;
-typedef QMapIterator<QString, WmsServer> WmsServerListIterator;
 
 class TmsServer
 {
@@ -218,10 +188,6 @@ public:
 	void setBgVisible(bool theValue);
 	bool getBgVisible() const;
 
-	void setBgType(ImageBackgroundType theValue);
-	ImageBackgroundType getBgType() const;
-	QStringList getBgTypes();
-
 	/* Tile Cache */
 	void setCacheDir(const QString & theValue);
 	QString getCacheDir() const;
@@ -243,10 +209,6 @@ public:
 	int getZoomInPerc() const;
 	void setZoomOutPerc(int theValue);
 	int getZoomOutPerc() const;
-
-	void setProjectionType(ProjectionType theValue);
-	ProjectionType getProjectionType() const;
-	QStringList getProjectionTypes();
 
 	QStringList getAlphaList() const;
 	void setAlphaList();
@@ -398,6 +360,28 @@ public:
 	/* Track */
 	M_PARAM_DECLARE_BOOL(ReadonlyTracksDefault)
 
+	/* Plugins */
+	void addBackgroundPlugin(IMapAdapter* aPlugin);
+	void setBackgroundPlugin(const QUuid& theValue);
+	QUuid getBackgroundPlugin() const;
+	IMapAdapter* getBackgroundPlugin(const QUuid& anAdapterUid);
+	QMap<QUuid, IMapAdapter *> getBackgroundPlugins();
+
+	/* Projections */
+	void loadProjections();
+	void saveProjections();
+
+	void setProjectionType(ProjectionType theValue);
+	ProjectionType getProjectionType() const;
+#ifndef USE_PROJ
+	QStringList getProjectionTypes();
+#else
+	ProjectionsList getProjectionsList();
+	QString getProjection(QString aProj);
+#endif
+
+
+
 protected:
 	bool Use06Api;
 	QString version;
@@ -431,8 +415,10 @@ private:
 	TmsServerList theTmsServerList;
 	ToolList* theToolList;
 	QSettings * Sets;
-	QStringList bgTypes;
 	QStringList projTypes;
+	QMap<QUuid, IMapAdapter *> mBackgroundPlugins;
+	ProjectionsList theProjectionsList;
+
 	static MerkaartorPreferences* m_prefInstance;
 
 private slots:

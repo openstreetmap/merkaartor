@@ -25,7 +25,7 @@
 #include <QDebug>
 #include <QDir>
 
-class MapAdapter;
+class IMapAdapter;
 class LoadingRequest
 {
 	public:
@@ -62,10 +62,10 @@ class IImageManager : public QObject
 		 * @return the pixmap of the asked image
 		 */
 		//QPixmap getImage(const QString& host, const QString& path);
-		virtual QPixmap getImage(MapAdapter* anAdapter, int x, int y, int z) = 0;
+		virtual QPixmap getImage(IMapAdapter* anAdapter, int x, int y, int z) = 0;
 
 		//QPixmap prefetchImage(const QString& host, const QString& path);
-		virtual QPixmap prefetchImage(MapAdapter* anAdapter, int x, int y, int z) = 0;
+		virtual QPixmap prefetchImage(IMapAdapter* anAdapter, int x, int y, int z) = 0;
 
 		virtual void receivedImage(const QPixmap& pixmap, const QString& url) = 0;
 

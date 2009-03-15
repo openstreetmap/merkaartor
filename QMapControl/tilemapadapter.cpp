@@ -79,6 +79,18 @@ TileMapAdapter::TileMapAdapter(const QString& host, const QString& serverPath, i
 TileMapAdapter::~TileMapAdapter()
 {
 }
+
+QUuid TileMapAdapter::getId() const
+{
+	return QUuid("{CA8A07EC-A466-462b-929F-3805BC9DEC95}");
+}
+
+IMapAdapter::Type TileMapAdapter::getType() const
+{
+	return IMapAdapter::DirectBackground;
+}
+
+
 //TODO: rausziehen? ->MapAdapter?
 void TileMapAdapter::zoom_in()
 {

@@ -51,6 +51,8 @@ HEADERS += ./Command/Command.h \
     ./Preferences/PreferencesDialog.h \
     ./Preferences/WMSPreferencesDialog.h \
     ./Preferences/TMSPreferencesDialog.h \
+    ./Preferences/ProjectionsList.h \
+    ./Preferences/WmsServersList.h \
     ./Utils/LineF.h \
     ./Utils/ShortcutOverrideFilter.h \
     ./Utils/SlippyMapWidget.h \
@@ -123,6 +125,8 @@ SOURCES += ./Command/Command.cpp \
     ./Preferences/PreferencesDialog.cpp \
     ./Preferences/WMSPreferencesDialog.cpp \
     ./Preferences/TMSPreferencesDialog.cpp \
+    ./Preferences/ProjectionsList.cpp \
+    ./Preferences/WmsServersList.cpp \
     ./DirtyDock.cpp \
     ./GotoDialog.cpp \
     StyleDock.cpp

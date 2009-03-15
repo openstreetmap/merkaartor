@@ -199,8 +199,10 @@
     <addaction name="designerMenu" />
     <addaction name="separator" />
     <addaction name="toolsWorldOsbAction" />
-    <addaction name="toolsShortcutsAction" />
+    <addaction name="toolsTMSServersAction" />
+    <addaction name="toolsWMSServersAction" />
     <addaction name="separator" />
+    <addaction name="toolsShortcutsAction" />
     <addaction name="toolsPreferencesAction" />
    </widget>
    <widget class="QMenu" name="menu_Node" >
@@ -1400,6 +1402,16 @@
    </property>
    <property name="shortcut" >
     <string>Ctrl+B</string>
+   </property>
+  </action>
+  <action name="toolsWMSServersAction" >
+   <property name="text" >
+    <string>WMS Servers Editor...</string>
+   </property>
+  </action>
+  <action name="toolsTMSServersAction" >
+   <property name="text" >
+    <string>TMS Servers Editor...</string>
    </property>
   </action>
  </widget>

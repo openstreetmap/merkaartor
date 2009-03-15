@@ -1,6 +1,5 @@
 # external supported variables:
 # passed on commandline like "qmake NOWEBKIT=1"
-# NOUSEWEBKIT         - disable use of WebKit (Yahoo adapter)
 # TRANSDIR_MERKAARTOR - translations directory for merkaartor
 # TRANSDIR_SYSTEM     - translations directory for Qt itself
 # OUTPUT_DIR          - base directory for local output files
@@ -27,8 +26,8 @@ QT_VERSION = $$split(QT_VERSION, ".")
 QT_VER_MAJ = $$member(QT_VERSION, 0)
 QT_VER_MIN = $$member(QT_VERSION, 1)
 
-lessThan(QT_VER_MAJ, 4) | lessThan(QT_VER_MIN, 3) {
-    error(Merkaartor requires Qt 4.3 or newer but Qt $$[QT_VERSION] was detected.)
+lessThan(QT_VER_MAJ, 4) | lessThan(QT_VER_MIN, 4) {
+    error(Merkaartor requires Qt 4.4 or newer but Qt $$[QT_VERSION] was detected.)
 }
 DEFINES += VERSION=\"\\\"$$VERSION\\\"\"
 DEFINES += REVISION=\"\\\"$$REVISION\\\"\"
@@ -40,15 +39,31 @@ QT += svg network xml core gui
 
 !contains(NODEBUG,1) {
     CONFIG += debug
-    OUTPUT_DIR=$$PWD/binaries/$$(QMAKESPEC)/debug
     OBJECTS_DIR += tmp/$$(QMAKESPEC)/obj_debug
 }
 contains(NODEBUG,1) {
     CONFIG += release
     DEFINES += NDEBUG
     DEFINES += QT_NO_DEBUG_OUTPUT
-    OUTPUT_DIR=$$PWD/binaries/$$(QMAKESPEC)/release
     OBJECTS_DIR += tmp/$$(QMAKESPEC)/obj_release
+}
+COMMON_DIR=$$PWD/binaries
+OUTPUT_DIR=$$PWD/binaries/$$(QMAKESPEC)
+DESTDIR = $$OUTPUT_DIR/bin
+
+OUTPUT_DIR=$$PWD/binaries
+UI_DIR += tmp/$$(QMAKESPEC)
+MOC_DIR += tmp/$$(QMAKESPEC)
+RCC_DIR += tmp/$$(QMAKESPEC)
+DESTDIR = $$OUTPUT_DIR/$$(QMAKESPEC)/bin
+
+INCLUDEPATH += plugins/background
+DEPENDPATH += plugins/background
+
+win32 {
+	INCLUDEPATH += $$OUTPUT_DIR/include
+	LIBS += -L$$OUTPUT_DIR/lib
+	RC_FILE = Icons/merkaartor-win32.rc
 }
 
 contains(GPSD,1) {
@@ -63,13 +78,15 @@ contains(NVIDIA_HACK,1) {
     DEFINES += ENABLE_NVIDIA_HACK
 }
 
-DESTDIR = $$OUTPUT_DIR/bin
-
 INCLUDEPATH += . Render qextserialport GPS NameFinder
 DEPENDPATH += . Render qextserialport GPS NameFinder
-UI_DIR += tmp/$$(QMAKESPEC)
-MOC_DIR += tmp/$$(QMAKESPEC)
-RCC_DIR += tmp/$$(QMAKESPEC)
+
+greaterThan(QT_VER_MAJ, 3) : greaterThan(QT_VER_MIN, 3) {
+    DEFINES += USE_WEBKIT
+    SOURCES += QMapControl/browserimagemanager.cpp
+    HEADERS += QMapControl/browserimagemanager.h
+    QT += webkit
+}
 
 TRANSLATIONS += \
 	translations/merkaartor_ar.ts \
@@ -109,18 +126,17 @@ unix {
 		PREFIX = /usr/local
 	}
     target.path = $${PREFIX}/bin
+    SHARE_DIR = $${PREFIX}/share/merkaartor
 
     isEmpty(TRANSDIR_MERKAARTOR) {
-        TRANSDIR_MERKAARTOR = $${PREFIX}/share/merkaartor/translations
+        TRANSDIR_MERKAARTOR = $${SHARE_DIR}/translations
     }
 }
-
 win32 {
-	INCLUDEPATH += $$OUTPUT_DIR/include
-	LIBS += -L$$OUTPUT_DIR/lib
-	RC_FILE = Icons/merkaartor-win32.rc
+    SHARE_DIR = share
 }
 
+DEFINES += SHARE_DIR=\"\\\"$${SHARE_DIR}\\\"\"
 INSTALLS += target
 
 win32-msvc* {
@@ -139,15 +155,6 @@ count(TRANSDIR_SYSTEM, 1) {
 	DEFINES += TRANSDIR_SYSTEM=\"\\\"$${TRANSDIR_SYSTEM}\\\"\"
 }
 
-isEmpty(NOUSEWEBKIT) {
-   greaterThan(QT_VER_MAJ, 3) : greaterThan(QT_VER_MIN, 3) {
-        DEFINES += YAHOO
-        SOURCES += QMapControl/yahoolegalmapadapter.cpp QMapControl/browserimagemanager.cpp
-        HEADERS += QMapControl/yahoolegalmapadapter.h QMapControl/browserimagemanager.h
-        QT += webkit
-    }
-}
-
 contains(MOBILE,1) {
     DEFINES += _MOBILE
     win32-wince* {
@@ -163,8 +170,15 @@ contains(GEOIMAGE, 1) {
 
 contains (PROJ, 1) {
 	DEFINES += USE_PROJ
-	win32-msvc*:LIBS += -lproj_i
+	#win32-msvc*:LIBS += -lproj_i
+	win32-msvc*:LIBS += -lproj
 	!win32-msvc*:LIBS += -lproj
+    proj.path = $${SHARE_DIR}/proj
+	proj.files = share/proj/*
+    projlist.path = $${SHARE_DIR}
+	projlist.files = share/Projections.xml
+
+	INSTALLS += proj projlist
 }
 
 contains (GDAL, 1) {
@@ -172,13 +186,11 @@ contains (GDAL, 1) {
 	win32 {
 		win32-msvc*:LIBS += -lgdal_i
 		win32-g++:LIBS += -lgdal
-		world_shp.path = share/world_shp
 	}
 	unix {
 		LIBS += -lgdal
-		world_shp.path = $${PREFIX}/share/merkaartor/world_shp
 	}
-	
+	world_shp.path = $${SHARE_DIR}/world_shp
 	world_shp.files = \
 		share/world_shp/world_adm0.shp \
 		share/world_shp/world_adm0.shx \
@@ -187,11 +199,6 @@ contains (GDAL, 1) {
 	DEFINES += WORLD_SHP=\"\\\"$$world_shp.path/world_adm0.shp\\\"\"
 	INSTALLS += world_shp
 }
-
-#   INCLUDEPATH += binaries/win32-g++/debug/include
-#   LIBS += -Lbinaries/win32-g++/debug/lib
-
-#   DESTDIR = binaries/win32-g++/debug/bin
 
 
 !isEmpty(TRANSLATIONS) {

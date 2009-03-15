@@ -119,13 +119,13 @@ class LayerManager : public QObject
 		 */
 		void scrollView(const QPoint& offset);
 
-		//! forwards mouseevents to the layers
-		/*!
-		 * This method is invoked by the MapControl which receives Mouse Events.
-		 * These events are forwarded to the layers, so they can check for clicked geometries.
-		 * @param  evnt the mouse event
-		 */
-		void mouseEvent(const QMouseEvent* evnt);
+		////! forwards mouseevents to the layers
+		///*!
+		// * This method is invoked by the MapControl which receives Mouse Events.
+		// * These events are forwarded to the layers, so they can check for clicked geometries.
+		// * @param  evnt the mouse event
+		// */
+		//void mouseEvent(const QMouseEvent* evnt);
 
 		//! returns the middle of the map in projection coordinates
 		/*!
@@ -159,7 +159,7 @@ class LayerManager : public QObject
 		 */
 		int getCurrentZoom() const;
 
-		void drawGeoms(QPainter* painter);
+		//void drawGeoms(QPainter* painter);
 		void drawImage(QPainter* painter);
 		void setSize(QSize newSize);
 		void setSize();
@@ -175,7 +175,7 @@ class LayerManager : public QObject
 		void newOffscreenImage(bool clearImage=true, bool showZoomImage=true);
 		inline bool checkOffscreen() const;
 		inline bool containsAll(QList<QPointF> coordinates) const;
-		inline void moveWidgets();
+		//inline void moveWidgets();
 		inline void setMiddle(QList<QPointF> coordinates);
 		void backZoomIn();
 		void backZoomOut();

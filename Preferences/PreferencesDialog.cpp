@@ -10,8 +10,6 @@
 //
 //
 #include "Preferences/PreferencesDialog.h"
-#include "Preferences/WMSPreferencesDialog.h"
-#include "Preferences/TMSPreferencesDialog.h"
 #include "PaintStyle/EditPaintStyle.h"
 
 #include "MainWindow.h"
@@ -43,12 +41,11 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 #endif
 
 	setupUi(this);
-	for (int i=0; i < M_PREFS->getBgTypes().size(); ++i) {
-		cbMapAdapter->insertItem(i, M_PREFS->getBgTypes()[i]);
-	}
+#ifndef USE_PROJ
 	for (int i=0; i < M_PREFS->getProjectionTypes().size(); ++i) {
 		cbProjection->insertItem(i, M_PREFS->getProjectionTypes()[i]);
 	}
+#endif
     QDir intTemplates(BUILTIN_TEMPLATES_DIR);
 	for (int i=0; i < intTemplates.entryList().size(); ++i) {
 		cbTemplates->addItem(intTemplates.entryList().at(i));
@@ -142,17 +139,6 @@ void PreferencesDialog::loadPrefs()
 
 	edCacheDir->setText(M_PREFS->getCacheDir());
 	sbCacheSize->setValue(M_PREFS->getCacheSize());
-
-	cbMapAdapter->setCurrentIndex(M_PREFS->getBgType());
-	switch (M_PREFS->getBgType()) {
-		case Bg_Tms:
-		case Bg_Wms:
-			//grpWmsServers->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-			btAdapterSetup->setEnabled(true);
-			break;
-		default:
-			btAdapterSetup->setEnabled(false);
-	}
 
 	QString s = M_PREFS->getDefaultStyle();
 	QString cs = M_PREFS->getCustomStyle();
@@ -253,7 +239,6 @@ void PreferencesDialog::savePrefs()
 	M_PREFS->setProxyUse(bbUseProxy->isChecked());
 	M_PREFS->setProxyHost(edProxyHost->text());
 	M_PREFS->setProxyPort(edProxyPort->text().toInt());
-	M_PREFS->setBgType((ImageBackgroundType)cbMapAdapter->currentIndex());
 
 	M_PREFS->setCacheDir(edCacheDir->text());
 	M_PREFS->setCacheSize(sbCacheSize->value());
@@ -296,7 +281,9 @@ void PreferencesDialog::savePrefs()
 	M_PREFS->setCustomTemplate(CustomTemplateName->text());
 	M_PREFS->setZoomInPerc(sbZoomInPerc->text().toInt());
 	M_PREFS->setZoomOutPerc(sbZoomOutPerc->text().toInt());
+#ifndef USE_PROJ
 	M_PREFS->setProjectionType((ProjectionType)cbProjection->currentIndex());
+#endif
 	M_PREFS->getAlphaPtr()->insert("Low", sbAlphaLow->value());
 	M_PREFS->getAlphaPtr()->insert("High", sbAlphaHigh->value());
 	M_PREFS->setBgColor(BgColor);
@@ -329,24 +316,6 @@ void PreferencesDialog::savePrefs()
 	M_PREFS->save();
 }
 
-void PreferencesDialog::on_cbMapAdapter_currentIndexChanged(int index)
-{
-	//grpWmsServers->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-	btAdapterSetup->setEnabled(false);
-
-	switch (index) {
-		case Bg_Tms:
-		case Bg_Wms:
-			//grpWmsServers->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-			btAdapterSetup->setEnabled(true);
-			break;
-	}
-	//layout()->activate();
-	//QApplication::processEvents();
-	//setFixedSize(minimumSizeHint());
-
-}
-
 void PreferencesDialog::on_BrowseStyle_clicked()
 {
     QString s = QFileDialog::getExistingDirectory(this,tr("Custom styles directory"),"");
@@ -361,26 +330,6 @@ void PreferencesDialog::on_BrowseTemplate_clicked()
 	QString s = QFileDialog::getOpenFileName(this,tr("Tag Template"),"",tr("Merkaartor tag template (*.mat)"));
 	if (!s.isNull())
 		CustomTemplateName->setText(QDir::toNativeSeparators(s));
-}
-
-void PreferencesDialog::on_btAdapterSetup_clicked()
-{
-	WMSPreferencesDialog* WMSPref;
-	TMSPreferencesDialog* TMSPref;
-	switch (cbMapAdapter->currentIndex()) {
-		case Bg_Wms:
-			//grpWmsServers->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-			WMSPref = new WMSPreferencesDialog();
-			if (WMSPref->exec() == QDialog::Accepted) {
-			}
-			break;
-		case Bg_Tms:
-			//grpTmsServers->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-			TMSPref = new TMSPreferencesDialog();
-			if (TMSPref->exec() == QDialog::Accepted) {
-			}
-			break;
-	}
 }
 
 void PreferencesDialog::on_btBgColor_clicked()

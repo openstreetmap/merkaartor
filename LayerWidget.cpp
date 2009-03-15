@@ -4,8 +4,9 @@
 #include "MainWindow.h"
 #include "Map/MapDocument.h"
 #include "Map/MapLayer.h"
-#include "MapView.h"
 #include "Preferences/MerkaartorPreferences.h"
+
+#include "IMapAdapter.h"
 
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
@@ -244,48 +245,20 @@ ImageLayerWidget::ImageLayerWidget(ImageMapLayer* aLayer, QWidget* aParent)
 	backColor = QColor(200,200,200);
 	//actgrAdapter = new QActionGroup(this);
 
-	actNone = new QAction(MerkaartorPreferences::instance()->getBgTypes()[Bg_None], this);
+	actNone = new QAction(tr("None"), this);
 	//actNone->setCheckable(true);
-	actNone->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_None));
-	connect(actNone, SIGNAL(triggered(bool)), this, SLOT(setNone(bool)));
-
-// 	actOSM = new QAction(MerkaartorPreferences::instance()->getBgTypes()[Bg_OSM], this);
-// 	//actNone->setCheckable(true);
-// 	actOSM->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_OSM));
-// 	connect(actOSM, SIGNAL(triggered(bool)), this, SLOT(setOSM(bool)));
+	actNone->setChecked((MerkaartorPreferences::instance()->getBackgroundPlugin() == NONE_ADAPTER_UUID));
+	actNone->setData(QVariant::fromValue(NONE_ADAPTER_UUID));
 
 #ifdef USE_GDAL
 	if (M_PREFS->getUseShapefileForBackground()) {
-		actShape = new QAction(MerkaartorPreferences::instance()->getBgTypes()[Bg_Shp], this);
+		actShape = new QAction(tr("Shape adapter"), this);
 		//actShape->setCheckable(true);
-		actShape->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_Shp));
-		connect(actShape, SIGNAL(triggered(bool)), this, SLOT(setShape(bool)));
+		actShape->setChecked((MerkaartorPreferences::instance()->getBackgroundPlugin() == SHAPE_ADAPTER_UUID));
+		actShape->setData(QVariant::fromValue(SHAPE_ADAPTER_UUID));
 	}
 #endif
-#ifdef YAHOO
-	actLegalYahoo = new QAction(MerkaartorPreferences::instance()->getBgTypes()[Bg_Yahoo], this);
-	//actYahoo->setCheckable(true);
-	actLegalYahoo->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_Yahoo));
-	connect(actLegalYahoo, SIGNAL(triggered(bool)), this, SLOT(setLegalYahoo(bool)));
-#endif
-#ifdef YAHOO_ILLEGAL
-	actYahoo = new QAction(MerkaartorPreferences::instance()->getBgTypes()[Bg_Yahoo_illegal], this);
-	//actYahoo->setCheckable(true);
-	actYahoo->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_Yahoo_illegal));
-	connect(actYahoo, SIGNAL(triggered(bool)), this, SLOT(setYahoo(bool)));
-#endif
-#ifdef GOOGLE_ILLEGAL
-	actGoogle = new QAction(MerkaartorPreferences::instance()->getBgTypes()[Bg_Google_illegal], this);
-	//actGoogle->setCheckable(true);
-	actGoogle->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_Google_illegal));
-	connect(actGoogle, SIGNAL(triggered(bool)), this, SLOT(setGoogle(bool)));
-#endif
-#ifdef MSLIVEMAP_ILLEGAL
-	actVirtEarth = new QAction(MerkaartorPreferences::instance()->getBgTypes()[Bg_MsVirtualEarth_illegal], this);
-	//actVirtEarth->setCheckable(true);
-	actVirtEarth->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_MsVirtualEarth_illegal));
-	connect(actVirtEarth, SIGNAL(triggered(bool)), this, SLOT(setMsVirtualEarth(bool)));
-#endif
+
 	initActions();
 }
 
@@ -299,7 +272,7 @@ void ImageLayerWidget::setWms(QAction* act)
 	WmsServer S = L.value(act->data().toString());
 	MerkaartorPreferences::instance()->setSelectedWmsServer(S.WmsName);
 
-	((ImageMapLayer *)theLayer)->setMapAdapter(Bg_Wms);
+	((ImageMapLayer *)theLayer)->setMapAdapter(WMS_ADAPTER_UUID);
 	theLayer->setVisible(true);
 
 	this->update(rect());
@@ -312,85 +285,24 @@ void ImageLayerWidget::setTms(QAction* act)
 	TmsServer S = L.value(act->data().toString());
 	MerkaartorPreferences::instance()->setSelectedTmsServer(S.TmsName);
 
-	((ImageMapLayer *)theLayer)->setMapAdapter(Bg_Tms);
+	((ImageMapLayer *)theLayer)->setMapAdapter(TMS_ADAPTER_UUID);
 	theLayer->setVisible(true);
 
 	this->update(rect());
 	emit (layerChanged(this, true));
 }
 
-#ifdef USE_GDAL
-void ImageLayerWidget::setShape(bool)
+void ImageLayerWidget::setBackground(QAction* act)
 {
-	((ImageMapLayer *)theLayer)->setMapAdapter(Bg_Shp);
-	theLayer->setVisible(true);
+	QUuid aUuid = act->data().value<QUuid>();
+	if (aUuid.isNull())
+		return;
+
+	((ImageMapLayer *)theLayer)->setMapAdapter(aUuid);
 
 	this->update(rect());
 	emit (layerChanged(this, true));
 }
-#endif
-
-#ifdef YAHOO
-void ImageLayerWidget::setLegalYahoo(bool)
-{
-	((ImageMapLayer *)theLayer)->setMapAdapter(Bg_Yahoo);
-	theLayer->setVisible(true);
-
-	this->update(rect());
-	emit (layerChanged(this, true));
-}
-#endif
-
-#ifdef YAHOO_ILLEGAL
-void ImageLayerWidget::setYahoo(bool)
-{
-	((ImageMapLayer *)theLayer)->setMapAdapter(Bg_Yahoo_illegal);
-	theLayer->setVisible(true);
-
-	this->update(rect());
-	emit (layerChanged(this, true));
-}
-#endif
-
-#ifdef GOOGLE_ILLEGAL
-void ImageLayerWidget::setGoogle(bool)
-{
-	((ImageMapLayer *)theLayer)->setMapAdapter(Bg_Google_illegal);
-	theLayer->setVisible(true);
-
-	this->update(rect());
-	emit (layerChanged(this, true));
-}
-#endif
-
-#ifdef MSLIVEMAP_ILLEGAL
-void ImageLayerWidget::setMsVirtualEarth(bool)
-{
-	((ImageMapLayer *)theLayer)->setMapAdapter(Bg_MsVirtualEarth_illegal);
-	theLayer->setVisible(true);
-
-	this->update(rect());
-	emit (layerChanged(this, true));
-}
-#endif
-
-void ImageLayerWidget::setNone(bool)
-{
-	((ImageMapLayer *)theLayer)->setMapAdapter(Bg_None);
-
-	this->update(rect());
-	emit (layerChanged(this, true));
-}
-
-/*void ImageLayerWidget::setOSM(bool)
-{
-	((ImageMapLayer *)theLayer)->setMapAdapter(Bg_OSM);
-	theLayer->setVisible(true);
-
-	this->update(rect());
-	emit (layerChanged(this, true));
-}
-*/
 
 void ImageLayerWidget::initActions()
 {
@@ -405,7 +317,7 @@ void ImageLayerWidget::initActions()
 	ctxMenu->addSeparator();
 	associatedMenu->addSeparator();
 
-	wmsMenu = new QMenu(MerkaartorPreferences::instance()->getBgTypes()[Bg_Wms], this);
+	wmsMenu = new QMenu(tr("WMS adapter"), this);
 	WmsServerList WmsServers = MerkaartorPreferences::instance()->getWmsServers();
 	WmsServerListIterator wi(WmsServers);
 	while (wi.hasNext()) {
@@ -413,16 +325,13 @@ void ImageLayerWidget::initActions()
 		WmsServer S = wi.value();
 		QAction* act = new QAction(S.WmsName, wmsMenu);
 		act->setData(S.WmsName);
-		//act->setCheckable(true);
 		wmsMenu->addAction(act);
-		//actgrAdapter->addAction(act);
-		//actgrWms->addAction(act);
-		if (MerkaartorPreferences::instance()->getBgType() == Bg_Wms)
+		if (MerkaartorPreferences::instance()->getBackgroundPlugin() == WMS_ADAPTER_UUID)
 			if (S.WmsName == MerkaartorPreferences::instance()->getSelectedWmsServer())
 				act->setChecked(true);
 	}
 
-	tmsMenu = new QMenu(MerkaartorPreferences::instance()->getBgTypes()[Bg_Tms], this);
+	tmsMenu = new QMenu(tr("TMS adapter"), this);
 	TmsServerList TmsServers = MerkaartorPreferences::instance()->getTmsServers();
 	TmsServerListIterator ti(TmsServers);
 	while (ti.hasNext()) {
@@ -431,29 +340,16 @@ void ImageLayerWidget::initActions()
 		QAction* act = new QAction(S.TmsName, tmsMenu);
 		act->setData(S.TmsName);
 		tmsMenu->addAction(act);
-		if (MerkaartorPreferences::instance()->getBgType() == Bg_Tms)
+		if (MerkaartorPreferences::instance()->getBackgroundPlugin() == TMS_ADAPTER_UUID)
 			if (S.TmsName == MerkaartorPreferences::instance()->getSelectedTmsServer())
 				act->setChecked(true);
 	}
 
-	actNone->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_None));
+	actNone->setChecked((MerkaartorPreferences::instance()->getBackgroundPlugin() == NONE_ADAPTER_UUID));
 #ifdef USE_GDAL
 	if (M_PREFS->getUseShapefileForBackground())
-		actShape->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_Shp));
+		actShape->setChecked((MerkaartorPreferences::instance()->getBackgroundPlugin() == SHAPE_ADAPTER_UUID));
 #endif
-#ifdef YAHOO
-	actLegalYahoo->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_Yahoo));
-#endif
-#ifdef YAHOO_ILLEGAL
-	actYahoo->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_Yahoo_illegal));
-#endif
-#ifdef GOOGLE_ILLEGAL
-	actGoogle->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_Google_illegal));
-#endif
-#ifdef MSLIVEMAP_ILLEGAL
-	actVirtEarth->setChecked((MerkaartorPreferences::instance()->getBgType() == Bg_MsVirtualEarth_illegal));
-#endif
-
 	ctxMenu->addAction(actNone);
 	associatedMenu->addAction(actNone);
 
@@ -465,29 +361,25 @@ void ImageLayerWidget::initActions()
 	associatedMenu->addMenu(tmsMenu);
 	connect(tmsMenu, SIGNAL(triggered(QAction*)), this, SLOT(setTms(QAction*)));
 
-// 	ctxMenu->addAction(actOSM);
 #ifdef USE_GDAL
 	if (M_PREFS->getUseShapefileForBackground()) {
 		ctxMenu->addAction(actShape);
 		associatedMenu->addAction(actShape);
 	}
 #endif
-#ifdef YAHOO
-	ctxMenu->addAction(actLegalYahoo);
-	associatedMenu->addAction(actLegalYahoo);
-#endif
-#ifdef YAHOO_ILLEGAL
-	ctxMenu->addAction(actYahoo);
-	associatedMenu->addAction(actYahoo);
-#endif
-#ifdef GOOGLE_ILLEGAL
-	ctxMenu->addAction(actGoogle);
-	associatedMenu->addAction(actGoogle);
-#endif
-#ifdef MSLIVEMAP_ILLEGAL
-	ctxMenu->addAction(actVirtEarth);
-	associatedMenu->addAction(actVirtEarth);
-#endif
+
+	QMapIterator <QUuid, IMapAdapter *> it(M_PREFS->getBackgroundPlugins());
+	while (it.hasNext()) {
+		it.next();
+
+		QAction* actBackPlug = new QAction(it.value()->getName(), this);
+		actBackPlug->setChecked((M_PREFS->getBackgroundPlugin() == it.key()));
+		actBackPlug->setData(QVariant::fromValue(it.key()));
+
+		ctxMenu->addAction(actBackPlug);
+		associatedMenu->addAction(actBackPlug);
+	}
+	connect(ctxMenu, SIGNAL(triggered(QAction*)), this, SLOT(setBackground(QAction*)));
 }
 
 // TrackLayerWidget

@@ -20,14 +20,14 @@
 #ifndef WMSMAPADAPTER_H
 #define WMSMAPADAPTER_H
 
-#include "mapadapter.h"
+#include "tilemapadapter.h"
 
 //! MapAdapter for WMS servers
 /*!
  * Use this derived MapAdapter to display maps from WMS servers
  *	@author Kai Winter <kaiwinter@gmx.de>
 */
-class WMSMapAdapter : public MapAdapter
+class WMSMapAdapter : public TileMapAdapter
 {
 	friend class ImageMapLayer;
 	public:
@@ -44,21 +44,35 @@ class WMSMapAdapter : public MapAdapter
 		WMSMapAdapter(QString host, QString serverPath, QString wlayers, QString wSrs, QString wStyles, QString wImgFormat, int tilesize = 256);
 		virtual ~WMSMapAdapter();
 
+		//! returns the unique identifier (Uuid) of this MapAdapter
+		/*!
+		 * @return  the unique identifier (Uuid) of this MapAdapter
+		 */
+		virtual QUuid	getId		() const;
+
+		//! returns the type of this MapAdapter
+		/*!
+		 * @return  the type of this MapAdapter
+		 */
+		virtual IMapAdapter::Type	getType		() const;
+
 		virtual QPoint		coordinateToDisplay(const QPointF&) const;
 		virtual QPointF	displayToCoordinate(const QPoint&) const;
 
+		virtual QString projection() const;
 
 	protected:
-		virtual void zoom_in();
-		virtual void zoom_out();
+		virtual int tilesonzoomlevel(int zoomlevel) const;
+		//virtual void zoom_in();
+		//virtual void zoom_out();
 		virtual QString getQuery(int x, int y, int z) const;
 		virtual bool isValid(int x, int y, int z) const;
 
 	private:
-		virtual QString getQ(double ux, double uy, double ox, double oy) const;
+		virtual QString getQ(QPointF ul, QPointF br) const;
 
-		double coord_per_x_tile;
-		double coord_per_y_tile;
+		//double coord_per_x_tile;
+		//double coord_per_y_tile;
 
 		QString wms_version;
 		QString wms_request;

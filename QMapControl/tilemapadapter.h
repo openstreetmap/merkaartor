@@ -28,8 +28,6 @@
 */
 class TileMapAdapter : public MapAdapter
 {
-Q_OBJECT
-friend class ImageMapLayer;
 public:
 	//! constructor
 	/*!
@@ -46,20 +44,36 @@ public:
 	TileMapAdapter(const QString& host, const QString& serverPath, int tilesize, int minZoom = 0, int maxZoom = 17);
 	
 	virtual ~TileMapAdapter();
+
+	//! returns the unique identifier (Uuid) of this MapAdapter
+	/*!
+	 * @return  the unique identifier (Uuid) of this MapAdapter
+	 */
+	virtual QUuid	getId		() const;
+
+	//! returns the type of this MapAdapter
+	/*!
+	 * @return  the type of this MapAdapter
+	 */
+	virtual IMapAdapter::Type	getType		() const;
 	
 	virtual QPoint		coordinateToDisplay(const QPointF&) const;
 	virtual QPointF	displayToCoordinate(const QPoint&) const;
 	
 	double PI;
 	
+	virtual void zoom_in();
+	virtual void zoom_out();
+
+	virtual bool isValid(int x, int y, int z) const;
+	virtual QString getQuery(int x, int y, int z) const;
+
+	virtual QString projection() const { return ("EPSG:3785"); }
+
 protected:
 	double rad_deg(double) const;
 	double deg_rad(double) const;
 	
-	virtual bool isValid(int x, int y, int z) const;
-	virtual void zoom_in();
-	virtual void zoom_out();
-	virtual QString getQuery(int x, int y, int z) const;
 	virtual int tilesonzoomlevel(int zoomlevel) const;
 	virtual int getxoffset(int x) const;
 	virtual int getyoffset(int y) const;

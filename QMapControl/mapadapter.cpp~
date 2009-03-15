@@ -17,48 +17,65 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#include "circlepoint.h"
+#include "mapadapter.h"
 
-CirclePoint::CirclePoint(double x, double y, int radius, QString name, Alignment alignment, QPen* pen)
- : Point(x, y, name, alignment)
+MapAdapter::MapAdapter(const QString& host, const QString& serverPath, int tilesize, int minZoom, int maxZoom)
+	:host(host), serverPath(serverPath), tilesize(tilesize), min_zoom(minZoom), max_zoom(maxZoom)
 {
-	size = QSize(radius, radius);
-	mypixmap = new QPixmap(radius+1, radius+1);
-	mypixmap->fill(Qt::transparent);
-	QPainter painter(mypixmap);
-	if (pen != 0)
-	{
-		painter.setPen(*pen);
-	}
-	painter.drawEllipse(0,0,radius, radius);
+	current_zoom = min_zoom;
+	loc = QLocale(QLocale::English);
 }
 
-CirclePoint::CirclePoint(double x, double y, QString name, Alignment alignment, QPen* pen)
-	: Point(x, y, name, alignment)
+MapAdapter::~MapAdapter()
 {
-	int radius = 10;
-	size = QSize(radius, radius);
-	mypixmap = new QPixmap(radius+1, radius+1);
-	mypixmap->fill(Qt::transparent);
-	QPainter painter(mypixmap);
-	if (pen != 0)
-	{
-		painter.setPen(*pen);
-	}
-	painter.drawEllipse(0,0,radius, radius);
 }
 
-CirclePoint::~CirclePoint()
+QString MapAdapter::getName() const
 {
-	delete mypixmap;
+	return name;
 }
 
-void CirclePoint::setPen(QPen* pen)
+QString MapAdapter::getHost() const
 {
-	this->pen = pen;
-	mypixmap = new QPixmap(size.width()+1, size.height()+1);
-	mypixmap->fill(Qt::transparent);
-	QPainter painter(mypixmap);
-	painter.setPen(*pen);
-	painter.drawEllipse(0,0, size.width(), size.height());
+	return host;
+}
+
+int MapAdapter::getTileSize() const
+{
+	return tilesize;
+}
+
+int MapAdapter::getMinZoom() const
+{
+	return min_zoom;
+}
+
+int MapAdapter::getMaxZoom() const
+{
+	return max_zoom;
+}
+
+int MapAdapter::getAdaptedMinZoom() const
+{
+	return 0;
+}
+
+int MapAdapter::getAdaptedMaxZoom() const
+{
+	return max_zoom > min_zoom ? max_zoom - min_zoom : min_zoom - max_zoom;
+}
+
+int MapAdapter::getZoom() const
+{
+	return current_zoom;
+}
+
+int MapAdapter::getAdaptedZoom() const
+{
+	return max_zoom < min_zoom ? min_zoom - current_zoom : max_zoom - current_zoom;
+}
+
+IImageManager* MapAdapter::getImageManager()
+{
+	return ImageManager::instance();
 }

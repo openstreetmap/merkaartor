@@ -17,12 +17,17 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#include <QtPlugin>
+
 #include "yahoolegalmapadapter.h"
+
+// {67CC0481-8C6A-4735-8666-BBA6A1B04E19}
+static const QUuid theUid ( 0x67cc0481, 0x8c6a, 0x4735, 0x86, 0x66, 0xbb, 0xa6, 0xa1, 0xb0, 0x4e, 0x19);
 
 YahooLegalMapAdapter::YahooLegalMapAdapter()
 : TileMapAdapter("", "qrc:/Html/ymap.html?", 512, 17, 0)
 {
-	name = "yahoolegal";
+	name = "Yahoo!";
 
 	int zoom = max_zoom < min_zoom ? min_zoom - current_zoom : current_zoom;
 	numberOfTiles = pow(2, zoom+1.0);
@@ -32,6 +37,17 @@ YahooLegalMapAdapter::YahooLegalMapAdapter()
 YahooLegalMapAdapter::~YahooLegalMapAdapter()
 {
 }
+
+QUuid YahooLegalMapAdapter::getId() const
+{
+	return theUid;
+}
+
+IMapAdapter::Type YahooLegalMapAdapter::getType() const
+{
+	return IMapAdapter::BrowserBackground;
+}
+
 
 bool YahooLegalMapAdapter::isValid(int /* x */, int /* y */, int /* z */) const
 {
@@ -60,6 +76,7 @@ QString YahooLegalMapAdapter::getQuery(int i, int j, int /* z */) const
 	QPointF br = displayToCoordinate(QPoint((i+1)*tilesize, (j+1)*tilesize));
 	return getQ(ul, br);
 }
+
 QString YahooLegalMapAdapter::getQ(QPointF ul, QPointF br) const
 {
 	return QString().append(serverPath)
@@ -81,8 +98,4 @@ int YahooLegalMapAdapter::getyoffset(int y) const
 	return int(y);
 }
 
-IImageManager* YahooLegalMapAdapter::getImageManager()
-{
-	return BrowserImageManager::instance();
-}
-
+Q_EXPORT_PLUGIN2(MYahooBackgroundPlugin, YahooLegalMapAdapter)

@@ -30,6 +30,7 @@
 
 #include "IImageManager.h"
 #include "imagemanager.h"
+#include "IMapAdapter.h"
 
 //! Used to fit map servers into QMapControl
 /*!
@@ -46,13 +47,15 @@
  *
  *	@author Kai Winter <kaiwinter@gmx.de>
 */
-class MapAdapter : public QObject
+class MapAdapter : public QObject, public IMapAdapter
 {
-	friend class ImageManager;
-	friend class BrowserImageManager;
-	friend class Layer;
+	//friend class ImageManager;
+	//friend class BrowserImageManager;
+	//friend class Layer;
 
-Q_OBJECT
+	Q_OBJECT
+	Q_INTERFACES(IMapAdapter)
+
 public:
 	virtual ~MapAdapter();
 
@@ -116,6 +119,7 @@ public:
 	virtual QPointF	displayToCoordinate(const QPoint& point) const = 0;
 
 	virtual IImageManager* getImageManager();
+	virtual void setImageManager(IImageManager* anImageManager);
 
 protected:
 	QString name;
@@ -154,6 +158,8 @@ protected:
 
 	double numberOfTiles;
 	QLocale loc;
+
+	IImageManager* theImageManager;
 };
 
 #endif

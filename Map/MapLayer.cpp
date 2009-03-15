@@ -3,7 +3,6 @@
 #include "Map/Relation.h"
 #include "Map/TrackPoint.h"
 #include "Map/TrackSegment.h"
-#include "MapView.h"
 #include "LayerWidget.h"
 #include "Map/ImportOSM.h"
 
@@ -15,23 +14,14 @@
 
 #include "Utils/LineF.h"
 
-#include "QMapControl/mapadapter.h"
-#include "QMapControl/osmmapadapter.h"
+#include "IMapAdapter.h"
+#include "QMapControl/imagemanager.h"
+#ifdef USE_WEBKIT
+#include "QMapControl/browserimagemanager.h"
+#endif
 #include "QMapControl/wmsmapadapter.h"
 #ifdef USE_GDAL
 	#include "ImportExport/ImportExportSHP.h"
-#endif
-#ifdef YAHOO
-	#include "QMapControl/yahoolegalmapadapter.h"
-#endif
-#ifdef YAHOO_ILLEGAL
-	#include "QMapControl/yahoomapadapter.h"
-#endif
-#ifdef GOOGLE_ILLEGAL
-	#include "QMapControl/googlesatmapadapter.h"
-#endif
-#ifdef MSLIVEMAP_ILLEGAL
-	#include "QMapControl/mslivemapadapter.h"
 #endif
 #include "QMapControl/layer.h"
 #include "QMapControl/layermanager.h"
@@ -41,6 +31,7 @@
 #include <QtCore/QString>
 #include <QMultiMap>
 #include <QProgressDialog>
+#include <QUuid>
 
 #include <algorithm>
 #include <map>
@@ -79,7 +70,7 @@ public:
 	qreal alpha;
 	unsigned int dirtyLevel;
 
-	ImageBackgroundType bgType;
+	QUuid bgType;
 	Layer* layer_bg;
 
 	bool RenderPriorityUpToDate;
@@ -586,8 +577,8 @@ DrawingMapLayer * DrawingMapLayer::doFromXML(DrawingMapLayer* l, MapDocument* d,
 ImageMapLayer::ImageMapLayer(const QString & aName, LayerManager* aLayerMgr)
 	: MapLayer(aName), layermanager(aLayerMgr)
 {
-	setMapAdapter(MerkaartorPreferences::instance()->getBgType());
-	if (MerkaartorPreferences::instance()->getBgType() == Bg_None)
+	setMapAdapter(MerkaartorPreferences::instance()->getBackgroundPlugin());
+	if (MerkaartorPreferences::instance()->getBackgroundPlugin() == NONE_ADAPTER_UUID)
 		setVisible(false);
 	else
 		setVisible(MerkaartorPreferences::instance()->getBgVisible());
@@ -608,9 +599,17 @@ ImageMapLayer::ImageMapLayer(const QString & aName, LayerManager* aLayerMgr)
 
 ImageMapLayer::~ ImageMapLayer()
 {
-	if (layermanager && p->layer_bg)
-		layermanager->removeLayer(p->layer_bg->getLayername());
-	SAFE_DELETE(p->layer_bg);
+	if (p->layer_bg) {
+		if (p->layer_bg)
+			layermanager->removeLayer(p->layer_bg->getLayername());
+
+		IMapAdapter* mapadapter_bg = p->layer_bg->getMapAdapter();
+		if (mapadapter_bg && (mapadapter_bg->getId() == WMS_ADAPTER_UUID || mapadapter_bg->getId() == TMS_ADAPTER_UUID)) {
+			delete (dynamic_cast<MapAdapter*>(mapadapter_bg));
+			mapadapter_bg = NULL;
+		}
+		SAFE_DELETE(p->layer_bg);
+	}
 	clear();
 }
 
@@ -618,7 +617,7 @@ unsigned int ImageMapLayer::size() const
 {
 #ifdef USE_GDAL
 	//return p->Features.size();
-	if (p->bgType == Bg_Shp)
+	if (p->bgType == SHAPE_ADAPTER_UUID)
 		return p->Features.size();
 	else
 #endif
@@ -641,7 +640,7 @@ void ImageMapLayer::updateWidget()
 void ImageMapLayer::setVisible(bool b)
 {
 	p->Visible = b;
-	if (p->bgType == Bg_None)
+	if (p->bgType == NONE_ADAPTER_UUID)
 		p->Visible = false;
 	else
 		if (p->layer_bg)
@@ -654,9 +653,9 @@ Layer* ImageMapLayer::imageLayer()
 	return p->layer_bg;
 }
 
-void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
+void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid)
 {
-	MapAdapter* mapadapter_bg;
+	IMapAdapter* mapadapter_bg;
 	WmsServerList wsl;
 	WmsServer ws;
 	TmsServerList tsl;
@@ -664,104 +663,88 @@ void ImageMapLayer::setMapAdapter(ImageBackgroundType typ)
 	QString selws, selts;
 	int idx = -1;
 
-	if (layermanager)
+	if (layermanager) {
 		if (layermanager->getLayer(id())) {
 			idx = layermanager->getLayers().indexOf(id());
 			layermanager->removeLayer(id());
 		}
-	SAFE_DELETE(p->layer_bg);
+	}
 
-	p->bgType = typ;
-	MerkaartorPreferences::instance()->setBgType(typ);
-	switch (p->bgType) {
-		default:
-			p->bgType = Bg_None; /* no break */
-		case Bg_None:
+	if (p->layer_bg) {
+		mapadapter_bg = p->layer_bg->getMapAdapter();
+		if (mapadapter_bg && (mapadapter_bg->getId() == WMS_ADAPTER_UUID || mapadapter_bg->getId() == TMS_ADAPTER_UUID)) {
+			delete (dynamic_cast<MapAdapter*>(mapadapter_bg));
+			mapadapter_bg = NULL;
+		}
+		SAFE_DELETE(p->layer_bg);
+	}
+
+	p->bgType = theAdapterUid;
+	MerkaartorPreferences::instance()->setBackgroundPlugin(theAdapterUid);
+	if (p->bgType == NONE_ADAPTER_UUID) {
+		setName(tr("Map - None"));
+		p->Visible = false;
+	} else 
+	if (p->bgType == WMS_ADAPTER_UUID) {
+		wsl = MerkaartorPreferences::instance()->getWmsServers();
+		selws = MerkaartorPreferences::instance()->getSelectedWmsServer();
+		ws = wsl.value(selws);
+		wmsa = new WMSMapAdapter(ws.WmsAdress, ws.WmsPath, ws.WmsLayers, ws.WmsProjections,
+				ws.WmsStyles, ws.WmsImgFormat, 256);
+		wmsa->setImageManager(ImageManager::instance());
+		mapadapter_bg = wmsa;
+		p->layer_bg = new Layer(id(), mapadapter_bg, Layer::MapLayer);
+		p->layer_bg->setVisible(p->Visible);
+
+		setName(tr("Map - WMS - %1").arg(ws.WmsName));
+	} else
+	if (p->bgType == TMS_ADAPTER_UUID) {
+		tsl = MerkaartorPreferences::instance()->getTmsServers();
+		selts = MerkaartorPreferences::instance()->getSelectedTmsServer();
+		ts = tsl.value(selts);
+		tmsa = new TileMapAdapter(ts.TmsAdress, ts.TmsPath, ts.TmsTileSize, ts.TmsMinZoom, ts.TmsMaxZoom);
+		tmsa->setImageManager(ImageManager::instance());
+		mapadapter_bg = tmsa;
+		p->layer_bg = new Layer(id(), mapadapter_bg, Layer::MapLayer);
+		p->layer_bg->setVisible(p->Visible);
+
+		setName(tr("Map - TMS - %1").arg(ts.TmsName));
+	} else
+#ifdef USE_GDAL
+	if (p->bgType == SHAPE_ADAPTER_UUID) {
+		if (!M_PREFS->getUseShapefileForBackground()) {
+			p->bgType = NONE_ADAPTER_UUID;
 			setName(tr("Map - None"));
 			p->Visible = false;
-			break;
-
-		case Bg_Wms:
-			wsl = MerkaartorPreferences::instance()->getWmsServers();
-			selws = MerkaartorPreferences::instance()->getSelectedWmsServer();
-			ws = wsl.value(selws);
-			wmsa = new WMSMapAdapter(ws.WmsAdress, ws.WmsPath, ws.WmsLayers, ws.WmsProjections,
-					ws.WmsStyles, ws.WmsImgFormat, 256);
-			mapadapter_bg = wmsa;
-			p->layer_bg = new Layer(id(), mapadapter_bg, Layer::MapLayer);
-			p->layer_bg->setVisible(p->Visible);
-
-			setName(tr("Map - WMS - %1").arg(ws.WmsName));
-			break;
-		case Bg_Tms:
-			tsl = MerkaartorPreferences::instance()->getTmsServers();
-			selts = MerkaartorPreferences::instance()->getSelectedTmsServer();
-			ts = tsl.value(selts);
-			tmsa = new TileMapAdapter(ts.TmsAdress, ts.TmsPath, ts.TmsTileSize, ts.TmsMinZoom, ts.TmsMaxZoom);
-			mapadapter_bg = tmsa;
-			p->layer_bg = new Layer(id(), mapadapter_bg, Layer::MapLayer);
-			p->layer_bg->setVisible(p->Visible);
-
-			setName(tr("Map - TMS - %1").arg(ts.TmsName));
-/*			mapadapter_bg = new OSMMapAdapter();
-			p->layer_bg = new Layer("Custom Layer", mapadapter_bg, Layer::MapLayer);
-			p->layer_bg->setVisible(p->Visible);
-
-			setName("Background - OSM");*/
-			break;
-#ifdef USE_GDAL
-		case Bg_Shp:
-			if (!M_PREFS->getUseShapefileForBackground()) {
-				p->bgType = Bg_None;
-				setName(tr("Map - None"));
-				p->Visible = false;
-			} else
-				setName(tr("Map - Shape"));
-			break;
+		} else
+			setName(tr("Map - Shape"));
+	} else
 #endif
-#ifdef YAHOO
-		case Bg_Yahoo:
-			mapadapter_bg = new YahooLegalMapAdapter();
+	{
+		IMapAdapter * thePluginBackground = M_PREFS->getBackgroundPlugin(p->bgType);
+		if (thePluginBackground) {
+			switch (thePluginBackground->getType()) {
+				case IMapAdapter::BrowserBackground :
+					thePluginBackground->setImageManager(BrowserImageManager::instance());
+					break;
+				case IMapAdapter::DirectBackground :
+					thePluginBackground->setImageManager(ImageManager::instance());
+					break;
+			}
+			mapadapter_bg = thePluginBackground;
 			p->layer_bg = new Layer(id(), mapadapter_bg, Layer::MapLayer);
 			p->layer_bg->setVisible(p->Visible);
 
-			setName(tr("Map - Yahoo"));
-			break;
-#endif
-#ifdef YAHOO_ILLEGAL
-		case Bg_Yahoo_illegal:
-			mapadapter_bg = new YahooMapAdapter("us.maps3.yimg.com", "/aerial.maps.yimg.com/png?v=1.7&t=a&s=256&x=%2&y=%3&z=%1");
-			p->layer_bg = new Layer(id(), mapadapter_bg, Layer::MapLayer);
-			p->layer_bg->setVisible(p->Visible);
-
-			setName(tr("Map - Illegal Yahoo"));
-			break;
-#endif
-#ifdef GOOGLE_ILLEGAL
-		case Bg_Google_illegal:
-			mapadapter_bg = new GoogleSatMapAdapter();
-			p->layer_bg = new Layer(id(), mapadapter_bg, Layer::MapLayer);
-			p->layer_bg->setVisible(p->Visible);
-
-			setName(tr("Map - Illegal Google"));
-			break;
-#endif
-#ifdef MSLIVEMAP_ILLEGAL
-		case Bg_MsVirtualEarth_illegal:
-			mapadapter_bg = new MsLiveMapAdapter();
-			p->layer_bg = new Layer(id(), mapadapter_bg, Layer::MapLayer);
-			p->layer_bg->setVisible(p->Visible);
-
-			setName(tr("Map - Illegal Ms Virtual Earth"));
-			break;
-#endif
+			setName(tr("Map - %1").arg(thePluginBackground->getName()));
+		} else
+			p->bgType = NONE_ADAPTER_UUID;
 	}
+
 	if (layermanager)
 		if (p->layer_bg) {
 			layermanager->addLayer(p->layer_bg, idx);
 			layermanager->setSize();
 		}
-
 }
 
 bool ImageMapLayer::toXML(QDomElement xParent, QProgressDialog & /* progress */)
@@ -778,39 +761,23 @@ bool ImageMapLayer::toXML(QDomElement xParent, QProgressDialog & /* progress */)
 	e.setAttribute("selected", QString((p->selected ? "true" : "false")));
 	e.setAttribute("enabled", QString((p->Enabled ? "true" : "false")));
 
-	e.setAttribute("bgtype", QString::number((int)p->bgType));
+	e.setAttribute("bgtype", p->bgType.toString());
 
 	QDomElement c;
 	WmsServer ws;
 	TmsServer ts;
-	switch (p->bgType) {
-		case Bg_Wms:
-			c = e.ownerDocument().createElement("WmsServer");
-			e.appendChild(c);
 
-			c.setAttribute("name", M_PREFS->getSelectedWmsServer());
-			//e.setAttribute("adress", wmsa->host);
-			//e.setAttribute("path", wmsa->serverPath);
-			//e.setAttribute("layers", wmsa->wms_layers);
-			//e.setAttribute("projection", wmsa->wms_srs);
-			//e.setAttribute("styles", wmsa->wms_styles);
-			//e.setAttribute("format", wmsa->wms_format);
+	if (p->bgType == WMS_ADAPTER_UUID) {
+		c = e.ownerDocument().createElement("WmsServer");
+		e.appendChild(c);
 
-			break;
-		case Bg_Tms:
-			c = e.ownerDocument().createElement("TmsServer");
-			e.appendChild(c);
+		c.setAttribute("name", M_PREFS->getSelectedWmsServer());
+	} else
+	if (p->bgType == TMS_ADAPTER_UUID) {
+		c = e.ownerDocument().createElement("TmsServer");
+		e.appendChild(c);
 
-			c.setAttribute("name", M_PREFS->getSelectedTmsServer());
-			//e.setAttribute("adress", tmsa->host);
-			//e.setAttribute("path", tmsa->serverPath);
-			//e.setAttribute("path", tmsa->tilesize);
-			//e.setAttribute("minzoom", tmsa->min_zoom);
-			//e.setAttribute("maxzoom", tmsa->max_zoom);
-
-			break;
-		default:
-			break;
+		c.setAttribute("name", M_PREFS->getSelectedTmsServer());
 	}
 
 	return OK;
@@ -829,7 +796,7 @@ ImageMapLayer * ImageMapLayer::fromXML(MapDocument* d, const QDomElement e, QPro
 	if (c.tagName() == "TmsServer") {
 		MerkaartorPreferences::instance()->setSelectedTmsServer(c.attribute("name"));
 	}
-	l->setMapAdapter((ImageBackgroundType)(e.attribute("bgtype").toInt()));
+	l->setMapAdapter(QUuid(e.attribute("bgtype")));
 	l->setAlpha(e.attribute("alpha").toDouble());
 	l->setVisible((e.attribute("visible") == "true" ? true : false));
 	l->setSelected((e.attribute("selected") == "true" ? true : false));

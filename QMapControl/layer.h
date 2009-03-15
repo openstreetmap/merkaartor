@@ -25,10 +25,8 @@
 #include <QPainter>
 #include <QMouseEvent>
 
-#include "mapadapter.h"
+#include "IMapAdapter.h"
 #include "layermanager.h"
-#include "geometry.h"
-#include "point.h"
 
 #include "wmsmapadapter.h"
 #include "tilemapadapter.h"
@@ -72,7 +70,7 @@ public:
 	 * @param takeevents Should the Layer receive MouseEvents? This is set to true by default. Setting it to false could
 	 * be something like a "speed up hint"
 	 */
-	Layer(QString layername, MapAdapter* mapadapter, enum LayerType layertype, bool takeevents=true);
+	Layer(QString layername, IMapAdapter* mapadapter, enum LayerType layertype, bool takeevents=true);
 	virtual ~Layer();
 
 	//! returns the layer's name
@@ -87,16 +85,16 @@ public:
 	 * to do coordinate transformations.
 	 * @return the MapAdapter which us used by this Layer
 	 */
-	const MapAdapter*	getMapAdapter() const;
+	IMapAdapter*	getMapAdapter() const;
 	
 	//! adds a Geometry object to this Layer
 	/*!
 	 * Please notice the different LayerTypes (MapLayer and GeometryLayer) and the differences
 	 * @param  geometry the new Geometry
 	 */
-	void	addGeometry(Geometry* geometry);
-	
-	void	removeGeometry(Geometry* geometry);
+	//void	addGeometry(Geometry* geometry);
+	//
+	//void	removeGeometry(Geometry* geometry);
 	
 	//! return true if the layer is visible
 	/**
@@ -111,19 +109,19 @@ public:
 	 */
 	Layer::LayerType getLayertype() const;
 	
-	void setMapAdapter(MapAdapter* mapadapter);
+	void setMapAdapter(IMapAdapter* mapadapter);
 	
 	Layer& operator=(const Layer& rhs);
 	Layer(const Layer& old);
 	
 private:
-	void moveWidgets(const QPoint mapmiddle_px) const;
+	//void moveWidgets(const QPoint mapmiddle_px) const;
 	void drawYourImage(QPainter* painter, const QPoint mapmiddle_px) const;
-	void drawYourGeometries(QPainter* painter, const QPoint mapmiddle_px, QRect viewport) const;
+	//void drawYourGeometries(QPainter* painter, const QPoint mapmiddle_px, QRect viewport) const;
 	void setSize(QSize size);
 	QRect getOffscreenViewport() const;
-	bool takesMouseEvents() const;
-	void mouseEvent(const QMouseEvent*, const QPoint mapmiddle_px);
+	//bool takesMouseEvents() const;
+	//void mouseEvent(const QMouseEvent*, const QPoint mapmiddle_px);
 	void zoomIn() const;
 	void zoomOut() const;
 	void _draw(QPainter* painter, const QPoint mapmiddle_px) const;
@@ -134,12 +132,24 @@ private:
 	QSize size;	
 	QPoint screenmiddle;
 	
-	QList<Geometry*> geometries;
-	MapAdapter*	mapAdapter;
+	//QList<Geometry*> geometries;
+	IMapAdapter*	mapAdapter;
 	bool takeevents;
 	mutable QRect offscreenViewport;
 
 	
+	struct Tile
+	{
+		Tile(int i, int j, double priority)
+		    : i(i), j(j), priority(priority)
+		{}
+
+		int i, j;
+		double priority;
+
+		bool operator<(const Tile& rhs) const { return priority < rhs.priority; }
+	};
+
 	
 	signals:
 		//! This signal is emitted when a Geometry is clicked
@@ -149,7 +159,7 @@ private:
 		 * @param  geometry The clicked Geometry
 		 * @param  point The coordinate (in widget coordinates) of the click
 		 */
-		void geometryClickEvent(Geometry* geometry, QPoint point);
+		//void geometryClickEvent(Geometry* geometry, QPoint point);
 	
 		void updateRequest(QRectF rect);
 		void updateRequest();

@@ -110,7 +110,7 @@ BrowserImageManager::BrowserImageManager(QObject* parent)
 #ifndef QT_WEBKIT_LIB
 	connect(page->mainFrame(), SIGNAL(loadDone(bool)), this, SLOT(pageLoadFinished(bool)));
 #endif
-	connect(page, SIGNAL(loadFinished(bool)), this, SLOT(pageLoadFinished(bool)));
+	connect(page, SIGNAL(loadFinished(bool)), this, SLOT(pageLoadFinished(bool)), Qt::QueuedConnection);
 
 	//browser->show();
 }
@@ -121,7 +121,7 @@ BrowserImageManager::~BrowserImageManager()
 }
 
 //QPixmap BrowserImageManager::getImage(const QString& host, const QString& url)
-QPixmap BrowserImageManager::getImage(MapAdapter* anAdapter, int x, int y, int z)
+QPixmap BrowserImageManager::getImage(IMapAdapter* anAdapter, int x, int y, int z)
 {
 // 	qDebug() << "BrowserImageManager::getImage";
 	QPixmap pm(emptyPixmap);
@@ -218,7 +218,7 @@ void BrowserImageManager::slotLoadProgress(int p)
 }
 
 //QPixmap BrowserImageManager::prefetchImage(const QString& host, const QString& url)
-QPixmap BrowserImageManager::prefetchImage(MapAdapter* anAdapter, int x, int y, int z)
+QPixmap BrowserImageManager::prefetchImage(IMapAdapter* anAdapter, int x, int y, int z)
 {
 	QString host = anAdapter->getHost();
 	QString url = anAdapter->getQuery(x, y, z);
@@ -240,7 +240,7 @@ void BrowserImageManager::receivedImage(const QPixmap& pixmap, const QString& ha
 		QPixmapCache::insert(hash, pixmap);
 		QString strHash = QByteArray::fromBase64(hash.toAscii());
 
-		if (cacheMaxSize && !strHash.startsWith("yahoolegal")) {
+		if (cacheMaxSize && !strHash.startsWith("Yahoo")) {
 			pixmap.save(cacheDir.absolutePath() + "/" + hash + ".png");
 			QFileInfo info(cacheDir.absolutePath() + "/" + hash + ".png");
 			cacheInfo.append(info);

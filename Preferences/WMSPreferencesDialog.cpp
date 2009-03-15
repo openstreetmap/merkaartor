@@ -196,7 +196,7 @@ void WMSPreferencesDialog::savePrefs()
 		WmsServer S(theWmsServers[i]);
 		L.insert(theWmsServers[i].WmsName, S);
 	}
-	MerkaartorPreferences::instance()->setSelectedWmsServer(getSelectedServer());
+	//MerkaartorPreferences::instance()->setSelectedWmsServer(getSelectedServer());
 	MerkaartorPreferences::instance()->save();
 }
 

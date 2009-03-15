@@ -201,7 +201,7 @@ void MapDocument::clear()
 	delete p;
 	p = new MapDocumentPrivate;
 	p->imageLayer = new ImageMapLayer(tr("Background imagery"));
-	p->imageLayer->setMapAdapter(MerkaartorPreferences::instance()->getBgType());
+	p->imageLayer->setMapAdapter(MerkaartorPreferences::instance()->getBackgroundPlugin());
 	add(p->imageLayer);
 
 	p->dirtyLayer = new DirtyMapLayer(tr("Dirty layer"));

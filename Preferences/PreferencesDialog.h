@@ -34,11 +34,9 @@ public:
 	~PreferencesDialog();
 
 public slots:
-	void on_cbMapAdapter_currentIndexChanged(int index);
 	void on_buttonBox_clicked(QAbstractButton * button);
 	void on_BrowseStyle_clicked();
 	void on_BrowseTemplate_clicked();
-	void on_btAdapterSetup_clicked();
 	void on_btBgColor_clicked();
 	void on_btFocusColor_clicked();
 	void on_btHoverColor_clicked();

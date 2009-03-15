@@ -1,3 +1,9 @@
+v0.14
+	* FIX : WMS has now the proper projection
+	* ADD : Projections are specified in a "Projections.xml" file
+	* ADD : move WMS/TMS configuration out of the preferences dialog to their own tools menu items.
+	* ADD : switch to plugin-based image backgrounds
+	* ADD : prioritize tile loading starting from center (by Arvin Schnell)
 v0.13
     * FIX : Workaround for a crash with templates on Qt 4.5
 	* FIX : Crash after TMS/WMS server renaming (fixes #1634)

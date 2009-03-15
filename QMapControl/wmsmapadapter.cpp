@@ -20,7 +20,7 @@
 #include "wmsmapadapter.h"
 
 WMSMapAdapter::WMSMapAdapter(QString host, QString serverPath, QString wlayers, QString wSrs, QString wStyles, QString wImgFormat, int tilesize)
- : MapAdapter(host, serverPath, tilesize, 0, 99)
+ : TileMapAdapter(host, serverPath, tilesize, 0, 99)
 {
 	name = "WMS-"+ host;
 
@@ -41,48 +41,67 @@ WMSMapAdapter::WMSMapAdapter(QString host, QString serverPath, QString wlayers, 
 	wms_elevation = "";
 
 	numberOfTiles = pow(2, current_zoom+0.0);
-	coord_per_x_tile = 360. / numberOfTiles;
-	coord_per_y_tile = 180. / numberOfTiles;
+	//coord_per_x_tile = 360. / numberOfTiles;
+	//coord_per_y_tile = 180. / numberOfTiles;
 }
 
+QString WMSMapAdapter::projection() const
+{
+	return wms_srs;
+}
 
 WMSMapAdapter::~WMSMapAdapter()
 {
 }
 
+QUuid WMSMapAdapter::getId() const
+{
+	return QUuid("{E238750A-AC27-429e-995C-A60C17B9A1E0}");
+}
+
+IMapAdapter::Type WMSMapAdapter::getType() const
+{
+	return IMapAdapter::DirectBackground;
+}
+
 QPoint WMSMapAdapter::coordinateToDisplay(const QPointF& coordinate) const
 {
-// 	double x = ((coordinate.x()+180)*(tilesize*numberOfTiles/360));
-// 	double y = (((coordinate.y()*-1)+90)*(tilesize*numberOfTiles/180));
-
 	double x = (coordinate.x()+180) * (numberOfTiles*tilesize)/360.;		// coord to pixel!
-	double y = -1*(coordinate.y()-90) * (numberOfTiles*tilesize)/180.;	// coord to pixel!
+	double y = -1*(coordinate.y()-90) * (numberOfTiles/2*tilesize)/180.;	// coord to pixel!
+
+	//double x = (coordinate.x()+180) * (numberOfTiles*tilesize)/360.;		// coord to pixel!
+	//double y = (1-(log(tan(PI/4+deg_rad(coordinate.y())/2)) /PI)) /2  * (numberOfTiles*tilesize);
+
 	return QPoint(int(x), int(y));
 }
-QPointF WMSMapAdapter::displayToCoordinate(const QPoint& point) const
+QPointF WMSMapAdapter::displayToCoordinate(const QPoint& pt) const
 {
-// 	double lon = ((point.x()/tilesize*numberOfTiles)*360)-180;
-// 	double lat = (((point.y()/tilesize*numberOfTiles)*180)-90)*-1;
+	double longitude = (pt.x()*(360./(numberOfTiles*tilesize)))-180;
+	double latitude = -(pt.y()*(180./(numberOfTiles/2*tilesize)))+90;
 
-	double lon = (point.x()*(360./(numberOfTiles*tilesize)))-180;
-	double lat = -(point.y()*(180./(numberOfTiles*tilesize)))+90;
-	return QPointF(lon, lat);
-}
-void WMSMapAdapter::zoom_in()
-{
-	current_zoom+=1;
-	numberOfTiles = pow(2, current_zoom+0.0);
-	coord_per_x_tile = 360. / numberOfTiles;
-	coord_per_y_tile = 180. / numberOfTiles;
-}
-void WMSMapAdapter::zoom_out()
-{
-	current_zoom-=1;
-	numberOfTiles = pow(2, current_zoom+0.0);
-	coord_per_x_tile = 360. / numberOfTiles;
-	coord_per_y_tile = 180. / numberOfTiles;
+	//QPointF point(pt);
+	//double longitude = (point.x()*(360.0/(numberOfTiles*(double)tilesize)))-180.0;
+	//double latitude = rad_deg(atan(sinh((1.0-point.y()*(2.0/(numberOfTiles*(double)tilesize)))*PI)));
+
+	return QPointF(longitude, latitude);
 }
 
+//void WMSMapAdapter::zoom_in()
+//{
+//	current_zoom+=1;
+//	numberOfTiles = pow(2, current_zoom+0.0);
+//	coord_per_x_tile = 360. / numberOfTiles;
+//	coord_per_y_tile = 180. / numberOfTiles;
+//}
+//
+//void WMSMapAdapter::zoom_out()
+//{
+//	current_zoom-=1;
+//	numberOfTiles = pow(2, current_zoom+0.0);
+//	coord_per_x_tile = 360. / numberOfTiles;
+//	coord_per_y_tile = 180. / numberOfTiles;
+//}
+//
 bool WMSMapAdapter::isValid(int /* x */, int /* y */, int /* z */) const
 {
 // 	if (x>0 && y>0 && z>0)
@@ -91,14 +110,26 @@ bool WMSMapAdapter::isValid(int /* x */, int /* y */, int /* z */) const
 	}
 // 	return false;
 }
+
+int WMSMapAdapter::tilesonzoomlevel(int zoomlevel) const
+{
+	return int(pow(2, zoomlevel+1.0));
+}
+
+
 QString WMSMapAdapter::getQuery(int i, int j, int /* z */) const
 {
-	return getQ(-180+i*coord_per_x_tile,
- 					90-(j+1)*coord_per_y_tile,
- 					-180+i*coord_per_x_tile+coord_per_x_tile,
- 					90-(j+1)*coord_per_y_tile+coord_per_y_tile);
+	//return getQ(-180+i*coord_per_x_tile,
+ //					90-(j+1)*coord_per_y_tile,
+ //					-180+i*coord_per_x_tile+coord_per_x_tile,
+ //					90-(j+1)*coord_per_y_tile+coord_per_y_tile);
+
+	QPointF ul = displayToCoordinate(QPoint(i*tilesize, j*tilesize));
+	QPointF br = displayToCoordinate(QPoint((i+1)*tilesize, (j+1)*tilesize));
+	return getQ(ul, br);
+
 }
-QString WMSMapAdapter::getQ(double ux, double uy, double ox, double oy) const
+QString WMSMapAdapter::getQ(QPointF ul, QPointF br) const
 {
 	return QString().append(serverPath)
 						.append("SERVICE=WMS")
@@ -112,8 +143,8 @@ QString WMSMapAdapter::getQ(double ux, double uy, double ox, double oy) const
 						.append("&WIDTH=").append(wms_width)
 						.append("&HEIGHT=").append(wms_height)
 						.append("&BBOX=")
-						.append(loc.toString(ux, 'f', 8)).append(",")
-						.append(loc.toString(uy, 'f', 8)).append(",")
-						.append(loc.toString(ox, 'f', 8)).append(",")
-						.append(loc.toString(oy, 'f', 8));
+						 .append(loc.toString(ul.x(),'f',6)).append(",")
+						 .append(loc.toString(br.y(),'f',6)).append(",")
+						 .append(loc.toString(br.x(),'f',6)).append(",")
+						 .append(loc.toString(ul.y(),'f',6));
 }
