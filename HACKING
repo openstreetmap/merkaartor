@@ -1,11 +1,7 @@
 This are some basic notes on hacking on merkaartor
 
-- adding amenities
-	see Map/PreDefinedTags.cpp fillAmenities for filling combobox
-- adding highways
-	see Map/PreDefinedTags.cpp fillHighway for filling combobox
-- adding landuse
-	see Map/PreDefinedTags.cpp fillLandUse for filling combobox
+- fiddling with tagging templates
+	see Templates to add/modify templates
 - adding a language
 	edit Merkaartor.pro and add your language
 	edit Preferences/PreferencesDialog function initLanguages

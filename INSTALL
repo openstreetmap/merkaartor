@@ -1,6 +1,6 @@
 Prerequisites:
 * Working C++ compiler
-* Qt 4.3.3 or later development environment
+* Qt 4.4.0 or later development environment
 
 On (K)ubuntu Edgy it is sufficient to install the qt4-dev package
 to satisfy these requirements.
