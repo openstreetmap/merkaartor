@@ -17,37 +17,40 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef IMAGEMANAGER_H
-#define IMAGEMANAGER_H
+#ifndef IIMAGEMANAGER_H
+#define IIMAGEMANAGER_H
 
-#include <QObject>
-#include <QPixmapCache>
+#include <QPixmap>
 #include <QDebug>
-#include <QMutex>
-#include <QFileInfo>
-#include "mapnetwork.h"
+#include <QDir>
 
-#include "IMapAdapter.h"
-#include "IImageManager.h"
+class IMapAdapter;
+class LoadingRequest
+{
+	public:
+		LoadingRequest(QString h, QString H, QString U) : hash(h), host(H), url(U) {};
+		bool operator==(const LoadingRequest& LR) const {
+			if (hash != LR.hash)
+				return false;
+			if (host != LR.host)
+				return false;
+			if (url != LR.url)
+				return false;
+			return true;
+		}
+	QString hash;
+	QString host;
+	QString url;
+};
 
-class MapNetwork;
 /**
 	@author Kai Winter <kaiwinter@gmx.de>
 */
-class ImageManager : public IImageManager
+class IImageManager
 {
-	Q_OBJECT;
 	public:
-		static ImageManager* instance()
-		{
-			if(!m_ImageManagerInstance)
-			{
-				m_ImageManagerInstance = new ImageManager;
-			}
-			return m_ImageManagerInstance;
-		}
-		
-		~ImageManager();
+		IImageManager();
+		virtual ~IImageManager() {};
 
 		//! returns a QPixmap of the asked image
 		/*!
@@ -57,27 +60,27 @@ class ImageManager : public IImageManager
 		 * @return the pixmap of the asked image
 		 */
 		//QPixmap getImage(const QString& host, const QString& path);
-		QPixmap getImage(IMapAdapter* anAdapter, int x, int y, int z);
-		
+		virtual QPixmap getImage(IMapAdapter* anAdapter, int x, int y, int z) = 0;
+
 		//QPixmap prefetchImage(const QString& host, const QString& path);
-		QPixmap prefetchImage(IMapAdapter* anAdapter, int x, int y, int z);
-		
-		void receivedImage(const QPixmap& pixmap, const QString& url);
-		
+		virtual QPixmap prefetchImage(IMapAdapter* anAdapter, int x, int y, int z) = 0;
+
+		virtual void receivedImage(const QPixmap& pixmap, const QString& url) = 0;
+
 		/*!
 		 * This method is called by MapNetwork, after all images in its queue were loaded.
 		 * The ImageManager emits a signal, which is used in MapControl to remove the zoom image.
 		 * The zoom image should be removed on Tile Images with transparency.
 		 * Else the zoom image stay visible behind the newly loaded tiles.
 		 */
-		void loadingQueueEmpty();
-		
+		virtual void loadingQueueEmpty() = 0;
+
 		/*!
 		 * Aborts all current loading threads.
 		 * This is useful when changing the zoom-factor, though newly needed images loads faster
 		 */
-		void abortLoading();
-		
+		virtual void abortLoading() = 0;
+
 		//! sets the proxy for HTTP connections
 		/*!
 		 * This method sets the proxy for HTTP connections.
@@ -85,22 +88,20 @@ class ImageManager : public IImageManager
 		 * @param host the proxy´s hostname or ip
 		 * @param port the proxy´s port
 		 */
-		void setProxy(QString host, int port);
+		virtual void setProxy(QString host, int port) = 0;
 
-	private:
-		ImageManager(QObject* parent = 0);
-		ImageManager(const ImageManager&);
-		ImageManager& operator=(const ImageManager&);
-		QPixmap emptyPixmap;
-		MapNetwork* net;
-		QVector<QString> prefetch;
-	
-		static ImageManager* m_ImageManagerInstance;
+		void setCacheDir(const QDir& path);
+		void setCacheMaxSize(int max);
 
-	signals:
-		void imageRequested();
-		void imageReceived();
-		void loadingFinished();
+	protected:
+
+		QDir cacheDir;
+		QFileInfoList cacheInfo;
+		int cacheSize;
+		int	cacheMaxSize;
+
+		bool useDiskCache(QString filename);
+		void adaptCache();
 };
 
 #endif

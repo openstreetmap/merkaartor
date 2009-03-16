@@ -90,7 +90,7 @@ void BrowserWebPage::javaScriptAlert ( QWebFrame * frame, const QString & msg )
 BrowserImageManager* BrowserImageManager::m_BrowserImageManagerInstance = 0;
 
 BrowserImageManager::BrowserImageManager(QObject* parent)
-	:IImageManager(parent), emptyPixmap(QPixmap(1,1)), browser(0)
+	:QObject(parent), emptyPixmap(QPixmap(1,1)), browser(0), requestActive(false)
 {
 	emptyPixmap.fill(Qt::transparent);
 
@@ -99,10 +99,7 @@ BrowserImageManager::BrowserImageManager(QObject* parent)
 		QPixmapCache::setCacheLimit(20000);	// in kb
 	}
 
-	if (browser)
-		delete browser;
 	browser = new QWebView();
-
 	page = new BrowserWebPage();
 	browser->setPage(page);
 	page->setViewportSize(QSize(1024, 1024));
@@ -111,8 +108,6 @@ BrowserImageManager::BrowserImageManager(QObject* parent)
 	connect(page->mainFrame(), SIGNAL(loadDone(bool)), this, SLOT(pageLoadFinished(bool)));
 #endif
 	connect(page, SIGNAL(loadFinished(bool)), this, SLOT(pageLoadFinished(bool)), Qt::QueuedConnection);
-
-	//browser->show();
 }
 
 BrowserImageManager::~BrowserImageManager()
@@ -157,7 +152,7 @@ QPixmap BrowserImageManager::getImage(IMapAdapter* anAdapter, int x, int y, int 
 	loadingRequests.enqueue(LR);
 	emit(imageRequested());
 
-	if (loadingRequests.size() <= MAX_REQ)
+	if (!requestActive)
 		launchRequest();
 	else {
 		//qDebug() << "queue full";
@@ -186,6 +181,7 @@ void BrowserImageManager::launchRequest()
 
 //	page->mainFrame()->load(u);
 	browser->load(u);
+	requestActive = true;
 }
 
 void BrowserImageManager::pageLoadFinished(bool)
@@ -204,6 +200,7 @@ void BrowserImageManager::pageLoadFinished(bool)
 	LoadingRequest R = loadingRequests.dequeue();
 	//pt.save("c:/temp/tst/"+R.hash+".png");
 	receivedImage(pt, R.hash);
+	requestActive = false;
 
 	if (loadingRequests.isEmpty()) {
 		loadingQueueEmpty();

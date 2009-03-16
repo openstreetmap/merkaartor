@@ -155,5 +155,5 @@ FORMS += ./AboutDialog.ui \
     StyleDock.ui
 
 # Resource file(s)
-RESOURCES += ./Icons/AllIcons.qrc \
+RESOURCES += ../Icons/AllIcons.qrc \
     ./Utils/Utils.qrc

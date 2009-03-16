@@ -26,7 +26,7 @@
 ImageManager* ImageManager::m_ImageManagerInstance = 0;
 
 ImageManager::ImageManager(QObject* parent)
-	:IImageManager(parent), emptyPixmap(QPixmap(1,1)), net(new MapNetwork(this))
+	:QObject(parent), emptyPixmap(QPixmap(1,1)), net(new MapNetwork(this))
 {
 	emptyPixmap.fill(Qt::transparent);
 

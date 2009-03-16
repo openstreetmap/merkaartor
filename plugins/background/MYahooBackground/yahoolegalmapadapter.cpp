@@ -40,7 +40,7 @@ YahooLegalMapAdapter::~YahooLegalMapAdapter()
 
 QUuid YahooLegalMapAdapter::getId() const
 {
-	return theUid;
+	return QUuid(theUid);
 }
 
 IMapAdapter::Type YahooLegalMapAdapter::getType() const

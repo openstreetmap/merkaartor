@@ -34,6 +34,7 @@
 #include "qwebview.h"
 
 #include <QNetworkProxy>
+#include <QThread>
 
 #include "IImageManager.h"
 #include "IMapAdapter.h"
@@ -57,7 +58,7 @@ class BrowserWebPage : public QWebPage
 		int ox, oy, sw, sh;
 };
 
-class BrowserImageManager : public IImageManager
+class BrowserImageManager : public QObject, public IImageManager
 {
 	Q_OBJECT;
 	public:
@@ -118,6 +119,7 @@ class BrowserImageManager : public IImageManager
 		QVector<QString> prefetch;
 
 		QQueue<LoadingRequest> loadingRequests;
+		bool requestActive;
 		void launchRequest();
 
 		static BrowserImageManager* m_BrowserImageManagerInstance;

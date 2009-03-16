@@ -205,7 +205,11 @@ void Layer::_draw(QPainter* painter, const QPoint mapmiddle_px) const
 	{
 		for (j=-tiles_above+mapmiddle_tile_y; j<=tiles_bottom+mapmiddle_tile_y; j++)
 		{
+#ifdef Q_CC_MSVC
+			double priority = _hypot(i - mapmiddle_tile_x, j - mapmiddle_tile_y);
+#else
 			double priority = hypot(i - mapmiddle_tile_x, j - mapmiddle_tile_y);
+#endif
 			tiles.append(Tile(i, j, priority));
 		}
 	}

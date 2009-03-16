@@ -560,7 +560,7 @@ void ImageView::zoom(double levelStep)
 
 	// zoomValue (in percent) increases/decreases following this function: 100 * sqrt(2)^x
 	// round about it results in -> 100% 150% 200% 300% 400% 550% 800% (see zooming values e.g. in gimp)
-	double newZoom = zoomLevel * pow(sqrt(2), levelStep);
+	double newZoom = zoomLevel * pow(sqrt(2.0), levelStep);
 	if (newZoom > 256 || newZoom < 0.8) // only zoom up to 25600 % or down to 80%
 		return;
 

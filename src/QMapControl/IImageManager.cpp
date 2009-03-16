@@ -22,8 +22,8 @@
 
 #include <QDateTime>
 
-IImageManager::IImageManager(QObject* parent) 
-	: QObject(parent), cacheSize(0), cacheMaxSize(0)
+IImageManager::IImageManager() 
+	: cacheSize(0), cacheMaxSize(0)
 
 {
 }

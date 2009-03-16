@@ -1,5 +1,6 @@
 # PREFIX              - base prefix for installation
 # NODEBUG             - no debug target
+MERKAARTOR_SRC_DIR = $$PWD/../../..
 
 DEFINES += VERSION=\"\\\"$$VERSION\\\"\"
 DEFINES += REVISION=\"\\\"$$REVISION\\\"\"
@@ -21,8 +22,8 @@ CONFIG += plugin
 QT += core
 
 TARGET = $$qtLibraryTarget(MYahooBackgroundPlugin)
-DEPENDPATH += ..
-INCLUDEPATH += ..
+DEPENDPATH += $${MERKAARTOR_SRC_DIR}/interfaces
+INCLUDEPATH += $${MERKAARTOR_SRC_DIR}/interfaces
 HEADERS += \
 	IMapAdapter.h \
 	IImageManager.h \
@@ -40,17 +41,11 @@ RESOURCES += \
 
 #DEFINES += QT_NO_DEBUG_OUTPUT
 
-OUTPUT_DIR=$$PWD/../../../binaries
+OUTPUT_DIR=../../../binaries
 UI_DIR += tmp/$$(QMAKESPEC)
 MOC_DIR += tmp/$$(QMAKESPEC)
 RCC_DIR += tmp/$$(QMAKESPEC)
 DESTDIR = $$OUTPUT_DIR/$$(QMAKESPEC)/bin/plugins/background
 
-unix {
-    # Prefix: base instalation directory
-    isEmpty( PREFIX ) {
-		PREFIX = /usr/local
-	}
-	target.path = $${PREFIX}/lib/Merkaartor/plugins/background
-	INSTALLS += target
-}
+target.path = $${PREFIX}/lib/Merkaartor/plugins/background
+INSTALLS += target

@@ -66,18 +66,18 @@ MapView::MapView(MainWindow* aMain) :
 	layermanager = new LayerManager((QWidget *) this, size());
 	
 	connect(ImageManager::instance(), SIGNAL(imageRequested()),
-		this, SLOT(imageRequested()));
+		this, SLOT(imageRequested()), Qt::QueuedConnection);
 	connect(ImageManager::instance(), SIGNAL(imageReceived()),
-		this, SLOT(imageReceived()));
+		this, SLOT(imageReceived()), Qt::QueuedConnection);
 	connect(ImageManager::instance(), SIGNAL(loadingFinished()),
-		this, SLOT(loadingFinished()));
+		this, SLOT(loadingFinished()), Qt::QueuedConnection);
 #ifdef USE_WEBKIT
 	connect(BrowserImageManager::instance(), SIGNAL(imageRequested()),
-		this, SLOT(imageRequested()));
+		this, SLOT(imageRequested()), Qt::QueuedConnection);
 	connect(BrowserImageManager::instance(), SIGNAL(imageReceived()),
-		this, SLOT(imageReceived()));
+		this, SLOT(imageReceived()), Qt::QueuedConnection);
 	connect(BrowserImageManager::instance(), SIGNAL(loadingFinished()),
-		this, SLOT(loadingFinished()));
+		this, SLOT(loadingFinished()), Qt::QueuedConnection);
 #endif
 
 	MoveRight = new QShortcut(QKeySequence(Qt::Key_Right), this);
