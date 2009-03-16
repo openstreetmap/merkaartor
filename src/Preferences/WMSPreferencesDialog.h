@@ -49,6 +49,8 @@ public slots:
 private:
 	void loadPrefs();
 	void savePrefs();
+	void requestCapabilities(QUrl url);
+
 public:
 	std::vector<WmsServer> theWmsServers;
 	QString getSelectedServer();

@@ -27,6 +27,7 @@
 #include <QQueue>
 #include <QPixmap>
 #include <QMutex>
+#include <QUrl>
 
 #include "IImageManager.h"
 /**
@@ -66,6 +67,7 @@ class MapNetwork : QObject
 		MapNetwork& operator=(const MapNetwork& rhs);
 		MapNetwork(const MapNetwork& old);
 		void launchRequest();
+		void launchRequest(QUrl url, QString hash);
 
 
 	private slots:

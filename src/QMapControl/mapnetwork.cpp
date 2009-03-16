@@ -19,7 +19,6 @@
  ***************************************************************************/
 #include "mapnetwork.h"
 #include <QWaitCondition>
-#include <QUrl>
 
 #define MAX_REQ 8
 
@@ -28,7 +27,6 @@ MapNetwork::MapNetwork(IImageManager* parent)
 {
 	connect(http, SIGNAL(requestFinished(int, bool)),
 	        this, SLOT(requestFinished(int, bool)));
-// 	http->setProxy("www-cache.mi.fh-wiesbaden.de", 8080);
 }
 
 MapNetwork::~MapNetwork()
@@ -62,29 +60,38 @@ void MapNetwork::launchRequest()
 
     QUrl U("http://" + QString(R->host).append(R->url));
 	qDebug() << "getting: " << U.host() << " ; " << U.path();
-	http->setHost(U.host(), U.port() == -1 ? 80 : U.port());
 
-	QHttpRequestHeader header("GET", R->url);
-	header.setValue("Host", U.host());
-    header.setValue("User-Agent", "Mozilla");
-	int getId = http->request(header);
-
-	if (vectorMutex.tryLock()) {
-		loadingMap[getId] = R->hash;
-		vectorMutex.unlock();
-	}
+	launchRequest(U, R->hash);
 
 	delete R;
 }
 
+void MapNetwork::launchRequest(QUrl url, QString hash)
+{
+	http->setHost(url.host(), url.port() == -1 ? 80 : url.port());
+
+	QHttpRequestHeader header("GET", url.path() + "?" + url.encodedQuery());
+	header.setValue("Host", url.host());
+    header.setValue("User-Agent", "Mozilla");
+
+	int getId = http->request(header);
+
+	if (vectorMutex.tryLock()) {
+		loadingMap[getId] = hash;
+		vectorMutex.unlock();
+	}
+}
+
 void MapNetwork::requestFinished(int id, bool error)
 {
-// 	sleep(1);
-// 	qDebug() << "MapNetwork::requestFinished" << http->state() << ", id: " << id;
+	if (http->lastResponse().statusCode() > 300 && http->lastResponse().statusCode() < 400) { // Redirected
+		launchRequest(QUrl(http->lastResponse().value("Location")), loadingMap[id]);
+		loadingMap.remove(id);
+		return;
+	}
 	if (error) {
 		qDebug() << "network error: " << http->errorString();
-		//restart query
-
+		loadingMap.remove(id);
 	} else
 		if (vectorMutex.tryLock()) {
 			// check if id is in map?

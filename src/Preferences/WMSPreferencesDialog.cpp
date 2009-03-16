@@ -60,15 +60,18 @@ void WMSPreferencesDialog::on_btShowCapabilities_clicked(void)
 		QMessageBox::critical(this, tr("Merkaartor: GetCapabilities"), tr("Address and Path cannot be blank."), QMessageBox::Ok);
 	}
 
+	QUrl url("http://" + edWmsAdr->text() + edWmsPath->text() + "SERVICE=WMS&request=GetCapabilities");
+	requestCapabilities(url);
+}
+
+void WMSPreferencesDialog::requestCapabilities(QUrl url)
+{
 	http = new QHttp(this);
 	connect (http, SIGNAL(done(bool)), this, SLOT(httpRequestFinished(bool)));
 	connect(http, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)),
 		this, SLOT(readResponseHeader(const QHttpResponseHeader &)));
 
-	QUrl url("http://" + edWmsAdr->text() + "?" + edWmsPath->text() + "request=GetCapabilities");
-//	QUrl url("http://localhost/");
-
-	QHttpRequestHeader header("GET", url.path() + url.encodedQuery());
+	QHttpRequestHeader header("GET", url.path() + "?" + url.encodedQuery());
 	qDebug() << header.toString();
 	const char *userAgent = "Mozilla/9.876 (X11; U; Linux 2.2.12-20 i686, en) Gecko/25250101 Netscape/5.432b1";
 
@@ -86,19 +89,31 @@ void WMSPreferencesDialog::on_btShowCapabilities_clicked(void)
 void WMSPreferencesDialog::readResponseHeader(const QHttpResponseHeader &responseHeader)
 {
 	qDebug() << responseHeader.toString();
-	if (responseHeader.statusCode() != 200) {
-		QMessageBox::information(this, tr("Merkaartor: GetCapabilities"),
-							  tr("Download failed: %1.")
-							  .arg(responseHeader.reasonPhrase()));
-		http->abort();
-		return;
+	switch (responseHeader.statusCode())
+	{
+		case 200:
+			break;
+
+		case 301:
+		case 302:
+		case 307:
+			http->abort();
+			requestCapabilities(QUrl(responseHeader.value("Location")));
+			break;
+
+		default:
+			http->abort();
+			QMessageBox::information(this, tr("Merkaartor: GetCapabilities"),
+								  tr("Download failed: %1.")
+								  .arg(responseHeader.reasonPhrase()));
 	}
 }
 
 void WMSPreferencesDialog::httpRequestFinished(bool error)
 {
 	if (error) {
-		QMessageBox::critical(this, tr("Merkaartor: GetCapabilities"), tr("Error reading capabilities.\n") + http->errorString(), QMessageBox::Ok);
+		if (http->error() != QHttp::Aborted)
+			QMessageBox::critical(this, tr("Merkaartor: GetCapabilities"), tr("Error reading capabilities.\n") + http->errorString(), QMessageBox::Ok);
 	} else {
 		QVBoxLayout *mainLayout = new QVBoxLayout;
 		QTextEdit* edit = new QTextEdit();
