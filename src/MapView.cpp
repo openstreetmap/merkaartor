@@ -1174,6 +1174,13 @@ bool MapView::event(QEvent *event)
 
 			return true;
 		} 
+	} else
+    if ( event->type() == QEvent::Leave ) {
+		Main->info()->unsetHoverHtml();
+		FeatureSnapInteraction* intr = dynamic_cast<FeatureSnapInteraction*>(interaction());
+		if (intr)
+			intr->clearLastSnap();
+		update();
 	} 
 
 	return QWidget::event(event);

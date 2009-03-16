@@ -20,7 +20,7 @@
       <enum>QTabWidget::North</enum>
      </property>
      <property name="currentIndex" >
-      <number>7</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_7" >
       <attribute name="title" >
@@ -407,25 +407,6 @@
              </spacer>
             </item>
            </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="grpProjection" >
-         <property name="title" >
-          <string>Projection</string>
-         </property>
-         <layout class="QHBoxLayout" >
-          <item>
-           <widget class="QLabel" name="label_7" >
-            <property name="text" >
-             <string>Select Projection</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QComboBox" name="cbProjection" />
           </item>
          </layout>
         </widget>

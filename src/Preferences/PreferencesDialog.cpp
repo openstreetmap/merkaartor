@@ -41,11 +41,6 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 #endif
 
 	setupUi(this);
-#ifndef USE_PROJ
-	for (int i=0; i < M_PREFS->getProjectionTypes().size(); ++i) {
-		cbProjection->insertItem(i, M_PREFS->getProjectionTypes()[i]);
-	}
-#endif
     QDir intTemplates(BUILTIN_TEMPLATES_DIR);
 	for (int i=0; i < intTemplates.entryList().size(); ++i) {
 		cbTemplates->addItem(intTemplates.entryList().at(i));
@@ -164,9 +159,6 @@ void PreferencesDialog::loadPrefs()
 
 	sbZoomInPerc->setValue(M_PREFS->getZoomInPerc());
 	sbZoomOutPerc->setValue(M_PREFS->getZoomOutPerc());
-#ifndef USE_PROJ
-	cbProjection->setCurrentIndex(M_PREFS->getProjectionType());
-#endif
 
 	sbAlphaLow->setValue(M_PREFS->getAlpha("Low"));
 	sbAlphaHigh->setValue(M_PREFS->getAlpha("High"));
@@ -281,9 +273,7 @@ void PreferencesDialog::savePrefs()
 	M_PREFS->setCustomTemplate(CustomTemplateName->text());
 	M_PREFS->setZoomInPerc(sbZoomInPerc->text().toInt());
 	M_PREFS->setZoomOutPerc(sbZoomOutPerc->text().toInt());
-#ifndef USE_PROJ
-	M_PREFS->setProjectionType((ProjectionType)cbProjection->currentIndex());
-#endif
+
 	M_PREFS->getAlphaPtr()->insert("Low", sbAlphaLow->value());
 	M_PREFS->getAlphaPtr()->insert("High", sbAlphaHigh->value());
 	M_PREFS->setBgColor(BgColor);

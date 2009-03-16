@@ -1,4 +1,5 @@
 v0.14
+    * FIX : Clear "hover" state when mouse leave the map widget
 	* FIX : WMS has now the proper projection
 	* ADD : Projections are specified in a "Projections.xml" file
 	* ADD : move WMS/TMS configuration out of the preferences dialog to their own tools menu items.

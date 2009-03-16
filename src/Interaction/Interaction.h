@@ -134,6 +134,10 @@ class GenericFeatureSnapInteraction : public Interaction
 		{
 			StackSnap.clear();
 		}
+		void clearLastSnap()
+		{
+			LastSnap = 0;
+		}
 		QList<MapFeature*> snapList()
 		{
 			return StackSnap;
