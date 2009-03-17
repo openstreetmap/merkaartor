@@ -1,4 +1,5 @@
 v0.14
+    * FIX : Reflect in dirty dock the fact that multiple objects were changed together (fixes #1507)
     * ADD : Threaded browser-based background image grabbing. (fixes #1312)
     * FIX : Handle redirection for TMS/WMS servers (fixes #1639)
     * FIX : Clear "hover" state when mouse leave the map widget

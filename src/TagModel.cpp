@@ -126,7 +126,11 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
 			if (index.column() == 0)
 			{
 				beginInsertRows(QModelIndex(), Tags.size()+1, Tags.size()+1);
-				CommandList* L = new CommandList(MainWindow::tr("Set Tags on %1").arg(theFeatures[0]->id()), theFeatures[0]);
+				CommandList* L;
+				if (theFeatures.size() > 1) 
+					L = new CommandList(MainWindow::tr("Set Tags on multiple features"), NULL);
+				else
+					L = new CommandList(MainWindow::tr("Set Tags on %1").arg(theFeatures[0]->id()), theFeatures[0]);
 				for (int i=0; i<theFeatures.size(); ++i)
 				{
 					if (!theFeatures[i]->isDirty() && !theFeatures[i]->hasOSMId() && theFeatures[i]->isUploadable()) {
@@ -150,7 +154,11 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
 				Tags[index.row()].first = value.toString();
 			else
 				Tags[index.row()].second = value.toString();
-			CommandList* L = new CommandList(MainWindow::tr("Set Tags on %1").arg(theFeatures[0]->id()), theFeatures[0]);
+				CommandList* L;
+				if (theFeatures.size() > 1) 
+					L = new CommandList(MainWindow::tr("Set Tags on multiple features"), NULL);
+				else
+					L = new CommandList(MainWindow::tr("Set Tags on %1").arg(theFeatures[0]->id()), theFeatures[0]);
 			for (int i=0; i<theFeatures.size(); ++i)
 			{
 				unsigned int j = theFeatures[i]->findKey(Original);
