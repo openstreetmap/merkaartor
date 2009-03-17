@@ -49,6 +49,7 @@ MapView::MapView(MainWindow* aMain) :
 #ifdef USE_WEBKIT
 	BrowserImageManager::instance()->setCacheDir(MerkaartorPreferences::instance()->getCacheDir());
 	BrowserImageManager::instance()->setCacheMaxSize(MerkaartorPreferences::instance()->getCacheSize());
+	BrowserImageManager::instance()->start();
 #endif
 	if (MerkaartorPreferences::instance()->getProxyUse()) {
 		ImageManager::instance()->setProxy(MerkaartorPreferences::instance()->getProxyHost(),
@@ -98,6 +99,8 @@ MapView::~MapView()
 		delete theInteraction;
 	delete ImageManager::instance();
 #ifdef USE_WEBKIT
+	BrowserImageManager::instance()->quit();
+	BrowserImageManager::instance()->wait(1000);
 	delete BrowserImageManager::instance();
 #endif
 	delete layermanager;

@@ -26,6 +26,8 @@
 #include <QPainter>
 #include <QMessageBox>
 #include <QCryptographicHash>
+#include <QTimer>
+#include <QMutex>
 
 #define MAX_REQ 1
 #define BROWSER_TILE_SIZE 512
@@ -88,9 +90,10 @@ void BrowserWebPage::javaScriptAlert ( QWebFrame * frame, const QString & msg )
 
 
 BrowserImageManager* BrowserImageManager::m_BrowserImageManagerInstance = 0;
+QMutex mutex;
 
 BrowserImageManager::BrowserImageManager(QObject* parent)
-	:QObject(parent), emptyPixmap(QPixmap(1,1)), browser(0), requestActive(false)
+	:QThread(parent), emptyPixmap(QPixmap(1,1)), requestActive(false), page(0)
 {
 	emptyPixmap.fill(Qt::transparent);
 
@@ -98,21 +101,10 @@ BrowserImageManager::BrowserImageManager(QObject* parent)
 	{
 		QPixmapCache::setCacheLimit(20000);	// in kb
 	}
-
-	browser = new QWebView();
-	page = new BrowserWebPage();
-	browser->setPage(page);
-	page->setViewportSize(QSize(1024, 1024));
-
-#ifndef QT_WEBKIT_LIB
-	connect(page->mainFrame(), SIGNAL(loadDone(bool)), this, SLOT(pageLoadFinished(bool)));
-#endif
-	connect(page, SIGNAL(loadFinished(bool)), this, SLOT(pageLoadFinished(bool)), Qt::QueuedConnection);
 }
 
 BrowserImageManager::~BrowserImageManager()
 {
-	delete browser;
 }
 
 //QPixmap BrowserImageManager::getImage(const QString& host, const QString& url)
@@ -152,13 +144,6 @@ QPixmap BrowserImageManager::getImage(IMapAdapter* anAdapter, int x, int y, int 
 	loadingRequests.enqueue(LR);
 	emit(imageRequested());
 
-	if (!requestActive)
-		launchRequest();
-	else {
-		//qDebug() << "queue full";
-		return emptyPixmap;
-	}
-
 	return pm;
 }
 
@@ -170,42 +155,37 @@ void BrowserImageManager::launchRequest()
 	LoadingRequest R = loadingRequests.head();
 	qDebug() << "getting: " << QString(R.host).append(R.url);
 
-
 	QUrl u = QUrl( R.url);
 
-#if QT_VERSION >= 0x040400
-	page->networkAccessManager()->setProxy(proxy);
-#else
-	page->setNetworkProxy(proxy);
-#endif
-
-//	page->mainFrame()->load(u);
-	browser->load(u);
+	page->mainFrame()->load(u);
 	requestActive = true;
 }
 
-void BrowserImageManager::pageLoadFinished(bool)
+void BrowserImageManager::pageLoadFinished(bool ok)
 {
-	QPixmap pt(page->sw, page->sh);
-	QPainter P;
-	P.begin(&pt);
-	page->mainFrame()->render(&P, QRegion(0,0,page->sw,page->sh));
-	P.end();
-	
-	if (page->sw != BROWSER_TILE_SIZE || page->sh != BROWSER_TILE_SIZE) {
-		QPixmap tmpPx = pt.scaled(QSize(BROWSER_TILE_SIZE, BROWSER_TILE_SIZE));
-		pt = tmpPx;
-	}
+	mutex.lock();
 
 	LoadingRequest R = loadingRequests.dequeue();
-	//pt.save("c:/temp/tst/"+R.hash+".png");
-	receivedImage(pt, R.hash);
 	requestActive = false;
 
-	if (loadingRequests.isEmpty()) {
+	if (ok) {
+		QPixmap pt(page->sw, page->sh);
+		QPainter P(&pt);
+		page->mainFrame()->render(&P, QRegion(0,0,page->sw,page->sh));
+		P.end();
+		
+		if (page->sw != BROWSER_TILE_SIZE || page->sh != BROWSER_TILE_SIZE) {
+			QPixmap tmpPx = pt.scaled(QSize(BROWSER_TILE_SIZE, BROWSER_TILE_SIZE));
+			pt = tmpPx;
+		}
+
+		receivedImage(pt, R.hash);
+	}
+
+	if (loadingRequests.isEmpty())
 		loadingQueueEmpty();
-	} else
-		launchRequest();
+
+	mutex.unlock();
 }
 
 void BrowserImageManager::slotLoadProgress(int p)
@@ -274,13 +254,42 @@ void BrowserImageManager::abortLoading()
 void BrowserImageManager::setProxy(QString host, int port)
 {
 	if (!host.isEmpty()) {
-#if QT_VERSION >= 0x040400
 		proxy.setType(QNetworkProxy::HttpCachingProxy);
-#else
-		proxy.setType(QNetworkProxy::HttpProxy);
-#endif
 		proxy.setHostName(host);
 		proxy.setPort(port);
 	}
 }
 
+void BrowserImageManager::run()
+{
+	page = new BrowserWebPage();
+	page->setViewportSize(QSize(1024, 1024));
+	page->networkAccessManager()->setProxy(proxy);
+
+	QTimer theTimer;
+	theTimer.start(100);
+	connect(page, SIGNAL(loadFinished(bool)), this, SLOT(pageLoadFinished(bool)));
+	connect (&theTimer, SIGNAL(timeout()), this, SLOT(checkRequests()), Qt::DirectConnection);
+
+	exec();
+
+	delete page;
+}
+
+void BrowserImageManager::checkRequests() 
+{
+	mutex.lock();
+
+	if (!requestActive) {
+		requestDuration = 0;
+		launchRequest();
+	} else {
+		if ((requestDuration++) > 50) {
+			requestDuration = 0;
+			page->triggerAction(QWebPage::Stop);
+			qDebug() << "BrowserImageManager Timeout";
+		}
+	}
+	
+	mutex.unlock();
+}
