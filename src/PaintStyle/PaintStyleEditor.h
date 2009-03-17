@@ -70,6 +70,8 @@ class PaintStyleEditor : public QDialog, public Ui::PaintStyleEditor
 		QVector<FeaturePainter> thePainters;
 	private:
 		void updatePaintList();
+		void updatePagesIcons();
+
 	signals:
 		void stylesApplied(QVector<FeaturePainter>* thePainters);
 	private:

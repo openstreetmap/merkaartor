@@ -164,8 +164,33 @@ void PaintStyleEditor::on_PaintList_itemClicked(QListWidgetItem* it)
 	LabelBackgroundTag->setText(FP.getLabelBackgroundTag());
 	LabelHalo->setChecked(FP.getLabelHalo());
 	LabelArea->setChecked(FP.getLabelArea());
+
+	updatePagesIcons();
 	
 	FreezeUpdate = false;
+}
+
+void PaintStyleEditor::updatePagesIcons()
+{
+	if (DrawForeground->isChecked() || DrawFill->isChecked()) 
+		tbStyle->setItemIcon(0, QIcon(":/Icons/actions/software-update-available.png"));
+	else
+		tbStyle->setItemIcon(0, QIcon());
+
+	if (DrawBackground->isChecked()) 
+		tbStyle->setItemIcon(1, QIcon(":/Icons/actions/software-update-available.png"));
+	else
+		tbStyle->setItemIcon(1, QIcon());
+
+	if (DrawTouchup->isChecked() || DrawIcon->isChecked())
+		tbStyle->setItemIcon(2, QIcon(":/Icons/actions/software-update-available.png"));
+	else
+		tbStyle->setItemIcon(2, QIcon());
+
+	if (DrawLabel->isChecked())
+		tbStyle->setItemIcon(3, QIcon(":/Icons/actions/software-update-available.png"));
+	else
+		tbStyle->setItemIcon(3, QIcon());
 }
 
 void PaintStyleEditor::on_TagSelection_editingFinished()
@@ -217,6 +242,8 @@ void PaintStyleEditor::on_DrawBackground_clicked(bool b)
 	if (idx >= thePainters.size())
 		return;
 	thePainters[idx].backgroundActive(b);
+
+	updatePagesIcons();
 }
 
 void PaintStyleEditor::on_BackgroundColor_clicked()
@@ -255,6 +282,8 @@ void PaintStyleEditor::on_DrawForeground_clicked(bool b)
 	if (idx >= thePainters.size())
 		return;
 	thePainters[idx].foregroundActive(b);
+
+	updatePagesIcons();
 }
 
 
@@ -319,6 +348,8 @@ void PaintStyleEditor::on_DrawTouchup_clicked(bool b)
 	if (idx >= thePainters.size())
 		return;
 	thePainters[idx].touchupActive(b);
+
+	updatePagesIcons();
 }
 
 void PaintStyleEditor::on_TouchupColor_clicked()
@@ -382,6 +413,8 @@ void PaintStyleEditor::on_DrawFill_clicked(bool b)
 	if (idx >= thePainters.size())
 		return;
 	thePainters[idx].fillActive(b);
+
+	updatePagesIcons();
 }
 
 void PaintStyleEditor::on_FillColor_clicked()
@@ -404,6 +437,8 @@ void PaintStyleEditor::on_DrawIcon_clicked(bool b)
 	if (idx >= thePainters.size())
 		return;
 	thePainters[idx].iconActive(b);
+
+	updatePagesIcons();
 }
 
 void PaintStyleEditor::on_IconName_textEdited()
@@ -433,6 +468,8 @@ void PaintStyleEditor::on_DrawLabel_clicked(bool b)
 	if (idx >= thePainters.size())
 		return;
 	thePainters[idx].labelActive(b);
+
+	updatePagesIcons();
 }
 
 void PaintStyleEditor::on_LabelHalo_clicked(bool b)

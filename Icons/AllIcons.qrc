@@ -47,6 +47,9 @@
         <file>actions/zoom_fit_best.png</file>
         <file>actions/zoom_in.png</file>
         <file>actions/zoom_out.png</file>
+        <file>actions/emblem-unreadable.png</file>
+        <file>actions/emblem-important.png</file>
+        <file>actions/software-update-available.png</file>
         <file>geotagged.png</file>
     </qresource>
     <qresource prefix="/Art">
