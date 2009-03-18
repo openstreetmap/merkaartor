@@ -106,7 +106,7 @@ static void importTrkSeg(const QDomElement& Root, MapDocument* theDocument, MapL
 		{
 			double kilometer = Pt->position().distanceFrom( lastPoint->position() );
 
-			if (M_PREFS->getMaxDistNodes() == 0.0 || kilometer > M_PREFS->getMaxDistNodes())
+			if (M_PREFS->getMaxDistNodes() != 0.0 && kilometer > M_PREFS->getMaxDistNodes())
 			{
 				if (S->size())
 					theList->add(new AddFeatureCommand(theLayer,S, true));
