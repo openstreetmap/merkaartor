@@ -757,9 +757,9 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 		}
 #ifdef USE_GDAL
 		else if (fn.endsWith(".shp")) {
-			newLayer = new DrawingMapLayer( baseFileName );
+			newLayer = new ExtractedMapLayer( baseFileName );
 			mapDocument->add(newLayer);
-			importOK = mapDocument->importSHP(baseFileName, (DrawingMapLayer *)newLayer);
+			importOK = mapDocument->importSHP(baseFileName, (ExtractedMapLayer *)newLayer);
 		}
 #endif
 

@@ -63,7 +63,7 @@ void parseGeometry(MapLayer* aLayer, OGRGeometry *poGeometry)
 		TrackPoint* N = new TrackPoint(Coord(angToInt(poPoint->getY()), angToInt(poPoint->getX())));
 
 		aLayer->add(N);
-	}
+	} else
 	if ( wkbFlatten(poGeometry->getGeometryType()) == wkbPolygon )
 	{
 		OGRPolygon  *poPoly = (OGRPolygon *) poGeometry;
@@ -75,18 +75,41 @@ void parseGeometry(MapLayer* aLayer, OGRGeometry *poGeometry)
 			for(int i=0; i<numNode; i++) {
 				poRing->getPoint(i, &p);
 				TrackPoint* N = new TrackPoint(Coord(angToInt(p.getY()), angToInt(p.getX())));
+				aLayer->add(N);
+
 				R->add(N);
 			}
 			aLayer->add(R);
 		}
-	}
-	if ( wkbFlatten(poGeometry->getGeometryType()) == wkbMultiPolygon  )
+	} else
+	if ( wkbFlatten(poGeometry->getGeometryType()) == wkbLineString )
 	{
-		OGRMultiPolygon  *poPoly = (OGRMultiPolygon *) poGeometry;
+		OGRLineString  *poLS = (OGRLineString *) poGeometry;
+		OGRPoint p;
 
-		if(int numPoly = poPoly->getNumGeometries()) {
-			for(int i=0; i<numPoly; i++) {
-				parseGeometry(aLayer, poPoly->getGeometryRef(i));
+		if(int numNode = poLS->getNumPoints()) {
+			Road* R = new Road();
+			for(int i=0; i<numNode; i++) {
+				poLS->getPoint(i, &p);
+				TrackPoint* N = new TrackPoint(Coord(angToInt(p.getY()), angToInt(p.getX())));
+				aLayer->add(N);
+
+				R->add(N);
+			}
+			aLayer->add(R);
+		}
+	} else
+	if (
+		( wkbFlatten(poGeometry->getGeometryType()) == wkbMultiPolygon  ) ||
+		( wkbFlatten(poGeometry->getGeometryType()) == wkbMultiLineString  ) ||
+		( wkbFlatten(poGeometry->getGeometryType()) == wkbMultiPoint  )
+		)
+	{
+		OGRGeometryCollection  *poCol = (OGRGeometryCollection *) poGeometry;
+
+		if(int numCol = poCol->getNumGeometries()) {
+			for(int i=0; i<numCol; i++) {
+				parseGeometry(aLayer, poCol->getGeometryRef(i));
 			}
 		}
 	}
