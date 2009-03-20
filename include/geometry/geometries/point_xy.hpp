@@ -1,0 +1,93 @@
+// Generic Geometry Library
+//
+// Copyright Barend Gehrels 1995-2009, Geodan Holding B.V. Amsterdam, the Netherlands.
+// Copyright Bruno Lalande 2008, 2009
+// Use, modification and distribution is subject to the Boost Software License,
+// Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
+
+#ifndef _GEOMETRY_POINT_XY_HPP
+#define _GEOMETRY_POINT_XY_HPP
+
+#include <geometry/geometries/point.hpp>
+#include <geometry/core/cs.hpp>
+
+namespace geometry
+{
+
+
+	/*!
+		\brief 2D point in Cartesian coordinate system
+		\ingroup Geometry
+		\tparam T numeric type, arguments can be, for example, double, float, int
+	*/
+	template<typename T, typename C = cs::cartesian>
+	class point_xy : public point<T, 2, C>
+	{
+		public :
+			/// Default constructor, does not initialize anything
+			inline point_xy() : point<T, 2, C>() {}
+			/// Constructor with x/y values
+			inline point_xy(const T& x, const T& y) : point<T, 2, C>(x, y) {}
+
+			/// Get x-value
+			inline const T& x() const
+			{ return this->template get<0>(); }
+
+			/// Get y-value
+			inline const T& y() const
+			{ return this->template get<1>(); }
+
+			/// Set x-value
+			inline void x(const T& v)
+			{ this->template set<0>(v); }
+
+			/// Set y-value
+			inline void y(const T& v)
+			{ this->template set<1>(v); }
+
+			/// Compare two points
+			inline bool operator<(const point_xy& other) const
+			{
+				return equals(x(), other.x()) ? y() < other.y() : x() < other.x();
+			}
+	};
+
+
+	// Adapt the point_xy to the concept
+	#ifndef DOXYGEN_NO_TRAITS_SPECIALIZATIONS
+	namespace traits
+	{
+		template <typename T, typename C>
+		struct tag<point_xy<T, C> > { typedef point_tag type; };
+
+		template<typename T, typename C>
+		struct coordinate_type<point_xy<T, C> > { typedef T type; };
+
+		template<typename T, typename C>
+		struct coordinate_system<point_xy<T, C> > { typedef C type; };
+
+
+		template<typename T, typename C>
+		struct dimension<point_xy<T, C> >: boost::mpl::int_<2> {};
+
+		template<typename T, typename C>
+		struct access<point_xy<T, C> >
+		{
+			template <size_t I>
+			static inline T get(const point_xy<T, C>& p)
+			{ return p.template get<I>(); }
+
+			template <size_t I>
+			static inline void set(point_xy<T, C>& p, const T& value)
+			{ p.template set<I>(value); }
+		};
+
+	}
+	#endif
+
+
+} // namespace geometry
+
+
+#endif // _GEOMETRY_POINT_XY_HPP

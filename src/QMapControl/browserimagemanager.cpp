@@ -165,6 +165,11 @@ void BrowserImageManager::pageLoadFinished(bool ok)
 {
 	mutex.lock();
 
+	if (loadingRequests.isEmpty()) {
+		mutex.unlock();
+		return;
+	}
+
 	LoadingRequest R = loadingRequests.dequeue();
 	requestActive = false;
 

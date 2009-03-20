@@ -4,14 +4,9 @@
 #include "Preferences/MerkaartorPreferences.h"
 #include "Map/Coord.h"
 
-#ifdef USE_PROJ
-#include <proj_api.h>
-#endif
-
 #include <QPointF>
 
 #define LAYERMANAGER_OK (layermanager && layermanager->getLayer())
-#define BGPROJ_SELECTED (theProjectionType == Proj_Background)
 
 class QRect;
 class LayerManager;
@@ -29,10 +24,8 @@ class Projection
 		double pixelPerM() const;
 		double latAnglePerM() const;
 		double lonAnglePerM(double Lat) const;
-#ifdef USE_PROJ
 		QPoint projProject(const Coord& Map) const;
-		Coord projInverse(const QPointF& Screen) const;
-#endif
+		Coord projInverse(const QPoint& Screen) const;
 		QPoint project(const Coord& Map) const;
 		QPoint project(TrackPoint* aNode) const;
 		Coord inverse(const QPointF& Screen) const;
@@ -55,10 +48,6 @@ class Projection
 		QPoint screen_middle;
 		LayerManager* layermanager;
 		ProjectionType theProjectionType;
-#ifdef USE_PROJ
-		projPJ theWmsProj;
-		projPJ theProj;
-#endif
 
 	private:
 		void viewportRecalc(const QRect& Screen);

@@ -6,7 +6,6 @@
 # PREFIX              - base prefix for installation
 # NODEBUG             - no debug target
 # OSMARENDER          - enable osmarender
-# PROJ                - use PROJ4 library for projections
 # GDAL    	      - enable GDAL
 # MOBILE    	      - enable MOBILE
 # GEOIMAGE            - enable geotagged images (needs exiv2)
@@ -55,7 +54,7 @@ UI_DIR += $$PWD/../tmp/$$(QMAKESPEC)
 MOC_DIR += $$PWD/../tmp/$$(QMAKESPEC)
 RCC_DIR += $$PWD/../tmp/$$(QMAKESPEC)
 
-INCLUDEPATH += $$PWD/../interfaces
+INCLUDEPATH += $$PWD/../include $$PWD/../interfaces
 DEPENDPATH += $$PWD/../interfaces
 
 win32 {
@@ -166,18 +165,9 @@ contains(GEOIMAGE, 1) {
 	include(GeoImage.pri)
 }
 
-contains (PROJ, 1) {
-	DEFINES += USE_PROJ
-	#win32-msvc*:LIBS += -lproj_i
-	win32-msvc*:LIBS += -lproj
-	!win32-msvc*:LIBS += -lproj
-    proj.path = $${SHARE_DIR}/proj
-	proj.files = share/proj/*
-    projlist.path = $${SHARE_DIR}
-	projlist.files = share/Projections.xml
-
-	INSTALLS += proj projlist
-}
+projlist.path = $${SHARE_DIR}
+projlist.files = $$PWD/../share/Projections.xml
+INSTALLS += projlist
 
 contains (GDAL, 1) {
 	DEFINES += USE_GDAL
@@ -190,9 +180,9 @@ contains (GDAL, 1) {
 	}
 	world_shp.path = $${SHARE_DIR}/world_shp
 	world_shp.files = \
-		share/world_shp/world_adm0.shp \
-		share/world_shp/world_adm0.shx \
-		share/world_shp/world_adm0.dbf
+		$$PWD/../share/world_shp/world_adm0.shp \
+		$$PWD/../share/world_shp/world_adm0.shx \
+		$$PWD/../share/world_shp/world_adm0.dbf
 
 	DEFINES += WORLD_SHP=\"\\\"$$world_shp.path/world_adm0.shp\\\"\"
 	INSTALLS += world_shp

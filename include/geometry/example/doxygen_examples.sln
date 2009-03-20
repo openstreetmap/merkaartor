@@ -1,0 +1,25 @@
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C++ Express 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "doxygen_examples", "doxygen_examples.vcproj", "{861F130D-2849-4B50-B240-049DBD9D3F18}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "doxygen_2", "doxygen_2.vcproj", "{6CF6A521-57E0-4DA4-9D17-ED5D29E4208C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{861F130D-2849-4B50-B240-049DBD9D3F18}.Debug|Win32.ActiveCfg = Debug|Win32
+		{861F130D-2849-4B50-B240-049DBD9D3F18}.Debug|Win32.Build.0 = Debug|Win32
+		{861F130D-2849-4B50-B240-049DBD9D3F18}.Release|Win32.ActiveCfg = Release|Win32
+		{861F130D-2849-4B50-B240-049DBD9D3F18}.Release|Win32.Build.0 = Release|Win32
+		{6CF6A521-57E0-4DA4-9D17-ED5D29E4208C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6CF6A521-57E0-4DA4-9D17-ED5D29E4208C}.Debug|Win32.Build.0 = Debug|Win32
+		{6CF6A521-57E0-4DA4-9D17-ED5D29E4208C}.Release|Win32.ActiveCfg = Release|Win32
+		{6CF6A521-57E0-4DA4-9D17-ED5D29E4208C}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

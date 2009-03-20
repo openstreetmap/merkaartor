@@ -1,0 +1,90 @@
+// Generic Geometry Library
+//
+// Copyright Barend Gehrels 1995-2009, Geodan Holding B.V. Amsterdam, the Netherlands.
+// Copyright Bruno Lalande 2008, 2009
+// Use, modification and distribution is subject to the Boost Software License,
+// Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
+
+
+#ifndef _GEOMETRY_RING_TYPE_HPP
+#define _GEOMETRY_RING_TYPE_HPP
+
+
+#include <boost/type_traits/remove_const.hpp>
+
+
+#include <geometry/core/tag.hpp>
+#include <geometry/core/tags.hpp>
+
+
+namespace geometry
+{
+
+	namespace traits
+	{
+
+		/*!
+			\brief Traits class to indicate ring-type  of a polygon's exterior ring/interior rings
+			\ingroup traits
+			\par Geometries:
+				- polygon
+			\par Specializations should provide:
+				- typedef XXX type (e.g. linear_ring<P>)
+			\tparam G geometry
+		*/
+		template <typename G>
+		struct ring_type
+		{
+			// should define type
+		};
+
+
+
+	} // namespace traits
+
+
+
+
+	#ifndef DOXYGEN_NO_DISPATCH
+	namespace core_dispatch
+	{
+
+
+		template <typename TAG, typename G> struct ring_type {};
+
+		// Specialization for polygon
+		template <typename P>
+		struct ring_type<polygon_tag, P>
+		{
+			typedef typename traits::ring_type<P>::type type;
+		};
+
+
+
+
+	} // namespace core_dispatch
+	#endif
+
+
+	/*!
+		\brief Meta-function which defines ring type of (multi)polygon geometry
+		\details a polygon contains one exterior ring and zero or more interior rings (holes).
+			The type of those rings is assumed to be equal. This meta function retrieves the type
+			of such rings.
+		\ingroup core
+	*/
+	template <typename G>
+	struct ring_type
+	{
+		typedef typename boost::remove_const<G>::type NCG;
+		typedef typename core_dispatch::ring_type<typename tag<G>::type, NCG>::type type;
+	};
+
+
+
+
+}
+
+
+#endif

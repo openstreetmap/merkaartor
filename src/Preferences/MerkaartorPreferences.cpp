@@ -386,12 +386,7 @@ void MerkaartorPreferences::initialize()
 {
 	Use06Api = Sets->value("osm/use06api", "").toBool();
 
-#ifndef USE_PROJ
-	projTypes.insert(Proj_Merkaartor, tr("Merkaartor"));
-	projTypes.insert(Proj_Background, tr("Background"));
-#else
 	loadProjections();
-#endif
 
 	QStringList sl = Sets->value("downloadosm/bookmarks").toStringList();
 	if (sl.size() == 0) {
@@ -894,21 +889,9 @@ void MerkaartorPreferences::setProjectionType(ProjectionType theValue)
 
 ProjectionType MerkaartorPreferences::getProjectionType() const
 {
-#ifdef USE_PROJ
-	QString theProjName = Sets->value("projection/Type", "Mercator").toString();
-	QString theProj = theProjectionsList.getProjection(theProjName);
-	return (ProjectionType)theProjName;
-#else
 	return (ProjectionType)Sets->value("projection/Type", 0).toInt();
-#endif
 }
 
-#ifndef USE_PROJ
-QStringList MerkaartorPreferences::getProjectionTypes()
-{
-	return projTypes;
-}
-#else
 ProjectionsList MerkaartorPreferences::getProjectionsList()
 {
 	return theProjectionsList;
@@ -918,7 +901,6 @@ QString MerkaartorPreferences::getProjection(QString aProj)
 {
 	return theProjectionsList.getProjection(aProj);
 }
-#endif
 
 qreal MerkaartorPreferences::getAlpha(QString lvl)
 {

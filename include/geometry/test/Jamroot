@@ -1,0 +1,45 @@
+# Generic Geometry Library unit tests
+#
+# Copyright Bruno Lalande 2008
+# Copyright Barend Gehrels, Geodan Holding B.V. Amsterdam, the Netherlands.
+# Use, modification and distribution is subject to the Boost Software License,
+# Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
+
+
+project : requirements <include>../.. ;
+
+import testing ;
+
+run access.cpp ;
+run append.cpp ;
+run area.cpp ;
+run arithmetic.cpp ;
+run assign.cpp ;
+run box.cpp ;
+run circle.cpp ;
+run convert.cpp ;
+run copy.cpp ;
+run core.cpp ;
+run custom_linestring.cpp ;
+run distance.cpp ;
+run dot_product.cpp ;
+run envelope.cpp ;
+run for_each_coordinate.cpp ;
+run geometry_tests.cpp ;
+run grow.cpp ;
+run loop.cpp ;
+run make.cpp ;
+run parse.cpp ;
+run parse_dms.cpp ;
+run point_ll.cpp ;
+run projection.cpp ;
+run projection_epsg.cpp ;
+run projections.cpp ;
+run pythagoras.cpp ;
+run segment.cpp ;
+run selected.cpp ;
+run simplify.cpp ;
+run transform.cpp ;
+run transformer.cpp ;
+run wkt.cpp ;

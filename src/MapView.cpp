@@ -307,46 +307,30 @@ void MapView::updateLayersImage()
 	QPainter pmp(&pm);
 	layermanager->drawImage(&pmp);
 
-#ifndef USE_PROJ
-	if (MerkaartorPreferences::instance()->getProjectionType() == Proj_Merkaartor) {
-#endif
-		const QRectF vlm = layermanager->getViewport();
-		const Coord ctl = Coord(angToInt(vlm.bottomLeft().y()), angToInt(vlm.bottomLeft().x()));
-		const Coord cbr = Coord(angToInt(vlm.topRight().y()), angToInt(vlm.topRight().x()));
+	const QRectF vlm = layermanager->getViewport();
+	const Coord ctl = Coord(angToInt(vlm.bottomLeft().y()), angToInt(vlm.bottomLeft().x()));
+	const Coord cbr = Coord(angToInt(vlm.topRight().y()), angToInt(vlm.topRight().x()));
 
-		const QPointF tl = projection().project(ctl);
-		const QPointF br = projection().project(cbr);
+	const QPointF tl = projection().project(ctl);
+	const QPointF br = projection().project(cbr);
 
-		const QRect pr = QRectF(tl, br).toRect();
-		const QSize ps = pr.size();
+	const QRect pr = QRectF(tl, br).toRect();
+	const QSize ps = pr.size();
 
-		const qreal ratio = qMax<const qreal>((qreal)width()/ps.width()*1.0, (qreal)height()/ps.height());
-		QPixmap pms;
-		if (ratio > 1.0) {
-#ifndef USE_PROJ
-			pms = pm.scaled(ps /*, Qt::IgnoreAspectRatio, Qt::SmoothTransformation */ );
-#else
-			pms = pm.scaled(ps, Qt::KeepAspectRatio, Qt::FastTransformation );
-#endif
-		} else {
-			const QSizeF drawingSize = pm.size() * ratio;
-			const QSizeF originSize = pm.size()/2 - drawingSize/2;
-			const QPointF drawingOrigin = QPointF(originSize.width(), originSize.height());
-			const QRect drawingRect = QRect(drawingOrigin.toPoint(), drawingSize.toSize());
-
-#ifndef USE_PROJ
-			pms = pm.copy(drawingRect).scaled(ps*ratio /*, Qt::IgnoreAspectRatio, Qt::SmoothTransformation */ );
-#else
-			pms = pm.copy(drawingRect).scaled(ps*ratio, Qt::KeepAspectRatio, Qt::FastTransformation );
-#endif
-		}
-
-		P.drawPixmap((width()-pms.width())/2, (height()-pms.height())/2, pms);
-#ifndef USE_PROJ
+	const qreal ratio = qMax<const qreal>((qreal)width()/ps.width()*1.0, (qreal)height()/ps.height());
+	QPixmap pms;
+	if (ratio > 1.0) {
+		pms = pm.scaled(ps, Qt::KeepAspectRatio, Qt::FastTransformation );
 	} else {
-		P.drawPixmap((width()-pm.width())/2, (height()-pm.height())/2, pm);
+		const QSizeF drawingSize = pm.size() * ratio;
+		const QSizeF originSize = pm.size()/2 - drawingSize/2;
+		const QPointF drawingOrigin = QPointF(originSize.width(), originSize.height());
+		const QRect drawingRect = QRect(drawingOrigin.toPoint(), drawingSize.toSize());
+
+		pms = pm.copy(drawingRect).scaled(ps*ratio, Qt::KeepAspectRatio, Qt::FastTransformation );
 	}
-#endif
+
+	P.drawPixmap((width()-pms.width())/2, (height()-pms.height())/2, pms);
 
 	thePanDelta = QPoint(0, 0);
 	StaticMapUpToDate = true;
@@ -1019,11 +1003,7 @@ void MapView::resizeEvent(QResizeEvent * ev)
 	StaticBufferUpToDate = false;
 	if (LAYERMANAGER_OK && layermanager->getLayer()->isVisible())
 		layermanager->setSize(size());
-#ifndef USE_PROJ
-	projection().zoom(1, QPoint(width() / 2, height() / 2), rect());
-#else
 	projection().resize(ev->oldSize(), ev->size());
-#endif
 
 	QWidget::resizeEvent(ev);
 

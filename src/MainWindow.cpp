@@ -42,9 +42,7 @@
 #include <ui_ExportDialog.h>
 #include "Preferences/PreferencesDialog.h"
 #include "Preferences/MerkaartorPreferences.h"
-#ifdef USE_PROJ
 #include "Preferences/ProjectionsList.h"
-#endif
 #include "Preferences/WMSPreferencesDialog.h"
 #include "Preferences/TMSPreferencesDialog.h"
 #include "Utils/SelectionDialog.h"
@@ -364,17 +362,10 @@ void MainWindow::setAreaOpacity(QAction *act)
 void MainWindow::adjustLayers(bool adjustViewport)
 {
 	if (adjustViewport) {
-#ifndef USE_PROJ
-		if (MerkaartorPreferences::instance()->getProjectionType() == Proj_Background)
-			theView->projection().setViewport(theView->projection().viewport(), theView->rect());
-		else
-			theView->projection().zoom(1, QPoint(theView->width() / 2, theView->height() / 2), theView->rect());
-#else
 		CoordBox theVp = theView->projection().viewport();
 		if (theDocument->getImageLayer()->imageLayer())
 			theView->projection().setProjectionType(theDocument->getImageLayer()->imageLayer()->getMapAdapter()->projection());
 		theView->projection().setViewport(theVp, theView->rect());
-#endif
 	}
 	invalidateView(true);
 }
@@ -1477,8 +1468,6 @@ void MainWindow::preferencesChanged(void)
 	} else {
 		ImageManager::instance()->setProxy("",0);
 	}
-	if (!theView->projection().setProjectionType(M_PREFS->getProjectionType()))
-		QMessageBox::critical(this, tr("Invalid projection"), tr("Unable to set projection \"%1\".").arg(M_PREFS->getProjectionType()));
 	
 	updateStyleMenu();
 	updateMenu();
@@ -1899,17 +1888,6 @@ void MainWindow::updateRecentImportMenu()
 void MainWindow::updateProjectionMenu()
 {
 	QActionGroup* actgrp = new QActionGroup(this);
-#ifndef USE_PROJ
-	QStringList Projections = MerkaartorPreferences::instance()->getProjectionTypes();
-	for (int i=0; i<Projections.size(); i++) {
-		QAction* a = new QAction(Projections[i], mnuProjections);
-		actgrp->addAction(a);
-		a->setCheckable (true);
-		if (i == (int)MerkaartorPreferences::instance()->getProjectionType())
-			a->setChecked(true);
-		mnuProjections->addAction(a);
-	}
-#else
 	foreach (QString name, M_PREFS->getProjectionsList().getProjections().keys()) {
 		QAction* a = new QAction(name, mnuProjections);
 		actgrp->addAction(a);
@@ -1918,7 +1896,6 @@ void MainWindow::updateProjectionMenu()
 			a->setChecked(true);
 		mnuProjections->addAction(a);
 	}
-#endif
 	connect (mnuProjections, SIGNAL(triggered(QAction *)), this, SLOT(projectionTriggered(QAction *)));
 }
 
@@ -2087,17 +2064,10 @@ void MainWindow::recentImportTriggered(QAction* anAction)
 
 void MainWindow::projectionTriggered(QAction* anAction)
 {
-#ifndef USE_PROJ
-	QStringList Projections = MerkaartorPreferences::instance()->getProjectionTypes();
-	int idx = Projections.indexOf(anAction->text());
-	MerkaartorPreferences::instance()->setProjectionType((ProjectionType)idx);
-	theView->projection().setProjectionType((ProjectionType)idx);
-#else
 	if(theView->projection().setProjectionType((ProjectionType)anAction->text()))
 		M_PREFS->setProjectionType(anAction->text());
 	else
 		QMessageBox::critical(this, tr("Invalid projection"), tr("Unable to set projection \"%1\".").arg(anAction->text()));
-#endif
 	theView->projection().setViewport(theView->projection().viewport(), theView->rect());
 	invalidateView();
 }

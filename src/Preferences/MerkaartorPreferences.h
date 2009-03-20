@@ -69,14 +69,7 @@ class IMapAdapter;
 	@author cbro <cbro@semperpax.com>
 */
 
-#ifndef USE_PROJ
-enum ProjectionType {
- 	Proj_Background,
-	Proj_Merkaartor
-};
-#else
 typedef QString ProjectionType;
-#endif
 
 enum ExportType {
 	Export_All,
@@ -373,12 +366,8 @@ public:
 
 	void setProjectionType(ProjectionType theValue);
 	ProjectionType getProjectionType() const;
-#ifndef USE_PROJ
-	QStringList getProjectionTypes();
-#else
 	ProjectionsList getProjectionsList();
 	QString getProjection(QString aProj);
-#endif
 
 
 
