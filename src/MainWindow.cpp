@@ -2367,7 +2367,7 @@ void MainWindow::updateLanguage()
         QCoreApplication::removeTranslator(merkaartorTranslator);
     }
     QString DefaultLanguage = getDefaultLanguage();
-    if (DefaultLanguage != "-")
+	if (DefaultLanguage != "-" && DefaultLanguage != "en")
     {
         qtTranslator = new QTranslator;
     #ifdef TRANSDIR_SYSTEM

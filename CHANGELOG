@@ -1,4 +1,5 @@
 v0.14
+	* FIX : English language warning
 	* ADD : Switch to template-based projection handling; remove dependency on libproj
     * FIX : proper handling of the "Don't connect GPX nodes..." disabling.
     * FIX : Fit the style editor in 1024x600 resolution (fixes #1609)
