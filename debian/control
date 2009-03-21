@@ -2,7 +2,8 @@ Source: merkaartor
 Section: science
 Priority: extra
 Maintainer: Christoph Berg <myon@debian.org>
-Build-Depends: debhelper (>= 5), libqt4-dev
+Build-Depends: debhelper (>= 5),
+	       libqt4-dev, libexiv2-dev, libshp-dev, libogre-dev
 Standards-Version: 3.7.3
 Vcs-Svn: svn+ssh://svn.debian.org/svn/collab-maint/deb-maint/merkaartor
 Vcs-Browser: http://svn.debian.org/wsvn/collab-maint/deb-maint/merkaartor/
