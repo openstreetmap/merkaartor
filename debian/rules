@@ -7,8 +7,14 @@ else
 	CFLAGS += -O2
 endif
 
+# Get options like
+#       export DEB_BUILD_OPTIONS="parallel=4"
+debian_build_options_list:=$(shell echo "$$DEB_BUILD_OPTIONS"|sed 's/[^-_=[:alnum:]]/ /g'|tr a-z- A-Z_)
+$(foreach o, $(debian_build_options_list), $(if $(findstring =,$o),$(eval DEB_BUILD_OPT_$o),$(eval DEB_BUILD_OPT_$o=1)))
+MAKE_-J += $(addprefix -j, $(DEB_BUILD_OPT_PARALLEL))
+
 configure: configure-stamp
-configure-stamp: clean
+configure-stamp:
 	dh_testdir
 	/usr/share/qt4/bin/qmake
 	touch configure-stamp
@@ -18,20 +24,20 @@ build-indep:
 build build-arch: build-stamp
 build-stamp: configure-stamp
 	dh_testdir
-	$(MAKE)
+	$(MAKE) $(MAKE_-J)
 	touch $@
 
 clean:
 	dh_testdir
 	dh_testroot
-	[ ! -f Makefile ] || $(MAKE) distclean
+	[ ! -f Makefile ] || $(MAKE) $(MAKE_-J) distclean
 	dh_clean
 	rm -f build-stamp configure-stamp
 
 install: build
 	dh_testdir
 	dh_testroot
-	dh_clean -k
+#	dh_clean -k
 	dh_installdirs
 	install -D binaries/debug/bin/merkaartor $(CURDIR)/debian/merkaartor/usr/bin
 
