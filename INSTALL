@@ -24,7 +24,7 @@ TRANSDIR_SYSTEM=<path>		- where your global Qt translation directory is
 NODEBUG=1			- release target
 NOUSEWEBKIT                 	- disable use of WebKit (Yahoo adapter)
 
-see http://wiki.openstreetmap.org/index.php/Merkaartor_doc_0.12 for the complete list
+see http://wiki.openstreetmap.org/wiki/Merkaartor/Compiling for the complete list
 
 On (K)ubuntu this will probably pick up the qmake from Qt3 so
 you need to explicitly run the correct one : /usr/share/qt4/bin/qmake
