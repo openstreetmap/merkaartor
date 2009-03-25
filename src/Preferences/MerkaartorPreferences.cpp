@@ -89,19 +89,6 @@
 
 MerkaartorPreferences* MerkaartorPreferences::m_prefInstance = 0;
 
-TmsServer::TmsServer()
-{
-	TmsServer(QApplication::translate("MerkaartorPreferences","New Server"), "", "", 256, 0, 17);
-}
-
-TmsServer::TmsServer(QString Name, QString Adress, QString Path, int tileSize, int minZoom, int maxZoom)
-	: TmsName(Name), TmsAdress(Adress), TmsPath(Path), TmsTileSize(tileSize), TmsMinZoom(minZoom), TmsMaxZoom(maxZoom)
-{
-	if (Name == "") {
-		TmsName = QApplication::translate("MerkaartorPreferences","New Server");
-	}
-}
-
 Tool::Tool(QString Name, QString Path)
 	: ToolName(Name), ToolPath(Path)
 {
@@ -127,7 +114,6 @@ MerkaartorPreferences::MerkaartorPreferences()
 		httpRequest.setProxy(getProxyHost(),getProxyPort());
 
 	initialize();
-	fromOsmPref();
 }
 
 MerkaartorPreferences::~MerkaartorPreferences()
@@ -145,6 +131,11 @@ void MerkaartorPreferences::save()
 	setAlphaList();
 	Sets->sync();
 
+	saveProjections();
+	saveWMSes();
+	saveTMSes();
+	saveBookmarks();
+
 	if (getProxyUse())
 		httpRequest.setProxy(getProxyHost(),getProxyPort());
 	else
@@ -158,61 +149,38 @@ void MerkaartorPreferences::toOsmPref()
 
 	if (getOsmUser().isEmpty() || getOsmPassword().isEmpty()) return;
 
+	QDomDocument theXmlDoc;
+
+	theXmlDoc.appendChild(theXmlDoc.createProcessingInstruction("xml", "version=\"1.0\""));
+
+	QDomElement root = theXmlDoc.createElement("MerkaartorLists");
+	theXmlDoc.appendChild(root);
+
+	theProjectionsList.toXml(root);
+	theBookmarkList.toXml(root);
+	theTmsServerList.toXml(root);
+	theWmsServerList.toXml(root);
+
+	QByteArray PrefsXML = qCompress(theXmlDoc.toString().toUtf8(), 9).toBase64();
+
+	QStringList slicedPrefs;
+	for (int i=0; i<PrefsXML.size(); i+=254) {
+		QString s = PrefsXML.mid(i, 254);
+		slicedPrefs.append(s);
+		if (s.size() < 254)
+			break;
+	}
+
 	QMap<QString, QString> OsmPref;
 
-	int i=0;
-	BookmarkListIterator bl(getBookmarks());
-	while(bl.hasNext()) {
-		bl.next();
+	QString k = QString("MerkaartorSizePrefsXML");
+	QString v = QString::number(slicedPrefs.size());
+	OsmPref.insert(k, v);
 
-		QString k = QString("MerkaartorBookmark%1").arg(i, 3, 10, QLatin1Char('0'));
-		QString v = QString("%1;%2;%3;%4;%5")
-						.arg(bl.key())
-						.arg(intToAng(bl.value().bottomRight().lat()))
-						.arg(intToAng(bl.value().bottomRight().lon()))
-						.arg(intToAng(bl.value().topLeft().lat()))
-						.arg(intToAng(bl.value().topLeft().lon()));
+	for (int i=0; i<slicedPrefs.size(); i++) {
+		k = QString("MerkaartorPrefsXML%1").arg(i, 3, 10, QLatin1Char('0'));
+		v = slicedPrefs[i];
 		OsmPref.insert(k, v);
-		++i;
-	}
-
-	i=0;
-	TmsServerListIterator tsl(getTmsServers());
-	while(tsl.hasNext()) {
-		tsl.next();
-
-		QString k = QString("MerkaartorTmsServer%1").arg(i, 3, 10, QLatin1Char('0'));
-		QString v;
-		TmsServer S = tsl.value();
-		v.append(S.TmsName + ";");
-		v.append(S.TmsAdress + ";");
-		v.append(S.TmsPath + ";");
-		v.append(QString::number(S.TmsTileSize) + ";");
-		v.append(QString::number(S.TmsMinZoom) + ";");
-		v.append(QString::number(S.TmsMaxZoom));
-
-		OsmPref.insert(k, v);
-		++i;
-	}
-
-	i=0;
-	WmsServerListIterator wsl(getWmsServers());
-	while(wsl.hasNext()) {
-		wsl.next();
-
-		QString k = QString("MerkaartorWmsServer%1").arg(i, 3, 10, QLatin1Char('0'));
-		QString v;
-		WmsServer S = wsl.value();
-		v.append(S.WmsName + ";");
-		v.append(S.WmsAdress + ";");
-		v.append(S.WmsPath + ";");
-		v.append(S.WmsLayers + ";");
-		v.append(S.WmsProjections + ";");
-		v.append(S.WmsStyles + ";");
-		v.append(S.WmsImgFormat);
-
-		OsmPref.insert(k, v);
-		++i;
 	}
 
 	QMapIterator<QString, QString> it(OsmPref);
@@ -220,20 +188,87 @@ void MerkaartorPreferences::toOsmPref()
 		it.next();
 		putOsmPref(it.key(), it.value());
 	}
-	for (int i=getBookmarks().size(); i<OsmPrefListsCount["MerkaartorBookmark"]; ++i) {
-		QString k = QString("MerkaartorBookmark%1").arg(i, 3, 10, QLatin1Char('0'));
-		deleteOsmPref(k);
-	}
-	for (int i=getBookmarks().size(); i<OsmPrefListsCount["MerkaartorTmsServer"]; ++i) {
-		QString k = QString("MerkaartorTmsServer%1").arg(i, 3, 10, QLatin1Char('0'));
-		deleteOsmPref(k);
-	}
-	for (int i=getBookmarks().size(); i<OsmPrefListsCount["MerkaartorWmsServer"]; ++i) {
-		QString k = QString("MerkaartorWmsServer%1").arg(i, 3, 10, QLatin1Char('0'));
-		deleteOsmPref(k);
-	}
 
 }
+
+void MerkaartorPreferences::on_requestFinished ( int id, bool error )
+{
+	if (id == OsmPrefLoadId && !error) {
+		QMap<QString, QString> OsmPref;
+
+		QDomDocument aOsmPrefDoc;
+		aOsmPrefDoc.setContent(OsmPrefContent.buffer(), false);
+
+		QDomNodeList prefList = aOsmPrefDoc.elementsByTagName("preference");
+
+		int sz = 0;
+		for (int i=0; i < prefList.size(); ++i) {
+			QDomElement e = prefList.at(i).toElement();
+			if (e.attribute("k").startsWith("MerkaartorSizePrefsXML")) {
+				sz = e.attribute("v").toInt();
+				break;
+			}
+		}
+
+		if (!sz)
+			return;
+
+		QStringList slicedPrefs;
+		QString k, v;
+		for (int i=0; i < prefList.size(); ++i) {
+			QDomElement e = prefList.at(i).toElement();
+			k = e.attribute("k");
+			v = e.attribute("v");
+			if (k.startsWith("MerkaartorPrefsXML")) {
+				int idx = k.right(3).toInt();
+				slicedPrefs.insert(idx, v);
+			}
+		}
+
+		QByteArray PrefsXML;
+		for (int i=0; i<sz; i++)
+			PrefsXML.append(slicedPrefs[i]);
+
+		qDebug() << "Size: " << PrefsXML.size();
+
+		QDomDocument theXmlDoc;
+		if (!theXmlDoc.setContent(qUncompress(QByteArray::fromBase64(PrefsXML)))) {
+			qDebug() << "Invalid OSM Prefs XML";
+			return;
+		}
+
+		QDomElement docElem = theXmlDoc.documentElement();
+		if (docElem.tagName() != "MerkaartorLists") {
+			qDebug() << "Invalid OSM Prefs XML root element: " << docElem.tagName();
+			return;
+		}
+
+		qDebug() << theXmlDoc.toString();
+
+		QDomElement c = docElem.firstChildElement();
+		while(!c.isNull()) {
+			if (c.tagName() == "Projections") {
+				ProjectionsList aProjList = ProjectionsList::fromXml(c);
+				theProjectionsList.add(aProjList);
+			} else
+			if (c.tagName() == "Bookmarks") {
+				BookmarksList aBkList = BookmarksList::fromXml(c);
+				theBookmarkList.add(aBkList);
+			} else
+			if (c.tagName() == "TmsServers") {
+				TmsServersList aTmsList = TmsServersList::fromXml(c);
+				theTmsServerList.add(aTmsList);
+			} else
+			if (c.tagName() == "WmsServers") {
+				WmsServersList aWmsList = WmsServersList::fromXml(c);
+				theWmsServerList.add(aWmsList);
+			}
+
+			c = c.nextSiblingElement();
+		}
+	}
+}
+
 
 void MerkaartorPreferences::putOsmPref(const QString& k, const QString& v)
 {
@@ -329,76 +364,26 @@ void MerkaartorPreferences::on_responseHeaderReceived(const QHttpResponseHeader 
 	}
 }
 
-void MerkaartorPreferences::on_requestFinished ( int id, bool error )
-{
-	if (id == OsmPrefLoadId && !error) {
-		QMap<QString, QString> OsmPref;
-		bool ChangedBookmark = false;
-
-		QDomDocument aOsmPrefDoc;
-		aOsmPrefDoc.setContent(OsmPrefContent.buffer(), false);
-
-		OsmPrefListsCount["MerkaartorBookmark"] = 0;
-		OsmPrefListsCount["MerkaartorTmsServer"] = 0;
-		OsmPrefListsCount["MerkaartorWmsServer"] = 0;
-
-		QDomNodeList prefList = aOsmPrefDoc.elementsByTagName("preference");
-		for (int i=0; i < prefList.size(); ++i) {
-			QDomElement e = prefList.at(i).toElement();
-
-			if (e.attribute("k").startsWith("MerkaartorBookmark")) {
-				OsmPrefListsCount["MerkaartorBookmark"]++;
-				QStringList sl = e.attribute("v").split(";");
-				if (sl.size() < 5) continue;
-				if (!theBookmarks.contains(sl[0])) {
-					ChangedBookmark = true;
-					theBookmarks[sl[0]] = CoordBox(Coord(angToInt(sl[1].toDouble()),angToInt(sl[2].toDouble())),
-											Coord(angToInt(sl[3].toDouble()),angToInt(sl[4].toDouble())));
-				}
-			}
-			if (e.attribute("k").startsWith("MerkaartorTmsServer")) {
-				OsmPrefListsCount["MerkaartorTmsServer"]++;
-				QStringList sl = e.attribute("v").split(";");
-				if (sl.size() < 6) continue;
-				if (!theTmsServerList.contains(sl[0])) {
-					TmsServer S(sl[0], sl[1], sl[2], sl[3].toInt(), sl[4].toInt(), sl[5].toInt());
-					theTmsServerList[sl[0]] = S;
-				}
-			}
-			if (e.attribute("k").startsWith("MerkaartorWmsServer")) {
-				OsmPrefListsCount["MerkaartorWmsServer"]++;
-				QStringList sl = e.attribute("v").split(";");
-				if (sl.size() < 7) continue;
-				if (!theWmsServerList.contains(sl[0])) {
-					WmsServer S(sl[0], sl[1], sl[2], sl[3], sl[4], sl[5], sl[6]);
-					theWmsServerList[sl[0]] = S;
-				}
-			}
-		}
-		if (ChangedBookmark) {
-			setBookmarks();	
-			emit(bookmarkChanged());
-		}
-	}
-}
-
 void MerkaartorPreferences::initialize()
 {
 	Use06Api = Sets->value("osm/use06api", "").toBool();
 
 	loadProjections();
+	loadWMSes();
+	loadTMSes();
+	loadBookmarks();
+
+	fromOsmPref();
 
 	QStringList sl = Sets->value("downloadosm/bookmarks").toStringList();
-	if (sl.size() == 0) {
-		QStringList DefaultBookmarks;
-		DefaultBookmarks << "London" << "51.47" << "-0.20" << "51.51" << "-0.08";
-	//	DefaultBookmarks << "Rotterdam" << "51.89" << "4.43" << "51.93" << "4.52";
-		Sets->setValue("downloadosm/bookmarks", DefaultBookmarks);
-		sl = DefaultBookmarks;
-	}
-	for (int i=0; i<sl.size(); i+=5) {
-		theBookmarks[sl[i]] = CoordBox(Coord(angToInt(sl[i+1].toDouble()),angToInt(sl[i+2].toDouble())),
-								Coord(angToInt(sl[i+3].toDouble()),angToInt(sl[i+4].toDouble())));
+	if (sl.size()) {
+		for (int i=0; i<sl.size(); i+=5) {
+			Bookmark B(sl[i], CoordBox(Coord(angToInt(sl[i+1].toDouble()),angToInt(sl[i+2].toDouble())),
+									Coord(angToInt(sl[i+3].toDouble()),angToInt(sl[i+4].toDouble()))));
+			theBookmarkList.addBookmark(B);
+		}
+		save();
+		Sets->remove("downloadosm/bookmarks");
 	}
 
 	QStringList alphaList = getAlphaList();
@@ -422,92 +407,40 @@ void MerkaartorPreferences::initialize()
 		theToolList->insert("Inkscape", t);
 	}
 
-	if (version == "0") {
-		QStringList Servers = Sets->value("WSM/servers").toStringList();
-		if (Servers.size() > 0) {
-			int selI = Sets->value("WSM/selected", "0").toInt();
-			QString selS;
-			for (int i=0; i<Servers.size()/6; i++) {
-				WmsServer S(Servers[(i*6)], Servers[(i*6)+1], Servers[(i*6)+2], Servers[(i*6)+3], Servers[(i*6)+4], Servers[(i*6)+5], "image/png");
-				theWmsServerList.insert(Servers[(i*6)], S);
-				if (i == selI)
-					selS = Servers[(i*6)];
-			}
-			setSelectedWmsServer(selS);
-			if (!theWmsServerList.contains("OpenAerialMap")) {
-				WmsServer oam("OpenAerialMap", "openaerialmap.org", "/wms/?",
-					"world", "EPSG:4326", ",", "image/jpeg");
-				theWmsServerList.insert("OpenAerialMap", oam);
-				WmsServer otm("OpenTopoMap", "opentopomap.org", "/wms/?",
-					"world", "EPSG:4326", ",", "image/jpeg");
-				theWmsServerList.insert("OpenTopoMap", otm);
-				WmsServer tu("Terraservice_Urban", "terraservice.net", "/ogcmap.ashx?",
-					"urbanarea", "EPSG:4326", ",", "image/jpeg");
-				theWmsServerList.insert("Terraservice_Urban", tu);
-				WmsServer tg("Terraservice_DRG", "terraservice.net", "/ogcmap.ashx?",
-					"drg", "EPSG:4326", ",", "image/jpeg");
-				theWmsServerList.insert("Terraservice_DRG", tg);
-				WmsServer tq("Terraservice_DOQ", "terraservice.net", "/ogcmap.ashx?",
-					"doq", "EPSG:4326", ",", "image/jpeg");
-				theWmsServerList.insert("Terraservice_DOQ", tq);
-				WmsServer op("Oberpfalz Germany", "oberpfalz.geofabrik.de", "/wms/?",
-					"DOP20", "EPSG:4326", ",", "image/png");
-				theWmsServerList.insert("Oberpfalz_DOP20", op);
-			}
+	QStringList Servers = Sets->value("WSM/servers").toStringList();
+	if (Servers.size()) {
+		for (int i=0; i<Servers.size(); i+=7) {
+			WmsServer S(Servers[i], Servers[i+1], Servers[i+2], Servers[i+3], Servers[i+4], Servers[i+5], Servers[i+6]);
+			theWmsServerList.addServer(S);
 		}
 		save();
-	}
-	QStringList Servers = Sets->value("WSM/servers").toStringList();
-	if (Servers.size() == 0) {
-		WmsServer demis("Demis", "www2.demis.nl", "/wms/wms.asp?wms=WorldMap&",
-						"Countries,Borders,Highways,Roads,Cities", "EPSG:4326", ",", "image/png");
-		theWmsServerList.insert("Demis", demis);
-		WmsServer oam("OpenAerialMap", "openaerialmap.org", "/wms/?",
-						"world", "EPSG:4326", ",", "image/jpeg");
-		theWmsServerList.insert("OpenAerialMap", oam);
-		WmsServer otm("OpenTopoMap", "opentopomap.org", "/wms/?",
-						"world", "EPSG:4326", ",", "image/jpeg");
-		theWmsServerList.insert("OpenTopoMap", otm);
-		WmsServer tu("Terraservice_Urban", "terraservice.net", "/ogcmap.ashx?",
-						"urbanarea", "EPSG:4326", ",", "image/jpeg");
-		theWmsServerList.insert("Terraservice_Urban", tu);
-		WmsServer tg("Terraservice_DRG", "terraservice.net", "/ogcmap.ashx?",
-						"drg", "EPSG:4326", ",", "image/jpeg");
-		theWmsServerList.insert("Terraservice_DRG", tg);
-		WmsServer tq("Terraservice_DOQ", "terraservice.net", "/ogcmap.ashx?",
-						"doq", "EPSG:4326", ",", "image/jpeg");
-		theWmsServerList.insert("Terraservice_DOQ", tq);
-		WmsServer op("Oberpfalz_DOP20", "oberpfalz.geofabrik.de", "/wms?",
-						"DOP20", "EPSG:4326", ",", "image/png");
-		theWmsServerList.insert("Oberpfalz_DOP20", op);
-		setSelectedWmsServer("OpenAerialMap");
-		save();
-	}
-	for (int i=0; i<Servers.size(); i+=7) {
-		WmsServer S(Servers[i], Servers[i+1], Servers[i+2], Servers[i+3], Servers[i+4], Servers[i+5], Servers[i+6]);
-		theWmsServerList.insert(Servers[i], S);
+		Sets->remove("WSM/servers");
 	}
 	Servers = Sets->value("TMS/servers").toStringList();
-	if (Servers.size() == 0) {
-		TmsServer osmmapnik("OSM Mapnik", "tile.openstreetmap.org", "/%1/%2/%3.png", 256, 0, 17);
-		theTmsServerList.insert("OSM Mapnik", osmmapnik);
-		TmsServer osmth("OSM T@H", "tah.openstreetmap.org", "/Tiles/tile/%1/%2/%3.png", 256, 0, 17);
-		theTmsServerList.insert("OSM T@H", osmth);
-		TmsServer cycle("Cycle Map", "andy.sandbox.cloudmade.com", "/tiles/cycle/%1/%2/%3.png", 256, 0, 17);
-		theTmsServerList.insert("Gravitystorm Cycle", cycle);
-		TmsServer oam("OpenAerialMap", "tile.openaerialmap.org", "/tiles/1.0.0/openaerialmap-900913/%1/%2/%3.png", 256, 0, 17);
-		theTmsServerList.insert("OpenAerialMap", oam);
-		TmsServer npe("New Popular Edition (NPE)", "npe.openstreetmap.org", "/%1/%2/%3.png", 256, 6, 15);
-		theTmsServerList.insert("New Popular Edition (NPE)", npe);
-		TmsServer osmmaplint("OSM Maplint", "tah.openstreetmap.org", "/Tiles/maplint/%1/%2/%3.png", 256, 12, 16);
-		theTmsServerList.insert("OSM Maplint", osmmaplint);
-		setSelectedTmsServer("OSM Mapnik");
+	if (Servers.size()) {
+		for (int i=0; i<Servers.size(); i+=6) {
+			TmsServer S(Servers[i], Servers[i+1], Servers[i+2], Servers[i+3].toInt(), Servers[i+4].toInt(), Servers[i+5].toInt());
+			theTmsServerList.addServer(S);
+		}
 		save();
+		Sets->remove("TMS/servers");
 	}
-	for (int i=0; i<Servers.size(); i+=6) {
-		TmsServer S(Servers[i], Servers[i+1], Servers[i+2], Servers[i+3].toInt(), Servers[i+4].toInt(), Servers[i+5].toInt());
-		theTmsServerList.insert(Servers[i], S);
-	}
+	//if (Servers.size() == 0) {
+	//	TmsServer osmmapnik("OSM Mapnik", "tile.openstreetmap.org", "/%1/%2/%3.png", 256, 0, 17);
+	//	theTmsServerList.insert("OSM Mapnik", osmmapnik);
+	//	TmsServer osmth("OSM T@H", "tah.openstreetmap.org", "/Tiles/tile/%1/%2/%3.png", 256, 0, 17);
+	//	theTmsServerList.insert("OSM T@H", osmth);
+	//	TmsServer cycle("Cycle Map", "andy.sandbox.cloudmade.com", "/tiles/cycle/%1/%2/%3.png", 256, 0, 17);
+	//	theTmsServerList.insert("Gravitystorm Cycle", cycle);
+	//	TmsServer oam("OpenAerialMap", "tile.openaerialmap.org", "/tiles/1.0.0/openaerialmap-900913/%1/%2/%3.png", 256, 0, 17);
+	//	theTmsServerList.insert("OpenAerialMap", oam);
+	//	TmsServer npe("New Popular Edition (NPE)", "npe.openstreetmap.org", "/%1/%2/%3.png", 256, 6, 15);
+	//	theTmsServerList.insert("New Popular Edition (NPE)", npe);
+	//	TmsServer osmmaplint("OSM Maplint", "tah.openstreetmap.org", "/Tiles/maplint/%1/%2/%3.png", 256, 12, 16);
+	//	theTmsServerList.insert("OSM Maplint", osmmaplint);
+	//	setSelectedTmsServer("OSM Mapnik");
+	//	save();
+	//}
 }
 
 bool MerkaartorPreferences::getRightSideDriving() const
@@ -594,52 +527,36 @@ void MerkaartorPreferences::setProxyPort(int theValue)
 	Sets->setValue("proxy/Port", theValue);
 }
 
-BookmarkList& MerkaartorPreferences::getBookmarks()
+BookmarkList* MerkaartorPreferences::getBookmarks()
 {
 	//return Sets->value("downloadosm/bookmarks").toStringList();
-	return theBookmarks;
-}
-
-void MerkaartorPreferences::setBookmarks()
-{
-	QStringList bk;
-	QMapIterator<QString, CoordBox> i(theBookmarks);
-	while (i.hasNext()) {
-		i.next();
-		bk.append(i.key());
-		bk.append(QString::number(intToAng(i.value().bottomLeft().lat()), 'f', 4));
-		bk.append(QString::number(intToAng(i.value().bottomLeft().lon()), 'f', 4));
-		bk.append(QString::number(intToAng(i.value().topRight().lat()), 'f', 4));
-		bk.append(QString::number(intToAng(i.value().topRight().lon()), 'f', 4));
-	}
-	Sets->setValue("downloadosm/bookmarks", bk);
-	toOsmPref();
+	return theBookmarkList.getBookmarks();
 }
 
 /* WMS */
 
-WmsServerList& MerkaartorPreferences::getWmsServers()
+WmsServerList* MerkaartorPreferences::getWmsServers()
 {
 //	return Sets->value("WSM/servers").toStringList();
-	return theWmsServerList;
+	return theWmsServerList.getServers();
 }
 
 void MerkaartorPreferences::setWmsServers()
 {
-	QStringList Servers;
-	WmsServerListIterator i(theWmsServerList);
-	while (i.hasNext()) {
-		i.next();
-		WmsServer S = i.value();
-		Servers.append(S.WmsName);
-		Servers.append(S.WmsAdress);
-		Servers.append(S.WmsPath);
-		Servers.append(S.WmsLayers);
-		Servers.append(S.WmsProjections);
-		Servers.append(S.WmsStyles);
-		Servers.append(S.WmsImgFormat);
-	}
-	Sets->setValue("WSM/servers", Servers);
+	//QStringList Servers;
+	//WmsServerListIterator i(theWmsServerList);
+	//while (i.hasNext()) {
+	//	i.next();
+	//	WmsServer S = i.value();
+	//	Servers.append(S.WmsName);
+	//	Servers.append(S.WmsAdress);
+	//	Servers.append(S.WmsPath);
+	//	Servers.append(S.WmsLayers);
+	//	Servers.append(S.WmsProjections);
+	//	Servers.append(S.WmsStyles);
+	//	Servers.append(S.WmsImgFormat);
+	//}
+	//Sets->setValue("WSM/servers", Servers);
 }
 
 QString MerkaartorPreferences::getSelectedWmsServer() const
@@ -654,27 +571,27 @@ void MerkaartorPreferences::setSelectedWmsServer(const QString & theValue)
 
 /* TMS */
 
-TmsServerList& MerkaartorPreferences::getTmsServers()
+TmsServerList* MerkaartorPreferences::getTmsServers()
 {
 //	return Sets->value("WSM/servers").toStringList();
-	return theTmsServerList;
+	return theTmsServerList.getServers();
 }
 
 void MerkaartorPreferences::setTmsServers()
 {
-	QStringList Servers;
-	TmsServerListIterator i(theTmsServerList);
-	while (i.hasNext()) {
-		i.next();
-		TmsServer S = i.value();
-		Servers.append(S.TmsName);
-		Servers.append(S.TmsAdress);
-		Servers.append(S.TmsPath);
-		Servers.append(QString::number(S.TmsTileSize));
-		Servers.append(QString::number(S.TmsMinZoom));
-		Servers.append(QString::number(S.TmsMaxZoom));
-	}
-	Sets->setValue("TMS/servers", Servers);
+	//QStringList Servers;
+	//TmsServerListIterator i(theTmsServerList);
+	//while (i.hasNext()) {
+	//	i.next();
+	//	TmsServer S = i.value();
+	//	Servers.append(S.TmsName);
+	//	Servers.append(S.TmsAdress);
+	//	Servers.append(S.TmsPath);
+	//	Servers.append(QString::number(S.TmsTileSize));
+	//	Servers.append(QString::number(S.TmsMinZoom));
+	//	Servers.append(QString::number(S.TmsMaxZoom));
+	//}
+	//Sets->setValue("TMS/servers", Servers);
 }
 
 QString MerkaartorPreferences::getSelectedTmsServer() const
@@ -737,7 +654,7 @@ void MerkaartorPreferences::setCacheDir(const QString & theValue)
 
 QString MerkaartorPreferences::getCacheDir() const
 {
-	return Sets->value("backgroundImage/CacheDir", QDir::homePath() + "/.QMapControlCache").toString();
+	return Sets->value("backgroundImage/CacheDir", HOMEDIR + "/BackgroundCache").toString();
 }
 
 int MerkaartorPreferences::getCacheSize() const
@@ -897,7 +814,7 @@ ProjectionsList MerkaartorPreferences::getProjectionsList()
 	return theProjectionsList;
 }
 
-QString MerkaartorPreferences::getProjection(QString aProj)
+ProjectionItem MerkaartorPreferences::getProjection(QString aProj)
 {
 	return theProjectionsList.getProjection(aProj);
 }
@@ -1337,6 +1254,7 @@ M_PARAM_IMPLEMENT_BOOL(SeparateMoveMode, Mouse, true)
 
 /* Custom Style */
 M_PARAM_IMPLEMENT_BOOL(MerkaartorStyle, visual, false)
+M_PARAM_IMPLEMENT_STRING(MerkaartorStyleString, visual, "skulpture")
 
 /* Network */
 M_PARAM_IMPLEMENT_BOOL(OfflineMode, Network, false)
@@ -1345,9 +1263,8 @@ M_PARAM_IMPLEMENT_BOOL(OfflineMode, Network, false)
 M_PARAM_IMPLEMENT_BOOL(ReadonlyTracksDefault, data, false)
 
 /* Projections */
-void MerkaartorPreferences::loadProjections()
+void MerkaartorPreferences::loadProjection(QString fn)
 {
-	QString fn = QString(SHARE_DIR) + "/Projections.xml";
 	if (QDir::isRelativePath(fn))
 		fn = QCoreApplication::applicationDirPath() + "/" + fn;
 
@@ -1361,18 +1278,212 @@ void MerkaartorPreferences::loadProjections()
 	if (!theXmlDoc->setContent(&file)) {
 //		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
 		file.close();
-		delete theXmlDoc;
-		theXmlDoc = NULL;
 		return;
 	}
 	file.close();
 
 	QDomElement docElem = theXmlDoc->documentElement();
-	theProjectionsList = ProjectionsList::fromXml(docElem);
+	ProjectionsList aProjList = ProjectionsList::fromXml(docElem.firstChildElement());
+	theProjectionsList.add(aProjList);
+}
+
+void MerkaartorPreferences::loadProjections()
+{
+	QString fn = ":/Projections.xml";
+	loadProjection(fn);
+
+	fn = QString(SHARE_DIR) + "/Projections.xml";
+	loadProjection(fn);
+
+	fn = HOMEDIR + "/Projections.xml";
+	loadProjection(fn);
 }
 
 void MerkaartorPreferences::saveProjections()
 {
+	QDomDocument theXmlDoc;
+
+	theXmlDoc.appendChild(theXmlDoc.createProcessingInstruction("xml", "version=\"1.0\""));
+
+	QDomElement root = theXmlDoc.createElement("MerkaartorList");
+	theXmlDoc.appendChild(root);
+	theProjectionsList.toXml(root);
+
+	QFile file(HOMEDIR + "/Projections.xml");
+	if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+		//QMessageBox::critical(this, tr("Unable to open save projections file"), tr("%1 could not be opened for writing.").arg(HOMEDIR + "/Projections.xml"));
+		return;
+	}
+	file.write(theXmlDoc.toString().toUtf8());
+	file.close();
+}
+
+/* WMS Servers */
+void MerkaartorPreferences::loadWMS(QString fn)
+{
+	if (QDir::isRelativePath(fn))
+		fn = QCoreApplication::applicationDirPath() + "/" + fn;
+
+	QFile file(fn);
+	if (!file.open(QIODevice::ReadOnly)) {
+//		QMessageBox::critical(this, tr("Invalid file"), tr("%1 could not be opened.").arg(fn));
+		return;
+	}
+
+	QDomDocument* theXmlDoc = new QDomDocument();
+	if (!theXmlDoc->setContent(&file)) {
+//		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
+		file.close();
+		return;
+	}
+	file.close();
+
+	QDomElement docElem = theXmlDoc->documentElement();
+	WmsServersList aWmsList = WmsServersList::fromXml(docElem.firstChildElement());
+	theWmsServerList.add(aWmsList);
+}
+
+void MerkaartorPreferences::loadWMSes()
+{
+	QString fn = ":/WmsServersList.xml";
+	loadWMS(fn);
+
+	fn = QString(SHARE_DIR) + "/WmsServersList.xml";
+	loadWMS(fn);
+
+	fn = HOMEDIR + "/WmsServersList.xml";
+	loadWMS(fn);
+}
+
+void MerkaartorPreferences::saveWMSes()
+{
+	QDomDocument theXmlDoc;
+
+	theXmlDoc.appendChild(theXmlDoc.createProcessingInstruction("xml", "version=\"1.0\""));
+
+	QDomElement root = theXmlDoc.createElement("MerkaartorList");
+	theXmlDoc.appendChild(root);
+	theWmsServerList.toXml(root);
+
+	QFile file(HOMEDIR + "/WmsServersList.xml");
+	if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+		//QMessageBox::critical(this, tr("Unable to open save projections file"), tr("%1 could not be opened for writing.").arg(HOMEDIR + "/Projections.xml"));
+		return;
+	}
+	file.write(theXmlDoc.toString().toUtf8());
+	file.close();
+}
+
+/* TMS Servers */
+void MerkaartorPreferences::loadTMS(QString fn)
+{
+	if (QDir::isRelativePath(fn))
+		fn = QCoreApplication::applicationDirPath() + "/" + fn;
+
+	QFile file(fn);
+	if (!file.open(QIODevice::ReadOnly)) {
+//		QMessageBox::critical(this, tr("Invalid file"), tr("%1 could not be opened.").arg(fn));
+		return;
+	}
+
+	QDomDocument* theXmlDoc = new QDomDocument();
+	if (!theXmlDoc->setContent(&file)) {
+//		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
+		file.close();
+		return;
+	}
+	file.close();
+
+	QDomElement docElem = theXmlDoc->documentElement();
+	TmsServersList aTmsList = TmsServersList::fromXml(docElem.firstChildElement());
+	theTmsServerList.add(aTmsList);
+}
+
+void MerkaartorPreferences::loadTMSes()
+{
+	QString fn = ":/TmsServersList.xml";
+	loadTMS(fn);
+
+	fn = QString(SHARE_DIR) + "/TmsServersList.xml";
+	loadTMS(fn);
+
+	fn = HOMEDIR + "/TmsServersList.xml";
+	loadTMS(fn);
+}
+
+void MerkaartorPreferences::saveTMSes()
+{
+	QDomDocument theXmlDoc;
+
+	theXmlDoc.appendChild(theXmlDoc.createProcessingInstruction("xml", "version=\"1.0\""));
+
+	QDomElement root = theXmlDoc.createElement("MerkaartorList");
+	theXmlDoc.appendChild(root);
+	theTmsServerList.toXml(root);
+
+	QFile file(HOMEDIR + "/TmsServersList.xml");
+	if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+		//QMessageBox::critical(this, tr("Unable to open save projections file"), tr("%1 could not be opened for writing.").arg(HOMEDIR + "/Projections.xml"));
+		return;
+	}
+	file.write(theXmlDoc.toString().toUtf8());
+	file.close();
+}
+
+/* Bookmarks */
+void MerkaartorPreferences::loadBookmark(QString fn)
+{
+	if (QDir::isRelativePath(fn))
+		fn = QCoreApplication::applicationDirPath() + "/" + fn;
+
+	QFile file(fn);
+	if (!file.open(QIODevice::ReadOnly)) {
+//		QMessageBox::critical(this, tr("Invalid file"), tr("%1 could not be opened.").arg(fn));
+		return;
+	}
+
+	QDomDocument* theXmlDoc = new QDomDocument();
+	if (!theXmlDoc->setContent(&file)) {
+//		QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
+		file.close();
+		return;
+	}
+	file.close();
+
+	QDomElement docElem = theXmlDoc->documentElement();
+	BookmarksList aBkList = BookmarksList::fromXml(docElem.firstChildElement());
+	theBookmarkList.add(aBkList);
+}
+
+void MerkaartorPreferences::loadBookmarks()
+{
+	QString fn = ":/BookmarksList.xml";
+	loadBookmark(fn);
+
+	fn = QString(SHARE_DIR) + "/BookmarksList.xml";
+	loadBookmark(fn);
+
+	fn = HOMEDIR + "/BookmarksList.xml";
+	loadBookmark(fn);
+}
+
+void MerkaartorPreferences::saveBookmarks()
+{
+	QDomDocument theXmlDoc;
+
+	theXmlDoc.appendChild(theXmlDoc.createProcessingInstruction("xml", "version=\"1.0\""));
+
+	QDomElement root = theXmlDoc.createElement("MerkaartorList");
+	theXmlDoc.appendChild(root);
+	theBookmarkList.toXml(root);
+
+	QFile file(HOMEDIR + "/BookmarksList.xml");
+	if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+		//QMessageBox::critical(this, tr("Unable to open save bookmarks file"), tr("%1 could not be opened for writing.").arg(HOMEDIR + "/BookmarksList.xml"));
+		return;
+	}
+	file.write(theXmlDoc.toString().toUtf8());
+	file.close();
 }
 
 /* */ 

@@ -12,19 +12,63 @@
 
 #include "ProjectionsList.h"
 
-void ProjectionsList::addProjection(QString name, QString projCommand)
+ProjectionItem::ProjectionItem ()
+	: name(""), projection(""), deleted(false)
 {
-	theProjections.insert(name, projCommand);
 }
 
-QString ProjectionsList::getProjection(QString name) const
+ProjectionItem::ProjectionItem (QString aName, QString aProjection, bool aDeleted)
+	: name(aName), projection(aProjection), deleted(aDeleted)
 {
+}
 
-	QString theProj = theProjections.value(name, "__NULL__");
-	if (theProj != "__NULL__")
-		return theProj;
+void ProjectionItem::toXml(QDomElement parent)
+{
+	QDomElement p = parent.ownerDocument().createElement("Projection");
+	parent.appendChild(p);
+	p.setAttribute("name", name);
+	if (deleted)
+		p.setAttribute("deleted", "true");
+
+	QDomText t = parent.ownerDocument().createTextNode(projection);
+	p.appendChild(t);
+}
+
+ProjectionItem ProjectionItem::fromXml(QDomElement parent)
+{
+	ProjectionItem theProjection;
+
+	if (parent.tagName() == "Projection") {
+		theProjection.projection = parent.text().trimmed();
+		theProjection.name = parent.attribute("name");
+		theProjection.deleted = (parent.attribute("deleted") == "true" ? true : false);
+	}
+
+	return theProjection;
+}
+
+void ProjectionsList::add(ProjectionsList aProjectionsList)
+{
+	QMapIterator <QString, ProjectionItem> it(aProjectionsList.getProjections());
+	while (it.hasNext()) {
+		it.next();
+
+		ProjectionItem anItem = it.value();
+		theProjections.insert(anItem.name, anItem);
+	}
+}
+
+void ProjectionsList::addProjection(ProjectionItem aProjection)
+{
+	theProjections.insert(aProjection.name, aProjection);
+}
+
+ProjectionItem ProjectionsList::getProjection(QString name) const
+{
+	if (theProjections.contains(name))
+		return theProjections.value(name);
 	else {
-		QMapIterator <QString, QString> it(theProjections);
+		QMapIterator <QString, ProjectionItem> it(theProjections);
 		while (it.hasNext()) {
 			it.next();
 
@@ -32,10 +76,10 @@ QString ProjectionsList::getProjection(QString name) const
 				return it.value();
 		}
 	}
-	return QString("+init=%1").arg(name);
+	return ProjectionItem(name, QString("+init=%1").arg(name));
 }
 
-QMap <QString, QString> ProjectionsList::getProjections() const
+QMap <QString, ProjectionItem> ProjectionsList::getProjections() const
 {
 	return theProjections;
 }
@@ -44,17 +88,14 @@ void ProjectionsList::toXml(QDomElement parent)
 {
 	QDomElement rt = parent.ownerDocument().createElement("Projections");
 	parent.appendChild(rt);
+	rt.setAttribute("creator", QString("Merkaartor %1").arg(VERSION));
 
-	QMapIterator <QString, QString> it(theProjections);
+	QMapIterator <QString, ProjectionItem> it(theProjections);
 	while (it.hasNext()) {
 		it.next();
 
-		QDomElement p = parent.ownerDocument().createElement("Projection");
-		rt.appendChild(p);
-		p.setAttribute("name", it.key());
-
-		QDomText t = parent.ownerDocument().createTextNode(it.value());
-		p.appendChild(t);
+		ProjectionItem i = it.value();
+		i.toXml(rt);
 	}
 }
 
@@ -66,9 +107,7 @@ ProjectionsList ProjectionsList::fromXml(QDomElement parent)
 		QDomElement c = parent.firstChildElement();
 		while(!c.isNull()) {
 			if (c.tagName() == "Projection") {
-				QString theProj = c.text().trimmed();
-				//QString theProj = QString("%1 +a=%2 +b=%3").arg(c.text().trimmed()).arg(double(INT_MAX)/M_PI).arg(double(INT_MAX)/M_PI);
-				theProjections.addProjection(c.attribute("name"), theProj);
+				theProjections.addProjection(ProjectionItem::fromXml(c));
 			} 
 
 			c = c.nextSiblingElement();

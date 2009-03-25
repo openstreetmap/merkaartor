@@ -83,8 +83,7 @@
 #include <QTranslator>
 #include <QLocale>
 #include <QMessageBox>
-
-#include "QtStyles/skulpture/skulpture.h"
+#include <QStyleFactory>
 
 SlippyMapCache* SlippyMapWidget::theSlippyCache = 0;
 
@@ -114,8 +113,10 @@ MainWindow::MainWindow(void)
 	p->defStyle = QApplication::style()->objectName();
 #ifndef FORCED_CUSTOM_STYLE
 	if (M_PREFS->getMerkaartorStyle())
+		QApplication::setStyle(QStyleFactory::create(M_PREFS->getMerkaartorStyleString()));
+#else
+		QApplication::setStyle(QStyleFactory::create("skulpture"));
 #endif
-		QApplication::setStyle(new SkulptureStyle);
 
 	setupUi(this);
 	M_STYLE->loadPainters(MerkaartorPreferences::instance()->getDefaultStyle());
@@ -1450,11 +1451,13 @@ void MainWindow::preferencesChanged(void)
             QApplication::setStyle(p->defStyle);
     }
     else
-#endif
     {
         if (QApplication::style()->objectName() != "")
-            QApplication::setStyle(new SkulptureStyle);
+			QApplication::setStyle(QStyleFactory::create(M_PREFS->getMerkaartorStyleString()));
     }
+#else
+	QApplication::setStyle(QStyleFactory::create("skulpture"));
+#endif
 
 	ImageManager::instance()->setCacheDir(M_PREFS->getCacheDir());
 	ImageManager::instance()->setCacheMaxSize(M_PREFS->getCacheSize());
@@ -1839,11 +1842,13 @@ void MainWindow::updateBookmarksMenu()
 		menuBookmarks->removeAction(menuBookmarks->actions()[3]);
 	}
 
-	QMapIterator<QString, CoordBox> it(MerkaartorPreferences::instance()->getBookmarks());
+	BookmarkListIterator it(*(M_PREFS->getBookmarks()));
 	while (it.hasNext()) {
 		it.next();
-		QAction* a = new QAction(it.key(), menuBookmarks);
-		menuBookmarks->addAction(a);
+		if (it.value().deleted == false) {
+			QAction* a = new QAction(it.key(), menuBookmarks);
+			menuBookmarks->addAction(a);
+		}
 	}
 }
 
@@ -1951,12 +1956,13 @@ void MainWindow::on_bookmarkAddAction_triggered()
 	bool ok = true;
 	QString text;
 
-	QMap<QString, CoordBox>& Bookmarks = MerkaartorPreferences::instance()->getBookmarks();
+	BookmarkList* Bookmarks = M_PREFS->getBookmarks();
 	QStringList bkName;
-	QMapIterator<QString, CoordBox> i(Bookmarks);
+	BookmarkListIterator i(*Bookmarks);
 	while (i.hasNext()) {
 		i.next();
-		bkName.append(i.key());
+		if (i.value().deleted == false)
+			bkName.append(i.key());
 	}
 	while (ok) {
 		text = QInputDialog::getItem(this, MainWindow::tr("Add Bookmark"),
@@ -1967,13 +1973,11 @@ void MainWindow::on_bookmarkAddAction_triggered()
 					tr("Bookmark cannot be blank."), QMessageBox::Ok);
 				continue;
 			}
-			if (Bookmarks.contains(text)) {
+			if (Bookmarks->contains(text)) {
 				QString newBk = QInputDialog::getText(this, MainWindow::tr("Warning: Bookmark name already exists"),
 						MainWindow::tr("Enter a new one, keep the same to overwrite or cancel."), QLineEdit::Normal,
 									   text, &ok);
-				if (ok && Bookmarks.contains(newBk)) {
-					Bookmarks.remove(newBk);
-
+				if (ok && Bookmarks->contains(newBk)) {
 					for(int i=2; i < menuBookmarks->actions().count(); i++) {
 						if (menuBookmarks->actions()[i]->text() == newBk) {
 							menuBookmarks->removeAction(menuBookmarks->actions()[i]);
@@ -1988,8 +1992,9 @@ void MainWindow::on_bookmarkAddAction_triggered()
 	}
 	if (ok) {
 		CoordBox Clip = view()->projection().viewport();
-		Bookmarks[text] = Clip;
-		M_PREFS->setBookmarks();
+		Bookmark B(text, Clip);
+		Bookmarks->insert(text, B);
+		M_PREFS->save();
 
 		QAction* a = new QAction(text, menuBookmarks);
 		menuBookmarks->addAction(a);
@@ -2000,18 +2005,21 @@ void MainWindow::on_bookmarkRemoveAction_triggered()
 {
 	bool ok;
 
-	QMap<QString, CoordBox>& Bookmarks = MerkaartorPreferences::instance()->getBookmarks();
+	BookmarkList* Bookmarks = M_PREFS->getBookmarks();
 	QStringList bkName;
-	QMapIterator<QString, CoordBox> i(Bookmarks);
+	BookmarkListIterator i(*Bookmarks);
 	while (i.hasNext()) {
 		i.next();
-		bkName.append(i.key());
+		if (i.value().deleted == false)
+			bkName.append(i.key());
 	}
 	QString item = QInputDialog::getItem(this, MainWindow::tr("Remove Bookmark"),
 						MainWindow::tr("Select the bookmark to remove."), bkName, 0, false, &ok);
 	if (ok) {
-		Bookmarks.remove(item);
-		M_PREFS->setBookmarks();
+		Bookmark B = Bookmarks->value(item);
+		B.deleted = true;
+		Bookmarks->insert(item, B);
+		M_PREFS->save();
 
 		for(int i=2; i < menuBookmarks->actions().count(); i++) {
 			if (menuBookmarks->actions()[i]->text() == item) {
@@ -2026,8 +2034,8 @@ void MainWindow::bookmarkTriggered(QAction* anAction)
 {
 	if (anAction == bookmarkAddAction || anAction == bookmarkRemoveAction)
 		return;
-	QMap<QString, CoordBox> Bookmarks = MerkaartorPreferences::instance()->getBookmarks();
-	theView->projection().setViewport(Bookmarks[anAction->text()], theView->rect());
+	BookmarkList* Bookmarks = M_PREFS->getBookmarks();
+	theView->projection().setViewport(Bookmarks->value(anAction->text()).Coordinates, theView->rect());
 
 	invalidateView();
 }

@@ -1,4 +1,8 @@
 v0.14
+    * CHG : Preferences are uploaded to OSM in binary, base-64 encoded, 254 char slice. Allow to bypass the 255 char per preference limitation.
+    * CHG : Preferences lists (Bookmarks, WMS servers, ...) are now distributed and saved as XML in ~/.merkaartor. Allow proper merging (fixes #1401)
+    * ADD : Allow to choose which Qt style to use via a combobox
+    * CHG : Implement the custom styles as plugins
 	* FIX : English language warning
 	* ADD : Switch to template-based projection handling; remove dependency on libproj
     * FIX : proper handling of the "Don't connect GPX nodes..." disabling.

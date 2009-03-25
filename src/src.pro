@@ -165,9 +165,13 @@ contains(GEOIMAGE, 1) {
 	include(GeoImage.pri)
 }
 
-projlist.path = $${SHARE_DIR}
-projlist.files = $$PWD/../share/Projections.xml
-INSTALLS += projlist
+lists.path = $${SHARE_DIR}
+lists.files = \ 
+    $$PWD/../share/BookmarksList.xml \
+    $$PWD/../share/Projections.xml \
+    $$PWD/../share/WmsServersList.xml \
+    $$PWD/../share/TmsServersList.xml
+INSTALLS += lists
 
 contains (GDAL, 1) {
 	DEFINES += USE_GDAL
@@ -176,6 +180,7 @@ contains (GDAL, 1) {
 		win32-g++:LIBS += -lgdal
 	}
 	unix {
+		INCLUDEPATH += /usr/include/gdal
 		LIBS += -lgdal
 	}
 	world_shp.path = $${SHARE_DIR}/world_shp

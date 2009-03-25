@@ -124,7 +124,7 @@ void TMSPreferencesDialog::on_btDelTmsServer_clicked(void)
 	if (idx >= theTmsServers.size())
 		return;
 
-	theTmsServers.erase(theTmsServers.begin() + idx);
+	theTmsServers[idx].deleted = true;
 	delete lvTmsServers->takeItem(idx);
 	if (idx && (idx >= theTmsServers.size()))
 		--idx;
@@ -174,8 +174,8 @@ void TMSPreferencesDialog::on_buttonBox_clicked(QAbstractButton * button)
 
 void TMSPreferencesDialog::loadPrefs()
 {
-	TmsServerList L = MerkaartorPreferences::instance()->getTmsServers();
-	TmsServerListIterator i(L);
+	TmsServerList* L = MerkaartorPreferences::instance()->getTmsServers();
+	TmsServerListIterator i(*L);
 	while (i.hasNext()) {
 		i.next();
 		addServer(i.value());
@@ -185,13 +185,13 @@ void TMSPreferencesDialog::loadPrefs()
 
 void TMSPreferencesDialog::savePrefs()
 {
-	TmsServerList& L = MerkaartorPreferences::instance()->getTmsServers();
-	L.clear();
+	TmsServerList* L = MerkaartorPreferences::instance()->getTmsServers();
+	L->clear();
 	for (unsigned int i = 0; i < theTmsServers.size(); ++i) {
 		TmsServer S(theTmsServers[i]);
-		L.insert(theTmsServers[i].TmsName, S);
+		L->insert(theTmsServers[i].TmsName, S);
 	}
 	//MerkaartorPreferences::instance()->setSelectedTmsServer(getSelectedServer());
-	MerkaartorPreferences::instance()->save();
+	M_PREFS->save();
 }
 

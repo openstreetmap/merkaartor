@@ -21,7 +21,9 @@
 
 #include "Map/Coord.h"
 #include "Preferences/WmsServersList.h"
+#include "Preferences/TmsServersList.h"
 #include "Preferences/ProjectionsList.h"
+#include "Preferences/BookmarksList.h"
 
 class MainWindow;
 class MapView;
@@ -37,6 +39,8 @@ class IMapAdapter;
 #define SHAPE_ADAPTER_UUID QUuid("{AFB0324E-34D0-4267-BB8A-CF56CD2D7012}")
 #define WMS_ADAPTER_UUID QUuid("{E238750A-AC27-429e-995C-A60C17B9A1E0}")
 #define TMS_ADAPTER_UUID QUuid("{CA8A07EC-A466-462b-929F-3805BC9DEC95}")
+
+#define HOMEDIR QDir::homePath() + "/.merkaartor"
 
 #define M_PARAM_DECLARE_BOOL(Param) \
 	private: \
@@ -82,26 +86,6 @@ enum DirectionalArrowsShow {
 	DirectionalArrows_Oneway,
 	DirectionalArrows_Always
 };
-
-typedef QMap<QString, CoordBox> BookmarkList;
-typedef QMapIterator<QString, CoordBox> BookmarkListIterator;
-
-class TmsServer
-{
-	public:
-		TmsServer();
-		TmsServer(QString Name, QString Adress, QString Path, int tileSize, int minZoom, int maxZoom);
-
-	public:
-		QString TmsName;
-		QString TmsAdress;
-		QString TmsPath;
-		int TmsTileSize;
-		int TmsMinZoom;
-		int TmsMaxZoom;
-};
-typedef QMap<QString, TmsServer> TmsServerList;
-typedef QMapIterator<QString, TmsServer> TmsServerListIterator;
 
 #define TOOL_FIELD_SIZE 2
 class Tool
@@ -167,16 +151,15 @@ public:
 	void setProxyPort(int theValue);
 	int getProxyPort() const;
 
-	void setBookmarks();
-	BookmarkList&  getBookmarks();
+	BookmarkList*  getBookmarks();
 
 	void setSelectedWmsServer(const QString & theValue);
 	QString getSelectedWmsServer() const;
-	WmsServerList& getWmsServers();
+	WmsServerList* getWmsServers();
 
 	void setSelectedTmsServer(const QString & theValue);
 	QString getSelectedTmsServer() const;
-	TmsServerList& getTmsServers();
+	TmsServerList* getTmsServers();
 
 	void setBgVisible(bool theValue);
 	bool getBgVisible() const;
@@ -346,6 +329,7 @@ public:
 		
 	/* Custom Style */
 	M_PARAM_DECLARE_BOOL(MerkaartorStyle)
+	M_PARAM_DECLARE_STRING(MerkaartorStyleString)
 
 	/* Network */
 	M_PARAM_DECLARE_BOOL(OfflineMode)
@@ -361,13 +345,29 @@ public:
 	QMap<QUuid, IMapAdapter *> getBackgroundPlugins();
 
 	/* Projections */
+	void loadProjection(QString fn);
 	void loadProjections();
 	void saveProjections();
+
+	/* WMSes */
+	void loadWMS(QString fn);
+	void loadWMSes();
+	void saveWMSes();
+
+	/* TMSes */
+	void loadTMS(QString fn);
+	void loadTMSes();
+	void saveTMSes();
+
+	/* Bookmarks */
+	void loadBookmark(QString fn);
+	void loadBookmarks();
+	void saveBookmarks();
 
 	void setProjectionType(ProjectionType theValue);
 	ProjectionType getProjectionType() const;
 	ProjectionsList getProjectionsList();
-	QString getProjection(QString aProj);
+	ProjectionItem getProjection(QString aProj);
 
 
 
@@ -383,7 +383,6 @@ protected:
 	bool ProxyUse;
 	QString ProxyHost;
 	int ProxyPort;
-	QStringList Bookmarks;
 
 	QHttp httpRequest;
 	int OsmPrefLoadId;
@@ -399,14 +398,14 @@ protected:
 
 private:
 	QHash<QString, qreal> alpha;
-	BookmarkList theBookmarks;
-	WmsServerList theWmsServerList;
-	TmsServerList theTmsServerList;
 	ToolList* theToolList;
 	QSettings * Sets;
 	QStringList projTypes;
 	QMap<QUuid, IMapAdapter *> mBackgroundPlugins;
 	ProjectionsList theProjectionsList;
+	WmsServersList theWmsServerList;
+	TmsServersList theTmsServerList;
+	BookmarksList theBookmarkList;
 
 	static MerkaartorPreferences* m_prefInstance;
 

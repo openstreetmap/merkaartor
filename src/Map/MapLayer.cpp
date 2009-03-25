@@ -600,7 +600,7 @@ ImageMapLayer::ImageMapLayer(const QString & aName, LayerManager* aLayerMgr)
 ImageMapLayer::~ ImageMapLayer()
 {
 	if (p->layer_bg) {
-		if (p->layer_bg)
+		if (layermanager)
 			layermanager->removeLayer(p->layer_bg->getLayername());
 
 		IMapAdapter* mapadapter_bg = p->layer_bg->getMapAdapter();
@@ -617,7 +617,7 @@ unsigned int ImageMapLayer::size() const
 {
 #ifdef USE_GDAL
 	//return p->Features.size();
-	if (p->bgType == SHAPE_ADAPTER_UUID)
+	if (p->bgType == SHAPE_ADAPTER_UUID && isVisible())
 		return p->Features.size();
 	else
 #endif
@@ -656,9 +656,9 @@ Layer* ImageMapLayer::imageLayer()
 void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid)
 {
 	IMapAdapter* mapadapter_bg;
-	WmsServerList wsl;
+	WmsServerList* wsl;
 	WmsServer ws;
-	TmsServerList tsl;
+	TmsServerList* tsl;
 	TmsServer ts;
 	QString selws, selts;
 	int idx = -1;
@@ -686,9 +686,9 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid)
 		p->Visible = false;
 	} else 
 	if (p->bgType == WMS_ADAPTER_UUID) {
-		wsl = MerkaartorPreferences::instance()->getWmsServers();
-		selws = MerkaartorPreferences::instance()->getSelectedWmsServer();
-		ws = wsl.value(selws);
+		wsl = M_PREFS->getWmsServers();
+		selws = M_PREFS->getSelectedWmsServer();
+		ws = wsl->value(selws);
 		wmsa = new WMSMapAdapter(ws.WmsAdress, ws.WmsPath, ws.WmsLayers, ws.WmsProjections,
 				ws.WmsStyles, ws.WmsImgFormat, 256);
 		wmsa->setImageManager(ImageManager::instance());
@@ -699,9 +699,9 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid)
 		setName(tr("Map - WMS - %1").arg(ws.WmsName));
 	} else
 	if (p->bgType == TMS_ADAPTER_UUID) {
-		tsl = MerkaartorPreferences::instance()->getTmsServers();
+		tsl = M_PREFS->getTmsServers();
 		selts = MerkaartorPreferences::instance()->getSelectedTmsServer();
-		ts = tsl.value(selts);
+		ts = tsl->value(selts);
 		tmsa = new TileMapAdapter(ts.TmsAdress, ts.TmsPath, ts.TmsTileSize, ts.TmsMinZoom, ts.TmsMaxZoom);
 		tmsa->setImageManager(ImageManager::instance());
 		mapadapter_bg = tmsa;

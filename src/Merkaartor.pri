@@ -53,6 +53,8 @@ HEADERS += ./Command/Command.h \
     ./Preferences/TMSPreferencesDialog.h \
     ./Preferences/ProjectionsList.h \
     ./Preferences/WmsServersList.h \
+    ./Preferences/TmsServersList.h \
+    ./Preferences/BookmarksList.h \
     ./Utils/LineF.h \
     ./Utils/ShortcutOverrideFilter.h \
     ./Utils/SlippyMapWidget.h \
@@ -127,6 +129,8 @@ SOURCES += ./Command/Command.cpp \
     ./Preferences/TMSPreferencesDialog.cpp \
     ./Preferences/ProjectionsList.cpp \
     ./Preferences/WmsServersList.cpp \
+    ./Preferences/TmsServersList.cpp \
+    ./Preferences/BookmarksList.cpp \
     ./DirtyDock.cpp \
     ./GotoDialog.cpp \
     StyleDock.cpp
@@ -156,4 +160,5 @@ FORMS += ./AboutDialog.ui \
 
 # Resource file(s)
 RESOURCES += ../Icons/AllIcons.qrc \
-    ./Utils/Utils.qrc
+    ./Utils/Utils.qrc \
+    ../share/share.qrc

@@ -21,6 +21,8 @@
 #include <QColorDialog>
 #include <QMessageBox>
 #include <QPainter>
+#include <QStyleFactory>
+
 
 static void makeBoundaryIcon(QToolButton* bt, QColor C)
 {
@@ -48,6 +50,7 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 
 #ifdef FORCED_CUSTOM_STYLE
     cbCustomStyle->hide();
+    comboCustomStyle->hide();
 #endif
 
 	resize(1,1);
@@ -194,7 +197,10 @@ void PreferencesDialog::loadPrefs()
 
 	cbMouseSingleButton->setChecked(M_PREFS->getMouseSingleButton());
 	cbSeparateMoveMode->setChecked(M_PREFS->getSeparateMoveMode());
+
 	cbCustomStyle->setChecked(M_PREFS->getMerkaartorStyle());
+	comboCustomStyle->addItems(QStyleFactory::keys());
+	comboCustomStyle->setCurrentIndex(comboCustomStyle->findText(M_PREFS->getMerkaartorStyleString()));
 
 	cbUseShapefileForBackground->setChecked(M_PREFS->getUseShapefileForBackground());
 #ifndef USE_GDAL
@@ -299,7 +305,9 @@ void PreferencesDialog::savePrefs()
 
 	M_PREFS->setMouseSingleButton(cbMouseSingleButton->isChecked());
 	M_PREFS->setSeparateMoveMode(cbSeparateMoveMode->isChecked());
+
 	M_PREFS->setMerkaartorStyle(cbCustomStyle->isChecked());
+	M_PREFS->setMerkaartorStyleString(comboCustomStyle->currentText());
 
 	M_PREFS->setUseShapefileForBackground(cbUseShapefileForBackground->isChecked());
 

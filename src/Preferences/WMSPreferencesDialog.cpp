@@ -32,7 +32,8 @@ WMSPreferencesDialog::~WMSPreferencesDialog()
 void WMSPreferencesDialog::addServer(const WmsServer & srv)
 {
 	theWmsServers.push_back(srv);
-	lvWmsServers->addItem(srv.WmsName);
+	if (!srv.deleted)
+		lvWmsServers->addItem(srv.WmsName);
 }
 
 void WMSPreferencesDialog::on_btApplyWmsServer_clicked(void)
@@ -141,7 +142,7 @@ void WMSPreferencesDialog::on_btDelWmsServer_clicked(void)
 	if (idx >= theWmsServers.size())
 		return;
 
-	theWmsServers.erase(theWmsServers.begin() + idx);
+	theWmsServers[idx].deleted = true;
 	delete lvWmsServers->takeItem(idx);
 	if (idx && (idx >= theWmsServers.size()))
 		--idx;
@@ -194,8 +195,8 @@ void WMSPreferencesDialog::on_buttonBox_clicked(QAbstractButton * button)
 
 void WMSPreferencesDialog::loadPrefs()
 {
-	WmsServerList L = MerkaartorPreferences::instance()->getWmsServers();
-	WmsServerListIterator i(L);
+	WmsServerList* L = MerkaartorPreferences::instance()->getWmsServers();
+	WmsServerListIterator i(*L);
 	while (i.hasNext()) {
 		i.next();
 		addServer(i.value());
@@ -205,13 +206,13 @@ void WMSPreferencesDialog::loadPrefs()
 
 void WMSPreferencesDialog::savePrefs()
 {
-	WmsServerList& L = MerkaartorPreferences::instance()->getWmsServers();
-	L.clear();
+	WmsServerList* L = MerkaartorPreferences::instance()->getWmsServers();
+	L->clear();
 	for (unsigned int i = 0; i < theWmsServers.size(); ++i) {
 		WmsServer S(theWmsServers[i]);
-		L.insert(theWmsServers[i].WmsName, S);
+		L->insert(theWmsServers[i].WmsName, S);
 	}
 	//MerkaartorPreferences::instance()->setSelectedWmsServer(getSelectedServer());
-	MerkaartorPreferences::instance()->save();
+	M_PREFS->save();
 }
 

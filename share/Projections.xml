@@ -1,9 +1,7 @@
 <?xml version="1.0"?>
-<Projections>
-	<Projection name="Mercator (epsg:3785)">
-		+proj=merc +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +ellps=WGS84 +datum=WGS84 +no_defs
-	</Projection>
-	<Projection name="EPSG:4326">
-		+proj=eqc +ellps=WGS84 +datum=WGS84 +no_defs
-	</Projection>
-</Projections>
+<MerkaartorList>
+ <Projections version="1.0" creator="SVN" >
+  <Projection name="EPSG:4326" >+proj=eqc +ellps=WGS84 +datum=WGS84 +no_defs</Projection>
+  <Projection name="Mercator (epsg:3785)" >+proj=merc +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +ellps=WGS84 +datum=WGS84 +no_defs</Projection>
+ </Projections>
+</MerkaartorList>

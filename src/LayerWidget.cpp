@@ -268,9 +268,9 @@ ImageLayerWidget::~ImageLayerWidget()
 
 void ImageLayerWidget::setWms(QAction* act)
 {
-	WmsServerList L = MerkaartorPreferences::instance()->getWmsServers();
-	WmsServer S = L.value(act->data().toString());
-	MerkaartorPreferences::instance()->setSelectedWmsServer(S.WmsName);
+	WmsServerList* L = M_PREFS->getWmsServers();
+	WmsServer S = L->value(act->data().toString());
+	M_PREFS->setSelectedWmsServer(S.WmsName);
 
 	((ImageMapLayer *)theLayer)->setMapAdapter(WMS_ADAPTER_UUID);
 	theLayer->setVisible(true);
@@ -281,9 +281,9 @@ void ImageLayerWidget::setWms(QAction* act)
 
 void ImageLayerWidget::setTms(QAction* act)
 {
-	TmsServerList L = MerkaartorPreferences::instance()->getTmsServers();
-	TmsServer S = L.value(act->data().toString());
-	MerkaartorPreferences::instance()->setSelectedTmsServer(S.TmsName);
+	TmsServerList* L = M_PREFS->getTmsServers();
+	TmsServer S = L->value(act->data().toString());
+	M_PREFS->setSelectedTmsServer(S.TmsName);
 
 	((ImageMapLayer *)theLayer)->setMapAdapter(TMS_ADAPTER_UUID);
 	theLayer->setVisible(true);
@@ -318,31 +318,35 @@ void ImageLayerWidget::initActions()
 	associatedMenu->addSeparator();
 
 	wmsMenu = new QMenu(tr("WMS adapter"), this);
-	WmsServerList WmsServers = MerkaartorPreferences::instance()->getWmsServers();
-	WmsServerListIterator wi(WmsServers);
+	WmsServerList* WmsServers = M_PREFS->getWmsServers();
+	WmsServerListIterator wi(*WmsServers);
 	while (wi.hasNext()) {
 		wi.next();
 		WmsServer S = wi.value();
-		QAction* act = new QAction(S.WmsName, wmsMenu);
-		act->setData(S.WmsName);
-		wmsMenu->addAction(act);
-		if (MerkaartorPreferences::instance()->getBackgroundPlugin() == WMS_ADAPTER_UUID)
-			if (S.WmsName == MerkaartorPreferences::instance()->getSelectedWmsServer())
-				act->setChecked(true);
+		if (!S.deleted) {
+			QAction* act = new QAction(S.WmsName, wmsMenu);
+			act->setData(S.WmsName);
+			wmsMenu->addAction(act);
+			if (M_PREFS->getBackgroundPlugin() == WMS_ADAPTER_UUID)
+				if (S.WmsName == M_PREFS->getSelectedWmsServer())
+					act->setChecked(true);
+		}
 	}
 
 	tmsMenu = new QMenu(tr("TMS adapter"), this);
-	TmsServerList TmsServers = MerkaartorPreferences::instance()->getTmsServers();
-	TmsServerListIterator ti(TmsServers);
+	TmsServerList* TmsServers = MerkaartorPreferences::instance()->getTmsServers();
+	TmsServerListIterator ti(*TmsServers);
 	while (ti.hasNext()) {
 		ti.next();
 		TmsServer S = ti.value();
-		QAction* act = new QAction(S.TmsName, tmsMenu);
-		act->setData(S.TmsName);
-		tmsMenu->addAction(act);
-		if (MerkaartorPreferences::instance()->getBackgroundPlugin() == TMS_ADAPTER_UUID)
-			if (S.TmsName == MerkaartorPreferences::instance()->getSelectedTmsServer())
-				act->setChecked(true);
+		if (!S.deleted) {
+			QAction* act = new QAction(S.TmsName, tmsMenu);
+			act->setData(S.TmsName);
+			tmsMenu->addAction(act);
+			if (M_PREFS->getBackgroundPlugin() == TMS_ADAPTER_UUID)
+				if (S.TmsName == M_PREFS->getSelectedTmsServer())
+					act->setChecked(true);
+		}
 	}
 
 	actNone->setChecked((MerkaartorPreferences::instance()->getBackgroundPlugin() == NONE_ADAPTER_UUID));

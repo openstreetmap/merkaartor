@@ -679,75 +679,105 @@ void MapDocument::setLastDownloadLayer(MapLayer * aLayer)
 	p->lastDownloadLayer = aLayer;
 }
 
-/* VISIBLEFEATUREITERATOR */
-
-VisibleFeatureIterator::VisibleFeatureIterator(MapDocument *aDoc)
-: theDocument(aDoc), Idx(0)
-{
-	for (unsigned int i=0; i<theDocument->layerSize(); ++i) {
-		if (!theDocument->getLayer(i)->isVisible())
-			continue;
-		for (unsigned int j=0; j<theDocument->getLayer(i)->size(); ++j)
-			if ((theDocument->getLayer(i)->get(j)->lastUpdated() != MapFeature::NotYetDownloaded) &&
-					!theDocument->getLayer(i)->get(j)->isDeleted())
-				theFeatures.push_back(theDocument->getLayer(i)->get(j));
-	}
-}
-
-MapFeature* VisibleFeatureIterator::get()
-{
-	return theFeatures[Idx];
-}
-
-bool VisibleFeatureIterator::isEnd() const
-{
-	return Idx >= (unsigned int)theFeatures.size();
-}
-
-VisibleFeatureIterator& VisibleFeatureIterator::operator++()
-{
-	++Idx;
-	return *this;
-}
-
-unsigned int VisibleFeatureIterator::index()
-{
-	return Idx;
-}
-
-
 /* FEATUREITERATOR */
 
 FeatureIterator::FeatureIterator(MapDocument *aDoc)
-: theDocument(aDoc), Idx(0)
+: theDocument(aDoc), curLayerIdx(0), curFeatureIdx(0), isAtEnd(false)
 {
-	for (unsigned int i=0; i<theDocument->layerSize(); ++i)
-		for (unsigned int j=0; j<theDocument->getLayer(i)->size(); ++j)
-			if ((theDocument->getLayer(i)->get(j)->lastUpdated() != MapFeature::NotYetDownloaded) &&
-					!theDocument->getLayer(i)->get(j)->isDeleted())
-				theFeatures.push_back(theDocument->getLayer(i)->get(j));
+	docSize = theDocument->layerSize();
+	curLayerSize = theDocument->getLayer(curLayerIdx)->size();
+
+	if(!check() && !isAtEnd)
+		++(*this);
 }
 
 MapFeature* FeatureIterator::get()
 {
-	return theFeatures[Idx];
+	return theDocument->getLayer(curLayerIdx)->get(curFeatureIdx);
 }
 
 bool FeatureIterator::isEnd() const
 {
-	return Idx >= (unsigned int)theFeatures.size();
+	return isAtEnd;
 }
 
 FeatureIterator& FeatureIterator::operator++()
 {
-	++Idx;
+	docSize = theDocument->layerSize();
+	curLayerSize = theDocument->getLayer(curLayerIdx)->size();
+
+	if (curFeatureIdx < curLayerSize-1)
+		curFeatureIdx++;
+	else
+		if (curLayerIdx < docSize-1) {
+			curLayerIdx++;
+			curLayerSize = theDocument->getLayer(curLayerIdx)->size();
+			curFeatureIdx = 0;
+		} else
+			isAtEnd = true;
+
+	while(!isAtEnd && !check()) {
+		if (curFeatureIdx < curLayerSize-1)
+			curFeatureIdx++;
+		else
+			if (curLayerIdx < docSize-1) {
+				curLayerIdx++;
+				curLayerSize = theDocument->getLayer(curLayerIdx)->size();
+				curFeatureIdx = 0;
+			} else
+				isAtEnd = true;
+	}
+
 	return *this;
 }
 
 unsigned int FeatureIterator::index()
 {
-	return Idx;
+	return (curLayerIdx*10000000)+curFeatureIdx;
 }
+
+bool FeatureIterator::check()
+{
+	if (curLayerIdx >= docSize) {
+		isAtEnd = true;
+		return false;
+	}
+	if (curFeatureIdx >= curLayerSize)
+		return false;
+
+	if (theDocument->getLayer(curLayerIdx)->get(curFeatureIdx)->lastUpdated() == MapFeature::NotYetDownloaded 
+			|| theDocument->getLayer(curLayerIdx)->get(curFeatureIdx)->isDeleted())
+		return false;
+
+	return true;
+}
+
+
+/* VISIBLEFEATUREITERATOR */
+
+VisibleFeatureIterator::VisibleFeatureIterator(MapDocument *aDoc)
+: FeatureIterator(aDoc)
+{
+	if(!check() && !isAtEnd)
+		++(*this);
+}
+
+bool VisibleFeatureIterator::check()
+{
+	if (!FeatureIterator::check())
+		return false;
+	else {
+		if (theDocument->getLayer(curLayerIdx)->isVisible()) {
+			if (CAST_NODE(theDocument->getLayer(curLayerIdx)->get(curFeatureIdx)) 
+					&& !(theDocument->getLayer(curLayerIdx)->arePointsDrawable()))
+				return false;
+		} else
+			return false;
+	}
+
+	return true;
+}
+
 
 /* RELATED */
 

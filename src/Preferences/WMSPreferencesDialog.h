@@ -52,7 +52,7 @@ private:
 	void requestCapabilities(QUrl url);
 
 public:
-	std::vector<WmsServer> theWmsServers;
+	QVector<WmsServer> theWmsServers;
 	QString getSelectedServer();
 	void setSelectedServer(QString theValue);
 

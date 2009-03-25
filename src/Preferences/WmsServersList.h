@@ -21,7 +21,7 @@ class WmsServer
 {
 	public:
 		WmsServer();
-		WmsServer(QString Name, QString Adress, QString Path, QString Layers, QString Projections, QString Styles, QString ImgFormat);
+		WmsServer(QString Name, QString Adress, QString Path, QString Layers, QString Projections, QString Styles, QString ImgFormat, bool Deleted=false);
 
 		void toXml(QDomElement parent);
 		static WmsServer fromXml(QDomElement parent);
@@ -34,6 +34,7 @@ class WmsServer
 		QString WmsProjections;
 		QString WmsStyles;
 		QString WmsImgFormat;
+		bool deleted;
 };
 typedef QMap<QString, WmsServer> WmsServerList;
 typedef QMapIterator<QString, WmsServer> WmsServerListIterator;
@@ -41,13 +42,16 @@ typedef QMapIterator<QString, WmsServer> WmsServerListIterator;
 class WmsServersList
 {
 	public:
-		void addServer(QString name, WmsServer aServer);
-		WmsServer getServer(QString name);
+		void add(WmsServersList aWmsServersList);
+		void addServer(WmsServer aServer);
+		bool contains(QString name) const;
+		WmsServerList* getServers();
+		WmsServer getServer(QString name) const;
 		void toXml(QDomElement parent);
 		static WmsServersList fromXml(QDomElement parent);
 
 	private:
-		QMap <QString, WmsServer> theServers;
+		WmsServerList theServers;
 };
 
 #endif // WMSSERVERS_LIST_H

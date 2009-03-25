@@ -110,24 +110,6 @@ signals:
 bool hasUnsavedChanges(const MapDocument& aDoc);
 std::pair<bool, CoordBox> boundingBox(const MapDocument* theDocument);
 
-class VisibleFeatureIterator
-{
-
-public:
-	VisibleFeatureIterator(MapDocument* aDoc);
-
-	bool isEnd() const;
-	VisibleFeatureIterator& operator ++();
-	MapFeature* get();
-	MapLayer* layer();
-	unsigned int index();
-
-private:
-	MapDocument* theDocument;
-	QList<MapFeature*> theFeatures;
-	unsigned int Idx;
-};
-
 class FeatureIterator
 {
 
@@ -139,11 +121,26 @@ public:
 	MapFeature* get();
 	unsigned int index();
 
-private:
+protected:
+	virtual bool check();
 	MapDocument* theDocument;
-	QList<MapFeature*> theFeatures;
-	unsigned int Idx;
+	int curLayerIdx;
+	int curFeatureIdx;
+	bool isAtEnd;
+	int docSize;
+	int curLayerSize;
 };
+
+class VisibleFeatureIterator: public FeatureIterator
+{
+
+public:
+	VisibleFeatureIterator(MapDocument* aDoc);
+
+protected:
+	virtual bool check();
+};
+
 
 #endif
 

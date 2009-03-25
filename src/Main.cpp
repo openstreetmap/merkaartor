@@ -25,6 +25,8 @@ int main(int argc, char** argv)
 	splash.showMessage(QString(app.translate("Main", "Merkaartor v%1%2\nLoading plugins...")).arg(VERSION).arg(REVISION), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
 	app.processEvents();
 
+	if (!QDir::home().exists(".merkaartor"))
+		QDir::home().mkdir(".merkaartor");
 #if defined(Q_OS_UNIX)
 	QDir pluginsDir = QDir(qApp->applicationDirPath());
 	if (pluginsDir.absolutePath().contains("/bin")) {
@@ -33,6 +35,8 @@ int main(int argc, char** argv)
 #else
 	QDir pluginsDir = QDir(qApp->applicationDirPath());
 #endif
+	QCoreApplication::addLibraryPath(pluginsDir.path() + "/plugins");
+
 	pluginsDir.cd("plugins");
 
 	pluginsDir.cd("background");

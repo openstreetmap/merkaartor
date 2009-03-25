@@ -13,5 +13,5 @@ REVISION="-svn"
 # GEOIMAGE=1          - enable geotagged images (requires exiv2)
 # GPSD=1              - use gpsd as location provider
 # NVIDIA_HACK=1       - used to solve nvidia specific slowdown
-# GDAL=1    	      - enable GDAL (for, e.g., shapefile import)
+# GDAL=1    	      - enable GDAL (for, e.g., shapefile import; requires libgdal)
 # FORCE_CUSTOM_STYLE=1 - force custom style (recommended on Linux until the "expanding dock" is solved upstream)

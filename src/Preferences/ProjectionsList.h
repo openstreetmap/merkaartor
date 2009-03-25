@@ -17,17 +17,32 @@
 #include <QMap>
 #include <QtXml>
 
+class ProjectionItem
+{
+	public:
+		ProjectionItem ();
+		ProjectionItem (QString aName, QString aProjection, bool aDeleted = false);
+		QString name;
+		QString projection;
+		bool deleted;
+
+	public:
+		void toXml(QDomElement parent);
+		static ProjectionItem fromXml(QDomElement parent);
+};
+
 class ProjectionsList
 {
 	public:
-		void addProjection(QString name, QString projCommand);
-		QString getProjection(QString name) const;
-		QMap <QString, QString> getProjections() const;
+		void add(ProjectionsList aProjectionsList);
+		void addProjection(ProjectionItem aProjItem);
+		ProjectionItem getProjection(QString name) const;
+		QMap <QString, ProjectionItem> getProjections() const;
 		void toXml(QDomElement parent);
 		static ProjectionsList fromXml(QDomElement parent);
 
 	private:
-		QMap <QString, QString> theProjections;
+		QMap <QString, ProjectionItem> theProjections;
 };
 
 #endif // PROJECTIONS_LIST_H

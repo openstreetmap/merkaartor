@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<MerkaartorList >
+ <Bookmarks version="1.0" creator="SVN" >
+  <Bookmark name="Europe" >
+   <Coordinates>
+    <topright lon="19.41069998" lat="57.01699999" />
+    <bottomleft lon="-7.07099992" lat="37.37469998" />
+   </Coordinates>
+  </Bookmark>
+  <Bookmark name="London" >
+   <Coordinates>
+    <topright lon="-0.07999999" lat="51.50999992" />
+    <bottomleft lon="-0.19999992" lat="51.46999997" />
+   </Coordinates>
+  </Bookmark>
+  <Bookmark name="World" >
+   <Coordinates>
+    <topright lon="-180.00000000" lat="84.67349998" />
+    <bottomleft lon="-180.00000000" lat="-84.60779994" />
+   </Coordinates>
+  </Bookmark>
+ </Bookmarks>
+</MerkaartorList>

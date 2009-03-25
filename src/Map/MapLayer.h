@@ -108,6 +108,7 @@ public:
 	virtual bool isUploadable() {return true;}
 	virtual bool isReadonly() const;
 	virtual bool isTrack() {return false;}
+	virtual bool arePointsDrawable() {return true;}
 
 protected:
 	MapLayerPrivate* p;
@@ -158,6 +159,7 @@ public:
     virtual const QString className() {return "ImageMapLayer";}
     virtual const LayerGroups classGroups() {return(MapLayer::Default);}
 
+	virtual bool arePointsDrawable() {return false;}
 private:
 	WMSMapAdapter* wmsa;
 	TileMapAdapter* tmsa;

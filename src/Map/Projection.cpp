@@ -36,12 +36,12 @@ Projection::Projection(void)
 	theProjectionType = M_PREFS->getProjectionType();
 
 	try {
-		projection::parameters par = projection::init(std::string(QString("%1 -m %2").arg(M_PREFS->getProjection(theProjectionType))
+		projection::parameters par = projection::init(std::string(QString("%1 -m %2").arg(M_PREFS->getProjection(theProjectionType).projection)
 			.arg((double(INT_MAX)/M_PI) / EQUATORIALRADIUS, 6, 'f').toLatin1().data()));
 		theProj = fac.create_new(par);
 	} catch (...) {
 		try {
-			projection::parameters par = projection::init(std::string(QString("%1 -m %2").arg(M_PREFS->getProjection("mercator"))
+			projection::parameters par = projection::init(std::string(QString("%1 -m %2").arg(M_PREFS->getProjection("mercator").projection)
 				.arg((double(INT_MAX)/M_PI) / EQUATORIALRADIUS, 6, 'f').toLatin1().data()));
 			theProj = fac.create_new(par);
 		} catch (...) {
@@ -82,13 +82,13 @@ bool Projection::setProjectionType(ProjectionType aProjectionType)
 	delete theProj;
 	theProjectionType = aProjectionType;
 	try {
-		projection::parameters par = projection::init(std::string(QString("%1 -m %2").arg(M_PREFS->getProjection(theProjectionType))
+		projection::parameters par = projection::init(std::string(QString("%1 -m %2").arg(M_PREFS->getProjection(theProjectionType).projection)
 			.arg((double(INT_MAX)/M_PI) / EQUATORIALRADIUS, 6, 'f').toLatin1().data()));
 		theProj = fac.create_new(par);
 		return true;
 	} catch (...) {
 		try {
-			projection::parameters par = projection::init(std::string(QString("%1 -m %2").arg(M_PREFS->getProjection("mercator"))
+			projection::parameters par = projection::init(std::string(QString("%1 -m %2").arg(M_PREFS->getProjection("mercator").projection)
 				.arg((double(INT_MAX)/M_PI) / EQUATORIALRADIUS, 6, 'f').toLatin1().data()));
 			theProj = fac.create_new(par);
 			return false;

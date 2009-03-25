@@ -31,16 +31,18 @@ GotoDialog::GotoDialog(const Projection& aProj, QWidget *parent)
 	int selIdx = -1;
 	double dist = 6372.795;
 	double d;
-	QMap<QString, CoordBox> Bookmarks = M_PREFS->getBookmarks();
-	QMapIterator<QString, CoordBox> i(Bookmarks);
+	BookmarkList* Bookmarks = M_PREFS->getBookmarks();
+	BookmarkListIterator i(*Bookmarks);
 	while (i.hasNext()) {
 		i.next();
 
-		coordBookmark->addItem(i.key());
-		CoordBox C = i.value();
-		if ((d = C.center().distanceFrom(B.center())) < dist) {
-			dist = d;
-			selIdx = idx;
+		if (i.value().deleted == false) {
+			coordBookmark->addItem(i.key());
+			CoordBox C = i.value().Coordinates;
+			if ((d = C.center().distanceFrom(B.center())) < dist) {
+				dist = d;
+				selIdx = idx;
+			}
 		}
 		++idx;
 	}
@@ -93,7 +95,7 @@ void GotoDialog::on_buttonBox_clicked(QAbstractButton * button)
 {
 	if (buttonBox->buttonRole(button) == QDialogButtonBox::AcceptRole) {
 		if (rbBookmark->isChecked()) {
-			theNewViewport = M_PREFS->getBookmarks()[coordBookmark->currentText()];
+			theNewViewport = M_PREFS->getBookmarks()->value(coordBookmark->currentText()).Coordinates;
 		} else
 		if (rbOSM->isChecked()) {
 			QUrl url = QUrl(coordOSM->text()); 

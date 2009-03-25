@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+    	<file alias="Projections.xml">Projections.xml</file>
+    	<file alias="WmsServersList.xml">WmsServersList.xml</file>
+    	<file alias="TmsServersList.xml">TmsServersList.xml</file>
+    	<file alias="BookmarksList.xml">BookmarksList.xml</file>
+    </qresource>
+</RCC>
+

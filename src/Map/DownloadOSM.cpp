@@ -659,10 +659,11 @@ bool downloadOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDocume
 	SlippyMap->setViewportArea(Clip.toQRectF());
 	ui.vboxLayout1->addWidget(SlippyMap);
 	QObject::connect(SlippyMap, SIGNAL(redraw()), ui.FromMap, SLOT(toggle()));
-	QMapIterator<QString, CoordBox> i(M_PREFS->getBookmarks());
+	BookmarkListIterator i(*(M_PREFS->getBookmarks()));
 	while (i.hasNext()) {
 		i.next();
-		ui.Bookmarks->addItem(i.key());
+		if (i.value().deleted == false)
+			ui.Bookmarks->addItem(i.key());
 	}
 	ui.IncludeTracks->setChecked(DownloadRaw);
 	ui.ResolveRelations->setChecked(M_PREFS->getResolveRelations());
@@ -677,7 +678,7 @@ bool downloadOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDocume
 			DownloadRaw = false;
 			if (ui.FromBookmark->isChecked())
 			{
-				Clip = M_PREFS->getBookmarks()[ui.Bookmarks->currentText()];
+				Clip = M_PREFS->getBookmarks()->value(ui.Bookmarks->currentText()).Coordinates;
 			}
 			else if (ui.FromView->isChecked())
 			{
