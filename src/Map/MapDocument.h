@@ -116,6 +116,7 @@ class FeatureIterator
 
 public:
 	FeatureIterator(MapDocument* aDoc);
+	virtual ~FeatureIterator();
 
 	bool isEnd() const;
 	FeatureIterator& operator ++();
@@ -137,6 +138,7 @@ class VisibleFeatureIterator: public FeatureIterator
 
 public:
 	VisibleFeatureIterator(MapDocument* aDoc);
+	virtual ~VisibleFeatureIterator();
 
 protected:
 	virtual bool check();

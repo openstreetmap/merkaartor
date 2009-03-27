@@ -1,4 +1,5 @@
 v0.14
+    * FIX : <Esc> in Name property inspector causes AV (fixes #1672)
     * CHG : Move vector background from SHP to OSB
     * CHG : Preferences are uploaded to OSM in binary, base-64 encoded, 254 char slice. Allow to bypass the 255 char per preference limitation.
     * CHG : Preferences lists (Bookmarks, WMS servers, ...) are now distributed and saved as XML in ~/.merkaartor. Allow proper merging (fixes #1401)

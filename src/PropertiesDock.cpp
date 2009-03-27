@@ -52,6 +52,7 @@ PropertiesDock::PropertiesDock(MainWindow* aParent)
 	shortcutFilter->addOverride(Qt::Key_Right);
 	shortcutFilter->addOverride(Qt::Key_F2);
 	shortcutFilter->addOverride(Qt::Key_Delete);
+	shortcutFilter->addOverride(Qt::Key_Escape);
 
 	centerAction = new QAction(NULL, this);
 	connect(centerAction, SIGNAL(triggered()), this, SLOT(on_centerAction_triggered()));
@@ -407,8 +408,6 @@ void PropertiesDock::switchToTrackPointUi(MapFeature* F)
 	NowShowing = TrackPointUiShowing;
 	QWidget* NewUi = new QWidget(this);
 	TrackPointUi.setupUi(NewUi);
-	if (theTemplates)
-		TrackPointUi.variableLayout->addWidget(theTemplates->getWidget(F));
 	TrackPointUi.TagView->verticalHeader()->hide();
 	setWidget(NewUi);
 	if (CurrentUi)
@@ -425,8 +424,6 @@ void PropertiesDock::switchToRoadUi(MapFeature* F)
 	NowShowing = RoadUiShowing;
 	QWidget* NewUi = new QWidget(this);
 	RoadUi.setupUi(NewUi);
-	if (theTemplates)
-		RoadUi.variableLayout->addWidget(theTemplates->getWidget(F));
 	RoadUi.TagView->verticalHeader()->hide();
 	setWidget(NewUi);
 	if (CurrentUi)
@@ -441,8 +438,6 @@ void PropertiesDock::switchToRelationUi(MapFeature* F)
 	NowShowing = RelationUiShowing;
 	QWidget* NewUi = new QWidget(this);
 	RelationUi.setupUi(NewUi);
-	if (theTemplates)
-		RelationUi.variableLayout->addWidget(theTemplates->getWidget(F));
 	RelationUi.TagView->verticalHeader()->hide();
 	setWidget(NewUi);
 	if (CurrentUi)
@@ -488,11 +483,17 @@ void PropertiesDock::resetValues()
 			TrackPointUi.TagView->setModel(theModel);
 			TrackPointUi.TagView->setItemDelegate(delegate);
 
-			QWidget* w = TrackPointUi.variableLayout->itemAt(0)->widget();
-			w->hide();
-			w->deleteLater();
-			if (theTemplates)
-				TrackPointUi.variableLayout->addWidget(theTemplates->getWidget(Pt));
+			QWidget* w;
+			if (TrackPointUi.variableLayout->count()) {
+				w = TrackPointUi.variableLayout->itemAt(0)->widget();
+				w->hide();
+				w->deleteLater();
+			}
+			if (theTemplates) {
+				w = theTemplates->getWidget(Pt);
+				w->installEventFilter(shortcutFilter);
+				TrackPointUi.variableLayout->addWidget(w);
+			}
 
 			CurrentTagView = TrackPointUi.TagView;
  
@@ -507,11 +508,17 @@ void PropertiesDock::resetValues()
 			RoadUi.TagView->setModel(theModel);
 			RoadUi.TagView->setItemDelegate(delegate);
 
-			QWidget* w = RoadUi.variableLayout->itemAt(0)->widget();
-			w->hide();
-			w->deleteLater();
-			if (theTemplates)
-				RoadUi.variableLayout->addWidget(theTemplates->getWidget(R));
+			QWidget* w;
+			if (RoadUi.variableLayout->count()) {
+				w = RoadUi.variableLayout->itemAt(0)->widget();
+				w->hide();
+				w->deleteLater();
+			}
+			if (theTemplates) {
+				w = theTemplates->getWidget(R);
+				w->installEventFilter(shortcutFilter);
+				RoadUi.variableLayout->addWidget(w);
+			}
 
 			CurrentTagView = RoadUi.TagView;
 		}
@@ -521,11 +528,17 @@ void PropertiesDock::resetValues()
 			RelationUi.TagView->setModel(theModel);
 			RelationUi.TagView->setItemDelegate(delegate);
 
-			QWidget* w = RelationUi.variableLayout->itemAt(0)->widget();
-			w->hide();
-			w->deleteLater();
-			if (theTemplates)
-				RelationUi.variableLayout->addWidget(theTemplates->getWidget(R));
+			QWidget* w;
+			if (RelationUi.variableLayout->count()) {
+				w = RelationUi.variableLayout->itemAt(0)->widget();
+				w->hide();
+				w->deleteLater();
+			}
+			if (theTemplates) {
+				w = theTemplates->getWidget(R);
+				w->installEventFilter(shortcutFilter);
+				RelationUi.variableLayout->addWidget(w);
+			}
 			
 			CurrentTagView     = RelationUi.TagView;
 			CurrentMembersView = RelationUi.MembersView;

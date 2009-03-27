@@ -690,6 +690,10 @@ FeatureIterator::FeatureIterator(MapDocument *aDoc)
 		++(*this);
 }
 
+FeatureIterator::~FeatureIterator()
+{
+}
+
 MapFeature* FeatureIterator::get()
 {
 	return theDocument->getLayer(curLayerIdx)->get(curFeatureIdx);
@@ -760,6 +764,10 @@ VisibleFeatureIterator::VisibleFeatureIterator(MapDocument *aDoc)
 {
 	if(!check() && !isAtEnd)
 		++(*this);
+}
+
+VisibleFeatureIterator::~VisibleFeatureIterator()
+{
 }
 
 bool VisibleFeatureIterator::check()
