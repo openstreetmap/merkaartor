@@ -122,7 +122,7 @@ public:
 		return m_prefInstance;
 	}
 
-	void save();
+	void save(bool UserPwdChanged = false);
 
 	void toOsmPref();
 	void fromOsmPref();

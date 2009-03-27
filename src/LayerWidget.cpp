@@ -250,14 +250,12 @@ ImageLayerWidget::ImageLayerWidget(ImageMapLayer* aLayer, QWidget* aParent)
 	actNone->setChecked((MerkaartorPreferences::instance()->getBackgroundPlugin() == NONE_ADAPTER_UUID));
 	actNone->setData(QVariant::fromValue(NONE_ADAPTER_UUID));
 
-#ifdef USE_GDAL
 	if (M_PREFS->getUseShapefileForBackground()) {
 		actShape = new QAction(tr("Shape adapter"), this);
 		//actShape->setCheckable(true);
 		actShape->setChecked((MerkaartorPreferences::instance()->getBackgroundPlugin() == SHAPE_ADAPTER_UUID));
 		actShape->setData(QVariant::fromValue(SHAPE_ADAPTER_UUID));
 	}
-#endif
 
 	initActions();
 }
@@ -350,10 +348,9 @@ void ImageLayerWidget::initActions()
 	}
 
 	actNone->setChecked((MerkaartorPreferences::instance()->getBackgroundPlugin() == NONE_ADAPTER_UUID));
-#ifdef USE_GDAL
 	if (M_PREFS->getUseShapefileForBackground())
 		actShape->setChecked((MerkaartorPreferences::instance()->getBackgroundPlugin() == SHAPE_ADAPTER_UUID));
-#endif
+
 	ctxMenu->addAction(actNone);
 	associatedMenu->addAction(actNone);
 
@@ -365,12 +362,10 @@ void ImageLayerWidget::initActions()
 	associatedMenu->addMenu(tmsMenu);
 	connect(tmsMenu, SIGNAL(triggered(QAction*)), this, SLOT(setTms(QAction*)));
 
-#ifdef USE_GDAL
 	if (M_PREFS->getUseShapefileForBackground()) {
 		ctxMenu->addAction(actShape);
 		associatedMenu->addAction(actShape);
 	}
-#endif
 
 	QMapIterator <QUuid, IMapAdapter *> it(M_PREFS->getBackgroundPlugins());
 	while (it.hasNext()) {

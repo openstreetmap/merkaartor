@@ -20,7 +20,7 @@
       <enum>QTabWidget::North</enum>
      </property>
      <property name="currentIndex" >
-      <number>1</number>
+      <number>7</number>
      </property>
      <widget class="QWidget" name="tab_7" >
       <attribute name="title" >
@@ -964,7 +964,7 @@
             <item>
              <widget class="QCheckBox" name="cbUseShapefileForBackground" >
               <property name="text" >
-               <string>Enable use of Shape background (needs restart)</string>
+               <string>Enable use of OSB background (needs new document)</string>
               </property>
              </widget>
             </item>

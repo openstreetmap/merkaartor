@@ -106,9 +106,7 @@ class ImageLayerWidget : public LayerWidget
 		virtual void initActions();
 
 	private:
-#ifdef USE_GDAL
 		QAction* actShape;
-#endif
 		QAction* actNone;
 		QMenu* wmsMenu;
 		QMenu* tmsMenu;

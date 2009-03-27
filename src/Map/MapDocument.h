@@ -3,6 +3,7 @@
 
 #include <QtXml>
 
+#include "Map/MapLayer.h"
 #include "Map/Coord.h"
 #include "PaintStyle/PaintStyle.h"
 #include "MainWindow.h"
@@ -52,7 +53,7 @@ public:
 	const MapLayer* getLayer(unsigned int i) const;
 
 	MapFeature* getFeature(const QString& id, bool exact=true);
-	QList<MapFeature*> getFeatures(QString* layerType=NULL);
+	QList<MapFeature*> getFeatures(MapLayer::LayerType layerType = MapLayer::UndefinedType);
 	void setHistory(CommandHistory* h);
 	CommandHistory& history();
 	const CommandHistory& history() const;

@@ -122,7 +122,7 @@ MerkaartorPreferences::~MerkaartorPreferences()
 	delete Sets;
 }
 
-void MerkaartorPreferences::save()
+void MerkaartorPreferences::save(bool UserPwdChanged)
 {
 	Sets->setValue("version/version", QString("%1").arg(VERSION));
 	setWmsServers();
@@ -140,7 +140,10 @@ void MerkaartorPreferences::save()
 		httpRequest.setProxy(getProxyHost(),getProxyPort());
 	else
 		httpRequest.setProxy("",0);
-	toOsmPref();
+	if (UserPwdChanged)
+		fromOsmPref();
+	else
+		toOsmPref();
 }
 
 void MerkaartorPreferences::toOsmPref()
@@ -229,7 +232,7 @@ void MerkaartorPreferences::on_requestFinished ( int id, bool error )
 		for (int i=0; i<sz; i++)
 			PrefsXML.append(slicedPrefs[i]);
 
-		qDebug() << "Size: " << PrefsXML.size();
+		//qDebug() << "Size: " << PrefsXML.size();
 
 		QDomDocument theXmlDoc;
 		if (!theXmlDoc.setContent(qUncompress(QByteArray::fromBase64(PrefsXML)))) {
@@ -243,7 +246,7 @@ void MerkaartorPreferences::on_requestFinished ( int id, bool error )
 			return;
 		}
 
-		qDebug() << theXmlDoc.toString();
+		//qDebug() << theXmlDoc.toString();
 
 		QDomElement c = docElem.firstChildElement();
 		while(!c.isNull()) {
@@ -855,21 +858,45 @@ int MerkaartorPreferences::getRelationsWidth() const
 	return Sets->value("visual/RelationsWidth",3).toInt();
 }
 
+QColor mb_BgColor;
 QColor MerkaartorPreferences::getBgColor() const
 {
-	QString sColor = Sets->value("visual/BgColor").toString();
-	if (sColor.isEmpty())
-		return Qt::white;
-	return Sets->value("visual/BgColor").value<QColor>();
+	if (!::mb_BgColor.isValid()) {
+		QString sColor = Sets->value("visual/BgColor").toString();
+		if (sColor.isEmpty())
+			::mb_BgColor = Qt::white;
+		else
+			::mb_BgColor = Sets->value("visual/BgColor").value<QColor>();
+	}
+	return ::mb_BgColor;
 }
 
+void MerkaartorPreferences::setBgColor(const QColor theValue)
+{
+	::mb_BgColor = theValue;
+	Sets->setValue("visual/BgColor", QVariant(theValue));
+}
+
+
+QColor mb_WaterColor;
 QColor MerkaartorPreferences::getWaterColor() const
 {
-	QString sColor = Sets->value("visual/WaterColor").toString();
-	if (sColor.isEmpty())
-		return QColor(181, 208, 208);
-	return Sets->value("visual/WaterColor").value<QColor>();
+	if (!::mb_BgColor.isValid()) {
+		QString sColor = Sets->value("visual/WaterColor").toString();
+		if (sColor.isEmpty())
+			::mb_WaterColor = QColor(181, 208, 208);
+		else
+			mb_WaterColor = Sets->value("visual/WaterColor").value<QColor>();
+	}
+	return ::mb_WaterColor;
 }
+
+void MerkaartorPreferences::setWaterColor(const QColor theValue)
+{
+	::mb_WaterColor = theValue;
+	Sets->setValue("visual/WaterColor", QVariant(theValue));
+}
+
 
 QColor MerkaartorPreferences::getFocusColor() const
 {
@@ -893,16 +920,6 @@ QColor MerkaartorPreferences::getRelationsColor() const
 	if (sColor.isEmpty())
 		return QColor(0, 170, 0);
 	return Sets->value("visual/RelationsColor").value<QColor>();
-}
-
-void MerkaartorPreferences::setBgColor(const QColor theValue)
-{
-	Sets->setValue("visual/BgColor", QVariant(theValue));
-}
-
-void MerkaartorPreferences::setWaterColor(const QColor theValue)
-{
-	Sets->setValue("visual/WaterColor", QVariant(theValue));
 }
 
 void MerkaartorPreferences::setHoverColor(const QColor theValue, int Width)

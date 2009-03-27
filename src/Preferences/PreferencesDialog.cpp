@@ -203,9 +203,6 @@ void PreferencesDialog::loadPrefs()
 	comboCustomStyle->setCurrentIndex(comboCustomStyle->findText(M_PREFS->getMerkaartorStyleString()));
 
 	cbUseShapefileForBackground->setChecked(M_PREFS->getUseShapefileForBackground());
-#ifndef USE_GDAL
-	cbUseShapefileForBackground->setVisible(false);
-#endif
 }
 
 void PreferencesDialog::savePrefs()
@@ -220,6 +217,13 @@ void PreferencesDialog::savePrefs()
 
 	M_PREFS->setTranslateTags(TranslateTags->isChecked());
 	M_PREFS->setUse06Api(bbUse06Api->isChecked());
+
+	bool OsmDataChanged = false;
+	if (edOsmUrl->text() != M_PREFS->getOsmWebsite() || 
+		edOsmUser->text() != M_PREFS->getOsmUser() ||
+		edOsmPwd->text() != M_PREFS->getOsmPassword())
+		OsmDataChanged = true;
+
 	M_PREFS->setOsmWebsite(edOsmUrl->text());
 	M_PREFS->setOsmUser(edOsmUser->text());
 	M_PREFS->setOsmPassword(edOsmPwd->text());
@@ -311,7 +315,7 @@ void PreferencesDialog::savePrefs()
 
 	M_PREFS->setUseShapefileForBackground(cbUseShapefileForBackground->isChecked());
 
-	M_PREFS->save();
+	M_PREFS->save(OsmDataChanged);
 }
 
 void PreferencesDialog::on_BrowseStyle_clicked()

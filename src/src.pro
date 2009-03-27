@@ -183,14 +183,11 @@ contains (GDAL, 1) {
 		INCLUDEPATH += /usr/include/gdal
 		LIBS += -lgdal
 	}
-	world_shp.path = $${SHARE_DIR}/world_shp
-	world_shp.files = \
-		$$PWD/../share/world_shp/world_adm0.shp \
-		$$PWD/../share/world_shp/world_adm0.shx \
-		$$PWD/../share/world_shp/world_adm0.dbf
-
-	DEFINES += WORLD_SHP=\"\\\"$$world_shp.path/world_adm0.shp\\\"\"
-	INSTALLS += world_shp
 }
+world_shp.path = $${SHARE_DIR}
+world_shp.files = $$PWD/../share/world_background.osb
+
+DEFINES += WORLD_SHP=\"\\\"$$world_shp.path/world_background.osb\\\"\"
+INSTALLS += world_shp
 
 

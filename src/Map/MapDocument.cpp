@@ -1,4 +1,3 @@
-#include "Map/MapLayer.h"
 #include "Map/MapFeature.h"
 #include "Command/Command.h"
 #include "Map/ImportOSM.h"
@@ -381,14 +380,14 @@ const MapLayer* MapDocument::getLayer(unsigned int i) const
 	return p->Layers[i];
 }
 
-QList<MapFeature*> MapDocument::getFeatures(QString* layerType)
+QList<MapFeature*> MapDocument::getFeatures(MapLayer::LayerType layerType)
 {
 	QList<MapFeature*> theFeatures;
 	for (VisibleFeatureIterator i(this); !i.isEnd(); ++i) {
 		if (!layerType)
 			theFeatures.append(i.get());
 		else
-			if (i.get()->layer()->className() == *layerType)
+			if (i.get()->layer()->classType() == layerType)
 				theFeatures.append(i.get());
 	}
 	return theFeatures;
@@ -745,8 +744,9 @@ bool FeatureIterator::check()
 	if (curFeatureIdx >= curLayerSize)
 		return false;
 
-	if (theDocument->getLayer(curLayerIdx)->get(curFeatureIdx)->lastUpdated() == MapFeature::NotYetDownloaded 
-			|| theDocument->getLayer(curLayerIdx)->get(curFeatureIdx)->isDeleted())
+	MapFeature* curFeature = theDocument->getLayer(curLayerIdx)->get(curFeatureIdx);
+	if (curFeature->lastUpdated() == MapFeature::NotYetDownloaded 
+			|| curFeature->isDeleted())
 		return false;
 
 	return true;

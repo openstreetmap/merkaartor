@@ -39,7 +39,7 @@ class MapFeaturePrivate
 				PossiblePaintersUpToDate(false),
 			  	PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
 				theFeature(0), LastPartNotification(0),
-				Time(QDateTime::currentDateTime()), Deleted(false), Uploaded(false)
+				Time(QDateTime::currentDateTime()), Deleted(false), Uploaded(false), LongId(0)
 		{
 			initVersionNumber();
 			parentDashes << 1 << 5;
@@ -49,7 +49,7 @@ class MapFeaturePrivate
 				PossiblePaintersUpToDate(false),
 			  	PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
 				theFeature(0), LastPartNotification(0),
-				Time(other.Time), Deleted(false), Uploaded(false)
+				Time(other.Time), Deleted(false), Uploaded(false), LongId(0)
 		{
 			initVersionNumber();
 			parentDashes << 1 << 5;
@@ -78,7 +78,7 @@ class MapFeaturePrivate
 		QVector<qreal> parentDashes;
 		bool Deleted;
 		bool Uploaded;
-
+		qint64 LongId;
 };
 
 void MapFeaturePrivate::initVersionNumber()
@@ -137,7 +137,7 @@ void MapFeature::setLastUpdated(MapFeature::ActorType A)
 
 MapFeature::ActorType MapFeature::lastUpdated() const
 {
-	if (p->theLayer->className() == "DirtyMapLayer")
+	if (p->theLayer->classType() == MapLayer::DirtyMapLayerType)
 		return MapFeature::User;
 	else
 		return p->LastActor;
@@ -166,16 +166,19 @@ const QString& MapFeature::id() const
 
 qint64 MapFeature::idToLong() const
 {
-	bool ok;
+	if (p->LongId)
+		return p->LongId;
 
 	if (hasOSMId()) {
+		bool ok;
 		QString s = stripToOSMId(id());
-		qint64 l = s.toLongLong(&ok);
+		p->LongId = s.toLongLong(&ok);
 		Q_ASSERT(ok);
-		return l;
 	} else {
-        return (((qint64)this) * -1);
+        p->LongId = (((qint64)this) * -1);
     }
+
+	return p->LongId;
 }
 
 QString MapFeature::xmlId() const
@@ -218,7 +221,7 @@ void MapFeature::setUser(const QString& user)
 
 bool MapFeature::isDirty() const
 {
-	return (p->theLayer->className() == "DirtyMapLayer");
+	return (p->theLayer->classType() == MapLayer::DirtyMapLayerType);
 }
 
 void MapFeature::setUploaded(bool state)

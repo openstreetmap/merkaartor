@@ -54,6 +54,23 @@ bool TrackPoint::isNull() const
 	return Position.isNull();
 }
 
+bool TrackPoint::isInteresting() const
+{
+	// does its id look like one from osm
+	if (id().left(5) == "node_")
+		return true;
+	// if the user has added special tags, that's fine also
+	for (unsigned int i=0; i<tagSize(); ++i)
+		if ((tagKey(i) != "created_by") && (tagKey(i) != "ele"))
+			return true;
+	// if it is part of a road, then too
+	if (sizeParents())
+		return true;
+
+	return false;
+}
+
+
 const Coord& TrackPoint::position() const
 {
 	return Position;

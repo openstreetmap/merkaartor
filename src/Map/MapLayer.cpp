@@ -1,4 +1,8 @@
+#include "Map/MapLayer.h"
+
 #include "Map/MapFeature.h"
+
+#include "Map/MapDocument.h"
 #include "Map/Road.h"
 #include "Map/Relation.h"
 #include "Map/TrackPoint.h"
@@ -10,8 +14,6 @@
 #include "Command/FeatureCommands.h"
 #include "Command/RoadCommands.h"
 
-#include "Map/MapLayer.h"
-
 #include "Utils/LineF.h"
 
 #include "IMapAdapter.h"
@@ -20,9 +22,6 @@
 #include "QMapControl/browserimagemanager.h"
 #endif
 #include "QMapControl/wmsmapadapter.h"
-#ifdef USE_GDAL
-	#include "ImportExport/ImportExportSHP.h"
-#endif
 #include "QMapControl/layer.h"
 #include "QMapControl/layermanager.h"
 
@@ -217,10 +216,8 @@ void MapLayer::notifyIdUpdate(const QString& id, MapFeature* aFeature)
 
 void MapLayer::remove(MapFeature* aFeature)
 {
-	int i = p->Features.indexOf(aFeature);
-	if (i != -1)
+	if (p->Features.removeOne(aFeature))
 	{
-		p->Features.removeAt(i);
 		aFeature->setLayer(0);
 		notifyIdUpdate(aFeature->id(),0);
 		p->RenderPriorityUpToDate = false;
@@ -229,10 +226,8 @@ void MapLayer::remove(MapFeature* aFeature)
 
 void MapLayer::deleteFeature(MapFeature* aFeature)
 {
-	int i = p->Features.indexOf(aFeature);
-	if (i != -1)
+	if (p->Features.removeOne(aFeature))
 	{
-		p->Features.removeAt(i);
 		aFeature->setLayer(0);
 		notifyIdUpdate(aFeature->id(),0);
 		p->RenderPriorityUpToDate = false;
@@ -424,7 +419,7 @@ QString MapLayer::toMainHtml()
 
 	QString S =
 	"<html><head/><body>"
-	"<small><i>" + className() + "</i></small><br/>"
+	"<small><i>" + objectName() + "</i></small><br/>"
 	+ desc;
 	S += "<hr/>";
 	S += "<i>"+QApplication::translate("MapLayer", "Size")+": </i>" + QApplication::translate("MapLayer", "%1 features").arg(QLocale().toString(size()))+"<br/>";
@@ -469,7 +464,7 @@ bool DrawingMapLayer::toXML(QDomElement xParent, QProgressDialog & progress)
 {
 	bool OK = true;
 
-	QDomElement e = xParent.ownerDocument().createElement(className());
+	QDomElement e = xParent.ownerDocument().createElement(objectName());
 	xParent.appendChild(e);
 
 	e.setAttribute("xml:id", id());
@@ -575,7 +570,7 @@ DrawingMapLayer * DrawingMapLayer::doFromXML(DrawingMapLayer* l, MapDocument* d,
 // ImageMapLayer
 
 ImageMapLayer::ImageMapLayer(const QString & aName, LayerManager* aLayerMgr)
-	: MapLayer(aName), layermanager(aLayerMgr)
+	: OsbMapLayer(aName), layermanager(aLayerMgr)
 {
 	setMapAdapter(MerkaartorPreferences::instance()->getBackgroundPlugin());
 	if (MerkaartorPreferences::instance()->getBackgroundPlugin() == NONE_ADAPTER_UUID)
@@ -583,16 +578,8 @@ ImageMapLayer::ImageMapLayer(const QString & aName, LayerManager* aLayerMgr)
 	else
 		setVisible(MerkaartorPreferences::instance()->getBgVisible());
 
-#ifdef USE_GDAL
-	if (M_PREFS->getUseShapefileForBackground()) {
-		ImportExportSHP s(NULL);
-		QString fn = WORLD_SHP;
-		if (QDir::isRelativePath(fn))
-			fn = QCoreApplication::applicationDirPath() + "/" + WORLD_SHP;
-		s.loadFile(fn);
-		s.import(this);
-	}
-#endif
+	if (M_PREFS->getUseShapefileForBackground())
+		setFilename(QCoreApplication::applicationDirPath() + "/" + WORLD_SHP);
 
 	setReadonly(true);
 }
@@ -615,12 +602,10 @@ ImageMapLayer::~ ImageMapLayer()
 
 unsigned int ImageMapLayer::size() const
 {
-#ifdef USE_GDAL
 	//return p->Features.size();
 	if (p->bgType == SHAPE_ADAPTER_UUID && isVisible())
 		return p->Features.size();
 	else
-#endif
 		return 0;
 }
 
@@ -710,16 +695,14 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid)
 
 		setName(tr("Map - TMS - %1").arg(ts.TmsName));
 	} else
-#ifdef USE_GDAL
 	if (p->bgType == SHAPE_ADAPTER_UUID) {
 		if (!M_PREFS->getUseShapefileForBackground()) {
 			p->bgType = NONE_ADAPTER_UUID;
 			setName(tr("Map - None"));
 			p->Visible = false;
 		} else
-			setName(tr("Map - Shape"));
+			setName(tr("Map - OSB Background"));
 	} else
-#endif
 	{
 		IMapAdapter * thePluginBackground = M_PREFS->getBackgroundPlugin(p->bgType);
 		if (thePluginBackground) {
@@ -751,7 +734,7 @@ bool ImageMapLayer::toXML(QDomElement xParent, QProgressDialog & /* progress */)
 {
 	bool OK = true;
 
-	QDomElement e = xParent.ownerDocument().createElement(className());
+	QDomElement e = xParent.ownerDocument().createElement(objectName());
 	xParent.appendChild(e);
 
 	e.setAttribute("xml:id", id());
@@ -805,6 +788,34 @@ ImageMapLayer * ImageMapLayer::fromXML(MapDocument* d, const QDomElement e, QPro
 	return l;
 }
 
+// ExtractedMapLayer
+
+ExtractedMapLayer::ExtractedMapLayer(const QString & aName)
+	: DrawingMapLayer(aName)
+{
+	p->Visible = true;
+}
+
+ExtractedMapLayer::~ ExtractedMapLayer()
+{
+}
+
+ExtractedMapLayer* ExtractedMapLayer::fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress)
+{
+	ExtractedMapLayer* l = new ExtractedMapLayer(e.attribute("name"));
+	d->add(l);
+	if (!DrawingMapLayer::doFromXML(l, d, e, progress)) {
+		delete l;
+		return NULL;
+	}
+	return l;
+}
+
+LayerWidget* ExtractedMapLayer::newWidget(void)
+{
+	p->theWidget = new ExtractedLayerWidget(this);
+	return p->theWidget;
+}
 
 // TrackMapLayer
 
@@ -916,7 +927,7 @@ bool TrackMapLayer::toXML(QDomElement xParent, QProgressDialog & progress)
 {
 	bool OK = true;
 
-	QDomElement e = xParent.ownerDocument().createElement(className());
+	QDomElement e = xParent.ownerDocument().createElement(objectName());
 	xParent.appendChild(e);
 
 	e.setAttribute("xml:id", id());
@@ -1050,35 +1061,6 @@ LayerWidget* UploadedMapLayer::newWidget(void)
 	return p->theWidget;
 }
 
-// ExtractedMapLayer
-
-ExtractedMapLayer::ExtractedMapLayer(const QString & aName)
-	: DrawingMapLayer(aName)
-{
-	p->Visible = true;
-}
-
-ExtractedMapLayer::~ ExtractedMapLayer()
-{
-}
-
-ExtractedMapLayer* ExtractedMapLayer::fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress)
-{
-	ExtractedMapLayer* l = new ExtractedMapLayer(e.attribute("name"));
-	d->add(l);
-	if (!DrawingMapLayer::doFromXML(l, d, e, progress)) {
-		delete l;
-		return NULL;
-	}
-	return l;
-}
-
-LayerWidget* ExtractedMapLayer::newWidget(void)
-{
-	p->theWidget = new ExtractedLayerWidget(this);
-	return p->theWidget;
-}
-
 // DeletedMapLayer
 
 DeletedMapLayer::DeletedMapLayer(const QString & aName)
@@ -1114,6 +1096,10 @@ LayerWidget* DeletedMapLayer::newWidget(void)
 class OsbMapLayerPrivate
 {
 public:
+	OsbMapLayerPrivate()
+		: theImp(0) 
+	{
+	}
 	ImportExportOsmBin* theImp;
 	QList<qint32> loadedTiles;
 	QList<qint32> loadedRegions;
@@ -1143,6 +1129,15 @@ OsbMapLayer::~ OsbMapLayer()
 	delete pp;
 }
 
+void OsbMapLayer::setFilename(const QString& filename)
+{
+	delete pp->theImp;
+
+	pp->theImp = new ImportExportOsmBin(NULL);
+	if (pp->theImp->loadFile(filename))
+		pp->theImp->import(this);
+}
+
 LayerWidget* OsbMapLayer::newWidget(void)
 {
 	p->theWidget = new OsbLayerWidget(this);
@@ -1162,6 +1157,7 @@ void OsbMapLayer::invalidate(MapDocument* d, CoordBox vp)
 	int y2 = int((r.bottomRight().y() + INT_MAX) / REGION_WIDTH);
 
 	QList<qint32> regionToLoad;
+	regionToLoad.append(0);
 	for (int i=x1; i <= x2; ++i)
 		for (int j=y1; j <= y2; ++j)
 			regionToLoad.push_back(j*NUM_REGIONS+i);
@@ -1175,13 +1171,12 @@ void OsbMapLayer::invalidate(MapDocument* d, CoordBox vp)
 	y2 = int((r.bottomRight().y() + INT_MAX) / TILE_WIDTH);
 
 	QList<qint32> tileToLoad;
-	for (int i=x1; i <= x2; ++i)
-		for (int j=y1; j <= y2; ++j)
-			tileToLoad.push_back(j*NUM_TILES+i);
+	if (intToAng(vp.lonDiff()) <= M_PREFS->getTileToRegionThreshold())
+		for (int i=x1; i <= x2; ++i)
+			for (int j=y1; j <= y2; ++j)
+				tileToLoad.push_back(j*NUM_TILES+i);
 
 	//int span = (x2 - x1 + 1) * (y2 - y1 + 1);
-        if (intToAng(vp.lonDiff()) > M_PREFS->getTileToRegionThreshold())
-		tileToLoad.clear();
 
 	int j;
 	j = 0;
@@ -1214,12 +1209,6 @@ void OsbMapLayer::invalidate(MapDocument* d, CoordBox vp)
 			if (pp->theImp->loadTile(tileToLoad[i], d, this))
 				pp->loadedTiles.push_back(tileToLoad[i]);
 
-	for (unsigned int i=0; i<size(); ++i)
-	{
-		Relation* RR = dynamic_cast<Relation*>(get(i));
-		if (RR && RR->notEverythingDownloaded())
-			remove(RR);
-	}
 }
 
 //MapFeature*  OsbMapLayer::getFeatureByRef(MapDocument* d, quint64 ref)
@@ -1238,7 +1227,7 @@ bool OsbMapLayer::toXML(QDomElement xParent, QProgressDialog & progress)
 
 	bool OK = true;
 
-	QDomElement e = xParent.ownerDocument().createElement(className());
+	QDomElement e = xParent.ownerDocument().createElement(objectName());
 	xParent.appendChild(e);
 
 	e.setAttribute("xml:id", id());

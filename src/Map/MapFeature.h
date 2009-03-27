@@ -199,6 +199,8 @@ class MapFeature : public QObject
 		 */
 		bool isUploaded() const;
 
+		virtual bool isInteresting() const {return true;}
+
 		const FeaturePainter* getEditPainter(double PixelPerM) const;
 		const FeaturePainter* getCurrentEditPainter() const;
 		bool hasEditPainter() const;

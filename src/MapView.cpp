@@ -346,7 +346,7 @@ void MapView::buildFeatureSet(QRegion invalidRegion, Projection& aProj)
 		Main->properties()->adjustSelection();
 	}
 
-	QVector <CoordBox> coordRegion;
+	QList <CoordBox> coordRegion;
 	for (int i=0; i < invalidRegion.rects().size(); ++i) {
 		Coord tl = aProj.inverse(invalidRegion.rects()[i].topLeft());
 		Coord br = aProj.inverse(invalidRegion.rects()[i].bottomRight());

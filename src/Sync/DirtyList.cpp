@@ -35,33 +35,6 @@ static QString userName(const MapFeature* F)
 	return "";
 }
 
-static bool isInterestingPoint(MapDocument* theDocument, TrackPoint* Pt)
-{
-	// does its id look like one from osm
-	if (Pt->id().left(5) == "node_")
-		return true;
-	// if the user has added special tags, that's fine also
-	for (unsigned int i=0; i<Pt->tagSize(); ++i)
-		if ((Pt->tagKey(i) != "created_by") && (Pt->tagKey(i) != "ele"))
-			return true;
-	// if it is part of a road, then too
-	for (unsigned int j=0; j<theDocument->layerSize(); ++j)
-	{
-		MapLayer* theLayer = theDocument->getLayer(j);
-		for (unsigned i=0; i<theLayer->size(); ++i)
-		{
-			Road* R = dynamic_cast<Road*>(theLayer->get(i));
-			if (R)
-			{
-				for (unsigned int i=0; i<R->size(); ++i)
-					if (R->get(i) == Pt)
-						return true;
-			}
-		}
-	}
-	return false;
-}
-
 DirtyList::~DirtyList()
 {
 }
@@ -179,7 +152,7 @@ bool DirtyListVisit::add(MapFeature* F)
 			return EraseResponse[i];
 	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(F))
 	{
-		if (isInterestingPoint(theDocument,Pt))
+		if (Pt->isInteresting())
 		{
 			bool x = addPoint(Pt);
 			AlreadyAdded.push_back(F);
@@ -224,7 +197,7 @@ bool DirtyListVisit::update(MapFeature* F)
 		return EraseFromHistory;
 	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(F))
 	{
-		if (isInterestingPoint(theDocument,Pt)) {
+		if (Pt->isInteresting()) {
 			if (!(Pt->hasOSMId()) && notYetAdded(Pt)) 
 				return addPoint(Pt);
 			else
@@ -262,7 +235,7 @@ bool DirtyListVisit::erase(MapFeature* F)
 		return EraseFromHistory;
 	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(F))
 	{
-		if (isInterestingPoint(theDocument,Pt)) 
+		if (Pt->isInteresting()) 
 			TrackPointsToDelete[Pt] = false;
 	}
 	else if (Road* R = dynamic_cast<Road*>(F)) 

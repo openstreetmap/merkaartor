@@ -2,7 +2,9 @@
 #define MAPLAYER_H_
 
 #include "Map/MapTypedef.h"
-#include "Map/MapDocument.h"
+#include "Map/Coord.h"
+
+#include <QProgressDialog>
 
 class QString;
 class QprogressDialog;
@@ -18,6 +20,7 @@ class TileMapAdapter;
 class TrackSegment;
 class OsbMapLayerPrivate;
 class IMapAdapter;
+class MapDocument;
 
 class MapLayer : public QObject
 {
@@ -31,6 +34,18 @@ private:
 	MapLayer(const MapLayer& aLayer);
 
 public:
+	typedef enum {
+		UndefinedType,
+		DeletedMapLayerType,
+		DirtyMapLayerType,
+		DrawingMapLayerType,
+		ExtractedMapLayerType,
+		ImageMapLayerType,
+		OsbMapLayerType,
+		TrackMapLayerType,
+		UploadedMapLayerType
+	} LayerType;
+
 	enum LayerGroup {
 		None				= 0x00000000,
 		Default				= 0x00000001,
@@ -52,8 +67,8 @@ public:
 	bool isSelected() const;
 	bool isEnabled() const;
 
-	void add(MapFeature* aFeature);
-	void add(MapFeature* aFeature, unsigned int Idx);
+	virtual void add(MapFeature* aFeature);
+	virtual void add(MapFeature* aFeature, unsigned int Idx);
 	virtual void remove(MapFeature* aFeature);
 	virtual void deleteFeature(MapFeature* aFeature);
 	virtual void clear();
@@ -95,7 +110,7 @@ public:
 
 	static CoordBox boundingBox(const MapLayer* theLayer);
 
-	virtual const QString className() = 0;
+	virtual const LayerType classType() = 0;
 	virtual const LayerGroups classGroups() = 0;
 
 	unsigned int incDirtyLevel(unsigned int inc=1);
@@ -132,37 +147,24 @@ public:
 	static DrawingMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
 	static DrawingMapLayer* doFromXML(DrawingMapLayer* l, MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
-    virtual const QString className() {return "DrawingMapLayer";}
+	virtual const LayerType classType() {return MapLayer::DrawingMapLayerType;}
     virtual const LayerGroups classGroups() {return (MapLayer::OSM);}
 };
 
-class ImageMapLayer : public MapLayer
+class ExtractedMapLayer : public DrawingMapLayer
 {
 	Q_OBJECT
 public:
-    ImageMapLayer() : layermanager(0) {}
-	ImageMapLayer(const QString& aName, LayerManager* aLayerMgr=NULL);
-	virtual ~ImageMapLayer();
+	ExtractedMapLayer(const QString& aName);
+	virtual ~ExtractedMapLayer();
 
-	Layer* imageLayer();
-	void setMapAdapter(const QUuid& theAdapterUid);
-	LayerManager* layermanager;
+	static ExtractedMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
-	virtual void setVisible(bool b);
+	virtual const LayerType classType() {return MapLayer::ExtractedMapLayerType;}
+	virtual const LayerGroups classGroups() {return(MapLayer::OSM);}
 	virtual LayerWidget* newWidget(void);
-	virtual void updateWidget();
-	virtual unsigned int size() const;
 
-	virtual bool toXML(QDomElement xParent, QProgressDialog & progress);
-	static ImageMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
-
-    virtual const QString className() {return "ImageMapLayer";}
-    virtual const LayerGroups classGroups() {return(MapLayer::Default);}
-
-	virtual bool arePointsDrawable() {return false;}
-private:
-	WMSMapAdapter* wmsa;
-	TileMapAdapter* tmsa;
+	virtual bool isUploadable() {return false;}
 };
 
 class TrackMapLayer : public MapLayer
@@ -181,7 +183,7 @@ public:
 	virtual bool toXML(QDomElement xParent, QProgressDialog & progress);
 	static TrackMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
-	virtual const QString className() {return "TrackMapLayer";}
+	virtual const LayerType classType() {return MapLayer::TrackMapLayerType;}
 	virtual const LayerGroups classGroups() {return(MapLayer::Tracks);}
 
 	virtual bool isUploadable() {return true;}
@@ -200,7 +202,7 @@ public:
 
 	static DirtyMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
-	virtual const QString className() {return "DirtyMapLayer";}
+	virtual const LayerType classType() {return MapLayer::DirtyMapLayerType;}
 	virtual const LayerGroups classGroups() {return(MapLayer::Default|MapLayer::OSM);}
 
 	virtual LayerWidget* newWidget(void);
@@ -215,25 +217,9 @@ public:
 
 	static UploadedMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
-	virtual const QString className() {return "UploadedMapLayer";}
+	virtual const LayerType classType() {return MapLayer::UploadedMapLayerType;}
 	virtual const LayerGroups classGroups() {return(MapLayer::Default|MapLayer::OSM);}
 	virtual LayerWidget* newWidget(void);
-};
-
-class ExtractedMapLayer : public DrawingMapLayer
-{
-	Q_OBJECT
-public:
-	ExtractedMapLayer(const QString& aName);
-	virtual ~ExtractedMapLayer();
-
-	static ExtractedMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
-
-	virtual const QString className() {return "ExtractedMapLayer";}
-	virtual const LayerGroups classGroups() {return(MapLayer::OSM);}
-	virtual LayerWidget* newWidget(void);
-
-	virtual bool isUploadable() {return false;}
 };
 
 class DeletedMapLayer : public DrawingMapLayer
@@ -246,7 +232,7 @@ public:
 	virtual bool toXML(QDomElement xParent, QProgressDialog & progress);
 	static DeletedMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
-	virtual const QString className() {return "DeletedMapLayer";}
+	virtual const LayerType classType() {return MapLayer::DeletedMapLayerType;}
 	virtual const LayerGroups classGroups() {return(MapLayer::None);}
 	virtual LayerWidget* newWidget(void);
 
@@ -261,9 +247,11 @@ public:
 	OsbMapLayer(const QString& aName, const QString& filename);
 	virtual ~OsbMapLayer();
 
-	virtual const QString className() {return "OsbMapLayer";}
+	virtual const LayerType classType() {return MapLayer::OsbMapLayerType;}
 	virtual const LayerGroups classGroups() {return(MapLayer::OSM);}
 	virtual LayerWidget* newWidget(void);
+
+	void setFilename(const QString& filename);
 
 	virtual void setVisible(bool b);
 	virtual bool isUploadable() {return true;}
@@ -282,6 +270,35 @@ public:
 protected:
 	OsbMapLayerPrivate* pp;
 
+};
+
+class ImageMapLayer : public OsbMapLayer
+{
+	Q_OBJECT
+public:
+    //ImageMapLayer() : layermanager(0) {}
+	ImageMapLayer(const QString& aName, LayerManager* aLayerMgr=NULL);
+	virtual ~ImageMapLayer();
+
+	Layer* imageLayer();
+	void setMapAdapter(const QUuid& theAdapterUid);
+	LayerManager* layermanager;
+
+	virtual void setVisible(bool b);
+	virtual LayerWidget* newWidget(void);
+	virtual void updateWidget();
+	virtual unsigned int size() const;
+
+	virtual bool toXML(QDomElement xParent, QProgressDialog & progress);
+	static ImageMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
+
+	virtual const LayerType classType() {return MapLayer::ImageMapLayerType;}
+    virtual const LayerGroups classGroups() {return(MapLayer::Default);}
+
+	virtual bool arePointsDrawable() {return false;}
+private:
+	WMSMapAdapter* wmsa;
+	TileMapAdapter* tmsa;
 };
 
 Q_DECLARE_METATYPE ( QUuid )
