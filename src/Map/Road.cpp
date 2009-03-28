@@ -38,6 +38,7 @@ class RoadPrivate
 		double Distance;
 		double Width;
 		bool MetaUpToDate;
+		QList <QPainterPath> thePaths;
 		QPainterPath thePath;
 
 		void updateSmoothed(bool DoSmooth);
@@ -454,6 +455,13 @@ QPainterPath Road::getPath()
 {
 	return p->thePath;
 }
+
+//void Road::buildPath(Projection const &theProjection, const QRegion& paintRegion)
+//{
+//	p->thePaths.clear();
+//	if (!p->Nodes.size())
+//		return;
+//}
 
 void Road::buildPath(Projection const &theProjection, const QRegion& paintRegion)
 {

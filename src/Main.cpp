@@ -29,7 +29,7 @@ int main(int argc, char** argv)
 		QDir::home().mkdir(".merkaartor");
 #if defined(Q_OS_UNIX)
 	QDir pluginsDir = QDir(qApp->applicationDirPath());
-	if (pluginsDir.absolutePath().contains("/bin")) {
+	if (!pluginsDir.exists("plugins")) {
 		pluginsDir = QDir(pluginsDir.absolutePath().remove("/bin").append("/lib/Merkaartor"));
 	}
 #else

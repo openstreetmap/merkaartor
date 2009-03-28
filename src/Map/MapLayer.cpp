@@ -579,7 +579,7 @@ ImageMapLayer::ImageMapLayer(const QString & aName, LayerManager* aLayerMgr)
 		setVisible(MerkaartorPreferences::instance()->getBgVisible());
 
 	if (M_PREFS->getUseShapefileForBackground())
-		setFilename(QCoreApplication::applicationDirPath() + "/" + WORLD_SHP);
+		setFilename(WORLD_SHP);
 
 	setReadonly(true);
 }
