@@ -172,12 +172,12 @@ void GeoImageDock::loadImages(QStringList fileNames)
 		int trackLayersCount = 0;
 		for (i=0;i<theDocument->layerSize();i++) {
 			layer = theDocument->getLayer(i);
-			if (layer->className() == "TrackMapLayer") {
+			if (layer->classType() == MapLayer::TrackMapLayerType) {
 				trackLayersCount++;
 				if (!singleTrackLayer)
 					singleTrackLayer = layer;
 			}
-			if (layer->className() == "TrackMapLayer" || layer->className() == "DrawingMapLayer") {
+			if (layer->classType() == MapLayer::TrackMapLayerType || layer->classType() == MapLayer::DrawingMapLayerType) {
 				if (!singleLayer)
 					singleLayer = layer;
 				layers.append(theDocument->getLayer(i)->name());
