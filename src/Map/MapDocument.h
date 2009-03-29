@@ -66,12 +66,7 @@ public:
 	QStringList getTagList() ;
 	QStringList getTagValueList(QString k) ;
 	QList<QString> getTagKeys();
-	void setTagKeys(QList<QString> list);
-	QString getTagKey(int idx);
-	int getTagKeyIndex(QString k);
-	int getTagValueIndex(QString v);
 	QList<QString> getTagValues();
-	void setTagValues(QList<QString> list);
 	QString getTagValue(int idx);
 
 	ImageMapLayer* getImageLayer() const;
@@ -100,8 +95,6 @@ public:
 
 private:
 	MapDocumentPrivate* p;
-	QStringList tagKeys;
-	QStringList tagValues;
 
 signals:
 	void historyChanged();

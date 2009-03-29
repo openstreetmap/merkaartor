@@ -40,7 +40,7 @@ void OSMHandler::parseTag(const QXmlAttributes &atts)
 void parseStandardAttributes(const QXmlAttributes& atts, MapFeature* F)
 {
 	QString ts = atts.value("timestamp"); 
-	QDateTime time = QDateTime::fromString(ts.left(19), "yyyy-MM-ddTHH:mm:ss");
+	QDateTime time = QDateTime::fromString(ts.left(19), Qt::ISODate);
 	QString user = atts.value("user");
 	F->setTime(time);
 	F->setUser(user);

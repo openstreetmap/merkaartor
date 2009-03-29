@@ -22,7 +22,45 @@ const QString encodeAttributes(const QString & text);
 
 static QString randomId()
 {
-	return QUuid::createUuid().toString();
+	QUuid uuid = QUuid::createUuid();
+#ifdef _MOBILE
+	return uuid.toString();
+#else
+	// This is fairly horrible, but it's also around 10 times faster than QUuid::toString()
+	// and randomId() is called a lot during large imports
+
+	// Lookup table of hex value-pairs representing a byte
+	static char hex[(2*256)+1] = "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff";
+
+    char buffer[39] = "{________-____-____-____-____________}";
+
+	
+
+	// {__%08x__-____-____-____-____________}
+	memcpy(&buffer[ 1], &hex[((uuid.data1 >> 24) & 0xFF)], 2);
+	memcpy(&buffer[ 3], &hex[((uuid.data1 >> 16) & 0xFF)], 2);
+	memcpy(&buffer[ 5], &hex[((uuid.data1 >>  8) & 0xFF)], 2);
+	memcpy(&buffer[ 7], &hex[((uuid.data1 >>  0) & 0xFF)], 2);
+
+	// {________-%04x-____-____-____________}
+	memcpy(&buffer[10], &hex[((uuid.data2 >>  8) & 0xFF)], 2);
+	memcpy(&buffer[12], &hex[((uuid.data2 >>  0) & 0xFF)], 2);
+
+	// {________-____-%04x-____-____________}
+	memcpy(&buffer[15], &hex[((uuid.data3 >>  8) & 0xFF)], 2);
+	memcpy(&buffer[17], &hex[((uuid.data3 >>  0) & 0xFF)], 2);
+
+	// {________-____-____-%04x-____________}
+	memcpy(&buffer[20], &hex[uuid.data4[0]], 2);
+	memcpy(&buffer[22], &hex[uuid.data4[1]], 2);
+
+	// {________-____-____-____-___%012x____}
+	for (int i=0; i<6; i++) {
+		memcpy(&buffer[25+(i*2)], &hex[uuid.data4[i+2]], 2);
+	}
+
+	return QString::fromAscii(buffer,38);
+#endif
 }
 
 void copyTags(MapFeature* Dest, MapFeature* Src)
@@ -35,7 +73,7 @@ class MapFeaturePrivate
 {
 	public:
 		MapFeaturePrivate()
-			:  TagsSize(0), LastActor(MapFeature::User), theLayer(0),
+			:  TagsSize(0), LastActor(MapFeature::User), 
 				PossiblePaintersUpToDate(false),
 			  	PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
 				theFeature(0), LastPartNotification(0),
@@ -45,7 +83,7 @@ class MapFeaturePrivate
 			parentDashes << 1 << 5;
 		}
 		MapFeaturePrivate(const MapFeaturePrivate& other)
-			: Tags(other.Tags), TagsSize(other.TagsSize), LastActor(other.LastActor), theLayer(0),
+			: Tags(other.Tags), TagsSize(other.TagsSize), LastActor(other.LastActor), 
 				PossiblePaintersUpToDate(false),
 			  	PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
 				theFeature(0), LastPartNotification(0),
@@ -63,7 +101,6 @@ class MapFeaturePrivate
 		std::vector<std::pair<QString, QString> > Tags;
 		unsigned int TagsSize;
 		MapFeature::ActorType LastActor;
-		MapLayer* theLayer;
 		QVector<const FeaturePainter*> PossiblePainters;
 		bool PossiblePaintersUpToDate;
 		double PixelPerMForPainter;
@@ -104,8 +141,6 @@ MapFeature::~MapFeature(void)
 {
 	while (sizeParents())
 		getParent(0)->remove(this);
-	if (p->theLayer)
-		p->theLayer->notifyIdUpdate(p->Id,0);
 	delete p;
 }
 
@@ -121,13 +156,13 @@ int MapFeature::versionNumber() const
 
 void MapFeature::setLayer(MapLayer* aLayer)
 {
-	p->theLayer = aLayer;
+	setParent(aLayer);
 	notifyChanges();
 }
 
 MapLayer* MapFeature::layer()
 {
-	return p->theLayer;
+	return dynamic_cast<MapLayer*>(parent());
 }
 
 void MapFeature::setLastUpdated(MapFeature::ActorType A)
@@ -137,7 +172,7 @@ void MapFeature::setLastUpdated(MapFeature::ActorType A)
 
 MapFeature::ActorType MapFeature::lastUpdated() const
 {
-	if (p->theLayer->classType() == MapLayer::DirtyMapLayerType)
+	if (dynamic_cast<MapLayer*>(parent())->classType() == MapLayer::DirtyMapLayerType)
 		return MapFeature::User;
 	else
 		return p->LastActor;
@@ -145,10 +180,10 @@ MapFeature::ActorType MapFeature::lastUpdated() const
 
 void MapFeature::setId(const QString& id)
 {
-	if (p->theLayer)
+	if (parent())
 	{
-		p->theLayer->notifyIdUpdate(p->Id,0);
-		p->theLayer->notifyIdUpdate(id,this);
+		dynamic_cast<MapLayer*>(parent())->notifyIdUpdate(p->Id,0);
+		dynamic_cast<MapLayer*>(parent())->notifyIdUpdate(id,this);
 	}
 	p->Id = id;
 }
@@ -158,8 +193,8 @@ const QString& MapFeature::id() const
 	if (p->Id == "")
 	{
 		p->Id = randomId();
-		if (p->theLayer)
-			p->theLayer->notifyIdUpdate(p->Id,const_cast<MapFeature*>(this));
+		if (parent())
+			dynamic_cast<MapLayer*>(parent())->notifyIdUpdate(p->Id,const_cast<MapFeature*>(this));
 	}
 	return p->Id;
 }
@@ -221,7 +256,10 @@ void MapFeature::setUser(const QString& user)
 
 bool MapFeature::isDirty() const
 {
-	return (p->theLayer->classType() == MapLayer::DirtyMapLayerType);
+	if (parent())
+		return (dynamic_cast<MapLayer*>(parent())->classType() == MapLayer::DirtyMapLayerType);
+	else
+		return false;
 }
 
 void MapFeature::setUploaded(bool state)
@@ -236,7 +274,10 @@ bool MapFeature::isUploaded() const
 
 bool MapFeature::isUploadable() const
 {
-	return (p->theLayer->isUploadable());
+	if (parent())
+		return (dynamic_cast<MapLayer*>(parent())->isUploadable());
+	else
+		return false;
 }
 
 void MapFeature::setDeleted(bool delState)
@@ -264,9 +305,9 @@ void MapFeature::setTag(unsigned int index, const QString& key, const QString& v
 		p->Tags.insert(p->Tags.begin() + index, std::make_pair(key,value));
 		p->TagsSize++;
 	}
-	if (p->theLayer && addToTagList)
-		if (p->theLayer->getDocument())
-	  		p->theLayer->getDocument()->addToTagList(key, value);
+	if (parent() && addToTagList)
+		if (dynamic_cast<MapLayer*>(parent())->getDocument())
+	  		dynamic_cast<MapLayer*>(parent())->getDocument()->addToTagList(key, value);
 	notifyChanges();
 }
 
@@ -282,9 +323,9 @@ void MapFeature::setTag(const QString& key, const QString& value, bool addToTagL
 		}
 	p->Tags.push_back(std::make_pair(key,value));
 	p->TagsSize++;
-	if (p->theLayer && addToTagList)
-		if (p->theLayer->getDocument())
-  			p->theLayer->getDocument()->addToTagList(key, value);
+	if (parent() && addToTagList)
+		if (dynamic_cast<MapLayer*>(parent())->getDocument())
+  			dynamic_cast<MapLayer*>(parent())->getDocument()->addToTagList(key, value);
 	notifyChanges();
 }
 
@@ -428,13 +469,13 @@ bool MapFeature::hasEditPainter() const
 	return p->HasPainter;
 }
 
-void MapFeature::setParent(MapFeature* F)
+void MapFeature::setParentFeature(MapFeature* F)
 {
 	if (std::find(p->Parents.begin(),p->Parents.end(),F) == p->Parents.end())
 		p->Parents.push_back(F);
 }
 
-void MapFeature::unsetParent(MapFeature* F)
+void MapFeature::unsetParentFeature(MapFeature* F)
 {
 	for (unsigned int i=0; i<p->Parents.size(); ++i)
 		if (p->Parents[i] == F)
@@ -464,8 +505,8 @@ void MapFeature::notifyChanges()
 {
 	static unsigned int Id = 0;
 	notifyParents(++Id);
-	if (p->theLayer)
-		p->theLayer->invalidateRenderPriority();
+	if (parent())
+		dynamic_cast<MapLayer*>(parent())->invalidateRenderPriority();
 }
 
 void MapFeature::notifyParents(unsigned int Id)

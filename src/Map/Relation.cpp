@@ -65,7 +65,7 @@ Relation::~Relation()
 {
 	for (unsigned int i=0; i<p->Members.size(); ++i)
 		if (p->Members[i].second)
-			p->Members[i].second->unsetParent(this);
+			p->Members[i].second->unsetParentFeature(this);
 	delete p;
 }
 
@@ -74,11 +74,11 @@ void Relation::setLayer(MapLayer* L)
 	if (L)
 		for (unsigned int i=0; i<p->Members.size(); ++i)
 			if (p->Members[i].second)
-				p->Members[i].second->setParent(this);
+				p->Members[i].second->setParentFeature(this);
 	else
 		for (unsigned int i=0; i<p->Members.size(); ++i)
 			if (p->Members[i].second)
-				p->Members[i].second->unsetParent(this);
+				p->Members[i].second->unsetParentFeature(this);
 	MapFeature::setLayer(L);
 }
 
@@ -251,21 +251,21 @@ bool Relation::notEverythingDownloaded() const
 void Relation::add(const QString& Role, MapFeature* F)
 {
 	p->Members.push_back(std::make_pair(Role,F));
-	F->setParent(this);
+	F->setParentFeature(this);
 }
 
 void Relation::add(const QString& Role, MapFeature* F, unsigned int Idx)
 {
 	p->Members.push_back(std::make_pair(Role,F));
 	std::rotate(p->Members.begin()+Idx,p->Members.end()-1,p->Members.end());
-	F->setParent(this);
+	F->setParentFeature(this);
 }
 
 void Relation::remove(unsigned int Idx)
 {
 	if (p->Members[Idx].second) {
 		MapFeature* F = p->Members[Idx].second;
-		F->unsetParent(this);
+		F->unsetParentFeature(this);
 	}
 	p->Members.erase(p->Members.begin()+Idx);
 }
@@ -463,7 +463,7 @@ Relation * Relation::fromXML(MapDocument * d, MapLayer * L, const QDomElement e)
 	QString id = e.attribute("id");
 	if (!id.startsWith('{'))
 		id = "rel_" + id;
-	QDateTime time = QDateTime::fromString(e.attribute("timestamp").left(19), "yyyy-MM-ddTHH:mm:ss");
+	QDateTime time = QDateTime::fromString(e.attribute("timestamp").left(19), Qt::ISODate);
 	QString user = e.attribute("user");
 	bool Deleted = (e.attribute("deleted") == "true");
 

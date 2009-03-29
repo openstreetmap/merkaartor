@@ -1,4 +1,7 @@
 v0.14
+	* FIX : Do not use guarded pointers (too slow) (closes #1674)
+	* FIX : Styles tag selection speed optimisation (by Trav)
+	* FIX : OSM/GPX import optimisations (by Trav)
     * FIX : <Esc> in Name property inspector causes AV (fixes #1672)
     * CHG : Move vector background from SHP to OSB
     * CHG : Preferences are uploaded to OSM in binary, base-64 encoded, 254 char slice. Allow to bypass the 255 char per preference limitation.

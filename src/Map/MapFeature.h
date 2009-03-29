@@ -215,8 +215,8 @@ class MapFeature : public QObject
 		virtual const MapFeature* get(unsigned int Idx) const = 0; 
 		virtual bool isNull() const = 0;
 
-		void setParent(MapFeature* F);
-		void unsetParent(MapFeature* F);
+		void setParentFeature(MapFeature* F);
+		void unsetParentFeature(MapFeature* F);
 		unsigned int sizeParents() const;
 		MapFeature* getParent(unsigned int i);
 		const MapFeature* getParent(unsigned int i) const;

@@ -53,9 +53,9 @@ public:
 	}
 	~MapLayerPrivate()
 	{
-		for (int i=0; i<Features.size(); ++i)
-			if (Features[i])
-				delete Features[i];
+		//for (int i=0; i<Features.size(); ++i)
+		//	if (Features[i])
+		//		delete Features[i];
 	}
 	QList<MapFeaturePtr> Features;
 	QHash<QString, MapFeaturePtr> IdMap;
@@ -123,7 +123,7 @@ MapLayer::MapLayer(const MapLayer&)
 
 MapLayer::~MapLayer()
 {
-	delete p;
+	SAFE_DELETE(p);
 }
 
 void MapLayer::sortRenderingPriority(double aPixelPerM)
@@ -197,9 +197,9 @@ bool MapLayer::isReadonly() const
 
 void MapLayer::add(MapFeature* aFeature)
 {
+	aFeature->setLayer(this);
 	p->Features.push_back(aFeature);
 	notifyIdUpdate(aFeature->id(),aFeature);
-	aFeature->setLayer(this);
 	p->RenderPriorityUpToDate = false;
 }
 
@@ -211,7 +211,8 @@ void MapLayer::add(MapFeature* aFeature, unsigned int Idx)
 
 void MapLayer::notifyIdUpdate(const QString& id, MapFeature* aFeature)
 {
-	p->IdMap[id] = aFeature;
+	if(p)
+		p->IdMap[id] = aFeature;
 }
 
 void MapLayer::remove(MapFeature* aFeature)
@@ -533,6 +534,8 @@ DrawingMapLayer * DrawingMapLayer::doFromXML(DrawingMapLayer* l, MapDocument* d,
 // 		return NULL;
 // 	}
 
+	
+	int i=0;
 	c = c.firstChildElement();
 	while(!c.isNull()) {
 		if (c.tagName() == "bound") {
@@ -540,22 +543,27 @@ DrawingMapLayer * DrawingMapLayer::doFromXML(DrawingMapLayer* l, MapDocument* d,
 		if (c.tagName() == "way") {
 			/* Road* R = */ Road::fromXML(d, l, c);
 //			l->add(R);
-			progress.setValue(progress.value()+1);
+			i++;
 		} else
 		if (c.tagName() == "relation") {
 			/* Relation* r = */ Relation::fromXML(d, l, c);
 //			l->add(r);
-			progress.setValue(progress.value()+1);
+			i++;
 		} else
 		if (c.tagName() == "node") {
 			/* TrackPoint* N = */ TrackPoint::fromXML(d, l, c);
 //			l->add(N);
-			progress.setValue(progress.value()+1);
+			i++;
 		} else
 		if (c.tagName() == "trkseg") {
 			TrackSegment* T = TrackSegment::fromXML(d, l, c, progress);
 			l->add(T);
-			progress.setValue(progress.value()+1);
+			i++;
+		}
+
+		if (i >= progress.maximum()/100) {
+			progress.setValue(progress.value()+i);
+			i=0;
 		}
 
 		if (progress.wasCanceled())
@@ -564,6 +572,8 @@ DrawingMapLayer * DrawingMapLayer::doFromXML(DrawingMapLayer* l, MapDocument* d,
 		c = c.nextSiblingElement();
 	}
 
+	if (i > 0) progress.setValue(progress.value()+i);
+	
 	return l;
 }
 
@@ -579,7 +589,10 @@ ImageMapLayer::ImageMapLayer(const QString & aName, LayerManager* aLayerMgr)
 		setVisible(MerkaartorPreferences::instance()->getBgVisible());
 
 	if (M_PREFS->getUseShapefileForBackground())
-		setFilename(WORLD_SHP);
+		if (QDir::isAbsolutePath(WORLD_SHP))
+			setFilename(WORLD_SHP);
+		else
+			setFilename(QCoreApplication::applicationDirPath() + "/" + WORLD_SHP);
 
 	setReadonly(true);
 }

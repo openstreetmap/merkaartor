@@ -89,7 +89,7 @@ Road::~Road(void)
 {
 	for (unsigned int i=0; i<p->Nodes.size(); ++i)
 		if (p->Nodes[i])
-			p->Nodes[i]->unsetParent(this);
+			p->Nodes[i]->unsetParentFeature(this);
 	delete p;
 }
 
@@ -98,11 +98,11 @@ void Road::setLayer(MapLayer* L)
 	if (L)
 		for (unsigned int i=0; i<p->Nodes.size(); ++i)
 			if (p->Nodes[i])
-				p->Nodes[i]->setParent(this);
+				p->Nodes[i]->setParentFeature(this);
 	else
 		for (unsigned int i=0; i<p->Nodes.size(); ++i)
 			if (p->Nodes[i])
-				p->Nodes[i]->unsetParent(this);
+				p->Nodes[i]->unsetParentFeature(this);
 	MapFeature::setLayer(L);
 }
 
@@ -134,7 +134,7 @@ RenderPriority Road::renderPriority(double aPixelPerM) const
 void Road::add(TrackPoint* Pt)
 {
 	p->Nodes.push_back(Pt);
-	Pt->setParent(this);
+	Pt->setParentFeature(this);
 	p->BBoxUpToDate = false;
 	p->MetaUpToDate = false;
 	p->SmoothedUpToDate = false;
@@ -144,7 +144,7 @@ void Road::add(TrackPoint* Pt, unsigned int Idx)
 {
 	p->Nodes.push_back(Pt);
 	std::rotate(p->Nodes.begin()+Idx,p->Nodes.end()-1,p->Nodes.end());
-	Pt->setParent(this);
+	Pt->setParentFeature(this);
 	p->BBoxUpToDate = false;
 	p->MetaUpToDate = false;
 	p->SmoothedUpToDate = false;
@@ -162,7 +162,7 @@ void Road::remove(unsigned int idx)
 {
 	if (p->Nodes[idx]) {
 		TrackPoint* Pt = p->Nodes[idx];
-		Pt->unsetParent(this);
+		Pt->unsetParentFeature(this);
 	}
 	p->Nodes.erase(p->Nodes.begin()+idx);
 	p->BBoxUpToDate = false;
@@ -693,7 +693,7 @@ Road * Road::fromXML(MapDocument* d, MapLayer * L, const QDomElement e)
 	QString id = e.attribute("id");
 	if (!id.startsWith('{'))
 		id = "way_" + id;
-	QDateTime time = QDateTime::fromString(e.attribute("timestamp").left(19), "yyyy-MM-ddTHH:mm:ss");
+	QDateTime time = QDateTime::fromString(e.attribute("timestamp").left(19), Qt::ISODate);
 	QString user = e.attribute("user");
 	bool Deleted = (e.attribute("deleted") == "true");
 	MapFeature::ActorType A;

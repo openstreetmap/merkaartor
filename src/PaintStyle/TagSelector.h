@@ -39,6 +39,8 @@ class TagSelectorIs : public TagSelector
 	private:
 		QRegExp rx;
 		QString Key, Value;
+		bool MatchEmpty;
+		bool UseRegExp;
 };
 
 class TagSelectorTypeIs : public TagSelector
@@ -75,8 +77,10 @@ class TagSelectorIsOneOf : public TagSelector
 
 	private:
 		QVector<QRegExp> rxv;
+		QVector<QString> exactMatchv;
 		QString Key;
 		std::vector<QString> Values;
+		bool MatchEmpty;
 };
 
 class TagSelectorOr : public TagSelector

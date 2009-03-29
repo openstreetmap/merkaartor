@@ -17,6 +17,8 @@
 #include <map>
 #include <vector>
 
+#include <QSet>
+
 /* MAPDOCUMENT */
 
 class MapDocumentPrivate
@@ -25,9 +27,6 @@ public:
 	MapDocumentPrivate()
 	: History(new CommandHistory()), imageLayer(0), dirtyLayer(0), uploadedLayer(0)/*, trashLayer(0)*/, theDock(0), lastDownloadLayer(0)
 	{
-    	tagList.insert("created_by", QString("Merkaartor %1").arg(VERSION));
-		tagKeys.append("created_by");
-		tagValues.append(QString("Merkaartor %1").arg(VERSION));
 	};
 	~MapDocumentPrivate()
 	{
@@ -48,16 +47,17 @@ public:
 	LayerDock*					theDock;
 	MapLayer*					lastDownloadLayer;
 
-	QHash<MapLayer*, CoordBox>				downloadBoxes;
+	QHash<MapLayer*, CoordBox>		downloadBoxes;
 
-	QMultiMap<QString, QString> tagList;
-	QList<QString>				tagKeys;
-	QList<QString>				tagValues;
+	QHash< QString, QSet<QString> * >		tagList;
+	
 };
 
 MapDocument::MapDocument()
 	: p(new MapDocumentPrivate)
 {
+	addToTagList("created_by", QString("Merkaartor %1").arg(VERSION));
+
 	p->imageLayer = new ImageMapLayer(tr("Background imagery"));
 	add(p->imageLayer);
 
@@ -256,69 +256,49 @@ void MapDocument::add(MapLayer* aLayer)
 void MapDocument::addToTagList(QString k, QString v)
 {
 #ifndef _MOBILE
-	if (!p->tagList.contains(k, v)) {
-    	p->tagList.insert(k, v);
-		if (!p->tagKeys.contains(k)) {
-			p->tagKeys.append(k);
+	if (p->tagList.contains(k)) {
+		if (!p->tagList.value(k)->contains(v)) {
+			//static_cast< QSet<QString> * >(p->tagList.value(k))->insert(v);
+			p->tagList.value(k)->insert(v);
 		}
-		if (!p->tagValues.contains(v)) {
-			p->tagValues.append(v);
-		}
+	} else {
+		QSet<QString> *values = new QSet<QString>;
+		values->insert(v);
+		p->tagList.insert(k, values);
 	}
 #endif
 }
 
 QList<QString> MapDocument::getTagKeys()
 {
-	return p->tagKeys;
-}
-
-void MapDocument::setTagKeys(QList<QString> list)
-{
-	p->tagKeys = list;
-}
-
-QString MapDocument::getTagKey(int idx)
-{
-	return p->tagKeys[idx];
-}
-
-int MapDocument::getTagKeyIndex(QString k)
-{
-	return p->tagKeys.indexOf(k);
+	return p->tagList.keys();
 }
 
 QList<QString> MapDocument::getTagValues()
 {
-	return p->tagValues;
-}
-
-void MapDocument::setTagValues(QList<QString> list)
-{
-	p->tagValues = list;
-}
-
-QString MapDocument::getTagValue(int idx)
-{
-	return p->tagValues[idx];
-}
-
-int MapDocument::getTagValueIndex(QString v)
-{
-	return p->tagValues.indexOf(v);
+	return getTagValueList("*");
 }
 
 QStringList MapDocument::getTagList()
 {
+	qDebug() << p->tagList.uniqueKeys() << endl;
 	return p->tagList.uniqueKeys();
 }
 
 QStringList MapDocument::getTagValueList(QString k)
 {
-	if (k == "*")
-		return p->tagList.values();
-	else
-		return p->tagList.values(k);
+	if (k == "*") {
+		QSet<QString> allValues;
+		QSet<QString> *tagValues;
+		foreach (tagValues, p->tagList) {
+			allValues += *tagValues;
+		}
+		return allValues.toList();
+	} else if (p->tagList.contains(k)) {
+		return p->tagList.value(k)->toList();
+	} else {
+		return QStringList();
+	}
 }
 
 void MapDocument::remove(MapLayer* aLayer)

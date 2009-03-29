@@ -302,7 +302,7 @@ TrackPoint * TrackPoint::fromXML(MapDocument* d, MapLayer* L, const QDomElement 
 	bool Deleted = (e.attribute("deleted") == "true");
 
 	QDateTime time;
-	time = QDateTime::fromString(e.attribute("timestamp").left(19), "yyyy-MM-ddTHH:mm:ss");
+	time = QDateTime::fromString(e.attribute("timestamp").left(19), Qt::ISODate);
 	QString user = e.attribute("user");
 	MapFeature::ActorType A = (MapFeature::ActorType)(e.attribute("actor", "2").toInt());
 
@@ -362,7 +362,7 @@ TrackPoint * TrackPoint::fromGPX(MapDocument* d, MapLayer* L, const QDomElement 
 	while(!c.isNull()) {
 		if (c.tagName() == "time") {
 			QString dtm = c.text();
-			Pt->setTime(QDateTime::fromString(dtm.left(19), "yyyy-MM-ddTHH:mm:ss"));
+			Pt->setTime(QDateTime::fromString(dtm.left(19), Qt::ISODate));
 		} else
 		if (c.tagName() == "ele") {
 			Pt->setElevation(c.text().toFloat());

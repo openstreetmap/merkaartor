@@ -256,12 +256,16 @@ TagSelector::~TagSelector()
 /* TAGSELECTORIS */
 
 TagSelectorIs::TagSelectorIs(const QString& key, const QString& value)
-: Key(key), Value(value)
+: Key(key), Value(value), MatchEmpty(false), UseRegExp(false)
 {
-	if (value != "_NULL_") {
+	if (value == "_NULL_") {
+		MatchEmpty = true;
+	} else if (value.contains(QRegExp("[][*?]"))) {
+		UseRegExp = true;
 		rx = QRegExp(value);
 		rx.setPatternSyntax(QRegExp::Wildcard);
 	}
+	// Else exact match against ->Value only
 }
 
 TagSelector* TagSelectorIs::copy() const
@@ -269,11 +273,17 @@ TagSelector* TagSelectorIs::copy() const
 	return new TagSelectorIs(Key,Value);
 }
 
+static const QString emptyString("");
+
 TagSelectorMatchResult TagSelectorIs::matches(const MapFeature* F) const
 {
-	if (Value == "_NULL_") {
-		QString val = F->tagValue(Key, "");
+	QString val = F->tagValue(Key, emptyString);
+	if (MatchEmpty) {
 		return val.isEmpty() ? TagSelect_Match : TagSelect_NoMatch;
+	} else if (UseRegExp) {
+		return rx.exactMatch(val) ? TagSelect_Match : TagSelect_NoMatch;
+	} else {
+		return (val == Value) ? TagSelect_Match : TagSelect_NoMatch;
 	}
 	return rx.exactMatch(F->tagValue(Key, "")) ? TagSelect_Match : TagSelect_NoMatch;
 }
@@ -291,14 +301,18 @@ QString TagSelectorIs::asExpression(bool) const
 /* TAGSELECTORISONEOF */
 
 TagSelectorIsOneOf::TagSelectorIsOneOf(const QString& key, const std::vector<QString>& values)
-: Key(key), Values(values)
+: Key(key), Values(values), MatchEmpty(false)
 {
 	for (unsigned int i=0; i<values.size(); ++i)
 	{
-		if (values[i] != "_NULL_") {
+		if (values[i] == "_NULL_") {
+			MatchEmpty = true;
+		} else if (values[i].contains(QRegExp("[][*?]"))) {
 			QRegExp rx(values[i]);
 			rx.setPatternSyntax(QRegExp::Wildcard);
 			rxv.append(rx);
+		} else {
+			exactMatchv.append(values[i]);
 		}
 	}
 }
@@ -310,17 +324,15 @@ TagSelector* TagSelectorIsOneOf::copy() const
 
 TagSelectorMatchResult TagSelectorIsOneOf::matches(const MapFeature* F) const
 {
-	QString V = F->tagValue(Key, "");
-	for (unsigned int i=0; i<Values.size(); ++i)
-	{
-		if (Values[i] == "_NULL_") {
-			if (V.isEmpty())
-				return TagSelect_Match;
-		}
+	QString V = F->tagValue(Key, emptyString);
+	if (MatchEmpty && V.isEmpty()) {
+		return TagSelect_Match;
 	}
-	for (int i=0; i<rxv.size(); ++i)
-	{
-		if(rxv[i].exactMatch(V)) return TagSelect_Match;
+	foreach (QString pattern, exactMatchv) {
+		if (V == pattern) return TagSelect_Match;
+	}
+	foreach (QRegExp pattern, rxv) {
+		if (pattern.exactMatch(V)) return TagSelect_Match;
 	}
 	return TagSelect_NoMatch;
 }

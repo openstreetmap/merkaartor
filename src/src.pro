@@ -190,4 +190,10 @@ world_shp.files = $$PWD/../share/world_background.osb
 DEFINES += WORLD_SHP=\"\\\"$$world_shp.path/world_background.osb\\\"\"
 INSTALLS += world_shp
 
+desktop.path = $${PREFIX}/share/applications
+desktop.files = merkaartor.desktop
+desktopicons.path = $${PREFIX}/share/icons/hicolor/48x48/apps/
+desktopicons.files = $$PWD/../Icons/48x48/merkaartor.png
+INSTALLS += desktop desktopicons
+
 
