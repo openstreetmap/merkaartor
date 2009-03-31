@@ -7,6 +7,7 @@
 #include "Map/Projection.h"
 #include "Map/TrackPoint.h"
 #include "Utils/LineF.h"
+#include "Utils/MDiscardableDialog.h"
 
 #include <QtGui/QPainter>
 #include <QtGui/QPainterPath>
@@ -16,8 +17,11 @@
 #include <algorithm>
 #include <vector>
 
-//#include <geometry/geometry.hpp>
-//#include <geometry/geometries/cartesian2d.hpp>
+#include <geometry/geometry.hpp>
+#include <geometry/geometries/cartesian2d.hpp>
+
+#include <geometry/geometries/adapted/std_as_linestring.hpp>
+
 
 class RoadPrivate
 {
@@ -38,7 +42,6 @@ class RoadPrivate
 		double Distance;
 		double Width;
 		bool MetaUpToDate;
-		QList <QPainterPath> thePaths;
 		QPainterPath thePath;
 
 		void updateSmoothed(bool DoSmooth);
@@ -322,7 +325,8 @@ void Road::drawHover(QPainter& thePainter, const Projection& theProjection, bool
 	thePainter.setPen(TP);
 	thePainter.setBrush(Qt::NoBrush);
 	QRegion clipRg = QRegion(thePainter.clipRegion().boundingRect().adjusted(-20, -20, 20, 20));
-	buildPath(theProjection, clipRg);
+	QRect clipRect = clipRg.boundingRect().adjusted(int(-20), int(-20), int(20), int(20));
+	buildPath(theProjection, clipRect);
 	thePainter.drawPath(p->thePath);
 	if (solid) {
 		TP.setWidth(MerkaartorPreferences::instance()->getHoverWidth()*3);
@@ -359,7 +363,8 @@ void Road::drawFocus(QPainter& thePainter, const Projection& theProjection, bool
 	thePainter.setPen(TP);
 	thePainter.setBrush(Qt::NoBrush);
 	QRegion clipRg = QRegion(thePainter.clipRegion().boundingRect().adjusted(-20, -20, 20, 20));
-	buildPath(theProjection, clipRg);
+	QRect clipRect = clipRg.boundingRect().adjusted(int(-20), int(-20), int(20), int(20));
+	buildPath(theProjection, clipRect);
 	thePainter.drawPath(p->thePath);
 	if (solid) {
 		TP.setWidth(MerkaartorPreferences::instance()->getFocusWidth()*3);
@@ -456,89 +461,137 @@ QPainterPath Road::getPath()
 	return p->thePath;
 }
 
-//void Road::buildPath(Projection const &theProjection, const QRegion& paintRegion)
-//{
-//	p->thePaths.clear();
-//	if (!p->Nodes.size())
-//		return;
-//}
-
-void Road::buildPath(Projection const &theProjection, const QRegion& paintRegion)
+void Road::buildPath(Projection const &theProjection, const QRect& cr)
 {
+	using namespace geometry;
+
 	p->thePath = QPainterPath();
 	if (!p->Nodes.size())
 		return;
 
-	bool lastPointVisible = true;
-	QPoint lastPoint = theProjection.project(p->Nodes[0]);
-	QPoint aP = lastPoint;
+	box_2d clipRect (make<point_2d>(cr.bottomLeft().x(), cr.topRight().y()), make<point_2d>(cr.topRight().x(), cr.bottomLeft().y()));
 
-	double PixelPerM = theProjection.pixelPerM();
-	double WW = PixelPerM*widthOf()*10+10;
-	QRect clipRect = paintRegion.boundingRect().adjusted(int(-WW-20), int(-WW-20), int(WW+20), int(WW+20));
-
-
-	if (M_PREFS->getDrawingHack()) {
-		if (!clipRect.contains(aP)) {
-			aP.setX(qMax(clipRect.left(), aP.x()));
-			aP.setX(qMin(clipRect.right(), aP.x()));
-			aP.setY(qMax(clipRect.top(), aP.y()));
-			aP.setY(qMin(clipRect.bottom(), aP.y()));
-			lastPointVisible = false;
+	if (area() <= 0.0) {
+		linestring_2d in;
+		for (int i=0; i<p->Nodes.size(); ++i) {
+			QPoint P = theProjection.project(p->Nodes[i]);
+			append(in, make<point_2d>(P.x(), P.y()));
 		}
-	}
-	p->thePath.moveTo(aP);
-	QPoint firstPoint = aP;
-	if (smoothed().size())
-	{
-		for (unsigned int i=3; i<smoothed().size(); i+=3)
-			p->thePath.cubicTo(
-				theProjection.project(smoothed()[i-2]),
-				theProjection.project(smoothed()[i-1]),
-				theProjection.project(smoothed()[i]));
-	}
-	else
-		for (unsigned int j=1; j<size(); ++j) {
-			aP = theProjection.project(p->Nodes[j]);
-			if (M_PREFS->getDrawingHack()) {
-				QLine l(lastPoint, aP);
-				if (!clipRect.contains(aP)) {
-					if (!lastPointVisible) {
-						QPoint a, b;
-						if (QRectInterstects(clipRect, l, a, b)) {
-							p->thePath.lineTo(a);
-							lastPoint = aP;
-							aP = b;
-						} else {
-							lastPoint = aP;
-							aP.setX(qMax(clipRect.left(), aP.x()));
-							aP.setX(qMin(clipRect.right(), aP.x()));
-							aP.setY(qMax(clipRect.top(), aP.y()));
-							aP.setY(qMin(clipRect.bottom(), aP.y()));
-						}
-					} else {
-						QPoint a, b;
-						QRectInterstects(clipRect, l, a, b);
-						lastPoint = aP;
-						aP = a;
-					}
-					lastPointVisible = false;
-				} else {
-					if (!lastPointVisible) {
-						QPoint a, b;
-						QRectInterstects(clipRect, l, a, b);
-						p->thePath.lineTo(a);
-					}
-					lastPoint = aP;
-					lastPointVisible = true;
-				}
+
+		std::vector<linestring_2d> clipped;
+		intersection(clipRect, in, std::back_inserter(clipped));
+
+		for (std::vector<linestring_2d>::const_iterator it = clipped.begin(); it != clipped.end(); it++)
+		{
+			if (!(*it).empty()) {
+				p->thePath.moveTo(QPoint((*it)[0].x(), (*it)[0].y()));
 			}
-			p->thePath.lineTo(aP);
+			for (linestring_2d::const_iterator itl = (*it).begin()+1; itl != (*it).end(); itl++)
+			{
+				p->thePath.lineTo(QPoint((*itl).x(), (*itl).y()));
+			}
 		}
-		if (area() > 0.0 && !lastPointVisible)
-			p->thePath.lineTo(firstPoint);
+	} else {
+		polygon_2d in;
+		for (int i=0; i<p->Nodes.size(); ++i) {
+			QPoint P = theProjection.project(p->Nodes[i]);
+			append(in, make<point_2d>(P.x(), P.y()));
+		}
+		correct(in);
+
+		std::vector<polygon_2d> clipped;
+		intersection(clipRect, in, std::back_inserter(clipped));
+
+		for (std::vector<polygon_2d>::const_iterator it = clipped.begin(); it != clipped.end(); it++)
+		{
+			if (!(*it).outer().empty()) {
+				p->thePath.moveTo(QPoint((*it).outer()[0].x(), (*it).outer()[0].y()));
+			}
+			for (ring_2d::const_iterator itl = (*it).outer().begin()+1; itl != (*it).outer().end(); itl++)
+			{
+				p->thePath.lineTo(QPoint((*itl).x(), (*itl).y()));
+			}
+		}
+	}
+
 }
 
+//void Road::buildPath(Projection const &theProjection, const QRegion& paintRegion)
+//{
+//	p->thePath = QPainterPath();
+//	if (!p->Nodes.size())
+//		return;
+//
+//	bool lastPointVisible = true;
+//	QPoint lastPoint = theProjection.project(p->Nodes[0]);
+//	QPoint aP = lastPoint;
+//
+//	double PixelPerM = theProjection.pixelPerM();
+//	double WW = PixelPerM*widthOf()*10+10;
+//	QRect clipRect = paintRegion.boundingRect().adjusted(int(-WW-20), int(-WW-20), int(WW+20), int(WW+20));
+//
+//
+//	if (M_PREFS->getDrawingHack()) {
+//		if (!clipRect.contains(aP)) {
+//			aP.setX(qMax(clipRect.left(), aP.x()));
+//			aP.setX(qMin(clipRect.right(), aP.x()));
+//			aP.setY(qMax(clipRect.top(), aP.y()));
+//			aP.setY(qMin(clipRect.bottom(), aP.y()));
+//			lastPointVisible = false;
+//		}
+//	}
+//	p->thePath.moveTo(aP);
+//	QPoint firstPoint = aP;
+//	if (smoothed().size())
+//	{
+//		for (unsigned int i=3; i<smoothed().size(); i+=3)
+//			p->thePath.cubicTo(
+//				theProjection.project(smoothed()[i-2]),
+//				theProjection.project(smoothed()[i-1]),
+//				theProjection.project(smoothed()[i]));
+//	}
+//	else
+//		for (unsigned int j=1; j<size(); ++j) {
+//			aP = theProjection.project(p->Nodes[j]);
+//			if (M_PREFS->getDrawingHack()) {
+//				QLine l(lastPoint, aP);
+//				if (!clipRect.contains(aP)) {
+//					if (!lastPointVisible) {
+//						QPoint a, b;
+//						if (QRectInterstects(clipRect, l, a, b)) {
+//							p->thePath.lineTo(a);
+//							lastPoint = aP;
+//							aP = b;
+//						} else {
+//							lastPoint = aP;
+//							aP.setX(qMax(clipRect.left(), aP.x()));
+//							aP.setX(qMin(clipRect.right(), aP.x()));
+//							aP.setY(qMax(clipRect.top(), aP.y()));
+//							aP.setY(qMin(clipRect.bottom(), aP.y()));
+//						}
+//					} else {
+//						QPoint a, b;
+//						QRectInterstects(clipRect, l, a, b);
+//						lastPoint = aP;
+//						aP = a;
+//					}
+//					lastPointVisible = false;
+//				} else {
+//					if (!lastPointVisible) {
+//						QPoint a, b;
+//						QRectInterstects(clipRect, l, a, b);
+//						p->thePath.lineTo(a);
+//					}
+//					lastPoint = aP;
+//					lastPointVisible = true;
+//				}
+//			}
+//			p->thePath.lineTo(aP);
+//		}
+//		if (area() > 0.0 && !lastPointVisible)
+//			p->thePath.lineTo(firstPoint);
+//}
+//
 
 
 bool Road::deleteChildren(MapDocument* theDocument, CommandList* theList)
@@ -546,36 +599,25 @@ bool Road::deleteChildren(MapDocument* theDocument, CommandList* theList)
 	if (lastUpdated() == MapFeature::OSMServerConflict)
 		return true;
 
-	QMessageBox::StandardButton resp = QMessageBox::question(NULL, MainWindow::tr("Delete Children"),
-								 MainWindow::tr("Do you want to delete the children nodes also?"),
-								 QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes);
-	switch(resp) {
-		case QMessageBox::No:
-			return true;
-
-		case QMessageBox::Cancel:
-			return false;
-
-		case QMessageBox::Yes: {
-			std::vector<MapFeature*> Alternatives;
-			QMap<MapFeature*, int> ToDelete;
-			for (int i=(int)p->Nodes.size()-1; i>=0; --i) {
-				TrackPoint* N = p->Nodes[i];
-				if (N->sizeParents() < 2) {
-					ToDelete[N] = i;
-				}
+	MDiscardableMessage dlg(NULL,
+		MainWindow::tr("Delete Children."),
+		MainWindow::tr("Do you want to delete the children nodes also?"));
+	if (dlg.check() == QDialog::Accepted) {
+		std::vector<MapFeature*> Alternatives;
+		QMap<MapFeature*, int> ToDelete;
+		for (int i=(int)p->Nodes.size()-1; i>=0; --i) {
+			TrackPoint* N = p->Nodes[i];
+			if (N->sizeParents() < 2) {
+				ToDelete[N] = i;
 			}
-			QList<MapFeature*> ToDeleteKeys = ToDelete.uniqueKeys();
-			for (int i=0; i<ToDeleteKeys.size(); ++i) {
-				if (!ToDeleteKeys[i]->isDeleted())
-					theList->add(new RemoveFeatureCommand(theDocument, ToDeleteKeys[i], Alternatives));
-			}
-			return true;
 		}
-
-		default:
-			return false;
+		QList<MapFeature*> ToDeleteKeys = ToDelete.uniqueKeys();
+		for (int i=0; i<ToDeleteKeys.size(); ++i) {
+			if (!ToDeleteKeys[i]->isDeleted())
+				theList->add(new RemoveFeatureCommand(theDocument, ToDeleteKeys[i], Alternatives));
+		}
 	}
+	return true;
 }
 
 #define DEFAULTWIDTH 6

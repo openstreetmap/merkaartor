@@ -10,6 +10,7 @@
 #include "Utils/LineF.h"
 #include "MainWindow.h"
 #include "PropertiesDock.h"
+#include "Utils/MDiscardableDialog.h"
 
 #include <QtGui/QDockWidget>
 #include <QtGui/QMessageBox>
@@ -125,10 +126,10 @@ void CreateAreaInteraction::finishRoad(CommandList* L)
 	LastRoad = theRoad;
 	theRoad = 0;
 
-	if (QMessageBox::question(Main, tr("Add a hole?"),
-		tr("Do you want to add a(nother) hole to this area?"),
-		QMessageBox::Yes, QMessageBox::No)  == QMessageBox::No)
-	{
+	MDiscardableMessage dlg(NULL,
+		MainWindow::tr("Add a hole."),
+		MainWindow::tr("Do you want to add a(nother) hole to this area?"));
+	if (dlg.check() == QDialog::Rejected) {
 		EndNow = true;
 	}
 	L->setDescription(MainWindow::tr("Area: Finish Road %1").arg(LastRoad->description()));

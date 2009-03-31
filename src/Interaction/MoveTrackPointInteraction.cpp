@@ -9,6 +9,7 @@
 #include "Map/Projection.h"
 #include "Map/TrackPoint.h"
 #include "Utils/LineF.h"
+#include "Utils/MDiscardableDialog.h"
 
 #include <QtGui/QCursor>
 #include <QtGui/QMouseEvent>
@@ -85,8 +86,8 @@ void MoveTrackPointInteraction::snapMouseReleaseEvent(QMouseEvent * event, MapFe
 			std::vector<TrackPoint*> samePosPts;
 			for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it)
 			{
-				TrackPoint* visPt = dynamic_cast<TrackPoint*>(it.get());
-				if (visPt)
+				TrackPoint* visPt = CAST_NODE(it.get());
+				if (visPt && visPt->layer()->classType() != MapLayer::TrackMapLayerType)
 				{
 					if (visPt == Moving[0])
 						continue;
@@ -104,11 +105,10 @@ void MoveTrackPointInteraction::snapMouseReleaseEvent(QMouseEvent * event, MapFe
 
 			if (samePosPts.size() > 1)   // Ignore the node we're moving, see if there are more
 			{
-				int ret = QMessageBox::question(view(),
+				MDiscardableMessage dlg(view(),
 					MainWindow::tr("Nodes at the same position found."),
-					MainWindow::tr("Do you want to merge all nodes at the drop position?"),
-					QMessageBox::Yes | QMessageBox::No);
-				if (ret == QMessageBox::Yes)
+					MainWindow::tr("Do you want to merge all nodes at the drop position?"));
+				if (dlg.check() == QDialog::Accepted)
 				{
 					// Merge all nodes from the same position
 

@@ -1365,6 +1365,12 @@ void MainWindow::on_toolsTMSServersAction_triggered()
 	}
 }
 
+void MainWindow::on_toolsResetDiscardableAction_triggered()
+{
+	QSettings Sets;
+	Sets.remove("DiscardableDialogs");
+}
+
 void MainWindow::on_toolsShortcutsAction_triggered()
 {
 	QList<QAction*> theActions;

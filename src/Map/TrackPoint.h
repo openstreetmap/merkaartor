@@ -11,6 +11,9 @@
 #include <QtCore/QDateTime>
 #include <QtXml>
 
+#include <geometry/geometry.hpp>
+#include <geometry/geometries/register/register_point.hpp>
+
 class QProgressDialog;
 
 class TrackPoint : public MapFeature
@@ -79,6 +82,10 @@ private:
 };
 
 Q_DECLARE_METATYPE( TrackPoint * );
+
+// Register this point as being a recognizable point by the GGL
+GEOMETRY_REGISTER_POINT_2D_CONST(TrackPoint, int, cs::cartesian, projection().x(), projection().y())
+
 
 #endif
 

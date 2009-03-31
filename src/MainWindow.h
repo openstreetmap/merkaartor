@@ -118,6 +118,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 		virtual void on_toolsWMSServersAction_triggered();
 		virtual void on_toolsTMSServersAction_triggered();
 		virtual void toolsPreferencesAction_triggered(bool focusData=false);
+		virtual void on_toolsResetDiscardableAction_triggered();
 		
 		virtual void on_windowPropertiesAction_triggered();
 		virtual void on_windowLayersAction_triggered();

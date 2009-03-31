@@ -7,6 +7,8 @@
 #include "Map/MapFeature.h"
 #include "Map/MapLayer.h"
 
+#include <geometry/geometry.hpp>
+
 class RoadPrivate;
 class TrackPoint;
 class QProgressDialog;
@@ -90,7 +92,7 @@ class Road : public MapFeature
 		virtual bool deleteChildren(MapDocument* theDocument, CommandList* theList);
 
 		QPainterPath getPath();
-		void buildPath(Projection const &theProjection, const QRegion& paintRegion);
+		void buildPath(Projection const &theProjection, const QRect& clipRect);
 
 		virtual QString toXML(unsigned int lvl=0, QProgressDialog * progress=NULL);
 		virtual bool toXML(QDomElement xParent, QProgressDialog & progress);

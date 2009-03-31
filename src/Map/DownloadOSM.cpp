@@ -283,20 +283,22 @@ QByteArray& Downloader::content()
 
 void Downloader::on_responseHeaderReceived(const QHttpResponseHeader & hdr)
 {
-	switch (hdr.statusCode()) {
-		//case 200:
-		//	break;
-		//case 406:
-		//	QMessageBox::critical(NULL,QApplication::translate("MerkaartorPreferences","Preferences upload failed"), QApplication::translate("MerkaartorPreferences","Duplicate key"));
-		//	break;
-		//case 413:
-		//	QMessageBox::critical(NULL,QApplication::translate("MerkaartorPreferences","Preferences upload failed"), QApplication::translate("MerkaartorPreferences","More than 150 preferences"));
-		//	break;
-		default:
-			qDebug() << hdr.statusCode();
-			qDebug() << hdr.reasonPhrase();
-			break;
-	}
+	//switch (hdr.statusCode()) {
+	//	case 200:
+	//		break;
+	//	case 406:
+	//		QMessageBox::critical(NULL,QApplication::translate("MerkaartorPreferences","Preferences upload failed"), QApplication::translate("MerkaartorPreferences","Duplicate key"));
+	//		break;
+	//	case 413:
+	//		QMessageBox::critical(NULL,QApplication::translate("MerkaartorPreferences","Preferences upload failed"), QApplication::translate("MerkaartorPreferences","More than 150 preferences"));
+	//		break;
+	//	default:
+	//		qDebug() << hdr.statusCode();
+	//		qDebug() << hdr.reasonPhrase();
+	//		break;
+	//}
+	qDebug() << hdr.statusCode();
+	qDebug() << hdr.reasonPhrase();
 }
 
 void Downloader::on_requestFinished(int anId, bool anError)

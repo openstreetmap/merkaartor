@@ -369,12 +369,12 @@ void PropertiesDock::switchUi()
 		switchToNoUi();
 	else if (FullSelection.size() == 1)
 	{
-		if (dynamic_cast<TrackPoint*>(FullSelection[0]))
-			switchToTrackPointUi(FullSelection[0]);
-		else if (dynamic_cast<Road*>(FullSelection[0]))
-			switchToRoadUi(FullSelection[0]);
-		else if (dynamic_cast<Relation*>(FullSelection[0]))
-			switchToRelationUi(FullSelection[0]);
+		if (CAST_NODE(FullSelection[0]))
+			switchToTrackPointUi();
+		else if (CAST_WAY(FullSelection[0]))
+			switchToRoadUi();
+		else if (CAST_RELATION(FullSelection[0]))
+			switchToRelationUi();
 		else
 			switchToNoUi();
 	}
@@ -403,7 +403,7 @@ void PropertiesDock::switchToMultiUi()
 	setWindowTitle(tr("Properties - Multiple elements"));
 }
 
-void PropertiesDock::switchToTrackPointUi(MapFeature* F)
+void PropertiesDock::switchToTrackPointUi()
 {
 	NowShowing = TrackPointUiShowing;
 	QWidget* NewUi = new QWidget(this);
@@ -419,7 +419,7 @@ void PropertiesDock::switchToTrackPointUi(MapFeature* F)
 	setWindowTitle(tr("Properties - Trackpoint"));
 }
 
-void PropertiesDock::switchToRoadUi(MapFeature* F)
+void PropertiesDock::switchToRoadUi()
 {
 	NowShowing = RoadUiShowing;
 	QWidget* NewUi = new QWidget(this);
@@ -433,7 +433,7 @@ void PropertiesDock::switchToRoadUi(MapFeature* F)
 	setWindowTitle(tr("Properties - Road"));
 }
 
-void PropertiesDock::switchToRelationUi(MapFeature* F)
+void PropertiesDock::switchToRelationUi()
 {
 	NowShowing = RelationUiShowing;
 	QWidget* NewUi = new QWidget(this);

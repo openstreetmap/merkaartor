@@ -353,6 +353,8 @@ void MapView::buildFeatureSet(QRegion invalidRegion, Projection& aProj)
 		coordRegion += CoordBox(tl, br);
 	}
 
+	QRect clipRect = invalidRegion.boundingRect().adjusted(int(-20), int(-20), int(20), int(20));
+
 	for (VisibleFeatureIterator vit(theDocument); !vit.isEnd(); ++vit) {
 		bool OK = false;
 		for (int k=0; k<coordRegion.size() && !OK; ++k)
@@ -360,13 +362,13 @@ void MapView::buildFeatureSet(QRegion invalidRegion, Projection& aProj)
 				OK = true;
 		if (OK) {
 			if (Road * R = dynamic_cast < Road * >(vit.get())) {
-				R->buildPath(aProj, invalidRegion);
+				R->buildPath(aProj, clipRect);
 				theFeatures.push_back(R);
 				if (R->isCoastline())
 					theCoastlines.push_back(R);
 			} else
 			if (Relation * RR = dynamic_cast < Relation * >(vit.get())) {
-				RR->buildPath(aProj, invalidRegion);
+				RR->buildPath(aProj, clipRect);
 				theFeatures.push_back(RR);
 			} else {
 				theFeatures.push_back(vit.get());

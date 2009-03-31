@@ -13,7 +13,7 @@
    <string>Merkaartor</string>
   </property>
   <property name="windowIcon" >
-   <iconset resource="Icons/AllIcons.qrc" >
+   <iconset resource="../Icons/AllIcons.qrc" >
     <normaloff>:/Icons/Merkaartor.xpm</normaloff>:/Icons/Merkaartor.xpm</iconset>
   </property>
   <widget class="QWidget" name="centralWidget" />
@@ -198,11 +198,13 @@
     <addaction name="menuStyles" />
     <addaction name="designerMenu" />
     <addaction name="separator" />
+    <addaction name="toolsShortcutsAction" />
     <addaction name="toolsWorldOsbAction" />
     <addaction name="toolsTMSServersAction" />
     <addaction name="toolsWMSServersAction" />
     <addaction name="separator" />
-    <addaction name="toolsShortcutsAction" />
+    <addaction name="toolsResetDiscardableAction" />
+    <addaction name="separator" />
     <addaction name="toolsPreferencesAction" />
    </widget>
    <widget class="QMenu" name="menu_Node" >
@@ -338,7 +340,7 @@
   </action>
   <action name="fileOpenAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/document_open.png</normaloff>:/Icons/actions/document_open.png</iconset>
    </property>
    <property name="text" >
@@ -353,7 +355,7 @@
   </action>
   <action name="viewZoomAllAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/zoom_fit_best.png</normaloff>:/Icons/actions/zoom_fit_best.png</iconset>
    </property>
    <property name="text" >
@@ -379,7 +381,7 @@
   </action>
   <action name="viewZoomOutAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/zoom_out.png</normaloff>:/Icons/actions/zoom_out.png</iconset>
    </property>
    <property name="text" >
@@ -391,7 +393,7 @@
   </action>
   <action name="viewZoomInAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/zoom_in.png</normaloff>:/Icons/actions/zoom_in.png</iconset>
    </property>
    <property name="text" >
@@ -423,7 +425,7 @@
   </action>
   <action name="editUndoAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/undo.png</normaloff>:/Icons/actions/undo.png</iconset>
    </property>
    <property name="text" >
@@ -435,7 +437,7 @@
   </action>
   <action name="editRedoAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/redo.png</normaloff>:/Icons/actions/redo.png</iconset>
    </property>
    <property name="text" >
@@ -450,7 +452,7 @@
     <bool>true</bool>
    </property>
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/edit_move.png</normaloff>:/Icons/actions/edit_move.png</iconset>
    </property>
    <property name="text" >
@@ -462,7 +464,7 @@
   </action>
   <action name="fileImportAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/document_import.png</normaloff>:/Icons/actions/document_import.png</iconset>
    </property>
    <property name="text" >
@@ -474,7 +476,7 @@
   </action>
   <action name="fileDownloadAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/download.png</normaloff>:/Icons/actions/download.png</iconset>
    </property>
    <property name="text" >
@@ -506,7 +508,7 @@
     <bool>true</bool>
    </property>
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/select.png</normaloff>:/Icons/actions/select.png</iconset>
    </property>
    <property name="text" >
@@ -518,7 +520,7 @@
   </action>
   <action name="fileUploadAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/upload.png</normaloff>:/Icons/actions/upload.png</iconset>
    </property>
    <property name="text" >
@@ -536,7 +538,7 @@
     <bool>false</bool>
    </property>
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/edit_delete.png</normaloff>:/Icons/actions/edit_delete.png</iconset>
    </property>
    <property name="text" >
@@ -554,7 +556,7 @@
     <bool>true</bool>
    </property>
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/create_road.png</normaloff>:/Icons/actions/create_road.png</iconset>
    </property>
    <property name="text" >
@@ -572,7 +574,7 @@
     <bool>true</bool>
    </property>
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/create_node.png</normaloff>:/Icons/actions/create_node.png</iconset>
    </property>
    <property name="text" >
@@ -590,7 +592,7 @@
     <bool>false</bool>
    </property>
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/reverse_road.png</normaloff>:/Icons/actions/reverse_road.png</iconset>
    </property>
    <property name="text" >
@@ -602,7 +604,7 @@
   </action>
   <action name="viewGotoAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/goto.png</normaloff>:/Icons/actions/goto.png</iconset>
    </property>
    <property name="text" >
@@ -630,7 +632,7 @@
   </action>
   <action name="fileNewAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/document_new.png</normaloff>:/Icons/actions/document_new.png</iconset>
    </property>
    <property name="text" >
@@ -642,7 +644,7 @@
   </action>
   <action name="roadSplitAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/split_road.png</normaloff>:/Icons/actions/split_road.png</iconset>
    </property>
    <property name="text" >
@@ -657,7 +659,7 @@
   </action>
   <action name="roadJoinAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/join_roads.png</normaloff>:/Icons/actions/join_roads.png</iconset>
    </property>
    <property name="text" >
@@ -672,7 +674,7 @@
   </action>
   <action name="roadBreakAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/break_apart_roads.png</normaloff>:/Icons/actions/break_apart_roads.png</iconset>
    </property>
    <property name="text" >
@@ -701,7 +703,7 @@
     <bool>true</bool>
    </property>
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/create_area.png</normaloff>:/Icons/actions/create_area.png</iconset>
    </property>
    <property name="text" >
@@ -733,7 +735,7 @@
   </action>
   <action name="toolsPreferencesAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/preferences.png</normaloff>:/Icons/actions/preferences.png</iconset>
    </property>
    <property name="text" >
@@ -758,7 +760,7 @@
   </action>
   <action name="editSelectAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/find.png</normaloff>:/Icons/actions/find.png</iconset>
    </property>
    <property name="text" >
@@ -818,7 +820,7 @@
   </action>
   <action name="fileSaveAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/save.png</normaloff>:/Icons/actions/save.png</iconset>
    </property>
    <property name="text" >
@@ -833,7 +835,7 @@
   </action>
   <action name="fileDownloadMoreAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/download_more.png</normaloff>:/Icons/actions/download_more.png</iconset>
    </property>
    <property name="text" >
@@ -910,7 +912,7 @@
   </action>
   <action name="nodeAlignAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/align_nodes.png</normaloff>:/Icons/actions/align_nodes.png</iconset>
    </property>
    <property name="text" >
@@ -956,7 +958,7 @@
   </action>
   <action name="editCopyAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/edit_copy.png</normaloff>:/Icons/actions/edit_copy.png</iconset>
    </property>
    <property name="text" >
@@ -985,7 +987,7 @@
   </action>
   <action name="editPasteMergeAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/edit_paste_tags.png</normaloff>:/Icons/actions/edit_paste_tags.png</iconset>
    </property>
    <property name="text" >
@@ -1016,7 +1018,7 @@
   </action>
   <action name="editPasteFeaturesAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/edit_paste.png</normaloff>:/Icons/actions/edit_paste.png</iconset>
    </property>
    <property name="text" >
@@ -1357,7 +1359,7 @@
   </action>
   <action name="nodeDetachAction" >
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/detach_node.png</normaloff>:/Icons/actions/detach_node.png</iconset>
    </property>
    <property name="text" >
@@ -1375,7 +1377,7 @@
     <bool>true</bool>
    </property>
    <property name="icon" >
-    <iconset resource="Icons/AllIcons.qrc" >
+    <iconset resource="../Icons/AllIcons.qrc" >
      <normaloff>:/Icons/actions/offline.png</normaloff>:/Icons/actions/offline.png</iconset>
    </property>
    <property name="text" >
@@ -1414,9 +1416,14 @@
     <string>TMS Servers Editor...</string>
    </property>
   </action>
+  <action name="toolsResetDiscardableAction" >
+   <property name="text" >
+    <string>&amp;Reset Discardable dialogs status</string>
+   </property>
+  </action>
  </widget>
  <resources>
-  <include location="Icons/AllIcons.qrc" />
+  <include location="../Icons/AllIcons.qrc" />
  </resources>
  <connections>
   <connection>

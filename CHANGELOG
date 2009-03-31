@@ -1,4 +1,7 @@
 v0.14
+    * ADD : Support for discardable dialogs/messageboxes (fixes #1487)
+    * FIX : Do not automerge GPX nodes (fixes #1486)
+    * FIX : Proper clipping via Boost's geometry template library
 	* FIX : Do not use guarded pointers (too slow) (closes #1674)
 	* FIX : Styles tag selection speed optimisation (by Trav)
 	* FIX : OSM/GPX import optimisations (by Trav)

@@ -66,10 +66,10 @@ class PropertiesDock : public MDockAncestor
 		void cleanUpUi();
 		void switchUi();
 		void switchToNoUi();
-		void switchToTrackPointUi(MapFeature* F);
-		void switchToRoadUi(MapFeature* F);
+		void switchToTrackPointUi();
+		void switchToRoadUi();
 		void switchToMultiUi();
-		void switchToRelationUi(MapFeature* F);
+		void switchToRelationUi();
 		void fillMultiUiSelectionBox();
 		void changeEvent(QEvent*);
 		void retranslateUi();

@@ -64,6 +64,7 @@ HEADERS += ./Command/Command.h \
     ./Utils/SelectionDialog.h \
     ./Utils/SvgCache.h \
     ./Utils/MDockAncestor.h \
+    ./Utils/MDiscardableDialog.h \
     ./DirtyDock.h \
     ./GotoDialog.h \
     StyleDock.h
@@ -123,6 +124,7 @@ SOURCES += ./Command/Command.cpp \
     ./Utils/SelectionDialog.cpp \
     ./Utils/SvgCache.cpp \
     ./Utils/MDockAncestor.cpp \
+    ./Utils/MDiscardableDialog.cpp \
     ./Preferences/MerkaartorPreferences.cpp \
     ./Preferences/PreferencesDialog.cpp \
     ./Preferences/WMSPreferencesDialog.cpp \
