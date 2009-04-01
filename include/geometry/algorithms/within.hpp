@@ -89,7 +89,7 @@ namespace geometry
 			template <typename P, typename B, size_t N>
 			struct point_in_box<P, B, N, N>
 			{
-				static bool inside(const P& p, const B& b)
+				static bool inside(const P& /* p */, const B& /* b */)
 				{
 					return true;
 				}

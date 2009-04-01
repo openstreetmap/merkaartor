@@ -6,7 +6,7 @@
 #include <QSettings>
 
 MDiscardableDialog::MDiscardableDialog(QWidget *parent, QString title)
-	: QDialog(parent), Title(title), mainWidget(0)
+	: QDialog(parent), mainWidget(0), Title(title) 
 {
 	QSettings Sets;
 	Sets.beginGroup("DiscardableDialogs");

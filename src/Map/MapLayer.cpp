@@ -588,11 +588,12 @@ ImageMapLayer::ImageMapLayer(const QString & aName, LayerManager* aLayerMgr)
 	else
 		setVisible(MerkaartorPreferences::instance()->getBgVisible());
 
-	if (M_PREFS->getUseShapefileForBackground())
+	if (M_PREFS->getUseShapefileForBackground()) {
 		if (QDir::isAbsolutePath(WORLD_SHP))
 			setFilename(WORLD_SHP);
 		else
 			setFilename(QCoreApplication::applicationDirPath() + "/" + WORLD_SHP);
+	}
 
 	setReadonly(true);
 }
