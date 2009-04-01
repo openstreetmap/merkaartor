@@ -32,13 +32,16 @@ WMSPreferencesDialog::~WMSPreferencesDialog()
 void WMSPreferencesDialog::addServer(const WmsServer & srv)
 {
 	theWmsServers.push_back(srv);
-	if (!srv.deleted)
-		lvWmsServers->addItem(srv.WmsName);
+	if (!srv.deleted) {
+		QListWidgetItem* item = new QListWidgetItem(srv.WmsName);
+		item->setData(Qt::UserRole, theWmsServers.size()-1);
+		lvWmsServers->addItem(item);
+	}
 }
 
 void WMSPreferencesDialog::on_btApplyWmsServer_clicked(void)
 {
-	unsigned int idx = static_cast<unsigned int>(lvWmsServers->currentRow());
+	unsigned int idx = static_cast<unsigned int>(lvWmsServers->currentItem()->data(Qt::UserRole).toInt());
 	if (idx >= theWmsServers.size())
 		return;
 
@@ -53,6 +56,91 @@ void WMSPreferencesDialog::on_btApplyWmsServer_clicked(void)
 
 	lvWmsServers->currentItem()->setText(WS.WmsName);
 	selectedServer = WS.WmsName;
+}
+
+void WMSPreferencesDialog::on_btAddWmsServer_clicked(void)
+{
+	addServer(WmsServer(edWmsName->text(), edWmsAdr->text(), edWmsPath->text(),
+		edWmsLayers->text(), edWmsProj->text(), edWmsStyles->text(), edWmsImgFormat->text()));
+	lvWmsServers->setCurrentRow(lvWmsServers->count() - 1);
+	on_lvWmsServers_itemClicked(lvWmsServers->item(lvWmsServers->currentRow()));
+}
+
+void WMSPreferencesDialog::on_btDelWmsServer_clicked(void)
+{
+	unsigned int idx = static_cast<unsigned int>(lvWmsServers->currentItem()->data(Qt::UserRole).toInt());
+	if (idx >= theWmsServers.size())
+		return;
+
+	theWmsServers[idx].deleted = true;
+	delete lvWmsServers->currentItem();
+	on_lvWmsServers_itemClicked(lvWmsServers->item(lvWmsServers->currentRow()));
+}
+
+void WMSPreferencesDialog::on_lvWmsServers_itemClicked(QListWidgetItem* it)
+{
+	unsigned int idx = it->data(Qt::UserRole).toInt();
+	if (idx >= theWmsServers.size())
+		return;
+
+	WmsServer& WS(theWmsServers[idx]);
+	edWmsName->setText(WS.WmsName);
+	edWmsAdr->setText(WS.WmsAdress);
+	edWmsPath->setText(WS.WmsPath);
+	edWmsLayers->setText(WS.WmsLayers);
+	edWmsProj->setText(WS.WmsProjections);
+	edWmsStyles->setText(WS.WmsStyles);
+	edWmsImgFormat->setText(WS.WmsImgFormat);
+
+	selectedServer = WS.WmsName;
+}
+
+QString WMSPreferencesDialog::getSelectedServer()
+{
+	return selectedServer;
+}
+
+void WMSPreferencesDialog::setSelectedServer(QString theValue)
+{
+	QList<QListWidgetItem *> L = lvWmsServers->findItems(theValue, Qt::MatchExactly);
+	if (L.size()) {
+		lvWmsServers->setCurrentItem(L[0]);
+		on_lvWmsServers_itemClicked(L[0]);
+	}
+}
+
+void WMSPreferencesDialog::on_buttonBox_clicked(QAbstractButton * button)
+{
+	if ((button == buttonBox->button(QDialogButtonBox::Apply))) {
+		savePrefs();
+	} else
+		if ((button == buttonBox->button(QDialogButtonBox::Ok))) {
+			savePrefs();
+			this->accept();
+		}
+}
+
+void WMSPreferencesDialog::loadPrefs()
+{
+	WmsServerList* L = MerkaartorPreferences::instance()->getWmsServers();
+	WmsServerListIterator i(*L);
+	while (i.hasNext()) {
+		i.next();
+		addServer(i.value());
+	}
+	setSelectedServer(MerkaartorPreferences::instance()->getSelectedWmsServer());
+}
+
+void WMSPreferencesDialog::savePrefs()
+{
+	WmsServerList* L = MerkaartorPreferences::instance()->getWmsServers();
+	L->clear();
+	for (unsigned int i = 0; i < theWmsServers.size(); ++i) {
+		WmsServer S(theWmsServers[i]);
+		L->insert(theWmsServers[i].WmsName, S);
+	}
+	//MerkaartorPreferences::instance()->setSelectedWmsServer(getSelectedServer());
+	M_PREFS->save();
 }
 
 void WMSPreferencesDialog::on_btShowCapabilities_clicked(void)
@@ -126,93 +214,5 @@ void WMSPreferencesDialog::httpRequestFinished(bool error)
 		dlg->show();
 		//delete dlg;
 	}
-}
-
-void WMSPreferencesDialog::on_btAddWmsServer_clicked(void)
-{
-	addServer(WmsServer(edWmsName->text(), edWmsAdr->text(), edWmsPath->text(),
-		edWmsLayers->text(), edWmsProj->text(), edWmsStyles->text(), edWmsImgFormat->text()));
-	lvWmsServers->setCurrentRow(theWmsServers.size() - 1);
-	on_lvWmsServers_itemClicked(lvWmsServers->item(lvWmsServers->currentRow()));
-}
-
-void WMSPreferencesDialog::on_btDelWmsServer_clicked(void)
-{
-	unsigned int idx = static_cast<unsigned int>(lvWmsServers->currentRow());
-	if (idx >= theWmsServers.size())
-		return;
-
-	theWmsServers[idx].deleted = true;
-	delete lvWmsServers->takeItem(idx);
-	if (idx && (idx >= theWmsServers.size()))
-		--idx;
-	lvWmsServers->setCurrentRow(idx);
-	on_lvWmsServers_itemClicked(lvWmsServers->item(lvWmsServers->currentRow()));
-}
-
-void WMSPreferencesDialog::on_lvWmsServers_itemClicked(QListWidgetItem* it)
-{
-	unsigned int idx = static_cast<unsigned int>(lvWmsServers->row(it));
-	if (idx >= theWmsServers.size())
-		return;
-
-	WmsServer& WS(theWmsServers[idx]);
-	edWmsName->setText(WS.WmsName);
-	edWmsAdr->setText(WS.WmsAdress);
-	edWmsPath->setText(WS.WmsPath);
-	edWmsLayers->setText(WS.WmsLayers);
-	edWmsProj->setText(WS.WmsProjections);
-	edWmsStyles->setText(WS.WmsStyles);
-	edWmsImgFormat->setText(WS.WmsImgFormat);
-
-	selectedServer = WS.WmsName;
-}
-
-QString WMSPreferencesDialog::getSelectedServer()
-{
-	return selectedServer;
-}
-
-void WMSPreferencesDialog::setSelectedServer(QString theValue)
-{
-	QList<QListWidgetItem *> L = lvWmsServers->findItems(theValue, Qt::MatchExactly);
-	if (L.size()) {
-		lvWmsServers->setCurrentItem(L[0]);
-		on_lvWmsServers_itemClicked(L[0]);
-	}
-}
-
-void WMSPreferencesDialog::on_buttonBox_clicked(QAbstractButton * button)
-{
-	if ((button == buttonBox->button(QDialogButtonBox::Apply))) {
-		savePrefs();
-	} else
-		if ((button == buttonBox->button(QDialogButtonBox::Ok))) {
-			savePrefs();
-			this->accept();
-		}
-}
-
-void WMSPreferencesDialog::loadPrefs()
-{
-	WmsServerList* L = MerkaartorPreferences::instance()->getWmsServers();
-	WmsServerListIterator i(*L);
-	while (i.hasNext()) {
-		i.next();
-		addServer(i.value());
-	}
-	setSelectedServer(MerkaartorPreferences::instance()->getSelectedWmsServer());
-}
-
-void WMSPreferencesDialog::savePrefs()
-{
-	WmsServerList* L = MerkaartorPreferences::instance()->getWmsServers();
-	L->clear();
-	for (unsigned int i = 0; i < theWmsServers.size(); ++i) {
-		WmsServer S(theWmsServers[i]);
-		L->insert(theWmsServers[i].WmsName, S);
-	}
-	//MerkaartorPreferences::instance()->setSelectedWmsServer(getSelectedServer());
-	M_PREFS->save();
 }
 

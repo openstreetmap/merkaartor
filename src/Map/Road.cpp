@@ -324,8 +324,7 @@ void Road::drawHover(QPainter& thePainter, const Projection& theProjection, bool
 	}
 	thePainter.setPen(TP);
 	thePainter.setBrush(Qt::NoBrush);
-	QRegion clipRg = QRegion(thePainter.clipRegion().boundingRect().adjusted(-20, -20, 20, 20));
-	QRect clipRect = clipRg.boundingRect().adjusted(int(-20), int(-20), int(20), int(20));
+	QRect clipRect = thePainter.clipRegion().boundingRect().adjusted(int(-20), int(-20), int(20), int(20));
 	buildPath(theProjection, clipRect);
 	thePainter.drawPath(p->thePath);
 	if (solid) {
@@ -362,8 +361,7 @@ void Road::drawFocus(QPainter& thePainter, const Projection& theProjection, bool
 	}
 	thePainter.setPen(TP);
 	thePainter.setBrush(Qt::NoBrush);
-	QRegion clipRg = QRegion(thePainter.clipRegion().boundingRect().adjusted(-20, -20, 20, 20));
-	QRect clipRect = clipRg.boundingRect().adjusted(int(-20), int(-20), int(20), int(20));
+	QRect clipRect = thePainter.clipRegion().boundingRect().adjusted(int(-20), int(-20), int(20), int(20));
 	buildPath(theProjection, clipRect);
 	thePainter.drawPath(p->thePath);
 	if (solid) {

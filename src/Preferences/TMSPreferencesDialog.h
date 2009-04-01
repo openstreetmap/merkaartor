@@ -40,10 +40,7 @@ public slots:
 	void on_btApplyTmsServer_clicked();
 	void on_btAddTmsServer_clicked();
 	void on_btDelTmsServer_clicked();
-	void on_btShowCapabilities_clicked();
 	void on_lvTmsServers_itemClicked(QListWidgetItem* it);
-	void readResponseHeader(const QHttpResponseHeader &responseHeader);
-	void httpRequestFinished(bool error);
 	void on_buttonBox_clicked(QAbstractButton * button);
 
 private:

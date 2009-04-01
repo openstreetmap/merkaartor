@@ -32,12 +32,16 @@ TMSPreferencesDialog::~TMSPreferencesDialog()
 void TMSPreferencesDialog::addServer(const TmsServer & srv)
 {
 	theTmsServers.push_back(srv);
-	lvTmsServers->addItem(srv.TmsName);
+	if (!srv.deleted) {
+		QListWidgetItem* item = new QListWidgetItem(srv.TmsName);
+		item->setData(Qt::UserRole, theTmsServers.size()-1);
+		lvTmsServers->addItem(item);
+	}
 }
 
 void TMSPreferencesDialog::on_btApplyTmsServer_clicked(void)
 {
-	unsigned int idx = static_cast<unsigned int>(lvTmsServers->currentRow());
+	unsigned int idx = static_cast<unsigned int>(lvTmsServers->currentItem()->data(Qt::UserRole).toInt());
 	if (idx >= theTmsServers.size())
 		return;
 
@@ -53,88 +57,27 @@ void TMSPreferencesDialog::on_btApplyTmsServer_clicked(void)
 	selectedServer = WS.TmsName;
 }
 
-void TMSPreferencesDialog::on_btShowCapabilities_clicked(void)
-{
-	if ((edTmsAdr->text() == "") || (edTmsPath->text() == "")) {
-		QMessageBox::critical(this, tr("Merkaartor: GetCapabilities"), tr("Address and Path cannot be blank."), QMessageBox::Ok);
-	}
-
-	http = new QHttp(this);
-	connect (http, SIGNAL(done(bool)), this, SLOT(httpRequestFinished(bool)));
-	connect(http, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)),
-		this, SLOT(readResponseHeader(const QHttpResponseHeader &)));
-
-	QUrl url("http://" + edTmsAdr->text() + "?" + edTmsPath->text() + "request=GetCapabilities");
-//	QUrl url("http://localhost/");
-
-	QHttpRequestHeader header("GET", url.path() + url.encodedQuery());
-	qDebug() << header.toString();
-	const char *userAgent = "Mozilla/9.876 (X11; U; Linux 2.2.12-20 i686, en) Gecko/25250101 Netscape/5.432b1";
-
-	header.setValue("Host", url.host());
-	header.setValue("User-Agent", userAgent);
-
-	http->setHost(url.host(), url.port() == -1 ? 80 : url.port());
-
-	if (MerkaartorPreferences::instance()->getProxyUse())
-		http->setProxy(MerkaartorPreferences::instance()->getProxyHost(), MerkaartorPreferences::instance()->getProxyPort());
-
-	httpGetId = http->request(header);
-}
-
-void TMSPreferencesDialog::readResponseHeader(const QHttpResponseHeader &responseHeader)
-{
-	qDebug() << responseHeader.toString();
-	if (responseHeader.statusCode() != 200) {
-		QMessageBox::information(this, tr("Merkaartor: GetCapabilities"),
-							  tr("Download failed: %1.")
-							  .arg(responseHeader.reasonPhrase()));
-		http->abort();
-		return;
-	}
-}
-
-void TMSPreferencesDialog::httpRequestFinished(bool error)
-{
-	if (error) {
-		QMessageBox::critical(this, tr("Merkaartor: GetCapabilities"), tr("Error reading capabilities.\n") + http->errorString(), QMessageBox::Ok);
-	} else {
-		QVBoxLayout *mainLayout = new QVBoxLayout;
-		QTextEdit* edit = new QTextEdit();
-		edit->setPlainText(QString(http->readAll()));
-		mainLayout->addWidget(edit);
-
-		QDialog* dlg = new QDialog(this);
-		dlg->setLayout(mainLayout);
-		dlg->show();
-		//delete dlg;
-	}
-}
-
 void TMSPreferencesDialog::on_btAddTmsServer_clicked(void)
 {
 	addServer(TmsServer(edTmsName->text(), edTmsAdr->text(), edTmsPath->text(), sbTileSize->value(), sbMinZoom->value(), sbMaxZoom->value()));
-	lvTmsServers->setCurrentRow(theTmsServers.size() - 1);
+	lvTmsServers->setCurrentRow(lvTmsServers->count() - 1);
 	on_lvTmsServers_itemClicked(lvTmsServers->item(lvTmsServers->currentRow()));
 }
 
 void TMSPreferencesDialog::on_btDelTmsServer_clicked(void)
 {
-	unsigned int idx = static_cast<unsigned int>(lvTmsServers->currentRow());
+	unsigned int idx = static_cast<unsigned int>(lvTmsServers->currentItem()->data(Qt::UserRole).toInt());
 	if (idx >= theTmsServers.size())
 		return;
 
 	theTmsServers[idx].deleted = true;
 	delete lvTmsServers->takeItem(idx);
-	if (idx && (idx >= theTmsServers.size()))
-		--idx;
-	lvTmsServers->setCurrentRow(idx);
 	on_lvTmsServers_itemClicked(lvTmsServers->item(lvTmsServers->currentRow()));
 }
 
 void TMSPreferencesDialog::on_lvTmsServers_itemClicked(QListWidgetItem* it)
 {
-	unsigned int idx = static_cast<unsigned int>(lvTmsServers->row(it));
+	unsigned int idx = it->data(Qt::UserRole).toInt();
 	if (idx >= theTmsServers.size())
 		return;
 
