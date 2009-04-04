@@ -99,7 +99,7 @@ BINTRANSLATIONS += \
 	../translations/merkaartor_ar.qm \
 	../translations/merkaartor_cs.qm \
 	../translations/merkaartor_de.qm \
-	../translations/merkaartor_es.ts \
+	../translations/merkaartor_es.qm \
 	../translations/merkaartor_fr.qm \
 	../translations/merkaartor_it.qm \
 	../translations/merkaartor_pl.qm \
