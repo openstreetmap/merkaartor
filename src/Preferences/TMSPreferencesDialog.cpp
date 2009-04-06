@@ -34,7 +34,7 @@ void TMSPreferencesDialog::addServer(const TmsServer & srv)
 	theTmsServers.push_back(srv);
 	if (!srv.deleted) {
 		QListWidgetItem* item = new QListWidgetItem(srv.TmsName);
-		item->setData(Qt::UserRole, theTmsServers.size()-1);
+		item->setData(Qt::UserRole, (int) theTmsServers.size()-1);
 		lvTmsServers->addItem(item);
 	}
 }
