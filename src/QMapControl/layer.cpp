@@ -36,11 +36,6 @@ void Layer::setSize(QSize size)
 {
 	this->size = size;
 	screenmiddle = QPoint(size.width()/2, size.height()/2);
-// 	QMatrix mat;
-// 	mat.translate(480/2, 640/2);
-// 	mat.rotate(45);
-// 	mat.translate(-480/2,-640/2);
-// 	screenmiddle = mat.map(screenmiddle);
 
 }
 
@@ -60,29 +55,6 @@ void Layer::setVisible(bool visible)
 	emit(updateRequest());
 }
 
-//void Layer::addGeometry(Geometry* geom)
-//{
-//// 	qDebug() << geom->getName() << ", " << geom->getPoints().at(0)->getWidget();
-//
-//	geometries.append(geom);
-//	emit(updateRequest(geom->getBoundingBox()));
-//	// a geometry can request a redraw, e.g. when its position has been changed
-//	connect(geom, SIGNAL(updateRequest(QRectF)),
-//				this, SIGNAL(updateRequest(QRectF)));
-//}
-//void Layer::removeGeometry(Geometry* geometry)
-//{
-//	for (int i=0; i<geometries.count(); i++)
-//	{
-//		if (geometry == geometries.at(i))
-//		{
-//			disconnect(geometry);
-//			geometries.removeAt(i);
-//// 			delete geometry;
-//		}
-//	}
-//}
-//
 bool Layer::isVisible() const
 {
 	return visible;
@@ -96,68 +68,14 @@ void Layer::zoomOut() const
 	mapAdapter->zoom_out();
 }
 
-//void Layer::mouseEvent(const QMouseEvent* evnt, const QPoint mapmiddle_px)
-//{
-//	if (takesMouseEvents())
-//	{
-//		if (evnt->button() == Qt::LeftButton && evnt->type() == QEvent::MouseButtonPress)
-//		{
-//			// check for collision
-//			QPointF c = mapAdapter->displayToCoordinate(QPoint(evnt->x()-screenmiddle.x()+mapmiddle_px.x(),
-//																					evnt->y()-screenmiddle.y()+mapmiddle_px.y()));
-//			Point* tmppoint = new Point(c.x(), c.y());
-//			for (int i=0; i<geometries.count(); i++)
-//			{
-//				if (geometries.at(i)->isVisible() && geometries.at(i)->Touches(tmppoint, mapAdapter))
-//
-//// 				if (geometries.at(i)->Touches(c, mapAdapter))
-//				{
-//					emit(geometryClickEvent(geometries.at(i), QPoint(evnt->x(), evnt->y())));
-//				}
-//			}
-//			delete tmppoint;
-//		}
-//	}
-//}
-//
-//bool Layer::takesMouseEvents() const
-//{
-//	return takeevents;
-//}
-
 void Layer::drawYourImage(QPainter* painter, const QPoint mapmiddle_px) const
 {
 	if (layertype == MapLayer)
 	{
-// 			qDebug() << ":: " << mapmiddle_px;
-// 			QMatrix mat;
-// 			mat.translate(480/2, 640/2);
-// 			mat.rotate(45);
-// 			mat.translate(-480/2,-640/2);
-
-// 			mapmiddle_px = mat.map(mapmiddle_px);
-// 			qDebug() << ":: " << mapmiddle_px;
 		_draw(painter, mapmiddle_px);
 	}
-
-	//drawYourGeometries(painter, QPoint(mapmiddle_px.x()-screenmiddle.x(), mapmiddle_px.y()-screenmiddle.y()), offscreenViewport);
 }
-//void Layer::drawYourGeometries(QPainter* painter, const QPoint mapmiddle_px, QRect viewport) const
-//{
-//	QPoint offset;
-//	if (layertype == MapLayer)
-//		offset = mapmiddle_px;
-//	else
-//		offset = mapmiddle_px-screenmiddle;
-//
-//	painter->translate(-mapmiddle_px+screenmiddle);
-//	for (int i=0; i<geometries.count(); i++)
-//	{
-//		geometries.at(i)->draw(painter, mapAdapter, viewport, offset);
-//	}
-//	painter->translate(mapmiddle_px-screenmiddle);
-//
-//}
+
 void Layer::_draw(QPainter* painter, const QPoint mapmiddle_px) const
 {
 	// screen middle rotieren...
@@ -167,7 +85,8 @@ void Layer::_draw(QPainter* painter, const QPoint mapmiddle_px) const
 	int tilesize = mapAdapter->getTileSize();
 	int cross_x = int(mapmiddle_px.x())%tilesize;		// position on middle tile
 	int cross_y = int(mapmiddle_px.y())%tilesize;
-// 	qDebug() << screenmiddle << " - " << cross_x << ", " << cross_y;
+ 	//qDebug() << mapmiddle_px;
+ 	//qDebug() << screenmiddle << " - " << cross_x << ", " << cross_y;
 
 		// calculate how many surrounding tiles have to be drawn to fill the display
 	int space_left = screenmiddle.x() - cross_x;
@@ -219,7 +138,7 @@ void Layer::_draw(QPainter* painter, const QPoint mapmiddle_px) const
 	for (QList<Tile>::const_iterator tile = tiles.begin(); tile != tiles.end(); ++tile)
 	{
 		if (mapAdapter->isValid(tile->i, tile->j, mapAdapter->getZoom()))
-			{
+		{
 			QPixmap pm = mapAdapter->getImageManager()->getImage(mapAdapter, tile->i, tile->j, mapAdapter->getZoom());
 			painter->drawPixmap(((tile->i-mapmiddle_tile_x)*tilesize)-cross_x+size.width(),
 					    ((tile->j-mapmiddle_tile_y)*tilesize)-cross_y+size.height(),
@@ -277,21 +196,6 @@ QRect Layer::getOffscreenViewport() const
 	return offscreenViewport;
 }
 
-//void Layer::moveWidgets(const QPoint mapmiddle_px) const
-//{
-//	for (int i=0; i<geometries.count(); i++)
-//	{
-//		const Geometry* geom = geometries.at(i);
-//		if (geom->GeometryType == "Point")
-//		{
-//			if (((Point*)geom)->getWidget()!=0)
-//			{
-//				QPoint topleft_relative = QPoint(mapmiddle_px-screenmiddle);
-//				((Point*)geom)->drawWidget(mapAdapter, topleft_relative);
-//			}
-//		}
-//	}
-//}
 Layer::LayerType Layer::getLayertype() const
 {
 	return layertype;

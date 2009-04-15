@@ -3,6 +3,7 @@
 #include "Map/ImportOSM.h"
 
 #include "Map/MapDocument.h"
+#include "Map/ImageMapLayer.h"
 
 #include "ImportExport/ImportNMEA.h"
 #include "ImportExport/ImportExportOsmBin.h"

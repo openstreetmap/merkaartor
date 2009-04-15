@@ -251,8 +251,8 @@ void MerkaartorPreferences::on_requestFinished ( int id, bool error )
 		QDomElement c = docElem.firstChildElement();
 		while(!c.isNull()) {
 			if (c.tagName() == "Projections") {
-				ProjectionsList aProjList = ProjectionsList::fromXml(c);
-				theProjectionsList.add(aProjList);
+				//ProjectionsList aProjList = ProjectionsList::fromXml(c);
+				//theProjectionsList.add(aProjList);
 			} else
 			if (c.tagName() == "Bookmarks") {
 				BookmarksList aBkList = BookmarksList::fromXml(c);
@@ -809,7 +809,7 @@ void MerkaartorPreferences::setProjectionType(ProjectionType theValue)
 
 ProjectionType MerkaartorPreferences::getProjectionType() const
 {
-	return (ProjectionType)Sets->value("projection/Type", 0).toInt();
+	return (ProjectionType)Sets->value("projection/Type", "").toString();
 }
 
 ProjectionsList MerkaartorPreferences::getProjectionsList()

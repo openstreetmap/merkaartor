@@ -48,8 +48,8 @@ class TrackPoint : public MapFeature
 
 		const Coord& position() const;
 		void setPosition(const Coord& aCoord);
-		const QPoint& projection() const;
-		void setProjection(const QPoint& aProjection);
+		const QPointF& projection() const;
+		void setProjection(const QPointF& aProjection);
 		ProjectionType projectionType() const;
 		void setProjectionType(const ProjectionType aProjectionType);
 
@@ -77,7 +77,7 @@ private:
 
 		double Elevation;
 		double Speed;
-		QPoint Projected;
+		QPointF Projected;
 		ProjectionType ProjectedType;
 };
 

@@ -27,6 +27,7 @@
 #include "Map/ImportOSM.h"
 #include "Map/MapDocument.h"
 #include "Map/MapLayer.h"
+#include "Map/ImageMapLayer.h"
 #include "Map/MapFeature.h"
 #include "Map/Relation.h"
 #include "Map/Road.h"

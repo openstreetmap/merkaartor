@@ -34,6 +34,8 @@ DEFINES += REVISION=\"\\\"$$REVISION\\\"\"
 TEMPLATE = app
 TARGET = merkaartor
 
+CONFIG += rtti stl 
+CONFIG -= exceptions
 QT += svg network xml core gui
 
 !contains(NODEBUG,1) {

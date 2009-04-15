@@ -3,6 +3,7 @@
 #include "PropertiesDock.h"
 #include "Map/MapDocument.h"
 #include "Map/MapLayer.h"
+#include "Map/ImageMapLayer.h"
 #include "Map/MapFeature.h"
 #include "Map/Relation.h"
 #include "Interaction/Interaction.h"
@@ -196,9 +197,7 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 	P.setClipRegion(rg);
 	P.setClipping(true);
 
-	if (LAYERMANAGER_OK && layermanager->getLayer()->isVisible()) {
-		updateLayersImage();
-	}
+	updateLayersImage();
 
 	if (!StaticBufferUpToDate) {
 		buildFeatureSet(invalidRegion, theProjection);
@@ -304,33 +303,43 @@ void MapView::updateLayersImage()
 	//	pm.fill(M_PREFS->getBgColor());
 	//else
 	//	pm.fill(M_STYLE->getGlobalPainter().getBackgroundColor());
-	QPainter pmp(&pm);
-	layermanager->drawImage(&pmp);
+	if (LAYERMANAGER_OK && layermanager->getLayer()->isVisible()) {
+		QPainter pmp(&pm);
+		layermanager->drawImage(&pmp);
 
-	const QRectF vlm = layermanager->getViewport();
-	const Coord ctl = Coord(angToInt(vlm.bottomLeft().y()), angToInt(vlm.bottomLeft().x()));
-	const Coord cbr = Coord(angToInt(vlm.topRight().y()), angToInt(vlm.topRight().x()));
+		const QRectF vlm = layermanager->getViewport();
+		const Coord ctl = Coord(angToInt(vlm.bottomLeft().y()), angToInt(vlm.bottomLeft().x()));
+		const Coord cbr = Coord(angToInt(vlm.topRight().y()), angToInt(vlm.topRight().x()));
 
-	const QPointF tl = projection().project(ctl);
-	const QPointF br = projection().project(cbr);
+		const QPointF tl = projection().project(ctl);
+		const QPointF br = projection().project(cbr);
 
-	const QRect pr = QRectF(tl, br).toRect();
-	const QSize ps = pr.size();
+		const QRect pr = QRectF(tl, br).toRect();
+		const QSize ps = pr.size();
 
-	const qreal ratio = qMax<const qreal>((qreal)width()/ps.width()*1.0, (qreal)height()/ps.height());
-	QPixmap pms;
-	if (ratio > 1.0) {
-		pms = pm.scaled(ps, Qt::KeepAspectRatio, Qt::FastTransformation );
-	} else {
-		const QSizeF drawingSize = pm.size() * ratio;
-		const QSizeF originSize = pm.size()/2 - drawingSize/2;
-		const QPointF drawingOrigin = QPointF(originSize.width(), originSize.height());
-		const QRect drawingRect = QRect(drawingOrigin.toPoint(), drawingSize.toSize());
+		const qreal ratio = qMax<const qreal>((qreal)width()/ps.width()*1.0, (qreal)height()/ps.height());
+		QPixmap pms;
+		if (ratio > 1.0) {
+			pms = pm.scaled(ps, Qt::KeepAspectRatio, Qt::FastTransformation );
+		} else {
+			const QSizeF drawingSize = pm.size() * ratio;
+			const QSizeF originSize = pm.size()/2 - drawingSize/2;
+			const QPointF drawingOrigin = QPointF(originSize.width(), originSize.height());
+			const QRect drawingRect = QRect(drawingOrigin.toPoint(), drawingSize.toSize());
 
-		pms = pm.copy(drawingRect).scaled(ps*ratio, Qt::KeepAspectRatio, Qt::FastTransformation );
+			pms = pm.copy(drawingRect).scaled(ps*ratio, Qt::KeepAspectRatio, Qt::FastTransformation );
+		}
+
+		P.drawPixmap((width()-pms.width())/2, (height()-pms.height())/2, pms);
 	}
-
-	P.drawPixmap((width()-pms.width())/2, (height()-pms.height())/2, pms);
+	for (int i=0; i<theDocument->layerSize(); ++i)
+	{
+		ImageMapLayer* IL = dynamic_cast<ImageMapLayer*>(theDocument->getLayer(i));
+		if ( IL )
+		{
+			IL->drawImage(pm, theProjection);
+		}
+	}
 
 	thePanDelta = QPoint(0, 0);
 	StaticMapUpToDate = true;
@@ -1031,7 +1040,7 @@ void MapView::dragMoveEvent(QDragMoveEvent *event)
 	for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it) {
 		if ((tP = qobject_cast<TrackPoint*>(it.get())) && tP->pixelDistance(event->pos(), 5.01, projection()) < 5.01) {
 			dropTarget = tP;
-			QRect acceptedRect(tP->projection() - QPoint(3.5, 3.5), tP->projection() + QPoint(3.5, 3.5));
+			QRect acceptedRect(tP->projection().toPoint() - QPoint(3.5, 3.5), tP->projection().toPoint() + QPoint(3.5, 3.5));
 			event->acceptProposedAction();
 			event->accept(acceptedRect);
 			return;

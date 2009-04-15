@@ -174,7 +174,9 @@ namespace projection
 	{
 		public :
 			proj_exception(int code = 0)
-			{}
+			{
+				(void)code;
+			}
 	};
 }
 #endif

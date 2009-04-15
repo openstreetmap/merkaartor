@@ -28,6 +28,7 @@ HEADERS += ./Command/Command.h \
     ./Map/ImportNGT.h \
     ./Map/MapDocument.h \
     ./Map/MapLayer.h \
+    ./Map/ImageMapLayer.h \
     ./Map/MapTypedef.h \
     ./Map/MapFeature.h \
     ./Map/Painting.h \
@@ -85,6 +86,7 @@ SOURCES += ./Command/Command.cpp \
     ./Map/ImportNGT.cpp \
     ./Map/MapDocument.cpp \
     ./Map/MapLayer.cpp \
+    ./Map/ImageMapLayer.cpp \
     ./Map/MapFeature.cpp \
     ./Map/Painting.cpp \
     ./Map/Projection.cpp \

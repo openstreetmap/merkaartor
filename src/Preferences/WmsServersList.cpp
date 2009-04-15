@@ -19,6 +19,12 @@ WmsServer::WmsServer()
 	WmsServer(QApplication::translate("MerkaartorPreferences","New Server"), "", "", "", "", "", "");
 }
 
+WmsServer::WmsServer(const WmsServer& other)
+	: WmsName(other.WmsName), WmsAdress(other.WmsAdress), WmsPath(other.WmsPath), WmsLayers(other.WmsLayers), 
+		WmsProjections(other.WmsProjections), WmsStyles(other.WmsStyles), WmsImgFormat(other.WmsImgFormat), deleted(other.deleted)
+{
+}
+
 WmsServer::WmsServer(QString Name, QString Adress, QString Path, QString Layers, QString Projections, QString Styles, QString ImgFormat, bool Deleted)
 	: WmsName(Name), WmsAdress(Adress), WmsPath(Path), WmsLayers(Layers), WmsProjections(Projections), WmsStyles(Styles), WmsImgFormat(ImgFormat), deleted(Deleted)
 {

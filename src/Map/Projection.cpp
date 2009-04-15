@@ -4,47 +4,66 @@
 #include <QRect>
 #include <QRectF>
 
-#include <geometry/geometry.hpp>
+#include <math.h>
 
 #include <geometry/geometries/cartesian2d.hpp>
 #include <geometry/geometries/latlong.hpp>
 
-#include <geometry/io/wkt/streamwkt.hpp>
-
 #include <geometry/projections/parameters.hpp>
 #include <geometry/projections/factory.hpp>
-
-#include "QMapControl/mapadapter.h"
-#include "QMapControl/layermanager.h"
-
-#include <math.h>
 
 // from wikipedia
 #define EQUATORIALRADIUS 6378137.0
 #define POLARRADIUS      6356752.0
+//#define PROJ_RATIO ((double(INT_MAX)/M_PI) / EQUATORIALRADIUS)
 
 using namespace geometry;
 
-projection::projection<point_ll_rad, point_2d> *theProj;
-projection::factory<point_ll_rad, point_2d> fac;
+projection::projection<geometry::point_ll_deg, geometry::point_2d> *theProj;
+projection::factory<geometry::point_ll_deg, geometry::point_2d> fac;
+projection::parameters par;
+
+QPointF Projection::projProject(const Coord & Map)
+{
+	point_ll_deg in(longitude<>(intToAng(Map.lon())), latitude<>(intToAng(Map.lat())));
+	point_2d out;
+
+	theProj->forward(in, out);
+
+	return QPointF(out.x(), out.y());
+}
+
+Coord Projection::projInverse(const QPointF & pProj)
+{
+	point_2d in(pProj.x(), pProj.y());
+	point_ll_deg out;
+
+	theProj->inverse(in, out);
+
+	return Coord(angToInt(out.lat()), angToInt(out.lon()));
+}
+
+bool Projection::projIsLatLong()
+{
+	return false;
+}
+
 
 Projection::Projection(void)
   : ScaleLat(1000000), ScaleLon(1000000),
   DeltaLat(0), DeltaLon(0), Viewport(Coord(-1000, -1000), Coord(1000, 1000)),
   layermanager(0)
 {
+	QString theProjString;
 	theProjectionType = M_PREFS->getProjectionType();
 
-	try {
-		projection::parameters par = projection::init(std::string(QString("%1 -m %2").arg(M_PREFS->getProjection(theProjectionType).projection)
-			.arg((double(INT_MAX)/M_PI) / EQUATORIALRADIUS, 6, 'f').toLatin1().data()));
+	theProjString = M_PREFS->getProjection(theProjectionType).projection;
+	par = projection::init(std::string(QString("%1 +over").arg(theProjString).toLatin1().data()));
+	theProj = fac.create_new(par);
+	if (!theProj) {
+		par = projection::init(std::string(QString("%1 +over").arg(M_PREFS->getProjection("mercator").projection).toLatin1().data()));
 		theProj = fac.create_new(par);
-	} catch (...) {
-		try {
-			projection::parameters par = projection::init(std::string(QString("%1 -m %2").arg(M_PREFS->getProjection("mercator").projection)
-				.arg((double(INT_MAX)/M_PI) / EQUATORIALRADIUS, 6, 'f').toLatin1().data()));
-			theProj = fac.create_new(par);
-		} catch (...) {
+		if (!theProj) {
 			qDebug() << "Unable to set projection : " << theProjectionType;
 			Q_ASSERT(false);
 			exit(1);
@@ -80,69 +99,48 @@ double Projection::lonAnglePerM(double Lat) const
 bool Projection::setProjectionType(ProjectionType aProjectionType)
 {
 	delete theProj;
+	QString theProjString;
 	theProjectionType = aProjectionType;
-	try {
-		projection::parameters par = projection::init(std::string(QString("%1 -m %2").arg(M_PREFS->getProjection(theProjectionType).projection)
-			.arg((double(INT_MAX)/M_PI) / EQUATORIALRADIUS, 6, 'f').toLatin1().data()));
+
+	theProjString = M_PREFS->getProjection(theProjectionType).projection;
+	par = projection::init(std::string(QString("%1 +over").arg(theProjString).toLatin1().data()));
+	theProj = fac.create_new(par);
+	if (!theProj) {
+		par = projection::init(std::string(QString("%1 +over").arg(M_PREFS->getProjection("mercator").projection).toLatin1().data()));
 		theProj = fac.create_new(par);
-		return true;
-	} catch (...) {
-		try {
-			projection::parameters par = projection::init(std::string(QString("%1 -m %2").arg(M_PREFS->getProjection("mercator").projection)
-				.arg((double(INT_MAX)/M_PI) / EQUATORIALRADIUS, 6, 'f').toLatin1().data()));
-			theProj = fac.create_new(par);
-			return false;
-		} catch (...) {
+		if (!theProj) {
 			qDebug() << "Unable to set projection : " << theProjectionType;
 			Q_ASSERT(false);
 			exit(1);
 		}
+		return false;
 	}
-}
-
-QPoint Projection::projProject(const Coord & Map) const
-{
-	point_ll_rad in(longitude<>(intToRad(Map.lon())), latitude<>(intToRad(Map.lat())));
-	point_2d out;
-
-	theProj->forward(in, out);
- 
-	return QPoint(out.x(), out.y());
-}
-
-Coord Projection::projInverse(const QPoint & pProj) const
-{
-	point_2d in(pProj.x(), pProj.y());
-	point_ll_rad out;
-
-	theProj->inverse(in, out);
-
-	return Coord(radToInt(out.lat()), radToInt(out.lon()));
+	return true;
 }
 
 QPoint Projection::project(const Coord & Map) const
 {
-	QPoint p = projProject(Map);
-	return QPoint(int(p.x() * ScaleLon + DeltaLon), int(-p.y() * ScaleLat + DeltaLat));
+	QPointF p = projProject(Map);
+	return QPointF(p.x() * ScaleLon + DeltaLon, -p.y() * ScaleLat + DeltaLat).toPoint();
 }
 
 QPoint Projection::project(TrackPoint* aNode) const
 {
 	if (aNode && aNode->projectionType() == theProjectionType && !aNode->projection().isNull())
-		return QPoint(int(aNode->projection().x() * ScaleLon + DeltaLon),
-					   int(-aNode->projection().y() * ScaleLat + DeltaLat));
+		return QPointF(aNode->projection().x() * ScaleLon + DeltaLon,
+					   -aNode->projection().y() * ScaleLat + DeltaLat).toPoint();
 
-	QPoint p = projProject(aNode->position());
+	QPointF p = projProject(aNode->position());
 
 	aNode->setProjectionType(theProjectionType);
 	aNode->setProjection(p);
 
-	return QPoint(int(p.x() * ScaleLon + DeltaLon), int(-p.y() * ScaleLat + DeltaLat));
+	return QPointF(p.x() * ScaleLon + DeltaLon, -p.y() * ScaleLat + DeltaLat).toPoint();
 }
 
 Coord Projection::inverse(const QPointF & Screen) const
 {
-	Coord c = projInverse(QPoint((Screen.x() - DeltaLon ) / ScaleLon, -(Screen.y() - DeltaLat) / ScaleLat));
+	Coord c = projInverse((QPointF((Screen.x() - DeltaLon ) / ScaleLon, -(Screen.y() - DeltaLat) / ScaleLat)));
 	return c;
 }
 
@@ -227,9 +225,9 @@ void Projection::setViewport(const CoordBox & TargetMap,
 void Projection::zoom(double d, const QPointF & Around,
 							 const QRect & Screen)
 {
-	if (ScaleLat * d < 100 && ScaleLon * d < 100) {
+	if (PixelPerM < 100) {
 		Coord Before = inverse(Around);
-		QPoint pBefore = projProject(Before);
+		QPointF pBefore = projProject(Before);
 		ScaleLon *= d;
 		ScaleLat *= d;
 

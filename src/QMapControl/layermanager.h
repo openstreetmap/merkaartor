@@ -119,14 +119,6 @@ class LayerManager : public QObject
 		 */
 		void scrollView(const QPoint& offset);
 
-		////! forwards mouseevents to the layers
-		///*!
-		// * This method is invoked by the MapControl which receives Mouse Events.
-		// * These events are forwarded to the layers, so they can check for clicked geometries.
-		// * @param  evnt the mouse event
-		// */
-		//void mouseEvent(const QMouseEvent* evnt);
-
 		//! returns the middle of the map in projection coordinates
 		/*!
 		 *
@@ -194,10 +186,6 @@ class LayerManager : public QObject
 		QPixmap zoomImage;
 
 		QList<Layer*>	layers;
-
-
-
-
 
 		QPoint mapmiddle_px;	// projection-display coordinates
 		QPointF mapmiddle;	// world coordinate

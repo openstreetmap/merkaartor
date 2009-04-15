@@ -115,13 +115,9 @@ public:
 	Layer(const Layer& old);
 	
 private:
-	//void moveWidgets(const QPoint mapmiddle_px) const;
 	void drawYourImage(QPainter* painter, const QPoint mapmiddle_px) const;
-	//void drawYourGeometries(QPainter* painter, const QPoint mapmiddle_px, QRect viewport) const;
 	void setSize(QSize size);
 	QRect getOffscreenViewport() const;
-	//bool takesMouseEvents() const;
-	//void mouseEvent(const QMouseEvent*, const QPoint mapmiddle_px);
 	void zoomIn() const;
 	void zoomOut() const;
 	void _draw(QPainter* painter, const QPoint mapmiddle_px) const;

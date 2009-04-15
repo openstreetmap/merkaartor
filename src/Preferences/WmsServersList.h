@@ -21,6 +21,7 @@ class WmsServer
 {
 	public:
 		WmsServer();
+		WmsServer(const WmsServer& other);
 		WmsServer(QString Name, QString Adress, QString Path, QString Layers, QString Projections, QString Styles, QString ImgFormat, bool Deleted=false);
 
 		void toXml(QDomElement parent);

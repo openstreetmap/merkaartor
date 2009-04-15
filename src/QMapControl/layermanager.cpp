@@ -87,34 +87,11 @@ QList<QString> LayerManager::getLayers() const
 
 void LayerManager::scrollView(const QPoint& point)
 {
-// 	if (scrollMutex.tryLock())
-	{
-
 	scroll += point;
 	zoomImageScroll+=point;
 	mapmiddle_px += point;
-// 	scrollMutex.unlock();
-	}
 	mapmiddle = getLayer()->getMapAdapter()->displayToCoordinate(mapmiddle_px);
-	if (!checkOffscreen())
-	{
-
-//		newOffscreenImage();
-	}
-	//else
-	//{
-	//	moveWidgets();
-	//}
 }
-
-//void LayerManager::moveWidgets()
-//{
-//	QListIterator<Layer*> it(layers);
-//	while (it.hasNext())
-//	{
-//		it.next()->moveWidgets(mapmiddle_px);
-//	}
-//}
 
 void LayerManager::setView(const QPointF& coordinate, bool newImage)
 {
@@ -124,18 +101,7 @@ void LayerManager::setView(const QPointF& coordinate, bool newImage)
 	if (!newImage)
 		return;
 
-	//TODO: muss wegen moveTo() raus
-	if (!checkOffscreen())
-	{
-		newOffscreenImage();
-	}
-	else
-	{
-		//TODO:
-		// verschiebung ausrechnen
-		// oder immer neues offscreenimage
-		newOffscreenImage();
-	}
+	newOffscreenImage();
 }
 
 
@@ -437,19 +403,6 @@ void LayerManager::setZoom(int zoomlevel)
 	}
 }
 
-//void LayerManager::mouseEvent(const QMouseEvent* evnt)
-//{
-//	QListIterator<Layer*> it(layers);
-//	while (it.hasNext())
-//	{
-//		Layer* l = it.next();
-//		if (l->isVisible())
-//		{
-//			l->mouseEvent(evnt, mapmiddle_px);
-//		}
-//	}
-//}
-
 void LayerManager::updateRequest(QRectF rect)
 {
 	const QPoint topleft = mapmiddle_px - screenmiddle;
@@ -481,18 +434,6 @@ void LayerManager::removeZoomImage()
 	zoomImage.fill(Qt::transparent);
 }
 
-//void LayerManager::drawGeoms(QPainter* painter)
-//{
-//	QListIterator<Layer*> it(layers);
-//	while (it.hasNext())
-//	{
-//		Layer* l = it.next();
-//		if (l->getLayertype() == Layer::GeometryLayer && l->isVisible())
-//		{
-//			l->drawYourGeometries(painter, mapmiddle_px, getLayer()->getOffscreenViewport());
-//		}
-//	}
-//}
 void LayerManager::drawImage(QPainter* painter)
 {
 	painter->drawPixmap(-scroll.x()-screenmiddle.x(),

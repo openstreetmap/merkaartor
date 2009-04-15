@@ -16,15 +16,6 @@
 
 #include "Utils/LineF.h"
 
-#include "IMapAdapter.h"
-#include "QMapControl/imagemanager.h"
-#ifdef USE_WEBKIT
-#include "QMapControl/browserimagemanager.h"
-#endif
-#include "QMapControl/wmsmapadapter.h"
-#include "QMapControl/layer.h"
-#include "QMapControl/layermanager.h"
-
 #include "ImportExport/ImportExportOsmBin.h"
 
 #include <QtCore/QString>
@@ -45,7 +36,6 @@ public:
 		: RenderPriorityUpToDate(false)
 	{
 		theDocument = NULL;
-		layer_bg = NULL;
 		theWidget = NULL;
 		selected = false;
 		Enabled = true;
@@ -68,9 +58,6 @@ public:
 	LayerWidget* theWidget;
 	qreal alpha;
 	unsigned int dirtyLevel;
-
-	QUuid bgType;
-	Layer* layer_bg;
 
 	bool RenderPriorityUpToDate;
 	MapDocument* theDocument;
@@ -157,6 +144,10 @@ void MapLayer::setDescription(const QString& s)
 const QString& MapLayer::description() const
 {
 	return p->Description;
+}
+
+void MapLayer::setVisible(bool b) {
+	p->Visible = b;
 }
 
 bool MapLayer::isVisible() const
@@ -448,11 +439,6 @@ DrawingMapLayer::~ DrawingMapLayer()
 {
 }
 
-void DrawingMapLayer::setVisible(bool b)
-{
-	p->Visible = b;
-}
-
 LayerWidget* DrawingMapLayer::newWidget(void)
 {
 //	delete p->theWidget;
@@ -577,231 +563,6 @@ DrawingMapLayer * DrawingMapLayer::doFromXML(DrawingMapLayer* l, MapDocument* d,
 	return l;
 }
 
-// ImageMapLayer
-
-ImageMapLayer::ImageMapLayer(const QString & aName, LayerManager* aLayerMgr)
-	: OsbMapLayer(aName), layermanager(aLayerMgr)
-{
-	setMapAdapter(MerkaartorPreferences::instance()->getBackgroundPlugin());
-	if (MerkaartorPreferences::instance()->getBackgroundPlugin() == NONE_ADAPTER_UUID)
-		setVisible(false);
-	else
-		setVisible(MerkaartorPreferences::instance()->getBgVisible());
-
-	if (M_PREFS->getUseShapefileForBackground()) {
-		if (QDir::isAbsolutePath(WORLD_SHP))
-			setFilename(WORLD_SHP);
-		else
-			setFilename(QCoreApplication::applicationDirPath() + "/" + WORLD_SHP);
-	}
-
-	setReadonly(true);
-}
-
-ImageMapLayer::~ ImageMapLayer()
-{
-	if (p->layer_bg) {
-		if (layermanager)
-			layermanager->removeLayer(p->layer_bg->getLayername());
-
-		IMapAdapter* mapadapter_bg = p->layer_bg->getMapAdapter();
-		if (mapadapter_bg && (mapadapter_bg->getId() == WMS_ADAPTER_UUID || mapadapter_bg->getId() == TMS_ADAPTER_UUID)) {
-			delete (dynamic_cast<MapAdapter*>(mapadapter_bg));
-			mapadapter_bg = NULL;
-		}
-		SAFE_DELETE(p->layer_bg);
-	}
-	clear();
-}
-
-unsigned int ImageMapLayer::size() const
-{
-	//return p->Features.size();
-	if (p->bgType == SHAPE_ADAPTER_UUID && isVisible())
-		return p->Features.size();
-	else
-		return 0;
-}
-
-LayerWidget* ImageMapLayer::newWidget(void)
-{
-//	delete p->theWidget;
-	p->theWidget = new ImageLayerWidget(this);
-	return p->theWidget;
-}
-
-void ImageMapLayer::updateWidget()
-{
-    ((ImageLayerWidget*) p->theWidget)->initActions();
-	p->theWidget->update();
-}
-
-void ImageMapLayer::setVisible(bool b)
-{
-	p->Visible = b;
-	if (p->bgType == NONE_ADAPTER_UUID)
-		p->Visible = false;
-	else
-		if (p->layer_bg)
-			p->layer_bg->setVisible(b);
-	MerkaartorPreferences::instance()->setBgVisible(p->Visible);
-}
-
-Layer* ImageMapLayer::imageLayer()
-{
-	return p->layer_bg;
-}
-
-void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid)
-{
-	IMapAdapter* mapadapter_bg;
-	WmsServerList* wsl;
-	WmsServer ws;
-	TmsServerList* tsl;
-	TmsServer ts;
-	QString selws, selts;
-	int idx = -1;
-
-	if (layermanager) {
-		if (layermanager->getLayer(id())) {
-			idx = layermanager->getLayers().indexOf(id());
-			layermanager->removeLayer(id());
-		}
-	}
-
-	if (p->layer_bg) {
-		mapadapter_bg = p->layer_bg->getMapAdapter();
-		if (mapadapter_bg && (mapadapter_bg->getId() == WMS_ADAPTER_UUID || mapadapter_bg->getId() == TMS_ADAPTER_UUID)) {
-			delete (dynamic_cast<MapAdapter*>(mapadapter_bg));
-			mapadapter_bg = NULL;
-		}
-		SAFE_DELETE(p->layer_bg);
-	}
-
-	p->bgType = theAdapterUid;
-	MerkaartorPreferences::instance()->setBackgroundPlugin(theAdapterUid);
-	if (p->bgType == NONE_ADAPTER_UUID) {
-		setName(tr("Map - None"));
-		p->Visible = false;
-	} else 
-	if (p->bgType == WMS_ADAPTER_UUID) {
-		wsl = M_PREFS->getWmsServers();
-		selws = M_PREFS->getSelectedWmsServer();
-		ws = wsl->value(selws);
-		wmsa = new WMSMapAdapter(ws.WmsAdress, ws.WmsPath, ws.WmsLayers, ws.WmsProjections,
-				ws.WmsStyles, ws.WmsImgFormat, 256);
-		wmsa->setImageManager(ImageManager::instance());
-		mapadapter_bg = wmsa;
-		p->layer_bg = new Layer(id(), mapadapter_bg, Layer::MapLayer);
-		p->layer_bg->setVisible(p->Visible);
-
-		setName(tr("Map - WMS - %1").arg(ws.WmsName));
-	} else
-	if (p->bgType == TMS_ADAPTER_UUID) {
-		tsl = M_PREFS->getTmsServers();
-		selts = MerkaartorPreferences::instance()->getSelectedTmsServer();
-		ts = tsl->value(selts);
-		tmsa = new TileMapAdapter(ts.TmsAdress, ts.TmsPath, ts.TmsTileSize, ts.TmsMinZoom, ts.TmsMaxZoom);
-		tmsa->setImageManager(ImageManager::instance());
-		mapadapter_bg = tmsa;
-		p->layer_bg = new Layer(id(), mapadapter_bg, Layer::MapLayer);
-		p->layer_bg->setVisible(p->Visible);
-
-		setName(tr("Map - TMS - %1").arg(ts.TmsName));
-	} else
-	if (p->bgType == SHAPE_ADAPTER_UUID) {
-		if (!M_PREFS->getUseShapefileForBackground()) {
-			p->bgType = NONE_ADAPTER_UUID;
-			setName(tr("Map - None"));
-			p->Visible = false;
-		} else
-			setName(tr("Map - OSB Background"));
-	} else
-	{
-		IMapAdapter * thePluginBackground = M_PREFS->getBackgroundPlugin(p->bgType);
-		if (thePluginBackground) {
-			switch (thePluginBackground->getType()) {
-				case IMapAdapter::BrowserBackground :
-					thePluginBackground->setImageManager(BrowserImageManager::instance());
-					break;
-				case IMapAdapter::DirectBackground :
-					thePluginBackground->setImageManager(ImageManager::instance());
-					break;
-			}
-			mapadapter_bg = thePluginBackground;
-			p->layer_bg = new Layer(id(), mapadapter_bg, Layer::MapLayer);
-			p->layer_bg->setVisible(p->Visible);
-
-			setName(tr("Map - %1").arg(thePluginBackground->getName()));
-		} else
-			p->bgType = NONE_ADAPTER_UUID;
-	}
-
-	if (layermanager)
-		if (p->layer_bg) {
-			layermanager->addLayer(p->layer_bg, idx);
-			layermanager->setSize();
-		}
-}
-
-bool ImageMapLayer::toXML(QDomElement xParent, QProgressDialog & /* progress */)
-{
-	bool OK = true;
-
-	QDomElement e = xParent.ownerDocument().createElement(objectName());
-	xParent.appendChild(e);
-
-	e.setAttribute("xml:id", id());
-	e.setAttribute("name", p->Name);
-	e.setAttribute("alpha", QString::number(p->alpha,'f',2));
-	e.setAttribute("visible", QString((p->Visible ? "true" : "false")));
-	e.setAttribute("selected", QString((p->selected ? "true" : "false")));
-	e.setAttribute("enabled", QString((p->Enabled ? "true" : "false")));
-
-	e.setAttribute("bgtype", p->bgType.toString());
-
-	QDomElement c;
-	WmsServer ws;
-	TmsServer ts;
-
-	if (p->bgType == WMS_ADAPTER_UUID) {
-		c = e.ownerDocument().createElement("WmsServer");
-		e.appendChild(c);
-
-		c.setAttribute("name", M_PREFS->getSelectedWmsServer());
-	} else
-	if (p->bgType == TMS_ADAPTER_UUID) {
-		c = e.ownerDocument().createElement("TmsServer");
-		e.appendChild(c);
-
-		c.setAttribute("name", M_PREFS->getSelectedTmsServer());
-	}
-
-	return OK;
-}
-
-ImageMapLayer * ImageMapLayer::fromXML(MapDocument* d, const QDomElement e, QProgressDialog & /* progress */)
-{
-	ImageMapLayer* l = d->getImageLayer();
-	l->setId(e.attribute("xml:id"));
-
-	QDomElement c = e.firstChildElement();
-
-	if (c.tagName() == "WmsServer") {
-		MerkaartorPreferences::instance()->setSelectedWmsServer(c.attribute("name"));
-	} else
-	if (c.tagName() == "TmsServer") {
-		MerkaartorPreferences::instance()->setSelectedTmsServer(c.attribute("name"));
-	}
-	l->setMapAdapter(QUuid(e.attribute("bgtype")));
-	l->setAlpha(e.attribute("alpha").toDouble());
-	l->setVisible((e.attribute("visible") == "true" ? true : false));
-	l->setSelected((e.attribute("selected") == "true" ? true : false));
-	l->setEnabled((e.attribute("enabled") == "false" ? false : true));
-
-	return l;
-}
-
 // ExtractedMapLayer
 
 ExtractedMapLayer::ExtractedMapLayer(const QString & aName)
@@ -842,11 +603,6 @@ TrackMapLayer::TrackMapLayer(const QString & aName, const QString& filename)
 
 TrackMapLayer::~ TrackMapLayer()
 {
-}
-
-void TrackMapLayer::setVisible(bool b)
-{
-	p->Visible = b;
 }
 
 LayerWidget* TrackMapLayer::newWidget(void)
@@ -1229,11 +985,6 @@ void OsbMapLayer::invalidate(MapDocument* d, CoordBox vp)
 //{
 //	return pp->theImp->getFeature(d, this, ref);
 //}
-
-void OsbMapLayer::setVisible(bool b)
-{
-	p->Visible = b;
-}
 
 bool OsbMapLayer::toXML(QDomElement xParent, QProgressDialog & progress)
 {

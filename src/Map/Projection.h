@@ -6,6 +6,9 @@
 
 #include <QPointF>
 
+#include "QMapControl/mapadapter.h"
+#include "QMapControl/layermanager.h"
+
 #define LAYERMANAGER_OK (layermanager && layermanager->getLayer())
 
 class QRect;
@@ -24,8 +27,6 @@ class Projection
 		double pixelPerM() const;
 		double latAnglePerM() const;
 		double lonAnglePerM(double Lat) const;
-		QPoint projProject(const Coord& Map) const;
-		Coord projInverse(const QPoint& Screen) const;
 		QPoint project(const Coord& Map) const;
 		QPoint project(TrackPoint* aNode) const;
 		Coord inverse(const QPointF& Screen) const;
@@ -40,9 +41,13 @@ class Projection
 
 		bool setProjectionType(ProjectionType aProjectionType);
 
+		static QPointF projProject(const Coord& Map);
+		static Coord projInverse(const QPointF& Screen);
+		static bool projIsLatLong();
+
 	protected:
 		double ScaleLat, ScaleLon;
-		int DeltaLat, DeltaLon;
+		double DeltaLat, DeltaLon;
 		double PixelPerM;
 		CoordBox Viewport;
 		QPoint screen_middle;
@@ -56,6 +61,7 @@ class Projection
 		QPointF screenToCoordinate(QPointF click) const;
 		QPoint coordinateToScreen(QPointF click) const;
 };
+
 
 #endif
 

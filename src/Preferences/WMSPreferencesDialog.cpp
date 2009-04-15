@@ -34,7 +34,7 @@ void WMSPreferencesDialog::addServer(const WmsServer & srv)
 	theWmsServers.push_back(srv);
 	if (!srv.deleted) {
 		QListWidgetItem* item = new QListWidgetItem(srv.WmsName);
-		item->setData(Qt::UserRole, theWmsServers.size()-1);
+		item->setData(Qt::UserRole, (int)(theWmsServers.size()-1));
 		lvWmsServers->addItem(item);
 	}
 }

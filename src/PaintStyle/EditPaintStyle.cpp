@@ -5,6 +5,7 @@
 #include "Map/Relation.h"
 #include "Map/Road.h"
 #include "Map/MapLayer.h"
+#include "Map/ImageMapLayer.h"
 #include "PaintStyle/TagSelector.h"
 #include "Utils/LineF.h"
 

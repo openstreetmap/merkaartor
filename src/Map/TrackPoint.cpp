@@ -83,12 +83,12 @@ void TrackPoint::setPosition(const Coord& aCoord)
 	notifyChanges();
 }
 
-const QPoint& TrackPoint::projection() const
+const QPointF& TrackPoint::projection() const
 {
 	return Projected;
 }
 
-void TrackPoint::setProjection(const QPoint& aProjection)
+void TrackPoint::setProjection(const QPointF& aProjection)
 {
 	Projected = aProjection;
 }
