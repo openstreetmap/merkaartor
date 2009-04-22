@@ -118,7 +118,7 @@ class QGPSDevice : public QThread
         CardinalDirection longCardinal()    { return cur_longCardinal;  }
         CardinalDirection varCardinal()     { return cur_varCardinal;   }
         
-	bool isActiveSat(unsigned int prn);
+        bool isActiveSat(int prn);
         void satInfo(int index, int &elev, int &azim, int &snr);
         
         // some convinience functions
@@ -140,7 +140,7 @@ class QGPSDevice : public QThread
     
         void  updatePosition(float latitude, float longitude, QDateTime time, float altitude, float speed, float heading);
         void  updateStatus();
-	void doStopDevice();
+        void doStopDevice();
 
         
     protected:
@@ -187,11 +187,11 @@ class QGPSDevice : public QThread
         CardinalDirection cur_longCardinal;
         CardinalDirection cur_varCardinal;
         
-        unsigned int cur_fixQuality;
-        unsigned int cur_numSatellites;
+        int cur_fixQuality;
+        int cur_numSatellites;
         
-        unsigned int satArray[50][3];
-        unsigned int activeSats[12];
+        int satArray[50][3];
+        int activeSats[12];
         
         FixType cur_fixType;
         FixMode cur_fixMode;
@@ -211,6 +211,7 @@ class QGPSDevice : public QThread
 		friend class GPSSlotForwarder;
 };
       
+#ifndef Q_OS_SYMBIAN
 class QGPSComDevice : public QGPSDevice
 {
 Q_OBJECT
@@ -238,6 +239,7 @@ private:
 protected:
 	virtual void checkDataAvailable();
 };        
+#endif
 
 class QGPSFileDevice : public QGPSDevice
 {
@@ -259,6 +261,7 @@ private:
 	virtual void run();
 };        
 
+#ifndef Q_OS_SYMBIAN
 class QTcpSocket;
 
 class QGPSDDevice;
@@ -288,5 +291,36 @@ class QGPSDDevice : public QGPSDevice
 
 		friend class GPSSlotForwarder;
 };
+#endif
+
+#ifdef Q_OS_SYMBIAN
+#include "xqlocation.h"
+
+class QGPSS60Device : public QGPSDevice
+{
+	Q_OBJECT
+
+	public:
+		QGPSS60Device();
+
+		virtual bool openDevice();
+		virtual bool closeDevice();
+
+	protected:
+		virtual void run();
+
+	private slots:
+		void onLocationChanged(double latitude, double longitude, double altitude, float speed);
+		void onStatusChanged(XQLocation::DeviceStatus);
+		void onDataQualityChanged(XQLocation::DataQuality);
+
+	private:
+		void onLinkReady();
+		void onDataAvailable();
+		void onStop();
+
+		friend class GPSSlotForwarder;
+};
+#endif
 
 #endif // QGPS_DEVICE_H

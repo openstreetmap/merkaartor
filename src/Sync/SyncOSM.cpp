@@ -2,9 +2,9 @@
 
 #include "MainWindow.h"
 #include "Command/Command.h"
-#include "Map/MapDocument.h"
-#include "Map/MapLayer.h"
-#include "Map/DownloadOSM.h"
+#include "Maps/MapDocument.h"
+#include "Maps/MapLayer.h"
+#include "Maps/DownloadOSM.h"
 #include "Sync/DirtyList.h"
 
 #include <QtGui/QMessageBox>

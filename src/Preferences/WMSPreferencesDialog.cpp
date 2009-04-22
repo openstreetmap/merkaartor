@@ -41,7 +41,7 @@ void WMSPreferencesDialog::addServer(const WmsServer & srv)
 
 void WMSPreferencesDialog::on_btApplyWmsServer_clicked(void)
 {
-	unsigned int idx = static_cast<unsigned int>(lvWmsServers->currentItem()->data(Qt::UserRole).toInt());
+	int idx = lvWmsServers->currentItem()->data(Qt::UserRole).toInt();
 	if (idx >= theWmsServers.size())
 		return;
 
@@ -68,7 +68,7 @@ void WMSPreferencesDialog::on_btAddWmsServer_clicked(void)
 
 void WMSPreferencesDialog::on_btDelWmsServer_clicked(void)
 {
-	unsigned int idx = static_cast<unsigned int>(lvWmsServers->currentItem()->data(Qt::UserRole).toInt());
+	int idx = lvWmsServers->currentItem()->data(Qt::UserRole).toInt();
 	if (idx >= theWmsServers.size())
 		return;
 
@@ -79,7 +79,7 @@ void WMSPreferencesDialog::on_btDelWmsServer_clicked(void)
 
 void WMSPreferencesDialog::on_lvWmsServers_itemClicked(QListWidgetItem* it)
 {
-	unsigned int idx = it->data(Qt::UserRole).toInt();
+	int idx = it->data(Qt::UserRole).toInt();
 	if (idx >= theWmsServers.size())
 		return;
 
@@ -135,7 +135,7 @@ void WMSPreferencesDialog::savePrefs()
 {
 	WmsServerList* L = MerkaartorPreferences::instance()->getWmsServers();
 	L->clear();
-	for (unsigned int i = 0; i < theWmsServers.size(); ++i) {
+	for (int i = 0; i < theWmsServers.size(); ++i) {
 		WmsServer S(theWmsServers[i]);
 		L->insert(theWmsServers[i].WmsName, S);
 	}

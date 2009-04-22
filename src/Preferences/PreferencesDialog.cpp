@@ -13,8 +13,8 @@
 #include "PaintStyle/EditPaintStyle.h"
 
 #include "MainWindow.h"
-#include "Map/MapDocument.h"
-#include "Map/MapFeature.h"
+#include "Maps/MapDocument.h"
+#include "Maps/MapFeature.h"
 #include "PropertiesDock.h"
 
 #include <QFileDialog>
@@ -394,7 +394,7 @@ void PreferencesDialog::on_btAddTool_clicked(void)
 
 void PreferencesDialog::on_btDelTool_clicked(void)
 {
-	int idx = static_cast<unsigned int>(lvTools->currentRow());
+	int idx = static_cast<int>(lvTools->currentRow());
 	if (idx >= theTools.size())
 		return;
 
@@ -413,7 +413,7 @@ void PreferencesDialog::on_btDelTool_clicked(void)
 
 void PreferencesDialog::on_btApplyTool_clicked(void)
 {
-	int idx = static_cast<unsigned int>(lvTools->currentRow());
+	int idx = static_cast<int>(lvTools->currentRow());
 	if (idx >= theTools.size())
 		return;
 
@@ -431,7 +431,7 @@ void PreferencesDialog::on_btApplyTool_clicked(void)
 
 void PreferencesDialog::on_lvTools_itemClicked(QListWidgetItem* it)
 {
-	int idx = static_cast<unsigned int>(lvTools->row(it));
+	int idx = static_cast<int>(lvTools->row(it));
 	if (idx >= theTools.size())
 		return;
 

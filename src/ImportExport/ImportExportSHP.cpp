@@ -45,7 +45,7 @@ bool ImportExportSHP::saveFile(QString filename)
 
 
 // export
-bool ImportExportSHP::export_(const QVector<MapFeature *>& featList)
+bool ImportExportSHP::export_(const QList<MapFeature *>& featList)
 {
 	Q_UNUSED(featList);
 

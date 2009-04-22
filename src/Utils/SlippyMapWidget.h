@@ -6,8 +6,8 @@
 #include <QtGui/QWidget>
 #include <QtNetwork/QHttp>
 
-#include <map>
-#include <vector>
+#include <QMap>
+#include <QList>
 
 class SlippyMapWidgetPrivate;
 
@@ -42,8 +42,8 @@ class SlippyMapCache : public QObject
 		void startDownload();
 		void preload(const Coord& C, const QString& filename);
 
-		std::map<Coord, QByteArray> Memory, Dirties;
-		std::vector<Coord> Queue;
+		QMap<Coord, QByteArray> Memory, Dirties;
+		QList<Coord> Queue;
 		QHttp Download;
 		QByteArray DownloadData;
 		QBuffer DownloadBuffer;

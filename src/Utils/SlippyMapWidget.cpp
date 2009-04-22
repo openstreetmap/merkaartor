@@ -45,7 +45,7 @@ class SlippyMapWidgetPrivate
 		void newData(int x, int y, int zoom);
 
 		SlippyMapWidget* theWidget;
-		unsigned int Zoom, VpZoom;
+		int Zoom, VpZoom;
 		double Lat,Lon, VpLat, VpLon;
 		QPoint PreviousDrag;
 		bool InDrag;
@@ -317,9 +317,9 @@ SlippyMapCache::SlippyMapCache()
 void SlippyMapCache::setMap(SlippyMapWidgetPrivate* aMap)
 {
 	theMap = aMap;
-	unsigned int Use = 0;
-	for (std::map<Coord, QByteArray>::iterator i = Memory.begin(); i != Memory.end(); ++i)
-		Use += i->second.length();
+	int Use = 0;
+	for (QMap<Coord, QByteArray>::iterator i = Memory.begin(); i != Memory.end(); ++i)
+		Use += i.value().length();
 	Dirties.clear();
 }
 
@@ -344,7 +344,7 @@ void SlippyMapCache::on_requestFinished(int Id, bool Error)
 			Memory[DownloadCoord] = DownloadData;
 			if (theMap)
 				theMap->newData(DownloadCoord.X,DownloadCoord.Y,DownloadCoord.Zoom);
-			std::map<Coord,QByteArray>::iterator i = Dirties.find(DownloadCoord);
+			QMap<Coord,QByteArray>::iterator i = Dirties.find(DownloadCoord);
 			if (i != Dirties.end())
 				Dirties.erase(i);
 		}
@@ -357,25 +357,25 @@ QPixmap* SlippyMapCache::getImage(int x, int y, int Zoom)
 	C.X = x;
 	C.Y = y;
 	C.Zoom = Zoom;
-	std::map<Coord,QByteArray>::iterator i = Memory.find(C);
+	QMap<Coord,QByteArray>::iterator i = Memory.find(C);
 	if (i == Memory.end())
 	{
 		addToQueue(C);
 		return getDirty(x,y,Zoom);
 	}
 	QPixmap* img = new QPixmap;
-	img->loadFromData(i->second);
+	img->loadFromData(i.value());
 	return img;
 }
 
 QPixmap* SlippyMapCache::getDirty(int x, int y, int Zoom)
 {
 	if (Zoom == MINZOOMLEVEL) return 0;
-	std::map<Coord,QByteArray>::iterator i = Dirties.find(Coord(x,y,Zoom));
+	QMap<Coord,QByteArray>::iterator i = Dirties.find(Coord(x,y,Zoom));
 	if (i != Dirties.end())
 	{
 		QPixmap* img = new QPixmap;
-		img->loadFromData(i->second);
+		img->loadFromData(i.value());
 		return img;
 	}
 	QPixmap* img = getImage(x/2,y/2,Zoom-1);
@@ -393,7 +393,7 @@ QPixmap* SlippyMapCache::getDirty(int x, int y, int Zoom)
 
 void SlippyMapCache::addToQueue(const Coord& C)
 {
-	for (unsigned int i=Queue.size(); i; --i)
+	for (int i=Queue.size(); i; --i)
 		if (Queue[i-1].Zoom != C.Zoom)
 			Queue.erase(Queue.begin()+(i-1));
 	Queue.push_back(C);
@@ -406,7 +406,7 @@ void SlippyMapCache::startDownload()
 	if (DownloadBusy) return;
 	while (Queue.size())
 	{
-		std::map<Coord,QByteArray>::iterator i = Memory.find(Queue[0]);
+		QMap<Coord,QByteArray>::iterator i = Memory.find(Queue[0]);
 		if (i == Memory.end())
 		{
 			DownloadBusy = true;

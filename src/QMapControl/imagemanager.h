@@ -93,7 +93,7 @@ class ImageManager : public QObject, public IImageManager
 		ImageManager& operator=(const ImageManager&);
 		QPixmap emptyPixmap;
 		MapNetwork* net;
-		QVector<QString> prefetch;
+		QList<QString> prefetch;
 	
 		static ImageManager* m_ImageManagerInstance;
 

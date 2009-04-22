@@ -1,7 +1,7 @@
 #include "PaintStyle/PaintStyleEditor.h"
 #include "PaintStyle/PaintStyle.h"
 #include "MainWindow.h"
-#include "Map/MapDocument.h"
+#include "Maps/MapDocument.h"
 
 #include <QtGui/QCheckBox>
 #include <QtGui/QColorDialog>
@@ -23,7 +23,7 @@ static void makeBoundaryIcon(QToolButton* bt, QColor C)
 	bt->setIcon(pm);
 }
 
-PaintStyleEditor::PaintStyleEditor(QWidget *aParent, const GlobalPainter& aGlobalPainter, const QVector<FeaturePainter>& aPainters)
+PaintStyleEditor::PaintStyleEditor(QWidget *aParent, const GlobalPainter& aGlobalPainter, const QList<FeaturePainter>& aPainters)
 		: QDialog(aParent), theGlobalPainter(aGlobalPainter), thePainters(aPainters), FreezeUpdate(true)
 {
 	setupUi(this);
@@ -63,7 +63,7 @@ void PaintStyleEditor::on_DuplicateButton_clicked()
 	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())
 		return;
-	//QVector<FeaturePainter>::iterator theIterator = thePainters.begin();
+	//QList<FeaturePainter>::iterator theIterator = thePainters.begin();
 	thePainters.insert(thePainters.begin() + idx, FeaturePainter(thePainters[idx]));
 	idx++;
 	PaintList->insertItem(idx, thePainters[idx].userName());
@@ -87,7 +87,7 @@ void PaintStyleEditor::on_RemoveButton_clicked()
 
 void PaintStyleEditor::on_btUp_clicked()
 {
-	unsigned int idx = static_cast<unsigned int>(PaintList->currentRow());
+	int idx = static_cast<int>(PaintList->currentRow());
 	if (idx <= 0)
 		return;
 	FeaturePainter fp = thePainters[idx-1];
@@ -206,7 +206,7 @@ void PaintStyleEditor::on_LowerZoomBoundary_valueChanged()
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
-	std::pair<double, double> Result(0, 0);
+	QPair<double, double> Result(0, 0);
 	if (LowerZoomBoundary->value() > 10e-6)
 		Result.first = 1 / LowerZoomBoundary->value();
 	if (UpperZoomBoundary->value() > 10e-6)

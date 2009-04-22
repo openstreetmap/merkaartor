@@ -11,7 +11,7 @@
 //
 #include "OsmaRenderDialog.h"
 
-#include "Map/MapDocument.h"
+#include "Maps/MapDocument.h"
 #include "Utils/PictureViewerDialog.h"
 
 #include <QtSvg>

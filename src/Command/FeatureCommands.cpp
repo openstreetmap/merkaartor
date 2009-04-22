@@ -1,8 +1,8 @@
 #include "FeatureCommands.h"
 
-#include "Map/MapDocument.h"
-#include "Map/MapFeature.h"
-#include "Map/MapLayer.h"
+#include "Maps/MapDocument.h"
+#include "Maps/MapFeature.h"
+#include "Maps/MapLayer.h"
 #include "Sync/DirtyList.h"
 
 TagCommand::TagCommand(MapFeature* aF, MapLayer* aLayer)
@@ -24,19 +24,19 @@ TagCommand::~TagCommand(void)
 //void TagCommand::undo()
 //{
 //	theFeature->clearTags();
-//	for (unsigned int i=0; i<Before.size(); ++i)
+//	for (int i=0; i<Before.size(); ++i)
 //		theFeature->setTag(Before[i].first,Before[i].second);
 //}
 //
 //void TagCommand::redo()
 //{
 //	if (FirstRun)
-//		for (unsigned int i=0; i<theFeature->tagSize(); ++i)
-//			After.push_back(std::make_pair(theFeature->tagKey(i),theFeature->tagValue(i)));
+//		for (int i=0; i<theFeature->tagSize(); ++i)
+//			After.push_back(qMakePair(theFeature->tagKey(i),theFeature->tagValue(i)));
 //	else
 //	{
 //		theFeature->clearTags();
-//		for (unsigned int i=0; i<After.size(); ++i)
+//		for (int i=0; i<After.size(); ++i)
 //			theFeature->setTag(After[i].first,After[i].second);
 //	}
 //	FirstRun = false;
@@ -60,7 +60,7 @@ SetTagCommand::SetTagCommand(MapFeature* aF)
 	oldLayer = theFeature->layer();
 }
 
-SetTagCommand::SetTagCommand(MapFeature* aF, unsigned int idx, const QString& k, const QString& v, MapLayer* aLayer)
+SetTagCommand::SetTagCommand(MapFeature* aF, int idx, const QString& k, const QString& v, MapLayer* aLayer)
 : TagCommand(aF, aLayer), theIdx(idx), theK(k), theV(v)
 {
 	description = MainWindow::tr("Set Tag '%1=%2' on %3").arg(k).arg(v).arg(aF->description());
@@ -198,8 +198,8 @@ SetTagCommand * SetTagCommand::fromXML(MapDocument * d, QDomElement e)
 ClearTagsCommand::ClearTagsCommand(MapFeature* F, MapLayer* aLayer)
 : TagCommand(F, aLayer)
 {
-	for (unsigned int i=0; i<theFeature->tagSize(); ++i)
-		Before.push_back(std::make_pair(theFeature->tagKey(i),theFeature->tagValue(i)));
+	for (int i=0; i<theFeature->tagSize(); ++i)
+		Before.push_back(qMakePair(theFeature->tagKey(i),theFeature->tagValue(i)));
 	oldLayer = theFeature->layer();
 	redo();
 }
@@ -212,7 +212,7 @@ void ClearTagsCommand::undo()
 		oldLayer = theLayer->getDocument()->getDirtyOrOriginLayer();
 	}
 	theFeature->clearTags();
-	for (unsigned int i=0; i<Before.size(); ++i)
+	for (int i=0; i<Before.size(); ++i)
 		theFeature->setTag(Before[i].first,Before[i].second);
 
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
@@ -248,7 +248,7 @@ bool ClearTagsCommand::toXML(QDomElement& xParent) const
 	if (oldLayer)
 		e.setAttribute("oldlayer", oldLayer->id());
 
-	for (unsigned int i=0; i<Before.size(); ++i)
+	for (int i=0; i<Before.size(); ++i)
 	{
 		QDomElement c = e.ownerDocument().createElement("tag");
 		e.appendChild(c);
@@ -283,7 +283,7 @@ ClearTagsCommand * ClearTagsCommand::fromXML(MapDocument * d, QDomElement e)
 	QDomElement c = e.firstChildElement();
 	while(!c.isNull()) {
 		if (c.tagName() == "tag") {
-			a->Before.push_back(std::make_pair(c.attribute("k"),c.attribute("v")));
+			a->Before.push_back(qMakePair(c.attribute("k"),c.attribute("v")));
 		}
 		c = c.nextSiblingElement();
 	}

@@ -17,12 +17,18 @@ int main(int argc, char** argv)
 	QCoreApplication::setOrganizationDomain("www.irule.be");
 	QCoreApplication::setApplicationName("Merkaartor");
 
+#ifdef _MOBILE
+	QFont appFont = QApplication::font();
+	appFont.setPointSize(6);
+	QApplication::setFont(appFont);
+#endif
+
 	QPixmap pixmap(":/Splash/Mercator_splash.png");
 	QSplashScreen splash(pixmap);
 	splash.show();
 	app.processEvents();
 
-	splash.showMessage(QString(app.translate("Main", "Merkaartor v%1%2\nLoading plugins...")).arg(VERSION).arg(REVISION), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
+	splash.showMessage(QString(app.translate("Main", "Merkaartor v%1%2\nLoading plugins...")).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
 	app.processEvents();
 
 	if (!QDir::home().exists(".merkaartor"))
@@ -50,7 +56,7 @@ int main(int argc, char** argv)
 		}
 	}
 
-	splash.showMessage(QString(app.translate("Main", "Merkaartor v%1%2\nInitializing...")).arg(VERSION).arg(REVISION), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
+	splash.showMessage(QString(app.translate("Main", "Merkaartor v%1%2\nInitializing...")).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
 	app.processEvents();
 
 #if defined(Q_OS_MAC)
@@ -64,8 +70,8 @@ int main(int argc, char** argv)
 
 
 #ifdef _MOBILE
-//	Main.showMaximized();
-	Main.showFullScreen();
+	app.setActiveWindow(&Main);
+	Main.showMaximized();
 #else
 	Main.show();
 #endif

@@ -1,7 +1,7 @@
 #include "GeoImageDock.h"
 
-#include "Map/TrackPoint.h"
-#include "Map/MapLayer.h"
+#include "Maps/TrackPoint.h"
+#include "Maps/MapLayer.h"
 #include "Command/DocumentCommands.h"
 #include "LayerWidget.h"
 #include "PropertiesDock.h"
@@ -165,7 +165,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
 	{ // retrieve the target layer from the user
 		QStringList layers;
 		QList<int> layerId;
-		unsigned int i;
+		int i;
 		MapLayer *layer;
 		MapLayer *singleLayer = NULL;
 		MapLayer *singleTrackLayer = NULL;
@@ -358,8 +358,8 @@ void GeoImageDock::loadImages(QStringList fileNames)
 
 			MapFeature *feature = NULL;
 			TrackPoint *Pt, *bestPt = NULL;
-			int a, secondsTo = (unsigned int)-1 / 2;
-			unsigned int u;
+			int a, secondsTo = (int)-1 / 2;
+			int u;
 
 			for (u=0; u<theLayer->size(); u++) {
 				feature = theLayer->get(u);

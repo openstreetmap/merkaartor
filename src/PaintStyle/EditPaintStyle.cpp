@@ -1,11 +1,11 @@
 #include "PaintStyle/EditPaintStyle.h"
-#include "Map/Painting.h"
-#include "Map/Projection.h"
-#include "Map/TrackPoint.h"
-#include "Map/Relation.h"
-#include "Map/Road.h"
-#include "Map/MapLayer.h"
-#include "Map/ImageMapLayer.h"
+#include "Maps/Painting.h"
+#include "Maps/Projection.h"
+#include "Maps/TrackPoint.h"
+#include "Maps/Relation.h"
+#include "Maps/Road.h"
+#include "Maps/MapLayer.h"
+#include "Maps/ImageMapLayer.h"
 #include "PaintStyle/TagSelector.h"
 #include "Utils/LineF.h"
 
@@ -165,7 +165,7 @@ void EPTouchupLayer::draw(Road* R)
 				double DistFromCenter = 2*(theWidth+4);
 				if (theWidth > 0)
 				{
-					for (unsigned int i=1; i<R->size(); ++i)
+					for (int i=1; i<R->size(); ++i)
 					{
 						QPointF FromF(p->theProjection.project(R->getNode(i-1)));
 						QPointF ToF(p->theProjection.project(R->getNode(i)));
@@ -360,12 +360,12 @@ const FeaturePainter* EditPaintStyle::getPainter(int i) const
 	return &(Painters[i]);
 }
 
-QVector<FeaturePainter> EditPaintStyle::getPainters() const
+QList<FeaturePainter> EditPaintStyle::getPainters() const
 {
 	return Painters;
 }
 
-void EditPaintStyle::setPainters(QVector<FeaturePainter> aPainters)
+void EditPaintStyle::setPainters(QList<FeaturePainter> aPainters)
 {
 	Painters = aPainters;
 }

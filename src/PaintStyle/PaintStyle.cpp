@@ -1,9 +1,9 @@
 #include "PaintStyle.h"
-#include "Map/Painting.h"
-#include "Map/Projection.h"
-#include "Map/TrackPoint.h"
-#include "Map/Relation.h"
-#include "Map/Road.h"
+#include "Maps/Painting.h"
+#include "Maps/Projection.h"
+#include "Maps/TrackPoint.h"
+#include "Maps/Relation.h"
+#include "Maps/Road.h"
 #include "Utils/LineF.h"
 #include "Utils/SvgCache.h"
 
@@ -108,7 +108,7 @@ FeaturePainter::~FeaturePainter()
 	delete theSelector;
 }
 
-QString paddedHexa(unsigned int i)
+QString paddedHexa(int i)
 {
 	QString r=QString::number(i,16);
 	if (r.length() < 2)
@@ -254,7 +254,7 @@ FeaturePainter FeaturePainter::fromXML(const QDomElement& e, QString filename)
 			FP.labelBackgroundTag(e.attribute("labelBackgroundTag"));
 	}
 	QDomNode n = e.firstChild();
-	std::vector<std::pair<QString,QString> > Pairs;
+	QList<QPair<QString,QString> > Pairs;
 	while (!n.isNull())
 	{
 		if (n.isElement())
@@ -263,7 +263,7 @@ FeaturePainter FeaturePainter::fromXML(const QDomElement& e, QString filename)
 			if (t.tagName() == "selector")
 			{
 				if (t.attribute("key") != "")
-					Pairs.push_back(std::make_pair(t.attribute("key"),t.attribute("value")));
+					Pairs.push_back(qMakePair(t.attribute("key"),t.attribute("value")));
 				else
 				{
 					FP.setSelector(t.attribute("expr"));
@@ -278,20 +278,20 @@ FeaturePainter FeaturePainter::fromXML(const QDomElement& e, QString filename)
 	else if (Pairs.size())
 	{
 		bool Same = true;
-		for (unsigned int i=1; i<Pairs.size(); ++i)
+		for (int i=1; i<Pairs.size(); ++i)
 			if (Pairs[0].first != Pairs[i].first)
 				Same = false;
 		if (Same)
 		{
-			std::vector<QString> Options;
-			for (unsigned int i=0; i<Pairs.size(); ++i)
+			QList<QString> Options;
+			for (int i=0; i<Pairs.size(); ++i)
 				Options.push_back(Pairs[i].second);
 			FP.setSelector(new TagSelectorIsOneOf(Pairs[0].first,Options));
 		}
 		else
 		{
-			std::vector<TagSelector*> Options;
-			for (unsigned int i=0; i<Pairs.size(); ++i)
+			QList<TagSelector*> Options;
+			for (int i=0; i<Pairs.size(); ++i)
 				Options.push_back(new TagSelectorIs(Pairs[i].first,Pairs[i].second));
 			FP.setSelector(new TagSelectorOr(Options));
 		}
@@ -308,11 +308,11 @@ QString FeaturePainter::userName() const
 	return "Unnamed";
 }
 
-std::pair<double, double> FeaturePainter::zoomBoundaries() const
+QPair<double, double> FeaturePainter::zoomBoundaries() const
 {
 	if (ZoomLimitSet)
-		return std::make_pair(ZoomUnder,ZoomUpper);
-	return std::make_pair(0.0,0.0);
+		return qMakePair(ZoomUnder,ZoomUpper);
+	return qMakePair(0.0,0.0);
 }
 
 QColor FeaturePainter::fillColor() const
@@ -622,7 +622,7 @@ TagSelectorMatchResult FeaturePainter::matchesTag(const MapFeature* F) const
 	if (const Road* R = dynamic_cast<const Road*>(F))
 	{
 		// TODO create a isPartOfMultiPolygon(R) function for this
-		for (unsigned int i=0; i<R->sizeParents(); ++i)
+		for (int i=0; i<R->sizeParents(); ++i)
 		{
 			if (const Relation* Parent = dynamic_cast<const Relation*>(R->getParent(i)))
 				if (Parent->tagValue("type","") == "multipolygon")
@@ -634,7 +634,7 @@ TagSelectorMatchResult FeaturePainter::matchesTag(const MapFeature* F) const
 	// Special casing for multipolygon relations
 	if (const Relation* R = dynamic_cast<const Relation*>(F))
 	{
-		for (unsigned int i=0; i<R->size(); ++i)
+		for (int i=0; i<R->size(); ++i)
 			if ((res = theSelector->matches(R->get(i))))
 				return res;
 	}
@@ -651,13 +651,13 @@ bool FeaturePainter::matchesZoom(double PixelPerM) const
 void buildPathFromRoad(Road *R, const Projection &theProjection, QPainterPath &Path)
 {
 	Path.moveTo(theProjection.project(R->get(0)));
-	for (unsigned int i=1; i<R->size(); ++i)
+	for (int i=1; i<R->size(); ++i)
 		Path.lineTo(theProjection.project(R->get(i)));
 }
 
 void buildPathFromRelation(Relation *R, const Projection &theProjection, QPainterPath &Path)
 {
-	for (unsigned int i=0; i<R->size(); ++i)
+	for (int i=0; i<R->size(); ++i)
 		if (Road* M = dynamic_cast<Road*>(R->get(i)))
 			buildPathFromRoad(M, theProjection, Path);
 }
@@ -871,7 +871,7 @@ void FeaturePainter::drawTouchup(Road* R, QPainter& thePainter, const Projection
 			double DistFromCenter = 2*(theWidth+4);
 			if (theWidth > 0)
 			{
-				for (unsigned int i=1; i<R->size(); ++i)
+				for (int i=1; i<R->size(); ++i)
 				{
 					QPointF FromF(theProjection.project(R->getNode(i-1)));
 					QPointF ToF(theProjection.project(R->getNode(i)));
@@ -1225,12 +1225,12 @@ void PaintStyle::add(PaintStyleLayer *aLayer)
 	Layers.push_back(aLayer);
 }
 
-unsigned int PaintStyle::size() const
+int PaintStyle::size() const
 {
 	return Layers.size();
 }
 
-PaintStyleLayer* PaintStyle::get(unsigned int i)
+PaintStyleLayer* PaintStyle::get(int i)
 {
 	return Layers[i];
 }

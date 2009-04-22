@@ -29,14 +29,12 @@
 #include <QTimer>
 #include <QHostAddress>
 
-#include <cstdlib>
-
 #include "qgpsdevice.h"
+#ifndef Q_OS_SYMBIAN
 #include "qextserialport.h"
+#endif
 
 #include "Preferences/MerkaartorPreferences.h"
-
-#include <iostream>
 
 /* GPSSLOTFORWARDER */
 
@@ -127,7 +125,7 @@ int QGPSDevice::longSeconds()
 	return int(s * 60);
 }
 
-bool QGPSDevice::isActiveSat(unsigned int prn)
+bool QGPSDevice::isActiveSat(int prn)
 {
 	for (int i=0; i<12; i++) {
 		if (activeSats[i] == prn)
@@ -582,7 +580,7 @@ void QGPSDevice::startDevice()
     stopLoop = false;
     mutex->unlock();
 
-    printf("We're starting...\n");
+    //printf("We're starting...\n");
 
     start();
 }
@@ -600,6 +598,7 @@ void QGPSDevice::stopDevice()
     emit doStopDevice();
 }
 
+#ifndef Q_OS_SYMBIAN
 /*** QGPSComDevice  ***/
 
 QGPSComDevice::QGPSComDevice(const QString &device)
@@ -704,7 +703,7 @@ void QGPSComDevice::onDataAvailable()
 {
 	QByteArray ba(port->readAll());
 	// filter out unwanted characters
-	for (unsigned int i=ba.count(); i; --i)
+	for (int i=ba.count(); i; --i)
 		if(ba[i-1] == '\0' || 
 			(!isalnum((quint8)ba[i-1]) && 
 			 !isspace((quint8)ba[i-1]) && 
@@ -772,6 +771,7 @@ void QGPSComDevice::parse(const QByteArray& bufferString)
 	}
 	emit updateStatus();
 }
+#endif
 
 /*** QGPSFileDevice  ***/
 
@@ -899,6 +899,7 @@ void QGPSFileDevice::onDataAvailable()
 	}
 }
 
+#ifndef Q_OS_SYMBIAN
 /* GPSSDEVICE */
 
 QGPSDDevice::QGPSDDevice(const QString& device)
@@ -915,7 +916,6 @@ bool QGPSDDevice::closeDevice()
 {
 	return true;
 }
-
 
 // this function will be called within this thread
 void QGPSDDevice::onStop()
@@ -954,7 +954,7 @@ void QGPSDDevice::onDataAvailable()
 
 void QGPSDDevice::parse(const QString& s)
 {
-	std::cout << "parsing " << s.toUtf8().data() << "*" << std::endl;
+	qDebug() << "parsing " << s.toUtf8().data() << "*";
 	QStringList Args(s.split(',',QString::SkipEmptyParts));
 	for (int i=0; i<Args.count(); ++i)
 	{
@@ -1024,3 +1024,94 @@ void QGPSDDevice::onLinkReady()
 	Server->write("w+");
 	Server->write("j=1");
 }
+#endif
+
+#ifdef Q_OS_SYMBIAN
+/* GPSS60DEVICE */
+
+#include "xqlocation.h"
+
+QGPSS60Device::QGPSS60Device()
+{
+}
+
+bool QGPSS60Device::openDevice()
+{
+	return true;
+}
+
+bool QGPSS60Device::closeDevice()
+{
+	return true;
+}
+
+// this function will be called within this thread
+void QGPSS60Device::onStop()
+{
+	quit();
+}
+
+void QGPSS60Device::run()
+{
+	GPSSlotForwarder Forward(this);
+	connect(this,SIGNAL(doStopDevice()),&Forward,SLOT(onStop()));
+
+	XQLocation location;
+	if (location.open() != XQLocation::NoError) {
+		emit(doStopDevice());
+		return;
+	}
+	location.startUpdates(1000);
+
+	connect(&location, SIGNAL(locationChanged(double,double,double,float)), this, SLOT(onLocationChanged(double,double,double,float)));
+	connect(&location, SIGNAL(statusChanged(XQLocation::DeviceStatus)), this, SLOT(onStatusChanged(XQLocation::DeviceStatus)));
+	connect(&location, SIGNAL(dataQualityChanged(XQLocation::DataQuality)), this, SLOT(onDataQualityChanged(XQLocation::DataQuality)));
+	connect(&location, SIGNAL(numberOfSatellitesInViewChanged(int)), this, SLOT(setNumSatellites(int)));
+
+	exec();
+	
+	location.stopUpdates();
+}
+
+void QGPSS60Device::onLocationChanged(double latitude, double longitude, double altitude, float speed)
+{
+	setLatitude(latitude);
+	setLongitude(longitude);
+	setAltitude(altitude);
+	setSpeed(speed);
+	
+	emit updatePosition(latitude, longitude, QDateTime::currentDateTime(),
+			altitude, speed, cur_heading);
+}
+
+void QGPSS60Device::onStatusChanged(XQLocation::DeviceStatus)
+{
+	
+}
+
+void QGPSS60Device::onDataQualityChanged(XQLocation::DataQuality qual)
+{
+	switch (qual) {
+	case XQLocation::DataQualityUnknown:
+		setFixType(FixUnavailable);
+		break;
+	case XQLocation::DataQualityLoss:
+		setFixType(FixInvalid);
+		break;
+	case XQLocation::DataQualityPartial:
+		setFixType(Fix2D);
+		break;
+	case XQLocation::DataQualityNormal:
+		setFixType(Fix3D);
+	}
+}
+void QGPSS60Device::onLinkReady()
+{
+}
+
+void QGPSS60Device::onDataAvailable()
+{
+}
+
+
+#endif

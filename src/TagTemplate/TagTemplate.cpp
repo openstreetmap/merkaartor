@@ -12,10 +12,10 @@
 
 #include "TagTemplate.h"
 
-#include "Map/MapFeature.h"
-#include "Map/TrackPoint.h"
-#include "Map/Relation.h"
-#include "Map/Road.h"
+#include "Maps/MapFeature.h"
+#include "Maps/TrackPoint.h"
+#include "Maps/Relation.h"
+#include "Maps/Road.h"
 #include "Command/FeatureCommands.h"
 
 #include <QComboBox>
@@ -696,7 +696,7 @@ TagSelectorMatchResult TagTemplate::matchesTag(const MapFeature* F)
 	if (const Road* R = dynamic_cast<const Road*>(F))
 	{
 		// TODO create a isPartOfMultiPolygon(R) function for this
-		for (unsigned int i=0; i<R->sizeParents(); ++i)
+		for (int i=0; i<R->sizeParents(); ++i)
 		{
 			if (const Relation* Parent = dynamic_cast<const Relation*>(R->getParent(i)))
 				if (Parent->tagValue("type","") == "multipolygon")
@@ -708,7 +708,7 @@ TagSelectorMatchResult TagTemplate::matchesTag(const MapFeature* F)
 	// Special casing for multipolygon relations
 	if (const Relation* R = dynamic_cast<const Relation*>(F))
 	{
-		for (unsigned int i=0; i<R->size(); ++i)
+		for (int i=0; i<R->size(); ++i)
 			if ((res = theSelector->matches(R->get(i))))
 				return res;
 	}

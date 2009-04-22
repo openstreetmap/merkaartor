@@ -132,7 +132,7 @@ bool OsbRegion::clearTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer)
 		if (F && theLayer->exists(F) && theLayer->featRefCount.contains(F)) {
 			int theCount = --theLayer->featRefCount[F];
 			if (!(theCount)) {
-				quint32 j;
+				qint32 j;
 				for (j=0; j<F->sizeParents(); ++j)
 					if (F->getParent(j)->layer() != theLayer)
 						break;
@@ -165,7 +165,7 @@ void ImportExportOsmBin::doAddTileIndex(MapFeature* F, qint32 tile)
 		theTileNodesIndex[tile].push_back(F);
 	} else
 	if (Road* R = CAST_WAY(F)) {
-		for (unsigned int k=0; k<R->size(); ++k)
+		for (int k=0; k<R->size(); ++k)
 			if (!theTileNodesIndex[tile].contains(R->get(k)))
 				theTileNodesIndex[tile].push_back(R->get(k));
 		theTileRoadsIndex[tile].push_back(F);
@@ -244,12 +244,12 @@ void ImportExportOsmBin::addTileIndex(MapFeature* F)
 void ImportExportOsmBin::tagsToBinary(MapFeature* F, QDataStream& ds)
 {
 	qint64 k, v;
-	quint8 tagSize = (quint8)qMin(F->tagSize(), (unsigned int) 255);
+	quint8 tagSize = (quint8)qMin(F->tagSize(), (int) 255);
 	if (F->tagValue("created_by", "dummy") != "dummy")
 		tagSize--;
 
 	ds << tagSize;
-	for (unsigned int i=0; i<F->tagSize(); ++i) {
+	for (int i=0; i<F->tagSize(); ++i) {
 		if (F->tagKey(i) == "created_by")
 			continue;
 		k = theTagKeysIndex[F->tagKey(i)];
@@ -269,7 +269,7 @@ void ImportExportOsmBin::tagsFromBinary(MapFeature * F, QDataStream& ds)
 	quint64 cur_pos;
 
 	ds >> numTags;
-	for (unsigned int i=0; i < numTags; ++i) {
+	for (int i=0; i < numTags; ++i) {
 		ds >> k;
 		ds >> v;
 		if (F) {
@@ -295,7 +295,7 @@ void ImportExportOsmBin::tagsFromBinary(MapFeature * F, QDataStream& ds)
 void ImportExportOsmBin::tagsPopularity(MapFeature * F)
 {
 	int val;
-	for (unsigned int i=0; i<F->tagSize(); ++i) {
+	for (int i=0; i<F->tagSize(); ++i) {
 		val = keyPopularity.value(F->tagKey(i));
 		keyPopularity.insert(F->tagKey(i), val + 1);
 		val = valuePopularity.value(F->tagValue(i));

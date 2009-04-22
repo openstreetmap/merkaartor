@@ -5,7 +5,8 @@
 #include <QtGui/QColor>
 #include <QFont>
 
-#include <vector>
+#include <QList>
+#include <QPair>
 
 #include "PaintStyle/TagSelector.h"
 
@@ -82,7 +83,7 @@ class FeaturePainter
 		FeaturePainter& labelArea(bool b);
 
 		QString userName() const;
-		std::pair<double, double> zoomBoundaries() const;
+		QPair<double, double> zoomBoundaries() const;
 		LineParameters backgroundBoundary() const;
 		LineParameters foregroundBoundary() const;
 		LineParameters labelBoundary() const;
@@ -186,10 +187,10 @@ class PaintStyle
 {
 	public:
 		void add(PaintStyleLayer* aLayer);
-		unsigned int size() const;
-		PaintStyleLayer* get(unsigned int i);
+		int size() const;
+		PaintStyleLayer* get(int i);
 	protected:
-		QVector<PaintStyleLayer*> Layers;
+		QList<PaintStyleLayer*> Layers;
 };
 
 #endif

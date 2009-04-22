@@ -1,10 +1,10 @@
 #include "DocumentCommands.h"
-#include "Map/MapDocument.h"
-#include "Map/MapLayer.h"
-#include "Map/MapFeature.h"
-#include "Map/Road.h"
-#include "Map/TrackPoint.h"
-#include "Map/Relation.h"
+#include "Maps/MapDocument.h"
+#include "Maps/MapLayer.h"
+#include "Maps/MapFeature.h"
+#include "Maps/Road.h"
+#include "Maps/TrackPoint.h"
+#include "Maps/Relation.h"
 #include "Sync/DirtyList.h"
 
 AddFeatureCommand::AddFeatureCommand(MapFeature* aFeature)
@@ -131,7 +131,7 @@ RemoveFeatureCommand::RemoveFeatureCommand(MapDocument *theDocument, MapFeature 
 	redo();
 }
 
-RemoveFeatureCommand::RemoveFeatureCommand(MapDocument *theDocument, MapFeature *aFeature, const std::vector<MapFeature*>& Alternatives)
+RemoveFeatureCommand::RemoveFeatureCommand(MapDocument *theDocument, MapFeature *aFeature, const QList<MapFeature*>& Alternatives)
 : Command(aFeature), theLayer(0), Idx(0), theFeature(aFeature), CascadedCleanUp(0), RemoveExecuted(false), theAlternatives(Alternatives)
 {
 	CascadedCleanUp  = new CommandList(MainWindow::tr("Cascaded cleanup"), NULL);
@@ -241,7 +241,7 @@ bool RemoveFeatureCommand::toXML(QDomElement& xParent) const
 		CascadedCleanUp->toXML(casc);
 	}
 // 	if (theAlternatives.size() > 0) {
-// 		std::vector<MapFeature*>::const_iterator myFeatIter;
+// 		QList<MapFeature*>::const_iterator myFeatIter;
 // 		for(myFeatIter = theAlternatives.begin();
 // 			myFeatIter != theAlternatives.end();
 // 			myFeatIter++)

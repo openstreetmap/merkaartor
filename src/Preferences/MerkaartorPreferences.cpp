@@ -230,7 +230,7 @@ void MerkaartorPreferences::on_requestFinished ( int id, bool error )
 
 		QByteArray PrefsXML;
 		for (int i=0; i<sz; i++)
-			PrefsXML.append(slicedPrefs[i]);
+			PrefsXML.append(slicedPrefs[i].toAscii());
 
 		//qDebug() << "Size: " << PrefsXML.size();
 
@@ -369,7 +369,7 @@ void MerkaartorPreferences::on_responseHeaderReceived(const QHttpResponseHeader 
 
 void MerkaartorPreferences::initialize()
 {
-	Use06Api = Sets->value("osm/use06api", "").toBool();
+	Use06Api = Sets->value("osm/use06api", "true").toBool();
 
 	loadProjections();
 	loadWMSes();
@@ -802,6 +802,7 @@ void MerkaartorPreferences::initialPosition(MapView* vw)
 	}
 }
 
+#ifndef _MOBILE
 void MerkaartorPreferences::setProjectionType(ProjectionType theValue)
 {
 	Sets->setValue("projection/Type", theValue);
@@ -821,6 +822,7 @@ ProjectionItem MerkaartorPreferences::getProjection(QString aProj)
 {
 	return theProjectionsList.getProjection(aProj);
 }
+#endif
 
 qreal MerkaartorPreferences::getAlpha(QString lvl)
 {
@@ -1309,7 +1311,7 @@ void MerkaartorPreferences::loadProjections()
 	QString fn = ":/Projections.xml";
 	loadProjection(fn);
 
-	fn = QString(SHARE_DIR) + "/Projections.xml";
+	fn = QString(STRINGIFY(SHARE_DIR)) + "/Projections.xml";
 	loadProjection(fn);
 
 	fn = HOMEDIR + "/Projections.xml";
@@ -1365,7 +1367,7 @@ void MerkaartorPreferences::loadWMSes()
 	QString fn = ":/WmsServersList.xml";
 	loadWMS(fn);
 
-	fn = QString(SHARE_DIR) + "/WmsServersList.xml";
+	fn = QString(STRINGIFY(SHARE_DIR)) + "/WmsServersList.xml";
 	loadWMS(fn);
 
 	fn = HOMEDIR + "/WmsServersList.xml";
@@ -1421,7 +1423,7 @@ void MerkaartorPreferences::loadTMSes()
 	QString fn = ":/TmsServersList.xml";
 	loadTMS(fn);
 
-	fn = QString(SHARE_DIR) + "/TmsServersList.xml";
+	fn = QString(STRINGIFY(SHARE_DIR)) + "/TmsServersList.xml";
 	loadTMS(fn);
 
 	fn = HOMEDIR + "/TmsServersList.xml";
@@ -1477,7 +1479,7 @@ void MerkaartorPreferences::loadBookmarks()
 	QString fn = ":/BookmarksList.xml";
 	loadBookmark(fn);
 
-	fn = QString(SHARE_DIR) + "/BookmarksList.xml";
+	fn = QString(STRINGIFY(SHARE_DIR)) + "/BookmarksList.xml";
 	loadBookmark(fn);
 
 	fn = HOMEDIR + "/BookmarksList.xml";

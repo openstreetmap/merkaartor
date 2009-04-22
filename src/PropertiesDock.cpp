@@ -9,13 +9,13 @@
 #include "Command/FeatureCommands.h"
 #include "Command/TrackPointCommands.h"
 #include "Command/RelationCommands.h"
-#include "Map/Coord.h"
-#include "Map/MapDocument.h"
-#include "Map/MapFeature.h"
-#include "Map/Relation.h"
-#include "Map/Road.h"
-#include "Map/FeatureManipulations.h"
-#include "Map/TrackPoint.h"
+#include "Maps/Coord.h"
+#include "Maps/MapDocument.h"
+#include "Maps/MapFeature.h"
+#include "Maps/Relation.h"
+#include "Maps/Road.h"
+#include "Maps/FeatureManipulations.h"
+#include "Maps/TrackPoint.h"
 #include "TagTemplate/TagTemplate.h"
 
 #ifdef GEOIMAGE
@@ -91,14 +91,14 @@ static bool isChildOfSingleRoad(MapFeature *mapFeature)
 
 static bool isChildOfSingleRelation(MapFeature *mapFeature)
 {
-	unsigned int parents = mapFeature->sizeParents();
+	int parents = mapFeature->sizeParents();
 
 	if (parents == 0)
 		return false;
 
-	unsigned int parentRelations = 0;
+	int parentRelations = 0;
 
-	unsigned int i;
+	int i;
 	for (i=0; i<parents; i++)
 	{
 		MapFeature * parent = mapFeature->getParent(i);
@@ -114,12 +114,12 @@ static bool isChildOfSingleRelation(MapFeature *mapFeature)
 
 static bool isChildOfRelation(MapFeature *mapFeature)
 {
-	unsigned int parents = mapFeature->sizeParents();
+	int parents = mapFeature->sizeParents();
 
 	if (parents == 0)
 		return false;
 
-	unsigned int i;
+	int i;
 	for (i=0; i<parents; i++)
 	{
 		MapFeature * parent = mapFeature->getParent(i);
@@ -138,12 +138,12 @@ void PropertiesDock::checkMenuStatus()
 	bool IsParentRoadInner = false;
 	bool IsParentRelation = false;
 	bool IsParentArea = false;
-	unsigned int NumRoads = 0;
-	unsigned int NumCommitableFeature = 0;
-	unsigned int NumPoints = 0;
-	unsigned int NumRelation = 0;
-	unsigned int NumRelationChild = 0;
-	unsigned int NumAreas = 0;
+	int NumRoads = 0;
+	int NumCommitableFeature = 0;
+	int NumPoints = 0;
+	int NumRelation = 0;
+	int NumRelationChild = 0;
+	int NumAreas = 0;
 	if (Selection.size() == 1)
 	{
 		IsPoint = dynamic_cast<TrackPoint*>(Selection[0]) != 0;
@@ -194,7 +194,7 @@ void PropertiesDock::checkMenuStatus()
 	Main->clipboardChanged();
 }
 
-unsigned int PropertiesDock::size() const
+int PropertiesDock::size() const
 {
 	return Selection.size();
 }
@@ -222,11 +222,11 @@ void PropertiesDock::setSelection(MapFeature*aFeature)
 	fillMultiUiSelectionBox();
 }
 
-void PropertiesDock::setMultiSelection(const std::vector<MapFeature*>& aFeatureList)
+void PropertiesDock::setMultiSelection(const QList<MapFeature*>& aFeatureList)
 {
 	cleanUpUi();
 	Selection.clear();
-	for (unsigned int i=0; i<aFeatureList.size(); ++i)
+	for (int i=0; i<aFeatureList.size(); ++i)
 		Selection.push_back(aFeatureList[i]);
 	FullSelection = Selection;
 	switchToMultiUi();
@@ -267,7 +267,7 @@ void PropertiesDock::addSelection(MapFeature* S)
 void PropertiesDock::adjustSelection()
 {
 	QList<MapFeature*> aSelection;
-	unsigned int cnt = Selection.size();
+	int cnt = Selection.size();
 
 	for (int i=0; i<FullSelection.size(); ++i) {
 		if (Main->document()->exists(FullSelection[i])) {
@@ -337,7 +337,7 @@ void PropertiesDock::on_SelectionList_itemSelectionChanged()
 
 void PropertiesDock::on_SelectionList_itemDoubleClicked(QListWidgetItem* item)
 {
-	unsigned int i=item->data(Qt::UserRole).toUInt();
+	int i=item->data(Qt::UserRole).toUInt();
 	PendingSelectionChange = i;
 	// changing directly from this method would delete the current Ui from
 	// which this slot is called
@@ -754,7 +754,7 @@ void PropertiesDock::on_centerAction_triggered()
 	} else
 	if (CurrentTagView) {
 		Main->setUpdatesEnabled(false);
-		unsigned int idx = MultiUi.SelectionList->selectedItems()[0]->data(Qt::UserRole).toUInt();
+		int idx = MultiUi.SelectionList->selectedItems()[0]->data(Qt::UserRole).toUInt();
 		cb = FullSelection[idx]->boundingBox();
 		for (int i=1; i < MultiUi.SelectionList->selectedItems().size(); i++) {
 			idx = MultiUi.SelectionList->selectedItems()[i]->data(Qt::UserRole).toUInt();
@@ -797,7 +797,7 @@ void PropertiesDock::on_centerZoomAction_triggered()
 	} else
 	if (CurrentTagView) {
 		Main->setUpdatesEnabled(false);
-		unsigned int idx = MultiUi.SelectionList->selectedItems()[0]->data(Qt::UserRole).toUInt();
+		int idx = MultiUi.SelectionList->selectedItems()[0]->data(Qt::UserRole).toUInt();
 		CoordBox cb = FullSelection[idx]->boundingBox();
 		for (int i=1; i < MultiUi.SelectionList->selectedItems().size(); i++) {
 			idx = MultiUi.SelectionList->selectedItems()[i]->data(Qt::UserRole).toUInt();

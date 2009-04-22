@@ -2,9 +2,9 @@
 #include "Command/DocumentCommands.h"
 #include "Command/RoadCommands.h"
 #include "Command/TrackPointCommands.h"
-#include "Map/Painting.h"
-#include "Map/Road.h"
-#include "Map/TrackPoint.h"
+#include "Maps/Painting.h"
+#include "Maps/Road.h"
+#include "Maps/TrackPoint.h"
 #include "Utils/LineF.h"
 #include "MainWindow.h"
 #include "PropertiesDock.h"
@@ -102,7 +102,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Map
 			else if (Road* aRoad = dynamic_cast<Road*>(aFeature))
 			{
 				Coord P(projection().inverse(anEvent->pos()));
-				unsigned int SnapIdx = findSnapPointIndex(aRoad, P);
+				int SnapIdx = findSnapPointIndex(aRoad, P);
 				TrackPoint* N = new TrackPoint(P);
 				N->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 				CommandList* theList  = new CommandList(MainWindow::tr("Create Node %1 in Road %2").arg(N->description()).arg(aRoad->description()), N);
@@ -150,7 +150,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Map
 			else if (Road* aRoad = dynamic_cast<Road*>(aFeature))
 			{
 				Coord P(projection().inverse(anEvent->pos()));
-				unsigned int SnapIdx = findSnapPointIndex(aRoad, P);
+				int SnapIdx = findSnapPointIndex(aRoad, P);
 				TrackPoint* N = new TrackPoint(P);
 				N->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 				CommandList* theList  = new CommandList(MainWindow::tr("Create Node %1 in Road %2").arg(N->description()).arg(aRoad->description()), N);
@@ -170,7 +170,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Map
 			}
 			L->setDescription(MainWindow::tr("Add Node %1 to Road %2").arg(To->description()).arg(theRoad->description()));
 			if (Prepend)
-				L->add(new RoadAddTrackPointCommand(theRoad,To,(unsigned int)0,Main->document()->getDirtyOrOriginLayer(theRoad)));
+				L->add(new RoadAddTrackPointCommand(theRoad,To,(int)0,Main->document()->getDirtyOrOriginLayer(theRoad)));
 			else
 				L->add(new RoadAddTrackPointCommand(theRoad,To,Main->document()->getDirtyOrOriginLayer(theRoad)));
 			document()->addHistory(L);
@@ -183,7 +183,9 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Map
 	LastCursor = anEvent->pos();
 }
 
+#ifndef Q_OS_SYMBIAN
 QCursor CreateSingleWayInteraction::cursor() const
 {
 	return QCursor(Qt::CrossCursor);
 }
+#endif

@@ -61,7 +61,7 @@ private:
 	void changeEvent(QEvent *);
 
 private:
-	QVector<Tool> theTools;
+	QList<Tool> theTools;
 	QColor BgColor;
 	QColor FocusColor;
 	QColor HoverColor;

@@ -5,7 +5,8 @@
 #include <QtCore/QString>
 
 #include <utility>
-#include <vector>
+#include <QList>
+#include <QPair>
 
 class MainWindow;
 class MapFeature;
@@ -30,7 +31,7 @@ Q_OBJECT
 	private:
 		MainWindow* Main;
 		QList<MapFeature*> theFeatures;
-		QList<std::pair<QString, QString> > Tags;
+		QList<QPair<QString, QString> > Tags;
 };
 
 #endif

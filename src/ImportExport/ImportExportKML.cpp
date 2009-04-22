@@ -66,7 +66,7 @@ bool ImportExportKML::export_(const QList<MapFeature *>& featList)
 			k = theXmlDoc.createElement("description");
 			p.appendChild(k);
 			QString desc;
-			for (unsigned int j=0; j<R->tagSize(); ++j) {
+			for (int j=0; j<R->tagSize(); ++j) {
 				desc += R->tagKey(j);
 				desc += "=";
 				desc += R->tagValue(j);
@@ -101,7 +101,7 @@ bool ImportExportKML::export_(const QList<MapFeature *>& featList)
 			l.appendChild(c);
 			
 			QString s;
-			for (unsigned int j=0; j<R->size(); ++j) {
+			for (int j=0; j<R->size(); ++j) {
 				TrackPoint* N = dynamic_cast<TrackPoint*>(R->get(j));
 				s += QString(" %1,%2").arg(QString::number(intToAng(N->position().lon()),'f',8)).arg(QString::number(intToAng(N->position().lat()),'f',8));
 			}
@@ -123,7 +123,7 @@ bool ImportExportKML::export_(const QList<MapFeature *>& featList)
 			k = theXmlDoc.createElement("description");
 			p.appendChild(k);
 			QString desc;
-			for (unsigned int j=0; j<N->tagSize(); ++j) {
+			for (int j=0; j<N->tagSize(); ++j) {
 				desc += N->tagKey(j);
 				desc += "=";
 				desc += N->tagValue(j);

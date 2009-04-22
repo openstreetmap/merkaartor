@@ -1,6 +1,6 @@
 #include "Command/TrackPointCommands.h"
-#include "Map/TrackPoint.h"
-#include "Map/MapLayer.h"
+#include "Maps/TrackPoint.h"
+#include "Maps/MapLayer.h"
 #include "Sync/DirtyList.h"
 
 MoveTrackPointCommand::MoveTrackPointCommand() 

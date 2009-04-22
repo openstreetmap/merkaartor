@@ -12,7 +12,7 @@
 #include "WorldOsbManager.h"
 
 #include "ImportExport/ImportExportOsmBin.h"
-#include "Map/DownloadOSM.h"
+#include "Maps/DownloadOSM.h"
 #include "Preferences/MerkaartorPreferences.h"
 
 

@@ -3,9 +3,9 @@
 #include "MainWindow.h"
 #include "Command/DocumentCommands.h"
 #include "Command/FeatureCommands.h"
-#include "Map/MapDocument.h"
-#include "Map/MapFeature.h"
-#include "Map/MapLayer.h"
+#include "Maps/MapDocument.h"
+#include "Maps/MapFeature.h"
+#include "Maps/MapLayer.h"
 
 TagModel::TagModel(MainWindow* aMain)
 : Main(aMain)
@@ -28,7 +28,7 @@ void TagModel::setFeature(const QList<MapFeature*> Features)
 	if (theFeatures.size())
 	{
 		MapFeature* F = theFeatures[0];
-		for (unsigned int i=0; i<F->tagSize(); ++i)
+		for (int i=0; i<F->tagSize(); ++i)
 		{
 			int j=0;
 			for (j=1; j<theFeatures.size(); ++j)
@@ -36,7 +36,7 @@ void TagModel::setFeature(const QList<MapFeature*> Features)
 					break;
 			if (j == theFeatures.size())
 				if (!F->tagKey(i).startsWith("%kml:"))
-					Tags.push_back(std::make_pair(F->tagKey(i),F->tagValue(i)));
+					Tags.push_back(qMakePair(F->tagKey(i),F->tagValue(i)));
 		}
 		std::sort(Tags.begin(), Tags.end());
 		beginInsertRows(QModelIndex(),0,Tags.size());
@@ -121,7 +121,7 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
 	if (!theFeatures.size()) return false;
 	if (index.isValid() && role == Qt::EditRole)
 	{
-		if ((unsigned int)index.row() == Tags.size())
+		if ((int)index.row() == Tags.size())
 		{
 			if (index.column() == 0)
 			{
@@ -140,7 +140,7 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
 					L->add(new SetTagCommand(theFeatures[i],value.toString(),"", Main->document()->getDirtyOrOriginLayer(theFeatures[i]->layer())));
 					theFeatures[i]->setLastUpdated(MapFeature::User);
 				}
-				Tags.push_back(std::make_pair(value.toString(),""));
+				Tags.push_back(qMakePair(value.toString(),QString("")));
 				Main->document()->addHistory(L);
 				endInsertRows();
 			}
@@ -161,7 +161,7 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
 					L = new CommandList(MainWindow::tr("Set Tags on %1").arg(theFeatures[0]->id()), theFeatures[0]);
 			for (int i=0; i<theFeatures.size(); ++i)
 			{
-				unsigned int j = theFeatures[i]->findKey(Original);
+				int j = theFeatures[i]->findKey(Original);
 				if (j<theFeatures[i]->tagSize()) {
 					if (!theFeatures[i]->isDirty() && !theFeatures[i]->hasOSMId() && theFeatures[i]->isUploadable()) {
 						bool userAdded = !theFeatures[i]->id().startsWith("conflict_");

@@ -24,6 +24,8 @@
 #include "browserimagemanager.h"
 #endif
 
+#include <QWidget>
+
 LayerManager::LayerManager(QWidget* aParent, QSize size)
 	:scroll(QPoint(0,0)), size(size), whilenewscroll(QPoint(0,0))
 {

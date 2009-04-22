@@ -12,7 +12,7 @@ class TrackSegmentAddTrackPointCommand : public Command
 	public:
 		TrackSegmentAddTrackPointCommand(TrackSegment* R = NULL);
 		TrackSegmentAddTrackPointCommand(TrackSegment* R, TrackPoint* W, MapLayer* aLayer=NULL);
-		TrackSegmentAddTrackPointCommand(TrackSegment* R, TrackPoint* W, unsigned int Position, MapLayer* aLayer=NULL);
+		TrackSegmentAddTrackPointCommand(TrackSegment* R, TrackPoint* W, int Position, MapLayer* aLayer=NULL);
 		~TrackSegmentAddTrackPointCommand(void);
 
 		virtual void undo();
@@ -27,7 +27,7 @@ class TrackSegmentAddTrackPointCommand : public Command
 		MapLayer* oldLayer;
 		TrackSegment* theTrackSegment;
 		TrackPoint* theTrackPoint;
-		unsigned int Position;
+		int Position;
 };
 
 class TrackSegmentRemoveTrackPointCommand : public Command
@@ -35,7 +35,7 @@ class TrackSegmentRemoveTrackPointCommand : public Command
 	public:
 		TrackSegmentRemoveTrackPointCommand(TrackSegment* R = NULL);
 		TrackSegmentRemoveTrackPointCommand(TrackSegment* R, TrackPoint* W, MapLayer* aLayer=NULL);
-		TrackSegmentRemoveTrackPointCommand(TrackSegment* R, unsigned int anIdx, MapLayer* aLayer=NULL);
+		TrackSegmentRemoveTrackPointCommand(TrackSegment* R, int anIdx, MapLayer* aLayer=NULL);
 		~TrackSegmentRemoveTrackPointCommand(void);
 
 		virtual void undo();
@@ -48,7 +48,7 @@ class TrackSegmentRemoveTrackPointCommand : public Command
 	private:
 		MapLayer* theLayer;
 		MapLayer* oldLayer;
-		unsigned int Idx;
+		int Idx;
 		TrackSegment* theTrackSegment;
 		TrackPoint* theTrackPoint;
 };

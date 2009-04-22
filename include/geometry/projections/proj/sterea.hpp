@@ -79,15 +79,15 @@ namespace projection
 
 				inline void fwd(LL_T& lp_lon, LL_T& lp_lat, XY_T& xy_x, XY_T& xy_y) const
 				{
-					double cosc, sinc, cosl, k;
+					double cosc, sinc, cosL, k;
 
 					impl::gauss::gauss(m_proj_parm.en, lp_lon, lp_lat);
 					sinc = sin(lp_lat);
 					cosc = cos(lp_lat);
-					cosl = cos(lp_lon);
-					k = this->m_par.k0 * this->m_proj_parm.R2 / (1. + this->m_proj_parm.sinc0 * sinc + this->m_proj_parm.cosc0 * cosc * cosl);
+					cosL = cos(lp_lon);
+					k = this->m_par.k0 * this->m_proj_parm.R2 / (1. + this->m_proj_parm.sinc0 * sinc + this->m_proj_parm.cosc0 * cosc * cosL);
 					xy_x = k * cosc * sin(lp_lon);
-					xy_y = k * (this->m_proj_parm.cosc0 * sinc - this->m_proj_parm.sinc0 * cosc * cosl);
+					xy_y = k * (this->m_proj_parm.cosc0 * sinc - this->m_proj_parm.sinc0 * cosc * cosL);
 				}
 
 				inline void inv(XY_T& xy_x, XY_T& xy_y, LL_T& lp_lon, LL_T& lp_lat) const

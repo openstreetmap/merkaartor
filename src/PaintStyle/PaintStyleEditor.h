@@ -6,14 +6,14 @@
 
 #include <QtGui/QDialog>
 
-#include <vector>
+#include <QList>
 
 class PaintStyleEditor : public QDialog, public Ui::PaintStyleEditor
 {
 	Q_OBJECT
 
 	public:
-		PaintStyleEditor(QWidget* aParent, const GlobalPainter& aGlobalPainter, const QVector<FeaturePainter>& aPainters);
+		PaintStyleEditor(QWidget* aParent, const GlobalPainter& aGlobalPainter, const QList<FeaturePainter>& aPainters);
 
 	public slots:
 		void on_DrawGlobalBackground_clicked(bool b);
@@ -67,13 +67,13 @@ class PaintStyleEditor : public QDialog, public Ui::PaintStyleEditor
 
 	public:
 		GlobalPainter	theGlobalPainter;
-		QVector<FeaturePainter> thePainters;
+		QList<FeaturePainter> thePainters;
 	private:
 		void updatePaintList();
 		void updatePagesIcons();
 
 	signals:
-		void stylesApplied(QVector<FeaturePainter>* thePainters);
+		void stylesApplied(QList<FeaturePainter>* thePainters);
 	private:
 		bool FreezeUpdate;
 };

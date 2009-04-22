@@ -3,7 +3,7 @@
 
 #include "Command/Command.h"
 
-#include <vector>
+#include <QList>
 
 class MapDocument;
 class MapLayer;
@@ -35,7 +35,7 @@ class RemoveFeatureCommand : public Command
 	public:
 		RemoveFeatureCommand(MapFeature* aFeature = NULL);
 		RemoveFeatureCommand(MapDocument* theDocument, MapFeature* aFeature);
-		RemoveFeatureCommand(MapDocument* theDocument, MapFeature* aFeature, const std::vector<MapFeature*>& Alternatives);
+		RemoveFeatureCommand(MapDocument* theDocument, MapFeature* aFeature, const QList<MapFeature*>& Alternatives);
 		virtual ~RemoveFeatureCommand();
 
 		void undo();
@@ -48,11 +48,11 @@ class RemoveFeatureCommand : public Command
 	private:
 		MapLayer* theLayer;
 		MapLayer* oldLayer;
-		unsigned int Idx;
+		int Idx;
 		MapFeature* theFeature;
 		CommandList* CascadedCleanUp;
 		bool RemoveExecuted;
-		std::vector<MapFeature*> theAlternatives;
+		QList<MapFeature*> theAlternatives;
 };
 
 #endif

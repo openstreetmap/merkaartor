@@ -1,7 +1,7 @@
 #ifndef MERKATOR_MAPVIEW_H_
 #define MERKATOR_MAPVIEW_H_
 
-#include "Map/Projection.h"
+#include "Maps/Projection.h"
 
 #include <QPixmap>
 #include <QWidget>

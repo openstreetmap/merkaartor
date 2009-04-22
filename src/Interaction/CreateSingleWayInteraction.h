@@ -21,7 +21,9 @@ class CreateSingleWayInteraction : public GenericFeatureSnapInteraction<MapFeatu
 		virtual void snapMouseReleaseEvent(QMouseEvent * event, MapFeature* aLast);
 		virtual void snapMouseMoveEvent(QMouseEvent* event, MapFeature* aLast);
 		virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter);
+#ifndef Q_OS_SYMBIAN
 		virtual QCursor cursor() const;
+#endif
 		
 	private:
 		MainWindow* Main;

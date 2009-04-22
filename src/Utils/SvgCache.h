@@ -3,6 +3,6 @@
 
 #include <QtGui/QPixmap>
 
-QPixmap getPixmapFromFile(const QString& aName, unsigned int Size);
+QPixmap getPixmapFromFile(const QString& aName, int Size);
 
 #endif

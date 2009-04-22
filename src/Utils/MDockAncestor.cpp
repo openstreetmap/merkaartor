@@ -2,6 +2,7 @@
 
 #include <QVBoxLayout>
 #include <QApplication>
+#include <QDialogButtonBox>
 
 #ifdef _MOBILE
 
@@ -13,13 +14,17 @@ MDockAncestor::MDockAncestor(QWidget *parent)
 	theLayout = new QVBoxLayout(this);
 	theLayout->setSpacing(4);
 	theLayout->setMargin(4);
+
+	QDialogButtonBox* aBB = new QDialogButtonBox(QDialogButtonBox::Close);
+	theLayout->addWidget(aBB);
+	connect(aBB, SIGNAL(rejected()), this, SLOT(hide()));
 }
 
 void MDockAncestor::setWidget ( QWidget * widget )
 {
 	mainWidget = widget;
 	mainWidget->setParent(this); 
-	theLayout->addWidget(mainWidget);
+	theLayout->insertWidget(0, mainWidget);
 }
 
 #endif

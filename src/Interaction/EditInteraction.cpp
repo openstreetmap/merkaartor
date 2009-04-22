@@ -9,13 +9,13 @@
 #include "Command/RoadCommands.h"
 #include "Command/TrackPointCommands.h"
 #include "Interaction/MoveTrackPointInteraction.h"
-#include "Map/MapDocument.h"
-#include "Map/MapFeature.h"
-#include "Map/Road.h"
-#include "Map/Relation.h"
-#include "Map/FeatureManipulations.h"
-#include "Map/TrackPoint.h"
-#include "Map/Projection.h"
+#include "Maps/MapDocument.h"
+#include "Maps/MapFeature.h"
+#include "Maps/Road.h"
+#include "Maps/Relation.h"
+#include "Maps/FeatureManipulations.h"
+#include "Maps/TrackPoint.h"
+#include "Maps/Projection.h"
 #include "Utils/LineF.h"
 #include "Utils/MDiscardableDialog.h"
 
@@ -23,7 +23,7 @@
 #include <QtGui/QPainter>
 #include <QMessageBox>
 
-#include <vector>
+#include <QList>
 
 EditInteraction::EditInteraction(MapView* theView)
 : FeatureSnapInteraction(theView), Dragging(false), StartDrag(0,0), EndDrag(0,0),
@@ -43,11 +43,13 @@ EditInteraction::~EditInteraction(void)
 	}
 }
 
+#ifndef Q_OS_SYMBIAN
 QCursor EditInteraction::moveCursor() const
 {
 	QPixmap pm(":/Icons/move.xpm");
 	return QCursor(pm);
 }
+#endif
 
 Coord EditInteraction::calculateNewPosition(QMouseEvent *event, MapFeature *aLast, CommandList* theList)
 {
@@ -60,8 +62,8 @@ Coord EditInteraction::calculateNewPosition(QMouseEvent *event, MapFeature *aLas
 		LineF L1(R->getNode(0)->position(),R->getNode(1)->position());
 		double Dist = L1.capDistance(TargetC);
 		QPoint BestTarget = L1.project(Target).toPoint();
-		unsigned int BestIdx = 1;
-		for (unsigned int i=2; i<R->size(); ++i)
+		int BestIdx = 1;
+		for (int i=2; i<R->size(); ++i)
 		{
 			LineF L2(R->getNode(i-1)->position(),R->getNode(i)->position());
 			double Dist2 = L2.capDistance(TargetC);
@@ -109,12 +111,12 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 			StartDragPosition = Pt->position();
 		}
 		else if (Road* R = dynamic_cast<Road*>(sel)) {
-			for (unsigned int i=0; i<R->size(); ++i)
+			for (int i=0; i<R->size(); ++i)
 				if (std::find(Moving.begin(),Moving.end(),R->get(i)) == Moving.end())
 					Moving.push_back(R->getNode(i));
 			addToNoSnap(R);
 		}
-		for (unsigned int i=0; i<Moving.size(); ++i)
+		for (int i=0; i<Moving.size(); ++i)
 		{
 			OriginalPosition.push_back(Moving[i]->position());
 			addToNoSnap(Moving[i]);
@@ -157,7 +159,7 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* aLast
 		{
 			CommandList* theList = new CommandList(MainWindow::tr("Move Point %1").arg(Moving[0]->id()), Moving[0]);
 			Coord Diff(calculateNewPosition(ev, aLast, theList)-StartDragPosition);
-			for (unsigned int i=0; i<Moving.size(); ++i)
+			for (int i=0; i<Moving.size(); ++i)
 			{
 				Moving[i]->setPosition(OriginalPosition[i]);
 				if (Moving[i]->layer()->isTrack())
@@ -170,7 +172,7 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* aLast
 			if (Moving.size() == 1 && !Moving[0]->layer()->isTrack())
 			{
 				Coord newPos = OriginalPosition[0] + Diff;
-				std::vector<TrackPoint*> samePosPts;
+				QList<TrackPoint*> samePosPts;
 				for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it)
 				{
 					TrackPoint* visPt = dynamic_cast<TrackPoint*>(it.get());
@@ -207,10 +209,10 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* aLast
 						theList->setFeature(F);
 						
 						// from mergeNodes(theDocument, theList, theProperties);
-						std::vector<MapFeature*> alt;
+						QList<MapFeature*> alt;
 						TrackPoint* merged = samePosPts[0];
 						alt.push_back(merged);
-						for (unsigned int i = 1; i < samePosPts.size(); ++i) {
+						for (int i = 1; i < samePosPts.size(); ++i) {
 							MapFeature::mergeTags(document(), theList, merged, samePosPts[i]);
 							theList->add(new RemoveFeatureCommand(document(), samePosPts[i], alt));
 						}
@@ -230,7 +232,7 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* aLast
 	} else
 	if (Dragging)
 	{
-		std::vector<MapFeature*> List;
+		QList<MapFeature*> List;
 		CoordBox DragBox(StartDrag,projection().inverse(ev->pos()));
 		for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it) {
 			if (it.get()->layer()->isReadonly())
@@ -247,7 +249,7 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* aLast
 				else {
 					Coord A, B;
 					if (Road* R = dynamic_cast<Road*>(it.get())) {
-						for (unsigned int j=1; j<R->size(); ++j) {
+						for (int j=1; j<R->size(); ++j) {
 							A = R->getNode(j-1)->position();
 							B = R->getNode(j)->position();
 							if (CoordBox::visibleLine(DragBox, A, B)) {
@@ -257,9 +259,9 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* aLast
 						}
 					} else 
 					if (Relation* r = dynamic_cast<Relation*>(it.get())) {
-						for (unsigned int k=0; k<r->size(); ++k) {
+						for (int k=0; k<r->size(); ++k) {
 							if (Road* R = dynamic_cast<Road*>(r->get(k))) {
-								for (unsigned int j=1; j<R->size(); ++j) {
+								for (int j=1; j<R->size(); ++j) {
 									A = R->getNode(j-1)->position();
 									B = R->getNode(j)->position();
 									if (CoordBox::visibleLine(DragBox, A, B)) {
@@ -286,7 +288,9 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* aLast
 			if (view()->properties()->isSelected(aLast) && !M_PREFS->getSeparateMoveMode()) {
 				MoveMode = true;
 				Moved = false;
+#ifndef Q_OS_SYMBIAN
 				view()->setCursor(moveCursor());
+#endif
 			}
 			view()->properties()->checkMenuStatus();
 			view()->update();
@@ -302,13 +306,15 @@ void EditInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, MapFeature* aLast
 		{
 			Moved = true;
 			Coord Diff = calculateNewPosition(anEvent, aLast, 0)-StartDragPosition;
-			for (unsigned int i=0; i<Moving.size(); ++i)
+			for (int i=0; i<Moving.size(); ++i)
 				Moving[i]->setPosition(OriginalPosition[i]+Diff);
 			view()->invalidate(true, false);
 		} else
 		if ((!aLast || !(view()->properties()->isSelected(aLast))) && !M_PREFS->getSeparateMoveMode())
 		{
+#ifndef Q_OS_SYMBIAN
 			view()->setCursor(cursor());
+#endif
 			MoveMode = false;
 			Moved = false;
 		}
@@ -320,12 +326,16 @@ void EditInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, MapFeature* aLast
 	} else
 	if (aLast && view()->properties()->isSelected(aLast) && !M_PREFS->getSeparateMoveMode())
 	{
+#ifndef Q_OS_SYMBIAN
 		view()->setCursor(moveCursor());
+#endif
 		MoveMode = true;
 		Moved = false;
 	} else
 	{
+#ifndef Q_OS_SYMBIAN
 		view()->setCursor(cursor());
+#endif
 		MoveMode = false;
 		Moved = false;
 	}
@@ -333,15 +343,15 @@ void EditInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, MapFeature* aLast
 
 void EditInteraction::on_remove_triggered()
 {
-	std::vector<MapFeature*> Sel;
-	for (unsigned int i=0; i<view()->properties()->size(); ++i)
+	QList<MapFeature*> Sel;
+	for (int i=0; i<view()->properties()->size(); ++i)
 		Sel.push_back(view()->properties()->selection(i));
 	if (Sel.size() == 0) return;
 	CommandList* theList  = new CommandList(MainWindow::tr("Remove feature %1").arg(Sel[0]->id()), Sel[0]);
 	bool deleteChildrenOK = true;
-	for (unsigned int i=0; i<Sel.size() && deleteChildrenOK; ++i) {
+	for (int i=0; i<Sel.size() && deleteChildrenOK; ++i) {
 		if (document()->exists(Sel[i])) {
-			std::vector<MapFeature*> Alternatives;
+			QList<MapFeature*> Alternatives;
 			theList->add(new RemoveFeatureCommand(document(), Sel[i], Alternatives));
 
 			deleteChildrenOK = Sel[i]->deleteChildren(document(), theList);

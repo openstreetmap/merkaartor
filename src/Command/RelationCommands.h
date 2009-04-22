@@ -14,7 +14,7 @@ class RelationAddFeatureCommand : public Command
 	public:
 		RelationAddFeatureCommand(Relation* R = NULL);
 		RelationAddFeatureCommand(Relation* R, const QString& Role, MapFeature* W, MapLayer* aLayer=NULL);
-		RelationAddFeatureCommand(Relation* R, const QString& Role, MapFeature* W, unsigned int Position, MapLayer* aLayer=NULL);
+		RelationAddFeatureCommand(Relation* R, const QString& Role, MapFeature* W, int Position, MapLayer* aLayer=NULL);
 		~RelationAddFeatureCommand(void);
 
 		virtual void undo();
@@ -30,7 +30,7 @@ class RelationAddFeatureCommand : public Command
 		Relation* theRelation;
 		QString Role;
 		MapFeature* theMapFeature;
-		unsigned int Position;
+		int Position;
 };
 
 class RelationRemoveFeatureCommand : public Command
@@ -38,7 +38,7 @@ class RelationRemoveFeatureCommand : public Command
 	public:
 		RelationRemoveFeatureCommand(Relation* R = NULL);
 		RelationRemoveFeatureCommand(Relation* R, MapFeature* W, MapLayer* aLayer=NULL);
-		RelationRemoveFeatureCommand(Relation* R, unsigned int anIdx, MapLayer* aLayer=NULL);
+		RelationRemoveFeatureCommand(Relation* R, int anIdx, MapLayer* aLayer=NULL);
 		~RelationRemoveFeatureCommand(void);
 
 		virtual void undo();
@@ -51,7 +51,7 @@ class RelationRemoveFeatureCommand : public Command
 	private:
 		MapLayer* theLayer;
 		MapLayer* oldLayer;
-		unsigned int Idx;
+		int Idx;
 		Relation* theRelation;
 		QString Role;
 		MapFeature* theMapFeature;

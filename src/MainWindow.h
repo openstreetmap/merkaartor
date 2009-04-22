@@ -177,10 +177,12 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 		void bookmarkTriggered(QAction* anAction);
 		void recentOpenTriggered(QAction* anAction);
 		void recentImportTriggered(QAction* anAction);
+#ifndef _MOBILE
 		void projectionTriggered(QAction* anAction);
+#endif
 		void styleTriggered(QAction* anAction);
         void updateGpsPosition(float latitude, float longitude, QDateTime time, float altitude, float speed, float heading);
-		void applyStyles(QVector<FeaturePainter>* thePainters);
+		void applyStyles(QList<FeaturePainter>* thePainters);
 
 	public:
 		void invalidateView(bool UpdateDock = true);

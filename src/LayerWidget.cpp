@@ -2,8 +2,8 @@
 #include "LayerDock.h"
 
 #include "MainWindow.h"
-#include "Map/MapDocument.h"
-#include "Map/MapLayer.h"
+#include "Maps/MapDocument.h"
+#include "Maps/MapLayer.h"
 #include "Preferences/MerkaartorPreferences.h"
 
 #include "IMapAdapter.h"

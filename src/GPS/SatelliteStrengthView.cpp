@@ -2,12 +2,12 @@
 
 #include <QtGui/QPainter>
 
-void sortSatellitesById(std::vector<Satellite>& List)
+void sortSatellitesById(QList<Satellite>& List)
 {
-	for (unsigned int i=0; i<List.size(); ++i)
-		for (unsigned int j=i+1; j<List.size(); ++j)
+	for (int i=0; i<List.size(); ++i)
+		for (int j=i+1; j<List.size(); ++j)
 			if (List[i].Id>List[j].Id)
-				std::swap(List[i],List[j]);
+				List.swap(i, j);
 }
 
 SatelliteStrengthView::SatelliteStrengthView(QWidget* aParent)
@@ -15,7 +15,7 @@ SatelliteStrengthView::SatelliteStrengthView(QWidget* aParent)
 {
 }
 
-void SatelliteStrengthView::setSatellites(const std::vector<Satellite>& aList)
+void SatelliteStrengthView::setSatellites(const QList<Satellite>& aList)
 {
 	List = aList;
 	update();
@@ -31,7 +31,7 @@ void SatelliteStrengthView::paintEvent(QPaintEvent* ev)
 	{
 		int w=width()/List.size();
 		p.setBrush(QBrush(QColor(0,0,0)));
-		for (unsigned int i=0; i<List.size(); ++i)
+		for (int i=0; i<List.size(); ++i)
 		{
 			// typical s/r values seem to be 0-50?
 			// this may turn out higher, I tested it on a

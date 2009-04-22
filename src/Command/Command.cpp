@@ -1,7 +1,7 @@
 #include "Command/Command.h"
-#include "Map/MapDocument.h"
-#include "Map/MapLayer.h"
-#include "Map/MapFeature.h"
+#include "Maps/MapDocument.h"
+#include "Maps/MapLayer.h"
+#include "Maps/MapFeature.h"
 #include "Command/DocumentCommands.h"
 #include "Command/RoadCommands.h"
 #include "Command/TrackSegmentCommands.h"
@@ -16,7 +16,7 @@
 
 #include <algorithm>
 #include <utility>
-#include <vector>
+#include <QList>
 
 Command::Command(MapFeature* aF)
 	: mainFeature(aF), commandDirtyLevel(0), oldCreated(""), isUndone(false), postUploadCommand(0)
@@ -69,19 +69,19 @@ bool Command::buildUndoList(QListWidget* theListWidget)
 	return true;
 }
 
-unsigned int Command::incDirtyLevel(MapLayer* aLayer)
+int Command::incDirtyLevel(MapLayer* aLayer)
 {
 	aLayer->incDirtyLevel();
 	return ++commandDirtyLevel;
 }
 
-unsigned int Command::decDirtyLevel(MapLayer* aLayer)
+int Command::decDirtyLevel(MapLayer* aLayer)
 {
 	aLayer->decDirtyLevel();
 	return commandDirtyLevel;
 }
 
-unsigned int Command::getDirtyLevel()
+int Command::getDirtyLevel()
 {
 	return commandDirtyLevel;
 }
@@ -163,7 +163,7 @@ CommandList::CommandList(QString aDesc, MapFeature* aFeat)
 
 CommandList::~CommandList(void)
 {
-	for (unsigned int i=0; i<Subs.size(); ++i)
+	for (int i=0; i<Subs.size(); ++i)
 		delete Subs[i];
 }
 
@@ -178,26 +178,26 @@ bool CommandList::empty() const
 	return Size == 0;
 }
 
-unsigned int CommandList::size()
+int CommandList::size()
 {
 	return Size;
 }
 
 void CommandList::redo()
 {
-	for (unsigned int i=0; i<Size; ++i)
+	for (int i=0; i<Size; ++i)
 		Subs[i]->redo();
 }
 
 void CommandList::undo()
 {
-	for (unsigned int i=Size; i; --i)
+	for (int i=Size; i; --i)
 		Subs[i-1]->undo();
 }
 
 bool CommandList::buildDirtyList(DirtyList& theList)
 {
-	for (unsigned int i=0; i<Size;)
+	for (int i=0; i<Size;)
 	{
 		if (Subs[i]->buildDirtyList(theList))
 		{
@@ -227,7 +227,7 @@ bool CommandList::toXML(QDomElement& xParent) const
 		e.setAttribute("featureclass", mainFeature->getClass());
 	}
 
-	for (unsigned int i=0; i<Size; ++i) {
+	for (int i=0; i<Size; ++i) {
 		OK = Subs[i]->toXML(e);
 	}
 
@@ -340,9 +340,9 @@ CommandHistory::~CommandHistory()
 void CommandHistory::cleanup()
 {
 	//FIXME Is there a point to this?
-	//for (unsigned int i=Index; i<Subs.size(); ++i)
+	//for (int i=Index; i<Subs.size(); ++i)
 	//	Subs[i]->redo();
-	for (unsigned int i=0; i<Subs.size(); ++i)
+	for (int i=0; i<Subs.size(); ++i)
 		delete Subs[i];
 	Subs.clear();
 	Index = 0;
@@ -369,7 +369,7 @@ void CommandHistory::redo()
 
 void CommandHistory::add(Command* aCommand)
 {
-	//for (unsigned int i=Index; i<Subs.size(); ++i)
+	//for (int i=Index; i<Subs.size(); ++i)
 	//	delete Subs[i];
 	//Subs.erase(Subs.begin()+Index,Subs.end());
 	//Subs.push_back(aCommand);
@@ -398,14 +398,14 @@ void CommandHistory::updateActions()
 		UploadAction->setEnabled(Subs.size());
 }
 
-unsigned int CommandHistory::index() const
+int CommandHistory::index() const
 {
 	return Index;
 }
 
-unsigned int CommandHistory::buildDirtyList(DirtyList& theList)
+int CommandHistory::buildDirtyList(DirtyList& theList)
 {
-	for (unsigned int i=0; i<Subs.size();)
+	for (int i=0; i<Subs.size();)
 		if (Subs[i]->buildDirtyList(theList))
 		{
 			//delete Subs[i];
@@ -422,9 +422,9 @@ unsigned int CommandHistory::buildDirtyList(DirtyList& theList)
 	return Index;
 }
 
-unsigned int CommandHistory::buildUndoList(QListWidget* theList)
+int CommandHistory::buildUndoList(QListWidget* theList)
 {
-	for (unsigned int i=0; i<Index; ++i)
+	for (int i=0; i<Index; ++i)
 		Subs[i]->buildUndoList(theList);
 
 	return Index;
@@ -444,7 +444,7 @@ bool CommandHistory::toXML(QDomElement& xParent, QProgressDialog & /*progress*/)
 
 	e.setAttribute("index", QString::number(Index));
 
-	for (unsigned int i=0; i<Size; ++i) {
+	for (int i=0; i<Size; ++i) {
 		OK = Subs[i]->toXML(e);
 	}
 

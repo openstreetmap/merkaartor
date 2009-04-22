@@ -20,7 +20,7 @@
 #include <ui_TMSPreferencesDialog.h>
 #include "Preferences/MerkaartorPreferences.h"
 
-#include <vector>
+#include <QList>
 
 /**
 	@author cbro <cbro@semperpax.com>
@@ -47,7 +47,7 @@ private:
 	void loadPrefs();
 	void savePrefs();
 public:
-	std::vector<TmsServer> theTmsServers;
+	QList<TmsServer> theTmsServers;
 	QString getSelectedServer();
 	void setSelectedServer(QString theValue);
 

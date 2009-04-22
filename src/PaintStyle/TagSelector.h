@@ -5,9 +5,9 @@ class MapFeature;
 
 #include <QtCore/QString>
 #include <QRegExp>
-#include <QVector>
+#include <QList>
 
-#include <vector>
+#include <QList>
 
 enum TagSelectorMatchResult {
 	TagSelect_NoMatch,
@@ -69,24 +69,24 @@ class TagSelectorHasTags : public TagSelector
 class TagSelectorIsOneOf : public TagSelector
 {
 	public:
-		TagSelectorIsOneOf(const QString& key, const std::vector<QString>& values);
+		TagSelectorIsOneOf(const QString& key, const QList<QString>& values);
 
 		virtual TagSelector* copy() const;
 		virtual TagSelectorMatchResult matches(const MapFeature* F) const;
 		virtual QString asExpression(bool Precedence) const;
 
 	private:
-		QVector<QRegExp> rxv;
-		QVector<QString> exactMatchv;
+		QList<QRegExp> rxv;
+		QList<QString> exactMatchv;
 		QString Key;
-		std::vector<QString> Values;
+		QList<QString> Values;
 		bool MatchEmpty;
 };
 
 class TagSelectorOr : public TagSelector
 {
 	public:
-		TagSelectorOr(const std::vector<TagSelector*> Terms);
+		TagSelectorOr(const QList<TagSelector*> Terms);
 		virtual ~TagSelectorOr();
 
 		virtual TagSelector* copy() const;
@@ -94,13 +94,13 @@ class TagSelectorOr : public TagSelector
 		virtual QString asExpression(bool Precedence) const;
 
 	private:
-		std::vector<TagSelector*> Terms;
+		QList<TagSelector*> Terms;
 };
 
 class TagSelectorAnd : public TagSelector
 {
 	public:
-		TagSelectorAnd(const std::vector<TagSelector*> Terms);
+		TagSelectorAnd(const QList<TagSelector*> Terms);
 		virtual ~TagSelectorAnd();
 
 		virtual TagSelector* copy() const;
@@ -108,7 +108,7 @@ class TagSelectorAnd : public TagSelector
 		virtual QString asExpression(bool Precedence) const;
 
 	private:
-		std::vector<TagSelector*> Terms;
+		QList<TagSelector*> Terms;
 };
 
 class TagSelectorNot : public TagSelector

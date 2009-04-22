@@ -126,7 +126,7 @@ void ImageManager::receivedImage(const QPixmap& pixmap, const QString& hash)
 
 	if (prefetch.contains(hash))
 	{
-		prefetch.remove(prefetch.indexOf(hash));
+		prefetch.removeAt(prefetch.indexOf(hash));
 	}
 	emit(imageReceived());
 }

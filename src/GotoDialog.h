@@ -15,8 +15,8 @@
 #include <QWidget>
 #include <QSettings>
 
-#include "Map/Coord.h"
-#include "Map/Projection.h"
+#include "Maps/Coord.h"
+#include "Maps/Projection.h"
 
 #include <ui_GotoDialog.h>
 

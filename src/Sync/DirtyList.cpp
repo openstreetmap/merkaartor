@@ -1,13 +1,13 @@
 #include "Sync/DirtyList.h"
 #include "Command/Command.h"
-#include "Map/Coord.h"
-#include "Map/DownloadOSM.h"
-#include "Map/ExportOSM.h"
-#include "Map/MapDocument.h"
-#include "Map/MapLayer.h"
-#include "Map/Relation.h"
-#include "Map/Road.h"
-#include "Map/TrackPoint.h"
+#include "Maps/Coord.h"
+#include "Maps/DownloadOSM.h"
+#include "Maps/ExportOSM.h"
+#include "Maps/MapDocument.h"
+#include "Maps/MapLayer.h"
+#include "Maps/Relation.h"
+#include "Maps/Road.h"
+#include "Maps/TrackPoint.h"
 
 #include <QtCore/QEventLoop>
 #include <QtGui/QDialog>
@@ -52,14 +52,14 @@ bool DirtyListBuild::update(MapFeature* F)
 {
 	if (!F->isDirty()) return false;
 
-	for (unsigned int i=0; i<Updated.size(); ++i)
+	for (int i=0; i<Updated.size(); ++i)
 		if (Updated[i] == F)
 		{
 			UpdateCounter[i].first++;
 			return false;
 		}
 	Updated.push_back(F);
-	UpdateCounter.push_back(std::make_pair(1,0));
+	UpdateCounter.push_back(qMakePair((int) 1, (int)0));
 	return false;
 }
 
@@ -83,7 +83,7 @@ bool DirtyListBuild::willBeErased(MapFeature* F) const
 
 bool DirtyListBuild::updateNow(MapFeature* F) const
 {
-	for (unsigned int i=0; i<Updated.size(); ++i)
+	for (int i=0; i<Updated.size(); ++i)
 		if (Updated[i] == F)
 		{
 			UpdateCounter[i].second++;
@@ -94,7 +94,7 @@ bool DirtyListBuild::updateNow(MapFeature* F) const
 
 void DirtyListBuild::resetUpdates()
 {
-	for (unsigned int i=0; i<UpdateCounter.size(); ++i)
+	for (int i=0; i<UpdateCounter.size(); ++i)
 		UpdateCounter[i].second = 0;
 }
 
@@ -147,7 +147,7 @@ bool DirtyListVisit::add(MapFeature* F)
 
 	if (Future.willBeErased(F))
 		return EraseFromHistory;
-	for (unsigned int i=0; i<AlreadyAdded.size(); ++i)
+	for (int i=0; i<AlreadyAdded.size(); ++i)
 		if (AlreadyAdded[i] == F)
 			return EraseResponse[i];
 	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(F))
@@ -164,7 +164,7 @@ bool DirtyListVisit::add(MapFeature* F)
 	}
 	else if (Road* R = dynamic_cast<Road*>(F))
 	{
-		for (unsigned int i=0; i<R->size(); ++i)
+		for (int i=0; i<R->size(); ++i)
 			if (!(R->get(i)->hasOSMId()) && notYetAdded(R->get(i)))
 				add(R->get(i));
 		bool x = addRoad(R);
@@ -174,7 +174,7 @@ bool DirtyListVisit::add(MapFeature* F)
 	}
 	else if (Relation* Rel = dynamic_cast<Relation*>(F))
 	{
-		for (unsigned int i=0; i<Rel->size(); ++i)
+		for (int i=0; i<Rel->size(); ++i)
 			if (!(Rel->get(i)->hasOSMId()) && notYetAdded(Rel->get(i)))
 				add(Rel->get(i));
 		bool x = addRelation(Rel);
@@ -206,12 +206,12 @@ bool DirtyListVisit::update(MapFeature* F)
 			return EraseFromHistory;
 	}
 	else if (Road* R = dynamic_cast<Road*>(F)) {
-		for (unsigned int i=0; i<R->size(); ++i)
+		for (int i=0; i<R->size(); ++i)
 			if (!(R->get(i)->hasOSMId()) && notYetAdded(R->get(i)))
 				add(R->get(i));
 		return updateRoad(R);
 	} else if (Relation* Rel = dynamic_cast<Relation*>(F)) {
-		for (unsigned int i=0; i<Rel->size(); ++i)
+		for (int i=0; i<Rel->size(); ++i)
 			if (!(Rel->get(i)->hasOSMId()) && notYetAdded(Rel->get(i)))
 				add(Rel->get(i));
 		return updateRelation(Rel);
@@ -264,7 +264,7 @@ DirtyListDescriber::DirtyListDescriber(MapDocument* aDoc, const DirtyListBuild& 
 {
 }
 
-unsigned int DirtyListDescriber::tasks() const
+int DirtyListDescriber::tasks() const
 {
 	return Task;
 }
@@ -352,7 +352,7 @@ bool DirtyListDescriber::eraseRelation(Relation* R)
 
 
 DirtyListExecutor::DirtyListExecutor(MapDocument* aDoc, const DirtyListBuild& aFuture, const QString& aWeb, const QString& aUser, const QString& aPwd,
-									 bool aUseProxy, const QString& aProxyHost, int aProxyPort, unsigned int aTasks)
+									 bool aUseProxy, const QString& aProxyHost, int aProxyPort, int aTasks)
 : DirtyListVisit(aDoc, aFuture, false), Tasks(aTasks), Done(0), Web(aWeb), User(aUser), Pwd(aPwd),
   UseProxy(aUseProxy), ProxyHost(aProxyHost), ProxyPort(aProxyPort), theDownloader(0)
 {

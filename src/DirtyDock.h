@@ -17,7 +17,7 @@
 
 #include "ui_DirtyDock.h"
 
-#include <vector>
+#include <QList>
 
 class MainWindow;
 class MapFeature;
@@ -48,7 +48,7 @@ private:
 	QAction* centerAction;
 	QAction* centerZoomAction;
 	
-	std::vector<MapFeature*> Selection;
+	QList<MapFeature*> Selection;
 public:
 	void changeEvent(QEvent*);
 	void retranslateUi();

@@ -1,7 +1,7 @@
 #include "TagSelector.h"
 
-#include "Map/MapFeature.h"
-#include "Map/Road.h"
+#include "Maps/MapFeature.h"
+#include "Maps/Road.h"
 
 void skipWhite(const QString& Expression, int& idx)
 {
@@ -116,7 +116,7 @@ TagSelectorIsOneOf* parseTagSelectorIsOneOf(const QString& Expression, int& idx)
 		return 0;
 	if (!canParseSymbol(Expression, idx, '('))
 		return 0;
-	std::vector<QString> Values;
+	QList<QString> Values;
 	while (true)
 	{
 		QString Value;
@@ -206,7 +206,7 @@ TagSelector* parseFactor(const QString& Expression, int& idx)
 
 TagSelector* parseTerm(const QString& Expression, int& idx)
 {
-	std::vector<TagSelector*> Factors;
+	QList<TagSelector*> Factors;
 	while (idx < Expression.length())
 	{
 		TagSelector* Current = parseFactor(Expression, idx);
@@ -225,7 +225,7 @@ TagSelector* parseTerm(const QString& Expression, int& idx)
 
 TagSelector* parseTagSelector(const QString& Expression, int& idx)
 {
-	std::vector<TagSelector*> Terms;
+	QList<TagSelector*> Terms;
 	while (idx < Expression.length())
 	{
 		TagSelector* Current = parseTerm(Expression, idx);
@@ -300,10 +300,10 @@ QString TagSelectorIs::asExpression(bool) const
 
 /* TAGSELECTORISONEOF */
 
-TagSelectorIsOneOf::TagSelectorIsOneOf(const QString& key, const std::vector<QString>& values)
+TagSelectorIsOneOf::TagSelectorIsOneOf(const QString& key, const QList<QString>& values)
 : Key(key), Values(values), MatchEmpty(false)
 {
-	for (unsigned int i=0; i<values.size(); ++i)
+	for (int i=0; i<values.size(); ++i)
 	{
 		if (values[i] == "_NULL_") {
 			MatchEmpty = true;
@@ -343,7 +343,7 @@ QString TagSelectorIsOneOf::asExpression(bool) const
 	R += "[";
 	R += Key;
 	R += "] isoneof (";
-	for (unsigned int i=0; i<Values.size(); ++i)
+	for (int i=0; i<Values.size(); ++i)
 	{
 		if (i)
 			R += " , ";
@@ -411,28 +411,28 @@ QString TagSelectorHasTags::asExpression(bool) const
 
 /* TAGSELECTOROR */
 
-TagSelectorOr::TagSelectorOr(const std::vector<TagSelector*> terms)
+TagSelectorOr::TagSelectorOr(const QList<TagSelector*> terms)
 : Terms(terms)
 {
 }
 
 TagSelectorOr::~TagSelectorOr()
 {
-	for (unsigned int i=0; i<Terms.size(); ++i)
+	for (int i=0; i<Terms.size(); ++i)
 		delete Terms[i];
 }
 
 TagSelector* TagSelectorOr::copy() const
 {
-	std::vector<TagSelector*> Copied;
-	for (unsigned int i=0; i<Terms.size(); ++i)
+	QList<TagSelector*> Copied;
+	for (int i=0; i<Terms.size(); ++i)
 		Copied.push_back(Terms[i]->copy());
 	return new TagSelectorOr(Copied);
 }
 
 TagSelectorMatchResult TagSelectorOr::matches(const MapFeature* F) const
 {
-	for (unsigned int i=0; i<Terms.size(); ++i)
+	for (int i=0; i<Terms.size(); ++i)
 		if (Terms[i]->matches(F) == TagSelect_Match)
 			return TagSelect_Match;
 	return TagSelect_NoMatch;
@@ -443,7 +443,7 @@ QString TagSelectorOr::asExpression(bool Precedence) const
 	QString R;
 	if (Precedence)
 		R += "(";
-	for (unsigned int i=0; i<Terms.size(); ++i)
+	for (int i=0; i<Terms.size(); ++i)
 	{
 		if (i)
 			R += " or ";
@@ -457,28 +457,28 @@ QString TagSelectorOr::asExpression(bool Precedence) const
 
 /* TAGSELECTORAND */
 
-TagSelectorAnd::TagSelectorAnd(const std::vector<TagSelector*> terms)
+TagSelectorAnd::TagSelectorAnd(const QList<TagSelector*> terms)
 : Terms(terms)
 {
 }
 
 TagSelectorAnd::~TagSelectorAnd()
 {
-	for (unsigned int i=0; i<Terms.size(); ++i)
+	for (int i=0; i<Terms.size(); ++i)
 		delete Terms[i];
 }
 
 TagSelector* TagSelectorAnd::copy() const
 {
-	std::vector<TagSelector*> Copied;
-	for (unsigned int i=0; i<Terms.size(); ++i)
+	QList<TagSelector*> Copied;
+	for (int i=0; i<Terms.size(); ++i)
 		Copied.push_back(Terms[i]->copy());
 	return new TagSelectorAnd(Copied);
 }
 
 TagSelectorMatchResult TagSelectorAnd::matches(const MapFeature* F) const
 {
-	for (unsigned int i=0; i<Terms.size(); ++i)
+	for (int i=0; i<Terms.size(); ++i)
 		if (Terms[i]->matches(F) == TagSelect_NoMatch)
 			return TagSelect_NoMatch;
 	return TagSelect_Match;
@@ -487,7 +487,7 @@ TagSelectorMatchResult TagSelectorAnd::matches(const MapFeature* F) const
 QString TagSelectorAnd::asExpression(bool /* Precedence */) const
 {
 	QString R;
-	for (unsigned int i=0; i<Terms.size(); ++i)
+	for (int i=0; i<Terms.size(); ++i)
 	{
 		if (i)
 			R += " and ";

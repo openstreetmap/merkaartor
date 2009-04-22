@@ -4,11 +4,11 @@
 #include "PropertiesDock.h"
 #include "Command/DocumentCommands.h"
 #include "Command/RoadCommands.h"
-#include "Map/Projection.h"
-#include "Map/TrackPoint.h"
+#include "Maps/Projection.h"
+#include "Maps/TrackPoint.h"
 #include "Utils/LineF.h"
 
-#include <vector>
+#include <QList>
 
 CreateNodeInteraction::CreateNodeInteraction(MapView* aView)
 : RoadSnapInteraction(aView)
@@ -28,7 +28,7 @@ void CreateNodeInteraction::snapMouseReleaseEvent(QMouseEvent * ev, Road* aRoad)
 		{
 			main()->properties()->setSelection(0);
 			CommandList* theList  = new CommandList(MainWindow::tr("Create node in Road: %1").arg(aRoad->id()), aRoad);
-			unsigned int SnapIdx = findSnapPointIndex(aRoad, P);
+			int SnapIdx = findSnapPointIndex(aRoad, P);
 			TrackPoint* N = new TrackPoint(P);
 			N->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 			theList->add(new AddFeatureCommand(main()->document()->getDirtyOrOriginLayer(aRoad->layer()),N,true));
@@ -50,11 +50,12 @@ void CreateNodeInteraction::snapMouseReleaseEvent(QMouseEvent * ev, Road* aRoad)
 	}
 }
 
-
+#ifndef Q_OS_SYMBIAN
 QCursor CreateNodeInteraction::cursor() const
 {
 	return QCursor(Qt::CrossCursor);
 }
+#endif
 
 
 

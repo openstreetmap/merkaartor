@@ -8,7 +8,7 @@ class Projection;
 class QPainter;
 class QString;
 
-#include <vector>
+#include <QList>
 
 #define M_STYLE EditPaintStyle::instance()
 
@@ -31,15 +31,15 @@ class EditPaintStyle : public PaintStyle
 		const GlobalPainter& getGlobalPainter() const;
 		void setGlobalPainter(GlobalPainter aGlobalPainter);
 		const FeaturePainter* getPainter(int i) const;
-		QVector<FeaturePainter> getPainters() const;
-		void setPainters(QVector<FeaturePainter> aPainters);
+		QList<FeaturePainter> getPainters() const;
+		void setPainters(QList<FeaturePainter> aPainters);
 
 		void savePainters(const QString& filename);
 		void loadPainters(const QString& filename);
 
 	private:
 		EditPaintStylePrivate* p;
-		QVector<FeaturePainter> Painters;
+		QList<FeaturePainter> Painters;
 		GlobalPainter globalPainter;
 		
 		static EditPaintStyle* m_EPSInstance;

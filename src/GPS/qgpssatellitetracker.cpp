@@ -36,7 +36,7 @@ QGPSSatelliteTracker::QGPSSatelliteTracker(QWidget *parent)
 {
 }
 
-void QGPSSatelliteTracker::setSatellites(const std::vector<Satellite>& aList)
+void QGPSSatelliteTracker::setSatellites(const QList<Satellite>& aList)
 {
 	List = aList;
 	update();
@@ -103,7 +103,7 @@ void QGPSSatelliteTracker::paintEvent(QPaintEvent *)
     painter.setBrush(QBrush(palette().foreground()));
 
     int x,y;
-    for (unsigned int i=0; i<List.size(); ++i)
+    for (int i=0; i<List.size(); ++i)
     {
         if(List[i].SignalStrength > 0)
         {

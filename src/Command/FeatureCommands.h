@@ -6,7 +6,7 @@
 #include <QtCore/QString>
 
 #include <utility>
-#include <vector>
+#include <QList>
 
 class MapFeature;
 class MapDocument;
@@ -25,7 +25,7 @@ class TagCommand : public Command
 
 	protected:
 		MapFeature* theFeature;
-		std::vector<std::pair<QString, QString> > Before, After;
+		QList<QPair<QString, QString> > Before, After;
 		bool FirstRun;
 		MapLayer* theLayer;
 		MapLayer* oldLayer;
@@ -35,7 +35,7 @@ class SetTagCommand : public TagCommand
 {
 	public:
 		SetTagCommand(MapFeature* aF);
-		SetTagCommand(MapFeature* aF, unsigned int idx, const QString& k, const QString& v, MapLayer* aLayer=NULL);
+		SetTagCommand(MapFeature* aF, int idx, const QString& k, const QString& v, MapLayer* aLayer=NULL);
 		SetTagCommand(MapFeature* aF, const QString& k, const QString& v, MapLayer* aLayer=NULL);
 
 		virtual void undo();

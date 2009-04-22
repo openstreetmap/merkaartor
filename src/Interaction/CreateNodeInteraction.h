@@ -10,7 +10,9 @@ class CreateNodeInteraction : public RoadSnapInteraction
 		~CreateNodeInteraction(void);
 
 		virtual void snapMouseReleaseEvent(QMouseEvent * event, Road* aRoad);
+#ifndef Q_OS_SYMBIAN
 		virtual QCursor cursor() const;
+#endif
 };
 
 #endif

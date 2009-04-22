@@ -28,8 +28,6 @@
 #include "qgpssatellitetracker.h"
 #include "SatelliteStrengthView.h"
 
-#include <iostream>
-
 //#include "Preferences/MerkaartorPreferences.h"
 
 QGPS::QGPS(QWidget *parent)
@@ -96,7 +94,7 @@ void QGPS::resetGpsStatus()
 	lblFixStatus->setText(tr("No Position Fix"));
 	lblFixTime->setText(tr("No UTC Time"));
 
-	satTracker->setSatellites(std::vector<Satellite>());
+	satTracker->setSatellites(QList<Satellite>());
 }
 
 void QGPS::updateGpsStatus()
@@ -174,7 +172,7 @@ void QGPS::updateGpsStatus()
 	else
 		lblFixTime->setText(gpsDevice->dateTime().toString() + " UTC");
 
-	std::vector<Satellite> List;
+	QList<Satellite> List;
 	for(int i = 1; i < 50; i ++)
 	{
 		int b, x, y;

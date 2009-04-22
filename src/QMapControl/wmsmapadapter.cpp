@@ -18,7 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "wmsmapadapter.h"
-#include "Map/Projection.h"
+#include "Maps/Projection.h"
 
 WMSMapAdapter::WMSMapAdapter(QString host, QString serverPath, QString wlayers, QString wSrs, QString wStyles, QString wImgFormat, int tilesize)
  : TileMapAdapter(host, serverPath, tilesize, 0, 99)
@@ -67,10 +67,7 @@ IMapAdapter::Type WMSMapAdapter::getType() const
 
 QPoint WMSMapAdapter::coordinateToDisplay(const QPointF& coordinate) const
 {
-	//QPointF p0 = Projection::projProject(Coord(angToInt(-90.), angToInt(-180.)));
-	//QPointF p1 = Projection::projProject(Coord(angToInt(90.), angToInt(180.)));
-	//double spanX = p1.x() - p0.x();
-	//double spanY = p1.y() - p0.y();
+#ifndef _MOBILE
 	double spanX = 360.;
 	double spanY = 180.;
 
@@ -80,14 +77,16 @@ QPoint WMSMapAdapter::coordinateToDisplay(const QPointF& coordinate) const
 	double y = -1*(p.y()) * (numberOfTiles/2*tilesize)/spanY;	// coord to pixel!
 
 	return QPoint(int(x), int(y));
+#else
+	double x = (coordinate.x()+180) * (numberOfTiles*tilesize)/360.;		// coord to pixel!
+	double y = -1*(coordinate.y()-90) * (numberOfTiles*tilesize)/180.;	// coord to pixel!
+	return QPoint(int(x), int(y));
+#endif
 }
 
 QPointF WMSMapAdapter::displayToCoordinate(const QPoint& pt) const
 {
-	//QPointF p0 = Projection::projProject(Coord(angToInt(-90.), angToInt(-180.)));
-	//QPointF p1 = Projection::projProject(Coord(angToInt(90.), angToInt(180.)));
-	//double spanX = p1.x() - p0.x();
-	//double spanY = p1.y() - p0.y();
+#ifndef _MOBILE
 	double spanX = 360.;
 	double spanY = 180.;
 
@@ -96,7 +95,11 @@ QPointF WMSMapAdapter::displayToCoordinate(const QPoint& pt) const
 
 	Coord c = Projection::projInverse(QPointF(Lon, Lat));
 	return QPointF(intToAng(c.lon()), intToAng(c.lat()));
-
+#else
+	double lon = (pt.x()*(360./(numberOfTiles*tilesize)))-180;
+	double lat = -(pt.y()*(180./(numberOfTiles*tilesize)))+90;
+	return QPointF(lon, lat);
+#endif
 } 
 
 bool WMSMapAdapter::isValid(int /* x */, int /* y */, int /* z */) const
@@ -126,12 +129,17 @@ QString WMSMapAdapter::getQ(QPointF ul, QPointF br) const
 	QPointF ulp;
 	QPointF brp;
 
+#ifndef _MOBILE
 	ulp = Projection::projProject(Coord(angToInt(ul.y()), angToInt(ul.x())));
 	brp = Projection::projProject(Coord(angToInt(br.y()), angToInt(br.x())));
 	if (Projection::projIsLatLong() ) {
 		ulp = QPointF(rad_deg(ulp.x()), rad_deg(ulp.y()));
 		brp = QPointF(rad_deg(brp.x()), rad_deg(brp.y()));
 	}
+#else
+	ulp = ul;
+	brp = br;
+#endif
 
 	return QString().append(serverPath)
 						.append("SERVICE=WMS")

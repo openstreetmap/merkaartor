@@ -19,25 +19,25 @@ HEADERS += ./Command/Command.h \
     ./LayerWidget.h \
     ./IProgressWindow.h \
     ./MainWindow.h \
-    ./Map/Coord.h \
-    ./Map/DownloadOSM.h \
-    ./Map/ExportOSM.h \
-    ./Map/ImportGPX.h \
-    ./Map/ImportNGT.h \
-    ./Map/ImportOSM.h \
-    ./Map/ImportNGT.h \
-    ./Map/MapDocument.h \
-    ./Map/MapLayer.h \
-    ./Map/ImageMapLayer.h \
-    ./Map/MapTypedef.h \
-    ./Map/MapFeature.h \
-    ./Map/Painting.h \
-    ./Map/Projection.h \
-    ./Map/Relation.h \
-    ./Map/Road.h \
-    ./Map/FeatureManipulations.h \
-    ./Map/TrackPoint.h \
-    ./Map/TrackSegment.h \
+    ./Maps/Coord.h \
+    ./Maps/DownloadOSM.h \
+    ./Maps/ExportOSM.h \
+    ./Maps/ImportGPX.h \
+    ./Maps/ImportNGT.h \
+    ./Maps/ImportOSM.h \
+    ./Maps/ImportNGT.h \
+    ./Maps/MapDocument.h \
+    ./Maps/MapLayer.h \
+    ./Maps/ImageMapLayer.h \
+    ./Maps/MapTypedef.h \
+    ./Maps/MapFeature.h \
+    ./Maps/Painting.h \
+    ./Maps/Projection.h \
+    ./Maps/Relation.h \
+    ./Maps/Road.h \
+    ./Maps/FeatureManipulations.h \
+    ./Maps/TrackPoint.h \
+    ./Maps/TrackSegment.h \
     ./MapView.h \
     ./PaintStyle/EditPaintStyle.h \
     ./PaintStyle/PaintStyle.h \
@@ -78,23 +78,23 @@ SOURCES += ./Command/Command.cpp \
     ./Command/RelationCommands.cpp \
     ./Command/RoadCommands.cpp \
     ./Command/TrackSegmentCommands.cpp \
-    ./Map/Coord.cpp \
-    ./Map/DownloadOSM.cpp \
-    ./Map/ExportOSM.cpp \
-    ./Map/ImportGPX.cpp \
-    ./Map/ImportOSM.cpp \
-    ./Map/ImportNGT.cpp \
-    ./Map/MapDocument.cpp \
-    ./Map/MapLayer.cpp \
-    ./Map/ImageMapLayer.cpp \
-    ./Map/MapFeature.cpp \
-    ./Map/Painting.cpp \
-    ./Map/Projection.cpp \
-    ./Map/Relation.cpp \
-    ./Map/Road.cpp \
-    ./Map/FeatureManipulations.cpp \
-    ./Map/TrackPoint.cpp \
-    ./Map/TrackSegment.cpp \
+    ./Maps/Coord.cpp \
+    ./Maps/DownloadOSM.cpp \
+    ./Maps/ExportOSM.cpp \
+    ./Maps/ImportGPX.cpp \
+    ./Maps/ImportOSM.cpp \
+    ./Maps/ImportNGT.cpp \
+    ./Maps/MapDocument.cpp \
+    ./Maps/MapLayer.cpp \
+    ./Maps/ImageMapLayer.cpp \
+    ./Maps/MapFeature.cpp \
+    ./Maps/Painting.cpp \
+    ./Maps/Projection.cpp \
+    ./Maps/Relation.cpp \
+    ./Maps/Road.cpp \
+    ./Maps/FeatureManipulations.cpp \
+    ./Maps/TrackPoint.cpp \
+    ./Maps/TrackSegment.cpp \
     ./MapView.cpp \
     ./Interaction/CreateAreaInteraction.cpp \
     ./Interaction/CreateDoubleWayInteraction.cpp \

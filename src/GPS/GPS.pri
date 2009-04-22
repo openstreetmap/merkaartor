@@ -12,3 +12,20 @@ SOURCES += qgps.cpp \
            qgpsdevice.cpp \
 	   SatelliteStrengthView.cpp
 
+DEFINES += USE_GPS
+
+symbian: { 
+	DEPENDPATH += ../S60extensions/location/src
+	INCLUDEPATH += ../S60extensions/location/src
+
+	# Mobile extensions headers and sources
+	HEADERS += xqlocation.h
+
+	SOURCES += xqlocation.cpp
+
+    HEADERS += xqlocation_s60_p.h
+    SOURCES += xqlocation_s60_p.cpp
+    
+    LIBS += -llbs
+}
+

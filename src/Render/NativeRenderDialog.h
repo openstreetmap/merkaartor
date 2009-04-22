@@ -15,7 +15,7 @@
 #include <QWidget>
 #include <QSettings>
 
-#include "Map/Coord.h"
+#include "Maps/Coord.h"
 
 #include <ui_NativeRenderDialog.h>
 

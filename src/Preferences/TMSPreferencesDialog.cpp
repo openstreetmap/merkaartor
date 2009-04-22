@@ -41,7 +41,7 @@ void TMSPreferencesDialog::addServer(const TmsServer & srv)
 
 void TMSPreferencesDialog::on_btApplyTmsServer_clicked(void)
 {
-	unsigned int idx = static_cast<unsigned int>(lvTmsServers->currentItem()->data(Qt::UserRole).toInt());
+	int idx = static_cast<int>(lvTmsServers->currentItem()->data(Qt::UserRole).toInt());
 	if (idx >= theTmsServers.size())
 		return;
 
@@ -66,7 +66,7 @@ void TMSPreferencesDialog::on_btAddTmsServer_clicked(void)
 
 void TMSPreferencesDialog::on_btDelTmsServer_clicked(void)
 {
-	unsigned int idx = static_cast<unsigned int>(lvTmsServers->currentItem()->data(Qt::UserRole).toInt());
+	int idx = static_cast<int>(lvTmsServers->currentItem()->data(Qt::UserRole).toInt());
 	if (idx >= theTmsServers.size())
 		return;
 
@@ -77,7 +77,7 @@ void TMSPreferencesDialog::on_btDelTmsServer_clicked(void)
 
 void TMSPreferencesDialog::on_lvTmsServers_itemClicked(QListWidgetItem* it)
 {
-	unsigned int idx = it->data(Qt::UserRole).toInt();
+	int idx = it->data(Qt::UserRole).toInt();
 	if (idx >= theTmsServers.size())
 		return;
 
@@ -130,7 +130,7 @@ void TMSPreferencesDialog::savePrefs()
 {
 	TmsServerList* L = MerkaartorPreferences::instance()->getTmsServers();
 	L->clear();
-	for (unsigned int i = 0; i < theTmsServers.size(); ++i) {
+	for (int i = 0; i < theTmsServers.size(); ++i) {
 		TmsServer S(theTmsServers[i]);
 		L->insert(theTmsServers[i].TmsName, S);
 	}

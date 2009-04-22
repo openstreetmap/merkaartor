@@ -23,7 +23,7 @@
 #include <QObject>
 #include <QDebug>
 #include <QHttp>
-#include <QVector>
+#include <QList>
 #include <QQueue>
 #include <QPixmap>
 #include <QMutex>

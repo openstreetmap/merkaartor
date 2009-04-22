@@ -4,10 +4,10 @@
 #include "Command/DocumentCommands.h"
 #include "Command/RoadCommands.h"
 #include "Command/TrackPointCommands.h"
-#include "Map/Coord.h"
-#include "Map/MapDocument.h"
-#include "Map/Projection.h"
-#include "Map/TrackPoint.h"
+#include "Maps/Coord.h"
+#include "Maps/MapDocument.h"
+#include "Maps/Projection.h"
+#include "Maps/TrackPoint.h"
 #include "Utils/LineF.h"
 #include "Utils/MDiscardableDialog.h"
 
@@ -16,7 +16,7 @@
 #include <QtGui/QPixmap>
 #include <QMessageBox>
 
-#include <vector>
+#include <QList>
 
 MoveTrackPointInteraction::MoveTrackPointInteraction(MapView* aView)
 : FeatureSnapInteraction(aView), StartDragPosition(0,0)
@@ -27,11 +27,13 @@ MoveTrackPointInteraction::~MoveTrackPointInteraction(void)
 {
 }
 
+#ifndef Q_OS_SYMBIAN
 QCursor MoveTrackPointInteraction::cursor() const
 {
 	QPixmap pm(":/Icons/move.xpm");
 	return QCursor(pm);
 }
+#endif
 
 
 void MoveTrackPointInteraction::snapMousePressEvent(QMouseEvent * event, MapFeature* aLast)
@@ -52,12 +54,12 @@ void MoveTrackPointInteraction::snapMousePressEvent(QMouseEvent * event, MapFeat
 		StartDragPosition = Pt->position();
 	}
 	else if (Road* R = dynamic_cast<Road*>(sel)) {
-		for (unsigned int i=0; i<R->size(); ++i)
+		for (int i=0; i<R->size(); ++i)
 			if (std::find(Moving.begin(),Moving.end(),R->get(i)) == Moving.end())
 				Moving.push_back(R->getNode(i));
 		addToNoSnap(R);
 	}
-	for (unsigned int i=0; i<Moving.size(); ++i)
+	for (int i=0; i<Moving.size(); ++i)
 	{
 		OriginalPosition.push_back(Moving[i]->position());
 		addToNoSnap(Moving[i]);
@@ -70,7 +72,7 @@ void MoveTrackPointInteraction::snapMouseReleaseEvent(QMouseEvent * event, MapFe
 	{
 		CommandList* theList = new CommandList(MainWindow::tr("Move Point %1").arg(Moving[0]->id()), Moving[0]);
 		Coord Diff(calculateNewPosition(event,Closer, theList)-StartDragPosition);
-		for (unsigned int i=0; i<Moving.size(); ++i)
+		for (int i=0; i<Moving.size(); ++i)
 		{
 			Moving[i]->setPosition(OriginalPosition[i]);
 			if (Moving[i]->layer()->isTrack())
@@ -83,7 +85,7 @@ void MoveTrackPointInteraction::snapMouseReleaseEvent(QMouseEvent * event, MapFe
 		if (Moving.size() == 1 && !Moving[0]->layer()->isTrack())
 		{
 			Coord newPos = OriginalPosition[0] + Diff;
-			std::vector<TrackPoint*> samePosPts;
+			QList<TrackPoint*> samePosPts;
 			for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it)
 			{
 				TrackPoint* visPt = CAST_NODE(it.get());
@@ -120,10 +122,10 @@ void MoveTrackPointInteraction::snapMouseReleaseEvent(QMouseEvent * event, MapFe
 					theList->setFeature(F);
 					
 					// from mergeNodes(theDocument, theList, theProperties);
-					std::vector<MapFeature*> alt;
+					QList<MapFeature*> alt;
 					TrackPoint* merged = samePosPts[0];
 					alt.push_back(merged);
-					for (unsigned int i = 1; i < samePosPts.size(); ++i) {
+					for (int i = 1; i < samePosPts.size(); ++i) {
 						MapFeature::mergeTags(document(), theList, merged, samePosPts[i]);
 						theList->add(new RemoveFeatureCommand(document(), samePosPts[i], alt));
 					}
@@ -146,7 +148,7 @@ void MoveTrackPointInteraction::snapMouseMoveEvent(QMouseEvent* event, MapFeatur
 	if (Moving.size())
 	{
 		Coord Diff = calculateNewPosition(event,Closer,0)-StartDragPosition;
-		for (unsigned int i=0; i<Moving.size(); ++i)
+		for (int i=0; i<Moving.size(); ++i)
 			Moving[i]->setPosition(OriginalPosition[i]+Diff);
 		view()->invalidate(true, false);
 	}
@@ -163,8 +165,8 @@ Coord MoveTrackPointInteraction::calculateNewPosition(QMouseEvent *event, MapFea
 		LineF L1(R->getNode(0)->position(),R->getNode(1)->position());
 		double Dist = L1.capDistance(TargetC);
 		QPoint BestTarget = L1.project(Target).toPoint();
-		unsigned int BestIdx = 1;
-		for (unsigned int i=2; i<R->size(); ++i)
+		int BestIdx = 1;
+		for (int i=2; i<R->size(); ++i)
 		{
 			LineF L2(R->getNode(i-1)->position(),R->getNode(i)->position());
 			double Dist2 = L2.capDistance(TargetC);

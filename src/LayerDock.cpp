@@ -3,8 +3,8 @@
 
 #include "MainWindow.h"
 #include "MapView.h"
-#include "Map/MapDocument.h"
-#include "Map/MapLayer.h"
+#include "Maps/MapDocument.h"
+#include "Maps/MapLayer.h"
 #include "PropertiesDock.h"
 #include "Command/Command.h"
 #include "InfoDock.h"

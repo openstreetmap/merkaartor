@@ -16,7 +16,9 @@ class ZoomInteraction : public Interaction
 		virtual void mouseReleaseEvent(QMouseEvent * event);
 		virtual void mouseMoveEvent(QMouseEvent* event);
 		virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter);
+#ifndef Q_OS_SYMBIAN
 		virtual QCursor cursor() const;
+#endif
 
 	private:
 		bool HaveFirstPoint;

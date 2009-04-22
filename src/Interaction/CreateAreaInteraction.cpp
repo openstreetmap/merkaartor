@@ -3,10 +3,10 @@
 #include "Command/RelationCommands.h"
 #include "Command/RoadCommands.h"
 #include "Command/TrackPointCommands.h"
-#include "Map/Painting.h"
-#include "Map/Relation.h"
-#include "Map/Road.h"
-#include "Map/TrackPoint.h"
+#include "Maps/Painting.h"
+#include "Maps/Relation.h"
+#include "Maps/Road.h"
+#include "Maps/TrackPoint.h"
 #include "Utils/LineF.h"
 #include "MainWindow.h"
 #include "PropertiesDock.h"
@@ -71,7 +71,7 @@ void CreateAreaInteraction::startNewRoad(QMouseEvent* anEvent, MapFeature* aFeat
 	{
 		Coord P(projection().inverse(anEvent->pos()));
 		CommandList* theList  = new CommandList(MainWindow::tr("Create Area %1").arg(aRoad->description()), aRoad);
-		unsigned int SnapIdx = findSnapPointIndex(aRoad, P);
+		int SnapIdx = findSnapPointIndex(aRoad, P);
 		TrackPoint* N = new TrackPoint(P);
 		N->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 		theList->add(new AddFeatureCommand(main()->document()->getDirtyOrOriginLayer(),N,true));
@@ -145,7 +145,7 @@ void CreateAreaInteraction::addToRoad(QMouseEvent* anEvent, MapFeature* Snap, Co
 	else if (Road* aRoad = dynamic_cast<Road*>(Snap))
 	{
 		Coord P(projection().inverse(anEvent->pos()));
-		unsigned int SnapIdx = findSnapPointIndex(aRoad, P);
+		int SnapIdx = findSnapPointIndex(aRoad, P);
 		TrackPoint* N = new TrackPoint(P);
 		N->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 		CommandList* theList  = new CommandList(MainWindow::tr("Area: Add node %1 to Road %2").arg(N->description()).arg(theRoad->description()), N);
@@ -201,7 +201,9 @@ void CreateAreaInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFeature
 		view()->launch(0);
 }
 
+#ifndef Q_OS_SYMBIAN
 QCursor CreateAreaInteraction::cursor() const
 {
 	return QCursor(Qt::CrossCursor);
 }
+#endif

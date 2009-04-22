@@ -12,15 +12,15 @@
 #include "NativeRenderDialog.h"
 
 #include "MainWindow.h"
-#include "Map/MapDocument.h"
+#include "Maps/MapDocument.h"
 #include "MapView.h"
 #include "PaintStyle/EditPaintStyle.h"
-#include "Map/Projection.h"
-#include "Map/MapLayer.h"
-#include "Map/MapFeature.h"
-#include "Map/Relation.h"
-#include "Map/Road.h"
-#include "Map/TrackPoint.h"
+#include "Maps/Projection.h"
+#include "Maps/MapLayer.h"
+#include "Maps/MapFeature.h"
+#include "Maps/Relation.h"
+#include "Maps/Road.h"
+#include "Maps/TrackPoint.h"
 #include "Preferences/MerkaartorPreferences.h"
 
 #include "Utils/PictureViewerDialog.h"
@@ -111,7 +111,9 @@ void NativeRenderDialog::render()
 	QRect theR(0, 0, w, h);
 	aProj.setViewport(VP, theR);
 
+#ifndef Q_OS_SYMBIAN
 	QApplication::setOverrideCursor(Qt::BusyCursor);
+#endif
 	QProgressDialog progress(tr("Working. Please Wait..."), tr("Cancel"), 0, 0);
 	progress.setWindowModality(Qt::WindowModal);
 	progress.setCancelButton(NULL);
@@ -134,7 +136,9 @@ void NativeRenderDialog::render()
 	P.end();
 
 	progress.reset();
+#ifndef Q_OS_SYMBIAN
 	QApplication::restoreOverrideCursor();
+#endif
 
 	if (rbSVG->isChecked()) {
 		PictureViewerDialog vwDlg(tr("Native rendering"), QDir::tempPath()+"/tmp.svg", this);

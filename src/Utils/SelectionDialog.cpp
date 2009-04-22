@@ -10,8 +10,8 @@
 //
 //
 #include "SelectionDialog.h"
-#include "../MainWindow.h"
-#include "../Map/MapDocument.h"
+#include "MainWindow.h"
+#include "Maps/MapDocument.h"
 
 #include <QCompleter>
 

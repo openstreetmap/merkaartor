@@ -1,7 +1,7 @@
 
 #include "MapView.h"
 #include "MainWindow.h"
-#include "Map/MapDocument.h"
+#include "Maps/MapDocument.h"
 
 #include <QtGui/QPainter>
 #include <QtGui/QDockWidget>

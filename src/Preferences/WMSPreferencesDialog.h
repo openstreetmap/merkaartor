@@ -20,7 +20,7 @@
 #include <ui_WMSPreferencesDialog.h>
 #include "Preferences/MerkaartorPreferences.h"
 
-#include <vector>
+#include <QList>
 
 /**
 	@author cbro <cbro@semperpax.com>
@@ -52,7 +52,7 @@ private:
 	void requestCapabilities(QUrl url);
 
 public:
-	QVector<WmsServer> theWmsServers;
+	QList<WmsServer> theWmsServers;
 	QString getSelectedServer();
 	void setSelectedServer(QString theValue);
 

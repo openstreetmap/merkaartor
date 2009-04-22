@@ -15,11 +15,11 @@
 class QString;
 class QIODevice;
 
-#include "Map/TrackPoint.h"
-#include "Map/TrackSegment.h"
-#include "Map/Road.h"
-#include "Map/Relation.h"
-#include "Map/MapLayer.h"
+#include "Maps/TrackPoint.h"
+#include "Maps/TrackSegment.h"
+#include "Maps/Road.h"
+#include "Maps/Relation.h"
+#include "Maps/MapLayer.h"
 #include "Command/Command.h"
 #include "Command/DocumentCommands.h"
 

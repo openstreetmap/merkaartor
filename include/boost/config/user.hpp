@@ -120,5 +120,5 @@
 // that feature off.
 // #define BOOST_WHATEVER_NO_LIB
  
-
+#define BOOST_EXCEPTION_DISABLE 1
 

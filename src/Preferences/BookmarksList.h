@@ -17,7 +17,7 @@
 #include <QMap>
 #include <QtXml>
 
-#include "Map/Coord.h"
+#include "Maps/Coord.h"
 
 class Bookmark
 {

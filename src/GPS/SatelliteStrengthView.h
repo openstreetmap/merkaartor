@@ -2,8 +2,7 @@
 #define MERKAARTOR_SATELLITEVIEW_H_
 
 #include <QtGui/QWidget>
-
-#include <vector>
+#include <QList>
 
 class Satellite
 {
@@ -14,7 +13,7 @@ class Satellite
 		int SignalStrength;
 };
 
-void sortSatellitesById(std::vector<Satellite>& List);
+void sortSatellitesById(QList<Satellite>& List);
 
 class SatelliteStrengthView : public QWidget
 {
@@ -23,12 +22,12 @@ class SatelliteStrengthView : public QWidget
 	public:
 		SatelliteStrengthView(QWidget* aParent);
 
-		void setSatellites(const std::vector<Satellite>& List);
+		void setSatellites(const QList<Satellite>& List);
 
 	protected:
 		void paintEvent(QPaintEvent* ev);
 
-		std::vector<Satellite> List;
+		QList<Satellite> List;
 };
 
 #endif

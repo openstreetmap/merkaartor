@@ -1,7 +1,7 @@
 #ifndef MERKAARTOR_LINEF_
 #define MERKAARTOR_LINEF_
 
-#include "Map/Coord.h"
+#include "Maps/Coord.h"
 
 #include <QtCore/QPointF>
 

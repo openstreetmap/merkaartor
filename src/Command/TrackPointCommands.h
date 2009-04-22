@@ -2,7 +2,7 @@
 #define MERKATOR_TRACKPOINTCOMMANDS_H_
 
 #include "Command/Command.h"
-#include "Map/Coord.h"
+#include "Maps/Coord.h"
 
 class TrackPoint;
 class MapLayer;

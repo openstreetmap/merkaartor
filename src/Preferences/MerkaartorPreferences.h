@@ -19,7 +19,7 @@
 #include <QBuffer>
 #include <QUuid>
 
-#include "Map/Coord.h"
+#include "Maps/Coord.h"
 #include "Preferences/WmsServersList.h"
 #include "Preferences/TmsServersList.h"
 #include "Preferences/ProjectionsList.h"
@@ -68,12 +68,16 @@ class IMapAdapter;
 		double get##Param(); 
 
 #define SAFE_DELETE(x) {delete (x); x = NULL;}
+#define STRINGIFY(x) XSTRINGIFY(x)
+#define XSTRINGIFY(x) #x
 
 /**
 	@author cbro <cbro@semperpax.com>
 */
 
+#ifndef _MOBILE
 typedef QString ProjectionType;
+#endif
 
 enum ExportType {
 	Export_All,
@@ -364,10 +368,12 @@ public:
 	void loadBookmarks();
 	void saveBookmarks();
 
+#ifndef _MOBILE
 	void setProjectionType(ProjectionType theValue);
 	ProjectionType getProjectionType() const;
 	ProjectionsList getProjectionsList();
 	ProjectionItem getProjection(QString aProj);
+#endif
 
 
 

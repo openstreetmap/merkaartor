@@ -1,8 +1,8 @@
 #include "RelationCommands.h"
 
-#include "Map/Relation.h"
-#include "Map/MapFeature.h"
-#include "Map/MapLayer.h"
+#include "Maps/Relation.h"
+#include "Maps/MapFeature.h"
+#include "Maps/MapLayer.h"
 #include "Sync/DirtyList.h"
 
 RelationAddFeatureCommand::RelationAddFeatureCommand(Relation* R)
@@ -16,7 +16,7 @@ RelationAddFeatureCommand::RelationAddFeatureCommand(Relation* R, const QString&
 	redo();
 }
 
-RelationAddFeatureCommand::RelationAddFeatureCommand(Relation* R, const QString& aRole, MapFeature* W, unsigned int aPos, MapLayer* aLayer)
+RelationAddFeatureCommand::RelationAddFeatureCommand(Relation* R, const QString& aRole, MapFeature* W, int aPos, MapLayer* aLayer)
 : Command(R), theLayer(aLayer), oldLayer(0), theRelation(R), Role(aRole), theMapFeature(W), Position(aPos)
 {
 	redo();
@@ -136,7 +136,7 @@ RelationRemoveFeatureCommand::RelationRemoveFeatureCommand(Relation* R, MapFeatu
 	redo();
 }
 
-RelationRemoveFeatureCommand::RelationRemoveFeatureCommand(Relation* R, unsigned int anIdx, MapLayer* aLayer)
+RelationRemoveFeatureCommand::RelationRemoveFeatureCommand(Relation* R, int anIdx, MapLayer* aLayer)
 : Command(R), theLayer(aLayer), oldLayer(0), Idx(anIdx), theRelation(R), Role(R->getRole(anIdx)), theMapFeature(R->get(anIdx))
 {
 	redo();

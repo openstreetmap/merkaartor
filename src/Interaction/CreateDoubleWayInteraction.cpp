@@ -2,9 +2,9 @@
 #include "Command/DocumentCommands.h"
 #include "Command/RoadCommands.h"
 #include "Command/TrackPointCommands.h"
-#include "Map/Painting.h"
-#include "Map/Road.h"
-#include "Map/TrackPoint.h"
+#include "Maps/Painting.h"
+#include "Maps/Road.h"
+#include "Maps/TrackPoint.h"
 #include "Utils/LineF.h"
 #include "MainWindow.h"
 #include "Preferences/MerkaartorPreferences.h"
@@ -108,8 +108,8 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 		}
 		else if (R1)
 		{
-			unsigned int i1 = R1->size()-1;
-			unsigned int i2 = 1;
+			int i1 = R1->size()-1;
+			int i2 = 1;
 			LineF P1(
 				view()->projection().project(R1->getNode(i1-1)),
 				view()->projection().project(R1->getNode(i1)));
@@ -153,7 +153,7 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 				L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),B1,true));
 				L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),B2,true));
 				L->add(new RoadAddTrackPointCommand(R1,B1));
-				L->add(new RoadAddTrackPointCommand(R2,B2,(unsigned int)0));
+				L->add(new RoadAddTrackPointCommand(R2,B2,(int)0));
 				document()->addHistory(L);
 				view()->invalidate(true, false);
 				//FirstPoint = view()->projection().inverse(anEvent->pos());
@@ -221,7 +221,10 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 		Interaction::mousePressEvent(anEvent);
 }
 
+#ifndef Q_OS_SYMBIAN
 QCursor CreateDoubleWayInteraction::cursor() const
 {
 	return QCursor(Qt::CrossCursor);
 }
+
+#endif

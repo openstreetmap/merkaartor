@@ -15,10 +15,10 @@ class QPainter;
 #include "MapView.h"
 #include "InfoDock.h"
 #include "PropertiesDock.h"
-#include "Map/MapDocument.h"
-#include "Map/MapFeature.h"
-#include "Map/Road.h"
-#include "Map/TrackPoint.h"
+#include "Maps/MapDocument.h"
+#include "Maps/MapFeature.h"
+#include "Maps/Road.h"
+#include "Maps/TrackPoint.h"
 
 #include <QtCore/QObject>
 #include <QtCore/QTime>
@@ -41,7 +41,9 @@ class Interaction : public QObject
 		virtual void mouseMoveEvent(QMouseEvent* event);
 		virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter);
 
+#ifndef Q_OS_SYMBIAN
 		virtual QCursor cursor() const;
+#endif
 		MapView* view();
 		MapDocument* document();
 		MainWindow* main();
@@ -75,7 +77,7 @@ class GenericFeatureSnapInteraction : public Interaction
 		{
 			Interaction::paintEvent(anEvent, thePainter);
 
-			for (unsigned int i=0; i<view()->properties()->size(); ++i)
+			for (int i=0; i<view()->properties()->size(); ++i)
 				if (document()->exists(view()->properties()->selection(i)))
 					view()->properties()->selection(i)->drawFocus(thePainter, projection());
 
@@ -238,7 +240,7 @@ class GenericFeatureSnapInteraction : public Interaction
 		}
 
 		FeatureType* LastSnap;
-		std::vector<FeatureType*> NoSnap;
+		QList<FeatureType*> NoSnap;
 		bool SnapActive;
 		bool NoSelectPoints;
 		bool NoSelectWays;

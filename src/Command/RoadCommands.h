@@ -12,7 +12,7 @@ class RoadAddTrackPointCommand : public Command
 	public:
 		RoadAddTrackPointCommand(Road* R = NULL);
 		RoadAddTrackPointCommand(Road* R, TrackPoint* W, MapLayer* aLayer=NULL);
-		RoadAddTrackPointCommand(Road* R, TrackPoint* W, unsigned int Position, MapLayer* aLayer=NULL);
+		RoadAddTrackPointCommand(Road* R, TrackPoint* W, int Position, MapLayer* aLayer=NULL);
 		~RoadAddTrackPointCommand(void);
 
 		virtual void undo();
@@ -27,7 +27,7 @@ class RoadAddTrackPointCommand : public Command
 		MapLayer* oldLayer;
 		Road* theRoad;
 		TrackPoint* theTrackPoint;
-		unsigned int Position;
+		int Position;
 };
 
 class RoadRemoveTrackPointCommand : public Command
@@ -35,7 +35,7 @@ class RoadRemoveTrackPointCommand : public Command
 	public:
 		RoadRemoveTrackPointCommand(Road* R = NULL);
 		RoadRemoveTrackPointCommand(Road* R, TrackPoint* W, MapLayer* aLayer=NULL);
-		RoadRemoveTrackPointCommand(Road* R, unsigned int anIdx, MapLayer* aLayer=NULL);
+		RoadRemoveTrackPointCommand(Road* R, int anIdx, MapLayer* aLayer=NULL);
 		~RoadRemoveTrackPointCommand(void);
 
 		virtual void undo();
@@ -48,7 +48,7 @@ class RoadRemoveTrackPointCommand : public Command
 	private:
 		MapLayer* theLayer;
 		MapLayer* oldLayer;
-		unsigned int Idx;
+		int Idx;
 		Road* theRoad;
 		TrackPoint* theTrackPoint;
 };

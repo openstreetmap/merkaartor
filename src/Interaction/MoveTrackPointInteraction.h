@@ -2,9 +2,9 @@
 #define MERKATOR_MOVETRACKPOINTINTERACTION_H_
 
 #include "Interaction/Interaction.h"
-#include "Map/Coord.h"
+#include "Maps/Coord.h"
 
-#include <vector>
+#include <QList>
 
 class CommandList;
 
@@ -17,12 +17,14 @@ class MoveTrackPointInteraction : public FeatureSnapInteraction
 		virtual void snapMousePressEvent(QMouseEvent * event, MapFeature* aLast);
 		virtual void snapMouseReleaseEvent(QMouseEvent * event, MapFeature* aLast);
 		virtual void snapMouseMoveEvent(QMouseEvent* event, MapFeature* aLast);
+#ifndef Q_OS_SYMBIAN
 		virtual QCursor cursor() const;
+#endif
 
 	private:
 		Coord calculateNewPosition(QMouseEvent* event, MapFeature* aLast, CommandList* theList);
-		std::vector<TrackPoint*> Moving;
-		std::vector<Coord> OriginalPosition;
+		QList<TrackPoint*> Moving;
+		QList<Coord> OriginalPosition;
 		Coord StartDragPosition;
 };
 

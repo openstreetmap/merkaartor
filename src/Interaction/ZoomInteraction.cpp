@@ -1,9 +1,9 @@
 #include "Interaction/ZoomInteraction.h"
 
 #include "MapView.h"
-#include "Map/MapDocument.h"
-#include "Map/Projection.h"
-#include "Map/TrackPoint.h"
+#include "Maps/MapDocument.h"
+#include "Maps/Projection.h"
+#include "Maps/TrackPoint.h"
 
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
@@ -54,10 +54,12 @@ void ZoomInteraction::mouseMoveEvent(QMouseEvent* event)
 	}
 }
 
+#ifndef Q_OS_SYMBIAN
 QCursor ZoomInteraction::cursor() const
 {
 	QPixmap pm(":/Icons/zoomico.xpm");
 	return QCursor(pm,11,12);
 }
+#endif
 
 

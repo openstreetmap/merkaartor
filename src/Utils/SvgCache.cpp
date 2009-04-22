@@ -5,10 +5,10 @@
 #include <QtGui/QPainter>
 #include <QtSvg/QSvgRenderer>
 
-QPixmap getPixmapFromFile(const QString& aName, unsigned int Size)
+QPixmap getPixmapFromFile(const QString& aName, int Size)
 {
-	static QMap<QPair<QString, unsigned int>, QPixmap> Cache;
-	QPair<QString, unsigned int> Key(aName,Size); 
+	static QMap<QPair<QString, int>, QPixmap> Cache;
+	QPair<QString, int> Key(aName,Size); 
 	if (!Cache.contains(Key))
 	{
 		QPixmap result(Size, Size);

@@ -1,8 +1,8 @@
 #include "TrackSegmentCommands.h"
 
-#include "Map/TrackSegment.h"
-#include "Map/TrackPoint.h"
-#include "Map/MapLayer.h"
+#include "Maps/TrackSegment.h"
+#include "Maps/TrackPoint.h"
+#include "Maps/MapLayer.h"
 #include "Sync/DirtyList.h"
 
 TrackSegmentAddTrackPointCommand::TrackSegmentAddTrackPointCommand(TrackSegment* R) 
@@ -16,7 +16,7 @@ TrackSegmentAddTrackPointCommand::TrackSegmentAddTrackPointCommand(TrackSegment*
 	redo();
 }
 
-TrackSegmentAddTrackPointCommand::TrackSegmentAddTrackPointCommand(TrackSegment* R, TrackPoint* W, unsigned int aPos, MapLayer* aLayer)
+TrackSegmentAddTrackPointCommand::TrackSegmentAddTrackPointCommand(TrackSegment* R, TrackPoint* W, int aPos, MapLayer* aLayer)
 : Command(R), theLayer(aLayer), oldLayer(0), theTrackSegment(R), theTrackPoint(W), Position(aPos)
 {
 	redo();
@@ -107,7 +107,7 @@ TrackSegmentRemoveTrackPointCommand::TrackSegmentRemoveTrackPointCommand(TrackSe
 	redo();
 }
 
-TrackSegmentRemoveTrackPointCommand::TrackSegmentRemoveTrackPointCommand(TrackSegment* R, unsigned int anIdx, MapLayer* aLayer)
+TrackSegmentRemoveTrackPointCommand::TrackSegmentRemoveTrackPointCommand(TrackSegment* R, int anIdx, MapLayer* aLayer)
 : Command(R), theLayer(aLayer), oldLayer(0), Idx(anIdx), theTrackSegment(R), theTrackPoint(dynamic_cast <TrackPoint*> (R->get(anIdx)))
 {
 	redo();

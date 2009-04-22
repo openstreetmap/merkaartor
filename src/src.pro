@@ -28,8 +28,8 @@ QT_VER_MIN = $$member(QT_VERSION, 1)
 lessThan(QT_VER_MAJ, 4) | lessThan(QT_VER_MIN, 4) {
     error(Merkaartor requires Qt 4.4 or newer but Qt $$[QT_VERSION] was detected.)
 }
-DEFINES += VERSION=\"\\\"$$VERSION\\\"\"
-DEFINES += REVISION=\"\\\"$$REVISION\\\"\"
+DEFINES += VERSION=$$VERSION
+DEFINES += REVISION=$$REVISION
 
 TEMPLATE = app
 TARGET = merkaartor
@@ -40,21 +40,21 @@ QT += svg network xml core gui
 
 !contains(NODEBUG,1) {
     CONFIG += debug
-    OBJECTS_DIR += $$PWD/../tmp/$$(QMAKESPEC)/obj_debug
+    #OBJECTS_DIR += $$PWD/../tmp/$$(QMAKESPEC)/obj_debug
 }
 contains(NODEBUG,1) {
     CONFIG += release
     DEFINES += NDEBUG
     DEFINES += QT_NO_DEBUG_OUTPUT
-    OBJECTS_DIR += $$PWD/../tmp/$$(QMAKESPEC)/obj_release
+    #OBJECTS_DIR += $$PWD/../tmp/$$(QMAKESPEC)/obj_release
 }
 COMMON_DIR=$$PWD/../binaries
 OUTPUT_DIR=$$PWD/../binaries/$$(QMAKESPEC)
 DESTDIR = $$OUTPUT_DIR/bin
 
-UI_DIR += $$PWD/../tmp/$$(QMAKESPEC)
-MOC_DIR += $$PWD/../tmp/$$(QMAKESPEC)
-RCC_DIR += $$PWD/../tmp/$$(QMAKESPEC)
+#UI_DIR += $$PWD/../tmp/$$(QMAKESPEC)
+#MOC_DIR += $$PWD/../tmp/$$(QMAKESPEC)
+#RCC_DIR += $$PWD/../tmp/$$(QMAKESPEC)
 
 INCLUDEPATH += $$PWD/../include $$PWD/../interfaces
 DEPENDPATH += $$PWD/../interfaces
@@ -80,11 +80,13 @@ contains(NVIDIA_HACK,1) {
 INCLUDEPATH += $$PWD Render qextserialport GPS NameFinder
 DEPENDPATH += $$PWD Render qextserialport GPS NameFinder
 
-greaterThan(QT_VER_MAJ, 3) : greaterThan(QT_VER_MIN, 3) {
-    DEFINES += USE_WEBKIT
-    SOURCES += QMapControl/browserimagemanager.cpp
-    HEADERS += QMapControl/browserimagemanager.h
-    QT += webkit
+!contains(NOUSEWEBKIT,1) {
+	greaterThan(QT_VER_MAJ, 3) : greaterThan(QT_VER_MIN, 3) {
+    	DEFINES += USE_WEBKIT
+    	SOURCES += QMapControl/browserimagemanager.cpp
+    	HEADERS += QMapControl/browserimagemanager.h
+    	QT += webkit
+	}
 }
 
 TRANSLATIONS += \
@@ -112,7 +114,7 @@ include(Merkaartor.pri)
 include(QMapControl.pri)
 include(ImportExport.pri)
 include(Render/Render.pri)
-include(qextserialport/qextserialport.pri)
+!symbian:include(qextserialport/qextserialport.pri)
 include(GPS/GPS.pri)
 include(Tools/Tools.pri)
 include(TagTemplate/TagTemplate.pri)
@@ -135,7 +137,7 @@ win32 {
     SHARE_DIR = share
 }
 
-DEFINES += SHARE_DIR=\"\\\"$${SHARE_DIR}\\\"\"
+DEFINES += SHARE_DIR=$${SHARE_DIR}
 INSTALLS += target
 
 win32-msvc* {
@@ -146,12 +148,12 @@ win32-msvc* {
 count(TRANSDIR_MERKAARTOR, 1) {
 	translations.path =  $${TRANSDIR_MERKAARTOR}
 	translations.files = $${BINTRANSLATIONS}
-	DEFINES += TRANSDIR_MERKAARTOR=\"\\\"$$translations.path\\\"\"
+	DEFINES += TRANSDIR_MERKAARTOR=$$translations.path
 	INSTALLS += translations
 }
 
 count(TRANSDIR_SYSTEM, 1) {
-	DEFINES += TRANSDIR_SYSTEM=\"\\\"$${TRANSDIR_SYSTEM}\\\"\"
+	DEFINES += TRANSDIR_SYSTEM=$${TRANSDIR_SYSTEM}
 }
 
 contains(MOBILE,1) {
@@ -189,7 +191,7 @@ contains (GDAL, 1) {
 world_shp.path = $${SHARE_DIR}
 world_shp.files = $$PWD/../share/world_background.osb
 
-DEFINES += WORLD_SHP=\"\\\"$$world_shp.path/world_background.osb\\\"\"
+DEFINES += WORLD_SHP=$$world_shp.path/world_background.osb
 INSTALLS += world_shp
 
 desktop.path = $${PREFIX}/share/applications

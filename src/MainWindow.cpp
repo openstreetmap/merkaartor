@@ -20,19 +20,19 @@
 #include "Interaction/EditInteraction.h"
 #include "Interaction/MoveTrackPointInteraction.h"
 #include "Interaction/ZoomInteraction.h"
-#include "Map/Coord.h"
-#include "Map/DownloadOSM.h"
-#include "Map/ImportGPX.h"
-#include "Map/ImportNGT.h"
-#include "Map/ImportOSM.h"
-#include "Map/MapDocument.h"
-#include "Map/MapLayer.h"
-#include "Map/ImageMapLayer.h"
-#include "Map/MapFeature.h"
-#include "Map/Relation.h"
-#include "Map/Road.h"
-#include "Map/FeatureManipulations.h"
-#include "Map/TrackPoint.h"
+#include "Maps/Coord.h"
+#include "Maps/DownloadOSM.h"
+#include "Maps/ImportGPX.h"
+#include "Maps/ImportNGT.h"
+#include "Maps/ImportOSM.h"
+#include "Maps/MapDocument.h"
+#include "Maps/MapLayer.h"
+#include "Maps/ImageMapLayer.h"
+#include "Maps/MapFeature.h"
+#include "Maps/Relation.h"
+#include "Maps/Road.h"
+#include "Maps/FeatureManipulations.h"
+#include "Maps/TrackPoint.h"
 #include "PaintStyle/EditPaintStyle.h"
 #include "PaintStyle/PaintStyleEditor.h"
 #include "Sync/SyncOSM.h"
@@ -85,6 +85,7 @@
 #include <QLocale>
 #include <QMessageBox>
 #include <QStyleFactory>
+#include <QMenu>
 
 SlippyMapCache* SlippyMapWidget::theSlippyCache = 0;
 
@@ -142,10 +143,7 @@ MainWindow::MainWindow(void)
 	pbImages->setFormat(tr("tile %v / %m"));
 	//PaintTimeLabel->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
 	PaintTimeLabel->setMinimumWidth(23);
-#ifdef _MOBILE
-	ViewportStatusLabel->setVisible(false);
 	pbImages->setVisible(false);
-#endif
 
 	SlippyMapWidget::theSlippyCache = new SlippyMapCache;
 
@@ -249,13 +247,20 @@ MainWindow::MainWindow(void)
     theGPS->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 	addDockWidget(Qt::RightDockWidgetArea, theGPS);
 
+	mobileToolBar->setVisible(false);
+
 #else
 	theProperties->setVisible(false);
 	theInfo->setVisible(false);
 	theLayers->setVisible(false);
 	theDirty->setVisible(false);
-	toolBar->setVisible(false);
 	theGPS->setVisible(false);
+
+	toolBar->setVisible(false);
+	mobileToolBar->setVisible(true);
+
+	gpsPopupAction->setMenu(menuGps);
+	dynamic_cast<QToolButton*>(mobileToolBar->widgetForAction(gpsPopupAction))->setPopupMode(QToolButton::InstantPopup);
 
 #ifdef _WINCE
 	windowPropertiesAction->setText(tr("Properties..."));
@@ -279,10 +284,12 @@ MainWindow::MainWindow(void)
 	
 	on_fileNewAction_triggered();
 	MerkaartorPreferences::instance()->restoreMainWindowState( this );
+#ifndef _MOBILE
 	if (!M_PREFS->getProjectionsList().getProjections().size()) {
 		QMessageBox::critical(this, tr("Cannot load Projections file"), tr("\"Projections.xml\" could not be opened anywhere. Aborting."));
 		exit(1);
 	}
+#endif
 	M_PREFS->initialPosition(theView);
 
 
@@ -365,8 +372,10 @@ void MainWindow::adjustLayers(bool adjustViewport)
 {
 	if (adjustViewport) {
 		CoordBox theVp = theView->projection().viewport();
+#ifndef _MOBILE
 		if (theDocument->getImageLayer()->imageLayer())
 			theView->projection().setProjectionType(theDocument->getImageLayer()->imageLayer()->getMapAdapter()->projection());
+#endif
 		theView->projection().setViewport(theVp, theView->rect());
 	}
 	invalidateView(true);
@@ -657,7 +666,9 @@ static bool mayDiscardUnsavedChanges(QWidget* aWidget)
 bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & fileNames, QStringList * importedFileNames )
 {
 	createProgressDialog();
+#ifndef Q_OS_SYMBIAN
 	QApplication::setOverrideCursor(Qt::BusyCursor);
+#endif
 
 	bool foundImport = false;
 
@@ -674,7 +685,7 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 		bool importAborted = false;
 
 		if (fn.endsWith(".gpx")) {
-			QVector<TrackMapLayer*> theTracklayers;
+			QList<TrackMapLayer*> theTracklayers;
 			TrackMapLayer* newLayer = new TrackMapLayer( baseFileName + " - " + tr("Waypoints"), baseFileName);
 			mapDocument->add(newLayer);
 			theTracklayers.append(newLayer);
@@ -773,7 +784,9 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 			QMessageBox::warning(this, tr("No valid file"), tr("%1 could not be opened.").arg(fn));
 		}
 	}
+#ifndef Q_OS_SYMBIAN
 	QApplication::restoreOverrideCursor();
+#endif
 	SAFE_DELETE(theProgressDialog);
 
 	return foundImport;
@@ -796,8 +809,9 @@ void MainWindow::loadFiles(const QStringList & fileList)
 	
 	if (fileNames.isEmpty())
 		return;
-
+#ifndef Q_OS_SYMBIAN
 	QApplication::setOverrideCursor(Qt::BusyCursor);
+#endif
 	theLayers->setUpdatesEnabled(false);
 	view()->setUpdatesEnabled(false);
 
@@ -863,7 +877,9 @@ void MainWindow::loadFiles(const QStringList & fileList)
 
 	theLayers->setUpdatesEnabled(true);
 	view()->setUpdatesEnabled(true);
+#ifndef Q_OS_SYMBIAN
 	QApplication::restoreOverrideCursor();
+#endif
 }
 
 void MainWindow::on_fileOpenAction_triggered()
@@ -950,7 +966,7 @@ void MainWindow::on_helpAboutAction_triggered()
 	QDialog dlg(this);
 	Ui::AboutDialog About;
 	About.setupUi(&dlg);
-	About.Version->setText(About.Version->text().arg(VERSION).arg(REVISION));
+	About.Version->setText(About.Version->text().arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
 	About.QTVersion->setText(About.QTVersion->text().arg(qVersion()).arg(QT_VERSION_STR));
 	QFile ct(":/Utils/CHANGELOG");
 	ct.open(QIODevice::ReadOnly);
@@ -964,7 +980,7 @@ void MainWindow::on_helpAboutAction_triggered()
 
 void MainWindow::on_viewZoomAllAction_triggered()
 {
-	std::pair<bool, CoordBox> BBox(boundingBox(theDocument));
+	QPair<bool, CoordBox> BBox(boundingBox(theDocument));
 	if (BBox.first) {
 		BBox.second.resize(1.01);
 		theView->projection().setViewport(BBox.second, theView->rect());
@@ -1268,7 +1284,7 @@ void MainWindow::on_relationRemoveMemberAction_triggered()
 void MainWindow::on_createRelationAction_triggered()
 {
 	Relation* R = new Relation;
-	for (unsigned int i = 0; i < theProperties->size(); ++i)
+	for (int i = 0; i < theProperties->size(); ++i)
 		R->add("", theProperties->selection(i));
 	CommandList* theList = new CommandList(MainWindow::tr("Create Relation %1").arg(R->description()), R);
 	theList->add(
@@ -1280,9 +1296,9 @@ void MainWindow::on_createRelationAction_triggered()
 void MainWindow::on_editMapStyleAction_triggered()
 {
 	PaintStyleEditor* dlg = new PaintStyleEditor(this, M_STYLE->getGlobalPainter(), M_STYLE->getPainters());
-	connect(dlg, SIGNAL(stylesApplied(QVector<FeaturePainter>* )), this, SLOT(applyStyles(QVector<FeaturePainter>* )));
+	connect(dlg, SIGNAL(stylesApplied(QList<FeaturePainter>* )), this, SLOT(applyStyles(QList<FeaturePainter>* )));
 	GlobalPainter saveGlobalPainter = M_STYLE->getGlobalPainter();
-	QVector<FeaturePainter> savePainters = M_STYLE->getPainters();
+	QList<FeaturePainter> savePainters = M_STYLE->getPainters();
 	if (dlg->exec() == QDialog::Accepted) {
 		M_STYLE->setGlobalPainter(dlg->theGlobalPainter);
 		M_STYLE->setPainters(dlg->thePainters);
@@ -1297,7 +1313,7 @@ void MainWindow::on_editMapStyleAction_triggered()
 	delete dlg;
 }
 
-void MainWindow::applyStyles(QVector<FeaturePainter>* thePainters)
+void MainWindow::applyStyles(QList<FeaturePainter>* thePainters)
 {
 	M_STYLE->setPainters(*thePainters);
 	for (VisibleFeatureIterator i(theDocument); !i.isEnd(); ++i)
@@ -1508,7 +1524,9 @@ void MainWindow::on_fileSaveAction_triggered()
 
 void MainWindow::saveDocument()
 {
+#ifndef Q_OS_SYMBIAN
 	QApplication::setOverrideCursor(Qt::BusyCursor);
+#endif
 
 	QDomElement root;
 	QDomDocument* theXmlDoc;
@@ -1540,7 +1558,9 @@ void MainWindow::saveDocument()
 
 	setWindowTitle(QString("Merkaartor - %1").arg(fileName));
 
+#ifndef Q_OS_SYMBIAN
 	QApplication::restoreOverrideCursor();
+#endif
 
 }
 
@@ -1644,14 +1664,18 @@ void MainWindow::on_exportOSMBinAction_triggered()
 		tr("Export Binary OSM"), MerkaartorPreferences::instance()->getWorkingDir() + "/untitled.osb", tr("OSM Binary Files (*.osb)"));
 
 	if (fileName != "") {
+#ifndef Q_OS_SYMBIAN
 		QApplication::setOverrideCursor(Qt::BusyCursor);
+#endif
 
 		ImportExportOsmBin osb(document());
 		if (osb.saveFile(fileName)) {
 			osb.export_(theFeatures);
 		}
 
+#ifndef Q_OS_SYMBIAN
 		QApplication::restoreOverrideCursor();
+#endif
 	}
 }
 
@@ -1663,7 +1687,9 @@ void MainWindow::on_exportGPXAction_triggered()
 		tr("Export GPX"), MerkaartorPreferences::instance()->getWorkingDir() + "/untitled.gpx", tr("GPX Files (*.gpx)"));
 
 	if (fileName != "") {
+#ifndef Q_OS_SYMBIAN
 		QApplication::setOverrideCursor(Qt::BusyCursor);
+#endif
 
 		for (VisibleFeatureIterator i(document()); !i.isEnd(); ++i) {
 			if (dynamic_cast<TrackMapLayer*>(i.get()->layer())) {
@@ -1676,7 +1702,9 @@ void MainWindow::on_exportGPXAction_triggered()
 			gpx.export_(theFeatures);
 		}
 
+#ifndef Q_OS_SYMBIAN
 		QApplication::restoreOverrideCursor();
+#endif
 	}
 }
 
@@ -1690,14 +1718,18 @@ void MainWindow::on_exportKMLAction_triggered()
 		tr("Export KML"), MerkaartorPreferences::instance()->getWorkingDir() + "/untitled.kml", tr("KML Files (*.kml)"));
 
 	if (fileName != "") {
+#ifndef Q_OS_SYMBIAN
 		QApplication::setOverrideCursor(Qt::BusyCursor);
+#endif
 
 		ImportExportKML kml(document());
 		if (kml.saveFile(fileName)) {
 			kml.export_(theFeatures);
 		}
 
+#ifndef Q_OS_SYMBIAN
 		QApplication::restoreOverrideCursor();
+#endif
 	}
 }
 
@@ -1738,7 +1770,7 @@ bool MainWindow::selectExportedFeatures(QList<MapFeature*>& theFeatures)
 				} else
 					if (Road* G = dynamic_cast<Road*>(i.get())) {
 						if (aCoordBox.intersects(G->boundingBox())) {
-							for (unsigned int j=0; j < G->size(); j++) {
+							for (int j=0; j < G->size(); j++) {
 								if (TrackPoint* P = dynamic_cast<TrackPoint*>(G->get(j)))
 									if (!aCoordBox.contains(P->position()))
 										theFeatures.append(P);
@@ -1749,10 +1781,10 @@ bool MainWindow::selectExportedFeatures(QList<MapFeature*>& theFeatures)
 						//FIXME Not working for relation (not made of point?)
 						if (Relation* G = dynamic_cast<Relation*>(i.get())) {
 							if (aCoordBox.intersects(G->boundingBox())) {
-								for (unsigned int j=0; j < G->size(); j++) {
+								for (int j=0; j < G->size(); j++) {
 									if (Road* R = dynamic_cast<Road*>(G->get(j))) {
 										if (!aCoordBox.contains(R->boundingBox())) {
-											for (unsigned int k=0; k < R->size(); k++) {
+											for (int k=0; k < R->size(); k++) {
 												if (TrackPoint* P = dynamic_cast<TrackPoint*>(R->get(k)))
 													if (!aCoordBox.contains(P->position()))
 														theFeatures.append(P);
@@ -1792,7 +1824,7 @@ void MainWindow::on_editSelectAction_triggered()
 		QRegExp selValue(Sel->cbValue->currentText(), Qt::CaseInsensitive, QRegExp::RegExp);
 		int selMaxResult = Sel->sbMaxResult->value();
 
-		std::vector <MapFeature *> selection;
+		QList <MapFeature *> selection;
 		int added = 0;
 		for (VisibleFeatureIterator i(theDocument); !i.isEnd() && added < selMaxResult; ++i) {
 			MapFeature* F = i.get();
@@ -1800,7 +1832,7 @@ void MainWindow::on_editSelectAction_triggered()
 				continue;
 			}
 			int ok = false;
-			for (unsigned int j=0; j < F->tagSize(); j++) {
+			for (int j=0; j < F->tagSize(); j++) {
 				if ((selKey.indexIn(F->tagKey(j)) > -1) && (selValue.indexIn(F->tagValue(j)) > -1)) {
 					ok = true;
 					break;
@@ -1899,6 +1931,7 @@ void MainWindow::updateRecentImportMenu()
 
 void MainWindow::updateProjectionMenu()
 {
+#ifndef _MOBILE
 	QActionGroup* actgrp = new QActionGroup(this);
 	foreach (QString name, M_PREFS->getProjectionsList().getProjections().keys()) {
 		QAction* a = new QAction(name, mnuProjections);
@@ -1909,6 +1942,9 @@ void MainWindow::updateProjectionMenu()
 		mnuProjections->addAction(a);
 	}
 	connect (mnuProjections, SIGNAL(triggered(QAction *)), this, SLOT(projectionTriggered(QAction *)));
+#else
+	mnuProjections->setVisible(false);
+#endif
 }
 
 void MainWindow::updateStyleMenu()
@@ -2077,6 +2113,7 @@ void MainWindow::recentImportTriggered(QAction* anAction)
 	theDocument->history().setActions(editUndoAction, editRedoAction, fileUploadAction);
 }
 
+#ifndef _MOBILE
 void MainWindow::projectionTriggered(QAction* anAction)
 {
 	if(theView->projection().setProjectionType((ProjectionType)anAction->text()))
@@ -2086,6 +2123,7 @@ void MainWindow::projectionTriggered(QAction* anAction)
 	theView->projection().setViewport(theView->projection().viewport(), theView->rect());
 	invalidateView();
 }
+#endif
 
 void MainWindow::styleTriggered(QAction* anAction)
 {
@@ -2195,10 +2233,14 @@ void MainWindow::on_layersAddImageAction_triggered()
 
 void MainWindow::on_gpsConnectAction_triggered()
 {
+#ifndef Q_OS_SYMBIAN
 #ifdef USEGPSD
 	QGPSDDevice* aGps = new QGPSDDevice("gpsd");
 #else
 	QGPSComDevice* aGps = new QGPSComDevice(M_PREFS->getGpsPort());
+#endif
+#else
+	QGPSS60Device* aGps = new QGPSS60Device();
 #endif
 	if (aGps->openDevice()) {
 		connect(aGps, SIGNAL(updatePosition(float, float, QDateTime, float, float, float)), 
@@ -2405,10 +2447,10 @@ void MainWindow::updateLanguage()
     #ifdef TRANSDIR_MERKAARTOR
         if (!retM) {
 			// Next, try the TRANSDIR_MERKAARTOR, if defined
-            if (!QDir::isAbsolutePath(TRANSDIR_MERKAARTOR))
-                retM = merkaartorTranslator->load("merkaartor_" + DefaultLanguage, QCoreApplication::applicationDirPath() + "/" + TRANSDIR_MERKAARTOR);
+            if (!QDir::isAbsolutePath(STRINGIFY(TRANSDIR_MERKAARTOR)))
+                retM = merkaartorTranslator->load("merkaartor_" + DefaultLanguage, QCoreApplication::applicationDirPath() + "/" + STRINGIFY(TRANSDIR_MERKAARTOR));
             else
-                retM = merkaartorTranslator->load("merkaartor_" + DefaultLanguage, TRANSDIR_MERKAARTOR);
+                retM = merkaartorTranslator->load("merkaartor_" + DefaultLanguage, STRINGIFY(TRANSDIR_MERKAARTOR));
         }
     #endif
 

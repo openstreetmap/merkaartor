@@ -116,7 +116,7 @@ class BrowserImageManager : public QThread, public IImageManager
 		BrowserImageManager(const BrowserImageManager&);
 		BrowserImageManager& operator=(const BrowserImageManager&);
 		QPixmap emptyPixmap;
-		QVector<QString> prefetch;
+		QList<QString> prefetch;
 
 		QQueue<LoadingRequest> loadingRequests;
 		bool requestActive;

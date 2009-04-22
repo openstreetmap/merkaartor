@@ -18,7 +18,7 @@ class QWidget;
 #include <QtCore/QString>
 
 #include <utility>
-#include <vector>
+#include <QList>
 
 class DirtyList
 {
@@ -50,9 +50,9 @@ class DirtyListBuild : public DirtyList
 		virtual void resetUpdates();
 
 	protected:
-		std::vector<MapFeature*> Added, Deleted;
-		std::vector<MapFeature*> Updated;
-		mutable std::vector<std::pair<unsigned int, unsigned int> > UpdateCounter;
+		QList<MapFeature*> Added, Deleted;
+		QList<MapFeature*> Updated;
+		mutable QList<QPair<int, int> > UpdateCounter;
 };
 
 class DirtyListVisit : public DirtyList
@@ -83,9 +83,9 @@ class DirtyListVisit : public DirtyList
 		MapDocument* theDocument;
 		const DirtyListBuild& Future;
 		bool EraseFromHistory;
-		std::vector<MapFeature*> Updated;
-		std::vector<MapFeature*> AlreadyAdded;
-		std::vector<bool> EraseResponse;
+		QList<MapFeature*> Updated;
+		QList<MapFeature*> AlreadyAdded;
+		QList<bool> EraseResponse;
 		bool DeletePass;
 		QMap<TrackPoint*, bool> TrackPointsToDelete;
 		QMap<Road*, bool> RoadsToDelete;
@@ -108,14 +108,14 @@ class DirtyListDescriber : public DirtyListVisit
 		virtual bool eraseRelation(Relation* R);
 
 		bool showChanges(QWidget* Parent);
-		unsigned int tasks() const;
+		int tasks() const;
 
 	private:
 		Ui::SyncListDialog Ui;
 
 	protected:
 		QListWidget* theListWidget;
-		unsigned int Task;
+		int Task;
 };
 
 class DirtyListExecutor : public QObject, public DirtyListVisit
@@ -123,7 +123,7 @@ class DirtyListExecutor : public QObject, public DirtyListVisit
 	Q_OBJECT
 
 	public:
-		DirtyListExecutor(MapDocument* aDoc, const DirtyListBuild& aFuture, const QString& aWeb, const QString& aUser, const QString& aPwd, bool UseProxy, const QString& ProxyHost, int ProxyPort, unsigned int aTasks);
+		DirtyListExecutor(MapDocument* aDoc, const DirtyListBuild& aFuture, const QString& aWeb, const QString& aUser, const QString& aPwd, bool UseProxy, const QString& ProxyHost, int ProxyPort, int aTasks);
 		virtual ~DirtyListExecutor();
 
 		virtual bool start();
@@ -144,7 +144,7 @@ class DirtyListExecutor : public QObject, public DirtyListVisit
 		bool sendRequest(const QString& Method, const QString& URL, const QString& Out, QString& Rcv);
 
 		Ui::SyncListDialog Ui;
-		unsigned int Tasks, Done;
+		int Tasks, Done;
 		QProgressDialog* Progress;
 		QString Web,User,Pwd;
 		bool UseProxy;

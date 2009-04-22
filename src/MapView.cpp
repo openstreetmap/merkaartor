@@ -1,15 +1,15 @@
 #include "MapView.h"
 #include "MainWindow.h"
 #include "PropertiesDock.h"
-#include "Map/MapDocument.h"
-#include "Map/MapLayer.h"
-#include "Map/ImageMapLayer.h"
-#include "Map/MapFeature.h"
-#include "Map/Relation.h"
+#include "Maps/MapDocument.h"
+#include "Maps/MapLayer.h"
+#include "Maps/ImageMapLayer.h"
+#include "Maps/MapFeature.h"
+#include "Maps/Relation.h"
 #include "Interaction/Interaction.h"
 #include "Interaction/EditInteraction.h"
 #include "PaintStyle/EditPaintStyle.h"
-#include "Map/Projection.h"
+#include "Maps/Projection.h"
 #include "GPS/qgps.h"
 #include "GPS/qgpsdevice.h"
 
@@ -279,7 +279,7 @@ void MapView::drawGPS(QPainter & P)
 
 void MapView::sortRenderingPriorityInLayers()
 {
-	for (unsigned int i = 0; i < theDocument->layerSize(); ++i) {
+	for (int i = 0; i < theDocument->layerSize(); ++i) {
 		theDocument->getLayer(i)->
 			sortRenderingPriority(theProjection.pixelPerM());
 	}
@@ -320,14 +320,22 @@ void MapView::updateLayersImage()
 		const qreal ratio = qMax<const qreal>((qreal)width()/ps.width()*1.0, (qreal)height()/ps.height());
 		QPixmap pms;
 		if (ratio > 1.0) {
+#ifndef _MOBILE
 			pms = pm.scaled(ps, Qt::KeepAspectRatio, Qt::FastTransformation );
+#else
+			pms = pm.scaled(ps);
+#endif
 		} else {
 			const QSizeF drawingSize = pm.size() * ratio;
 			const QSizeF originSize = pm.size()/2 - drawingSize/2;
 			const QPointF drawingOrigin = QPointF(originSize.width(), originSize.height());
 			const QRect drawingRect = QRect(drawingOrigin.toPoint(), drawingSize.toSize());
 
+#ifndef _MOBILE
 			pms = pm.copy(drawingRect).scaled(ps*ratio, Qt::KeepAspectRatio, Qt::FastTransformation );
+#else
+			pms = pm.copy(drawingRect).scaled(ps*ratio);
+#endif
 		}
 
 		P.drawPixmap((width()-pms.width())/2, (height()-pms.height())/2, pms);
@@ -350,7 +358,7 @@ void MapView::buildFeatureSet(QRegion invalidRegion, Projection& aProj)
 	theFeatures.clear();
 	theCoastlines.clear();
 
-	for (unsigned int i=0; i<theDocument->layerSize(); ++i) {
+	for (int i=0; i<theDocument->layerSize(); ++i) {
 		theDocument->getLayer(i)->invalidate(theDocument, aProj.viewport());
 		Main->properties()->adjustSelection();
 	}
@@ -569,14 +577,14 @@ void MapView::drawBackground(QPainter & theP, Projection& aProj)
 //	QPoint firstPoint = aP;
 //	if (smoothed().size())
 //	{
-//		for (unsigned int i=3; i<smoothed().size(); i+=3)
+//		for (int i=3; i<smoothed().size(); i+=3)
 //			p->thePath.cubicTo(
 //				theProjection.project(smoothed()[i-2]),
 //				theProjection.project(smoothed()[i-1]),
 //				theProjection.project(smoothed()[i]));
 //	}
 //	else
-//		for (unsigned int j=1; j<size(); ++j) {
+//		for (int j=1; j<size(); ++j) {
 //			aP = theProjection.project(p->Nodes[j]);
 //			if (M_PREFS->getDrawingHack()) {
 //				QLine l(lastPoint, aP);
@@ -688,7 +696,7 @@ void MapView::drawFeatures(QPainter & P, Projection& aProj)
 {
 	M_STYLE->initialize(P, aProj);
 
-	for (unsigned int i = 0; i < M_STYLE->size(); ++i)
+	for (int i = 0; i < M_STYLE->size(); ++i)
 	{
 		PaintStyleLayer *Current = M_STYLE->get(i);
 
@@ -890,13 +898,17 @@ void MapView::launch(Interaction* anInteraction)
 	theInteraction = anInteraction;
 	EI = dynamic_cast<EditInteraction*>(theInteraction);
 	if (theInteraction) {
+#ifndef Q_OS_SYMBIAN
 		setCursor(theInteraction->cursor());
+#endif
 		emit interactionChanged(anInteraction);
 		if (EI)
 			EI->setSnap(theSnapList);
 	}
 	else {
+#ifndef Q_OS_SYMBIAN
 		setCursor(QCursor(Qt::ArrowCursor));
+#endif
 		launch(new EditInteraction(this));
 		//Q_ASSERT(theInteraction);
 	}

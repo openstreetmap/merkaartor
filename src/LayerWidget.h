@@ -1,8 +1,8 @@
 #ifndef MERKATOR_LAYERWIDGET_H_
 #define MERKATOR_LAYERWIDGET_H_
 
-#include "Map/MapLayer.h"
-#include "Map/ImageMapLayer.h"
+#include "Maps/MapLayer.h"
+#include "Maps/ImageMapLayer.h"
 
 #include <QActionGroup>
 #include <QAbstractButton>

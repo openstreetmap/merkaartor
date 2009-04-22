@@ -2,9 +2,9 @@
 #include "Command/DocumentCommands.h"
 #include "Command/RoadCommands.h"
 #include "Command/TrackPointCommands.h"
-#include "Map/Painting.h"
-#include "Map/Road.h"
-#include "Map/TrackPoint.h"
+#include "Maps/Painting.h"
+#include "Maps/Road.h"
+#include "Maps/TrackPoint.h"
 #include "Utils/LineF.h"
 #include "PropertiesDock.h"
 #include "Preferences/MerkaartorPreferences.h"
@@ -34,11 +34,11 @@ CreateRoundaboutInteraction::~CreateRoundaboutInteraction()
 	view()->update();
 }
 
-void CreateRoundaboutInteraction::testIntersections(CommandList* L, Road* Left, unsigned int FromIdx, Road* Right, unsigned int RightIndex)
+void CreateRoundaboutInteraction::testIntersections(CommandList* L, Road* Left, int FromIdx, Road* Right, int RightIndex)
 {
 	LineF L1(view()->projection().project(Right->getNode(RightIndex-1)),
 		view()->projection().project(Right->getNode(RightIndex)));
-	for (unsigned int i=FromIdx; i<Left->size(); ++i)
+	for (int i=FromIdx; i<Left->size(); ++i)
 	{
 		LineF L2(view()->projection().project(Left->getNode(i-1)),
 			view()->projection().project(Left->getNode(i)));
@@ -102,11 +102,11 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
 			{
 				Road* W1 = dynamic_cast<Road*>(it.get());
 				if (W1 && (W1 != R))
-					for (unsigned int i=1; i<W1->size(); ++i)
+					for (int i=1; i<W1->size(); ++i)
 					{
-						unsigned int Before = W1->size();
+						int Before = W1->size();
 						testIntersections(L,R,1,W1,i);
-						unsigned int After = W1->size();
+						int After = W1->size();
 						i += (After-Before);
 					}
 			}
@@ -156,7 +156,9 @@ void CreateRoundaboutInteraction::paintEvent(QPaintEvent* , QPainter& thePainter
 	}
 }
 
+#ifndef Q_OS_SYMBIAN
 QCursor CreateRoundaboutInteraction::cursor() const
 {
 	return QCursor(Qt::CrossCursor);
 }
+#endif

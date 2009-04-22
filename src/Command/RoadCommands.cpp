@@ -1,8 +1,8 @@
 #include "RoadCommands.h"
 
-#include "Map/Road.h"
-#include "Map/TrackPoint.h"
-#include "Map/MapLayer.h"
+#include "Maps/Road.h"
+#include "Maps/TrackPoint.h"
+#include "Maps/MapLayer.h"
 #include "Sync/DirtyList.h"
 
 RoadAddTrackPointCommand::RoadAddTrackPointCommand(Road* R)
@@ -16,7 +16,7 @@ RoadAddTrackPointCommand::RoadAddTrackPointCommand(Road* R, TrackPoint* W, MapLa
 	redo();
 }
 
-RoadAddTrackPointCommand::RoadAddTrackPointCommand(Road* R, TrackPoint* W, unsigned int aPos, MapLayer* aLayer)
+RoadAddTrackPointCommand::RoadAddTrackPointCommand(Road* R, TrackPoint* W, int aPos, MapLayer* aLayer)
 : Command(R), theLayer(aLayer), oldLayer(0), theRoad(R), theTrackPoint(W), Position(aPos)
 {
 	redo();
@@ -120,7 +120,7 @@ RoadRemoveTrackPointCommand::RoadRemoveTrackPointCommand(Road* R, TrackPoint* W,
 	redo();
 }
 
-RoadRemoveTrackPointCommand::RoadRemoveTrackPointCommand(Road* R, unsigned int anIdx, MapLayer* aLayer)
+RoadRemoveTrackPointCommand::RoadRemoveTrackPointCommand(Road* R, int anIdx, MapLayer* aLayer)
 : Command(R), theLayer(aLayer), oldLayer(0), Idx(anIdx), theRoad(R), theTrackPoint(R->getNode(anIdx))
 {
 	redo();

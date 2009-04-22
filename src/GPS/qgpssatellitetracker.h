@@ -22,6 +22,7 @@
 #define QGPSSATELLITETRACKER_H
 
 #include <QWidget>
+#include <QVector>
 
 #include "SatelliteStrengthView.h"
 
@@ -35,13 +36,13 @@ class QGPSSatelliteTracker : public QWidget
     
         void paintEvent(QPaintEvent *);
 
-	void setSatellites(const std::vector<Satellite>& aList);
+	void setSatellites(const QList<Satellite>& aList);
 	void setHeading(int x);
         
     private:
         void getCoordsFromPos(int rad, int elevation, int azimuth, int &x, int &y);
         
-	std::vector<Satellite> List;
+        QList<Satellite> List;
 	int Heading;
 };
 

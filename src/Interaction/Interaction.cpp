@@ -1,9 +1,9 @@
 #include "Interaction.h"
 
 #include "MapView.h"
-#include "Map/MapDocument.h"
-#include "Map/Projection.h"
-#include "Map/TrackPoint.h"
+#include "Maps/MapDocument.h"
+#include "Maps/Projection.h"
+#include "Maps/TrackPoint.h"
 
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
@@ -140,7 +140,9 @@ void Interaction::paintEvent(QPaintEvent*, QPainter& thePainter)
 	}
 }
 
+#ifndef Q_OS_SYMBIAN
 QCursor Interaction::cursor() const
 {
 	return QCursor(Qt::ArrowCursor);
 }
+#endif

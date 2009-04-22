@@ -1,4 +1,7 @@
 v0.14
+    * FIX : API 0.6 fixes
+    * FIX : Nodes fetched by relations are incomplete and not completed by "download more" (fixes #1715)
+	* ADD : Initial support for Symbian S60v5
     * ADD : Support for discardable dialogs/messageboxes (fixes #1487)
     * FIX : Do not automerge GPX nodes (fixes #1486)
     * FIX : Proper clipping via Boost's geometry template library
