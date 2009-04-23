@@ -148,8 +148,10 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 				TrackPoint* B2 = new TrackPoint(view()->projection().inverse(
 					FB2.project(LastCursor)));
 
-				B1->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
-				B2->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+				if (M_PREFS->apiVersionNum() < 0.6) {
+					B1->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+					B2->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+				}
 				L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),B1,true));
 				L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),B2,true));
 				L->add(new RoadAddTrackPointCommand(R1,B1));
@@ -190,10 +192,12 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 				R2 = new Road;
 
 				CommandList* L  = new CommandList(MainWindow::tr("Create double-way Road %1").arg(R1->id()), R1);
-				A1->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
-				A2->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
-				B1->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
-				B2->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+					if (M_PREFS->apiVersionNum() < 0.6) {
+					A1->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+					A2->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+					B1->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+					B2->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+					}
 				L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),A1,true));
 				L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),A2,true));
 				L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),B1,true));
@@ -202,9 +206,11 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 				L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),R1,true));
 				L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),R2,true));
 				R1->setTag("oneway","yes");
-				R1->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 				R2->setTag("oneway","yes");
-				R2->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+				if (M_PREFS->apiVersionNum() < 0.6) {
+					R1->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+					R2->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+				}
 				L->add(new RoadAddTrackPointCommand(R1,A1));
 				L->add(new RoadAddTrackPointCommand(R1,B1));
 				L->add(new RoadAddTrackPointCommand(R2,B2));

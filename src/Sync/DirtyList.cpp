@@ -16,8 +16,12 @@
 #include <QtGui/QProgressDialog>
 #include <QtNetwork/QHttp>
 #include <QtNetwork/QTcpSocket>
+#include <QInputDialog>
 
 #include <algorithm>
+
+int glbAdded, glbUpdated, glbDeleted;
+QString glbChangeSetComment;
 
 static QString stripToOSMId(const QString& id)
 {
@@ -262,6 +266,7 @@ bool DirtyListVisit::noop(MapFeature* F)
 DirtyListDescriber::DirtyListDescriber(MapDocument* aDoc, const DirtyListBuild& aFuture)
 : DirtyListVisit(aDoc, aFuture, false), Task(0)
 {
+	glbAdded = glbUpdated = glbDeleted = 0;
 }
 
 int DirtyListDescriber::tasks() const
@@ -277,8 +282,32 @@ bool DirtyListDescriber::showChanges(QWidget* aParent)
 
 	runVisit();
 
+	if (M_PREFS->apiVersionNum() < 0.6) {
+		Ui.lblChangesetComment->setVisible(false);
+		Ui.edChangesetComment->setVisible(false);
+	} else {
+		CoordBox bbox = MapLayer::boundingBox(theDocument->getDirtyOrOriginLayer());
+		QString bboxComment = QString("BBOX:%1,%2,%3,%4")
+			.arg(QString::number(intToAng(bbox.bottomLeft().lon()), 'f', 2))
+			.arg(QString::number(intToAng(bbox.bottomLeft().lat()), 'f', 2))
+			.arg(QString::number(intToAng(bbox.topRight().lon()), 'f', 2))
+			.arg(QString::number(intToAng(bbox.topRight().lat()), 'f', 2));
+
+		QString statComment = QString("ADD:%1 UPD:%2 DEL:%3").arg(glbAdded).arg(glbUpdated).arg(glbDeleted);
+
+		glbChangeSetComment = bboxComment + " " + statComment;
+		Ui.edChangesetComment->setText(glbChangeSetComment);
+	}
+
 	bool ok = (dlg->exec() == QDialog::Accepted);
 
+	if (M_PREFS->apiVersionNum() > 0.5) {
+		if (!Ui.edChangesetComment->text().isEmpty())
+			glbChangeSetComment = Ui.edChangesetComment->text();
+		else
+			glbChangeSetComment = "-";
+	}
+	
 	Task = Ui.ChangesList->count();
 	SAFE_DELETE(dlg);
 	return ok;
@@ -289,6 +318,7 @@ bool DirtyListDescriber::addRoad(Road* R)
 {
 	QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","ADD road %1").arg(R->id()) + userName(R), theListWidget);
 	it->setData(Qt::UserRole, R->id());
+	++glbAdded;
 	return false;
 }
 
@@ -296,6 +326,7 @@ bool DirtyListDescriber::addPoint(TrackPoint* Pt)
 {
 	QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","ADD trackpoint %1").arg(Pt->id()) + userName(Pt), theListWidget);
 	it->setData(Qt::UserRole, Pt->id());
+	++glbAdded;
 	return false;
 }
 
@@ -303,6 +334,7 @@ bool DirtyListDescriber::addRelation(Relation* R)
 {
 	QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","ADD relation %1").arg(R->id()) + userName(R), theListWidget);
 	it->setData(Qt::UserRole, R->id());
+	++glbAdded;
 	return false;
 }
 
@@ -310,6 +342,7 @@ bool DirtyListDescriber::updatePoint(TrackPoint* Pt)
 {
 	QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","UPDATE trackpoint %1").arg(Pt->id()) + userName(Pt), theListWidget);
 	it->setData(Qt::UserRole, Pt->id());
+	++glbUpdated;
 	return false;
 }
 
@@ -317,6 +350,7 @@ bool DirtyListDescriber::updateRelation(Relation* R)
 {
 	QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","UPDATE relation %1").arg(R->id()) + userName(R), theListWidget);
 	it->setData(Qt::UserRole, R->id());
+	++glbUpdated;
 	return false;
 }
 
@@ -324,6 +358,7 @@ bool DirtyListDescriber::updateRoad(Road* R)
 {
 	QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","UPDATE road %1").arg(R->id()) + userName(R), theListWidget);
 	it->setData(Qt::UserRole, R->id());
+	++glbUpdated;
 	return false;
 }
 
@@ -331,6 +366,7 @@ bool DirtyListDescriber::erasePoint(TrackPoint* Pt)
 {
 	QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","REMOVE trackpoint %1").arg(Pt->id()) + userName(Pt), theListWidget);
 	it->setData(Qt::UserRole, Pt->id());
+	++glbDeleted;
 	return false;
 }
 
@@ -338,6 +374,7 @@ bool DirtyListDescriber::eraseRoad(Road* R)
 {
 	QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","REMOVE road %1").arg(R->id()) + userName(R), theListWidget);
 	it->setData(Qt::UserRole, R->id());
+	++glbDeleted;
 	return false;
 }
 
@@ -345,6 +382,7 @@ bool DirtyListDescriber::eraseRelation(Relation* R)
 {
 	QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","REMOVE relation %1").arg(R->id()) + userName(R), theListWidget);
 	it->setData(Qt::UserRole, R->id());
+	++glbDeleted;
 	return false;
 }
 
@@ -432,6 +470,7 @@ bool DirtyListExecutor::start()
 	ChangeSetId = "";
 	Progress->setValue(++Done);
 	if (!(M_PREFS->apiVersionNum() > 0.5)) return true;
+
 	Progress->setLabelText(tr("OPEN changeset"));
 	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
 
@@ -439,10 +478,10 @@ bool DirtyListExecutor::start()
 		"<osm>"
 		"<changeset>"
 		"<tag k=\"created_by\" v=\"Merkaartor %1\"/>"
-		"<tag k=\"comment\" v=\"-\"/>"
+		"<tag k=\"comment\" v=\"%2\"/>"
 		"</changeset>"
 		"</osm>");
-	DataIn = DataIn.arg(VERSION);
+	DataIn = DataIn.arg(VERSION).arg(glbChangeSetComment);
 	QString DataOut;
 	QString URL = theDownloader->getURLToOpenChangeSet();
 	if (sendRequest("PUT",URL,DataIn, DataOut))

@@ -1,4 +1,6 @@
 v0.14
+    * FIX : API 0.6: Do not add "created_by" to changed features (fixes #1728)
+    * FIX : API 0.6: Allow to define a comment on a changeset (fixes #1731)
     * FIX : API 0.6 fixes
     * FIX : Nodes fetched by relations are incomplete and not completed by "download more" (fixes #1715)
 	* ADD : Initial support for Symbian S60v5

@@ -179,6 +179,9 @@ QByteArray gzipDecode(const QByteArray& In)
 bool Downloader::go(const QString& url)
 {
 	if (Error) return false;
+
+	qDebug() << url;
+
 	if (AnimationTimer)
 		AnimationTimer->start(200);
 	Content.clear();

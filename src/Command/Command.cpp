@@ -88,7 +88,7 @@ int Command::getDirtyLevel()
 
 void Command::undo()
 {
-	if (mainFeature) {
+	if (mainFeature && M_PREFS->apiVersionNum() < 0.6) {
 		mainFeature->setUploaded(wasUploaded);
 		if (oldCreated != TAG_UNDEF_VALUE)
 			mainFeature->setTag("created_by", oldCreated);
@@ -100,7 +100,7 @@ void Command::undo()
 
 void Command::redo()
 {
-	if (mainFeature) {
+	if (mainFeature && M_PREFS->apiVersionNum() < 0.6) {
 		oldCreated = mainFeature->tagValue("created_by", TAG_UNDEF_VALUE);
 		mainFeature->setTag("created_by",QString("Merkaartor %1").arg(VERSION));
 		wasUploaded = mainFeature->isUploaded();
