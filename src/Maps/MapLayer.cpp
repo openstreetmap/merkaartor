@@ -414,7 +414,7 @@ QString MapLayer::toMainHtml()
 	"<small><i>" + QString(metaObject()->className()) + "</i></small><br/>"
 	+ desc;
 	S += "<hr/>";
-	S += "<i>"+QApplication::translate("MapLayer", "Size")+": </i>" + QApplication::translate("MapLayer", "%1 features").arg(QLocale().toString(size()))+"<br/>";
+        S += "<i>"+QApplication::translate("MapLayer", "Size")+": </i>" + QApplication::translate("MapLayer", "%n features", "", QCoreApplication::CodecForTr, size())+"<br/>";
 	S += "%1";
 	S += "</body></html>";
 
