@@ -27,11 +27,6 @@ public:
 	MapDocumentPrivate()
 	: History(new CommandHistory()), imageLayer(0), dirtyLayer(0), uploadedLayer(0)/*, trashLayer(0)*/, theDock(0), lastDownloadLayer(0)
 	{
-		if (M_PREFS->apiVersionNum() < 0.6) {
-    		tagList.insert("created_by", QString("Merkaartor %1").arg(VERSION));
- 			tagKeys.append("created_by");
- 			tagValues.append(QString("Merkaartor %1").arg(VERSION));
-		}
 	};
 	~MapDocumentPrivate()
 	{
