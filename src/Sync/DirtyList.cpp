@@ -633,8 +633,6 @@ bool DirtyListExecutor::updateRoad(Road* R)
 
 	Progress->setLabelText(tr("UPDATE road %1").arg(R->id()) + userName(R));
 	QEventLoop L; L.processEvents(QEventLoop::ExcludeUserInputEvents);
-//	QString URL("/api/0.3/way/%1");
-//	URL = URL.arg(stripToOSMId(R->id()));
 	QString URL = theDownloader->getURLToUpdate("way",stripToOSMId(R->id()));
 	QString DataIn, DataOut;
 	DataIn = wrapOSM(exportOSM(*R, ChangeSetId), ChangeSetId);

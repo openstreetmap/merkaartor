@@ -1,4 +1,5 @@
 v0.14
+	* FIX : API 0.6: Error when deleting a road with no nodes (fixes #1732)
     * FIX : Correctly handle plural forms in MapLayer information
     * FIX : API 0.6: Do not add "created_by" to changed features (fixes #1728)
     * FIX : API 0.6: Allow to define a comment on a changeset (fixes #1731)

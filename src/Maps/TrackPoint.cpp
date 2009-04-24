@@ -235,6 +235,7 @@ bool TrackPoint::toXML(QDomElement xParent, QProgressDialog & progress)
 	e.setAttribute("timestamp", time().toString(Qt::ISODate)+"Z");
 	e.setAttribute("user", user());
 	e.setAttribute("actor", (int)lastUpdated());
+	e.setAttribute("versionr", versionNumber());
 	if (isDeleted())
 		e.setAttribute("deleted","true");
 
@@ -306,6 +307,7 @@ TrackPoint * TrackPoint::fromXML(MapDocument* d, MapLayer* L, const QDomElement 
 	QDateTime time;
 	time = QDateTime::fromString(e.attribute("timestamp").left(19), Qt::ISODate);
 	QString user = e.attribute("user");
+	int Version = e.attribute("version").toInt();
 	MapFeature::ActorType A = (MapFeature::ActorType)(e.attribute("actor", "2").toInt());
 
 	QString id = (e.hasAttribute("id") ? e.attribute("id") : e.attribute("xml:id"));
@@ -329,6 +331,7 @@ TrackPoint * TrackPoint::fromXML(MapDocument* d, MapLayer* L, const QDomElement 
 	Pt->setDeleted(Deleted);
 	Pt->setTime(time);
 	Pt->setUser(user);
+	Pt->setVersionNumber(Version);
 
 	MapFeature::tagsFromXML(d, Pt, e);
 

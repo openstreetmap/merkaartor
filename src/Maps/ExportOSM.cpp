@@ -68,17 +68,17 @@ QString exportOSM(const TrackPoint& Pt, const QString& ChangesetId)
 
 QString exportOSM(const Road& R, const QString& ChangesetId)
 {
-	if (!R.size()) return "";
-
 	QString S;
 	if (ChangesetId.isEmpty())
 		S += QString("<way id=\"%1\"%2>").arg(stripToOSMId(R.id())).arg(versionAttribute(R));
 	else
 		S += QString("<way id=\"%1\"%2 changeset=\"%3\">").arg(stripToOSMId(R.id())).arg(versionAttribute(R)).arg(ChangesetId);
-	S+=QString("<nd ref=\"%1\"/>").arg(stripToOSMId(R.get(0)->id()));
-	for (int i=1; i<R.size(); ++i)
-		if (R.get(i)->id() != R.get(i-1)->id())
-			S+=QString("<nd ref=\"%1\"/>").arg(stripToOSMId(R.get(i)->id()));
+	if (R.size()) {
+		S+=QString("<nd ref=\"%1\"/>").arg(stripToOSMId(R.get(0)->id()));
+		for (int i=1; i<R.size(); ++i)
+			if (R.get(i)->id() != R.get(i-1)->id())
+				S+=QString("<nd ref=\"%1\"/>").arg(stripToOSMId(R.get(i)->id()));
+	}
 	S += tagOSM(R);
 	S += "</way>";
 	return S;

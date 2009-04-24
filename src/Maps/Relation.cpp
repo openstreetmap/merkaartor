@@ -434,6 +434,7 @@ bool Relation::toXML(QDomElement xParent, QProgressDialog & progress)
 	e.setAttribute("id", xmlId());
 	e.setAttribute("timestamp", time().toString(Qt::ISODate)+"Z");
 	e.setAttribute("user", user());
+	e.setAttribute("version", versionNumber());
 	if (isDeleted())
 		e.setAttribute("deleted","true");
 
@@ -466,6 +467,7 @@ Relation * Relation::fromXML(MapDocument * d, MapLayer * L, const QDomElement e)
 	QDateTime time = QDateTime::fromString(e.attribute("timestamp").left(19), Qt::ISODate);
 	QString user = e.attribute("user");
 	bool Deleted = (e.attribute("deleted") == "true");
+	int Version = e.attribute("version").toInt();
 
 	Relation* R = dynamic_cast<Relation*>(d->getFeature(id));
 	if (!R) {
@@ -478,6 +480,7 @@ Relation * Relation::fromXML(MapDocument * d, MapLayer * L, const QDomElement e)
 	R->setTime(time);
 	R->setUser(user);
 	R->setDeleted(Deleted);
+	R->setVersionNumber(Version);
 
 	QDomElement c = e.firstChildElement();
 	while(!c.isNull()) {

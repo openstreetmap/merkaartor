@@ -197,6 +197,7 @@ bool RelationRemoveFeatureCommand::toXML(QDomElement& xParent) const
 	e.setAttribute("feature", theMapFeature->xmlId());
 	e.setAttribute("featureclass", theMapFeature->getClass());
 	e.setAttribute("index", QString::number(Idx));
+	e.setAttribute("role", Role);
 	if (theLayer)
 		e.setAttribute("layer", theLayer->id());
 	if (oldLayer)
@@ -233,7 +234,7 @@ RelationRemoveFeatureCommand * RelationRemoveFeatureCommand::fromXML(MapDocument
 	}
 	a->theMapFeature = F;
 	a->Idx = e.attribute("index").toInt();
-	a->Role = a->theRelation->getRole(a->Idx);
+	a->Role = e.attribute("role");
 
 	Command::fromXML(d, e, a);
 
