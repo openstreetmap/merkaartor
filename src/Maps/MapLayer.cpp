@@ -475,7 +475,7 @@ bool DrawingMapLayer::toXML(QDomElement& xParent, QProgressDialog & progress)
 		S += QString().number(intToAng(layBB.topRight().lat()),'f',6) + ",";
 		S += QString().number(intToAng(layBB.topRight().lon()),'f',6);
 		bb.setAttribute("box", S);
-		bb.setAttribute("origin", "http://www.openstreetmap.org/api/0.5");
+		bb.setAttribute("origin", QString("http://www.openstreetmap.org/api/%1").arg(M_PREFS->apiVersion()));
 	}
 
 	QList<MapFeaturePtr>::iterator it;

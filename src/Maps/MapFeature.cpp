@@ -705,13 +705,13 @@ QString MapFeature::toMainHtml(QString type, QString systemtype)
 	int f = id().lastIndexOf("_");
 	if (f>0) {
 		S += "<hr/>"
-		"<a href='/api/0.5/" + systemtype + "/" + xmlId() + "/history'>"+QApplication::translate("MapFeature", "History")+"</a>";
+		"<a href='/api/" + M_PREFS->apiVersion() + "/" + systemtype + "/" + xmlId() + "/history'>"+QApplication::translate("MapFeature", "History")+"</a>";
 		if (systemtype == "node") {
 			S += "<br/>"
-			"<a href='/api/0.5/" + systemtype + "/" + xmlId() + "/ways'>"+QApplication::translate("MapFeature", "Referenced by ways")+"</a>";
+			"<a href='/api/" + M_PREFS->apiVersion() + "/" + systemtype + "/" + xmlId() + "/ways'>"+QApplication::translate("MapFeature", "Referenced by ways")+"</a>";
 		}
 		S += "<br/>"
-		"<a href='/api/0.5/" + systemtype + "/" + xmlId() + "/relations'>"+QApplication::translate("MapFeature", "Referenced by relation")+"</a>";
+		"<a href='/api/" + M_PREFS->apiVersion() + "/" + systemtype + "/" + xmlId() + "/relations'>"+QApplication::translate("MapFeature", "Referenced by relation")+"</a>";
 	}
 	S += "</body></html>";
 

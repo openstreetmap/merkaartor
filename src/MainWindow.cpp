@@ -1442,12 +1442,16 @@ void MainWindow::on_toolsShortcutsAction_triggered()
 	theActions.append(toolsPreferencesAction);
 	theActions.append(toolsShortcutsAction);
 	theActions.append(toolsWorldOsbAction);
+	
+	theActions.append(windowHideAllAction);
 	theActions.append(windowPropertiesAction);
 	theActions.append(windowLayersAction);
 	theActions.append(windowInfoAction);
 	theActions.append(windowDirtyAction);
 	theActions.append(windowGPSAction);
 	theActions.append(windowGeoimageAction);
+	theActions.append(windowStylesAction);
+	
 	theActions.append(helpAboutAction);
 
 	ActionsDialog dlg(theActions, this);
