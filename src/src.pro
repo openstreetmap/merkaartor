@@ -12,6 +12,7 @@
 # GPSD                - use gpsd as location provider
 # NVIDIA_HACK         - used to solve nvidia specific slowdown
 # FORCE_CUSTOM_STYLE  - force custom style (recommended on Linux until the "expanding dock" is solved upstream)
+# THREADED_BROWSERIMAGEMANAGER
 
 #Static config
 include (Config.pri)
@@ -86,6 +87,7 @@ DEPENDPATH += $$PWD Render qextserialport GPS NameFinder
     	SOURCES += QMapControl/browserimagemanager.cpp
     	HEADERS += QMapControl/browserimagemanager.h
     	QT += webkit
+        contains(THREADED_BROWSERIMAGEMANAGER,1): DEFINES += BROWSERIMAGEMANAGER_IS_THREADED
 	}
 }
 

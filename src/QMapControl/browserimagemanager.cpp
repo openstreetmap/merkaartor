@@ -92,6 +92,7 @@ void BrowserWebPage::javaScriptAlert ( QWebFrame * frame, const QString & msg )
 BrowserImageManager* BrowserImageManager::m_BrowserImageManagerInstance = 0;
 QMutex mutex;
 
+#ifdef BROWSERIMAGEMANAGER_IS_THREADED
 BrowserImageManager::BrowserImageManager(QObject* parent)
 	:QThread(parent), emptyPixmap(QPixmap(1,1)), requestActive(false), page(0)
 {
@@ -102,6 +103,24 @@ BrowserImageManager::BrowserImageManager(QObject* parent)
 		QPixmapCache::setCacheLimit(20000);	// in kb
 	}
 }
+#else
+BrowserImageManager::BrowserImageManager(QObject* parent)
+    :emptyPixmap(QPixmap(1,1)), page(0)
+{   
+    emptyPixmap.fill(Qt::transparent);
+    
+    if (QPixmapCache::cacheLimit() <= 20000)
+    {   
+        QPixmapCache::setCacheLimit(20000); // in kb
+    }
+    
+    page = new BrowserWebPage();
+    page->setViewportSize(QSize(1024, 1024));
+
+    connect(page, SIGNAL(loadFinished(bool)), this, SLOT(pageLoadFinished(bool)));
+}
+#endif // BROWSERIMAGEMANAGER_IS_THREADED
+
 
 BrowserImageManager::~BrowserImageManager()
 {
@@ -143,6 +162,11 @@ QPixmap BrowserImageManager::getImage(IMapAdapter* anAdapter, int x, int y, int 
 
 	loadingRequests.enqueue(LR);
 	emit(imageRequested());
+
+#ifndef BROWSERIMAGEMANAGER_IS_THREADED
+	if (loadingRequests.size() <= MAX_REQ)
+		launchRequest();
+#endif
 
 	return pm;
 }
@@ -187,10 +211,14 @@ void BrowserImageManager::pageLoadFinished(bool ok)
 		receivedImage(pt, R.hash);
 	}
 
+	mutex.unlock();
+
 	if (loadingRequests.isEmpty())
 		loadingQueueEmpty();
-
-	mutex.unlock();
+#ifndef BROWSERIMAGEMANAGER_IS_THREADED
+	else
+		launchRequest();
+#endif
 }
 
 void BrowserImageManager::slotLoadProgress(int p)
@@ -263,8 +291,10 @@ void BrowserImageManager::setProxy(QString host, int port)
 		proxy.setHostName(host);
 		proxy.setPort(port);
 	}
+	page->networkAccessManager()->setProxy(proxy);
 }
 
+#ifdef BROWSERIMAGEMANAGER_IS_THREADED
 void BrowserImageManager::run()
 {
 	page = new BrowserWebPage();
@@ -298,3 +328,4 @@ void BrowserImageManager::checkRequests()
 	
 	mutex.unlock();
 }
+#endif // BROWSERIMAGEMANAGER_IS_THREADED

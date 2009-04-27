@@ -266,7 +266,7 @@ static bool downloadToResolve(const QList<MapFeature*>& Resolution, QWidget* aPa
 	for (int i=0; i<Resolution.size(); i++ )
 	{
 		QString URL = theDownloader->getURLToFetchFull(Resolution[i]);
-		Lbl->setText(QApplication::translate("Downloader","Downloading unresolved %1 of %2").arg(i).arg(Resolution.size()));
+		Lbl->setText(QApplication::translate("Downloader","Downloading unresolved %1 of %2").arg(i+1).arg(Resolution.size()));
 		if (theDownloader->go(URL))
 		{
 			if (theDownloader->resultCode() == 410) {
@@ -275,7 +275,7 @@ static bool downloadToResolve(const QList<MapFeature*>& Resolution, QWidget* aPa
 			}
 			else
 			{
-				Lbl->setText(QApplication::translate("Downloader","Parsing unresolved %1 of %2").arg(i).arg(Resolution.size()));
+				Lbl->setText(QApplication::translate("Downloader","Parsing unresolved %1 of %2").arg(i+1).arg(Resolution.size()));
 
 				QByteArray ba(theDownloader->content());
 				QBuffer  File(&ba);

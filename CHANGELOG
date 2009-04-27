@@ -1,4 +1,6 @@
 v0.14
+	* FIX : Graphical corruption on Intel chipsets when "Show downloaded areas" was enabled
+	* FIX : API 0.6: Add features version number in MDC'es
 	* FIX : API 0.6: Fix info dock links
 	* FIX : Problem with "center" & "center & zoom" from the properties dock
 	* FIX : API 0.6: Error when deleting a road with no nodes (fixes #1732)

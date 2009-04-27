@@ -143,7 +143,9 @@ MainWindow::MainWindow(void)
 	pbImages->setFormat(tr("tile %v / %m"));
 	//PaintTimeLabel->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
 	PaintTimeLabel->setMinimumWidth(23);
+#ifdef _MOBILE
 	pbImages->setVisible(false);
+#endif
 
 	SlippyMapWidget::theSlippyCache = new SlippyMapCache;
 

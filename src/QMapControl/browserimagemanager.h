@@ -58,7 +58,11 @@ class BrowserWebPage : public QWebPage
 		int ox, oy, sw, sh;
 };
 
+#ifdef BROWSERIMAGEMANAGER_IS_THREADED
 class BrowserImageManager : public QThread, public IImageManager
+#else
+class BrowserImageManager : public QObject, public IImageManager
+#endif
 {
 	Q_OBJECT;
 	public:
@@ -139,10 +143,14 @@ class BrowserImageManager : public QThread, public IImageManager
 	private slots:
 		void pageLoadFinished(bool);
 		void slotLoadProgress(int p);
+
+#ifdef BROWSERIMAGEMANAGER_IS_THREADED
+	private slots:
 		void checkRequests();
 
 	protected:
 		virtual void run();
+#endif // BROWSERIMAGEMANAGER_IS_THREADED
 };
 
 #endif
