@@ -529,7 +529,7 @@ bool DirtyListExecutor::addRelation(Relation *R)
 		// chop off extra spaces, newlines etc
 		R->setId("rel_"+QString::number(DataOut.toInt()));
 		R->setLastUpdated(MapFeature::OSMServer);
-		R->setVersionNumber(0);
+		R->setVersionNumber(1);
 		R->layer()->remove(R);
 		document()->getUploadedLayer()->add(R);
 		R->setUploaded(true);
@@ -557,7 +557,7 @@ bool DirtyListExecutor::addRoad(Road *R)
 		// chop off extra spaces, newlines etc
 		R->setId("way_"+QString::number(DataOut.toInt()));
 		R->setLastUpdated(MapFeature::OSMServer);
-		R->setVersionNumber(0);
+		R->setVersionNumber(1);
 		R->layer()->remove(R);
 		document()->getUploadedLayer()->add(R);
 		R->setUploaded(true);
@@ -586,7 +586,7 @@ bool DirtyListExecutor::addPoint(TrackPoint* Pt)
 		// chop off extra spaces, newlines etc
 		Pt->setId("node_"+QString::number(DataOut.toInt()));
 		Pt->setLastUpdated(MapFeature::OSMServer);
-		Pt->setVersionNumber(0);
+		Pt->setVersionNumber(1);
 		Pt->layer()->remove(Pt);
 		document()->getUploadedLayer()->add(Pt);
 		Pt->setUploaded(true);

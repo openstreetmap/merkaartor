@@ -105,7 +105,7 @@ BrowserImageManager::BrowserImageManager(QObject* parent)
 }
 #else
 BrowserImageManager::BrowserImageManager(QObject* parent)
-    :emptyPixmap(QPixmap(1,1)), page(0)
+    :QObject(parent), emptyPixmap(QPixmap(1,1)), page(0)
 {   
     emptyPixmap.fill(Qt::transparent);
     

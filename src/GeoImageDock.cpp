@@ -151,7 +151,7 @@ void GeoImageDock::selectPrevious(void)
 
 void GeoImageDock::loadImages(QStringList fileNames)
 {
-	QString file, latS, lonS;
+	QString file;
 	QDateTime time;
 	int offset = -1, timeQuestion = 0, noMatchQuestion = 0;
 
@@ -160,6 +160,8 @@ void GeoImageDock::loadImages(QStringList fileNames)
 
 	Exiv2::Image::AutoPtr image;
 	Exiv2::ExifData exifData;
+	double lat = 0.0, lon = 0.0;
+	bool positionValid = FALSE;
 
 	MapLayer *theLayer;
 	{ // retrieve the target layer from the user
@@ -230,23 +232,33 @@ void GeoImageDock::loadImages(QStringList fileNames)
 		progress.setValue(fileNames.indexOf(file));
 
 		if (!QFile::exists(file))
-			WARNING(tr("No such file"), tr("Can't find image \"%1\"."));
+			WARNING(tr("No such file"), tr("Can't find image \"%1\".").arg(file));
 
 		try {
 			image = Exiv2::ImageFactory::open(file.toStdString());
 		}
 		catch (Exiv2::Error error)
-			WARNING(tr("Exiv2"), tr("Error while opening \"%2\":\n%1").arg(error.what()));
+			WARNING(tr("Exiv2"), tr("Error while opening \"%2\":\n%1").arg(error.what()).arg(file));
 		if (image.get() == 0)
-			WARNING(tr("Exiv2"), tr("Error while loading EXIF-data from \"%1\"."));
+			WARNING(tr("Exiv2"), tr("Error while loading EXIF-data from \"%1\".").arg(file));
 
 		image->readMetadata();
 
 		exifData = image->exifData();
 		time = QDateTime();
 		if (!exifData.empty()) {
-			latS = QString::fromStdString(exifData["Exif.GPSInfo.GPSLatitude"].toString());
-			lonS = QString::fromStdString(exifData["Exif.GPSInfo.GPSLongitude"].toString());
+			Exiv2::Exifdatum &latV = exifData["Exif.GPSInfo.GPSLatitude"];
+			Exiv2::Exifdatum &lonV = exifData["Exif.GPSInfo.GPSLongitude"];
+			positionValid = latV.count()==3 && lonV.count()==3;
+
+			if (positionValid) {
+				lat = latV.toFloat(0) + latV.toFloat(1) / 60.0 + latV.toFloat(2) / 3600.0;
+				lon = lonV.toFloat(0) + lonV.toFloat(1) / 60.0 + lonV.toFloat(2) / 3600.0;
+				if (exifData["Exif.GPSInfo.GPSLatitudeRef"].toString() == "S")
+					lat *= -1.0;
+				if (exifData["Exif.GPSInfo.GPSLongitudeRef"].toString() == "W")
+					lon *= -1.0;
+			}
 
 			QString timeStamp = QString::fromStdString(exifData["Exif.Image.DateTime"].toString());
 			if (timeStamp.isEmpty())
@@ -255,7 +267,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
 			if (!timeStamp.isEmpty())
 				time = QDateTime::fromString(timeStamp, "yyyy:MM:dd hh:mm:ss");
 		}
-		if (exifData.empty() || ((latS.isEmpty() || lonS.isEmpty()) && time.isNull()) ) {
+		if (exifData.empty() || (!positionValid && time.isNull()) ) {
 			// this question is asked when the file timestamp is used to find out to which node the image belongs
 			QUESTION(tr("No EXIF"), tr("No EXIF header found in image \"%1\".\nDo you want to revert to improper file timestamp?").arg(file), timeQuestion);
 			time = QFileInfo(file).created();
@@ -265,32 +277,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
 			time = QFileInfo(file).created();
 
 
-		if (!latS.isEmpty() && !lonS.isEmpty()) {
-			double lat = 0.0, lon = 0.0, *cur;
-			QString curS;
-			int i;
-			curS = latS;
-			cur = &lat;
-			for (i=0;i<=1;i++) { // parse latS and lonS. format: "h/d m/d s/d" (with d as divider)
-				QList<int> p;
-				p.append(curS.indexOf("/"));
-				p.append(curS.indexOf(" ", p.last()));
-				p.append(curS.indexOf("/", p.last()));
-				p.append(curS.indexOf(" ", p.last()));
-				p.append(curS.indexOf("/", p.last()));
-				p.append(curS.indexOf(" ", p.last()));
-
-				*cur = (double)curS.left(p.at(0)).toInt() / (double)curS.mid(p.at(0)+1, p.at(1)-p.at(0)-1).toInt() + // hours
-				 (double)curS.mid(p.at(1)+1, p.at(2)-p.at(1)-1).toInt() / (double)curS.mid(p.at(2)+1, p.at(3)-p.at(2)-1).toInt() / 60.0 + // minutes
-				 (double)curS.mid(p.at(3)+1, p.at(4)-p.at(3)-1).toInt() / (double)curS.mid(p.at(4)+1, p.at(5)-p.at(4)-1).toInt() / 60.0 / 60.0; // seconds
-					
-				curS = lonS;
-				cur = &lon;
-			}
-
-			latS.clear(); // clear these to be empty for the next image
-			lonS.clear();
-
+		if (positionValid) {
 			Coord newPos(angToInt(lat), angToInt(lon));
 			TrackPoint *Pt;
             QList<MapFeature*>::ConstIterator it = theLayer->get().constBegin();

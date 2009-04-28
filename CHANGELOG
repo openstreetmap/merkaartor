@@ -1,4 +1,6 @@
 v0.14
+    * FIX : Photo localization patch from Toby Speight.
+	* FIX : Set version of newly uploaded objects at 1.
 	* FIX : Graphical corruption on Intel chipsets when "Show downloaded areas" was enabled
 	* FIX : API 0.6: Add features version number in MDC'es
 	* FIX : API 0.6: Fix info dock links
