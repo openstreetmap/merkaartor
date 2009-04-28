@@ -154,9 +154,7 @@ bool WorldOsbManager::deleteRegion(quint32 rg)
 
 bool WorldOsbManager::generateRegion(quint32 rg)
 {
-	QString osmWebsite, osmUser, osmPwd, proxyHost;
-	int proxyPort;
-	bool useProxy;
+	QString osmWebsite, osmUser, osmPwd;
 
 	theProgressLabel->setText("");
 	theProgressBar->reset();
@@ -169,11 +167,7 @@ bool WorldOsbManager::generateRegion(quint32 rg)
 	osmUser = M_PREFS->getOsmUser();
 	osmPwd = M_PREFS->getOsmPassword();
 
-	useProxy = M_PREFS->getProxyUse();
-	proxyHost = M_PREFS->getProxyHost();
-	proxyPort = M_PREFS->getProxyPort();
-
-	if (!downloadOSM(this, osmUser, osmPwd, useProxy, proxyHost, proxyPort, rg , aDoc, aLayer)) {
+	if (!downloadOSM(this, osmUser, osmPwd, rg , aDoc, aLayer)) {
 		aDoc->remove(aLayer);
 		delete aLayer;
 		delete aDoc;

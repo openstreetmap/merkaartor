@@ -110,8 +110,6 @@ MerkaartorPreferences::MerkaartorPreferences()
 
 	connect(&httpRequest, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)), this, SLOT(on_responseHeaderReceived(const QHttpResponseHeader &)));
 	connect(&httpRequest,SIGNAL(requestFinished(int, bool)),this,SLOT(on_requestFinished(int, bool)));
-	if (getProxyUse())
-		httpRequest.setProxy(getProxyHost(),getProxyPort());
 
 	initialize();
 }
@@ -136,10 +134,6 @@ void MerkaartorPreferences::save(bool UserPwdChanged)
 	saveTMSes();
 	saveBookmarks();
 
-	if (getProxyUse())
-		httpRequest.setProxy(getProxyHost(),getProxyPort());
-	else
-		httpRequest.setProxy("",0);
 	if (UserPwdChanged)
 		fromOsmPref();
 	else
@@ -444,6 +438,19 @@ void MerkaartorPreferences::initialize()
 	//	setSelectedTmsServer("OSM Mapnik");
 	//	save();
 	//}
+
+	// PRoxy upgrade
+	if (Sets->contains("proxy/Use")) {
+		bool b = Sets->value("proxy/Use").toBool();
+		QString h = Sets->value("proxy/Host").toString();
+		int p = Sets->value("proxy/Port").toInt();
+
+		Sets->remove("proxy");
+
+		setProxyUse(b);
+		setProxyHost(h);
+		setProxyPort(p);
+	}
 }
 
 bool MerkaartorPreferences::getRightSideDriving() const
@@ -498,36 +505,6 @@ QString MerkaartorPreferences::getWorkingDir() const
 void MerkaartorPreferences::setWorkingDir(const QString & theValue)
 {
 	Sets->setValue("general/workingdir", theValue);
-}
-
-bool MerkaartorPreferences::getProxyUse() const
-{
-	return Sets->value("proxy/Use").toBool();
-}
-
-void MerkaartorPreferences::setProxyUse(bool theValue)
-{
-	Sets->setValue("proxy/Use", theValue);
-}
-
-QString MerkaartorPreferences::getProxyHost() const
-{
-	return Sets->value("proxy/Host").toString();
-}
-
-void MerkaartorPreferences::setProxyHost(const QString & theValue)
-{
-	Sets->setValue("proxy/Host", theValue);
-}
-
-int MerkaartorPreferences::getProxyPort() const
-{
-	return Sets->value("proxy/Port").toInt();
-}
-
-void MerkaartorPreferences::setProxyPort(int theValue)
-{
-	Sets->setValue("proxy/Port", theValue);
 }
 
 BookmarkList* MerkaartorPreferences::getBookmarks()
@@ -1277,6 +1254,13 @@ M_PARAM_IMPLEMENT_STRING(MerkaartorStyleString, visual, "skulpture")
 
 /* Network */
 M_PARAM_IMPLEMENT_BOOL(OfflineMode, Network, false)
+
+/* Proxy */
+M_PARAM_IMPLEMENT_BOOL(ProxyUse, proxy, false)
+M_PARAM_IMPLEMENT_STRING(ProxyHost, proxy, "")
+M_PARAM_IMPLEMENT_INT(ProxyPort, proxy, 8080)
+M_PARAM_IMPLEMENT_STRING(ProxyUser, proxy, "")
+M_PARAM_IMPLEMENT_STRING(ProxyPassword, proxy, "")
 
 /* Track */
 M_PARAM_IMPLEMENT_BOOL(ReadonlyTracksDefault, data, false)

@@ -144,8 +144,3 @@ void ImageManager::abortLoading()
 	net->abortLoading();
 	loadingQueueEmpty();
 }
-void ImageManager::setProxy(QString host, int port)
-{
-	net->setProxy(host, port);
-}
-

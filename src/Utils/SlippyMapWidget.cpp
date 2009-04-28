@@ -299,9 +299,6 @@ SlippyMapCache::SlippyMapCache()
 : QObject(0), DownloadId(0), DownloadBusy(false), theMap(0)
 {
 	Download.setHost("tile.openstreetmap.org");
-	if (MerkaartorPreferences::instance()->getProxyUse()) {
-		Download.setProxy(MerkaartorPreferences::instance()->getProxyHost(), MerkaartorPreferences::instance()->getProxyPort());
-	}
 
 	DownloadBuffer.setBuffer(&DownloadData);
 	DownloadBuffer.open(QIODevice::WriteOnly);

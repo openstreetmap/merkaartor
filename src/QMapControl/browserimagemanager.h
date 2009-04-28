@@ -33,7 +33,6 @@
 #include "qwebsettings.h"
 #include "qwebview.h"
 
-#include <QNetworkProxy>
 #include <QThread>
 
 #include "IImageManager.h"
@@ -106,15 +105,6 @@ class BrowserImageManager : public QObject, public IImageManager
 		 */
 		void abortLoading();
 
-		//! sets the proxy for HTTP connections
-		/*!
-		 * This method sets the proxy for HTTP connections.
-		 * This is not provided by the current Qtopia version!
-		 * @param host the proxy´s hostname or ip
-		 * @param port the proxy´s port
-		 */
-		void setProxy(QString host, int port);
-
 	private:
 		BrowserImageManager(QObject* parent = 0);
 		BrowserImageManager(const BrowserImageManager&);
@@ -129,11 +119,9 @@ class BrowserImageManager : public QObject, public IImageManager
 
 		static BrowserImageManager* m_BrowserImageManagerInstance;
 
-		//QNetworkProxy* proxy;
 		BrowserWebPage* page;
 		QWebFrame *frame;
 		QNetworkAccessManager* qnam;
-		QNetworkProxy proxy;
 
 	signals:
 		void imageRequested();

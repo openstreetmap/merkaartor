@@ -36,10 +36,9 @@
 
 /* DOWNLOADER */
 
-Downloader::Downloader(const QString& aWeb, const QString& aUser, const QString& aPwd, bool aUseProxy, const QString& aProxyHost, int aProxyPort)
+Downloader::Downloader(const QString& aWeb, const QString& aUser, const QString& aPwd)
 : Port(80), Web(aWeb), User(aUser), Password(aPwd),
-  UseProxy(aUseProxy), ProxyHost(aProxyHost), ProxyPort(aProxyPort), Id(0),
-  Error(false), AnimatorLabel(0), AnimatorBar(0), AnimationTimer(0)
+  Id(0),Error(false), AnimatorLabel(0), AnimatorBar(0), AnimationTimer(0)
 {
 	int p = Web.lastIndexOf(':');
 	if (p != -1)
@@ -187,8 +186,6 @@ bool Downloader::go(const QString& url)
 	Content.clear();
 	QBuffer ResponseBuffer(&Content);
 	ResponseBuffer.open(QIODevice::WriteOnly);
-	if (UseProxy)
-		Request.setProxy(ProxyHost,ProxyPort);
 	QHttpRequestHeader Header("GET",url);
 	Header.setValue("Accept-Encoding", "gzip,deflate");
 	if (Port == 80)
@@ -240,8 +237,6 @@ bool Downloader::request(const QString& Method, const QString& URL, const QStrin
 	QByteArray ba(Data.toUtf8());
 	QBuffer Buf(&ba);
 
-	if (UseProxy)
-		Request.setProxy(ProxyHost,ProxyPort);
 	QHttpRequestHeader Header(Method,URL);
 	if (Port == 80)
 		Header.setValue("Host",Web);
@@ -417,11 +412,11 @@ QString Downloader::getURLToTrackPoints()
 	return URL;
 }
 
-bool downloadOSM(QWidget* aParent, const QUrl& theUrl, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort, MapDocument* theDocument, MapLayer* theLayer)
+bool downloadOSM(QWidget* aParent, const QUrl& theUrl, const QString& aUser, const QString& aPassword, MapDocument* theDocument, MapLayer* theLayer)
 {
 	QString aWeb = theUrl.host();
 	QString URL = theUrl.path();
-	Downloader Rcv(aWeb, aUser, aPassword, UseProxy, ProxyHost, ProxyPort);
+	Downloader Rcv(aWeb, aUser, aPassword);
 
 	IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(aParent);
 	if (!aProgressWindow)
@@ -462,7 +457,7 @@ bool downloadOSM(QWidget* aParent, const QUrl& theUrl, const QString& aUser, con
 		if (!aWeb.isEmpty()) {
 			QUrl aURL = theUrl;
 			aURL.setHost(aWeb);
-			return downloadOSM(aParent, aURL, aUser, aPassword, UseProxy, ProxyHost, ProxyPort, theDocument, theLayer);
+			return downloadOSM(aParent, aURL, aUser, aPassword, theDocument, theLayer);
 		} else {
 			QString msg = QApplication::translate("Downloader","Unexpected http status code (%1)\nServer message is '%2'").arg(x).arg(Rcv.resultText());
 			if (!Rcv.errorText().isEmpty())
@@ -481,19 +476,19 @@ bool downloadOSM(QWidget* aParent, const QUrl& theUrl, const QString& aUser, con
 		QMessageBox::warning(aParent,QApplication::translate("Downloader","Download failed"), msg);
 		return false;
 	}
-	Downloader Down(aWeb, aUser, aPassword, UseProxy, ProxyHost, ProxyPort);
+	Downloader Down(aWeb, aUser, aPassword);
 	bool OK = importOSM(aParent, Rcv.content(), theDocument, theLayer, &Down);
 	return OK;
 }
 
-bool downloadOSM(QWidget* aParent, const QString& aWeb, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort, const CoordBox& aBox , MapDocument* theDocument, MapLayer* theLayer)
+bool downloadOSM(QWidget* aParent, const QString& aWeb, const QString& aUser, const QString& aPassword, const CoordBox& aBox , MapDocument* theDocument, MapLayer* theLayer)
 {
 	if (checkForConflicts(theDocument))
 	{
 		QMessageBox::warning(aParent,QApplication::translate("Downloader","Unresolved conflicts"), QApplication::translate("Downloader","Please resolve existing conflicts first"));
 		return false;
 	}
-	Downloader Rcv(aWeb, aUser, aPassword, UseProxy, ProxyHost, ProxyPort);
+	Downloader Rcv(aWeb, aUser, aPassword);
 	QString URL = Rcv.getURLToMap();
 	URL = URL.arg(intToAng(aBox.bottomLeft().lon()), 0, 'f').arg(intToAng(aBox.bottomLeft().lat()), 0, 'f').arg(intToAng(aBox.topRight().lon()), 0, 'f').arg(intToAng(aBox.topRight().lat()), 0, 'f');
 	
@@ -502,10 +497,10 @@ bool downloadOSM(QWidget* aParent, const QString& aWeb, const QString& aUser, co
 	theUrl.setPath(URL);
 	theUrl.setScheme("http");
 
-	return downloadOSM(aParent, theUrl, aUser, aPassword, UseProxy, ProxyHost, ProxyPort, theDocument, theLayer);
+	return downloadOSM(aParent, theUrl, aUser, aPassword, theDocument, theLayer);
 }
 
-bool downloadOSM(QWidget* Main, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort , const quint32 region , MapDocument* theDocument, MapLayer* theLayer)
+bool downloadOSM(QWidget* Main, const QString& aUser, const QString& aPassword, const quint32 region , MapDocument* theDocument, MapLayer* theLayer)
 {
 	Q_UNUSED(aUser)
 	Q_UNUSED(aPassword)
@@ -521,23 +516,12 @@ bool downloadOSM(QWidget* Main, const QString& aUser, const QString& aPassword, 
 	osmUser = M_PREFS->getOsmUser();
 	osmPwd = M_PREFS->getOsmPassword();
 
-	return downloadOSM(Main,osmWebsite,osmUser,osmPwd,UseProxy,ProxyHost,ProxyPort,Clip,theDocument,theLayer);
-
-// This code will never be reached. Can It be removed?
-//	QString aUrl(QString("http://%1/api/0.5/*[bbox=%2,%3,%4,%5]")
-//		.arg(M_PREFS->getXapiWebSite())
-//		.arg(intToAng(Clip.bottomLeft().lon())).arg(intToAng(Clip.bottomLeft().lat()))
-//		.arg(intToAng(Clip.topRight().lon())).arg(intToAng(Clip.topRight().lat()))
-//		);
-//	qDebug() << aUrl;
-//	QUrl theUrl(aUrl);
-//
-//	return downloadOSM(Main,theUrl,aUser,aPassword,UseProxy,ProxyHost,ProxyPort,theDocument, theLayer);
+	return downloadOSM(Main,osmWebsite,osmUser,osmPwd,Clip,theDocument,theLayer);
 }
 
-bool downloadTracksFromOSM(QWidget* Main, const QString& aWeb, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort , const CoordBox& aBox , MapDocument* theDocument)
+bool downloadTracksFromOSM(QWidget* Main, const QString& aWeb, const QString& aUser, const QString& aPassword, const CoordBox& aBox , MapDocument* theDocument)
 {
-	Downloader theDownloader(aWeb, aUser, aPassword, UseProxy, ProxyHost, ProxyPort);
+	Downloader theDownloader(aWeb, aUser, aPassword);
 	QList<TrackMapLayer*> theTracklayers;
 	//TrackMapLayer* trackLayer = new TrackMapLayer(QApplication::translate("Downloader","Downloaded tracks"));
 	//theDocument->add(trackLayer);
@@ -605,21 +589,16 @@ bool downloadMoreOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDo
 		theLayer = theDocument->getLastDownloadLayer();
 
 
-	QString osmWebsite, osmUser, osmPwd, proxyHost;
-	int proxyPort;
-	bool useProxy;
+	QString osmWebsite, osmUser, osmPwd;
 
 	osmWebsite = MerkaartorPreferences::instance()->getOsmWebsite();
 	osmUser = MerkaartorPreferences::instance()->getOsmUser();
 	osmPwd = MerkaartorPreferences::instance()->getOsmPassword();
 
-	useProxy = MerkaartorPreferences::instance()->getProxyUse();
-	proxyHost = MerkaartorPreferences::instance()->getProxyHost();
-	proxyPort = MerkaartorPreferences::instance()->getProxyPort();
 	Main->view()->setUpdatesEnabled(false);
 
 	bool OK = true;
-	OK = downloadOSM(aParent,osmWebsite,osmUser,osmPwd,useProxy,proxyHost,proxyPort,aBox,theDocument,theLayer);
+	OK = downloadOSM(aParent,osmWebsite,osmUser,osmPwd,aBox,theDocument,theLayer);
 	Main->view()->setUpdatesEnabled(true);
 	if (OK)
 	{
@@ -640,9 +619,7 @@ bool downloadMoreOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDo
 
 bool downloadOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDocument)
 {
-	QString osmWebsite, osmUser, osmPwd, proxyHost;
-	int proxyPort;
-	bool useProxy;
+	QString osmWebsite, osmUser, osmPwd;
 	static bool DownloadRaw = false;
 
 	MainWindow* Main = dynamic_cast<MainWindow*>(aParent);
@@ -651,10 +628,6 @@ bool downloadOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDocume
 	osmWebsite = MerkaartorPreferences::instance()->getOsmWebsite();
 	osmUser = MerkaartorPreferences::instance()->getOsmUser();
 	osmPwd = MerkaartorPreferences::instance()->getOsmPassword();
-
-	useProxy = MerkaartorPreferences::instance()->getProxyUse();
-	proxyHost = MerkaartorPreferences::instance()->getProxyHost();
-	proxyPort = MerkaartorPreferences::instance()->getProxyPort();
 
 	Ui::DownloadMapDialog ui;
 	ui.setupUi(dlg);
@@ -736,14 +709,14 @@ bool downloadOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDocume
 			theDocument->add(theLayer);
 			M_PREFS->setResolveRelations(ui.ResolveRelations->isChecked());
 			if (directAPI)
-				OK = downloadOSM(aParent,QUrl(ui.Link->text()),osmUser,osmPwd,useProxy,proxyHost,proxyPort,theDocument,theLayer);
+				OK = downloadOSM(aParent,QUrl(ui.Link->text()),osmUser,osmPwd,theDocument,theLayer);
 			else
 			if (Regional)
-				OK = downloadOSM(aParent,osmUser,osmPwd,useProxy,proxyHost,proxyPort,ui.Link->text().toUInt(),theDocument,theLayer);
+				OK = downloadOSM(aParent,osmUser,osmPwd,ui.Link->text().toUInt(),theDocument,theLayer);
 			else
-				OK = downloadOSM(aParent,osmWebsite,osmUser,osmPwd,useProxy,proxyHost,proxyPort,Clip,theDocument,theLayer);
+				OK = downloadOSM(aParent,osmWebsite,osmUser,osmPwd,Clip,theDocument,theLayer);
 			if (OK && ui.IncludeTracks->isChecked())
-				OK = downloadTracksFromOSM(aParent,osmWebsite,osmUser,osmPwd,useProxy,proxyHost,proxyPort, Clip,theDocument);
+				OK = downloadTracksFromOSM(aParent,osmWebsite,osmUser,osmPwd, Clip,theDocument);
 			Main->view()->setUpdatesEnabled(true);
 			if (OK)
 			{

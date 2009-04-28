@@ -66,11 +66,7 @@ void InfoDock::on_anchorClicked(const QUrl & link)
 	QString osmUser = MerkaartorPreferences::instance()->getOsmUser();
 	QString osmPwd = MerkaartorPreferences::instance()->getOsmPassword();
 
-	bool useProxy = MerkaartorPreferences::instance()->getProxyUse();
-	QString proxyHost = MerkaartorPreferences::instance()->getProxyHost();
-	int proxyPort = MerkaartorPreferences::instance()->getProxyPort();
-
-	Downloader theDownloader(osmWebsite, osmUser, osmPwd, useProxy, proxyHost, proxyPort);
+	Downloader theDownloader(osmWebsite, osmUser, osmPwd);
 
 	if (theDownloader.request("GET", link.path(), data)) {
 		QTextBrowser* b = new QTextBrowser;

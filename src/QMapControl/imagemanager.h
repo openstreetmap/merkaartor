@@ -78,15 +78,6 @@ class ImageManager : public QObject, public IImageManager
 		 */
 		void abortLoading();
 		
-		//! sets the proxy for HTTP connections
-		/*!
-		 * This method sets the proxy for HTTP connections.
-		 * This is not provided by the current Qtopia version!
-		 * @param host the proxy´s hostname or ip
-		 * @param port the proxy´s port
-		 */
-		void setProxy(QString host, int port);
-
 	private:
 		ImageManager(QObject* parent = 0);
 		ImageManager(const ImageManager&);

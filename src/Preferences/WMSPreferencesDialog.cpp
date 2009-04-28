@@ -169,9 +169,6 @@ void WMSPreferencesDialog::requestCapabilities(QUrl url)
 
 	http->setHost(url.host(), url.port() == -1 ? 80 : url.port());
 
-	if (MerkaartorPreferences::instance()->getProxyUse())
-		http->setProxy(MerkaartorPreferences::instance()->getProxyHost(), MerkaartorPreferences::instance()->getProxyPort());
-
 	httpGetId = http->request(header);
 }
 

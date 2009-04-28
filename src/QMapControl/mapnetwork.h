@@ -55,7 +55,6 @@ class MapNetwork : QObject
 		 * This is useful when changing the zoom-factor, though newly needed images loads faster
  		*/
 		void abortLoading();
-		void setProxy(QString host, int port);
 
 	private:
 		IImageManager* parent;

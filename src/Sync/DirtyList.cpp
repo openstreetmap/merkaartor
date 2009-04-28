@@ -389,12 +389,10 @@ bool DirtyListDescriber::eraseRelation(Relation* R)
 /* DIRTYLIST */
 
 
-DirtyListExecutor::DirtyListExecutor(MapDocument* aDoc, const DirtyListBuild& aFuture, const QString& aWeb, const QString& aUser, const QString& aPwd,
-									 bool aUseProxy, const QString& aProxyHost, int aProxyPort, int aTasks)
-: DirtyListVisit(aDoc, aFuture, false), Tasks(aTasks), Done(0), Web(aWeb), User(aUser), Pwd(aPwd),
-  UseProxy(aUseProxy), ProxyHost(aProxyHost), ProxyPort(aProxyPort), theDownloader(0)
+DirtyListExecutor::DirtyListExecutor(MapDocument* aDoc, const DirtyListBuild& aFuture, const QString& aWeb, const QString& aUser, const QString& aPwd, int aTasks)
+: DirtyListVisit(aDoc, aFuture, false), Tasks(aTasks), Done(0), Web(aWeb), User(aUser), Pwd(aPwd), theDownloader(0)
 {
-	theDownloader = new Downloader(Web, User, Pwd, UseProxy, ProxyHost, ProxyPort);
+	theDownloader = new Downloader(Web, User, Pwd);
 }
 
 DirtyListExecutor::~DirtyListExecutor()

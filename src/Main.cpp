@@ -3,6 +3,7 @@
 
 #include <QLibraryInfo>
 #include <QSplashScreen>
+#include <QNetworkProxy>
 
 #include "MainWindow.h" 
 #include "Preferences/MerkaartorPreferences.h"
@@ -82,6 +83,16 @@ int main(int argc, char** argv)
 
 	if (fileNames.isEmpty())
 		QDir::setCurrent(MerkaartorPreferences::instance()->getWorkingDir());
+
+	if (M_PREFS->M_PREFS->getProxyUse()) {
+		QNetworkProxy proxy;
+		proxy.setType(QNetworkProxy::HttpCachingProxy);
+		proxy.setHostName(M_PREFS->getProxyHost());
+		proxy.setPort(M_PREFS->getProxyPort());
+		proxy.setUser(M_PREFS->getProxyUser());
+		proxy.setPassword(M_PREFS->getProxyPassword());
+		QNetworkProxy::setApplicationProxy(proxy);
+	}
 
 	Main.show();
 	splash.finish(&Main);

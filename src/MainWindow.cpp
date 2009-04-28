@@ -922,8 +922,7 @@ void MainWindow::on_fileUploadAction_triggered()
 			return;
 	}
 	on_editPropertiesAction_triggered();
-	syncOSM(this, p->getOsmWebsite(), p->getOsmUser(), p->getOsmPassword(), p->getProxyUse(),
-		p->getProxyHost(), p->getProxyPort());
+	syncOSM(this, p->getOsmWebsite(), p->getOsmUser(), p->getOsmPassword());
 
 	theDocument->history().updateActions();
 	theDirty->updateList();
@@ -1495,12 +1494,6 @@ void MainWindow::preferencesChanged(void)
 	BrowserImageManager::instance()->setCacheDir(M_PREFS->getCacheDir());
 	BrowserImageManager::instance()->setCacheMaxSize(M_PREFS->getCacheSize());
 #endif
-	if (M_PREFS->getProxyUse()) {
-		ImageManager::instance()->setProxy(M_PREFS->getProxyHost(),
-			M_PREFS->getProxyPort());
-	} else {
-		ImageManager::instance()->setProxy("",0);
-	}
 	
 	updateStyleMenu();
 	updateMenu();

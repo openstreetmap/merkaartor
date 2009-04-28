@@ -151,10 +151,3 @@ bool MapNetwork::imageIsLoading(QString hash)
 			return true;
 	return loadingMap.values().contains(hash);
 }
-
-void MapNetwork::setProxy(QString host, int port)
-{
-#ifndef Q_WS_QWS
-	http->setProxy(host, port);
-#endif
-}

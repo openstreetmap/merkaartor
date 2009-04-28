@@ -28,6 +28,8 @@
 #include <QCryptographicHash>
 #include <QTimer>
 #include <QMutex>
+#include <QNetworkProxy>
+#include <QNetworkAccessManager>
 
 #define MAX_REQ 1
 #define BROWSER_TILE_SIZE 512
@@ -181,6 +183,9 @@ void BrowserImageManager::launchRequest()
 
 	QUrl u = QUrl( R.url);
 
+#if QT_VERSION < 0x040500
+	page->networkAccessManager()->setProxy(QNetworkProxy::applicationProxy());
+#endif
 	page->mainFrame()->load(u);
 	requestActive = true;
 }
@@ -284,22 +289,11 @@ void BrowserImageManager::abortLoading()
 	}
 }
 
-void BrowserImageManager::setProxy(QString host, int port)
-{
-	if (!host.isEmpty()) {
-		proxy.setType(QNetworkProxy::HttpCachingProxy);
-		proxy.setHostName(host);
-		proxy.setPort(port);
-	}
-	page->networkAccessManager()->setProxy(proxy);
-}
-
 #ifdef BROWSERIMAGEMANAGER_IS_THREADED
 void BrowserImageManager::run()
 {
 	page = new BrowserWebPage();
 	page->setViewportSize(QSize(1024, 1024));
-	page->networkAccessManager()->setProxy(proxy);
 
 	QTimer theTimer;
 	theTimer.start(100);

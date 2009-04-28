@@ -81,15 +81,6 @@ class IImageManager
 		 */
 		virtual void abortLoading() = 0;
 
-		//! sets the proxy for HTTP connections
-		/*!
-		 * This method sets the proxy for HTTP connections.
-		 * This is not provided by the current Qtopia version!
-		 * @param host the proxy´s hostname or ip
-		 * @param port the proxy´s port
-		 */
-		virtual void setProxy(QString host, int port) = 0;
-
 		void setCacheDir(const QDir& path);
 		void setCacheMaxSize(int max);
 

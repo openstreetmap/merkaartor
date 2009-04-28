@@ -20,7 +20,7 @@
       <enum>QTabWidget::North</enum>
      </property>
      <property name="currentIndex" >
-      <number>7</number>
+      <number>6</number>
      </property>
      <widget class="QWidget" name="tab_7" >
       <attribute name="title" >
@@ -850,10 +850,47 @@
           <string>Proxy settings</string>
          </property>
          <layout class="QGridLayout" >
-          <item row="0" column="0" colspan="2" >
+          <item row="0" column="0" colspan="3" >
            <widget class="QCheckBox" name="bbUseProxy" >
             <property name="text" >
              <string>Use Proxy</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0" >
+           <widget class="QLabel" name="label_7" >
+            <property name="text" >
+             <string>Password:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1" >
+           <widget class="QLineEdit" name="edProxyPassword" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="maximumSize" >
+             <size>
+              <width>250</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="echoMode" >
+             <enum>QLineEdit::Password</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" >
+           <widget class="QLabel" name="label_4" >
+            <property name="text" >
+             <string>User:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" >
+           <widget class="QLabel" name="label_2" >
+            <property name="text" >
+             <string>Port:</string>
             </property>
            </widget>
           </item>
@@ -877,13 +914,6 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0" >
-           <widget class="QLabel" name="label_2" >
-            <property name="text" >
-             <string>Port:</string>
-            </property>
-           </widget>
-          </item>
           <item row="2" column="1" >
            <widget class="QLineEdit" name="edProxyPort" >
             <property name="enabled" >
@@ -897,7 +927,29 @@
             </property>
            </widget>
           </item>
+          <item row="3" column="1" >
+           <widget class="QLineEdit" name="edProxyUser" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="maximumSize" >
+             <size>
+              <width>250</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
          </layout>
+         <zorder>bbUseProxy</zorder>
+         <zorder>label_7</zorder>
+         <zorder>edProxyPassword</zorder>
+         <zorder>label_4</zorder>
+         <zorder>label_2</zorder>
+         <zorder>label</zorder>
+         <zorder>edProxyHost</zorder>
+         <zorder>edProxyPort</zorder>
+         <zorder>edProxyUser</zorder>
         </widget>
        </item>
        <item>
@@ -1117,8 +1169,6 @@
   <tabstop>edOsmUser</tabstop>
   <tabstop>edOsmPwd</tabstop>
   <tabstop>bbUseProxy</tabstop>
-  <tabstop>edProxyHost</tabstop>
-  <tabstop>edProxyPort</tabstop>
   <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources/>
@@ -1146,12 +1196,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>145</x>
-     <y>129</y>
+     <x>52</x>
+     <y>65</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>145</x>
-     <y>129</y>
+     <x>108</x>
+     <y>89</y>
     </hint>
    </hints>
   </connection>
@@ -1162,8 +1212,8 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>145</x>
-     <y>129</y>
+     <x>52</x>
+     <y>65</y>
     </hint>
     <hint type="destinationlabel" >
      <x>95</x>
@@ -1178,12 +1228,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>68</x>
-     <y>157</y>
+     <x>21</x>
+     <y>73</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>145</x>
-     <y>157</y>
+     <x>168</x>
+     <y>72</y>
     </hint>
    </hints>
   </connection>
@@ -1194,12 +1244,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>68</x>
-     <y>157</y>
+     <x>21</x>
+     <y>73</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>75</x>
-     <y>157</y>
+     <x>595</x>
+     <y>70</y>
     </hint>
    </hints>
   </connection>
@@ -1210,12 +1260,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>123</x>
-     <y>178</y>
+     <x>21</x>
+     <y>63</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>167</x>
-     <y>178</y>
+     <x>117</x>
+     <y>62</y>
     </hint>
    </hints>
   </connection>
@@ -1226,12 +1276,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>134</x>
-     <y>216</y>
+     <x>87</x>
+     <y>84</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>134</x>
-     <y>216</y>
+     <x>171</x>
+     <y>85</y>
     </hint>
    </hints>
   </connection>
@@ -1242,12 +1292,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>134</x>
-     <y>216</y>
+     <x>91</x>
+     <y>114</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>134</x>
-     <y>216</y>
+     <x>175</x>
+     <y>115</y>
     </hint>
    </hints>
   </connection>
@@ -1258,12 +1308,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>134</x>
-     <y>216</y>
+     <x>91</x>
+     <y>114</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>163</x>
-     <y>216</y>
+     <x>614</x>
+     <y>118</y>
     </hint>
    </hints>
   </connection>
@@ -1274,12 +1324,44 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>130</x>
-     <y>162</y>
+     <x>126</x>
+     <y>164</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>372</x>
-     <y>163</y>
+     <x>614</x>
+     <y>165</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>bbUseProxy</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>edProxyUser</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>37</x>
+     <y>74</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>101</x>
+     <y>155</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>bbUseProxy</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>edProxyPassword</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>68</x>
+     <y>76</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>105</x>
+     <y>179</y>
     </hint>
    </hints>
   </connection>

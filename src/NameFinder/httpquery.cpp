@@ -19,7 +19,6 @@
  ***************************************************************************/
 #include "httpquery.h"
 #include <QtDebug>
-#include <QtNetwork/QNetworkProxy>
 
 namespace NameFinder
 {
@@ -28,13 +27,11 @@ namespace NameFinder
 	{
 		myService = "http://gazetteer.openstreetmap.org/namefinder/search.xml";
 		myDevice = device;
-		proxyEnabled = false;
 	}
 	HttpQuery::HttpQuery ( QObject *parent, QUrl service, QIODevice *device ) : QObject ( parent )
 	{
 		myService = service;
 		myDevice = device;
-		proxyEnabled = false;
 	}
 
 
@@ -51,8 +48,6 @@ namespace NameFinder
 
 		myService.addQueryItem ( "find",question );
 		connection.setHost ( myService.host(), myService.port ( 80 ) );
-		if ( proxyEnabled )
-			connection.setProxy ( myProxy );
 		
 		QHttpRequestHeader request( "GET", myService.path() + "?" + myService.encodedQuery() );
 		if (myService.port(80) != 80)
@@ -84,16 +79,6 @@ namespace NameFinder
 		}
 		else if ((id == reqId) && error) {
 			emit doneWithError(connection.error());
-		}
-	}
-
-	void HttpQuery::setProxy ( QString host, int port )
-	{
-		if (!host.isEmpty()) {
-			myProxy.setType(QNetworkProxy::HttpProxy);
-			myProxy.setHostName(host);
-			myProxy.setPort(port);
-			proxyEnabled = true;
 		}
 	}
 }

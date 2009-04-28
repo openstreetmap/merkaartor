@@ -22,6 +22,7 @@
 #include <QMessageBox>
 #include <QPainter>
 #include <QStyleFactory>
+#include <QNetworkProxy>
 
 
 static void makeBoundaryIcon(QToolButton* bt, QColor C)
@@ -133,6 +134,9 @@ void PreferencesDialog::loadPrefs()
 	bbUseProxy->setChecked(M_PREFS->getProxyUse());
 	edProxyHost->setText(M_PREFS->getProxyHost());
 	edProxyPort->setText(QString().setNum(M_PREFS->getProxyPort()));
+	edProxyUser->setText(M_PREFS->getProxyUser());
+	edProxyPassword->setText(M_PREFS->getProxyPassword());
+
 	bbUse06Api->setChecked((M_PREFS->apiVersionNum() > 0.5));
 
 	edCacheDir->setText(M_PREFS->getCacheDir());
@@ -241,6 +245,17 @@ void PreferencesDialog::savePrefs()
 	M_PREFS->setProxyUse(bbUseProxy->isChecked());
 	M_PREFS->setProxyHost(edProxyHost->text());
 	M_PREFS->setProxyPort(edProxyPort->text().toInt());
+	M_PREFS->setProxyUser(edProxyUser->text());
+	M_PREFS->setProxyPassword(edProxyPassword->text());
+	if (M_PREFS->M_PREFS->getProxyUse()) {
+		QNetworkProxy proxy;
+		proxy.setType(QNetworkProxy::HttpCachingProxy);
+		proxy.setHostName(M_PREFS->getProxyHost());
+		proxy.setPort(M_PREFS->getProxyPort());
+		proxy.setUser(M_PREFS->getProxyUser());
+		proxy.setPassword(M_PREFS->getProxyPassword());
+		QNetworkProxy::setApplicationProxy(proxy);
+	}
 
 	M_PREFS->setCacheDir(edCacheDir->text());
 	M_PREFS->setCacheSize(sbCacheSize->value());

@@ -24,7 +24,6 @@
 #include <QIODevice>
 #include <QtNetwork/QHttp>
 #include <QUrl>
-#include <QtNetwork/QNetworkProxy>
 
 namespace NameFinder {
 
@@ -39,8 +38,6 @@ public:
         ~HttpQuery();
 
         bool   startSearch(QString question);
-        //! Sets up a network proxy
-        void setProxy(QString host, int port);
 
 signals:
 	void done();
@@ -54,9 +51,6 @@ private:
         QUrl myService;
 //! Our input device - so we can use QFile, QBuffer, etc...
         QIODevice *myDevice;
-        //! Do we have an http proxy
-        QNetworkProxy myProxy;
-        bool proxyEnabled;
 		int reqId;
 
 private slots:

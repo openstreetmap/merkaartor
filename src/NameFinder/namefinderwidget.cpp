@@ -66,8 +66,6 @@ namespace NameFinder
 	void NameFinderWidget::search ( QString object )
 	{
 		query = new HttpQuery ( this, &buffer );
-		if (M_PREFS->getProxyUse())
-			query->setProxy(M_PREFS->getProxyHost(), M_PREFS->getProxyPort());
 		connect ( query, SIGNAL ( done() ), this, SLOT ( display() ) );
 		connect ( query, SIGNAL ( doneWithError(QHttp::Error) ), this, SLOT ( displayError(QHttp::Error) ));
 		query->startSearch ( object );

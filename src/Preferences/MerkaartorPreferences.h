@@ -147,14 +147,6 @@ public:
 	void setWorkingDir(const QString & theValue);
 	QString getWorkingDir() const;
 
-	void setProxyUse(bool theValue);
-	bool getProxyUse() const;
-
-	void setProxyHost(const QString & theValue);
-	QString getProxyHost() const;
-	void setProxyPort(int theValue);
-	int getProxyPort() const;
-
 	BookmarkList*  getBookmarks();
 
 	void setSelectedWmsServer(const QString & theValue);
@@ -338,6 +330,13 @@ public:
 	/* Network */
 	M_PARAM_DECLARE_BOOL(OfflineMode)
 
+	/* Proxy */
+	M_PARAM_DECLARE_BOOL(ProxyUse)
+	M_PARAM_DECLARE_STRING(ProxyHost)
+	M_PARAM_DECLARE_INT(ProxyPort)
+	M_PARAM_DECLARE_STRING(ProxyUser)
+	M_PARAM_DECLARE_STRING(ProxyPassword)
+
 	/* Track */
 	M_PARAM_DECLARE_BOOL(ReadonlyTracksDefault)
 
@@ -386,9 +385,6 @@ protected:
 	QString OsmWebsite;
 	QString OsmUser;
 	QString OsmPassword;
-	bool ProxyUse;
-	QString ProxyHost;
-	int ProxyPort;
 
 	QHttp httpRequest;
 	int OsmPrefLoadId;

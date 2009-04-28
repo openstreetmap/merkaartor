@@ -26,7 +26,7 @@ class Downloader : public QObject
 	Q_OBJECT
 
 	public:
-		Downloader(const QString& aWeb, const QString& aUser, const QString& aPwd, bool UseProxy, const QString& aProxyHost, int aProxyPort);
+		Downloader(const QString& aWeb, const QString& aUser, const QString& aPwd);
 
 		bool request(const QString& Method, const QString& URL, const QString& Out);
 		bool go(const QString& url);
@@ -58,9 +58,6 @@ class Downloader : public QObject
 		int Port;
 		QHttp Request;
 		QString Web, User, Password;
-		bool UseProxy;
-		QString ProxyHost;
-		int ProxyPort;
 		QByteArray Content;
 		int Result;
 		QString LocationText;
@@ -77,7 +74,7 @@ class Downloader : public QObject
 
 bool downloadOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDocument);
 bool downloadMoreOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDocument);
-bool downloadOSM(QWidget* Main, const QString& aUser, const QString& aPassword, bool UseProxy, const QString& ProxyHost, int ProxyPort , const quint32 region , MapDocument* theDocument, MapLayer* theLayer);
+bool downloadOSM(QWidget* Main, const QString& aUser, const QString& aPassword, const quint32 region , MapDocument* theDocument, MapLayer* theLayer);
 
 bool checkForConflicts(MapDocument* theDocument);
 

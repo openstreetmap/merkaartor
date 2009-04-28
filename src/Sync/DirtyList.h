@@ -123,7 +123,7 @@ class DirtyListExecutor : public QObject, public DirtyListVisit
 	Q_OBJECT
 
 	public:
-		DirtyListExecutor(MapDocument* aDoc, const DirtyListBuild& aFuture, const QString& aWeb, const QString& aUser, const QString& aPwd, bool UseProxy, const QString& ProxyHost, int ProxyPort, int aTasks);
+		DirtyListExecutor(MapDocument* aDoc, const DirtyListBuild& aFuture, const QString& aWeb, const QString& aUser, const QString& aPwd, int aTasks);
 		virtual ~DirtyListExecutor();
 
 		virtual bool start();
@@ -147,9 +147,6 @@ class DirtyListExecutor : public QObject, public DirtyListVisit
 		int Tasks, Done;
 		QProgressDialog* Progress;
 		QString Web,User,Pwd;
-		bool UseProxy;
-		QString ProxyHost;
-		int ProxyPort;
 		Downloader* theDownloader;
 		QString ChangeSetId;
 };

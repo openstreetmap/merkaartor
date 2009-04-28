@@ -55,19 +55,6 @@ MapView::MapView(MainWindow* aMain) :
 #endif // BROWSERIMAGEMANAGER_IS_THREADED
 #endif //USE_WEBKIT
 
-	if (MerkaartorPreferences::instance()->getProxyUse()) {
-		ImageManager::instance()->setProxy(MerkaartorPreferences::instance()->getProxyHost(),
-			MerkaartorPreferences::instance()->getProxyPort());
-#ifdef USE_WEBKIT
-		BrowserImageManager::instance()->setProxy(MerkaartorPreferences::instance()->getProxyHost(),
-			MerkaartorPreferences::instance()->getProxyPort());
-#endif
-	} else {
-		ImageManager::instance()->setProxy("",0);
-#ifdef USE_WEBKIT
-		BrowserImageManager::instance()->setProxy("",0);
-#endif
-	}
 	layermanager = new LayerManager((QWidget *) this, size());
 	
 	connect(ImageManager::instance(), SIGNAL(imageRequested()),
