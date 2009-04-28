@@ -95,7 +95,7 @@ namespace geometry
 			{
 				typedef typename ring_type<P>::type R;
 
-				static inline void run(P& polygon, const PNT& point, int ring_index, int multi_index)
+				static inline void run(P& polygon, const PNT& point, int ring_index, int /* multi_index */)
 				{
 					if (ring_index == -1)
 					{

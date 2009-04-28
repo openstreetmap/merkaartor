@@ -37,7 +37,7 @@ namespace geometry
 			template <typename PS, typename PD, size_t N>
 			struct copy_coordinates<PS, PD, N, N>
 			{
-				static inline void copy(const PS& source, PD& dest)
+				static inline void copy(const PS& /* source */, PD& /* dest */)
 				{}
 			};
 

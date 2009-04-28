@@ -189,7 +189,7 @@ namespace geometry
 	*/
 	template <size_t D, typename G>
 	inline typename coordinate_type<G>::type get(const G& geometry
-			, impl::signature_getset_dimension* dummy = NULL
+			, impl::signature_getset_dimension* /* dummy */ = NULL
 			)
 	{
 		typedef typename boost::remove_const<G>::type NCG;
@@ -209,7 +209,7 @@ namespace geometry
 	*/
 	template <size_t D, typename G>
 	inline void set(G& geometry, const typename coordinate_type<G>::type& value
-			, impl::signature_getset_dimension* dummy = NULL
+			, impl::signature_getset_dimension* /* dummy */ = NULL
 			)
 	{
 		typedef typename boost::remove_const<G>::type NCG;
@@ -233,7 +233,7 @@ namespace geometry
 	*/
 	template <size_t I, size_t D, typename G>
 	inline typename coordinate_type<G>::type get(const G& geometry
-			, impl::signature_getset_index_dimension* dummy = NULL
+			, impl::signature_getset_index_dimension* /* dummy */ = NULL
 			)
 	{
 		typedef typename boost::remove_const<G>::type NCG;
@@ -253,7 +253,7 @@ namespace geometry
 	*/
 	template <size_t I, size_t D, typename G>
 	inline void set(G& geometry, const typename coordinate_type<G>::type& value
-			, impl::signature_getset_index_dimension* dummy = NULL
+			, impl::signature_getset_index_dimension* /* dummy */= NULL
 			)
 	{
 		typedef typename boost::remove_const<G>::type NCG;
