@@ -65,7 +65,7 @@ void BrowserWebPage::javaScriptAlert ( QWebFrame * frame, const QString & msg )
 		brlat = tokens[3].toDouble();
 		brlon = tokens[4].toDouble();
 
-		qDebug() << tllon << ", " << tllat << ", " << brlon << "," << brlat;
+		// qDebug() << tllon << ", " << tllat << ", " << brlon << "," << brlat;
 	} else
 	if (msg.startsWith("Size")) {
 
@@ -81,15 +81,20 @@ void BrowserWebPage::javaScriptAlert ( QWebFrame * frame, const QString & msg )
 		x1 = int(tokens[3].toDouble());
 		y1 = int(tokens[4].toDouble());
 
-		qDebug() << ox << ", " << oy << ", " << x1 << "," << y1;
+		// qDebug() << ox << ", " << oy << ", " << x1 << "," << y1;
 
 		sw = x1 - ox;
 		sh = y1 - oy;
 
-		qDebug() << sw << ", " << sh;
+		// qDebug() << sw << ", " << sh;
 	}
 }
 
+void BrowserWebPage::launchRequest ( const QUrl & url )
+{
+	sw = sh = 0;
+	mainFrame()->load(url);
+}
 
 BrowserImageManager* BrowserImageManager::m_BrowserImageManagerInstance = 0;
 QMutex mutex;
@@ -107,9 +112,12 @@ BrowserImageManager::BrowserImageManager(QObject* parent)
 }
 #else
 BrowserImageManager::BrowserImageManager(QObject* parent)
-    :QObject(parent), emptyPixmap(QPixmap(1,1)), page(0)
+    :QObject(parent), emptyPixmap(QPixmap(1,1)), errorPixmap(QPixmap(512,512)), page(0)
 {   
-    emptyPixmap.fill(Qt::transparent);
+	errorPixmap.fill(Qt::gray);
+	QPainter P(&errorPixmap);
+	P.fillRect(0, 0, 511, 511, QBrush(Qt::red, Qt::DiagCrossPattern));
+	emptyPixmap.fill(Qt::transparent);
     
     if (QPixmapCache::cacheLimit() <= 20000)
     {   
@@ -120,18 +128,22 @@ BrowserImageManager::BrowserImageManager(QObject* parent)
     page->setViewportSize(QSize(1024, 1024));
 
     connect(page, SIGNAL(loadFinished(bool)), this, SLOT(pageLoadFinished(bool)));
+
+	timeoutTimer = new QTimer();
+	connect(timeoutTimer, SIGNAL(timeout()), this, SLOT(timeout()));
+	timeoutTimer->setInterval(10000);
 }
 #endif // BROWSERIMAGEMANAGER_IS_THREADED
 
 
 BrowserImageManager::~BrowserImageManager()
 {
+	delete timeoutTimer;
 }
 
 //QPixmap BrowserImageManager::getImage(const QString& host, const QString& url)
 QPixmap BrowserImageManager::getImage(IMapAdapter* anAdapter, int x, int y, int z)
 {
-// 	qDebug() << "BrowserImageManager::getImage";
 	QPixmap pm(emptyPixmap);
 
 	QString host = anAdapter->getHost();
@@ -179,20 +191,25 @@ void BrowserImageManager::launchRequest()
 		return;
 //	LoadingRequest* R = loadingRequests.dequeue();
 	LoadingRequest R = loadingRequests.head();
-	qDebug() << "getting: " << QString(R.host).append(R.url);
+	qDebug() << "BrowserImageManager::launchRequest: " << QString(R.host).append(R.url) << " Hash: " << R.hash;
 
 	QUrl u = QUrl( R.url);
 
 #if QT_VERSION < 0x040500
 	page->networkAccessManager()->setProxy(QNetworkProxy::applicationProxy());
 #endif
-	page->mainFrame()->load(u);
+	page->launchRequest(u);
 	requestActive = true;
+#ifndef BROWSERIMAGEMANAGER_IS_THREADED
+	timeoutTimer->start();
+#endif
 }
 
 void BrowserImageManager::pageLoadFinished(bool ok)
 {
 	mutex.lock();
+
+	timeoutTimer->stop();
 
 	if (loadingRequests.isEmpty()) {
 		mutex.unlock();
@@ -202,7 +219,8 @@ void BrowserImageManager::pageLoadFinished(bool ok)
 	LoadingRequest R = loadingRequests.dequeue();
 	requestActive = false;
 
-	if (ok) {
+	if (ok && page->sw && page->sh) {
+		qDebug() << "BrowserImageManager::pageLoadFinished: " << " Hash: " << R.hash;
 		QPixmap pt(page->sw, page->sh);
 		QPainter P(&pt);
 		page->mainFrame()->render(&P, QRegion(0,0,page->sw,page->sh));
@@ -214,6 +232,8 @@ void BrowserImageManager::pageLoadFinished(bool ok)
 		}
 
 		receivedImage(pt, R.hash);
+	} else {
+		qDebug() << "BrowserImageManager::pageLoadFinished - Error: " << " Hash: " << R.hash;
 	}
 
 	mutex.unlock();
@@ -246,12 +266,7 @@ QPixmap BrowserImageManager::prefetchImage(IMapAdapter* anAdapter, int x, int y,
 
 void BrowserImageManager::receivedImage(const QPixmap& pixmap, const QString& hash)
 {
-// 	qDebug() << "BrowserImageManager::receivedImage";
-	if (pixmap.isNull()) {
-		QPixmap pm(256, 256);
-		pm.fill(Qt::gray);
-		QPixmapCache::insert(hash, pm);
-	} else {
+	if (!(pixmap.isNull())) {
 		QPixmapCache::insert(hash, pixmap);
 		QString strHash = QByteArray::fromBase64(hash.toAscii());
 
@@ -275,9 +290,6 @@ void BrowserImageManager::receivedImage(const QPixmap& pixmap, const QString& ha
 void BrowserImageManager::loadingQueueEmpty()
 {
 	emit(loadingFinished());
-// 	((Layer*)this->parent())->removeZoomImage();
-// 	qDebug() << "size of image-map: " << images.size();
-// 	qDebug() << "size: " << QPixmapCache::cacheLimit();
 }
 
 void BrowserImageManager::abortLoading()
@@ -321,5 +333,11 @@ void BrowserImageManager::checkRequests()
 	}
 	
 	mutex.unlock();
+}
+#else
+void BrowserImageManager::timeout()
+{
+	page->triggerAction(QWebPage::Stop);
+	pageLoadFinished(false);
 }
 #endif // BROWSERIMAGEMANAGER_IS_THREADED

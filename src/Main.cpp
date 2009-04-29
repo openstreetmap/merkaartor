@@ -3,16 +3,121 @@
 
 #include <QLibraryInfo>
 #include <QSplashScreen>
-#include <QNetworkProxy>
 
 #include "MainWindow.h" 
 #include "Preferences/MerkaartorPreferences.h"
 
 #include "IMapAdapter.h"
 
+#if defined(Q_OS_WIN)
+extern Q_CORE_EXPORT void qWinMsgHandler(QtMsgType t, const char* str);
+#endif
+
+FILE* pLogFile;
+
+void myMessageOutput(QtMsgType msgType, const char *buf)
+{
+// From corelib/global/qglobal.cpp : qt_message_output
+
+#if defined(Q_OS_WIN) && !defined(NDEBUG)
+	qWinMsgHandler(msgType, buf);
+#endif
+#if defined(Q_CC_MWERKS)
+	mac_default_handler(buf);
+#elif defined(Q_OS_WINCE)
+	QString fstr = QString::fromLatin1(buf);
+	fstr += QLatin1String("\n");
+	OutputDebugString(reinterpret_cast<const wchar_t *> (fstr.utf16()));
+#else
+#ifndef NDEBUG
+	fprintf(stderr, "%s\n", buf);
+	fflush(stderr);
+#endif
+	if (pLogFile && msgType == QtDebugMsg) {
+		fprintf(pLogFile, "%s\n", buf);
+		fflush(pLogFile);
+	}
+#endif
+
+	if (msgType == QtFatalMsg
+		|| (msgType == QtWarningMsg
+		&& (!qgetenv("QT_FATAL_WARNINGS").isNull())) ) {
+
+#if defined(Q_CC_MSVC) && defined(QT_DEBUG) && defined(_DEBUG) && defined(_CRT_ERROR)
+			// get the current report mode
+			int reportMode = _CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_WNDW);
+			_CrtSetReportMode(_CRT_ERROR, reportMode);
+#if !defined(Q_OS_WINCE)
+			int ret = _CrtDbgReport(_CRT_ERROR, __FILE__, __LINE__, QT_VERSION_STR, buf);
+#else
+			int ret = _CrtDbgReportW(_CRT_ERROR, _CRT_WIDE(__FILE__),
+				__LINE__, _CRT_WIDE(QT_VERSION_STR), reinterpret_cast<const wchar_t *> (QString::fromLatin1(buf).utf16()));
+#endif
+			if (ret == 0  && reportMode & _CRTDBG_MODE_WNDW)
+				return; // ignore
+			else if (ret == 1)
+				_CrtDbgBreak();
+#endif
+
+#if (defined(Q_OS_UNIX) || defined(Q_CC_MINGW))
+			abort(); // trap; generates core dump
+#else
+			exit(1); // goodbye cruel world
+#endif
+	}
+}
+
+void showVersion()
+{
+	QString o;
+	o = QString("Merkaartor %1%2\n").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION));
+	fprintf(stdout, o.toLatin1());
+	o = QString("using QT version %1 (built with %2)\n").arg(qVersion()).arg(QT_VERSION_STR);
+	fprintf(stdout, o.toLatin1());
+	fprintf(stdout, "Copyright Bart Vanhauwaert, Chris Browet and others, 2006-2009\n");
+	fprintf(stdout, "This program is licensed under the GNU Public License v2\n");
+}
+
+void showHelp()
+{
+	showVersion();
+	fprintf(stdout, "\n");
+	fprintf(stdout, "Usage: merkaartor [-h|--help] [-v|--version] [-l|--log logfilename] [filenames...]\n");
+	fprintf(stdout, "\n");
+	fprintf(stdout, "  -h, --help\t\tShow help information\n");
+	fprintf(stdout, "  -l, --log logfilename\t\tSave debugging information to file \"logfilename\"\n");
+	fprintf(stdout, "  -v, --version\t\tShow version information\n");
+	fprintf(stdout, "  [filenames]\t\tOpen designated files \n");
+}
+
 int main(int argc, char** argv)
 {
 	QApplication app(argc,argv);
+
+	QString logFilename(qApp->applicationDirPath() + "/merkaartor.log");
+	QStringList fileNames;
+	QStringList args = QCoreApplication::arguments();
+	args.removeFirst();
+	for (int i=0; i < args.size(); ++i) {
+		if (args[i] == "-l" || args[i] == "--log") {
+			++i;
+			logFilename = args[i];
+		} else
+		if (args[i] == "-v" || args[i] == "--version") {
+			showVersion();
+			exit(0);
+		} else
+		if (args[i] == "-h" || args[i] == "--help") {
+			showHelp();
+			exit(0);
+		} else
+			fileNames.append(args[i]);
+	}
+
+	pLogFile = fopen(logFilename.toLatin1(), "a");
+	qInstallMsgHandler(myMessageOutput);
+
+	qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Starting Merkaartor";
 
 	QCoreApplication::setOrganizationName("BartVanhauwaert");
 	QCoreApplication::setOrganizationDomain("www.irule.be");
@@ -76,28 +181,19 @@ int main(int argc, char** argv)
 #else
 	Main.show();
 #endif
-	QStringList fileNames = QCoreApplication::arguments();
-	fileNames.removeFirst();
-
 	Main.loadFiles(fileNames);
 
 	if (fileNames.isEmpty())
-		QDir::setCurrent(MerkaartorPreferences::instance()->getWorkingDir());
-
-	if (M_PREFS->M_PREFS->getProxyUse()) {
-		QNetworkProxy proxy;
-		proxy.setType(QNetworkProxy::HttpCachingProxy);
-		proxy.setHostName(M_PREFS->getProxyHost());
-		proxy.setPort(M_PREFS->getProxyPort());
-		proxy.setUser(M_PREFS->getProxyUser());
-		proxy.setPassword(M_PREFS->getProxyPassword());
-		QNetworkProxy::setApplicationProxy(proxy);
-	}
+		QDir::setCurrent(M_PREFS->getWorkingDir());
 
 	Main.show();
 	splash.finish(&Main);
 
 	int x = app.exec();
+
+	qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Ending Merkaartor";
+	fclose(pLogFile);
+
 	return x;
 }
 

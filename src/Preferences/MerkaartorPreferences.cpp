@@ -15,6 +15,8 @@
 #include <QApplication>
 #include <QByteArray>
 #include <QMessageBox>
+#include <QNetworkProxy>
+
 
 #include "MainWindow.h"
 #include "MapView.h"
@@ -331,6 +333,7 @@ void MerkaartorPreferences::fromOsmPref()
 	httpRequest.setHost(osmWeb.host(), osmWeb.port());
 
 	QHttpRequestHeader Header("GET", QString("/api/%1/user/preferences/").arg(apiVersion()));
+	qDebug() << "MerkaartorPreferences::fromOsmPref :" <<  QString("GET /api/%1/user/preferences/").arg(apiVersion());
 	if (osmWeb.port() == 80)
 		Header.setValue("Host",osmWeb.host());
 	else
@@ -355,8 +358,7 @@ void MerkaartorPreferences::on_responseHeaderReceived(const QHttpResponseHeader 
 			QMessageBox::critical(NULL,QApplication::translate("MerkaartorPreferences","Preferences upload failed"), QApplication::translate("MerkaartorPreferences","More than 150 preferences"));
 			break;
 		default:
-			qDebug() << hdr.statusCode();
-			qDebug() << hdr.reasonPhrase();
+			qDebug() << "MerkaartorPreferences::on_responseHeaderReceived :" << hdr.statusCode() << hdr.reasonPhrase();
 			break;
 	}
 }
@@ -364,6 +366,16 @@ void MerkaartorPreferences::on_responseHeaderReceived(const QHttpResponseHeader 
 void MerkaartorPreferences::initialize()
 {
 	Use06Api = Sets->value("osm/use06api", "true").toBool();
+
+	if (getProxyUse()) {
+		QNetworkProxy proxy;
+		proxy.setType(QNetworkProxy::HttpCachingProxy);
+		proxy.setHostName(getProxyHost());
+		proxy.setPort(getProxyPort());
+		proxy.setUser(getProxyUser());
+		proxy.setPassword(getProxyPassword());
+		QNetworkProxy::setApplicationProxy(proxy);
+	}
 
 	loadProjections();
 	loadWMSes();

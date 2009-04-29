@@ -294,8 +294,6 @@ MainWindow::MainWindow(void)
 #endif
 	M_PREFS->initialPosition(theView);
 
-	qDebug() << "Starting Merkaartor";
-
 #define NUMOP 3
 	static const char *opStr[NUMOP] = {
 		QT_TR_NOOP("Low"), QT_TR_NOOP("High"), QT_TR_NOOP("Opaque")};

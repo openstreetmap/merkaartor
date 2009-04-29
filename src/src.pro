@@ -46,7 +46,6 @@ QT += svg network xml core gui
 contains(NODEBUG,1) {
     CONFIG += release
     DEFINES += NDEBUG
-    DEFINES += QT_NO_DEBUG_OUTPUT
     #OBJECTS_DIR += $$PWD/../tmp/$$(QMAKESPEC)/obj_release
 }
 COMMON_DIR=$$PWD/../binaries

@@ -1,4 +1,6 @@
 v0.14
+	* ADD : log file for debugging output
+	* ADD : standard command-line arguments (-h, -v, ...) (fixes #1712)
     * FIX : Use application-wide proxy (fixes #1763)
     * ADD : Allow to specify a user/password for the proxy (untested by me)
     * FIX : Photo localization patch from Toby Speight.

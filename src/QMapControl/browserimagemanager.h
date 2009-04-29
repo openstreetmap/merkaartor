@@ -49,6 +49,7 @@ class BrowserWebPage : public QWebPage
 	protected:
 		virtual void javaScriptConsoleMessage ( const QString & message, int lineNumber, const QString & sourceID );
 		virtual void javaScriptAlert ( QWebFrame * frame, const QString & msg ) ;
+		void launchRequest ( const QUrl & url );
 
 	private:
 		double tllat, tllon;
@@ -110,6 +111,7 @@ class BrowserImageManager : public QObject, public IImageManager
 		BrowserImageManager(const BrowserImageManager&);
 		BrowserImageManager& operator=(const BrowserImageManager&);
 		QPixmap emptyPixmap;
+		QPixmap errorPixmap;
 		QList<QString> prefetch;
 
 		QQueue<LoadingRequest> loadingRequests;
@@ -138,6 +140,13 @@ class BrowserImageManager : public QObject, public IImageManager
 
 	protected:
 		virtual void run();
+#else
+	private:
+		QTimer* timeoutTimer;
+
+	private slots:
+		void timeout();
+
 #endif // BROWSERIMAGEMANAGER_IS_THREADED
 };
 
