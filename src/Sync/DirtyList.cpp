@@ -146,7 +146,8 @@ bool DirtyListVisit::add(MapFeature* F)
 {
 	if (DeletePass) return false;
 	if (F->isDeleted()) return false;
-	if (!F->isDirty()) return false;
+	// TODO Needed to add children of updated imported features. Sure there is no advert cases? 
+	//if (!F->isDirty()) return false;
 	if (F->hasOSMId()) return false;
 
 	if (Future.willBeErased(F))
