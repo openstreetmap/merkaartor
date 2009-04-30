@@ -117,7 +117,7 @@ int main(int argc, char** argv)
 	pLogFile = fopen(logFilename.toLatin1(), "a");
 	qInstallMsgHandler(myMessageOutput);
 
-	qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Starting Merkaartor";
+	qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Starting " << QString("Merkaartor %1%2\n").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION));
 
 	QCoreApplication::setOrganizationName("BartVanhauwaert");
 	QCoreApplication::setOrganizationDomain("www.irule.be");
@@ -191,7 +191,7 @@ int main(int argc, char** argv)
 
 	int x = app.exec();
 
-	qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Ending Merkaartor";
+	qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Ending " << QString("Merkaartor %1%2\n").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION));
 	fclose(pLogFile);
 
 	return x;

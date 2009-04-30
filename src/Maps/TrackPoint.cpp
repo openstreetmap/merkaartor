@@ -311,7 +311,7 @@ TrackPoint * TrackPoint::fromXML(MapDocument* d, MapLayer* L, const QDomElement 
 	MapFeature::ActorType A = (MapFeature::ActorType)(e.attribute("actor", "2").toInt());
 
 	QString id = (e.hasAttribute("id") ? e.attribute("id") : e.attribute("xml:id"));
-	if (!id.startsWith('{'))
+	if (!id.startsWith('{') && !id.startsWith('-'))
 		id = "node_" + id;
 	TrackPoint* Pt = dynamic_cast<TrackPoint*>(d->getFeature(id));
 	if (!Pt) {
@@ -344,7 +344,7 @@ TrackPoint * TrackPoint::fromGPX(MapDocument* d, MapLayer* L, const QDomElement 
 	double Lon = e.attribute("lon").toDouble();
 
 	QString id = (e.hasAttribute("id") ? e.attribute("id") : e.attribute("xml:id"));
-	if (!id.startsWith('{'))
+	if (!id.startsWith('{') && !id.startsWith('-'))
 		id = "node_" + id;
 
 	TrackPoint* Pt = dynamic_cast<TrackPoint*>(d->getFeature(id));

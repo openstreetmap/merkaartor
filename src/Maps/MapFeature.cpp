@@ -192,7 +192,7 @@ const QString& MapFeature::id() const
 {
 	if (p->Id == "")
 	{
-		p->Id = randomId();
+		p->Id = QString::number((((qint64)this) * -1));
 		if (parent())
 			dynamic_cast<MapLayer*>(parent())->notifyIdUpdate(p->Id,const_cast<MapFeature*>(this));
 	}
@@ -608,7 +608,7 @@ TrackPoint* MapFeature::getTrackPointOrCreatePlaceHolder(MapDocument *theDocumen
 		if (!Part)
 		{
 			Part = new TrackPoint(Coord(0,0));
-			if (Id.startsWith('{'))
+			if (Id.startsWith('{') || Id.startsWith('-'))
 				Part->setId(Id);
 			else
 				Part->setId("node_"+Id);
@@ -628,7 +628,7 @@ Road* MapFeature::getWayOrCreatePlaceHolder(MapDocument *theDocument, MapLayer *
 		if (!Part)
 		{
 			Part = new Road;
-			if (Id.startsWith('{'))
+			if (Id.startsWith('{') || Id.startsWith('-'))
 				Part->setId(Id);
 			else
 				Part->setId("way_"+Id);
@@ -648,7 +648,7 @@ Relation* MapFeature::getRelationOrCreatePlaceHolder(MapDocument *theDocument, M
 		if (!Part)
 		{
 			Part = new Relation;
-			if (Id.startsWith('{'))
+			if (Id.startsWith('{') || Id.startsWith('-'))
 				Part->setId(Id);
 			else
 				Part->setId("rel_"+Id);

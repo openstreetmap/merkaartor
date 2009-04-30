@@ -735,7 +735,7 @@ bool Road::toXML(QDomElement xParent, QProgressDialog & progress)
 Road * Road::fromXML(MapDocument* d, MapLayer * L, const QDomElement e)
 {
 	QString id = e.attribute("id");
-	if (!id.startsWith('{'))
+	if (!id.startsWith('{') && !id.startsWith('-'))
 		id = "way_" + id;
 	QDateTime time = QDateTime::fromString(e.attribute("timestamp").left(19), Qt::ISODate);
 	QString user = e.attribute("user");
@@ -774,7 +774,7 @@ Road * Road::fromXML(MapDocument* d, MapLayer * L, const QDomElement e)
 	while(!c.isNull()) {
 		if (c.tagName() == "nd") {
 			QString nId = c.attribute("ref");
-			if (!nId.startsWith('{'))
+			if (!nId.startsWith('{') && !nId.startsWith('-'))
 				nId = "node_" + nId;
 			//TrackPoint* Part = MapFeature::getTrackPointOrCreatePlaceHolder(d, L, NULL, c.attribute("ref"));
 			TrackPoint* Part = dynamic_cast<TrackPoint*>(d->getFeature(nId));

@@ -179,7 +179,7 @@ bool Downloader::go(const QString& url)
 {
 	if (Error) return false;
 
-	qDebug() << url;
+	qDebug() << "Downloader::go: " << url;
 
 	if (AnimationTimer)
 		AnimationTimer->start(200);
@@ -234,6 +234,9 @@ bool Downloader::go(const QString& url)
 bool Downloader::request(const QString& Method, const QString& URL, const QString& Data)
 {
 	if (Error) return false;
+	
+	qDebug() << "Downloader::request: " << URL;
+
 	QByteArray ba(Data.toUtf8());
 	QBuffer Buf(&ba);
 
@@ -295,8 +298,8 @@ void Downloader::on_responseHeaderReceived(const QHttpResponseHeader & hdr)
 	//		qDebug() << hdr.reasonPhrase();
 	//		break;
 	//}
-	qDebug() << hdr.statusCode();
-	qDebug() << hdr.reasonPhrase();
+
+	qDebug() << "Downloader::on_responseHeaderReceived: " << hdr.statusCode() << hdr.reasonPhrase();
 }
 
 void Downloader::on_requestFinished(int anId, bool anError)

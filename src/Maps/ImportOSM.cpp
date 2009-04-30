@@ -53,7 +53,9 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
 {
 	double Lat = atts.value("lat").toDouble();
 	double Lon = atts.value("lon").toDouble();
-	QString id = "node_"+atts.value("id");
+	QString id = atts.value("id");
+	if (id[0] != '-' && id[0] != '{')
+		id = "node_"+id;
 	TrackPoint* Pt = dynamic_cast<TrackPoint*>(theDocument->getFeature(id));
 	if (Pt)
 	{
@@ -112,8 +114,10 @@ void OSMHandler::parseNd(const QXmlAttributes& atts)
 
 void OSMHandler::parseWay(const QXmlAttributes& atts)
 {
-	QString id = "way_"+atts.value("id");
-        QString ts = atts.value("timestamp"); ts.truncate(19);
+	QString id = atts.value("id");
+	if (id[0] != '-' && id[0] != '{')
+		id = "way_"+id;
+	QString ts = atts.value("timestamp"); ts.truncate(19);
 	Road* R = dynamic_cast<Road*>(theDocument->getFeature(id));
 	if (R)
 	{
@@ -183,8 +187,10 @@ void OSMHandler::parseMember(const QXmlAttributes& atts)
 
 void OSMHandler::parseRelation(const QXmlAttributes& atts)
 {
-	QString id = "rel_"+atts.value("id");
-        QString ts = atts.value("timestamp"); ts.truncate(19);
+	QString id = atts.value("id");
+	if (id[0] != '-' && id[0] != '{')
+		id = "rel_"+id;
+	QString ts = atts.value("timestamp"); ts.truncate(19);
 	Relation* R = dynamic_cast<Relation*>(theDocument->getFeature(id));
 	if (R)
 	{

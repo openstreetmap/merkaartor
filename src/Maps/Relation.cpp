@@ -462,7 +462,7 @@ bool Relation::toXML(QDomElement xParent, QProgressDialog & progress)
 Relation * Relation::fromXML(MapDocument * d, MapLayer * L, const QDomElement e)
 {
 	QString id = e.attribute("id");
-	if (!id.startsWith('{'))
+	if (!id.startsWith('{') && !id.startsWith('-'))
 		id = "rel_" + id;
 	QDateTime time = QDateTime::fromString(e.attribute("timestamp").left(19), Qt::ISODate);
 	QString user = e.attribute("user");
@@ -489,7 +489,7 @@ Relation * Relation::fromXML(MapDocument * d, MapLayer * L, const QDomElement e)
 			MapFeature* F = 0;
 			if (Type == "node") {
 				QString nId = c.attribute("ref");
-				if (!nId.startsWith('{'))
+				if (!nId.startsWith('{') && !nId.startsWith('-'))
 					nId = "node_" + nId;
 				TrackPoint* Part = dynamic_cast<TrackPoint*>(d->getFeature(nId));
 				if (!Part)
@@ -502,7 +502,7 @@ Relation * Relation::fromXML(MapDocument * d, MapLayer * L, const QDomElement e)
 				F = Part;
 			} else if (Type == "way") {
 				QString rId = c.attribute("ref");
-				if (!rId.startsWith('{'))
+				if (!rId.startsWith('{') && !rId.startsWith('-'))
 					rId = "way_" + rId;
 				Road* Part = dynamic_cast<Road*>(d->getFeature(rId));
 				if (!Part)
@@ -515,7 +515,7 @@ Relation * Relation::fromXML(MapDocument * d, MapLayer * L, const QDomElement e)
 				F = Part;
 			} else if (Type == "relation") {
 				QString RId = c.attribute("ref");
-				if (!RId.startsWith('{'))
+				if (!RId.startsWith('{') && !RId.startsWith('-'))
 					RId = "rel_" + RId;
 				Relation* Part = dynamic_cast<Relation*>(d->getFeature(RId));
 				if (!Part)
