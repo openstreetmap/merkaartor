@@ -181,6 +181,7 @@ void PropertiesDock::checkMenuStatus()
 	Main->editMoveAction->setEnabled(true);
 	Main->editReverseAction->setEnabled(IsRoad);
 	Main->roadJoinAction->setEnabled(NumRoads > 1 && canJoinRoads(this));
+	Main->roadCreateJunctionAction->setEnabled(NumRoads > 1 && canCreateJunction(this));
 	Main->roadSplitAction->setEnabled((IsParentRoadInner && !IsParentArea) || (NumRoads && NumPoints) || (NumAreas && NumPoints));
 	Main->roadBreakAction->setEnabled(IsParentRoadInner || (NumRoads == 1 && NumPoints) || (NumRoads > 1 && canBreakRoads(this)));
 	Main->featureCommitAction->setEnabled(NumCommitableFeature);

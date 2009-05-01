@@ -14,6 +14,10 @@
 
 #include <algorithm>
 
+#ifndef _MOBILE
+#include <geometry/geometry.hpp>
+#endif
+
 bool canJoin(Road* R1, Road* R2)
 {
 	if ( (R1->size() == 0) || (R2->size() == 0) )
@@ -312,6 +316,59 @@ void breakRoads(MapDocument* theDocument, CommandList* theList, PropertiesDock* 
 		for (int j=0; j<Roads[i]->size(); ++j)
 			for (int k=i+1; k<Roads.size(); ++k)
 				breakRoad(theDocument, theList, Roads[k],dynamic_cast<TrackPoint*>(Roads[i]->get(j)));
+}
+
+bool canCreateJunction(PropertiesDock* theDock)
+{
+	return createJunction(NULL, NULL, theDock, false);
+}
+
+bool createJunction(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock, bool doIt)
+{
+	//TODO test that the junction do not already exists!
+	typedef geometry::point_xy<float> P;
+	bool ret = false;
+
+	QList<Road*> Roads, Result;
+	for (int i=0; i<theDock->size(); ++i)
+		if (Road* R = dynamic_cast<Road*>(theDock->selection(i)))
+			Roads.push_back(R);
+
+	if (Roads.size() < 2)
+		return false;
+
+	Road* R1 = Roads[0];
+	Road* R2 = Roads[1];
+
+	for (int i=0; i<R1->size()-1; ++i) {
+		P a(R1->getNode(i)->position().lon(), R1->getNode(i)->position().lat());
+		P b(R1->getNode(i+1)->position().lon(), R1->getNode(i+1)->position().lat());
+        geometry::segment<P> s1(a, b);
+
+		for (int j=0; j<R2->size()-1; ++j) {
+			P c(R2->getNode(j)->position().lon(), R2->getNode(j)->position().lat());
+			P d(R2->getNode(j+1)->position().lon(), R2->getNode(j+1)->position().lat());
+			geometry::segment<P> s2(c, d);
+
+			QList<P> theintersections;
+			theintersections.append(P(0, 0));
+			theintersections.append(P(0, 0));
+			QList<P>::Iterator intersectOS = theintersections.begin();
+
+			geometry::intersection_result r = geometry::intersection_segment<P>(s1, s2, intersectOS);
+			if (r.is_type == geometry::is_intersect)
+				if (r.get_connection_type() == geometry::is_connect_no) {
+					ret = true;
+					if (doIt) {
+						TrackPoint* pt = new TrackPoint(Coord(theintersections[0].y(), theintersections[0].x()));
+						theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(R1->layer()),pt,true));
+						theList->add(new RoadAddTrackPointCommand(R1,pt,i+1,theDocument->getDirtyOrOriginLayer(R1->layer())));
+						theList->add(new RoadAddTrackPointCommand(R2,pt,j+1,theDocument->getDirtyOrOriginLayer(R2->layer())));
+					}
+				}
+		}
+	}
+	return ret;
 }
 
 void alignNodes(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)

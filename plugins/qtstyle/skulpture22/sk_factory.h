@@ -78,19 +78,19 @@ class AbstractFactory
 		void create();
 
 	protected:
-		virtual void executeCode(Code code) QT_FASTCALL;
-		virtual void skipCode(Code code) QT_FASTCALL;
-		virtual int version() QT_FASTCALL { return 0; }
+		virtual void QT_FASTCALL executeCode(Code code);
+		virtual void QT_FASTCALL skipCode(Code code);
+		virtual int QT_FASTCALL version() { return 0; }
 
 	protected:
-		qreal evalValue() QT_FASTCALL;
-		QColor evalColor() QT_FASTCALL;
-		void skipValue() QT_FASTCALL;
-		void skipColor() QT_FASTCALL;
+		qreal QT_FASTCALL evalValue();
+		QColor QT_FASTCALL evalColor();
+		void QT_FASTCALL skipValue();
+		void QT_FASTCALL skipColor();
 
 	private:
-		bool evalCondition() QT_FASTCALL;
-		void skipCondition() QT_FASTCALL;
+		bool QT_FASTCALL evalCondition();
+		void QT_FASTCALL skipCondition();
 
 	private:
 		Description p;
@@ -115,8 +115,8 @@ class ShapeFactory : public AbstractFactory
 		const QPainterPath &getPath() const { return path; }
 
 	protected:
-		virtual void executeCode(Code code) QT_FASTCALL;
-		virtual void skipCode(Code code) QT_FASTCALL;
+		virtual void QT_FASTCALL executeCode(Code code);
+		virtual void QT_FASTCALL skipCode(Code code);
 
 	private:
 		QPainterPath path;
@@ -150,8 +150,8 @@ class GradientFactory : public AbstractFactory
 		const QGradient &getGradient() const { return gradient; }
 
 	protected:
-		virtual void executeCode(Code code) QT_FASTCALL;
-		virtual void skipCode(Code code) QT_FASTCALL;
+		virtual void QT_FASTCALL executeCode(Code code);
+		virtual void QT_FASTCALL skipCode(Code code);
 
 	private:
 		QGradient gradient;

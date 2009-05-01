@@ -93,6 +93,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 		virtual void on_roadSplitAction_triggered();
 		virtual void on_roadBreakAction_triggered();
 		virtual void on_roadJoinAction_triggered();
+		virtual void on_roadCreateJunctionAction_triggered();
 		virtual void on_featureCommitAction_triggered();
 		virtual void on_nodeAlignAction_triggered();
 		virtual void on_nodeMergeAction_triggered();

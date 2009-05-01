@@ -51,6 +51,7 @@
     <addaction name="roadBreakAction" />
     <addaction name="roadJoinAction" />
     <addaction name="editReverseAction" />
+    <addaction name="roadCreateJunctionAction" />
    </widget>
    <widget class="QMenu" name="menuEdit" >
     <property name="title" >
@@ -1487,6 +1488,11 @@
    </property>
    <property name="text" >
     <string>Camera</string>
+   </property>
+  </action>
+  <action name="roadCreateJunctionAction" >
+   <property name="text" >
+    <string>Create &amp;Junction</string>
    </property>
   </action>
  </widget>

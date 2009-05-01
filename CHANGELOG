@@ -1,4 +1,5 @@
 v0.14
+	* ADD : Create road junction function (closes #1661)
     * FIX : force the addition of children of imported features (might solve some "prerequisites" errors)
     * FIX : import & export JOSM compatible .osm (fixes #1163)
 	* ADD : log file for debugging output

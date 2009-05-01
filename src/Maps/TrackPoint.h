@@ -91,7 +91,7 @@ Q_DECLARE_METATYPE( TrackPoint * );
 
 #ifndef _MOBILE
 // Register this point as being a recognizable point by the GGL
-GEOMETRY_REGISTER_POINT_2D_CONST(TrackPoint, int, cs::cartesian, projection().x(), projection().y())
+GEOMETRY_REGISTER_POINT_2D_CONST(TrackPoint, qreal, cs::cartesian, projection().x(), projection().y())
 #endif
 
 

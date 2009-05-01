@@ -22,7 +22,7 @@ void myMessageOutput(QtMsgType msgType, const char *buf)
 #if defined(Q_OS_WIN) && !defined(NDEBUG)
 	qWinMsgHandler(msgType, buf);
 #endif
-#if defined(Q_CC_MWERKS)
+#if defined(Q_CC_MWERKS) && !defined(Q_OS_SYMBIAN)
 	mac_default_handler(buf);
 #elif defined(Q_OS_WINCE)
 	QString fstr = QString::fromLatin1(buf);

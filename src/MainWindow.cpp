@@ -1216,6 +1216,19 @@ void MainWindow::on_featureCommitAction_triggered()
 		theDocument->addHistory(theList);
 }
 
+void MainWindow::on_roadCreateJunctionAction_triggered()
+{
+	CommandList* theList = new CommandList(MainWindow::tr("Create Junction"), NULL);
+	createJunction(theDocument, theList, theProperties);
+	if (theList->empty())
+		delete theList;
+	else
+	{
+		theDocument->addHistory(theList);
+		invalidateView();
+	}
+}
+
 void MainWindow::on_nodeAlignAction_triggered()
 {
 	//MapFeature* F = theView->properties()->selection(0);
