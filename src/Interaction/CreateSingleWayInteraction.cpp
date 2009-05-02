@@ -108,7 +108,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Map
 					N->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 				CommandList* theList  = new CommandList(MainWindow::tr("Create Node %1 in Road %2").arg(N->description()).arg(aRoad->description()), N);
 				theList->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),N,true));
-				theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx));
+				theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx,Main->document()->getDirtyOrOriginLayer(aRoad)));
 				document()->addHistory(theList);
 				view()->invalidate(true, false);
 				FirstNode = N;
