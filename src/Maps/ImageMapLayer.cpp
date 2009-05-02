@@ -12,6 +12,7 @@
 #include "QMapControl/wmsmapadapter.h"
 #include "QMapControl/layer.h"
 #include "QMapControl/layermanager.h"
+#include <QLocale>
 
 #include "LayerWidget.h"
 
@@ -25,6 +26,9 @@ public:
 	WmsServer* theWmsServer;
 
 	ImageLayerWidget* theWidget;
+	QLocale loc;
+	QHttp http;
+	QPixmap pm;
 
 public:
 	ImageMapLayerPrivate()
@@ -32,6 +36,8 @@ public:
 		layer_bg = NULL;
 		theWidget = NULL;
 		theWmsServer = NULL;
+		loc = QLocale(QLocale::English);
+		loc.setNumberOptions(QLocale::OmitGroupSeparator);
 	}
 };
 
@@ -53,6 +59,9 @@ ImageMapLayer::ImageMapLayer(const QString & aName, LayerManager* aLayerMgr)
 		else
 			setFilename(QCoreApplication::applicationDirPath() + "/" + STRINGIFY(WORLD_SHP));
 	}
+
+	connect(&p->http, SIGNAL(requestFinished(int, bool)),
+	        this, SLOT(requestFinished(int, bool)));
 
 	setReadonly(true);
 }
@@ -113,6 +122,16 @@ Layer* ImageMapLayer::imageLayer()
 	return p->layer_bg;
 }
 
+QString ImageMapLayer::projection() const
+{
+	if (p->layer_bg)
+		return p->layer_bg->getMapAdapter()->projection();
+	else
+		if (p->theWmsServer)
+			return p->theWmsServer->WmsProjections;
+}
+
+
 void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid)
 {
 	IMapAdapter* mapadapter_bg;
@@ -149,13 +168,6 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid)
 		wsl = M_PREFS->getWmsServers();
 		selws = M_PREFS->getSelectedWmsServer();
 		p->theWmsServer = new WmsServer(wsl->value(selws));
-
-		wmsa = new WMSMapAdapter(p->theWmsServer->WmsAdress, p->theWmsServer->WmsPath, p->theWmsServer->WmsLayers, p->theWmsServer->WmsProjections,
-			p->theWmsServer->WmsStyles, p->theWmsServer->WmsImgFormat);
-		wmsa->setImageManager(ImageManager::instance());
-		mapadapter_bg = wmsa;
-		p->layer_bg = new Layer(id(), mapadapter_bg, Layer::MapLayer);
-		p->layer_bg->setVisible(isVisible());
 
 		setName(tr("Map - WMS - %1").arg(p->theWmsServer->WmsName));
 	} else
@@ -266,8 +278,84 @@ ImageMapLayer * ImageMapLayer::fromXML(MapDocument* d, const QDomElement& e, QPr
 	return l;
 }
 
-void ImageMapLayer::drawImage(QPixmap& /*thePix*/, Projection& /*theProjection*/)
+void ImageMapLayer::drawImage(QPixmap& thePix, QPoint delta)
 {
 	if (!p->theWmsServer)
 		return;
+
+	QPainter P(&thePix);
+	P.drawPixmap(delta, p->pm);
+}
+
+void ImageMapLayer::forceRedraw(Projection& theProjection, QRect rect)
+{
+	if (!p->theWmsServer)
+		return;
+
+	drawWMS(theProjection, rect);
+}
+
+void ImageMapLayer::drawWMS(Projection& theProjection, QRect& rect)
+{
+	p->http.abort();
+
+	CoordBox vp = theProjection.viewport();
+	QPointF ul = Projection::projProject(vp.topLeft());
+	QPointF br = Projection::projProject(vp.bottomRight());
+	QUrl url (QString("http://")
+						.append(p->theWmsServer->WmsAdress)
+						.append(p->theWmsServer->WmsPath)
+						.append("SERVICE=WMS")
+						.append("&VERSION=1.1.1")
+						.append("&REQUEST=GetMap")
+						.append("&TRANSPARENT=TRUE")
+						.append("&LAYERS=").append(p->theWmsServer->WmsLayers)
+						.append("&SRS=").append(p->theWmsServer->WmsProjections)
+						.append("&STYLES=").append(p->theWmsServer->WmsStyles)
+						.append("&FORMAT=").append(p->theWmsServer->WmsImgFormat)
+						.append("&WIDTH=").append(QString::number(rect.width()))
+						.append("&HEIGHT=").append(QString::number(rect.height()))
+						.append("&BBOX=")
+						 .append(p->loc.toString(ul.x(),'f',6)).append(",")
+						 .append(p->loc.toString(br.y(),'f',6)).append(",")
+						 .append(p->loc.toString(br.x(),'f',6)).append(",")
+						 .append(p->loc.toString(ul.y(),'f',6))
+						 );
+
+	qDebug() << "ImageMapLayer::drawWMS: getting: " << url.toString();
+
+	p->http.setHost(url.host(), url.port() == -1 ? 80 : url.port());
+
+	QHttpRequestHeader header("GET", url.path() + "?" + url.encodedQuery());
+	header.setValue("Host", url.host());
+    header.setValue("User-Agent", "Mozilla");
+
+	int getId = p->http.request(header);
+}
+
+void ImageMapLayer::requestFinished(int id, bool error)
+{
+	if (p->http.error()) {
+		qDebug() << "ImageMapLayer::drawWMS: network error: " << p->http.errorString();
+		return;
+	}
+
+	QByteArray ax;
+
+	if (p->http.bytesAvailable() > 0) {
+		ax = p->http.readAll();
+		if (!p->pm.loadFromData(ax)) {
+			qDebug() << "ImageMapLayer::drawWMS: NETWORK_PIXMAP_ERROR: " << ax;
+		} else {
+			emit(imageReceived());
+		}
+	}
+}
+
+void ImageMapLayer::zoom(double zoom, const QPoint& pos, const QRect& rect) 
+{
+	QPixmap tpm = p->pm.scaled(rect.size() * zoom, Qt::KeepAspectRatio);
+	p->pm.fill(Qt::transparent);
+	QPainter P(&p->pm);
+	P.drawPixmap(pos - (pos * zoom), tpm);
 }

@@ -284,7 +284,6 @@ MainWindow::MainWindow(void)
 	viewStyleTouchupAction->setVisible(false);
 //#endif
 	
-	on_fileNewAction_triggered();
 	MerkaartorPreferences::instance()->restoreMainWindowState( this );
 #ifndef _MOBILE
 	if (!M_PREFS->getProjectionsList().getProjections().size()) {
@@ -292,6 +291,7 @@ MainWindow::MainWindow(void)
 		exit(1);
 	}
 #endif
+	on_fileNewAction_triggered();
 	M_PREFS->initialPosition(theView);
 
 #define NUMOP 3
@@ -371,11 +371,12 @@ void MainWindow::setAreaOpacity(QAction *act)
 
 void MainWindow::adjustLayers(bool adjustViewport)
 {
+	CoordBox theVp;
 	if (adjustViewport) {
-		CoordBox theVp = theView->projection().viewport();
+		theVp = theView->projection().viewport();
 #ifndef _MOBILE
-		if (theDocument->getImageLayer()->imageLayer())
-			theView->projection().setProjectionType(theDocument->getImageLayer()->imageLayer()->getMapAdapter()->projection());
+		if (theDocument->getImageLayer())
+			theView->projection().setProjectionType(theDocument->getImageLayer()->projection());
 #endif
 		theView->projection().setViewport(theVp, theView->rect());
 	}
@@ -563,7 +564,7 @@ void MainWindow::on_editPropertiesAction_triggered()
 	if (theView->interaction() && dynamic_cast<EditInteraction*>(theView->interaction()))
 		theProperties->setSelection(0);
 	theView->unlockSelection();
-	invalidateView();
+	theView->invalidate(true, false);
 	theView->launch(new EditInteraction(theView));
 }
 

@@ -1,4 +1,5 @@
 v0.14
+	* CHG : Changed way to handle WMS. Should allow exotic projections and eliminate problems.
 	* ADD : Create road junction function (closes #1661)
     * FIX : force the addition of children of imported features (might solve some "prerequisites" errors)
     * FIX : import & export JOSM compatible .osm (fixes #1163)

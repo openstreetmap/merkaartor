@@ -52,7 +52,7 @@ bool Projection::projIsLatLong()
 
 Projection::Projection(void)
   : ScaleLat(1000000), ScaleLon(1000000),
-  DeltaLat(0), DeltaLon(0), Viewport(Coord(-1000, -1000), Coord(1000, 1000)),
+  DeltaLat(0), DeltaLon(0), Viewport(WORLD_COORDBOX),
   layermanager(0)
 {
 #ifndef _MOBILE

@@ -17,6 +17,7 @@ public:
 	Layer* imageLayer();
 	void setMapAdapter(const QUuid& theAdapterUid);
 	LayerManager* layermanager;
+	QString projection() const;
 
 	virtual void setVisible(bool b);
 	virtual LayerWidget* newWidget(void);
@@ -31,7 +32,10 @@ public:
 
 	virtual bool arePointsDrawable() {return false;}
 
-	virtual void drawImage(QPixmap& thePix, Projection& theProjection);
+	virtual void drawImage(QPixmap& thePix, QPoint delta);
+	virtual void forceRedraw(Projection& theProjection, QRect rect);
+	virtual void drawWMS(Projection& theProjection, QRect& rect);
+	virtual void zoom(double zoom, const QPoint& pos, const QRect& rect);
 
 private:
 	WMSMapAdapter* wmsa;
@@ -40,6 +44,11 @@ private:
 protected:
 	ImageMapLayerPrivate* p;
 
+private slots:
+	void requestFinished(int id, bool error);
+
+signals:
+	void imageReceived();
 };
 
 #endif

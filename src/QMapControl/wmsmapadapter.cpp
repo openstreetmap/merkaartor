@@ -67,39 +67,16 @@ IMapAdapter::Type WMSMapAdapter::getType() const
 
 QPoint WMSMapAdapter::coordinateToDisplay(const QPointF& coordinate) const
 {
-#ifndef _MOBILE
-	double spanX = 360.;
-	double spanY = 180.;
-
-	QPointF p = Projection::projProject(Coord(angToInt(coordinate.y()), angToInt(coordinate.x())));
-
-	double x = (p.x()) * (numberOfTiles*tilesize)/spanX;		// coord to pixel!
-	double y = -1*(p.y()) * (numberOfTiles/2*tilesize)/spanY;	// coord to pixel!
-
-	return QPoint(int(x), int(y));
-#else
 	double x = (coordinate.x()+180) * (numberOfTiles*tilesize)/360.;		// coord to pixel!
-	double y = -1*(coordinate.y()-90) * (numberOfTiles*tilesize)/180.;	// coord to pixel!
+	double y = -1*(coordinate.y()-90) * (numberOfTiles/2*tilesize)/180.;	// coord to pixel!
 	return QPoint(int(x), int(y));
-#endif
 }
 
 QPointF WMSMapAdapter::displayToCoordinate(const QPoint& pt) const
 {
-#ifndef _MOBILE
-	double spanX = 360.;
-	double spanY = 180.;
-
-	double Lon = (pt.x()*(spanX/(numberOfTiles*tilesize)));
-	double Lat = -(pt.y()*(spanY/(numberOfTiles/2*tilesize)));
-
-	Coord c = Projection::projInverse(QPointF(Lon, Lat));
-	return QPointF(intToAng(c.lon()), intToAng(c.lat()));
-#else
 	double lon = (pt.x()*(360./(numberOfTiles*tilesize)))-180;
-	double lat = -(pt.y()*(180./(numberOfTiles*tilesize)))+90;
+	double lat = -(pt.y()*(180./(numberOfTiles/2*tilesize)))+90;
 	return QPointF(lon, lat);
-#endif
 } 
 
 bool WMSMapAdapter::isValid(int /* x */, int /* y */, int /* z */) const
@@ -129,18 +106,7 @@ QString WMSMapAdapter::getQ(QPointF ul, QPointF br) const
 	QPointF ulp;
 	QPointF brp;
 
-#ifndef _MOBILE
-	ulp = Projection::projProject(Coord(angToInt(ul.y()), angToInt(ul.x())));
-	brp = Projection::projProject(Coord(angToInt(br.y()), angToInt(br.x())));
-	if (Projection::projIsLatLong() ) {
-		ulp = QPointF(rad_deg(ulp.x()), rad_deg(ulp.y()));
-		brp = QPointF(rad_deg(brp.x()), rad_deg(brp.y()));
-	}
-#else
-	ulp = ul;
-	brp = br;
-#endif
-
+	//Q_ASSERT(!(ulp.toPoint().isNull() && brp.toPoint().isNull()));
 	return QString().append(serverPath)
 						.append("SERVICE=WMS")
 						.append("&VERSION=").append(wms_version)
@@ -153,8 +119,8 @@ QString WMSMapAdapter::getQ(QPointF ul, QPointF br) const
 						.append("&WIDTH=").append(wms_width)
 						.append("&HEIGHT=").append(wms_height)
 						.append("&BBOX=")
-						 .append(loc.toString(ulp.x(),'f',6)).append(",")
-						 .append(loc.toString(brp.y(),'f',6)).append(",")
-						 .append(loc.toString(brp.x(),'f',6)).append(",")
-						 .append(loc.toString(ulp.y(),'f',6));
+						 .append(loc.toString(ul.x(),'f',6)).append(",")
+						 .append(loc.toString(br.y(),'f',6)).append(",")
+						 .append(loc.toString(br.x(),'f',6)).append(",")
+						 .append(loc.toString(ul.y(),'f',6));
 }
