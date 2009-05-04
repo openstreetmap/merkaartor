@@ -330,10 +330,10 @@ void ImageMapLayer::drawWMS(Projection& theProjection, QRect& rect)
 	header.setValue("Host", url.host());
     header.setValue("User-Agent", "Mozilla");
 
-	int getId = p->http.request(header);
+	/* int getId = */ p->http.request(header);
 }
 
-void ImageMapLayer::requestFinished(int id, bool error)
+void ImageMapLayer::requestFinished(int /*id*/, bool /*error*/)
 {
 	if (p->http.error()) {
 		qDebug() << "ImageMapLayer::drawWMS: network error: " << p->http.errorString();
