@@ -398,6 +398,10 @@ QString TrackPoint::toHtml()
 		D += "<i>"+QApplication::translate("MapFeature", "elevation")+": </i>" + QString::number(elevation(), 'f', 4) + "<br/>";
 	if (speed())
 		D += "<i>"+QApplication::translate("MapFeature", "speed")+": </i>" + QString::number(speed(), 'f', 4) + "<br/>";
+	if ((i = findKey("_description_")) < tagSize())
+		D += "<i>"+QApplication::translate("MapFeature", "description")+": </i>" + tagValue(i) + "<br/>";
+	if ((i = findKey("_comment_")) < tagSize())
+		D += "<i>"+QApplication::translate("MapFeature", "comment")+": </i>" + tagValue(i) + "<br/>";
 
 	if ((i = findKey("_waypoint_")) < tagSize()) {
 		D += "<p><b>"+QApplication::translate("MapFeature", "Waypoint")+"</b><br/>";
