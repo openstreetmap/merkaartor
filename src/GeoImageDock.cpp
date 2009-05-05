@@ -80,13 +80,22 @@ void GeoImageDock::setImage(TrackPoint *Pt)
 }
 void GeoImageDock::setImage(int ImageId)
 {
+	if (ImageId < 0 || ImageId >= usedTrackPoints.size()) { // invalid ImageId
+		Image->setImage("");
+		curImage = -1;
+		return;
+	}
+
 	VisibleFeatureIterator it(Main->document());
 	for (; !it.isEnd(); ++it) // find TrackPoint
 		if (usedTrackPoints.at(ImageId).id == it.get()->id())
 			break;
 
-	if (it.isEnd()) // haven't found one
+	if (it.isEnd()) { // haven't found one
+		Image->setImage("");
+		curImage = -1;
 		return;
+	}
 
 	updateByMe = true;
 	if (!Main->properties()->isSelected(it.get())) {
@@ -135,7 +144,7 @@ void GeoImageDock::toClipboard(void)
 
 void GeoImageDock::selectNext(void)
 {
-	if (++curImage >= usedTrackPoints.size())
+	if (++curImage >= usedTrackPoints.size() || curImage < 0)
 		curImage = 0;
 
 	setImage(curImage);
@@ -345,7 +354,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
 
 			MapFeature *feature = NULL;
 			TrackPoint *Pt, *bestPt = NULL;
-			int a, secondsTo = (int)-1 / 2;
+			int a, secondsTo = INT_MAX;
 			int u;
 
 			for (u=0; u<theLayer->size(); u++) {
