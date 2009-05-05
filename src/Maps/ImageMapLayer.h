@@ -2,6 +2,9 @@
 #define IMAGEMAPLAYER_H_
 
 #include "Maps/MapLayer.h"
+#include <geometry/geometries/cartesian2d.hpp>
+#include <geometry/geometries/latlong.hpp>
+#include <geometry/projections/projection.hpp>
 
 class ImageMapLayerPrivate;
 class Projection;
@@ -40,6 +43,7 @@ public:
 private:
 	WMSMapAdapter* wmsa;
 	TileMapAdapter* tmsa;
+	projection::projection<geometry::point_ll_deg, geometry::point_2d> *theProj;
 
 protected:
 	ImageMapLayerPrivate* p;

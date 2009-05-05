@@ -9,6 +9,11 @@
 #include "QMapControl/mapadapter.h"
 #include "QMapControl/layermanager.h"
 
+#include <geometry/geometries/cartesian2d.hpp>
+#include <geometry/geometries/latlong.hpp>
+
+#include <geometry/projections/projection.hpp>
+
 #define LAYERMANAGER_OK (layermanager && layermanager->getLayer())
 
 class QRect;
@@ -40,11 +45,12 @@ class Projection
 		void fromXML(QDomElement e, const QRect & Screen);
 
 #ifndef _MOBILE
+		static projection::projection<geometry::point_ll_deg, geometry::point_2d> * getProjection(QString projString);
 		bool setProjectionType(ProjectionType aProjectionType);
 
-		static QPointF projProject(const Coord& Map);
-		static Coord projInverse(const QPointF& Screen);
-		static bool projIsLatLong();
+		QPointF projProject(const Coord& Map) const;
+		Coord projInverse(const QPointF& Screen) const;
+		bool projIsLatLong();
 #endif
 
 	protected:
@@ -56,6 +62,7 @@ class Projection
 		LayerManager* layermanager;
 #ifndef _MOBILE
 		ProjectionType theProjectionType;
+		projection::projection<geometry::point_ll_deg, geometry::point_2d> *theProj;
 #endif
 
 	private:

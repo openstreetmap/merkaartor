@@ -6,25 +6,20 @@
 
 #include <math.h>
 
+#include <geometry/projections/parameters.hpp>
+#include <geometry/projections/factory.hpp>
+
 // from wikipedia
 #define EQUATORIALRADIUS 6378137.0
 #define POLARRADIUS      6356752.0
 //#define PROJ_RATIO ((double(INT_MAX)/M_PI) / EQUATORIALRADIUS)
 
 #ifndef _MOBILE
-#include <geometry/geometries/cartesian2d.hpp>
-#include <geometry/geometries/latlong.hpp>
-
-#include <geometry/projections/parameters.hpp>
-#include <geometry/projections/factory.hpp>
 
 using namespace geometry;
 
-projection::projection<geometry::point_ll_deg, geometry::point_2d> *theProj;
-projection::factory<geometry::point_ll_deg, geometry::point_2d> fac;
-projection::parameters par;
 
-QPointF Projection::projProject(const Coord & Map)
+QPointF Projection::projProject(const Coord & Map) const
 {
 	point_ll_deg in(longitude<>(intToAng(Map.lon())), latitude<>(intToAng(Map.lat())));
 	point_2d out;
@@ -34,7 +29,7 @@ QPointF Projection::projProject(const Coord & Map)
 	return QPointF(out.x(), out.y());
 }
 
-Coord Projection::projInverse(const QPointF & pProj)
+Coord Projection::projInverse(const QPointF & pProj) const
 {
 	point_2d in(pProj.x(), pProj.y());
 	point_ll_deg out;
@@ -53,26 +48,42 @@ bool Projection::projIsLatLong()
 Projection::Projection(void)
   : ScaleLat(1000000), ScaleLon(1000000),
   DeltaLat(0), DeltaLon(0), Viewport(WORLD_COORDBOX),
-  layermanager(0)
+  layermanager(0), theProj(0)
 {
 #ifndef _MOBILE
-	QString theProjString;
-	theProjectionType = M_PREFS->getProjectionType();
+	setProjectionType(M_PREFS->getProjectionType());
+#endif
+}
 
-	theProjString = M_PREFS->getProjection(theProjectionType).projection;
-	par = projection::init(std::string(QString("%1 +over").arg(theProjString).toLatin1().data()));
-	theProj = fac.create_new(par);
+#ifndef _MOBILE
+
+projection::projection<geometry::point_ll_deg, geometry::point_2d> * Projection::getProjection(QString projString)
+{
+	projection::factory<geometry::point_ll_deg, geometry::point_2d> fac;
+	projection::parameters par;
+
+	par = projection::init(std::string(QString("%1 +over").arg(projString).toLatin1().data()));
+	projection::projection<geometry::point_ll_deg, geometry::point_2d> *theProj = fac.create_new(par);
 	if (!theProj) {
 		par = projection::init(std::string(QString("%1 +over").arg(M_PREFS->getProjection("mercator").projection).toLatin1().data()));
 		theProj = fac.create_new(par);
 		if (!theProj) {
-			qDebug() << "Unable to set projection : " << theProjectionType;
-			Q_ASSERT(false);
-			exit(1);
+			qDebug() << "Unable to set projection : " << projString;
+			return NULL;
 		}
 	}
-#endif
+	return theProj;
 }
+
+bool Projection::setProjectionType(ProjectionType aProjectionType)
+{
+	delete theProj;
+	QString theProjString;
+	theProjectionType = aProjectionType;
+	theProj = getProjection(M_PREFS->getProjection(theProjectionType).projection);
+	return (theProj != NULL);
+}
+#endif
 
 // Common routines
 
@@ -98,30 +109,6 @@ double Projection::lonAnglePerM(double Lat) const
 	double LengthOfOneDegreeLon = LengthOfOneDegreeLat * fabs(cos(Lat));
 	return 1 / LengthOfOneDegreeLon;
 }
-
-#ifndef _MOBILE
-bool Projection::setProjectionType(ProjectionType aProjectionType)
-{
-	delete theProj;
-	QString theProjString;
-	theProjectionType = aProjectionType;
-
-	theProjString = M_PREFS->getProjection(theProjectionType).projection;
-	par = projection::init(std::string(QString("%1 +over").arg(theProjString).toLatin1().data()));
-	theProj = fac.create_new(par);
-	if (!theProj) {
-		par = projection::init(std::string(QString("%1 +over").arg(M_PREFS->getProjection("mercator").projection).toLatin1().data()));
-		theProj = fac.create_new(par);
-		if (!theProj) {
-			qDebug() << "Unable to set projection : " << theProjectionType;
-			Q_ASSERT(false);
-			exit(1);
-		}
-		return false;
-	}
-	return true;
-}
-#endif
 
 QPoint Projection::project(const Coord & Map) const
 {
@@ -203,30 +190,29 @@ void Projection::setViewport(const CoordBox & TargetMap,
 
 	double wv, hv;
 	if (pAspect > Aspect) {
-		wv = TargetMap.lonDiff();
-		hv = TargetMap.latDiff() * pAspect / Aspect;
+		wv = pViewport.width();
+		hv = pViewport.height() * pAspect / Aspect;
 	} else {
-		wv = TargetMap.lonDiff() * Aspect / pAspect;
-		hv = TargetMap.latDiff();
+		wv = pViewport.width() * Aspect / pAspect;
+		hv = pViewport.height();
 	}
 
-	Viewport = CoordBox(
-            Coord(int(Center.lat() - hv/2), int(Center.lon() - wv/2)),
-            Coord(int(Center.lat() + hv/2), int(Center.lon() + wv/2))
-		);
+	pViewport = QRectF((pCenter.x() - wv/2), (pCenter.x() - hv/2), wv, hv);
 
-	bl = projProject(Viewport.bottomLeft());
-	tr = projProject(Viewport.topRight());
-	pViewport = QRectF(bl, QSizeF(tr.x() - bl.x(), tr.y() - bl.y()));
-
-	ScaleLon = Screen.width() / pViewport.width();
-	ScaleLat = Screen.height() / pViewport.height();
+	ScaleLon = Screen.width() / wv;
+	ScaleLat = Screen.height() / hv;
 
 	double PLon = pCenter.x() * ScaleLon;
 	double PLat = pCenter.y() * ScaleLat;
-	DeltaLon = int(Screen.width() / 2 - PLon);
-	DeltaLat = int(Screen.height() - (Screen.height() / 2 - PLat));
+	DeltaLon = Screen.width() / 2 - PLon;
+	DeltaLat = Screen.height() - (Screen.height() / 2 - PLat);
 
+
+	viewportRecalc(Screen);
+	if (LAYERMANAGER_OK)
+		layerManagerSetViewport(Viewport, Screen);
+
+	// Calculate PixelPerM
 	double LengthOfOneDegreeLat = EQUATORIALRADIUS * M_PI / 180;
 	double LengthOfOneDegreeLon =
 		LengthOfOneDegreeLat * fabs(cos(intToRad(Center.lat())));
@@ -236,10 +222,7 @@ void Projection::setViewport(const CoordBox & TargetMap,
 
 	double LatAngPerM = 1.0 / EQUATORIALRADIUS;
 	PixelPerM = LatAngPerM / M_PI * INT_MAX * sa;
-	
-	viewportRecalc(Screen);
-	if (LAYERMANAGER_OK)
-		layerManagerSetViewport(Viewport, Screen);
+	//
 #else
 	if (LAYERMANAGER_OK)
 		layerManagerSetViewport(TargetMap, Screen);
@@ -263,8 +246,8 @@ void Projection::setViewport(const CoordBox & TargetMap,
 
 	double PLon = Center.lon() * ScaleLon;
 	double PLat = Center.lat() * ScaleLat;
-	DeltaLon = int(Screen.width() / 2 - PLon);
-	DeltaLat = int(Screen.height() - (Screen.height() / 2 - PLat));
+	DeltaLon = Screen.width() / 2 - PLon;
+	DeltaLat = Screen.height() - (Screen.height() / 2 - PLat);
 	viewportRecalc(Screen);
 #endif
 }

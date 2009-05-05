@@ -129,6 +129,8 @@ QString ImageMapLayer::projection() const
 	else
 		if (p->theWmsServer)
 			return p->theWmsServer->WmsProjections;
+
+	return "";
 }
 
 
@@ -157,6 +159,7 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid)
 		SAFE_DELETE(p->layer_bg);
 	}
 	SAFE_DELETE(p->theWmsServer);
+	p->pm.fill(Qt::transparent);
 
 	p->bgType = theAdapterUid;
 	MerkaartorPreferences::instance()->setBackgroundPlugin(theAdapterUid);
@@ -168,6 +171,7 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid)
 		wsl = M_PREFS->getWmsServers();
 		selws = M_PREFS->getSelectedWmsServer();
 		p->theWmsServer = new WmsServer(wsl->value(selws));
+		theProj = Projection::getProjection(M_PREFS->getProjection(p->theWmsServer->WmsProjections).projection);
 
 		setName(tr("Map - WMS - %1").arg(p->theWmsServer->WmsName));
 	} else
@@ -295,13 +299,30 @@ void ImageMapLayer::forceRedraw(Projection& theProjection, QRect rect)
 	drawWMS(theProjection, rect);
 }
 
+using namespace geometry;
+
 void ImageMapLayer::drawWMS(Projection& theProjection, QRect& rect)
 {
 	p->http.abort();
 
 	CoordBox vp = theProjection.viewport();
-	QPointF ul = Projection::projProject(vp.topLeft());
-	QPointF br = Projection::projProject(vp.bottomRight());
+
+	if (!theProj) {
+		qDebug() << "ImageMapLayer::drawWMS: Projection not set";
+		return;
+	}
+
+	point_2d out;
+	point_ll_deg in;
+	
+	in = point_ll_deg(longitude<>(intToAng(vp.topLeft().lon())), latitude<>(intToAng(vp.topLeft().lat())));
+	theProj->forward(in, out);
+	QPointF ul = QPointF(out.x(), out.y());
+
+	in = point_ll_deg(longitude<>(intToAng(vp.bottomRight().lon())), latitude<>(intToAng(vp.bottomRight().lat())));
+	theProj->forward(in, out);
+	QPointF br = QPointF(out.x(), out.y());
+
 	QUrl url (QString("http://")
 						.append(p->theWmsServer->WmsAdress)
 						.append(p->theWmsServer->WmsPath)
