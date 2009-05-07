@@ -26,7 +26,7 @@ updatets:
 	${CD} .. && ${LUPDATE} -noobsolete Merkaartor.pro
 
 release:
-	${CD} .. && ${LRELEASE} Merkaartor.pro
+	${CD} .. && ${LRELEASE} src/src.pro
 
 clean:
 	@-${RM} *.po *.pot *.qm *.tar.gz
