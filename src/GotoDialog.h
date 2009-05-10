@@ -47,7 +47,6 @@ public slots:
 protected:
 	
 private:
-	Projection theProjection;
 	CoordBox theNewViewport;
 
 	void changeEvent(QEvent*);

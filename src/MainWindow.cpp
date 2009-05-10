@@ -375,8 +375,13 @@ void MainWindow::adjustLayers(bool adjustViewport)
 	if (adjustViewport) {
 		theVp = theView->projection().viewport();
 #ifndef _MOBILE
-		if (theDocument->getImageLayer())
-			theView->projection().setProjectionType(theDocument->getImageLayer()->projection());
+		if (theDocument->getImageLayer()) {
+			ProjectionItem pi = M_PREFS->getProjection(theDocument->getImageLayer()->projection());
+			if(theView->projection().setProjectionType(theDocument->getImageLayer()->projection())) {
+				M_PREFS->setProjectionType(pi.name);
+				// TODO Select the proper action in the Projection menu
+			}
+		}
 #endif
 		theView->projection().setViewport(theVp, theView->rect());
 	}

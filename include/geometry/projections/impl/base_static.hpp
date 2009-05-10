@@ -37,6 +37,7 @@ namespace projection
 
 			public :
 				inline base_t_f(const PRJ& prj, const PAR& par) : m_par(par), m_prj(prj) {}
+				inline PAR params() {return m_par;}
 				inline bool forward(const LL& lp, XY& xy) const
 				{
 					try

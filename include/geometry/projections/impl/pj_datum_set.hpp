@@ -129,7 +129,7 @@ namespace projection
 					it != parm.end() && parm_count < n;
 					it++, parm_count++)
 				{
-					projdef.datum_params[parm_count++] = atof(it->c_str());
+					projdef.datum_params[parm_count] = atof(it->c_str());
 				}
 
 				if( projdef.datum_params[3] != 0.0

@@ -68,7 +68,8 @@ HEADERS += ./Command/Command.h \
     ./Utils/MDiscardableDialog.h \
     ./DirtyDock.h \
     ./GotoDialog.h \
-    StyleDock.h
+    StyleDock.h \
+    ../include/geometry/projections/impl/geocent.h
 
 # Source files
 SOURCES += ./Command/Command.cpp \
@@ -137,7 +138,8 @@ SOURCES += ./Command/Command.cpp \
     ./Preferences/BookmarksList.cpp \
     ./DirtyDock.cpp \
     ./GotoDialog.cpp \
-    StyleDock.cpp
+    StyleDock.cpp \
+    ../include/geometry/projections/impl/geocent.c
 
 # Forms
 FORMS += ./AboutDialog.ui \

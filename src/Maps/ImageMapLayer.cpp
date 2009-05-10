@@ -171,7 +171,6 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid)
 		wsl = M_PREFS->getWmsServers();
 		selws = M_PREFS->getSelectedWmsServer();
 		p->theWmsServer = new WmsServer(wsl->value(selws));
-		theProj = Projection::getProjection(M_PREFS->getProjection(p->theWmsServer->WmsProjections).projection);
 
 		setName(tr("Map - WMS - %1").arg(p->theWmsServer->WmsName));
 	} else
@@ -305,23 +304,36 @@ void ImageMapLayer::drawWMS(Projection& theProjection, QRect& rect)
 {
 	p->http.abort();
 
-	CoordBox vp = theProjection.viewport();
+	QRectF vp = theProjection.getProjectedViewport(rect);
 
-	if (!theProj) {
-		qDebug() << "ImageMapLayer::drawWMS: Projection not set";
-		return;
-	}
+	//QPointF ul, br;
 
-	point_2d out;
-	point_ll_deg in;
-	
-	in = point_ll_deg(longitude<>(intToAng(vp.topLeft().lon())), latitude<>(intToAng(vp.topLeft().lat())));
-	theProj->forward(in, out);
-	QPointF ul = QPointF(out.x(), out.y());
+	//double x = intToRad(vp.topLeft().lon());
+	//double y = intToRad(vp.topLeft().lat());
+	//Projection::projTransformWGS84(1, 0, &x, &y, NULL);
+	//if (p->theProj->params().is_latlong)
+	//	ul = QPointF(radToAng(x), radToAng(y));
+	//else
+	//	ul = QPointF(x, y);
 
-	in = point_ll_deg(longitude<>(intToAng(vp.bottomRight().lon())), latitude<>(intToAng(vp.bottomRight().lat())));
-	theProj->forward(in, out);
-	QPointF br = QPointF(out.x(), out.y());
+	//x = intToRad(vp.bottomRight().lon());
+	//y = intToRad(vp.bottomRight().lat());
+	//Projection::projTransformWGS84(1, 0, &x, &y, NULL);
+	//if (p->theProj->params().is_latlong)
+	//	br = QPointF(radToAng(x), radToAng(y));
+	//else
+	//	br = QPointF(x, y);
+
+	//point_2d out;
+	//point_ll_deg in;
+	//
+	//in = point_ll_deg(longitude<>(intToAng(vp.topLeft().lon())), latitude<>(intToAng(vp.topLeft().lat())));
+	//p->theProj->forward(in, out);
+	//QPointF ul = QPointF(out.x(), out.y());
+
+	//in = point_ll_deg(longitude<>(intToAng(vp.bottomRight().lon())), latitude<>(intToAng(vp.bottomRight().lat())));
+	//p->theProj->forward(in, out);
+	//QPointF br = QPointF(out.x(), out.y());
 
 	QUrl url (QString("http://")
 						.append(p->theWmsServer->WmsAdress)
@@ -337,10 +349,10 @@ void ImageMapLayer::drawWMS(Projection& theProjection, QRect& rect)
 						.append("&WIDTH=").append(QString::number(rect.width()))
 						.append("&HEIGHT=").append(QString::number(rect.height()))
 						.append("&BBOX=")
-						 .append(p->loc.toString(ul.x(),'f',6)).append(",")
-						 .append(p->loc.toString(br.y(),'f',6)).append(",")
-						 .append(p->loc.toString(br.x(),'f',6)).append(",")
-						 .append(p->loc.toString(ul.y(),'f',6))
+						.append(p->loc.toString(vp.bottomLeft().x(),'f',6)).append(",")
+						 .append(p->loc.toString(vp.bottomLeft().y(),'f',6)).append(",")
+						 .append(p->loc.toString(vp.topRight().x(),'f',6)).append(",")
+						 .append(p->loc.toString(vp.topRight().y(),'f',6))
 						 );
 
 	qDebug() << "ImageMapLayer::drawWMS: getting: " << url.toString();

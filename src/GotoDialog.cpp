@@ -18,11 +18,11 @@
 #include "NameFinder/namefinderwidget.h"
 
 GotoDialog::GotoDialog(const Projection& aProj, QWidget *parent)
-	:QDialog(parent), theProjection(aProj)
+	:QDialog(parent)
 {
 	setupUi(this);
 
-	CoordBox B = theProjection.viewport();
+	CoordBox B = aProj.viewport();
 	int OsmZoom = int((log((360.0 / intToAng(B.latDiff()))) / log(2.0)) + 1);
 	OsmZoom = qMin(OsmZoom, 18);
 	OsmZoom = qMax(OsmZoom, 1);

@@ -11,7 +11,7 @@
 
 
 #include <string>
-
+#include <geometry/projections/impl/projects.hpp>
 
 namespace projection
 {
@@ -49,6 +49,8 @@ namespace projection
 
 			/// Returns name of projection
 			virtual std::string name() const = 0;
+
+			virtual parameters params() = 0;
 
 			virtual ~projection() {}
 

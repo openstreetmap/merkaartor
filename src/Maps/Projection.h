@@ -19,12 +19,15 @@
 class QRect;
 class LayerManager;
 class TrackPoint;
+class ProjectionPrivate;
+
+typedef projection::projection<geometry::point_ll_deg, geometry::point_2d> ProjProjection;
 
 class Projection
 {
 	public:
 		Projection(void);
-		virtual ~Projection(void) {};
+		virtual ~Projection(void);
 
 		void setViewport(const CoordBox& Map, const QRect& Screen);
 		void panScreen(const QPoint& p, const QRect& Screen);
@@ -45,12 +48,17 @@ class Projection
 		void fromXML(QDomElement e, const QRect & Screen);
 
 #ifndef _MOBILE
-		static projection::projection<geometry::point_ll_deg, geometry::point_2d> * getProjection(QString projString);
+		static ProjProjection * getProjection(QString projString);
 		bool setProjectionType(ProjectionType aProjectionType);
 
 		QPointF projProject(const Coord& Map) const;
 		Coord projInverse(const QPointF& Screen) const;
+		static void projTransform(ProjProjection *srcdefn, 
+						   ProjProjection *dstdefn, 
+						   long point_count, int point_offset, double *x, double *y, double *z );
+		void projTransformWGS84(long point_count, int point_offset, double *x, double *y, double *z );
 		bool projIsLatLong();
+		QRectF getProjectedViewport(QRect& screen);
 #endif
 
 	protected:
@@ -62,10 +70,12 @@ class Projection
 		LayerManager* layermanager;
 #ifndef _MOBILE
 		ProjectionType theProjectionType;
-		projection::projection<geometry::point_ll_deg, geometry::point_2d> *theProj;
+		ProjProjection *theProj;
 #endif
 
 	private:
+		ProjectionPrivate* p;
+
 		void viewportRecalc(const QRect& Screen);
 		void layerManagerSetViewport(const CoordBox& Map, const QRect& Screen);
 		void layerManagerViewportRecalc(const QRect& Screen);

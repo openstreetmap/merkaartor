@@ -13,11 +13,11 @@ inline double angToRad(double a)
 {
 	return a*M_PI/180.;
 }
-//
-//inline double radToAng(double a)
-//{
-//	return a*180/M_PI;
-//}
+
+inline double radToAng(double a)
+{
+	return a*180/M_PI;
+}
 
 inline int angToInt(double a)
 {

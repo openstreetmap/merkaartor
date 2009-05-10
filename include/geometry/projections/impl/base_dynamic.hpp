@@ -31,6 +31,7 @@ namespace projection
 			public :
 				base_v_f(const PAR& par) : m_proj(par) {}
 
+				virtual PAR params() {return m_proj.params();};
 				virtual bool forward(const LL& ll, XY& xy) const
 				{
 					return m_proj.forward(ll, xy);
