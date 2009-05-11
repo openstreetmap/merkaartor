@@ -23,6 +23,9 @@ WMSPreferencesDialog::WMSPreferencesDialog(QWidget* parent)
 	setupUi(this);
 
 	loadPrefs();
+
+	edWmsLayers->setVisible(false);
+	connect(tvWmsLayers, SIGNAL(itemChanged(QTreeWidgetItem *, int)), this, SLOT(on_tvWmsLayers_itemChanged(QTreeWidgetItem *, int)));
 }
 
 WMSPreferencesDialog::~WMSPreferencesDialog()
@@ -45,14 +48,18 @@ void WMSPreferencesDialog::on_btApplyWmsServer_clicked(void)
 	if (idx >= theWmsServers.size())
 		return;
 
+	QUrl theUrl(edWmsUrl->text());
+
 	WmsServer& WS(theWmsServers[idx]);
 	WS.WmsName = edWmsName->text();
-	WS.WmsAdress = edWmsAdr->text();
-	WS.WmsPath = edWmsPath->text();
+	WS.WmsAdress = theUrl.host();
+	if (theUrl.port() != -1)
+		WS.WmsAdress += ":" + QString::number(theUrl.port());
+	WS.WmsPath = theUrl.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority);
 	WS.WmsLayers = edWmsLayers->text();
-	WS.WmsProjections = edWmsProj->text();
+	WS.WmsProjections = cbWmsProj->currentText();
 	WS.WmsStyles = edWmsStyles->text();
-	WS.WmsImgFormat = edWmsImgFormat->text();
+	WS.WmsImgFormat = cbWmsImgFormat->currentText();
 
 	lvWmsServers->currentItem()->setText(WS.WmsName);
 	selectedServer = WS.WmsName;
@@ -60,8 +67,12 @@ void WMSPreferencesDialog::on_btApplyWmsServer_clicked(void)
 
 void WMSPreferencesDialog::on_btAddWmsServer_clicked(void)
 {
-	addServer(WmsServer(edWmsName->text(), edWmsAdr->text(), edWmsPath->text(),
-		edWmsLayers->text(), edWmsProj->text(), edWmsStyles->text(), edWmsImgFormat->text()));
+	QUrl theUrl(edWmsUrl->text());
+	QString theAdress = theUrl.host();
+	if (theUrl.port() != -1)
+		theAdress += ":" + QString::number(theUrl.port());
+	addServer(WmsServer(edWmsName->text(), theAdress, theUrl.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority),
+		edWmsLayers->text(), cbWmsProj->currentText(), edWmsStyles->text(), cbWmsImgFormat->currentText()));
 	lvWmsServers->setCurrentRow(lvWmsServers->count() - 1);
 	on_lvWmsServers_itemClicked(lvWmsServers->item(lvWmsServers->currentRow()));
 }
@@ -85,14 +96,19 @@ void WMSPreferencesDialog::on_lvWmsServers_itemClicked(QListWidgetItem* it)
 
 	WmsServer& WS(theWmsServers[idx]);
 	edWmsName->setText(WS.WmsName);
-	edWmsAdr->setText(WS.WmsAdress);
-	edWmsPath->setText(WS.WmsPath);
+	edWmsUrl->setText("http://" + WS.WmsAdress + WS.WmsPath);
 	edWmsLayers->setText(WS.WmsLayers);
-	edWmsProj->setText(WS.WmsProjections);
+	cbWmsProj->setEditText(WS.WmsProjections);
 	edWmsStyles->setText(WS.WmsStyles);
-	edWmsImgFormat->setText(WS.WmsImgFormat);
+	cbWmsImgFormat->setEditText(WS.WmsImgFormat);
 
 	selectedServer = WS.WmsName;
+
+	QUrl theUrl(edWmsUrl->text());
+	if ((theUrl.host() != "") && (theUrl.path() != "")) {
+		QUrl url(edWmsUrl->text() + "VERSION=1.1.1&SERVICE=WMS&request=GetCapabilities");
+		requestCapabilities(url);
+	}
 }
 
 QString WMSPreferencesDialog::getSelectedServer()
@@ -145,16 +161,27 @@ void WMSPreferencesDialog::savePrefs()
 
 void WMSPreferencesDialog::on_btShowCapabilities_clicked(void)
 {
-	if ((edWmsAdr->text() == "") || (edWmsPath->text() == "")) {
+	QUrl theUrl(edWmsUrl->text());
+	if ((theUrl.host() == "") || (theUrl.path() == "")) {
 		QMessageBox::critical(this, tr("Merkaartor: GetCapabilities"), tr("Address and Path cannot be blank."), QMessageBox::Ok);
 	}
 
-	QUrl url("http://" + edWmsAdr->text() + edWmsPath->text() + "SERVICE=WMS&request=GetCapabilities");
+	QUrl url(edWmsUrl->text() + "VERSION=1.1.1&SERVICE=WMS&request=GetCapabilities");
 	requestCapabilities(url);
 }
 
 void WMSPreferencesDialog::requestCapabilities(QUrl url)
 {
+	tvWmsLayers->clear();
+
+	QString oldSrs = cbWmsProj->currentText();
+	cbWmsProj->clear();
+	cbWmsProj->setEditText(oldSrs);
+
+	QString oldFormat = cbWmsImgFormat->currentText();
+	cbWmsImgFormat->clear();
+	cbWmsImgFormat->setEditText(oldFormat);
+
 	http = new QHttp(this);
 	connect (http, SIGNAL(done(bool)), this, SLOT(httpRequestFinished(bool)));
 	connect(http, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)),
@@ -197,19 +224,120 @@ void WMSPreferencesDialog::readResponseHeader(const QHttpResponseHeader &respons
 
 void WMSPreferencesDialog::httpRequestFinished(bool error)
 {
+	//if (error) {
+	//	if (http->error() != QHttp::Aborted)
+	//		QMessageBox::critical(this, tr("Merkaartor: GetCapabilities"), tr("Error reading capabilities.\n") + http->errorString(), QMessageBox::Ok);
+	//} else {
+	//	QVBoxLayout *mainLayout = new QVBoxLayout;
+	//	QTextEdit* edit = new QTextEdit();
+	//	edit->setPlainText(QString(http->readAll()));
+	//	mainLayout->addWidget(edit);
+
+	//	QDialog* dlg = new QDialog(this);
+	//	dlg->setLayout(mainLayout);
+	//	dlg->show();
+	//	//delete dlg;
+	//}
+
 	if (error) {
 		if (http->error() != QHttp::Aborted)
 			QMessageBox::critical(this, tr("Merkaartor: GetCapabilities"), tr("Error reading capabilities.\n") + http->errorString(), QMessageBox::Ok);
-	} else {
-		QVBoxLayout *mainLayout = new QVBoxLayout;
-		QTextEdit* edit = new QTextEdit();
-		edit->setPlainText(QString(http->readAll()));
-		mainLayout->addWidget(edit);
-
-		QDialog* dlg = new QDialog(this);
-		dlg->setLayout(mainLayout);
-		dlg->show();
-		//delete dlg;
+		return;
 	}
+
+	QDomDocument theXmlDoc;
+	theXmlDoc.setContent(http->readAll());
+
+	QDomElement docElem = theXmlDoc.documentElement();
+	QDomElement capElem = docElem.firstChildElement("Capability");
+	if (capElem.isNull()) {
+		// No "Capability"
+		return;
+	}
+
+	QStringList srsList;
+	QDomElement layElem = capElem.firstChildElement("Layer");
+	while(!layElem.isNull()) {
+		QTreeWidgetItem* it = fillLayers(layElem, NULL);
+		tvWmsLayers->addTopLevelItem(it);
+		tvWmsLayers->expandItem(it);
+		QDomNodeList aNodeList = layElem.elementsByTagName("SRS");
+		for (int i=0; i<aNodeList.size(); ++i) {
+			if (!srsList.contains(aNodeList.item(i).firstChild().toText().nodeValue()))
+				srsList.append(aNodeList.item(i).firstChild().toText().nodeValue());
+		}
+
+		layElem = layElem.nextSiblingElement("Layer");
+	}
+	QString oldSrs = cbWmsProj->currentText();
+	cbWmsProj->clear();
+	srsList.sort();
+	cbWmsProj->addItems(srsList);
+	cbWmsProj->setEditText(oldSrs);
+
+	QDomElement reqElem = capElem.firstChildElement("Request");
+	QDomElement GetMapElem = reqElem.firstChildElement("GetMap");
+	QDomNodeList formatNodeList = GetMapElem.elementsByTagName("Format");
+
+	QStringList formatList;
+	QString oldFormat = cbWmsImgFormat->currentText();
+	cbWmsImgFormat->clear();
+	for (int i=0; i<formatNodeList.size(); ++i) {
+		if (!formatList.contains(formatNodeList.item(i).firstChild().toText().nodeValue()))
+			formatList.append(formatNodeList.item(i).firstChild().toText().nodeValue());
+	}
+	formatList.sort();
+	cbWmsImgFormat->addItems(formatList);
+	cbWmsImgFormat->setEditText(oldFormat);
 }
 
+QTreeWidgetItem * WMSPreferencesDialog::fillLayers(QDomElement& aLayerElem, QTreeWidgetItem* aLayerItem)
+{
+	if (aLayerElem.tagName() != "Layer")
+		return NULL;
+
+	QDomElement title = aLayerElem.firstChildElement("Title");
+	QDomElement name = aLayerElem.firstChildElement("Name");
+
+	QTreeWidgetItem *newItem = new QTreeWidgetItem;
+	newItem->setFlags(Qt::NoItemFlags |Qt::ItemIsEnabled);
+	if (!title.isNull())
+		newItem->setText(0, title.firstChild().toText().nodeValue());
+	else
+		if (!name.isNull())
+			newItem->setText(0,name.firstChild().toText().nodeValue());
+
+	if (!name.isNull()) {
+		QString theName = name.firstChild().toText().nodeValue();
+		newItem->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+		newItem->setData(0, Qt::UserRole, theName);
+		if (edWmsLayers->text().contains(theName))
+			newItem->setCheckState(0, Qt::Checked);
+		else
+			newItem->setCheckState(0, Qt::Unchecked);
+	}
+	if (aLayerItem)
+		aLayerItem->addChild(newItem);
+
+	QDomElement layElem = aLayerElem.firstChildElement("Layer");
+	while(!layElem.isNull()) {
+		fillLayers(layElem, newItem);
+		layElem = layElem.nextSiblingElement("Layer");
+	}
+
+	tvWmsLayers->expandItem(newItem);
+	return newItem;
+}
+
+void WMSPreferencesDialog::on_tvWmsLayers_itemChanged(QTreeWidgetItem *, int)
+{
+	QStringList theLayers;
+
+	QTreeWidgetItemIterator it(tvWmsLayers);
+	while (*it) {
+		if ((*it)->checkState(0) == Qt::Checked)
+			theLayers.append((*it)->data(0, Qt::UserRole).toString());
+		++it;
+	}
+	edWmsLayers->setText(theLayers.join(","));
+}

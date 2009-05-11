@@ -22,16 +22,7 @@
       <property name="spacing" >
        <number>1</number>
       </property>
-      <property name="leftMargin" >
-       <number>1</number>
-      </property>
-      <property name="topMargin" >
-       <number>1</number>
-      </property>
-      <property name="rightMargin" >
-       <number>1</number>
-      </property>
-      <property name="bottomMargin" >
+      <property name="margin" >
        <number>1</number>
       </property>
       <item>
@@ -46,16 +37,7 @@
          <property name="spacing" >
           <number>5</number>
          </property>
-         <property name="leftMargin" >
-          <number>5</number>
-         </property>
-         <property name="topMargin" >
-          <number>5</number>
-         </property>
-         <property name="rightMargin" >
-          <number>5</number>
-         </property>
-         <property name="bottomMargin" >
+         <property name="margin" >
           <number>5</number>
          </property>
          <item>
@@ -100,22 +82,12 @@
          <item>
           <widget class="QLabel" name="label_5" >
            <property name="text" >
-            <string>Server address:</string>
+            <string>Server Url:</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="edWmsAdr" />
-         </item>
-         <item>
-          <widget class="QLabel" name="label_6" >
-           <property name="text" >
-            <string>Main path:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="edWmsPath" />
+          <widget class="QLineEdit" name="edWmsUrl" />
          </item>
          <item>
           <widget class="QPushButton" name="btShowCapabilities" >
@@ -135,6 +107,18 @@
           <widget class="QLineEdit" name="edWmsLayers" />
          </item>
          <item>
+          <widget class="QTreeWidget" name="tvWmsLayers" >
+           <property name="headerHidden" >
+            <bool>true</bool>
+           </property>
+           <column>
+            <property name="text" >
+             <string>1</string>
+            </property>
+           </column>
+          </widget>
+         </item>
+         <item>
           <widget class="QLabel" name="label_8" >
            <property name="text" >
             <string>Projection:</string>
@@ -142,7 +126,38 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="edWmsProj" />
+          <widget class="QComboBox" name="cbWmsProj" >
+           <property name="editable" >
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label" >
+           <property name="text" >
+            <string>Image format</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="cbWmsImgFormat" >
+           <property name="editable" >
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0" >
+            <size>
+             <width>20</width>
+             <height>1</height>
+            </size>
+           </property>
+          </spacer>
          </item>
          <item>
           <widget class="QLabel" name="label_9" >
@@ -153,29 +168,6 @@
          </item>
          <item>
           <widget class="QLineEdit" name="edWmsStyles" />
-         </item>
-         <item>
-          <widget class="QLabel" name="label" >
-           <property name="text" >
-            <string>Image format</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="edWmsImgFormat" />
-         </item>
-         <item>
-          <spacer>
-           <property name="orientation" >
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" >
-            <size>
-             <width>20</width>
-             <height>1</height>
-            </size>
-           </property>
-          </spacer>
          </item>
          <item>
           <widget class="QPushButton" name="btApplyWmsServer" >
@@ -210,7 +202,7 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons" >
-      <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>

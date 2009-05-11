@@ -21,6 +21,7 @@
 #include "Preferences/MerkaartorPreferences.h"
 
 #include <QList>
+#include <QtXml>
 
 /**
 	@author cbro <cbro@semperpax.com>
@@ -45,12 +46,13 @@ public slots:
 	void readResponseHeader(const QHttpResponseHeader &responseHeader);
 	void httpRequestFinished(bool error);
 	void on_buttonBox_clicked(QAbstractButton * button);
+	void on_tvWmsLayers_itemChanged(QTreeWidgetItem *, int);
 
 private:
 	void loadPrefs();
 	void savePrefs();
 	void requestCapabilities(QUrl url);
-
+	QTreeWidgetItem * fillLayers(QDomElement& aLayerElem, QTreeWidgetItem* aLayerItem);
 public:
 	QList<WmsServer> theWmsServers;
 	QString getSelectedServer();
