@@ -38,33 +38,52 @@ QCursor RotateInteraction::cursor() const
 
 void RotateInteraction::snapMousePressEvent(QMouseEvent * event, MapFeature* aLast)
 {
-	MapFeature* sel = aLast;
+	QList<MapFeature*> sel;
 	if (view()->isSelectionLocked()) {
-		sel = view()->properties()->selection(0);
-		if (!sel)
-			sel = aLast;
+		if (view()->properties()->selection(0))
+			sel.append(view()->properties()->selection(0));
+		else
+			sel.append(aLast);
+	} else {
+		sel = view()->properties()->selection();
 	}
 	clearNoSnap();
 	Rotating.clear();
 	OriginalPosition.clear();
+
+	if (!sel.size())
+		return;
+
 	StartDragPosition = projection().inverse(event->pos());
-	if (Road* R = dynamic_cast<Road*>(sel)) {
-		for (int i=0; i<R->size(); ++i)
-			if (std::find(Rotating.begin(),Rotating.end(),R->get(i)) == Rotating.end())
-				Rotating.push_back(R->getNode(i));
-		addToNoSnap(R);
-		RotationCenter = R->boundingBox().center();
+	CoordBox selBB = sel[0]->boundingBox();
+	for (int j=0; j<sel.size(); j++) {
+		selBB.merge(sel[j]->boundingBox());
+		if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(sel[j]))
+		{
+			Rotating.push_back(Pt);
+			StartDragPosition = Pt->position();
+		}
+		else if (Road* R = dynamic_cast<Road*>(sel[j])) {
+			for (int i=0; i<R->size(); ++i)
+				if (std::find(Rotating.begin(),Rotating.end(),R->get(i)) == Rotating.end())
+					Rotating.push_back(R->getNode(i));
+			addToNoSnap(R);
+		}
 	}
-	for (int i=0; i<Rotating.size(); ++i)
-	{
-		OriginalPosition.push_back(Rotating[i]->position());
-		addToNoSnap(Rotating[i]);
-	}
+	if (Rotating.size() > 1) {
+		RotationCenter = selBB.center();
+		for (int i=0; i<Rotating.size(); ++i)
+		{
+			OriginalPosition.push_back(Rotating[i]->position());
+			addToNoSnap(Rotating[i]);
+		}
+	} else
+		Rotating.clear();
 }
 
 void RotateInteraction::snapMouseReleaseEvent(QMouseEvent * event, MapFeature* Closer)
 {
-	if (Rotating.size())
+	if (Rotating.size() && !panning())
 	{
 		CommandList* theList;
 		theList = new CommandList(MainWindow::tr("Rotate Nodes").arg(Rotating[0]->id()), Rotating[0]);
@@ -89,7 +108,7 @@ void RotateInteraction::snapMouseReleaseEvent(QMouseEvent * event, MapFeature* C
 
 void RotateInteraction::snapMouseMoveEvent(QMouseEvent* event, MapFeature* Closer)
 {
-	if (Rotating.size())
+	if (Rotating.size() && !panning())
 	{
 		double Angle = calculateNewAngle(event);
 		for (int i=0; i<Rotating.size(); ++i)
@@ -121,3 +140,14 @@ double RotateInteraction::calculateNewAngle(QMouseEvent *event)
 
 	return v1.angleTo(v2);
 }
+
+void RotateInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
+{
+	if (!RotationCenter.isNull())
+	{
+		thePainter.setPen(QPen(QColor(255,0,0),1));
+		thePainter.drawEllipse(projection().project(RotationCenter), 5, 5);
+	}
+	FeatureSnapInteraction::paintEvent(anEvent, thePainter);
+}
+

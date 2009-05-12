@@ -14,6 +14,7 @@ class RotateInteraction : public FeatureSnapInteraction
 		RotateInteraction(MapView* aView);
 		~RotateInteraction(void);
 
+		virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter);
 		virtual void snapMousePressEvent(QMouseEvent * event, MapFeature* aLast);
 		virtual void snapMouseReleaseEvent(QMouseEvent * event, MapFeature* aLast);
 		virtual void snapMouseMoveEvent(QMouseEvent* event, MapFeature* aLast);

@@ -27,7 +27,7 @@
 
 EditInteraction::EditInteraction(MapView* theView)
 : FeatureSnapInteraction(theView), Dragging(false), StartDrag(0,0), EndDrag(0,0),
-  StartDragPosition(0,0), MoveMode(false), Moved(false)
+	StartDragPosition(0,0), currentMode(EditMode), Moved(false)
 {
 	connect(main(),SIGNAL(remove_triggered()),this,SLOT(on_remove_triggered()));
 	connect(main(),SIGNAL(reverse_triggered()), this,SLOT(on_reverse_triggered()));
@@ -94,27 +94,32 @@ void EditInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
 
 void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 {
-	if (MoveMode) {
-		MapFeature* sel = aLast;
+	if (currentMode == MoveMode) {
+		QList<MapFeature*> sel;
 		if (view()->isSelectionLocked()) {
-			sel = view()->properties()->selection(0);
-			if (!sel)
-				sel = aLast;
+			if (view()->properties()->selection(0))
+				sel.append(view()->properties()->selection(0));
+			else
+				sel.append(aLast);
+		} else {
+			sel = view()->properties()->selection();
 		}
 		clearNoSnap();
 		Moving.clear();
 		OriginalPosition.clear();
 		StartDragPosition = projection().inverse(ev->pos());
-		if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(sel))
-		{
-			Moving.push_back(Pt);
-			StartDragPosition = Pt->position();
-		}
-		else if (Road* R = dynamic_cast<Road*>(sel)) {
-			for (int i=0; i<R->size(); ++i)
-				if (std::find(Moving.begin(),Moving.end(),R->get(i)) == Moving.end())
-					Moving.push_back(R->getNode(i));
-			addToNoSnap(R);
+		for (int j=0; j<sel.size(); j++) {
+			if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(sel[j]))
+			{
+				Moving.push_back(Pt);
+				StartDragPosition = Pt->position();
+			}
+			else if (Road* R = dynamic_cast<Road*>(sel[j])) {
+				for (int i=0; i<R->size(); ++i)
+					if (std::find(Moving.begin(),Moving.end(),R->get(i)) == Moving.end())
+						Moving.push_back(R->getNode(i));
+				addToNoSnap(R);
+			}
 		}
 		for (int i=0; i<Moving.size(); ++i)
 		{
@@ -153,11 +158,15 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* aLast)
 {
 	Q_UNUSED(ev);
-	if (MoveMode) {
+	if (currentMode == MoveMode) {
 		// Check if we actually moved 
 		if (Moving.size() && Moved)
 		{
-			CommandList* theList = new CommandList(MainWindow::tr("Move Point %1").arg(Moving[0]->id()), Moving[0]);
+			CommandList* theList;
+			if (Moving.size() > 1)
+				theList = new CommandList(MainWindow::tr("Move Nodes").arg(Moving[0]->id()), Moving[0]);
+			else
+			theList = new CommandList(MainWindow::tr("Move Node %1").arg(Moving[0]->id()), Moving[0]);
 			Coord Diff(calculateNewPosition(ev, aLast, theList)-StartDragPosition);
 			for (int i=0; i<Moving.size(); ++i)
 			{
@@ -286,7 +295,7 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* aLast
 		if (!panning() && !ev->modifiers()) {
 			view()->properties()->setSelection(aLast);
 			if (view()->properties()->isSelected(aLast) && !M_PREFS->getSeparateMoveMode()) {
-				MoveMode = true;
+				currentMode = MoveMode;
 				Moved = false;
 #ifndef Q_OS_SYMBIAN
 				view()->setCursor(moveCursor());
@@ -301,7 +310,7 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* aLast
 void EditInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, MapFeature* aLast)
 {
 	Q_UNUSED(anEvent);
-	if (MoveMode) {
+	if (currentMode == MoveMode) {
 		if (anEvent->buttons() & Qt::LeftButton && Moving.size())
 		{
 			Moved = true;
@@ -315,7 +324,7 @@ void EditInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, MapFeature* aLast
 #ifndef Q_OS_SYMBIAN
 			view()->setCursor(cursor());
 #endif
-			MoveMode = false;
+			currentMode = EditMode;
 			Moved = false;
 		}
 	} else
@@ -329,14 +338,14 @@ void EditInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, MapFeature* aLast
 #ifndef Q_OS_SYMBIAN
 		view()->setCursor(moveCursor());
 #endif
-		MoveMode = true;
+		currentMode = MoveMode;
 		Moved = false;
 	} else
 	{
 #ifndef Q_OS_SYMBIAN
 		view()->setCursor(cursor());
 #endif
-		MoveMode = false;
+		currentMode = EditMode;
 		Moved = false;
 	}
 }

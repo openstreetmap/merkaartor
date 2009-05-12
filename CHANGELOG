@@ -1,4 +1,5 @@
 v0.14
+	* FIX : Allow move of multiple selected features
     * ADD : Rotate function
     * FIX : Give title to progress dialogs (fixes #1512)
     * ADD : WMS Editor: Display user-friendly layers/projection list based on capabilities

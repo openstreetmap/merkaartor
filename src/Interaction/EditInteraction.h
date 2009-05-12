@@ -8,6 +8,8 @@ class EditInteraction :	public FeatureSnapInteraction
 	Q_OBJECT
 
 	public:
+		typedef enum { EditMode, MoveMode, RotateMode, ScaleMode } EditModeEnum;
+
 		EditInteraction(MapView* theView);
 		~EditInteraction(void);
 
@@ -35,7 +37,7 @@ class EditInteraction :	public FeatureSnapInteraction
 		QList<Coord> OriginalPosition;
 		Coord StartDragPosition;
 
-		bool MoveMode;
+		EditModeEnum currentMode;
 		bool Moved;
 };
 

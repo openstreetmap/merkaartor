@@ -38,26 +38,31 @@ QCursor MoveTrackPointInteraction::cursor() const
 
 void MoveTrackPointInteraction::snapMousePressEvent(QMouseEvent * event, MapFeature* aLast)
 {
-	MapFeature* sel = aLast;
+	QList<MapFeature*> sel;
 	if (view()->isSelectionLocked()) {
-		sel = view()->properties()->selection(0);
-		if (!sel)
-			sel = aLast;
+		if (view()->properties()->selection(0))
+			sel.append(view()->properties()->selection(0));
+		else
+			sel.append(aLast);
+	} else {
+		sel = view()->properties()->selection();
 	}
 	clearNoSnap();
 	Moving.clear();
 	OriginalPosition.clear();
 	StartDragPosition = projection().inverse(event->pos());
-	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(sel))
-	{
-		Moving.push_back(Pt);
-		StartDragPosition = Pt->position();
-	}
-	else if (Road* R = dynamic_cast<Road*>(sel)) {
-		for (int i=0; i<R->size(); ++i)
-			if (std::find(Moving.begin(),Moving.end(),R->get(i)) == Moving.end())
-				Moving.push_back(R->getNode(i));
-		addToNoSnap(R);
+	for (int j=0; j<sel.size(); j++) {
+		if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(sel[j]))
+		{
+			Moving.push_back(Pt);
+			StartDragPosition = Pt->position();
+		}
+		else if (Road* R = dynamic_cast<Road*>(sel[j])) {
+			for (int i=0; i<R->size(); ++i)
+				if (std::find(Moving.begin(),Moving.end(),R->get(i)) == Moving.end())
+					Moving.push_back(R->getNode(i));
+			addToNoSnap(R);
+		}
 	}
 	for (int i=0; i<Moving.size(); ++i)
 	{
@@ -68,7 +73,7 @@ void MoveTrackPointInteraction::snapMousePressEvent(QMouseEvent * event, MapFeat
 
 void MoveTrackPointInteraction::snapMouseReleaseEvent(QMouseEvent * event, MapFeature* Closer)
 {
-	if (Moving.size())
+	if (Moving.size() && !panning())
 	{
 		CommandList* theList;
 		if (Moving.size() > 1)
@@ -149,7 +154,7 @@ void MoveTrackPointInteraction::snapMouseReleaseEvent(QMouseEvent * event, MapFe
 
 void MoveTrackPointInteraction::snapMouseMoveEvent(QMouseEvent* event, MapFeature* Closer)
 {
-	if (Moving.size())
+	if (Moving.size() && !panning())
 	{
 		Coord Diff = calculateNewPosition(event,Closer,0)-StartDragPosition;
 		for (int i=0; i<Moving.size(); ++i)
