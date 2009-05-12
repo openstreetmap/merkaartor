@@ -19,6 +19,7 @@
 #include "Interaction/CreateSingleWayInteraction.h"
 #include "Interaction/EditInteraction.h"
 #include "Interaction/MoveTrackPointInteraction.h"
+#include "Interaction/RotateInteraction.h"
 #include "Interaction/ZoomInteraction.h"
 #include "Maps/Coord.h"
 #include "Maps/DownloadOSM.h"
@@ -584,6 +585,11 @@ void MainWindow::on_editMoveAction_triggered()
 		view()->launch(new MoveTrackPointInteraction(view()));
 }
 
+void MainWindow::on_editRotateAction_triggered()
+{
+//	if (M_PREFS->getSeparateMoveMode())
+		view()->launch(new RotateInteraction(view()));
+}
 
 void MainWindow::on_editReverseAction_triggered()
 {

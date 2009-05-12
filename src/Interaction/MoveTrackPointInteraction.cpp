@@ -70,7 +70,11 @@ void MoveTrackPointInteraction::snapMouseReleaseEvent(QMouseEvent * event, MapFe
 {
 	if (Moving.size())
 	{
-		CommandList* theList = new CommandList(MainWindow::tr("Move Point %1").arg(Moving[0]->id()), Moving[0]);
+		CommandList* theList;
+		if (Moving.size() > 1)
+			theList = new CommandList(MainWindow::tr("Move Nodes").arg(Moving[0]->id()), Moving[0]);
+		else
+			theList = new CommandList(MainWindow::tr("Move Node %1").arg(Moving[0]->id()), Moving[0]);
 		Coord Diff(calculateNewPosition(event,Closer, theList)-StartDragPosition);
 		for (int i=0; i<Moving.size(); ++i)
 		{

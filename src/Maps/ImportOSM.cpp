@@ -266,6 +266,7 @@ static bool downloadToResolve(const QList<MapFeature*>& Resolution, QWidget* aPa
 		return false;
 
 	QProgressDialog* dlg = aProgressWindow->getProgressDialog();
+	dlg->setWindowTitle(QApplication::translate("Downloader", "Downloading unresolved..."));
 	QProgressBar* Bar = aProgressWindow->getProgressBar();
 	QLabel* Lbl = aProgressWindow->getProgressLabel();
 
@@ -380,6 +381,7 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 		return false;
 
 	QProgressDialog* dlg = aProgressWindow->getProgressDialog();
+	dlg->setWindowTitle(QApplication::translate("Downloader", "Parsing..."));
 
 	QProgressBar* Bar = aProgressWindow->getProgressBar();
 	Bar->setTextVisible(false);

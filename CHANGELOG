@@ -1,4 +1,6 @@
 v0.14
+    * ADD : Rotate function
+    * FIX : Give title to progress dialogs (fixes #1512)
     * ADD : WMS Editor: Display user-friendly layers/projection list based on capabilities
     * ADD : Display plain trackpoint description/comment in infodock if found (closes #1788)
 	* FIX : First node of a new way not connected to existing way after upload (fixes #1774; fixes #1780)

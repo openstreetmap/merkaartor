@@ -88,6 +88,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 
 		virtual void on_editRemoveAction_triggered();
 		virtual void on_editMoveAction_triggered();
+		virtual void on_editRotateAction_triggered();
 		virtual void on_editReverseAction_triggered();
 
 		virtual void on_roadSplitAction_triggered();

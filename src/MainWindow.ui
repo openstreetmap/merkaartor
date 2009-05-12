@@ -67,6 +67,7 @@
     <addaction name="separator" />
     <addaction name="editRemoveAction" />
     <addaction name="editMoveAction" />
+    <addaction name="editRotateAction" />
     <addaction name="editPropertiesAction" />
     <addaction name="separator" />
     <addaction name="editSelectAction" />
@@ -318,6 +319,7 @@
    <addaction name="separator" />
    <addaction name="editPropertiesAction" />
    <addaction name="editMoveAction" />
+   <addaction name="editRotateAction" />
    <addaction name="createNodeAction" />
    <addaction name="createRoadAction" />
    <addaction name="createAreaAction" />
@@ -1493,6 +1495,15 @@
   <action name="roadCreateJunctionAction" >
    <property name="text" >
     <string>Create &amp;Junction</string>
+   </property>
+  </action>
+  <action name="editRotateAction" >
+   <property name="icon" >
+    <iconset resource="../Icons/AllIcons.qrc" >
+     <normaloff>:/Icons/actions/edit_rotate.svg</normaloff>:/Icons/actions/edit_rotate.svg</iconset>
+   </property>
+   <property name="text" >
+    <string>Rotate</string>
    </property>
   </action>
  </widget>

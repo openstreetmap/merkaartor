@@ -14,6 +14,7 @@ HEADERS += ./Command/Command.h \
     ./Interaction/EditInteraction.h \
     ./Interaction/Interaction.h \
     ./Interaction/MoveTrackPointInteraction.h \
+    ./Interaction/RotateInteraction.h \
     ./Interaction/ZoomInteraction.h \
     ./LayerDock.h \
     ./LayerWidget.h \
@@ -105,6 +106,7 @@ SOURCES += ./Command/Command.cpp \
     ./Interaction/EditInteraction.cpp \
     ./Interaction/Interaction.cpp \
     ./Interaction/MoveTrackPointInteraction.cpp \
+    ./Interaction/RotateInteraction.cpp \
     ./Interaction/ZoomInteraction.cpp \
     ./PaintStyle/EditPaintStyle.cpp \
     ./PaintStyle/PaintStyle.cpp \

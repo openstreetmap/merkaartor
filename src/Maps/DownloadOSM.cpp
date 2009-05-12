@@ -426,6 +426,7 @@ bool downloadOSM(QWidget* aParent, const QUrl& theUrl, const QString& aUser, con
 		return false;
 
 	QProgressDialog* dlg = aProgressWindow->getProgressDialog();
+	dlg->setWindowTitle(QApplication::translate("Downloader","Downloading..."));
 
 	QProgressBar* Bar = aProgressWindow->getProgressBar();
 	Bar->setTextVisible(false);
@@ -534,6 +535,7 @@ bool downloadTracksFromOSM(QWidget* Main, const QString& aWeb, const QString& aU
 		return false;
 
 	QProgressDialog* dlg = aProgressWindow->getProgressDialog();
+	dlg->setWindowTitle(QApplication::translate("Downloader","Parsing..."));
 
 	QProgressBar* Bar = aProgressWindow->getProgressBar();
 	Bar->setTextVisible(false);

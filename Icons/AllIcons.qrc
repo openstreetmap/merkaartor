@@ -7,6 +7,7 @@
     <file>empty.xpm</file>
     <file>eye.xpm</file>
     <file>move.xpm</file>
+    <file>rotate.svg</file>
     <file>small-remove.xpm</file>
     <file>remove.xpm</file>
     <file>toolselect.xpm</file>
@@ -29,6 +30,7 @@
     <file>actions/edit_copy.png</file>
     <file>actions/edit_delete.png</file>
     <file>actions/edit_move.png</file>
+    <file>actions/edit_rotate.svg</file>
     <file>actions/edit_paste.png</file>
     <file>actions/edit_paste_tags.png</file>
     <file>actions/join_roads.png</file>
