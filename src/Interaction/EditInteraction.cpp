@@ -126,7 +126,7 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 			OriginalPosition.push_back(Moving[i]->position());
 			addToNoSnap(Moving[i]);
 		}
-	} else
+	} 
 	if (!view()->isSelectionLocked()) {
 		if (ev->buttons() & Qt::LeftButton)
 		{
@@ -141,11 +141,7 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 //				if (aLast)
 //					view()->properties()->setSelection(aLast);
 			}
-			if (
-				(M_PREFS->getMouseSingleButton() && (ev->modifiers() & Qt::ShiftModifier) && !aLast) ||
-				(!M_PREFS->getMouseSingleButton() && !aLast)
-				)
-			{
+			if (!aLast && !ev->modifiers()) {
 				EndDrag = StartDrag = projection().inverse(ev->pos());
 				Dragging = true;
 			}
@@ -233,7 +229,14 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* aLast
 
 			document()->addHistory(theList);
 			view()->invalidate(true, false);
-		}
+		} else
+		if (ev->modifiers()) {
+			if ((ev->modifiers() & Qt::ControlModifier) && aLast)
+				view()->properties()->toggleSelection(aLast);
+
+			if ((ev->modifiers() & Qt::ShiftModifier) && aLast)
+				view()->properties()->addSelection(aLast);
+		} 
 		Moving.clear();
 		OriginalPosition.clear();
 		clearNoSnap();
