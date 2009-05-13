@@ -16,6 +16,7 @@
 #include "Interaction/CreateDoubleWayInteraction.h"
 #include "Interaction/CreateNodeInteraction.h"
 #include "Interaction/CreateRoundaboutInteraction.h"
+#include "Interaction/CreatePolygonInteraction.h"
 #include "Interaction/CreateSingleWayInteraction.h"
 #include "Interaction/EditInteraction.h"
 #include "Interaction/MoveTrackPointInteraction.h"
@@ -1155,6 +1156,11 @@ void MainWindow::on_createDoubleWayAction_triggered()
 void MainWindow::on_createRoundaboutAction_triggered()
 {
 	theView->launch(new CreateRoundaboutInteraction(this, theView));
+}
+
+void MainWindow::on_createPolygonAction_triggered()
+{
+	theView->launch(new CreatePolygonInteraction(this, theView));
 }
 
 void MainWindow::on_createRoadAction_triggered()

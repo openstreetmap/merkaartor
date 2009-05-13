@@ -69,7 +69,6 @@ class Projection
 		QPoint screen_middle;
 		LayerManager* layermanager;
 #ifndef _MOBILE
-		ProjectionType theProjectionType;
 		ProjProjection *theProj;
 #endif
 

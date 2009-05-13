@@ -40,6 +40,7 @@
     <addaction name="createRoadAction" />
     <addaction name="createDoubleWayAction" />
     <addaction name="createRoundaboutAction" />
+    <addaction name="createPolygonAction" />
     <addaction name="createAreaAction" />
     <addaction name="createRelationAction" />
    </widget>
@@ -1504,6 +1505,11 @@
    </property>
    <property name="text" >
     <string>Rotate</string>
+   </property>
+  </action>
+  <action name="createPolygonAction" >
+   <property name="text" >
+    <string>Polygon</string>
    </property>
   </action>
  </widget>

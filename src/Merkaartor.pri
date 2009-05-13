@@ -10,6 +10,7 @@ HEADERS += ./Command/Command.h \
     ./Interaction/CreateDoubleWayInteraction.h \
     ./Interaction/CreateNodeInteraction.h \
     ./Interaction/CreateRoundaboutInteraction.h \
+    ./Interaction/CreatePolygonInteraction.h \
     ./Interaction/CreateSingleWayInteraction.h \
     ./Interaction/EditInteraction.h \
     ./Interaction/Interaction.h \
@@ -103,6 +104,7 @@ SOURCES += ./Command/Command.cpp \
     ./Interaction/CreateNodeInteraction.cpp \
     ./Interaction/CreateSingleWayInteraction.cpp \
     ./Interaction/CreateRoundaboutInteraction.cpp \
+    ./Interaction/CreatePolygonInteraction.cpp \
     ./Interaction/EditInteraction.cpp \
     ./Interaction/Interaction.cpp \
     ./Interaction/MoveTrackPointInteraction.cpp \

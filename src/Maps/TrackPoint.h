@@ -53,8 +53,8 @@ class TrackPoint : public MapFeature
 		const QPointF& projection() const;
 		void setProjection(const QPointF& aProjection);
 #ifndef _MOBILE
-		ProjectionType projectionType() const;
-		void setProjectionType(const ProjectionType aProjectionType);
+		int projectionRevision() const;
+		void setProjectionRevision(int aProjectionRevision);
 #endif
 
 		double speed() const;
@@ -83,7 +83,7 @@ private:
 		double Speed;
 		QPointF Projected;
 #ifndef _MOBILE
-		ProjectionType ProjectedType;
+		int ProjectionRevision;
 #endif
 };
 

@@ -23,9 +23,11 @@ class ProjectionPrivate
 public:
 	ProjProjection *theWGS84Proj;
 	QRectF ProjectedViewport;
+	int ProjectionRevision;
 
 public:
 	ProjectionPrivate()
+		: ProjectionRevision(0)
 	{
 	}
 };
@@ -159,6 +161,7 @@ ProjProjection * Projection::getProjection(QString projString)
 bool Projection::setProjectionType(ProjectionType aProjectionType)
 {
 	delete theProj;
+	p->ProjectionRevision++;
 	theProj = getProjection(M_PREFS->getProjection(aProjectionType).projection);
 	return (theProj != NULL);
 }
@@ -203,16 +206,16 @@ QPoint Projection::project(const Coord & Map) const
 QPoint Projection::project(TrackPoint* aNode) const
 {
 #ifndef _MOBILE
-	if (aNode && aNode->projectionType() == theProjectionType && !aNode->projection().isNull())
+	if (aNode && aNode->projectionRevision() == p->ProjectionRevision)
 		return QPointF(aNode->projection().x() * ScaleLon + DeltaLon,
 					   -aNode->projection().y() * ScaleLat + DeltaLat).toPoint();
 
-	QPointF p = projProject(aNode->position());
+	QPointF pt = projProject(aNode->position());
 
-	aNode->setProjectionType(theProjectionType);
-	aNode->setProjection(p);
+	aNode->setProjectionRevision(p->ProjectionRevision);
+	aNode->setProjection(pt);
 
-	return QPointF(p.x() * ScaleLon + DeltaLon, -p.y() * ScaleLat + DeltaLat).toPoint();
+	return QPointF(pt.x() * ScaleLon + DeltaLon, -pt.y() * ScaleLat + DeltaLat).toPoint();
 #else
 	return project(aNode->position());
 #endif

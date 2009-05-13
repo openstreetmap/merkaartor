@@ -7,12 +7,12 @@
 #include <QProgressDialog>
 
 TrackPoint::TrackPoint(const Coord& aCoord)
-: Position(aCoord), Elevation(0.0), Speed(0.0)
+: Position(aCoord), Elevation(0.0), Speed(0.0), ProjectionRevision(0)
 {
 }
 
 TrackPoint::TrackPoint(const TrackPoint& other)
-: MapFeature(other), Position(other.Position), Elevation(other.Elevation), Speed(other.Speed), Projected(other.Projected)
+: MapFeature(other), Position(other.Position), Elevation(other.Elevation), Speed(other.Speed), ProjectionRevision(other.ProjectionRevision), Projected(other.Projected)
 {
 	setTime(other.time());
 }
@@ -79,7 +79,7 @@ const Coord& TrackPoint::position() const
 void TrackPoint::setPosition(const Coord& aCoord)
 {
 	Position = aCoord;
-	Projected = QPoint();
+	ProjectionRevision = 0;
 	notifyChanges();
 }
 
@@ -94,14 +94,14 @@ void TrackPoint::setProjection(const QPointF& aProjection)
 }
 
 #ifndef _MOBILE
-ProjectionType TrackPoint::projectionType() const
+int TrackPoint::projectionRevision() const
 {
-	return ProjectedType;
+	return ProjectionRevision;
 }
 
-void TrackPoint::setProjectionType(const ProjectionType aProjectionType)
+void TrackPoint::setProjectionRevision(const int aProjectionRevision)
 {
-	ProjectedType = aProjectionType;
+	ProjectionRevision = aProjectionRevision;
 }
 #endif
 

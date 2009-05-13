@@ -46,6 +46,8 @@ void RotateInteraction::snapMousePressEvent(QMouseEvent * event, MapFeature* aLa
 			sel.append(aLast);
 	} else {
 		sel = view()->properties()->selection();
+		if (!sel.size() && aLast)
+			sel.append(aLast);
 	}
 	clearNoSnap();
 	Rotating.clear();
@@ -119,24 +121,20 @@ void RotateInteraction::snapMouseMoveEvent(QMouseEvent* event, MapFeature* Close
 
 Coord RotateInteraction::rotatePosition(Coord center, Coord position, double angle)
 {
-	QPointF c = QPointF(center.lon(), center.lat());
-	QPointF p = QPointF(position.lon(), position.lat());
+	QPointF c = projection().project(center);
+	QPointF p = projection().project(position);
 	QLineF v(c, p);
 	v.setAngle(v.angle() + angle);
 
-	return Coord(qRound(v.p2().y()), qRound(v.p2().x()));
+	return projection().inverse(v.p2());
 }
 
 double RotateInteraction::calculateNewAngle(QMouseEvent *event)
 {
-	QPointF c = QPointF(RotationCenter.lon(), RotationCenter.lat());
-	QPointF p1 = QPointF(StartDragPosition.lon(), StartDragPosition.lat());
+	QPointF c = projection().project(RotationCenter);
+	QPointF p1 = projection().project(StartDragPosition);
 	QLineF v1(c, p1);
-
-
-	Coord TargetC = projection().inverse(event->pos());
-	QPointF p2 = QPointF(TargetC.lon(), TargetC.lat());
-	QLineF v2(c, p2);
+	QLineF v2(c, event->pos());
 
 	return v1.angleTo(v2);
 }
