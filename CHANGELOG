@@ -1,6 +1,6 @@
 v0.14
     * FIX : Never loose selection when ctrl- or shift-clicking (fixes #1793)
-	* FIX : Allow move of multiple selected features
+    * FIX : Allow move of multiple selected features
     * ADD : Rotate function
     * FIX : Give title to progress dialogs (fixes #1512)
     * ADD : WMS Editor: Display user-friendly layers/projection list based on capabilities

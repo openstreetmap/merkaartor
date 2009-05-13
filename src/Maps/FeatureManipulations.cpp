@@ -364,7 +364,9 @@ bool createJunction(MapDocument* theDocument, CommandList* theList, PropertiesDo
 						theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(R1->layer()),pt,true));
 						theList->add(new RoadAddTrackPointCommand(R1,pt,i+1,theDocument->getDirtyOrOriginLayer(R1->layer())));
 						theList->add(new RoadAddTrackPointCommand(R2,pt,j+1,theDocument->getDirtyOrOriginLayer(R2->layer())));
-					}
+						++i; ++j;
+					} else
+						return true;
 				}
 		}
 	}
