@@ -49,6 +49,8 @@ void RotateInteraction::snapMousePressEvent(QMouseEvent * event, MapFeature* aLa
 		if (!sel.size() && aLast)
 			sel.append(aLast);
 	}
+	Angle = 0.0;
+	Radius = 1.0;
 	clearNoSnap();
 	Rotating.clear();
 	OriginalPosition.clear();
@@ -73,7 +75,7 @@ void RotateInteraction::snapMousePressEvent(QMouseEvent * event, MapFeature* aLa
 		}
 	}
 	if (Rotating.size() > 1) {
-		RotationCenter = selBB.center();
+		RotationCenter = projection().project(selBB.center());
 		for (int i=0; i<Rotating.size(); ++i)
 		{
 			OriginalPosition.push_back(Rotating[i]->position());
@@ -85,24 +87,25 @@ void RotateInteraction::snapMousePressEvent(QMouseEvent * event, MapFeature* aLa
 
 void RotateInteraction::snapMouseReleaseEvent(QMouseEvent * event, MapFeature* /*Closer*/)
 {
-	if (Rotating.size() && !panning())
+	if ((Angle != 0.0 || Radius != 1.0) && Rotating.size() && !panning())
 	{
 		CommandList* theList;
-		theList = new CommandList(MainWindow::tr("Rotate Nodes").arg(Rotating[0]->id()), Rotating[0]);
-		double Angle = calculateNewAngle(event);
+		theList = new CommandList(MainWindow::tr("Scale/Rotate Nodes").arg(Rotating[0]->id()), Rotating[0]);
 		for (int i=0; i<Rotating.size(); ++i)
 		{
 			Rotating[i]->setPosition(OriginalPosition[i]);
 			if (Rotating[i]->layer()->isTrack())
-				theList->add(new MoveTrackPointCommand(Rotating[i],rotatePosition(RotationCenter, OriginalPosition[i], Angle), Rotating[i]->layer()));
+				theList->add(new MoveTrackPointCommand(Rotating[i],rotatePosition(OriginalPosition[i], Angle, Radius), Rotating[i]->layer()));
 			else
-				theList->add(new MoveTrackPointCommand(Rotating[i],rotatePosition(RotationCenter, OriginalPosition[i], Angle), document()->getDirtyOrOriginLayer(Rotating[i]->layer())));
+				theList->add(new MoveTrackPointCommand(Rotating[i],rotatePosition(OriginalPosition[i], Angle, Radius), document()->getDirtyOrOriginLayer(Rotating[i]->layer())));
 		}
 		
 		
 		document()->addHistory(theList);
 		view()->invalidate(true, false);
 	}
+	Angle = 0.0;
+	Radius = 1.0;
 	Rotating.clear();
 	OriginalPosition.clear();
 	clearNoSnap();
@@ -112,29 +115,31 @@ void RotateInteraction::snapMouseMoveEvent(QMouseEvent* event, MapFeature* /*Clo
 {
 	if (Rotating.size() && !panning())
 	{
-		double Angle = calculateNewAngle(event);
+		if (!(event->modifiers() & Qt::ControlModifier))
+			Radius = distance(RotationCenter,event->pos()) / distance(RotationCenter, projection().project(StartDragPosition));
+		if (!(event->modifiers() & Qt::ShiftModifier))
+			Angle = calculateNewAngle(event);
 		for (int i=0; i<Rotating.size(); ++i)
-			Rotating[i]->setPosition(rotatePosition(RotationCenter, OriginalPosition[i], Angle));
+			Rotating[i]->setPosition(rotatePosition(OriginalPosition[i], Angle, Radius));
 		view()->invalidate(true, false);
 	}
 }
 
-Coord RotateInteraction::rotatePosition(Coord center, Coord position, double angle)
+Coord RotateInteraction::rotatePosition(Coord position, double angle, double radius)
 {
-	QPointF c = projection().project(center);
 	QPointF p = projection().project(position);
-	QLineF v(c, p);
+	QLineF v(RotationCenter, p);
 	v.setAngle(v.angle() + angle);
+	v.setLength(v.length() * radius);
 
 	return projection().inverse(v.p2());
 }
 
 double RotateInteraction::calculateNewAngle(QMouseEvent *event)
 {
-	QPointF c = projection().project(RotationCenter);
 	QPointF p1 = projection().project(StartDragPosition);
-	QLineF v1(c, p1);
-	QLineF v2(c, event->pos());
+	QLineF v1(RotationCenter, p1);
+	QLineF v2(RotationCenter, event->pos());
 
 	return v1.angleTo(v2);
 }

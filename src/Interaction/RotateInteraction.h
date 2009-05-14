@@ -23,12 +23,14 @@ class RotateInteraction : public FeatureSnapInteraction
 #endif
 
 	private:
-		Coord rotatePosition(Coord center, Coord position, double angle);
+		Coord rotatePosition(Coord position, double angle, double radius);
 		double calculateNewAngle(QMouseEvent* event);
 		QList<TrackPoint*> Rotating;
 		QList<Coord> OriginalPosition;
 		Coord StartDragPosition;
-		Coord RotationCenter;
+		QPointF RotationCenter;
+		double Angle;
+		double Radius;
 };
 
 #endif

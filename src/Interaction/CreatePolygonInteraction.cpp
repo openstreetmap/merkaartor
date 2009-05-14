@@ -66,9 +66,10 @@ void CreatePolygonInteraction::mousePressEvent(QMouseEvent * event)
 			double Angle = 2*acos(1-Precision/Radius);
 			Angle = 2*M_PI/Sides;
 			Radius *= view()->projection().pixelPerM();
+			double StartAngle = angle(QPointF(10,0), LastCursor-CenterF);
 			QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
 			QPen TP(SomeBrush,projection().pixelPerM()*4);
-			QPointF Prev(CenterF.x()+cos(Angle/2)*Radius,CenterF.y()+sin(Angle/2)*Radius);
+			QPointF Prev(CenterF.x()+cos(StartAngle + Angle/2)*Radius,CenterF.y()+sin(StartAngle + Angle/2)*Radius);
 			TrackPoint* First = new TrackPoint(view()->projection().inverse(Prev));
 			Road* R = new Road;
 			R->add(First);
@@ -76,7 +77,7 @@ void CreatePolygonInteraction::mousePressEvent(QMouseEvent * event)
 				R->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 			CommandList* L  = new CommandList(MainWindow::tr("Create Polygon %1").arg(R->id()), R);
 			L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),First,true));
-			for (double a = Angle*3/2; a<2*M_PI; a+=Angle)
+			for (double a = StartAngle + Angle*3/2; a<2*M_PI+StartAngle; a+=Angle)
 			{
 				QPointF Next(CenterF.x()+cos(a)*Radius,CenterF.y()+sin(a)*Radius);
 				TrackPoint* New = new TrackPoint(view()->projection().inverse(Next));
@@ -123,6 +124,7 @@ void CreatePolygonInteraction::paintEvent(QPaintEvent* , QPainter& thePainter)
 	{
 		QPointF CenterF(view()->projection().project(Center));
 		double Radius = distance(CenterF,LastCursor)/view()->projection().pixelPerM();
+		double StartAngle = angle(QPointF(10,0), LastCursor-CenterF);
 		double Precision = 1.99;
 		if (Radius<2)
 			Radius = 2;
@@ -131,14 +133,14 @@ void CreatePolygonInteraction::paintEvent(QPaintEvent* , QPainter& thePainter)
 		Radius *= view()->projection().pixelPerM();
 		QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
 		QPen TP(SomeBrush,projection().pixelPerM()*4);
-		QPointF Prev(CenterF.x()+cos(Angle/2)*Radius,CenterF.y()+sin(Angle/2)*Radius);
-		for (double a = Angle*3/2; a<2*M_PI; a+=Angle)
+		QPointF Prev(CenterF.x()+cos(StartAngle + Angle/2)*Radius,CenterF.y()+sin(StartAngle + Angle/2)*Radius);
+		for (double a = StartAngle + Angle*3/2; a<2*M_PI+StartAngle; a+=Angle)
 		{
 			QPointF Next(CenterF.x()+cos(a)*Radius,CenterF.y()+sin(a)*Radius);
 			::draw(thePainter,TP,MapFeature::UnknownDirection, Prev,Next,4,view()->projection());
 			Prev = Next;
 		}
-		QPointF Next(CenterF.x()+cos(Angle/2)*Radius,CenterF.y()+sin(Angle/2)*Radius);
+		QPointF Next(CenterF.x()+cos(StartAngle + Angle/2)*Radius,CenterF.y()+sin(StartAngle + Angle/2)*Radius);
 		::draw(thePainter,TP,MapFeature::UnknownDirection, Prev,Next,4,view()->projection());
 	}
 }
