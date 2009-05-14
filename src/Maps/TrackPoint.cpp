@@ -12,7 +12,7 @@ TrackPoint::TrackPoint(const Coord& aCoord)
 }
 
 TrackPoint::TrackPoint(const TrackPoint& other)
-: MapFeature(other), Position(other.Position), Elevation(other.Elevation), Speed(other.Speed), ProjectionRevision(other.ProjectionRevision), Projected(other.Projected)
+: MapFeature(other), Position(other.Position), Elevation(other.Elevation), Speed(other.Speed), Projected(other.Projected), ProjectionRevision(other.ProjectionRevision)
 {
 	setTime(other.time());
 }

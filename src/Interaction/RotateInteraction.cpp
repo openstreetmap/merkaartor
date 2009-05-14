@@ -83,7 +83,7 @@ void RotateInteraction::snapMousePressEvent(QMouseEvent * event, MapFeature* aLa
 		Rotating.clear();
 }
 
-void RotateInteraction::snapMouseReleaseEvent(QMouseEvent * event, MapFeature* Closer)
+void RotateInteraction::snapMouseReleaseEvent(QMouseEvent * event, MapFeature* /*Closer*/)
 {
 	if (Rotating.size() && !panning())
 	{
@@ -108,7 +108,7 @@ void RotateInteraction::snapMouseReleaseEvent(QMouseEvent * event, MapFeature* C
 	clearNoSnap();
 }
 
-void RotateInteraction::snapMouseMoveEvent(QMouseEvent* event, MapFeature* Closer)
+void RotateInteraction::snapMouseMoveEvent(QMouseEvent* event, MapFeature* /*Closer*/)
 {
 	if (Rotating.size() && !panning())
 	{
