@@ -175,7 +175,7 @@ namespace projection
 
 		{
 			long      i;
-			int       need_datum_shift;
+			//int       need_datum_shift;
 
 			int pj_errno = 0;
 
@@ -522,7 +522,7 @@ namespace projection
 		{
 			int       i;
 
-			int pj_errno = 0;
+			//int pj_errno = 0;
 
 			if( defn->params().datum_type == PJD_3PARAM )
 			{
@@ -573,7 +573,7 @@ namespace projection
 		{
 			int       i;
 
-			int pj_errno = 0;
+			//int pj_errno = 0;
 
 			if( defn->params().datum_type == PJD_3PARAM )
 			{
