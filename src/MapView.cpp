@@ -846,8 +846,10 @@ void MapView::updateStaticBuffer()
 
 void MapView::mousePressEvent(QMouseEvent* event)
 {
-	if (theInteraction)
+	if (theInteraction) {
+		Main->info()->setHtml(theInteraction->toHtml());
 		theInteraction->mousePressEvent(event);
+	}
 }
 
 void MapView::mouseReleaseEvent(QMouseEvent* event)
@@ -1209,6 +1211,7 @@ void MapView::lockSelection()
 	if (!SelectionLocked && Main->properties()->selection().size()) {
 		lockIcon = new QLabel(this);
 		lockIcon->setPixmap(QPixmap(":/Icons/emblem-readonly.png"));
+		Main->statusBar()->clearMessage();
 		Main->statusBar()->addWidget(lockIcon);
 		SelectionLocked = true;
 	}

@@ -17,6 +17,24 @@ ZoomInteraction::~ZoomInteraction(void)
 {
 }
 
+QString ZoomInteraction::toHtml()
+{
+	QString help;
+	help = (MainWindow::tr("LEFT-CLICK to first corner -> LEFT-DRAG to specify area -> LEFT-CLICK to zoom"));
+
+	QString desc;
+	desc = QString("<big><b>%1</b></big><br/>").arg(MainWindow::tr("Zoom Interaction"));
+	desc += QString("<b>%1</b><br/>").arg(help);
+
+	QString S =
+	"<html><head/><body>"
+	"<small><i>" + QString(metaObject()->className()) + "</i></small><br/>"
+	+ desc;
+	S += "</body></html>";
+
+	return S;
+}
+
 void ZoomInteraction::paintEvent(QPaintEvent*, QPainter& thePainter)
 {
 	if (HaveFirstPoint)

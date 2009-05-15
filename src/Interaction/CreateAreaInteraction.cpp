@@ -27,6 +27,24 @@ CreateAreaInteraction::~CreateAreaInteraction()
 {
 }
 
+QString CreateAreaInteraction::toHtml()
+{
+	QString help;
+	//help = (MainWindow::tr("LEFT-CLICK to select; LEFT-DRAG to move"));
+
+	QString desc;
+	desc = QString("<big><b>%1</b></big><br/>").arg(MainWindow::tr("Create Area Interaction"));
+	desc += QString("<b>%1</b><br/>").arg(help);
+
+	QString S =
+	"<html><head/><body>"
+	"<small><i>" + QString(metaObject()->className()) + "</i></small><br/>"
+	+ desc;
+	S += "</body></html>";
+
+	return S;
+}
+
 void CreateAreaInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
 {
 	if (theRoad && (!theRoad->layer() || theRoad->isDeleted())) { // The road was begon and then undoed. Restarting....

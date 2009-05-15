@@ -51,6 +51,34 @@ QCursor EditInteraction::moveCursor() const
 }
 #endif
 
+QString EditInteraction::toHtml()
+{
+	QString help;
+	if (!M_PREFS->getMouseSingleButton())
+		help = (MainWindow::tr("LEFT-CLICK to select;RIGHT-CLICK to pan;CTRL-LEFT-CLICK to toggle selction;SHIFT-LEFT-CLICK to add to selection;LEFT-DRAG for area selection;CTRL-RIGHT-DRAG for zoom;"));
+	else
+		help = (MainWindow::tr("CLICK to select/move;CTRL-CLICK to toggle selction;SHIFT-CLICK to add to selection;SHIFT-DRAG for area selection;CTRL-DRAG for zoom;"));
+
+	QStringList helpList = help.split(";");
+
+	QString desc;
+	desc = QString("<big><b>%1</b></big>").arg(MainWindow::tr("Edit Interaction"));
+
+	QString S =
+	"<html><head/><body>"
+	"<small><i>" + QString(metaObject()->className()) + "</i></small><br/>"
+	+ desc;
+	S += "<hr/>";
+	S += "<ul style=\"margin-left: 0px; padding-left: 0px;\">";
+	for (int i=0; i<helpList.size(); ++i) {
+		S+= "<li>" + helpList[i] + "</li>";
+	}
+	S += "</ul>";
+	S += "</body></html>";
+
+	return S;
+}
+
 Coord EditInteraction::calculateNewPosition(QMouseEvent *event, MapFeature *aLast, CommandList* theList)
 {
 	Coord TargetC = projection().inverse(event->pos());
@@ -141,7 +169,11 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 //				if (aLast)
 //					view()->properties()->setSelection(aLast);
 			}
-			if (!aLast && !ev->modifiers()) {
+			if (
+				(M_PREFS->getMouseSingleButton() && (ev->modifiers() & Qt::ShiftModifier) && !aLast) ||
+				(!M_PREFS->getMouseSingleButton() && !aLast)
+				)
+			{
 				EndDrag = StartDrag = projection().inverse(ev->pos());
 				Dragging = true;
 			}

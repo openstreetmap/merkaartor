@@ -42,6 +42,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 	public slots:
 		virtual void on_createRoundaboutAction_triggered();
 		virtual void on_createPolygonAction_triggered();
+		virtual void on_createRectangleAction_triggered();
 		virtual void on_createDoubleWayAction_triggered();
 		virtual void on_createNodeAction_triggered();
 		virtual void on_createRoadAction_triggered();

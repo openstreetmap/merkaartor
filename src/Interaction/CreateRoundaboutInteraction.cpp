@@ -34,6 +34,24 @@ CreateRoundaboutInteraction::~CreateRoundaboutInteraction()
 	view()->update();
 }
 
+QString CreateRoundaboutInteraction::toHtml()
+{
+	QString help;
+	//help = (MainWindow::tr("LEFT-CLICK to select; LEFT-DRAG to move"));
+
+	QString desc;
+	desc = QString("<big><b>%1</b></big><br/>").arg(MainWindow::tr("Create roundabout Interaction"));
+	desc += QString("<b>%1</b><br/>").arg(help);
+
+	QString S =
+	"<html><head/><body>"
+	"<small><i>" + QString(metaObject()->className()) + "</i></small><br/>"
+	+ desc;
+	S += "</body></html>";
+
+	return S;
+}
+
 void CreateRoundaboutInteraction::testIntersections(CommandList* L, Road* Left, int FromIdx, Road* Right, int RightIndex)
 {
 	LineF L1(view()->projection().project(Right->getNode(RightIndex-1)),

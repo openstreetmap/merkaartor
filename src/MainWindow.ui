@@ -40,6 +40,7 @@
     <addaction name="createRoadAction" />
     <addaction name="createDoubleWayAction" />
     <addaction name="createRoundaboutAction" />
+    <addaction name="createRectangleAction" />
     <addaction name="createPolygonAction" />
     <addaction name="createAreaAction" />
     <addaction name="createRelationAction" />
@@ -1506,10 +1507,18 @@
    <property name="text" >
     <string>Rotate</string>
    </property>
+   <property name="shortcut" >
+    <string>Ctrl+A</string>
+   </property>
   </action>
   <action name="createPolygonAction" >
    <property name="text" >
     <string>Polygon</string>
+   </property>
+  </action>
+  <action name="createRectangleAction" >
+   <property name="text" >
+    <string>Rectangle</string>
    </property>
   </action>
  </widget>

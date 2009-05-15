@@ -19,6 +19,24 @@ CreateNodeInteraction::~CreateNodeInteraction(void)
 {
 }
 
+QString CreateNodeInteraction::toHtml()
+{
+	QString help;
+	//help = (MainWindow::tr("LEFT-CLICK to select; LEFT-DRAG to move"));
+
+	QString desc;
+	desc = QString("<big><b>%1</b></big><br/>").arg(MainWindow::tr("Create node Interaction"));
+	desc += QString("<b>%1</b><br/>").arg(help);
+
+	QString S =
+	"<html><head/><body>"
+	"<small><i>" + QString(metaObject()->className()) + "</i></small><br/>"
+	+ desc;
+	S += "</body></html>";
+
+	return S;
+}
+
 void CreateNodeInteraction::snapMouseReleaseEvent(QMouseEvent * ev, Road* aRoad)
 {
 	if (ev->button() == Qt::LeftButton)

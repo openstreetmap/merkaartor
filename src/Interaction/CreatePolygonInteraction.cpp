@@ -14,16 +14,41 @@
 
 #include <math.h>
 
-CreatePolygonInteraction::CreatePolygonInteraction(MainWindow* aMain, MapView* aView)
-	: Interaction(aView), Main(aMain), Center(0,0), HaveCenter(false)
+CreatePolygonInteraction::CreatePolygonInteraction(MainWindow* aMain, MapView* aView, int sides)
+	: Interaction(aView), Main(aMain), Origin(0,0), HaveOrigin(false), Sides(sides), bAngle(0.0), bScale(QPointF(1., 1.))
 {
-	Sides = QInputDialog::getInteger(aView, MainWindow::tr("Create Polygon"), MainWindow::tr("Specify the number of sides"), 4, 3);
 }
 
 CreatePolygonInteraction::~CreatePolygonInteraction()
 {
 	view()->update();
 }
+
+QString CreatePolygonInteraction::toHtml()
+{
+	QString help;
+	help = (MainWindow::tr("LEFT-CLICK to start;DRAG to scale;SHIFT-DRAG to rotate;LEFT-CLICK to end"));
+
+	QStringList helpList = help.split(";");
+
+	QString desc;
+	desc = QString("<big><b>%1</b></big>").arg(MainWindow::tr("Create Polygon Interaction"));
+
+	QString S =
+	"<html><head/><body>"
+	"<small><i>" + QString(metaObject()->className()) + "</i></small><br/>"
+	+ desc;
+	S += "<hr/>";
+	S += "<ul style=\"margin-left: 0px; padding-left: 0px;\">";
+	for (int i=0; i<helpList.size(); ++i) {
+		S+= "<li>" + helpList[i] + "</li>";
+	}
+	S += "</ul>";
+	S += "</body></html>";
+
+	return S;
+}
+
 
 void CreatePolygonInteraction::testIntersections(CommandList* L, Road* Left, int FromIdx, Road* Right, int RightIndex)
 {
@@ -51,36 +76,41 @@ void CreatePolygonInteraction::mousePressEvent(QMouseEvent * event)
 {
 	if (event->buttons() & Qt::LeftButton)
 	{
-		if (!HaveCenter)
+		if (!HaveOrigin)
 		{
-			HaveCenter = true;
-			Center = view()->projection().inverse(event->pos());
+			HaveOrigin = true;
+			Origin = view()->projection().inverse(event->pos());
+			OriginF = event->pos();
+			bAngle = 0.;
+			bScale = QPointF(1., 1.);
 		}
 		else
 		{
-			QPointF CenterF(view()->projection().project(Center));
-			double Radius = distance(CenterF,LastCursor)/view()->projection().pixelPerM();
-			double Precision = 2.49;
-			if (Radius<2.5)
-				Radius = 2.5;
-			double Angle = 2*acos(1-Precision/Radius);
-			Angle = 2*M_PI/Sides;
-			Radius *= view()->projection().pixelPerM();
-			double StartAngle = angle(QPointF(10,0), LastCursor-CenterF);
+			QPointF CenterF(0.5, 0.5);
+			double Radius = 0.5;
+			if (Sides == 4)
+				Radius = sqrt(2.)/2.;
+			double Angle = 2*M_PI/Sides;
 			QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
 			QPen TP(SomeBrush,projection().pixelPerM()*4);
-			QPointF Prev(CenterF.x()+cos(StartAngle + Angle/2)*Radius,CenterF.y()+sin(StartAngle + Angle/2)*Radius);
-			TrackPoint* First = new TrackPoint(view()->projection().inverse(Prev));
+
+			QMatrix m;
+			m.translate(OriginF.x(), OriginF.y());
+			m.rotate(bAngle);
+			m.scale(bScale.x(), bScale.y());
+
+			QPointF Prev(CenterF.x()+cos(Angle/2)*Radius,CenterF.y()+sin(Angle/2)*Radius);
+			TrackPoint* First = new TrackPoint(view()->projection().inverse(m.map(Prev)));
 			Road* R = new Road;
 			R->add(First);
 			if (M_PREFS->apiVersionNum() < 0.6)
 				R->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 			CommandList* L  = new CommandList(MainWindow::tr("Create Polygon %1").arg(R->id()), R);
 			L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),First,true));
-			for (double a = StartAngle + Angle*3/2; a<2*M_PI+StartAngle; a+=Angle)
+			for (double a = Angle*3/2; a<2*M_PI; a+=Angle)
 			{
 				QPointF Next(CenterF.x()+cos(a)*Radius,CenterF.y()+sin(a)*Radius);
-				TrackPoint* New = new TrackPoint(view()->projection().inverse(Next));
+				TrackPoint* New = new TrackPoint(view()->projection().inverse(m.map(Next)));
 				if (M_PREFS->apiVersionNum() < 0.6)
 					New->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 				L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),New,true));
@@ -110,40 +140,63 @@ void CreatePolygonInteraction::mousePressEvent(QMouseEvent * event)
 		Interaction::mousePressEvent(event);
 }
 
+void CreatePolygonInteraction::paintEvent(QPaintEvent* , QPainter& thePainter)
+{
+	if (HaveOrigin)
+	{
+		QPointF CenterF(0.5, 0.5);
+		double Radius = 0.5;
+		if (Sides == 4)
+			Radius = sqrt(2.)/2.;
+
+		QMatrix m;
+		m.translate(OriginF.x(), OriginF.y());
+		m.rotate(bAngle);
+		m.scale(bScale.x(), bScale.y());
+		QPolygonF thePoly = m.map(QRectF(QPointF(0.0, 0.0), QPointF(1.0, 1.0)));
+
+		thePainter.setPen(QPen(QColor(0,0,255),1,Qt::DotLine));
+		thePainter.drawPolygon(thePoly);
+
+		double Angle = 2*M_PI/Sides;
+		QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
+		QPen TP(SomeBrush,projection().pixelPerM()*4);
+		QPointF Prev(CenterF.x()+cos(Angle/2)*Radius,CenterF.y()+sin(Angle/2)*Radius);
+		for (double a = Angle*3/2; a<2*M_PI; a+=Angle)
+		{
+			QPointF Next(CenterF.x()+cos(a)*Radius,CenterF.y()+sin(a)*Radius);
+			::draw(thePainter,TP,MapFeature::UnknownDirection, m.map(Prev),m.map(Next),4,view()->projection());
+			Prev = Next;
+		}
+		QPointF Next(CenterF.x()+cos(Angle/2)*Radius,CenterF.y()+sin(Angle/2)*Radius);
+		::draw(thePainter,TP,MapFeature::UnknownDirection, m.map(Prev),m.map(Next),4,view()->projection());
+	}
+}
+
 void CreatePolygonInteraction::mouseMoveEvent(QMouseEvent* event)
 {
-	LastCursor = event->pos();
-	if (HaveCenter)
+	if (HaveOrigin) {
+		QMatrix m;
+		m.translate(OriginF.x(), OriginF.y());
+		m.rotate(bAngle);
+
+		if (event->modifiers() & Qt::ShiftModifier) {
+			bAngle += radToAng(angle(m.inverted().map(LastCursor), m.inverted().map(event->pos())));
+
+			QMatrix m2;
+			m2.translate(OriginF.x(), OriginF.y());
+			m2.rotate(bAngle);
+			bScale = m2.inverted().map(event->pos());
+		} else {
+			bScale = m.inverted().map(event->pos());
+		}
+
 		view()->update();
+	}
+	LastCursor = event->pos();
 	Interaction::mouseMoveEvent(event);
 }
 
-void CreatePolygonInteraction::paintEvent(QPaintEvent* , QPainter& thePainter)
-{
-	if (HaveCenter)
-	{
-		QPointF CenterF(view()->projection().project(Center));
-		double Radius = distance(CenterF,LastCursor)/view()->projection().pixelPerM();
-		double StartAngle = angle(QPointF(10,0), LastCursor-CenterF);
-		double Precision = 1.99;
-		if (Radius<2)
-			Radius = 2;
-		double Angle = 2*acos(1-Precision/Radius);
-		Angle = 2*M_PI/Sides;
-		Radius *= view()->projection().pixelPerM();
-		QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
-		QPen TP(SomeBrush,projection().pixelPerM()*4);
-		QPointF Prev(CenterF.x()+cos(StartAngle + Angle/2)*Radius,CenterF.y()+sin(StartAngle + Angle/2)*Radius);
-		for (double a = StartAngle + Angle*3/2; a<2*M_PI+StartAngle; a+=Angle)
-		{
-			QPointF Next(CenterF.x()+cos(a)*Radius,CenterF.y()+sin(a)*Radius);
-			::draw(thePainter,TP,MapFeature::UnknownDirection, Prev,Next,4,view()->projection());
-			Prev = Next;
-		}
-		QPointF Next(CenterF.x()+cos(StartAngle + Angle/2)*Radius,CenterF.y()+sin(StartAngle + Angle/2)*Radius);
-		::draw(thePainter,TP,MapFeature::UnknownDirection, Prev,Next,4,view()->projection());
-	}
-}
 
 #ifndef Q_OS_SYMBIAN
 QCursor CreatePolygonInteraction::cursor() const

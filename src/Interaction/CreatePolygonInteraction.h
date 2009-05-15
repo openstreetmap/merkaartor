@@ -9,12 +9,13 @@ class CreatePolygonInteraction : public Interaction
 	Q_OBJECT
 
 	public:
-		CreatePolygonInteraction(MainWindow* Main, MapView* aView);
+		CreatePolygonInteraction(MainWindow* Main, MapView* aView, int sides);
 		~CreatePolygonInteraction();
 
 		virtual void mousePressEvent(QMouseEvent * event);
 		virtual void mouseMoveEvent(QMouseEvent* event);
 		virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter);
+		virtual QString toHtml();
 #ifndef Q_OS_SYMBIAN
 		virtual QCursor cursor() const;
 #endif
@@ -23,10 +24,14 @@ class CreatePolygonInteraction : public Interaction
 		void testIntersections(CommandList* L, Road* Left, int FromIdx, Road* Right, int RightIdx);
 		MainWindow* Main;
 		QDockWidget* theDock;
-		Coord Center;
-        int Sides;
+		Coord Origin;
+		QPointF OriginF;
+		int Sides;
 		QPointF LastCursor;
-		bool HaveCenter;
+		bool HaveOrigin;
+
+		double bAngle;
+		QPointF bScale;
 };
 
 #endif // INTERACTION\CreatePolygonInteraction_H

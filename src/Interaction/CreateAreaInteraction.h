@@ -20,6 +20,7 @@ class CreateAreaInteraction : public GenericFeatureSnapInteraction<MapFeature>
 		virtual void snapMousePressEvent(QMouseEvent * event, MapFeature* aLast);
 		virtual void snapMouseMoveEvent(QMouseEvent* event, MapFeature* aLast);
 		virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter);
+		virtual QString toHtml();
 #ifndef Q_OS_SYMBIAN
 		virtual QCursor cursor() const;
 #endif

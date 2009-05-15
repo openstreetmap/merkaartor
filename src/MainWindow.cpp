@@ -155,15 +155,15 @@ MainWindow::MainWindow(void)
 	setCentralWidget(theView);
 	connect (theView, SIGNAL(interactionChanged(Interaction*)), this, SLOT(mapView_interactionChanged(Interaction*)));
 
+	theInfo = new InfoDock(this);
+    connect(theInfo, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
+
 	theLayers = new LayerDock(this);
     connect(theLayers, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
 
 	theProperties = new PropertiesDock(this);
     connect(theProperties, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
 	on_editPropertiesAction_triggered();
-
-	theInfo = new InfoDock(this);
-    connect(theInfo, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
 
     theDirty = new DirtyDock(this);
     connect(theDirty, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
@@ -573,6 +573,7 @@ void MainWindow::on_editPropertiesAction_triggered()
 	theView->unlockSelection();
 	theView->invalidate(true, false);
 	theView->launch(new EditInteraction(theView));
+	theInfo->setHtml(theView->interaction()->toHtml());
 }
 
 void MainWindow::on_editRemoveAction_triggered()
@@ -582,14 +583,16 @@ void MainWindow::on_editRemoveAction_triggered()
 
 void MainWindow::on_editMoveAction_triggered()
 {
-	if (M_PREFS->getSeparateMoveMode())
+	if (M_PREFS->getSeparateMoveMode()) {
 		view()->launch(new MoveTrackPointInteraction(view()));
+		theInfo->setHtml(theView->interaction()->toHtml());
+	}
 }
 
 void MainWindow::on_editRotateAction_triggered()
 {
-//	if (M_PREFS->getSeparateMoveMode())
-		view()->launch(new RotateInteraction(view()));
+	view()->launch(new RotateInteraction(view()));
+	theInfo->setHtml(theView->interaction()->toHtml());
 }
 
 void MainWindow::on_editReverseAction_triggered()
@@ -1151,16 +1154,26 @@ void MainWindow::on_fileNewAction_triggered()
 void MainWindow::on_createDoubleWayAction_triggered()
 {
 	theView->launch(new CreateDoubleWayInteraction(this, theView));
+	theInfo->setHtml(theView->interaction()->toHtml());
 }
 
 void MainWindow::on_createRoundaboutAction_triggered()
 {
 	theView->launch(new CreateRoundaboutInteraction(this, theView));
+	theInfo->setHtml(theView->interaction()->toHtml());
 }
 
 void MainWindow::on_createPolygonAction_triggered()
 {
-	theView->launch(new CreatePolygonInteraction(this, theView));
+	int Sides = QInputDialog::getInteger(this, MainWindow::tr("Create Polygon"), MainWindow::tr("Specify the number of sides"), 3, 3);
+	theView->launch(new CreatePolygonInteraction(this, theView, Sides));
+	theInfo->setHtml(theView->interaction()->toHtml());
+}
+
+void MainWindow::on_createRectangleAction_triggered()
+{
+	theView->launch(new CreatePolygonInteraction(this, theView, 4));
+	theInfo->setHtml(theView->interaction()->toHtml());
 }
 
 void MainWindow::on_createRoadAction_triggered()
@@ -1174,21 +1187,25 @@ void MainWindow::on_createRoadAction_triggered()
 	}
 
 	theView->launch(new CreateSingleWayInteraction(this, theView, firstPoint, false));
+	theInfo->setHtml(theView->interaction()->toHtml());
 }
 
 void MainWindow::on_createCurvedRoadAction_triggered()
 {
 	theView->launch(new CreateSingleWayInteraction(this, theView, NULL, true));
+	theInfo->setHtml(theView->interaction()->toHtml());
 }
 
 void MainWindow::on_createAreaAction_triggered()
 {
 	theView->launch(new CreateAreaInteraction(this, theView));
+	theInfo->setHtml(theView->interaction()->toHtml());
 }
 
 void MainWindow::on_createNodeAction_triggered()
 {
 	theView->launch(new CreateNodeInteraction(theView));
+	theInfo->setHtml(theView->interaction()->toHtml());
 }
 
 void MainWindow::on_roadJoinAction_triggered()
@@ -1438,6 +1455,8 @@ void MainWindow::on_toolsShortcutsAction_triggered()
 	theActions.append(editPasteOverwriteAction);
 	theActions.append(editRemoveAction);
 	theActions.append(editPropertiesAction);
+	theActions.append(editMoveAction);
+	theActions.append(editRotateAction);
 	theActions.append(editSelectAction);
 	theActions.append(viewZoomAllAction);
 	theActions.append(viewZoomWindowAction);
@@ -1462,6 +1481,8 @@ void MainWindow::on_toolsShortcutsAction_triggered()
 	theActions.append(createRoundaboutAction);
 	theActions.append(createAreaAction);
 	theActions.append(createRelationAction);
+	theActions.append(createRectangleAction);
+	theActions.append(createPolygonAction);
 	theActions.append(featureCommitAction);
 	theActions.append(roadSplitAction);
 	theActions.append(roadBreakAction);

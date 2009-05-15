@@ -27,6 +27,31 @@ MoveTrackPointInteraction::~MoveTrackPointInteraction(void)
 {
 }
 
+QString MoveTrackPointInteraction::toHtml()
+{
+	QString help;
+	help = (MainWindow::tr("LEFT-CLICK to select;LEFT-DRAG to move"));
+
+	QStringList helpList = help.split(";");
+
+	QString desc;
+	desc = QString("<big><b>%1</b></big>").arg(MainWindow::tr("Move node Interaction"));
+
+	QString S =
+	"<html><head/><body>"
+	"<small><i>" + QString(metaObject()->className()) + "</i></small><br/>"
+	+ desc;
+	S += "<hr/>";
+	S += "<ul style=\"margin-left: 0px; padding-left: 0px;\">";
+	for (int i=0; i<helpList.size(); ++i) {
+		S+= "<li>" + helpList[i] + "</li>";
+	}
+	S += "</ul>";
+	S += "</body></html>";
+
+	return S;
+}
+
 #ifndef Q_OS_SYMBIAN
 QCursor MoveTrackPointInteraction::cursor() const
 {
