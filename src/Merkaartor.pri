@@ -71,7 +71,8 @@ HEADERS += ./Command/Command.h \
     ./DirtyDock.h \
     ./GotoDialog.h \
     StyleDock.h \
-    ../include/geometry/projections/impl/geocent.h
+    ../include/geometry/projections/impl/geocent.h \
+    ../interfaces/IMapAdapter.h
 
 # Source files
 SOURCES += ./Command/Command.cpp \

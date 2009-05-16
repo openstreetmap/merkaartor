@@ -34,21 +34,14 @@ public:
 
 	virtual void drawImage(QPixmap& thePix, QPoint delta);
 	virtual void forceRedraw(Projection& theProjection, QRect rect);
-	virtual void drawWMS(Projection& theProjection, QRect& rect);
+	virtual void draw(Projection& theProjection, QRect& rect);
 	virtual void zoom(double zoom, const QPoint& pos, const QRect& rect);
 
 private:
-	WMSMapAdapter* wmsa;
 	TileMapAdapter* tmsa;
 
 protected:
 	ImageMapLayerPrivate* p;
-
-private slots:
-	void requestFinished(int id, bool error);
-
-signals:
-	void imageReceived();
 };
 
 #endif

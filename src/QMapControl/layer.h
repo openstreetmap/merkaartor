@@ -28,7 +28,6 @@
 #include "IMapAdapter.h"
 #include "layermanager.h"
 
-#include "wmsmapadapter.h"
 #include "tilemapadapter.h"
 //! Layer class
 /*!

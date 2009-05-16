@@ -20,73 +20,111 @@
 #ifndef WMSMAPADAPTER_H
 #define WMSMAPADAPTER_H
 
-#include "tilemapadapter.h"
+#include "IMapAdapter.h"
+#include "Preferences/WmsServersList.h"
+
+#include <QLocale>
 
 //! MapAdapter for WMS servers
 /*!
  * Use this derived MapAdapter to display maps from WMS servers
  *	@author Kai Winter <kaiwinter@gmx.de>
 */
-class WMSMapAdapter : public TileMapAdapter
+class WMSMapAdapter : public IMapAdapter
 {
-	friend class ImageMapLayer;
-	public:
-	//! constructor
+public:
+
+	WMSMapAdapter(WmsServer aServer);
+	virtual ~WMSMapAdapter();
+
+	//! returns the unique identifier (Uuid) of this MapAdapter
 	/*!
-	 * Sample of a correct initialization of a MapAdapter:<br/>
-	 * MapAdapter* mapadapter = new WMSMapAdapter("www2.demis.nl", "/wms/wms.asp?wms=WorldMap[...]&BBOX=%1,%2,%3,%4&WIDTH=%5&HEIGHT=%5&TRANSPARENT=TRUE", 256);<br/>
-	 * The placeholders %1, %2, %3, %4 creates the bounding box, %5 is for the tilesize
-	 * The minZoom is 0 (means the whole world is visible). The maxZoom is 17 (means it is zoomed in to the max)
-	 * @param host The servers URL
-	 * @param serverPath The path to the tiles with placeholders
-	 * @param tilesize the size of the tiles
+	 * @return  the unique identifier (Uuid) of this MapAdapter
 	 */
-		WMSMapAdapter(QString host, QString serverPath, QString wlayers, QString wSrs, QString wStyles, QString wImgFormat, int tilesize = 256);
-		virtual ~WMSMapAdapter();
+	virtual QUuid	getId		() const;
 
-		//! returns the unique identifier (Uuid) of this MapAdapter
-		/*!
-		 * @return  the unique identifier (Uuid) of this MapAdapter
-		 */
-		virtual QUuid	getId		() const;
+	//! returns the type of this MapAdapter
+	/*!
+	 * @return  the type of this MapAdapter
+	 */
+	virtual IMapAdapter::Type	getType		() const;
 
-		//! returns the type of this MapAdapter
-		/*!
-		 * @return  the type of this MapAdapter
-		 */
-		virtual IMapAdapter::Type	getType		() const;
+	//! returns the name of this MapAdapter
+	/*!
+	 * @return  the name of this MapAdapter
+	 */
+	virtual QString	getName		() const;
 
-		virtual QPoint		coordinateToDisplay(const QPointF&) const;
-		virtual QPointF	displayToCoordinate(const QPoint&) const;
+	//! returns the host of this MapAdapter
+	/*!
+	 * @return  the host of this MapAdapter
+	 */
+	virtual QString	getHost		() const;
 
-		virtual QString projection() const;
+	//! returns the size of the tiles
+	/*!
+	 * @return the size of the tiles
+	 */
+	virtual int		getTileSize	() const { return -1; }
 
-	protected:
-		virtual int tilesonzoomlevel(int zoomlevel) const;
-		//virtual void zoom_in();
-		//virtual void zoom_out();
-		virtual QString getQuery(int x, int y, int z) const;
-		virtual bool isValid(int x, int y, int z) const;
+	//! returns the min zoom value
+	/*!
+	 * @return the min zoom value
+	 */
+	virtual int 		getMinZoom	() const { return -1; }
 
-	private:
-		virtual QString getQ(QPointF ul, QPointF br) const;
+	//! returns the max zoom value
+	/*!
+	 * @return the max zoom value
+	 */
+	virtual int		getMaxZoom	() const { return -1; }
 
-		//double coord_per_x_tile;
-		//double coord_per_y_tile;
+	//! returns the current zoom
+	/*!
+	 * @return the current zoom
+	 */
+	virtual int 		getZoom		() const { return -1; }
 
-		QString wms_version;
-		QString wms_request;
-		QString wms_layers;
-		QString wms_styles;
-		QString wms_srs;
-		QString wms_format;
-		QString wms_transparent;
-		QString wms_bgcolor;
-		QString wms_exceptions;
-		QString wms_time;
-		QString wms_elevation;
-		QString wms_width;
-		QString wms_height;
+	virtual int		getAdaptedZoom() const { return -1; }
+	virtual int 	getAdaptedMinZoom() const { return -1; }
+	virtual int		getAdaptedMaxZoom() const { return -1; }
+
+	virtual void	zoom_in() {}
+	virtual void	zoom_out() {}
+
+	virtual bool	isValid(int, int, int) const { return true; }
+	virtual QString getQuery(int, int, int)  const { return ""; }
+	virtual QString getQuery(const QRectF& bbox, const QRect& size) const ;
+
+	//! translates a world coordinate to display coordinate
+	/*!
+	 * The calculations also needs the current zoom. The current zoom is managed by the MapAdapter, so this is no problem.
+	 * To divide model from view the current zoom should be moved to the layers.
+	 * @param  coordinate the world coordinate
+	 * @return the display coordinate (in widget coordinates)
+	 */
+	virtual QPoint		coordinateToDisplay(const QPointF& ) const { return QPoint(); }
+
+	//! translates display coordinate to world coordinate
+	/*!
+	 * The calculations also needs the current zoom. The current zoom is managed by the MapAdapter, so this is no problem.
+	 * To divide model from view the current zoom should be moved to the layers.
+	 * @param  point the display coordinate
+	 * @return the world coordinate
+	 */
+	virtual QPointF	displayToCoordinate(const QPoint& )  const { return QPointF(); }
+
+	virtual bool isTiled() const { return false; }
+	virtual QString projection() const;
+
+	virtual IImageManager* getImageManager();
+	virtual void setImageManager(IImageManager* anImageManager);
+
+private:
+
+	QLocale loc;
+	WmsServer theServer;
+	IImageManager* theImageManager;
 };
 
 #endif

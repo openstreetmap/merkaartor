@@ -140,20 +140,21 @@ void Layer::_draw(QPainter* painter, const QPoint mapmiddle_px) const
 		if (mapAdapter->isValid(tile->i, tile->j, mapAdapter->getZoom()))
 		{
 			QPixmap pm = mapAdapter->getImageManager()->getImage(mapAdapter, tile->i, tile->j, mapAdapter->getZoom());
-			painter->drawPixmap(((tile->i-mapmiddle_tile_x)*tilesize)-cross_x+size.width(),
-					    ((tile->j-mapmiddle_tile_y)*tilesize)-cross_y+size.height(),
-												pm);
+			if (!pm.isNull())
+				painter->drawPixmap(((tile->i-mapmiddle_tile_x)*tilesize)-cross_x+size.width(),
+							((tile->j-mapmiddle_tile_y)*tilesize)-cross_y+size.height(),
+													pm);
 
-				if (MerkaartorPreferences::instance()->getDrawTileBoundary()) {
+			if (MerkaartorPreferences::instance()->getDrawTileBoundary()) {
 				painter->drawRect(((tile->i-mapmiddle_tile_x)*tilesize)-cross_x+size.width(),
 						  ((tile->j-mapmiddle_tile_y)*tilesize)-cross_y+size.height(),
 											tilesize, tilesize);
-				}
+			}
 
 // 			if (QCoreApplication::hasPendingEvents())
 // 				QCoreApplication::processEvents();
-			}
 		}
+	}
 
 	return;
 

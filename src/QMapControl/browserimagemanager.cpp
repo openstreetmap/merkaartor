@@ -141,14 +141,19 @@ BrowserImageManager::~BrowserImageManager()
 	delete timeoutTimer;
 }
 
-//QPixmap BrowserImageManager::getImage(const QString& host, const QString& url)
 QPixmap BrowserImageManager::getImage(IMapAdapter* anAdapter, int x, int y, int z)
 {
-	QPixmap pm(emptyPixmap);
+	QString url = anAdapter->getQuery(x, y, z);
+	return getImage(anAdapter, url);
+}
+
+QPixmap BrowserImageManager::getImage(IMapAdapter* anAdapter, QString url)
+{
+//	QPixmap pm(emptyPixmap);
+	QPixmap pm;
 
 	QString host = anAdapter->getHost();
-	QString url = anAdapter->getQuery(x, y, z);
-	QString strHash = QString("%1;%2;%3;%4;%5").arg(anAdapter->getName()).arg(QString::number(x)).arg(QString::number(y)).arg(QString::number(z)).arg(anAdapter->getTileSize());
+	QString strHash = QString("%1%2").arg(anAdapter->getName()).arg(url);
 	QString hash = QString(strHash.toAscii().toBase64());
 	if (hash.size() > 255) {
 		QCryptographicHash crypt(QCryptographicHash::Md5);
@@ -161,7 +166,7 @@ QPixmap BrowserImageManager::getImage(IMapAdapter* anAdapter, int x, int y, int 
 		return pm;
 
 	// disk cache?
-    if (useDiskCache(hash + ".png")) {
+    if (anAdapter->isTiled() && useDiskCache(hash + ".png")) {
 		if (pm.load(cacheDir.absolutePath() + "/" + hash + ".png")) {
 			QPixmapCache::insert(hash, pm);
 			return pm;

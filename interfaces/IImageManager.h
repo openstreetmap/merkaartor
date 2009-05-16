@@ -61,6 +61,7 @@ class IImageManager
 		 */
 		//QPixmap getImage(const QString& host, const QString& path);
 		virtual QPixmap getImage(IMapAdapter* anAdapter, int x, int y, int z) = 0;
+		virtual QPixmap getImage(IMapAdapter* anAdapter, QString url) = 0;
 
 		//QPixmap prefetchImage(const QString& host, const QString& path);
 		virtual QPixmap prefetchImage(IMapAdapter* anAdapter, int x, int y, int z) = 0;

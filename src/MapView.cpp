@@ -154,7 +154,12 @@ void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
 		StaticMapUpToDate = false;
 	}
 	if (theDocument && theDocument->getImageLayer() && updateMap) {
-		theDocument->getImageLayer()->forceRedraw(theProjection, rect());
+		for (int i=0; i<theDocument->layerSize(); ++i)
+		{
+			ImageMapLayer* IL = dynamic_cast<ImageMapLayer*>(theDocument->getLayer(i));
+			if ( IL )
+				theDocument->getImageLayer()->forceRedraw(theProjection, rect());
+		}
 		StaticMapUpToDate = false;
 	}
 	update();
@@ -1013,10 +1018,16 @@ void MapView::imageRequested()
 
 void MapView::imageReceived()
 {
-	if (LAYERMANAGER_OK && layermanager->getLayer()->isVisible()) {
-		Main->pbImages->setValue(Main->pbImages->value()+1);
+	Main->pbImages->setValue(Main->pbImages->value()+1);
+	if (LAYERMANAGER_OK && layermanager->getLayer()->isVisible())
 		layermanager->forceRedraw();
-	}
+	else
+		for (int i=0; i<theDocument->layerSize(); ++i)
+		{
+			ImageMapLayer* IL = dynamic_cast<ImageMapLayer*>(theDocument->getLayer(i));
+			if ( IL )
+				theDocument->getImageLayer()->forceRedraw(theProjection, rect());
+		}
 	StaticMapUpToDate = false;
 	update();
 }

@@ -86,6 +86,7 @@ class BrowserImageManager : public QObject, public IImageManager
 		 */
 		//QPixmap getImage(const QString& host, const QString& path);
 		QPixmap getImage(IMapAdapter* anAdapter, int x, int y, int z);
+		QPixmap getImage(IMapAdapter* anAdapter, QString url);
 
 		//QPixmap prefetchImage(const QString& host, const QString& path);
 		QPixmap prefetchImage(IMapAdapter* anAdapter, int x, int y, int z);

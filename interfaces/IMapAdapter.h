@@ -89,6 +89,7 @@ public:
 
 	virtual bool	isValid(int x, int y, int z) const = 0;
 	virtual QString getQuery(int x, int y, int z) const = 0;
+	virtual QString getQuery(const QRectF& bbox, const QRect& size) const = 0;
 
 	//! translates a world coordinate to display coordinate
 	/*!
@@ -108,6 +109,7 @@ public:
 	 */
 	virtual QPointF	displayToCoordinate(const QPoint& point) const = 0;
 
+	virtual bool isTiled() const = 0;
 	virtual QString projection() const = 0;
 
 	virtual IImageManager* getImageManager() = 0;
@@ -115,6 +117,6 @@ public:
 };
 
 Q_DECLARE_INTERFACE ( IMapAdapter,
-					  "com.cbsoft.Merkaartor.IMapAdapter/1.0" )
+					  "com.cbsoft.Merkaartor.IMapAdapter/1.1" )
 
 #endif

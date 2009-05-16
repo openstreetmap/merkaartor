@@ -48,13 +48,17 @@ ImageManager::~ImageManager()
 	delete net;
 }
 
-//QPixmap ImageManager::getImage(const QString& host, const QString& url)
 QPixmap ImageManager::getImage(IMapAdapter* anAdapter, int x, int y, int z)
+{
+	QString url = anAdapter->getQuery(x, y, z);
+	return getImage(anAdapter, url);
+}
+
+QPixmap ImageManager::getImage(IMapAdapter* anAdapter, QString url)
 {
 // 	qDebug() << "ImageManager::getImage";
 	
 	QString host = anAdapter->getHost();
-	QString url = anAdapter->getQuery(x, y, z);
 	QString strHash = QString("%1%2").arg(anAdapter->getName()).arg(url);
 	QString hash = QString(strHash.toAscii().toBase64());
 	if (hash.size() > 255) {
@@ -65,14 +69,15 @@ QPixmap ImageManager::getImage(IMapAdapter* anAdapter, int x, int y, int z)
 
 /*	QPixmap pm(anAdapter->getTileSize(), anAdapter->getTileSize());
 	pm.fill(Qt::black);*/
-	QPixmap pm(emptyPixmap);
+//	QPixmap pm(emptyPixmap);
+	QPixmap pm;
 	
 	// is image in picture cache
 	if (QPixmapCache::find(hash, pm))
 		return pm;
 
 	// disk cache?
-    if (useDiskCache(hash + ".png")) {
+    if (anAdapter->isTiled() && useDiskCache(hash + ".png")) {
 		if (pm.load(cacheDir.absolutePath() + "/" + hash + ".png")) {
 			QPixmapCache::insert(hash, pm);
 			return pm;
@@ -88,7 +93,7 @@ QPixmap ImageManager::getImage(IMapAdapter* anAdapter, int x, int y, int z)
 		// load from net, add empty image
 		net->loadImage(hash, host, url);
 		emit(imageRequested());
-		return emptyPixmap;
+		return pm;
 	}
 	return pm;
 }

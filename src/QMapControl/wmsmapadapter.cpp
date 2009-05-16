@@ -20,35 +20,36 @@
 #include "wmsmapadapter.h"
 #include "Maps/Projection.h"
 
-WMSMapAdapter::WMSMapAdapter(QString host, QString serverPath, QString wlayers, QString wSrs, QString wStyles, QString wImgFormat, int tilesize)
- : TileMapAdapter(host, serverPath, tilesize, 0, 99)
+WMSMapAdapter::WMSMapAdapter(WmsServer aServer)
+ : theServer(aServer)
 {
-	name = "WMS-"+ host;
+	loc = QLocale(QLocale::English);
+	loc.setNumberOptions(QLocale::OmitGroupSeparator);
+}
 
-	wms_version = "1.1.1";
-	wms_request = "GetMap";
-	wms_format = wImgFormat; //"image/png";
-	wms_transparent = "TRUE";
-	wms_width = loc.toString(tilesize);
-	wms_height = loc.toString(tilesize);
+QString	WMSMapAdapter::getName() const
+{
+	return theServer.WmsName;
+}
 
-	wms_layers = wlayers;
-	wms_styles = wStyles;
-	wms_srs = wSrs;
+QString	WMSMapAdapter::getHost() const
+{
+	return theServer.WmsAdress;
+}
 
-	wms_bgcolor = "";
-	wms_exceptions = "";
-	wms_time = "";
-	wms_elevation = "";
+IImageManager* WMSMapAdapter::getImageManager()
+{
+	return theImageManager;
+}
 
-	numberOfTiles = pow(2, current_zoom+0.0);
-	//coord_per_x_tile = 360. / numberOfTiles;
-	//coord_per_y_tile = 180. / numberOfTiles;
+void WMSMapAdapter::setImageManager(IImageManager* anImageManager)
+{
+	theImageManager = anImageManager;
 }
 
 QString WMSMapAdapter::projection() const
 {
-	return wms_srs;
+	return theServer.WmsProjections;
 }
 
 WMSMapAdapter::~WMSMapAdapter()
@@ -65,62 +66,24 @@ IMapAdapter::Type WMSMapAdapter::getType() const
 	return IMapAdapter::DirectBackground;
 }
 
-QPoint WMSMapAdapter::coordinateToDisplay(const QPointF& coordinate) const
+QString WMSMapAdapter::getQuery(const QRectF& bbox, const QRect& size) const
 {
-	double x = (coordinate.x()+180) * (numberOfTiles*tilesize)/360.;		// coord to pixel!
-	double y = -1*(coordinate.y()-90) * (numberOfTiles/2*tilesize)/180.;	// coord to pixel!
-	return QPoint(int(x), int(y));
-}
-
-QPointF WMSMapAdapter::displayToCoordinate(const QPoint& pt) const
-{
-	double lon = (pt.x()*(360./(numberOfTiles*tilesize)))-180;
-	double lat = -(pt.y()*(180./(numberOfTiles/2*tilesize)))+90;
-	return QPointF(lon, lat);
-} 
-
-bool WMSMapAdapter::isValid(int /* x */, int /* y */, int /* z */) const
-{
-// 	if (x>0 && y>0 && z>0)
-	{
-		return true;
-	}
-// 	return false;
-}
-
-int WMSMapAdapter::tilesonzoomlevel(int zoomlevel) const
-{
-	return int(pow(2, zoomlevel+1.0));
-}
-
-
-QString WMSMapAdapter::getQuery(int i, int j, int /* z */) const
-{
-	QPointF ul = displayToCoordinate(QPoint(i*tilesize, j*tilesize));
-	QPointF br = displayToCoordinate(QPoint((i+1)*tilesize, (j+1)*tilesize));
-	return getQ(ul, br);
-
-}
-QString WMSMapAdapter::getQ(QPointF ul, QPointF br) const
-{
-	QPointF ulp;
-	QPointF brp;
-
-	//Q_ASSERT(!(ulp.toPoint().isNull() && brp.toPoint().isNull()));
-	return QString().append(serverPath)
+	return QString()
+						.append(theServer.WmsPath)
 						.append("SERVICE=WMS")
-						.append("&VERSION=").append(wms_version)
-						.append("&REQUEST=").append(wms_request)
-						.append("&LAYERS=").append(wms_layers)
-						.append("&SRS=").append(wms_srs)
-						.append("&STYLES=").append(wms_styles)
-						.append("&FORMAT=").append(wms_format)
-						.append("&TRANSPARENT=").append(wms_transparent)
-						.append("&WIDTH=").append(wms_width)
-						.append("&HEIGHT=").append(wms_height)
+						.append("&VERSION=1.1.1")
+						.append("&REQUEST=GetMap")
+						.append("&TRANSPARENT=TRUE")
+						.append("&LAYERS=").append(theServer.WmsLayers)
+						.append("&SRS=").append(theServer.WmsProjections)
+						.append("&STYLES=").append(theServer.WmsStyles)
+						.append("&FORMAT=").append(theServer.WmsImgFormat)
+						.append("&WIDTH=").append(QString::number(size.width()))
+						.append("&HEIGHT=").append(QString::number(size.height()))
 						.append("&BBOX=")
-						 .append(loc.toString(ul.x(),'f',6)).append(",")
-						 .append(loc.toString(br.y(),'f',6)).append(",")
-						 .append(loc.toString(br.x(),'f',6)).append(",")
-						 .append(loc.toString(ul.y(),'f',6));
+						.append(loc.toString(bbox.bottomLeft().x(),'f',6)).append(",")
+						 .append(loc.toString(bbox.bottomLeft().y(),'f',6)).append(",")
+						 .append(loc.toString(bbox.topRight().x(),'f',6)).append(",")
+						 .append(loc.toString(bbox.topRight().y(),'f',6))
+						 ;
 }
