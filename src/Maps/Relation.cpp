@@ -128,21 +128,21 @@ void Relation::draw(QPainter& P, const Projection& theProjection)
 		P.setPen(QPen(Qt::red,M_PREFS->getRelationsWidth(),Qt::DashLine));
 	else
 		P.setPen(QPen(M_PREFS->getRelationsColor(),M_PREFS->getRelationsWidth(),Qt::DashLine));
-	P.drawPath(p->thePath);
+	QRectF bb = p->thePath.boundingRect().adjusted(-10, -10, 10, 10);
+	P.drawRect(bb);
 }
 
 void Relation::drawFocus(QPainter& P, const Projection& theProjection, bool solid)
 {
-	QRegion clipRg = QRegion(P.clipRegion().boundingRect().adjusted(-20, -20, 20, 20));
-	buildPath(theProjection, clipRg);
+	QRectF bb = p->thePath.boundingRect().adjusted(-10, -10, 10, 10);
 	if (!solid) {
 		QPen thePen(M_PREFS->getFocusColor(),M_PREFS->getFocusWidth());
 		thePen.setDashPattern(getParentDashes());
 		P.setPen(thePen);
-		P.drawPath(p->thePath);
+		P.drawRect(bb);
 	} else {
 		P.setPen(QPen(M_PREFS->getFocusColor(),M_PREFS->getFocusWidth(),Qt::DashLine));
-		P.drawPath(p->thePath);
+		P.drawRect(bb);
 
 		for (int i=0; i<p->Members.size(); ++i)
 			if (p->Members[i].second && !p->Members[i].second->isDeleted())
@@ -158,16 +158,15 @@ void Relation::drawFocus(QPainter& P, const Projection& theProjection, bool soli
 
 void Relation::drawHover(QPainter& P, const Projection& theProjection, bool solid)
 {
-	QRegion clipRg = QRegion(P.clipRegion().boundingRect().adjusted(-20, -20, 20, 20));
-	buildPath(theProjection, clipRg);
+	QRectF bb = p->thePath.boundingRect().adjusted(-10, -10, 10, 10);
 	if (!solid) {
 		QPen thePen(M_PREFS->getHoverColor(),M_PREFS->getHoverWidth());
 		thePen.setDashPattern(getParentDashes());
 		P.setPen(thePen);
-		P.drawPath(p->thePath);
+		P.drawRect(bb);
 	} else {
 		P.setPen(QPen(M_PREFS->getHoverColor(),M_PREFS->getHoverWidth(),Qt::DashLine));
-		P.drawPath(p->thePath);
+		P.drawRect(bb);
 
 		for (int i=0; i<p->Members.size(); ++i)
 			if (p->Members[i].second && !p->Members[i].second->isDeleted())
@@ -328,73 +327,81 @@ void Relation::releaseMemberModel()
 	}
 }
 
-void Relation::buildPath(Projection const &theProjection, const QRegion& paintRegion)
+void Relation::buildPath(Projection const &theProjection, const QRect& clipRect)
 {
 	p->thePath = QPainterPath();
-	QRect bb = QRect(theProjection.project(boundingBox().topLeft()),theProjection.project(boundingBox().bottomRight()));
-	bb.adjust(-10, -10, 10, 10);
-	QList<QPoint> corners;
-
-	corners << bb.bottomLeft() << bb.topLeft() << bb.topRight() << bb.bottomRight() << bb.bottomLeft();
-
-	bool lastPointVisible = true;
-	QPoint lastPoint = corners[0];
-	QPoint aP = lastPoint;
-
-	double PixelPerM = theProjection.pixelPerM();
-	double WW = PixelPerM*10+10;
-	QRect clipRect = paintRegion.boundingRect().adjusted(int(-WW-20), int(-WW-20), int(WW+20), int(WW+20));
-
-
-	if (M_PREFS->getDrawingHack()) {
-		if (!clipRect.contains(aP)) {
-			aP.setX(qMax(clipRect.left(), aP.x()));
-			aP.setX(qMin(clipRect.right(), aP.x()));
-			aP.setY(qMax(clipRect.top(), aP.y()));
-			aP.setY(qMin(clipRect.bottom(), aP.y()));
-			lastPointVisible = false;
+	for (unsigned int i=0; i<size(); ++i)
+		if (Road* M = dynamic_cast<Road*>(p->Members[i].second)) {
+			M->buildPath(theProjection, clipRect);
+			p->thePath.addPath(M->getPath());
 		}
-	}
-	p->thePath.moveTo(aP);
-	QPoint firstPoint = aP;
 
-	for (int j=1; j<corners.size(); ++j) {
-		aP = corners[j];
-		if (M_PREFS->getDrawingHack()) {
-			QLine l(lastPoint, aP);
-			if (!clipRect.contains(aP)) {
-				if (!lastPointVisible) {
-					QPoint a, b;
-					if (QRectInterstects(clipRect, l, a, b)) {
-						p->thePath.lineTo(a);
-						lastPoint = aP;
-						aP = b;
-					} else {
-						lastPoint = aP;
-						aP.setX(qMax(clipRect.left(), aP.x()));
-						aP.setX(qMin(clipRect.right(), aP.x()));
-						aP.setY(qMax(clipRect.top(), aP.y()));
-						aP.setY(qMin(clipRect.bottom(), aP.y()));
-					}
-				} else {
-					QPoint a, b;
-					QRectInterstects(clipRect, l, a, b);
-					lastPoint = aP;
-					aP = a;
-				}
-				lastPointVisible = false;
-			} else {
-				if (!lastPointVisible) {
-					QPoint a, b;
-					QRectInterstects(clipRect, l, a, b);
-					p->thePath.lineTo(a);
-				}
-				lastPoint = aP;
-				lastPointVisible = true;
-			}
-		}
-		p->thePath.lineTo(aP);
-	}
+	//	
+	//p->thePath = QPainterPath();
+	//QRect bb = QRect(theProjection.project(boundingBox().topLeft()),theProjection.project(boundingBox().bottomRight()));
+	//bb.adjust(-10, -10, 10, 10);
+	//QList<QPoint> corners;
+
+	//corners << bb.bottomLeft() << bb.topLeft() << bb.topRight() << bb.bottomRight() << bb.bottomLeft();
+
+	//bool lastPointVisible = true;
+	//QPoint lastPoint = corners[0];
+	//QPoint aP = lastPoint;
+
+	//double PixelPerM = theProjection.pixelPerM();
+	//double WW = PixelPerM*10+10;
+	//QRect clipRect = paintRegion.boundingRect().adjusted(int(-WW-20), int(-WW-20), int(WW+20), int(WW+20));
+
+
+	//if (M_PREFS->getDrawingHack()) {
+	//	if (!clipRect.contains(aP)) {
+	//		aP.setX(qMax(clipRect.left(), aP.x()));
+	//		aP.setX(qMin(clipRect.right(), aP.x()));
+	//		aP.setY(qMax(clipRect.top(), aP.y()));
+	//		aP.setY(qMin(clipRect.bottom(), aP.y()));
+	//		lastPointVisible = false;
+	//	}
+	//}
+	//p->thePath.moveTo(aP);
+	//QPoint firstPoint = aP;
+
+	//for (int j=1; j<corners.size(); ++j) {
+	//	aP = corners[j];
+	//	if (M_PREFS->getDrawingHack()) {
+	//		QLine l(lastPoint, aP);
+	//		if (!clipRect.contains(aP)) {
+	//			if (!lastPointVisible) {
+	//				QPoint a, b;
+	//				if (QRectInterstects(clipRect, l, a, b)) {
+	//					p->thePath.lineTo(a);
+	//					lastPoint = aP;
+	//					aP = b;
+	//				} else {
+	//					lastPoint = aP;
+	//					aP.setX(qMax(clipRect.left(), aP.x()));
+	//					aP.setX(qMin(clipRect.right(), aP.x()));
+	//					aP.setY(qMax(clipRect.top(), aP.y()));
+	//					aP.setY(qMin(clipRect.bottom(), aP.y()));
+	//				}
+	//			} else {
+	//				QPoint a, b;
+	//				QRectInterstects(clipRect, l, a, b);
+	//				lastPoint = aP;
+	//				aP = a;
+	//			}
+	//			lastPointVisible = false;
+	//		} else {
+	//			if (!lastPointVisible) {
+	//				QPoint a, b;
+	//				QRectInterstects(clipRect, l, a, b);
+	//				p->thePath.lineTo(a);
+	//			}
+	//			lastPoint = aP;
+	//			lastPointVisible = true;
+	//		}
+	//	}
+	//	p->thePath.lineTo(aP);
+	//}
 }
 
 QPainterPath Relation::getPath()

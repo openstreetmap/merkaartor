@@ -42,6 +42,7 @@ class RoadPrivate
 		bool IsCoastline;
 		double Area;
 		double Distance;
+		double Layer;
 		double Width;
 		bool MetaUpToDate;
 		QPainterPath thePath;
@@ -133,7 +134,7 @@ RenderPriority Road::renderPriority(double aPixelPerM) const
 	double a = area();
 	if (a)
 		return RenderPriority(RenderPriority::IsArea,fabs(a));
-	return RenderPriority(RenderPriority::IsLinear,0);
+	return RenderPriority(RenderPriority::IsLinear,p->Layer*-1.);
 }
 
 void Road::add(TrackPoint* Pt)
@@ -244,6 +245,9 @@ void Road::updateMeta() const
 	p->Area = 0;
 	p->Distance = 0;
 	p->IsCoastline = false;
+	p->Layer = tagValue("layer","0").toInt();
+	if (p->Layer == 0)
+		p->Layer = 0.01;
 
 	if (p->Nodes.size() == 0)
 	{
@@ -467,6 +471,7 @@ void Road::buildPath(Projection const &theProjection, const QRect& cr)
 	using namespace geometry;
 
 	p->thePath = QPainterPath();
+
 	if (!p->Nodes.size())
 		return;
 
@@ -512,6 +517,7 @@ void Road::buildPath(Projection const &theProjection, const QRect& cr)
 			{
 				p->thePath.lineTo(QPoint((*itl).x(), (*itl).y()));
 			}
+			p->thePath.lineTo(QPoint((*it).outer()[0].x(), (*it).outer()[0].y()));
 		}
 	}
 

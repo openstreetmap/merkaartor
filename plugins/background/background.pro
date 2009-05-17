@@ -2,5 +2,6 @@ TEMPLATE = subdirs
 
 !symbian {
 	SUBDIRS += \ 
-		MYahooBackground 
+		MYahooBackground \
+		FrenchCadastre
 }

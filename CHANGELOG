@@ -1,4 +1,6 @@
 v0.14
+	* FIX : Take layer tag into account for drawing priority (fixes #1792)
+	* FIX : Relations were no more drawn according to style
     * ADD : Interactions help in the info dock
     * ADD : Generic polygons creation (closes #1808)
     * FIX : Never loose selection when ctrl- or shift-clicking (fixes #1793)

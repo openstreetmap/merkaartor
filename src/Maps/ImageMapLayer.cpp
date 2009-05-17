@@ -151,7 +151,8 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid)
 		}
 		SAFE_DELETE(p->layer_bg);
 	}
-	SAFE_DELETE(p->theMapAdapter);
+	if (p->theMapAdapter && p->theMapAdapter->getId() == WMS_ADAPTER_UUID)
+		SAFE_DELETE(p->theMapAdapter);
 	p->pm.fill(Qt::transparent);
 
 	p->bgType = theAdapterUid;
@@ -190,23 +191,24 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid)
 			setName(tr("Map - OSB Background"));
 	} else
 	{
-		IMapAdapter * thePluginBackground = M_PREFS->getBackgroundPlugin(p->bgType);
-		if (thePluginBackground) {
-			switch (thePluginBackground->getType()) {
+		p->theMapAdapter = M_PREFS->getBackgroundPlugin(p->bgType);
+		if (p->theMapAdapter) {
+			switch (p->theMapAdapter->getType()) {
 #ifdef USE_WEBKIT
 				case IMapAdapter::BrowserBackground :
-					thePluginBackground->setImageManager(BrowserImageManager::instance());
+					p->theMapAdapter->setImageManager(BrowserImageManager::instance());
 					break;
 #endif
 				case IMapAdapter::DirectBackground :
-					thePluginBackground->setImageManager(ImageManager::instance());
+					p->theMapAdapter->setImageManager(ImageManager::instance());
 					break;
 			}
-			mapadapter_bg = thePluginBackground;
-			p->layer_bg = new Layer(id(), mapadapter_bg, Layer::MapLayer);
-			p->layer_bg->setVisible(isVisible());
+			if (p->theMapAdapter->isTiled()) {
+				p->layer_bg = new Layer(id(), p->theMapAdapter, Layer::MapLayer);
+				p->layer_bg->setVisible(isVisible());
+			}
 
-			setName(tr("Map - %1").arg(thePluginBackground->getName()));
+			setName(tr("Map - %1").arg(p->theMapAdapter->getName()));
 		} else
 			p->bgType = NONE_ADAPTER_UUID;
 	}

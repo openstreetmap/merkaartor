@@ -184,7 +184,7 @@ void CreateAreaInteraction::addToRoad(QMouseEvent* anEvent, MapFeature* Snap, Co
 		if (M_PREFS->apiVersionNum() < 0.6)
 			To->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 		L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),To,true));
-		L->setDescription(MainWindow::tr("Area: Add node %1 to Road %2").arg(To->description().arg(theRoad->description())));
+		L->setDescription(MainWindow::tr("Area: Add node %1 to Road %2").arg(To->description()).arg(theRoad->description()));
 		L->setFeature(To);
 	} else {
 		if (!To->isDirty() && !To->hasOSMId() && To->isUploadable())

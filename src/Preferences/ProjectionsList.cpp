@@ -65,6 +65,9 @@ void ProjectionsList::addProjection(ProjectionItem aProjection)
 
 ProjectionItem ProjectionsList::getProjection(QString name) const
 {
+	if (name.contains("+proj")) {
+		return ProjectionItem(name, name);
+	}
 	if (theProjections.contains(name))
 		return theProjections.value(name);
 	else {
