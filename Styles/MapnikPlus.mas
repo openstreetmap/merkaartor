@@ -7,9 +7,8 @@
 </painter>
 <painter
  zoomUnder="0.01" zoomUpper="1e+07"
+ backgroundColor="#bdbdbdff" backgroundScale="0.1" backgroundOffset="0.1"
  fillColor="#edededfc"
- backgroundColor="#777777fc" backgroundScale="1.2" backgroundOffset="3"
- foregroundColor="#edededfc" foregroundScale="1" foregroundOffset="2"
  drawTrafficDirectionMarks="no" labelColor="#333333fc" labelScale="5" labelOffset="5"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes" labelArea="yes">
   <selector expr="[area] isoneof (yes , true)"/>

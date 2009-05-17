@@ -8,6 +8,14 @@
   <selector expr="[note] is FIXME*"/>
 </painter>
 <painter
+ zoomUnder="0.01" zoomUpper="1e+07"
+ backgroundColor="#bdbdbdff" backgroundScale="0.1" backgroundOffset="0.1"
+ fillColor="#edededfc"
+ drawTrafficDirectionMarks="no" labelColor="#333333fc" labelScale="5" labelOffset="5"
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes" labelArea="yes">
+  <selector expr="[area] isoneof (yes , true)"/>
+</painter>
+<painter
  backgroundColor="#506077fc" backgroundScale="1" backgroundOffset="6"
  foregroundColor="#809bc0fc" foregroundScale="0.5" foregroundOffset="4"
  drawTrafficDirectionMarks="yes" labelColor="#506077fc" labelScale="2" labelOffset="4"
