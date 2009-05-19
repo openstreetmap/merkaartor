@@ -39,7 +39,7 @@ install: build
 	dh_testroot
 #	dh_clean -k
 	dh_installdirs
-	install -D binaries/debug/bin/merkaartor $(CURDIR)/debian/merkaartor/usr/bin
+	install -D binaries/bin/merkaartor $(CURDIR)/debian/merkaartor/usr/bin
 
 binary-indep:
 binary binary-arch: install
