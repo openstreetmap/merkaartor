@@ -7,17 +7,13 @@
 #include <QPointF>
 
 #include "QMapControl/mapadapter.h"
-#include "QMapControl/layermanager.h"
 
 #include <geometry/geometries/cartesian2d.hpp>
 #include <geometry/geometries/latlong.hpp>
 
 #include <geometry/projections/projection.hpp>
 
-#define LAYERMANAGER_OK (layermanager && layermanager->getLayer())
-
 class QRect;
-class LayerManager;
 class TrackPoint;
 class ProjectionPrivate;
 
@@ -29,6 +25,7 @@ class Projection
 		Projection(void);
 		virtual ~Projection(void);
 
+		void setViewport(const CoordBox& Map);
 		void setViewport(const CoordBox& Map, const QRect& Screen);
 		void panScreen(const QPoint& p, const QRect& Screen);
 		CoordBox viewport() const;
@@ -41,8 +38,6 @@ class Projection
 		void zoom(double d, const QPointF& Around, const QRect& Screen);
 		void setCenter(Coord& Center, const QRect& Screen);
 		void resize(QSize oldS, QSize newS);
-
-		void setLayerManager(LayerManager* lm);
 
 		virtual bool toXML(QDomElement xParent) const;
 		void fromXML(QDomElement e, const QRect & Screen);
@@ -67,7 +62,6 @@ class Projection
 		double PixelPerM;
 		CoordBox Viewport;
 		QPoint screen_middle;
-		LayerManager* layermanager;
 #ifndef _MOBILE
 		ProjProjection *theProj;
 #endif
@@ -76,10 +70,6 @@ class Projection
 		ProjectionPrivate* p;
 
 		void viewportRecalc(const QRect& Screen);
-		void layerManagerSetViewport(const CoordBox& Map, const QRect& Screen);
-		void layerManagerViewportRecalc(const QRect& Screen);
-		QPointF screenToCoordinate(QPointF click) const;
-		QPoint coordinateToScreen(QPointF click) const;
 };
 
 

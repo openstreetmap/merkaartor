@@ -57,6 +57,8 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 		virtual void on_editPasteOverwriteAction_triggered();
 		virtual void on_editPasteMergeAction_triggered();
 		virtual void on_editPasteFeaturesAction_triggered();
+
+		virtual void on_layersNewImageAction_triggered();
 		
 		virtual void on_fileNewAction_triggered();
 		virtual void on_fileDownloadAction_triggered();
@@ -68,7 +70,6 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 		virtual void on_fileSaveAction_triggered();
 		virtual void on_fileWorkOfflineAction_triggered();
 		
-		virtual void on_layersAddImageAction_triggered();
 		virtual void on_helpAboutAction_triggered();
 		virtual void on_viewZoomAllAction_triggered();
 		virtual void on_viewZoomInAction_triggered();

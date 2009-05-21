@@ -799,8 +799,11 @@ DirtyMapLayer::~ DirtyMapLayer()
 
 DirtyMapLayer* DirtyMapLayer::fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress)
 {
-	DrawingMapLayer::doFromXML(dynamic_cast<DrawingMapLayer*>(d->getDirtyOrOriginLayer()), d, e, progress);
-	return dynamic_cast<DirtyMapLayer*>(d->getDirtyOrOriginLayer());
+	DirtyMapLayer* l = new DirtyMapLayer(e.attribute("name"));
+	d->add(l);
+	d->setDirtyLayer(l);
+	DrawingMapLayer::doFromXML(l, d, e, progress);
+	return l;
 }
 
 LayerWidget* DirtyMapLayer::newWidget(void)
@@ -808,8 +811,6 @@ LayerWidget* DirtyMapLayer::newWidget(void)
 	p->theWidget = new DirtyLayerWidget(this);
 	return p->theWidget;
 }
-
-
 
 // UploadedMapLayer
 
@@ -825,8 +826,11 @@ UploadedMapLayer::~ UploadedMapLayer()
 
 UploadedMapLayer* UploadedMapLayer::fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress)
 {
-	DrawingMapLayer::doFromXML(d->getUploadedLayer(), d, e, progress);
-	return d->getUploadedLayer();
+	UploadedMapLayer* l = new UploadedMapLayer(e.attribute("name"));
+	d->add(l);
+	d->setUploadedLayer(l);
+	DrawingMapLayer::doFromXML(l, d, e, progress);
+	return l;
 }
 
 LayerWidget* UploadedMapLayer::newWidget(void)

@@ -17,6 +17,7 @@
 #include <QMessageBox>
 
 #include <QList>
+#include <QPainter>
 
 RotateInteraction::RotateInteraction(MapView* aView)
 : FeatureSnapInteraction(aView), StartDragPosition(0,0)
@@ -112,6 +113,8 @@ void RotateInteraction::snapMousePressEvent(QMouseEvent * event, MapFeature* aLa
 
 void RotateInteraction::snapMouseReleaseEvent(QMouseEvent * event, MapFeature* /*Closer*/)
 {
+	Q_UNUSED(event);
+
 	if ((Angle != 0.0 || Radius != 1.0) && Rotating.size() && !panning())
 	{
 		CommandList* theList;

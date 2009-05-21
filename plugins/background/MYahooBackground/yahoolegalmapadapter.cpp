@@ -25,17 +25,19 @@
 static const QUuid theUid ( 0x67cc0481, 0x8c6a, 0x4735, 0x86, 0x66, 0xbb, 0xa6, 0xa1, 0xb0, 0x4e, 0x19);
 
 YahooLegalMapAdapter::YahooLegalMapAdapter()
-: TileMapAdapter("", "qrc:/Html/ymap.html?", 512, 17, 0)
 {
-	name = "Yahoo!";
-
-	int zoom = max_zoom < min_zoom ? min_zoom - current_zoom : current_zoom;
-	numberOfTiles = pow(2, zoom+1.0);
+	loc = QLocale(QLocale::English);
+	loc.setNumberOptions(QLocale::OmitGroupSeparator);
 }
 
 
 YahooLegalMapAdapter::~YahooLegalMapAdapter()
 {
+}
+
+QString	YahooLegalMapAdapter::getHost() const
+{
+	return "";
 }
 
 QUuid YahooLegalMapAdapter::getId() const
@@ -48,54 +50,41 @@ IMapAdapter::Type YahooLegalMapAdapter::getType() const
 	return IMapAdapter::BrowserBackground;
 }
 
-
-bool YahooLegalMapAdapter::isValid(int /* x */, int /* y */, int /* z */) const
+QString	YahooLegalMapAdapter::getName() const
 {
-	return true;
+	return "Yahoo!";
 }
 
-//bool YahooLegalMapAdapter::isValid(int x, int y, int z) const
-//{
-// 	if (x<0 || y<0 || z<0)
-//		return false;
-//
-//	if ( (((x+1)*coord_per_x_tile) > 360) || (((y+1)*coord_per_y_tile) > 180) )
-//		return false;
-//
-// 	return true;
-//}
-
-int YahooLegalMapAdapter::tilesonzoomlevel(int zoomlevel) const
+QString YahooLegalMapAdapter::projection() const
 {
-	return int(pow(2, zoomlevel+1.0));
+	return ("EPSG:3785");
 }
 
-QString YahooLegalMapAdapter::getQuery(int i, int j, int /* z */) const
+QString YahooLegalMapAdapter::getQuery(const QRectF& wgs84Bbox, const QRectF& projBbox, const QRect& size) const
 {
-	QPointF ul = displayToCoordinate(QPoint(i*tilesize, j*tilesize));
-	QPointF br = displayToCoordinate(QPoint((i+1)*tilesize, (j+1)*tilesize));
-	return getQ(ul, br);
-}
+	if (size.width() < 150 || size.height() < 150)
+		return "";
 
-QString YahooLegalMapAdapter::getQ(QPointF ul, QPointF br) const
-{
-	return QString().append(serverPath)
-						.append("WIDTH=").append(QString().setNum(tilesize))
-						.append("&HEIGHT=").append(QString().setNum(tilesize))
+	return QString()
+						.append("qrc:/Html/ymap.html?")
+						.append("WIDTH=").append(QString::number(size.width()))
+						.append("&HEIGHT=").append(QString::number(size.height()))
 						.append("&BBOX=")
-						 .append(loc.toString(ul.x(),'f',6)).append(",")
-						 .append(loc.toString(ul.y(),'f',6)).append(",")
-						 .append(loc.toString(br.x(),'f',6)).append(",")
-						 .append(loc.toString(br.y(),'f',6));
+						.append(loc.toString(wgs84Bbox.bottomLeft().x(),'f',6)).append(",")
+						 .append(loc.toString(wgs84Bbox.bottomLeft().y(),'f',6)).append(",")
+						 .append(loc.toString(wgs84Bbox.topRight().x(),'f',6)).append(",")
+						 .append(loc.toString(wgs84Bbox.topRight().y(),'f',6))
+						 ;
 }
 
-int YahooLegalMapAdapter::getyoffset(int y) const
+IImageManager* YahooLegalMapAdapter::getImageManager()
 {
-	int zoom = max_zoom < min_zoom ? min_zoom - current_zoom : current_zoom;
+	return theImageManager;
+}
 
-	int tiles = int(pow(2, zoom+0.0));
-	y = y*(-1)+tiles-1;
-	return int(y);
+void YahooLegalMapAdapter::setImageManager(IImageManager* anImageManager)
+{
+	theImageManager = anImageManager;
 }
 
 Q_EXPORT_PLUGIN2(MYahooBackgroundPlugin, YahooLegalMapAdapter)

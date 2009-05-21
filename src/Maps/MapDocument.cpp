@@ -25,7 +25,7 @@ class MapDocumentPrivate
 {
 public:
 	MapDocumentPrivate()
-	: History(new CommandHistory()), imageLayer(0), dirtyLayer(0), uploadedLayer(0)/*, trashLayer(0)*/, theDock(0), lastDownloadLayer(0)
+	: History(new CommandHistory()), dirtyLayer(0), uploadedLayer(0)/*, trashLayer(0)*/, theDock(0), lastDownloadLayer(0)
 	{
 	};
 	~MapDocumentPrivate()
@@ -40,10 +40,9 @@ public:
 	}
 	CommandHistory*				History;
 	QList<MapLayer*>		Layers;
-	ImageMapLayer*				imageLayer;
+	QList<ImageMapLayer*>		imageLayers;
 	DirtyMapLayer*				dirtyLayer;
 	UploadedMapLayer*			uploadedLayer;
-	//DeletedMapLayer*			trashLayer;
 	LayerDock*					theDock;
 	MapLayer*					lastDownloadLayer;
 
@@ -56,37 +55,14 @@ public:
 MapDocument::MapDocument()
 	: p(new MapDocumentPrivate)
 {
-	addToTagList("created_by", QString("Merkaartor %1").arg(VERSION));
-
-	p->imageLayer = new ImageMapLayer(tr("Background imagery"));
-	add(p->imageLayer);
-
-	//p->trashLayer = new DeletedMapLayer(tr("Trash layer"));
-	//add(p->trashLayer);
-
-	p->dirtyLayer = new DirtyMapLayer(tr("Dirty layer"));
-	add(p->dirtyLayer);
-
-	p->uploadedLayer = new UploadedMapLayer(tr("Uploaded layer"));
-	add(p->uploadedLayer);
+	if (!(M_PREFS->apiVersionNum() > 0.5))
+		addToTagList("created_by", QString("Merkaartor %1").arg(VERSION));
 }
 
 MapDocument::MapDocument(LayerDock* aDock)
 : p(new MapDocumentPrivate)
 {
 	p->theDock = aDock;
-
-	p->imageLayer = new ImageMapLayer(tr("Background imagery"));
-	add(p->imageLayer);
-
-	//p->trashLayer = new DeletedMapLayer(tr("Trash layer"));
-	//add(p->trashLayer);
-
-	p->dirtyLayer = new DirtyMapLayer(tr("Dirty layer"));
-	add(p->dirtyLayer);
-
-	p->uploadedLayer = new UploadedMapLayer(tr("Uploaded layer"));
-	add(p->uploadedLayer);
 }
 
 MapDocument::MapDocument(const MapDocument&, LayerDock*)
@@ -97,6 +73,20 @@ MapDocument::MapDocument(const MapDocument&, LayerDock*)
 MapDocument::~MapDocument()
 {
 	delete p;
+}
+
+void MapDocument::addDefaultLayers()
+{
+	ImageMapLayer*l = addImageLayer();
+	l->setMapAdapter(M_PREFS->getBackgroundPlugin(), M_PREFS->getSelectedServer());
+	if (M_PREFS->getBackgroundPlugin() != NONE_ADAPTER_UUID)
+		l->setVisible(MerkaartorPreferences::instance()->getBgVisible());
+
+	p->dirtyLayer = new DirtyMapLayer(tr("Dirty layer"));
+	add(p->dirtyLayer);
+
+	p->uploadedLayer = new UploadedMapLayer(tr("Uploaded layer"));
+	add(p->uploadedLayer);
 }
 
 bool MapDocument::toXML(QDomElement xParent, QProgressDialog & progress)
@@ -199,15 +189,7 @@ void MapDocument::clear()
 {
 	delete p;
 	p = new MapDocumentPrivate;
-	p->imageLayer = new ImageMapLayer(tr("Background imagery"));
-	p->imageLayer->setMapAdapter(MerkaartorPreferences::instance()->getBackgroundPlugin());
-	add(p->imageLayer);
-
-	p->dirtyLayer = new DirtyMapLayer(tr("Dirty layer"));
-	add(p->dirtyLayer);
-
-	p->uploadedLayer = new UploadedMapLayer(tr("Uploaded layer"));
-	add(p->uploadedLayer);
+	addDefaultLayers();
 }
 
 void MapDocument::setHistory(CommandHistory* h)
@@ -251,6 +233,17 @@ void MapDocument::add(MapLayer* aLayer)
     aLayer->setDocument(this);
 	if (p->theDock)
 		p->theDock->addLayer(aLayer);
+}
+
+ImageMapLayer* MapDocument::addImageLayer(ImageMapLayer* aLayer)
+{
+	ImageMapLayer* theLayer = aLayer;
+	if (!theLayer)
+		theLayer = new ImageMapLayer(tr("Background imagery"));
+	p->imageLayers.append(theLayer);
+	add(theLayer);
+
+	return theLayer;
 }
 
 void MapDocument::addToTagList(QString k, QString v)
@@ -392,20 +385,20 @@ MapFeature* MapDocument::getFeature(const QString& id, bool exact)
 	return 0;
 }
 
-ImageMapLayer* MapDocument::getImageLayer() const
+int MapDocument::getImageLayersSize() const
 {
-	return p->imageLayer;
+	return p->imageLayers.size();
 }
 
-//DirtyMapLayer* MapDocument::getDirtyLayer() const
-//{
-//	return p->dirtyLayer;
-//}
+ImageMapLayer* MapDocument::getImageLayer(int i) const
+{
+	return p->imageLayers[i];
+}
 
-//DeletedMapLayer* MapDocument::getTrashLayer() const
-//{
-//	return p->trashLayer;
-//}
+void MapDocument::setDirtyLayer(DirtyMapLayer* aLayer)
+{
+	p->dirtyLayer = aLayer;
+}
 
 MapLayer* MapDocument::getDirtyOrOriginLayer(MapLayer* aLayer) const
 {
@@ -422,6 +415,12 @@ MapLayer* MapDocument::getDirtyOrOriginLayer(MapFeature* F) const
 	else
 		return F->layer();
 }
+
+void MapDocument::setUploadedLayer(UploadedMapLayer* aLayer)
+{
+	p->uploadedLayer = aLayer;
+}
+
 
 UploadedMapLayer* MapDocument::getUploadedLayer() const
 {

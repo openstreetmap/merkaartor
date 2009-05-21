@@ -6,17 +6,27 @@
 class ImageMapLayerPrivate;
 class Projection;
 
+struct Tile
+{
+	Tile(int i, int j, double priority)
+	    : i(i), j(j), priority(priority)
+	{}
+
+	int i, j;
+	double priority;
+
+	bool operator<(const Tile& rhs) const { return priority < rhs.priority; }
+};
+
 class ImageMapLayer : public OsbMapLayer
 {
 	Q_OBJECT
 public:
     //ImageMapLayer() : layermanager(0) {}
-	ImageMapLayer(const QString& aName, LayerManager* aLayerMgr=NULL);
+	ImageMapLayer(const QString& aName);
 	virtual ~ImageMapLayer();
 
-	Layer* imageLayer();
-	void setMapAdapter(const QUuid& theAdapterUid);
-	LayerManager* layermanager;
+	void setMapAdapter(const QUuid& theAdapterUid, const QString& server = QString());
 	QString projection() const;
 
 	virtual void setVisible(bool b);
@@ -33,12 +43,13 @@ public:
 	virtual bool arePointsDrawable() {return false;}
 
 	virtual void drawImage(QPixmap& thePix, QPoint delta);
-	virtual void forceRedraw(Projection& theProjection, QRect rect);
-	virtual void draw(Projection& theProjection, QRect& rect);
+	virtual void forceRedraw(const Projection& mainProj, QRect rect);
+	virtual void draw(const Projection& mainProj, QRect& rect);
 	virtual void zoom(double zoom, const QPoint& pos, const QRect& rect);
 
 private:
-	TileMapAdapter* tmsa;
+	void drawTiled(const Projection& mainProj, QRect& rect) const;
+	void drawFull(const Projection& mainProj, QRect& rect) const;
 
 protected:
 	ImageMapLayerPrivate* p;

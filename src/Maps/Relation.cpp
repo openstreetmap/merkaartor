@@ -330,7 +330,7 @@ void Relation::releaseMemberModel()
 void Relation::buildPath(Projection const &theProjection, const QRect& clipRect)
 {
 	p->thePath = QPainterPath();
-	for (unsigned int i=0; i<size(); ++i)
+	for (int i=0; i<size(); ++i)
 		if (Road* M = dynamic_cast<Road*>(p->Members[i].second)) {
 			M->buildPath(theProjection, clipRect);
 			p->thePath.addPath(M->getPath());

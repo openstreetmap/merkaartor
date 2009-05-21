@@ -551,16 +551,6 @@ void MerkaartorPreferences::setWmsServers()
 	//Sets->setValue("WSM/servers", Servers);
 }
 
-QString MerkaartorPreferences::getSelectedWmsServer() const
-{
-	return Sets->value("WSM/selected").toString();
-}
-
-void MerkaartorPreferences::setSelectedWmsServer(const QString & theValue)
-{
-	Sets->setValue("WSM/selected", theValue);
-}
-
 /* TMS */
 
 TmsServerList* MerkaartorPreferences::getTmsServers()
@@ -586,17 +576,18 @@ void MerkaartorPreferences::setTmsServers()
 	//Sets->setValue("TMS/servers", Servers);
 }
 
-QString MerkaartorPreferences::getSelectedTmsServer() const
-{
-	return Sets->value("TMS/selected").toString();
-}
-
-void MerkaartorPreferences::setSelectedTmsServer(const QString & theValue)
-{
-	Sets->setValue("TMS/selected", theValue);
-}
-
 /* */
+
+QString MerkaartorPreferences::getSelectedServer() const
+{
+	return Sets->value("backgroundImage/SelectedServer").toString();
+}
+
+void MerkaartorPreferences::setSelectedServer(const QString & theValue)
+{
+	Sets->setValue("backgroundImage/SelectedServer", theValue);
+}
+
 
 bool MerkaartorPreferences::getBgVisible() const
 {

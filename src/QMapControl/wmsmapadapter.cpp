@@ -65,7 +65,7 @@ IMapAdapter::Type WMSMapAdapter::getType() const
 	return IMapAdapter::DirectBackground;
 }
 
-QString WMSMapAdapter::getQuery(const QRectF& bbox, const QRect& size) const
+QString WMSMapAdapter::getQuery(const QRectF& /*wgs84Bbox*/, const QRectF& projBbox, const QRect& size) const
 {
 	return QString()
 						.append(theServer.WmsPath)
@@ -80,9 +80,9 @@ QString WMSMapAdapter::getQuery(const QRectF& bbox, const QRect& size) const
 						.append("&WIDTH=").append(QString::number(size.width()))
 						.append("&HEIGHT=").append(QString::number(size.height()))
 						.append("&BBOX=")
-						.append(loc.toString(bbox.bottomLeft().x(),'f',6)).append(",")
-						 .append(loc.toString(bbox.bottomLeft().y(),'f',6)).append(",")
-						 .append(loc.toString(bbox.topRight().x(),'f',6)).append(",")
-						 .append(loc.toString(bbox.topRight().y(),'f',6))
+						.append(loc.toString(projBbox.bottomLeft().x(),'f',6)).append(",")
+						 .append(loc.toString(projBbox.bottomLeft().y(),'f',6)).append(",")
+						 .append(loc.toString(projBbox.topRight().x(),'f',6)).append(",")
+						 .append(loc.toString(projBbox.topRight().y(),'f',6))
 						 ;
 }

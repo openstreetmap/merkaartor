@@ -37,7 +37,7 @@ public:
 Projection::Projection(void)
   : ScaleLat(1000000), ScaleLon(1000000),
   DeltaLat(0), DeltaLon(0), Viewport(WORLD_COORDBOX),
-  layermanager(0), theProj(0)
+  theProj(0)
 {
 	p = new ProjectionPrivate;
 #ifndef _MOBILE
@@ -169,11 +169,6 @@ bool Projection::setProjectionType(ProjectionType aProjectionType)
 
 // Common routines
 
-void Projection::setLayerManager(LayerManager * lm)
-{
-	layermanager = lm;
-}
-
 double Projection::pixelPerM() const
 {
 	return PixelPerM;
@@ -237,9 +232,6 @@ void Projection::panScreen(const QPoint & p, const QRect & Screen)
 	DeltaLon += p.x();
 	DeltaLat += p.y();
 	viewportRecalc(Screen);
-	if (LAYERMANAGER_OK) {
-		layermanager->setView(QPointF(intToAng(Viewport.center().lon()), intToAng(Viewport.center().lat())), false);
-	}
 }
 
 CoordBox Projection::viewport() const
@@ -254,7 +246,10 @@ void Projection::viewportRecalc(const QRect & Screen)
 			 inverse(Screen.topRight()));
 }
 
-// Routines without layermanager
+void Projection::setViewport(const CoordBox & TargetMap)
+{
+	Viewport = TargetMap;
+}
 
 void Projection::setViewport(const CoordBox & TargetMap,
 									const QRect & Screen)
@@ -288,8 +283,6 @@ void Projection::setViewport(const CoordBox & TargetMap,
 	DeltaLat = Screen.height() - (Screen.height() / 2 - PLat);
 
 	viewportRecalc(Screen);
-	if (LAYERMANAGER_OK)
-		layerManagerSetViewport(Viewport, Screen);
 
 	// Calculate PixelPerM
 	double LengthOfOneDegreeLat = EQUATORIALRADIUS * M_PI / 180;
@@ -303,8 +296,6 @@ void Projection::setViewport(const CoordBox & TargetMap,
 	PixelPerM = LatAngPerM / M_PI * INT_MAX * sa;
 	//
 #else
-	if (LAYERMANAGER_OK)
-		layerManagerSetViewport(TargetMap, Screen);
 	Viewport = TargetMap;
 	Coord Center(Viewport.center());
 	double LengthOfOneDegreeLat = EQUATORIALRADIUS * M_PI / 180;
@@ -355,9 +346,6 @@ void Projection::zoom(double d, const QPointF & Around,
 		PixelPerM = LatAngPerM / M_PI * INT_MAX * sa;
 
 		viewportRecalc(Screen);
-		if (LAYERMANAGER_OK) {
-			layerManagerSetViewport(Viewport, Screen);
-		}
 	}
 #else
 	if (ScaleLat * d < 1.0 && ScaleLon * d < 1.0) {
@@ -371,9 +359,6 @@ void Projection::zoom(double d, const QPointF & Around,
 		PixelPerM = LatAngPerM / M_PI * INT_MAX * ScaleLat;
 
 		viewportRecalc(Screen);
-		if (LAYERMANAGER_OK) {
-			layerManagerSetViewport(Viewport, Screen);
-		}
 	}
 #endif
 }
@@ -383,73 +368,9 @@ void Projection::resize(QSize oldS, QSize newS)
 	Q_UNUSED(oldS)
 #ifndef _MOBILE
 	viewportRecalc(QRect(QPoint(0,0), newS));
-	if (LAYERMANAGER_OK) {
-		layerManagerSetViewport(Viewport, QRect(QPoint(0,0), newS));
-	}
 #else
 	Q_UNUSED(newS)
 #endif
-}
-
-
-// Routines with layermanager
-
-void Projection::layerManagerViewportRecalc(const QRect & Screen)
-{
-//	layermanager->setSize(Screen.size());
-
-	QPointF tr = screenToCoordinate(Screen.topRight());
-	QPointF bl = screenToCoordinate(Screen.bottomLeft());
-
-	Coord trc = Coord(angToInt(tr.y()), angToInt(tr.x()));
-	Coord blc = Coord(angToInt(bl.y()), angToInt(bl.x()));
-
-	Viewport = CoordBox(trc, blc);
-	ScaleLat = Screen.height()/(double)Viewport.latDiff();
-	ScaleLon = Screen.width()/(double)Viewport.lonDiff();
-
-	double LatAngPerM = 1.0 / EQUATORIALRADIUS;
-	PixelPerM = LatAngPerM / M_PI * INT_MAX * ScaleLat;
-}
-
-void Projection::layerManagerSetViewport(const CoordBox & TargetMap, const QRect& Screen)
-{
-//	layermanager->setSize(Screen.size());
-
-	screen_middle = QPoint(Screen.width() / 2, Screen.height() / 2);
-//	QPoint screen_middle = QPoint(Screen.width() / 2, Screen.height() / 2);
-
-	QList < QPointF > ql;
-	Coord cbl(TargetMap.bottomLeft());
-	QPointF cblf = QPointF(intToAng(cbl.lon()), intToAng(cbl.lat()));
-	ql.append(cblf);
-	Coord ctr(TargetMap.topRight());
-	QPointF ctrf = QPointF(intToAng(ctr.lon()), intToAng(ctr.lat()));
-	ql.append(ctrf);
-	layermanager->setView(ql);
-}
-
-QPointF Projection::screenToCoordinate(QPointF click) const
-{
-	// click coordinate to image coordinate
-	QPoint displayToImage = click.toPoint() - screen_middle + layermanager->getMapmiddle_px();
-
-	// image coordinate to world coordinate
-	return layermanager->getLayer()->getMapAdapter()->
-		   displayToCoordinate(displayToImage);
-}
-
-QPoint Projection::coordinateToScreen(QPointF click) const
-{
-	QPoint p =
-		layermanager->getLayer()->getMapAdapter()->
-		coordinateToDisplay(click);
-	QPoint r =
-		QPoint(-layermanager->getMapmiddle_px().x() + p.x() +
-			   screen_middle.x(),
-			   -layermanager->getMapmiddle_px().y() + p.y() +
-			   screen_middle.y());
-	return r;
 }
 
 void Projection::setCenter(Coord & Center, const QRect & Screen)

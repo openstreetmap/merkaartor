@@ -17,8 +17,6 @@
 #include "GeoImageDock.h"
 #endif
 
-#include "QMapControl/layermanager.h"
-#include "QMapControl/imagemanager.h"
 #ifdef USE_WEBKIT
 	#include "QMapControl/browserimagemanager.h"
 #endif
@@ -55,8 +53,6 @@ MapView::MapView(MainWindow* aMain) :
 #endif // BROWSERIMAGEMANAGER_IS_THREADED
 #endif //USE_WEBKIT
 
-	layermanager = new LayerManager((QWidget *) this, size());
-	
 	connect(ImageManager::instance(), SIGNAL(imageRequested()),
 		this, SLOT(imageRequested()), Qt::QueuedConnection);
 	connect(ImageManager::instance(), SIGNAL(imageReceived()),
@@ -96,7 +92,6 @@ MapView::~MapView()
 #endif // BROWSERIMAGEMANAGER_IS_THREADED
 	delete BrowserImageManager::instance();
 #endif
-	delete layermanager;
 	delete StaticBackground;
 	delete StaticBuffer;
 	delete StaticMap;
@@ -120,21 +115,6 @@ PropertiesDock *MapView::properties()
 void MapView::setDocument(MapDocument* aDoc)
 {
 	theDocument = aDoc;
-
-	delete layermanager;
-	layermanager = NULL;
-
-	if (theDocument->getImageLayer()) {
-		connect(theDocument->getImageLayer(), SIGNAL(imageReceived()),
-			this, SLOT(imageReceived()));
-		layermanager = new LayerManager((QWidget *) this, size());
-		if (theDocument->getImageLayer()->imageLayer())
-			layermanager->addLayer(theDocument->getImageLayer()->imageLayer());
-		theDocument->getImageLayer()->layermanager = layermanager;
-	}
-
-	projection().setLayerManager(layermanager);
-//	projection().setViewport(WORLD_COORDBOX, rect());
 	projection().setViewport(projection().viewport(), rect());
 }
 
@@ -149,16 +129,10 @@ void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
 		invalidRegion = QRegion(rect());
 		StaticBufferUpToDate = false;
 	}
-	if (LAYERMANAGER_OK && layermanager->getLayer()->isVisible() && updateMap) {
-		layermanager->forceRedraw();
-		StaticMapUpToDate = false;
-	}
-	if (theDocument && theDocument->getImageLayer() && updateMap) {
-		for (int i=0; i<theDocument->layerSize(); ++i)
+	if (theDocument && updateMap) {
+		for (int i=0; i<theDocument->getImageLayersSize(); ++i)
 		{
-			ImageMapLayer* IL = dynamic_cast<ImageMapLayer*>(theDocument->getLayer(i));
-			if ( IL )
-				theDocument->getImageLayer()->forceRedraw(theProjection, rect());
+			theDocument->getImageLayer(i)->forceRedraw(theProjection, rect());
 		}
 		StaticMapUpToDate = false;
 	}
@@ -210,12 +184,9 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 
 	P.drawPixmap(QPoint(0, 0), *StaticBackground);
 
-	if (theDocument->getImageLayer()->isVisible()) {
-		P.setOpacity(theDocument->getImageLayer()->getAlpha());
-		P.drawPixmap(thePanDelta, *StaticMap);
-		P.setOpacity(1.0);
-	}
-    P.drawPixmap(QPoint(0, 0), *StaticBuffer);
+	P.drawPixmap(thePanDelta, *StaticMap);
+
+	P.drawPixmap(QPoint(0, 0), *StaticBuffer);
 
 	drawDownloadAreas(P);
 	drawScale(P);
@@ -300,53 +271,10 @@ void MapView::updateLayersImage()
 	}
 	StaticMap->fill(Qt::transparent);
 
-	if (LAYERMANAGER_OK && layermanager->getLayer()->isVisible()) {
-		QPixmap pm(size());
-		QPainter pmp(&pm);
-		layermanager->drawImage(&pmp);
-
-		const QRectF vlm = layermanager->getViewport();
-		const Coord ctl = Coord(angToInt(vlm.bottomLeft().y()), angToInt(vlm.bottomLeft().x()));
-		const Coord cbr = Coord(angToInt(vlm.topRight().y()), angToInt(vlm.topRight().x()));
-
-		const QPointF tl = projection().project(ctl);
-		const QPointF br = projection().project(cbr);
-
-		const QRect pr = QRectF(tl, br).toRect();
-		const QSize ps = pr.size();
-
-		const qreal ratio = qMax<const qreal>((qreal)width()/ps.width()*1.0, (qreal)height()/ps.height());
-		QPixmap pms;
-		if (ratio > 1.0) {
-#ifndef _MOBILE
-			pms = pm.scaled(ps, Qt::KeepAspectRatio, Qt::FastTransformation );
-#else
-			pms = pm.scaled(ps);
-#endif
-		} else {
-			const QSizeF drawingSize = pm.size() * ratio;
-			const QSizeF originSize = pm.size()/2 - drawingSize/2;
-			const QPointF drawingOrigin = QPointF(originSize.width(), originSize.height());
-			const QRect drawingRect = QRect(drawingOrigin.toPoint(), drawingSize.toSize());
-
-#ifndef _MOBILE
-			pms = pm.copy(drawingRect).scaled(ps*ratio, Qt::KeepAspectRatio, Qt::FastTransformation );
-#else
-			pms = pm.copy(drawingRect).scaled(ps*ratio);
-#endif
-		}
-
-		QPainter P(StaticMap);
-		P.drawPixmap((width()-pms.width())/2, (height()-pms.height())/2, pms);
-	}
-	for (int i=0; i<theDocument->layerSize(); ++i)
+	for (int i=0; i<theDocument->getImageLayersSize(); ++i)
 	{
-		ImageMapLayer* IL = dynamic_cast<ImageMapLayer*>(theDocument->getLayer(i));
-		if ( IL )
-		{
-			//IL->panScreen(delta);
-			IL->drawImage(*StaticMap, thePanDelta);
-		}
+		if (theDocument->getImageLayer(i)->isVisible())
+			theDocument->getImageLayer(i)->drawImage(*StaticMap, thePanDelta);
 	}
 
 	thePanDelta = QPoint(0, 0);
@@ -457,9 +385,9 @@ void MapView::drawBackground(QPainter & theP, Projection& aProj)
 	theP.fillRect(theP.clipRegion().boundingRect(), theFillColor);
 
 	if (theCoastlines.isEmpty()) {
-		if (M_PREFS->getUseShapefileForBackground() && theDocument->getImageLayer()->isVisible() && !LAYERMANAGER_OK) {
+//		if (M_PREFS->getUseShapefileForBackground() && theDocument->getImageLayer()->isVisible() && !LAYERMANAGER_OK) {
+		if (M_PREFS->getUseShapefileForBackground())
 			theP.fillRect(theP.clipRegion().boundingRect(), M_PREFS->getWaterColor());
-		}
 		return;
 	}
 
@@ -884,13 +812,9 @@ void MapView::wheelEvent(QWheelEvent* ev)
 		}
 	}
 	projection().zoom(finalZoom, ev->pos(), rect());
-	for (int i=0; i<theDocument->layerSize(); ++i)
+	for (int i=0; i<theDocument->getImageLayersSize(); ++i)
 	{
-		ImageMapLayer* IL = dynamic_cast<ImageMapLayer*>(theDocument->getLayer(i));
-		if ( IL )
-		{
-			IL->zoom(finalZoom, ev->pos(), rect());
-		}
+		theDocument->getImageLayer(i)->zoom(finalZoom, ev->pos(), rect());
 	}
 	invalidate(true, true);
 }
@@ -1018,33 +942,23 @@ void MapView::imageRequested()
 void MapView::imageReceived()
 {
 	Main->pbImages->setValue(Main->pbImages->value()+1);
-	if (LAYERMANAGER_OK && layermanager->getLayer()->isVisible())
-		layermanager->forceRedraw();
-	else
-		for (int i=0; i<theDocument->layerSize(); ++i)
-		{
-			ImageMapLayer* IL = dynamic_cast<ImageMapLayer*>(theDocument->getLayer(i));
-			if ( IL )
-				theDocument->getImageLayer()->forceRedraw(theProjection, rect());
-		}
+	for (int i=0; i<theDocument->getImageLayersSize(); ++i)
+	{
+		theDocument->getImageLayer(i)->forceRedraw(theProjection, rect());
+	}
 	StaticMapUpToDate = false;
 	update();
 }
 
 void MapView::loadingFinished()
 {
-	layermanager->removeZoomImage();
 	numImages = 0;
 	Main->pbImages->reset();
-
-	//invalidate(false, true);
 }
 
 void MapView::resizeEvent(QResizeEvent * ev)
 {
 	StaticBufferUpToDate = false;
-	if (LAYERMANAGER_OK && layermanager->getLayer()->isVisible())
-		layermanager->setSize(size());
 	projection().resize(ev->oldSize(), ev->size());
 
 	QWidget::resizeEvent(ev);

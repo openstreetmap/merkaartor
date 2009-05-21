@@ -7,13 +7,9 @@ INCLUDEPATH += $${MERKAARTOR_SRC_DIR}/interfaces
 HEADERS += \
 	IMapAdapter.h \
 	IImageManager.h \
-	mapadapter.h \
-	tilemapadapter.h \
 	yahoolegalmapadapter.h 
 
 SOURCES += \ 
-	mapadapter.cpp \
-	tilemapadapter.cpp \
 	yahoolegalmapadapter.cpp 
 
 RESOURCES += \

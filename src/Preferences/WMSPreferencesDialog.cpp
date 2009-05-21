@@ -144,7 +144,6 @@ void WMSPreferencesDialog::loadPrefs()
 		i.next();
 		addServer(i.value());
 	}
-	setSelectedServer(MerkaartorPreferences::instance()->getSelectedWmsServer());
 }
 
 void WMSPreferencesDialog::savePrefs()

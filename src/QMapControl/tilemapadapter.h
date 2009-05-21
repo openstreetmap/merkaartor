@@ -67,7 +67,7 @@ public:
 
 	virtual bool isValid(int x, int y, int z) const;
 	virtual QString getQuery(int x, int y, int z) const;
-	virtual QString getQuery(const QRectF& , const QRect& ) const { return ""; }
+	virtual QString getQuery(const QRectF& , const QRectF& , const QRect& ) const { return ""; }
 
 	virtual bool isTiled() const { return true; }
 	virtual QString projection() const { return ("EPSG:3785"); }

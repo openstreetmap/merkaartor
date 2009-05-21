@@ -65,7 +65,7 @@ void BrowserWebPage::javaScriptAlert ( QWebFrame * frame, const QString & msg )
 		brlat = tokens[3].toDouble();
 		brlon = tokens[4].toDouble();
 
-		// qDebug() << tllon << ", " << tllat << ", " << brlon << "," << brlat;
+		qDebug() << "Coord: " << tllat << ", " << tllon << ", " << brlat << "," << brlon;
 	} else
 	if (msg.startsWith("Size")) {
 
@@ -81,12 +81,22 @@ void BrowserWebPage::javaScriptAlert ( QWebFrame * frame, const QString & msg )
 		x1 = int(tokens[3].toDouble());
 		y1 = int(tokens[4].toDouble());
 
-		// qDebug() << ox << ", " << oy << ", " << x1 << "," << y1;
+		qDebug() << "Size: " << ox << ", " << oy << ", " << x1 << "," << y1;
 
 		sw = x1 - ox;
 		sh = y1 - oy;
 
-		// qDebug() << sw << ", " << sh;
+		 qDebug() << "---- " << sw << ", " << sh;
+	}
+	if (msg.startsWith("ReqSize")) {
+		QStringList tokens = msg.split(" ");
+		Q_ASSERT(tokens.size() == 3);
+
+		int w, h;
+		w = int(tokens[1].toDouble());
+		h = int(tokens[2].toDouble());
+
+		qDebug() << "ReqSize: " << w << ", " << h ;
 	}
 }
 

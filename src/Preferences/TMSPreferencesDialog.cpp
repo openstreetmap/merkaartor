@@ -123,7 +123,6 @@ void TMSPreferencesDialog::loadPrefs()
 		i.next();
 		addServer(i.value());
 	}
-	setSelectedServer(MerkaartorPreferences::instance()->getSelectedTmsServer());
 }
 
 void TMSPreferencesDialog::savePrefs()

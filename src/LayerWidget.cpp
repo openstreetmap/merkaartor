@@ -242,7 +242,7 @@ void DrawingLayerWidget::initActions()
 ImageLayerWidget::ImageLayerWidget(ImageMapLayer* aLayer, QWidget* aParent)
 : LayerWidget(aLayer, aParent), wmsMenu(0) //, actgrWms(0)
 {
-	backColor = QColor(200,200,200);
+	backColor = QColor(255,255,204);
 	//actgrAdapter = new QActionGroup(this);
 
 	actNone = new QAction(tr("None"), this);
@@ -268,9 +268,9 @@ void ImageLayerWidget::setWms(QAction* act)
 {
 	WmsServerList* L = M_PREFS->getWmsServers();
 	WmsServer S = L->value(act->data().toString());
-	M_PREFS->setSelectedWmsServer(S.WmsName);
+	M_PREFS->setSelectedServer(S.WmsName);
 
-	((ImageMapLayer *)theLayer)->setMapAdapter(WMS_ADAPTER_UUID);
+	((ImageMapLayer *)theLayer)->setMapAdapter(WMS_ADAPTER_UUID, S.WmsName);
 	theLayer->setVisible(true);
 
 	this->update(rect());
@@ -281,9 +281,9 @@ void ImageLayerWidget::setTms(QAction* act)
 {
 	TmsServerList* L = M_PREFS->getTmsServers();
 	TmsServer S = L->value(act->data().toString());
-	M_PREFS->setSelectedTmsServer(S.TmsName);
+	M_PREFS->setSelectedServer(S.TmsName);
 
-	((ImageMapLayer *)theLayer)->setMapAdapter(TMS_ADAPTER_UUID);
+	((ImageMapLayer *)theLayer)->setMapAdapter(TMS_ADAPTER_UUID, S.TmsName);
 	theLayer->setVisible(true);
 
 	this->update(rect());
@@ -326,7 +326,7 @@ void ImageLayerWidget::initActions()
 			act->setData(S.WmsName);
 			wmsMenu->addAction(act);
 			if (M_PREFS->getBackgroundPlugin() == WMS_ADAPTER_UUID)
-				if (S.WmsName == M_PREFS->getSelectedWmsServer())
+				if (S.WmsName == M_PREFS->getSelectedServer())
 					act->setChecked(true);
 		}
 	}
@@ -342,7 +342,7 @@ void ImageLayerWidget::initActions()
 			act->setData(S.TmsName);
 			tmsMenu->addAction(act);
 			if (M_PREFS->getBackgroundPlugin() == TMS_ADAPTER_UUID)
-				if (S.TmsName == M_PREFS->getSelectedTmsServer())
+				if (S.TmsName == M_PREFS->getSelectedServer())
 					act->setChecked(true);
 		}
 	}

@@ -39,10 +39,13 @@ private:
 public:
 	~MapDocument();
 
+	void addDefaultLayers();
+
 	void setLayerDock(LayerDock* aDock);
 	LayerDock* getLayerDock(void);
 
 	void add(MapLayer* aLayer);
+	ImageMapLayer* addImageLayer(ImageMapLayer* aLayer = NULL);
 	void remove(MapLayer* aLayer);
 	bool exists(MapLayer* aLayer) const;
 	bool exists(MapFeature* aFeature) const;
@@ -69,10 +72,13 @@ public:
 	QList<QString> getTagValues();
 	QString getTagValue(int idx);
 
-	ImageMapLayer* getImageLayer() const;
+	int getImageLayersSize() const;
+	ImageMapLayer* getImageLayer(int i) const;
+	void setDirtyLayer(DirtyMapLayer* aLayer);
 	//DirtyMapLayer* getDirtyLayer() const;
 	MapLayer* getDirtyOrOriginLayer(MapLayer* aLayer = NULL) const;
 	MapLayer* getDirtyOrOriginLayer(MapFeature* F) const;
+	void setUploadedLayer(UploadedMapLayer* aLayer);
 	UploadedMapLayer* getUploadedLayer() const;
 	//DeletedMapLayer* getTrashLayer() const;
 

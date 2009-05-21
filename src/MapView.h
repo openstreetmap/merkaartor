@@ -15,8 +15,6 @@ class MapDocument;
 class PropertiesDock;
 class InfoDock;
 class MapAdapter;
-class Layer;
-class LayerManager;
 class Interaction;
 
 class MapView :	public QWidget
@@ -58,7 +56,6 @@ class MapView :	public QWidget
 		PropertiesDock* properties();
 		//InfoDock* info();
 
-        LayerManager*	layermanager;
 		bool isSelectionLocked();
 		void lockSelection();
 		void unlockSelection();

@@ -149,13 +149,10 @@ public:
 
 	BookmarkList*  getBookmarks();
 
-	void setSelectedWmsServer(const QString & theValue);
-	QString getSelectedWmsServer() const;
 	WmsServerList* getWmsServers();
-
-	void setSelectedTmsServer(const QString & theValue);
-	QString getSelectedTmsServer() const;
 	TmsServerList* getTmsServers();
+	void setSelectedServer(const QString & theValue);
+	QString getSelectedServer() const;
 
 	void setBgVisible(bool theValue);
 	bool getBgVisible() const;

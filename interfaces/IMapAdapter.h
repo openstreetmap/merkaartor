@@ -89,7 +89,7 @@ public:
 
 	virtual bool	isValid(int x, int y, int z) const = 0;
 	virtual QString getQuery(int x, int y, int z) const = 0;
-	virtual QString getQuery(const QRectF& bbox, const QRect& size) const = 0;
+	virtual QString getQuery(const QRectF& wgs84Bbox, const QRectF& projBbox, const QRect& size) const = 0;
 
 	//! translates a world coordinate to display coordinate
 	/*!

@@ -9,10 +9,11 @@
 #ifdef USE_WEBKIT
 #include "QMapControl/browserimagemanager.h"
 #endif
+#include "QMapControl/tilemapadapter.h"
 #include "QMapControl/wmsmapadapter.h"
-#include "QMapControl/layer.h"
-#include "QMapControl/layermanager.h"
+
 #include <QLocale>
+#include <QPainter>
 
 #include "LayerWidget.h"
 
@@ -22,56 +23,37 @@ class ImageMapLayerPrivate
 {
 public:
 	QUuid bgType;
-	Layer* layer_bg;
 	IMapAdapter* theMapAdapter;
 
 	ImageLayerWidget* theWidget;
-	QPixmap pm;
+	QPixmap* pm;
+	QPoint theDelta;
+	Projection theProjection;
+	QString selServer;
 
 public:
 	ImageMapLayerPrivate()
 	{
-		layer_bg = NULL;
 		theWidget = NULL;
 		theMapAdapter = NULL;
+		pm = NULL;
 	}
 };
 
 
 // ImageMapLayer
 
-ImageMapLayer::ImageMapLayer(const QString & aName, LayerManager* aLayerMgr)
-	: OsbMapLayer(aName), layermanager(aLayerMgr), p(new ImageMapLayerPrivate)
+ImageMapLayer::ImageMapLayer(const QString & aName)
+	: OsbMapLayer(aName), p(new ImageMapLayerPrivate)
 {
-	setMapAdapter(MerkaartorPreferences::instance()->getBackgroundPlugin());
-	if (MerkaartorPreferences::instance()->getBackgroundPlugin() == NONE_ADAPTER_UUID)
-		setVisible(false);
-	else
-		setVisible(MerkaartorPreferences::instance()->getBgVisible());
-
-	if (M_PREFS->getUseShapefileForBackground()) {
-		if (QDir::isAbsolutePath(STRINGIFY(WORLD_SHP)))
-			setFilename(STRINGIFY(WORLD_SHP));
-		else
-			setFilename(QCoreApplication::applicationDirPath() + "/" + STRINGIFY(WORLD_SHP));
-	}
-
+	p->bgType = NONE_ADAPTER_UUID;
+	setName(tr("Map - None"));
+	MapLayer::setVisible(false);
 	setReadonly(true);
 }
 
 ImageMapLayer::~ ImageMapLayer()
 {
-	if (p->layer_bg) {
-		if (layermanager)
-			layermanager->removeLayer(p->layer_bg->getLayername());
-
-		IMapAdapter* mapadapter_bg = p->layer_bg->getMapAdapter();
-		if (mapadapter_bg && (mapadapter_bg->getId() == WMS_ADAPTER_UUID || mapadapter_bg->getId() == TMS_ADAPTER_UUID)) {
-			delete (dynamic_cast<MapAdapter*>(mapadapter_bg));
-			mapadapter_bg = NULL;
-		}
-		SAFE_DELETE(p->layer_bg);
-	}
 	clear();
 	SAFE_DELETE(p);
 }
@@ -80,7 +62,7 @@ int ImageMapLayer::size() const
 {
 	//return p->Features.size();
 	if (p->bgType == SHAPE_ADAPTER_UUID && isVisible())
-		return size();
+		return MapLayer::size();
 	else
 		return 0;
 }
@@ -104,56 +86,27 @@ void ImageMapLayer::setVisible(bool b)
 	MapLayer::setVisible(b);
 	if (p->bgType == NONE_ADAPTER_UUID)
 		MapLayer::setVisible(false);
-	else
-		if (p->layer_bg)
-			p->layer_bg->setVisible(b);
 	MerkaartorPreferences::instance()->setBgVisible(isVisible());
-}
-
-Layer* ImageMapLayer::imageLayer()
-{
-	return p->layer_bg;
 }
 
 QString ImageMapLayer::projection() const
 {
-	if (p->layer_bg)
-		return p->layer_bg->getMapAdapter()->projection();
-	else
-		if (p->theMapAdapter)
-			return p->theMapAdapter->projection();
+	if (p->theMapAdapter)
+		return p->theMapAdapter->projection();
 
 	return "";
 }
 
 
-void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid)
+void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& server)
 {
 	IMapAdapter* mapadapter_bg;
 	WmsServerList* wsl;
 	TmsServerList* tsl;
 	TmsServer ts;
-	QString selws, selts;
-	int idx = -1;
 
-	if (layermanager) {
-		if (layermanager->getLayer(id())) {
-			idx = layermanager->getLayers().indexOf(id());
-			layermanager->removeLayer(id());
-		}
-	}
-
-	if (p->layer_bg) {
-		mapadapter_bg = p->layer_bg->getMapAdapter();
-		if (mapadapter_bg && (mapadapter_bg->getId() == WMS_ADAPTER_UUID || mapadapter_bg->getId() == TMS_ADAPTER_UUID)) {
-			delete (dynamic_cast<MapAdapter*>(mapadapter_bg));
-			mapadapter_bg = NULL;
-		}
-		SAFE_DELETE(p->layer_bg);
-	}
 	if (p->theMapAdapter && p->theMapAdapter->getId() == WMS_ADAPTER_UUID)
 		SAFE_DELETE(p->theMapAdapter);
-	p->pm.fill(Qt::transparent);
 
 	p->bgType = theAdapterUid;
 	MerkaartorPreferences::instance()->setBackgroundPlugin(theAdapterUid);
@@ -163,8 +116,8 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid)
 	} else 
 	if (p->bgType == WMS_ADAPTER_UUID) {
 		wsl = M_PREFS->getWmsServers();
-		selws = M_PREFS->getSelectedWmsServer();
-		WmsServer theWmsServer(wsl->value(selws));
+		p->selServer = server;
+		WmsServer theWmsServer(wsl->value(p->selServer));
 		p->theMapAdapter = new WMSMapAdapter(theWmsServer);
 		p->theMapAdapter->setImageManager(ImageManager::instance());
 
@@ -172,13 +125,11 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid)
 	} else
 	if (p->bgType == TMS_ADAPTER_UUID) {
 		tsl = M_PREFS->getTmsServers();
-		selts = MerkaartorPreferences::instance()->getSelectedTmsServer();
-		ts = tsl->value(selts);
-		tmsa = new TileMapAdapter(ts.TmsAdress, ts.TmsPath, ts.TmsTileSize, ts.TmsMinZoom, ts.TmsMaxZoom);
+		p->selServer = server;
+		ts = tsl->value(p->selServer);
+		TileMapAdapter* tmsa = new TileMapAdapter(ts.TmsAdress, ts.TmsPath, ts.TmsTileSize, ts.TmsMinZoom, ts.TmsMaxZoom);
 		tmsa->setImageManager(ImageManager::instance());
-		mapadapter_bg = tmsa;
-		p->layer_bg = new Layer(id(), mapadapter_bg, Layer::MapLayer);
-		p->layer_bg->setVisible(isVisible());
+		p->theMapAdapter = tmsa;
 
 		setName(tr("Map - TMS - %1").arg(ts.TmsName));
 	} else
@@ -187,37 +138,36 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid)
 			p->bgType = NONE_ADAPTER_UUID;
 			setName(tr("Map - None"));
 			setVisible(false);
-		} else
+		} else {
+			if (QDir::isAbsolutePath(STRINGIFY(WORLD_SHP)))
+				setFilename(STRINGIFY(WORLD_SHP));
+			else
+				setFilename(QCoreApplication::applicationDirPath() + "/" + STRINGIFY(WORLD_SHP));
+		}
 			setName(tr("Map - OSB Background"));
 	} else
 	{
-		p->theMapAdapter = M_PREFS->getBackgroundPlugin(p->bgType);
-		if (p->theMapAdapter) {
-			switch (p->theMapAdapter->getType()) {
+		mapadapter_bg = M_PREFS->getBackgroundPlugin(p->bgType);
+		if (mapadapter_bg) {
+			switch (mapadapter_bg->getType()) {
 #ifdef USE_WEBKIT
 				case IMapAdapter::BrowserBackground :
-					p->theMapAdapter->setImageManager(BrowserImageManager::instance());
+					mapadapter_bg->setImageManager(BrowserImageManager::instance());
 					break;
 #endif
 				case IMapAdapter::DirectBackground :
-					p->theMapAdapter->setImageManager(ImageManager::instance());
+					mapadapter_bg->setImageManager(ImageManager::instance());
 					break;
 			}
-			if (p->theMapAdapter->isTiled()) {
-				p->layer_bg = new Layer(id(), p->theMapAdapter, Layer::MapLayer);
-				p->layer_bg->setVisible(isVisible());
-			}
+			p->theMapAdapter = mapadapter_bg;
 
-			setName(tr("Map - %1").arg(p->theMapAdapter->getName()));
+			setName(tr("Map - %1").arg(mapadapter_bg->getName()));
 		} else
 			p->bgType = NONE_ADAPTER_UUID;
 	}
-
-	if (layermanager)
-		if (p->layer_bg) {
-			layermanager->addLayer(p->layer_bg, idx);
-			layermanager->setSize();
-		}
+	if (p->theMapAdapter) {
+		p->theProjection.setProjectionType(p->theMapAdapter->projection());
+	}
 }
 
 bool ImageMapLayer::toXML(QDomElement& xParent, QProgressDialog & /* progress */)
@@ -244,13 +194,13 @@ bool ImageMapLayer::toXML(QDomElement& xParent, QProgressDialog & /* progress */
 		c = e.ownerDocument().createElement("WmsServer");
 		e.appendChild(c);
 
-		c.setAttribute("name", M_PREFS->getSelectedWmsServer());
+		c.setAttribute("name", p->selServer);
 	} else
 	if (p->bgType == TMS_ADAPTER_UUID) {
 		c = e.ownerDocument().createElement("TmsServer");
 		e.appendChild(c);
 
-		c.setAttribute("name", M_PREFS->getSelectedTmsServer());
+		c.setAttribute("name", p->selServer);
 	}
 
 	return OK;
@@ -258,18 +208,21 @@ bool ImageMapLayer::toXML(QDomElement& xParent, QProgressDialog & /* progress */
 
 ImageMapLayer * ImageMapLayer::fromXML(MapDocument* d, const QDomElement& e, QProgressDialog & /* progress */)
 {
-	ImageMapLayer* l = d->getImageLayer();
+	ImageMapLayer* l = new ImageMapLayer(e.attribute("name"));
+	d->addImageLayer(l);
 	l->setId(e.attribute("xml:id"));
 
 	QDomElement c = e.firstChildElement();
 
+	QString server;
 	if (c.tagName() == "WmsServer") {
-		MerkaartorPreferences::instance()->setSelectedWmsServer(c.attribute("name"));
+		server = c.attribute("name");
 	} else
 	if (c.tagName() == "TmsServer") {
-		MerkaartorPreferences::instance()->setSelectedTmsServer(c.attribute("name"));
+		server = c.attribute("name");
 	}
-	l->setMapAdapter(QUuid(e.attribute("bgtype")));
+	l->setMapAdapter(QUuid(e.attribute("bgtype")), server);
+
 	l->setAlpha(e.attribute("alpha").toDouble());
 	l->setVisible((e.attribute("visible") == "true" ? true : false));
 	l->setSelected((e.attribute("selected") == "true" ? true : false));
@@ -283,37 +236,232 @@ void ImageMapLayer::drawImage(QPixmap& thePix, QPoint delta)
 	if (!p->theMapAdapter)
 		return;
 
+	if (!delta.isNull())
+		p->theDelta = delta;
 	QPainter P(&thePix);
-	P.drawPixmap(delta, p->pm);
-}
-
-void ImageMapLayer::forceRedraw(Projection& theProjection, QRect rect)
-{
-	if (!p->theMapAdapter)
-		return;
-
-	draw(theProjection, rect);
+	P.setOpacity(getAlpha());
+	if (p->theMapAdapter->isTiled())
+		P.drawPixmap(0, 0, *p->pm);
+	else
+		P.drawPixmap(p->theDelta, *p->pm);
 }
 
 using namespace geometry;
 
-void ImageMapLayer::draw(Projection& theProjection, QRect& rect)
-{
-	QRectF vp = theProjection.getProjectedViewport(rect);
-	QString url (p->theMapAdapter->getQuery(vp, rect));
-
-	qDebug() << "ImageMapLayer::drawWMS: getting: " << url;
-
-	p->theMapAdapter->getImageManager()->abortLoading();
-	QPixmap pm = p->theMapAdapter->getImageManager()->getImage(p->theMapAdapter,url);
-	if (!pm.isNull())
-		p->pm = pm;
-}
-
 void ImageMapLayer::zoom(double zoom, const QPoint& pos, const QRect& rect) 
 {
-	QPixmap tpm = p->pm.scaled(rect.size() * zoom, Qt::KeepAspectRatio);
-	p->pm.fill(Qt::transparent);
-	QPainter P(&p->pm);
+	if (!p->theMapAdapter)
+		return;
+
+	QPixmap tpm = p->pm->scaled(rect.size() * zoom, Qt::KeepAspectRatio);
+	p->pm->fill(Qt::transparent);
+	QPainter P(p->pm);
 	P.drawPixmap(pos - (pos * zoom), tpm);
+}
+
+void ImageMapLayer::forceRedraw(const Projection& mainProj, QRect rect)
+{
+	if (!p->theMapAdapter)
+		return;
+
+	if (!p->pm || (p->pm->size() != rect.size())) {
+		SAFE_DELETE(p->pm);
+		p->pm = new QPixmap(rect.size());
+		p->pm->fill(Qt::transparent);
+	}
+	p->theProjection.setViewport(mainProj.viewport(), rect);
+	draw(mainProj, rect);
+}
+
+void ImageMapLayer::draw(const Projection& mainProj, QRect& rect)
+{
+	if (!p->theMapAdapter)
+		return;
+
+	if (p->theMapAdapter->isTiled())
+		drawTiled(mainProj, rect);
+	else
+		drawFull(mainProj, rect);
+}
+
+void ImageMapLayer::drawFull(const Projection& mainProj, QRect& rect) const
+{
+	QRectF vp = p->theProjection.getProjectedViewport(rect);
+	QRectF wgs84vp = QRectF(QPointF(intToAng(p->theProjection.viewport().bottomLeft().lon()), intToAng(p->theProjection.viewport().bottomLeft().lat()))
+						, QPointF(intToAng(p->theProjection.viewport().topRight().lon()), intToAng(p->theProjection.viewport().topRight().lat())));
+	QString url (p->theMapAdapter->getQuery(wgs84vp, vp, rect));
+
+	qDebug() << "ImageMapLayer::drawFull: getting: " << url;
+
+	//p->theMapAdapter->getImageManager()->abortLoading();
+	QPixmap pm = p->theMapAdapter->getImageManager()->getImage(p->theMapAdapter,url);
+	if (pm.isNull())
+		return;
+
+	p->theDelta = QPoint();
+	p->pm->fill(Qt::transparent);
+
+	const QPointF tl = mainProj.project(p->theProjection.viewport().topLeft());
+	const QPointF br = mainProj.project(p->theProjection.viewport().bottomRight());
+
+	const QRect pr = QRectF(tl, br).toRect();
+	const QSize ps = pr.size();
+
+	const qreal ratio = qMax<const qreal>((qreal)rect.width()/ps.width()*1.0, (qreal)rect.height()/ps.height());
+	QPixmap pms;
+	if (ratio > 1.0) {
+		pms = pm.scaled(ps);
+	} else {
+		const QSizeF drawingSize = pm.size() * ratio;
+		const QSizeF originSize = pm.size()/2 - drawingSize/2;
+		const QPointF drawingOrigin = QPointF(originSize.width(), originSize.height());
+		const QRect drawingRect = QRect(drawingOrigin.toPoint(), drawingSize.toSize());
+
+		pms = pm.copy(drawingRect).scaled(ps*ratio);
+	}
+	p->pm->fill(Qt::transparent);
+	QPainter P(p->pm);
+	P.drawPixmap((rect.width()-pms.width())/2, (rect.height()-pms.height())/2, pms);
+}
+
+void ImageMapLayer::drawTiled(const Projection& mainProj, QRect& rect) const
+{
+	int tilesize = p->theMapAdapter->getTileSize();
+	QRectF vp = QRectF(QPointF(intToAng(p->theProjection.viewport().bottomLeft().lon()), intToAng(p->theProjection.viewport().bottomLeft().lat()))
+						, QPointF(intToAng(p->theProjection.viewport().topRight().lon()), intToAng(p->theProjection.viewport().topRight().lat())));
+
+	// Set zoom level to 0.
+	while (p->theMapAdapter->getAdaptedZoom()) {
+		p->theMapAdapter->zoom_out();
+	}
+
+	// Find zoom level where tilesize < viewport wdth
+	QPoint mapmiddle_px = p->theMapAdapter->coordinateToDisplay(vp.center()); 
+	QPoint screenmiddle = rect.center();
+	QRectF vlm = QRectF(QPointF(-180., -90.), QSize(360., 180.));
+	int maxZoom = p->theMapAdapter->getAdaptedMaxZoom();
+	while ((!vp.contains(vlm)) && (p->theMapAdapter->getAdaptedZoom() < maxZoom)) {
+		p->theMapAdapter->zoom_in();
+
+		mapmiddle_px = p->theMapAdapter->coordinateToDisplay(vp.center()); 
+
+		QPoint upperLeft = QPoint(mapmiddle_px.x()-screenmiddle.x(), mapmiddle_px.y()+screenmiddle.y());
+		QPoint lowerRight = QPoint(mapmiddle_px.x()+screenmiddle.x(), mapmiddle_px.y()-screenmiddle.y());
+
+		QPointF ulCoord = p->theMapAdapter->displayToCoordinate(upperLeft);
+		QPointF lrCoord = p->theMapAdapter->displayToCoordinate(lowerRight);
+
+		vlm = QRectF(ulCoord, QSizeF( (lrCoord-ulCoord).x(), (lrCoord-ulCoord).y()));
+	}
+
+	if (p->theMapAdapter->getAdaptedZoom() && vp.contains(vlm))
+		p->theMapAdapter->zoom_out();
+
+	mapmiddle_px = p->theMapAdapter->coordinateToDisplay(vp.center()); 
+
+	QPoint upperLeft = QPoint(mapmiddle_px.x()-screenmiddle.x(), mapmiddle_px.y()+screenmiddle.y());
+	QPoint lowerRight = QPoint(mapmiddle_px.x()+screenmiddle.x(), mapmiddle_px.y()-screenmiddle.y());
+
+	QPointF ulCoord = p->theMapAdapter->displayToCoordinate(upperLeft);
+	QPointF lrCoord = p->theMapAdapter->displayToCoordinate(lowerRight);
+
+	vlm = QRectF(ulCoord, QSizeF( (lrCoord-ulCoord).x(), (lrCoord-ulCoord).y()));
+
+	QPixmap pm(rect.size());
+	QPainter painter(&pm);
+
+	// Actual drawing
+	int i, j;
+
+	int cross_x = int(mapmiddle_px.x())%tilesize;		// position on middle tile
+	int cross_y = int(mapmiddle_px.y())%tilesize;
+
+		// calculate how many surrounding tiles have to be drawn to fill the display
+	int space_left = screenmiddle.x() - cross_x;
+	int tiles_left = space_left/tilesize;
+	if (space_left>0)
+		tiles_left+=1;
+
+	int space_above = screenmiddle.y() - cross_y;
+	int tiles_above = space_above/tilesize;
+	if (space_above>0)
+		tiles_above+=1;
+
+	int space_right = screenmiddle.x() - (tilesize-cross_x);
+	int tiles_right = space_right/tilesize;
+	if (space_right>0)
+		tiles_right+=1;
+
+	int space_bottom = screenmiddle.y() - (tilesize-cross_y);
+	int tiles_bottom = space_bottom/tilesize;
+	if (space_bottom>0)
+		tiles_bottom+=1;
+
+// 	int tiles_displayed = 0;
+	int mapmiddle_tile_x = mapmiddle_px.x()/tilesize;
+	int mapmiddle_tile_y = mapmiddle_px.y()/tilesize;
+
+	const QPoint from =	QPoint((-tiles_left+mapmiddle_tile_x)*tilesize, (-tiles_above+mapmiddle_tile_y)*tilesize);
+	const QPoint to =		QPoint((tiles_right+mapmiddle_tile_x+1)*tilesize, (tiles_bottom+mapmiddle_tile_y+1)*tilesize);
+
+	QList<Tile> tiles;
+
+	for (i=-tiles_left+mapmiddle_tile_x; i<=tiles_right+mapmiddle_tile_x; i++)
+	{
+		for (j=-tiles_above+mapmiddle_tile_y; j<=tiles_bottom+mapmiddle_tile_y; j++)
+		{
+#ifdef Q_CC_MSVC
+			double priority = _hypot(i - mapmiddle_tile_x, j - mapmiddle_tile_y);
+#else
+			double priority = hypot(i - mapmiddle_tile_x, j - mapmiddle_tile_y);
+#endif
+			tiles.append(Tile(i, j, priority));
+		}
+	}
+
+	qSort(tiles);
+
+	for (QList<Tile>::const_iterator tile = tiles.begin(); tile != tiles.end(); ++tile)
+	{
+		if (p->theMapAdapter->isValid(tile->i, tile->j, p->theMapAdapter->getZoom()))
+		{
+			QPixmap pm = p->theMapAdapter->getImageManager()->getImage(p->theMapAdapter, tile->i, tile->j, p->theMapAdapter->getZoom());
+			if (!pm.isNull())
+				painter.drawPixmap(((tile->i-mapmiddle_tile_x)*tilesize)-cross_x+rect.width()/2,
+							((tile->j-mapmiddle_tile_y)*tilesize)-cross_y+rect.height()/2,
+													pm);
+
+			if (MerkaartorPreferences::instance()->getDrawTileBoundary()) {
+				painter.drawRect(((tile->i-mapmiddle_tile_x)*tilesize)-cross_x+rect.width()/2,
+						  ((tile->j-mapmiddle_tile_y)*tilesize)-cross_y+rect.height()/2,
+											tilesize, tilesize);
+			}
+		}
+	}
+	painter.end();
+
+	const Coord ctl = Coord(angToInt(vlm.bottomLeft().y()), angToInt(vlm.bottomLeft().x()));
+	const Coord cbr = Coord(angToInt(vlm.topRight().y()), angToInt(vlm.topRight().x()));
+
+	const QPointF tl = mainProj.project(ctl);
+	const QPointF br = mainProj.project(cbr);
+
+	const QRect pr = QRectF(tl, br).toRect();
+	const QSize ps = pr.size();
+
+	const qreal ratio = qMax<const qreal>((qreal)rect.width()/ps.width()*1.0, (qreal)rect.height()/ps.height());
+	QPixmap pms;
+	if (ratio > 1.0) {
+		pms = pm.scaled(ps);
+	} else {
+		const QSizeF drawingSize = pm.size() * ratio;
+		const QSizeF originSize = pm.size()/2 - drawingSize/2;
+		const QPointF drawingOrigin = QPointF(originSize.width(), originSize.height());
+		const QRect drawingRect = QRect(drawingOrigin.toPoint(), drawingSize.toSize());
+
+		pms = pm.copy(drawingRect).scaled(ps*ratio);
+	}
+	p->pm->fill(Qt::transparent);
+	QPainter P(p->pm);
+	P.drawPixmap((rect.width()-pms.width())/2, (rect.height()-pms.height())/2, pms);
 }

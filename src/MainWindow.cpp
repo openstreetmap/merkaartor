@@ -38,7 +38,6 @@
 #include "PaintStyle/EditPaintStyle.h"
 #include "PaintStyle/PaintStyleEditor.h"
 #include "Sync/SyncOSM.h"
-#include "QMapControl/layer.h"
 #include <ui_AboutDialog.h>
 #include <ui_UploadMapDialog.h>
 #include <ui_SelectionDialog.h>
@@ -377,13 +376,16 @@ void MainWindow::adjustLayers(bool adjustViewport)
 	if (adjustViewport) {
 		theVp = theView->projection().viewport();
 #ifndef _MOBILE
-		if (theDocument->getImageLayer()) {
-			ProjectionItem pi = M_PREFS->getProjection(theDocument->getImageLayer()->projection());
-			if(theView->projection().setProjectionType(theDocument->getImageLayer()->projection())) {
-				M_PREFS->setProjectionType(pi.name);
-				// TODO Select the proper action in the Projection menu
-			}
-		}
+		////FIXME Remove when the image layers will be independent from the projection
+		//for (int i=0; i<theDocument->getImageLayersSize(); ++i)
+		//{
+		//	ProjectionItem pi = M_PREFS->getProjection(theDocument->getImageLayer(i)->projection());
+		//	if (theView->projection().setProjectionType(theDocument->getImageLayer(i)->projection())) {
+		//		M_PREFS->setProjectionType(pi.name);
+		//		// TODO Select the proper action in the Projection menu
+		//	}
+		//	break;
+		//}
 #endif
 		theView->projection().setViewport(theVp, theView->rect());
 	}
@@ -853,8 +855,10 @@ void MainWindow::loadFiles(const QStringList & fileList)
 	}
 
 	MapDocument* newDoc = theDocument;
-	if (foundDocument == false)
+	if (foundDocument == false) {
 		newDoc = new MapDocument(theLayers);
+		newDoc->addDefaultLayers();
+	}
 
 	QStringList openedFiles;
 	bool foundImport = importFiles(newDoc, fileNames, &openedFiles);
@@ -1127,6 +1131,7 @@ void MainWindow::on_fileNewAction_triggered()
 	if (!theDocument || !hasUnsavedChanges(*theDocument) || mayDiscardUnsavedChanges(this)) {
 		delete theDocument;
 		theDocument = new MapDocument(theLayers);
+		theDocument->addDefaultLayers();
 		if (M_PREFS->getWorldOsbAutoload() && !M_PREFS->getWorldOsbUri().isEmpty()) {
 			MapLayer* newLayer = new OsbMapLayer( "World", M_PREFS->getWorldOsbUri() + "/world.osb" );
 			if (M_PREFS->getWorldOsbAutoshow())
@@ -1415,7 +1420,9 @@ void MainWindow::on_toolsWMSServersAction_triggered()
 	WMSPreferencesDialog* WMSPref;
 	WMSPref = new WMSPreferencesDialog();
 	if (WMSPref->exec() == QDialog::Accepted) {
-		theDocument->getImageLayer()->updateWidget();
+		for (int i=0; i<theDocument->getImageLayersSize(); ++i) {
+			theDocument->getImageLayer(i)->updateWidget();
+		}
 		adjustLayers(true);
 	}
 }
@@ -1425,7 +1432,9 @@ void MainWindow::on_toolsTMSServersAction_triggered()
 	TMSPreferencesDialog* TMSPref;
 	TMSPref = new TMSPreferencesDialog();
 	if (TMSPref->exec() == QDialog::Accepted) {
-		theDocument->getImageLayer()->updateWidget();
+		for (int i=0; i<theDocument->getImageLayersSize(); ++i) {
+			theDocument->getImageLayer(i)->updateWidget();
+		}
 		adjustLayers(true);
 	}
 }
@@ -2275,12 +2284,6 @@ void MainWindow::on_windowShowAllAction_triggered()
 	windowShowAllAction->setVisible(false);
 }
 
-void MainWindow::on_layersAddImageAction_triggered()
-{
-	ImageMapLayer* il = new ImageMapLayer(tr("Background imagery"), theView->layermanager);
-	theDocument->add(il);
-}
-
 void MainWindow::on_gpsConnectAction_triggered()
 {
 #ifndef Q_OS_SYMBIAN
@@ -2553,4 +2556,10 @@ void MainWindow::updateMenu()
 		editMoveAction->setVisible(true);
 	else
 		editMoveAction->setVisible(false);
+}
+
+void MainWindow::on_layersNewImageAction_triggered()
+{
+	if (theDocument)
+		theDocument->addImageLayer();
 }

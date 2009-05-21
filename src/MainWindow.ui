@@ -251,6 +251,8 @@
     <property name="title" >
      <string>&amp;Layers</string>
     </property>
+    <addaction name="layersNewImageAction" />
+    <addaction name="separator" />
    </widget>
    <widget class="QMenu" name="menuGps" >
     <property name="title" >
@@ -1519,6 +1521,11 @@
   <action name="createRectangleAction" >
    <property name="text" >
     <string>Rectangle</string>
+   </property>
+  </action>
+  <action name="layersNewImageAction" >
+   <property name="text" >
+    <string>Add new Image layer</string>
    </property>
   </action>
  </widget>
