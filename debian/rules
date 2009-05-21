@@ -45,7 +45,7 @@ binary-indep:
 binary binary-arch: install
 	dh_installchangelogs CHANGELOG
 	dh_installdocs
-	dh_installexamples Data/*
+#	dh_installexamples Data/*
 	dh_installmenu
 	dh_installman debian/merkaartor.1
 	dh_strip
