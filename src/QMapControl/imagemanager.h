@@ -37,16 +37,10 @@ class MapNetwork;
 class ImageManager : public QObject, public IImageManager
 {
 	Q_OBJECT;
-	public:
-		static ImageManager* instance()
-		{
-			if(!m_ImageManagerInstance)
-			{
-				m_ImageManagerInstance = new ImageManager;
-			}
-			return m_ImageManagerInstance;
-		}
-		
+	public:	
+		ImageManager(QObject* parent = 0);
+		ImageManager(const ImageManager&);
+		ImageManager& operator=(const ImageManager&);
 		~ImageManager();
 
 		//! returns a QPixmap of the asked image
@@ -80,9 +74,6 @@ class ImageManager : public QObject, public IImageManager
 		void abortLoading();
 		
 	private:
-		ImageManager(QObject* parent = 0);
-		ImageManager(const ImageManager&);
-		ImageManager& operator=(const ImageManager&);
 		QPixmap emptyPixmap;
 		MapNetwork* net;
 		QList<QString> prefetch;

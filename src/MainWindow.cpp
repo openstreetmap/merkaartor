@@ -1546,13 +1546,6 @@ void MainWindow::preferencesChanged(void)
 #else
 	QApplication::setStyle(QStyleFactory::create("skulpture"));
 #endif
-
-	ImageManager::instance()->setCacheDir(M_PREFS->getCacheDir());
-	ImageManager::instance()->setCacheMaxSize(M_PREFS->getCacheSize());
-#ifdef USE_WEBKIT
-	BrowserImageManager::instance()->setCacheDir(M_PREFS->getCacheDir());
-	BrowserImageManager::instance()->setCacheMaxSize(M_PREFS->getCacheSize());
-#endif
 	
 	updateStyleMenu();
 	updateMenu();

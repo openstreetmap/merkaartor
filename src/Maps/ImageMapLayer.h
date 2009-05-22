@@ -5,6 +5,7 @@
 
 class ImageMapLayerPrivate;
 class Projection;
+class IImageManager;
 
 struct Tile
 {
@@ -47,9 +48,20 @@ public:
 	virtual void draw(const Projection& mainProj, QRect& rect);
 	virtual void zoom(double zoom, const QPoint& pos, const QRect& rect);
 
+	IImageManager* getImageManger();
 private:
-	void drawTiled(const Projection& mainProj, QRect& rect) const;
-	void drawFull(const Projection& mainProj, QRect& rect) const;
+	QRect drawTiled(const Projection& mainProj, QRect& rect) const;
+	QRect drawFull(const Projection& mainProj, QRect& rect) const;
+
+signals:
+	void imageRequested(ImageMapLayer*);
+	void imageReceived(ImageMapLayer*);
+	void loadingFinished(ImageMapLayer*);
+
+private slots:
+	void on_imageRequested();
+	void on_imageReceived();
+	void on_loadingFinished();
 
 protected:
 	ImageMapLayerPrivate* p;

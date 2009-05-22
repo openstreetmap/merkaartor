@@ -16,6 +16,7 @@ class PropertiesDock;
 class InfoDock;
 class MapAdapter;
 class Interaction;
+class ImageMapLayer;
 
 class MapView :	public QWidget
 {
@@ -112,9 +113,9 @@ class MapView :	public QWidget
 		bool event(QEvent *event);
 
 	private slots:
-		void imageRequested();
-		void imageReceived();
-		void loadingFinished();
+		void on_imageRequested(ImageMapLayer*);
+		void on_imageReceived(ImageMapLayer*);
+		void on_loadingFinished(ImageMapLayer*);
 		void on_customContextMenuRequested(const QPoint & pos);
 };
 

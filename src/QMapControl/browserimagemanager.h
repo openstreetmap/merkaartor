@@ -66,15 +66,9 @@ class BrowserImageManager : public QObject, public IImageManager
 {
 	Q_OBJECT;
 	public:
-		static BrowserImageManager* instance()
-		{
-			if(!m_BrowserImageManagerInstance)
-			{
-				m_BrowserImageManagerInstance = new BrowserImageManager;
-			}
-			return m_BrowserImageManagerInstance;
-		}
-
+		BrowserImageManager(QObject* parent = 0);
+		BrowserImageManager(const BrowserImageManager&);
+		BrowserImageManager& operator=(const BrowserImageManager&);
 		~BrowserImageManager();
 
 		//! returns a QPixmap of the asked image
@@ -108,9 +102,6 @@ class BrowserImageManager : public QObject, public IImageManager
 		void abortLoading();
 
 	private:
-		BrowserImageManager(QObject* parent = 0);
-		BrowserImageManager(const BrowserImageManager&);
-		BrowserImageManager& operator=(const BrowserImageManager&);
 		QPixmap emptyPixmap;
 		QPixmap errorPixmap;
 		QList<QString> prefetch;

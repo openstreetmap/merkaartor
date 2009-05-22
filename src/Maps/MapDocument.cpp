@@ -243,6 +243,13 @@ ImageMapLayer* MapDocument::addImageLayer(ImageMapLayer* aLayer)
 	p->imageLayers.append(theLayer);
 	add(theLayer);
 
+	connect(theLayer, SIGNAL(imageRequested(ImageMapLayer*)),
+		this, SLOT(on_imageRequested(ImageMapLayer*)), Qt::QueuedConnection);
+	connect(theLayer, SIGNAL(imageReceived(ImageMapLayer*)),
+		this, SLOT(on_imageReceived(ImageMapLayer*)), Qt::QueuedConnection);
+	connect(theLayer, SIGNAL(loadingFinished(ImageMapLayer*)),
+		this, SLOT(on_loadingFinished(ImageMapLayer*)), Qt::QueuedConnection);
+
 	return theLayer;
 }
 
@@ -656,6 +663,22 @@ void MapDocument::setLastDownloadLayer(MapLayer * aLayer)
 {
 	p->lastDownloadLayer = aLayer;
 }
+
+void MapDocument::on_imageRequested(ImageMapLayer* anImageLayer)
+{
+	emit imageRequested(anImageLayer);
+}
+
+void MapDocument::on_imageReceived(ImageMapLayer* anImageLayer)
+{
+	emit imageReceived(anImageLayer);
+}
+
+void MapDocument::on_loadingFinished(ImageMapLayer* anImageLayer)
+{
+	emit loadingFinished(anImageLayer);
+}
+
 
 /* FEATUREITERATOR */
 

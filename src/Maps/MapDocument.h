@@ -102,7 +102,15 @@ public:
 private:
 	MapDocumentPrivate* p;
 
+protected slots:
+	void on_imageRequested(ImageMapLayer* anImageLayer);
+	void on_imageReceived(ImageMapLayer* anImageLayer);
+	void on_loadingFinished(ImageMapLayer* anImageLayer);
+
 signals:
+	void imageRequested(ImageMapLayer*);
+	void imageReceived(ImageMapLayer*);
+	void loadingFinished(ImageMapLayer*);
 	void historyChanged();
 
 };

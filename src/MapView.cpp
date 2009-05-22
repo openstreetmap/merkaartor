@@ -43,31 +43,6 @@ MapView::MapView(MainWindow* aMain) :
 	setAcceptDrops(true);
 #endif
 
-	ImageManager::instance()->setCacheDir(MerkaartorPreferences::instance()->getCacheDir());
-	ImageManager::instance()->setCacheMaxSize(MerkaartorPreferences::instance()->getCacheSize());
-#ifdef USE_WEBKIT
-	BrowserImageManager::instance()->setCacheDir(MerkaartorPreferences::instance()->getCacheDir());
-	BrowserImageManager::instance()->setCacheMaxSize(MerkaartorPreferences::instance()->getCacheSize());
-#ifdef BROWSERIMAGEMANAGER_IS_THREADED
-	BrowserImageManager::instance()->start();
-#endif // BROWSERIMAGEMANAGER_IS_THREADED
-#endif //USE_WEBKIT
-
-	connect(ImageManager::instance(), SIGNAL(imageRequested()),
-		this, SLOT(imageRequested()), Qt::QueuedConnection);
-	connect(ImageManager::instance(), SIGNAL(imageReceived()),
-		this, SLOT(imageReceived()), Qt::QueuedConnection);
-	connect(ImageManager::instance(), SIGNAL(loadingFinished()),
-		this, SLOT(loadingFinished()), Qt::QueuedConnection);
-#ifdef USE_WEBKIT
-	connect(BrowserImageManager::instance(), SIGNAL(imageRequested()),
-		this, SLOT(imageRequested()), Qt::QueuedConnection);
-	connect(BrowserImageManager::instance(), SIGNAL(imageReceived()),
-		this, SLOT(imageReceived()), Qt::QueuedConnection);
-	connect(BrowserImageManager::instance(), SIGNAL(loadingFinished()),
-		this, SLOT(loadingFinished()), Qt::QueuedConnection);
-#endif
-
 	MoveRight = new QShortcut(QKeySequence(Qt::Key_Right), this);
 	connect(MoveRight, SIGNAL(activated()), this, SLOT(on_MoveRight_activated()));
 	MoveLeft = new QShortcut(QKeySequence(Qt::Key_Left), this);
@@ -84,14 +59,6 @@ MapView::~MapView()
 {
 	if(theInteraction)
 		delete theInteraction;
-	delete ImageManager::instance();
-#ifdef USE_WEBKIT
-#ifdef BROWSERIMAGEMANAGER_IS_THREADED
-	BrowserImageManager::instance()->quit();
-	BrowserImageManager::instance()->wait(1000);
-#endif // BROWSERIMAGEMANAGER_IS_THREADED
-	delete BrowserImageManager::instance();
-#endif
 	delete StaticBackground;
 	delete StaticBuffer;
 	delete StaticMap;
@@ -115,6 +82,13 @@ PropertiesDock *MapView::properties()
 void MapView::setDocument(MapDocument* aDoc)
 {
 	theDocument = aDoc;
+	connect(aDoc, SIGNAL(imageRequested(ImageMapLayer*)),
+		this, SLOT(on_imageRequested(ImageMapLayer*)), Qt::QueuedConnection);
+	connect(aDoc, SIGNAL(imageReceived(ImageMapLayer*)),
+		this, SLOT(on_imageReceived(ImageMapLayer*)), Qt::QueuedConnection);
+	connect(aDoc, SIGNAL(loadingFinished(ImageMapLayer*)),
+		this, SLOT(on_loadingFinished(ImageMapLayer*)), Qt::QueuedConnection);
+
 	projection().setViewport(projection().viewport(), rect());
 }
 
@@ -929,7 +903,7 @@ void MapView::on_customContextMenuRequested(const QPoint & pos)
 }
 
 
-void MapView::imageRequested()
+void MapView::on_imageRequested(ImageMapLayer*)
 {
 	++numImages;
 	Main->pbImages->setRange(0, numImages);
@@ -939,18 +913,15 @@ void MapView::imageRequested()
 		Main->pbImages->setValue(0);
 }
 
-void MapView::imageReceived()
+void MapView::on_imageReceived(ImageMapLayer* aLayer)
 {
 	Main->pbImages->setValue(Main->pbImages->value()+1);
-	for (int i=0; i<theDocument->getImageLayersSize(); ++i)
-	{
-		theDocument->getImageLayer(i)->forceRedraw(theProjection, rect());
-	}
+	aLayer->forceRedraw(theProjection, rect());
 	StaticMapUpToDate = false;
 	update();
 }
 
-void MapView::loadingFinished()
+void MapView::on_loadingFinished(ImageMapLayer*)
 {
 	numImages = 0;
 	Main->pbImages->reset();
