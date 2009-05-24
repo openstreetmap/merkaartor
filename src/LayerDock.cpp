@@ -10,14 +10,19 @@
 #include "InfoDock.h"
 
 #include <QPushButton>
+#include <QDragEnterEvent>
 
 #define LINEHEIGHT 25
+
+#define CHILD_WIDGETS (p->Content->children())
+#define CHILD_WIDGET(x) (dynamic_cast<LayerWidget*>(p->Content->children().at(x)))
+#define CHILD_LAYER(x) (dynamic_cast<LayerWidget*>(p->Content->children().at(x))->getMapLayer())
 
 class LayerDockPrivate
 {
 	public:
 		LayerDockPrivate(MainWindow* aMain) :
-		  Main(aMain), Scroller(0), Content(0), Layout(0), butGroup(0) {}
+		  Main(aMain), Scroller(0), Content(0), Layout(0), butGroup(0), theDropWidget(0) {}
 	public:
 		MainWindow* Main;
 		QScrollArea* Scroller;
@@ -26,8 +31,7 @@ class LayerDockPrivate
 		QHBoxLayout* frameLayout;
 		QButtonGroup* butGroup;
 		QTabBar* tab;
-
-		QList < QPair<MapLayer*, LayerWidget*> > layerList;
+		LayerWidget* theDropWidget;
 };
 
 LayerDock::LayerDock(MainWindow* aMain)
@@ -36,6 +40,7 @@ LayerDock::LayerDock(MainWindow* aMain)
 	p = new LayerDockPrivate(aMain);
 //	setMinimumSize(220,100);
 	setObjectName("layersDock");
+	setAcceptDrops(true);
 
 	createContent();
 
@@ -47,13 +52,62 @@ LayerDock::~LayerDock()
 	delete p;
 }
 
+void LayerDock::dragEnterEvent(QDragEnterEvent *event)
+{
+	p->theDropWidget = NULL;
+	if (event->mimeData()->hasFormat("application/x-layer"))
+		if (p->theDropWidget = dynamic_cast<LayerWidget*>(event->source()))
+			event->acceptProposedAction();
+}
+
+void LayerDock::dragMoveEvent(QDragMoveEvent *event)
+{
+	if (event->mimeData()->hasFormat("application/x-layer"))
+		event->accept();
+	else {
+		event->ignore();
+		return;
+	}
+
+	LayerWidget* aW = dynamic_cast<LayerWidget*>(childAt(event->pos()));
+	if (aW != p->theDropWidget) {
+		if (!aW) {
+			p->Layout->removeWidget(p->theDropWidget);
+			p->Layout->addWidget(p->theDropWidget);
+		} else {
+			p->Layout->removeWidget(p->theDropWidget);
+			p->Layout->insertWidget(p->Layout->indexOf(aW), p->theDropWidget);
+		}
+		update();
+	}
+}
+
+void LayerDock::dragLeaveEvent(QDragLeaveEvent *event)
+{
+//	if (p->theDropWidget) {
+//		p->Layout->removeWidget(p->theDropWidget);
+//		SAFE_DELETE(p->theDropWidget);
+//	}
+}
+
+void LayerDock::dropEvent(QDropEvent *event)
+{
+	if (event->mimeData()->hasFormat("application/x-layer"))
+		event->accept();
+	else {
+		event->ignore();
+		return;
+	}
+
+	p->Main->document()->moveLayer(p->theDropWidget->getMapLayer(), p->Layout->indexOf(p->theDropWidget));
+	emit(layersChanged(false));
+	update();
+}
+
 void LayerDock::clearLayers()
 {
-	for (int i=p->layerList.size()-1; i >= 0; i--) {
-		p->butGroup->removeButton(p->layerList[i].second);
-		p->Layout->removeWidget(p->layerList[i].second);
-		delete p->layerList[i].second;
-		p->layerList.removeAt(i);
+	for (int i=CHILD_WIDGETS.size()-1; i >= 0; i--) {
+		CHILD_WIDGET(i)->deleteLater();
 	}
 }
 
@@ -61,9 +115,8 @@ void LayerDock::addLayer(MapLayer* aLayer)
 {
 	LayerWidget* w = aLayer->newWidget();
 	if (w) {
-		p->layerList.append(qMakePair(aLayer, w));
 		p->butGroup->addButton(w);
-		p->Layout->insertWidget(p->layerList.size()-1, w);
+		p->Layout->addWidget(w);
 
 		connect(w, SIGNAL(layerChanged(LayerWidget*,bool)), this, SLOT(layerChanged(LayerWidget*,bool)));
 		connect(w, SIGNAL(layerClosed(MapLayer*)), this, SLOT(layerClosed(MapLayer*)));
@@ -83,21 +136,12 @@ void LayerDock::addLayer(MapLayer* aLayer)
 
 void LayerDock::deleteLayer(MapLayer* aLayer)
 {
-	for (int i=p->layerList.size()-1; i >= 0; i--) {
-		if (p->layerList[i].first == aLayer) {
-			if (i) {
-				p->layerList[i-1].first->setSelected(true);
-				p->layerList[i-1].second->setChecked(true);
-			}
-			p->butGroup->removeButton(p->layerList[i].second);
-			p->Layout->removeWidget(p->layerList[i].second);
-			disconnect(p->layerList[i].second);
-			p->layerList[i].second->setVisible(false);
-
-			p->Main->menuLayers->removeAction(p->layerList[i].second->getAssociatedMenu()->menuAction());
-
-			p->layerList.removeAt(i);
-			//aLayer->deleteWidget();
+	for (int i=CHILD_WIDGETS.size()-1; i >= 0; i--) {
+		if (CHILD_LAYER(i) == aLayer) {
+			p->Main->menuLayers->removeAction(CHILD_WIDGET(i)->getAssociatedMenu()->menuAction());
+			LayerWidget* curW = CHILD_WIDGET(i);
+			curW->deleteLater();
+			break;
 		}
 	}
 
@@ -141,6 +185,11 @@ void LayerDock::createContent()
 	p->Scroller->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	p->Scroller->setWidgetResizable(true);
 
+	QWidget* aWidget = new QWidget();
+	QVBoxLayout* aLayout = new QVBoxLayout(aWidget);
+	aLayout->setSpacing(0);
+	aLayout->setMargin(0);
+
 	p->Content = new QWidget();
 	p->Layout = new QVBoxLayout(p->Content);
 	p->Layout->setSpacing(0);
@@ -149,9 +198,10 @@ void LayerDock::createContent()
 	p->butGroup = new QButtonGroup(p->Content);
 	connect(p->butGroup, SIGNAL(buttonClicked (QAbstractButton *)), this, SLOT(layerSelected(QAbstractButton *)));
 
-	p->Layout->addStretch();
+	aLayout->addWidget(p->Content);
+	aLayout->addStretch();
 
-	p->Scroller->setWidget(p->Content);
+	p->Scroller->setWidget(aWidget);
 
 	p->frameLayout->addWidget(p->Scroller);
 
@@ -208,11 +258,11 @@ void LayerDock::layerZoom(MapLayer * l)
 
 void LayerDock::tabChanged(int idx)
 {
-	for (int i=p->layerList.size()-1; i >= 0; i--) {
-		if ((p->layerList[i].first->isEnabled()) && (p->layerList[i].first->classGroups() & p->tab->tabData(idx).toInt()))
-			p->layerList[i].second->setVisible(true);
+	for (int i=CHILD_WIDGETS.size()-1; i >= 0; i--) {
+		if ((CHILD_LAYER(i)->isEnabled()) && (CHILD_LAYER(i)->classGroups() & p->tab->tabData(idx).toInt()))
+			CHILD_WIDGET(i)->setVisible(true);
 		else
-			p->layerList[i].second->setVisible(false);
+			CHILD_WIDGET(i)->setVisible(false);
 	}
 }
 
@@ -237,18 +287,18 @@ void LayerDock::tabContextMenuRequested(const QPoint& pos)
 
 void LayerDock::TabShowAll(bool)
 {
-	for (int i=p->layerList.size()-1; i >= 0; i--) {
-		if (p->layerList[i].first->classGroups() & p->tab->tabData(p->tab->currentIndex()).toInt()) {
-			p->layerList[i].second->setLayerVisible(true);
+	for (int i=CHILD_WIDGETS.size()-1; i >= 0; i--) {
+		if (CHILD_LAYER(i)->classGroups() & p->tab->tabData(p->tab->currentIndex()).toInt()) {
+			CHILD_WIDGET(i)->setLayerVisible(true);
 		}
 	}
 }
 
 void LayerDock::TabHideAll(bool)
 {
-	for (int i=p->layerList.size()-1; i >= 0; i--) {
-		if (p->layerList[i].first->classGroups() & p->tab->tabData(p->tab->currentIndex()).toInt()) {
-			p->layerList[i].second->setLayerVisible(false);
+	for (int i=CHILD_WIDGETS.size()-1; i >= 0; i--) {
+		if (CHILD_LAYER(i)->classGroups() & p->tab->tabData(p->tab->currentIndex()).toInt()) {
+			CHILD_WIDGET(i)->setLayerVisible(false);
 		}
 	}
 }

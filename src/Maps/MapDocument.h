@@ -45,6 +45,7 @@ public:
 	LayerDock* getLayerDock(void);
 
 	void add(MapLayer* aLayer);
+	void moveLayer(MapLayer* aLayer, int pos);
 	ImageMapLayer* addImageLayer(ImageMapLayer* aLayer = NULL);
 	void remove(MapLayer* aLayer);
 	bool exists(MapLayer* aLayer) const;
@@ -72,8 +73,6 @@ public:
 	QList<QString> getTagValues();
 	QString getTagValue(int idx);
 
-	int getImageLayersSize() const;
-	ImageMapLayer* getImageLayer(int i) const;
 	void setDirtyLayer(DirtyMapLayer* aLayer);
 	//DirtyMapLayer* getDirtyLayer() const;
 	MapLayer* getDirtyOrOriginLayer(MapLayer* aLayer = NULL) const;

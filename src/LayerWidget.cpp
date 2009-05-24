@@ -28,6 +28,34 @@ LayerWidget::~LayerWidget()
 	delete associatedMenu;
 }
 
+void LayerWidget::mousePressEvent(QMouseEvent *event)
+{
+	if (event->button() == Qt::LeftButton)
+		dragStartPosition = event->pos();
+
+	QAbstractButton::mousePressEvent(event);
+}
+
+void LayerWidget::mouseMoveEvent(QMouseEvent *event)
+{
+	if (!(event->buttons() & Qt::LeftButton))
+		return;
+	if ((event->pos() - dragStartPosition).manhattanLength()
+		< QApplication::startDragDistance())
+		return;
+
+	QDrag *drag = new QDrag(this);
+	QMimeData *mimeData = new QMimeData;
+	mimeData->setData("application/x-layer", theLayer->id().toLatin1());
+	drag->setMimeData(mimeData);
+
+	QPixmap px(size());
+	render(&px);
+	drag->setPixmap(px);
+
+	Qt::DropAction dropAction = drag->exec(Qt::MoveAction);
+}
+
 QSize LayerWidget::minimumSizeHint () const
 {
 	return QSize(100, LINEHEIGHT);
@@ -40,7 +68,7 @@ QSize LayerWidget::sizeHint () const
 
 void LayerWidget::paintEvent(QPaintEvent*)
 {
-	if (!theLayer->isEnabled())
+	if (!theLayer || !theLayer->isEnabled())
 		return;
 
 	QPainter P(this);
@@ -208,7 +236,6 @@ void LayerWidget::associatedAboutToShow()
 	initActions();
 }
 
-
 // DrawingLayerWidget
 
 DrawingLayerWidget::DrawingLayerWidget(DrawingMapLayer* aLayer, QWidget* aParent)
@@ -270,7 +297,7 @@ void ImageLayerWidget::setWms(QAction* act)
 	WmsServer S = L->value(act->data().toString());
 	M_PREFS->setSelectedServer(S.WmsName);
 
-	((ImageMapLayer *)theLayer)->setMapAdapter(WMS_ADAPTER_UUID, S.WmsName);
+	((ImageMapLayer *)theLayer.data())->setMapAdapter(WMS_ADAPTER_UUID, S.WmsName);
 	theLayer->setVisible(true);
 
 	this->update(rect());
@@ -283,7 +310,7 @@ void ImageLayerWidget::setTms(QAction* act)
 	TmsServer S = L->value(act->data().toString());
 	M_PREFS->setSelectedServer(S.TmsName);
 
-	((ImageMapLayer *)theLayer)->setMapAdapter(TMS_ADAPTER_UUID, S.TmsName);
+	((ImageMapLayer *)theLayer.data())->setMapAdapter(TMS_ADAPTER_UUID, S.TmsName);
 	theLayer->setVisible(true);
 
 	this->update(rect());
@@ -296,7 +323,7 @@ void ImageLayerWidget::setBackground(QAction* act)
 	if (aUuid.isNull())
 		return;
 
-	((ImageMapLayer *)theLayer)->setMapAdapter(aUuid);
+	((ImageMapLayer *)theLayer.data())->setMapAdapter(aUuid);
 
 	this->update(rect());
 	emit (layerChanged(this, true));
@@ -422,7 +449,7 @@ TrackLayerWidget::~TrackLayerWidget()
 
 void TrackLayerWidget::extractLayer(bool)
 {
-	((TrackMapLayer*)theLayer)->extractLayer();
+	((TrackMapLayer*)theLayer.data())->extractLayer();
 	emit (layerChanged(this, false));
 }
 

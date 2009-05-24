@@ -490,11 +490,11 @@ void Road::buildPath(Projection const &theProjection, const QRect& cr)
 		for (QList<linestring_2d>::const_iterator it = clipped.begin(); it != clipped.end(); it++)
 		{
 			if (!(*it).empty()) {
-				p->thePath.moveTo(QPoint((*it)[0].x(), (*it)[0].y()));
+				p->thePath.moveTo(QPointF((*it)[0].x(), (*it)[0].y()).toPoint());
 			}
 			for (linestring_2d::const_iterator itl = (*it).begin()+1; itl != (*it).end(); itl++)
 			{
-				p->thePath.lineTo(QPoint((*itl).x(), (*itl).y()));
+				p->thePath.lineTo(QPointF((*itl).x(), (*itl).y()).toPoint());
 			}
 		}
 	} else {
@@ -511,13 +511,13 @@ void Road::buildPath(Projection const &theProjection, const QRect& cr)
 		for (QList<polygon_2d>::const_iterator it = clipped.begin(); it != clipped.end(); it++)
 		{
 			if (!(*it).outer().empty()) {
-				p->thePath.moveTo(QPoint((*it).outer()[0].x(), (*it).outer()[0].y()));
+				p->thePath.moveTo(QPointF((*it).outer()[0].x(), (*it).outer()[0].y()).toPoint());
 			}
 			for (ring_2d::const_iterator itl = (*it).outer().begin()+1; itl != (*it).outer().end(); itl++)
 			{
-				p->thePath.lineTo(QPoint((*itl).x(), (*itl).y()));
+				p->thePath.lineTo(QPointF((*itl).x(), (*itl).y()).toPoint());
 			}
-			p->thePath.lineTo(QPoint((*it).outer()[0].x(), (*it).outer()[0].y()));
+			p->thePath.lineTo(QPointF((*it).outer()[0].x(), (*it).outer()[0].y()).toPoint());
 		}
 	}
 

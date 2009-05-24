@@ -35,6 +35,7 @@
 #include "Maps/Road.h"
 #include "Maps/FeatureManipulations.h"
 #include "Maps/TrackPoint.h"
+#include "Maps/LayerIterator.h"
 #include "PaintStyle/EditPaintStyle.h"
 #include "PaintStyle/PaintStyleEditor.h"
 #include "Sync/SyncOSM.h"
@@ -1420,9 +1421,8 @@ void MainWindow::on_toolsWMSServersAction_triggered()
 	WMSPreferencesDialog* WMSPref;
 	WMSPref = new WMSPreferencesDialog();
 	if (WMSPref->exec() == QDialog::Accepted) {
-		for (int i=0; i<theDocument->getImageLayersSize(); ++i) {
-			theDocument->getImageLayer(i)->updateWidget();
-		}
+		for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
+			ImgIt.get()->updateWidget();
 		adjustLayers(true);
 	}
 }
@@ -1432,9 +1432,8 @@ void MainWindow::on_toolsTMSServersAction_triggered()
 	TMSPreferencesDialog* TMSPref;
 	TMSPref = new TMSPreferencesDialog();
 	if (TMSPref->exec() == QDialog::Accepted) {
-		for (int i=0; i<theDocument->getImageLayersSize(); ++i) {
-			theDocument->getImageLayer(i)->updateWidget();
-		}
+		for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
+			ImgIt.get()->updateWidget();
 		adjustLayers(true);
 	}
 }

@@ -21,9 +21,6 @@ class LayerWidget : public QAbstractButton
 		virtual QSize sizeHint () const;
 		virtual QSize minimumSizeHint () const;
 
-		virtual void paintEvent(QPaintEvent* anEvent);
-		virtual void mouseReleaseEvent(QMouseEvent* anEvent);
-
 		virtual MapLayer* getMapLayer();
 		virtual void setLayerVisible(bool b);
 		virtual void setLayerReadonly(bool b);
@@ -34,10 +31,15 @@ class LayerWidget : public QAbstractButton
 	protected:
 		virtual void contextMenuEvent(QContextMenuEvent* anEvent);
 
+		virtual void mousePressEvent(QMouseEvent *event);
+		virtual void mouseMoveEvent(QMouseEvent *event);
+		virtual void mouseReleaseEvent(QMouseEvent* anEvent);
+
+		virtual void paintEvent(QPaintEvent* anEvent);
 		virtual void checkStateSet();
 		virtual void nextCheckState();
 
-		MapLayer* theLayer;
+		QPointer<MapLayer> theLayer;
 		QPixmap visibleIcon;
 		QPixmap hiddenIcon;
 		QBrush backColor;
@@ -47,6 +49,7 @@ class LayerWidget : public QAbstractButton
 		QAction* actVisible;
 		QAction* actReadonly;
 		QMenu* associatedMenu;
+		QPoint dragStartPosition;
 
 	signals:
 		void layerSelected(LayerWidget *);

@@ -12,6 +12,7 @@
 #include "Maps/Projection.h"
 #include "GPS/qgps.h"
 #include "GPS/qgpsdevice.h"
+#include "Maps/LayerIterator.h"
 
 #ifdef GEOIMAGE
 #include "GeoImageDock.h"
@@ -104,10 +105,8 @@ void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
 		StaticBufferUpToDate = false;
 	}
 	if (theDocument && updateMap) {
-		for (int i=0; i<theDocument->getImageLayersSize(); ++i)
-		{
-			theDocument->getImageLayer(i)->forceRedraw(theProjection, rect());
-		}
+		for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
+			ImgIt.get()->forceRedraw(theProjection, rect());
 		StaticMapUpToDate = false;
 	}
 	update();
@@ -245,11 +244,9 @@ void MapView::updateLayersImage()
 	}
 	StaticMap->fill(Qt::transparent);
 
-	for (int i=0; i<theDocument->getImageLayersSize(); ++i)
-	{
-		if (theDocument->getImageLayer(i)->isVisible())
-			theDocument->getImageLayer(i)->drawImage(*StaticMap, thePanDelta);
-	}
+	for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
+		if (ImgIt.get()->isVisible())
+			ImgIt.get()->drawImage(*StaticMap, thePanDelta);
 
 	thePanDelta = QPoint(0, 0);
 	StaticMapUpToDate = true;
@@ -786,10 +783,8 @@ void MapView::wheelEvent(QWheelEvent* ev)
 		}
 	}
 	projection().zoom(finalZoom, ev->pos(), rect());
-	for (int i=0; i<theDocument->getImageLayersSize(); ++i)
-	{
-		theDocument->getImageLayer(i)->zoom(finalZoom, ev->pos(), rect());
-	}
+	for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
+		ImgIt.get()->zoom(finalZoom, ev->pos(), rect());
 	invalidate(true, true);
 }
 
@@ -956,7 +951,7 @@ void MapView::dragMoveEvent(QDragMoveEvent *event)
 	for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it) {
 		if ((tP = qobject_cast<TrackPoint*>(it.get())) && tP->pixelDistance(event->pos(), 5.01, projection()) < 5.01) {
 			dropTarget = tP;
-			QRect acceptedRect(tP->projection().toPoint() - QPoint(3.5, 3.5), tP->projection().toPoint() + QPoint(3.5, 3.5));
+			QRect acceptedRect(tP->projection().toPoint() - QPoint(3, 3), tP->projection().toPoint() + QPoint(3, 3));
 			event->acceptProposedAction();
 			event->accept(acceptedRect);
 			return;

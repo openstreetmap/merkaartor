@@ -28,6 +28,7 @@ HEADERS += ./Command/Command.h \
     ./Maps/ImportNGT.h \
     ./Maps/ImportOSM.h \
     ./Maps/ImportNGT.h \
+    ./Maps/LayerIterator.h \
     ./Maps/MapDocument.h \
     ./Maps/MapLayer.h \
     ./Maps/ImageMapLayer.h \

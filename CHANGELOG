@@ -1,4 +1,5 @@
 v0.14
+	* ADD : Drag & drop re-ordering of the layers
 	* ADD : Support for multiple image layers (closes #1400)
 	* CHG : Load Yahoo background as a whole rather than in pseudo-tile
 	* FIX : Take layer tag into account for drawing priority (fixes #1792)

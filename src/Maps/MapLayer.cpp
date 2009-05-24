@@ -354,6 +354,8 @@ CoordBox MapLayer::boundingBox(const MapLayer* theLayer)
 	for (int i=0; i<theLayer->size(); ++i) {
 		if (theLayer->get(i)->isDeleted())
 			continue;
+		if (theLayer->get(i)->notEverythingDownloaded())
+			continue;
 		if (haveFirst)
 			Box.merge(theLayer->get(i)->boundingBox());
 		else {

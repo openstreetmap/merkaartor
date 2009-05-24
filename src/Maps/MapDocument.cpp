@@ -40,7 +40,6 @@ public:
 	}
 	CommandHistory*				History;
 	QList<MapLayer*>		Layers;
-	QList<ImageMapLayer*>		imageLayers;
 	DirtyMapLayer*				dirtyLayer;
 	UploadedMapLayer*			uploadedLayer;
 	LayerDock*					theDock;
@@ -235,12 +234,16 @@ void MapDocument::add(MapLayer* aLayer)
 		p->theDock->addLayer(aLayer);
 }
 
+void MapDocument::moveLayer(MapLayer* aLayer, int pos)
+{
+	p->Layers.move(p->Layers.indexOf(aLayer), pos);
+}
+
 ImageMapLayer* MapDocument::addImageLayer(ImageMapLayer* aLayer)
 {
 	ImageMapLayer* theLayer = aLayer;
 	if (!theLayer)
 		theLayer = new ImageMapLayer(tr("Background imagery"));
-	p->imageLayers.append(theLayer);
 	add(theLayer);
 
 	connect(theLayer, SIGNAL(imageRequested(ImageMapLayer*)),
@@ -390,16 +393,6 @@ MapFeature* MapDocument::getFeature(const QString& id, bool exact)
 		}
 	}
 	return 0;
-}
-
-int MapDocument::getImageLayersSize() const
-{
-	return p->imageLayers.size();
-}
-
-ImageMapLayer* MapDocument::getImageLayer(int i) const
-{
-	return p->imageLayers[i];
 }
 
 void MapDocument::setDirtyLayer(DirtyMapLayer* aLayer)
@@ -678,7 +671,6 @@ void MapDocument::on_loadingFinished(ImageMapLayer* anImageLayer)
 {
 	emit loadingFinished(anImageLayer);
 }
-
 
 /* FEATUREITERATOR */
 

@@ -122,7 +122,8 @@ bool ImportExportSHP::import(MapLayer* aLayer)
 
 	OGRDataSource       *poDS;
 
-	poDS = OGRSFDriverRegistrar::Open( FileName.toUtf8().constData(), FALSE );
+	QFileInfo fi(FileName);
+	poDS = OGRSFDriverRegistrar::Open( fi.path().toUtf8().constData(), FALSE );
 	if( poDS == NULL )
 	{
 		qDebug( "SHP Open failed.\n" );
@@ -130,9 +131,17 @@ bool ImportExportSHP::import(MapLayer* aLayer)
 	}
 
 	OGRLayer  *poLayer;
+	char* theProj4;
 
 	//poLayer = poDS->GetLayerByName( "point" );
 	poLayer = poDS->GetLayer( 0 );
+	OGRSpatialReference * theSrs = poLayer->GetSpatialRef();
+	if (theSrs) {
+		theSrs->morphFromESRI();
+		if (theSrs->exportToProj4(&theProj4) == OGRERR_NONE) {
+		} else
+			qDebug() << "SHP: to proj4 error: " << CPLGetLastErrorMsg();
+	}
 
 	OGRFeature *poFeature;
 

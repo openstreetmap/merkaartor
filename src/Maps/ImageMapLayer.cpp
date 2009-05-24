@@ -371,7 +371,7 @@ QRect ImageMapLayer::drawTiled(const Projection& mainProj, QRect& rect) const
 	// Find zoom level where tilesize < viewport wdth
 	QPoint mapmiddle_px = p->theMapAdapter->coordinateToDisplay(vp.center()); 
 	QPoint screenmiddle = rect.center();
-	QRectF vlm = QRectF(QPointF(-180., -90.), QSize(360., 180.));
+	QRectF vlm = QRectF(QPointF(-180., -90.), QSizeF(360., 180.));
 	int maxZoom = p->theMapAdapter->getAdaptedMaxZoom();
 	while ((!vp.contains(vlm)) && (p->theMapAdapter->getAdaptedZoom() < maxZoom)) {
 		p->theMapAdapter->zoom_in();
