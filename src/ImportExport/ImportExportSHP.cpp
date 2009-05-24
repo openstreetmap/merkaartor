@@ -13,6 +13,7 @@
 #include <QtGui>
 
 #include "../ImportExport/ImportExportSHP.h"
+#include "Maps/Projection.h"
 
 #include "ogrsf_frmts.h"
 
@@ -21,7 +22,7 @@
 bool parseContainer(QDomElement& e, MapLayer* aLayer);
 
 ImportExportSHP::ImportExportSHP(MapDocument* doc)
- : IImportExport(doc)
+ : IImportExport(doc), theProjection(0)
 {
 }
 
@@ -54,13 +55,20 @@ bool ImportExportSHP::export_(const QList<MapFeature *>& featList)
 
 // IMPORT
 
-void parseGeometry(MapLayer* aLayer, OGRGeometry *poGeometry)
+void ImportExportSHP::parseGeometry(MapLayer* aLayer, OGRGeometry *poGeometry)
 {
+	TrackPoint* N;
+	double x, y;
 	if ( wkbFlatten(poGeometry->getGeometryType()) == wkbPoint )
 	{
 		OGRPoint *poPoint = (OGRPoint *) poGeometry;
-
-		TrackPoint* N = new TrackPoint(Coord(angToInt(poPoint->getY()), angToInt(poPoint->getX())));
+		x = poPoint->getX(); y = poPoint->getY();
+		if (!theProjection)
+			N = new TrackPoint(Coord(angToInt(y), angToInt(x)));
+		else {
+			theProjection->projTransformToWGS84(1, 0, &x, &y, NULL);
+			N = new TrackPoint(Coord(radToInt(y), radToInt(x)));
+		}
 
 		aLayer->add(N);
 	} else
@@ -74,7 +82,13 @@ void parseGeometry(MapLayer* aLayer, OGRGeometry *poGeometry)
 			Road* R = new Road();
 			for(int i=0; i<numNode; i++) {
 				poRing->getPoint(i, &p);
-				TrackPoint* N = new TrackPoint(Coord(angToInt(p.getY()), angToInt(p.getX())));
+				x = p.getX(); y = p.getY();
+				if (!theProjection)
+					N = new TrackPoint(Coord(angToInt(y), angToInt(x)));
+				else {
+					theProjection->projTransformToWGS84(1, 0, &x, &y, NULL);
+					N = new TrackPoint(Coord(radToInt(y), radToInt(x)));
+				}
 				aLayer->add(N);
 
 				R->add(N);
@@ -91,7 +105,13 @@ void parseGeometry(MapLayer* aLayer, OGRGeometry *poGeometry)
 			Road* R = new Road();
 			for(int i=0; i<numNode; i++) {
 				poLS->getPoint(i, &p);
-				TrackPoint* N = new TrackPoint(Coord(angToInt(p.getY()), angToInt(p.getX())));
+				x = p.getX(); y = p.getY();
+				if (!theProjection)
+					N = new TrackPoint(Coord(angToInt(y), angToInt(x)));
+				else {
+					theProjection->projTransformToWGS84(1, 0, &x, &y, NULL);
+					N = new TrackPoint(Coord(radToInt(y), radToInt(x)));
+				}
 				aLayer->add(N);
 
 				R->add(N);
@@ -131,16 +151,21 @@ bool ImportExportSHP::import(MapLayer* aLayer)
 	}
 
 	OGRLayer  *poLayer;
-	char* theProj4;
 
 	//poLayer = poDS->GetLayerByName( "point" );
 	poLayer = poDS->GetLayer( 0 );
 	OGRSpatialReference * theSrs = poLayer->GetSpatialRef();
 	if (theSrs) {
 		theSrs->morphFromESRI();
+		char* theProj4;
 		if (theSrs->exportToProj4(&theProj4) == OGRERR_NONE) {
-		} else
+			qDebug() << "SHP: to proj4 : " << theProj4;
+		} else {
 			qDebug() << "SHP: to proj4 error: " << CPLGetLastErrorMsg();
+			return false;
+		}
+		theProjection = new Projection();
+		theProjection->setProjectionType(QString(theProj4));
 	}
 
 	OGRFeature *poFeature;
@@ -148,23 +173,6 @@ bool ImportExportSHP::import(MapLayer* aLayer)
 	poLayer->ResetReading();
 	while( (poFeature = poLayer->GetNextFeature()) != NULL )
 	{
-		//OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
-		//int iField;
-
-		//for( iField = 0; iField < poFDefn->GetFieldCount(); iField++ )
-		//{
-		//	OGRFieldDefn *poFieldDefn = poFDefn->GetFieldDefn( iField );
-
-		//	if( poFieldDefn->GetType() == OFTInteger )
-		//		qDebug( "%d,", poFeature->GetFieldAsInteger( iField ) );
-		//	else if( poFieldDefn->GetType() == OFTReal )
-		//		qDebug( "%.3f,", poFeature->GetFieldAsDouble(iField) );
-		//	else if( poFieldDefn->GetType() == OFTString )
-		//		qDebug( "%s,", poFeature->GetFieldAsString(iField) );
-		//	else
-		//		qDebug( "%s,", poFeature->GetFieldAsString(iField) );
-		//}
-
 		OGRGeometry *poGeometry;
 
 		poGeometry = poFeature->GetGeometryRef();

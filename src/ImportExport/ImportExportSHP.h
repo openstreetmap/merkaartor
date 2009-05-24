@@ -14,6 +14,10 @@
 
 #include <ImportExport/IImportExport.h>
 
+class Projection;
+class MapLayer;
+class OGRGeometry;
+
 /**
 	@author cbro <cbro@semperpax.com>
 */
@@ -33,6 +37,12 @@ public:
 
 	//export
 	virtual bool export_(const QList<MapFeature *>& featList);
+
+protected:
+	Projection* theProjection;
+
+	void parseGeometry(MapLayer* aLayer, OGRGeometry *poGeometry);
+
 };
 
 #endif

@@ -62,9 +62,14 @@ void Projection::projTransform(ProjProjection *srcdefn,
 	projection::impl::pj_transform(srcdefn, dstdefn, point_count, point_offset, x, y, z);
 }
 
-void Projection::projTransformWGS84(long point_count, int point_offset, double *x, double *y, double *z )
+void Projection::projTransformFromWGS84(long point_count, int point_offset, double *x, double *y, double *z )
 {
 	projection::impl::pj_transform(p->theWGS84Proj, theProj, point_count, point_offset, x, y, z);
+}
+
+void Projection::projTransformToWGS84(long point_count, int point_offset, double *x, double *y, double *z )
+{
+	projection::impl::pj_transform(theProj, p->theWGS84Proj, point_count, point_offset, x, y, z);
 }
 
 QPointF Projection::projProject(const Coord & Map) const
@@ -98,7 +103,7 @@ QRectF Projection::getProjectedViewport(QRect& screen)
 
 	double x = intToRad(Viewport.topLeft().lon());
 	double y = intToRad(Viewport.topLeft().lat());
-	projTransformWGS84(1, 0, &x, &y, NULL);
+	projTransformFromWGS84(1, 0, &x, &y, NULL);
 	if (theProj->params().is_latlong)
 		tl = QPointF(radToAng(x), radToAng(y));
 	else
@@ -106,7 +111,7 @@ QRectF Projection::getProjectedViewport(QRect& screen)
 
 	x = intToRad(Viewport.bottomRight().lon());
 	y = intToRad(Viewport.bottomRight().lat());
-	projTransformWGS84(1, 0, &x, &y, NULL);
+	projTransformFromWGS84(1, 0, &x, &y, NULL);
 	if (theProj->params().is_latlong)
 		br = QPointF(radToAng(x), radToAng(y));
 	else
