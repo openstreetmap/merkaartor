@@ -12,6 +12,9 @@
 
 #include "ProjectionsList.h"
 
+#define STRINGIFY(x) XSTRINGIFY(x)
+#define XSTRINGIFY(x) #x
+
 ProjectionItem::ProjectionItem ()
 	: name(""), projection(""), deleted(false)
 {
@@ -63,6 +66,32 @@ void ProjectionsList::addProjection(ProjectionItem aProjection)
 	theProjections.insert(aProjection.name, aProjection);
 }
 
+QString searchEPSG(QString name, QString filename)
+{
+	QString ret;
+	QString espgNum = name.remove("epsg:", Qt::CaseInsensitive);
+	QFile f(filename);
+	f.open(QIODevice::ReadOnly);
+	if (!f.isOpen())
+		return ret;
+
+	QString theEpsgNum("<" + espgNum + ">");
+	while (!f.atEnd()) {
+		QByteArray epsg = f.readLine();
+
+		int idx = epsg.indexOf(theEpsgNum);
+		if (idx != -1) {
+			idx += theEpsgNum.length();
+			int idx2 = epsg.indexOf("<>", idx);
+			ret = epsg.mid(idx, idx2 - idx);
+			break;
+		}
+	}
+	f.close();
+
+	return ret;
+}
+
 ProjectionItem ProjectionsList::getProjection(QString name) const
 {
 	if (name.contains("+proj")) {
@@ -78,6 +107,15 @@ ProjectionItem ProjectionsList::getProjection(QString name) const
 			if (it.key().contains(name, Qt::CaseInsensitive))
 				return it.value();
 		}
+	}
+	QString theProj;
+	if (name.startsWith("epsg:", Qt::CaseInsensitive)) {
+		theProj = searchEPSG(name, ":/proj/epsg");
+		if (!theProj.isEmpty())
+			return ProjectionItem(name, theProj);
+		theProj = searchEPSG(name, QString(STRINGIFY(SHARE_DIR)) + "/proj/epsg");
+		if (!theProj.isEmpty())
+			return ProjectionItem(name, theProj);
 	}
 	return ProjectionItem(name, QString("+init=%1").arg(name));
 }

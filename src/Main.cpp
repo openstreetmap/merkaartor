@@ -192,7 +192,8 @@ int main(int argc, char** argv)
 	int x = app.exec();
 
 	qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Ending " << QString("Merkaartor %1%2\n").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION));
-	fclose(pLogFile);
+	if(pLogFile)
+		fclose(pLogFile);
 
 	return x;
 }

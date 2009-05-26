@@ -1,13 +1,7 @@
 <?xml version="1.0"?>
 <MerkaartorList>
  <Projections creator="Merkaartor 0.14" >
-  <Projection name="Belge 1972 / Belgian Lambert 72 (EPSG:31370)" >+proj=lcc +lat_1=51.16666723333334 +lat_2=49.83333389999999 +lat_0=90 +lon_0=4.367486666666666 +x_0=150000.013 +y_0=5400088.438 +ellps=intl +towgs84=-99.1,53.3,-112.5,0.419,-0.83,1.885,-1.0 +units=m +no_defs </Projection>
-  <Projection name="EPSG:102065" >+proj=krovak +lat_0=49.5 +lon_0=24.83333333333333 +alpha=30.28813975277778 +k=0.9999 +x_0=0 +y_0=0 +ellps=bessel +units=m  +no_defs</Projection>
-  <Projection name="EPSG:102067" >+proj=krovak +lat_0=49.5 +lon_0=24.83333333333333 +alpha=0 +k=0.9999 +x_0=0 +y_0=0 +ellps=bessel +towgs84=570.8,85.7,462.8,4.998,1.587,5.261,3.56 +units=m +no_defs</Projection>
-  <Projection name="EPSG:2065" >+proj=krovak +lat_0=49.5 +lon_0=42.5 +alpha=30.28813972222222 +k=0.9999 +x_0=0 +y_0=0 +ellps=bessel +pm=ferro +units=m +no_defs</Projection>
-  <Projection name="EPSG:28992" >+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.999908 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +towgs84=565.2369,50.0087,465.658,-0.406857330322398,0.350732676542563,-1.8703473836068,4.0812 +no_defs</Projection>
-  <Projection name="EPSG:4326" >+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +to_meter=0.017453292519943295769236907684886</Projection>
   <Projection name="Mercator (epsg:3785)" >+proj=merc +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +ellps=WGS84 +datum=WGS84 +no_defs</Projection>
-  <Projection name="backup:4326" >+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +to_meter=0.017453292519943295769236907684886</Projection>
+  <Projection name="EPSG:4326" >+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +to_meter=0.017453292519943295769236907684886</Projection>
  </Projections>
 </MerkaartorList>

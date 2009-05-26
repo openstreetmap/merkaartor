@@ -144,6 +144,7 @@ void MerkaartorPreferences::save(bool UserPwdChanged)
 
 void MerkaartorPreferences::toOsmPref()
 {
+	qDebug() << "MerkaartorPreferences::toOsmPref";
 	if (getOfflineMode()) return;
 
 	if (getOsmUser().isEmpty() || getOsmPassword().isEmpty()) return;

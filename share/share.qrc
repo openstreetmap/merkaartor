@@ -5,5 +5,9 @@
     	<file alias="TmsServersList.xml">TmsServersList.xml</file>
     	<file alias="BookmarksList.xml">BookmarksList.xml</file>
     </qresource>
+    <qresource prefix="/proj">
+    	<file alias="epsg">proj/epsg</file>
+    	<file alias="esri">proj/esri</file>
+    </qresource>
 </RCC>
 
