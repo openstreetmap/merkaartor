@@ -60,7 +60,7 @@ QString YahooLegalMapAdapter::projection() const
 	return ("EPSG:3785");
 }
 
-QString YahooLegalMapAdapter::getQuery(const QRectF& wgs84Bbox, const QRectF& projBbox, const QRect& size) const
+QString YahooLegalMapAdapter::getQuery(const QRectF& wgs84Bbox, const QRectF& /*projBbox*/, const QRect& size) const
 {
 	if (size.width() < 150 || size.height() < 150)
 		return "";
@@ -71,10 +71,10 @@ QString YahooLegalMapAdapter::getQuery(const QRectF& wgs84Bbox, const QRectF& pr
 						.append("&HEIGHT=").append(QString::number(size.height()))
 						.append("&BBOX=")
 						.append(loc.toString(wgs84Bbox.bottomLeft().x(),'f',6)).append(",")
-						 .append(loc.toString(wgs84Bbox.bottomLeft().y(),'f',6)).append(",")
-						 .append(loc.toString(wgs84Bbox.topRight().x(),'f',6)).append(",")
-						 .append(loc.toString(wgs84Bbox.topRight().y(),'f',6))
-						 ;
+						.append(loc.toString(wgs84Bbox.bottomLeft().y(),'f',6)).append(",")
+						.append(loc.toString(wgs84Bbox.topRight().x(),'f',6)).append(",")
+						.append(loc.toString(wgs84Bbox.topRight().y(),'f',6))
+						;
 }
 
 IImageManager* YahooLegalMapAdapter::getImageManager()

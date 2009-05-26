@@ -53,7 +53,7 @@ void LayerWidget::mouseMoveEvent(QMouseEvent *event)
 	render(&px);
 	drag->setPixmap(px);
 
-	Qt::DropAction dropAction = drag->exec(Qt::MoveAction);
+	/*Qt::DropAction dropAction =*/ drag->exec(Qt::MoveAction);
 }
 
 QSize LayerWidget::minimumSizeHint () const

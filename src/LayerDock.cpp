@@ -56,7 +56,7 @@ void LayerDock::dragEnterEvent(QDragEnterEvent *event)
 {
 	p->theDropWidget = NULL;
 	if (event->mimeData()->hasFormat("application/x-layer"))
-		if (p->theDropWidget = dynamic_cast<LayerWidget*>(event->source()))
+		if ((p->theDropWidget = dynamic_cast<LayerWidget*>(event->source())))
 			event->acceptProposedAction();
 }
 
@@ -82,7 +82,7 @@ void LayerDock::dragMoveEvent(QDragMoveEvent *event)
 	}
 }
 
-void LayerDock::dragLeaveEvent(QDragLeaveEvent *event)
+void LayerDock::dragLeaveEvent(QDragLeaveEvent * /*event*/)
 {
 //	if (p->theDropWidget) {
 //		p->Layout->removeWidget(p->theDropWidget);
