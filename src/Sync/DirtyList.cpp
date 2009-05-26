@@ -148,18 +148,25 @@ bool DirtyListVisit::add(MapFeature* F)
 	if (F->isDeleted()) return false;
 	// TODO Needed to add children of updated imported features. Sure there is no advert cases? 
 	//if (!F->isDirty()) return false;
-	if (F->hasOSMId()) return false;
+
+	// Allow "Force Upload" of OSM objects
+	//if (F->hasOSMId()) return false;
 
 	if (Future.willBeErased(F))
 		return EraseFromHistory;
 	for (int i=0; i<AlreadyAdded.size(); ++i)
 		if (AlreadyAdded[i] == F)
 			return EraseResponse[i];
+
+	bool x;
 	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(F))
 	{
 		if (Pt->isInteresting())
 		{
-			bool x = addPoint(Pt);
+			if (F->hasOSMId())
+				x = updatePoint(Pt);
+			else
+				x = addPoint(Pt);
 			AlreadyAdded.push_back(F);
 			EraseResponse.push_back(x);
 			return x;
@@ -172,7 +179,10 @@ bool DirtyListVisit::add(MapFeature* F)
 		for (int i=0; i<R->size(); ++i)
 			if (!(R->get(i)->hasOSMId()) && notYetAdded(R->get(i)))
 				add(R->get(i));
-		bool x = addRoad(R);
+		if (F->hasOSMId())
+			x = updateRoad(R);
+		else
+			x = addRoad(R);
 		AlreadyAdded.push_back(F);
 		EraseResponse.push_back(x);
 		return x;
@@ -182,7 +192,10 @@ bool DirtyListVisit::add(MapFeature* F)
 		for (int i=0; i<Rel->size(); ++i)
 			if (!(Rel->get(i)->hasOSMId()) && notYetAdded(Rel->get(i)))
 				add(Rel->get(i));
-		bool x = addRelation(Rel);
+		if (F->hasOSMId())
+			x = updateRelation(Rel);
+		else
+			x = addRelation(Rel);
 		AlreadyAdded.push_back(F);
 		EraseResponse.push_back(x);
 		return x;

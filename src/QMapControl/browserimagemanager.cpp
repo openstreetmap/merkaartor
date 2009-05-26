@@ -248,6 +248,7 @@ void BrowserImageManager::pageLoadFinished(bool ok)
 
 		receivedImage(pt, R.hash);
 	} else {
+		loadingRequests.enqueue(R);
 		qDebug() << "BrowserImageManager::pageLoadFinished - Error: " << " Hash: " << R.hash;
 	}
 
@@ -309,6 +310,8 @@ void BrowserImageManager::loadingQueueEmpty()
 
 void BrowserImageManager::abortLoading()
 {
+	qDebug() << "BrowserImageManager::abortLoading";
+	page->triggerAction(QWebPage::Stop);
 	if (!loadingRequests.isEmpty()) {
 		LoadingRequest R = loadingRequests.dequeue();
 		loadingRequests.clear();

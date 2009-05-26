@@ -341,14 +341,16 @@ QRect ImageMapLayer::drawFull(const Projection& mainProj, QRect& rect) const
 	QRectF wgs84vp = QRectF(QPointF(intToAng(p->theProjection.viewport().bottomLeft().lon()), intToAng(p->theProjection.viewport().bottomLeft().lat()))
 						, QPointF(intToAng(p->theProjection.viewport().topRight().lon()), intToAng(p->theProjection.viewport().topRight().lat())));
 	QString url (p->theMapAdapter->getQuery(wgs84vp, vp, rect));
+	if (!url.isEmpty()) {
 
-	qDebug() << "ImageMapLayer::drawFull: getting: " << url;
+		qDebug() << "ImageMapLayer::drawFull: getting: " << url;
 
-	//p->theMapAdapter->getImageManager()->abortLoading();
-	QPixmap pm = p->theMapAdapter->getImageManager()->getImage(p->theMapAdapter,url);
-	if (!pm.isNull())  {
-		p->pm = pm.scaled(rect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-		p->theDelta = QPoint();
+		p->theMapAdapter->getImageManager()->abortLoading();
+		QPixmap pm = p->theMapAdapter->getImageManager()->getImage(p->theMapAdapter,url);
+		if (!pm.isNull())  {
+			p->pm = pm.scaled(rect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+			p->theDelta = QPoint();
+		}
 	}
 
 	const QPointF tl = mainProj.project(p->theProjection.viewport().topLeft());

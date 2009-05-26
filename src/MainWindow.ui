@@ -1109,7 +1109,7 @@
   </action>
   <action name="featureCommitAction" >
    <property name="text" >
-    <string>&amp;Commit to dirty layer</string>
+    <string>&amp;Force Upload</string>
    </property>
    <property name="toolTip" >
     <string>Commit feature to the dirty layer</string>

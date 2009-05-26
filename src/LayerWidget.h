@@ -146,18 +146,6 @@ class UploadedLayerWidget : public LayerWidget
 		virtual void initActions();
 };
 
-class ExtractedLayerWidget : public LayerWidget
-{
-	Q_OBJECT
-
-	public:
-		ExtractedLayerWidget(ExtractedMapLayer* aLayer, QWidget* aParent = 0);
-		virtual ~ExtractedLayerWidget() {};
-
-	public:
-		virtual void initActions();
-};
-
 class OsbLayerWidget : public LayerWidget
 {
 	Q_OBJECT

@@ -160,7 +160,8 @@ void MerkaartorPreferences::toOsmPref()
 	theTmsServerList.toXml(root);
 	theWmsServerList.toXml(root);
 
-	QByteArray PrefsXML = qCompress(theXmlDoc.toString().toUtf8(), 9).toBase64();
+	QByteArray ba = qCompress(theXmlDoc.toString().toUtf8());
+	QByteArray PrefsXML = ba.toBase64();
 
 	QStringList slicedPrefs;
 	for (int i=0; i<PrefsXML.size(); i+=254) {
@@ -190,6 +191,34 @@ void MerkaartorPreferences::toOsmPref()
 
 }
 
+void MerkaartorPreferences::fromOsmPref()
+{
+	if (getOfflineMode()) return;
+
+	if (getOsmUser().isEmpty() || getOsmPassword().isEmpty()) return;
+
+	QUrl osmWeb;
+	osmWeb.setScheme("http");
+	osmWeb.setAuthority(getOsmWebsite());
+	if (osmWeb.port() == -1)
+		osmWeb.setPort(80);
+
+	httpRequest.setHost(osmWeb.host(), osmWeb.port());
+
+	QHttpRequestHeader Header("GET", QString("/api/%1/user/preferences/").arg(apiVersion()));
+	qDebug() << "MerkaartorPreferences::fromOsmPref :" <<  QString("GET /api/%1/user/preferences/").arg(apiVersion());
+	if (osmWeb.port() == 80)
+		Header.setValue("Host",osmWeb.host());
+	else
+		Header.setValue("Host",osmWeb.host() + ':' + QString::number(osmWeb.port()));
+
+	QString auth = QString("%1:%2").arg(getOsmUser()).arg(getOsmPassword());
+	QByteArray ba_auth = auth.toUtf8().toBase64();
+	Header.setValue("Authorization", QString("Basic %1").arg(QString(ba_auth)));
+
+	OsmPrefLoadId = httpRequest.request(Header, NULL, &OsmPrefContent);
+}
+
 void MerkaartorPreferences::on_requestFinished ( int id, bool error )
 {
 	if (id == OsmPrefLoadId && !error) {
@@ -212,7 +241,7 @@ void MerkaartorPreferences::on_requestFinished ( int id, bool error )
 		if (!sz)
 			return;
 
-		QStringList slicedPrefs;
+		QVector<QString> slicedPrefs(sz);
 		QString k, v;
 		for (int i=0; i < prefList.size(); ++i) {
 			QDomElement e = prefList.at(i).toElement();
@@ -220,7 +249,8 @@ void MerkaartorPreferences::on_requestFinished ( int id, bool error )
 			v = e.attribute("v");
 			if (k.startsWith("MerkaartorPrefsXML")) {
 				int idx = k.right(3).toInt();
-				slicedPrefs.insert(idx, v);
+				if (idx < sz)
+					slicedPrefs[idx] = v;
 			}
 		}
 
@@ -231,7 +261,8 @@ void MerkaartorPreferences::on_requestFinished ( int id, bool error )
 		//qDebug() << "Size: " << PrefsXML.size();
 
 		QDomDocument theXmlDoc;
-		if (!theXmlDoc.setContent(qUncompress(QByteArray::fromBase64(PrefsXML)))) {
+		QByteArray ba = QByteArray::fromBase64(PrefsXML);
+		if (!theXmlDoc.setContent(qUncompress(ba))) {
 			qDebug() << "Invalid OSM Prefs XML";
 			return;
 		}
@@ -316,34 +347,6 @@ void MerkaartorPreferences::deleteOsmPref(const QString& k)
 	Header.setValue("Authorization", QString("Basic %1").arg(QString(ba_auth)));
 
 	httpRequest.request(Header);
-}
-
-void MerkaartorPreferences::fromOsmPref()
-{
-	if (getOfflineMode()) return;
-
-	if (getOsmUser().isEmpty() || getOsmPassword().isEmpty()) return;
-
-	QUrl osmWeb;
-	osmWeb.setScheme("http");
-	osmWeb.setAuthority(getOsmWebsite());
-	if (osmWeb.port() == -1)
-		osmWeb.setPort(80);
-
-	httpRequest.setHost(osmWeb.host(), osmWeb.port());
-
-	QHttpRequestHeader Header("GET", QString("/api/%1/user/preferences/").arg(apiVersion()));
-	qDebug() << "MerkaartorPreferences::fromOsmPref :" <<  QString("GET /api/%1/user/preferences/").arg(apiVersion());
-	if (osmWeb.port() == 80)
-		Header.setValue("Host",osmWeb.host());
-	else
-		Header.setValue("Host",osmWeb.host() + ':' + QString::number(osmWeb.port()));
-
-	QString auth = QString("%1:%2").arg(getOsmUser()).arg(getOsmPassword());
-	QByteArray ba_auth = auth.toUtf8().toBase64();
-	Header.setValue("Authorization", QString("Basic %1").arg(QString(ba_auth)));
-
-	OsmPrefLoadId = httpRequest.request(Header, NULL, &OsmPrefContent);
 }
 
 void MerkaartorPreferences::on_responseHeaderReceived(const QHttpResponseHeader & hdr)

@@ -84,6 +84,9 @@ void LayerWidget::paintEvent(QPaintEvent*)
 		P.setPen(QColor(0,0,0));
 		P.drawText(rect().adjusted(23,0,0,-1), Qt::AlignLeft | Qt::AlignVCenter , theLayer->name());
 	}
+	if (!getMapLayer()->isUploadable()) {
+		P.fillRect(rect().adjusted(20,0,0,-1),QBrush(Qt::red, Qt::BDiagPattern));
+	}
 
 	if (theLayer->isVisible())
 		P.drawPixmap(QPoint(2, rect().center().y()-visibleIcon.height()/2), visibleIcon);
@@ -496,34 +499,6 @@ void UploadedLayerWidget::initActions()
 
 	closeAction = new QAction(tr("Clear"), this);
 	connect(closeAction, SIGNAL(triggered()), this, SLOT(clear()));
-	ctxMenu->addAction(closeAction);
-	associatedMenu->addAction(closeAction);
-	closeAction->setEnabled(theLayer->canDelete());
-}
-
-// ExtractedLayerWidget
-
-ExtractedLayerWidget::ExtractedLayerWidget(ExtractedMapLayer* aLayer, QWidget* aParent)
-	: LayerWidget(aLayer, aParent)
-{
-	backColor = QColor(165,209,255);
-	initActions();
-}
-
-void ExtractedLayerWidget::initActions()
-{
-	LayerWidget::initActions();
-
-	actZoom = new QAction(tr("Zoom"), ctxMenu);
-	ctxMenu->addAction(actZoom);
-	associatedMenu->addAction(actZoom);
-	connect(actZoom, SIGNAL(triggered(bool)), this, SLOT(zoomLayer(bool)));
-
-	ctxMenu->addSeparator();
-	associatedMenu->addSeparator();
-
-	closeAction = new QAction(tr("Close"), this);
-	connect(closeAction, SIGNAL(triggered()), this, SLOT(close()));
 	ctxMenu->addAction(closeAction);
 	associatedMenu->addAction(closeAction);
 	closeAction->setEnabled(theLayer->canDelete());

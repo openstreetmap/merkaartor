@@ -96,6 +96,7 @@ public:
 	virtual void setSelected(bool b);
 	virtual void setEnabled(bool b);
 	virtual void setReadonly(bool b);
+	virtual void setUploadable(bool b);
 	virtual LayerWidget* newWidget(void) = 0;
 
 	virtual void setAlpha(const qreal alpha);
@@ -120,7 +121,7 @@ public:
 	int getDirtySize();
 
 	virtual bool canDelete();
-	virtual bool isUploadable() {return true;}
+	virtual bool isUploadable() const;
 	virtual bool isReadonly() const;
 	virtual bool isTrack() {return false;}
 	virtual bool arePointsDrawable() {return true;}
@@ -148,22 +149,6 @@ public:
 
 	virtual /* const */ LayerType classType() {return MapLayer::DrawingMapLayerType;}
     virtual const LayerGroups classGroups() {return (MapLayer::OSM);}
-};
-
-class ExtractedMapLayer : public DrawingMapLayer
-{
-	Q_OBJECT
-public:
-	ExtractedMapLayer(const QString& aName);
-	virtual ~ExtractedMapLayer();
-
-	static ExtractedMapLayer* fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress);
-
-	virtual /* const */ LayerType classType() {return MapLayer::ExtractedMapLayerType;}
-	virtual const LayerGroups classGroups() {return(MapLayer::OSM);}
-	virtual LayerWidget* newWidget(void);
-
-	virtual bool isUploadable() {return false;}
 };
 
 class TrackMapLayer : public MapLayer

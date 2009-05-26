@@ -469,7 +469,7 @@ void commitFeatures(MapDocument* theDocument, CommandList* theList, PropertiesDo
 	QList<MapFeature*> Features;
 
 	for (int i=0; i<theDock->size(); ++i)
-		if (!theDock->selection(i)->layer()->isUploadable())
+		if (!theDock->selection(i)->isDirty())
 			Features.push_back(theDock->selection(i));
 	for (int i=0; i<Features.size(); ++i) {
 		if (TrackPoint* N = dynamic_cast<TrackPoint *>(Features[i])) {
@@ -479,9 +479,7 @@ void commitFeatures(MapDocument* theDocument, CommandList* theList, PropertiesDo
 			theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),R,true));
 			for (int j=0; j < R->size(); ++j) {
 				if (!Features.contains(R->get(j))) {
-					if ( !(R->get(j)->layer()->isUploadable()) ) {
-						theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),R->get(j),true));
-					}
+					theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),R->get(j),true));
 				}
 			}
 		}

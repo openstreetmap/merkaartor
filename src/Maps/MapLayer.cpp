@@ -40,6 +40,7 @@ public:
 		selected = false;
 		Enabled = true;
 		Readonly = false;
+		Uploadable = true;
 	}
 	~MapLayerPrivate()
 	{
@@ -55,6 +56,7 @@ public:
 	bool selected;
 	bool Enabled;
 	bool Readonly;
+	bool Uploadable;
 	LayerWidget* theWidget;
 	qreal alpha;
 	int dirtyLevel;
@@ -184,6 +186,15 @@ void MapLayer::setReadonly(bool b) {
 bool MapLayer::isReadonly() const
 {
 	return p->Readonly;
+}
+
+void MapLayer::setUploadable(bool b) {
+	p->Uploadable = b;
+}
+
+bool MapLayer::isUploadable() const
+{
+	return p->Uploadable;
 }
 
 void MapLayer::add(MapFeature* aFeature)
@@ -565,35 +576,6 @@ DrawingMapLayer * DrawingMapLayer::doFromXML(DrawingMapLayer* l, MapDocument* d,
 	return l;
 }
 
-// ExtractedMapLayer
-
-ExtractedMapLayer::ExtractedMapLayer(const QString & aName)
-	: DrawingMapLayer(aName)
-{
-	p->Visible = true;
-}
-
-ExtractedMapLayer::~ ExtractedMapLayer()
-{
-}
-
-ExtractedMapLayer* ExtractedMapLayer::fromXML(MapDocument* d, const QDomElement e, QProgressDialog & progress)
-{
-	ExtractedMapLayer* l = new ExtractedMapLayer(e.attribute("name"));
-	d->add(l);
-	if (!DrawingMapLayer::doFromXML(l, d, e, progress)) {
-		delete l;
-		return NULL;
-	}
-	return l;
-}
-
-LayerWidget* ExtractedMapLayer::newWidget(void)
-{
-	p->theWidget = new ExtractedLayerWidget(this);
-	return p->theWidget;
-}
-
 // TrackMapLayer
 
 TrackMapLayer::TrackMapLayer(const QString & aName, const QString& filename)
@@ -615,8 +597,8 @@ LayerWidget* TrackMapLayer::newWidget(void)
 
 void TrackMapLayer::extractLayer()
 {
-	ExtractedMapLayer* extL = new ExtractedMapLayer(tr("Extract - %1").arg(name()));
-	CommandList* theList = new CommandList(MainWindow::tr("Extracted Layer '%1'").arg(name()), NULL);
+	DrawingMapLayer* extL = new DrawingMapLayer(tr("Extract - %1").arg(name()));
+	extL->setUploadable(false);
 
 	TrackPoint* P;
 	QList<TrackPoint*> PL;
@@ -679,18 +661,14 @@ void TrackMapLayer::extractLayer()
 			R->setLastUpdated(MapFeature::OSMServer);
 			if (M_PREFS->apiVersionNum() < 0.6)
 				R->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
-			theList->add(new AddFeatureCommand(extL,R,true));
+			extL->add(R);
 			for (int i=0; i < PL.size(); i++) {
-				theList->add(new AddFeatureCommand(extL,PL[i],true));
-				theList->add(new RoadAddTrackPointCommand(R,PL[i],extL));
+				extL->add(PL[i]);
+				R->add(PL[i]);
 			}
 		}
 	}
 
-	if (theList->size()) {
-		p->theDocument->addHistory(theList);
-		//delete theList;
-	}
 	p->theDocument->add(extL);
 }
 

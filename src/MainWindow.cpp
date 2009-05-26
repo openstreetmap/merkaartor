@@ -773,7 +773,8 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 					 "Are you absolutely sure this KML can legally be imported in OSM?"),
 					 QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes)
 			{
-				newLayer = new TrackMapLayer( baseFileName );
+				newLayer = new DrawingMapLayer( baseFileName );
+				newLayer->setUploadable(false);
 				mapDocument->add(newLayer);
 				importOK = mapDocument->importKML(baseFileName, (TrackMapLayer *)newLayer);
 			} else
@@ -781,9 +782,10 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 		}
 #ifdef USE_GDAL
 		else if (fn.endsWith(".shp")) {
-			newLayer = new ExtractedMapLayer( baseFileName );
+			newLayer = new DrawingMapLayer( baseFileName );
+			newLayer->setUploadable(false);
 			mapDocument->add(newLayer);
-			importOK = mapDocument->importSHP(baseFileName, (ExtractedMapLayer *)newLayer);
+			importOK = mapDocument->importSHP(baseFileName, (DrawingMapLayer*)newLayer);
 		}
 #endif
 
@@ -1249,7 +1251,7 @@ void MainWindow::on_roadBreakAction_triggered()
 
 void MainWindow::on_featureCommitAction_triggered()
 {
-	CommandList* theList = new CommandList(MainWindow::tr("Commit Roads"), NULL);
+	CommandList* theList = new CommandList(MainWindow::tr("Force Feature upload"), NULL);
 	commitFeatures(theDocument, theList, theProperties);
 	if (theList->empty())
 		delete theList;
@@ -1321,8 +1323,10 @@ void MainWindow::on_relationAddMemberAction_triggered()
 	addRelationMember(theDocument, theList, theProperties);
 	if (theList->empty())
 		delete theList;
-	else
+	else {
 		theDocument->addHistory(theList);
+		invalidateView();
+	}
 }
 
 void MainWindow::on_relationRemoveMemberAction_triggered()
@@ -1331,8 +1335,10 @@ void MainWindow::on_relationRemoveMemberAction_triggered()
 	removeRelationMember(theDocument, theList, theProperties);
 	if (theList->empty())
 		delete theList;
-	else
+	else {
 		theDocument->addHistory(theList);
+		invalidateView();
+	}
 }
 
 void MainWindow::on_createRelationAction_triggered()

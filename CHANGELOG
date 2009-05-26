@@ -1,4 +1,6 @@
 v0.14
+    * CHG : Replaced "Commit..." command by "Force Upload". Allows to force update of existing features or to upload imported features (such as SHP, KML, ...)
+    * FIX : User preferences thru OSM preferences system works again
 	* FIX : Support projections when importing SHP files
 	* ADD : Drag & drop re-ordering of the layers
 	* ADD : Support for multiple image layers (closes #1400)

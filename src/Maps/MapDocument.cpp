@@ -142,7 +142,7 @@ MapDocument* MapDocument::fromXML(const QDomElement e, double version, LayerDock
 			/* TrackMapLayer* l = */ TrackMapLayer::fromXML(NewDoc, c, progress);
 		} else
 		if (c.tagName() == "ExtractedMapLayer") {
-			/* ExtractedMapLayer* l = */ ExtractedMapLayer::fromXML(NewDoc, c, progress);
+			/* ExtractedMapLayer* l = */ DrawingMapLayer::fromXML(NewDoc, c, progress);
 		} else
 		if (c.tagName() == "OsbMapLayer") {
 			/* OsbMapLayer* l = */ OsbMapLayer::fromXML(NewDoc, c, progress);

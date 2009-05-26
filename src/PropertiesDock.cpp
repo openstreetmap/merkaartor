@@ -173,7 +173,7 @@ void PropertiesDock::checkMenuStatus()
 		if (isChildOfRelation(Selection[i]))
 			++NumRelationChild;
 
-		if (Selection[i]->layer() && !Selection[i]->layer()->isUploadable())
+		if (!Selection[i]->isDirty())
 			++NumCommitableFeature;
 	}
 	Main->createRelationAction->setEnabled(Selection.size());
