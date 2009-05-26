@@ -169,13 +169,15 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 //				if (aLast)
 //					view()->properties()->setSelection(aLast);
 			}
-			if (
-				(M_PREFS->getMouseSingleButton() && (ev->modifiers() & Qt::ShiftModifier) && !aLast) ||
-				(!M_PREFS->getMouseSingleButton() && !aLast)
-				)
-			{
-				EndDrag = StartDrag = projection().inverse(ev->pos());
-				Dragging = true;
+			if (view()->properties()->selection().size() == 0) {
+				if (
+					(M_PREFS->getMouseSingleButton() && (ev->modifiers() & Qt::ShiftModifier) && !aLast) ||
+					(!M_PREFS->getMouseSingleButton() && !aLast)
+					)
+				{
+					EndDrag = StartDrag = projection().inverse(ev->pos());
+					Dragging = true;
+				}
 			}
 		}
 		view()->properties()->checkMenuStatus();
