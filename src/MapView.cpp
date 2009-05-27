@@ -254,6 +254,9 @@ void MapView::updateLayersImage()
 
 void MapView::buildFeatureSet(QRegion invalidRegion, Projection& aProj)
 {
+	if (!theDocument)
+		return;
+
 	theFeatures.clear();
 	theCoastlines.clear();
 
@@ -261,6 +264,7 @@ void MapView::buildFeatureSet(QRegion invalidRegion, Projection& aProj)
 		theDocument->getLayer(i)->invalidate(theDocument, aProj.viewport());
 		Main->properties()->adjustSelection();
 	}
+	sortRenderingPriorityInLayers();
 
 	QList <CoordBox> coordRegion;
 	for (int i=0; i < invalidRegion.rects().size(); ++i) {
@@ -595,24 +599,42 @@ void MapView::drawFeatures(QPainter & P, Projection& aProj)
 {
 	M_STYLE->initialize(P, aProj);
 
+	//RenderPriority curPriority;
+	//int i=0;
+	//int curI;
+	//while (i < theFeatures.size())
+	//{
+	//	curPriority = theFeatures[i]->getRenderPriority();
+	//	curI = i;
+	//	for (int j = 0; j < M_STYLE->size(); ++j)
+	//	{
+	//		i = curI;
+	//		PaintStyleLayer *Current = M_STYLE->get(j);
+
+	//		while ((i < theFeatures.size()) && (theFeatures[i]->getRenderPriority() == curPriority))
+	//		{
+	//			P.save();
+	//			P.setOpacity(theFeatures[i]->layer()->getAlpha());
+	//			if (Road * R = dynamic_cast < Road * >(theFeatures[i]))
+	//				Current->draw(R);
+	//			else if (TrackPoint * Pt = dynamic_cast < TrackPoint * >(theFeatures[i]))
+	//				Current->draw(Pt);
+	//			else if (Relation * RR = dynamic_cast < Relation * >(theFeatures[i]))
+	//				Current->draw(RR); 
+	//			P.restore();
+
+	//			theFeatures[i]->draw(P, aProj);
+	//			++i;
+	//		}
+	//	}
+	//}
+
+
+
+
 	for (int i = 0; i < M_STYLE->size(); ++i)
 	{
 		PaintStyleLayer *Current = M_STYLE->get(i);
-
-#ifndef NDEBUG
-		EPBackgroundLayer* bl = dynamic_cast<EPBackgroundLayer*> (Current);
-		if ((bl) && (!M_PREFS->getStyleBackgroundVisible()))
-			continue;
-		EPForegroundLayer* fl = dynamic_cast<EPForegroundLayer*> (Current);
-		if ((fl) && (!M_PREFS->getStyleForegroundVisible()))
-			continue;
-		EPTouchupLayer* tl = dynamic_cast<EPTouchupLayer*> (Current);
-		if ((tl) && (!M_PREFS->getStyleTouchupVisible()))
-			continue;
-#endif
-		EPLabelLayer* nl = dynamic_cast<EPLabelLayer*> (Current);
-		if ((nl) && (!M_PREFS->getNamesVisible()))
-			continue;
 
 		P.save();
 		for (int i=0; i<theFeatures.size(); i++)
@@ -737,11 +759,7 @@ void MapView::updateStaticBuffer()
 	painter.setClipRegion(invalidRegion);
 	painter.setRenderHint(QPainter::Antialiasing);
 
-	if (theDocument)
-	{
-		sortRenderingPriorityInLayers();
-		drawFeatures(painter, theProjection);
-	}
+	drawFeatures(painter, theProjection);
 
 	invalidRegion = QRegion();
 	StaticBufferUpToDate = true;

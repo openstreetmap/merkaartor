@@ -14,6 +14,9 @@
 #include <QDomElement>
 #include <math.h>
 
+#define CAPSTYLE Qt::RoundCap
+#define JOINSTYLE Qt::RoundJoin
+
 FeaturePainter::FeaturePainter()
 : theSelector(0),
   ZoomLimitSet(false), ZoomUnder(0), ZoomUpper(10e6),
@@ -619,25 +622,25 @@ TagSelectorMatchResult FeaturePainter::matchesTag(const MapFeature* F) const
 
 	if (!theSelector) return TagSelect_NoMatch;
 	// Special casing for multipolygon roads
-	if (const Road* R = dynamic_cast<const Road*>(F))
-	{
-		// TODO create a isPartOfMultiPolygon(R) function for this
-		for (int i=0; i<R->sizeParents(); ++i)
-		{
-			if (const Relation* Parent = dynamic_cast<const Relation*>(R->getParent(i)))
-				if (Parent->tagValue("type","") == "multipolygon")
-					return TagSelect_NoMatch;
-		}
-	}
+	//if (const Road* R = dynamic_cast<const Road*>(F))
+	//{
+	//	// TODO create a isPartOfMultiPolygon(R) function for this
+	//	for (int i=0; i<R->sizeParents(); ++i)
+	//	{
+	//		if (const Relation* Parent = dynamic_cast<const Relation*>(R->getParent(i)))
+	//			if (Parent->tagValue("type","") == "multipolygon")
+	//				return TagSelect_NoMatch;
+	//	}
+	//}
 	if ((res = theSelector->matches(F)))
 		return res;
 	// Special casing for multipolygon relations
-	if (const Relation* R = dynamic_cast<const Relation*>(F))
-	{
-		for (int i=0; i<R->size(); ++i)
-			if ((res = theSelector->matches(R->get(i))))
-				return res;
-	}
+	//if (const Relation* R = dynamic_cast<const Relation*>(F))
+	//{
+	//	for (int i=0; i<R->size(); ++i)
+	//		if ((res = theSelector->matches(R->get(i))))
+	//			return res;
+	//}
 	return TagSelect_NoMatch;
 }
 
@@ -675,7 +678,8 @@ void FeaturePainter::drawBackground(Road* R, QPainter& thePainter, const Project
 		if (WW >= 0)
 		{
 			QPen thePen(BackgroundColor,WW);
-			thePen.setCapStyle(Qt::RoundCap);
+			thePen.setCapStyle(CAPSTYLE);
+			thePen.setJoinStyle(JOINSTYLE);
 			////thePainter.strokePath(R->getPath(),thePen);
 			thePainter.setPen(thePen);
 		}
@@ -716,7 +720,8 @@ void FeaturePainter::drawBackground(Relation* R, QPainter& thePainter, const Pro
 	double WW = BackgroundOffset;
 	if (WW < 0) return;
 	QPen thePen(BackgroundColor,WW);
-	thePen.setCapStyle(Qt::RoundCap);
+	thePen.setCapStyle(CAPSTYLE);
+	thePen.setJoinStyle(JOINSTYLE);
 	thePainter.setPen(thePen);
 	thePainter.setBrush(Qt::NoBrush);
 	thePainter.drawPath(R->getPath());
@@ -733,7 +738,8 @@ void FeaturePainter::drawForeground(Road* R, QPainter& thePainter, const Project
 		WW = PixelPerM*R->widthOf()*ForegroundScale+ForegroundOffset;
 		if (WW < 0) return;
 		QPen thePen(ForegroundColor,WW);
-		thePen.setCapStyle(Qt::RoundCap);
+		thePen.setCapStyle(CAPSTYLE);
+		thePen.setJoinStyle(JOINSTYLE);
 		if (ForegroundDashSet)
 		{
 			QVector<qreal> Pattern;
@@ -774,7 +780,8 @@ void FeaturePainter::drawForeground(Relation* R, QPainter& thePainter, const Pro
 		WW = ForegroundOffset;
 		if (WW < 0) return;
 		QPen thePen(ForegroundColor,WW);
-		thePen.setCapStyle(Qt::RoundCap);
+		thePen.setCapStyle(CAPSTYLE);
+		thePen.setJoinStyle(JOINSTYLE);
 		if (ForegroundDashSet)
 		{
 			QVector<qreal> Pattern;
@@ -850,7 +857,8 @@ void FeaturePainter::drawTouchup(Road* R, QPainter& thePainter, const Projection
 		if (WW > 0)
 		{
 			QPen thePen(TouchupColor,WW);
-			thePen.setCapStyle(Qt::FlatCap);
+			thePen.setCapStyle(CAPSTYLE);
+			thePen.setJoinStyle(JOINSTYLE);
 			if (TouchupDashSet)
 			{
 				QVector<qreal> Pattern;

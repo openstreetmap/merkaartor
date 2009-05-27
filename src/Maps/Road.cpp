@@ -128,13 +128,16 @@ QString Road::description() const
 	return QString("%1").arg(id());
 }
 
-RenderPriority Road::renderPriority(double aPixelPerM) const
+RenderPriority Road::renderPriority(double aPixelPerM) 
 {
+	// FIWME Segments of a road with different layers are wrongly painted (rounded corners)
 	Q_UNUSED(aPixelPerM)
 	double a = area();
 	if (a)
-		return RenderPriority(RenderPriority::IsArea,fabs(a));
-	return RenderPriority(RenderPriority::IsLinear,p->Layer*-1.);
+		setRenderPriority(RenderPriority(RenderPriority::IsArea,-fabs(a)));
+	else
+		setRenderPriority(RenderPriority(RenderPriority::IsLinear,p->Layer));
+	return getRenderPriority();
 }
 
 void Road::add(TrackPoint* Pt)

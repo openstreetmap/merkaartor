@@ -31,7 +31,7 @@ class TrackSegment : public MapFeature
 		void cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const QList<MapFeature*>& Alternatives);
 		virtual bool notEverythingDownloaded() const;
 		virtual QString description() const;
-		virtual RenderPriority renderPriority(double aPixelPerM) const;
+		virtual RenderPriority renderPriority(double aPixelPerM);
 
 		void add(TrackPoint* aPoint);
 		void add(TrackPoint* Pt, int Idx);

@@ -47,18 +47,18 @@ class EditPaintStylePrivate
 		EditPaintStylePrivate(QPainter& P, const Projection& aProj)
 			: thePainter(P), theProjection(aProj)
 		{
-			First.setP(this);
-			Second.setP(this);
-			Third.setP(this);
-			Fourth.setP(this);
+			bgLayer.setP(this);
+			fgLayer.setP(this);
+			tchLayer.setP(this);
+			lblLayer.setP(this);
 		}
 
 		QPainter& thePainter;
 		const Projection& theProjection;
-		EPBackgroundLayer First;
-		EPForegroundLayer Second;
-		EPTouchupLayer Third;
-		EPLabelLayer Fourth;
+		EPBackgroundLayer bgLayer;
+		EPForegroundLayer fgLayer;
+		EPTouchupLayer tchLayer;
+		EPLabelLayer lblLayer;
 		bool isTrackPointVisible;
 		bool isTrackSegmentVisible;
 };
@@ -83,9 +83,15 @@ void EPBackgroundLayer::setP(EditPaintStylePrivate* ap)
 void EPBackgroundLayer::draw(Road* R)
 {
 	const FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
-	if (paintsel)
+	if (paintsel) {
 		paintsel->drawBackground(R,p->thePainter,p->theProjection);
-	else if (/*!globalZoom(p->theProjection) && */!R->hasEditPainter()) //FIXME Untagged roads level of zoom?
+		return;
+	}
+	for (int i=0; i<R->sizeParents(); ++i) {
+		if ((paintsel = R->getParent(i)->getEditPainter(p->theProjection.pixelPerM())))
+			return;
+	}
+	//else if (/*!globalZoom(p->theProjection) && */!R->hasEditPainter() && !R->sizeParents()) //FIXME Untagged roads level of zoom?
 	{
 		QPen thePen(QColor(0,0,0),1);
 
@@ -281,10 +287,16 @@ void EditPaintStyle::initialize(QPainter& P, const Projection& theProjection)
 	}
 
 	p = new EditPaintStylePrivate(P,theProjection);
-	add(&p->First);
-	add(&p->Second);
-	add(&p->Third);
-	add(&p->Fourth);
+#ifndef NDEBUG
+	if (M_PREFS->getStyleBackgroundVisible())
+		add(&p->bgLayer);
+	if (M_PREFS->getStyleForegroundVisible())
+		add(&p->fgLayer);
+	if (M_PREFS->getStyleTouchupVisible())
+		add(&p->tchLayer);
+#endif
+	if (M_PREFS->getNamesVisible())
+		add(&p->lblLayer);
 
 	p->isTrackPointVisible = M_PREFS->getTrackPointsVisible();
 	p->isTrackSegmentVisible = M_PREFS->getTrackSegmentsVisible();

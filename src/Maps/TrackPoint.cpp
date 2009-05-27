@@ -205,9 +205,11 @@ void TrackPoint::partChanged(MapFeature*, int)
 {
 }
 
-RenderPriority TrackPoint::renderPriority(double) const
+RenderPriority TrackPoint::renderPriority(double) 
 {
-	return RenderPriority(RenderPriority::IsSingular,0);
+	RenderPriority apriority(RenderPriority::IsSingular,0.); 
+	setRenderPriority(apriority);
+	return apriority;
 }
 
 QString TrackPoint::toXML(int lvl, QProgressDialog * progress)

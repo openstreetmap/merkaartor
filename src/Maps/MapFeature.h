@@ -27,12 +27,18 @@ class RenderPriority
 {
 	public:
 		typedef enum { IsArea, IsLinear, IsSingular } Class;
+		RenderPriority()
+			: theClass(IsLinear), InClassPriority(0.0) { }
 		RenderPriority(Class C, double IC)
 			: theClass(C), InClassPriority(IC) { }
 		bool operator<(const RenderPriority& R) const
 		{
 			return (theClass < R.theClass) ||
-				( (theClass == R.theClass) && (InClassPriority > R.InClassPriority) );
+				( (theClass == R.theClass) && (InClassPriority < R.InClassPriority) );
+		}
+		bool operator==(const RenderPriority& R) const
+		{
+			return ((theClass == R.theClass) && (InClassPriority == R.InClassPriority));
 		}
 	private:
 		Class theClass;
@@ -109,7 +115,9 @@ class MapFeature : public QObject
 		int versionNumber() const;
 		void setVersionNumber(int vn);
 		virtual QString description() const = 0;
-		virtual RenderPriority renderPriority(double aPixelPerM) const = 0;
+		virtual RenderPriority renderPriority(double aPixelPerM) = 0;
+		virtual RenderPriority getRenderPriority();
+		virtual void setRenderPriority(RenderPriority aPriority);
 
 		/** Set the tag "key=value" to the current object
 		 * If a tag with the same key exist, it is replaced

@@ -116,6 +116,7 @@ class MapFeaturePrivate
 		bool Deleted;
 		bool Uploaded;
 		qint64 LongId;
+		RenderPriority theRenderPriority;
 };
 
 void MapFeaturePrivate::initVersionNumber()
@@ -163,6 +164,16 @@ void MapFeature::setLayer(MapLayer* aLayer)
 MapLayer* MapFeature::layer()
 {
 	return dynamic_cast<MapLayer*>(parent());
+}
+
+RenderPriority MapFeature::getRenderPriority()
+{
+	return p->theRenderPriority;
+}
+
+void MapFeature::setRenderPriority(RenderPriority aPriority)
+{
+	p->theRenderPriority = aPriority;
 }
 
 void MapFeature::setLastUpdated(MapFeature::ActorType A)
@@ -432,7 +443,7 @@ void MapFeaturePrivate::updatePainters(double PixelPerM)
 		if (!PossiblePainters.size())
 			PossiblePainters = DefaultPainters;
 		PossiblePaintersUpToDate = true;
-		HasPainter = PossiblePainters.size();
+		HasPainter = (PossiblePainters.size() > 0);
 	}
 	CurrentPainter = 0;
 	PixelPerMForPainter = PixelPerM;

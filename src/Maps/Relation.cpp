@@ -92,9 +92,19 @@ QString Relation::description() const
 	return QString(QApplication::translate("MapFeature", "relationship %1")).arg(id());
 }
 
-RenderPriority Relation::renderPriority(double /* aPixelPerM */) const
+RenderPriority Relation::renderPriority(double aPixelPerM)
 {
-	return RenderPriority(RenderPriority::IsLinear,0);
+	//FIXME Not good! If a relation is larger than an area, the area is painted first anyway
+	//setRenderPriority(RenderPriority(RenderPriority::IsArea,0));
+	//return getRenderPriority();
+
+	RenderPriority aPriority(RenderPriority::IsSingular, 0.);
+	for (int i=0; i<p->Members.size(); ++i) {
+		if (p->Members[i].second->renderPriority(aPixelPerM) < aPriority)
+			aPriority = p->Members[i].second->getRenderPriority();
+	}
+	setRenderPriority(aPriority);
+	return aPriority;
 }
 
 CoordBox Relation::boundingBox() const

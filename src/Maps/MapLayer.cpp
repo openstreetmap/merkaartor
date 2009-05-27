@@ -85,7 +85,7 @@ class SortAccordingToRenderingPriority
 
  void MapLayerPrivate::sortRenderingPriority(double aPixelPerM)
 {
- 	std::sort(Features.begin(),Features.end(),SortAccordingToRenderingPriority(aPixelPerM));
+ 	qSort(Features.begin(),Features.end(),SortAccordingToRenderingPriority(aPixelPerM));
   	RenderPriorityUpToDate = true;
  	RenderPriorityForPixelPerM = aPixelPerM;
 }
