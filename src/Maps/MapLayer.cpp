@@ -292,7 +292,7 @@ QList<MapFeature *> MapLayer::get()
 
 MapFeature* MapLayer::get(int i)
 {
-	return p->Features[i];
+	return p->Features.at(i);
 }
 
 MapFeature* MapLayer::get(const QString& id, bool exact)

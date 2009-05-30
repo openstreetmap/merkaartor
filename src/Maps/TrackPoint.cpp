@@ -79,6 +79,7 @@ const Coord& TrackPoint::position() const
 void TrackPoint::setPosition(const Coord& aCoord)
 {
 	Position = aCoord;
+	BBox = CoordBox(Position,Position);
 	ProjectionRevision = 0;
 	notifyChanges();
 }
@@ -132,7 +133,7 @@ bool TrackPoint::notEverythingDownloaded() const
 
 CoordBox TrackPoint::boundingBox() const
 {
-	return CoordBox(Position,Position);
+	return BBox;
 }
 
 #ifdef GEOIMAGE

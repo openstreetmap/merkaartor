@@ -355,7 +355,7 @@ MapLayer* MapDocument::getLayer(const QString& id)
 
 MapLayer* MapDocument::getLayer(int i)
 {
-	return p->Layers[i];
+	return p->Layers.at(i);
 }
 
 const MapLayer* MapDocument::getLayer(int i) const

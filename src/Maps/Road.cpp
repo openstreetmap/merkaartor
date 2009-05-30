@@ -29,7 +29,7 @@ class RoadPrivate
 {
 	public:
 		RoadPrivate()
-		: SmoothedUpToDate(false), BBox(Coord(0,0),Coord(0,0)), BBoxUpToDate(true), Area(0), Distance(0), Width(0),
+		: SmoothedUpToDate(false), BBox(Coord(0,0),Coord(0,0)), BBoxUpToDate(false), Area(0), Distance(0), Width(0),
 			MetaUpToDate(true)
 		{
 		}
@@ -487,10 +487,10 @@ void Road::buildPath(Projection const &theProjection, const QRect& cr)
 			append(in, make<point_2d>(P.x(), P.y()));
 		}
 
-		QList<linestring_2d> clipped;
+		std::vector<linestring_2d> clipped;
 		intersection(clipRect, in, std::back_inserter(clipped));
 
-		for (QList<linestring_2d>::const_iterator it = clipped.begin(); it != clipped.end(); it++)
+		for (std::vector<linestring_2d>::const_iterator it = clipped.begin(); it != clipped.end(); it++)
 		{
 			if (!(*it).empty()) {
 				p->thePath.moveTo(QPointF((*it)[0].x(), (*it)[0].y()).toPoint());
@@ -500,7 +500,9 @@ void Road::buildPath(Projection const &theProjection, const QRect& cr)
 				p->thePath.lineTo(QPointF((*itl).x(), (*itl).y()).toPoint());
 			}
 		}
-	} else {
+	} 
+	else 
+	{
 		polygon_2d in;
 		for (int i=0; i<p->Nodes.size(); ++i) {
 			QPoint P = theProjection.project(p->Nodes[i]);
@@ -508,10 +510,10 @@ void Road::buildPath(Projection const &theProjection, const QRect& cr)
 		}
 		correct(in);
 
-		QList<polygon_2d> clipped;
+		std::vector<polygon_2d> clipped;
 		intersection(clipRect, in, std::back_inserter(clipped));
 
-		for (QList<polygon_2d>::const_iterator it = clipped.begin(); it != clipped.end(); it++)
+		for (std::vector<polygon_2d>::const_iterator it = clipped.begin(); it != clipped.end(); it++)
 		{
 			if (!(*it).outer().empty()) {
 				p->thePath.moveTo(QPointF((*it).outer()[0].x(), (*it).outer()[0].y()).toPoint());

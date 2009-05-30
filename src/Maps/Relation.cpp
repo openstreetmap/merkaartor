@@ -36,7 +36,9 @@ class RelationMemberModel : public QAbstractTableModel
 class RelationPrivate
 {
 	public:
-		RelationPrivate(Relation* R) : theRelation(R), theModel(0), ModelReferences(0)
+		RelationPrivate(Relation* R) 
+			: theRelation(R), theModel(0), ModelReferences(0),
+				BBox(Coord(0,0),Coord(0,0)), BBoxUpToDate(false)
 		{
 		}
 		~RelationPrivate()
@@ -48,6 +50,8 @@ class RelationPrivate
 		RelationMemberModel* theModel;
 		int ModelReferences;
 		QPainterPath thePath;
+		CoordBox BBox;
+		bool BBoxUpToDate;
 };
 
 Relation::Relation()
@@ -84,6 +88,7 @@ void Relation::setLayer(MapLayer* L)
 
 void Relation::partChanged(MapFeature*, int ChangeId)
 {
+	p->BBoxUpToDate = false;
 	notifyParents(ChangeId);
 }
 
@@ -109,22 +114,27 @@ RenderPriority Relation::renderPriority(double aPixelPerM)
 
 CoordBox Relation::boundingBox() const
 {
-	if (p->Members.size() == 0)
-		return CoordBox(Coord(0,0),Coord(0,0));
-	else
+	if (!p->BBoxUpToDate)
 	{
-		CoordBox Clip;
-		bool haveFirst = false;
-		for (int i=0; i<p->Members.size(); ++i)
-			if (p->Members[i].second && !p->Members[i].second->notEverythingDownloaded()) {
-				if (!haveFirst) {
-					Clip = p->Members[i].second->boundingBox();
-					haveFirst = true;
-				} else
-					Clip.merge(p->Members[i].second->boundingBox());
-			}
-		return Clip;
+		if (p->Members.size() == 0)
+			p->BBox = CoordBox(Coord(0,0),Coord(0,0));
+		else
+		{
+			CoordBox Clip;
+			bool haveFirst = false;
+			for (int i=0; i<p->Members.size(); ++i)
+				if (p->Members[i].second && !p->Members[i].second->notEverythingDownloaded()) {
+					if (!haveFirst) {
+						Clip = p->Members[i].second->boundingBox();
+						haveFirst = true;
+					} else
+						Clip.merge(p->Members[i].second->boundingBox());
+				}
+			p->BBox = Clip;
+			p->BBoxUpToDate = true;
+		}
 	}
+	return p->BBox;
 }
 
 void Relation::draw(QPainter& P, const Projection& theProjection)
@@ -261,6 +271,7 @@ void Relation::add(const QString& Role, MapFeature* F)
 {
 	p->Members.push_back(qMakePair(Role,F));
 	F->setParentFeature(this);
+	p->BBoxUpToDate = false;
 }
 
 void Relation::add(const QString& Role, MapFeature* F, int Idx)
@@ -268,6 +279,7 @@ void Relation::add(const QString& Role, MapFeature* F, int Idx)
 	p->Members.push_back(qMakePair(Role,F));
 	std::rotate(p->Members.begin()+Idx,p->Members.end()-1,p->Members.end());
 	F->setParentFeature(this);
+	p->BBoxUpToDate = false;
 }
 
 void Relation::remove(int Idx)
@@ -277,6 +289,7 @@ void Relation::remove(int Idx)
 		F->unsetParentFeature(this);
 	}
 	p->Members.erase(p->Members.begin()+Idx);
+	p->BBoxUpToDate = false;
 }
 
 void Relation::remove(MapFeature* F)
@@ -284,6 +297,7 @@ void Relation::remove(MapFeature* F)
 	for (int i=p->Members.size(); i; --i)
 		if (F == p->Members[i-1].second)
 			remove(i-1);
+	p->BBoxUpToDate = false;
 }
 
 int Relation::size() const
@@ -339,12 +353,7 @@ void Relation::releaseMemberModel()
 
 void Relation::buildPath(Projection const &theProjection, const QRect& clipRect)
 {
-	p->thePath = QPainterPath();
-	for (int i=0; i<size(); ++i)
-		if (Road* M = dynamic_cast<Road*>(p->Members[i].second)) {
-			M->buildPath(theProjection, clipRect);
-			p->thePath.addPath(M->getPath());
-		}
+	Q_UNUSED(theProjection); Q_UNUSED(clipRect);
 
 	//	
 	//p->thePath = QPainterPath();
@@ -416,6 +425,11 @@ void Relation::buildPath(Projection const &theProjection, const QRect& clipRect)
 
 QPainterPath Relation::getPath()
 {
+	p->thePath = QPainterPath();
+	for (int i=0; i<size(); ++i)
+		if (Road* M = dynamic_cast<Road*>(p->Members[i].second)) {
+			p->thePath.addPath(M->getPath());
+		}
 	return p->thePath;
 }
 
