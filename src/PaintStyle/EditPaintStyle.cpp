@@ -287,14 +287,12 @@ void EditPaintStyle::initialize(QPainter& P, const Projection& theProjection)
 	}
 
 	p = new EditPaintStylePrivate(P,theProjection);
-#ifndef NDEBUG
 	if (M_PREFS->getStyleBackgroundVisible())
 		add(&p->bgLayer);
 	if (M_PREFS->getStyleForegroundVisible())
 		add(&p->fgLayer);
 	if (M_PREFS->getStyleTouchupVisible())
 		add(&p->tchLayer);
-#endif
 	if (M_PREFS->getNamesVisible())
 		add(&p->lblLayer);
 
