@@ -148,13 +148,13 @@ void Relation::draw(QPainter& P, const Projection& theProjection)
 		P.setPen(QPen(Qt::red,M_PREFS->getRelationsWidth(),Qt::DashLine));
 	else
 		P.setPen(QPen(M_PREFS->getRelationsColor(),M_PREFS->getRelationsWidth(),Qt::DashLine));
-	QRectF bb = p->thePath.boundingRect().adjusted(-10, -10, 10, 10);
+	QRectF bb = getPath().boundingRect().adjusted(-10, -10, 10, 10);
 	P.drawRect(bb);
 }
 
 void Relation::drawFocus(QPainter& P, const Projection& theProjection, bool solid)
 {
-	QRectF bb = p->thePath.boundingRect().adjusted(-10, -10, 10, 10);
+	QRectF bb = getPath().boundingRect().adjusted(-10, -10, 10, 10);
 	if (!solid) {
 		QPen thePen(M_PREFS->getFocusColor(),M_PREFS->getFocusWidth());
 		thePen.setDashPattern(getParentDashes());
@@ -178,7 +178,7 @@ void Relation::drawFocus(QPainter& P, const Projection& theProjection, bool soli
 
 void Relation::drawHover(QPainter& P, const Projection& theProjection, bool solid)
 {
-	QRectF bb = p->thePath.boundingRect().adjusted(-10, -10, 10, 10);
+	QRectF bb = getPath().boundingRect().adjusted(-10, -10, 10, 10);
 	if (!solid) {
 		QPen thePen(M_PREFS->getHoverColor(),M_PREFS->getHoverWidth());
 		thePen.setDashPattern(getParentDashes());
