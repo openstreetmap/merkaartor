@@ -9,12 +9,14 @@
 TrackPoint::TrackPoint(const Coord& aCoord)
 : Position(aCoord), Elevation(0.0), Speed(0.0), ProjectionRevision(0)
 {
+	BBox = CoordBox(Position,Position);
 }
 
 TrackPoint::TrackPoint(const TrackPoint& other)
 : MapFeature(other), Position(other.Position), Elevation(other.Elevation), Speed(other.Speed), Projected(other.Projected), ProjectionRevision(other.ProjectionRevision)
 {
 	setTime(other.time());
+	BBox = other.boundingBox();
 }
 
 TrackPoint::~TrackPoint(void)
