@@ -83,7 +83,6 @@ void TrackPoint::setPosition(const Coord& aCoord)
 	Position = aCoord;
 	BBox = CoordBox(Position,Position);
 	ProjectionRevision = 0;
-	notifyChanges();
 }
 
 const QPointF& TrackPoint::projection() const

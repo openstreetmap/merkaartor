@@ -30,7 +30,7 @@ class RoadPrivate
 	public:
 		RoadPrivate()
 		: SmoothedUpToDate(false), BBox(Coord(0,0),Coord(0,0)), BBoxUpToDate(false), Area(0), Distance(0), Width(0),
-			MetaUpToDate(true)
+			MetaUpToDate(false)
 		{
 		}
 		QList<TrackPointPtr> Nodes;
@@ -42,9 +42,9 @@ class RoadPrivate
 		bool IsCoastline;
 		double Area;
 		double Distance;
-		double Layer;
 		double Width;
 		bool MetaUpToDate;
+		RenderPriority theRenderPriority;
 		QPainterPath thePath;
 
 		void updateSmoothed(bool DoSmooth);
@@ -114,9 +114,18 @@ void Road::setLayer(MapLayer* L)
 
 void Road::partChanged(MapFeature*, int ChangeId)
 {
+	if (isDeleted())
+		return;
+
+	if (layer())
+		layer()->getRTree()->remove(geometry::box < Coord > (p->BBox.bottomLeft(), p->BBox.topRight() ), this);
 	p->BBoxUpToDate = false;
 	p->MetaUpToDate = false;
 	p->SmoothedUpToDate = false;
+	if (layer()) {
+		CoordBox bb = boundingBox();
+		layer()->getRTree()->insert(geometry::box < Coord > (bb.bottomLeft(), bb.topRight() ), this);
+	}
 	notifyParents(ChangeId);
 }
 
@@ -132,12 +141,12 @@ RenderPriority Road::renderPriority(double aPixelPerM)
 {
 	// FIWME Segments of a road with different layers are wrongly painted (rounded corners)
 	Q_UNUSED(aPixelPerM)
-	double a = area();
-	if (a)
-		setRenderPriority(RenderPriority(RenderPriority::IsArea,-fabs(a)));
-	else
-		setRenderPriority(RenderPriority(RenderPriority::IsLinear,p->Layer));
-	return getRenderPriority();
+	return p->theRenderPriority;
+}
+
+RenderPriority Road::getRenderPriority()
+{
+	return p->theRenderPriority;
 }
 
 void Road::add(TrackPoint* Pt)
@@ -221,7 +230,7 @@ bool Road::notEverythingDownloaded() const
 	if (lastUpdated() == MapFeature::NotYetDownloaded)
 		return true;
 	for (int i=0; i<p->Nodes.size(); ++i)
-		if (p->Nodes[i] && p->Nodes[i]->notEverythingDownloaded())
+		if (p->Nodes.at(i) && p->Nodes.at(i)->notEverythingDownloaded())
 			return true;
 	return false;
 }
@@ -248,9 +257,6 @@ void Road::updateMeta() const
 	p->Area = 0;
 	p->Distance = 0;
 	p->IsCoastline = false;
-	p->Layer = tagValue("layer","0").toInt();
-	if (p->Layer == 0)
-		p->Layer = 0.01;
 
 	if (p->Nodes.size() == 0)
 	{
@@ -272,9 +278,17 @@ void Road::updateMeta() const
 		}
 	}
 
-	if (isArea)
+	if (isArea) {
 		p->Area = p->Distance;
-	//p->Area /= 2;
+		p->theRenderPriority = RenderPriority(RenderPriority::IsArea,-fabs(p->Area));
+	} else {
+		qreal Priority = tagValue("layer","0").toInt();
+		if (Priority >= 0)
+			Priority++;
+		// dummy number to get a deterministic feature sort
+		Priority *= sin(intToRad(boundingBox().lonDiff()));
+		p->theRenderPriority = RenderPriority(RenderPriority::IsLinear,Priority);
+	}
 
 	if (tagValue("natural","") == "coastline")
 		p->IsCoastline = true;
@@ -394,8 +408,8 @@ double Road::pixelDistance(const QPointF& Target, double ClearEndDistance, const
 	double Best = 1000000;
 	for (int i=0; i<p->Nodes.size(); ++i)
 	{
-		if (p->Nodes[i]) {
-			double x = ::distance(Target,theProjection.project(p->Nodes[i]));
+		if (p->Nodes.at(i)) {
+			double x = ::distance(Target,theProjection.project(p->Nodes.at(i)));
 			if (x<ClearEndDistance)
 				return Best;
 		}
@@ -415,8 +429,8 @@ double Road::pixelDistance(const QPointF& Target, double ClearEndDistance, const
 	else
 		for (int i=1; i<p->Nodes.size(); ++i)
 		{
-			if (p->Nodes[i] && p->Nodes[i-1]) {
-				LineF F(theProjection.project(p->Nodes[i-1]),theProjection.project(p->Nodes[i]));
+			if (p->Nodes.at(i) && p->Nodes.at(i-1)) {
+				LineF F(theProjection.project(p->Nodes.at(i-1)),theProjection.project(p->Nodes.at(i)));
 				double D = F.capDistance(Target);
 				if (D < ClearEndDistance)
 					Best = D;

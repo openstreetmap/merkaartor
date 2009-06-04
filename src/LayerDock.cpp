@@ -107,6 +107,8 @@ void LayerDock::dropEvent(QDropEvent *event)
 void LayerDock::clearLayers()
 {
 	for (int i=CHILD_WIDGETS.size()-1; i >= 0; i--) {
+		if (!CHILD_WIDGET(i))
+			continue;
 		CHILD_WIDGET(i)->deleteLater();
 	}
 }
@@ -137,6 +139,8 @@ void LayerDock::addLayer(MapLayer* aLayer)
 void LayerDock::deleteLayer(MapLayer* aLayer)
 {
 	for (int i=CHILD_WIDGETS.size()-1; i >= 0; i--) {
+		if (!CHILD_WIDGET(i))
+			continue;
 		if (CHILD_LAYER(i) == aLayer) {
 			p->Main->menuLayers->removeAction(CHILD_WIDGET(i)->getAssociatedMenu()->menuAction());
 			LayerWidget* curW = CHILD_WIDGET(i);
@@ -248,7 +252,7 @@ void LayerDock::layerCleared(MapLayer* l)
 
 void LayerDock::layerZoom(MapLayer * l)
 {
-	CoordBox bb = MapLayer::boundingBox(l);
+	CoordBox bb = l->boundingBox();
 	CoordBox mini(bb.center()-10, bb.center()+10);
 	bb.merge(mini);
 	bb = bb.zoomed(1.1);
@@ -259,6 +263,8 @@ void LayerDock::layerZoom(MapLayer * l)
 void LayerDock::tabChanged(int idx)
 {
 	for (int i=CHILD_WIDGETS.size()-1; i >= 0; i--) {
+		if (!CHILD_WIDGET(i))
+			continue;
 		if ((CHILD_LAYER(i)->isEnabled()) && (CHILD_LAYER(i)->classGroups() & p->tab->tabData(idx).toInt()))
 			CHILD_WIDGET(i)->setVisible(true);
 		else
@@ -288,6 +294,8 @@ void LayerDock::tabContextMenuRequested(const QPoint& pos)
 void LayerDock::TabShowAll(bool)
 {
 	for (int i=CHILD_WIDGETS.size()-1; i >= 0; i--) {
+		if (!CHILD_WIDGET(i))
+			continue;
 		if (CHILD_LAYER(i)->classGroups() & p->tab->tabData(p->tab->currentIndex()).toInt()) {
 			CHILD_WIDGET(i)->setLayerVisible(true);
 		}
@@ -297,6 +305,8 @@ void LayerDock::TabShowAll(bool)
 void LayerDock::TabHideAll(bool)
 {
 	for (int i=CHILD_WIDGETS.size()-1; i >= 0; i--) {
+		if (!CHILD_WIDGET(i))
+			continue;
 		if (CHILD_LAYER(i)->classGroups() & p->tab->tabData(p->tab->currentIndex()).toInt()) {
 			CHILD_WIDGET(i)->setLayerVisible(false);
 		}

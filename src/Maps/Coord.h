@@ -101,6 +101,14 @@ class Coord
 		int Lon;
 };
 
+#ifndef _MOBILE
+#include <geometry/geometry.hpp>
+#include <geometry/geometries/register/register_point.hpp>
+
+GEOMETRY_REGISTER_POINT_2D_GET_SET(Coord, int, cs::cartesian, lat, lon, setLat, setLon);
+
+#endif
+
 inline Coord operator-(const Coord& A, const Coord& B)
 {
 	return Coord(A.lat()-B.lat(),A.lon()-B.lon());
@@ -269,6 +277,12 @@ class CoordBox
 	private:
 		Coord BottomLeft, TopRight;
 };
+
+#ifndef _MOBILE
+#include <geometry/geometries/register/register_box.hpp>
+
+GEOMETRY_REGISTER_BOX(CoordBox, Coord, bottomLeft(), topRight())
+#endif
 
 #endif
 

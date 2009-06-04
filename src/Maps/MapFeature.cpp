@@ -158,7 +158,6 @@ int MapFeature::versionNumber() const
 void MapFeature::setLayer(MapLayer* aLayer)
 {
 	setParent(aLayer);
-	notifyChanges();
 }
 
 MapLayer* MapFeature::layer()
@@ -251,7 +250,6 @@ const QDateTime& MapFeature::time() const
 void MapFeature::setTime(const QDateTime& time)
 {
 	p->Time = time;
-	notifyChanges();
 }
 
 const QString& MapFeature::user() const
@@ -262,7 +260,6 @@ const QString& MapFeature::user() const
 void MapFeature::setUser(const QString& user)
 {
 	p->User = user;
-	notifyChanges();
 }
 
 bool MapFeature::isDirty() const
@@ -319,7 +316,6 @@ void MapFeature::setTag(int index, const QString& key, const QString& value, boo
 	if (parent() && addToTagList)
 		if (dynamic_cast<MapLayer*>(parent())->getDocument())
 	  		dynamic_cast<MapLayer*>(parent())->getDocument()->addToTagList(key, value);
-	notifyChanges();
 }
 
 void MapFeature::setTag(const QString& key, const QString& value, bool addToTagList)
@@ -329,7 +325,6 @@ void MapFeature::setTag(const QString& key, const QString& value, bool addToTagL
 		if (p->Tags[i].first == key)
 		{
 			p->Tags[i].second = value;
-			notifyChanges();
 			return;
 		}
 	p->Tags.push_back(qMakePair(key,value));
@@ -337,7 +332,6 @@ void MapFeature::setTag(const QString& key, const QString& value, bool addToTagL
 	if (parent() && addToTagList)
 		if (dynamic_cast<MapLayer*>(parent())->getDocument())
   			dynamic_cast<MapLayer*>(parent())->getDocument()->addToTagList(key, value);
-	notifyChanges();
 }
 
 void MapFeature::clearTags()
@@ -345,7 +339,6 @@ void MapFeature::clearTags()
 	p->PixelPerMForPainter = -1;
 	p->Tags.clear();
 	p->TagsSize = 0;
-	notifyChanges();
 }
 
 void MapFeature::invalidatePainter()
@@ -362,7 +355,6 @@ void MapFeature::clearTag(const QString& k)
 			p->PixelPerMForPainter = -1;
 			p->Tags.erase(p->Tags.begin()+i);
 			p->TagsSize--;
-			notifyChanges();
 			return;
 		}
 }
@@ -372,7 +364,6 @@ void MapFeature::removeTag(int idx)
 	p->PixelPerMForPainter = -1;
 	p->Tags.erase(p->Tags.begin()+idx);
 	p->TagsSize--;
-	notifyChanges();
 }
 
 int MapFeature::tagSize() const

@@ -96,6 +96,7 @@ void Command::undo()
 			mainFeature->clearTag("created_by");
 	}
 	isUndone = true;
+	mainFeature->notifyChanges();
 }
 
 void Command::redo()
@@ -107,6 +108,7 @@ void Command::redo()
 		mainFeature->setUploaded(false);
 	}
 	isUndone = false;
+	mainFeature->notifyChanges();
 }
 
 bool Command::toXML(QDomElement& xParent) const

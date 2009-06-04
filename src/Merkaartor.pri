@@ -1,3 +1,4 @@
+# FORCE_CUSTOM_STYLE=1 - force custom style (recommended on Linux until the "expanding dock" is solved upstream)
 # Header files
 HEADERS += ./Command/Command.h \
     ./Command/DocumentCommands.h \
@@ -73,7 +74,8 @@ HEADERS += ./Command/Command.h \
     ./GotoDialog.h \
     StyleDock.h \
     ../include/geometry/projections/impl/geocent.h \
-    ../interfaces/IMapAdapter.h
+    ../interfaces/IMapAdapter.h \
+    Utils/SortAccordingToRenderingPriority.h
 
 # Source files
 SOURCES += ./Command/Command.cpp \

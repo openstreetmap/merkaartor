@@ -15,6 +15,7 @@
 #include "Command/RoadCommands.h"
 
 #include "Utils/LineF.h"
+#include "Utils/SortAccordingToRenderingPriority.h"
 
 #include "ImportExport/ImportExportOsmBin.h"
 
@@ -41,14 +42,20 @@ public:
 		Enabled = true;
 		Readonly = false;
 		Uploadable = true;
+
+		theRTree = new MyRTree(7, 2);
+
 	}
 	~MapLayerPrivate()
 	{
+		delete theRTree;
 		//for (int i=0; i<Features.size(); ++i)
 		//	if (Features[i])
 		//		delete Features[i];
 	}
 	QList<MapFeaturePtr> Features;
+	MyRTree* theRTree;
+ 
 	QHash<QString, MapFeaturePtr> IdMap;
 	QString Name;
 	QString Description;
@@ -66,21 +73,6 @@ public:
  	double RenderPriorityForPixelPerM;
 
  	void sortRenderingPriority(double PixelPerM);
-};
-
-class SortAccordingToRenderingPriority
-{
-	public:
- 		SortAccordingToRenderingPriority(double aPixelPerM)
- 			: PixelPerM(aPixelPerM)
-		{
-		}
-		bool operator()(MapFeature* A, MapFeature* B)
-		{
- 			return A->renderPriority(PixelPerM) < B->renderPriority(PixelPerM);
-		}
-
- 		double PixelPerM;
 };
 
  void MapLayerPrivate::sortRenderingPriority(double aPixelPerM)
@@ -113,6 +105,11 @@ MapLayer::MapLayer(const MapLayer&)
 MapLayer::~MapLayer()
 {
 	SAFE_DELETE(p);
+}
+
+MyRTree* MapLayer::getRTree()
+{
+	return p->theRTree;
 }
 
 void MapLayer::sortRenderingPriority(double aPixelPerM)
@@ -213,8 +210,7 @@ void MapLayer::add(MapFeature* aFeature, int Idx)
 
 void MapLayer::notifyIdUpdate(const QString& id, MapFeature* aFeature)
 {
-	if(p)
-		p->IdMap[id] = aFeature;
+	p->IdMap[id] = aFeature;
 }
 
 void MapLayer::remove(MapFeature* aFeature)
@@ -232,6 +228,7 @@ void MapLayer::deleteFeature(MapFeature* aFeature)
 	if (p->Features.removeOne(aFeature))
 	{
 		aFeature->setLayer(0);
+		p->theRTree->remove(geometry::box < Coord > (aFeature->boundingBox().bottomLeft(), aFeature->boundingBox().topRight() ));
 		notifyIdUpdate(aFeature->id(),0);
 		p->RenderPriorityUpToDate = false;
 	}
@@ -357,20 +354,36 @@ const QString& MapLayer::id() const
 	return Id;
 }
 
-CoordBox MapLayer::boundingBox(const MapLayer* theLayer)
+void MapLayer::reIndex()
 {
-	if(theLayer->size()==0) return CoordBox(Coord(0,0),Coord(0,0));
+	for (int i=0; i<p->Features.size(); ++i) {
+		if (p->Features.at(i)->isDeleted())
+			continue;
+		MapFeature* f = p->Features.at(i);
+		CoordBox bb = f->boundingBox();
+		if (!bb.isNull()) {
+			Q_ASSERT((bb.bottomLeft().lon() <= bb.topRight().lon()) && (bb.bottomLeft().lat() <= bb.topRight().lat()));
+			Q_ASSERT((bb.bottomLeft().lon() < 100000000) && (bb.bottomLeft().lat() > 100000000));
+			Q_ASSERT((bb.topRight().lon() < 100000000) && (bb.topRight().lat() > 100000000));
+			p->theRTree->insert(geometry::box < Coord > (bb.bottomLeft(), bb.topRight() ), f);
+		}
+	}
+}
+
+CoordBox MapLayer::boundingBox()
+{
+	if(p->Features.size()==0) return CoordBox(Coord(0,0),Coord(0,0));
 	CoordBox Box;
 	bool haveFirst = false;
-	for (int i=0; i<theLayer->size(); ++i) {
-		if (theLayer->get(i)->isDeleted())
+	for (int i=0; i<p->Features.size(); ++i) {
+		if (p->Features.at(i)->isDeleted())
 			continue;
-		if (theLayer->get(i)->notEverythingDownloaded())
+		if (p->Features.at(i)->notEverythingDownloaded())
 			continue;
 		if (haveFirst)
-			Box.merge(theLayer->get(i)->boundingBox());
+			Box.merge(p->Features.at(i)->boundingBox());
 		else {
-			Box = theLayer->get(i)->boundingBox();
+			Box = p->Features.at(i)->boundingBox();
 			haveFirst = true;
 		}
 	}
@@ -482,7 +495,7 @@ bool DrawingMapLayer::toXML(QDomElement& xParent, QProgressDialog & progress)
 	if (p->Features.size()) {
 		QDomElement bb = xParent.ownerDocument().createElement("bound");
 		o.appendChild(bb);
-		CoordBox layBB = boundingBox((const MapLayer*)this);
+		CoordBox layBB = boundingBox();
 		QString S = QString().number(intToAng(layBB.bottomLeft().lat()),'f',6) + ",";
 		S += QString().number(intToAng(layBB.bottomLeft().lon()),'f',6) + ",";
 		S += QString().number(intToAng(layBB.topRight().lat()),'f',6) + ",";

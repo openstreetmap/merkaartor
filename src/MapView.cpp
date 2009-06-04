@@ -23,6 +23,7 @@
 #endif
 #include "Preferences/MerkaartorPreferences.h"
 #include "Utils/SvgCache.h"
+#include "Utils/SortAccordingToRenderingPriority.h"
 
 
 #include <QTime>
@@ -232,6 +233,11 @@ void MapView::sortRenderingPriorityInLayers()
 	}
 }
 
+void MapView::sortRenderingPriority()
+{
+	qSort(theFeatures.begin(),theFeatures.end(),SortAccordingToRenderingPriority(theProjection.pixelPerM()));
+}
+
 void MapView::updateLayersImage()
 {
 	if (StaticMapUpToDate)
@@ -264,17 +270,56 @@ void MapView::buildFeatureSet(QRegion invalidRegion, Projection& aProj)
 		theDocument->getLayer(i)->invalidate(theDocument, aProj.viewport());
 		Main->properties()->adjustSelection();
 	}
-	sortRenderingPriorityInLayers();
-
-	QList <CoordBox> coordRegion;
-	for (int i=0; i < invalidRegion.rects().size(); ++i) {
-		Coord tl = aProj.inverse(invalidRegion.rects()[i].topLeft());
-		Coord br = aProj.inverse(invalidRegion.rects()[i].bottomRight());
-		coordRegion += CoordBox(tl, br);
-	}
 
 	QRect clipRect = invalidRegion.boundingRect().adjusted(int(-20), int(-20), int(20), int(20));
+	QList <CoordBox> coordRegion;
 
+#if 1
+
+	for (int i=0; i < invalidRegion.rects().size(); ++i) {
+		Coord bl = aProj.inverse(invalidRegion.rects()[i].bottomLeft());
+		Coord tr = aProj.inverse(invalidRegion.rects()[i].topRight());
+		geometry::box < Coord > cb(bl, tr);
+		for (int j=0; j<theDocument->layerSize(); ++j) {
+			if (!theDocument->getLayer(j)->isVisible())
+				continue;
+
+			std::deque < MapFeaturePtr > ret = theDocument->getLayer(j)->getRTree()->find(cb);
+			for (std::deque < MapFeaturePtr >::const_iterator it = ret.begin(); it < ret.end(); ++it) {
+				if (theFeatures.contains(*it))
+					continue;
+
+				if (Road * R = CAST_WAY(*it)) {
+					R->buildPath(aProj, clipRect);
+					theFeatures.push_back(R);
+					if (R->isCoastline())
+						theCoastlines.push_back(R);
+				} else
+				if (Relation * RR = CAST_RELATION(*it)) {
+					RR->buildPath(aProj, clipRect);
+					theFeatures.push_back(RR);
+				} else
+				if (TrackPoint * pt = CAST_NODE(*it)) {
+					if (theDocument->getLayer(j)->arePointsDrawable())
+						theFeatures.push_back(*it);
+				} else 
+					theFeatures.push_back(*it);
+			}
+		}
+
+		coordRegion += CoordBox(bl, tr);
+	}
+	sortRenderingPriority();
+
+#else
+
+	for (int i=0; i < invalidRegion.rects().size(); ++i) {
+		Coord bl = aProj.inverse(invalidRegion.rects()[i].bottomLeft());
+		Coord tr = aProj.inverse(invalidRegion.rects()[i].topRight());
+		coordRegion += CoordBox(bl, tr);
+	}
+
+	sortRenderingPriorityInLayers();
 	for (VisibleFeatureIterator vit(theDocument); !vit.isEnd(); ++vit) {
 		bool OK = false;
 		for (int k=0; k<coordRegion.size() && !OK; ++k)
@@ -295,6 +340,7 @@ void MapView::buildFeatureSet(QRegion invalidRegion, Projection& aProj)
 			}
 		}
 	}
+#endif
 }
 
 bool testColor(const QImage& theImage, const QPoint& P, const QRgb& targetColor)

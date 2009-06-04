@@ -65,6 +65,7 @@ class MapView :	public QWidget
 		void fromXML(const QDomElement e);
 
 	private:
+		void sortRenderingPriority();
 		void sortRenderingPriorityInLayers();
 		void drawDownloadAreas(QPainter & painter);
 		void drawScale(QPainter & painter);
@@ -72,6 +73,7 @@ class MapView :	public QWidget
 		void updateStaticBackground();
 		void updateStaticBuffer();
 		void updateLayersImage();
+
 		MainWindow* Main;
 		Projection theProjection;
 		MapDocument* theDocument;

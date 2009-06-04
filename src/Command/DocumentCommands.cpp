@@ -26,6 +26,9 @@ AddFeatureCommand::~AddFeatureCommand()
 
 void AddFeatureCommand::undo()
 {
+	CoordBox bb = theFeature->boundingBox();
+	theLayer->getRTree()->remove(geometry::box < Coord > (bb.bottomLeft(), bb.topRight() ), theFeature);
+
 	Command::undo();
 	if (theFeature->isUploaded() || postUploadCommand) {
 		if (postUploadCommand)
@@ -33,9 +36,10 @@ void AddFeatureCommand::undo()
 		else
 			postUploadCommand = new RemoveFeatureCommand(theLayer->getDocument(), theFeature);
 	} else {
-		if (oldLayer) {
+		if (theLayer && oldLayer && (theLayer != oldLayer)) {
 			theLayer->remove(theFeature);
 			oldLayer->add(theFeature);
+			oldLayer->getRTree()->insert(geometry::box < Coord > (bb.bottomLeft(), bb.topRight() ), theFeature);
 		} else
 			theFeature->setDeleted(true);
 
@@ -49,13 +53,16 @@ void AddFeatureCommand::redo()
 		postUploadCommand->undo();
 	else {
 		oldLayer = theFeature->layer();
-		if (oldLayer && oldLayer != theLayer)
+		CoordBox bb = theFeature->boundingBox();
+		if (theLayer && oldLayer && (theLayer != oldLayer)) {
 			oldLayer->remove(theFeature);
-		else {
+			oldLayer->getRTree()->remove(geometry::box < Coord > (bb.bottomLeft(), bb.topRight() ), theFeature);
+		} else {
 			theFeature->setDeleted(false);
 			oldLayer = NULL;
 		}
 		theLayer->add(theFeature);
+		theLayer->getRTree()->insert(geometry::box < Coord > (bb.bottomLeft(), bb.topRight() ), theFeature);
 		incDirtyLevel(theLayer);
 	}
 	Command::redo();
@@ -165,6 +172,8 @@ void RemoveFeatureCommand::redo()
 		if (CascadedCleanUp)
 			CascadedCleanUp->redo();
 		oldLayer = theFeature->layer();
+		CoordBox bb = theFeature->boundingBox();
+		oldLayer->getRTree()->remove(geometry::box < Coord > (bb.bottomLeft(), bb.topRight() ), theFeature);
 		Idx = theFeature->layer()->get(theFeature);
 		oldLayer->remove(theFeature);
 		theLayer->add(theFeature);
@@ -187,9 +196,11 @@ void RemoveFeatureCommand::undo()
 		}
 	} else {
 		theLayer->remove(theFeature);
+		CoordBox bb = theFeature->boundingBox();
 		if (oldLayer->size() < Idx)
 			Idx = oldLayer->size();
 		oldLayer->add(theFeature,Idx);
+		oldLayer->getRTree()->insert(geometry::box < Coord > (bb.bottomLeft(), bb.topRight() ), theFeature);
 		theFeature->setDeleted(false);
 		decDirtyLevel(oldLayer);
 		if (CascadedCleanUp)

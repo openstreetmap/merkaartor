@@ -6,6 +6,11 @@
 
 #include <QProgressDialog>
 
+#include <boost/spatial_index.hpp>
+
+typedef boost::spatial_index::spatial_index<Coord, MapFeaturePtr, 
+			boost::spatial_index::rtree<Coord, MapFeaturePtr> > MyRTree;
+
 class QString;
 class QprogressDialog;
 
@@ -109,7 +114,7 @@ public:
 	virtual QString toHtml();
 	virtual bool toXML(QDomElement& xParent, QProgressDialog & progress) = 0;
 
-	static CoordBox boundingBox(const MapLayer* theLayer);
+	CoordBox boundingBox();
 
 	virtual /* const */ LayerType classType() = 0;
 	virtual const LayerGroups classGroups() = 0;
@@ -125,6 +130,10 @@ public:
 	virtual bool isReadonly() const;
 	virtual bool isTrack() {return false;}
 	virtual bool arePointsDrawable() {return true;}
+
+	virtual MyRTree* getRTree();
+	virtual void reIndex();
+
 
 protected:
 	MapLayerPrivate* p;

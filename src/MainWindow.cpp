@@ -908,7 +908,7 @@ void MainWindow::loadFiles(const QStringList & fileList)
 
 void MainWindow::on_fileOpenAction_triggered()
 {
-	if (hasUnsavedChanges(*theDocument) && !mayDiscardUnsavedChanges(this))
+	if (theDocument->hasUnsavedChanges() && !mayDiscardUnsavedChanges(this))
 		return;
 
 	QStringList fileNames = QFileDialog::getOpenFileNames(
@@ -1003,7 +1003,7 @@ void MainWindow::on_helpAboutAction_triggered()
 
 void MainWindow::on_viewZoomAllAction_triggered()
 {
-	QPair<bool, CoordBox> BBox(boundingBox(theDocument));
+	QPair<bool, CoordBox> BBox(theDocument->boundingBox());
 	if (BBox.first) {
 		BBox.second.resize(1.01);
 		theView->projection().setViewport(BBox.second, theView->rect());
@@ -1131,7 +1131,7 @@ void MainWindow::on_fileNewAction_triggered()
 {
 	theView->launch(0);
 	theProperties->setSelection(0);
-	if (!theDocument || !hasUnsavedChanges(*theDocument) || mayDiscardUnsavedChanges(this)) {
+	if (!theDocument || !theDocument->hasUnsavedChanges() || mayDiscardUnsavedChanges(this)) {
 		delete theDocument;
 		theDocument = new MapDocument(theLayers);
 		theDocument->addDefaultLayers();
@@ -1907,7 +1907,7 @@ void MainWindow::on_editSelectAction_triggered()
 
 void MainWindow::closeEvent(QCloseEvent * event)
 {
-	if (hasUnsavedChanges(*theDocument) && !mayDiscardUnsavedChanges(this)) {
+	if (theDocument->hasUnsavedChanges() && !mayDiscardUnsavedChanges(this)) {
 		event->ignore();
 		return;
 	}
@@ -2142,7 +2142,7 @@ void MainWindow::bookmarkTriggered(QAction* anAction)
 
 void MainWindow::recentOpenTriggered(QAction* anAction)
 {
-	if (hasUnsavedChanges(*theDocument) && !mayDiscardUnsavedChanges(this))
+	if (theDocument->hasUnsavedChanges() && !mayDiscardUnsavedChanges(this))
 		return;
 
 	QStringList fileNames(anAction->text());

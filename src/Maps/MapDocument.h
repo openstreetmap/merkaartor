@@ -98,6 +98,9 @@ public:
 	void removeDownloadBox(MapLayer*l);
 	const QList<CoordBox> getDownloadBoxes() const;
 
+	bool hasUnsavedChanges();
+	QPair<bool, CoordBox> boundingBox();
+
 private:
 	MapDocumentPrivate* p;
 
@@ -113,9 +116,6 @@ signals:
 	void historyChanged();
 
 };
-
-bool hasUnsavedChanges(const MapDocument& aDoc);
-QPair<bool, CoordBox> boundingBox(const MapDocument* theDocument);
 
 class FeatureIterator
 {

@@ -619,6 +619,9 @@ bool downloadMoreOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDo
 			delete theLayer;
 		}
 	}
+	for (int j=0; j<theDocument->layerSize(); ++j) {
+		theDocument->getLayer(j)->reIndex();
+	}
 	return OK;
 }
 
@@ -740,6 +743,9 @@ bool downloadOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDocume
 		}
 	}
 	delete dlg;
+	for (int j=0; j<theDocument->layerSize(); ++j) {
+		theDocument->getLayer(j)->reIndex();
+	}
 	return OK;
 }
 

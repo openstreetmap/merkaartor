@@ -124,28 +124,28 @@ MapDocument* MapDocument::fromXML(const QDomElement e, double version, LayerDock
 	QDomElement c = e.firstChildElement();
 	while(!c.isNull()) {
 		if (c.tagName() == "ImageMapLayer") {
-			/* ImageMapLayer* l = */ ImageMapLayer::fromXML(NewDoc, c, progress);
+			/*ImageMapLayer* l =*/ ImageMapLayer::fromXML(NewDoc, c, progress);
 		} else
 		if (c.tagName() == "DeletedMapLayer") {
-			/* TrashMapLayer* l = */ DeletedMapLayer::fromXML(NewDoc, c, progress);
+			/*DeletedMapLayer* l =*/ DeletedMapLayer::fromXML(NewDoc, c, progress);
 		} else
 		if (c.tagName() == "DirtyMapLayer") {
-			/* DirtyMapLayer* l = */ DirtyMapLayer::fromXML(NewDoc, c, progress);
+			/*DirtyMapLayer* l =*/ DirtyMapLayer::fromXML(NewDoc, c, progress);
 		} else
 		if (c.tagName() == "UploadedMapLayer") {
-			/* UploadedMapLayer* l = */ UploadedMapLayer::fromXML(NewDoc, c, progress);
+			/*UploadedMapLayer* l =*/ UploadedMapLayer::fromXML(NewDoc, c, progress);
 		} else
 		if (c.tagName() == "DrawingMapLayer") {
-			/* DrawingMapLayer* l = */ DrawingMapLayer::fromXML(NewDoc, c, progress);
+			/*DrawingMapLayer* l =*/ DrawingMapLayer::fromXML(NewDoc, c, progress);
 		} else
 		if (c.tagName() == "TrackMapLayer") {
-			/* TrackMapLayer* l = */ TrackMapLayer::fromXML(NewDoc, c, progress);
+			/*TrackMapLayer* l =*/ TrackMapLayer::fromXML(NewDoc, c, progress);
 		} else
 		if (c.tagName() == "ExtractedMapLayer") {
-			/* ExtractedMapLayer* l = */ DrawingMapLayer::fromXML(NewDoc, c, progress);
+			/*DrawingMapLayer* l =*/ DrawingMapLayer::fromXML(NewDoc, c, progress);
 		} else
 		if (c.tagName() == "OsbMapLayer") {
-			/* OsbMapLayer* l = */ OsbMapLayer::fromXML(NewDoc, c, progress);
+			/*OsbMapLayer* l =*/ OsbMapLayer::fromXML(NewDoc, c, progress);
 		} else
 		if (c.tagName() == "CommandHistory") {
 			if (version > 1.0)
@@ -164,6 +164,9 @@ MapDocument* MapDocument::fromXML(const QDomElement e, double version, LayerDock
 	}
 
 	if (NewDoc) {
+		for (int j=0; j<NewDoc->layerSize(); ++j) {
+			NewDoc->getLayer(j)->reIndex();
+		}
 		if (e.hasAttribute("lastdownloadlayer"))
 			NewDoc->setLastDownloadLayer(NewDoc->getLayer(e.attribute("lastdownloadlayer")));
 
@@ -672,6 +675,29 @@ void MapDocument::on_loadingFinished(ImageMapLayer* anImageLayer)
 	emit loadingFinished(anImageLayer);
 }
 
+QPair<bool,CoordBox> MapDocument::boundingBox()
+{
+	int First;
+	for (First = 0; First < layerSize(); ++First)
+		if (getLayer(First)->size())
+			break;
+	if (First == layerSize())
+		return qMakePair(false,CoordBox(Coord(0,0),Coord(0,0)));
+	MapLayer* aLayer = getLayer(First);
+	CoordBox BBox = aLayer->boundingBox();
+	for (int i=First+1; i<layerSize(); ++i)
+		aLayer = getLayer(i);
+		if (aLayer->size())
+			BBox.merge(aLayer->boundingBox());
+	return qMakePair(true,BBox);
+}
+
+bool MapDocument::hasUnsavedChanges()
+{
+//	return aDoc.history().index();
+	return (getDirtyOrOriginLayer()->getDirtySize() > 0);
+}
+
 /* FEATUREITERATOR */
 
 FeatureIterator::FeatureIterator(MapDocument *aDoc)
@@ -783,24 +809,4 @@ bool VisibleFeatureIterator::check()
 
 /* RELATED */
 
-QPair<bool,CoordBox> boundingBox(const MapDocument* theDocument)
-{
-	int First;
-	for (First = 0; First < theDocument->layerSize(); ++First)
-		if (theDocument->getLayer(First)->size())
-			break;
-	if (First == theDocument->layerSize())
-		return qMakePair(false,CoordBox(Coord(0,0),Coord(0,0)));
-	CoordBox BBox(MapLayer::boundingBox(theDocument->getLayer(First)));
-	for (int i=First+1; i<theDocument->layerSize(); ++i)
-		if (theDocument->getLayer(i)->size())
-			BBox.merge(MapLayer::boundingBox(theDocument->getLayer(i)));
-	return qMakePair(true,BBox);
-}
-
-bool hasUnsavedChanges(const MapDocument& aDoc)
-{
-//	return aDoc.history().index();
-	return (aDoc.getDirtyOrOriginLayer()->getDirtySize() > 0);
-}
 

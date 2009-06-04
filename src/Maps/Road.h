@@ -38,6 +38,7 @@ class Road : public MapFeature
 		virtual bool notEverythingDownloaded() const;
 		virtual QString description() const;
 		virtual RenderPriority renderPriority(double aPixelPerM);
+		virtual RenderPriority getRenderPriority();
 
 		virtual void add(TrackPoint* Pt);
 		virtual void add(TrackPoint* Pt, int Idx);

@@ -300,7 +300,7 @@ bool DirtyListDescriber::showChanges(QWidget* aParent)
 		Ui.lblChangesetComment->setVisible(false);
 		Ui.edChangesetComment->setVisible(false);
 	} else {
-		CoordBox bbox = MapLayer::boundingBox(theDocument->getDirtyOrOriginLayer());
+		CoordBox bbox = theDocument->getDirtyOrOriginLayer()->boundingBox();
 		QString bboxComment = QString("BBOX:%1,%2,%3,%4")
 			.arg(QString::number(intToAng(bbox.bottomLeft().lon()), 'f', 2))
 			.arg(QString::number(intToAng(bbox.bottomLeft().lat()), 'f', 2))

@@ -195,6 +195,38 @@ class GenericFeatureSnapInteraction : public Interaction
 			CoordBox HotZone(projection().inverse(event->pos()-QPointF(15,15)),projection().inverse(event->pos()+QPointF(15,15)));
 			SnapList.clear();
 			double BestDistance = 5;
+#if 1
+			geometry::box < Coord > cb(HotZone.bottomLeft(), HotZone.topRight());
+
+			for (int j=0; j<document()->layerSize(); ++j) {
+				if (!document()->getLayer(j)->isVisible() || document()->getLayer(j)->isReadonly())
+					continue;
+
+				std::deque < MapFeaturePtr > ret = document()->getLayer(j)->getRTree()->find(cb);
+				for (std::deque < MapFeaturePtr >::const_iterator it = ret.begin(); it < ret.end(); ++it) {
+					FeatureType* Pt = dynamic_cast<FeatureType*>(*it);
+					if (Pt)
+					{
+						if (Pt->notEverythingDownloaded())
+							continue;
+						if ( (NoRoads || NoSelectRoads) && dynamic_cast<Road*>(Pt))
+							continue;
+						if (NoSelectPoints && dynamic_cast<TrackPoint*>(Pt))
+							continue;
+						if (std::find(NoSnap.begin(),NoSnap.end(),Pt) != NoSnap.end())
+							continue;
+						double Distance = Pt->pixelDistance(event->pos(), 5.01, projection());
+						SnapList.push_back(Pt);
+						if (Distance < BestDistance)
+						{
+							BestDistance = Distance;
+							LastSnap = Pt;
+						}
+					}
+				}
+			}
+
+#else
 			for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it)
 			{
 				FeatureType* Pt = dynamic_cast<FeatureType*>(it.get());
@@ -221,6 +253,7 @@ class GenericFeatureSnapInteraction : public Interaction
 					}
 				}
 			}
+#endif
 			if (Prev != LastSnap) {
 				curStackSnap = SnapList.indexOf(LastSnap);
 				view()->update();
