@@ -362,9 +362,9 @@ void MapLayer::reIndex()
 		MapFeature* f = p->Features.at(i);
 		CoordBox bb = f->boundingBox();
 		if (!bb.isNull()) {
-			Q_ASSERT((bb.bottomLeft().lon() <= bb.topRight().lon()) && (bb.bottomLeft().lat() <= bb.topRight().lat()));
-			Q_ASSERT((bb.bottomLeft().lon() < 100000000) && (bb.bottomLeft().lat() > 100000000));
-			Q_ASSERT((bb.topRight().lon() < 100000000) && (bb.topRight().lat() > 100000000));
+			//Q_ASSERT((bb.bottomLeft().lon() <= bb.topRight().lon()) && (bb.bottomLeft().lat() <= bb.topRight().lat()));
+			//Q_ASSERT((bb.bottomLeft().lon() < 100000000) && (bb.bottomLeft().lat() > 100000000));
+			//Q_ASSERT((bb.topRight().lon() < 100000000) && (bb.topRight().lat() > 100000000));
 			p->theRTree->insert(geometry::box < Coord > (bb.bottomLeft(), bb.topRight() ), f);
 		}
 	}
