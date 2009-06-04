@@ -770,7 +770,7 @@ Road * Road::fromXML(MapDocument* d, MapLayer * L, const QDomElement e)
 	if (e.hasAttribute("actor"))
 		A = (MapFeature::ActorType)(e.attribute("actor", "2").toInt());
 	else
-		if ((L = d->getDirtyOrOriginLayer()))
+		if ((L == d->getDirtyOrOriginLayer()))
 			A = MapFeature::User;
 		else
 			A = MapFeature::OSMServer;

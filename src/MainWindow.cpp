@@ -440,7 +440,8 @@ MapDocument* MainWindow::getDocumentFromClipboard()
 	}
 
 	MapDocument* NewDoc = new MapDocument(NULL);
-	MapLayer* l = NewDoc->getDirtyOrOriginLayer();
+	DrawingMapLayer* l = new DrawingMapLayer("Dummy");
+	NewDoc->add(l);
 
 	c = c.firstChildElement();
 	while(!c.isNull()) {
