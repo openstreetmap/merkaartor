@@ -97,6 +97,7 @@ TRANSLATIONS += \
 	../translations/merkaartor_es.ts \
 	../translations/merkaartor_fr.ts \
 	../translations/merkaartor_it.ts \
+	../translations/merkaartor_nl.ts \
 	../translations/merkaartor_pl.ts \
 	../translations/merkaartor_ru.ts
 
@@ -107,6 +108,7 @@ BINTRANSLATIONS += \
 	../translations/merkaartor_es.qm \
 	../translations/merkaartor_fr.qm \
 	../translations/merkaartor_it.qm \
+	../translations/merkaartor_nl.qm \
 	../translations/merkaartor_pl.qm \
 	../translations/merkaartor_ru.qm
 

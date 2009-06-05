@@ -9,6 +9,7 @@
    <description locale="es" >Nombre</description>
    <description locale="fr" >Nom</description>
    <description locale="it" >Nome</description>
+   <description locale="ja" >名前</description>
    <description locale="pl" >Nazwa</description>
    <description locale="sl" >Ime</description>
    <value tag="$[name:fr] - $[name:nl]" />
@@ -22,6 +23,7 @@
    <description locale="es" >Nombre (francés)</description>
    <description locale="fr" >Nom (français)</description>
    <description locale="it" >Nome (francese)</description>
+   <description locale="ja" >名前（フランス語)</description>
    <description locale="pl" >Nazwa (francuska)</description>
   </widget>
   <widget tag="name:nl" type="edit" >
@@ -32,6 +34,7 @@
    <description locale="es" >Nombre (alemán)</description>
    <description locale="fr" >Nom (néérlandais)</description>
    <description locale="it" >Nome (olandese)</description>
+   <description locale="ja" >名前（ドイツ語）</description>
    <description locale="pl" >Nazwa (belgijska)</description>
   </widget>
  </widgets>

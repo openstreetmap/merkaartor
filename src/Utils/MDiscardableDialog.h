@@ -9,6 +9,7 @@ class QVBoxLayout;
 
 class MDiscardableDialog : public QDialog
 {
+Q_OBJECT
 	public:
 		MDiscardableDialog(QWidget *parent = 0, QString title = QString());
 		void setWidget ( QWidget * widget );
