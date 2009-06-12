@@ -76,7 +76,7 @@ void MoveTrackPointInteraction::snapMousePressEvent(QMouseEvent * event, MapFeat
 	clearNoSnap();
 	Moving.clear();
 	OriginalPosition.clear();
-	StartDragPosition = projection().inverse(event->pos());
+	StartDragPosition = XY_TO_COORD(event->pos());
 	for (int j=0; j<sel.size(); j++) {
 		if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(sel[j]))
 		{
@@ -191,7 +191,7 @@ void MoveTrackPointInteraction::snapMouseMoveEvent(QMouseEvent* event, MapFeatur
 
 Coord MoveTrackPointInteraction::calculateNewPosition(QMouseEvent *event, MapFeature *aLast, CommandList* theList)
 {
-	Coord TargetC = projection().inverse(event->pos());
+	Coord TargetC = XY_TO_COORD(event->pos());
 	QPoint Target(TargetC.lat(),TargetC.lon());
 	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(aLast))
 		return Pt->position();
@@ -217,5 +217,5 @@ Coord MoveTrackPointInteraction::calculateNewPosition(QMouseEvent *event, MapFea
 				RoadAddTrackPointCommand(R,Moving[0],BestIdx,document()->getDirtyOrOriginLayer(R->layer())));
 		return Coord(BestTarget.x(),BestTarget.y());
 	}
-	return projection().inverse(event->pos());
+	return XY_TO_COORD(event->pos());
 }

@@ -143,7 +143,7 @@ void DirtyDock::on_centerAction_triggered()
 	}
 	if (!cb.isNull()) {
 		Coord c = cb.center();
-		Main->view()->projection().setCenter(c, Main->view()->rect());
+		Main->view()->setCenter(c, Main->view()->rect());
 		Main->invalidateView();
 	}
 	Main->setUpdatesEnabled(true);
@@ -168,7 +168,7 @@ void DirtyDock::on_centerZoomAction_triggered()
 		CoordBox mini(cb.center()-10, cb.center()+10);
 		cb.merge(mini);
 		cb = cb.zoomed(1.1);
-		Main->view()->projection().setViewport(cb, Main->view()->rect());
+		Main->view()->setViewport(cb, Main->view()->rect());
 		Main->invalidateView();
 	}
 	Main->setUpdatesEnabled(true);

@@ -41,7 +41,7 @@ void CreateNodeInteraction::snapMouseReleaseEvent(QMouseEvent * ev, Road* aRoad)
 {
 	if (ev->button() == Qt::LeftButton)
 	{
-		Coord P(projection().inverse(ev->pos()));
+		Coord P(XY_TO_COORD(ev->pos()));
 		if (aRoad)
 		{
 			main()->properties()->setSelection(0);

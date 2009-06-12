@@ -756,7 +756,7 @@ void MerkaartorPreferences::restoreMainWindowState(MainWindow * mainWindow) cons
 void MerkaartorPreferences::setInitialPosition(MapView* vw)
 {
 	QStringList ip;
-	CoordBox cb = vw->projection().viewport();
+	CoordBox cb = vw->viewport();
 	ip.append(QString::number(cb.bottomLeft().lat()));
 	ip.append(QString::number(cb.bottomLeft().lon()));
 	ip.append(QString::number(cb.topRight().lat()));
@@ -769,7 +769,7 @@ void MerkaartorPreferences::setInitialPosition(MapView* vw)
 void MerkaartorPreferences::initialPosition(MapView* vw)
 {
 	if (!Sets->contains("MainWindow/InitialPosition")) {
-		vw->projection().setViewport(WORLD_COORDBOX, vw->rect());
+		vw->setViewport(WORLD_COORDBOX, vw->rect());
 		return;
 	}
 
@@ -779,10 +779,10 @@ void MerkaartorPreferences::initialPosition(MapView* vw)
 	const Coord topRight(ip[2].toInt(),ip[3].toInt());
 
 	if (!Sets->contains("MainWindow/ViewRect"))
-		vw->projection().setViewport(CoordBox(bottomLeft, topRight), vw->rect());
+		vw->setViewport(CoordBox(bottomLeft, topRight), vw->rect());
 	else {
 		QRect rt = Sets->value("MainWindow/ViewRect").toRect();
-		vw->projection().setViewport(CoordBox(bottomLeft, topRight), rt);
+		vw->setViewport(CoordBox(bottomLeft, topRight), rt);
 	}
 }
 

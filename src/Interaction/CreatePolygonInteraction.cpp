@@ -52,16 +52,16 @@ QString CreatePolygonInteraction::toHtml()
 
 void CreatePolygonInteraction::testIntersections(CommandList* L, Road* Left, int FromIdx, Road* Right, int RightIndex)
 {
-	LineF L1(view()->projection().project(Right->getNode(RightIndex-1)),
-		view()->projection().project(Right->getNode(RightIndex)));
+	LineF L1(COORD_TO_XY(Right->getNode(RightIndex-1)),
+		COORD_TO_XY(Right->getNode(RightIndex)));
 	for (int i=FromIdx; i<Left->size(); ++i)
 	{
-		LineF L2(view()->projection().project(Left->getNode(i-1)),
-			view()->projection().project(Left->getNode(i)));
+		LineF L2(COORD_TO_XY(Left->getNode(i-1)),
+			COORD_TO_XY(Left->getNode(i)));
 		QPointF Intersection(L1.intersectionWith(L2));
 		if (L1.segmentContains(Intersection) && L2.segmentContains(Intersection))
 		{
-			TrackPoint* Pt = new TrackPoint(view()->projection().inverse(Intersection));
+			TrackPoint* Pt = new TrackPoint(XY_TO_COORD(Intersection));
 			L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),Pt,true));
 			L->add(new RoadAddTrackPointCommand(Left,Pt,i));
 			L->add(new RoadAddTrackPointCommand(Right,Pt,RightIndex));
@@ -79,7 +79,7 @@ void CreatePolygonInteraction::mousePressEvent(QMouseEvent * event)
 		if (!HaveOrigin)
 		{
 			HaveOrigin = true;
-			Origin = view()->projection().inverse(event->pos());
+			Origin = XY_TO_COORD(event->pos());
 			OriginF = event->pos();
 			bAngle = 0.;
 			bScale = QPointF(1., 1.);
@@ -92,7 +92,7 @@ void CreatePolygonInteraction::mousePressEvent(QMouseEvent * event)
 				Radius = sqrt(2.)/2.;
 			double Angle = 2*M_PI/Sides;
 			QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
-			QPen TP(SomeBrush,projection().pixelPerM()*4);
+			QPen TP(SomeBrush,view()->pixelPerM()*4);
 
 			QMatrix m;
 			m.translate(OriginF.x(), OriginF.y());
@@ -100,7 +100,7 @@ void CreatePolygonInteraction::mousePressEvent(QMouseEvent * event)
 			m.scale(bScale.x(), bScale.y());
 
 			QPointF Prev(CenterF.x()+cos(Angle/2)*Radius,CenterF.y()+sin(Angle/2)*Radius);
-			TrackPoint* First = new TrackPoint(view()->projection().inverse(m.map(Prev)));
+			TrackPoint* First = new TrackPoint(XY_TO_COORD(m.map(Prev)));
 			Road* R = new Road;
 			R->add(First);
 			if (M_PREFS->apiVersionNum() < 0.6)
@@ -110,7 +110,7 @@ void CreatePolygonInteraction::mousePressEvent(QMouseEvent * event)
 			for (double a = Angle*3/2; a<2*M_PI; a+=Angle)
 			{
 				QPointF Next(CenterF.x()+cos(a)*Radius,CenterF.y()+sin(a)*Radius);
-				TrackPoint* New = new TrackPoint(view()->projection().inverse(m.map(Next)));
+				TrackPoint* New = new TrackPoint(XY_TO_COORD(m.map(Next)));
 				if (M_PREFS->apiVersionNum() < 0.6)
 					New->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 				L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),New,true));
@@ -160,7 +160,7 @@ void CreatePolygonInteraction::paintEvent(QPaintEvent* , QPainter& thePainter)
 
 		double Angle = 2*M_PI/Sides;
 		QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
-		QPen TP(SomeBrush,projection().pixelPerM()*4);
+		QPen TP(SomeBrush,view()->pixelPerM()*4);
 		QPointF Prev(CenterF.x()+cos(Angle/2)*Radius,CenterF.y()+sin(Angle/2)*Radius);
 		for (double a = Angle*3/2; a<2*M_PI; a+=Angle)
 		{

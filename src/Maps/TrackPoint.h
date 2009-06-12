@@ -30,10 +30,10 @@ class TrackPoint : public MapFeature
 		virtual QString getClass() const {return "TrackPoint";}
 
 		virtual CoordBox boundingBox() const;
-		virtual void draw(QPainter& P, const Projection& theProjection);
-		virtual void drawFocus(QPainter& P, const Projection& theProjection, bool solid=true);
-		virtual void drawHover(QPainter& P, const Projection& theProjection, bool solid=true);
-		virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection) const;
+		virtual void draw(QPainter& P, const Projection& theProjection, const QTransform& theTransform);
+		virtual void drawFocus(QPainter& P, const Projection& theProjection, const QTransform& theTransform, bool solid=true);
+		virtual void drawHover(QPainter& P, const Projection& theProjection, const QTransform& theTransform, bool solid=true);
+		virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection, const QTransform& theTransform) const;
 		virtual void cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const QList<MapFeature*>& Alternatives);
 		virtual bool notEverythingDownloaded() const;
 		virtual QString description() const;
@@ -92,7 +92,43 @@ Q_DECLARE_METATYPE( TrackPoint * );
 
 #ifndef _MOBILE
 // Register this point as being a recognizable point by the GGL
-GEOMETRY_REGISTER_POINT_2D_CONST(TrackPoint, qreal, cs::cartesian, projection().x(), projection().y())
+//GEOMETRY_REGISTER_POINT_2D_CONST(TrackPoint, qreal, cs::cartesian, projection().x(), projection().y())
+
+namespace geometry { namespace traits {
+
+template<> struct tag<TrackPointPtr>
+{ typedef point_tag type; };
+
+template<> struct coordinate_type<TrackPointPtr>
+{ typedef qreal type; };
+
+template<> struct coordinate_system<TrackPointPtr>
+{ typedef cs::cartesian type; };
+
+template<> struct dimension<TrackPointPtr>
+    : boost::mpl::int_<2> {};
+
+template<>
+struct access<TrackPointPtr>
+{
+    template <std::size_t I>
+    static inline qreal get(const TrackPointPtr& p)
+    {
+        return I == 0 ? p->Position.lon() : p->Position.lat();
+    }
+
+    template <std::size_t I>
+    static inline void set(TrackPointPtr& p, const qreal& value)
+    {
+        // Or (better) implement an accessor with specializations
+        if (I == 0) p->Position.setLon(value);
+        else if (I == 1) p->Position.setLat(value);
+    }
+
+};
+
+}} // namespace ggl::traits
+
 #endif
 
 

@@ -84,7 +84,7 @@ void RotateInteraction::snapMousePressEvent(QMouseEvent * event, MapFeature* aLa
 	if (!sel.size())
 		return;
 
-	StartDragPosition = projection().inverse(event->pos());
+	StartDragPosition = XY_TO_COORD(event->pos());
 	CoordBox selBB = sel[0]->boundingBox();
 	for (int j=0; j<sel.size(); j++) {
 		selBB.merge(sel[j]->boundingBox());
@@ -101,7 +101,7 @@ void RotateInteraction::snapMousePressEvent(QMouseEvent * event, MapFeature* aLa
 		}
 	}
 	if (Rotating.size() > 1) {
-		RotationCenter = projection().project(selBB.center());
+		RotationCenter = COORD_TO_XY(selBB.center());
 		for (int i=0; i<Rotating.size(); ++i)
 		{
 			OriginalPosition.push_back(Rotating[i]->position());
@@ -144,7 +144,7 @@ void RotateInteraction::snapMouseMoveEvent(QMouseEvent* event, MapFeature* /*Clo
 	if (Rotating.size() && !panning())
 	{
 		if (!(event->modifiers() & Qt::ControlModifier))
-			Radius = distance(RotationCenter,event->pos()) / distance(RotationCenter, projection().project(StartDragPosition));
+			Radius = distance(RotationCenter,event->pos()) / distance(RotationCenter, COORD_TO_XY(StartDragPosition));
 		if (!(event->modifiers() & Qt::ShiftModifier))
 			Angle = calculateNewAngle(event);
 		for (int i=0; i<Rotating.size(); ++i)
@@ -155,17 +155,17 @@ void RotateInteraction::snapMouseMoveEvent(QMouseEvent* event, MapFeature* /*Clo
 
 Coord RotateInteraction::rotatePosition(Coord position, double angle, double radius)
 {
-	QPointF p = projection().project(position);
+	QPointF p = COORD_TO_XY(position);
 	QLineF v(RotationCenter, p);
 	v.setAngle(v.angle() + angle);
 	v.setLength(v.length() * radius);
 
-	return projection().inverse(v.p2());
+	return XY_TO_COORD(v.p2());
 }
 
 double RotateInteraction::calculateNewAngle(QMouseEvent *event)
 {
-	QPointF p1 = projection().project(StartDragPosition);
+	QPointF p1 = COORD_TO_XY(StartDragPosition);
 	QLineF v1(RotationCenter, p1);
 	QLineF v2(RotationCenter, event->pos());
 
@@ -177,7 +177,7 @@ void RotateInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
 	if (!RotationCenter.isNull())
 	{
 		thePainter.setPen(QPen(QColor(255,0,0),1));
-		thePainter.drawEllipse(projection().project(RotationCenter), 5, 5);
+		thePainter.drawEllipse(COORD_TO_XY(RotationCenter), 5, 5);
 	}
 	FeatureSnapInteraction::paintEvent(anEvent, thePainter);
 }

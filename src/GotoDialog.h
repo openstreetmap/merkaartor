@@ -15,8 +15,8 @@
 #include <QWidget>
 #include <QSettings>
 
+#include "MapView.h"
 #include "Maps/Coord.h"
-#include "Maps/Projection.h"
 
 #include <ui_GotoDialog.h>
 
@@ -32,7 +32,7 @@ class GotoDialog: public QDialog , public Ui::GotoDialog
 	Q_OBJECT
 
 public:
-    GotoDialog(const Projection& aProj, QWidget *parent = 0);
+    GotoDialog(const MapView& aView, QWidget *parent = 0);
 
 	const CoordBox& newViewport() const { return theNewViewport; };
 	NameFinder::NameFinderWidget *searchWidget;

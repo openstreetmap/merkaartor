@@ -147,7 +147,7 @@ CoordBox Relation::boundingBox() const
 	return p->BBox;
 }
 
-void Relation::draw(QPainter& P, const Projection& theProjection)
+void Relation::draw(QPainter& P, const Projection& theProjection, const QTransform& theTransform)
 {
 	Q_UNUSED(theProjection)
 
@@ -161,7 +161,7 @@ void Relation::draw(QPainter& P, const Projection& theProjection)
 	P.drawPath(p->theBoundingPath);
 }
 
-void Relation::drawFocus(QPainter& P, const Projection& theProjection, bool solid)
+void Relation::drawFocus(QPainter& P, const Projection& theProjection, const QTransform& theTransform, bool solid)
 {
 	if (!solid) {
 		QPen thePen(M_PREFS->getFocusColor(),M_PREFS->getFocusWidth());
@@ -174,17 +174,17 @@ void Relation::drawFocus(QPainter& P, const Projection& theProjection, bool soli
 
 		for (int i=0; i<p->Members.size(); ++i)
 			if (p->Members[i].second && !p->Members[i].second->isDeleted())
-				p->Members[i].second->drawFocus(P,theProjection, solid);
+				p->Members[i].second->drawFocus(P,theProjection, theTransform, solid);
 
 		if (M_PREFS->getShowParents()) {
 			for (int i=0; i<sizeParents(); ++i)
 				if (!getParent(i)->isDeleted())
-					getParent(i)->drawFocus(P, theProjection, false);
+					getParent(i)->drawFocus(P, theProjection, theTransform, false);
 		}
 	}
 }
 
-void Relation::drawHover(QPainter& P, const Projection& theProjection, bool solid)
+void Relation::drawHover(QPainter& P, const Projection& theProjection, const QTransform& theTransform, bool solid)
 {
 	if (!solid) {
 		QPen thePen(M_PREFS->getHoverColor(),M_PREFS->getHoverWidth());
@@ -197,17 +197,17 @@ void Relation::drawHover(QPainter& P, const Projection& theProjection, bool soli
 
 		for (int i=0; i<p->Members.size(); ++i)
 			if (p->Members[i].second && !p->Members[i].second->isDeleted())
-				p->Members[i].second->drawHover(P,theProjection, solid);
+				p->Members[i].second->drawHover(P,theProjection, theTransform, solid);
 
 		if (M_PREFS->getShowParents()) {
 			for (int i=0; i<sizeParents(); ++i)
 				if (!getParent(i)->isDeleted())
-					getParent(i)->drawHover(P, theProjection, false);
+					getParent(i)->drawHover(P, theProjection, theTransform, false);
 		}
 	}
 }
 
-double Relation::pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection) const
+double Relation::pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection, const QTransform& theTransform) const
 {
 	double Best = 1000000;
 	//for (int i=0; i<p->Members.size(); ++i)
@@ -220,8 +220,8 @@ double Relation::pixelDistance(const QPointF& Target, double ClearEndDistance, c
 	//}
 
 	double D;
-	QRectF bb = QRectF(theProjection.project(boundingBox().topLeft()),theProjection.project(boundingBox().bottomRight()));
-	bb.adjust(-10, -10, 10, 10);
+	QRectF bb = QRectF(theTransform.map(theProjection.project(boundingBox().topLeft())),theTransform.map(theProjection.project(boundingBox().bottomRight())));
+	//bb.adjust(-10, -10, 10, 10);
 
 	LineF F(bb.topLeft(), bb.topRight());
 	D = F.capDistance(Target);
@@ -358,7 +358,7 @@ void Relation::releaseMemberModel()
 	}
 }
 
-void Relation::buildPath(Projection const &theProjection, const QRect& cr)
+void Relation::buildPath(Projection const &theProjection, const QTransform& theTransform, const QRectF& cr)
 {
 	using namespace geometry;
 
@@ -369,34 +369,54 @@ void Relation::buildPath(Projection const &theProjection, const QRect& cr)
 
 	box_2d clipRect (make<point_2d>(cr.bottomLeft().x(), cr.topRight().y()), make<point_2d>(cr.topRight().x(), cr.bottomLeft().y()));
 
-	QRect bb = QRect(theProjection.project(boundingBox().topLeft()),theProjection.project(boundingBox().bottomRight()));
-	bb.adjust(-10, -10, 10, 10);
-	QList<QPoint> corners;
+	QRectF bb = QRectF(theProjection.project(boundingBox().bottomLeft()),theProjection.project(boundingBox().topRight()));
+	//bb.adjust(-10, -10, 10, 10);
+	QList<QPointF> corners;
 
 	corners << bb.bottomLeft() << bb.topLeft() << bb.topRight() << bb.bottomRight() << bb.bottomLeft();
 
-	polygon_2d in;
+	linestring_2d in;
 	for (int i=0; i<corners.size(); ++i) {
-		QPoint P = corners[i];
+		QPointF P = corners[i];
 		append(in, make<point_2d>(P.x(), P.y()));
 	}
-	correct(in);
 
-	std::vector<polygon_2d> clipped;
+	std::vector<linestring_2d> clipped;
 	intersection(clipRect, in, std::back_inserter(clipped));
 
-	for (std::vector<polygon_2d>::const_iterator it = clipped.begin(); it != clipped.end(); it++)
+	for (std::vector<linestring_2d>::const_iterator it = clipped.begin(); it != clipped.end(); it++)
 	{
-		if (!(*it).outer().empty()) {
-			p->theBoundingPath.moveTo(QPointF((*it).outer()[0].x(), (*it).outer()[0].y()).toPoint());
+		if (!(*it).empty()) {
+			p->theBoundingPath.moveTo(QPointF((*it)[0].x(), (*it)[0].y()));
 		}
-		for (ring_2d::const_iterator itl = (*it).outer().begin()+1; itl != (*it).outer().end(); itl++)
+		for (linestring_2d::const_iterator itl = (*it).begin()+1; itl != (*it).end(); itl++)
 		{
-			p->theBoundingPath.lineTo(QPointF((*itl).x(), (*itl).y()).toPoint());
+			p->theBoundingPath.lineTo(QPointF((*itl).x(), (*itl).y()));
 		}
-		p->theBoundingPath.lineTo(QPointF((*it).outer()[0].x(), (*it).outer()[0].y()).toPoint());
 	}
+	
+	//polygon_2d in;
+	//for (int i=0; i<corners.size(); ++i) {
+	//	QPointF P = corners[i];
+	//	append(in, make<point_2d>(P.x(), P.y()));
+	//}
+	//correct(in);
 
+	//std::vector<polygon_2d> clipped;
+	//intersection(clipRect, in, std::back_inserter(clipped));
+
+	//for (std::vector<polygon_2d>::const_iterator it = clipped.begin(); it != clipped.end(); it++)
+	//{
+	//	if (!(*it).outer().empty()) {
+	//		p->theBoundingPath.moveTo(QPointF((*it).outer()[0].x(), (*it).outer()[0].y()));
+	//	}
+	//	for (ring_2d::const_iterator itl = (*it).outer().begin()+1; itl != (*it).outer().end(); itl++)
+	//	{
+	//		p->theBoundingPath.lineTo(QPointF((*itl).x(), (*itl).y()));
+	//	}
+	//	p->theBoundingPath.lineTo(QPointF((*it).outer()[0].x(), (*it).outer()[0].y()));
+	//}
+	p->theBoundingPath = theTransform.map(p->theBoundingPath);
 }
 
 QPainterPath Relation::getPath()

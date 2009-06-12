@@ -10,6 +10,7 @@
 
 #include "PaintStyle/TagSelector.h"
 
+class MapView;
 class MapFeature;
 class Projection;
 class Relation;
@@ -102,15 +103,15 @@ class FeaturePainter
 		QString toXML(QString filename) const;
 		static FeaturePainter fromXML(const QDomElement& e, QString filename);
 
-		void drawBackground(Road* R, QPainter& thePainter, const Projection& theProjection) const;
-		void drawBackground(Relation* R, QPainter& thePainter, const Projection& theProjection) const;
-		void drawForeground(Road* R, QPainter& thePainter, const Projection& theProjection) const;
-		void drawForeground(Relation* R, QPainter& thePainter, const Projection& theProjection) const;
-		void drawTouchup(Road* R, QPainter& thePainter, const Projection& theProjection) const;
-		void drawTouchup(TrackPoint* R, QPainter& thePainter, const Projection& theProjection) const;
-		void drawLabel(Road* R, QPainter& thePainter, const Projection& theProjection) const;
-		void drawPointLabel(QPoint C, QString str, QString strBG, QPainter& thePainter, const Projection& theProjection) const;
-		void drawLabel(TrackPoint* Pt, QPainter& thePainter, const Projection& theProjection) const;
+		void drawBackground(Road* R, QPainter& thePainter, MapView& theView) const;
+		void drawBackground(Relation* R, QPainter& thePainter, MapView& theView) const;
+		void drawForeground(Road* R, QPainter& thePainter, MapView& theView) const;
+		void drawForeground(Relation* R, QPainter& thePainter, MapView& theView) const;
+		void drawTouchup(Road* R, QPainter& thePainter, MapView& theView) const;
+		void drawTouchup(TrackPoint* R, QPainter& thePainter, MapView& theView) const;
+		void drawLabel(Road* R, QPainter& thePainter, MapView& theView) const;
+		void drawPointLabel(QPointF C, QString str, QString strBG, QPainter& thePainter, MapView& theView) const;
+		void drawLabel(TrackPoint* Pt, QPainter& thePainter, MapView& theView) const;
 
 	public:
 		TagSelector* theSelector;

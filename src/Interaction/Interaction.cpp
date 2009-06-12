@@ -45,6 +45,11 @@ const Projection& Interaction::projection() const
 	return theView->projection();
 }
 
+const QTransform& Interaction::transform() const
+{
+	return theView->transform();
+}
+
 void Interaction::mousePressEvent(QMouseEvent * anEvent)
 {
 #if defined(Q_OS_MAC)
@@ -61,7 +66,7 @@ void Interaction::mousePressEvent(QMouseEvent * anEvent)
 #endif // Q_OS_MAC
 	{
 		if (anEvent->modifiers() & Qt::ControlModifier) {
-			EndDrag = StartDrag = projection().inverse(anEvent->pos());
+			EndDrag = StartDrag = XY_TO_COORD(anEvent->pos());
 			Dragging = true;
 		} else 
 		if (anEvent->modifiers() & Qt::ShiftModifier) {
@@ -86,9 +91,9 @@ void Interaction::mouseReleaseEvent(QMouseEvent * anEvent)
 	} else
 	if (Dragging)
 	{
-		CoordBox DragBox(StartDrag,projection().inverse(anEvent->pos()));
+		CoordBox DragBox(StartDrag,XY_TO_COORD(anEvent->pos()));
 		if (!DragBox.isEmpty()) {
-			view()->projection().setViewport(DragBox,view()->rect());
+			view()->setViewport(DragBox,view()->rect());
 			view()->invalidate(true, true);
 			view()->launch(0);
 		}
@@ -125,7 +130,7 @@ void Interaction::mouseMoveEvent(QMouseEvent* anEvent)
 		} else
 		if (Dragging)
 		{
-			EndDrag = projection().inverse(anEvent->pos());
+			EndDrag = XY_TO_COORD(anEvent->pos());
 			view()->update();
 		}
 	}
@@ -136,7 +141,7 @@ void Interaction::paintEvent(QPaintEvent*, QPainter& thePainter)
 	if (Dragging)
 	{
 		thePainter.setPen(QPen(QColor(0,0,255),1,Qt::DotLine));
-		thePainter.drawRect(QRectF(projection().project(StartDrag),projection().project(EndDrag)));
+		thePainter.drawRect(QRectF(COORD_TO_XY(StartDrag),COORD_TO_XY(EndDrag)));
 	}
 }
 

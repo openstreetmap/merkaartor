@@ -29,6 +29,9 @@ class QPainter;
 
 #include <algorithm>
 
+#define XY_TO_COORD(x)  projection().inverse(transform().inverted().map(QPointF(x)))
+#define COORD_TO_XY(x)  transform().map(projection().project(x)).toPoint()
+
 class Interaction : public QObject
 {
 	Q_OBJECT
@@ -49,6 +52,7 @@ class Interaction : public QObject
 		MapDocument* document();
 		MainWindow* main();
 		const Projection& projection() const;
+		const QTransform& transform() const;
 		bool panning() const;
 	private:
 		MapView* theView;
@@ -80,11 +84,11 @@ class GenericFeatureSnapInteraction : public Interaction
 
 			for (int i=0; i<view()->properties()->size(); ++i)
 				if (document()->exists(view()->properties()->selection(i)))
-					view()->properties()->selection(i)->drawFocus(thePainter, projection());
+					view()->properties()->selection(i)->drawFocus(thePainter, projection(), transform());
 
 #ifndef _MOBILE
 			if (LastSnap && document()->exists(LastSnap)) {
-				LastSnap->drawHover(thePainter, projection());
+				LastSnap->drawHover(thePainter, projection(), transform());
 				view()->setToolTip(LastSnap->toHtml());
 			} else {
 				view()->setToolTip("");
@@ -192,7 +196,7 @@ class GenericFeatureSnapInteraction : public Interaction
 			LastSnap = 0;
 			if (!SnapActive) return;
 			//QTime Start(QTime::currentTime());
-			CoordBox HotZone(projection().inverse(event->pos()-QPointF(15,15)),projection().inverse(event->pos()+QPointF(15,15)));
+			CoordBox HotZone(XY_TO_COORD(event->pos()-QPointF(15,15)),XY_TO_COORD(event->pos()+QPointF(15,15)));
 			SnapList.clear();
 			double BestDistance = 5;
 #if 1
@@ -215,7 +219,7 @@ class GenericFeatureSnapInteraction : public Interaction
 							continue;
 						if (std::find(NoSnap.begin(),NoSnap.end(),Pt) != NoSnap.end())
 							continue;
-						double Distance = Pt->pixelDistance(event->pos(), 5.01, projection());
+						double Distance = Pt->pixelDistance(event->pos(), 5.01, projection(), transform());
 						SnapList.push_back(Pt);
 						if (Distance < BestDistance)
 						{
@@ -244,7 +248,7 @@ class GenericFeatureSnapInteraction : public Interaction
 						continue;
 					if (Pt->boundingBox().disjunctFrom(HotZone))
 						continue;
-					double Distance = Pt->pixelDistance(event->pos(), 5.01, projection());
+					double Distance = Pt->pixelDistance(transform().inverted().map(event->pos()), 5.01, projection());
 					SnapList.push_back(Pt);
 					if (Distance < BestDistance)
 					{

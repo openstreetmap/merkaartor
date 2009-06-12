@@ -71,7 +71,7 @@ namespace boost
           && geometry::get < 0 > (b1.min_corner()) <= geometry::get < 0 > (b2.max_corner()))
         {
           overlaps_x = true;
-        }
+        } else
       if (geometry::get < 0 > (b1.max_corner()) >= geometry::get < 0 > (b2.min_corner())
           && geometry::get < 0 > (b1.min_corner()) <= geometry::get < 0 > (b2.max_corner()))
         {
@@ -82,7 +82,7 @@ namespace boost
           && geometry::get < 1 > (b1.min_corner()) <= geometry::get < 1 > (b2.max_corner()))
         {
           overlaps_y = true;
-        }
+        } else
       if (geometry::get < 1 > (b1.max_corner()) >= geometry::get < 1 > (b2.min_corner())
           && geometry::get < 1 > (b1.min_corner()) <= geometry::get < 1 > (b2.max_corner()))
         {

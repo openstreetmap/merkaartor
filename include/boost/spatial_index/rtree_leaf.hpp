@@ -61,7 +61,7 @@ namespace boost
               r.push_back(it->second);
             }
           } else {
-            if (overlaps(it->first, e)) {
+			if (geometry::overlaps(it->first, e)) {
               r.push_back(it->second);
             }
           }

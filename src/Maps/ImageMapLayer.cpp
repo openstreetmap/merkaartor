@@ -1,3 +1,4 @@
+#include "MapView.h"
 #include "Maps/ImageMapLayer.h"
 
 #include "Maps/MapDocument.h"
@@ -34,6 +35,8 @@ public:
 	TileMapAdapter* tmsa;
 	WMSMapAdapter* wmsa;
 	QRect pr;
+	QTransform theTransform;
+	CoordBox Viewport;
 
 public:
 	ImageMapLayerPrivate()
@@ -310,36 +313,43 @@ void ImageMapLayer::zoom(double zoom, const QPoint& pos, const QRect& rect)
 	P.drawPixmap(pos - (pos * zoom), tpm);
 }
 
-void ImageMapLayer::forceRedraw(const Projection& mainProj, QRect rect)
+void ImageMapLayer::forceRedraw(MapView& theView, QRect Screen)
 {
 	if (!p->theMapAdapter)
 		return;
 
-	if (p->pm.size() != rect.size()) {
-		p->pm = QPixmap(rect.size());
+	if (p->pm.size() != Screen.size()) {
+		p->pm = QPixmap(Screen.size());
 		p->pm.fill(Qt::transparent);
 	}
-	p->theProjection.setViewport(mainProj.viewport(), rect);
+
+	MapView::transformCalc(p->theTransform, p->theProjection, theView.viewport(), Screen);
+
+	QRectF fScreen(Screen);
+	p->Viewport =
+		CoordBox(p->theProjection.inverse(p->theTransform.inverted().map(fScreen.bottomLeft())),
+			 p->theProjection.inverse(p->theTransform.inverted().map(fScreen.topRight())));
+
 	p->theImageManager->abortLoading();
-	draw(mainProj, rect);
+	draw(theView, Screen);
 }
 
-void ImageMapLayer::draw(const Projection& mainProj, QRect& rect)
+void ImageMapLayer::draw(MapView& theView, QRect& rect)
 {
 	if (!p->theMapAdapter)
 		return;
 
 	if (p->theMapAdapter->isTiled())
-		p->pr = drawTiled(mainProj, rect);
+		p->pr = drawTiled(theView, rect);
 	else
-		p->pr = drawFull(mainProj, rect);
+		p->pr = drawFull(theView, rect);
 }
 
-QRect ImageMapLayer::drawFull(const Projection& mainProj, QRect& rect) const
+QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect) const
 {
-	QRectF vp = p->theProjection.getProjectedViewport(rect);
-	QRectF wgs84vp = QRectF(QPointF(intToAng(p->theProjection.viewport().bottomLeft().lon()), intToAng(p->theProjection.viewport().bottomLeft().lat()))
-						, QPointF(intToAng(p->theProjection.viewport().topRight().lon()), intToAng(p->theProjection.viewport().topRight().lat())));
+	QRectF vp = p->theProjection.getProjectedViewport(p->Viewport, rect);
+	QRectF wgs84vp = QRectF(QPointF(intToAng(p->Viewport.bottomLeft().lon()), intToAng(p->Viewport.bottomLeft().lat()))
+						, QPointF(intToAng(p->Viewport.topRight().lon()), intToAng(p->Viewport.topRight().lat())));
 	QString url (p->theMapAdapter->getQuery(wgs84vp, vp, rect));
 	if (!url.isEmpty()) {
 
@@ -353,17 +363,17 @@ QRect ImageMapLayer::drawFull(const Projection& mainProj, QRect& rect) const
 		}
 	}
 
-	const QPointF tl = mainProj.project(p->theProjection.viewport().topLeft());
-	const QPointF br = mainProj.project(p->theProjection.viewport().bottomRight());
+	const QPointF tl = theView.transform().map(theView.projection().project(p->Viewport.topLeft()));
+	const QPointF br = theView.transform().map(theView.projection().project(p->Viewport.bottomRight()));
 
 	return QRectF(tl, br).toRect();
 }
 
-QRect ImageMapLayer::drawTiled(const Projection& mainProj, QRect& rect) const
+QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect) const
 {
 	int tilesize = p->theMapAdapter->getTileSize();
-	QRectF vp = QRectF(QPointF(intToAng(p->theProjection.viewport().bottomLeft().lon()), intToAng(p->theProjection.viewport().bottomLeft().lat()))
-						, QPointF(intToAng(p->theProjection.viewport().topRight().lon()), intToAng(p->theProjection.viewport().topRight().lat())));
+	QRectF vp = QRectF(QPointF(intToAng(p->Viewport.bottomLeft().lon()), intToAng(p->Viewport.bottomLeft().lat()))
+						, QPointF(intToAng(p->Viewport.topRight().lon()), intToAng(p->Viewport.topRight().lat())));
 
 	// Set zoom level to 0.
 	while (p->theMapAdapter->getAdaptedZoom()) {
@@ -478,8 +488,8 @@ QRect ImageMapLayer::drawTiled(const Projection& mainProj, QRect& rect) const
 	const Coord ctl = Coord(angToInt(vlm.bottomLeft().y()), angToInt(vlm.bottomLeft().x()));
 	const Coord cbr = Coord(angToInt(vlm.topRight().y()), angToInt(vlm.topRight().x()));
 
-	const QPointF tl = mainProj.project(ctl);
-	const QPointF br = mainProj.project(cbr);
+	const QPointF tl = theView.transform().map(theView.projection().project(ctl));
+	const QPointF br = theView.transform().map(theView.projection().project(cbr));
 
 	return QRectF(tl, br).toRect();
 }

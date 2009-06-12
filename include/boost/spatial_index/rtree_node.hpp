@@ -14,6 +14,7 @@
 #define BOOST_SPATIAL_INDEX_RTREE_NODE_HPP
 
 #include <geometry/algorithms/area.hpp>
+#include <geometry/algorithms/overlaps.hpp>
 
 namespace boost
 {
@@ -105,7 +106,7 @@ namespace boost
       {
         for(typename node_map::const_iterator it = nodes_.begin();
              it != nodes_.end(); ++it) {
-          if (overlaps(it->first, e)) {
+		  if (geometry::overlaps(it->first, e)) {
             it->second->find(e, r, exact_match);
           }
         }

@@ -138,10 +138,10 @@ CoordBox TrackPoint::boundingBox() const
 }
 
 #ifdef GEOIMAGE
-void TrackPoint::draw(QPainter& thePainter , const Projection& theProjection )
+void TrackPoint::draw(QPainter& thePainter , const Projection& theProjection, const QTransform& theTransform )
 {
 	if (!tagValue("Picture", "").isEmpty()) {
-		QPoint me = theProjection.project(this);
+		QPoint me = theTransform.map(theProjection.project(this).toPoint());
 		thePainter.setPen(QPen(QColor(0, 0, 0), 2));
 		QRect box(me - QPoint(5, 3), me + QPoint(5, 3));
 		thePainter.drawRect(box);
@@ -153,11 +153,11 @@ void TrackPoint::draw(QPainter& /* thePainter */, const Projection& /*theProject
 }
 #endif
 
-void TrackPoint::drawFocus(QPainter& thePainter, const Projection& theProjection, bool solid)
+void TrackPoint::drawFocus(QPainter& thePainter, const Projection& theProjection, const QTransform& theTransform, bool solid)
 {
 	thePainter.setPen(MerkaartorPreferences::instance()->getFocusColor());
-	QPoint P(theProjection.project(this));
-	QRect R(P-QPoint(3,3),QSize(6,6));
+	QPointF P(theTransform.map(theProjection.project(this)));
+	QRectF R(P-QPoint(3,3),QSize(6,6));
 	thePainter.drawRect(R);
 	R.adjust(-7, -7, 7, 7);
 	thePainter.drawEllipse(R);
@@ -165,15 +165,15 @@ void TrackPoint::drawFocus(QPainter& thePainter, const Projection& theProjection
 	if (M_PREFS->getShowParents() && solid) {
 		for (int i=0; i<sizeParents(); ++i)
 			if (!getParent(i)->isDeleted())
-				getParent(i)->drawFocus(thePainter, theProjection, false);
+				getParent(i)->drawFocus(thePainter, theProjection, theTransform, false);
 	}
 }
 
-void TrackPoint::drawHover(QPainter& thePainter, const Projection& theProjection, bool solid)
+void TrackPoint::drawHover(QPainter& thePainter, const Projection& theProjection, const QTransform& theTransform, bool solid)
 {
 	thePainter.setPen(MerkaartorPreferences::instance()->getHoverColor());
-	QPoint P(theProjection.project(this));
-	QRect R(P-QPoint(3,3),QSize(6,6));
+	QPointF P(theTransform.map(theProjection.project(this)));
+	QRectF R(P-QPoint(3,3),QSize(6,6));
 	thePainter.drawRect(R);
 	R.adjust(-7, -7, 7, 7);
 	thePainter.drawEllipse(R);
@@ -181,13 +181,13 @@ void TrackPoint::drawHover(QPainter& thePainter, const Projection& theProjection
 	if (M_PREFS->getShowParents() && solid) {
 		for (int i=0; i<sizeParents(); ++i)
 			if (!getParent(i)->isDeleted())
-				getParent(i)->drawHover(thePainter, theProjection, false);
+				getParent(i)->drawHover(thePainter, theProjection, theTransform, false);
 	}
 }
 
-double TrackPoint::pixelDistance(const QPointF& Target, double, const Projection& theProjection) const
+double TrackPoint::pixelDistance(const QPointF& Target, double, const Projection& theProjection, const QTransform& theTransform) const
 {
-	return distance(Target,theProjection.project(Position));
+	return distance(Target,theTransform.map(theProjection.project(Position)));
 }
 
 void TrackPoint::cascadedRemoveIfUsing(MapDocument*, MapFeature*, CommandList*, const QList<MapFeature*>&)

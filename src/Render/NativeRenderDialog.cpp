@@ -109,7 +109,7 @@ void NativeRenderDialog::render()
 
 	Projection aProj;
 	QRect theR(0, 0, w, h);
-	aProj.setViewport(VP, theR);
+	mw->view()->setViewport(VP, theR);
 
 #ifndef Q_OS_SYMBIAN
 	QApplication::setOverrideCursor(Qt::BusyCursor);
@@ -121,14 +121,14 @@ void NativeRenderDialog::render()
 
 	QApplication::processEvents();
 
-	QRegion rg(theR);
-	P.setClipRegion(rg);
-	P.setClipping(true);
+	//QRegion rg(theR);
+	//P.setClipRegion(rg);
+	//P.setClipping(true);
 
 	double oldTileToRegionThreshold = M_PREFS->getTileToRegionThreshold();
 	M_PREFS->setTileToRegionThreshold(360.0);
 
-	mw->view()->buildFeatureSet(rg, aProj);
+	mw->view()->buildFeatureSet();
 	mw->view()->drawBackground(P, aProj);
 	mw->view()->drawFeatures(P, aProj);
 
@@ -159,9 +159,8 @@ void NativeRenderDialog::calcRatio()
 		angToInt(sbMaxLon->value())
 	));
 	Projection theProj;
-	int w = sbPreviewWidth->value();
-	int h = sbPreviewHeight->value();
-	theProj.setViewport(theB, QRect(0, 0, w, h));
+	//int w = sbPreviewWidth->value();
+	//int h = sbPreviewHeight->value();
 	ratio = (theB.latDiff() / theProj.latAnglePerM()) / (theB.lonDiff() / theProj.lonAnglePerM((theB.bottomLeft().lat() + theB.topRight().lat())/2));
 }
 

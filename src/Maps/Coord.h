@@ -44,6 +44,8 @@ class Coord
 	public:
 		Coord()
 			: Lat(0), Lon(0) {}
+		Coord(const Coord& c)
+			: Lat(c.Lat), Lon(c.Lon) {}
 		Coord(const QPoint& P)
 			: Lat(P.x()), Lon(P.y()) {}
 		Coord(const QPointF& P)
@@ -156,6 +158,7 @@ class CoordBox
 {
 	public:
 		CoordBox() {};
+		CoordBox(const CoordBox& cb);
 		CoordBox(const Coord& C1, const Coord& C2);
 
 		bool isNull() const

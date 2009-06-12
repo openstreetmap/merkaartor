@@ -81,7 +81,7 @@ QString EditInteraction::toHtml()
 
 Coord EditInteraction::calculateNewPosition(QMouseEvent *event, MapFeature *aLast, CommandList* theList)
 {
-	Coord TargetC = projection().inverse(event->pos());
+	Coord TargetC = XY_TO_COORD(event->pos());
 	QPoint Target(TargetC.lat(),TargetC.lon());
 	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(aLast))
 		return Pt->position();
@@ -107,7 +107,7 @@ Coord EditInteraction::calculateNewPosition(QMouseEvent *event, MapFeature *aLas
 				RoadAddTrackPointCommand(R,Moving[0],BestIdx,document()->getDirtyOrOriginLayer(R->layer())));
 		return Coord(BestTarget.x(),BestTarget.y());
 	}
-	return projection().inverse(event->pos());
+	return XY_TO_COORD(event->pos());
 }
 
 void EditInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
@@ -115,7 +115,7 @@ void EditInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
 	if (Dragging)
 	{
 		thePainter.setPen(QPen(QColor(255,0,0),1,Qt::DotLine));
-		thePainter.drawRect(QRectF(projection().project(StartDrag),projection().project(EndDrag)));
+		thePainter.drawRect(QRectF(COORD_TO_XY(StartDrag),COORD_TO_XY(EndDrag)));
 	}
 	FeatureSnapInteraction::paintEvent(anEvent, thePainter);
 }
@@ -135,7 +135,7 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 		clearNoSnap();
 		Moving.clear();
 		OriginalPosition.clear();
-		StartDragPosition = projection().inverse(ev->pos());
+		StartDragPosition = XY_TO_COORD(ev->pos());
 		for (int j=0; j<sel.size(); j++) {
 			if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(sel[j]))
 			{
@@ -175,7 +175,7 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 					(!M_PREFS->getMouseSingleButton() && !aLast)
 					)
 				{
-					EndDrag = StartDrag = projection().inverse(ev->pos());
+					EndDrag = StartDrag = XY_TO_COORD(ev->pos());
 					Dragging = true;
 				}
 			}
@@ -279,7 +279,7 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* aLast
 	if (Dragging)
 	{
 		QList<MapFeature*> List;
-		CoordBox DragBox(StartDrag,projection().inverse(ev->pos()));
+		CoordBox DragBox(StartDrag,XY_TO_COORD(ev->pos()));
 		for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it) {
 			if (it.get()->layer()->isReadonly())
 				continue;
@@ -367,7 +367,7 @@ void EditInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, MapFeature* aLast
 	} else
 	if (Dragging)
 	{
-		EndDrag = projection().inverse(anEvent->pos());
+		EndDrag = XY_TO_COORD(anEvent->pos());
 		view()->update();
 	} else
 	if (aLast && view()->properties()->isSelected(aLast) && !M_PREFS->getSeparateMoveMode())

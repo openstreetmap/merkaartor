@@ -22,10 +22,10 @@ class Relation : public MapFeature
 		virtual QString getClass() const {return "Relation";}
 
 		virtual CoordBox boundingBox() const;
-		virtual void draw(QPainter& P, const Projection& theProjection);
-		virtual void drawFocus(QPainter& P, const Projection& theProjection, bool solid=true);
-		virtual void drawHover(QPainter& P, const Projection& theProjection, bool solid=true);
-		virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection) const;
+		virtual void draw(QPainter& P, const Projection& theProjection, const QTransform& theTransform);
+		virtual void drawFocus(QPainter& P, const Projection& theProjection, const QTransform& theTransform, bool solid=true);
+		virtual void drawHover(QPainter& P, const Projection& theProjection, const QTransform& theTransform, bool solid=true);
+		virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection, const QTransform& theTransform) const;
 		virtual void cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const QList<MapFeature*>& Alternatives);
 		virtual bool notEverythingDownloaded() const;
 		virtual RenderPriority renderPriority(double aPixelPerM);
@@ -49,7 +49,7 @@ class Relation : public MapFeature
 		virtual void partChanged(MapFeature* F, int ChangeId);
 
 		QPainterPath getPath();
-		void buildPath(Projection const &theProjection, const QRect& clipRect);
+		void buildPath(Projection const &theProjection, const QTransform& theTransform, const QRectF& clipRect);
 
 		virtual QString toXML(int lvl=0, QProgressDialog * progress=NULL);
 		virtual bool toXML(QDomElement xParent, QProgressDialog & progress);

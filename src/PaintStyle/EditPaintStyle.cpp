@@ -1,3 +1,4 @@
+#include "MapView.h"
 #include "PaintStyle/EditPaintStyle.h"
 #include "Maps/Painting.h"
 #include "Maps/Projection.h"
@@ -31,21 +32,21 @@ EditPaintStyle* EditPaintStyle::m_EPSInstance = 0;
 //	return theProjection.pixelPerM() < LOCALZOOM;
 //}
 
-static bool regionalZoom(const Projection& theProjection)
+static bool regionalZoom(const MapView& theView)
 {
-	return theProjection.pixelPerM() < REGIONALZOOM;
+	return theView.pixelPerM() < REGIONALZOOM;
 }
 
-static bool globalZoom(const Projection& theProjection)
+static bool globalZoom(const MapView& theView)
 {
-	return theProjection.pixelPerM() < GLOBALZOOM;
+	return theView.pixelPerM() < GLOBALZOOM;
 }
 
 class EditPaintStylePrivate
 {
 	public:
-		EditPaintStylePrivate(QPainter& P, const Projection& aProj)
-			: thePainter(P), theProjection(aProj)
+		EditPaintStylePrivate(QPainter& P, MapView& aView)
+			: thePainter(P), theView(aView)
 		{
 			bgLayer.setP(this);
 			fgLayer.setP(this);
@@ -54,7 +55,7 @@ class EditPaintStylePrivate
 		}
 
 		QPainter& thePainter;
-		const Projection& theProjection;
+		MapView& theView;
 		EPBackgroundLayer bgLayer;
 		EPForegroundLayer fgLayer;
 		EPTouchupLayer tchLayer;
@@ -82,13 +83,13 @@ void EPBackgroundLayer::setP(EditPaintStylePrivate* ap)
 
 void EPBackgroundLayer::draw(Road* R)
 {
-	const FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
+	const FeaturePainter* paintsel = R->getEditPainter(p->theView.pixelPerM());
 	if (paintsel) {
-		paintsel->drawBackground(R,p->thePainter,p->theProjection);
+		paintsel->drawBackground(R,p->thePainter,p->theView);
 		return;
 	}
 	for (int i=0; i<R->sizeParents(); ++i) {
-		if ((paintsel = R->getParent(i)->getEditPainter(p->theProjection.pixelPerM())))
+		if ((paintsel = R->getParent(i)->getEditPainter(p->theView.pixelPerM())))
 			return;
 	}
 	//else if (/*!globalZoom(p->theProjection) && */!R->hasEditPainter() && !R->sizeParents()) //FIXME Untagged roads level of zoom?
@@ -105,7 +106,7 @@ void EPBackgroundLayer::draw(Road* R)
 					p->thePainter.setBrush(QBrush(M_STYLE->getGlobalPainter().getBackgroundColor()));
 			}
 		} else {
-			if (regionalZoom(p->theProjection))
+			if (regionalZoom(p->theView))
 				thePen = QPen(QColor(0x77,0x77,0x77),1);
 		}
 
@@ -116,9 +117,9 @@ void EPBackgroundLayer::draw(Road* R)
 
 void EPBackgroundLayer::draw(Relation* R)
 {
-	const FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
+	const FeaturePainter* paintsel = R->getEditPainter(p->theView.pixelPerM());
 	if (paintsel)
-		paintsel->drawBackground(R,p->thePainter,p->theProjection);
+		paintsel->drawBackground(R,p->thePainter,p->theView);
 }
 
 
@@ -133,16 +134,16 @@ void EPForegroundLayer::setP(EditPaintStylePrivate* ap)
 
 void EPForegroundLayer::draw(Road* R)
 {
-	const FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
+	const FeaturePainter* paintsel = R->getEditPainter(p->theView.pixelPerM());
 	if (paintsel)
-		paintsel->drawForeground(R,p->thePainter,p->theProjection);
+		paintsel->drawForeground(R,p->thePainter,p->theView);
 }
 
 void EPForegroundLayer::draw(Relation* R)
 {
-	const FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
+	const FeaturePainter* paintsel = R->getEditPainter(p->theView.pixelPerM());
 	if (paintsel)
-		paintsel->drawForeground(R,p->thePainter,p->theProjection);
+		paintsel->drawForeground(R,p->thePainter,p->theView);
 }
 
 void EPForegroundLayer::draw(TrackPoint*)
@@ -156,16 +157,16 @@ void EPTouchupLayer::setP(EditPaintStylePrivate* ap)
 
 void EPTouchupLayer::draw(Road* R)
 {
-	const FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
+	const FeaturePainter* paintsel = R->getEditPainter(p->theView.pixelPerM());
 	if (paintsel)
-		paintsel->drawTouchup(R,p->thePainter,p->theProjection);
+		paintsel->drawTouchup(R,p->thePainter,p->theView);
 	else {
 		if ( M_PREFS->getDirectionalArrowsVisible() != DirectionalArrows_Never )
 		{
 			MapFeature::TrafficDirectionType TT = trafficDirection(R);
 			if ( (TT != MapFeature::UnknownDirection) || (M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Always) ) 
 			{
-				double theWidth = p->theProjection.pixelPerM()*R->widthOf()-4;
+				double theWidth = p->theView.pixelPerM()*R->widthOf()-4;
 				if (theWidth > 8)
 					theWidth = 8;
 				double DistFromCenter = 2*(theWidth+4);
@@ -173,8 +174,8 @@ void EPTouchupLayer::draw(Road* R)
 				{
 					for (int i=1; i<R->size(); ++i)
 					{
-						QPointF FromF(p->theProjection.project(R->getNode(i-1)));
-						QPointF ToF(p->theProjection.project(R->getNode(i)));
+						QPointF FromF(p->theView.transform().map(p->theView.projection().project(R->getNode(i-1))));
+						QPointF ToF(p->theView.transform().map(p->theView.projection().project(R->getNode(i))));
 						if (distance(FromF,ToF) > (DistFromCenter*2+4))
 						{
 							QPointF H(FromF+ToF);
@@ -218,19 +219,19 @@ void EPTouchupLayer::draw(Relation* /* R */)
 
 void EPTouchupLayer::draw(TrackPoint* Pt)
 {
-	const FeaturePainter* paintsel = Pt->getEditPainter(p->theProjection.pixelPerM());
+	const FeaturePainter* paintsel = Pt->getEditPainter(p->theView.pixelPerM());
 	if (paintsel)
-		paintsel->drawTouchup(Pt,p->thePainter,p->theProjection);
+		paintsel->drawTouchup(Pt,p->thePainter,p->theView);
 	else if (!Pt->hasEditPainter()) {
 		if (p->isTrackPointVisible || (Pt->lastUpdated() == MapFeature::Log && !p->isTrackSegmentVisible)) {
-			bool Draw = p->theProjection.pixelPerM() > 1;
-			if (!Draw && !Pt->sizeParents() && (p->theProjection.pixelPerM() > LOCALZOOM) )
+			bool Draw = p->theView.pixelPerM() > 1;
+			if (!Draw && !Pt->sizeParents() && (p->theView.pixelPerM() > LOCALZOOM) )
 				Draw = true;
 			if (Pt->lastUpdated() == MapFeature::Log && !p->isTrackSegmentVisible)
 				Draw = true;
 			if (Draw)
 			{
-				QPointF P(p->theProjection.project(Pt));
+				QPointF P(p->theView.transform().map(p->theView.projection().project(Pt)));
 
 				if (Pt->findKey("_waypoint_") != Pt->tagSize()) {
 					QRectF R(P-QPointF(4,4),QSize(8,8)); 
@@ -251,9 +252,9 @@ void EPLabelLayer::setP(EditPaintStylePrivate* ap)
 
 void EPLabelLayer::draw(Road* R)
 {
-	const FeaturePainter* paintsel = R->getEditPainter(p->theProjection.pixelPerM());
+	const FeaturePainter* paintsel = R->getEditPainter(p->theView.pixelPerM());
 	if (paintsel)
-		paintsel->drawLabel(R,p->thePainter,p->theProjection);
+		paintsel->drawLabel(R,p->thePainter,p->theView);
 }
 
 void EPLabelLayer::draw(Relation* /* R */)
@@ -262,9 +263,9 @@ void EPLabelLayer::draw(Relation* /* R */)
 
 void EPLabelLayer::draw(TrackPoint* Pt)
 {
-	const FeaturePainter* paintsel = Pt->getEditPainter(p->theProjection.pixelPerM());
+	const FeaturePainter* paintsel = Pt->getEditPainter(p->theView.pixelPerM());
 	if (paintsel)
-		paintsel->drawLabel(Pt,p->thePainter,p->theProjection);
+		paintsel->drawLabel(Pt,p->thePainter,p->theView);
 }
 
 /* EDITPAINTSTYLE */
@@ -279,14 +280,14 @@ EditPaintStyle::~EditPaintStyle(void)
 	delete p;
 }
 
-void EditPaintStyle::initialize(QPainter& P, const Projection& theProjection)
+void EditPaintStyle::initialize(QPainter& P, MapView& theView)
 {
 	if (p) {
 		Layers.clear();
 		delete p;
 	}
 
-	p = new EditPaintStylePrivate(P,theProjection);
+	p = new EditPaintStylePrivate(P,theView);
 	if (M_PREFS->getStyleBackgroundVisible())
 		add(&p->bgLayer);
 	if (M_PREFS->getStyleForegroundVisible())

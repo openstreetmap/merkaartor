@@ -151,7 +151,12 @@ namespace boost
                ++it)
           {
             l = *it;
-		    l->remove(v);
+			try {
+				l->remove(v);
+				break;
+			} catch (...) {
+				l = boost::shared_ptr < rtree_node < Point, Value > >();
+			}
           }
 
 		  if (!l)

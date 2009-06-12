@@ -54,16 +54,16 @@ QString CreateRoundaboutInteraction::toHtml()
 
 void CreateRoundaboutInteraction::testIntersections(CommandList* L, Road* Left, int FromIdx, Road* Right, int RightIndex)
 {
-	LineF L1(view()->projection().project(Right->getNode(RightIndex-1)),
-		view()->projection().project(Right->getNode(RightIndex)));
+	LineF L1(COORD_TO_XY(Right->getNode(RightIndex-1)),
+		COORD_TO_XY(Right->getNode(RightIndex)));
 	for (int i=FromIdx; i<Left->size(); ++i)
 	{
-		LineF L2(view()->projection().project(Left->getNode(i-1)),
-			view()->projection().project(Left->getNode(i)));
+		LineF L2(COORD_TO_XY(Left->getNode(i-1)),
+			COORD_TO_XY(Left->getNode(i)));
 		QPointF Intersection(L1.intersectionWith(L2));
 		if (L1.segmentContains(Intersection) && L2.segmentContains(Intersection))
 		{
-			TrackPoint* Pt = new TrackPoint(view()->projection().inverse(Intersection));
+			TrackPoint* Pt = new TrackPoint(XY_TO_COORD(Intersection));
 			L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),Pt,true));
 			L->add(new RoadAddTrackPointCommand(Left,Pt,i));
 			L->add(new RoadAddTrackPointCommand(Right,Pt,RightIndex));
@@ -81,24 +81,24 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
 		if (!HaveCenter)
 		{
 			HaveCenter = true;
-			Center = view()->projection().inverse(event->pos());
+			Center = XY_TO_COORD(event->pos());
 		}
 		else
 		{
-			QPointF CenterF(view()->projection().project(Center));
-			double Radius = distance(CenterF,LastCursor)/view()->projection().pixelPerM();
+			QPointF CenterF(COORD_TO_XY(Center));
+			double Radius = distance(CenterF,LastCursor)/view()->pixelPerM();
 			double Precision = 2.49;
 			if (Radius<2.5)
 				Radius = 2.5;
 			double Angle = 2*acos(1-Precision/Radius);
 			double Steps = ceil(2*M_PI/Angle);
 			Angle = 2*M_PI/Steps;
-			Radius *= view()->projection().pixelPerM();
+			Radius *= view()->pixelPerM();
 			double Modifier = DockData.DriveRight->isChecked()?-1:1;
 			QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
-			QPen TP(SomeBrush,projection().pixelPerM()*4);
+			QPen TP(SomeBrush,view()->pixelPerM()*4);
 			QPointF Prev(CenterF.x()+cos(Modifier*Angle/2)*Radius,CenterF.y()+sin(Modifier*Angle/2)*Radius);
-			TrackPoint* First = new TrackPoint(view()->projection().inverse(Prev));
+			TrackPoint* First = new TrackPoint(XY_TO_COORD(Prev));
 			Road* R = new Road;
 			R->add(First);
 			R->setTag("oneway","yes");
@@ -110,7 +110,7 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
 			for (double a = Angle*3/2; a<2*M_PI; a+=Angle)
 			{
 				QPointF Next(CenterF.x()+cos(Modifier*a)*Radius,CenterF.y()+sin(Modifier*a)*Radius);
-				TrackPoint* New = new TrackPoint(view()->projection().inverse(Next));
+				TrackPoint* New = new TrackPoint(XY_TO_COORD(Next));
 				if (M_PREFS->apiVersionNum() < 0.6)
 					New->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
 				L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),New,true));
@@ -152,18 +152,18 @@ void CreateRoundaboutInteraction::paintEvent(QPaintEvent* , QPainter& thePainter
 {
 	if (HaveCenter)
 	{
-		QPointF CenterF(view()->projection().project(Center));
-		double Radius = distance(CenterF,LastCursor)/view()->projection().pixelPerM();
+		QPointF CenterF(COORD_TO_XY(Center));
+		double Radius = distance(CenterF,LastCursor)/view()->pixelPerM();
 		double Precision = 1.99;
 		if (Radius<2)
 			Radius = 2;
 		double Angle = 2*acos(1-Precision/Radius);
 		double Steps = ceil(2*M_PI/Angle);
 		Angle = 2*M_PI/Steps;
-		Radius *= view()->projection().pixelPerM();
+		Radius *= view()->pixelPerM();
 		double Modifier = DockData.DriveRight->isChecked()?-1:1;
 		QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
-		QPen TP(SomeBrush,projection().pixelPerM()*4);
+		QPen TP(SomeBrush,view()->pixelPerM()*4);
 		QPointF Prev(CenterF.x()+cos(Modifier*Angle/2)*Radius,CenterF.y()+sin(Modifier*Angle/2)*Radius);
 		for (double a = Angle*3/2; a<2*M_PI; a+=Angle)
 		{

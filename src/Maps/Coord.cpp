@@ -25,6 +25,11 @@ void rotate(Coord & p1,double angle)
 	p1=p1p;
 }
 
+CoordBox::CoordBox(const CoordBox &cb)
+: BottomLeft(cb.bottomLeft()), TopRight(cb.topRight())
+{
+}
+
 CoordBox::CoordBox(const Coord &C1, const Coord &C2)
 : BottomLeft(C1.lat()<C2.lat()?C1.lat():C2.lat() , C1.lon()<C2.lon()?C1.lon():C2.lon()),
 TopRight(C1.lat()>C2.lat()?C1.lat():C2.lat() , C1.lon()>C2.lon()?C1.lon():C2.lon())

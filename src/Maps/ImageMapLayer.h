@@ -3,6 +3,7 @@
 
 #include "Maps/MapLayer.h"
 
+class MapView;
 class ImageMapLayerPrivate;
 class Projection;
 class IImageManager;
@@ -44,14 +45,14 @@ public:
 	virtual bool arePointsDrawable() {return false;}
 
 	virtual void drawImage(QPixmap& thePix, QPoint delta);
-	virtual void forceRedraw(const Projection& mainProj, QRect rect);
-	virtual void draw(const Projection& mainProj, QRect& rect);
+	virtual void forceRedraw(MapView& theView, QRect rect);
+	virtual void draw(MapView& theView, QRect& rect);
 	virtual void zoom(double zoom, const QPoint& pos, const QRect& rect);
 
 	IImageManager* getImageManger();
 private:
-	QRect drawTiled(const Projection& mainProj, QRect& rect) const;
-	QRect drawFull(const Projection& mainProj, QRect& rect) const;
+	QRect drawTiled(MapView& theView, QRect& rect) const;
+	QRect drawFull(MapView& theView, QRect& rect) const;
 
 signals:
 	void imageRequested(ImageMapLayer*);

@@ -1,8 +1,10 @@
+#include "MapView.h"
 #include "PaintStyle.h"
 #include "Maps/Painting.h"
 #include "Maps/Projection.h"
 #include "Maps/TrackPoint.h"
 #include "Maps/Relation.h"
+#include "Maps/Road.h"
 #include "Maps/Road.h"
 #include "Utils/LineF.h"
 #include "Utils/SvgCache.h"
@@ -666,14 +668,14 @@ void buildPathFromRelation(Relation *R, const Projection &theProjection, QPainte
 }
 
 */
-void FeaturePainter::drawBackground(Road* R, QPainter& thePainter, const Projection& theProjection) const
+void FeaturePainter::drawBackground(Road* R, QPainter& thePainter, MapView& theView) const
 {
 	if (!DrawBackground && !ForegroundFill) return;
 
 	thePainter.setPen(Qt::NoPen);
 	if (DrawBackground)
 	{
-		double PixelPerM = theProjection.pixelPerM();
+		double PixelPerM = theView.pixelPerM();
 		double WW = PixelPerM*R->widthOf()*BackgroundScale+BackgroundOffset;
 		if (WW >= 0)
 		{
@@ -712,8 +714,10 @@ void FeaturePainter::drawBackground(Road* R, QPainter& thePainter, const Project
 	//}
 }
 
-void FeaturePainter::drawBackground(Relation* R, QPainter& thePainter, const Projection& /* theProjection */) const
+void FeaturePainter::drawBackground(Relation* R, QPainter& thePainter, MapView& theView) const
 {
+	Q_UNUSED(theView);
+
 	if (!DrawBackground) return;
 //	double PixelPerM = theProjection.pixelPerM();
 //	double WW = PixelPerM*widthOf(R)*BackgroundScale+BackgroundOffset;
@@ -727,14 +731,14 @@ void FeaturePainter::drawBackground(Relation* R, QPainter& thePainter, const Pro
 	thePainter.drawPath(R->getPath());
 }
 
-void FeaturePainter::drawForeground(Road* R, QPainter& thePainter, const Projection& theProjection) const
+void FeaturePainter::drawForeground(Road* R, QPainter& thePainter, MapView& theView) const
 {
 	if (!DrawForeground) return;
 
 	double WW = 0.0;
 	if (DrawForeground)
 	{
-		double PixelPerM = theProjection.pixelPerM();
+		double PixelPerM = theView.pixelPerM();
 		WW = PixelPerM*R->widthOf()*ForegroundScale+ForegroundOffset;
 		if (WW < 0) return;
 		QPen thePen(ForegroundColor,WW);
@@ -768,7 +772,7 @@ void FeaturePainter::drawForeground(Road* R, QPainter& thePainter, const Project
 	thePainter.drawPath(R->getPath());
 }
 
-void FeaturePainter::drawForeground(Relation* R, QPainter& thePainter, const Projection& /* theProjection */) const
+void FeaturePainter::drawForeground(Relation* R, QPainter& thePainter, MapView& /* theProjection */) const
 {
 	if (!DrawForeground && !ForegroundFill) return;
 
@@ -810,19 +814,19 @@ void FeaturePainter::drawForeground(Relation* R, QPainter& thePainter, const Pro
 }
 
 
-void FeaturePainter::drawTouchup(TrackPoint* Pt, QPainter& thePainter, const Projection& theProjection) const
+void FeaturePainter::drawTouchup(TrackPoint* Pt, QPainter& thePainter, MapView& theView) const
 {
 	bool IconError = false;
 	if (DrawIcon && (IconName != "") )
 	{
-		double PixelPerM = theProjection.pixelPerM();
+		double PixelPerM = theView.pixelPerM();
 		double WW = PixelPerM*IconScale+IconOffset;
 
         QPixmap pm = getPixmapFromFile(IconName,int(WW));
 		if (pm.isNull())
 			IconError = true;
 		else {
-			QPoint C(theProjection.project(Pt));
+			QPointF C(theView.transform().map(theView.projection().project(Pt)));
 			// cbro-20090109: Don't draw the dot if there is an icon
 			// thePainter.fillRect(QRect(C-QPoint(2,2),QSize(4,4)),QColor(0,0,0,128));
 			thePainter.drawPixmap( int(C.x()-pm.width()/2), int(C.y()-pm.height()/2) , pm);
@@ -837,7 +841,7 @@ void FeaturePainter::drawTouchup(TrackPoint* Pt, QPainter& thePainter, const Pro
 			if (DrawBackground)
 				theColor =BackgroundColor;
 
-		QPointF P(theProjection.project(Pt));
+		QPointF P(theView.transform().map(theView.projection().project(Pt)));
 		if (Pt->findKey("_waypoint_") != Pt->tagSize()) {
 			QRectF R(P-QPointF(4,4),QSize(8,8)); 
 			thePainter.fillRect(R,QColor(255,0,0,128)); 
@@ -848,11 +852,11 @@ void FeaturePainter::drawTouchup(TrackPoint* Pt, QPainter& thePainter, const Pro
 	}
 }
 
-void FeaturePainter::drawTouchup(Road* R, QPainter& thePainter, const Projection& theProjection) const
+void FeaturePainter::drawTouchup(Road* R, QPainter& thePainter, MapView& theView) const
 {
 	if (DrawTouchup)
 	{
-		double PixelPerM = theProjection.pixelPerM();
+		double PixelPerM = theView.pixelPerM();
 		double WW = PixelPerM*R->widthOf()*TouchupScale+TouchupOffset;
 		if (WW > 0)
 		{
@@ -873,7 +877,7 @@ void FeaturePainter::drawTouchup(Road* R, QPainter& thePainter, const Projection
 		MapFeature::TrafficDirectionType TT = trafficDirection(R);
 		if ( (TT != MapFeature::UnknownDirection) || (M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Always) ) 
 		{
-			double theWidth = theProjection.pixelPerM()*R->widthOf()-4;
+			double theWidth = theView.pixelPerM()*R->widthOf()-4;
 			if (theWidth > 8)
 				theWidth = 8;
 			double DistFromCenter = 2*(theWidth+4);
@@ -881,8 +885,8 @@ void FeaturePainter::drawTouchup(Road* R, QPainter& thePainter, const Projection
 			{
 				for (int i=1; i<R->size(); ++i)
 				{
-					QPointF FromF(theProjection.project(R->getNode(i-1)));
-					QPointF ToF(theProjection.project(R->getNode(i)));
+					QPointF FromF(theView.transform().map(theView.projection().project(R->getNode(i-1))));
+					QPointF ToF(theView.transform().map(theView.projection().project(R->getNode(i))));
 					if (distance(FromF,ToF) > (DistFromCenter*2+4))
 					{
 						QPointF H(FromF+ToF);
@@ -924,10 +928,10 @@ void FeaturePainter::drawTouchup(Road* R, QPainter& thePainter, const Projection
 #define BG_SPACING 6
 #define BG_PEN_SZ 2
 
-void FeaturePainter::drawPointLabel(QPoint C, QString str, QString strBg, QPainter& thePainter, const Projection& theProjection) const
+void FeaturePainter::drawPointLabel(QPointF C, QString str, QString strBg, QPainter& thePainter, MapView& theView) const
 {
 	LineParameters lp = labelBoundary();
-	double PixelPerM = theProjection.pixelPerM();
+	double PixelPerM = theView.pixelPerM();
 	double WW = PixelPerM*lp.Proportional+lp.Fixed;
 	if (WW < 10) return;
 
@@ -987,13 +991,13 @@ void FeaturePainter::drawPointLabel(QPoint C, QString str, QString strBg, QPaint
 
 	if (DrawLabelBackground && !strBg.isEmpty()) {
 		QRegion rg = thePainter.clipRegion();
-		rg -= textPath.boundingRect().toRect().translated(C);
+		rg -= textPath.boundingRect().toRect().translated(C.toPoint());
 		thePainter.setClipRegion(rg);
 	}
 }
 
 
-void FeaturePainter::drawLabel(TrackPoint* Pt, QPainter& thePainter, const Projection& theProjection) const
+void FeaturePainter::drawLabel(TrackPoint* Pt, QPainter& thePainter, MapView& theView) const
 {
 	if (!DrawLabel)
 		return;
@@ -1004,11 +1008,11 @@ void FeaturePainter::drawLabel(TrackPoint* Pt, QPainter& thePainter, const Proje
 	if (str.isEmpty() && strBg.isEmpty())
 		return;
 
-	QPoint C(theProjection.project(Pt));
-	drawPointLabel(C, str, strBg, thePainter, theProjection);
+	QPointF C(theView.transform().map(theView.projection().project(Pt)));
+	drawPointLabel(C, str, strBg, thePainter, theView);
 }
 
-void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, const Projection& theProjection) const
+void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, MapView& theView) const
 {
 	if (!DrawLabel)
 		return;
@@ -1019,13 +1023,13 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, const Projection& 
 		return;
 
 	if (getLabelArea()) {
-		QPoint C(theProjection.project(R->boundingBox().center()));
-		drawPointLabel(C, str, strBg, thePainter, theProjection);
+		QPointF C(theView.transform().map(theView.projection().project(R->boundingBox().center())));
+		drawPointLabel(C, str, strBg, thePainter, theView);
 		return;
 	}
 
 	LineParameters lp = labelBoundary();
-	double PixelPerM = theProjection.pixelPerM();
+	double PixelPerM = theView.pixelPerM();
 	double WW = PixelPerM*R->widthOf()*lp.Proportional+lp.Fixed;
 	if (WW < 10) return;
 	//double WWR = qMax(PixelPerM*R->widthOf()*BackgroundScale+BackgroundOffset, PixelPerM*R->widthOf()*ForegroundScale+ForegroundOffset);

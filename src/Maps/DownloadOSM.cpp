@@ -733,7 +733,7 @@ bool downloadOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDocume
                 if (directAPI)
                     Main->on_viewZoomAllAction_triggered();
                 else
-                    Main->view()->projection().setViewport(Clip,Main->view()->rect());
+                    Main->view()->setViewport(Clip,Main->view()->rect());
 				Main->invalidateView();
 			} else {
 				retry = true;

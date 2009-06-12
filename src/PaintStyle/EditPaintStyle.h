@@ -3,6 +3,7 @@
 
 #include "PaintStyle.h"
 
+class MapView;
 class EditPaintStylePrivate;
 class Projection;
 class QPainter;
@@ -25,7 +26,7 @@ class EditPaintStyle : public PaintStyle
 
 		EditPaintStyle();
 		virtual ~EditPaintStyle();
-		void initialize(QPainter& P, const Projection& theProjection);
+		void initialize(QPainter& P, MapView& theView);
 
 		int painterSize();
 		const GlobalPainter& getGlobalPainter() const;

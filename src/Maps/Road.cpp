@@ -325,11 +325,11 @@ double Road::area() const
 	return p->Area;
 }
 
-void Road::draw(QPainter& /* thePainter */, const Projection& )
+void Road::draw(QPainter& /* thePainter */, const Projection&, const QTransform& )
 {
 }
 
-void Road::drawHover(QPainter& thePainter, const Projection& theProjection, bool solid)
+void Road::drawHover(QPainter& thePainter, const Projection& theProjection, const QTransform& theTransform, bool solid)
 {
 	// FIXME Selected route
 	if (!size())
@@ -347,8 +347,8 @@ void Road::drawHover(QPainter& thePainter, const Projection& theProjection, bool
 	}
 	thePainter.setPen(TP);
 	thePainter.setBrush(Qt::NoBrush);
-	QRect clipRect = thePainter.clipRegion().boundingRect().adjusted(int(-20), int(-20), int(20), int(20));
-	buildPath(theProjection, clipRect);
+	//QRect clipRect = thePainter.clipRegion().boundingRect().adjusted(int(-20), int(-20), int(20), int(20));
+	//buildPath(theProjection, clipRect);
 	thePainter.drawPath(p->thePath);
 	if (solid) {
 		TP.setWidth(MerkaartorPreferences::instance()->getHoverWidth()*3);
@@ -356,17 +356,17 @@ void Road::drawHover(QPainter& thePainter, const Projection& theProjection, bool
 		thePainter.setPen(TP);
 		QPolygonF Pl;
 		buildPolygonFromRoad(this,theProjection,Pl);
-		thePainter.drawPoints(Pl);
+		thePainter.drawPoints(theTransform.map(Pl));
 
 		if (M_PREFS->getShowParents()) {
 			for (int i=0; i<sizeParents(); ++i)
 				if (!getParent(i)->isDeleted())
-					getParent(i)->drawHover(thePainter, theProjection, false);
+					getParent(i)->drawHover(thePainter, theProjection, theTransform, false);
 		}
 	}
 }
 
-void Road::drawFocus(QPainter& thePainter, const Projection& theProjection, bool solid)
+void Road::drawFocus(QPainter& thePainter, const Projection& theProjection, const QTransform& theTransform, bool solid)
 {
 	// FIXME Selected route
 	if (!size())
@@ -384,8 +384,8 @@ void Road::drawFocus(QPainter& thePainter, const Projection& theProjection, bool
 	}
 	thePainter.setPen(TP);
 	thePainter.setBrush(Qt::NoBrush);
-	QRect clipRect = thePainter.clipRegion().boundingRect().adjusted(int(-20), int(-20), int(20), int(20));
-	buildPath(theProjection, clipRect);
+	//QRect clipRect = thePainter.clipRegion().boundingRect().adjusted(int(-20), int(-20), int(20), int(20));
+	//buildPath(theProjection, clipRect);
 	thePainter.drawPath(p->thePath);
 	if (solid) {
 		TP.setWidth(MerkaartorPreferences::instance()->getFocusWidth()*3);
@@ -393,23 +393,23 @@ void Road::drawFocus(QPainter& thePainter, const Projection& theProjection, bool
 		thePainter.setPen(TP);
 		QPolygonF Pl;
 		buildPolygonFromRoad(this,theProjection,Pl);
-		thePainter.drawPoints(Pl);
+		thePainter.drawPoints(theTransform.map(Pl));
 
 		if (M_PREFS->getShowParents()) {
 			for (int i=0; i<sizeParents(); ++i)
 				if (!getParent(i)->isDeleted())
-					getParent(i)->drawFocus(thePainter, theProjection, false);
+					getParent(i)->drawFocus(thePainter, theProjection, theTransform, false);
 		}
 	}
 }
 
-double Road::pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection) const
+double Road::pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection, const QTransform& theTransform) const
 {
 	double Best = 1000000;
 	for (int i=0; i<p->Nodes.size(); ++i)
 	{
 		if (p->Nodes.at(i)) {
-			double x = ::distance(Target,theProjection.project(p->Nodes.at(i)));
+			double x = ::distance(Target,theTransform.map(theProjection.project(p->Nodes.at(i))));
 			if (x<ClearEndDistance)
 				return Best;
 		}
@@ -418,10 +418,10 @@ double Road::pixelDistance(const QPointF& Target, double ClearEndDistance, const
 		for (int i=3; i <p->Smoothed.size(); i += 3)
 		{
 			BezierF F(
-				theProjection.project(p->Smoothed[i-3]),
-				theProjection.project(p->Smoothed[i-2]),
-				theProjection.project(p->Smoothed[i-1]),
-				theProjection.project(p->Smoothed[i]));
+				theTransform.map(theProjection.project(p->Smoothed[i-3])),
+				theTransform.map(theProjection.project(p->Smoothed[i-2])),
+				theTransform.map(theProjection.project(p->Smoothed[i-1])),
+				theTransform.map(theProjection.project(p->Smoothed[i])));
 			double D = F.distance(Target);
 			if (D < ClearEndDistance)
 				Best = D;
@@ -430,7 +430,7 @@ double Road::pixelDistance(const QPointF& Target, double ClearEndDistance, const
 		for (int i=1; i<p->Nodes.size(); ++i)
 		{
 			if (p->Nodes.at(i) && p->Nodes.at(i-1)) {
-				LineF F(theProjection.project(p->Nodes.at(i-1)),theProjection.project(p->Nodes.at(i)));
+				LineF F(theTransform.map(theProjection.project(p->Nodes.at(i-1))),theTransform.map(theProjection.project(p->Nodes.at(i))));
 				double D = F.capDistance(Target);
 				if (D < ClearEndDistance)
 					Best = D;
@@ -483,13 +483,13 @@ QPainterPath Road::getPath()
 }
 
 #ifndef _MOBILE
-void Road::buildPath(Projection const &theProjection, const QRect& cr)
+void Road::buildPath(const Projection &theProjection, const QTransform& theTransform, const QRectF& cr)
 {
 	using namespace geometry;
 
 	p->thePath = QPainterPath();
 
-	if (!p->Nodes.size())
+	if (p->Nodes.size() < 2)
 		return;
 
 	box_2d clipRect (make<point_2d>(cr.bottomLeft().x(), cr.topRight().y()), make<point_2d>(cr.topRight().x(), cr.bottomLeft().y()));
@@ -497,7 +497,7 @@ void Road::buildPath(Projection const &theProjection, const QRect& cr)
 	if (area() <= 0.0) {
 		linestring_2d in;
 		for (int i=0; i<p->Nodes.size(); ++i) {
-			QPoint P = theProjection.project(p->Nodes[i]);
+			QPointF P = theProjection.project(p->Nodes[i]);
 			append(in, make<point_2d>(P.x(), P.y()));
 		}
 
@@ -507,11 +507,11 @@ void Road::buildPath(Projection const &theProjection, const QRect& cr)
 		for (std::vector<linestring_2d>::const_iterator it = clipped.begin(); it != clipped.end(); it++)
 		{
 			if (!(*it).empty()) {
-				p->thePath.moveTo(QPointF((*it)[0].x(), (*it)[0].y()).toPoint());
+				p->thePath.moveTo(QPointF((*it)[0].x(), (*it)[0].y()));
 			}
 			for (linestring_2d::const_iterator itl = (*it).begin()+1; itl != (*it).end(); itl++)
 			{
-				p->thePath.lineTo(QPointF((*itl).x(), (*itl).y()).toPoint());
+				p->thePath.lineTo(QPointF((*itl).x(), (*itl).y()));
 			}
 		}
 	} 
@@ -519,7 +519,7 @@ void Road::buildPath(Projection const &theProjection, const QRect& cr)
 	{
 		polygon_2d in;
 		for (int i=0; i<p->Nodes.size(); ++i) {
-			QPoint P = theProjection.project(p->Nodes[i]);
+			QPointF P = theProjection.project(p->Nodes[i]);
 			append(in, make<point_2d>(P.x(), P.y()));
 		}
 		correct(in);
@@ -530,16 +530,16 @@ void Road::buildPath(Projection const &theProjection, const QRect& cr)
 		for (std::vector<polygon_2d>::const_iterator it = clipped.begin(); it != clipped.end(); it++)
 		{
 			if (!(*it).outer().empty()) {
-				p->thePath.moveTo(QPointF((*it).outer()[0].x(), (*it).outer()[0].y()).toPoint());
+				p->thePath.moveTo(QPointF((*it).outer()[0].x(), (*it).outer()[0].y()));
 			}
 			for (ring_2d::const_iterator itl = (*it).outer().begin()+1; itl != (*it).outer().end(); itl++)
 			{
-				p->thePath.lineTo(QPointF((*itl).x(), (*itl).y()).toPoint());
+				p->thePath.lineTo(QPointF((*itl).x(), (*itl).y()));
 			}
-			p->thePath.lineTo(QPointF((*it).outer()[0].x(), (*it).outer()[0].y()).toPoint());
+			p->thePath.lineTo(QPointF((*it).outer()[0].x(), (*it).outer()[0].y()));
 		}
 	}
-
+	p->thePath = theTransform.map(p->thePath);
 }
 #else
 void Road::buildPath(Projection const &theProjection, const QRect& clipRect)

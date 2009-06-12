@@ -24,10 +24,10 @@ class TrackSegment : public MapFeature
 		virtual QString getClass() const {return "TrackSegment";}
 
 		virtual CoordBox boundingBox() const;
-		virtual void draw(QPainter& P, const Projection& theProjection);
-		virtual void drawFocus(QPainter& P, const Projection& theProjection, bool solid=true);
-		virtual void drawHover(QPainter& P, const Projection& theProjection, bool solid=true);
-		virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection) const;
+		virtual void draw(QPainter& P, const Projection& theProjection, const QTransform& theTransform);
+		virtual void drawFocus(QPainter& P, const Projection& theProjection, const QTransform& theTransform, bool solid=true);
+		virtual void drawHover(QPainter& P, const Projection& theProjection, const QTransform& theTransform, bool solid=true);
+		virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection, const QTransform& theTransform) const;
 		void cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const QList<MapFeature*>& Alternatives);
 		virtual bool notEverythingDownloaded() const;
 		virtual QString description() const;

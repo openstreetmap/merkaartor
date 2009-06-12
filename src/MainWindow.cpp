@@ -375,7 +375,7 @@ void MainWindow::adjustLayers(bool adjustViewport)
 {
 	CoordBox theVp;
 	if (adjustViewport) {
-		theVp = theView->projection().viewport();
+		theVp = theView->viewport();
 #ifndef _MOBILE
 		////FIXME Remove when the image layers will be independent from the projection
 		//for (int i=0; i<theDocument->getImageLayersSize(); ++i)
@@ -388,7 +388,7 @@ void MainWindow::adjustLayers(bool adjustViewport)
 		//	break;
 		//}
 #endif
-		theView->projection().setViewport(theVp, theView->rect());
+		theView->setViewport(theVp, theView->rect());
 	}
 	invalidateView(true);
 }
@@ -954,7 +954,7 @@ void MainWindow::on_fileDownloadAction_triggered()
 {
 	createProgressDialog();
 
-	if (downloadOSM(this, theView->projection().viewport(), theDocument)) {
+	if (downloadOSM(this, theView->viewport(), theDocument)) {
 		on_editPropertiesAction_triggered();
 	} else
 		QMessageBox::warning(this, tr("Error downloading"), tr("The map could not be downloaded"));
@@ -970,7 +970,7 @@ void MainWindow::on_fileDownloadMoreAction_triggered()
 {
 	createProgressDialog();
 
-	if (!downloadMoreOSM(this, theView->projection().viewport(), theDocument)) {
+	if (!downloadMoreOSM(this, theView->viewport(), theDocument)) {
 		QMessageBox::warning(this, tr("Error downloading"), tr("The map could not be downloaded"));
 	}
 
@@ -1007,20 +1007,20 @@ void MainWindow::on_viewZoomAllAction_triggered()
 	QPair<bool, CoordBox> BBox(theDocument->boundingBox());
 	if (BBox.first) {
 		BBox.second.resize(1.01);
-		theView->projection().setViewport(BBox.second, theView->rect());
+		theView->setViewport(BBox.second, theView->rect());
 		invalidateView();
 	}
 }
 
 void MainWindow::on_viewZoomInAction_triggered()
 {
-	theView->projection().zoom(1.33333, theView->rect().center(), theView->rect());
+	theView->zoom(1.33333, theView->rect().center(), theView->rect());
 	invalidateView();
 }
 
 void MainWindow::on_viewZoomOutAction_triggered()
 {
-	theView->projection().zoom(0.75, theView->rect().center(), theView->rect());
+	theView->zoom(0.75, theView->rect().center(), theView->rect());
 	invalidateView();
 }
 
@@ -1094,10 +1094,10 @@ void MainWindow::on_viewRelationsAction_triggered()
 
 void MainWindow::on_viewGotoAction_triggered()
 {
-	GotoDialog* Dlg = new GotoDialog(theView->projection(), this);
+	GotoDialog* Dlg = new GotoDialog(*theView, this);
 	if (Dlg->exec() == QDialog::Accepted) {
 		if (!Dlg->newViewport().isNull()) {
-			theView->projection().setViewport(Dlg->newViewport(), theView->rect());
+			theView->setViewport(Dlg->newViewport(), theView->rect());
 			invalidateView();
 		}
 	}
@@ -1419,7 +1419,7 @@ void MainWindow::on_mapStyleLoadAction_triggered()
 void MainWindow::on_toolsWorldOsbAction_triggered()
 {
 	WorldOsbManager osbMgr(this);
-	osbMgr.setViewport(theView->projection().viewport().toQRectF());
+	osbMgr.setViewport(theView->viewport().toQRectF());
 	osbMgr.exec();
 }
 
@@ -1817,7 +1817,7 @@ bool MainWindow::selectExportedFeatures(QList<MapFeature*>& theFeatures)
 			return true;
 		}
 		if (dlgExport.rbViewport->isChecked()) {
-			CoordBox aCoordBox = view()->projection().viewport();
+			CoordBox aCoordBox = view()->viewport();
 
 			theFeatures.clear();
 			for (VisibleFeatureIterator i(document()); !i.isEnd(); ++i) {
@@ -1921,7 +1921,7 @@ void MainWindow::closeEvent(QCloseEvent * event)
 
 void MainWindow::on_renderNativeAction_triggered()
 {
-	NativeRenderDialog osmR(theDocument, theView->projection().viewport(), this);
+	NativeRenderDialog osmR(theDocument, theView->viewport(), this);
 	osmR.exec();
 }
 
@@ -2092,7 +2092,7 @@ void MainWindow::on_bookmarkAddAction_triggered()
 		}
 	}
 	if (ok) {
-		CoordBox Clip = view()->projection().viewport();
+		CoordBox Clip = view()->viewport();
 		Bookmark B(text, Clip);
 		Bookmarks->insert(text, B);
 		M_PREFS->save();
@@ -2136,7 +2136,7 @@ void MainWindow::bookmarkTriggered(QAction* anAction)
 	if (anAction == bookmarkAddAction || anAction == bookmarkRemoveAction)
 		return;
 	BookmarkList* Bookmarks = M_PREFS->getBookmarks();
-	theView->projection().setViewport(Bookmarks->value(anAction->text()).Coordinates, theView->rect());
+	theView->setViewport(Bookmarks->value(anAction->text()).Coordinates, theView->rect());
 
 	invalidateView();
 }
@@ -2178,7 +2178,7 @@ void MainWindow::projectionTriggered(QAction* anAction)
 		M_PREFS->setProjectionType(anAction->text());
 	else
 		QMessageBox::critical(this, tr("Invalid projection"), tr("Unable to set projection \"%1\".").arg(anAction->text()));
-	theView->projection().setViewport(theView->projection().viewport(), theView->rect());
+	theView->setViewport(theView->viewport(), theView->rect());
 	invalidateView();
 }
 #endif
@@ -2362,10 +2362,10 @@ void MainWindow::updateGpsPosition(float latitude, float longitude, QDateTime ti
 	if (theGPS->getGpsDevice()) {
 		Coord gpsCoord(angToInt(latitude), angToInt(longitude));
 		if (gpsCenterAction->isChecked()) {
-			CoordBox vp = theView->projection().viewport();
+			CoordBox vp = theView->viewport();
 			QRect vpr = vp.toRect().adjusted(vp.lonDiff() / 4, vp.latDiff() / 4, -vp.lonDiff() / 4, -vp.latDiff() / 4);
 			if (!vpr.contains(gpsCoord.toQPoint())) {
-				theView->projection().setCenter(gpsCoord, theView->rect());
+				theView->setCenter(gpsCoord, theView->rect());
 				theView->invalidate(true, true);
 			}
 		}

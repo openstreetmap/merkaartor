@@ -18,6 +18,8 @@ class MapAdapter;
 class Interaction;
 class ImageMapLayer;
 
+class MapViewPrivate;
+
 class MapView :	public QWidget
 {
 	Q_OBJECT
@@ -33,7 +35,7 @@ class MapView :	public QWidget
 		void launch(Interaction* anInteraction);
 		Interaction* interaction();
 		
-		void buildFeatureSet(QRegion invalidRegion, Projection& aProj);
+		void buildFeatureSet();
 		void drawBackground(QPainter & painter, Projection& aProj);
 		void drawFeatures(QPainter & painter, Projection& aProj);
 
@@ -53,6 +55,7 @@ class MapView :	public QWidget
 		#endif // GEOIMAGE
 
 		Projection& projection();
+		QTransform& transform();
 
 		PropertiesDock* properties();
 		//InfoDock* info();
@@ -60,6 +63,16 @@ class MapView :	public QWidget
 		bool isSelectionLocked();
 		void lockSelection();
 		void unlockSelection();
+
+		void setViewport(const CoordBox& Map);
+		void setViewport(const CoordBox& Map, const QRect& Screen);
+		CoordBox viewport() const;
+		static void transformCalc(QTransform& theTransform, const Projection& theProjection, const CoordBox& TargetMap, const QRect& Screen);
+		double pixelPerM() const; 
+
+		void zoom(double d, const QPointF& Around, const QRect& Screen);
+		void setCenter(Coord& Center, const QRect& Screen);
+		void resize(QSize oldS, QSize newS);
 
 		bool toXML(QDomElement xParent);
 		void fromXML(const QDomElement e);
@@ -83,13 +96,13 @@ class MapView :	public QWidget
 		QPixmap* StaticMap;
 		bool StaticBufferUpToDate;
 		bool StaticMapUpToDate;
-		QPoint thePanDelta, theLastDelta;
-		QRegion invalidRegion;
 		bool SelectionLocked;
 		QLabel* lockIcon;
 		QList<MapFeature*> theSnapList;
 		QList<MapFeature*> theFeatures;
 		QList<Road*> theCoastlines;
+
+		void viewportRecalc(const QRect& Screen);
 
 		#ifdef GEOIMAGE
 		TrackPoint *dropTarget;
@@ -119,6 +132,9 @@ class MapView :	public QWidget
 		void on_imageReceived(ImageMapLayer*);
 		void on_loadingFinished(ImageMapLayer*);
 		void on_customContextMenuRequested(const QPoint & pos);
+
+	private:
+		MapViewPrivate* p;
 };
 
 #endif

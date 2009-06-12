@@ -433,9 +433,9 @@ void GeoImageDock::addGeoDataToImage(Coord position, const QString & file)
 
 	QString hourFormat("%1/1 %2/1 %3/100");
 
-	int h = lat / 1; // translate angle to hours, minutes and seconds
-	int m = (lat - h) * 60 / 1;
-	int s = (lat - h - m/60.0) * 60 * 60 * 100 / 1; // multiply with 100 because of divider in hourFormat
+	int h = qRound(lat / 1); // translate angle to hours, minutes and seconds
+	int m = qRound((lat - h) * 60 / 1);
+	int s = qRound((lat - h - m/60.0) * 60 * 60 * 100 / 1); // multiply with 100 because of divider in hourFormat
 	Exiv2::ValueType<Exiv2::URational> vlat;
 	vlat.read(hourFormat.arg(h).arg(m).arg(s).toStdString()); // fill vlat with string
 	Exiv2::ExifKey klat("Exif.GPSInfo.GPSLatitude");
@@ -444,9 +444,9 @@ void GeoImageDock::addGeoDataToImage(Coord position, const QString & file)
 		image->exifData().erase(pos);
 	image->exifData().add(klat, &vlat); // add key with value
 
-	h = lon / 1; // translate angle to hours, minutes and seconds
-	m = (lon - h) * 60 / 1;
-	s = (lon - h - m/60.0) * 60 * 60 * 100 / 1; // multiply with 100 because of divider in hourFormat
+	h = qRound(lon / 1); // translate angle to hours, minutes and seconds
+	m = qRound((lon - h) * 60 / 1);
+	s = qRound((lon - h - m/60.0) * 60 * 60 * 100 / 1); // multiply with 100 because of divider in hourFormat
 	Exiv2::ValueType<Exiv2::URational> vlon;
 	vlon.read(hourFormat.arg(h).arg(m).arg(s).toStdString()); // fil vlon with string
 	Exiv2::ExifKey klon("Exif.GPSInfo.GPSLongitude");

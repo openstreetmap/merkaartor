@@ -60,7 +60,7 @@ void CreateDoubleWayInteraction::paintEvent(QPaintEvent* /* anEvent */, QPainter
 		R1 = R2 = NULL;
 	}
 
-	double rB = view()->projection().pixelPerM()*DockData.RoadDistance->text().toDouble()/2;
+	double rB = view()->pixelPerM()*DockData.RoadDistance->text().toDouble()/2;
 	if (!HaveFirst)
 	{
 		thePainter.setPen(QColor(0,0,0));
@@ -74,10 +74,10 @@ void CreateDoubleWayInteraction::paintEvent(QPaintEvent* /* anEvent */, QPainter
 		else
 			PreviousPoint = FirstPoint;
 
-		if (distance(view()->projection().project(PreviousPoint), LastCursor) > 1)
+		if (distance(COORD_TO_XY(PreviousPoint), LastCursor) > 1)
 		{
-			double rA = FirstDistance * view()->projection().pixelPerM()/2;
-			LineF FA1(view()->projection().project(PreviousPoint),LastCursor);
+			double rA = FirstDistance * view()->pixelPerM()/2;
+			LineF FA1(COORD_TO_XY(PreviousPoint),LastCursor);
 			LineF FA2(FA1);
 			LineF FB1(FA1);
 			LineF FB2(FA1);
@@ -85,13 +85,13 @@ void CreateDoubleWayInteraction::paintEvent(QPaintEvent* /* anEvent */, QPainter
 			FA2.slide(rA);
 			FB1.slide(-rB);
 			FB2.slide(rB);
-			QPointF A1(FA1.project(view()->projection().project(PreviousPoint)));
-			QPointF A2(FA2.project(view()->projection().project(PreviousPoint)));
+			QPointF A1(FA1.project(COORD_TO_XY(PreviousPoint)));
+			QPointF A2(FA2.project(COORD_TO_XY(PreviousPoint)));
 			QPointF B1(FB1.project(LastCursor));
 			QPointF B2(FB2.project(LastCursor));
 
 			QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
-			QPen TP(SomeBrush,projection().pixelPerM()*4);
+			QPen TP(SomeBrush,view()->pixelPerM()*4);
 			if (DockData.DriveRight->isChecked())
 			{
 				::draw(thePainter,TP,MapFeature::OneWay, B1,A1,rB/4,view()->projection());
@@ -121,7 +121,7 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 		if (!HaveFirst)
 		{
 			HaveFirst = true;
-			FirstPoint = view()->projection().inverse(anEvent->pos());
+			FirstPoint = XY_TO_COORD(anEvent->pos());
 			FirstDistance = DockData.RoadDistance->text().toDouble();
 		}
 		else if (R1)
@@ -129,18 +129,18 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 			int i1 = R1->size()-1;
 			int i2 = 1;
 			LineF P1(
-				view()->projection().project(R1->getNode(i1-1)),
-				view()->projection().project(R1->getNode(i1)));
+				COORD_TO_XY(R1->getNode(i1-1)),
+				COORD_TO_XY(R1->getNode(i1)));
 			LineF P2(
-				view()->projection().project(R2->getNode(i2-1)),
-				view()->projection().project(R2->getNode(i2)));
+				COORD_TO_XY(R2->getNode(i2-1)),
+				COORD_TO_XY(R2->getNode(i2)));
 
 			Coord PreviousPoint = PreviousPoints[R1->size()-1];
-			if (distance(view()->projection().project(PreviousPoint), LastCursor) > 1)
+			if (distance(COORD_TO_XY(PreviousPoint), LastCursor) > 1)
 			{
-				double rB = view()->projection().pixelPerM()*DockData.RoadDistance->text().toDouble()/2;
-				double rA = FirstDistance * view()->projection().pixelPerM()/2;
-				LineF FA1(view()->projection().project(PreviousPoint),LastCursor);
+				double rB = view()->pixelPerM()*DockData.RoadDistance->text().toDouble()/2;
+				double rA = FirstDistance * view()->pixelPerM()/2;
+				LineF FA1(COORD_TO_XY(PreviousPoint),LastCursor);
 				LineF FA2(FA1);
 				LineF FB1(FA1);
 				LineF FB2(FA1);
@@ -149,21 +149,21 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 				FA2.slide(-rA*Modifier);
 				FB1.slide(rB*Modifier);
 				FB2.slide(-rB*Modifier);
-				LineF N1(FA1.project(view()->projection().project(PreviousPoint)), FB1.project(LastCursor));
-				LineF N2(FA2.project(view()->projection().project(PreviousPoint)), FB2.project(LastCursor));
+				LineF N1(FA1.project(COORD_TO_XY(PreviousPoint)), FB1.project(LastCursor));
+				LineF N2(FA2.project(COORD_TO_XY(PreviousPoint)), FB2.project(LastCursor));
 
 				TrackPoint* A1;
 				TrackPoint* A2;
 				CommandList* L  = new CommandList(MainWindow::tr("Add nodes to double-way Road %1").arg(R1->id()), R1);
 				A1 = R1->getNode(i1);
 				A2 = R2->getNode(i2-1);
-				L->add(new MoveTrackPointCommand(A1,view()->projection().inverse(
+				L->add(new MoveTrackPointCommand(A1,XY_TO_COORD(
 					P1.intersectionWith(N1))));
-				L->add(new MoveTrackPointCommand(A2,view()->projection().inverse(
+				L->add(new MoveTrackPointCommand(A2,XY_TO_COORD(
 					P2.intersectionWith(N2))));
-				TrackPoint* B1 = new TrackPoint(view()->projection().inverse(
+				TrackPoint* B1 = new TrackPoint(XY_TO_COORD(
 					FB1.project(LastCursor)));
-				TrackPoint* B2 = new TrackPoint(view()->projection().inverse(
+				TrackPoint* B2 = new TrackPoint(XY_TO_COORD(
 					FB2.project(LastCursor)));
 
 				if (M_PREFS->apiVersionNum() < 0.6) {
@@ -177,18 +177,18 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 				document()->addHistory(L);
 				view()->invalidate(true, false);
 				//FirstPoint = view()->projection().inverse(anEvent->pos());
-				PreviousPoints[R1->size()-1] = view()->projection().inverse(anEvent->pos());
+				PreviousPoints[R1->size()-1] = XY_TO_COORD(anEvent->pos());
 				FirstDistance = DockData.RoadDistance->text().toDouble();
 			}
 		}
 		else
 		{
 			Coord PreviousPoint = FirstPoint;
-			if (distance(view()->projection().project(PreviousPoint), LastCursor) > 1)
+			if (distance(COORD_TO_XY(PreviousPoint), LastCursor) > 1)
 			{
-				double rB = view()->projection().pixelPerM()*DockData.RoadDistance->text().toDouble()/2;
-				double rA = FirstDistance * view()->projection().pixelPerM()/2;
-				LineF FA1(view()->projection().project(PreviousPoint),LastCursor);
+				double rB = view()->pixelPerM()*DockData.RoadDistance->text().toDouble()/2;
+				double rA = FirstDistance * view()->pixelPerM()/2;
+				LineF FA1(COORD_TO_XY(PreviousPoint),LastCursor);
 				LineF FA2(FA1);
 				LineF FB1(FA1);
 				LineF FB2(FA1);
@@ -198,13 +198,13 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 				FB1.slide(rB*Modifier);
 				FB2.slide(-rB*Modifier);
 
-				TrackPoint* A1 = new TrackPoint(view()->projection().inverse(
-					FA1.project(view()->projection().project(PreviousPoint))));
-				TrackPoint* A2 = new TrackPoint(view()->projection().inverse(
-					FA2.project(view()->projection().project(PreviousPoint))));
-				TrackPoint* B1 = new TrackPoint(view()->projection().inverse(
+				TrackPoint* A1 = new TrackPoint(XY_TO_COORD(
+					FA1.project(COORD_TO_XY(PreviousPoint))));
+				TrackPoint* A2 = new TrackPoint(XY_TO_COORD(
+					FA2.project(COORD_TO_XY(PreviousPoint))));
+				TrackPoint* B1 = new TrackPoint(XY_TO_COORD(
 					FB1.project(LastCursor)));
-				TrackPoint* B2 = new TrackPoint(view()->projection().inverse(
+				TrackPoint* B2 = new TrackPoint(XY_TO_COORD(
 					FB2.project(LastCursor)));
 				R1 = new Road;
 				R2 = new Road;
@@ -236,7 +236,7 @@ void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 				document()->addHistory(L);
 				view()->invalidate(true, false);
 				//FirstPoint = view()->projection().inverse(anEvent->pos());
-				PreviousPoints[R1->size()-1] = view()->projection().inverse(anEvent->pos());
+				PreviousPoints[R1->size()-1] = XY_TO_COORD(anEvent->pos());
 				FirstDistance = DockData.RoadDistance->text().toDouble();
 			}
 		}

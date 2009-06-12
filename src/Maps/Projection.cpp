@@ -35,11 +35,8 @@ public:
 //Projection
 
 Projection::Projection(void)
-  : ScaleLat(1000000), ScaleLon(1000000),
-  DeltaLat(0), DeltaLon(0), Viewport(WORLD_COORDBOX),
-  theProj(0)
+: theProj(0), p(new ProjectionPrivate)
 {
-	p = new ProjectionPrivate;
 #ifndef _MOBILE
 	p->theWGS84Proj = Projection::getProjection("+proj=longlat +ellps=WGS84 +datum=WGS84");
 	setProjectionType(M_PREFS->getProjectionType());
@@ -97,7 +94,7 @@ bool Projection::projIsLatLong()
 	return (theProj->params().is_latlong > 0);
 }
 
-QRectF Projection::getProjectedViewport(QRect& screen)
+QRectF Projection::getProjectedViewport(CoordBox& Viewport, QRect& screen)
 {
 	QPointF br, tl;
 
@@ -174,11 +171,6 @@ bool Projection::setProjectionType(ProjectionType aProjectionType)
 
 // Common routines
 
-double Projection::pixelPerM() const
-{
-	return PixelPerM;
-}
-
 double Projection::latAnglePerM() const
 {
 	double LengthOfOneDegreeLat = EQUATORIALRADIUS * M_PI / 180;
@@ -192,30 +184,27 @@ double Projection::lonAnglePerM(double Lat) const
 	return 1 / LengthOfOneDegreeLon;
 }
 
-QPoint Projection::project(const Coord & Map) const
+QPointF Projection::project(const Coord & Map) const
 {
 #ifndef _MOBILE
-	QPointF p = projProject(Map);
-	return QPointF(p.x() * ScaleLon + DeltaLon, -p.y() * ScaleLat + DeltaLat).toPoint();
+	return projProject(Map);
 #else
-	return QPoint(int(Map.lon() * ScaleLon + DeltaLon),
-				   int(-Map.lat() * ScaleLat + DeltaLat));
+	return QPoint(qRound(Map.lon()), qRound(Map.lat()));
 #endif
 }
 
-QPoint Projection::project(TrackPoint* aNode) const
+QPointF Projection::project(TrackPoint* aNode) const
 {
 #ifndef _MOBILE
 	if (aNode && aNode->projectionRevision() == p->ProjectionRevision)
-		return QPointF(aNode->projection().x() * ScaleLon + DeltaLon,
-					   -aNode->projection().y() * ScaleLat + DeltaLat).toPoint();
+		return aNode->projection();
 
 	QPointF pt = projProject(aNode->position());
 
 	aNode->setProjectionRevision(p->ProjectionRevision);
 	aNode->setProjection(pt);
 
-	return QPointF(pt.x() * ScaleLon + DeltaLon, -pt.y() * ScaleLat + DeltaLat).toPoint();
+	return pt;
 #else
 	return project(aNode->position());
 #endif
@@ -224,189 +213,10 @@ QPoint Projection::project(TrackPoint* aNode) const
 Coord Projection::inverse(const QPointF & Screen) const
 {
 #ifndef _MOBILE
-	Coord c = projInverse((QPointF((Screen.x() - DeltaLon ) / ScaleLon, -(Screen.y() - DeltaLat) / ScaleLat)));
-	return c;
+	return projInverse(QPointF(Screen.x(), Screen.y()));
 #else
-	return Coord(int(-(Screen.y() - DeltaLat) / ScaleLat),
-				 int((Screen.x() - DeltaLon) / ScaleLon));
+	return Coord(qRound(Screen.y()),
+				 qRound(Screen.x()));
 #endif
-}
-
-void Projection::panScreen(const QPoint & p, const QRect & Screen)
-{
-	DeltaLon += p.x();
-	DeltaLat += p.y();
-	viewportRecalc(Screen);
-}
-
-CoordBox Projection::viewport() const
-{
-	return Viewport;
-}
-
-void Projection::viewportRecalc(const QRect & Screen)
-{
-	Viewport =
-		CoordBox(inverse(Screen.bottomLeft()),
-			 inverse(Screen.topRight()));
-}
-
-void Projection::setViewport(const CoordBox & TargetMap)
-{
-	Viewport = TargetMap;
-}
-
-void Projection::setViewport(const CoordBox & TargetMap,
-									const QRect & Screen)
-{
-#ifndef _MOBILE
-	QPointF bl = projProject(TargetMap.bottomLeft());
-	QPointF tr = projProject(TargetMap.topRight());
-	QRectF pViewport = QRectF(bl, QSizeF(tr.x() - bl.x(), tr.y() - bl.y()));
-
-	Coord Center(TargetMap.center());
-	QPointF pCenter(pViewport.center());
-
-	double Aspect = (double)Screen.width() / Screen.height();
-	double pAspect = pViewport.width() / pViewport.height();
-
-	double wv, hv;
-	if (pAspect > Aspect) {
-		wv = pViewport.width();
-		hv = pViewport.height() * pAspect / Aspect;
-	} else {
-		wv = pViewport.width() * Aspect / pAspect;
-		hv = pViewport.height();
-	}
-
-	ScaleLon = Screen.width() / wv;
-	ScaleLat = Screen.height() / hv;
-
-	double PLon = pCenter.x() * ScaleLon;
-	double PLat = pCenter.y() * ScaleLat;
-	DeltaLon = Screen.width() / 2 - PLon;
-	DeltaLat = Screen.height() - (Screen.height() / 2 - PLat);
-
-	viewportRecalc(Screen);
-
-	// Calculate PixelPerM
-	double LengthOfOneDegreeLat = EQUATORIALRADIUS * M_PI / 180;
-	double LengthOfOneDegreeLon =
-		LengthOfOneDegreeLat * fabs(cos(intToRad(Center.lat())));
-	double degAspect = LengthOfOneDegreeLon / LengthOfOneDegreeLat;
-	double so = Screen.width() / (double)Viewport.lonDiff();
-	double sa = so / degAspect;
-
-	double LatAngPerM = 1.0 / EQUATORIALRADIUS;
-	PixelPerM = LatAngPerM / M_PI * INT_MAX * sa;
-	//
-#else
-	Viewport = TargetMap;
-	Coord Center(Viewport.center());
-	double LengthOfOneDegreeLat = EQUATORIALRADIUS * M_PI / 180;
-	double LengthOfOneDegreeLon =
-		LengthOfOneDegreeLat * fabs(cos(intToRad(Center.lat())));
-	double Aspect = LengthOfOneDegreeLon / LengthOfOneDegreeLat;
-	ScaleLon = Screen.width() / (double)Viewport.lonDiff();
-	ScaleLat = ScaleLon / Aspect;
-	
-	if ((ScaleLat * Viewport.latDiff()) > Screen.height())
-	{
-		ScaleLat = Screen.height() / (double)Viewport.latDiff();
-		ScaleLon = ScaleLat * Aspect;
-	}
-
-	double LatAngPerM = 1.0 / EQUATORIALRADIUS;
-	PixelPerM = LatAngPerM / M_PI * INT_MAX * ScaleLat;
-
-	double PLon = Center.lon() * ScaleLon;
-	double PLat = Center.lat() * ScaleLat;
-	DeltaLon = Screen.width() / 2 - PLon;
-	DeltaLat = Screen.height() - (Screen.height() / 2 - PLat);
-	viewportRecalc(Screen);
-#endif
-}
-
-void Projection::zoom(double d, const QPointF & Around,
-							 const QRect & Screen)
-{
-#ifndef _MOBILE
-	if (PixelPerM < 100) {
-		Coord Before = inverse(Around);
-		QPointF pBefore = projProject(Before);
-		ScaleLon *= d;
-		ScaleLat *= d;
-
-		DeltaLat = int(Around.y() + pBefore.y() * ScaleLat);
-		DeltaLon = int(Around.x() - pBefore.x() * ScaleLon);
-
-		double LengthOfOneDegreeLat = EQUATORIALRADIUS * M_PI / 180;
-		double LengthOfOneDegreeLon =
-			LengthOfOneDegreeLat * fabs(cos(intToRad(Before.lat())));
-		double degAspect = LengthOfOneDegreeLon / LengthOfOneDegreeLat;
-		double so = Screen.width() / (double)Viewport.lonDiff();
-		double sa = so / degAspect;
-
-		double LatAngPerM = 1.0 / EQUATORIALRADIUS;
-		PixelPerM = LatAngPerM / M_PI * INT_MAX * sa;
-
-		viewportRecalc(Screen);
-	}
-#else
-	if (ScaleLat * d < 1.0 && ScaleLon * d < 1.0) {
-		Coord Before = inverse(Around);
-		ScaleLon *= d;
-		ScaleLat *= d;
-		DeltaLat = int(Around.y() + Before.lat() * ScaleLat);
-		DeltaLon = int(Around.x() - Before.lon() * ScaleLon);
-
-		double LatAngPerM = 1.0 / EQUATORIALRADIUS;
-		PixelPerM = LatAngPerM / M_PI * INT_MAX * ScaleLat;
-
-		viewportRecalc(Screen);
-	}
-#endif
-}
-
-void Projection::resize(QSize oldS, QSize newS)
-{
-	Q_UNUSED(oldS)
-#ifndef _MOBILE
-	viewportRecalc(QRect(QPoint(0,0), newS));
-#else
-	Q_UNUSED(newS)
-#endif
-}
-
-void Projection::setCenter(Coord & Center, const QRect & Screen)
-{
-	Coord curCenter(Viewport.center());
-	QPoint curCenterScreen = project(curCenter);
-	QPoint newCenterScreen = project(Center);
-
-	QPoint panDelta = (curCenterScreen - newCenterScreen);
-	panScreen(panDelta, Screen);
-}
-
-bool Projection::toXML(QDomElement xParent) const
-{
-	bool OK = true;
-
-	QDomElement e = xParent.namedItem("Projection").toElement();
-	if (!e.isNull()) {
-		xParent.removeChild(e);
-	}
-	e = xParent.ownerDocument().createElement("Projection");
-	xParent.appendChild(e);
-
-	viewport().toXML("Viewport", e);
-
-	return OK;
-}
-
-void Projection::fromXML(QDomElement e, const QRect & Screen)
-{
-	CoordBox cb = CoordBox::fromXML(e.firstChildElement("Viewport"));
-	setViewport(cb, Screen);
 }
 

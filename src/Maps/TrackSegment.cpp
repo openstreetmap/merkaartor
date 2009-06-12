@@ -170,7 +170,7 @@ void TrackSegment::drawDirectionMarkers(QPainter &P, QPen &pen, const QPointF & 
 	P.drawLine(H-T,H-T+V2);
 }
 
-void TrackSegment::draw(QPainter &P, const Projection& theProjection)
+void TrackSegment::draw(QPainter &P, const Projection& theProjection, const QTransform& theTransform)
 {
 	QPen pen;
 
@@ -182,11 +182,12 @@ void TrackSegment::draw(QPainter &P, const Projection& theProjection)
 		Coord last = p->Points[i-1]->position();
 		Coord here = p->Points[i]->position();
 
-		if (CoordBox::visibleLine(theProjection.viewport(), last, here) == false)
-			continue;
+		// TODO get Viewport?
+		//if (CoordBox::visibleLine(theProjection.viewport(), last, here) == false)
+		//	continue;
 
-		QPointF FromF(theProjection.project(last));
-		QPointF ToF(theProjection.project(here));
+		QPointF FromF(theTransform.map(theProjection.project(last)));
+		QPointF ToF(theTransform.map(theProjection.project(here)));
 
 		const double distance = here.distanceFrom(last);
 		const double slope = (p->Points[i]->elevation() - p->Points[i-1]->elevation()) / (distance * 10.0);
@@ -205,12 +206,12 @@ bool TrackSegment::notEverythingDownloaded() const
 	return false;
 }
 
-void TrackSegment::drawFocus(QPainter &, const Projection &, bool)
+void TrackSegment::drawFocus(QPainter &, const Projection &, const QTransform&, bool)
 {
 	// Can't be selection
 }
 
-void TrackSegment::drawHover(QPainter &, const Projection &, bool)
+void TrackSegment::drawHover(QPainter &, const Projection &, const QTransform&, bool)
 {
 	// Can't be selection
 }
@@ -227,7 +228,7 @@ CoordBox TrackSegment::boundingBox() const
 	return CoordBox(Coord(0,0),Coord(0,0));
 }
 
-double TrackSegment::pixelDistance(const QPointF& , double , const Projection&) const
+double TrackSegment::pixelDistance(const QPointF& , double , const Projection&, const QTransform& ) const
 {
 	// unable to select that one
 	return 1000000;

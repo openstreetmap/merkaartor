@@ -33,9 +33,31 @@
 #include <QStatusBar>
 #include <QToolTip>
 
+// from wikipedia
+#define EQUATORIALRADIUS 6378137.0
+
+class MapViewPrivate
+{
+public:
+	//double ScaleLat, ScaleLon;
+	//double DeltaLat, DeltaLon;
+	QTransform theTransform;
+	double PixelPerM;
+	CoordBox Viewport;
+	QList<CoordBox> invalidRects;
+	QPoint theRasterPanDelta, theVectorPanDelta;
+
+	MapViewPrivate()
+	  : PixelPerM(0.0), Viewport(WORLD_COORDBOX)
+	{}
+};
+
+/****************/
+
 MapView::MapView(MainWindow* aMain) :
 	QWidget(aMain), Main(aMain), theDocument(0), theInteraction(0), StaticBackground(0), StaticBuffer(0), StaticMap(0), 
-		StaticBufferUpToDate(false), StaticMapUpToDate(false), SelectionLocked(false),lockIcon(0), numImages(0)
+		StaticBufferUpToDate(false), StaticMapUpToDate(false), SelectionLocked(false),lockIcon(0), numImages(0),
+		p(new MapViewPrivate)
 {
 	setMouseTracking(true);
 	setAttribute(Qt::WA_OpaquePaintEvent);
@@ -53,8 +75,6 @@ MapView::MapView(MainWindow* aMain) :
 	connect(MoveUp, SIGNAL(activated()), this, SLOT(on_MoveUp_activated()));
 	MoveDown = new QShortcut(QKeySequence(Qt::Key_Down), this);
 	connect(MoveDown, SIGNAL(activated()), this, SLOT(on_MoveDown_activated()));
-
-	invalidRegion = QRegion(rect());
 }
 
 MapView::~MapView()
@@ -64,6 +84,7 @@ MapView::~MapView()
 	delete StaticBackground;
 	delete StaticBuffer;
 	delete StaticMap;
+	delete p;
 }
 
 MainWindow *MapView::main()
@@ -91,7 +112,7 @@ void MapView::setDocument(MapDocument* aDoc)
 	connect(aDoc, SIGNAL(loadingFinished(ImageMapLayer*)),
 		this, SLOT(on_loadingFinished(ImageMapLayer*)), Qt::QueuedConnection);
 
-	projection().setViewport(projection().viewport(), rect());
+	setViewport(viewport(), rect());
 }
 
 MapDocument *MapView::document()
@@ -102,12 +123,13 @@ MapDocument *MapView::document()
 void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
 {
 	if (updateStaticBuffer) {
-		invalidRegion = QRegion(rect());
+		p->invalidRects.clear();
+		p->invalidRects.push_back(p->Viewport);
 		StaticBufferUpToDate = false;
 	}
 	if (theDocument && updateMap) {
 		for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
-			ImgIt.get()->forceRedraw(theProjection, rect());
+			ImgIt.get()->forceRedraw(*this, rect());
 		StaticMapUpToDate = false;
 	}
 	update();
@@ -115,23 +137,38 @@ void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
 
 void MapView::panScreen(QPoint delta) 
 {
-	thePanDelta += delta;
-	projection().panScreen(delta,rect());
+	p->theRasterPanDelta += delta;
+	p->theVectorPanDelta += delta;
 
-	QRegion panRg = QRegion(rect()) - invalidRegion;
-	QRect bbRect = panRg.boundingRect();
+	CoordBox r1, r2;
 
-	if (delta.x() < 0)
-		invalidRegion += QRect(bbRect.x() + bbRect.width() + delta.x(), bbRect.y(), -delta.x(), bbRect.height());
-	else
-		invalidRegion += QRect(bbRect.x(), bbRect.y(), delta.x(), bbRect.height());
-	if (delta.y() < 0)
-		invalidRegion += QRect(bbRect.x(), bbRect.y() + bbRect.height() + delta.y(), bbRect.width(), -delta.y());
-	else
-		invalidRegion += QRect(bbRect.x(), bbRect.y(), bbRect.width(), delta.y());
+	Coord cDelta = theProjection.inverse(p->theTransform.inverted().map(QPointF(delta)))  - theProjection.inverse(p->theTransform.inverted().map(QPointF(0., 0.)));
+	
+	if (delta.x()) {
+		if (delta.x() < 0)
+			r1 = CoordBox(p->Viewport.bottomRight(), Coord(p->Viewport.topRight().lat(), p->Viewport.topRight().lon() - cDelta.lon())); // OK
+		else
+			r1 = CoordBox(Coord(p->Viewport.bottomLeft().lat(), p->Viewport.bottomLeft().lon() - cDelta.lon()), p->Viewport.topLeft()); // OK
+		p->invalidRects.push_back(r1);
+	}
+	if (delta.y()) {
+		if (delta.y() < 0)
+			r2 = CoordBox(Coord(p->Viewport.bottomLeft().lat() - cDelta.lat(), p->Viewport.bottomLeft().lon()), p->Viewport.bottomRight()); // OK
+		else
+			r2 = CoordBox(p->Viewport.topLeft(), Coord(p->Viewport.topRight().lat() - cDelta.lat(), p->Viewport.bottomRight().lon())); //NOK
+		p->invalidRects.push_back(r2);
+	}
+
+
+	//qDebug() << "Inv rects size: " << p->invalidRects.size();
+	//qDebug() << "delta: " << delta;
+	//qDebug() << "r1 : " << p->theTransform.map(theProjection.project(r1.topLeft())) << ", " << p->theTransform.map(theProjection.project(r1.bottomRight()));
+	//qDebug() << "r2 : " << p->theTransform.map(theProjection.project(r2.topLeft())) << ", " << p->theTransform.map(theProjection.project(r2.bottomRight()));
+
+	p->theTransform.translate(qreal(delta.x())/p->theTransform.m11(), qreal(delta.y())/p->theTransform.m22());
+	viewportRecalc(rect());
 
 	StaticBufferUpToDate = false;
-
 	update();
 }
 
@@ -139,28 +176,33 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 {
 	QTime Start(QTime::currentTime());
 
-	//if (!(StaticBufferUpToDate && StaticMapUpToDate))
-	//	qDebug() << "PaintEvent: " << StaticBufferUpToDate << "; " << StaticMapUpToDate;
+	theFeatures.clear();
+	theCoastlines.clear();
 
 	QPainter P;
 	P.begin(this);
-	QRegion rg(rect());
-	P.setClipRegion(rg);
-	P.setClipping(true);
 
-	updateLayersImage();
+	QColor theFillColor;
+	if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
+		theFillColor = M_PREFS->getBgColor();
+	else
+		theFillColor = M_STYLE->getGlobalPainter().getBackgroundColor();
+	P.fillRect(rect(), theFillColor);
+
+	if (!p->invalidRects.isEmpty())
+		buildFeatureSet();
+
+	if (!StaticMapUpToDate)
+		updateLayersImage();
 
 	if (!StaticBufferUpToDate) {
-		buildFeatureSet(invalidRegion, theProjection);
 		updateStaticBackground();
 		updateStaticBuffer();
 	}
 
-	P.drawPixmap(QPoint(0, 0), *StaticBackground);
-
-	P.drawPixmap(thePanDelta, *StaticMap);
-
-	P.drawPixmap(QPoint(0, 0), *StaticBuffer);
+	P.drawPixmap(p->theVectorPanDelta, *StaticBackground);
+	P.drawPixmap(p->theRasterPanDelta, *StaticMap);
+	P.drawPixmap(p->theVectorPanDelta, *StaticBuffer);
 
 	drawDownloadAreas(P);
 	drawScale(P);
@@ -175,10 +217,10 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 	P.end();
 
 	Main->ViewportStatusLabel->setText(QString("%1,%2,%3,%4")
-		.arg(QString::number(intToAng(theProjection.viewport().bottomLeft().lon()),'f',4)) 
-		.arg(QString::number(intToAng(theProjection.viewport().bottomLeft().lat()),'f',4))
-		.arg(QString::number(intToAng(theProjection.viewport().topRight().lon()),'f',4))
-		.arg(QString::number(intToAng(theProjection.viewport().topRight().lat()),'f',4))
+		.arg(QString::number(intToAng(viewport().bottomLeft().lon()),'f',4)) 
+		.arg(QString::number(intToAng(viewport().bottomLeft().lat()),'f',4))
+		.arg(QString::number(intToAng(viewport().topRight().lon()),'f',4))
+		.arg(QString::number(intToAng(viewport().topRight().lat()),'f',4))
 		);
 
 	QTime Stop(QTime::currentTime());
@@ -190,7 +232,7 @@ void MapView::drawScale(QPainter & P)
 	if (!M_PREFS->getScaleVisible())
 		return;
 
-	double Log = log10(200/projection().pixelPerM());
+	double Log = log10(200/p->PixelPerM);
 	double RestLog = Log-floor(Log);
 	if (RestLog < log10(2.))
 		Log = floor(Log);
@@ -202,7 +244,7 @@ void MapView::drawScale(QPainter & P)
 	double Length = pow(10.,Log);
 	P.setPen(QPen(QColor(0,0,0),2));
 	QPointF P1(20,height()-20);
-	QPointF P2(20+Length*projection().pixelPerM(),height()-20);
+	QPointF P2(20+Length*p->PixelPerM,height()-20);
 	P.drawLine(P1-QPointF(0,5),P1+QPointF(0,5));
 	P.drawLine(P1,P2);
 	if (Length < 1000)
@@ -218,7 +260,7 @@ void MapView::drawGPS(QPainter & P)
 	if (Main->gps()->getGpsDevice()) {
 		if (Main->gps()->getGpsDevice()->fixStatus() == QGPSDevice::StatusActive) {
 			Coord vp(angToInt(Main->gps()->getGpsDevice()->latitude()), angToInt(Main->gps()->getGpsDevice()->longitude()));
-			QPoint g = projection().project(vp);
+			QPointF g = projection().project(vp);
 			QPixmap pm = getPixmapFromFile(":/Gps/Gps_Marker.svg", 32);
 			P.drawPixmap(g - QPoint(16, 16), pm);
 		}
@@ -229,20 +271,17 @@ void MapView::sortRenderingPriorityInLayers()
 {
 	for (int i = 0; i < theDocument->layerSize(); ++i) {
 		theDocument->getLayer(i)->
-			sortRenderingPriority(theProjection.pixelPerM());
+			sortRenderingPriority(p->PixelPerM);
 	}
 }
 
 void MapView::sortRenderingPriority()
 {
-	qSort(theFeatures.begin(),theFeatures.end(),SortAccordingToRenderingPriority(theProjection.pixelPerM()));
+	qSort(theFeatures.begin(),theFeatures.end(),SortAccordingToRenderingPriority(p->PixelPerM));
 }
 
 void MapView::updateLayersImage()
 {
-	if (StaticMapUpToDate)
-		return;
-
 	if (!StaticMap || (StaticMap->size() != size()))
 	{
 		delete StaticMap;
@@ -252,62 +291,61 @@ void MapView::updateLayersImage()
 
 	for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
 		if (ImgIt.get()->isVisible())
-			ImgIt.get()->drawImage(*StaticMap, thePanDelta);
+			ImgIt.get()->drawImage(*StaticMap, p->theRasterPanDelta);
 
-	thePanDelta = QPoint(0, 0);
+	p->theRasterPanDelta = QPoint(0, 0);
 	StaticMapUpToDate = true;
 }
 
-void MapView::buildFeatureSet(QRegion invalidRegion, Projection& aProj)
+void MapView::buildFeatureSet()
 {
 	if (!theDocument)
 		return;
 
-	theFeatures.clear();
-	theCoastlines.clear();
-
 	for (int i=0; i<theDocument->layerSize(); ++i) {
-		theDocument->getLayer(i)->invalidate(theDocument, aProj.viewport());
+		theDocument->getLayer(i)->invalidate(theDocument, p->Viewport);
 		Main->properties()->adjustSelection();
 	}
 
-	QRect clipRect = invalidRegion.boundingRect().adjusted(int(-20), int(-20), int(20), int(20));
-	QList <CoordBox> coordRegion;
+	CoordBox coordRegion;
+	QRectF clipRect = p->theTransform.inverted().mapRect(QRectF(rect().adjusted(-20, -20, 20, 20)));
 
 #if 1
 
-	for (int i=0; i < invalidRegion.rects().size(); ++i) {
-		Coord bl = aProj.inverse(invalidRegion.rects()[i].bottomLeft());
-		Coord tr = aProj.inverse(invalidRegion.rects()[i].topRight());
+	qDebug() << "Inv rects size: " << p->invalidRects.size();
+	for (int i=0; i < p->invalidRects.size(); ++i) {
+		Coord bl = p->invalidRects[i].bottomLeft();
+		Coord tr = p->invalidRects[i].topRight();
+		qDebug() << "rect : " << p->theTransform.map(theProjection.project(bl)) << ", " << p->theTransform.map(theProjection.project(tr));
 		geometry::box < Coord > cb(bl, tr);
 		for (int j=0; j<theDocument->layerSize(); ++j) {
 			if (!theDocument->getLayer(j)->isVisible())
 				continue;
 
 			std::deque < MapFeaturePtr > ret = theDocument->getLayer(j)->getRTree()->find(cb);
-			for (std::deque < MapFeaturePtr >::const_iterator it = ret.begin(); it < ret.end(); ++it) {
+			for (std::deque < MapFeaturePtr >::const_iterator it = ret.begin(); it != ret.end(); ++it) {
 				if (theFeatures.contains(*it))
 					continue;
 
 				if (Road * R = CAST_WAY(*it)) {
-					R->buildPath(aProj, clipRect);
+					R->buildPath(theProjection, p->theTransform, clipRect);
 					theFeatures.push_back(R);
 					if (R->isCoastline())
 						theCoastlines.push_back(R);
 				} else
 				if (Relation * RR = CAST_RELATION(*it)) {
-					RR->buildPath(aProj, clipRect);
+					RR->buildPath(theProjection, p->theTransform, clipRect);
 					theFeatures.push_back(RR);
 				} else
 				if (TrackPoint * pt = CAST_NODE(*it)) {
 					if (theDocument->getLayer(j)->arePointsDrawable())
-						theFeatures.push_back(*it);
+						theFeatures.push_back(pt);
 				} else 
 					theFeatures.push_back(*it);
 			}
 		}
 
-		coordRegion += CoordBox(bl, tr);
+		coordRegion.merge(CoordBox(bl, tr));
 	}
 	sortRenderingPriority();
 
@@ -386,12 +424,11 @@ void floodFill(QImage& theImage, const QPoint& P, const QRgb& targetColor, const
 	}
 }
 
-void MapView::drawBackground(QPainter & theP, Projection& aProj)
+void MapView::drawBackground(QPainter & theP, Projection& /*aProj*/)
 {
 	QColor theFillColor;
 	
-	double PixelPerM = aProj.pixelPerM();
-	double WW = PixelPerM*30.0 + 2.0;
+	double WW = p->PixelPerM*30.0 + 2.0;
 
 	QPen thePen(M_PREFS->getWaterColor(), WW);
 	thePen.setCapStyle(Qt::RoundCap);
@@ -643,46 +680,15 @@ void MapView::drawBackground(QPainter & theP, Projection& aProj)
 
 void MapView::drawFeatures(QPainter & P, Projection& aProj)
 {
-	M_STYLE->initialize(P, aProj);
-
-	//RenderPriority curPriority;
-	//int i=0;
-	//int curI;
-	//while (i < theFeatures.size())
-	//{
-	//	curPriority = theFeatures[i]->getRenderPriority();
-	//	curI = i;
-	//	for (int j = 0; j < M_STYLE->size(); ++j)
-	//	{
-	//		i = curI;
-	//		PaintStyleLayer *Current = M_STYLE->get(j);
-
-	//		while ((i < theFeatures.size()) && (theFeatures[i]->getRenderPriority() == curPriority))
-	//		{
-	//			P.save();
-	//			P.setOpacity(theFeatures[i]->layer()->getAlpha());
-	//			if (Road * R = dynamic_cast < Road * >(theFeatures[i]))
-	//				Current->draw(R);
-	//			else if (TrackPoint * Pt = dynamic_cast < TrackPoint * >(theFeatures[i]))
-	//				Current->draw(Pt);
-	//			else if (Relation * RR = dynamic_cast < Relation * >(theFeatures[i]))
-	//				Current->draw(RR); 
-	//			P.restore();
-
-	//			theFeatures[i]->draw(P, aProj);
-	//			++i;
-	//		}
-	//	}
-	//}
-
-
-
+	M_STYLE->initialize(P, *this);
 
 	for (int i = 0; i < M_STYLE->size(); ++i)
 	{
 		PaintStyleLayer *Current = M_STYLE->get(i);
 
 		P.save();
+		P.setRenderHint(QPainter::Antialiasing);
+
 		for (int i=0; i<theFeatures.size(); i++)
 		{
 			P.setOpacity(theFeatures[i]->layer()->getAlpha());
@@ -699,7 +705,7 @@ void MapView::drawFeatures(QPainter & P, Projection& aProj)
 	for (int i=0; i<theFeatures.size(); i++)
 	{
 		P.setOpacity(theFeatures[i]->layer()->getAlpha());
-		theFeatures[i]->draw(P, aProj);
+		theFeatures[i]->draw(P, aProj, p->theTransform);
 	}
 }
 
@@ -718,7 +724,7 @@ void MapView::drawDownloadAreas(QPainter & P)
 	QList<CoordBox> db = theDocument->getDownloadBoxes();
 	QList<CoordBox>::const_iterator bb;
 	for (bb = db.constBegin(); bb != db.constEnd(); ++bb) {
-		if (projection().viewport().disjunctFrom(*bb)) continue;
+		if (viewport().disjunctFrom(*bb)) continue;
 		QPolygonF poly;
 		poly << projection().project((*bb).topLeft());
 		poly << projection().project((*bb).bottomLeft());
@@ -729,8 +735,8 @@ void MapView::drawDownloadAreas(QPainter & P)
 		r -= QRegion(poly.toPolygon());
 	}
 
-	P.setClipRegion(r);
-	P.setClipping(true);
+	//P.setClipRegion(r);
+	//P.setClipping(true);
 	P.fillRect(rect(), b);
 
 	P.restore();
@@ -738,76 +744,73 @@ void MapView::drawDownloadAreas(QPainter & P)
 
 void MapView::updateStaticBackground()
 {
-	QPixmap savPix;
-	QPoint pan;
-	QRect bbRect;
-
-	QRegion panRg = QRegion(rect()) - invalidRegion;
-	if (!panRg.isEmpty()) {
-		//pan = (panRg.boundingRect().center() - rect().center()) * 2.0;
-		bbRect = panRg.boundingRect();
-		pan = bbRect.topLeft() - rect().topLeft() + bbRect.bottomRight() - rect().bottomRight();
-		savPix = StaticBackground->copy();
-	}
-
 	if (!StaticBackground || (StaticBackground->size() != size()))
 	{
 		delete StaticBackground;
 		StaticBackground = new QPixmap(size());
 	}
 
-	//StaticBackground->fill(Qt::transparent);
+	QPainter P;;
 
-	QPainter painter(StaticBackground);
-
-	painter.setClipping(true);
-	if (!panRg.isEmpty()) {
-		painter.setClipRegion(panRg);
-		painter.drawPixmap(pan, savPix);
+	if (!p->theVectorPanDelta.isNull()) {
+		QPixmap savPix;
+		savPix = StaticBackground->copy();
+		StaticBackground->fill(Qt::transparent);
+		P.begin(StaticBackground);
+		P.drawPixmap(p->theVectorPanDelta, savPix);
+		P.end();
+	} else {
+		StaticBackground->fill(Qt::transparent);
 	}
 
-	painter.setClipRegion(invalidRegion);
-	painter.setRenderHint(QPainter::Antialiasing);
-
-	drawBackground(painter, theProjection);
+	if (!p->invalidRects.isEmpty()) {
+		P.begin(StaticBackground);
+		P.setRenderHint(QPainter::Antialiasing);
+		if (!p->theVectorPanDelta.isNull()) {
+			P.setClipping(true);
+			P.setClipRegion(QRegion(rect()) - QRegion(QRect(p->theVectorPanDelta, size())));
+		}
+		drawBackground(P, theProjection);
+		P.setClipping(false);
+		P.end();
+	}
 }
 
 void MapView::updateStaticBuffer()
 {
-	QPixmap savPix;
-	QPoint pan;
-	QRect bbRect;
-
-	QRegion panRg = QRegion(rect()) - invalidRegion;
-	if (!panRg.isEmpty()) {
-		//pan = (panRg.boundingRect().center() - rect().center()) * 2.0;
-		bbRect = panRg.boundingRect();
-		pan = bbRect.topLeft() - rect().topLeft() + bbRect.bottomRight() - rect().bottomRight();
-		savPix = StaticBuffer->copy();
-	}
-
 	if (!StaticBuffer || (StaticBuffer->size() != size()))
 	{
 		delete StaticBuffer;
 		StaticBuffer = new QPixmap(size());
 	}
 
-	StaticBuffer->fill(Qt::transparent);
+	QPainter P;
 
-	QPainter painter(StaticBuffer);
-
-	painter.setClipping(true);
-	if (!panRg.isEmpty()) {
-		painter.setClipRegion(panRg);
-		painter.drawPixmap(pan, savPix);
+	if (!p->theVectorPanDelta.isNull()) {
+		QPixmap savPix;
+		savPix = StaticBuffer->copy();
+		StaticBuffer->fill(Qt::transparent);
+		P.begin(StaticBuffer);
+		P.drawPixmap(p->theVectorPanDelta, savPix);
+		P.end();
+	} else {
+		StaticBuffer->fill(Qt::transparent);
 	}
 
-	painter.setClipRegion(invalidRegion);
-	painter.setRenderHint(QPainter::Antialiasing);
+	if (!p->invalidRects.isEmpty()) {
+		P.begin(StaticBuffer);
+		P.setRenderHint(QPainter::Antialiasing);
+		if (!p->theVectorPanDelta.isNull()) {
+			P.setClipping(true);
+			P.setClipRegion(QRegion(rect()) - QRegion(QRect(p->theVectorPanDelta, size())));
+		}
+		drawFeatures(P, theProjection);
+		P.setClipping(false);
+		P.end();
+	}
 
-	drawFeatures(painter, theProjection);
-
-	invalidRegion = QRegion();
+	p->invalidRects.clear();
+	p->theVectorPanDelta = QPoint(0, 0);
 	StaticBufferUpToDate = true;
 }
 
@@ -846,7 +849,7 @@ void MapView::wheelEvent(QWheelEvent* ev)
 			finalZoom *= M_PREFS->getZoomOutPerc()/100.0;
 		}
 	}
-	projection().zoom(finalZoom, ev->pos(), rect());
+	zoom(finalZoom, ev->pos(), rect());
 	for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
 		ImgIt.get()->zoom(finalZoom, ev->pos(), rect());
 	invalidate(true, true);
@@ -888,6 +891,11 @@ Interaction *MapView::interaction()
 Projection& MapView::projection()
 {
 	return theProjection;
+}
+
+QTransform& MapView::transform()
+{
+	return p->theTransform;
 }
 
 void MapView::on_customContextMenuRequested(const QPoint & pos)
@@ -975,7 +983,7 @@ void MapView::on_imageRequested(ImageMapLayer*)
 void MapView::on_imageReceived(ImageMapLayer* aLayer)
 {
 	Main->pbImages->setValue(Main->pbImages->value()+1);
-	aLayer->forceRedraw(theProjection, rect());
+	aLayer->forceRedraw(*this, rect());
 	StaticMapUpToDate = false;
 	update();
 }
@@ -989,7 +997,7 @@ void MapView::on_loadingFinished(ImageMapLayer*)
 void MapView::resizeEvent(QResizeEvent * ev)
 {
 	StaticBufferUpToDate = false;
-	projection().resize(ev->oldSize(), ev->size());
+	resize(ev->oldSize(), ev->size());
 
 	QWidget::resizeEvent(ev);
 
@@ -1013,7 +1021,7 @@ void MapView::dragMoveEvent(QDragMoveEvent *event)
 	}
 	TrackPoint *tP;
 	for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it) {
-		if ((tP = qobject_cast<TrackPoint*>(it.get())) && tP->pixelDistance(event->pos(), 5.01, projection()) < 5.01) {
+		if ((tP = qobject_cast<TrackPoint*>(it.get())) && tP->pixelDistance(event->pos(), 5.01, projection(), p->theTransform) < 5.01) {
 			dropTarget = tP;
 			QRect acceptedRect(tP->projection().toPoint() - QPoint(3, 3), tP->projection().toPoint() + QPoint(3, 3));
 			event->acceptProposedAction();
@@ -1051,35 +1059,30 @@ bool MapView::toXML(QDomElement xParent)
 	e = xParent.ownerDocument().createElement("MapView");
 	xParent.appendChild(e);
 
-	projection().toXML(e);
+	viewport().toXML("Viewport", e);
 
 	return OK;
 }
 
 void MapView::fromXML(const QDomElement e)
 {
-	QDomElement c = e.firstChildElement();
-	while(!c.isNull()) {
-		if (c.tagName() == "Projection") {
-			projection().fromXML(c, rect());
-		}
+	CoordBox cb = CoordBox::fromXML(e.firstChildElement("Viewport"));
+	setViewport(cb, rect());
 
-		c = c.nextSiblingElement();
-	}
 	invalidate(true, true);
 }
 
 void MapView::on_MoveLeft_activated()
 {
 	QPoint p(rect().width()/4,0);
-	projection().panScreen(p, rect());
+	panScreen(p);
 
 	invalidate(true, true);
 }
 void MapView::on_MoveRight_activated()
 {
 	QPoint p(-rect().width()/4,0);
-	projection().panScreen(p, rect());
+	panScreen(p);
 
 	invalidate(true, true);
 }
@@ -1087,7 +1090,7 @@ void MapView::on_MoveRight_activated()
 void MapView::on_MoveUp_activated()
 {
 	QPoint p(0,rect().height()/4);
-	projection().panScreen(p, rect());
+	panScreen(p);
 
 	invalidate(true, true);
 }
@@ -1095,7 +1098,7 @@ void MapView::on_MoveUp_activated()
 void MapView::on_MoveDown_activated()
 {
 	QPoint p(0,-rect().height()/4);
-	projection().panScreen(p, rect());
+	panScreen(p);
 
 	invalidate(true, true);
 }
@@ -1178,4 +1181,167 @@ void MapView::unlockSelection()
 		SAFE_DELETE(lockIcon);
 		SelectionLocked = false;
 	}
+}
+
+CoordBox MapView::viewport() const
+{
+	return p->Viewport;
+}
+
+void MapView::viewportRecalc(const QRect & Screen)
+{
+	QRectF fScreen(Screen);
+	p->Viewport =
+		CoordBox(theProjection.inverse(p->theTransform.inverted().map(fScreen.bottomLeft())),
+			 theProjection.inverse(p->theTransform.inverted().map(fScreen.topRight())));
+}
+
+void MapView::transformCalc(QTransform& theTransform, const Projection& theProjection, const CoordBox& TargetMap, const QRect& Screen)
+{
+	QPointF bl = theProjection.project(TargetMap.bottomLeft());
+	QPointF tr = theProjection.project(TargetMap.topRight());
+	QRectF pViewport = QRectF(bl, QSizeF(tr.x() - bl.x(), tr.y() - bl.y()));
+
+	Coord Center(TargetMap.center());
+	QPointF pCenter(pViewport.center());
+
+	double Aspect = (double)Screen.width() / Screen.height();
+	double pAspect = pViewport.width() / pViewport.height();
+
+	double wv, hv;
+	if (pAspect > Aspect) {
+		wv = pViewport.width();
+		hv = pViewport.height() * pAspect / Aspect;
+	} else {
+		wv = pViewport.width() * Aspect / pAspect;
+		hv = pViewport.height();
+	}
+
+	double ScaleLon = Screen.width() / wv;
+	double ScaleLat = Screen.height() / hv;
+
+	double PLon = pCenter.x() * ScaleLon;
+	double PLat = pCenter.y() * ScaleLat;
+	double DeltaLon = Screen.width() / 2 - PLon;
+	double DeltaLat = Screen.height() - (Screen.height() / 2 - PLat);
+
+	theTransform.setMatrix(ScaleLon, 0, 0, 0, -ScaleLat, 0, DeltaLon, DeltaLat, 1);
+}
+
+void MapView::setViewport(const CoordBox & TargetMap)
+{
+	p->Viewport = TargetMap;
+}
+
+void MapView::setViewport(const CoordBox & TargetMap,
+									const QRect & Screen)
+{
+#ifndef _MOBILE
+	transformCalc(p->theTransform, theProjection, TargetMap, Screen);
+	viewportRecalc(Screen);
+
+	// Calculate PixelPerM
+	double LengthOfOneDegreeLat = EQUATORIALRADIUS * M_PI / 180;
+	double LengthOfOneDegreeLon =
+		LengthOfOneDegreeLat * fabs(cos(intToRad(TargetMap.center().lat())));
+	double degAspect = LengthOfOneDegreeLon / LengthOfOneDegreeLat;
+	double so = Screen.width() / (double)p->Viewport.lonDiff();
+	double sa = so / degAspect;
+
+	double LatAngPerM = 1.0 / EQUATORIALRADIUS;
+	p->PixelPerM = LatAngPerM / M_PI * INT_MAX * sa;
+	//
+#else
+	Viewport = TargetMap;
+	Coord Center(Viewport.center());
+	double LengthOfOneDegreeLat = EQUATORIALRADIUS * M_PI / 180;
+	double LengthOfOneDegreeLon =
+		LengthOfOneDegreeLat * fabs(cos(intToRad(Center.lat())));
+	double Aspect = LengthOfOneDegreeLon / LengthOfOneDegreeLat;
+	ScaleLon = Screen.width() / (double)Viewport.lonDiff();
+	ScaleLat = ScaleLon / Aspect;
+	
+	if ((ScaleLat * Viewport.latDiff()) > Screen.height())
+	{
+		ScaleLat = Screen.height() / (double)Viewport.latDiff();
+		ScaleLon = ScaleLat * Aspect;
+	}
+
+	double LatAngPerM = 1.0 / EQUATORIALRADIUS;
+	PixelPerM = LatAngPerM / M_PI * INT_MAX * ScaleLat;
+
+	double PLon = Center.lon() * ScaleLon;
+	double PLat = Center.lat() * ScaleLat;
+	DeltaLon = Screen.width() / 2 - PLon;
+	DeltaLat = Screen.height() - (Screen.height() / 2 - PLat);
+	viewportRecalc(Screen);
+#endif
+}
+
+void MapView::zoom(double d, const QPointF & Around,
+							 const QRect & Screen)
+{
+#ifndef _MOBILE
+	if (p->PixelPerM < 100) {
+		Coord Before = theProjection.inverse(p->theTransform.inverted().map(Around));
+		QPointF pBefore = theProjection.project(Before);
+
+		double ScaleLon = p->theTransform.m11() * d;
+		double ScaleLat = p->theTransform.m22() * d;
+		double DeltaLat = (Around.y() - pBefore.y() * ScaleLat);
+		double DeltaLon = (Around.x() - pBefore.x() * ScaleLon);
+
+		p->theTransform.setMatrix(ScaleLon, 0, 0, 0, ScaleLat, 0, DeltaLon, DeltaLat, 1);
+
+		double LengthOfOneDegreeLat = EQUATORIALRADIUS * M_PI / 180;
+		double LengthOfOneDegreeLon =
+			LengthOfOneDegreeLat * fabs(cos(intToRad(Before.lat())));
+		double degAspect = LengthOfOneDegreeLon / LengthOfOneDegreeLat;
+		double so = Screen.width() / (double)p->Viewport.lonDiff();
+		double sa = so / degAspect;
+
+		double LatAngPerM = 1.0 / EQUATORIALRADIUS;
+		p->PixelPerM = LatAngPerM / M_PI * INT_MAX * sa;
+
+		viewportRecalc(Screen);
+	}
+#else
+	if (ScaleLat * d < 1.0 && ScaleLon * d < 1.0) {
+		Coord Before = inverse(Around);
+		ScaleLon *= d;
+		ScaleLat *= d;
+		DeltaLat = int(Around.y() + Before.lat() * ScaleLat);
+		DeltaLon = int(Around.x() - Before.lon() * ScaleLon);
+
+		double LatAngPerM = 1.0 / EQUATORIALRADIUS;
+		PixelPerM = LatAngPerM / M_PI * INT_MAX * ScaleLat;
+
+		viewportRecalc(Screen);
+	}
+#endif
+}
+
+void MapView::resize(QSize oldS, QSize newS)
+{
+	Q_UNUSED(oldS)
+#ifndef _MOBILE
+	viewportRecalc(QRect(QPoint(0,0), newS));
+#else
+	Q_UNUSED(newS)
+#endif
+}
+
+void MapView::setCenter(Coord & Center, const QRect & /*Screen*/)
+{
+	Coord curCenter(p->Viewport.center());
+	QPointF curCenterScreen = theProjection.project(curCenter);
+	QPointF newCenterScreen = theProjection.project(Center);
+
+	QPointF panDelta = (curCenterScreen - newCenterScreen);
+	panScreen(panDelta.toPoint());
+}
+
+double MapView::pixelPerM() const
+{
+	return p->PixelPerM;
 }
