@@ -427,46 +427,112 @@ MapDocument* MainWindow::getDocumentFromClipboard()
 {
 	QClipboard *clipboard = QApplication::clipboard();
 	QDomDocument* theXmlDoc = new QDomDocument();
-	if (!theXmlDoc->setContent(clipboard->text())) {
-		QMessageBox::critical(this, tr("Clipboard invalid"), tr("Clipboard is not valid XML."));
-		return NULL;
-	}
+
+	if (!theXmlDoc->setContent(clipboard->mimeData()->data("application/x-openstreetmap+xml")))
+		if (!theXmlDoc->setContent(clipboard->text())) {
+			delete theXmlDoc;
+			return NULL;
+		}
 
 	QDomElement c = theXmlDoc->documentElement();
 
-	if (c.tagName() != "osm") {
-		QMessageBox::critical(this, tr("Clipboard invalid"), tr("Clipboard do not contain valid OSM."));
-		return NULL;
-	}
+	if (c.tagName() == "osm") {
+		MapDocument* NewDoc = new MapDocument(NULL);
+		DrawingMapLayer* l = new DrawingMapLayer("Dummy");
+		NewDoc->add(l);
 
-	MapDocument* NewDoc = new MapDocument(NULL);
-	DrawingMapLayer* l = new DrawingMapLayer("Dummy");
-	NewDoc->add(l);
+		c = c.firstChildElement();
+		while(!c.isNull()) {
+			if (c.tagName() == "bound") {
+			} else
+			if (c.tagName() == "way") {
+				Road::fromXML(NewDoc, l, c);
+			} else
+			if (c.tagName() == "relation") {
+				Relation::fromXML(NewDoc, l, c);
+			} else
+			if (c.tagName() == "node") {
+				TrackPoint::fromXML(NewDoc, l, c);
+			}
 
-	c = c.firstChildElement();
-	while(!c.isNull()) {
-		if (c.tagName() == "bound") {
-		} else
-		if (c.tagName() == "way") {
-			Road::fromXML(NewDoc, l, c);
-		} else
-		if (c.tagName() == "relation") {
-			Relation::fromXML(NewDoc, l, c);
-		} else
-		if (c.tagName() == "node") {
-			TrackPoint::fromXML(NewDoc, l, c);
+			c = c.nextSiblingElement();
 		}
 
-		c = c.nextSiblingElement();
-	}
+		delete theXmlDoc;
+		return NewDoc;
+	} else
+	if (c.tagName() == "kml") {
+		MapDocument* NewDoc = new MapDocument(NULL);
+		DrawingMapLayer* l = new DrawingMapLayer("Dummy");
+		NewDoc->add(l);
 
-	return NewDoc;
+		ImportExportKML imp(NewDoc);
+		QByteArray ba = clipboard->text().toUtf8();
+		QBuffer kmlBuf(&ba);
+		kmlBuf.open(QIODevice::ReadOnly);
+		if (imp.setDevice(&kmlBuf))
+			imp.import(l);
+
+		delete theXmlDoc;
+		return NewDoc;
+	}
+	QMessageBox::critical(this, tr("Clipboard invalid"), tr("Clipboard do not contain valid data."));
+	return NULL;
 }
 
 void MainWindow::on_editCopyAction_triggered()
 {
 	QClipboard *clipboard = QApplication::clipboard();
-	clipboard->setText(theDocument->exportOSM(theProperties->selection()));
+	QMimeData* md = new QMimeData();
+	QString osm = theDocument->exportOSM(theProperties->selection());
+
+	ImportExportKML exp(theDocument);
+	QBuffer kmlBuf;
+	kmlBuf.open(QIODevice::WriteOnly | QIODevice::Truncate);
+	if (exp.setDevice(&kmlBuf))
+		exp.export_(theProperties->selection());
+	md->setText(osm);
+	md->setData("application/x-openstreetmap+xml", osm.toUtf8()); 
+	md->setData("application/vnd.google-earth.kml+xml", kmlBuf.data()); 
+	clipboard->setMimeData(md);
+	invalidateView();
+}
+
+void MainWindow::on_editPasteFeatureAction_triggered()
+{
+	MapDocument* doc;
+	if (!(doc = getDocumentFromClipboard()))
+		return;
+
+	CommandList* theList = new CommandList();
+	theList->setDescription("Paste Features");
+
+	QList<MapFeature*> theFeats;
+	for (FeatureIterator k(doc); !k.isEnd(); ++k) {
+		theFeats.push_back(k.get());
+	}
+	for (int i=0; i<theFeats.size(); ++i) {
+		MapFeature*F = theFeats.at(i);
+		if (theDocument->getFeature(F->id()))
+			F->resetId();
+
+		if (TrackPoint* P = CAST_NODE(F)) {
+		} else
+		if (Road* R = CAST_WAY(F)) {
+		} else
+		if (Relation* RR = CAST_RELATION(F)) {
+		}
+		theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(), F, true));
+	}
+
+	if (theList->size())
+		document()->addHistory(theList);
+	else
+		delete theList;
+
+	delete doc;
+
+	theProperties->setSelection(theFeats);
 	invalidateView();
 }
 
@@ -539,15 +605,18 @@ void MainWindow::clipboardChanged()
 	editPasteOverwriteAction->setEnabled(false);
 
 	QClipboard *clipboard = QApplication::clipboard();
+	qDebug() << "Clipboard mime: " << clipboard->mimeData()->formats();
 	QDomDocument* theXmlDoc = new QDomDocument();
-	if (!theXmlDoc->setContent(clipboard->text())) {
-		delete theXmlDoc;
-		return;
-	}
+	if (!theXmlDoc->setContent(clipboard->mimeData()->data("application/x-openstreetmap+xml")))
+		if (!theXmlDoc->setContent(clipboard->text())) {
+			delete theXmlDoc;
+			return;
+		}
 
 	QDomElement c = theXmlDoc->documentElement();
 
-	if (c.tagName() != "osm") {
+	if (c.tagName() != "osm" && c.tagName() != "kml") {
+		delete theXmlDoc;
 		return;
 	}
 
@@ -1466,6 +1535,7 @@ void MainWindow::on_toolsShortcutsAction_triggered()
 	theActions.append(editUndoAction);
 	theActions.append(editRedoAction);
 	theActions.append(editCopyAction);
+	theActions.append(editPasteFeatureAction);
 	theActions.append(editPasteMergeAction);
 	theActions.append(editPasteOverwriteAction);
 	theActions.append(editRemoveAction);

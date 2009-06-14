@@ -158,7 +158,7 @@ void Relation::draw(QPainter& P, const Projection& theProjection, const QTransfo
 		P.setPen(QPen(Qt::red,M_PREFS->getRelationsWidth(),Qt::DashLine));
 	else
 		P.setPen(QPen(M_PREFS->getRelationsColor(),M_PREFS->getRelationsWidth(),Qt::DashLine));
-	P.drawPath(p->theBoundingPath);
+	P.drawPath(theTransform.map(p->theBoundingPath));
 }
 
 void Relation::drawFocus(QPainter& P, const Projection& theProjection, const QTransform& theTransform, bool solid)
@@ -167,10 +167,10 @@ void Relation::drawFocus(QPainter& P, const Projection& theProjection, const QTr
 		QPen thePen(M_PREFS->getFocusColor(),M_PREFS->getFocusWidth());
 		thePen.setDashPattern(getParentDashes());
 		P.setPen(thePen);
-		P.drawPath(p->theBoundingPath);
+		P.drawPath(theTransform.map(p->theBoundingPath));
 	} else {
 		P.setPen(QPen(M_PREFS->getFocusColor(),M_PREFS->getFocusWidth(),Qt::DashLine));
-		P.drawPath(p->theBoundingPath);
+		P.drawPath(theTransform.map(p->theBoundingPath));
 
 		for (int i=0; i<p->Members.size(); ++i)
 			if (p->Members[i].second && !p->Members[i].second->isDeleted())
@@ -190,10 +190,10 @@ void Relation::drawHover(QPainter& P, const Projection& theProjection, const QTr
 		QPen thePen(M_PREFS->getHoverColor(),M_PREFS->getHoverWidth());
 		thePen.setDashPattern(getParentDashes());
 		P.setPen(thePen);
-		P.drawPath(p->theBoundingPath);
+		P.drawPath(theTransform.map(p->theBoundingPath));
 	} else {
 		P.setPen(QPen(M_PREFS->getHoverColor(),M_PREFS->getHoverWidth(),Qt::DashLine));
-		P.drawPath(p->theBoundingPath);
+		P.drawPath(theTransform.map(p->theBoundingPath));
 
 		for (int i=0; i<p->Members.size(); ++i)
 			if (p->Members[i].second && !p->Members[i].second->isDeleted())
@@ -416,7 +416,7 @@ void Relation::buildPath(Projection const &theProjection, const QTransform& theT
 	//	}
 	//	p->theBoundingPath.lineTo(QPointF((*it).outer()[0].x(), (*it).outer()[0].y()));
 	//}
-	p->theBoundingPath = theTransform.map(p->theBoundingPath);
+	//p->theBoundingPath = theTransform.map(p->theBoundingPath);
 }
 
 QPainterPath Relation::getPath()

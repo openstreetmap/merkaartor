@@ -34,6 +34,8 @@ public:
 	virtual ~IImportExport();
 
 public:
+	// Specify the input as a QIODevice
+	virtual bool setDevice(QIODevice* aDevice);
 	// Specify the input as a QFile
 	virtual bool loadFile(QString filename);
 	// Specify the output as a QFile
@@ -54,6 +56,7 @@ protected:
 	CommandList* theList;
 	QList<MapFeature*> theFeatures;
 	QString FileName;
+	bool ownDevice;
 };
 
 #endif

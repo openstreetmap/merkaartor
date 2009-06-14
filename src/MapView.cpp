@@ -312,15 +312,16 @@ void MapView::buildFeatureSet()
 
 #if 1
 
-	qDebug() << "Inv rects size: " << p->invalidRects.size();
+	//qDebug() << "Inv rects size: " << p->invalidRects.size();
 	for (int i=0; i < p->invalidRects.size(); ++i) {
 		Coord bl = p->invalidRects[i].bottomLeft();
 		Coord tr = p->invalidRects[i].topRight();
-		qDebug() << "rect : " << p->theTransform.map(theProjection.project(bl)) << ", " << p->theTransform.map(theProjection.project(tr));
+		//qDebug() << "rect : " << p->theTransform.map(theProjection.project(bl)) << ", " << p->theTransform.map(theProjection.project(tr));
 		geometry::box < Coord > cb(bl, tr);
 		for (int j=0; j<theDocument->layerSize(); ++j) {
-			if (!theDocument->getLayer(j)->isVisible())
+			if (!theDocument->getLayer(j)->size() || !theDocument->getLayer(j)->isVisible())
 				continue;
+
 
 			std::deque < MapFeaturePtr > ret = theDocument->getLayer(j)->getRTree()->find(cb);
 			for (std::deque < MapFeaturePtr >::const_iterator it = ret.begin(); it != ret.end(); ++it) {

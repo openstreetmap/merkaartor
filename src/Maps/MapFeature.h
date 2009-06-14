@@ -92,6 +92,10 @@ class MapFeature : public QObject
 		 */
 		void setId(const QString& id);
 
+		/** Reset the id for the current feature to a random one.
+		 */
+		const QString& resetId();
+
 		/** Give the id of the feature.
 		 *  If the feature has no id, a random id is generated
 		 * @return the id of the current feature
@@ -102,6 +106,7 @@ class MapFeature : public QObject
 		 * @return the id of the current feature
 		 */
 		qint64 idToLong() const;
+
 		QString xmlId() const;
 		bool hasOSMId() const;
 		ActorType lastUpdated() const;

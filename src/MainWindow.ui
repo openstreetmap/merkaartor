@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow" >
-  <property name="geometry" >
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,1528 +10,1537 @@
     <height>549</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Merkaartor</string>
   </property>
-  <property name="windowIcon" >
-   <iconset resource="../Icons/AllIcons.qrc" >
+  <property name="windowIcon">
+   <iconset resource="../Icons/AllIcons.qrc">
     <normaloff>:/Icons/Merkaartor.xpm</normaloff>:/Icons/Merkaartor.xpm</iconset>
   </property>
-  <widget class="QWidget" name="centralWidget" />
-  <widget class="QMenuBar" name="theMenuBar" >
-   <property name="geometry" >
+  <widget class="QWidget" name="centralWidget"/>
+  <widget class="QMenuBar" name="theMenuBar">
+   <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
      <width>1100</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuHelp" >
-    <property name="title" >
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
      <string>&amp;Help</string>
     </property>
-    <addaction name="helpAboutAction" />
+    <addaction name="helpAboutAction"/>
    </widget>
-   <widget class="QMenu" name="menuCreate" >
-    <property name="title" >
+   <widget class="QMenu" name="menuCreate">
+    <property name="title">
      <string>&amp;Create</string>
     </property>
-    <addaction name="createNodeAction" />
-    <addaction name="createRoadAction" />
-    <addaction name="createDoubleWayAction" />
-    <addaction name="createRoundaboutAction" />
-    <addaction name="createRectangleAction" />
-    <addaction name="createPolygonAction" />
-    <addaction name="createAreaAction" />
-    <addaction name="createRelationAction" />
+    <addaction name="createNodeAction"/>
+    <addaction name="createRoadAction"/>
+    <addaction name="createDoubleWayAction"/>
+    <addaction name="createRoundaboutAction"/>
+    <addaction name="createRectangleAction"/>
+    <addaction name="createPolygonAction"/>
+    <addaction name="createAreaAction"/>
+    <addaction name="createRelationAction"/>
    </widget>
-   <widget class="QMenu" name="menuRoad" >
-    <property name="title" >
+   <widget class="QMenu" name="menuRoad">
+    <property name="title">
      <string>&amp;Road</string>
     </property>
-    <addaction name="roadSplitAction" />
-    <addaction name="roadBreakAction" />
-    <addaction name="roadJoinAction" />
-    <addaction name="editReverseAction" />
-    <addaction name="roadCreateJunctionAction" />
+    <addaction name="roadSplitAction"/>
+    <addaction name="roadBreakAction"/>
+    <addaction name="roadJoinAction"/>
+    <addaction name="editReverseAction"/>
+    <addaction name="roadCreateJunctionAction"/>
    </widget>
-   <widget class="QMenu" name="menuEdit" >
-    <property name="title" >
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
      <string>&amp;Edit</string>
     </property>
-    <addaction name="editUndoAction" />
-    <addaction name="editRedoAction" />
-    <addaction name="separator" />
-    <addaction name="editCopyAction" />
-    <addaction name="editPasteMergeAction" />
-    <addaction name="editPasteOverwriteAction" />
-    <addaction name="editPasteFeaturesAction" />
-    <addaction name="separator" />
-    <addaction name="editRemoveAction" />
-    <addaction name="editMoveAction" />
-    <addaction name="editRotateAction" />
-    <addaction name="editPropertiesAction" />
-    <addaction name="separator" />
-    <addaction name="editSelectAction" />
+    <addaction name="editUndoAction"/>
+    <addaction name="editRedoAction"/>
+    <addaction name="separator"/>
+    <addaction name="editCopyAction"/>
+    <addaction name="editPasteFeatureAction"/>
+    <addaction name="editPasteMergeAction"/>
+    <addaction name="editPasteOverwriteAction"/>
+    <addaction name="editPasteFeaturesAction"/>
+    <addaction name="separator"/>
+    <addaction name="editRemoveAction"/>
+    <addaction name="editMoveAction"/>
+    <addaction name="editRotateAction"/>
+    <addaction name="editPropertiesAction"/>
+    <addaction name="separator"/>
+    <addaction name="editSelectAction"/>
    </widget>
-   <widget class="QMenu" name="menuView" >
-    <property name="title" >
+   <widget class="QMenu" name="menuView">
+    <property name="title">
      <string>&amp;View</string>
     </property>
-    <widget class="QMenu" name="menuBookmarks" >
-     <property name="title" >
+    <widget class="QMenu" name="menuBookmarks">
+     <property name="title">
       <string>&amp;Bookmarks</string>
      </property>
-     <addaction name="bookmarkAddAction" />
-     <addaction name="bookmarkRemoveAction" />
-     <addaction name="separator" />
+     <addaction name="bookmarkAddAction"/>
+     <addaction name="bookmarkRemoveAction"/>
+     <addaction name="separator"/>
     </widget>
-    <widget class="QMenu" name="mnuProjections" >
-     <property name="title" >
+    <widget class="QMenu" name="mnuProjections">
+     <property name="title">
       <string>Set &amp;projection</string>
      </property>
     </widget>
-    <widget class="QMenu" name="menuShow_directional_Arrows" >
-     <property name="title" >
+    <widget class="QMenu" name="menuShow_directional_Arrows">
+     <property name="title">
       <string>Show directional &amp;Arrows</string>
      </property>
-     <addaction name="viewArrowsNeverAction" />
-     <addaction name="viewArrowsOnewayAction" />
-     <addaction name="viewArrowsAlwaysAction" />
+     <addaction name="viewArrowsNeverAction"/>
+     <addaction name="viewArrowsOnewayAction"/>
+     <addaction name="viewArrowsAlwaysAction"/>
     </widget>
-    <widget class="QMenu" name="mnuAreaOpacity" >
-     <property name="title" >
+    <widget class="QMenu" name="mnuAreaOpacity">
+     <property name="title">
       <string>Set Areas &amp;opacity</string>
      </property>
     </widget>
-    <addaction name="viewZoomAllAction" />
-    <addaction name="viewZoomWindowAction" />
-    <addaction name="viewZoomOutAction" />
-    <addaction name="viewZoomInAction" />
-    <addaction name="separator" />
-    <addaction name="viewDownloadedAction" />
-    <addaction name="viewRelationsAction" />
-    <addaction name="separator" />
-    <addaction name="viewStyleForegroundAction" />
-    <addaction name="viewStyleBackgroundAction" />
-    <addaction name="viewStyleTouchupAction" />
-    <addaction name="viewScaleAction" />
-    <addaction name="viewNamesAction" />
-    <addaction name="menuShow_directional_Arrows" />
-    <addaction name="separator" />
-    <addaction name="viewTrackPointsAction" />
-    <addaction name="viewTrackSegmentsAction" />
-    <addaction name="separator" />
-    <addaction name="mnuAreaOpacity" />
-    <addaction name="mnuProjections" />
-    <addaction name="separator" />
-    <addaction name="viewGotoAction" />
-    <addaction name="menuBookmarks" />
+    <addaction name="viewZoomAllAction"/>
+    <addaction name="viewZoomWindowAction"/>
+    <addaction name="viewZoomOutAction"/>
+    <addaction name="viewZoomInAction"/>
+    <addaction name="separator"/>
+    <addaction name="viewDownloadedAction"/>
+    <addaction name="viewRelationsAction"/>
+    <addaction name="separator"/>
+    <addaction name="viewStyleForegroundAction"/>
+    <addaction name="viewStyleBackgroundAction"/>
+    <addaction name="viewStyleTouchupAction"/>
+    <addaction name="viewScaleAction"/>
+    <addaction name="viewNamesAction"/>
+    <addaction name="menuShow_directional_Arrows"/>
+    <addaction name="separator"/>
+    <addaction name="viewTrackPointsAction"/>
+    <addaction name="viewTrackSegmentsAction"/>
+    <addaction name="separator"/>
+    <addaction name="mnuAreaOpacity"/>
+    <addaction name="mnuProjections"/>
+    <addaction name="separator"/>
+    <addaction name="viewGotoAction"/>
+    <addaction name="menuBookmarks"/>
    </widget>
-   <widget class="QMenu" name="menuFile" >
-    <property name="title" >
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
      <string>&amp;File</string>
     </property>
-    <widget class="QMenu" name="menuExport" >
-     <property name="title" >
+    <widget class="QMenu" name="menuExport">
+     <property name="title">
       <string>&amp;Export</string>
      </property>
-     <addaction name="exportOSMAction" />
-     <addaction name="exportOSMBinAction" />
-     <addaction name="exportGPXAction" />
-     <addaction name="exportKMLAction" />
+     <addaction name="exportOSMAction"/>
+     <addaction name="exportOSMBinAction"/>
+     <addaction name="exportGPXAction"/>
+     <addaction name="exportKMLAction"/>
     </widget>
-    <widget class="QMenu" name="menuRender" >
-     <property name="title" >
+    <widget class="QMenu" name="menuRender">
+     <property name="title">
       <string>&amp;Render</string>
      </property>
-     <addaction name="renderNativeAction" />
-     <addaction name="renderOsmarenderAction" />
+     <addaction name="renderNativeAction"/>
+     <addaction name="renderOsmarenderAction"/>
     </widget>
-    <widget class="QMenu" name="menuRecentOpen" >
-     <property name="title" >
+    <widget class="QMenu" name="menuRecentOpen">
+     <property name="title">
       <string>Re&amp;cent open</string>
      </property>
     </widget>
-    <widget class="QMenu" name="menuRecentImport" >
-     <property name="title" >
+    <widget class="QMenu" name="menuRecentImport">
+     <property name="title">
       <string>Recen&amp;t import</string>
      </property>
     </widget>
-    <addaction name="fileNewAction" />
-    <addaction name="fileOpenAction" />
-    <addaction name="fileImportAction" />
-    <addaction name="menuRecentOpen" />
-    <addaction name="menuRecentImport" />
-    <addaction name="separator" />
-    <addaction name="menuExport" />
-    <addaction name="menuRender" />
-    <addaction name="separator" />
-    <addaction name="fileSaveAction" />
-    <addaction name="fileSaveAsAction" />
-    <addaction name="separator" />
-    <addaction name="fileDownloadAction" />
-    <addaction name="fileDownloadMoreAction" />
-    <addaction name="fileUploadAction" />
-    <addaction name="separator" />
-    <addaction name="fileWorkOfflineAction" />
-    <addaction name="fileQuitAction" />
+    <addaction name="fileNewAction"/>
+    <addaction name="fileOpenAction"/>
+    <addaction name="fileImportAction"/>
+    <addaction name="menuRecentOpen"/>
+    <addaction name="menuRecentImport"/>
+    <addaction name="separator"/>
+    <addaction name="menuExport"/>
+    <addaction name="menuRender"/>
+    <addaction name="separator"/>
+    <addaction name="fileSaveAction"/>
+    <addaction name="fileSaveAsAction"/>
+    <addaction name="separator"/>
+    <addaction name="fileDownloadAction"/>
+    <addaction name="fileDownloadMoreAction"/>
+    <addaction name="fileUploadAction"/>
+    <addaction name="separator"/>
+    <addaction name="fileWorkOfflineAction"/>
+    <addaction name="fileQuitAction"/>
    </widget>
-   <widget class="QMenu" name="menuTools" >
-    <property name="title" >
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
      <string>T&amp;ools</string>
     </property>
-    <widget class="QMenu" name="menuStyles" >
-     <property name="title" >
+    <widget class="QMenu" name="menuStyles">
+     <property name="title">
       <string>&amp;Style</string>
      </property>
-     <addaction name="editMapStyleAction" />
-     <addaction name="separator" />
-     <addaction name="mapStyleSaveAction" />
-     <addaction name="mapStyleLoadAction" />
-     <addaction name="separator" />
+     <addaction name="editMapStyleAction"/>
+     <addaction name="separator"/>
+     <addaction name="mapStyleSaveAction"/>
+     <addaction name="mapStyleLoadAction"/>
+     <addaction name="separator"/>
     </widget>
-    <widget class="QMenu" name="designerMenu" >
-     <property name="title" >
+    <widget class="QMenu" name="designerMenu">
+     <property name="title">
       <string>Tag templates</string>
      </property>
-     <addaction name="toolTemplatesSaveAction" />
-     <addaction name="toolTemplatesMergeAction" />
-     <addaction name="toolTemplatesLoadAction" />
+     <addaction name="toolTemplatesSaveAction"/>
+     <addaction name="toolTemplatesMergeAction"/>
+     <addaction name="toolTemplatesLoadAction"/>
     </widget>
-    <addaction name="menuStyles" />
-    <addaction name="designerMenu" />
-    <addaction name="separator" />
-    <addaction name="toolsShortcutsAction" />
-    <addaction name="toolsWorldOsbAction" />
-    <addaction name="toolsTMSServersAction" />
-    <addaction name="toolsWMSServersAction" />
-    <addaction name="separator" />
-    <addaction name="toolsResetDiscardableAction" />
-    <addaction name="separator" />
-    <addaction name="toolsPreferencesAction" />
+    <addaction name="menuStyles"/>
+    <addaction name="designerMenu"/>
+    <addaction name="separator"/>
+    <addaction name="toolsShortcutsAction"/>
+    <addaction name="toolsWorldOsbAction"/>
+    <addaction name="toolsTMSServersAction"/>
+    <addaction name="toolsWMSServersAction"/>
+    <addaction name="separator"/>
+    <addaction name="toolsResetDiscardableAction"/>
+    <addaction name="separator"/>
+    <addaction name="toolsPreferencesAction"/>
    </widget>
-   <widget class="QMenu" name="menu_Node" >
-    <property name="title" >
+   <widget class="QMenu" name="menu_Node">
+    <property name="title">
      <string>&amp;Node</string>
     </property>
-    <addaction name="nodeMergeAction" />
-    <addaction name="nodeAlignAction" />
-    <addaction name="nodeDetachAction" />
+    <addaction name="nodeMergeAction"/>
+    <addaction name="nodeAlignAction"/>
+    <addaction name="nodeDetachAction"/>
    </widget>
-   <widget class="QMenu" name="windowAction" >
-    <property name="title" >
+   <widget class="QMenu" name="windowAction">
+    <property name="title">
      <string>&amp;Window</string>
     </property>
-    <widget class="QMenu" name="menu_Docks" >
-     <property name="title" >
+    <widget class="QMenu" name="menu_Docks">
+     <property name="title">
       <string>&amp;Docks</string>
      </property>
-     <addaction name="windowPropertiesAction" />
-     <addaction name="windowLayersAction" />
-     <addaction name="windowInfoAction" />
-     <addaction name="windowDirtyAction" />
-     <addaction name="windowGPSAction" />
-     <addaction name="windowGeoimageAction" />
-     <addaction name="windowStylesAction" />
+     <addaction name="windowPropertiesAction"/>
+     <addaction name="windowLayersAction"/>
+     <addaction name="windowInfoAction"/>
+     <addaction name="windowDirtyAction"/>
+     <addaction name="windowGPSAction"/>
+     <addaction name="windowGeoimageAction"/>
+     <addaction name="windowStylesAction"/>
     </widget>
-    <addaction name="menu_Docks" />
-    <addaction name="windowToolbarAction" />
-    <addaction name="separator" />
-    <addaction name="windowHideAllAction" />
-    <addaction name="windowShowAllAction" />
+    <addaction name="menu_Docks"/>
+    <addaction name="windowToolbarAction"/>
+    <addaction name="separator"/>
+    <addaction name="windowHideAllAction"/>
+    <addaction name="windowShowAllAction"/>
    </widget>
-   <widget class="QMenu" name="menu_Feature" >
-    <property name="title" >
+   <widget class="QMenu" name="menu_Feature">
+    <property name="title">
      <string>Fea&amp;ture</string>
     </property>
-    <addaction name="featureCommitAction" />
+    <addaction name="featureCommitAction"/>
    </widget>
-   <widget class="QMenu" name="menuLayers" >
-    <property name="title" >
+   <widget class="QMenu" name="menuLayers">
+    <property name="title">
      <string>&amp;Layers</string>
     </property>
-    <addaction name="layersNewImageAction" />
-    <addaction name="separator" />
+    <addaction name="layersNewImageAction"/>
+    <addaction name="separator"/>
    </widget>
-   <widget class="QMenu" name="menuGps" >
-    <property name="title" >
+   <widget class="QMenu" name="menuGps">
+    <property name="title">
      <string>&amp;Gps</string>
     </property>
-    <addaction name="gpsConnectAction" />
-    <addaction name="gpsReplayAction" />
-    <addaction name="separator" />
-    <addaction name="gpsRecordAction" />
-    <addaction name="gpsPauseAction" />
-    <addaction name="gpsDisconnectAction" />
-    <addaction name="separator" />
-    <addaction name="gpsCenterAction" />
+    <addaction name="gpsConnectAction"/>
+    <addaction name="gpsReplayAction"/>
+    <addaction name="separator"/>
+    <addaction name="gpsRecordAction"/>
+    <addaction name="gpsPauseAction"/>
+    <addaction name="gpsDisconnectAction"/>
+    <addaction name="separator"/>
+    <addaction name="gpsCenterAction"/>
    </widget>
-   <widget class="QMenu" name="menuRelation" >
-    <property name="title" >
+   <widget class="QMenu" name="menuRelation">
+    <property name="title">
      <string>Rel&amp;ation</string>
     </property>
-    <addaction name="relationAddMemberAction" />
-    <addaction name="relationRemoveMemberAction" />
+    <addaction name="relationAddMemberAction"/>
+    <addaction name="relationRemoveMemberAction"/>
    </widget>
-   <addaction name="menuFile" />
-   <addaction name="menuEdit" />
-   <addaction name="menuView" />
-   <addaction name="menuGps" />
-   <addaction name="menuLayers" />
-   <addaction name="menuCreate" />
-   <addaction name="menu_Feature" />
-   <addaction name="menu_Node" />
-   <addaction name="menuRoad" />
-   <addaction name="menuRelation" />
-   <addaction name="menuTools" />
-   <addaction name="windowAction" />
-   <addaction name="menuHelp" />
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuView"/>
+   <addaction name="menuGps"/>
+   <addaction name="menuLayers"/>
+   <addaction name="menuCreate"/>
+   <addaction name="menu_Feature"/>
+   <addaction name="menu_Node"/>
+   <addaction name="menuRoad"/>
+   <addaction name="menuRelation"/>
+   <addaction name="menuTools"/>
+   <addaction name="windowAction"/>
+   <addaction name="menuHelp"/>
   </widget>
-  <widget class="QStatusBar" name="StatusBar" />
-  <widget class="QToolBar" name="toolBar" >
-   <property name="enabled" >
+  <widget class="QStatusBar" name="StatusBar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="enabled">
     <bool>true</bool>
    </property>
-   <property name="windowTitle" >
+   <property name="windowTitle">
     <string>Tool Bar</string>
    </property>
-   <property name="orientation" >
+   <property name="orientation">
     <enum>Qt::Horizontal</enum>
    </property>
-   <property name="toolButtonStyle" >
+   <property name="toolButtonStyle">
     <enum>Qt::ToolButtonTextUnderIcon</enum>
    </property>
-   <attribute name="toolBarArea" >
+   <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
-   <attribute name="toolBarBreak" >
+   <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="fileDownloadAction" />
-   <addaction name="fileDownloadMoreAction" />
-   <addaction name="fileUploadAction" />
-   <addaction name="fileSaveAction" />
-   <addaction name="separator" />
-   <addaction name="editCopyAction" />
-   <addaction name="editPasteFeaturesAction" />
-   <addaction name="editPasteMergeAction" />
-   <addaction name="editRemoveAction" />
-   <addaction name="separator" />
-   <addaction name="editUndoAction" />
-   <addaction name="editRedoAction" />
-   <addaction name="separator" />
-   <addaction name="editPropertiesAction" />
-   <addaction name="editMoveAction" />
-   <addaction name="editRotateAction" />
-   <addaction name="createNodeAction" />
-   <addaction name="createRoadAction" />
-   <addaction name="createAreaAction" />
-   <addaction name="separator" />
-   <addaction name="nodeAlignAction" />
-   <addaction name="nodeDetachAction" />
-   <addaction name="roadSplitAction" />
-   <addaction name="roadBreakAction" />
-   <addaction name="roadJoinAction" />
-   <addaction name="editReverseAction" />
+   <addaction name="fileDownloadAction"/>
+   <addaction name="fileDownloadMoreAction"/>
+   <addaction name="fileUploadAction"/>
+   <addaction name="fileSaveAction"/>
+   <addaction name="separator"/>
+   <addaction name="editCopyAction"/>
+   <addaction name="editPasteFeaturesAction"/>
+   <addaction name="editPasteMergeAction"/>
+   <addaction name="editRemoveAction"/>
+   <addaction name="separator"/>
+   <addaction name="editUndoAction"/>
+   <addaction name="editRedoAction"/>
+   <addaction name="separator"/>
+   <addaction name="editPropertiesAction"/>
+   <addaction name="editMoveAction"/>
+   <addaction name="editRotateAction"/>
+   <addaction name="createNodeAction"/>
+   <addaction name="createRoadAction"/>
+   <addaction name="createAreaAction"/>
+   <addaction name="separator"/>
+   <addaction name="nodeAlignAction"/>
+   <addaction name="nodeDetachAction"/>
+   <addaction name="roadSplitAction"/>
+   <addaction name="roadBreakAction"/>
+   <addaction name="roadJoinAction"/>
+   <addaction name="editReverseAction"/>
   </widget>
-  <widget class="QToolBar" name="mobileToolBar" >
-   <property name="enabled" >
+  <widget class="QToolBar" name="mobileToolBar">
+   <property name="enabled">
     <bool>true</bool>
    </property>
-   <property name="sizePolicy" >
-    <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <property name="windowTitle" >
+   <property name="windowTitle">
     <string>Tool Bar</string>
    </property>
-   <property name="orientation" >
+   <property name="orientation">
     <enum>Qt::Vertical</enum>
    </property>
-   <property name="iconSize" >
+   <property name="iconSize">
     <size>
      <width>22</width>
      <height>22</height>
     </size>
    </property>
-   <property name="toolButtonStyle" >
+   <property name="toolButtonStyle">
     <enum>Qt::ToolButtonIconOnly</enum>
    </property>
-   <attribute name="toolBarArea" >
+   <attribute name="toolBarArea">
     <enum>RightToolBarArea</enum>
    </attribute>
-   <attribute name="toolBarBreak" >
+   <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="fileDownloadMoreAction" />
-   <addaction name="fileUploadAction" />
-   <addaction name="fileSaveAction" />
-   <addaction name="separator" />
-   <addaction name="editPasteFeaturesAction" />
-   <addaction name="editRemoveAction" />
-   <addaction name="separator" />
-   <addaction name="viewZoomInAction" />
-   <addaction name="viewZoomOutAction" />
-   <addaction name="separator" />
-   <addaction name="editPropertiesAction" />
-   <addaction name="createNodeAction" />
-   <addaction name="createRoadAction" />
-   <addaction name="createAreaAction" />
-   <addaction name="separator" />
-   <addaction name="gpsPopupAction" />
-   <addaction name="cameraAction" />
-   <addaction name="separator" />
+   <addaction name="fileDownloadMoreAction"/>
+   <addaction name="fileUploadAction"/>
+   <addaction name="fileSaveAction"/>
+   <addaction name="separator"/>
+   <addaction name="editPasteFeaturesAction"/>
+   <addaction name="editRemoveAction"/>
+   <addaction name="separator"/>
+   <addaction name="viewZoomInAction"/>
+   <addaction name="viewZoomOutAction"/>
+   <addaction name="separator"/>
+   <addaction name="editPropertiesAction"/>
+   <addaction name="createNodeAction"/>
+   <addaction name="createRoadAction"/>
+   <addaction name="createAreaAction"/>
+   <addaction name="separator"/>
+   <addaction name="gpsPopupAction"/>
+   <addaction name="cameraAction"/>
+   <addaction name="separator"/>
   </widget>
-  <action name="fileQuitAction" >
-   <property name="text" >
+  <action name="fileQuitAction">
+   <property name="text">
     <string>&amp;Quit</string>
    </property>
   </action>
-  <action name="helpAboutAction" >
-   <property name="text" >
+  <action name="helpAboutAction">
+   <property name="text">
     <string>&amp;About</string>
    </property>
   </action>
-  <action name="fileOpenAction" >
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+  <action name="fileOpenAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/document_open.png</normaloff>:/Icons/actions/document_open.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Open</string>
    </property>
-   <property name="statusTip" >
+   <property name="statusTip">
     <string>Create a new document and import a file</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+O</string>
    </property>
   </action>
-  <action name="viewZoomAllAction" >
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+  <action name="viewZoomAllAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/zoom_fit_best.png</normaloff>:/Icons/actions/zoom_fit_best.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Zoom &amp;all</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>F2</string>
    </property>
   </action>
-  <action name="viewZoomWindowAction" >
-   <property name="text" >
+  <action name="viewZoomWindowAction">
+   <property name="text">
     <string>Zoom &amp;window</string>
    </property>
-   <property name="iconText" >
+   <property name="iconText">
     <string>Zoom window</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Zoom window</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>F3</string>
    </property>
   </action>
-  <action name="viewZoomOutAction" >
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+  <action name="viewZoomOutAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/zoom_out.png</normaloff>:/Icons/actions/zoom_out.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Zoom &amp;out</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>-</string>
    </property>
   </action>
-  <action name="viewZoomInAction" >
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+  <action name="viewZoomInAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/zoom_in.png</normaloff>:/Icons/actions/zoom_in.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Zoom &amp;in</string>
    </property>
-   <property name="iconText" >
+   <property name="iconText">
     <string>Zoom in</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Zoom in</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>+</string>
    </property>
   </action>
-  <action name="createWayAction" >
-   <property name="text" >
+  <action name="createWayAction">
+   <property name="text">
     <string>Curved link</string>
    </property>
-   <property name="iconText" >
+   <property name="iconText">
     <string>Curved link</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Curved link</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string/>
    </property>
   </action>
-  <action name="editUndoAction" >
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+  <action name="editUndoAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/undo.png</normaloff>:/Icons/actions/undo.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Undo</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+Z</string>
    </property>
   </action>
-  <action name="editRedoAction" >
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+  <action name="editRedoAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/redo.png</normaloff>:/Icons/actions/redo.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Redo</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+Y</string>
    </property>
   </action>
-  <action name="editMoveAction" >
-   <property name="checkable" >
+  <action name="editMoveAction">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/edit_move.png</normaloff>:/Icons/actions/edit_move.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Move</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+M</string>
    </property>
   </action>
-  <action name="fileImportAction" >
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+  <action name="fileImportAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/document_import.png</normaloff>:/Icons/actions/document_import.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Import</string>
    </property>
-   <property name="statusTip" >
+   <property name="statusTip">
     <string>Import a file into the current document</string>
    </property>
   </action>
-  <action name="fileDownloadAction" >
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+  <action name="fileDownloadAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/download.png</normaloff>:/Icons/actions/download.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Download</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Download map data for a new area</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+D</string>
    </property>
   </action>
-  <action name="createLinearWayAction" >
-   <property name="text" >
+  <action name="createLinearWayAction">
+   <property name="text">
     <string>Link</string>
    </property>
-   <property name="iconText" >
+   <property name="iconText">
     <string>Create link</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Create link</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>L</string>
    </property>
   </action>
-  <action name="editPropertiesAction" >
-   <property name="checkable" >
+  <action name="editPropertiesAction">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/select.png</normaloff>:/Icons/actions/select.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Select</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Esc</string>
    </property>
   </action>
-  <action name="fileUploadAction" >
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+  <action name="fileUploadAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/upload.png</normaloff>:/Icons/actions/upload.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Upload</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Upload changes to the server</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+U</string>
    </property>
   </action>
-  <action name="editRemoveAction" >
-   <property name="enabled" >
+  <action name="editRemoveAction">
+   <property name="enabled">
     <bool>false</bool>
    </property>
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/edit_delete.png</normaloff>:/Icons/actions/edit_delete.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>R&amp;emove</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Remove selected features</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Del</string>
    </property>
   </action>
-  <action name="createRoadAction" >
-   <property name="checkable" >
+  <action name="createRoadAction">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/create_road.png</normaloff>:/Icons/actions/create_road.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Road</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Create new road</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+R</string>
    </property>
   </action>
-  <action name="createNodeAction" >
-   <property name="checkable" >
+  <action name="createNodeAction">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/create_node.png</normaloff>:/Icons/actions/create_node.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Node</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Create new node</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+N</string>
    </property>
   </action>
-  <action name="editReverseAction" >
-   <property name="enabled" >
+  <action name="editReverseAction">
+   <property name="enabled">
     <bool>false</bool>
    </property>
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/reverse_road.png</normaloff>:/Icons/actions/reverse_road.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Reverse</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Reverse road direction</string>
    </property>
   </action>
-  <action name="viewGotoAction" >
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+  <action name="viewGotoAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/goto.png</normaloff>:/Icons/actions/goto.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Go To...</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+G</string>
    </property>
   </action>
-  <action name="createDoubleWayAction" >
-   <property name="text" >
+  <action name="createDoubleWayAction">
+   <property name="text">
     <string>&amp;Double carriage way</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Create Double carriage way</string>
    </property>
   </action>
-  <action name="createRoundaboutAction" >
-   <property name="text" >
+  <action name="createRoundaboutAction">
+   <property name="text">
     <string>&amp;Roundabout</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Create Roundabout</string>
    </property>
   </action>
-  <action name="fileNewAction" >
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+  <action name="fileNewAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/document_new.png</normaloff>:/Icons/actions/document_new.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;New</string>
    </property>
-   <property name="statusTip" >
+   <property name="statusTip">
     <string>Create a new document</string>
    </property>
   </action>
-  <action name="roadSplitAction" >
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+  <action name="roadSplitAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/split_road.png</normaloff>:/Icons/actions/split_road.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Split</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Split road into separate (connected) roads</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Alt+S</string>
    </property>
   </action>
-  <action name="roadJoinAction" >
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+  <action name="roadJoinAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/join_roads.png</normaloff>:/Icons/actions/join_roads.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Join</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Join connected roads to a single road</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Alt+J</string>
    </property>
   </action>
-  <action name="roadBreakAction" >
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+  <action name="roadBreakAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/break_apart_roads.png</normaloff>:/Icons/actions/break_apart_roads.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Break apart</string>
    </property>
-   <property name="iconText" >
+   <property name="iconText">
     <string>Break</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Break apart connected roads</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Alt+B</string>
    </property>
   </action>
-  <action name="createRelationAction" >
-   <property name="text" >
+  <action name="createRelationAction">
+   <property name="text">
     <string>Re&amp;lation</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Create Relation</string>
    </property>
   </action>
-  <action name="createAreaAction" >
-   <property name="checkable" >
+  <action name="createAreaAction">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/create_area.png</normaloff>:/Icons/actions/create_area.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Area</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Create new area</string>
    </property>
   </action>
-  <action name="editMapStyleAction" >
-   <property name="text" >
+  <action name="editMapStyleAction">
+   <property name="text">
     <string>&amp;Edit...</string>
    </property>
   </action>
-  <action name="mapStyleSaveAction" >
-   <property name="text" >
+  <action name="mapStyleSaveAction">
+   <property name="text">
     <string>&amp;Save...</string>
    </property>
   </action>
-  <action name="mapStyleLoadAction" >
-   <property name="text" >
+  <action name="mapStyleLoadAction">
+   <property name="text">
     <string>&amp;Load...</string>
    </property>
   </action>
-  <action name="createCurvedRoadAction" >
-   <property name="text" >
+  <action name="createCurvedRoadAction">
+   <property name="text">
     <string>&amp;Curved road</string>
    </property>
   </action>
-  <action name="toolsPreferencesAction" >
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+  <action name="toolsPreferencesAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/preferences.png</normaloff>:/Icons/actions/preferences.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Preferences...</string>
    </property>
   </action>
-  <action name="exportOSMAllAction" >
-   <property name="text" >
+  <action name="exportOSMAllAction">
+   <property name="text">
     <string>&amp;All...</string>
    </property>
-   <property name="statusTip" >
+   <property name="statusTip">
     <string>Export all visible layers to a file</string>
    </property>
   </action>
-  <action name="exportOSMBinAllAction" >
-   <property name="text" >
+  <action name="exportOSMBinAllAction">
+   <property name="text">
     <string>&amp;All...</string>
    </property>
-   <property name="statusTip" >
+   <property name="statusTip">
     <string>Export all visible layers to a file</string>
    </property>
   </action>
-  <action name="editSelectAction" >
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+  <action name="editSelectAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/find.png</normaloff>:/Icons/actions/find.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Find...</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Find</string>
    </property>
-   <property name="statusTip" >
+   <property name="statusTip">
     <string>Find and select items</string>
    </property>
   </action>
-  <action name="exportOSMViewportAction" >
-   <property name="text" >
+  <action name="exportOSMViewportAction">
+   <property name="text">
     <string>&amp;Viewport...</string>
    </property>
-   <property name="statusTip" >
+   <property name="statusTip">
     <string>Export the features in the viewport to a file</string>
    </property>
   </action>
-  <action name="exportOSMBinViewportAction" >
-   <property name="text" >
+  <action name="exportOSMBinViewportAction">
+   <property name="text">
     <string>&amp;Viewport...</string>
    </property>
-   <property name="statusTip" >
+   <property name="statusTip">
     <string>Export the features in the viewport to a file</string>
    </property>
   </action>
-  <action name="bookmarkAddAction" >
-   <property name="text" >
+  <action name="bookmarkAddAction">
+   <property name="text">
     <string>&amp;Add...</string>
    </property>
   </action>
-  <action name="bookmarkRemoveAction" >
-   <property name="text" >
+  <action name="bookmarkRemoveAction">
+   <property name="text">
     <string>&amp;Remove...</string>
    </property>
   </action>
-  <action name="nodeMergeAction" >
-   <property name="text" >
+  <action name="nodeMergeAction">
+   <property name="text">
     <string>&amp;Merge</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Node Merge</string>
    </property>
-   <property name="statusTip" >
+   <property name="statusTip">
     <string>Merge the selected nodes (first selected will remain)</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Alt+M</string>
    </property>
   </action>
-  <action name="fileSaveAsAction" >
-   <property name="text" >
+  <action name="fileSaveAsAction">
+   <property name="text">
     <string>Save &amp;As...</string>
    </property>
   </action>
-  <action name="fileSaveAction" >
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+  <action name="fileSaveAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/save.png</normaloff>:/Icons/actions/save.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Save</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Save to file</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+S</string>
    </property>
   </action>
-  <action name="fileDownloadMoreAction" >
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+  <action name="fileDownloadMoreAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/download_more.png</normaloff>:/Icons/actions/download_more.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Download more</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Download more map data for the current area</string>
    </property>
-   <property name="statusTip" >
+   <property name="statusTip">
     <string>Download the current view to the previous download layer</string>
    </property>
-   <property name="whatsThis" >
+   <property name="whatsThis">
     <string>Download the current view to the previous download layer</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+Shift+D</string>
    </property>
   </action>
-  <action name="action_Docks" >
-   <property name="text" >
+  <action name="action_Docks">
+   <property name="text">
     <string>&amp;Docks</string>
    </property>
   </action>
-  <action name="windowPropertiesAction" >
-   <property name="checkable" >
+  <action name="windowPropertiesAction">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Properties</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Hide/Show the Properties dock</string>
    </property>
-   <property name="statusTip" >
+   <property name="statusTip">
     <string>Hide/Show the Properties dock</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+P</string>
    </property>
   </action>
-  <action name="windowLayersAction" >
-   <property name="checkable" >
+  <action name="windowLayersAction">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Layers</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Hide/Show the Layers dock</string>
    </property>
-   <property name="statusTip" >
+   <property name="statusTip">
     <string>Hide/Show the Layers dock</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+L</string>
    </property>
   </action>
-  <action name="windowInfoAction" >
-   <property name="checkable" >
+  <action name="windowInfoAction">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Info</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Hide/Show the Info dock</string>
    </property>
-   <property name="statusTip" >
+   <property name="statusTip">
     <string>Hide/Show the Info dock</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+I</string>
    </property>
   </action>
-  <action name="nodeAlignAction" >
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+  <action name="nodeAlignAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/align_nodes.png</normaloff>:/Icons/actions/align_nodes.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Align</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Align nodes</string>
    </property>
-   <property name="statusTip" >
+   <property name="statusTip">
     <string>Align selected nodes. First two selected give the line.</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Alt+A</string>
    </property>
   </action>
-  <action name="windowDirtyAction" >
-   <property name="checkable" >
+  <action name="windowDirtyAction">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Undo</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Hide/Show the Undo dock</string>
    </property>
-   <property name="statusTip" >
+   <property name="statusTip">
     <string>Hide/Show the Undo dock</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+T</string>
    </property>
   </action>
-  <action name="viewDownloadedAction" >
-   <property name="checkable" >
+  <action name="viewDownloadedAction">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Show &amp;downloaded areas</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+Alt+A</string>
    </property>
   </action>
-  <action name="editCopyAction" >
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+  <action name="editCopyAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/edit_copy.png</normaloff>:/Icons/actions/edit_copy.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Copy</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Copy selected features and tags to the clipboard</string>
    </property>
-   <property name="statusTip" >
+   <property name="statusTip">
     <string>Copy the selected feature's tags to the clipboard; if the feature is a trackpoint, copy the coordinates, too.</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+C</string>
    </property>
   </action>
-  <action name="editPasteOverwriteAction" >
-   <property name="text" >
+  <action name="editPasteOverwriteAction">
+   <property name="text">
     <string>Paste Tags (&amp;Overwrite)</string>
    </property>
-   <property name="statusTip" >
+   <property name="statusTip">
     <string>Paste (and overwrite) the tags in the clipboard to the selected feature.</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+V, O</string>
    </property>
   </action>
-  <action name="editPasteMergeAction" >
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+  <action name="editPasteMergeAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/edit_paste_tags.png</normaloff>:/Icons/actions/edit_paste_tags.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Paste Tags (&amp;Merge)</string>
    </property>
-   <property name="iconText" >
+   <property name="iconText">
     <string>Paste tags</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Paste tags from the clipboard (Merge with existing tags)</string>
    </property>
-   <property name="statusTip" >
+   <property name="statusTip">
     <string>Merge the tags in the clipboard with the ones of the selected feature.</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+V, M</string>
    </property>
   </action>
-  <action name="exportOSMSelectedAction" >
-   <property name="text" >
+  <action name="exportOSMSelectedAction">
+   <property name="text">
     <string>Selected...</string>
    </property>
   </action>
-  <action name="exportOSMBinSelectedAction" >
-   <property name="text" >
+  <action name="exportOSMBinSelectedAction">
+   <property name="text">
     <string>Selected...</string>
    </property>
   </action>
-  <action name="editPasteFeaturesAction" >
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+  <action name="editPasteFeaturesAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/edit_paste.png</normaloff>:/Icons/actions/edit_paste.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Paste Features</string>
    </property>
-   <property name="iconText" >
+   <property name="iconText">
     <string>Paste</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Paste features from the clipboard</string>
    </property>
-   <property name="statusTip" >
+   <property name="statusTip">
     <string>Paste the features in the clipboard; If the features'id are already in the document, overwrite them.</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+V, F</string>
    </property>
-   <property name="visible" >
+   <property name="visible">
     <bool>false</bool>
    </property>
   </action>
-  <action name="exportOSMAction" >
-   <property name="text" >
+  <action name="exportOSMAction">
+   <property name="text">
     <string>OSM (XML)</string>
    </property>
   </action>
-  <action name="exportOSMBinAction" >
-   <property name="text" >
+  <action name="exportOSMBinAction">
+   <property name="text">
     <string>OSM (Binary)</string>
    </property>
   </action>
-  <action name="featureCommitAction" >
-   <property name="text" >
+  <action name="featureCommitAction">
+   <property name="text">
     <string>&amp;Force Upload</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Commit feature to the dirty layer</string>
    </property>
-   <property name="statusTip" >
+   <property name="statusTip">
     <string>Commit the selected feature from a non-uploadable layer (e.g.Track or Extract) to the dirty layer, ready for upload</string>
    </property>
-   <property name="whatsThis" >
+   <property name="whatsThis">
     <string>Commit the selected feature from a non-uploadable layer (e.g.Track or Extract) to the dirty layer, ready for upload</string>
    </property>
   </action>
-  <action name="exportGPXAction" >
-   <property name="text" >
+  <action name="exportGPXAction">
+   <property name="text">
     <string>GPX</string>
    </property>
   </action>
-  <action name="exportKMLAction" >
-   <property name="text" >
+  <action name="exportKMLAction">
+   <property name="text">
     <string>KML</string>
    </property>
   </action>
-  <action name="windowToolbarAction" >
-   <property name="text" >
+  <action name="windowToolbarAction">
+   <property name="text">
     <string>Toggle Toolbar</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Hide/Show the Toolbar</string>
    </property>
-   <property name="statusTip" >
+   <property name="statusTip">
     <string>Hide/Show the Toolbar</string>
    </property>
   </action>
-  <action name="windowHideAllAction" >
-   <property name="text" >
+  <action name="windowHideAllAction">
+   <property name="text">
     <string>Hide All</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+F</string>
    </property>
   </action>
-  <action name="windowShowAllAction" >
-   <property name="text" >
+  <action name="windowShowAllAction">
+   <property name="text">
     <string>Show All</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+F</string>
    </property>
-   <property name="visible" >
+   <property name="visible">
     <bool>false</bool>
    </property>
   </action>
-  <action name="layersAddImageAction" >
-   <property name="text" >
+  <action name="layersAddImageAction">
+   <property name="text">
     <string>&amp;Image layer</string>
    </property>
   </action>
-  <action name="renderOsmarenderAction" >
-   <property name="text" >
+  <action name="renderOsmarenderAction">
+   <property name="text">
     <string>Osmarender</string>
    </property>
   </action>
-  <action name="renderNativeAction" >
-   <property name="text" >
+  <action name="renderNativeAction">
+   <property name="text">
     <string>Native</string>
    </property>
   </action>
-  <action name="viewTrackPointsAction" >
-   <property name="checkable" >
+  <action name="viewTrackPointsAction">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Show track &amp;points</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+Alt+P</string>
    </property>
   </action>
-  <action name="viewNamesAction" >
-   <property name="checkable" >
+  <action name="viewNamesAction">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Show &amp;names</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+Alt+N</string>
    </property>
   </action>
-  <action name="gpsConnectAction" >
-   <property name="text" >
+  <action name="gpsConnectAction">
+   <property name="text">
     <string>&amp;Start</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Start GPS</string>
    </property>
   </action>
-  <action name="gpsReplayAction" >
-   <property name="text" >
+  <action name="gpsReplayAction">
+   <property name="text">
     <string>&amp;Replay...</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Replay GPS</string>
    </property>
   </action>
-  <action name="windowGPSAction" >
-   <property name="checkable" >
+  <action name="windowGPSAction">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;GPS</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Hide/Show the GPS dock</string>
    </property>
-   <property name="statusTip" >
+   <property name="statusTip">
     <string>Hide/Show the GPS dock</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+W</string>
    </property>
   </action>
-  <action name="gpsDisconnectAction" >
-   <property name="enabled" >
+  <action name="gpsDisconnectAction">
+   <property name="enabled">
     <bool>false</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>S&amp;top</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Stop GPS</string>
    </property>
   </action>
-  <action name="gpsCenterAction" >
-   <property name="checkable" >
+  <action name="gpsCenterAction">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Center on GPS</string>
    </property>
   </action>
-  <action name="viewTrackSegmentsAction" >
-   <property name="checkable" >
+  <action name="viewTrackSegmentsAction">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Show track &amp;segments</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+Alt+T</string>
    </property>
   </action>
-  <action name="viewScaleAction" >
-   <property name="checkable" >
+  <action name="viewScaleAction">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Show &amp;scale</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+Alt+S</string>
    </property>
   </action>
-  <action name="viewRelationsAction" >
-   <property name="checkable" >
+  <action name="viewRelationsAction">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Show &amp;relations</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+Alt+R</string>
    </property>
   </action>
-  <action name="viewStyleForegroundAction" >
-   <property name="checkable" >
+  <action name="viewStyleForegroundAction">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Show roads background</string>
    </property>
   </action>
-  <action name="viewStyleBackgroundAction" >
-   <property name="checkable" >
+  <action name="viewStyleBackgroundAction">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Show roads boundary</string>
    </property>
   </action>
-  <action name="viewStyleTouchupAction" >
-   <property name="checkable" >
+  <action name="viewStyleTouchupAction">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Show touchup</string>
    </property>
   </action>
-  <action name="gpsRecordAction" >
-   <property name="checkable" >
+  <action name="gpsRecordAction">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="enabled" >
+   <property name="enabled">
     <bool>false</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Record</string>
    </property>
-   <property name="iconText" >
+   <property name="iconText">
     <string>Record</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Record GPS</string>
    </property>
   </action>
-  <action name="gpsPauseAction" >
-   <property name="checkable" >
+  <action name="gpsPauseAction">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="enabled" >
+   <property name="enabled">
     <bool>false</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Pause</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Pause GPS</string>
    </property>
   </action>
-  <action name="windowGeoimageAction" >
-   <property name="checkable" >
+  <action name="windowGeoimageAction">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>G&amp;eoImage</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Hide/Show the GeoImage dock</string>
    </property>
-   <property name="statusTip" >
+   <property name="statusTip">
     <string>Hide/Show the GeoImage dock</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+E</string>
    </property>
   </action>
-  <action name="toolsWorldOsbAction" >
-   <property name="text" >
+  <action name="toolsWorldOsbAction">
+   <property name="text">
     <string>World OSB manager...</string>
    </property>
   </action>
-  <action name="toolsShortcutsAction" >
-   <property name="text" >
+  <action name="toolsShortcutsAction">
+   <property name="text">
     <string>&amp;Shortcut Editor...</string>
    </property>
   </action>
-  <action name="toolTemplatesLoadAction" >
-   <property name="text" >
+  <action name="toolTemplatesLoadAction">
+   <property name="text">
     <string>&amp;Load...</string>
    </property>
   </action>
-  <action name="toolTemplatesMergeAction" >
-   <property name="text" >
+  <action name="toolTemplatesMergeAction">
+   <property name="text">
     <string>&amp;Merge...</string>
    </property>
   </action>
-  <action name="toolTemplatesSaveAction" >
-   <property name="text" >
+  <action name="toolTemplatesSaveAction">
+   <property name="text">
     <string>&amp;Save...</string>
    </property>
   </action>
-  <action name="relationAddMemberAction" >
-   <property name="text" >
+  <action name="relationAddMemberAction">
+   <property name="text">
     <string>&amp;Add member</string>
    </property>
   </action>
-  <action name="relationRemoveMemberAction" >
-   <property name="text" >
+  <action name="relationRemoveMemberAction">
+   <property name="text">
     <string>&amp;Remove member</string>
    </property>
   </action>
-  <action name="viewArrowsNeverAction" >
-   <property name="checkable" >
+  <action name="viewArrowsNeverAction">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Never</string>
    </property>
   </action>
-  <action name="viewArrowsOnewayAction" >
-   <property name="checkable" >
+  <action name="viewArrowsOnewayAction">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>for &amp;Oneway roads</string>
    </property>
   </action>
-  <action name="viewArrowsAlwaysAction" >
-   <property name="checkable" >
+  <action name="viewArrowsAlwaysAction">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Always</string>
    </property>
   </action>
-  <action name="nodeDetachAction" >
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+  <action name="nodeDetachAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/detach_node.png</normaloff>:/Icons/actions/detach_node.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Detach</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Detach node from a road</string>
    </property>
-   <property name="statusTip" >
+   <property name="statusTip">
     <string>Detach a node from a Road</string>
    </property>
   </action>
-  <action name="fileWorkOfflineAction" >
-   <property name="checkable" >
+  <action name="fileWorkOfflineAction">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/offline.png</normaloff>:/Icons/actions/offline.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Work Offline</string>
    </property>
   </action>
-  <action name="renderSVGAction" >
-   <property name="text" >
+  <action name="renderSVGAction">
+   <property name="text">
     <string>SVG</string>
    </property>
   </action>
-  <action name="windowStylesAction" >
-   <property name="checkable" >
+  <action name="windowStylesAction">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Styles</string>
    </property>
-   <property name="iconText" >
+   <property name="iconText">
     <string>Hide/Show the Styles dock</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Hide/Show the Styles dock</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+B</string>
    </property>
   </action>
-  <action name="toolsWMSServersAction" >
-   <property name="text" >
+  <action name="toolsWMSServersAction">
+   <property name="text">
     <string>WMS Servers Editor...</string>
    </property>
   </action>
-  <action name="toolsTMSServersAction" >
-   <property name="text" >
+  <action name="toolsTMSServersAction">
+   <property name="text">
     <string>TMS Servers Editor...</string>
    </property>
   </action>
-  <action name="toolsResetDiscardableAction" >
-   <property name="text" >
+  <action name="toolsResetDiscardableAction">
+   <property name="text">
     <string>&amp;Reset Discardable dialogs status</string>
    </property>
   </action>
-  <action name="gpsPopupAction" >
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+  <action name="gpsPopupAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/GPS.png</normaloff>:/Icons/actions/GPS.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>GPS Menu</string>
    </property>
   </action>
-  <action name="cameraAction" >
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+  <action name="cameraAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/camera.png</normaloff>:/Icons/actions/camera.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Camera</string>
    </property>
   </action>
-  <action name="roadCreateJunctionAction" >
-   <property name="text" >
+  <action name="roadCreateJunctionAction">
+   <property name="text">
     <string>Create &amp;Junction</string>
    </property>
   </action>
-  <action name="editRotateAction" >
-   <property name="icon" >
-    <iconset resource="../Icons/AllIcons.qrc" >
+  <action name="editRotateAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
      <normaloff>:/Icons/actions/edit_rotate.svg</normaloff>:/Icons/actions/edit_rotate.svg</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Rotate</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+A</string>
    </property>
   </action>
-  <action name="createPolygonAction" >
-   <property name="text" >
+  <action name="createPolygonAction">
+   <property name="text">
     <string>Polygon</string>
    </property>
   </action>
-  <action name="createRectangleAction" >
-   <property name="text" >
+  <action name="createRectangleAction">
+   <property name="text">
     <string>Rectangle</string>
    </property>
   </action>
-  <action name="layersNewImageAction" >
-   <property name="text" >
+  <action name="layersNewImageAction">
+   <property name="text">
     <string>Add new Image layer</string>
+   </property>
+  </action>
+  <action name="editPasteFeatureAction">
+   <property name="text">
+    <string>Paste Feature(s)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V, F</string>
    </property>
   </action>
  </widget>
  <resources>
-  <include location="../Icons/AllIcons.qrc" />
+  <include location="../Icons/AllIcons.qrc"/>
  </resources>
  <connections>
   <connection>
@@ -1539,11 +1549,11 @@
    <receiver>MainWindow</receiver>
    <slot>close()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>-1</x>
      <y>-1</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>403</x>
      <y>322</y>
     </hint>

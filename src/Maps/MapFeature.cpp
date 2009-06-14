@@ -198,6 +198,14 @@ void MapFeature::setId(const QString& id)
 	p->Id = id;
 }
 
+const QString& MapFeature::resetId()
+{
+	p->Id = QString::number((((qint64)this) * -1));
+	if (parent())
+		dynamic_cast<MapLayer*>(parent())->notifyIdUpdate(p->Id,const_cast<MapFeature*>(this));
+	return p->Id;
+}
+
 const QString& MapFeature::id() const
 {
 	if (p->Id == "")

@@ -698,7 +698,7 @@ void FeaturePainter::drawBackground(Road* R, QPainter& thePainter, MapView& theV
 		thePainter.save();
 		thePainter.setOpacity(qreal(M_PREFS->getAreaOpacity()) / 100);
 	}
-	thePainter.drawPath(R->getPath());
+	thePainter.drawPath(theView.transform().map(R->getPath()));
 	if (M_PREFS->getAreaOpacity() != 100 && ForegroundFill) {
 		thePainter.restore();
 	}
@@ -728,7 +728,7 @@ void FeaturePainter::drawBackground(Relation* R, QPainter& thePainter, MapView& 
 	thePen.setJoinStyle(JOINSTYLE);
 	thePainter.setPen(thePen);
 	thePainter.setBrush(Qt::NoBrush);
-	thePainter.drawPath(R->getPath());
+	thePainter.drawPath(theView.transform().map(R->getPath()));
 }
 
 void FeaturePainter::drawForeground(Road* R, QPainter& thePainter, MapView& theView) const
@@ -769,10 +769,10 @@ void FeaturePainter::drawForeground(Road* R, QPainter& thePainter, MapView& theV
 	//if (M_PREFS->getAreaOpacity() != 100 && ForegroundFill) {
 	//	thePainter.restore();
 	//}
-	thePainter.drawPath(R->getPath());
+	thePainter.drawPath(theView.transform().map(R->getPath()));
 }
 
-void FeaturePainter::drawForeground(Relation* R, QPainter& thePainter, MapView& /* theProjection */) const
+void FeaturePainter::drawForeground(Relation* R, QPainter& thePainter, MapView& theView) const
 {
 	if (!DrawForeground && !ForegroundFill) return;
 
@@ -807,7 +807,7 @@ void FeaturePainter::drawForeground(Relation* R, QPainter& thePainter, MapView& 
 		thePainter.save();
 		thePainter.setOpacity(qreal(M_PREFS->getAreaOpacity()) / 100);
 	}
-	thePainter.drawPath(R->getPath());
+	thePainter.drawPath(theView.transform().map(R->getPath()));
 	if (M_PREFS->getAreaOpacity() != 100 && ForegroundFill) {
 		thePainter.restore();
 	}
@@ -869,7 +869,7 @@ void FeaturePainter::drawTouchup(Road* R, QPainter& thePainter, MapView& theView
 				Pattern << TouchupDash << TouchupWhite;
 				thePen.setDashPattern(Pattern);
 			}
-			thePainter.strokePath(R->getPath(),thePen);
+			thePainter.strokePath(theView.transform().map(R->getPath()),thePen);
 		}
 	}
 	if ( ((DrawTrafficDirectionMarks) && (M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Oneway)) ||  M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Always)
@@ -977,22 +977,22 @@ void FeaturePainter::drawPointLabel(QPointF C, QString str, QString strBg, QPain
 		bgPath.addRect(textPath.boundingRect().adjusted(-BG_SPACING, -BG_SPACING, BG_SPACING, BG_SPACING));
 		thePainter.setPen(QPen(LabelColor, BG_PEN_SZ));
 		thePainter.setBrush(LabelBackgroundColor);
-		thePainter.drawPath(bgPath);
+		thePainter.drawPath(theView.transform().map(bgPath));
 	}
 	if (getLabelHalo()) {
 		thePainter.setPen(QPen(Qt::white, font.pixelSize()/5));
-		thePainter.drawPath(textPath);
+		thePainter.drawPath(theView.transform().map(textPath));
 	}
 	thePainter.setPen(Qt::NoPen);
 	thePainter.setBrush(LabelColor);
-	thePainter.drawPath(textPath);
+	thePainter.drawPath(theView.transform().map(textPath));
 
 	thePainter.restore();
 
 	if (DrawLabelBackground && !strBg.isEmpty()) {
 		QRegion rg = thePainter.clipRegion();
 		rg -= textPath.boundingRect().toRect().translated(C.toPoint());
-		thePainter.setClipRegion(rg);
+		thePainter.setClipRegion(theView.transform().map(rg));
 	}
 }
 
@@ -1086,11 +1086,11 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, MapView& theView) 
 
 			if (getLabelHalo()) {
 				thePainter.setPen(QPen(Qt::white, font.pixelSize()/6));
-				thePainter.drawPath(textPath);
+				thePainter.drawPath(theView.transform().map(textPath));
 			}
 			thePainter.setPen(Qt::NoPen);
 			thePainter.setBrush(LabelColor);
-			thePainter.drawPath(textPath);
+			thePainter.drawPath(theView.transform().map(textPath));
 			thePainter.setClipRegion(rg);
 		}
 	}
@@ -1133,15 +1133,15 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, MapView& theView) 
 
 				thePainter.setPen(QPen(LabelColor, BG_PEN_SZ));
 				thePainter.setBrush(LabelBackgroundColor);
-				thePainter.drawPath(bgPath);
+				thePainter.drawPath(theView.transform().map(bgPath));
 
 				if (getLabelHalo()) {
 					thePainter.setPen(QPen(Qt::white, font.pixelSize()/5));
-					thePainter.drawPath(textPath);
+					thePainter.drawPath(theView.transform().map(textPath));
 				}
 				thePainter.setPen(Qt::NoPen);
 				thePainter.setBrush(LabelColor);
-				thePainter.drawPath(textPath);
+				thePainter.drawPath(theView.transform().map(textPath));
 
 				thePainter.restore();
 

@@ -81,7 +81,7 @@ void MoveTrackPointInteraction::snapMousePressEvent(QMouseEvent * event, MapFeat
 		if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(sel[j]))
 		{
 			Moving.push_back(Pt);
-			StartDragPosition = Pt->position();
+			//StartDragPosition = Pt->position();
 		}
 		else if (Road* R = dynamic_cast<Road*>(sel[j])) {
 			for (int i=0; i<R->size(); ++i)
@@ -182,7 +182,7 @@ void MoveTrackPointInteraction::snapMouseMoveEvent(QMouseEvent* event, MapFeatur
 {
 	if (Moving.size() && !panning())
 	{
-		Coord Diff = calculateNewPosition(event,Closer,0)-StartDragPosition;
+		Coord Diff = calculateNewPosition(event,Closer,NULL)-StartDragPosition;
 		for (int i=0; i<Moving.size(); ++i)
 			Moving[i]->setPosition(OriginalPosition[i]+Diff);
 		view()->invalidate(true, false);
@@ -192,11 +192,11 @@ void MoveTrackPointInteraction::snapMouseMoveEvent(QMouseEvent* event, MapFeatur
 Coord MoveTrackPointInteraction::calculateNewPosition(QMouseEvent *event, MapFeature *aLast, CommandList* theList)
 {
 	Coord TargetC = XY_TO_COORD(event->pos());
-	QPoint Target(TargetC.lat(),TargetC.lon());
 	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(aLast))
 		return Pt->position();
 	else if (Road* R = dynamic_cast<Road*>(aLast))
 	{
+		QPoint Target(TargetC.lat(),TargetC.lon());
 		LineF L1(R->getNode(0)->position(),R->getNode(1)->position());
 		double Dist = L1.capDistance(TargetC);
 		QPoint BestTarget = L1.project(Target).toPoint();
@@ -217,5 +217,5 @@ Coord MoveTrackPointInteraction::calculateNewPosition(QMouseEvent *event, MapFea
 				RoadAddTrackPointCommand(R,Moving[0],BestIdx,document()->getDirtyOrOriginLayer(R->layer())));
 		return Coord(BestTarget.x(),BestTarget.y());
 	}
-	return XY_TO_COORD(event->pos());
+	return TargetC;
 }

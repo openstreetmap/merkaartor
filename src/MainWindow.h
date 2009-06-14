@@ -54,6 +54,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 		virtual void on_editRedoAction_triggered();
 		virtual void on_editMapStyleAction_triggered();
 		virtual void on_editCopyAction_triggered();
+		virtual void on_editPasteFeatureAction_triggered();
 		virtual void on_editPasteOverwriteAction_triggered();
 		virtual void on_editPasteMergeAction_triggered();
 		virtual void on_editPasteFeaturesAction_triggered();

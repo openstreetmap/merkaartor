@@ -253,7 +253,7 @@ void LayerDock::layerCleared(MapLayer* l)
 void LayerDock::layerZoom(MapLayer * l)
 {
 	CoordBox bb = l->boundingBox();
-	CoordBox mini(bb.center()-10, bb.center()+10);
+	CoordBox mini(bb.center()-2000, bb.center()+2000);
 	bb.merge(mini);
 	bb = bb.zoomed(1.1);
 	p->Main->view()->setViewport(bb, p->Main->view()->rect());

@@ -349,7 +349,7 @@ void Road::drawHover(QPainter& thePainter, const Projection& theProjection, cons
 	thePainter.setBrush(Qt::NoBrush);
 	//QRect clipRect = thePainter.clipRegion().boundingRect().adjusted(int(-20), int(-20), int(20), int(20));
 	//buildPath(theProjection, clipRect);
-	thePainter.drawPath(p->thePath);
+	thePainter.drawPath(theTransform.map(p->thePath));
 	if (solid) {
 		TP.setWidth(MerkaartorPreferences::instance()->getHoverWidth()*3);
 		TP.setCapStyle(Qt::RoundCap);
@@ -386,7 +386,7 @@ void Road::drawFocus(QPainter& thePainter, const Projection& theProjection, cons
 	thePainter.setBrush(Qt::NoBrush);
 	//QRect clipRect = thePainter.clipRegion().boundingRect().adjusted(int(-20), int(-20), int(20), int(20));
 	//buildPath(theProjection, clipRect);
-	thePainter.drawPath(p->thePath);
+	thePainter.drawPath(theTransform.map(p->thePath));
 	if (solid) {
 		TP.setWidth(MerkaartorPreferences::instance()->getFocusWidth()*3);
 		TP.setCapStyle(Qt::RoundCap);
@@ -539,7 +539,7 @@ void Road::buildPath(const Projection &theProjection, const QTransform& theTrans
 			p->thePath.lineTo(QPointF((*it).outer()[0].x(), (*it).outer()[0].y()));
 		}
 	}
-	p->thePath = theTransform.map(p->thePath);
+	//p->thePath = theTransform.map(p->thePath);
 }
 #else
 void Road::buildPath(Projection const &theProjection, const QRect& clipRect)

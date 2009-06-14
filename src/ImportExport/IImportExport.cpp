@@ -15,15 +15,24 @@
 #include "../ImportExport/IImportExport.h"
 
 IImportExport::IImportExport(MapDocument* doc)
-		: theDoc(doc), Device(0)
+		: theDoc(doc), Device(0), ownDevice(false)
 {
 }
 
 IImportExport::~IImportExport()
 {
-	if (Device && Device->isOpen())
-		Device->close();
-	delete Device;
+	if (ownDevice) {
+		if (Device && Device->isOpen())
+			Device->close();
+		delete Device;
+	}
+}
+
+// Specify the input as a QIODevice
+bool IImportExport::setDevice(QIODevice* aDevice)
+{
+	Device = aDevice;
+	return true;
 }
 
 // Specify the input as a QFile
@@ -31,6 +40,7 @@ bool IImportExport::loadFile(QString filename)
 {
 	FileName = filename;
 	Device = new QFile(filename);
+	ownDevice = true;
 	return Device->open(QIODevice::ReadOnly);
 }
 

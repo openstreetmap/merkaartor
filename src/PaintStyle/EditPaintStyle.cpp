@@ -111,7 +111,7 @@ void EPBackgroundLayer::draw(Road* R)
 		}
 
 		p->thePainter.setPen(thePen);
-		p->thePainter.drawPath(R->getPath());
+		p->thePainter.drawPath(p->theView.transform().map(R->getPath()));
 	}
 }
 

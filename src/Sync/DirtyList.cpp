@@ -46,7 +46,7 @@ DirtyList::~DirtyList()
 bool DirtyListBuild::add(MapFeature* F)
 {
 	if (!F->isDirty()) return false;
-	if (F->hasOSMId()) return false;
+	//if (F->hasOSMId()) return false;
 
 	Added.push_back(F);
 	return false;

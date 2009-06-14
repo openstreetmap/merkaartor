@@ -82,11 +82,11 @@ QString EditInteraction::toHtml()
 Coord EditInteraction::calculateNewPosition(QMouseEvent *event, MapFeature *aLast, CommandList* theList)
 {
 	Coord TargetC = XY_TO_COORD(event->pos());
-	QPoint Target(TargetC.lat(),TargetC.lon());
 	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(aLast))
 		return Pt->position();
 	else if (Road* R = dynamic_cast<Road*>(aLast))
 	{
+		QPoint Target(TargetC.lat(),TargetC.lon());
 		LineF L1(R->getNode(0)->position(),R->getNode(1)->position());
 		double Dist = L1.capDistance(TargetC);
 		QPoint BestTarget = L1.project(Target).toPoint();
@@ -107,7 +107,7 @@ Coord EditInteraction::calculateNewPosition(QMouseEvent *event, MapFeature *aLas
 				RoadAddTrackPointCommand(R,Moving[0],BestIdx,document()->getDirtyOrOriginLayer(R->layer())));
 		return Coord(BestTarget.x(),BestTarget.y());
 	}
-	return XY_TO_COORD(event->pos());
+	return TargetC;
 }
 
 void EditInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
@@ -140,7 +140,7 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 			if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(sel[j]))
 			{
 				Moving.push_back(Pt);
-				StartDragPosition = Pt->position();
+				//StartDragPosition = Pt->position();
 			}
 			else if (Road* R = dynamic_cast<Road*>(sel[j])) {
 				for (int i=0; i<R->size(); ++i)
