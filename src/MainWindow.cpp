@@ -428,11 +428,27 @@ MapDocument* MainWindow::getDocumentFromClipboard()
 	QClipboard *clipboard = QApplication::clipboard();
 	QDomDocument* theXmlDoc = new QDomDocument();
 
-	if (!theXmlDoc->setContent(clipboard->mimeData()->data("application/x-openstreetmap+xml")))
+	if (clipboard->mimeData()->hasFormat("application/x-openstreetmap+xml")) {
+		if (!theXmlDoc->setContent(clipboard->mimeData()->data("application/x-openstreetmap+xml"))) {
+			delete theXmlDoc;
+			return NULL;
+		}
+	} else
+	if (clipboard->mimeData()->hasFormat("application/vnd.google-earth.kml+xml")) {
+		if (!theXmlDoc->setContent(clipboard->mimeData()->data("application/vnd.google-earth.kml+xml"))) {
+			delete theXmlDoc;
+			return NULL;
+		}
+	} else
+	if (clipboard->mimeData()->hasText()) {
 		if (!theXmlDoc->setContent(clipboard->text())) {
 			delete theXmlDoc;
 			return NULL;
 		}
+	} else {
+		delete theXmlDoc;
+		return NULL;
+	}
 
 	QDomElement c = theXmlDoc->documentElement();
 
@@ -475,6 +491,8 @@ MapDocument* MainWindow::getDocumentFromClipboard()
 
 		delete theXmlDoc;
 		return NewDoc;
+	} else
+	if (c.tagName() == "gpx") {
 	}
 	QMessageBox::critical(this, tr("Clipboard invalid"), tr("Clipboard do not contain valid data."));
 	return NULL;
@@ -484,16 +502,27 @@ void MainWindow::on_editCopyAction_triggered()
 {
 	QClipboard *clipboard = QApplication::clipboard();
 	QMimeData* md = new QMimeData();
-	QString osm = theDocument->exportOSM(theProperties->selection());
 
-	ImportExportKML exp(theDocument);
-	QBuffer kmlBuf;
-	kmlBuf.open(QIODevice::WriteOnly | QIODevice::Truncate);
-	if (exp.setDevice(&kmlBuf))
-		exp.export_(theProperties->selection());
+	QString osm = theDocument->exportOSM(theProperties->selection());
 	md->setText(osm);
 	md->setData("application/x-openstreetmap+xml", osm.toUtf8()); 
-	md->setData("application/vnd.google-earth.kml+xml", kmlBuf.data()); 
+
+	ImportExportKML kmlexp(theDocument);
+	QBuffer kmlBuf;
+	kmlBuf.open(QIODevice::WriteOnly | QIODevice::Truncate);
+	if (kmlexp.setDevice(&kmlBuf)) {
+		kmlexp.export_(theProperties->selection());
+		md->setData("application/vnd.google-earth.kml+xml", kmlBuf.data()); 
+	}
+
+	ExportGPX gpxexp(theDocument);
+	QBuffer gpxBuf;
+	gpxBuf.open(QIODevice::WriteOnly | QIODevice::Truncate);
+	if (gpxexp.setDevice(&gpxBuf)) {
+		gpxexp.export_(theProperties->selection());
+		md->setData("application/gpx+xml", gpxBuf.data()); 
+	}
+
 	clipboard->setMimeData(md);
 	invalidateView();
 }
@@ -1810,6 +1839,8 @@ void MainWindow::on_exportOSMBinAction_triggered()
 void MainWindow::on_exportGPXAction_triggered()
 {
 	QList<MapFeature*> theFeatures;
+	if (!selectExportedFeatures(theFeatures))
+		return;
 
 	QString fileName = QFileDialog::getSaveFileName(this,
 		tr("Export GPX"), MerkaartorPreferences::instance()->getWorkingDir() + "/untitled.gpx", tr("GPX Files (*.gpx)"));
@@ -1818,12 +1849,6 @@ void MainWindow::on_exportGPXAction_triggered()
 #ifndef Q_OS_SYMBIAN
 		QApplication::setOverrideCursor(Qt::BusyCursor);
 #endif
-
-		for (VisibleFeatureIterator i(document()); !i.isEnd(); ++i) {
-			if (dynamic_cast<TrackMapLayer*>(i.get()->layer())) {
-				theFeatures.push_back(i.get());
-			}
-		}
 
 		ExportGPX gpx(document());
 		if (gpx.saveFile(fileName)) {

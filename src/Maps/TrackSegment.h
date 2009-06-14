@@ -48,6 +48,8 @@ class TrackSegment : public MapFeature
 		virtual void partChanged(MapFeature* F, int ChangeId);
 
 		virtual QString toXML(int, QProgressDialog *) {return QString("");}
+		virtual bool toGPX(QDomElement xParent, QProgressDialog & progress, bool forExport=false);
+		static TrackSegment* fromGPX(MapDocument* d, MapLayer* L, const QDomElement e, QProgressDialog & progress);
 		virtual bool toXML(QDomElement xParent, QProgressDialog & progress);
 		static TrackSegment* fromXML(MapDocument* d, MapLayer* L, const QDomElement e, QProgressDialog & progress);
 

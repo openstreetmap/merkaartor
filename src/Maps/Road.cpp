@@ -483,7 +483,7 @@ QPainterPath Road::getPath()
 }
 
 #ifndef _MOBILE
-void Road::buildPath(const Projection &theProjection, const QTransform& theTransform, const QRectF& cr)
+void Road::buildPath(const Projection &theProjection, const QTransform& /*theTransform*/, const QRectF& cr)
 {
 	using namespace geometry;
 
@@ -700,6 +700,44 @@ void Road::clearTag(const QString& k)
 	MapFeature::clearTag(k);
 	p->MetaUpToDate = false;
 	p->Width = 0;
+}
+
+bool Road::toGPX(QDomElement xParent, QProgressDialog & progress, bool forExport)
+{
+	bool OK = true;
+
+	QDomElement e = xParent.ownerDocument().createElement("rte");
+	xParent.appendChild(e);
+
+	if (!forExport)
+		e.setAttribute("xml:id", xmlId());
+	QString s = tagValue("name","");
+	if (!s.isEmpty()) {
+		QDomElement c = xParent.ownerDocument().createElement("name");
+		e.appendChild(c);
+		QDomText v = c.ownerDocument().createTextNode(s);
+		c.appendChild(v);
+	}
+	s = tagValue("_comment_","");
+	if (!s.isEmpty()) {
+		QDomElement c = xParent.ownerDocument().createElement("cmt");
+		e.appendChild(c);
+		QDomText v = c.ownerDocument().createTextNode(s);
+		c.appendChild(v);
+	}
+	s = tagValue("_description_","");
+	if (!s.isEmpty()) {
+		QDomElement c = xParent.ownerDocument().createElement("desc");
+		e.appendChild(c);
+		QDomText v = c.ownerDocument().createTextNode(s);
+		c.appendChild(v);
+	}
+
+	for (int i=0; i<size(); ++i) {
+		dynamic_cast <TrackPoint*> (get(i))->toGPX(e, progress, forExport);
+	}
+
+	return OK;
 }
 
 QString Road::toXML(int lvl, QProgressDialog * progress)

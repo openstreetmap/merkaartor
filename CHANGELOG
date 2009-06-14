@@ -1,4 +1,5 @@
 v0.14
+	* ADD : Also export routes in GPX
 	* ADD : Paste features as a whole (closes #1807)
     * ADD : Spatial indexing of features for faster display with large downloaded areas.
     * ADD : Built-in list of epsg projections (from proj4)

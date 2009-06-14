@@ -67,7 +67,7 @@ class TrackPoint : public MapFeature
 
 		virtual QString toXML(int lvl=0, QProgressDialog * progress=NULL);
 		virtual bool toXML(QDomElement xParent, QProgressDialog & progress);
-		virtual bool toGPX(QDomElement xParent, QProgressDialog & progress);
+		virtual bool toGPX(QDomElement xParent, QProgressDialog & progress, bool forExport=false);
 		static TrackPoint* fromXML(MapDocument* d, MapLayer* L, const QDomElement e);
 		static TrackPoint* fromGPX(MapDocument* d, MapLayer* L, const QDomElement e);
 

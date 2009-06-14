@@ -48,6 +48,7 @@ bool IImportExport::saveFile(QString filename)
 {
 	FileName = filename;
 	Device = new QFile(filename);
+	ownDevice = true;
 	return Device->open(QIODevice::WriteOnly | QIODevice::Truncate);
 }
 

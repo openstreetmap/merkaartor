@@ -97,6 +97,7 @@ class Road : public MapFeature
 		QPainterPath getPath();
 		void buildPath(Projection const &theProjection, const QTransform& theTransform, const QRectF& clipRect);
 
+		virtual bool toGPX(QDomElement xParent, QProgressDialog & progress, bool forExport=false);
 		virtual QString toXML(int lvl=0, QProgressDialog * progress=NULL);
 		virtual bool toXML(QDomElement xParent, QProgressDialog & progress);
 		static Road* fromXML(MapDocument* d, MapLayer* L, const QDomElement e);

@@ -709,7 +709,6 @@ bool TrackMapLayer::toXML(QDomElement& xParent, QProgressDialog & progress)
 	o.setAttribute("version", "1.1");
 	o.setAttribute("creator", "Merkaartor");
 	o.setAttribute("xmlns", "http://www.topografix.com/GPX/1/1");
-	o.setAttribute("xmlns:rmc", "urn:net:trekbuddy:1.0:nmea:rmc");
 
 	QList<TrackPoint*>	waypoints;
 	QList<TrackSegment*>	segments;

@@ -274,23 +274,29 @@ void TrackSegment::partChanged(MapFeature*, int)
 {
 }
 
-bool TrackSegment::toXML(QDomElement xParent, QProgressDialog & progress)
+bool TrackSegment::toGPX(QDomElement xParent, QProgressDialog & progress, bool forExport)
 {
 	bool OK = true;
 
 	QDomElement e = xParent.ownerDocument().createElement("trkseg");
 	xParent.appendChild(e);
 
-	e.setAttribute("xml:id", xmlId());
+	if (!forExport)
+		e.setAttribute("xml:id", xmlId());
 
 	for (int i=0; i<size(); ++i) {
-		dynamic_cast <TrackPoint*> (get(i))->toGPX(e, progress);
+		dynamic_cast <TrackPoint*> (get(i))->toGPX(e, progress, forExport);
 	}
 
 	return OK;
 }
 
-TrackSegment* TrackSegment::fromXML(MapDocument* d, MapLayer* L, const QDomElement e, QProgressDialog & progress)
+bool TrackSegment::toXML(QDomElement xParent, QProgressDialog & progress)
+{
+	return toGPX(xParent, progress, false);
+}
+
+TrackSegment* TrackSegment::fromGPX(MapDocument* d, MapLayer* L, const QDomElement e, QProgressDialog & progress)
 {
 	TrackSegment* l = new TrackSegment();
 
@@ -312,4 +318,9 @@ TrackSegment* TrackSegment::fromXML(MapDocument* d, MapLayer* L, const QDomEleme
 	}
 
 	return l;
+}
+
+TrackSegment* TrackSegment::fromXML(MapDocument* d, MapLayer* L, const QDomElement e, QProgressDialog & progress)
+{
+	return TrackSegment::fromGPX(d, L, e, progress);
 }

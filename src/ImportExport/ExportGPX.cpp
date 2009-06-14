@@ -31,6 +31,7 @@ bool ExportGPX::export_(const QList<MapFeature *>& featList)
 	QList<TrackPoint*>	waypoints;
 	QList<TrackSegment*>	segments;
 	QList<MapLayer*>	tracks;
+	QList<Road*>	routes;
 
 	if(! IImportExport::export_(featList) ) return false;
 
@@ -48,21 +49,31 @@ bool ExportGPX::export_(const QList<MapFeature *>& featList)
 	o.setAttribute("version", "1.1");
 	o.setAttribute("creator", "Merkaartor");
 	o.setAttribute("xmlns", "http://www.topografix.com/GPX/1/1");
-	o.setAttribute("xmlns:rmc", "urn:net:trekbuddy:1.0:nmea:rmc");
 
 	for (int i=0; i<theFeatures.size(); ++i) {
 		if (TrackSegment* S = dynamic_cast<TrackSegment*>(theFeatures[i])) {
 			segments.push_back(S);
 			if (!tracks.contains(S->layer()))
 				tracks.push_back(S->layer());
-		}
-		if (TrackPoint* P = dynamic_cast<TrackPoint*>(theFeatures[i]))
+		} else
+		if (TrackPoint* P = CAST_NODE(theFeatures[i])) {
 			if (!P->tagValue("_waypoint_","").isEmpty())
 				waypoints.push_back(P);
+			if (!P->tagValue("name","").isEmpty() && !P->sizeParents())
+				waypoints.push_back(P);
+		} else
+		if (Road* R = CAST_WAY(theFeatures[i])) {
+			if (R->size())
+				routes.push_back(R);
+		}
 	}
 
 	for (int i=0; i < waypoints.size(); ++i) {
-		waypoints[i]->toGPX(o, progress);
+		waypoints[i]->toGPX(o, progress, true);
+	}
+
+	for (int i=0; i < routes.size(); ++i) {
+		routes[i]->toGPX(o, progress, true);
 	}
 
 	for (int i=0; i<tracks.size(); ++i) {
@@ -76,7 +87,7 @@ bool ExportGPX::export_(const QList<MapFeature *>& featList)
 
 		for (int j=0; j < segments.size(); ++j)
 			if (tracks[i]->exists(segments[j]))
-				segments[j]->toXML(t, progress);
+				segments[j]->toGPX(t, progress, true);
 	}
 
 	progress.setValue(progress.maximum());

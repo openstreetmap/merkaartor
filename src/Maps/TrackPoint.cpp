@@ -249,28 +249,27 @@ bool TrackPoint::toXML(QDomElement xParent, QProgressDialog & progress)
 	return OK;
 }
 
-bool TrackPoint::toGPX(QDomElement xParent, QProgressDialog & progress)
+bool TrackPoint::toGPX(QDomElement xParent, QProgressDialog & progress, bool forExport)
 {
 	bool OK = true;
 
-	QString s = tagValue("_waypoint_","");
 	QDomElement e;
-	if (!s.isEmpty())
+	if (!tagValue("_waypoint_","").isEmpty() ||!sizeParents())
 		e = xParent.ownerDocument().createElement("wpt");
 	else
-		e = xParent.ownerDocument().createElement("trkpt");
+		if (xParent.tagName() == "trkseg")
+			e = xParent.ownerDocument().createElement("trkpt");
+		else
+			if (xParent.tagName() == "rte")
+				e = xParent.ownerDocument().createElement("rtept");
 	xParent.appendChild(e);
 
-	e.setAttribute("xml:id", xmlId());
+	if (!forExport)
+		e.setAttribute("xml:id", xmlId());
 	e.setAttribute("lon",QString::number(intToAng(Position.lon()),'f',8));
 	e.setAttribute("lat", QString::number(intToAng(Position.lat()),'f',8));
 
-	QDomElement c = xParent.ownerDocument().createElement("time");
-	e.appendChild(c);
-	QDomText v = c.ownerDocument().createTextNode(time().toString(Qt::ISODate)+"Z");
-	c.appendChild(v);
-
-	s = tagValue("name","");
+	QString s = tagValue("name","");
 	if (!s.isEmpty()) {
 		QDomElement c = xParent.ownerDocument().createElement("name");
 		e.appendChild(c);
