@@ -148,7 +148,7 @@ void TrackPoint::draw(QPainter& thePainter , const Projection& theProjection, co
 	}
 }
 #else
-void TrackPoint::draw(QPainter& /* thePainter */, const Projection& /*theProjection*/ )
+void TrackPoint::draw(QPainter& /* thePainter */, const Projection& /*theProjection*/, const QTransform& /*theTransform*/ )
 {
 }
 #endif
