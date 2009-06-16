@@ -733,11 +733,11 @@ void MapView::drawDownloadAreas(QPainter & P)
 		poly << projection().project((*bb).topRight());
 		poly << projection().project((*bb).topLeft());
 
-		r -= QRegion(poly.toPolygon());
+		r -= QRegion(p->theTransform.map(poly.toPolygon()));
 	}
 
-	//P.setClipRegion(r);
-	//P.setClipping(true);
+	P.setClipRegion(r);
+	P.setClipping(true);
 	P.fillRect(rect(), b);
 
 	P.restore();
