@@ -35,7 +35,7 @@ void MoveTrackPointCommand::undo()
 {
 	Command::undo();
 	CoordBox bb = thePoint->boundingBox();
-	theLayer->getRTree()->remove(geometry::box < Coord > (bb.bottomLeft(), bb.topRight() ), thePoint);
+	theLayer->getRTree()->remove(bb, thePoint);
 	thePoint->setPosition(OldPos);
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		theLayer->remove(thePoint);
@@ -43,14 +43,14 @@ void MoveTrackPointCommand::undo()
 		decDirtyLevel(oldLayer);
 	}
 	bb = thePoint->boundingBox();
-	oldLayer->getRTree()->insert(geometry::box < Coord > (bb.bottomLeft(), bb.topRight() ), thePoint);
+	oldLayer->getRTree()->insert(bb, thePoint);
 }
 
 void MoveTrackPointCommand::redo()
 {
 	oldLayer = thePoint->layer();
 	CoordBox bb = thePoint->boundingBox();
-	oldLayer->getRTree()->remove(geometry::box < Coord > (bb.bottomLeft(), bb.topRight() ), thePoint);
+	oldLayer->getRTree()->remove(bb, thePoint);
 	thePoint->setPosition(NewPos);
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		oldLayer->remove(thePoint);
@@ -58,7 +58,7 @@ void MoveTrackPointCommand::redo()
 		theLayer->add(thePoint);
 	}
 	bb = thePoint->boundingBox();
-	theLayer->getRTree()->insert(geometry::box < Coord > (bb.bottomLeft(), bb.topRight() ), thePoint);
+	theLayer->getRTree()->insert(bb, thePoint);
 	Command::redo();
 }
 

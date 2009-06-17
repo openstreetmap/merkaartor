@@ -32,6 +32,8 @@ public:
 		BrowserBackground
 	};
 
+	virtual ~IMapAdapter() {};
+
 	//! returns the unique identifier (Uuid) of this MapAdapter
 	/*!
 	 * @return  the unique identifier (Uuid) of this MapAdapter

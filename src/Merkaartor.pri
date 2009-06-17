@@ -73,7 +73,7 @@ HEADERS += ./Command/Command.h \
     ./DirtyDock.h \
     ./GotoDialog.h \
     StyleDock.h \
-    ../include/geometry/projections/impl/geocent.h \
+    ../include/ggl/projections/impl/geocent.h \
     ../interfaces/IMapAdapter.h \
     Utils/SortAccordingToRenderingPriority.h
 
@@ -147,7 +147,7 @@ SOURCES += ./Command/Command.cpp \
     ./DirtyDock.cpp \
     ./GotoDialog.cpp \
     StyleDock.cpp \
-    ../include/geometry/projections/impl/geocent.c
+    ../include/ggl/projections/impl/geocent.c
 
 # Forms
 FORMS += ./AboutDialog.ui \

@@ -317,13 +317,11 @@ void MapView::buildFeatureSet()
 		Coord bl = p->invalidRects[i].bottomLeft();
 		Coord tr = p->invalidRects[i].topRight();
 		//qDebug() << "rect : " << p->theTransform.map(theProjection.project(bl)) << ", " << p->theTransform.map(theProjection.project(tr));
-		geometry::box < Coord > cb(bl, tr);
 		for (int j=0; j<theDocument->layerSize(); ++j) {
 			if (!theDocument->getLayer(j)->size() || !theDocument->getLayer(j)->isVisible())
 				continue;
 
-
-			std::deque < MapFeaturePtr > ret = theDocument->getLayer(j)->getRTree()->find(cb);
+			std::deque < MapFeaturePtr > ret = theDocument->getLayer(j)->getRTree()->find(CoordBox(bl, tr));
 			for (std::deque < MapFeaturePtr >::const_iterator it = ret.begin(); it != ret.end(); ++it) {
 				if (theFeatures.contains(*it))
 					continue;
@@ -1283,29 +1281,30 @@ void MapView::zoom(double d, const QPointF & Around,
 							 const QRect & Screen)
 {
 #ifndef _MOBILE
-	if (p->PixelPerM < 100) {
-		Coord Before = theProjection.inverse(p->theTransform.inverted().map(Around));
-		QPointF pBefore = theProjection.project(Before);
+	if (p->PixelPerM > 100 && d > 1.0)
+		return;
 
-		double ScaleLon = p->theTransform.m11() * d;
-		double ScaleLat = p->theTransform.m22() * d;
-		double DeltaLat = (Around.y() - pBefore.y() * ScaleLat);
-		double DeltaLon = (Around.x() - pBefore.x() * ScaleLon);
+	Coord Before = theProjection.inverse(p->theTransform.inverted().map(Around));
+	QPointF pBefore = theProjection.project(Before);
 
-		p->theTransform.setMatrix(ScaleLon, 0, 0, 0, ScaleLat, 0, DeltaLon, DeltaLat, 1);
+	double ScaleLon = p->theTransform.m11() * d;
+	double ScaleLat = p->theTransform.m22() * d;
+	double DeltaLat = (Around.y() - pBefore.y() * ScaleLat);
+	double DeltaLon = (Around.x() - pBefore.x() * ScaleLon);
 
-		double LengthOfOneDegreeLat = EQUATORIALRADIUS * M_PI / 180;
-		double LengthOfOneDegreeLon =
-			LengthOfOneDegreeLat * fabs(cos(intToRad(Before.lat())));
-		double degAspect = LengthOfOneDegreeLon / LengthOfOneDegreeLat;
-		double so = Screen.width() / (double)p->Viewport.lonDiff();
-		double sa = so / degAspect;
+	p->theTransform.setMatrix(ScaleLon, 0, 0, 0, ScaleLat, 0, DeltaLon, DeltaLat, 1);
 
-		double LatAngPerM = 1.0 / EQUATORIALRADIUS;
-		p->PixelPerM = LatAngPerM / M_PI * INT_MAX * sa;
+	double LengthOfOneDegreeLat = EQUATORIALRADIUS * M_PI / 180;
+	double LengthOfOneDegreeLon =
+		LengthOfOneDegreeLat * fabs(cos(intToRad(Before.lat())));
+	double degAspect = LengthOfOneDegreeLon / LengthOfOneDegreeLat;
+	double so = Screen.width() / (double)p->Viewport.lonDiff();
+	double sa = so / degAspect;
 
-		viewportRecalc(Screen);
-	}
+	double LatAngPerM = 1.0 / EQUATORIALRADIUS;
+	p->PixelPerM = LatAngPerM / M_PI * INT_MAX * sa;
+
+	viewportRecalc(Screen);
 #else
 	if (ScaleLat * d < 1.0 && ScaleLon * d < 1.0) {
 		Coord Before = inverse(Around);

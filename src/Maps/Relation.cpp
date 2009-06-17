@@ -93,11 +93,11 @@ void Relation::partChanged(MapFeature*, int ChangeId)
 		return;
 
 	if (layer())
-		layer()->getRTree()->remove(geometry::box < Coord > (p->BBox.bottomLeft(), p->BBox.topRight() ), this);
+		layer()->getRTree()->remove(p->BBox, this);
 	p->BBoxUpToDate = false;
 	if (layer()) {
 		CoordBox bb = boundingBox();
-		layer()->getRTree()->insert(geometry::box < Coord > (bb.bottomLeft(), bb.topRight() ), this);
+		layer()->getRTree()->insert(bb, this);
 	}
 	notifyParents(ChangeId);
 }
@@ -360,7 +360,7 @@ void Relation::releaseMemberModel()
 
 void Relation::buildPath(Projection const &theProjection, const QTransform& theTransform, const QRectF& cr)
 {
-	using namespace geometry;
+	using namespace ggl;
 
 	p->theBoundingPath = QPainterPath();
 
@@ -382,7 +382,8 @@ void Relation::buildPath(Projection const &theProjection, const QTransform& theT
 	}
 
 	std::vector<linestring_2d> clipped;
-	intersection(clipRect, in, std::back_inserter(clipped));
+	intersection <linestring_2d, box_2d, linestring_2d, std::back_insert_iterator <std::vector<linestring_2d> > >
+		(clipRect, in, std::back_inserter(clipped));
 
 	for (std::vector<linestring_2d>::const_iterator it = clipped.begin(); it != clipped.end(); it++)
 	{

@@ -8,16 +8,16 @@
 
 #include "QMapControl/mapadapter.h"
 
-#include <geometry/geometries/cartesian2d.hpp>
-#include <geometry/geometries/latlong.hpp>
+#include <ggl/geometries/cartesian2d.hpp>
+#include <ggl/geometries/latlong.hpp>
 
-#include <geometry/projections/projection.hpp>
+#include <ggl/projections/projection.hpp>
 
 class QRect;
 class TrackPoint;
 class ProjectionPrivate;
 
-typedef projection::projection<geometry::point_ll_deg, geometry::point_2d> ProjProjection;
+typedef ggl::projection::projection<ggl::point_ll_deg, ggl::point_2d> ProjProjection;
 
 class Projection
 {

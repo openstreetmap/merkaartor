@@ -15,7 +15,8 @@
 #include <algorithm>
 
 #ifndef _MOBILE
-#include <geometry/geometry.hpp>
+#include <ggl/ggl.hpp>
+#include <ggl/algorithms/intersection_segment.hpp>
 #endif
 
 bool canJoin(Road* R1, Road* R2)
@@ -326,7 +327,7 @@ bool canCreateJunction(PropertiesDock* theDock)
 bool createJunction(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock, bool doIt)
 {
 	//TODO test that the junction do not already exists!
-	typedef geometry::point_xy<float> P;
+	typedef ggl::point_xy<float> P;
 	bool ret = false;
 
 	QList<Road*> Roads, Result;
@@ -343,21 +344,21 @@ bool createJunction(MapDocument* theDocument, CommandList* theList, PropertiesDo
 	for (int i=0; i<R1->size()-1; ++i) {
 		P a(R1->getNode(i)->position().lon(), R1->getNode(i)->position().lat());
 		P b(R1->getNode(i+1)->position().lon(), R1->getNode(i+1)->position().lat());
-        geometry::segment<P> s1(a, b);
+        ggl::segment<P> s1(a, b);
 
 		for (int j=0; j<R2->size()-1; ++j) {
 			P c(R2->getNode(j)->position().lon(), R2->getNode(j)->position().lat());
 			P d(R2->getNode(j+1)->position().lon(), R2->getNode(j+1)->position().lat());
-			geometry::segment<P> s2(c, d);
+			ggl::segment<P> s2(c, d);
 
 			QList<P> theintersections;
 			theintersections.append(P(0, 0));
 			theintersections.append(P(0, 0));
 			QList<P>::Iterator intersectOS = theintersections.begin();
 
-			geometry::intersection_result r = geometry::intersection_segment<P>(s1, s2, intersectOS);
-			if (r.is_type == geometry::is_intersect)
-				if (r.get_connection_type() == geometry::is_connect_no) {
+			ggl::intersection_result r = ggl::intersection_segment<P>(s1, s2, intersectOS);
+			if (r.is_type == ggl::is_intersect)
+				if (r.get_connection_type() == ggl::is_connect_no) {
 					ret = true;
 					if (doIt) {
 						TrackPoint* pt = new TrackPoint(Coord(qRound(theintersections[0].y()), qRound(theintersections[0].x())));

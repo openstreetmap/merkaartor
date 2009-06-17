@@ -36,7 +36,7 @@ void RoadAddTrackPointCommand::undo()
 {
 	Command::undo();
 	CoordBox bb = theRoad->boundingBox();
-	theLayer->getRTree()->remove(geometry::box < Coord > (bb.bottomLeft(), bb.topRight() ), theRoad);
+	theLayer->getRTree()->remove(bb, theRoad);
 	theRoad->remove(Position);
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		theLayer->remove(theRoad);
@@ -44,14 +44,14 @@ void RoadAddTrackPointCommand::undo()
 		decDirtyLevel(oldLayer);
 	}
 	bb = theRoad->boundingBox();
-	oldLayer->getRTree()->insert(geometry::box < Coord > (bb.bottomLeft(), bb.topRight() ), theRoad);
+	oldLayer->getRTree()->insert(bb, theRoad);
 }
 
 void RoadAddTrackPointCommand::redo()
 {
 	oldLayer = theRoad->layer();
 	CoordBox bb = theRoad->boundingBox();
-	oldLayer->getRTree()->remove(geometry::box < Coord > (bb.bottomLeft(), bb.topRight() ), theRoad);
+	oldLayer->getRTree()->remove(bb, theRoad);
 	theRoad->add(theTrackPoint, Position);
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		oldLayer->remove(theRoad);
@@ -59,7 +59,7 @@ void RoadAddTrackPointCommand::redo()
 		theLayer->add(theRoad);
 	}
 	bb = theRoad->boundingBox();
-	theLayer->getRTree()->insert(geometry::box < Coord > (bb.bottomLeft(), bb.topRight() ), theRoad);
+	theLayer->getRTree()->insert(bb, theRoad);
 	Command::redo();
 }
 
@@ -152,7 +152,7 @@ void RoadRemoveTrackPointCommand::undo()
 {
 	Command::undo();
 	CoordBox bb = theRoad->boundingBox();
-	theLayer->getRTree()->remove(geometry::box < Coord > (bb.bottomLeft(), bb.topRight() ), theRoad);
+	theLayer->getRTree()->remove(bb, theRoad);
 	theRoad->add(theTrackPoint,Idx);
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		theLayer->remove(theRoad);
@@ -160,14 +160,14 @@ void RoadRemoveTrackPointCommand::undo()
 		decDirtyLevel(oldLayer);
 	}
 	bb = theRoad->boundingBox();
-	oldLayer->getRTree()->insert(geometry::box < Coord > (bb.bottomLeft(), bb.topRight() ), theRoad);
+	oldLayer->getRTree()->insert(bb, theRoad);
 }
 
 void RoadRemoveTrackPointCommand::redo()
 {
 	oldLayer = theRoad->layer();
 	CoordBox bb = theRoad->boundingBox();
-	oldLayer->getRTree()->remove(geometry::box < Coord > (bb.bottomLeft(), bb.topRight() ), theRoad);
+	oldLayer->getRTree()->remove(bb, theRoad);
 	theRoad->remove(Idx);
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		oldLayer->remove(theRoad);
@@ -175,7 +175,7 @@ void RoadRemoveTrackPointCommand::redo()
 		theLayer->add(theRoad);
 	}
 	bb = theRoad->boundingBox();
-	theLayer->getRTree()->insert(geometry::box < Coord > (bb.bottomLeft(), bb.topRight() ), theRoad);
+	theLayer->getRTree()->insert(bb, theRoad);
 	Command::redo();
 }
 

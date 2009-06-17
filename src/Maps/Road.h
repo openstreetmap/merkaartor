@@ -8,7 +8,7 @@
 #include "Maps/MapLayer.h"
 
 #ifndef _MOBILE
-#include <geometry/geometry.hpp>
+#include <ggl/ggl.hpp>
 #endif
 
 class RoadPrivate;

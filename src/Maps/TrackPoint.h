@@ -12,8 +12,8 @@
 #include <QtXml>
 
 #ifndef _MOBILE
-#include <geometry/geometry.hpp>
-#include <geometry/geometries/register/register_point.hpp>
+#include <ggl/ggl.hpp>
+#include <ggl/geometries/register/register_point.hpp>
 #endif
 
 class QProgressDialog;
@@ -94,7 +94,7 @@ Q_DECLARE_METATYPE( TrackPoint * );
 // Register this point as being a recognizable point by the GGL
 //GEOMETRY_REGISTER_POINT_2D_CONST(TrackPoint, qreal, cs::cartesian, projection().x(), projection().y())
 
-namespace geometry { namespace traits {
+namespace ggl { namespace traits {
 
 template<> struct tag<TrackPointPtr>
 { typedef point_tag type; };

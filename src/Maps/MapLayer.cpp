@@ -228,7 +228,7 @@ void MapLayer::deleteFeature(MapFeature* aFeature)
 	if (p->Features.removeOne(aFeature))
 	{
 		aFeature->setLayer(0);
-		p->theRTree->remove(geometry::box < Coord > (aFeature->boundingBox().bottomLeft(), aFeature->boundingBox().topRight() ));
+		p->theRTree->remove(aFeature->boundingBox(), aFeature);
 		notifyIdUpdate(aFeature->id(),0);
 		p->RenderPriorityUpToDate = false;
 	}
@@ -365,7 +365,7 @@ void MapLayer::reIndex()
 			//Q_ASSERT((bb.bottomLeft().lon() <= bb.topRight().lon()) && (bb.bottomLeft().lat() <= bb.topRight().lat()));
 			//Q_ASSERT((bb.bottomLeft().lon() < 100000000) && (bb.bottomLeft().lat() > 100000000));
 			//Q_ASSERT((bb.topRight().lon() < 100000000) && (bb.topRight().lat() > 100000000));
-			p->theRTree->insert(geometry::box < Coord > (bb.bottomLeft(), bb.topRight() ), f);
+			p->theRTree->insert(bb, f);
 		}
 	}
 }

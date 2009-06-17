@@ -200,13 +200,13 @@ class GenericFeatureSnapInteraction : public Interaction
 			SnapList.clear();
 			double BestDistance = 5;
 #if 1
-			geometry::box < Coord > cb(HotZone.bottomLeft(), HotZone.topRight());
+			//ggl::box < Coord > cb(HotZone.bottomLeft(), HotZone.topRight());
 
 			for (int j=0; j<document()->layerSize(); ++j) {
 				if (!document()->getLayer(j)->isVisible() || document()->getLayer(j)->isReadonly())
 					continue;
 
-				std::deque < MapFeaturePtr > ret = document()->getLayer(j)->getRTree()->find(cb);
+				std::deque < MapFeaturePtr > ret = document()->getLayer(j)->getRTree()->find(HotZone);
 				for (std::deque < MapFeaturePtr >::const_iterator it = ret.begin(); it < ret.end(); ++it) {
 					FeatureType* Pt = dynamic_cast<FeatureType*>(*it);
 					if (Pt)

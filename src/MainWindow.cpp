@@ -545,12 +545,13 @@ void MainWindow::on_editPasteFeatureAction_triggered()
 		if (theDocument->getFeature(F->id()))
 			F->resetId();
 
-		if (TrackPoint* P = CAST_NODE(F)) {
-		} else
-		if (Road* R = CAST_WAY(F)) {
-		} else
-		if (Relation* RR = CAST_RELATION(F)) {
-		}
+//		if (TrackPoint* P = CAST_NODE(F)) {
+//		} else
+//		if (Road* R = CAST_WAY(F)) {
+//		} else
+//		if (Relation* RR = CAST_RELATION(F)) {
+//		}
+		F->layer()->remove(F);
 		theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(), F, true));
 	}
 

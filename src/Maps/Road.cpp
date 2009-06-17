@@ -18,10 +18,10 @@
 #include <QList>
 
 #ifndef _MOBILE
-#include <geometry/geometry.hpp>
-#include <geometry/geometries/cartesian2d.hpp>
+#include <ggl/ggl.hpp>
+#include <ggl/geometries/cartesian2d.hpp>
 
-#include <geometry/geometries/adapted/std_as_linestring.hpp>
+#include <ggl/geometries/adapted/std_as_linestring.hpp>
 #endif
 
 
@@ -118,13 +118,13 @@ void Road::partChanged(MapFeature*, int ChangeId)
 		return;
 
 	if (layer())
-		layer()->getRTree()->remove(geometry::box < Coord > (p->BBox.bottomLeft(), p->BBox.topRight() ), this);
+		layer()->getRTree()->remove(p->BBox, this);
 	p->BBoxUpToDate = false;
 	p->MetaUpToDate = false;
 	p->SmoothedUpToDate = false;
 	if (layer()) {
 		CoordBox bb = boundingBox();
-		layer()->getRTree()->insert(geometry::box < Coord > (bb.bottomLeft(), bb.topRight() ), this);
+		layer()->getRTree()->insert(bb, this);
 	}
 	notifyParents(ChangeId);
 }
@@ -485,7 +485,7 @@ QPainterPath Road::getPath()
 #ifndef _MOBILE
 void Road::buildPath(const Projection &theProjection, const QTransform& /*theTransform*/, const QRectF& cr)
 {
-	using namespace geometry;
+	using namespace ggl;
 
 	p->thePath = QPainterPath();
 
@@ -502,7 +502,8 @@ void Road::buildPath(const Projection &theProjection, const QTransform& /*theTra
 		}
 
 		std::vector<linestring_2d> clipped;
-		intersection(clipRect, in, std::back_inserter(clipped));
+		intersection <linestring_2d, box_2d, linestring_2d, std::back_insert_iterator <std::vector<linestring_2d> > >
+			(clipRect, in, std::back_inserter(clipped));
 
 		for (std::vector<linestring_2d>::const_iterator it = clipped.begin(); it != clipped.end(); it++)
 		{
@@ -525,7 +526,8 @@ void Road::buildPath(const Projection &theProjection, const QTransform& /*theTra
 		correct(in);
 
 		std::vector<polygon_2d> clipped;
-		intersection(clipRect, in, std::back_inserter(clipped));
+		intersection <polygon_2d, box_2d, polygon_2d, std::back_insert_iterator <std::vector<polygon_2d> > >
+			(clipRect, in, std::back_inserter(clipped));
 
 		for (std::vector<polygon_2d>::const_iterator it = clipped.begin(); it != clipped.end(); it++)
 		{

@@ -6,15 +6,15 @@
 
 #include <math.h>
 
-#include <geometry/projections/parameters.hpp>
-#include <geometry/projections/factory.hpp>
+#include <ggl/projections/parameters.hpp>
+#include <ggl/projections/factory.hpp>
 
 // from wikipedia
 #define EQUATORIALRADIUS 6378137.0
 #define POLARRADIUS      6356752.0
 //#define PROJ_RATIO ((double(INT_MAX)/M_PI) / EQUATORIALRADIUS)
 
-using namespace geometry;
+using namespace ggl;
 
 // ProjectionPrivate
 
@@ -51,22 +51,22 @@ Projection::~Projection(void)
 
 #ifndef _MOBILE
 
-#include "geometry/projections/impl/pj_transform.hpp"
+#include "ggl/projections/impl/pj_transform.hpp"
 void Projection::projTransform(ProjProjection *srcdefn, 
 						   ProjProjection *dstdefn, 
 						   long point_count, int point_offset, double *x, double *y, double *z )
 {
-	projection::impl::pj_transform(srcdefn, dstdefn, point_count, point_offset, x, y, z);
+	ggl::projection::impl::pj_transform(srcdefn, dstdefn, point_count, point_offset, x, y, z);
 }
 
 void Projection::projTransformFromWGS84(long point_count, int point_offset, double *x, double *y, double *z )
 {
-	projection::impl::pj_transform(p->theWGS84Proj, theProj, point_count, point_offset, x, y, z);
+	ggl::projection::impl::pj_transform(p->theWGS84Proj, theProj, point_count, point_offset, x, y, z);
 }
 
 void Projection::projTransformToWGS84(long point_count, int point_offset, double *x, double *y, double *z )
 {
-	projection::impl::pj_transform(theProj, p->theWGS84Proj, point_count, point_offset, x, y, z);
+	ggl::projection::impl::pj_transform(theProj, p->theWGS84Proj, point_count, point_offset, x, y, z);
 }
 
 QPointF Projection::projProject(const Coord & Map) const
@@ -144,13 +144,13 @@ QRectF Projection::getProjectedViewport(CoordBox& Viewport, QRect& screen)
 
 ProjProjection * Projection::getProjection(QString projString)
 {
-	projection::factory<geometry::point_ll_deg, geometry::point_2d> fac;
-	projection::parameters par;
+	ggl::projection::factory<ggl::point_ll_deg, ggl::point_2d> fac;
+	ggl::projection::parameters par;
 
-	par = projection::init(std::string(QString("%1 +over").arg(projString).toLatin1().data()));
-	projection::projection<geometry::point_ll_deg, geometry::point_2d> *theProj = fac.create_new(par);
+	par = ggl::projection::init(std::string(QString("%1 +over").arg(projString).toLatin1().data()));
+	ggl::projection::projection<ggl::point_ll_deg, ggl::point_2d> *theProj = fac.create_new(par);
 	if (!theProj) {
-		par = projection::init(std::string(QString("%1 +over").arg(M_PREFS->getProjection("mercator").projection).toLatin1().data()));
+		par = ggl::projection::init(std::string(QString("%1 +over").arg(M_PREFS->getProjection("mercator").projection).toLatin1().data()));
 		theProj = fac.create_new(par);
 		if (!theProj) {
 			qDebug() << "Unable to set projection : " << projString;

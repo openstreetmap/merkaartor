@@ -81,7 +81,8 @@ void MoveTrackPointInteraction::snapMousePressEvent(QMouseEvent * event, MapFeat
 		if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(sel[j]))
 		{
 			Moving.push_back(Pt);
-			//StartDragPosition = Pt->position();
+			if (sel.size() == 1)
+				StartDragPosition = Pt->position();
 		}
 		else if (Road* R = dynamic_cast<Road*>(sel[j])) {
 			for (int i=0; i<R->size(); ++i)

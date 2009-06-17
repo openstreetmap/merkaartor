@@ -124,6 +124,9 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
 
 	SAFE_DELETE(p->wmsa);
 	SAFE_DELETE(p->tmsa);
+	if (p->theImageManager)
+		p->theImageManager->abortLoading();
+	p->theImageManager = NULL;
 	p->theMapAdapter = NULL;
 	p->pm = QPixmap();
 
@@ -300,7 +303,7 @@ void ImageMapLayer::drawImage(QPixmap& thePix, QPoint delta)
 		P.drawPixmap(QPoint((pmSize.width()-pms.width())/2, (pmSize.height()-pms.height())/2) + p->theDelta, pms);
 }
 
-using namespace geometry;
+using namespace ggl;
 
 void ImageMapLayer::zoom(double zoom, const QPoint& pos, const QRect& rect) 
 {

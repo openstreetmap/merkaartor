@@ -104,10 +104,10 @@ class Coord
 };
 
 #ifndef _MOBILE
-#include <geometry/geometry.hpp>
-#include <geometry/geometries/register/register_point.hpp>
+#include <ggl/ggl.hpp>
+#include <ggl/geometries/register/register_point.hpp>
 
-GEOMETRY_REGISTER_POINT_2D_GET_SET(Coord, int, cs::cartesian, lat, lon, setLat, setLon);
+GEOMETRY_REGISTER_POINT_2D_GET_SET(Coord, int, cs::cartesian, lat, lon, setLat, setLon)
 
 #endif
 
@@ -157,7 +157,7 @@ void rotate(Coord & p1,double angle);
 class CoordBox
 {
 	public:
-		CoordBox() {};
+		CoordBox() {}
 		CoordBox(const CoordBox& cb);
 		CoordBox(const Coord& C1, const Coord& C2);
 
@@ -277,14 +277,14 @@ class CoordBox
 		bool toXML(QString elName, QDomElement& xParent) const;
 		static CoordBox fromXML(QDomElement e);
 
-	private:
+	//private:
 		Coord BottomLeft, TopRight;
 };
 
 #ifndef _MOBILE
-#include <geometry/geometries/register/register_box.hpp>
+#include <ggl/geometries/register/register_box.hpp>
 
-GEOMETRY_REGISTER_BOX(CoordBox, Coord, bottomLeft(), topRight())
+GEOMETRY_REGISTER_BOX(CoordBox, Coord, BottomLeft, TopRight)
 #endif
 
 #endif
