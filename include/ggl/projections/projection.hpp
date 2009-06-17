@@ -50,7 +50,8 @@ class projection
         /// Returns name of projection
         virtual std::string name() const = 0;
 
-		virtual parameters params() const = 0;
+        /// Returns parameters of projection
+        virtual parameters params() const = 0;
 
         virtual ~projection() {}
 

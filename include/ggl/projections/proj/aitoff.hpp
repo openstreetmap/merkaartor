@@ -85,7 +85,7 @@ namespace ggl { namespace projection
             };
 
             template <typename Parameters>
-            void setup(Parameters& par, par_aitoff&)
+            void setup(Parameters& par, par_aitoff& proj_parm)
             {
                 // par.inv = 0;
                 // par.fwd = s_forward;

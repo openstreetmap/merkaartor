@@ -57,15 +57,19 @@ struct unrolled_byte_loops
     template <typename Iterator>
     static T load_forward(Iterator& bytes)
     {
-        return *bytes++ | (next::load_forward(bytes) << 8);
+        T const value = *bytes;
+        ++bytes;
+        return value | (next::load_forward(bytes) << 8);
     }
 
     template <typename Iterator>
     static T load_backward(Iterator& bytes)
     {
-        return *(bytes - 1) | (next::load_backward(--bytes) << 8);
+        T const value = *(bytes - 1);
+        --bytes;
+        return value | (next::load_backward(bytes) << 8);
     }
-    
+
     template <typename Iterator>
     static void store_forward(Iterator& bytes, T value)
     {

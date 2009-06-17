@@ -46,6 +46,11 @@ struct PolygonChecker
 
         I& i = interior_rings(*poly);
         const I& ci = interior_rings(*poly);
+
+        boost::ignore_unused_variable_warning(e);
+        boost::ignore_unused_variable_warning(ce);
+        boost::ignore_unused_variable_warning(i);
+        boost::ignore_unused_variable_warning(ci);
     }
 };
 

@@ -358,7 +358,7 @@ void Relation::releaseMemberModel()
 	}
 }
 
-void Relation::buildPath(Projection const &theProjection, const QTransform& theTransform, const QRectF& cr)
+void Relation::buildPath(Projection const &theProjection, const QTransform& /*theTransform*/, const QRectF& cr)
 {
 	using namespace ggl;
 

@@ -9,6 +9,7 @@
 #ifndef GGL_GEOMETRY_POLICIES_RELATE_INTERSECTION_POINTS_HPP
 #define GGL_GEOMETRY_POLICIES_RELATE_INTERSECTION_POINTS_HPP
 
+#include <boost/concept_check.hpp>
 
 #include <ggl/core/access.hpp>
 #include <ggl/util/promotion_traits.hpp>
@@ -35,6 +36,13 @@ struct segments_intersection_points
                     coordinate_type const& wx, coordinate_type const& wy,
                     S1 const& s1, S2 const& s2)
     {
+        boost::ignore_unused_variable_warning(rb);
+        boost::ignore_unused_variable_warning(dx2);
+        boost::ignore_unused_variable_warning(dy2);
+        boost::ignore_unused_variable_warning(wx);
+        boost::ignore_unused_variable_warning(wy);
+        boost::ignore_unused_variable_warning(s2);
+
         return_type result;
 
         if (on_segment)

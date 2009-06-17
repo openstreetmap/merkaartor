@@ -82,7 +82,7 @@ struct ConstBox
             {
                 const B* b = 0;
                 T coord(ggl::get<C, D>(*b));
-                (void)sizeof(coord); // To avoid "unused variable" warnings
+                boost::ignore_unused_variable_warning(coord);
                 dimension_checker<C, D + 1, N>::check();
             }
         };

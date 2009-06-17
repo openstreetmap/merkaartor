@@ -24,6 +24,8 @@
 #include <ggl/core/coordinate_dimension.hpp>
 #include <ggl/core/coordinate_type.hpp>
 #include <ggl/core/concepts/point_concept.hpp>
+#include <ggl/core/exterior_ring.hpp>
+#include <ggl/core/interior_rings.hpp>
 #include <ggl/detail/endian.hpp>
 #include <ggl/io/wkb/detail/ogc.hpp>
 
@@ -41,8 +43,13 @@ struct value_parser
     template <typename Iterator>
     static bool parse(Iterator& it, Iterator end, T& value, byte_order_type::enum_t order)
     {
-        BOOST_STATIC_ASSERT(boost::is_integral<Iterator::value_type>::value);
-        BOOST_STATIC_ASSERT(sizeof(Iterator::value_type) == sizeof(boost::uint8_t));
+        // Very basic pre-conditions check on stream of bytes passed in
+        BOOST_STATIC_ASSERT((
+            boost::is_integral<typename std::iterator_traits<Iterator>::value_type>::value
+        ));
+        BOOST_STATIC_ASSERT((sizeof(boost::uint8_t) ==
+            sizeof(typename std::iterator_traits<Iterator>::value_type)
+        ));
 
         std::size_t const required_size = sizeof(T);
         if (it != end && std::distance(it, end) >= required_size)
@@ -160,7 +167,7 @@ struct point_parser
         geometry_type::enum_t type;
         if (geometry_type_parser::parse(it, end, type, order))
         {
-            if (geometry_type::point == type)
+            if (geometry_type::point == type && it != end)
             {
                 parsing_assigner<P, 0, dimension<P>::value>::run(it, end, point, order);
             }
@@ -168,23 +175,21 @@ struct point_parser
         }
         return false;
     }
+
+private:
+    BOOST_CONCEPT_ASSERT((concept::Point<P>));
 };
 
-template <typename P>
-struct linestring_parser
+template <typename C>
+struct point_container_parser
 {
-    template <typename Iterator, typename OutputIterator>
-    static bool parse(Iterator& it, Iterator end, OutputIterator out, byte_order_type::enum_t order)
+    template <typename Iterator>
+    static bool parse(Iterator& it, Iterator end, C& container, byte_order_type::enum_t order)
     {
-        geometry_type::enum_t type;
-        if (!geometry_type_parser::parse(it, end, type, order))
-        {
-            return false;
-        }
+        typedef typename point_type<C>::type point_type;
 
         boost::uint32_t num_points(0);
-        if (geometry_type::linestring != type ||
-            !value_parser<boost::uint32_t>::parse(it, end, num_points, order))
+        if (!value_parser<boost::uint32_t>::parse(it, end, num_points, order))
         {
             return false;
         }
@@ -192,46 +197,110 @@ struct linestring_parser
         typedef typename std::iterator_traits<Iterator>::difference_type size_type;
         assert(num_points <= boost::uint32_t(std::numeric_limits<size_type>::max()));
 
-        size_type const linestring_size = static_cast<size_type>(num_points);
-        size_type const point_size = dimension<P>::value * sizeof(double);
+        size_type const container_size = static_cast<size_type>(num_points);
+        size_type const point_size = dimension<point_type>::value * sizeof(double);
 
-        if (std::distance(it, end) >= (linestring_size * point_size))
+        if (std::distance(it, end) >= (container_size * point_size))
         {
-            P point_buffer;
-            for (size_type i = 0; i < linestring_size; ++i)
-            {  
-                parsing_assigner<P, 0, dimension<P>::value>::run(it, end, point_buffer, order);
-                out = point_buffer;
-                ++out;
+            point_type point_buffer;
+            std::back_insert_iterator<C> output(std::back_inserter(container));
+
+            // Read coordinates into point and append point to line (ring)
+            size_type points_parsed = 0;
+            while (points_parsed < container_size && it != end)
+            {
+                parsing_assigner<point_type, 0, dimension<point_type>::value>::run(it, end, point_buffer, order);
+                output = point_buffer;
+                ++output;
+                ++points_parsed;
             }
-            return true;
+
+            if (container_size != points_parsed)
+            {
+                return false;
+            }
         }
-        return false;
+
+        return true;
     }
 };
 
-template <typename Iterator, typename P>
-inline
-BOOST_CONCEPT_REQUIRES(((concept::Point<P>)), (bool))
-parse_point(Iterator& it, Iterator end, P& point, byte_order_type::enum_t order)
+template <typename L>
+struct linestring_parser
 {
-    return point_parser<P>::parse(it, end, point, order);
-}
+    template <typename Iterator>
+    static bool parse(Iterator& it, Iterator end, L& linestring, byte_order_type::enum_t order)
+    {
+        typedef typename point_type<L>::type point_type;
 
-template <typename P, typename Iterator, typename OutputIterator>
-inline bool parse_linestring(Iterator& it, Iterator end, OutputIterator out,
-                             byte_order_type::enum_t order)
-{
-    return linestring_parser<P>::parse(it, end, out, order);
-}
+        geometry_type::enum_t type;
+        if (!geometry_type_parser::parse(it, end, type, order))
+        {
+            return false;
+        }
 
-template <typename Iterator, typename P>
-inline bool parse_polygon(Iterator& it, Iterator end, P& polygon,
-                          byte_order_type::enum_t order)
+        if (geometry_type::linestring != type)
+        {
+            return false;
+        }
+
+        assert(it != end);
+        return point_container_parser<L>::parse(it, end, linestring, order);
+    }
+};
+
+template <typename Polygon>
+struct polygon_parser
 {
-    assert(!"to be implemented");
-    return false;
-}
+    template <typename Iterator>
+    static bool parse(Iterator& it, Iterator end, Polygon& polygon, byte_order_type::enum_t order)
+    {
+        geometry_type::enum_t type;
+        if (!geometry_type_parser::parse(it, end, type, order))
+        {
+            return false;
+        }
+
+        boost::uint32_t num_rings(0);
+        if (geometry_type::polygon != type ||
+            !value_parser<boost::uint32_t>::parse(it, end, num_rings, order))
+        {
+            return false;
+        }
+
+        typedef typename ring_type<Polygon>::type ring_type;
+
+        std::size_t rings_parsed = 0;
+        while (rings_parsed < num_rings && it != end) //while (rings_parsed < num_rings && it != end)
+        {
+            if (0 == rings_parsed)
+            {
+                ring_type& ring0 = exterior_ring(polygon);
+                if (!point_container_parser<ring_type>::parse(it, end, ring0, order))
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                interior_rings(polygon).resize(rings_parsed);
+                ring_type& ringN = interior_rings(polygon).back();
+                if (!point_container_parser<ring_type>::parse(it, end, ringN, order))
+                {
+                    return false;
+                }
+            }
+            ++rings_parsed;
+        }
+
+        if (num_rings != rings_parsed)
+        {
+            return false;
+        }
+
+        return true;
+    }
+};
 
 }}} // namespace ggl::detail::wkb
 #endif // DOXYGEN_NO_IMPL

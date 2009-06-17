@@ -635,7 +635,7 @@ void MainWindow::clipboardChanged()
 	editPasteOverwriteAction->setEnabled(false);
 
 	QClipboard *clipboard = QApplication::clipboard();
-	qDebug() << "Clipboard mime: " << clipboard->mimeData()->formats();
+	//qDebug() << "Clipboard mime: " << clipboard->mimeData()->formats();
 	QDomDocument* theXmlDoc = new QDomDocument();
 	if (!theXmlDoc->setContent(clipboard->mimeData()->data("application/x-openstreetmap+xml")))
 		if (!theXmlDoc->setContent(clipboard->text())) {

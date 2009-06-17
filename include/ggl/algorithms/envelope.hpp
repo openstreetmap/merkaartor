@@ -96,7 +96,7 @@ struct envelope_point
 
 
 /// Calculate envelope of an 2D or 3D segment
-template<typename B, typename S, typename Strategy>
+template<typename S, typename B, typename Strategy>
 struct envelope_segment
 {
     static inline void apply(S const& s, B& mbr, Strategy const&)

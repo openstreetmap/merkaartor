@@ -120,7 +120,7 @@ private:
         {
             const P* p = 0;
             ctype coord(ggl::get<I>(*p));
-            (void)sizeof(coord); // To avoid "unused variable" warnings
+            boost::ignore_unused_variable_warning(coord);
             dimension_checker<P, I+1, Count>::check();
         }
     };

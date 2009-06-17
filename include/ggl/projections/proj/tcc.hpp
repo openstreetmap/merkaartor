@@ -77,7 +77,7 @@ namespace ggl { namespace projection
 
             // Transverse Central Cylindrical
             template <typename Parameters>
-            void setup_tcc(Parameters& par, par_tcc&)
+            void setup_tcc(Parameters& par, par_tcc& proj_parm)
             {
                 par.es = 0.;
                 // par.fwd = s_forward;

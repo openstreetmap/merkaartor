@@ -12,6 +12,7 @@
 #include <cstddef>
 
 #include <boost/concept/requires.hpp>
+#include <boost/concept_check.hpp>
 #include <boost/numeric/conversion/bounds.hpp>
 #include <boost/numeric/conversion/cast.hpp>
 
@@ -105,7 +106,11 @@ struct initialize<B, C, D, D>
 {
     typedef typename coordinate_type<B>::type coordinate_type;
 
-    static inline void apply(B& /*box*/, const coordinate_type& /*value*/) {}
+    static inline void apply(B& box, const coordinate_type& value) 
+	{
+        boost::ignore_unused_variable_warning(box);
+		boost::ignore_unused_variable_warning(value);
+	}
 };
 
 template <typename Point>

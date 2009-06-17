@@ -6,15 +6,12 @@
 // Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-
 #ifndef GGL_CORE_POINT_TYPE_HPP
 #define GGL_CORE_POINT_TYPE_HPP
-
 
 #include <boost/range/functions.hpp>
 #include <boost/range/metafunctions.hpp>
 #include <boost/type_traits/remove_const.hpp>
-
 
 #include <ggl/core/ring_type.hpp>
 #include <ggl/core/tag.hpp>
@@ -37,7 +34,6 @@ template <typename G>
 struct point_type {};
 
 } // namespace traits
-
 
 #ifndef DOXYGEN_NO_DISPATCH
 namespace core_dispatch
@@ -94,8 +90,6 @@ struct point_type
         typename tag<G>::type, ncg>::type type;
 };
 
-
 } // namespace ggl
-
 
 #endif // GGL_CORE_POINT_TYPE_HPP

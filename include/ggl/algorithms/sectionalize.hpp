@@ -94,6 +94,8 @@ struct get_direction_loop<Segment, N, N>
 {
     static inline void run(Segment const& seg, int directions[N])
     {
+        boost::ignore_unused_variable_warning(seg);
+        boost::ignore_unused_variable_warning(directions);
     }
 };
 
@@ -110,7 +112,11 @@ struct copy_loop
 template <typename T, std::size_t N>
 struct copy_loop<T, N, N>
 {
-    static inline void run(const T source[N], T target[N]) {}
+    static inline void run(const T source[N], T target[N])
+	{
+        boost::ignore_unused_variable_warning(source);
+        boost::ignore_unused_variable_warning(target);
+	}
 };
 
 template <typename T, std::size_t D, std::size_t N>
@@ -129,7 +135,10 @@ struct compare_loop<T, N, N>
 {
     static inline bool equal(const T source[N], const T target[N])
     {
-        return true;
+        boost::ignore_unused_variable_warning(source);
+        boost::ignore_unused_variable_warning(target);
+
+		return true;
     }
 };
 

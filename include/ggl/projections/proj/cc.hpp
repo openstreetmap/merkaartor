@@ -80,7 +80,7 @@ namespace ggl { namespace projection
 
             // Central Cylindrical
             template <typename Parameters>
-            void setup_cc(Parameters& par, par_cc&)
+            void setup_cc(Parameters& par, par_cc& proj_parm)
             {
                 par.es = 0.;
                 // par.inv = s_inverse;

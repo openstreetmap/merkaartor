@@ -6,9 +6,9 @@
 
 #include <QProgressDialog>
 
-#include <ggl/spatial_index/rtree.hpp>
+#include <ggl/index/rtree/rtree.hpp>
 
-typedef ggl::spatial_index::rtree<CoordBox, Coord, MapFeaturePtr> MyRTree;
+typedef ggl::index::rtree::rtree<CoordBox, Coord, MapFeaturePtr> MyRTree;
 
 class QString;
 class QprogressDialog;

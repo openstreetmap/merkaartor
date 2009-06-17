@@ -12,6 +12,7 @@
 #include <boost/range/functions.hpp>
 #include <boost/range/metafunctions.hpp>
 #include <boost/type_traits/remove_const.hpp>
+#include <boost/concept_check.hpp>
 
 #include <ggl/core/access.hpp>
 #include <ggl/core/point_type.hpp>
@@ -92,6 +93,8 @@ struct point_to_poly
 
     static inline void run(P& polygon, const T& point, int ring_index, int multi_index)
     {
+        boost::ignore_unused_variable_warning(multi_index);
+
         if (ring_index == -1)
         {
             append_point<range_type, T, Std>::run(exterior_ring(polygon), point, -1, -1);

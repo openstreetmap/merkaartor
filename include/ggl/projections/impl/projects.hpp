@@ -39,6 +39,8 @@
 #include <string>
 #include <vector>
 
+#include <boost/concept_check.hpp>
+
 namespace ggl { namespace projection
 {
 
@@ -172,7 +174,10 @@ class proj_exception
 {
 public:
 
-    proj_exception(int code = 0) {(void)code;}
+    proj_exception(int code = 0) 
+	{
+        boost::ignore_unused_variable_warning(code);
+	}
 };
 
 }} // namespace ggl::projection

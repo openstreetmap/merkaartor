@@ -146,7 +146,7 @@ namespace ggl { namespace projection
             template <typename LatLong, typename Cartesian, typename Parameters>
             double setup_ob_tran(Parameters& par, par_ob_tran<LatLong, Cartesian>& proj_parm, bool create = true)
             {
-                //int i;
+                int i;
                 double phip;
 
 

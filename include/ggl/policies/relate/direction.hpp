@@ -9,6 +9,7 @@
 #ifndef GGL_GEOMETRY_POLICIES_RELATE_DIRECTION_HPP
 #define GGL_GEOMETRY_POLICIES_RELATE_DIRECTION_HPP
 
+#include <boost/concept_check.hpp>
 
 #include <ggl/util/math.hpp>
 #include <ggl/util/promotion_traits.hpp>
@@ -73,7 +74,12 @@ struct segments_direction
                     coordinate_type const& wx, coordinate_type const& wy,
                     S1 const& s1, S2 const& s2)
     {
-        if(on_segment)
+        boost::ignore_unused_variable_warning(dx2);
+        boost::ignore_unused_variable_warning(dy2);
+        boost::ignore_unused_variable_warning(wx);
+        boost::ignore_unused_variable_warning(wy);
+
+		if(on_segment)
         {
             // 0 <= ra <= 1 and 0 <= rb <= 1
             // Check the configuration

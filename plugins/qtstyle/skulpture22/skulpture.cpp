@@ -3541,7 +3541,7 @@ static inline bool is_popup_menu(const QWidget *widget)
 }
 
 
-void paintStyledFrame(QPainter *painter, const QStyleOptionFrame *option, const QWidget *widget, const QStyle */*style*/)
+void paintStyledFrame(QPainter *painter, const QStyleOptionFrame *option, const QWidget *widget, const QStyle * /*style*/)
 {
 	QPalette::ColorRole bgrole = widget ? widget->backgroundRole() : QPalette::Window;
 
@@ -6592,7 +6592,7 @@ static bool isPasswordStrengthIndicator(const QWidget *widget)
 }
 
 
-static bool isDiskSpaceIndicator(const QWidget *widget)
+static bool isDiskSpaceIndicator(const QWidget * widget)
 {
     return false && widget && widget->inherits("StatusBarSpaceInfo");
 }
@@ -6985,7 +6985,7 @@ void paintScrollArea(QPainter *painter, const QStyleOption *option)
 }
 
 
-void paintScrollAreaCorner(QPainter *painter, const QStyleOption *option, const QWidget *widget, const QStyle */*style*/)
+void paintScrollAreaCorner(QPainter *painter, const QStyleOption *option, const QWidget *widget, const QStyle * /*style*/)
 {
 	QStyleOption opt;
 	opt = *option;
@@ -10463,13 +10463,13 @@ int SkulptureStyle::skulpturePrivateMethod(SkulptureStyle::SkulpturePrivateMetho
 
 /*-----------------------------------------------------------------------*/
 
-void paintNothing(QPainter */*painter*/, const QStyleOption */*option*/)
+void paintNothing(QPainter * /*painter*/, const QStyleOption * /*option*/)
 {
 	//
 }
 
 
-void paintDefault(QPainter */*painter*/, const QStyleOption */*option*/)
+void paintDefault(QPainter * /*painter*/, const QStyleOption * /*option*/)
 {
 	//
 }

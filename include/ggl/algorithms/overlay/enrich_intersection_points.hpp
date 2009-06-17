@@ -15,6 +15,7 @@
 
 #include <boost/range/functions.hpp>
 #include <boost/range/metafunctions.hpp>
+#include <boost/concept_check.hpp>
 
 
 
@@ -444,6 +445,8 @@ static inline void assign_order(M const& map, V& intersection_points)
 template <typename V>
 inline void enrich_intersection_points(V& intersection_points, bool has_collinear)
 {
+	boost::ignore_unused_variable_warning(has_collinear);
+
     // Create a map of segment<source_index,segment_index,ring_index,multi_index>
     // to <number of IP's on this segment, index of first IP>
     // Purpose: count IP's per source/segment

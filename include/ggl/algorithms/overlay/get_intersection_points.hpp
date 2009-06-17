@@ -107,8 +107,6 @@ struct get_ips
         for (int i = 0; i < is.count; i++)
         {
             typedef typename cs_tag<point1_type>::type tag;
-            typename strategy_side<tag, point1_type>::type side;
-
 
             // Slight enhancement for distance-calculations below:
             // make this a separate policy to have less computations

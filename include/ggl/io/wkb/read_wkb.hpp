@@ -33,7 +33,7 @@ struct read_wkb<point_tag, G>
     static inline bool parse(Iterator& it, Iterator end, G& geometry,
         detail::wkb::byte_order_type::enum_t order)
     {
-        return detail::wkb::parse_point(it, end, geometry, order);
+        return detail::wkb::point_parser<G>::parse(it, end, geometry, order);
     }
 };
 
@@ -45,11 +45,7 @@ struct read_wkb<linestring_tag, G>
         detail::wkb::byte_order_type::enum_t order)
     {
         ggl::clear(geometry);
-        typedef typename boost::range_value<G>::type point_type;
-        return detail::wkb::parse_linestring
-            <
-            point_type
-            >(it, end, std::back_inserter(geometry), order);
+        return detail::wkb::linestring_parser<G>::parse(it, end, geometry, order);
     }
 };
 
@@ -60,7 +56,8 @@ struct read_wkb<polygon_tag, G>
     static inline bool parse(Iterator& it, Iterator end, G& geometry,
         detail::wkb::byte_order_type::enum_t order)
     {
-        return detail::wkb::parse_polygon(it, end, std::back_inserter(geometry), order);
+        ggl::clear(geometry);
+        return detail::wkb::polygon_parser<G>::parse(it, end, geometry, order);
     }
 };
 
@@ -68,7 +65,7 @@ struct read_wkb<polygon_tag, G>
 #endif // DOXYGEN_NO_DISPATCH
 
 
-template <typename G, typename Iterator>
+template <typename Iterator, typename G>
 inline bool read_wkb(Iterator begin, Iterator end, G& geometry)
 {
     // Stream of bytes can only be parsed using random access iterator.
@@ -92,7 +89,18 @@ inline bool read_wkb(Iterator begin, Iterator end, G& geometry)
     return false;
 }
 
-// TODO: mloskot - Add read_wkb accepting raw pointers.
+template <typename ByteType, typename G>
+inline bool read_wkb(ByteType const* bytes, std::size_t length, G& geometry)
+{
+    BOOST_STATIC_ASSERT((boost::is_integral<ByteType>::value));
+    BOOST_STATIC_ASSERT((sizeof(boost::uint8_t) == sizeof(ByteType)));
+
+    ByteType const* begin = bytes;
+    ByteType const* const end = bytes + length;
+
+    return read_wkb(begin, end, geometry);
+}
+
 
 } // namespace ggl
 

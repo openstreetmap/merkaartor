@@ -12,6 +12,7 @@
 #include <cstddef>
 
 #include <boost/type_traits/remove_const.hpp>
+#include <boost/concept_check.hpp>
 
 #include <ggl/core/coordinate_type.hpp>
 #include <ggl/core/point_type.hpp>
@@ -181,7 +182,7 @@ template <std::size_t D, typename G>
 inline typename coordinate_type<G>::type get(const G& geometry,
     impl::signature_getset_dimension* dummy = 0)
 {
-    (void)dummy;
+    boost::ignore_unused_variable_warning(dummy);
 
     typedef typename boost::remove_const<G>::type ncg_type;
 
@@ -210,9 +211,9 @@ template <std::size_t D, typename G>
 inline void set(G& geometry, const typename coordinate_type<G>::type& value,
     impl::signature_getset_dimension* dummy = 0)
 {
-    (void)dummy;
-
-    typedef typename boost::remove_const<G>::type ncg_type;
+    boost::ignore_unused_variable_warning(dummy);
+    
+	typedef typename boost::remove_const<G>::type ncg_type;
 
     typedef core_dispatch::access
         <
@@ -241,8 +242,8 @@ template <std::size_t I, std::size_t D, typename G>
 inline typename coordinate_type<G>::type get(const G& geometry,
     impl::signature_getset_index_dimension* dummy = 0)
 {
-    (void)dummy;
-
+    boost::ignore_unused_variable_warning(dummy);
+    
     typedef typename boost::remove_const<G>::type ncg_type;
     
     typedef core_dispatch::indexed_access
@@ -271,8 +272,8 @@ template <std::size_t I, std::size_t D, typename G>
 inline void set(G& geometry, const typename coordinate_type<G>::type& value,
     impl::signature_getset_index_dimension* dummy = 0)
 {
-    (void)dummy;
-
+    boost::ignore_unused_variable_warning(dummy);
+    
     typedef typename boost::remove_const<G>::type ncg_type;
 
     typedef core_dispatch::indexed_access

@@ -150,7 +150,7 @@ namespace ggl { namespace projection
 
                 inline void inv(XY_T& xy_x, XY_T& xy_y, LL_T& lp_lon, LL_T& lp_lat) const
                 {
-                    double Vx, Vy, Vz, a, b, det, k;
+                    double Vx, Vy, Vz, a, b, c, det, k;
 
                 /* Setting three components of vector from satellite to position.*/
                     Vx = -1.0;

@@ -13,6 +13,7 @@
 
 #include <boost/concept/requires.hpp>
 #include <boost/numeric/conversion/cast.hpp>
+#include <boost/concept_check.hpp>
 
 #include <ggl/core/concepts/point_concept.hpp>
 
@@ -40,7 +41,10 @@ template <typename Src, typename Dst, std::size_t N>
 struct copy_coordinates<Src, Dst, N, N>
 {
     static inline void copy(const Src& source, Dst& dest)
-    {}
+    {
+        boost::ignore_unused_variable_warning(source);
+        boost::ignore_unused_variable_warning(dest);
+	}
 };
 
 }} // namespace impl::copy

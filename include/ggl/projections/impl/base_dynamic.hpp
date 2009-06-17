@@ -11,6 +11,8 @@
 
 #include <string>
 
+#include <boost/concept_check.hpp>
+
 #include <ggl/projections/projection.hpp>
 
 namespace ggl { namespace projection {
@@ -32,9 +34,9 @@ public:
 
     base_v_f(const P& params) : m_proj(params) {}
 
-	virtual P params() const {return m_proj.params();}
+    virtual P params() const {return m_proj.params();}
     
-	virtual bool forward(const LL& ll, XY& xy) const
+    virtual bool forward(const LL& ll, XY& xy) const
     {
         return m_proj.forward(ll, xy);
     }
@@ -44,13 +46,20 @@ public:
         m_proj.fwd(lp_lon, lp_lat, xy_x, xy_y);
     }
 
-    virtual bool inverse(const XY& /*xy*/, LL& /*ll*/) const
+    virtual bool inverse(const XY& xy, LL& ll) const
     {
-        // exception?
+        boost::ignore_unused_variable_warning(xy);
+        boost::ignore_unused_variable_warning(ll);
+
+		// exception?
         return false;
     }
-    virtual void inv(XY_T& /*xy_x*/, XY_T& /*xy_y*/, LL_T& /*lp_lon*/, LL_T& /*lp_lat*/) const
+    virtual void inv(XY_T& xy_x, XY_T& xy_y, LL_T& lp_lon, LL_T& lp_lat) const
     {
+        boost::ignore_unused_variable_warning(xy_x);
+        boost::ignore_unused_variable_warning(xy_y);
+        boost::ignore_unused_variable_warning(lp_lon);
+        boost::ignore_unused_variable_warning(lp_lat);
         // exception?
     }
 

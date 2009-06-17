@@ -43,7 +43,7 @@ public:
         : m_par(params), m_prj(prj)
     {}
 
-	inline P params() const {return m_par;}
+    inline P params() const {return m_par;}
 
     inline bool forward(const LL& lp, XY& xy) const
     {
