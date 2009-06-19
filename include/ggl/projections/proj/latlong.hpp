@@ -16,7 +16,7 @@
 // PROJ4 is converted to Geometry Library by Barend Gehrels (Geodan, Amsterdam)
 
 // Original copyright notice:
-
+ 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
@@ -35,6 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/math/special_functions/hypot.hpp>
+
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>
 #include <ggl/projections/impl/projects.hpp>
@@ -45,34 +47,36 @@
 namespace ggl { namespace projection
 {
     #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace latlong{
+    namespace impl { namespace latlong{ 
 
-
+            
             /* very loosely based upon DMA code by Bradford W. Drew */
-
+            
 
             // template class, using CRTP to implement forward/inverse
-            template <typename LatLong, typename Cartesian, typename Parameters>
-            struct base_latlong_other : public base_t_fi<base_latlong_other<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>
+            template <typename Geographic, typename Cartesian, typename Parameters>
+            struct base_latlong_other : public base_t_fi<base_latlong_other<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>
             {
 
-                typedef typename base_t_fi<base_latlong_other<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::LL_T LL_T;
-                typedef typename base_t_fi<base_latlong_other<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::XY_T XY_T;
+                 typedef double geographic_type;
+                 typedef double cartesian_type;
 
 
                 inline base_latlong_other(const Parameters& par)
-                    : base_t_fi<base_latlong_other<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(*this, par) {}
+                    : base_t_fi<base_latlong_other<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>(*this, par) {}
 
-                inline void fwd(LL_T& lp_lon, LL_T& lp_lat, XY_T& xy_x, XY_T& xy_y) const
+                inline void fwd(geographic_type& lp_lon, geographic_type& lp_lat, cartesian_type& xy_x, cartesian_type& xy_y) const
                 {
-
+                
                         xy_x = lp_lon / this->m_par.a;
                         xy_y = lp_lat / this->m_par.a;
                 }
 
-                inline void inv(XY_T& xy_x, XY_T& xy_y, LL_T& lp_lon, LL_T& lp_lat) const
+                inline void inv(cartesian_type& xy_x, cartesian_type& xy_y, geographic_type& lp_lon, geographic_type& lp_lat) const
                 {
-
+                
                         lp_lat = xy_y * this->m_par.a;
                         lp_lon = xy_x * this->m_par.a;
                 }
@@ -123,22 +127,22 @@ namespace ggl { namespace projection
             }
 
         }} // namespace impl::latlong
-    #endif // doxygen
+    #endif // doxygen 
 
     /*!
         \brief Lat/long (Geodetic) projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
         \par Example
         \image html ex_lonlat.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct lonlat_other : public impl::latlong::base_latlong_other<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct lonlat_other : public impl::latlong::base_latlong_other<Geographic, Cartesian, Parameters>
     {
-        inline lonlat_other(const Parameters& par) : impl::latlong::base_latlong_other<LatLong, Cartesian, Parameters>(par)
+        inline lonlat_other(const Parameters& par) : impl::latlong::base_latlong_other<Geographic, Cartesian, Parameters>(par)
         {
             impl::latlong::setup_lonlat(this->m_par);
         }
@@ -147,17 +151,17 @@ namespace ggl { namespace projection
     /*!
         \brief Lat/long (Geodetic alias) projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
         \par Example
         \image html ex_latlon.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct latlon_other : public impl::latlong::base_latlong_other<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct latlon_other : public impl::latlong::base_latlong_other<Geographic, Cartesian, Parameters>
     {
-        inline latlon_other(const Parameters& par) : impl::latlong::base_latlong_other<LatLong, Cartesian, Parameters>(par)
+        inline latlon_other(const Parameters& par) : impl::latlong::base_latlong_other<Geographic, Cartesian, Parameters>(par)
         {
             impl::latlong::setup_latlon(this->m_par);
         }
@@ -166,17 +170,17 @@ namespace ggl { namespace projection
     /*!
         \brief Lat/long (Geodetic alias) projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
         \par Example
         \image html ex_latlong.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct latlong_other : public impl::latlong::base_latlong_other<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct latlong_other : public impl::latlong::base_latlong_other<Geographic, Cartesian, Parameters>
     {
-        inline latlong_other(const Parameters& par) : impl::latlong::base_latlong_other<LatLong, Cartesian, Parameters>(par)
+        inline latlong_other(const Parameters& par) : impl::latlong::base_latlong_other<Geographic, Cartesian, Parameters>(par)
         {
             impl::latlong::setup_latlong(this->m_par);
         }
@@ -185,17 +189,17 @@ namespace ggl { namespace projection
     /*!
         \brief Lat/long (Geodetic alias) projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
         \par Example
         \image html ex_longlat.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct longlat_other : public impl::latlong::base_latlong_other<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct longlat_other : public impl::latlong::base_latlong_other<Geographic, Cartesian, Parameters>
     {
-        inline longlat_other(const Parameters& par) : impl::latlong::base_latlong_other<LatLong, Cartesian, Parameters>(par)
+        inline longlat_other(const Parameters& par) : impl::latlong::base_latlong_other<Geographic, Cartesian, Parameters>(par)
         {
             impl::latlong::setup_longlat(this->m_par);
         }
@@ -206,56 +210,56 @@ namespace ggl { namespace projection
     {
 
         // Factory entry(s)
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class lonlat_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class lonlat_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_fi<lonlat_other<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_fi<lonlat_other<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class latlon_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class latlon_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_fi<latlon_other<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_fi<latlon_other<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class latlong_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class latlong_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_fi<latlong_other<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_fi<latlong_other<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class longlat_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class longlat_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_fi<longlat_other<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_fi<longlat_other<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        inline void latlong_init(impl::base_factory<LatLong, Cartesian, Parameters>& factory)
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        inline void latlong_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
-            factory.add_to_factory("lonlat", new lonlat_entry<LatLong, Cartesian, Parameters>);
-            factory.add_to_factory("latlon", new latlon_entry<LatLong, Cartesian, Parameters>);
-            factory.add_to_factory("latlong", new latlong_entry<LatLong, Cartesian, Parameters>);
-            factory.add_to_factory("longlat", new longlat_entry<LatLong, Cartesian, Parameters>);
+            factory.add_to_factory("lonlat", new lonlat_entry<Geographic, Cartesian, Parameters>);
+            factory.add_to_factory("latlon", new latlon_entry<Geographic, Cartesian, Parameters>);
+            factory.add_to_factory("latlong", new latlong_entry<Geographic, Cartesian, Parameters>);
+            factory.add_to_factory("longlat", new longlat_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl
+    } // namespace impl 
     // Create EPSG specializations
     // (Proof of Concept, only for some)
 

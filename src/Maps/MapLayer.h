@@ -84,7 +84,7 @@ public:
 	const MapFeature* get(int i) const;
 	MapFeature* get(const QString& id, bool exact=true);
 	void notifyIdUpdate(const QString& id, MapFeature* aFeature);
-	void sortRenderingPriority(double PixelPerM);
+	void sortRenderingPriority();
 
 	virtual void invalidate(MapDocument*, CoordBox) {}
 	void invalidateRenderPriority();

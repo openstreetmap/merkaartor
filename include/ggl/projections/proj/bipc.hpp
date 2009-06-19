@@ -16,7 +16,7 @@
 // PROJ4 is converted to Geometry Library by Barend Gehrels (Geodan, Amsterdam)
 
 // Original copyright notice:
-
+ 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
@@ -35,6 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/math/special_functions/hypot.hpp>
+
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>
 #include <ggl/projections/impl/projects.hpp>
@@ -43,7 +45,7 @@
 namespace ggl { namespace projection
 {
     #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace bipc{
+    namespace impl { namespace bipc{ 
             static const double EPS = 1e-10;
             static const double EPS10 = 1e-10;
             static const double ONEEPS = 1.000000001;
@@ -70,118 +72,120 @@ namespace ggl { namespace projection
             };
 
             // template class, using CRTP to implement forward/inverse
-            template <typename LatLong, typename Cartesian, typename Parameters>
-            struct base_bipc_spheroid : public base_t_fi<base_bipc_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>
+            template <typename Geographic, typename Cartesian, typename Parameters>
+            struct base_bipc_spheroid : public base_t_fi<base_bipc_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>
             {
 
-                typedef typename base_t_fi<base_bipc_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::LL_T LL_T;
-                typedef typename base_t_fi<base_bipc_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::XY_T XY_T;
+                 typedef double geographic_type;
+                 typedef double cartesian_type;
 
                 par_bipc m_proj_parm;
 
                 inline base_bipc_spheroid(const Parameters& par)
-                    : base_t_fi<base_bipc_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(*this, par) {}
+                    : base_t_fi<base_bipc_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>(*this, par) {}
 
-                inline void fwd(LL_T& lp_lon, LL_T& lp_lat, XY_T& xy_x, XY_T& xy_y) const
+                inline void fwd(geographic_type& lp_lon, geographic_type& lp_lat, cartesian_type& xy_x, cartesian_type& xy_y) const
                 {
-                    double cphi, sphi, tphi, t, al, Az, z, Av, cdlam, sdlam, r;
-                    int tag;
-
-                    cphi = cos(lp_lat);
-                    sphi = sin(lp_lat);
-                    cdlam = cos(sdlam = lamB - lp_lon);
-                    sdlam = sin(sdlam);
-                    if (fabs(fabs(lp_lat) - HALFPI) < EPS10) {
-                        Az = lp_lat < 0. ? PI : 0.;
-                        tphi = HUGE_VAL;
-                    } else {
-                        tphi = sphi / cphi;
-                        Az = atan2(sdlam , C45 * (tphi - cdlam));
-                    }
-                    if( (tag = (Az > Azba)) ) {
-                        cdlam = cos(sdlam = lp_lon + R110);
-                        sdlam = sin(sdlam);
-                        z = S20 * sphi + C20 * cphi * cdlam;
-                        if (fabs(z) > 1.) {
-                            if (fabs(z) > ONEEPS) throw proj_exception();
-                            else z = z < 0. ? -1. : 1.;
-                        } else
-                            z = acos(z);
-                        if (tphi != HUGE_VAL)
-                            Az = atan2(sdlam, (C20 * tphi - S20 * cdlam));
-                        Av = Azab;
-                        xy_y = rhoc;
-                    } else {
-                        z = S45 * (sphi + cphi * cdlam);
-                        if (fabs(z) > 1.) {
-                            if (fabs(z) > ONEEPS) throw proj_exception();
-                            else z = z < 0. ? -1. : 1.;
-                        } else
-                            z = acos(z);
-                        Av = Azba;
-                        xy_y = -rhoc;
-                    }
-                    if (z < 0.) throw proj_exception();;
-                    r = F * (t = pow(tan(.5 * z), n));
-                    if ((al = .5 * (R104 - z)) < 0.) throw proj_exception();;
-                    al = (t + pow(al, n)) / T;
-                    if (fabs(al) > 1.) {
-                        if (fabs(al) > ONEEPS) throw proj_exception();
-                        else al = al < 0. ? -1. : 1.;
-                    } else
-                        al = acos(al);
-                    if (fabs(t = n * (Av - Az)) < al)
-                        r /= cos(al + (tag ? t : -t));
-                    xy_x = r * sin(t);
-                    xy_y += (tag ? -r : r) * cos(t);
-                    if (this->m_proj_parm.noskew) {
-                        t = xy_x;
-                        xy_x = -xy_x * cAzc - xy_y * sAzc;
-                        xy_y = -xy_y * cAzc + t * sAzc;
-                    }
+                	double cphi, sphi, tphi, t, al, Az, z, Av, cdlam, sdlam, r;
+                	int tag;
+                
+                	cphi = cos(lp_lat);
+                	sphi = sin(lp_lat);
+                	cdlam = cos(sdlam = lamB - lp_lon);
+                	sdlam = sin(sdlam);
+                	if (fabs(fabs(lp_lat) - HALFPI) < EPS10) {
+                		Az = lp_lat < 0. ? PI : 0.;
+                		tphi = HUGE_VAL;
+                	} else {
+                		tphi = sphi / cphi;
+                		Az = atan2(sdlam , C45 * (tphi - cdlam));
+                	}
+                	if( (tag = (Az > Azba)) ) {
+                		cdlam = cos(sdlam = lp_lon + R110);
+                		sdlam = sin(sdlam);
+                		z = S20 * sphi + C20 * cphi * cdlam;
+                		if (fabs(z) > 1.) {
+                			if (fabs(z) > ONEEPS) throw proj_exception();
+                			else z = z < 0. ? -1. : 1.;
+                		} else
+                			z = acos(z);
+                		if (tphi != HUGE_VAL)
+                			Az = atan2(sdlam, (C20 * tphi - S20 * cdlam));
+                		Av = Azab;
+                		xy_y = rhoc;
+                	} else {
+                		z = S45 * (sphi + cphi * cdlam);
+                		if (fabs(z) > 1.) {
+                			if (fabs(z) > ONEEPS) throw proj_exception();
+                			else z = z < 0. ? -1. : 1.;
+                		} else
+                			z = acos(z);
+                		Av = Azba;
+                		xy_y = -rhoc;
+                	}
+                	if (z < 0.) throw proj_exception();;
+                	r = F * (t = pow(tan(.5 * z), n));
+                	if ((al = .5 * (R104 - z)) < 0.) throw proj_exception();;
+                	al = (t + pow(al, n)) / T;
+                	if (fabs(al) > 1.) {
+                		if (fabs(al) > ONEEPS) throw proj_exception();
+                		else al = al < 0. ? -1. : 1.;
+                	} else
+                		al = acos(al);
+                	if (fabs(t = n * (Av - Az)) < al)
+                		r /= cos(al + (tag ? t : -t));
+                	xy_x = r * sin(t);
+                	xy_y += (tag ? -r : r) * cos(t);
+                	if (this->m_proj_parm.noskew) {
+                		t = xy_x;
+                		xy_x = -xy_x * cAzc - xy_y * sAzc; 
+                		xy_y = -xy_y * cAzc + t * sAzc; 
+                	}
                 }
 
-                inline void inv(XY_T& xy_x, XY_T& xy_y, LL_T& lp_lon, LL_T& lp_lat) const
+                inline void inv(cartesian_type& xy_x, cartesian_type& xy_y, geographic_type& lp_lon, geographic_type& lp_lat) const
                 {
-                    double t, r, rp, rl, al, z, fAz, Az, s, c, Av;
-                    int neg, i;
-
-                    if (this->m_proj_parm.noskew) {
-                        t = xy_x;
-                        xy_x = -xy_x * cAzc + xy_y * sAzc;
-                        xy_y = -xy_y * cAzc - t * sAzc;
-                    }
-                    if( (neg = (xy_x < 0.)) ) {
-                        xy_y = rhoc - xy_y;
-                        s = S20;
-                        c = C20;
-                        Av = Azab;
-                    } else {
-                        xy_y += rhoc;
-                        s = S45;
-                        c = C45;
-                        Av = Azba;
-                    }
-                    rl = rp = r = hypot(xy_x, xy_y);
-                    fAz = fabs(Az = atan2(xy_x, xy_y));
-                    for (i = NITER; i ; --i) {
-                        z = 2. * atan(pow(r / F,1 / n));
-                        al = acos((pow(tan(.5 * z), n) +
-                           pow(tan(.5 * (R104 - z)), n)) / T);
-                        if (fAz < al)
-                            r = rp * cos(al + (neg ? Az : -Az));
-                        if (fabs(rl - r) < EPS)
-                            break;
-                        rl = r;
-                    }
-                    if (! i) throw proj_exception();;
-                    Az = Av - Az / n;
-                    lp_lat = asin(s * cos(z) + c * sin(z) * cos(Az));
-                    lp_lon = atan2(sin(Az), c / tan(z) - s * cos(Az));
-                    if (neg)
-                        lp_lon -= R110;
-                    else
-                        lp_lon = lamB - lp_lon;
+                	double t, r, rp, rl, al, z, fAz, Az, s, c, Av;
+                	int neg, i;
+                
+                	if (this->m_proj_parm.noskew) {
+                		t = xy_x;
+                		xy_x = -xy_x * cAzc + xy_y * sAzc; 
+                		xy_y = -xy_y * cAzc - t * sAzc; 
+                	}
+                	if( (neg = (xy_x < 0.)) ) {
+                		xy_y = rhoc - xy_y;
+                		s = S20;
+                		c = C20;
+                		Av = Azab;
+                	} else {
+                		xy_y += rhoc;
+                		s = S45;
+                		c = C45;
+                		Av = Azba;
+                	}
+                	rl = rp = r = boost::math::hypot(xy_x, xy_y);
+                	fAz = fabs(Az = atan2(xy_x, xy_y));
+                	for (i = NITER; i ; --i) {
+                		z = 2. * atan(pow(r / F,1 / n));
+                		al = acos((pow(tan(.5 * z), n) +
+                		   pow(tan(.5 * (R104 - z)), n)) / T);
+                		if (fAz < al)
+                			r = rp * cos(al + (neg ? Az : -Az));
+                		if (fabs(rl - r) < EPS)
+                			break;
+                		rl = r;
+                	}
+                	if (! i) throw proj_exception();;
+                	Az = Av - Az / n;
+                	lp_lat = asin(s * cos(z) + c * sin(z) * cos(Az));
+                	lp_lon = atan2(sin(Az), c / tan(z) - s * cos(Az));
+                	if (neg)
+                		lp_lon -= R110;
+                	else
+                		lp_lon = lamB - lp_lon;
                 }
             };
 
@@ -189,19 +193,19 @@ namespace ggl { namespace projection
             template <typename Parameters>
             void setup_bipc(Parameters& par, par_bipc& proj_parm)
             {
-                proj_parm.noskew = pj_param(par.params, "bns").i;
+            	proj_parm.noskew = pj_param(par.params, "bns").i;
                 // par.inv = s_inverse;
                 // par.fwd = s_forward;
-                par.es = 0.;
+            	par.es = 0.;
             }
 
         }} // namespace impl::bipc
-    #endif // doxygen
+    #endif // doxygen 
 
     /*!
         \brief Bipolar conic of western hemisphere projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -210,10 +214,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_bipc.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct bipc_spheroid : public impl::bipc::base_bipc_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct bipc_spheroid : public impl::bipc::base_bipc_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline bipc_spheroid(const Parameters& par) : impl::bipc::base_bipc_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline bipc_spheroid(const Parameters& par) : impl::bipc::base_bipc_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::bipc::setup_bipc(this->m_par, this->m_proj_parm);
         }
@@ -224,23 +228,23 @@ namespace ggl { namespace projection
     {
 
         // Factory entry(s)
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class bipc_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class bipc_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_fi<bipc_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_fi<bipc_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        inline void bipc_init(impl::base_factory<LatLong, Cartesian, Parameters>& factory)
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        inline void bipc_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
-            factory.add_to_factory("bipc", new bipc_entry<LatLong, Cartesian, Parameters>);
+            factory.add_to_factory("bipc", new bipc_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl
+    } // namespace impl 
     #endif // doxygen
 
 }} // namespace ggl::projection

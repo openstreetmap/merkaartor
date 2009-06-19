@@ -207,7 +207,7 @@ void TrackPoint::partChanged(MapFeature*, int)
 {
 }
 
-RenderPriority TrackPoint::renderPriority(double) 
+RenderPriority TrackPoint::renderPriority() 
 {
 	RenderPriority apriority(RenderPriority::IsSingular,0.); 
 	setRenderPriority(apriority);

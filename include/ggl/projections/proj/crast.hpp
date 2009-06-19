@@ -16,7 +16,7 @@
 // PROJ4 is converted to Geometry Library by Barend Gehrels (Geodan, Amsterdam)
 
 // Original copyright notice:
-
+ 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
@@ -35,6 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/math/special_functions/hypot.hpp>
+
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>
 #include <ggl/projections/impl/projects.hpp>
@@ -43,7 +45,7 @@
 namespace ggl { namespace projection
 {
     #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace crast{
+    namespace impl { namespace crast{ 
             static const double XM = 0.97720502380583984317;
             static const double RXM = 1.02332670794648848847;
             static const double YM = 3.06998012383946546542;
@@ -52,28 +54,30 @@ namespace ggl { namespace projection
 
 
             // template class, using CRTP to implement forward/inverse
-            template <typename LatLong, typename Cartesian, typename Parameters>
-            struct base_crast_spheroid : public base_t_fi<base_crast_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>
+            template <typename Geographic, typename Cartesian, typename Parameters>
+            struct base_crast_spheroid : public base_t_fi<base_crast_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>
             {
 
-                typedef typename base_t_fi<base_crast_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::LL_T LL_T;
-                typedef typename base_t_fi<base_crast_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::XY_T XY_T;
+                 typedef double geographic_type;
+                 typedef double cartesian_type;
 
 
                 inline base_crast_spheroid(const Parameters& par)
-                    : base_t_fi<base_crast_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(*this, par) {}
+                    : base_t_fi<base_crast_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>(*this, par) {}
 
-                inline void fwd(LL_T& lp_lon, LL_T& lp_lat, XY_T& xy_x, XY_T& xy_y) const
+                inline void fwd(geographic_type& lp_lon, geographic_type& lp_lat, cartesian_type& xy_x, cartesian_type& xy_y) const
                 {
-                    lp_lat *= THIRD;
-                    xy_x = XM * lp_lon * (2. * cos(lp_lat + lp_lat) - 1.);
-                    xy_y = YM * sin(lp_lat);
+                	lp_lat *= THIRD;
+                	xy_x = XM * lp_lon * (2. * cos(lp_lat + lp_lat) - 1.);
+                	xy_y = YM * sin(lp_lat);
                 }
 
-                inline void inv(XY_T& xy_x, XY_T& xy_y, LL_T& lp_lon, LL_T& lp_lat) const
+                inline void inv(cartesian_type& xy_x, cartesian_type& xy_y, geographic_type& lp_lon, geographic_type& lp_lat) const
                 {
-                    lp_lat = 3. * asin(xy_y * RYM);
-                    lp_lon = xy_x * RXM / (2. * cos((lp_lat + lp_lat) * THIRD) - 1);
+                	lp_lat = 3. * asin(xy_y * RYM);
+                	lp_lon = xy_x * RXM / (2. * cos((lp_lat + lp_lat) * THIRD) - 1);
                 }
             };
 
@@ -87,12 +91,12 @@ namespace ggl { namespace projection
             }
 
         }} // namespace impl::crast
-    #endif // doxygen
+    #endif // doxygen 
 
     /*!
         \brief Craster Parabolic (Putnins P4) projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -101,10 +105,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_crast.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct crast_spheroid : public impl::crast::base_crast_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct crast_spheroid : public impl::crast::base_crast_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline crast_spheroid(const Parameters& par) : impl::crast::base_crast_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline crast_spheroid(const Parameters& par) : impl::crast::base_crast_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::crast::setup_crast(this->m_par);
         }
@@ -115,23 +119,23 @@ namespace ggl { namespace projection
     {
 
         // Factory entry(s)
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class crast_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class crast_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_fi<crast_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_fi<crast_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        inline void crast_init(impl::base_factory<LatLong, Cartesian, Parameters>& factory)
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        inline void crast_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
-            factory.add_to_factory("crast", new crast_entry<LatLong, Cartesian, Parameters>);
+            factory.add_to_factory("crast", new crast_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl
+    } // namespace impl 
     #endif // doxygen
 
 }} // namespace ggl::projection

@@ -16,7 +16,7 @@
 // PROJ4 is converted to Geometry Library by Barend Gehrels (Geodan, Amsterdam)
 
 // Original copyright notice:
-
+ 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
@@ -35,6 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/math/special_functions/hypot.hpp>
+
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>
 #include <ggl/projections/impl/projects.hpp>
@@ -43,7 +45,7 @@
 namespace ggl { namespace projection
 {
     #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace eck4{
+    namespace impl { namespace eck4{ 
             static const double C_x = .42223820031577120149;
             static const double C_y = 1.32650042817700232218;
             static const double RC_y = .75386330736002178205;
@@ -54,49 +56,51 @@ namespace ggl { namespace projection
 
 
             // template class, using CRTP to implement forward/inverse
-            template <typename LatLong, typename Cartesian, typename Parameters>
-            struct base_eck4_spheroid : public base_t_fi<base_eck4_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>
+            template <typename Geographic, typename Cartesian, typename Parameters>
+            struct base_eck4_spheroid : public base_t_fi<base_eck4_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>
             {
 
-                typedef typename base_t_fi<base_eck4_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::LL_T LL_T;
-                typedef typename base_t_fi<base_eck4_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::XY_T XY_T;
+                 typedef double geographic_type;
+                 typedef double cartesian_type;
 
 
                 inline base_eck4_spheroid(const Parameters& par)
-                    : base_t_fi<base_eck4_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(*this, par) {}
+                    : base_t_fi<base_eck4_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>(*this, par) {}
 
-                inline void fwd(LL_T& lp_lon, LL_T& lp_lat, XY_T& xy_x, XY_T& xy_y) const
+                inline void fwd(geographic_type& lp_lon, geographic_type& lp_lat, cartesian_type& xy_x, cartesian_type& xy_y) const
                 {
-                    double p, V, s, c;
-                    int i;
-
-                    p = C_p * sin(lp_lat);
-                    V = lp_lat * lp_lat;
-                    lp_lat *= 0.895168 + V * ( 0.0218849 + V * 0.00826809 );
-                    for (i = NITER; i ; --i) {
-                        c = cos(lp_lat);
-                        s = sin(lp_lat);
-                        lp_lat -= V = (lp_lat + s * (c + 2.) - p) /
-                            (1. + c * (c + 2.) - s * s);
-                        if (fabs(V) < EPS)
-                            break;
-                    }
-                    if (!i) {
-                        xy_x = C_x * lp_lon;
-                        xy_y = lp_lat < 0. ? -C_y : C_y;
-                    } else {
-                        xy_x = C_x * lp_lon * (1. + cos(lp_lat));
-                        xy_y = C_y * sin(lp_lat);
-                    }
+                	double p, V, s, c;
+                	int i;
+                
+                	p = C_p * sin(lp_lat);
+                	V = lp_lat * lp_lat;
+                	lp_lat *= 0.895168 + V * ( 0.0218849 + V * 0.00826809 );
+                	for (i = NITER; i ; --i) {
+                		c = cos(lp_lat);
+                		s = sin(lp_lat);
+                		lp_lat -= V = (lp_lat + s * (c + 2.) - p) /
+                			(1. + c * (c + 2.) - s * s);
+                		if (fabs(V) < EPS)
+                			break;
+                	}
+                	if (!i) {
+                		xy_x = C_x * lp_lon;
+                		xy_y = lp_lat < 0. ? -C_y : C_y;
+                	} else {
+                		xy_x = C_x * lp_lon * (1. + cos(lp_lat));
+                		xy_y = C_y * sin(lp_lat);
+                	}
                 }
 
-                inline void inv(XY_T& xy_x, XY_T& xy_y, LL_T& lp_lon, LL_T& lp_lat) const
+                inline void inv(cartesian_type& xy_x, cartesian_type& xy_y, geographic_type& lp_lon, geographic_type& lp_lat) const
                 {
-                    double c;
-
-                    lp_lat = aasin(xy_y / C_y);
-                    lp_lon = xy_x / (C_x * (1. + (c = cos(lp_lat))));
-                    lp_lat = aasin((lp_lat + sin(lp_lat) * (c + 2.)) / C_p);
+                	double c;
+                
+                	lp_lat = aasin(xy_y / C_y);
+                	lp_lon = xy_x / (C_x * (1. + (c = cos(lp_lat))));
+                	lp_lat = aasin((lp_lat + sin(lp_lat) * (c + 2.)) / C_p);
                 }
             };
 
@@ -110,12 +114,12 @@ namespace ggl { namespace projection
             }
 
         }} // namespace impl::eck4
-    #endif // doxygen
+    #endif // doxygen 
 
     /*!
         \brief Eckert IV projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -124,10 +128,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_eck4.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct eck4_spheroid : public impl::eck4::base_eck4_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct eck4_spheroid : public impl::eck4::base_eck4_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline eck4_spheroid(const Parameters& par) : impl::eck4::base_eck4_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline eck4_spheroid(const Parameters& par) : impl::eck4::base_eck4_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::eck4::setup_eck4(this->m_par);
         }
@@ -138,23 +142,23 @@ namespace ggl { namespace projection
     {
 
         // Factory entry(s)
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class eck4_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class eck4_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_fi<eck4_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_fi<eck4_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        inline void eck4_init(impl::base_factory<LatLong, Cartesian, Parameters>& factory)
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        inline void eck4_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
-            factory.add_to_factory("eck4", new eck4_entry<LatLong, Cartesian, Parameters>);
+            factory.add_to_factory("eck4", new eck4_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl
+    } // namespace impl 
     #endif // doxygen
 
 }} // namespace ggl::projection

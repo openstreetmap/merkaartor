@@ -16,7 +16,7 @@
 // PROJ4 is converted to Geometry Library by Barend Gehrels (Geodan, Amsterdam)
 
 // Original copyright notice:
-
+ 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
@@ -35,6 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/math/special_functions/hypot.hpp>
+
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>
 #include <ggl/projections/impl/projects.hpp>
@@ -43,7 +45,7 @@
 namespace ggl { namespace projection
 {
     #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace putp4p{
+    namespace impl { namespace putp4p{ 
 
             struct par_putp4p
             {
@@ -51,40 +53,42 @@ namespace ggl { namespace projection
             };
 
             // template class, using CRTP to implement forward/inverse
-            template <typename LatLong, typename Cartesian, typename Parameters>
-            struct base_putp4p_spheroid : public base_t_fi<base_putp4p_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>
+            template <typename Geographic, typename Cartesian, typename Parameters>
+            struct base_putp4p_spheroid : public base_t_fi<base_putp4p_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>
             {
 
-                typedef typename base_t_fi<base_putp4p_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::LL_T LL_T;
-                typedef typename base_t_fi<base_putp4p_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::XY_T XY_T;
+                 typedef double geographic_type;
+                 typedef double cartesian_type;
 
                 par_putp4p m_proj_parm;
 
                 inline base_putp4p_spheroid(const Parameters& par)
-                    : base_t_fi<base_putp4p_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(*this, par) {}
+                    : base_t_fi<base_putp4p_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>(*this, par) {}
 
-                inline void fwd(LL_T& lp_lon, LL_T& lp_lat, XY_T& xy_x, XY_T& xy_y) const
+                inline void fwd(geographic_type& lp_lon, geographic_type& lp_lat, cartesian_type& xy_x, cartesian_type& xy_y) const
                 {
-                    lp_lat = aasin(0.883883476 * sin(lp_lat));
-                    xy_x = this->m_proj_parm.C_x * lp_lon * cos(lp_lat);
-                    xy_x /= cos(lp_lat *= 0.333333333333333);
-                    xy_y = this->m_proj_parm.C_y * sin(lp_lat);
+                	lp_lat = aasin(0.883883476 * sin(lp_lat));
+                	xy_x = this->m_proj_parm.C_x * lp_lon * cos(lp_lat);
+                	xy_x /= cos(lp_lat *= 0.333333333333333);
+                	xy_y = this->m_proj_parm.C_y * sin(lp_lat);
                 }
 
-                inline void inv(XY_T& xy_x, XY_T& xy_y, LL_T& lp_lon, LL_T& lp_lat) const
+                inline void inv(cartesian_type& xy_x, cartesian_type& xy_y, geographic_type& lp_lon, geographic_type& lp_lat) const
                 {
-                    lp_lat = aasin(xy_y / this->m_proj_parm.C_y);
-                    lp_lon = xy_x * cos(lp_lat) / this->m_proj_parm.C_x;
-                    lp_lat *= 3.;
-                    lp_lon /= cos(lp_lat);
-                    lp_lat = aasin(1.13137085 * sin(lp_lat));
+                	lp_lat = aasin(xy_y / this->m_proj_parm.C_y);
+                	lp_lon = xy_x * cos(lp_lat) / this->m_proj_parm.C_x;
+                	lp_lat *= 3.;
+                	lp_lon /= cos(lp_lat);
+                	lp_lat = aasin(1.13137085 * sin(lp_lat));
                 }
             };
 
             template <typename Parameters>
-            void setup(Parameters& par, par_putp4p& proj_parm)
+            void setup(Parameters& par, par_putp4p& proj_parm) 
             {
-                par.es = 0.;
+            	par.es = 0.;
                 // par.inv = s_inverse;
                 // par.fwd = s_forward;
             }
@@ -109,12 +113,12 @@ namespace ggl { namespace projection
             }
 
         }} // namespace impl::putp4p
-    #endif // doxygen
+    #endif // doxygen 
 
     /*!
         \brief Putnins P4' projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -123,10 +127,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_putp4p.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct putp4p_spheroid : public impl::putp4p::base_putp4p_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct putp4p_spheroid : public impl::putp4p::base_putp4p_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline putp4p_spheroid(const Parameters& par) : impl::putp4p::base_putp4p_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline putp4p_spheroid(const Parameters& par) : impl::putp4p::base_putp4p_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::putp4p::setup_putp4p(this->m_par, this->m_proj_parm);
         }
@@ -135,7 +139,7 @@ namespace ggl { namespace projection
     /*!
         \brief Werenskiold I projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -144,10 +148,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_weren.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct weren_spheroid : public impl::putp4p::base_putp4p_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct weren_spheroid : public impl::putp4p::base_putp4p_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline weren_spheroid(const Parameters& par) : impl::putp4p::base_putp4p_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline weren_spheroid(const Parameters& par) : impl::putp4p::base_putp4p_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::putp4p::setup_weren(this->m_par, this->m_proj_parm);
         }
@@ -158,34 +162,34 @@ namespace ggl { namespace projection
     {
 
         // Factory entry(s)
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class putp4p_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class putp4p_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_fi<putp4p_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_fi<putp4p_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class weren_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class weren_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_fi<weren_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_fi<weren_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        inline void putp4p_init(impl::base_factory<LatLong, Cartesian, Parameters>& factory)
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        inline void putp4p_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
-            factory.add_to_factory("putp4p", new putp4p_entry<LatLong, Cartesian, Parameters>);
-            factory.add_to_factory("weren", new weren_entry<LatLong, Cartesian, Parameters>);
+            factory.add_to_factory("putp4p", new putp4p_entry<Geographic, Cartesian, Parameters>);
+            factory.add_to_factory("weren", new weren_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl
+    } // namespace impl 
     #endif // doxygen
 
 }} // namespace ggl::projection

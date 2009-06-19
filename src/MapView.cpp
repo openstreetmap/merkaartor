@@ -182,21 +182,15 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 	QPainter P;
 	P.begin(this);
 
-	QColor theFillColor;
-	if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
-		theFillColor = M_PREFS->getBgColor();
-	else
-		theFillColor = M_STYLE->getGlobalPainter().getBackgroundColor();
-	P.fillRect(rect(), theFillColor);
-
 	if (!p->invalidRects.isEmpty())
 		buildFeatureSet();
 
 	if (!StaticMapUpToDate)
 		updateLayersImage();
 
-	if (!StaticBufferUpToDate) {
-		updateStaticBackground();
+	updateStaticBackground();
+
+    if (!StaticBufferUpToDate) {
 		updateStaticBuffer();
 	}
 
@@ -271,13 +265,13 @@ void MapView::sortRenderingPriorityInLayers()
 {
 	for (int i = 0; i < theDocument->layerSize(); ++i) {
 		theDocument->getLayer(i)->
-			sortRenderingPriority(p->PixelPerM);
+			sortRenderingPriority();
 	}
 }
 
 void MapView::sortRenderingPriority()
 {
-	qSort(theFeatures.begin(),theFeatures.end(),SortAccordingToRenderingPriority(p->PixelPerM));
+	qSort(theFeatures.begin(),theFeatures.end(),SortAccordingToRenderingPriority());
 }
 
 void MapView::updateLayersImage()
@@ -308,7 +302,7 @@ void MapView::buildFeatureSet()
 	}
 
 	CoordBox coordRegion;
-	QRectF clipRect = p->theTransform.inverted().mapRect(QRectF(rect().adjusted(-20, -20, 20, 20)));
+	QRectF clipRect = p->theTransform.inverted().mapRect(QRectF(rect().adjusted(-1000, -1000, 1000, 1000)));
 
 #if 1
 
@@ -439,7 +433,7 @@ void MapView::drawBackground(QPainter & theP, Projection& /*aProj*/)
 		theFillColor = M_PREFS->getBgColor();
 	else
 		theFillColor = M_STYLE->getGlobalPainter().getBackgroundColor();
-	theP.fillRect(theP.clipRegion().boundingRect(), theFillColor);
+	theP.fillRect(rect(), theFillColor);
 
 	if (theCoastlines.isEmpty()) {
 //		if (M_PREFS->getUseShapefileForBackground() && theDocument->getImageLayer()->isVisible() && !LAYERMANAGER_OK) {
@@ -749,7 +743,7 @@ void MapView::updateStaticBackground()
 		StaticBackground = new QPixmap(size());
 	}
 
-	QPainter P;;
+	QPainter P;
 
 	if (!p->theVectorPanDelta.isNull()) {
 		QPixmap savPix;
@@ -758,8 +752,8 @@ void MapView::updateStaticBackground()
 		P.begin(StaticBackground);
 		P.drawPixmap(p->theVectorPanDelta, savPix);
 		P.end();
-	} else {
-		StaticBackground->fill(Qt::transparent);
+	//} else {
+	//	StaticBackground->fill(Qt::transparent);
 	}
 
 	if (!p->invalidRects.isEmpty()) {

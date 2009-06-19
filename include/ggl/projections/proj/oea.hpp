@@ -16,7 +16,7 @@
 // PROJ4 is converted to Geometry Library by Barend Gehrels (Geodan, Amsterdam)
 
 // Original copyright notice:
-
+ 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
@@ -35,6 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/math/special_functions/hypot.hpp>
+
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>
 #include <ggl/projections/impl/projects.hpp>
@@ -43,7 +45,7 @@
 namespace ggl { namespace projection
 {
     #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace oea{
+    namespace impl { namespace oea{ 
 
             struct par_oea
             {
@@ -54,48 +56,50 @@ namespace ggl { namespace projection
             };
 
             // template class, using CRTP to implement forward/inverse
-            template <typename LatLong, typename Cartesian, typename Parameters>
-            struct base_oea_spheroid : public base_t_fi<base_oea_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>
+            template <typename Geographic, typename Cartesian, typename Parameters>
+            struct base_oea_spheroid : public base_t_fi<base_oea_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>
             {
 
-                typedef typename base_t_fi<base_oea_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::LL_T LL_T;
-                typedef typename base_t_fi<base_oea_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::XY_T XY_T;
+                 typedef double geographic_type;
+                 typedef double cartesian_type;
 
                 par_oea m_proj_parm;
 
                 inline base_oea_spheroid(const Parameters& par)
-                    : base_t_fi<base_oea_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(*this, par) {}
+                    : base_t_fi<base_oea_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>(*this, par) {}
 
-                inline void fwd(LL_T& lp_lon, LL_T& lp_lat, XY_T& xy_x, XY_T& xy_y) const
+                inline void fwd(geographic_type& lp_lon, geographic_type& lp_lat, cartesian_type& xy_x, cartesian_type& xy_y) const
                 {
-                    double Az, M, N, cp, sp, cl, shz;
-
-                    cp = cos(lp_lat);
-                    sp = sin(lp_lat);
-                    cl = cos(lp_lon);
-                    Az = aatan2(cp * sin(lp_lon), this->m_proj_parm.cp0 * sp - this->m_proj_parm.sp0 * cp * cl) + this->m_proj_parm.theta;
-                    shz = sin(0.5 * aacos(this->m_proj_parm.sp0 * sp + this->m_proj_parm.cp0 * cp * cl));
-                    M = aasin(shz * sin(Az));
-                    N = aasin(shz * cos(Az) * cos(M) / cos(M * this->m_proj_parm.two_r_m));
-                    xy_y = this->m_proj_parm.n * sin(N * this->m_proj_parm.two_r_n);
-                    xy_x = this->m_proj_parm.m * sin(M * this->m_proj_parm.two_r_m) * cos(N) / cos(N * this->m_proj_parm.two_r_n);
+                	double Az, M, N, cp, sp, cl, shz;
+                
+                	cp = cos(lp_lat);
+                	sp = sin(lp_lat);
+                	cl = cos(lp_lon);
+                	Az = aatan2(cp * sin(lp_lon), this->m_proj_parm.cp0 * sp - this->m_proj_parm.sp0 * cp * cl) + this->m_proj_parm.theta;
+                	shz = sin(0.5 * aacos(this->m_proj_parm.sp0 * sp + this->m_proj_parm.cp0 * cp * cl));
+                	M = aasin(shz * sin(Az));
+                	N = aasin(shz * cos(Az) * cos(M) / cos(M * this->m_proj_parm.two_r_m));
+                	xy_y = this->m_proj_parm.n * sin(N * this->m_proj_parm.two_r_n);
+                	xy_x = this->m_proj_parm.m * sin(M * this->m_proj_parm.two_r_m) * cos(N) / cos(N * this->m_proj_parm.two_r_n);
                 }
 
-                inline void inv(XY_T& xy_x, XY_T& xy_y, LL_T& lp_lon, LL_T& lp_lat) const
+                inline void inv(cartesian_type& xy_x, cartesian_type& xy_y, geographic_type& lp_lon, geographic_type& lp_lat) const
                 {
-                    double N, M, xp, yp, z, Az, cz, sz, cAz;
-
-                    N = this->m_proj_parm.hn * aasin(xy_y * this->m_proj_parm.rn);
-                    M = this->m_proj_parm.hm * aasin(xy_x * this->m_proj_parm.rm * cos(N * this->m_proj_parm.two_r_n) / cos(N));
-                    xp = 2. * sin(M);
-                    yp = 2. * sin(N) * cos(M * this->m_proj_parm.two_r_m) / cos(M);
-                    cAz = cos(Az = aatan2(xp, yp) - this->m_proj_parm.theta);
-                    z = 2. * aasin(0.5 * hypot(xp, yp));
-                    sz = sin(z);
-                    cz = cos(z);
-                    lp_lat = aasin(this->m_proj_parm.sp0 * cz + this->m_proj_parm.cp0 * sz * cAz);
-                    lp_lon = aatan2(sz * sin(Az),
-                        this->m_proj_parm.cp0 * cz - this->m_proj_parm.sp0 * sz * cAz);
+                	double N, M, xp, yp, z, Az, cz, sz, cAz;
+                
+                	N = this->m_proj_parm.hn * aasin(xy_y * this->m_proj_parm.rn);
+                	M = this->m_proj_parm.hm * aasin(xy_x * this->m_proj_parm.rm * cos(N * this->m_proj_parm.two_r_n) / cos(N));
+                	xp = 2. * sin(M);
+                	yp = 2. * sin(N) * cos(M * this->m_proj_parm.two_r_m) / cos(M);
+                	cAz = cos(Az = aatan2(xp, yp) - this->m_proj_parm.theta);
+                	z = 2. * aasin(0.5 * boost::math::hypot(xp, yp));
+                	sz = sin(z);
+                	cz = cos(z);
+                	lp_lat = aasin(this->m_proj_parm.sp0 * cz + this->m_proj_parm.cp0 * sz * cAz);
+                	lp_lon = aatan2(sz * sin(Az),
+                		this->m_proj_parm.cp0 * cz - this->m_proj_parm.sp0 * sz * cAz);
                 }
             };
 
@@ -103,32 +107,32 @@ namespace ggl { namespace projection
             template <typename Parameters>
             void setup_oea(Parameters& par, par_oea& proj_parm)
             {
-                if (((proj_parm.n = pj_param(par.params, "dn").f) <= 0.) ||
-                    ((proj_parm.m = pj_param(par.params, "dm").f) <= 0.))
-                    throw proj_exception(-39);
-                else {
-                    proj_parm.theta = pj_param(par.params, "rtheta").f;
-                    proj_parm.sp0 = sin(par.phi0);
-                    proj_parm.cp0 = cos(par.phi0);
-                    proj_parm.rn = 1./ proj_parm.n;
-                    proj_parm.rm = 1./ proj_parm.m;
-                    proj_parm.two_r_n = 2. * proj_parm.rn;
-                    proj_parm.two_r_m = 2. * proj_parm.rm;
-                    proj_parm.hm = 0.5 * proj_parm.m;
-                    proj_parm.hn = 0.5 * proj_parm.n;
+            	if (((proj_parm.n = pj_param(par.params, "dn").f) <= 0.) ||
+            		((proj_parm.m = pj_param(par.params, "dm").f) <= 0.))
+            		throw proj_exception(-39);
+            	else {
+            		proj_parm.theta = pj_param(par.params, "rtheta").f;
+            		proj_parm.sp0 = sin(par.phi0);
+            		proj_parm.cp0 = cos(par.phi0);
+            		proj_parm.rn = 1./ proj_parm.n;
+            		proj_parm.rm = 1./ proj_parm.m;
+            		proj_parm.two_r_n = 2. * proj_parm.rn;
+            		proj_parm.two_r_m = 2. * proj_parm.rm;
+            		proj_parm.hm = 0.5 * proj_parm.m;
+            		proj_parm.hn = 0.5 * proj_parm.n;
                 // par.fwd = s_forward;
                 // par.inv = s_inverse;
-                    par.es = 0.;
-                }
+            		par.es = 0.;
+            	}
             }
 
         }} // namespace impl::oea
-    #endif // doxygen
+    #endif // doxygen 
 
     /*!
         \brief Oblated Equal Area projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -138,10 +142,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_oea.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct oea_spheroid : public impl::oea::base_oea_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct oea_spheroid : public impl::oea::base_oea_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline oea_spheroid(const Parameters& par) : impl::oea::base_oea_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline oea_spheroid(const Parameters& par) : impl::oea::base_oea_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::oea::setup_oea(this->m_par, this->m_proj_parm);
         }
@@ -152,23 +156,23 @@ namespace ggl { namespace projection
     {
 
         // Factory entry(s)
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class oea_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class oea_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_fi<oea_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_fi<oea_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        inline void oea_init(impl::base_factory<LatLong, Cartesian, Parameters>& factory)
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        inline void oea_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
-            factory.add_to_factory("oea", new oea_entry<LatLong, Cartesian, Parameters>);
+            factory.add_to_factory("oea", new oea_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl
+    } // namespace impl 
     #endif // doxygen
 
 }} // namespace ggl::projection

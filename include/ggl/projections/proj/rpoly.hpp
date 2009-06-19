@@ -16,7 +16,7 @@
 // PROJ4 is converted to Geometry Library by Barend Gehrels (Geodan, Amsterdam)
 
 // Original copyright notice:
-
+ 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
@@ -35,6 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/math/special_functions/hypot.hpp>
+
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>
 #include <ggl/projections/impl/projects.hpp>
@@ -43,7 +45,7 @@
 namespace ggl { namespace projection
 {
     #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace rpoly{
+    namespace impl { namespace rpoly{ 
             static const double EPS = 1e-9;
 
             struct par_rpoly
@@ -55,34 +57,36 @@ namespace ggl { namespace projection
             };
 
             // template class, using CRTP to implement forward/inverse
-            template <typename LatLong, typename Cartesian, typename Parameters>
-            struct base_rpoly_spheroid : public base_t_f<base_rpoly_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>
+            template <typename Geographic, typename Cartesian, typename Parameters>
+            struct base_rpoly_spheroid : public base_t_f<base_rpoly_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>
             {
 
-                typedef typename base_t_f<base_rpoly_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::LL_T LL_T;
-                typedef typename base_t_f<base_rpoly_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::XY_T XY_T;
+                 typedef double geographic_type;
+                 typedef double cartesian_type;
 
                 par_rpoly m_proj_parm;
 
                 inline base_rpoly_spheroid(const Parameters& par)
-                    : base_t_f<base_rpoly_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(*this, par) {}
+                    : base_t_f<base_rpoly_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>(*this, par) {}
 
-                inline void fwd(LL_T& lp_lon, LL_T& lp_lat, XY_T& xy_x, XY_T& xy_y) const
+                inline void fwd(geographic_type& lp_lon, geographic_type& lp_lat, cartesian_type& xy_x, cartesian_type& xy_y) const
                 {
-                    double fa;
-
-                    if (this->m_proj_parm.mode)
-                        fa = tan(lp_lon * this->m_proj_parm.fxb) * this->m_proj_parm.fxa;
-                    else
-                        fa = 0.5 * lp_lon;
-                    if (fabs(lp_lat) < EPS) {
-                        xy_x = fa + fa;
-                        xy_y = - this->m_par.phi0;
-                    } else {
-                        xy_y = 1. / tan(lp_lat);
-                        xy_x = sin(fa = 2. * atan(fa * sin(lp_lat))) * xy_y;
-                        xy_y = lp_lat - this->m_par.phi0 + (1. - cos(fa)) * xy_y;
-                    }
+                	double fa;
+                
+                	if (this->m_proj_parm.mode)
+                		fa = tan(lp_lon * this->m_proj_parm.fxb) * this->m_proj_parm.fxa;
+                	else
+                		fa = 0.5 * lp_lon;
+                	if (fabs(lp_lat) < EPS) {
+                		xy_x = fa + fa;
+                		xy_y = - this->m_par.phi0;
+                	} else {
+                		xy_y = 1. / tan(lp_lat);
+                		xy_x = sin(fa = 2. * atan(fa * sin(lp_lat))) * xy_y;
+                		xy_y = lp_lat - this->m_par.phi0 + (1. - cos(fa)) * xy_y;
+                	}
                 }
             };
 
@@ -90,21 +94,21 @@ namespace ggl { namespace projection
             template <typename Parameters>
             void setup_rpoly(Parameters& par, par_rpoly& proj_parm)
             {
-                if ((proj_parm.mode = (proj_parm.phi1 = fabs(pj_param(par.params, "rlat_ts").f)) > EPS)) {
-                    proj_parm.fxb = 0.5 * sin(proj_parm.phi1);
-                    proj_parm.fxa = 0.5 / proj_parm.fxb;
-                }
-                par.es = 0.;
+            	if ((proj_parm.mode = (proj_parm.phi1 = fabs(pj_param(par.params, "rlat_ts").f)) > EPS)) {
+            		proj_parm.fxb = 0.5 * sin(proj_parm.phi1);
+            		proj_parm.fxa = 0.5 / proj_parm.fxb;
+            	}
+            	par.es = 0.;
                 // par.fwd = s_forward;
             }
 
         }} // namespace impl::rpoly
-    #endif // doxygen
+    #endif // doxygen 
 
     /*!
         \brief Rectangular Polyconic projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -115,10 +119,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_rpoly.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct rpoly_spheroid : public impl::rpoly::base_rpoly_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct rpoly_spheroid : public impl::rpoly::base_rpoly_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline rpoly_spheroid(const Parameters& par) : impl::rpoly::base_rpoly_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline rpoly_spheroid(const Parameters& par) : impl::rpoly::base_rpoly_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::rpoly::setup_rpoly(this->m_par, this->m_proj_parm);
         }
@@ -129,23 +133,23 @@ namespace ggl { namespace projection
     {
 
         // Factory entry(s)
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class rpoly_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class rpoly_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_f<rpoly_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_f<rpoly_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        inline void rpoly_init(impl::base_factory<LatLong, Cartesian, Parameters>& factory)
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        inline void rpoly_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
-            factory.add_to_factory("rpoly", new rpoly_entry<LatLong, Cartesian, Parameters>);
+            factory.add_to_factory("rpoly", new rpoly_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl
+    } // namespace impl 
     #endif // doxygen
 
 }} // namespace ggl::projection

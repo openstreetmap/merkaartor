@@ -35,6 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/math/special_functions/hypot.hpp>
+
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>
 #include <ggl/projections/impl/projects.hpp>
@@ -122,7 +124,7 @@ namespace ggl { namespace projection
                 {
                     double rho;
                 
-                    rho = hypot(xy_x, xy_y = this->m_proj_parm.rho_0 - xy_y);
+                    rho = boost::math::hypot(xy_x, xy_y = this->m_proj_parm.rho_0 - xy_y);
                     if (this->m_proj_parm.n < 0.) {
                         rho = - rho;
                         xy_x = - xy_x;

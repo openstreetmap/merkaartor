@@ -16,7 +16,7 @@
 // PROJ4 is converted to Geometry Library by Barend Gehrels (Geodan, Amsterdam)
 
 // Original copyright notice:
-
+ 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
@@ -35,6 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/math/special_functions/hypot.hpp>
+
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>
 #include <ggl/projections/impl/projects.hpp>
@@ -43,7 +45,7 @@
 namespace ggl { namespace projection
 {
     #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace vandg2{
+    namespace impl { namespace vandg2{ 
             static const double TOL = 1e-10;
             static const double TWORPI = 0.63661977236758134308;
 
@@ -53,45 +55,47 @@ namespace ggl { namespace projection
             };
 
             // template class, using CRTP to implement forward/inverse
-            template <typename LatLong, typename Cartesian, typename Parameters>
-            struct base_vandg2_spheroid : public base_t_f<base_vandg2_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>
+            template <typename Geographic, typename Cartesian, typename Parameters>
+            struct base_vandg2_spheroid : public base_t_f<base_vandg2_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>
             {
 
-                typedef typename base_t_f<base_vandg2_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::LL_T LL_T;
-                typedef typename base_t_f<base_vandg2_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::XY_T XY_T;
+                 typedef double geographic_type;
+                 typedef double cartesian_type;
 
                 par_vandg2 m_proj_parm;
 
                 inline base_vandg2_spheroid(const Parameters& par)
-                    : base_t_f<base_vandg2_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(*this, par) {}
+                    : base_t_f<base_vandg2_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>(*this, par) {}
 
-                inline void fwd(LL_T& lp_lon, LL_T& lp_lat, XY_T& xy_x, XY_T& xy_y) const
+                inline void fwd(geographic_type& lp_lon, geographic_type& lp_lat, cartesian_type& xy_x, cartesian_type& xy_y) const
                 {
-                    double x1, at, bt, ct;
-
-                    bt = fabs(TWORPI * lp_lat);
-                    if ((ct = 1. - bt * bt) < 0.)
-                        ct = 0.;
-                    else
-                        ct = sqrt(ct);
-                    if (fabs(lp_lon) < TOL) {
-                        xy_x = 0.;
-                        xy_y = PI * (lp_lat < 0. ? -bt : bt) / (1. + ct);
-                    } else {
-                        at = 0.5 * fabs(PI / lp_lon - lp_lon / PI);
-                        if (this->m_proj_parm.vdg3) {
-                            x1 = bt / (1. + ct);
-                            xy_x = PI * (sqrt(at * at + 1. - x1 * x1) - at);
-                            xy_y = PI * x1;
-                        } else {
-                            x1 = (ct * sqrt(1. + at * at) - at * ct * ct) /
-                                (1. + at * at * bt * bt);
-                            xy_x = PI * x1;
-                            xy_y = PI * sqrt(1. - x1 * (x1 + 2. * at) + TOL);
-                        }
-                        if ( lp_lon < 0.) xy_x = -xy_x;
-                        if ( lp_lat < 0.) xy_y = -xy_y;
-                    }
+                	double x1, at, bt, ct;
+                
+                	bt = fabs(TWORPI * lp_lat);
+                	if ((ct = 1. - bt * bt) < 0.)
+                		ct = 0.;
+                	else
+                		ct = sqrt(ct);
+                	if (fabs(lp_lon) < TOL) {
+                		xy_x = 0.;
+                		xy_y = PI * (lp_lat < 0. ? -bt : bt) / (1. + ct);
+                	} else {
+                		at = 0.5 * fabs(PI / lp_lon - lp_lon / PI);
+                		if (this->m_proj_parm.vdg3) {
+                			x1 = bt / (1. + ct);
+                			xy_x = PI * (sqrt(at * at + 1. - x1 * x1) - at);
+                			xy_y = PI * x1;
+                		} else {
+                			x1 = (ct * sqrt(1. + at * at) - at * ct * ct) /
+                				(1. + at * at * bt * bt);
+                			xy_x = PI * x1;
+                			xy_y = PI * sqrt(1. - x1 * (x1 + 2. * at) + TOL);
+                		}
+                		if ( lp_lon < 0.) xy_x = -xy_x;
+                		if ( lp_lat < 0.) xy_y = -xy_y;
+                	}
                 }
             };
 
@@ -99,7 +103,7 @@ namespace ggl { namespace projection
             template <typename Parameters>
             void setup_vandg2(Parameters& par, par_vandg2& proj_parm)
             {
-                proj_parm.vdg3 = 0;
+            	proj_parm.vdg3 = 0;
                 // par.inv = 0;
                 // par.fwd = s_forward;
             }
@@ -108,18 +112,18 @@ namespace ggl { namespace projection
             template <typename Parameters>
             void setup_vandg3(Parameters& par, par_vandg2& proj_parm)
             {
-                proj_parm.vdg3 = 1;
-                par.es = 0.;
+            	proj_parm.vdg3 = 1;
+            	par.es = 0.;
                 // par.fwd = s_forward;
             }
 
         }} // namespace impl::vandg2
-    #endif // doxygen
+    #endif // doxygen 
 
     /*!
         \brief van der Grinten II projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -129,10 +133,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_vandg2.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct vandg2_spheroid : public impl::vandg2::base_vandg2_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct vandg2_spheroid : public impl::vandg2::base_vandg2_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline vandg2_spheroid(const Parameters& par) : impl::vandg2::base_vandg2_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline vandg2_spheroid(const Parameters& par) : impl::vandg2::base_vandg2_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::vandg2::setup_vandg2(this->m_par, this->m_proj_parm);
         }
@@ -141,7 +145,7 @@ namespace ggl { namespace projection
     /*!
         \brief van der Grinten III projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -151,10 +155,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_vandg3.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct vandg3_spheroid : public impl::vandg2::base_vandg2_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct vandg3_spheroid : public impl::vandg2::base_vandg2_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline vandg3_spheroid(const Parameters& par) : impl::vandg2::base_vandg2_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline vandg3_spheroid(const Parameters& par) : impl::vandg2::base_vandg2_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::vandg2::setup_vandg3(this->m_par, this->m_proj_parm);
         }
@@ -165,34 +169,34 @@ namespace ggl { namespace projection
     {
 
         // Factory entry(s)
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class vandg2_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class vandg2_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_f<vandg2_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_f<vandg2_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class vandg3_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class vandg3_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_f<vandg3_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_f<vandg3_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        inline void vandg2_init(impl::base_factory<LatLong, Cartesian, Parameters>& factory)
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        inline void vandg2_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
-            factory.add_to_factory("vandg2", new vandg2_entry<LatLong, Cartesian, Parameters>);
-            factory.add_to_factory("vandg3", new vandg3_entry<LatLong, Cartesian, Parameters>);
+            factory.add_to_factory("vandg2", new vandg2_entry<Geographic, Cartesian, Parameters>);
+            factory.add_to_factory("vandg3", new vandg3_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl
+    } // namespace impl 
     #endif // doxygen
 
 }} // namespace ggl::projection

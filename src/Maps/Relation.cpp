@@ -38,7 +38,8 @@ class RelationPrivate
 	public:
 		RelationPrivate(Relation* R) 
 			: theRelation(R), theModel(0), ModelReferences(0),
-				BBox(Coord(0,0),Coord(0,0)), BBoxUpToDate(false)
+				BBox(Coord(0,0),Coord(0,0)), BBoxUpToDate(false),
+                MetaUpToDate(false)
 		{
 		}
 		~RelationPrivate()
@@ -53,6 +54,21 @@ class RelationPrivate
 		QPainterPath theBoundingPath;
 		CoordBox BBox;
 		bool BBoxUpToDate;
+
+   		bool MetaUpToDate;
+        RenderPriority theRenderPriority;
+
+        void updateMeta()
+        {
+	        theRenderPriority = RenderPriority(RenderPriority::IsSingular, 0.);
+	        for (int i=0; i<Members.size(); ++i) {
+		        if (Members.at(i).second->renderPriority() < theRenderPriority)
+			        theRenderPriority = Members.at(i).second->getRenderPriority();
+	        }
+
+       		MetaUpToDate = true;
+        }
+
 };
 
 Relation::Relation()
@@ -95,6 +111,7 @@ void Relation::partChanged(MapFeature*, int ChangeId)
 	if (layer())
 		layer()->getRTree()->remove(p->BBox, this);
 	p->BBoxUpToDate = false;
+	p->MetaUpToDate = false;
 	if (layer()) {
 		CoordBox bb = boundingBox();
 		layer()->getRTree()->insert(bb, this);
@@ -107,19 +124,10 @@ QString Relation::description() const
 	return QString(QApplication::translate("MapFeature", "relationship %1")).arg(id());
 }
 
-RenderPriority Relation::renderPriority(double aPixelPerM)
+RenderPriority Relation::renderPriority()
 {
-	//FIXME Not good! If a relation is larger than an area, the area is painted first anyway
-	//setRenderPriority(RenderPriority(RenderPriority::IsArea,0));
-	//return getRenderPriority();
-
-	RenderPriority aPriority(RenderPriority::IsSingular, 0.);
-	for (int i=0; i<p->Members.size(); ++i) {
-		if (p->Members.at(i).second->renderPriority(aPixelPerM) < aPriority)
-			aPriority = p->Members.at(i).second->getRenderPriority();
-	}
-	setRenderPriority(aPriority);
-	return aPriority;
+    setRenderPriority(p->theRenderPriority);
+	return p->theRenderPriority;
 }
 
 CoordBox Relation::boundingBox() const
@@ -269,7 +277,7 @@ bool Relation::notEverythingDownloaded() const
 	for (int i=0; i<p->Members.size(); ++i)
 		if (p->Members.at(i).second)
 			if (p->Members.at(i).second->notEverythingDownloaded())
-			return true;
+			    return true;
 	return false;
 }
 
@@ -279,6 +287,7 @@ void Relation::add(const QString& Role, MapFeature* F)
 	p->Members.push_back(qMakePair(Role,F));
 	F->setParentFeature(this);
 	p->BBoxUpToDate = false;
+	p->MetaUpToDate = false;
 }
 
 void Relation::add(const QString& Role, MapFeature* F, int Idx)
@@ -287,6 +296,7 @@ void Relation::add(const QString& Role, MapFeature* F, int Idx)
 	std::rotate(p->Members.begin()+Idx,p->Members.end()-1,p->Members.end());
 	F->setParentFeature(this);
 	p->BBoxUpToDate = false;
+	p->MetaUpToDate = false;
 }
 
 void Relation::remove(int Idx)
@@ -297,6 +307,7 @@ void Relation::remove(int Idx)
 	}
 	p->Members.erase(p->Members.begin()+Idx);
 	p->BBoxUpToDate = false;
+	p->MetaUpToDate = false;
 }
 
 void Relation::remove(MapFeature* F)
@@ -305,6 +316,7 @@ void Relation::remove(MapFeature* F)
 		if (F == p->Members[i-1].second)
 			remove(i-1);
 	p->BBoxUpToDate = false;
+	p->MetaUpToDate = false;
 }
 
 int Relation::size() const

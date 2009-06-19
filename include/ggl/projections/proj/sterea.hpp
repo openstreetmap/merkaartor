@@ -16,7 +16,7 @@
 // PROJ4 is converted to Geometry Library by Barend Gehrels (Geodan, Amsterdam)
 
 // Original copyright notice:
-
+ 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
@@ -35,6 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/math/special_functions/hypot.hpp>
+
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>
 #include <ggl/projections/impl/projects.hpp>
@@ -46,7 +48,7 @@
 namespace ggl { namespace projection
 {
     #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace sterea{
+    namespace impl { namespace sterea{ 
             static const double DEL_TOL = 1.e-14;
             static const int MAX_ITER = 10;
 
@@ -57,54 +59,56 @@ namespace ggl { namespace projection
                 double R2;
                 gauss::GAUSS en;
             };
-
-
-
+            
+            
+            
 
             // template class, using CRTP to implement forward/inverse
-            template <typename LatLong, typename Cartesian, typename Parameters>
-            struct base_sterea_ellipsoid : public base_t_fi<base_sterea_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>
+            template <typename Geographic, typename Cartesian, typename Parameters>
+            struct base_sterea_ellipsoid : public base_t_fi<base_sterea_ellipsoid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>
             {
 
-                typedef typename base_t_fi<base_sterea_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::LL_T LL_T;
-                typedef typename base_t_fi<base_sterea_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::XY_T XY_T;
+                 typedef double geographic_type;
+                 typedef double cartesian_type;
 
                 par_sterea m_proj_parm;
 
                 inline base_sterea_ellipsoid(const Parameters& par)
-                    : base_t_fi<base_sterea_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(*this, par) {}
+                    : base_t_fi<base_sterea_ellipsoid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>(*this, par) {}
 
-                inline void fwd(LL_T& lp_lon, LL_T& lp_lat, XY_T& xy_x, XY_T& xy_y) const
+                inline void fwd(geographic_type& lp_lon, geographic_type& lp_lat, cartesian_type& xy_x, cartesian_type& xy_y) const
                 {
-                    double cosc, sinc, cosl, k;
-
-                    impl::gauss::gauss(m_proj_parm.en, lp_lon, lp_lat);
-                    sinc = sin(lp_lat);
-                    cosc = cos(lp_lat);
-                    cosl = cos(lp_lon);
-                    k = this->m_par.k0 * this->m_proj_parm.R2 / (1. + this->m_proj_parm.sinc0 * sinc + this->m_proj_parm.cosc0 * cosc * cosl);
-                    xy_x = k * cosc * sin(lp_lon);
-                    xy_y = k * (this->m_proj_parm.cosc0 * sinc - this->m_proj_parm.sinc0 * cosc * cosl);
+                	double cosc, sinc, cosl, k;
+                
+                	impl::gauss::gauss(m_proj_parm.en, lp_lon, lp_lat);
+                	sinc = sin(lp_lat);
+                	cosc = cos(lp_lat);
+                	cosl = cos(lp_lon);
+                	k = this->m_par.k0 * this->m_proj_parm.R2 / (1. + this->m_proj_parm.sinc0 * sinc + this->m_proj_parm.cosc0 * cosc * cosl);
+                	xy_x = k * cosc * sin(lp_lon);
+                	xy_y = k * (this->m_proj_parm.cosc0 * sinc - this->m_proj_parm.sinc0 * cosc * cosl);
                 }
 
-                inline void inv(XY_T& xy_x, XY_T& xy_y, LL_T& lp_lon, LL_T& lp_lat) const
+                inline void inv(cartesian_type& xy_x, cartesian_type& xy_y, geographic_type& lp_lon, geographic_type& lp_lat) const
                 {
-                    double rho, c, sinc, cosc;
-
-                    xy_x /= this->m_par.k0;
-                    xy_y /= this->m_par.k0;
-                    if((rho = hypot(xy_x, xy_y))) {
-                        c = 2. * atan2(rho, this->m_proj_parm.R2);
-                        sinc = sin(c);
-                        cosc = cos(c);
-                        lp_lat = asin(cosc * this->m_proj_parm.sinc0 + xy_y * sinc * this->m_proj_parm.cosc0 / rho);
-                        lp_lon = atan2(xy_x * sinc, rho * this->m_proj_parm.cosc0 * cosc -
-                            xy_y * this->m_proj_parm.sinc0 * sinc);
-                    } else {
-                        lp_lat = this->m_proj_parm.phic0;
-                        lp_lon = 0.;
-                    }
-                    impl::gauss::inv_gauss(m_proj_parm.en, lp_lon, lp_lat);
+                	double rho, c, sinc, cosc;
+                
+                	xy_x /= this->m_par.k0;
+                	xy_y /= this->m_par.k0;
+                	if((rho = boost::math::hypot(xy_x, xy_y))) {
+                		c = 2. * atan2(rho, this->m_proj_parm.R2);
+                		sinc = sin(c);
+                		cosc = cos(c);
+                		lp_lat = asin(cosc * this->m_proj_parm.sinc0 + xy_y * sinc * this->m_proj_parm.cosc0 / rho);
+                		lp_lon = atan2(xy_x * sinc, rho * this->m_proj_parm.cosc0 * cosc -
+                			xy_y * this->m_proj_parm.sinc0 * sinc);
+                	} else {
+                		lp_lat = this->m_proj_parm.phic0;
+                		lp_lon = 0.;
+                	}
+                	impl::gauss::inv_gauss(m_proj_parm.en, lp_lon, lp_lat);
                 }
             };
 
@@ -112,22 +116,22 @@ namespace ggl { namespace projection
             template <typename Parameters>
             void setup_sterea(Parameters& par, par_sterea& proj_parm)
             {
-                double R;
-                proj_parm.en = impl::gauss::gauss_ini(par.e, par.phi0, proj_parm.phic0, R);
-                proj_parm.sinc0 = sin(proj_parm.phic0);
-                proj_parm.cosc0 = cos(proj_parm.phic0);
-                proj_parm.R2 = 2. * R;
+            	double R;
+            	proj_parm.en = impl::gauss::gauss_ini(par.e, par.phi0, proj_parm.phic0, R);
+            	proj_parm.sinc0 = sin(proj_parm.phic0);
+            	proj_parm.cosc0 = cos(proj_parm.phic0);
+            	proj_parm.R2 = 2. * R;
                 // par.inv = e_inverse;
                 // par.fwd = e_forward;
             }
 
         }} // namespace impl::sterea
-    #endif // doxygen
+    #endif // doxygen 
 
     /*!
         \brief Oblique Stereographic Alternative projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -137,10 +141,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_sterea.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct sterea_ellipsoid : public impl::sterea::base_sterea_ellipsoid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct sterea_ellipsoid : public impl::sterea::base_sterea_ellipsoid<Geographic, Cartesian, Parameters>
     {
-        inline sterea_ellipsoid(const Parameters& par) : impl::sterea::base_sterea_ellipsoid<LatLong, Cartesian, Parameters>(par)
+        inline sterea_ellipsoid(const Parameters& par) : impl::sterea::base_sterea_ellipsoid<Geographic, Cartesian, Parameters>(par)
         {
             impl::sterea::setup_sterea(this->m_par, this->m_proj_parm);
         }
@@ -151,23 +155,23 @@ namespace ggl { namespace projection
     {
 
         // Factory entry(s)
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class sterea_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class sterea_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_fi<sterea_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_fi<sterea_ellipsoid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        inline void sterea_init(impl::base_factory<LatLong, Cartesian, Parameters>& factory)
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        inline void sterea_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
-            factory.add_to_factory("sterea", new sterea_entry<LatLong, Cartesian, Parameters>);
+            factory.add_to_factory("sterea", new sterea_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl
+    } // namespace impl 
     // Create EPSG specializations
     // (Proof of Concept, only for some)
 

@@ -16,7 +16,7 @@
 // PROJ4 is converted to Geometry Library by Barend Gehrels (Geodan, Amsterdam)
 
 // Original copyright notice:
-
+ 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
@@ -35,6 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/math/special_functions/hypot.hpp>
+
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>
 #include <ggl/projections/impl/projects.hpp>
@@ -43,7 +45,7 @@
 namespace ggl { namespace projection
 {
     #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace nzmg{
+    namespace impl { namespace nzmg{ 
             static const double EPSLN = 1e-10;
             static const double SEC5_TO_RAD = 0.4848136811095359935899141023;
             static const double RAD_TO_SEC5 = 2.062648062470963551564733573;
@@ -51,78 +53,80 @@ namespace ggl { namespace projection
             static const int Ntpsi = 9;
             static const int Ntphi = 8;
 
-
+            
             /*  */
-
-
-
-                static COMPLEX
+            
+            
+            
+            	static COMPLEX
             bf[] = {
-                {.7557853228,    0.0},
-                {.249204646,    .003371507},
-                {-.001541739,    .041058560},
-                {-.10162907,    .01727609},
-                {-.26623489,    -.36249218},
-                {-.6870983,    -1.1651967} };
-                static double
+            	{.7557853228,	0.0},
+            	{.249204646,	.003371507},
+            	{-.001541739,	.041058560},
+            	{-.10162907,	.01727609},
+            	{-.26623489,	-.36249218},
+            	{-.6870983,	-1.1651967} };
+            	static double
             tphi[] = { 1.5627014243, .5185406398, -.03333098, -.1052906, -.0368594,
-                .007317, .01220, .00394, -.0013 },
+            	.007317, .01220, .00394, -.0013 },
             tpsi[] = { .6399175073, -.1358797613, .063294409, -.02526853, .0117879,
-                -.0055161, .0026906, -.001333, .00067, -.00034 };
+            	-.0055161, .0026906, -.001333, .00067, -.00034 };
 
             // template class, using CRTP to implement forward/inverse
-            template <typename LatLong, typename Cartesian, typename Parameters>
-            struct base_nzmg_ellipsoid : public base_t_fi<base_nzmg_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>
+            template <typename Geographic, typename Cartesian, typename Parameters>
+            struct base_nzmg_ellipsoid : public base_t_fi<base_nzmg_ellipsoid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>
             {
 
-                typedef typename base_t_fi<base_nzmg_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::LL_T LL_T;
-                typedef typename base_t_fi<base_nzmg_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::XY_T XY_T;
+                 typedef double geographic_type;
+                 typedef double cartesian_type;
 
 
                 inline base_nzmg_ellipsoid(const Parameters& par)
-                    : base_t_fi<base_nzmg_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(*this, par) {}
+                    : base_t_fi<base_nzmg_ellipsoid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>(*this, par) {}
 
-                inline void fwd(LL_T& lp_lon, LL_T& lp_lat, XY_T& xy_x, XY_T& xy_y) const
+                inline void fwd(geographic_type& lp_lon, geographic_type& lp_lat, cartesian_type& xy_x, cartesian_type& xy_y) const
                 {
-                    COMPLEX p;
-                    double *C;
-                    int i;
-
-                    lp_lat = (lp_lat - this->m_par.phi0) * RAD_TO_SEC5;
-                    for (p.r = *(C = tpsi + (i = Ntpsi)); i ; --i)
-                        p.r = *--C + lp_lat * p.r;
-                    p.r *= lp_lat;
-                    p.i = lp_lon;
-                    p = pj_zpoly1(p, bf, Nbf);
-                    xy_x = p.i;
-                    xy_y = p.r;
+                	COMPLEX p;
+                	double *C;
+                	int i;
+                
+                	lp_lat = (lp_lat - this->m_par.phi0) * RAD_TO_SEC5;
+                	for (p.r = *(C = tpsi + (i = Ntpsi)); i ; --i)
+                		p.r = *--C + lp_lat * p.r;
+                	p.r *= lp_lat;
+                	p.i = lp_lon;
+                	p = pj_zpoly1(p, bf, Nbf);
+                	xy_x = p.i;
+                	xy_y = p.r;
                 }
 
-                inline void inv(XY_T& xy_x, XY_T& xy_y, LL_T& lp_lon, LL_T& lp_lat) const
+                inline void inv(cartesian_type& xy_x, cartesian_type& xy_y, geographic_type& lp_lon, geographic_type& lp_lat) const
                 {
-                    int nn, i;
-                    COMPLEX p, f, fp, dp;
-                    double den, *C;
-
-                    p.r = xy_y;
-                    p.i = xy_x;
-                    for (nn = 20; nn ;--nn) {
-                        f = pj_zpolyd1(p, bf, Nbf, &fp);
-                        f.r -= xy_y;
-                        f.i -= xy_x;
-                        den = fp.r * fp.r + fp.i * fp.i;
-                        p.r += dp.r = -(f.r * fp.r + f.i * fp.i) / den;
-                        p.i += dp.i = -(f.i * fp.r - f.r * fp.i) / den;
-                        if ((fabs(dp.r) + fabs(dp.i)) <= EPSLN)
-                            break;
-                    }
-                    if (nn) {
-                        lp_lon = p.i;
-                        for (lp_lat = *(C = tphi + (i = Ntphi)); i ; --i)
-                            lp_lat = *--C + p.r * lp_lat;
-                        lp_lat = this->m_par.phi0 + p.r * lp_lat * SEC5_TO_RAD;
-                    } else
-                        lp_lon = lp_lat = HUGE_VAL;
+                	int nn, i;
+                	COMPLEX p, f, fp, dp;
+                	double den, *C;
+                
+                	p.r = xy_y;
+                	p.i = xy_x;
+                	for (nn = 20; nn ;--nn) {
+                		f = pj_zpolyd1(p, bf, Nbf, &fp);
+                		f.r -= xy_y;
+                		f.i -= xy_x;
+                		den = fp.r * fp.r + fp.i * fp.i;
+                		p.r += dp.r = -(f.r * fp.r + f.i * fp.i) / den;
+                		p.i += dp.i = -(f.i * fp.r - f.r * fp.i) / den;
+                		if ((fabs(dp.r) + fabs(dp.i)) <= EPSLN)
+                			break;
+                	}
+                	if (nn) {
+                		lp_lon = p.i;
+                		for (lp_lat = *(C = tphi + (i = Ntphi)); i ; --i)
+                			lp_lat = *--C + p.r * lp_lat;
+                		lp_lat = this->m_par.phi0 + p.r * lp_lat * SEC5_TO_RAD;
+                	} else
+                		lp_lon = lp_lat = HUGE_VAL;
                 }
             };
 
@@ -130,23 +134,23 @@ namespace ggl { namespace projection
             template <typename Parameters>
             void setup_nzmg(Parameters& par)
             {
-                /* force to International major axis */
-                par.ra = 1. / (par.a = 6378388.0);
-                par.lam0 = DEG_TO_RAD * 173.;
-                par.phi0 = DEG_TO_RAD * -41.;
-                par.x0 = 2510000.;
-                par.y0 = 6023150.;
+            	/* force to International major axis */
+            	par.ra = 1. / (par.a = 6378388.0);
+            	par.lam0 = DEG_TO_RAD * 173.;
+            	par.phi0 = DEG_TO_RAD * -41.;
+            	par.x0 = 2510000.;
+            	par.y0 = 6023150.;
                 // par.inv = e_inverse;
                 // par.fwd = e_forward;
             }
 
         }} // namespace impl::nzmg
-    #endif // doxygen
+    #endif // doxygen 
 
     /*!
         \brief New Zealand Map Grid projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -154,10 +158,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_nzmg.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct nzmg_ellipsoid : public impl::nzmg::base_nzmg_ellipsoid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct nzmg_ellipsoid : public impl::nzmg::base_nzmg_ellipsoid<Geographic, Cartesian, Parameters>
     {
-        inline nzmg_ellipsoid(const Parameters& par) : impl::nzmg::base_nzmg_ellipsoid<LatLong, Cartesian, Parameters>(par)
+        inline nzmg_ellipsoid(const Parameters& par) : impl::nzmg::base_nzmg_ellipsoid<Geographic, Cartesian, Parameters>(par)
         {
             impl::nzmg::setup_nzmg(this->m_par);
         }
@@ -168,23 +172,23 @@ namespace ggl { namespace projection
     {
 
         // Factory entry(s)
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class nzmg_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class nzmg_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_fi<nzmg_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_fi<nzmg_ellipsoid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        inline void nzmg_init(impl::base_factory<LatLong, Cartesian, Parameters>& factory)
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        inline void nzmg_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
-            factory.add_to_factory("nzmg", new nzmg_entry<LatLong, Cartesian, Parameters>);
+            factory.add_to_factory("nzmg", new nzmg_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl
+    } // namespace impl 
     #endif // doxygen
 
 }} // namespace ggl::projection

@@ -16,7 +16,7 @@
 // PROJ4 is converted to Geometry Library by Barend Gehrels (Geodan, Amsterdam)
 
 // Original copyright notice:
-
+ 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
@@ -35,6 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/math/special_functions/hypot.hpp>
+
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>
 #include <ggl/projections/impl/projects.hpp>
@@ -43,7 +45,7 @@
 namespace ggl { namespace projection
 {
     #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace sts{
+    namespace impl { namespace sts{ 
 
             struct par_sts
             {
@@ -52,60 +54,62 @@ namespace ggl { namespace projection
             };
 
             // template class, using CRTP to implement forward/inverse
-            template <typename LatLong, typename Cartesian, typename Parameters>
-            struct base_sts_spheroid : public base_t_fi<base_sts_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>
+            template <typename Geographic, typename Cartesian, typename Parameters>
+            struct base_sts_spheroid : public base_t_fi<base_sts_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>
             {
 
-                typedef typename base_t_fi<base_sts_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::LL_T LL_T;
-                typedef typename base_t_fi<base_sts_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::XY_T XY_T;
+                 typedef double geographic_type;
+                 typedef double cartesian_type;
 
                 par_sts m_proj_parm;
 
                 inline base_sts_spheroid(const Parameters& par)
-                    : base_t_fi<base_sts_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(*this, par) {}
+                    : base_t_fi<base_sts_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>(*this, par) {}
 
-                inline void fwd(LL_T& lp_lon, LL_T& lp_lat, XY_T& xy_x, XY_T& xy_y) const
+                inline void fwd(geographic_type& lp_lon, geographic_type& lp_lat, cartesian_type& xy_x, cartesian_type& xy_y) const
                 {
-                    double c;
-
-                    xy_x = this->m_proj_parm.C_x * lp_lon * cos(lp_lat);
-                    xy_y = this->m_proj_parm.C_y;
-                    lp_lat *= this->m_proj_parm.C_p;
-                    c = cos(lp_lat);
-                    if (this->m_proj_parm.tan_mode) {
-                        xy_x *= c * c;
-                        xy_y *= tan(lp_lat);
-                    } else {
-                        xy_x /= c;
-                        xy_y *= sin(lp_lat);
-                    }
+                	double c;
+                
+                	xy_x = this->m_proj_parm.C_x * lp_lon * cos(lp_lat);
+                	xy_y = this->m_proj_parm.C_y;
+                	lp_lat *= this->m_proj_parm.C_p;
+                	c = cos(lp_lat);
+                	if (this->m_proj_parm.tan_mode) {
+                		xy_x *= c * c;
+                		xy_y *= tan(lp_lat);
+                	} else {
+                		xy_x /= c;
+                		xy_y *= sin(lp_lat);
+                	}
                 }
 
-                inline void inv(XY_T& xy_x, XY_T& xy_y, LL_T& lp_lon, LL_T& lp_lat) const
+                inline void inv(cartesian_type& xy_x, cartesian_type& xy_y, geographic_type& lp_lon, geographic_type& lp_lat) const
                 {
-                    double c;
-
-                    xy_y /= this->m_proj_parm.C_y;
-                    c = cos(lp_lat = this->m_proj_parm.tan_mode ? atan(xy_y) : aasin(xy_y));
-                    //lp_lat /= this->m_proj_parm.C_p;
-                    lp_lon = xy_x / (this->m_proj_parm.C_x * cos(lp_lat /= this->m_proj_parm.C_p));
-                    if (this->m_proj_parm.tan_mode)
-                        lp_lon /= c * c;
-                    else
-                        lp_lon *= c;
+                	double c;
+                	
+                	xy_y /= this->m_proj_parm.C_y;
+                	c = cos(lp_lat = this->m_proj_parm.tan_mode ? atan(xy_y) : aasin(xy_y));
+                	lp_lat /= this->m_proj_parm.C_p;
+                	lp_lon = xy_x / (this->m_proj_parm.C_x * cos(lp_lat));
+                	if (this->m_proj_parm.tan_mode)
+                		lp_lon /= c * c;
+                	else
+                		lp_lon *= c;
                 }
             };
 
             template <typename Parameters>
-            void setup(Parameters& par, par_sts& proj_parm, double p, double q, int mode)
+            void setup(Parameters& par, par_sts& proj_parm, double p, double q, int mode) 
             {
-                par.es = 0.;
+            	par.es = 0.;
                 // par.inv = s_inverse;
                 // par.fwd = s_forward;
-                proj_parm.C_x = q / p;
-                proj_parm.C_y = p;
-                proj_parm.C_p = 1/ q;
-                proj_parm.tan_mode = mode;
+            	proj_parm.C_x = q / p;
+            	proj_parm.C_y = p;
+            	proj_parm.C_p = 1/ q;
+            	proj_parm.tan_mode = mode;
             }
 
 
@@ -138,12 +142,12 @@ namespace ggl { namespace projection
             }
 
         }} // namespace impl::sts
-    #endif // doxygen
+    #endif // doxygen 
 
     /*!
         \brief Kavraisky V projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -152,10 +156,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_kav5.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct kav5_spheroid : public impl::sts::base_sts_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct kav5_spheroid : public impl::sts::base_sts_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline kav5_spheroid(const Parameters& par) : impl::sts::base_sts_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline kav5_spheroid(const Parameters& par) : impl::sts::base_sts_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::sts::setup_kav5(this->m_par, this->m_proj_parm);
         }
@@ -164,7 +168,7 @@ namespace ggl { namespace projection
     /*!
         \brief Quartic Authalic projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -173,10 +177,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_qua_aut.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct qua_aut_spheroid : public impl::sts::base_sts_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct qua_aut_spheroid : public impl::sts::base_sts_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline qua_aut_spheroid(const Parameters& par) : impl::sts::base_sts_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline qua_aut_spheroid(const Parameters& par) : impl::sts::base_sts_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::sts::setup_qua_aut(this->m_par, this->m_proj_parm);
         }
@@ -185,7 +189,7 @@ namespace ggl { namespace projection
     /*!
         \brief McBryde-Thomas Flat-Polar Sine (No. 1) projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -194,10 +198,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_mbt_s.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct mbt_s_spheroid : public impl::sts::base_sts_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct mbt_s_spheroid : public impl::sts::base_sts_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline mbt_s_spheroid(const Parameters& par) : impl::sts::base_sts_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline mbt_s_spheroid(const Parameters& par) : impl::sts::base_sts_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::sts::setup_mbt_s(this->m_par, this->m_proj_parm);
         }
@@ -206,7 +210,7 @@ namespace ggl { namespace projection
     /*!
         \brief Foucaut projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -215,10 +219,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_fouc.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct fouc_spheroid : public impl::sts::base_sts_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct fouc_spheroid : public impl::sts::base_sts_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline fouc_spheroid(const Parameters& par) : impl::sts::base_sts_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline fouc_spheroid(const Parameters& par) : impl::sts::base_sts_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::sts::setup_fouc(this->m_par, this->m_proj_parm);
         }
@@ -229,56 +233,56 @@ namespace ggl { namespace projection
     {
 
         // Factory entry(s)
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class kav5_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class kav5_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_fi<kav5_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_fi<kav5_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class qua_aut_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class qua_aut_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_fi<qua_aut_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_fi<qua_aut_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class mbt_s_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class mbt_s_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_fi<mbt_s_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_fi<mbt_s_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class fouc_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class fouc_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_fi<fouc_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_fi<fouc_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        inline void sts_init(impl::base_factory<LatLong, Cartesian, Parameters>& factory)
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        inline void sts_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
-            factory.add_to_factory("kav5", new kav5_entry<LatLong, Cartesian, Parameters>);
-            factory.add_to_factory("qua_aut", new qua_aut_entry<LatLong, Cartesian, Parameters>);
-            factory.add_to_factory("mbt_s", new mbt_s_entry<LatLong, Cartesian, Parameters>);
-            factory.add_to_factory("fouc", new fouc_entry<LatLong, Cartesian, Parameters>);
+            factory.add_to_factory("kav5", new kav5_entry<Geographic, Cartesian, Parameters>);
+            factory.add_to_factory("qua_aut", new qua_aut_entry<Geographic, Cartesian, Parameters>);
+            factory.add_to_factory("mbt_s", new mbt_s_entry<Geographic, Cartesian, Parameters>);
+            factory.add_to_factory("fouc", new fouc_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl
+    } // namespace impl 
     #endif // doxygen
 
 }} // namespace ggl::projection

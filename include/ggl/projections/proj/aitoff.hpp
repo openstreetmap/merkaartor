@@ -16,7 +16,7 @@
 // PROJ4 is converted to Geometry Library by Barend Gehrels (Geodan, Amsterdam)
 
 // Original copyright notice:
-
+ 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
@@ -35,6 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/math/special_functions/hypot.hpp>
+
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>
 #include <ggl/projections/impl/projects.hpp>
@@ -43,53 +45,55 @@
 namespace ggl { namespace projection
 {
     #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace aitoff{
+    namespace impl { namespace aitoff{ 
 
             struct par_aitoff
             {
                 double cosphi1;
                 int  mode;
             };
-
-
-
-
+            
+            
+            
+            
 
             // template class, using CRTP to implement forward/inverse
-            template <typename LatLong, typename Cartesian, typename Parameters>
-            struct base_aitoff_spheroid : public base_t_f<base_aitoff_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>
+            template <typename Geographic, typename Cartesian, typename Parameters>
+            struct base_aitoff_spheroid : public base_t_f<base_aitoff_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>
             {
 
-                typedef typename base_t_f<base_aitoff_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::LL_T LL_T;
-                typedef typename base_t_f<base_aitoff_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::XY_T XY_T;
+                 typedef double geographic_type;
+                 typedef double cartesian_type;
 
                 par_aitoff m_proj_parm;
 
                 inline base_aitoff_spheroid(const Parameters& par)
-                    : base_t_f<base_aitoff_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(*this, par) {}
+                    : base_t_f<base_aitoff_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>(*this, par) {}
 
-                inline void fwd(LL_T& lp_lon, LL_T& lp_lat, XY_T& xy_x, XY_T& xy_y) const
+                inline void fwd(geographic_type& lp_lon, geographic_type& lp_lat, cartesian_type& xy_x, cartesian_type& xy_y) const
                 {
-                    double c, d;
-
-                    if((d = acos(cos(lp_lat) * cos(c = 0.5 * lp_lon)))) {/* basic Aitoff */
-                        xy_x = 2. * d * cos(lp_lat) * sin(c) * (xy_y = 1. / sin(d));
-                        xy_y *= d * sin(lp_lat);
-                    } else
-                        xy_x = xy_y = 0.;
-                    if (this->m_proj_parm.mode) { /* Winkel Tripel */
-                        xy_x = (xy_x + lp_lon * this->m_proj_parm.cosphi1) * 0.5;
-                        xy_y = (xy_y + lp_lat) * 0.5;
-                    }
+                	double c, d;
+                
+                	if((d = acos(cos(lp_lat) * cos(c = 0.5 * lp_lon)))) {/* basic Aitoff */
+                		xy_x = 2. * d * cos(lp_lat) * sin(c) * (xy_y = 1. / sin(d));
+                		xy_y *= d * sin(lp_lat);
+                	} else
+                		xy_x = xy_y = 0.;
+                	if (this->m_proj_parm.mode) { /* Winkel Tripel */
+                		xy_x = (xy_x + lp_lon * this->m_proj_parm.cosphi1) * 0.5;
+                		xy_y = (xy_y + lp_lat) * 0.5;
+                	}
                 }
             };
 
             template <typename Parameters>
-            void setup(Parameters& par, par_aitoff& proj_parm)
+            void setup(Parameters& par, par_aitoff& proj_parm) 
             {
                 // par.inv = 0;
                 // par.fwd = s_forward;
-                par.es = 0.;
+            	par.es = 0.;
             }
 
 
@@ -97,7 +101,7 @@ namespace ggl { namespace projection
             template <typename Parameters>
             void setup_aitoff(Parameters& par, par_aitoff& proj_parm)
             {
-                proj_parm.mode = 0;
+            	proj_parm.mode = 0;
                 setup(par, proj_parm);
             }
 
@@ -105,24 +109,24 @@ namespace ggl { namespace projection
             template <typename Parameters>
             void setup_wintri(Parameters& par, par_aitoff& proj_parm)
             {
-                proj_parm.mode = 1;
-                if (pj_param(par.params, "tlat_1").i)
+            	proj_parm.mode = 1;
+            	if (pj_param(par.params, "tlat_1").i)
                     {
-                    if ((proj_parm.cosphi1 = cos(pj_param(par.params, "rlat_1").f)) == 0.)
-                        throw proj_exception(-22);
+            		if ((proj_parm.cosphi1 = cos(pj_param(par.params, "rlat_1").f)) == 0.)
+            			throw proj_exception(-22);
                     }
-                else /* 50d28' or acos(2/pi) */
-                    proj_parm.cosphi1 = 0.636619772367581343;
+            	else /* 50d28' or acos(2/pi) */
+            		proj_parm.cosphi1 = 0.636619772367581343;
                 setup(par, proj_parm);
             }
 
         }} // namespace impl::aitoff
-    #endif // doxygen
+    #endif // doxygen 
 
     /*!
         \brief Aitoff projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -131,10 +135,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_aitoff.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct aitoff_spheroid : public impl::aitoff::base_aitoff_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct aitoff_spheroid : public impl::aitoff::base_aitoff_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline aitoff_spheroid(const Parameters& par) : impl::aitoff::base_aitoff_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline aitoff_spheroid(const Parameters& par) : impl::aitoff::base_aitoff_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::aitoff::setup_aitoff(this->m_par, this->m_proj_parm);
         }
@@ -143,7 +147,7 @@ namespace ggl { namespace projection
     /*!
         \brief Winkel Tripel projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -153,10 +157,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_wintri.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct wintri_spheroid : public impl::aitoff::base_aitoff_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct wintri_spheroid : public impl::aitoff::base_aitoff_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline wintri_spheroid(const Parameters& par) : impl::aitoff::base_aitoff_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline wintri_spheroid(const Parameters& par) : impl::aitoff::base_aitoff_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::aitoff::setup_wintri(this->m_par, this->m_proj_parm);
         }
@@ -167,34 +171,34 @@ namespace ggl { namespace projection
     {
 
         // Factory entry(s)
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class aitoff_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class aitoff_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_f<aitoff_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_f<aitoff_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class wintri_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class wintri_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_f<wintri_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_f<wintri_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        inline void aitoff_init(impl::base_factory<LatLong, Cartesian, Parameters>& factory)
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        inline void aitoff_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
-            factory.add_to_factory("aitoff", new aitoff_entry<LatLong, Cartesian, Parameters>);
-            factory.add_to_factory("wintri", new wintri_entry<LatLong, Cartesian, Parameters>);
+            factory.add_to_factory("aitoff", new aitoff_entry<Geographic, Cartesian, Parameters>);
+            factory.add_to_factory("wintri", new wintri_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl
+    } // namespace impl 
     #endif // doxygen
 
 }} // namespace ggl::projection

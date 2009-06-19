@@ -16,7 +16,7 @@
 // PROJ4 is converted to Geometry Library by Barend Gehrels (Geodan, Amsterdam)
 
 // Original copyright notice:
-
+ 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
@@ -35,6 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/math/special_functions/hypot.hpp>
+
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>
 #include <ggl/projections/impl/projects.hpp>
@@ -44,7 +46,7 @@
 namespace ggl { namespace projection
 {
     #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace imw_p{
+    namespace impl { namespace imw_p{ 
             static const double TOL = 1e-10;
             static const double EPS = 1e-10;
 
@@ -52,8 +54,8 @@ namespace ggl { namespace projection
 
             struct par_imw_p
             {
-                double P, Pp, Q, Qp, R_1, R_2, sphi_1, sphi_2, C2;
-                double phi_1, phi_2, lam_1;
+                double  P, Pp, Q, Qp, R_1, R_2, sphi_1, sphi_2, C2;
+                double  phi_1, phi_2, lam_1;
                 double en[EN_SIZE];
                 int mode; /* = 0, phi_1 and phi_2 != 0, = 1, phi_1 = 0, = -1 phi_2 = 0 */
             };
@@ -61,7 +63,7 @@ namespace ggl { namespace projection
                 inline int
             phi12(Parameters& par, par_imw_p& proj_parm, double *del, double *sig) {
                 int err = 0;
-
+            
                 if (!pj_param(par.params, "tlat_1").i ||
                     !pj_param(par.params, "tlat_2").i) {
                     err = -41;
@@ -78,13 +80,13 @@ namespace ggl { namespace projection
                 inline PXY
             loc_for(const double& lp_lam, const double& lp_phi, const Parameters& par, const par_imw_p& proj_parm, double *yc) {
                 PXY xy;
-
+            
                 if (! lp_phi) {
                     xy.x = lp_lam;
                     xy.y = 0.;
                 } else {
                     double xa, ya, xb, yb, xc, D, B, m, sp, t, R, C;
-
+            
                     sp = sin(lp_phi);
                     m = pj_mlfn(lp_phi, sp, cos(lp_phi), proj_parm.en);
                     xa = proj_parm.Pp + proj_parm.Qp * m;
@@ -122,45 +124,47 @@ namespace ggl { namespace projection
                 }
                 return (xy);
             }
-
+            
             template <typename Parameters>
             inline void
             xy(Parameters& par, par_imw_p& proj_parm, double phi, double *x, double *y, double *sp, double *R) {
                 double F;
-
+            
                 *sp = sin(phi);
                 *R = 1./(tan(phi) * sqrt(1. - par.es * *sp * *sp ));
                 F = proj_parm.lam_1 * *sp;
                 *y = *R * (1 - cos(F));
                 *x = *R * sin(F);
             }
-
+            
 
             // template class, using CRTP to implement forward/inverse
-            template <typename LatLong, typename Cartesian, typename Parameters>
-            struct base_imw_p_ellipsoid : public base_t_fi<base_imw_p_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>
+            template <typename Geographic, typename Cartesian, typename Parameters>
+            struct base_imw_p_ellipsoid : public base_t_fi<base_imw_p_ellipsoid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>
             {
 
-                typedef typename base_t_fi<base_imw_p_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::LL_T LL_T;
-                typedef typename base_t_fi<base_imw_p_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::XY_T XY_T;
+                 typedef double geographic_type;
+                 typedef double cartesian_type;
 
                 par_imw_p m_proj_parm;
 
                 inline base_imw_p_ellipsoid(const Parameters& par)
-                    : base_t_fi<base_imw_p_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(*this, par) {}
+                    : base_t_fi<base_imw_p_ellipsoid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>(*this, par) {}
 
-                inline void fwd(LL_T& lp_lon, LL_T& lp_lat, XY_T& xy_x, XY_T& xy_y) const
+                inline void fwd(geographic_type& lp_lon, geographic_type& lp_lat, cartesian_type& xy_x, cartesian_type& xy_y) const
                 {
                     double yc = 0;
                     PXY xy = loc_for(lp_lon, lp_lat, this->m_par, m_proj_parm, &yc);
-                    xy_x = xy.x; xy_y = xy.y;
+                	xy_x = xy.x; xy_y = xy.y;
                 }
 
-                inline void inv(XY_T& xy_x, XY_T& xy_y, LL_T& lp_lon, LL_T& lp_lat) const
+                inline void inv(cartesian_type& xy_x, cartesian_type& xy_y, geographic_type& lp_lon, geographic_type& lp_lat) const
                 {
                     PXY t;
                     double yc = 0;
-
+                
                     lp_lat = this->m_proj_parm.phi_2;
                     lp_lon = xy_x / cos(lp_lat);
                     do {
@@ -223,12 +227,12 @@ namespace ggl { namespace projection
             }
 
         }} // namespace impl::imw_p
-    #endif // doxygen
+    #endif // doxygen 
 
     /*!
         \brief International Map of the World Polyconic projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -238,10 +242,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_imw_p.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct imw_p_ellipsoid : public impl::imw_p::base_imw_p_ellipsoid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct imw_p_ellipsoid : public impl::imw_p::base_imw_p_ellipsoid<Geographic, Cartesian, Parameters>
     {
-        inline imw_p_ellipsoid(const Parameters& par) : impl::imw_p::base_imw_p_ellipsoid<LatLong, Cartesian, Parameters>(par)
+        inline imw_p_ellipsoid(const Parameters& par) : impl::imw_p::base_imw_p_ellipsoid<Geographic, Cartesian, Parameters>(par)
         {
             impl::imw_p::setup_imw_p(this->m_par, this->m_proj_parm);
         }
@@ -252,23 +256,23 @@ namespace ggl { namespace projection
     {
 
         // Factory entry(s)
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class imw_p_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class imw_p_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_fi<imw_p_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_fi<imw_p_ellipsoid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        inline void imw_p_init(impl::base_factory<LatLong, Cartesian, Parameters>& factory)
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        inline void imw_p_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
-            factory.add_to_factory("imw_p", new imw_p_entry<LatLong, Cartesian, Parameters>);
+            factory.add_to_factory("imw_p", new imw_p_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl
+    } // namespace impl 
     #endif // doxygen
 
 }} // namespace ggl::projection

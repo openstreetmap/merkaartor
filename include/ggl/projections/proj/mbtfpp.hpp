@@ -16,7 +16,7 @@
 // PROJ4 is converted to Geometry Library by Barend Gehrels (Geodan, Amsterdam)
 
 // Original copyright notice:
-
+ 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
@@ -35,6 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/math/special_functions/hypot.hpp>
+
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>
 #include <ggl/projections/impl/projects.hpp>
@@ -43,7 +45,7 @@
 namespace ggl { namespace projection
 {
     #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace mbtfpp{
+    namespace impl { namespace mbtfpp{ 
             static const double CS = .95257934441568037152;
             static const double FXC = .92582009977255146156;
             static const double FYC = 3.40168025708304504493;
@@ -53,38 +55,40 @@ namespace ggl { namespace projection
 
 
             // template class, using CRTP to implement forward/inverse
-            template <typename LatLong, typename Cartesian, typename Parameters>
-            struct base_mbtfpp_spheroid : public base_t_fi<base_mbtfpp_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>
+            template <typename Geographic, typename Cartesian, typename Parameters>
+            struct base_mbtfpp_spheroid : public base_t_fi<base_mbtfpp_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>
             {
 
-                typedef typename base_t_fi<base_mbtfpp_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::LL_T LL_T;
-                typedef typename base_t_fi<base_mbtfpp_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::XY_T XY_T;
+                 typedef double geographic_type;
+                 typedef double cartesian_type;
 
 
                 inline base_mbtfpp_spheroid(const Parameters& par)
-                    : base_t_fi<base_mbtfpp_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(*this, par) {}
+                    : base_t_fi<base_mbtfpp_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>(*this, par) {}
 
-                inline void fwd(LL_T& lp_lon, LL_T& lp_lat, XY_T& xy_x, XY_T& xy_y) const
+                inline void fwd(geographic_type& lp_lon, geographic_type& lp_lat, cartesian_type& xy_x, cartesian_type& xy_y) const
                 {
-                    lp_lat = asin(CS * sin(lp_lat));
-                    xy_x = FXC * lp_lon * (2. * cos(C23 * lp_lat) - 1.);
-                    xy_y = FYC * sin(C13 * lp_lat);
+                	lp_lat = asin(CS * sin(lp_lat));
+                	xy_x = FXC * lp_lon * (2. * cos(C23 * lp_lat) - 1.);
+                	xy_y = FYC * sin(C13 * lp_lat);
                 }
 
-                inline void inv(XY_T& xy_x, XY_T& xy_y, LL_T& lp_lon, LL_T& lp_lat) const
+                inline void inv(cartesian_type& xy_x, cartesian_type& xy_y, geographic_type& lp_lon, geographic_type& lp_lat) const
                 {
-                    lp_lat = xy_y / FYC;
-                    if (fabs(lp_lat) >= 1.) {
-                        if (fabs(lp_lat) > ONEEPS)    throw proj_exception();
-                        else    lp_lat = (lp_lat < 0.) ? -HALFPI : HALFPI;
-                    } else
-                        lp_lat = asin(lp_lat);
-                    lp_lon = xy_x / ( FXC * (2. * cos(C23 * (lp_lat *= 3.)) - 1.) );
-                    if (fabs(lp_lat = sin(lp_lat) / CS) >= 1.) {
-                        if (fabs(lp_lat) > ONEEPS)    throw proj_exception();
-                        else    lp_lat = (lp_lat < 0.) ? -HALFPI : HALFPI;
-                    } else
-                        lp_lat = asin(lp_lat);
+                	lp_lat = xy_y / FYC;
+                	if (fabs(lp_lat) >= 1.) {
+                		if (fabs(lp_lat) > ONEEPS)	throw proj_exception();
+                		else	lp_lat = (lp_lat < 0.) ? -HALFPI : HALFPI;
+                	} else
+                		lp_lat = asin(lp_lat);
+                	lp_lon = xy_x / ( FXC * (2. * cos(C23 * (lp_lat *= 3.)) - 1.) );
+                	if (fabs(lp_lat = sin(lp_lat) / CS) >= 1.) {
+                		if (fabs(lp_lat) > ONEEPS)	throw proj_exception();
+                		else	lp_lat = (lp_lat < 0.) ? -HALFPI : HALFPI;
+                	} else
+                		lp_lat = asin(lp_lat);
                 }
             };
 
@@ -98,12 +102,12 @@ namespace ggl { namespace projection
             }
 
         }} // namespace impl::mbtfpp
-    #endif // doxygen
+    #endif // doxygen 
 
     /*!
         \brief McBride-Thomas Flat-Polar Parabolic projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -112,10 +116,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_mbtfpp.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct mbtfpp_spheroid : public impl::mbtfpp::base_mbtfpp_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct mbtfpp_spheroid : public impl::mbtfpp::base_mbtfpp_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline mbtfpp_spheroid(const Parameters& par) : impl::mbtfpp::base_mbtfpp_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline mbtfpp_spheroid(const Parameters& par) : impl::mbtfpp::base_mbtfpp_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::mbtfpp::setup_mbtfpp(this->m_par);
         }
@@ -126,23 +130,23 @@ namespace ggl { namespace projection
     {
 
         // Factory entry(s)
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class mbtfpp_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class mbtfpp_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_fi<mbtfpp_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_fi<mbtfpp_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        inline void mbtfpp_init(impl::base_factory<LatLong, Cartesian, Parameters>& factory)
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        inline void mbtfpp_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
-            factory.add_to_factory("mbtfpp", new mbtfpp_entry<LatLong, Cartesian, Parameters>);
+            factory.add_to_factory("mbtfpp", new mbtfpp_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl
+    } // namespace impl 
     #endif // doxygen
 
 }} // namespace ggl::projection

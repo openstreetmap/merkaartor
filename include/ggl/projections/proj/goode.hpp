@@ -16,7 +16,7 @@
 // PROJ4 is converted to Geometry Library by Barend Gehrels (Geodan, Amsterdam)
 
 // Original copyright notice:
-
+ 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
@@ -35,6 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/math/special_functions/hypot.hpp>
+
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>
 #include <ggl/projections/impl/projects.hpp>
@@ -46,69 +48,71 @@
 namespace ggl { namespace projection
 {
     #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace goode{
+    namespace impl { namespace goode{ 
             static const double Y_COR = 0.05280;
             static const double PHI_LIM = .71093078197902358062;
 
-            template <typename LatLong, typename Cartesian, typename Parameters>
+            template <typename Geographic, typename Cartesian, typename Parameters>
             struct par_goode
             {
-                sinu_ellipsoid<LatLong, Cartesian, Parameters> sinu;
-                moll_spheroid<LatLong, Cartesian, Parameters> moll;
-
+                sinu_ellipsoid<Geographic, Cartesian, Parameters> sinu;
+                moll_spheroid<Geographic, Cartesian, Parameters> moll;
+                
                 par_goode(const Parameters& par) : sinu(par), moll(par) {}
             };
 
             // template class, using CRTP to implement forward/inverse
-            template <typename LatLong, typename Cartesian, typename Parameters>
-            struct base_goode_spheroid : public base_t_fi<base_goode_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>
+            template <typename Geographic, typename Cartesian, typename Parameters>
+            struct base_goode_spheroid : public base_t_fi<base_goode_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>
             {
 
-                typedef typename base_t_fi<base_goode_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::LL_T LL_T;
-                typedef typename base_t_fi<base_goode_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::XY_T XY_T;
+                 typedef double geographic_type;
+                 typedef double cartesian_type;
 
-                par_goode<LatLong, Cartesian, Parameters> m_proj_parm;
+                par_goode<Geographic, Cartesian, Parameters> m_proj_parm;
 
                 inline base_goode_spheroid(const Parameters& par)
-                    : base_t_fi<base_goode_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(*this, par), m_proj_parm(par) {}
+                    : base_t_fi<base_goode_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>(*this, par), m_proj_parm(par) {}
 
-                inline void fwd(LL_T& lp_lon, LL_T& lp_lat, XY_T& xy_x, XY_T& xy_y) const
+                inline void fwd(geographic_type& lp_lon, geographic_type& lp_lat, cartesian_type& xy_x, cartesian_type& xy_y) const
                 {
-                    if (fabs(lp_lat) <= PHI_LIM)
-                        this->m_proj_parm.sinu.fwd(lp_lon, lp_lat, xy_x, xy_y);
-                    else {
-                        this->m_proj_parm.moll.fwd(lp_lon, lp_lat, xy_x, xy_y);
-                        xy_y -= lp_lat >= 0.0 ? Y_COR : -Y_COR;
-                    }
+                	if (fabs(lp_lat) <= PHI_LIM)
+                		this->m_proj_parm.sinu.fwd(lp_lon, lp_lat, xy_x, xy_y);
+                	else {
+                		this->m_proj_parm.moll.fwd(lp_lon, lp_lat, xy_x, xy_y);
+                		xy_y -= lp_lat >= 0.0 ? Y_COR : -Y_COR;
+                	}
                 }
 
-                inline void inv(XY_T& xy_x, XY_T& xy_y, LL_T& lp_lon, LL_T& lp_lat) const
+                inline void inv(cartesian_type& xy_x, cartesian_type& xy_y, geographic_type& lp_lon, geographic_type& lp_lat) const
                 {
-                    if (fabs(xy_y) <= PHI_LIM)
-                        this->m_proj_parm.sinu.inv(xy_x, xy_y, lp_lon, lp_lat);
-                    else {
-                        xy_y += xy_y >= 0.0 ? Y_COR : -Y_COR;
-                        this->m_proj_parm.moll.inv(xy_x, xy_y, lp_lon, lp_lat);
-                    }
+                	if (fabs(xy_y) <= PHI_LIM)
+                		this->m_proj_parm.sinu.inv(xy_x, xy_y, lp_lon, lp_lat);
+                	else {
+                		xy_y += xy_y >= 0.0 ? Y_COR : -Y_COR;
+                		this->m_proj_parm.moll.inv(xy_x, xy_y, lp_lon, lp_lat);
+                	}
                 }
             };
 
             // Goode Homolosine
-            template <typename LatLong, typename Cartesian, typename Parameters>
-            void setup_goode(Parameters& par, par_goode<LatLong, Cartesian, Parameters>& proj_parm)
+            template <typename Geographic, typename Cartesian, typename Parameters>
+            void setup_goode(Parameters& par, par_goode<Geographic, Cartesian, Parameters>& proj_parm)
             {
-                par.es = 0.;
+            	par.es = 0.;
                 // par.fwd = s_forward;
                 // par.inv = s_inverse;
             }
 
         }} // namespace impl::goode
-    #endif // doxygen
+    #endif // doxygen 
 
     /*!
         \brief Goode Homolosine projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -117,10 +121,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_goode.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct goode_spheroid : public impl::goode::base_goode_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct goode_spheroid : public impl::goode::base_goode_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline goode_spheroid(const Parameters& par) : impl::goode::base_goode_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline goode_spheroid(const Parameters& par) : impl::goode::base_goode_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::goode::setup_goode(this->m_par, this->m_proj_parm);
         }
@@ -131,23 +135,23 @@ namespace ggl { namespace projection
     {
 
         // Factory entry(s)
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class goode_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class goode_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_fi<goode_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_fi<goode_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        inline void goode_init(impl::base_factory<LatLong, Cartesian, Parameters>& factory)
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        inline void goode_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
-            factory.add_to_factory("goode", new goode_entry<LatLong, Cartesian, Parameters>);
+            factory.add_to_factory("goode", new goode_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl
+    } // namespace impl 
     #endif // doxygen
 
 }} // namespace ggl::projection

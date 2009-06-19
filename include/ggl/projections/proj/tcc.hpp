@@ -16,7 +16,7 @@
 // PROJ4 is converted to Geometry Library by Barend Gehrels (Geodan, Amsterdam)
 
 // Original copyright notice:
-
+ 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
@@ -35,6 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/math/special_functions/hypot.hpp>
+
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>
 #include <ggl/projections/impl/projects.hpp>
@@ -43,7 +45,7 @@
 namespace ggl { namespace projection
 {
     #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace tcc{
+    namespace impl { namespace tcc{ 
             static const double EPS10 = 1.e-10;
 
             struct par_tcc
@@ -52,26 +54,28 @@ namespace ggl { namespace projection
             };
 
             // template class, using CRTP to implement forward/inverse
-            template <typename LatLong, typename Cartesian, typename Parameters>
-            struct base_tcc_spheroid : public base_t_f<base_tcc_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>
+            template <typename Geographic, typename Cartesian, typename Parameters>
+            struct base_tcc_spheroid : public base_t_f<base_tcc_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>
             {
 
-                typedef typename base_t_f<base_tcc_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::LL_T LL_T;
-                typedef typename base_t_f<base_tcc_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::XY_T XY_T;
+                 typedef double geographic_type;
+                 typedef double cartesian_type;
 
                 par_tcc m_proj_parm;
 
                 inline base_tcc_spheroid(const Parameters& par)
-                    : base_t_f<base_tcc_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(*this, par) {}
+                    : base_t_f<base_tcc_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>(*this, par) {}
 
-                inline void fwd(LL_T& lp_lon, LL_T& lp_lat, XY_T& xy_x, XY_T& xy_y) const
+                inline void fwd(geographic_type& lp_lon, geographic_type& lp_lat, cartesian_type& xy_x, cartesian_type& xy_y) const
                 {
-                    double b, bt;
-
-                    b = cos(lp_lat) * sin(lp_lon);
-                    if ((bt = 1. - b * b) < EPS10) throw proj_exception();;
-                    xy_x = b / sqrt(bt);
-                    xy_y = atan2(tan(lp_lat) , cos(lp_lon));
+                	double b, bt;
+                
+                	b = cos(lp_lat) * sin(lp_lon);
+                	if ((bt = 1. - b * b) < EPS10) throw proj_exception();;
+                	xy_x = b / sqrt(bt);
+                	xy_y = atan2(tan(lp_lat) , cos(lp_lon));
                 }
             };
 
@@ -84,12 +88,12 @@ namespace ggl { namespace projection
             }
 
         }} // namespace impl::tcc
-    #endif // doxygen
+    #endif // doxygen 
 
     /*!
         \brief Transverse Central Cylindrical projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -99,10 +103,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_tcc.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct tcc_spheroid : public impl::tcc::base_tcc_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct tcc_spheroid : public impl::tcc::base_tcc_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline tcc_spheroid(const Parameters& par) : impl::tcc::base_tcc_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline tcc_spheroid(const Parameters& par) : impl::tcc::base_tcc_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::tcc::setup_tcc(this->m_par, this->m_proj_parm);
         }
@@ -113,23 +117,23 @@ namespace ggl { namespace projection
     {
 
         // Factory entry(s)
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class tcc_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class tcc_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_f<tcc_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_f<tcc_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        inline void tcc_init(impl::base_factory<LatLong, Cartesian, Parameters>& factory)
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        inline void tcc_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
-            factory.add_to_factory("tcc", new tcc_entry<LatLong, Cartesian, Parameters>);
+            factory.add_to_factory("tcc", new tcc_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl
+    } // namespace impl 
     #endif // doxygen
 
 }} // namespace ggl::projection

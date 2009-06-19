@@ -55,7 +55,7 @@ QString TrackSegment::description() const
 	return "tracksegment";
 }
 
-RenderPriority TrackSegment::renderPriority(double)
+RenderPriority TrackSegment::renderPriority()
 {
 	RenderPriority apriority(RenderPriority::IsLinear,0.); 
 	setRenderPriority(apriority);

@@ -16,7 +16,7 @@
 // PROJ4 is converted to Geometry Library by Barend Gehrels (Geodan, Amsterdam)
 
 // Original copyright notice:
-
+ 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
@@ -35,6 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/math/special_functions/hypot.hpp>
+
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>
 #include <ggl/projections/impl/projects.hpp>
@@ -43,7 +45,7 @@
 namespace ggl { namespace projection
 {
     #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace denoy{
+    namespace impl { namespace denoy{ 
             static const double C0 = 0.95;
             static const double C1 = -.08333333333333333333;
             static const double C3 = .00166666666666666666;
@@ -52,24 +54,26 @@ namespace ggl { namespace projection
 
 
             // template class, using CRTP to implement forward/inverse
-            template <typename LatLong, typename Cartesian, typename Parameters>
-            struct base_denoy_spheroid : public base_t_f<base_denoy_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>
+            template <typename Geographic, typename Cartesian, typename Parameters>
+            struct base_denoy_spheroid : public base_t_f<base_denoy_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>
             {
 
-                typedef typename base_t_f<base_denoy_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::LL_T LL_T;
-                typedef typename base_t_f<base_denoy_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::XY_T XY_T;
+                 typedef double geographic_type;
+                 typedef double cartesian_type;
 
 
                 inline base_denoy_spheroid(const Parameters& par)
-                    : base_t_f<base_denoy_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(*this, par) {}
+                    : base_t_f<base_denoy_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>(*this, par) {}
 
-                inline void fwd(LL_T& lp_lon, LL_T& lp_lat, XY_T& xy_x, XY_T& xy_y) const
+                inline void fwd(geographic_type& lp_lon, geographic_type& lp_lat, cartesian_type& xy_x, cartesian_type& xy_y) const
                 {
-                    xy_y = lp_lat;
-                    xy_x = lp_lon;
-                    lp_lon = fabs(lp_lon);
-                    xy_x *= cos((C0 + lp_lon * (C1 + lp_lon * lp_lon * C3)) *
-                        (lp_lat * (D1 + D5 * lp_lat * lp_lat * lp_lat * lp_lat)));
+                	xy_y = lp_lat;
+                	xy_x = lp_lon;
+                	lp_lon = fabs(lp_lon);
+                	xy_x *= cos((C0 + lp_lon * (C1 + lp_lon * lp_lon * C3)) *
+                		(lp_lat * (D1 + D5 * lp_lat * lp_lat * lp_lat * lp_lat)));
                 }
             };
 
@@ -82,12 +86,12 @@ namespace ggl { namespace projection
             }
 
         }} // namespace impl::denoy
-    #endif // doxygen
+    #endif // doxygen 
 
     /*!
         \brief Denoyer Semi-Elliptical projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -97,10 +101,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_denoy.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct denoy_spheroid : public impl::denoy::base_denoy_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct denoy_spheroid : public impl::denoy::base_denoy_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline denoy_spheroid(const Parameters& par) : impl::denoy::base_denoy_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline denoy_spheroid(const Parameters& par) : impl::denoy::base_denoy_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::denoy::setup_denoy(this->m_par);
         }
@@ -111,23 +115,23 @@ namespace ggl { namespace projection
     {
 
         // Factory entry(s)
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class denoy_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class denoy_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_f<denoy_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_f<denoy_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        inline void denoy_init(impl::base_factory<LatLong, Cartesian, Parameters>& factory)
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        inline void denoy_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
-            factory.add_to_factory("denoy", new denoy_entry<LatLong, Cartesian, Parameters>);
+            factory.add_to_factory("denoy", new denoy_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl
+    } // namespace impl 
     #endif // doxygen
 
 }} // namespace ggl::projection

@@ -16,7 +16,7 @@
 // PROJ4 is converted to Geometry Library by Barend Gehrels (Geodan, Amsterdam)
 
 // Original copyright notice:
-
+ 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
@@ -35,6 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/math/special_functions/hypot.hpp>
+
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>
 #include <ggl/projections/impl/projects.hpp>
@@ -43,7 +45,7 @@
 namespace ggl { namespace projection
 {
     #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace wink2{
+    namespace impl { namespace wink2{ 
             static const int MAX_ITER = 10;
             static const double LOOP_TOL = 1e-7;
             static const double TWO_D_PI = 0.636619772367581343;
@@ -54,38 +56,40 @@ namespace ggl { namespace projection
             };
 
             // template class, using CRTP to implement forward/inverse
-            template <typename LatLong, typename Cartesian, typename Parameters>
-            struct base_wink2_spheroid : public base_t_f<base_wink2_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>
+            template <typename Geographic, typename Cartesian, typename Parameters>
+            struct base_wink2_spheroid : public base_t_f<base_wink2_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>
             {
 
-                typedef typename base_t_f<base_wink2_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::LL_T LL_T;
-                typedef typename base_t_f<base_wink2_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::XY_T XY_T;
+                 typedef double geographic_type;
+                 typedef double cartesian_type;
 
                 par_wink2 m_proj_parm;
 
                 inline base_wink2_spheroid(const Parameters& par)
-                    : base_t_f<base_wink2_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(*this, par) {}
+                    : base_t_f<base_wink2_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>(*this, par) {}
 
-                inline void fwd(LL_T& lp_lon, LL_T& lp_lat, XY_T& xy_x, XY_T& xy_y) const
+                inline void fwd(geographic_type& lp_lon, geographic_type& lp_lat, cartesian_type& xy_x, cartesian_type& xy_y) const
                 {
-                    double k, V;
-                    int i;
-
-                    xy_y = lp_lat * TWO_D_PI;
-                    k = PI * sin(lp_lat);
-                    lp_lat *= 1.8;
-                    for (i = MAX_ITER; i ; --i) {
-                        lp_lat -= V = (lp_lat + sin(lp_lat) - k) /
-                            (1. + cos(lp_lat));
-                        if (fabs(V) < LOOP_TOL)
-                            break;
-                    }
-                    if (!i)
-                        lp_lat = (lp_lat < 0.) ? -HALFPI : HALFPI;
-                    else
-                        lp_lat *= 0.5;
-                    xy_x = 0.5 * lp_lon * (cos(lp_lat) + this->m_proj_parm.cosphi1);
-                    xy_y = FORTPI * (sin(lp_lat) + xy_y);
+                	double k, V;
+                	int i;
+                
+                	xy_y = lp_lat * TWO_D_PI;
+                	k = PI * sin(lp_lat);
+                	lp_lat *= 1.8;
+                	for (i = MAX_ITER; i ; --i) {
+                		lp_lat -= V = (lp_lat + sin(lp_lat) - k) /
+                			(1. + cos(lp_lat));
+                		if (fabs(V) < LOOP_TOL)
+                			break;
+                	}
+                	if (!i)
+                		lp_lat = (lp_lat < 0.) ? -HALFPI : HALFPI;
+                	else
+                		lp_lat *= 0.5;
+                	xy_x = 0.5 * lp_lon * (cos(lp_lat) + this->m_proj_parm.cosphi1);
+                	xy_y = FORTPI * (sin(lp_lat) + xy_y);
                 }
             };
 
@@ -93,19 +97,19 @@ namespace ggl { namespace projection
             template <typename Parameters>
             void setup_wink2(Parameters& par, par_wink2& proj_parm)
             {
-                proj_parm.cosphi1 = cos(pj_param(par.params, "rlat_1").f);
-                par.es = 0.;
+            	proj_parm.cosphi1 = cos(pj_param(par.params, "rlat_1").f);
+            	par.es = 0.;
                 // par.inv = 0;
                 // par.fwd = s_forward;
             }
 
         }} // namespace impl::wink2
-    #endif // doxygen
+    #endif // doxygen 
 
     /*!
         \brief Winkel II projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -116,10 +120,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_wink2.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct wink2_spheroid : public impl::wink2::base_wink2_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct wink2_spheroid : public impl::wink2::base_wink2_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline wink2_spheroid(const Parameters& par) : impl::wink2::base_wink2_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline wink2_spheroid(const Parameters& par) : impl::wink2::base_wink2_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::wink2::setup_wink2(this->m_par, this->m_proj_parm);
         }
@@ -130,23 +134,23 @@ namespace ggl { namespace projection
     {
 
         // Factory entry(s)
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class wink2_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class wink2_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_f<wink2_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_f<wink2_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        inline void wink2_init(impl::base_factory<LatLong, Cartesian, Parameters>& factory)
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        inline void wink2_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
-            factory.add_to_factory("wink2", new wink2_entry<LatLong, Cartesian, Parameters>);
+            factory.add_to_factory("wink2", new wink2_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl
+    } // namespace impl 
     #endif // doxygen
 
 }} // namespace ggl::projection

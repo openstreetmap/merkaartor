@@ -70,16 +70,14 @@ public:
 
 	bool RenderPriorityUpToDate;
 	MapDocument* theDocument;
- 	double RenderPriorityForPixelPerM;
 
- 	void sortRenderingPriority(double PixelPerM);
+ 	void sortRenderingPriority();
 };
 
- void MapLayerPrivate::sortRenderingPriority(double aPixelPerM)
+ void MapLayerPrivate::sortRenderingPriority()
 {
- 	qSort(Features.begin(),Features.end(),SortAccordingToRenderingPriority(aPixelPerM));
+ 	qSort(Features.begin(),Features.end(),SortAccordingToRenderingPriority());
   	RenderPriorityUpToDate = true;
- 	RenderPriorityForPixelPerM = aPixelPerM;
 }
 
 MapLayer::MapLayer()
@@ -112,12 +110,10 @@ MyRTree* MapLayer::getRTree()
 	return p->theRTree;
 }
 
-void MapLayer::sortRenderingPriority(double aPixelPerM)
+void MapLayer::sortRenderingPriority()
 {
-	// No need to resort after a zoom, is there?
-	// if (!p->RenderPriorityUpToDate || (aPixelPerM != p->RenderPriorityForPixelPerM) )
 	if (!p->RenderPriorityUpToDate)
-		p->sortRenderingPriority(aPixelPerM);
+		p->sortRenderingPriority();
 }
 
 void MapLayer::invalidateRenderPriority()

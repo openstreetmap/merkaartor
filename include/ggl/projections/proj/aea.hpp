@@ -16,7 +16,7 @@
 // PROJ4 is converted to Geometry Library by Barend Gehrels (Geodan, Amsterdam)
 
 // Original copyright notice:
-
+ 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
@@ -35,6 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/math/special_functions/hypot.hpp>
+
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>
 #include <ggl/projections/impl/projects.hpp>
@@ -48,7 +50,7 @@
 namespace ggl { namespace projection
 {
     #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace aea{
+    namespace impl { namespace aea{ 
             static const double EPS10 = 1.e-10;
             static const double TOL7 = 1.e-7;
             static const int N_ITER = 15;
@@ -69,119 +71,121 @@ namespace ggl { namespace projection
                 double en[EN_SIZE];
                 int  ellips;
             };
-
-
-
-
-
+            
+            
+            
+            
+            
             /* determine latitude angle phi-1 */
-                inline double
+            	inline double
             phi1_(double qs, double Te, double Tone_es) {
-                int i;
-                double Phi, sinpi, cospi, con, com, dphi;
-
-                Phi = asin (.5 * qs);
-                if (Te < EPSILON)
-                    return( Phi );
-                i = N_ITER;
-                do {
-                    sinpi = sin (Phi);
-                    cospi = cos (Phi);
-                    con = Te * sinpi;
-                    com = 1. - con * con;
-                    dphi = .5 * com * com / cospi * (qs / Tone_es -
-                       sinpi / com + .5 / Te * log ((1. - con) /
-                       (1. + con)));
-                    Phi += dphi;
-                } while (fabs(dphi) > TOL && --i);
-                return( i ? Phi : HUGE_VAL );
+            	int i;
+            	double Phi, sinpi, cospi, con, com, dphi;
+            
+            	Phi = asin (.5 * qs);
+            	if (Te < EPSILON)
+            		return( Phi );
+            	i = N_ITER;
+            	do {
+            		sinpi = sin (Phi);
+            		cospi = cos (Phi);
+            		con = Te * sinpi;
+            		com = 1. - con * con;
+            		dphi = .5 * com * com / cospi * (qs / Tone_es -
+            		   sinpi / com + .5 / Te * log ((1. - con) /
+            		   (1. + con)));
+            		Phi += dphi;
+            	} while (fabs(dphi) > TOL && --i);
+            	return( i ? Phi : HUGE_VAL );
             }
 
             // template class, using CRTP to implement forward/inverse
-            template <typename LatLong, typename Cartesian, typename Parameters>
-            struct base_aea_ellipsoid : public base_t_fi<base_aea_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>
+            template <typename Geographic, typename Cartesian, typename Parameters>
+            struct base_aea_ellipsoid : public base_t_fi<base_aea_ellipsoid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>
             {
 
-                typedef typename base_t_fi<base_aea_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::LL_T LL_T;
-                typedef typename base_t_fi<base_aea_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::XY_T XY_T;
+                 typedef double geographic_type;
+                 typedef double cartesian_type;
 
                 mutable par_aea m_proj_parm;
 
                 inline base_aea_ellipsoid(const Parameters& par)
-                    : base_t_fi<base_aea_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(*this, par) {}
+                    : base_t_fi<base_aea_ellipsoid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>(*this, par) {}
 
-                inline void fwd(LL_T& lp_lon, LL_T& lp_lat, XY_T& xy_x, XY_T& xy_y) const
+                inline void fwd(geographic_type& lp_lon, geographic_type& lp_lat, cartesian_type& xy_x, cartesian_type& xy_y) const
                 {
-                    if ((this->m_proj_parm.rho = this->m_proj_parm.c - (this->m_proj_parm.ellips ? this->m_proj_parm.n * pj_qsfn(sin(lp_lat),
-                        this->m_par.e, this->m_par.one_es) : this->m_proj_parm.n2 * sin(lp_lat))) < 0.) throw proj_exception();
-                    this->m_proj_parm.rho = this->m_proj_parm.dd * sqrt(this->m_proj_parm.rho);
-                    xy_x = this->m_proj_parm.rho * sin( lp_lon *= this->m_proj_parm.n );
-                    xy_y = this->m_proj_parm.rho0 - this->m_proj_parm.rho * cos(lp_lon);
+                	if ((this->m_proj_parm.rho = this->m_proj_parm.c - (this->m_proj_parm.ellips ? this->m_proj_parm.n * pj_qsfn(sin(lp_lat),
+                		this->m_par.e, this->m_par.one_es) : this->m_proj_parm.n2 * sin(lp_lat))) < 0.) throw proj_exception();
+                	this->m_proj_parm.rho = this->m_proj_parm.dd * sqrt(this->m_proj_parm.rho);
+                	xy_x = this->m_proj_parm.rho * sin( lp_lon *= this->m_proj_parm.n );
+                	xy_y = this->m_proj_parm.rho0 - this->m_proj_parm.rho * cos(lp_lon);
                 }
 
-                inline void inv(XY_T& xy_x, XY_T& xy_y, LL_T& lp_lon, LL_T& lp_lat) const
+                inline void inv(cartesian_type& xy_x, cartesian_type& xy_y, geographic_type& lp_lon, geographic_type& lp_lat) const
                 {
-                    if( (this->m_proj_parm.rho = hypot(xy_x, xy_y = this->m_proj_parm.rho0 - xy_y)) != 0.0 ) {
-                        if (this->m_proj_parm.n < 0.) {
-                            this->m_proj_parm.rho = -this->m_proj_parm.rho;
-                            xy_x = -xy_x;
-                            xy_y = -xy_y;
-                        }
-                        lp_lat =  this->m_proj_parm.rho / this->m_proj_parm.dd;
-                        if (this->m_proj_parm.ellips) {
-                            lp_lat = (this->m_proj_parm.c - lp_lat * lp_lat) / this->m_proj_parm.n;
-                            if (fabs(this->m_proj_parm.ec - fabs(lp_lat)) > TOL7) {
-                                if ((lp_lat = phi1_(lp_lat, this->m_par.e, this->m_par.one_es)) == HUGE_VAL)
-                                    throw proj_exception();
-                            } else
-                                lp_lat = lp_lat < 0. ? -HALFPI : HALFPI;
-                        } else if (fabs(lp_lat = (this->m_proj_parm.c - lp_lat * lp_lat) / this->m_proj_parm.n2) <= 1.)
-                            lp_lat = asin(lp_lat);
-                        else
-                            lp_lat = lp_lat < 0. ? -HALFPI : HALFPI;
-                        lp_lon = atan2(xy_x, xy_y) / this->m_proj_parm.n;
-                    } else {
-                        lp_lon = 0.;
-                        lp_lat = this->m_proj_parm.n > 0. ? HALFPI : - HALFPI;
-                    }
+                	if( (this->m_proj_parm.rho = boost::math::hypot(xy_x, xy_y = this->m_proj_parm.rho0 - xy_y)) != 0.0 ) {
+                		if (this->m_proj_parm.n < 0.) {
+                			this->m_proj_parm.rho = -this->m_proj_parm.rho;
+                			xy_x = -xy_x;
+                			xy_y = -xy_y;
+                		}
+                		lp_lat =  this->m_proj_parm.rho / this->m_proj_parm.dd;
+                		if (this->m_proj_parm.ellips) {
+                			lp_lat = (this->m_proj_parm.c - lp_lat * lp_lat) / this->m_proj_parm.n;
+                			if (fabs(this->m_proj_parm.ec - fabs(lp_lat)) > TOL7) {
+                				if ((lp_lat = phi1_(lp_lat, this->m_par.e, this->m_par.one_es)) == HUGE_VAL)
+                					throw proj_exception();
+                			} else
+                				lp_lat = lp_lat < 0. ? -HALFPI : HALFPI;
+                		} else if (fabs(lp_lat = (this->m_proj_parm.c - lp_lat * lp_lat) / this->m_proj_parm.n2) <= 1.)
+                			lp_lat = asin(lp_lat);
+                		else
+                			lp_lat = lp_lat < 0. ? -HALFPI : HALFPI;
+                		lp_lon = atan2(xy_x, xy_y) / this->m_proj_parm.n;
+                	} else {
+                		lp_lon = 0.;
+                		lp_lat = this->m_proj_parm.n > 0. ? HALFPI : - HALFPI;
+                	}
                 }
             };
 
             template <typename Parameters>
-            void setup(Parameters& par, par_aea& proj_parm)
+            void setup(Parameters& par, par_aea& proj_parm) 
             {
-                double cosphi, sinphi;
-                int secant;
-                if (fabs(proj_parm.phi1 + proj_parm.phi2) < EPS10) throw proj_exception(-21);
-                proj_parm.n = sinphi = sin(proj_parm.phi1);
-                cosphi = cos(proj_parm.phi1);
-                secant = fabs(proj_parm.phi1 - proj_parm.phi2) >= EPS10;
-                if( (proj_parm.ellips = (par.es > 0.))) {
-                    double ml1, m1;
+            	double cosphi, sinphi;
+            	int secant;
+            	if (fabs(proj_parm.phi1 + proj_parm.phi2) < EPS10) throw proj_exception(-21);
+            	proj_parm.n = sinphi = sin(proj_parm.phi1);
+            	cosphi = cos(proj_parm.phi1);
+            	secant = fabs(proj_parm.phi1 - proj_parm.phi2) >= EPS10;
+            	if( (proj_parm.ellips = (par.es > 0.))) {
+            		double ml1, m1;
                     pj_enfn(par.es, proj_parm.en);
-                    m1 = pj_msfn(sinphi, cosphi, par.es);
-                    ml1 = pj_qsfn(sinphi, par.e, par.one_es);
-                    if (secant) { /* secant cone */
-                        double ml2, m2;
-                        sinphi = sin(proj_parm.phi2);
-                        cosphi = cos(proj_parm.phi2);
-                        m2 = pj_msfn(sinphi, cosphi, par.es);
-                        ml2 = pj_qsfn(sinphi, par.e, par.one_es);
-                        proj_parm.n = (m1 * m1 - m2 * m2) / (ml2 - ml1);
-                    }
-                    proj_parm.ec = 1. - .5 * par.one_es * log((1. - par.e) /
-                        (1. + par.e)) / par.e;
-                    proj_parm.c = m1 * m1 + proj_parm.n * ml1;
-                    proj_parm.dd = 1. / proj_parm.n;
-                    proj_parm.rho0 = proj_parm.dd * sqrt(proj_parm.c - proj_parm.n * pj_qsfn(sin(par.phi0),
-                        par.e, par.one_es));
-                } else {
-                    if (secant) proj_parm.n = .5 * (proj_parm.n + sin(proj_parm.phi2));
-                    proj_parm.n2 = proj_parm.n + proj_parm.n;
-                    proj_parm.c = cosphi * cosphi + proj_parm.n2 * sinphi;
-                    proj_parm.dd = 1. / proj_parm.n;
-                    proj_parm.rho0 = proj_parm.dd * sqrt(proj_parm.c - proj_parm.n2 * sin(par.phi0));
-                }
+            		m1 = pj_msfn(sinphi, cosphi, par.es);
+            		ml1 = pj_qsfn(sinphi, par.e, par.one_es);
+            		if (secant) { /* secant cone */
+            			double ml2, m2;
+            			sinphi = sin(proj_parm.phi2);
+            			cosphi = cos(proj_parm.phi2);
+            			m2 = pj_msfn(sinphi, cosphi, par.es);
+            			ml2 = pj_qsfn(sinphi, par.e, par.one_es);
+            			proj_parm.n = (m1 * m1 - m2 * m2) / (ml2 - ml1);
+            		}
+            		proj_parm.ec = 1. - .5 * par.one_es * log((1. - par.e) /
+            			(1. + par.e)) / par.e;
+            		proj_parm.c = m1 * m1 + proj_parm.n * ml1;
+            		proj_parm.dd = 1. / proj_parm.n;
+            		proj_parm.rho0 = proj_parm.dd * sqrt(proj_parm.c - proj_parm.n * pj_qsfn(sin(par.phi0),
+            			par.e, par.one_es));
+            	} else {
+            		if (secant) proj_parm.n = .5 * (proj_parm.n + sin(proj_parm.phi2));
+            		proj_parm.n2 = proj_parm.n + proj_parm.n;
+            		proj_parm.c = cosphi * cosphi + proj_parm.n2 * sinphi;
+            		proj_parm.dd = 1. / proj_parm.n;
+            		proj_parm.rho0 = proj_parm.dd * sqrt(proj_parm.c - proj_parm.n2 * sin(par.phi0));
+            	}
                 // par.inv = e_inverse;
                 // par.fwd = e_forward;
             }
@@ -191,8 +195,8 @@ namespace ggl { namespace projection
             template <typename Parameters>
             void setup_aea(Parameters& par, par_aea& proj_parm)
             {
-                proj_parm.phi1 = pj_param(par.params, "rlat_1").f;
-                proj_parm.phi2 = pj_param(par.params, "rlat_2").f;
+            	proj_parm.phi1 = pj_param(par.params, "rlat_1").f;
+            	proj_parm.phi2 = pj_param(par.params, "rlat_2").f;
                 setup(par, proj_parm);
             }
 
@@ -200,18 +204,18 @@ namespace ggl { namespace projection
             template <typename Parameters>
             void setup_leac(Parameters& par, par_aea& proj_parm)
             {
-                proj_parm.phi2 = pj_param(par.params, "rlat_1").f;
-                proj_parm.phi1 = pj_param(par.params, "bsouth").i ? - HALFPI: HALFPI;
+            	proj_parm.phi2 = pj_param(par.params, "rlat_1").f;
+            	proj_parm.phi1 = pj_param(par.params, "bsouth").i ? - HALFPI: HALFPI;
                 setup(par, proj_parm);
             }
 
         }} // namespace impl::aea
-    #endif // doxygen
+    #endif // doxygen 
 
     /*!
         \brief Albers Equal Area projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -222,10 +226,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_aea.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct aea_ellipsoid : public impl::aea::base_aea_ellipsoid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct aea_ellipsoid : public impl::aea::base_aea_ellipsoid<Geographic, Cartesian, Parameters>
     {
-        inline aea_ellipsoid(const Parameters& par) : impl::aea::base_aea_ellipsoid<LatLong, Cartesian, Parameters>(par)
+        inline aea_ellipsoid(const Parameters& par) : impl::aea::base_aea_ellipsoid<Geographic, Cartesian, Parameters>(par)
         {
             impl::aea::setup_aea(this->m_par, this->m_proj_parm);
         }
@@ -234,7 +238,7 @@ namespace ggl { namespace projection
     /*!
         \brief Lambert Equal Area Conic projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -245,10 +249,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_leac.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct leac_ellipsoid : public impl::aea::base_aea_ellipsoid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct leac_ellipsoid : public impl::aea::base_aea_ellipsoid<Geographic, Cartesian, Parameters>
     {
-        inline leac_ellipsoid(const Parameters& par) : impl::aea::base_aea_ellipsoid<LatLong, Cartesian, Parameters>(par)
+        inline leac_ellipsoid(const Parameters& par) : impl::aea::base_aea_ellipsoid<Geographic, Cartesian, Parameters>(par)
         {
             impl::aea::setup_leac(this->m_par, this->m_proj_parm);
         }
@@ -259,34 +263,34 @@ namespace ggl { namespace projection
     {
 
         // Factory entry(s)
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class aea_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class aea_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_fi<aea_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_fi<aea_ellipsoid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class leac_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class leac_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_fi<leac_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_fi<leac_ellipsoid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        inline void aea_init(impl::base_factory<LatLong, Cartesian, Parameters>& factory)
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        inline void aea_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
-            factory.add_to_factory("aea", new aea_entry<LatLong, Cartesian, Parameters>);
-            factory.add_to_factory("leac", new leac_entry<LatLong, Cartesian, Parameters>);
+            factory.add_to_factory("aea", new aea_entry<Geographic, Cartesian, Parameters>);
+            factory.add_to_factory("leac", new leac_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl
+    } // namespace impl 
     // Create EPSG specializations
     // (Proof of Concept, only for some)
 

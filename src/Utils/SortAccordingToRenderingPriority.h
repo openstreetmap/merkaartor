@@ -6,16 +6,13 @@ class MapFeature;
 class SortAccordingToRenderingPriority
 {
 	public:
-		SortAccordingToRenderingPriority(double aPixelPerM)
-			: PixelPerM(aPixelPerM)
+		SortAccordingToRenderingPriority()
 		{
 		}
 		bool operator()(MapFeature* A, MapFeature* B)
 		{
-			return A->renderPriority(PixelPerM) < B->renderPriority(PixelPerM);
+			return A->renderPriority() < B->renderPriority();
 		}
-
-		double PixelPerM;
 };
 
 #endif // SORTACCORDINGTORENDERINGPRIORITY_H

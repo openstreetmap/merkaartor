@@ -37,7 +37,7 @@ class Road : public MapFeature
 		virtual void cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const QList<MapFeature*>& Alternatives);
 		virtual bool notEverythingDownloaded() const;
 		virtual QString description() const;
-		virtual RenderPriority renderPriority(double aPixelPerM);
+		virtual RenderPriority renderPriority();
 		virtual RenderPriority getRenderPriority();
 
 		virtual void add(TrackPoint* Pt);

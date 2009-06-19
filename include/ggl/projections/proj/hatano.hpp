@@ -16,7 +16,7 @@
 // PROJ4 is converted to Geometry Library by Barend Gehrels (Geodan, Amsterdam)
 
 // Original copyright notice:
-
+ 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
@@ -35,6 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/math/special_functions/hypot.hpp>
+
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>
 #include <ggl/projections/impl/projects.hpp>
@@ -43,7 +45,7 @@
 namespace ggl { namespace projection
 {
     #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace hatano{
+    namespace impl { namespace hatano{ 
             static const int NITER = 20;
             static const double EPS = 1e-7;
             static const double ONETOL = 1.000001;
@@ -60,49 +62,51 @@ namespace ggl { namespace projection
 
 
             // template class, using CRTP to implement forward/inverse
-            template <typename LatLong, typename Cartesian, typename Parameters>
-            struct base_hatano_spheroid : public base_t_fi<base_hatano_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>
+            template <typename Geographic, typename Cartesian, typename Parameters>
+            struct base_hatano_spheroid : public base_t_fi<base_hatano_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>
             {
 
-                typedef typename base_t_fi<base_hatano_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::LL_T LL_T;
-                typedef typename base_t_fi<base_hatano_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::XY_T XY_T;
+                 typedef double geographic_type;
+                 typedef double cartesian_type;
 
 
                 inline base_hatano_spheroid(const Parameters& par)
-                    : base_t_fi<base_hatano_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(*this, par) {}
+                    : base_t_fi<base_hatano_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>(*this, par) {}
 
-                inline void fwd(LL_T& lp_lon, LL_T& lp_lat, XY_T& xy_x, XY_T& xy_y) const
+                inline void fwd(geographic_type& lp_lon, geographic_type& lp_lat, cartesian_type& xy_x, cartesian_type& xy_y) const
                 {
-                    double th1, c;
-                    int i;
-
-                    c = sin(lp_lat) * (lp_lat < 0. ? CS : CN);
-                    for (i = NITER; i; --i) {
-                        lp_lat -= th1 = (lp_lat + sin(lp_lat) - c) / (1. + cos(lp_lat));
-                        if (fabs(th1) < EPS) break;
-                    }
-                    xy_x = FXC * lp_lon * cos(lp_lat *= .5);
-                    xy_y = sin(lp_lat) * (lp_lat < 0. ? FYCS : FYCN);
+                	double th1, c;
+                	int i;
+                
+                	c = sin(lp_lat) * (lp_lat < 0. ? CS : CN);
+                	for (i = NITER; i; --i) {
+                		lp_lat -= th1 = (lp_lat + sin(lp_lat) - c) / (1. + cos(lp_lat));
+                		if (fabs(th1) < EPS) break;
+                	}
+                	xy_x = FXC * lp_lon * cos(lp_lat *= .5);
+                	xy_y = sin(lp_lat) * (lp_lat < 0. ? FYCS : FYCN);
                 }
 
-                inline void inv(XY_T& xy_x, XY_T& xy_y, LL_T& lp_lon, LL_T& lp_lat) const
+                inline void inv(cartesian_type& xy_x, cartesian_type& xy_y, geographic_type& lp_lon, geographic_type& lp_lat) const
                 {
-                    double th;
-
-                    th = xy_y * ( xy_y < 0. ? RYCS : RYCN);
-                    if (fabs(th) > 1.)
-                        if (fabs(th) > ONETOL)    throw proj_exception();
-                        else            th = th > 0. ? HALFPI : - HALFPI;
-                    else
-                        th = asin(th);
-                    lp_lon = RXC * xy_x / cos(th);
-                    th += th;
-                    lp_lat = (th + sin(th)) * (xy_y < 0. ? RCS : RCN);
-                    if (fabs(lp_lat) > 1.)
-                        if (fabs(lp_lat) > ONETOL)    throw proj_exception();
-                        else            lp_lat = lp_lat > 0. ? HALFPI : - HALFPI;
-                    else
-                        lp_lat = asin(lp_lat);
+                	double th;
+                
+                	th = xy_y * ( xy_y < 0. ? RYCS : RYCN);
+                	if (fabs(th) > 1.)
+                		if (fabs(th) > ONETOL)	throw proj_exception();
+                		else			th = th > 0. ? HALFPI : - HALFPI;
+                	else
+                		th = asin(th);
+                	lp_lon = RXC * xy_x / cos(th);
+                	th += th;
+                	lp_lat = (th + sin(th)) * (xy_y < 0. ? RCS : RCN);
+                	if (fabs(lp_lat) > 1.)
+                		if (fabs(lp_lat) > ONETOL)	throw proj_exception();
+                		else			lp_lat = lp_lat > 0. ? HALFPI : - HALFPI;
+                	else
+                		lp_lat = asin(lp_lat);
                 }
             };
 
@@ -116,12 +120,12 @@ namespace ggl { namespace projection
             }
 
         }} // namespace impl::hatano
-    #endif // doxygen
+    #endif // doxygen 
 
     /*!
         \brief Hatano Asymmetrical Equal Area projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -130,10 +134,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_hatano.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct hatano_spheroid : public impl::hatano::base_hatano_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct hatano_spheroid : public impl::hatano::base_hatano_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline hatano_spheroid(const Parameters& par) : impl::hatano::base_hatano_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline hatano_spheroid(const Parameters& par) : impl::hatano::base_hatano_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::hatano::setup_hatano(this->m_par);
         }
@@ -144,23 +148,23 @@ namespace ggl { namespace projection
     {
 
         // Factory entry(s)
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class hatano_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class hatano_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_fi<hatano_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_fi<hatano_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        inline void hatano_init(impl::base_factory<LatLong, Cartesian, Parameters>& factory)
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        inline void hatano_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
-            factory.add_to_factory("hatano", new hatano_entry<LatLong, Cartesian, Parameters>);
+            factory.add_to_factory("hatano", new hatano_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl
+    } // namespace impl 
     #endif // doxygen
 
 }} // namespace ggl::projection

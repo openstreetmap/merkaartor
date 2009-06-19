@@ -16,7 +16,7 @@
 // PROJ4 is converted to Geometry Library by Barend Gehrels (Geodan, Amsterdam)
 
 // Original copyright notice:
-
+ 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
@@ -35,6 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/math/special_functions/hypot.hpp>
+
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>
 #include <ggl/projections/impl/projects.hpp>
@@ -43,7 +45,7 @@
 namespace ggl { namespace projection
 {
     #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace ortho{
+    namespace impl { namespace ortho{ 
             static const double EPS10 = 1.e-10;
             static const int N_POLE = 0;
             static const int S_POLE = 1;
@@ -58,51 +60,53 @@ namespace ggl { namespace projection
             };
 
             // template class, using CRTP to implement forward/inverse
-            template <typename LatLong, typename Cartesian, typename Parameters>
-            struct base_ortho_spheroid : public base_t_fi<base_ortho_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>
+            template <typename Geographic, typename Cartesian, typename Parameters>
+            struct base_ortho_spheroid : public base_t_fi<base_ortho_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>
             {
 
-                typedef typename base_t_fi<base_ortho_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::LL_T LL_T;
-                typedef typename base_t_fi<base_ortho_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::XY_T XY_T;
+                 typedef double geographic_type;
+                 typedef double cartesian_type;
 
                 par_ortho m_proj_parm;
 
                 inline base_ortho_spheroid(const Parameters& par)
-                    : base_t_fi<base_ortho_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(*this, par) {}
+                    : base_t_fi<base_ortho_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>(*this, par) {}
 
-                inline void fwd(LL_T& lp_lon, LL_T& lp_lat, XY_T& xy_x, XY_T& xy_y) const
+                inline void fwd(geographic_type& lp_lon, geographic_type& lp_lat, cartesian_type& xy_x, cartesian_type& xy_y) const
                 {
-                    double  coslam, cosphi, sinphi;
-
-                    cosphi = cos(lp_lat);
-                    coslam = cos(lp_lon);
-                    switch (this->m_proj_parm.mode) {
-                    case EQUIT:
-                        if (cosphi * coslam < - EPS10) throw proj_exception();;
-                        xy_y = sin(lp_lat);
-                        break;
-                    case OBLIQ:
-                        if (this->m_proj_parm.sinph0 * (sinphi = sin(lp_lat)) +
-                           this->m_proj_parm.cosph0 * cosphi * coslam < - EPS10) throw proj_exception();;
-                        xy_y = this->m_proj_parm.cosph0 * sinphi - this->m_proj_parm.sinph0 * cosphi * coslam;
-                        break;
-                    case N_POLE:
-                        coslam = - coslam;
-                    case S_POLE:
-                        if (fabs(lp_lat - this->m_par.phi0) - EPS10 > HALFPI) throw proj_exception();;
-                        xy_y = cosphi * coslam;
-                        break;
-                    }
-                    xy_x = cosphi * sin(lp_lon);
+                	double  coslam, cosphi, sinphi;
+                
+                	cosphi = cos(lp_lat);
+                	coslam = cos(lp_lon);
+                	switch (this->m_proj_parm.mode) {
+                	case EQUIT:
+                		if (cosphi * coslam < - EPS10) throw proj_exception();;
+                		xy_y = sin(lp_lat);
+                		break;
+                	case OBLIQ:
+                		if (this->m_proj_parm.sinph0 * (sinphi = sin(lp_lat)) +
+                		   this->m_proj_parm.cosph0 * cosphi * coslam < - EPS10) throw proj_exception();;
+                		xy_y = this->m_proj_parm.cosph0 * sinphi - this->m_proj_parm.sinph0 * cosphi * coslam;
+                		break;
+                	case N_POLE:
+                		coslam = - coslam;
+                	case S_POLE:
+                		if (fabs(lp_lat - this->m_par.phi0) - EPS10 > HALFPI) throw proj_exception();;
+                		xy_y = cosphi * coslam;
+                		break;
+                	}
+                	xy_x = cosphi * sin(lp_lon);
                             return;
                 }
+                
 
-
-                inline void inv(XY_T& xy_x, XY_T& xy_y, LL_T& lp_lon, LL_T& lp_lat) const
+                inline void inv(cartesian_type& xy_x, cartesian_type& xy_y, geographic_type& lp_lon, geographic_type& lp_lat) const
                 {
                     double  rh, cosc, sinc;
-
-                    if ((sinc = (rh = hypot(xy_x, xy_y))) > 1.) {
+                
+                    if ((sinc = (rh = boost::math::hypot(xy_x, xy_y))) > 1.) {
                         if ((sinc - 1.) > EPS10) throw proj_exception();;
                         sinc = 1.;
                     }
@@ -141,33 +145,33 @@ namespace ggl { namespace projection
                     }
                             return;
                 }
-
+                
             };
 
             // Orthographic
             template <typename Parameters>
             void setup_ortho(Parameters& par, par_ortho& proj_parm)
             {
-                if (fabs(fabs(par.phi0) - HALFPI) <= EPS10)
-                    proj_parm.mode = par.phi0 < 0. ? S_POLE : N_POLE;
-                else if (fabs(par.phi0) > EPS10) {
-                    proj_parm.mode = OBLIQ;
-                    proj_parm.sinph0 = sin(par.phi0);
-                    proj_parm.cosph0 = cos(par.phi0);
-                } else
-                    proj_parm.mode = EQUIT;
+            	if (fabs(fabs(par.phi0) - HALFPI) <= EPS10)
+            		proj_parm.mode = par.phi0 < 0. ? S_POLE : N_POLE;
+            	else if (fabs(par.phi0) > EPS10) {
+            		proj_parm.mode = OBLIQ;
+            		proj_parm.sinph0 = sin(par.phi0);
+            		proj_parm.cosph0 = cos(par.phi0);
+            	} else
+            		proj_parm.mode = EQUIT;
                 // par.inv = s_inverse;
                 // par.fwd = s_forward;
-                par.es = 0.;
+            	par.es = 0.;
             }
 
         }} // namespace impl::ortho
-    #endif // doxygen
+    #endif // doxygen 
 
     /*!
         \brief Orthographic projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -176,10 +180,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_ortho.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct ortho_spheroid : public impl::ortho::base_ortho_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct ortho_spheroid : public impl::ortho::base_ortho_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline ortho_spheroid(const Parameters& par) : impl::ortho::base_ortho_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline ortho_spheroid(const Parameters& par) : impl::ortho::base_ortho_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::ortho::setup_ortho(this->m_par, this->m_proj_parm);
         }
@@ -190,23 +194,23 @@ namespace ggl { namespace projection
     {
 
         // Factory entry(s)
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class ortho_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class ortho_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_fi<ortho_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_fi<ortho_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        inline void ortho_init(impl::base_factory<LatLong, Cartesian, Parameters>& factory)
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        inline void ortho_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
-            factory.add_to_factory("ortho", new ortho_entry<LatLong, Cartesian, Parameters>);
+            factory.add_to_factory("ortho", new ortho_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl
+    } // namespace impl 
     #endif // doxygen
 
 }} // namespace ggl::projection

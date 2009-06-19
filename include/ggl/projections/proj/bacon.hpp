@@ -16,7 +16,7 @@
 // PROJ4 is converted to Geometry Library by Barend Gehrels (Geodan, Amsterdam)
 
 // Original copyright notice:
-
+ 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
@@ -35,6 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/math/special_functions/hypot.hpp>
+
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>
 #include <ggl/projections/impl/projects.hpp>
@@ -43,7 +45,7 @@
 namespace ggl { namespace projection
 {
     #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace bacon{
+    namespace impl { namespace bacon{ 
             static const double HLFPI2 = 2.46740110027233965467;
             static const double EPS = 1e-10;
 
@@ -54,33 +56,35 @@ namespace ggl { namespace projection
             };
 
             // template class, using CRTP to implement forward/inverse
-            template <typename LatLong, typename Cartesian, typename Parameters>
-            struct base_bacon_spheroid : public base_t_f<base_bacon_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>
+            template <typename Geographic, typename Cartesian, typename Parameters>
+            struct base_bacon_spheroid : public base_t_f<base_bacon_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>
             {
 
-                typedef typename base_t_f<base_bacon_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::LL_T LL_T;
-                typedef typename base_t_f<base_bacon_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::XY_T XY_T;
+                 typedef double geographic_type;
+                 typedef double cartesian_type;
 
                 par_bacon m_proj_parm;
 
                 inline base_bacon_spheroid(const Parameters& par)
-                    : base_t_f<base_bacon_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(*this, par) {}
+                    : base_t_f<base_bacon_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>(*this, par) {}
 
-                inline void fwd(LL_T& lp_lon, LL_T& lp_lat, XY_T& xy_x, XY_T& xy_y) const
+                inline void fwd(geographic_type& lp_lon, geographic_type& lp_lat, cartesian_type& xy_x, cartesian_type& xy_y) const
                 {
-                    double ax, f;
-
-                    xy_y = this->m_proj_parm.bacn ? HALFPI * sin(lp_lat) : lp_lat;
-                    if ((ax = fabs(lp_lon)) >= EPS) {
-                        if (this->m_proj_parm.ortl && ax >= HALFPI)
-                            xy_x = sqrt(HLFPI2 - lp_lat * lp_lat + EPS) + ax - HALFPI;
-                        else {
-                            f = 0.5 * (HLFPI2 / ax + ax);
-                            xy_x = ax - f + sqrt(f * f - xy_y * xy_y);
-                        }
-                        if (lp_lon < 0.) xy_x = - xy_x;
-                    } else
-                        xy_x = 0.;
+                	double ax, f;
+                
+                	xy_y = this->m_proj_parm.bacn ? HALFPI * sin(lp_lat) : lp_lat;
+                	if ((ax = fabs(lp_lon)) >= EPS) {
+                		if (this->m_proj_parm.ortl && ax >= HALFPI)
+                			xy_x = sqrt(HLFPI2 - lp_lat * lp_lat + EPS) + ax - HALFPI;
+                		else {
+                			f = 0.5 * (HLFPI2 / ax + ax);
+                			xy_x = ax - f + sqrt(f * f - xy_y * xy_y);
+                		}
+                		if (lp_lon < 0.) xy_x = - xy_x;
+                	} else
+                		xy_x = 0.;
                 }
             };
 
@@ -88,8 +92,8 @@ namespace ggl { namespace projection
             template <typename Parameters>
             void setup_apian(Parameters& par, par_bacon& proj_parm)
             {
-                proj_parm.bacn = proj_parm.ortl = 0;
-                par.es = 0.;
+            	proj_parm.bacn = proj_parm.ortl = 0;
+            	par.es = 0.;
                 // par.fwd = s_forward;
             }
 
@@ -97,9 +101,9 @@ namespace ggl { namespace projection
             template <typename Parameters>
             void setup_ortel(Parameters& par, par_bacon& proj_parm)
             {
-                proj_parm.bacn = 0;
-                proj_parm.ortl = 1;
-                par.es = 0.;
+            	proj_parm.bacn = 0;
+            	proj_parm.ortl = 1;
+            	par.es = 0.;
                 // par.fwd = s_forward;
             }
 
@@ -107,19 +111,19 @@ namespace ggl { namespace projection
             template <typename Parameters>
             void setup_bacon(Parameters& par, par_bacon& proj_parm)
             {
-                proj_parm.bacn = 1;
-                proj_parm.ortl = 0;
-                par.es = 0.;
+            	proj_parm.bacn = 1;
+            	proj_parm.ortl = 0;
+            	par.es = 0.;
                 // par.fwd = s_forward;
             }
 
         }} // namespace impl::bacon
-    #endif // doxygen
+    #endif // doxygen 
 
     /*!
         \brief Apian Globular I projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -129,10 +133,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_apian.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct apian_spheroid : public impl::bacon::base_bacon_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct apian_spheroid : public impl::bacon::base_bacon_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline apian_spheroid(const Parameters& par) : impl::bacon::base_bacon_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline apian_spheroid(const Parameters& par) : impl::bacon::base_bacon_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::bacon::setup_apian(this->m_par, this->m_proj_parm);
         }
@@ -141,7 +145,7 @@ namespace ggl { namespace projection
     /*!
         \brief Ortelius Oval projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -151,10 +155,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_ortel.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct ortel_spheroid : public impl::bacon::base_bacon_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct ortel_spheroid : public impl::bacon::base_bacon_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline ortel_spheroid(const Parameters& par) : impl::bacon::base_bacon_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline ortel_spheroid(const Parameters& par) : impl::bacon::base_bacon_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::bacon::setup_ortel(this->m_par, this->m_proj_parm);
         }
@@ -163,7 +167,7 @@ namespace ggl { namespace projection
     /*!
         \brief Bacon Globular projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -173,10 +177,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_bacon.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct bacon_spheroid : public impl::bacon::base_bacon_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct bacon_spheroid : public impl::bacon::base_bacon_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline bacon_spheroid(const Parameters& par) : impl::bacon::base_bacon_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline bacon_spheroid(const Parameters& par) : impl::bacon::base_bacon_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::bacon::setup_bacon(this->m_par, this->m_proj_parm);
         }
@@ -187,45 +191,45 @@ namespace ggl { namespace projection
     {
 
         // Factory entry(s)
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class apian_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class apian_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_f<apian_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_f<apian_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class ortel_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class ortel_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_f<ortel_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_f<ortel_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class bacon_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class bacon_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_f<bacon_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_f<bacon_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        inline void bacon_init(impl::base_factory<LatLong, Cartesian, Parameters>& factory)
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        inline void bacon_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
-            factory.add_to_factory("apian", new apian_entry<LatLong, Cartesian, Parameters>);
-            factory.add_to_factory("ortel", new ortel_entry<LatLong, Cartesian, Parameters>);
-            factory.add_to_factory("bacon", new bacon_entry<LatLong, Cartesian, Parameters>);
+            factory.add_to_factory("apian", new apian_entry<Geographic, Cartesian, Parameters>);
+            factory.add_to_factory("ortel", new ortel_entry<Geographic, Cartesian, Parameters>);
+            factory.add_to_factory("bacon", new bacon_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl
+    } // namespace impl 
     #endif // doxygen
 
 }} // namespace ggl::projection

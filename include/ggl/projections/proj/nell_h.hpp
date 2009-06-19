@@ -16,7 +16,7 @@
 // PROJ4 is converted to Geometry Library by Barend Gehrels (Geodan, Amsterdam)
 
 // Original copyright notice:
-
+ 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
@@ -35,6 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/math/special_functions/hypot.hpp>
+
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>
 #include <ggl/projections/impl/projects.hpp>
@@ -43,46 +45,48 @@
 namespace ggl { namespace projection
 {
     #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace nell_h{
+    namespace impl { namespace nell_h{ 
             static const int NITER = 9;
             static const double EPS = 1e-7;
 
 
             // template class, using CRTP to implement forward/inverse
-            template <typename LatLong, typename Cartesian, typename Parameters>
-            struct base_nell_h_spheroid : public base_t_fi<base_nell_h_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>
+            template <typename Geographic, typename Cartesian, typename Parameters>
+            struct base_nell_h_spheroid : public base_t_fi<base_nell_h_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>
             {
 
-                typedef typename base_t_fi<base_nell_h_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::LL_T LL_T;
-                typedef typename base_t_fi<base_nell_h_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::XY_T XY_T;
+                 typedef double geographic_type;
+                 typedef double cartesian_type;
 
 
                 inline base_nell_h_spheroid(const Parameters& par)
-                    : base_t_fi<base_nell_h_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(*this, par) {}
+                    : base_t_fi<base_nell_h_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>(*this, par) {}
 
-                inline void fwd(LL_T& lp_lon, LL_T& lp_lat, XY_T& xy_x, XY_T& xy_y) const
+                inline void fwd(geographic_type& lp_lon, geographic_type& lp_lat, cartesian_type& xy_x, cartesian_type& xy_y) const
                 {
-                    xy_x = 0.5 * lp_lon * (1. + cos(lp_lat));
-                    xy_y = 2.0 * (lp_lat - tan(0.5 *lp_lat));
+                	xy_x = 0.5 * lp_lon * (1. + cos(lp_lat));
+                	xy_y = 2.0 * (lp_lat - tan(0.5 *lp_lat));
                 }
 
-                inline void inv(XY_T& xy_x, XY_T& xy_y, LL_T& lp_lon, LL_T& lp_lat) const
+                inline void inv(cartesian_type& xy_x, cartesian_type& xy_y, geographic_type& lp_lon, geographic_type& lp_lat) const
                 {
-                    double V, c, p;
-                    int i;
-
-                    p = 0.5 * xy_y;
-                    for (i = NITER; i ; --i) {
-                        c = cos(0.5 * lp_lat);
-                        lp_lat -= V = (lp_lat - tan(lp_lat/2) - p)/(1. - 0.5/(c*c));
-                        if (fabs(V) < EPS)
-                            break;
-                    }
-                    if (!i) {
-                        lp_lat = p < 0. ? -HALFPI : HALFPI;
-                        lp_lon = 2. * xy_x;
-                    } else
-                        lp_lon = 2. * xy_x / (1. + cos(lp_lat));
+                	double V, c, p;
+                	int i;
+                
+                	p = 0.5 * xy_y;
+                	for (i = NITER; i ; --i) {
+                		c = cos(0.5 * lp_lat);
+                		lp_lat -= V = (lp_lat - tan(lp_lat/2) - p)/(1. - 0.5/(c*c));
+                		if (fabs(V) < EPS)
+                			break;
+                	}
+                	if (!i) {
+                		lp_lat = p < 0. ? -HALFPI : HALFPI;
+                		lp_lon = 2. * xy_x;
+                	} else
+                		lp_lon = 2. * xy_x / (1. + cos(lp_lat));
                 }
             };
 
@@ -96,12 +100,12 @@ namespace ggl { namespace projection
             }
 
         }} // namespace impl::nell_h
-    #endif // doxygen
+    #endif // doxygen 
 
     /*!
         \brief Nell-Hammer projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -110,10 +114,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_nell_h.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct nell_h_spheroid : public impl::nell_h::base_nell_h_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct nell_h_spheroid : public impl::nell_h::base_nell_h_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline nell_h_spheroid(const Parameters& par) : impl::nell_h::base_nell_h_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline nell_h_spheroid(const Parameters& par) : impl::nell_h::base_nell_h_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::nell_h::setup_nell_h(this->m_par);
         }
@@ -124,23 +128,23 @@ namespace ggl { namespace projection
     {
 
         // Factory entry(s)
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class nell_h_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class nell_h_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_fi<nell_h_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_fi<nell_h_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        inline void nell_h_init(impl::base_factory<LatLong, Cartesian, Parameters>& factory)
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        inline void nell_h_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
-            factory.add_to_factory("nell_h", new nell_h_entry<LatLong, Cartesian, Parameters>);
+            factory.add_to_factory("nell_h", new nell_h_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl
+    } // namespace impl 
     #endif // doxygen
 
 }} // namespace ggl::projection

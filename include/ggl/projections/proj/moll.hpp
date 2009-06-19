@@ -16,7 +16,7 @@
 // PROJ4 is converted to Geometry Library by Barend Gehrels (Geodan, Amsterdam)
 
 // Original copyright notice:
-
+ 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
@@ -35,6 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/math/special_functions/hypot.hpp>
+
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>
 #include <ggl/projections/impl/projects.hpp>
@@ -43,7 +45,7 @@
 namespace ggl { namespace projection
 {
     #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace moll{
+    namespace impl { namespace moll{ 
             static const int MAX_ITER = 10;
             static const double LOOP_TOL = 1e-7;
 
@@ -53,59 +55,61 @@ namespace ggl { namespace projection
             };
 
             // template class, using CRTP to implement forward/inverse
-            template <typename LatLong, typename Cartesian, typename Parameters>
-            struct base_moll_spheroid : public base_t_fi<base_moll_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>
+            template <typename Geographic, typename Cartesian, typename Parameters>
+            struct base_moll_spheroid : public base_t_fi<base_moll_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>
             {
 
-                typedef typename base_t_fi<base_moll_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::LL_T LL_T;
-                typedef typename base_t_fi<base_moll_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::XY_T XY_T;
+                 typedef double geographic_type;
+                 typedef double cartesian_type;
 
                 par_moll m_proj_parm;
 
                 inline base_moll_spheroid(const Parameters& par)
-                    : base_t_fi<base_moll_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(*this, par) {}
+                    : base_t_fi<base_moll_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>(*this, par) {}
 
-                inline void fwd(LL_T& lp_lon, LL_T& lp_lat, XY_T& xy_x, XY_T& xy_y) const
+                inline void fwd(geographic_type& lp_lon, geographic_type& lp_lat, cartesian_type& xy_x, cartesian_type& xy_y) const
                 {
-                    double k, V;
-                    int i;
-
-                    k = this->m_proj_parm.C_p * sin(lp_lat);
-                    for (i = MAX_ITER; i ; --i) {
-                        lp_lat -= V = (lp_lat + sin(lp_lat) - k) /
-                            (1. + cos(lp_lat));
-                        if (fabs(V) < LOOP_TOL)
-                            break;
-                    }
-                    if (!i)
-                        lp_lat = (lp_lat < 0.) ? -HALFPI : HALFPI;
-                    else
-                        lp_lat *= 0.5;
-                    xy_x = this->m_proj_parm.C_x * lp_lon * cos(lp_lat);
-                    xy_y = this->m_proj_parm.C_y * sin(lp_lat);
+                	double k, V;
+                	int i;
+                
+                	k = this->m_proj_parm.C_p * sin(lp_lat);
+                	for (i = MAX_ITER; i ; --i) {
+                		lp_lat -= V = (lp_lat + sin(lp_lat) - k) /
+                			(1. + cos(lp_lat));
+                		if (fabs(V) < LOOP_TOL)
+                			break;
+                	}
+                	if (!i)
+                		lp_lat = (lp_lat < 0.) ? -HALFPI : HALFPI;
+                	else
+                		lp_lat *= 0.5;
+                	xy_x = this->m_proj_parm.C_x * lp_lon * cos(lp_lat);
+                	xy_y = this->m_proj_parm.C_y * sin(lp_lat);
                 }
 
-                inline void inv(XY_T& xy_x, XY_T& xy_y, LL_T& lp_lon, LL_T& lp_lat) const
+                inline void inv(cartesian_type& xy_x, cartesian_type& xy_y, geographic_type& lp_lon, geographic_type& lp_lat) const
                 {
-                    double th, s;
-
-                    lp_lat = aasin(xy_y / this->m_proj_parm.C_y);
-                    lp_lon = xy_x / (this->m_proj_parm.C_x * cos(lp_lat));
-                    lp_lat += lp_lat;
-                    lp_lat = aasin((lp_lat + sin(lp_lat)) / this->m_proj_parm.C_p);
+                	
+                
+                	lp_lat = aasin(xy_y / this->m_proj_parm.C_y);
+                	lp_lon = xy_x / (this->m_proj_parm.C_x * cos(lp_lat));
+                	lp_lat += lp_lat;
+                	lp_lat = aasin((lp_lat + sin(lp_lat)) / this->m_proj_parm.C_p);
                 }
             };
 
             template <typename Parameters>
-            void setup(Parameters& par, par_moll& proj_parm, double p)
+            void setup(Parameters& par, par_moll& proj_parm, double p) 
             {
-                double r, sp, p2 = p + p;
-                par.es = 0;
-                sp = sin(p);
-                r = sqrt(TWOPI * sp / (p2 + sin(p2)));
-                proj_parm.C_x = 2. * r / PI;
-                proj_parm.C_y = r / sp;
-                proj_parm.C_p = p2 + sin(p2);
+            	double r, sp, p2 = p + p;
+            	par.es = 0;
+            	sp = sin(p);
+            	r = sqrt(TWOPI * sp / (p2 + sin(p2)));
+            	proj_parm.C_x = 2. * r / PI;
+            	proj_parm.C_y = r / sp;
+            	proj_parm.C_p = p2 + sin(p2);
                 // par.inv = s_inverse;
                 // par.fwd = s_forward;
             }
@@ -129,21 +133,21 @@ namespace ggl { namespace projection
             template <typename Parameters>
             void setup_wag5(Parameters& par, par_moll& proj_parm)
             {
-                par.es = 0;
-                proj_parm.C_x = 0.90977;
-                proj_parm.C_y = 1.65014;
-                proj_parm.C_p = 3.00896;
+            	par.es = 0;
+            	proj_parm.C_x = 0.90977;
+            	proj_parm.C_y = 1.65014;
+            	proj_parm.C_p = 3.00896;
                 // par.inv = s_inverse;
                 // par.fwd = s_forward;
             }
 
         }} // namespace impl::moll
-    #endif // doxygen
+    #endif // doxygen 
 
     /*!
         \brief Mollweide projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -152,10 +156,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_moll.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct moll_spheroid : public impl::moll::base_moll_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct moll_spheroid : public impl::moll::base_moll_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline moll_spheroid(const Parameters& par) : impl::moll::base_moll_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline moll_spheroid(const Parameters& par) : impl::moll::base_moll_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::moll::setup_moll(this->m_par, this->m_proj_parm);
         }
@@ -164,7 +168,7 @@ namespace ggl { namespace projection
     /*!
         \brief Wagner IV projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -173,10 +177,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_wag4.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct wag4_spheroid : public impl::moll::base_moll_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct wag4_spheroid : public impl::moll::base_moll_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline wag4_spheroid(const Parameters& par) : impl::moll::base_moll_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline wag4_spheroid(const Parameters& par) : impl::moll::base_moll_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::moll::setup_wag4(this->m_par, this->m_proj_parm);
         }
@@ -185,7 +189,7 @@ namespace ggl { namespace projection
     /*!
         \brief Wagner V projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -194,10 +198,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_wag5.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct wag5_spheroid : public impl::moll::base_moll_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct wag5_spheroid : public impl::moll::base_moll_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline wag5_spheroid(const Parameters& par) : impl::moll::base_moll_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline wag5_spheroid(const Parameters& par) : impl::moll::base_moll_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::moll::setup_wag5(this->m_par, this->m_proj_parm);
         }
@@ -208,45 +212,45 @@ namespace ggl { namespace projection
     {
 
         // Factory entry(s)
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class moll_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class moll_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_fi<moll_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_fi<moll_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class wag4_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class wag4_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_fi<wag4_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_fi<wag4_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class wag5_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class wag5_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_fi<wag5_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_fi<wag5_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        inline void moll_init(impl::base_factory<LatLong, Cartesian, Parameters>& factory)
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        inline void moll_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
-            factory.add_to_factory("moll", new moll_entry<LatLong, Cartesian, Parameters>);
-            factory.add_to_factory("wag4", new wag4_entry<LatLong, Cartesian, Parameters>);
-            factory.add_to_factory("wag5", new wag5_entry<LatLong, Cartesian, Parameters>);
+            factory.add_to_factory("moll", new moll_entry<Geographic, Cartesian, Parameters>);
+            factory.add_to_factory("wag4", new wag4_entry<Geographic, Cartesian, Parameters>);
+            factory.add_to_factory("wag5", new wag5_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl
+    } // namespace impl 
     #endif // doxygen
 
 }} // namespace ggl::projection

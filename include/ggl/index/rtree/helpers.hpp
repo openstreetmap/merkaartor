@@ -60,34 +60,19 @@ inline double compute_union_area(Box const& b1, Box const& b2)
 template <typename Box>
 inline bool is_overlapping(Box const& b1, Box const& b2)
 {
-    bool overlaps_x = false;
-    bool overlaps_y = false;
+    if (ggl::get<min_corner, 0>(b1) > ggl::get<max_corner, 0>(b2))
+        return false;
 
-    if (ggl::get<min_corner, 0>(b1) >= ggl::get<min_corner, 0>(b2)
-        && ggl::get<min_corner, 0>(b1) <= ggl::get<max_corner, 0>(b2))
-    {
-        overlaps_x = true;
-    }
+    if (ggl::get<max_corner, 0>(b1) < ggl::get<min_corner, 0>(b2))
+        return false;
 
-    if (ggl::get<max_corner, 0>(b1) >= ggl::get<min_corner, 0>(b2)
-        && ggl::get<min_corner, 0>(b1) <= ggl::get<max_corner, 0>(b2))
-    {
-        overlaps_x = true;
-    }
+    if (ggl::get<min_corner, 1>(b1) > ggl::get<max_corner, 1>(b2))
+        return false;
 
-    if (ggl::get<min_corner, 1>(b1) >= ggl::get<min_corner, 1>(b2)
-        && ggl::get<min_corner, 1>(b1) <= ggl::get<max_corner, 1>(b2))
-    {
-        overlaps_y = true;
-    }
+    if (ggl::get<max_corner, 1>(b1) < ggl::get<min_corner, 1>(b2))
+        return false;
 
-    if (ggl::get<max_corner, 1>(b1) >= ggl::get<min_corner, 1>(b2)
-        && ggl::get<min_corner, 1>(b1) <= ggl::get<max_corner, 1>(b2))
-    {
-        overlaps_y = true;
-    }
-
-    return overlaps_x && overlaps_y;
+    return true;
 }
 
 }}} // namespace ggl::index::rtree

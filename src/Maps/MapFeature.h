@@ -120,7 +120,7 @@ class MapFeature : public QObject
 		int versionNumber() const;
 		void setVersionNumber(int vn);
 		virtual QString description() const = 0;
-		virtual RenderPriority renderPriority(double aPixelPerM) = 0;
+		virtual RenderPriority renderPriority() = 0;
 		virtual RenderPriority getRenderPriority();
 		virtual void setRenderPriority(RenderPriority aPriority);
 

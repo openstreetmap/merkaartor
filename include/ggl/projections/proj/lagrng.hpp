@@ -16,7 +16,7 @@
 // PROJ4 is converted to Geometry Library by Barend Gehrels (Geodan, Amsterdam)
 
 // Original copyright notice:
-
+ 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
@@ -35,6 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/math/special_functions/hypot.hpp>
+
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>
 #include <ggl/projections/impl/projects.hpp>
@@ -43,7 +45,7 @@
 namespace ggl { namespace projection
 {
     #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace lagrng{
+    namespace impl { namespace lagrng{ 
             static const double TOL = 1e-10;
 
             struct par_lagrng
@@ -54,33 +56,35 @@ namespace ggl { namespace projection
             };
 
             // template class, using CRTP to implement forward/inverse
-            template <typename LatLong, typename Cartesian, typename Parameters>
-            struct base_lagrng_spheroid : public base_t_f<base_lagrng_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>
+            template <typename Geographic, typename Cartesian, typename Parameters>
+            struct base_lagrng_spheroid : public base_t_f<base_lagrng_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>
             {
 
-                typedef typename base_t_f<base_lagrng_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::LL_T LL_T;
-                typedef typename base_t_f<base_lagrng_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::XY_T XY_T;
+                 typedef double geographic_type;
+                 typedef double cartesian_type;
 
                 par_lagrng m_proj_parm;
 
                 inline base_lagrng_spheroid(const Parameters& par)
-                    : base_t_f<base_lagrng_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(*this, par) {}
+                    : base_t_f<base_lagrng_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>(*this, par) {}
 
-                inline void fwd(LL_T& lp_lon, LL_T& lp_lat, XY_T& xy_x, XY_T& xy_y) const
+                inline void fwd(geographic_type& lp_lon, geographic_type& lp_lat, cartesian_type& xy_x, cartesian_type& xy_y) const
                 {
-                    double v, c;
-
-                    if (fabs(fabs(lp_lat) - HALFPI) < TOL) {
-                        xy_x = 0;
-                        xy_y = lp_lat < 0 ? -2. : 2.;
-                    } else {
-                        lp_lat = sin(lp_lat);
-                        v = this->m_proj_parm.a1 * pow((1. + lp_lat)/(1. - lp_lat), this->m_proj_parm.hrw);
-                        if ((c = 0.5 * (v + 1./v) + cos(lp_lon *= this->m_proj_parm.rw)) < TOL)
-                            throw proj_exception();;
-                        xy_x = 2. * sin(lp_lon) / c;
-                        xy_y = (v - 1./v) / c;
-                    }
+                	double v, c;
+                
+                	if (fabs(fabs(lp_lat) - HALFPI) < TOL) {
+                		xy_x = 0;
+                		xy_y = lp_lat < 0 ? -2. : 2.;
+                	} else {
+                		lp_lat = sin(lp_lat);
+                		v = this->m_proj_parm.a1 * pow((1. + lp_lat)/(1. - lp_lat), this->m_proj_parm.hrw);
+                		if ((c = 0.5 * (v + 1./v) + cos(lp_lon *= this->m_proj_parm.rw)) < TOL)
+                			throw proj_exception();;
+                		xy_x = 2. * sin(lp_lon) / c;
+                		xy_y = (v - 1./v) / c;
+                	}
                 }
             };
 
@@ -88,23 +92,23 @@ namespace ggl { namespace projection
             template <typename Parameters>
             void setup_lagrng(Parameters& par, par_lagrng& proj_parm)
             {
-                double phi1;
-                if ((proj_parm.rw = pj_param(par.params, "dW").f) <= 0) throw proj_exception(-27);
-                proj_parm.hrw = 0.5 * (proj_parm.rw = 1. / proj_parm.rw);
-                phi1 = pj_param(par.params, "rlat_1").f;
-                if (fabs(fabs(phi1 = sin(phi1)) - 1.) < TOL) throw proj_exception(-22);
-                proj_parm.a1 = pow((1. - phi1)/(1. + phi1), proj_parm.hrw);
-                par.es = 0.;
+            	double phi1;
+            	if ((proj_parm.rw = pj_param(par.params, "dW").f) <= 0) throw proj_exception(-27);
+            	proj_parm.hrw = 0.5 * (proj_parm.rw = 1. / proj_parm.rw);
+            	phi1 = pj_param(par.params, "rlat_1").f;
+            	if (fabs(fabs(phi1 = sin(phi1)) - 1.) < TOL) throw proj_exception(-22);
+            	proj_parm.a1 = pow((1. - phi1)/(1. + phi1), proj_parm.hrw);
+            	par.es = 0.;
                 // par.fwd = s_forward;
             }
 
         }} // namespace impl::lagrng
-    #endif // doxygen
+    #endif // doxygen 
 
     /*!
         \brief Lagrange projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -115,10 +119,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_lagrng.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct lagrng_spheroid : public impl::lagrng::base_lagrng_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct lagrng_spheroid : public impl::lagrng::base_lagrng_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline lagrng_spheroid(const Parameters& par) : impl::lagrng::base_lagrng_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline lagrng_spheroid(const Parameters& par) : impl::lagrng::base_lagrng_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::lagrng::setup_lagrng(this->m_par, this->m_proj_parm);
         }
@@ -129,23 +133,23 @@ namespace ggl { namespace projection
     {
 
         // Factory entry(s)
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class lagrng_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class lagrng_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_f<lagrng_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_f<lagrng_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        inline void lagrng_init(impl::base_factory<LatLong, Cartesian, Parameters>& factory)
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        inline void lagrng_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
-            factory.add_to_factory("lagrng", new lagrng_entry<LatLong, Cartesian, Parameters>);
+            factory.add_to_factory("lagrng", new lagrng_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl
+    } // namespace impl 
     #endif // doxygen
 
 }} // namespace ggl::projection

@@ -16,7 +16,7 @@
 // PROJ4 is converted to Geometry Library by Barend Gehrels (Geodan, Amsterdam)
 
 // Original copyright notice:
-
+ 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
@@ -35,6 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/math/special_functions/hypot.hpp>
+
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>
 #include <ggl/projections/impl/projects.hpp>
@@ -43,7 +45,7 @@
 namespace ggl { namespace projection
 {
     #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace boggs{
+    namespace impl { namespace boggs{ 
             static const int NITER = 20;
             static const double EPS = 1e-7;
             static const double ONETOL = 1.000001;
@@ -54,36 +56,38 @@ namespace ggl { namespace projection
 
 
             // template class, using CRTP to implement forward/inverse
-            template <typename LatLong, typename Cartesian, typename Parameters>
-            struct base_boggs_spheroid : public base_t_f<base_boggs_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>
+            template <typename Geographic, typename Cartesian, typename Parameters>
+            struct base_boggs_spheroid : public base_t_f<base_boggs_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>
             {
 
-                typedef typename base_t_f<base_boggs_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::LL_T LL_T;
-                typedef typename base_t_f<base_boggs_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::XY_T XY_T;
+                 typedef double geographic_type;
+                 typedef double cartesian_type;
 
 
                 inline base_boggs_spheroid(const Parameters& par)
-                    : base_t_f<base_boggs_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(*this, par) {}
+                    : base_t_f<base_boggs_spheroid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>(*this, par) {}
 
-                inline void fwd(LL_T& lp_lon, LL_T& lp_lat, XY_T& xy_x, XY_T& xy_y) const
+                inline void fwd(geographic_type& lp_lon, geographic_type& lp_lat, cartesian_type& xy_x, cartesian_type& xy_y) const
                 {
-                    double theta, th1, c;
-                    int i;
-
-                    theta = lp_lat;
-                    if (fabs(fabs(lp_lat) - HALFPI) < EPS)
-                        xy_x = 0.;
-                    else {
-                        c = sin(theta) * PI;
-                        for (i = NITER; i; --i) {
-                            theta -= th1 = (theta + sin(theta) - c) /
-                                (1. + cos(theta));
-                            if (fabs(th1) < EPS) break;
-                        }
-                        theta *= 0.5;
-                        xy_x = FXC * lp_lon / (1. / cos(lp_lat) + FXC2 / cos(theta));
-                    }
-                    xy_y = FYC * (lp_lat + FYC2 * sin(theta));
+                	double theta, th1, c;
+                	int i;
+                
+                	theta = lp_lat;
+                	if (fabs(fabs(lp_lat) - HALFPI) < EPS)
+                		xy_x = 0.;
+                	else {
+                		c = sin(theta) * PI;
+                		for (i = NITER; i; --i) {
+                			theta -= th1 = (theta + sin(theta) - c) /
+                				(1. + cos(theta));
+                			if (fabs(th1) < EPS) break;
+                		}
+                		theta *= 0.5;
+                		xy_x = FXC * lp_lon / (1. / cos(lp_lat) + FXC2 / cos(theta));
+                	}
+                	xy_y = FYC * (lp_lat + FYC2 * sin(theta));
                 }
             };
 
@@ -96,12 +100,12 @@ namespace ggl { namespace projection
             }
 
         }} // namespace impl::boggs
-    #endif // doxygen
+    #endif // doxygen 
 
     /*!
         \brief Boggs Eumorphic projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -111,10 +115,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_boggs.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct boggs_spheroid : public impl::boggs::base_boggs_spheroid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct boggs_spheroid : public impl::boggs::base_boggs_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline boggs_spheroid(const Parameters& par) : impl::boggs::base_boggs_spheroid<LatLong, Cartesian, Parameters>(par)
+        inline boggs_spheroid(const Parameters& par) : impl::boggs::base_boggs_spheroid<Geographic, Cartesian, Parameters>(par)
         {
             impl::boggs::setup_boggs(this->m_par);
         }
@@ -125,23 +129,23 @@ namespace ggl { namespace projection
     {
 
         // Factory entry(s)
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class boggs_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class boggs_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_f<boggs_spheroid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_f<boggs_spheroid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        inline void boggs_init(impl::base_factory<LatLong, Cartesian, Parameters>& factory)
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        inline void boggs_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
-            factory.add_to_factory("boggs", new boggs_entry<LatLong, Cartesian, Parameters>);
+            factory.add_to_factory("boggs", new boggs_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl
+    } // namespace impl 
     #endif // doxygen
 
 }} // namespace ggl::projection

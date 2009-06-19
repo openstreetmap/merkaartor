@@ -39,11 +39,12 @@ class RoadPrivate
 		CoordBox BBox;
 		bool BBoxUpToDate;
 
+		bool MetaUpToDate;
 		bool IsCoastline;
 		double Area;
 		double Distance;
 		double Width;
-		bool MetaUpToDate;
+        bool NotEverythingDownloaded;
 		RenderPriority theRenderPriority;
 		QPainterPath thePath;
 
@@ -137,10 +138,9 @@ QString Road::description() const
 	return QString("%1").arg(id());
 }
 
-RenderPriority Road::renderPriority(double aPixelPerM) 
+RenderPriority Road::renderPriority() 
 {
 	// FIWME Segments of a road with different layers are wrongly painted (rounded corners)
-	Q_UNUSED(aPixelPerM)
 	return p->theRenderPriority;
 }
 
@@ -227,12 +227,10 @@ bool Road::isNull() const
 
 bool Road::notEverythingDownloaded() const
 {
-	if (lastUpdated() == MapFeature::NotYetDownloaded)
-		return true;
-	for (int i=0; i<p->Nodes.size(); ++i)
-		if (p->Nodes.at(i) && p->Nodes.at(i)->notEverythingDownloaded())
-			return true;
-	return false;
+   	if (p->MetaUpToDate == false)
+		updateMeta();
+
+	return p->NotEverythingDownloaded;
 }
 
 CoordBox Road::boundingBox() const
@@ -292,6 +290,17 @@ void Road::updateMeta() const
 
 	if (tagValue("natural","") == "coastline")
 		p->IsCoastline = true;
+
+    
+	p->NotEverythingDownloaded = false;
+	if (lastUpdated() == MapFeature::NotYetDownloaded)
+		p->NotEverythingDownloaded = true;
+    else
+	    for (int i=0; i<p->Nodes.size(); ++i)
+            if (p->Nodes.at(i) && p->Nodes.at(i)->notEverythingDownloaded()) {
+			    p->NotEverythingDownloaded = true;
+                break;
+            }
 
 	p->MetaUpToDate = true;
 }
@@ -492,54 +501,68 @@ void Road::buildPath(const Projection &theProjection, const QTransform& /*theTra
 	if (p->Nodes.size() < 2)
 		return;
 
+    QPointF pbl = theProjection.project(p->BBox.bottomLeft());
+    QPointF ptr = theProjection.project(p->BBox.topRight());
+    box_2d roadRect (
+        make<point_2d>(pbl.x(), pbl.y()), 
+        make<point_2d>(ptr.x(), ptr.y())
+        );
 	box_2d clipRect (make<point_2d>(cr.bottomLeft().x(), cr.topRight().y()), make<point_2d>(cr.topRight().x(), cr.bottomLeft().y()));
+    bool toClip = !ggl::within(roadRect, clipRect);
+    if (!toClip) {
+    	p->thePath.moveTo(theProjection.project(p->Nodes.at(0)));
+	    for (int i=1; i<p->Nodes.size(); ++i) {
+        	p->thePath.lineTo(theProjection.project(p->Nodes.at(i)));
+        }
+    } else {
 
-	if (area() <= 0.0) {
-		linestring_2d in;
-		for (int i=0; i<p->Nodes.size(); ++i) {
-			QPointF P = theProjection.project(p->Nodes[i]);
-			append(in, make<point_2d>(P.x(), P.y()));
-		}
+	    if (area() <= 0.0) {
+	        linestring_2d in;
+	        for (int i=0; i<p->Nodes.size(); ++i) {
+		        QPointF P = theProjection.project(p->Nodes[i]);
+		        append(in, make<point_2d>(P.x(), P.y()));
+	        }
 
-		std::vector<linestring_2d> clipped;
-		intersection <linestring_2d, box_2d, linestring_2d, std::back_insert_iterator <std::vector<linestring_2d> > >
-			(clipRect, in, std::back_inserter(clipped));
+	        std::vector<linestring_2d> clipped;
+	        intersection <linestring_2d, box_2d, linestring_2d, std::back_insert_iterator <std::vector<linestring_2d> > >
+		        (clipRect, in, std::back_inserter(clipped));
 
-		for (std::vector<linestring_2d>::const_iterator it = clipped.begin(); it != clipped.end(); it++)
-		{
-			if (!(*it).empty()) {
-				p->thePath.moveTo(QPointF((*it)[0].x(), (*it)[0].y()));
-			}
-			for (linestring_2d::const_iterator itl = (*it).begin()+1; itl != (*it).end(); itl++)
-			{
-				p->thePath.lineTo(QPointF((*itl).x(), (*itl).y()));
-			}
-		}
-	} 
-	else 
-	{
-		polygon_2d in;
-		for (int i=0; i<p->Nodes.size(); ++i) {
-			QPointF P = theProjection.project(p->Nodes[i]);
-			append(in, make<point_2d>(P.x(), P.y()));
-		}
-		correct(in);
+	        for (std::vector<linestring_2d>::const_iterator it = clipped.begin(); it != clipped.end(); it++)
+	        {
+		        if (!(*it).empty()) {
+			        p->thePath.moveTo(QPointF((*it)[0].x(), (*it)[0].y()));
+		        }
+		        for (linestring_2d::const_iterator itl = (*it).begin()+1; itl != (*it).end(); itl++)
+		        {
+			        p->thePath.lineTo(QPointF((*itl).x(), (*itl).y()));
+		        }
+	        }
+	    } 
+	    else 
+	    {
+		    polygon_2d in;
+	        for (int i=0; i<p->Nodes.size(); ++i) {
+		        QPointF P = theProjection.project(p->Nodes[i]);
+		        append(in, make<point_2d>(P.x(), P.y()));
+	        }
+	        correct(in);
 
-		std::vector<polygon_2d> clipped;
-		intersection <polygon_2d, box_2d, polygon_2d, std::back_insert_iterator <std::vector<polygon_2d> > >
-			(clipRect, in, std::back_inserter(clipped));
+	        std::vector<polygon_2d> clipped;
+	        intersection <polygon_2d, box_2d, polygon_2d, std::back_insert_iterator <std::vector<polygon_2d> > >
+		        (clipRect, in, std::back_inserter(clipped));
 
-		for (std::vector<polygon_2d>::const_iterator it = clipped.begin(); it != clipped.end(); it++)
-		{
-			if (!(*it).outer().empty()) {
-				p->thePath.moveTo(QPointF((*it).outer()[0].x(), (*it).outer()[0].y()));
-			}
-			for (ring_2d::const_iterator itl = (*it).outer().begin()+1; itl != (*it).outer().end(); itl++)
-			{
-				p->thePath.lineTo(QPointF((*itl).x(), (*itl).y()));
-			}
-			p->thePath.lineTo(QPointF((*it).outer()[0].x(), (*it).outer()[0].y()));
-		}
+	        for (std::vector<polygon_2d>::const_iterator it = clipped.begin(); it != clipped.end(); it++)
+	        {
+		        if (!(*it).outer().empty()) {
+			        p->thePath.moveTo(QPointF((*it).outer()[0].x(), (*it).outer()[0].y()));
+		        }
+		        for (ring_2d::const_iterator itl = (*it).outer().begin()+1; itl != (*it).outer().end(); itl++)
+		        {
+			        p->thePath.lineTo(QPointF((*itl).x(), (*itl).y()));
+		        }
+		        p->thePath.lineTo(QPointF((*it).outer()[0].x(), (*it).outer()[0].y()));
+	        }
+        }
 	}
 	//p->thePath = theTransform.map(p->thePath);
 }

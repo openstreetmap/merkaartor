@@ -16,7 +16,7 @@
 // PROJ4 is converted to Geometry Library by Barend Gehrels (Geodan, Amsterdam)
 
 // Original copyright notice:
-
+ 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
@@ -35,6 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/math/special_functions/hypot.hpp>
+
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>
 #include <ggl/projections/impl/projects.hpp>
@@ -43,7 +45,7 @@
 namespace ggl { namespace projection
 {
     #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace lsat{
+    namespace impl { namespace lsat{ 
             static const double TOL = 1e-7;
             static const double PI_HALFPI = 4.71238898038468985766;
             static const double TWOPI_HALFPI = 7.85398163397448309610;
@@ -55,18 +57,18 @@ namespace ggl { namespace projection
             };
             /* based upon Snyder and Linck, USGS-NMD */
             template <typename Parameters>
-                inline void
+            	inline void
             seraz0(double lam, double mult, Parameters& par, par_lsat& proj_parm) {
                 double sdsq, h, s, fc, sd, sq, d__1;
-
+            
                 lam *= DEG_TO_RAD;
                 sd = sin(lam);
                 sdsq = sd * sd;
                 s = proj_parm.p22 * proj_parm.sa * cos(lam) * sqrt((1. + proj_parm.t * sdsq) / ((
-                    1. + proj_parm.w * sdsq) * (1. + proj_parm.q * sdsq)));
+            	    1. + proj_parm.w * sdsq) * (1. + proj_parm.q * sdsq)));
                 d__1 = 1. + proj_parm.q * sdsq;
-                h = sqrt((1. + proj_parm.q * sdsq) / (1. + proj_parm.w * sdsq)) * ((1. +
-                    proj_parm.w * sdsq) / (d__1 * d__1) - proj_parm.p22 * proj_parm.ca);
+                h = sqrt((1. + proj_parm.q * sdsq) / (1. + proj_parm.w * sdsq)) * ((1. + 
+            	    proj_parm.w * sdsq) / (d__1 * d__1) - proj_parm.p22 * proj_parm.ca);
                 sq = sqrt(proj_parm.xj * proj_parm.xj + s * s);
                 proj_parm.b += fc = mult * (h * proj_parm.xj - s * s) / sq;
                 proj_parm.a2 += fc * cos(lam + lam);
@@ -77,111 +79,113 @@ namespace ggl { namespace projection
             }
 
             // template class, using CRTP to implement forward/inverse
-            template <typename LatLong, typename Cartesian, typename Parameters>
-            struct base_lsat_ellipsoid : public base_t_fi<base_lsat_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>
+            template <typename Geographic, typename Cartesian, typename Parameters>
+            struct base_lsat_ellipsoid : public base_t_fi<base_lsat_ellipsoid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>
             {
 
-                typedef typename base_t_fi<base_lsat_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::LL_T LL_T;
-                typedef typename base_t_fi<base_lsat_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::XY_T XY_T;
+                 typedef double geographic_type;
+                 typedef double cartesian_type;
 
                 par_lsat m_proj_parm;
 
                 inline base_lsat_ellipsoid(const Parameters& par)
-                    : base_t_fi<base_lsat_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(*this, par) {}
+                    : base_t_fi<base_lsat_ellipsoid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>(*this, par) {}
 
-                inline void fwd(LL_T& lp_lon, LL_T& lp_lat, XY_T& xy_x, XY_T& xy_y) const
+                inline void fwd(geographic_type& lp_lon, geographic_type& lp_lat, cartesian_type& xy_x, cartesian_type& xy_y) const
                 {
                     int l, nn;
                     double lamt, xlam, sdsq, c, d, s, lamdp, phidp, lampp, tanph,
-                        lamtp, cl, sd, sp, fac, sav, tanphi;
-
-                    if (lp_lat > HALFPI)
-                        lp_lat = HALFPI;
-                    else if (lp_lat < -HALFPI)
-                        lp_lat = -HALFPI;
-                    lampp = lp_lat >= 0. ? HALFPI : PI_HALFPI;
-                    tanphi = tan(lp_lat);
-                    for (nn = 0;;) {
-                        sav = lampp;
-                        lamtp = lp_lon + this->m_proj_parm.p22 * lampp;
-                        cl = cos(lamtp);
-                        if (fabs(cl) < TOL)
-                            lamtp -= TOL;
-                        fac = lampp - sin(lampp) * (cl < 0. ? -HALFPI : HALFPI);
-                        for (l = 50; l; --l) {
-                            lamt = lp_lon + this->m_proj_parm.p22 * sav;
-                            if (fabs(c = cos(lamt)) < TOL)
-                                lamt -= TOL;
-                            xlam = (this->m_par.one_es * tanphi * this->m_proj_parm.sa + sin(lamt) * this->m_proj_parm.ca) / c;
-                            lamdp = atan(xlam) + fac;
-                            if (fabs(fabs(sav) - fabs(lamdp)) < TOL)
-                                break;
-                            sav = lamdp;
-                        }
-                        if (!l || ++nn >= 3 || (lamdp > this->m_proj_parm.rlm && lamdp < this->m_proj_parm.rlm2))
-                            break;
-                        if (lamdp <= this->m_proj_parm.rlm)
-                            lampp = TWOPI_HALFPI;
-                        else if (lamdp >= this->m_proj_parm.rlm2)
-                            lampp = HALFPI;
-                    }
-                    if (l) {
-                        sp = sin(lp_lat);
-                        phidp = aasin((this->m_par.one_es * this->m_proj_parm.ca * sp - this->m_proj_parm.sa * cos(lp_lat) *
-                            sin(lamt)) / sqrt(1. - this->m_par.es * sp * sp));
-                        tanph = log(tan(FORTPI + .5 * phidp));
-                        sd = sin(lamdp);
-                        sdsq = sd * sd;
-                        s = this->m_proj_parm.p22 * this->m_proj_parm.sa * cos(lamdp) * sqrt((1. + this->m_proj_parm.t * sdsq)
-                             / ((1. + this->m_proj_parm.w * sdsq) * (1. + this->m_proj_parm.q * sdsq)));
-                        d = sqrt(this->m_proj_parm.xj * this->m_proj_parm.xj + s * s);
-                        xy_x = this->m_proj_parm.b * lamdp + this->m_proj_parm.a2 * sin(2. * lamdp) + this->m_proj_parm.a4 *
-                            sin(lamdp * 4.) - tanph * s / d;
-                        xy_y = this->m_proj_parm.c1 * sd + this->m_proj_parm.c3 * sin(lamdp * 3.) + tanph * this->m_proj_parm.xj / d;
-                    } else
-                        xy_x = xy_y = HUGE_VAL;
+                		lamtp, cl, sd, sp, fac, sav, tanphi;
+                
+                	if (lp_lat > HALFPI)
+                	    lp_lat = HALFPI;
+                	else if (lp_lat < -HALFPI)
+                	    lp_lat = -HALFPI;
+                	lampp = lp_lat >= 0. ? HALFPI : PI_HALFPI;
+                	tanphi = tan(lp_lat);
+                	for (nn = 0;;) {
+                		sav = lampp;
+                		lamtp = lp_lon + this->m_proj_parm.p22 * lampp;
+                		cl = cos(lamtp);
+                		if (fabs(cl) < TOL)
+                		    lamtp -= TOL;
+                		fac = lampp - sin(lampp) * (cl < 0. ? -HALFPI : HALFPI);
+                		for (l = 50; l; --l) {
+                			lamt = lp_lon + this->m_proj_parm.p22 * sav;
+                			if (fabs(c = cos(lamt)) < TOL)
+                			    lamt -= TOL;
+                			xlam = (this->m_par.one_es * tanphi * this->m_proj_parm.sa + sin(lamt) * this->m_proj_parm.ca) / c;
+                			lamdp = atan(xlam) + fac;
+                			if (fabs(fabs(sav) - fabs(lamdp)) < TOL)
+                			    break;
+                			sav = lamdp;
+                		}
+                		if (!l || ++nn >= 3 || (lamdp > this->m_proj_parm.rlm && lamdp < this->m_proj_parm.rlm2))
+                			break;
+                		if (lamdp <= this->m_proj_parm.rlm)
+                		    lampp = TWOPI_HALFPI;
+                		else if (lamdp >= this->m_proj_parm.rlm2)
+                		    lampp = HALFPI;
+                	}
+                	if (l) {
+                		sp = sin(lp_lat);
+                		phidp = aasin((this->m_par.one_es * this->m_proj_parm.ca * sp - this->m_proj_parm.sa * cos(lp_lat) * 
+                			sin(lamt)) / sqrt(1. - this->m_par.es * sp * sp));
+                		tanph = log(tan(FORTPI + .5 * phidp));
+                		sd = sin(lamdp);
+                		sdsq = sd * sd;
+                		s = this->m_proj_parm.p22 * this->m_proj_parm.sa * cos(lamdp) * sqrt((1. + this->m_proj_parm.t * sdsq)
+                			 / ((1. + this->m_proj_parm.w * sdsq) * (1. + this->m_proj_parm.q * sdsq)));
+                		d = sqrt(this->m_proj_parm.xj * this->m_proj_parm.xj + s * s);
+                		xy_x = this->m_proj_parm.b * lamdp + this->m_proj_parm.a2 * sin(2. * lamdp) + this->m_proj_parm.a4 *
+                			sin(lamdp * 4.) - tanph * s / d;
+                		xy_y = this->m_proj_parm.c1 * sd + this->m_proj_parm.c3 * sin(lamdp * 3.) + tanph * this->m_proj_parm.xj / d;
+                	} else
+                		xy_x = xy_y = HUGE_VAL;
                 }
 
-                inline void inv(XY_T& xy_x, XY_T& xy_y, LL_T& lp_lon, LL_T& lp_lat) const
+                inline void inv(cartesian_type& xy_x, cartesian_type& xy_y, geographic_type& lp_lon, geographic_type& lp_lat) const
                 {
                     int nn;
                     double lamt, sdsq, s, lamdp, phidp, sppsq, dd, sd, sl, fac, scl, sav, spp;
-
-                    lamdp = xy_x / this->m_proj_parm.b;
-                    nn = 50;
-                    do {
-                        sav = lamdp;
-                        sd = sin(lamdp);
-                        sdsq = sd * sd;
-                        s = this->m_proj_parm.p22 * this->m_proj_parm.sa * cos(lamdp) * sqrt((1. + this->m_proj_parm.t * sdsq)
-                             / ((1. + this->m_proj_parm.w * sdsq) * (1. + this->m_proj_parm.q * sdsq)));
-                        lamdp = xy_x + xy_y * s / this->m_proj_parm.xj - this->m_proj_parm.a2 * sin(
-                            2. * lamdp) - this->m_proj_parm.a4 * sin(lamdp * 4.) - s / this->m_proj_parm.xj * (
-                            this->m_proj_parm.c1 * sin(lamdp) + this->m_proj_parm.c3 * sin(lamdp * 3.));
-                        lamdp /= this->m_proj_parm.b;
-                    } while (fabs(lamdp - sav) >= TOL && --nn);
-                    sl = sin(lamdp);
-                    fac = exp(sqrt(1. + s * s / this->m_proj_parm.xj / this->m_proj_parm.xj) * (xy_y -
-                        this->m_proj_parm.c1 * sl - this->m_proj_parm.c3 * sin(lamdp * 3.)));
-                    phidp = 2. * (atan(fac) - FORTPI);
-                    dd = sl * sl;
-                    if (fabs(cos(lamdp)) < TOL)
-                        lamdp -= TOL;
-                    spp = sin(phidp);
-                    sppsq = spp * spp;
-                    lamt = atan(((1. - sppsq * this->m_par.rone_es) * tan(lamdp) *
-                        this->m_proj_parm.ca - spp * this->m_proj_parm.sa * sqrt((1. + this->m_proj_parm.q * dd) * (
-                        1. - sppsq) - sppsq * this->m_proj_parm.u) / cos(lamdp)) / (1. - sppsq
-                        * (1. + this->m_proj_parm.u)));
-                    sl = lamt >= 0. ? 1. : -1.;
-                    scl = cos(lamdp) >= 0. ? 1. : -1;
-                    lamt -= HALFPI * (1. - scl) * sl;
-                    lp_lon = lamt - this->m_proj_parm.p22 * lamdp;
-                    if (fabs(this->m_proj_parm.sa) < TOL)
-                        lp_lat = aasin(spp / sqrt(this->m_par.one_es * this->m_par.one_es + this->m_par.es * sppsq));
-                    else
-                        lp_lat = atan((tan(lamdp) * cos(lamt) - this->m_proj_parm.ca * sin(lamt)) /
-                            (this->m_par.one_es * this->m_proj_parm.sa));
+                
+                	lamdp = xy_x / this->m_proj_parm.b;
+                	nn = 50;
+                	do {
+                		sav = lamdp;
+                		sd = sin(lamdp);
+                		sdsq = sd * sd;
+                		s = this->m_proj_parm.p22 * this->m_proj_parm.sa * cos(lamdp) * sqrt((1. + this->m_proj_parm.t * sdsq)
+                			 / ((1. + this->m_proj_parm.w * sdsq) * (1. + this->m_proj_parm.q * sdsq)));
+                		lamdp = xy_x + xy_y * s / this->m_proj_parm.xj - this->m_proj_parm.a2 * sin(
+                			2. * lamdp) - this->m_proj_parm.a4 * sin(lamdp * 4.) - s / this->m_proj_parm.xj * (
+                			this->m_proj_parm.c1 * sin(lamdp) + this->m_proj_parm.c3 * sin(lamdp * 3.));
+                		lamdp /= this->m_proj_parm.b;
+                	} while (fabs(lamdp - sav) >= TOL && --nn);
+                	sl = sin(lamdp);
+                	fac = exp(sqrt(1. + s * s / this->m_proj_parm.xj / this->m_proj_parm.xj) * (xy_y - 
+                		this->m_proj_parm.c1 * sl - this->m_proj_parm.c3 * sin(lamdp * 3.)));
+                	phidp = 2. * (atan(fac) - FORTPI);
+                	dd = sl * sl;
+                	if (fabs(cos(lamdp)) < TOL)
+                	    lamdp -= TOL;
+                	spp = sin(phidp);
+                	sppsq = spp * spp;
+                	lamt = atan(((1. - sppsq * this->m_par.rone_es) * tan(lamdp) * 
+                		this->m_proj_parm.ca - spp * this->m_proj_parm.sa * sqrt((1. + this->m_proj_parm.q * dd) * (
+                		1. - sppsq) - sppsq * this->m_proj_parm.u) / cos(lamdp)) / (1. - sppsq 
+                		* (1. + this->m_proj_parm.u)));
+                	sl = lamt >= 0. ? 1. : -1.;
+                	scl = cos(lamdp) >= 0. ? 1. : -1;
+                	lamt -= HALFPI * (1. - scl) * sl;
+                	lp_lon = lamt - this->m_proj_parm.p22 * lamdp;
+                	if (fabs(this->m_proj_parm.sa) < TOL)
+                	    lp_lat = aasin(spp / sqrt(this->m_par.one_es * this->m_par.one_es + this->m_par.es * sppsq));
+                	else
+                		lp_lat = atan((tan(lamdp) * cos(lamt) - this->m_proj_parm.ca * sin(lamt)) /
+                			(this->m_par.one_es * this->m_proj_parm.sa));
                 }
             };
 
@@ -191,61 +195,61 @@ namespace ggl { namespace projection
             {
                 int land, path;
                 double lam, alf, esc, ess;
-                land = pj_param(par.params, "ilsat").i;
-                if (land <= 0 || land > 5) throw proj_exception(-28);
-                path = pj_param(par.params, "ipath").i;
-                if (path <= 0 || path > (land <= 3 ? 251 : 233)) throw proj_exception(-29);
-                if (land <= 3) {
-                    par.lam0 = DEG_TO_RAD * 128.87 - TWOPI / 251. * path;
-                    proj_parm.p22 = 103.2669323;
-                    alf = DEG_TO_RAD * 99.092;
-                } else {
-                    par.lam0 = DEG_TO_RAD * 129.3 - TWOPI / 233. * path;
-                    proj_parm.p22 = 98.8841202;
-                    alf = DEG_TO_RAD * 98.2;
-                }
-                proj_parm.p22 /= 1440.;
-                proj_parm.sa = sin(alf);
-                proj_parm.ca = cos(alf);
-                if (fabs(proj_parm.ca) < 1e-9)
-                    proj_parm.ca = 1e-9;
-                esc = par.es * proj_parm.ca * proj_parm.ca;
-                ess = par.es * proj_parm.sa * proj_parm.sa;
-                proj_parm.w = (1. - esc) * par.rone_es;
-                proj_parm.w = proj_parm.w * proj_parm.w - 1.;
-                proj_parm.q = ess * par.rone_es;
-                proj_parm.t = ess * (2. - par.es) * par.rone_es * par.rone_es;
-                proj_parm.u = esc * par.rone_es;
-                proj_parm.xj = par.one_es * par.one_es * par.one_es;
-                proj_parm.rlm = PI * (1. / 248. + .5161290322580645);
-                proj_parm.rlm2 = proj_parm.rlm + TWOPI;
+            	land = pj_param(par.params, "ilsat").i;
+            	if (land <= 0 || land > 5) throw proj_exception(-28);
+            	path = pj_param(par.params, "ipath").i;
+            	if (path <= 0 || path > (land <= 3 ? 251 : 233)) throw proj_exception(-29);
+            	if (land <= 3) {
+            		par.lam0 = DEG_TO_RAD * 128.87 - TWOPI / 251. * path;
+            	    proj_parm.p22 = 103.2669323;
+            	    alf = DEG_TO_RAD * 99.092;
+            	} else {
+            		par.lam0 = DEG_TO_RAD * 129.3 - TWOPI / 233. * path;
+            	    proj_parm.p22 = 98.8841202;
+            	    alf = DEG_TO_RAD * 98.2;
+            	}
+            	proj_parm.p22 /= 1440.;
+            	proj_parm.sa = sin(alf);
+            	proj_parm.ca = cos(alf);
+            	if (fabs(proj_parm.ca) < 1e-9)
+            	    proj_parm.ca = 1e-9;
+            	esc = par.es * proj_parm.ca * proj_parm.ca;
+            	ess = par.es * proj_parm.sa * proj_parm.sa;
+            	proj_parm.w = (1. - esc) * par.rone_es;
+            	proj_parm.w = proj_parm.w * proj_parm.w - 1.;
+            	proj_parm.q = ess * par.rone_es;
+            	proj_parm.t = ess * (2. - par.es) * par.rone_es * par.rone_es;
+            	proj_parm.u = esc * par.rone_es;
+            	proj_parm.xj = par.one_es * par.one_es * par.one_es;
+            	proj_parm.rlm = PI * (1. / 248. + .5161290322580645);
+            	proj_parm.rlm2 = proj_parm.rlm + TWOPI;
                 proj_parm.a2 = proj_parm.a4 = proj_parm.b = proj_parm.c1 = proj_parm.c3 = 0.;
-                seraz0(0., 1., par, proj_parm);
-                for (lam = 9.;
+            	seraz0(0., 1., par, proj_parm);
+            	for (lam = 9.;
              lam <= 81.0001;
              lam += 18.)
-                    seraz0(lam, 4., par, proj_parm);
-                for (lam = 18;
+            	    seraz0(lam, 4., par, proj_parm);
+            	for (lam = 18;
              lam <= 72.0001;
              lam += 18.)
-                    seraz0(lam, 2., par, proj_parm);
-                seraz0(90., 1., par, proj_parm);
-                proj_parm.a2 /= 30.;
-                proj_parm.a4 /= 60.;
-                proj_parm.b /= 30.;
-                proj_parm.c1 /= 15.;
-                proj_parm.c3 /= 45.;
+            	    seraz0(lam, 2., par, proj_parm);
+            	seraz0(90., 1., par, proj_parm);
+            	proj_parm.a2 /= 30.;
+            	proj_parm.a4 /= 60.;
+            	proj_parm.b /= 30.;
+            	proj_parm.c1 /= 15.;
+            	proj_parm.c3 /= 45.;
                 // par.inv = e_inverse;
                 // par.fwd = e_forward;
             }
 
         }} // namespace impl::lsat
-    #endif // doxygen
+    #endif // doxygen 
 
     /*!
         \brief Space oblique for LANDSAT projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -256,10 +260,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_lsat.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct lsat_ellipsoid : public impl::lsat::base_lsat_ellipsoid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct lsat_ellipsoid : public impl::lsat::base_lsat_ellipsoid<Geographic, Cartesian, Parameters>
     {
-        inline lsat_ellipsoid(const Parameters& par) : impl::lsat::base_lsat_ellipsoid<LatLong, Cartesian, Parameters>(par)
+        inline lsat_ellipsoid(const Parameters& par) : impl::lsat::base_lsat_ellipsoid<Geographic, Cartesian, Parameters>(par)
         {
             impl::lsat::setup_lsat(this->m_par, this->m_proj_parm);
         }
@@ -270,23 +274,23 @@ namespace ggl { namespace projection
     {
 
         // Factory entry(s)
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class lsat_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class lsat_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_fi<lsat_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_fi<lsat_ellipsoid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        inline void lsat_init(impl::base_factory<LatLong, Cartesian, Parameters>& factory)
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        inline void lsat_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
-            factory.add_to_factory("lsat", new lsat_entry<LatLong, Cartesian, Parameters>);
+            factory.add_to_factory("lsat", new lsat_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl
+    } // namespace impl 
     #endif // doxygen
 
 }} // namespace ggl::projection

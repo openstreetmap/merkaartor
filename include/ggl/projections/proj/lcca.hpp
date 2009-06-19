@@ -16,7 +16,7 @@
 // PROJ4 is converted to Geometry Library by Barend Gehrels (Geodan, Amsterdam)
 
 // Original copyright notice:
-
+ 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
@@ -35,6 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/math/special_functions/hypot.hpp>
+
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>
 #include <ggl/projections/impl/projects.hpp>
@@ -44,7 +46,7 @@
 namespace ggl { namespace projection
 {
     #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace lcca{
+    namespace impl { namespace lcca{ 
             static const int MAX_ITER = 10;
             static const double DEL_TOL = 1e-12;
 
@@ -54,58 +56,60 @@ namespace ggl { namespace projection
                 double r0, l, M0;
                 double C;
             };
-
-
-                inline double /* func to compute dr */
+            
+            
+            	inline double /* func to compute dr */
             fS(double S, double C) {
-                    return(S * ( 1. + S * S * C));
+            		return(S * ( 1. + S * S * C));
             }
-                inline double /* deriv of fs */
+            	inline double /* deriv of fs */
             fSp(double S, double C) {
-                return(1. + 3.* S * S * C);
+            	return(1. + 3.* S * S * C);
             }
 
             // template class, using CRTP to implement forward/inverse
-            template <typename LatLong, typename Cartesian, typename Parameters>
-            struct base_lcca_ellipsoid : public base_t_fi<base_lcca_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>
+            template <typename Geographic, typename Cartesian, typename Parameters>
+            struct base_lcca_ellipsoid : public base_t_fi<base_lcca_ellipsoid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>
             {
 
-                typedef typename base_t_fi<base_lcca_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::LL_T LL_T;
-                typedef typename base_t_fi<base_lcca_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>::XY_T XY_T;
+                 typedef double geographic_type;
+                 typedef double cartesian_type;
 
                 par_lcca m_proj_parm;
 
                 inline base_lcca_ellipsoid(const Parameters& par)
-                    : base_t_fi<base_lcca_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(*this, par) {}
+                    : base_t_fi<base_lcca_ellipsoid<Geographic, Cartesian, Parameters>,
+                     Geographic, Cartesian, Parameters>(*this, par) {}
 
-                inline void fwd(LL_T& lp_lon, LL_T& lp_lat, XY_T& xy_x, XY_T& xy_y) const
+                inline void fwd(geographic_type& lp_lon, geographic_type& lp_lat, cartesian_type& xy_x, cartesian_type& xy_y) const
                 {
-                    double S, S3, r, dr;
-
-                    S = pj_mlfn(lp_lat, sin(lp_lat), cos(lp_lat), this->m_proj_parm.en) - this->m_proj_parm.M0;
-                    dr = fS(S, this->m_proj_parm.C);
-                    r = this->m_proj_parm.r0 - dr;
-                    xy_x = this->m_par.k0 * (r * sin( lp_lon *= this->m_proj_parm.l ) );
-                    xy_y = this->m_par.k0 * (this->m_proj_parm.r0 - r * cos(lp_lon) );
+                	double S, r, dr;
+                	
+                	S = pj_mlfn(lp_lat, sin(lp_lat), cos(lp_lat), this->m_proj_parm.en) - this->m_proj_parm.M0;
+                	dr = fS(S, this->m_proj_parm.C);
+                	r = this->m_proj_parm.r0 - dr;
+                	xy_x = this->m_par.k0 * (r * sin( lp_lon *= this->m_proj_parm.l ) );
+                	xy_y = this->m_par.k0 * (this->m_proj_parm.r0 - r * cos(lp_lon) );
                 }
 
-                inline void inv(XY_T& xy_x, XY_T& xy_y, LL_T& lp_lon, LL_T& lp_lat) const
+                inline void inv(cartesian_type& xy_x, cartesian_type& xy_y, geographic_type& lp_lon, geographic_type& lp_lat) const
                 {
-                    double theta, dr, S, dif;
-                    int i;
-
-                    xy_x /= this->m_par.k0;
-                    xy_y /= this->m_par.k0;
-                    theta = atan2(xy_x , this->m_proj_parm.r0 - xy_y);
-                    dr = xy_y - xy_x * tan(0.5 * theta);
-                    lp_lon = theta / this->m_proj_parm.l;
-                    S = dr;
-                    for (i = MAX_ITER; i ; --i) {
-                        S -= (dif = (fS(S, this->m_proj_parm.C) - dr) / fSp(S, this->m_proj_parm.C));
-                        if (fabs(dif) < DEL_TOL) break;
-                    }
-                    if (!i) throw proj_exception();
-                    lp_lat = pj_inv_mlfn(S + this->m_proj_parm.M0, this->m_par.es, this->m_proj_parm.en);
+                	double theta, dr, S, dif;
+                	int i;
+                
+                	xy_x /= this->m_par.k0;
+                	xy_y /= this->m_par.k0;
+                	theta = atan2(xy_x , this->m_proj_parm.r0 - xy_y);
+                	dr = xy_y - xy_x * tan(0.5 * theta);
+                	lp_lon = theta / this->m_proj_parm.l;
+                	S = dr;
+                	for (i = MAX_ITER; i ; --i) {
+                		S -= (dif = (fS(S, this->m_proj_parm.C) - dr) / fSp(S, this->m_proj_parm.C));
+                		if (fabs(dif) < DEL_TOL) break;
+                	}
+                	if (!i) throw proj_exception();
+                	lp_lat = pj_inv_mlfn(S + this->m_proj_parm.M0, this->m_par.es, this->m_proj_parm.en);
                 }
             };
 
@@ -113,31 +117,31 @@ namespace ggl { namespace projection
             template <typename Parameters>
             void setup_lcca(Parameters& par, par_lcca& proj_parm)
             {
-                double s2p0, N0, R0, tan0, tan20;
+            	double s2p0, N0, R0, tan0, tan20;
                     pj_enfn(par.es, proj_parm.en);
-                if (!pj_param(par.params, "tlat_0").i) throw proj_exception(50);
-                if (par.phi0 == 0.) throw proj_exception(51);
-                proj_parm.l = sin(par.phi0);
-                proj_parm.M0 = pj_mlfn(par.phi0, proj_parm.l, cos(par.phi0), proj_parm.en);
-                s2p0 = proj_parm.l * proj_parm.l;
-                R0 = 1. / (1. - par.es * s2p0);
-                N0 = sqrt(R0);
-                R0 *= par.one_es * N0;
-                tan0 = tan(par.phi0);
-                tan20 = tan0 * tan0;
-                proj_parm.r0 = N0 / tan0;
-                proj_parm.C = 1. / (6. * R0 * N0);
+            	if (!pj_param(par.params, "tlat_0").i) throw proj_exception(50);
+            	if (par.phi0 == 0.) throw proj_exception(51);
+            	proj_parm.l = sin(par.phi0);
+            	proj_parm.M0 = pj_mlfn(par.phi0, proj_parm.l, cos(par.phi0), proj_parm.en);
+            	s2p0 = proj_parm.l * proj_parm.l;
+            	R0 = 1. / (1. - par.es * s2p0);
+            	N0 = sqrt(R0);
+            	R0 *= par.one_es * N0;
+            	tan0 = tan(par.phi0);
+            	tan20 = tan0 * tan0;
+            	proj_parm.r0 = N0 / tan0;
+            	proj_parm.C = 1. / (6. * R0 * N0);
                 // par.inv = e_inverse;
                 // par.fwd = e_forward;
             }
 
         }} // namespace impl::lcca
-    #endif // doxygen
+    #endif // doxygen 
 
     /*!
         \brief Lambert Conformal Conic Alternative projection
         \ingroup projections
-        \tparam LatLong latlong point type
+        \tparam Geographic latlong point type
         \tparam Cartesian xy point type
         \tparam Parameters parameter type
         \par Projection characteristics
@@ -148,10 +152,10 @@ namespace ggl { namespace projection
         \par Example
         \image html ex_lcca.gif
     */
-    template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-    struct lcca_ellipsoid : public impl::lcca::base_lcca_ellipsoid<LatLong, Cartesian, Parameters>
+    template <typename Geographic, typename Cartesian, typename Parameters = parameters>
+    struct lcca_ellipsoid : public impl::lcca::base_lcca_ellipsoid<Geographic, Cartesian, Parameters>
     {
-        inline lcca_ellipsoid(const Parameters& par) : impl::lcca::base_lcca_ellipsoid<LatLong, Cartesian, Parameters>(par)
+        inline lcca_ellipsoid(const Parameters& par) : impl::lcca::base_lcca_ellipsoid<Geographic, Cartesian, Parameters>(par)
         {
             impl::lcca::setup_lcca(this->m_par, this->m_proj_parm);
         }
@@ -162,23 +166,23 @@ namespace ggl { namespace projection
     {
 
         // Factory entry(s)
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        class lcca_entry : public impl::factory_entry<LatLong, Cartesian, Parameters>
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        class lcca_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
-                virtual projection<LatLong, Cartesian>* create_new(const Parameters& par) const
+                virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    return new base_v_fi<lcca_ellipsoid<LatLong, Cartesian, Parameters>, LatLong, Cartesian, Parameters>(par);
+                    return new base_v_fi<lcca_ellipsoid<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                 }
         };
 
-        template <typename LatLong, typename Cartesian, typename Parameters>
-        inline void lcca_init(impl::base_factory<LatLong, Cartesian, Parameters>& factory)
+        template <typename Geographic, typename Cartesian, typename Parameters>
+        inline void lcca_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
-            factory.add_to_factory("lcca", new lcca_entry<LatLong, Cartesian, Parameters>);
+            factory.add_to_factory("lcca", new lcca_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl
+    } // namespace impl 
     #endif // doxygen
 
 }} // namespace ggl::projection
