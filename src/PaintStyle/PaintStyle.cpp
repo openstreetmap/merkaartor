@@ -977,15 +977,15 @@ void FeaturePainter::drawPointLabel(QPointF C, QString str, QString strBg, QPain
 		bgPath.addRect(textPath.boundingRect().adjusted(-BG_SPACING, -BG_SPACING, BG_SPACING, BG_SPACING));
 		thePainter.setPen(QPen(LabelColor, BG_PEN_SZ));
 		thePainter.setBrush(LabelBackgroundColor);
-		thePainter.drawPath(theView.transform().map(bgPath));
+		thePainter.drawPath(bgPath);
 	}
 	if (getLabelHalo()) {
 		thePainter.setPen(QPen(Qt::white, font.pixelSize()/5));
-		thePainter.drawPath(theView.transform().map(textPath));
+		thePainter.drawPath(textPath);
 	}
 	thePainter.setPen(Qt::NoPen);
 	thePainter.setBrush(LabelColor);
-	thePainter.drawPath(theView.transform().map(textPath));
+	thePainter.drawPath(textPath);
 
 	thePainter.restore();
 
@@ -1035,6 +1035,7 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, MapView& theView) 
 	//double WWR = qMax(PixelPerM*R->widthOf()*BackgroundScale+BackgroundOffset, PixelPerM*R->widthOf()*ForegroundScale+ForegroundOffset);
 
  	QPainterPath textPath;
+	QPainterPath tranformedRoadPath = theView.transform().map(R->getPath());
     QFont font = getLabelFont();
 
 	if (!str.isEmpty()) {
@@ -1042,12 +1043,12 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, MapView& theView) 
 		font.setPixelSize(int(WW));
 		QFontMetrics metrics(font);
 
-		if (font.pixelSize() >= 5 && R->getPath().length() > metrics.width(str)) {
+		if (font.pixelSize() >= 5 && tranformedRoadPath.length() > metrics.width(str)) {
 			thePainter.setFont(font);
 
-			int repeat = int((R->getPath().length() / ((metrics.width(str) * LABEL_PATH_DISTANCE))) - 0.5);
+			int repeat = int((tranformedRoadPath.length() / ((metrics.width(str) * LABEL_PATH_DISTANCE))) - 0.5);
 			int numSegment = repeat+1;
-			qreal lenSegment = R->getPath().length() / numSegment;
+			qreal lenSegment = tranformedRoadPath.length() / numSegment;
 			qreal startSegment = 0;
 		 	QPainterPath textPath;
 			do {
@@ -1057,15 +1058,15 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, MapView& theView) 
 				int modIncrement = 1;
 				qreal modAngle = 0;
 				int modY = 0;
-				if (cos(angToRad(R->getPath().angleAtPercent((startSegment+(lenSegment/2))/R->getPath().length()))) < 0) {
+				if (cos(angToRad(tranformedRoadPath.angleAtPercent((startSegment+(lenSegment/2))/tranformedRoadPath.length()))) < 0) {
 					modIncrement = -1;
 					modAngle = 180.0;
 					curLen += metrics.width(str);
 				}
 				for (int i = 0; i < str.length(); ++i) {
-					qreal t = R->getPath().percentAtLength(curLen);
-					QPointF pt = R->getPath().pointAtPercent(t);
-					qreal angle = R->getPath().angleAtPercent(t);
+					qreal t = tranformedRoadPath.percentAtLength(curLen);
+					QPointF pt = tranformedRoadPath.pointAtPercent(t);
+					qreal angle = tranformedRoadPath.angleAtPercent(t);
 					modY = (metrics.ascent()/2)-3;
 
 					QMatrix m;
@@ -1086,11 +1087,11 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, MapView& theView) 
 
 			if (getLabelHalo()) {
 				thePainter.setPen(QPen(Qt::white, font.pixelSize()/6));
-				thePainter.drawPath(theView.transform().map(textPath));
+				thePainter.drawPath(textPath);
 			}
 			thePainter.setPen(Qt::NoPen);
 			thePainter.setBrush(LabelColor);
-			thePainter.drawPath(theView.transform().map(textPath));
+			thePainter.drawPath(textPath);
 			thePainter.setClipRegion(rg);
 		}
 	}
@@ -1099,9 +1100,9 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, MapView& theView) 
 		font.setPixelSize(int(WW));
 		QFontMetrics metrics(font);
 
-		int repeat = int((R->getPath().length() / (metrics.width(strBg) * LABEL_STRAIGHT_DISTANCE)) - 0.5);
+		int repeat = int((tranformedRoadPath.length() / (metrics.width(strBg) * LABEL_STRAIGHT_DISTANCE)) - 0.5);
 		int numSegment = repeat+1;
-		qreal lenSegment = R->getPath().length() / numSegment;
+		qreal lenSegment = tranformedRoadPath.length() / numSegment;
 		qreal startSegment = 0;
 		do {
 
@@ -1109,8 +1110,8 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, MapView& theView) 
 			int modY = 0;
 
 			qreal curLen = startSegment + (lenSegment / 2);
-			qreal t = R->getPath().percentAtLength(curLen);
-			QPointF pt = R->getPath().pointAtPercent(t);
+			qreal t = tranformedRoadPath.percentAtLength(curLen);
+			QPointF pt = tranformedRoadPath.pointAtPercent(t);
 
 			modX = - (metrics.width(strBg)/2);
 			//modX = WW;

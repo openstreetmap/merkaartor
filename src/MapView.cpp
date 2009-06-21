@@ -794,8 +794,9 @@ void MapView::updateStaticBuffer()
 	if (!p->invalidRects.isEmpty()) {
 		P.begin(StaticBuffer);
 		P.setRenderHint(QPainter::Antialiasing);
+		P.setClipping(true);
+		P.setClipRegion(QRegion(rect()));
 		if (!p->theVectorPanDelta.isNull()) {
-			P.setClipping(true);
 			P.setClipRegion(QRegion(rect()) - QRegion(QRect(p->theVectorPanDelta, size())));
 		}
 		drawFeatures(P, theProjection);
