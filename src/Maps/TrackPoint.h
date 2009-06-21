@@ -30,9 +30,9 @@ class TrackPoint : public MapFeature
 		virtual QString getClass() const {return "TrackPoint";}
 
 		virtual CoordBox boundingBox() const;
-		virtual void draw(QPainter& P, const Projection& theProjection, const QTransform& theTransform);
-		virtual void drawFocus(QPainter& P, const Projection& theProjection, const QTransform& theTransform, bool solid=true);
-		virtual void drawHover(QPainter& P, const Projection& theProjection, const QTransform& theTransform, bool solid=true);
+		virtual void draw(QPainter& P, MapView* theView);
+		virtual void drawFocus(QPainter& P, MapView* theView, bool solid=true);
+		virtual void drawHover(QPainter& P, MapView* theView, bool solid=true);
 		virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection, const QTransform& theTransform) const;
 		virtual void cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const QList<MapFeature*>& Alternatives);
 		virtual bool notEverythingDownloaded() const;
@@ -114,15 +114,15 @@ struct access<TrackPointPtr>
     template <std::size_t I>
     static inline qreal get(const TrackPointPtr& p)
     {
-        return I == 0 ? p->Position.lon() : p->Position.lat();
+        return I == 0 ? p->position().lon() : p->position().lat();
     }
 
     template <std::size_t I>
     static inline void set(TrackPointPtr& p, const qreal& value)
     {
         // Or (better) implement an accessor with specializations
-        if (I == 0) p->Position.setLon(value);
-        else if (I == 1) p->Position.setLat(value);
+        if (I == 0) p->position().setLon(value);
+        else if (I == 1) p->position().setLat(value);
     }
 
 };

@@ -1,6 +1,6 @@
 #include "TrackPoint.h"
 
-#include "Maps/Projection.h"
+#include "MapView.h"
 #include "Utils/LineF.h"
 
 #include <QtGui/QPainter>
@@ -138,25 +138,25 @@ CoordBox TrackPoint::boundingBox() const
 }
 
 #ifdef GEOIMAGE
-void TrackPoint::draw(QPainter& thePainter , const Projection& theProjection, const QTransform& theTransform )
+void TrackPoint::draw(QPainter& thePainter , MapView* theView )
 {
 	if (!tagValue("Picture", "").isEmpty()) {
-		QPoint me = theTransform.map(theProjection.project(this).toPoint());
+		QPointF me = theView->toView(this);
 		thePainter.setPen(QPen(QColor(0, 0, 0), 2));
-		QRect box(me - QPoint(5, 3), me + QPoint(5, 3));
+		QRectF box(me - QPoint(5, 3), QSize(10, 6));
 		thePainter.drawRect(box);
 	}
 }
 #else
-void TrackPoint::draw(QPainter& /* thePainter */, const Projection& /*theProjection*/, const QTransform& /*theTransform*/ )
+void TrackPoint::draw(QPainter& /* thePainter */, MapView* /*theView*/ )
 {
 }
 #endif
 
-void TrackPoint::drawFocus(QPainter& thePainter, const Projection& theProjection, const QTransform& theTransform, bool solid)
+void TrackPoint::drawFocus(QPainter& thePainter, MapView* theView, bool solid)
 {
 	thePainter.setPen(MerkaartorPreferences::instance()->getFocusColor());
-	QPointF P(theTransform.map(theProjection.project(this)));
+	QPointF P(theView->toView(this));
 	QRectF R(P-QPoint(3,3),QSize(6,6));
 	thePainter.drawRect(R);
 	R.adjust(-7, -7, 7, 7);
@@ -165,14 +165,14 @@ void TrackPoint::drawFocus(QPainter& thePainter, const Projection& theProjection
 	if (M_PREFS->getShowParents() && solid) {
 		for (int i=0; i<sizeParents(); ++i)
 			if (!getParent(i)->isDeleted())
-				getParent(i)->drawFocus(thePainter, theProjection, theTransform, false);
+				getParent(i)->drawFocus(thePainter, theView, false);
 	}
 }
 
-void TrackPoint::drawHover(QPainter& thePainter, const Projection& theProjection, const QTransform& theTransform, bool solid)
+void TrackPoint::drawHover(QPainter& thePainter, MapView* theView, bool solid)
 {
 	thePainter.setPen(MerkaartorPreferences::instance()->getHoverColor());
-	QPointF P(theTransform.map(theProjection.project(this)));
+	QPointF P(theView->toView(this));
 	QRectF R(P-QPoint(3,3),QSize(6,6));
 	thePainter.drawRect(R);
 	R.adjust(-7, -7, 7, 7);
@@ -181,7 +181,7 @@ void TrackPoint::drawHover(QPainter& thePainter, const Projection& theProjection
 	if (M_PREFS->getShowParents() && solid) {
 		for (int i=0; i<sizeParents(); ++i)
 			if (!getParent(i)->isDeleted())
-				getParent(i)->drawHover(thePainter, theProjection, theTransform, false);
+				getParent(i)->drawHover(thePainter, theView, false);
 	}
 }
 

@@ -1,7 +1,7 @@
 #include "Maps/TrackSegment.h"
 #include "Command/DocumentCommands.h"
 #include "Command/TrackSegmentCommands.h"
-#include "Maps/Projection.h"
+#include "MapView.h"
 #include "Maps/TrackPoint.h"
 #include "Utils/LineF.h"
 
@@ -14,7 +14,15 @@
 class TrackSegmentPrivate
 {
 	public:
-		QList<TrackPoint*> Points;
+		TrackSegmentPrivate()
+		: Distance(0), MetaUpToDate(false)
+		{
+		}
+
+		QList<TrackPoint*> Nodes;
+		double Distance;
+
+		bool MetaUpToDate;
 };
 
 TrackSegment::TrackSegment(void)
@@ -29,22 +37,22 @@ TrackSegment::TrackSegment(const TrackSegment& other)
 
 TrackSegment::~TrackSegment(void)
 {
-	for (int i=0; i<p->Points.size(); ++i)
-		p->Points[i]->unsetParentFeature(this);
+	for (int i=0; i<p->Nodes.size(); ++i)
+		p->Nodes[i]->unsetParentFeature(this);
 	delete p;
 }
 
 void TrackSegment::sortByTime()
 {
-	for (int i=0; i<p->Points.size(); ++i)
+	for (int i=0; i<p->Nodes.size(); ++i)
 	{
-		for (int j=i+1; j<p->Points.size(); ++j)
+		for (int j=i+1; j<p->Nodes.size(); ++j)
 		{
-			if (p->Points[i]->time() > p->Points[j]->time())
+			if (p->Nodes[i]->time() > p->Nodes[j]->time())
 			{
-				QDateTime dt(p->Points[i]->time());
-				p->Points[i]->setTime(p->Points[j]->time());
-				p->Points[j]->setTime(dt);
+				QDateTime dt(p->Nodes[i]->time());
+				p->Nodes[i]->setTime(p->Nodes[j]->time());
+				p->Nodes[j]->setTime(dt);
 			}
 		}
 	}
@@ -64,61 +72,61 @@ RenderPriority TrackSegment::renderPriority()
 
 void TrackSegment::add(TrackPoint* aPoint)
 {
-	p->Points.push_back(aPoint);
+	p->Nodes.push_back(aPoint);
 	aPoint->setParentFeature(this);
 }
 
 void TrackSegment::add(TrackPoint* Pt, int Idx)
 {
-	p->Points.push_back(Pt);
-	std::rotate(p->Points.begin()+Idx,p->Points.end()-1,p->Points.end());
+	p->Nodes.push_back(Pt);
+	std::rotate(p->Nodes.begin()+Idx,p->Nodes.end()-1,p->Nodes.end());
 }
 
 int TrackSegment::find(MapFeature* Pt) const
 {
-	for (int i=0; i<p->Points.size(); ++i)
-		if (p->Points[i] == Pt)
+	for (int i=0; i<p->Nodes.size(); ++i)
+		if (p->Nodes[i] == Pt)
 			return i;
-	return p->Points.size();
+	return p->Nodes.size();
 }
 
 void TrackSegment::remove(int idx)
 {
-	TrackPoint* Pt = p->Points[idx];
-	p->Points.erase(p->Points.begin()+idx);
+	TrackPoint* Pt = p->Nodes[idx];
+	p->Nodes.erase(p->Nodes.begin()+idx);
 	Pt->unsetParentFeature(this);
 }
 
 void TrackSegment::remove(MapFeature* F)
 {
-	for (int i=p->Points.size(); i; --i)
-		if (p->Points[i-1] == F)
+	for (int i=p->Nodes.size(); i; --i)
+		if (p->Nodes[i-1] == F)
 			remove(i-1);
 }
 
 int TrackSegment::size() const
 {
-	return p->Points.size();
+	return p->Nodes.size();
 }
 
 MapFeature* TrackSegment::get(int i)
 {
-	return p->Points[i];
+	return p->Nodes[i];
 }
 
 TrackPoint* TrackSegment::getNode(int i)
 {
-	return p->Points[i];
+	return p->Nodes[i];
 }
 
 const MapFeature* TrackSegment::get(int Idx) const
 {
-	return p->Points[Idx];
+	return p->Nodes[Idx];
 }
 
 bool TrackSegment::isNull() const
 {
-	return (p->Points.size() == 0);
+	return (p->Nodes.size() == 0);
 }
 
 static void configurePen(QPen & pen, double slope, double speed)
@@ -170,28 +178,27 @@ void TrackSegment::drawDirectionMarkers(QPainter &P, QPen &pen, const QPointF & 
 	P.drawLine(H-T,H-T+V2);
 }
 
-void TrackSegment::draw(QPainter &P, const Projection& theProjection, const QTransform& theTransform)
+void TrackSegment::draw(QPainter &P, MapView* theView)
 {
 	QPen pen;
 
 	if (!M_PREFS->getTrackSegmentsVisible())
 		return;
 
-	for (int i=1; i<p->Points.size(); ++i)
+	for (int i=1; i<p->Nodes.size(); ++i)
 	{
-		Coord last = p->Points[i-1]->position();
-		Coord here = p->Points[i]->position();
+		Coord last = p->Nodes[i-1]->position();
+		Coord here = p->Nodes[i]->position();
 
-		// TODO get Viewport?
-		//if (CoordBox::visibleLine(theProjection.viewport(), last, here) == false)
-		//	continue;
+		if (CoordBox::visibleLine(theView->viewport(), last, here) == false)
+			continue;
 
-		QPointF FromF(theTransform.map(theProjection.project(last)));
-		QPointF ToF(theTransform.map(theProjection.project(here)));
+		QPointF FromF(theView->toView(last));
+		QPointF ToF(theView->toView(here));
 
 		const double distance = here.distanceFrom(last);
-		const double slope = (p->Points[i]->elevation() - p->Points[i-1]->elevation()) / (distance * 10.0);
-		const double speed = p->Points[i]->speed();
+		const double slope = (p->Nodes[i]->elevation() - p->Nodes[i-1]->elevation()) / (distance * 10.0);
+		const double speed = p->Nodes[i]->speed();
 
 		configurePen(pen, slope, speed);
 		P.setPen(pen);
@@ -206,23 +213,23 @@ bool TrackSegment::notEverythingDownloaded() const
 	return false;
 }
 
-void TrackSegment::drawFocus(QPainter &, const Projection &, const QTransform&, bool)
+void TrackSegment::drawFocus(QPainter &, MapView*, bool)
 {
 	// Can't be selection
 }
 
-void TrackSegment::drawHover(QPainter &, const Projection &, const QTransform&, bool)
+void TrackSegment::drawHover(QPainter &, MapView*, bool)
 {
 	// Can't be selection
 }
 
 CoordBox TrackSegment::boundingBox() const
 {
-	if (p->Points.size())
+	if (p->Nodes.size())
 	{
-		CoordBox Box(p->Points[0]->position(),p->Points[0]->position());
-		for (int i=1; i<p->Points.size(); ++i)
-			Box.merge(p->Points[i]->position());
+		CoordBox Box(p->Nodes[0]->position(),p->Nodes[0]->position());
+		for (int i=1; i<p->Nodes.size(); ++i)
+			Box.merge(p->Nodes[i]->position());
 		return Box;
 	}
 	return CoordBox(Coord(0,0),Coord(0,0));
@@ -236,8 +243,8 @@ double TrackSegment::pixelDistance(const QPointF& , double , const Projection&, 
 
 void TrackSegment::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const QList<MapFeature*>& Proposals)
 {
-	for (int i=0; i<p->Points.size();) {
-		if (p->Points[i] == aFeature)
+	for (int i=0; i<p->Nodes.size();) {
+		if (p->Nodes[i] == aFeature)
 		{
 			QList<TrackPoint*> Alternatives;
 			for (int j=0; j<Proposals.size(); ++j)
@@ -246,19 +253,19 @@ void TrackSegment::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* a
 				if (Pt)
 					Alternatives.push_back(Pt);
 			}
-			if ( (p->Points.size() == 1) && (Alternatives.size() == 0) )
+			if ( (p->Nodes.size() == 1) && (Alternatives.size() == 0) )
 				theList->add(new RemoveFeatureCommand(theDocument,this));
 			else
 			{
 				for (int j=0; j<Alternatives.size(); ++j)
 				{
-					if (i < p->Points.size())
+					if (i < p->Nodes.size())
 					{
-						if (p->Points[i+j] != Alternatives[j])
+						if (p->Nodes[i+j] != Alternatives[j])
 						{
 							if ((i+j) == 0)
 								theList->add(new TrackSegmentAddTrackPointCommand(this, Alternatives[j], i+j,Alternatives[j]->layer()));
-							else if (p->Points[i+j-1] != Alternatives[j])
+							else if (p->Nodes[i+j-1] != Alternatives[j])
 								theList->add(new TrackSegmentAddTrackPointCommand(this, Alternatives[j], i+j,Alternatives[j]->layer()));
 						}
 					}
@@ -273,6 +280,44 @@ void TrackSegment::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* a
 void TrackSegment::partChanged(MapFeature*, int)
 {
 }
+
+void TrackSegment::updateMeta() const
+{
+	p->Distance = 0;
+
+	if (p->Nodes.size() == 0)
+	{
+		p->MetaUpToDate = true;
+		return;
+	}
+
+	for (unsigned int i=0; (i+1)<p->Nodes.size(); ++i)
+	{
+		if (p->Nodes[i] && p->Nodes[i+1]) {
+			const Coord & here = p->Nodes[i]->position();
+			const Coord & next = p->Nodes[i+1]->position();
+
+			p->Distance += next.distanceFrom(here);
+		}
+	}
+
+
+	p->MetaUpToDate = true;
+}
+
+double TrackSegment::distance() const
+{
+	if (p->MetaUpToDate == false)
+		updateMeta();
+
+	return p->Distance;
+}
+
+int TrackSegment::duration() const
+{
+	return p->Nodes[0]->time().secsTo(p->Nodes[p->Nodes.size() - 1]->time());
+}
+
 
 bool TrackSegment::toGPX(QDomElement xParent, QProgressDialog & progress, bool forExport)
 {

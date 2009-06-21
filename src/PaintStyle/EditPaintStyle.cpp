@@ -225,10 +225,12 @@ void EPTouchupLayer::draw(TrackPoint* Pt)
 	else if (!Pt->hasEditPainter()) {
 		if (p->isTrackPointVisible || (Pt->lastUpdated() == MapFeature::Log && !p->isTrackSegmentVisible)) {
 			bool Draw = p->theView.pixelPerM() > 1;
-			if (!Draw && !Pt->sizeParents() && (p->theView.pixelPerM() > LOCALZOOM) )
-				Draw = true;
-			if (Pt->lastUpdated() == MapFeature::Log && !p->isTrackSegmentVisible)
-				Draw = true;
+			if (!Draw) {
+				if (!Pt->sizeParents() && (p->theView.pixelPerM() > LOCALZOOM) )
+					Draw = true;
+				else if (Pt->lastUpdated() == MapFeature::Log && !p->isTrackSegmentVisible)
+					Draw = true;
+			}
 			if (Draw)
 			{
 				QPointF P(p->theView.transform().map(p->theView.projection().project(Pt)));

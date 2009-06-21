@@ -352,6 +352,9 @@ const QString& MapLayer::id() const
 
 void MapLayer::reIndex()
 {
+	delete p->theRTree;
+	p->theRTree = new MyRTree(7, 2);
+
 	for (int i=0; i<p->Features.size(); ++i) {
 		if (p->Features.at(i)->isDeleted())
 			continue;
@@ -620,6 +623,13 @@ void TrackMapLayer::extractLayer()
 			if (S->size() < 2)
 				continue;
 
+			// Cope with walking tracks
+			double konstant = coordPer10M;
+			double meanSpeed = S->distance() / S->duration() * 3600;
+			if (meanSpeed < 10.)
+				konstant /= 3.;
+
+
 			PL.clear();
 
 			P = new TrackPoint( S->getNode(0)->position() );
@@ -656,7 +666,7 @@ void TrackMapLayer::extractLayer()
 				LineF l(toQt(PL[startP]->position()), toQt(PL[endP]->position()));
 				for (int k=startP+1; k < endP; k++) {
 					double d = l.distance(toQt(PL[k]->position()));
-					if (d < coordPer10M) {
+					if (d < konstant) {
 						TrackPoint* P = PL[k];
 						PL.removeAt(k);
 						delete P;
@@ -674,7 +684,9 @@ void TrackMapLayer::extractLayer()
 			for (int i=0; i < PL.size(); i++) {
 				extL->add(PL[i]);
 				R->add(PL[i]);
+				extL->getRTree()->insert(PL[i]->boundingBox(), PL[i]);
 			}
+			extL->getRTree()->insert(R->boundingBox(), R);
 		}
 	}
 
@@ -684,6 +696,28 @@ void TrackMapLayer::extractLayer()
 const QString TrackMapLayer::getFilename()
 {
 	return Filename;
+}
+
+QString TrackMapLayer::toHtml()
+{
+	QString S;
+
+	int totSegment = 0;
+	int totSec = 0;
+	double totDistance = 0;
+	for (int i=0; i < size(); ++i) {
+		if (TrackSegment* S = CAST_SEGMENT(get(i))) {
+			totSegment++;
+			totSec += S->duration();
+			totDistance += S->distance();
+		}
+	}
+
+	S += "<i>"+QApplication::translate("TrackMapLayer", "# of track segments")+": </i>" + QApplication::translate("TrackMapLayer", "%1").arg(QLocale().toString(totSegment))+"<br/>";
+	S += "<i>"+QApplication::translate("TrackMapLayer", "Total distance")+": </i>" + QApplication::translate("TrackMapLayer", "%1 km").arg(QLocale().toString(totDistance, 'g', 3))+"<br/>";
+	S += "<i>"+QApplication::translate("TrackMapLayer", "Total duration")+": </i>" + QApplication::translate("TrackMapLayer", "%1h %2m").arg(QLocale().toString(totSec/3600)).arg(QLocale().toString((totSec%3600)/60))+"<br/>";
+
+	return toMainHtml().arg(S);
 }
 
 bool TrackMapLayer::toXML(QDomElement& xParent, QProgressDialog & progress)

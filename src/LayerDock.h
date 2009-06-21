@@ -31,7 +31,6 @@ class LayerDock : public MDockAncestor
 		void deleteLayer(MapLayer* aLayer);
 
 	private slots:
-		void layerSelected(QAbstractButton * l);
 		void layerChanged(LayerWidget*, bool adjustViewport);
 		void layerClosed(MapLayer*);
 		void layerCleared(MapLayer*);
@@ -46,6 +45,8 @@ class LayerDock : public MDockAncestor
 
 	protected:
 		LayerDockPrivate* p;
+
+        virtual void mousePressEvent ( QMouseEvent * event );
 
 		void dragEnterEvent(QDragEnterEvent *event);
 		void dragMoveEvent(QDragMoveEvent *event);

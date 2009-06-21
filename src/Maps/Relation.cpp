@@ -1,7 +1,7 @@
 #include "Maps/Relation.h"
 #include "Maps/Road.h"
 #include "Maps/TrackPoint.h"
-#include "Maps/Projection.h"
+#include "MapView.h"
 #include "MainWindow.h"
 #include "Command/DocumentCommands.h"
 #include "Command/RelationCommands.h"
@@ -155,10 +155,8 @@ CoordBox Relation::boundingBox() const
 	return p->BBox;
 }
 
-void Relation::draw(QPainter& P, const Projection& theProjection, const QTransform& theTransform)
+void Relation::draw(QPainter& P, MapView* theView)
 {
-	Q_UNUSED(theProjection)
-
 	if (!M_PREFS->getRelationsVisible())
 		return;
 
@@ -166,51 +164,51 @@ void Relation::draw(QPainter& P, const Projection& theProjection, const QTransfo
 		P.setPen(QPen(Qt::red,M_PREFS->getRelationsWidth(),Qt::DashLine));
 	else
 		P.setPen(QPen(M_PREFS->getRelationsColor(),M_PREFS->getRelationsWidth(),Qt::DashLine));
-	P.drawPath(theTransform.map(p->theBoundingPath));
+	P.drawPath(theView->transform().map(p->theBoundingPath));
 }
 
-void Relation::drawFocus(QPainter& P, const Projection& theProjection, const QTransform& theTransform, bool solid)
+void Relation::drawFocus(QPainter& P, MapView* theView, bool solid)
 {
 	if (!solid) {
 		QPen thePen(M_PREFS->getFocusColor(),M_PREFS->getFocusWidth());
 		thePen.setDashPattern(getParentDashes());
 		P.setPen(thePen);
-		P.drawPath(theTransform.map(p->theBoundingPath));
+		P.drawPath(theView->transform().map(p->theBoundingPath));
 	} else {
 		P.setPen(QPen(M_PREFS->getFocusColor(),M_PREFS->getFocusWidth(),Qt::DashLine));
-		P.drawPath(theTransform.map(p->theBoundingPath));
+		P.drawPath(theView->transform().map(p->theBoundingPath));
 
 		for (int i=0; i<p->Members.size(); ++i)
 			if (p->Members[i].second && !p->Members[i].second->isDeleted())
-				p->Members[i].second->drawFocus(P,theProjection, theTransform, solid);
+				p->Members[i].second->drawFocus(P,theView, solid);
 
 		if (M_PREFS->getShowParents()) {
 			for (int i=0; i<sizeParents(); ++i)
 				if (!getParent(i)->isDeleted())
-					getParent(i)->drawFocus(P, theProjection, theTransform, false);
+					getParent(i)->drawFocus(P, theView, false);
 		}
 	}
 }
 
-void Relation::drawHover(QPainter& P, const Projection& theProjection, const QTransform& theTransform, bool solid)
+void Relation::drawHover(QPainter& P, MapView* theView, bool solid)
 {
 	if (!solid) {
 		QPen thePen(M_PREFS->getHoverColor(),M_PREFS->getHoverWidth());
 		thePen.setDashPattern(getParentDashes());
 		P.setPen(thePen);
-		P.drawPath(theTransform.map(p->theBoundingPath));
+		P.drawPath(theView->transform().map(p->theBoundingPath));
 	} else {
 		P.setPen(QPen(M_PREFS->getHoverColor(),M_PREFS->getHoverWidth(),Qt::DashLine));
-		P.drawPath(theTransform.map(p->theBoundingPath));
+		P.drawPath(theView->transform().map(p->theBoundingPath));
 
 		for (int i=0; i<p->Members.size(); ++i)
 			if (p->Members[i].second && !p->Members[i].second->isDeleted())
-				p->Members[i].second->drawHover(P,theProjection, theTransform, solid);
+				p->Members[i].second->drawHover(P,theView, solid);
 
 		if (M_PREFS->getShowParents()) {
 			for (int i=0; i<sizeParents(); ++i)
 				if (!getParent(i)->isDeleted())
-					getParent(i)->drawHover(P, theProjection, theTransform, false);
+					getParent(i)->drawHover(P, theView, false);
 		}
 	}
 }

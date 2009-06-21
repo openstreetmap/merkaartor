@@ -33,7 +33,7 @@ void LayerWidget::mousePressEvent(QMouseEvent *event)
 	if (event->button() == Qt::LeftButton)
 		dragStartPosition = event->pos();
 
-	QAbstractButton::mousePressEvent(event);
+	event->ignore();
 }
 
 void LayerWidget::mouseMoveEvent(QMouseEvent *event)
@@ -54,6 +54,19 @@ void LayerWidget::mouseMoveEvent(QMouseEvent *event)
 	drag->setPixmap(px);
 
 	/*Qt::DropAction dropAction =*/ drag->exec(Qt::MoveAction);
+}
+
+void LayerWidget::mouseReleaseEvent(QMouseEvent* anEvent)
+{
+	if (anEvent->pos().x()<20)
+	{
+		setLayerVisible(!theLayer->isVisible());
+		anEvent->accept();
+	}
+	else
+	{
+		anEvent->ignore();
+	}
 }
 
 QSize LayerWidget::minimumSizeHint () const
@@ -92,19 +105,6 @@ void LayerWidget::paintEvent(QPaintEvent*)
 		P.drawPixmap(QPoint(2, rect().center().y()-visibleIcon.height()/2), visibleIcon);
 	else
 		P.drawPixmap(QPoint(2, rect().center().y()-hiddenIcon.height()/2), hiddenIcon);
-}
-
-void LayerWidget::mouseReleaseEvent(QMouseEvent* anEvent)
-{
-	if (anEvent->pos().x()<20)
-	{
-		setLayerVisible(!theLayer->isVisible());
-		anEvent->ignore();
-	}
-	else
-	{
-		QAbstractButton::mouseReleaseEvent(anEvent);
-	}
 }
 
 void LayerWidget::checkStateSet()
@@ -238,6 +238,7 @@ void LayerWidget::associatedAboutToShow()
 {
 	initActions();
 }
+
 
 // DrawingLayerWidget
 

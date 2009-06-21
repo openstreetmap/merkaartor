@@ -84,11 +84,11 @@ class GenericFeatureSnapInteraction : public Interaction
 
 			for (int i=0; i<view()->properties()->size(); ++i)
 				if (document()->exists(view()->properties()->selection(i)))
-					view()->properties()->selection(i)->drawFocus(thePainter, projection(), transform());
+					view()->properties()->selection(i)->drawFocus(thePainter, view());
 
 #ifndef _MOBILE
 			if (LastSnap && document()->exists(LastSnap)) {
-				LastSnap->drawHover(thePainter, projection(), transform());
+				LastSnap->drawHover(thePainter, view());
 				view()->setToolTip(LastSnap->toHtml());
 			} else {
 				view()->setToolTip("");

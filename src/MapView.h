@@ -56,6 +56,8 @@ class MapView :	public QWidget
 
 		Projection& projection();
 		QTransform& transform();
+		QPoint toView(const Coord& aCoord) const;
+		QPoint toView(TrackPoint* aPt) const;
 
 		PropertiesDock* properties();
 		//InfoDock* info();

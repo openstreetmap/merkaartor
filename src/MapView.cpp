@@ -303,6 +303,7 @@ void MapView::buildFeatureSet()
 
 	CoordBox coordRegion;
 	QRectF clipRect = p->theTransform.inverted().mapRect(QRectF(rect().adjusted(-1000, -1000, 1000, 1000)));
+//	QRectF clipRect = p->theTransform.inverted().mapRect(QRectF(rect().adjusted(10, 10, -10, -10)));
 
 #if 1
 
@@ -698,7 +699,7 @@ void MapView::drawFeatures(QPainter & P, Projection& aProj)
 	for (int i=0; i<theFeatures.size(); i++)
 	{
 		P.setOpacity(theFeatures[i]->layer()->getAlpha());
-		theFeatures[i]->draw(P, aProj, p->theTransform);
+		theFeatures[i]->draw(P, this);
 	}
 }
 
@@ -889,6 +890,16 @@ Projection& MapView::projection()
 QTransform& MapView::transform()
 {
 	return p->theTransform;
+}
+
+QPoint MapView::toView(const Coord& aCoord) const
+{
+	return p->theTransform.map(theProjection.project(aCoord)).toPoint();
+}
+
+QPoint MapView::toView(TrackPoint* aPt) const
+{
+	return p->theTransform.map(theProjection.project(aPt)).toPoint();
 }
 
 void MapView::on_customContextMenuRequested(const QPoint & pos)

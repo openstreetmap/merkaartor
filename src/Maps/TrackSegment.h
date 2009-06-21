@@ -24,9 +24,9 @@ class TrackSegment : public MapFeature
 		virtual QString getClass() const {return "TrackSegment";}
 
 		virtual CoordBox boundingBox() const;
-		virtual void draw(QPainter& P, const Projection& theProjection, const QTransform& theTransform);
-		virtual void drawFocus(QPainter& P, const Projection& theProjection, const QTransform& theTransform, bool solid=true);
-		virtual void drawHover(QPainter& P, const Projection& theProjection, const QTransform& theTransform, bool solid=true);
+		virtual void draw(QPainter& P, MapView* theView);
+		virtual void drawFocus(QPainter& P, MapView* theView, bool solid=true);
+		virtual void drawHover(QPainter& P, MapView* theView, bool solid=true);
 		virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection, const QTransform& theTransform) const;
 		void cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const QList<MapFeature*>& Alternatives);
 		virtual bool notEverythingDownloaded() const;
@@ -47,6 +47,9 @@ class TrackSegment : public MapFeature
 		void sortByTime();
 		virtual void partChanged(MapFeature* F, int ChangeId);
 
+		double distance() const;
+		int duration() const;
+
 		virtual QString toXML(int, QProgressDialog *) {return QString("");}
 		virtual bool toGPX(QDomElement xParent, QProgressDialog & progress, bool forExport=false);
 		static TrackSegment* fromGPX(MapDocument* d, MapLayer* L, const QDomElement e, QProgressDialog & progress);
@@ -59,6 +62,8 @@ class TrackSegment : public MapFeature
 
 private:
 		TrackSegmentPrivate* p;
+
+		void updateMeta() const;
 };
 
 #endif

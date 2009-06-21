@@ -171,6 +171,7 @@ public:
 	virtual void extractLayer();
 	virtual const QString getFilename();
 
+	virtual QString toHtml();
 	virtual bool toXML(QDomElement& xParent, QProgressDialog & progress);
 	static TrackMapLayer* fromXML(MapDocument* d, const QDomElement& e, QProgressDialog & progress);
 

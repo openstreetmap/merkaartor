@@ -78,6 +78,7 @@ void GeoImageDock::setImage(TrackPoint *Pt)
 	Image->setImage(usedTrackPoints.at(ImageId).filename);
 	curImage = ImageId;
 }
+
 void GeoImageDock::setImage(int ImageId)
 {
 	if (ImageId < 0 || ImageId >= usedTrackPoints.size()) { // invalid ImageId
@@ -298,11 +299,13 @@ void GeoImageDock::loadImages(QStringList fileNames)
 			if (it == end)
 				Pt = new TrackPoint(newPos);
 
+			//Pt->setTag("_waypoint_", "true");
 			Pt->setTag("Picture", "GeoTagged");
 			usedTrackPoints << TrackPointData(Pt->id(), file, time, it == end);
-			if (it == end)
+			if (it == end) {
 				theLayer->add(Pt);
-				//new AddFeatureCommand(theLayer, Pt, false);
+				theLayer->getRTree()->insert(Pt->boundingBox(), Pt);
+			}
 		} else if (!time.isNull()) {
 	
 			if (offset == -1) { // ask the user to specify an offset for the images
@@ -388,6 +391,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
 			}
 
 			usedTrackPoints << TrackPointData(bestPt->id(), file, time, false);
+			//bestPt->setTag("_waypoint_", "true");
 			bestPt->setTag("Picture", "GeoTagged");
 	
 			time = QDateTime(); // empty time to be null for the next image

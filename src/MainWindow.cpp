@@ -1336,7 +1336,10 @@ void MainWindow::on_roadSplitAction_triggered()
 	if (theList->empty())
 		delete theList;
 	else
+	{
 		theDocument->addHistory(theList);
+		invalidateView();
+	}
 }
 
 void MainWindow::on_roadBreakAction_triggered()
@@ -1346,7 +1349,10 @@ void MainWindow::on_roadBreakAction_triggered()
 	if (theList->empty())
 		delete theList;
 	else
+	{
 		theDocument->addHistory(theList);
+		invalidateView();
+	}
 }
 
 void MainWindow::on_featureCommitAction_triggered()
@@ -1356,7 +1362,10 @@ void MainWindow::on_featureCommitAction_triggered()
 	if (theList->empty())
 		delete theList;
 	else
+	{
 		theDocument->addHistory(theList);
+		invalidateView();
+	}
 }
 
 void MainWindow::on_roadCreateJunctionAction_triggered()
@@ -1451,6 +1460,7 @@ void MainWindow::on_createRelationAction_triggered()
 		new AddFeatureCommand(document()->getDirtyOrOriginLayer(), R, true));
 	theDocument->addHistory(theList);
 	theProperties->setSelection(R);
+	invalidateView();
 }
 
 void MainWindow::on_editMapStyleAction_triggered()

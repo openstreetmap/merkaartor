@@ -11,6 +11,7 @@
 #define CAST_NODE(x) (dynamic_cast<TrackPoint*>(x))
 #define CAST_WAY(x) (dynamic_cast<Road*>(x))
 #define CAST_RELATION(x) (dynamic_cast<Relation*>(x))
+#define CAST_SEGMENT(x) (dynamic_cast<TrackSegment*>(x))
 
 class CommandList;
 class MapDocument;
@@ -71,19 +72,21 @@ class MapFeature : public QObject
 		 * @param P The QPainter used to draw
 		 * @param theProjection the Projection used to convert real coordinates to screen coordinates
 		 */
-		virtual void draw(QPainter& P, const Projection& theProjection, const QTransform& theTransform) = 0;
+		virtual void draw(QPainter& P, MapView* theView) = 0;
 
 		/** Draw the feature using the given QPainter an Projection and with the focused draw
 		 * @param P The QPainter used to draw
 		 * @param theProjection the Projection used to convert real coordinates to screen coordinates
 		 */
-		virtual void drawFocus(QPainter& P, const Projection& theProjection, const QTransform& theTransform, bool solid=true) = 0;
+		virtual void drawFocus(QPainter& P, MapView* theView, bool solid=true) = 0;
 
 		/** Draw the feature using the given QPainter an Projection and with the hover draw
 		 * @param P The QPainter used to draw
 		 * @param theProjection the Projection used to convert real coordinates to screen coordinates
 		 */
-		virtual void drawHover(QPainter& P, const Projection& theProjection, const QTransform& theTransform, bool solid=true) = 0;
+		virtual void drawHover(QPainter& P, MapView* theView, bool solid=true) = 0;
+
+
 		virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection, const QTransform& theTransform) const = 0;
 		virtual void cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const QList<MapFeature*>& Alternatives) = 0;
 		virtual bool notEverythingDownloaded() const = 0;

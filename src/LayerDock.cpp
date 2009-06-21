@@ -22,16 +22,18 @@ class LayerDockPrivate
 {
 	public:
 		LayerDockPrivate(MainWindow* aMain) :
-		  Main(aMain), Scroller(0), Content(0), Layout(0), butGroup(0), theDropWidget(0) {}
+		  Main(aMain), Scroller(0), Content(0), Layout(0), theDropWidget(0),
+		  lastSelWidget(0)
+		  {}
 	public:
 		MainWindow* Main;
 		QScrollArea* Scroller;
 		QWidget* Content;
 		QVBoxLayout* Layout;
 		QHBoxLayout* frameLayout;
-		QButtonGroup* butGroup;
 		QTabBar* tab;
 		LayerWidget* theDropWidget;
+		LayerWidget* lastSelWidget;
 };
 
 LayerDock::LayerDock(MainWindow* aMain)
@@ -117,7 +119,6 @@ void LayerDock::addLayer(MapLayer* aLayer)
 {
 	LayerWidget* w = aLayer->newWidget();
 	if (w) {
-		p->butGroup->addButton(w);
 		p->Layout->addWidget(w);
 
 		connect(w, SIGNAL(layerChanged(LayerWidget*,bool)), this, SLOT(layerChanged(LayerWidget*,bool)));
@@ -199,9 +200,6 @@ void LayerDock::createContent()
 	p->Layout->setSpacing(0);
 	p->Layout->setMargin(0);
 
-	p->butGroup = new QButtonGroup(p->Content);
-	connect(p->butGroup, SIGNAL(buttonClicked (QAbstractButton *)), this, SLOT(layerSelected(QAbstractButton *)));
-
 	aLayout->addWidget(p->Content);
 	aLayout->addStretch();
 
@@ -215,12 +213,6 @@ void LayerDock::createContent()
 
 void LayerDock::resizeEvent(QResizeEvent* )
 {
-}
-
-void LayerDock::layerSelected(QAbstractButton * l)
-{
-	if (p->Main->info())
-		p->Main->info()->setHtml(((LayerWidget*)l)->getMapLayer()->toHtml());
 }
 
 void LayerDock::layerChanged(LayerWidget* l, bool adjustViewport)
@@ -332,4 +324,61 @@ void LayerDock::retranslateTabBar()
 	p->tab->setTabText(1, tr("Default"));
 	p->tab->setTabText(2, tr("OSM"));
 	p->tab->setTabText(3, tr("Tracks"));
+}
+
+void LayerDock::mousePressEvent ( QMouseEvent * ev )
+{
+	LayerWidget* aWidget = dynamic_cast<LayerWidget*>(childAt(ev->pos()));
+    
+	if (ev->button() == Qt::RightButton) {
+	    for (int i=0; i < CHILD_WIDGETS.size(); ++i) {
+    	    if (CHILD_WIDGET(i))
+	    	    CHILD_WIDGET(i)->setChecked(false);
+        }
+		aWidget->setChecked(true);
+		p->lastSelWidget = aWidget;
+        ev->ignore();
+        return;
+    }
+
+	if (!aWidget) {
+		if (p->lastSelWidget)
+			p->lastSelWidget->setChecked(false);
+		p->lastSelWidget = NULL;
+		ev->ignore();
+		return;
+	}
+
+    if (ev->modifiers() & Qt::ControlModifier) {
+		bool toSelect = !aWidget->isChecked();
+		aWidget->setChecked(toSelect);
+		if (toSelect)
+			p->lastSelWidget = aWidget;
+		else
+			p->lastSelWidget = NULL;
+    } else
+    if (ev->modifiers() & Qt::ShiftModifier) {
+		bool toSelect = false;
+ 	    for (int i=0; i < CHILD_WIDGETS.size(); ++i) {
+			if (CHILD_WIDGET(i)) {
+				if (CHILD_WIDGET(i) == aWidget || CHILD_WIDGET(i) == p->lastSelWidget)
+					toSelect = !toSelect;
+
+				if (toSelect)
+	    			CHILD_WIDGET(i)->setChecked(true);
+			}
+        }
+		aWidget->setChecked(true);
+    } else {
+ 	    for (int i=0; i < CHILD_WIDGETS.size(); ++i) {
+    	    if (CHILD_WIDGET(i))
+	    	    CHILD_WIDGET(i)->setChecked(false);
+        }
+		aWidget->setChecked(true);
+		p->lastSelWidget = aWidget;
+
+		if (p->Main->info())
+			p->Main->info()->setHtml(aWidget->getMapLayer()->toHtml());
+	}
+	ev->accept();
 }

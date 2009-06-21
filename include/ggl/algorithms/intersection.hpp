@@ -98,7 +98,7 @@ struct intersection
     static inline OutputIterator apply(Linestring const& linestring,
             Box const& box, OutputIterator out)
     {
-        typedef typename point_type<Linestring>::type point_type;
+        typedef typename point_type<GeometryOut>::type point_type;
         strategy::intersection::liang_barsky<Box, point_type> strategy;
         return impl::intersection::clip_linestring_with_box<GeometryOut>(box, linestring, out, strategy);
     }
