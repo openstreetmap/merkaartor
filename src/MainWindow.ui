@@ -24,7 +24,7 @@
      <x>0</x>
      <y>0</y>
      <width>1100</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp">
@@ -143,13 +143,6 @@
      <addaction name="exportGPXAction"/>
      <addaction name="exportKMLAction"/>
     </widget>
-    <widget class="QMenu" name="menuRender">
-     <property name="title">
-      <string>&amp;Render</string>
-     </property>
-     <addaction name="renderNativeAction"/>
-     <addaction name="renderOsmarenderAction"/>
-    </widget>
     <widget class="QMenu" name="menuRecentOpen">
      <property name="title">
       <string>Re&amp;cent open</string>
@@ -167,7 +160,7 @@
     <addaction name="menuRecentImport"/>
     <addaction name="separator"/>
     <addaction name="menuExport"/>
-    <addaction name="menuRender"/>
+    <addaction name="renderNativeAction"/>
     <addaction name="separator"/>
     <addaction name="fileSaveAction"/>
     <addaction name="fileSaveAsAction"/>
@@ -1175,7 +1168,7 @@
   </action>
   <action name="renderNativeAction">
    <property name="text">
-    <string>Native</string>
+    <string>&amp;Render</string>
    </property>
   </action>
   <action name="viewTrackPointsAction">
