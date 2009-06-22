@@ -11,6 +11,7 @@
 
 #include <QPushButton>
 #include <QDragEnterEvent>
+#include <QMenu>
 
 #define LINEHEIGHT 25
 
@@ -34,6 +35,8 @@ class LayerDockPrivate
 		QTabBar* tab;
 		LayerWidget* theDropWidget;
 		LayerWidget* lastSelWidget;
+   		QMenu* ctxMenu;
+        QList<LayerWidget*> selWidgets;
 };
 
 LayerDock::LayerDock(MainWindow* aMain)
@@ -209,6 +212,31 @@ void LayerDock::createContent()
 
 	setWidget(frame);
 	update();
+
+    //Contextual Menu
+	p->ctxMenu = new QMenu(this);
+    
+	QAction* actShowAll = new QAction(tr("Show All"), p->ctxMenu);
+	actShowAll->setCheckable(false);
+	p->ctxMenu->addAction(actShowAll);
+	connect(actShowAll, SIGNAL(triggered(bool)), this, SLOT(showAllLayers(bool)));
+
+	QAction* actHideAll = new QAction(tr("Hide All"), p->ctxMenu);
+	actHideAll->setCheckable(false);
+	p->ctxMenu->addAction(actHideAll);
+	connect(actHideAll, SIGNAL(triggered(bool)), this, SLOT(hideAllLayers(bool)));
+
+   	p->ctxMenu->addSeparator();
+
+    QAction* actReadonlyAll = new QAction(tr("Readonly All"), p->ctxMenu);
+	actReadonlyAll->setCheckable(false);
+	p->ctxMenu->addAction(actReadonlyAll);
+	connect(actReadonlyAll, SIGNAL(triggered(bool)), this, SLOT(readonlyAllLayers(bool)));
+
+    QAction* actReadonlyNone = new QAction(tr("Readonly None"), p->ctxMenu);
+	actReadonlyNone->setCheckable(false);
+	p->ctxMenu->addAction(actReadonlyNone);
+	connect(actReadonlyNone, SIGNAL(triggered(bool)), this, SLOT(readonlyNoneLayers(bool)));
 }
 
 void LayerDock::resizeEvent(QResizeEvent* )
@@ -326,24 +354,73 @@ void LayerDock::retranslateTabBar()
 	p->tab->setTabText(3, tr("Tracks"));
 }
 
-void LayerDock::mousePressEvent ( QMouseEvent * ev )
+void LayerDock::showAllLayers(bool)
 {
-	LayerWidget* aWidget = dynamic_cast<LayerWidget*>(childAt(ev->pos()));
-    
-	if (ev->button() == Qt::RightButton) {
-	    for (int i=0; i < CHILD_WIDGETS.size(); ++i) {
+    for (int i=0; i<p->selWidgets.size(); ++i) {
+        p->selWidgets[i]->setLayerVisible(true);
+    }
+}
+
+void LayerDock::hideAllLayers(bool)
+{
+    for (int i=0; i<p->selWidgets.size(); ++i) {
+        p->selWidgets[i]->setLayerVisible(false);
+    }
+}
+
+void LayerDock::readonlyAllLayers(bool)
+{
+    for (int i=0; i<p->selWidgets.size(); ++i) {
+        p->selWidgets[i]->setLayerReadonly(true);
+    }
+}
+
+void LayerDock::readonlyNoneLayers(bool)
+{
+    for (int i=0; i<p->selWidgets.size(); ++i) {
+        p->selWidgets[i]->setLayerReadonly(false);
+    }
+}
+
+void LayerDock::contextMenuEvent(QContextMenuEvent* anEvent)
+{
+    LayerWidget* aWidget = dynamic_cast<LayerWidget*>(childAt(anEvent->pos()));
+
+    p->selWidgets.clear();
+    for (int i=0; i < CHILD_WIDGETS.size(); ++i) {
+		if (CHILD_WIDGET(i) && CHILD_WIDGET(i)->isChecked())
+            p->selWidgets.push_back(CHILD_WIDGET(i));
+    }
+
+    if ((p->selWidgets.size() == 0 || p->selWidgets.size() == 1) && aWidget) {
+ 	    for (int i=0; i < CHILD_WIDGETS.size(); ++i) {
     	    if (CHILD_WIDGET(i))
 	    	    CHILD_WIDGET(i)->setChecked(false);
         }
-		aWidget->setChecked(true);
-		p->lastSelWidget = aWidget;
-        ev->ignore();
-        return;
-    }
+	    aWidget->setChecked(true);
+	    p->lastSelWidget = aWidget;
 
+		aWidget->showContextMenu(anEvent);
+    } else 
+    if (p->selWidgets.size()) {
+ 		p->ctxMenu->exec(anEvent->globalPos());
+   }
+}
+
+void LayerDock::mousePressEvent ( QMouseEvent * ev )
+{
+	if (ev->button() != Qt::LeftButton) {
+		ev->ignore();
+		return;
+	}
+
+	LayerWidget* aWidget = dynamic_cast<LayerWidget*>(childAt(ev->pos()));
+    
 	if (!aWidget) {
-		if (p->lastSelWidget)
-			p->lastSelWidget->setChecked(false);
+		for (int i=0; i < CHILD_WIDGETS.size(); ++i) {
+			if (CHILD_WIDGET(i))
+				CHILD_WIDGET(i)->setChecked(false);
+		}
 		p->lastSelWidget = NULL;
 		ev->ignore();
 		return;

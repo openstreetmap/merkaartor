@@ -14,6 +14,8 @@ class LayerWidget : public QAbstractButton
 {
 	Q_OBJECT
 
+        friend class LayerDock;
+
 	public:
 		LayerWidget(MapLayer* aLayer, QWidget* aParent = 0);
 		virtual ~LayerWidget();
@@ -29,7 +31,7 @@ class LayerWidget : public QAbstractButton
 		QMenu* getAssociatedMenu();
 
 	protected:
-		virtual void contextMenuEvent(QContextMenuEvent* anEvent);
+		virtual void showContextMenu(QContextMenuEvent* anEvent);
 
 		virtual void mousePressEvent(QMouseEvent *event);
 		virtual void mouseMoveEvent(QMouseEvent *event);

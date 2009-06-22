@@ -40,12 +40,18 @@ class LayerDock : public MDockAncestor
 		void TabShowAll(bool);
 		void TabHideAll(bool);
 
+   		void showAllLayers(bool);
+   		void hideAllLayers(bool);
+   		void readonlyAllLayers(bool);
+   		void readonlyNoneLayers(bool);
+
 	signals:
 		void layersChanged(bool adjustViewport);
 
 	protected:
 		LayerDockPrivate* p;
 
+		virtual void contextMenuEvent(QContextMenuEvent* anEvent);
         virtual void mousePressEvent ( QMouseEvent * event );
 
 		void dragEnterEvent(QDragEnterEvent *event);

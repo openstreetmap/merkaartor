@@ -291,7 +291,7 @@ void TrackSegment::updateMeta() const
 		return;
 	}
 
-	for (unsigned int i=0; (i+1)<p->Nodes.size(); ++i)
+	for (int i=0; (i+1)<p->Nodes.size(); ++i)
 	{
 		if (p->Nodes[i] && p->Nodes[i+1]) {
 			const Coord & here = p->Nodes[i]->position();

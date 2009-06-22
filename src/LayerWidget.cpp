@@ -19,6 +19,7 @@ LayerWidget::LayerWidget(MapLayer* aLayer, QWidget* aParent)
 	setCheckable(true);
 	//setAutoExclusive(true) ;
 	setFocusPolicy(Qt::NoFocus);
+    setContextMenuPolicy(Qt::NoContextMenu);
 	visibleIcon = QPixmap(":Icons/eye.xpm");
 	hiddenIcon = QPixmap(":Icons/empty.xpm");
 }
@@ -125,7 +126,7 @@ MapLayer* LayerWidget::getMapLayer()
 	return theLayer;
 }
 
-void LayerWidget::contextMenuEvent(QContextMenuEvent* anEvent)
+void LayerWidget::showContextMenu(QContextMenuEvent* anEvent)
 {
 	//initActions();
 
