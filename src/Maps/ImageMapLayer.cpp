@@ -126,7 +126,7 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
 	SAFE_DELETE(p->tmsa);
 	if (p->theImageManager)
 		p->theImageManager->abortLoading();
-	p->theImageManager = NULL;
+	SAFE_DELETE(p->theImageManager);
 	p->theMapAdapter = NULL;
 	p->pm = QPixmap();
 

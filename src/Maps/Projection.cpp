@@ -71,22 +71,30 @@ void Projection::projTransformToWGS84(long point_count, int point_offset, double
 
 QPointF Projection::projProject(const Coord & Map) const
 {
-	point_ll_deg in(longitude<>(intToAng(Map.lon())), latitude<>(intToAng(Map.lat())));
-	point_2d out;
+	try {
+		point_ll_deg in(longitude<>(intToAng(Map.lon())), latitude<>(intToAng(Map.lat())));
+		point_2d out;
 
-	theProj->forward(in, out);
+		theProj->forward(in, out);
 
-	return QPointF(out.x(), out.y());
+		return QPointF(out.x(), out.y());
+	} catch (...) {
+		return QPointF(0., 0.);
+	}
 }
 
 Coord Projection::projInverse(const QPointF & pProj) const
 {
-	point_2d in(pProj.x(), pProj.y());
-	point_ll_deg out;
+	try {
+		point_2d in(pProj.x(), pProj.y());
+		point_ll_deg out;
 
-	theProj->inverse(in, out);
+		theProj->inverse(in, out);
 
-	return Coord(angToInt(out.lat()), angToInt(out.lon()));
+		return Coord(angToInt(out.lat()), angToInt(out.lon()));
+	} catch (...) {
+		return Coord(0, 0);
+	}
 }
 
 bool Projection::projIsLatLong()
@@ -146,16 +154,22 @@ ProjProjection * Projection::getProjection(QString projString)
 {
 	ggl::projection::factory<ggl::point_ll_deg, ggl::point_2d> fac;
 	ggl::projection::parameters par;
+	ggl::projection::projection<ggl::point_ll_deg, ggl::point_2d> *theProj;
 
-	par = ggl::projection::init(std::string(QString("%1 +over").arg(projString).toLatin1().data()));
-	ggl::projection::projection<ggl::point_ll_deg, ggl::point_2d> *theProj = fac.create_new(par);
-	if (!theProj) {
-		par = ggl::projection::init(std::string(QString("%1 +over").arg(M_PREFS->getProjection("mercator").projection).toLatin1().data()));
+	try {
+		par = ggl::projection::init(std::string(QString("%1 +over").arg(projString).toLatin1().data()));
 		theProj = fac.create_new(par);
 		if (!theProj) {
-			qDebug() << "Unable to set projection : " << projString;
-			return NULL;
+			par = ggl::projection::init(std::string(QString("%1 +over").arg(M_PREFS->getProjection("mercator").projection).toLatin1().data()));
+			theProj = fac.create_new(par);
+			if (!theProj) {
+				qDebug() << "Unable to set projection : " << projString;
+				return NULL;
+			}
 		}
+	} catch (...) {
+		par = ggl::projection::init(std::string(QString("%1 +over").arg(M_PREFS->getProjection("mercator").projection).toLatin1().data()));
+		theProj = fac.create_new(par);
 	}
 	return theProj;
 }
@@ -164,7 +178,11 @@ bool Projection::setProjectionType(ProjectionType aProjectionType)
 {
 	delete theProj;
 	p->ProjectionRevision++;
-	theProj = getProjection(M_PREFS->getProjection(aProjectionType).projection);
+	try {
+		theProj = getProjection(M_PREFS->getProjection(aProjectionType).projection);
+	} catch (...) {
+		return false;
+	}
 	return (theProj != NULL);
 }
 #endif
