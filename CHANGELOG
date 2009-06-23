@@ -1,4 +1,5 @@
 v0.14
+    * ADD : Add a case-sensitiveness option to the search + search by ID (closes #1509)
     * CHG : Remove support for osmarender (fixes #1966)
     * ADD : Allow multi-selection of layers; allow to show/hide or readonly several layers at once (closes #1798)
 	* ADD : Also export routes in GPX

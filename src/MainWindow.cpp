@@ -1983,19 +1983,26 @@ void MainWindow::on_editSelectAction_triggered()
 		MerkaartorPreferences::instance()->setLastSearchValue(Sel->cbValue->currentText());
 		MerkaartorPreferences::instance()->setLastMaxSearchResults(Sel->sbMaxResult->value());
 
-		QRegExp selName(Sel->edName->text(), Qt::CaseInsensitive, QRegExp::RegExp);
-		QRegExp selKey(Sel->cbKey->currentText(), Qt::CaseInsensitive, QRegExp::RegExp);
-		QRegExp selValue(Sel->cbValue->currentText(), Qt::CaseInsensitive, QRegExp::RegExp);
+		Qt::CaseSensitivity theSensitivity = Qt::CaseInsensitive;
+		if (Sel->cbCaseSensitive->isChecked())
+			theSensitivity = Qt::CaseSensitive;
+		QRegExp selName(Sel->edName->text(), theSensitivity, QRegExp::RegExp);
+		QRegExp selKey(Sel->cbKey->currentText(), theSensitivity, QRegExp::RegExp);
+		QRegExp selValue(Sel->cbValue->currentText(), theSensitivity, QRegExp::RegExp);
 		int selMaxResult = Sel->sbMaxResult->value();
 
 		QList <MapFeature *> selection;
 		int added = 0;
 		for (VisibleFeatureIterator i(theDocument); !i.isEnd() && added < selMaxResult; ++i) {
 			MapFeature* F = i.get();
+			int ok = false;
+
 			if (selName.indexIn(F->description()) == -1) {
 				continue;
 			}
-			int ok = false;
+			if (F->id().indexOf(Sel->edID->text(), theSensitivity) == -1) {
+				continue;
+			}
 			for (int j=0; j < F->tagSize(); j++) {
 				if ((selKey.indexIn(F->tagKey(j)) > -1) && (selValue.indexIn(F->tagValue(j)) > -1)) {
 					ok = true;
@@ -2029,14 +2036,6 @@ void MainWindow::on_renderNativeAction_triggered()
 {
 	NativeRenderDialog osmR(theDocument, theView->viewport(), this);
 	osmR.exec();
-}
-
-void MainWindow::on_renderOsmarenderAction_triggered()
-{
-#ifdef OSMARENDER
-	OsmaRenderDialog osmR(theDocument, theView->projection().viewport(), this);
-	osmR.exec();
-#endif
 }
 
 void MainWindow::updateBookmarksMenu()
