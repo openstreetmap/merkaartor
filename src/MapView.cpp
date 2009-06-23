@@ -298,7 +298,8 @@ void MapView::buildFeatureSet()
 
 	for (int i=0; i<theDocument->layerSize(); ++i) {
 		theDocument->getLayer(i)->invalidate(theDocument, p->Viewport);
-		Main->properties()->adjustSelection();
+		if (Main)
+			Main->properties()->adjustSelection();
 	}
 
 	CoordBox coordRegion;
@@ -472,7 +473,7 @@ void MapView::drawBackground(QPainter & theP, Projection& /*aProj*/)
 	}
 
 	for (int i=0; i < theCoasts.size(); i++) {
-		theP.drawPath(*theCoasts[i]);
+		theP.drawPath(p->theTransform.map(*theCoasts[i]));
 		delete theCoasts[i];
 	}
 }

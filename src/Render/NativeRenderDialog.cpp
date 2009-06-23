@@ -99,6 +99,9 @@ void NativeRenderDialog::render()
 	}
 
 	MainWindow* mw = dynamic_cast<MainWindow*>(parentWidget());
+	MapView* vw = new MapView(NULL);
+	vw->setDocument(mw->document());
+
 	CoordBox VP(Coord(
 		angToInt(sbMinLat->value()),
 		angToInt(sbMinLon->value())
@@ -109,7 +112,10 @@ void NativeRenderDialog::render()
 
 	Projection aProj;
 	QRect theR(0, 0, w, h);
-	mw->view()->setViewport(VP, theR);
+	vw->setGeometry(theR);
+	vw->setViewport(VP, theR);
+	P.setClipping(true);
+	P.setClipRect(theR);
 
 #ifndef Q_OS_SYMBIAN
 	QApplication::setOverrideCursor(Qt::BusyCursor);
@@ -121,19 +127,18 @@ void NativeRenderDialog::render()
 
 	QApplication::processEvents();
 
-	//QRegion rg(theR);
-	//P.setClipRegion(rg);
-	//P.setClipping(true);
-
 	double oldTileToRegionThreshold = M_PREFS->getTileToRegionThreshold();
 	M_PREFS->setTileToRegionThreshold(360.0);
 
-	mw->view()->buildFeatureSet();
-	mw->view()->drawBackground(P, aProj);
-	mw->view()->drawFeatures(P, aProj);
+	vw->invalidate(true, false);
+	vw->buildFeatureSet();
+	vw->drawBackground(P, aProj);
+	vw->drawFeatures(P, aProj);
 
 	M_PREFS->setTileToRegionThreshold(oldTileToRegionThreshold);
 	P.end();
+
+	delete vw;
 
 	progress.reset();
 #ifndef Q_OS_SYMBIAN

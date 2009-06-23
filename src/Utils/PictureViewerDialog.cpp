@@ -38,6 +38,7 @@ void PictureViewerDialog::on_buttonBox_clicked(QAbstractButton * button)
 		if (m_filename.endsWith("svg", Qt::CaseInsensitive)) {
 			QString s = QFileDialog::getSaveFileName(this,tr("Output filename"),"",tr("SVG files (*.svg)"));
 			if (!s.isNull()) {
+				QFile(s).remove();
 				QFile(m_filename).copy(s);
 			}
 		} else {
