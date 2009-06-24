@@ -4,7 +4,7 @@
 <painter
  zoomUnder="0.01" zoomUpper="1e+07"
  backgroundColor="#ff0000fc" backgroundScale="1.5" backgroundOffset="0"
- drawTrafficDirectionMarks="no">
+ drawTrafficDirectionMarks="yes">
   <selector expr="[note] is FIXME*"/>
 </painter>
 <painter
