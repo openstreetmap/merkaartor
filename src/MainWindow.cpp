@@ -2586,10 +2586,10 @@ void MainWindow::updateLanguage()
         qtTranslator = new QTranslator;
     #ifdef TRANSDIR_SYSTEM
         bool retQt;
-        if (!QDir::isAbsolutePath(TRANSDIR_SYSTEM))
-            retQt = qtTranslator->load("qt_" + DefaultLanguage, QCoreApplication::applicationDirPath() + "/" + TRANSDIR_SYSTEM);
+        if (!QDir::isAbsolutePath(STRINGIFY(TRANSDIR_SYSTEM)))
+            retQt = qtTranslator->load("qt_" + DefaultLanguage, QCoreApplication::applicationDirPath() + "/" + STRINGIFY(TRANSDIR_SYSTEM));
         else
-            retQt = qtTranslator->load("qt_" + DefaultLanguage, TRANSDIR_SYSTEM);
+            retQt = qtTranslator->load("qt_" + DefaultLanguage, STRINGIFY(TRANSDIR_SYSTEM));
     #else
         bool retQt = qtTranslator->load("qt_" + DefaultLanguage, QLibraryInfo::location(QLibraryInfo::TranslationsPath));
     #endif

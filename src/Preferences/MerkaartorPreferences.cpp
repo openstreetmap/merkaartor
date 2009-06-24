@@ -373,7 +373,11 @@ void MerkaartorPreferences::initialize()
 
 	if (getProxyUse()) {
 		QNetworkProxy proxy;
+#if QT_VERSION < 0x040500
 		proxy.setType(QNetworkProxy::HttpCachingProxy);
+#else
+		proxy = QNetworkProxy::HttpProxy;
+#endif
 		proxy.setHostName(getProxyHost());
 		proxy.setPort(getProxyPort());
 		proxy.setUser(getProxyUser());

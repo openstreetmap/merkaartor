@@ -256,6 +256,16 @@ void Road::updateMeta() const
 	p->Distance = 0;
 	p->IsCoastline = false;
 
+	p->NotEverythingDownloaded = false;
+	if (lastUpdated() == MapFeature::NotYetDownloaded)
+		p->NotEverythingDownloaded = true;
+	else
+		for (unsigned int i=0; i<p->Nodes.size(); ++i)
+			if (p->Nodes.at(i) && p->Nodes.at(i)->notEverythingDownloaded()) {
+				p->NotEverythingDownloaded = true;
+				break;
+			}
+
 	if (p->Nodes.size() == 0)
 	{
 		p->MetaUpToDate = true;
@@ -292,16 +302,6 @@ void Road::updateMeta() const
 		p->IsCoastline = true;
 
     
-	p->NotEverythingDownloaded = false;
-	if (lastUpdated() == MapFeature::NotYetDownloaded)
-		p->NotEverythingDownloaded = true;
-    else
-	    for (unsigned int i=0; i<p->Nodes.size(); ++i)
-            if (p->Nodes.at(i) && p->Nodes.at(i)->notEverythingDownloaded()) {
-			    p->NotEverythingDownloaded = true;
-                break;
-            }
-
 	p->MetaUpToDate = true;
 }
 
