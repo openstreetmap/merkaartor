@@ -237,6 +237,13 @@ void LayerDock::createContent()
 	actReadonlyNone->setCheckable(false);
 	p->ctxMenu->addAction(actReadonlyNone);
 	connect(actReadonlyNone, SIGNAL(triggered(bool)), this, SLOT(readonlyNoneLayers(bool)));
+
+	p->ctxMenu->addSeparator();
+
+	QAction* actClose = new QAction(tr("Close"), p->ctxMenu);
+	actClose->setCheckable(false);
+	p->ctxMenu->addAction(actClose);
+	connect(actClose, SIGNAL(triggered(bool)), this, SLOT(closeLayers(bool)));
 }
 
 void LayerDock::resizeEvent(QResizeEvent* )
@@ -380,6 +387,14 @@ void LayerDock::readonlyNoneLayers(bool)
     for (int i=0; i<p->selWidgets.size(); ++i) {
         p->selWidgets[i]->setLayerReadonly(false);
     }
+}
+
+void LayerDock::closeLayers(bool)
+{
+	for (int i=0; i<p->selWidgets.size(); ++i) {
+		if (p->selWidgets[i]->getMapLayer()->canDelete())
+			layerClosed(p->selWidgets[i]->getMapLayer());
+	}
 }
 
 void LayerDock::contextMenuEvent(QContextMenuEvent* anEvent)

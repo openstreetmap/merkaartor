@@ -375,6 +375,9 @@ TrackPoint * TrackPoint::fromGPX(MapDocument* d, MapLayer* L, const QDomElement 
 		if (c.tagName() == "ele") {
 			Pt->setElevation(c.text().toFloat());
 		} else
+		if (c.tagName() == "name") {
+			Pt->setTag("name", c.text(), false);
+		} else
 		if (c.tagName() == "cmt") {
 			Pt->setTag("_comment_", c.text(), false);
 		} else

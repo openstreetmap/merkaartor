@@ -44,6 +44,7 @@ class LayerDock : public MDockAncestor
    		void hideAllLayers(bool);
    		void readonlyAllLayers(bool);
    		void readonlyNoneLayers(bool);
+		void closeLayers(bool);
 
 	signals:
 		void layersChanged(bool adjustViewport);

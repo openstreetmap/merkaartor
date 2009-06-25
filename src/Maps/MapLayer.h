@@ -124,7 +124,7 @@ public:
 	int setDirtyLevel(int newLevel);
 	int getDirtySize();
 
-	virtual bool canDelete();
+	virtual bool canDelete() const;
 	virtual bool isUploadable() const;
 	virtual bool isReadonly() const;
 	virtual bool isTrack() {return false;}
@@ -136,6 +136,7 @@ public:
 
 protected:
 	MapLayerPrivate* p;
+	LayerWidget* theWidget;
 	mutable QString Id;
 };
 
@@ -198,6 +199,9 @@ public:
 	virtual const LayerGroups classGroups() {return(MapLayer::Default|MapLayer::OSM);}
 
 	virtual LayerWidget* newWidget(void);
+
+	virtual bool canDelete() const { return false; }
+
 };
 
 class UploadedMapLayer : public DrawingMapLayer
@@ -211,7 +215,10 @@ public:
 
 	virtual /* const */ LayerType classType() {return MapLayer::UploadedMapLayerType;}
 	virtual const LayerGroups classGroups() {return(MapLayer::Default|MapLayer::OSM);}
+
 	virtual LayerWidget* newWidget(void);
+
+	virtual bool canDelete() const { return false; }
 };
 
 class DeletedMapLayer : public DrawingMapLayer
@@ -229,6 +236,7 @@ public:
 	virtual LayerWidget* newWidget(void);
 
 	virtual bool isUploadable() {return false;}
+	virtual bool canDelete() const { return false; }
 };
 
 class OsbMapLayer : public MapLayer

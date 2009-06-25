@@ -37,7 +37,6 @@ public:
 		: RenderPriorityUpToDate(false)
 	{
 		theDocument = NULL;
-		theWidget = NULL;
 		selected = false;
 		Enabled = true;
 		Readonly = false;
@@ -64,7 +63,6 @@ public:
 	bool Enabled;
 	bool Readonly;
 	bool Uploadable;
-	LayerWidget* theWidget;
 	qreal alpha;
 	int dirtyLevel;
 
@@ -81,14 +79,14 @@ public:
 }
 
 MapLayer::MapLayer()
-:  p(new MapLayerPrivate)
+:  p(new MapLayerPrivate), theWidget(0)
 {
 	p->alpha = 1.0;
 	p->dirtyLevel = 0;
 }
 
 MapLayer::MapLayer(const QString& aName)
-:  p(new MapLayerPrivate)
+:  p(new MapLayerPrivate), theWidget(0)
 {
 	p->Name = aName;
 	p->alpha = 1.0;
@@ -96,7 +94,7 @@ MapLayer::MapLayer(const QString& aName)
 }
 
 MapLayer::MapLayer(const MapLayer&)
-: QObject(), p(0)
+: QObject(), p(0), theWidget(0)
 {
 }
 
@@ -161,9 +159,9 @@ bool MapLayer::isSelected() const
 
 void MapLayer::setEnabled(bool b) {
 	p->Enabled = b;
-	if (p->theWidget) {
-		p->theWidget->setVisible(b);
-		p->theWidget->getAssociatedMenu()->menuAction()->setVisible(b);
+	if (theWidget) {
+		theWidget->setVisible(b);
+		theWidget->getAssociatedMenu()->menuAction()->setVisible(b);
 	}
 }
 
@@ -318,14 +316,14 @@ const MapFeature* MapLayer::get(int i) const
 
 LayerWidget* MapLayer::getWidget(void)
 {
-	return p->theWidget;
+	return theWidget;
 }
 
 void MapLayer::deleteWidget(void)
 {
-//	p->theWidget->deleteLater();
-	delete p->theWidget;
-	p->theWidget = NULL;
+//	theWidget->deleteLater();
+	delete theWidget;
+	theWidget = NULL;
 }
 
 void MapLayer::setAlpha(const qreal a)
@@ -421,7 +419,7 @@ int MapLayer::getDirtySize()
 	return dirtyObjects;
 }
 
-bool MapLayer::canDelete()
+bool MapLayer::canDelete() const
 {
 	return (p->dirtyLevel == 0);
 }
@@ -466,9 +464,9 @@ DrawingMapLayer::~ DrawingMapLayer()
 
 LayerWidget* DrawingMapLayer::newWidget(void)
 {
-//	delete p->theWidget;
-	p->theWidget = new DrawingLayerWidget(this);
-	return p->theWidget;
+//	delete theWidget;
+	theWidget = new DrawingLayerWidget(this);
+	return theWidget;
 }
 
 
@@ -485,6 +483,7 @@ bool DrawingMapLayer::toXML(QDomElement& xParent, QProgressDialog & progress)
 	e.setAttribute("visible", QString((p->Visible ? "true" : "false")));
 	e.setAttribute("selected", QString((p->selected ? "true" : "false")));
 	e.setAttribute("enabled", QString((p->Enabled ? "true" : "false")));
+	e.setAttribute("readonly", QString((p->Readonly ? "true" : "false")));
 
 	QDomElement o = xParent.ownerDocument().createElement("osm");
 	e.appendChild(o);
@@ -529,6 +528,7 @@ DrawingMapLayer * DrawingMapLayer::doFromXML(DrawingMapLayer* l, MapDocument* d,
 	l->setVisible((e.attribute("visible") == "true" ? true : false));
 	l->setSelected((e.attribute("selected") == "true" ? true : false));
 	l->setEnabled((e.attribute("enabled") == "false" ? false : true));
+	l->setReadonly((e.attribute("readonly") == "false" ? false : true));
 
 	QDomElement c = e.firstChildElement();
 	if (c.tagName() != "osm")
@@ -603,8 +603,8 @@ TrackMapLayer::~ TrackMapLayer()
 
 LayerWidget* TrackMapLayer::newWidget(void)
 {
-	p->theWidget = new TrackLayerWidget(this);
-	return p->theWidget;
+	theWidget = new TrackLayerWidget(this);
+	return theWidget;
 }
 
 void TrackMapLayer::extractLayer()
@@ -733,6 +733,7 @@ bool TrackMapLayer::toXML(QDomElement& xParent, QProgressDialog & progress)
 	e.setAttribute("visible", QString((p->Visible ? "true" : "false")));
 	e.setAttribute("selected", QString((p->selected ? "true" : "false")));
 	e.setAttribute("enabled", QString((p->Enabled ? "true" : "false")));
+	e.setAttribute("readonly", QString((p->Readonly ? "true" : "false")));
 
 	QDomElement o = xParent.ownerDocument().createElement("gpx");
 	e.appendChild(o);
@@ -772,6 +773,8 @@ TrackMapLayer * TrackMapLayer::fromXML(MapDocument* d, const QDomElement& e, QPr
 	l->setVisible((e.attribute("visible") == "true" ? true : false));
 	l->setSelected((e.attribute("selected") == "true" ? true : false));
 	l->setEnabled((e.attribute("enabled") == "false" ? false : true));
+	l->setReadonly((e.attribute("readonly") == "false" ? false : true));
+
 	d->add(l);
 
 	QDomElement c = e.firstChildElement();
@@ -830,8 +833,8 @@ DirtyMapLayer* DirtyMapLayer::fromXML(MapDocument* d, const QDomElement e, QProg
 
 LayerWidget* DirtyMapLayer::newWidget(void)
 {
-	p->theWidget = new DirtyLayerWidget(this);
-	return p->theWidget;
+	theWidget = new DirtyLayerWidget(this);
+	return theWidget;
 }
 
 // UploadedMapLayer
@@ -857,8 +860,8 @@ UploadedMapLayer* UploadedMapLayer::fromXML(MapDocument* d, const QDomElement e,
 
 LayerWidget* UploadedMapLayer::newWidget(void)
 {
-	p->theWidget = new UploadedLayerWidget(this);
-	return p->theWidget;
+	theWidget = new UploadedLayerWidget(this);
+	return theWidget;
 }
 
 // DeletedMapLayer
@@ -940,8 +943,8 @@ void OsbMapLayer::setFilename(const QString& filename)
 
 LayerWidget* OsbMapLayer::newWidget(void)
 {
-	p->theWidget = new OsbLayerWidget(this);
-	return p->theWidget;
+	theWidget = new OsbLayerWidget(this);
+	return theWidget;
 }
 
 void OsbMapLayer::invalidate(MapDocument* d, CoordBox vp)
@@ -1031,6 +1034,7 @@ bool OsbMapLayer::toXML(QDomElement& xParent, QProgressDialog & progress)
 	e.setAttribute("visible", QString((p->Visible ? "true" : "false")));
 	e.setAttribute("selected", QString((p->selected ? "true" : "false")));
 	e.setAttribute("enabled", QString((p->Enabled ? "true" : "false")));
+	e.setAttribute("readonly", QString((p->Readonly ? "true" : "false")));
 
 	e.setAttribute("filename", pp->theImp->getFilename());
 
@@ -1048,6 +1052,7 @@ OsbMapLayer * OsbMapLayer::fromXML(MapDocument* d, const QDomElement& e, QProgre
 	l->setVisible((e.attribute("visible") == "true" ? true : false));
 	l->setSelected((e.attribute("selected") == "true" ? true : false));
 	l->setEnabled((e.attribute("enabled") == "false" ? false : true));
+	l->setReadonly((e.attribute("readonly") == "false" ? false : true));
 
 	if (l->pp->theImp->loadFile(e.attribute("filename")))
 		l->pp->theImp->import(l);

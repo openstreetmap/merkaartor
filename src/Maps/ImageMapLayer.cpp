@@ -26,7 +26,6 @@ public:
 	QUuid bgType;
 	IMapAdapter* theMapAdapter;
 
-	ImageLayerWidget* theWidget;
 	QPixmap pm;
 	QPoint theDelta;
 	Projection theProjection;
@@ -41,7 +40,6 @@ public:
 public:
 	ImageMapLayerPrivate()
 	{
-		theWidget = NULL;
 		theMapAdapter = NULL;
 		theImageManager = NULL;
 		tmsa = NULL;
@@ -84,16 +82,16 @@ int ImageMapLayer::size() const
 
 LayerWidget* ImageMapLayer::newWidget(void)
 {
-//	delete p->theWidget;
-	p->theWidget = new ImageLayerWidget(this);
-	return p->theWidget;
+//	delete theWidget;
+	theWidget = new ImageLayerWidget(this);
+	return theWidget;
 }
 
 void ImageMapLayer::updateWidget()
 {
-    p->theWidget->initActions();
+	theWidget->initActions();
 	setMapAdapter(M_PREFS->getBackgroundPlugin());
-	p->theWidget->update();
+	theWidget->update();
 }
 
 void ImageMapLayer::setVisible(bool b)
