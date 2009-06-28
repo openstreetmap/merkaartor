@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace lask{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace lask{ 
             static const double a10 = 0.975534;
             static const double a12 = -0.119161;
             static const double a32 = -0.0143059;
@@ -93,7 +93,7 @@ namespace ggl { namespace projection
                 par.es = 0.;
             }
 
-        }} // namespace impl::lask
+        }} // namespace detail::lask
     #endif // doxygen 
 
     /*!
@@ -110,21 +110,21 @@ namespace ggl { namespace projection
         \image html ex_lask.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct lask_spheroid : public impl::lask::base_lask_spheroid<Geographic, Cartesian, Parameters>
+    struct lask_spheroid : public detail::lask::base_lask_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline lask_spheroid(const Parameters& par) : impl::lask::base_lask_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline lask_spheroid(const Parameters& par) : detail::lask::base_lask_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::lask::setup_lask(this->m_par);
+            detail::lask::setup_lask(this->m_par);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class lask_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class lask_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -134,12 +134,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void lask_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void lask_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("lask", new lask_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

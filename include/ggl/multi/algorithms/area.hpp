@@ -21,8 +21,8 @@ namespace dispatch
 {
     template <typename MultiGeometry, typename Strategy>
     struct area<multi_polygon_tag, MultiGeometry, Strategy>
-        : impl::multi_sum<double, MultiGeometry, Strategy,
-            impl::area::polygon_area<
+        : detail::multi_sum<double, MultiGeometry, Strategy,
+            detail::area::polygon_area<
                 typename boost::range_value<MultiGeometry>::type, Strategy> >
     {};
 

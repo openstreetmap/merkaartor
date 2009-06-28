@@ -44,8 +44,8 @@ struct append_point
 } // namespace traits
 
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace append {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace append {
 
 template <typename G, typename P, bool Std>
 struct append_point {};
@@ -53,7 +53,7 @@ struct append_point {};
 template <typename G, typename P>
 struct append_point<G, P, true>
 {
-    static inline void run(G& geometry, const P& point, int , int )
+    static inline void apply(G& geometry, P const& point, int , int )
     {
         typename point_type<G>::type point_type;
 
@@ -65,9 +65,9 @@ struct append_point<G, P, true>
 template <typename G, typename P>
 struct append_point<G, P, false>
 {
-    static inline void run(G& geometry, const P& point, int ring_index, int multi_index)
+    static inline void apply(G& geometry, P const& point, int ring_index, int multi_index)
     {
-        traits::append_point<G, P>::run(geometry, point, ring_index, multi_index);
+        traits::append_point<G, P>::apply(geometry, point, ring_index, multi_index);
     }
 };
 
@@ -76,12 +76,12 @@ struct append_range
 {
     typedef typename boost::range_value<R>::type point_type;
 
-    static inline void run(G& geometry, const R& range, int ring_index, int multi_index)
+    static inline void apply(G& geometry, R const& range, int ring_index, int multi_index)
     {
         for (typename boost::range_const_iterator<R>::type it = boost::begin(range);
              it != boost::end(range); ++it)
         {
-            append_point<G, point_type, Std>::run(geometry, *it, ring_index, multi_index);
+            append_point<G, point_type, Std>::apply(geometry, *it, ring_index, multi_index);
         }
     }
 };
@@ -91,17 +91,17 @@ struct point_to_poly
 {
     typedef typename ring_type<P>::type range_type;
 
-    static inline void run(P& polygon, const T& point, int ring_index, int multi_index)
+    static inline void apply(P& polygon, T const& point, int ring_index, int multi_index)
     {
         boost::ignore_unused_variable_warning(multi_index);
 
         if (ring_index == -1)
         {
-            append_point<range_type, T, Std>::run(exterior_ring(polygon), point, -1, -1);
+            append_point<range_type, T, Std>::apply(exterior_ring(polygon), point, -1, -1);
         }
         else if (ring_index < boost::size(interior_rings(polygon)))
         {
-            append_point<range_type, T, Std>::run(interior_rings(polygon)[ring_index], point, -1, -1);
+            append_point<range_type, T, Std>::apply(interior_rings(polygon)[ring_index], point, -1, -1);
         }
     }
 };
@@ -111,21 +111,21 @@ struct range_to_poly
 {
     typedef typename ring_type<P>::type ring_type;
 
-    static inline void run(P& polygon, const R& range, int ring_index, int multi_index)
+    static inline void apply(P& polygon, R const& range, int ring_index, int multi_index)
     {
         if (ring_index == -1)
         {
-            append_range<ring_type, R, Std>::run(exterior_ring(polygon), range, -1, -1);
+            append_range<ring_type, R, Std>::apply(exterior_ring(polygon), range, -1, -1);
         }
         else if (ring_index < boost::size(interior_rings(polygon)))
         {
-            append_range<ring_type, R, Std>::run(interior_rings(polygon)[ring_index], range, -1, -1);
+            append_range<ring_type, R, Std>::apply(interior_rings(polygon)[ring_index], range, -1, -1);
         }
     }
 };
 
-}} // namespace impl::append
-#endif // DOXYGEN_NO_IMPL
+}} // namespace detail::append
+#endif // DOXYGEN_NO_DETAIL
 
 
 #ifndef DOXYGEN_NO_DISPATCH
@@ -136,12 +136,12 @@ namespace dispatch
 
 // Default case (where RoP will be range/array/etc)
 template <typename Tag, typename TagRoP, typename G, typename RoP, bool Std>
-struct append : impl::append::append_range<G, RoP, Std> {};
+struct append : detail::append::append_range<G, RoP, Std> {};
 
 // Append a point to any geometry
 template <typename Tag, typename G, typename P, bool Std>
 struct append<Tag, point_tag, G, P, Std>
-    : impl::append::append_point<G, P, Std> {};
+    : detail::append::append_point<G, P, Std> {};
 
 // Never possible to append anything to a point/box/n-sphere
 template <typename TagRoP, typename P, typename RoP, bool Std>
@@ -155,11 +155,11 @@ struct append<nsphere_tag, TagRoP, N, RoP, Std> {};
 
 template <typename P, typename TAG_R, typename R, bool Std>
 struct append<polygon_tag, TAG_R, P, R, Std>
-        : impl::append::range_to_poly<P, R, Std> {};
+        : detail::append::range_to_poly<P, R, Std> {};
 
 template <typename P, typename T, bool Std>
 struct append<polygon_tag, point_tag, P, T, Std>
-        : impl::append::point_to_poly<P, T, Std> {};
+        : detail::append::point_to_poly<P, T, Std> {};
 
 // Multi-linestring and multi-polygon might either implement traits or use standard...
 
@@ -184,12 +184,12 @@ inline void append(G& geometry, const RoP& range_or_point,
 
     dispatch::append
         <
-        typename tag<G>::type,
-        typename tag<RoP>::type,
-        ncg_type,
-        RoP,
-        traits::use_std<ncg_type>::value
-        >::run(geometry, range_or_point, ring_index, multi_index);
+            typename tag<G>::type,
+            typename tag<RoP>::type,
+            ncg_type,
+            RoP,
+            traits::use_std<ncg_type>::value
+        >::apply(geometry, range_or_point, ring_index, multi_index);
 }
 
 } // namespace ggl

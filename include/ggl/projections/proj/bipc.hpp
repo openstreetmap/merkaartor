@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace bipc{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace bipc{ 
             static const double EPS = 1e-10;
             static const double EPS10 = 1e-10;
             static const double ONEEPS = 1.000000001;
@@ -199,7 +199,7 @@ namespace ggl { namespace projection
             	par.es = 0.;
             }
 
-        }} // namespace impl::bipc
+        }} // namespace detail::bipc
     #endif // doxygen 
 
     /*!
@@ -215,21 +215,21 @@ namespace ggl { namespace projection
         \image html ex_bipc.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct bipc_spheroid : public impl::bipc::base_bipc_spheroid<Geographic, Cartesian, Parameters>
+    struct bipc_spheroid : public detail::bipc::base_bipc_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline bipc_spheroid(const Parameters& par) : impl::bipc::base_bipc_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline bipc_spheroid(const Parameters& par) : detail::bipc::base_bipc_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::bipc::setup_bipc(this->m_par, this->m_proj_parm);
+            detail::bipc::setup_bipc(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class bipc_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class bipc_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -239,12 +239,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void bipc_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void bipc_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("bipc", new bipc_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

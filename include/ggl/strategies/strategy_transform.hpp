@@ -28,8 +28,8 @@ namespace ggl
 
 namespace strategy { namespace transform {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail
 {
 
 template
@@ -63,8 +63,8 @@ struct transform_coordinates<Src, Dst, N, N, F>
     }
 };
 
-} // namespace impl
-#endif // DOXYGEN_NO_IMPL
+} // namespace detail
+#endif // DOXYGEN_NO_DETAIL
 
 
 /*!
@@ -120,7 +120,7 @@ struct degree_radian_vv
         assert_dimension<P1, 2>();
         assert_dimension<P2, 2>();
 
-        impl::transform_coordinates<P1, P2, 0, 2, F>::transform(p1, p2, math::d2r);
+        detail::transform_coordinates<P1, P2, 0, 2, F>::transform(p1, p2, math::d2r);
         return true;
     }
 };
@@ -133,7 +133,7 @@ struct degree_radian_vv_3
         assert_dimension<P1, 3>();
         assert_dimension<P2, 3>();
 
-        impl::transform_coordinates<P1, P2, 0, 2, F>::transform(p1, p2, math::d2r);
+        detail::transform_coordinates<P1, P2, 0, 2, F>::transform(p1, p2, math::d2r);
         // Copy height or other third dimension
         set<2>(p2, get<2>(p1));
         return true;
@@ -141,8 +141,8 @@ struct degree_radian_vv_3
 };
 
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail
 {
 
     /// Helper function for conversion, phi/theta are in radians
@@ -168,7 +168,6 @@ namespace impl
         // http://en.wikipedia.org/wiki/List_of_canonical_coordinate_transformations#From_Cartesian_coordinates
 
         // TODO: MAYBE ONLY IF TO BE CHECKED?
-        // TODO: Use ggl::math::srq ? --mloskot
         double const r = std::sqrt(x * x + y * y + z * z);
 
         // Unit sphere, r should be 1
@@ -201,8 +200,8 @@ namespace impl
         return false;
     }
 
-} // namespace impl
-#endif // DOXYGEN_NO_IMPL
+} // namespace detail
+#endif // DOXYGEN_NO_DETAIL
 
 
 /*!
@@ -218,7 +217,7 @@ struct from_spherical_2_to_cartesian_3
     inline bool operator()(P1 const& p1, P2& p2) const
     {
         assert_dimension<P1, 2>();
-        impl::spherical_to_cartesian(get_as_radian<0>(p1), get_as_radian<1>(p1), 1.0, p2);
+        detail::spherical_to_cartesian(get_as_radian<0>(p1), get_as_radian<1>(p1), 1.0, p2);
         return true;
     }
 };
@@ -235,7 +234,7 @@ struct from_spherical_3_to_cartesian_3
     inline bool operator()(P1 const& p1, P2& p2) const
     {
         assert_dimension<P1, 3>();
-        impl::spherical_to_cartesian(
+        detail::spherical_to_cartesian(
                     get_as_radian<0>(p1), get_as_radian<1>(p1), get<2>(p1), p2);
         return true;
     }
@@ -255,7 +254,7 @@ struct from_cartesian_3_to_spherical_2
     inline bool operator()(P1 const& p1, P2& p2) const
     {
         assert_dimension<P1, 3>();
-        return impl::cartesian_to_spherical2(get<0>(p1), get<1>(p1), get<2>(p1), p2);
+        return detail::cartesian_to_spherical2(get<0>(p1), get<1>(p1), get<2>(p1), p2);
     }
 };
 
@@ -272,7 +271,7 @@ struct from_cartesian_3_to_spherical_3
     inline bool operator()(P1 const& p1, P2& p2) const
     {
         assert_dimension<P1, 3>();
-        return impl::cartesian_to_spherical3(get<0>(p1), get<1>(p1), get<2>(p1), p2);
+        return detail::cartesian_to_spherical3(get<0>(p1), get<1>(p1), get<2>(p1), p2);
     }
 };
 

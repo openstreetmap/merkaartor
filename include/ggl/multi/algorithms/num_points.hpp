@@ -7,8 +7,8 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 
 
-#ifndef GGL_MULTI_NUM_POINTS_HPP
-#define GGL_MULTI_NUM_POINTS_HPP
+#ifndef GGL_MULTI_ALGORITHMS_NUM_POINTS_HPP
+#define GGL_MULTI_ALGORITHMS_NUM_POINTS_HPP
 
 
 #include <ggl/multi/core/tags.hpp>
@@ -18,48 +18,55 @@
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace num_points {
+
+
+template <typename MultiGeometry>
+struct multi_count
 {
-    namespace num_points
+    static inline size_t apply(MultiGeometry const& geometry)
     {
-        template <typename G>
-        struct multi_count
+        typedef typename boost::range_value<MultiGeometry>::type geometry_type;
+        typedef typename boost::remove_const<geometry_type>::type ncg;
+        typedef typename boost::range_const_iterator
+            <
+                MultiGeometry
+            >::type iterator_type;
+
+        size_t n = 0;
+        for (iterator_type it = boost::begin(geometry);
+            it != boost::end(geometry);
+            ++it)
         {
-            static inline size_t calculate(const G& geometry)
-            {
-                typedef typename boost::range_value<G>::type V;
-                typedef typename boost::range_const_iterator<G>::type IT;
-
-                size_t n = 0;
-                for (IT it = boost::begin(geometry); it != boost::end(geometry); it++)
-                {
-                    typedef typename boost::remove_const<V>::type NCG;
-                    n += dispatch::num_points<typename tag<NCG>::type,
-                        ggl::is_linear<NCG>::value, NCG>::calculate(*it);
-                }
-                return n;
-            }
-        };
+            n += dispatch::num_points<typename tag<ncg>::type,
+                ggl::is_linear<ncg>::value, ncg>::apply(*it);
+        }
+        return n;
     }
+};
 
 
-
-} // namespace impl
+}} // namespace detail::num_points
 #endif
 
 
 #ifndef DOXYGEN_NO_DISPATCH
-namespace dispatch
-{
-    template <typename G>
-    struct num_points<multi_point_tag, false, G> : impl::num_points::multi_count<G> {};
+namespace dispatch {
 
-    template <typename G>
-    struct num_points<multi_linestring_tag, false, G> : impl::num_points::multi_count<G> {};
 
-    template <typename G>
-    struct num_points<multi_polygon_tag, false, G> : impl::num_points::multi_count<G> {};
+template <typename Geometry>
+struct num_points<multi_point_tag, false, Geometry>
+    : detail::num_points::multi_count<Geometry> {};
+
+template <typename Geometry>
+struct num_points<multi_linestring_tag, false, Geometry>
+    : detail::num_points::multi_count<Geometry> {};
+
+template <typename Geometry>
+struct num_points<multi_polygon_tag, false, Geometry>
+    : detail::num_points::multi_count<Geometry> {};
+
 
 } // namespace dispatch
 #endif
@@ -68,4 +75,4 @@ namespace dispatch
 }
 
 
-#endif
+#endif // GGL_MULTI_ALGORITHMS_NUM_POINTS_HPP

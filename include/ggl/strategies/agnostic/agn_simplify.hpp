@@ -29,8 +29,8 @@ namespace strategy
 {
     namespace simplify
     {
-        #ifndef DOXYGEN_NO_IMPL
-        namespace impl
+        #ifndef DOXYGEN_NO_DETAIL
+        namespace detail
         {
 
             /*!
@@ -58,7 +58,7 @@ namespace strategy
                 }
             };
         }
-        #endif // DOXYGEN_NO_IMPL
+        #endif // DOXYGEN_NO_DETAIL
 
 
         /*!
@@ -79,7 +79,7 @@ namespace strategy
         class douglas_peucker
         {
             typedef typename point_type<R>::type P;
-            typedef impl::douglas_peucker_point<P> DP;
+            typedef detail::douglas_peucker_point<P> DP;
             typedef typename std::vector<DP>::iterator DIT;
 
             typedef typename PSDS::return_type RET;

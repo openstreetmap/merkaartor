@@ -45,8 +45,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace chamb{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace chamb{ 
             static const double THIRD = 0.333333333333333333;
             static const double TOL = 1e-9;
 
@@ -184,7 +184,7 @@ namespace ggl { namespace projection
                 // par.fwd = s_forward;
             }
 
-        }} // namespace impl::chamb
+        }} // namespace detail::chamb
     #endif // doxygen 
 
     /*!
@@ -202,21 +202,21 @@ namespace ggl { namespace projection
         \image html ex_chamb.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct chamb_spheroid : public impl::chamb::base_chamb_spheroid<Geographic, Cartesian, Parameters>
+    struct chamb_spheroid : public detail::chamb::base_chamb_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline chamb_spheroid(const Parameters& par) : impl::chamb::base_chamb_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline chamb_spheroid(const Parameters& par) : detail::chamb::base_chamb_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::chamb::setup_chamb(this->m_par, this->m_proj_parm);
+            detail::chamb::setup_chamb(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class chamb_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class chamb_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -226,12 +226,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void chamb_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void chamb_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("chamb", new chamb_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

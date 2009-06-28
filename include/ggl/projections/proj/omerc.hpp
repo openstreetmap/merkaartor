@@ -46,8 +46,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace omerc{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace omerc{ 
             static const double TOL = 1.e-7;
             static const double EPS = 1.e-10;
 
@@ -236,7 +236,7 @@ namespace ggl { namespace projection
                 // par.fwd = e_forward;
             }
 
-        }} // namespace impl::omerc
+        }} // namespace detail::omerc
     #endif // doxygen 
 
     /*!
@@ -256,21 +256,21 @@ namespace ggl { namespace projection
         \image html ex_omerc.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct omerc_ellipsoid : public impl::omerc::base_omerc_ellipsoid<Geographic, Cartesian, Parameters>
+    struct omerc_ellipsoid : public detail::omerc::base_omerc_ellipsoid<Geographic, Cartesian, Parameters>
     {
-        inline omerc_ellipsoid(const Parameters& par) : impl::omerc::base_omerc_ellipsoid<Geographic, Cartesian, Parameters>(par)
+        inline omerc_ellipsoid(const Parameters& par) : detail::omerc::base_omerc_ellipsoid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::omerc::setup_omerc(this->m_par, this->m_proj_parm);
+            detail::omerc::setup_omerc(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class omerc_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class omerc_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -280,12 +280,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void omerc_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void omerc_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("omerc", new omerc_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

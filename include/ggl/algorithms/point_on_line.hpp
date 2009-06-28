@@ -31,8 +31,7 @@ namespace ggl
 // Date         : spring 1996
 //----------------------------------------------------------------------
 template <typename P, typename L>
-BOOST_CONCEPT_REQUIRES(((Point<P>)),
-(bool)) point_on_linestring(const L& line, const double& position, P& point)
+bool point_on_linestring(const L& line, const double& position, P& point)
 {
     double current_distance = 0.0;
     if (line.size() < 2)

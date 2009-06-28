@@ -20,8 +20,8 @@ namespace dispatch
 {
     template <typename MG, typename S>
     struct perimeter<multi_polygon_tag, MG, S>
-            : impl::multi_sum<double, MG, S,
-                    impl::perimeter::polygon_perimeter<typename boost::range_value<MG>::type, S> > {};
+            : detail::multi_sum<double, MG, S,
+                    detail::perimeter::polygon_perimeter<typename boost::range_value<MG>::type, S> > {};
 
 } // namespace dispatch
 #endif

@@ -21,8 +21,8 @@ namespace ggl
 namespace strategy { namespace intersection {
 
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail
 {
 
 template <typename S, size_t D>
@@ -148,14 +148,14 @@ private :
         if (math::equals(dx_b, 0))
         {
             // Vertical -> Check y-direction
-            impl::segment_interval<S1, 1>::arrange(a, a_1, a_2, a_swapped);
-            impl::segment_interval<S1, 1>::arrange(b, b_1, b_2, b_swapped);
+            detail::segment_interval<S1, 1>::arrange(a, a_1, a_2, a_swapped);
+            detail::segment_interval<S1, 1>::arrange(b, b_1, b_2, b_swapped);
         }
         else
         {
             // Check x-direction
-            impl::segment_interval<S1, 0>::arrange(a, a_1, a_2, a_swapped);
-            impl::segment_interval<S1, 0>::arrange(b, b_1, b_2, b_swapped);
+            detail::segment_interval<S1, 0>::arrange(a, a_1, a_2, a_swapped);
+            detail::segment_interval<S1, 0>::arrange(b, b_1, b_2, b_swapped);
         }
 
         // First handle "disjoint", probably common case.

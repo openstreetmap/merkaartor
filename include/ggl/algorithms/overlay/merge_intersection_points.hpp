@@ -25,8 +25,8 @@ namespace ggl
 {
 
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace intersection {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace intersection {
 
 template <typename PointType>
 struct on_increasing_dimension
@@ -77,8 +77,8 @@ struct shared_code_is
 };
 
 
-}} // namespace impl::intersection
-#endif //DOXYGEN_NO_IMPL
+}} // namespace detail::intersection
+#endif //DOXYGEN_NO_DETAIL
 
 
 
@@ -92,7 +92,7 @@ inline void merge_intersection_points(V& intersection_points)
         std::remove_if(
                 boost::begin(intersection_points),
                 boost::end(intersection_points),
-                impl::intersection::is_collinear<trav_type>()),
+                detail::intersection::is_collinear<trav_type>()),
         boost::end(intersection_points));
 
     if (intersection_points.size() <= 1)
@@ -108,7 +108,7 @@ inline void merge_intersection_points(V& intersection_points)
     // (otherwise indexes are wrong)
     std::sort(boost::begin(intersection_points),
         boost::end(intersection_points),
-        impl::intersection::on_increasing_dimension<trav_type>());
+        detail::intersection::on_increasing_dimension<trav_type>());
 
     typedef typename boost::range_iterator<V>::type iterator;
 
@@ -149,7 +149,7 @@ inline void merge_intersection_points(V& intersection_points)
             std::remove_if(
                     boost::begin(intersection_points),
                     boost::end(intersection_points),
-                    impl::intersection::shared_code_is<trav_type, 2>()),
+                    detail::intersection::shared_code_is<trav_type, 2>()),
             boost::end(intersection_points));
 
 

@@ -23,6 +23,7 @@
 #include <boost/iterator/iterator_adaptor.hpp>
 #include <boost/iterator/iterator_categories.hpp>
 
+#include <ggl/algorithms/equals.hpp>
 #include <ggl/geometries/segment.hpp>
 
 namespace ggl
@@ -47,8 +48,8 @@ struct segment_iterator
         , m_it(end)
         , m_end(end)
     {
-        BOOST_ASSERT(point_type() == m_segment.first);
-        BOOST_ASSERT(point_type() == m_segment.second);
+        BOOST_ASSERT(ggl::equals(point_type(), m_segment.first));
+        BOOST_ASSERT(ggl::equals(point_type(), m_segment.second));
     }
 
     segment_iterator(Base const& it, Base const& end)

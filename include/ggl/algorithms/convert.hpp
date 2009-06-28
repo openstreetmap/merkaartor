@@ -29,30 +29,30 @@
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace convert {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace convert {
 
 template <typename P, typename B, std::size_t C, std::size_t D, std::size_t N>
 struct point_to_box
 {
-    static inline void loop(const P& point, B& box)
+    static inline void apply(P const& point, B& box)
     {
         typedef typename coordinate_type<B>::type coordinate_type;
 
         set<C, D>(box, boost::numeric_cast<coordinate_type>(get<D>(point)));
-        point_to_box<P, B, C, D + 1, N>::loop(point, box);
+        point_to_box<P, B, C, D + 1, N>::apply(point, box);
     }
 };
 
 template <typename P, typename B, std::size_t C, std::size_t N>
 struct point_to_box<P, B, C, N, N>
 {
-    static inline void loop(const P& point, B& box)
+    static inline void apply(P const& point, B& box)
     {}
 };
 
-}} // namespace impl::convert
-#endif // DOXYGEN_NO_IMPL
+}} // namespace detail::convert
+#endif // DOXYGEN_NO_DETAIL
 
 
 #ifndef DOXYGEN_NO_DISPATCH
@@ -81,7 +81,7 @@ struct convert<T, T, G, G>
 template <typename B, typename R>
 struct convert<box_tag, ring_tag, B, R>
 {
-    static inline void calculate(const B& box, R& ring)
+    static inline void apply(B const& box, R& ring)
     {
         // go from box to ring -> add coordinates in correct order
         // only valid for 2D
@@ -110,24 +110,24 @@ struct convert<box_tag, ring_tag, B, R>
 template <typename B, typename P>
 struct convert<box_tag, polygon_tag, B, P>
 {
-    static inline void calculate(const B& box, P& polygon)
+    static inline void apply(B const& box, P& polygon)
     {
         typedef typename ring_type<P>::type ring_type;
 
-        convert<box_tag, ring_tag, B, ring_type>::calculate(box, exterior_ring(polygon));
+        convert<box_tag, ring_tag, B, ring_type>::apply(box, exterior_ring(polygon));
     }
 };
 
 template <typename P, typename B>
 struct convert<point_tag, box_tag, P, B>
 {
-    static inline void calculate(const P& point, B& box)
+    static inline void apply(P const& point, B& box)
     {
         // go from point to box -> box with volume of zero, 2D or 3D
         static const std::size_t N = dimension<P>::value;
 
-        impl::convert::point_to_box<P, B, min_corner, 0, N>::loop(point, box);
-        impl::convert::point_to_box<P, B, max_corner, 0, N>::loop(point, box);
+        detail::convert::point_to_box<P, B, min_corner, 0, N>::apply(point, box);
+        detail::convert::point_to_box<P, B, max_corner, 0, N>::apply(point, box);
     }
 };
 
@@ -145,15 +145,15 @@ struct convert<point_tag, box_tag, P, B>
     \param geometry2 second geometry
  */
 template <typename G1, typename G2>
-inline void convert(const G1& geometry1, G2& geometry2)
+inline void convert(G1 const& geometry1, G2& geometry2)
 {
     dispatch::convert
         <
-        typename tag<G1>::type,
-        typename tag<G2>::type,
-        G1,
-        G2
-        >::calculate(geometry1, geometry2);
+            typename tag<G1>::type,
+            typename tag<G2>::type,
+            G1,
+            G2
+        >::apply(geometry1, geometry2);
 }
 
 } // namespace ggl

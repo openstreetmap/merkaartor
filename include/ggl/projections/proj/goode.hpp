@@ -47,8 +47,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace goode{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace goode{ 
             static const double Y_COR = 0.05280;
             static const double PHI_LIM = .71093078197902358062;
 
@@ -106,7 +106,7 @@ namespace ggl { namespace projection
                 // par.inv = s_inverse;
             }
 
-        }} // namespace impl::goode
+        }} // namespace detail::goode
     #endif // doxygen 
 
     /*!
@@ -122,21 +122,21 @@ namespace ggl { namespace projection
         \image html ex_goode.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct goode_spheroid : public impl::goode::base_goode_spheroid<Geographic, Cartesian, Parameters>
+    struct goode_spheroid : public detail::goode::base_goode_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline goode_spheroid(const Parameters& par) : impl::goode::base_goode_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline goode_spheroid(const Parameters& par) : detail::goode::base_goode_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::goode::setup_goode(this->m_par, this->m_proj_parm);
+            detail::goode::setup_goode(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class goode_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class goode_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -146,12 +146,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void goode_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void goode_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("goode", new goode_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

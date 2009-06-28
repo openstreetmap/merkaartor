@@ -22,7 +22,7 @@
 #ifndef QGPS_H
 #define QGPS_H
 
-#include "Utils/MDockAncestor.h"
+#include "MDockAncestor.h"
 
 #include "ui_qgpsmainwindowui.h"
 

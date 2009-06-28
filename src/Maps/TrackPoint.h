@@ -33,6 +33,7 @@ class TrackPoint : public MapFeature
 		virtual void draw(QPainter& P, MapView* theView);
 		virtual void drawFocus(QPainter& P, MapView* theView, bool solid=true);
 		virtual void drawHover(QPainter& P, MapView* theView, bool solid=true);
+		virtual void drawHighlight(QPainter& P, MapView* theView, bool solid=true);
 		virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection, const QTransform& theTransform) const;
 		virtual void cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const QList<MapFeature*>& Alternatives);
 		virtual bool notEverythingDownloaded() const;
@@ -114,16 +115,16 @@ struct access<TrackPointPtr>
     template <std::size_t I>
     static inline qreal get(const TrackPointPtr& p)
     {
-        return I == 0 ? p->position().lon() : p->position().lat();
+		return I == 0 ? p->projection().x() : p->projection().y();
     }
 
-    template <std::size_t I>
-    static inline void set(TrackPointPtr& p, const qreal& value)
-    {
-        // Or (better) implement an accessor with specializations
-        if (I == 0) p->position().setLon(value);
-        else if (I == 1) p->position().setLat(value);
-    }
+//    template <std::size_t I>
+//    static inline void set(TrackPointPtr& p, const qreal& value)
+//    {
+//        // Or (better) implement an accessor with specializations
+//        if (I == 0) p->position().setLon(value);
+//        else if (I == 1) p->position().setLat(value);
+//    }
 
 };
 

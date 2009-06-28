@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace denoy{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace denoy{ 
             static const double C0 = 0.95;
             static const double C1 = -.08333333333333333333;
             static const double C3 = .00166666666666666666;
@@ -85,7 +85,7 @@ namespace ggl { namespace projection
                 // par.fwd = s_forward;
             }
 
-        }} // namespace impl::denoy
+        }} // namespace detail::denoy
     #endif // doxygen 
 
     /*!
@@ -102,21 +102,21 @@ namespace ggl { namespace projection
         \image html ex_denoy.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct denoy_spheroid : public impl::denoy::base_denoy_spheroid<Geographic, Cartesian, Parameters>
+    struct denoy_spheroid : public detail::denoy::base_denoy_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline denoy_spheroid(const Parameters& par) : impl::denoy::base_denoy_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline denoy_spheroid(const Parameters& par) : detail::denoy::base_denoy_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::denoy::setup_denoy(this->m_par);
+            detail::denoy::setup_denoy(this->m_par);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class denoy_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class denoy_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -126,12 +126,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void denoy_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void denoy_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("denoy", new denoy_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

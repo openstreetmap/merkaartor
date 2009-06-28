@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace aitoff{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace aitoff{ 
 
             struct par_aitoff
             {
@@ -120,7 +120,7 @@ namespace ggl { namespace projection
                 setup(par, proj_parm);
             }
 
-        }} // namespace impl::aitoff
+        }} // namespace detail::aitoff
     #endif // doxygen 
 
     /*!
@@ -136,11 +136,11 @@ namespace ggl { namespace projection
         \image html ex_aitoff.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct aitoff_spheroid : public impl::aitoff::base_aitoff_spheroid<Geographic, Cartesian, Parameters>
+    struct aitoff_spheroid : public detail::aitoff::base_aitoff_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline aitoff_spheroid(const Parameters& par) : impl::aitoff::base_aitoff_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline aitoff_spheroid(const Parameters& par) : detail::aitoff::base_aitoff_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::aitoff::setup_aitoff(this->m_par, this->m_proj_parm);
+            detail::aitoff::setup_aitoff(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -158,21 +158,21 @@ namespace ggl { namespace projection
         \image html ex_wintri.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct wintri_spheroid : public impl::aitoff::base_aitoff_spheroid<Geographic, Cartesian, Parameters>
+    struct wintri_spheroid : public detail::aitoff::base_aitoff_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline wintri_spheroid(const Parameters& par) : impl::aitoff::base_aitoff_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline wintri_spheroid(const Parameters& par) : detail::aitoff::base_aitoff_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::aitoff::setup_wintri(this->m_par, this->m_proj_parm);
+            detail::aitoff::setup_wintri(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class aitoff_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class aitoff_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -182,7 +182,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class wintri_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class wintri_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -192,13 +192,13 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void aitoff_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void aitoff_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("aitoff", new aitoff_entry<Geographic, Cartesian, Parameters>);
             factory.add_to_factory("wintri", new wintri_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

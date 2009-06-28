@@ -45,8 +45,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace rouss{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace rouss{ 
 
             struct par_rouss
             {
@@ -157,7 +157,7 @@ namespace ggl { namespace projection
                 // par.inv = e_inverse;
             }
 
-        }} // namespace impl::rouss
+        }} // namespace detail::rouss
     #endif // doxygen 
 
     /*!
@@ -173,21 +173,21 @@ namespace ggl { namespace projection
         \image html ex_rouss.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct rouss_ellipsoid : public impl::rouss::base_rouss_ellipsoid<Geographic, Cartesian, Parameters>
+    struct rouss_ellipsoid : public detail::rouss::base_rouss_ellipsoid<Geographic, Cartesian, Parameters>
     {
-        inline rouss_ellipsoid(const Parameters& par) : impl::rouss::base_rouss_ellipsoid<Geographic, Cartesian, Parameters>(par)
+        inline rouss_ellipsoid(const Parameters& par) : detail::rouss::base_rouss_ellipsoid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::rouss::setup_rouss(this->m_par, this->m_proj_parm);
+            detail::rouss::setup_rouss(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class rouss_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class rouss_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -197,12 +197,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void rouss_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void rouss_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("rouss", new rouss_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

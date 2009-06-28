@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace moll{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace moll{ 
             static const int MAX_ITER = 10;
             static const double LOOP_TOL = 1e-7;
 
@@ -141,7 +141,7 @@ namespace ggl { namespace projection
                 // par.fwd = s_forward;
             }
 
-        }} // namespace impl::moll
+        }} // namespace detail::moll
     #endif // doxygen 
 
     /*!
@@ -157,11 +157,11 @@ namespace ggl { namespace projection
         \image html ex_moll.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct moll_spheroid : public impl::moll::base_moll_spheroid<Geographic, Cartesian, Parameters>
+    struct moll_spheroid : public detail::moll::base_moll_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline moll_spheroid(const Parameters& par) : impl::moll::base_moll_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline moll_spheroid(const Parameters& par) : detail::moll::base_moll_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::moll::setup_moll(this->m_par, this->m_proj_parm);
+            detail::moll::setup_moll(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -178,11 +178,11 @@ namespace ggl { namespace projection
         \image html ex_wag4.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct wag4_spheroid : public impl::moll::base_moll_spheroid<Geographic, Cartesian, Parameters>
+    struct wag4_spheroid : public detail::moll::base_moll_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline wag4_spheroid(const Parameters& par) : impl::moll::base_moll_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline wag4_spheroid(const Parameters& par) : detail::moll::base_moll_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::moll::setup_wag4(this->m_par, this->m_proj_parm);
+            detail::moll::setup_wag4(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -199,21 +199,21 @@ namespace ggl { namespace projection
         \image html ex_wag5.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct wag5_spheroid : public impl::moll::base_moll_spheroid<Geographic, Cartesian, Parameters>
+    struct wag5_spheroid : public detail::moll::base_moll_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline wag5_spheroid(const Parameters& par) : impl::moll::base_moll_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline wag5_spheroid(const Parameters& par) : detail::moll::base_moll_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::moll::setup_wag5(this->m_par, this->m_proj_parm);
+            detail::moll::setup_wag5(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class moll_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class moll_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -223,7 +223,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class wag4_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class wag4_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -233,7 +233,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class wag5_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class wag5_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -243,14 +243,14 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void moll_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void moll_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("moll", new moll_entry<Geographic, Cartesian, Parameters>);
             factory.add_to_factory("wag4", new wag4_entry<Geographic, Cartesian, Parameters>);
             factory.add_to_factory("wag5", new wag5_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

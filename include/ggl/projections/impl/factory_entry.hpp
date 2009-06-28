@@ -13,7 +13,7 @@
 
 #include <ggl/projections/projection.hpp>
 
-namespace ggl { namespace projection { namespace impl {
+namespace ggl { namespace projection { namespace detail {
 
 template <typename LL, typename XY, typename P>
 class factory_entry

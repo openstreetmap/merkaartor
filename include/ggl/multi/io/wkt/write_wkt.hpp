@@ -18,8 +18,8 @@
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace wkt {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace wkt {
 
 
 template <typename Multi, typename StreamPolicy, typename PrefixPolicy>
@@ -59,44 +59,44 @@ namespace dispatch {
 
 template <typename Multi>
 struct wkt<multi_point_tag, Multi>
-    : impl::wkt::wkt_multi
+    : detail::wkt::wkt_multi
         <
             Multi,
-            impl::wkt::wkt_point
+            detail::wkt::wkt_point
                 <
                     typename boost::range_value<Multi>::type,
-                    impl::wkt::prefix_null
+                    detail::wkt::prefix_null
                 >,
-            impl::wkt::prefix_multipoint
+            detail::wkt::prefix_multipoint
         >
 {};
 
 
 template <typename Multi>
 struct wkt<multi_linestring_tag, Multi>
-    : impl::wkt::wkt_multi
+    : detail::wkt::wkt_multi
         <
             Multi,
-            impl::wkt::wkt_sequence
+            detail::wkt::wkt_sequence
                 <
                     typename boost::range_value<Multi>::type
                 >,
-            impl::wkt::prefix_multilinestring
+            detail::wkt::prefix_multilinestring
         >
 {};
 
 
 template <typename Multi>
 struct wkt<multi_polygon_tag, Multi>
-    : impl::wkt::wkt_multi
+    : detail::wkt::wkt_multi
         <
             Multi,
-            impl::wkt::wkt_poly
+            detail::wkt::wkt_poly
                 <
                     typename boost::range_value<Multi>::type,
-                    impl::wkt::prefix_null
+                    detail::wkt::prefix_null
                 >,
-            impl::wkt::prefix_multipolygon
+            detail::wkt::prefix_multipolygon
         >
 {};
 

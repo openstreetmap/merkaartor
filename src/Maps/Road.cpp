@@ -210,6 +210,12 @@ const TrackPoint* Road::getNode(int idx) const
 	return p->Nodes[idx];
 }
 
+const std::vector<TrackPointPtr>& Road::getNodes() const
+{
+	return p->Nodes;
+}
+
+
 MapFeature* Road::get(int idx)
 {
 	return p->Nodes[idx];
@@ -375,6 +381,43 @@ void Road::drawHover(QPainter& thePainter, MapView* theView, bool solid)
 	}
 }
 
+void Road::drawHighlight(QPainter& thePainter, MapView* theView, bool solid)
+{
+	// FIXME Selected route
+	if (!size())
+		return;
+
+	QFont F(thePainter.font());
+	F.setPointSize(10);
+	F.setBold(true);
+	F.setWeight(QFont::Black);
+	thePainter.setFont(F);
+	QPen TP(MerkaartorPreferences::instance()->getHighlightColor());
+	TP.setWidth(MerkaartorPreferences::instance()->getHighlightWidth());
+	if (!solid) {
+		TP.setDashPattern(getParentDashes());
+	}
+	thePainter.setPen(TP);
+	thePainter.setBrush(Qt::NoBrush);
+	//QRect clipRect = thePainter.clipRegion().boundingRect().adjusted(int(-20), int(-20), int(20), int(20));
+	//buildPath(theProjection, clipRect);
+	thePainter.drawPath(theView->transform().map(p->thePath));
+	if (solid) {
+		TP.setWidth(MerkaartorPreferences::instance()->getHighlightWidth()*3);
+		TP.setCapStyle(Qt::RoundCap);
+		thePainter.setPen(TP);
+		QPolygonF Pl;
+		buildPolygonFromRoad(this,theView->projection(),Pl);
+		thePainter.drawPoints(theView->transform().map(Pl));
+
+//		if (M_PREFS->getShowParents()) {
+//			for (int i=0; i<sizeParents(); ++i)
+//				if (!getParent(i)->isDeleted())
+//					getParent(i)->drawHover(thePainter, theView, false);
+//		}
+	}
+}
+
 void Road::drawFocus(QPainter& thePainter, MapView* theView, bool solid)
 {
 	// FIXME Selected route
@@ -501,7 +544,11 @@ void Road::buildPath(const Projection &theProjection, const QTransform& /*theTra
 	if (p->Nodes.size() < 2)
 		return;
 
-    QPointF pbl = theProjection.project(p->BBox.bottomLeft());
+	// Ensure nodes' projection is up-to-date
+	for (unsigned int i=0; i<p->Nodes.size(); ++i)
+		theProjection.project(p->Nodes[i]);
+
+	QPointF pbl = theProjection.project(p->BBox.bottomLeft());
     QPointF ptr = theProjection.project(p->BBox.topRight());
     box_2d roadRect (
         make<point_2d>(pbl.x(), pbl.y()), 
@@ -510,22 +557,22 @@ void Road::buildPath(const Projection &theProjection, const QTransform& /*theTra
 	box_2d clipRect (make<point_2d>(cr.bottomLeft().x(), cr.topRight().y()), make<point_2d>(cr.topRight().x(), cr.bottomLeft().y()));
     bool toClip = !ggl::within(roadRect, clipRect);
     if (!toClip) {
-    	p->thePath.moveTo(theProjection.project(p->Nodes.at(0)));
+		p->thePath.moveTo(p->Nodes.at(0)->projection());
 	    for (unsigned int i=1; i<p->Nodes.size(); ++i) {
-        	p->thePath.lineTo(theProjection.project(p->Nodes.at(i)));
+			p->thePath.lineTo(p->Nodes.at(i)->projection());
         }
     } else {
 
 	    if (area() <= 0.0) {
-	        linestring_2d in;
-	        for (unsigned int i=0; i<p->Nodes.size(); ++i) {
-		        QPointF P = theProjection.project(p->Nodes[i]);
-		        append(in, make<point_2d>(P.x(), P.y()));
-	        } 
+//	        linestring_2d in;
+//	        for (unsigned int i=0; i<p->Nodes.size(); ++i) {
+//		        QPointF P = p->Nodes[i]->projection();
+//		        append(in, make<point_2d>(P.x(), P.y()));
+//	        }
 
-	        std::vector<linestring_2d> clipped;
-	        intersection <linestring_2d, box_2d, linestring_2d /* std::vector<TrackPointPtr>*/, std::back_insert_iterator <std::vector<linestring_2d> > >
-		        (clipRect, in /*p->Nodes*/, std::back_inserter(clipped));
+			std::vector<linestring_2d> clipped;
+			intersection <linestring_2d, box_2d, /*linestring_2d*/ std::vector<TrackPointPtr>, std::back_insert_iterator <std::vector<linestring_2d> > >
+				(clipRect, /*in*/ p->Nodes, std::back_inserter(clipped));
 
 	        for (std::vector<linestring_2d>::const_iterator it = clipped.begin(); it != clipped.end(); it++)
 	        {
@@ -540,16 +587,16 @@ void Road::buildPath(const Projection &theProjection, const QTransform& /*theTra
 	    } 
 	    else 
 	    {
-		    polygon_2d in;
-	        for (unsigned int i=0; i<p->Nodes.size(); ++i) {
-		        QPointF P = theProjection.project(p->Nodes[i]);
-		        append(in, make<point_2d>(P.x(), P.y()));
-	        }
-	        correct(in);
+			polygon_2d in;
+			for (unsigned int i=0; i<p->Nodes.size(); ++i) {
+				QPointF P = p->Nodes[i]->projection();
+				append(in, make<point_2d>(P.x(), P.y()));
+			}
+//	        correct(in);
 
 	        std::vector<polygon_2d> clipped;
-	        intersection <polygon_2d, box_2d, polygon_2d, std::back_insert_iterator <std::vector<polygon_2d> > >
-		        (clipRect, in, std::back_inserter(clipped));
+			intersection <polygon_2d, box_2d, polygon_2d /*std::vector<TrackPointPtr>*/, std::back_insert_iterator <std::vector<polygon_2d> > >
+				(clipRect, in /*p->Nodes*/, std::back_inserter(clipped));
 
 	        for (std::vector<polygon_2d>::const_iterator it = clipped.begin(); it != clipped.end(); it++)
 	        {

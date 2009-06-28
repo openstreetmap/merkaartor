@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace geocent{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace geocent{ 
 
             
             
@@ -91,7 +91,7 @@ namespace ggl { namespace projection
                 // par.fwd = forward;
             }
 
-        }} // namespace impl::geocent
+        }} // namespace detail::geocent
     #endif // doxygen 
 
     /*!
@@ -105,21 +105,21 @@ namespace ggl { namespace projection
         \image html ex_geocent.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct geocent_other : public impl::geocent::base_geocent_other<Geographic, Cartesian, Parameters>
+    struct geocent_other : public detail::geocent::base_geocent_other<Geographic, Cartesian, Parameters>
     {
-        inline geocent_other(const Parameters& par) : impl::geocent::base_geocent_other<Geographic, Cartesian, Parameters>(par)
+        inline geocent_other(const Parameters& par) : detail::geocent::base_geocent_other<Geographic, Cartesian, Parameters>(par)
         {
-            impl::geocent::setup_geocent(this->m_par);
+            detail::geocent::setup_geocent(this->m_par);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class geocent_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class geocent_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -129,12 +129,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void geocent_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void geocent_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("geocent", new geocent_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

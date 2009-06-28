@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace fouc_s{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace fouc_s{ 
             static const int MAX_ITER = 10;
             static const double LOOP_TOL = 1e-7;
 
@@ -113,7 +113,7 @@ namespace ggl { namespace projection
                 // par.fwd = s_forward;
             }
 
-        }} // namespace impl::fouc_s
+        }} // namespace detail::fouc_s
     #endif // doxygen 
 
     /*!
@@ -129,21 +129,21 @@ namespace ggl { namespace projection
         \image html ex_fouc_s.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct fouc_s_spheroid : public impl::fouc_s::base_fouc_s_spheroid<Geographic, Cartesian, Parameters>
+    struct fouc_s_spheroid : public detail::fouc_s::base_fouc_s_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline fouc_s_spheroid(const Parameters& par) : impl::fouc_s::base_fouc_s_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline fouc_s_spheroid(const Parameters& par) : detail::fouc_s::base_fouc_s_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::fouc_s::setup_fouc_s(this->m_par, this->m_proj_parm);
+            detail::fouc_s::setup_fouc_s(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class fouc_s_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class fouc_s_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -153,12 +153,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void fouc_s_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void fouc_s_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("fouc_s", new fouc_s_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

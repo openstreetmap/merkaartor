@@ -18,6 +18,7 @@ class MapFeature;
 class PropertiesDock;
 class InfoDock;
 class DirtyDock;
+class FeaturesDock;
 class QGPS;
 class FeaturePainter;
 class TrackMapLayer;
@@ -129,6 +130,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 		virtual void on_windowLayersAction_triggered();
 		virtual void on_windowInfoAction_triggered();
 		virtual void on_windowDirtyAction_triggered();
+		virtual void on_windowFeatsAction_triggered();
 		virtual void on_windowToolbarAction_triggered();
 		virtual void on_windowGPSAction_triggered();
 #ifdef GEOIMAGE
@@ -162,6 +164,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 
 		QString fileName;
 		PropertiesDock* properties();
+		FeaturesDock* features();
 		InfoDock* info();
 		QGPS* gps();
 		#ifdef GEOIMAGE

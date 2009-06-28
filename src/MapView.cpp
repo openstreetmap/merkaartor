@@ -1200,6 +1200,8 @@ void MapView::viewportRecalc(const QRect & Screen)
 	p->Viewport =
 		CoordBox(theProjection.inverse(p->theTransform.inverted().map(fScreen.bottomLeft())),
 			 theProjection.inverse(p->theTransform.inverted().map(fScreen.topRight())));
+
+	emit viewportChanged();
 }
 
 void MapView::transformCalc(QTransform& theTransform, const Projection& theProjection, const CoordBox& TargetMap, const QRect& Screen)
@@ -1341,8 +1343,8 @@ void MapView::resize(QSize oldS, QSize newS)
 void MapView::setCenter(Coord & Center, const QRect & /*Screen*/)
 {
 	Coord curCenter(p->Viewport.center());
-	QPointF curCenterScreen = theProjection.project(curCenter);
-	QPointF newCenterScreen = theProjection.project(Center);
+	QPointF curCenterScreen = p->theTransform.map(theProjection.project(curCenter));
+	QPointF newCenterScreen = p->theTransform.map(theProjection.project(Center));
 
 	QPointF panDelta = (curCenterScreen - newCenterScreen);
 	panScreen(panDelta.toPoint());

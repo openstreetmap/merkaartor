@@ -61,8 +61,8 @@ Example showing envelope calculation
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace envelope {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace envelope {
 
 /// Calculate envelope of an n-sphere, circle or sphere (currently only for Cartesian 2D points)
 template<typename B, typename S, typename Strategy>
@@ -134,8 +134,8 @@ struct envelope_range
     }
 };
 
-}} // namespace impl::envelope
-#endif // DOXYGEN_NO_IMPL
+}} // namespace detail::envelope
+#endif // DOXYGEN_NO_DETAIL
 
 #ifndef DOXYGEN_NO_DISPATCH
 namespace dispatch
@@ -152,7 +152,7 @@ struct envelope {};
 
 template <typename P, typename B, typename Strategy>
 struct envelope<point_tag, box_tag, P, B, Strategy>
-    : impl::envelope::envelope_point<P, B, Strategy>
+    : detail::envelope::envelope_point<P, B, Strategy>
 {
 private:
     BOOST_CONCEPT_ASSERT( (concept::ConstPoint<P>) );
@@ -180,13 +180,13 @@ private:
 
 template <typename S, typename B, typename Strategy>
 struct envelope<segment_tag, box_tag, S, B, Strategy>
-    : impl::envelope::envelope_segment<S, B, Strategy>
+    : detail::envelope::envelope_segment<S, B, Strategy>
 {};
 
 
 template <typename S, typename B, typename Strategy>
 struct envelope<nsphere_tag, box_tag, S, B, Strategy>
-    : impl::envelope::envelope_nsphere<S, B, Strategy>
+    : detail::envelope::envelope_nsphere<S, B, Strategy>
 {
 private:
     BOOST_CONCEPT_ASSERT( (concept::ConstNsphere<S>) );
@@ -195,7 +195,7 @@ private:
 
 template <typename L, typename B, typename Strategy>
 struct envelope<linestring_tag, box_tag, L, B, Strategy>
-    : impl::envelope::envelope_range<L, B, Strategy>
+    : detail::envelope::envelope_range<L, B, Strategy>
 {
 private:
     BOOST_CONCEPT_ASSERT( (concept::ConstLinestring<L>) );
@@ -205,7 +205,7 @@ private:
 
 template <typename R, typename B, typename Strategy>
 struct envelope<ring_tag, box_tag, R, B, Strategy>
-    : impl::envelope::envelope_range<R, B, Strategy>
+    : detail::envelope::envelope_range<R, B, Strategy>
 {
 private:
     BOOST_CONCEPT_ASSERT( (concept::ConstRing<R>) );
@@ -220,7 +220,7 @@ struct envelope<polygon_tag, box_tag, P, B, Strategy>
     {
         // For polygon inspecting outer linear_ring is sufficient
 
-        impl::envelope::envelope_range
+        detail::envelope::envelope_range
             <
                 typename ring_type<P>::type,
                 B,

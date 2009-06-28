@@ -28,11 +28,11 @@ The perimeter algorithm is implemented for polygon,box,linear_ring,multi_polygon
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace perimeter {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace perimeter {
 
 template<typename R, typename S>
-struct range_perimeter : impl::length::range_length<R, S>
+struct range_perimeter : detail::length::range_length<R, S>
 {
 };
 
@@ -40,7 +40,7 @@ struct range_perimeter : impl::length::range_length<R, S>
 template<typename Polygon, typename S>
 struct polygon_perimeter
 {
-    static inline double calculate(Polygon const& poly, S const& strategy)
+    static inline double apply(Polygon const& poly, S const& strategy)
     {
         typedef typename ring_type<Polygon>::type ring_type;
         typedef typename boost::range_const_iterator
@@ -48,19 +48,19 @@ struct polygon_perimeter
             typename interior_type<Polygon>::type
             >::type iterator_type;
 
-        double sum = std::abs(range_perimeter<ring_type, S>::calculate(exterior_ring(poly), strategy));
+        double sum = std::abs(range_perimeter<ring_type, S>::apply(exterior_ring(poly), strategy));
 
         for (iterator_type it = boost::begin(interior_rings(poly));
              it != boost::end(interior_rings(poly)); it++)
         {
-            sum += std::abs(range_perimeter<ring_type, S>::calculate(*it, strategy));
+            sum += std::abs(range_perimeter<ring_type, S>::apply(*it, strategy));
         }
         return sum;
     }
 };
 
-}} // namespace impl:;perimeter
-#endif // DOXYGEN_NO_IMPL
+}} // namespace detail:;perimeter
+#endif // DOXYGEN_NO_DETAIL
 
 
 #ifndef DOXYGEN_NO_DISPATCH
@@ -68,20 +68,20 @@ namespace dispatch
 {
 
 // Default perimeter is 0.0, specializations implement calculated values
-template <typename Tag, typename G, typename S>
-struct perimeter : impl::calculate_null<double, G, S>
-{
-};
+template <typename Tag, typename Geometry, typename Strategy>
+struct perimeter : detail::calculate_null<double, Geometry, Strategy>
+{};
 
-template <typename G, typename S>
-struct perimeter<ring_tag, G, S> : impl::perimeter::range_perimeter<G, S>
-{
-};
+template <typename Geometry, typename Strategy>
+struct perimeter<ring_tag, Geometry, Strategy>
+    : detail::perimeter::range_perimeter<Geometry, Strategy>
+{};
 
-template <typename G, typename S>
-struct perimeter<polygon_tag, G, S> : impl::perimeter::polygon_perimeter<G, S>
-{
-};
+template <typename Geometry, typename Strategy>
+struct perimeter<polygon_tag, Geometry, Strategy>
+    : detail::perimeter::polygon_perimeter<Geometry, Strategy>
+{};
+
 
 // box,n-sphere: to be implemented
 
@@ -96,21 +96,25 @@ struct perimeter<polygon_tag, G, S> : impl::perimeter::polygon_perimeter<G, S>
     \param geometry the geometry, be it a ggl::ring, vector, iterator pair, or any other boost compatible range
     \return the perimeter
  */
-template<typename G>
-inline double perimeter(G const& geometry)
+template<typename Geometry>
+inline double perimeter(Geometry const& geometry)
 {
-    typedef typename point_type<G>::type point_type;
+    typedef typename point_type<Geometry>::type point_type;
     typedef typename cs_tag<point_type>::type cs_tag;
-    typedef typename strategy_distance<cs_tag, cs_tag, point_type, point_type>::type strategy_type;
-
-    typedef dispatch::perimeter
+    typedef typename strategy_distance
         <
-        typename tag<G>::type,
-        G,
-        strategy_type
-        > calculator_type;
+            cs_tag,
+            cs_tag,
+            point_type,
+            point_type
+        >::type strategy_type;
 
-    return calculator_type::calculate(geometry, strategy_type());
+    return dispatch::perimeter
+        <
+            typename tag<Geometry>::type,
+            Geometry,
+            strategy_type
+        >::apply(geometry, strategy_type());
 }
 
 /*!
@@ -121,12 +125,15 @@ inline double perimeter(G const& geometry)
     \param strategy strategy to be used for distance calculations.
     \return the perimeter
  */
-template<typename G, typename S>
-inline double perimeter(G const& geometry, S const& strategy)
+template<typename Geometry, typename Strategy>
+inline double perimeter(Geometry const& geometry, Strategy const& strategy)
 {
-    typedef dispatch::perimeter<typename tag<G>::type, G, S> calculator_type;
-
-    return calculator_type::calculate(geometry, strategy);
+    return dispatch::perimeter
+        <
+            typename tag<Geometry>::type,
+            Geometry,
+            Strategy
+        >::apply(geometry, strategy);
 }
 
 } // namespace ggl

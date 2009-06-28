@@ -37,7 +37,7 @@
 
 #include <ggl/projections/impl/projects.hpp>
 
-namespace ggl { namespace projection { namespace impl {
+namespace ggl { namespace projection { namespace detail {
 
 /*
  * The ellipse code must match one from pj_ellps.c.  The datum id should

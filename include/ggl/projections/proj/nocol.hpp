@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace nocol{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace nocol{ 
             static const double EPS = 1e-10;
 
 
@@ -105,7 +105,7 @@ namespace ggl { namespace projection
                 // par.fwd = s_forward;
             }
 
-        }} // namespace impl::nocol
+        }} // namespace detail::nocol
     #endif // doxygen 
 
     /*!
@@ -122,21 +122,21 @@ namespace ggl { namespace projection
         \image html ex_nicol.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct nicol_spheroid : public impl::nocol::base_nocol_spheroid<Geographic, Cartesian, Parameters>
+    struct nicol_spheroid : public detail::nocol::base_nocol_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline nicol_spheroid(const Parameters& par) : impl::nocol::base_nocol_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline nicol_spheroid(const Parameters& par) : detail::nocol::base_nocol_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::nocol::setup_nicol(this->m_par);
+            detail::nocol::setup_nicol(this->m_par);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class nicol_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class nicol_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -146,12 +146,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void nocol_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void nocol_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("nicol", new nicol_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

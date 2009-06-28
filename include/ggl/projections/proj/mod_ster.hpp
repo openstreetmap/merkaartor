@@ -45,8 +45,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace mod_ster{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace mod_ster{ 
             static const double EPSLN = 1e-10;
 
             struct par_mod_ster
@@ -294,7 +294,7 @@ namespace ggl { namespace projection
                 setup(par, proj_parm);
             }
 
-        }} // namespace impl::mod_ster
+        }} // namespace detail::mod_ster
     #endif // doxygen 
 
     /*!
@@ -309,11 +309,11 @@ namespace ggl { namespace projection
         \image html ex_mil_os.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct mil_os_ellipsoid : public impl::mod_ster::base_mod_ster_ellipsoid<Geographic, Cartesian, Parameters>
+    struct mil_os_ellipsoid : public detail::mod_ster::base_mod_ster_ellipsoid<Geographic, Cartesian, Parameters>
     {
-        inline mil_os_ellipsoid(const Parameters& par) : impl::mod_ster::base_mod_ster_ellipsoid<Geographic, Cartesian, Parameters>(par)
+        inline mil_os_ellipsoid(const Parameters& par) : detail::mod_ster::base_mod_ster_ellipsoid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::mod_ster::setup_mil_os(this->m_par, this->m_proj_parm);
+            detail::mod_ster::setup_mil_os(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -329,11 +329,11 @@ namespace ggl { namespace projection
         \image html ex_lee_os.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct lee_os_ellipsoid : public impl::mod_ster::base_mod_ster_ellipsoid<Geographic, Cartesian, Parameters>
+    struct lee_os_ellipsoid : public detail::mod_ster::base_mod_ster_ellipsoid<Geographic, Cartesian, Parameters>
     {
-        inline lee_os_ellipsoid(const Parameters& par) : impl::mod_ster::base_mod_ster_ellipsoid<Geographic, Cartesian, Parameters>(par)
+        inline lee_os_ellipsoid(const Parameters& par) : detail::mod_ster::base_mod_ster_ellipsoid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::mod_ster::setup_lee_os(this->m_par, this->m_proj_parm);
+            detail::mod_ster::setup_lee_os(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -349,11 +349,11 @@ namespace ggl { namespace projection
         \image html ex_gs48.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct gs48_ellipsoid : public impl::mod_ster::base_mod_ster_ellipsoid<Geographic, Cartesian, Parameters>
+    struct gs48_ellipsoid : public detail::mod_ster::base_mod_ster_ellipsoid<Geographic, Cartesian, Parameters>
     {
-        inline gs48_ellipsoid(const Parameters& par) : impl::mod_ster::base_mod_ster_ellipsoid<Geographic, Cartesian, Parameters>(par)
+        inline gs48_ellipsoid(const Parameters& par) : detail::mod_ster::base_mod_ster_ellipsoid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::mod_ster::setup_gs48(this->m_par, this->m_proj_parm);
+            detail::mod_ster::setup_gs48(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -369,11 +369,11 @@ namespace ggl { namespace projection
         \image html ex_alsk.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct alsk_ellipsoid : public impl::mod_ster::base_mod_ster_ellipsoid<Geographic, Cartesian, Parameters>
+    struct alsk_ellipsoid : public detail::mod_ster::base_mod_ster_ellipsoid<Geographic, Cartesian, Parameters>
     {
-        inline alsk_ellipsoid(const Parameters& par) : impl::mod_ster::base_mod_ster_ellipsoid<Geographic, Cartesian, Parameters>(par)
+        inline alsk_ellipsoid(const Parameters& par) : detail::mod_ster::base_mod_ster_ellipsoid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::mod_ster::setup_alsk(this->m_par, this->m_proj_parm);
+            detail::mod_ster::setup_alsk(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -389,21 +389,21 @@ namespace ggl { namespace projection
         \image html ex_gs50.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct gs50_ellipsoid : public impl::mod_ster::base_mod_ster_ellipsoid<Geographic, Cartesian, Parameters>
+    struct gs50_ellipsoid : public detail::mod_ster::base_mod_ster_ellipsoid<Geographic, Cartesian, Parameters>
     {
-        inline gs50_ellipsoid(const Parameters& par) : impl::mod_ster::base_mod_ster_ellipsoid<Geographic, Cartesian, Parameters>(par)
+        inline gs50_ellipsoid(const Parameters& par) : detail::mod_ster::base_mod_ster_ellipsoid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::mod_ster::setup_gs50(this->m_par, this->m_proj_parm);
+            detail::mod_ster::setup_gs50(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class mil_os_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class mil_os_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -413,7 +413,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class lee_os_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class lee_os_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -423,7 +423,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class gs48_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class gs48_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -433,7 +433,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class alsk_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class alsk_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -443,7 +443,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class gs50_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class gs50_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -453,7 +453,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void mod_ster_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void mod_ster_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("mil_os", new mil_os_entry<Geographic, Cartesian, Parameters>);
             factory.add_to_factory("lee_os", new lee_os_entry<Geographic, Cartesian, Parameters>);
@@ -462,7 +462,7 @@ namespace ggl { namespace projection
             factory.add_to_factory("gs50", new gs50_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

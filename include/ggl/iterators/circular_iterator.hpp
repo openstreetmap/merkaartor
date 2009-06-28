@@ -25,7 +25,7 @@ namespace ggl
 */
 template <typename Iterator>
 struct circular_iterator :
-    public impl::iterators::iterator_base
+    public detail::iterators::iterator_base
     <
         circular_iterator<Iterator>,
         Iterator

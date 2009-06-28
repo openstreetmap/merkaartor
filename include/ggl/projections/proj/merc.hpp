@@ -47,8 +47,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace merc{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace merc{ 
             static const double EPS10 = 1.e-10;
 
 
@@ -131,7 +131,7 @@ namespace ggl { namespace projection
             	}
             }
 
-        }} // namespace impl::merc
+        }} // namespace detail::merc
     #endif // doxygen 
 
     /*!
@@ -149,11 +149,11 @@ namespace ggl { namespace projection
         \image html ex_merc.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct merc_ellipsoid : public impl::merc::base_merc_ellipsoid<Geographic, Cartesian, Parameters>
+    struct merc_ellipsoid : public detail::merc::base_merc_ellipsoid<Geographic, Cartesian, Parameters>
     {
-        inline merc_ellipsoid(const Parameters& par) : impl::merc::base_merc_ellipsoid<Geographic, Cartesian, Parameters>(par)
+        inline merc_ellipsoid(const Parameters& par) : detail::merc::base_merc_ellipsoid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::merc::setup_merc(this->m_par);
+            detail::merc::setup_merc(this->m_par);
         }
     };
 
@@ -172,21 +172,21 @@ namespace ggl { namespace projection
         \image html ex_merc.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct merc_spheroid : public impl::merc::base_merc_spheroid<Geographic, Cartesian, Parameters>
+    struct merc_spheroid : public detail::merc::base_merc_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline merc_spheroid(const Parameters& par) : impl::merc::base_merc_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline merc_spheroid(const Parameters& par) : detail::merc::base_merc_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::merc::setup_merc(this->m_par);
+            detail::merc::setup_merc(this->m_par);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class merc_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class merc_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -199,12 +199,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void merc_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void merc_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("merc", new merc_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

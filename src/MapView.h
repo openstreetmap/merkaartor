@@ -125,6 +125,7 @@ class MapView :	public QWidget
 	
 	signals:
 		void interactionChanged(Interaction* anInteraction);
+		void viewportChanged();
 
 	protected:
 		bool event(QEvent *event);

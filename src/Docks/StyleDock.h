@@ -12,7 +12,7 @@
 #ifndef STYLEDOCK_H
 #define STYLEDOCK_H
 
-#include "Utils/MDockAncestor.h"
+#include "MDockAncestor.h"
 
 #include "ui_StyleDock.h"
 

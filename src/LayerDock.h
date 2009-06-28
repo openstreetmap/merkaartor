@@ -1,7 +1,7 @@
 #ifndef MERKATOR_LAYERDOCK_H_
 #define MERKATOR_LAYERDOCK_H_
 
-#include "Utils/MDockAncestor.h"
+#include "MDockAncestor.h"
 #include <QtGui/QScrollArea>
 #include <QVBoxLayout>
 #include <QGroupBox>

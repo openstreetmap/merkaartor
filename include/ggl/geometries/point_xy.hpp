@@ -11,6 +11,8 @@
 
 #include <cstddef>
 
+#include <boost/mpl/int.hpp>
+
 #include <ggl/core/cs.hpp>
 #include <ggl/geometries/point.hpp>
 
@@ -29,6 +31,7 @@ public:
 
     /// Default constructor, does not initialize anything
     inline point_xy() : point<T, 2, C>() {}
+
     /// Constructor with x/y values
     inline point_xy(const T& x, const T& y) : point<T, 2, C>(x, y) {}
 
@@ -80,7 +83,7 @@ struct coordinate_system<point_xy<T, C> >
 };
 
 template<typename T, typename C>
-struct dimension<point_xy<T, C> >: boost::mpl::int_<2> {};
+struct dimension<point_xy<T, C> > : boost::mpl::int_<2> {};
 
 template<typename T, typename C>
 struct access<point_xy<T, C> >

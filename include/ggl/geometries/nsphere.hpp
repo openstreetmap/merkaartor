@@ -44,7 +44,7 @@ public:
     nsphere()
         : m_radius(0)
     {
-        impl::assign::assign_value(m_center, coordinate_type());
+        detail::assign::assign_value(m_center, coordinate_type());
     }
 
     nsphere(const P& center, const T& radius)

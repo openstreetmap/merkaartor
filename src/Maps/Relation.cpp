@@ -213,6 +213,29 @@ void Relation::drawHover(QPainter& P, MapView* theView, bool solid)
 	}
 }
 
+void Relation::drawHighlight(QPainter& P, MapView* theView, bool solid)
+{
+	if (!solid) {
+		QPen thePen(M_PREFS->getHoverColor(),M_PREFS->getHighlightWidth());
+		thePen.setDashPattern(getParentDashes());
+		P.setPen(thePen);
+		P.drawPath(theView->transform().map(p->theBoundingPath));
+	} else {
+		P.setPen(QPen(M_PREFS->getHighlightColor(),M_PREFS->getHighlightWidth(),Qt::DashLine));
+		P.drawPath(theView->transform().map(p->theBoundingPath));
+
+		for (int i=0; i<p->Members.size(); ++i)
+			if (p->Members[i].second && !p->Members[i].second->isDeleted())
+				p->Members[i].second->drawHighlight(P,theView, solid);
+
+//		if (M_PREFS->getShowParents()) {
+//			for (int i=0; i<sizeParents(); ++i)
+//				if (!getParent(i)->isDeleted())
+//					getParent(i)->drawHover(P, theView, false);
+//		}
+	}
+}
+
 double Relation::pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection, const QTransform& theTransform) const
 {
 	double Best = 1000000;

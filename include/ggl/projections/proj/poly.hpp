@@ -46,8 +46,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace poly{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace poly{ 
             static const double TOL = 1e-10;
             static const double CONV = 1e-10;
             static const int N_ITER = 10;
@@ -186,7 +186,7 @@ namespace ggl { namespace projection
             	}
             }
 
-        }} // namespace impl::poly
+        }} // namespace detail::poly
     #endif // doxygen 
 
     /*!
@@ -203,11 +203,11 @@ namespace ggl { namespace projection
         \image html ex_poly.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct poly_ellipsoid : public impl::poly::base_poly_ellipsoid<Geographic, Cartesian, Parameters>
+    struct poly_ellipsoid : public detail::poly::base_poly_ellipsoid<Geographic, Cartesian, Parameters>
     {
-        inline poly_ellipsoid(const Parameters& par) : impl::poly::base_poly_ellipsoid<Geographic, Cartesian, Parameters>(par)
+        inline poly_ellipsoid(const Parameters& par) : detail::poly::base_poly_ellipsoid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::poly::setup_poly(this->m_par, this->m_proj_parm);
+            detail::poly::setup_poly(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -225,21 +225,21 @@ namespace ggl { namespace projection
         \image html ex_poly.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct poly_spheroid : public impl::poly::base_poly_spheroid<Geographic, Cartesian, Parameters>
+    struct poly_spheroid : public detail::poly::base_poly_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline poly_spheroid(const Parameters& par) : impl::poly::base_poly_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline poly_spheroid(const Parameters& par) : detail::poly::base_poly_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::poly::setup_poly(this->m_par, this->m_proj_parm);
+            detail::poly::setup_poly(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class poly_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class poly_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -252,12 +252,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void poly_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void poly_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("poly", new poly_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

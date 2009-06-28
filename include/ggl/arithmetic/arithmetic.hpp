@@ -25,8 +25,8 @@
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail
 {
 
 template <typename P>
@@ -34,7 +34,7 @@ struct param
 {
     typedef typename boost::call_traits
         <
-        typename coordinate_type<P>::type
+            typename coordinate_type<P>::type
         >::param_type type;
 };
 
@@ -43,12 +43,12 @@ struct value_operation
 {
     C m_value;
 
-    value_operation(const C& value)
+    inline value_operation(const C& value)
         : m_value(value)
     {}
 
     template <typename P, int I>
-    void run(P& point) const
+    inline void apply(P& point) const
     {
         set<I>(point, Function<C>()(get<I>(point), m_value));
     }
@@ -58,22 +58,22 @@ template <typename PointSrc, template <typename> class Function>
 struct point_operation
 {
     typedef typename coordinate_type<PointSrc>::type coordinate_type;
-    const PointSrc& m_source_point;
+    PointSrc const& m_source_point;
 
-    point_operation(const PointSrc& point)
+    inline point_operation(const PointSrc& point)
         : m_source_point(point)
     {}
 
     template <typename PointDst, int I>
-    void run(PointDst& dest_point) const
+    inline void apply(PointDst& dest_point) const
     {
         set<I>(dest_point,
             Function<coordinate_type>()(get<I>(dest_point), get<I>(m_source_point)));
     }
 };
 
-} // namespace impl
-#endif // DOXYGEN_NO_IMPL
+} // namespace detail
+#endif // DOXYGEN_NO_DETAIL
 
 /*!
     \brief Adds a value to each coordinate of a point
@@ -82,10 +82,13 @@ struct point_operation
     \param p point
     \param value value to add
  */
-template <typename P>
-BOOST_CONCEPT_REQUIRES(((concept::Point<P>)),
-(void)) add_value(P& p, typename impl::param<P>::type value)
-{ for_each_coordinate(p, impl::value_operation<typename coordinate_type<P>::type, std::plus>(value)); }
+template <typename Point>
+inline void add_value(Point& p, typename detail::param<Point>::type value)
+{
+    BOOST_CONCEPT_ASSERT( (concept::Point<Point>) );
+
+    for_each_coordinate(p, detail::value_operation<typename coordinate_type<Point>::type, std::plus>(value));
+}
 
 /*!
     \brief Adds a point to another
@@ -95,10 +98,14 @@ BOOST_CONCEPT_REQUIRES(((concept::Point<P>)),
     \param p1 first point
     \param p2 second point
  */
-template <typename P1, typename P2>
-BOOST_CONCEPT_REQUIRES(((concept::Point<P1>)) ((concept::ConstPoint<P2>)),
-(void)) add_point(P1& p1, const P2& p2)
-{ for_each_coordinate(p1, impl::point_operation<P2, std::plus>(p2)); }
+template <typename Point1, typename Point2>
+inline void add_point(Point1& p1, Point2 const& p2)
+{
+    BOOST_CONCEPT_ASSERT( (concept::Point<Point2>) );
+    BOOST_CONCEPT_ASSERT( (concept::ConstPoint<Point2>) );
+
+    for_each_coordinate(p1, detail::point_operation<Point2, std::plus>(p2));
+}
 
 /*!
     \brief Subtracts a value to each coordinate of a point
@@ -107,10 +114,13 @@ BOOST_CONCEPT_REQUIRES(((concept::Point<P1>)) ((concept::ConstPoint<P2>)),
     \param p point
     \param value value to subtract
  */
-template <typename P>
-BOOST_CONCEPT_REQUIRES(((concept::Point<P>)),
-(void)) subtract_value(P& p, typename impl::param<P>::type value)
-{ for_each_coordinate(p, impl::value_operation<typename coordinate_type<P>::type, std::minus>(value)); }
+template <typename Point>
+inline void subtract_value(Point& p, typename detail::param<Point>::type value)
+{
+    BOOST_CONCEPT_ASSERT( (concept::Point<Point>) );
+
+    for_each_coordinate(p, detail::value_operation<typename coordinate_type<Point>::type, std::minus>(value));
+}
 
 /*!
     \brief Subtracts a point to another
@@ -120,10 +130,14 @@ BOOST_CONCEPT_REQUIRES(((concept::Point<P>)),
     \param p1 first point
     \param p2 second point
  */
-template <typename P1, typename P2>
-BOOST_CONCEPT_REQUIRES(((concept::Point<P1>)) ((concept::ConstPoint<P2>)),
-(void)) subtract_point(P1& p1, const P2& p2)
-{ for_each_coordinate(p1, impl::point_operation<P2, std::minus>(p2)); }
+template <typename Point1, typename Point2>
+inline void subtract_point(Point1& p1, Point2 const& p2)
+{
+    BOOST_CONCEPT_ASSERT( (concept::Point<Point2>) );
+    BOOST_CONCEPT_ASSERT( (concept::ConstPoint<Point2>) );
+
+    for_each_coordinate(p1, detail::point_operation<Point2, std::minus>(p2));
+}
 
 /*!
     \brief Multiplies each coordinate of a point by a value
@@ -132,10 +146,13 @@ BOOST_CONCEPT_REQUIRES(((concept::Point<P1>)) ((concept::ConstPoint<P2>)),
     \param p point
     \param value value to multiply by
  */
-template <typename P>
-BOOST_CONCEPT_REQUIRES(((concept::Point<P>)),
-(void)) multiply_value(P& p, typename impl::param<P>::type value)
-{ for_each_coordinate(p, impl::value_operation<typename coordinate_type<P>::type, std::multiplies>(value)); }
+template <typename Point>
+inline void multiply_value(Point& p, typename detail::param<Point>::type value)
+{
+    BOOST_CONCEPT_ASSERT( (concept::Point<Point>) );
+
+    for_each_coordinate(p, detail::value_operation<typename coordinate_type<Point>::type, std::multiplies>(value));
+}
 
 /*!
     \brief Multiplies a point by another
@@ -146,10 +163,14 @@ BOOST_CONCEPT_REQUIRES(((concept::Point<P>)),
     \param p2 second point
     \note This is *not* a dot, cross or wedge product. It is a mere field-by-field multiplication.
  */
-template <typename P1, typename P2>
-BOOST_CONCEPT_REQUIRES(((concept::Point<P1>)) ((concept::ConstPoint<P2>)),
-(void)) multiply_point(P1& p1, const P2& p2)
-{ for_each_coordinate(p1, impl::point_operation<P2, std::multiplies>(p2)); }
+template <typename Point1, typename Point2>
+inline void multiply_point(Point1& p1, Point2 const& p2)
+{
+    BOOST_CONCEPT_ASSERT( (concept::Point<Point2>) );
+    BOOST_CONCEPT_ASSERT( (concept::ConstPoint<Point2>) );
+
+    for_each_coordinate(p1, detail::point_operation<Point2, std::multiplies>(p2));
+}
 
 /*!
     \brief Divides each coordinate of a point by a value
@@ -158,10 +179,13 @@ BOOST_CONCEPT_REQUIRES(((concept::Point<P1>)) ((concept::ConstPoint<P2>)),
     \param p point
     \param value value to divide by
  */
-template <typename P>
-BOOST_CONCEPT_REQUIRES(((concept::Point<P>)),
-(void)) divide_value(P& p, typename impl::param<P>::type value)
-{ for_each_coordinate(p, impl::value_operation<typename coordinate_type<P>::type, std::divides>(value)); }
+template <typename Point>
+inline void divide_value(Point& p, typename detail::param<Point>::type value)
+{
+    BOOST_CONCEPT_ASSERT( (concept::Point<Point>) );
+
+    for_each_coordinate(p, detail::value_operation<typename coordinate_type<Point>::type, std::divides>(value));
+}
 
 /*!
     \brief Divides a point by another
@@ -171,10 +195,14 @@ BOOST_CONCEPT_REQUIRES(((concept::Point<P>)),
     \param p1 first point
     \param p2 second point
  */
-template <typename P1, typename P2>
-BOOST_CONCEPT_REQUIRES(((concept::Point<P1>)) ((concept::ConstPoint<P2>)),
-(void)) divide_point(P1& p1, const P2& p2)
-{ for_each_coordinate(p1, impl::point_operation<P2, std::divides>(p2)); }
+template <typename Point1, typename Point2>
+inline void divide_point(Point1& p1, Point2 const& p2)
+{
+    BOOST_CONCEPT_ASSERT( (concept::Point<Point2>) );
+    BOOST_CONCEPT_ASSERT( (concept::ConstPoint<Point2>) );
+
+    for_each_coordinate(p1, detail::point_operation<Point2, std::divides>(p2));
+}
 
 } // namespace ggl
 

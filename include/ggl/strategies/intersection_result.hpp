@@ -9,6 +9,9 @@
 #ifndef GGL_INTERSECTION_RESULT_HPP
 #define GGL_INTERSECTION_RESULT_HPP
 
+#if defined(HAVE_MATRIX_AS_STRING)
+#include <string>
+#endif
 
 namespace ggl
 {
@@ -86,7 +89,8 @@ struct de9im
         return v >= 0 && v < 10 ? ('0' + char(v)) : '-';
     }
 
-    inline std::string matrix_as_string(const std::string& tab, const std::string& nl) const
+#if defined(HAVE_MATRIX_AS_STRING)
+    inline std::string matrix_as_string(std::string const& tab, std::string const& nl) const
     {
         std::string ret;
         ret.reserve(9 + tab.length() * 3 + nl.length() * 3);
@@ -100,6 +104,7 @@ struct de9im
     {
         return matrix_as_string("", "");
     }
+#endif
 
 };
 
@@ -134,6 +139,7 @@ struct de9im_segment : public de9im
     {}
 
 
+#if defined(HAVE_MATRIX_AS_STRING)
     inline std::string as_string() const
     {
         std::string ret = matrix_as_string();
@@ -141,6 +147,7 @@ struct de9im_segment : public de9im
         ret += opposite ? "o" : "-";
         return ret;
     }
+#endif
 };
 
 template <typename P>

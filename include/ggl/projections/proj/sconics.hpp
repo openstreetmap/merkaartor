@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace sconics{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace sconics{ 
             static const int EULER = 0;
             static const int MURD1 = 1;
             static const int MURD2 = 2;
@@ -255,7 +255,7 @@ namespace ggl { namespace projection
                 setup(par, proj_parm);
             }
 
-        }} // namespace impl::sconics
+        }} // namespace detail::sconics
     #endif // doxygen 
 
     /*!
@@ -272,11 +272,11 @@ namespace ggl { namespace projection
         \image html ex_tissot.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct tissot_spheroid : public impl::sconics::base_sconics_spheroid<Geographic, Cartesian, Parameters>
+    struct tissot_spheroid : public detail::sconics::base_sconics_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline tissot_spheroid(const Parameters& par) : impl::sconics::base_sconics_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline tissot_spheroid(const Parameters& par) : detail::sconics::base_sconics_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::sconics::setup_tissot(this->m_par, this->m_proj_parm);
+            detail::sconics::setup_tissot(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -294,11 +294,11 @@ namespace ggl { namespace projection
         \image html ex_murd1.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct murd1_spheroid : public impl::sconics::base_sconics_spheroid<Geographic, Cartesian, Parameters>
+    struct murd1_spheroid : public detail::sconics::base_sconics_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline murd1_spheroid(const Parameters& par) : impl::sconics::base_sconics_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline murd1_spheroid(const Parameters& par) : detail::sconics::base_sconics_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::sconics::setup_murd1(this->m_par, this->m_proj_parm);
+            detail::sconics::setup_murd1(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -316,11 +316,11 @@ namespace ggl { namespace projection
         \image html ex_murd2.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct murd2_spheroid : public impl::sconics::base_sconics_spheroid<Geographic, Cartesian, Parameters>
+    struct murd2_spheroid : public detail::sconics::base_sconics_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline murd2_spheroid(const Parameters& par) : impl::sconics::base_sconics_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline murd2_spheroid(const Parameters& par) : detail::sconics::base_sconics_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::sconics::setup_murd2(this->m_par, this->m_proj_parm);
+            detail::sconics::setup_murd2(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -338,11 +338,11 @@ namespace ggl { namespace projection
         \image html ex_murd3.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct murd3_spheroid : public impl::sconics::base_sconics_spheroid<Geographic, Cartesian, Parameters>
+    struct murd3_spheroid : public detail::sconics::base_sconics_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline murd3_spheroid(const Parameters& par) : impl::sconics::base_sconics_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline murd3_spheroid(const Parameters& par) : detail::sconics::base_sconics_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::sconics::setup_murd3(this->m_par, this->m_proj_parm);
+            detail::sconics::setup_murd3(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -360,11 +360,11 @@ namespace ggl { namespace projection
         \image html ex_euler.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct euler_spheroid : public impl::sconics::base_sconics_spheroid<Geographic, Cartesian, Parameters>
+    struct euler_spheroid : public detail::sconics::base_sconics_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline euler_spheroid(const Parameters& par) : impl::sconics::base_sconics_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline euler_spheroid(const Parameters& par) : detail::sconics::base_sconics_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::sconics::setup_euler(this->m_par, this->m_proj_parm);
+            detail::sconics::setup_euler(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -382,11 +382,11 @@ namespace ggl { namespace projection
         \image html ex_pconic.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct pconic_spheroid : public impl::sconics::base_sconics_spheroid<Geographic, Cartesian, Parameters>
+    struct pconic_spheroid : public detail::sconics::base_sconics_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline pconic_spheroid(const Parameters& par) : impl::sconics::base_sconics_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline pconic_spheroid(const Parameters& par) : detail::sconics::base_sconics_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::sconics::setup_pconic(this->m_par, this->m_proj_parm);
+            detail::sconics::setup_pconic(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -404,21 +404,21 @@ namespace ggl { namespace projection
         \image html ex_vitk1.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct vitk1_spheroid : public impl::sconics::base_sconics_spheroid<Geographic, Cartesian, Parameters>
+    struct vitk1_spheroid : public detail::sconics::base_sconics_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline vitk1_spheroid(const Parameters& par) : impl::sconics::base_sconics_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline vitk1_spheroid(const Parameters& par) : detail::sconics::base_sconics_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::sconics::setup_vitk1(this->m_par, this->m_proj_parm);
+            detail::sconics::setup_vitk1(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class tissot_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class tissot_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -428,7 +428,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class murd1_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class murd1_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -438,7 +438,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class murd2_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class murd2_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -448,7 +448,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class murd3_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class murd3_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -458,7 +458,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class euler_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class euler_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -468,7 +468,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class pconic_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class pconic_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -478,7 +478,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class vitk1_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class vitk1_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -488,7 +488,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void sconics_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void sconics_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("tissot", new tissot_entry<Geographic, Cartesian, Parameters>);
             factory.add_to_factory("murd1", new murd1_entry<Geographic, Cartesian, Parameters>);
@@ -499,7 +499,7 @@ namespace ggl { namespace projection
             factory.add_to_factory("vitk1", new vitk1_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

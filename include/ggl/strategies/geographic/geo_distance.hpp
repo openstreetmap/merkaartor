@@ -105,26 +105,39 @@ namespace strategy
 
                 inline return_type calc(const T1& lon1, const T1& lat1, const T2& lon2, const T2& lat2) const
                 {
-                    double F = (lat1 + lat2) / 2.0;
-                    double G = (lat1 - lat2) / 2.0;
-                    double lambda = (lon1 - lon2) / 2.0;
+                    typedef double calculation_type;
+                    calculation_type G = (lat1 - lat2) / 2.0;
+                    calculation_type lambda = (lon1 - lon2) / 2.0;
 
-                    double sinG2 = math::sqr(sin(G));
-                    double cosG2 = math::sqr(cos(G));
-                    double sinF2 = math::sqr(sin(F));
-                    double cosF2 = math::sqr(cos(F));
-                    double sinL2 = math::sqr(sin(lambda));
-                    double cosL2 = math::sqr(cos(lambda));
+                    if (ggl::math::equals(lambda, 0.0)
+                        && ggl::math::equals(G, 0.0))
+                    {
+                        return 0.0;
+                    }
 
-                    double S = sinG2 * cosL2 + cosF2 * sinL2;
-                    double C = cosG2 * cosL2 + sinF2 * sinL2;
+                    calculation_type F = (lat1 + lat2) / 2.0;
 
-                    double omega = atan(sqrt(S / C));
-                    double r = sqrt(S * C) / omega; // not sure if this is r or greek nu
+                    calculation_type sinG2 = math::sqr(sin(G));
+                    calculation_type cosG2 = math::sqr(cos(G));
+                    calculation_type sinF2 = math::sqr(sin(F));
+                    calculation_type cosF2 = math::sqr(cos(F));
+                    calculation_type sinL2 = math::sqr(sin(lambda));
+                    calculation_type cosL2 = math::sqr(cos(lambda));
 
-                    double D = 2.0 * omega * m_ellipsoid.a();
-                    double H1 = (3 * r - 1.0) / (2.0 * C);
-                    double H2 = (3 * r + 1.0) / (2.0 * S);
+                    calculation_type S = sinG2 * cosL2 + cosF2 * sinL2;
+                    calculation_type C = cosG2 * cosL2 + sinF2 * sinL2;
+
+                    if (ggl::math::equals(S, 0.0) || ggl::math::equals(C, 0.0))
+                    {
+                        return 0.0;
+                    }
+
+                    calculation_type omega = atan(sqrt(S / C));
+                    calculation_type r = sqrt(S * C) / omega; // not sure if this is r or greek nu
+
+                    calculation_type D = 2.0 * omega * m_ellipsoid.a();
+                    calculation_type H1 = (3 * r - 1.0) / (2.0 * C);
+                    calculation_type H2 = (3 * r + 1.0) / (2.0 * S);
 
                     return return_type(D
                         * (1.0 + m_ellipsoid.f() * H1 * sinF2 * cosG2

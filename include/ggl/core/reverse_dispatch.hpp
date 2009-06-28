@@ -21,8 +21,8 @@
 namespace ggl {
 
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail
 {
 
 // Different geometries: reverse_dispatch if second ID < first ID
@@ -43,12 +43,12 @@ template <std::size_t GeometryId>
 struct reverse_dispatch<GeometryId, GeometryId> : boost::false_type {};
 
 
-} // namespace impl
-#endif // DOXYGEN_NO_IMPL
+} // namespace detail
+#endif // DOXYGEN_NO_DETAIL
 
 
 template <typename Geometry1, typename Geometry2>
-struct reverse_dispatch : impl::reverse_dispatch
+struct reverse_dispatch : detail::reverse_dispatch
     <
     geometry_id<Geometry1>::type::value,
     geometry_id<Geometry2>::type::value

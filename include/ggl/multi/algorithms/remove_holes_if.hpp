@@ -21,11 +21,11 @@ namespace dispatch
 {
     template <typename MultiPolygon, typename Predicate>
     struct remove_holes_if<multi_polygon_tag, MultiPolygon, Predicate>
-        : impl::multi_modify_with_predicate
+        : detail::multi_modify_with_predicate
             <
                 MultiPolygon,
                 Predicate,
-                impl::remove_holes_if::polygon_remove_holes_if
+                detail::remove_holes_if::polygon_remove_holes_if
                     <
                         typename boost::range_value<MultiPolygon>::type, Predicate
                     >

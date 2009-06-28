@@ -122,11 +122,12 @@ namespace strategy
             (tried 5.0.21 / 5.0.45 / 5.0.51a / 5.1.23).
 
             Without holes:
-            - this: POINT(4.06923 1.65056)
-            - geolib: POINT(4.07254 1.66819)
-            - MySQL: 'POINT(3.6636363636364 1.6272727272727)'
-            - PostGIS: "POINT(4.06923363095238 1.65055803571429)"
-            - Oracle: 4.06923363095238, 1.65055803571429
+            - this:       POINT(4.06923363095238 1.65055803571429)
+            - geolib:     POINT(4.07254 1.66819)
+            - MySQL:      POINT(3.6636363636364  1.6272727272727)'
+            - PostGIS:    POINT(4.06923363095238 1.65055803571429)
+            - Oracle:           4.06923363095238 1.65055803571429
+            - SQL Server: POINT(4.06923362245959 1.65055804168294)
 
             Statements:
             - \b MySQL/PostGIS: select AsText(Centroid(GeomFromText('POLYGON((2 1.3,2.4 1.7,2.8 1.8,3.4 1.2
@@ -137,13 +138,18 @@ namespace strategy
                     , mdsys.sdo_dim_array(mdsys.sdo_dim_element('x',0,10,.00000005)
                     ,mdsys.sdo_dim_element('y',0,10,.00000005)))
                     from dual
+            - \b SQL Server 2008: select geometry::STGeomFromText('POLYGON((2 1.3,2.4 1.7,2.8 1.8,3.4 1.2
+                            ,3.7 1.6,3.4 2,4.1 3,5.3 2.6,5.4 1.2,4.9 0.8,2.9 0.7,2 1.3))',0)
+                            .STCentroid()
+                            .STAsText()
 
             With holes:
-            - this: POINT(4.04663 1.6349)
-            - geolib: POINT(4.04675 1.65735)
-            - MySQL: 'POINT(3.6090580503834 1.607573932092)'
-            - PostgresSQL: "POINT(4.0466265060241 1.63489959839357)"
-            - Oracle: 4.0466265060241, 1.63489959839357
+            - this:       POINT(4.04663 1.6349)
+            - geolib:     POINT(4.04675 1.65735)
+            - MySQL:      POINT(3.6090580503834 1.607573932092)
+            - PostGIS:    POINT(4.0466265060241 1.63489959839357)
+            - Oracle:           4.0466265060241 1.63489959839357
+            - SQL Server: POINT(4.0466264962959677 1.6348996057331333)
 
             Statements:
             - \b MySQL/PostGIS: select AsText(Centroid(GeomFromText('POLYGON((2 1.3,2.4 1.7,2.8 1.8,3.4 1.2
@@ -169,13 +175,13 @@ namespace strategy
                 {
                     T sum_a2;
                     PC sum;
-                    sums()
+                    inline sums()
                         : sum_a2(T())
                     {
-                        impl::assign::assign_value(sum, T());
+                        detail::assign::assign_value(sum, T());
                     }
 
-                    void centroid(PC& point)
+                    inline void centroid(PC& point)
                     {
                         typedef typename coordinate_type<PC>::type TPC;
                         point = sum;
@@ -194,7 +200,7 @@ namespace strategy
             public :
                 typedef sums state_type;
 
-                inline bool operator()(const segment<const PS>& s, state_type& state) const
+                inline bool operator()(segment<const PS> const& s, state_type& state) const
                 {
                     /* Algorithm:
                     For each segment:

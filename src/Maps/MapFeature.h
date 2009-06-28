@@ -54,6 +54,12 @@ class MapFeature : public QObject
 	public:
 		typedef enum { User, UserResolved, OSMServer, OSMServerConflict, NotYetDownloaded, Log } ActorType;
 		typedef enum { UnknownDirection, BothWays, OneWay, OtherWay } TrafficDirectionType;
+		typedef enum {
+			Relations			= 0x00000000,
+			Roads				= 0x00000001,
+			Nodes				= 0x00000002,
+			All					= 0xffffffff
+		} FeatureType;
 	public:
 		/// Constructor for an empty map feature
 		MapFeature();
@@ -85,6 +91,7 @@ class MapFeature : public QObject
 		 * @param theProjection the Projection used to convert real coordinates to screen coordinates
 		 */
 		virtual void drawHover(QPainter& P, MapView* theView, bool solid=true) = 0;
+		virtual void drawHighlight(QPainter& P, MapView* theView, bool solid=true) = 0;
 
 
 		virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection, const QTransform& theTransform) const = 0;

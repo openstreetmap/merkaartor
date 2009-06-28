@@ -52,8 +52,8 @@ For getting coordinates it is similar:
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace assign {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace assign {
 
 template <typename C>
 struct assign_operation
@@ -63,7 +63,7 @@ struct assign_operation
     {}
 
     template <typename P, std::size_t I>
-    inline void run(P& point) const
+    inline void apply(P& point) const
     {
         set<I>(point, m_value);
     }
@@ -84,7 +84,8 @@ private:
 template <typename P>
 inline void assign_value(P& p, typename coordinate_type<P>::type const& value)
 {
-    for_each_coordinate(p, assign_operation<typename coordinate_type<P>::type>(value));
+    for_each_coordinate(p,
+            assign_operation<typename coordinate_type<P>::type>(value));
 }
 
 
@@ -106,11 +107,11 @@ struct initialize<B, C, D, D>
 {
     typedef typename coordinate_type<B>::type coordinate_type;
 
-    static inline void apply(B& box, const coordinate_type& value) 
-	{
+    static inline void apply(B& box, const coordinate_type& value)
+    {
         boost::ignore_unused_variable_warning(box);
-		boost::ignore_unused_variable_warning(value);
-	}
+        boost::ignore_unused_variable_warning(value);
+    }
 };
 
 template <typename Point>
@@ -167,8 +168,8 @@ struct assign_zero_box
 
 
 
-}} // namespace impl::assign
-#endif // DOXYGEN_NO_IMPL
+}} // namespace detail::assign
+#endif // DOXYGEN_NO_DETAIL
 
 #ifndef DOXYGEN_NO_DISPATCH
 namespace dispatch
@@ -290,12 +291,12 @@ struct assign_zero {};
 
 template <typename Point>
 struct assign_zero<point_tag, Point>
-    : impl::assign::assign_zero_point<Point>
+    : detail::assign::assign_zero_point<Point>
 {};
 
 template <typename Box>
 struct assign_zero<box_tag, Box>
-    : impl::assign::assign_zero_box<Box>
+    : detail::assign::assign_zero_box<Box>
 {};
 
 
@@ -304,7 +305,7 @@ struct assign_inverse {};
 
 template <typename Box>
 struct assign_inverse<box_tag, Box>
-    : impl::assign::assign_inverse_box<Box>
+    : detail::assign::assign_inverse_box<Box>
 {};
 
 

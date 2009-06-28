@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace boggs{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace boggs{ 
             static const int NITER = 20;
             static const double EPS = 1e-7;
             static const double ONETOL = 1.000001;
@@ -99,7 +99,7 @@ namespace ggl { namespace projection
                 // par.fwd = s_forward;
             }
 
-        }} // namespace impl::boggs
+        }} // namespace detail::boggs
     #endif // doxygen 
 
     /*!
@@ -116,21 +116,21 @@ namespace ggl { namespace projection
         \image html ex_boggs.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct boggs_spheroid : public impl::boggs::base_boggs_spheroid<Geographic, Cartesian, Parameters>
+    struct boggs_spheroid : public detail::boggs::base_boggs_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline boggs_spheroid(const Parameters& par) : impl::boggs::base_boggs_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline boggs_spheroid(const Parameters& par) : detail::boggs::base_boggs_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::boggs::setup_boggs(this->m_par);
+            detail::boggs::setup_boggs(this->m_par);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class boggs_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class boggs_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -140,12 +140,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void boggs_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void boggs_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("boggs", new boggs_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

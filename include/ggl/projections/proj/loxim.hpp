@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace loxim{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace loxim{ 
             static const double EPS = 1e-8;
 
             struct par_loxim
@@ -110,7 +110,7 @@ namespace ggl { namespace projection
             	par.es = 0.;
             }
 
-        }} // namespace impl::loxim
+        }} // namespace detail::loxim
     #endif // doxygen 
 
     /*!
@@ -126,21 +126,21 @@ namespace ggl { namespace projection
         \image html ex_loxim.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct loxim_spheroid : public impl::loxim::base_loxim_spheroid<Geographic, Cartesian, Parameters>
+    struct loxim_spheroid : public detail::loxim::base_loxim_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline loxim_spheroid(const Parameters& par) : impl::loxim::base_loxim_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline loxim_spheroid(const Parameters& par) : detail::loxim::base_loxim_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::loxim::setup_loxim(this->m_par, this->m_proj_parm);
+            detail::loxim::setup_loxim(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class loxim_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class loxim_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -150,12 +150,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void loxim_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void loxim_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("loxim", new loxim_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

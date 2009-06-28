@@ -18,7 +18,7 @@
 namespace ggl
 {
 
-namespace impl { namespace wkt {
+namespace detail { namespace wkt {
 
 template <typename MultiGeometry, template<typename> class Parser, typename PrefixPolicy>
 struct multi_parser
@@ -56,7 +56,7 @@ struct multi_parser
 
 
 
-}} // namespace impl::wkt
+}} // namespace detail::wkt
 
 #ifndef DOXYGEN_NO_DISPATCH
 namespace dispatch
@@ -64,33 +64,33 @@ namespace dispatch
 
 template <typename MultiGeometry>
 struct read_wkt<multi_point_tag, MultiGeometry>
-    : impl::wkt::multi_parser
+    : detail::wkt::multi_parser
             <
                 MultiGeometry,
-                impl::wkt::point_parser,
-                impl::wkt::prefix_multipoint
+                detail::wkt::point_parser,
+                detail::wkt::prefix_multipoint
             >
 {};
 
 
 template <typename MultiGeometry>
 struct read_wkt<multi_linestring_tag, MultiGeometry>
-    : impl::wkt::multi_parser
+    : detail::wkt::multi_parser
             <
                 MultiGeometry,
-                impl::wkt::linestring_parser,
-                impl::wkt::prefix_multilinestring
+                detail::wkt::linestring_parser,
+                detail::wkt::prefix_multilinestring
             >
 {};
 
 
 template <typename MultiGeometry>
 struct read_wkt<multi_polygon_tag, MultiGeometry>
-    : impl::wkt::multi_parser
+    : detail::wkt::multi_parser
             <
                 MultiGeometry,
-                impl::wkt::polygon_parser,
-                impl::wkt::prefix_multipolygon
+                detail::wkt::polygon_parser,
+                detail::wkt::prefix_multipolygon
             >
 {};
 

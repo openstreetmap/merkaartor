@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace crast{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace crast{ 
             static const double XM = 0.97720502380583984317;
             static const double RXM = 1.02332670794648848847;
             static const double YM = 3.06998012383946546542;
@@ -90,7 +90,7 @@ namespace ggl { namespace projection
                 // par.fwd = s_forward;
             }
 
-        }} // namespace impl::crast
+        }} // namespace detail::crast
     #endif // doxygen 
 
     /*!
@@ -106,21 +106,21 @@ namespace ggl { namespace projection
         \image html ex_crast.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct crast_spheroid : public impl::crast::base_crast_spheroid<Geographic, Cartesian, Parameters>
+    struct crast_spheroid : public detail::crast::base_crast_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline crast_spheroid(const Parameters& par) : impl::crast::base_crast_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline crast_spheroid(const Parameters& par) : detail::crast::base_crast_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::crast::setup_crast(this->m_par);
+            detail::crast::setup_crast(this->m_par);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class crast_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class crast_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -130,12 +130,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void crast_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void crast_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("crast", new crast_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

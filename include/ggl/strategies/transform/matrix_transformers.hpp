@@ -279,8 +279,8 @@ struct scale_transformer<P1, P2, 3, 3> : ublas_transformer<P1, P2, 3, 3>
 
 
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail {
 
 template <typename DegreeOrRadian>
 struct as_radian {};
@@ -338,13 +338,13 @@ struct rad_rotate_transformer
     \note The 3D version will not compile
  */
 template <typename P1, typename P2, typename DegreeOrRadian>
-struct rotate_transformer : impl::rad_rotate_transformer<P1, P2>
+struct rotate_transformer : detail::rad_rotate_transformer<P1, P2>
 {
     inline rotate_transformer(double const& angle)
-        : impl::rad_rotate_transformer
+        : detail::rad_rotate_transformer
             <
                 P1, P2
-            >(impl::as_radian<DegreeOrRadian>::get(angle))
+            >(detail::as_radian<DegreeOrRadian>::get(angle))
     {}
 
 };

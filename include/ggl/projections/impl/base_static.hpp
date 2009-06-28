@@ -29,8 +29,8 @@ namespace ggl { namespace projection {
 
 
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail
 {
 
 // Base-template-forward
@@ -100,8 +100,8 @@ public :
     }
 };
 
-} // namespace impl
-#endif // DOXYGEN_NO_IMPL
+} // namespace detail
+#endif // DOXYGEN_NO_DETAIL
 
 }} // namespace ggl::projection
 

@@ -35,7 +35,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-namespace ggl { namespace projection { namespace impl {
+namespace ggl { namespace projection { namespace detail {
 
 /* meridinal distance for ellipsoid and inverse
 **    8th degree - accurate to < 1e-5 meters when used in conjuction

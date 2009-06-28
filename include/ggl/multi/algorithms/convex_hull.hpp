@@ -22,13 +22,14 @@
 namespace ggl {
 
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace convex_hull {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace convex_hull {
+
 
 template <typename MultiGeometry, typename OutputIterator>
 struct convex_hull_multi
 {
-    static inline OutputIterator calculate(const MultiGeometry& multi,
+    static inline OutputIterator apply(MultiGeometry const& multi,
             OutputIterator out)
     {
         using namespace boost;
@@ -55,7 +56,7 @@ struct convex_hull_multi
 };
 
 
-}} // namespace impl::convex_hull
+}} // namespace detail::convex_hull
 
 #endif
 
@@ -68,16 +69,16 @@ namespace dispatch
 
 template <typename MultiPoint, typename OutputIterator>
 struct convex_hull<multi_point_tag, MultiPoint, OutputIterator>
-    : impl::convex_hull::hull<MultiPoint, OutputIterator> {};
+    : detail::convex_hull::hull<MultiPoint, OutputIterator> {};
 
 
 template <typename MultiLinestring, typename OutputIterator>
 struct convex_hull<multi_linestring_tag, MultiLinestring, OutputIterator>
-    : impl::convex_hull::convex_hull_multi<MultiLinestring, OutputIterator> {};
+    : detail::convex_hull::convex_hull_multi<MultiLinestring, OutputIterator> {};
 
 template <typename MultiPolygon, typename OutputIterator>
 struct convex_hull<multi_polygon_tag, MultiPolygon, OutputIterator>
-    : impl::convex_hull::convex_hull_multi<MultiPolygon, OutputIterator> {};
+    : detail::convex_hull::convex_hull_multi<MultiPolygon, OutputIterator> {};
 
 
 } // namespace dispatch

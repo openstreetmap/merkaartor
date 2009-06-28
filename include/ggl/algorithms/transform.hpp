@@ -63,8 +63,8 @@ where this last one plus a transformation using a projection are used.
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace transform {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace transform {
 
 template <typename P1, typename P2>
 struct transform_point
@@ -114,7 +114,7 @@ struct transform_box
 };
 
 template <typename P, typename OutputIterator, typename R, typename S>
-inline bool transform_range_out(const R& range, OutputIterator out, S const& strategy)
+inline bool transform_range_out(R const& range, OutputIterator out, S const& strategy)
 {
     P point_out;
     for(typename boost::range_const_iterator<R>::type it = boost::begin(range);
@@ -199,8 +199,8 @@ struct transform_range
     }
 };
 
-}} // namespace impl::transform
-#endif // DOXYGEN_NO_IMPL
+}} // namespace detail::transform
+#endif // DOXYGEN_NO_DETAIL
 
 
 #ifndef DOXYGEN_NO_DISPATCH
@@ -212,32 +212,32 @@ struct transform {};
 
 template <typename P1, typename P2>
 struct transform<point_tag, point_tag, P1, P2>
-    : impl::transform::transform_point<P1, P2>
+    : detail::transform::transform_point<P1, P2>
 {
 };
 
 
 template <typename L1, typename L2>
 struct transform<linestring_tag, linestring_tag, L1, L2>
-    : impl::transform::transform_range<L1, L2>
+    : detail::transform::transform_range<L1, L2>
 {
 };
 
 template <typename R1, typename R2>
 struct transform<ring_tag, ring_tag, R1, R2>
-    : impl::transform::transform_range<R1, R2>
+    : detail::transform::transform_range<R1, R2>
 {
 };
 
 template <typename P1, typename P2>
 struct transform<polygon_tag, polygon_tag, P1, P2>
-    : impl::transform::transform_polygon<P1, P2>
+    : detail::transform::transform_polygon<P1, P2>
 {
 };
 
 template <typename B1, typename B2>
 struct transform<box_tag, box_tag, B1, B2>
-    : impl::transform::transform_box<B1, B2>
+    : detail::transform::transform_box<B1, B2>
 {
 };
 
@@ -257,7 +257,7 @@ struct transform<box_tag, box_tag, B1, B2>
     \param strategy the strategy to be used for transformation
  */
 template <typename G1, typename G2, typename S>
-inline bool transform(const G1& geometry1, G2& geometry2, S const& strategy)
+inline bool transform(G1 const& geometry1, G2& geometry2, S const& strategy)
 {
     typedef dispatch::transform
         <
@@ -280,9 +280,9 @@ inline bool transform(const G1& geometry1, G2& geometry2, S const& strategy)
     \return true if the transformation could be done
  */
 template <typename G1, typename G2>
-inline bool transform(const G1& geometry1, G2& geometry2)
+inline bool transform(G1 const& geometry1, G2& geometry2)
 {
-    typename impl::transform::select_strategy<G1, G2>::type strategy;
+    typename detail::transform::select_strategy<G1, G2>::type strategy;
     return transform(geometry1, geometry2, strategy);
 }
 

@@ -12,8 +12,8 @@
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail
 {
 
 
@@ -30,15 +30,15 @@ namespace impl
 template <typename Geometry1, typename Geometry2, typename Policy>
 struct not_
 {
-    static inline bool run(Geometry1 const &geometry1, Geometry2 const& geometry2)
+    static inline bool apply(Geometry1 const &geometry1, Geometry2 const& geometry2)
     {
-        return ! Policy::run(geometry1, geometry2);
+        return ! Policy::apply(geometry1, geometry2);
     }
 };
 
 
-} // namespace impl
-#endif // DOXYGEN_NO_IMPL
+} // namespace detail
+#endif // DOXYGEN_NO_DETAIL
 
 } // namespace ggl
 

@@ -48,8 +48,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace tmerc{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace tmerc{ 
             static const double EPS10 = 1.e-10;
             static const double FC1 = 1.;
             static const double FC2 = .5;
@@ -262,7 +262,7 @@ namespace ggl { namespace projection
                 setup(par, proj_parm);
             }
 
-        }} // namespace impl::tmerc
+        }} // namespace detail::tmerc
     #endif // doxygen 
 
     /*!
@@ -279,11 +279,11 @@ namespace ggl { namespace projection
         \image html ex_tmerc.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct tmerc_ellipsoid : public impl::tmerc::base_tmerc_ellipsoid<Geographic, Cartesian, Parameters>
+    struct tmerc_ellipsoid : public detail::tmerc::base_tmerc_ellipsoid<Geographic, Cartesian, Parameters>
     {
-        inline tmerc_ellipsoid(const Parameters& par) : impl::tmerc::base_tmerc_ellipsoid<Geographic, Cartesian, Parameters>(par)
+        inline tmerc_ellipsoid(const Parameters& par) : detail::tmerc::base_tmerc_ellipsoid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::tmerc::setup_tmerc(this->m_par, this->m_proj_parm);
+            detail::tmerc::setup_tmerc(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -301,11 +301,11 @@ namespace ggl { namespace projection
         \image html ex_utm.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct utm_ellipsoid : public impl::tmerc::base_tmerc_ellipsoid<Geographic, Cartesian, Parameters>
+    struct utm_ellipsoid : public detail::tmerc::base_tmerc_ellipsoid<Geographic, Cartesian, Parameters>
     {
-        inline utm_ellipsoid(const Parameters& par) : impl::tmerc::base_tmerc_ellipsoid<Geographic, Cartesian, Parameters>(par)
+        inline utm_ellipsoid(const Parameters& par) : detail::tmerc::base_tmerc_ellipsoid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::tmerc::setup_utm(this->m_par, this->m_proj_parm);
+            detail::tmerc::setup_utm(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -323,21 +323,21 @@ namespace ggl { namespace projection
         \image html ex_tmerc.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct tmerc_spheroid : public impl::tmerc::base_tmerc_spheroid<Geographic, Cartesian, Parameters>
+    struct tmerc_spheroid : public detail::tmerc::base_tmerc_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline tmerc_spheroid(const Parameters& par) : impl::tmerc::base_tmerc_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline tmerc_spheroid(const Parameters& par) : detail::tmerc::base_tmerc_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::tmerc::setup_tmerc(this->m_par, this->m_proj_parm);
+            detail::tmerc::setup_tmerc(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class tmerc_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class tmerc_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -350,7 +350,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class utm_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class utm_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -360,13 +360,13 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void tmerc_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void tmerc_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("tmerc", new tmerc_entry<Geographic, Cartesian, Parameters>);
             factory.add_to_factory("utm", new utm_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     // Create EPSG specializations
     // (Proof of Concept, only for some)
 

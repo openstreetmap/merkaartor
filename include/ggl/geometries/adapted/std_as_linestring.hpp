@@ -26,7 +26,7 @@
 
 namespace ggl
 {
-#ifndef DOXYGEN_NO_IMPL
+#ifndef DOXYGEN_NO_DETAIL
 namespace util
 {
     struct std_as_linestring

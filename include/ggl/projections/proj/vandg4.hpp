@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace vandg4{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace vandg4{ 
             static const double TOL = 1e-10;
             static const double TWORPI = 0.63661977236758134308;
 
@@ -108,7 +108,7 @@ namespace ggl { namespace projection
                 // par.fwd = s_forward;
             }
 
-        }} // namespace impl::vandg4
+        }} // namespace detail::vandg4
     #endif // doxygen 
 
     /*!
@@ -125,21 +125,21 @@ namespace ggl { namespace projection
         \image html ex_vandg4.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct vandg4_spheroid : public impl::vandg4::base_vandg4_spheroid<Geographic, Cartesian, Parameters>
+    struct vandg4_spheroid : public detail::vandg4::base_vandg4_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline vandg4_spheroid(const Parameters& par) : impl::vandg4::base_vandg4_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline vandg4_spheroid(const Parameters& par) : detail::vandg4::base_vandg4_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::vandg4::setup_vandg4(this->m_par);
+            detail::vandg4::setup_vandg4(this->m_par);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class vandg4_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class vandg4_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -149,12 +149,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void vandg4_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void vandg4_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("vandg4", new vandg4_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

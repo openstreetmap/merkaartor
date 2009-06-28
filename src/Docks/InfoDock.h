@@ -12,7 +12,7 @@
 #ifndef INFODOCK_H
 #define INFODOCK_H
 
-#include "Utils/MDockAncestor.h"
+#include "MDockAncestor.h"
 #include <QTextBrowser>
 
 class MainWindow;

@@ -45,8 +45,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace stere{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace stere{ 
             static const double EPS10 = 1.e-10;
             static const double TOL = 1.e-8;
             static const int NITER = 8;
@@ -332,7 +332,7 @@ namespace ggl { namespace projection
                 setup(par, proj_parm);
             }
 
-        }} // namespace impl::stere
+        }} // namespace detail::stere
     #endif // doxygen 
 
     /*!
@@ -350,11 +350,11 @@ namespace ggl { namespace projection
         \image html ex_stere.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct stere_ellipsoid : public impl::stere::base_stere_ellipsoid<Geographic, Cartesian, Parameters>
+    struct stere_ellipsoid : public detail::stere::base_stere_ellipsoid<Geographic, Cartesian, Parameters>
     {
-        inline stere_ellipsoid(const Parameters& par) : impl::stere::base_stere_ellipsoid<Geographic, Cartesian, Parameters>(par)
+        inline stere_ellipsoid(const Parameters& par) : detail::stere::base_stere_ellipsoid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::stere::setup_stere(this->m_par, this->m_proj_parm);
+            detail::stere::setup_stere(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -373,11 +373,11 @@ namespace ggl { namespace projection
         \image html ex_ups.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct ups_ellipsoid : public impl::stere::base_stere_ellipsoid<Geographic, Cartesian, Parameters>
+    struct ups_ellipsoid : public detail::stere::base_stere_ellipsoid<Geographic, Cartesian, Parameters>
     {
-        inline ups_ellipsoid(const Parameters& par) : impl::stere::base_stere_ellipsoid<Geographic, Cartesian, Parameters>(par)
+        inline ups_ellipsoid(const Parameters& par) : detail::stere::base_stere_ellipsoid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::stere::setup_ups(this->m_par, this->m_proj_parm);
+            detail::stere::setup_ups(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -396,21 +396,21 @@ namespace ggl { namespace projection
         \image html ex_stere.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct stere_spheroid : public impl::stere::base_stere_spheroid<Geographic, Cartesian, Parameters>
+    struct stere_spheroid : public detail::stere::base_stere_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline stere_spheroid(const Parameters& par) : impl::stere::base_stere_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline stere_spheroid(const Parameters& par) : detail::stere::base_stere_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::stere::setup_stere(this->m_par, this->m_proj_parm);
+            detail::stere::setup_stere(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class stere_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class stere_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -423,7 +423,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class ups_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class ups_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -433,13 +433,13 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void stere_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void stere_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("stere", new stere_entry<Geographic, Cartesian, Parameters>);
             factory.add_to_factory("ups", new ups_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

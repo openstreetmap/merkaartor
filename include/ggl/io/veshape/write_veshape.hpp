@@ -30,8 +30,8 @@
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace veshape {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace veshape {
 
 
 // Define the coordinate streamer, specialized for either 2 or 3 dimensions.
@@ -177,8 +177,8 @@ struct veshape_poly
 
 
 
-}} // namespace impl::veshape
-#endif // DOXYGEN_NO_IMPL
+}} // namespace detail::veshape
+#endif // DOXYGEN_NO_DETAIL
 
 
 #ifndef DOXYGEN_NO_DISPATCH
@@ -196,16 +196,16 @@ template <typename T, typename G>
 struct veshape {};
 
 template <typename P>
-struct veshape<point_tag, P> : public impl::veshape::veshape_point<P, impl::veshape::prefix_point> {};
+struct veshape<point_tag, P> : public detail::veshape::veshape_point<P, detail::veshape::prefix_point> {};
 
 template <typename R>
-struct veshape<linestring_tag, R> : public impl::veshape::veshape_range<R, impl::veshape::prefix_linestring> {};
+struct veshape<linestring_tag, R> : public detail::veshape::veshape_range<R, detail::veshape::prefix_linestring> {};
 
 template <typename R>
-struct veshape<ring_tag, R> : public impl::veshape::veshape_range<R, impl::veshape::prefix_polygon> {};
+struct veshape<ring_tag, R> : public detail::veshape::veshape_range<R, detail::veshape::prefix_polygon> {};
 
 template <typename P>
-struct veshape<polygon_tag, P> : public impl::veshape::veshape_poly<P, impl::veshape::prefix_polygon> {};
+struct veshape<polygon_tag, P> : public detail::veshape::veshape_poly<P, detail::veshape::prefix_polygon> {};
 
 } // namespace dispatch
 #endif // DOXYGEN_NO_DISPATCH

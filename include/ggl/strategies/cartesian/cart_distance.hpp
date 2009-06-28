@@ -33,8 +33,8 @@ namespace ggl {
 
 namespace strategy { namespace distance {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail
 {
 
 template <typename P1, typename P2, size_t I, typename T>
@@ -74,16 +74,19 @@ struct pythagoras
     typedef cartesian_distance return_type;
 
 
-    inline BOOST_CONCEPT_REQUIRES(((concept::ConstPoint<P1>))
-    ((concept::ConstPoint<P2>)), (cartesian_distance))
-    operator()(const P1& p1, const P2& p2) const
+    inline cartesian_distance
+    operator()(P1 const& p1, P2 const& p2) const
     {
+
+        BOOST_CONCEPT_ASSERT( (concept::ConstPoint<P1>) );
+        BOOST_CONCEPT_ASSERT( (concept::ConstPoint<P2>) );
+
         // Calculate distance using Pythagoras
         // (Leave comment above for Doxygen)
 
         assert_dimension_equal<P1, P2>();
 
-        return cartesian_distance(impl::compute_pythagoras
+        return cartesian_distance(detail::compute_pythagoras
             <
                 P1, P2,
                 dimension<P1>::value,
@@ -118,7 +121,7 @@ struct xy_point_segment
     typedef Strategy point_strategy_type;
 
 
-    inline cartesian_distance operator()(const P& p, const Segment& s) const
+    inline cartesian_distance operator()(P const& p, Segment const& s) const
     {
         assert_dimension_equal<P, Segment>();
 

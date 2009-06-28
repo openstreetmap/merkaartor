@@ -173,12 +173,15 @@ void PreferencesDialog::loadPrefs()
 	cbBackgroundOverwriteStyle->setChecked(M_PREFS->getBackgroundOverwriteStyle());
 	FocusColor = M_PREFS->getFocusColor();
 	HoverColor = M_PREFS->getHoverColor();
+	HighlightColor = M_PREFS->getHighlightColor();
 	RelationsColor = M_PREFS->getRelationsColor();
 	makeBoundaryIcon(btBgColor, BgColor);
 	makeBoundaryIcon(btHoverColor, HoverColor);
+	makeBoundaryIcon(btHighlightColor, HighlightColor);
 	makeBoundaryIcon(btFocusColor, FocusColor);
 	makeBoundaryIcon(btRelationsColor, RelationsColor);
 	HoverWidth->setValue(M_PREFS->getHoverWidth());
+	HighlightWidth->setValue(M_PREFS->getHighlightWidth());
 	FocusWidth->setValue(M_PREFS->getFocusWidth());
 	RelationsWidth->setValue(M_PREFS->getRelationsWidth());
 
@@ -309,6 +312,7 @@ void PreferencesDialog::savePrefs()
 	M_PREFS->setBackgroundOverwriteStyle(cbBackgroundOverwriteStyle->isChecked());
 	M_PREFS->setFocusColor(FocusColor,FocusWidth->value());
 	M_PREFS->setHoverColor(HoverColor,HoverWidth->value());
+	M_PREFS->setHighlightColor(HighlightColor,HighlightWidth->value());
 	M_PREFS->setRelationsColor(RelationsColor,RelationsWidth->value());
 
 	M_PREFS->setAutoSaveDoc(cbAutoSaveDoc->isChecked());
@@ -380,6 +384,16 @@ void PreferencesDialog::on_btHoverColor_clicked()
 	if (OK) {
 		HoverColor = QColor::fromRgba(rgb);
 		makeBoundaryIcon(btHoverColor, HoverColor);
+	}
+}
+
+void PreferencesDialog::on_btHighlightColor_clicked()
+{
+	bool OK = false;
+	QRgb rgb = QColorDialog::getRgba(HighlightColor.rgba(), &OK, this);
+	if (OK) {
+		HighlightColor = QColor::fromRgba(rgb);
+		makeBoundaryIcon(btHighlightColor, HoverColor);
 	}
 }
 

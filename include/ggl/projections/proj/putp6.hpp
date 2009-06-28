@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace putp6{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace putp6{ 
             static const double EPS = 1e-10;
             static const int NITER = 10;
             static const double CON_POLE = 1.732050807568877;
@@ -134,7 +134,7 @@ namespace ggl { namespace projection
                 setup(par, proj_parm);
             }
 
-        }} // namespace impl::putp6
+        }} // namespace detail::putp6
     #endif // doxygen 
 
     /*!
@@ -150,11 +150,11 @@ namespace ggl { namespace projection
         \image html ex_putp6.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct putp6_spheroid : public impl::putp6::base_putp6_spheroid<Geographic, Cartesian, Parameters>
+    struct putp6_spheroid : public detail::putp6::base_putp6_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline putp6_spheroid(const Parameters& par) : impl::putp6::base_putp6_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline putp6_spheroid(const Parameters& par) : detail::putp6::base_putp6_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::putp6::setup_putp6(this->m_par, this->m_proj_parm);
+            detail::putp6::setup_putp6(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -171,21 +171,21 @@ namespace ggl { namespace projection
         \image html ex_putp6p.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct putp6p_spheroid : public impl::putp6::base_putp6_spheroid<Geographic, Cartesian, Parameters>
+    struct putp6p_spheroid : public detail::putp6::base_putp6_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline putp6p_spheroid(const Parameters& par) : impl::putp6::base_putp6_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline putp6p_spheroid(const Parameters& par) : detail::putp6::base_putp6_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::putp6::setup_putp6p(this->m_par, this->m_proj_parm);
+            detail::putp6::setup_putp6p(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class putp6_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class putp6_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -195,7 +195,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class putp6p_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class putp6p_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -205,13 +205,13 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void putp6_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void putp6_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("putp6", new putp6_entry<Geographic, Cartesian, Parameters>);
             factory.add_to_factory("putp6p", new putp6p_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

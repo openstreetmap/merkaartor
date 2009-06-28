@@ -39,7 +39,7 @@
 #include <ggl/projections/impl/projects.hpp>
 
 
-namespace ggl { namespace projection { namespace impl {
+namespace ggl { namespace projection { namespace detail {
 
     /* evaluate complex polynomial */
 

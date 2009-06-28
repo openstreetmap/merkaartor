@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace putp2{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace putp2{ 
             static const double C_x = 1.89490;
             static const double C_y = 1.71848;
             static const double C_p = 0.6141848493043784;
@@ -109,7 +109,7 @@ namespace ggl { namespace projection
                 // par.fwd = s_forward;
             }
 
-        }} // namespace impl::putp2
+        }} // namespace detail::putp2
     #endif // doxygen 
 
     /*!
@@ -125,21 +125,21 @@ namespace ggl { namespace projection
         \image html ex_putp2.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct putp2_spheroid : public impl::putp2::base_putp2_spheroid<Geographic, Cartesian, Parameters>
+    struct putp2_spheroid : public detail::putp2::base_putp2_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline putp2_spheroid(const Parameters& par) : impl::putp2::base_putp2_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline putp2_spheroid(const Parameters& par) : detail::putp2::base_putp2_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::putp2::setup_putp2(this->m_par);
+            detail::putp2::setup_putp2(this->m_par);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class putp2_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class putp2_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -149,12 +149,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void putp2_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void putp2_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("putp2", new putp2_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

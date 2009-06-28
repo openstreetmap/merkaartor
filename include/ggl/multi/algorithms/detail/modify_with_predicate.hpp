@@ -17,26 +17,26 @@
 namespace ggl {
 
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail {
 
-template <typename MultiPolygon, typename Predicate, typename Policy>
+template <typename MultiGeometry, typename Predicate, typename Policy>
 struct multi_modify_with_predicate
 {
-    static inline void modify(MultiPolygon& multi, Predicate const& predicate)
+    static inline void apply(MultiGeometry& multi, Predicate const& predicate)
     {
-        typedef typename boost::range_iterator<MultiPolygon>::type iterator;
-        for (iterator it = boost::begin(multi);
+        typedef typename boost::range_iterator<MultiGeometry>::type iterator_type;
+        for (iterator_type it = boost::begin(multi);
             it != boost::end(multi);
             ++it)
         {
-            Policy::modify(*it, predicate);
+            Policy::apply(*it, predicate);
         }
     }
 };
 
 
-} // namespace impl
+} // namespace detail
 #endif
 
 

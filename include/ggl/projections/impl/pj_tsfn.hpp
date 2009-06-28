@@ -37,7 +37,7 @@
 
 #include <ggl/projections/impl/projects.hpp>
 
-namespace ggl { namespace projection { namespace impl {
+namespace ggl { namespace projection { namespace detail {
 
     /* determine small t */
     inline double pj_tsfn(double phi, double sinphi, double e)

@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace wink2{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace wink2{ 
             static const int MAX_ITER = 10;
             static const double LOOP_TOL = 1e-7;
             static const double TWO_D_PI = 0.636619772367581343;
@@ -103,7 +103,7 @@ namespace ggl { namespace projection
                 // par.fwd = s_forward;
             }
 
-        }} // namespace impl::wink2
+        }} // namespace detail::wink2
     #endif // doxygen 
 
     /*!
@@ -121,21 +121,21 @@ namespace ggl { namespace projection
         \image html ex_wink2.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct wink2_spheroid : public impl::wink2::base_wink2_spheroid<Geographic, Cartesian, Parameters>
+    struct wink2_spheroid : public detail::wink2::base_wink2_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline wink2_spheroid(const Parameters& par) : impl::wink2::base_wink2_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline wink2_spheroid(const Parameters& par) : detail::wink2::base_wink2_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::wink2::setup_wink2(this->m_par, this->m_proj_parm);
+            detail::wink2::setup_wink2(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class wink2_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class wink2_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -145,12 +145,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void wink2_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void wink2_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("wink2", new wink2_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

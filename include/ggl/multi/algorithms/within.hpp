@@ -17,8 +17,8 @@
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace within {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace within {
 
 
 template<typename P, typename I, typename S>
@@ -49,8 +49,8 @@ inline bool multi_polygon_in_circle(const I& m, const C& c)
     return true;
 }
 
-}} // namespace impl::within
-#endif // DOXYGEN_NO_IMPL
+}} // namespace detail::within
+#endif // DOXYGEN_NO_DETAIL
 
 #ifndef DOXYGEN_NO_DISPATCH
 namespace dispatch
@@ -60,9 +60,9 @@ namespace dispatch
 template <typename M, typename B>
 struct within<multi_polygon_tag, box_tag, M, B>
 {
-    inline static bool calculate(const M& m, const B& b)
+    static inline bool apply(const M& m, const B& b)
     {
-        return impl::within::multi_polygon_in_box(m, b);
+        return detail::within::multi_polygon_in_box(m, b);
     }
 };
 */
@@ -70,9 +70,9 @@ struct within<multi_polygon_tag, box_tag, M, B>
 template <typename M, typename C>
 struct within<multi_polygon_tag, nsphere_tag, M, C>
 {
-    inline static bool calculate(const M& m, const C& c)
+    static inline bool apply(const M& m, const C& c)
     {
-        return impl::within::multi_polygon_in_circle(m, c);
+        return detail::within::multi_polygon_in_circle(m, c);
     }
 };
 
@@ -80,18 +80,18 @@ template <typename P, typename M>
 struct within<point_tag, multi_polygon_tag, P, M>
 {
     template <typename S>
-    inline static bool calculate(const P& p, const M& m, const S& strategy)
+    static inline bool apply(const P& p, const M& m, const S& strategy)
     {
-        return impl::within::point_in_multi_polygon(p, m, strategy);
+        return detail::within::point_in_multi_polygon(p, m, strategy);
     }
 
-    inline static bool calculate(const P& p, const M& m)
+    static inline bool apply(const P& p, const M& m)
     {
         typedef typename point_type<M>::type PM;
         typename strategy_within<
                     typename cs_tag<P>::type, typename cs_tag<PM>::type, P, PM
                         >::type strategy;
-        return calculate(p, m, strategy);
+        return apply(p, m, strategy);
     }
 
 };

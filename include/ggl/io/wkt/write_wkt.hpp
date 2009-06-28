@@ -35,8 +35,8 @@ as well as points with more than two coordinates.
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace wkt {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace wkt {
 
 template <typename P, int I, int Count>
 struct stream_coordinate
@@ -216,8 +216,8 @@ struct wkt_box
         }
 };
 
-}} // namespace impl::wkt
-#endif // DOXYGEN_NO_IMPL
+}} // namespace detail::wkt
+#endif // DOXYGEN_NO_DETAIL
 
 
 #ifndef DOXYGEN_NO_DISPATCH
@@ -229,21 +229,21 @@ struct wkt {};
 
 template <typename Point>
 struct wkt<point_tag, Point>
-    : impl::wkt::wkt_point
+    : detail::wkt::wkt_point
         <
             Point,
-            impl::wkt::prefix_point
+            detail::wkt::prefix_point
         >
 {};
 
 
 template <typename Linestring>
 struct wkt<linestring_tag, Linestring>
-    : impl::wkt::wkt_range
+    : detail::wkt::wkt_range
         <
             Linestring,
-            impl::wkt::prefix_linestring_par,
-            impl::wkt::closing_parenthesis
+            detail::wkt::prefix_linestring_par,
+            detail::wkt::closing_parenthesis
         >
 {};
 
@@ -255,7 +255,7 @@ It is therefore streamed as a polygon
 */
 template <typename Box>
 struct wkt<box_tag, Box>
-    : impl::wkt::wkt_box<Box>
+    : detail::wkt::wkt_box<Box>
 {};
 
 
@@ -267,11 +267,11 @@ It is therefore streamed as a polygon
 */
 template <typename Ring>
 struct wkt<ring_tag, Ring>
-    : impl::wkt::wkt_range
+    : detail::wkt::wkt_range
         <
             Ring,
-            impl::wkt::prefix_ring_par_par,
-            impl::wkt::double_closing_parenthesis
+            detail::wkt::prefix_ring_par_par,
+            detail::wkt::double_closing_parenthesis
         >
 {};
 
@@ -281,10 +281,10 @@ struct wkt<ring_tag, Ring>
 */
 template <typename Polygon>
 struct wkt<polygon_tag, Polygon>
-    : impl::wkt::wkt_poly
+    : detail::wkt::wkt_poly
         <
             Polygon,
-            impl::wkt::prefix_polygon
+            detail::wkt::prefix_polygon
         >
 {};
 

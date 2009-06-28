@@ -23,14 +23,14 @@ namespace ggl
 
 
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace remove_holes_if {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace remove_holes_if {
 
 
 template<typename Polygon, typename Predicate>
 struct polygon_remove_holes_if
 {
-    static inline void modify(Polygon& poly, Predicate const& predicate)
+    static inline void apply(Polygon& poly, Predicate const& predicate)
     {
         typename interior_type<Polygon>::type& rings = interior_rings(poly);
 
@@ -42,10 +42,10 @@ struct polygon_remove_holes_if
     }
 };
 
-}} // namespace impl::remove_holes_if
+}} // namespace detail::remove_holes_if
 
 
-#endif // DOXYGEN_NO_IMPL
+#endif // DOXYGEN_NO_DETAIL
 
 
 #ifndef DOXYGEN_NO_DISPATCH
@@ -55,7 +55,7 @@ namespace dispatch {
 template <typename Tag, typename Geometry, typename Predicate>
 struct remove_holes_if
 {
-    static inline void modify(Geometry&, Predicate const& )
+    static inline void apply(Geometry&, Predicate const& )
     {}
 };
 
@@ -63,7 +63,7 @@ struct remove_holes_if
 
 template <typename Geometry, typename Predicate>
 struct remove_holes_if<polygon_tag, Geometry, Predicate>
-    : impl::remove_holes_if::polygon_remove_holes_if<Geometry, Predicate>
+    : detail::remove_holes_if::polygon_remove_holes_if<Geometry, Predicate>
 {
 };
 
@@ -82,7 +82,7 @@ inline void remove_holes_if(Geometry& geometry, Predicate const& predicate)
             typename tag<Geometry>::type,
             Geometry,
             Predicate
-        >::modify(geometry, predicate);
+        >::apply(geometry, predicate);
 }
 
 

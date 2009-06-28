@@ -28,8 +28,8 @@
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace correct {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace correct {
 
 // correct an box: make min/max are correct
 template <typename B>
@@ -83,35 +83,35 @@ inline void correct_polygon(Y& poly)
     typedef typename ring_type<Y>::type ring_type;
     typedef typename strategy_area
         <
-        typename cs_tag<point_type>::type,
-        point_type
+            typename cs_tag<point_type>::type,
+            point_type
         >::type strategy_type;
 
     strategy_type strategy;
 
-    if (impl::area::ring_area<ring_type, strategy_type>::calculate(outer, strategy) < 0)
+    if (detail::area::ring_area<ring_type, strategy_type>::apply(outer, strategy) < 0)
     {
         std::reverse(boost::begin(outer), boost::end(outer));
     }
 
     typedef typename boost::range_iterator
         <
-        typename interior_type<Y>::type
+            typename interior_type<Y>::type
         >::type iterator_type;
 
     for (iterator_type it = boost::begin(interior_rings(poly));
          it != boost::end(interior_rings(poly)); ++it)
     {
         ensure_closed_ring(*it);
-        if (impl::area::ring_area<ring_type, strategy_type>::calculate(*it, strategy) > 0)
+        if (detail::area::ring_area<ring_type, strategy_type>::apply(*it, strategy) > 0)
         {
             std::reverse(boost::begin(*it), boost::end(*it));
         }
     }
 }
 
-}} // namespace impl::correct
-#endif // DOXYGEN_NO_IMPL
+}} // namespace detail::correct
+#endif // DOXYGEN_NO_DETAIL
 
 #ifndef DOXYGEN_NO_DISPATCH
 namespace dispatch
@@ -123,27 +123,27 @@ struct correct {};
 template <typename B>
 struct correct<box_tag, B>
 {
-    static inline void calculate(B& box)
+    static inline void apply(B& box)
     {
-        impl::correct::correct_box(box);
+        detail::correct::correct_box(box);
     }
 };
 
 template <typename R>
 struct correct<ring_tag, R>
 {
-    static inline void calculate(R& ring)
+    static inline void apply(R& ring)
     {
-        impl::correct::ensure_closed_ring(ring);
+        detail::correct::ensure_closed_ring(ring);
     }
 };
 
 template <typename P>
 struct correct<polygon_tag, P>
 {
-    static inline void calculate(P& poly)
+    static inline void apply(P& poly)
     {
-        impl::correct::correct_polygon(poly);
+        detail::correct::correct_polygon(poly);
     }
 };
 
@@ -153,7 +153,7 @@ struct correct<polygon_tag, P>
 template <typename G>
 inline void correct(G& geometry)
 {
-    dispatch::correct<typename tag<G>::type, G>::calculate(geometry);
+    dispatch::correct<typename tag<G>::type, G>::apply(geometry);
 }
 
 } // namespace ggl

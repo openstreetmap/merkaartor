@@ -20,9 +20,9 @@
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
+#ifndef DOXYGEN_NO_DETAIL
 
-namespace impl { namespace envelope {
+namespace detail { namespace envelope {
 
 
 template<typename MultiLinestring, typename Box, typename Strategy>
@@ -31,9 +31,9 @@ struct envelope_multi_linestring
     static inline void apply(MultiLinestring const& mp, Box& mbr, Strategy const& strategy)
     {
         typename Strategy::state_type state(mbr);
-        for (typename boost::range_const_iterator<MultiLinestring>::type 
-                    it = mp.begin(); 
-            it != mp.end(); 
+        for (typename boost::range_const_iterator<MultiLinestring>::type
+                    it = mp.begin();
+            it != mp.end();
             ++it)
         {
             envelope_range_state(*it, strategy, state);
@@ -49,9 +49,9 @@ struct envelope_multi_polygon
     static inline void apply(MultiPolygon const& mp, Box& mbr, Strategy const& strategy)
     {
         typename Strategy::state_type state(mbr);
-        for (typename boost::range_const_iterator<MultiPolygon>::type 
-                    it = mp.begin(); 
-            it != mp.end(); 
+        for (typename boost::range_const_iterator<MultiPolygon>::type
+                    it = mp.begin();
+            it != mp.end();
             ++it)
         {
             envelope_range_state(exterior_ring(*it), strategy, state);
@@ -60,7 +60,7 @@ struct envelope_multi_polygon
 };
 
 
-}} // namespace impl::envelope
+}} // namespace detail::envelope
 
 #endif
 
@@ -71,18 +71,18 @@ namespace dispatch
 
 template <typename M, typename B, typename S>
 struct envelope<multi_point_tag, box_tag, M, B, S>
-    : impl::envelope::envelope_range<M, B, S>
+    : detail::envelope::envelope_range<M, B, S>
 {};
 
 template <typename M, typename B, typename S>
 struct envelope<multi_linestring_tag, box_tag, M, B, S>
-    : impl::envelope::envelope_multi_linestring<M, B, S>
+    : detail::envelope::envelope_multi_linestring<M, B, S>
 {};
 
 
 template <typename M, typename B, typename S>
 struct envelope<multi_polygon_tag, box_tag, M, B, S>
-    : impl::envelope::envelope_multi_polygon<M, B, S>
+    : detail::envelope::envelope_multi_polygon<M, B, S>
 {};
 
 

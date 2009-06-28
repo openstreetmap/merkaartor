@@ -13,7 +13,7 @@
 #include <boost/iterator/iterator_adaptor.hpp>
 #include <boost/iterator/iterator_categories.hpp>
 
-namespace ggl { namespace impl { namespace iterators {
+namespace ggl { namespace detail { namespace iterators {
 
 template <typename T, typename Iterator>
 struct iterator_base :
@@ -50,6 +50,6 @@ struct iterator_base :
     }*/
 };
 
-}}} // namespace ggl::impl::iterators
+}}} // namespace ggl::detail::iterators
 
 #endif // GGL_ITERATORS_BASE_HPP

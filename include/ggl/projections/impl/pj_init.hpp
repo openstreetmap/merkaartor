@@ -50,7 +50,7 @@
 #include <ggl/projections/parameters.hpp>
 #include <ggl/strategies/geographic/geo_parse.hpp>
 
-namespace ggl { namespace projection { namespace impl {
+namespace ggl { namespace projection { namespace detail {
 
 /************************************************************************/
 /*                              pj_init()                               */

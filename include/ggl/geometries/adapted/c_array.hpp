@@ -26,8 +26,8 @@ namespace ggl
 namespace traits
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail
 {
 
 // Create class and specialization to indicate the tag
@@ -44,12 +44,12 @@ struct c_array_tag<true>
     typedef point_tag type;
 };
 
-} // namespace impl
-#endif // DOXYGEN_NO_IMPL
+} // namespace detail
+#endif // DOXYGEN_NO_DETAIL
 
 // Assign the point-tag, preventing arrays of points getting a point-tag
 template <typename T, std::size_t N>
-struct tag<T[N]> : impl::c_array_tag<boost::is_arithmetic<T>::value> {};
+struct tag<T[N]> : detail::c_array_tag<boost::is_arithmetic<T>::value> {};
 
 template <typename T, std::size_t N>
 struct coordinate_type<T[N]>

@@ -185,6 +185,22 @@ void TrackPoint::drawHover(QPainter& thePainter, MapView* theView, bool solid)
 	}
 }
 
+void TrackPoint::drawHighlight(QPainter& thePainter, MapView* theView, bool solid)
+{
+	thePainter.setPen(MerkaartorPreferences::instance()->getHighlightColor());
+	QPointF P(theView->toView(this));
+	QRectF R(P-QPoint(3,3),QSize(6,6));
+	thePainter.drawRect(R);
+	R.adjust(-7, -7, 7, 7);
+	thePainter.drawEllipse(R);
+
+//	if (M_PREFS->getShowParents() && solid) {
+//		for (int i=0; i<sizeParents(); ++i)
+//			if (!getParent(i)->isDeleted())
+//				getParent(i)->drawHover(thePainter, theView, false);
+//	}
+}
+
 double TrackPoint::pixelDistance(const QPointF& Target, double, const Projection& theProjection, const QTransform& theTransform) const
 {
 	return distance(Target,theTransform.map(theProjection.project(Position)));

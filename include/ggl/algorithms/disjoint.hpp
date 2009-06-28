@@ -31,28 +31,28 @@ TODO: for spherical / latlong, it should consider the 180 dateline
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace disjoint {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace disjoint {
 
 template <typename P1, typename P2, std::size_t D, std::size_t N>
 struct point_point
 {
     typedef typename select_coordinate_type<P1, P2>::type coordinate_type;
 
-    static inline bool run(P1 const& p1, P2 const& p2)
+    static inline bool apply(P1 const& p1, P2 const& p2)
     {
         if (! math::equals(get<D>(p1), get<D>(p2)))
         {
             return true;
         }
-        return point_point<P1, P2, D + 1, N>::run(p1, p2);
+        return point_point<P1, P2, D + 1, N>::apply(p1, p2);
     }
 };
 
 template <typename P1, typename P2, std::size_t N>
 struct point_point<P1, P2, N, N>
 {
-    static inline bool run(P1 const& , P2 const& )
+    static inline bool apply(P1 const& , P2 const& )
     {
         return false;
     }
@@ -62,21 +62,21 @@ struct point_point<P1, P2, N, N>
 template <typename P, typename B, std::size_t D, std::size_t N>
 struct point_box
 {
-    static inline bool run(P const& point, B const& box)
+    static inline bool apply(P const& point, B const& box)
     {
         if (get<D>(point) < get<min_corner, D>(box)
             || get<D>(point) > get<max_corner, D>(box))
         {
             return true;
         }
-        return point_box<P, B, D + 1, N>::run(point, box);
+        return point_box<P, B, D + 1, N>::apply(point, box);
     }
 };
 
 template <typename P, typename B, std::size_t N>
 struct point_box<P, B, N, N>
 {
-    static inline bool run(P const& , B const& )
+    static inline bool apply(P const& , B const& )
     {
         return false;
     }
@@ -86,21 +86,24 @@ struct point_box<P, B, N, N>
 template <typename B1, typename B2, std::size_t D, std::size_t N>
 struct box_box
 {
-    static inline bool run(B1 const& box1, B2 const& box2)
+    static inline bool apply(B1 const& box1, B2 const& box2)
     {
-        if (get<max_corner, D>(box1) < get<min_corner, D>(box2)
-            || get<min_corner, D>(box1) > get<max_corner, D>(box2))
+        if (get<max_corner, D>(box1) < get<min_corner, D>(box2))
         {
             return true;
         }
-        return box_box<B1, B2, D + 1, N>::run(box1, box2);
+        if (get<min_corner, D>(box1) > get<max_corner, D>(box2))
+        {
+            return true;
+        }
+        return box_box<B1, B2, D + 1, N>::apply(box1, box2);
     }
 };
 
 template <typename B1, typename B2, std::size_t N>
 struct box_box<B1, B2, N, N>
 {
-    static inline bool run(B1 const& , B2 const& )
+    static inline bool apply(B1 const& , B2 const& )
     {
         return false;
     }
@@ -108,8 +111,8 @@ struct box_box<B1, B2, N, N>
 
 
 
-}} // namespace impl::disjoint
-#endif // DOXYGEN_NO_IMPL
+}} // namespace detail::disjoint
+#endif // DOXYGEN_NO_DETAIL
 
 
 #ifndef DOXYGEN_NO_DISPATCH
@@ -129,19 +132,19 @@ struct disjoint
 
 template <typename P1, typename P2, std::size_t DimensionCount>
 struct disjoint<point_tag, point_tag, P1, P2, false, false, DimensionCount>
-    : impl::disjoint::point_point<P1, P2, 0, DimensionCount>
+    : detail::disjoint::point_point<P1, P2, 0, DimensionCount>
 {
 };
 
 template <typename B1, typename B2, std::size_t DimensionCount>
 struct disjoint<box_tag, box_tag, B1, B2, false, false, DimensionCount>
-    : impl::disjoint::box_box<B1, B2, 0, DimensionCount>
+    : detail::disjoint::box_box<B1, B2, 0, DimensionCount>
 {
 };
 
 template <typename P, typename B, std::size_t DimensionCount>
 struct disjoint<point_tag, box_tag, P, B, false, false, DimensionCount>
-    : impl::disjoint::point_box<P, B, 0, DimensionCount>
+    : detail::disjoint::point_box<P, B, 0, DimensionCount>
 {
 };
 
@@ -155,7 +158,7 @@ template
 >
 struct disjoint_reversed
 {
-    static inline bool run(G1 const& g1, G2 const& g2)
+    static inline bool apply(G1 const& g1, G2 const& g2)
     {
         return disjoint
             <
@@ -163,7 +166,7 @@ struct disjoint_reversed
                 G2, G1,
                 IsMulti2, IsMulti1,
                 DimensionCount
-            >::run(g2, g1);
+            >::apply(g2, g1);
     }
 };
 
@@ -214,7 +217,7 @@ inline bool disjoint(const Geometry1& geometry1,
                 is_multi<ncg2_type>::type::value,
                 dimension<ncg1_type>::type::value
             >
-        >::type::run(geometry1, geometry2);
+        >::type::apply(geometry1, geometry2);
 }
 
 

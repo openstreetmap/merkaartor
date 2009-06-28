@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace mbt_fps{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace mbt_fps{ 
             static const int MAX_ITER = 10;
             static const double LOOP_TOL = 1e-7;
             static const double C1 = 0.45503;
@@ -107,7 +107,7 @@ namespace ggl { namespace projection
                 // par.fwd = s_forward;
             }
 
-        }} // namespace impl::mbt_fps
+        }} // namespace detail::mbt_fps
     #endif // doxygen 
 
     /*!
@@ -123,21 +123,21 @@ namespace ggl { namespace projection
         \image html ex_mbt_fps.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct mbt_fps_spheroid : public impl::mbt_fps::base_mbt_fps_spheroid<Geographic, Cartesian, Parameters>
+    struct mbt_fps_spheroid : public detail::mbt_fps::base_mbt_fps_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline mbt_fps_spheroid(const Parameters& par) : impl::mbt_fps::base_mbt_fps_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline mbt_fps_spheroid(const Parameters& par) : detail::mbt_fps::base_mbt_fps_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::mbt_fps::setup_mbt_fps(this->m_par);
+            detail::mbt_fps::setup_mbt_fps(this->m_par);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class mbt_fps_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class mbt_fps_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -147,12 +147,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void mbt_fps_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void mbt_fps_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("mbt_fps", new mbt_fps_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

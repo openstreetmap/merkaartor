@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace gins8{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace gins8{ 
             static const double Cl = 0.000952426;
             static const double Cp = 0.162388;
             static const double C12 = 0.08333333333333333;
@@ -85,7 +85,7 @@ namespace ggl { namespace projection
                 // par.fwd = s_forward;
             }
 
-        }} // namespace impl::gins8
+        }} // namespace detail::gins8
     #endif // doxygen 
 
     /*!
@@ -102,21 +102,21 @@ namespace ggl { namespace projection
         \image html ex_gins8.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct gins8_spheroid : public impl::gins8::base_gins8_spheroid<Geographic, Cartesian, Parameters>
+    struct gins8_spheroid : public detail::gins8::base_gins8_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline gins8_spheroid(const Parameters& par) : impl::gins8::base_gins8_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline gins8_spheroid(const Parameters& par) : detail::gins8::base_gins8_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::gins8::setup_gins8(this->m_par);
+            detail::gins8::setup_gins8(this->m_par);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class gins8_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class gins8_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -126,12 +126,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void gins8_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void gins8_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("gins8", new gins8_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

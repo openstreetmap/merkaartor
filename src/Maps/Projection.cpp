@@ -56,17 +56,17 @@ void Projection::projTransform(ProjProjection *srcdefn,
 						   ProjProjection *dstdefn, 
 						   long point_count, int point_offset, double *x, double *y, double *z )
 {
-	ggl::projection::impl::pj_transform(srcdefn, dstdefn, point_count, point_offset, x, y, z);
+	ggl::projection::detail::pj_transform(srcdefn, dstdefn, point_count, point_offset, x, y, z);
 }
 
 void Projection::projTransformFromWGS84(long point_count, int point_offset, double *x, double *y, double *z )
 {
-	ggl::projection::impl::pj_transform(p->theWGS84Proj, theProj, point_count, point_offset, x, y, z);
+	ggl::projection::detail::pj_transform(p->theWGS84Proj, theProj, point_count, point_offset, x, y, z);
 }
 
 void Projection::projTransformToWGS84(long point_count, int point_offset, double *x, double *y, double *z )
 {
-	ggl::projection::impl::pj_transform(theProj, p->theWGS84Proj, point_count, point_offset, x, y, z);
+	ggl::projection::detail::pj_transform(theProj, p->theWGS84Proj, point_count, point_offset, x, y, z);
 }
 
 QPointF Projection::projProject(const Coord & Map) const

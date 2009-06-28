@@ -25,8 +25,8 @@
 namespace ggl { namespace concept {
 
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail
 {
 
 template <typename P>
@@ -54,15 +54,15 @@ struct PolygonChecker
     }
 };
 
-} // namespace impl
-#endif // DOXYGEN_NO_IMPL
+} // namespace detail
+#endif // DOXYGEN_NO_DETAIL
 
 /*!
     \brief Checks polygon concept, using Boost Concept Check Library and metafunctions
     \ingroup concepts
 */
 template <typename P>
-struct Polygon : impl::PolygonChecker<P>
+struct Polygon : detail::PolygonChecker<P>
 {
 private:
 
@@ -95,7 +95,7 @@ public:
     but does not check write access.
 */
 template <typename P>
-struct ConstPolygon : impl::PolygonChecker<P>
+struct ConstPolygon : detail::PolygonChecker<P>
 {
 private:
 

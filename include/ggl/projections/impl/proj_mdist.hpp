@@ -37,7 +37,7 @@
 
 namespace ggl { namespace projection
 {
-namespace impl
+namespace detail
 {
     static const int MDIST_MAX_ITER = 20;
 

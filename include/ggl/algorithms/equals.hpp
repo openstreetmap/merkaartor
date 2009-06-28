@@ -9,19 +9,18 @@
 #ifndef GGL_ALGORITHMS_EQUALS_HPP
 #define GGL_ALGORITHMS_EQUALS_HPP
 
+#include <cstddef>
+
+#include <boost/static_assert.hpp>
 #include <boost/range/functions.hpp>
 #include <boost/range/metafunctions.hpp>
-#include <boost/static_assert.hpp>
 
 #include <ggl/core/access.hpp>
 #include <ggl/core/coordinate_dimension.hpp>
 #include <ggl/core/is_multi.hpp>
-
-#include <ggl/util/math.hpp>
-
 #include <ggl/algorithms/disjoint.hpp>
 #include <ggl/algorithms/detail/not.hpp>
-
+#include <ggl/util/math.hpp>
 
 /*!
 \defgroup equals equals determination
@@ -34,39 +33,34 @@ TODO: for spherical / latlong, it should consider the 180 dateline
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace equals {
-
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace equals {
 
 template <typename B1, typename B2, std::size_t D, std::size_t N>
 struct box_box
 {
-    static inline bool run(B1 const& box1, B2 const& box2)
+    static inline bool apply(B1 const& box1, B2 const& box2)
     {
-        if (! math::equals(get<max_corner, D>(box1), get<min_corner, D>(box2))
-            || ! math::equals(get<min_corner, D>(box1), get<max_corner, D>(box2)))
+        if (!math::equals(get<max_corner, D>(box1), get<min_corner, D>(box2))
+            || !math::equals(get<min_corner, D>(box1), get<max_corner, D>(box2)))
         {
             return false;
         }
-        return box_box<B1, B2, D + 1, N>::run(box1, box2);
+        return box_box<B1, B2, D + 1, N>::apply(box1, box2);
     }
 };
 
 template <typename B1, typename B2, std::size_t N>
 struct box_box<B1, B2, N, N>
 {
-    static inline bool run(B1 const& , B2 const& )
+    static inline bool apply(B1 const& , B2 const& )
     {
         return true;
     }
 };
 
-
-
-
-
-}} // namespace impl::equals
-#endif // DOXYGEN_NO_IMPL
+}} // namespace detail::equals
+#endif // DOXYGEN_NO_DETAIL
 
 
 #ifndef DOXYGEN_NO_DISPATCH
@@ -87,26 +81,23 @@ struct equals
 
 template <typename P1, typename P2, std::size_t DimensionCount>
 struct equals<point_tag, false, P1, P2, DimensionCount>
-    : ggl::impl::not_
+    : ggl::detail::not_
         <
             P1,
             P2,
-            impl::disjoint::point_point<P1, P2, 0, DimensionCount>
+            detail::disjoint::point_point<P1, P2, 0, DimensionCount>
         >
 {
 };
 
 template <typename B1, typename B2, std::size_t DimensionCount>
 struct equals<box_tag, false, B1, B2, DimensionCount>
-    : impl::equals::box_box<B1, B2, 0, DimensionCount>
+    : detail::equals::box_box<B1, B2, 0, DimensionCount>
 {
 };
 
-
-
 } // namespace dispatch
 #endif // DOXYGEN_NO_DISPATCH
-
 
 
 /*!
@@ -119,13 +110,13 @@ struct equals<box_tag, false, B1, B2, DimensionCount>
     \return true if equals, else false
  */
 template <typename Geometry1, typename Geometry2>
-inline bool equals(const Geometry1& geometry1,
-            const Geometry2& geometry2)
+inline bool equals(Geometry1 const& geometry1, Geometry2 const& geometry2)
 {
     assert_dimension_equal<Geometry1, Geometry2>();
 
-// TODO: assert types equal:                 typename tag<ncg1_type>::type, typename tag<ncg2_type>::type,
-
+// TODO: assert types equal:
+// typename tag<ncg1_type>::type, typename tag<ncg2_type>::type,
+// (LATER): NO! a linestring can be spatially equal to a multi_linestring
 
     typedef typename boost::remove_const<Geometry1>::type ncg1_type;
     typedef typename boost::remove_const<Geometry2>::type ncg2_type;
@@ -134,11 +125,11 @@ inline bool equals(const Geometry1& geometry1,
             <
                 typename tag<ncg1_type>::type,
                 is_multi<ncg1_type>::type::value,
-                ncg1_type, ncg2_type,
+                ncg1_type,
+                ncg2_type,
                 dimension<ncg1_type>::type::value
-            >::run(geometry1, geometry2);
+            >::apply(geometry1, geometry2);
 }
-
 
 } // namespace ggl
 

@@ -24,20 +24,22 @@ namespace ggl
 namespace traits
 {
 
-    /*!
-        \brief Traits class to indicate ring-type  of a polygon's exterior ring/interior rings
-        \ingroup traits
-        \par Geometries:
-            - polygon
-        \par Specializations should provide:
-            - typedef XXX type (e.g. linear_ring<P>)
-        \tparam G geometry
-    */
-    template <typename G>
-    struct ring_type
-    {
-        // should define type
-    };
+
+/*!
+    \brief Traits class to indicate ring-type  of a polygon's exterior ring/interior rings
+    \ingroup traits
+    \par Geometries:
+        - polygon
+    \par Specializations should provide:
+        - typedef XXX type (e.g. linear_ring<P>)
+    \tparam G geometry
+*/
+template <typename G>
+struct ring_type
+{
+    // should define type
+};
+
 
 
 
@@ -51,14 +53,16 @@ namespace core_dispatch
 {
 
 
-    template <typename GeometryTag, typename G> struct ring_type {};
+template <typename GeometryTag, typename Geometry> struct ring_type
+{};
 
-    // Specialization for polygon
-    template <typename P>
-    struct ring_type<polygon_tag, P>
-    {
-        typedef typename traits::ring_type<P>::type type;
-    };
+
+
+template <typename Polygon>
+struct ring_type<polygon_tag, Polygon>
+{
+    typedef typename traits::ring_type<Polygon>::type type;
+};
 
 
 
@@ -74,12 +78,14 @@ namespace core_dispatch
         of such rings.
     \ingroup core
 */
-template <typename G>
+template <typename Geometry>
 struct ring_type
 {
-    typedef typename boost::remove_const<G>::type ncg;
-    typedef typename core_dispatch::ring_type<
-        typename tag<G>::type, ncg>::type type;
+    typedef typename boost::remove_const<Geometry>::type ncg;
+    typedef typename core_dispatch::ring_type
+        <
+            typename tag<Geometry>::type, ncg
+        >::type type;
 };
 
 

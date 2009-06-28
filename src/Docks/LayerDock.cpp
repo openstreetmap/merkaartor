@@ -168,6 +168,8 @@ void LayerDock::createContent()
 	p->tab = new QTabBar(frame);
 	p->tab->setShape(QTabBar::RoundedWest);
 	p->tab->setContextMenuPolicy(Qt::CustomContextMenu);
+//	p->tab->setUsesScrollButtons(true);
+//	p->tab->setElideMode(Qt::ElideRight);
 	int t;
 	t = p->tab->addTab(NULL);
 	p->tab->setTabData(t, MapLayer::All);

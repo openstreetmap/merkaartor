@@ -20,8 +20,8 @@
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail
 {
     namespace correct
     {
@@ -42,7 +42,7 @@ template<typename Y,
         template<typename,typename> class V, template<typename> class A>
 void correct(multi_polygon<Y, V, A>& mp)
 {
-    impl::correct::correct_multi_polygon(mp);
+    detail::correct::correct_multi_polygon(mp);
 }
 
 

@@ -44,7 +44,7 @@
 #include <ggl/projections/impl/pj_param.hpp>
 #include <ggl/projections/parameters.hpp>
 
-namespace ggl { namespace projection { namespace impl {
+namespace ggl { namespace projection { namespace detail {
 
 
 /* SEC_TO_RAD = Pi/180/3600 */

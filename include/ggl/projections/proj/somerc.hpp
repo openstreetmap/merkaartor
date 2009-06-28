@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace somerc{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace somerc{ 
             static const double EPS = 1.e-10;
             static const int NITER = 6;
 
@@ -133,7 +133,7 @@ namespace ggl { namespace projection
                 // par.fwd = e_forward;
             }
 
-        }} // namespace impl::somerc
+        }} // namespace detail::somerc
     #endif // doxygen 
 
     /*!
@@ -150,21 +150,21 @@ namespace ggl { namespace projection
         \image html ex_somerc.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct somerc_ellipsoid : public impl::somerc::base_somerc_ellipsoid<Geographic, Cartesian, Parameters>
+    struct somerc_ellipsoid : public detail::somerc::base_somerc_ellipsoid<Geographic, Cartesian, Parameters>
     {
-        inline somerc_ellipsoid(const Parameters& par) : impl::somerc::base_somerc_ellipsoid<Geographic, Cartesian, Parameters>(par)
+        inline somerc_ellipsoid(const Parameters& par) : detail::somerc::base_somerc_ellipsoid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::somerc::setup_somerc(this->m_par, this->m_proj_parm);
+            detail::somerc::setup_somerc(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class somerc_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class somerc_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -174,12 +174,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void somerc_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void somerc_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("somerc", new somerc_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

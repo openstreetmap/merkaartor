@@ -46,8 +46,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace laea{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace laea{ 
             static const double EPS10 = 1.e-10;
             static const int NITER = 20;
             static const double CONV = 1.e-10;
@@ -311,7 +311,7 @@ namespace ggl { namespace projection
             	}
             }
 
-        }} // namespace impl::laea
+        }} // namespace detail::laea
     #endif // doxygen 
 
     /*!
@@ -328,11 +328,11 @@ namespace ggl { namespace projection
         \image html ex_laea.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct laea_ellipsoid : public impl::laea::base_laea_ellipsoid<Geographic, Cartesian, Parameters>
+    struct laea_ellipsoid : public detail::laea::base_laea_ellipsoid<Geographic, Cartesian, Parameters>
     {
-        inline laea_ellipsoid(const Parameters& par) : impl::laea::base_laea_ellipsoid<Geographic, Cartesian, Parameters>(par)
+        inline laea_ellipsoid(const Parameters& par) : detail::laea::base_laea_ellipsoid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::laea::setup_laea(this->m_par, this->m_proj_parm);
+            detail::laea::setup_laea(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -350,21 +350,21 @@ namespace ggl { namespace projection
         \image html ex_laea.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct laea_spheroid : public impl::laea::base_laea_spheroid<Geographic, Cartesian, Parameters>
+    struct laea_spheroid : public detail::laea::base_laea_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline laea_spheroid(const Parameters& par) : impl::laea::base_laea_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline laea_spheroid(const Parameters& par) : detail::laea::base_laea_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::laea::setup_laea(this->m_par, this->m_proj_parm);
+            detail::laea::setup_laea(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class laea_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class laea_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -377,12 +377,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void laea_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void laea_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("laea", new laea_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

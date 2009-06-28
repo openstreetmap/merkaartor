@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace eck1{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace eck1{ 
             static const double FC = .92131773192356127802;
             static const double RP = .31830988618379067154;
 
@@ -86,7 +86,7 @@ namespace ggl { namespace projection
                 // par.fwd = s_forward;
             }
 
-        }} // namespace impl::eck1
+        }} // namespace detail::eck1
     #endif // doxygen 
 
     /*!
@@ -102,21 +102,21 @@ namespace ggl { namespace projection
         \image html ex_eck1.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct eck1_spheroid : public impl::eck1::base_eck1_spheroid<Geographic, Cartesian, Parameters>
+    struct eck1_spheroid : public detail::eck1::base_eck1_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline eck1_spheroid(const Parameters& par) : impl::eck1::base_eck1_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline eck1_spheroid(const Parameters& par) : detail::eck1::base_eck1_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::eck1::setup_eck1(this->m_par);
+            detail::eck1::setup_eck1(this->m_par);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class eck1_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class eck1_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -126,12 +126,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void eck1_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void eck1_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("eck1", new eck1_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

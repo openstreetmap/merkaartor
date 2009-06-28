@@ -48,8 +48,8 @@ namespace ggl { namespace projection
 
     template <typename Geographic, typename Cartesian, typename Parameters> class factory;
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace ob_tran{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace ob_tran{ 
             static const double TOL = 1e-10;
 
             template <typename Geographic, typename Cartesian>
@@ -229,7 +229,7 @@ namespace ggl { namespace projection
                 return phip;
             }
 
-        }} // namespace impl::ob_tran
+        }} // namespace detail::ob_tran
     #endif // doxygen 
 
     /*!
@@ -249,11 +249,11 @@ namespace ggl { namespace projection
         \image html ex_ob_tran.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct ob_tran_oblique : public impl::ob_tran::base_ob_tran_oblique<Geographic, Cartesian, Parameters>
+    struct ob_tran_oblique : public detail::ob_tran::base_ob_tran_oblique<Geographic, Cartesian, Parameters>
     {
-        inline ob_tran_oblique(const Parameters& par) : impl::ob_tran::base_ob_tran_oblique<Geographic, Cartesian, Parameters>(par)
+        inline ob_tran_oblique(const Parameters& par) : detail::ob_tran::base_ob_tran_oblique<Geographic, Cartesian, Parameters>(par)
         {
-            impl::ob_tran::setup_ob_tran(this->m_par, this->m_proj_parm);
+            detail::ob_tran::setup_ob_tran(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -274,29 +274,29 @@ namespace ggl { namespace projection
         \image html ex_ob_tran.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct ob_tran_transverse : public impl::ob_tran::base_ob_tran_transverse<Geographic, Cartesian, Parameters>
+    struct ob_tran_transverse : public detail::ob_tran::base_ob_tran_transverse<Geographic, Cartesian, Parameters>
     {
-        inline ob_tran_transverse(const Parameters& par) : impl::ob_tran::base_ob_tran_transverse<Geographic, Cartesian, Parameters>(par)
+        inline ob_tran_transverse(const Parameters& par) : detail::ob_tran::base_ob_tran_transverse<Geographic, Cartesian, Parameters>(par)
         {
-            impl::ob_tran::setup_ob_tran(this->m_par, this->m_proj_parm);
+            detail::ob_tran::setup_ob_tran(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class ob_tran_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class ob_tran_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
                 {
-                    impl::ob_tran::par_ob_tran<Geographic, Cartesian> proj_parm;
+                    detail::ob_tran::par_ob_tran<Geographic, Cartesian> proj_parm;
                     Parameters p = par;
                     double phip = setup_ob_tran(p, proj_parm, false);
-                    if (fabs(phip) > impl::ob_tran::TOL)
+                    if (fabs(phip) > detail::ob_tran::TOL)
                         return new base_v_fi<ob_tran_oblique<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
                     else
                         return new base_v_fi<ob_tran_transverse<Geographic, Cartesian, Parameters>, Geographic, Cartesian, Parameters>(par);
@@ -304,12 +304,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void ob_tran_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void ob_tran_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("ob_tran", new ob_tran_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

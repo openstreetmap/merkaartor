@@ -35,41 +35,41 @@ small error in this distance, but it should be near the resolution of the coordi
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace buffer {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace buffer {
 
 template <typename BoxIn, typename BoxOut, typename T, std::size_t C, std::size_t D, std::size_t N>
 struct box_loop
 {
     typedef typename coordinate_type<BoxOut>::type coordinate_type;
 
-    static inline void buffer(const BoxIn& box_in, const T& distance, BoxOut& box_out)
+    static inline void apply(BoxIn const& box_in, T const& distance, BoxOut& box_out)
     {
         set<C, D>(box_out, boost::numeric_cast<coordinate_type>(get<C, D>(box_in) + distance));
-        box_loop<BoxIn, BoxOut, T, C, D + 1, N>::buffer(box_in, distance, box_out);
+        box_loop<BoxIn, BoxOut, T, C, D + 1, N>::apply(box_in, distance, box_out);
     }
 };
 
 template <typename BoxIn, typename BoxOut, typename T, std::size_t C, std::size_t N>
 struct box_loop<BoxIn, BoxOut, T, C, N, N>
 {
-    static inline void buffer(const BoxIn&, const T&, BoxOut&) {}
+    static inline void apply(BoxIn const&, T const&, BoxOut&) {}
 };
 
 // Extends a box with the same amount in all directions
 template<typename BoxIn, typename BoxOut, typename T>
-inline void buffer_box(const BoxIn& box_in, const T& distance, BoxOut& box_out)
+inline void buffer_box(BoxIn const& box_in, T const& distance, BoxOut& box_out)
 {
     assert_dimension_equal<BoxIn, BoxOut>();
 
     static const std::size_t N = dimension<BoxIn>::value;
 
-    box_loop<BoxIn, BoxOut, T, min_corner, 0, N>::buffer(box_in, -distance, box_out);
-    box_loop<BoxIn, BoxOut, T, max_corner, 0, N>::buffer(box_in, +distance, box_out);
+    box_loop<BoxIn, BoxOut, T, min_corner, 0, N>::apply(box_in, -distance, box_out);
+    box_loop<BoxIn, BoxOut, T, max_corner, 0, N>::apply(box_in, +distance, box_out);
 }
 
-}} // namespace impl::buffer
-#endif // DOXYGEN_NO_IMPL
+}} // namespace detail::buffer
+#endif // DOXYGEN_NO_DETAIL
 
 #ifndef DOXYGEN_NO_DISPATCH
 namespace dispatch
@@ -82,9 +82,10 @@ struct buffer {};
 template <typename BoxIn, typename T, typename BoxOut>
 struct buffer<box_tag, box_tag, BoxIn, T, BoxOut>
 {
-    static inline void calculate(const BoxIn& box_in, const T& distance, const T& chord_length, BoxIn& box_out)
+    static inline void apply(BoxIn const& box_in, T const& distance,
+                T const& chord_length, BoxIn& box_out)
     {
-        impl::buffer::buffer_box(box_in, distance, box_out);
+        detail::buffer::buffer_box(box_in, distance, box_out);
     }
 };
 
@@ -109,16 +110,17 @@ struct buffer<box_tag, box_tag, BoxIn, T, BoxOut>
         BOX + distance -> BOX: it is allowed that "geometry_out" the same object as "geometry_in"
  */
 template <typename Input, typename Output, typename T>
-inline void buffer(const Input& geometry_in, Output& geometry_out, const T& distance, const T& chord_length = -1)
+inline void buffer(const Input& geometry_in, Output& geometry_out,
+            T const& distance, T const& chord_length = -1)
 {
     dispatch::buffer
         <
-        typename tag<Input>::type,
-        typename tag<Output>::type,
-        Input,
-        T,
-        Output
-        >::calculate(geometry_in, distance, chord_length, geometry_out);
+            typename tag<Input>::type,
+            typename tag<Output>::type,
+            Input,
+            T,
+            Output
+        >::apply(geometry_in, distance, chord_length, geometry_out);
 }
 
 /*!
@@ -131,18 +133,18 @@ inline void buffer(const Input& geometry_in, Output& geometry_out, const T& dist
     \note See also: buffer
  */
 template <typename Output, typename Input, typename T>
-Output make_buffer(const Input& geometry, const T& distance, const T& chord_length = -1)
+Output make_buffer(const Input& geometry, T const& distance, T const& chord_length = -1)
 {
     Output geometry_out;
 
     dispatch::buffer
         <
-        typename tag<Input>::type,
-        typename tag<Output>::type,
-        Input,
-        T,
-        Output
-        >::calculate(geometry, distance, chord_length, geometry_out);
+            typename tag<Input>::type,
+            typename tag<Output>::type,
+            Input,
+            T,
+            Output
+        >::apply(geometry, distance, chord_length, geometry_out);
 
     return geometry_out;
 }

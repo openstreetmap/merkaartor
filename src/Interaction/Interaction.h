@@ -15,6 +15,7 @@ class QPainter;
 #include "MapView.h"
 #include "InfoDock.h"
 #include "PropertiesDock.h"
+#include "FeaturesDock.h"
 #include "Maps/MapDocument.h"
 #include "Maps/MapFeature.h"
 #include "Maps/Road.h"
@@ -82,9 +83,12 @@ class GenericFeatureSnapInteraction : public Interaction
 		{
 			Interaction::paintEvent(anEvent, thePainter);
 
-			for (int i=0; i<view()->properties()->size(); ++i)
-				if (document()->exists(view()->properties()->selection(i)))
-					view()->properties()->selection(i)->drawFocus(thePainter, view());
+			for (int i=0; i<main()->properties()->size(); ++i)
+				if (document()->exists(main()->properties()->selection(i)))
+					main()->properties()->selection(i)->drawFocus(thePainter, view());
+			for (int i=0; i<main()->features()->size(); ++i)
+				if (document()->exists(main()->features()->selection(i)))
+					main()->features()->selection(i)->drawHighlight(thePainter, view(), true);
 
 #ifndef _MOBILE
 			if (LastSnap && document()->exists(LastSnap)) {

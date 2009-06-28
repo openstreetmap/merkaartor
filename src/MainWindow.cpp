@@ -6,6 +6,7 @@
 #include "InfoDock.h"
 #include "DirtyDock.h"
 #include "StyleDock.h"
+#include "FeaturesDock.h"
 #include "Command/Command.h"
 #include "Command/DocumentCommands.h"
 #include "Command/FeatureCommands.h"
@@ -49,6 +50,7 @@
 #include "Preferences/WMSPreferencesDialog.h"
 #include "Preferences/TMSPreferencesDialog.h"
 #include "Utils/SelectionDialog.h"
+#include "Utils/MDiscardableDialog.h"
 #include "QMapControl/imagemanager.h"
 #ifdef USE_WEBKIT
 	#include "QMapControl/browserimagemanager.h"
@@ -101,6 +103,7 @@ class MainWindowPrivate
 		int lastPrefTabIndex;
 		QString defStyle;
         StyleDock* theStyle;
+		FeaturesDock* theFeats;
 };
 
 MainWindow::MainWindow(void)
@@ -171,7 +174,11 @@ MainWindow::MainWindow(void)
     p->theStyle = new StyleDock(this);
     connect(p->theStyle, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
 
-    theGPS = new QGPS(this);
+	p->theFeats = new FeaturesDock(this);
+	connect(p->theFeats, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
+	connect(theView, SIGNAL(viewportChanged()), p->theFeats, SLOT(on_Viewport_changed()), Qt::QueuedConnection);
+
+	theGPS = new QGPS(this);
     connect(theGPS, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
 
 #ifdef GEOIMAGE
@@ -248,7 +255,10 @@ MainWindow::MainWindow(void)
     p->theStyle->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     addDockWidget(Qt::RightDockWidgetArea, p->theStyle);
 
-    theGPS->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+	p->theFeats->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+	addDockWidget(Qt::RightDockWidgetArea, p->theFeats);
+
+	theGPS->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 	addDockWidget(Qt::RightDockWidgetArea, theGPS);
 
 	mobileToolBar->setVisible(false);
@@ -258,6 +268,7 @@ MainWindow::MainWindow(void)
 	theInfo->setVisible(false);
 	theLayers->setVisible(false);
 	theDirty->setVisible(false);
+	theFeats->setVisible(false);
 	theGPS->setVisible(false);
 
 	toolBar->setVisible(false);
@@ -417,6 +428,11 @@ GeoImageDock* MainWindow::geoImage()
 	return theGeoImage;
 }
 #endif
+
+FeaturesDock* MainWindow::features()
+{
+	return p->theFeats;
+}
 
 MapDocument* MainWindow::document()
 {
@@ -1371,7 +1387,16 @@ void MainWindow::on_featureCommitAction_triggered()
 void MainWindow::on_roadCreateJunctionAction_triggered()
 {
 	CommandList* theList = new CommandList(MainWindow::tr("Create Junction"), NULL);
-	createJunction(theDocument, theList, theProperties);
+	int n = createJunction(theDocument, theList, theProperties, false);
+	if (n > 1) {
+		MDiscardableMessage dlg(view(),
+			MainWindow::tr("Multiple intersection."),
+			MainWindow::tr("Those roads have multiple intersections.\nDo you still want to create a junction for each one (Unwanted junctions can still be deleted afterhand)?"));
+		if (dlg.check() != QDialog::Accepted)
+			return;
+	}
+	createJunction(theDocument, theList, theProperties, true);
+
 	if (theList->empty())
 		delete theList;
 	else
@@ -2150,7 +2175,8 @@ void MainWindow::updateWindowMenu(bool)
     windowLayersAction->setChecked(theLayers->isVisible());
     windowInfoAction->setChecked(theInfo->isVisible());
     windowDirtyAction->setChecked(theDirty->isVisible());
-    windowGPSAction->setChecked(theGPS->isVisible());
+	windowFeatsAction->setChecked(p->theFeats->isVisible());
+	windowGPSAction->setChecked(theGPS->isVisible());
 #ifdef GEOIMAGE
     windowGeoimageAction->setChecked(theGeoImage->isVisible());
 #endif
@@ -2332,6 +2358,12 @@ void MainWindow::on_windowDirtyAction_triggered()
 	windowDirtyAction->setChecked(theDirty->isVisible());
 }
 
+void MainWindow::on_windowFeatsAction_triggered()
+{
+	p->theFeats->setVisible(!p->theFeats->isVisible());
+	windowFeatsAction->setChecked(p->theFeats->isVisible());
+}
+
 void MainWindow::on_windowToolbarAction_triggered()
 {
 	toolBar->setVisible(!toolBar->isVisible());
@@ -2369,6 +2401,7 @@ void MainWindow::on_windowHideAllAction_triggered()
 //	toolBar->setVisible(false);
 	theInfo->setVisible(false);
 	theDirty->setVisible(false);
+	p->theFeats->setVisible(false);
 	theLayers->setVisible(false);
 	theProperties->setVisible(false);
 	theGPS->setVisible(false);

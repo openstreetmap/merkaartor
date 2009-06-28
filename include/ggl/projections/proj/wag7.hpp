@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace wag7{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace wag7{ 
 
 
             // template class, using CRTP to implement forward/inverse
@@ -82,7 +82,7 @@ namespace ggl { namespace projection
                 par.es = 0.;
             }
 
-        }} // namespace impl::wag7
+        }} // namespace detail::wag7
     #endif // doxygen 
 
     /*!
@@ -99,21 +99,21 @@ namespace ggl { namespace projection
         \image html ex_wag7.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct wag7_spheroid : public impl::wag7::base_wag7_spheroid<Geographic, Cartesian, Parameters>
+    struct wag7_spheroid : public detail::wag7::base_wag7_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline wag7_spheroid(const Parameters& par) : impl::wag7::base_wag7_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline wag7_spheroid(const Parameters& par) : detail::wag7::base_wag7_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::wag7::setup_wag7(this->m_par);
+            detail::wag7::setup_wag7(this->m_par);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class wag7_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class wag7_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -123,12 +123,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void wag7_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void wag7_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("wag7", new wag7_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

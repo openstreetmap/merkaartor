@@ -96,7 +96,7 @@ public:
         // Make positive and indicate this
         positive = value > 0;
 
-        // Todo: we might implment template/specializations here
+        // Todo: we might implement template/specializations here
         // Todo: if it is "west" and "positive", make east? or keep minus sign then?
 
         cardinal = ((CardinalDir == cd_lat && positive) ? 'N'
@@ -143,8 +143,8 @@ private:
 };
 
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail
 {
 /*!
     \brief internal base class for latitude and longitude classes
@@ -159,7 +159,7 @@ template <typename T>
 class graticule
 {
 public:
-    
+
     // TODO: Pass 'v' by const-ref
     inline explicit graticule(T v) : m_v(v) {}
     inline operator T() const { return m_v; }
@@ -169,8 +169,8 @@ private:
     T m_v;
 };
 
-} // namespace impl
-#endif // DOXYGEN_NO_IMPL
+} // namespace detail
+#endif // DOXYGEN_NO_DETAIL
 
 /*!
     \brief Utility class to assign points with latitude value (north/south)
@@ -179,23 +179,23 @@ private:
     \note Often combined with dms class
 */
 template <typename T = double>
-class latitude : public impl::graticule<T>
+class latitude : public detail::graticule<T>
 {
 public:
 
     /// Can be constructed with a value
     inline explicit latitude(T v)
-        : impl::graticule<T>(v)
+        : detail::graticule<T>(v)
     {}
 
     /// Can be constructed with a NORTH dms-class
     inline explicit latitude(const dms<north,T>& v)
-        : impl::graticule<T>(v.as_value())
+        : detail::graticule<T>(v.as_value())
     {}
 
     /// Can be constructed with a SOUTH dms-class
-    inline explicit latitude(const dms<south,T>& v) 
-       : impl::graticule<T>(v.as_value()) 
+    inline explicit latitude(const dms<south,T>& v)
+       : detail::graticule<T>(v.as_value())
    {}
 };
 
@@ -206,23 +206,23 @@ public:
 \note Often combined with dms class
 */
 template <typename T = double>
-class longitude : public impl::graticule<T>
+class longitude : public detail::graticule<T>
 {
 public:
 
     /// Can be constructed with a value
     inline explicit longitude(T v)
-        : impl::graticule<T>(v)
+        : detail::graticule<T>(v)
     {}
 
     /// Can be constructed with a WEST dms-class
     inline explicit longitude(const dms<west, T>& v)
-        : impl::graticule<T>(v.as_value())
+        : detail::graticule<T>(v.as_value())
     {}
 
     /// Can be constructed with an EAST dms-class
     inline explicit longitude(const dms<east, T>& v)
-        : impl::graticule<T>(v.as_value())
+        : detail::graticule<T>(v.as_value())
     {}
 };
 

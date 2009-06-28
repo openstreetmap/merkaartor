@@ -16,35 +16,33 @@
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail
 {
 
-template <int I, int N>
+template <typename P1, typename P2, std::size_t Dimension, std::size_t DimensionCount>
 struct dot_product_maker
 {
-    template <typename P1, typename P2>
-    static typename coordinate_type<P1>::type
-        run(const P1& p1, const P2& p2)
+    static inline typename coordinate_type<P1>::type
+        apply(P1 const& p1, P2 const& p2)
     {
-        return get<I>(p1) * get<I>(p2)
-            + dot_product_maker<I+1, N>::run(p1, p2);
+        return get<Dimension>(p1) * get<Dimension>(p2)
+            + dot_product_maker<P1, P2, Dimension+1, DimensionCount>::apply(p1, p2);
     }
 };
 
-template <int N>
-struct dot_product_maker<N, N>
+template <typename P1, typename P2, std::size_t DimensionCount>
+struct dot_product_maker<P1, P2, DimensionCount, DimensionCount>
 {
-    template <typename P1, typename P2>
-    static typename coordinate_type<P1>::type
-        run(const P1& p1, const P2& p2)
+    static inline typename coordinate_type<P1>::type
+        apply(P1 const& p1, P2 const& p2)
     {
-        return get<N>(p1) * get<N>(p2);
+        return get<DimensionCount>(p1) * get<DimensionCount>(p2);
     }
 };
 
-} // namespace impl
-#endif // DOXYGEN_NO_IMPL
+} // namespace detail
+#endif // DOXYGEN_NO_DETAIL
 
 
 /*!
@@ -55,10 +53,16 @@ struct dot_product_maker<N, N>
     \return the dot product
  */
 template <typename P1, typename P2>
-BOOST_CONCEPT_REQUIRES(((concept::ConstPoint<P1>)) ((concept::ConstPoint<P2>)),
-(typename coordinate_type<P1>::type)) dot_product(const P1& p1, const P2& p2)
+inline typename coordinate_type<P1>::type dot_product(P1 const& p1, P2 const& p2)
 {
-    return impl::dot_product_maker<0, dimension<P1>::value - 1>::run(p1, p2);
+    BOOST_CONCEPT_ASSERT( (concept::ConstPoint<P1>) );
+    BOOST_CONCEPT_ASSERT( (concept::ConstPoint<P2>) );
+
+    return detail::dot_product_maker
+        <
+            P1, P2,
+            0, dimension<P1>::type::value - 1
+        >::apply(p1, p2);
 }
 
 } // namespace ggl

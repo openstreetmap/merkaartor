@@ -20,7 +20,7 @@
 
 namespace ggl
 {
-namespace impl
+namespace detail
 {
     template <size_t D, typename P, typename B>
     inline bool exceeding(short int dir, const P& point, const B& box)
@@ -41,7 +41,7 @@ namespace impl
 // Iterator walking through ring/sections, delivering only those points of the ring
 // which are inside the specified box (using the sections)
 template<typename G, typename S, typename B, size_t D>
-struct section_iterator : public impl::iterators::iterator_base<
+struct section_iterator : public detail::iterators::iterator_base<
                     section_iterator<G, S, B, D>,
                     typename boost::range_const_iterator<G>::type
                 >
@@ -66,7 +66,7 @@ struct section_iterator : public impl::iterators::iterator_base<
 
             // If end or exceeding specified box, go to next section
             if (this->base() == m_end
-                    || impl::exceeding<D>(m_section_iterator->directions[0], *this->base(), m_box))
+                    || detail::exceeding<D>(m_section_iterator->directions[0], *this->base(), m_box))
             {
                 m_section_iterator++;
                 stay_within_box();
@@ -90,7 +90,7 @@ struct section_iterator : public impl::iterators::iterator_base<
 
                 // While not yet at box, advance
                 while(this->base() != m_end
-                    && impl::preceding<D>(m_section_iterator->directions[0], *this->base(), m_box))
+                    && detail::preceding<D>(m_section_iterator->directions[0], *this->base(), m_box))
                 {
                     ++(this->base_reference());
                 }
@@ -125,7 +125,7 @@ struct section_iterator : public impl::iterators::iterator_base<
 // Iterator walking through ring/sections, delivering only those points of the ring
 // which are inside the specified box (using the sections)
 template<typename G, typename SEC, typename B, size_t D>
-struct one_section_segment_iterator : public impl::iterators::iterator_base<
+struct one_section_segment_iterator : public detail::iterators::iterator_base<
                 one_section_segment_iterator<G, SEC, B, D>
                 , typename boost::range_const_iterator<G>::type>
 {
@@ -156,7 +156,7 @@ struct one_section_segment_iterator : public impl::iterators::iterator_base<
             m_previous = (this->base_reference())++;
 
             if (this->base() == m_section_end
-                || impl::exceeding<D>(m_dir, *m_previous, *m_box))
+                || detail::exceeding<D>(m_dir, *m_previous, *m_box))
             {
                 this->base_reference() = m_ring_end;
             }
@@ -179,7 +179,7 @@ struct one_section_segment_iterator : public impl::iterators::iterator_base<
                 // While (not end and) not yet at box, advance
                 normal_iterator it = next++;
                 while(next != m_section_end && next != m_ring_end
-                        && impl::preceding<D>(m_dir, *next, *m_box))
+                        && detail::preceding<D>(m_dir, *next, *m_box))
                 {
                     it = next++;
                 }

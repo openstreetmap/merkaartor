@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace mbtfpp{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace mbtfpp{ 
             static const double CS = .95257934441568037152;
             static const double FXC = .92582009977255146156;
             static const double FYC = 3.40168025708304504493;
@@ -101,7 +101,7 @@ namespace ggl { namespace projection
                 // par.fwd = s_forward;
             }
 
-        }} // namespace impl::mbtfpp
+        }} // namespace detail::mbtfpp
     #endif // doxygen 
 
     /*!
@@ -117,21 +117,21 @@ namespace ggl { namespace projection
         \image html ex_mbtfpp.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct mbtfpp_spheroid : public impl::mbtfpp::base_mbtfpp_spheroid<Geographic, Cartesian, Parameters>
+    struct mbtfpp_spheroid : public detail::mbtfpp::base_mbtfpp_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline mbtfpp_spheroid(const Parameters& par) : impl::mbtfpp::base_mbtfpp_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline mbtfpp_spheroid(const Parameters& par) : detail::mbtfpp::base_mbtfpp_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::mbtfpp::setup_mbtfpp(this->m_par);
+            detail::mbtfpp::setup_mbtfpp(this->m_par);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class mbtfpp_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class mbtfpp_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -141,12 +141,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void mbtfpp_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void mbtfpp_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("mbtfpp", new mbtfpp_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

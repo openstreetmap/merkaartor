@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace labrd{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace labrd{ 
             static const double EPS = 1.e-10;
 
             struct par_labrd
@@ -176,7 +176,7 @@ namespace ggl { namespace projection
                 // par.fwd = e_forward;
             }
 
-        }} // namespace impl::labrd
+        }} // namespace detail::labrd
     #endif // doxygen 
 
     /*!
@@ -193,21 +193,21 @@ namespace ggl { namespace projection
         \image html ex_labrd.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct labrd_ellipsoid : public impl::labrd::base_labrd_ellipsoid<Geographic, Cartesian, Parameters>
+    struct labrd_ellipsoid : public detail::labrd::base_labrd_ellipsoid<Geographic, Cartesian, Parameters>
     {
-        inline labrd_ellipsoid(const Parameters& par) : impl::labrd::base_labrd_ellipsoid<Geographic, Cartesian, Parameters>(par)
+        inline labrd_ellipsoid(const Parameters& par) : detail::labrd::base_labrd_ellipsoid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::labrd::setup_labrd(this->m_par, this->m_proj_parm);
+            detail::labrd::setup_labrd(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class labrd_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class labrd_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -217,12 +217,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void labrd_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void labrd_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("labrd", new labrd_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

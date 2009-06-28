@@ -17,6 +17,7 @@
 
 #include <ggl/core/tag.hpp>
 #include <ggl/core/tags.hpp>
+#include <ggl/core/geometry_id.hpp>
 #include <ggl/multi/core/tags.hpp>
 
 
@@ -28,15 +29,15 @@ namespace core_dispatch
 {
 
 template <>
-struct geometry_id<multi_point_tag>      : boost::mpl::int_<11> {};
+struct geometry_id<multi_point_tag>      : boost::mpl::int_<4> {};
 
 
 template <>
-struct geometry_id<multi_linestring_tag> : boost::mpl::int_<12> {};
+struct geometry_id<multi_linestring_tag> : boost::mpl::int_<5> {};
 
 
 template <>
-struct geometry_id<multi_polygon_tag>    : boost::mpl::int_<13> {};
+struct geometry_id<multi_polygon_tag>    : boost::mpl::int_<6> {};
 
 
 

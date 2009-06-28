@@ -19,8 +19,8 @@ namespace dispatch
 {
     template <typename MG, typename S>
     struct length<multi_linestring_tag, MG, S>
-            : impl::multi_sum<double, MG, S,
-                    impl::length::range_length<typename boost::range_value<MG>::type, S> > {};
+            : detail::multi_sum<double, MG, S,
+                    detail::length::range_length<typename boost::range_value<MG>::type, S> > {};
 
 } // namespace dispatch
 #endif

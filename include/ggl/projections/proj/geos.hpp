@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace geos{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace geos{ 
 
             struct par_geos
             {
@@ -198,7 +198,7 @@ namespace ggl { namespace projection
             	}
             }
 
-        }} // namespace impl::geos
+        }} // namespace detail::geos
     #endif // doxygen 
 
     /*!
@@ -216,11 +216,11 @@ namespace ggl { namespace projection
         \image html ex_geos.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct geos_ellipsoid : public impl::geos::base_geos_ellipsoid<Geographic, Cartesian, Parameters>
+    struct geos_ellipsoid : public detail::geos::base_geos_ellipsoid<Geographic, Cartesian, Parameters>
     {
-        inline geos_ellipsoid(const Parameters& par) : impl::geos::base_geos_ellipsoid<Geographic, Cartesian, Parameters>(par)
+        inline geos_ellipsoid(const Parameters& par) : detail::geos::base_geos_ellipsoid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::geos::setup_geos(this->m_par, this->m_proj_parm);
+            detail::geos::setup_geos(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -239,21 +239,21 @@ namespace ggl { namespace projection
         \image html ex_geos.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct geos_spheroid : public impl::geos::base_geos_spheroid<Geographic, Cartesian, Parameters>
+    struct geos_spheroid : public detail::geos::base_geos_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline geos_spheroid(const Parameters& par) : impl::geos::base_geos_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline geos_spheroid(const Parameters& par) : detail::geos::base_geos_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::geos::setup_geos(this->m_par, this->m_proj_parm);
+            detail::geos::setup_geos(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class geos_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class geos_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -266,12 +266,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void geos_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void geos_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("geos", new geos_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

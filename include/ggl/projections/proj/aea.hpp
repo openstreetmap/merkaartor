@@ -49,8 +49,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace aea{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace aea{ 
             static const double EPS10 = 1.e-10;
             static const double TOL7 = 1.e-7;
             static const int N_ITER = 15;
@@ -209,7 +209,7 @@ namespace ggl { namespace projection
                 setup(par, proj_parm);
             }
 
-        }} // namespace impl::aea
+        }} // namespace detail::aea
     #endif // doxygen 
 
     /*!
@@ -227,11 +227,11 @@ namespace ggl { namespace projection
         \image html ex_aea.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct aea_ellipsoid : public impl::aea::base_aea_ellipsoid<Geographic, Cartesian, Parameters>
+    struct aea_ellipsoid : public detail::aea::base_aea_ellipsoid<Geographic, Cartesian, Parameters>
     {
-        inline aea_ellipsoid(const Parameters& par) : impl::aea::base_aea_ellipsoid<Geographic, Cartesian, Parameters>(par)
+        inline aea_ellipsoid(const Parameters& par) : detail::aea::base_aea_ellipsoid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::aea::setup_aea(this->m_par, this->m_proj_parm);
+            detail::aea::setup_aea(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -250,21 +250,21 @@ namespace ggl { namespace projection
         \image html ex_leac.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct leac_ellipsoid : public impl::aea::base_aea_ellipsoid<Geographic, Cartesian, Parameters>
+    struct leac_ellipsoid : public detail::aea::base_aea_ellipsoid<Geographic, Cartesian, Parameters>
     {
-        inline leac_ellipsoid(const Parameters& par) : impl::aea::base_aea_ellipsoid<Geographic, Cartesian, Parameters>(par)
+        inline leac_ellipsoid(const Parameters& par) : detail::aea::base_aea_ellipsoid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::aea::setup_leac(this->m_par, this->m_proj_parm);
+            detail::aea::setup_leac(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class aea_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class aea_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -274,7 +274,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class leac_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class leac_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -284,13 +284,13 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void aea_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void aea_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("aea", new aea_entry<Geographic, Cartesian, Parameters>);
             factory.add_to_factory("leac", new leac_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     // Create EPSG specializations
     // (Proof of Concept, only for some)
 

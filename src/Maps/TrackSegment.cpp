@@ -220,6 +220,11 @@ void TrackSegment::drawFocus(QPainter &, MapView*, bool)
 
 void TrackSegment::drawHover(QPainter &, MapView*, bool)
 {
+	// Can't be highlighted
+}
+
+void TrackSegment::drawHighlight(QPainter &, MapView*, bool)
+{
 	// Can't be selection
 }
 

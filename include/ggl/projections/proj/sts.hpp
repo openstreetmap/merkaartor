@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace sts{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace sts{ 
 
             struct par_sts
             {
@@ -141,7 +141,7 @@ namespace ggl { namespace projection
                 setup(par, proj_parm, 2., 2., 1);
             }
 
-        }} // namespace impl::sts
+        }} // namespace detail::sts
     #endif // doxygen 
 
     /*!
@@ -157,11 +157,11 @@ namespace ggl { namespace projection
         \image html ex_kav5.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct kav5_spheroid : public impl::sts::base_sts_spheroid<Geographic, Cartesian, Parameters>
+    struct kav5_spheroid : public detail::sts::base_sts_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline kav5_spheroid(const Parameters& par) : impl::sts::base_sts_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline kav5_spheroid(const Parameters& par) : detail::sts::base_sts_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::sts::setup_kav5(this->m_par, this->m_proj_parm);
+            detail::sts::setup_kav5(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -178,11 +178,11 @@ namespace ggl { namespace projection
         \image html ex_qua_aut.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct qua_aut_spheroid : public impl::sts::base_sts_spheroid<Geographic, Cartesian, Parameters>
+    struct qua_aut_spheroid : public detail::sts::base_sts_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline qua_aut_spheroid(const Parameters& par) : impl::sts::base_sts_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline qua_aut_spheroid(const Parameters& par) : detail::sts::base_sts_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::sts::setup_qua_aut(this->m_par, this->m_proj_parm);
+            detail::sts::setup_qua_aut(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -199,11 +199,11 @@ namespace ggl { namespace projection
         \image html ex_mbt_s.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct mbt_s_spheroid : public impl::sts::base_sts_spheroid<Geographic, Cartesian, Parameters>
+    struct mbt_s_spheroid : public detail::sts::base_sts_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline mbt_s_spheroid(const Parameters& par) : impl::sts::base_sts_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline mbt_s_spheroid(const Parameters& par) : detail::sts::base_sts_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::sts::setup_mbt_s(this->m_par, this->m_proj_parm);
+            detail::sts::setup_mbt_s(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -220,21 +220,21 @@ namespace ggl { namespace projection
         \image html ex_fouc.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct fouc_spheroid : public impl::sts::base_sts_spheroid<Geographic, Cartesian, Parameters>
+    struct fouc_spheroid : public detail::sts::base_sts_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline fouc_spheroid(const Parameters& par) : impl::sts::base_sts_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline fouc_spheroid(const Parameters& par) : detail::sts::base_sts_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::sts::setup_fouc(this->m_par, this->m_proj_parm);
+            detail::sts::setup_fouc(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class kav5_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class kav5_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -244,7 +244,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class qua_aut_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class qua_aut_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -254,7 +254,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class mbt_s_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class mbt_s_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -264,7 +264,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class fouc_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class fouc_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -274,7 +274,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void sts_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void sts_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("kav5", new kav5_entry<Geographic, Cartesian, Parameters>);
             factory.add_to_factory("qua_aut", new qua_aut_entry<Geographic, Cartesian, Parameters>);
@@ -282,7 +282,7 @@ namespace ggl { namespace projection
             factory.add_to_factory("fouc", new fouc_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

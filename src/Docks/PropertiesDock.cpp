@@ -944,8 +944,6 @@ void PropertiesDock::retranslateUi()
 {
 	setWindowTitle(tr("Properties"));
 	centerAction->setText(tr("Center map"));
-        centerZoomAction->setText(tr("Center && Zoom map"));
-
-
+	centerZoomAction->setText(tr("Center && Zoom map"));
 }
 

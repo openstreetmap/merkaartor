@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace urm5{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace urm5{ 
 
             struct par_urm5
             {
@@ -94,7 +94,7 @@ namespace ggl { namespace projection
                 // par.fwd = s_forward;
             }
 
-        }} // namespace impl::urm5
+        }} // namespace detail::urm5
     #endif // doxygen 
 
     /*!
@@ -111,21 +111,21 @@ namespace ggl { namespace projection
         \image html ex_urm5.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct urm5_spheroid : public impl::urm5::base_urm5_spheroid<Geographic, Cartesian, Parameters>
+    struct urm5_spheroid : public detail::urm5::base_urm5_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline urm5_spheroid(const Parameters& par) : impl::urm5::base_urm5_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline urm5_spheroid(const Parameters& par) : detail::urm5::base_urm5_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::urm5::setup_urm5(this->m_par, this->m_proj_parm);
+            detail::urm5::setup_urm5(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class urm5_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class urm5_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -135,12 +135,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void urm5_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void urm5_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("urm5", new urm5_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

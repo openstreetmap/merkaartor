@@ -51,8 +51,8 @@ namespace ggl
 /*!
     \ingroup impl
  */
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace within {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace within {
 
 
 //-------------------------------------------------------------------------------------------------------
@@ -62,9 +62,9 @@ namespace impl { namespace within {
 template <typename P, typename B, size_t D, size_t N>
 struct point_in_box
 {
-    static bool inside(const P& p, const B& b)
+    static bool inside(P const& p, B const& b)
     {
-        if (get<D>(p) <= get<min_corner, D>(b) 
+        if (get<D>(p) <= get<min_corner, D>(b)
             || get<D>(p) >= get<max_corner, D>(b))
         {
             return false;
@@ -77,7 +77,7 @@ struct point_in_box
 template <typename P, typename B, size_t N>
 struct point_in_box<P, B, N, N>
 {
-    static bool inside(const P& p, const B& b)
+    static bool inside(P const& p, B const& b)
     {
         return true;
     }
@@ -89,9 +89,9 @@ struct point_in_box<P, B, N, N>
 template <typename B1, typename B2, size_t D, size_t N>
 struct box_in_box
 {
-    static inline bool inside(const B1& b1, const B2& b2)
+    static inline bool inside(B1 const& b1, B2 const& b2)
     {
-        if (get<min_corner, D>(b1) <= get<min_corner, D>(b2) 
+        if (get<min_corner, D>(b1) <= get<min_corner, D>(b2)
             || get<max_corner, D>(b1) >= get<max_corner, D>(b2))
         {
             return false;
@@ -104,7 +104,7 @@ struct box_in_box
 template <typename B1, typename B2, size_t N>
 struct box_in_box<B1, B2, N, N>
 {
-    static inline bool inside(const B1& b1, const B2& b2)
+    static inline bool inside(B1 const& b1, B2 const& b2)
     {
         return true;
     }
@@ -117,7 +117,7 @@ struct box_in_box<B1, B2, N, N>
 // Todo: implement as strategy
 //-------------------------------------------------------------------------------------------------------
 template<typename P, typename C>
-inline bool point_in_circle(const P& p, const C& c)
+inline bool point_in_circle(P const& p, C const& c)
 {
     assert_dimension<C, 2>();
 
@@ -140,7 +140,7 @@ inline bool point_in_circle(const P& p, const C& c)
 }
 /// 2D version
 template<typename T, typename C>
-inline bool point_in_circle(const T& c1, const T& c2, const C& c)
+inline bool point_in_circle(const T& c1, const T& c2, C const& c)
 {
     typedef typename point_type<C>::type point_type;
 
@@ -149,7 +149,7 @@ inline bool point_in_circle(const T& c1, const T& c2, const C& c)
 }
 
 template<typename B, typename C>
-inline bool box_in_circle(const B& b, const C& c)
+inline bool box_in_circle(B const& b, C const& c)
 {
     typedef typename point_type<B>::type point_type;
 
@@ -168,7 +168,7 @@ inline bool box_in_circle(const B& b, const C& c)
 
 // Generic "range-in-circle", true if all points within circle
 template<typename R, typename C>
-inline bool range_in_circle(const R& range, const C& c)
+inline bool range_in_circle(R const& range, C const& c)
 {
     assert_dimension<R, 2>();
     assert_dimension<C, 2>();
@@ -186,13 +186,13 @@ inline bool range_in_circle(const R& range, const C& c)
 }
 
 template<typename Y, typename C>
-inline bool polygon_in_circle(const Y& poly, const C& c)
+inline bool polygon_in_circle(Y const& poly, C const& c)
 {
     return range_in_circle(exterior_ring(poly), c);
 }
 
 template<typename P, typename R, typename S>
-inline bool point_in_ring(const P& p, const R& r, const S& strategy)
+inline bool point_in_ring(P const& p, R const& r, S const& strategy)
 {
     if (boost::size(r) < 4)
     {
@@ -210,7 +210,7 @@ inline bool point_in_ring(const P& p, const R& r, const S& strategy)
 
 // Polygon: in exterior ring, and if so, not within interior ring(s)
 template<typename P, typename Y, typename S>
-inline bool point_in_polygon(const P& p, const Y& poly, const S& strategy)
+inline bool point_in_polygon(P const& p, Y const& poly, S const& strategy)
 {
     if (point_in_ring(p, exterior_ring(poly), strategy))
     {
@@ -230,8 +230,8 @@ inline bool point_in_polygon(const P& p, const Y& poly, const S& strategy)
     return false;
 }
 
-}} // namespace impl::within
-#endif // DOXYGEN_NO_IMPL
+}} // namespace detail::within
+#endif // DOXYGEN_NO_DETAIL
 
 
 #ifndef DOXYGEN_NO_DISPATCH
@@ -244,11 +244,11 @@ struct within {};
 template <typename P, typename B>
 struct within<point_tag, box_tag, P, B>
 {
-    inline static bool calculate(const P& p, const B& b)
+    static inline bool apply(P const& p, B const& b)
     {
         assert_dimension_equal<P, B>();
 
-        return impl::within::point_in_box
+        return detail::within::point_in_box
             <
                 P,
                 B,
@@ -261,11 +261,11 @@ struct within<point_tag, box_tag, P, B>
 template <typename B1, typename B2>
 struct within<box_tag, box_tag, B1, B2>
 {
-    inline static bool calculate(const B1& b1, const B2& b2)
+    static inline bool apply(B1 const& b1, B2 const& b2)
     {
         assert_dimension_equal<B1, B2>();
 
-        return impl::within::box_in_box
+        return detail::within::box_in_box
             <
                 B1,
                 B2,
@@ -279,52 +279,52 @@ struct within<box_tag, box_tag, B1, B2>
 template <typename P, typename C>
 struct within<point_tag, nsphere_tag, P, C>
 {
-    inline static bool calculate(const P& p, const C& c)
+    static inline bool apply(P const& p, C const& c)
     {
-        return impl::within::point_in_circle(p, c);
+        return detail::within::point_in_circle(p, c);
     }
 };
 
 template <typename B, typename C>
 struct within<box_tag, nsphere_tag, B, C>
 {
-    inline static bool calculate(const B& b, const C& c)
+    static inline bool apply(B const& b, C const& c)
     {
-        return impl::within::box_in_circle(b, c);
+        return detail::within::box_in_circle(b, c);
     }
 };
 
 template <typename R, typename C>
 struct within<linestring_tag, nsphere_tag, R, C>
 {
-    inline static bool calculate(const R& ln, const C& c)
+    static inline bool apply(R const& ln, C const& c)
     {
-        return impl::within::range_in_circle(ln, c);
+        return detail::within::range_in_circle(ln, c);
     }
 };
 
 template <typename R, typename C>
 struct within<ring_tag, nsphere_tag, R, C>
 {
-    inline static bool calculate(const R& r, const C& c)
+    static inline bool apply(R const& r, C const& c)
     {
-        return impl::within::range_in_circle(r, c);
+        return detail::within::range_in_circle(r, c);
     }
 };
 
 template <typename Y, typename C>
 struct within<polygon_tag, nsphere_tag, Y, C>
 {
-    inline static bool calculate(const Y& poly, const C& c)
+    static inline bool apply(Y const& poly, C const& c)
     {
-        return impl::within::polygon_in_circle(poly, c);
+        return detail::within::polygon_in_circle(poly, c);
     }
 };
 
 template <typename P, typename R>
 struct within<point_tag, ring_tag, P, R>
 {
-    inline static bool calculate(const P& p, const R& r)
+    static inline bool apply(P const& p, R const& r)
     {
         typedef typename boost::range_value<R>::type point_type;
         typedef typename strategy_within
@@ -335,14 +335,14 @@ struct within<point_tag, ring_tag, P, R>
                 point_type
             >::type strategy_type;
 
-        return impl::within::point_in_ring(p, r, strategy_type());
+        return detail::within::point_in_ring(p, r, strategy_type());
     }
 };
 
 template <typename P, typename Y>
 struct within<point_tag, polygon_tag, P, Y>
 {
-    inline static bool calculate(const P& point, const Y& poly)
+    static inline bool apply(P const& point, Y const& poly)
     {
         typedef typename point_type<Y>::type point_type;
         typedef typename strategy_within
@@ -353,13 +353,13 @@ struct within<point_tag, polygon_tag, P, Y>
                 point_type
             >::type strategy_type;
 
-        return impl::within::point_in_polygon(point, poly, strategy_type());
+        return detail::within::point_in_polygon(point, poly, strategy_type());
     }
 
     template<typename S>
-    inline static bool calculate(const P& point, const Y& poly, const S& strategy)
+    static inline bool apply(P const& point, Y const& poly, S const& strategy)
     {
-        return impl::within::point_in_polygon(point, poly, strategy);
+        return detail::within::point_in_polygon(point, poly, strategy);
     }
 };
 
@@ -376,7 +376,7 @@ struct within<point_tag, polygon_tag, P, Y>
     \note The default strategy is used for within detection
  */
 template<typename G1, typename G2>
-inline bool within(const G1& geometry1, const G2& geometry2)
+inline bool within(G1 const& geometry1, G2 const& geometry2)
 {
     typedef dispatch::within
         <
@@ -386,7 +386,7 @@ inline bool within(const G1& geometry1, const G2& geometry2)
             G2
         > within_type;
 
-    return within_type::calculate(geometry1, geometry2);
+    return within_type::apply(geometry1, geometry2);
 }
 
 /*!
@@ -398,7 +398,7 @@ inline bool within(const G1& geometry1, const G2& geometry2)
     \return true if geometry1 is completely contained within geometry2, else false
  */
 template<typename G1, typename G2, typename S>
-inline bool within(const G1& geometry1, const G2& geometry2, const S& strategy)
+inline bool within(G1 const& geometry1, G2 const& geometry2, S const& strategy)
 {
     typedef dispatch::within
         <
@@ -408,7 +408,7 @@ inline bool within(const G1& geometry1, const G2& geometry2, const S& strategy)
             G2
         > within_type;
 
-    return within_type::calculate(geometry1, geometry2, strategy);
+    return within_type::apply(geometry1, geometry2, strategy);
 }
 
 } // namespace ggl

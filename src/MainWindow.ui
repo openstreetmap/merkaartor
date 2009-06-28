@@ -229,6 +229,7 @@
      <addaction name="windowGPSAction"/>
      <addaction name="windowGeoimageAction"/>
      <addaction name="windowStylesAction"/>
+     <addaction name="windowFeatsAction"/>
     </widget>
     <addaction name="menu_Docks"/>
     <addaction name="windowToolbarAction"/>
@@ -1529,6 +1530,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+V, F</string>
+   </property>
+  </action>
+  <action name="windowFeatsAction">
+   <property name="text">
+    <string>Features</string>
    </property>
   </action>
  </widget>

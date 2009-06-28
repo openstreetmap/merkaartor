@@ -31,47 +31,57 @@ namespace traits {
     \tparam G geometry
 */
 template <typename G>
-struct point_type {};
+struct point_type
+{};
+
 
 } // namespace traits
+
 
 #ifndef DOXYGEN_NO_DISPATCH
 namespace core_dispatch
 {
 
-template <typename T, typename G>
+template <typename Tag, typename Geometry>
 struct point_type
 {
     // Default: call traits to get point type
-    typedef typename boost::remove_const<typename traits::point_type<G>::type>::type type;
+    typedef typename boost::remove_const
+        <
+            typename traits::point_type<Geometry>::type
+        >::type type;
 };
 
+
 // Specialization for point: the point itself
-template <typename P>
-struct point_type<point_tag, P>
+template <typename Point>
+struct point_type<point_tag, Point>
 {
-    typedef P type;
+    typedef Point type;
 };
 
 // Specializations for linestring/linear ring, via boost::range
-template <typename R>
-struct point_type<linestring_tag, R>
+template <typename Linestring>
+struct point_type<linestring_tag, Linestring>
 {
-    typedef typename boost::range_value<R>::type type;
+    typedef typename boost::range_value<Linestring>::type type;
 };
 
-template <typename R>
-struct point_type<ring_tag, R>
+template <typename Ring>
+struct point_type<ring_tag, Ring>
 {
-    typedef typename boost::range_value<R>::type type;
+    typedef typename boost::range_value<Ring>::type type;
 };
 
 // Specialization for polygon: the point-type is the point-type of its rinsg
-template <typename P>
-struct point_type<polygon_tag, P>
+template <typename Polygon>
+struct point_type<polygon_tag, Polygon>
 {
-    typedef typename ring_type<polygon_tag, P>::type R;
-    typedef typename point_type<ring_tag, R>::type type;
+    typedef typename point_type
+        <
+            ring_tag,
+            typename ring_type<polygon_tag, Polygon>::type
+        >::type type;
 };
 
 } // namespace core_dispatch
@@ -82,12 +92,16 @@ struct point_type<polygon_tag, P>
     \brief Meta-function which defines point type of any geometry
     \ingroup core
 */
-template <typename G>
+template <typename Geometry>
 struct point_type
 {
-    typedef typename boost::remove_const<G>::type ncg;
+    typedef typename boost::remove_const<Geometry>::type ncg;
     typedef typename core_dispatch::point_type<
-        typename tag<G>::type, ncg>::type type;
+        typename tag<Geometry>::type, ncg>::type type;
+
+
+
+
 };
 
 } // namespace ggl

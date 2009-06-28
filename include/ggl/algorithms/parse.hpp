@@ -24,12 +24,12 @@
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail
 {
 
-} // namespace impl
-#endif // DOXYGEN_NO_IMPL
+} // namespace detail
+#endif // DOXYGEN_NO_DETAIL
 
 
 #ifndef DOXYGEN_NO_DISPATCH
@@ -94,7 +94,7 @@ inline void parse(G& geometry, const std::string& c1, const std::string& c2)
     \ingroup parse
  */
 template <typename G, typename S>
-inline void parse(G& geometry, const std::string& c1, const std::string& c2, const S& strategy)
+inline void parse(G& geometry, const std::string& c1, const std::string& c2, S const& strategy)
 {
     dispatch::parsing<typename tag<G>::type, G>::parse(geometry, c1, c2, strategy);
 }

@@ -15,37 +15,46 @@
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail
 {
 
-template <typename P, int I, int N>
+template <typename Point, int Dimension, int DimensionCount>
 struct coordinates_scanner
 {
     template <typename Op>
-    static void apply(P& point, Op operation)
+    static inline void apply(Point& point, Op operation)
     {
-        operation.template run<P, I>(point);
-        coordinates_scanner<P, I+1, N>::apply(point, operation);
+        operation.template apply<Point, Dimension>(point);
+        coordinates_scanner
+            <
+                Point,
+                Dimension+1,
+                DimensionCount
+            >::apply(point, operation);
     }
 };
 
-template <typename P, int N>
-struct coordinates_scanner<P, N, N>
+template <typename Point, int DimensionCount>
+struct coordinates_scanner<Point, DimensionCount, DimensionCount>
 {
     template <typename Op>
-    static void apply(P&, Op)
+    static inline void apply(Point&, Op)
     {}
 };
 
-} // namespace impl
-#endif // DOXYGEN_NO_IMPL
+} // namespace detail
+#endif // DOXYGEN_NO_DETAIL
 
-template <typename P, typename Op>
-BOOST_CONCEPT_REQUIRES(((concept::Point<P>)),
-(void)) for_each_coordinate(P& point, Op operation)
+template <typename Point, typename Op>
+inline void for_each_coordinate(Point& point, Op operation)
 {
-    typedef typename impl::coordinates_scanner<P, 0, dimension<P>::value> scanner;
+    BOOST_CONCEPT_ASSERT( (concept::Point<Point>) );
+
+    typedef typename detail::coordinates_scanner
+        <
+            Point, 0, dimension<Point>::type::value
+        > scanner;
 
     scanner::apply(point, operation);
 }

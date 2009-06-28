@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace airy{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace airy{ 
             static const double EPS = 1.e-10;
             static const int N_POLE = 0;
             static const int S_POLE = 1;
@@ -161,7 +161,7 @@ namespace ggl { namespace projection
             	par.es = 0.;
             }
 
-        }} // namespace impl::airy
+        }} // namespace detail::airy
     #endif // doxygen 
 
     /*!
@@ -179,21 +179,21 @@ namespace ggl { namespace projection
         \image html ex_airy.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct airy_spheroid : public impl::airy::base_airy_spheroid<Geographic, Cartesian, Parameters>
+    struct airy_spheroid : public detail::airy::base_airy_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline airy_spheroid(const Parameters& par) : impl::airy::base_airy_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline airy_spheroid(const Parameters& par) : detail::airy::base_airy_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::airy::setup_airy(this->m_par, this->m_proj_parm);
+            detail::airy::setup_airy(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class airy_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class airy_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -203,12 +203,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void airy_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void airy_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("airy", new airy_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

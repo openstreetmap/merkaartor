@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace nsper{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace nsper{ 
             static const double EPS10 = 1.e-10;
             static const int N_POLE = 0;
             static const int S_POLE = 1;
@@ -226,7 +226,7 @@ namespace ggl { namespace projection
                 setup(par, proj_parm);
             }
 
-        }} // namespace impl::nsper
+        }} // namespace detail::nsper
     #endif // doxygen 
 
     /*!
@@ -243,11 +243,11 @@ namespace ggl { namespace projection
         \image html ex_nsper.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct nsper_spheroid : public impl::nsper::base_nsper_spheroid<Geographic, Cartesian, Parameters>
+    struct nsper_spheroid : public detail::nsper::base_nsper_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline nsper_spheroid(const Parameters& par) : impl::nsper::base_nsper_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline nsper_spheroid(const Parameters& par) : detail::nsper::base_nsper_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::nsper::setup_nsper(this->m_par, this->m_proj_parm);
+            detail::nsper::setup_nsper(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -265,21 +265,21 @@ namespace ggl { namespace projection
         \image html ex_tpers.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct tpers_spheroid : public impl::nsper::base_nsper_spheroid<Geographic, Cartesian, Parameters>
+    struct tpers_spheroid : public detail::nsper::base_nsper_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline tpers_spheroid(const Parameters& par) : impl::nsper::base_nsper_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline tpers_spheroid(const Parameters& par) : detail::nsper::base_nsper_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::nsper::setup_tpers(this->m_par, this->m_proj_parm);
+            detail::nsper::setup_tpers(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class nsper_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class nsper_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -289,7 +289,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class tpers_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class tpers_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -299,13 +299,13 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void nsper_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void nsper_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("nsper", new nsper_entry<Geographic, Cartesian, Parameters>);
             factory.add_to_factory("tpers", new tpers_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

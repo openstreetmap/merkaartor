@@ -24,8 +24,8 @@
 
 namespace ggl {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace distance {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace distance {
 
 
 template<typename Geometry, typename MultiGeometry, typename Strategy>
@@ -90,7 +90,7 @@ struct distance_multi_to_multi
 };
 
 
-}} // namespace impl::distance
+}} // namespace detail::distance
 #endif
 
 
@@ -101,13 +101,13 @@ namespace dispatch
 template <typename GeometryTag1, typename GeometryTag2,
         typename G1, typename G2, typename Strategy>
 struct distance<GeometryTag1, GeometryTag2, G1, G2, strategy_tag_distance_point_point, Strategy, false, true>
-    : impl::distance::distance_single_to_multi<G1, G2, Strategy>
+    : detail::distance::distance_single_to_multi<G1, G2, Strategy>
 {};
 
 template <typename GeometryTag1, typename GeometryTag2,
         typename G1, typename G2, typename Strategy>
 struct distance<GeometryTag1, GeometryTag2, G1, G2, strategy_tag_distance_point_point, Strategy, true, true>
-    : impl::distance::distance_multi_to_multi<G1, G2, Strategy>
+    : detail::distance::distance_multi_to_multi<G1, G2, Strategy>
 {};
 
 } // namespace dispatch

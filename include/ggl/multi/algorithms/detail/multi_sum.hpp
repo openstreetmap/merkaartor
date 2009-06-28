@@ -14,27 +14,38 @@
 
 namespace ggl
 {
-#ifndef DOXYGEN_NO_IMPL
-namespace impl
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail
 {
 
-    template <typename T, typename MultiGeometry, typename S, typename Policy>
-    struct multi_sum
+template
+<
+    typename T,
+    typename MultiGeometry,
+    typename Strategy,
+    typename Policy
+>
+struct multi_sum
+{
+    static inline T apply(MultiGeometry const& geometry, Strategy const& strategy)
     {
-        static inline T calculate(const MultiGeometry& geometry, const S& strategy)
+        typedef typename boost::range_const_iterator
+            <
+                MultiGeometry
+            >::type iterator_type;
+        T sum = T();
+        for (iterator_type it = boost::begin(geometry);
+            it != boost::end(geometry);
+            ++it)
         {
-            typedef typename boost::range_const_iterator<MultiGeometry>::type iterator;
-            T sum = T();
-            for (iterator it = boost::begin(geometry); it != boost::end(geometry); ++it)
-            {
-                sum += Policy::calculate(*it, strategy);
-            }
-            return sum;
+            sum += Policy::apply(*it, strategy);
         }
-    };
+        return sum;
+    }
+};
 
 
-} // namespace impl
+} // namespace detail
 #endif
 
 } // namespace ggl

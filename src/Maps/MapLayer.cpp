@@ -528,7 +528,7 @@ DrawingMapLayer * DrawingMapLayer::doFromXML(DrawingMapLayer* l, MapDocument* d,
 	l->setVisible((e.attribute("visible") == "true" ? true : false));
 	l->setSelected((e.attribute("selected") == "true" ? true : false));
 	l->setEnabled((e.attribute("enabled") == "false" ? false : true));
-	l->setReadonly((e.attribute("readonly") == "false" ? false : true));
+	l->setReadonly((e.attribute("readonly") == "true" ? true : false));
 
 	QDomElement c = e.firstChildElement();
 	if (c.tagName() != "osm")
@@ -773,7 +773,7 @@ TrackMapLayer * TrackMapLayer::fromXML(MapDocument* d, const QDomElement& e, QPr
 	l->setVisible((e.attribute("visible") == "true" ? true : false));
 	l->setSelected((e.attribute("selected") == "true" ? true : false));
 	l->setEnabled((e.attribute("enabled") == "false" ? false : true));
-	l->setReadonly((e.attribute("readonly") == "false" ? false : true));
+	l->setReadonly((e.attribute("readonly") == "true" ? true : false));
 
 	d->add(l);
 
@@ -1052,7 +1052,7 @@ OsbMapLayer * OsbMapLayer::fromXML(MapDocument* d, const QDomElement& e, QProgre
 	l->setVisible((e.attribute("visible") == "true" ? true : false));
 	l->setSelected((e.attribute("selected") == "true" ? true : false));
 	l->setEnabled((e.attribute("enabled") == "false" ? false : true));
-	l->setReadonly((e.attribute("readonly") == "false" ? false : true));
+	l->setReadonly((e.attribute("readonly") == "true" ? true : false));
 
 	if (l->pp->theImp->loadFile(e.attribute("filename")))
 		l->pp->theImp->import(l);

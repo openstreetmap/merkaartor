@@ -35,13 +35,14 @@ Example showing length calculation
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace length {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace length {
 
-template<typename Segment, typename S>
+
+template<typename Segment, typename Strategy>
 struct segment_length
 {
-    static inline double calculate(Segment const& segment, S const& strategy)
+    static inline double apply(Segment const& segment, Strategy const& strategy)
     {
         // BSG 10 APR 2009
         // TODO: the segment concept has to be such that it is easy to return a point from it.
@@ -54,14 +55,14 @@ struct segment_length
 \brief Internal, calculates length of a linestring using iterator pairs and specified strategy
 \note for_each could be used here, now that point_type is changed by boost range iterator
 */
-template<typename R, typename S>
+template<typename Range, typename Strategy>
 struct range_length
 {
-    static inline double calculate(R const& range, S const& strategy)
+    static inline double apply(Range const& range, Strategy const& strategy)
     {
         double sum = 0.0;
 
-        typedef typename boost::range_const_iterator<R>::type iterator_type;
+        typedef typename boost::range_const_iterator<Range>::type iterator_type;
         iterator_type it = boost::begin(range);
         if (it != boost::end(range))
         {
@@ -78,28 +79,30 @@ struct range_length
     }
 };
 
-}} // namespace impl::length
-#endif // DOXYGEN_NO_IMPL
+}} // namespace detail::length
+#endif // DOXYGEN_NO_DETAIL
 
 #ifndef DOXYGEN_NO_DISPATCH
 namespace dispatch
 {
+
+
 template <typename Tag, typename G, typename S>
-struct length : impl::calculate_null<double, G, S>
-{
-};
+struct length : detail::calculate_null<double, G, S>
+{};
+
 
 template <typename G, typename S>
-struct length<linestring_tag, G, S> : impl::length::range_length<G, S>
-{
-};
+struct length<linestring_tag, G, S>
+    : detail::length::range_length<G, S>
+{};
+
 
 // RING: length is currently 0.0 but it might be argued that it is the "perimeter"
-
 template <typename G, typename S>
-struct length<segment_tag, G, S> : impl::length::segment_length<G, S>
-{
-};
+struct length<segment_tag, G, S> : detail::length::segment_length<G, S>
+{};
+
 
 } // namespace dispatch
 #endif // DOXYGEN_NO_DISPATCH
@@ -123,18 +126,18 @@ inline double length(const G& geometry)
     typedef typename cs_tag<point_type>::type cs_tag;
     typedef typename strategy_distance
         <
-        cs_tag,
-        cs_tag,
-        point_type,
-        point_type
+            cs_tag,
+            cs_tag,
+            point_type,
+            point_type
         >::type strategy_type;
-    
+
     return dispatch::length
         <
-        typename tag<G>::type,
-        G,
-        strategy_type
-        >::calculate(geometry, strategy_type());
+            typename tag<G>::type,
+            G,
+            strategy_type
+        >::apply(geometry, strategy_type());
 }
 
 /*!
@@ -154,7 +157,7 @@ inline double length(const G& geometry)
 template<typename G, typename S>
 inline double length(G const& geometry, S const& strategy)
 {
-    return dispatch::length<typename tag<G>::type, G, S>::calculate(geometry, strategy);
+    return dispatch::length<typename tag<G>::type, G, S>::apply(geometry, strategy);
 }
 
 } // namespace ggl

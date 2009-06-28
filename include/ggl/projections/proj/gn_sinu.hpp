@@ -46,8 +46,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace gn_sinu{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace gn_sinu{ 
             static const double EPS10 = 1e-10;
             static const int MAX_ITER = 8;
             static const double LOOP_TOL = 1e-7;
@@ -201,7 +201,7 @@ namespace ggl { namespace projection
             	setup(par, proj_parm);
             }
 
-        }} // namespace impl::gn_sinu
+        }} // namespace detail::gn_sinu
     #endif // doxygen 
 
     /*!
@@ -218,11 +218,11 @@ namespace ggl { namespace projection
         \image html ex_sinu.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct sinu_ellipsoid : public impl::gn_sinu::base_gn_sinu_ellipsoid<Geographic, Cartesian, Parameters>
+    struct sinu_ellipsoid : public detail::gn_sinu::base_gn_sinu_ellipsoid<Geographic, Cartesian, Parameters>
     {
-        inline sinu_ellipsoid(const Parameters& par) : impl::gn_sinu::base_gn_sinu_ellipsoid<Geographic, Cartesian, Parameters>(par)
+        inline sinu_ellipsoid(const Parameters& par) : detail::gn_sinu::base_gn_sinu_ellipsoid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::gn_sinu::setup_sinu(this->m_par, this->m_proj_parm);
+            detail::gn_sinu::setup_sinu(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -240,11 +240,11 @@ namespace ggl { namespace projection
         \image html ex_gn_sinu.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct gn_sinu_spheroid : public impl::gn_sinu::base_gn_sinu_spheroid<Geographic, Cartesian, Parameters>
+    struct gn_sinu_spheroid : public detail::gn_sinu::base_gn_sinu_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline gn_sinu_spheroid(const Parameters& par) : impl::gn_sinu::base_gn_sinu_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline gn_sinu_spheroid(const Parameters& par) : detail::gn_sinu::base_gn_sinu_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::gn_sinu::setup_gn_sinu(this->m_par, this->m_proj_parm);
+            detail::gn_sinu::setup_gn_sinu(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -262,11 +262,11 @@ namespace ggl { namespace projection
         \image html ex_sinu.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct sinu_spheroid : public impl::gn_sinu::base_gn_sinu_spheroid<Geographic, Cartesian, Parameters>
+    struct sinu_spheroid : public detail::gn_sinu::base_gn_sinu_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline sinu_spheroid(const Parameters& par) : impl::gn_sinu::base_gn_sinu_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline sinu_spheroid(const Parameters& par) : detail::gn_sinu::base_gn_sinu_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::gn_sinu::setup_sinu(this->m_par, this->m_proj_parm);
+            detail::gn_sinu::setup_sinu(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -283,11 +283,11 @@ namespace ggl { namespace projection
         \image html ex_eck6.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct eck6_spheroid : public impl::gn_sinu::base_gn_sinu_spheroid<Geographic, Cartesian, Parameters>
+    struct eck6_spheroid : public detail::gn_sinu::base_gn_sinu_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline eck6_spheroid(const Parameters& par) : impl::gn_sinu::base_gn_sinu_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline eck6_spheroid(const Parameters& par) : detail::gn_sinu::base_gn_sinu_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::gn_sinu::setup_eck6(this->m_par, this->m_proj_parm);
+            detail::gn_sinu::setup_eck6(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -304,21 +304,21 @@ namespace ggl { namespace projection
         \image html ex_mbtfps.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct mbtfps_spheroid : public impl::gn_sinu::base_gn_sinu_spheroid<Geographic, Cartesian, Parameters>
+    struct mbtfps_spheroid : public detail::gn_sinu::base_gn_sinu_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline mbtfps_spheroid(const Parameters& par) : impl::gn_sinu::base_gn_sinu_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline mbtfps_spheroid(const Parameters& par) : detail::gn_sinu::base_gn_sinu_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::gn_sinu::setup_mbtfps(this->m_par, this->m_proj_parm);
+            detail::gn_sinu::setup_mbtfps(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class gn_sinu_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class gn_sinu_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -328,7 +328,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class sinu_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class sinu_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -341,7 +341,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class eck6_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class eck6_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -351,7 +351,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class mbtfps_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class mbtfps_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -361,7 +361,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void gn_sinu_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void gn_sinu_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("gn_sinu", new gn_sinu_entry<Geographic, Cartesian, Parameters>);
             factory.add_to_factory("sinu", new sinu_entry<Geographic, Cartesian, Parameters>);
@@ -369,7 +369,7 @@ namespace ggl { namespace projection
             factory.add_to_factory("mbtfps", new mbtfps_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

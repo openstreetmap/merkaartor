@@ -37,7 +37,7 @@
 
 #include <ggl/projections/impl/projects.hpp>
 
-namespace ggl { namespace projection { namespace impl {
+namespace ggl { namespace projection { namespace detail {
 
 /* Field 2 that contains the multiplier to convert named units to meters
 ** may be expressed by either a simple floating point constant or a

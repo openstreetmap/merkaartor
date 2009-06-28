@@ -45,8 +45,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace lcca{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace lcca{ 
             static const int MAX_ITER = 10;
             static const double DEL_TOL = 1e-12;
 
@@ -135,7 +135,7 @@ namespace ggl { namespace projection
                 // par.fwd = e_forward;
             }
 
-        }} // namespace impl::lcca
+        }} // namespace detail::lcca
     #endif // doxygen 
 
     /*!
@@ -153,21 +153,21 @@ namespace ggl { namespace projection
         \image html ex_lcca.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct lcca_ellipsoid : public impl::lcca::base_lcca_ellipsoid<Geographic, Cartesian, Parameters>
+    struct lcca_ellipsoid : public detail::lcca::base_lcca_ellipsoid<Geographic, Cartesian, Parameters>
     {
-        inline lcca_ellipsoid(const Parameters& par) : impl::lcca::base_lcca_ellipsoid<Geographic, Cartesian, Parameters>(par)
+        inline lcca_ellipsoid(const Parameters& par) : detail::lcca::base_lcca_ellipsoid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::lcca::setup_lcca(this->m_par, this->m_proj_parm);
+            detail::lcca::setup_lcca(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class lcca_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class lcca_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -177,12 +177,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void lcca_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void lcca_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("lcca", new lcca_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

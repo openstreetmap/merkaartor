@@ -57,25 +57,32 @@ public:
     }
 };
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace centroid {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace centroid {
 
 /*!
     \brief Generic function which checks if enough points are present
 */
 template<typename P, typename R>
-inline bool ring_ok(const R& ring, P& c)
+inline bool ring_ok(R const& ring, P& c)
 {
     std::size_t const n = boost::size(ring);
-    if (n == 1)
+    if (n > 1)
+    {
+        return true;
+    }
+    else if (n <= 0)
+    {
+#if defined(CENTROID_WITH_CATCH)
+        throw centroid_exception();
+#endif
+        return false;
+    }
+    else // if (n == 1)
     {
         // Take over the first point in a "coordinate neutral way"
         copy_coordinates(ring.front(), c);
         return false;
-    }
-    else if (n <= 0)
-    {
-        throw centroid_exception();
     }
     return true;
 }
@@ -83,106 +90,95 @@ inline bool ring_ok(const R& ring, P& c)
 /*!
     \brief Calculate the centroid of a ring.
 */
-template<typename P, typename R, typename S>
-inline void centroid_ring(const R& ring, P& c, const S& strategy)
+template<typename Ring, typename Point, typename Strategy>
+struct centroid_ring
 {
-    if (ring_ok(ring, c))
+    static inline void apply(Ring const& ring, Point& c, Strategy const& strategy)
     {
-        typename S::state_type state;
-        loop(ring, strategy, state);
-        state.centroid(c);
+        if (ring_ok(ring, c))
+        {
+            typename Strategy::state_type state;
+            loop(ring, strategy, state);
+            state.centroid(c);
+        }
     }
-}
+};
+
 
 /*!
     \brief Centroid of a polygon.
     \note Because outer ring is clockwise, inners are counter clockwise,
     triangle approach is OK and works for polygons with rings.
 */
-template<typename P, typename Y, typename S>
-inline void centroid_polygon(const Y& poly, P& c, const S& strategy)
+template<typename Polygon, typename Point, typename Strategy>
+struct centroid_polygon
 {
-    if (ring_ok(exterior_ring(poly), c))
+    static inline void apply(Polygon const& poly, Point& c, Strategy const& strategy)
     {
-        typename S::state_type state;
-        loop(exterior_ring(poly), strategy, state);
- 
-        typedef typename boost::range_const_iterator
-            <
-            typename interior_type<Y>::type
-            >::type iterator_type;
-
-        for (iterator_type it = boost::begin(interior_rings(poly));
-             it != boost::end(interior_rings(poly)); ++it)
+        if (ring_ok(exterior_ring(poly), c))
         {
-            loop(*it, strategy, state);
+            typename Strategy::state_type state;
+
+            loop(exterior_ring(poly), strategy, state);
+
+            typedef typename boost::range_const_iterator
+                <
+                    typename interior_type<Polygon>::type
+                >::type iterator_type;
+
+            for (iterator_type it = boost::begin(interior_rings(poly));
+                 it != boost::end(interior_rings(poly));
+                 ++it)
+            {
+                loop(*it, strategy, state);
+            }
+            state.centroid(c);
         }
-        state.centroid(c);
     }
-}
+};
 
 /*!
     \brief Calculate centroid (==center) of a box
     \todo Implement strategy
 */
-template<typename P, typename B>
-inline void centroid_box(const B& box, P& c)
+template<typename Box, typename Point, typename Strategy>
+struct centroid_box
 {
-    // TODO: adapt using strategies
-    assert_dimension<B, 2>();
-    set<0>(c, (get<min_corner, 0>(box) + get<max_corner, 0>(box)) / 2);
-    set<1>(c, (get<min_corner, 1>(box) + get<max_corner, 1>(box)) / 2);
-}
+    static inline void apply(Box const& box, Point& c, Strategy const&)
+    {
+        // TODO: adapt using strategies
+        assert_dimension<Box, 2>();
+        set<0>(c, (get<min_corner, 0>(box) + get<max_corner, 0>(box)) / 2);
+        set<1>(c, (get<min_corner, 1>(box) + get<max_corner, 1>(box)) / 2);
+    }
+};
 
-}} // namespace impl::centroid
-#endif // DOXYGEN_NO_IMPL
+}} // namespace detail::centroid
+#endif // DOXYGEN_NO_DETAIL
+
 
 #ifndef DOXYGEN_NO_DISPATCH
 namespace dispatch
 {
 
-template <typename Tag, typename G, typename P>
+template <typename Tag, typename Geometry, typename Point, typename Strategy>
 struct centroid {};
 
-template <typename B, typename P>
-struct centroid<box_tag, B, P>
-{
-    inline static void calculate(const B& b, P& c)
-    {
-        impl::centroid::centroid_box<P>(b, c);
-    }
-};
+template <typename Box, typename Point, typename Strategy>
+struct centroid<box_tag, Box, Point, Strategy>
+    : detail::centroid::centroid_box<Box, Point, Strategy>
+{};
 
-template <typename R, typename P>
-struct centroid<ring_tag, R, P>
-{
+template <typename Ring, typename Point, typename Strategy>
+struct centroid<ring_tag, Ring, Point, Strategy>
+    : detail::centroid::centroid_ring<Ring, Point, Strategy>
+{};
 
-    inline static void calculate(const R& ring, P& c)
-    {
-        impl::centroid::centroid_ring(ring, c,
-            typename strategy_centroid<typename cs_tag<P>::type,
-            P,
-            typename boost::range_value<R>::type>::type());
-    }
-};
+template <typename Polygon, typename Point, typename Strategy>
+struct centroid<polygon_tag, Polygon, Point, Strategy>
+    : detail::centroid::centroid_polygon<Polygon, Point, Strategy>
 
-template <typename Y, typename P>
-struct centroid<polygon_tag, Y, P>
-{
-    inline static void calculate(const Y& poly, P& c)
-    {
-        impl::centroid::centroid_polygon(poly, c,
-            typename strategy_centroid<typename cs_tag<P>::type,
-            P,
-            typename point_type<Y>::type>::type());
-    }
-
-    template<typename S>
-    inline static void calculate(const Y& poly, P& c, const S& strategy)
-    {
-        impl::centroid::centroid_polygon(poly, c, strategy);
-    }
-};
+{};
 
 } // namespace dispatch
 #endif // DOXYGEN_NO_DISPATCH
@@ -207,7 +203,21 @@ struct centroid<polygon_tag, Y, P>
 template<typename G, typename P>
 inline void centroid(const G& geometry, P& c)
 {
-    dispatch::centroid<typename tag<G>::type, G, P>::calculate(geometry, c);
+    typedef typename point_type<G>::type point_type;
+    typedef typename strategy_centroid
+        <
+            typename cs_tag<point_type>::type,
+            P,
+            point_type
+        >::type strategy_type;
+
+    dispatch::centroid
+        <
+            typename tag<G>::type,
+            G,
+            P,
+            strategy_type
+        >::apply(geometry, c, strategy_type());
 }
 
 /*!
@@ -219,9 +229,15 @@ inline void centroid(const G& geometry, P& c)
     \exception centroid_exception if calculation is not successful, e.g. because polygon didn't contain points
  */
 template<typename G, typename P, typename S>
-inline void centroid(const G& geometry, P& c, const S& strategy)
+inline void centroid(const G& geometry, P& c, S const& strategy)
 {
-    dispatch::centroid<typename tag<G>::type, G, P>::calculate(geometry, c, strategy);
+    dispatch::centroid
+        <
+            typename tag<G>::type,
+            G,
+            P,
+            S
+        >::apply(geometry, c, strategy);
 }
 
 // Versions returning a centroid
@@ -237,7 +253,7 @@ template<typename P, typename G>
 inline P make_centroid(const G& geometry)
 {
     P c;
-    dispatch::centroid<typename tag<G>::type, G, P>::calculate(geometry, c);
+    centroid(geometry, c);
     return c;
 }
 
@@ -250,10 +266,10 @@ inline P make_centroid(const G& geometry)
     \exception centroid_exception if calculation is not successful, e.g. because polygon didn't contain points
  */
 template<typename P, typename G, typename S>
-inline P make_centroid(const G& geometry, const S& strategy)
+inline P make_centroid(const G& geometry, S const& strategy)
 {
     P c;
-    dispatch::centroid<typename tag<G>::type, G, P>::calculate(geometry, c, strategy);
+    centroid(geometry, c, strategy);
     return c;
 }
 

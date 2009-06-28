@@ -76,9 +76,9 @@ private :
 
 
 
-#ifndef DOXYGEN_NO_IMPL
+#ifndef DOXYGEN_NO_DETAIL
 // (wkt: Well Known Text, defined by OGC for all geometries and implemented by e.g. databases (MySQL, PostGIS))
-namespace impl { namespace wkt {
+namespace detail { namespace wkt {
 
 typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
 
@@ -481,8 +481,8 @@ struct box_parser
 
 
 
-}} // namespace impl::wkt
-#endif // DOXYGEN_NO_IMPL
+}} // namespace detail::wkt
+#endif // DOXYGEN_NO_DETAIL
 
 #ifndef DOXYGEN_NO_DISPATCH
 namespace dispatch
@@ -494,11 +494,11 @@ struct read_wkt {};
 
 template <typename Point>
 struct read_wkt<point_tag, Point>
-    : impl::wkt::geometry_parser
+    : detail::wkt::geometry_parser
         <
             Point,
-            impl::wkt::point_parser,
-            impl::wkt::prefix_point
+            detail::wkt::point_parser,
+            detail::wkt::prefix_point
         >
 {
 private :
@@ -508,31 +508,31 @@ private :
 
 template <typename L>
 struct read_wkt<linestring_tag, L>
-    : impl::wkt::geometry_parser
+    : detail::wkt::geometry_parser
         <
             L,
-            impl::wkt::linestring_parser,
-            impl::wkt::prefix_linestring
+            detail::wkt::linestring_parser,
+            detail::wkt::prefix_linestring
         >
 {};
 
 template <typename Ring>
 struct read_wkt<ring_tag, Ring>
-    : impl::wkt::geometry_parser
+    : detail::wkt::geometry_parser
         <
             Ring,
-            impl::wkt::ring_parser,
-            impl::wkt::prefix_polygon
+            detail::wkt::ring_parser,
+            detail::wkt::prefix_polygon
         >
 {};
 
 template <typename Geometry>
 struct read_wkt<polygon_tag, Geometry>
-    : impl::wkt::geometry_parser
+    : detail::wkt::geometry_parser
         <
             Geometry,
-            impl::wkt::polygon_parser,
-            impl::wkt::prefix_polygon
+            detail::wkt::polygon_parser,
+            detail::wkt::prefix_polygon
         >
 {};
 
@@ -540,7 +540,7 @@ struct read_wkt<polygon_tag, Geometry>
 // Box (Non-OGC)
 template <typename Box>
 struct read_wkt<box_tag, Box>
-    : impl::wkt::box_parser<Box>
+    : detail::wkt::box_parser<Box>
 {};
 
 
@@ -601,11 +601,11 @@ inline void read_wkt(std::string const& wkt, Out out)
     // any coordinate string is parsed and outputted
     std::string const& tag = "linestring";
 
-    impl::wkt::tokenizer tokens(wkt, boost::char_separator<char>(" ", ",()"));
-    impl::wkt::tokenizer::iterator it;
-    if (impl::wkt::initialize<P>(tokens, tag, wkt, it))
+    detail::wkt::tokenizer tokens(wkt, boost::char_separator<char>(" ", ",()"));
+    detail::wkt::tokenizer::iterator it;
+    if (detail::wkt::initialize<P>(tokens, tag, wkt, it))
     {
-        impl::wkt::container_inserter<P>::apply(it, tokens.end(), wkt, out);
+        detail::wkt::container_inserter<P>::apply(it, tokens.end(), wkt, out);
     }
 }
 

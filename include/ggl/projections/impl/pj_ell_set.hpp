@@ -41,7 +41,7 @@
 #include <ggl/projections/impl/pj_ellps.hpp>
 #include <ggl/projections/impl/pj_param.hpp>
 
-namespace ggl { namespace projection { namespace impl {
+namespace ggl { namespace projection { namespace detail {
 
 /* set ellipsoid parameters a and es */
 static const double SIXTH =  .1666666666666666667; /* 1/6 */

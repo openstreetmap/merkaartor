@@ -17,8 +17,8 @@
 
 namespace ggl { namespace projection {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail
 {
 
 // Base-virtual-forward
@@ -35,7 +35,7 @@ public:
     base_v_f(const P& params) : m_proj(params) {}
 
     virtual P params() const {return m_proj.params();}
-    
+
     virtual bool forward(const LL& ll, XY& xy) const
     {
         return m_proj.forward(ll, xy);
@@ -51,7 +51,7 @@ public:
         boost::ignore_unused_variable_warning(xy);
         boost::ignore_unused_variable_warning(ll);
 
-		// exception?
+        // exception?
         return false;
     }
     virtual void inv(XY_T& xy_x, XY_T& xy_y, LL_T& lp_lon, LL_T& lp_lat) const
@@ -97,8 +97,8 @@ public :
     }
 };
 
-} // namespace impl
-#endif // DOXYGEN_NO_IMPL
+} // namespace detail
+#endif // DOXYGEN_NO_DETAIL
 
 }} // namespace ggl::projection
 

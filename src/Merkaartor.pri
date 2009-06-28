@@ -1,5 +1,8 @@
 # FORCE_CUSTOM_STYLE=1 - force custom style (recommended on Linux until the "expanding dock" is solved upstream)
 # Header files
+
+include (Docks/Docks.pri)
+
 HEADERS += ./Command/Command.h \
     ./Command/DocumentCommands.h \
     ./Command/FeatureCommands.h \
@@ -18,7 +21,6 @@ HEADERS += ./Command/Command.h \
     ./Interaction/MoveTrackPointInteraction.h \
     ./Interaction/RotateInteraction.h \
     ./Interaction/ZoomInteraction.h \
-    ./LayerDock.h \
     ./LayerWidget.h \
     ./IProgressWindow.h \
     ./MainWindow.h \
@@ -47,8 +49,6 @@ HEADERS += ./Command/Command.h \
     ./PaintStyle/PaintStyle.h \
     ./PaintStyle/PaintStyleEditor.h \
     ./PaintStyle/TagSelector.h \
-    ./PropertiesDock.h \
-    ./InfoDock.h \
     ./Sync/DirtyList.h \
     ./Sync/SyncOSM.h \
     ./TagModel.h \
@@ -68,11 +68,8 @@ HEADERS += ./Command/Command.h \
     ./Utils/PixmapWidget.h \
     ./Utils/SelectionDialog.h \
     ./Utils/SvgCache.h \
-    ./Utils/MDockAncestor.h \
     ./Utils/MDiscardableDialog.h \
-    ./DirtyDock.h \
     ./GotoDialog.h \
-    StyleDock.h \
     ../include/ggl/projections/impl/geocent.h \
     ../interfaces/IMapAdapter.h \
     Utils/SortAccordingToRenderingPriority.h
@@ -122,10 +119,7 @@ SOURCES += ./Command/Command.cpp \
     ./Sync/SyncOSM.cpp \
     ./Main.cpp \
     ./MainWindow.cpp \
-    ./PropertiesDock.cpp \
-    ./InfoDock.cpp \
     ./TagModel.cpp \
-    ./LayerDock.cpp \
     ./LayerWidget.cpp \
     ./Utils/ShortcutOverrideFilter.cpp \
     ./Utils/SlippyMapWidget.cpp \
@@ -134,7 +128,6 @@ SOURCES += ./Command/Command.cpp \
     ./Utils/PixmapWidget.cpp \
     ./Utils/SelectionDialog.cpp \
     ./Utils/SvgCache.cpp \
-    ./Utils/MDockAncestor.cpp \
     ./Utils/MDiscardableDialog.cpp \
     ./Preferences/MerkaartorPreferences.cpp \
     ./Preferences/PreferencesDialog.cpp \
@@ -144,9 +137,7 @@ SOURCES += ./Command/Command.cpp \
     ./Preferences/WmsServersList.cpp \
     ./Preferences/TmsServersList.cpp \
     ./Preferences/BookmarksList.cpp \
-    ./DirtyDock.cpp \
     ./GotoDialog.cpp \
-    StyleDock.cpp \
     ../include/ggl/projections/impl/geocent.c
 
 # Forms
@@ -168,9 +159,7 @@ FORMS += ./AboutDialog.ui \
     ./Preferences/TMSPreferencesDialog.ui \
     ./Utils/PictureViewerDialog.ui \
     ./Utils/SelectionDialog.ui \
-    ./DirtyDock.ui \
     ./ExportDialog.ui \
-    StyleDock.ui
 
 # Resource file(s)
 RESOURCES += ../Icons/AllIcons.qrc \

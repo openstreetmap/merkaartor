@@ -838,6 +838,11 @@ int MerkaartorPreferences::getHoverWidth() const
 	return Sets->value("visual/HoverWidth",1).toInt();
 }
 
+int MerkaartorPreferences::getHighlightWidth() const
+{
+	return Sets->value("visual/HighlightWidth",1).toInt();
+}
+
 int MerkaartorPreferences::getFocusWidth() const
 {
 	return Sets->value("visual/FocusWidth",3).toInt();
@@ -904,6 +909,14 @@ QColor MerkaartorPreferences::getHoverColor() const
 	return Sets->value("visual/HoverColor").value<QColor>();
 }
 
+QColor MerkaartorPreferences::getHighlightColor() const
+{
+	QString sColor = Sets->value("visual/HighlightColor").toString();
+	if (sColor.isEmpty())
+		return Qt::darkCyan;
+	return Sets->value("visual/HighlightColor").value<QColor>();
+}
+
 QColor MerkaartorPreferences::getRelationsColor() const
 {
 	QString sColor = Sets->value("visual/RelationsColor").toString();
@@ -916,6 +929,12 @@ void MerkaartorPreferences::setHoverColor(const QColor theValue, int Width)
 {
 	Sets->setValue("visual/HoverColor", QVariant(theValue));
 	Sets->setValue("visual/HoverWidth", Width);
+}
+
+void MerkaartorPreferences::setHighlightColor(const QColor theValue, int Width)
+{
+	Sets->setValue("visual/HighlightColor", QVariant(theValue));
+	Sets->setValue("visual/HighlightWidth", Width);
 }
 
 void MerkaartorPreferences::setFocusColor(const QColor theValue, int Width)
@@ -1275,6 +1294,9 @@ M_PARAM_IMPLEMENT_STRING(ProxyPassword, proxy, "")
 
 /* Track */
 M_PARAM_IMPLEMENT_BOOL(ReadonlyTracksDefault, data, false)
+
+/* FeaturesDock */
+M_PARAM_IMPLEMENT_BOOL(FeaturesWithin, FeaturesDock, true)
 
 /* Projections */
 void MerkaartorPreferences::loadProjection(QString fn)

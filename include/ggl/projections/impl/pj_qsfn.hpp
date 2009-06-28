@@ -35,7 +35,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-namespace ggl { namespace projection { namespace impl {
+namespace ggl { namespace projection { namespace detail {
 
 /* determine small q */
 inline double pj_qsfn(double sinphi, double e, double one_es)
@@ -49,6 +49,31 @@ inline double pj_qsfn(double sinphi, double e, double one_es)
            (.5 / e) * log ((1. - con) / (1. + con))));
     } else
         return (sinphi + sinphi);
+}
+
+
+#define MAX_C 9
+struct AUTHALIC
+{
+    double C[MAX_C], CP[MAX_C], CQ[MAX_C];
+};
+
+/**
+ * @brief determine authalic latitude
+ * @param[in] phi geographic latitude
+ * @param[in] a initialized structure pointer
+ * @return authalic latitude
+ */
+inline double proj_qsfn(double phi, const AUTHALIC& a)
+{
+    double s, s2, sum;
+    int i = MAX_C;
+
+    s = sin(phi);
+    s2 = s * s;
+    sum = a.CQ[MAX_C - 1];
+    while (--i) sum = a.CQ[i] + s2 * sum;
+    return(s * sum);
 }
 
 }}} // namespace ggl::projection::impl

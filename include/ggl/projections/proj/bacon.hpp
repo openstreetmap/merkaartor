@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace bacon{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace bacon{ 
             static const double HLFPI2 = 2.46740110027233965467;
             static const double EPS = 1e-10;
 
@@ -117,7 +117,7 @@ namespace ggl { namespace projection
                 // par.fwd = s_forward;
             }
 
-        }} // namespace impl::bacon
+        }} // namespace detail::bacon
     #endif // doxygen 
 
     /*!
@@ -134,11 +134,11 @@ namespace ggl { namespace projection
         \image html ex_apian.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct apian_spheroid : public impl::bacon::base_bacon_spheroid<Geographic, Cartesian, Parameters>
+    struct apian_spheroid : public detail::bacon::base_bacon_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline apian_spheroid(const Parameters& par) : impl::bacon::base_bacon_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline apian_spheroid(const Parameters& par) : detail::bacon::base_bacon_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::bacon::setup_apian(this->m_par, this->m_proj_parm);
+            detail::bacon::setup_apian(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -156,11 +156,11 @@ namespace ggl { namespace projection
         \image html ex_ortel.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct ortel_spheroid : public impl::bacon::base_bacon_spheroid<Geographic, Cartesian, Parameters>
+    struct ortel_spheroid : public detail::bacon::base_bacon_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline ortel_spheroid(const Parameters& par) : impl::bacon::base_bacon_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline ortel_spheroid(const Parameters& par) : detail::bacon::base_bacon_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::bacon::setup_ortel(this->m_par, this->m_proj_parm);
+            detail::bacon::setup_ortel(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -178,21 +178,21 @@ namespace ggl { namespace projection
         \image html ex_bacon.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct bacon_spheroid : public impl::bacon::base_bacon_spheroid<Geographic, Cartesian, Parameters>
+    struct bacon_spheroid : public detail::bacon::base_bacon_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline bacon_spheroid(const Parameters& par) : impl::bacon::base_bacon_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline bacon_spheroid(const Parameters& par) : detail::bacon::base_bacon_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::bacon::setup_bacon(this->m_par, this->m_proj_parm);
+            detail::bacon::setup_bacon(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class apian_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class apian_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -202,7 +202,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class ortel_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class ortel_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -212,7 +212,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class bacon_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class bacon_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -222,14 +222,14 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void bacon_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void bacon_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("apian", new apian_entry<Geographic, Cartesian, Parameters>);
             factory.add_to_factory("ortel", new ortel_entry<Geographic, Cartesian, Parameters>);
             factory.add_to_factory("bacon", new bacon_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

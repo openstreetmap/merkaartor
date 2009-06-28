@@ -30,7 +30,7 @@ namespace ggl
 */
 template <typename Iterator>
 struct ever_circling_iterator :
-    public impl::iterators::iterator_base
+    public detail::iterators::iterator_base
     <
         ever_circling_iterator<Iterator>,
         Iterator

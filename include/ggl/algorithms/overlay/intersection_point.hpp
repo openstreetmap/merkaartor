@@ -18,58 +18,14 @@
 #include <ggl/strategies/distance_result.hpp>
 #include <ggl/strategies/strategy_traits.hpp>
 
+#include <ggl/algorithms/overlay/segment_identifier.hpp>
+
+
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace intersection {
-
-
-// This is really an internal struct to uniquely identify a segment
-// on a linestring,ring,polygon (needs ring_index) or multi-* (needs multi_index)
-struct segment_identifier
-{
-    inline segment_identifier()
-        : source_index(-1)
-        , multi_index(-1)
-        , ring_index(-1)
-        , segment_index(-1)
-    {}
-
-    inline bool operator<(segment_identifier const& other) const
-    {
-        return source_index != other.source_index ? source_index < other.source_index
-            : multi_index !=other.multi_index ? multi_index < other.multi_index
-            : ring_index != other.ring_index ? ring_index < other.ring_index
-            : segment_index < other.segment_index
-            ;
-    }
-
-    inline bool operator==(segment_identifier const& other) const
-    {
-        return source_index == other.source_index
-            && segment_index == other.segment_index
-            && ring_index == other.ring_index
-            && multi_index == other.multi_index
-            ;
-    }
-
-    friend std::ostream& operator<<(std::ostream &os, segment_identifier const& seg_id)
-    {
-        std::cout
-            << "s:" << seg_id.source_index
-            << ", v:" << seg_id.segment_index // vertex
-            ;
-        if (seg_id.ring_index >= 0) std::cout << ", r:" << seg_id.ring_index;
-        if (seg_id.multi_index >= 0) std::cout << ", m:" << seg_id.multi_index;
-        return os;
-    }
-
-    int source_index;
-    int multi_index;
-    int ring_index;
-    int segment_index;
-};
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace intersection {
 
 
 template<typename P>
@@ -183,38 +139,53 @@ struct intersection_point
 
 
 
-}} // namespace impl::intersection
-#endif //DOXYGEN_NO_IMPL
+}} // namespace detail::intersection
+#endif //DOXYGEN_NO_DETAIL
 
 
+// Register the intersection point as being a point fulfilling the ggl Point Concept
 namespace traits
 {
-    template <typename P>
-    struct coordinate_type<ggl::impl::intersection::intersection_point<P> >
-    { typedef typename ggl::coordinate_type<P>::type type; };
 
     template <typename P>
-    struct coordinate_system<ggl::impl::intersection::intersection_point<P> >
-    { typedef typename ggl::coordinate_system<P>::type type; };
-
-    template <typename P>
-    struct dimension<ggl::impl::intersection::intersection_point<P> >
-        : ggl::dimension<P> {};
-
-    template <typename P>
-    struct tag<ggl::impl::intersection::intersection_point<P> >
-    { typedef point_tag type; };
-
-    template <typename P>
-    struct access<ggl::impl::intersection::intersection_point<P> >
+    struct coordinate_type<ggl::detail::intersection::intersection_point<P> >
     {
-        template <int I>
-        static inline typename coordinate_type<P>::type get(ggl::impl::intersection::intersection_point<P> const& p)
-        { return ggl::get<I>(p.point); }
+        typedef typename ggl::coordinate_type<P>::type type;
+    };
 
-        template <int I>
-        static inline void set(ggl::impl::intersection::intersection_point<P>& p, typename coordinate_type<P>::type const& value)
-        { ggl::set<I>(p.point, value); }
+    template <typename P>
+    struct coordinate_system<ggl::detail::intersection::intersection_point<P> >
+    {
+        typedef typename ggl::coordinate_system<P>::type type;
+    };
+
+    template <typename P>
+    struct dimension<ggl::detail::intersection::intersection_point<P> >
+        : ggl::dimension<P>
+    {};
+
+    template <typename P>
+    struct tag<ggl::detail::intersection::intersection_point<P> >
+    {
+        typedef point_tag type;
+    };
+
+    template <typename P>
+    struct access<ggl::detail::intersection::intersection_point<P> >
+    {
+        template <int Index>
+        static inline typename coordinate_type<P>::type get(
+                ggl::detail::intersection::intersection_point<P> const& p)
+        {
+            return ggl::get<Index>(p.point);
+        }
+
+        template <int Index>
+        static inline void set(ggl::detail::intersection::intersection_point<P>& p,
+                typename coordinate_type<P>::type const& value)
+        {
+            ggl::set<Index>(p.point, value);
+        }
     };
 
 }

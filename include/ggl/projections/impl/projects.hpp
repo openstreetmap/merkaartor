@@ -44,8 +44,8 @@
 namespace ggl { namespace projection
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail
 {
 
 /* some useful constants */
@@ -155,18 +155,18 @@ struct FACTORS
     int code;        /* info as to analytics, see following */
 };
 
-} // namespace impl
-#endif // DOXYGEN_NO_IMPL
+} // namespace detail
+#endif // DOXYGEN_NO_DETAIL
 
 /*!
     \brief parameters, projection parameters
     \details This structure initializes all projections
     \ingroup projection
 */
-struct parameters : public impl::pj_const_pod
+struct parameters : public detail::pj_const_pod
 {
     std::string name;
-    std::vector<impl::pvalue> params;
+    std::vector<detail::pvalue> params;
 };
 
 // TODO: derived from boost::exception / make more for forward/inverse/init/setup
@@ -174,10 +174,10 @@ class proj_exception
 {
 public:
 
-    proj_exception(int code = 0) 
-	{
+    proj_exception(int code = 0)
+    {
         boost::ignore_unused_variable_warning(code);
-	}
+    }
 };
 
 }} // namespace ggl::projection

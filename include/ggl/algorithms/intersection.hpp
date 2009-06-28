@@ -16,6 +16,7 @@
 #include <ggl/algorithms/overlay/enrich_intersection_points.hpp>
 #include <ggl/algorithms/overlay/traverse.hpp>
 
+#include <ggl/algorithms/assign.hpp>
 #include <ggl/algorithms/convert.hpp>
 #include <ggl/algorithms/within.hpp>
 
@@ -69,40 +70,9 @@ Example showing clipping of polygon with box
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_DISPATCH
-namespace dispatch
-{
 
-template
-<
-    typename Tag1, typename Tag2, typename Tag3,
-    typename G1, typename G2,
-    typename OutputIterator,
-    typename GeometryOut
->
-struct intersection {};
-
-
-template
-<
-    typename Linestring, typename Box,
-    typename OutputIterator, typename GeometryOut
->
-struct intersection
-    <
-        linestring_tag, box_tag, linestring_tag,
-        Linestring, Box,
-        OutputIterator, GeometryOut
-    >
-{
-    static inline OutputIterator apply(Linestring const& linestring,
-            Box const& box, OutputIterator out)
-    {
-        typedef typename point_type<GeometryOut>::type point_type;
-        strategy::intersection::liang_barsky<Box, point_type> strategy;
-        return impl::intersection::clip_linestring_with_box<GeometryOut>(box, linestring, out, strategy);
-    }
-};
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace intersection {
 
 
 template
@@ -110,17 +80,12 @@ template
     typename Polygon1, typename Polygon2,
     typename OutputIterator, typename GeometryOut
 >
-struct intersection
-    <
-        polygon_tag, polygon_tag, polygon_tag,
-        Polygon1, Polygon2,
-        OutputIterator, GeometryOut
-    >
+struct intersection_polygon_polygon
 {
     static inline OutputIterator apply(Polygon1 const& polygon1,
                 Polygon2 const& polygon2, OutputIterator out)
     {
-        typedef impl::intersection::intersection_point
+        typedef detail::intersection::intersection_point
             <
                 typename ggl::point_type<GeometryOut>::type
             > ip_type;
@@ -155,6 +120,7 @@ struct intersection
             {
                 ggl::merge_intersection_points(ips);
             }
+
             ggl::enrich_intersection_points(ips, non_trivial);
 
             std::vector<ring_type> v;
@@ -165,7 +131,6 @@ struct intersection
                     -1,
                     ips, std::back_inserter(v)
                 );
-
 
             // TODO:
             // assemble rings / inner rings / to polygons
@@ -189,9 +154,200 @@ struct intersection
 };
 
 
+
+
 template
 <
-    typename Box, typename Polygon,
+    typename Polygon, typename Box,
+    typename OutputIterator, typename GeometryOut
+>
+struct intersection_polygon_box
+{
+    static inline OutputIterator apply(Polygon const& polygon,
+                Box const& box, OutputIterator out)
+    {
+        typedef typename ggl::point_type<GeometryOut>::type point_type;
+        typedef detail::intersection::intersection_point<point_type> ip_type;
+        typedef std::deque<ip_type> ips_container;
+
+        typedef typename ggl::ring_type<GeometryOut>::type ring_type;
+
+        ips_container ips;
+
+        bool non_trivial = ggl::get_intersection_points(polygon, box, ips);
+
+        // TODO: share this all with polygon_polygon using an "assemble" function!
+        // It is only different in the 'within' calls, can be sorted out with specialization
+
+
+        if (ips.size() <= 0)
+        {
+            // If there are no IP-s, check if one point is in other polygon
+            // assume both polygons having points
+            if (ggl::within(ggl::exterior_ring(polygon).front(), box))
+            {
+                // Assume same type (output = input)
+                // TODO: solve this (we go to specialize again...)
+                *out = polygon;
+                out++;
+            }
+            else
+            {
+                typename ggl::point_type<Box>::type p;
+                ggl::set<0>(p, ggl::get<min_corner, 0>(box));
+                ggl::set<1>(p, ggl::get<min_corner, 1>(box));
+                if (ggl::within(p, polygon))
+                {
+                    GeometryOut boxpoly;
+                    ggl::convert(box, boxpoly);
+                    *out = boxpoly;
+                    out++;
+                }
+            }
+        }
+        else
+        {
+            if (non_trivial)
+            {
+                ggl::merge_intersection_points(ips);
+            }
+
+            ggl::enrich_intersection_points(ips, non_trivial);
+
+            std::vector<ring_type> v;
+            ggl::traverse<ring_type>
+                (
+                    polygon,
+                    box,
+                    -1,
+                    ips, std::back_inserter(v)
+                );
+
+            // TODO:
+            // assemble rings / inner rings / to polygons
+            for (typename std::vector<ring_type>::const_iterator it = v.begin();
+                it != v.end(); ++it)
+            {
+                // How can we avoid the double copy here! It is really bad!
+                // We have to create a polygon, then copy it to the output iterator.
+                // Having an output-vector would have been better: append it to the vector!
+                // So output iterators are not that good.
+                GeometryOut poly;
+                poly.outer() = *it;
+                *out = poly;
+                out++;
+            }
+        }
+
+
+        return out;
+    }
+};
+
+
+}} // namespace detail::intersection
+#endif // DOXYGEN_NO_DETAIL
+
+
+
+
+
+#ifndef DOXYGEN_NO_DISPATCH
+namespace dispatch
+{
+
+template
+<
+    typename Tag1, typename Tag2, typename Tag3,
+    typename G1, typename G2,
+    typename OutputIterator,
+    typename GeometryOut
+>
+struct intersection {};
+
+
+template
+<
+    typename Segment1, typename Segment2,
+    typename OutputIterator, typename GeometryOut
+>
+struct intersection
+    <
+        segment_tag, segment_tag, point_tag,
+        Segment1, Segment2,
+        OutputIterator, GeometryOut
+    >
+{
+    static inline OutputIterator apply(Segment1 const& segment1,
+            Segment2 const& segment2, OutputIterator out)
+    {
+        typedef typename point_type<GeometryOut>::type point_type;
+
+        // Get the intersection point (or two points)
+        segment_intersection_points<point_type> is 
+            = strategy::intersection::relate_cartesian_segments
+            <
+                policies::relate::segments_intersection_points
+                    <
+                        Segment1, 
+                        Segment2, 
+                        segment_intersection_points<point_type> 
+                    > 
+            >::relate(segment1, segment2);
+        for (int i = 0; i < is.count; i++)
+        {
+            GeometryOut p;
+            ggl::copy_coordinates(is.intersections[i], p);
+            *out = p;
+            out++;
+        }
+        return out;
+    }
+};
+
+
+template
+<
+    typename Linestring, typename Box,
+    typename OutputIterator, typename GeometryOut
+>
+struct intersection
+    <
+        linestring_tag, box_tag, linestring_tag,
+        Linestring, Box,
+        OutputIterator, GeometryOut
+    >
+{
+    static inline OutputIterator apply(Linestring const& linestring,
+            Box const& box, OutputIterator out)
+    {
+        typedef typename point_type<GeometryOut>::type point_type;
+        strategy::intersection::liang_barsky<Box, point_type> strategy;
+        return detail::intersection::clip_linestring_with_box<GeometryOut>(box, linestring, out, strategy);
+    }
+};
+
+
+template
+<
+    typename Polygon1, typename Polygon2,
+    typename OutputIterator, typename GeometryOut
+>
+struct intersection
+    <
+        polygon_tag, polygon_tag, polygon_tag,
+        Polygon1, Polygon2,
+        OutputIterator, GeometryOut
+    >
+    : detail::intersection::intersection_polygon_polygon
+        <Polygon1, Polygon2, OutputIterator, GeometryOut>
+{};
+
+
+
+template
+<
+    typename Polygon, typename Box,
     typename OutputIterator, typename GeometryOut
 >
 struct intersection
@@ -200,20 +356,9 @@ struct intersection
     Polygon, Box,
     OutputIterator, GeometryOut
 >
-{
-    static inline OutputIterator apply(Polygon const& poly,
-                Box const& box, OutputIterator out)
-    {
-        GeometryOut as_polygon;
-        ggl::convert(box, as_polygon);
-        return intersection
-            <
-                polygon_tag, polygon_tag, polygon_tag,
-                Polygon, Polygon,
-                OutputIterator, GeometryOut
-            >::apply(poly, as_polygon, out);
-    }
-};
+    : detail::intersection::intersection_polygon_box
+        <Polygon, Box, OutputIterator, GeometryOut>
+{};
 
 
 

@@ -11,6 +11,7 @@
 #define GGL_GGL_INDEX_RTREE_HELPERS_HPP
 
 #include <ggl/algorithms/area.hpp>
+#include <ggl/algorithms/disjoint.hpp>
 #include <ggl/core/point_type.hpp>
 
 namespace ggl { namespace index { namespace rtree {
@@ -53,26 +54,13 @@ inline double compute_union_area(Box const& b1, Box const& b2)
 }
 
 /**
- * \brief Checks if boxes overlap
+ * \brief Checks if boxes intersects
  */
-// TODO: combine with ggl::overlaps but NOTE:
-// this definition is slightly different from GGL-definition
+// TODO: move to ggl::intersects
 template <typename Box>
 inline bool is_overlapping(Box const& b1, Box const& b2)
 {
-    if (ggl::get<min_corner, 0>(b1) > ggl::get<max_corner, 0>(b2))
-        return false;
-
-    if (ggl::get<max_corner, 0>(b1) < ggl::get<min_corner, 0>(b2))
-        return false;
-
-    if (ggl::get<min_corner, 1>(b1) > ggl::get<max_corner, 1>(b2))
-        return false;
-
-    if (ggl::get<max_corner, 1>(b1) < ggl::get<min_corner, 1>(b2))
-        return false;
-
-    return true;
+    return ! ggl::disjoint(b1, b2);
 }
 
 }}} // namespace ggl::index::rtree

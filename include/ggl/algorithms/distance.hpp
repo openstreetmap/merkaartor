@@ -56,8 +56,8 @@ Example showing distance calculation of two points, in xy and in latlong coordin
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace distance {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace distance {
 
 template <typename P1, typename P2, typename Strategy>
 struct point_to_point
@@ -139,8 +139,8 @@ struct point_to_linestring
 
 
 
-}} // namespace impl::distance
-#endif // DOXYGEN_NO_IMPL
+}} // namespace detail::distance
+#endif // DOXYGEN_NO_DETAIL
 
 
 #ifndef DOXYGEN_NO_DISPATCH
@@ -165,7 +165,7 @@ struct distance
     P1, P2,
     strategy_tag_distance_point_point, Strategy,
     false, false
-> : impl::distance::point_to_point<P1, P2, Strategy>
+> : detail::distance::point_to_point<P1, P2, Strategy>
 {};
 
 /// Point-line version 1, where point-point strategy is specified
@@ -191,7 +191,7 @@ struct distance
                             segment_type
                     >::type ps_strategy_type;
 
-        return impl::distance::point_to_linestring
+        return detail::distance::point_to_linestring
             <
                 P, L, Strategy, ps_strategy_type
             >::apply(point, linestring, strategy, ps_strategy_type());
@@ -213,7 +213,7 @@ struct distance
             Strategy const& strategy)
     {
         typedef typename Strategy::point_strategy_type pp_strategy_type;
-        return impl::distance::point_to_linestring
+        return detail::distance::point_to_linestring
             <
                 P, L, pp_strategy_type, Strategy
             >::apply(point, linestring, pp_strategy_type(), strategy);
@@ -228,7 +228,7 @@ struct distance
     P, Segment,
     strategy_tag_distance_point_point, Strategy,
     false, false
-> : impl::distance::point_to_segment<P, Segment, Strategy>
+> : detail::distance::point_to_segment<P, Segment, Strategy>
 {};
 
 

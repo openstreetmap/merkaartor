@@ -21,14 +21,14 @@
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace num_points {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace num_points {
 
 
-template <typename R>
+template <typename Range>
 struct range_count
 {
-    static inline std::size_t calculate(R const& range)
+    static inline std::size_t apply(Range const& range)
     {
         return boost::size(range);
     }
@@ -37,21 +37,21 @@ struct range_count
 template <typename Geometry, std::size_t D>
 struct other_count
 {
-    static inline std::size_t calculate(Geometry const& geometry)
+    static inline std::size_t apply(Geometry const& geometry)
     {
         return D;
     }
 };
 
-template <typename P>
+template <typename Polygon>
 struct polygon_count
 {
-    static inline std::size_t calculate(P const& poly)
+    static inline std::size_t apply(Polygon const& poly)
     {
         std::size_t n = boost::size(exterior_ring(poly));
         typedef typename boost::range_const_iterator
             <
-                typename interior_type<P>::type
+                typename interior_type<Polygon>::type
             >::type iterator;
 
         for (iterator it = boost::begin(interior_rings(poly));
@@ -65,8 +65,8 @@ struct polygon_count
     }
 };
 
-}} // namespace impl::num_points
-#endif // DOXYGEN_NO_IMPL
+}} // namespace detail::num_points
+#endif // DOXYGEN_NO_DETAIL
 
 
 #ifndef DOXYGEN_NO_DISPATCH
@@ -80,37 +80,37 @@ struct num_points
 
 template <typename GeometryTag, typename Geometry>
 struct num_points<GeometryTag, true, Geometry>
-        : impl::num_points::range_count<Geometry>
+        : detail::num_points::range_count<Geometry>
 {
 };
 
 template <typename Geometry>
 struct num_points<point_tag, false, Geometry>
-        : impl::num_points::other_count<Geometry, 1>
+        : detail::num_points::other_count<Geometry, 1>
 {
 };
 
 template <typename Geometry>
 struct num_points<box_tag, false, Geometry>
-        : impl::num_points::other_count<Geometry, 4>
+        : detail::num_points::other_count<Geometry, 4>
 {
 };
 
 template <typename Geometry>
 struct num_points<segment_tag, false, Geometry>
-        : impl::num_points::other_count<Geometry, 2>
+        : detail::num_points::other_count<Geometry, 2>
 {
 };
 
 template <typename Geometry>
 struct num_points<nsphere_tag, false, Geometry>
-        : impl::num_points::other_count<Geometry, 1>
+        : detail::num_points::other_count<Geometry, 1>
 {
 };
 
 template <typename Geometry>
 struct num_points<polygon_tag, false, Geometry>
-        : impl::num_points::polygon_count<Geometry>
+        : detail::num_points::polygon_count<Geometry>
 {
 };
 
@@ -138,7 +138,7 @@ inline std::size_t num_points(Geometry const& geometry)
             typename tag<Geometry>::type,
             is_linear<ncg_type>::value,
             ncg_type
-        >::calculate(geometry);
+        >::apply(geometry);
 }
 
 }

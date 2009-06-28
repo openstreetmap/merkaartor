@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace nell{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace nell{ 
             static const int MAX_ITER = 10;
             static const double LOOP_TOL = 1e-7;
 
@@ -100,7 +100,7 @@ namespace ggl { namespace projection
                 // par.fwd = s_forward;
             }
 
-        }} // namespace impl::nell
+        }} // namespace detail::nell
     #endif // doxygen 
 
     /*!
@@ -116,21 +116,21 @@ namespace ggl { namespace projection
         \image html ex_nell.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct nell_spheroid : public impl::nell::base_nell_spheroid<Geographic, Cartesian, Parameters>
+    struct nell_spheroid : public detail::nell::base_nell_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline nell_spheroid(const Parameters& par) : impl::nell::base_nell_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline nell_spheroid(const Parameters& par) : detail::nell::base_nell_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::nell::setup_nell(this->m_par);
+            detail::nell::setup_nell(this->m_par);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class nell_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class nell_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -140,12 +140,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void nell_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void nell_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("nell", new nell_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

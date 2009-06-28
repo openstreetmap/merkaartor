@@ -29,8 +29,8 @@
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace svg {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace svg {
 
 
 template <typename Point>
@@ -153,8 +153,8 @@ struct svg_poly
 
     private:
         BOOST_CONCEPT_ASSERT
-            ( 
-                (concept::ConstPoint<typename point_type<Polygon>::type>) 
+            (
+                (concept::ConstPoint<typename point_type<Polygon>::type>)
             );
 };
 
@@ -175,8 +175,8 @@ struct prefix_ring
 
 
 
-}} // namespace impl::svg
-#endif // DOXYGEN_NO_IMPL
+}} // namespace detail::svg
+#endif // DOXYGEN_NO_DETAIL
 
 
 #ifndef DOXYGEN_NO_DISPATCH
@@ -194,22 +194,22 @@ template <typename GeometryTag, typename Geometry>
 struct svg {};
 
 template <typename Point>
-struct svg<point_tag, Point> : impl::svg::svg_point<Point> {};
+struct svg<point_tag, Point> : detail::svg::svg_point<Point> {};
 
 template <typename Box>
-struct svg<box_tag, Box> : impl::svg::svg_box<Box> {};
+struct svg<box_tag, Box> : detail::svg::svg_box<Box> {};
 
 template <typename Linestring>
 struct svg<linestring_tag, Linestring>
-    : impl::svg::svg_range<Linestring, impl::svg::prefix_linestring> {};
+    : detail::svg::svg_range<Linestring, detail::svg::prefix_linestring> {};
 
 template <typename Ring>
 struct svg<ring_tag, Ring>
-    : impl::svg::svg_range<Ring, impl::svg::prefix_ring> {};
+    : detail::svg::svg_range<Ring, detail::svg::prefix_ring> {};
 
 template <typename Polygon>
 struct svg<polygon_tag, Polygon>
-    : impl::svg::svg_poly<Polygon> {};
+    : detail::svg::svg_poly<Polygon> {};
 
 } // namespace dispatch
 #endif // DOXYGEN_NO_DISPATCH

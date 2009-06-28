@@ -19,8 +19,8 @@
 
 namespace ggl { namespace projection
 {
-#ifndef DOXYGEN_NO_IMPL
-namespace impl
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail
 {
 
     inline std::string code_to_string(int code)
@@ -3552,13 +3552,13 @@ namespace impl
     }
 
 }
-#endif // DOXYGEN_NO_IMPL
+#endif // DOXYGEN_NO_DETAIL
 
 // Overloaded function
 inline parameters init(int epsg_code)
 {
-    std::string args = impl::code_to_string(epsg_code);
-    return impl::pj_init_plus(args, false);
+    std::string args = detail::code_to_string(epsg_code);
+    return detail::pj_init_plus(args, false);
 }
 
 }}

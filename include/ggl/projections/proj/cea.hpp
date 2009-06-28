@@ -46,8 +46,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace cea{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace cea{ 
             static const double EPS = 1e-10;
 
             struct par_cea
@@ -142,7 +142,7 @@ namespace ggl { namespace projection
             	}
             }
 
-        }} // namespace impl::cea
+        }} // namespace detail::cea
     #endif // doxygen 
 
     /*!
@@ -160,11 +160,11 @@ namespace ggl { namespace projection
         \image html ex_cea.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct cea_ellipsoid : public impl::cea::base_cea_ellipsoid<Geographic, Cartesian, Parameters>
+    struct cea_ellipsoid : public detail::cea::base_cea_ellipsoid<Geographic, Cartesian, Parameters>
     {
-        inline cea_ellipsoid(const Parameters& par) : impl::cea::base_cea_ellipsoid<Geographic, Cartesian, Parameters>(par)
+        inline cea_ellipsoid(const Parameters& par) : detail::cea::base_cea_ellipsoid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::cea::setup_cea(this->m_par, this->m_proj_parm);
+            detail::cea::setup_cea(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -183,21 +183,21 @@ namespace ggl { namespace projection
         \image html ex_cea.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct cea_spheroid : public impl::cea::base_cea_spheroid<Geographic, Cartesian, Parameters>
+    struct cea_spheroid : public detail::cea::base_cea_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline cea_spheroid(const Parameters& par) : impl::cea::base_cea_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline cea_spheroid(const Parameters& par) : detail::cea::base_cea_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::cea::setup_cea(this->m_par, this->m_proj_parm);
+            detail::cea::setup_cea(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class cea_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class cea_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -210,12 +210,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void cea_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void cea_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("cea", new cea_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

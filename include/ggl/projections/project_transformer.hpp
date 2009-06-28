@@ -46,7 +46,7 @@ struct project_transformer
     {
         // Latlong (LatLong -> Cartesian) will be projected, rest will be copied.
         // So first copy third or higher dimensions
-        ggl::impl::copy::copy_coordinates<LatLong, Cartesian, 2,
+        ggl::detail::copy::copy_coordinates<LatLong, Cartesian, 2,
                 ggl::dimension<Cartesian>::value> ::copy(p1, p2);
         return m_prj->forward(p1, p2);
     }

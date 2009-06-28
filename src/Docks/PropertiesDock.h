@@ -8,7 +8,7 @@
 
 #include <QList>
 
-#include "Utils/MDockAncestor.h"
+#include "MDockAncestor.h"
 #include "Utils/ShortcutOverrideFilter.h"
 
 class MainWindow;

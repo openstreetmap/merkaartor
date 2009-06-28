@@ -5,7 +5,7 @@ namespace ggl
 {
 namespace projection
 {
-	namespace impl
+	namespace detail
 	{
 
 		#include <ggl/projections/parameters.hpp>

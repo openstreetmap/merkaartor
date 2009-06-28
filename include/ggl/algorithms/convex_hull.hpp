@@ -37,13 +37,13 @@ In the images below the convex hull is painted in red.
 */
 namespace ggl {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace convex_hull {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace convex_hull {
 
 template <typename Geometry, typename OutputIterator>
 struct hull
 {
-    static inline OutputIterator calculate(const Geometry& geometry,
+    static inline OutputIterator apply(Geometry const& geometry,
             OutputIterator out)
     {
         typedef typename point_type<Geometry>::type point_type;
@@ -61,8 +61,8 @@ struct hull
 };
 
 
-}} // namespace impl::convex_hull
-#endif // DOXYGEN_NO_IMPL
+}} // namespace detail::convex_hull
+#endif // DOXYGEN_NO_DETAIL
 
 #ifndef DOXYGEN_NO_DISPATCH
 namespace dispatch
@@ -73,15 +73,15 @@ struct convex_hull {};
 
 template <typename Linestring, typename OutputIterator>
 struct convex_hull<linestring_tag, Linestring, OutputIterator>
-    : impl::convex_hull::hull<Linestring, OutputIterator> {};
+    : detail::convex_hull::hull<Linestring, OutputIterator> {};
 
 template <typename Ring, typename OutputIterator>
 struct convex_hull<ring_tag, Ring, OutputIterator>
-    : impl::convex_hull::hull<Ring, OutputIterator> {};
+    : detail::convex_hull::hull<Ring, OutputIterator> {};
 
 template <typename Polygon, typename OutputIterator>
 struct convex_hull<polygon_tag, Polygon, OutputIterator>
-    : impl::convex_hull::hull<Polygon, OutputIterator> {};
+    : detail::convex_hull::hull<Polygon, OutputIterator> {};
 
 } // namespace dispatch
 #endif // DOXYGEN_NO_DISPATCH
@@ -94,14 +94,14 @@ struct convex_hull<polygon_tag, Polygon, OutputIterator>
     \return the output iterator
  */
 template<typename Geometry, typename OutputIterator>
-inline OutputIterator convex_hull(const Geometry& geometry, OutputIterator out)
+inline OutputIterator convex_hull(Geometry const& geometry, OutputIterator out)
 {
     return dispatch::convex_hull
         <
-        typename tag<Geometry>::type,
-        Geometry,
-        OutputIterator
-        >::calculate(geometry, out);
+            typename tag<Geometry>::type,
+            Geometry,
+            OutputIterator
+        >::apply(geometry, out);
 }
 
 } // namespace ggl

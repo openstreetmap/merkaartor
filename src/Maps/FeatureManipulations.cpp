@@ -16,7 +16,8 @@
 
 #ifndef _MOBILE
 #include <ggl/ggl.hpp>
-#include <ggl/algorithms/intersection_segment.hpp>
+#include <ggl/geometries/cartesian2d.hpp>
+#include <ggl/algorithms/intersection.hpp>
 #endif
 
 bool canJoin(Road* R1, Road* R2)
@@ -324,11 +325,12 @@ bool canCreateJunction(PropertiesDock* theDock)
 	return createJunction(NULL, NULL, theDock, false);
 }
 
-bool createJunction(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock, bool doIt)
+int createJunction(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock, bool doIt)
 {
+	int numInter = 0;
+
 	//TODO test that the junction do not already exists!
-	typedef ggl::point_xy<float> P;
-	bool ret = false;
+	typedef ggl::point_2d P;
 
 	QList<Road*> Roads, Result;
 	for (int i=0; i<theDock->size(); ++i)
@@ -336,7 +338,7 @@ bool createJunction(MapDocument* theDocument, CommandList* theList, PropertiesDo
 			Roads.push_back(R);
 
 	if (Roads.size() < 2)
-		return false;
+		return 0;
 
 	Road* R1 = Roads[0];
 	Road* R2 = Roads[1];
@@ -351,27 +353,53 @@ bool createJunction(MapDocument* theDocument, CommandList* theList, PropertiesDo
 			P d(R2->getNode(j+1)->position().lon(), R2->getNode(j+1)->position().lat());
 			ggl::segment<P> s2(c, d);
 
-			QList<P> theintersections;
-			theintersections.append(P(0, 0));
-			theintersections.append(P(0, 0));
-			QList<P>::Iterator intersectOS = theintersections.begin();
+			std::vector<ggl::point_2d> intersected;
+//			ggl::intersection < ggl::point_2d, ggl::segment, ggl::segment, std::back_insert_iterator< std::vector<ggl::point_2d> > >
+//				(s1, s2, std::back_inserter(intersected));
+			ggl::intersection<ggl::point_2d>(s1, s2, std::back_inserter(intersected));
 
-			ggl::intersection_result r = ggl::intersection_segment<P>(s1, s2, intersectOS);
-			if (r.is_type == ggl::is_intersect)
-				if (r.get_connection_type() == ggl::is_connect_no) {
-					ret = true;
-					if (doIt) {
-						TrackPoint* pt = new TrackPoint(Coord(qRound(theintersections[0].y()), qRound(theintersections[0].x())));
-						theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(R1->layer()),pt,true));
-						theList->add(new RoadAddTrackPointCommand(R1,pt,i+1,theDocument->getDirtyOrOriginLayer(R1->layer())));
-						theList->add(new RoadAddTrackPointCommand(R2,pt,j+1,theDocument->getDirtyOrOriginLayer(R2->layer())));
-						++i; ++j;
-					} else
-						return true;
+			if (intersected.size()) {
+				numInter++;
+				if (doIt) {
+					TrackPoint* pt = new TrackPoint(Coord(qRound(intersected[0].y()), qRound(intersected[0].x())));
+					theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(R1->layer()),pt,true));
+					theList->add(new RoadAddTrackPointCommand(R1,pt,i+1,theDocument->getDirtyOrOriginLayer(R1->layer())));
+					theList->add(new RoadAddTrackPointCommand(R2,pt,j+1,theDocument->getDirtyOrOriginLayer(R2->layer())));
 				}
+				++i; ++j;
+			}
 		}
 	}
-	return ret;
+
+	return numInter;
+
+
+//	QList<Road*> Roads, Result;
+//	for (int i=0; i<theDock->size(); ++i)
+//		if (Road* R = dynamic_cast<Road*>(theDock->selection(i)))
+//			Roads.push_back(R);
+//
+//	if (Roads.size() < 2)
+//		return false;
+//
+//	Road* R1 = Roads[0];
+//	Road* R2 = Roads[1];
+//
+//	std::vector<ggl::point_2d> intersected;
+//	ggl::intersection <std::vector<ggl::point_2d>, std::vector<TrackPointPtr>, std::vector<TrackPointPtr>, std::back_insert_iterator <std::vector<ggl::point_2d> > >
+//			(R1->getNodes(), R2->getNodes(), std::back_inserter(intersected));
+//
+//	if (!doIt)
+//		return intersected.size();
+//
+//	for (int i=0; i<intersected.size()-1; ++i) {
+//		TrackPoint* pt = new TrackPoint(Coord(qRound(intersected[i].y()), qRound(intersected[i].x())));
+//		theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(R1->layer()),pt,true));
+//		theList->add(new RoadAddTrackPointCommand(R1,pt,i+1,theDocument->getDirtyOrOriginLayer(R1->layer())));
+//		theList->add(new RoadAddTrackPointCommand(R2,pt,j+1,theDocument->getDirtyOrOriginLayer(R2->layer())));
+//	}
+//
+//	return intersected.size();
 }
 
 void alignNodes(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)

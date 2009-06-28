@@ -36,7 +36,7 @@
 // DEALINGS IN THE SOFTWARE.
 
 
-namespace ggl { namespace projection { namespace impl {
+namespace ggl { namespace projection { namespace detail {
 
 namespace phi2
 {

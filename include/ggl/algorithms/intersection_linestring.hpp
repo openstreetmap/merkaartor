@@ -135,8 +135,8 @@ public:
 }} // namespace strategy::intersection
 
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace intersection {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace intersection {
 
 // TODO: The comment below seems toneed update, isn't it? --mloskot
 
@@ -231,8 +231,8 @@ OutputIterator clip_linestring_with_box(Box const& b, Linestring const& linestri
     return out;
 }
 
-}} // namespace impl::intersection
-#endif // DOXYGEN_NO_IMPL
+}} // namespace detail::intersection
+#endif // DOXYGEN_NO_DETAIL
 
 } // namespace ggl
 

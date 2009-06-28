@@ -38,7 +38,7 @@
 #include <cassert>
 #include <cmath>
 
-namespace ggl { namespace projection { namespace impl {
+namespace ggl { namespace projection { namespace detail {
 
 static const double P00 = .33333333333333333333;
 static const double P01 = .17222222222222222222;

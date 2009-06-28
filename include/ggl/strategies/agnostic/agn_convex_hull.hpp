@@ -35,8 +35,8 @@ namespace ggl
 
 namespace strategy { namespace convex_hull {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail
 {
 
 template <typename Range, typename RangeIterator, typename Strategy>
@@ -73,8 +73,8 @@ static inline void sort(R& range)
     #endif
 }
 
-} // namespace impl
-#endif // DOXYGEN_NO_IMPL
+} // namespace detail
+#endif // DOXYGEN_NO_DETAIL
 
 
 // Completely reworked version from source at:
@@ -171,15 +171,15 @@ private:
         // Get min/max (in most cases left / right) points
         range_iterator left_it, right_it;
         typename strategy_compare<cs_tag, P, 0>::type comparing;
-        impl::get_extremes(range, left_it, right_it, comparing);
+        detail::get_extremes(range, left_it, right_it, comparing);
 
         // Bounding left/right points
         container lower_points, upper_points;
 
         assign_range(range, left_it, right_it, lower_points, upper_points);
 
-        impl::sort(lower_points);
-        impl::sort(upper_points);
+        detail::sort(lower_points);
+        detail::sort(upper_points);
 
         build_half_hull<1>(lower_points, m_lower_hull, *left_it, *right_it);
         build_half_hull<-1>(upper_points, m_upper_hull, *left_it, *right_it);

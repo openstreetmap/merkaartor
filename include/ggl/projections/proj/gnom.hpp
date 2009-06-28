@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace gnom{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace gnom{ 
             static const double EPS10 = 1.e-10;
             static const int N_POLE = 0;
             static const int S_POLE = 1;
@@ -173,7 +173,7 @@ namespace ggl { namespace projection
             	par.es = 0.;
             }
 
-        }} // namespace impl::gnom
+        }} // namespace detail::gnom
     #endif // doxygen 
 
     /*!
@@ -189,21 +189,21 @@ namespace ggl { namespace projection
         \image html ex_gnom.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct gnom_spheroid : public impl::gnom::base_gnom_spheroid<Geographic, Cartesian, Parameters>
+    struct gnom_spheroid : public detail::gnom::base_gnom_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline gnom_spheroid(const Parameters& par) : impl::gnom::base_gnom_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline gnom_spheroid(const Parameters& par) : detail::gnom::base_gnom_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::gnom::setup_gnom(this->m_par, this->m_proj_parm);
+            detail::gnom::setup_gnom(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class gnom_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class gnom_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -213,12 +213,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void gnom_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void gnom_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("gnom", new gnom_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

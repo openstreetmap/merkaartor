@@ -23,7 +23,7 @@ namespace ggl { namespace projection {
 template <typename R>
 inline parameters init(const R& arguments)
 {
-    return impl::pj_init(arguments);
+    return detail::pj_init(arguments);
 }
 
 /*!
@@ -38,7 +38,7 @@ inline parameters init(const R& arguments)
 */
 inline parameters init(const std::string& arguments)
 {
-    return impl::pj_init_plus(arguments);
+    return detail::pj_init_plus(arguments);
 }
 
 /*!
@@ -47,7 +47,7 @@ inline parameters init(const std::string& arguments)
 */
 inline parameters init(const char* arguments)
 {
-    return impl::pj_init_plus(arguments);
+    return detail::pj_init_plus(arguments);
 }
 
 
@@ -55,7 +55,7 @@ inline parameters init(const char* arguments)
 /*
 parameters init(const std::map<std::string, std::string>& arguments)
 {
-    return impl::pj_init_plus(arguments);
+    return detail::pj_init_plus(arguments);
 }
 */
 

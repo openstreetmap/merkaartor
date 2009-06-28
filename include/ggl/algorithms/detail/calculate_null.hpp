@@ -12,21 +12,21 @@
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail
 {
 
-template<typename T, typename G, typename S>
+template<typename ReturnValue, typename Geometry, typename Strategy>
 struct calculate_null
 {
-    static inline T calculate(const G& , const S&)
+    static inline ReturnValue apply(Geometry const& , Strategy const&)
     {
-        return T();
+        return ReturnValue();
     }
 };
 
-} // namespace impl
-#endif // DOXYGEN_NO_IMPL
+} // namespace detail
+#endif // DOXYGEN_NO_DETAIL
 
 } // namespace ggl
 

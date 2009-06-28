@@ -36,7 +36,7 @@
 #define GGL_PROJECTIONS_IMPL_PJ_GAUSS_HPP
 
 
-namespace ggl { namespace projection { namespace impl { namespace gauss {
+namespace ggl { namespace projection { namespace detail { namespace gauss {
 
 
 static const int MAX_ITER = 20;
@@ -79,8 +79,8 @@ inline GAUSS gauss_ini(double e, double phi0, double &chi, double &rc)
     en.C = sqrt(1.0 + es * cphi * cphi / (1.0 - es));
     chi = asin(sphi / en.C);
     en.ratexp = 0.5 * en.C * e;
-    en.K = tan(0.5 * chi + impl::FORTPI)
-           / (pow(tan(0.5 * phi0 + impl::FORTPI), en.C) * srat(en.e * sphi, en.ratexp));
+    en.K = tan(0.5 * chi + detail::FORTPI)
+           / (pow(tan(0.5 * phi0 + detail::FORTPI), en.C) * srat(en.e * sphi, en.ratexp));
 
     return en;
 }
@@ -119,6 +119,6 @@ inline void inv_gauss(const GAUSS& en, T& lam, T& phi)
     }
 }
 
-}}}} // namespace ggl::projection::impl::gauss
+}}}} // namespace ggl::projection::detail::gauss
 
 #endif // GGL_PROJECTIONS_IMPL_PJ_GAUSS_HPP

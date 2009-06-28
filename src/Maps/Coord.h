@@ -281,6 +281,8 @@ class CoordBox
 		Coord BottomLeft, TopRight;
 };
 
+Q_DECLARE_METATYPE( CoordBox );
+
 #ifndef _MOBILE
 #include <ggl/geometries/register/register_box.hpp>
 

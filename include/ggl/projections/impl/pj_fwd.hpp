@@ -42,7 +42,7 @@
 
 /* general forward projection */
 
-namespace ggl { namespace projection { namespace impl {
+namespace ggl { namespace projection { namespace detail {
 
 namespace forwrd
 {
@@ -53,7 +53,7 @@ namespace forwrd
 template <typename Prj, typename LL, typename XY, typename P>
 inline void pj_fwd(const Prj& prj, const P& par, const LL& ll, XY& xy)
 {
-    using namespace impl;
+    using namespace detail;
 
     double lp_lon = ggl::get_as_radian<0>(ll);
     double lp_lat = ggl::get_as_radian<1>(ll);

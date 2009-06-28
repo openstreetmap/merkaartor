@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace fahey{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace fahey{ 
             static const double TOL = 1e-6;
 
 
@@ -86,7 +86,7 @@ namespace ggl { namespace projection
                 // par.fwd = s_forward;
             }
 
-        }} // namespace impl::fahey
+        }} // namespace detail::fahey
     #endif // doxygen 
 
     /*!
@@ -102,21 +102,21 @@ namespace ggl { namespace projection
         \image html ex_fahey.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct fahey_spheroid : public impl::fahey::base_fahey_spheroid<Geographic, Cartesian, Parameters>
+    struct fahey_spheroid : public detail::fahey::base_fahey_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline fahey_spheroid(const Parameters& par) : impl::fahey::base_fahey_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline fahey_spheroid(const Parameters& par) : detail::fahey::base_fahey_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::fahey::setup_fahey(this->m_par);
+            detail::fahey::setup_fahey(this->m_par);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class fahey_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class fahey_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -126,12 +126,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void fahey_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void fahey_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("fahey", new fahey_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

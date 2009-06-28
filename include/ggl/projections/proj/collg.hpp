@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace collg{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace collg{ 
             static const double FXC = 1.12837916709551257390;
             static const double FYC = 1.77245385090551602729;
             static const double ONEEPS = 1.0000001;
@@ -98,7 +98,7 @@ namespace ggl { namespace projection
                 // par.fwd = s_forward;
             }
 
-        }} // namespace impl::collg
+        }} // namespace detail::collg
     #endif // doxygen 
 
     /*!
@@ -114,21 +114,21 @@ namespace ggl { namespace projection
         \image html ex_collg.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct collg_spheroid : public impl::collg::base_collg_spheroid<Geographic, Cartesian, Parameters>
+    struct collg_spheroid : public detail::collg::base_collg_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline collg_spheroid(const Parameters& par) : impl::collg::base_collg_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline collg_spheroid(const Parameters& par) : detail::collg::base_collg_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::collg::setup_collg(this->m_par);
+            detail::collg::setup_collg(this->m_par);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class collg_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class collg_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -138,12 +138,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void collg_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void collg_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("collg", new collg_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

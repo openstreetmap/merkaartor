@@ -154,8 +154,8 @@ struct indexed_access<segment_tag, S, T, I, D>
 #endif // DOXYGEN_NO_DISPATCH
 
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail
 {
 
 // Two dummy tags to distinguish get/set variants below.
@@ -165,8 +165,8 @@ namespace impl
 struct signature_getset_dimension {};
 struct signature_getset_index_dimension {};
 
-} // namespace impl
-#endif // DOXYGEN_NO_IMPL
+} // namespace detail
+#endif // DOXYGEN_NO_DETAIL
 
 
 /*!
@@ -180,7 +180,7 @@ struct signature_getset_index_dimension {};
 */
 template <std::size_t D, typename G>
 inline typename coordinate_type<G>::type get(const G& geometry,
-    impl::signature_getset_dimension* dummy = 0)
+    detail::signature_getset_dimension* dummy = 0)
 {
     boost::ignore_unused_variable_warning(dummy);
 
@@ -209,7 +209,7 @@ inline typename coordinate_type<G>::type get(const G& geometry,
 */
 template <std::size_t D, typename G>
 inline void set(G& geometry, const typename coordinate_type<G>::type& value,
-    impl::signature_getset_dimension* dummy = 0)
+    detail::signature_getset_dimension* dummy = 0)
 {
     boost::ignore_unused_variable_warning(dummy);
     
@@ -240,12 +240,12 @@ inline void set(G& geometry, const typename coordinate_type<G>::type& value,
 */
 template <std::size_t I, std::size_t D, typename G>
 inline typename coordinate_type<G>::type get(const G& geometry,
-    impl::signature_getset_index_dimension* dummy = 0)
+    detail::signature_getset_index_dimension* dummy = 0)
 {
     boost::ignore_unused_variable_warning(dummy);
     
     typedef typename boost::remove_const<G>::type ncg_type;
-    
+
     typedef core_dispatch::indexed_access
         <
         typename tag<G>::type,
@@ -270,7 +270,7 @@ inline typename coordinate_type<G>::type get(const G& geometry,
 */
 template <std::size_t I, std::size_t D, typename G>
 inline void set(G& geometry, const typename coordinate_type<G>::type& value,
-    impl::signature_getset_index_dimension* dummy = 0)
+    detail::signature_getset_index_dimension* dummy = 0)
 {
     boost::ignore_unused_variable_warning(dummy);
     

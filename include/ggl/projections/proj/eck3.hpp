@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace eck3{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace eck3{ 
 
             struct par_eck3
             {
@@ -133,7 +133,7 @@ namespace ggl { namespace projection
                 setup(par, proj_parm);
             }
 
-        }} // namespace impl::eck3
+        }} // namespace detail::eck3
     #endif // doxygen 
 
     /*!
@@ -149,11 +149,11 @@ namespace ggl { namespace projection
         \image html ex_eck3.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct eck3_spheroid : public impl::eck3::base_eck3_spheroid<Geographic, Cartesian, Parameters>
+    struct eck3_spheroid : public detail::eck3::base_eck3_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline eck3_spheroid(const Parameters& par) : impl::eck3::base_eck3_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline eck3_spheroid(const Parameters& par) : detail::eck3::base_eck3_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::eck3::setup_eck3(this->m_par, this->m_proj_parm);
+            detail::eck3::setup_eck3(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -170,11 +170,11 @@ namespace ggl { namespace projection
         \image html ex_putp1.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct putp1_spheroid : public impl::eck3::base_eck3_spheroid<Geographic, Cartesian, Parameters>
+    struct putp1_spheroid : public detail::eck3::base_eck3_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline putp1_spheroid(const Parameters& par) : impl::eck3::base_eck3_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline putp1_spheroid(const Parameters& par) : detail::eck3::base_eck3_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::eck3::setup_putp1(this->m_par, this->m_proj_parm);
+            detail::eck3::setup_putp1(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -191,11 +191,11 @@ namespace ggl { namespace projection
         \image html ex_wag6.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct wag6_spheroid : public impl::eck3::base_eck3_spheroid<Geographic, Cartesian, Parameters>
+    struct wag6_spheroid : public detail::eck3::base_eck3_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline wag6_spheroid(const Parameters& par) : impl::eck3::base_eck3_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline wag6_spheroid(const Parameters& par) : detail::eck3::base_eck3_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::eck3::setup_wag6(this->m_par, this->m_proj_parm);
+            detail::eck3::setup_wag6(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -212,21 +212,21 @@ namespace ggl { namespace projection
         \image html ex_kav7.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct kav7_spheroid : public impl::eck3::base_eck3_spheroid<Geographic, Cartesian, Parameters>
+    struct kav7_spheroid : public detail::eck3::base_eck3_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline kav7_spheroid(const Parameters& par) : impl::eck3::base_eck3_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline kav7_spheroid(const Parameters& par) : detail::eck3::base_eck3_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::eck3::setup_kav7(this->m_par, this->m_proj_parm);
+            detail::eck3::setup_kav7(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class eck3_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class eck3_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -236,7 +236,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class putp1_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class putp1_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -246,7 +246,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class wag6_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class wag6_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -256,7 +256,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class kav7_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class kav7_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -266,7 +266,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void eck3_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void eck3_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("eck3", new eck3_entry<Geographic, Cartesian, Parameters>);
             factory.add_to_factory("putp1", new putp1_entry<Geographic, Cartesian, Parameters>);
@@ -274,7 +274,7 @@ namespace ggl { namespace projection
             factory.add_to_factory("kav7", new kav7_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

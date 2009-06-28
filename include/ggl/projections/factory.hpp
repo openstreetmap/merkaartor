@@ -113,114 +113,114 @@ namespace ggl { namespace projection
 {
 
 template <typename LatLong, typename Cartesian, typename Parameters = parameters>
-class factory : public impl::base_factory<LatLong, Cartesian, Parameters>
+class factory : public detail::base_factory<LatLong, Cartesian, Parameters>
 {
 private:
 
-    typedef std::map<std::string, boost::shared_ptr<impl::factory_entry<LatLong, Cartesian, Parameters> > > prj_registry;
+    typedef std::map<std::string, boost::shared_ptr<detail::factory_entry<LatLong, Cartesian, Parameters> > > prj_registry;
     prj_registry m_registry;
 
 public:
 
     factory()
     {
-        impl::aea_init(*this);
-        impl::aeqd_init(*this);
-        impl::airy_init(*this);
-        impl::aitoff_init(*this);
-        impl::august_init(*this);
-        impl::bacon_init(*this);
-        impl::bipc_init(*this);
-        impl::boggs_init(*this);
-        impl::bonne_init(*this);
-        impl::cass_init(*this);
-        impl::cc_init(*this);
-        impl::cea_init(*this);
-        impl::chamb_init(*this);
-        impl::collg_init(*this);
-        impl::crast_init(*this);
-        impl::denoy_init(*this);
-        impl::eck1_init(*this);
-        impl::eck2_init(*this);
-        impl::eck3_init(*this);
-        impl::eck4_init(*this);
-        impl::eck5_init(*this);
-        impl::eqc_init(*this);
-        impl::eqdc_init(*this);
-        impl::fahey_init(*this);
-        impl::fouc_s_init(*this);
-        impl::gall_init(*this);
-        impl::geocent_init(*this);
-        impl::geos_init(*this);
-        impl::gins8_init(*this);
-        impl::gn_sinu_init(*this);
-        impl::gnom_init(*this);
-        impl::goode_init(*this);
-        impl::gstmerc_init(*this);
-        impl::hammer_init(*this);
-        impl::hatano_init(*this);
-        impl::krovak_init(*this);
-        impl::imw_p_init(*this);
-        impl::labrd_init(*this);
-        impl::laea_init(*this);
-        impl::lagrng_init(*this);
-        impl::larr_init(*this);
-        impl::lask_init(*this);
-        impl::latlong_init(*this);
-        impl::lcc_init(*this);
-        impl::lcca_init(*this);
-        impl::loxim_init(*this);
-        impl::lsat_init(*this);
-        impl::mbtfpp_init(*this);
-        impl::mbtfpq_init(*this);
-        impl::mbt_fps_init(*this);
-        impl::merc_init(*this);
-        impl::mill_init(*this);
-        impl::mod_ster_init(*this);
-        impl::moll_init(*this);
-        impl::nell_init(*this);
-        impl::nell_h_init(*this);
-        impl::nocol_init(*this);
-        impl::nsper_init(*this);
-        impl::nzmg_init(*this);
-        impl::ob_tran_init(*this);
-        impl::ocea_init(*this);
-        impl::oea_init(*this);
-        impl::omerc_init(*this);
-        impl::ortho_init(*this);
-        impl::poly_init(*this);
-        impl::putp2_init(*this);
-        impl::putp3_init(*this);
-        impl::putp4p_init(*this);
-        impl::putp5_init(*this);
-        impl::putp6_init(*this);
-        impl::robin_init(*this);
-        impl::rouss_init(*this);
-        impl::rpoly_init(*this);
-        impl::sconics_init(*this);
-        impl::somerc_init(*this);
-        impl::stere_init(*this);
-        impl::sterea_init(*this);
-        impl::sts_init(*this);
-        impl::tcc_init(*this);
-        impl::tcea_init(*this);
-        impl::tmerc_init(*this);
-        impl::tpeqd_init(*this);
-        impl::urm5_init(*this);
-        impl::urmfps_init(*this);
-        impl::vandg_init(*this);
-        impl::vandg2_init(*this);
-        impl::vandg4_init(*this);
-        impl::wag2_init(*this);
-        impl::wag3_init(*this);
-        impl::wag7_init(*this);
-        impl::wink1_init(*this);
-        impl::wink2_init(*this);
+        detail::aea_init(*this);
+        detail::aeqd_init(*this);
+        detail::airy_init(*this);
+        detail::aitoff_init(*this);
+        detail::august_init(*this);
+        detail::bacon_init(*this);
+        detail::bipc_init(*this);
+        detail::boggs_init(*this);
+        detail::bonne_init(*this);
+        detail::cass_init(*this);
+        detail::cc_init(*this);
+        detail::cea_init(*this);
+        detail::chamb_init(*this);
+        detail::collg_init(*this);
+        detail::crast_init(*this);
+        detail::denoy_init(*this);
+        detail::eck1_init(*this);
+        detail::eck2_init(*this);
+        detail::eck3_init(*this);
+        detail::eck4_init(*this);
+        detail::eck5_init(*this);
+        detail::eqc_init(*this);
+        detail::eqdc_init(*this);
+        detail::fahey_init(*this);
+        detail::fouc_s_init(*this);
+        detail::gall_init(*this);
+        detail::geocent_init(*this);
+        detail::geos_init(*this);
+        detail::gins8_init(*this);
+        detail::gn_sinu_init(*this);
+        detail::gnom_init(*this);
+        detail::goode_init(*this);
+        detail::gstmerc_init(*this);
+        detail::hammer_init(*this);
+        detail::hatano_init(*this);
+        detail::krovak_init(*this);
+        detail::imw_p_init(*this);
+        detail::labrd_init(*this);
+        detail::laea_init(*this);
+        detail::lagrng_init(*this);
+        detail::larr_init(*this);
+        detail::lask_init(*this);
+        detail::latlong_init(*this);
+        detail::lcc_init(*this);
+        detail::lcca_init(*this);
+        detail::loxim_init(*this);
+        detail::lsat_init(*this);
+        detail::mbtfpp_init(*this);
+        detail::mbtfpq_init(*this);
+        detail::mbt_fps_init(*this);
+        detail::merc_init(*this);
+        detail::mill_init(*this);
+        detail::mod_ster_init(*this);
+        detail::moll_init(*this);
+        detail::nell_init(*this);
+        detail::nell_h_init(*this);
+        detail::nocol_init(*this);
+        detail::nsper_init(*this);
+        detail::nzmg_init(*this);
+        detail::ob_tran_init(*this);
+        detail::ocea_init(*this);
+        detail::oea_init(*this);
+        detail::omerc_init(*this);
+        detail::ortho_init(*this);
+        detail::poly_init(*this);
+        detail::putp2_init(*this);
+        detail::putp3_init(*this);
+        detail::putp4p_init(*this);
+        detail::putp5_init(*this);
+        detail::putp6_init(*this);
+        detail::robin_init(*this);
+        detail::rouss_init(*this);
+        detail::rpoly_init(*this);
+        detail::sconics_init(*this);
+        detail::somerc_init(*this);
+        detail::stere_init(*this);
+        detail::sterea_init(*this);
+        detail::sts_init(*this);
+        detail::tcc_init(*this);
+        detail::tcea_init(*this);
+        detail::tmerc_init(*this);
+        detail::tpeqd_init(*this);
+        detail::urm5_init(*this);
+        detail::urmfps_init(*this);
+        detail::vandg_init(*this);
+        detail::vandg2_init(*this);
+        detail::vandg4_init(*this);
+        detail::wag2_init(*this);
+        detail::wag3_init(*this);
+        detail::wag7_init(*this);
+        detail::wink1_init(*this);
+        detail::wink2_init(*this);
     }
 
     virtual ~factory() {}
 
-    virtual void add_to_factory(const std::string& name, impl::factory_entry<LatLong, Cartesian, Parameters>* sub)
+    virtual void add_to_factory(const std::string& name, detail::factory_entry<LatLong, Cartesian, Parameters>* sub)
     {
         m_registry[name].reset(sub);
     }

@@ -12,7 +12,7 @@
 #ifndef DIRTYDOCK_H
 #define DIRTYDOCK_H
 
-#include "Utils/MDockAncestor.h"
+#include "MDockAncestor.h"
 #include <QTextBrowser>
 
 #include "ui_DirtyDock.h"

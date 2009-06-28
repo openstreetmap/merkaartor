@@ -25,8 +25,8 @@
 namespace ggl {
 
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail {
 
 template <std::size_t D, typename G, typename DR>
 struct radian_access
@@ -72,8 +72,8 @@ struct radian_access<D, G, CS<degree> >
 
 };
 
-} // namespace impl
-#endif // DOXYGEN_NO_IMPL
+} // namespace detail
+#endif // DOXYGEN_NO_DETAIL
 
 
 /*!
@@ -88,14 +88,14 @@ struct radian_access<D, G, CS<degree> >
 template <std::size_t D, typename G>
 inline typename coordinate_type<G>::type get_as_radian(const G& geometry)
 {
-    return impl::radian_access<D, G, 
+    return detail::radian_access<D, G,
             typename coordinate_system<G>::type>::get(geometry);
 }
 
 
 /*!
     \brief assign coordinate value (which is in radian) to a point
-    \details if coordinate system of point is in degree, will be converted 
+    \details if coordinate system of point is in degree, will be converted
         to degree
     \ingroup access
     \tparam D dimension
@@ -104,10 +104,10 @@ inline typename coordinate_type<G>::type get_as_radian(const G& geometry)
     \param radians coordinate value to assign
 */
 template <std::size_t D, typename G>
-inline void set_from_radian(G& geometry, 
+inline void set_from_radian(G& geometry,
             const typename coordinate_type<G>::type& radians)
 {
-    impl::radian_access<D, G, 
+    detail::radian_access<D, G,
             typename coordinate_system<G>::type>::set(geometry, radians);
 }
 

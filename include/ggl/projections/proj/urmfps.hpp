@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace urmfps{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace urmfps{ 
             static const double C_x = 0.8773826753;
             static const double Cy = 1.139753528477;
 
@@ -115,7 +115,7 @@ namespace ggl { namespace projection
                 setup(par, proj_parm);
             }
 
-        }} // namespace impl::urmfps
+        }} // namespace detail::urmfps
     #endif // doxygen 
 
     /*!
@@ -132,11 +132,11 @@ namespace ggl { namespace projection
         \image html ex_urmfps.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct urmfps_spheroid : public impl::urmfps::base_urmfps_spheroid<Geographic, Cartesian, Parameters>
+    struct urmfps_spheroid : public detail::urmfps::base_urmfps_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline urmfps_spheroid(const Parameters& par) : impl::urmfps::base_urmfps_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline urmfps_spheroid(const Parameters& par) : detail::urmfps::base_urmfps_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::urmfps::setup_urmfps(this->m_par, this->m_proj_parm);
+            detail::urmfps::setup_urmfps(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -153,21 +153,21 @@ namespace ggl { namespace projection
         \image html ex_wag1.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct wag1_spheroid : public impl::urmfps::base_urmfps_spheroid<Geographic, Cartesian, Parameters>
+    struct wag1_spheroid : public detail::urmfps::base_urmfps_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline wag1_spheroid(const Parameters& par) : impl::urmfps::base_urmfps_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline wag1_spheroid(const Parameters& par) : detail::urmfps::base_urmfps_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::urmfps::setup_wag1(this->m_par, this->m_proj_parm);
+            detail::urmfps::setup_wag1(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class urmfps_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class urmfps_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -177,7 +177,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class wag1_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class wag1_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -187,13 +187,13 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void urmfps_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void urmfps_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("urmfps", new urmfps_entry<Geographic, Cartesian, Parameters>);
             factory.add_to_factory("wag1", new wag1_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

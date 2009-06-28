@@ -139,8 +139,8 @@ struct cartesian_distance
 
 
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail
 {
     namespace distance
     {
@@ -186,7 +186,7 @@ namespace impl
 template <typename R, typename T>
 inline R make_distance_result(const T& value)
 {
-    return impl::distance::distance_result_maker<R, T>::make(value);
+    return detail::distance::distance_result_maker<R, T>::make(value);
 }
 
 

@@ -15,8 +15,8 @@
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace wkt {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace wkt {
 
 
 struct prefix_point

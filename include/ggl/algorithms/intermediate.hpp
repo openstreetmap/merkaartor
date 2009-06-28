@@ -30,25 +30,24 @@ The intermediate algorithm calculate points IN BETWEEN of other points
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace intermediate {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace intermediate {
 
-template <std::size_t I, std::size_t Count>
+template <typename Src, typename Dst, std::size_t Dimension, std::size_t DimensionCount>
 struct calculate_coordinate
 {
-    template <typename Src, typename Dst>
-    static inline void run(Src const& p1, Src const& p2, Dst& p)
+    static inline void apply(Src const& p1, Src const& p2, Dst& p)
     {
-        ggl::set<I>(p, (ggl::get<I>(p1) + ggl::get<I>(p2)) / 2.0);
-        calculate_coordinate<I + 1, Count>::run(p1, p2, p);
+        ggl::set<Dimension>(p,
+                    (ggl::get<Dimension>(p1) + ggl::get<Dimension>(p2)) / 2.0);
+        calculate_coordinate<Src, Dst, Dimension + 1, DimensionCount>::apply(p1, p2, p);
     }
 };
 
-template <std::size_t Count>
-struct calculate_coordinate<Count, Count>
+template <typename Src, typename Dst, std::size_t DimensionCount>
+struct calculate_coordinate<Src, Dst, DimensionCount, DimensionCount>
 {
-    template <typename Src, typename Dst>
-    static inline void run(Src const&, Src const&, Dst&)
+    static inline void apply(Src const&, Src const&, Dst&)
     {
     }
 };
@@ -56,7 +55,7 @@ struct calculate_coordinate<Count, Count>
 template<typename R, typename Iterator>
 struct range_intermediate
 {
-    static inline void run(const R& range, bool start_and_end, Iterator out)
+    static inline void apply(R const& range, bool start_and_end, Iterator out)
     {
         typedef typename point_type<R>::type point_type;
         typedef typename boost::range_const_iterator<R>::type iterator_type;
@@ -72,7 +71,13 @@ struct range_intermediate
         for (; it != boost::end(range); prev = it++)
         {
             point_type p;
-            calculate_coordinate<0, dimension<point_type>::value>::run(*prev, *it, p);
+            calculate_coordinate
+                <
+                    point_type,
+                    point_type,
+                    0,
+                    dimension<point_type>::type::value
+                >::apply(*prev, *it, p);
             *(out++) = p;
         }
 
@@ -83,8 +88,8 @@ struct range_intermediate
     }
 };
 
-}} // namespace impl::intermediate
-#endif // DOXYGEN_NO_IMPL
+}} // namespace detail::intermediate
+#endif // DOXYGEN_NO_DETAIL
 
 
 #ifndef DOXYGEN_NO_DISPATCH
@@ -95,12 +100,12 @@ template <typename GeometryTag, typename G, typename Iterator>
 struct intermediate  {};
 
 template <typename G, typename Iterator>
-struct intermediate<ring_tag, G, Iterator> 
-        : impl::intermediate::range_intermediate<G, Iterator> {};
+struct intermediate<ring_tag, G, Iterator>
+        : detail::intermediate::range_intermediate<G, Iterator> {};
 
 template <typename G, typename Iterator>
-struct intermediate<linestring_tag, G, Iterator> 
-        : impl::intermediate::range_intermediate<G, Iterator> {};
+struct intermediate<linestring_tag, G, Iterator>
+        : detail::intermediate::range_intermediate<G, Iterator> {};
 
 } // namespace dispatch
 #endif // DOXYGEN_NO_DISPATCH
@@ -113,7 +118,7 @@ struct intermediate<linestring_tag, G, Iterator>
 template<typename G, typename Iterator>
 inline void intermediate(const G& geometry, bool start_and_end, Iterator out)
 {
-    dispatch::intermediate<typename tag<G>::type, G, Iterator>::run(geometry, start_and_end, out);
+    dispatch::intermediate<typename tag<G>::type, G, Iterator>::apply(geometry, start_and_end, out);
 }
 
 } // namespace ggl

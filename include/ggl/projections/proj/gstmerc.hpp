@@ -46,8 +46,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace gstmerc{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace gstmerc{ 
 
             struct par_gstmerc
             {
@@ -113,7 +113,7 @@ namespace ggl { namespace projection
                 // par.fwd= s_forward;
             }
 
-        }} // namespace impl::gstmerc
+        }} // namespace detail::gstmerc
     #endif // doxygen 
 
     /*!
@@ -131,21 +131,21 @@ namespace ggl { namespace projection
         \image html ex_gstmerc.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct gstmerc_spheroid : public impl::gstmerc::base_gstmerc_spheroid<Geographic, Cartesian, Parameters>
+    struct gstmerc_spheroid : public detail::gstmerc::base_gstmerc_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline gstmerc_spheroid(const Parameters& par) : impl::gstmerc::base_gstmerc_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline gstmerc_spheroid(const Parameters& par) : detail::gstmerc::base_gstmerc_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::gstmerc::setup_gstmerc(this->m_par, this->m_proj_parm);
+            detail::gstmerc::setup_gstmerc(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class gstmerc_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class gstmerc_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -155,12 +155,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void gstmerc_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void gstmerc_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("gstmerc", new gstmerc_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

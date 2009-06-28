@@ -47,8 +47,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace cass{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace cass{ 
             static const double EPS10 = 1e-10;
             static const double C1 = .16666666666666666666;
             static const double C2 = .00833333333333333333;
@@ -162,7 +162,7 @@ namespace ggl { namespace projection
             	}
             }
 
-        }} // namespace impl::cass
+        }} // namespace detail::cass
     #endif // doxygen 
 
     /*!
@@ -179,11 +179,11 @@ namespace ggl { namespace projection
         \image html ex_cass.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct cass_ellipsoid : public impl::cass::base_cass_ellipsoid<Geographic, Cartesian, Parameters>
+    struct cass_ellipsoid : public detail::cass::base_cass_ellipsoid<Geographic, Cartesian, Parameters>
     {
-        inline cass_ellipsoid(const Parameters& par) : impl::cass::base_cass_ellipsoid<Geographic, Cartesian, Parameters>(par)
+        inline cass_ellipsoid(const Parameters& par) : detail::cass::base_cass_ellipsoid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::cass::setup_cass(this->m_par, this->m_proj_parm);
+            detail::cass::setup_cass(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -201,21 +201,21 @@ namespace ggl { namespace projection
         \image html ex_cass.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct cass_spheroid : public impl::cass::base_cass_spheroid<Geographic, Cartesian, Parameters>
+    struct cass_spheroid : public detail::cass::base_cass_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline cass_spheroid(const Parameters& par) : impl::cass::base_cass_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline cass_spheroid(const Parameters& par) : detail::cass::base_cass_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::cass::setup_cass(this->m_par, this->m_proj_parm);
+            detail::cass::setup_cass(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class cass_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class cass_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -228,12 +228,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void cass_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void cass_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("cass", new cass_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     // Create EPSG specializations
     // (Proof of Concept, only for some)
 

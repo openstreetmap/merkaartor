@@ -40,8 +40,8 @@ struct clear
 } // namespace traits
 
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace clear {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace clear {
 
 template <typename G>
 struct use_std_clear
@@ -79,8 +79,8 @@ struct no_action
     }
 };
 
-}} // namespace impl::clear
-#endif // DOXYGEN_NO_IMPL
+}} // namespace detail::clear
+#endif // DOXYGEN_NO_DETAIL
 
 #ifndef DOXYGEN_NO_DISPATCH
 namespace dispatch
@@ -94,42 +94,42 @@ struct clear
 // uses std::clear
 template <typename Tag, typename G>
 struct clear<Tag, true, G>
-    : impl::clear::use_std_clear<G>
+    : detail::clear::use_std_clear<G>
 {};
 
 // If any geometry specializes use_std<G> to false, specialize to use the traits clear.
 template <typename Tag, typename G>
 struct clear<Tag, false, G>
-    : impl::clear::use_traits_clear<G>
+    : detail::clear::use_traits_clear<G>
 {};
 
 // Point/box/nsphere/segment do not have clear. So specialize to do nothing.
 template <typename G>
 struct clear<point_tag, true, G>
-    : impl::clear::no_action<G>
+    : detail::clear::no_action<G>
 {};
 
 template <typename G>
 struct clear<box_tag, true, G>
-    : impl::clear::no_action<G>
+    : detail::clear::no_action<G>
 {};
 
 template <typename G>
 struct clear<segment_tag, true, G>
-    : impl::clear::no_action<G>
+    : detail::clear::no_action<G>
 {};
 
 
 template <typename G>
 struct clear<nsphere_tag, true, G>
-    : impl::clear::no_action<G>
+    : detail::clear::no_action<G>
 {};
 
 
 // Polygon can (indirectly) use std for clear
 template <typename P>
 struct clear<polygon_tag, true, P>
-    : impl::clear::polygon_clear<P>
+    : detail::clear::polygon_clear<P>
 {};
 
 

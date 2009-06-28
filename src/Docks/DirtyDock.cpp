@@ -56,6 +56,8 @@ DirtyDock::~DirtyDock()
 
 void DirtyDock::updateList()
 {
+	ui.ChangesList->clear();
+
 	if (!Main->document())
 		return;
 
@@ -75,7 +77,6 @@ void DirtyDock::updateList()
 			break;
 	}
 	
-	ui.ChangesList->clear();
 	Main->document()->history().buildUndoList(ui.ChangesList);
 
 	if (!M_PREFS->getAutoHistoryCleanup()) {
@@ -133,7 +134,7 @@ void DirtyDock::on_centerAction_triggered()
 
 	Main->setUpdatesEnabled(false);
 	for (int i=0; i < ui.ChangesList->selectedItems().count(); ++i) {
-		F = Main->document()->getFeature(ui.ChangesList->selectedItems()[0]->data(Qt::UserRole).toString());
+		F = Main->document()->getFeature(ui.ChangesList->selectedItems()[i]->data(Qt::UserRole).toString());
 		if (F) {
 			if (cb.isNull())
 				cb = F->boundingBox();
@@ -156,7 +157,7 @@ void DirtyDock::on_centerZoomAction_triggered()
 
 	Main->setUpdatesEnabled(false);
 	for (int i=0; i < ui.ChangesList->selectedItems().count(); ++i) {
-		F = Main->document()->getFeature(ui.ChangesList->selectedItems()[0]->data(Qt::UserRole).toString());
+		F = Main->document()->getFeature(ui.ChangesList->selectedItems()[i]->data(Qt::UserRole).toString());
 		if (F) {
 			if (cb.isNull())
 				cb = F->boundingBox();

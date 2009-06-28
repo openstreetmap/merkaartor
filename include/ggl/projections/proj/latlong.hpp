@@ -46,8 +46,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace latlong{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace latlong{ 
 
             
             /* very loosely based upon DMA code by Bradford W. Drew */
@@ -126,7 +126,7 @@ namespace ggl { namespace projection
                 // par.fwd = forward;
             }
 
-        }} // namespace impl::latlong
+        }} // namespace detail::latlong
     #endif // doxygen 
 
     /*!
@@ -140,11 +140,11 @@ namespace ggl { namespace projection
         \image html ex_lonlat.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct lonlat_other : public impl::latlong::base_latlong_other<Geographic, Cartesian, Parameters>
+    struct lonlat_other : public detail::latlong::base_latlong_other<Geographic, Cartesian, Parameters>
     {
-        inline lonlat_other(const Parameters& par) : impl::latlong::base_latlong_other<Geographic, Cartesian, Parameters>(par)
+        inline lonlat_other(const Parameters& par) : detail::latlong::base_latlong_other<Geographic, Cartesian, Parameters>(par)
         {
-            impl::latlong::setup_lonlat(this->m_par);
+            detail::latlong::setup_lonlat(this->m_par);
         }
     };
 
@@ -159,11 +159,11 @@ namespace ggl { namespace projection
         \image html ex_latlon.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct latlon_other : public impl::latlong::base_latlong_other<Geographic, Cartesian, Parameters>
+    struct latlon_other : public detail::latlong::base_latlong_other<Geographic, Cartesian, Parameters>
     {
-        inline latlon_other(const Parameters& par) : impl::latlong::base_latlong_other<Geographic, Cartesian, Parameters>(par)
+        inline latlon_other(const Parameters& par) : detail::latlong::base_latlong_other<Geographic, Cartesian, Parameters>(par)
         {
-            impl::latlong::setup_latlon(this->m_par);
+            detail::latlong::setup_latlon(this->m_par);
         }
     };
 
@@ -178,11 +178,11 @@ namespace ggl { namespace projection
         \image html ex_latlong.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct latlong_other : public impl::latlong::base_latlong_other<Geographic, Cartesian, Parameters>
+    struct latlong_other : public detail::latlong::base_latlong_other<Geographic, Cartesian, Parameters>
     {
-        inline latlong_other(const Parameters& par) : impl::latlong::base_latlong_other<Geographic, Cartesian, Parameters>(par)
+        inline latlong_other(const Parameters& par) : detail::latlong::base_latlong_other<Geographic, Cartesian, Parameters>(par)
         {
-            impl::latlong::setup_latlong(this->m_par);
+            detail::latlong::setup_latlong(this->m_par);
         }
     };
 
@@ -197,21 +197,21 @@ namespace ggl { namespace projection
         \image html ex_longlat.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct longlat_other : public impl::latlong::base_latlong_other<Geographic, Cartesian, Parameters>
+    struct longlat_other : public detail::latlong::base_latlong_other<Geographic, Cartesian, Parameters>
     {
-        inline longlat_other(const Parameters& par) : impl::latlong::base_latlong_other<Geographic, Cartesian, Parameters>(par)
+        inline longlat_other(const Parameters& par) : detail::latlong::base_latlong_other<Geographic, Cartesian, Parameters>(par)
         {
-            impl::latlong::setup_longlat(this->m_par);
+            detail::latlong::setup_longlat(this->m_par);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class lonlat_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class lonlat_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -221,7 +221,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class latlon_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class latlon_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -231,7 +231,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class latlong_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class latlong_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -241,7 +241,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class longlat_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class longlat_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -251,7 +251,7 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void latlong_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void latlong_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("lonlat", new lonlat_entry<Geographic, Cartesian, Parameters>);
             factory.add_to_factory("latlon", new latlon_entry<Geographic, Cartesian, Parameters>);
@@ -259,7 +259,7 @@ namespace ggl { namespace projection
             factory.add_to_factory("longlat", new longlat_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     // Create EPSG specializations
     // (Proof of Concept, only for some)
 

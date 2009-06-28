@@ -40,6 +40,7 @@ public slots:
 	void on_btBgColor_clicked();
 	void on_btFocusColor_clicked();
 	void on_btHoverColor_clicked();
+	void on_btHighlightColor_clicked();
 	void on_btRelationsColor_clicked();
 	
 	/* GPS */
@@ -65,6 +66,7 @@ private:
 	QColor BgColor;
 	QColor FocusColor;
 	QColor HoverColor;
+	QColor HighlightColor;
 	QColor RelationsColor;
 
 signals:

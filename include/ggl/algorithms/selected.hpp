@@ -41,8 +41,8 @@ namespace ggl
 /*!
     \ingroup impl
  */
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace selected {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace selected {
 
 /*!
 \details Checks, per dimension, if d[I] not larger than search distance. If true for all
@@ -52,7 +52,7 @@ Calculate during this process the sum, which is only valid if returning true
 template <typename P1, typename P2, typename T, std::size_t D, std::size_t N>
 struct differences_loop
 {
-    static inline bool close(P1 const& p1, P2 const& p2, T const& distance, T& sum)
+    static inline bool apply(P1 const& p1, P2 const& p2, T const& distance, T& sum)
     {
         typedef typename select_coordinate_type<P1, P2>::type coordinate_type;
         // TODO: remove //typedef typename select_type_traits<coordinate_type, T>::type T2;
@@ -66,24 +66,25 @@ struct differences_loop
             return false;
         }
         sum += d * d;
-        return differences_loop<P1, P2, T, D + 1, N>::close(p1, p2, distance, sum);
+        return differences_loop<P1, P2, T, D + 1, N>::apply(p1, p2, distance, sum);
     }
 };
 
 template <typename P1, typename P2, typename T, std::size_t N>
 struct differences_loop<P1, P2, T, N, N>
 {
-    static inline bool close(const P1&, const P2&, const T&, T&)
+    static inline bool apply(P1 const&, P2 const&, T const&, T&)
     {
         return true;
     }
 };
 
 
+
 template <typename S, typename P, typename T, std::size_t D, std::size_t N>
 struct outside_loop
 {
-    static inline bool outside(const S& seg, const P& point, const T& distance)
+    static inline bool apply(S const& seg, P const& point, T const& distance)
     {
         typedef typename select_coordinate_type<S, P>::type coordinate_type;
 
@@ -98,29 +99,32 @@ struct outside_loop
         {
             return true;
         }
-        return outside_loop<S, P, T, D + 1, N>::outside(seg, point, distance);
+        return outside_loop<S, P, T, D + 1, N>::apply(seg, point, distance);
     }
 };
 
 template <typename S, typename P, typename T, std::size_t N>
 struct outside_loop<S, P, T, N, N>
 {
-    static inline bool outside(const S&, const P&, const T&)
+    static inline bool apply(S const&, P const&, T const&)
     {
         return false;
     }
 };
 
+
 template <typename P1, typename P2, typename T>
 struct close_to_point
 {
-    inline static bool calculate(const P1& point, const P1& selection_point, const T& search_radius)
+    static inline bool apply(P1 const& point, P1 const& selection_point, T const& search_radius)
     {
         assert_dimension_equal<P1, P2>();
-        static std::size_t const N = dimension<P1>::value; // TODO: Why static? Is the value cached?
 
         T sum = 0;
-        if (differences_loop<P1, P2, T, 0, N>::close(point, selection_point, search_radius, sum))
+        if (differences_loop
+                <
+                    P1, P2, T, 0, dimension<P1>::type::value
+                >::apply(point, selection_point, search_radius, sum))
         {
             return sum <= search_radius * search_radius;
         }
@@ -132,21 +136,23 @@ struct close_to_point
 template <typename S, typename P, typename T>
 struct close_to_segment
 {
-    inline static bool calculate(const S& seg, const P& selection_point, const T& search_radius)
+    static inline bool apply(S const& seg, P const& selection_point, T const& search_radius)
     {
         assert_dimension_equal<S, P>();
-        static std::size_t const N = dimension<P>::value; // TODO: Why static? Is the value cached?
 
-        if (! outside_loop<S, P, T, 0, N>::outside(seg, selection_point, search_radius))
+        if (! outside_loop
+                <
+                    S, P, T, 0, dimension<P>::type::value
+                >::apply(seg, selection_point, search_radius))
         {
             // Not outside, calculate dot product/square distance to segment.
             // Call corresponding strategy
             typedef typename strategy_distance_segment
                 <
-                typename cs_tag<P>::type,
-                typename cs_tag<S>::type,
-                P,
-                S
+                    typename cs_tag<P>::type,
+                    typename cs_tag<S>::type,
+                    P,
+                    S
                 >::type strategy_type;
             typedef typename strategy_type::return_type return_type;
 
@@ -162,7 +168,7 @@ struct close_to_segment
 template <typename R, typename P, typename T>
 struct close_to_range
 {
-    inline static bool calculate(const R& range, const P& selection_point, const T& search_radius)
+    static inline bool apply(R const& range, P const& selection_point, T const& search_radius)
     {
         assert_dimension_equal<R, P>();
 
@@ -175,12 +181,12 @@ struct close_to_range
 
         typedef typename point_type<R>::type point_type;
         typedef typename boost::range_const_iterator<R>::type iterator_type;
-        
+
         iterator_type it = boost::begin(range);
         if (n == 1)
         {
             // Line with one point ==> close to point
-            return close_to_point<P, point_type, T>::calculate(*it, selection_point, search_radius);
+            return close_to_point<P, point_type, T>::apply(*it, selection_point, search_radius);
         }
 
         iterator_type previous = it++;
@@ -188,7 +194,7 @@ struct close_to_range
         {
             typedef segment<const point_type> segment_type;
             segment_type s(*previous, *it);
-            if (close_to_segment<segment_type, P, T>::calculate(s, selection_point, search_radius))
+            if (close_to_segment<segment_type, P, T>::apply(s, selection_point, search_radius))
             {
                 return true;
             }
@@ -202,16 +208,16 @@ struct close_to_range
 template <typename Tag, typename G, typename P, typename T>
 struct use_within
 {
-    inline static bool calculate(const G& geometry, const P& selection_point, const T& search_radius)
+    static inline bool apply(G const& geometry, P const& selection_point, T const& search_radius)
     {
         // Note the reversion, point-in-poly -> first point, then poly
         // Selected-at-point -> first geometry, then point
-        return dispatch::within<point_tag, Tag, P, G>::calculate(selection_point, geometry);
+        return dispatch::within<point_tag, Tag, P, G>::apply(selection_point, geometry);
     }
 };
 
-}} // namespace impl::selected
-#endif // DOXYGEN_NO_IMPL
+}} // namespace detail::selected
+#endif // DOXYGEN_NO_DETAIL
 
 
 #ifndef DOXYGEN_NO_DISPATCH
@@ -227,15 +233,15 @@ struct selected
 };
 
 template <typename P1, typename P2, typename T>
-struct selected<point_tag, P1, 0, P2, T> : impl::selected::close_to_point<P1, P2, T> { };
+struct selected<point_tag, P1, 0, P2, T> : detail::selected::close_to_point<P1, P2, T> { };
 
 // SEGMENT, TODO HERE (close_to_segment)
 
 template <typename L, typename P, typename T>
-struct selected<linestring_tag, L, 1, P, T> : impl::selected::close_to_range<L, P, T> { };
+struct selected<linestring_tag, L, 1, P, T> : detail::selected::close_to_range<L, P, T> { };
 
 template <typename Tag, typename G, typename P, typename T>
-struct selected<Tag, G, 2, P, T> : impl::selected::use_within<Tag, G, P, T> { };
+struct selected<Tag, G, 2, P, T> : detail::selected::use_within<Tag, G, P, T> { };
 
 } // namespace dispatch
 #endif // DOXYGEN_NO_DISPATCH
@@ -254,7 +260,7 @@ struct selected<Tag, G, 2, P, T> : impl::selected::use_within<Tag, G, P, T> { };
 
  */
 template<typename G, typename P, typename T>
-inline bool selected(const G& geometry, const P& selection_point, const T& search_radius)
+inline bool selected(G const& geometry, P const& selection_point, T const& search_radius)
 {
     typedef dispatch::selected
         <
@@ -265,7 +271,7 @@ inline bool selected(const G& geometry, const P& selection_point, const T& searc
         T
         > selector_type;
 
-    return selector_type::calculate(geometry, selection_point, search_radius);
+    return selector_type::apply(geometry, selection_point, search_radius);
 }
 
 } // namespace ggl

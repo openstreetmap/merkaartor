@@ -34,7 +34,7 @@ namespace ggl
     \return true if there is overlap
  */
 template <typename B>
-bool overlaps(const B& b1, const B& b2)
+inline bool overlaps(const B& b1, const B& b2)
 {
     return !(
             get<max_corner, 0>(b1) <= get<min_corner, 0>(b2) ||

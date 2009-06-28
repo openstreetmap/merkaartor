@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace larr{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace larr{ 
             static const double SIXTH = .16666666666666666;
 
 
@@ -79,7 +79,7 @@ namespace ggl { namespace projection
                 par.es = 0.;
             }
 
-        }} // namespace impl::larr
+        }} // namespace detail::larr
     #endif // doxygen 
 
     /*!
@@ -96,21 +96,21 @@ namespace ggl { namespace projection
         \image html ex_larr.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct larr_spheroid : public impl::larr::base_larr_spheroid<Geographic, Cartesian, Parameters>
+    struct larr_spheroid : public detail::larr::base_larr_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline larr_spheroid(const Parameters& par) : impl::larr::base_larr_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline larr_spheroid(const Parameters& par) : detail::larr::base_larr_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::larr::setup_larr(this->m_par);
+            detail::larr::setup_larr(this->m_par);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class larr_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class larr_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -120,12 +120,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void larr_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void larr_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("larr", new larr_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

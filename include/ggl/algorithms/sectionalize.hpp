@@ -72,27 +72,27 @@ struct sections : std::vector<section<B, N> >
     static const std::size_t value = N;
 };
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace sectionalize {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace sectionalize {
 
 template <typename Segment, std::size_t D, std::size_t N>
 struct get_direction_loop
 {
     typedef typename coordinate_type<Segment>::type coordinate_type;
 
-    static inline void run(Segment const& seg, int directions[N])
+    static inline void apply(Segment const& seg, int directions[N])
     {
         coordinate_type const diff = ggl::get<1, D>(seg) - ggl::get<0, D>(seg);
         directions[D] = diff > 0 ? 1 : (diff < 0 ? -1 : 0);
 
-        get_direction_loop<Segment, D + 1, N>::run(seg, directions);
+        get_direction_loop<Segment, D + 1, N>::apply(seg, directions);
     }
 };
 
 template <typename Segment, std::size_t N>
 struct get_direction_loop<Segment, N, N>
 {
-    static inline void run(Segment const& seg, int directions[N])
+    static inline void apply(Segment const& seg, int directions[N])
     {
         boost::ignore_unused_variable_warning(seg);
         boost::ignore_unused_variable_warning(directions);
@@ -102,50 +102,50 @@ struct get_direction_loop<Segment, N, N>
 template <typename T, std::size_t D, std::size_t N>
 struct copy_loop
 {
-    static inline void run(const T source[N], T target[N])
+    static inline void apply(const T source[N], T target[N])
     {
         target[D] = source[D];
-        copy_loop<T, D + 1, N>::run(source, target);
+        copy_loop<T, D + 1, N>::apply(source, target);
     }
 };
 
 template <typename T, std::size_t N>
 struct copy_loop<T, N, N>
 {
-    static inline void run(const T source[N], T target[N])
-	{
+    static inline void apply(const T source[N], T target[N])
+    {
         boost::ignore_unused_variable_warning(source);
         boost::ignore_unused_variable_warning(target);
-	}
+    }
 };
 
 template <typename T, std::size_t D, std::size_t N>
 struct compare_loop
 {
-    static inline bool equal(const T source[N], const T target[N])
+    static inline bool apply(const T source[N], const T target[N])
     {
         bool const not_equal = target[D] != source[D];
 
-        return not_equal ? false : compare_loop<T, D + 1, N>::equal(source, target);
+        return not_equal ? false : compare_loop<T, D + 1, N>::apply(source, target);
     }
 };
 
 template <typename T, std::size_t N>
 struct compare_loop<T, N, N>
 {
-    static inline bool equal(const T source[N], const T target[N])
+    static inline bool apply(const T source[N], const T target[N])
     {
         boost::ignore_unused_variable_warning(source);
         boost::ignore_unused_variable_warning(target);
 
-		return true;
+        return true;
     }
 };
 
 template <typename R, typename P, typename S, std::size_t N>
 struct sectionalize_range
 {
-    inline static void calculate(R const& range, S& sections, int ring_index = -1, int multi_index = -1)
+    static inline void apply(R const& range, S& sections, int ring_index = -1, int multi_index = -1)
     {
         typedef segment<const P> segment_type;
 
@@ -175,10 +175,10 @@ struct sectionalize_range
             segment_type s(*previous, *it);
 
             int direction_classes[N] = {0};
-            get_direction_loop<segment_type, 0, N>::run(s, direction_classes);
+            get_direction_loop<segment_type, 0, N>::apply(s, direction_classes);
 
             if (section.count > 0
-                && !compare_loop<int, 0, N>::equal(direction_classes, section.directions))
+                && !compare_loop<int, 0, N>::apply(direction_classes, section.directions))
             {
                 sections.push_back(section);
                 section = sections_range_type();
@@ -189,7 +189,7 @@ struct sectionalize_range
                 section.begin_index = i;
                 section.ring_index = ring_index;
                 section.multi_index = multi_index;
-                copy_loop<int, 0, N>::run(direction_classes, section.directions);
+                copy_loop<int, 0, N>::apply(direction_classes, section.directions);
                 ggl::combine(section.bounding_box, *previous);
             }
 
@@ -208,7 +208,7 @@ struct sectionalize_range
 template <typename P, typename S, std::size_t N>
 struct sectionalize_polygon
 {
-    inline static void calculate(const P& poly, S& sections)
+    static inline void apply(P const& poly, S& sections, int multi_index = -1)
     {
         typedef typename point_type<P>::type point_type;
         typedef typename ring_type<P>::type ring_type;
@@ -218,14 +218,14 @@ struct sectionalize_polygon
             typename interior_type<P>::type
             >::type iterator_type;
 
-        sectionalizer_type::calculate(exterior_ring(poly), sections, -1, -1);
+        sectionalizer_type::apply(exterior_ring(poly), sections, -1, multi_index);
 
         int i = 0;
         for (iterator_type it = boost::begin(interior_rings(poly));
-             it != boost::end(interior_rings(poly)); 
-             ++it, i++)
+             it != boost::end(interior_rings(poly));
+             ++it, ++i)
         {
-            sectionalizer_type::calculate(*it, sections, i, -1);
+            sectionalizer_type::apply(*it, sections, i, multi_index);
         }
     }
 };
@@ -233,7 +233,7 @@ struct sectionalize_polygon
 template <typename B, typename S, std::size_t N>
 struct sectionalize_box
 {
-    inline static void calculate(const B& box, S& sections)
+    static inline void apply(B const& box, S& sections)
     {
         typedef typename point_type<B>::type point_type;
 
@@ -253,12 +253,12 @@ struct sectionalize_box
         points.push_back(lr);
         points.push_back(ll);
 
-        sectionalize_range<std::vector<point_type>, point_type, S, N>::calculate(points, sections);
+        sectionalize_range<std::vector<point_type>, point_type, S, N>::apply(points, sections);
     }
 };
 
-}} // namespace impl::sectionalize
-#endif // DOXYGEN_NO_IMPL
+}} // namespace detail::sectionalize
+#endif // DOXYGEN_NO_DETAIL
 
 
 #ifndef DOXYGEN_NO_DISPATCH
@@ -272,19 +272,19 @@ struct sectionalize
 
 template <typename B, typename S, std::size_t N>
 struct sectionalize<box_tag, B, S, N>
-    : impl::sectionalize::sectionalize_box<B, S, N> { };
+    : detail::sectionalize::sectionalize_box<B, S, N> { };
 
 template <typename L, typename S, std::size_t N>
 struct sectionalize<linestring_tag, L, S, N>
-    : impl::sectionalize::sectionalize_range<L, typename point_type<L>::type, S, N> { };
+    : detail::sectionalize::sectionalize_range<L, typename point_type<L>::type, S, N> { };
 
 template <typename R, typename S, std::size_t N>
 struct sectionalize<ring_tag, R, S, N>
-    : impl::sectionalize::sectionalize_range<R, typename point_type<R>::type, S, N> { };
+    : detail::sectionalize::sectionalize_range<R, typename point_type<R>::type, S, N> { };
 
 template <typename P, typename S, std::size_t N>
 struct sectionalize<polygon_tag, P, S, N>
-    : impl::sectionalize::sectionalize_polygon<P, S, N> { };
+    : detail::sectionalize::sectionalize_polygon<P, S, N> { };
 
 } // namespace dispatch
 #endif
@@ -300,18 +300,18 @@ struct sectionalize<polygon_tag, P, S, N>
 
  */
 template<typename G, typename S>
-inline void sectionalize(const G& geometry, S& sections)
+inline void sectionalize(G const& geometry, S& sections)
 {
     typedef dispatch::sectionalize
         <
-        typename tag<G>::type,
-        G,
-        S,
-        S::value
+            typename tag<G>::type,
+            G,
+            S,
+            S::value
         > sectionalizer_type;
 
     sections.clear();
-    sectionalizer_type::calculate(geometry, sections);
+    sectionalizer_type::apply(geometry, sections);
 }
 
 
@@ -324,7 +324,7 @@ inline void sectionalize(const G& geometry, S& sections)
 
 
 
-
+// will be moved soon to "get_section"
 
 
 template <typename Tag, typename Geometry, typename Section>
@@ -347,7 +347,7 @@ struct get_section<polygon_tag, Polygon, Section>
                 iterator_type& begin, iterator_type& end)
     {
         typedef typename ggl::ring_type<Polygon>::type ring_type;
-        ring_type const& ring = section.ring_index < 0 
+        ring_type const& ring = section.ring_index < 0
             ? ggl::exterior_ring(polygon)
             : ggl::interior_rings(polygon)[section.ring_index];
 

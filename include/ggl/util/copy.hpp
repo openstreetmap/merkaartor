@@ -22,8 +22,8 @@
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace copy {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace copy {
 
 template <typename Src, typename Dst, std::size_t D, std::size_t N>
 struct copy_coordinates
@@ -47,8 +47,8 @@ struct copy_coordinates<Src, Dst, N, N>
 	}
 };
 
-}} // namespace impl::copy
-#endif // DOXYGEN_NO_IMPL
+}} // namespace detail::copy
+#endif // DOXYGEN_NO_DETAIL
 
 
 /*!
@@ -61,11 +61,14 @@ struct copy_coordinates<Src, Dst, N, N>
     \note If destination type differs from source type, they must have the same coordinate count
  */
 template <typename Src, typename Dst>
-BOOST_CONCEPT_REQUIRES(((concept::ConstPoint<Src>)) ((concept::Point<Dst>)),
-(void)) copy_coordinates(const Src& source, Dst& dest)
+inline void copy_coordinates(const Src& source, Dst& dest)
 {
+    BOOST_CONCEPT_ASSERT( (concept::ConstPoint<Src>) );
+    BOOST_CONCEPT_ASSERT( (concept::Point<Dst>) );
+
+
     //assert_dimension_equal<Dst, Src>();
-    impl::copy::copy_coordinates<Src, Dst, 0, dimension<Src>::value>::copy(source, dest);
+    detail::copy::copy_coordinates<Src, Dst, 0, dimension<Src>::value>::copy(source, dest);
 }
 
 } // namespace ggl

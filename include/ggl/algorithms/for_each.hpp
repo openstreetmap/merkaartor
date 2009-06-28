@@ -32,8 +32,8 @@ Of the for_each algorithms there is a \b const and a non-const version provided.
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace for_each {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace for_each {
 
 template <typename P, typename F>
 struct fe_point
@@ -64,7 +64,7 @@ struct fe_range
         return (std::for_each(boost::begin(range), boost::end(range), f));
     }
 
-    static inline F for_each_const_segment(const R& range, F f)
+    static inline F for_each_const_segment(R const& range, F f)
     {
         typedef typename boost::range_const_iterator<R>::type iterator_type;
 
@@ -177,8 +177,8 @@ struct fe_polygon
     }
 };
 
-}} // namespace impl::for_each
-#endif // DOXYGEN_NO_IMPL
+}} // namespace detail::for_each
+#endif // DOXYGEN_NO_DETAIL
 
 
 #ifndef DOXYGEN_NO_DISPATCH
@@ -189,16 +189,16 @@ template <typename T, typename G, typename F>
 struct for_each {};
 
 template <typename P, typename F>
-struct for_each<point_tag, P, F> : impl::for_each::fe_point<P, F> {};
+struct for_each<point_tag, P, F> : detail::for_each::fe_point<P, F> {};
 
 template <typename L, typename F>
-struct for_each<linestring_tag, L, F> : impl::for_each::fe_range<L, F> {};
+struct for_each<linestring_tag, L, F> : detail::for_each::fe_range<L, F> {};
 
 template <typename R, typename F>
-struct for_each<ring_tag, R, F> : impl::for_each::fe_range<R, F> {};
+struct for_each<ring_tag, R, F> : detail::for_each::fe_range<R, F> {};
 
 template <typename P, typename F>
-struct for_each<polygon_tag, P, F> : impl::for_each::fe_polygon<P, F> {};
+struct for_each<polygon_tag, P, F> : detail::for_each::fe_polygon<P, F> {};
 
 } // namespace dispatch
 #endif // DOXYGEN_NO_DISPATCH

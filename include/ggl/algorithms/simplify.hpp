@@ -46,11 +46,11 @@ Efficient simplification of a ring/polygon is still an "Open Problem"
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace simplify {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace simplify {
 
 template<typename R, typename OutputIterator, typename S>
-inline void simplify_range_strategy(const R& range, OutputIterator out, double max_distance, const S& strategy)
+inline void simplify_range_strategy(R const& range, OutputIterator out, double max_distance, S const& strategy)
 {
     if (boost::begin(range) == boost::end(range) || max_distance < 0)
     {
@@ -71,17 +71,17 @@ inline void simplify_range_strategy(const R& range, OutputIterator out, double m
 }
 
 template<typename R, typename OutputIterator>
-inline void simplify_range(const R& range, OutputIterator out, double max_distance)
+inline void simplify_range(R const& range, OutputIterator out, double max_distance)
 {
     // Define default strategy
     typedef typename point_type<R>::type point_type;
     typedef typename cs_tag<point_type>::type cs_tag;
     typedef typename strategy_distance_segment
         <
-        cs_tag,
-        cs_tag,
-        point_type,
-        segment<const point_type>
+            cs_tag,
+            cs_tag,
+            point_type,
+            segment<const point_type>
         >::type strategy_type;
 
     strategy::simplify::douglas_peucker<R, OutputIterator, strategy_type> douglas;
@@ -90,7 +90,7 @@ inline void simplify_range(const R& range, OutputIterator out, double max_distan
 }
 
 template<typename R, typename OutputIterator, typename S>
-inline void simplify_ring(const R& r_in, OutputIterator out, double max_distance, const S& strategy)
+inline void simplify_ring(R const& r_in, OutputIterator out, double max_distance, S const& strategy)
 {
     // Call do_container for a ring
 
@@ -112,7 +112,7 @@ inline void simplify_ring(const R& r_in, OutputIterator out, double max_distance
 }
 
 template<typename Y, typename S>
-inline void simplify_polygon(const Y& poly_in, Y& poly_out, double max_distance, const S& strategy)
+inline void simplify_polygon(Y const& poly_in, Y& poly_out, double max_distance, S const& strategy)
 {
     typedef typename boost::range_iterator
         <typename interior_type<Y>::type>::type iterator_type;
@@ -138,7 +138,7 @@ inline void simplify_polygon(const Y& poly_in, Y& poly_out, double max_distance,
 }
 
 template<typename Y>
-inline void simplify_polygon(const Y& poly_in, Y& poly_out, double max_distance)
+inline void simplify_polygon(Y const& poly_in, Y& poly_out, double max_distance)
 {
     // Define default strategy
     typedef typename ring_type<Y>::type ring_type;
@@ -148,10 +148,10 @@ inline void simplify_polygon(const Y& poly_in, Y& poly_out, double max_distance)
     typedef typename cs_tag<point_type>::type cs_tag;
     typedef typename strategy_distance_segment
         <
-        cs_tag,
-        cs_tag,
-        point_type,
-        segment<const point_type>
+            cs_tag,
+            cs_tag,
+            point_type,
+            segment<const point_type>
         >::type strategy_type;
 
     strategy::simplify::douglas_peucker<ring_type, iterator_type, strategy_type> douglas;
@@ -159,8 +159,8 @@ inline void simplify_polygon(const Y& poly_in, Y& poly_out, double max_distance)
     simplify_polygon(poly_in, poly_out, max_distance, douglas);
 }
 
-}} // namespace impl::simplify
-#endif // DOXYGEN_NO_IMPL
+}} // namespace detail::simplify
+#endif // DOXYGEN_NO_DETAIL
 
 
 #ifndef DOXYGEN_NO_DISPATCH
@@ -177,28 +177,28 @@ template <typename R>
 struct simplify<linestring_tag, R>
 {
     template<typename OutputIterator, typename S>
-    inline static void calculate(const R& range, OutputIterator out, double max_distance, const S& strategy)
+    static inline void apply(R const& range, OutputIterator out, double max_distance, S const& strategy)
     {
         strategy.simplify(range, out, max_distance);
     }
 
     template<typename OutputIterator>
-    inline static void calculate(const R& range, OutputIterator out, double max_distance)
+    static inline void apply(R const& range, OutputIterator out, double max_distance)
     {
         // Define default strategy
         typedef typename point_type<R>::type point_type;
         typedef typename cs_tag<point_type>::type cs_tag;
         typedef typename strategy_distance_segment
             <
-            cs_tag,
-            cs_tag,
-            point_type,
-            segment<const point_type> 
+                cs_tag,
+                cs_tag,
+                point_type,
+                segment<const point_type>
            >::type strategy_type;
 
         strategy::simplify::douglas_peucker<R, OutputIterator, strategy_type> douglas;
 
-        impl::simplify::simplify_range_strategy(range, out, max_distance, douglas);
+        detail::simplify::simplify_range_strategy(range, out, max_distance, douglas);
     }
 };
 
@@ -207,30 +207,30 @@ struct simplify<ring_tag, R>
 {
     /// Simplify a ring, using a strategy
     template<typename S>
-    inline static void calculate(const R& ring_in, R& ring_out, double max_distance, const S& strategy)
+    static inline void apply(R const& ring_in, R& ring_out, double max_distance, S const& strategy)
     {
-        using impl::simplify::simplify_ring;
+        using detail::simplify::simplify_ring;
         simplify_ring(ring_in, std::back_inserter(ring_out), max_distance, strategy);
     }
 
     /// Simplify a ring
-    inline static void calculate(const R& ring_in, R& ring_out, double max_distance)
+    static inline void apply(R const& ring_in, R& ring_out, double max_distance)
     {
         // Define default strategy
         typedef typename point_type<R>::type point_type;
         typedef typename cs_tag<point_type>::type cs_tag;
         typedef typename strategy_distance_segment
             <
-            cs_tag,
-            cs_tag,
-            point_type,
-            segment<const point_type>
+                cs_tag,
+                cs_tag,
+                point_type,
+                segment<const point_type>
             >::type strategy_type;
         typedef std::back_insert_iterator<R> iterator_type;
 
         strategy::simplify::douglas_peucker<R, iterator_type, strategy_type> douglas;
 
-        impl::simplify::simplify_ring(ring_in, std::back_inserter(ring_out), max_distance, douglas);
+        detail::simplify::simplify_ring(ring_in, std::back_inserter(ring_out), max_distance, douglas);
     }
 };
 
@@ -239,15 +239,15 @@ struct simplify<polygon_tag, P>
 {
     /// Simplify a polygon, using a strategy
     template<typename S>
-    inline static void calculate(const P& poly_in, P& poly_out, double max_distance, const S& strategy)
+    static inline void apply(P const& poly_in, P& poly_out, double max_distance, S const& strategy)
     {
-        impl::simplify::simplify_polygon(poly_in, poly_out, max_distance, strategy);
+        detail::simplify::simplify_polygon(poly_in, poly_out, max_distance, strategy);
     }
 
     /// Simplify a polygon
-    inline static void calculate(const P& poly_in, P& poly_out, double max_distance)
+    static inline void apply(P const& poly_in, P& poly_out, double max_distance)
     {
-        impl::simplify::simplify_polygon(poly_in, poly_out, max_distance);
+        detail::simplify::simplify_polygon(poly_in, poly_out, max_distance);
     }
 };
 
@@ -276,7 +276,7 @@ template<typename G, typename O>
 inline void simplify(const G& geometry, O out, double max_distance)
 {
     typedef dispatch::simplify<typename tag<G>::type, G> simplify_type;
-    simplify_type::calculate(geometry, out, max_distance);
+    simplify_type::apply(geometry, out, max_distance);
 }
 
 /*!
@@ -296,10 +296,10 @@ inline void simplify(const G& geometry, O out, double max_distance)
     \until }
  */
 template<typename G, typename O, typename S>
-inline void simplify(const G& geometry, O out, double max_distance, const S& strategy)
+inline void simplify(const G& geometry, O out, double max_distance, S const& strategy)
 {
     typedef dispatch::simplify<typename tag<G>::type, G> simplify_type;
-    simplify_type::calculate(geometry, out, max_distance, strategy);
+    simplify_type::apply(geometry, out, max_distance, strategy);
 }
 
 // Model 2, where output is same type as input
@@ -317,7 +317,7 @@ template<typename G>
 inline void simplify(const G& geometry, G& out, double max_distance)
 {
     typedef dispatch::simplify<typename tag<G>::type, G> simplify_type;
-    simplify_type::calculate(geometry, out, max_distance);
+    simplify_type::apply(geometry, out, max_distance);
 }
 
 /*!
@@ -331,10 +331,10 @@ inline void simplify(const G& geometry, G& out, double max_distance)
     \param strategy simplify strategy to be used for simplification, might include point-distance strategy
  */
 template<typename G, typename S>
-inline void simplify(const G& geometry, G& out, double max_distance, const S& strategy)
+inline void simplify(const G& geometry, G& out, double max_distance, S const& strategy)
 {
     typedef dispatch::simplify<typename tag<G>::type, G> simplify_type;
-    simplify_type::calculate(geometry, out, max_distance, strategy);
+    simplify_type::apply(geometry, out, max_distance, strategy);
 }
 
 } // namespace ggl

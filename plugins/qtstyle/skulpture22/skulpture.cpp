@@ -4276,65 +4276,65 @@ static const ShapeFactory::Code * const titleBarCustomDescriptions[] = {
 };
 
 
-static QPainterPath growPath(const QPainterPath &path, double offset, Qt::PenJoinStyle style = Qt::MiterJoin)
-{
-    QPainterPathStroker stroker;
-    QPainterPath path2;
-    QPainterPath res;
-    bool add;
-
-    if (offset > 0) {
-        stroker.setWidth(2.0 * offset);
-        add = false;
-    } else if (offset < 0) {
-        stroker.setWidth(-2.0 * offset);
-        add = true;
-    } else {
-        return path;
-    }
-    stroker.setCapStyle(Qt::FlatCap);
-    stroker.setJoinStyle(style);
-    stroker.setDashPattern(Qt::SolidLine);
-    stroker.setCurveThreshold(0.1);
-    path2 = stroker.createStroke(path);
-
-    for (int i = 0; i < path2.elementCount(); ++i) {
-        const QPainterPath::Element &element = path2.elementAt(i);
-        switch (element.type)
-        {
-            case QPainterPath::MoveToElement:
-                // copy every other subpath, extracting either inner or outer winding.
-                add = !add;
-                if (add) {
-                    res.moveTo(element.x, element.y);
-                }
-                break;
-            case QPainterPath::LineToElement:
-                if (add) {
-                    res.lineTo(element.x, element.y);
-                }
-                break;
-            case QPainterPath::CurveToElement: {
-                const QPainterPath::Element &element1 = path2.elementAt(++i);
-                const QPainterPath::Element &element2 = path2.elementAt(++i);
-                if (add) {
-                    res.cubicTo(element.x, element.y, element1.x, element1.y, element2.x, element2.y);
-                }
-                break;
-            }
-            case QPainterPath::CurveToDataElement:
-                break;
-        }
-    }
-    res.setFillRule(Qt::WindingFill);
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 4, 0))
-    res = res.simplified();
-#endif
-    if (offset < 0) {
-        return res.toReversed();
-    }
-    return res;
-}
+//static QPainterPath growPath(const QPainterPath &path, double offset, Qt::PenJoinStyle style = Qt::MiterJoin)
+//{
+//    QPainterPathStroker stroker;
+//    QPainterPath path2;
+//    QPainterPath res;
+//    bool add;
+//
+//    if (offset > 0) {
+//        stroker.setWidth(2.0 * offset);
+//        add = false;
+//    } else if (offset < 0) {
+//        stroker.setWidth(-2.0 * offset);
+//        add = true;
+//    } else {
+//        return path;
+//    }
+//    stroker.setCapStyle(Qt::FlatCap);
+//    stroker.setJoinStyle(style);
+//    stroker.setDashPattern(Qt::SolidLine);
+//    stroker.setCurveThreshold(0.1);
+//    path2 = stroker.createStroke(path);
+//
+//    for (int i = 0; i < path2.elementCount(); ++i) {
+//        const QPainterPath::Element &element = path2.elementAt(i);
+//        switch (element.type)
+//        {
+//            case QPainterPath::MoveToElement:
+//                // copy every other subpath, extracting either inner or outer winding.
+//                add = !add;
+//                if (add) {
+//                    res.moveTo(element.x, element.y);
+//                }
+//                break;
+//            case QPainterPath::LineToElement:
+//                if (add) {
+//                    res.lineTo(element.x, element.y);
+//                }
+//                break;
+//            case QPainterPath::CurveToElement: {
+//                const QPainterPath::Element &element1 = path2.elementAt(++i);
+//                const QPainterPath::Element &element2 = path2.elementAt(++i);
+//                if (add) {
+//                    res.cubicTo(element.x, element.y, element1.x, element1.y, element2.x, element2.y);
+//                }
+//                break;
+//            }
+//            case QPainterPath::CurveToDataElement:
+//                break;
+//        }
+//    }
+//    res.setFillRule(Qt::WindingFill);
+//#if (QT_VERSION >= QT_VERSION_CHECK(4, 4, 0))
+//    res = res.simplified();
+//#endif
+//    if (offset < 0) {
+//        return res.toReversed();
+//    }
+//    return res;
+//}
 
 
 QIcon SkulptureStyle::standardIconImplementation(QStyle::StandardPixmap standardIcon, const QStyleOption *option, const QWidget *widget) const
@@ -6827,7 +6827,7 @@ void paintProgressBarContents(QPainter *painter, const QStyleOptionProgressBarV2
                 int m = QTime(0, 0).msecsTo(QTime::currentTime()) / (animationSpeed / chunkWidth);
                 QPoint startPoint = contentsCentered ? contentsRect.topLeft() : contentsRect.center();
                 startPoint += vertical ? QPoint(0, chunkWidth - 1 - m % chunkWidth) : QPoint(m % chunkWidth, 0);
-                QLinearGradient fillGradient(startPoint, startPoint + (vertical ? QPoint(0, chunkWidth) : QPoint(chunkWidth, chunkWidth * sin(gradientAngle * M_PI / 180))));
+				QLinearGradient fillGradient(startPoint, startPoint + (vertical ? QPoint(0, chunkWidth) : QPoint(chunkWidth, qRound(chunkWidth * sin(gradientAngle * M_PI / 180)))));
                 fillGradient.setSpread(QGradient::RepeatSpread);
                 const qreal delta = gradientRatio * gradientSharpness * 0.000049999;
                 fillGradient.setColorAt(0.0, fillColor);

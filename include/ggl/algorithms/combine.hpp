@@ -30,8 +30,8 @@
 namespace ggl
 {
 
-#ifndef DOXYGEN_NO_IMPL
-namespace impl { namespace combine {
+#ifndef DOXYGEN_NO_DETAIL
+namespace detail { namespace combine {
 
 template
 <
@@ -135,8 +135,8 @@ struct combine_box_with_box
     }
 };
 
-}} // namespace impl::combine
-#endif // DOXYGEN_NO_IMPL
+}} // namespace detail::combine
+#endif // DOXYGEN_NO_DETAIL
 
 #ifndef DOXYGEN_NO_DISPATCH
 namespace dispatch
@@ -150,14 +150,14 @@ struct combine
 // Box + point -> new box containing also point
 template <typename BoxOut, typename Point>
 struct combine<point_tag, BoxOut, Point>
-    : impl::combine::combine_box_with_point<BoxOut, Point>
+    : detail::combine::combine_box_with_point<BoxOut, Point>
 {};
 
 
 // Box + box -> new box containing two input boxes
 template <typename BoxOut, typename BoxIn>
 struct combine<box_tag, BoxOut, BoxIn>
-    : impl::combine::combine_box_with_box<BoxOut, BoxIn>
+    : detail::combine::combine_box_with_box<BoxOut, BoxIn>
 {};
 
 

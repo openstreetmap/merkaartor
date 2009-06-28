@@ -194,6 +194,9 @@ public:
 	QColor getHoverColor() const;
 	int getHoverWidth() const;
 	void setHoverColor(const QColor theValue, int width);
+	QColor getHighlightColor() const;
+	int getHighlightWidth() const;
+	void setHighlightColor(const QColor theValue, int width);
 	QColor getRelationsColor() const;
 	int getRelationsWidth() const;
 	void setRelationsColor(const QColor theValue, int width);
@@ -336,6 +339,9 @@ public:
 
 	/* Track */
 	M_PARAM_DECLARE_BOOL(ReadonlyTracksDefault)
+
+	/* FeaturesDock */
+	M_PARAM_DECLARE_BOOL(FeaturesWithin)
 
 	/* Plugins */
 	void addBackgroundPlugin(IMapAdapter* aPlugin);

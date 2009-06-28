@@ -44,8 +44,8 @@
 
 namespace ggl { namespace projection
 {
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl { namespace cc{ 
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail { namespace cc{ 
             static const double EPS10 = 1.e-10;
 
             struct par_cc
@@ -91,7 +91,7 @@ namespace ggl { namespace projection
                 // par.fwd = s_forward;
             }
 
-        }} // namespace impl::cc
+        }} // namespace detail::cc
     #endif // doxygen 
 
     /*!
@@ -107,21 +107,21 @@ namespace ggl { namespace projection
         \image html ex_cc.gif
     */
     template <typename Geographic, typename Cartesian, typename Parameters = parameters>
-    struct cc_spheroid : public impl::cc::base_cc_spheroid<Geographic, Cartesian, Parameters>
+    struct cc_spheroid : public detail::cc::base_cc_spheroid<Geographic, Cartesian, Parameters>
     {
-        inline cc_spheroid(const Parameters& par) : impl::cc::base_cc_spheroid<Geographic, Cartesian, Parameters>(par)
+        inline cc_spheroid(const Parameters& par) : detail::cc::base_cc_spheroid<Geographic, Cartesian, Parameters>(par)
         {
-            impl::cc::setup_cc(this->m_par, this->m_proj_parm);
+            detail::cc::setup_cc(this->m_par, this->m_proj_parm);
         }
     };
 
-    #ifndef DOXYGEN_NO_IMPL
-    namespace impl
+    #ifndef DOXYGEN_NO_DETAIL
+    namespace detail
     {
 
         // Factory entry(s)
         template <typename Geographic, typename Cartesian, typename Parameters>
-        class cc_entry : public impl::factory_entry<Geographic, Cartesian, Parameters>
+        class cc_entry : public detail::factory_entry<Geographic, Cartesian, Parameters>
         {
             public :
                 virtual projection<Geographic, Cartesian>* create_new(const Parameters& par) const
@@ -131,12 +131,12 @@ namespace ggl { namespace projection
         };
 
         template <typename Geographic, typename Cartesian, typename Parameters>
-        inline void cc_init(impl::base_factory<Geographic, Cartesian, Parameters>& factory)
+        inline void cc_init(detail::base_factory<Geographic, Cartesian, Parameters>& factory)
         {
             factory.add_to_factory("cc", new cc_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace impl 
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection
