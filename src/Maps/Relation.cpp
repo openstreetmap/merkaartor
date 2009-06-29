@@ -121,7 +121,10 @@ void Relation::partChanged(MapFeature*, int ChangeId)
 
 QString Relation::description() const
 {
-	return QString(QApplication::translate("MapFeature", "relationship %1")).arg(id());
+	QString s(tagValue("name",""));
+	if (!s.isEmpty())
+		return QString("%1 (%2)").arg(s).arg(id());
+	return QString("%1").arg(id());
 }
 
 RenderPriority Relation::renderPriority()
