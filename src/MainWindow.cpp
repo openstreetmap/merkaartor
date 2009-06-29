@@ -1094,6 +1094,19 @@ void MainWindow::on_fileDownloadMoreAction_triggered()
 	theProgressLabel = NULL;
 }
 
+void MainWindow::downloadFeatures(const QList<MapFeature*>& aDownloadList)
+{
+	createProgressDialog();
+
+	if (!::downloadFeatures(this, aDownloadList, theDocument)) {
+		QMessageBox::warning(this, tr("Error downloading"), tr("The map could not be downloaded"));
+	}
+
+	SAFE_DELETE(theProgressDialog);
+	theProgressBar = NULL;
+	theProgressLabel = NULL;
+}
+
 void MainWindow::on_fileWorkOfflineAction_triggered()
 {
 	M_PREFS->setOfflineMode(!M_PREFS->getOfflineMode());

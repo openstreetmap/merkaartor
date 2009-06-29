@@ -45,6 +45,7 @@ public slots:
 
 	void on_centerAction_triggered();
 	void on_centerZoomAction_triggered();
+	void on_downloadAction_triggered();
 
 	void on_Viewport_changed();
 
@@ -57,6 +58,7 @@ private:
 	Ui::FeaturesDockWidget ui;
 	QAction* centerAction;
 	QAction* centerZoomAction;
+	QAction* downloadAction;
 
 	CoordBox theViewport;
 	MapFeature::FeatureType curFeatType;

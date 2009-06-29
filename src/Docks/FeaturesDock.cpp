@@ -15,10 +15,11 @@
 #include "MapView.h"
 #include "Maps/MapDocument.h"
 #include "PropertiesDock.h"
+#include "Maps/ImportOSM.h"
 
 #include "Maps/Relation.h"
 #include "Maps/Road.h"
-#include "Maps/TrackPoint.h"
+#include "MAps/TrackPoint.h"
 
 #include <QAction>
 #include <QTimer>
@@ -46,6 +47,8 @@ FeaturesDock::FeaturesDock(MainWindow* aParent)
 	connect(centerAction, SIGNAL(triggered()), this, SLOT(on_centerAction_triggered()));
 	centerZoomAction = new QAction(NULL, this);
 	connect(centerZoomAction, SIGNAL(triggered()), this, SLOT(on_centerZoomAction_triggered()));
+	downloadAction = new QAction(NULL, this);
+	connect(downloadAction, SIGNAL(triggered()), this, SLOT(on_downloadAction_triggered()));
 
 	int t;
 	t = ui.tabBar->addTab(NULL);
@@ -90,12 +93,24 @@ void FeaturesDock::on_FeaturesList_itemDoubleClicked(QListWidgetItem* item)
 void FeaturesDock::on_FeaturesList_customContextMenuRequested(const QPoint & pos)
 {
 	QListWidgetItem *it = ui.FeaturesList->itemAt(pos);
-	if (it) {
-		QMenu menu(ui.FeaturesList);
-		menu.addAction(centerAction);
-		menu.addAction(centerZoomAction);
-		menu.exec(ui.FeaturesList->mapToGlobal(pos));
+	if (!it)
+		return;
+
+	QMenu menu(ui.FeaturesList);
+	menu.addAction(centerAction);
+	menu.addAction(centerZoomAction);
+
+	downloadAction->setEnabled(false);
+	MapFeature* F;
+	for (int i=0; i < ui.FeaturesList->selectedItems().count(); ++i) {
+		F = ui.FeaturesList->selectedItems()[i]->data(Qt::UserRole).value<MapFeature*>();
+		if (F->notEverythingDownloaded()) {
+			downloadAction->setEnabled(true);
+			break;
+		}
 	}
+	menu.addAction(downloadAction);
+	menu.exec(ui.FeaturesList->mapToGlobal(pos));
 }
 
 void FeaturesDock::on_rbWithin_stateChanged ( int state )
@@ -159,6 +174,19 @@ void FeaturesDock::on_centerZoomAction_triggered()
 	QTimer::singleShot(10, this, SLOT(on_Viewport_changed()));
 }
 
+void FeaturesDock::on_downloadAction_triggered()
+{
+	MapFeature* F;
+	QList<MapFeature*> toResolve;
+	for (int i=0; i < ui.FeaturesList->selectedItems().count(); ++i) {
+		F = ui.FeaturesList->selectedItems()[i]->data(Qt::UserRole).value<MapFeature*>();
+
+		if (F->notEverythingDownloaded()) {
+			toResolve.push_back(F);
+		}
+	}
+	Main->downloadFeatures(toResolve);
+}
 
 void FeaturesDock::changeEvent(QEvent * event)
 {
@@ -276,6 +304,7 @@ void FeaturesDock::retranslateUi()
 	setWindowTitle(tr("Features"));
 	centerAction->setText(tr("Center map"));
 	centerZoomAction->setText(tr("Center && Zoom map"));
+	downloadAction->setText(tr("Download missing children"));
 }
 
 void FeaturesDock::retranslateTabBar()

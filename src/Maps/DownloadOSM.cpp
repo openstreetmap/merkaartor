@@ -583,6 +583,56 @@ bool checkForConflicts(MapDocument* theDocument)
 	return false;
 }
 
+bool downloadFeatures(QWidget* aParent, const QList<MapFeature*>& aDownloadList , MapDocument* theDocument)
+{
+	MainWindow* Main = dynamic_cast<MainWindow*>(aParent);
+	MapLayer* theLayer;
+	if (!theDocument->getLastDownloadLayer()) {
+		theLayer = new DrawingMapLayer(QApplication::translate("Downloader","%1 download").arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
+		theDocument->add(theLayer);
+	} else
+		theLayer = theDocument->getLastDownloadLayer();
+
+
+	QString osmWebsite, osmUser, osmPwd;
+
+	osmWebsite = MerkaartorPreferences::instance()->getOsmWebsite();
+	osmUser = MerkaartorPreferences::instance()->getOsmUser();
+	osmPwd = MerkaartorPreferences::instance()->getOsmPassword();
+
+	Main->view()->setUpdatesEnabled(false);
+
+	bool OK = true;
+	Downloader Rcv(osmWebsite, osmUser, osmPwd);
+
+	for (int i=0; i<aDownloadList.size(); ++i) {
+		QString URL = Rcv.getURLToFetchFull(aDownloadList[i]);
+
+		QUrl theUrl;
+		theUrl.setHost(osmWebsite);
+		theUrl.setPath(URL);
+		theUrl.setScheme("http");
+
+		downloadOSM(aParent, theUrl, osmUser, osmPwd, theDocument, theLayer);
+	}
+
+	Main->view()->setUpdatesEnabled(true);
+	if (OK)
+	{
+		Main->invalidateView();
+	} else
+	{
+		if (theLayer != theDocument->getLastDownloadLayer()) {
+			theDocument->remove(theLayer);
+			delete theLayer;
+		}
+	}
+	for (int j=0; j<theDocument->layerSize(); ++j) {
+		theDocument->getLayer(j)->reIndex();
+	}
+	return OK;
+}
+
 bool downloadMoreOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDocument)
 {
 	MainWindow* Main = dynamic_cast<MainWindow*>(aParent);

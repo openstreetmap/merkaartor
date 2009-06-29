@@ -75,6 +75,7 @@ class Downloader : public QObject
 bool downloadOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDocument);
 bool downloadMoreOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDocument);
 bool downloadOSM(QWidget* Main, const QString& aUser, const QString& aPassword, const quint32 region , MapDocument* theDocument, MapLayer* theLayer);
+bool downloadFeatures(QWidget* aParent, const QList<MapFeature*>& aDownloadList , MapDocument* theDocument);
 
 bool checkForConflicts(MapDocument* theDocument);
 

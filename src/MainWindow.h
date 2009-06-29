@@ -198,6 +198,8 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 		void loadFiles(const QStringList & fileNames);
 		void loadDocument(QString fn);
         void saveDocument();
+		void downloadFeatures(const QList<MapFeature*>& aDownloadList);
+
         void updateLanguage();
 
 

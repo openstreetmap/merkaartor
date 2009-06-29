@@ -328,7 +328,7 @@ static bool resolveNotYetDownloaded(QWidget* aParent, MapDocument* theDocument, 
 {
 	// resolving nodes and roads makes no sense since the OSM api guarantees that they will be all downloaded,
 	//  so only resolve for relations if the ResolveRelations pref is set
-	if (theDownloader && M_PREFS->getResolveRelations())
+	if (theDownloader)
 	{
 		IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(aParent);
 		if (!aProgressWindow)
@@ -353,18 +353,21 @@ static bool resolveNotYetDownloaded(QWidget* aParent, MapDocument* theDocument, 
 				return false;
 		}
 	}
-	if (M_PREFS->getDeleteIncompleteRelations()) {
-		QList<MapFeature*> MustDelete;
-		for (int i=0; i<theLayer->size(); i++) 
-		{
-			if (theLayer->get(i)->notEverythingDownloaded()) {
-				recurseDelete(theLayer->get(i), MustDelete);
-			}
+	return true;
+}
+
+static bool deleteIncompleteRelations(QWidget* aParent, MapDocument* theDocument, MapLayer* theLayer, Downloader* theDownloader)
+{
+	QList<MapFeature*> MustDelete;
+	for (int i=0; i<theLayer->size(); i++)
+	{
+		if (theLayer->get(i)->notEverythingDownloaded()) {
+			recurseDelete(theLayer->get(i), MustDelete);
 		}
-		for (int i=0; i<MustDelete.size(); i++) {
-			MustDelete[i]->layer()->remove(MustDelete[i]);
-			delete MustDelete[i];
-		}
+	}
+	for (int i=0; i<MustDelete.size(); i++) {
+		MustDelete[i]->layer()->remove(MustDelete[i]);
+		delete MustDelete[i];
 	}
 	return true;
 }
@@ -421,8 +424,11 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 	bool WasCanceled = false;
 	if (dlg)
 		WasCanceled = dlg->wasCanceled();
-	if (!WasCanceled)
+	if (!WasCanceled && M_PREFS->getResolveRelations())
 		WasCanceled = !resolveNotYetDownloaded(aParent,theDocument,theLayer,theDownloader);
+	if (!WasCanceled && M_PREFS->getDeleteIncompleteRelations())
+		WasCanceled = !deleteIncompleteRelations(aParent,theDocument,theLayer,theDownloader);
+
 	if (WasCanceled)
 	{
 		theDocument->remove(conflictLayer);
