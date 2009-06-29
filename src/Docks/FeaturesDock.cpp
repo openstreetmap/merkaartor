@@ -19,7 +19,7 @@
 
 #include "Maps/Relation.h"
 #include "Maps/Road.h"
-#include "MAps/TrackPoint.h"
+#include "Maps/TrackPoint.h"
 
 #include <QAction>
 #include <QTimer>
