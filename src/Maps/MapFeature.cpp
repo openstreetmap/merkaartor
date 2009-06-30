@@ -723,6 +723,10 @@ QString MapFeature::toMainHtml(QString type, QString systemtype)
 		S += "<br/>"
 		"<a href='/api/" + M_PREFS->apiVersion() + "/" + systemtype + "/" + xmlId() + "/relations'>"+QApplication::translate("MapFeature", "Referenced by relation")+"</a>";
 	}
+//	QString bbox("bbox=%1,%2,%3,%4");
+//	bbox = bbox.arg(intToAng(boundingBox().bottomLeft().lon()), 0, 'f').arg(intToAng(boundingBox().bottomLeft().lat()), 0, 'f').arg(intToAng(boundingBox().topRight().lon()), 0, 'f').arg(intToAng(boundingBox().topRight().lat()), 0, 'f');
+//	S += "<br/>"
+//		"<a href='/api/" + M_PREFS->apiVersion() + "/changesets?" + bbox + "'>"+QApplication::translate("MapFeature", "Changesets in feature bbox")+"</a>";
 	S += "</body></html>";
 
 	return S;

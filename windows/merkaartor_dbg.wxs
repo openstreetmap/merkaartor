@@ -4,7 +4,7 @@
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
    <Product  Id="31B4DFCE-89B4-493e-9DA9-511CCDC13E9C" Name="$(var.PackageName)" 
-      Language="1033" Version="0.12.0.2" Manufacturer="Bart Vanhauwaert"
+      Language="1033" Version="0.14.0.1" Manufacturer="Merkaartor"
       UpgradeCode="4892C085-55A9-413b-9C7B-42E33ED7D7D2">
 
       <Package 
@@ -22,9 +22,12 @@
          <Directory Id="ProgramMenuFolder">
          </Directory>
          <Directory Id="ProgramFilesFolder">
-            <Directory Id="INSTALLLOCATION" Name="Merkaartor">
-                <Directory Id="MERKAARTORHARE" Name="share">
-                   <Directory Id="WORLD_SHP" Name="world_shp" />
+            <Directory Id="INSTALLLOCATION" Name="Merkaartor $(var.VERSION)$(var.REVISION)">
+                <Directory Id="MERKAARTORSHARE" Name="share">
+                </Directory>
+                <Directory Id="MERKAARTORPLUGINS" Name="plugins">
+                   <Directory Id="MPBACKGROUND" Name="background" />
+                   <Directory Id="MPSTYLES" Name="styles" />
                 </Directory>
                 <Directory Id="QTIMAGEPLUGINDIR" Name="imageformats" />
                 <Directory Id="QTTRANSLATIONS" Name="translations" />
@@ -32,36 +35,34 @@
          </Directory>
       </Directory>
 
-      <DirectoryRef Id="WORLD_SHP">
-         <Component Id="World_shp" Guid="406fac4e-54cf-4901-b4b7-936f75a69e15">
-            <File Id="world_adm0.dbf" Name="world_adm0.dbf"
-               Source="$(var.SharePath)\world_shp\world_adm0.dbf" DiskId="1">
-            </File>
-            <File Id="world_adm0.shp" Name="world_adm0.shp"
-               Source="$(var.SharePath)\world_shp\world_adm0.shp" DiskId="1">
-            </File>
-            <File Id="world_adm0.shx" Name="world_adm0.shx"
-               Source="$(var.SharePath)\world_shp\world_adm0.shx" DiskId="1">
+      <DirectoryRef Id="MERKAARTORSHARE">
+         <Component Id="worldbackgroundosb" Guid="12ACB195-D065-49bb-A7A9-CACE30DD8F1B">
+            <File Id="world_background.osb" Name="world_background.osb"
+               Source="$(var.SharePath)\world_background.osb" DiskId="1">
             </File>
          </Component>
       </DirectoryRef>
 
+      <DirectoryRef Id="MPBACKGROUND">
+         <Component Id="yahoo" Guid="A37E552D-FF55-4507-8C8D-3201993F7C48">
+            <File Id="MYahooBackgroundPlugind.dll" Name="MYahooBackgroundPlugind.dll"
+               Source="$(var.BinPath)\plugins\background\MYahooBackgroundPlugind.dll" DiskId="1">
+            </File>
+         </Component>
+      </DirectoryRef>
+      
+      <DirectoryRef Id="MPSTYLES">
+         <Component Id="skulpture" Guid="47E06B1A-DBF5-452d-A68A-5F45CE411353">
+            <File Id="skulptured.dll" Name="skulptured.dll"
+               Source="$(var.BinPath)\plugins\styles\skulptured.dll" DiskId="1">
+            </File>
+         </Component>
+      </DirectoryRef>
+      
       <DirectoryRef Id="INSTALLLOCATION">
          <Component Id="DllCt" Guid="79C79986-ECB5-4835-9E98-4370C0F8B654">
             <File Id="mingwm10.dll" Name="mingwm10.dll"
                Source="$(var.MingwPath)\bin\mingwm10.dll" DiskId="1">
-            </File>
-            <File Id="libexslt.dll" Name="libexslt.dll"
-               Source="$(var.DllPath)\libexslt.dll" DiskId="1">
-            </File>
-            <File Id="libxml2.dll" Name="libxml2.dll"
-               Source="$(var.DllPath)\libxml2.dll" DiskId="1">
-            </File>
-            <File Id="libxslt.dll" Name="libxslt.dll"
-               Source="$(var.DllPath)\libxslt.dll" DiskId="1">
-            </File>
-            <File Id="libproj.dll" Name="libproj.dll"
-               Source="$(var.DllPath)\libproj.dll" DiskId="1">
             </File>
             <File Id="libgdal1.dll" Name="libgdal-1.dll"
                Source="$(var.DllPath)\libgdal-1.dll" DiskId="1">
@@ -78,11 +79,14 @@
             <File Id="merkaartor.cmd" Name="merkaartor.cmd"
                Source="merkaartor.cmd" DiskId="1">
                <Shortcut Id="myshort" Directory="ProgramMenuFolder"
-                     Name="Merkaartor (Debug)" WorkingDirectory="INSTALLLOCATION"
+                     Name="Merkaartor $(var.VERSION)$(var.REVISION) (Debug)" WorkingDirectory="INSTALLLOCATION"
 					 Icon="MainIcon" />
             </File>
             <File Id="gdb.exe" Name="gdb.exe"
                Source="$(var.MingwPath)\bin\gdb.exe" DiskId="1">
+            </File>
+            <File Id="libexpat1.dll" Name="libexpat-1.dll"
+               Source="$(var.MingwPath)\bin\libexpat-1.dll" DiskId="1">
             </File>
          </Component>
       </DirectoryRef>
@@ -120,10 +124,12 @@
          Display="expand" ConfigurableDirectory="INSTALLLOCATION">
          <ComponentRef Id="DllCt" />
          <ComponentRef Id="Merkaartor" />
+         <ComponentRef Id="yahoo" />
+         <ComponentRef Id="skulpture" />
       </Feature>
       <Feature Id="ftWorld_Shp" Title="World Shape file" Level="1"
-         Display="expand" ConfigurableDirectory="WORLD_SHP">
-         <ComponentRef Id="World_shp" />
+         Display="expand" ConfigurableDirectory="MERKAARTORSHARE">
+         <ComponentRef Id="worldbackgroundosb" />
       </Feature>
      <Feature Id="QtMainFeature" Title="Main Qt DLLs" Level="1"
         Display="expand" ConfigurableDirectory="INSTALLLOCATION">

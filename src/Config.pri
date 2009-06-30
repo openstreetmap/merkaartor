@@ -1,5 +1,5 @@
 VERSION="0.14"
-REVISION="-svn"
+REVISION="-pre1"
 
 # NODEBUG=1             - no debug target
 # TRANSDIR_MERKAARTOR - translations directory for merkaartor

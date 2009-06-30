@@ -3,9 +3,9 @@ ToWin = $1
 DOSWIXDIR := c:\\Program Files\\Windows Installer XML v3\\
 LIGHT := "c:/Program Files/Windows Installer XML v3/bin/light.exe"
 CANDLE := "c:/Program Files/Windows Installer XML v3/bin/candle.exe"
-LRELEASE := "lrelease.exe"
-VERSION=0.13
-REVISION=-rc4
+LRELEASE := "c:/Qt/4.5.2/bin/lrelease.exe"
+VERSION=0.14
+REVISION=-pre1
 
 all: release debug 
 
@@ -45,7 +45,7 @@ merkaartor_dbg.wixobj: merkaartor_dbg.wxs defines_dbg.wxi qt_dbg.wxi qttrans.wxi
 		-out $(call ToWin,$@)
 
 merkaartor.qm: 
-	$(LRELEASE) ..\\merkaartor.pro
+	$(LRELEASE) ../src/src.pro
 
 clean:
 	rm -rf *.msi *.wixobj *.wixpdb
