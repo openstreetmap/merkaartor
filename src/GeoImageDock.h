@@ -63,7 +63,7 @@ private slots:
 private:
 
 	QStringList Images;
-	int curImage;
+	int curImage, lastImage;
 	bool updateByMe;
 
 	ImageView *Image;

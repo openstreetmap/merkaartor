@@ -18,7 +18,7 @@
 GeoImageDock::GeoImageDock(MainWindow *aMain)
 	: QDockWidget(aMain), Main(aMain)
 {
-	curImage = -1;
+	curImage = lastImage = -1;
 	updateByMe = false;
 	setWindowTitle(tr("Geo Images"));
 	Image = new ImageView(this);
@@ -52,6 +52,8 @@ GeoImageDock::~GeoImageDock(void)
 
 void GeoImageDock::setImage(TrackPoint *Pt)
 {
+	if (curImage != -1) // save last imageId to start iteration there again
+		lastImage = curImage;
 	if (updateByMe)
 		return;
 	if (!Pt) {
@@ -81,6 +83,8 @@ void GeoImageDock::setImage(TrackPoint *Pt)
 
 void GeoImageDock::setImage(int ImageId)
 {
+	if (curImage != -1) // save last imageid to start iteration there again
+		lastImage = curImage;
 	if (ImageId < 0 || ImageId >= usedTrackPoints.size()) { // invalid ImageId
 		Image->setImage("");
 		curImage = -1;
@@ -145,13 +149,17 @@ void GeoImageDock::toClipboard(void)
 
 void GeoImageDock::selectNext(void)
 {
-	if (++curImage >= usedTrackPoints.size() || curImage < 0)
+	if (curImage == -1) // restart iteration at last selected image
+		curImage = lastImage;
+	if (++curImage >= usedTrackPoints.size())
 		curImage = 0;
 
 	setImage(curImage);
 }
 void GeoImageDock::selectPrevious(void)
 {
+	if (curImage == -1) // restart iteration at last selected image
+		curImage = lastImage;
 	if (--curImage < 0)
 		curImage = usedTrackPoints.size() - 1;
 
