@@ -424,10 +424,22 @@ void LayerDock::contextMenuEvent(QContextMenuEvent* anEvent)
    }
 }
 
+#if QT_VERSION < 0x040500
+bool LayerDock::event (QEvent* ev)
+{
+    switch (ev->type()) {
+    case QEvent::MouseButtonPress:
+        mousePressEvent(static_cast<QMouseEvent *>(ev));
+        break;
+    }
+    return MDockAncestor::event(ev);
+}
+#endif
+
 void LayerDock::mousePressEvent ( QMouseEvent * ev )
 {
 	if (ev->button() != Qt::LeftButton) {
-		ev->ignore();
+        ev->ignore();
 		return;
 	}
 
@@ -439,7 +451,7 @@ void LayerDock::mousePressEvent ( QMouseEvent * ev )
 				CHILD_WIDGET(i)->setChecked(false);
 		}
 		p->lastSelWidget = NULL;
-		ev->ignore();
+        ev->ignore();
 		return;
 	}
 
@@ -474,5 +486,5 @@ void LayerDock::mousePressEvent ( QMouseEvent * ev )
 		if (p->Main->info())
 			p->Main->info()->setHtml(aWidget->getMapLayer()->toHtml());
 	}
-	ev->accept();
+    ev->accept();
 }

@@ -42,4 +42,3 @@ QWidget* MDockAncestor::getWidget()
 
 	return mainWidget;
 }
-

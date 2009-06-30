@@ -37,6 +37,8 @@ FeaturesDock::FeaturesDock(MainWindow* aParent)
 	ui.cbWithin->setChecked(M_PREFS->getFeaturesWithin());
 	ui.FeaturesList->sortItems();
 
+	connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(on_Viewport_changed()));
+
 	connect(ui.FeaturesList, SIGNAL(itemSelectionChanged()), this, SLOT(on_FeaturesList_itemSelectionChanged()));
 	connect(ui.FeaturesList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(on_FeaturesList_itemDoubleClicked(QListWidgetItem*)));
 	connect(ui.FeaturesList, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(on_FeaturesList_customContextMenuRequested(const QPoint &)));

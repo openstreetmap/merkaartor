@@ -52,7 +52,11 @@ class LayerDock : public MDockAncestor
 	protected:
 		LayerDockPrivate* p;
 
-		virtual void contextMenuEvent(QContextMenuEvent* anEvent);
+#if QT_VERSION < 0x040500
+        virtual bool event (QEvent* ev);
+#endif
+
+        virtual void contextMenuEvent(QContextMenuEvent* anEvent);
         virtual void mousePressEvent ( QMouseEvent * event );
 
 		void dragEnterEvent(QDragEnterEvent *event);

@@ -673,7 +673,7 @@ void MapView::drawBackground(QPainter & theP, Projection& /*aProj*/)
 //	P.drawPath(theCoast);
 //}
 
-void MapView::drawFeatures(QPainter & P, Projection& aProj)
+void MapView::drawFeatures(QPainter & P, Projection& /*aProj*/)
 {
 	M_STYLE->initialize(P, *this);
 
