@@ -13,6 +13,8 @@
 ActionsDialog::ActionsDialog(QList<QAction *>& actions, MainWindow *parent)
     : QDialog(parent), Main(parent)
 {
+	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
     actionsTable = new QTableWidget(actions.count(), 2, this);
 	QStringList hdr;
 	hdr << tr("Description") << tr("Shortcut");

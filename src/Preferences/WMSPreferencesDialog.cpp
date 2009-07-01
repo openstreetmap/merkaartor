@@ -22,6 +22,8 @@ WMSPreferencesDialog::WMSPreferencesDialog(QWidget* parent)
 {
 	setupUi(this);
 
+	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
 	loadPrefs();
 
 	edWmsLayers->setVisible(false);

@@ -1118,6 +1118,8 @@ void MainWindow::on_helpAboutAction_triggered()
 	QDialog dlg(this);
 	Ui::AboutDialog About;
 	About.setupUi(&dlg);
+	dlg.setWindowFlags(dlg.windowFlags() & ~Qt::WindowContextHelpButtonHint);
+	dlg.setWindowFlags(dlg.windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
 	About.Version->setText(About.Version->text().arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
 	About.QTVersion->setText(About.QTVersion->text().arg(qVersion()).arg(QT_VERSION_STR));
 	QFile ct(":/Utils/CHANGELOG");

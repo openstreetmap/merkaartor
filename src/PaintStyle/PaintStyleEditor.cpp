@@ -27,6 +27,10 @@ PaintStyleEditor::PaintStyleEditor(QWidget *aParent, const GlobalPainter& aGloba
 		: QDialog(aParent), theGlobalPainter(aGlobalPainter), thePainters(aPainters), FreezeUpdate(true)
 {
 	setupUi(this);
+
+	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+	setWindowFlags(windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
+
 	BackgroundColor->setIconSize(QSize(36, 18));
 	ForegroundColor->setIconSize(QSize(36, 18));
 	TouchupColor->setIconSize(QSize(36, 18));

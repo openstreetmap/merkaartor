@@ -27,6 +27,8 @@ WorldOsbManager::WorldOsbManager(QWidget *parent)
 {
 	setupUi(this);
 
+	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
 	QUrl u;
 	if (!M_PREFS->getWorldOsbUri().isEmpty()) {
 		//u = QUrl(M_PREFS->getWorldOsbUri());

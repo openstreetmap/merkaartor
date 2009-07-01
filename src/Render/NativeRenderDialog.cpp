@@ -34,6 +34,9 @@ NativeRenderDialog::NativeRenderDialog(MapDocument *aDoc, const CoordBox& aCoord
 {
 	setupUi(this);
 
+	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+	setWindowFlags(windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
+
 	buttonBox->addButton(tr("Proceed..."), QDialogButtonBox::ActionRole);
 	Sets = new QSettings();
 	Sets->beginGroup("NativeRenderDialog");

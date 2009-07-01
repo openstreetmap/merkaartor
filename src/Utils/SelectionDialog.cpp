@@ -20,6 +20,9 @@ SelectionDialog::SelectionDialog(QWidget *parent)
 {
 	setupUi(this);
 
+	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+	setWindowFlags(windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
+
 	cbKey->setInsertPolicy(QComboBox::InsertAlphabetically);
 	cbValue->setInsertPolicy(QComboBox::InsertAlphabetically);
 

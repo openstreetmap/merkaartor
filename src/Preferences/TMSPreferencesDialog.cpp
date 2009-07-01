@@ -22,6 +22,8 @@ TMSPreferencesDialog::TMSPreferencesDialog(QWidget* parent)
 {
 	setupUi(this);
 
+	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
 	loadPrefs();
 }
 

@@ -44,6 +44,9 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 #endif
 
 	setupUi(this);
+
+	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
     QDir intTemplates(BUILTIN_TEMPLATES_DIR);
 	for (int i=0; i < intTemplates.entryList().size(); ++i) {
 		cbTemplates->addItem(intTemplates.entryList().at(i));
