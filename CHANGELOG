@@ -1,4 +1,7 @@
 v0.14
+    * ADD : Select a relation member by contextual menu
+    * CHG : Do not select a relation member when doing a "Center..."
+    * ADD : Clicking on a relation member highlights it
 	* ADD : Add a Features dock displaying the features in the current viewport
     * ADD : Add a case-sensitiveness option to the search + search by ID (closes #1509)
     * CHG : Remove support for osmarender (fixes #1966)

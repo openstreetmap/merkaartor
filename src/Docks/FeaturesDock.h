@@ -32,9 +32,9 @@ public:
 
 	void updateList();
 
-	MapFeature* selection(int idx);
-	QList<MapFeature*> selection();
-	int size() const;
+	MapFeature* highlighted(int idx);
+	QList<MapFeature*> highlighted();
+	int highlightedSize() const;
 
 public slots:
 	void on_FeaturesList_itemSelectionChanged();
@@ -46,19 +46,21 @@ public slots:
 	void on_centerAction_triggered();
 	void on_centerZoomAction_triggered();
 	void on_downloadAction_triggered();
+	void on_addSelectAction_triggered();
 
 	void on_Viewport_changed();
 
 	void tabChanged(int idx);
 
 private:
-	QList<MapFeature*> Selection;
+	QList<MapFeature*> Highlighted;
 
     MainWindow* Main;
 	Ui::FeaturesDockWidget ui;
 	QAction* centerAction;
 	QAction* centerZoomAction;
 	QAction* downloadAction;
+	QAction* addSelectAction;
 
 	CoordBox theViewport;
 	MapFeature::FeatureType curFeatType;

@@ -46,10 +46,17 @@ class PropertiesDock : public MDockAncestor
 		bool mergeTemplates(const QString& filename = "");
 		bool saveTemplates(const QString& filename);
 
+		MapFeature* highlighted(int idx);
+		QList<MapFeature*> highlighted();
+		int highlightedSize() const;
+
+
 	public slots:
 		void on_TrackPointLat_editingFinished();
 		void on_TrackPointLon_editingFinished();
 		void on_Member_customContextMenuRequested(const QPoint & pos);
+		void on_Member_clicked(const QModelIndex & index);
+		void on_Member_selected();
 		void on_RemoveMemberButton_clicked();
 		void on_RemoveTagButton_clicked();
 		void on_SelectionList_itemSelectionChanged();
@@ -87,8 +94,11 @@ class PropertiesDock : public MDockAncestor
 		EditCompleterDelegate* delegate;
 		QAction* centerAction;
 		QAction* centerZoomAction;
+		QAction* selectAction;
 		ShortcutOverrideFilter* shortcutFilter;
 		TagTemplates* theTemplates;
+
+		QList<MapFeature*> Highlighted;
 
 		QTableView *CurrentTagView;
 		QTableView *CurrentMembersView;

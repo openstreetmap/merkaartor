@@ -58,6 +58,8 @@ PropertiesDock::PropertiesDock(MainWindow* aParent)
 	connect(centerAction, SIGNAL(triggered()), this, SLOT(on_centerAction_triggered()));
 	centerZoomAction = new QAction(NULL, this);
 	connect(centerZoomAction, SIGNAL(triggered()), this, SLOT(on_centerZoomAction_triggered()));
+	selectAction = new QAction(NULL, this);
+	connect(selectAction, SIGNAL(triggered()), this, SLOT(on_Member_selected()));
 
 	loadTemplates();
 
@@ -451,6 +453,7 @@ void PropertiesDock::switchToRelationUi()
 	CurrentUi = NewUi;
 	RelationUi.MembersView->setContextMenuPolicy(Qt::CustomContextMenu);
 	connect(RelationUi.MembersView, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(on_Member_customContextMenuRequested(const QPoint &)));
+	connect(RelationUi.MembersView, SIGNAL(clicked(QModelIndex)), this, SLOT(on_Member_clicked(QModelIndex)));
 	connect(RelationUi.RemoveMemberButton,SIGNAL(clicked()),this, SLOT(on_RemoveMemberButton_clicked()));
 	connect(RelationUi.RemoveTagButton,SIGNAL(clicked()),this, SLOT(on_RemoveTagButton_clicked()));
 	setWindowTitle(tr("Properties - Relation"));
@@ -470,6 +473,8 @@ void PropertiesDock::switchToNoUi()
 
 void PropertiesDock::resetValues()
 {
+	Highlighted.clear();
+
 	// Tables that might need column sizing
     CurrentTagView = NULL;
     CurrentMembersView = NULL;
@@ -722,8 +727,49 @@ void PropertiesDock::on_Member_customContextMenuRequested(const QPoint & pos)
 		QMenu menu(CurrentMembersView);
 		menu.addAction(centerAction);
 		menu.addAction(centerZoomAction);
+		menu.addAction(selectAction);
 		menu.exec(CurrentMembersView->mapToGlobal(pos));
 	}
+}
+
+void PropertiesDock::on_Member_clicked(const QModelIndex & index)
+{
+	Highlighted.clear();
+
+	Relation* R = dynamic_cast<Relation*>(Selection[0]);
+	if (R) {
+		QVariant Content(R->referenceMemberModel(Main)->data(index,Qt::UserRole));
+		if (Content.isValid())
+		{
+			MapFeature* F = Content.value<MapFeature*>();
+			if (F)
+				Highlighted.push_back(F);
+		}
+	}
+	Main->view()->update();
+}
+
+void PropertiesDock::on_Member_selected()
+{
+	Relation* R = dynamic_cast<Relation*>(Selection[0]);
+	if (R) {
+		QModelIndexList indexes = CurrentMembersView->selectionModel()->selectedIndexes();
+		QModelIndex index;
+
+		foreach(index, indexes)
+		{
+			QModelIndex idx = index.sibling(index.row(),0);
+			QVariant Content(R->referenceMemberModel(Main)->data(idx,Qt::UserRole));
+			if (Content.isValid())
+			{
+				MapFeature* F = Content.value<MapFeature*>();
+				if (F) {
+					setSelection(F);
+				}
+			}
+		}
+	}
+	Main->invalidateView(false);
 }
 
 void PropertiesDock::on_SelectionList_customContextMenuRequested(const QPoint & pos)
@@ -755,7 +801,7 @@ void PropertiesDock::on_centerAction_triggered()
 				{
 					MapFeature* F = Content.value<MapFeature*>();
 					if (F) {
-						setSelection(F);
+						//setSelection(F);
 						cb = F->boundingBox();
 					}
 				}
@@ -795,7 +841,7 @@ void PropertiesDock::on_centerZoomAction_triggered()
 				{
 					MapFeature* F = Content.value<MapFeature*>();
 					if (F) {
-						setSelection(F);
+						//setSelection(F);
 						cb = F->boundingBox();
 						CoordBox mini(cb.center()-2000, cb.center()+2000);
 						cb.merge(mini);
@@ -945,5 +991,25 @@ void PropertiesDock::retranslateUi()
 	setWindowTitle(tr("Properties"));
 	centerAction->setText(tr("Center map"));
 	centerZoomAction->setText(tr("Center && Zoom map"));
+	selectAction->setText(tr("Select member"));
+}
+
+int PropertiesDock::highlightedSize() const
+{
+	if (!isVisible())
+		return 0;
+	return Highlighted.size();
+}
+
+MapFeature* PropertiesDock::highlighted(int idx)
+{
+	if (idx < Highlighted.size())
+		return Highlighted[idx];
+	return 0;
+}
+
+QList<MapFeature*> PropertiesDock::highlighted()
+{
+	return Highlighted;
 }
 

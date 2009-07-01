@@ -83,12 +83,15 @@ class GenericFeatureSnapInteraction : public Interaction
 		{
 			Interaction::paintEvent(anEvent, thePainter);
 
+			for (int i=0; i<main()->features()->highlightedSize(); ++i)
+				if (document()->exists(main()->features()->highlighted(i)))
+					main()->features()->highlighted(i)->drawHighlight(thePainter, view(), true);
 			for (int i=0; i<main()->properties()->size(); ++i)
 				if (document()->exists(main()->properties()->selection(i)))
 					main()->properties()->selection(i)->drawFocus(thePainter, view());
-			for (int i=0; i<main()->features()->size(); ++i)
-				if (document()->exists(main()->features()->selection(i)))
-					main()->features()->selection(i)->drawHighlight(thePainter, view(), true);
+			for (int i=0; i<main()->properties()->highlightedSize(); ++i)
+				if (document()->exists(main()->properties()->highlighted(i)))
+					main()->properties()->highlighted(i)->drawHighlight(thePainter, view(), true);
 
 #ifndef _MOBILE
 			if (LastSnap && document()->exists(LastSnap)) {

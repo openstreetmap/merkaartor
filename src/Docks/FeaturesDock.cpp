@@ -51,6 +51,8 @@ FeaturesDock::FeaturesDock(MainWindow* aParent)
 	connect(centerZoomAction, SIGNAL(triggered()), this, SLOT(on_centerZoomAction_triggered()));
 	downloadAction = new QAction(NULL, this);
 	connect(downloadAction, SIGNAL(triggered()), this, SLOT(on_downloadAction_triggered()));
+	addSelectAction = new QAction(NULL, this);
+	connect(addSelectAction, SIGNAL(triggered()), this, SLOT(on_addSelectAction_triggered()));
 
 	int t;
 	t = ui.tabBar->addTab(NULL);
@@ -75,11 +77,11 @@ FeaturesDock::~FeaturesDock()
 
 void FeaturesDock::on_FeaturesList_itemSelectionChanged()
 {
-	Selection.clear();
+	Highlighted.clear();
 	for (int i=0; i<ui.FeaturesList->selectedItems().count(); ++i) {
 		QListWidgetItem* item = ui.FeaturesList->selectedItems()[i];
 		MapFeature * F = item->data(Qt::UserRole).value<MapFeature*>();
-		Selection.push_back(F);
+		Highlighted.push_back(F);
 	}
 
 	Main->view()->update();
@@ -88,7 +90,7 @@ void FeaturesDock::on_FeaturesList_itemSelectionChanged()
 void FeaturesDock::on_FeaturesList_itemDoubleClicked(QListWidgetItem* item)
 {
 	MapFeature * F = item->data(Qt::UserRole).value<MapFeature*>();
-	Main->properties()->addSelection(F);
+	Main->properties()->setSelection(F);
 	Main->view()->update();
 }
 
@@ -99,8 +101,11 @@ void FeaturesDock::on_FeaturesList_customContextMenuRequested(const QPoint & pos
 		return;
 
 	QMenu menu(ui.FeaturesList);
+	menu.addAction(addSelectAction);
+	menu.addSeparator();
 	menu.addAction(centerAction);
 	menu.addAction(centerZoomAction);
+	menu.addSeparator();
 
 	downloadAction->setEnabled(false);
 	MapFeature* F;
@@ -190,6 +195,21 @@ void FeaturesDock::on_downloadAction_triggered()
 	Main->downloadFeatures(toResolve);
 }
 
+void FeaturesDock::on_addSelectAction_triggered()
+{
+	MapFeature* F;
+	Main->view()->blockSignals(true);
+
+	for (int i=0; i < ui.FeaturesList->selectedItems().count(); ++i) {
+		F = ui.FeaturesList->selectedItems()[i]->data(Qt::UserRole).value<MapFeature*>();
+		if (F) {
+			Main->properties()->addSelection(F);
+		}
+	}
+
+	Main->view()->blockSignals(false);
+}
+
 void FeaturesDock::changeEvent(QEvent * event)
 {
     if (event->type() == QEvent::LanguageChange)
@@ -201,7 +221,7 @@ void FeaturesDock::tabChanged(int idx)
 {
 	curFeatType = (MapFeature::FeatureType)ui.tabBar->tabData(idx).toInt();
 	ui.FeaturesList->clear();
-	Selection.clear();
+	Highlighted.clear();
 
 	updateList();
 }
@@ -218,7 +238,7 @@ void FeaturesDock::addItem(MapFeaturePtr F)
 	if (ui.FeaturesList->count() > MAX_FEATS)
 		return;
 
-	if (Selection.contains(F))
+	if (Highlighted.contains(F))
 		return;
 
 	if (curFeatType == MapFeature::Relations || curFeatType == MapFeature::All)
@@ -284,21 +304,23 @@ void FeaturesDock::updateList()
 	setUpdatesEnabled(true);
 }
 
-int FeaturesDock::size() const
+int FeaturesDock::highlightedSize() const
 {
-	return Selection.size();
+	if (!isVisible())
+		return 0;
+	return Highlighted.size();
 }
 
-MapFeature* FeaturesDock::selection(int idx)
+MapFeature* FeaturesDock::highlighted(int idx)
 {
-	if (idx < Selection.size())
-		return Selection[idx];
+	if (idx < Highlighted.size())
+		return Highlighted[idx];
 	return 0;
 }
 
-QList<MapFeature*> FeaturesDock::selection()
+QList<MapFeature*> FeaturesDock::highlighted()
 {
-	return Selection;
+	return Highlighted;
 }
 
 void FeaturesDock::retranslateUi()
@@ -307,6 +329,7 @@ void FeaturesDock::retranslateUi()
 	centerAction->setText(tr("Center map"));
 	centerZoomAction->setText(tr("Center && Zoom map"));
 	downloadAction->setText(tr("Download missing children"));
+	addSelectAction->setText(tr("Add to selection"));
 }
 
 void FeaturesDock::retranslateTabBar()
