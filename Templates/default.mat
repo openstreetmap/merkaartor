@@ -7,6 +7,7 @@
    <description locale="ar" >مكان</description>
    <description locale="cs" >Písto</description>
    <description locale="de" >Ort</description>
+   <description locale="es" >Lugar</description>
    <description locale="fr" >Lieu</description>
    <description locale="it" >Luogo</description>
    <description locale="pl" >Miejsca</description>
@@ -134,6 +135,7 @@
     <description locale="ar" >طريق سريع</description>
     <description locale="cs" >Dálnice</description>
     <description locale="de" >Autobahn</description>
+    <description locale="es" >Autopista</description>
     <description locale="fr" >Autoroute</description>
     <description locale="it" >Autostrada</description>
     <description locale="ja" >高速道路</description>
@@ -155,6 +157,7 @@
     <description locale="ar" >طريق جزعية</description>
     <description locale="cs" >Víceproudá cesta</description>
     <description locale="de" >Schnellstraße</description>
+    <description locale="es" >Carretera cortada</description>
     <description locale="fr" >Voie rapide</description>
     <description locale="it" >Strada principale</description>
     <description locale="ja" >国道</description>
@@ -174,6 +177,7 @@
     <description locale="ar" >طريق رئيسية</description>
     <description locale="cs" >Silnice I. třídy</description>
     <description locale="de" >Bundesstraße</description>
+    <description locale="es" >Carretera principal</description>
     <description locale="fr" >Route nationale</description>
     <description locale="it" >Strada primaria</description>
     <description locale="ja" >都道府県道</description>
@@ -214,6 +218,7 @@
     <description locale="ar" >طريق غير مصنفة</description>
     <description locale="cs" >Neoznačená cesta</description>
     <description locale="de" >Ortsverbindungsstraße</description>
+    <description locale="es" >Carretera sin clasificar</description>
     <description locale="fr" >Route non-classée</description>
     <description locale="it" >Strada non classificata</description>
     <description locale="ja" >一車線道</description>
@@ -308,6 +313,7 @@
     <description locale="ar" >درجات</description>
     <description locale="cs" >Schodiště</description>
     <description locale="de" >Treppe</description>
+    <description locale="es" >Escaleras</description>
     <description locale="fr" >Escaliers</description>
     <description locale="it" >Passi</description>
     <description locale="ja" >階段</description>
@@ -552,6 +558,7 @@
    <description locale="ar" >إتجاه واحد</description>
    <description locale="cs" >Jednosměrka</description>
    <description locale="de" >Einbahnstraße</description>
+   <description locale="es" >Sentido único</description>
    <description locale="fr" >Sens unique</description>
    <description locale="it" >Senso unico</description>
    <description locale="ja" >一方通行</description>
