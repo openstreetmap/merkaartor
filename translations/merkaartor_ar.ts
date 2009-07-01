@@ -1241,7 +1241,7 @@ Loading plugins...</source>
     <message>
         <location filename="../src/Interaction/CreateNodeInteraction.cpp" line="64"/>
         <source>Create point %1</source>
-        <translation>أنشئ النقطة Join</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Interaction/CreateRoundaboutInteraction.cpp" line="108"/>
@@ -1394,7 +1394,7 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
     <message>
         <location filename="../src/MainWindow.cpp" line="1496"/>
         <source>Create Relation %1</source>
-        <translation>أنشئ العلاقة Join</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="2213"/>

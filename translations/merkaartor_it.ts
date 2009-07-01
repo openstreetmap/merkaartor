@@ -2095,7 +2095,7 @@ Vuoi farlo ora?</translation>
     <message>
         <location filename="../src/MainWindow.cpp" line="841"/>
         <source>Track %1</source>
-        <translation>Tra</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="2461"/>
