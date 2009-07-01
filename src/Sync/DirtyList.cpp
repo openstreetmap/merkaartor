@@ -292,6 +292,7 @@ bool DirtyListDescriber::showChanges(QWidget* aParent)
 {
 	QDialog* dlg = new QDialog(aParent);
 	Ui.setupUi(dlg);
+	dlg->setWindowFlags(dlg->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 	theListWidget = Ui.ChangesList;
 
 	runVisit();
@@ -466,6 +467,8 @@ bool DirtyListExecutor::executeChanges(QWidget* aParent)
 {
 	Progress = new QProgressDialog(aParent);
 	Progress->setWindowTitle(tr("Uploading changes..."));
+	Progress->setWindowFlags(Progress->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+	Progress->setWindowFlags(Progress->windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
 	Progress->setWindowModality(Qt::WindowModal);
 	Progress->setMinimumDuration(0);
 	Progress->setMaximum(Tasks+2);
