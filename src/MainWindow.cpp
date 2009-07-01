@@ -2683,6 +2683,7 @@ void MainWindow::mapView_interactionChanged(Interaction* anInteraction)
 {
 	editPropertiesAction->setChecked(dynamic_cast<EditInteraction*>(anInteraction) != NULL);
 	editMoveAction->setChecked(dynamic_cast<MoveTrackPointInteraction*>(anInteraction) != NULL);
+	editRotateAction->setChecked(dynamic_cast<RotateInteraction*>(anInteraction) != NULL);
 	createNodeAction->setChecked(dynamic_cast<CreateNodeInteraction*>(anInteraction) != NULL);
 	createRoadAction->setChecked(dynamic_cast<CreateSingleWayInteraction*>(anInteraction) != NULL);
 	createAreaAction->setChecked(dynamic_cast<CreateAreaInteraction*>(anInteraction) != NULL);

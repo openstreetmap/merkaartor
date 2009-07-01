@@ -1498,9 +1498,12 @@
    </property>
   </action>
   <action name="editRotateAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="../Icons/AllIcons.qrc">
-     <normaloff>:/Icons/actions/edit_rotate.svg</normaloff>:/Icons/actions/edit_rotate.svg</iconset>
+     <normaloff>:/Icons/actions/edit_rotate.png</normaloff>:/Icons/actions/edit_rotate.png</iconset>
    </property>
    <property name="text">
     <string>Rotate</string>

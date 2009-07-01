@@ -56,7 +56,7 @@ QString RotateInteraction::toHtml()
 #ifndef Q_OS_SYMBIAN
 QCursor RotateInteraction::cursor() const
 {
-	QPixmap pm(":/Icons/rotate.svg");
+	QPixmap pm(":/Icons/rotate.png");
 	return QCursor(pm.scaledToWidth(22));
 }
 #endif
