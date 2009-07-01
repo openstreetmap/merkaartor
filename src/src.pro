@@ -140,6 +140,12 @@ unix {
 }
 win32 {
     SHARE_DIR = share
+    isEmpty(TRANSDIR_MERKAARTOR) {
+        TRANSDIR_MERKAARTOR = translations
+    }
+    isEmpty(TRANSDIR_SYSTEM) {
+        TRANSDIR_SYSTEM = translations
+    }
 }
 
 DEFINES += SHARE_DIR=$${SHARE_DIR}

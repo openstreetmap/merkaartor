@@ -218,7 +218,8 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 		);
 
 	QTime Stop(QTime::currentTime());
-	Main->PaintTimeLabel->setText(tr("%1ms").arg(Start.msecsTo(Stop)));
+	//Main->PaintTimeLabel->setText(tr("%1ms").arg(Start.msecsTo(Stop)));
+	Main->PaintTimeLabel->setText(tr("%1ms;ppm:%2").arg(Start.msecsTo(Stop)).arg(p->PixelPerM));
 }
 
 void MapView::drawScale(QPainter & P)
@@ -1302,6 +1303,7 @@ void MapView::zoom(double d, const QPointF & Around,
 	double DeltaLon = (Around.x() - pBefore.x() * ScaleLon);
 
 	p->theTransform.setMatrix(ScaleLon, 0, 0, 0, ScaleLat, 0, DeltaLon, DeltaLat, 1);
+	viewportRecalc(Screen);
 
 	double LengthOfOneDegreeLat = EQUATORIALRADIUS * M_PI / 180;
 	double LengthOfOneDegreeLon =
@@ -1313,7 +1315,6 @@ void MapView::zoom(double d, const QPointF & Around,
 	double LatAngPerM = 1.0 / EQUATORIALRADIUS;
 	p->PixelPerM = LatAngPerM / M_PI * INT_MAX * sa;
 
-	viewportRecalc(Screen);
 #else
 	if (ScaleLat * d < 1.0 && ScaleLon * d < 1.0) {
 		Coord Before = inverse(Around);

@@ -2647,7 +2647,7 @@ void MainWindow::updateLanguage()
 
 		// First, try in the app dir
         bool retM = merkaartorTranslator->load("merkaartor_" + DefaultLanguage, QCoreApplication::applicationDirPath());
-    #ifdef TRANSDIR_MERKAARTOR
+	#ifdef TRANSDIR_MERKAARTOR
         if (!retM) {
 			// Next, try the TRANSDIR_MERKAARTOR, if defined
             if (!QDir::isAbsolutePath(STRINGIFY(TRANSDIR_MERKAARTOR)))
