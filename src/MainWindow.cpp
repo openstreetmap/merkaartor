@@ -842,6 +842,7 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 					if (importOK && MerkaartorPreferences::instance()->getAutoExtractTracks()) {
 						theTracklayers[i]->extractLayer();
 					}
+					theTracklayers[i]->reIndex();
 				}
 			}
 		}
@@ -914,6 +915,8 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 
 			if (importedFileNames)
 				importedFileNames->append(fn);
+
+			newLayer->reIndex();
 		}
 		else
 		if (!importAborted)
