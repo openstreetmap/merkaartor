@@ -2661,16 +2661,8 @@ void MainWindow::updateLanguage()
 
 		if (retM)
 			QCoreApplication::installTranslator(merkaartorTranslator);
-
-		if (!retQt && !retM)
-        {
-			QMessageBox::warning(this, tr("Error"), tr("Could not load the selected language. Go to Tools, Preferences to select another language or check whether the translation file is missing."));
-		} else
-			if (!retQt)
-				statusBar()->showMessage(tr("Warning! Could not load the Qt translations for the \"%1\" language.").arg(DefaultLanguage), 15000);
-			else
-				if (!retM)
-					statusBar()->showMessage(tr("Warning! Could not load the Merkaartor translations for the \"%1\" language.").arg(DefaultLanguage), 15000);
+		else
+			statusBar()->showMessage(tr("Warning! Could not load the Merkaartor translations for the \"%1\" language. Switching to default english.").arg(DefaultLanguage), 15000);
     }
     retranslateUi(this);
 
