@@ -92,7 +92,7 @@ void EPBackgroundLayer::draw(Road* R)
 		if ((paintsel = R->getParent(i)->getEditPainter(p->theView.pixelPerM())))
 			return;
 	}
-	//else if (/*!globalZoom(p->theProjection) && */!R->hasEditPainter() && !R->sizeParents()) //FIXME Untagged roads level of zoom?
+	if (/*!globalZoom(p->theProjection) && */!R->hasEditPainter()) //FIXME Untagged roads level of zoom?
 	{
 		QPen thePen(QColor(0,0,0),1);
 
