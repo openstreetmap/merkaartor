@@ -916,7 +916,8 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 			if (importedFileNames)
 				importedFileNames->append(fn);
 
-			newLayer->reIndex();
+			if (newLayer)
+				newLayer->reIndex();
 		}
 		else
 		if (!importAborted)
