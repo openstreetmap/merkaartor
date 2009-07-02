@@ -185,7 +185,7 @@ void TrackPoint::drawHover(QPainter& thePainter, MapView* theView, bool solid)
 	}
 }
 
-void TrackPoint::drawHighlight(QPainter& thePainter, MapView* theView, bool solid)
+void TrackPoint::drawHighlight(QPainter& thePainter, MapView* theView, bool /*solid*/)
 {
 	thePainter.setPen(MerkaartorPreferences::instance()->getHighlightColor());
 	QPointF P(theView->toView(this));

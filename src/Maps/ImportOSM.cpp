@@ -356,7 +356,7 @@ static bool resolveNotYetDownloaded(QWidget* aParent, MapDocument* theDocument, 
 	return true;
 }
 
-static bool deleteIncompleteRelations(QWidget* aParent, MapDocument* theDocument, MapLayer* theLayer, Downloader* theDownloader)
+static bool deleteIncompleteRelations(QWidget* /*aParent*/, MapDocument* /*theDocument*/, MapLayer* theLayer, Downloader* /*theDownloader*/)
 {
 	QList<MapFeature*> MustDelete;
 	for (int i=0; i<theLayer->size(); i++)

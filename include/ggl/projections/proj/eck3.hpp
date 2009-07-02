@@ -81,7 +81,7 @@ namespace ggl { namespace projection
             };
 
             template <typename Parameters>
-            void setup(Parameters& par, par_eck3& proj_parm) 
+						void setup(Parameters& par, par_eck3& /*proj_parm*/)
             {
             	par.es = 0.;
                 // par.inv = s_inverse;

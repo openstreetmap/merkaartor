@@ -58,7 +58,7 @@ namespace ggl { namespace projection
             /* based upon Snyder and Linck, USGS-NMD */
             template <typename Parameters>
             	inline void
-            seraz0(double lam, double mult, Parameters& par, par_lsat& proj_parm) {
+						seraz0(double lam, double mult, Parameters& /*par*/, par_lsat& proj_parm) {
                 double sdsq, h, s, fc, sd, sq, d__1;
             
                 lam *= DEG_TO_RAD;
