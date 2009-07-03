@@ -76,7 +76,7 @@ void WMSPreferencesDialog::on_btAddWmsServer_clicked(void)
 	addServer(WmsServer(edWmsName->text(), theAdress, theUrl.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority),
 		edWmsLayers->text(), cbWmsProj->currentText(), edWmsStyles->text(), cbWmsImgFormat->currentText()));
 	lvWmsServers->setCurrentRow(lvWmsServers->count() - 1);
-	on_lvWmsServers_itemClicked(lvWmsServers->item(lvWmsServers->currentRow()));
+	on_lvWmsServers_itemSelectionChanged();
 }
 
 void WMSPreferencesDialog::on_btDelWmsServer_clicked(void)
@@ -87,11 +87,13 @@ void WMSPreferencesDialog::on_btDelWmsServer_clicked(void)
 
 	theWmsServers[idx].deleted = true;
 	delete lvWmsServers->currentItem();
-	on_lvWmsServers_itemClicked(lvWmsServers->item(lvWmsServers->currentRow()));
+	on_lvWmsServers_itemSelectionChanged();
 }
 
-void WMSPreferencesDialog::on_lvWmsServers_itemClicked(QListWidgetItem* it)
+void WMSPreferencesDialog::on_lvWmsServers_itemSelectionChanged()
 {
+	QListWidgetItem* it = lvWmsServers->item(lvWmsServers->currentRow());
+	
 	int idx = it->data(Qt::UserRole).toInt();
 	if (idx >= theWmsServers.size())
 		return;
@@ -123,7 +125,7 @@ void WMSPreferencesDialog::setSelectedServer(QString theValue)
 	QList<QListWidgetItem *> L = lvWmsServers->findItems(theValue, Qt::MatchExactly);
 	if (L.size()) {
 		lvWmsServers->setCurrentItem(L[0]);
-		on_lvWmsServers_itemClicked(L[0]);
+		on_lvWmsServers_itemSelectionChanged();
 	}
 }
 

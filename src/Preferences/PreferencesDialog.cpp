@@ -412,7 +412,7 @@ void PreferencesDialog::on_btAddTool_clicked(void)
 	lvTools->addItem(t.ToolName);
 
 	lvTools->setCurrentRow(theTools.size() - 1);
-	on_lvTools_itemClicked(lvTools->item(lvTools->currentRow()));
+	on_lvTools_itemSelectionChanged();
 }
 
 void PreferencesDialog::on_btDelTool_clicked(void)
@@ -431,7 +431,7 @@ void PreferencesDialog::on_btDelTool_clicked(void)
 	if (idx && (idx >= theTools.size()))
 		--idx;
 	lvTools->setCurrentRow(idx);
-	on_lvTools_itemClicked(lvTools->item(lvTools->currentRow()));
+	on_lvTools_itemSelectionChanged();
 }
 
 void PreferencesDialog::on_btApplyTool_clicked(void)
@@ -452,8 +452,10 @@ void PreferencesDialog::on_btApplyTool_clicked(void)
 	lvTools->item(lvTools->currentRow())->setText(edToolName->text());
 }
 
-void PreferencesDialog::on_lvTools_itemClicked(QListWidgetItem* it)
+void PreferencesDialog::on_lvTools_itemSelectionChanged()
 {
+	QListWidgetItem* it = lvTools->item(lvTools->currentRow());
+	
 	int idx = static_cast<int>(lvTools->row(it));
 	if (idx >= theTools.size())
 		return;

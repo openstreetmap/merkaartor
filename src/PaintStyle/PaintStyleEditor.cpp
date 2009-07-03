@@ -47,7 +47,7 @@ PaintStyleEditor::PaintStyleEditor(QWidget *aParent, const GlobalPainter& aGloba
 
 	DrawGlobalBackground->setChecked(theGlobalPainter.getDrawBackground());
 	makeBoundaryIcon(GlobalBackgroundColor, theGlobalPainter.getBackgroundColor());
-	on_PaintList_itemClicked(PaintList->item(PaintList->currentRow()));
+	on_PaintList_itemSelectionChanged();
 
 	FreezeUpdate = false;
 
@@ -59,7 +59,7 @@ void PaintStyleEditor::on_AddButton_clicked()
 	thePainters.push_back(FeaturePainter());
 	PaintList->addItem(thePainters[thePainters.size()-1].userName());
 	PaintList->setCurrentRow(thePainters.size() - 1);
-	on_PaintList_itemClicked(PaintList->item(PaintList->currentRow()));
+	on_PaintList_itemSelectionChanged();
 }
 
 void PaintStyleEditor::on_DuplicateButton_clicked()
@@ -72,7 +72,7 @@ void PaintStyleEditor::on_DuplicateButton_clicked()
 	idx++;
 	PaintList->insertItem(idx, thePainters[idx].userName());
 	PaintList->setCurrentRow(idx);
-	on_PaintList_itemClicked(PaintList->item(PaintList->currentRow()));
+	on_PaintList_itemSelectionChanged();
 }
 
 void PaintStyleEditor::on_RemoveButton_clicked()
@@ -86,7 +86,7 @@ void PaintStyleEditor::on_RemoveButton_clicked()
 	if (idx && (idx >= thePainters.size()))
 		--idx;
 	PaintList->setCurrentRow(idx);
-	on_PaintList_itemClicked(PaintList->item(PaintList->currentRow()));
+	on_PaintList_itemSelectionChanged();
 }
 
 void PaintStyleEditor::on_btUp_clicked()
@@ -115,10 +115,8 @@ void PaintStyleEditor::on_btDown_clicked()
 	PaintList->setCurrentRow(idx+1);
 }
 
-void PaintStyleEditor::on_PaintList_itemClicked(QListWidgetItem* it)
+void PaintStyleEditor::on_PaintList_itemSelectionChanged()
 {
-	Q_UNUSED(it)
-			
 	FreezeUpdate = true;
 	int idx = PaintList->currentRow();
 	if (idx >= thePainters.size())

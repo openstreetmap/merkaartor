@@ -19,7 +19,7 @@ class PaintStyleEditor : public QDialog, public Ui::PaintStyleEditor
 		void on_DrawGlobalBackground_clicked(bool b);
 		void on_GlobalBackgroundColor_clicked();
 
-		void on_PaintList_itemClicked(QListWidgetItem*);
+		void on_PaintList_itemSelectionChanged();
 		void on_TagSelection_editingFinished();
 		void on_LowerZoomBoundary_valueChanged();
 		void on_UpperZoomBoundary_valueChanged();

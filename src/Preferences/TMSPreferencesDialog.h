@@ -40,7 +40,7 @@ public slots:
 	void on_btApplyTmsServer_clicked();
 	void on_btAddTmsServer_clicked();
 	void on_btDelTmsServer_clicked();
-	void on_lvTmsServers_itemClicked(QListWidgetItem* it);
+	void on_lvTmsServers_itemSelectionChanged();
 	void on_buttonBox_clicked(QAbstractButton * button);
 
 private:

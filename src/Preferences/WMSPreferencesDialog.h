@@ -42,7 +42,7 @@ public slots:
 	void on_btAddWmsServer_clicked();
 	void on_btDelWmsServer_clicked();
 	void on_btShowCapabilities_clicked();
-	void on_lvWmsServers_itemClicked(QListWidgetItem* it);
+	void on_lvWmsServers_itemSelectionChanged();
 	void readResponseHeader(const QHttpResponseHeader &responseHeader);
 	void httpRequestFinished(bool error);
 	void on_buttonBox_clicked(QAbstractButton * button);

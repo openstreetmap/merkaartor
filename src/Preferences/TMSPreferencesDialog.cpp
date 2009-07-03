@@ -63,7 +63,7 @@ void TMSPreferencesDialog::on_btAddTmsServer_clicked(void)
 {
 	addServer(TmsServer(edTmsName->text(), edTmsAdr->text(), edTmsPath->text(), sbTileSize->value(), sbMinZoom->value(), sbMaxZoom->value()));
 	lvTmsServers->setCurrentRow(lvTmsServers->count() - 1);
-	on_lvTmsServers_itemClicked(lvTmsServers->item(lvTmsServers->currentRow()));
+	on_lvTmsServers_itemSelectionChanged();
 }
 
 void TMSPreferencesDialog::on_btDelTmsServer_clicked(void)
@@ -74,11 +74,13 @@ void TMSPreferencesDialog::on_btDelTmsServer_clicked(void)
 
 	theTmsServers[idx].deleted = true;
 	delete lvTmsServers->takeItem(idx);
-	on_lvTmsServers_itemClicked(lvTmsServers->item(lvTmsServers->currentRow()));
+	on_lvTmsServers_itemSelectionChanged();
 }
 
-void TMSPreferencesDialog::on_lvTmsServers_itemClicked(QListWidgetItem* it)
+void TMSPreferencesDialog::on_lvTmsServers_itemSelectionChanged()
 {
+	QListWidgetItem* it = lvTmsServers->item(lvTmsServers->currentRow());
+	
 	int idx = it->data(Qt::UserRole).toInt();
 	if (idx >= theTmsServers.size())
 		return;
@@ -103,7 +105,7 @@ void TMSPreferencesDialog::setSelectedServer(QString theValue)
 {
 	QList<QListWidgetItem *> L = lvTmsServers->findItems(theValue, Qt::MatchExactly);
 	lvTmsServers->setCurrentItem(L[0]);
-	on_lvTmsServers_itemClicked(L[0]);
+	on_lvTmsServers_itemSelectionChanged();
 }
 
 void TMSPreferencesDialog::on_buttonBox_clicked(QAbstractButton * button)

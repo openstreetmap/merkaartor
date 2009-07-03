@@ -50,7 +50,7 @@ public slots:
 	void on_btAddTool_clicked(void);
 	void on_btDelTool_clicked(void);
 	void on_btApplyTool_clicked(void);
-	void on_lvTools_itemClicked(QListWidgetItem* it);
+	void on_lvTools_itemSelectionChanged();
 	void on_btBrowse_clicked();
 
 private:
