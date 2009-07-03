@@ -299,6 +299,7 @@ SlippyMapCache::SlippyMapCache()
 : QObject(0), DownloadId(0), DownloadBusy(false), theMap(0)
 {
 	Download.setHost("tile.openstreetmap.org");
+	Download.setProxy(M_PREFS->getProxy(QUrl(QString("http://tile.openstreetmap.org"))));
 
 	DownloadBuffer.setBuffer(&DownloadData);
 	DownloadBuffer.open(QIODevice::WriteOnly);

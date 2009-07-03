@@ -54,7 +54,6 @@ public:
 private:
 	QString selectedServer;
 	int httpGetId;
-	QHttp *http;
 	QBuffer* buf;
 
 };

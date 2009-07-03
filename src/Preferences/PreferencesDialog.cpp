@@ -253,19 +253,6 @@ void PreferencesDialog::savePrefs()
 	M_PREFS->setProxyPort(edProxyPort->text().toInt());
 	M_PREFS->setProxyUser(edProxyUser->text());
 	M_PREFS->setProxyPassword(edProxyPassword->text());
-	if (M_PREFS->M_PREFS->getProxyUse()) {
-		QNetworkProxy proxy;
-#if QT_VERSION < 0x040500
-		proxy.setType(QNetworkProxy::HttpCachingProxy);
-#else
-		proxy = QNetworkProxy::HttpProxy;
-#endif
-		proxy.setHostName(M_PREFS->getProxyHost());
-		proxy.setPort(M_PREFS->getProxyPort());
-		proxy.setUser(M_PREFS->getProxyUser());
-		proxy.setPassword(M_PREFS->getProxyPassword());
-		QNetworkProxy::setApplicationProxy(proxy);
-	}
 
 	M_PREFS->setCacheDir(edCacheDir->text());
 	M_PREFS->setCacheSize(sbCacheSize->value());

@@ -20,6 +20,8 @@
 #include "httpquery.h"
 #include <QtDebug>
 
+#include "Preferences/MerkaartorPreferences.h"
+
 namespace NameFinder
 {
 
@@ -55,6 +57,8 @@ namespace NameFinder
 		else
 			request.setValue( "Host", myService.host() );
 		request.setValue( "Connection", "Keep-Alive" );
+
+		connection.setProxy(M_PREFS->getProxy(myService));
 		reqId = connection.request( request, NULL, myDevice ); 
 		connection.close();
 		return true;

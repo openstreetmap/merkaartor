@@ -86,7 +86,8 @@ void BrowserWebPage::javaScriptAlert ( QWebFrame * frame, const QString & msg )
 		sw = x1 - ox;
 		sh = y1 - oy;
 
-		 qDebug() << "---- " << sw << ", " << sh;
+		qDebug() << "---- " << sw << ", " << sh;
+
 	}
 	if (msg.startsWith("ReqSize")) {
 		QStringList tokens = msg.split(" ");
@@ -135,13 +136,13 @@ BrowserImageManager::BrowserImageManager(QObject* parent)
     }
     
     page = new BrowserWebPage();
-    page->setViewportSize(QSize(1024, 1024));
+	page->setViewportSize(QSize(1024, 1024));
 
     connect(page, SIGNAL(loadFinished(bool)), this, SLOT(pageLoadFinished(bool)));
 
 	timeoutTimer = new QTimer();
 	connect(timeoutTimer, SIGNAL(timeout()), this, SLOT(timeout()));
-	timeoutTimer->setInterval(10000);
+	timeoutTimer->setInterval(30000);
 }
 #endif // BROWSERIMAGEMANAGER_IS_THREADED
 
@@ -210,9 +211,7 @@ void BrowserImageManager::launchRequest()
 
 	QUrl u = QUrl( R.url);
 
-#if QT_VERSION < 0x040500
-	page->networkAccessManager()->setProxy(QNetworkProxy::applicationProxy());
-#endif
+	page->networkAccessManager()->setProxy(M_PREFS->getProxy(u));
 	page->launchRequest(u);
 	requestActive = true;
 #ifndef BROWSERIMAGEMANAGER_IS_THREADED
@@ -355,6 +354,7 @@ void BrowserImageManager::checkRequests()
 #else
 void BrowserImageManager::timeout()
 {
+	qDebug() << "BrowserImageManager::timeout";
 	page->triggerAction(QWebPage::Stop);
 	pageLoadFinished(false);
 }

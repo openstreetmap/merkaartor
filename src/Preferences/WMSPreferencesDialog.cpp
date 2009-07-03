@@ -196,6 +196,7 @@ void WMSPreferencesDialog::requestCapabilities(QUrl url)
 	header.setValue("User-Agent", userAgent);
 
 	http->setHost(url.host(), url.port() == -1 ? 80 : url.port());
+	http->setProxy(M_PREFS->getProxy(url));
 
 	httpGetId = http->request(header);
 }

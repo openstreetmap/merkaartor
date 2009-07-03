@@ -18,6 +18,7 @@
 #include <QHttp>
 #include <QBuffer>
 #include <QUuid>
+#include <QNetworkProxy>
 
 #include "Maps/Coord.h"
 #include "Preferences/WmsServersList.h"
@@ -331,6 +332,8 @@ public:
 	M_PARAM_DECLARE_BOOL(OfflineMode)
 
 	/* Proxy */
+	QNetworkProxy getProxy(const QUrl & requestUrl);
+
 	M_PARAM_DECLARE_BOOL(ProxyUse)
 	M_PARAM_DECLARE_STRING(ProxyHost)
 	M_PARAM_DECLARE_INT(ProxyPort)

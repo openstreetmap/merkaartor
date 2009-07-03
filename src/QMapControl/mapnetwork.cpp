@@ -20,6 +20,8 @@
 #include "mapnetwork.h"
 #include <QWaitCondition>
 
+#include "Preferences/MerkaartorPreferences.h"
+
 #define MAX_REQ 8
 
 MapNetwork::MapNetwork(IImageManager* parent)
@@ -74,6 +76,7 @@ void MapNetwork::launchRequest(QUrl url, QString hash)
 	header.setValue("Host", url.host());
     header.setValue("User-Agent", "Mozilla");
 
+	http->setProxy(M_PREFS->getProxy(url));
 	int getId = http->request(header);
 
 	if (vectorMutex.tryLock()) {

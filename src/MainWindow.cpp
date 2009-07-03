@@ -305,7 +305,6 @@ MainWindow::MainWindow(void)
 	}
 #endif
 	on_fileNewAction_triggered();
-	M_PREFS->initialPosition(theView);
 
 #define NUMOP 3
 	static const char *opStr[NUMOP] = {
@@ -333,7 +332,8 @@ MainWindow::MainWindow(void)
 
 void MainWindow::delayedInit()
 {
-    updateWindowMenu();
+	M_PREFS->initialPosition(theView);
+	updateWindowMenu();
 }
 
 
@@ -2144,7 +2144,7 @@ void MainWindow::updateProjectionMenu()
 		QAction* a = new QAction(name, mnuProjections);
 		actgrp->addAction(a);
 		a->setCheckable (true);
-		if (M_PREFS->getProjectionType() == name)
+		if (name.contains(M_PREFS->getProjectionType()))
 			a->setChecked(true);
 		mnuProjections->addAction(a);
 	}

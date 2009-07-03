@@ -15,7 +15,7 @@
 #include <QApplication>
 #include <QByteArray>
 #include <QMessageBox>
-#include <QNetworkProxy>
+#include <QNetworkProxyFactory>
 
 
 #include "MainWindow.h"
@@ -217,6 +217,7 @@ void MerkaartorPreferences::fromOsmPref()
 	QByteArray ba_auth = auth.toUtf8().toBase64();
 	Header.setValue("Authorization", QString("Basic %1").arg(QString(ba_auth)));
 
+	httpRequest.setProxy(getProxy(osmWeb));
 	OsmPrefLoadId = httpRequest.request(Header, NULL, &OsmPrefContent);
 }
 
@@ -324,6 +325,7 @@ void MerkaartorPreferences::putOsmPref(const QString& k, const QString& v)
 	QByteArray ba_auth = auth.toUtf8().toBase64();
 	Header.setValue("Authorization", QString("Basic %1").arg(QString(ba_auth)));
 
+	httpRequest.setProxy(getProxy(osmWeb));
 	OsmPrefSaveId = httpRequest.request(Header,ba);
 }
 
@@ -347,6 +349,7 @@ void MerkaartorPreferences::deleteOsmPref(const QString& k)
 	QByteArray ba_auth = auth.toUtf8().toBase64();
 	Header.setValue("Authorization", QString("Basic %1").arg(QString(ba_auth)));
 
+	httpRequest.setProxy(getProxy(osmWeb));
 	httpRequest.request(Header);
 }
 
@@ -370,20 +373,6 @@ void MerkaartorPreferences::on_responseHeaderReceived(const QHttpResponseHeader 
 void MerkaartorPreferences::initialize()
 {
 	Use06Api = Sets->value("osm/use06api", "true").toBool();
-
-	if (getProxyUse()) {
-		QNetworkProxy proxy;
-#if QT_VERSION < 0x040500
-		proxy.setType(QNetworkProxy::HttpCachingProxy);
-#else
-		proxy = QNetworkProxy::HttpProxy;
-#endif
-		proxy.setHostName(getProxyHost());
-		proxy.setPort(getProxyPort());
-		proxy.setUser(getProxyUser());
-		proxy.setPassword(getProxyPassword());
-		QNetworkProxy::setApplicationProxy(proxy);
-	}
 
 	loadProjections();
 	loadWMSes();
@@ -773,7 +762,7 @@ void MerkaartorPreferences::setInitialPosition(MapView* vw)
 void MerkaartorPreferences::initialPosition(MapView* vw)
 {
 	if (!Sets->contains("MainWindow/InitialPosition")) {
-		vw->setViewport(WORLD_COORDBOX, vw->rect());
+		vw->setViewport(CoordBox(Coord(313646971, -120391031), Coord(793005387, 444097188)), vw->rect());
 		return;
 	}
 
@@ -798,7 +787,7 @@ void MerkaartorPreferences::setProjectionType(ProjectionType theValue)
 
 ProjectionType MerkaartorPreferences::getProjectionType() const
 {
-	return (ProjectionType)Sets->value("projection/Type", "").toString();
+	return (ProjectionType)Sets->value("projection/Type", "Mercator").toString();
 }
 
 ProjectionsList MerkaartorPreferences::getProjectionsList()
@@ -1286,6 +1275,25 @@ M_PARAM_IMPLEMENT_STRING(MerkaartorStyleString, visual, "skulpture")
 M_PARAM_IMPLEMENT_BOOL(OfflineMode, Network, false)
 
 /* Proxy */
+
+QNetworkProxy MerkaartorPreferences::getProxy(const QUrl & requestUrl)
+{
+	QNetworkProxy theProxy;
+
+	if (false /*getProxySystem()*/) {
+		QList<QNetworkProxy> theProxyList = QNetworkProxyFactory::systemProxyForQuery ( QNetworkProxyQuery(requestUrl) );
+		theProxy = theProxyList[0];
+	} else {
+		theProxy = QNetworkProxy::HttpProxy;
+		theProxy.setHostName(getProxyHost());
+		theProxy.setPort(getProxyPort());
+		theProxy.setUser(getProxyUser());
+		theProxy.setPassword(getProxyPassword());
+	}
+
+	return theProxy;
+}
+
 M_PARAM_IMPLEMENT_BOOL(ProxyUse, proxy, false)
 M_PARAM_IMPLEMENT_STRING(ProxyHost, proxy, "")
 M_PARAM_IMPLEMENT_INT(ProxyPort, proxy, 8080)

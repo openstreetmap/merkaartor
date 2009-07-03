@@ -193,6 +193,7 @@ bool Downloader::go(const QString& url)
 	else
 		Header.setValue("Host",Web+':'+QString::number(Port));
 	Content.clear();
+	Request.setProxy(M_PREFS->getProxy(QUrl(QString("http://" + Header.value("Host") + url))));
 	Id = Request.request(Header,QByteArray(), &ResponseBuffer);
 
 	if (Loop.exec() == QDialog::Rejected)
@@ -251,6 +252,7 @@ bool Downloader::request(const QString& Method, const QString& URL, const QStrin
 	Header.setValue("Authorization", QString("Basic %1").arg(QString(ba_auth)));
 
 	Content.clear();
+	Request.setProxy(M_PREFS->getProxy(QUrl(QString("http://" + Header.value("Host") + URL))));
 	Id = Request.request(Header,ba);
 
 	if (Loop.exec() == QDialog::Rejected)
