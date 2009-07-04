@@ -1012,7 +1012,6 @@ void OsbMapLayer::invalidate(MapDocument* d, CoordBox vp)
 		if (!pp->loadedTiles.contains(tileToLoad[i]))
 			if (pp->theImp->loadTile(tileToLoad[i], d, this))
 				pp->loadedTiles.push_back(tileToLoad[i]);
-
 }
 
 //MapFeature*  OsbMapLayer::getFeatureByRef(MapDocument* d, quint64 ref)

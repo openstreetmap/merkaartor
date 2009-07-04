@@ -106,6 +106,7 @@ bool OsbRegion::loadTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer)
 		MapFeature* F = theOsb->getFeature(this, d, theLayer);
 		theOsb->theTileIndex[tile].push_back(F);
 		theLayer->featRefCount[F]++;
+		theLayer->getRTree()->insert(F->boundingBox(), F);
 	}
 
 	return true;

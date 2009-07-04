@@ -14,6 +14,7 @@
 #include "MainWindow.h"
 #include "MapView.h"
 #include "Maps/MapDocument.h"
+#include "Maps/ImageMapLayer.h"
 #include "PropertiesDock.h"
 #include "Maps/ImportOSM.h"
 
@@ -288,6 +289,9 @@ void FeaturesDock::updateList()
 
 	for (int j=0; j<Main->document()->layerSize(); ++j) {
 		if (!Main->document()->getLayer(j)->size() || !Main->document()->getLayer(j)->isVisible())
+			continue;
+
+		if (dynamic_cast<ImageMapLayer*>(Main->document()->getLayer(j)))
 			continue;
 
 		std::deque < MapFeaturePtr > ret = Main->document()->getLayer(j)->getRTree()->find(theViewport);

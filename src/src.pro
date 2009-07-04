@@ -3,7 +3,8 @@
 # TRANSDIR_MERKAARTOR - translations directory for merkaartor
 # TRANSDIR_SYSTEM     - translations directory for Qt itself
 # OUTPUT_DIR          - base directory for local output files
-# PREFIX              - base prefix for installation
+# PREFIX              - base prefix for installation (default: /usr/local)
+# LIBDIR              - base directory for plugins (default: $$PREFIX/lib)
 # NODEBUG             - no debug target
 # OSMARENDER          - enable osmarender
 # GDAL    	      - enable GDAL
@@ -126,11 +127,15 @@ include(TagTemplate/TagTemplate.pri)
 include(NameFinder/NameFinder.pri)
 
 
-unix {
+!win32 {
     # Prefix: base instalation directory
     isEmpty( PREFIX ) {
 		PREFIX = /usr/local
 	}
+    isEmpty( LIBDIR ) {
+		LIBDIR = $${PREFIX}/lib
+	}
+	DEFINES += PLUGINS_DIR=$${LIBDIR}/plugins
     target.path = $${PREFIX}/bin
     SHARE_DIR = $${PREFIX}/share/merkaartor
 
@@ -139,6 +144,7 @@ unix {
     }
 }
 win32 {
+	DEFINES += PLUGINS_DIR=plugins
     SHARE_DIR = share
     isEmpty(TRANSDIR_MERKAARTOR) {
         TRANSDIR_MERKAARTOR = translations

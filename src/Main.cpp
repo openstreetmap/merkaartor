@@ -139,17 +139,12 @@ int main(int argc, char** argv)
 
 	if (!QDir::home().exists(".merkaartor"))
 		QDir::home().mkdir(".merkaartor");
-#if defined(Q_OS_UNIX)
-	QDir pluginsDir = QDir(qApp->applicationDirPath());
-	if (!pluginsDir.exists("plugins")) {
-		pluginsDir = QDir(pluginsDir.absolutePath().remove("/bin").append("/lib/Merkaartor"));
-	}
+#if defined(Q_OS_WIN32)
+	QDir pluginsDir = QDir(qApp->applicationDirPath() + "/" + STRINGIFY(PLUGINS_DIR));
 #else
-	QDir pluginsDir = QDir(qApp->applicationDirPath());
+	QDir pluginsDir = QDir(STRINGIFY(PLUGINS_DIR));
 #endif
-	QCoreApplication::addLibraryPath(pluginsDir.path() + "/plugins");
-
-	pluginsDir.cd("plugins");
+	QCoreApplication::addLibraryPath(pluginsDir.path());
 
 	pluginsDir.cd("background");
 	foreach (QString fileName, pluginsDir.entryList(QDir::Files)) {

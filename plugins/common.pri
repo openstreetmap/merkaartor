@@ -1,4 +1,5 @@
-# PREFIX              - base prefix for installation
+# PREFIX              - base prefix for installation (default: /usr/local)
+# LIBDIR              - base directory for plugins (default: $$PREFIX/lib)
 # NODEBUG             - no debug target
 MERKAARTOR_SRC_DIR = $$PWD/..
 
@@ -41,7 +42,10 @@ unix {
     isEmpty( PREFIX ) {
 		PREFIX = /usr/local
 	}
+    isEmpty( LIBDIR ) {
+		LIBDIR = $${PREFIX}/lib
+	}
 
-	target.path = $${PREFIX}/lib/Merkaartor/plugins
+	target.path = $${LIBDIR}/merkaartor/plugins
 	INSTALLS += target
 }

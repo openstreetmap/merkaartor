@@ -441,7 +441,7 @@ void MapView::drawBackground(QPainter & theP, Projection& /*aProj*/)
 	if (theCoastlines.isEmpty()) {
 //		if (M_PREFS->getUseShapefileForBackground() && theDocument->getImageLayer()->isVisible() && !LAYERMANAGER_OK) {
 		if (M_PREFS->getUseShapefileForBackground())
-			theP.fillRect(theP.clipRegion().boundingRect(), M_PREFS->getWaterColor());
+			theP.fillRect(rect(), M_PREFS->getWaterColor());
 		return;
 	}
 
