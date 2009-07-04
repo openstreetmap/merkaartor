@@ -135,7 +135,7 @@ include(NameFinder/NameFinder.pri)
     isEmpty( LIBDIR ) {
 		LIBDIR = $${PREFIX}/lib
 	}
-	DEFINES += PLUGINS_DIR=$${LIBDIR}/plugins
+	DEFINES += PLUGINS_DIR=$${LIBDIR}/merkaartor/plugins
     target.path = $${PREFIX}/bin
     SHARE_DIR = $${PREFIX}/share/merkaartor
 
