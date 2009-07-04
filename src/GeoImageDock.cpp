@@ -298,19 +298,18 @@ void GeoImageDock::loadImages(QStringList fileNames)
 		if (positionValid) {
 			Coord newPos(angToInt(lat), angToInt(lon));
 			TrackPoint *Pt;
-            QList<MapFeature*>::ConstIterator it = theLayer->get().constBegin();
-            QList<MapFeature*>::ConstIterator end = theLayer->get().constEnd();
-			for (; it != end; it++) // use existing TrackPoint if there is one in small distance 
-				if ((Pt = qobject_cast<TrackPoint*>(*it)) &&
+			int i = 0;
+			for (; i<theLayer->size(); ++i) // use existing TrackPoint if there is one in small distance
+				if ((Pt = CAST_NODE(theLayer->get(i))) &&
 				 Pt->position().distanceFrom(newPos) <= .002)
 					break;
-			if (it == end)
+			if (i == theLayer->size())
 				Pt = new TrackPoint(newPos);
 
 			//Pt->setTag("_waypoint_", "true");
 			Pt->setTag("Picture", "GeoTagged");
-			usedTrackPoints << TrackPointData(Pt->id(), file, time, it == end);
-			if (it == end) {
+			usedTrackPoints << TrackPointData(Pt->id(), file, time, i == theLayer->size());
+			if (i == theLayer->size()) {
 				theLayer->add(Pt);
 				theLayer->getRTree()->insert(Pt->boundingBox(), Pt);
 			}

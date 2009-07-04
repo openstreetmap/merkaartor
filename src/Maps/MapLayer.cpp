@@ -239,6 +239,7 @@ void MapLayer::clear()
 		p->RenderPriorityUpToDate = false;
 		i = p->Features.erase(i);
 	}
+	reIndex();
 }
 
 bool MapLayer::exists(MapFeature* F) const

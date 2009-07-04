@@ -218,8 +218,8 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 		);
 
 	QTime Stop(QTime::currentTime());
-	//Main->PaintTimeLabel->setText(tr("%1ms").arg(Start.msecsTo(Stop)));
-	Main->PaintTimeLabel->setText(tr("%1ms;ppm:%2").arg(Start.msecsTo(Stop)).arg(p->PixelPerM));
+	Main->PaintTimeLabel->setText(tr("%1ms").arg(Start.msecsTo(Stop)));
+	//Main->PaintTimeLabel->setText(tr("%1ms;ppm:%2").arg(Start.msecsTo(Stop)).arg(p->PixelPerM));
 }
 
 void MapView::drawScale(QPainter & P)
