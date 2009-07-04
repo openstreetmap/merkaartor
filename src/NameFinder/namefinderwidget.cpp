@@ -68,6 +68,7 @@ namespace NameFinder
 		query = new HttpQuery ( this, &buffer );
 		connect ( query, SIGNAL ( done() ), this, SLOT ( display() ) );
 		connect ( query, SIGNAL ( doneWithError(QHttp::Error) ), this, SLOT ( displayError(QHttp::Error) ));
+
 		query->startSearch ( object );
 	}
 
@@ -76,6 +77,8 @@ namespace NameFinder
 		XmlStreamReader reader ( &buffer );
 		reader.read();
 		model->setResults ( new QList<NameFinderResult> ( reader.getResults() ) );
+
+		emit done();
 	}
 
 	//! Displays a QMessageBox with the connection error
@@ -98,6 +101,7 @@ namespace NameFinder
 			errorBox.setText(tr("Unknown error."));
 		}
 		errorBox.exec();
+		emit done();
 	}
 
 	QPointF NameFinderWidget::selectedCoords()

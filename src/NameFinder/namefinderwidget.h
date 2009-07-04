@@ -57,6 +57,7 @@ public:
 signals:
 	void selectionChanged();
 	void doubleClicked();
+	void done();
 
 protected:
         virtual void changeEvent(QEvent *e);

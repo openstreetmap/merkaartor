@@ -43,6 +43,7 @@ public slots:
 	void searchWidget_selectionChanged();
 	void on_NameFinderEdit_textChanged(const QString & text);
 	void searchWidget_doubleClicked ();
+	void searchWidget_done ();
 
 protected:
 	

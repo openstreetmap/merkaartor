@@ -54,6 +54,7 @@ GotoDialog::GotoDialog(const MapView& aView, QWidget *parent)
 	searchWidget = new NameFinder::NameFinderWidget(this);
 	connect(searchWidget, SIGNAL(selectionChanged()), this, SLOT(searchWidget_selectionChanged()));
 	connect(searchWidget, SIGNAL(doubleClicked()), this, SLOT(searchWidget_doubleClicked()));
+	connect(searchWidget, SIGNAL(done()), this, SLOT(searchWidget_done()));
 	verticalLayout_4->addWidget(searchWidget);
 
 	coordOSM->setText( QString("http://www.openstreetmap.org/?lat=%1&lon=%2&zoom=%3")
@@ -94,6 +95,7 @@ void GotoDialog::on_searchButton_clicked()
 {
 		QString searchString = NameFinderEdit->text();
 		searchWidget->search(searchString);
+		searchButton->setEnabled(false);
 }
 void GotoDialog::on_buttonBox_clicked(QAbstractButton * button)
 {
@@ -187,6 +189,11 @@ void GotoDialog::on_NameFinderEdit_textChanged(const QString & text)
 void GotoDialog::searchWidget_doubleClicked()
 {
     buttonBox->button(QDialogButtonBox::Ok)->click();
+}
+
+void GotoDialog::searchWidget_done()
+{
+	searchButton->setEnabled(true);
 }
 
 void GotoDialog::changeEvent(QEvent * event)
