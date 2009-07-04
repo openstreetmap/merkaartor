@@ -243,6 +243,8 @@ void GeoImageDock::loadImages(QStringList fileNames)
 	}
 
 	QProgressDialog progress(tr("Loading Images ..."), tr("Abort loading"), 0, fileNames.size());
+	progress.setWindowFlags(progress.windowFlags() & ~Qt::WindowContextHelpButtonHint);
+	progress.setWindowFlags(progress.windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
 	progress.setWindowModality(Qt::WindowModal);
 	progress.show();
 
