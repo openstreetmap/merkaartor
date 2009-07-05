@@ -1,4 +1,5 @@
 v0.14
+	* FIX : Don't fail importing lower-cased filenames
     * ADD : Select a relation member by contextual menu
     * CHG : Do not select a relation member when doing a "Center..."
     * ADD : Clicking on a relation member highlights it

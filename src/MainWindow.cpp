@@ -823,7 +823,7 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 		bool importOK = false;
 		bool importAborted = false;
 
-		if (fn.endsWith(".gpx")) {
+		if (fn.toLower().endsWith(".gpx")) {
 			QList<TrackMapLayer*> theTracklayers;
 			TrackMapLayer* newLayer = new TrackMapLayer( baseFileName + " - " + tr("Waypoints"), baseFileName);
 			mapDocument->add(newLayer);
@@ -849,17 +849,17 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 				}
 			}
 		}
-		else if (fn.endsWith(".osm")) {
+		else if (fn.toLower().endsWith(".osm")) {
 			newLayer = new DrawingMapLayer( baseFileName );
 			mapDocument->add(newLayer);
 			importOK = importOSM(this, baseFileName, mapDocument, newLayer);
 		}
-		else if (fn.endsWith(".osb")) {
+		else if (fn.toLower().endsWith(".osb")) {
 			newLayer = new OsbMapLayer( baseFileName, fn );
 			mapDocument->add(newLayer);
 			importOK = mapDocument->importOSB(fn, (DrawingMapLayer *)newLayer);
 		}
-		else if (fn.endsWith(".ngt")) {
+		else if (fn.toLower().endsWith(".ngt")) {
 			newLayer = new TrackMapLayer( baseFileName );
 			mapDocument->add(newLayer);
 			importOK = importNGT(this, baseFileName, mapDocument, newLayer);
@@ -867,7 +867,7 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 				((TrackMapLayer *)newLayer)->extractLayer();
 			}
 		}
-		else if (fn.endsWith(".nmea") || (fn.endsWith(".nma"))) {
+		else if (fn.toLower().endsWith(".nmea") || (fn.toLower().endsWith(".nma"))) {
 			newLayer = new TrackMapLayer( baseFileName );
 			mapDocument->add(newLayer);
 			importOK = mapDocument->importNMEA(baseFileName, (TrackMapLayer *)newLayer);
@@ -875,7 +875,7 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 				((TrackMapLayer *)newLayer)->extractLayer();
 			}
 		}
-		else if (fn.endsWith(".kml")) {
+		else if (fn.toLower().endsWith(".kml")) {
 			if (QMessageBox::warning(this, MainWindow::tr("Big Fat Copyright Warning"),
 					 MainWindow::tr(
 					 "You are trying to import a KML file. Please be aware that:\n"
@@ -901,7 +901,7 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 				importAborted = true;
 		}
 #ifdef USE_GDAL
-		else if (fn.endsWith(".shp")) {
+		else if (fn.toLower().endsWith(".shp")) {
 			newLayer = new DrawingMapLayer( baseFileName );
 			newLayer->setUploadable(false);
 			mapDocument->add(newLayer);
@@ -967,7 +967,7 @@ void MainWindow::loadFiles(const QStringList & fileList)
 	{
 		const QString & fn = it.next();
 
-		if (fn.endsWith(".mdc") == false)
+		if (fn.toLower().endsWith(".mdc") == false)
 			continue;
 
 		if (foundDocument == false)
