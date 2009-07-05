@@ -129,7 +129,7 @@ void ProjectionsList::toXml(QDomElement parent)
 {
 	QDomElement rt = parent.ownerDocument().createElement("Projections");
 	parent.appendChild(rt);
-	rt.setAttribute("creator", QString("Merkaartor %1").arg(VERSION));
+	rt.setAttribute("creator", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
 
 	QMapIterator <QString, ProjectionItem> it(theProjections);
 	while (it.hasNext()) {

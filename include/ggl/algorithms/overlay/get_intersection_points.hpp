@@ -9,14 +9,18 @@
 #ifndef GGL_ALGORITHMS_GET_INTERSECTION_POINTS_HPP
 #define GGL_ALGORITHMS_GET_INTERSECTION_POINTS_HPP
 
-#include <vector>
+#include <cstddef>
 
 #include <boost/mpl/if.hpp>
 #include <boost/range/functions.hpp>
 #include <boost/range/metafunctions.hpp>
+#include <boost/tuple/tuple.hpp>
+#include <boost/type_traits/remove_const.hpp>
+
 
 #include <ggl/core/access.hpp>
 #include <ggl/core/coordinate_dimension.hpp>
+#include <ggl/core/is_multi.hpp>
 #include <ggl/core/reverse_dispatch.hpp>
 
 #include <ggl/core/exterior_ring.hpp>
@@ -43,11 +47,8 @@
 
 
 
-
 namespace ggl
 {
-
-
 
 
 #ifndef DOXYGEN_NO_DETAIL
@@ -62,7 +63,10 @@ struct relate
                 segment_identifier const& seg_id2,
                 IntersectionPoints& out, bool& non_trivial)
     {
-        typedef typename boost::range_value<IntersectionPoints>::type intersection_point;
+        typedef typename boost::range_value
+            <
+                IntersectionPoints
+            >::type intersection_point;
         typedef segment_intersection_points<intersection_point> ip_type;
 
         typedef boost::tuple
@@ -136,13 +140,20 @@ template
 class get_ips_in_sections
 {
 public :
-    static inline void apply(Geometry1 const& geometry1, Geometry2 const& geometry2,
+    static inline void apply(Geometry1 const& geometry1,
+            Geometry2 const& geometry2,
             Section1 const& sec1, Section2 const& sec2,
             IntersectionPoints& intersection_points, bool& non_trivial)
     {
 
-        typedef typename ggl::point_const_iterator<Geometry1>::type range1_iterator;
-        typedef typename ggl::point_const_iterator<Geometry2>::type range2_iterator;
+        typedef typename ggl::point_const_iterator
+            <
+                Geometry1
+            >::type range1_iterator;
+        typedef typename ggl::point_const_iterator
+            <
+                Geometry2
+            >::type range2_iterator;
 
         int const dir1 = sec1.directions[0];
         int const dir2 = sec2.directions[0];
@@ -212,10 +223,9 @@ public :
 
 private :
     typedef typename ggl::point_type<Geometry1>::type point1_type;
-    typedef typename ggl::point_type<Geometry1>::type point2_type; // TODO: change this with 2 as soon as boxes are solved / not converted!
+    typedef typename ggl::point_type<Geometry2>::type point2_type;
     typedef typename ggl::segment<const point1_type> segment1_type;
     typedef typename ggl::segment<const point2_type> segment2_type;
-
 
 
     template <size_t Dim, typename Point, typename Box>
@@ -264,7 +274,8 @@ struct get_ips_generic
             IntersectionPoints& intersection_points)
     {
         // Create monotonic sections in ONE direction
-        // (this is ~1% faster than in TWO directions, at least for the NLP4 testset)
+        // - in most cases ONE direction is faster (e.g. ~1% faster for the NLP4 testset)
+        // - the sections now have a limit (default 10) so will not be too large
         typedef typename ggl::sections
             <
                 ggl::box < typename ggl::point_type<Geometry1>::type >, 1
@@ -281,11 +292,13 @@ struct get_ips_generic
         ggl::sectionalize(geometry2, sec2);
 
         bool non_trivial = false;
-        for (typename boost::range_const_iterator<sections1_type>::type it1 = sec1.begin();
+        for (typename boost::range_const_iterator<sections1_type>::type
+                    it1 = sec1.begin();
             it1 != sec1.end();
             ++it1)
         {
-            for (typename boost::range_const_iterator<sections2_type>::type it2 = sec2.begin();
+            for (typename boost::range_const_iterator<sections2_type>::type
+                        it2 = sec2.begin();
                 it2 != sec2.end();
                 ++it2)
             {
@@ -298,7 +311,8 @@ struct get_ips_generic
                         typename boost::range_value<sections1_type>::type,
                         typename boost::range_value<sections2_type>::type,
                         IntersectionPoints
-                    >::apply(geometry1, geometry2, *it1, *it2, intersection_points, non_trivial);
+                    >::apply(geometry1, geometry2, *it1, *it2,
+                                intersection_points, non_trivial);
                 }
             }
         }
@@ -306,11 +320,6 @@ struct get_ips_generic
     }
 };
 
-
-static const char cohen_sutherland_top    = 1; // 0001
-static const char cohen_sutherland_bottom = 2; // 0010
-static const char cohen_sutherland_right  = 4; // 0100
-static const char cohen_sutherland_left   = 8; // 1000
 
 
 template<typename Range, typename Box, typename IntersectionPoints>
@@ -435,6 +444,7 @@ namespace dispatch
 template
 <
     typename GeometryTag1, typename GeometryTag2,
+    bool IsMulti1, bool IsMulti2,
     typename Geometry1, typename Geometry2,
     typename IntersectionPoints
 
@@ -447,7 +457,7 @@ struct get_intersection_points
 template<typename Polygon, typename Box, typename IntersectionPoints>
 struct get_intersection_points
     <
-        polygon_tag, box_tag,
+        polygon_tag, box_tag, false, false,
         Polygon, Box,
         IntersectionPoints
     >
@@ -486,37 +496,58 @@ struct get_intersection_points
 template<typename Ring1, typename Ring2, typename IntersectionPoints>
 struct get_intersection_points
     <
-        ring_tag, ring_tag,
+        ring_tag, ring_tag, false, false,
         Ring1, Ring2,
         IntersectionPoints
     >
-    : detail::get_intersection_points::get_ips_generic<Ring1, Ring2, IntersectionPoints>
+    : detail::get_intersection_points::get_ips_generic
+        <
+            Ring1,
+            Ring2,
+            IntersectionPoints
+        >
 {};
 
 
 template<typename Polygon1, typename Polygon2, typename IntersectionPoints>
 struct get_intersection_points
     <
-        polygon_tag, polygon_tag,
+        polygon_tag, polygon_tag, false, false,
         Polygon1, Polygon2,
         IntersectionPoints
     >
-    : detail::get_intersection_points::get_ips_generic<Polygon1, Polygon2, IntersectionPoints>
+    : detail::get_intersection_points::get_ips_generic
+        <
+            Polygon1,
+            Polygon2,
+            IntersectionPoints
+        >
 {};
 
-template<typename LineString1, typename LineString2, typename IntersectionPoints>
+template
+<
+    typename LineString1,
+    typename LineString2,
+    typename IntersectionPoints
+>
 struct get_intersection_points
     <
-        linestring_tag, linestring_tag,
+        linestring_tag, linestring_tag, false, false,
         LineString1, LineString2,
         IntersectionPoints
     >
-    : detail::get_intersection_points::get_ips_generic<LineString1, LineString2, IntersectionPoints>
+    : detail::get_intersection_points::get_ips_generic
+        <
+            LineString1,
+            LineString2,
+            IntersectionPoints
+        >
 {};
 
 template
 <
     typename GeometryTag1, typename GeometryTag2,
+    bool IsMulti1, bool IsMulti2,
     typename Geometry1, typename Geometry2,
     typename IntersectionPoints
 >
@@ -528,6 +559,7 @@ struct get_intersection_points_reversed
         return get_intersection_points
             <
                 GeometryTag2, GeometryTag1,
+                IsMulti2, IsMulti1,
                 Geometry2, Geometry1,
                 IntersectionPoints
             >::apply(g2, g1, intersection_points);
@@ -565,6 +597,8 @@ inline bool get_intersection_points(const Geometry1& geometry1,
             <
                 typename tag<ncg1_type>::type,
                 typename tag<ncg2_type>::type,
+                is_multi<ncg1_type>::type::value,
+                is_multi<ncg2_type>::type::value,
                 ncg1_type,
                 ncg2_type,
                 IntersectionPoints
@@ -573,6 +607,8 @@ inline bool get_intersection_points(const Geometry1& geometry1,
             <
                 typename tag<ncg1_type>::type,
                 typename tag<ncg2_type>::type,
+                is_multi<ncg1_type>::type::value,
+                is_multi<ncg2_type>::type::value,
                 ncg1_type,
                 ncg2_type,
                IntersectionPoints

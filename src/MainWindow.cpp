@@ -99,11 +99,13 @@ class MainWindowPrivate
 		MainWindowPrivate()
 			: lastPrefTabIndex(0)
 		{
+			title = QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION));
 		}
 		int lastPrefTabIndex;
 		QString defStyle;
         StyleDock* theStyle;
 		FeaturesDock* theFeats;
+		QString title;
 };
 
 MainWindow::MainWindow(void)
@@ -132,10 +134,13 @@ MainWindow::MainWindow(void)
 
 	ViewportStatusLabel = new QLabel(this);
 	pbImages = new QProgressBar(this);
-	PaintTimeLabel = new QLabel(this);
 	statusBar()->addPermanentWidget(ViewportStatusLabel);
 	statusBar()->addPermanentWidget(pbImages);
+#ifndef NDEBUG
+	PaintTimeLabel = new QLabel(this);
+	PaintTimeLabel->setMinimumWidth(23);
 	statusBar()->addPermanentWidget(PaintTimeLabel);
+#endif
 
 	QList<QAction*> actions = findChildren<QAction*>();
 	for (int i=0; i<actions.size(); i++) {
@@ -146,8 +151,6 @@ MainWindow::MainWindow(void)
 	ViewportStatusLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
 	pbImages->setMaximumWidth(200);
 	pbImages->setFormat(tr("tile %v / %m"));
-	//PaintTimeLabel->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
-	PaintTimeLabel->setMinimumWidth(23);
 #ifdef _MOBILE
 	pbImages->setVisible(false);
 #endif
@@ -237,7 +240,7 @@ MainWindow::MainWindow(void)
 
 	connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardChanged()));
 
-	setWindowTitle(QString("Merkaartor - untitled"));
+	setWindowTitle(QString("untitled - %1").arg(p->title));
 
 #ifndef _MOBILE
 	theLayers->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
@@ -326,13 +329,13 @@ MainWindow::MainWindow(void)
 
 	blockSignals(false);
 
-	QTimer::singleShot( 0, this, SLOT(delayedInit()) );
+	M_PREFS->initialPosition(theView);
 
+	QTimer::singleShot( 0, this, SLOT(delayedInit()) );
 }
 
 void MainWindow::delayedInit()
 {
-	M_PREFS->initialPosition(theView);
 	updateWindowMenu();
 }
 
@@ -1287,7 +1290,7 @@ void MainWindow::on_fileNewAction_triggered()
 		theDirty->updateList();
 
 		fileName = "";
-		setWindowTitle(QString("Merkaartor - untitled"));
+		setWindowTitle(QString("untitled - %1").arg(p->title));
 
 		on_editPropertiesAction_triggered();
 		adjustLayers(true);
@@ -1747,7 +1750,7 @@ void MainWindow::saveDocument()
 	theXmlDoc->appendChild(theXmlDoc->createProcessingInstruction("xml", "version=\"1.0\""));
 	root = theXmlDoc->createElement("MerkaartorDocument");
 	root.setAttribute("version", "1.1");
-	root.setAttribute("creator", QString("Merkaartor %1").arg(VERSION));
+	root.setAttribute("creator", QString("%1").arg(p->title));
 
 	theXmlDoc->appendChild(root);
 
@@ -1768,7 +1771,7 @@ void MainWindow::saveDocument()
 
 	progress.setValue(progress.maximum());
 
-	setWindowTitle(QString("Merkaartor - %1").arg(fileName));
+	setWindowTitle(QString("%1 - %2").arg(fileName).arg(p->title));
 
 #ifndef Q_OS_SYMBIAN
 	QApplication::restoreOverrideCursor();
@@ -1828,7 +1831,7 @@ void MainWindow::loadDocument(QString fn)
 				connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));
 				theDirty->updateList();
 				fileName = fn;
-				setWindowTitle(QString("Merkaartor - %1").arg(fileName));
+				setWindowTitle(QString("%1 - %2").arg(fileName).arg(p->title));
 			}
 		} else
 		if (e.tagName() == "MapView") {

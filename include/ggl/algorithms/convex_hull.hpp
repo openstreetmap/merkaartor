@@ -9,10 +9,16 @@
 #ifndef GGL_ALGORITHMS_CONVEX_HULL_HPP
 #define GGL_ALGORITHMS_CONVEX_HULL_HPP
 
+
 #include <boost/concept/requires.hpp>
+#include <boost/type_traits/remove_const.hpp>
+
+#include <ggl/core/cs.hpp>
+#include <ggl/core/is_multi.hpp>
 
 #include <ggl/core/concepts/point_concept.hpp>
-#include <ggl/core/cs.hpp>
+
+
 #include <ggl/strategies/strategies.hpp>
 #include <ggl/util/as_range.hpp>
 
@@ -50,8 +56,8 @@ struct hull
 
         typedef typename strategy_convex_hull
             <
-            typename cs_tag<point_type>::type,
-            point_type
+                typename cs_tag<point_type>::type,
+                point_type
             >::type strategy_type;
 
         strategy_type s(as_range<typename as_range_type<Geometry>::type>(geometry));
@@ -68,20 +74,29 @@ struct hull
 namespace dispatch
 {
 
-template <typename GeometryTag, typename Geometry, typename OutputIterator>
+template
+<
+    typename GeometryTag,
+    bool IsMulti,
+    typename Geometry,
+    typename OutputIterator
+ >
 struct convex_hull {};
 
 template <typename Linestring, typename OutputIterator>
-struct convex_hull<linestring_tag, Linestring, OutputIterator>
-    : detail::convex_hull::hull<Linestring, OutputIterator> {};
+struct convex_hull<linestring_tag, false, Linestring, OutputIterator>
+    : detail::convex_hull::hull<Linestring, OutputIterator> 
+{};
 
 template <typename Ring, typename OutputIterator>
-struct convex_hull<ring_tag, Ring, OutputIterator>
-    : detail::convex_hull::hull<Ring, OutputIterator> {};
+struct convex_hull<ring_tag, false, Ring, OutputIterator>
+    : detail::convex_hull::hull<Ring, OutputIterator> 
+{};
 
 template <typename Polygon, typename OutputIterator>
-struct convex_hull<polygon_tag, Polygon, OutputIterator>
-    : detail::convex_hull::hull<Polygon, OutputIterator> {};
+struct convex_hull<polygon_tag, false, Polygon, OutputIterator>
+    : detail::convex_hull::hull<Polygon, OutputIterator> 
+{};
 
 } // namespace dispatch
 #endif // DOXYGEN_NO_DISPATCH
@@ -96,9 +111,12 @@ struct convex_hull<polygon_tag, Polygon, OutputIterator>
 template<typename Geometry, typename OutputIterator>
 inline OutputIterator convex_hull(Geometry const& geometry, OutputIterator out)
 {
+    typedef typename boost::remove_const<Geometry>::type ncg_type;
+
     return dispatch::convex_hull
         <
-            typename tag<Geometry>::type,
+            typename tag<ncg_type>::type,
+            is_multi<ncg_type>::type::value,
             Geometry,
             OutputIterator
         >::apply(geometry, out);

@@ -66,19 +66,23 @@ struct convex_hull_multi
 namespace dispatch
 {
 
+// Specialize for multi's
+template
+<
+    typename MultiTag,
+    typename MultiGeometry,
+    typename OutputIterator
+>
+struct convex_hull<MultiTag, true, MultiGeometry, OutputIterator>
+    : detail::convex_hull::convex_hull_multi<MultiGeometry, OutputIterator> 
+{};
 
+
+// Specialize more for point
 template <typename MultiPoint, typename OutputIterator>
-struct convex_hull<multi_point_tag, MultiPoint, OutputIterator>
-    : detail::convex_hull::hull<MultiPoint, OutputIterator> {};
-
-
-template <typename MultiLinestring, typename OutputIterator>
-struct convex_hull<multi_linestring_tag, MultiLinestring, OutputIterator>
-    : detail::convex_hull::convex_hull_multi<MultiLinestring, OutputIterator> {};
-
-template <typename MultiPolygon, typename OutputIterator>
-struct convex_hull<multi_polygon_tag, MultiPolygon, OutputIterator>
-    : detail::convex_hull::convex_hull_multi<MultiPolygon, OutputIterator> {};
+struct convex_hull<multi_point_tag, true, MultiPoint, OutputIterator>
+    : detail::convex_hull::hull<MultiPoint, OutputIterator> 
+{};
 
 
 } // namespace dispatch

@@ -55,7 +55,7 @@ MapDocument::MapDocument()
 	: p(new MapDocumentPrivate)
 {
 	if (!(M_PREFS->apiVersionNum() > 0.5))
-		addToTagList("created_by", QString("Merkaartor %1").arg(VERSION));
+		addToTagList("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
 }
 
 MapDocument::MapDocument(LayerDock* aDock)

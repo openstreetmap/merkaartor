@@ -99,7 +99,7 @@ namespace ggl { namespace projection
 
             // Goode Homolosine
             template <typename Geographic, typename Cartesian, typename Parameters>
-						void setup_goode(Parameters& par, par_goode<Geographic, Cartesian, Parameters>& /*proj_parm*/)
+            void setup_goode(Parameters& par, par_goode<Geographic, Cartesian, Parameters>& proj_parm)
             {
             	par.es = 0.;
                 // par.fwd = s_forward;

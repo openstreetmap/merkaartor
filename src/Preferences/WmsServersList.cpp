@@ -13,6 +13,7 @@
 #include <QApplication>
 
 #include "WmsServersList.h"
+#include "Preferences/MerkaartorPreferences.h"
 
 WmsServer::WmsServer()
 {
@@ -125,7 +126,7 @@ void WmsServersList::toXml(QDomElement parent)
 {
 	QDomElement rt = parent.ownerDocument().createElement("WmsServers");
 	parent.appendChild(rt);
-	rt.setAttribute("creator", QString("Merkaartor %1").arg(VERSION));
+	rt.setAttribute("creator", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
 
 	WmsServerListIterator it(theServers);
 	while (it.hasNext()) {

@@ -101,7 +101,7 @@ namespace ggl { namespace projection
 
             // van der Grinten II
             template <typename Parameters>
-						void setup_vandg2(Parameters& /*par*/, par_vandg2& proj_parm)
+            void setup_vandg2(Parameters& par, par_vandg2& proj_parm)
             {
             	proj_parm.vdg3 = 0;
                 // par.inv = 0;

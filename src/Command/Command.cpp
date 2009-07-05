@@ -103,7 +103,7 @@ void Command::redo()
 {
 	if (mainFeature && M_PREFS->apiVersionNum() < 0.6) {
 		oldCreated = mainFeature->tagValue("created_by", TAG_UNDEF_VALUE);
-		mainFeature->setTag("created_by",QString("Merkaartor %1").arg(VERSION));
+		mainFeature->setTag("created_by",QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
 		wasUploaded = mainFeature->isUploaded();
 		mainFeature->setUploaded(false);
 	}

@@ -123,7 +123,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Map
 				int SnapIdx = findSnapPointIndex(aRoad, P);
 				TrackPoint* N = new TrackPoint(P);
 				if (M_PREFS->apiVersionNum() < 0.6)
-					N->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+					N->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
 				CommandList* theList  = new CommandList(MainWindow::tr("Create Node %1 in Road %2").arg(N->description()).arg(aRoad->description()), N);
 				theList->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),N,true));
 				theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx,Main->document()->getDirtyOrOriginLayer(aRoad)));
@@ -140,7 +140,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Map
 				TrackPoint* From = 0;
 				theRoad = new Road;
 				if (M_PREFS->apiVersionNum() < 0.6)
-					theRoad->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+					theRoad->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
 				if (IsCurved)
 					theRoad->setTag("smooth","yes");
 				if (FirstNode) {
@@ -152,7 +152,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Map
 				{
 					From = new TrackPoint(FirstPoint);
 					if (M_PREFS->apiVersionNum() < 0.6)
-						From->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+						From->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
 					L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),From,true));
 				}
 				L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),theRoad,true));
@@ -174,7 +174,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Map
 				int SnapIdx = findSnapPointIndex(aRoad, P);
 				TrackPoint* N = new TrackPoint(P);
 				if (M_PREFS->apiVersionNum() < 0.6)
-					N->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+					N->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
 				CommandList* theList  = new CommandList(MainWindow::tr("Create Node %1 in Road %2").arg(N->description()).arg(aRoad->description()), N);
 				theList->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),N,true));
 				theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx,Main->document()->getDirtyOrOriginLayer(aRoad)));
@@ -186,7 +186,7 @@ void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Map
 			{
 				To = new TrackPoint(XY_TO_COORD(anEvent->pos()));
 				if (M_PREFS->apiVersionNum() < 0.6)
-					To->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+					To->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
 				L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),To,true));
 				L->setDescription(MainWindow::tr("Create Node %1 in Road %2").arg(To->description()).arg(theRoad->description()));
 				L->setFeature(To);

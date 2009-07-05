@@ -13,6 +13,7 @@
 
 #include <boost/lexical_cast.hpp>
 #include <boost/tokenizer.hpp>
+
 #include <boost/algorithm/string.hpp>
 #include <boost/concept/requires.hpp>
 #include <boost/range/functions.hpp>
@@ -71,8 +72,6 @@ private :
     std::string wkt;
     std::string complete;
 };
-
-
 
 
 

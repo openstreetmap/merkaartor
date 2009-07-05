@@ -35,8 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-#include <boost/math/special_functions/hypot.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/math/special_functions/hypot.hpp>
 
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>

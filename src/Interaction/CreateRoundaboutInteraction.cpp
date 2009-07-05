@@ -104,7 +104,7 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
 			R->setTag("oneway","yes");
 			R->setTag("junction","roundabout");
 			if (M_PREFS->apiVersionNum() < 0.6)
-				R->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+				R->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
 			CommandList* L  = new CommandList(MainWindow::tr("Create Roundabout %1").arg(R->id()), R);
 			L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),First,true));
 			for (double a = Angle*3/2; a<2*M_PI; a+=Angle)
@@ -112,7 +112,7 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
 				QPointF Next(CenterF.x()+cos(Modifier*a)*Radius,CenterF.y()+sin(Modifier*a)*Radius);
 				TrackPoint* New = new TrackPoint(XY_TO_COORD(Next));
 				if (M_PREFS->apiVersionNum() < 0.6)
-					New->setTag("created_by", QString("Merkaartor %1").arg(VERSION));
+					New->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
 				L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),New,true));
 				R->add(New);
 			}

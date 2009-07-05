@@ -77,7 +77,7 @@ struct point_in_box
 template <typename P, typename B, size_t N>
 struct point_in_box<P, B, N, N>
 {
-		static bool inside(P const& /*p*/, B const& /*b*/)
+    static bool inside(P const& p, B const& b)
     {
         return true;
     }
@@ -104,7 +104,7 @@ struct box_in_box
 template <typename B1, typename B2, size_t N>
 struct box_in_box<B1, B2, N, N>
 {
-		static inline bool inside(B1 const& /*b1*/, B2 const& /*b2*/)
+    static inline bool inside(B1 const& b1, B2 const& b2)
     {
         return true;
     }

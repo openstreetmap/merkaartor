@@ -13,6 +13,7 @@
 
 #include <ggl/io/wkt/read_wkt.hpp>
 #include <ggl/multi/core/tags.hpp>
+#include <ggl/multi/core/point_type.hpp>
 #include <ggl/multi/io/wkt/detail/wkt.hpp>
 
 namespace ggl

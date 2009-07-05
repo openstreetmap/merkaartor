@@ -62,6 +62,8 @@
 #include <ggl/io/wkt/write_wkt.hpp>
 #include <ggl/io/wkt/read_wkt.hpp>
 
+#include <ggl/io/svg/write_svg.hpp>
+
 #include <ggl/util/for_each_coordinate.hpp>
 #include <ggl/util/copy.hpp>
 #include <ggl/util/loop.hpp>

@@ -35,6 +35,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/concept_check.hpp>
 #include <boost/math/special_functions/hypot.hpp>
 
 #include <ggl/projections/impl/base_static.hpp>
@@ -181,6 +182,8 @@ namespace ggl { namespace projection
             template <typename Parameters>
             void setup(Parameters& par, par_nsper& proj_parm) 
             {
+                boost::ignore_unused_variable_warning(par);
+                boost::ignore_unused_variable_warning(proj_parm);
             	if ((proj_parm.height = pj_param(par.params, "dh").f) <= 0.) throw proj_exception(-30);
             	if (fabs(fabs(par.phi0) - HALFPI) < EPS10)
             		proj_parm.mode = par.phi0 < 0. ? S_POLE : N_POLE;

@@ -35,8 +35,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-#include <boost/math/special_functions/hypot.hpp>
 #include <boost/concept_check.hpp>
+#include <boost/math/special_functions/hypot.hpp>
 
 #include <ggl/projections/impl/base_static.hpp>
 #include <ggl/projections/impl/base_dynamic.hpp>
@@ -148,6 +148,8 @@ namespace ggl { namespace projection
             template <typename Parameters>
             void setup(Parameters& par, par_gn_sinu& proj_parm) 
             {
+                boost::ignore_unused_variable_warning(par);
+                boost::ignore_unused_variable_warning(proj_parm);
             	par.es = 0;
             	proj_parm.C_x = (proj_parm.C_y = sqrt((proj_parm.m + 1.) / proj_parm.n))/(proj_parm.m + 1.);
                 // par.inv = s_inverse;

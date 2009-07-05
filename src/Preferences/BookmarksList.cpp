@@ -13,6 +13,7 @@
 #include <QApplication>
 
 #include "BookmarksList.h"
+#include "Preferences/MerkaartorPreferences.h"
 
 Bookmark::Bookmark()
 {
@@ -111,7 +112,7 @@ void BookmarksList::toXml(QDomElement parent)
 {
 	QDomElement rt = parent.ownerDocument().createElement("Bookmarks");
 	parent.appendChild(rt);
-	rt.setAttribute("creator", QString("Merkaartor %1").arg(VERSION));
+	rt.setAttribute("creator", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
 
 	BookmarkListIterator it(theBookmarks);
 	while (it.hasNext()) {

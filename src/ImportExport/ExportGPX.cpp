@@ -47,7 +47,7 @@ bool ExportGPX::export_(const QList<MapFeature *>& featList)
 	QDomElement o = theXmlDoc.createElement("gpx");
 	theXmlDoc.appendChild(o);
 	o.setAttribute("version", "1.1");
-	o.setAttribute("creator", "Merkaartor");
+	o.setAttribute("creator", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
 	o.setAttribute("xmlns", "http://www.topografix.com/GPX/1/1");
 
 	for (int i=0; i<theFeatures.size(); ++i) {

@@ -16,7 +16,7 @@
 // PROJ4 is converted to Geometry Library by Barend Gehrels (Geodan, Amsterdam)
 
 // Original copyright notice:
-
+ 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
@@ -46,7 +46,7 @@
 namespace ggl { namespace projection
 {
     #ifndef DOXYGEN_NO_DETAIL
-    namespace detail { namespace robin{
+    namespace detail { namespace robin{ 
             static const double FXC = 0.8487;
             static const double FYC = 1.3523;
             static const double C1 = 11.45915590261646417544;
@@ -113,16 +113,16 @@ namespace ggl { namespace projection
                     : base_t_fi<base_robin_spheroid<Geographic, Cartesian, Parameters>,
                      Geographic, Cartesian, Parameters>(*this, par) {}
 
-                inline double  V(const COEFS& C, double z) const
+                inline double  V(COEFS const& C, double z) const
                 { return (C.c0 + z * (C.c1 + z * (C.c2 + z * C.c3))); }
-                inline double DV(const COEFS& C, double z) const
+                inline double DV(COEFS const& C, double z) const
                 { return (C.c1 + z * (C.c2 + C.c2 + z * 3. * C.c3)); }
 
                 inline void fwd(geographic_type& lp_lon, geographic_type& lp_lat, cartesian_type& xy_x, cartesian_type& xy_y) const
                 {
                     int i;
                     double dphi;
-
+                
                     i = int_floor((dphi = fabs(lp_lat)) * C1);
                     if (i >= NODES) i = NODES - 1;
                     dphi = RAD_TO_DEG * (dphi - RC1 * i);
@@ -136,7 +136,7 @@ namespace ggl { namespace projection
                     int i;
                     double t, t1;
                     struct COEFS T;
-
+                
                     lp_lon = xy_x / FXC;
                     lp_lat = fabs(xy_y / FYC);
                     if (lp_lat >= 1.) { /* simple pathologic cases */
@@ -179,7 +179,7 @@ namespace ggl { namespace projection
             }
 
         }} // namespace detail::robin
-    #endif // doxygen
+    #endif // doxygen 
 
     /*!
         \brief Robinson projection
@@ -223,7 +223,7 @@ namespace ggl { namespace projection
             factory.add_to_factory("robin", new robin_entry<Geographic, Cartesian, Parameters>);
         }
 
-    } // namespace detail
+    } // namespace detail 
     #endif // doxygen
 
 }} // namespace ggl::projection

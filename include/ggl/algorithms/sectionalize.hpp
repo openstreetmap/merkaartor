@@ -12,6 +12,7 @@
 #include <cstddef>
 #include <vector>
 
+#include <boost/concept_check.hpp>
 #include <boost/concept/requires.hpp>
 #include <boost/range/functions.hpp>
 #include <boost/range/metafunctions.hpp>
@@ -29,30 +30,44 @@
 
 
 /*!
-\defgroup sectionalize sectionalize: split a geometry (polygon,linestring,etc) into monotonic sections
+\defgroup sectionalize sectionalize: split a geometry (polygon,linestring,etc)
+    into monotonic sections
 
 \par Geometries:
 - LINESTRING:
 - RING:
 - POLYGON:
+- BOX
 */
 
 namespace ggl
 {
 
-template <typename B, std::size_t N>
+
+/*!
+    \brief Structure containing section information
+    \details Section information consists of a bounding box, direction
+        information (if it is increasing or decreasing, per dimension),
+        index information (begin-end, ring, multi) and the number of
+        segments in this section
+
+    \tparam Box box-type
+    \tparam DimensionCount number of dimensions for this section
+    \ingroup sectionalize
+ */
+template <typename Box, std::size_t DimensionCount>
 struct section
 {
-    typedef B box_type;
+    typedef Box box_type;
 
-    int directions[N];
+    int directions[DimensionCount];
     int ring_index;
     int multi_index;
-    B bounding_box;
+    Box bounding_box;
 
     int begin_index;
     int end_index;
-    int count; // might be not necessary
+    int count;
 
     inline section()
         : ring_index(-99)
@@ -62,78 +77,106 @@ struct section
         , count(0)
     {
         assign_inverse(bounding_box);
+        for (register int i = 0; i < DimensionCount; i++)
+        {
+            directions[i] = 0;
+        }
     }
 };
 
-template <typename B, std::size_t N>
-struct sections : std::vector<section<B, N> >
+
+/*!
+    \brief Structure containing a collection of sections
+    \note Derived from a vector, proves to be faster than of deque
+    \note vector might be templated in the future
+    \ingroup sectionalize
+ */
+template <typename Box, std::size_t DimensionCount>
+struct sections : std::vector<section<Box, DimensionCount> >
 {
-    typedef B box_type;
-    static const std::size_t value = N;
+    typedef Box box_type;
+    static const std::size_t value = DimensionCount;
 };
+
 
 #ifndef DOXYGEN_NO_DETAIL
 namespace detail { namespace sectionalize {
 
-template <typename Segment, std::size_t D, std::size_t N>
+template <typename Segment, std::size_t Dimension, std::size_t DimensionCount>
 struct get_direction_loop
 {
     typedef typename coordinate_type<Segment>::type coordinate_type;
 
-    static inline void apply(Segment const& seg, int directions[N])
+    static inline void apply(Segment const& seg,
+                int directions[DimensionCount])
     {
-        coordinate_type const diff = ggl::get<1, D>(seg) - ggl::get<0, D>(seg);
-        directions[D] = diff > 0 ? 1 : (diff < 0 ? -1 : 0);
+        coordinate_type const diff =
+            ggl::get<1, Dimension>(seg) - ggl::get<0, Dimension>(seg);
 
-        get_direction_loop<Segment, D + 1, N>::apply(seg, directions);
+        directions[Dimension] = diff > 0 ? 1 : (diff < 0 ? -1 : 0);
+
+        get_direction_loop
+            <
+                Segment, Dimension + 1, DimensionCount
+            >::apply(seg, directions);
     }
 };
 
-template <typename Segment, std::size_t N>
-struct get_direction_loop<Segment, N, N>
+template <typename Segment, std::size_t DimensionCount>
+struct get_direction_loop<Segment, DimensionCount, DimensionCount>
 {
-    static inline void apply(Segment const& seg, int directions[N])
+    static inline void apply(Segment const& seg,
+                int directions[DimensionCount])
     {
         boost::ignore_unused_variable_warning(seg);
         boost::ignore_unused_variable_warning(directions);
     }
 };
 
-template <typename T, std::size_t D, std::size_t N>
+template <typename T, std::size_t Dimension, std::size_t DimensionCount>
 struct copy_loop
 {
-    static inline void apply(const T source[N], T target[N])
+    static inline void apply(const T source[DimensionCount],
+                T target[DimensionCount])
     {
-        target[D] = source[D];
-        copy_loop<T, D + 1, N>::apply(source, target);
+        target[Dimension] = source[Dimension];
+        copy_loop<T, Dimension + 1, DimensionCount>::apply(source, target);
     }
 };
 
-template <typename T, std::size_t N>
-struct copy_loop<T, N, N>
+template <typename T, std::size_t DimensionCount>
+struct copy_loop<T, DimensionCount, DimensionCount>
 {
-    static inline void apply(const T source[N], T target[N])
+    static inline void apply(const T source[DimensionCount],
+                T target[DimensionCount])
     {
         boost::ignore_unused_variable_warning(source);
         boost::ignore_unused_variable_warning(target);
     }
 };
 
-template <typename T, std::size_t D, std::size_t N>
+template <typename T, std::size_t Dimension, std::size_t DimensionCount>
 struct compare_loop
 {
-    static inline bool apply(const T source[N], const T target[N])
+    static inline bool apply(const T source[DimensionCount],
+                const T target[DimensionCount])
     {
-        bool const not_equal = target[D] != source[D];
+        bool const not_equal = target[Dimension] != source[Dimension];
 
-        return not_equal ? false : compare_loop<T, D + 1, N>::apply(source, target);
+        return not_equal
+            ? false
+            : compare_loop
+                <
+                    T, Dimension + 1, DimensionCount
+                >::apply(source, target);
     }
 };
 
-template <typename T, std::size_t N>
-struct compare_loop<T, N, N>
+template <typename T, std::size_t DimensionCount>
+struct compare_loop<T, DimensionCount, DimensionCount>
 {
-    static inline bool apply(const T source[N], const T target[N])
+    static inline bool apply(const T source[DimensionCount],
+                const T target[DimensionCount])
     {
         boost::ignore_unused_variable_warning(source);
         boost::ignore_unused_variable_warning(target);
@@ -142,12 +185,20 @@ struct compare_loop<T, N, N>
     }
 };
 
-template <typename R, typename P, typename S, std::size_t N>
+template
+<
+    typename Range,
+    typename Point,
+    typename Sections,
+    std::size_t DimensionCount,
+    std::size_t MaxCount
+>
 struct sectionalize_range
 {
-    static inline void apply(R const& range, S& sections, int ring_index = -1, int multi_index = -1)
+    static inline void apply(Range const& range, Sections& sections,
+                int ring_index = -1, int multi_index = -1)
     {
-        typedef segment<const P> segment_type;
+        typedef segment<const Point> segment_type;
 
         std::size_t const n = boost::size(range);
         if (n == 0)
@@ -164,21 +215,32 @@ struct sectionalize_range
 
         int i = 0;
 
-        typedef typename boost::range_value<S>::type sections_range_type;
+        typedef typename boost::range_value<Sections>::type sections_range_type;
         sections_range_type section;
 
-        typedef typename boost::range_const_iterator<R>::type iterator_type;
+        typedef typename boost::range_const_iterator<Range>::type iterator_type;
         iterator_type it = boost::begin(range);
 
-        for(iterator_type previous = it++; it != boost::end(range); previous = it++, i++)
+        for(iterator_type previous = it++;
+            it != boost::end(range);
+            previous = it++, i++)
         {
             segment_type s(*previous, *it);
 
-            int direction_classes[N] = {0};
-            get_direction_loop<segment_type, 0, N>::apply(s, direction_classes);
+            int direction_classes[DimensionCount] = {0};
+            get_direction_loop
+                <
+                    segment_type, 0, DimensionCount
+                >::apply(s, direction_classes);
 
             if (section.count > 0
-                && !compare_loop<int, 0, N>::apply(direction_classes, section.directions))
+                && (!compare_loop
+                        <
+                            int, 0, DimensionCount
+                        >::apply(direction_classes, section.directions)
+                    || section.count > MaxCount
+                    )
+                )
             {
                 sections.push_back(section);
                 section = sections_range_type();
@@ -189,7 +251,10 @@ struct sectionalize_range
                 section.begin_index = i;
                 section.ring_index = ring_index;
                 section.multi_index = multi_index;
-                copy_loop<int, 0, N>::apply(direction_classes, section.directions);
+                copy_loop
+                    <
+                        int, 0, DimensionCount
+                    >::apply(direction_classes, section.directions);
                 ggl::combine(section.bounding_box, *previous);
             }
 
@@ -205,17 +270,28 @@ struct sectionalize_range
     }
 };
 
-template <typename P, typename S, std::size_t N>
+template
+<
+    typename Polygon,
+    typename Sections,
+    std::size_t DimensionCount,
+    std::size_t MaxCount
+>
 struct sectionalize_polygon
 {
-    static inline void apply(P const& poly, S& sections, int multi_index = -1)
+    static inline void apply(Polygon const& poly, Sections& sections,
+                int multi_index = -1)
     {
-        typedef typename point_type<P>::type point_type;
-        typedef typename ring_type<P>::type ring_type;
-        typedef sectionalize_range<ring_type, point_type, S, N> sectionalizer_type;
+        typedef typename point_type<Polygon>::type point_type;
+        typedef typename ring_type<Polygon>::type ring_type;
+        typedef sectionalize_range
+            <
+                ring_type, point_type, Sections, DimensionCount, MaxCount
+            > sectionalizer_type;
+
         typedef typename boost::range_const_iterator
             <
-            typename interior_type<P>::type
+            typename interior_type<Polygon>::type
             >::type iterator_type;
 
         sectionalizer_type::apply(exterior_ring(poly), sections, -1, multi_index);
@@ -230,17 +306,25 @@ struct sectionalize_polygon
     }
 };
 
-template <typename B, typename S, std::size_t N>
+template
+<
+    typename Box,
+    typename Sections,
+    std::size_t DimensionCount,
+    std::size_t MaxCount
+>
 struct sectionalize_box
 {
-    static inline void apply(B const& box, S& sections)
+    static inline void apply(Box const& box, Sections& sections)
     {
-        typedef typename point_type<B>::type point_type;
+        typedef typename point_type<Box>::type point_type;
 
-        assert_dimension<B, 2>();
+        assert_dimension<Box, 2>();
 
-        // Add all four sides of the 2D-box as separate section. Easiest is to convert it to a polygon.
-        // However, we don't have the polygon type (or polygon would be a helper-type).
+        // Add all four sides of the 2D-box as separate section.
+        // Easiest is to convert it to a polygon.
+        // However, we don't have the polygon type
+        // (or polygon would be a helper-type).
         // Therefore we mimic a linestring/std::vector of 5 points
 
         point_type ll, lr, ul, ur;
@@ -253,7 +337,14 @@ struct sectionalize_box
         points.push_back(lr);
         points.push_back(ll);
 
-        sectionalize_range<std::vector<point_type>, point_type, S, N>::apply(points, sections);
+        sectionalize_range
+            <
+                std::vector<point_type>,
+                point_type,
+                Sections,
+                DimensionCount,
+                MaxCount
+            >::apply(points, sections);
     }
 };
 
@@ -265,26 +356,90 @@ struct sectionalize_box
 namespace dispatch
 {
 
-template <typename Tag, typename G, typename S, std::size_t N>
+template
+<
+    typename Tag,
+    typename Geometry,
+    typename Sections,
+    std::size_t DimensionCount,
+    std::size_t MaxCount
+>
 struct sectionalize
-{
-};
+{};
 
-template <typename B, typename S, std::size_t N>
-struct sectionalize<box_tag, B, S, N>
-    : detail::sectionalize::sectionalize_box<B, S, N> { };
+template
+<
+    typename Box,
+    typename Sections,
+    std::size_t DimensionCount,
+    std::size_t MaxCount
+>
+struct sectionalize<box_tag, Box, Sections, DimensionCount, MaxCount>
+    : detail::sectionalize::sectionalize_box
+        <
+            Box,
+            Sections,
+            DimensionCount,
+            MaxCount
+        >
+{};
 
-template <typename L, typename S, std::size_t N>
-struct sectionalize<linestring_tag, L, S, N>
-    : detail::sectionalize::sectionalize_range<L, typename point_type<L>::type, S, N> { };
+template
+<
+    typename LineString, typename
+    Sections,
+    std::size_t DimensionCount,
+    std::size_t MaxCount
+>
+struct sectionalize
+    <
+        linestring_tag,
+        LineString,
+        Sections,
+        DimensionCount,
+        MaxCount
+    >
+    : detail::sectionalize::sectionalize_range
+        <
+            LineString,
+            typename point_type<LineString>::type,
+            Sections,
+            DimensionCount,
+            MaxCount
+        >
+{};
 
-template <typename R, typename S, std::size_t N>
-struct sectionalize<ring_tag, R, S, N>
-    : detail::sectionalize::sectionalize_range<R, typename point_type<R>::type, S, N> { };
+template
+<
+    typename Range,
+    typename Sections,
+    std::size_t DimensionCount,
+    std::size_t MaxCount
+>
+struct sectionalize<ring_tag, Range, Sections, DimensionCount, MaxCount>
+    : detail::sectionalize::sectionalize_range
+        <
+            Range,
+            typename point_type<Range>::type,
+            Sections,
+            DimensionCount,
+            MaxCount
+        >
+{};
 
-template <typename P, typename S, std::size_t N>
-struct sectionalize<polygon_tag, P, S, N>
-    : detail::sectionalize::sectionalize_polygon<P, S, N> { };
+template
+<
+    typename Polygon,
+    typename Sections,
+    std::size_t DimensionCount,
+    std::size_t MaxCount
+>
+struct sectionalize<polygon_tag, Polygon, Sections, DimensionCount, MaxCount>
+    : detail::sectionalize::sectionalize_polygon
+        <
+            Polygon, Sections, DimensionCount, MaxCount
+        >
+{};
 
 } // namespace dispatch
 #endif
@@ -299,15 +454,18 @@ struct sectionalize<polygon_tag, P, S, N>
     \param section structure with sections
 
  */
-template<typename G, typename S>
-inline void sectionalize(G const& geometry, S& sections)
+template<typename Geometry, typename Sections>
+inline void sectionalize(Geometry const& geometry, Sections& sections)
 {
+    // A maximum of 10 segments per section proves to give the fastest results
+    static const std::size_t max_segments_per_section = 10;
     typedef dispatch::sectionalize
         <
-            typename tag<G>::type,
-            G,
-            S,
-            S::value
+            typename tag<Geometry>::type,
+            Geometry,
+            Sections,
+            Sections::value,
+            max_segments_per_section
         > sectionalizer_type;
 
     sections.clear();

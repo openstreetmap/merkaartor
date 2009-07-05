@@ -35,6 +35,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+#include <boost/concept_check.hpp>
 #include <boost/math/special_functions/hypot.hpp>
 
 #include <ggl/projections/impl/base_static.hpp>
@@ -215,6 +216,8 @@ namespace ggl { namespace projection
             template <typename Parameters>
             void setup(Parameters& par, par_tmerc& proj_parm)  /* general initialization */
             {
+                boost::ignore_unused_variable_warning(par);
+                boost::ignore_unused_variable_warning(proj_parm);
             	if (par.es) {
                     pj_enfn(par.es, proj_parm.en);
             

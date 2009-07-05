@@ -9,6 +9,7 @@
 #ifndef GGL_MULTI_ALGORITHMS_GET_INTERSECTION_POINTS_HPP
 #define GGL_MULTI_ALGORITHMS_GET_INTERSECTION_POINTS_HPP
 
+#include <ggl/multi/core/is_multi.hpp>
 
 #include <ggl/multi/algorithms/distance.hpp>
 #include <ggl/multi/algorithms/sectionalize.hpp>
@@ -23,35 +24,33 @@ namespace ggl
 {
 
 
-
-
-#ifndef DOXYGEN_NO_DETAIL
-namespace detail { namespace get_intersection_points {
-
-
-
-}} // namespace detail::get_intersection_points
-#endif // DOXYGEN_NO_DETAIL
-
-
 #ifndef DOXYGEN_NO_DISPATCH
 namespace dispatch
 {
 
 
-
-
-template<typename Polygon1, typename Polygon2, typename IntersectionPoints>
+template
+<
+    typename MultiTag1,
+    typename MultiTag2,
+    typename MultiGeometry1,
+    typename MultiGeometry2,
+    typename IntersectionPoints
+>
 struct get_intersection_points
     <
-        multi_polygon_tag, multi_polygon_tag,
-        Polygon1, Polygon2,
+        MultiTag1, MultiTag2,
+        true, true,
+        MultiGeometry1, MultiGeometry2,
         IntersectionPoints
     >
-    : detail::get_intersection_points::get_ips_generic<Polygon1, Polygon2, IntersectionPoints>
+    : detail::get_intersection_points::get_ips_generic
+        <
+            MultiGeometry1,
+            MultiGeometry2,
+            IntersectionPoints
+        >
 {};
-
-
 
 
 } // namespace dispatch
