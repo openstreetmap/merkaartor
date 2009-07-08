@@ -1279,11 +1279,18 @@ QNetworkProxy MerkaartorPreferences::getProxy(const QUrl & requestUrl)
 {
 	QNetworkProxy theProxy;
 
-	theProxy = QNetworkProxy::HttpProxy;
-	theProxy.setHostName(getProxyHost());
-	theProxy.setPort(getProxyPort());
-	theProxy.setUser(getProxyUser());
-	theProxy.setPassword(getProxyPassword());
+	if ( getProxyUse() )
+	{
+		theProxy.setType(QNetworkProxy::HttpProxy);
+		theProxy.setHostName(getProxyHost());
+		theProxy.setPort(getProxyPort());
+		theProxy.setUser(getProxyUser());
+		theProxy.setPassword(getProxyPassword());
+	}
+	else
+	{
+		theProxy.setType(QNetworkProxy::NoProxy);
+	}
 
 	return theProxy;
 }
