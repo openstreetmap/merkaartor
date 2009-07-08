@@ -384,7 +384,8 @@ bool importOSM(QWidget* aParent, QIODevice& File, MapDocument* theDocument, MapL
 		return false;
 
 	QProgressDialog* dlg = aProgressWindow->getProgressDialog();
-	dlg->setWindowTitle(QApplication::translate("Downloader", "Parsing..."));
+	if (dlg)
+		dlg->setWindowTitle(QApplication::translate("Downloader", "Parsing..."));
 
 	QProgressBar* Bar = aProgressWindow->getProgressBar();
 	Bar->setTextVisible(false);

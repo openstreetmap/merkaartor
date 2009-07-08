@@ -15,7 +15,6 @@
 #include <QApplication>
 #include <QByteArray>
 #include <QMessageBox>
-#include <QNetworkProxyFactory>
 
 
 #include "MainWindow.h"
@@ -1280,16 +1279,11 @@ QNetworkProxy MerkaartorPreferences::getProxy(const QUrl & requestUrl)
 {
 	QNetworkProxy theProxy;
 
-	if (false /*getProxySystem()*/) {
-		QList<QNetworkProxy> theProxyList = QNetworkProxyFactory::systemProxyForQuery ( QNetworkProxyQuery(requestUrl) );
-		theProxy = theProxyList[0];
-	} else {
-		theProxy = QNetworkProxy::HttpProxy;
-		theProxy.setHostName(getProxyHost());
-		theProxy.setPort(getProxyPort());
-		theProxy.setUser(getProxyUser());
-		theProxy.setPassword(getProxyPassword());
-	}
+	theProxy = QNetworkProxy::HttpProxy;
+	theProxy.setHostName(getProxyHost());
+	theProxy.setPort(getProxyPort());
+	theProxy.setUser(getProxyUser());
+	theProxy.setPassword(getProxyPassword());
 
 	return theProxy;
 }

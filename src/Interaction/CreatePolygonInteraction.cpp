@@ -99,7 +99,7 @@ void CreatePolygonInteraction::mousePressEvent(QMouseEvent * event)
 			m.rotate(bAngle);
 			m.scale(bScale.x(), bScale.y());
 
-			QPointF Prev(CenterF.x()+cos(Angle/2)*Radius,CenterF.y()+sin(Angle/2)*Radius);
+			QPointF Prev(CenterF.x()+cos(-Angle/2)*Radius,CenterF.y()+sin(-Angle/2)*Radius);
 			TrackPoint* First = new TrackPoint(XY_TO_COORD(m.map(Prev)));
 			Road* R = new Road;
 			R->add(First);
@@ -107,7 +107,7 @@ void CreatePolygonInteraction::mousePressEvent(QMouseEvent * event)
 				R->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
 			CommandList* L  = new CommandList(MainWindow::tr("Create Polygon %1").arg(R->id()), R);
 			L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),First,true));
-			for (double a = Angle*3/2; a<2*M_PI; a+=Angle)
+			for (double a = 2*M_PI - Angle*3/2; a>0; a-=Angle)
 			{
 				QPointF Next(CenterF.x()+cos(a)*Radius,CenterF.y()+sin(a)*Radius);
 				TrackPoint* New = new TrackPoint(XY_TO_COORD(m.map(Next)));
@@ -161,14 +161,14 @@ void CreatePolygonInteraction::paintEvent(QPaintEvent* , QPainter& thePainter)
 		double Angle = 2*M_PI/Sides;
 		QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
 		QPen TP(SomeBrush,view()->pixelPerM()*4);
-		QPointF Prev(CenterF.x()+cos(Angle/2)*Radius,CenterF.y()+sin(Angle/2)*Radius);
-		for (double a = Angle*3/2; a<2*M_PI; a+=Angle)
+		QPointF Prev(CenterF.x()+cos(-Angle/2)*Radius,CenterF.y()+sin(-Angle/2)*Radius);
+		for (double a = 2*M_PI - Angle*3/2; a>0; a-=Angle)
 		{
 			QPointF Next(CenterF.x()+cos(a)*Radius,CenterF.y()+sin(a)*Radius);
 			::draw(thePainter,TP,MapFeature::UnknownDirection, m.map(Prev),m.map(Next),4,view()->projection());
 			Prev = Next;
 		}
-		QPointF Next(CenterF.x()+cos(Angle/2)*Radius,CenterF.y()+sin(Angle/2)*Radius);
+		QPointF Next(CenterF.x()+cos(-Angle/2)*Radius,CenterF.y()+sin(-Angle/2)*Radius);
 		::draw(thePainter,TP,MapFeature::UnknownDirection, m.map(Prev),m.map(Next),4,view()->projection());
 	}
 }

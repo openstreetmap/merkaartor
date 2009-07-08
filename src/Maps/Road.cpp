@@ -592,7 +592,7 @@ void Road::buildPath(const Projection &theProjection, const QTransform& /*theTra
 				QPointF P = p->Nodes[i]->projection();
 				append(in, make<point_2d>(P.x(), P.y()));
 			}
-//	        correct(in);
+			correct(in);
 
 	        std::vector<polygon_2d> clipped;
 			intersection <polygon_2d, box_2d, polygon_2d /*std::vector<TrackPointPtr>*/, std::back_insert_iterator <std::vector<polygon_2d> > >

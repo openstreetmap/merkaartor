@@ -92,7 +92,9 @@ void NativeRenderDialog::render()
 	if (rbSVG->isChecked()) {
 		svgg.setFileName(QDir::tempPath()+"/tmp.svg");
 		svgg.setSize(QSize(w,h));
+#if QT_VERSION >= 0x040500
 		svgg.setViewBox(QRect(0, 0, w, h));
+#endif
 
 		P.begin(&svgg);
 	} else {

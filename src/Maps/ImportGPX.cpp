@@ -127,6 +127,60 @@ static void importTrkSeg(const QDomElement& Root, MapDocument* theDocument, MapL
 		delete S;
 }
 
+static void importRte(const QDomElement& Root, MapDocument* theDocument, MapLayer* theLayer, CommandList* theList, bool MakeSegment, QProgressDialog & progress)
+{
+	TrackSegment* S = new TrackSegment;
+
+	if (Root.hasAttribute("xml:id"))
+		S->setId(Root.attribute("xml:id"));
+
+	TrackPoint* lastPoint = NULL;
+
+	for(QDomNode n = Root.firstChild(); !n.isNull(); n = n.nextSibling())
+	{
+		QDomElement t = n.toElement();
+		if (!t.isNull() && t.tagName() == "name") {
+			theLayer->setName(t.text());
+		} else
+		if (!t.isNull() && t.tagName() == "desc") {
+			theLayer->setDescription(t.text());
+		} else
+		if (!t.isNull() && t.tagName() == "rtept") {
+
+			progress.setValue(progress.value()+1);
+			if (progress.wasCanceled())
+				return;
+
+			TrackPoint* Pt = importTrkPt(t,theDocument, theLayer, theList);
+
+			if (MakeSegment == false)
+				continue;
+
+			if (lastPoint)
+			{
+				double kilometer = Pt->position().distanceFrom( lastPoint->position() );
+
+				if (M_PREFS->getMaxDistNodes() != 0.0 && kilometer > M_PREFS->getMaxDistNodes())
+				{
+					if (S->size())
+						theList->add(new AddFeatureCommand(theLayer,S, true));
+					else
+						delete S;
+
+					S = new TrackSegment;
+				}
+			}
+			S->add(Pt);
+			lastPoint = Pt;
+		}
+	}
+
+	if (S->size())
+		theList->add(new AddFeatureCommand(theLayer,S, true));
+	else
+		delete S;
+}
+
 static void importTrk(const QDomElement& Root, MapDocument* theDocument, MapLayer* theLayer, CommandList* theList, bool MakeSegment, QProgressDialog & progress)
 {
 	for(QDomNode n = Root.firstChild(); !n.isNull(); n = n.nextSibling())
@@ -159,6 +213,18 @@ static void importGPX(const QDomElement& Root, MapDocument* theDocument, QList<T
 			TrackMapLayer* newLayer = new TrackMapLayer();
 			theDocument->add(newLayer);
 			importTrk(t,theDocument, newLayer, theList, MakeSegment, progress);
+			if (!newLayer->size()) {
+				theDocument->remove(newLayer);
+				delete newLayer;
+			} else {
+				theTracklayers.append(newLayer);
+			}
+		}
+		else if (t.tagName() == "rte")
+		{
+			TrackMapLayer* newLayer = new TrackMapLayer();
+			theDocument->add(newLayer);
+			importRte(t,theDocument, newLayer, theList, MakeSegment, progress);
 			if (!newLayer->size()) {
 				theDocument->remove(newLayer);
 				delete newLayer;

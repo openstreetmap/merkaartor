@@ -428,9 +428,11 @@ bool downloadOSM(QWidget* aParent, const QUrl& theUrl, const QString& aUser, con
 		return false;
 
 	QProgressDialog* dlg = aProgressWindow->getProgressDialog();
-	dlg->setWindowTitle(QApplication::translate("Downloader","Downloading..."));
-	dlg->setWindowFlags(dlg->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-	dlg->setWindowFlags(dlg->windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
+	if (dlg) {
+		dlg->setWindowTitle(QApplication::translate("Downloader","Downloading..."));
+		dlg->setWindowFlags(dlg->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+		dlg->setWindowFlags(dlg->windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
+	}
 
 	QProgressBar* Bar = aProgressWindow->getProgressBar();
 	Bar->setTextVisible(false);

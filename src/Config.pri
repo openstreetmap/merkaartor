@@ -9,7 +9,6 @@ REVISION="-pre2"
 # PREFIX              - base prefix for installation
 symbian:NOUSEWEBKIT=1
 # NOUSEWEBKIT=1         - disable use of WebKit (Yahoo adapter)
-# OSMARENDER=1        - enable osmarender (requires libxml2 / libxslt)
 symbian:MOBILE=1
 # MOBILE=1    	      - enable MOBILE
 # GEOIMAGE=1          - enable geotagged images (requires exiv2)
