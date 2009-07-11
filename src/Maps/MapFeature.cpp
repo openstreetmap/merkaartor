@@ -182,7 +182,8 @@ void MapFeature::setLastUpdated(MapFeature::ActorType A)
 
 MapFeature::ActorType MapFeature::lastUpdated() const
 {
-	if (dynamic_cast<MapLayer*>(parent())->classType() == MapLayer::DirtyMapLayerType)
+	MapLayer* L = dynamic_cast<MapLayer*>(parent());
+	if (L && L->classType() == MapLayer::DirtyMapLayerType)
 		return MapFeature::User;
 	else
 		return p->LastActor;
@@ -211,8 +212,9 @@ const QString& MapFeature::id() const
 	if (p->Id == "")
 	{
 		p->Id = QString::number((((qint64)this) * -1));
-		if (parent())
-			dynamic_cast<MapLayer*>(parent())->notifyIdUpdate(p->Id,const_cast<MapFeature*>(this));
+		MapLayer* L = dynamic_cast<MapLayer*>(parent());
+		if (L)
+			L->notifyIdUpdate(p->Id,const_cast<MapFeature*>(this));
 	}
 	return p->Id;
 }
@@ -298,6 +300,15 @@ bool MapFeature::isUploadable() const
 
 void MapFeature::setDeleted(bool delState)
 {
+	if (delState == p->Deleted)
+		return;
+
+	if (layer()) {
+		if (delState)
+			layer()->getRTree()->remove(boundingBox(), this);
+		else
+			layer()->getRTree()->insert(boundingBox(), this);
+	}
 	p->Deleted = delState;
 }
 

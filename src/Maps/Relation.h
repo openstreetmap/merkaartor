@@ -20,6 +20,7 @@ class Relation : public MapFeature
 		virtual ~Relation(void);
 
 		virtual QString getClass() const {return "Relation";}
+		virtual MapFeature::FeatureType getType() const {return MapFeature::Nodes;}
 
 		virtual CoordBox boundingBox() const;
 		virtual void draw(QPainter& P, MapView* theView);

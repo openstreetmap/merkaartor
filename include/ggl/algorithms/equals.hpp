@@ -41,8 +41,8 @@ struct box_box
 {
     static inline bool apply(B1 const& box1, B2 const& box2)
     {
-        if (!math::equals(get<max_corner, D>(box1), get<min_corner, D>(box2))
-            || !math::equals(get<min_corner, D>(box1), get<max_corner, D>(box2)))
+        if (!math::equals(get<min_corner, D>(box1), get<min_corner, D>(box2))
+            || !math::equals(get<max_corner, D>(box1), get<max_corner, D>(box2)))
         {
             return false;
         }

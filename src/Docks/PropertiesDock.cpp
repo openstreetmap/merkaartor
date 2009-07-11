@@ -499,10 +499,12 @@ void PropertiesDock::resetValues()
 			TrackPointUi.TagView->setItemDelegate(delegate);
 
 			QWidget* w;
-			if (TrackPointUi.variableLayout->count()) {
-				w = TrackPointUi.variableLayout->itemAt(0)->widget();
-				w->hide();
-				w->deleteLater();
+			for (int i=0; i<TrackPointUi.variableLayout->count(); ++i) {
+				w = TrackPointUi.variableLayout->itemAt(i)->widget();
+				if (w) {
+					w->hide();
+					w->deleteLater();
+				}
 			}
 			if (theTemplates) {
 				w = theTemplates->getWidget(Pt);
@@ -524,10 +526,12 @@ void PropertiesDock::resetValues()
 			RoadUi.TagView->setItemDelegate(delegate);
 
 			QWidget* w;
-			if (RoadUi.variableLayout->count()) {
-				w = RoadUi.variableLayout->itemAt(0)->widget();
-				w->hide();
-				w->deleteLater();
+			for (int i=0; i<RoadUi.variableLayout->count(); ++i) {
+				w = RoadUi.variableLayout->itemAt(i)->widget();
+				if (w) {
+					w->hide();
+					w->deleteLater();
+				}
 			}
 			if (theTemplates) {
 				w = theTemplates->getWidget(R);
@@ -544,10 +548,12 @@ void PropertiesDock::resetValues()
 			RelationUi.TagView->setItemDelegate(delegate);
 
 			QWidget* w;
-			if (RelationUi.variableLayout->count()) {
-				w = RelationUi.variableLayout->itemAt(0)->widget();
-				w->hide();
-				w->deleteLater();
+			for (int i=0; i<RelationUi.variableLayout->count(); ++i) {
+				w = RelationUi.variableLayout->itemAt(i)->widget();
+				if (w) {
+					w->hide();
+					w->deleteLater();
+				}
 			}
 			if (theTemplates) {
 				w = theTemplates->getWidget(L);

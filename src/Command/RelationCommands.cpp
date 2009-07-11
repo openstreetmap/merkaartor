@@ -35,31 +35,23 @@ RelationAddFeatureCommand::~RelationAddFeatureCommand(void)
 void RelationAddFeatureCommand::undo()
 {
 	Command::undo();
-	CoordBox bb = theRelation->boundingBox();
-	theLayer->getRTree()->remove(bb, theRelation);
 	theRelation->remove(Position);
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		theLayer->remove(theRelation);
 		oldLayer->add(theRelation);
 		decDirtyLevel(oldLayer);
 	}
-	bb = theRelation->boundingBox();
-	oldLayer->getRTree()->insert(bb, theRelation);
 }
 
 void RelationAddFeatureCommand::redo()
 {
 	oldLayer = theRelation->layer();
-	CoordBox bb = theRelation->boundingBox();
-	oldLayer->getRTree()->remove(bb, theRelation);
 	theRelation->add(Role, theMapFeature, Position);
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		oldLayer->remove(theRelation);
 		incDirtyLevel(oldLayer);
 		theLayer->add(theRelation);
 	}
-	bb = theRelation->boundingBox();
-	theLayer->getRTree()->insert(bb, theRelation);
 	Command::redo();
 }
 
@@ -167,31 +159,23 @@ RelationRemoveFeatureCommand::~RelationRemoveFeatureCommand(void)
 void RelationRemoveFeatureCommand::undo()
 {
 	Command::undo();
-	CoordBox bb = theRelation->boundingBox();
-	theLayer->getRTree()->remove(bb, theRelation);
 	theRelation->add(Role,theMapFeature,Idx);
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		theLayer->remove(theRelation);
 		oldLayer->add(theRelation);
 		decDirtyLevel(oldLayer);
 	}
-	bb = theRelation->boundingBox();
-	oldLayer->getRTree()->insert(bb, theRelation);
 }
 
 void RelationRemoveFeatureCommand::redo()
 {
 	oldLayer = theRelation->layer();
-	CoordBox bb = theRelation->boundingBox();
-	oldLayer->getRTree()->remove(bb, theRelation);
 	theRelation->remove(Idx);
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		oldLayer->remove(theRelation);
 		incDirtyLevel(oldLayer);
 		theLayer->add(theRelation);
 	}
-	bb = theRelation->boundingBox();
-	theLayer->getRTree()->insert(bb, theRelation);
 	Command::redo();
 }
 

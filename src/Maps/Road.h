@@ -28,6 +28,7 @@ class Road : public MapFeature
 
 	public:
 		virtual QString getClass() const {return "Road";}
+		virtual MapFeature::FeatureType getType() const {return MapFeature::Nodes;}
 
 		virtual CoordBox boundingBox() const;
 		virtual void draw(QPainter& P, MapView* theView);

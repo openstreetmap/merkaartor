@@ -30,7 +30,7 @@ class RoadPrivate
 	public:
 		RoadPrivate()
 		: SmoothedUpToDate(false), BBox(Coord(0,0),Coord(0,0)), BBoxUpToDate(false), Area(0), Distance(0), Width(0),
-			MetaUpToDate(false)
+			MetaUpToDate(false), wasPathComplete(false)
 		{
 		}
 		std::vector<TrackPointPtr> Nodes;
@@ -45,6 +45,7 @@ class RoadPrivate
 		double Width;
         bool NotEverythingDownloaded;
 		bool MetaUpToDate;
+		bool wasPathComplete;
 		RenderPriority theRenderPriority;
 		QPainterPath thePath;
 
@@ -118,15 +119,10 @@ void Road::partChanged(MapFeature*, int ChangeId)
 	if (isDeleted())
 		return;
 
-	if (layer())
-		layer()->getRTree()->remove(p->BBox, this);
 	p->BBoxUpToDate = false;
 	p->MetaUpToDate = false;
 	p->SmoothedUpToDate = false;
-	if (layer()) {
-		CoordBox bb = boundingBox();
-		layer()->getRTree()->insert(bb, this);
-	}
+	p->wasPathComplete = false;
 	notifyParents(ChangeId);
 }
 
@@ -151,21 +147,35 @@ RenderPriority Road::getRenderPriority()
 
 void Road::add(TrackPoint* Pt)
 {
+	if (layer())
+		layer()->getRTree()->remove(p->BBox, this);
 	p->Nodes.push_back(Pt);
 	Pt->setParentFeature(this);
 	p->BBoxUpToDate = false;
 	p->MetaUpToDate = false;
 	p->SmoothedUpToDate = false;
+	p->wasPathComplete = false;
+	if (layer()) {
+		CoordBox bb = boundingBox();
+		layer()->getRTree()->insert(bb, this);
+	}
 }
 
 void Road::add(TrackPoint* Pt, int Idx)
 {
+	if (layer())
+		layer()->getRTree()->remove(p->BBox, this);
 	p->Nodes.push_back(Pt);
 	std::rotate(p->Nodes.begin()+Idx,p->Nodes.end()-1,p->Nodes.end());
 	Pt->setParentFeature(this);
 	p->BBoxUpToDate = false;
 	p->MetaUpToDate = false;
 	p->SmoothedUpToDate = false;
+	p->wasPathComplete = false;
+	if (layer()) {
+		CoordBox bb = boundingBox();
+		layer()->getRTree()->insert(bb, this);
+	}
 }
 
 int Road::find(MapFeature* Pt) const
@@ -178,6 +188,8 @@ int Road::find(MapFeature* Pt) const
 
 void Road::remove(int idx)
 {
+	if (layer())
+		layer()->getRTree()->remove(p->BBox, this);
 	if (p->Nodes[idx]) {
 		TrackPoint* Pt = p->Nodes[idx];
 		Pt->unsetParentFeature(this);
@@ -186,13 +198,24 @@ void Road::remove(int idx)
 	p->BBoxUpToDate = false;
 	p->MetaUpToDate = false;
 	p->SmoothedUpToDate = false;
+	p->wasPathComplete = false;
+	if (layer()) {
+		CoordBox bb = boundingBox();
+		layer()->getRTree()->insert(bb, this);
+	}
 }
 
 void Road::remove(MapFeature* F)
 {
+	if (layer())
+		layer()->getRTree()->remove(p->BBox, this);
 	for (int i=p->Nodes.size(); i; --i)
 		if (p->Nodes[i-1] == F)
 			remove(i-1);
+	if (layer()) {
+		CoordBox bb = boundingBox();
+		layer()->getRTree()->insert(bb, this);
+	}
 }
 
 int Road::size() const
@@ -539,8 +562,6 @@ void Road::buildPath(const Projection &theProjection, const QTransform& /*theTra
 {
 	using namespace ggl;
 
-	p->thePath = QPainterPath();
-
 	if (p->Nodes.size() < 2)
 		return;
 
@@ -557,11 +578,18 @@ void Road::buildPath(const Projection &theProjection, const QTransform& /*theTra
 	box_2d clipRect (make<point_2d>(cr.bottomLeft().x(), cr.topRight().y()), make<point_2d>(cr.topRight().x(), cr.bottomLeft().y()));
     bool toClip = !ggl::within(roadRect, clipRect);
     if (!toClip) {
-		p->thePath.moveTo(p->Nodes.at(0)->projection());
-	    for (unsigned int i=1; i<p->Nodes.size(); ++i) {
-			p->thePath.lineTo(p->Nodes.at(i)->projection());
+		if (!p->wasPathComplete) {
+			p->thePath = QPainterPath();
+
+			p->thePath.moveTo(p->Nodes.at(0)->projection());
+			for (unsigned int i=1; i<p->Nodes.size(); ++i) {
+				p->thePath.lineTo(p->Nodes.at(i)->projection());
+			}
+			p->wasPathComplete = true;
         }
     } else {
+		p->thePath = QPainterPath();
+		p->wasPathComplete = false;
 
 	    if (area() <= 0.0) {
 //	        linestring_2d in;
@@ -592,7 +620,7 @@ void Road::buildPath(const Projection &theProjection, const QTransform& /*theTra
 				QPointF P = p->Nodes[i]->projection();
 				append(in, make<point_2d>(P.x(), P.y()));
 			}
-			correct(in);
+	        correct(in);
 
 	        std::vector<polygon_2d> clipped;
 			intersection <polygon_2d, box_2d, polygon_2d /*std::vector<TrackPointPtr>*/, std::back_insert_iterator <std::vector<polygon_2d> > >
@@ -1028,8 +1056,8 @@ void Road::toBinary(QDataStream& ds, QHash <QString, quint64>& theIndex)
 	ds << idToLong();
 	ds << (qint32)size();
 	for (int i=0; i < size(); ++i) {
-		ds << (qint64)(get(i)->idToLong());
-//		ds << (qint64)(theIndex["N" + QString::number(get(i)->idToLong())]);
+		TrackPoint* N = CAST_NODE(get(i));
+		ds << N->position().lat() << N->position().lon();
 	}
 }
 
@@ -1039,13 +1067,15 @@ Road* Road::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds, qint8 c,
 
 	qint32	fSize;
 	QString strId;
-	qint64 refId;
+	qint32 lat, lon;
 
 	ds >> fSize;
 
 	if (!L) {
-		for (int i=0; i < fSize; ++i)
-			ds >> refId;
+		for (int i=0; i < fSize; ++i) {
+			ds >> lat;
+			ds >> lon;
+		}
 		return NULL;
 	}
 
@@ -1059,32 +1089,29 @@ Road* Road::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds, qint8 c,
 		R = new Road();
 		R->setId(strId);
 		R->setLastUpdated(MapFeature::OSMServer);
-		L->add(R);
 	} else {
-		if (R->lastUpdated() == MapFeature::NotYetDownloaded)
+		if (R->lastUpdated() == MapFeature::NotYetDownloaded) {
 			R->setLastUpdated(MapFeature::OSMServer);
+			L->remove(R);
+		}
 		else  {
-			for (int i=0; i < fSize; ++i)
-				ds >> refId;
+			for (int i=0; i < fSize; ++i) {
+				ds >> lat;
+				ds >> lon;
+			}
 			return R;
 		}
 	}
 
 	for (int i=0; i < fSize; ++i) {
-		ds >> refId;
+		ds >> lat;
+		ds >> lon;
 
-		QString sRefId;
-		if (refId < 0)
-			sRefId = QString::number(refId);
-		else
-			sRefId = "node_" + QString::number(refId);
-		TrackPoint* N = dynamic_cast<TrackPoint*> (d->getFeature(sRefId));
-//		TrackPoint* N = dynamic_cast<TrackPoint*> (L->getFeature(d, refId)); QString("node_"+id));
-//		TrackPoint* N = dynamic_cast<TrackPoint*> (L->get(QString("node_%1").arg(refId)));
-//		TrackPoint* N = dynamic_cast<TrackPoint*> (d->getFeature(QString("node_%1").arg(refId)));
-		Q_ASSERT(N);
+		TrackPoint* N = new TrackPoint(Coord(lat, lon));
+		N->setParent(R);
 		R->add(N);
 	}
+	L->add(R);
 
 	return R;
 }

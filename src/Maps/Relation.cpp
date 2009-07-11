@@ -108,14 +108,8 @@ void Relation::partChanged(MapFeature*, int ChangeId)
 	if (isDeleted())
 		return;
 
-	if (layer())
-		layer()->getRTree()->remove(p->BBox, this);
 	p->BBoxUpToDate = false;
 	p->MetaUpToDate = false;
-	if (layer()) {
-		CoordBox bb = boundingBox();
-		layer()->getRTree()->insert(bb, this);
-	}
 	notifyParents(ChangeId);
 }
 
@@ -311,23 +305,37 @@ bool Relation::notEverythingDownloaded() const
 
 void Relation::add(const QString& Role, MapFeature* F)
 {
+	if (layer())
+		layer()->getRTree()->remove(p->BBox, this);
 	p->Members.push_back(qMakePair(Role,F));
 	F->setParentFeature(this);
 	p->BBoxUpToDate = false;
 	p->MetaUpToDate = false;
+	if (layer()) {
+		CoordBox bb = boundingBox();
+		layer()->getRTree()->insert(bb, this);
+	}
 }
 
 void Relation::add(const QString& Role, MapFeature* F, int Idx)
 {
+	if (layer())
+		layer()->getRTree()->remove(p->BBox, this);
 	p->Members.push_back(qMakePair(Role,F));
 	std::rotate(p->Members.begin()+Idx,p->Members.end()-1,p->Members.end());
 	F->setParentFeature(this);
 	p->BBoxUpToDate = false;
 	p->MetaUpToDate = false;
+	if (layer()) {
+		CoordBox bb = boundingBox();
+		layer()->getRTree()->insert(bb, this);
+	}
 }
 
 void Relation::remove(int Idx)
 {
+	if (layer())
+		layer()->getRTree()->remove(p->BBox, this);
 	if (p->Members[Idx].second) {
 		MapFeature* F = p->Members[Idx].second;
 		F->unsetParentFeature(this);
@@ -335,6 +343,10 @@ void Relation::remove(int Idx)
 	p->Members.erase(p->Members.begin()+Idx);
 	p->BBoxUpToDate = false;
 	p->MetaUpToDate = false;
+	if (layer()) {
+		CoordBox bb = boundingBox();
+		layer()->getRTree()->insert(bb, this);
+	}
 }
 
 void Relation::remove(MapFeature* F)
@@ -679,11 +691,11 @@ Relation* Relation::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds, 
 		R = new Relation();
 		R->setId(strId);
 		R->setLastUpdated(MapFeature::OSMServer);
-		L->add(R);
 	} else {
-		if (R->lastUpdated() == MapFeature::NotYetDownloaded)
+		if (R->lastUpdated() == MapFeature::NotYetDownloaded) {
 			R->setLastUpdated(MapFeature::OSMServer);
-		else  {
+			L->remove(R);
+		} else  {
 			for (int i=0; i < fSize; ++i) {
 				ds >> Type;
 				ds >> refId;
@@ -717,6 +729,7 @@ Relation* Relation::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds, 
 		if (F)
 			R->add(Role, F);
 	}
+	L->add(R);
 
 	return R;
 }

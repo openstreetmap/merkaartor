@@ -20,6 +20,8 @@
 #include <boost/shared_ptr.hpp>
 
 #include <ggl/algorithms/area.hpp>
+#include <ggl/algorithms/within.hpp>
+#include <ggl/algorithms/equals.hpp>
 #include <ggl/index/rtree/rtree_node.hpp>
 #include <ggl/index/rtree/rtree_leaf.hpp>
 
@@ -160,19 +162,25 @@ public:
             // refine the result
             for (typename node_type::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
             {
-                leaf = *it;
-                try
-                {
-                    leaf->remove(value);
-                    break;
-                } catch (...)
-                {
-                    leaf = node_pointer();
-                }
+				typedef std::vector<std::pair<Box, Value> > leaves_type;
+				leaves_type leaves = (*it)->get_leaves();
+
+				for (typename leaves_type::const_iterator itl = leaves.begin();
+					 itl != leaves.end(); ++itl)
+				{
+					if (itl->second == value)
+					{
+						leaf = *it;
+						leaf->remove(value);
+						break;
+					}
+				}
+				if (leaf)
+					break;
             }
 
             if (!leaf)
-                return;
+		        throw std::logic_error("Value not found.");
 
             typename rtree_leaf < Box, Point, Value >::leaf_map q_leaves;
 

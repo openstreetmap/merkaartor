@@ -72,6 +72,15 @@ bool TrackPoint::isInteresting() const
 	return false;
 }
 
+bool TrackPoint::isPOI() const
+{
+	// if the user has added special tags, that's fine also
+	for (int i=0; i<tagSize(); ++i)
+		if ((tagKey(i) != "created_by") && (tagKey(i) != "ele"))
+			return true;
+
+	return false;
+}
 
 const Coord& TrackPoint::position() const
 {
@@ -80,9 +89,15 @@ const Coord& TrackPoint::position() const
 
 void TrackPoint::setPosition(const Coord& aCoord)
 {
+	if (layer())
+		layer()->getRTree()->remove(BBox, this);
 	Position = aCoord;
 	BBox = CoordBox(Position,Position);
 	ProjectionRevision = 0;
+	if (layer()) {
+		layer()->getRTree()->insert(BBox, this);
+	}
+	notifyChanges();
 }
 
 const QPointF& TrackPoint::projection() const
@@ -479,7 +494,9 @@ TrackPoint* TrackPoint::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& 
 		Pt->setLastUpdated(MapFeature::OSMServer);
 		L->add(Pt);
 	} else {
+		L->remove(Pt);
 		Pt->setPosition(cd);
+		L->add(Pt);
 		if (Pt->lastUpdated() == MapFeature::NotYetDownloaded)
 			Pt->setLastUpdated(MapFeature::OSMServer);
 	}

@@ -26,9 +26,6 @@ AddFeatureCommand::~AddFeatureCommand()
 
 void AddFeatureCommand::undo()
 {
-	CoordBox bb = theFeature->boundingBox();
-	theLayer->getRTree()->remove(bb, theFeature);
-
 	Command::undo();
 	if (theFeature->isUploaded() || postUploadCommand) {
 		if (postUploadCommand)
@@ -39,7 +36,6 @@ void AddFeatureCommand::undo()
 		if (theLayer && oldLayer && (theLayer != oldLayer)) {
 			theLayer->remove(theFeature);
 			oldLayer->add(theFeature);
-			oldLayer->getRTree()->insert(bb, theFeature);
 		} else
 			theFeature->setDeleted(true);
 
@@ -53,16 +49,17 @@ void AddFeatureCommand::redo()
 		postUploadCommand->undo();
 	else {
 		oldLayer = theFeature->layer();
-		CoordBox bb = theFeature->boundingBox();
 		if (theLayer && oldLayer && (theLayer != oldLayer)) {
 			oldLayer->remove(theFeature);
-			oldLayer->getRTree()->remove(bb, theFeature);
+			theLayer->add(theFeature);
 		} else {
-			theFeature->setDeleted(false);
-			oldLayer = NULL;
+			if (!oldLayer)
+				theLayer->add(theFeature);
+			else {
+				theFeature->setDeleted(false);
+				oldLayer = NULL;
+			}
 		}
-		theLayer->add(theFeature);
-		theLayer->getRTree()->insert(bb, theFeature);
 		incDirtyLevel(theLayer);
 	}
 	Command::redo();
@@ -172,8 +169,6 @@ void RemoveFeatureCommand::redo()
 		if (CascadedCleanUp)
 			CascadedCleanUp->redo();
 		oldLayer = theFeature->layer();
-		CoordBox bb = theFeature->boundingBox();
-		oldLayer->getRTree()->remove(bb, theFeature);
 		Idx = theFeature->layer()->get(theFeature);
 		oldLayer->remove(theFeature);
 		theLayer->add(theFeature);
@@ -196,11 +191,9 @@ void RemoveFeatureCommand::undo()
 		}
 	} else {
 		theLayer->remove(theFeature);
-		CoordBox bb = theFeature->boundingBox();
 		if (oldLayer->size() < Idx)
 			Idx = oldLayer->size();
 		oldLayer->add(theFeature,Idx);
-		oldLayer->getRTree()->insert(bb, theFeature);
 		theFeature->setDeleted(false);
 		decDirtyLevel(oldLayer);
 		if (CascadedCleanUp)

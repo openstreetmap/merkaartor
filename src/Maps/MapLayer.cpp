@@ -191,6 +191,8 @@ bool MapLayer::isUploadable() const
 void MapLayer::add(MapFeature* aFeature)
 {
 	aFeature->setLayer(this);
+	if (!aFeature->isDeleted())
+		p->theRTree->insert(aFeature->boundingBox(), aFeature);
 	p->Features.push_back(aFeature);
 	notifyIdUpdate(aFeature->id(),aFeature);
 	p->RenderPriorityUpToDate = false;
@@ -212,6 +214,8 @@ void MapLayer::remove(MapFeature* aFeature)
 	if (p->Features.removeOne(aFeature))
 	{
 		aFeature->setLayer(0);
+		if (!aFeature->isDeleted())
+			p->theRTree->remove(aFeature->boundingBox(), aFeature);
 		notifyIdUpdate(aFeature->id(),0);
 		p->RenderPriorityUpToDate = false;
 	}
@@ -222,7 +226,8 @@ void MapLayer::deleteFeature(MapFeature* aFeature)
 	if (p->Features.removeOne(aFeature))
 	{
 		aFeature->setLayer(0);
-		p->theRTree->remove(aFeature->boundingBox(), aFeature);
+		if (!aFeature->isDeleted())
+			p->theRTree->remove(aFeature->boundingBox(), aFeature);
 		notifyIdUpdate(aFeature->id(),0);
 		p->RenderPriorityUpToDate = false;
 	}
@@ -685,9 +690,7 @@ void TrackMapLayer::extractLayer()
 			for (int i=0; i < PL.size(); i++) {
 				extL->add(PL[i]);
 				R->add(PL[i]);
-				extL->getRTree()->insert(PL[i]->boundingBox(), PL[i]);
 			}
-			extL->getRTree()->insert(R->boundingBox(), R);
 		}
 	}
 
@@ -933,6 +936,11 @@ OsbMapLayer::~ OsbMapLayer()
 	delete pp;
 }
 
+bool OsbMapLayer::arePointsDrawable()
+{
+	return true;
+}
+
 void OsbMapLayer::setFilename(const QString& filename)
 {
 	delete pp->theImp;
@@ -988,7 +996,7 @@ void OsbMapLayer::invalidate(MapDocument* d, CoordBox vp)
 		if (!tileToLoad.contains(pp->loadedTiles[j])) {
 			if (pp->theImp->clearTile(pp->loadedTiles[j], d, this))
 				pp->loadedTiles.removeAt(j);
-			else 
+			else
 				++j;
 		} else
 			++j;
@@ -998,7 +1006,7 @@ void OsbMapLayer::invalidate(MapDocument* d, CoordBox vp)
 		if (!regionToLoad.contains(pp->loadedRegions[j])) {
 			if (pp->theImp->clearRegion(pp->loadedRegions[j], d, this))
 				pp->loadedRegions.removeAt(j);
-			else 
+			else
 				++j;
 		} else
 			++j;

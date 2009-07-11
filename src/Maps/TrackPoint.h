@@ -28,6 +28,7 @@ class TrackPoint : public MapFeature
 		virtual ~TrackPoint();
 
 		virtual QString getClass() const {return "TrackPoint";}
+		virtual MapFeature::FeatureType getType() const {return MapFeature::Nodes;}
 
 		virtual CoordBox boundingBox() const;
 		virtual void draw(QPainter& P, MapView* theView);
@@ -48,6 +49,7 @@ class TrackPoint : public MapFeature
 		virtual const MapFeature* get(int Idx) const;
 		virtual bool isNull() const;
 		virtual bool isInteresting() const;
+		virtual bool isPOI() const;
 
 		const Coord& position() const;
 		void setPosition(const Coord& aCoord);

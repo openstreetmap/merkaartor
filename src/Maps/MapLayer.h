@@ -254,6 +254,7 @@ public:
 	void setFilename(const QString& filename);
 
 	virtual bool isUploadable() {return true;}
+	virtual bool arePointsDrawable();
 
 	virtual void invalidate(MapDocument* d, CoordBox vp);
 	//MapFeature*  getFeatureByRef(MapDocument* d, quint64 ref);
