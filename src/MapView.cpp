@@ -174,7 +174,9 @@ void MapView::panScreen(QPoint delta)
 
 void MapView::paintEvent(QPaintEvent * anEvent)
 {
+#ifndef NDEBUG
 	QTime Start(QTime::currentTime());
+#endif
 
 	theFeatures.clear();
 	theCoastlines.clear();
@@ -217,9 +219,11 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 		.arg(QString::number(intToAng(viewport().topRight().lat()),'f',4))
 		);
 
+#ifndef NDEBUG
 	QTime Stop(QTime::currentTime());
 	//Main->PaintTimeLabel->setText(tr("%1ms").arg(Start.msecsTo(Stop)));
 	Main->PaintTimeLabel->setText(tr("%1ms;ppm:%2").arg(Start.msecsTo(Stop)).arg(p->PixelPerM));
+#endif
 }
 
 void MapView::drawScale(QPainter & P)

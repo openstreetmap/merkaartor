@@ -173,8 +173,10 @@ QPixmap BrowserImageManager::getImage(IMapAdapter* anAdapter, QString url)
 	}
 
 	// is image in picture cache
-	if (QPixmapCache::find(hash, pm))
+	if (QPixmapCache::find(hash, pm)) {
+		qDebug() << "BrowserImageManager::QPixmapCache hit!";
 		return pm;
+	}
 
 	// disk cache?
     if (anAdapter->isTiled() && useDiskCache(hash + ".png")) {
@@ -309,7 +311,7 @@ void BrowserImageManager::loadingQueueEmpty()
 
 void BrowserImageManager::abortLoading()
 {
-	qDebug() << "BrowserImageManager::abortLoading";
+	//qDebug() << "BrowserImageManager::abortLoading";
 	page->triggerAction(QWebPage::Stop);
 	if (!loadingRequests.isEmpty()) {
 		LoadingRequest R = loadingRequests.dequeue();

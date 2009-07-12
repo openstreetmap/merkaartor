@@ -970,56 +970,95 @@ void OsbMapLayer::invalidate(MapDocument* d, CoordBox vp)
 
 	QList<qint32> regionToLoad;
 	regionToLoad.append(0);
-	for (int i=x1; i <= x2; ++i)
-		for (int j=y1; j <= y2; ++j)
+	for (int j=y1; j <= y2; ++j)
+		for (int i=x1; i <= x2; ++i)
 			regionToLoad.push_back(j*NUM_REGIONS+i);
-			//if (!pp->loadedRegions.contains(j*NUM_REGIONS+i))
-			//	if (pp->theImp->loadRegion(j*NUM_REGIONS+i))
-			//		pp->loadedRegions.append(j*NUM_REGIONS+i);
-
-	x1 = int((r.topLeft().x() + INT_MAX) / TILE_WIDTH); 
-	y1 = int((r.topLeft().y() + INT_MAX) / TILE_WIDTH);
-	x2 = int((r.bottomRight().x() + INT_MAX) / TILE_WIDTH);
-	y2 = int((r.bottomRight().y() + INT_MAX) / TILE_WIDTH);
 
 	QList<qint32> tileToLoad;
-	if (intToAng(vp.lonDiff()) <= M_PREFS->getTileToRegionThreshold())
-		for (int i=x1; i <= x2; ++i)
-			for (int j=y1; j <= y2; ++j)
+	if (intToAng(vp.lonDiff()) <= M_PREFS->getTileToRegionThreshold()) {
+		x1 = int((r.topLeft().x() + INT_MAX) / TILE_WIDTH); 
+		y1 = int((r.topLeft().y() + INT_MAX) / TILE_WIDTH);
+		x2 = int((r.bottomRight().x() + INT_MAX) / TILE_WIDTH);
+		y2 = int((r.bottomRight().y() + INT_MAX) / TILE_WIDTH);
+		for (int j=y1; j <= y2; ++j)
+			for (int i=x1; i <= x2; ++i)
 				tileToLoad.push_back(j*NUM_TILES+i);
+	}
 
 	//int span = (x2 - x1 + 1) * (y2 - y1 + 1);
-
-	int j;
-	j = 0;
-	while (j<pp->loadedTiles.size()) {
-		if (!tileToLoad.contains(pp->loadedTiles[j])) {
-			if (pp->theImp->clearTile(pp->loadedTiles[j], d, this))
-				pp->loadedTiles.removeAt(j);
+	int rl = 0;
+	int rt = 0;
+	while (rt < regionToLoad.size() && rl < pp->loadedRegions.size()) {
+		if (pp->loadedRegions.at(rl) == regionToLoad.at(rt)) {
+			++rl;
+			++rt;
+			continue;
+		}
+		while (rl < pp->loadedRegions.size() && pp->loadedRegions.at(rl) < regionToLoad.at(rt) ) {
+			if (pp->theImp->clearRegion(pp->loadedRegions.at(rl), d, this))
+				pp->loadedRegions.removeAt(rl);
 			else
-				++j;
-		} else
-			++j;
+				++rl;
+		}
+		if (rl < pp->loadedRegions.size()) {
+			while (rt < regionToLoad.size() && regionToLoad.at(rt) < pp->loadedRegions.at(rl)) {
+				if (pp->theImp->loadRegion(regionToLoad.at(rt), d, this)) {
+					pp->loadedRegions.insert(rl, regionToLoad.at(rt));
+					++rl;
+				}
+				++rt;
+			}
+		}
 	}
-	j = 0;
-	while (j<pp->loadedRegions.size()) {
-		if (!regionToLoad.contains(pp->loadedRegions[j])) {
-			if (pp->theImp->clearRegion(pp->loadedRegions[j], d, this))
-				pp->loadedRegions.removeAt(j);
-			else
-				++j;
-		} else
-			++j;
+	while (rl < pp->loadedRegions.size() ) {
+		if (pp->theImp->clearRegion(pp->loadedRegions.at(rl), d, this))
+			pp->loadedRegions.removeAt(rl);
+		else
+			++rl;
+	}
+	while (rt < regionToLoad.size()) {
+		if (pp->theImp->loadRegion(regionToLoad.at(rt), d, this)) {
+			pp->loadedRegions.push_back(regionToLoad.at(rt));
+		}
+		++rt;
 	}
 
-	for (int i=0; i<regionToLoad.size(); ++i)
-		if (!pp->loadedRegions.contains(regionToLoad[i]))
-			if (pp->theImp->loadRegion(regionToLoad[i], d, this))
-				pp->loadedRegions.append(regionToLoad[i]);
-	for (int i=0; i<tileToLoad.size(); ++i)
-		if (!pp->loadedTiles.contains(tileToLoad[i]))
-			if (pp->theImp->loadTile(tileToLoad[i], d, this))
-				pp->loadedTiles.push_back(tileToLoad[i]);
+	rl = 0;
+	rt = 0;
+	while (rt < tileToLoad.size() && rl < pp->loadedTiles.size()) {
+		if (pp->loadedTiles.at(rl) == tileToLoad.at(rt)) {
+			++rl;
+			++rt;
+			continue;
+		}
+		while (rl < pp->loadedTiles.size() && pp->loadedTiles.at(rl) < tileToLoad.at(rt) ) {
+			if (pp->theImp->clearTile(pp->loadedTiles.at(rl), d, this))
+				pp->loadedTiles.removeAt(rl);
+			else
+				++rl;
+		}
+		if (rl < pp->loadedTiles.size()) {
+			while (rt < tileToLoad.size() && tileToLoad.at(rt) < pp->loadedTiles.at(rl)) {
+				if (pp->theImp->loadTile(tileToLoad.at(rt), d, this)) {
+					pp->loadedTiles.insert(rl, tileToLoad.at(rt));
+					++rl;
+				}
+				++rt;
+			}
+		}
+	}
+	while (rl < pp->loadedTiles.size() ) {
+		if (pp->theImp->clearTile(pp->loadedTiles.at(rl), d, this))
+			pp->loadedTiles.removeAt(rl);
+		else
+			++rl;
+	}
+	while (rt < tileToLoad.size()) {
+		if (pp->theImp->loadTile(tileToLoad.at(rt), d, this)) {
+			pp->loadedTiles.push_back(tileToLoad.at(rt));
+		}
+		++rt;
+	}
 }
 
 //MapFeature*  OsbMapLayer::getFeatureByRef(MapDocument* d, quint64 ref)

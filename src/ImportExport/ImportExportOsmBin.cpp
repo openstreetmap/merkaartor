@@ -223,7 +223,7 @@ void ImportExportOsmBin::addTileIndex(MapFeature* F)
 					(F->tagValue("highway", "") == "motorway") ||
 					(F->tagValue("highway", "") == "trunk") ||
 					(F->tagValue("highway", "") == "primary") ||
-					(F->tagValue("highway", "") == "secondry") ||
+					(F->tagValue("highway", "") == "secondary") ||
 					(F->tagValue("place", "") == "city") ||
 					(F->tagValue("place", "") == "town") ||
 					(F->tagValue("boundary", "") == "administrative") ||

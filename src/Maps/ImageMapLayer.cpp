@@ -332,7 +332,7 @@ void ImageMapLayer::forceRedraw(MapView& theView, QRect Screen)
 		CoordBox(p->theProjection.inverse(p->theTransform.inverted().map(fScreen.bottomLeft())),
 			 p->theProjection.inverse(p->theTransform.inverted().map(fScreen.topRight())));
 
-	p->theImageManager->abortLoading();
+	//p->theImageManager->abortLoading();
 	draw(theView, Screen);
 }
 

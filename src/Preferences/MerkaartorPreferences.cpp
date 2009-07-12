@@ -1252,7 +1252,7 @@ M_PARAM_IMPLEMENT_INT(TagListFirstColumnWidth, visual, 0)
 M_PARAM_IMPLEMENT_BOOL(TranslateTags, locale, true)
 
 /* World OSB manager */
-M_PARAM_IMPLEMENT_DOUBLE(TileToRegionThreshold, WOSB, 0.02)
+M_PARAM_IMPLEMENT_DOUBLE(TileToRegionThreshold, WOSB, 0.03)
 
 M_PARAM_IMPLEMENT_STRING(WorldOsbUri, WOSB, "")
 M_PARAM_IMPLEMENT_BOOL(WorldOsbAutoload, WOSB, false)
