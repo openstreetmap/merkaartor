@@ -6,6 +6,7 @@
 
 #include <QProgressDialog>
 
+#include <deque>
 #include <ggl/index/rtree/rtree.hpp>
 
 typedef ggl::index::rtree::rtree<CoordBox, Coord, MapFeaturePtr> MyRTree;
@@ -130,7 +131,10 @@ public:
 	virtual bool isTrack() {return false;}
 	virtual bool arePointsDrawable() {return true;}
 
-	virtual MyRTree* getRTree();
+	virtual void blockIndexing(bool val);
+	virtual void indexAdd(const CoordBox& bb, const MapFeaturePtr aFeat);
+	virtual void indexRemove(const CoordBox& bb, const MapFeaturePtr aFeat);
+	virtual std::deque<MapFeature*> indexFind(const CoordBox& vp);
 	virtual void reIndex();
 
 

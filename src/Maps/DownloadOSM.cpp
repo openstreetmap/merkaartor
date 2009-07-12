@@ -598,6 +598,7 @@ bool downloadFeatures(QWidget* aParent, const QList<MapFeature*>& aDownloadList 
 		theDocument->add(theLayer);
 	} else
 		theLayer = theDocument->getLastDownloadLayer();
+	theLayer->blockIndexing(true);
 
 
 	QString osmWebsite, osmUser, osmPwd;
@@ -625,6 +626,8 @@ bool downloadFeatures(QWidget* aParent, const QList<MapFeature*>& aDownloadList 
 	Main->view()->setUpdatesEnabled(true);
 	if (OK)
 	{
+		theLayer->blockIndexing(false);
+		theLayer->reIndex();
 		Main->invalidateView();
 	} else
 	{
@@ -632,9 +635,6 @@ bool downloadFeatures(QWidget* aParent, const QList<MapFeature*>& aDownloadList 
 			theDocument->remove(theLayer);
 			delete theLayer;
 		}
-	}
-	for (int j=0; j<theDocument->layerSize(); ++j) {
-		theDocument->getLayer(j)->reIndex();
 	}
 	return OK;
 }
@@ -648,6 +648,7 @@ bool downloadMoreOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDo
 		theDocument->add(theLayer);
 	} else
 		theLayer = theDocument->getLastDownloadLayer();
+	theLayer->blockIndexing(true);
 
 
 	QString osmWebsite, osmUser, osmPwd;
@@ -663,6 +664,8 @@ bool downloadMoreOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDo
 	Main->view()->setUpdatesEnabled(true);
 	if (OK)
 	{
+		theLayer->blockIndexing(false);
+		theLayer->reIndex();
 		theDocument->setLastDownloadLayer(theLayer);
 		theDocument->addDownloadBox(theLayer, aBox);
 		// Don't jump around on Download More
@@ -674,9 +677,6 @@ bool downloadMoreOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDo
 			theDocument->remove(theLayer);
 			delete theLayer;
 		}
-	}
-	for (int j=0; j<theDocument->layerSize(); ++j) {
-		theDocument->getLayer(j)->reIndex();
 	}
 	return OK;
 }
@@ -771,6 +771,7 @@ bool downloadOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDocume
 			Main->view()->setUpdatesEnabled(false);
 			MapLayer* theLayer = new DrawingMapLayer(QApplication::translate("Downloader","%1 download").arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
 			theDocument->add(theLayer);
+			theLayer->blockIndexing(true);
 			M_PREFS->setResolveRelations(ui.ResolveRelations->isChecked());
 			if (directAPI)
 				OK = downloadOSM(aParent,QUrl(ui.Link->text()),osmUser,osmPwd,theDocument,theLayer);
@@ -784,6 +785,8 @@ bool downloadOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDocume
 			Main->view()->setUpdatesEnabled(true);
 			if (OK)
 			{
+				theLayer->blockIndexing(false);
+				theLayer->reIndex();
 				theDocument->setLastDownloadLayer(theLayer);
 				theDocument->addDownloadBox(theLayer, Clip);
                 if (directAPI)
@@ -799,9 +802,6 @@ bool downloadOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDocume
 		}
 	}
 	delete dlg;
-	for (int j=0; j<theDocument->layerSize(); ++j) {
-		theDocument->getLayer(j)->reIndex();
-	}
 	return OK;
 }
 

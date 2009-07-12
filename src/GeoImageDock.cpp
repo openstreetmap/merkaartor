@@ -313,7 +313,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
 			usedTrackPoints << TrackPointData(Pt->id(), file, time, i == theLayer->size());
 			if (i == theLayer->size()) {
 				theLayer->add(Pt);
-				theLayer->getRTree()->insert(Pt->boundingBox(), Pt);
+				theLayer->indexAdd(Pt->boundingBox(), Pt);
 			}
 		} else if (!time.isNull()) {
 	

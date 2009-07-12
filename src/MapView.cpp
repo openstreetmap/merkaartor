@@ -322,7 +322,7 @@ void MapView::buildFeatureSet()
 			if (!theDocument->getLayer(j)->size() || !theDocument->getLayer(j)->isVisible())
 				continue;
 
-			std::deque < MapFeaturePtr > ret = theDocument->getLayer(j)->getRTree()->find(CoordBox(bl, tr));
+			std::deque < MapFeaturePtr > ret = theDocument->getLayer(j)->indexFind(CoordBox(bl, tr));
 			for (std::deque < MapFeaturePtr >::const_iterator it = ret.begin(); it != ret.end(); ++it) {
 				if (theFeatures.contains(*it))
 					continue;

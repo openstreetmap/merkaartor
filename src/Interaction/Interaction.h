@@ -213,7 +213,7 @@ class GenericFeatureSnapInteraction : public Interaction
 				if (!document()->getLayer(j)->isVisible() || document()->getLayer(j)->isReadonly())
 					continue;
 
-				std::deque < MapFeaturePtr > ret = document()->getLayer(j)->getRTree()->find(HotZone);
+				std::deque < MapFeaturePtr > ret = document()->getLayer(j)->indexFind(HotZone);
 				for (std::deque < MapFeaturePtr >::const_iterator it = ret.begin(); it < ret.end(); ++it) {
 					FeatureType* Pt = dynamic_cast<FeatureType*>(*it);
 					if (Pt)

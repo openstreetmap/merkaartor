@@ -250,6 +250,7 @@ bool ImageMapLayer::toXML(QDomElement& xParent, QProgressDialog & /* progress */
 ImageMapLayer * ImageMapLayer::fromXML(MapDocument* d, const QDomElement& e, QProgressDialog & /* progress */)
 {
 	ImageMapLayer* l = new ImageMapLayer(e.attribute("name"));
+	l->blockIndexing(true);
 	d->addImageLayer(l);
 	l->setId(e.attribute("xml:id"));
 
@@ -269,6 +270,8 @@ ImageMapLayer * ImageMapLayer::fromXML(MapDocument* d, const QDomElement& e, QPr
 	l->setSelected((e.attribute("selected") == "true" ? true : false));
 	l->setEnabled((e.attribute("enabled") == "false" ? false : true));
 
+	l->blockIndexing(false);
+	l->reIndex();
 	return l;
 }
 

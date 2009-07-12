@@ -148,7 +148,7 @@ RenderPriority Road::getRenderPriority()
 void Road::add(TrackPoint* Pt)
 {
 	if (layer())
-		layer()->getRTree()->remove(p->BBox, this);
+		layer()->indexRemove(p->BBox, this);
 	p->Nodes.push_back(Pt);
 	Pt->setParentFeature(this);
 	p->BBoxUpToDate = false;
@@ -157,14 +157,14 @@ void Road::add(TrackPoint* Pt)
 	p->wasPathComplete = false;
 	if (layer()) {
 		CoordBox bb = boundingBox();
-		layer()->getRTree()->insert(bb, this);
+		layer()->indexAdd(bb, this);
 	}
 }
 
 void Road::add(TrackPoint* Pt, int Idx)
 {
 	if (layer())
-		layer()->getRTree()->remove(p->BBox, this);
+		layer()->indexRemove(p->BBox, this);
 	p->Nodes.push_back(Pt);
 	std::rotate(p->Nodes.begin()+Idx,p->Nodes.end()-1,p->Nodes.end());
 	Pt->setParentFeature(this);
@@ -174,7 +174,7 @@ void Road::add(TrackPoint* Pt, int Idx)
 	p->wasPathComplete = false;
 	if (layer()) {
 		CoordBox bb = boundingBox();
-		layer()->getRTree()->insert(bb, this);
+		layer()->indexAdd(bb, this);
 	}
 }
 
@@ -189,7 +189,7 @@ int Road::find(MapFeature* Pt) const
 void Road::remove(int idx)
 {
 	if (layer())
-		layer()->getRTree()->remove(p->BBox, this);
+		layer()->indexRemove(p->BBox, this);
 	if (p->Nodes[idx]) {
 		TrackPoint* Pt = p->Nodes[idx];
 		Pt->unsetParentFeature(this);
@@ -201,20 +201,20 @@ void Road::remove(int idx)
 	p->wasPathComplete = false;
 	if (layer()) {
 		CoordBox bb = boundingBox();
-		layer()->getRTree()->insert(bb, this);
+		layer()->indexAdd(bb, this);
 	}
 }
 
 void Road::remove(MapFeature* F)
 {
 	if (layer())
-		layer()->getRTree()->remove(p->BBox, this);
+		layer()->indexRemove(p->BBox, this);
 	for (int i=p->Nodes.size(); i; --i)
 		if (p->Nodes[i-1] == F)
 			remove(i-1);
 	if (layer()) {
 		CoordBox bb = boundingBox();
-		layer()->getRTree()->insert(bb, this);
+		layer()->indexAdd(bb, this);
 	}
 }
 
@@ -631,7 +631,7 @@ void Road::buildPath(const Projection &theProjection, const QTransform& /*theTra
 		        if (!(*it).outer().empty()) {
 			        p->thePath.moveTo(QPointF((*it).outer()[0].x(), (*it).outer()[0].y()));
 		        }
-		        for (ring_2d::const_iterator itl = (*it).outer().begin()+1; itl != (*it).outer().end(); itl++)
+		        for (ring_2d::const_iterator itl = (*it).outer().begin()+1; itl != (*it).outer().end()-1; itl++)
 		        {
 			        p->thePath.lineTo(QPointF((*itl).x(), (*itl).y()));
 		        }
@@ -1051,11 +1051,17 @@ QString Road::toHtml()
 
 void Road::toBinary(QDataStream& ds, QHash <QString, quint64>& theIndex)
 {
-	theIndex["R" + QString::number(idToLong())] = ds.device()->pos();
-	ds << (qint8)'R';
+	char type = 'R';
+	qint32 sz = size();
+	if (isClosed()) {
+		type = 'A';
+		sz--;
+	}
+	theIndex[type  + QString::number(idToLong())] = ds.device()->pos();
+	ds << (qint8)type;
 	ds << idToLong();
-	ds << (qint32)size();
-	for (int i=0; i < size(); ++i) {
+	ds << (qint32)sz;
+	for (int i=0; i < sz; ++i) {
 		TrackPoint* N = CAST_NODE(get(i));
 		ds << N->position().lat() << N->position().lon();
 	}
@@ -1063,7 +1069,7 @@ void Road::toBinary(QDataStream& ds, QHash <QString, quint64>& theIndex)
 
 Road* Road::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds, qint8 c, qint64 id)
 {
-	Q_UNUSED(c);
+	char type = c;
 
 	qint32	fSize;
 	QString strId;
@@ -1103,6 +1109,7 @@ Road* Road::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds, qint8 c,
 		}
 	}
 
+	TrackPoint* firstPoint = NULL;
 	for (int i=0; i < fSize; ++i) {
 		ds >> lat;
 		ds >> lon;
@@ -1110,7 +1117,12 @@ Road* Road::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds, qint8 c,
 		TrackPoint* N = new TrackPoint(Coord(lat, lon));
 		N->setParent(R);
 		R->add(N);
+		if (!firstPoint)
+			firstPoint = N;
 	}
+	if (type == 'A')
+		R->add(firstPoint);
+
 	L->add(R);
 
 	return R;

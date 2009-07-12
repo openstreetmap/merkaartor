@@ -77,10 +77,11 @@ void ImportExportSHP::parseGeometry(MapLayer* aLayer, OGRGeometry *poGeometry)
 		OGRPolygon  *poPoly = (OGRPolygon *) poGeometry;
 		OGRLinearRing *poRing = poPoly->getExteriorRing();
 		OGRPoint p;
+		TrackPoint* firstPoint = NULL;
 
 		if(int numNode = poRing->getNumPoints()) {
 			Road* R = new Road();
-			for(int i=0; i<numNode; i++) {
+			for(int i=0; i<numNode-1; i++) {
 				poRing->getPoint(i, &p);
 				x = p.getX(); y = p.getY();
 				if (!theProjection)
@@ -90,9 +91,12 @@ void ImportExportSHP::parseGeometry(MapLayer* aLayer, OGRGeometry *poGeometry)
 					N = new TrackPoint(Coord(radToInt(y), radToInt(x)));
 				}
 				aLayer->add(N);
-
 				R->add(N);
+
+				if (!firstPoint)
+					firstPoint = N;
 			}
+			R->add(firstPoint);
 			aLayer->add(R);
 		}
 	} else

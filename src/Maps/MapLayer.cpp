@@ -43,6 +43,7 @@ public:
 		Uploadable = true;
 
 		theRTree = new MyRTree(7, 2);
+		IndexingBlocked = false;
 
 	}
 	~MapLayerPrivate()
@@ -63,6 +64,7 @@ public:
 	bool Enabled;
 	bool Readonly;
 	bool Uploadable;
+	bool IndexingBlocked;
 	qreal alpha;
 	int dirtyLevel;
 
@@ -101,11 +103,6 @@ MapLayer::MapLayer(const MapLayer&)
 MapLayer::~MapLayer()
 {
 	SAFE_DELETE(p);
-}
-
-MyRTree* MapLayer::getRTree()
-{
-	return p->theRTree;
 }
 
 void MapLayer::sortRenderingPriority()
@@ -354,6 +351,28 @@ const QString& MapLayer::id() const
 	return Id;
 }
 
+void MapLayer::blockIndexing(bool val)
+{
+	p->IndexingBlocked = val;
+}
+
+void MapLayer::indexAdd(const CoordBox& bb, const MapFeaturePtr aFeat)
+{
+	if (!p->IndexingBlocked)
+		p->theRTree->insert(bb, aFeat);
+}
+
+void MapLayer::indexRemove(const CoordBox& bb, const MapFeaturePtr aFeat)
+{
+	if (!p->IndexingBlocked)
+		p->theRTree->remove(bb, aFeat);
+}
+
+std::deque<MapFeature*> MapLayer::indexFind(const CoordBox& vp)
+{
+	return p->theRTree->find(vp);
+}
+
 void MapLayer::reIndex()
 {
 	delete p->theRTree;
@@ -529,6 +548,8 @@ DrawingMapLayer * DrawingMapLayer::fromXML(MapDocument* d, const QDomElement& e,
 
 DrawingMapLayer * DrawingMapLayer::doFromXML(DrawingMapLayer* l, MapDocument* d, const QDomElement e, QProgressDialog & progress)
 {
+	l->blockIndexing(true);
+
 	l->setId(e.attribute("xml:id"));
 	l->setAlpha(e.attribute("alpha").toDouble());
 	l->setVisible((e.attribute("visible") == "true" ? true : false));
@@ -591,6 +612,9 @@ DrawingMapLayer * DrawingMapLayer::doFromXML(DrawingMapLayer* l, MapDocument* d,
 
 	if (i > 0) progress.setValue(progress.value()+i);
 	
+	l->blockIndexing(false);
+	l->reIndex();
+
 	return l;
 }
 
@@ -772,6 +796,8 @@ bool TrackMapLayer::toXML(QDomElement& xParent, QProgressDialog & progress)
 TrackMapLayer * TrackMapLayer::fromXML(MapDocument* d, const QDomElement& e, QProgressDialog & progress)
 {
 	TrackMapLayer* l = new TrackMapLayer(e.attribute("name"));
+	l->blockIndexing(true);
+
 	l->setId(e.attribute("xml:id"));
 	l->setAlpha(e.attribute("alpha").toDouble());
 	l->setVisible((e.attribute("visible") == "true" ? true : false));
@@ -810,6 +836,8 @@ TrackMapLayer * TrackMapLayer::fromXML(MapDocument* d, const QDomElement& e, QPr
 		c = c.nextSiblingElement();
 	}
 
+	l->blockIndexing(false);
+	l->reIndex();
 
 	return l;
 }

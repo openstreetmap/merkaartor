@@ -294,7 +294,7 @@ void FeaturesDock::updateList()
 		if (dynamic_cast<ImageMapLayer*>(Main->document()->getLayer(j)))
 			continue;
 
-		std::deque < MapFeaturePtr > ret = Main->document()->getLayer(j)->getRTree()->find(theViewport);
+		std::deque < MapFeaturePtr > ret = Main->document()->getLayer(j)->indexFind(theViewport);
 		for (std::deque < MapFeaturePtr >::const_iterator it = ret.begin(); it != ret.end(); ++it)
 			if (ui.cbWithin->isChecked()) {
 				if (ggl::within((*it)->boundingBox(), Main->view()->viewport()))

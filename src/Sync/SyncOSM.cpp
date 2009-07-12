@@ -41,9 +41,6 @@ void syncOSM(MainWindow* theMain, const QString& aWeb, const QString& aUser, con
 				}
 			}
 		}
-		for (int j=0; j<theMain->document()->layerSize(); ++j) {
-			theMain->document()->getLayer(j)->reIndex();
-		}
 	}
 }
 

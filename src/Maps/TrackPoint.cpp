@@ -90,12 +90,12 @@ const Coord& TrackPoint::position() const
 void TrackPoint::setPosition(const Coord& aCoord)
 {
 	if (layer())
-		layer()->getRTree()->remove(BBox, this);
+		layer()->indexRemove(BBox, this);
 	Position = aCoord;
 	BBox = CoordBox(Position,Position);
 	ProjectionRevision = 0;
 	if (layer()) {
-		layer()->getRTree()->insert(BBox, this);
+		layer()->indexAdd(BBox, this);
 	}
 	notifyChanges();
 }

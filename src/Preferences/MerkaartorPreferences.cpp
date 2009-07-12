@@ -1295,7 +1295,7 @@ M_PARAM_IMPLEMENT_BOOL(OfflineMode, Network, false)
 
 /* Proxy */
 
-QNetworkProxy MerkaartorPreferences::getProxy(const QUrl & requestUrl)
+QNetworkProxy MerkaartorPreferences::getProxy(const QUrl & /*requestUrl*/)
 {
 	QNetworkProxy theProxy;
 

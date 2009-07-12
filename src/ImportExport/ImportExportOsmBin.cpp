@@ -594,6 +594,7 @@ MapFeature* ImportExportOsmBin::getFeature(OsbRegion* osr, MapDocument* d, OsbMa
 		case 'N':
 			F = d->getFeature(QString("node_%1").arg(QString::number(id)));
 			break;
+		case 'A':
 		case 'R':
 			F = d->getFeature(QString("way_%1").arg(QString::number(id)));
 			break;
@@ -614,6 +615,7 @@ MapFeature* ImportExportOsmBin::getFeature(OsbRegion* osr, MapDocument* d, OsbMa
 			F = TrackPoint::fromBinary(d, theLayer, ds, c, id);
 			tagsFromBinary(F, ds);
 			break;
+		case 'A':
 		case 'R':
 			F = Road::fromBinary(d, theLayer, ds, c, id);
 			tagsFromBinary(F, ds);
@@ -643,6 +645,7 @@ MapFeature* ImportExportOsmBin::getFeature(OsbRegion* osr, MapDocument* d, OsbMa
 		case 'N':
 			oF = d->getFeature(QString("node_%1").arg(QString::number(id)));
 			break;
+		case 'A':
 		case 'R':
 			oF = d->getFeature(QString("way_%1").arg(QString::number(id)));
 			break;
@@ -662,6 +665,7 @@ MapFeature* ImportExportOsmBin::getFeature(OsbRegion* osr, MapDocument* d, OsbMa
 			F = TrackPoint::fromBinary(d, theLayer, ds, c, id);
 			tagsFromBinary(F, ds);
 			break;
+		case 'A':
 		case 'R':
 			F = Road::fromBinary(d, theLayer, ds, c, id);
 			tagsFromBinary(F, ds);

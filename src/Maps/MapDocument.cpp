@@ -35,6 +35,7 @@ public:
 		for (int i=0; i<Layers.size(); ++i) {
 			if (theDock)
 				theDock->deleteLayer(Layers[i]);
+			Layers[i]->	blockIndexing(true);
 			delete Layers[i];
 		}
 	}
@@ -164,9 +165,6 @@ MapDocument* MapDocument::fromXML(const QDomElement e, double version, LayerDock
 	}
 
 	if (NewDoc) {
-		for (int j=0; j<NewDoc->layerSize(); ++j) {
-			NewDoc->getLayer(j)->reIndex();
-		}
 		if (e.hasAttribute("lastdownloadlayer"))
 			NewDoc->setLastDownloadLayer(NewDoc->getLayer(e.attribute("lastdownloadlayer")));
 

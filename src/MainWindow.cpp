@@ -828,6 +828,7 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 			TrackMapLayer* newLayer = new TrackMapLayer( baseFileName + " - " + tr("Waypoints"), baseFileName);
 			mapDocument->add(newLayer);
 			theTracklayers.append(newLayer);
+			newLayer->blockIndexing(true);
 			importOK = importGPX(this, baseFileName, mapDocument, theTracklayers);
 			if (!importOK) {
 				for (int i=0; i<theTracklayers.size(); i++) {
@@ -845,22 +846,24 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 					if (importOK && MerkaartorPreferences::instance()->getAutoExtractTracks()) {
 						theTracklayers[i]->extractLayer();
 					}
-					theTracklayers[i]->reIndex();
 				}
 			}
 		}
 		else if (fn.toLower().endsWith(".osm")) {
 			newLayer = new DrawingMapLayer( baseFileName );
+			newLayer->blockIndexing(true);
 			mapDocument->add(newLayer);
 			importOK = importOSM(this, baseFileName, mapDocument, newLayer);
 		}
 		else if (fn.toLower().endsWith(".osb")) {
 			newLayer = new OsbMapLayer( baseFileName, fn );
+			newLayer->blockIndexing(true);
 			mapDocument->add(newLayer);
 			importOK = mapDocument->importOSB(fn, (DrawingMapLayer *)newLayer);
 		}
 		else if (fn.toLower().endsWith(".ngt")) {
 			newLayer = new TrackMapLayer( baseFileName );
+			newLayer->blockIndexing(true);
 			mapDocument->add(newLayer);
 			importOK = importNGT(this, baseFileName, mapDocument, newLayer);
 			if (importOK && MerkaartorPreferences::instance()->getAutoExtractTracks()) {
@@ -869,6 +872,7 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 		}
 		else if (fn.toLower().endsWith(".nmea") || (fn.toLower().endsWith(".nma"))) {
 			newLayer = new TrackMapLayer( baseFileName );
+			newLayer->blockIndexing(true);
 			mapDocument->add(newLayer);
 			importOK = mapDocument->importNMEA(baseFileName, (TrackMapLayer *)newLayer);
 			if (importOK && MerkaartorPreferences::instance()->getAutoExtractTracks()) {
@@ -894,6 +898,7 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 					 QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes)
 			{
 				newLayer = new DrawingMapLayer( baseFileName );
+				newLayer->blockIndexing(true);
 				newLayer->setUploadable(false);
 				mapDocument->add(newLayer);
 				importOK = mapDocument->importKML(baseFileName, (TrackMapLayer *)newLayer);
@@ -919,8 +924,10 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 			if (importedFileNames)
 				importedFileNames->append(fn);
 
-			if (newLayer)
+			if (newLayer) {
+				newLayer->blockIndexing(false);
 				newLayer->reIndex();
+			}
 		}
 		else
 		if (!importAborted)

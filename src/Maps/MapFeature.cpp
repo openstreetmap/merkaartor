@@ -305,9 +305,9 @@ void MapFeature::setDeleted(bool delState)
 
 	if (layer()) {
 		if (delState)
-			layer()->getRTree()->remove(boundingBox(), this);
+			layer()->indexRemove(boundingBox(), this);
 		else
-			layer()->getRTree()->insert(boundingBox(), this);
+			layer()->indexAdd(boundingBox(), this);
 	}
 	p->Deleted = delState;
 }

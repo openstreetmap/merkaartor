@@ -306,21 +306,21 @@ bool Relation::notEverythingDownloaded() const
 void Relation::add(const QString& Role, MapFeature* F)
 {
 	if (layer())
-		layer()->getRTree()->remove(p->BBox, this);
+		layer()->indexRemove(p->BBox, this);
 	p->Members.push_back(qMakePair(Role,F));
 	F->setParentFeature(this);
 	p->BBoxUpToDate = false;
 	p->MetaUpToDate = false;
 	if (layer()) {
 		CoordBox bb = boundingBox();
-		layer()->getRTree()->insert(bb, this);
+		layer()->indexAdd(bb, this);
 	}
 }
 
 void Relation::add(const QString& Role, MapFeature* F, int Idx)
 {
 	if (layer())
-		layer()->getRTree()->remove(p->BBox, this);
+		layer()->indexRemove(p->BBox, this);
 	p->Members.push_back(qMakePair(Role,F));
 	std::rotate(p->Members.begin()+Idx,p->Members.end()-1,p->Members.end());
 	F->setParentFeature(this);
@@ -328,14 +328,14 @@ void Relation::add(const QString& Role, MapFeature* F, int Idx)
 	p->MetaUpToDate = false;
 	if (layer()) {
 		CoordBox bb = boundingBox();
-		layer()->getRTree()->insert(bb, this);
+		layer()->indexAdd(bb, this);
 	}
 }
 
 void Relation::remove(int Idx)
 {
 	if (layer())
-		layer()->getRTree()->remove(p->BBox, this);
+		layer()->indexRemove(p->BBox, this);
 	if (p->Members[Idx].second) {
 		MapFeature* F = p->Members[Idx].second;
 		F->unsetParentFeature(this);
@@ -345,7 +345,7 @@ void Relation::remove(int Idx)
 	p->MetaUpToDate = false;
 	if (layer()) {
 		CoordBox bb = boundingBox();
-		layer()->getRTree()->insert(bb, this);
+		layer()->indexAdd(bb, this);
 	}
 }
 
