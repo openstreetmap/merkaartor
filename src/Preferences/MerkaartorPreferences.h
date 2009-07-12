@@ -201,6 +201,9 @@ public:
 	QColor getRelationsColor() const;
 	int getRelationsWidth() const;
 	void setRelationsColor(const QColor theValue, int width);
+	QColor getGpxTrackColor() const;
+	int getGpxTrackWidth() const;
+	void setGpxTrackColor(const QColor theValue, int width);
 
 	void setDownloadedVisible(bool theValue);
 	bool getDownloadedVisible() const;
@@ -294,6 +297,7 @@ public:
 	M_PARAM_DECLARE_INT(AreaOpacity)
 	M_PARAM_DECLARE_BOOL(UseShapefileForBackground)
 	M_PARAM_DECLARE_BOOL(DrawingHack)
+	M_PARAM_DECLARE_BOOL(SimpleGpxTrack)
 
 	/* Templates */
 	M_PARAM_DECLARE_STRING(DefaultTemplate)

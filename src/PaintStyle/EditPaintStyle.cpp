@@ -225,6 +225,9 @@ void EPTouchupLayer::draw(TrackPoint* Pt)
 	else if (!Pt->hasEditPainter()) {
 		if (p->isTrackPointVisible || (Pt->lastUpdated() == MapFeature::Log && !p->isTrackSegmentVisible)) {
 			bool Draw = p->theView.pixelPerM() > 1;
+			// Do not draw GPX nodes when simple GPX track appearance is enabled
+			if (M_PREFS->getSimpleGpxTrack() && Pt->layer()->isTrack())
+				Draw = false;
 			if (!Draw) {
 				if (!Pt->sizeParents() && (p->theView.pixelPerM() > LOCALZOOM) )
 					Draw = true;

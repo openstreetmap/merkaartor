@@ -178,15 +178,19 @@ void PreferencesDialog::loadPrefs()
 	HoverColor = M_PREFS->getHoverColor();
 	HighlightColor = M_PREFS->getHighlightColor();
 	RelationsColor = M_PREFS->getRelationsColor();
+	GpxTrackColor = M_PREFS->getGpxTrackColor();
 	makeBoundaryIcon(btBgColor, BgColor);
 	makeBoundaryIcon(btHoverColor, HoverColor);
 	makeBoundaryIcon(btHighlightColor, HighlightColor);
 	makeBoundaryIcon(btFocusColor, FocusColor);
 	makeBoundaryIcon(btRelationsColor, RelationsColor);
+	makeBoundaryIcon(btGpxTrackColor, GpxTrackColor);
 	HoverWidth->setValue(M_PREFS->getHoverWidth());
 	HighlightWidth->setValue(M_PREFS->getHighlightWidth());
 	FocusWidth->setValue(M_PREFS->getFocusWidth());
 	RelationsWidth->setValue(M_PREFS->getRelationsWidth());
+	GpxTrackWidth->setValue(M_PREFS->getGpxTrackWidth());
+	cbSimpleGpxTrack->setChecked(M_PREFS->getSimpleGpxTrack());
 
 	cbAutoSaveDoc->setChecked(M_PREFS->getAutoSaveDoc());
 	cbAutoExtractTracks->setChecked(M_PREFS->getAutoExtractTracks());
@@ -272,6 +276,10 @@ void PreferencesDialog::savePrefs()
 		M_PREFS->setDisableStyleForTracks(cbDisableStyleForTracks->isChecked());	
 		PainterToInvalidate = true;
 	}
+	if (cbSimpleGpxTrack->isChecked() != M_PREFS->getSimpleGpxTrack()) {
+		M_PREFS->setSimpleGpxTrack(cbSimpleGpxTrack->isChecked());	
+		PainterToInvalidate = true;
+	}
 	if (PainterToInvalidate) {
 		for (FeatureIterator it(((MainWindow*)parent())->document()); !it.isEnd(); ++it)
 		{
@@ -304,6 +312,7 @@ void PreferencesDialog::savePrefs()
 	M_PREFS->setHoverColor(HoverColor,HoverWidth->value());
 	M_PREFS->setHighlightColor(HighlightColor,HighlightWidth->value());
 	M_PREFS->setRelationsColor(RelationsColor,RelationsWidth->value());
+	M_PREFS->setGpxTrackColor(GpxTrackColor,GpxTrackWidth->value());
 
 	M_PREFS->setAutoSaveDoc(cbAutoSaveDoc->isChecked());
 	M_PREFS->setAutoExtractTracks(cbAutoExtractTracks->isChecked());

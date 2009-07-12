@@ -163,7 +163,7 @@ void TrackSegment::drawDirectionMarkers(QPainter &P, QPen &pen, const QPointF & 
 		return;
 
 	const double DistFromCenter=10.0;
-	const double theWidth=5.0;
+	const double theWidth = !M_PREFS->getSimpleGpxTrack() ? 5.0 : 8.0;
 	const double A = angle(FromF-ToF);
 
 	QPointF T(DistFromCenter*cos(A), DistFromCenter*sin(A));
@@ -196,11 +196,25 @@ void TrackSegment::draw(QPainter &P, MapView* theView)
 		QPointF FromF(theView->toView(last));
 		QPointF ToF(theView->toView(here));
 
-		const double distance = here.distanceFrom(last);
-		const double slope = (p->Nodes[i]->elevation() - p->Nodes[i-1]->elevation()) / (distance * 10.0);
-		const double speed = p->Nodes[i]->speed();
+		if (!M_PREFS->getSimpleGpxTrack())
+		{
+			const double distance = here.distanceFrom(last);
+			const double slope = (p->Nodes[i]->elevation() - p->Nodes[i-1]->elevation()) / (distance * 10.0);
+			const double speed = p->Nodes[i]->speed();
 
-		configurePen(pen, slope, speed);
+			configurePen(pen, slope, speed);
+		}
+		else
+		{
+			int width = M_PREFS->getGpxTrackWidth();
+			// Dynamic track line width adaption to zoom level
+			if (theView->pixelPerM() > 2)
+				width++;
+			else if (theView->pixelPerM() < 1)
+				width--;
+			pen.setWidthF(width);
+			pen.setColor(M_PREFS->getGpxTrackColor());
+		}
 		P.setPen(pen);
 
 		P.drawLine(FromF,ToF);

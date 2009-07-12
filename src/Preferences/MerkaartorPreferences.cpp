@@ -841,6 +841,11 @@ int MerkaartorPreferences::getRelationsWidth() const
 	return Sets->value("visual/RelationsWidth",3).toInt();
 }
 
+int MerkaartorPreferences::getGpxTrackWidth() const
+{
+	return Sets->value("visual/GpxTrackWidth",3).toInt();
+}
+
 QColor mb_BgColor;
 QColor MerkaartorPreferences::getBgColor() const
 {
@@ -913,6 +918,14 @@ QColor MerkaartorPreferences::getRelationsColor() const
 	return Sets->value("visual/RelationsColor").value<QColor>();
 }
 
+QColor MerkaartorPreferences::getGpxTrackColor() const
+{
+	QString sColor = Sets->value("visual/GpxTrackColor").toString();
+	if (sColor.isEmpty())
+		return QColor(50, 220, 220);
+	return Sets->value("visual/GpxTrackColor").value<QColor>();
+}
+
 void MerkaartorPreferences::setHoverColor(const QColor theValue, int Width)
 {
 	Sets->setValue("visual/HoverColor", QVariant(theValue));
@@ -935,6 +948,12 @@ void MerkaartorPreferences::setRelationsColor(const QColor theValue, int Width)
 {
 	Sets->setValue("visual/RelationsColor", QVariant(theValue));
 	Sets->setValue("visual/RelationsWidth", Width);
+}
+
+void MerkaartorPreferences::setGpxTrackColor(const QColor theValue, int Width)
+{
+	Sets->setValue("visual/GpxTrackColor", QVariant(theValue));
+	Sets->setValue("visual/GpxTrackWidth", Width);
 }
 
 QHash< QString, qreal > * MerkaartorPreferences::getAlphaPtr()
@@ -1231,6 +1250,7 @@ M_PARAM_IMPLEMENT_BOOL(BackgroundOverwriteStyle, visual, false)
 M_PARAM_IMPLEMENT_INT(AreaOpacity, visual, 100)
 M_PARAM_IMPLEMENT_BOOL(UseShapefileForBackground, visual, false)
 M_PARAM_IMPLEMENT_BOOL(DrawingHack, visual, true)
+M_PARAM_IMPLEMENT_BOOL(SimpleGpxTrack, visual, false)
 
 /* Templates */
 M_PARAM_IMPLEMENT_STRING(DefaultTemplate, templates, ":/Templates/default.mat")

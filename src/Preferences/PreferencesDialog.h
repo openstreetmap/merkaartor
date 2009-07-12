@@ -68,6 +68,7 @@ private:
 	QColor HoverColor;
 	QColor HighlightColor;
 	QColor RelationsColor;
+	QColor GpxTrackColor;
 
 signals:
 	void preferencesChanged();
