@@ -126,13 +126,14 @@ void MapFeaturePrivate::initVersionNumber()
 }
 
 MapFeature::MapFeature()
-: p(0)
+: p(0), MetaUpToDate(false)
 {
 	 p = new MapFeaturePrivate;
 	 p->theFeature = this;
 }
 
-MapFeature::MapFeature(const MapFeature& other) : QObject()
+MapFeature::MapFeature(const MapFeature& other)
+: QObject(), MetaUpToDate(false)
 {
 	p = new MapFeaturePrivate(*other.p);
 	p->theFeature = this;
@@ -332,6 +333,8 @@ void MapFeature::setTag(int index, const QString& key, const QString& value, boo
 		p->Tags.insert(p->Tags.begin() + index, qMakePair(key,value));
 		p->TagsSize++;
 	}
+	invalidateMeta();
+
 	if (parent() && addToTagList)
 		if (dynamic_cast<MapLayer*>(parent())->getDocument())
 	  		dynamic_cast<MapLayer*>(parent())->getDocument()->addToTagList(key, value);
@@ -348,6 +351,8 @@ void MapFeature::setTag(const QString& key, const QString& value, bool addToTagL
 		}
 	p->Tags.push_back(qMakePair(key,value));
 	p->TagsSize++;
+	invalidateMeta();
+
 	if (parent() && addToTagList)
 		if (dynamic_cast<MapLayer*>(parent())->getDocument())
   			dynamic_cast<MapLayer*>(parent())->getDocument()->addToTagList(key, value);
@@ -358,6 +363,12 @@ void MapFeature::clearTags()
 	p->PixelPerMForPainter = -1;
 	p->Tags.clear();
 	p->TagsSize = 0;
+	invalidateMeta();
+}
+
+void MapFeature::invalidateMeta()
+{
+	MetaUpToDate = false;
 }
 
 void MapFeature::invalidatePainter()

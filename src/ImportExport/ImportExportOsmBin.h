@@ -58,6 +58,7 @@ class ImportExportOsmBin : public IImportExport
 	friend class OsbMapLayer;
 	friend class WorldOsbManager;
 	friend class OsbRegion;
+	friend class OsbMapLayerPrivate;
 
 public:
     ImportExportOsmBin(MapDocument* doc);
@@ -115,6 +116,7 @@ protected:
 	QMap <quint64, QString> keyTable;
 	QMap <quint64, QString> valueTable;
 
+	// k=region# v=offset
 	QMap< qint32, quint64 > theRegionToc;
 	QMap< qint32, OsbRegion* > theRegionList;
 
@@ -138,34 +140,4 @@ protected:
 	qint64 tagValuesPos;
 };
 
-/*
-class OsbRegion
-{
-public:
-	OsbRegion(qint32 id);
-	addFeature(MapFeature* F);
-	bool read();
-
-protected:
-	qint32	rgId;
-	QIODevice* Device;
-	QDataStream ds;
-
-	QMap< qint32, QList<quint64> > theTileIndex;
-
-	QHash <QString, quint64> theFeatureIndex;
-
-	QMap<quint64, TrackPoint*> theNodes;
-	QMap<quint64,Road*> theRoads;
-	QMap<quint64, Relation*> theRelations;
-
-	QList <quint64> theTagKeysIndex;
-	QList <quint64> theTagValuesIndex;
-
-	qint64 tagKeysPos;
-	qint64 tagValuesPos;
-
-};
-
-*/
 #endif

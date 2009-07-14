@@ -371,7 +371,8 @@ void MerkaartorPreferences::on_responseHeaderReceived(const QHttpResponseHeader 
 
 void MerkaartorPreferences::initialize()
 {
-	Use06Api = Sets->value("osm/use06api", "true").toBool();
+//	Use06Api = Sets->value("osm/use06api", "true").toBool();
+	Use06Api = true;
 
 	loadProjections();
 	loadWMSes();

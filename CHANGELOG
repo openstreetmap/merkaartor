@@ -1,4 +1,6 @@
 v0.14
+	* CHG : Remove api 0.5 option
+	* ADD : Alternative way of drawing tracks
 	* FIX : Don't fail importing lower-cased filenames
     * ADD : Select a relation member by contextual menu
     * CHG : Do not select a relation member when doing a "Center..."

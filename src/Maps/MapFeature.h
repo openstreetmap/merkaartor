@@ -96,7 +96,7 @@ class MapFeature : public QObject
 
 		virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection, const QTransform& theTransform) const = 0;
 		virtual void cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const QList<MapFeature*>& Alternatives) = 0;
-		virtual bool notEverythingDownloaded() const = 0;
+		virtual bool notEverythingDownloaded() = 0;
 
 		/** Set the id for the current feature.
 		 */
@@ -256,6 +256,8 @@ class MapFeature : public QObject
 		virtual void toBinary(QDataStream& ds, QHash <QString, quint64>& theIndex) = 0;
 
 		virtual QString getClass() const = 0;
+		virtual void updateMeta() = 0;
+		virtual void invalidateMeta();
 
 		virtual bool deleteChildren(MapDocument* , CommandList* ) { return true; }
 
@@ -271,6 +273,8 @@ class MapFeature : public QObject
 		MapFeaturePrivate* p;
 
 	protected:
+		bool MetaUpToDate;
+
 		QString tagsToXML(int lvl=0);
 		bool tagsToXML(QDomElement xParent);
 		static void tagsFromXML(MapDocument* d, MapFeature* f, QDomElement e);

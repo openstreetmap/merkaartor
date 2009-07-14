@@ -189,7 +189,7 @@ void MapLayer::add(MapFeature* aFeature)
 {
 	aFeature->setLayer(this);
 	if (!aFeature->isDeleted())
-		p->theRTree->insert(aFeature->boundingBox(), aFeature);
+		indexAdd(aFeature->boundingBox(), aFeature);
 	p->Features.push_back(aFeature);
 	notifyIdUpdate(aFeature->id(),aFeature);
 	p->RenderPriorityUpToDate = false;
@@ -212,7 +212,7 @@ void MapLayer::remove(MapFeature* aFeature)
 	{
 		aFeature->setLayer(0);
 		if (!aFeature->isDeleted())
-			p->theRTree->remove(aFeature->boundingBox(), aFeature);
+			indexRemove(aFeature->boundingBox(), aFeature);
 		notifyIdUpdate(aFeature->id(),0);
 		p->RenderPriorityUpToDate = false;
 	}
@@ -224,7 +224,7 @@ void MapLayer::deleteFeature(MapFeature* aFeature)
 	{
 		aFeature->setLayer(0);
 		if (!aFeature->isDeleted())
-			p->theRTree->remove(aFeature->boundingBox(), aFeature);
+			indexRemove(aFeature->boundingBox(), aFeature);
 		notifyIdUpdate(aFeature->id(),0);
 		p->RenderPriorityUpToDate = false;
 	}
@@ -358,12 +358,16 @@ void MapLayer::blockIndexing(bool val)
 
 void MapLayer::indexAdd(const CoordBox& bb, const MapFeaturePtr aFeat)
 {
+	if (bb.isNull())
+		return;
 	if (!p->IndexingBlocked)
 		p->theRTree->insert(bb, aFeat);
 }
 
 void MapLayer::indexRemove(const CoordBox& bb, const MapFeaturePtr aFeat)
 {
+	if (bb.isNull())
+		return;
 	if (!p->IndexingBlocked)
 		p->theRTree->remove(bb, aFeat);
 }
@@ -935,9 +939,16 @@ public:
 		: theImp(0) 
 	{
 	}
+	OsbMapLayer* theLayer;
 	ImportExportOsmBin* theImp;
 	QList<qint32> loadedTiles;
 	QList<qint32> loadedRegions;
+
+	int rl;
+	QMap< qint32, quint64 >::const_iterator ri;
+	void loadRegion(MapDocument* d, int rt);
+	void clearRegion(MapDocument* d, int rt);
+	void handleTile(MapDocument* d, int rt);
 };
 
 OsbMapLayer::OsbMapLayer(const QString & aName)
@@ -945,6 +956,7 @@ OsbMapLayer::OsbMapLayer(const QString & aName)
 {
 	p->Visible = true;
 	pp = new OsbMapLayerPrivate();
+	pp->theLayer = this;
 	pp->theImp = new ImportExportOsmBin(NULL);
 }
 
@@ -953,6 +965,7 @@ OsbMapLayer::OsbMapLayer(const QString & aName, const QString & filename)
 {
 	p->Visible = true;
 	pp = new OsbMapLayerPrivate();
+	pp->theLayer = this;
 	pp->theImp = new ImportExportOsmBin(NULL);
 	if (pp->theImp->loadFile(filename))
 		pp->theImp->import(this);
@@ -984,6 +997,65 @@ LayerWidget* OsbMapLayer::newWidget(void)
 	return theWidget;
 }
 
+void OsbMapLayerPrivate::loadRegion(MapDocument* d, int rt)
+{
+	while (rl < loadedRegions.size() && loadedRegions.at(rl) <= rt) {
+		if (loadedRegions.at(rl) == rt) {
+			++rl;
+			return;
+		}
+		while (rl < loadedRegions.size() && loadedRegions.at(rl) < rt ) {
+			++rl;
+		}
+	}
+	while(ri != theImp->theRegionToc.constEnd() && ri.key() < rt) {
+		++ri;
+	}
+	if (ri != theImp->theRegionToc.constEnd() && ri.key() == rt) {
+		if (theImp->loadRegion(rt, d, theLayer)) {
+			loadedRegions.insert(rl, rt);
+			++rl;
+			++ri;
+		}
+	}
+}
+
+void OsbMapLayerPrivate::handleTile(MapDocument* d, int rt)
+{
+	while (rl < loadedTiles.size() && loadedTiles.at(rl) <= rt) {
+		if (loadedTiles.at(rl) == rt) {
+			++rl;
+			return;
+		}
+		while (rl < loadedTiles.size() && loadedTiles.at(rl) < rt ) {
+			if (theImp->clearTile(loadedTiles.at(rl), d, theLayer))
+				loadedTiles.removeAt(rl);
+			else
+				++rl;
+		}
+	}
+	if (theImp->loadTile(rt, d, theLayer)) {
+		loadedTiles.insert(rl, rt);
+		++rl;
+	}
+}
+
+void OsbMapLayerPrivate::clearRegion(MapDocument* d, int rt)
+{
+	while (rl < loadedRegions.size() && loadedRegions.at(rl) <= rt) {
+		if (loadedRegions.at(rl) == rt) {
+			++rl;
+			return;
+		}
+		while (rl < loadedRegions.size() && loadedRegions.at(rl) < rt ) {
+			if (theImp->clearRegion(loadedRegions.at(rl), d, theLayer))
+				loadedRegions.removeAt(rl);
+			else
+				++rl;
+		}
+	}
+}
+
 void OsbMapLayer::invalidate(MapDocument* d, CoordBox vp)
 {
 	if (!isVisible())
@@ -991,101 +1063,49 @@ void OsbMapLayer::invalidate(MapDocument* d, CoordBox vp)
 
 	QRectF r(vp.toQRectF());
 
-	int x1 = int((r.topLeft().x() + INT_MAX) / REGION_WIDTH);
-	int y1 = int((r.topLeft().y() + INT_MAX) / REGION_WIDTH);
-	int x2 = int((r.bottomRight().x() + INT_MAX) / REGION_WIDTH);
-	int y2 = int((r.bottomRight().y() + INT_MAX) / REGION_WIDTH);
+	int xr1 = int((r.topLeft().x() + INT_MAX) / REGION_WIDTH);
+	int yr1 = int((r.topLeft().y() + INT_MAX) / REGION_WIDTH);
+	int xr2 = int((r.bottomRight().x() + INT_MAX) / REGION_WIDTH);
+	int yr2 = int((r.bottomRight().y() + INT_MAX) / REGION_WIDTH);
 
-	QList<qint32> regionToLoad;
-	regionToLoad.append(0);
-	for (int j=y1; j <= y2; ++j)
-		for (int i=x1; i <= x2; ++i)
-			regionToLoad.push_back(j*NUM_REGIONS+i);
+	int xt1 = int((r.topLeft().x() + INT_MAX) / TILE_WIDTH);
+	int yt1 = int((r.topLeft().y() + INT_MAX) / TILE_WIDTH);
+	int xt2 = int((r.bottomRight().x() + INT_MAX) / TILE_WIDTH);
+	int yt2 = int((r.bottomRight().y() + INT_MAX) / TILE_WIDTH);
 
-	QList<qint32> tileToLoad;
+	pp->rl = 0;
+	pp->ri = pp->theImp->theRegionToc.constBegin();
+
+	pp->loadRegion(d, 0);
+	for (int j=yr1; j <= yr2; ++j)
+		for (int i=xr1; i <= xr2; ++i) {
+			pp->loadRegion(d, j*NUM_REGIONS+i);
+		}
+
+	pp->rl = 0;
 	if (intToAng(vp.lonDiff()) <= M_PREFS->getTileToRegionThreshold()) {
-		x1 = int((r.topLeft().x() + INT_MAX) / TILE_WIDTH); 
-		y1 = int((r.topLeft().y() + INT_MAX) / TILE_WIDTH);
-		x2 = int((r.bottomRight().x() + INT_MAX) / TILE_WIDTH);
-		y2 = int((r.bottomRight().y() + INT_MAX) / TILE_WIDTH);
-		for (int j=y1; j <= y2; ++j)
-			for (int i=x1; i <= x2; ++i)
-				tileToLoad.push_back(j*NUM_TILES+i);
+		for (int j=yt1; j <= yt2; ++j)
+			for (int i=xt1; i <= xt2; ++i)
+				pp->handleTile(d, j*NUM_TILES+i);
+	}
+	while (pp->rl < pp->loadedTiles.size() ) {
+		if (pp->theImp->clearTile(pp->loadedTiles.at(pp->rl), d, this))
+			pp->loadedTiles.removeAt(pp->rl);
+		else
+			++pp->rl;
 	}
 
-	//int span = (x2 - x1 + 1) * (y2 - y1 + 1);
-	int rl = 0;
-	int rt = 0;
-	while (rt < regionToLoad.size() && rl < pp->loadedRegions.size()) {
-		if (pp->loadedRegions.at(rl) == regionToLoad.at(rt)) {
-			++rl;
-			++rt;
-			continue;
+	pp->rl = 0;
+	for (int j=yr1; j <= yr2; ++j)
+		for (int i=xr1; i <= xr2; ++i) {
+			pp->clearRegion(d, j*NUM_REGIONS+i);
 		}
-		while (rl < pp->loadedRegions.size() && pp->loadedRegions.at(rl) < regionToLoad.at(rt) ) {
-			if (pp->theImp->clearRegion(pp->loadedRegions.at(rl), d, this))
-				pp->loadedRegions.removeAt(rl);
-			else
-				++rl;
-		}
-		if (rl < pp->loadedRegions.size()) {
-			while (rt < regionToLoad.size() && regionToLoad.at(rt) < pp->loadedRegions.at(rl)) {
-				if (pp->theImp->loadRegion(regionToLoad.at(rt), d, this)) {
-					pp->loadedRegions.insert(rl, regionToLoad.at(rt));
-					++rl;
-				}
-				++rt;
-			}
-		}
-	}
-	while (rl < pp->loadedRegions.size() ) {
-		if (pp->theImp->clearRegion(pp->loadedRegions.at(rl), d, this))
-			pp->loadedRegions.removeAt(rl);
-		else
-			++rl;
-	}
-	while (rt < regionToLoad.size()) {
-		if (pp->theImp->loadRegion(regionToLoad.at(rt), d, this)) {
-			pp->loadedRegions.push_back(regionToLoad.at(rt));
-		}
-		++rt;
-	}
 
-	rl = 0;
-	rt = 0;
-	while (rt < tileToLoad.size() && rl < pp->loadedTiles.size()) {
-		if (pp->loadedTiles.at(rl) == tileToLoad.at(rt)) {
-			++rl;
-			++rt;
-			continue;
-		}
-		while (rl < pp->loadedTiles.size() && pp->loadedTiles.at(rl) < tileToLoad.at(rt) ) {
-			if (pp->theImp->clearTile(pp->loadedTiles.at(rl), d, this))
-				pp->loadedTiles.removeAt(rl);
-			else
-				++rl;
-		}
-		if (rl < pp->loadedTiles.size()) {
-			while (rt < tileToLoad.size() && tileToLoad.at(rt) < pp->loadedTiles.at(rl)) {
-				if (pp->theImp->loadTile(tileToLoad.at(rt), d, this)) {
-					pp->loadedTiles.insert(rl, tileToLoad.at(rt));
-					++rl;
-				}
-				++rt;
-			}
-		}
-	}
-	while (rl < pp->loadedTiles.size() ) {
-		if (pp->theImp->clearTile(pp->loadedTiles.at(rl), d, this))
-			pp->loadedTiles.removeAt(rl);
+	while (pp->rl < pp->loadedRegions.size()) {
+		if (pp->theImp->clearRegion(pp->loadedRegions.at(pp->rl), d, this))
+			pp->loadedRegions.removeAt(pp->rl);
 		else
-			++rl;
-	}
-	while (rt < tileToLoad.size()) {
-		if (pp->theImp->loadTile(tileToLoad.at(rt), d, this)) {
-			pp->loadedTiles.push_back(tileToLoad.at(rt));
-		}
-		++rt;
+			++pp->rl;
 	}
 }
 

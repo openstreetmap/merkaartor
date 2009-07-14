@@ -42,6 +42,8 @@ class Projection
 		void projTransformFromWGS84(long point_count, int point_offset, double *x, double *y, double *z );
 		bool projIsLatLong();
 		QRectF getProjectedViewport(CoordBox& Viewport, QRect& screen);
+
+		int projectionRevision() const;
 #endif
 
 	protected:

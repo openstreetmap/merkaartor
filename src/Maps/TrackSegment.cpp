@@ -15,14 +15,12 @@ class TrackSegmentPrivate
 {
 	public:
 		TrackSegmentPrivate()
-		: Distance(0), MetaUpToDate(false)
+		: Distance(0)
 		{
 		}
 
 		QList<TrackPoint*> Nodes;
 		double Distance;
-
-		bool MetaUpToDate;
 };
 
 TrackSegment::TrackSegment(void)
@@ -222,7 +220,7 @@ void TrackSegment::draw(QPainter &P, MapView* theView)
 	}
 }
 
-bool TrackSegment::notEverythingDownloaded() const
+bool TrackSegment::notEverythingDownloaded()
 {
 	return false;
 }
@@ -300,13 +298,13 @@ void TrackSegment::partChanged(MapFeature*, int)
 {
 }
 
-void TrackSegment::updateMeta() const
+void TrackSegment::updateMeta()
 {
 	p->Distance = 0;
 
 	if (p->Nodes.size() == 0)
 	{
-		p->MetaUpToDate = true;
+		MetaUpToDate = true;
 		return;
 	}
 
@@ -321,12 +319,12 @@ void TrackSegment::updateMeta() const
 	}
 
 
-	p->MetaUpToDate = true;
+	MetaUpToDate = true;
 }
 
-double TrackSegment::distance() const
+double TrackSegment::distance()
 {
-	if (p->MetaUpToDate == false)
+	if (MetaUpToDate == false)
 		updateMeta();
 
 	return p->Distance;

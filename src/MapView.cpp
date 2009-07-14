@@ -324,8 +324,8 @@ void MapView::buildFeatureSet()
 
 			std::deque < MapFeaturePtr > ret = theDocument->getLayer(j)->indexFind(CoordBox(bl, tr));
 			for (std::deque < MapFeaturePtr >::const_iterator it = ret.begin(); it != ret.end(); ++it) {
-				if (theFeatures.contains(*it))
-					continue;
+				//if (theFeatures.contains(*it))
+				//	continue;
 
 				if (Road * R = CAST_WAY(*it)) {
 					R->buildPath(theProjection, p->theTransform, clipRect);

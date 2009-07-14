@@ -140,7 +140,7 @@ void PreferencesDialog::loadPrefs()
 	edProxyUser->setText(M_PREFS->getProxyUser());
 	edProxyPassword->setText(M_PREFS->getProxyPassword());
 
-	bbUse06Api->setChecked((M_PREFS->apiVersionNum() > 0.5));
+	//bbUse06Api->setChecked((M_PREFS->apiVersionNum() > 0.5));
 
 	edCacheDir->setText(M_PREFS->getCacheDir());
 	sbCacheSize->setValue(M_PREFS->getCacheSize());
@@ -230,7 +230,7 @@ void PreferencesDialog::savePrefs()
     retranslateUi(this);
 
 	M_PREFS->setTranslateTags(TranslateTags->isChecked());
-	M_PREFS->setUse06Api(bbUse06Api->isChecked());
+	//M_PREFS->setUse06Api(bbUse06Api->isChecked());
 
 	bool OsmDataChanged = false;
 	if (edOsmUrl->text() != M_PREFS->getOsmWebsite() || 

@@ -21,7 +21,7 @@
       <enum>QTabWidget::North</enum>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="tab_7">
       <attribute name="title">
@@ -782,13 +782,6 @@
              </widget>
             </item>
            </layout>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="bbUse06Api">
-            <property name="text">
-             <string>Use 0.6 API (only takes effect after program restart!)</string>
-            </property>
-           </widget>
           </item>
          </layout>
         </widget>

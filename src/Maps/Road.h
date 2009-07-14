@@ -23,12 +23,11 @@ class Road : public MapFeature
 		Road(void);
 		Road(const Road& other);
 		virtual ~Road();
-	private:
-		void updateMeta() const;
 
 	public:
 		virtual QString getClass() const {return "Road";}
 		virtual MapFeature::FeatureType getType() const {return MapFeature::Nodes;}
+		virtual void updateMeta();
 
 		virtual CoordBox boundingBox() const;
 		virtual void draw(QPainter& P, MapView* theView);
@@ -37,7 +36,7 @@ class Road : public MapFeature
 		virtual void drawHighlight(QPainter& P, MapView* theView, bool solid=true);
 		virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection, const QTransform& theTransform) const;
 		virtual void cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const QList<MapFeature*>& Alternatives);
-		virtual bool notEverythingDownloaded() const;
+		virtual bool notEverythingDownloaded();
 		virtual QString description() const;
 		virtual RenderPriority renderPriority();
 		virtual RenderPriority getRenderPriority();
@@ -89,10 +88,10 @@ class Road : public MapFeature
 		virtual void partChanged(MapFeature* F, int ChangeId);
 		virtual void setLayer(MapLayer* aLayer);
 
-		bool isCoastline() const;
-		double area() const;
+		bool isCoastline();
+		double area();
 		bool isClosed() const;
-		double distance() const;
+		double distance();
 		double widthOf();
 
 		virtual bool deleteChildren(MapDocument* theDocument, CommandList* theList);

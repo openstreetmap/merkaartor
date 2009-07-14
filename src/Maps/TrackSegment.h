@@ -22,6 +22,7 @@ class TrackSegment : public MapFeature
 
 	public:
 		virtual QString getClass() const {return "TrackSegment";}
+		virtual void updateMeta();
 
 		virtual CoordBox boundingBox() const;
 		virtual void draw(QPainter& P, MapView* theView);
@@ -30,7 +31,7 @@ class TrackSegment : public MapFeature
 		virtual void drawHighlight(QPainter& P, MapView* theView, bool solid=true);
 		virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection, const QTransform& theTransform) const;
 		void cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const QList<MapFeature*>& Alternatives);
-		virtual bool notEverythingDownloaded() const;
+		virtual bool notEverythingDownloaded();
 		virtual QString description() const;
 		virtual RenderPriority renderPriority();
 
@@ -48,7 +49,7 @@ class TrackSegment : public MapFeature
 		void sortByTime();
 		virtual void partChanged(MapFeature* F, int ChangeId);
 
-		double distance() const;
+		double distance();
 		int duration() const;
 
 		virtual QString toXML(int, QProgressDialog *) {return QString("");}
@@ -63,8 +64,6 @@ class TrackSegment : public MapFeature
 
 private:
 		TrackSegmentPrivate* p;
-
-		void updateMeta() const;
 };
 
 #endif

@@ -6,17 +6,34 @@
 #include <QtGui/QPainter>
 #include <QProgressDialog>
 
+class TrackPointPrivate
+{
+	public:
+		TrackPointPrivate()
+		: IsWaypoint(false), ProjectionRevision(0)
+		{
+		}
+
+		bool IsWaypoint;
+#ifndef _MOBILE
+		int ProjectionRevision;
+#endif
+};
+
+
 TrackPoint::TrackPoint(const Coord& aCoord)
-: Position(aCoord), Elevation(0.0), Speed(0.0), ProjectionRevision(0)
+: Position(aCoord), Elevation(0.0), Speed(0.0), p(new TrackPointPrivate)
 {
 	BBox = CoordBox(Position,Position);
 }
 
 TrackPoint::TrackPoint(const TrackPoint& other)
-: MapFeature(other), Position(other.Position), Elevation(other.Elevation), Speed(other.Speed), Projected(other.Projected), ProjectionRevision(other.ProjectionRevision)
+: MapFeature(other), Position(other.Position), Elevation(other.Elevation), Speed(other.Speed), 
+	Projected(other.Projected), p(new TrackPointPrivate)
 {
 	setTime(other.time());
 	BBox = other.boundingBox();
+	p->ProjectionRevision = other.projectionRevision();
 }
 
 TrackPoint::~TrackPoint(void)
@@ -82,6 +99,14 @@ bool TrackPoint::isPOI() const
 	return false;
 }
 
+bool TrackPoint::isWaypoint() 
+{
+	if (!MetaUpToDate)
+		updateMeta();
+
+	return p->IsWaypoint;
+}
+
 const Coord& TrackPoint::position() const
 {
 	return Position;
@@ -93,7 +118,7 @@ void TrackPoint::setPosition(const Coord& aCoord)
 		layer()->indexRemove(BBox, this);
 	Position = aCoord;
 	BBox = CoordBox(Position,Position);
-	ProjectionRevision = 0;
+	p->ProjectionRevision = 0;
 	if (layer()) {
 		layer()->indexAdd(BBox, this);
 	}
@@ -113,12 +138,12 @@ void TrackPoint::setProjection(const QPointF& aProjection)
 #ifndef _MOBILE
 int TrackPoint::projectionRevision() const
 {
-	return ProjectionRevision;
+	return p->ProjectionRevision;
 }
 
 void TrackPoint::setProjectionRevision(const int aProjectionRevision)
 {
-	ProjectionRevision = aProjectionRevision;
+	p->ProjectionRevision = aProjectionRevision;
 }
 #endif
 
@@ -142,7 +167,7 @@ void TrackPoint::setElevation(double aElevation)
 	Elevation = aElevation;
 }
 
-bool TrackPoint::notEverythingDownloaded() const
+bool TrackPoint::notEverythingDownloaded()
 {
 	return lastUpdated() == MapFeature::NotYetDownloaded;
 }
@@ -236,6 +261,12 @@ QString TrackPoint::description() const
 
 void TrackPoint::partChanged(MapFeature*, int)
 {
+}
+
+void TrackPoint::updateMeta()
+{
+	p->IsWaypoint = (findKey("_waypoint_") != tagSize());
+	MetaUpToDate = true;
 }
 
 RenderPriority TrackPoint::renderPriority() 
@@ -469,7 +500,6 @@ void TrackPoint::toBinary(QDataStream& ds, QHash <QString, quint64>& theIndex)
 TrackPoint* TrackPoint::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds, qint8 c, qint64 id)
 {
 	Q_UNUSED(c);
-//	Q_ASSERT(id != 27145981);
 
 	qint32	lon;
 	qint32	lat;

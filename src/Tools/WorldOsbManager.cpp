@@ -163,6 +163,7 @@ bool WorldOsbManager::generateRegion(quint32 rg)
 
 	MapDocument * aDoc = new MapDocument();
 	DrawingMapLayer* aLayer = new DrawingMapLayer("Tmp");
+	aLayer->blockIndexing(true);
 	aDoc->add(aLayer);
 
 	osmWebsite = M_PREFS->getOsmWebsite();

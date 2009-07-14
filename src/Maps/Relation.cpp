@@ -38,8 +38,7 @@ class RelationPrivate
 	public:
 		RelationPrivate(Relation* R) 
 			: theRelation(R), theModel(0), ModelReferences(0),
-				BBox(Coord(0,0),Coord(0,0)), BBoxUpToDate(false),
-                MetaUpToDate(false)
+				BBox(Coord(0,0),Coord(0,0)), BBoxUpToDate(false)
 		{
 		}
 		~RelationPrivate()
@@ -55,20 +54,7 @@ class RelationPrivate
 		CoordBox BBox;
 		bool BBoxUpToDate;
 
-   		bool MetaUpToDate;
         RenderPriority theRenderPriority;
-
-        void updateMeta()
-        {
-	        theRenderPriority = RenderPriority(RenderPriority::IsSingular, 0.);
-	        for (int i=0; i<Members.size(); ++i) {
-		        if (Members.at(i).second->renderPriority() < theRenderPriority)
-			        theRenderPriority = Members.at(i).second->getRenderPriority();
-	        }
-
-       		MetaUpToDate = true;
-        }
-
 };
 
 Relation::Relation()
@@ -109,7 +95,7 @@ void Relation::partChanged(MapFeature*, int ChangeId)
 		return;
 
 	p->BBoxUpToDate = false;
-	p->MetaUpToDate = false;
+	MetaUpToDate = false;
 	notifyParents(ChangeId);
 }
 
@@ -236,8 +222,6 @@ void Relation::drawHighlight(QPainter& P, MapView* theView, bool solid)
 double Relation::pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection, const QTransform& theTransform) const
 {
 	double Best = 1000000;
-	if (!M_PREFS->getRelationsVisible())
-		return Best;
 
 	//for (int i=0; i<p->Members.size(); ++i)
 	//{
@@ -291,7 +275,7 @@ void Relation::cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeat
 	}
 }
 
-bool Relation::notEverythingDownloaded() const
+bool Relation::notEverythingDownloaded()
 {
 	if (lastUpdated() == MapFeature::NotYetDownloaded)
 		return true;
@@ -310,7 +294,7 @@ void Relation::add(const QString& Role, MapFeature* F)
 	p->Members.push_back(qMakePair(Role,F));
 	F->setParentFeature(this);
 	p->BBoxUpToDate = false;
-	p->MetaUpToDate = false;
+	MetaUpToDate = false;
 	if (layer()) {
 		CoordBox bb = boundingBox();
 		layer()->indexAdd(bb, this);
@@ -325,7 +309,7 @@ void Relation::add(const QString& Role, MapFeature* F, int Idx)
 	std::rotate(p->Members.begin()+Idx,p->Members.end()-1,p->Members.end());
 	F->setParentFeature(this);
 	p->BBoxUpToDate = false;
-	p->MetaUpToDate = false;
+	MetaUpToDate = false;
 	if (layer()) {
 		CoordBox bb = boundingBox();
 		layer()->indexAdd(bb, this);
@@ -342,7 +326,7 @@ void Relation::remove(int Idx)
 	}
 	p->Members.erase(p->Members.begin()+Idx);
 	p->BBoxUpToDate = false;
-	p->MetaUpToDate = false;
+	MetaUpToDate = false;
 	if (layer()) {
 		CoordBox bb = boundingBox();
 		layer()->indexAdd(bb, this);
@@ -355,7 +339,7 @@ void Relation::remove(MapFeature* F)
 		if (F == p->Members[i-1].second)
 			remove(i-1);
 	p->BBoxUpToDate = false;
-	p->MetaUpToDate = false;
+	MetaUpToDate = false;
 }
 
 int Relation::size() const
@@ -479,6 +463,17 @@ QPainterPath Relation::getPath()
 			p->thePath.addPath(M->getPath());
 		}
 	return p->thePath;
+}
+
+void Relation::updateMeta()
+{
+    p->theRenderPriority = RenderPriority(RenderPriority::IsSingular, 0.);
+    for (int i=0; i<p->Members.size(); ++i) {
+        if (p->Members.at(i).second->renderPriority() < p->theRenderPriority)
+	        p->theRenderPriority = p->Members.at(i).second->getRenderPriority();
+    }
+
+	MetaUpToDate = true;
 }
 
 QString Relation::toXML(int lvl, QProgressDialog * progress)

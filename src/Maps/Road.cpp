@@ -30,7 +30,7 @@ class RoadPrivate
 	public:
 		RoadPrivate()
 		: SmoothedUpToDate(false), BBox(Coord(0,0),Coord(0,0)), BBoxUpToDate(false), Area(0), Distance(0), Width(0),
-			MetaUpToDate(false), wasPathComplete(false)
+			wasPathComplete(false), ProjectionRevision(0)
 		{
 		}
 		std::vector<TrackPointPtr> Nodes;
@@ -44,10 +44,12 @@ class RoadPrivate
 		double Distance;
 		double Width;
         bool NotEverythingDownloaded;
-		bool MetaUpToDate;
 		bool wasPathComplete;
 		RenderPriority theRenderPriority;
 		QPainterPath thePath;
+#ifndef _MOBILE
+		int ProjectionRevision;
+#endif
 
 		void updateSmoothed(bool DoSmooth);
 		void addSmoothedBezier(int i, int j, int k, int l);
@@ -120,7 +122,7 @@ void Road::partChanged(MapFeature*, int ChangeId)
 		return;
 
 	p->BBoxUpToDate = false;
-	p->MetaUpToDate = false;
+	MetaUpToDate = false;
 	p->SmoothedUpToDate = false;
 	p->wasPathComplete = false;
 	notifyParents(ChangeId);
@@ -152,7 +154,7 @@ void Road::add(TrackPoint* Pt)
 	p->Nodes.push_back(Pt);
 	Pt->setParentFeature(this);
 	p->BBoxUpToDate = false;
-	p->MetaUpToDate = false;
+	MetaUpToDate = false;
 	p->SmoothedUpToDate = false;
 	p->wasPathComplete = false;
 	if (layer()) {
@@ -169,7 +171,7 @@ void Road::add(TrackPoint* Pt, int Idx)
 	std::rotate(p->Nodes.begin()+Idx,p->Nodes.end()-1,p->Nodes.end());
 	Pt->setParentFeature(this);
 	p->BBoxUpToDate = false;
-	p->MetaUpToDate = false;
+	MetaUpToDate = false;
 	p->SmoothedUpToDate = false;
 	p->wasPathComplete = false;
 	if (layer()) {
@@ -196,7 +198,7 @@ void Road::remove(int idx)
 	}
 	p->Nodes.erase(p->Nodes.begin()+idx);
 	p->BBoxUpToDate = false;
-	p->MetaUpToDate = false;
+	MetaUpToDate = false;
 	p->SmoothedUpToDate = false;
 	p->wasPathComplete = false;
 	if (layer()) {
@@ -207,15 +209,9 @@ void Road::remove(int idx)
 
 void Road::remove(MapFeature* F)
 {
-	if (layer())
-		layer()->indexRemove(p->BBox, this);
 	for (int i=p->Nodes.size(); i; --i)
 		if (p->Nodes[i-1] == F)
 			remove(i-1);
-	if (layer()) {
-		CoordBox bb = boundingBox();
-		layer()->indexAdd(bb, this);
-	}
 }
 
 int Road::size() const
@@ -254,9 +250,9 @@ bool Road::isNull() const
 	return (p->Nodes.size() == 0);
 }
 
-bool Road::notEverythingDownloaded() const
+bool Road::notEverythingDownloaded()
 {
-   	if (p->MetaUpToDate == false)
+   	if (MetaUpToDate == false)
 		updateMeta();
 
 	return p->NotEverythingDownloaded;
@@ -279,7 +275,7 @@ CoordBox Road::boundingBox() const
 	return p->BBox;
 }
 
-void Road::updateMeta() const
+void Road::updateMeta()
 {
 	p->Area = 0;
 	p->Distance = 0;
@@ -297,7 +293,7 @@ void Road::updateMeta() const
 
 	if (p->Nodes.size() == 0)
 	{
-		p->MetaUpToDate = true;
+		MetaUpToDate = true;
 		return;
 	}
 
@@ -331,20 +327,20 @@ void Road::updateMeta() const
 		p->IsCoastline = true;
 
     
-	p->MetaUpToDate = true;
+	MetaUpToDate = true;
 }
 
-double Road::distance() const
+double Road::distance()
 {
-	if (p->MetaUpToDate == false)
+	if (MetaUpToDate == false)
 		updateMeta();
 
 	return p->Distance;
 }
 
-bool Road::isCoastline() const
+bool Road::isCoastline()
 {
-	if (p->MetaUpToDate == false)
+	if (MetaUpToDate == false)
 		updateMeta();
 
 	return p->IsCoastline;
@@ -352,12 +348,12 @@ bool Road::isCoastline() const
 
 bool Road::isClosed() const
 {
-	return (p->Area > 0.0);
+	return (p->Nodes[0] == p->Nodes[p->Nodes.size()-1]);
 }
 
-double Road::area() const
+double Road::area()
 {
-	if (p->MetaUpToDate == false)
+	if (MetaUpToDate == false)
 		updateMeta();
 
 	return p->Area;
@@ -578,13 +574,14 @@ void Road::buildPath(const Projection &theProjection, const QTransform& /*theTra
 	box_2d clipRect (make<point_2d>(cr.bottomLeft().x(), cr.topRight().y()), make<point_2d>(cr.topRight().x(), cr.bottomLeft().y()));
     bool toClip = !ggl::within(roadRect, clipRect);
     if (!toClip) {
-		if (!p->wasPathComplete) {
+		if (!p->wasPathComplete || p->ProjectionRevision != theProjection.projectionRevision()) {
 			p->thePath = QPainterPath();
 
 			p->thePath.moveTo(p->Nodes.at(0)->projection());
 			for (unsigned int i=1; i<p->Nodes.size(); ++i) {
 				p->thePath.lineTo(p->Nodes.at(i)->projection());
 			}
+			p->ProjectionRevision = theProjection.projectionRevision();
 			p->wasPathComplete = true;
         }
     } else {
@@ -777,28 +774,28 @@ double Road::widthOf()
 void Road::setTag(const QString& key, const QString& value, bool addToTagList)
 {
 	MapFeature::setTag(key, value, addToTagList);
-	p->MetaUpToDate = false;
+	MetaUpToDate = false;
 	p->Width = 0;
 }
 
 void Road::setTag(int index, const QString& key, const QString& value, bool addToTagList)
 {
 	MapFeature::setTag(index, key, value, addToTagList);
-	p->MetaUpToDate = false;
+	MetaUpToDate = false;
 	p->Width = 0;
 }
 
 void Road::clearTags()
 {
 	MapFeature::clearTags();
-	p->MetaUpToDate = false;
+	MetaUpToDate = false;
 	p->Width = 0;
 }
 
 void Road::clearTag(const QString& k)
 {
 	MapFeature::clearTag(k);
-	p->MetaUpToDate = false;
+	MetaUpToDate = false;
 	p->Width = 0;
 }
 
@@ -1063,7 +1060,10 @@ void Road::toBinary(QDataStream& ds, QHash <QString, quint64>& theIndex)
 	ds << (qint32)sz;
 	for (int i=0; i < sz; ++i) {
 		TrackPoint* N = CAST_NODE(get(i));
-		ds << N->position().lat() << N->position().lon();
+		if (N->sizeParents() > 1)
+			ds << (qint8)'N' << (qint64)(N->idToLong());
+		else
+			ds << (qint8)'C' << N->position().lat() << N->position().lon();
 	}
 }
 
@@ -1075,12 +1075,15 @@ Road* Road::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds, qint8 c,
 	QString strId;
 	qint32 lat, lon;
 
+	quint8 nodeType;
+	qint64 refId;
+
 	ds >> fSize;
 
 	if (!L) {
 		for (int i=0; i < fSize; ++i) {
-			ds >> lat;
-			ds >> lon;
+			ds >> nodeType;
+			ds >> refId;
 		}
 		return NULL;
 	}
@@ -1102,20 +1105,31 @@ Road* Road::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds, qint8 c,
 		}
 		else  {
 			for (int i=0; i < fSize; ++i) {
-				ds >> lat;
-				ds >> lon;
+				ds >> nodeType;
+				ds >> refId;
 			}
 			return R;
 		}
 	}
 
+	TrackPoint* N = NULL;
 	TrackPoint* firstPoint = NULL;
 	for (int i=0; i < fSize; ++i) {
-		ds >> lat;
-		ds >> lon;
+		ds >> nodeType;
+		switch (nodeType) {
+			case 'C':
+				ds >> lat;
+				ds >> lon;
 
-		TrackPoint* N = new TrackPoint(Coord(lat, lon));
-		N->setParent(R);
+				N = new TrackPoint(Coord(lat, lon));
+				N->setParent(R);
+				break;
+			case 'N':
+				ds >> refId;
+				N = CAST_NODE(d->getFeature(QString("node_%1").arg(refId)));
+				Q_ASSERT(N);
+
+		}
 		R->add(N);
 		if (!firstPoint)
 			firstPoint = N;

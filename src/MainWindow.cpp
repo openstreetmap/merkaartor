@@ -2057,12 +2057,15 @@ void MainWindow::on_editSelectAction_triggered()
 			if (F->id().indexOf(Sel->edID->text(), theSensitivity) == -1) {
 				continue;
 			}
-			for (int j=0; j < F->tagSize(); j++) {
-				if ((selKey.indexIn(F->tagKey(j)) > -1) && (selValue.indexIn(F->tagValue(j)) > -1)) {
-					ok = true;
-					break;
+			if (Sel->cbKey->currentText().isEmpty() && Sel->cbValue->currentText().isEmpty())
+				ok = true;
+			else
+				for (int j=0; j < F->tagSize(); j++) {
+					if ((selKey.indexIn(F->tagKey(j)) > -1) && (selValue.indexIn(F->tagValue(j)) > -1)) {
+						ok = true;
+						break;
+					}
 				}
-			}
 			if (ok) {
 				selection.push_back(F);
 				++added;

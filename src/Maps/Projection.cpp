@@ -238,3 +238,8 @@ Coord Projection::inverse(const QPointF & Screen) const
 #endif
 }
 
+int Projection::projectionRevision() const
+{
+	return p->ProjectionRevision;
+}
+

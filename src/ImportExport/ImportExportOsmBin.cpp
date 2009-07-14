@@ -92,8 +92,7 @@ bool OsbRegion::load(qint32 rg, MapDocument* d, OsbMapLayer* theLayer)
 
 bool OsbRegion::loadTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer)
 {
-	if (!theTileToc.contains(tile))
-		return false;
+	Q_ASSERT(theTileToc.contains(tile));
 
 	QDataStream ds(device);
 	quint32 featCount;
@@ -164,10 +163,13 @@ void ImportExportOsmBin::doAddTileIndex(MapFeature* F, qint32 tile)
 	if (/*TrackPoint* N = */CAST_NODE(F)) {
 		theTileNodesIndex[tile].push_back(F);
 	} else
-	if (/*Road* R =*/ CAST_WAY(F)) {
-//		for (int k=0; k<R->size(); ++k)
-//			if (!theTileNodesIndex[tile].contains(R->get(k)))
-//				theTileNodesIndex[tile].push_back(R->get(k));
+	if (Road* R = CAST_WAY(F)) {
+		for (int k=0; k<R->size(); ++k) {
+			TrackPoint* N = CAST_NODE(R->get(k));
+			if(N->sizeParents() > 1)
+				if (!theTileNodesIndex[tile].contains(N))
+					theTileNodesIndex[tile].push_back(N);
+		}
 		theTileRoadsIndex[tile].push_back(F);
 	} else
 	if (CAST_RELATION(F)) {
@@ -308,7 +310,7 @@ bool ImportExportOsmBin::prepare()
 	for (int j=0; j< theFeatures.size(); ++j) {
 		qint64 idx = theFeatures[j]->idToLong();
 		if (TrackPoint* N = CAST_NODE(theFeatures[j])) {
-			if (!N->isPOI() && N->sizeParents() < 2)
+			if (!N->isPOI())
 				continue;
 			theNodes[idx] = N;
 		}
@@ -531,8 +533,7 @@ bool ImportExportOsmBin::readPopularTagLists(QDataStream& ds)
 
 bool ImportExportOsmBin::loadRegion(qint32 rg, MapDocument* d, OsbMapLayer* theLayer)
 {
-	if (!theRegionToc.contains(rg))
-		return false;
+//	Q_ASSERT(theRegionToc.contains(rg));
 
 	OsbRegion* org = new OsbRegion(this);
 	org->device = Device;
@@ -558,8 +559,7 @@ bool ImportExportOsmBin::loadTile(qint32 tile, MapDocument* d, OsbMapLayer* theL
 
 bool ImportExportOsmBin::clearRegion(qint32 rg, MapDocument* d, OsbMapLayer* theLayer)
 {
-	if (!theRegionList.contains(rg))
-		return false;
+//	Q_ASSERT(theRegionList.contains(rg));
 
 	theRegionList[rg]->clearRegion(d, theLayer);
 	delete theRegionList[rg];
@@ -573,8 +573,7 @@ bool ImportExportOsmBin::clearTile(qint32 tile, MapDocument* d, OsbMapLayer* the
 	int y = int(tile / NUM_TILES);
 	int x = (tile % NUM_TILES);
 	int rg = (y * NUM_REGIONS / NUM_TILES) * NUM_REGIONS + (x * NUM_REGIONS / NUM_TILES);
-	if (!theRegionList.contains(rg))
-		return true;
+//	Q_ASSERT(theRegionList.contains(rg));
 
 	return theRegionList[rg]->clearTile(tile, d, theLayer);
 }

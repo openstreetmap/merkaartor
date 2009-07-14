@@ -16,6 +16,7 @@
 #include <ggl/geometries/register/register_point.hpp>
 #endif
 
+class TrackPointPrivate;
 class QProgressDialog;
 
 class TrackPoint : public MapFeature
@@ -29,6 +30,7 @@ class TrackPoint : public MapFeature
 
 		virtual QString getClass() const {return "TrackPoint";}
 		virtual MapFeature::FeatureType getType() const {return MapFeature::Nodes;}
+		virtual void updateMeta();
 
 		virtual CoordBox boundingBox() const;
 		virtual void draw(QPainter& P, MapView* theView);
@@ -37,7 +39,7 @@ class TrackPoint : public MapFeature
 		virtual void drawHighlight(QPainter& P, MapView* theView, bool solid=true);
 		virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection, const QTransform& theTransform) const;
 		virtual void cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const QList<MapFeature*>& Alternatives);
-		virtual bool notEverythingDownloaded() const;
+		virtual bool notEverythingDownloaded();
 		virtual QString description() const;
 		virtual RenderPriority renderPriority();
 
@@ -50,6 +52,7 @@ class TrackPoint : public MapFeature
 		virtual bool isNull() const;
 		virtual bool isInteresting() const;
 		virtual bool isPOI() const;
+		virtual bool isWaypoint();
 
 		const Coord& position() const;
 		void setPosition(const Coord& aCoord);
@@ -86,9 +89,10 @@ private:
 		double Elevation;
 		double Speed;
 		QPointF Projected;
-#ifndef _MOBILE
-		int ProjectionRevision;
-#endif
+
+private:
+		TrackPointPrivate* p;
+
 };
 
 Q_DECLARE_METATYPE( TrackPoint * );
