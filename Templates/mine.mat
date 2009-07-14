@@ -12,6 +12,7 @@
    <description locale="it" >Luogo</description>
    <description locale="pl" >Miejsca</description>
    <description locale="sl" >Kraj</description>
+   <description locale="sv" >Plats</description>
    <selector expr="Type is Area or Type is TrackPoint" />
    <value tag="city" >
     <description locale="en" >City (Pop. &gt; 100.000)</description>
@@ -24,6 +25,7 @@
     <description locale="ja" >市（人口 10万人以上)</description>
     <description locale="pl" >Miasto (ludność &gt; 100 000)</description>
     <description locale="pt" >Cidade (Pop. &gt; 100.000)</description>
+    <description locale="sv" >Stad (mer än 100 000 inv.)</description>
    </value>
    <value tag="town" >
     <description locale="en" >Town (10.000 &lt; Pop. &lt; 100.000)</description>
@@ -35,6 +37,7 @@
     <description locale="it" >Paese (10.000 &lt; Pop. &lt; 100.000)</description>
     <description locale="pl" >Miejscowość (ludność 10 000-100 000)</description>
     <description locale="sl" >Mesto (10.000 &lt; preb. &lt; 100.000)</description>
+    <description locale="sv" >Samhälle (mellan 10 000 till 100 000 inv.)</description>
    </value>
    <value tag="village" >
     <description locale="en" >Village (Pop. &lt; 10.000)</description>
@@ -46,6 +49,7 @@
     <description locale="it" >Villaggio (Pop. &lt; 10.000)</description>
     <description locale="pl" >Wieś (ludność &lt; 10 000</description>
     <description locale="sl" >Vas (&lt; 10.000 preb.)</description>
+    <description locale="sv" >By (Mindre än 10 000 inv.)</description>
    </value>
    <value tag="hamlet" >
     <description locale="en" >Hamlet (a few houses)</description>
@@ -57,6 +61,7 @@
     <description locale="it" >Frazione</description>
     <description locale="pl" >Wólka</description>
     <description locale="sl" >Zaselek (nekaj hiš)</description>
+    <description locale="sv" >Småby (enstaka hus)</description>
    </value>
    <value tag="suburb" >
     <description locale="en" >Suburb</description>
@@ -68,6 +73,7 @@
     <description locale="it" >Sobborgo</description>
     <description locale="pl" >Dzielnica</description>
     <description locale="sl" >Mestna četrt</description>
+    <description locale="sv" >Förort</description>
    </value>
    <value tag="locality" >
     <description locale="en" >Locality (named place)</description>
@@ -77,6 +83,7 @@
     <description locale="fr" >Lieu-dit</description>
     <description locale="it" >Località (nome luogo)</description>
     <description locale="pl" >Miejsce (nazwane)</description>
+    <description locale="sv" >Lokalitet (namngedd plats)</description>
    </value>
   </widget>
   <widget tag="building" type="yesno" >
@@ -91,6 +98,7 @@
    <description locale="pl" >Budynek</description>
    <description locale="pt" >Edifício</description>
    <description locale="sl" >Zgradba</description>
+   <description locale="sv" >Byggnad</description>
    <selector expr="Type is Area" />
   </widget>
   <widget tag="area" type="yesno" >
@@ -105,6 +113,7 @@
    <description locale="ja" >エリア</description>
    <description locale="pl" >Obszar</description>
    <description locale="sl" >Površina</description>
+   <description locale="sv" >Yta</description>
    <selector expr="Type is Area" />
   </widget>
   <widget tag="name" type="edit" >
@@ -118,6 +127,7 @@
    <description locale="ja" >名前</description>
    <description locale="pl" >Nazwa</description>
    <description locale="sl" >Ime</description>
+   <description locale="sv" >Namn</description>
   </widget>
   <widget tag="highway" type="combo" >
    <link src="http://wiki.openstreetmap.org/index.php/Key:highway" />
@@ -129,6 +139,7 @@
    <description locale="it" >Tipo strada</description>
    <description locale="ja" >ハイウェイ タイプ</description>
    <description locale="pl" >Typ drogi</description>
+   <description locale="sv" >Typ av väg</description>
    <value tag="motorway" >
     <link src="http://wiki.openstreetmap.org/index.php/Tag:highway=motorway" />
     <description locale="en" >Motorway</description>
@@ -141,6 +152,7 @@
     <description locale="ja" >高速道路</description>
     <description locale="pl" >Autostrada</description>
     <description locale="sl" >Avtocesta</description>
+    <description locale="sv" >Motorväg</description>
    </value>
    <value tag="motorway_link" >
     <description locale="en" >Ramp to motorway</description>
@@ -151,6 +163,7 @@
     <description locale="it" >Svincolo per l&apos;autostrada</description>
     <description locale="ja" >高速道路の乗り口</description>
     <description locale="pl" >Dojazd do autostrady</description>
+    <description locale="sv" >Motorvägspåfart</description>
    </value>
    <value tag="trunk" >
     <description locale="en" >Trunk road</description>
@@ -162,6 +175,7 @@
     <description locale="it" >Strada principale</description>
     <description locale="ja" >国道</description>
     <description locale="pl" >Droga ekspresowa</description>
+    <description locale="sv" >Motortrafikled</description>
    </value>
    <value tag="trunk_link" >
     <description locale="en" >Ramp to trunk road</description>
@@ -171,6 +185,7 @@
     <description locale="it" >Svincolo per la strada principale</description>
     <description locale="ja" >国道の乗り口</description>
     <description locale="pl" >Dojazd do drogi ekspresowej</description>
+    <description locale="sv" >Påfart till motortrafikled</description>
    </value>
    <value tag="primary" >
     <description locale="en" >Primary road</description>
@@ -182,6 +197,7 @@
     <description locale="it" >Strada primaria</description>
     <description locale="ja" >都道府県道</description>
     <description locale="pl" >Droga krajowa</description>
+    <description locale="sv" >Huvudväg</description>
    </value>
    <value tag="primary_link" >
     <description locale="en" >Ramp to primary road</description>
@@ -192,6 +208,7 @@
     <description locale="it" >Svincolo per strada primaria</description>
     <description locale="ja" >都道府県道の乗り口</description>
     <description locale="pl" >Dojazd do drogi krajowej</description>
+    <description locale="sv" >Påfart till huvudväg</description>
    </value>
    <value tag="secondary" >
     <description locale="en" >Secondary road</description>
@@ -203,6 +220,7 @@
     <description locale="it" >Strada secondaria</description>
     <description locale="ja" >主要道路</description>
     <description locale="pl" >Droga wojewódzka</description>
+    <description locale="sv" >Sekundär väg</description>
    </value>
    <value tag="tertiary" >
     <description locale="en" >Tertiary road</description>
@@ -212,6 +230,7 @@
     <description locale="fr" >Petite départementale ou communale</description>
     <description locale="it" >Strada terziaria</description>
     <description locale="pl" >Droga powiatowa</description>
+    <description locale="sv" >Tertiär väg</description>
    </value>
    <value tag="unclassified" >
     <description locale="en" >Unclassified road</description>
@@ -223,6 +242,7 @@
     <description locale="it" >Strada non classificata</description>
     <description locale="ja" >一車線道</description>
     <description locale="pl" >Droga gminna</description>
+    <description locale="sv" >Enskild väg</description>
    </value>
    <value tag="residential" >
     <description locale="en" >Residential road</description>
@@ -232,6 +252,7 @@
     <description locale="fr" >Rue résidentielle</description>
     <description locale="it" >Strada residenziale</description>
     <description locale="pl" >Droga lokalna</description>
+    <description locale="sv" >Väg inom bostadsområde</description>
    </value>
    <value tag="service" >
     <description locale="en" >Service road</description>
@@ -241,6 +262,7 @@
     <description locale="it" >Strada di servizio</description>
     <description locale="ja" >サービス道</description>
     <description locale="pl" >Droga serwisowa</description>
+    <description locale="sv" >Serviceväg (liten gata)</description>
    </value>
    <value tag="track" >
     <description locale="en" >Track road</description>
@@ -250,6 +272,7 @@
     <description locale="fr" >Chemin</description>
     <description locale="it" >Strada forestale</description>
     <description locale="pl" >Droga gruntowa</description>
+    <description locale="sv" >skogsväg</description>
    </value>
    <value tag="living_street" >
     <description locale="en" >Pedestrian priority road</description>
@@ -261,6 +284,7 @@
     <description locale="it" >Strada pedonale con traffico limitato</description>
     <description locale="ja" >歩行者優先道路</description>
     <description locale="pl" >Strefa zamieszkania</description>
+    <description locale="sv" >Väg med prioritet för fotgängare</description>
    </value>
    <value tag="pedestrian" >
     <description locale="en" >Pedestrian only road</description>
@@ -273,6 +297,7 @@
     <description locale="ja" >歩行者専用道</description>
     <description locale="pl" >Ciąg pieszy</description>
     <description locale="sl" >Cesta za pešce</description>
+    <description locale="sv" >Väg endast för fotgängare</description>
    </value>
    <value tag="footway" >
     <description locale="en" >Footway</description>
@@ -285,6 +310,7 @@
     <description locale="ja" >歩道</description>
     <description locale="pl" >Droga dla pieszych</description>
     <description locale="sl" >Pešpot</description>
+    <description locale="sv" >Gångstig</description>
    </value>
    <value tag="cycleway" >
     <description locale="en" >Cycleway</description>
@@ -297,6 +323,7 @@
     <description locale="ja" >自転車道</description>
     <description locale="pl" >Droga rowerowa</description>
     <description locale="sl" >Kolesarska steza</description>
+    <description locale="sv" >Cykelbana</description>
    </value>
    <value tag="bridleway" >
     <description locale="en" >Bridleway</description>
@@ -307,6 +334,7 @@
     <description locale="it" >Strada per cavalli</description>
     <description locale="ja" >馬道</description>
     <description locale="pl" >Ścieżka do jazdy konnej</description>
+    <description locale="sv" >Gång-/Ridstig</description>
    </value>
    <value tag="steps" >
     <description locale="en" >Steps</description>
@@ -316,9 +344,11 @@
     <description locale="es" >Escaleras</description>
     <description locale="fr" >Escaliers</description>
     <description locale="it" >Passi</description>
+    <description locale="iu" >trappsteg</description>
     <description locale="ja" >階段</description>
     <description locale="pl" >Schody</description>
     <description locale="sl" >Stopnice</description>
+    <description locale="sv" >Trappsteg</description>
    </value>
    <value tag="bus_guideway" >
     <description locale="en" >Bus guideway (not a bus way)</description>
@@ -326,6 +356,7 @@
     <description locale="de" >Spurbus-Strecke</description>
     <description locale="fr" >Voie réservée aux bus guidés</description>
     <description locale="it" >Tramvia (non una strada per autobus)</description>
+    <description locale="sv" >Spårbuss (ej bussfil)</description>
    </value>
    <value tag="unsurfaced" >
     <description locale="en" >Unsurfaced road (old tag)</description>
@@ -334,6 +365,7 @@
     <description locale="fr" >Route sans revêtement (étiquette dépréciée)</description>
     <description locale="it" >Non asfaltata (vecchio tag)</description>
     <description locale="pl" >Nieutwardzona droga (przestarzały znacznik)</description>
+    <description locale="sv" >Obelagd väg (gammal tagg)</description>
    </value>
   </widget>
   <widget tag="landuse" type="combo" >
@@ -347,6 +379,7 @@
    <description locale="ja" >土地利用</description>
    <description locale="pl" >Zagospodarowanie terenu</description>
    <description locale="sl" >Raba tal</description>
+   <description locale="sv" >Markanvändning</description>
    <selector expr="Type is Area or Type is Relation" />
    <value tag="allotments" >
     <description locale="en" >Allotments</description>
@@ -358,6 +391,7 @@
     <description locale="it" >Concessioni</description>
     <description locale="ja" >貸し農園</description>
     <description locale="pl" >Ogródki działkowe</description>
+    <description locale="sv" >Kolonilotter</description>
    </value>
    <value tag="basin" >
     <description locale="en" >Basin</description>
@@ -369,6 +403,7 @@
     <description locale="it" >Bacino</description>
     <description locale="ja" >水たまり、窪地</description>
     <description locale="pl" >Zbiornik wodny</description>
+    <description locale="sv" >Hamnbassäng</description>
    </value>
    <value tag="brownfield" >
     <description locale="en" >Brownfield</description>
@@ -379,6 +414,7 @@
     <description locale="it" >Campo</description>
     <description locale="ja" >利用されなくなった商業設備</description>
     <description locale="pl" >Teren poprzemysłowy</description>
+    <description locale="sv" >Övergivet industri- eller affärsområde</description>
    </value>
    <value tag="cemetery" >
     <description locale="en" >Cemetery</description>
@@ -391,6 +427,7 @@
     <description locale="ja" >共同墓地</description>
     <description locale="pl" >Cmentarz</description>
     <description locale="pt" >Cemitério</description>
+    <description locale="sv" >Begravningsplats</description>
    </value>
    <value tag="commercial" >
     <description locale="en" >Commercial zone</description>
@@ -404,6 +441,7 @@
     <description locale="pl" >Teren handlowy</description>
     <description locale="pt" >Zona comercial</description>
     <description locale="sl" >Trgovsko središče</description>
+    <description locale="sv" >Affärsområde</description>
    </value>
    <value tag="construction" >
     <description locale="en" >Construction zone</description>
@@ -417,6 +455,7 @@
     <description locale="pl" >Budowa</description>
     <description locale="pt" >Zona de construção</description>
     <description locale="sl" >Gradbišče</description>
+    <description locale="sv" >Byggarbetsplats</description>
    </value>
    <value tag="farm" >
     <description locale="en" >Farm</description>
@@ -430,6 +469,7 @@
     <description locale="pl" >Gospodarstwo rolne</description>
     <description locale="pt" >Quinta</description>
     <description locale="sl" >Kmetija</description>
+    <description locale="sv" >Bondgård</description>
    </value>
    <value tag="forest" >
     <description locale="en" >Forest</description>
@@ -443,6 +483,7 @@
     <description locale="pl" >Las</description>
     <description locale="pt" >Floresta</description>
     <description locale="sl" >Gozd</description>
+    <description locale="sv" >Skog</description>
    </value>
    <value tag="greenfield" >
     <description locale="en" >Greenfield</description>
@@ -453,6 +494,7 @@
     <description locale="it" >Campo verde</description>
     <description locale="ja" >未開発工業地</description>
     <description locale="pl" >Teren pod zabudowę</description>
+    <description locale="sv" >Tidigare outnyttjat område (greenfield)</description>
    </value>
    <value tag="industrial" >
     <description locale="en" >Industrial zone</description>
@@ -465,6 +507,7 @@
     <description locale="ja" >工業用地</description>
     <description locale="pl" >Teren przemysłowy</description>
     <description locale="sl" >Industrijska cona</description>
+    <description locale="sv" >Industriområde</description>
    </value>
    <value tag="landfill" >
     <description locale="en" >Landfill</description>
@@ -476,6 +519,7 @@
     <description locale="it" >Terra</description>
     <description locale="pl" >Wysypisko śmieci</description>
     <description locale="sl" >Deponija</description>
+    <description locale="sv" >Deponi (soptipp)</description>
    </value>
    <value tag="military" >
     <description locale="en" >Military</description>
@@ -487,6 +531,7 @@
     <description locale="it" >Zona militare</description>
     <description locale="ja" >軍</description>
     <description locale="pl" >Teren wojskowy</description>
+    <description locale="sv" >Militärt område</description>
    </value>
    <value tag="recreation_ground" >
     <description locale="en" >Recreation ground</description>
@@ -499,6 +544,7 @@
     <description locale="ja" >遊び場</description>
     <description locale="pl" >Teren rekreacyjny</description>
     <description locale="sl" >Rekreacijska površina</description>
+    <description locale="sv" >Rekreationsområde</description>
    </value>
    <value tag="reservoir" >
     <description locale="en" >Reservoir (water)</description>
@@ -510,6 +556,7 @@
     <description locale="it" >Riserva (acqua)</description>
     <description locale="pl" >Zbiornik retencyjny</description>
     <description locale="sl" >Rezervoar (voda)</description>
+    <description locale="sv" >Vattenreservoar</description>
    </value>
    <value tag="residential" >
     <description locale="en" >Residential zone</description>
@@ -521,6 +568,7 @@
     <description locale="it" >Zona residenziale</description>
     <description locale="pl" >Zabudowa mieszkaniowa</description>
     <description locale="pt" >Zona residencial</description>
+    <description locale="sv" >Bostadsområde</description>
    </value>
    <value tag="retail" >
     <description locale="en" >Retail zone</description>
@@ -530,6 +578,7 @@
     <description locale="fr" >Vente au détail</description>
     <description locale="it" >Zona particolareggiata</description>
     <description locale="pl" >Strefa handlowa</description>
+    <description locale="sv" >Detaljhandelsområde</description>
    </value>
    <value tag="quarry" >
     <description locale="en" >Surface mineral extraction</description>
@@ -540,6 +589,7 @@
     <description locale="fr" >Mine à ciel ouvert</description>
     <description locale="it" >Superficie di estrazione di minerali</description>
     <description locale="pl" >Kamieniołom</description>
+    <description locale="sv" >Mineralutvinning (vid jordytan)</description>
    </value>
    <value tag="village_green" >
     <description locale="en" >Village green</description>
@@ -550,6 +600,7 @@
     <description locale="fr" >Espace vert</description>
     <description locale="it" >Villaggio verde</description>
     <description locale="pl" >Łąka wiejska</description>
+    <description locale="sv" >Byallmänning (gräsplätt)</description>
    </value>
   </widget>
   <widget tag="oneway" type="yesno" >
@@ -564,6 +615,7 @@
    <description locale="ja" >一方通行</description>
    <description locale="pl" >Jednokierunkowa</description>
    <description locale="sl" >Enosmerna</description>
+   <description locale="sv" >Enkelriktat</description>
   </widget>
   <widget tag="amenity" type="combo" >
    <description locale="en" >Amenity</description>
@@ -574,6 +626,7 @@
    <description locale="it" >Attrattiva</description>
    <description locale="ja" >各種施設</description>
    <description locale="pl" >Miejsce kultu</description>
+   <description locale="sv" >Facilitet</description>
    <value tag="arts_centre" >
     <description locale="en" >Arts centre</description>
     <description locale="ar" >مركز ثقافي</description>
@@ -585,6 +638,7 @@
     <description locale="ja" >美術館</description>
     <description locale="pl" >Centrum kultury/sztuki</description>
     <description locale="sl" >Kulturni center</description>
+    <description locale="sv" >Konstcenter</description>
    </value>
    <value tag="atm" >
     <description locale="en" >ATM or cash point</description>
@@ -597,6 +651,7 @@
     <description locale="ja" >ATMやキャッシュディスペンサー</description>
     <description locale="pl" >Bankomat</description>
     <description locale="sl" >Bankomat</description>
+    <description locale="sv" >Bankomat / uttagsautomat</description>
    </value>
    <value tag="bank" >
     <description locale="en" >Bank</description>
@@ -610,6 +665,7 @@
     <description locale="pl" >Bank</description>
     <description locale="pt" >Banco</description>
     <description locale="sl" >Banka</description>
+    <description locale="sv" >Bank</description>
    </value>
    <value tag="bank;atm" >
     <description locale="en" >Bank with atm</description>
@@ -622,6 +678,7 @@
     <description locale="ja" >atmのある銀行店舗</description>
     <description locale="pl" >Bank z bankomatem</description>
     <description locale="sl" >Banka z bankomatom</description>
+    <description locale="sv" >Bank med automatuttag</description>
    </value>
    <value tag="biergarten" >
     <description locale="en" >Beer garden</description>
@@ -633,6 +690,7 @@
     <description locale="it" >Giardino della birra</description>
     <description locale="ja" >ビアーガーデン</description>
     <description locale="pl" >Ogródek piwny</description>
+    <description locale="sv" >Biergarten (uteservering för öl)</description>
    </value>
    <value tag="bicycle_parking" >
     <description locale="en" >Parking for bicycles</description>
@@ -644,6 +702,7 @@
     <description locale="it" >Parcheggio per biciclette</description>
     <description locale="ja" >自転車駐輪場</description>
     <description locale="pl" >Parking rowerowy</description>
+    <description locale="sv" >Cykelparkering</description>
    </value>
    <value tag="bicycle_rental" >
     <description locale="en" >Bicycle Rental</description>
@@ -656,6 +715,7 @@
     <description locale="ja" >自転車レンタル</description>
     <description locale="pl" >Wypożyczalnia rowerów</description>
     <description locale="sl" >Najem koles</description>
+    <description locale="sv" >Cykeluthyrning</description>
    </value>
    <value tag="bureau_de_change" >
     <description locale="en" >Bureau de change</description>
@@ -668,6 +728,7 @@
     <description locale="ja" >両替所</description>
     <description locale="pl" >Kantor</description>
     <description locale="sl" >Menjalnica</description>
+    <description locale="sv" >Växelbyrå</description>
    </value>
    <value tag="bus_station" >
     <description locale="en" >Bus station</description>
@@ -680,6 +741,7 @@
     <description locale="ja" >バスステーション</description>
     <description locale="pl" >Dworzec autobusowy</description>
     <description locale="sl" >Avtobusna postaja</description>
+    <description locale="sv" >Busstation</description>
    </value>
    <value tag="cafe" >
     <description locale="en" >Cafe</description>
@@ -692,6 +754,7 @@
     <description locale="ja" >カフェ</description>
     <description locale="pl" >Kafejka</description>
     <description locale="pt" >Café</description>
+    <description locale="sv" >Kafé</description>
    </value>
    <value tag="car_rental" >
     <description locale="en" >Car Rental</description>
@@ -704,6 +767,7 @@
     <description locale="ja" >レンタカー</description>
     <description locale="pl" >Wypożyczalnia samochodów</description>
     <description locale="sl" >Najem avtomobilov</description>
+    <description locale="sv" >Biluthyrning</description>
    </value>
    <value tag="car_sharing" >
     <description locale="en" >Car Sharing</description>
@@ -714,6 +778,7 @@
     <description locale="it" >Car Sharing</description>
     <description locale="ja" >カーシェアリング</description>
     <description locale="pl" >Wspóldzielenie samochodów</description>
+    <description locale="sv" >Bilpool</description>
    </value>
    <value tag="cinema" >
     <description locale="en" >Cinema</description>
@@ -727,6 +792,7 @@
     <description locale="pl" >Kino</description>
     <description locale="pt" >Cinema</description>
     <description locale="sl" >Kino</description>
+    <description locale="sv" >Biograf</description>
    </value>
    <value tag="college" >
     <description locale="en" >College</description>
@@ -739,6 +805,7 @@
     <description locale="it" >College</description>
     <description locale="ja" >短大</description>
     <description locale="pl" >Szkoła wyższa</description>
+    <description locale="sv" >Högskola</description>
    </value>
    <value tag="courthouse" >
     <description locale="en" >Court house</description>
@@ -752,6 +819,7 @@
     <description locale="pl" >Sąd</description>
     <description locale="pt" >Tribunal</description>
     <description locale="sl" >Sodišče</description>
+    <description locale="sv" >Domstolsbyggnad / Tingshus</description>
    </value>
    <value tag="crematorium" >
     <description locale="en" >Crematorium</description>
@@ -764,6 +832,7 @@
     <description locale="pl" >Krematorium</description>
     <description locale="pt" >Crematório</description>
     <description locale="sl" >Krematorij</description>
+    <description locale="sv" >Krematorium</description>
    </value>
    <value tag="drinking_water" >
     <description locale="en" >Source of drinking water</description>
@@ -776,6 +845,7 @@
     <description locale="ja" >飲み水の水源</description>
     <description locale="pl" >Źródło wody pitnej</description>
     <description locale="sl" >Vir pitne vode</description>
+    <description locale="sv" >Källa för dricksvatten</description>
    </value>
    <value tag="Fast food" >
     <description locale="en" >Fast food</description>
@@ -787,6 +857,7 @@
     <description locale="it" >Fast food</description>
     <description locale="ja" >ファーストフード</description>
     <description locale="pl" >Fast food</description>
+    <description locale="sv" >Snabbmat</description>
    </value>
    <value tag="fire_station" >
     <description locale="en" >Fire Station</description>
@@ -800,6 +871,7 @@
     <description locale="pl" >Straż pożarna</description>
     <description locale="pt" >Bombeiros</description>
     <description locale="sl" >Gasilski dom</description>
+    <description locale="sv" >Brandstation</description>
    </value>
    <value tag="fountain" >
     <description locale="en" >Fountain</description>
@@ -811,6 +883,7 @@
     <description locale="it" >Fontana</description>
     <description locale="ja" >噴水</description>
     <description locale="pl" >Fontanna</description>
+    <description locale="sv" >Fontän</description>
    </value>
    <value tag="fuel" >
     <description locale="en" >Fuel</description>
@@ -822,6 +895,7 @@
     <description locale="it" >Benzina</description>
     <description locale="ja" >ガソリンスタンド</description>
     <description locale="pl" >Stacja benzynowa</description>
+    <description locale="sv" >Bränsle</description>
    </value>
    <value tag="grave_yard" >
     <description locale="en" >Small place of burial</description>
@@ -832,6 +906,7 @@
     <description locale="it" >Piccolo luogo di sepoltura</description>
     <description locale="pl" >Cmentarz (mały)</description>
     <description locale="sl" >Majhno pokopališče</description>
+    <description locale="sv" >Liten begravningsplats</description>
    </value>
    <value tag="hospital" >
     <description locale="en" >Hospital</description>
@@ -845,6 +920,7 @@
     <description locale="pl" >Szpital</description>
     <description locale="pt" >Hospital</description>
     <description locale="sl" >Bolnišnica</description>
+    <description locale="sv" >Sjukhus</description>
    </value>
    <value tag="library" >
     <description locale="en" >Library</description>
@@ -858,6 +934,7 @@
     <description locale="pl" >Biblioteka</description>
     <description locale="pt" >Biblioteca</description>
     <description locale="sl" >Knjižnica</description>
+    <description locale="sv" >Bibliotek</description>
    </value>
    <value tag="nightclub" >
     <description locale="en" >Nightclub</description>
@@ -869,6 +946,7 @@
     <description locale="it" >Nightclub</description>
     <description locale="ja" >ナイトクラブ</description>
     <description locale="pl" >Klub nocny</description>
+    <description locale="sv" >Nattklubb</description>
    </value>
    <value tag="parking" >
     <description locale="en" >Parking</description>
@@ -881,6 +959,7 @@
     <description locale="ja" >駐車場</description>
     <description locale="pl" >Parking</description>
     <description locale="sl" >Parkirišče</description>
+    <description locale="sv" >Parkeringsplats</description>
    </value>
    <value tag="pharmacy" >
     <description locale="en" >Pharmacy</description>
@@ -894,6 +973,7 @@
     <description locale="pl" >Apteka</description>
     <description locale="pt" >Farmácia</description>
     <description locale="sl" >Lekarna</description>
+    <description locale="sv" >Apotek</description>
    </value>
    <value tag="place_of_worship" >
     <description locale="en" >Place of Worship</description>
@@ -905,6 +985,7 @@
     <description locale="it" >Luogo di culto</description>
     <description locale="pl" >Miejsce kultu</description>
     <description locale="sl" >Kraj čaščenja</description>
+    <description locale="sv" >Religiös helgedom</description>
    </value>
    <value tag="police" >
     <description locale="en" >Police Station</description>
@@ -917,6 +998,7 @@
     <description locale="ja" >警察署・交番</description>
     <description locale="pl" >Komenda policji</description>
     <description locale="sl" >Policijska postaja</description>
+    <description locale="sv" >Polisstation</description>
    </value>
    <value tag="post_box" >
     <description locale="en" >Post Box</description>
@@ -929,6 +1011,7 @@
     <description locale="ja" >ポスト</description>
     <description locale="pl" >Skrzynka pocztowa</description>
     <description locale="sl" >Poštni nabiralnik</description>
+    <description locale="sv" >Brevlåda</description>
    </value>
    <value tag="post_office" >
     <description locale="en" >Post Office</description>
@@ -941,6 +1024,7 @@
     <description locale="ja" >郵便局</description>
     <description locale="pl" >Poczta</description>
     <description locale="sl" >Poštni urad</description>
+    <description locale="sv" >Postkontor</description>
    </value>
    <value tag="prison" >
     <description locale="en" >Prison</description>
@@ -953,6 +1037,7 @@
     <description locale="pl" >Więzienie</description>
     <description locale="pt" >Prisão</description>
     <description locale="sl" >Zapor</description>
+    <description locale="sv" >Fängelse</description>
    </value>
    <value tag="pub" >
     <description locale="en" >Pub</description>
@@ -964,6 +1049,7 @@
     <description locale="it" >Bar</description>
     <description locale="ja" >パブ</description>
     <description locale="pl" >Pub</description>
+    <description locale="sv" >Pub</description>
    </value>
    <value tag="public_building" >
     <description locale="en" >Public building</description>
@@ -976,6 +1062,7 @@
     <description locale="ja" >公共のビル</description>
     <description locale="pl" >Budynek publiczny</description>
     <description locale="sl" >Javna zgradba</description>
+    <description locale="sv" >Offentlig byggnad</description>
    </value>
    <value tag="telephone" >
     <description locale="en" >Public Telephone</description>
@@ -988,6 +1075,7 @@
     <description locale="ja" >公衆電話</description>
     <description locale="pl" >Budka telefoniczna</description>
     <description locale="sl" >Javna telefonska govorilnica</description>
+    <description locale="sv" >Publik telefon</description>
    </value>
    <value tag="recycling" >
     <description locale="en" >Recycling Facilities</description>
@@ -997,6 +1085,7 @@
     <description locale="fr" >Point de collecte pour le recyclage</description>
     <description locale="it" >Impianti di riciclaggio</description>
     <description locale="pl" >Centrum recyklingowe</description>
+    <description locale="sv" >Återvinningsstation</description>
    </value>
    <value tag="restaurant" >
     <description locale="en" >Restaurant</description>
@@ -1010,6 +1099,7 @@
     <description locale="pl" >Restauracja</description>
     <description locale="pt" >Restaurante</description>
     <description locale="sl" >Restavracija</description>
+    <description locale="sv" >Restaurang</description>
    </value>
    <value tag="school" >
     <description locale="en" >School</description>
@@ -1023,6 +1113,7 @@
     <description locale="pl" >Szkoła</description>
     <description locale="pt" >Escola</description>
     <description locale="sl" >Šola</description>
+    <description locale="sv" >Skola</description>
    </value>
    <value tag="taxi" >
     <description locale="en" >Taxi</description>
@@ -1035,6 +1126,7 @@
     <description locale="ja" >タクシー</description>
     <description locale="pl" >Postój taksówek</description>
     <description locale="sl" >Taxi</description>
+    <description locale="sv" >Taxi</description>
    </value>
    <value tag="theatre" >
     <description locale="en" >Theatre or opera house</description>
@@ -1047,6 +1139,7 @@
     <description locale="ja" >劇場やオペラハウス</description>
     <description locale="pl" >Teatr lub opera</description>
     <description locale="sl" >Gledališče ali opera</description>
+    <description locale="sv" >Teater eller operahus</description>
    </value>
    <value tag="toilets" >
     <description locale="en" >Toilets</description>
@@ -1059,6 +1152,7 @@
     <description locale="ja" >トイレ</description>
     <description locale="pl" >Szalet</description>
     <description locale="sl" >Stranišča</description>
+    <description locale="sv" >Toaletter</description>
    </value>
    <value tag="townhall" >
     <description locale="en" >Town hall</description>
@@ -1071,6 +1165,7 @@
     <description locale="ja" >役所</description>
     <description locale="pl" >Ratusz</description>
     <description locale="sl" >Mestna hiša</description>
+    <description locale="sv" >Rådhus / Stadshus</description>
    </value>
    <value tag="university" >
     <description locale="en" >University</description>
@@ -1084,6 +1179,7 @@
     <description locale="pl" >Uniwersytet</description>
     <description locale="pt" >Universidade</description>
     <description locale="sl" >Univerza</description>
+    <description locale="sv" >Universitet</description>
    </value>
    <value tag="waste_disposal" >
     <description locale="en" >Waste Disposal</description>
@@ -1095,6 +1191,7 @@
     <description locale="it" >Smaltimento rifiuti</description>
     <description locale="ja" >ゴミ箱</description>
     <description locale="pl" >Wysypisko śmieci</description>
+    <description locale="sv" >Avfallsdeponi</description>
    </value>
   </widget>
   <widget tag="religion" type="combo" >
@@ -1110,6 +1207,7 @@
    <description locale="pl" >Religia</description>
    <description locale="pt" >Religião</description>
    <description locale="sl" >Vera</description>
+   <description locale="sv" >Religion</description>
    <value tag="buddhist" >
     <description locale="en" >Buddhist</description>
     <description locale="ar" >بوذي</description>
@@ -1121,6 +1219,7 @@
     <description locale="ja" >仏教</description>
     <description locale="pl" >Buddyzm</description>
     <description locale="pt" >Budista</description>
+    <description locale="sv" >Buddhism</description>
    </value>
    <value tag="christian" >
     <description locale="en" >Christian</description>
@@ -1134,6 +1233,7 @@
     <description locale="pl" >Chrześcijaństwo</description>
     <description locale="pt" >Cristã</description>
     <description locale="sl" >Krščanska</description>
+    <description locale="sv" >Kristet</description>
    </value>
    <value tag="jewish" >
     <description locale="en" >Jewish</description>
@@ -1145,6 +1245,7 @@
     <description locale="it" >Ebraico</description>
     <description locale="pl" >Judaizm</description>
     <description locale="sl" >Židovska</description>
+    <description locale="sv" >Judiskt</description>
    </value>
    <value tag="muslim" >
     <description locale="en" >Muslim</description>
@@ -1157,6 +1258,7 @@
     <description locale="ja" >イスラム教</description>
     <description locale="pl" >Islam</description>
     <description locale="sl" >Muslimanska</description>
+    <description locale="sv" >Mulimskt</description>
    </value>
   </widget>
   <widget tag="denomination" type="combo" id="denomination_christian" >
@@ -1170,6 +1272,7 @@
    <description locale="it" >Denominazione</description>
    <description locale="ja" >宗派</description>
    <description locale="pl" >Wyznanie</description>
+   <description locale="sv" >Samfund</description>
    <selector expr="[religion] is christian" />
    <value tag="anglican" />
    <value tag="baptist" />
@@ -1202,6 +1305,7 @@
    <description locale="ja" >名前</description>
    <description locale="pl" >Nazwa</description>
    <description locale="sl" >Ime</description>
+   <description locale="sv" >Namn</description>
    <selector expr=" not [place] is _NULL_" />
   </widget>
   <widget tag="name:fr" type="edit" >
@@ -1214,6 +1318,7 @@
    <description locale="it" >Nome (francese)</description>
    <description locale="ja" >名前（フランス語)</description>
    <description locale="pl" >Nazwa (francuska)</description>
+   <description locale="sv" >Namn (franska)</description>
   </widget>
   <widget tag="name:nl" type="edit" >
    <description locale="en" >Name (dutch)</description>
@@ -1225,6 +1330,7 @@
    <description locale="it" >Nome (olandese)</description>
    <description locale="ja" >名前（ドイツ語）</description>
    <description locale="pl" >Nazwa (belgijska)</description>
+   <description locale="sv" >Namn (nederländska)</description>
   </widget>
  </widgets>
  <template>
@@ -1238,6 +1344,7 @@
   <description locale="it" >Luogo di culto</description>
   <description locale="pl" >Miejsce kultu</description>
   <description locale="sl" >Kraj čaščenja</description>
+  <description locale="sv" >Religiös helgedom</description>
   <widgetref id="name" />
   <widget tag="amenity" type="constant" >
    <description locale="en" >Amenity</description>
@@ -1248,6 +1355,7 @@
    <description locale="it" >Attrattiva</description>
    <description locale="ja" >各種施設</description>
    <description locale="pl" >Miejsce kultu</description>
+   <description locale="sv" >Facilitet</description>
    <link src="http://wiki.openstreetmap.org/index.php/Tag:amenity=place_of_worship" />
    <value tag="place_of_worship" >
     <description locale="en" >Place of Worship</description>
@@ -1259,6 +1367,7 @@
     <description locale="it" >Luogo di culto</description>
     <description locale="pl" >Miejsce kultu</description>
     <description locale="sl" >Kraj čaščenja</description>
+    <description locale="sv" >Religiös helgedom</description>
    </value>
   </widget>
   <widgetref id="religion" />
@@ -1272,10 +1381,12 @@
   <description locale="es" >Iglesia Católica</description>
   <description locale="fr" >Eglise catholique</description>
   <description locale="it" >Chiesa cattolica</description>
+  <description locale="iu" >Katolsk kyrka</description>
   <description locale="ja" >カソリック教会</description>
   <description locale="pl" >Kościół katolicki</description>
   <description locale="pt" >Igreja católica</description>
   <description locale="sl" >Katoliška cerkev</description>
+  <description locale="sv" >Katolsk kyrka</description>
   <widgetref id="name" />
   <widget tag="amenity" type="constant" >
    <description locale="en" >Amenity</description>
@@ -1286,6 +1397,7 @@
    <description locale="it" >Attrattiva</description>
    <description locale="ja" >各種施設</description>
    <description locale="pl" >Miejsce kultu</description>
+   <description locale="sv" >Facilitet</description>
    <value tag="place_of_worship" >
     <description locale="en" >Place of Worship</description>
     <description locale="ar" >معبد</description>
@@ -1296,6 +1408,7 @@
     <description locale="it" >Luogo di culto</description>
     <description locale="pl" >Miejsce kultu</description>
     <description locale="sl" >Kraj čaščenja</description>
+    <description locale="sv" >Religiös helgedom</description>
    </value>
   </widget>
   <widget tag="religion" type="constant" >
@@ -1311,6 +1424,7 @@
    <description locale="pl" >Religia</description>
    <description locale="pt" >Religião</description>
    <description locale="sl" >Vera</description>
+   <description locale="sv" >Religion</description>
    <value tag="christian" >
     <description locale="en" >Christian</description>
     <description locale="ar" >نصراني</description>
@@ -1323,6 +1437,7 @@
     <description locale="pl" >Chrześcijaństwo</description>
     <description locale="pt" >Cristã</description>
     <description locale="sl" >Krščanska</description>
+    <description locale="sv" >Kristet</description>
    </value>
   </widget>
   <widget tag="denomination" type="constant" >
@@ -1336,6 +1451,7 @@
    <description locale="it" >Denominazione</description>
    <description locale="ja" >宗派</description>
    <description locale="pl" >Wyznanie</description>
+   <description locale="sv" >Samfund</description>
    <value tag="catholic" >
     <description locale="en" >Catholic</description>
     <description locale="ar" >كثليك</description>
@@ -1346,6 +1462,7 @@
     <description locale="it" >Cattolico</description>
     <description locale="ja" >カソリック</description>
     <description locale="pl" >Katolickie</description>
+    <description locale="sv" >Katolskt</description>
    </value>
   </widget>
  </template>
@@ -1358,6 +1475,7 @@
   <description locale="fr" >Relations génériques</description>
   <description locale="it" >Relazioni Generiche</description>
   <description locale="pl" >Ogólne relacje</description>
+  <description locale="sv" >Generella relationer</description>
   <widgetref id="landuse" />
  </template>
  <template>
@@ -1368,6 +1486,7 @@
   <description locale="fr" >Routes génériques</description>
   <description locale="it" >Strade Generiche</description>
   <description locale="pl" >Ogólne drogi</description>
+  <description locale="sv" >Generella vägar</description>
   <widgetref id="name" />
   <widgetref id="highway" />
   <widgetref id="oneway" />
@@ -1384,6 +1503,7 @@
   <description locale="fr" >Nœuds génériques</description>
   <description locale="it" >Nodi Generici</description>
   <description locale="pl" >Ogólne węzły</description>
+  <description locale="sv" >Generella noder</description>
   <widgetref id="name" />
   <widgetref id="amenity" />
   <widgetref id="place" />
@@ -1396,6 +1516,7 @@
   <description locale="fr" >Rues de Bruxelles</description>
   <description locale="it" >Strade di Bruxelles</description>
   <description locale="pl" >Drogi Brukselskie</description>
+  <description locale="sv" >Brysselväg</description>
   <widget tag="name" type="constant" id="name_bxl" >
    <description locale="en" >Name</description>
    <description locale="ar" >الإسم</description>
@@ -1407,6 +1528,7 @@
    <description locale="ja" >名前</description>
    <description locale="pl" >Nazwa</description>
    <description locale="sl" >Ime</description>
+   <description locale="sv" >Namn</description>
    <value tag="$[name:fr] - $[name:nl]" />
   </widget>
   <widgetref id="name:fr" />
