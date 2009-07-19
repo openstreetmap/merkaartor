@@ -294,11 +294,12 @@ MainWindow::MainWindow(void)
 	windowGeoimageAction->setVisible(false);
 #endif
 
-//#ifdef NDEBUG
+#ifdef NDEBUG
+	roadAddStreetNumbersAction->setVisible((false);
+#endif
 	viewStyleBackgroundAction->setVisible(false);
 	viewStyleForegroundAction->setVisible(false);
 	viewStyleTouchupAction->setVisible(false);
-//#endif
 	
 	MerkaartorPreferences::instance()->restoreMainWindowState( this );
 #ifndef _MOBILE
@@ -839,6 +840,9 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 				if (!newLayer->size()) {
 					mapDocument->remove(newLayer);
 					delete newLayer;
+				} else {
+					newLayer->blockIndexing(false);
+					newLayer->reIndex();
 				}
 				for (int i=1; i<theTracklayers.size(); i++) {
 					if (theTracklayers[i]->name().isEmpty())
@@ -1435,6 +1439,21 @@ void MainWindow::on_roadCreateJunctionAction_triggered()
 	}
 }
 
+void MainWindow::on_roadAddStreetNumbersAction_triggered()
+{
+	CommandList* theList = new CommandList(MainWindow::tr("Create Junction"), NULL);
+
+	addStreetNumbers(theDocument, theList, theProperties);
+
+	if (theList->empty())
+		delete theList;
+	else
+	{
+		theDocument->addHistory(theList);
+		invalidateView();
+	}
+}
+
 void MainWindow::on_nodeAlignAction_triggered()
 {
 	//MapFeature* F = theView->properties()->selection(0);
@@ -1729,10 +1748,9 @@ void MainWindow::on_fileSaveAsAction_triggered()
 
 	if (fileName != "") {
 		saveDocument();
+		M_PREFS->addRecentOpen(fileName);
+		updateRecentOpenMenu();
 	}
-
-	M_PREFS->addRecentOpen(fileName);
-	updateRecentOpenMenu();
 }
 
 void MainWindow::on_fileSaveAction_triggered()

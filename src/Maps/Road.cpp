@@ -348,7 +348,7 @@ bool Road::isCoastline()
 
 bool Road::isClosed() const
 {
-	return (p->Nodes[0] == p->Nodes[p->Nodes.size()-1]);
+	return (!p->Nodes.size() && p->Nodes[0] == p->Nodes[p->Nodes.size()-1]);
 }
 
 double Road::area()
@@ -1134,7 +1134,7 @@ Road* Road::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds, qint8 c,
 		if (!firstPoint)
 			firstPoint = N;
 	}
-	if (type == 'A')
+	if (type == 'A' && firstPoint)
 		R->add(firstPoint);
 
 	L->add(R);

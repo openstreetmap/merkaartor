@@ -1351,6 +1351,8 @@ void MerkaartorPreferences::loadProjection(QString fn)
 	QDomElement docElem = theXmlDoc->documentElement();
 	ProjectionsList aProjList = ProjectionsList::fromXml(docElem.firstChildElement());
 	theProjectionsList.add(aProjList);
+
+	delete theXmlDoc;
 }
 
 void MerkaartorPreferences::loadProjections()
@@ -1407,6 +1409,8 @@ void MerkaartorPreferences::loadWMS(QString fn)
 	QDomElement docElem = theXmlDoc->documentElement();
 	WmsServersList aWmsList = WmsServersList::fromXml(docElem.firstChildElement());
 	theWmsServerList.add(aWmsList);
+
+	delete theXmlDoc;
 }
 
 void MerkaartorPreferences::loadWMSes()
@@ -1463,6 +1467,8 @@ void MerkaartorPreferences::loadTMS(QString fn)
 	QDomElement docElem = theXmlDoc->documentElement();
 	TmsServersList aTmsList = TmsServersList::fromXml(docElem.firstChildElement());
 	theTmsServerList.add(aTmsList);
+
+	delete theXmlDoc;
 }
 
 void MerkaartorPreferences::loadTMSes()
@@ -1519,6 +1525,8 @@ void MerkaartorPreferences::loadBookmark(QString fn)
 	QDomElement docElem = theXmlDoc->documentElement();
 	BookmarksList aBkList = BookmarksList::fromXml(docElem.firstChildElement());
 	theBookmarkList.add(aBkList);
+
+	delete theXmlDoc;
 }
 
 void MerkaartorPreferences::loadBookmarks()

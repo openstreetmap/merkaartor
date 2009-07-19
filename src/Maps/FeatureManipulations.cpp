@@ -402,6 +402,81 @@ int createJunction(MapDocument* theDocument, CommandList* theList, PropertiesDoc
 //	return intersected.size();
 }
 
+#define STREET_NUMBERS_LENGTH 1500.0
+
+void createStreetNumbers(MapDocument* theDocument, CommandList* theList, Road* theRoad, bool Left)
+{
+	Road* R = new Road;
+	theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),R,true));
+
+	QLineF l(theRoad->getNode(1)->position().toPointF(), theRoad->getNode(0)->position().toPointF());
+	QLineF nv = l.normalVector().unitVector();
+	nv.translate(l.p2() - l.p1());
+	if (Left) {
+		nv.setAngle(nv.angle() + 45.0);
+	} else {
+		nv.setAngle(nv.angle() + 180.0);
+		nv.setAngle(nv.angle() - 45.0);
+	}
+	nv.setLength(STREET_NUMBERS_LENGTH/sin(M_PI_4));
+	TrackPoint* N = new TrackPoint(Coord(nv.p2()));
+	theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),N,true));
+	theList->add(new RoadAddTrackPointCommand(R, N, theDocument->getDirtyOrOriginLayer(R->layer())));
+
+	for (int j=1; j < theRoad->size(); j++) {
+		l = QLineF(theRoad->getNode(j)->position().toPointF(), theRoad->getNode(j-1)->position().toPointF());
+		nv = l.normalVector().unitVector();
+
+		if (j < theRoad->size() - 1) {
+			QLineF l2(theRoad->getNode(j)->position().toPointF(), theRoad->getNode(j+1)->position().toPointF());
+			qDebug() << "l.a: " << l.angle() << "; l2.a: " << l2.angle();
+			double theAngle = (l.angle() - l2.angle());
+			if (theAngle < 0.0) theAngle = 360. + theAngle;
+			//if (theAngle > 180.0) theAngle -= 180.0;
+			theAngle /= 2.;
+			qDebug() << "theA: " << theAngle;
+			if (qRound(theAngle) == 90)
+				continue;
+			nv.setAngle(l2.angle() + theAngle);
+			nv.setLength(STREET_NUMBERS_LENGTH/sin(angToRad(theAngle)));
+			qDebug() << "theL: " << nv.length() << " : " << STREET_NUMBERS_LENGTH/sin(angToRad(theAngle)) << " : " << sin(angToRad(theAngle));
+			if (Left)
+				nv.setAngle(nv.angle() + 180.0);
+		} else {
+			if (Left) {
+				nv.setAngle(nv.angle() - 45.0);
+			} else {
+				nv.setAngle(nv.angle() + 180.0);
+				nv.setAngle(nv.angle() + 45.0);
+			}
+			nv.setLength(STREET_NUMBERS_LENGTH/sin(M_PI_4));
+		}
+		TrackPoint* N = new TrackPoint(Coord(nv.p2()));
+		theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),N,true));
+		theList->add(new RoadAddTrackPointCommand(R, N, theDocument->getDirtyOrOriginLayer(R->layer())));
+	}
+}
+
+void addStreetNumbers(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)
+{
+	QList<Road*> Roads;
+	for (int i=0; i<theDock->size(); ++i)
+		if (Road* R = CAST_WAY(theDock->selection(i)))
+			Roads.push_back(R);
+
+	if (Roads.isEmpty())
+		return;
+
+	QList<Road*>::const_iterator it = Roads.constBegin();
+	for (;it != Roads.constEnd(); ++it) {
+		if((*it)->size() < 2)
+			continue;
+
+		createStreetNumbers(theDocument, theList, (*it), false);
+		createStreetNumbers(theDocument, theList, (*it), true);
+	}
+}
+
 void alignNodes(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
 	if (theDock->size() < 3) //thre must be at least 3 nodes to align something

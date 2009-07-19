@@ -14,6 +14,7 @@ void splitRoads(MapDocument* theDocument, CommandList* theList, PropertiesDock* 
 void breakRoads(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock);
 bool canCreateJunction(PropertiesDock* theDock);
 int createJunction(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock, bool doIt=true);
+void addStreetNumbers(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock);
 void reversePoints(MapDocument* theDocument, CommandList* theList, Road* R);
 void alignNodes(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock);
 void mergeNodes(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock);

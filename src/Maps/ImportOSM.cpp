@@ -181,7 +181,7 @@ void OSMHandler::parseMember(const QXmlAttributes& atts)
 	else if (Type == "relation")
 		F = MapFeature::getRelationOrCreatePlaceHolder(theDocument, theLayer, atts.value("ref"));
 
-	if (F)
+	if (F && F != R)
 		R->add(atts.value("role"),F);
 }
 

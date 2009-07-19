@@ -55,6 +55,7 @@
     <addaction name="roadJoinAction"/>
     <addaction name="editReverseAction"/>
     <addaction name="roadCreateJunctionAction"/>
+    <addaction name="roadAddStreetNumbersAction"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -1538,6 +1539,11 @@
   <action name="windowFeatsAction">
    <property name="text">
     <string>Features</string>
+   </property>
+  </action>
+  <action name="roadAddStreetNumbersAction">
+   <property name="text">
+    <string>Add street &amp;numbers (Karlsruhe scheme)</string>
    </property>
   </action>
  </widget>

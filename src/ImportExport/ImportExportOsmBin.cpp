@@ -255,9 +255,7 @@ void ImportExportOsmBin::tagsToBinary(MapFeature* F, QDataStream& ds)
 		if (F->tagKey(i) == "created_by")
 			continue;
 		k = theTagKeysIndex[F->tagKey(i)];
-		Q_ASSERT((k>0));
 		v = theTagValuesIndex[F->tagValue(i)];
-		Q_ASSERT((v>0));
 		ds << k;
 		ds << v;
 	}
@@ -276,17 +274,21 @@ void ImportExportOsmBin::tagsFromBinary(MapFeature * F, QDataStream& ds)
 		ds >> v;
 		if (F) {
 			cur_pos = ds.device()->pos();
-			if (keyTable.contains(k))
-				K = keyTable[k];
-			else {
-				ds.device()->seek(k);
-				ds >> K;
+			if (k) {
+				if (keyTable.contains(k))
+					K = keyTable[k];
+				else {
+					ds.device()->seek(k);
+					ds >> K;
+				}
 			}
-			if (valueTable.contains(v))
-				V = valueTable[v];
-			else {
-				ds.device()->seek(v);
-				ds >> V;
+			if (v) {
+				if (valueTable.contains(v))
+					V = valueTable[v];
+				else {
+					ds.device()->seek(v);
+					ds >> V;
+				}
 			}
 			F->setTag(K,V);
 			ds.device()->seek(cur_pos);

@@ -49,7 +49,7 @@ class Coord
 		Coord(const QPoint& P)
 			: Lat(P.x()), Lon(P.y()) {}
 		Coord(const QPointF& P)
-			: Lat(int(P.x())), Lon(int(P.y())) {}
+			: Lat(qRound(P.x())), Lon(qRound(P.y())) {}
 		Coord(int aLat, int aLon)
 			: Lat(aLat), Lon(aLon) {}
 

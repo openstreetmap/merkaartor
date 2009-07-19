@@ -101,8 +101,6 @@ class MapView :	public QWidget
 		bool SelectionLocked;
 		QLabel* lockIcon;
 		QList<MapFeature*> theSnapList;
-		QList<MapFeature*> theFeatures;
-		QList<Road*> theCoastlines;
 
 		void viewportRecalc(const QRect& Screen);
 

@@ -46,6 +46,8 @@ public:
 	CoordBox Viewport;
 	QList<CoordBox> invalidRects;
 	QPoint theRasterPanDelta, theVectorPanDelta;
+	QSet<MapFeature*> theFeatures;
+	QSet<Road*> theCoastlines;
 
 	MapViewPrivate()
 	  : PixelPerM(0.0), Viewport(WORLD_COORDBOX)
@@ -178,8 +180,8 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 	QTime Start(QTime::currentTime());
 #endif
 
-	theFeatures.clear();
-	theCoastlines.clear();
+	p->theFeatures.clear();
+	p->theCoastlines.clear();
 
 	QPainter P;
 	P.begin(this);
@@ -276,7 +278,9 @@ void MapView::sortRenderingPriorityInLayers()
 
 void MapView::sortRenderingPriority()
 {
-	qSort(theFeatures.begin(),theFeatures.end(),SortAccordingToRenderingPriority());
+	QList<MapFeature*> aList = p->theFeatures.toList();
+	qSort(aList.begin(),aList.end(),SortAccordingToRenderingPriority());
+	p->theFeatures.fromList(aList);
 }
 
 void MapView::updateLayersImage()
@@ -324,24 +328,21 @@ void MapView::buildFeatureSet()
 
 			std::deque < MapFeaturePtr > ret = theDocument->getLayer(j)->indexFind(CoordBox(bl, tr));
 			for (std::deque < MapFeaturePtr >::const_iterator it = ret.begin(); it != ret.end(); ++it) {
-				//if (theFeatures.contains(*it))
-				//	continue;
-
 				if (Road * R = CAST_WAY(*it)) {
 					R->buildPath(theProjection, p->theTransform, clipRect);
-					theFeatures.push_back(R);
+					p->theFeatures.insert(R);
 					if (R->isCoastline())
-						theCoastlines.push_back(R);
+						p->theCoastlines.insert(R);
 				} else
 				if (Relation * RR = CAST_RELATION(*it)) {
 					RR->buildPath(theProjection, p->theTransform, clipRect);
-					theFeatures.push_back(RR);
+					p->theFeatures.insert(RR);
 				} else
 				if (TrackPoint * pt = CAST_NODE(*it)) {
 					if (theDocument->getLayer(j)->arePointsDrawable())
-						theFeatures.push_back(pt);
+						p->theFeatures.insert(pt);
 				} else 
-					theFeatures.push_back(*it);
+					p->theFeatures.insert(*it);
 			}
 		}
 
@@ -366,15 +367,15 @@ void MapView::buildFeatureSet()
 		if (OK) {
 			if (Road * R = dynamic_cast < Road * >(vit.get())) {
 				R->buildPath(aProj, clipRect);
-				theFeatures.push_back(R);
+				p->theFeatures.push_back(R);
 				if (R->isCoastline())
-					theCoastlines.push_back(R);
+					p->theCoastlines.push_back(R);
 			} else
 			if (Relation * RR = dynamic_cast < Relation * >(vit.get())) {
 				RR->buildPath(aProj, clipRect);
-				theFeatures.push_back(RR);
+				p->theFeatures.push_back(RR);
 			} else {
-				theFeatures.push_back(vit.get());
+				p->theFeatures.push_back(vit.get());
 			}
 		}
 	}
@@ -442,7 +443,7 @@ void MapView::drawBackground(QPainter & theP, Projection& /*aProj*/)
 		theFillColor = M_STYLE->getGlobalPainter().getBackgroundColor();
 	theP.fillRect(rect(), theFillColor);
 
-	if (theCoastlines.isEmpty()) {
+	if (p->theCoastlines.isEmpty()) {
 //		if (M_PREFS->getUseShapefileForBackground() && theDocument->getImageLayer()->isVisible() && !LAYERMANAGER_OK) {
 		if (M_PREFS->getUseShapefileForBackground())
 			theP.fillRect(rect(), M_PREFS->getWaterColor());
@@ -450,13 +451,14 @@ void MapView::drawBackground(QPainter & theP, Projection& /*aProj*/)
 	}
 
 	QList<QPainterPath*> theCoasts;
-	for (int i=0; i<theCoastlines.size(); i++) {
-		if (theCoastlines[i]->getPath().elementCount() < 2) continue;
+	QSet<Road*>::const_iterator it = p->theCoastlines.constBegin();
+	for (;it != p->theCoastlines.constEnd(); ++it) {
+		if ((*it)->getPath().elementCount() < 2) continue;
 
 		QPainterPath* aPath = new QPainterPath;
-		for (int j=1; j < theCoastlines[i]->getPath().elementCount(); j++) {
+		for (int j=1; j < (*it)->getPath().elementCount(); j++) {
 
-			QLineF l(QPointF(theCoastlines[i]->getPath().elementAt(j)), QPointF(theCoastlines[i]->getPath().elementAt(j-1)));
+			QLineF l(QPointF((*it)->getPath().elementAt(j)), QPointF((*it)->getPath().elementAt(j-1)));
 			QLineF l1 = l.normalVector().unitVector();
             l1.setLength(WW / 2.0);
 			if (j == 1) {
@@ -464,8 +466,8 @@ void MapView::drawBackground(QPainter & theP, Projection& /*aProj*/)
 				l3.translate(l.p2() - l.p1());
 				aPath->moveTo(l3.p2());
 			} else
-				if (j < theCoastlines[i]->getPath().elementCount() - 1) {
-					QLineF l4(QPointF(theCoastlines[i]->getPath().elementAt(j)), QPointF(theCoastlines[i]->getPath().elementAt(j+1)));
+				if (j < (*it)->getPath().elementCount() - 1) {
+					QLineF l4(QPointF((*it)->getPath().elementAt(j)), QPointF((*it)->getPath().elementAt(j+1)));
 					double theAngle = (l4.angle() - l.angle()) / 2.0;
 					if (theAngle < 0.0) theAngle += 180.0;
 					l1.setAngle(l.angle() + theAngle);
@@ -501,7 +503,7 @@ void MapView::drawBackground(QPainter & theP, Projection& /*aProj*/)
 //		theFillColor = M_STYLE->getGlobalPainter().getBackgroundColor();
 //	theP.fillRect(rect(), theFillColor);
 //
-//	if (theCoastlines.isEmpty()) {
+//	if (p->theCoastlines.isEmpty()) {
 //		if (M_PREFS->getUseShapefileForBackground() && theDocument->getImageLayer()->isVisible()) {
 //			theP.fillRect(rect(), M_PREFS->getWaterColor());
 //		}
@@ -509,11 +511,11 @@ void MapView::drawBackground(QPainter & theP, Projection& /*aProj*/)
 //		return;
 //	}
 //
-//	for (int i=0; i<theCoastlines.size(); i++) {
-//		if (theCoastlines[i]->getPath().elementCount() < 2) continue;
+//	for (int i=0; i<p->theCoastlines.size(); i++) {
+//		if (p->theCoastlines[i]->getPath().elementCount() < 2) continue;
 //
-//		for (int j=1; j < theCoastlines[i]->getPath().elementCount(); j++) {
-//			QLineF l(QPointF(theCoastlines[i]->getPath().elementAt(j)), QPointF(theCoastlines[i]->getPath().elementAt(j-1)));
+//		for (int j=1; j < p->theCoastlines[i]->getPath().elementCount(); j++) {
+//			QLineF l(QPointF(p->theCoastlines[i]->getPath().elementAt(j)), QPointF(p->theCoastlines[i]->getPath().elementAt(j-1)));
 //			QLineF l1 = l.normalVector().unitVector();
 //			QLineF l2(l1);
 //			l2.translate(-l1.p1());
@@ -524,7 +526,7 @@ void MapView::drawBackground(QPainter & theP, Projection& /*aProj*/)
 //            theFloodStarts.append(l2.p2().toPoint());
 //            //theP.drawEllipse(l2.p2(), 5, 5);
 //		}
-//		theP.drawPath(theCoastlines[i]->getPath());
+//		theP.drawPath(p->theCoastlines[i]->getPath());
 //	}
 //	theP.end();
 //
@@ -616,7 +618,7 @@ void MapView::drawBackground(QPainter & theP, Projection& /*aProj*/)
 //	else
 //		P.fillRect(rect(), QBrush(M_STYLE->getGlobalPainter().getBackgroundColor()));
 //
-//	if (theCoastlines.isEmpty()) {
+//	if (p->theCoastlines.isEmpty()) {
 //		if (M_PREFS->getUseShapefileForBackground() && theDocument->getImageLayer()->isVisible()) {
 //			P.fillRect(rect(), QBrush(M_PREFS->getWaterColor()));
 //		}
@@ -630,13 +632,13 @@ void MapView::drawBackground(QPainter & theP, Projection& /*aProj*/)
 //	QList < QPair <TrackPoint*, Road*> > aStartPoints;
 //	QList < QPair <TrackPoint*, Road*> > aEndPoints;
 //
-//	for (int i=0; i < theCoastlines.size(); i++) {
-//		if (theCoastlines[i]->isClosed()) {
-//			theCoast.addPath(theCoastlines[i]->getPath());
+//	for (int i=0; i < p->theCoastlines.size(); i++) {
+//		if (p->theCoastlines[i]->isClosed()) {
+//			theCoast.addPath(p->theCoastlines[i]->getPath());
 //			continue;
 //		}
-//		aStartPoints.append(qMakePair(dynamic_cast<TrackPoint*>(theCoastlines[i]->get(0)), theCoastlines[i]));
-//		aEndPoints.append(qMakePair(dynamic_cast<TrackPoint*>(theCoastlines[i]->get(theCoastlines[i]->size()-1)), theCoastlines[i]));
+//		aStartPoints.append(qMakePair(dynamic_cast<TrackPoint*>(p->theCoastlines[i]->get(0)), p->theCoastlines[i]));
+//		aEndPoints.append(qMakePair(dynamic_cast<TrackPoint*>(p->theCoastlines[i]->get(p->theCoastlines[i]->size()-1)), p->theCoastlines[i]));
 //	}
 //
 //	int curIndex, tmpIndex;
@@ -682,6 +684,7 @@ void MapView::drawFeatures(QPainter & P, Projection& /*aProj*/)
 {
 	M_STYLE->initialize(P, *this);
 
+	QSet<MapFeature*>::const_iterator it;
 	for (int i = 0; i < M_STYLE->size(); ++i)
 	{
 		PaintStyleLayer *Current = M_STYLE->get(i);
@@ -689,23 +692,23 @@ void MapView::drawFeatures(QPainter & P, Projection& /*aProj*/)
 		P.save();
 		P.setRenderHint(QPainter::Antialiasing);
 
-		for (int i=0; i<theFeatures.size(); i++)
+		for (it = p->theFeatures.constBegin() ;it != p->theFeatures.constEnd(); ++it)
 		{
-			P.setOpacity(theFeatures[i]->layer()->getAlpha());
-			if (Road * R = dynamic_cast < Road * >(theFeatures[i]))
+			P.setOpacity((*it)->layer()->getAlpha());
+			if (Road * R = dynamic_cast < Road * >((*it)))
 				Current->draw(R);
-			else if (TrackPoint * Pt = dynamic_cast < TrackPoint * >(theFeatures[i]))
+			else if (TrackPoint * Pt = dynamic_cast < TrackPoint * >((*it)))
 				Current->draw(Pt);
-			else if (Relation * RR = dynamic_cast < Relation * >(theFeatures[i]))
+			else if (Relation * RR = dynamic_cast < Relation * >((*it)))
 				Current->draw(RR); 
 		}
 		P.restore();
 	}
 	
-	for (int i=0; i<theFeatures.size(); i++)
+	for (it = p->theFeatures.constBegin(); it != p->theFeatures.constEnd(); ++it)
 	{
-		P.setOpacity(theFeatures[i]->layer()->getAlpha());
-		theFeatures[i]->draw(P, this);
+		P.setOpacity((*it)->layer()->getAlpha());
+		(*it)->draw(P, this);
 	}
 }
 

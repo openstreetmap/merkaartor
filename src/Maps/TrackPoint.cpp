@@ -38,6 +38,7 @@ TrackPoint::TrackPoint(const TrackPoint& other)
 
 TrackPoint::~TrackPoint(void)
 {
+	delete p;
 }
 
 void TrackPoint::remove(int )
