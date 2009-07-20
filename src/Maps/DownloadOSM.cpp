@@ -420,7 +420,8 @@ QString Downloader::getURLToTrackPoints()
 bool downloadOSM(QWidget* aParent, const QUrl& theUrl, const QString& aUser, const QString& aPassword, MapDocument* theDocument, MapLayer* theLayer)
 {
 	QString aWeb = theUrl.host();
-	QString URL = theUrl.path();
+	//QString URL = theUrl.path();
+	QString URL = theUrl.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority);
 	Downloader Rcv(aWeb, aUser, aPassword);
 
 	IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(aParent);
@@ -774,7 +775,7 @@ bool downloadOSM(QWidget* aParent, const CoordBox& aBox , MapDocument* theDocume
 			theLayer->blockIndexing(true);
 			M_PREFS->setResolveRelations(ui.ResolveRelations->isChecked());
 			if (directAPI)
-				OK = downloadOSM(aParent,QUrl(ui.Link->text()),osmUser,osmPwd,theDocument,theLayer);
+				OK = downloadOSM(aParent,QUrl(QUrl::fromEncoded(ui.Link->text().toAscii())),osmUser,osmPwd,theDocument,theLayer);
 			else
 			if (Regional)
 				OK = downloadOSM(aParent,osmUser,osmPwd,ui.Link->text().toUInt(),theDocument,theLayer);
