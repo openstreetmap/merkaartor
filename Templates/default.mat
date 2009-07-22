@@ -618,6 +618,7 @@
    <description locale="sv" >Enkelriktat</description>
   </widget>
   <widget tag="amenity" type="combo" >
+   <link src="http://wiki.openstreetmap.org/index.php/Key:amenity" />
    <description locale="en" >Amenity</description>
    <description locale="ar" >خدمات</description>
    <description locale="cs" >Občanská vybavenost</description>
@@ -1294,8 +1295,52 @@
    <value tag="russian_orthodox" />
    <value tag="seventh_day_adventist" />
   </widget>
+   <widget tag="addr:housenumber" type="edit" id="housenumber">
+     <link src="http://wiki.openstreetmap.org/wiki/Key:addr" />
+     <description locale="en" >House number</description>
+     <description locale="fr" >Numéro de Maison</description>
+   </widget>
+   <widget tag="addr:street" type="edit" id="housestreet">
+     <link src="http://wiki.openstreetmap.org/wiki/Key:addr" />
+     <description locale="en" >House street</description>
+     <description locale="fr" >Rue de la Maison</description>
+   </widget>
+   <widget tag="addr:interpolation" type="combo" id="houseinterpolation">
+     <link src="http://wiki.openstreetmap.org/wiki/Key:addr" />
+     <description locale="en" >Number interpolation</description>
+     <description locale="fr" >Interpolation de numéro</description>
+     <value tag="even" >
+       <description locale="en" >even</description>
+       <description locale="fr" >pair</description>
+     </value>
+     <value tag="odd" >
+       <description locale="en" >odd</description>
+       <description locale="fr" >impair</description>
+     </value>
+     <value tag="all" >
+       <description locale="en" >all</description>
+       <description locale="fr" >tous</description>
+     </value>
+   </widget>
+
  </widgets>
- <template>
+  <template>
+    <selector expr="not [addr:housenumber] is _NULL_ and Type is TrackPoint" />
+    <link src="http://wiki.openstreetmap.org/wiki/Key:addr" />
+    <description locale="en" >House number (Karlsruhe Schema)</description>
+    <description locale="fr" >Numéro de Maison (Schéma de Karlsruhe)</description>
+    <widgetref id="housenumber" />
+  </template>
+  <template>
+    <selector expr="not [addr:interpolation] is _NULL_ and Type is Road" />
+    <link src="http://wiki.openstreetmap.org/wiki/Key:addr" />
+    <description locale="en" >House number scheme (Karlsruhe)</description>
+    <description locale="fr" >Schéma de numéro de Maison (Schéma de Karlsruhe)</description>
+    <widgetref id="houseinterpolation" />
+    <widgetref id="housestreet" />
+  </template>
+
+  <template>
   <selector expr="[amenity] is place_of_worship" />
   <description locale="en" >Place of Worship</description>
   <description locale="ar" >معبد</description>
@@ -1307,7 +1352,8 @@
   <description locale="pl" >Miejsce kultu</description>
   <description locale="sl" >Kraj čaščenja</description>
   <description locale="sv" >Religiös helgedom</description>
-  <widget tag="amenity" type="constant" >
+   <widgetref id="name" />
+   <widget tag="amenity" type="constant" >
    <description locale="en" >Amenity</description>
    <description locale="ar" >خدمات</description>
    <description locale="cs" >Občanská vybavenost</description>
@@ -1347,7 +1393,8 @@
   <description locale="pt" >Igreja católica</description>
   <description locale="sl" >Katoliška cerkev</description>
   <description locale="sv" >Katolsk kyrka</description>
-  <widget tag="amenity" type="constant" >
+   <widgetref id="name" />
+   <widget tag="amenity" type="constant" >
    <description locale="en" >Amenity</description>
    <description locale="ar" >خدمات</description>
    <description locale="cs" >Občanská vybavenost</description>
@@ -1480,4 +1527,5 @@
   <widgetref id="amenity" />
   <widgetref id="place" />
  </template>
-</templates>
+
+  </templates>

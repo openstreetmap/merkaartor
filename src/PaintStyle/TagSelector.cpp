@@ -273,13 +273,13 @@ TagSelector* TagSelectorIs::copy() const
 	return new TagSelectorIs(Key,Value);
 }
 
-static const QString emptyString("");
+static const QString emptyString("__EMPTY__");
 
 TagSelectorMatchResult TagSelectorIs::matches(const MapFeature* F) const
 {
 	QString val = F->tagValue(Key, emptyString);
 	if (MatchEmpty) {
-		return val.isEmpty() ? TagSelect_Match : TagSelect_NoMatch;
+		return val == emptyString ? TagSelect_Match : TagSelect_NoMatch;
 	} else if (UseRegExp) {
 		return rx.exactMatch(val) ? TagSelect_Match : TagSelect_NoMatch;
 	} else {

@@ -148,13 +148,10 @@ SOURCES += ./Command/Command.cpp \
 FORMS += ./AboutDialog.ui \
     ./DownloadMapDialog.ui \
     ./MainWindow.ui \
-    ./MinimumRoadProperties.ui \
     ./Sync/SyncListDialog.ui \
-    ./MinimumTrackPointProperties.ui \
     ./UploadMapDialog.ui \
     ./GotoDialog.ui \
     ./MultiProperties.ui \
-    ./MinimumRelationProperties.ui \
     ./Interaction/CreateDoubleWayDock.ui \
     ./Interaction/CreateRoundaboutDock.ui \
     ./PaintStyle/PaintStyleEditor.ui \

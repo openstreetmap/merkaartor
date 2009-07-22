@@ -1,4 +1,5 @@
 v0.14
+    * ADD : Ability to create house numbers "Karlsruhe" style
 	* FIX : Avoid infinite loop with imbricated relations
 	* CHG : Remove api 0.5 option
 	* ADD : Alternative way of drawing tracks

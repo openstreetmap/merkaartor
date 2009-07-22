@@ -403,45 +403,50 @@ int createJunction(MapDocument* theDocument, CommandList* theList, PropertiesDoc
 }
 
 #define STREET_NUMBERS_LENGTH 1500.0
+#define STREET_NUMBERS_ANGLE 30.0
 
 void createStreetNumbers(MapDocument* theDocument, CommandList* theList, Road* theRoad, bool Left)
 {
+	QString streetName = theRoad->tagValue("name", "");
+	QLineF l, l2, nv;
+
+	TrackPoint* N;
 	Road* R = new Road;
 	theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),R,true));
+	theList->add(new SetTagCommand(R, "addr:interpolation", ""));
+	theList->add(new SetTagCommand(R, "addr:street", streetName));
+	QPointF prevPoint;
 
-	QLineF l(theRoad->getNode(1)->position().toPointF(), theRoad->getNode(0)->position().toPointF());
-	QLineF nv = l.normalVector().unitVector();
-	nv.translate(l.p2() - l.p1());
-	if (Left) {
-		nv.setAngle(nv.angle() + 45.0);
-	} else {
-		nv.setAngle(nv.angle() + 180.0);
-		nv.setAngle(nv.angle() - 45.0);
-	}
-	nv.setLength(STREET_NUMBERS_LENGTH/sin(M_PI_4));
-	QPointF prevPoint = nv.p2();
-	TrackPoint* N = new TrackPoint(Coord(prevPoint));
-	theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),N,true));
-	theList->add(new RoadAddTrackPointCommand(R, N, theDocument->getDirtyOrOriginLayer(R->layer())));
-
-	int j = 1;
-	for (; j < theRoad->size()-1; j++) {
-		l = QLineF(theRoad->getNode(j)->position().toPointF(), theRoad->getNode(j-1)->position().toPointF());
-		QLineF l2(theRoad->getNode(j)->position().toPointF(), theRoad->getNode(j+1)->position().toPointF());
+	for (int j=0; j < theRoad->size(); j++) {
+		if (j == 0) {
+			l2 = QLineF(theRoad->getNode(j)->position().toPointF(), theRoad->getNode(j+1)->position().toPointF());
+			l = l2;
+			l.setAngle(l2.angle() + 180.);
+			prevPoint = l.p2();
+		} else 
+		if (j == theRoad->size()-1) {
+			l = QLineF(theRoad->getNode(j)->position().toPointF(), theRoad->getNode(j-1)->position().toPointF());
+			l2 = l;
+			l2.setAngle(l.angle() + 180.);
+		} else {
+			l = QLineF(theRoad->getNode(j)->position().toPointF(), theRoad->getNode(j-1)->position().toPointF());
+			l2 = QLineF(theRoad->getNode(j)->position().toPointF(), theRoad->getNode(j+1)->position().toPointF());
+		}
 		nv = l.normalVector().unitVector();
 
 		double theAngle = (l.angle() - l2.angle());
 		if (theAngle < 0.0) theAngle = 360. + theAngle;
 		theAngle /= 2.;
-		if (qRound(theAngle) == 90)
-			continue;
 		nv.setAngle(l2.angle() + theAngle);
 		nv.setLength(STREET_NUMBERS_LENGTH/sin(angToRad(theAngle)));
 		if (Left)
 			nv.setAngle(nv.angle() + 180.0);
 
-		QLineF li(prevPoint, nv.p2());
-		bool intersected = false;
+		QLineF lto(prevPoint, nv.p2());
+		lto.setLength(lto.length()+STREET_NUMBERS_LENGTH);
+		QPointF pto;
+
+		bool intersectedTo = false;
 		for (int k=0; k < theRoad->getNode(j)->sizeParents(); ++k) {
 			Road* I = CAST_WAY(theRoad->getNode(j)->getParent(k));
 			if (!I || I == theRoad)
@@ -450,49 +455,77 @@ void createStreetNumbers(MapDocument* theDocument, CommandList* theList, Road* t
 			for (int m=0; m < I->size()-1; ++m) {
 				QLineF l3 = QLineF(I->getNode(m)->position().toPointF(), I->getNode(m+1)->position().toPointF());
 				QPointF theIntersection;
-				if (li.intersect(l3, &theIntersection) == QLineF::BoundedIntersection) {
-					intersected = true;
-					li = QLineF(prevPoint, theIntersection);
+				if (lto.intersect(l3, &theIntersection) == QLineF::BoundedIntersection) {
+					intersectedTo = true;
+					QLineF lt = QLineF(prevPoint, theIntersection);
+					if (lt.length() < lto.length())
+						lto = lt;
 				}
 			}
 		}
-		if (intersected) {
-			li.setLength(li.length() - STREET_NUMBERS_LENGTH);
 
-			TrackPoint* N = new TrackPoint(Coord(li.p2()));
-			theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),N,true));
-			theList->add(new RoadAddTrackPointCommand(R, N, theDocument->getDirtyOrOriginLayer(R->layer())));
+		if (j != 0) {
+			QLineF lfrom = QLineF(nv.p2(), prevPoint);
+			lfrom.setLength(lfrom.length()*2.);
+			QPointF pfrom;
 
-			R = new Road;
-			theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),R,true));
+			bool intersectedFrom = false;
+			for (int k=0; k < theRoad->getNode(j-1)->sizeParents(); ++k) {
+				Road* I = CAST_WAY(theRoad->getNode(j-1)->getParent(k));
+				if (!I || I == theRoad)
+					continue;
 
-			N = new TrackPoint(Coord(li.p2()));
-			theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),N,true));
-			theList->add(new RoadAddTrackPointCommand(R, N, theDocument->getDirtyOrOriginLayer(R->layer())));
+				for (int m=0; m < I->size()-1; ++m) {
+					QLineF l3 = QLineF(I->getNode(m)->position().toPointF(), I->getNode(m+1)->position().toPointF());
+					QPointF theIntersection;
+					if (lfrom.intersect(l3, &theIntersection) == QLineF::BoundedIntersection) {
+						intersectedFrom = true;
+						QLineF lt = QLineF(nv.p2(), theIntersection);
+						if (lt.length() < lfrom.length())
+							lfrom = lt;
+					}
+				}
+			}
+			if (intersectedFrom) {
+				lfrom.setLength(lfrom.length() - STREET_NUMBERS_LENGTH);
+				pfrom = lfrom.p2();
 
-			prevPoint = li.p2();
-		} else {
-			TrackPoint* N = new TrackPoint(Coord(nv.p2()));
-			theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),N,true));
-			theList->add(new RoadAddTrackPointCommand(R, N, theDocument->getDirtyOrOriginLayer(R->layer())));
+				R = new Road;
+				theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),R,true));
+				theList->add(new SetTagCommand(R, "addr:interpolation", ""));
+				theList->add(new SetTagCommand(R, "addr:street", streetName));
 
-			prevPoint = nv.p2();
+				N = new TrackPoint(Coord(pfrom));
+				theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),N,true));
+				theList->add(new RoadAddTrackPointCommand(R, N, theDocument->getDirtyOrOriginLayer(R->layer())));
+				theList->add(new SetTagCommand(N, "addr:housenumber", ""));
+			} else {
+				pfrom = prevPoint;
+			}
 		}
-	}
 
-	l = QLineF(theRoad->getNode(j)->position().toPointF(), theRoad->getNode(j-1)->position().toPointF());
-	nv = l.normalVector().unitVector();
-	if (Left) {
-		nv.setAngle(nv.angle() - 45.0);
-	} else {
-		nv.setAngle(nv.angle() + 180.0);
-		nv.setAngle(nv.angle() + 45.0);
-	}
-	nv.setLength(STREET_NUMBERS_LENGTH/sin(M_PI_4));
+		if (intersectedTo) {
+			if (j != 0) {
+				lto.setLength(lto.length() - STREET_NUMBERS_LENGTH);
+				pto = lto.p2();
 
-	N = new TrackPoint(Coord(nv.p2()));
-	theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),N,true));
-	theList->add(new RoadAddTrackPointCommand(R, N, theDocument->getDirtyOrOriginLayer(R->layer())));
+				N = new TrackPoint(Coord(pto));
+				theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),N,true));
+				theList->add(new RoadAddTrackPointCommand(R, N, theDocument->getDirtyOrOriginLayer(R->layer())));
+				theList->add(new SetTagCommand(N, "addr:housenumber", ""));
+			}
+		} else {
+			if (theAngle < 85. || theAngle > 95. || j== 0 || j == theRoad->size()-1) {
+				N = new TrackPoint(Coord(nv.p2()));
+				theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),N,true));
+				theList->add(new RoadAddTrackPointCommand(R, N, theDocument->getDirtyOrOriginLayer(R->layer())));
+				theList->add(new SetTagCommand(N, "addr:housenumber", ""));
+			}
+
+			pto = nv.p2();
+		}
+		prevPoint = nv.p2();
+	}
 }
 
 void addStreetNumbers(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)
@@ -513,6 +546,9 @@ void addStreetNumbers(MapDocument* theDocument, CommandList* theList, Properties
 		createStreetNumbers(theDocument, theList, (*it), false);
 		createStreetNumbers(theDocument, theList, (*it), true);
 	}
+
+	if (Roads.size() == 1)
+		theList->setFeature(Roads.at(0));
 }
 
 void alignNodes(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)

@@ -891,10 +891,10 @@ QWidget* TagTemplates::getWidget(const MapFeature* F)
 	theCombo = new QComboBox();
 	theCombo->setEditable(true);
 	theCombo->setInsertPolicy(QComboBox::InsertAtBottom);
-	QFont f = theCombo->font();
-	f.setPointSize(6);
-	theCombo->setFont(f);
-	theCombo->setMaximumHeight(16);
+//	QFont f = theCombo->font();
+//	f.setPointSize(6);
+//	theCombo->setFont(f);
+//	theCombo->setMaximumHeight(16);
 	headLayout->addWidget(theCombo);
 
 	QFrame* line = new QFrame();

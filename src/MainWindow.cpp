@@ -294,9 +294,6 @@ MainWindow::MainWindow(void)
 	windowGeoimageAction->setVisible(false);
 #endif
 
-#ifdef NDEBUG
-	roadAddStreetNumbersAction->setVisible((false);
-#endif
 	viewStyleBackgroundAction->setVisible(false);
 	viewStyleForegroundAction->setVisible(false);
 	viewStyleTouchupAction->setVisible(false);
@@ -1441,7 +1438,7 @@ void MainWindow::on_roadCreateJunctionAction_triggered()
 
 void MainWindow::on_roadAddStreetNumbersAction_triggered()
 {
-	CommandList* theList = new CommandList(MainWindow::tr("Create Junction"), NULL);
+	CommandList* theList = new CommandList(MainWindow::tr("Add Street Numbers"), NULL);
 
 	addStreetNumbers(theDocument, theList, theProperties);
 
