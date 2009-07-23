@@ -3,15 +3,16 @@
 <?include defines.wxi?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-   <Product  Id="132E9A8B-1BF6-4d55-893E-110D662FD355" Name="$(var.PackageName)" 
+   <Product  Id="5D43BC5B-DA2E-49ad-937E-1B48E1A882AB" Name="$(var.PackageName)" 
       Language="1033" Version="0.14.0.3" Manufacturer="Merkaartor"
-      UpgradeCode="4892C085-55A9-413b-9C7B-42E33ED7D7D2">
+      UpgradeCode="CBE31473-E824-4065-BC54-A90AA2BE143A">
 
       <Package 
          Description="A map editor for OpenStreetMap.org" InstallerVersion="100" Compressed="yes" />
 
       <!--Set the icon for the msi and Add/Remove programs-->
       <Icon Id='Merkaartor.exe' SourceFile='..\Icons\Mercator_16x16.ico'/>
+      <Icon Id='MainIcon.exe' SourceFile='..\Icons\Mercator_48x48.ico'/>
       <Property Id="ARPPRODUCTICON" Value="Merkaartor.exe" />
       <Property Id="ALLUSERS" Value="1"/>
 
@@ -22,7 +23,7 @@
          </Directory>
          <Directory Id="ProgramFilesFolder">
             <Directory Id="INSTALLLOCATION" Name="Merkaartor $(var.VERSION)$(var.REVISION)">
-                <Directory Id="MERKAARTORHARE" Name="share">
+                <Directory Id="MERKAARTORSHARE" Name="share">
                 </Directory>
                 <Directory Id="MERKAARTORPLUGINS" Name="plugins">
                    <Directory Id="MPBACKGROUND" Name="background" />
@@ -71,11 +72,12 @@
 
       <DirectoryRef Id="INSTALLLOCATION">
          <Component Id="Merkaartor" Guid="5FDB24DB-CE92-433c-8AC4-288551C6AF7B">
-	          <RegistryValue Root="HKCU" Key="Software\Merkaartor" Name="Installed" Type="integer" Value="1"/>
+	          <RegistryValue Root="HKCU" Key="Software\Merkaartor $(var.VERSION)$(var.REVISION)" Name="Installed" Type="integer" Value="1"/>
             <File Id="MerkaartorExe" Name="Merkaartor.exe"
                Source="$(var.BinPath)\Merkaartor.exe" DiskId="1">
                <Shortcut Id="myshort" Directory="ProgramMenuFolder"
-                     Name="Merkaartor" WorkingDirectory="INSTALLLOCATION"/>
+                     Name="Merkaartor $(var.VERSION)$(var.REVISION)" WorkingDirectory="INSTALLLOCATION"
+					 Icon="MainIcon.exe" />
             </File>         
          </Component>
       </DirectoryRef>
@@ -109,7 +111,7 @@
          </Component>
       </DirectoryRef>
       
-	  <Feature Id="MerkaartorFeature" Title="Merkaartor editor" Level="1"
+      <Feature Id="MerkaartorFeature" Title="Merkaartor editor" Level="1"
          Display="expand" ConfigurableDirectory="INSTALLLOCATION">
          <ComponentRef Id="DllCt" />
          <ComponentRef Id="Merkaartor" />
