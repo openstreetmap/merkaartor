@@ -261,7 +261,7 @@ void MapView::drawGPS(QPainter & P)
 	if (Main->gps()->getGpsDevice()) {
 		if (Main->gps()->getGpsDevice()->fixStatus() == QGPSDevice::StatusActive) {
 			Coord vp(angToInt(Main->gps()->getGpsDevice()->latitude()), angToInt(Main->gps()->getGpsDevice()->longitude()));
-			QPointF g = projection().project(vp);
+			QPointF g = p->theTransform.map(projection().project(vp));
 			QPixmap pm = getPixmapFromFile(":/Gps/Gps_Marker.svg", 32);
 			P.drawPixmap(g - QPoint(16, 16), pm);
 		}
