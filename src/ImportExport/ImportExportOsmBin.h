@@ -29,6 +29,7 @@ class OsbRegion
 		~OsbRegion();
 
 		bool load(qint32 rg, MapDocument* d, OsbMapLayer* theLayer);
+		bool loadRegion(qint32 rg, MapDocument* d, OsbMapLayer* theLayer);
 		bool loadTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer);
 		bool clearRegion(MapDocument* d, OsbMapLayer* theLayer);
 		bool clearTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer);

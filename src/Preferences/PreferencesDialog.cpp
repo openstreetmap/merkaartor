@@ -405,6 +405,16 @@ void PreferencesDialog::on_btRelationsColor_clicked()
 		makeBoundaryIcon(btRelationsColor, RelationsColor);
 	}
 }
+void PreferencesDialog::on_btGpxTrackColor_clicked()
+{
+	bool OK = false;
+	QRgb rgb = QColorDialog::getRgba(GpxTrackColor.rgba(), &OK, this);
+	if (OK) {
+		GpxTrackColor = QColor::fromRgba(rgb);
+		makeBoundaryIcon(btGpxTrackColor, GpxTrackColor);
+	}
+}
+
 
 /* Tools */
 void PreferencesDialog::on_btAddTool_clicked(void)

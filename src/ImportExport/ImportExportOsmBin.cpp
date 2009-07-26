@@ -70,24 +70,30 @@ bool OsbRegion::load(qint32 rg, MapDocument* d, OsbMapLayer* theLayer)
 			return false;
 		}
 
-		device->seek(theOsb->theRegionToc[rg]);
-		QList< QPair < qint32, quint64 > > aTileList;
-
-		QDataStream ds(device);
-		ds >> aTileList;
-
-		for (int i=0; i<aTileList.size(); ++i) {
-			theTileToc[aTileList[i].first] = aTileList[i].second;
-		}
-		theRegionIndex = aTileList;
-
-		bool OK = false;
-		qint32 theRegionTile = theRegionIndex[0].first;
-		if (theRegionTile < 0)
-			OK = loadTile(theRegionTile, d, theLayer);
-
-		return OK;
+		loadRegion(0, d, theLayer);
+		return loadRegion(rg, d, theLayer);
 	}
+}
+
+bool OsbRegion::loadRegion(qint32 rg, MapDocument* d, OsbMapLayer* theLayer)
+{
+	device->seek(theOsb->theRegionToc[rg]);
+	QList< QPair < qint32, quint64 > > aTileList;
+
+	QDataStream ds(device);
+	ds >> aTileList;
+
+	for (int i=0; i<aTileList.size(); ++i) {
+		theTileToc[aTileList[i].first] = aTileList[i].second;
+	}
+	theRegionIndex = aTileList;
+
+	bool OK = true;
+	qint32 theRegionTile = theRegionIndex[0].first;
+	if (theRegionTile == -rg)
+		OK = loadTile(theRegionTile, d, theLayer);
+
+	return OK;
 }
 
 bool OsbRegion::loadTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer)
@@ -380,7 +386,7 @@ bool ImportExportOsmBin::writeIndex(QDataStream& ds, int selRegion)
 			rg = (y * NUM_REGIONS / NUM_TILES) * NUM_REGIONS + (x * NUM_REGIONS / NUM_TILES);
 		}
 
-		if (rg == selRegion || selRegion == -1) {
+		if (rg == selRegion || rg == 0 || selRegion == -1) {
 			theRegionIndex[rg].append(QPair < qint32, quint64 > (it.key(), Device->pos()));
 			writeFeatures(it.value(), ds);
 		}
@@ -758,6 +764,8 @@ bool ImportExportOsmBin::import(MapLayer* aLayer)
 
 bool ImportExportOsmBin::writeWorld(QDataStream& ds)
 {
+	theRegionToc[0] = 0;
+
 	if (! writeHeader(ds) ) return false;
 	if (! writeIndex(ds) ) return false;
 

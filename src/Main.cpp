@@ -94,7 +94,11 @@ int main(int argc, char** argv)
 {
 	QApplication app(argc,argv);
 
+#if defined(Q_OS_UNIX)
+	QString logFilename("/tmp/merkaartor.log");
+#else
 	QString logFilename(qApp->applicationDirPath() + "/merkaartor.log");
+#endif
 	QStringList fileNames;
 	QStringList args = QCoreApplication::arguments();
 	args.removeFirst();
@@ -117,7 +121,17 @@ int main(int argc, char** argv)
 	pLogFile = fopen(logFilename.toLatin1(), "a");
 	qInstallMsgHandler(myMessageOutput);
 
-	qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Starting " << QString("Merkaartor %1%2\n").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION));
+	qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Starting " << QString("Merkaartor %1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION));
+	qDebug() <<	"-------" << QString("using QT version %1 (built with %2)").arg(qVersion()).arg(QT_VERSION_STR);
+#ifdef Q_WS_X11
+	qDebug() << "-------" << "on X11";
+#endif
+#ifdef Q_WS_WIN
+	qDebug() << "-------" << "on Windows";
+#endif
+#ifdef Q_WS_MACX
+	qDebug() << "-------" << "on Mac OS/X";
+#endif
 
 	QCoreApplication::setOrganizationName("BartVanhauwaert");
 	QCoreApplication::setOrganizationDomain("www.irule.be");
@@ -186,7 +200,7 @@ int main(int argc, char** argv)
 
 	int x = app.exec();
 
-	qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Ending " << QString("Merkaartor %1%2\n").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION));
+	qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Ending " << QString("Merkaartor %1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION));
 	if(pLogFile)
 		fclose(pLogFile);
 

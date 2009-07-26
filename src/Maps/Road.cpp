@@ -348,7 +348,7 @@ bool Road::isCoastline()
 
 bool Road::isClosed() const
 {
-	return (!p->Nodes.size() && p->Nodes[0] == p->Nodes[p->Nodes.size()-1]);
+	return (p->Nodes.size() && p->Nodes[0] == p->Nodes[p->Nodes.size()-1]);
 }
 
 double Road::area()
@@ -1043,7 +1043,8 @@ QString Road::toHtml()
 	D += "<br/>";
 	D += "<i>"+QApplication::translate("MapFeature", "Botright")+": </i>" + QString::number(intToAng(bb.bottomRight().lat()), 'f', 4) + " / " + QString::number(intToAng(bb.bottomRight().lon()), 'f', 4);
 
-	return MapFeature::toMainHtml(QApplication::translate("MapFeature", "Way"), "way").arg(D);
+	QString type = isClosed() ? QApplication::translate("MapFeature", "Area") : QApplication::translate("MapFeature", "Way");
+	return MapFeature::toMainHtml(type, "way").arg(D);
 }
 
 void Road::toBinary(QDataStream& ds, QHash <QString, quint64>& theIndex)
