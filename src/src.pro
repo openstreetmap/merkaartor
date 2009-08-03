@@ -132,7 +132,7 @@ include(NameFinder/NameFinder.pri)
 		PREFIX = /usr/local
 	}
     isEmpty( LIBDIR ) {
-		LIBDIR = $${PREFIX}/lib
+		LIBDIR = $${PREFIX}/lib${LIB_SUFFIX}
 	}
 	DEFINES += PLUGINS_DIR=$${LIBDIR}/merkaartor/plugins
     target.path = $${PREFIX}/bin

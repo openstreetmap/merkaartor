@@ -43,7 +43,7 @@ unix {
 		PREFIX = /usr/local
 	}
     isEmpty( LIBDIR ) {
-		LIBDIR = $${PREFIX}/lib
+		LIBDIR = $${PREFIX}/lib${LIB_SUFFIX}
 	}
 
 	target.path = $${LIBDIR}/merkaartor/plugins
