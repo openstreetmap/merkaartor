@@ -23,7 +23,7 @@ const QString encodeAttributes(const QString & text)
 	s.replace( "\"", "&quot;" );
 	s.replace( "\'", "&apos;" );
 	return s;
-};
+}
 
 static QString tagOSM(const MapFeature& F)
 {

@@ -12,6 +12,7 @@ QString exportOSM(const Road& R, const QString&  ChangesetId);
 QString exportOSM(const Relation& R, const QString&  ChangesetId);
 
 QString wrapOSM(const QString& S, const QString& ChangeSetId);
+const QString encodeAttributes(const QString & text);
 
 #endif
 
