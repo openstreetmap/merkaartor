@@ -93,8 +93,9 @@ class MapFeaturePrivate
 			parentDashes << 1 << 5;
 		}
 
+		void updatePossiblePainters();
+		void blankPainters();
 		void updatePainters(double PixelPerM);
-		void blankPainters(double PixelPerM);
 		void initVersionNumber();
 
 		mutable QString Id;
@@ -427,12 +428,12 @@ QString MapFeature::tagValue(const QString& k, const QString& Default) const
 	return Default;
 }
 
-void MapFeaturePrivate::updatePainters(double PixelPerM)
+void MapFeaturePrivate::updatePossiblePainters()
 {
 	//if the object has no tags or only the created_by tag, we don't check for style
 	//search is about 15 times faster like that !!!
 	//However, still match features with no tags and no parent, i.e. "lost" trackpoints
-	if ( (theFeature->layer()->isTrack()) && MerkaartorPreferences::instance()->getDisableStyleForTracks() ) return blankPainters(PixelPerM);
+	if ( (theFeature->layer()->isTrack()) && MerkaartorPreferences::instance()->getDisableStyleForTracks() ) return blankPainters();
 
 	if ( (theFeature->layer()->isTrack()) || theFeature->sizeParents() ) {
 		int i;
@@ -440,32 +441,36 @@ void MapFeaturePrivate::updatePainters(double PixelPerM)
 			if ((theFeature->tagKey(i) != "created_by") && (theFeature->tagKey(i) != "ele"))
 				break;
 
-		if (i == theFeature->tagSize()) return blankPainters(PixelPerM);
+		if (i == theFeature->tagSize()) return blankPainters();
 	}
 
-	if (PixelPerMForPainter < 0)
+	PossiblePainters.clear();
+	QList<const FeaturePainter*> DefaultPainters;
+	for (int i=0; i<M_STYLE->painterSize(); ++i)
 	{
-		PossiblePainters.clear();
-		QList<const FeaturePainter*> DefaultPainters;
-		for (int i=0; i<M_STYLE->painterSize(); ++i)
-		{
-			const FeaturePainter* Current = M_STYLE->getPainter(i);
-			switch (Current->matchesTag(theFeature)) {
-				case TagSelect_Match:
-					PossiblePainters.push_back(Current);
-					break;
-				case TagSelect_DefaultMatch:
-					DefaultPainters.push_back(Current);
-					break;
-				default:
-					break;
-			}
+		const FeaturePainter* Current = M_STYLE->getPainter(i);
+		switch (Current->matchesTag(theFeature)) {
+			case TagSelect_Match:
+				PossiblePainters.push_back(Current);
+				break;
+			case TagSelect_DefaultMatch:
+				DefaultPainters.push_back(Current);
+				break;
+			default:
+				break;
 		}
-		if (!PossiblePainters.size())
-			PossiblePainters = DefaultPainters;
-		PossiblePaintersUpToDate = true;
-		HasPainter = (PossiblePainters.size() > 0);
 	}
+	if (!PossiblePainters.size())
+		PossiblePainters = DefaultPainters;
+	PossiblePaintersUpToDate = true;
+	HasPainter = (PossiblePainters.size() > 0);
+}
+
+void MapFeaturePrivate::updatePainters(double PixelPerM)
+{
+	if (!PossiblePaintersUpToDate)
+		updatePossiblePainters();
+
 	CurrentPainter = 0;
 	PixelPerMForPainter = PixelPerM;
 	for (int i=0; i<PossiblePainters.size(); ++i)
@@ -476,11 +481,11 @@ void MapFeaturePrivate::updatePainters(double PixelPerM)
 		}
 }
 
-void MapFeaturePrivate::blankPainters(double PixelPerM)
+void MapFeaturePrivate::blankPainters()
 {
 	CurrentPainter = 0;
-	PixelPerMForPainter = PixelPerM;
 	PossiblePainters.clear();
+	PossiblePaintersUpToDate = true;
 	HasPainter = false;
 }
 
@@ -498,6 +503,9 @@ const FeaturePainter* MapFeature::getCurrentEditPainter() const
 
 bool MapFeature::hasEditPainter() const
 {
+	if (!p->PossiblePaintersUpToDate)
+		p->updatePossiblePainters();
+
 	return p->HasPainter;
 }
 
