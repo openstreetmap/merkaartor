@@ -334,6 +334,7 @@ void MapFeature::setTag(int index, const QString& key, const QString& value, boo
 		p->Tags.insert(p->Tags.begin() + index, qMakePair(key,value));
 		p->TagsSize++;
 	}
+	invalidatePainter();
 	invalidateMeta();
 
 	if (parent() && addToTagList)
@@ -353,6 +354,7 @@ void MapFeature::setTag(const QString& key, const QString& value, bool addToTagL
 	p->Tags.push_back(qMakePair(key,value));
 	p->TagsSize++;
 	invalidateMeta();
+	invalidatePainter();
 
 	if (parent() && addToTagList)
 		if (dynamic_cast<MapLayer*>(parent())->getDocument())
@@ -365,6 +367,7 @@ void MapFeature::clearTags()
 	p->Tags.clear();
 	p->TagsSize = 0;
 	invalidateMeta();
+	invalidatePainter();
 }
 
 void MapFeature::invalidateMeta()
@@ -388,6 +391,8 @@ void MapFeature::clearTag(const QString& k)
 			p->TagsSize--;
 			return;
 		}
+	invalidateMeta();
+	invalidatePainter();
 }
 
 void MapFeature::removeTag(int idx)
@@ -395,6 +400,8 @@ void MapFeature::removeTag(int idx)
 	p->PixelPerMForPainter = -1;
 	p->Tags.erase(p->Tags.begin()+idx);
 	p->TagsSize--;
+	invalidateMeta();
+	invalidatePainter();
 }
 
 int MapFeature::tagSize() const
