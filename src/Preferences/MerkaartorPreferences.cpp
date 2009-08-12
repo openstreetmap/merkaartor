@@ -460,6 +460,13 @@ void MerkaartorPreferences::initialize()
 		setProxyHost(h);
 		setProxyPort(p);
 	}
+
+	parentDashes << 1 << 5;
+}
+
+const QVector<qreal> MerkaartorPreferences::getParentDashes() const
+{
+	return parentDashes;
 }
 
 bool MerkaartorPreferences::getRightSideDriving() const
@@ -1242,7 +1249,7 @@ void MerkaartorPreferences::setShortcuts(const QStringList & theValue)
 }
 
 /* Styles */
-M_PARAM_IMPLEMENT_STRING(DefaultStyle, style, ":/Styles/Classic.mas")
+M_PARAM_IMPLEMENT_STRING(DefaultStyle, style, ":/Styles/Mapnik.mas")
 M_PARAM_IMPLEMENT_STRING(CustomStyle, style, "")
 M_PARAM_IMPLEMENT_BOOL(DisableStyleForTracks, style, true)
 

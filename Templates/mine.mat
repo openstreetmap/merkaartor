@@ -80,6 +80,7 @@
     <description locale="ar" >المحلة (مكان/محلة ذات إسم)</description>
     <description locale="cs" >Lokalita (pojmenované místo)</description>
     <description locale="de" >Ort (benannter Platz)</description>
+    <description locale="es" >Localidad (lugar)</description>
     <description locale="fr" >Lieu-dit</description>
     <description locale="it" >Località (nome luogo)</description>
     <description locale="pl" >Miejsce (nazwane)</description>
@@ -204,6 +205,7 @@
     <description locale="ar" >طلعة إلى طريق رئيسية</description>
     <description locale="cs" >Nájezd na silnici I. třídy</description>
     <description locale="de" >Bundesstraßenanschlussstelle</description>
+    <description locale="es" >Rampa al camino primario</description>
     <description locale="fr" >Voie d&apos;accès à une route nationale</description>
     <description locale="it" >Svincolo per strada primaria</description>
     <description locale="ja" >都道府県道の乗り口</description>
@@ -227,6 +229,7 @@
     <description locale="ar" >طريق ثلاثية</description>
     <description locale="cs" >Silnice III. třídy</description>
     <description locale="de" >Kreisstraße</description>
+    <description locale="es" >Camino terciario</description>
     <description locale="fr" >Petite départementale ou communale</description>
     <description locale="it" >Strada terziaria</description>
     <description locale="pl" >Droga powiatowa</description>
@@ -249,6 +252,7 @@
     <description locale="ar" >طريق سكن</description>
     <description locale="cs" >Obecní komunikace</description>
     <description locale="de" >Ortsstraße</description>
+    <description locale="es" >Camino residencial</description>
     <description locale="fr" >Rue résidentielle</description>
     <description locale="it" >Strada residenziale</description>
     <description locale="pl" >Droga lokalna</description>
@@ -258,6 +262,7 @@
     <description locale="en" >Service road</description>
     <description locale="cs" >Účelová komunikace</description>
     <description locale="de" >Zufahrtstraße</description>
+    <description locale="es" >Camino de servicio</description>
     <description locale="fr" >Route d&apos;accès</description>
     <description locale="it" >Strada di servizio</description>
     <description locale="ja" >サービス道</description>
@@ -622,6 +627,7 @@
    <description locale="ar" >خدمات</description>
    <description locale="cs" >Občanská vybavenost</description>
    <description locale="de" >Nutzung</description>
+   <description locale="es" >Comodidades</description>
    <description locale="fr" >Équipement</description>
    <description locale="it" >Attrattiva</description>
    <description locale="ja" >各種施設</description>
@@ -774,6 +780,7 @@
     <description locale="ar" >مشاركة سيارات</description>
     <description locale="cs" >Sdílení aut</description>
     <description locale="de" >Autotausch</description>
+    <description locale="es" >Compartir auto</description>
     <description locale="fr" >Co-voiturage</description>
     <description locale="it" >Car Sharing</description>
     <description locale="ja" >カーシェアリング</description>
@@ -1082,6 +1089,7 @@
     <description locale="ar" >مرافق إعادة التدوير</description>
     <description locale="cs" >Recyklační místo</description>
     <description locale="de" >Recycling-Einrichtung</description>
+    <description locale="es" >Instalacion</description>
     <description locale="fr" >Point de collecte pour le recyclage</description>
     <description locale="it" >Impianti di riciclaggio</description>
     <description locale="pl" >Centrum recyklingowe</description>
@@ -1351,6 +1359,7 @@
    <description locale="ar" >خدمات</description>
    <description locale="cs" >Občanská vybavenost</description>
    <description locale="de" >Nutzung</description>
+   <description locale="es" >Comodidades</description>
    <description locale="fr" >Équipement</description>
    <description locale="it" >Attrattiva</description>
    <description locale="ja" >各種施設</description>
@@ -1393,6 +1402,7 @@
    <description locale="ar" >خدمات</description>
    <description locale="cs" >Občanská vybavenost</description>
    <description locale="de" >Nutzung</description>
+   <description locale="es" >Comodidades</description>
    <description locale="fr" >Équipement</description>
    <description locale="it" >Attrattiva</description>
    <description locale="ja" >各種施設</description>
@@ -1483,6 +1493,7 @@
   <description locale="en" >Generic Ways</description>
   <description locale="cs" >Obecné cesty</description>
   <description locale="de" >Generische Wege</description>
+  <description locale="es" >Metodos genericos</description>
   <description locale="fr" >Routes génériques</description>
   <description locale="it" >Strade Generiche</description>
   <description locale="pl" >Ogólne drogi</description>

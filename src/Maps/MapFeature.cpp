@@ -80,7 +80,6 @@ class MapFeaturePrivate
 				Time(QDateTime::currentDateTime()), Deleted(false), Uploaded(false), LongId(0)
 		{
 			initVersionNumber();
-			parentDashes << 1 << 5;
 		}
 		MapFeaturePrivate(const MapFeaturePrivate& other)
 			: Tags(other.Tags), TagsSize(other.TagsSize), LastActor(other.LastActor), 
@@ -90,7 +89,6 @@ class MapFeaturePrivate
 				Time(other.Time), Deleted(false), Uploaded(false), LongId(0)
 		{
 			initVersionNumber();
-			parentDashes << 1 << 5;
 		}
 
 		void updatePossiblePainters();
@@ -113,7 +111,6 @@ class MapFeaturePrivate
 		QDateTime Time;
 		QString User;
 		int VersionNumber;
-		QVector<qreal> parentDashes;
 		bool Deleted;
 		bool Uploaded;
 		qint64 LongId;
@@ -610,11 +607,6 @@ QString MapFeature::stripToOSMId(const QString& id)
 	if (f>0)
 		return id.right(id.length()-(f+1));
 	return id;
-}
-
-QVector<qreal> MapFeature::getParentDashes() const
-{
-	return p->parentDashes;
 }
 
 Relation * MapFeature::GetSingleParentRelation(MapFeature * mapFeature)

@@ -80,6 +80,7 @@
     <description locale="ar" >المحلة (مكان/محلة ذات إسم)</description>
     <description locale="cs" >Lokalita (pojmenované místo)</description>
     <description locale="de" >Ort (benannter Platz)</description>
+    <description locale="es" >Localidad (lugar)</description>
     <description locale="fr" >Lieu-dit</description>
     <description locale="it" >Località (nome luogo)</description>
     <description locale="pl" >Miejsce (nazwane)</description>
@@ -204,6 +205,7 @@
     <description locale="ar" >طلعة إلى طريق رئيسية</description>
     <description locale="cs" >Nájezd na silnici I. třídy</description>
     <description locale="de" >Bundesstraßenanschlussstelle</description>
+    <description locale="es" >Rampa al camino primario</description>
     <description locale="fr" >Voie d&apos;accès à une route nationale</description>
     <description locale="it" >Svincolo per strada primaria</description>
     <description locale="ja" >都道府県道の乗り口</description>
@@ -227,6 +229,7 @@
     <description locale="ar" >طريق ثلاثية</description>
     <description locale="cs" >Silnice III. třídy</description>
     <description locale="de" >Kreisstraße</description>
+    <description locale="es" >Camino terciario</description>
     <description locale="fr" >Petite départementale ou communale</description>
     <description locale="it" >Strada terziaria</description>
     <description locale="pl" >Droga powiatowa</description>
@@ -249,6 +252,7 @@
     <description locale="ar" >طريق سكن</description>
     <description locale="cs" >Obecní komunikace</description>
     <description locale="de" >Ortsstraße</description>
+    <description locale="es" >Camino residencial</description>
     <description locale="fr" >Rue résidentielle</description>
     <description locale="it" >Strada residenziale</description>
     <description locale="pl" >Droga lokalna</description>
@@ -258,6 +262,7 @@
     <description locale="en" >Service road</description>
     <description locale="cs" >Účelová komunikace</description>
     <description locale="de" >Zufahrtstraße</description>
+    <description locale="es" >Camino de servicio</description>
     <description locale="fr" >Route d&apos;accès</description>
     <description locale="it" >Strada di servizio</description>
     <description locale="ja" >サービス道</description>
@@ -623,6 +628,7 @@
    <description locale="ar" >خدمات</description>
    <description locale="cs" >Občanská vybavenost</description>
    <description locale="de" >Nutzung</description>
+   <description locale="es" >Comodidades</description>
    <description locale="fr" >Équipement</description>
    <description locale="it" >Attrattiva</description>
    <description locale="ja" >各種施設</description>
@@ -775,6 +781,7 @@
     <description locale="ar" >مشاركة سيارات</description>
     <description locale="cs" >Sdílení aut</description>
     <description locale="de" >Autotausch</description>
+    <description locale="es" >Compartir auto</description>
     <description locale="fr" >Co-voiturage</description>
     <description locale="it" >Car Sharing</description>
     <description locale="ja" >カーシェアリング</description>
@@ -1083,6 +1090,7 @@
     <description locale="ar" >مرافق إعادة التدوير</description>
     <description locale="cs" >Recyklační místo</description>
     <description locale="de" >Recycling-Einrichtung</description>
+    <description locale="es" >Instalacion</description>
     <description locale="fr" >Point de collecte pour le recyclage</description>
     <description locale="it" >Impianti di riciclaggio</description>
     <description locale="pl" >Centrum recyklingowe</description>
@@ -1298,27 +1306,35 @@
    <widget tag="addr:housenumber" type="edit" id="housenumber">
      <link src="http://wiki.openstreetmap.org/wiki/Key:addr" />
      <description locale="en" >House number</description>
+     <description locale="de" >Hausnummer</description>
      <description locale="fr" >Numéro de Maison</description>
    </widget>
    <widget tag="addr:street" type="edit" id="housestreet">
      <link src="http://wiki.openstreetmap.org/wiki/Key:addr" />
      <description locale="en" >House street</description>
+     <description locale="de" >Straße zum Haus</description>
+     <description locale="es" >Calle de la casa</description>
      <description locale="fr" >Rue de la Maison</description>
    </widget>
    <widget tag="addr:interpolation" type="combo" id="houseinterpolation">
      <link src="http://wiki.openstreetmap.org/wiki/Key:addr" />
      <description locale="en" >Number interpolation</description>
+     <description locale="de" >Nummerninterpolation</description>
+     <description locale="es" >Numero de interpolacion</description>
      <description locale="fr" >Interpolation de numéro</description>
      <value tag="even" >
        <description locale="en" >even</description>
+       <description locale="de" >gerade</description>
        <description locale="fr" >pair</description>
      </value>
      <value tag="odd" >
        <description locale="en" >odd</description>
+       <description locale="de" >ungerade</description>
        <description locale="fr" >impair</description>
      </value>
      <value tag="all" >
        <description locale="en" >all</description>
+       <description locale="de" >alle</description>
        <description locale="fr" >tous</description>
      </value>
    </widget>
@@ -1328,6 +1344,8 @@
     <selector expr="not [addr:housenumber] is _NULL_ and Type is TrackPoint" />
     <link src="http://wiki.openstreetmap.org/wiki/Key:addr" />
     <description locale="en" >House number (Karlsruhe Schema)</description>
+    <description locale="de" >Hausnummer (Karlsruhe-Methode)</description>
+    <description locale="es" >Numero de la casa (Esquema de Karlsruhe)</description>
     <description locale="fr" >Numéro de Maison (Schéma de Karlsruhe)</description>
     <widgetref id="housenumber" />
   </template>
@@ -1335,6 +1353,7 @@
     <selector expr="not [addr:interpolation] is _NULL_ and Type is Road" />
     <link src="http://wiki.openstreetmap.org/wiki/Key:addr" />
     <description locale="en" >House number scheme (Karlsruhe)</description>
+    <description locale="de" >Hausnummernmethode (Karlsruhe)</description>
     <description locale="fr" >Schéma de numéro de Maison (Schéma de Karlsruhe)</description>
     <widgetref id="houseinterpolation" />
     <widgetref id="housestreet" />
@@ -1358,6 +1377,7 @@
    <description locale="ar" >خدمات</description>
    <description locale="cs" >Občanská vybavenost</description>
    <description locale="de" >Nutzung</description>
+   <description locale="es" >Comodidades</description>
    <description locale="fr" >Équipement</description>
    <description locale="it" >Attrattiva</description>
    <description locale="ja" >各種施設</description>
@@ -1399,6 +1419,7 @@
    <description locale="ar" >خدمات</description>
    <description locale="cs" >Občanská vybavenost</description>
    <description locale="de" >Nutzung</description>
+   <description locale="es" >Comodidades</description>
    <description locale="fr" >Équipement</description>
    <description locale="it" >Attrattiva</description>
    <description locale="ja" >各種施設</description>
@@ -1489,6 +1510,7 @@
   <description locale="en" >Generic Ways</description>
   <description locale="cs" >Obecné cesty</description>
   <description locale="de" >Generische Wege</description>
+  <description locale="es" >Metodos genericos</description>
   <description locale="fr" >Routes génériques</description>
   <description locale="it" >Strade Generiche</description>
   <description locale="pl" >Ogólne drogi</description>

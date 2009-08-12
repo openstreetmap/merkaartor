@@ -134,6 +134,8 @@ public:
 	void putOsmPref(const QString& k, const QString& v);
 	void deleteOsmPref(const QString& k);
 
+	const QVector<qreal> getParentDashes() const;
+
 	//bool use06Api() const;
 	void setUse06Api(bool b);
 	const QString apiVersion() const;
@@ -387,6 +389,8 @@ public:
 
 
 protected:
+	QVector<qreal> parentDashes;
+
 	bool Use06Api;
 	QString version;
 	bool RightSideDriving;

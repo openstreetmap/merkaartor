@@ -377,7 +377,7 @@ void Road::drawHover(QPainter& thePainter, MapView* theView, bool solid)
 	QPen TP(MerkaartorPreferences::instance()->getHoverColor());
 	TP.setWidth(MerkaartorPreferences::instance()->getHoverWidth());
 	if (!solid) {
-		TP.setDashPattern(getParentDashes());
+		TP.setDashPattern(M_PREFS->getParentDashes());
 	}
 	thePainter.setPen(TP);
 	thePainter.setBrush(Qt::NoBrush);
@@ -414,7 +414,7 @@ void Road::drawHighlight(QPainter& thePainter, MapView* theView, bool solid)
 	QPen TP(MerkaartorPreferences::instance()->getHighlightColor());
 	TP.setWidth(MerkaartorPreferences::instance()->getHighlightWidth());
 	if (!solid) {
-		TP.setDashPattern(getParentDashes());
+		TP.setDashPattern(M_PREFS->getParentDashes());
 	}
 	thePainter.setPen(TP);
 	thePainter.setBrush(Qt::NoBrush);
@@ -451,7 +451,7 @@ void Road::drawFocus(QPainter& thePainter, MapView* theView, bool solid)
 	QPen TP(MerkaartorPreferences::instance()->getFocusColor());
 	TP.setWidth(MerkaartorPreferences::instance()->getFocusWidth());
 	if (!solid) {
-		TP.setDashPattern(getParentDashes());
+		TP.setDashPattern(M_PREFS->getParentDashes());
 	}
 	thePainter.setPen(TP);
 	thePainter.setBrush(Qt::NoBrush);

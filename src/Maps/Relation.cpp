@@ -154,7 +154,7 @@ void Relation::drawFocus(QPainter& P, MapView* theView, bool solid)
 {
 	if (!solid) {
 		QPen thePen(M_PREFS->getFocusColor(),M_PREFS->getFocusWidth());
-		thePen.setDashPattern(getParentDashes());
+		thePen.setDashPattern(M_PREFS->getParentDashes());
 		P.setPen(thePen);
 		P.drawPath(theView->transform().map(p->theBoundingPath));
 	} else {
@@ -177,7 +177,7 @@ void Relation::drawHover(QPainter& P, MapView* theView, bool solid)
 {
 	if (!solid) {
 		QPen thePen(M_PREFS->getHoverColor(),M_PREFS->getHoverWidth());
-		thePen.setDashPattern(getParentDashes());
+		thePen.setDashPattern(M_PREFS->getParentDashes());
 		P.setPen(thePen);
 		P.drawPath(theView->transform().map(p->theBoundingPath));
 	} else {
@@ -200,7 +200,7 @@ void Relation::drawHighlight(QPainter& P, MapView* theView, bool solid)
 {
 	if (!solid) {
 		QPen thePen(M_PREFS->getHoverColor(),M_PREFS->getHighlightWidth());
-		thePen.setDashPattern(getParentDashes());
+		thePen.setDashPattern(M_PREFS->getParentDashes());
 		P.setPen(thePen);
 		P.drawPath(theView->transform().map(p->theBoundingPath));
 	} else {
