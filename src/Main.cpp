@@ -167,7 +167,10 @@ int main(int argc, char** argv)
 		if (plugin) {
 			IMapAdapter *plg = qobject_cast<IMapAdapter *>(plugin);
 			if (plg)
-				M_PREFS->addBackgroundPlugin(plg);
+#ifndef USE_WEBKIT
+				if (plg->getType() != IMapAdapter::BrowserBackground)
+#endif
+					M_PREFS->addBackgroundPlugin(plg);
 		}
 	}
 

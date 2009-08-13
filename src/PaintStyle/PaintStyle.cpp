@@ -1134,15 +1134,15 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, MapView& theView) 
 
 				thePainter.setPen(QPen(LabelColor, BG_PEN_SZ));
 				thePainter.setBrush(LabelBackgroundColor);
-				thePainter.drawPath(theView.transform().map(bgPath));
+				thePainter.drawPath(bgPath);
 
 				if (getLabelHalo()) {
 					thePainter.setPen(QPen(Qt::white, font.pixelSize()/5));
-					thePainter.drawPath(theView.transform().map(textPath));
+					thePainter.drawPath(textPath);
 				}
 				thePainter.setPen(Qt::NoPen);
 				thePainter.setBrush(LabelColor);
-				thePainter.drawPath(theView.transform().map(textPath));
+				thePainter.drawPath(textPath);
 
 				thePainter.restore();
 

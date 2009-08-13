@@ -25,6 +25,7 @@
 static const QUuid theUid ( 0x67cc0481, 0x8c6a, 0x4735, 0x86, 0x66, 0xbb, 0xa6, 0xa1, 0xb0, 0x4e, 0x19);
 
 YahooLegalMapAdapter::YahooLegalMapAdapter()
+		: theImageManager(0)
 {
 	loc = QLocale(QLocale::English);
 	loc.setNumberOptions(QLocale::OmitGroupSeparator);

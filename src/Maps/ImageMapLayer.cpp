@@ -176,10 +176,12 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
 	if (p->theMapAdapter) {
 		p->theProjection.setProjectionType(p->theMapAdapter->projection());
 		ImageManager* m;
-		BrowserImageManager* b;
-		switch (p->theMapAdapter->getType()) {
 #ifdef USE_WEBKIT
+		BrowserImageManager* b;
+#endif
+		switch (p->theMapAdapter->getType()) {
 			case IMapAdapter::BrowserBackground :
+#ifdef USE_WEBKIT
 				b = new BrowserImageManager();
 				connect(b, SIGNAL(imageRequested()),
 					this, SLOT(on_imageRequested()), Qt::QueuedConnection);
@@ -192,8 +194,8 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
 				#endif // BROWSERIMAGEMANAGER_IS_THREADED
 				p->theImageManager = b;
 				p->theMapAdapter->setImageManager(p->theImageManager);
-				break;
 #endif
+				break;
 			case IMapAdapter::DirectBackground :
 				m = new ImageManager();
 				connect(m, SIGNAL(imageRequested()),
@@ -206,8 +208,10 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
 				p->theMapAdapter->setImageManager(p->theImageManager);
 				break;
 		}
-		p->theImageManager->setCacheDir(M_PREFS->getCacheDir());
-		p->theImageManager->setCacheMaxSize(M_PREFS->getCacheSize());
+		if (p->theImageManager) {
+			p->theImageManager->setCacheDir(M_PREFS->getCacheDir());
+			p->theImageManager->setCacheMaxSize(M_PREFS->getCacheSize());
+		}
 	}
 }
 
@@ -279,6 +283,8 @@ void ImageMapLayer::drawImage(QPixmap& thePix, QPoint delta)
 {
 	if (!p->theMapAdapter)
 		return;
+	if (!p->theMapAdapter->getImageManager())
+		return;
 
 	const QSize ps = p->pr.size();
 	const QSize pmSize = p->pm.size();
@@ -311,6 +317,8 @@ void ImageMapLayer::zoom(double zoom, const QPoint& pos, const QRect& rect)
 {
 	if (!p->theMapAdapter)
 		return;
+	if (!p->theMapAdapter->getImageManager())
+		return;
 
 	QPixmap tpm = p->pm.scaled(rect.size() * zoom, Qt::KeepAspectRatio);
 	p->pm.fill(Qt::transparent);
@@ -321,6 +329,8 @@ void ImageMapLayer::zoom(double zoom, const QPoint& pos, const QRect& rect)
 void ImageMapLayer::forceRedraw(MapView& theView, QRect Screen)
 {
 	if (!p->theMapAdapter)
+		return;
+	if (!p->theMapAdapter->getImageManager())
 		return;
 
 	if (p->pm.size() != Screen.size()) {
@@ -342,6 +352,8 @@ void ImageMapLayer::forceRedraw(MapView& theView, QRect Screen)
 void ImageMapLayer::draw(MapView& theView, QRect& rect)
 {
 	if (!p->theMapAdapter)
+		return;
+	if (!p->theMapAdapter->getImageManager())
 		return;
 
 	if (p->theMapAdapter->isTiled())
