@@ -71,9 +71,9 @@ void showVersion()
 {
 	QString o;
 	o = QString("Merkaartor %1%2\n").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION));
-	fprintf(stdout, o.toLatin1());
+	fprintf(stdout, "%s", o.toLatin1());
 	o = QString("using QT version %1 (built with %2)\n").arg(qVersion()).arg(QT_VERSION_STR);
-	fprintf(stdout, o.toLatin1());
+	fprintf(stdout, "%s", o.toLatin1());
 	fprintf(stdout, "Copyright Bart Vanhauwaert, Chris Browet and others, 2006-2009\n");
 	fprintf(stdout, "This program is licensed under the GNU Public License v2\n");
 }
