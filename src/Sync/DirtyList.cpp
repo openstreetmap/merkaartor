@@ -536,7 +536,6 @@ bool DirtyListExecutor::stop()
 bool DirtyListExecutor::addRelation(Relation *R)
 {
 	Progress->setValue(++Done);
-	if (!R->isDirty()) return false;
 
 	qDebug() << QString("ADD relation %1").arg(R->id());
 
@@ -566,7 +565,6 @@ bool DirtyListExecutor::addRelation(Relation *R)
 bool DirtyListExecutor::addRoad(Road *R)
 {
 	Progress->setValue(++Done);
-	if (!R->isDirty()) return false;
 
 	qDebug() << QString("ADD road %1").arg(R->id());
 
@@ -597,7 +595,6 @@ bool DirtyListExecutor::addRoad(Road *R)
 bool DirtyListExecutor::addPoint(TrackPoint* Pt)
 {
 	Progress->setValue(++Done);
-	if (!Pt->isDirty()) return false;
 
 	qDebug() << QString("ADD trackpoint %1").arg(Pt->id());
 
@@ -629,7 +626,6 @@ bool DirtyListExecutor::addPoint(TrackPoint* Pt)
 bool DirtyListExecutor::updateRelation(Relation* R)
 {
 	Progress->setValue(++Done);
-	if (!R->isDirty()) return false;
 
 	qDebug() << QString("UPDATE relation %1").arg(R->id());
 
@@ -660,7 +656,6 @@ bool DirtyListExecutor::updateRelation(Relation* R)
 bool DirtyListExecutor::updateRoad(Road* R)
 {
 	Progress->setValue(++Done);
-	if (!R->isDirty()) return false;
 
 	qDebug() << QString("UPDATE road %1").arg(R->id());
 
@@ -690,7 +685,6 @@ bool DirtyListExecutor::updateRoad(Road* R)
 bool DirtyListExecutor::updatePoint(TrackPoint* Pt)
 {
 	Progress->setValue(++Done);
-	if (!Pt->isDirty()) return false;
 
 	qDebug() << QString("UPDATE trackpoint %1").arg(Pt->id());
 
@@ -722,7 +716,6 @@ bool DirtyListExecutor::updatePoint(TrackPoint* Pt)
 bool DirtyListExecutor::erasePoint(TrackPoint *Pt)
 {
 	Progress->setValue(++Done);
-	if (!Pt->isDirty()) return false;
 
 	qDebug() << QString("REMOVE trackpoint %1").arg(Pt->id());
 
@@ -748,7 +741,6 @@ bool DirtyListExecutor::erasePoint(TrackPoint *Pt)
 bool DirtyListExecutor::eraseRoad(Road *R)
 {
 	Progress->setValue(++Done);
-	if (!R->isDirty()) return false;
 
 	qDebug() << QString("REMOVE road %1").arg(R->id());
 
@@ -774,7 +766,6 @@ bool DirtyListExecutor::eraseRoad(Road *R)
 bool DirtyListExecutor::eraseRelation(Relation *R)
 {
 	Progress->setValue(++Done);
-	if (!R->isDirty()) return false;
 
 	qDebug() << QString("REMOVE relation %1").arg(R->id());
 
