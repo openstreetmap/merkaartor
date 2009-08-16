@@ -63,7 +63,7 @@ void ImportExportSHP::parseGeometry(MapLayer* aLayer, OGRGeometry *poGeometry)
 	{
 		OGRPoint *poPoint = (OGRPoint *) poGeometry;
 		x = poPoint->getX(); y = poPoint->getY();
-		if (!theProjection)
+		if (!theProjection || theProjection->projIsLatLong())
 			N = new TrackPoint(Coord(angToInt(y), angToInt(x)));
 		else {
 			theProjection->projTransformToWGS84(1, 0, &x, &y, NULL);
@@ -84,7 +84,7 @@ void ImportExportSHP::parseGeometry(MapLayer* aLayer, OGRGeometry *poGeometry)
 			for(int i=0; i<numNode-1; i++) {
 				poRing->getPoint(i, &p);
 				x = p.getX(); y = p.getY();
-				if (!theProjection)
+				if (!theProjection || theProjection->projIsLatLong())
 					N = new TrackPoint(Coord(angToInt(y), angToInt(x)));
 				else {
 					theProjection->projTransformToWGS84(1, 0, &x, &y, NULL);
@@ -110,7 +110,7 @@ void ImportExportSHP::parseGeometry(MapLayer* aLayer, OGRGeometry *poGeometry)
 			for(int i=0; i<numNode; i++) {
 				poLS->getPoint(i, &p);
 				x = p.getX(); y = p.getY();
-				if (!theProjection)
+				if (!theProjection || theProjection->projIsLatLong())
 					N = new TrackPoint(Coord(angToInt(y), angToInt(x)));
 				else {
 					theProjection->projTransformToWGS84(1, 0, &x, &y, NULL);

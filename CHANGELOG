@@ -1,3 +1,9 @@
+v0.15
+	* FIX : Handle latlong projection in SHP files (fixes #2183)
+	* FIX : remove s60 extensions (fixes #2185)
+	* FIX : allow non-uploadable nodes to be uploaded when they are part of of a created road (fixes #2175)
+	* FIX : fixes building Merkaartor 0.14 with the -Werror=format-security CFLAG, which is used by default in Mandriva
+	* FIX : remove Yahoo when NOUSEWEBKIT is enabled
 v0.14
     * FIX : Optimize painter/style update
     * FIX : XML encode the changeset comments (fixes #2115)
