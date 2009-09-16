@@ -1010,16 +1010,6 @@ void MerkaartorPreferences::setOsmPassword(const QString & theValue)
 	Sets->setValue("osm/Password", theValue);
 }
 
-QString MerkaartorPreferences::getGpsPort() const
-{
-	return Sets->value("gps/port", "/dev/rfcomm0").toString();
-}
-
-void MerkaartorPreferences::setGpsPort(const QString & theValue)
-{
-	Sets->setValue("gps/port", theValue);
-}
-
 M_PARAM_IMPLEMENT_DOUBLE(MaxDistNodes, data, 0.0)
 
 bool MerkaartorPreferences::getAutoSaveDoc() const
@@ -1264,6 +1254,16 @@ M_PARAM_IMPLEMENT_BOOL(SimpleGpxTrack, visual, false)
 M_PARAM_IMPLEMENT_STRING(DefaultTemplate, templates, ":/Templates/default.mat")
 M_PARAM_IMPLEMENT_STRING(CustomTemplate, templates, "")
 
+/* GPS */
+#ifdef Q_OS_WIN
+M_PARAM_IMPLEMENT_BOOL(GpsUseGpsd, gps, false)
+M_PARAM_IMPLEMENT_STRING(GpsPort, gps, "COM1")
+#else
+M_PARAM_IMPLEMENT_BOOL(GpsUseGpsd, gps, true))
+M_PARAM_IMPLEMENT_STRING(GpsPort, gps, "/dev/rfcomm0")
+#endif
+M_PARAM_IMPLEMENT_STRING(GpsdHost, gps, "localhost")
+M_PARAM_IMPLEMENT_INT(GpsdPort, gps, 2947)
 M_PARAM_IMPLEMENT_BOOL(GpsSaveLog, gps, false)
 M_PARAM_IMPLEMENT_BOOL(GpsMapCenter, gps, false)
 M_PARAM_IMPLEMENT_STRING(GpsLogDir, gps, "")

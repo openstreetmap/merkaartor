@@ -10,7 +10,6 @@
 # GDAL    	      - enable GDAL
 # MOBILE    	      - enable MOBILE
 # GEOIMAGE            - enable geotagged images (needs exiv2)
-# GPSD                - use gpsd as location provider
 # NVIDIA_HACK         - used to solve nvidia specific slowdown
 # FORCE_CUSTOM_STYLE  - force custom style (recommended on Linux until the "expanding dock" is solved upstream)
 # THREADED_BROWSERIMAGEMANAGER
@@ -61,10 +60,6 @@ win32 {
 	INCLUDEPATH += $$COMMON_DIR/include
 	LIBS += -L$$COMMON_DIR/lib
 	RC_FILE = $$PWD/../Icons/merkaartor-win32.rc
-}
-
-contains(GPSD,1) {
-    DEFINES += USEGPSD
 }
 
 contains(FORCE_CUSTOM_STYLE,1) {

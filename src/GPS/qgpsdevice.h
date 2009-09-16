@@ -197,7 +197,9 @@ class QGPSDevice : public QThread
         FixMode cur_fixMode;
         FixStatus cur_fixStatus;
         
-        bool parseGGA(const char *ggaString = 0);
+		QFile* LogFile;
+		void parseNMEA(const QByteArray& array);
+		bool parseGGA(const char *ggaString = 0);
         bool parseGLL(const char *ggaString = 0);
         bool parseGSA(const char *gsaString = 0);
         bool parseGSV(const char *gsvString = 0);
@@ -228,11 +230,8 @@ private:
 	virtual void onDataAvailable();
 	virtual void onStop();
 
-	void parse(const QByteArray& array);
-
 	QextSerialPort *port;
-	QFile* LogFile;
-		QByteArray Buffer;
+	QByteArray Buffer;
 
 	virtual void run();
 

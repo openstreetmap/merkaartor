@@ -1,4 +1,8 @@
 v0.15
+	* ADD : Allow all platforms to connect to a gpsd backend
+	* FIX : Set gpsd output to NMEA; allow to save log
+	* FIX : Do not draw background if saved pixmap is null as a copy of a null pixmap seems to crash on Mac (fixes #2262)
+	* FIX : Fixes MacOSX plugin dir (fixes #2253)
 	* FIX : Handle latlong projection in SHP files (fixes #2183)
 	* FIX : remove s60 extensions (fixes #2185)
 	* FIX : allow non-uploadable nodes to be uploaded when they are part of of a created road (fixes #2175)

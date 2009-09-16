@@ -21,7 +21,7 @@
       <enum>QTabWidget::North</enum>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="tab_7">
       <attribute name="title">
@@ -868,18 +868,103 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QLabel" name="label_11">
-           <property name="text">
-            <string>Serial port</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="edGpsPort"/>
-         </item>
-        </layout>
+        <widget class="QGroupBox" name="groupBox_4">
+         <property name="title">
+          <string>GPS input</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="1" column="0">
+           <widget class="QRadioButton" name="rbGpsGpsd">
+            <property name="text">
+             <string>gpsd</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QRadioButton" name="rbGpsSerial">
+            <property name="text">
+             <string>Serial</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" colspan="2">
+           <widget class="QFrame" name="frGpsSerial">
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_8">
+             <property name="spacing">
+              <number>4</number>
+             </property>
+             <property name="margin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="lblGpsPort">
+               <property name="text">
+                <string>Port</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="edGpsPort"/>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QFrame" name="frGpsGpsd">
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_10">
+             <property name="spacing">
+              <number>4</number>
+             </property>
+             <property name="margin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="lblGpsdHost">
+               <property name="text">
+                <string>Host</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="edGpsdHost"/>
+             </item>
+             <item>
+              <widget class="QLabel" name="lblGpsdPort">
+               <property name="text">
+                <string>Port</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="sbGpsdPort">
+               <property name="minimum">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <number>65535</number>
+               </property>
+               <property name="value">
+                <number>2741</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
        <item>
         <layout class="QHBoxLayout" name="_5">
@@ -1294,11 +1379,11 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>52</x>
+     <x>30</x>
      <y>65</y>
     </hint>
     <hint type="destinationlabel">
-     <x>108</x>
+     <x>86</x>
      <y>89</y>
     </hint>
    </hints>
@@ -1310,12 +1395,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>52</x>
+     <x>30</x>
      <y>65</y>
     </hint>
     <hint type="destinationlabel">
-     <x>95</x>
-     <y>129</y>
+     <x>86</x>
+     <y>115</y>
     </hint>
    </hints>
   </connection>
@@ -1327,11 +1412,11 @@
    <hints>
     <hint type="sourcelabel">
      <x>21</x>
-     <y>73</y>
+     <y>135</y>
     </hint>
     <hint type="destinationlabel">
-     <x>168</x>
-     <y>72</y>
+     <x>125</x>
+     <y>134</y>
     </hint>
    </hints>
   </connection>
@@ -1343,11 +1428,11 @@
    <hints>
     <hint type="sourcelabel">
      <x>21</x>
-     <y>73</y>
+     <y>135</y>
     </hint>
     <hint type="destinationlabel">
-     <x>595</x>
-     <y>70</y>
+     <x>624</x>
+     <y>132</y>
     </hint>
    </hints>
   </connection>
@@ -1438,12 +1523,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>37</x>
-     <y>74</y>
+     <x>30</x>
+     <y>65</y>
     </hint>
     <hint type="destinationlabel">
-     <x>101</x>
-     <y>155</y>
+     <x>86</x>
+     <y>141</y>
     </hint>
    </hints>
   </connection>
@@ -1454,12 +1539,44 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>68</x>
-     <y>76</y>
+     <x>30</x>
+     <y>65</y>
     </hint>
     <hint type="destinationlabel">
-     <x>105</x>
-     <y>179</y>
+     <x>86</x>
+     <y>167</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rbGpsSerial</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frGpsSerial</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>66</x>
+     <y>74</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>111</x>
+     <y>66</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rbGpsGpsd</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frGpsGpsd</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>51</x>
+     <y>105</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>126</x>
+     <y>93</y>
     </hint>
    </hints>
   </connection>

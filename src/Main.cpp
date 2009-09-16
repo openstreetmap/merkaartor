@@ -155,6 +155,12 @@ int main(int argc, char** argv)
 		QDir::home().mkdir(".merkaartor");
 #if defined(Q_OS_WIN32)
 	QDir pluginsDir = QDir(qApp->applicationDirPath() + "/" + STRINGIFY(PLUGINS_DIR));
+
+	// Fixes MacOSX plugin dir (fixes #2253)
+#elif defined(Q_OS_MAC)
+	QDir pluginsDir = QDir(qApp->applicationDirPath());
+	pluginsDir.cdUp();
+	pluginsDir.cd("plugins");
 #else
 	QDir pluginsDir = QDir(STRINGIFY(PLUGINS_DIR));
 #endif
@@ -176,13 +182,6 @@ int main(int argc, char** argv)
 
 	splash.showMessage(QString(app.translate("Main", "Merkaartor v%1%2\nInitializing...")).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
 	app.processEvents();
-
-#if defined(Q_OS_MAC)
-	QDir dir(QApplication::applicationDirPath());
-	dir.cdUp();
-	dir.cd("plugins");
-	QApplication::setLibraryPaths(QStringList(dir.absolutePath()));
-#endif
 
 	MainWindow Main;
 

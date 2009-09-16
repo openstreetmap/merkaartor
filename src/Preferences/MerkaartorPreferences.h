@@ -258,9 +258,6 @@ public:
 	void setOsmPassword(const QString & theValue);
 	QString getOsmPassword() const;
 
-	void setGpsPort(const QString & theValue);
-	QString getGpsPort() const;
-
 	M_PARAM_DECLARE_DOUBLE(MaxDistNodes)
 
 	void setAutoSaveDoc(bool theValue);
@@ -305,6 +302,11 @@ public:
 	M_PARAM_DECLARE_STRING(DefaultTemplate)
 	M_PARAM_DECLARE_STRING(CustomTemplate)
 
+	/* GPS */
+	M_PARAM_DECLARE_BOOL(GpsUseGpsd)
+	M_PARAM_DECLARE_STRING(GpsPort)
+	M_PARAM_DECLARE_STRING(GpsdHost)
+	M_PARAM_DECLARE_INT(GpsdPort)
 	M_PARAM_DECLARE_BOOL(GpsSaveLog)
 	M_PARAM_DECLARE_BOOL(GpsMapCenter)
 	M_PARAM_DECLARE_STRING(GpsLogDir)

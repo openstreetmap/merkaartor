@@ -285,6 +285,9 @@ void ImageMapLayer::drawImage(QPixmap& thePix, QPoint delta)
 		return;
 	if (!p->theMapAdapter->getImageManager())
 		return;
+	// Do not draw if saved pixmap is null as a copy of a null pixmap seems to crash on Mac (fixes #2262)
+	if (p->pm.isNull())
+		return;
 
 	const QSize ps = p->pr.size();
 	const QSize pmSize = p->pm.size();

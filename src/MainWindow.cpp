@@ -2471,11 +2471,11 @@ void MainWindow::on_windowShowAllAction_triggered()
 void MainWindow::on_gpsConnectAction_triggered()
 {
 #ifndef Q_OS_SYMBIAN
-#ifdef USEGPSD
-	QGPSDDevice* aGps = new QGPSDDevice("gpsd");
-#else
-	QGPSComDevice* aGps = new QGPSComDevice(M_PREFS->getGpsPort());
-#endif
+	QGPSDevice* aGps;
+	if (M_PREFS->getGpsUseGpsd())
+		aGps = new QGPSDDevice("gpsd");
+	else
+		aGps = new QGPSComDevice(M_PREFS->getGpsPort());
 #else
 	QGPSS60Device* aGps = new QGPSS60Device();
 #endif

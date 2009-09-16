@@ -131,6 +131,20 @@ void PreferencesDialog::loadPrefs()
     edOsmPwd->setText(M_PREFS->getOsmPassword());
 
 	edGpsPort->setText(M_PREFS->getGpsPort());
+	edGpsdHost->setText(M_PREFS->getGpsdHost());
+	sbGpsdPort->setValue(M_PREFS->getGpsdPort());
+	if (M_PREFS->getGpsUseGpsd()) {
+		rbGpsGpsd->setChecked(true);
+		frGpsSerial->setEnabled(false);
+	} else {
+		rbGpsSerial->setChecked(true);
+		frGpsGpsd->setEnabled(false);
+	}
+
+	cbGgpsSaveLog->setChecked(M_PREFS->getGpsSaveLog());
+	edGpsLogDir->setText(M_PREFS->getGpsLogDir());
+	cbGpsSyncTime->setChecked(M_PREFS->getGpsSyncTime());
+
 
 	sbMaxDistNodes->setValue(M_PREFS->getMaxDistNodes());
 
@@ -205,10 +219,6 @@ void PreferencesDialog::loadPrefs()
 		lvTools->addItem(t.ToolName);
 	}
 
-	cbGgpsSaveLog->setChecked(M_PREFS->getGpsSaveLog());
-	edGpsLogDir->setText(M_PREFS->getGpsLogDir());
-	cbGpsSyncTime->setChecked(M_PREFS->getGpsSyncTime());
-
 	cbMouseSingleButton->setChecked(M_PREFS->getMouseSingleButton());
 	cbSeparateMoveMode->setChecked(M_PREFS->getSeparateMoveMode());
 
@@ -244,11 +254,17 @@ void PreferencesDialog::savePrefs()
 
 	M_PREFS->setXapiWebSite(M_PREFS->getXapiWebSite());
 
-#ifdef Q_OS_WIN32
-	if (!edGpsPort->text().startsWith("\\\\.\\"))
-		edGpsPort->setText("\\\\.\\" + edGpsPort->text());
-#endif 
 	M_PREFS->setGpsPort(edGpsPort->text());
+	M_PREFS->setGpsdHost(edGpsdHost->text());
+	M_PREFS->setGpsdPort(sbGpsdPort->value());
+	if (rbGpsGpsd->isChecked())
+		M_PREFS->setGpsUseGpsd(true);
+	else
+		M_PREFS->setGpsUseGpsd(false);
+
+	M_PREFS->setGpsSaveLog(cbGgpsSaveLog->isChecked());
+	M_PREFS->setGpsLogDir(edGpsLogDir->text());
+	M_PREFS->setGpsSyncTime(cbGpsSyncTime->isChecked());
 
 	M_PREFS->setMaxDistNodes(sbMaxDistNodes->value());
 
@@ -324,10 +340,6 @@ void PreferencesDialog::savePrefs()
 		Tool t(theTools[i]);
 		tl->insert(theTools[i].ToolName, t);
 	}
-
-	M_PREFS->setGpsSaveLog(cbGgpsSaveLog->isChecked());
-	M_PREFS->setGpsLogDir(edGpsLogDir->text());
-	M_PREFS->setGpsSyncTime(cbGpsSyncTime->isChecked());
 
 	M_PREFS->setMouseSingleButton(cbMouseSingleButton->isChecked());
 	M_PREFS->setSeparateMoveMode(cbSeparateMoveMode->isChecked());
