@@ -1259,7 +1259,7 @@ M_PARAM_IMPLEMENT_STRING(CustomTemplate, templates, "")
 M_PARAM_IMPLEMENT_BOOL(GpsUseGpsd, gps, false)
 M_PARAM_IMPLEMENT_STRING(GpsPort, gps, "COM1")
 #else
-M_PARAM_IMPLEMENT_BOOL(GpsUseGpsd, gps, true))
+M_PARAM_IMPLEMENT_BOOL(GpsUseGpsd, gps, true)
 M_PARAM_IMPLEMENT_STRING(GpsPort, gps, "/dev/rfcomm0")
 #endif
 M_PARAM_IMPLEMENT_STRING(GpsdHost, gps, "localhost")
