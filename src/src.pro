@@ -11,7 +11,6 @@
 # MOBILE    	      - enable MOBILE
 # GEOIMAGE            - enable geotagged images (needs exiv2)
 # NVIDIA_HACK         - used to solve nvidia specific slowdown
-# FORCE_CUSTOM_STYLE  - force custom style (recommended on Linux until the "expanding dock" is solved upstream)
 # THREADED_BROWSERIMAGEMANAGER
 
 #Static config
@@ -60,10 +59,6 @@ win32 {
 	INCLUDEPATH += $$COMMON_DIR/include
 	LIBS += -L$$COMMON_DIR/lib
 	RC_FILE = $$PWD/../Icons/merkaartor-win32.rc
-}
-
-contains(FORCE_CUSTOM_STYLE,1) {
-    DEFINES += FORCED_CUSTOM_STYLE
 }
 
 contains(NVIDIA_HACK,1) {

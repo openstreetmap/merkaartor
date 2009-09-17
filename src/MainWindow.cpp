@@ -120,12 +120,14 @@ MainWindow::MainWindow(void)
 	theProgressLabel = NULL;
 
 	p->defStyle = QApplication::style()->objectName();
-#ifndef FORCED_CUSTOM_STYLE
-	if (M_PREFS->getMerkaartorStyle())
-		QApplication::setStyle(QStyleFactory::create(M_PREFS->getMerkaartorStyleString()));
-#else
+	QString qVer = QString(qVersion()).replace(".", "");
+	int iQVer = qVer.toInt();
+	if (iQVer < 451) {
 		QApplication::setStyle(QStyleFactory::create("skulpture"));
-#endif
+	} else {
+		if (M_PREFS->getMerkaartorStyle())
+			QApplication::setStyle(QStyleFactory::create(M_PREFS->getMerkaartorStyleString()));
+	}
 
 	setupUi(this);
 	M_STYLE->loadPainters(MerkaartorPreferences::instance()->getDefaultStyle());
@@ -1718,20 +1720,22 @@ void MainWindow::toolsPreferencesAction_triggered(bool focusData)
 
 void MainWindow::preferencesChanged(void)
 {
-#ifndef FORCED_CUSTOM_STYLE
-    if (!M_PREFS->getMerkaartorStyle())
-    {
-        if (QApplication::style()->objectName() != p->defStyle)
-            QApplication::setStyle(p->defStyle);
-    }
-    else
-    {
-        if (QApplication::style()->objectName() != "")
-			QApplication::setStyle(QStyleFactory::create(M_PREFS->getMerkaartorStyleString()));
-    }
-#else
-	QApplication::setStyle(QStyleFactory::create("skulpture"));
-#endif
+	QString qVer = QString(qVersion()).replace(".", "");
+	int iQVer = qVer.toInt();
+	if (iQVer < 451) {
+		QApplication::setStyle(QStyleFactory::create("skulpture"));
+	} else {
+		if (!M_PREFS->getMerkaartorStyle())
+		{
+			if (QApplication::style()->objectName() != p->defStyle)
+				QApplication::setStyle(p->defStyle);
+		}
+		else
+		{
+			if (QApplication::style()->objectName() != "")
+				QApplication::setStyle(QStyleFactory::create(M_PREFS->getMerkaartorStyleString()));
+		}
+	}
 	
 	updateStyleMenu();
 	updateMenu();

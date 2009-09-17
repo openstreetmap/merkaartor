@@ -1,4 +1,5 @@
 v0.15
+    * FIX : Force custom Qt style if Qt runtime version < 4.5.1 (fixes #2204)
 	* ADD : Allow all platforms to connect to a gpsd backend
 	* FIX : Set gpsd output to NMEA; allow to save log
 	* FIX : Do not draw background if saved pixmap is null as a copy of a null pixmap seems to crash on Mac (fixes #2262)

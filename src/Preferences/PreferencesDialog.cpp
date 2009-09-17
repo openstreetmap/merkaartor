@@ -52,10 +52,12 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 		cbTemplates->addItem(intTemplates.entryList().at(i));
 	}
 
-#ifdef FORCED_CUSTOM_STYLE
-    cbCustomStyle->hide();
-    comboCustomStyle->hide();
-#endif
+	QString qVer = QString(qVersion()).replace(".", "");
+	int iQVer = qVer.toInt();
+	if (iQVer < 451) {
+		cbCustomStyle->hide();
+		comboCustomStyle->hide();
+	}
 
 	resize(1,1);
 	QApplication::processEvents();
