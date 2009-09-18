@@ -61,6 +61,10 @@ win32 {
 	RC_FILE = $$PWD/../Icons/merkaartor-win32.rc
 }
 
+macx {
+	C_FILE = $$PWD/../Icons/merkaartor.icns
+}
+
 contains(NVIDIA_HACK,1) {
     DEFINES += ENABLE_NVIDIA_HACK
 }
