@@ -62,7 +62,7 @@ win32 {
 }
 
 macx {
-	C_FILE = $$PWD/../Icons/merkaartor.icns
+	RC_FILE = $$PWD/../Icons/merkaartor.icns
 }
 
 contains(NVIDIA_HACK,1) {
