@@ -13,10 +13,12 @@ double angle(Coord & vertex, Coord p1, Coord p2)
 */
 double angle(Coord p1)
 {
-	if(p1.length()==0) return 0;
-	p1=p1/int(p1.length());
-	if(p1.lat()>0) return acos(intToRad(p1.lon()));
-	return -acos(intToRad(p1.lon()));
+	if (p1.length() == 0)
+		return 0;
+	double adjacent = (double)p1.lon() / p1.length();
+	if (p1.lat() > 0)
+		return acos(adjacent);
+	return -acos(adjacent);
 }
 
 void rotate(Coord & p1,double angle)

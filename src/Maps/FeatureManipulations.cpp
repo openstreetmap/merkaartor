@@ -572,11 +572,12 @@ void alignNodes(MapDocument* theDocument, CommandList* theList, PropertiesDock* 
 	Coord pos(0,0);
 	const Coord p1(Nodes[0]->position());
 	const Coord p2(Nodes[1]->position()-p1);
+	const double slope = angle(p2);
 	for (int i=2; i<Nodes.size(); ++i) {
 		pos=Nodes[i]->position()-p1;
-		rotate(pos,-angle(p2));
+		rotate(pos,-slope);
 		pos.setLat(0);
-		rotate(pos,angle(p2));
+		rotate(pos,slope);
 		pos=pos+p1;
 		theList->add(new MoveTrackPointCommand( Nodes[i], pos, theDocument->getDirtyOrOriginLayer(Nodes[i]->layer()) ));
 	}

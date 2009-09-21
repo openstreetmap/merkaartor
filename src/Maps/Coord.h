@@ -80,7 +80,7 @@ class Coord
 
 		double length() const
 		{
-			return sqrt((double)(Lat*Lat+Lon*Lon));
+			return sqrt((double)((long)Lat*(long)Lat+(long)Lon*(long)Lon));
 		}
 
 		double distanceFrom(const Coord& other) const;

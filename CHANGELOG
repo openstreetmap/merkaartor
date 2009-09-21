@@ -1,4 +1,5 @@
 v0.15
+    * FIX : Align nodes patch by Chris Baird (closes #2296)
 	* ADD : Mac OS X icon (closes #2254)
     * FIX : Force custom Qt style if Qt runtime version < 4.5.1 (fixes #2204)
 	* ADD : Allow all platforms to connect to a gpsd backend
