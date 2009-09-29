@@ -119,7 +119,7 @@ void PaintStyleEditor::on_PaintList_itemSelectionChanged()
 {
 	FreezeUpdate = true;
 	int idx = PaintList->currentRow();
-	if (idx >= thePainters.size())
+	if (idx < 0 || idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
 	TagSelection->setText(FP.userName());
