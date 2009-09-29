@@ -70,13 +70,13 @@ void MapNetwork::launchRequest()
 
 void MapNetwork::launchRequest(QUrl url, QString hash)
 {
+	http->setProxy(M_PREFS->getProxy(url));
 	http->setHost(url.host(), url.port() == -1 ? 80 : url.port());
 
 	QHttpRequestHeader header("GET", url.path() + "?" + url.encodedQuery());
 	header.setValue("Host", url.host());
     header.setValue("User-Agent", "Mozilla");
 
-	http->setProxy(M_PREFS->getProxy(url));
 	int getId = http->request(header);
 
 	if (vectorMutex.tryLock()) {
@@ -87,15 +87,32 @@ void MapNetwork::launchRequest(QUrl url, QString hash)
 
 void MapNetwork::requestFinished(int id, bool error)
 {
-	if (http->lastResponse().statusCode() > 300 && http->lastResponse().statusCode() < 400) { // Redirected
+    int statusCode = http->lastResponse().statusCode();
+
+    qDebug() << "requestFinished " 
+             << "id:" << id
+             << "error:" << error
+             << "status:" << statusCode
+             << "inflight:" << loadingMap.size();
+
+    if (!loadingMap.contains(id)){
+        // Don't react on setProxy and setHost requestFinished...
+        return;
+    }
+
+	if (statusCode > 300 && statusCode < 400) { // Redirected
 		launchRequest(QUrl(http->lastResponse().value("Location")), loadingMap[id]);
 		loadingMap.remove(id);
 		return;
 	}
+
 	if (error) {
 		qDebug() << "network error: " << http->errorString();
 		loadingMap.remove(id);
-	} else
+    } else if (statusCode == 404){
+		qDebug() << "404 error";
+		loadingMap.remove(id);
+    } else
 		if (vectorMutex.tryLock()) {
 			// check if id is in map?
 			if (loadingMap.contains(id)) {

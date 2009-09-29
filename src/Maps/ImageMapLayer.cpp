@@ -293,7 +293,7 @@ void ImageMapLayer::drawImage(QPixmap& thePix, QPoint delta)
 	const QSize pmSize = p->pm.size();
 	const qreal ratio = qMax<const qreal>((qreal)pmSize.width()/ps.width()*1.0, (qreal)pmSize.height()/ps.height());
 	QPixmap pms;
-	if (ratio > 1.0) {
+	if (ratio >= 1.0) {
 		pms = p->pm.scaled(ps);
 	} else {
 		const QSizeF drawingSize = pmSize * ratio;
@@ -378,7 +378,7 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect) const
 		p->theMapAdapter->getImageManager()->abortLoading();
 		QPixmap pm = p->theMapAdapter->getImageManager()->getImage(p->theMapAdapter,url);
 		if (!pm.isNull())  {
-			p->pm = pm.scaled(rect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+			p->pm = pm.scaled(rect.size(), Qt::IgnoreAspectRatio);
 			p->theDelta = QPoint();
 		}
 	}
