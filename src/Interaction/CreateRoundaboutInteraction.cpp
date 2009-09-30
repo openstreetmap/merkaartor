@@ -101,7 +101,8 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
 			TrackPoint* First = new TrackPoint(XY_TO_COORD(Prev));
 			Road* R = new Road;
 			R->add(First);
-			R->setTag("oneway","yes");
+			// "oneway" is implied on roundabouts
+			//R->setTag("oneway","yes");
 			R->setTag("junction","roundabout");
 			if (M_PREFS->apiVersionNum() < 0.6)
 				R->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
