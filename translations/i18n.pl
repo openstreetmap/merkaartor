@@ -75,7 +75,7 @@ sub loadfiles($$@)
       }
     }
     elsif($file =~ /[-_](.._..)\.po$/ || $file =~ /^(?:.*\/)?(.._..)\.po$/ ||
-    $file =~ /[-_](..)\.po$/ || $file =~ /^(?:.*\/)?(..)\.po$/)
+    $file =~ /[-_](...?)\.po$/ || $file =~ /^(?:.*\/)?(..)\.po$/)
     {
       my $l = $1;
       ++$lang->{$l};
@@ -311,7 +311,7 @@ sub createpos($$@)
     my $head;
     my $la;
     if($file =~ /[-_](.._..)\.po$/ || $file =~ /^(?:.*\/)?(.._..)\.po$/ ||
-    $file =~ /[-_](..)\.po$/ || $file =~ /^(?:.*\/)?(..)\.po$/)
+    $file =~ /[-_](...?)\.po$/ || $file =~ /^(?:.*\/)?(..)\.po$/)
     {
       $la = $1;
       $head = "# translation into language $la file $file\n";
