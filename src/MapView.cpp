@@ -233,7 +233,11 @@ void MapView::drawScale(QPainter & P)
 	if (!M_PREFS->getScaleVisible())
 		return;
 
-	double Log = log10(200/p->PixelPerM);
+	errno = 0;
+	double Log = log10(200./p->PixelPerM);
+	if (errno != 0)
+		return;
+
 	double RestLog = Log-floor(Log);
 	if (RestLog < log10(2.))
 		Log = floor(Log);
