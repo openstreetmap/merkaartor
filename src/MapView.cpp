@@ -1,3 +1,5 @@
+#include <errno.h>
+
 #include "MapView.h"
 #include "MainWindow.h"
 #include "PropertiesDock.h"
