@@ -212,8 +212,8 @@ inline void set(G& geometry, const typename coordinate_type<G>::type& value,
     detail::signature_getset_dimension* dummy = 0)
 {
     boost::ignore_unused_variable_warning(dummy);
-    
-	typedef typename boost::remove_const<G>::type ncg_type;
+
+    typedef typename boost::remove_const<G>::type ncg_type;
 
     typedef core_dispatch::access
         <
@@ -243,7 +243,7 @@ inline typename coordinate_type<G>::type get(const G& geometry,
     detail::signature_getset_index_dimension* dummy = 0)
 {
     boost::ignore_unused_variable_warning(dummy);
-    
+
     typedef typename boost::remove_const<G>::type ncg_type;
 
     typedef core_dispatch::indexed_access
@@ -273,7 +273,7 @@ inline void set(G& geometry, const typename coordinate_type<G>::type& value,
     detail::signature_getset_index_dimension* dummy = 0)
 {
     boost::ignore_unused_variable_warning(dummy);
-    
+
     typedef typename boost::remove_const<G>::type ncg_type;
 
     typedef core_dispatch::indexed_access

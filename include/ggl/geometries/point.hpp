@@ -45,9 +45,18 @@ public:
     inline point()
     {}
 
+    /// Constructs with one, or optionally two or three values
+    inline point(T const& v0, T const& v1 = 0, T const& v2 = 0)
+    {
+        if (D >= 1) m_values[0] = v0;
+        if (D >= 2) m_values[1] = v1;
+        if (D >= 3) m_values[2] = v2;
+    }
+
+
     /// Compile time access to coordinate values
     template <std::size_t K>
-    inline const T& get() const
+    inline T const& get() const
     {
         BOOST_STATIC_ASSERT(K < D);
         return m_values[K];
@@ -60,39 +69,12 @@ public:
         m_values[K] = value;
     }
 
-    /***
-    /// Examine if point is equal to other point
-    inline bool operator==(const point& other) const
-    {
-        for (register std::size_t i = 0; i < D; ++i)
-        {
-            if (! math::equals(m_values[i], other.m_values[i]))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /// Examine if points are NOT equal
-    inline bool operator!=(const point& other) const
-    {
-        return ! operator==(other);
-    }
-    ***/
-
-    /// Constructs with one, or optionally two or three values
-    inline point(const T& v0, const T& v1 = 0, const T& v2 = 0)
-    {
-        if (D >= 1) m_values[0] = v0;
-        if (D >= 2) m_values[1] = v1;
-        if (D >= 3) m_values[2] = v2;
-    }
 
 private:
 
     T m_values[D];
 };
+
 
 // Adapt the point to the concept
 #ifndef DOXYGEN_NO_TRAITS_SPECIALIZATIONS
@@ -123,13 +105,13 @@ template<typename T, std::size_t D, typename C>
 struct access<point<T, D, C> >
 {
     template <std::size_t I>
-    static inline T get(const point<T, D, C>& p)
+    static inline T get(point<T, D, C> const& p)
     {
         return p.template get<I>();
     }
 
     template <std::size_t I>
-    static inline void set(point<T, D, C>& p, const T& value)
+    static inline void set(point<T, D, C>& p, T const& value)
     {
         p.template set<I>(value);
     }

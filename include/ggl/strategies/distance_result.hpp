@@ -14,8 +14,10 @@
 #include <limits>
 #include <iostream>
 
-namespace ggl
-{
+#include <boost/mpl/if.hpp>
+#include <boost/type_traits.hpp>
+
+namespace ggl {
 
 /*!
     \brief Encapsulate the results of distance calculation
@@ -29,51 +31,73 @@ namespace ggl
     http://article.gmane.org/gmane.comp.lib.boost.devel/172709/match=greatcircle_distance
     \note It might be templatized with a T
 */
+template<typename T = double>
 struct cartesian_distance
 {
     private :
-        typedef double T;
         T m_squared_distance;
+
+        // Because result is square-rooted, for integer, the cast should
+        // go to double and NOT to T
+        typedef typename
+            boost::mpl::if_c
+            <
+                boost::is_integral<T>::type::value,
+                double,
+                T
+            >::type cast_type;
+
+
+
 
     public :
 
 
         /// Constructor with a value
-        explicit cartesian_distance(const T& v) : m_squared_distance(v) {}
+        explicit cartesian_distance(T const& v) : m_squared_distance(v) {}
 
-        /// Automatic conversion to double, taking squareroot if necessary
-        inline operator double() const
+        /// Automatic conversion to double or higher precision,
+        /// taking squareroot if necessary
+        inline operator cast_type() const
         {
-            return sqrt(m_squared_distance);
+#if defined(NUMERIC_ADAPTOR_INCLUDED)
+            return boost::sqrt(m_squared_distance);
+#else
+            return std::sqrt((long double)m_squared_distance);
+#endif
         }
 
         // Compare squared values
-        inline bool operator<(const cartesian_distance& other) const
+        inline bool operator<(cartesian_distance<T> const& other) const
         {
             return this->m_squared_distance < other.m_squared_distance;
         }
-        inline bool operator>(const cartesian_distance& other) const
+        inline bool operator>(cartesian_distance<T> const& other) const
         {
             return this->m_squared_distance > other.m_squared_distance;
         }
-        inline bool operator==(const cartesian_distance& other) const
+        inline bool operator==(cartesian_distance<T> const& other) const
         {
             return this->m_squared_distance == other.m_squared_distance;
         }
 
         // Compare just with a corresponding POD value
-        inline bool operator<(const T& value) const
+        // Note: this is NOT possible because of the cast to double,
+        // it makes it for the compiler ambiguous which to take
+        /*
+        inline bool operator<(T const& value) const
         {
             return this->m_squared_distance < (value * value);
         }
-        inline bool operator>(const T& value) const
+        inline bool operator>(T const& value) const
         {
             return this->m_squared_distance > (value * value);
         }
-        inline bool operator==(const T& value) const
+        inline bool operator==(T const& value) const
         {
             return this->m_squared_distance == (value * value);
         }
+        */
 
         // Utility method to compare without SQRT, but not with method above because for epsilon that
         // makes no sense...
@@ -82,16 +106,26 @@ struct cartesian_distance
             return m_squared_distance <= std::numeric_limits<T>::epsilon();
         }
 
-        /// The "value" method returns the internal value, here: the squared value
-        /// inline T value() const { return m_squared_distance; }
-
+        /// The "squared_value" method returns the internal squared value
+        inline T squared_value() const
+        {
+            return m_squared_distance;
+        }
 
         /// Make streamable to enable std::cout << ggl::distance( )
         template <typename CH, typename TR>
         inline friend std::basic_ostream<CH, TR>& operator<<(std::basic_ostream<CH, TR>& os,
-                        const cartesian_distance& d)
+                        cartesian_distance<T> const& d)
         {
-            os << sqrt(d.m_squared_distance);
+            // Avoid "ambiguous function call" for MSVC
+            cast_type const sq = d.m_squared_distance;
+
+            os <<
+#if defined(NUMERIC_ADAPTOR_INCLUDED)
+                boost::sqrt(sq);
+#else
+                std::sqrt(sq);
+#endif
             return os;
         }
 
@@ -149,23 +183,44 @@ namespace detail
         {
         };
 
-        template <typename T>
-        struct distance_result_maker<cartesian_distance, T>
+        template <typename R, typename T>
+        struct distance_result_maker<ggl::cartesian_distance<R>, T>
         {
-            static inline cartesian_distance make(const T& value)
+            static inline ggl::cartesian_distance<R> apply(T const& value)
             {
-                return cartesian_distance(value * value);
+                return cartesian_distance<R>(value * value);
             }
         };
 
         template <typename T>
         struct distance_result_maker<double, T>
         {
-            static inline double make(const T& value)
+            static inline double apply(T const& value)
             {
                 return value;
             }
         };
+
+
+        template <typename T>
+        struct close_to_zero
+        {
+            static inline bool apply(T const& value)
+            {
+                return value <= std::numeric_limits<T>::epsilon();
+            }
+        };
+
+
+        template <typename T>
+        struct close_to_zero<ggl::cartesian_distance<T> >
+        {
+            static inline bool apply(ggl::cartesian_distance<T> const& value)
+            {
+                return value.very_small();
+            }
+        };
+
 
     }
 }
@@ -184,9 +239,9 @@ namespace detail
     \return the distance result
 */
 template <typename R, typename T>
-inline R make_distance_result(const T& value)
+inline R make_distance_result(T const& value)
 {
-    return detail::distance::distance_result_maker<R, T>::make(value);
+    return detail::distance::distance_result_maker<R, T>::apply(value);
 }
 
 
@@ -198,20 +253,11 @@ inline R make_distance_result(const T& value)
     \tparam R the distance result type, either arithmetic or cartesian distance
     \param value the distance result to check
 */
-template <typename R>
-inline bool close_to_zero(const R& value)
+template <typename T>
+inline bool close_to_zero(T const& value)
 {
-    return value <= std::numeric_limits<R>::epsilon();
+    return detail::distance::close_to_zero<T>::apply(value);
 }
-
-// Specialization to do not take the square
-#ifndef DOXYGEN_NO_SPECIALIZATIONS
-template <>
-inline bool close_to_zero<cartesian_distance>(const cartesian_distance& value)
-{
-    return value.very_small();
-}
-#endif
 
 } // namespace ggl
 

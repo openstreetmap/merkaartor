@@ -12,7 +12,7 @@
 #include <boost/concept_check.hpp>
 
 #include <ggl/util/math.hpp>
-#include <ggl/util/promotion_traits.hpp>
+#include <ggl/util/select_coordinate_type.hpp>
 
 
 namespace ggl
@@ -26,18 +26,37 @@ struct direction_type
     inline direction_type(char h,
                 double a = 0, double b = 0,
                 int ha = 0, int hb = 0,
-                int d = 0)
+                int da = 0, int db = 0,
+                bool op = false)
         : how(h)
+        , opposite(op)
         , ra(a)
         , rb(b)
         , how_a(ha)
         , how_b(hb)
-        , direction(d)
-    {}
+        , dir_a(da)
+        , dir_b(db)
+    {
+    }
+
+    inline direction_type(char h, bool op, int ha = 0, int hb = 0)
+        : how(h)
+        , opposite(op)
+        , ra(0)
+        , rb(0)
+        , how_a(ha)
+        , how_b(hb)
+        , dir_a(0)
+        , dir_b(0)
+    {
+    }
+
 
     // "How" is the intersection formed?
     char how;
 
+    // Is it opposite (for collinear/equal cases)
+    bool opposite;
 
     // "Distance information", information on how far lies IP from a/b in ratio [0..1]
     double ra, rb;
@@ -45,17 +64,17 @@ struct direction_type
     // Information on how A arrives at intersection, how B arrives at intersection
     // 1: arrives at intersection
     // -1: starts from intersection
-    // Contrary to direction, this should be specified for both A and B
     int how_a;
     int how_b;
 
     // Direction: how is A positioned from B
-    // 1: A is left from B
-    // -1: A is right from B
+    // 1: points left, seen from IP
+    // -1: points right, seen from IP
     // In case of intersection: B's TO direction
     // In case that B's TO direction is at A: B's from direction
     // In collinear cases: it is 0
-    int direction;
+    int dir_a; // Direction of A-s TO from IP
+    int dir_b; // Direction of B-s TO from IP
 };
 
 
@@ -79,7 +98,7 @@ struct segments_direction
         boost::ignore_unused_variable_warning(wx);
         boost::ignore_unused_variable_warning(wy);
 
-		if(on_segment)
+        if(on_segment)
         {
             // 0 <= ra <= 1 and 0 <= rb <= 1
             // Check the configuration
@@ -90,32 +109,34 @@ struct segments_direction
 
             return
                 // opposite and same starting point (FROM)
-                ra0 && rb0 ? calculate_side<1, 'f', -1, -1>(ra, rb, dx1, dy1, s1, s2)
+                ra0 && rb0 ? calculate_side<1>(ra, rb, dx1, dy1, s1, s2, 'f', -1, -1)
 
                 // opposite and point to each other (TO)
-                : ra1 && rb1 ? calculate_side<0, 't', 1, 1>(ra, rb, dx1, dy1, s1, s2)
+                : ra1 && rb1 ? calculate_side<0>(ra, rb, dx1, dy1, s1, s2, 't', 1, 1)
 
-                // not opposite, forming an angle, first a then b, directed either left, or right
+                // not opposite, forming an angle, first a then b,
+                // directed either both left, or both right
                 // Check side of B2 from A. This is not calculated before
-                : ra1 && rb0 ? calculate_side<1, 'a', 1, -1>(ra, rb, dx1, dy1, s1, s2)
+                : ra1 && rb0 ? angle<1>(ra, rb, dx1, dy1, s1, s2, 'a', 1, -1)
 
-                // not opposite, forming a angle, first b then a, directed either left, or right
-                : ra0 && rb1 ? calculate_side<0, 'a', -1, 1>(ra, rb, dx1, dy1, s1, s2)
+                // not opposite, forming a angle, first b then a,
+                // directed either both left, or both right
+                : ra0 && rb1 ? angle<0>(ra, rb, dx1, dy1, s1, s2, 'a', -1, 1)
 
                 // b starts from interior of a
-                : rb0 ? calculate_side<1, 's', 0, -1>(ra, rb, dx1, dy1, s1, s2)
+                : rb0 ? starts_from_middle(ra, rb, dx1, dy1, s1, s2, 'B', 0, -1)
 
                 // a starts from interior of b (#39)
-                : ra0 ? calculate_side<1, 's', -1, 0>(ra, rb, dx1, dy1, s1, s2)
+                : ra0 ? starts_from_middle(ra, rb, dx1, dy1, s1, s2, 'A', -1, 0)
 
-                // b ends at interior of a
-                : rb1 ? calculate_side<0, 'm', 0, 1>(ra, rb, dx1, dy1, s1, s2)
+                // b ends at interior of a, calculate direction of A from IP
+                : rb1 ? b_ends_at_middle(ra, rb, dx2, dy2, s1, s2)
 
                 // a ends at interior of b
-                : ra1 ? calculate_side<1, 'm', 1, 0>(ra, rb, dx1, dy1, s1, s2)
+                : ra1 ? a_ends_at_middle(ra, rb, dx1, dy1, s1, s2)
 
                 // normal intersection
-                : calculate_side<1, 'i', 0, 0>(ra, rb, dx1, dy1, s1, s2)
+                : calculate_side<1>(ra, rb, dx1, dy1, s1, s2, 'i', -1, -1)
                 ;
         }
 
@@ -123,51 +144,42 @@ struct segments_direction
         return return_type('d');
     }
 
-    /// This is a "side calculation" as in the strategies, but here two terms are precalculated
-    /// We might merge this with side, offering a pre-calculated term
-    /// Waiting for implementing spherical...
-    template <size_t I, char C, size_t A, size_t B>
-    static inline return_type calculate_side(double ra, double rb,
-                coordinate_type const& dx1, coordinate_type const& dy1,
-                S1 const& s1, S2 const& s2)
+    static inline return_type collinear_touch(coordinate_type const& , coordinate_type const& , bool opposite, char how)
     {
-        coordinate_type dpx = get<I, 0>(s2) - get<0, 0>(s1);
-        coordinate_type dpy = get<I, 1>(s2) - get<0, 1>(s1);
-        return dx1 * dpy - dy1 * dpx > 0
-            ? return_type(C, ra, rb, A, B, -1)
-            : return_type(C, ra, rb, A, B, 1);
-    }
-
-    static inline return_type collinear_touch(coordinate_type const& , coordinate_type const& , bool)
-    {
-        return return_type('c');
+        // Though this is 'collinear', we handle it as To/From/Angle because it is the same.
+        // It only does NOT have a direction.
+        int const arrive = how == 'T' ? 1 : -1;
+        return
+            ! opposite
+            ? return_type('a', 0, 0, how == 'A' ? 1 : -1, how == 'B' ? 1 : -1)
+            : return_type(how == 'T' ? 't' : 'f', 0, 0, arrive, arrive, 0, 0, true);
     }
 
     template <typename S>
-    static inline return_type collinear_interior_boundary_intersect(S const& , bool, bool)
+    static inline return_type collinear_interior_boundary_intersect(S const& , bool, bool opposite)
     {
-        return return_type('c');
+        return return_type('c', opposite);
     }
 
-    static inline return_type collinear_a_in_b(S1 const& , bool)
+    static inline return_type collinear_a_in_b(S1 const& , bool opposite)
     {
-        return return_type('c');
+        return return_type('c', opposite);
     }
-    static inline return_type collinear_b_in_a(S2 const& , bool)
+    static inline return_type collinear_b_in_a(S2 const& , bool opposite)
     {
-        return return_type('c');
+        return return_type('c', opposite);
     }
 
     static inline return_type collinear_overlaps(
                     coordinate_type const& , coordinate_type const& ,
-                    coordinate_type const& , coordinate_type const& , bool)
+                    coordinate_type const& , coordinate_type const& , bool opposite)
     {
-        return return_type('c');
+        return return_type('c', opposite);
     }
 
-    static inline return_type segment_equal(S1 const& , bool)
+    static inline return_type segment_equal(S1 const& , bool opposite)
     {
-        return return_type('e');
+        return return_type('e', opposite);
     }
 
     static inline return_type degenerate(S1 const& , bool)
@@ -185,6 +197,99 @@ struct segments_direction
     {
         return return_type('p');
     }
+
+private :
+
+
+    template <std::size_t I>
+    static inline return_type calculate_side(double ra, double rb,
+                coordinate_type const& dx1, coordinate_type const& dy1,
+                S1 const& s1, S2 const& s2,
+                char how, int how_a, int how_b)
+    {
+        coordinate_type dpx = get<I, 0>(s2) - get<0, 0>(s1);
+        coordinate_type dpy = get<I, 1>(s2) - get<0, 1>(s1);
+
+        // This is a "side calculation" as in the strategies, but here two terms are precalculated
+        // We might merge this with side, offering a pre-calculated term
+        // Waiting for implementing spherical...
+
+        return dx1 * dpy - dy1 * dpx > 0
+            ? return_type(how, ra, rb, how_a, how_b, -1, 1)
+            : return_type(how, ra, rb, how_a, how_b, 1, -1);
+    }
+
+    template <std::size_t I>
+    static inline return_type angle(double ra, double rb,
+                coordinate_type const& dx1, coordinate_type const& dy1,
+                S1 const& s1, S2 const& s2,
+                char how, int how_a, int how_b)
+    {
+        coordinate_type dpx = get<I, 0>(s2) - get<0, 0>(s1);
+        coordinate_type dpy = get<I, 1>(s2) - get<0, 1>(s1);
+
+         return dx1 * dpy - dy1 * dpx > 0
+            ? return_type(how, ra, rb, how_a, how_b, 1, 1)
+            : return_type(how, ra, rb, how_a, how_b, -1, -1);
+    }
+
+
+    static inline return_type starts_from_middle(double ra, double rb,
+                coordinate_type const& dx1, coordinate_type const& dy1,
+                S1 const& s1, S2 const& s2,
+                char which,
+                int how_a, int how_b)
+    {
+        // Calculate ARROW of b segment w.r.t. s1
+        coordinate_type dpx = get<1, 0>(s2) - get<0, 0>(s1);
+        coordinate_type dpy = get<1, 1>(s2) - get<0, 1>(s1);
+
+        int dir = dx1 * dpy - dy1 * dpx > 0 ? 1 : -1;
+
+        // From other perspective, then reverse
+        bool const is_a = which == 'A';
+        if (is_a)
+        {
+            dir = -dir;
+        }
+
+        return return_type('s', ra, rb,
+            how_a,
+            how_b,
+            is_a ? dir : -dir,
+            ! is_a ? dir : -dir);
+    }
+
+
+
+    // To be harmonized
+    static inline return_type a_ends_at_middle(double ra, double rb,
+                coordinate_type const& dx, coordinate_type const& dy,
+                S1 const& s1, S2 const& s2)
+    {
+        coordinate_type dpx = get<1, 0>(s2) - get<0, 0>(s1);
+        coordinate_type dpy = get<1, 1>(s2) - get<0, 1>(s1);
+
+        // Ending at the middle, one ARRIVES, the other one is NEUTRAL
+        // (because it both "arrives"  and "departs"  there
+        return dx * dpy - dy * dpx > 0
+            ? return_type('m', ra, rb, 1, 0, 1, 1)
+            : return_type('m', ra, rb, 1, 0, -1, -1);
+    }
+
+
+    static inline return_type b_ends_at_middle(double ra, double rb,
+                coordinate_type const& dx, coordinate_type const& dy,
+                S1 const& s1, S2 const& s2)
+    {
+        coordinate_type dpx = get<1, 0>(s1) - get<0, 0>(s2);
+        coordinate_type dpy = get<1, 1>(s1) - get<0, 1>(s2);
+
+        return dx * dpy - dy * dpx > 0
+            ? return_type('m', ra, rb, 0, 1, 1, 1)
+            : return_type('m', ra, rb, 0, 1, -1, -1);
+    }
+
 };
 
 }} // namespace policies::relate

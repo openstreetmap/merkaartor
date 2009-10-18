@@ -74,7 +74,7 @@ HEADERS += ./Command/Command.h \
     ./Utils/SvgCache.h \
     ./Utils/MDiscardableDialog.h \
     ./GotoDialog.h \
-    ../include/ggl/projections/impl/geocent.h \
+    ../include/ggl/extensions/gis/projections/impl/geocent.h \
     ../interfaces/IMapAdapter.h \
     Utils/SortAccordingToRenderingPriority.h
 
@@ -142,7 +142,7 @@ SOURCES += ./Command/Command.cpp \
     ./Preferences/TmsServersList.cpp \
     ./Preferences/BookmarksList.cpp \
     ./GotoDialog.cpp \
-    ../include/ggl/projections/impl/geocent.c
+    ../include/ggl/extensions/gis/projections/impl/geocent.c
 
 # Forms
 FORMS += ./AboutDialog.ui \

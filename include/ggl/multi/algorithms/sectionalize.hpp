@@ -56,8 +56,8 @@ namespace dispatch
 {
 
 
-template <typename MultiPolygon, typename Sections, std::size_t DimensionCount>
-struct sectionalize<multi_polygon_tag, MultiPolygon, Sections, DimensionCount>
+template <typename MultiPolygon, typename Sections, std::size_t DimensionCount, std::size_t MaxCount>
+struct sectionalize<multi_polygon_tag, MultiPolygon, Sections, DimensionCount, MaxCount>
     : detail::sectionalize::sectionalize_multi
         <
             MultiPolygon,
@@ -67,7 +67,8 @@ struct sectionalize<multi_polygon_tag, MultiPolygon, Sections, DimensionCount>
                 <
                     typename boost::range_value<MultiPolygon>::type,
                     Sections,
-                    DimensionCount
+                    DimensionCount,
+                    MaxCount
                 >
         >
 
@@ -79,21 +80,6 @@ struct sectionalize<multi_polygon_tag, MultiPolygon, Sections, DimensionCount>
 
 
 
-template <typename MultiPolygon, typename Section>
-struct get_section<multi_polygon_tag, MultiPolygon, Section>
-{
-    typedef typename ggl::point_const_iterator<MultiPolygon>::type iterator_type;
-
-    static inline void apply(MultiPolygon const& multi_polygon, Section const& section,
-                iterator_type& begin, iterator_type& end)
-    {
-        BOOST_ASSERT(section.multi_index >= 0 && section.multi_index < boost::size(multi_polygon));
-
-        get_section<polygon_tag, typename boost::range_value<MultiPolygon>::type, Section>
-            ::apply(multi_polygon[section.multi_index], section, begin, end);
-
-    }
-};
 
 } // namespace ggl
 

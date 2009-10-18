@@ -1,3 +1,7 @@
+// VERY OLD
+// NOT PART OF GGL-REVIEW-TREE
+
+
 // Generic Geometry Library
 //
 // Copyright Barend Gehrels 1995-2009, Geodan Holding B.V. Amsterdam, the Netherlands.

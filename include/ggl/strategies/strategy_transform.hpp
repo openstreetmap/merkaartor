@@ -21,7 +21,7 @@
 #include <ggl/core/concepts/point_concept.hpp>
 #include <ggl/util/copy.hpp>
 #include <ggl/util/math.hpp>
-#include <ggl/util/promotion_traits.hpp>
+#include <ggl/util/select_coordinate_type.hpp>
 
 namespace ggl
 {

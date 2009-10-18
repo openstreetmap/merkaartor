@@ -37,7 +37,7 @@ namespace ggl
 */
 template
 <
-    typename P,
+    typename Point,
     template<typename, typename> class PointList = std::vector,
     template<typename, typename> class RingList = std::vector,
     template<typename> class PointAlloc = std::allocator,
@@ -45,17 +45,17 @@ template
 >
 class polygon
 {
-    BOOST_CONCEPT_ASSERT( (concept::Point<P>) );
+    BOOST_CONCEPT_ASSERT( (concept::Point<Point>) );
 
 public:
 
     // Member types
-    typedef P point_type;
-    typedef linear_ring<P, PointList, PointAlloc> ring_type;
+    typedef Point point_type;
+    typedef linear_ring<Point, PointList, PointAlloc> ring_type;
     typedef RingList<ring_type , RingAlloc<ring_type > > inner_container_type;
 
-    inline const ring_type& outer() const { return m_outer; }
-    inline const inner_container_type & inners() const { return m_inners; }
+    inline ring_type const& outer() const { return m_outer; }
+    inline inner_container_type const& inners() const { return m_inners; }
 
     inline ring_type& outer() { return m_outer; }
     inline inner_container_type & inners() { return m_inners; }
@@ -80,61 +80,67 @@ namespace traits
 
 template
 <
-    typename P,
+    typename Point,
     template<typename, typename> class PointList,
     template<typename, typename> class RingList,
     template<typename> class PointAlloc,
     template<typename> class RingAlloc
 >
-struct tag<polygon<P, PointList, RingList, PointAlloc, RingAlloc> >
+struct tag<polygon<Point, PointList, RingList, PointAlloc, RingAlloc> >
 {
     typedef polygon_tag type;
 };
 
 template
 <
-    typename P,
+    typename Point,
     template<typename, typename> class PointList,
     template<typename, typename> class RingList,
     template<typename> class PointAlloc,
     template<typename> class RingAlloc
 >
-struct ring_type<polygon<P, PointList, RingList, PointAlloc, RingAlloc> >
+struct ring_type<polygon<Point, PointList, RingList, PointAlloc, RingAlloc> >
 {
-    typedef typename polygon<P, PointList, RingList, PointAlloc, RingAlloc>::ring_type type;
+    typedef typename polygon
+        <
+            Point, PointList, RingList, PointAlloc, RingAlloc
+        >::ring_type type;
 };
 
 template
 <
-    typename P,
+    typename Point,
     template<typename, typename> class PointList,
     template<typename, typename> class RingList,
     template<typename> class PointAlloc,
     template<typename> class RingAlloc
 >
-struct interior_type< polygon<P, PointList, RingList, PointAlloc, RingAlloc> >
+struct interior_type< polygon<Point, PointList, RingList, PointAlloc, RingAlloc> >
 {
-    typedef typename polygon<P, PointList, RingList, PointAlloc, RingAlloc>::inner_container_type type;
+    typedef typename polygon
+        <
+            Point, PointList, RingList, PointAlloc, RingAlloc
+        >::inner_container_type type;
 };
 
 template
 <
-    typename P,
+    typename Point,
     template<typename, typename> class PointList,
     template<typename, typename> class RingList,
     template<typename> class PointAlloc,
     template<typename> class RingAlloc
 >
-struct exterior_ring< polygon<P, PointList, RingList, PointAlloc, RingAlloc> >
+struct exterior_ring< polygon<Point, PointList, RingList, PointAlloc, RingAlloc> >
 {
-    typedef polygon<P, PointList, RingList, PointAlloc, RingAlloc> polygon_type;
+    typedef polygon<Point, PointList, RingList, PointAlloc, RingAlloc> polygon_type;
 
     static inline typename polygon_type::ring_type& get(polygon_type& p)
     {
         return p.outer();
     }
 
-    static inline const typename polygon_type::ring_type& get(const polygon_type& p)
+    static inline typename polygon_type::ring_type const & get(polygon_type const& p)
     {
         return p.outer();
     }
@@ -142,28 +148,30 @@ struct exterior_ring< polygon<P, PointList, RingList, PointAlloc, RingAlloc> >
 
 template
 <
-    typename P,
+    typename Point,
     template<typename, typename> class PointList,
     template<typename, typename> class RingList,
     template<typename> class PointAlloc,
     template<typename> class RingAlloc
 >
-struct interior_rings< polygon<P, PointList, RingList, PointAlloc, RingAlloc> >
+struct interior_rings< polygon<Point, PointList, RingList, PointAlloc, RingAlloc> >
 {
-    typedef polygon<P, PointList, RingList, PointAlloc, RingAlloc> polygon_type;
+    typedef polygon<Point, PointList, RingList, PointAlloc, RingAlloc> polygon_type;
 
-    static inline typename polygon_type::inner_container_type& get(polygon_type& p)
+    static inline typename polygon_type::inner_container_type& get(
+                    polygon_type& p)
     {
         return p.inners();
     }
 
-    static inline const typename polygon_type::inner_container_type& get(const polygon_type& p)
+    static inline typename polygon_type::inner_container_type const& get(
+                    polygon_type const& p)
     {
         return p.inners();
     }
 };
 
-} // namespac etraits
+} // namespace traits
 #endif // DOXYGEN_NO_TRAITS_SPECIALIZATIONS
 
 } // namespace ggl

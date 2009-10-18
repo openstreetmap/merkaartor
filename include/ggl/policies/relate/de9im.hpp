@@ -12,7 +12,7 @@
 
 #include <ggl/strategies/intersection_result.hpp>
 #include <ggl/util/math.hpp>
-#include <ggl/util/promotion_traits.hpp>
+#include <ggl/util/select_coordinate_type.hpp>
 
 
 namespace ggl
@@ -77,7 +77,7 @@ struct segments_de9im
     }
 
     static inline return_type collinear_touch(coordinate_type const& x,
-                coordinate_type const& y, bool opposite)
+                coordinate_type const& y, bool opposite, char)
     {
         return de9im_segment(0,0,
                 -1, -1, 1,

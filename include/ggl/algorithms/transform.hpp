@@ -52,8 +52,6 @@ The example below shows automatic transformations to go from one coordinate syst
 The next example takes another approach and transforms from Cartesian to Cartesian:
 \skipline XY
 \until endl;
-See also \link p03_projmap_example.cpp the projmap example \endlink
-where this last one plus a transformation using a projection are used.
 
 \note Not every possibility is yet worked out, e.g. polar coordinate system is ignored until now
 \note This "transform" is broader then geodetic datum transformations, those are currently not worked out

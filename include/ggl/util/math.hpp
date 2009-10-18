@@ -14,7 +14,7 @@
 
 #include <boost/math/constants/constants.hpp>
 
-#include <ggl/util/promotion_traits.hpp>
+#include <ggl/util/select_most_precise.hpp>
 
 namespace ggl
 {
@@ -38,8 +38,9 @@ namespace math
 template <typename T1, typename T2>
 inline bool equals(T1 const& a, T2 const& b)
 {
-    typedef typename select_type_traits<T1, T2>::type select_type;
+    typedef typename select_most_precise<T1, T2>::type select_type;
 
+    // TODO: select on is_fundemental. Otherwise (non-fundamental), take == operator
     if (std::numeric_limits<select_type>::is_exact)
     {
         return a == b;
@@ -84,13 +85,6 @@ inline T sqr(T const& value)
 
 } // namespace math
 
-// To be moved somewhere.
-namespace constants
-{
-
-double const average_earth_radius = 6372795.0;
-
-} // namespace constants
 
 } // namespace ggl
 

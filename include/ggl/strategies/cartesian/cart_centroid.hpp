@@ -10,18 +10,22 @@
 #define GGL_STRATEGY_CARTESIAN_CENTROID_HPP
 
 
+#include <boost/mpl/if.hpp>
 #include <boost/numeric/conversion/cast.hpp>
+#include <boost/type_traits.hpp>
 
 #include <ggl/geometries/point_xy.hpp>
 #include <ggl/geometries/segment.hpp>
 
 #include <ggl/algorithms/assign.hpp>
 
+#include <ggl/util/select_coordinate_type.hpp>
 #include <ggl/util/copy.hpp>
 
 
 namespace ggl
 {
+
 namespace strategy
 {
     namespace centroid
@@ -39,7 +43,11 @@ namespace strategy
         class geolib1995
         {
             private  :
-                typedef typename coordinate_type<PS>::type T;
+                typedef typename select_most_precise
+                    <
+                        typename select_coordinate_type<PC, PS>::type,
+                        double
+                    >::type T;
 
                 /*! subclass to keep state */
                 struct sums
@@ -163,31 +171,69 @@ namespace strategy
                     ,mdsys.sdo_dim_element('y',0,10,.00000005)))
                     from dual
          */
-        template<typename PC, typename PS = PC>
+        template
+        <
+            typename CentroidPointType,
+            typename SegmentPointType = CentroidPointType,
+            typename CalculationType = void
+        >
         class bashein_detmer
         {
             private :
-                typedef typename select_coordinate_type<PC, PS>::type T;
-
+                // If user specified a calculation type, use that type,
+                //   whatever it is and whatever the point-type(s) are.
+                // Else, use the most appropriate coordinate type
+                //    of the two points, but at least double
+                typedef typename
+                    boost::mpl::if_c
+                    <
+                        boost::is_void<CalculationType>::type::value,
+                        typename select_most_precise
+                        <
+                            typename select_coordinate_type
+                                <
+                                    CentroidPointType,
+                                    SegmentPointType
+                                >::type,
+                            double
+                        >::type,
+                        CalculationType
+                    >::type calc_type;
 
                 /*! subclass to keep state */
                 struct sums
                 {
-                    T sum_a2;
-                    PC sum;
+                    calc_type sum_a2;
+                    calc_type sum_x;
+                    calc_type sum_y;
                     inline sums()
-                        : sum_a2(T())
+                        : sum_a2(calc_type())
+                        , sum_x(calc_type())
+                        , sum_y(calc_type())
                     {
-                        detail::assign::assign_value(sum, T());
+                        typedef calc_type ct;
+                        //std::cout << "-> calctype: " << typeid(ct).name()
+                        //    << " size: " << sizeof(ct)
+                        //    << " init: " << sum_a2
+                        //    << std::endl;
                     }
 
-                    inline void centroid(PC& point)
+                    inline void centroid(CentroidPointType& point)
                     {
-                        typedef typename coordinate_type<PC>::type TPC;
-                        point = sum;
                         if (sum_a2 != 0)
                         {
-                            divide_value(point, boost::numeric_cast<TPC>(3.0 * sum_a2));
+                            calc_type const v3 = 3;
+                            calc_type const a3 = v3 * sum_a2;
+
+                            typedef typename ggl::coordinate_type
+                                <
+                                    CentroidPointType
+                                >::type coordinate_type;
+
+                            set<0>(point,
+                                boost::numeric_cast<coordinate_type>(sum_x / a3));
+                            set<1>(point,
+                                boost::numeric_cast<coordinate_type>(sum_y / a3));
                         }
                         else
                         {
@@ -200,7 +246,7 @@ namespace strategy
             public :
                 typedef sums state_type;
 
-                inline bool operator()(segment<const PS> const& s, state_type& state) const
+                inline bool operator()(segment<const SegmentPointType> const& s, state_type& state) const
                 {
                     /* Algorithm:
                     For each segment:
@@ -213,16 +259,15 @@ namespace strategy
                     return POINT(sum_x / (3 * sum_a2), sum_y / (3 * sum_a2) )
                     */
 
-                    T ai = get<0, 0>(s) * get<1, 1>(s) - get<1, 0>(s) * get<0, 1>(s);
+                    // Get coordinates and promote them to calc_type
+                    calc_type const x1 = boost::numeric_cast<calc_type>(get<0, 0>(s));
+                    calc_type const y1 = boost::numeric_cast<calc_type>(get<0, 1>(s));
+                    calc_type const x2 = boost::numeric_cast<calc_type>(get<1, 0>(s));
+                    calc_type const y2 = boost::numeric_cast<calc_type>(get<1, 1>(s));
+                    calc_type const ai = x1 * y2 - x2 * y1;
                     state.sum_a2 += ai;
-
-                    PC p;
-                    typedef typename coordinate_type<PC>::type PT;
-
-                    copy_coordinates(s.first, p);
-                    add_point(p, s.second);
-                    multiply_value(p, boost::numeric_cast<PT>(ai));
-                    add_point(state.sum, p);
+                    state.sum_x += ai * (x1 + x2);
+                    state.sum_y += ai * (y1 + y2);
 
                     return true;
                 }

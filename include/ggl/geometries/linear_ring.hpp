@@ -14,6 +14,12 @@
 
 #include <boost/concept/assert.hpp>
 
+#include <ggl/core/tag.hpp>
+#include <ggl/core/tags.hpp>
+
+#include <ggl/core/concepts/point_concept.hpp>
+
+
 namespace ggl
 {
 

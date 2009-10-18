@@ -43,14 +43,14 @@ public:
     /*!
         \brief Constructor taking the minimum corner point and the maximum corner point
     */
-    inline box(const P& min_corner, const P& max_corner)
+    inline box(P const& min_corner, P const& max_corner)
     {
         copy_coordinates(min_corner, m_min_corner);
         copy_coordinates(max_corner, m_max_corner);
     }
 
-    inline const P& min_corner() const { return m_min_corner; }
-    inline const P& max_corner() const { return m_max_corner; }
+    inline P const& min_corner() const { return m_min_corner; }
+    inline P const& max_corner() const { return m_max_corner; }
 
     inline P& min_corner() { return m_min_corner; }
     inline P& max_corner() { return m_max_corner; }
@@ -84,12 +84,12 @@ struct indexed_access<box<P>, C, D>
 {
     typedef box<P> box_type;
 
-    static inline typename ggl::coordinate_type<box_type>::type get(const box_type& b)
+    static inline typename ggl::coordinate_type<box_type>::type get(box_type const& b)
     {
         return (C == min_corner ? ggl::get<D>(b.min_corner()) : ggl::get<D>(b.max_corner()));
     }
 
-    static inline void set(box_type& b, const typename ggl::coordinate_type<box_type>::type& value)
+    static inline void set(box_type& b, typename ggl::coordinate_type<box_type>::type const& value)
     {
         if (C == min_corner)
         {

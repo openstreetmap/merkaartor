@@ -11,12 +11,29 @@
 
 #include <algorithm>
 
+#include <ggl/core/exception.hpp>
 #include <ggl/core/concepts/point_concept.hpp>
 #include <ggl/core/concepts/segment_concept.hpp>
+
+#include <ggl/util/select_coordinate_type.hpp>
 
 
 namespace ggl
 {
+
+
+class relate_cartesian_segments_exception : public ggl::exception
+{
+public:
+
+    relate_cartesian_segments_exception()  {}
+
+    virtual char const* what() const throw()
+    {
+        return "GGL: Internal error, unexpected case in relate_segment";
+    }
+};
+
 
 namespace strategy { namespace intersection {
 
@@ -218,18 +235,18 @@ private :
         // ... which are handled lateron
 
         // Corresponds to 4 cases, of which the equal points are determined above
-        // 1: a1---->a2 b1--->b2
-        // 2: a2<----a1 b2<---b1
-        // 3: a1---->a2 b2<---b1
-        // 4: a2<----a1 b1--->b2
+        // 1: a1---->a2 b1--->b2   ("a" first)
+        // 2: a2<----a1 b2<---b1   ("b" first)
+        // 3: a1---->a2 b2<---b1   ("t": to)
+        // 4: a2<----a1 b1--->b2   ("f": from)
         // Where the arranged forms have two forms:
         //    a_1-----a_2/b_1-------b_2 or reverse (B left of A)
         if (has_common_points && (math::equals(a_2, b_1) || math::equals(b_2, a_1)))
         {
-            if (a2_eq_b1) return F::collinear_touch(get<1, 0>(a), get<1, 1>(a), false);
-            if (a2_eq_b2) return F::collinear_touch(get<1, 0>(a), get<1, 1>(a), true);
-            if (a1_eq_b2) return F::collinear_touch(get<0, 0>(a), get<0, 1>(a), false);
-            if (a1_eq_b1) return F::collinear_touch(get<0, 0>(a), get<0, 1>(a), true);
+            if (a2_eq_b1) return F::collinear_touch(get<1, 0>(a), get<1, 1>(a), false, 'A');
+            if (a2_eq_b2) return F::collinear_touch(get<1, 0>(a), get<1, 1>(a), true, 'T');
+            if (a1_eq_b2) return F::collinear_touch(get<0, 0>(a), get<0, 1>(a), false, 'B');
+            if (a1_eq_b1) return F::collinear_touch(get<0, 0>(a), get<0, 1>(a), true, 'F');
         }
 
 
@@ -299,28 +316,28 @@ private :
 
         if (a_1 < b_1 && b_1 < a_2)
         {
-            // Case 1,2,3,4
+            // Case 4,2,3,1
             return
-                ! a_swapped && ! b_swapped ? F::collinear_overlaps(get<1, 0>(a), get<1, 1>(a), get<0, 0>(b), get<0, 1>(b), opposite)
+                  a_swapped && b_swapped   ? F::collinear_overlaps(get<0, 0>(a), get<0, 1>(a), get<1, 0>(b), get<1, 1>(b), opposite)
                 : a_swapped                ? F::collinear_overlaps(get<0, 0>(a), get<0, 1>(a), get<0, 0>(b), get<0, 1>(b), opposite)
                 : b_swapped                ? F::collinear_overlaps(get<1, 0>(a), get<1, 1>(a), get<1, 0>(b), get<1, 1>(b), opposite)
-                :                            F::collinear_overlaps(get<0, 0>(a), get<0, 1>(a), get<1, 0>(b), get<1, 1>(b), opposite)
+                :                            F::collinear_overlaps(get<1, 0>(a), get<1, 1>(a), get<0, 0>(b), get<0, 1>(b), opposite)
                 ;
         }
         if (b_1 < a_1 && a_1 < b_2)
         {
-            // Case 5,6,7,8
+            // Case 8, 6, 7, 5
             return
-                ! a_swapped && ! b_swapped ? F::collinear_overlaps(get<0, 0>(a), get<0, 1>(a), get<1, 0>(b), get<1, 1>(b), opposite)
+                  a_swapped && b_swapped   ? F::collinear_overlaps(get<1, 0>(a), get<1, 1>(a), get<0, 0>(b), get<0, 1>(b), opposite)
                 : a_swapped                ? F::collinear_overlaps(get<1, 0>(a), get<1, 1>(a), get<1, 0>(b), get<1, 1>(b), opposite)
                 : b_swapped                ? F::collinear_overlaps(get<0, 0>(a), get<0, 1>(a), get<0, 0>(b), get<0, 1>(b), opposite)
-                :                            F::collinear_overlaps(get<1, 0>(a), get<1, 1>(a), get<0, 0>(b), get<0, 1>(b), opposite)
+                :                            F::collinear_overlaps(get<0, 0>(a), get<0, 1>(a), get<1, 0>(b), get<1, 1>(b), opposite)
                 ;
         }
 
         // Nothing should goes through. If any we have made an error
         // TODO: proper exception
-        throw std::string("Internal error, unexpected case in relate_segment");
+        throw relate_cartesian_segments_exception();
     }
 };
 

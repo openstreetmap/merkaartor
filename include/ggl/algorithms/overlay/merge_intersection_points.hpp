@@ -45,36 +45,113 @@ struct on_increasing_dimension
 };
 
 
+
+// T can be an intersection_point or intersection_info record
 template <typename T>
-struct is_collinear
+struct is_flagged
 {
     inline bool operator()(T const& object) const
     {
-        typedef typename T::traversal_vector tv;
-        typedef typename boost::range_const_iterator<tv>::type tvit_type;
-        for (tvit_type it = boost::begin(object.info);
-                it != boost::end(object.info); ++it)
+        return object.flagged;
+    }
+};
+
+
+
+template <typename V>
+inline void remove_collinearities(V& intersection_points)
+{
+    typedef typename boost::range_iterator<V>::type iterator_type;
+    typedef typename boost::range_value<V>::type ip_type;
+    typedef typename ip_type::traversal_type info_type;
+
+
+    for (iterator_type it = boost::begin(intersection_points);
+         it != boost::end(intersection_points);
+         ++it)
+    {
+        if (! it->trivial && ! it->flagged)
         {
-            // If not collinear / not "TO", do NOT delete (false)
-            if (it->how != 'c' && it->how != 't' && it->how != 'm')
+            // Remove anything having to do with collinearity
+            typedef typename boost::range_value<V>::type::traversal_vector vector_type;
+            typedef typename boost::range_iterator<vector_type>::type tvit_type;
+
+            bool has_flag = false;
+
+            // Note, this is done n*m, in case of collinearity, but it is only done if not trivial
+            // or if there
+            bool middle = false;
+            for (tvit_type tvit = boost::begin(it->info);
+                ! middle && tvit != boost::end(it->info);
+                ++tvit)
             {
-                return false;
+                if (tvit->how == 'e' || tvit->how == 'c')
+                {
+                    tvit->flagged = true;
+                    has_flag = true;
+
+                    for (tvit_type tvit2 = boost::begin(it->info);
+                        tvit2 != boost::end(it->info); ++tvit2)
+                    {
+                        // Do NOT remove anything starting from collinear, or ending on, in the middle.
+                        if (tvit2->how != 'm' && tvit2->how != 's')
+                        {
+                            if (tvit->seg_id == tvit2->seg_id
+                                || tvit->seg_id == tvit2->other_id
+                                || tvit->other_id == tvit2->seg_id
+                                || tvit->other_id == tvit2->other_id
+                                )
+                            {
+                                tvit2->flagged = true;
+                            }
+                        }
+                        else
+                        {
+                            tvit->flagged = false;
+                            has_flag = false;
+                            middle = true;
+                        }
+                    }
+                }
             }
 
+            if (has_flag)
+            {
+                it->info.erase(
+                    std::remove_if(
+                            boost::begin(it->info),
+                            boost::end(it->info),
+                            is_flagged<info_type>()),
+                    boost::end(it->info));
+
+                // Mark for deletion afterwards if there are no info-records left
+                if (boost::size(it->info) == 0)
+                {
+                    it->flagged = true;
+                }
+
+                // Cases, previously forming an 'angle' (test #19)
+                // will be normal (neutral) case now,
+                // so to continue traversal:
+                if (it->info.size() == 2
+                    && it->info.front().how == 'a'
+                    && it->info.back().how == 'a')
+                {
+                    it->info.front().direction = 1;
+                    it->info.back().direction = 1;
+                }
+            }
         }
-        return true;
     }
-};
+
+#ifdef GGL_DEBUG_INTERSECTION
+    std::cout << "Removed collinearities: " << std::endl;
+    report_ip(intersection_points);
+#endif
+}
 
 
-template <typename T, int Index>
-struct shared_code_is
-{
-    inline bool operator()(T const& object) const
-    {
-        return object.shared_code == Index;
-    }
-};
+
 
 
 }} // namespace detail::intersection
@@ -82,20 +159,19 @@ struct shared_code_is
 
 
 
-template <typename V>
-inline void merge_intersection_points(V& intersection_points)
+/*!
+    \brief Merges intersection points such that points at the same location will be merged, having one point
+        and their info-records appended
+    \ingroup overlay
+    \tparam IntersectionPoints type of intersection container (e.g. vector of "intersection_point"'s)
+    \param intersection_points container containing intersectionpoints
+ */
+template <typename IntersectionPoints>
+inline void merge_intersection_points(IntersectionPoints& intersection_points)
 {
-    typedef typename boost::range_value<V>::type trav_type;
+    typedef typename boost::range_value<IntersectionPoints>::type trav_type;
 
-    // Remove all IP's which are collinear
-    intersection_points.erase(
-        std::remove_if(
-                boost::begin(intersection_points),
-                boost::end(intersection_points),
-                detail::intersection::is_collinear<trav_type>()),
-        boost::end(intersection_points));
-
-    if (intersection_points.size() <= 1)
+    if (boost::size(intersection_points) <= 1)
     {
         return;
     }
@@ -110,7 +186,7 @@ inline void merge_intersection_points(V& intersection_points)
         boost::end(intersection_points),
         detail::intersection::on_increasing_dimension<trav_type>());
 
-    typedef typename boost::range_iterator<V>::type iterator;
+    typedef typename boost::range_iterator<IntersectionPoints>::type iterator;
 
 #ifdef GGL_DEBUG_INTERSECTION
     std::cout << "Sorted (x then y): " << std::endl;
@@ -130,8 +206,9 @@ inline void merge_intersection_points(V& intersection_points)
         if (ggl::equals(prev->point, it->point))
         {
             has_merge = true;
-            prev->shared_code = 1;
-            it->shared_code = 2;
+            prev->shared = true;
+            prev->trivial = false;
+            it->flagged = true;
             std::copy(it->info.begin(), it->info.end(),
                         std::back_inserter(prev->info));
         }
@@ -141,29 +218,36 @@ inline void merge_intersection_points(V& intersection_points)
         }
     }
 
+
     if (has_merge)
     {
+#ifdef GGL_DEBUG_INTERSECTION
+        std::cout << "Merged (1): " << std::endl;
+        report_ip(intersection_points);
+#endif
 
-        // Remove all IP's which are merged (code=2)
+        // If there merges, there might be  collinearities
+        detail::intersection::remove_collinearities(intersection_points);
+
+        // Remove all IP's which are flagged for deletion
         intersection_points.erase(
             std::remove_if(
                     boost::begin(intersection_points),
                     boost::end(intersection_points),
-                    detail::intersection::shared_code_is<trav_type, 2>()),
+                    detail::intersection::is_flagged<trav_type>()),
             boost::end(intersection_points));
 
 
 #ifdef GGL_DEBUG_INTERSECTION
-        std::cout << "Merged: " << std::endl;
-        for (iterator it = boost::begin(intersection_points);
-            it != boost::end(intersection_points);
-            ++it)
-        {
-            std::cout << *it;
-        }
+        std::cout << "Merged (2): " << std::endl;
+        report_ip(intersection_points);
 #endif
+
+
     }
+
 }
+
 
 } // namespace ggl
 

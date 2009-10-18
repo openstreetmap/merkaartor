@@ -36,23 +36,11 @@ inline void report_map(M const& map)
     std::cout << "Map [source,segment(,ring,multi)] -> [count]:" << std::endl;
     for (typename M::const_iterator it = map.begin(); it != map.end(); it++)
     {
-        std::cout << "(" << it->first << ")" 
+        std::cout << "(" << it->first << ")"
             << " -> " << "(" << it->second << ")" << std::endl;
     }
 }
 
-template <typename V>
-inline void report_ip(V const& intersection_points)
-{
-    typedef typename boost::range_const_iterator<V>::type iterator_type;
-
-    for (iterator_type it = boost::begin(intersection_points);
-         it != boost::end(intersection_points);
-         ++it)
-    {
-        std::cout << *it;
-    }
-}
 
 template <typename V>
 inline void report_indexed(V const& index)
@@ -156,6 +144,31 @@ struct sort_on_segment_identifier
 };
 
 
+template <typename Info>
+struct on_source_segment_dir
+{
+    inline bool operator()(Info const& left, Info const& right) const
+    {
+        int ldir = left.direction;
+        int rdir = right.direction;
+        if (ldir == -1) ldir = 2;
+        if (rdir == -1) rdir = 2;
+
+
+        return left.seg_id.source_index == right.seg_id.source_index
+            ? (left.seg_id.segment_index == right.seg_id.segment_index
+                ? ldir < rdir
+                : left.seg_id.segment_index < right.seg_id.segment_index
+               )
+
+            : left.seg_id.source_index < right.seg_id.source_index;
+    }
+};
+
+
+
+
+
 // Assigns IP[index] . info[source/multi/ring/segment] . next_ip_index
 template <typename V>
 static inline void assign_next_ip_index(V& intersection_points, int index,
@@ -175,7 +188,7 @@ static inline void assign_next_ip_index(V& intersection_points, int index,
         if (it->seg_id == seg_id)
         {
             it->next_ip_index = next_ip_index;
-            return;
+            // Note: there can be MORE than one here. So do NOT return
         }
     }
 }
@@ -212,7 +225,8 @@ static inline void assign_last_vertex(V& intersection_points, int index,
 // more than one IP on it. It is not the usual situation, so not
 // computational intensive.
 template <typename V>
-static inline bool assign_next_points(V& intersection_points, segment_identifier const& seg_id)
+static inline bool assign_next_points(V& intersection_points,
+            segment_identifier const& seg_id)
 {
     typedef typename boost::range_value<V>::type ip_type;
     typedef typename boost::range_const_iterator<V>::type iterator_type;
@@ -258,26 +272,38 @@ static inline bool assign_next_points(V& intersection_points, segment_identifier
 
 
     // Now that it is sorted, do the main purpose: assign the next points
-    typedef typename boost::range_const_iterator
+    typedef typename boost::range_iterator
         <
             std::vector<indexed_type>
         >::type indexed_iterator_type;
+
     indexed_iterator_type it = boost::begin(copy);
     for (indexed_iterator_type prev = it++; it != boost::end(copy); prev = it++)
     {
-        for (tvit_type tvit = boost::begin(it->subject.info);
+        for (
+#ifdef GGL_DEBUG_INTERSECTION
+        typename boost::range_iterator<vector_type>::type
+#else
+        tvit_type
+#endif
+            tvit = boost::begin(it->subject.info);
              tvit != boost::end(it->subject.info);
              ++tvit)
         {
             if (tvit->seg_id == seg_id)
             {
                 assign_next_ip_index(intersection_points, prev->index, seg_id, it->index);
+
+#ifdef GGL_DEBUG_INTERSECTION
+                tvit->next_ip_index = it->index;
+#endif
+
             }
         }
     }
 
 #ifdef GGL_DEBUG_INTERSECTION
-    std::cout << "Sorted (distance " << seg_id << "): " << std::endl;
+    std::cout << "Enrichment - sorted (on distance, " << seg_id << "): " << std::endl;
     report_indexed(copy);
 #endif
 
@@ -302,6 +328,12 @@ static inline bool assign_next_points(M& map, V& intersection_points)
             }
         }
     }
+
+#ifdef GGL_DEBUG_INTERSECTION
+    std::cout << "Enrichment - assigned next points on same segment: " << std::endl;
+    report_ip(intersection_points);
+#endif
+
     return assigned;
 }
 
@@ -345,7 +377,7 @@ static inline bool assign_order(V& intersection_points,
     }
 
 #ifdef GGL_DEBUG_INTERSECTION
-    std::cout << "Ordered/copy (segment "
+    std::cout << "Enrichment - ordered/copy (on segment "
         << " src: " << source_index
         << "): " << std::endl;
     report_indexed(copy);
@@ -379,7 +411,8 @@ static inline bool assign_order(V& intersection_points,
     }
 
 #ifdef GGL_DEBUG_INTERSECTION
-    std::cout << "Ordered (segment " << " src: " << source_index << "): " << std::endl;
+    std::cout << "Enrichment - ordered  on segment (src: "
+        << source_index << "): " << std::endl;
     report_ip(intersection_points);
 #endif
 
@@ -404,37 +437,51 @@ static inline void assign_order(M const& map, V& intersection_points)
         }
         prev = mit;
     }
+
+#ifdef GGL_DEBUG_INTERSECTION
+    std::cout << "Enrichment - assigned order: " << std::endl;
+    report_ip(intersection_points);
+#endif
+
 }
+
+
+
 
 }} // namespace detail::intersection
 #endif //DOXYGEN_NO_DETAIL
 
 
 /*!
-    \brief All intersection points are enriched by their successor
-    \ingroup intersection
-    \param has_collinear Boolean flag to indicate that there are collinear IP's. If false,
-       it knows that it can skip some tests.
+    \brief All intersection points are enriched with successor information
+    \ingroup overlay
+    \tparam IntersectionPoints type of intersection container (e.g. vector of "intersection_point"'s)
+    \param intersection_points container containing intersectionpoints
+    \param trivial Boolean flag to indicate that it is trivial, only intersections,
+        no touch, collinearities, etc.
  */
-template <typename V>
-inline void enrich_intersection_points(V& intersection_points, bool has_collinear)
+template <typename IntersectionPoints>
+inline void enrich_intersection_points(IntersectionPoints& intersection_points, bool trivial)
 {
-    boost::ignore_unused_variable_warning(has_collinear);
 
     // Create a map of segment<source_index,segment_index,ring_index,multi_index>
-    // to <number of IP's on this segment, index of first IP>
-    // Purpose: count IP's per source/segment
-    std::map<segment_identifier, int> map; 
+    // to <number of IP's on this segment>
+    // Purpose: count IP's per source/segment, sort them lateron
+    std::map<segment_identifier, int> map;
 
-    typedef typename boost::range_const_iterator<V>::type iterator_type;
-    int ip_index = 0;
+    typedef typename boost::range_const_iterator<IntersectionPoints>::type iterator_type;
     for (iterator_type it = boost::begin(intersection_points);
          it != boost::end(intersection_points);
-         ++it, ++ip_index)
+         ++it)
     {
-        typedef typename boost::range_value<V>::type::traversal_vector vector_type;
+        typedef typename boost::range_value
+            <
+                IntersectionPoints
+            >::type::traversal_vector vector_type;
         typedef typename boost::range_const_iterator<vector_type>::type tvit_type;
-        for (tvit_type tvit = boost::begin(it->info); tvit != boost::end(it->info); ++tvit)
+        for (tvit_type tvit = boost::begin(it->info);
+            tvit != boost::end(it->info);
+            ++tvit)
         {
             map[tvit->seg_id]++;
         }
@@ -444,13 +491,7 @@ inline void enrich_intersection_points(V& intersection_points, bool has_collinea
     detail::intersection::report_map(map);
 #endif
 
-    if (detail::intersection::assign_next_points(map, intersection_points))
-    {
-#ifdef GGL_DEBUG_INTERSECTION
-        std::cout << "Enriched: " << std::endl;
-        detail::intersection::report_ip(intersection_points);
-#endif
-    }
+    detail::intersection::assign_next_points(map, intersection_points);
 
     detail::intersection::assign_order(map, intersection_points);
 }

@@ -10,7 +10,7 @@
 #ifndef GGL_CORE_INTERIOR_RINGS_HPP
 #define GGL_CORE_INTERIOR_RINGS_HPP
 
-
+#include <boost/range/functions.hpp>
 #include <boost/type_traits/remove_const.hpp>
 
 #include <ggl/core/tag.hpp>

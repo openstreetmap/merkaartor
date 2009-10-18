@@ -21,11 +21,8 @@
 #include <ggl/strategies/cartesian/cart_within.hpp>
 
 #include <ggl/strategies/spherical/sph_area.hpp>
-#include <ggl/strategies/spherical/sph_distance.hpp>
+#include <ggl/strategies/spherical/haversine.hpp>
 #include <ggl/strategies/spherical/sph_envelope.hpp>
-
-#include <ggl/strategies/geographic/geo_distance.hpp>
-#include <ggl/strategies/geographic/geo_parse.hpp>
 
 #include <ggl/strategies/agnostic/agn_convex_hull.hpp>
 #include <ggl/strategies/agnostic/agn_simplify.hpp>

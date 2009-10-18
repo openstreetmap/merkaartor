@@ -11,18 +11,6 @@
 
 #include <ggl/core/access.hpp>
 
-/*!
-\defgroup overlap overlap detection
-\par Source descriptions:
-- Egenhofer: Two objects overlap if they have common interior faces and the bounding faces have common parts
-with the opposite interior faces.
-
-\note Implemented in scratch the Generic Geometry library. Will be reworked internally to support more geometries
-but function call will stay as it is now.
-\see http://docs.codehaus.org/display/GEOTDOC/02+Geometry+Relationships#02GeometryRelationships-Overlaps
-where is stated that "inside" is not an "overlap", this is probably true and should then be implemented as such.
-
-*/
 
 namespace ggl
 {
@@ -30,8 +18,19 @@ namespace ggl
 /*!
     \brief Determines overlap between two geometries
     \details parameters are now boxes but in the future will be geometries
-    \ingroup overlap
+    \ingroup boolean_relations
     \return true if there is overlap
+
+
+    \par Source descriptions:
+    - Egenhofer: Two objects overlap if they have common interior faces and the bounding faces have common parts
+    with the opposite interior faces.
+
+    \note Implemented in scratch the Generic Geometry library. Will be reworked internally to support more geometries
+    but function call will stay as it is now.
+    \see http://docs.codehaus.org/display/GEOTDOC/02+Geometry+Relationships#02GeometryRelationships-Overlaps
+    where is stated that "inside" is not an "overlap", this is probably true and should then be implemented as such.
+
  */
 template <typename B>
 inline bool overlaps(const B& b1, const B& b2)

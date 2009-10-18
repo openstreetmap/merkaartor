@@ -20,8 +20,8 @@
 #ifndef _MOBILE
 #include <ggl/ggl.hpp>
 #include <ggl/geometries/cartesian2d.hpp>
-
 #include <ggl/geometries/adapted/std_as_linestring.hpp>
+#include <ggl/algorithms/intersects.hpp>
 #endif
 
 
@@ -619,21 +619,35 @@ void Road::buildPath(const Projection &theProjection, const QTransform& /*theTra
 			}
 	        correct(in);
 
-	        std::vector<polygon_2d> clipped;
-			intersection <polygon_2d, box_2d, polygon_2d /*std::vector<TrackPointPtr>*/, std::back_insert_iterator <std::vector<polygon_2d> > >
-				(clipRect, in /*p->Nodes*/, std::back_inserter(clipped));
 
-	        for (std::vector<polygon_2d>::const_iterator it = clipped.begin(); it != clipped.end(); it++)
-	        {
-		        if (!(*it).outer().empty()) {
-			        p->thePath.moveTo(QPointF((*it).outer()[0].x(), (*it).outer()[0].y()));
-		        }
-		        for (ring_2d::const_iterator itl = (*it).outer().begin()+1; itl != (*it).outer().end()-1; itl++)
-		        {
-			        p->thePath.lineTo(QPointF((*itl).x(), (*itl).y()));
-		        }
-		        p->thePath.lineTo(QPointF((*it).outer()[0].x(), (*it).outer()[0].y()));
-	        }
+			// Handle case of self-intersecting polygons
+			if (!intersects(in)) {
+				std::vector<polygon_2d> clipped;
+				intersection <polygon_2d, box_2d, polygon_2d /*std::vector<TrackPointPtr>*/, std::back_insert_iterator <std::vector<polygon_2d> > >
+					(clipRect, in /*p->Nodes*/, std::back_inserter(clipped));
+				for (std::vector<polygon_2d>::const_iterator it = clipped.begin(); it != clipped.end(); it++)
+				{
+					if (!(*it).outer().empty()) {
+						p->thePath.moveTo(QPointF((*it).outer()[0].x(), (*it).outer()[0].y()));
+					}
+					for (ring_2d::const_iterator itl = (*it).outer().begin()+1; itl != (*it).outer().end()-1; itl++)
+					{
+						p->thePath.lineTo(QPointF((*itl).x(), (*itl).y()));
+					}
+					p->thePath.lineTo(QPointF((*it).outer()[0].x(), (*it).outer()[0].y()));
+				}
+			} else {
+				if (!p->wasPathComplete || p->ProjectionRevision != theProjection.projectionRevision()) {
+					p->thePath = QPainterPath();
+
+					p->thePath.moveTo(p->Nodes.at(0)->projection());
+					for (unsigned int i=1; i<p->Nodes.size(); ++i) {
+						p->thePath.lineTo(p->Nodes.at(i)->projection());
+					}
+					p->ProjectionRevision = theProjection.projectionRevision();
+					p->wasPathComplete = true;
+				}
+			}
         }
 	}
 	//p->thePath = theTransform.map(p->thePath);

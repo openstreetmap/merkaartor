@@ -16,6 +16,7 @@
 #include <boost/range/metafunctions.hpp>
 
 #include <ggl/core/cs.hpp>
+#include <ggl/core/exception.hpp>
 #include <ggl/core/exterior_ring.hpp>
 #include <ggl/core/interior_rings.hpp>
 #include <ggl/core/concepts/point_concept.hpp>
@@ -44,8 +45,7 @@ return the centroid, the type has to be specified.
 namespace ggl
 {
 
-// Move elsewhere?
-class centroid_exception : public std::exception
+class centroid_exception : public ggl::exception
 {
 public:
 
@@ -56,6 +56,8 @@ public:
         return "centroid calculation exception";
     }
 };
+
+
 
 #ifndef DOXYGEN_NO_DETAIL
 namespace detail { namespace centroid {
@@ -73,14 +75,11 @@ inline bool ring_ok(R const& ring, P& c)
     }
     else if (n <= 0)
     {
-#if defined(CENTROID_WITH_CATCH)
         throw centroid_exception();
-#endif
-        return false;
     }
-    else // if (n == 1)
+    else
     {
-        // Take over the first point in a "coordinate neutral way"
+        // n == 1: Take over the first point in a "coordinate neutral way"
         copy_coordinates(ring.front(), c);
         return false;
     }

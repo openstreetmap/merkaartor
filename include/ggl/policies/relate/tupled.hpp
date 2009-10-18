@@ -10,7 +10,7 @@
 #define GGL_GEOMETRY_POLICIES_RELATE_TUPLED_HPP
 
 #include <boost/tuple/tuple.hpp>
-#include <ggl/util/promotion_traits.hpp>
+#include <ggl/util/select_coordinate_type.hpp>
 
 namespace ggl
 {
@@ -55,12 +55,12 @@ struct segments_tupled
     }
 
     static inline return_type collinear_touch(coordinate_type const& x,
-                coordinate_type const& y, bool opposite)
+                coordinate_type const& y, bool opposite, char how)
     {
         return boost::make_tuple
             (
-                Policy1::collinear_touch(x, y, opposite),
-                Policy2::collinear_touch(x, y, opposite)
+                Policy1::collinear_touch(x, y, opposite, how),
+                Policy2::collinear_touch(x, y, opposite, how)
             );
     }
 

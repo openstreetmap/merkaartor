@@ -18,7 +18,7 @@
 #include <ggl/core/concepts/box_concept.hpp>
 #include <ggl/core/concepts/point_concept.hpp>
 #include <ggl/util/assign_box_corner.hpp>
-#include <ggl/util/promotion_traits.hpp>
+#include <ggl/util/select_coordinate_type.hpp>
 
 /*!
 \defgroup combine combine: add a geometry to a bounding box

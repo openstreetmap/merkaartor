@@ -19,14 +19,9 @@
 #include <ggl/core/is_multi.hpp>
 #include <ggl/core/reverse_dispatch.hpp>
 #include <ggl/util/math.hpp>
+#include <ggl/util/select_coordinate_type.hpp>
 
-/*!
-\defgroup disjoint disjoint determination
-The disjoint algorithm returns if two geometries are disjoint
 
-TODO: for spherical / latlong, it should consider the 180 dateline
-
-*/
 
 namespace ggl
 {
@@ -178,7 +173,7 @@ struct disjoint_reversed
 
 /*!
     \brief Calculate if two geometries are disjoint
-    \ingroup disjoint
+    \ingroup boolean_relations
     \tparam Geometry1 first geometry type
     \tparam Geometry2 second geometry type
     \param geometry1 first geometry

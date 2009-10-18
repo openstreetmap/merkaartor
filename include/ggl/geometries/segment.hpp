@@ -79,12 +79,12 @@ struct indexed_access<segment<P>, I, D>
     typedef segment<P> segment_type;
     typedef typename ggl::coordinate_type<segment_type>::type coordinate_type;
 
-    static inline coordinate_type get(const segment_type& s)
+    static inline coordinate_type get(segment_type const& s)
     {
         return (I == 0 ? ggl::get<D>(s.first) : ggl::get<D>(s.second));
     }
 
-    static inline void set(segment_type& s, const coordinate_type& value)
+    static inline void set(segment_type& s, coordinate_type const& value)
     {
         if (I == 0)
         {

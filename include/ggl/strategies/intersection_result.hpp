@@ -19,7 +19,7 @@ namespace ggl
 /*!
     \brief Dimensionally Extended 9 Intersection Matrix
     \details
-    \ingroup intersection
+    \ingroup overlay
     \see http://gis.hsr.ch/wiki/images/3/3d/9dem_springer.pdf
 */
 struct de9im

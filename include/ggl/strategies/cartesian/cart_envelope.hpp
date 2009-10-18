@@ -55,6 +55,8 @@ struct strategy_envelope<cartesian_tag, cartesian_tag, P, B>
 {
     typedef strategy::envelope::combine_xy<P, B> type;
 };
+
+
 #endif
 
 

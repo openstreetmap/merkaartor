@@ -35,6 +35,7 @@ struct copy_segments_ring
             SegmentIdentifier const& seg_id, int to_index,
             RangeOut& current_output)
     {
+
         typedef typename ggl::point_const_iterator<Ring>::type iterator;
         typedef ggl::ever_circling_iterator<iterator> ec_iterator;
 
@@ -44,11 +45,16 @@ struct copy_segments_ring
         // So we use the ever-circling iterator and determine when to step out
 
         int from_index = seg_id.segment_index + 1;
+
+        // Sanity check
+        BOOST_ASSERT(from_index < boost::size(ring));
+
         ec_iterator it(boost::begin(ring), boost::end(ring),
                     boost::begin(ring) + from_index);
 
         // [2..4] -> 4 - 2 + 1 = 3 -> {2,3,4} -> OK
         // [4..2],size=6 -> 6 - 4 + 2 + 1 = 5 -> {4,5,0,1,2} -> OK
+        // [1..1], travel the whole ring round
         int count = from_index <= to_index
             ? to_index - from_index + 1
             : boost::size(ring) - from_index + to_index + 1;
@@ -56,6 +62,11 @@ struct copy_segments_ring
         for (int i = 0; i < count; ++i, ++it)
         {
             // TODO: use 'copy coordinates' to handle different point types
+#ifdef GGL_DEBUG_INTERSECTION
+            std::cout << "  add: (" 
+                << ggl::get<0>(*it) << ", " << ggl::get<1>(*it) << ")" 
+                << std::endl;
+#endif
             current_output.push_back(*it);
         }
     }
@@ -80,7 +91,8 @@ struct copy_segments_polygon
                     seg_id.ring_index < 0
                     ? ggl::exterior_ring(polygon)
                     : ggl::interior_rings(polygon)[seg_id.ring_index],
-                    seg_id, to_index, current_output
+                    seg_id, to_index, 
+                    current_output
                 );
     }
 };

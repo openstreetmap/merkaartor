@@ -15,6 +15,12 @@
 #include <boost/concept/assert.hpp>
 #include <boost/range/functions.hpp>
 
+#include <ggl/core/tag.hpp>
+#include <ggl/core/tags.hpp>
+
+#include <ggl/core/concepts/point_concept.hpp>
+
+
 namespace ggl
 {
 

@@ -26,11 +26,12 @@
 #include <ggl/iterators/point_const_iterator.hpp>
 
 #include <ggl/util/assign_box_corner.hpp>
+#include <ggl/util/math.hpp>
 #include <ggl/geometries/segment.hpp>
 
 
 /*!
-\defgroup sectionalize sectionalize: split a geometry (polygon,linestring,etc)
+\defgroup sectionalize sectionalize: split a geometry (polygon, linestring, etc)
     into monotonic sections
 
 \par Geometries:
@@ -67,7 +68,11 @@ struct section
 
     int begin_index;
     int end_index;
-    int count;
+    std::size_t count;
+    std::size_t range_count;
+    bool duplicate;
+    int non_duplicate_index;
+
 
     inline section()
         : ring_index(-99)
@@ -75,9 +80,12 @@ struct section
         , begin_index(-1)
         , end_index(-1)
         , count(0)
+        , range_count(0)
+        , duplicate(false)
+        , non_duplicate_index(-1)
     {
         assign_inverse(bounding_box);
-        for (register int i = 0; i < DimensionCount; i++)
+        for (register std::size_t i = 0; i < DimensionCount; i++)
         {
             directions[i] = 0;
         }
@@ -185,6 +193,58 @@ struct compare_loop<T, DimensionCount, DimensionCount>
     }
 };
 
+
+template <typename Segment, std::size_t Dimension, std::size_t DimensionCount>
+struct check_duplicate_loop
+{
+    typedef typename coordinate_type<Segment>::type coordinate_type;
+
+    static inline bool apply(Segment const& seg)
+    {
+        coordinate_type const diff =
+            ggl::get<1, Dimension>(seg) - ggl::get<0, Dimension>(seg);
+
+        if (! ggl::math::equals(diff, 0))
+        {
+            return false;
+        }
+
+        return check_duplicate_loop
+            <
+                Segment, Dimension + 1, DimensionCount
+            >::apply(seg);
+    }
+};
+
+template <typename Segment, std::size_t DimensionCount>
+struct check_duplicate_loop<Segment, DimensionCount, DimensionCount>
+{
+    static inline bool apply(Segment const&)
+    {
+        return true;
+    }
+};
+
+template <typename T, std::size_t Dimension, std::size_t DimensionCount>
+struct assign_loop
+{
+    static inline void apply(T dims[DimensionCount], int const value)
+    {
+        dims[Dimension] = value;
+        assign_loop<T, Dimension + 1, DimensionCount>::apply(dims, value);
+    }
+};
+
+template <typename T, std::size_t DimensionCount>
+struct assign_loop<T, DimensionCount, DimensionCount>
+{
+    static inline void apply(T dims[DimensionCount], int const)
+    {
+        boost::ignore_unused_variable_warning(dims);
+    }
+};
+
+
 template
 <
     typename Range,
@@ -214,6 +274,7 @@ struct sectionalize_range
         }
 
         int i = 0;
+        int ndi = 0; // non duplicate index
 
         typedef typename boost::range_value<Sections>::type sections_range_type;
         sections_range_type section;
@@ -233,6 +294,35 @@ struct sectionalize_range
                     segment_type, 0, DimensionCount
                 >::apply(s, direction_classes);
 
+            // if "dir" == 0 for all point-dimensions, it is duplicate.
+            // Those sections might be omitted, if wished, lateron
+            bool check_duplicate = true; //?
+            bool duplicate = false;
+
+            if (check_duplicate && direction_classes[0] == 0)
+            {
+                // Recheck because all dimensions should be checked,
+                // not only first one,
+                // Note that DimensionCount might be < dimension<P>::value
+                if (check_duplicate_loop
+                    <
+                        segment_type, 0, ggl::dimension<Point>::type::value
+                    >::apply(s)
+                    )
+                {
+                    duplicate = true;
+
+                    // Change direction-info to force new section
+                    // Note that wo consecutive duplicate segments will generate
+                    // only one duplicate-section.
+                    // Actual value is not important as long as it is not -1,0,1
+                    assign_loop
+                    <
+                        int, 0, DimensionCount
+                    >::apply(direction_classes, -99);
+                }
+            }
+
             if (section.count > 0
                 && (!compare_loop
                         <
@@ -251,6 +341,10 @@ struct sectionalize_range
                 section.begin_index = i;
                 section.ring_index = ring_index;
                 section.multi_index = multi_index;
+                section.duplicate = duplicate;
+                section.non_duplicate_index = ndi;
+                section.range_count = boost::size(range);
+
                 copy_loop
                     <
                         int, 0, DimensionCount
@@ -261,6 +355,10 @@ struct sectionalize_range
             ggl::combine(section.bounding_box, *it);
             section.end_index = i + 1;
             section.count++;
+            if (! duplicate)
+            {
+                ndi++;
+            }
         }
 
         if (section.count > 0)
@@ -448,16 +546,16 @@ struct sectionalize<polygon_tag, Polygon, Sections, DimensionCount, MaxCount>
 /*!
     \brief Split a geometry into monotonic sections
     \ingroup sectionalize
-    \tparam G type of geometry to check
-    \tparam S type of sections to create
-    \param geometry geometry which might be located in the neighborhood
-    \param section structure with sections
+    \tparam Geometry type of geometry to check
+    \tparam Sections type of sections to create
+    \param geometry geometry to create sections from
+    \param sections structure with sections
 
  */
 template<typename Geometry, typename Sections>
 inline void sectionalize(Geometry const& geometry, Sections& sections)
 {
-    // A maximum of 10 segments per section proves to give the fastest results
+    // A maximum of 10 segments per section seems to give the fastest results
     static const std::size_t max_segments_per_section = 10;
     typedef dispatch::sectionalize
         <
@@ -473,46 +571,6 @@ inline void sectionalize(Geometry const& geometry, Sections& sections)
 }
 
 
-
-
-
-
-
-
-
-
-
-// will be moved soon to "get_section"
-
-
-template <typename Tag, typename Geometry, typename Section>
-struct get_section
-{
-    typedef typename ggl::point_const_iterator<Geometry>::type iterator_type;
-    static inline void apply(Geometry const& geometry, Section const& section,
-                iterator_type& begin, iterator_type& end)
-    {
-        begin = boost::begin(geometry) + section.begin_index;
-        end = boost::begin(geometry) + section.end_index + 1;
-    }
-};
-
-template <typename Polygon, typename Section>
-struct get_section<polygon_tag, Polygon, Section>
-{
-    typedef typename ggl::point_const_iterator<Polygon>::type iterator_type;
-    static inline void apply(Polygon const& polygon, Section const& section,
-                iterator_type& begin, iterator_type& end)
-    {
-        typedef typename ggl::ring_type<Polygon>::type ring_type;
-        ring_type const& ring = section.ring_index < 0
-            ? ggl::exterior_ring(polygon)
-            : ggl::interior_rings(polygon)[section.ring_index];
-
-        begin = boost::begin(ring) + section.begin_index;
-        end = boost::begin(ring) + section.end_index + 1;
-    }
-};
 
 
 

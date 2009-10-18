@@ -13,7 +13,7 @@
 
 #ifndef _MOBILE
 #include <ggl/ggl.hpp>
-#include <ggl/geometries/register/register_point.hpp>
+#include <ggl/geometries/register/point.hpp>
 #endif
 
 class TrackPointPrivate;

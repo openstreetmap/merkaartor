@@ -20,7 +20,6 @@
 #include <ggl/geometries/segment.hpp>
 #include <ggl/strategies/distance_result.hpp>
 #include <ggl/strategies/strategies.hpp>
-#include <ggl/util/promotion_traits.hpp>
 
 /*!
 \defgroup distance distance calculation
@@ -70,17 +69,17 @@ struct point_to_point
 };
 
 
-template<typename P, typename Segment, typename Strategy>
+template<typename Point, typename Segment, typename Strategy>
 struct point_to_segment
 {
-    static inline typename Strategy::return_type apply(P const& point,
+    static inline typename Strategy::return_type apply(Point const& point,
                 Segment const& segment, Strategy const& strategy)
     {
         typename strategy_distance_segment
             <
-            typename cs_tag<P>::type,
+            typename cs_tag<Point>::type,
             typename cs_tag<Segment>::type,
-            P,
+            Point,
             Segment
             >::type segment_strategy;
 
@@ -122,7 +121,7 @@ struct point_to_linestring
         while(it != boost::end(linestring))
         {
             return_type ds = ps_strategy(point, segment_type(*prev, *it));
-            if (close_to_zero(ds))
+            if (ggl::close_to_zero(ds))
             {
                 return return_type(0);
             }
@@ -169,66 +168,68 @@ struct distance
 {};
 
 /// Point-line version 1, where point-point strategy is specified
-template <typename P, typename L, typename Strategy>
+template <typename Point, typename Linestring, typename Strategy>
 struct distance
 <
     point_tag, linestring_tag,
-    P, L,
+    Point, Linestring,
     strategy_tag_distance_point_point, Strategy,
     false, false
 >
 {
 
-    static inline typename Strategy::return_type apply(P const& point, L const& linestring,
+    static inline typename Strategy::return_type apply(Point const& point,
+            Linestring const& linestring,
             Strategy const& strategy)
     {
-        typedef segment<const typename point_type<L>::type> segment_type;
+        typedef segment<const typename point_type<Linestring>::type> segment_type;
         typedef typename ggl::strategy_distance_segment
                     <
-                            typename cs_tag<P>::type,
+                            typename cs_tag<Point>::type,
                             typename cs_tag<segment_type>::type,
-                            P,
+                            Point,
                             segment_type
                     >::type ps_strategy_type;
 
         return detail::distance::point_to_linestring
             <
-                P, L, Strategy, ps_strategy_type
+                Point, Linestring, Strategy, ps_strategy_type
             >::apply(point, linestring, strategy, ps_strategy_type());
     }
 };
 
 
 /// Point-line version 2, where point-segment strategy is specified
-template <typename P, typename L, typename Strategy>
+template <typename Point, typename Linestring, typename Strategy>
 struct distance
 <
     point_tag, linestring_tag,
-    P, L,
+    Point, Linestring,
     strategy_tag_distance_point_segment, Strategy,
     false, false
 >
 {
-    static inline typename Strategy::return_type apply(P const& point, L const& linestring,
+    static inline typename Strategy::return_type apply(Point const& point,
+            Linestring const& linestring,
             Strategy const& strategy)
     {
         typedef typename Strategy::point_strategy_type pp_strategy_type;
         return detail::distance::point_to_linestring
             <
-                P, L, pp_strategy_type, Strategy
+                Point, Linestring, pp_strategy_type, Strategy
             >::apply(point, linestring, pp_strategy_type(), strategy);
     }
 };
 
 
-template <typename P, typename Segment, typename Strategy>
+template <typename Point, typename Segment, typename Strategy>
 struct distance
 <
     point_tag, segment_tag,
-    P, Segment,
+    Point, Segment,
     strategy_tag_distance_point_point, Strategy,
     false, false
-> : detail::distance::point_to_segment<P, Segment, Strategy>
+> : detail::distance::point_to_segment<Point, Segment, Strategy>
 {};
 
 

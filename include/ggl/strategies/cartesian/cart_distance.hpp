@@ -10,7 +10,8 @@
 #define GGL_STRATEGY_CARTESIAN_DISTANCE_HPP
 
 
-
+#include <boost/mpl/if.hpp>
+#include <boost/type_traits.hpp>
 #include <boost/type_traits/remove_const.hpp>
 
 #include <ggl/core/access.hpp>
@@ -22,7 +23,7 @@
 #include <ggl/strategies/strategy_traits.hpp>
 #include <ggl/strategies/distance_result.hpp>
 
-#include <ggl/util/promotion_traits.hpp>
+#include <ggl/util/select_coordinate_type.hpp>
 #include <ggl/util/copy.hpp>
 
 
@@ -40,19 +41,21 @@ namespace detail
 template <typename P1, typename P2, size_t I, typename T>
 struct compute_pythagoras
 {
-    static T result(const P1& p1, const P2& p2)
+    static inline T apply(P1 const& p1, P2 const& p2)
     {
-        T d = get<I-1>(p2) - get<I-1>(p1);
-        return d*d + compute_pythagoras<P1, P2, I-1, T>::result(p1, p2);
+        T const c1 = boost::numeric_cast<T>(get<I-1>(p2));
+        T const c2 = boost::numeric_cast<T>(get<I-1>(p1));
+        T const d = c1 - c2;
+        return d * d + compute_pythagoras<P1, P2, I-1, T>::apply(p1, p2);
     }
 };
 
 template <typename P1, typename P2, typename T>
 struct compute_pythagoras<P1, P2, 0, T>
 {
-    static T result(const P1&, const P2&)
+    static inline T apply(P1 const&, P2 const&)
     {
-        return 0;
+        return boost::numeric_cast<T>(0);
     }
 };
 
@@ -67,15 +70,30 @@ struct compute_pythagoras<P1, P2, 0, T>
     \par Concepts for P1 and P2:
     - specialized point_traits class
 */
-template <typename P1, typename P2 = P1>
+template
+<
+    typename P1,
+    typename P2 = P1,
+    typename CalculationType = void
+>
 struct pythagoras
 {
-    typedef typename select_coordinate_type<P1, P2>::type coordinate_type;
-    typedef cartesian_distance return_type;
+    typedef typename
+        boost::mpl::if_c
+        <
+            boost::is_void<CalculationType>::type::value,
+            typename select_coordinate_type
+                <
+                    P1,
+                    P2
+                >::type,
+            CalculationType
+        >::type calculation_type;
+
+    typedef cartesian_distance<calculation_type> return_type;
 
 
-    inline cartesian_distance
-    operator()(P1 const& p1, P2 const& p2) const
+    inline return_type operator()(P1 const& p1, P2 const& p2) const
     {
 
         BOOST_CONCEPT_ASSERT( (concept::ConstPoint<P1>) );
@@ -86,12 +104,12 @@ struct pythagoras
 
         assert_dimension_equal<P1, P2>();
 
-        return cartesian_distance(detail::compute_pythagoras
+        return return_type(detail::compute_pythagoras
             <
                 P1, P2,
                 dimension<P1>::value,
-                coordinate_type
-            >::result(p1, p2));
+                calculation_type
+            >::apply(p1, p2));
     }
 };
 
@@ -116,12 +134,12 @@ template
 struct xy_point_segment
 {
     typedef typename select_coordinate_type<P, Segment>::type coordinate_type;
-    typedef cartesian_distance return_type;
+    typedef cartesian_distance<coordinate_type> return_type;
     typedef Strategy distance_strategy_type; // OBSOLETE!
     typedef Strategy point_strategy_type;
 
 
-    inline cartesian_distance operator()(P const& p, Segment const& s) const
+    inline return_type operator()(P const& p, Segment const& s) const
     {
         assert_dimension_equal<P, Segment>();
 

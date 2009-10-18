@@ -59,7 +59,7 @@ namespace ggl
     \until //:\\
 */
 template<typename R, typename F, typename S>
-inline bool loop(const R& range, const F& functor, S& state)
+inline bool loop(R const& range, F const& functor, S& state)
 {
     typedef typename boost::range_const_iterator<R>::type iterator_type;
 

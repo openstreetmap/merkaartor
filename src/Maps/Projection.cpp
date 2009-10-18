@@ -6,8 +6,8 @@
 
 #include <math.h>
 
-#include <ggl/projections/parameters.hpp>
-#include <ggl/projections/factory.hpp>
+#include <ggl/extensions/gis/projections/parameters.hpp>
+#include <ggl/extensions/gis/projections/factory.hpp>
 
 // from wikipedia
 #define EQUATORIALRADIUS 6378137.0
@@ -51,7 +51,7 @@ Projection::~Projection(void)
 
 #ifndef _MOBILE
 
-#include "ggl/projections/impl/pj_transform.hpp"
+#include "ggl/extensions/gis/projections/impl/pj_transform.hpp"
 void Projection::projTransform(ProjProjection *srcdefn, 
 						   ProjProjection *dstdefn, 
 						   long point_count, int point_offset, double *x, double *y, double *z )

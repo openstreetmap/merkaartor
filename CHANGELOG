@@ -1,4 +1,5 @@
 v0.15
+    * FIX : crash with self-intersecting polygons (fixes #2317)
 	* FIX : assert when drawing scale (fixes #2347)
     * FIX : Do not add the "oneway" tag on roundabouts (implied)
     * FIX : crashes on editing style None.mas by Stefan (Konink?) (fixes #2200)

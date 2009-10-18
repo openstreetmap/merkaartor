@@ -105,7 +105,7 @@ class Coord
 
 #ifndef _MOBILE
 #include <ggl/ggl.hpp>
-#include <ggl/geometries/register/register_point.hpp>
+#include <ggl/geometries/register/point.hpp>
 
 GEOMETRY_REGISTER_POINT_2D_GET_SET(Coord, int, cs::cartesian, lat, lon, setLat, setLon)
 
@@ -284,7 +284,7 @@ class CoordBox
 Q_DECLARE_METATYPE( CoordBox );
 
 #ifndef _MOBILE
-#include <ggl/geometries/register/register_box.hpp>
+#include <ggl/geometries/register/box.hpp>
 
 GEOMETRY_REGISTER_BOX(CoordBox, Coord, BottomLeft, TopRight)
 #endif

@@ -12,6 +12,7 @@
 #include <ggl/multi/core/is_multi.hpp>
 
 #include <ggl/multi/algorithms/distance.hpp>
+#include <ggl/multi/algorithms/get_section.hpp>
 #include <ggl/multi/algorithms/sectionalize.hpp>
 
 #include <ggl/multi/iterators/point_const_iterator.hpp>

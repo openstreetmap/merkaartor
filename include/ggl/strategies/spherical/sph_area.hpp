@@ -10,7 +10,10 @@
 #define GGL_GEOMETRY_STRATEGIES_SPHERICAL_SPH_AREA_HPP
 
 #include <ggl/geometries/segment.hpp>
-#include <ggl/strategies/spherical/sph_distance.hpp>
+#include <ggl/strategies/spherical/haversine.hpp>
+#include <ggl/strategies/strategy_transform.hpp>
+
+#include <ggl/util/get_cs_as_radian.hpp>
 
 namespace ggl
 {
@@ -18,6 +21,9 @@ namespace strategy
 {
     namespace area
     {
+
+
+
         /*!
             \brief Area calculation by spherical excess
             \tparam P type of points of rings/polygons
@@ -41,29 +47,47 @@ namespace strategy
             private :
                 struct excess_sum
                 {
-                    double sum;
-                    inline excess_sum() : sum(0) {}
+                    double m_sum;
+                    double m_radius;
+
+                    // TODO: make this 1.0 & implement other construct to let user specify
+                    inline excess_sum(double radius = 1.0) //constants::average_earth_radius)
+                        : m_sum(0)
+                        , m_radius(radius)
+                    {}
                     inline double area() const
                     {
-                        return - sum * constants::average_earth_radius * constants::average_earth_radius;
+                        return - m_sum * m_radius * m_radius;
+                            //constants::average_earth_radius * constants::average_earth_radius;
                     }
                 };
 
                 // Distances are calculated on unit sphere here
                 strategy::distance::haversine<P, P> m_unit_sphere;
+                double m_radius;
 
             public :
+                typedef double return_type;
                 typedef excess_sum state_type;
 
-                by_spherical_excess()
+                by_spherical_excess(double radius = 1.0)
                     : m_unit_sphere(1)
+                    , m_radius(radius)
                 {}
 
-                inline bool operator()(const segment<const P>& segment, state_type& state) const
+                inline bool operator()(segment<const P> const& segment, state_type& state) const
                 {
                     if (get<0>(segment.first) != get<0>(segment.second))
                     {
-                        typedef point_ll<typename coordinate_type<P>::type, cs::geographic<radian> > PR;
+                        typedef point
+                            <
+                                typename coordinate_type<P>::type,
+                                2,
+                                typename ggl::detail::get_cs_as_radian
+                                    <
+                                        typename coordinate_system<P>::type
+                                    >::type
+                            > PR;
                         PR p1, p2;
 
                         // Select transformation strategy and transform to radians (if necessary)
@@ -82,14 +106,17 @@ namespace strategy
                         // Distance p1 p2
                         double a = m_unit_sphere(segment.first, segment.second);
                         // Sides on unit sphere to south pole
-                        double b = 0.5 * math::pi - p2.lat();
-                        double c = 0.5 * math::pi - p1.lat();
+                        double b = 0.5 * math::pi - ggl::get<1>(p2);
+                        double c = 0.5 * math::pi - ggl::get<1>(p1);
                         // Semi parameter
                         double s = 0.5 * (a + b + c);
 
                         // E: spherical excess, using l'Huiller's formula
                         // [tg(e / 4)]2   =   tg[s / 2]  tg[(s-a) / 2]  tg[(s-b) / 2]  tg[(s-c) / 2]
-                        double E = 4.0 * atan(sqrt(fabs(tan(s / 2) * tan((s - a) / 2) * tan((s - b) / 2) * tan((s - c) / 2))));
+                        double E = 4.0 * atan(sqrt(fabs(tan(s / 2)
+                                * tan((s - a) / 2)
+                                * tan((s - b) / 2)
+                                * tan((s - c) / 2))));
 
                         E = fabs(E);
 
@@ -98,15 +125,19 @@ namespace strategy
                         // we have to take the date into account.
                         // TODO: check this / enhance this, should be more robust. See also the "grow" for ll
                         // TODO: use minmax or "smaller"/"compare" strategy for this
-                        double lon1 = p1.lon() < 0 ? p1.lon() + math::two_pi : p1.lon();
-                        double lon2 = p2.lon() < 0 ? p2.lon() + math::two_pi : p2.lon();
+                        double lon1 = ggl::get<0>(p1) < 0
+                            ? ggl::get<0>(p1) + math::two_pi
+                            : ggl::get<0>(p1);
+                        double lon2 = ggl::get<0>(p2) < 0
+                            ? ggl::get<0>(p2) + math::two_pi
+                            : ggl::get<0>(p2);
 
                         if (lon2 < lon1)
                         {
                             E= -E;
                         }
 
-                        state.sum += E;
+                        state.m_sum += E;
                     }
                     return true;
                 }
@@ -118,6 +149,12 @@ namespace strategy
 
 
 #ifndef DOXYGEN_NO_STRATEGY_SPECIALIZATIONS
+template <typename LL>
+struct strategy_area<spherical_tag, LL>
+{
+    typedef strategy::area::by_spherical_excess<LL> type;
+};
+
 template <typename LL>
 struct strategy_area<geographic_tag, LL>
 {

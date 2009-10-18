@@ -14,7 +14,7 @@
 #include <ggl/geometries/point_xy.hpp>
 #include <ggl/geometries/segment.hpp>
 
-#include <ggl/util/promotion_traits.hpp>
+#include <ggl/util/select_coordinate_type.hpp>
 
 
 

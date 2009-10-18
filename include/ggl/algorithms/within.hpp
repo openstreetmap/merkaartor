@@ -24,33 +24,12 @@
 #include <ggl/strategies/strategies.hpp>
 #include <ggl/util/loop.hpp>
 
-/*!
-\defgroup within within: examine if one geometry is within another geometry (a.o. point in polygon)
 
-\par Source descriptions:
-- OGC: Returns 1 (TRUE) if this geometric object is "spatially within" another Geometry.
-
-\par Performance
-2776 within determinations using bounding box and polygon are done in 0.09 seconds (other libraries: 0.14 seconds, 3.0 seconds, 3.8)
-
-\par Example:
-The within algorithm is used as following:
-\dontinclude doxygen_examples.cpp
-\skip example_within
-\line {
-\until }
-\par Geometries:
-- POINT + POLYGON: The well-known point-in-polygon, returning true if a point falls within a polygon (and not
-within one of its holes) \image html within_polygon.png
-- POINT + RING: returns true if point is completely within a ring \image html within_ring.png
-*/
 
 
 namespace ggl
 {
-/*!
-    \ingroup impl
- */
+
 #ifndef DOXYGEN_NO_DETAIL
 namespace detail { namespace within {
 
@@ -369,11 +348,30 @@ struct within<point_tag, polygon_tag, P, Y>
 
 /*!
     \brief Within check
-    \ingroup within
+    \details Examine if one geometry is within another geometry (a.o. point in polygon)
+    \ingroup boolean_relations
     \param geometry1 geometry which might be within the second geometry
     \param geometry2 geometry which might contain the first geometry
     \return true if geometry1 is completely contained within geometry2, else false
     \note The default strategy is used for within detection
+
+\par Source descriptions:
+- OGC: Returns 1 (TRUE) if this geometric object is "spatially within" another Geometry.
+
+\par Performance
+2776 within determinations using bounding box and polygon are done in 0.09 seconds (other libraries: 0.14 seconds, 3.0 seconds, 3.8)
+
+\par Example:
+The within algorithm is used as following:
+\dontinclude doxygen_examples.cpp
+\skip example_within
+\line {
+\until }
+\par Geometries:
+- POINT + POLYGON: The well-known point-in-polygon, returning true if a point falls within a polygon (and not
+within one of its holes) \image html within_polygon.png
+- POINT + RING: returns true if point is completely within a ring \image html within_ring.png
+
  */
 template<typename G1, typename G2>
 inline bool within(G1 const& geometry1, G2 const& geometry2)
@@ -391,7 +389,7 @@ inline bool within(G1 const& geometry1, G2 const& geometry2)
 
 /*!
     \brief Within check using a strategy
-    \ingroup within
+    \ingroup boolean_relations
     \param geometry1 geometry which might be within the second geometry
     \param geometry2 geometry which might contain the first geometry
     \param strategy strategy to be used

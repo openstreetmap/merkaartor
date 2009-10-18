@@ -15,7 +15,7 @@
 #include <ggl/algorithms/append.hpp>
 #include <ggl/algorithms/clear.hpp>
 #include <ggl/util/copy.hpp>
-#include <ggl/util/promotion_traits.hpp>
+#include <ggl/util/select_coordinate_type.hpp>
 #include <ggl/geometries/segment.hpp>
 
 namespace ggl
@@ -25,7 +25,7 @@ namespace strategy { namespace intersection {
 
 /*!
     \brief Strategy: line clipping algorithm after Liang Barsky
-    \ingroup intersection
+    \ingroup overlay
     \details The Liang-Barsky line clipping algorithm clips a line with a clipping box.
     It is slightly adapted in the sense that it returns which points are clipped
     \tparam B input box type of clipping box
@@ -138,18 +138,15 @@ public:
 #ifndef DOXYGEN_NO_DETAIL
 namespace detail { namespace intersection {
 
-// TODO: The comment below seems toneed update, isn't it? --mloskot
-
 /*!
-    \brief Clips a linestring, or pair of iterators, with a box
-    \details A linestring, defined by an iterator pair, is intersected (clipped) by the specified box
+    \brief Clips a linestring with a box
+    \details A linestring is intersected (clipped) by the specified box
     and the resulting linestring, or pieces of linestrings, are sent to the specified output operator.
-    \tparam C container type, for example a vector of points, matching the output-iterator type,
-         the points should also match the input-iterator type
     \tparam OutputLinestring type of the output linestrings
     \tparam OutputIterator an output iterator which outputs linestrings
+    \tparam Linestring linestring-type, for example a vector of points, matching the output-iterator type,
+         the points should also match the input-iterator type
     \tparam Box box type
-    \tparam OutputIterator output iterator type, which outputs linestrings
     \tparam Strategy strategy, a clipping strategy which should implement the methods "clip_segment" and "add"
 */
 template

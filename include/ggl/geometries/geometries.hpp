@@ -13,7 +13,6 @@
 #include <ggl/geometries/adapted/tuple.hpp>
 
 #include <ggl/geometries/point.hpp>
-#include <ggl/geometries/point_ll.hpp>
 #include <ggl/geometries/point_xy.hpp>
 #include <ggl/geometries/linear_ring.hpp>
 #include <ggl/geometries/linestring.hpp>

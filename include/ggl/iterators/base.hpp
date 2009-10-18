@@ -13,6 +13,7 @@
 #include <boost/iterator/iterator_adaptor.hpp>
 #include <boost/iterator/iterator_categories.hpp>
 
+#ifndef DOXYGEN_NO_DETAIL
 namespace ggl { namespace detail { namespace iterators {
 
 template <typename T, typename Iterator>
@@ -51,5 +52,7 @@ struct iterator_base :
 };
 
 }}} // namespace ggl::detail::iterators
+#endif
+
 
 #endif // GGL_ITERATORS_BASE_HPP

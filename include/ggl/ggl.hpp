@@ -6,8 +6,8 @@
 // Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef GGL_GEOMETRY_HPP
-#define GGL_GEOMETRY_HPP
+#ifndef GGL_GGL_HPP
+#define GGL_GGL_HPP
 
 // Shortcut to include all header files
 
@@ -28,6 +28,8 @@
 #include <ggl/core/radian_access.hpp>
 #include <ggl/core/topological_dimension.hpp>
 
+#include <ggl/core/replace_point_type.hpp>
+
 #include <ggl/arithmetic/arithmetic.hpp>
 #include <ggl/arithmetic/dot_product.hpp>
 
@@ -45,11 +47,12 @@
 #include <ggl/algorithms/distance.hpp>
 #include <ggl/algorithms/envelope.hpp>
 #include <ggl/algorithms/for_each.hpp>
+#include <ggl/algorithms/intermediate.hpp>
 #include <ggl/algorithms/intersection.hpp>
+#include <ggl/algorithms/intersects.hpp>
 #include <ggl/algorithms/length.hpp>
 #include <ggl/algorithms/make.hpp>
 #include <ggl/algorithms/num_points.hpp>
-#include <ggl/algorithms/parse.hpp>
 #include <ggl/algorithms/perimeter.hpp>
 #include <ggl/algorithms/sectionalize.hpp>
 #include <ggl/algorithms/selected.hpp>
@@ -57,17 +60,13 @@
 #include <ggl/algorithms/transform.hpp>
 #include <ggl/algorithms/within.hpp>
 
-#include <ggl/iterators/section_iterators.hpp>
 
-#include <ggl/io/wkt/write_wkt.hpp>
-#include <ggl/io/wkt/read_wkt.hpp>
-
-#include <ggl/io/svg/write_svg.hpp>
-
-#include <ggl/util/for_each_coordinate.hpp>
 #include <ggl/util/copy.hpp>
+#include <ggl/util/for_each_coordinate.hpp>
 #include <ggl/util/loop.hpp>
-#include <ggl/util/promotion_traits.hpp>
 #include <ggl/util/math.hpp>
+#include <ggl/util/select_most_precise.hpp>
+#include <ggl/util/select_coordinate_type.hpp>
+#include <ggl/util/write_dsv.hpp>
 
-#endif // GGL_GEOMETRY_HPP
+#endif // GGL_GGL_HPP

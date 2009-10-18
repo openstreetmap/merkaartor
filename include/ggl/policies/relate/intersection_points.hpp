@@ -12,7 +12,7 @@
 #include <boost/concept_check.hpp>
 
 #include <ggl/core/access.hpp>
-#include <ggl/util/promotion_traits.hpp>
+#include <ggl/util/select_coordinate_type.hpp>
 
 
 namespace ggl
@@ -48,16 +48,16 @@ struct segments_intersection_points
         if (on_segment)
         {
             result.count = 1;
-            set<0>(result.intersections[0], 
+            set<0>(result.intersections[0],
                 boost::numeric_cast<coordinate_type>(get<0, 0>(s1) + ra * dx1));
-            set<1>(result.intersections[0], 
+            set<1>(result.intersections[0],
                 boost::numeric_cast<coordinate_type>(get<0, 1>(s1) + ra * dy1));
         }
         return result;
     }
 
     static inline return_type collinear_touch(coordinate_type const& x,
-                coordinate_type const& y, bool)
+                coordinate_type const& y, bool, char)
     {
         return_type result;
         result.count = 1;

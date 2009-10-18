@@ -26,7 +26,7 @@ namespace ggl
     \todo will be merged with assign
 */
 template <std::size_t C1, std::size_t C2, typename B, typename P>
-inline void assign_box_corner(const B& box, P& point)
+inline void assign_box_corner(B const& box, P& point)
 {
     // Be sure both are 2-Dimensional
     assert_dimension<B, 2>();
@@ -46,7 +46,7 @@ inline void assign_box_corner(const B& box, P& point)
     \note The order can be crucial. Most logical is LOWER, UPPER and sub-order LEFT, RIGHT
 */
 template <typename B, typename P>
-inline void assign_box_corners(const B& box, P& lower_left, P& lower_right, P& upper_left, P& upper_right)
+inline void assign_box_corners(B const& box, P& lower_left, P& lower_right, P& upper_left, P& upper_right)
 {
     assign_box_corner<min_corner, min_corner>(box, lower_left);
     assign_box_corner<max_corner, min_corner>(box, lower_right);

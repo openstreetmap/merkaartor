@@ -9,9 +9,9 @@
 #include "QMapControl/mapadapter.h"
 
 #include <ggl/geometries/cartesian2d.hpp>
-#include <ggl/geometries/latlong.hpp>
+#include <ggl/extensions/gis/latlong/latlong.hpp>
 
-#include <ggl/projections/projection.hpp>
+#include <ggl/extensions/gis/projections/projection.hpp>
 
 class QRect;
 class TrackPoint;

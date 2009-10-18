@@ -17,7 +17,6 @@
 #include <boost/tuple/tuple.hpp>
 #include <boost/type_traits/remove_const.hpp>
 
-
 #include <ggl/core/access.hpp>
 #include <ggl/core/coordinate_dimension.hpp>
 #include <ggl/core/is_multi.hpp>
@@ -43,6 +42,7 @@
 #include <ggl/algorithms/distance.hpp>
 #include <ggl/algorithms/disjoint.hpp>
 #include <ggl/algorithms/sectionalize.hpp>
+#include <ggl/algorithms/get_section.hpp>
 #include <ggl/algorithms/within.hpp>
 
 
@@ -58,11 +58,12 @@ namespace detail { namespace get_intersection_points {
 template <typename Segment1, typename Segment2, typename IntersectionPoints>
 struct relate
 {
-    static inline void apply(Segment1 const& s1, Segment2 const& s2,
+    static inline bool apply(Segment1 const& s1, Segment2 const& s2,
                 segment_identifier const& seg_id1,
                 segment_identifier const& seg_id2,
-                IntersectionPoints& out, bool& non_trivial)
+                IntersectionPoints& out, bool& trivial)
     {
+
         typedef typename boost::range_value
             <
                 IntersectionPoints
@@ -94,40 +95,86 @@ struct relate
             >::relate(s1, s2);
 
         ip_type& is = result.get<0>();
-        policies::relate::direction_type const& dir = result.get<1>();
+        policies::relate::direction_type & dir = result.get<1>();
+
         for (int i = 0; i < is.count; i++)
         {
             typedef typename point_type<Segment1>::type point1_type;
             typedef typename cs_tag<point1_type>::type tag;
 
-            // Slight enhancement for distance-calculations below:
-            // make this a separate policy to have less computations
-            // NOTE: tried using ra/rb from segment-intersection (only valid for non-collinear).
-            // There was NO measurable performance increment.
-
             typename intersection_point::traversal_type info;
-            info.seg_id = seg_id1;
-            info.distance = ggl::distance(is.intersections[i], s1.first);
-            //info.distance = dir.ra; // NOTE: not possible for collinear intersections!
+
             info.how = dir.how;
+            info.opposite = dir.opposite;
+
+            // First info-record, containing info about segment 1
+            info.seg_id = seg_id1;
+            info.other_id = seg_id2;
+            info.other_point = dir.how_a == 1 ? s1.first : s1.second;
+
+            info.distance = ggl::distance(is.intersections[i], s1.first);
+
+            //info.distance = dir.ra; // NOTE: not possible for collinear intersections!
             info.arrival = dir.how_a;
-            info.direction = dir.direction; // Direction from A with respect to B
+            info.direction = dir.dir_a;
             is.intersections[i].info.push_back(info);
 
+
+            // Second info-record, containing info about segment 2
             info.seg_id = seg_id2;
-            info.distance = ggl::distance(is.intersections[i], s2.first);
-            //info.distance = dir.rb; // NOTE: not possible for collinear intersections!
-            info.arrival = dir.how_b;
-            info.direction = -dir.direction; // Direction from B with respect to A
-            is.intersections[i].info.push_back(info);
+            info.other_id = seg_id1;
+            info.other_point = dir.how_b == 1 ? s2.first : s2.second;
 
-            out.push_back(is.intersections[i]);
+            info.distance = ggl::distance(is.intersections[i], s2.first);
+            //info.distance = dir.rb;
+
+            info.arrival = dir.how_b;
+            info.direction = dir.dir_b;
+            is.intersections[i].info.push_back(info);
 
             if (dir.how != 'i')
             {
-                non_trivial = true;
+                trivial = false;
+                is.intersections[i].trivial = false;
             }
+
+            // Robustness: due to IEEE floating point errors, also in double, it might be
+            // that the IP is at the same location as s1.first/s1.second, and still
+            // being classified as an 'i' (normal intersection). Then handle it as non-trivial,
+            // such that the IP's will be merged lateron.
+
+            double eps = 1.0e-10;
+            if (dir.how == 'i'
+                && (dir.ra < eps
+                    || dir.rb < eps
+                    || 1.0 - dir.ra < eps
+                    || 1.0 - dir.rb <  eps
+                    )
+                )
+            {
+                // Handle them as non-trivial. This will case a "merge" lateron,
+                // which could be done anyway (because of other intersections)
+                // So it is never harmful to do this with a larger epsilon.
+                // However, it has to be handled (more) carefully lateron, in
+                // 'merge' or 'adapt_turns'
+                trivial = false;
+                is.intersections[i].trivial = false;
+
+
+#ifdef GGL_DEBUG_INTERSECTION
+                std::cout << "INTERSECTION suspicious: " << std::setprecision(20)
+                    << " ra: " << dir.ra
+                    << " rb: " << dir.rb
+                    << std::endl
+                    << " dist1: " << ggl::distance(is.intersections[i], s1.first)
+                    << " dist2: " << ggl::distance(is.intersections[i], s1.second)
+                    << std::endl;
+#endif
+            }
+
+            out.push_back(is.intersections[i]);
         }
+        return is.count > 0;
     }
 };
 
@@ -140,10 +187,14 @@ template
 class get_ips_in_sections
 {
 public :
-    static inline void apply(Geometry1 const& geometry1,
-            Geometry2 const& geometry2,
-            Section1 const& sec1, Section2 const& sec2,
-            IntersectionPoints& intersection_points, bool& non_trivial)
+    static inline void apply(
+            std::size_t source_id1, Geometry1 const& geometry1,
+                Section1 const& sec1,
+            std::size_t source_id2, Geometry2 const& geometry2,
+                Section2 const& sec2,
+            bool return_if_found,
+            IntersectionPoints& intersection_points,
+            bool& trivial)
     {
 
         typedef typename ggl::point_const_iterator
@@ -157,24 +208,25 @@ public :
 
         int const dir1 = sec1.directions[0];
         int const dir2 = sec2.directions[0];
-        register int index1 = sec1.begin_index;
+        int index1 = sec1.begin_index;
+        int ndi1 = sec1.non_duplicate_index;
+
+        bool const same_source =
+            source_id1 == source_id2
+                    && sec1.multi_index == sec2.multi_index
+                    && sec1.ring_index == sec2.ring_index;
 
         // Note that it is NOT possible to have section-iterators here
         // because of the logistics of "index" (the section-iterator automatically
         // skips to the begin-point, we loose the index or have to recalculate it)
         // So we mimic it here
         range1_iterator it1, end1;
-        get_section
-            <
-                typename ggl::tag<Geometry1>::type,
-                Geometry1,
-                Section1
-            >::apply(geometry1, sec1, it1, end1);
+        get_section(geometry1, sec1, it1, end1);
 
-        // Mimic 1: Skip to the point that the section interects the other box
+        // Mimic 1: Skip to point such that section interects other box
         range1_iterator prev1 = it1++;
         for(; it1 != end1 && preceding<0>(dir1, *it1, sec2.bounding_box);
-            prev1 = it1++, index1++)
+            prev1 = it1++, index1++, ndi1++)
         {
         }
         // Go back one step because we want to start completely preceding
@@ -183,39 +235,64 @@ public :
         // Walk through section and stop if we exceed the other box
         for (prev1 = it1++;
             it1 != end1 && ! exceeding<0>(dir1, *prev1, sec2.bounding_box);
-            prev1 = it1++, index1++)
+            prev1 = it1++, index1++, ndi1++)
         {
             segment1_type s1(*prev1, *it1);
 
-            register int index2 = sec2.begin_index;
+            int index2 = sec2.begin_index;
+            int ndi2 = sec2.non_duplicate_index;
 
             range2_iterator it2, end2;
-            get_section
-                <
-                    typename ggl::tag<Geometry2>::type,
-                    Geometry2,
-                    Section2
-                >::apply(geometry2, sec2, it2, end2);
+            get_section(geometry2, sec2, it2, end2);
 
             range2_iterator prev2 = it2++;
+
             // Mimic 2:
             for(; it2 != end2 && preceding<0>(dir2, *it2, sec1.bounding_box);
-                prev2 = it2++, index2++)
+                prev2 = it2++, index2++, ndi2++)
             {
             }
             it2 = prev2;
 
             for (prev2 = it2++;
                 it2 != end2 && ! exceeding<0>(dir2, *prev2, sec1.bounding_box);
-                prev2 = it2++, index2++)
+                prev2 = it2++, index2++, ndi2++)
             {
-                relate<segment1_type, segment2_type, IntersectionPoints>
-                    ::apply(s1, segment2_type(*prev2, *it2),
-                    segment_identifier(0,
-                                sec1.multi_index, sec1.ring_index, index1),
-                    segment_identifier(1,
-                                sec2.multi_index, sec2.ring_index, index2),
-                    intersection_points, non_trivial);
+                bool skip = same_source;
+                if (skip)
+                {
+                    // If sources are the same (possibly self-intersecting):
+                    // check if it is a neighbouring sement.
+                    // (including first-last segment
+                    //  and two segments with one or more degenerate/duplicate
+                    //  (zero-length) segments in between)
+
+                    // Also skip if index1 < index2 to avoid getting all
+                    // intersections twice (only do this on same source!)
+
+                    // About n-2:
+                    //   (square: range_count=5, indices 0,1,2,3
+                    //    -> 0-3 are adjacent)
+                    skip = index2 >= index1
+                        || ndi1 == ndi2 + 1
+                        || (index2 == 0 && index1 >= int(sec1.range_count) - 2)
+                        ;
+                }
+
+                if (! skip)
+                {
+                    if (relate<segment1_type, segment2_type, IntersectionPoints>
+                        ::apply(s1, segment2_type(*prev2, *it2),
+                            segment_identifier(source_id1,
+                                        sec1.multi_index, sec1.ring_index, index1),
+                            segment_identifier(source_id2,
+                                        sec2.multi_index, sec2.ring_index, index2),
+                            intersection_points, trivial)
+                        && return_if_found)
+                    {
+                        return;
+                    }
+                }
             }
         }
     }
@@ -255,12 +332,18 @@ template
 class get_ips_range_box
 {
 public :
-    static inline void apply(Ring const& ring, Box const& box,
+    static inline void apply(
+            std::size_t source_id1, Ring const& ring,
+            std::size_t source_id2, Box const& box,
             Section1 const& sec1, Section2 const& sec2,
-            IntersectionPoints& intersection_points, bool& non_trivial)
+            IntersectionPoints& intersection_points, bool& trivial)
     {
         get_ips_in_sections<Ring, Box, Section1, Section2, IntersectionPoints>
-            ::apply(ring, box, sec1, sec2, intersection_points, non_trivial);
+            ::apply(
+                source_id1, ring, sec1,
+                source_id2, box, sec2,
+                false,
+                intersection_points, trivial);
     }
 };
 
@@ -270,7 +353,9 @@ public :
 template<typename Geometry1, typename Geometry2, typename IntersectionPoints>
 struct get_ips_generic
 {
-    static inline bool apply(Geometry1 const& geometry1, Geometry2 const& geometry2,
+    static inline bool apply(
+            std::size_t source_id1, Geometry1 const& geometry1,
+            std::size_t source_id2, Geometry2 const& geometry2,
             IntersectionPoints& intersection_points)
     {
         // Create monotonic sections in ONE direction
@@ -291,7 +376,7 @@ struct get_ips_generic
         ggl::sectionalize(geometry1, sec1);
         ggl::sectionalize(geometry2, sec2);
 
-        bool non_trivial = false;
+        bool trivial = true;
         for (typename boost::range_const_iterator<sections1_type>::type
                     it1 = sec1.begin();
             it1 != sec1.end();
@@ -311,12 +396,15 @@ struct get_ips_generic
                         typename boost::range_value<sections1_type>::type,
                         typename boost::range_value<sections2_type>::type,
                         IntersectionPoints
-                    >::apply(geometry1, geometry2, *it1, *it2,
-                                intersection_points, non_trivial);
+                    >::apply(
+                            source_id1, geometry1, *it1,
+                            source_id2, geometry2, *it2,
+                            false,
+                            intersection_points, trivial);
                 }
             }
         }
-        return non_trivial;
+        return trivial;
     }
 };
 
@@ -325,11 +413,11 @@ struct get_ips_generic
 template<typename Range, typename Box, typename IntersectionPoints>
 struct get_ips_cs
 {
-    static inline void apply(Range const& range,
+    static inline void apply(std::size_t source_id1, Range const& range,
             int multi_index, int ring_index,
-            Box const& box,
+            std::size_t source_id2, Box const& box,
             IntersectionPoints& intersection_points,
-            bool non_trivial)
+            bool& trivial)
     {
         if (boost::size(range) <= 1)
         {
@@ -391,28 +479,27 @@ struct get_ips_cs
                   )
                 )
             {
-                segment_identifier seg_id(0,
+                segment_identifier seg_id(source_id1,
                             multi_index, ring_index, index);
 
-                typedef
-                relate
+                typedef relate
                     <
                         segment_type, box_segment_type, IntersectionPoints
                     > relater;
 
                 // Todo: depending on code some relations can be left out
                 relater::apply(segment, left, seg_id,
-                        segment_identifier(1, -1, -1, 0),
-                        intersection_points, non_trivial);
+                        segment_identifier(source_id2, -1, -1, 0),
+                        intersection_points, trivial);
                 relater::apply(segment, top, seg_id,
-                        segment_identifier(1, -1, -1, 1),
-                        intersection_points, non_trivial);
+                        segment_identifier(source_id2, -1, -1, 1),
+                        intersection_points, trivial);
                 relater::apply(segment, right, seg_id,
-                        segment_identifier(1, -1, -1, 2),
-                        intersection_points, non_trivial);
+                        segment_identifier(source_id2, -1, -1, 2),
+                        intersection_points, trivial);
                 relater::apply(segment, bottom, seg_id,
-                        segment_identifier(1, -1, -1, 3),
-                        intersection_points, non_trivial);
+                        segment_identifier(source_id2, -1, -1, 3),
+                        intersection_points, trivial);
 
             }
         }
@@ -463,7 +550,9 @@ struct get_intersection_points
     >
 {
 
-    static inline bool apply(Polygon const& polygon, Box const& box,
+    static inline bool apply(
+            std::size_t source_id1, Polygon const& polygon,
+            std::size_t source_id2, Box const& box,
             IntersectionPoints& intersection_points)
     {
         typedef typename ggl::ring_type<Polygon>::type ring_type;
@@ -477,19 +566,23 @@ struct get_intersection_points
         typedef detail::get_intersection_points::get_ips_cs
             <ring_type, Box, IntersectionPoints> intersector_type;
 
-        bool non_trivial = false;
-        intersector_type::apply(ggl::exterior_ring(polygon),
-            -1, -1, box, intersection_points, non_trivial);
+        bool trivial = true;
+        intersector_type::apply(
+                source_id1, ggl::exterior_ring(polygon), -1, -1,
+                source_id2, box,
+                intersection_points, trivial);
 
         int i = 0;
         for (iterator_type it = boost::begin(interior_rings(polygon));
              it != boost::end(interior_rings(polygon));
              ++it, ++i)
         {
-            intersector_type::apply(*it, -1, i, box, intersection_points, non_trivial);
+            intersector_type::apply(
+                    source_id1, *it, -1, i,
+                    source_id2, box, intersection_points, trivial);
         }
 
-        return non_trivial;
+        return trivial;
     }
 };
 
@@ -553,7 +646,9 @@ template
 >
 struct get_intersection_points_reversed
 {
-    static inline bool apply(Geometry1 const& g1, Geometry2 const& g2,
+    static inline bool apply(
+            std::size_t source_id1, Geometry1 const& g1,
+            std::size_t source_id2, Geometry2 const& g2,
             IntersectionPoints& intersection_points)
     {
         return get_intersection_points
@@ -562,7 +657,7 @@ struct get_intersection_points_reversed
                 IsMulti2, IsMulti1,
                 Geometry2, Geometry1,
                 IntersectionPoints
-            >::apply(g2, g1, intersection_points);
+            >::apply(source_id2, g2, source_id1, g1, intersection_points);
     }
 };
 
@@ -573,17 +668,19 @@ struct get_intersection_points_reversed
 
 
 /*!
-    \brief Calculate if two geometries are get_intersection_points
-    \ingroup get_intersection_points
+    \brief Calculate intersection points of two geometries
+    \ingroup overlay
     \tparam Geometry1 first geometry type
     \tparam Geometry2 second geometry type
-    \tparam V type of intersection container (e.g. vector of "intersection_point"'s
+    \tparam IntersectionPoints type of intersection container (e.g. vector of "intersection_point"'s)
     \param geometry1 first geometry
     \param geometry2 second geometry
+    \param intersection_points container which will contain intersection points
+    \return TRUE if it is trivial, else FALSE
  */
 template <typename Geometry1, typename Geometry2, typename IntersectionPoints>
-inline bool get_intersection_points(const Geometry1& geometry1,
-            const Geometry2& geometry2, IntersectionPoints& intersection_points)
+inline bool get_intersection_points(Geometry1 const& geometry1,
+            Geometry2 const& geometry2, IntersectionPoints& intersection_points)
 {
     assert_dimension_equal<Geometry1, Geometry2>();
 
@@ -613,7 +710,10 @@ inline bool get_intersection_points(const Geometry1& geometry1,
                 ncg2_type,
                IntersectionPoints
             >
-        >::type::apply(geometry1, geometry2, intersection_points);
+        >::type::apply(
+            0, geometry1,
+            1, geometry2,
+            intersection_points);
 }
 
 

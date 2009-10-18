@@ -47,16 +47,16 @@ public:
         detail::assign::assign_value(m_center, coordinate_type());
     }
 
-    nsphere(const P& center, const T& radius)
+    nsphere(P const& center, T const& radius)
         : m_radius(radius)
     {
         copy_coordinates(center, m_center);
     }
 
-    inline const P& center() const { return m_center; }
-    inline const T& radius() const { return m_radius; }
+    inline P const& center() const { return m_center; }
+    inline T const& radius() const { return m_radius; }
 
-    inline void radius(const T& r) { m_radius = r; }
+    inline void radius(T const& r) { m_radius = r; }
     inline P& center() { return m_center; }
 
 private:
@@ -94,13 +94,13 @@ struct access<nsphere<P, T> >
     typedef nsphere<P, T> nsphere_type;
 
     template <std::size_t D>
-    static inline typename ggl::coordinate_type<nsphere_type>::type get(const nsphere_type& s)
+    static inline typename ggl::coordinate_type<nsphere_type>::type get(nsphere_type const& s)
     {
         return ggl::get<D>(s.center());
     }
 
     template <std::size_t D>
-    static inline void set(nsphere_type& s, const typename ggl::coordinate_type<nsphere_type>::type& value)
+    static inline void set(nsphere_type& s, typename ggl::coordinate_type<nsphere_type>::type const& value)
     {
         ggl::set<D>(s.center(), value);
     }
@@ -111,12 +111,12 @@ struct radius_access<nsphere<P, T>, T, 0>
 {
     typedef nsphere<P, T> nsphere_type;
 
-    static inline T get(const nsphere_type& s)
+    static inline T get(nsphere_type const& s)
     {
         return s.radius();
     }
 
-    static inline void set(nsphere_type& s, const T& value)
+    static inline void set(nsphere_type& s, T const& value)
     {
         s.radius(value);
     }

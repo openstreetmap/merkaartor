@@ -23,10 +23,8 @@
 #include <ggl/util/math.hpp>
 
 /*!
-\defgroup equals equals determination
-The equals algorithm returns if two geometries are equals
 
-TODO: for spherical / latlong, it should consider the 180 dateline
+\defgroup boolean_relations boolean relationships (equals, disjoint, overlaps, etc)
 
 */
 
@@ -102,7 +100,7 @@ struct equals<box_tag, false, B1, B2, DimensionCount>
 
 /*!
     \brief Calculate if two geometries are equals
-    \ingroup equals
+    \ingroup boolean_relations
     \tparam Geometry1 first geometry type
     \tparam Geometry2 second geometry type
     \param geometry1 first geometry

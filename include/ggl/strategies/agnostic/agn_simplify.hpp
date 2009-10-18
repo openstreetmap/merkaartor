@@ -17,8 +17,8 @@
 //#define GL_DEBUG_SIMPLIFY
 
 #ifdef GL_DEBUG_SIMPLIFY
-#include <ggl/io/wkt/write_wkt.hpp>
-#include <ggl/io/wkt/stream_wkt.hpp>
+#include <ggl/extensions/gis/io/wkt/write_wkt.hpp>
+#include <ggl/extensions/gis/io/wkt/stream_wkt.hpp>
 #include <iostream>
 #endif
 

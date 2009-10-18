@@ -55,7 +55,6 @@ struct differences_loop
     static inline bool apply(P1 const& p1, P2 const& p2, T const& distance, T& sum)
     {
         typedef typename select_coordinate_type<P1, P2>::type coordinate_type;
-        // TODO: remove //typedef typename select_type_traits<coordinate_type, T>::type T2;
 
         coordinate_type const c1 = boost::numeric_cast<coordinate_type>(get<D>(p1));
         coordinate_type const c2 = boost::numeric_cast<coordinate_type>(get<D>(p2));

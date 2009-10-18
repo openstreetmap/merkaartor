@@ -17,7 +17,7 @@
 
 #include <ggl/core/concepts/point_concept.hpp>
 
-// TODO: merge with "assign"
+
 
 namespace ggl
 {
@@ -44,7 +44,7 @@ struct copy_coordinates<Src, Dst, N, N>
     {
         boost::ignore_unused_variable_warning(source);
         boost::ignore_unused_variable_warning(dest);
-	}
+    }
 };
 
 }} // namespace detail::copy

@@ -17,6 +17,9 @@
 #include <ggl/core/concepts/point_concept.hpp>
 #include <ggl/strategies/strategies.hpp>
 
+// TODO: remove used EXTENSION here (result should be part of parsing strategy)
+#include <ggl/extensions/gis/latlong/strategies/dms_parser.hpp>
+
 /*!
 \defgroup parse parse and assign string values
 */

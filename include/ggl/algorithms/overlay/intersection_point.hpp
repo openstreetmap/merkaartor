@@ -31,6 +31,7 @@ namespace detail { namespace intersection {
 template<typename P>
 struct intersection_info
 {
+    typedef P point_type;
     typedef typename distance_result<P, P>::type distance_type;
 
     inline intersection_info()
@@ -39,12 +40,22 @@ struct intersection_info
         , next_ip_index(-1)
         , distance(ggl::make_distance_result<distance_type>(0))
         , direction(0)
-        , how(0)
+        , how('?')
         , arrival(0)
+        , opposite(false)
+        , visit_code(0)
+        , flagged(false)
     {}
+
+    // Point to which the segment from IP is directing (TO-point)
+    // If they intersect on their "arrival" points, it is the FROM-point.
+    P other_point;
 
     // Identifier of this segment (source,segment,ring,multi)
     segment_identifier seg_id;
+
+    // Identify the segment where it was intersected with to form this IP
+    segment_identifier other_id;
 
 
     // vertex to which is free travel after this IP,
@@ -65,7 +76,49 @@ struct intersection_info
 
     // Information about how intersection is done
     char how;
+
+    // 1: arrived at IP, -1: departs from IP, 0: crosses IP
     int arrival;
+
+    bool opposite;
+
+    int visit_code;
+
+    bool flagged; // flagged for deletion
+
+#ifdef GGL_DEBUG_INTERSECTION
+        static inline std::string dir(int d)
+        {
+            return d == 0 ? "-" : (d == 1 ? "L" : d == -1 ? "R" : "#");
+        }
+        static inline std::string how_str(int h)
+        {
+            return h == 0 ? "-" : (h == 1 ? "A" : "D");
+        }
+
+        friend std::ostream& operator<<(std::ostream &os, intersection_info<P> const& info)
+        {
+            os  << "\t"
+                << " src " << info.seg_id.source_index
+                << " seg " << info.seg_id.segment_index
+                << " (// " << info.other_id.source_index
+                    << "." << info.other_id.segment_index << ")"
+                << " how " << info.how
+                    << "[" << how_str(info.arrival)
+                    << " " << dir(info.direction)
+                    << (info.opposite ? " o" : "")
+                    << "]"
+                << " nxt seg " << info.travels_to_vertex_index
+                << " , ip " << info.travels_to_ip_index
+                << " , or " << info.next_ip_index
+                << " dst " << std::setprecision(12) << double(info.distance);
+            if (info.visit_code != 0)
+            {
+                os << " VIS: " << int(info.visit_code);
+            }
+            return os;
+        }
+#endif
 };
 
 
@@ -75,42 +128,25 @@ struct intersection_point
     public :
         inline intersection_point()
             : visit_code(0) // VISIT_NONE
-            , shared_code(0)
+            , trivial(true)
+            , shared(false)
+            , flagged(false)
         {
-            // Init intersection point with zero
-            ggl::assign_zero(point);
         }
 
 
 #ifdef GGL_DEBUG_INTERSECTION
-        static inline std::string dir(int d)
-        {
-            return d == 0 ? "-" : (d == 1 ? "L" : "R");
-        }
-        static inline std::string how(int h)
-        {
-            return h == 0 ? "-" : (h == 1 ? "A" : "D");
-        }
-
         friend std::ostream& operator<<(std::ostream &os, intersection_point<P> const& p)
         {
             os << "IP (" << ggl::get<0>(p.point) << "," << ggl::get<1>(p.point) << ")"
                 << " visited: " << int(p.visit_code)
-                << " shared: " << p.shared_code
+                << (p.shared ? " SHARED" : "")
+                << (p.flagged ? " FLAGGED" : "")
                 << std::endl;
 
             for (unsigned int i = 0; i < p.info.size(); i++)
             {
-                os  << "\t"
-                    << " src: " << p.info[i].seg_id.source_index
-                    << " how: " << p.info[i].how << "[" << how(p.info[i].arrival) << "]"
-                    << " dir: " << dir(p.info[i].direction)
-                    << " seg: " << p.info[i].seg_id.segment_index
-                    << " - " << p.info[i].travels_to_vertex_index
-                    << " next ip: " << p.info[i].travels_to_ip_index
-                    << " , " << p.info[i].next_ip_index
-                    << " dist: " << double(p.info[i].distance)
-                    << std::endl;
+                os << p.info[i] << std::endl;
             }
             return os;
         }
@@ -121,18 +157,21 @@ struct intersection_point
         P point;
 
         int visit_code;
-        short int shared_code; // 0 for nothing, 1 for is-shared, 2 for to-be-deleted
+        bool trivial; // FALSE if there is an collinearity, touch or so.
+        bool shared; // shared with more IP's
+        bool flagged; // flagged for deletion afterwards
 
         // info about the two intersecting segments
-        // usually two, but can be more if IP's are merged
+        // usually two, but often more if IP's are merged
         traversal_vector info;
-
 
         inline void clone_except_info(intersection_point& other) const
         {
             other.point = point;
-            other.shared_code = shared_code;
             other.visit_code = visit_code;
+            other.trivial = trivial;
+            other.shared = shared;
+            other.flagged = flagged;
         }
 };
 
@@ -189,6 +228,26 @@ namespace traits
     };
 
 }
+
+
+#ifdef GGL_DEBUG_INTERSECTION
+
+template <typename V>
+inline void report_ip(V const& intersection_points)
+{
+    typedef typename V::const_iterator iterator_type;
+
+    for (iterator_type it = intersection_points.begin();
+         it != intersection_points.end();
+         ++it)
+    {
+        if (! it->flagged)
+        {
+            std::cout << *it;
+        }
+    }
+}
+#endif // GGL_DEBUG_INTERSECTION
 
 
 } // namespace ggl

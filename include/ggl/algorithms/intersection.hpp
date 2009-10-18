@@ -9,10 +9,13 @@
 #ifndef GGL_ALGORITHMS_INTERSECTION_HPP
 #define GGL_ALGORITHMS_INTERSECTION_HPP
 
+#include <deque>
+
 #include <ggl/algorithms/intersection_linestring.hpp>
 
 #include <ggl/algorithms/overlay/get_intersection_points.hpp>
 #include <ggl/algorithms/overlay/merge_intersection_points.hpp>
+#include <ggl/algorithms/overlay/adapt_turns.hpp>
 #include <ggl/algorithms/overlay/enrich_intersection_points.hpp>
 #include <ggl/algorithms/overlay/traverse.hpp>
 
@@ -23,7 +26,7 @@
 
 
 /*!
-\defgroup intersection intersection (AND operation) and clipping
+\defgroup overlay overlay operations (intersection, union, clipping)
 \details The intersection of two geometries A and B is the geometry containing all points of A also belonging to B,
 but no other elements. The so-called clip is an intersection of a geometry with a box.
 \par Source description:
@@ -95,7 +98,7 @@ struct intersection_polygon_polygon
 
         ips_container ips;
 
-        bool non_trivial = ggl::get_intersection_points(polygon1, polygon2, ips);
+        bool trivial = ggl::get_intersection_points(polygon1, polygon2, ips);
 
         if (ips.size() <= 0)
         {
@@ -116,12 +119,15 @@ struct intersection_polygon_polygon
         }
         else
         {
-            if (non_trivial)
+            if (! trivial)
             {
                 ggl::merge_intersection_points(ips);
+                ggl::adapt_turns(ips);
+
             }
 
-            ggl::enrich_intersection_points(ips, non_trivial);
+            ggl::enrich_intersection_points(ips, trivial);
+
 
             std::vector<ring_type> v;
             ggl::traverse<ring_type>
@@ -129,8 +135,11 @@ struct intersection_polygon_polygon
                     polygon1,
                     polygon2,
                     -1,
-                    ips, std::back_inserter(v)
+                    ips,
+                    trivial,
+                    std::back_inserter(v)
                 );
+
 
             // TODO:
             // assemble rings / inner rings / to polygons
@@ -174,7 +183,7 @@ struct intersection_polygon_box
 
         ips_container ips;
 
-        bool non_trivial = ggl::get_intersection_points(polygon, box, ips);
+        bool trivial = ggl::get_intersection_points(polygon, box, ips);
 
         // TODO: share this all with polygon_polygon using an "assemble" function!
         // It is only different in the 'within' calls, can be sorted out with specialization
@@ -207,12 +216,12 @@ struct intersection_polygon_box
         }
         else
         {
-            if (non_trivial)
+            if (trivial)
             {
                 ggl::merge_intersection_points(ips);
             }
 
-            ggl::enrich_intersection_points(ips, non_trivial);
+            ggl::enrich_intersection_points(ips, trivial);
 
             std::vector<ring_type> v;
             ggl::traverse<ring_type>
@@ -220,7 +229,9 @@ struct intersection_polygon_box
                     polygon,
                     box,
                     -1,
-                    ips, std::back_inserter(v)
+                    ips,
+                    trivial,
+                    std::back_inserter(v)
                 );
 
             // TODO:
@@ -284,15 +295,15 @@ struct intersection
         typedef typename point_type<GeometryOut>::type point_type;
 
         // Get the intersection point (or two points)
-        segment_intersection_points<point_type> is 
+        segment_intersection_points<point_type> is
             = strategy::intersection::relate_cartesian_segments
             <
                 policies::relate::segments_intersection_points
                     <
-                        Segment1, 
-                        Segment2, 
-                        segment_intersection_points<point_type> 
-                    > 
+                        Segment1,
+                        Segment2,
+                        segment_intersection_points<point_type>
+                    >
             >::relate(segment1, segment2);
         for (int i = 0; i < is.count; i++)
         {
@@ -388,7 +399,7 @@ struct intersection_reversed
 
 /*!
     \brief Intersects two geometries which each other
-    \ingroup intersection
+    \ingroup overlay
     \details A sequence of points is intersected (clipped) by the specified box
     and the resulting linestring, or pieces of linestrings, are sent to the specified output operator.
     \tparam GeometryOut output geometry type, must be specified

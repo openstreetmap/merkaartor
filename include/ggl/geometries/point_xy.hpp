@@ -33,26 +33,26 @@ public:
     inline point_xy() : point<T, 2, C>() {}
 
     /// Constructor with x/y values
-    inline point_xy(const T& x, const T& y) : point<T, 2, C>(x, y) {}
+    inline point_xy(T const& x, T const& y) : point<T, 2, C>(x, y) {}
 
     /// Get x-value
-    inline const T& x() const
+    inline T const& x() const
     { return this->template get<0>(); }
 
     /// Get y-value
-    inline const T& y() const
+    inline T const& y() const
     { return this->template get<1>(); }
 
     /// Set x-value
-    inline void x(const T& v)
+    inline void x(T const& v)
     { this->template set<0>(v); }
 
     /// Set y-value
-    inline void y(const T& v)
+    inline void y(T const& v)
     { this->template set<1>(v); }
 
     /// Compare two points
-    inline bool operator<(const point_xy& other) const
+    inline bool operator<(point_xy const& other) const
     {
         return math::equals(x(), other.x()) ? y() < other.y() : x() < other.x();
     }
@@ -89,13 +89,13 @@ template<typename T, typename C>
 struct access<point_xy<T, C> >
 {
     template <std::size_t I>
-    static inline T get(const point_xy<T, C>& p)
+    static inline T get(point_xy<T, C> const& p)
     {
         return p.template get<I>();
     }
 
     template <std::size_t I>
-    static inline void set(point_xy<T, C>& p, const T& value)
+    static inline void set(point_xy<T, C>& p, T const& value)
     {
         p.template set<I>(value);
     }

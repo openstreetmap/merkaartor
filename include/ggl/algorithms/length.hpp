@@ -14,6 +14,10 @@
 #include <boost/range/functions.hpp>
 #include <boost/range/metafunctions.hpp>
 
+#include <boost/mpl/if.hpp>
+#include <boost/type_traits.hpp>
+
+
 #include <ggl/algorithms/detail/calculate_null.hpp>
 #include <ggl/core/cs.hpp>
 #include <ggl/core/concepts/point_concept.hpp>
@@ -60,7 +64,19 @@ struct range_length
 {
     static inline double apply(Range const& range, Strategy const& strategy)
     {
-        double sum = 0.0;
+        typedef typename ggl::coordinate_type<Range>::type coordinate_type;
+
+        // Because result is square-rooted, for integer, the cast should
+        // go to double and NOT to T
+        typedef typename
+            boost::mpl::if_c
+            <
+                boost::is_integral<coordinate_type>::type::value,
+                double,
+                coordinate_type
+            >::type calculation_type;
+
+        calculation_type sum = 0.0;
 
         typedef typename boost::range_const_iterator<Range>::type iterator_type;
         iterator_type it = boost::begin(range);

@@ -34,10 +34,12 @@ struct as_range_type<polygon_tag, Geometry>
     typedef typename ring_type<Geometry>::type type;
 };
 
+
+
 template <typename GeometryTag, typename Geometry, typename Range>
 struct as_range
 {
-    static inline const Range& get(const Geometry& input)
+    static inline Range const& get(Geometry const& input)
     {
         return input;
     }
@@ -46,7 +48,7 @@ struct as_range
 template <typename Geometry, typename Range>
 struct as_range<polygon_tag, Geometry, Range>
 {
-    static inline const Range& get(const Geometry& input)
+    static inline Range const& get(Geometry const& input)
     {
         return exterior_ring(input);
     }
@@ -54,6 +56,7 @@ struct as_range<polygon_tag, Geometry, Range>
 
 } // namespace dispatch
 #endif // DOXYGEN_NO_DISPATCH
+
 
 /*!
 \brief Meta-function utility returning either type itself, or outer ring
@@ -65,8 +68,8 @@ struct as_range_type
 {
     typedef typename dispatch::as_range_type
         <
-        typename tag<Geometry>::type,
-        Geometry
+            typename tag<Geometry>::type,
+            Geometry
         >::type type;
 };
 
@@ -77,13 +80,13 @@ or the outer ring
 \ingroup utility
 */
 template <typename Range, typename Geometry>
-const Range& as_range(const Geometry& input)
+inline Range const& as_range(Geometry const& input)
 {
     return dispatch::as_range
         <
-        typename tag<Geometry>::type,
-        Geometry,
-        Range
+            typename tag<Geometry>::type,
+            Geometry,
+            Range
         >::get(input);
 }
 

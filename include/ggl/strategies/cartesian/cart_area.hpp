@@ -10,6 +10,9 @@
 #define GGL_STRATEGY_CARTESIAN_AREA_HPP
 
 
+#include <boost/mpl/if.hpp>
+#include <boost/type_traits.hpp>
+
 #include <ggl/geometries/point_xy.hpp>
 #include <ggl/geometries/segment.hpp>
 
@@ -28,26 +31,50 @@ namespace strategy
             \par Concepts for PS:
             - specialized point_traits class
         */
-        template<typename PS>
+        template<typename PS, typename CalculationType = void>
         class by_triangles
         {
+            public :
+                // If user specified a calculation type, use that type,
+                //   whatever it is and whatever the point-type is.
+                // Else, use the pointtype, but at least double
+                typedef typename
+                    boost::mpl::if_c
+                    <
+                        boost::is_void<CalculationType>::type::value,
+                        typename select_most_precise
+                        <
+                            typename coordinate_type<PS>::type,
+                            double
+                        >::type,
+                        CalculationType
+                    >::type return_type;
+
+
             private :
+
                 struct summation
                 {
-                    typedef typename coordinate_type<PS>::type T;
-                    T sum;
-                    inline summation() : sum(T())
+                    return_type sum;
+
+                    inline summation() : sum(return_type())
                     {
                         // Currently only 2D areas are supported
                         assert_dimension<PS, 2>();
                     }
-                    inline double area() const { return 0.5 * double(sum); }
+                    inline return_type area() const
+                    {
+                        return_type result = sum;
+                        result *= 0.5;
+                        return result;
+                    }
                 };
 
             public :
                 typedef summation state_type;
 
-                inline bool operator()(const segment<const PS>& s, state_type& state) const
+                inline bool operator()(segment<const PS> const& s,
+                            state_type& state) const
                 {
                     // SUM += x2 * y1 - x1 * y2;
                     state.sum += get<1, 0>(s) * get<0, 1>(s)

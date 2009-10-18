@@ -28,16 +28,17 @@ namespace ggl
 
 /*!
     \brief Unit of plan angles: degrees
-    \ingroup utility
+    \ingroup cs
 */
 class degree {};
 
 
 /*!
     \brief Unit of plan angles: radians
-    \ingroup utility
+    \ingroup cs
 */
 class radian {};
+
 
 namespace cs
 {
@@ -52,20 +53,6 @@ namespace cs
 struct cartesian {};
 
 
-/*!
-    \brief EPSG Cartesian coordinate system
-    \details EPSG (European Petrol Survey Group) has a standard list of projections,
-        each having a code
-    \see
-    \ingroup cs
-    \tparam Code the EPSG code
-    \todo Maybe derive from boost::mpl::int_<EpsgCode>
-*/
-template<std::size_t Code>
-struct epsg
-{
-    static const std::size_t epsg_code = Code;
-};
 
 
 /*!
@@ -74,6 +61,7 @@ struct epsg
     known as lat,long or lo,la or phi,lambda
     \see http://en.wikipedia.org/wiki/Geographic_coordinate_system
     \ingroup cs
+    \note might be moved to extensions/gis/geographic
 */
 template<typename DegreeOrRadian>
 struct geographic
@@ -81,18 +69,7 @@ struct geographic
     typedef DegreeOrRadian units;
 };
 
-/*!
-    \brief Earth Centered, Earth Fixed
-    \details Defines a Cartesian coordinate system x,y,z with the center of the earth as its origin,
-        going through the Greenwich
-    \see http://en.wikipedia.org/wiki/ECEF
-    \see http://en.wikipedia.org/wiki/Geodetic_system
-    \note Also known as "Geocentric", but geocentric is also an astronomic coordinate system
-    \ingroup cs
-*/
-struct ecef
-{
-};
+
 
 /*!
     \brief Spherical coordinate system, in degree or in radian
@@ -128,26 +105,6 @@ struct polar
 };
 
 
-namespace celestial
-{
-
-/*!
-    \brief Ecliptic (celestial) coordinate system
-    \details Defines the astronomical ecliptic coordinate system "that uses the ecliptic for its fundamental plane"
-    It uses Beta and Lambda as its latitude and longitude.
-    \see http://en.wikipedia.org/wiki/Ecliptic_coordinate_system
-    \ingroup cs
-*/
-template<typename DegreeOrRadian>
-struct ecliptic
-{
-    typedef DegreeOrRadian units;
-};
-
-// TODO: More celestial coordinate systems could be defined
-
-} // namespace celestial
-
 } // namespace cs
 
 namespace traits
@@ -182,17 +139,6 @@ struct cs_tag<cs::cartesian>
     typedef cartesian_tag type;
 };
 
-template<>
-struct cs_tag<cs::ecef>
-{
-    typedef cartesian_tag type;
-};
-
-template <std::size_t C>
-struct cs_tag<cs::epsg<C> >
-{
-    typedef cartesian_tag type;
-};
 
 #endif // DOXYGEN_NO_TRAITS_SPECIALIZATIONS
 } // namespace traits
