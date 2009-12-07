@@ -71,9 +71,9 @@ void showVersion()
 {
 	QString o;
 	o = QString("Merkaartor %1%2\n").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION));
-	fprintf(stdout, "%s", o.toLatin1());
+	fprintf(stdout, "%s", o.toLatin1().data());
 	o = QString("using QT version %1 (built with %2)\n").arg(qVersion()).arg(QT_VERSION_STR);
-	fprintf(stdout, "%s", o.toLatin1());
+	fprintf(stdout, "%s", o.toLatin1().data());
 	fprintf(stdout, "Copyright Bart Vanhauwaert, Chris Browet and others, 2006-2009\n");
 	fprintf(stdout, "This program is licensed under the GNU Public License v2\n");
 }
@@ -95,7 +95,7 @@ int main(int argc, char** argv)
 	QApplication app(argc,argv);
 
 #if defined(Q_OS_UNIX)
-	QString logFilename("/tmp/merkaartor.log");
+	QString logFilename(QDir::homePath() + "/merkaartor.log");
 #else
 	QString logFilename(qApp->applicationDirPath() + "/merkaartor.log");
 #endif

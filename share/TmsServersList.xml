@@ -10,5 +10,6 @@
   <TmsServer minzoom="0" maxzoom="17" path="/%1/%2/%3.png" address="tile.openstreetmap.org" name="OSM Mapnik" tilesize="256" />
   <TmsServer minzoom="0" maxzoom="17" path="/Tiles/tile/%1/%2/%3.png" address="tah.openstreetmap.org" name="OSM T@H" tilesize="256" />
   <TmsServer minzoom="0" maxzoom="17" path="/tiles/1.0.0/openaerialmap-900913/%1/%2/%3.png" address="tile.openaerialmap.org" name="OpenAerialMap" tilesize="256" />
+ <TmsServer minzoom="0" maxzoom="23" path="/maps/nml=Vert&amp;x=%2&amp;y=%3&amp;z=%1" address="www.nearmap.com" name="NearMap" tilesize="256"/>
  </TmsServers>
 </MerkaartorList>

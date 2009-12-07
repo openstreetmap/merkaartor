@@ -35,7 +35,7 @@ void syncOSM(MainWindow* theMain, const QString& aWeb, const QString& aUser, con
 			} else {
 				if (QMessageBox::warning(theMain,MainWindow::tr("Unsaved changes"), 
 						MainWindow::tr("It is strongly recommended to save the changes to your document after an upload.\nDo you want to do this now?"),
-						QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
+						QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) {
 					theMain->saveDocument();
 
 				}

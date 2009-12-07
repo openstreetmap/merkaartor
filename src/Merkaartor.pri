@@ -166,3 +166,5 @@ FORMS += ./AboutDialog.ui \
 RESOURCES += ../Icons/AllIcons.qrc \
     ./Utils/Utils.qrc \
     ../share/share.qrc
+
+OTHER_FILES += ../CHANGELOG

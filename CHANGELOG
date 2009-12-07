@@ -1,4 +1,7 @@
 v0.15
+	* ADD : NearMap Austalian TMS to the default list
+	* FIX : corrected issues in image downloading
+	* FIX : Set "yes" as default to request for saving .mdc file after upload
     * FIX : crash with self-intersecting polygons (fixes #2317)
 	* FIX : assert when drawing scale (fixes #2347)
     * FIX : Do not add the "oneway" tag on roundabouts (implied)

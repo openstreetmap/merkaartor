@@ -73,9 +73,14 @@ void MapNetwork::launchRequest(QUrl url, QString hash)
 	http->setProxy(M_PREFS->getProxy(url));
 	http->setHost(url.host(), url.port() == -1 ? 80 : url.port());
 
-	QHttpRequestHeader header("GET", url.path() + "?" + url.encodedQuery());
+	QHttpRequestHeader header;
+	if (url.hasQuery())
+		header = QHttpRequestHeader("GET", url.path() + "?" + url.encodedQuery());
+	else
+		header = QHttpRequestHeader("GET", url.path());
 	header.setValue("Host", url.host());
-    header.setValue("User-Agent", "Mozilla");
+	header.setValue("Accept", "image/*");
+	header.setValue("User-Agent", "Mozilla");
 
 	int getId = http->request(header);
 
@@ -89,58 +94,66 @@ void MapNetwork::requestFinished(int id, bool error)
 {
     int statusCode = http->lastResponse().statusCode();
 
-    qDebug() << "requestFinished " 
-             << "id:" << id
-             << "error:" << error
-             << "status:" << statusCode
-             << "inflight:" << loadingMap.size();
-
     if (!loadingMap.contains(id)){
         // Don't react on setProxy and setHost requestFinished...
         return;
     }
 
-	if (statusCode > 300 && statusCode < 400) { // Redirected
-		launchRequest(QUrl(http->lastResponse().value("Location")), loadingMap[id]);
-		loadingMap.remove(id);
-		return;
-	}
-
 	if (error) {
-		qDebug() << "network error: " << http->errorString();
+		qDebug() << "network error: " << statusCode << " " << http->errorString();
 		loadingMap.remove(id);
-    } else if (statusCode == 404){
-		qDebug() << "404 error";
-		loadingMap.remove(id);
-    } else
-		if (vectorMutex.tryLock()) {
-			// check if id is in map?
-			if (loadingMap.contains(id)) {
-
-				QString hash = loadingMap[id];
+	} else
+		switch (statusCode) {
+			case 301:
+			case 302:
+			case 307:
+				qDebug() << "redirected: " << id;
+				launchRequest(QUrl(http->lastResponse().value("Location")), loadingMap[id]);
 				loadingMap.remove(id);
-				vectorMutex.unlock();
-// 		qDebug() << "request finished for id: " << id;
-				QByteArray ax;
+				return;
+			case 404:
+				qDebug() << "404 error: " << id;
+				loadingMap.remove(id);
+				break;
+			case 500:
+				qDebug() << "500 error: " << id;
+				loadingMap.remove(id);
+				break;
+				// Redirected
+			default:
+				if (statusCode != 200)
+					qDebug() << "Other http code (" << statusCode << "): "  << id;
+				if (vectorMutex.tryLock()) {
+					// check if id is in map?
+					if (loadingMap.contains(id)) {
 
-				if (http->bytesAvailable() > 0) {
-					QPixmap pm;
-					ax = http->readAll();
-//			qDebug() << ax.size();
+						QString hash = loadingMap[id];
+						loadingMap.remove(id);
+						vectorMutex.unlock();
+		// 		qDebug() << "request finished for id: " << id;
+						QByteArray ax;
 
-					if (pm.loadFromData(ax)) {
-						loaded += pm.size().width() * pm.size().height() * pm.depth() / 8 / 1024;
-// 				qDebug() << "Network loaded: " << (loaded);
-					} else {
-						qDebug() << "NETWORK_PIXMAP_ERROR: " << ax;
-					}
-					parent->receivedImage(pm, hash);
+						if (http->bytesAvailable() > 0) {
+							QPixmap pm;
+							ax = http->readAll();
+		//			qDebug() << ax.size();
+
+							if (pm.loadFromData(ax)) {
+								loaded += pm.size().width() * pm.size().height() * pm.depth() / 8 / 1024;
+		// 				qDebug() << "Network loaded: " << (loaded);
+							} else {
+								qDebug() << "NETWORK_PIXMAP_ERROR: " << ax;
+							}
+							parent->receivedImage(pm, hash);
+						}
+
+					} else
+						vectorMutex.unlock();
+
 				}
-
-			} else
-				vectorMutex.unlock();
-
+				break;
 		}
+
 
 	launchRequest();
 	if (loadingMap.isEmpty() && loadingRequests.isEmpty()) {

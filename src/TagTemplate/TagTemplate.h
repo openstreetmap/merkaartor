@@ -68,8 +68,8 @@ class TagTemplateWidget: public QObject
 		QUrl		theUrl;
 
 	signals:
-		virtual void tagCleared(QString k);
-		virtual void tagChanged(QString k, QString v);
+		void tagCleared(QString k);
+		void tagChanged(QString k, QString v);
 };
 
 class TagTemplateWidgetValue: public TagTemplateWidget
@@ -107,10 +107,6 @@ class TagTemplateWidgetCombo: public TagTemplateWidget
 
 	public slots:
 		void on_combo_activated(int idx);
-
-	signals:
-		virtual void tagCleared(QString k);
-		virtual void tagChanged(QString k, QString v);
 };
 
 class TagTemplateWidgetYesno: public TagTemplateWidget
@@ -127,10 +123,6 @@ class TagTemplateWidgetYesno: public TagTemplateWidget
 
 	public slots:
 		void on_checkbox_stateChanged(int state);
-
-	signals:
-		virtual void tagCleared(QString k);
-		virtual void tagChanged(QString k, QString v);
 };
 
 class TagTemplateWidgetConstant: public TagTemplateWidget
@@ -147,10 +139,6 @@ class TagTemplateWidgetConstant: public TagTemplateWidget
 
 		static TagTemplateWidgetConstant*		fromXml(const QDomElement& e);
 		bool toXML(QDomElement& xParent, bool header);
-
-	signals:
-		virtual void tagCleared(QString k);
-		virtual void tagChanged(QString k, QString v);
 };
 
 class TagTemplateWidgetEdit: public TagTemplateWidget
@@ -167,10 +155,6 @@ class TagTemplateWidgetEdit: public TagTemplateWidget
 
 	public slots:
 		void on_editingFinished();
-
-	signals:
-		virtual void tagCleared(QString k);
-		virtual void tagChanged(QString k, QString v);
 };
 
 class TagTemplate: public QObject
