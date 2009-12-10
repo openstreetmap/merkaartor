@@ -383,10 +383,10 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect) const
 		}
 	}
 
-	const QPointF tl = theView.transform().map(theView.projection().project(p->Viewport.topLeft()));
-	const QPointF br = theView.transform().map(theView.projection().project(p->Viewport.bottomRight()));
+	const QPointF bl = theView.transform().map(theView.projection().project(p->Viewport.bottomLeft()));
+	const QPointF tr = theView.transform().map(theView.projection().project(p->Viewport.topRight()));
 
-	return QRectF(tl, br).toRect();
+	return QRectF(bl.x(), tr.y(), tr.x() - bl.x(), bl.y() - tr.y()).toRect();
 }
 
 QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect) const

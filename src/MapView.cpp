@@ -224,6 +224,15 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 		);
 
 #ifndef NDEBUG
+	QPointF pbl = theProjection.project(viewport().bottomLeft());
+	QPointF ptr = theProjection.project(viewport().topRight());
+	qDebug() << "VP: " << QString("%1 (%2,%3,%4,%5)")
+	   .arg(Main->ViewportStatusLabel->text())
+		.arg(QString::number(pbl.x(),'f',4))
+		.arg(QString::number(pbl.y(),'f',4))
+		.arg(QString::number(ptr.x(),'f',4))
+		.arg(QString::number(ptr.y(),'f',4));
+
 	QTime Stop(QTime::currentTime());
 	//Main->PaintTimeLabel->setText(tr("%1ms").arg(Start.msecsTo(Stop)));
 	Main->PaintTimeLabel->setText(tr("%1ms;ppm:%2").arg(Start.msecsTo(Stop)).arg(p->PixelPerM));

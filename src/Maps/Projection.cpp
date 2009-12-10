@@ -104,25 +104,25 @@ bool Projection::projIsLatLong()
 
 QRectF Projection::getProjectedViewport(CoordBox& Viewport, QRect& screen)
 {
-	QPointF br, tl;
+	QPointF bl, tr;
 
-	double x = intToRad(Viewport.topLeft().lon());
-	double y = intToRad(Viewport.topLeft().lat());
+	double x = intToRad(Viewport.topRight().lon());
+	double y = intToRad(Viewport.topRight().lat());
 	projTransformFromWGS84(1, 0, &x, &y, NULL);
 	if (theProj->params().is_latlong)
-		tl = QPointF(radToAng(x), radToAng(y));
+		tr = QPointF(radToAng(x), radToAng(y));
 	else
-		tl = QPointF(x, y);
+		tr = QPointF(x, y);
 
-	x = intToRad(Viewport.bottomRight().lon());
-	y = intToRad(Viewport.bottomRight().lat());
+	x = intToRad(Viewport.bottomLeft().lon());
+	y = intToRad(Viewport.bottomLeft().lat());
 	projTransformFromWGS84(1, 0, &x, &y, NULL);
 	if (theProj->params().is_latlong)
-		br = QPointF(radToAng(x), radToAng(y));
+		bl = QPointF(radToAng(x), radToAng(y));
 	else
-		br = QPointF(x, y);
+		bl = QPointF(x, y);
 
-	QRectF pViewport = QRectF(tl, br);
+	QRectF pViewport = QRectF(bl.x(), tr.y(), tr.x() - bl.x(), bl.y() - tr.y());
 
 	QPointF pCenter(pViewport.center());
 
