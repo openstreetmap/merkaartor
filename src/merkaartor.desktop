@@ -9,5 +9,5 @@ Icon=merkaartor
 Exec=merkaartor
 Terminal=false
 StartupNotify=false
-Categories=Education;Science;Geography;Network;Graphics;Qt;
+Categories=Geography;Network;Qt;
 
