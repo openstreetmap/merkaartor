@@ -24,11 +24,6 @@
 
 #include <QLocale>
 
-//! MapAdapter for WMS servers
-/*!
- * Use this derived MapAdapter to display maps from WMS servers
- *	@author Kai Winter <kaiwinter@gmx.de>
-*/
 class YahooLegalMapAdapter : public QObject, public IMapAdapter
 {
 	Q_OBJECT

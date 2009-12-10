@@ -53,7 +53,7 @@ IMapAdapter::Type YahooLegalMapAdapter::getType() const
 
 QString	YahooLegalMapAdapter::getName() const
 {
-	return "Yahoo!";
+	return "Yahoo! (WMS)";
 }
 
 QString YahooLegalMapAdapter::projection() const

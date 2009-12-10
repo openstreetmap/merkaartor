@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2007 by Kai Winter   *
- *   kaiwinter@gmx.de   *
+ *   Copyright (C) 2008 by Chris Browet                                    *
+ *   cbro@semperpax.com                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,50 +17,47 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef MAPADAPTER_H
-#define MAPADAPTER_H
-
-#include <QObject>
-#include <QSize>
-#include <QPoint>
-#include <QPointF>
-#include <QLocale>
-#include <QDebug>
-#include <cmath>
+#ifndef YAHOOTILEDMAPADAPTER_H
+#define YAHOOTILEDMAPADAPTER_H
 
 #include "IMapAdapter.h"
-#include "IImageManager.h"
 
-//! Used to fit map servers into QMapControl
+#include <QLocale>
+
+//! MapAdapter for WMS servers
 /*!
- * MapAdapters are needed to convert between world- and display coordinates.
- * This calculations depend on the used map projection.
- * There are two ready-made MapAdapters:
- *  - TileMapAdapter, which is ready to use for OpenStreetMap or Google (Mercator projection)
- *  - WMSMapAdapter, which could be used for the most WMS-Server (some servers show errors, because of image ratio)
- *
- * MapAdapters are also needed to form the HTTP-Queries to load the map tiles.
- * The maps from WMS Servers are also divided into tiles, because those can be better cached.
- *
- * @see TileMapAdapter, @see WMSMapAdapter
- *
+ * Use this derived MapAdapter to display maps from WMS servers
  *	@author Kai Winter <kaiwinter@gmx.de>
 */
-class MapAdapter : public QObject, public IMapAdapter
+class YahooTiledMapAdapter : public QObject, public IMapAdapter
 {
-	//friend class ImageManager;
-	//friend class BrowserImageManager;
-	//friend class Layer;
-
 	Q_OBJECT
 	Q_INTERFACES(IMapAdapter)
 
 public:
-	virtual ~MapAdapter();
-
-	//! returns the host of this MapAdapter
+	//! constructor
 	/*!
-	 * @return  the host of this MapAdapter
+	 * This construct a Yahoo Adapter
+	 */
+	YahooTiledMapAdapter();
+	virtual ~YahooTiledMapAdapter();
+
+
+	//! returns the unique identifier (Uuid) of this MapAdapter
+	/*!
+	 * @return  the unique identifier (Uuid) of this MapAdapter
+	 */
+	virtual QUuid	getId		() const;
+
+	//! returns the type of this MapAdapter
+	/*!
+	 * @return  the type of this MapAdapter
+	 */
+	virtual IMapAdapter::Type	getType		() const;
+
+	//! returns the name of this MapAdapter
+	/*!
+	 * @return  the name of this MapAdapter
 	 */
 	virtual QString	getName		() const;
 
@@ -94,10 +91,16 @@ public:
 	 */
 	virtual int 		getZoom		() const;
 
-	virtual int		getAdaptedZoom()const;
+	virtual int		getAdaptedZoom()   const;
 	virtual int 	getAdaptedMinZoom	() const;
 	virtual int		getAdaptedMaxZoom	() const;
 
+	virtual void	zoom_in();
+	virtual void	zoom_out();
+
+	virtual bool	isValid(int x, int y, int z) const;
+	virtual QString getQuery(int x, int y, int z) const;
+	virtual QString getQuery(const QRectF& wgs84Bbox, const QRectF& projBbox, const QRect& size) const  { return ""; }
 
 	//! translates a world coordinate to display coordinate
 	/*!
@@ -106,7 +109,7 @@ public:
 	 * @param  coordinate the world coordinate
 	 * @return the display coordinate (in widget coordinates)
 	 */
-	virtual QPoint		coordinateToDisplay(const QPointF& coordinate) const = 0;
+	virtual QPoint		coordinateToDisplay(const QPointF& coordinate) const;
 
 	//! translates display coordinate to world coordinate
 	/*!
@@ -115,51 +118,31 @@ public:
 	 * @param  point the display coordinate
 	 * @return the world coordinate
 	 */
-	virtual QPointF	displayToCoordinate(const QPoint& point) const = 0;
+	virtual QPointF	displayToCoordinate(const QPoint& point) const;
+
+	virtual bool isTiled() const { return true; };
+	virtual QString projection() const;
 
 	virtual IImageManager* getImageManager();
 	virtual void setImageManager(IImageManager* anImageManager);
 
-
 protected:
-	QString name;
-	MapAdapter(const QString& host, const QString& serverPath, int tilesize, int minZoom = 0, int maxZoom = 0);
-	virtual void zoom_in() = 0;
-	virtual void zoom_out() = 0;
-	virtual bool 		isValid(int x, int y, int z) const = 0;
-	virtual QString getQuery(int x, int y, int z) const = 0;
+	virtual int tilesonzoomlevel(int zoomlevel) const;
+	virtual int getyoffset(int y) const;
 
-	QSize size;
+private:
+	QLocale loc;
+	IImageManager* theImageManager;
+
 	QString	host;
 	QString	serverPath;
-	int		tilesize;
+	int	tilesize;
 	int min_zoom;
 	int max_zoom;
 	int current_zoom;
-
-	int param1;
-	int param2;
-	int param3;
-	int param4;
-	int param5;
-	int param6;
-
-	QString sub1;
-	QString sub2;
-	QString sub3;
-	QString sub4;
-	QString sub5;
-	QString sub6;
-
-	int order[3][2];
-
-	int middle_x;
-	int middle_y;
-
 	double numberOfTiles;
-	QLocale loc;
 
-	IImageManager* theImageManager;
+	virtual QString getQ(QPointF ul, QPointF br) const;
 };
 
 #endif
