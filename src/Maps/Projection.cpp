@@ -205,9 +205,12 @@ double Projection::lonAnglePerM(double Lat) const
 QPointF Projection::project(const Coord & Map) const
 {
 #ifndef _MOBILE
-	return projProject(Map);
+	if (theProj->params().is_latlong)
+		return QPointF(radToAng(Map.lon()), radToAng(Map.lat()));
+	else
+		return projProject(Map);
 #else
-	return QPoint(qRound(Map.lon()), qRound(Map.lat()));
+	return QPointF(Map.lon(), Map.lat());
 #endif
 }
 
@@ -217,7 +220,11 @@ QPointF Projection::project(TrackPoint* aNode) const
 	if (aNode && aNode->projectionRevision() == p->ProjectionRevision)
 		return aNode->projection();
 
-	QPointF pt = projProject(aNode->position());
+	QPointF pt;
+	if (theProj->params().is_latlong)
+		pt = QPointF(radToAng(aNode->position().lon()), radToAng(aNode->position().lat()));
+	else
+		pt = projProject(aNode->position());
 
 	aNode->setProjectionRevision(p->ProjectionRevision);
 	aNode->setProjection(pt);
@@ -231,7 +238,10 @@ QPointF Projection::project(TrackPoint* aNode) const
 Coord Projection::inverse(const QPointF & Screen) const
 {
 #ifndef _MOBILE
-	return projInverse(QPointF(Screen.x(), Screen.y()));
+	if (theProj->params().is_latlong)
+		return Coord(angToRad(Screen.y()), angToRad(Screen.x()));
+	else
+		return projInverse(QPointF(Screen.x(), Screen.y()));
 #else
 	return Coord(qRound(Screen.y()),
 				 qRound(Screen.x()));
