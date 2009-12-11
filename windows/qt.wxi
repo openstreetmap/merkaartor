@@ -14,6 +14,9 @@
         <File Id="QtXml" Name="QtXml4.dll" DefaultLanguage="0"
            Source="$(var.QtPath)\bin\QtXml4.dll" DiskId="1">
         </File>
+         <File Id="QtXmlPatterns4.dll" Name="QtXmlPatterns4.dll" DefaultLanguage="0"
+           Source="$(var.QtPath)\bin\QtXmlPatterns4.dll" DiskId="1">
+        </File>
         <File Id="QtNetwork" Name="QtNetwork4.dll" DefaultLanguage="0"
            Source="$(var.QtPath)\bin\QtNetwork4.dll" DiskId="1">
         </File>
@@ -22,6 +25,9 @@
         </File>
         <File Id="QtWebKit" Name="QtWebKit4.dll" DefaultLanguage="0"
            Source="$(var.QtPath)\bin\QtWebKit4.dll" DiskId="1">
+        </File>
+        <File Id="phonon" Name="phonon4.dll" DefaultLanguage="0"
+           Source="$(var.QtPath)\bin\phonon4.dll" DiskId="1">
         </File>
       </Component>
     </DirectoryRef>

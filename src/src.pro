@@ -176,8 +176,6 @@ contains(MOBILE,1) {
 }
 
 contains(GEOIMAGE, 1) {
-	DEFINES += GEOIMAGE
-	LIBS += -lexiv2
 	include(GeoImage.pri)
 }
 

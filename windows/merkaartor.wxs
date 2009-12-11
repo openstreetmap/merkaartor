@@ -46,8 +46,9 @@
       <DirectoryRef Id="MPBACKGROUND">
          <Component Id="yahoo" Guid="A37E552D-FF55-4507-8C8D-3201993F7C48">
             <File Id="MYahooBackgroundPlugin.dll" Name="MYahooBackgroundPlugin.dll"
-               Source="$(var.BinPath)\plugins\background\MYahooBackgroundPlugin.dll" DiskId="1">
-            </File>
+		    Source="$(var.BinPath)\plugins\background\MYahooBackgroundPlugin.dll" DiskId="1" />
+            <File Id="MYahooTiledBackgroundPlugin.dll" Name="MYahooTiledBackgroundPlugin.dll"
+		    Source="$(var.BinPath)\plugins\background\MYahooTiledBackgroundPlugin.dll" DiskId="1" />
          </Component>
       </DirectoryRef>
       
@@ -59,17 +60,6 @@
          </Component>
       </DirectoryRef>
       
-      <DirectoryRef Id="INSTALLLOCATION">
-         <Component Id="DllCt" Guid="79C79986-ECB5-4835-9E98-4370C0F8B654">
-            <File Id="mingwm10.dll" Name="mingwm10.dll"
-               Source="$(var.MingwPath)\bin\mingwm10.dll" DiskId="1">
-            </File>
-            <File Id="libgdal1.dll" Name="libgdal-1.dll"
-               Source="$(var.DllPath)\libgdal-1.dll" DiskId="1">
-            </File>
-         </Component>
-      </DirectoryRef>
-
       <DirectoryRef Id="INSTALLLOCATION">
          <Component Id="Merkaartor" Guid="5FDB24DB-CE92-433c-8AC4-288551C6AF7B">
 	          <RegistryValue Root="HKCU" Key="Software\Merkaartor $(var.VERSION)$(var.REVISION)" Name="Installed" Type="integer" Value="1"/>
@@ -142,5 +132,6 @@
 
    <?include qt.wxi?>
    <?include qttrans.wxi?>
+   <?include external.wxi?>
 
 </Wix>
