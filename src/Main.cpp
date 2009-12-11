@@ -13,7 +13,7 @@
 extern Q_CORE_EXPORT void qWinMsgHandler(QtMsgType t, const char* str);
 #endif
 
-FILE* pLogFile;
+FILE* pLogFile = NULL;
 
 void myMessageOutput(QtMsgType msgType, const char *buf)
 {
@@ -94,10 +94,13 @@ int main(int argc, char** argv)
 {
 	QApplication app(argc,argv);
 
+	QString logFilename;
+#ifndef NDEBUG
 #if defined(Q_OS_UNIX)
-	QString logFilename(QDir::homePath() + "/merkaartor.log");
+	logFilename = QString(QDir::homePath() + "/merkaartor.log");
 #else
-	QString logFilename(qApp->applicationDirPath() + "/merkaartor.log");
+	logFilename = QString(qApp->applicationDirPath() + "/merkaartor.log");
+#endif
 #endif
 	QStringList fileNames;
 	QStringList args = QCoreApplication::arguments();
@@ -118,7 +121,8 @@ int main(int argc, char** argv)
 			fileNames.append(args[i]);
 	}
 
-	pLogFile = fopen(logFilename.toLatin1(), "a");
+	if (!logFilename.isNull())
+		pLogFile = fopen(logFilename.toLatin1(), "a");
 	qInstallMsgHandler(myMessageOutput);
 
 	qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Starting " << QString("Merkaartor %1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION));

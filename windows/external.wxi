@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Include>
+  
+  <Fragment>
+      <DirectoryRef Id="INSTALLLOCATION">
+         <Component Id="DllCt" Guid="79C79986-ECB5-4835-9E98-4370C0F8B654">
+            <File Id="mingwm10.dll" Name="mingwm10.dll"
+               Source="$(var.MingwPath)\bin\mingwm10.dll" DiskId="1">
+            </File>
+            <File Id="libgcc_s_dw2" Name="libgcc_s_dw2-1.dll"
+               Source="$(var.MingwPath)\bin\libgcc_s_dw2-1.dll" DiskId="1">
+            </File>
+            <File Id="libgdal1" Name="libgdal-1.dll"
+               Source="$(var.DllPath)\libgdal-1.dll" DiskId="1">
+            </File>
+            <File Id="libexiv2" Name="libexiv2-5.dll"
+               Source="$(var.DllPath)\libexiv2-5.dll" DiskId="1">
+            </File>
+         </Component>
+      </DirectoryRef>
+ 
+  </Fragment>
+
+</Include>

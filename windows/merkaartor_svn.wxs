@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+
+<?include defines_svn.wxi?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+   <Product  Id="c1612e6b-7e8d-4f87-b34c-0b164245e3c0" Name="$(var.PackageName)" 
+      Language="1033" Version="0.15.0.1" Manufacturer="Merkaartor"
+      UpgradeCode="CBE31473-E824-4065-BC54-A90AA2BE143A">
+
+      <Package 
+         Description="A map editor for OpenStreetMap.org" InstallerVersion="100" Compressed="yes" />
+
+      <!--Set the icon for the msi and Add/Remove programs-->
+      <Icon Id='Merkaartor.exe' SourceFile='..\Icons\Mercator_16x16.ico'/>
+      <Icon Id='MainIcon.exe' SourceFile='..\Icons\Mercator_48x48.ico'/>
+      <Property Id="ARPPRODUCTICON" Value="Merkaartor.exe" />
+      <Property Id="ALLUSERS" Value="1"/>
+
+      <Media Id="1" Cabinet="Product.cab" EmbedCab="yes" />
+      
+      <Directory Id="TARGETDIR" Name="SourceDir">
+         <Directory Id="ProgramMenuFolder">
+         </Directory>
+         <Directory Id="ProgramFilesFolder">
+            <Directory Id="INSTALLLOCATION" Name="Merkaartor $(var.VERSION)-svn($(var.REVISION))">
+                <Directory Id="MERKAARTORSHARE" Name="share">
+                </Directory>
+                <Directory Id="MERKAARTORPLUGINS" Name="plugins">
+                   <Directory Id="MPBACKGROUND" Name="background" />
+                   <Directory Id="MPSTYLES" Name="styles" />
+                </Directory>
+                <Directory Id="QTIMAGEPLUGINDIR" Name="imageformats" />
+                <Directory Id="QTTRANSLATIONS" Name="translations" />
+            </Directory>
+         </Directory>
+      </Directory>
+
+      <DirectoryRef Id="MERKAARTORSHARE">
+         <Component Id="worldbackgroundosb" Guid="12ACB195-D065-49bb-A7A9-CACE30DD8F1B">
+            <File Id="world_background.osb" Name="world_background.osb"
+               Source="$(var.SharePath)\world_background.osb" DiskId="1">
+            </File>
+         </Component>
+      </DirectoryRef>
+
+      <DirectoryRef Id="MPBACKGROUND">
+         <Component Id="yahoo" Guid="A37E552D-FF55-4507-8C8D-3201993F7C48">
+            <File Id="MYahooBackgroundPlugin.dll" Name="MYahooBackgroundPlugin.dll"
+		    Source="$(var.BinPath)\plugins\background\MYahooBackgroundPlugin.dll" DiskId="1" />
+            <File Id="MYahooTiledBackgroundPlugin.dll" Name="MYahooTiledBackgroundPlugin.dll"
+		    Source="$(var.BinPath)\plugins\background\MYahooTiledBackgroundPlugin.dll" DiskId="1" />
+         </Component>
+      </DirectoryRef>
+      
+      <DirectoryRef Id="MPSTYLES">
+         <Component Id="skulpture" Guid="47E06B1A-DBF5-452d-A68A-5F45CE411353">
+            <File Id="skulpture.dll" Name="skulpture.dll"
+               Source="$(var.BinPath)\plugins\styles\skulpture.dll" DiskId="1">
+            </File>
+         </Component>
+      </DirectoryRef>
+      
+      <DirectoryRef Id="INSTALLLOCATION">
+         <Component Id="Merkaartor" Guid="5FDB24DB-CE92-433c-8AC4-288551C6AF7B">
+	          <RegistryValue Root="HKCU" Key="Software\Merkaartor $(var.VERSION)-svn($(var.REVISION))" Name="Installed" Type="integer" Value="1"/>
+            <File Id="MerkaartorExe" Name="Merkaartor.exe"
+               Source="$(var.BinPath)\Merkaartor.exe" DiskId="1">
+               <Shortcut Id="myshort" Directory="ProgramMenuFolder"
+                     Name="Merkaartor $(var.VERSION)-svn($(var.REVISION))" WorkingDirectory="INSTALLLOCATION"
+					 Icon="MainIcon.exe" />
+            </File>         
+         </Component>
+      </DirectoryRef>
+ 
+      <DirectoryRef Id="QTTRANSLATIONS">
+         <Component Id="MerkaartorTranslationsCt" Guid="8BA3BDF5-D15B-46e0-8581-2BF72A4B6940">
+            <File Id="merkaartor_ar.qm" Name="merkaartor_ar.qm"
+               Source="..\translations\merkaartor_ar.qm" DiskId="1">
+            </File>
+            <File Id="merkaartor_cs.qm" Name="merkaartor_cs.qm"
+               Source="..\translations\merkaartor_cs.qm" DiskId="1">
+            </File>
+            <File Id="merkaartor_de.qm" Name="merkaartor_de.qm"
+               Source="..\translations\merkaartor_de.qm" DiskId="1">
+            </File>
+            <File Id="merkaartor_es.qm" Name="merkaartor_es.qm"
+               Source="..\translations\merkaartor_es.qm" DiskId="1">
+            </File>
+            <File Id="merkaartor_fr.qm" Name="merkaartor_fr.qm"
+               Source="..\translations\merkaartor_fr.qm" DiskId="1">
+            </File>
+            <File Id="merkaartor_it.qm" Name="merkaartor_it.qm"
+               Source="..\translations\merkaartor_it.qm" DiskId="1">
+            </File>
+            <File Id="merkaartor_ru.qm" Name="merkaartor_ru.qm"
+               Source="..\translations\merkaartor_ru.qm" DiskId="1">
+            </File>
+            <File Id="merkaartor_pl.qm" Name="merkaartor_pl.qm"
+               Source="..\translations\merkaartor_pl.qm" DiskId="1">
+            </File>
+         </Component>
+      </DirectoryRef>
+      
+      <Feature Id="MerkaartorFeature" Title="Merkaartor editor" Level="1"
+         Display="expand" ConfigurableDirectory="INSTALLLOCATION">
+         <ComponentRef Id="DllCt" />
+         <ComponentRef Id="Merkaartor" />
+         <ComponentRef Id="yahoo" />
+         <ComponentRef Id="skulpture" />
+      </Feature>
+      <Feature Id="ftWorld_Shp" Title="World Shape file" Level="1"
+         Display="expand" ConfigurableDirectory="MERKAARTORSHARE">
+         <ComponentRef Id="worldbackgroundosb" />
+      </Feature>
+     <Feature Id="QtMainFeature" Title="Main Qt DLLs" Level="1"
+        Display="expand" ConfigurableDirectory="INSTALLLOCATION">
+       <ComponentRef Id="QtMain" />
+     </Feature>
+     <Feature Id="QtImagePluginsFeature" Title="Qt Image Plugins DLLs" Level="1"
+        Display="expand" ConfigurableDirectory="QTIMAGEPLUGINDIR">
+       <ComponentRef Id="QtImagePlugins" />
+     </Feature>
+     <Feature Id="TranslationsFeature" Title="Translation files" Level="1"
+        Display="expand" ConfigurableDirectory="QTTRANSLATIONS">
+       <ComponentRef Id="QtTranslations" />
+       <ComponentRef Id="MerkaartorTranslationsCt" />
+     </Feature>
+
+     <UIRef Id="WixUI_Mondo"/>
+
+   </Product>
+
+   <?include qt.wxi?>
+   <?include qttrans.wxi?>
+   <?include external.wxi?>
+
+</Wix>

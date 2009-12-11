@@ -1,4 +1,5 @@
 v0.15
+	* CHG : Only generate log files on request (--log) on release builds
 	* FIX : speedup epsg:4326 projection
 	* FIX : WMS projection related bugfixes
 	* ADD : Re-added tiled Yahoo! imagery as a plugin
