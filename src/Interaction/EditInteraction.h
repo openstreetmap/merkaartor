@@ -3,6 +3,8 @@
 
 #include "Interaction/Interaction.h"
 
+class MoveTrackPointInteraction;
+
 class EditInteraction :	public FeatureSnapInteraction
 {
 	Q_OBJECT
@@ -33,13 +35,9 @@ class EditInteraction :	public FeatureSnapInteraction
 		Coord StartDrag;
 		Coord EndDrag;
 
-		Coord calculateNewPosition(QMouseEvent* event, MapFeature* aLast, CommandList* theList);
-		QList<TrackPoint*> Moving;
-		QList<Coord> OriginalPosition;
-		Coord StartDragPosition;
-
 		EditModeEnum currentMode;
-		bool Moved;
+
+        MoveTrackPointInteraction* theMoveInteraction;
 };
 
 #endif

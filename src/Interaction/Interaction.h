@@ -55,7 +55,7 @@ class Interaction : public QObject
 		const Projection& projection() const;
 		const QTransform& transform() const;
 		bool panning() const;
-	private:
+    protected:
 		MapView* theView;
 		bool Panning;
 		QPoint FirstPan;
@@ -63,7 +63,7 @@ class Interaction : public QObject
 	signals:
 		void requestCustomContextMenu(const QPoint & pos);
 
-	private:
+    protected:
 		bool Dragging;
 		Coord StartDrag;
 		Coord EndDrag;

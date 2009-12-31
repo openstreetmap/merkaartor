@@ -4,7 +4,7 @@
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
    <Product  Id="c1612e6b-7e8d-4f87-b34c-0b164245e3c0" Name="$(var.PackageName)" 
-      Language="1033" Version="0.15.0.1" Manufacturer="Merkaartor"
+      Language="1033" Version="0.15.0.2" Manufacturer="Merkaartor"
       UpgradeCode="CBE31473-E824-4065-BC54-A90AA2BE143A">
 
       <Package 

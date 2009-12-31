@@ -5,7 +5,7 @@ LIGHT := "c:/Program Files/Windows Installer XML v3/bin/light.exe"
 CANDLE := "c:/Program Files/Windows Installer XML v3/bin/candle.exe"
 LRELEASE := "C:/Qt/2009.05/qt/bin/lrelease.exe"
 VERSION=0.15
-REVISION=19035
+REVISION=19041
 
 all: release debug svn 
 
