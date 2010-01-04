@@ -133,6 +133,9 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
 					L = new CommandList(MainWindow::tr("Set Tags on %1").arg(theFeatures[0]->id()), theFeatures[0]);
 				for (int i=0; i<theFeatures.size(); ++i)
 				{
+                    if (theFeatures[i]->isVirtual())
+                        continue;
+
 					if (!theFeatures[i]->isDirty() && !theFeatures[i]->hasOSMId() && theFeatures[i]->isUploadable()) {
 						bool userAdded = !theFeatures[i]->id().startsWith("conflict_");
 						L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),theFeatures[i],userAdded));
@@ -161,7 +164,10 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
 					L = new CommandList(MainWindow::tr("Set Tags on %1").arg(theFeatures[0]->id()), theFeatures[0]);
 			for (int i=0; i<theFeatures.size(); ++i)
 			{
-				int j = theFeatures[i]->findKey(Original);
+                if (theFeatures[i]->isVirtual())
+                    continue;
+
+                int j = theFeatures[i]->findKey(Original);
 				if (j<theFeatures[i]->tagSize()) {
 					if (!theFeatures[i]->isDirty() && !theFeatures[i]->hasOSMId() && theFeatures[i]->isUploadable()) {
 						bool userAdded = !theFeatures[i]->id().startsWith("conflict_");

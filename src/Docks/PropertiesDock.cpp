@@ -377,7 +377,9 @@ void PropertiesDock::switchUi()
 		switchToNoUi();
 	else if (FullSelection.size() == 1)
 	{
-		if (CAST_NODE(FullSelection[0]))
+        if (FullSelection[0]->isVirtual())
+            switchToNoUi();
+        else if (CAST_NODE(FullSelection[0]))
 			switchToTrackPointUi();
 		else if (CAST_WAY(FullSelection[0]))
 			switchToRoadUi();

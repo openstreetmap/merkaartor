@@ -34,8 +34,9 @@ class RoadPrivate
 		{
 		}
 		std::vector<TrackPointPtr> Nodes;
- 		QList<Coord> Smoothed;
- 		bool SmoothedUpToDate;
+		std::vector<TrackPointPtr> virtualNodes;
+		QList<Coord> Smoothed;
+		bool SmoothedUpToDate;
 		CoordBox BBox;
 		bool BBoxUpToDate;
 
@@ -43,7 +44,7 @@ class RoadPrivate
 		double Area;
 		double Distance;
 		double Width;
-        bool NotEverythingDownloaded;
+		bool NotEverythingDownloaded;
 		bool wasPathComplete;
 		RenderPriority theRenderPriority;
 		QPainterPath thePath;
@@ -97,22 +98,31 @@ Road::Road(const Road& other)
 
 Road::~Road(void)
 {
+	while (p->virtualNodes.size()) {
+		p->virtualNodes[0]->unsetParentFeature(this);
+		delete p->virtualNodes[0];
+		p->virtualNodes.erase(p->virtualNodes.begin());
+	}
 	for (unsigned int i=0; i<p->Nodes.size(); ++i)
 		if (p->Nodes[i])
 			p->Nodes[i]->unsetParentFeature(this);
+
 	delete p;
 }
 
 void Road::setLayer(MapLayer* L)
 {
-	if (L)
-		for (unsigned int i=0; i<p->Nodes.size(); ++i)
+	if (L) {
+		for (unsigned int i=0; i<p->Nodes.size(); ++i) {
 			if (p->Nodes[i])
 				p->Nodes[i]->setParentFeature(this);
-	else
-		for (unsigned int i=0; i<p->Nodes.size(); ++i)
+		}
+	} else {
+		for (unsigned int i=0; i<p->Nodes.size(); ++i) {
 			if (p->Nodes[i])
 				p->Nodes[i]->unsetParentFeature(this);
+		}
+	}
 	MapFeature::setLayer(L);
 }
 
@@ -125,6 +135,7 @@ void Road::partChanged(MapFeature*, int ChangeId)
 	MetaUpToDate = false;
 	p->SmoothedUpToDate = false;
 	p->wasPathComplete = false;
+
 	notifyParents(ChangeId);
 }
 
@@ -136,7 +147,7 @@ QString Road::description() const
 	return QString("%1").arg(id());
 }
 
-RenderPriority Road::renderPriority() 
+RenderPriority Road::renderPriority()
 {
 	// FIWME Segments of a road with different layers are wrongly painted (rounded corners)
 	return p->theRenderPriority;
@@ -167,8 +178,9 @@ void Road::add(TrackPoint* Pt, int Idx)
 {
 	if (layer())
 		layer()->indexRemove(p->BBox, this);
-	p->Nodes.push_back(Pt);
-	std::rotate(p->Nodes.begin()+Idx,p->Nodes.end()-1,p->Nodes.end());
+	p->Nodes.insert(p->Nodes.begin() + Idx, Pt);
+//	p->Nodes.push_back(Pt);
+//	std::rotate(p->Nodes.begin()+Idx,p->Nodes.end()-1,p->Nodes.end());
 	Pt->setParentFeature(this);
 	p->BBoxUpToDate = false;
 	MetaUpToDate = false;
@@ -180,12 +192,44 @@ void Road::add(TrackPoint* Pt, int Idx)
 	}
 }
 
+void Road::updateVirtuals()
+{
+	while (p->virtualNodes.size()) {
+		if (p->virtualNodes[0]->layer())
+			p->virtualNodes[0]->layer()->remove(p->virtualNodes[0]);
+		p->virtualNodes[0]->unsetParentFeature(this);
+		delete p->virtualNodes[0];
+		p->virtualNodes.erase(p->virtualNodes.begin());
+	}
+
+	if (!M_PREFS->getUseVirtualNodes() || !layer() || isDeleted())
+		return;
+
+	for (int i=1; i<p->Nodes.size(); ++i) {
+		QLineF l(toQt(p->Nodes[i-1]->position()), toQt(p->Nodes[i]->position()));
+		l.setLength(l.length()/2);
+		TrackPoint* v = new TrackPoint(toCoord(l.p2()));
+		v->setVirtual(true);
+		v->setParentFeature(this);
+		layer()->add(v);
+		p->virtualNodes.push_back(v);
+	}
+}
+
 int Road::find(MapFeature* Pt) const
 {
 	for (unsigned int i=0; i<p->Nodes.size(); ++i)
 		if (p->Nodes[i] == Pt)
 			return i;
 	return p->Nodes.size();
+}
+
+int Road::findVirtual(MapFeature* Pt) const
+{
+	for (unsigned int i=0; i<p->virtualNodes.size(); ++i)
+		if (p->virtualNodes[i] == Pt)
+			return i;
+	return p->virtualNodes.size();
 }
 
 void Road::remove(int idx)
@@ -221,12 +265,12 @@ int Road::size() const
 
 TrackPoint* Road::getNode(int idx)
 {
-	return p->Nodes[idx];
+	return p->Nodes.at(idx);
 }
 
 const TrackPoint* Road::getNode(int idx) const
 {
-	return p->Nodes[idx];
+	return p->Nodes.at(idx);
 }
 
 const std::vector<TrackPointPtr>& Road::getNodes() const
@@ -237,12 +281,12 @@ const std::vector<TrackPointPtr>& Road::getNodes() const
 
 MapFeature* Road::get(int idx)
 {
-	return p->Nodes[idx];
+	return p->Nodes.at(idx);
 }
 
 const MapFeature* Road::get(int idx) const
 {
-	return p->Nodes[idx];
+	return p->Nodes.at(idx);
 }
 
 bool Road::isNull() const
@@ -252,7 +296,7 @@ bool Road::isNull() const
 
 bool Road::notEverythingDownloaded()
 {
-   	if (MetaUpToDate == false)
+	if (MetaUpToDate == false)
 		updateMeta();
 
 	return p->NotEverythingDownloaded;
@@ -291,6 +335,7 @@ void Road::updateMeta()
 				break;
 			}
 
+	updateVirtuals();
 	if (p->Nodes.size() == 0)
 	{
 		MetaUpToDate = true;
@@ -326,7 +371,7 @@ void Road::updateMeta()
 	if (tagValue("natural","") == "coastline")
 		p->IsCoastline = true;
 
-    
+
 	MetaUpToDate = true;
 }
 
@@ -485,6 +530,14 @@ double Road::pixelDistance(const QPointF& Target, double ClearEndDistance, const
 				return Best;
 		}
 	}
+	for (unsigned int i=0; i<p->virtualNodes.size(); ++i)
+	{
+		if (p->virtualNodes.at(i)) {
+			double x = ::distance(Target,theTransform.map(theProjection.project(p->virtualNodes.at(i))));
+			if (x<ClearEndDistance)
+				return Best;
+		}
+	}
 	if (smoothed().size())
 		for (int i=3; i <p->Smoothed.size(); i += 3)
 		{
@@ -566,14 +619,14 @@ void Road::buildPath(const Projection &theProjection, const QTransform& /*theTra
 		theProjection.project(p->Nodes[i]);
 
 	QPointF pbl = theProjection.project(p->BBox.bottomLeft());
-    QPointF ptr = theProjection.project(p->BBox.topRight());
-    box_2d roadRect (
-        make<point_2d>(pbl.x(), pbl.y()), 
-        make<point_2d>(ptr.x(), ptr.y())
-        );
+	QPointF ptr = theProjection.project(p->BBox.topRight());
+	box_2d roadRect (
+		make<point_2d>(pbl.x(), pbl.y()),
+		make<point_2d>(ptr.x(), ptr.y())
+		);
 	box_2d clipRect (make<point_2d>(cr.bottomLeft().x(), cr.topRight().y()), make<point_2d>(cr.topRight().x(), cr.bottomLeft().y()));
-    bool toClip = !ggl::within(roadRect, clipRect);
-    if (!toClip) {
+	bool toClip = !ggl::within(roadRect, clipRect);
+	if (!toClip) {
 		if (!p->wasPathComplete || p->ProjectionRevision != theProjection.projectionRevision()) {
 			p->thePath = QPainterPath();
 
@@ -583,12 +636,12 @@ void Road::buildPath(const Projection &theProjection, const QTransform& /*theTra
 			}
 			p->ProjectionRevision = theProjection.projectionRevision();
 			p->wasPathComplete = true;
-        }
-    } else {
+		}
+	} else {
 		p->thePath = QPainterPath();
 		p->wasPathComplete = false;
 
-	    if (area() <= 0.0) {
+		if (area() <= 0.0) {
 //	        linestring_2d in;
 //	        for (unsigned int i=0; i<p->Nodes.size(); ++i) {
 //		        QPointF P = p->Nodes[i]->projection();
@@ -599,25 +652,25 @@ void Road::buildPath(const Projection &theProjection, const QTransform& /*theTra
 			intersection <linestring_2d, box_2d, /*linestring_2d*/ std::vector<TrackPointPtr>, std::back_insert_iterator <std::vector<linestring_2d> > >
 				(clipRect, /*in*/ p->Nodes, std::back_inserter(clipped));
 
-	        for (std::vector<linestring_2d>::const_iterator it = clipped.begin(); it != clipped.end(); it++)
-	        {
-		        if (!(*it).empty()) {
-			        p->thePath.moveTo(QPointF((*it)[0].x(), (*it)[0].y()));
-		        }
-		        for (linestring_2d::const_iterator itl = (*it).begin()+1; itl != (*it).end(); itl++)
-		        {
-			        p->thePath.lineTo(QPointF((*itl).x(), (*itl).y()));
-		        }
-	        }
-	    } 
-	    else 
-	    {
+			for (std::vector<linestring_2d>::const_iterator it = clipped.begin(); it != clipped.end(); it++)
+			{
+				if (!(*it).empty()) {
+					p->thePath.moveTo(QPointF((*it)[0].x(), (*it)[0].y()));
+				}
+				for (linestring_2d::const_iterator itl = (*it).begin()+1; itl != (*it).end(); itl++)
+				{
+					p->thePath.lineTo(QPointF((*itl).x(), (*itl).y()));
+				}
+			}
+		}
+		else
+		{
 			polygon_2d in;
 			for (unsigned int i=0; i<p->Nodes.size(); ++i) {
 				QPointF P = p->Nodes[i]->projection();
 				append(in, make<point_2d>(P.x(), P.y()));
 			}
-	        correct(in);
+			correct(in);
 
 
 			// Handle case of self-intersecting polygons
@@ -648,7 +701,7 @@ void Road::buildPath(const Projection &theProjection, const QTransform& /*theTra
 					p->wasPathComplete = true;
 				}
 			}
-        }
+		}
 	}
 	//p->thePath = theTransform.map(p->thePath);
 }
@@ -845,7 +898,8 @@ bool Road::toGPX(QDomElement xParent, QProgressDialog & progress, bool forExport
 	}
 
 	for (int i=0; i<size(); ++i) {
-		dynamic_cast <TrackPoint*> (get(i))->toGPX(e, progress, forExport);
+		if (!getNode(i)->isVirtual())
+			getNode(i)->toGPX(e, progress, forExport);
 	}
 
 	return OK;
@@ -863,8 +917,9 @@ QString Road::toXML(int lvl, QProgressDialog * progress)
 
 	S += QString((lvl+1)*2, ' ') + QString("<nd ref=\"%1\"/>\n").arg(stripToOSMId(get(0)->id()));
 	for (int i=1; i<size(); ++i)
-		if (get(i)->id() != get(i-1)->id())
-			S += QString((lvl+1)*2, ' ') + QString("<nd ref=\"%1\"/>\n").arg(stripToOSMId(get(i)->id()));
+		if (!getNode(i)->isVirtual())
+			if (get(i)->id() != get(i-1)->id())
+				S += QString((lvl+1)*2, ' ') + QString("<nd ref=\"%1\"/>\n").arg(stripToOSMId(get(i)->id()));
 	S += tagsToXML(lvl+1);
 	S += QString(lvl*2, ' ') + "</way>\n";
 	return S;
@@ -891,12 +946,13 @@ bool Road::toXML(QDomElement xParent, QProgressDialog & progress)
 		n.setAttribute("ref", get(0)->xmlId());
 
 		for (int i=1; i<size(); ++i) {
-			if (get(i)->xmlId() != get(i-1)->xmlId()) {
-				QDomElement n = xParent.ownerDocument().createElement("nd");
-				e.appendChild(n);
+			if (!getNode(i)->isVirtual())
+				if (get(i)->xmlId() != get(i-1)->xmlId()) {
+					QDomElement n = xParent.ownerDocument().createElement("nd");
+					e.appendChild(n);
 
-				n.setAttribute("ref", get(i)->xmlId());
-			}
+					n.setAttribute("ref", get(i)->xmlId());
+				}
 		}
 	}
 
@@ -1218,7 +1274,7 @@ Road * Road::GetSingleParentRoadInner(MapFeature * mapFeature)
 
 		if (road->isExtrimity(trackPoint) && !road->isClosed())
 			continue;
-		
+
 		if (parentRoad && road != parentRoad)
 			return NULL;
 

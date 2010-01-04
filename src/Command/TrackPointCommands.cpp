@@ -46,6 +46,7 @@ void MoveTrackPointCommand::redo()
 {
 	oldLayer = thePoint->layer();
 	thePoint->setPosition(NewPos);
+    thePoint->setVirtual(false);
 	if (theLayer && oldLayer && (theLayer != oldLayer)) {
 		oldLayer->remove(thePoint);
 		incDirtyLevel(oldLayer);
@@ -95,7 +96,7 @@ MoveTrackPointCommand * MoveTrackPointCommand::fromXML(MapDocument * d, QDomElem
 	a->setId(e.attribute("xml:id"));
 	a->OldPos = Coord::fromXML(e.firstChildElement("oldpos"));
 	a->NewPos = Coord::fromXML(e.firstChildElement("newpos"));
-	if (e.hasAttribute("layer"))
+    if (e.hasAttribute("layer"))
 		a->theLayer = d->getLayer(e.attribute("layer"));
 	else
 		a->theLayer = NULL;

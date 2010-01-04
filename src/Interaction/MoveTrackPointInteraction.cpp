@@ -19,7 +19,8 @@
 #include <QList>
 
 MoveTrackPointInteraction::MoveTrackPointInteraction(MapView* aView)
-: FeatureSnapInteraction(aView), StartDragPosition(0,0)
+	: FeatureSnapInteraction(aView)
+	, StartDragPosition(0,0)
 {
 }
 
@@ -70,11 +71,11 @@ void MoveTrackPointInteraction::snapMousePressEvent(QMouseEvent * event, MapFeat
 		else
 			sel.append(aLast);
 	} else {
-        if (view()->properties()->selection().size())
-            sel = view()->properties()->selection();
-        else
-            if (aLast)
-                sel.append(aLast);
+		if (view()->properties()->selection().size())
+			sel = view()->properties()->selection();
+		else
+			if (aLast)
+				sel.append(aLast);
 	}
 	clearNoSnap();
 	Moving.clear();
@@ -99,27 +100,32 @@ void MoveTrackPointInteraction::snapMousePressEvent(QMouseEvent * event, MapFeat
 		OriginalPosition.push_back(Moving[i]->position());
 		addToNoSnap(Moving[i]);
 	}
+	Virtual = false;
+	theList = new CommandList;
 }
 
 void MoveTrackPointInteraction::snapMouseReleaseEvent(QMouseEvent * event, MapFeature* Closer)
 {
 	if (Moving.size() && !panning())
 	{
-		CommandList* theList;
-		if (Moving.size() > 1)
-			theList = new CommandList(MainWindow::tr("Move Nodes").arg(Moving[0]->id()), Moving[0]);
-		else
-			theList = new CommandList(MainWindow::tr("Move Node %1").arg(Moving[0]->id()), Moving[0]);
+		if (Moving.size() > 1) {
+			theList->setDescription(MainWindow::tr("Move Nodes"));
+			theList->setFeature(Moving[0]);
+		} else {
+			if (!Virtual) {
+				theList->setDescription(MainWindow::tr("Move Node %1").arg(Moving[0]->id()));
+				theList->setFeature(Moving[0]);
+			}
+		}
 		Coord Diff(calculateNewPosition(event,Closer, theList)-StartDragPosition);
 		for (int i=0; i<Moving.size(); ++i)
 		{
-			Moving[i]->setPosition(OriginalPosition[i]);
 			if (Moving[i]->layer()->isTrack())
 				theList->add(new MoveTrackPointCommand(Moving[i],OriginalPosition[i]+Diff, Moving[i]->layer()));
 			else
 				theList->add(new MoveTrackPointCommand(Moving[i],OriginalPosition[i]+Diff, document()->getDirtyOrOriginLayer(Moving[i]->layer())));
 		}
-		
+
 		// If moving a single node (not a track node), see if it got dropped onto another node
 		if (Moving.size() == 1 && !Moving[0]->layer()->isTrack())
 		{
@@ -159,7 +165,7 @@ void MoveTrackPointInteraction::snapMouseReleaseEvent(QMouseEvent * event, MapFe
 					// Change the command description to reflect the merge
 					theList->setDescription(MainWindow::tr("Merge Nodes into %1").arg(F->id()));
 					theList->setFeature(F);
-					
+
 					// from mergeNodes(theDocument, theList, theProperties);
 					QList<MapFeature*> alt;
 					TrackPoint* merged = samePosPts[0];
@@ -168,12 +174,12 @@ void MoveTrackPointInteraction::snapMouseReleaseEvent(QMouseEvent * event, MapFe
 						MapFeature::mergeTags(document(), theList, merged, samePosPts[i]);
 						theList->add(new RemoveFeatureCommand(document(), samePosPts[i], alt));
 					}
-					
+
 					view()->properties()->setSelection(F);
 				}
 			}
 		}
-		
+
 		document()->addHistory(theList);
 		view()->invalidate(true, false);
 	}
@@ -187,8 +193,32 @@ void MoveTrackPointInteraction::snapMouseMoveEvent(QMouseEvent* event, MapFeatur
 	if (Moving.size() && !panning())
 	{
 		Coord Diff = calculateNewPosition(event,Closer,NULL)-StartDragPosition;
-		for (int i=0; i<Moving.size(); ++i)
-			Moving[i]->setPosition(OriginalPosition[i]+Diff);
+		for (int i=0; i<Moving.size(); ++i) {
+			if (Moving[i]->isVirtual()) {
+				Virtual = true;
+				TrackPoint* v = Moving[i];
+				Road* aRoad = CAST_WAY(v->getParent(0));
+				theList->setDescription(MainWindow::tr("Create node in Road: %1").arg(aRoad->id()));
+				theList->setFeature(aRoad);
+				int SnapIdx = aRoad->findVirtual(v)+1;
+				TrackPoint* N = new TrackPoint(*v);
+				N->setVirtual(false);
+				N->setPosition(OriginalPosition[i]+Diff);
+				if (M_PREFS->apiVersionNum() < 0.6)
+					N->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
+
+				if (view()->properties()->isSelected(v)) {
+					view()->properties()->toggleSelection(v);
+					view()->properties()->toggleSelection(N);
+				}
+				theList->add(new AddFeatureCommand(main()->document()->getDirtyOrOriginLayer(aRoad->layer()),N,true));
+				theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx,main()->document()->getDirtyOrOriginLayer(aRoad->layer())));
+				aRoad->updateVirtuals();
+
+				Moving[i] = N;
+			} else
+				Moving[i]->setPosition(OriginalPosition[i]+Diff);
+		}
 		view()->invalidate(true, false);
 	}
 }

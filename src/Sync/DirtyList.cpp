@@ -159,7 +159,7 @@ bool DirtyListVisit::add(MapFeature* F)
 			return EraseResponse[i];
 
 	bool x;
-	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(F))
+    if (TrackPoint* Pt = CAST_NODE(F))
 	{
 		if (Pt->isInteresting())
 		{
@@ -177,8 +177,9 @@ bool DirtyListVisit::add(MapFeature* F)
 	else if (Road* R = dynamic_cast<Road*>(F))
 	{
 		for (int i=0; i<R->size(); ++i)
-			if (!(R->get(i)->hasOSMId()) && notYetAdded(R->get(i)))
-				add(R->get(i));
+            if (!R->getNode(i)->isVirtual())
+                if (!(R->get(i)->hasOSMId()) && notYetAdded(R->get(i)))
+                    add(R->get(i));
 		if (F->hasOSMId())
 			x = updateRoad(R);
 		else

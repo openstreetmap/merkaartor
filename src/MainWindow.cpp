@@ -103,7 +103,7 @@ class MainWindowPrivate
 		}
 		int lastPrefTabIndex;
 		QString defStyle;
-        StyleDock* theStyle;
+		StyleDock* theStyle;
 		FeaturesDock* theFeats;
 		QString title;
 };
@@ -114,7 +114,7 @@ MainWindow::MainWindow(void)
 		qtTranslator(0), merkaartorTranslator(0)
 {
 	p = new MainWindowPrivate;
-	
+
 	theProgressDialog = NULL;
 	theProgressBar = NULL;
 	theProgressLabel = NULL;
@@ -164,33 +164,33 @@ MainWindow::MainWindow(void)
 	connect (theView, SIGNAL(interactionChanged(Interaction*)), this, SLOT(mapView_interactionChanged(Interaction*)));
 
 	theInfo = new InfoDock(this);
-    connect(theInfo, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
+	connect(theInfo, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
 
 	theLayers = new LayerDock(this);
-    connect(theLayers, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
+	connect(theLayers, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
 
 	theProperties = new PropertiesDock(this);
-    connect(theProperties, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
+	connect(theProperties, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
 	on_editPropertiesAction_triggered();
 
-    theDirty = new DirtyDock(this);
-    connect(theDirty, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
+	theDirty = new DirtyDock(this);
+	connect(theDirty, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
 
-    p->theStyle = new StyleDock(this);
-    connect(p->theStyle, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
+	p->theStyle = new StyleDock(this);
+	connect(p->theStyle, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
 
 	p->theFeats = new FeaturesDock(this);
 	connect(p->theFeats, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
 	connect(theView, SIGNAL(viewportChanged()), p->theFeats, SLOT(on_Viewport_changed()), Qt::QueuedConnection);
 
 	theGPS = new QGPS(this);
-    connect(theGPS, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
+	connect(theGPS, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
 
 #ifdef GEOIMAGE
 	theGeoImage = new GeoImageDock(this);
 	theGeoImage->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 	addDockWidget(Qt::RightDockWidgetArea, theGeoImage);
-    connect(theGeoImage, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
+	connect(theGeoImage, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
 #endif
 
 	connect (theLayers, SIGNAL(layersChanged(bool)), this, SLOT(adjustLayers(bool)));
@@ -219,6 +219,7 @@ MainWindow::MainWindow(void)
 	viewTrackPointsAction->setChecked(M_PREFS->getTrackPointsVisible());
 	viewTrackSegmentsAction->setChecked(M_PREFS->getTrackSegmentsVisible());
 	viewRelationsAction->setChecked(M_PREFS->getRelationsVisible());
+	viewVirtualNodesAction->setChecked(M_PREFS->getVirtualNodesVisible());
 
 	updateMenu();
 
@@ -257,8 +258,8 @@ MainWindow::MainWindow(void)
 	theDirty->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 	addDockWidget(Qt::RightDockWidgetArea, theDirty);
 
-    p->theStyle->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    addDockWidget(Qt::RightDockWidgetArea, p->theStyle);
+	p->theStyle->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+	addDockWidget(Qt::RightDockWidgetArea, p->theStyle);
 
 	p->theFeats->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 	addDockWidget(Qt::RightDockWidgetArea, p->theFeats);
@@ -299,7 +300,7 @@ MainWindow::MainWindow(void)
 	viewStyleBackgroundAction->setVisible(false);
 	viewStyleForegroundAction->setVisible(false);
 	viewStyleTouchupAction->setVisible(false);
-	
+
 	MerkaartorPreferences::instance()->restoreMainWindowState( this );
 #ifndef _MOBILE
 	if (!M_PREFS->getProjectionsList().getProjections().size()) {
@@ -342,7 +343,7 @@ void MainWindow::delayedInit()
 
 MainWindow::~MainWindow(void)
 {
-    theProperties->setSelection(NULL);
+	theProperties->setSelection(NULL);
 
 	if (EditPaintStyle::instance())
 		delete EditPaintStyle::instance();
@@ -352,8 +353,8 @@ MainWindow::~MainWindow(void)
 	delete theView;
 	delete theProperties;
 
-    delete qtTranslator;
-    delete merkaartorTranslator;
+	delete qtTranslator;
+	delete merkaartorTranslator;
 
 	delete SlippyMapWidget::theSlippyCache;
 
@@ -373,7 +374,7 @@ void MainWindow::createProgressDialog()
 	theProgressLabel = new QLabel();
 	theProgressLabel->setAlignment(Qt::AlignCenter);
 	theProgressDialog->setLabel(theProgressLabel);
-	
+
 	theProgressDialog->setMaximum(11);
 }
 
@@ -524,14 +525,14 @@ void MainWindow::on_editCopyAction_triggered()
 
 	QString osm = theDocument->exportOSM(theProperties->selection());
 	md->setText(osm);
-	md->setData("application/x-openstreetmap+xml", osm.toUtf8()); 
+	md->setData("application/x-openstreetmap+xml", osm.toUtf8());
 
 	ImportExportKML kmlexp(theDocument);
 	QBuffer kmlBuf;
 	kmlBuf.open(QIODevice::WriteOnly | QIODevice::Truncate);
 	if (kmlexp.setDevice(&kmlBuf)) {
 		kmlexp.export_(theProperties->selection());
-		md->setData("application/vnd.google-earth.kml+xml", kmlBuf.data()); 
+		md->setData("application/vnd.google-earth.kml+xml", kmlBuf.data());
 	}
 
 	ExportGPX gpxexp(theDocument);
@@ -539,7 +540,7 @@ void MainWindow::on_editCopyAction_triggered()
 	gpxBuf.open(QIODevice::WriteOnly | QIODevice::Truncate);
 	if (gpxexp.setDevice(&gpxBuf)) {
 		gpxexp.export_(theProperties->selection());
-		md->setData("application/gpx+xml", gpxBuf.data()); 
+		md->setData("application/gpx+xml", gpxBuf.data());
 	}
 
 	clipboard->setMimeData(md);
@@ -935,7 +936,7 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 		else
 		if (!importAborted)
 		{
- 			delete newLayer;
+			delete newLayer;
 			QMessageBox::warning(this, tr("No valid file"), tr("%1 could not be opened.").arg(fn));
 		}
 	}
@@ -961,7 +962,7 @@ void MainWindow::loadFiles(const QStringList & fileList)
 			fileNames.removeAll(cur);
 	}
 #endif
-	
+
 	if (fileNames.isEmpty())
 		return;
 #ifndef Q_OS_SYMBIAN
@@ -970,7 +971,7 @@ void MainWindow::loadFiles(const QStringList & fileList)
 	theLayers->setUpdatesEnabled(false);
 	view()->setUpdatesEnabled(false);
 
-        // Load only the first merkaartor document
+		// Load only the first merkaartor document
 	bool foundDocument = false;
 	QMutableStringListIterator it(fileNames);
 	while (it.hasNext())
@@ -1008,7 +1009,7 @@ void MainWindow::loadFiles(const QStringList & fileList)
 
 	if (foundDocument == false)
 	{
- 		if (foundImport)
+		if (foundImport)
 		{
 			// only imported some tracks
 			delete theDocument;
@@ -1215,6 +1216,13 @@ void MainWindow::on_viewNamesAction_triggered()
 {
 	M_PREFS->setNamesVisible(!M_PREFS->getNamesVisible());
 	viewNamesAction->setChecked(M_PREFS->getNamesVisible());
+	invalidateView();
+}
+
+void MainWindow::on_viewVirtualNodesAction_triggered()
+{
+	M_PREFS->setVirtualNodesVisible(!M_PREFS->getVirtualNodesVisible());
+	viewVirtualNodesAction->setChecked(M_PREFS->getVirtualNodesVisible());
 	invalidateView();
 }
 
@@ -1690,7 +1698,7 @@ void MainWindow::on_toolsShortcutsAction_triggered()
 	theActions.append(toolsPreferencesAction);
 	theActions.append(toolsShortcutsAction);
 	theActions.append(toolsWorldOsbAction);
-	
+
 	theActions.append(windowHideAllAction);
 	theActions.append(windowPropertiesAction);
 	theActions.append(windowLayersAction);
@@ -1699,7 +1707,7 @@ void MainWindow::on_toolsShortcutsAction_triggered()
 	theActions.append(windowGPSAction);
 	theActions.append(windowGeoimageAction);
 	theActions.append(windowStylesAction);
-	
+
 	theActions.append(helpAboutAction);
 
 	ActionsDialog dlg(theActions, this);
@@ -1736,7 +1744,7 @@ void MainWindow::preferencesChanged(void)
 				QApplication::setStyle(QStyleFactory::create(M_PREFS->getMerkaartorStyleString()));
 		}
 	}
-	
+
 	updateStyleMenu();
 	updateMenu();
 	invalidateView(false);
@@ -2195,7 +2203,7 @@ void MainWindow::updateStyleMenu()
 
 	QActionGroup* actgrp = new QActionGroup(this);
 	QDir intStyles(BUILTIN_STYLES_DIR);
-    for (int i=0; i < intStyles.entryList().size(); ++i) {
+	for (int i=0; i < intStyles.entryList().size(); ++i) {
 		QAction* a = new QAction(QString(tr("%1 (int)")).arg(intStyles.entryList().at(i)), menuStyles);
 		actgrp->addAction(a);
 		a->setCheckable(true);
@@ -2205,10 +2213,10 @@ void MainWindow::updateStyleMenu()
 			a->setChecked(true);
 		p->theStyle->addItem(a);
 	}
-    if (!M_PREFS->getCustomStyle().isEmpty()) {
-        QDir customStyles(M_PREFS->getCustomStyle(), "*.mas");
-        for (int i=0; i < customStyles.entryList().size(); ++i) {
- 			QAction* a = new QAction(customStyles.entryList().at(i), menuStyles);
+	if (!M_PREFS->getCustomStyle().isEmpty()) {
+		QDir customStyles(M_PREFS->getCustomStyle(), "*.mas");
+		for (int i=0; i < customStyles.entryList().size(); ++i) {
+			QAction* a = new QAction(customStyles.entryList().at(i), menuStyles);
 			actgrp->addAction(a);
 			a->setCheckable(true);
 			a->setData(QVariant(customStyles.entryInfoList().at(i).absoluteFilePath()));
@@ -2216,22 +2224,22 @@ void MainWindow::updateStyleMenu()
 			if (customStyles.entryInfoList().at(i).absoluteFilePath() == M_PREFS->getDefaultStyle())
 				a->setChecked(true);
 			p->theStyle->addItem(a);
-       }
-    }
+	   }
+	}
 }
 
 void MainWindow::updateWindowMenu(bool)
 {
-    windowPropertiesAction->setChecked(theProperties->isVisible());
-    windowLayersAction->setChecked(theLayers->isVisible());
-    windowInfoAction->setChecked(theInfo->isVisible());
-    windowDirtyAction->setChecked(theDirty->isVisible());
+	windowPropertiesAction->setChecked(theProperties->isVisible());
+	windowLayersAction->setChecked(theLayers->isVisible());
+	windowInfoAction->setChecked(theInfo->isVisible());
+	windowDirtyAction->setChecked(theDirty->isVisible());
 	windowFeatsAction->setChecked(p->theFeats->isVisible());
 	windowGPSAction->setChecked(theGPS->isVisible());
 #ifdef GEOIMAGE
-    windowGeoimageAction->setChecked(theGeoImage->isVisible());
+	windowGeoimageAction->setChecked(theGeoImage->isVisible());
 #endif
-    windowStylesAction->setChecked(p->theStyle->isVisible());
+	windowStylesAction->setChecked(p->theStyle->isVisible());
 }
 
 void MainWindow::on_bookmarkAddAction_triggered()
@@ -2484,7 +2492,7 @@ void MainWindow::on_gpsConnectAction_triggered()
 	QGPSS60Device* aGps = new QGPSS60Device();
 #endif
 	if (aGps->openDevice()) {
-		connect(aGps, SIGNAL(updatePosition(float, float, QDateTime, float, float, float)), 
+		connect(aGps, SIGNAL(updatePosition(float, float, QDateTime, float, float, float)),
 			this, SLOT(updateGpsPosition(float, float, QDateTime, float, float, float)));
 
 		gpsConnectAction->setEnabled(false);
@@ -2514,7 +2522,7 @@ void MainWindow::on_gpsReplayAction_triggered()
 
 	QGPSFileDevice* aGps = new QGPSFileDevice(fileName);
 	if (aGps->openDevice()) {
-		connect(aGps, SIGNAL(updatePosition(float, float, QDateTime, float, float, float)), 
+		connect(aGps, SIGNAL(updatePosition(float, float, QDateTime, float, float, float)),
 			this, SLOT(updateGpsPosition(float, float, QDateTime, float, float, float)));
 
 		gpsConnectAction->setEnabled(false);
@@ -2539,7 +2547,7 @@ void MainWindow::on_gpsDisconnectAction_triggered()
 	gpsRecordAction->setChecked(false);
 	gpsPauseAction->setChecked(false);
 
-	disconnect(theGPS->getGpsDevice(), SIGNAL(updatePosition(float, float, QDateTime, float, float, float)), 
+	disconnect(theGPS->getGpsDevice(), SIGNAL(updatePosition(float, float, QDateTime, float, float, float)),
 		this, SLOT(updateGpsPosition(float, float, QDateTime, float, float, float)));
 	theGPS->stopGps();
 	theGPS->resetGpsStatus();
@@ -2658,49 +2666,49 @@ void MainWindow::on_toolTemplatesLoadAction_triggered()
 
 void MainWindow::updateLanguage()
 {
-    if (qtTranslator) {
-        QCoreApplication::removeTranslator(qtTranslator);
-    }
-    if (merkaartorTranslator) {
-        QCoreApplication::removeTranslator(merkaartorTranslator);
-    }
-    QString DefaultLanguage = getDefaultLanguage();
+	if (qtTranslator) {
+		QCoreApplication::removeTranslator(qtTranslator);
+	}
+	if (merkaartorTranslator) {
+		QCoreApplication::removeTranslator(merkaartorTranslator);
+	}
+	QString DefaultLanguage = getDefaultLanguage();
 	if (DefaultLanguage != "-" && DefaultLanguage != "en")
-    {
-        qtTranslator = new QTranslator;
-    #ifdef TRANSDIR_SYSTEM
-        bool retQt;
-        if (!QDir::isAbsolutePath(STRINGIFY(TRANSDIR_SYSTEM)))
-            retQt = qtTranslator->load("qt_" + DefaultLanguage, QCoreApplication::applicationDirPath() + "/" + STRINGIFY(TRANSDIR_SYSTEM));
-        else
-            retQt = qtTranslator->load("qt_" + DefaultLanguage, STRINGIFY(TRANSDIR_SYSTEM));
-    #else
-        bool retQt = qtTranslator->load("qt_" + DefaultLanguage, QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-    #endif
-        if (retQt)
-	        QCoreApplication::installTranslator(qtTranslator);
+	{
+		qtTranslator = new QTranslator;
+	#ifdef TRANSDIR_SYSTEM
+		bool retQt;
+		if (!QDir::isAbsolutePath(STRINGIFY(TRANSDIR_SYSTEM)))
+			retQt = qtTranslator->load("qt_" + DefaultLanguage, QCoreApplication::applicationDirPath() + "/" + STRINGIFY(TRANSDIR_SYSTEM));
+		else
+			retQt = qtTranslator->load("qt_" + DefaultLanguage, STRINGIFY(TRANSDIR_SYSTEM));
+	#else
+		bool retQt = qtTranslator->load("qt_" + DefaultLanguage, QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+	#endif
+		if (retQt)
+			QCoreApplication::installTranslator(qtTranslator);
 
-        merkaartorTranslator = new QTranslator;
+		merkaartorTranslator = new QTranslator;
 		// Do not prevent Merkaartor translations to be loaded, even if there is no Qt translation for the language.
 
 		// First, try in the app dir
-        bool retM = merkaartorTranslator->load("merkaartor_" + DefaultLanguage, QCoreApplication::applicationDirPath());
+		bool retM = merkaartorTranslator->load("merkaartor_" + DefaultLanguage, QCoreApplication::applicationDirPath());
 	#ifdef TRANSDIR_MERKAARTOR
-        if (!retM) {
+		if (!retM) {
 			// Next, try the TRANSDIR_MERKAARTOR, if defined
-            if (!QDir::isAbsolutePath(STRINGIFY(TRANSDIR_MERKAARTOR)))
-                retM = merkaartorTranslator->load("merkaartor_" + DefaultLanguage, QCoreApplication::applicationDirPath() + "/" + STRINGIFY(TRANSDIR_MERKAARTOR));
-            else
-                retM = merkaartorTranslator->load("merkaartor_" + DefaultLanguage, STRINGIFY(TRANSDIR_MERKAARTOR));
-        }
-    #endif
+			if (!QDir::isAbsolutePath(STRINGIFY(TRANSDIR_MERKAARTOR)))
+				retM = merkaartorTranslator->load("merkaartor_" + DefaultLanguage, QCoreApplication::applicationDirPath() + "/" + STRINGIFY(TRANSDIR_MERKAARTOR));
+			else
+				retM = merkaartorTranslator->load("merkaartor_" + DefaultLanguage, STRINGIFY(TRANSDIR_MERKAARTOR));
+		}
+	#endif
 
 		if (retM)
 			QCoreApplication::installTranslator(merkaartorTranslator);
 		else
 			statusBar()->showMessage(tr("Warning! Could not load the Merkaartor translations for the \"%1\" language. Switching to default english.").arg(DefaultLanguage), 15000);
-    }
-    retranslateUi(this);
+	}
+	retranslateUi(this);
 
 	QStringList shortcuts = M_PREFS->getShortcuts();
 	for (int i=0; i<shortcuts.size(); i+=2) {
@@ -2732,7 +2740,7 @@ void MainWindow::updateMenu()
 		fileDownloadMoreAction->setEnabled(true);
 		fileUploadAction->setEnabled(true);
 	}
-	
+
 	if (M_PREFS->getSeparateMoveMode())
 		editMoveAction->setVisible(true);
 	else

@@ -734,7 +734,7 @@ void MerkaartorPreferences::restoreMainWindowState(MainWindow * mainWindow) cons
 	if (Sets->contains("MainWindow/Size"))
 		mainWindow->resize( Sets->value("MainWindow/Size").toSize());
 
-	if (Sets->contains("MainWindow/State")) 
+	if (Sets->contains("MainWindow/State"))
 		mainWindow->restoreState( Sets->value("MainWindow/State").toByteArray() );
 
 	if (Sets->contains("MainWindow/FullscreenState"))
@@ -1195,7 +1195,7 @@ void MerkaartorPreferences::addRecentOpen(const QString & theValue)
 	if (idx  >= 0) {
 		RecentOpen.move(idx, 0);
 	} else {
-		if (RecentOpen.size() == 4) 
+		if (RecentOpen.size() == 4)
 			RecentOpen.removeLast();
 
 		RecentOpen.insert(0, theValue);
@@ -1219,13 +1219,13 @@ void MerkaartorPreferences::addRecentImport(const QString & theValue)
 	int idx = RecentImport.indexOf(theValue);
 	if (idx  >= 0) {
 		RecentImport.move(idx, 0);
-	} else {		
-		if (RecentImport.size() == 4) 
+	} else {
+		if (RecentImport.size() == 4)
 			RecentImport.removeLast();
 
 		RecentImport.insert(0, theValue);
 	}
-	setRecentImport(RecentImport);			
+	setRecentImport(RecentImport);
 }
 
 QStringList MerkaartorPreferences::getShortcuts() const
@@ -1249,6 +1249,8 @@ M_PARAM_IMPLEMENT_INT(AreaOpacity, visual, 100)
 M_PARAM_IMPLEMENT_BOOL(UseShapefileForBackground, visual, false)
 M_PARAM_IMPLEMENT_BOOL(DrawingHack, visual, true)
 M_PARAM_IMPLEMENT_BOOL(SimpleGpxTrack, visual, false)
+M_PARAM_IMPLEMENT_BOOL(VirtualNodesVisible, visual, true)
+M_PARAM_IMPLEMENT_BOOL(UseVirtualNodes, visual, true)
 
 /* Templates */
 M_PARAM_IMPLEMENT_STRING(DefaultTemplate, templates, ":/Templates/default.mat")
@@ -1567,7 +1569,7 @@ void MerkaartorPreferences::saveBookmarks()
 	file.close();
 }
 
-/* */ 
+/* */
 
 QString getDefaultLanguage()
 {

@@ -36,7 +36,7 @@ class RelationMemberModel : public QAbstractTableModel
 class RelationPrivate
 {
 	public:
-		RelationPrivate(Relation* R) 
+		RelationPrivate(Relation* R)
 			: theRelation(R), theModel(0), ModelReferences(0),
 				BBox(Coord(0,0),Coord(0,0)), BBoxUpToDate(false)
 		{
@@ -54,7 +54,7 @@ class RelationPrivate
 		CoordBox BBox;
 		bool BBoxUpToDate;
 
-        RenderPriority theRenderPriority;
+		RenderPriority theRenderPriority;
 };
 
 Relation::Relation()
@@ -109,7 +109,7 @@ QString Relation::description() const
 
 RenderPriority Relation::renderPriority()
 {
-    setRenderPriority(p->theRenderPriority);
+	setRenderPriority(p->theRenderPriority);
 	return p->theRenderPriority;
 }
 
@@ -282,7 +282,7 @@ bool Relation::notEverythingDownloaded()
 	for (int i=0; i<p->Members.size(); ++i)
 		if (p->Members.at(i).second && !CAST_RELATION(p->Members[i].second))
 			if (p->Members.at(i).second->notEverythingDownloaded())
-			    return true;
+				return true;
 	return false;
 }
 
@@ -430,7 +430,7 @@ void Relation::buildPath(Projection const &theProjection, const QTransform& /*th
 			p->theBoundingPath.lineTo(QPointF((*itl).x(), (*itl).y()));
 		}
 	}
-	
+
 	//polygon_2d in;
 	//for (int i=0; i<corners.size(); ++i) {
 	//	QPointF P = corners[i];
@@ -467,11 +467,11 @@ QPainterPath Relation::getPath()
 
 void Relation::updateMeta()
 {
-    p->theRenderPriority = RenderPriority(RenderPriority::IsSingular, 0.);
-    for (int i=0; i<p->Members.size(); ++i) {
-        if (p->Members.at(i).second->renderPriority() < p->theRenderPriority)
-	        p->theRenderPriority = p->Members.at(i).second->getRenderPriority();
-    }
+	p->theRenderPriority = RenderPriority(RenderPriority::IsSingular, 0.);
+	for (int i=0; i<p->Members.size(); ++i) {
+		if (p->Members.at(i).second->renderPriority() < p->theRenderPriority)
+			p->theRenderPriority = p->Members.at(i).second->getRenderPriority();
+	}
 
 	MetaUpToDate = true;
 }
@@ -717,9 +717,9 @@ Relation* Relation::fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds, 
 			case 'L':
 				F = d->getFeature(QString("rel_%1").arg(refId));
 				break;
-    	default: 
+		default:
 				F = NULL;
-      	break;
+		break;
 		}
 		if (F)
 			R->add(Role, F);

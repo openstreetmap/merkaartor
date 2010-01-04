@@ -53,6 +53,9 @@ QString versionAttribute(const MapFeature& F)
 
 QString exportOSM(const TrackPoint& Pt, const QString& ChangesetId)
 {
+    if (Pt.isVirtual())
+        return QString();
+
 	QString S;
 	if (ChangesetId.isEmpty())
 		S += QString("<node id=\"%1\" lat=\"%2\" lon=\"%3\"%4>")
@@ -76,8 +79,9 @@ QString exportOSM(const Road& R, const QString& ChangesetId)
 	if (R.size()) {
 		S+=QString("<nd ref=\"%1\"/>").arg(stripToOSMId(R.get(0)->id()));
 		for (int i=1; i<R.size(); ++i)
-			if (R.get(i)->id() != R.get(i-1)->id())
-				S+=QString("<nd ref=\"%1\"/>").arg(stripToOSMId(R.get(i)->id()));
+            if (!R.getNode(i)->isVirtual())
+                if (R.get(i)->id() != R.get(i-1)->id())
+                    S+=QString("<nd ref=\"%1\"/>").arg(stripToOSMId(R.get(i)->id()));
 	}
 	S += tagOSM(R);
 	S += "</way>";

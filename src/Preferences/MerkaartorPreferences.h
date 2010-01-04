@@ -48,25 +48,25 @@ class IMapAdapter;
 		bool m_##Param; \
 	public: \
 		void set##Param(bool theValue); \
-		bool get##Param(); 
+		bool get##Param();
 #define M_PARAM_DECLARE_STRING(Param) \
 	private: \
 		QString m_##Param; \
 	public: \
 		void set##Param(QString theValue); \
-		QString get##Param(); 
+		QString get##Param();
 #define M_PARAM_DECLARE_INT(Param) \
 	private: \
 		int m_##Param; \
 	public: \
 		void set##Param(int theValue); \
-		int get##Param(); 
+		int get##Param();
 #define M_PARAM_DECLARE_DOUBLE(Param) \
 	private: \
 		double m_##Param; \
 	public: \
 		void set##Param(double theValue); \
-		double get##Param(); 
+		double get##Param();
 
 #define SAFE_DELETE(x) {delete (x); x = NULL;}
 #define STRINGIFY(x) XSTRINGIFY(x)
@@ -234,7 +234,7 @@ public:
 	void setRelationsVisible(bool theValue);
 	bool getRelationsVisible() const;
 
-    M_PARAM_DECLARE_INT(TagListFirstColumnWidth)
+	M_PARAM_DECLARE_INT(TagListFirstColumnWidth)
 
 	/* MainWindow state */
 	void saveMainWindowState(const class MainWindow * mainWindow);
@@ -297,6 +297,8 @@ public:
 	M_PARAM_DECLARE_BOOL(UseShapefileForBackground)
 	M_PARAM_DECLARE_BOOL(DrawingHack)
 	M_PARAM_DECLARE_BOOL(SimpleGpxTrack)
+	M_PARAM_DECLARE_BOOL(VirtualNodesVisible)
+	M_PARAM_DECLARE_BOOL(UseVirtualNodes)
 
 	/* Templates */
 	M_PARAM_DECLARE_STRING(DefaultTemplate)
@@ -331,7 +333,7 @@ public:
 	/* Mouse bevaviour */
 	M_PARAM_DECLARE_BOOL(MouseSingleButton)
 	M_PARAM_DECLARE_BOOL(SeparateMoveMode)
-		
+
 	/* Custom Style */
 	M_PARAM_DECLARE_BOOL(MerkaartorStyle)
 	M_PARAM_DECLARE_STRING(MerkaartorStyleString)

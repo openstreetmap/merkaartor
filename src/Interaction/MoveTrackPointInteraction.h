@@ -27,6 +27,8 @@ class MoveTrackPointInteraction : public FeatureSnapInteraction
 		QList<TrackPoint*> Moving;
 		QList<Coord> OriginalPosition;
 		Coord StartDragPosition;
+        CommandList* theList;
+        bool Virtual;
 };
 
 #endif

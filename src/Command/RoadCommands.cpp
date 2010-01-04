@@ -41,6 +41,7 @@ void RoadAddTrackPointCommand::undo()
 		oldLayer->add(theRoad);
 		decDirtyLevel(oldLayer);
 	}
+	theRoad->updateMeta();
 }
 
 void RoadAddTrackPointCommand::redo()
@@ -52,6 +53,7 @@ void RoadAddTrackPointCommand::redo()
 		incDirtyLevel(oldLayer);
 		theLayer->add(theRoad);
 	}
+	theRoad->updateMeta();
 	Command::redo();
 }
 
@@ -149,6 +151,7 @@ void RoadRemoveTrackPointCommand::undo()
 		oldLayer->add(theRoad);
 		decDirtyLevel(oldLayer);
 	}
+	theRoad->updateMeta();
 }
 
 void RoadRemoveTrackPointCommand::redo()
@@ -160,6 +163,7 @@ void RoadRemoveTrackPointCommand::redo()
 		incDirtyLevel(oldLayer);
 		theLayer->add(theRoad);
 	}
+	theRoad->updateMeta();
 	Command::redo();
 }
 

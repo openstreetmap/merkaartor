@@ -171,8 +171,8 @@ void RemoveFeatureCommand::redo()
 		oldLayer = theFeature->layer();
 		Idx = theFeature->layer()->get(theFeature);
 		oldLayer->remove(theFeature);
-		theLayer->add(theFeature);
 		theFeature->setDeleted(true);
+		theLayer->add(theFeature);
 		incDirtyLevel(oldLayer);
 	}
 	Command::redo();
@@ -193,8 +193,8 @@ void RemoveFeatureCommand::undo()
 		theLayer->remove(theFeature);
 		if (oldLayer->size() < Idx)
 			Idx = oldLayer->size();
-		oldLayer->add(theFeature,Idx);
 		theFeature->setDeleted(false);
+		oldLayer->add(theFeature,Idx);
 		decDirtyLevel(oldLayer);
 		if (CascadedCleanUp)
 			CascadedCleanUp->undo();

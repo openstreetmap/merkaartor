@@ -69,7 +69,7 @@ class TrackPoint : public MapFeature
 		double elevation() const;
 		void setElevation(double aElevation);
 
-		virtual void partChanged(MapFeature* F, int ChangeId);
+        virtual void partChanged(MapFeature* F, int ChangeId);
 
 		virtual QString toXML(int lvl=0, QProgressDialog * progress=NULL);
 		virtual bool toXML(QDomElement xParent, QProgressDialog & progress);

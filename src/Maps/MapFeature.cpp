@@ -32,9 +32,9 @@ static QString randomId()
 	// Lookup table of hex value-pairs representing a byte
 	static char hex[(2*256)+1] = "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff";
 
-    char buffer[39] = "{________-____-____-____-____________}";
+	char buffer[39] = "{________-____-____-____-____________}";
 
-	
+
 
 	// {__%08x__-____-____-____-____________}
 	memcpy(&buffer[ 1], &hex[((uuid.data1 >> 24) & 0xFF)], 2);
@@ -73,20 +73,22 @@ class MapFeaturePrivate
 {
 	public:
 		MapFeaturePrivate()
-			:  TagsSize(0), LastActor(MapFeature::User), 
+			:  TagsSize(0), LastActor(MapFeature::User),
 				PossiblePaintersUpToDate(false),
-			  	PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
+				PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
 				theFeature(0), LastPartNotification(0),
 				Time(QDateTime::currentDateTime()), Deleted(false), Uploaded(false), LongId(0)
+				, Virtual(false)
 		{
 			initVersionNumber();
 		}
 		MapFeaturePrivate(const MapFeaturePrivate& other)
-			: Tags(other.Tags), TagsSize(other.TagsSize), LastActor(other.LastActor), 
+			: Tags(other.Tags), TagsSize(other.TagsSize), LastActor(other.LastActor),
 				PossiblePaintersUpToDate(false),
-			  	PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
+				PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
 				theFeature(0), LastPartNotification(0),
 				Time(other.Time), Deleted(false), Uploaded(false), LongId(0)
+				, Virtual(other.Virtual)
 		{
 			initVersionNumber();
 		}
@@ -115,6 +117,7 @@ class MapFeaturePrivate
 		bool Uploaded;
 		qint64 LongId;
 		RenderPriority theRenderPriority;
+		bool Virtual;
 };
 
 void MapFeaturePrivate::initVersionNumber()
@@ -229,8 +232,8 @@ qint64 MapFeature::idToLong() const
 		p->LongId = s.toLongLong(&ok);
 		Q_ASSERT(ok);
 	} else {
-        p->LongId = (((qint64)this) * -1);
-    }
+		p->LongId = (((qint64)this) * -1);
+	}
 
 	return p->LongId;
 }
@@ -316,6 +319,16 @@ bool MapFeature::isDeleted() const
 	return p->Deleted;
 }
 
+void MapFeature::setVirtual(bool val)
+{
+	p->Virtual = val;
+}
+
+bool MapFeature::isVirtual() const
+{
+	return p->Virtual;
+}
+
 void MapFeature::setTag(int index, const QString& key, const QString& value, bool addToTagList)
 {
 	int i;
@@ -336,7 +349,7 @@ void MapFeature::setTag(int index, const QString& key, const QString& value, boo
 
 	if (parent() && addToTagList)
 		if (dynamic_cast<MapLayer*>(parent())->getDocument())
-	  		dynamic_cast<MapLayer*>(parent())->getDocument()->addToTagList(key, value);
+			dynamic_cast<MapLayer*>(parent())->getDocument()->addToTagList(key, value);
 }
 
 void MapFeature::setTag(const QString& key, const QString& value, bool addToTagList)
@@ -355,7 +368,7 @@ void MapFeature::setTag(const QString& key, const QString& value, bool addToTagL
 
 	if (parent() && addToTagList)
 		if (dynamic_cast<MapLayer*>(parent())->getDocument())
-  			dynamic_cast<MapLayer*>(parent())->getDocument()->addToTagList(key, value);
+			dynamic_cast<MapLayer*>(parent())->getDocument()->addToTagList(key, value);
 }
 
 void MapFeature::clearTags()
@@ -731,12 +744,12 @@ QString MapFeature::toMainHtml(QString type, QString systemtype)
 	QString S =
 	"<html><head/><body>"
 	"<small><i>" + type + "</i></small><br/>"
-	+ desc + 
+	+ desc +
 	"<br/>"
 	"<small>";
 	if (!user().isEmpty())
 		S += QApplication::translate("MapFeature", "<i>last: </i><b>%1</b> by <b>%2</b>").arg(time().toString(Qt::SystemLocaleDate)).arg(user());
-        else
+		else
 		S += QApplication::translate("MapFeature", "<i>last: </i><b>%1</b>").arg(time().toString(Qt::SystemLocaleDate));
 	S += "</small>"
 	"<hr/>"

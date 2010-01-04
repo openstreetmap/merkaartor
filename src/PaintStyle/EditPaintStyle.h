@@ -42,7 +42,7 @@ class EditPaintStyle : public PaintStyle
 		EditPaintStylePrivate* p;
 		QList<FeaturePainter> Painters;
 		GlobalPainter globalPainter;
-		
+
 		static EditPaintStyle* m_EPSInstance;
 };
 
@@ -73,12 +73,14 @@ class EPForegroundLayer : public PaintStyleLayer
 class EPTouchupLayer : public PaintStyleLayer
 {
 	public:
+		EPTouchupLayer();
 		void setP(EditPaintStylePrivate* p);
 		virtual void draw(Road* R);
 		virtual void draw(TrackPoint* Pt);
 		virtual void draw(Relation* R);
 	private:
 		EditPaintStylePrivate* p;
+		QPainterPath cross;
 };
 
 class EPLabelLayer : public PaintStyleLayer

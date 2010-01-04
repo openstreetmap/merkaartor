@@ -150,6 +150,14 @@ void EPForegroundLayer::draw(TrackPoint*)
 {
 }
 
+EPTouchupLayer::EPTouchupLayer()
+{
+	cross.moveTo(-3, -3);
+	cross.lineTo(3, 3);
+	cross.moveTo(-3, 3);
+	cross.lineTo(3, -3);
+}
+
 void EPTouchupLayer::setP(EditPaintStylePrivate* ap)
 {
 	p = ap;
@@ -164,7 +172,7 @@ void EPTouchupLayer::draw(Road* R)
 		if ( M_PREFS->getDirectionalArrowsVisible() != DirectionalArrows_Never )
 		{
 			MapFeature::TrafficDirectionType TT = trafficDirection(R);
-			if ( (TT != MapFeature::UnknownDirection) || (M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Always) ) 
+			if ( (TT != MapFeature::UnknownDirection) || (M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Always) )
 			{
 				double theWidth = p->theView.pixelPerM()*R->widthOf()-4;
 				if (theWidth > 8)
@@ -188,20 +196,20 @@ void EPTouchupLayer::draw(Road* R)
 							{
 								if ( (TT == MapFeature::OtherWay) || (TT == MapFeature::BothWays) )
 								{
-									p->thePainter.setPen(QColor(0,0,0));
+									p->thePainter.setPen(QPen(QColor(0,0,255), 2));
 									p->thePainter.drawLine(H+T,H+T-V1);
 									p->thePainter.drawLine(H+T,H+T-V2);
 								}
 								if ( (TT == MapFeature::OneWay) || (TT == MapFeature::BothWays) )
 								{
-									p->thePainter.setPen(QColor(0,0,0));
+									p->thePainter.setPen(QPen(QColor(0,0,255), 2));
 									p->thePainter.drawLine(H-T,H-T+V1);
 									p->thePainter.drawLine(H-T,H-T+V2);
 								}
-							} 
+							}
 							else
 							{
-								p->thePainter.setPen(QColor(255,0,0));
+								p->thePainter.setPen(QPen(QColor(255,0,0), 2));
 								p->thePainter.drawLine(H-T,H-T+V1);
 								p->thePainter.drawLine(H-T,H-T+V2);
 							}
@@ -236,15 +244,25 @@ void EPTouchupLayer::draw(TrackPoint* Pt)
 			}
 			if (Draw)
 			{
-				QPointF P(p->theView.transform().map(p->theView.projection().project(Pt)));
+				QPoint P = p->theView.transform().map(p->theView.projection().project(Pt)).toPoint();
 
-				if (Pt->isWaypoint()) {
-					QRectF R(P-QPointF(4,4),QSize(8,8)); 
-					p->thePainter.fillRect(R,QColor(255,0,0,128)); 
+				if (Pt->isVirtual()) {
+					if (M_PREFS->getVirtualNodesVisible()) {
+						p->thePainter.save();
+						p->thePainter.setPen(QColor(0,0,0));
+						p->thePainter.translate(P);
+						p->thePainter.drawPath(cross);
+						p->thePainter.restore();
+					}
+				} else {
+					if (Pt->isWaypoint()) {
+						QRect R2(P-QPoint(4,4),QSize(8,8));
+						p->thePainter.fillRect(R2,QColor(255,0,0,128));
+					}
+
+					QRect R(P-QPoint(3,3),QSize(6,6));
+					p->thePainter.fillRect(R,QColor(0,0,0,128));
 				}
-				
-				QRectF R(P-QPointF(2,2),QSize(4,4));
-				p->thePainter.fillRect(R,QColor(0,0,0,128));
 			}
 		}
 	}

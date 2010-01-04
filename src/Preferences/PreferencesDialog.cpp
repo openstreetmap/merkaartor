@@ -47,7 +47,7 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 
 	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    QDir intTemplates(BUILTIN_TEMPLATES_DIR);
+	QDir intTemplates(BUILTIN_TEMPLATES_DIR);
 	for (int i=0; i < intTemplates.entryList().size(); ++i) {
 		cbTemplates->addItem(intTemplates.entryList().at(i));
 	}
@@ -67,23 +67,23 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
 
 void PreferencesDialog::updateStyles()
 {
-    cbStyles->clear();
-    QDir intStyles(BUILTIN_STYLES_DIR);
-    for (int i=0; i < intStyles.entryList().size(); ++i) {
-        cbStyles->addItem(intStyles.entryList().at(i) + " (int)", QVariant(intStyles.entryInfoList().at(i).absoluteFilePath()));
-    }
-    if (!CustomStylesDir->text().isEmpty()) {
-        QDir customStyles(CustomStylesDir->text(), "*.mas");
-        for (int i=0; i < customStyles.entryList().size(); ++i) {
-            cbStyles->addItem(customStyles.entryList().at(i), QVariant(customStyles.entryInfoList().at(i).absoluteFilePath()));
-        }
-    }
+	cbStyles->clear();
+	QDir intStyles(BUILTIN_STYLES_DIR);
+	for (int i=0; i < intStyles.entryList().size(); ++i) {
+		cbStyles->addItem(intStyles.entryList().at(i) + " (int)", QVariant(intStyles.entryInfoList().at(i).absoluteFilePath()));
+	}
+	if (!CustomStylesDir->text().isEmpty()) {
+		QDir customStyles(CustomStylesDir->text(), "*.mas");
+		for (int i=0; i < customStyles.entryList().size(); ++i) {
+			cbStyles->addItem(customStyles.entryList().at(i), QVariant(customStyles.entryInfoList().at(i).absoluteFilePath()));
+		}
+	}
 
-    int idx = cbStyles->findData(M_PREFS->getDefaultStyle());
-    if (idx == -1)
-        idx = 0;
+	int idx = cbStyles->findData(M_PREFS->getDefaultStyle());
+	if (idx == -1)
+		idx = 0;
 
-    cbStyles->setCurrentIndex(idx);
+	cbStyles->setCurrentIndex(idx);
 }
 
 PreferencesDialog::~PreferencesDialog()
@@ -130,7 +130,7 @@ void PreferencesDialog::loadPrefs()
 	TranslateTags->setChecked(M_PREFS->getTranslateTags());
 	edOsmUrl->setText(M_PREFS->getOsmWebsite());
 	edOsmUser->setText(M_PREFS->getOsmUser());
-    edOsmPwd->setText(M_PREFS->getOsmPassword());
+	edOsmPwd->setText(M_PREFS->getOsmPassword());
 
 	edGpsPort->setText(M_PREFS->getGpsPort());
 	edGpsdHost->setText(M_PREFS->getGpsdHost());
@@ -163,10 +163,10 @@ void PreferencesDialog::loadPrefs()
 
 	QString s = M_PREFS->getDefaultStyle();
 	QString cs = M_PREFS->getCustomStyle();
-    if (QFileInfo(cs).isFile())
-        cs = QFileInfo(cs).absolutePath();
-    CustomStylesDir->setText(cs);
-    updateStyles();
+	if (QFileInfo(cs).isFile())
+		cs = QFileInfo(cs).absolutePath();
+	CustomStylesDir->setText(cs);
+	updateStyles();
 
 	cbDisableStyleForTracks->setChecked(M_PREFS->getDisableStyleForTracks());
 
@@ -223,6 +223,7 @@ void PreferencesDialog::loadPrefs()
 
 	cbMouseSingleButton->setChecked(M_PREFS->getMouseSingleButton());
 	cbSeparateMoveMode->setChecked(M_PREFS->getSeparateMoveMode());
+	cbVirtualNodes->setChecked(M_PREFS->getUseVirtualNodes());
 
 	cbCustomStyle->setChecked(M_PREFS->getMerkaartorStyle());
 	comboCustomStyle->addItems(QStyleFactory::keys());
@@ -236,16 +237,16 @@ void PreferencesDialog::savePrefs()
 	if (SelectLanguage->isChecked())
 		setDefaultLanguage(Language->itemData(Language->currentIndex()).toString());
 	else
-        setDefaultLanguage("");
+		setDefaultLanguage("");
 
-    ((MainWindow*)parent())->updateLanguage();
-    retranslateUi(this);
+	((MainWindow*)parent())->updateLanguage();
+	retranslateUi(this);
 
 	M_PREFS->setTranslateTags(TranslateTags->isChecked());
 	//M_PREFS->setUse06Api(bbUse06Api->isChecked());
 
 	bool OsmDataChanged = false;
-	if (edOsmUrl->text() != M_PREFS->getOsmWebsite() || 
+	if (edOsmUrl->text() != M_PREFS->getOsmWebsite() ||
 		edOsmUser->text() != M_PREFS->getOsmUser() ||
 		edOsmPwd->text() != M_PREFS->getOsmPassword())
 		OsmDataChanged = true;
@@ -279,9 +280,9 @@ void PreferencesDialog::savePrefs()
 	M_PREFS->setCacheDir(edCacheDir->text());
 	M_PREFS->setCacheSize(sbCacheSize->value());
 
-    M_PREFS->setCustomStyle(CustomStylesDir->text());
+	M_PREFS->setCustomStyle(CustomStylesDir->text());
 	QString NewStyle;
-    NewStyle = cbStyles->itemData(cbStyles->currentIndex()).toString();
+	NewStyle = cbStyles->itemData(cbStyles->currentIndex()).toString();
 
 	bool PainterToInvalidate = false;
 	if (NewStyle != M_PREFS->getDefaultStyle())
@@ -291,11 +292,11 @@ void PreferencesDialog::savePrefs()
 		PainterToInvalidate = true;
 	}
 	if (cbDisableStyleForTracks->isChecked() != M_PREFS->getDisableStyleForTracks()) {
-		M_PREFS->setDisableStyleForTracks(cbDisableStyleForTracks->isChecked());	
+		M_PREFS->setDisableStyleForTracks(cbDisableStyleForTracks->isChecked());
 		PainterToInvalidate = true;
 	}
 	if (cbSimpleGpxTrack->isChecked() != M_PREFS->getSimpleGpxTrack()) {
-		M_PREFS->setSimpleGpxTrack(cbSimpleGpxTrack->isChecked());	
+		M_PREFS->setSimpleGpxTrack(cbSimpleGpxTrack->isChecked());
 		PainterToInvalidate = true;
 	}
 	if (PainterToInvalidate) {
@@ -317,7 +318,7 @@ void PreferencesDialog::savePrefs()
 		((MainWindow*)parent())->properties()->loadTemplates(NewTemplate);
 	}
 
-    M_PREFS->setCustomStyle(CustomStylesDir->text());
+	M_PREFS->setCustomStyle(CustomStylesDir->text());
 	M_PREFS->setCustomTemplate(CustomTemplateName->text());
 	M_PREFS->setZoomInPerc(sbZoomInPerc->text().toInt());
 	M_PREFS->setZoomOutPerc(sbZoomOutPerc->text().toInt());
@@ -345,6 +346,7 @@ void PreferencesDialog::savePrefs()
 
 	M_PREFS->setMouseSingleButton(cbMouseSingleButton->isChecked());
 	M_PREFS->setSeparateMoveMode(cbSeparateMoveMode->isChecked());
+	M_PREFS->setUseVirtualNodes(cbVirtualNodes->isChecked());
 
 	M_PREFS->setMerkaartorStyle(cbCustomStyle->isChecked());
 	M_PREFS->setMerkaartorStyleString(comboCustomStyle->currentText());
@@ -356,11 +358,11 @@ void PreferencesDialog::savePrefs()
 
 void PreferencesDialog::on_BrowseStyle_clicked()
 {
-    QString s = QFileDialog::getExistingDirectory(this,tr("Custom styles directory"),"");
+	QString s = QFileDialog::getExistingDirectory(this,tr("Custom styles directory"),"");
 	if (!s.isNull())
-        CustomStylesDir->setText(QDir::toNativeSeparators(s));
+		CustomStylesDir->setText(QDir::toNativeSeparators(s));
 
-    updateStyles();
+	updateStyles();
 }
 
 void PreferencesDialog::on_BrowseTemplate_clicked()
@@ -435,7 +437,7 @@ void PreferencesDialog::on_btAddTool_clicked(void)
 {
 	for (int i=0; i<theTools.size(); ++i) {
 		if (theTools[i].ToolName == edToolName->text()) {
-		QMessageBox::critical(this, tr("Tool already exists"), 
+		QMessageBox::critical(this, tr("Tool already exists"),
 			tr("A tool of this name already exists.\nPlease select another name or click the <Apply> button if you want to modify the existing one"), QMessageBox::Ok);
 		return;
 		}
@@ -455,7 +457,7 @@ void PreferencesDialog::on_btDelTool_clicked(void)
 		return;
 
 	if (theTools[idx].ToolName == "Inkscape") {
-		QMessageBox::critical(this, tr("Cannot delete preset tool"), 
+		QMessageBox::critical(this, tr("Cannot delete preset tool"),
 			tr("Cannot delete preset tool \"%1\"").arg(theTools[idx].ToolName), QMessageBox::Ok);
 		return;
 	}
@@ -474,7 +476,7 @@ void PreferencesDialog::on_btApplyTool_clicked(void)
 		return;
 
 	if ((theTools[idx].ToolName == "Inkscape") && edToolName->text() != theTools[idx].ToolName) {
-		QMessageBox::critical(this, tr("Cannot modify preset tool name"), 
+		QMessageBox::critical(this, tr("Cannot modify preset tool name"),
 			tr("Cannot modify preset tool \"%1\"'s name").arg(theTools[idx].ToolName), QMessageBox::Ok);
 		return;
 	}
@@ -488,7 +490,7 @@ void PreferencesDialog::on_btApplyTool_clicked(void)
 void PreferencesDialog::on_lvTools_itemSelectionChanged()
 {
 	QListWidgetItem* it = lvTools->item(lvTools->currentRow());
-	
+
 	int idx = static_cast<int>(lvTools->row(it));
 	if (idx >= theTools.size())
 		return;

@@ -122,6 +122,7 @@
     <addaction name="viewNamesAction"/>
     <addaction name="menuShow_directional_Arrows"/>
     <addaction name="separator"/>
+    <addaction name="viewVirtualNodesAction"/>
     <addaction name="viewTrackPointsAction"/>
     <addaction name="viewTrackSegmentsAction"/>
     <addaction name="separator"/>
@@ -1544,6 +1545,14 @@
   <action name="roadAddStreetNumbersAction">
    <property name="text">
     <string>Add street &amp;numbers (Karlsruhe scheme)</string>
+   </property>
+  </action>
+  <action name="viewVirtualNodesAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show &amp;virtual nodes</string>
    </property>
   </action>
  </widget>

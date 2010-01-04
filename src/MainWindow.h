@@ -61,7 +61,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 		virtual void on_editPasteFeaturesAction_triggered();
 
 		virtual void on_layersNewImageAction_triggered();
-		
+
 		virtual void on_fileNewAction_triggered();
 		virtual void on_fileDownloadAction_triggered();
 		virtual void on_fileDownloadMoreAction_triggered();
@@ -71,7 +71,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 		virtual void on_fileSaveAsAction_triggered();
 		virtual void on_fileSaveAction_triggered();
 		virtual void on_fileWorkOfflineAction_triggered();
-		
+
 		virtual void on_helpAboutAction_triggered();
 		virtual void on_viewZoomAllAction_triggered();
 		virtual void on_viewZoomInAction_triggered();
@@ -83,6 +83,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 		virtual void on_viewStyleForegroundAction_triggered();
 		virtual void on_viewStyleTouchupAction_triggered();
 		virtual void on_viewNamesAction_triggered();
+		virtual void on_viewVirtualNodesAction_triggered();
 		virtual void on_viewTrackPointsAction_triggered();
 		virtual void on_viewTrackSegmentsAction_triggered();
 		virtual void on_viewRelationsAction_triggered();
@@ -127,7 +128,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 		virtual void on_toolsTMSServersAction_triggered();
 		virtual void toolsPreferencesAction_triggered(bool focusData=false);
 		virtual void on_toolsResetDiscardableAction_triggered();
-		
+
 		virtual void on_windowPropertiesAction_triggered();
 		virtual void on_windowLayersAction_triggered();
 		virtual void on_windowInfoAction_triggered();
@@ -139,7 +140,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 		virtual void on_windowGeoimageAction_triggered();
 #endif
 		virtual void on_windowStylesAction_triggered();
-		
+
 		virtual void on_windowHideAllAction_triggered();
 		virtual void on_windowShowAllAction_triggered();
 		virtual void on_gpsConnectAction_triggered();
@@ -191,7 +192,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 		void projectionTriggered(QAction* anAction);
 #endif
 		void styleTriggered(QAction* anAction);
-        void updateGpsPosition(float latitude, float longitude, QDateTime time, float altitude, float speed, float heading);
+		void updateGpsPosition(float latitude, float longitude, QDateTime time, float altitude, float speed, float heading);
 		void applyStyles(QList<FeaturePainter>* thePainters);
 
 	public:
@@ -199,13 +200,13 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 		bool importFiles(MapDocument * mapDocument, const QStringList & filesNames, QStringList * importedFileNames = NULL);
 		void loadFiles(const QStringList & fileNames);
 		void loadDocument(QString fn);
-        void saveDocument();
+		void saveDocument();
 		void downloadFeatures(const QList<MapFeature*>& aDownloadList);
 
-        void updateLanguage();
+		void updateLanguage();
 
 
-    private:
+	private:
 		MapView* theView;
 		MapDocument* theDocument;
 		PropertiesDock* theProperties;
@@ -228,8 +229,8 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 		void delayedInit();
 		void setAreaOpacity(QAction*);
 		void updateBookmarksMenu();
-        void updateWindowMenu(bool b=false);
-        void mapView_interactionChanged(Interaction* anInteraction);
+		void updateWindowMenu(bool b=false);
+		void mapView_interactionChanged(Interaction* anInteraction);
 
 	private:
 		void createProgressDialog();

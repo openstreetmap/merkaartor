@@ -176,11 +176,11 @@ QString FeaturePainter::toXML(QString filename) const
 	if (!IconName.isEmpty() && DrawIcon)
 	{
 		QString iconFilename;
-        if (!IconName.startsWith(':')) {
-            iconFilename = QFileInfo(filename).absoluteDir().relativeFilePath(QFileInfo(IconName).absoluteFilePath());
-        } else {
-            iconFilename = IconName;
-        }
+		if (!IconName.startsWith(':')) {
+			iconFilename = QFileInfo(filename).absoluteDir().relativeFilePath(QFileInfo(IconName).absoluteFilePath());
+		} else {
+			iconFilename = IconName;
+		}
 		r += " " + iconAsXML("icon",iconFilename, IconScale, IconOffset);
 	}
 	if (DrawTrafficDirectionMarks)
@@ -822,7 +822,7 @@ void FeaturePainter::drawTouchup(TrackPoint* Pt, QPainter& thePainter, MapView& 
 		double PixelPerM = theView.pixelPerM();
 		double WW = PixelPerM*IconScale+IconOffset;
 
-        QPixmap pm = getPixmapFromFile(IconName,int(WW));
+		QPixmap pm = getPixmapFromFile(IconName,int(WW));
 		if (pm.isNull())
 			IconError = true;
 		else {
@@ -832,21 +832,21 @@ void FeaturePainter::drawTouchup(TrackPoint* Pt, QPainter& thePainter, MapView& 
 			thePainter.drawPixmap( int(C.x()-pm.width()/2), int(C.y()-pm.height()/2) , pm);
 		}
 	}
-	if (!DrawIcon || (IconName == "") || IconError) 
+	if (!DrawIcon || (IconName == "") || IconError)
 	{
 		QColor theColor = QColor(0,0,0,128);
 		if (DrawForeground)
 			theColor = ForegroundColor;
-		else 
+		else
 			if (DrawBackground)
 				theColor =BackgroundColor;
 
 		QPointF P(theView.transform().map(theView.projection().project(Pt)));
-		if (Pt->findKey("_waypoint_") != Pt->tagSize()) {
-			QRectF R(P-QPointF(4,4),QSize(8,8)); 
-			thePainter.fillRect(R,QColor(255,0,0,128)); 
+		if (Pt->isWaypoint()) {
+			QRectF R(P-QPointF(4,4),QSize(8,8));
+			thePainter.fillRect(R,QColor(255,0,0,128));
 		}
-		
+
 		QRectF R(P-QPointF(2,2),QSize(4,4));
 			thePainter.fillRect(R,theColor);
 	}
@@ -875,7 +875,7 @@ void FeaturePainter::drawTouchup(Road* R, QPainter& thePainter, MapView& theView
 	if ( ((DrawTrafficDirectionMarks) && (M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Oneway)) ||  M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Always)
 	{
 		MapFeature::TrafficDirectionType TT = trafficDirection(R);
-		if ( (TT != MapFeature::UnknownDirection) || (M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Always) ) 
+		if ( (TT != MapFeature::UnknownDirection) || (M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Always) )
 		{
 			double theWidth = theView.pixelPerM()*R->widthOf()-4;
 			if (theWidth > 8)
@@ -899,20 +899,20 @@ void FeaturePainter::drawTouchup(Road* R, QPainter& thePainter, MapView& theView
 						{
 							if ( (TT == MapFeature::OtherWay) || (TT == MapFeature::BothWays) )
 							{
-								thePainter.setPen(QColor(0,0,0));
+								thePainter.setPen(QPen(QColor(0,0,255), 2));
 								thePainter.drawLine(H+T,H+T-V1);
 								thePainter.drawLine(H+T,H+T-V2);
 							}
 							if ( (TT == MapFeature::OneWay) || (TT == MapFeature::BothWays) )
 							{
-								thePainter.setPen(QColor(0,0,0));
+								thePainter.setPen(QPen(QColor(0,0,255), 2));
 								thePainter.drawLine(H-T,H-T+V1);
 								thePainter.drawLine(H-T,H-T+V2);
 							}
-						} 
+						}
 						else
 						{
-							thePainter.setPen(QColor(255,0,0));
+							thePainter.setPen(QPen(QColor(255,0,0), 2));
 							thePainter.drawLine(H-T,H-T+V1);
 							thePainter.drawLine(H-T,H-T+V2);
 						}
@@ -937,7 +937,7 @@ void FeaturePainter::drawPointLabel(QPointF C, QString str, QString strBg, QPain
 
 	QFont font = getLabelFont();
 	font.setPixelSize(int(WW));
-    QFontMetrics metrics(font);
+	QFontMetrics metrics(font);
 
 	int modX = 0;
 	int modY = 0;
@@ -1034,9 +1034,9 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, MapView& theView) 
 	if (WW < 10) return;
 	//double WWR = qMax(PixelPerM*R->widthOf()*BackgroundScale+BackgroundOffset, PixelPerM*R->widthOf()*ForegroundScale+ForegroundOffset);
 
- 	QPainterPath textPath;
+	QPainterPath textPath;
 	QPainterPath tranformedRoadPath = theView.transform().map(R->getPath());
-    QFont font = getLabelFont();
+	QFont font = getLabelFont();
 
 	if (!str.isEmpty()) {
 		QRegion rg = thePainter.clipRegion();
@@ -1050,7 +1050,7 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, MapView& theView) 
 			int numSegment = repeat+1;
 			qreal lenSegment = tranformedRoadPath.length() / numSegment;
 			qreal startSegment = 0;
-		 	QPainterPath textPath;
+			QPainterPath textPath;
 			do {
 				QRegion rg = thePainter.clipRegion();
 
@@ -1076,7 +1076,7 @@ void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, MapView& theView) 
 					QPainterPath charPath;
 					charPath.addText(0, modY, font, str.mid(i, 1));
 					charPath = charPath * m;
-					
+
 					textPath.addPath(charPath);
 
 					qreal incremenet = metrics.width(str[i]);

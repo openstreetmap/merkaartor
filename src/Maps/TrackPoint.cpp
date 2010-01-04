@@ -22,14 +22,21 @@ class TrackPointPrivate
 
 
 TrackPoint::TrackPoint(const Coord& aCoord)
-: Position(aCoord), Elevation(0.0), Speed(0.0), p(new TrackPointPrivate)
+    : Position(aCoord)
+    , Elevation(0.0)
+    , Speed(0.0)
+    , p(new TrackPointPrivate)
 {
 	BBox = CoordBox(Position,Position);
 }
 
 TrackPoint::TrackPoint(const TrackPoint& other)
-: MapFeature(other), Position(other.Position), Elevation(other.Elevation), Speed(other.Speed), 
-	Projected(other.Projected), p(new TrackPointPrivate)
+    : MapFeature(other)
+    , Position(other.Position)
+    , Elevation(other.Elevation)
+    , Speed(other.Speed)
+    , Projected(other.Projected)
+    , p(new TrackPointPrivate)
 {
 	setTime(other.time());
 	BBox = other.boundingBox();
@@ -282,6 +289,9 @@ QString TrackPoint::toXML(int lvl, QProgressDialog * progress)
 	if (progress)
 		progress->setValue(progress->value()+1);
 
+    if (isVirtual())
+        return QString();
+
 	QString S(lvl*2, ' ');
 	S += "<node id=\"%1\" lat=\"%2\" lon=\"%3\">\n";
 	S += tagsToXML(lvl+1);
@@ -292,6 +302,10 @@ QString TrackPoint::toXML(int lvl, QProgressDialog * progress)
 bool TrackPoint::toXML(QDomElement xParent, QProgressDialog & progress)
 {
 	bool OK = true;
+    progress.setValue(progress.value()+1);
+
+    if (isVirtual())
+        return OK;
 
 	QDomElement e = xParent.ownerDocument().createElement("node");
 	xParent.appendChild(e);
@@ -308,13 +322,16 @@ bool TrackPoint::toXML(QDomElement xParent, QProgressDialog & progress)
 
 	tagsToXML(e);
 
-	progress.setValue(progress.value()+1);
 	return OK;
 }
 
 bool TrackPoint::toGPX(QDomElement xParent, QProgressDialog & progress, bool forExport)
 {
 	bool OK = true;
+    progress.setValue(progress.value()+1);
+
+    if (isVirtual())
+        return OK;
 
 	QDomElement e;
 	if (!tagValue("_waypoint_","").isEmpty() ||!sizeParents())
@@ -360,7 +377,6 @@ bool TrackPoint::toGPX(QDomElement xParent, QProgressDialog & progress, bool for
 		c.appendChild(v);
 	}
 
-	progress.setValue(progress.value()+1);
 	return OK;
 }
 

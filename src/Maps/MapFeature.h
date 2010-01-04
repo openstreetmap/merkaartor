@@ -215,12 +215,17 @@ class MapFeature : public QObject
 		 */
 		bool isDeleted() const;
 
-		void setUploaded(bool state);
-
 		/** check if the feature has been uploaded
 		 * @return true if uploaded
 		 */
 		bool isUploaded() const;
+        void setUploaded(bool state);
+
+        /** check if the feature is virtual
+         * @return true if virtual
+         */
+        bool isVirtual() const;
+        void setVirtual(bool val);
 
 		virtual bool isInteresting() const {return true;}
 

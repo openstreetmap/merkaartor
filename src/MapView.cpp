@@ -50,6 +50,7 @@ public:
 	QPoint theRasterPanDelta, theVectorPanDelta;
 	QSet<MapFeature*> theFeatures;
 	QSet<Road*> theCoastlines;
+	QList<TrackPoint*> theVirtualNodes;
 
 	MapViewPrivate()
 	  : PixelPerM(0.0), Viewport(WORLD_COORDBOX)
@@ -59,7 +60,7 @@ public:
 /****************/
 
 MapView::MapView(MainWindow* aMain) :
-	QWidget(aMain), Main(aMain), theDocument(0), theInteraction(0), StaticBackground(0), StaticBuffer(0), StaticMap(0), 
+	QWidget(aMain), Main(aMain), theDocument(0), theInteraction(0), StaticBackground(0), StaticBuffer(0), StaticMap(0),
 		StaticBufferUpToDate(false), StaticMapUpToDate(false), SelectionLocked(false),lockIcon(0), numImages(0),
 		p(new MapViewPrivate)
 {
@@ -139,7 +140,7 @@ void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
 	update();
 }
 
-void MapView::panScreen(QPoint delta) 
+void MapView::panScreen(QPoint delta)
 {
 	p->theRasterPanDelta += delta;
 	p->theVectorPanDelta += delta;
@@ -147,7 +148,7 @@ void MapView::panScreen(QPoint delta)
 	CoordBox r1, r2;
 
 	Coord cDelta = theProjection.inverse(p->theTransform.inverted().map(QPointF(delta)))  - theProjection.inverse(p->theTransform.inverted().map(QPointF(0., 0.)));
-	
+
 	if (delta.x()) {
 		if (delta.x() < 0)
 			r1 = CoordBox(p->Viewport.bottomRight(), Coord(p->Viewport.topRight().lat(), p->Viewport.topRight().lon() - cDelta.lon())); // OK
@@ -196,7 +197,7 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 
 	updateStaticBackground();
 
-    if (!StaticBufferUpToDate) {
+	if (!StaticBufferUpToDate) {
 		updateStaticBuffer();
 	}
 
@@ -217,7 +218,7 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 	P.end();
 
 	Main->ViewportStatusLabel->setText(QString("%1,%2,%3,%4")
-		.arg(QString::number(intToAng(viewport().bottomLeft().lon()),'f',4)) 
+		.arg(QString::number(intToAng(viewport().bottomLeft().lon()),'f',4))
 		.arg(QString::number(intToAng(viewport().bottomLeft().lat()),'f',4))
 		.arg(QString::number(intToAng(viewport().topRight().lon()),'f',4))
 		.arg(QString::number(intToAng(viewport().topRight().lat()),'f',4))
@@ -293,6 +294,7 @@ void MapView::sortRenderingPriorityInLayers()
 
 void MapView::sortRenderingPriority()
 {
+	// TODO Avoid copy
 	QList<MapFeature*> aList = p->theFeatures.toList();
 	qSort(aList.begin(),aList.end(),SortAccordingToRenderingPriority());
 	p->theFeatures.fromList(aList);
@@ -356,7 +358,7 @@ void MapView::buildFeatureSet()
 				if (TrackPoint * pt = CAST_NODE(*it)) {
 					if (theDocument->getLayer(j)->arePointsDrawable())
 						p->theFeatures.insert(pt);
-				} else 
+				} else
 					p->theFeatures.insert(*it);
 			}
 		}
@@ -416,40 +418,40 @@ void floodFill(QImage& theImage, const QPoint& P, const QRgb& targetColor, const
 	theStack.push(P);
 	while (!theStack.isEmpty()) {
 		aP = theStack.pop();
-        QPoint W = aP;
-        QPoint E = aP;
-        if (testColor(theImage, aP + QPoint(0, 1), targetColor))
-            theStack.push(aP + QPoint(0, 1));
-        if (testColor(theImage, aP + QPoint(0, -1), targetColor))
-            theStack.push(aP + QPoint(0, -1));
-        while (testColor(theImage, W + QPoint(-1, 0),targetColor) && W.x() > 0) {
-            W += QPoint(-1, 0);
-            if (testColor(theImage, W + QPoint(0, 1), targetColor))
-                theStack.push(W + QPoint(0, 1));
-            if (testColor(theImage, W + QPoint(0, -1), targetColor))
-                theStack.push(W + QPoint(0, -1));
-        }
-        while (testColor(theImage, E + QPoint(1, 0), targetColor) && E.x() < theImage.width()-1) {
-            E += QPoint(1, 0);
-            if (testColor(theImage, E + QPoint(0, 1), targetColor))
-                theStack.push(E + QPoint(0, 1));
-            if (testColor(theImage, E + QPoint(0, -1), targetColor))
-                theStack.push(E + QPoint(0, -1));
-        }
-        theP.drawLine(W, E);
+		QPoint W = aP;
+		QPoint E = aP;
+		if (testColor(theImage, aP + QPoint(0, 1), targetColor))
+			theStack.push(aP + QPoint(0, 1));
+		if (testColor(theImage, aP + QPoint(0, -1), targetColor))
+			theStack.push(aP + QPoint(0, -1));
+		while (testColor(theImage, W + QPoint(-1, 0),targetColor) && W.x() > 0) {
+			W += QPoint(-1, 0);
+			if (testColor(theImage, W + QPoint(0, 1), targetColor))
+				theStack.push(W + QPoint(0, 1));
+			if (testColor(theImage, W + QPoint(0, -1), targetColor))
+				theStack.push(W + QPoint(0, -1));
+		}
+		while (testColor(theImage, E + QPoint(1, 0), targetColor) && E.x() < theImage.width()-1) {
+			E += QPoint(1, 0);
+			if (testColor(theImage, E + QPoint(0, 1), targetColor))
+				theStack.push(E + QPoint(0, 1));
+			if (testColor(theImage, E + QPoint(0, -1), targetColor))
+				theStack.push(E + QPoint(0, -1));
+		}
+		theP.drawLine(W, E);
 	}
 }
 
 void MapView::drawBackground(QPainter & theP, Projection& /*aProj*/)
 {
 	QColor theFillColor;
-	
+
 	double WW = p->PixelPerM*30.0 + 2.0;
 
 	QPen thePen(M_PREFS->getWaterColor(), WW);
 	thePen.setCapStyle(Qt::RoundCap);
 	thePen.setJoinStyle(Qt::RoundJoin);
-    theP.setPen(thePen);
+	theP.setPen(thePen);
 	theP.setBrush(Qt::NoBrush);
 
 	if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
@@ -475,7 +477,7 @@ void MapView::drawBackground(QPainter & theP, Projection& /*aProj*/)
 
 			QLineF l(QPointF((*it)->getPath().elementAt(j)), QPointF((*it)->getPath().elementAt(j-1)));
 			QLineF l1 = l.normalVector().unitVector();
-            l1.setLength(WW / 2.0);
+			l1.setLength(WW / 2.0);
 			if (j == 1) {
 				QLineF l3(l1);
 				l3.translate(l.p2() - l.p1());
@@ -487,7 +489,7 @@ void MapView::drawBackground(QPainter & theP, Projection& /*aProj*/)
 					if (theAngle < 0.0) theAngle += 180.0;
 					l1.setAngle(l.angle() + theAngle);
 				}
-            //theP.drawEllipse(l2.p2(), 5, 5);
+			//theP.drawEllipse(l2.p2(), 5, 5);
 			aPath->lineTo(l1.p2());
 
 		}
@@ -505,7 +507,7 @@ void MapView::drawBackground(QPainter & theP, Projection& /*aProj*/)
 //	QImage theImage(size(), QImage::Format_RGB32);
 //	QList <QPoint> theFloodStarts;
 //	QColor theFillColor;
-//	
+//
 //	QPainter theP;
 //	theP.begin(&theImage);
 //    theP.setRenderHint(QPainter::Antialiasing);
@@ -627,7 +629,7 @@ void MapView::drawBackground(QPainter & theP, Projection& /*aProj*/)
 //		if (area() > 0.0 && !lastPointVisible)
 //			p->thePath.lineTo(firstPoint);
 //*/
-//		
+//
 //	if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
 //		P.fillRect(rect(), QBrush(M_PREFS->getBgColor()));
 //	else
@@ -715,11 +717,11 @@ void MapView::drawFeatures(QPainter & P, Projection& /*aProj*/)
 			else if (TrackPoint * Pt = dynamic_cast < TrackPoint * >((*it)))
 				Current->draw(Pt);
 			else if (Relation * RR = dynamic_cast < Relation * >((*it)))
-				Current->draw(RR); 
+				Current->draw(RR);
 		}
 		P.restore();
 	}
-	
+
 	for (it = p->theFeatures.constBegin(); it != p->theFeatures.constEnd(); ++it)
 	{
 		P.setOpacity((*it)->layer()->getAlpha());
@@ -1145,7 +1147,7 @@ bool MapView::event(QEvent *event)
 		 }
 		return true;
 	} else
-    if ( event->type() == QEvent::KeyPress ) {
+	if ( event->type() == QEvent::KeyPress ) {
 		QKeyEvent *ke = static_cast< QKeyEvent* >( event );
 		if ( ke->key() == Qt::Key_Tab ) {
 			setFocus();
@@ -1174,15 +1176,15 @@ bool MapView::event(QEvent *event)
 			}
 
 			return true;
-		} 
+		}
 	} else
-    if ( event->type() == QEvent::Leave ) {
+	if ( event->type() == QEvent::Leave ) {
 		Main->info()->unsetHoverHtml();
 		FeatureSnapInteraction* intr = dynamic_cast<FeatureSnapInteraction*>(interaction());
 		if (intr)
 			intr->clearLastSnap();
 		update();
-	} 
+	}
 
 	return QWidget::event(event);
  }
@@ -1291,7 +1293,7 @@ void MapView::setViewport(const CoordBox & TargetMap,
 	double Aspect = LengthOfOneDegreeLon / LengthOfOneDegreeLat;
 	ScaleLon = Screen.width() / (double)Viewport.lonDiff();
 	ScaleLat = ScaleLon / Aspect;
-	
+
 	if ((ScaleLat * Viewport.latDiff()) > Screen.height())
 	{
 		ScaleLat = Screen.height() / (double)Viewport.latDiff();
