@@ -22,21 +22,21 @@ class TrackPointPrivate
 
 
 TrackPoint::TrackPoint(const Coord& aCoord)
-    : Position(aCoord)
-    , Elevation(0.0)
-    , Speed(0.0)
-    , p(new TrackPointPrivate)
+	: Position(aCoord)
+	, Elevation(0.0)
+	, Speed(0.0)
+	, p(new TrackPointPrivate)
 {
 	BBox = CoordBox(Position,Position);
 }
 
 TrackPoint::TrackPoint(const TrackPoint& other)
-    : MapFeature(other)
-    , Position(other.Position)
-    , Elevation(other.Elevation)
-    , Speed(other.Speed)
-    , Projected(other.Projected)
-    , p(new TrackPointPrivate)
+	: MapFeature(other)
+	, Position(other.Position)
+	, Elevation(other.Elevation)
+	, Speed(other.Speed)
+	, Projected(other.Projected)
+	, p(new TrackPointPrivate)
 {
 	setTime(other.time());
 	BBox = other.boundingBox();
@@ -107,7 +107,7 @@ bool TrackPoint::isPOI() const
 	return false;
 }
 
-bool TrackPoint::isWaypoint() 
+bool TrackPoint::isWaypoint()
 {
 	if (!MetaUpToDate)
 		updateMeta();
@@ -277,9 +277,9 @@ void TrackPoint::updateMeta()
 	MetaUpToDate = true;
 }
 
-RenderPriority TrackPoint::renderPriority() 
+RenderPriority TrackPoint::renderPriority()
 {
-	RenderPriority apriority(RenderPriority::IsSingular,0.); 
+	RenderPriority apriority(RenderPriority::IsSingular,0.);
 	setRenderPriority(apriority);
 	return apriority;
 }
@@ -289,8 +289,8 @@ QString TrackPoint::toXML(int lvl, QProgressDialog * progress)
 	if (progress)
 		progress->setValue(progress->value()+1);
 
-    if (isVirtual())
-        return QString();
+	if (isVirtual())
+		return QString();
 
 	QString S(lvl*2, ' ');
 	S += "<node id=\"%1\" lat=\"%2\" lon=\"%3\">\n";
@@ -302,10 +302,10 @@ QString TrackPoint::toXML(int lvl, QProgressDialog * progress)
 bool TrackPoint::toXML(QDomElement xParent, QProgressDialog & progress)
 {
 	bool OK = true;
-    progress.setValue(progress.value()+1);
+	progress.setValue(progress.value()+1);
 
-    if (isVirtual())
-        return OK;
+	if (isVirtual())
+		return OK;
 
 	QDomElement e = xParent.ownerDocument().createElement("node");
 	xParent.appendChild(e);
@@ -328,10 +328,10 @@ bool TrackPoint::toXML(QDomElement xParent, QProgressDialog & progress)
 bool TrackPoint::toGPX(QDomElement xParent, QProgressDialog & progress, bool forExport)
 {
 	bool OK = true;
-    progress.setValue(progress.value()+1);
+	progress.setValue(progress.value()+1);
 
-    if (isVirtual())
-        return OK;
+	if (isVirtual())
+		return OK;
 
 	QDomElement e;
 	if (!tagValue("_waypoint_","").isEmpty() ||!sizeParents())
@@ -348,6 +348,11 @@ bool TrackPoint::toGPX(QDomElement xParent, QProgressDialog & progress, bool for
 		e.setAttribute("xml:id", xmlId());
 	e.setAttribute("lon",QString::number(intToAng(Position.lon()),'f',8));
 	e.setAttribute("lat", QString::number(intToAng(Position.lat()),'f',8));
+
+	QDomElement c = xParent.ownerDocument().createElement("time");
+	e.appendChild(c);
+	QDomText v = c.ownerDocument().createTextNode(time().toString(Qt::ISODate)+"Z");
+	c.appendChild(v);
 
 	QString s = tagValue("name","");
 	if (!s.isEmpty()) {
@@ -444,12 +449,12 @@ TrackPoint * TrackPoint::fromGPX(MapDocument* d, MapLayer* L, const QDomElement 
 	if (e.tagName() == "wpt")
 		Pt->setTag("_waypoint_", "yes");
 
-	QDateTime time;
+	QDateTime time = QDateTime::currentDateTime();
 	QDomElement c = e.firstChildElement();
 	while(!c.isNull()) {
 		if (c.tagName() == "time") {
 			QString dtm = c.text();
-			Pt->setTime(QDateTime::fromString(dtm.left(19), Qt::ISODate));
+			time = QDateTime::fromString(dtm.left(19), Qt::ISODate);
 		} else
 		if (c.tagName() == "ele") {
 			Pt->setElevation(c.text().toFloat());
@@ -466,6 +471,7 @@ TrackPoint * TrackPoint::fromGPX(MapDocument* d, MapLayer* L, const QDomElement 
 
 		c = c.nextSiblingElement();
 	}
+	Pt->setTime(time);
 
 	return Pt;
 }
@@ -502,7 +508,7 @@ QString TrackPoint::toHtml()
 	if (layer())
 		D += layer()->name();
 	D += "<br/>";
-	
+
 	return MapFeature::toMainHtml(QApplication::translate("MapFeature", "Node"), "node").arg(D);
 }
 
