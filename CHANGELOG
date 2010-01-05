@@ -1,4 +1,5 @@
 v0.15
+    * FIX : URL's in about dialog (fixes #2606)
 	* FIX : Export trackpoints time when exporting GPX (fixes #2594)
 	* ADD : Virtual nodes allow fast creation of intermediary nodes (closes #821)
 	* ADD : Allow to move node in Node creation mode (closes #1910)
