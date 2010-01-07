@@ -95,7 +95,7 @@ sub loadfiles($$@)
         elsif($_ =~ /^(msg.+) "(.*)"$/)
         {
           my ($n, $d) = ($1, $2);
-          my $new = $n eq "msgid";
+          my $new = ($n eq "msgid" && $postate{type} ne "msgctxt") || ($n eq "msgctxt");
           checkpo(\%postate, \%all, $l, "line $linenum in $file", $keys, $new);
           $postate{last} = $d;
           $postate{type} = $n;
