@@ -3,73 +3,73 @@
 <context>
     <name></name>
     <message>
-        <location filename="../src/MainWindow.cpp" line="759"/>
+        <location filename="../src/MainWindow.cpp" line="760"/>
         <source>Supported formats</source>
         <translation>サポートされたフォーマット</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="748"/>
+        <location filename="../src/MainWindow.cpp" line="749"/>
         <source>Merkaartor document (*.mdc)
 </source>
         <translation>Merkaartor文書(*.mdc)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="761"/>
+        <location filename="../src/MainWindow.cpp" line="762"/>
         <source>GPS Exchange format (*.gpx)
 </source>
         <translation>GPS 交換フォーマット (*.gpx)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="762"/>
+        <location filename="../src/MainWindow.cpp" line="763"/>
         <source>OpenStreetMap format (*.osm)
 </source>
         <translation>OpenStreetMapフォーマット(*.osm)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="763"/>
+        <location filename="../src/MainWindow.cpp" line="764"/>
         <source>OpenStreetMap binary format (*.osb)
 </source>
         <translation>OpenStreetMapバイナリフォーマット(*.osb)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="764"/>
+        <location filename="../src/MainWindow.cpp" line="765"/>
         <source>Noni GPSPlot format (*.ngt)
 </source>
         <translation>Noni GPSPlotフォーマット(*.ngt)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="765"/>
+        <location filename="../src/MainWindow.cpp" line="766"/>
         <source>NMEA GPS log format (*.nmea *.nma)
 </source>
         <translation>NMEA GPSログフォーマット(*.nmea *.nma)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="766"/>
+        <location filename="../src/MainWindow.cpp" line="767"/>
         <source>KML file (*.kml)
 </source>
         <translation>KMLファイル (*.kml)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="767"/>
+        <location filename="../src/MainWindow.cpp" line="768"/>
         <source>ESRI Shapefile (*.shp)
 </source>
         <translation>ESRIシェイプファイル (*.shp)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="769"/>
+        <location filename="../src/MainWindow.cpp" line="770"/>
         <source>All Files (*)</source>
         <translation>全てのファイル(*)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="755"/>
+        <location filename="../src/MainWindow.cpp" line="756"/>
         <source>Geotagged images (*.jpg)
 </source>
         <translation>ジオタグされた画像(*.jpg)
@@ -79,12 +79,12 @@
 <context>
     <name>AboutDialog</name>
     <message>
-        <location filename="../src/AboutDialog.ui" line="13"/>
+        <location filename="../src/AboutDialog.ui" line="14"/>
         <source>About Merkaartor</source>
         <translation>Merkaartorについて</translation>
     </message>
     <message>
-        <location filename="../src/AboutDialog.ui" line="23"/>
+        <location filename="../src/AboutDialog.ui" line="24"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -99,7 +99,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%1%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../src/AboutDialog.ui" line="35"/>
+        <location filename="../src/AboutDialog.ui" line="36"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -109,42 +109,38 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/AboutDialog.ui" line="87"/>
+        <location filename="../src/AboutDialog.ui" line="88"/>
         <source>TextLabel</source>
         <translation>テキストラベル</translation>
     </message>
     <message>
-        <location filename="../src/AboutDialog.ui" line="96"/>
+        <location filename="../src/AboutDialog.ui" line="97"/>
         <source>Copyright Bart Vanhauwaert, Chris Browet and others, 2006-2009</source>
         <translation>Copyright, Bart VanhauwaertとChris Browetやその他の開発者, 2006-2009年</translation>
     </message>
     <message>
-        <location filename="../src/AboutDialog.ui" line="103"/>
+        <location filename="../src/AboutDialog.ui" line="104"/>
         <source>This program is licensed under the GNU Public License v2</source>
         <translation>このプログラムは、GNU一般公衆使用許諾バージョン2のもとでライセンスされています。</translation>
     </message>
     <message>
-        <location filename="../src/AboutDialog.ui" line="110"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://merkaartor.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://merkaartor.org/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2,VL Gothic,IPAGothic,Sazanami Gothic,Unifont&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://merkaartor.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://merkaartor.org/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <location filename="../src/AboutDialog.ui" line="124"/>
+        <location filename="../src/AboutDialog.ui" line="125"/>
         <source>Changelog</source>
         <translation>変更ログ</translation>
     </message>
     <message>
-        <location filename="../src/AboutDialog.ui" line="180"/>
+        <location filename="../src/AboutDialog.ui" line="181"/>
         <source>OK</source>
         <translation>OK</translation>
+    </message>
+    <message>
+        <location filename="../src/AboutDialog.ui" line="111"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://www.merkaartor.org&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.merkaartor.org&lt;/span&gt;&lt;/a&gt; or &lt;a href=&quot;http://merkaartor.yuio.de&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;http://merkaartor.yuio.de&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -333,86 +329,86 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>DirtyListExecutor</name>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="571"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="572"/>
         <source>ADD road %1</source>
         <translation>道路 %1 を追加</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="601"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="602"/>
         <source>ADD trackpoint %1</source>
         <translation>トラックポイント %1 の追加</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="542"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="543"/>
         <source>ADD relation %1</source>
         <translation>関連 %1 を追加</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="691"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="692"/>
         <source>UPDATE trackpoint %1</source>
         <translation>トラックポイント %1 のアップデート</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="632"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="633"/>
         <source>UPDATE relation %1</source>
         <translation>関連 %1 のアップデート</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="662"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="663"/>
         <source>UPDATE road %1</source>
         <translation>道路 %1 のアップデート</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="722"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="723"/>
         <source>REMOVE trackpoint %1</source>
         <translation>トラックポイント%1の削除</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="747"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="748"/>
         <source>REMOVE road %1</source>
         <translation>道路%1の削除</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="772"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="773"/>
         <source>REMOVE relation %1</source>
         <translation>関連%1の削除</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="453"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="454"/>
         <source>Error uploading request</source>
         <translation>アップロード要求のエラー</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="431"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="432"/>
         <source>Please check your username and password in the Preferences menu</source>
         <translation>設定メニューでユーザ名、パスワードをチェックしてください。</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="454"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="455"/>
         <source>There was an error uploading this request (%1)
 Server message is &apos;%2&apos;</source>
         <translation>この要求(%1)のアップロードでエラーが発生しました。
 サーバからのメッセージは&apos;%2&apos;です。</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="436"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="437"/>
         <source>
 API message is &apos;%1&apos;</source>
         <translation>
 APIメッセージは&apos;%1&apos;です</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="494"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="495"/>
         <source>OPEN changeset</source>
         <translation>変更セットのオープン</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="522"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="523"/>
         <source>CLOSE changeset</source>
         <translation>チェンジセットを閉じる</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="469"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="470"/>
         <source>Uploading changes...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1159,14 +1155,14 @@ Do you still want to use it?</source>
 <context>
     <name>Main</name>
     <message>
-        <location filename="../src/Main.cpp" line="151"/>
+        <location filename="../src/Main.cpp" line="155"/>
         <source>Merkaartor v%1%2
 Loading plugins...</source>
         <translation>Merkaartor v%1%2
 プラグインのロード...</translation>
     </message>
     <message>
-        <location filename="../src/Main.cpp" line="183"/>
+        <location filename="../src/Main.cpp" line="187"/>
         <source>Merkaartor v%1%2
 Initializing...</source>
         <translation>Merkaartor v%1%2
@@ -1186,12 +1182,12 @@ Initializing...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="677"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="679"/>
         <source>Clear Tag &apos;%1&apos; on %2</source>
         <translation>%2のタグ&apos;%1&apos;をクリアー</translation>
     </message>
     <message>
-        <location filename="../src/Command/TrackPointCommands.cpp" line="108"/>
+        <location filename="../src/Command/TrackPointCommands.cpp" line="109"/>
         <source>Move node %1</source>
         <translation>ノード %1 の移動</translation>
     </message>
@@ -1241,12 +1237,12 @@ Initializing...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreateNodeInteraction.cpp" line="48"/>
+        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="201"/>
         <source>Create node in Road: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreateNodeInteraction.cpp" line="64"/>
+        <location filename="../src/Interaction/CreateNodeInteraction.cpp" line="100"/>
         <source>Create point %1</source>
         <translation>点 %1 を作成</translation>
     </message>
@@ -1276,27 +1272,27 @@ Initializing...</source>
         <translation>ノード %1 を 道路 %2 に追加</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="147"/>
+        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="156"/>
         <source>Nodes at the same position found.</source>
         <translation>同じ位置のノードが見つかりました。</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="148"/>
+        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="157"/>
         <source>Do you want to merge all nodes at the drop position?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1474"/>
+        <location filename="../src/MainWindow.cpp" line="1482"/>
         <source>Merge Nodes into %1</source>
         <translation>ノードを%1にマージします</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/EditInteraction.cpp" line="397"/>
+        <location filename="../src/Interaction/EditInteraction.cpp" line="238"/>
         <source>Remove feature %1</source>
         <translation>フィーチャ%1の削除</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/EditInteraction.cpp" line="427"/>
+        <location filename="../src/Interaction/EditInteraction.cpp" line="268"/>
         <source>Reverse Road %1</source>
         <translation>道路%1の方向を反転</translation>
     </message>
@@ -1306,42 +1302,42 @@ Initializing...</source>
         <translation>タイル %v / %m</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="286"/>
+        <location filename="../src/MainWindow.cpp" line="287"/>
         <source>Properties...</source>
         <translation>プロパティ...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="306"/>
+        <location filename="../src/MainWindow.cpp" line="307"/>
         <source>Cannot load Projections file</source>
         <translation>投影法ファイルをロードできません</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="306"/>
+        <location filename="../src/MainWindow.cpp" line="307"/>
         <source>&quot;Projections.xml&quot; could not be opened anywhere. Aborting.</source>
         <translation>&quot;Projections.xml&quot; はどこからも開けませんでした。中断します。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="314"/>
+        <location filename="../src/MainWindow.cpp" line="315"/>
         <source>Low</source>
         <translation>低い</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="314"/>
+        <location filename="../src/MainWindow.cpp" line="315"/>
         <source>High</source>
         <translation>高い</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="314"/>
+        <location filename="../src/MainWindow.cpp" line="315"/>
         <source>Opaque</source>
         <translation>不透明</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="516"/>
+        <location filename="../src/MainWindow.cpp" line="517"/>
         <source>Clipboard invalid</source>
         <translation>クリップボードが不正です</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="773"/>
+        <location filename="../src/MainWindow.cpp" line="774"/>
         <source>Open track file</source>
         <translation>トラックファイルを開く</translation>
     </message>
@@ -1351,29 +1347,29 @@ Initializing...</source>
         <translation>保存されていない変更</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="801"/>
+        <location filename="../src/MainWindow.cpp" line="802"/>
         <source>The current map contains unsaved changes that will be lost when starting a new one.
 Do you want to cancel starting a new map or continue and discard the old changes?</source>
         <translation>現在の地図には保存されていない変更があり、新しい地図を開いたときに失われます。
 新しい地図の開始をキャンセルしますか？それとも、継続して古い変更を破棄しますか？</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="828"/>
+        <location filename="../src/MainWindow.cpp" line="829"/>
         <source>Waypoints</source>
         <translation>ウエイポイント</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="848"/>
+        <location filename="../src/MainWindow.cpp" line="849"/>
         <source>Track %1</source>
         <translation>トラック %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="886"/>
+        <location filename="../src/MainWindow.cpp" line="887"/>
         <source>Big Fat Copyright Warning</source>
         <translation>重大な著作権の警告</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="900"/>
+        <location filename="../src/MainWindow.cpp" line="901"/>
         <source>You are trying to import a KML file. Please be aware that:
 
  - You cannot import to OSM a KML file created from Google Earth. While you might
@@ -1401,39 +1397,39 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
 このKMLをOSMにインポートすることが、法的に完全に確認できていますか？</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="939"/>
+        <location filename="../src/MainWindow.cpp" line="940"/>
         <source>No valid file</source>
         <translation>不正なファイルです</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1812"/>
+        <location filename="../src/MainWindow.cpp" line="1820"/>
         <source>%1 could not be opened.</source>
         <translation>%1 を開けません。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1049"/>
+        <location filename="../src/MainWindow.cpp" line="1050"/>
         <source>Open track files</source>
         <translation>トラックファイルを開く</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1061"/>
+        <location filename="../src/MainWindow.cpp" line="1062"/>
         <source>Old Qt version detected</source>
         <translation>古い Qt のバージョンが見つかりました</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1065"/>
+        <location filename="../src/MainWindow.cpp" line="1066"/>
         <source>Your setup uses Qt %1, which contains various known errors in uploading data to OpenStreetMap leading to 401 server response codes. Are you sure you want to continue (which is not recommended).
 For more information see http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor</source>
         <translation>あなたの設定は、Qt %1を使用しています。これには、OpenStreetMapにデータをアップロードをするときに知られているいろんなエラーがあり、401サーバ応答コードになってしまうことがあります。（推奨されていませんが、）続けますか？
 さらなる情報は、http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor で知ることができます。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1071"/>
+        <location filename="../src/MainWindow.cpp" line="1072"/>
         <source>Upload OSM</source>
         <translation>OSMのアップロード</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1072"/>
+        <location filename="../src/MainWindow.cpp" line="1073"/>
         <source>You don&apos;t seem to have specified your
 OpenStreetMap username and password.
 Do you want to do this now?</source>
@@ -1442,242 +1438,242 @@ Do you want to do this now?</source>
 いま指定しますか？</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1119"/>
+        <location filename="../src/MainWindow.cpp" line="1120"/>
         <source>Error downloading</source>
         <translation>ダウンロードエラー</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1119"/>
+        <location filename="../src/MainWindow.cpp" line="1120"/>
         <source>The map could not be downloaded</source>
         <translation>地図をダウンロードできません。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1369"/>
+        <location filename="../src/MainWindow.cpp" line="1377"/>
         <source>Join Roads</source>
         <translation>道路の結合</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1382"/>
+        <location filename="../src/MainWindow.cpp" line="1390"/>
         <source>Split Roads</source>
         <translation>道路の分割</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1395"/>
+        <location filename="../src/MainWindow.cpp" line="1403"/>
         <source>Break Roads</source>
         <translation>道路分割</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1421"/>
+        <location filename="../src/MainWindow.cpp" line="1429"/>
         <source>Create Junction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1443"/>
+        <location filename="../src/MainWindow.cpp" line="1451"/>
         <source>Add Street Numbers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1459"/>
+        <location filename="../src/MainWindow.cpp" line="1467"/>
         <source>Align Nodes</source>
         <translation>ノードの整列</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1489"/>
+        <location filename="../src/MainWindow.cpp" line="1497"/>
         <source>Detach Node %1</source>
         <translation>ノード %1 の切り離し</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1503"/>
+        <location filename="../src/MainWindow.cpp" line="1511"/>
         <source>Add member to relation</source>
         <translation>関連にメンバーを追加</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1515"/>
+        <location filename="../src/MainWindow.cpp" line="1523"/>
         <source>Remove member from relation</source>
         <translation>関連からメンバーの削除</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1530"/>
+        <location filename="../src/MainWindow.cpp" line="1538"/>
         <source>Create Relation %1</source>
         <translation>関連%1の作成</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1580"/>
+        <location filename="../src/MainWindow.cpp" line="1588"/>
         <source>Save map style</source>
         <translation>マップスタイルの保存</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1591"/>
+        <location filename="../src/MainWindow.cpp" line="1599"/>
         <source>Merkaartor map style (*.mas)</source>
         <translation>Merkaartorマップスタイル(*.mas)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1591"/>
+        <location filename="../src/MainWindow.cpp" line="1599"/>
         <source>Load map style</source>
         <translation>マップスタイルのロード</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1748"/>
+        <location filename="../src/MainWindow.cpp" line="1756"/>
         <source>Save Merkaartor document</source>
         <translation>Merkaartor文書を保存</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1748"/>
+        <location filename="../src/MainWindow.cpp" line="1756"/>
         <source>untitled</source>
         <translation>タイトルなし</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1748"/>
+        <location filename="../src/MainWindow.cpp" line="1756"/>
         <source>Merkaartor documents Files (*.mdc)</source>
         <translation>Merkaartor文書ファイル (*.mdc)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1791"/>
+        <location filename="../src/MainWindow.cpp" line="1799"/>
         <source>Unable to open save file</source>
         <translation>保存ファイルを開くことができません。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1791"/>
+        <location filename="../src/MainWindow.cpp" line="1799"/>
         <source>%1 could not be opened for writing.</source>
         <translation>%1 を書き込み用に開けません。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1828"/>
+        <location filename="../src/MainWindow.cpp" line="1836"/>
         <source>Invalid file</source>
         <translation>不正なファイル</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1818"/>
+        <location filename="../src/MainWindow.cpp" line="1826"/>
         <source>%1 is not a valid XML file.</source>
         <translation>%1 は適正なXMLファイルではありません。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1828"/>
+        <location filename="../src/MainWindow.cpp" line="1836"/>
         <source>%1 is not a valid Merkaartor document.</source>
         <translation>%1 は、ただしい Merkaartor データファイルではありません。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1886"/>
+        <location filename="../src/MainWindow.cpp" line="1894"/>
         <source>Export OSM</source>
         <translation>OSMのエキスポート</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1886"/>
+        <location filename="../src/MainWindow.cpp" line="1894"/>
         <source>OSM Files (*.osm)</source>
         <translation>OSM ファイル (*.osm)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1905"/>
+        <location filename="../src/MainWindow.cpp" line="1913"/>
         <source>Export Binary OSM</source>
         <translation>バイナリーのOSM形式でエキスポート</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1905"/>
+        <location filename="../src/MainWindow.cpp" line="1913"/>
         <source>OSM Binary Files (*.osb)</source>
         <translation>OSM バイナリーファイル (*.osb)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1930"/>
+        <location filename="../src/MainWindow.cpp" line="1938"/>
         <source>Export GPX</source>
         <translation>GPXのエキスポート</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1930"/>
+        <location filename="../src/MainWindow.cpp" line="1938"/>
         <source>GPX Files (*.gpx)</source>
         <translation>GPXファイル (*.gpx)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1955"/>
+        <location filename="../src/MainWindow.cpp" line="1963"/>
         <source>Export KML</source>
         <translation>KMLのエキスポート</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1955"/>
+        <location filename="../src/MainWindow.cpp" line="1963"/>
         <source>KML Files (*.kml)</source>
         <translation>KMLファイル(*.kml)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2199"/>
+        <location filename="../src/MainWindow.cpp" line="2207"/>
         <source>%1 (int)</source>
         <translation>%1 (int)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2251"/>
+        <location filename="../src/MainWindow.cpp" line="2259"/>
         <source>Add Bookmark</source>
         <translation>ブックマークに追加</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2252"/>
+        <location filename="../src/MainWindow.cpp" line="2260"/>
         <source>Specify the name of the bookmark.</source>
         <translation>ブックマークの名前を指定</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2255"/>
+        <location filename="../src/MainWindow.cpp" line="2263"/>
         <source>Invalid bookmark name</source>
         <translation>不正なブックマーク名</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2256"/>
+        <location filename="../src/MainWindow.cpp" line="2264"/>
         <source>Bookmark cannot be blank.</source>
         <translation>ブックマークは空白にできません。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2260"/>
+        <location filename="../src/MainWindow.cpp" line="2268"/>
         <source>Warning: Bookmark name already exists</source>
         <translation>警告!ブックマークの名前がすでに存在しています。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2261"/>
+        <location filename="../src/MainWindow.cpp" line="2269"/>
         <source>Enter a new one, keep the same to overwrite or cancel.</source>
         <translation>新しいのを入れてください。上書きするなら現在の値と同じにするか、キャンセルしてください。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2299"/>
+        <location filename="../src/MainWindow.cpp" line="2307"/>
         <source>Remove Bookmark</source>
         <translation>ブックマークの削除</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2300"/>
+        <location filename="../src/MainWindow.cpp" line="2308"/>
         <source>Select the bookmark to remove.</source>
         <translation>削除するブックマークを選択</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2362"/>
+        <location filename="../src/MainWindow.cpp" line="2370"/>
         <source>Invalid projection</source>
         <translation>不正な投影法</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2362"/>
+        <location filename="../src/MainWindow.cpp" line="2370"/>
         <source>Unable to set projection &quot;%1&quot;.</source>
         <translation>投影法を&quot;%1&quot;に設定できませんでした。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2499"/>
+        <location filename="../src/MainWindow.cpp" line="2507"/>
         <source>GPS error</source>
         <translation>GPSエラー</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2500"/>
+        <location filename="../src/MainWindow.cpp" line="2508"/>
         <source>Unable to open GPS port.</source>
         <translation>GPSポートを開けません。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2509"/>
+        <location filename="../src/MainWindow.cpp" line="2517"/>
         <source>Open NMEA log file</source>
         <translation>NMEAログファイルを開く</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2623"/>
+        <location filename="../src/MainWindow.cpp" line="2631"/>
         <source>Save Tag Templates</source>
         <translation>タグテンプレートの保存</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2623"/>
+        <location filename="../src/MainWindow.cpp" line="2631"/>
         <source>Merkaartor tag templates (*.mat)</source>
         <translation>Merkaartorタグテンプレート(*.mat)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2649"/>
+        <location filename="../src/MainWindow.cpp" line="2657"/>
         <source>Open Tag Templates</source>
         <translation>タグテンプレートを開く</translation>
     </message>
@@ -1697,7 +1693,7 @@ Do you want to do this now?</source>
         <translation>作成(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="617"/>
+        <location filename="../src/MainWindow.ui" line="618"/>
         <source>&amp;Road</source>
         <translation>道路(&amp;R)</translation>
     </message>
@@ -1732,1042 +1728,1042 @@ Do you want to do this now?</source>
         <translation>領域の透明度設定(&amp;o)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="136"/>
+        <location filename="../src/MainWindow.ui" line="137"/>
         <source>&amp;File</source>
         <translation>ファイル(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="140"/>
+        <location filename="../src/MainWindow.ui" line="141"/>
         <source>&amp;Export</source>
         <translation>エクスポート(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1173"/>
+        <location filename="../src/MainWindow.ui" line="1174"/>
         <source>&amp;Render</source>
         <translation>レンダリング(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="149"/>
+        <location filename="../src/MainWindow.ui" line="150"/>
         <source>Re&amp;cent open</source>
         <translation>最近開いたファイル(&amp;c)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="154"/>
+        <location filename="../src/MainWindow.ui" line="155"/>
         <source>Recen&amp;t import</source>
         <translation>最近のインポート(&amp;t)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="178"/>
+        <location filename="../src/MainWindow.ui" line="179"/>
         <source>T&amp;ools</source>
         <translation>ツール(&amp;T)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="182"/>
+        <location filename="../src/MainWindow.ui" line="183"/>
         <source>&amp;Style</source>
         <translation>スタイル(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="192"/>
+        <location filename="../src/MainWindow.ui" line="193"/>
         <source>Tag templates</source>
         <translation>タグのテンプレート</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="635"/>
+        <location filename="../src/MainWindow.ui" line="636"/>
         <source>&amp;Node</source>
         <translation>ノード(&amp;N)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="220"/>
+        <location filename="../src/MainWindow.ui" line="221"/>
         <source>&amp;Window</source>
         <translation>ウィンドウ(&amp;W)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="913"/>
+        <location filename="../src/MainWindow.ui" line="914"/>
         <source>&amp;Docks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="243"/>
+        <location filename="../src/MainWindow.ui" line="244"/>
         <source>Fea&amp;ture</source>
         <translation>フィーチャ(&amp;t)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="938"/>
+        <location filename="../src/MainWindow.ui" line="939"/>
         <source>&amp;Layers</source>
         <translation>レイヤー(&amp;L)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="256"/>
+        <location filename="../src/MainWindow.ui" line="257"/>
         <source>&amp;Gps</source>
         <translation>&amp;Gps</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="269"/>
+        <location filename="../src/MainWindow.ui" line="270"/>
         <source>Rel&amp;ation</source>
         <translation>関連(&amp;a)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="346"/>
+        <location filename="../src/MainWindow.ui" line="347"/>
         <source>Tool Bar</source>
         <translation>ツールバー</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="387"/>
+        <location filename="../src/MainWindow.ui" line="388"/>
         <source>&amp;Quit</source>
         <translation>終了(&amp;Q)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="392"/>
+        <location filename="../src/MainWindow.ui" line="393"/>
         <source>&amp;About</source>
         <translation>情報(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="401"/>
+        <location filename="../src/MainWindow.ui" line="402"/>
         <source>&amp;Open</source>
         <translation>開く(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="404"/>
+        <location filename="../src/MainWindow.ui" line="405"/>
         <source>Create a new document and import a file</source>
         <translation>新規文書を作成して、ファイルをインポート</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="407"/>
+        <location filename="../src/MainWindow.ui" line="408"/>
         <source>Ctrl+O</source>
         <translation>Ctrl+O</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="416"/>
+        <location filename="../src/MainWindow.ui" line="417"/>
         <source>Zoom &amp;all</source>
         <translation>全てズーム(&amp;a)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="419"/>
+        <location filename="../src/MainWindow.ui" line="420"/>
         <source>F2</source>
         <translation>F2</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="424"/>
+        <location filename="../src/MainWindow.ui" line="425"/>
         <source>Zoom &amp;window</source>
         <translation>ウィンドウズーム(&amp;w)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="430"/>
+        <location filename="../src/MainWindow.ui" line="431"/>
         <source>Zoom window</source>
         <translation>ズームウィンドウ</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="433"/>
+        <location filename="../src/MainWindow.ui" line="434"/>
         <source>F3</source>
         <translation>F3</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="442"/>
+        <location filename="../src/MainWindow.ui" line="443"/>
         <source>Zoom &amp;out</source>
         <translation>ズームアウト(&amp;o)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="445"/>
+        <location filename="../src/MainWindow.ui" line="446"/>
         <source>-</source>
         <translation>-</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="454"/>
+        <location filename="../src/MainWindow.ui" line="455"/>
         <source>Zoom &amp;in</source>
         <translation>ズームイン(&amp;i)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="460"/>
+        <location filename="../src/MainWindow.ui" line="461"/>
         <source>Zoom in</source>
         <translation>ズームイン</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="463"/>
+        <location filename="../src/MainWindow.ui" line="464"/>
         <source>+</source>
         <translation>+</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="474"/>
+        <location filename="../src/MainWindow.ui" line="475"/>
         <source>Curved link</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="990"/>
+        <location filename="../src/MainWindow.ui" line="991"/>
         <source>&amp;Undo</source>
         <translation>元に戻す(&amp;U)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="489"/>
+        <location filename="../src/MainWindow.ui" line="490"/>
         <source>Ctrl+Z</source>
         <translation>Ctrl+Z</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="498"/>
+        <location filename="../src/MainWindow.ui" line="499"/>
         <source>&amp;Redo</source>
         <translation>やり直す(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="501"/>
+        <location filename="../src/MainWindow.ui" line="502"/>
         <source>Ctrl+Y</source>
         <translation>Ctrl+Y</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="513"/>
+        <location filename="../src/MainWindow.ui" line="514"/>
         <source>&amp;Move</source>
         <translation>移動(&amp;M)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="516"/>
+        <location filename="../src/MainWindow.ui" line="517"/>
         <source>Ctrl+M</source>
         <translation>Ctrl+M</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="525"/>
+        <location filename="../src/MainWindow.ui" line="526"/>
         <source>&amp;Import</source>
         <translation>インポート(&amp;I)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="528"/>
+        <location filename="../src/MainWindow.ui" line="529"/>
         <source>Import a file into the current document</source>
         <translation>現在の文書にファイルをインポート</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="537"/>
+        <location filename="../src/MainWindow.ui" line="538"/>
         <source>&amp;Download</source>
         <translation>ダウンロード(&amp;D)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="540"/>
+        <location filename="../src/MainWindow.ui" line="541"/>
         <source>Download map data for a new area</source>
         <translation>新規エリアの地図データをダウンロード</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="543"/>
+        <location filename="../src/MainWindow.ui" line="544"/>
         <source>Ctrl+D</source>
         <translation>Ctrl+D</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="548"/>
+        <location filename="../src/MainWindow.ui" line="549"/>
         <source>Link</source>
         <translation>リンク</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="554"/>
+        <location filename="../src/MainWindow.ui" line="555"/>
         <source>Create link</source>
         <translation>リンクの作成</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="557"/>
+        <location filename="../src/MainWindow.ui" line="558"/>
         <source>L</source>
         <translation>L</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="569"/>
+        <location filename="../src/MainWindow.ui" line="570"/>
         <source>&amp;Select</source>
         <translation>選択(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="572"/>
+        <location filename="../src/MainWindow.ui" line="573"/>
         <source>Esc</source>
         <translation>Esc</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="581"/>
+        <location filename="../src/MainWindow.ui" line="582"/>
         <source>&amp;Upload</source>
         <translation>アップロード(&amp;U)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="584"/>
+        <location filename="../src/MainWindow.ui" line="585"/>
         <source>Upload changes to the server</source>
         <translation>変更をサーバにアップロード</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="587"/>
+        <location filename="../src/MainWindow.ui" line="588"/>
         <source>Ctrl+U</source>
         <translation>Ctrl+U</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="599"/>
+        <location filename="../src/MainWindow.ui" line="600"/>
         <source>R&amp;emove</source>
         <translation>削除(&amp;e)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="602"/>
+        <location filename="../src/MainWindow.ui" line="603"/>
         <source>Remove selected features</source>
         <translation>選択したフィーチャを削除</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="605"/>
+        <location filename="../src/MainWindow.ui" line="606"/>
         <source>Del</source>
         <translation>削除</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="620"/>
+        <location filename="../src/MainWindow.ui" line="621"/>
         <source>Create new road</source>
         <translation>新規道路の作成</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="623"/>
+        <location filename="../src/MainWindow.ui" line="624"/>
         <source>Ctrl+R</source>
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="638"/>
+        <location filename="../src/MainWindow.ui" line="639"/>
         <source>Create new node</source>
         <translation>新規ノードの作成</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="641"/>
+        <location filename="../src/MainWindow.ui" line="642"/>
         <source>Ctrl+N</source>
         <translation>Ctrl+N</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="653"/>
+        <location filename="../src/MainWindow.ui" line="654"/>
         <source>&amp;Reverse</source>
         <translation>逆転(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="656"/>
+        <location filename="../src/MainWindow.ui" line="657"/>
         <source>Reverse road direction</source>
         <translation>道路の進行方向を反転</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="665"/>
+        <location filename="../src/MainWindow.ui" line="666"/>
         <source>&amp;Go To...</source>
         <translation>移動(&amp;G)...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="668"/>
+        <location filename="../src/MainWindow.ui" line="669"/>
         <source>Ctrl+G</source>
         <translation>Ctrl+G</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="673"/>
+        <location filename="../src/MainWindow.ui" line="674"/>
         <source>&amp;Double carriage way</source>
         <translation>2車線にする</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="676"/>
+        <location filename="../src/MainWindow.ui" line="677"/>
         <source>Create Double carriage way</source>
         <translation>2車線道の作成</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="681"/>
+        <location filename="../src/MainWindow.ui" line="682"/>
         <source>&amp;Roundabout</source>
         <translation>ラウンドアバウト(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="684"/>
+        <location filename="../src/MainWindow.ui" line="685"/>
         <source>Create Roundabout</source>
         <translation>ロータリーの作成</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="693"/>
+        <location filename="../src/MainWindow.ui" line="694"/>
         <source>&amp;New</source>
         <translation>新規(&amp;N)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="696"/>
+        <location filename="../src/MainWindow.ui" line="697"/>
         <source>Create a new document</source>
         <translation>新規文書の作成</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="705"/>
+        <location filename="../src/MainWindow.ui" line="706"/>
         <source>&amp;Split</source>
         <translation>分割(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="708"/>
+        <location filename="../src/MainWindow.ui" line="709"/>
         <source>Split road into separate (connected) roads</source>
         <translation>道路を分割して、複数のつながった道路とします。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="711"/>
+        <location filename="../src/MainWindow.ui" line="712"/>
         <source>Alt+S</source>
         <translation>Alt+S</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="720"/>
+        <location filename="../src/MainWindow.ui" line="721"/>
         <source>&amp;Join</source>
         <translation>接合(&amp;J)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="723"/>
+        <location filename="../src/MainWindow.ui" line="724"/>
         <source>Join connected roads to a single road</source>
         <translation>接続された道路を一つの道路として結合</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="726"/>
+        <location filename="../src/MainWindow.ui" line="727"/>
         <source>Alt+J</source>
         <translation>Alt+J</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="735"/>
+        <location filename="../src/MainWindow.ui" line="736"/>
         <source>&amp;Break apart</source>
         <translation>切り離す(&amp;B)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="738"/>
+        <location filename="../src/MainWindow.ui" line="739"/>
         <source>Break</source>
         <translation>分割</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="741"/>
+        <location filename="../src/MainWindow.ui" line="742"/>
         <source>Break apart connected roads</source>
         <translation>接続された道路を切り離す</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="744"/>
+        <location filename="../src/MainWindow.ui" line="745"/>
         <source>Alt+B</source>
         <translation>Alt+B</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="749"/>
+        <location filename="../src/MainWindow.ui" line="750"/>
         <source>Re&amp;lation</source>
         <translation>関連(&amp;l)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="752"/>
+        <location filename="../src/MainWindow.ui" line="753"/>
         <source>Create Relation</source>
         <translation>関連の作成</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="764"/>
+        <location filename="../src/MainWindow.ui" line="765"/>
         <source>&amp;Area</source>
         <translation>領域(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="767"/>
+        <location filename="../src/MainWindow.ui" line="768"/>
         <source>Create new area</source>
         <translation>新規エリアの作成</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="772"/>
+        <location filename="../src/MainWindow.ui" line="773"/>
         <source>&amp;Edit...</source>
         <translation>編集(&amp;E)...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1377"/>
+        <location filename="../src/MainWindow.ui" line="1378"/>
         <source>&amp;Save...</source>
         <translation>保存(&amp;S)...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1367"/>
+        <location filename="../src/MainWindow.ui" line="1368"/>
         <source>&amp;Load...</source>
         <translation>読み込み(&amp;L)...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="787"/>
+        <location filename="../src/MainWindow.ui" line="788"/>
         <source>&amp;Curved road</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="796"/>
+        <location filename="../src/MainWindow.ui" line="797"/>
         <source>&amp;Preferences...</source>
         <translation>設定(&amp;P)...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="809"/>
+        <location filename="../src/MainWindow.ui" line="810"/>
         <source>&amp;All...</source>
         <translation>全て(&amp;A)...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="812"/>
+        <location filename="../src/MainWindow.ui" line="813"/>
         <source>Export all visible layers to a file</source>
         <translation>全ての表示中レイヤーをファイルに書き出す</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="821"/>
+        <location filename="../src/MainWindow.ui" line="822"/>
         <source>&amp;Find...</source>
         <translation>検索(&amp;F)...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="824"/>
+        <location filename="../src/MainWindow.ui" line="825"/>
         <source>Find</source>
         <translation>検索</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="827"/>
+        <location filename="../src/MainWindow.ui" line="828"/>
         <source>Find and select items</source>
         <translation>検索とアイテムの選択</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="840"/>
+        <location filename="../src/MainWindow.ui" line="841"/>
         <source>&amp;Viewport...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="843"/>
+        <location filename="../src/MainWindow.ui" line="844"/>
         <source>Export the features in the viewport to a file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="848"/>
+        <location filename="../src/MainWindow.ui" line="849"/>
         <source>&amp;Add...</source>
         <translation>追加(&amp;A)...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="853"/>
+        <location filename="../src/MainWindow.ui" line="854"/>
         <source>&amp;Remove...</source>
         <translation>削除(&amp;R)...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="858"/>
+        <location filename="../src/MainWindow.ui" line="859"/>
         <source>&amp;Merge</source>
         <translation>マージ(&amp;M)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="861"/>
+        <location filename="../src/MainWindow.ui" line="862"/>
         <source>Node Merge</source>
         <translation>ノードの結合</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="864"/>
+        <location filename="../src/MainWindow.ui" line="865"/>
         <source>Merge the selected nodes (first selected will remain)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="867"/>
+        <location filename="../src/MainWindow.ui" line="868"/>
         <source>Alt+M</source>
         <translation>Alt+M</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="872"/>
+        <location filename="../src/MainWindow.ui" line="873"/>
         <source>Save &amp;As...</source>
         <translation>名前をつけて保存(&amp;A)...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="881"/>
+        <location filename="../src/MainWindow.ui" line="882"/>
         <source>&amp;Save</source>
         <translation>保存(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="884"/>
+        <location filename="../src/MainWindow.ui" line="885"/>
         <source>Save to file</source>
         <translation>ファイルに保存</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="887"/>
+        <location filename="../src/MainWindow.ui" line="888"/>
         <source>Ctrl+S</source>
         <translation>Ctrl+S</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="896"/>
+        <location filename="../src/MainWindow.ui" line="897"/>
         <source>Download more</source>
         <translation>更新ダウンロード</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="899"/>
+        <location filename="../src/MainWindow.ui" line="900"/>
         <source>Download more map data for the current area</source>
         <translation>現在のエリアの地図データをダウンロード</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="905"/>
+        <location filename="../src/MainWindow.ui" line="906"/>
         <source>Download the current view to the previous download layer</source>
         <translation>現在の表示範囲を、前回ダウンロードしたレイヤーにダウンロード</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="908"/>
+        <location filename="../src/MainWindow.ui" line="909"/>
         <source>Ctrl+Shift+D</source>
         <translation>Ctrl+Shift+D</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="921"/>
+        <location filename="../src/MainWindow.ui" line="922"/>
         <source>&amp;Properties</source>
         <translation>プロパティ(&amp;P)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="927"/>
+        <location filename="../src/MainWindow.ui" line="928"/>
         <source>Hide/Show the Properties dock</source>
         <translation>プロパティ枠の表示/非表示</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="930"/>
+        <location filename="../src/MainWindow.ui" line="931"/>
         <source>Ctrl+P</source>
         <translation>Ctrl+P</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="944"/>
+        <location filename="../src/MainWindow.ui" line="945"/>
         <source>Hide/Show the Layers dock</source>
         <translation>レイヤー枠の表示/非表示</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="947"/>
+        <location filename="../src/MainWindow.ui" line="948"/>
         <source>Ctrl+L</source>
         <translation>Ctrl+L</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="955"/>
+        <location filename="../src/MainWindow.ui" line="956"/>
         <source>&amp;Info</source>
         <translation>情報(&amp;I)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="961"/>
+        <location filename="../src/MainWindow.ui" line="962"/>
         <source>Hide/Show the Info dock</source>
         <translation>情報枠の表示/非表示</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="964"/>
+        <location filename="../src/MainWindow.ui" line="965"/>
         <source>Ctrl+I</source>
         <translation>Ctrl+I</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="973"/>
+        <location filename="../src/MainWindow.ui" line="974"/>
         <source>&amp;Align</source>
         <translation>整列(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="976"/>
+        <location filename="../src/MainWindow.ui" line="977"/>
         <source>Align nodes</source>
         <translation>ノードの整列</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="979"/>
+        <location filename="../src/MainWindow.ui" line="980"/>
         <source>Align selected nodes. First two selected give the line.</source>
         <translation>選択したノードを整列させます。最初に選択した２つの線上にならべます。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="982"/>
+        <location filename="../src/MainWindow.ui" line="983"/>
         <source>Alt+A</source>
         <translation>Alt+A</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="996"/>
+        <location filename="../src/MainWindow.ui" line="997"/>
         <source>Hide/Show the Undo dock</source>
         <translation>やり直し枠の表示/非表示</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="999"/>
+        <location filename="../src/MainWindow.ui" line="1000"/>
         <source>Ctrl+T</source>
         <translation>Ctrl+T</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1007"/>
+        <location filename="../src/MainWindow.ui" line="1008"/>
         <source>Show &amp;downloaded areas</source>
         <translation>ダウンロードした領域の表示(&amp;d)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1010"/>
+        <location filename="../src/MainWindow.ui" line="1011"/>
         <source>Ctrl+Alt+A</source>
         <translation>Ctrl+Alt+A</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1019"/>
+        <location filename="../src/MainWindow.ui" line="1020"/>
         <source>&amp;Copy</source>
         <translation>コピー(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1022"/>
+        <location filename="../src/MainWindow.ui" line="1023"/>
         <source>Copy selected features and tags to the clipboard</source>
         <translation>選択したフィーチャーとタグをクリップボードにコピー</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1025"/>
+        <location filename="../src/MainWindow.ui" line="1026"/>
         <source>Copy the selected feature&apos;s tags to the clipboard; if the feature is a trackpoint, copy the coordinates, too.</source>
         <translation>要素のタグをクリップボードにコピーします;要素がトラックポイントなら、緯度経度もコピーします。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1028"/>
+        <location filename="../src/MainWindow.ui" line="1029"/>
         <source>Ctrl+C</source>
         <translation>Ctrl+C</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1033"/>
+        <location filename="../src/MainWindow.ui" line="1034"/>
         <source>Paste Tags (&amp;Overwrite)</source>
         <translation>タグを上書き貼り付け(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1036"/>
+        <location filename="../src/MainWindow.ui" line="1037"/>
         <source>Paste (and overwrite) the tags in the clipboard to the selected feature.</source>
         <translation>クリップボードのタグを選択したーフィーチャーに貼り付け（し上書き）</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1039"/>
+        <location filename="../src/MainWindow.ui" line="1040"/>
         <source>Ctrl+V, O</source>
         <translation>Ctrl+V, O</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1048"/>
+        <location filename="../src/MainWindow.ui" line="1049"/>
         <source>Paste Tags (&amp;Merge)</source>
         <translation>タグを追加貼り付け(&amp;M)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1051"/>
+        <location filename="../src/MainWindow.ui" line="1052"/>
         <source>Paste tags</source>
         <translation>タグを貼り付け</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1054"/>
+        <location filename="../src/MainWindow.ui" line="1055"/>
         <source>Paste tags from the clipboard (Merge with existing tags)</source>
         <translation>クリップボードからタグを貼り付け（既存のタグに追加）</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1057"/>
+        <location filename="../src/MainWindow.ui" line="1058"/>
         <source>Merge the tags in the clipboard with the ones of the selected feature.</source>
         <translation>選択したフィーチャーのタグと、クリップボードのタグを混ぜる</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1060"/>
+        <location filename="../src/MainWindow.ui" line="1061"/>
         <source>Ctrl+V, M</source>
         <translation>Ctrl+V, M</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1070"/>
+        <location filename="../src/MainWindow.ui" line="1071"/>
         <source>Selected...</source>
         <translation>選択...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1079"/>
+        <location filename="../src/MainWindow.ui" line="1080"/>
         <source>Paste Features</source>
         <translation>貼り付け機能</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1082"/>
+        <location filename="../src/MainWindow.ui" line="1083"/>
         <source>Paste</source>
         <translation>貼り付け</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1085"/>
+        <location filename="../src/MainWindow.ui" line="1086"/>
         <source>Paste features from the clipboard</source>
         <translation>クリップボードからタグを貼り付け</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1088"/>
+        <location filename="../src/MainWindow.ui" line="1089"/>
         <source>Paste the features in the clipboard; If the features&apos;id are already in the document, overwrite them.</source>
         <translation>クリップボードのフィーチャーを貼り付けます；もしフィーチャーIDがすでに文書にある場合は上書きされます。</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1536"/>
+        <location filename="../src/MainWindow.ui" line="1537"/>
         <source>Ctrl+V, F</source>
         <translation>Ctrl+V, F</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1099"/>
+        <location filename="../src/MainWindow.ui" line="1100"/>
         <source>OSM (XML)</source>
         <translation>OSM (XML)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1104"/>
+        <location filename="../src/MainWindow.ui" line="1105"/>
         <source>OSM (Binary)</source>
         <translation>OSM (バイナリー形式)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1112"/>
+        <location filename="../src/MainWindow.ui" line="1113"/>
         <source>Commit feature to the dirty layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1118"/>
+        <location filename="../src/MainWindow.ui" line="1119"/>
         <source>Commit the selected feature from a non-uploadable layer (e.g.Track or Extract) to the dirty layer, ready for upload</source>
         <translation>選択した要素をアップロードできないレイヤー(トラックや展開)から「変更されたレイヤー」に移して、アップロードできるようにする</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1123"/>
+        <location filename="../src/MainWindow.ui" line="1124"/>
         <source>GPX</source>
         <translation>GPX</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1128"/>
+        <location filename="../src/MainWindow.ui" line="1129"/>
         <source>KML</source>
         <translation>KML</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1133"/>
+        <location filename="../src/MainWindow.ui" line="1134"/>
         <source>Toggle Toolbar</source>
         <translation>ツールバーのトグル</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1139"/>
+        <location filename="../src/MainWindow.ui" line="1140"/>
         <source>Hide/Show the Toolbar</source>
         <translation>ツールバー枠の表示/非表示</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1144"/>
+        <location filename="../src/MainWindow.ui" line="1145"/>
         <source>Hide All</source>
         <translation>全て隠す</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1155"/>
+        <location filename="../src/MainWindow.ui" line="1156"/>
         <source>Ctrl+F</source>
         <translation>Ctrl+F</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1152"/>
+        <location filename="../src/MainWindow.ui" line="1153"/>
         <source>Show All</source>
         <translation>全て表示</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1163"/>
+        <location filename="../src/MainWindow.ui" line="1164"/>
         <source>&amp;Image layer</source>
         <translation>&amp;イメージレイヤー(&amp;I)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1168"/>
+        <location filename="../src/MainWindow.ui" line="1169"/>
         <source>Osmarender</source>
         <translation>Osmarender</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1181"/>
+        <location filename="../src/MainWindow.ui" line="1182"/>
         <source>Show track &amp;points</source>
         <translation>トラックポイントの表示(&amp;p)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1184"/>
+        <location filename="../src/MainWindow.ui" line="1185"/>
         <source>Ctrl+Alt+P</source>
         <translation>Ctrl+Alt+P</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1192"/>
+        <location filename="../src/MainWindow.ui" line="1193"/>
         <source>Show &amp;names</source>
         <translation>名前の表示(&amp;n)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1195"/>
+        <location filename="../src/MainWindow.ui" line="1196"/>
         <source>Ctrl+Alt+N</source>
         <translation>Ctrl+Alt+N</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1200"/>
+        <location filename="../src/MainWindow.ui" line="1201"/>
         <source>&amp;Start</source>
         <translation>開始(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1203"/>
+        <location filename="../src/MainWindow.ui" line="1204"/>
         <source>Start GPS</source>
         <translation>GPSの開始</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1208"/>
+        <location filename="../src/MainWindow.ui" line="1209"/>
         <source>&amp;Replay...</source>
         <translation>再生(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1211"/>
+        <location filename="../src/MainWindow.ui" line="1212"/>
         <source>Replay GPS</source>
         <translation>GPSの再生</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1219"/>
+        <location filename="../src/MainWindow.ui" line="1220"/>
         <source>&amp;GPS</source>
         <translation>&amp;GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1225"/>
+        <location filename="../src/MainWindow.ui" line="1226"/>
         <source>Hide/Show the GPS dock</source>
         <translation>GPS枠の表示/非表示</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1228"/>
+        <location filename="../src/MainWindow.ui" line="1229"/>
         <source>Ctrl+W</source>
         <translation>Ctrl+W</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1236"/>
+        <location filename="../src/MainWindow.ui" line="1237"/>
         <source>S&amp;top</source>
         <translation>ストップ(&amp;t)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1239"/>
+        <location filename="../src/MainWindow.ui" line="1240"/>
         <source>Stop GPS</source>
         <translation>GPSの停止</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1247"/>
+        <location filename="../src/MainWindow.ui" line="1248"/>
         <source>&amp;Center on GPS</source>
         <translation>GPS位置を中心にする(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1255"/>
+        <location filename="../src/MainWindow.ui" line="1256"/>
         <source>Show track &amp;segments</source>
         <translation>トラックの要素を表示(&amp;s)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1258"/>
+        <location filename="../src/MainWindow.ui" line="1259"/>
         <source>Ctrl+Alt+T</source>
         <translation>Ctrl+Alt+T</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1266"/>
+        <location filename="../src/MainWindow.ui" line="1267"/>
         <source>Show &amp;scale</source>
         <translation>スケールの表示(&amp;s)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1269"/>
+        <location filename="../src/MainWindow.ui" line="1270"/>
         <source>Ctrl+Alt+S</source>
         <translation>Ctrl+Alt+S</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1277"/>
+        <location filename="../src/MainWindow.ui" line="1278"/>
         <source>Show &amp;relations</source>
         <translation>関連の表示(&amp;r)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1280"/>
+        <location filename="../src/MainWindow.ui" line="1281"/>
         <source>Ctrl+Alt+R</source>
         <translation>Ctrl+Alt+R</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1288"/>
+        <location filename="../src/MainWindow.ui" line="1289"/>
         <source>Show roads background</source>
         <translation>道路の背景を表示</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1296"/>
+        <location filename="../src/MainWindow.ui" line="1297"/>
         <source>Show roads boundary</source>
         <translation>道路境界を標示</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1304"/>
+        <location filename="../src/MainWindow.ui" line="1305"/>
         <source>Show touchup</source>
         <translation>touchupを表示</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1318"/>
+        <location filename="../src/MainWindow.ui" line="1319"/>
         <source>Record</source>
         <translation>記録</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1321"/>
+        <location filename="../src/MainWindow.ui" line="1322"/>
         <source>Record GPS</source>
         <translation>GPS記録</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1332"/>
+        <location filename="../src/MainWindow.ui" line="1333"/>
         <source>Pause</source>
         <translation>一時停止</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1335"/>
+        <location filename="../src/MainWindow.ui" line="1336"/>
         <source>Pause GPS</source>
         <translation>GPSを一時停止</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1343"/>
+        <location filename="../src/MainWindow.ui" line="1344"/>
         <source>G&amp;eoImage</source>
         <translation>ジオイメージ(&amp;e)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1349"/>
+        <location filename="../src/MainWindow.ui" line="1350"/>
         <source>Hide/Show the GeoImage dock</source>
         <translation>ジオイメージ枠の表示/非表示</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1352"/>
+        <location filename="../src/MainWindow.ui" line="1353"/>
         <source>Ctrl+E</source>
         <translation>Ctrl+E</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1357"/>
+        <location filename="../src/MainWindow.ui" line="1358"/>
         <source>World OSB manager...</source>
         <translation>World OSB 管理...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1362"/>
+        <location filename="../src/MainWindow.ui" line="1363"/>
         <source>&amp;Shortcut Editor...</source>
         <translation>ショートカット編集(&amp;S)...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1372"/>
+        <location filename="../src/MainWindow.ui" line="1373"/>
         <source>&amp;Merge...</source>
         <translation>結合(&amp;M)...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1382"/>
+        <location filename="../src/MainWindow.ui" line="1383"/>
         <source>&amp;Add member</source>
         <translation>メンバー追加(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1387"/>
+        <location filename="../src/MainWindow.ui" line="1388"/>
         <source>&amp;Remove member</source>
         <translation>メンバー削除(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1395"/>
+        <location filename="../src/MainWindow.ui" line="1396"/>
         <source>&amp;Never</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1403"/>
+        <location filename="../src/MainWindow.ui" line="1404"/>
         <source>for &amp;Oneway roads</source>
         <translation>一方通行道路の(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1411"/>
+        <location filename="../src/MainWindow.ui" line="1412"/>
         <source>&amp;Always</source>
         <translation>常に(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1420"/>
+        <location filename="../src/MainWindow.ui" line="1421"/>
         <source>&amp;Detach</source>
         <translation>分離(&amp;D)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1423"/>
+        <location filename="../src/MainWindow.ui" line="1424"/>
         <source>Detach node from a road</source>
         <translation>道路からノードを切り離す</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1426"/>
+        <location filename="../src/MainWindow.ui" line="1427"/>
         <source>Detach a node from a Road</source>
         <translation>道路からノードを切り離す</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1438"/>
+        <location filename="../src/MainWindow.ui" line="1439"/>
         <source>&amp;Work Offline</source>
         <translation>オフライン作業(&amp;W)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1443"/>
+        <location filename="../src/MainWindow.ui" line="1444"/>
         <source>SVG</source>
         <translation>SVG</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1451"/>
+        <location filename="../src/MainWindow.ui" line="1452"/>
         <source>&amp;Styles</source>
         <translation>スタイル(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1457"/>
+        <location filename="../src/MainWindow.ui" line="1458"/>
         <source>Hide/Show the Styles dock</source>
         <translation>スタイル枠の表示/非表示</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1460"/>
+        <location filename="../src/MainWindow.ui" line="1461"/>
         <source>Ctrl+B</source>
         <translation>Ctrl+B</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1465"/>
+        <location filename="../src/MainWindow.ui" line="1466"/>
         <source>WMS Servers Editor...</source>
         <translation>WMSサーバの編集...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1470"/>
+        <location filename="../src/MainWindow.ui" line="1471"/>
         <source>TMS Servers Editor...</source>
         <translation>TMSサーバの編集...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1475"/>
+        <location filename="../src/MainWindow.ui" line="1476"/>
         <source>&amp;Reset Discardable dialogs status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1484"/>
+        <location filename="../src/MainWindow.ui" line="1485"/>
         <source>GPS Menu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1493"/>
+        <location filename="../src/MainWindow.ui" line="1494"/>
         <source>Camera</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1498"/>
+        <location filename="../src/MainWindow.ui" line="1499"/>
         <source>Create &amp;Junction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1546"/>
+        <location filename="../src/MainWindow.ui" line="1547"/>
         <source>Add street &amp;numbers (Karlsruhe scheme)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2787,17 +2783,17 @@ Do you want to do this now?</source>
         <translation>リレーションが修正されました。 %1</translation>
     </message>
     <message>
-        <location filename="../src/Maps/Road.cpp" line="725"/>
+        <location filename="../src/Maps/Road.cpp" line="792"/>
         <source>Delete Children.</source>
         <translation>子の削除</translation>
     </message>
     <message>
-        <location filename="../src/Maps/Road.cpp" line="726"/>
+        <location filename="../src/Maps/Road.cpp" line="793"/>
         <source>Do you want to delete the children nodes also?</source>
         <translation>子のノードも削除しますか？</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="711"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="713"/>
         <source>Remove member &apos;%1&apos; on %2</source>
         <translation>%2のメンバー&apos;%1&apos;の削除</translation>
     </message>
@@ -2819,12 +2815,12 @@ Do you want to do this now?</source>
 そうしますか？</translation>
     </message>
     <message>
-        <location filename="../src/TagModel.cpp" line="159"/>
+        <location filename="../src/TagModel.cpp" line="162"/>
         <source>Set Tags on multiple features</source>
         <translation>複数のフィーチャーのタグを設定</translation>
     </message>
     <message>
-        <location filename="../src/TagModel.cpp" line="161"/>
+        <location filename="../src/TagModel.cpp" line="164"/>
         <source>Set Tags on %1</source>
         <translation>%1にタグを設定</translation>
     </message>
@@ -2839,7 +2835,7 @@ Do you want to do this now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreateNodeInteraction.cpp" line="28"/>
+        <location filename="../src/Interaction/CreateNodeInteraction.cpp" line="31"/>
         <source>Create node Interaction</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2869,27 +2865,27 @@ Do you want to do this now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Interaction/EditInteraction.cpp" line="65"/>
+        <location filename="../src/Interaction/EditInteraction.cpp" line="69"/>
         <source>Edit Interaction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="107"/>
+        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="112"/>
         <source>Move Nodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="109"/>
+        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="116"/>
         <source>Move Node %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="33"/>
+        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="34"/>
         <source>LEFT-CLICK to select;LEFT-DRAG to move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="38"/>
+        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="39"/>
         <source>Move node Interaction</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2919,89 +2915,94 @@ Do you want to do this now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1324"/>
+        <location filename="../src/MainWindow.cpp" line="1332"/>
         <source>Create Polygon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1324"/>
+        <location filename="../src/MainWindow.cpp" line="1332"/>
         <source>Specify the number of sides</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1408"/>
+        <location filename="../src/MainWindow.cpp" line="1416"/>
         <source>Force Feature upload</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1109"/>
+        <location filename="../src/MainWindow.ui" line="1110"/>
         <source>&amp;Force Upload</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1510"/>
+        <location filename="../src/MainWindow.ui" line="1511"/>
         <source>Rotate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1513"/>
+        <location filename="../src/MainWindow.ui" line="1514"/>
         <source>Ctrl+A</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1518"/>
+        <location filename="../src/MainWindow.ui" line="1519"/>
         <source>Polygon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1523"/>
+        <location filename="../src/MainWindow.ui" line="1524"/>
         <source>Rectangle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1528"/>
+        <location filename="../src/MainWindow.ui" line="1529"/>
         <source>Add new Image layer</source>
         <translation>新しいイメージレイヤーを追加する</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/EditInteraction.cpp" line="58"/>
+        <location filename="../src/Interaction/EditInteraction.cpp" line="62"/>
         <source>LEFT-CLICK to select;RIGHT-CLICK to pan;CTRL-LEFT-CLICK to toggle selection;SHIFT-LEFT-CLICK to add to selection;LEFT-DRAG for area selection;CTRL-RIGHT-DRAG for zoom;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Interaction/EditInteraction.cpp" line="60"/>
+        <location filename="../src/Interaction/EditInteraction.cpp" line="64"/>
         <source>CLICK to select/move;CTRL-CLICK to toggle selection;SHIFT-CLICK to add to selection;SHIFT-DRAG for area selection;CTRL-DRAG for zoom;</source>
         <translation>クリック=選択/移動;CTRL-クリック=選択のトグル;SHIFT-クリック=選択に追加;SHIFT-ドラッグ=エリア選択;CTRL-ドラッグ=ズーム;</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="516"/>
+        <location filename="../src/MainWindow.cpp" line="517"/>
         <source>Clipboard do not contain valid data.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1425"/>
+        <location filename="../src/MainWindow.cpp" line="1433"/>
         <source>Multiple intersection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1426"/>
+        <location filename="../src/MainWindow.cpp" line="1434"/>
         <source>Those roads have multiple intersections.
 Do you still want to create a junction for each one (Unwanted junctions can still be deleted afterhand)?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1533"/>
+        <location filename="../src/MainWindow.ui" line="1534"/>
         <source>Paste Feature(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1541"/>
+        <location filename="../src/MainWindow.ui" line="1542"/>
         <source>Features</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2701"/>
+        <location filename="../src/MainWindow.cpp" line="2709"/>
         <source>Warning! Could not load the Merkaartor translations for the &quot;%1&quot; language. Switching to default english.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1555"/>
+        <source>Show &amp;virtual nodes</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3026,27 +3027,27 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
 <context>
     <name>MapFeature</name>
     <message>
-        <location filename="../src/Maps/MapFeature.cpp" line="738"/>
+        <location filename="../src/Maps/MapFeature.cpp" line="751"/>
         <source>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; by &lt;b&gt;%2&lt;/b&gt;</source>
         <translation>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; by &lt;b&gt;%2&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/Maps/MapFeature.cpp" line="740"/>
+        <location filename="../src/Maps/MapFeature.cpp" line="753"/>
         <source>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt;</source>
         <translation>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/Maps/MapFeature.cpp" line="747"/>
+        <location filename="../src/Maps/MapFeature.cpp" line="760"/>
         <source>History</source>
         <translation>履歴</translation>
     </message>
     <message>
-        <location filename="../src/Maps/MapFeature.cpp" line="750"/>
+        <location filename="../src/Maps/MapFeature.cpp" line="763"/>
         <source>Referenced by ways</source>
         <translation>ウエイから参照</translation>
     </message>
     <message>
-        <location filename="../src/Maps/MapFeature.cpp" line="753"/>
+        <location filename="../src/Maps/MapFeature.cpp" line="766"/>
         <source>Referenced by relation</source>
         <translation>関連から参照</translation>
     </message>
@@ -3056,12 +3057,12 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
         <translation>サイズ</translation>
     </message>
     <message>
-        <location filename="../src/Maps/Road.cpp" line="1042"/>
+        <location filename="../src/Maps/Road.cpp" line="1112"/>
         <source>Topleft</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Maps/Road.cpp" line="1044"/>
+        <location filename="../src/Maps/Road.cpp" line="1114"/>
         <source>Botright</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3081,72 +3082,72 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
         <translation>メンバー</translation>
     </message>
     <message>
-        <location filename="../src/Maps/Road.cpp" line="1037"/>
+        <location filename="../src/Maps/Road.cpp" line="1107"/>
         <source>Length</source>
         <translation>距離</translation>
     </message>
     <message>
-        <location filename="../src/Maps/Road.cpp" line="1039"/>
+        <location filename="../src/Maps/Road.cpp" line="1109"/>
         <source>Size</source>
         <translation>サイズ</translation>
     </message>
     <message>
-        <location filename="../src/Maps/Road.cpp" line="1039"/>
+        <location filename="../src/Maps/Road.cpp" line="1109"/>
         <source>%1 nodes</source>
         <translation>%1 ノード</translation>
     </message>
     <message>
-        <location filename="../src/Maps/Road.cpp" line="1046"/>
+        <location filename="../src/Maps/Road.cpp" line="1116"/>
         <source>Way</source>
         <translation>ウエイ</translation>
     </message>
     <message>
-        <location filename="../src/Maps/Road.cpp" line="1046"/>
+        <location filename="../src/Maps/Road.cpp" line="1116"/>
         <source>Area</source>
         <translation>エリア</translation>
     </message>
     <message>
-        <location filename="../src/Maps/TrackPoint.cpp" line="463"/>
+        <location filename="../src/Maps/TrackPoint.cpp" line="485"/>
         <source>timestamp</source>
         <translation>タイムスタンプ</translation>
     </message>
     <message>
-        <location filename="../src/Maps/TrackPoint.cpp" line="464"/>
+        <location filename="../src/Maps/TrackPoint.cpp" line="486"/>
         <source>coord</source>
         <translation>coord</translation>
     </message>
     <message>
-        <location filename="../src/Maps/TrackPoint.cpp" line="467"/>
+        <location filename="../src/Maps/TrackPoint.cpp" line="489"/>
         <source>elevation</source>
         <translation>高度</translation>
     </message>
     <message>
-        <location filename="../src/Maps/TrackPoint.cpp" line="469"/>
+        <location filename="../src/Maps/TrackPoint.cpp" line="491"/>
         <source>speed</source>
         <translation>速度</translation>
     </message>
     <message>
-        <location filename="../src/Maps/TrackPoint.cpp" line="479"/>
+        <location filename="../src/Maps/TrackPoint.cpp" line="501"/>
         <source>description</source>
         <translation>記述</translation>
     </message>
     <message>
-        <location filename="../src/Maps/TrackPoint.cpp" line="482"/>
+        <location filename="../src/Maps/TrackPoint.cpp" line="504"/>
         <source>comment</source>
         <translation>コメント</translation>
     </message>
     <message>
-        <location filename="../src/Maps/TrackPoint.cpp" line="476"/>
+        <location filename="../src/Maps/TrackPoint.cpp" line="498"/>
         <source>Waypoint</source>
         <translation>ウエイポイント</translation>
     </message>
     <message>
-        <location filename="../src/Maps/TrackPoint.cpp" line="485"/>
+        <location filename="../src/Maps/TrackPoint.cpp" line="507"/>
         <source>layer</source>
         <translation>レイヤー</translation>
     </message>
     <message>
-        <location filename="../src/Maps/TrackPoint.cpp" line="490"/>
+        <location filename="../src/Maps/TrackPoint.cpp" line="512"/>
         <source>Node</source>
         <translation>ノード</translation>
     </message>
@@ -3169,47 +3170,47 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
 <context>
     <name>MapView</name>
     <message>
-        <location filename="../src/MapView.cpp" line="252"/>
+        <location filename="../src/MapView.cpp" line="268"/>
         <source>%1 m</source>
         <translation>%1 m</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="254"/>
+        <location filename="../src/MapView.cpp" line="270"/>
         <source>%1 km</source>
         <translation>%1 km</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="941"/>
+        <location filename="../src/MapView.cpp" line="958"/>
         <source>Feature</source>
         <translation>フィーチャ</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="950"/>
+        <location filename="../src/MapView.cpp" line="967"/>
         <source>Node</source>
         <translation>ノード</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="958"/>
+        <location filename="../src/MapView.cpp" line="975"/>
         <source>Road</source>
         <translation>道路</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="966"/>
+        <location filename="../src/MapView.cpp" line="983"/>
         <source>Relation</source>
         <translation>関連</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="1057"/>
+        <location filename="../src/MapView.cpp" line="1074"/>
         <source>Add trackpoint position to image</source>
         <translation>井マージにトラックポイント位置を追加します。</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="1059"/>
+        <location filename="../src/MapView.cpp" line="1076"/>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="227"/>
+        <location filename="../src/MapView.cpp" line="239"/>
         <source>%1ms;ppm:%2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3647,59 +3648,59 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
         <translation>Russian</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="566"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="573"/>
         <source>Custom styles directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="652"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="659"/>
         <source>Tag Template</source>
         <translation>タグのテンプレート</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="368"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="370"/>
         <source>Merkaartor tag template (*.mat)</source>
         <translation>Merkaartorタグテンプレート(*.mat)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="438"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="440"/>
         <source>Tool already exists</source>
         <translation>ツールがすでに存在します</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="439"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="441"/>
         <source>A tool of this name already exists.
 Please select another name or click the &lt;Apply&gt; button if you want to modify the existing one</source>
         <translation>この名前のツールはすでに存在しています。
 他の名前を選択するか、既存の名前を変更して&lt;適用&gt;ボタンをおしてください。</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="458"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="460"/>
         <source>Cannot delete preset tool</source>
         <translation>プリセットツールを削除できません</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="459"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="461"/>
         <source>Cannot delete preset tool &quot;%1&quot;</source>
         <translation>プリセットツール&quot;%1&quot;を削除できません</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="477"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="479"/>
         <source>Cannot modify preset tool name</source>
         <translation>プリセットツールの名前を変更できません</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="478"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="480"/>
         <source>Cannot modify preset tool &quot;%1&quot;&apos;s name</source>
         <translation>プリセットツールの&quot;%1&quot;の名前を変更できません。</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="503"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="505"/>
         <source>Select tool executable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="511"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="513"/>
         <source>Select Log directory</source>
         <translation>ログディレクトリを選択</translation>
     </message>
@@ -3764,278 +3765,283 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
         <translation>カスタムQtスタイルを使う</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="207"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="214"/>
         <source>Colors</source>
         <translation>配色</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="213"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="220"/>
         <source>Background</source>
         <translation>背景</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1286"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1293"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="241"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="248"/>
         <source>Overwrite style</source>
         <translation>スタイルの上書き</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="263"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="270"/>
         <source>Hover</source>
         <translation>上にある時</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="506"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="513"/>
         <source>Pixels</source>
         <translation>ピクセル</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="369"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="376"/>
         <source>Focus</source>
         <translation>フォーカス</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="422"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="429"/>
         <source>Relations</source>
         <translation>関連</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="552"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="559"/>
         <source>Style</source>
         <translation>スタイル</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="558"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="565"/>
         <source>Map style</source>
         <translation>マップスタイル</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="600"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="607"/>
         <source>Current style</source>
         <translation>現在のスタイル</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="622"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="629"/>
         <source>Disable styles for track layers</source>
         <translation>トラックレイヤーのスタイルを無効にする</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="646"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="653"/>
         <source>Template</source>
         <translation>テンプレート</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="660"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="667"/>
         <source>Built-in</source>
         <translation>内蔵</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="684"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="691"/>
         <source>Custom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="733"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="740"/>
         <source>Data</source>
         <translation>データ</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="745"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="752"/>
         <source>OSM</source>
         <translation>OSM</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="753"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="760"/>
         <source>Website:</source>
         <translation>Webサイト:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="763"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="770"/>
         <source>Username:</source>
         <translation>ユーザ名:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1055"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1062"/>
         <source>Password:</source>
         <translation>パスワード：</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="792"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="799"/>
         <source>Documents</source>
         <translation>文書</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="798"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="805"/>
         <source>Autosave documents after upload</source>
         <translation>アップロード後文書を自動保存</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="808"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="815"/>
         <source>Tracks</source>
         <translation>トラック</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="816"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="823"/>
         <source>Automatically extract tracks on open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="823"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="830"/>
         <source>Track layers readonly by default</source>
         <translation>トラックレイヤーは、既定で読み込み専用です。</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="834"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="841"/>
         <source>Don&apos;t connect GPX nodes separated by more than (in km; 0 to disable)</source>
         <translation>次以上離れたGPXノードは接続しない（単位km; 0で無効）</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="867"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="874"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="974"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="981"/>
         <source>Save NMEA log</source>
         <translation>NMEAログを保存</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1015"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1022"/>
         <source>Set system time to GPS</source>
         <translation>システム時間をGPSで合わせる</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1036"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1043"/>
         <source>Network</source>
         <translation>ネットワーク</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1042"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1049"/>
         <source>Proxy settings</source>
         <translation>プロキシー設定</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1048"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1055"/>
         <source>Use Proxy</source>
         <translation>プロキシーを使う</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1078"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1085"/>
         <source>User:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1085"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1092"/>
         <source>Port:</source>
         <translation>ポート：</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1092"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1099"/>
         <source>Host:</source>
         <translation>ホスト：</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1155"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1162"/>
         <source>Background Image</source>
         <translation>背景画像</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1161"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1168"/>
         <source>Tiles Caching (not active for Yahoo! due to legal restrictions)</source>
         <translation>タイルキャッシング(法的な制限のためにYahoo!では無効です)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1167"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1174"/>
         <source>Cache directory</source>
         <translation>キャッシュディレクトリ</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1177"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1184"/>
         <source>Cache size (in Mb; 0 to disable)</source>
         <translation>キャッシュサイズ(Mb；０で無効)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1196"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1203"/>
         <source>Map Adapter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1202"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1209"/>
         <source>Enable use of OSB background (needs new document)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1231"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1238"/>
         <source>Tools</source>
         <translation>ツール</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1249"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1256"/>
         <source>Name:</source>
         <translation>地名：</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1259"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1266"/>
         <source>Path:</source>
         <translation>パス：</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1308"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1315"/>
         <source>Apply</source>
         <translation>適用</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1315"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1322"/>
         <source>Add</source>
         <translation>追加</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1322"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1329"/>
         <source>Remove</source>
         <translation>削除</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="316"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="323"/>
         <source>Highlight</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="475"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="482"/>
         <source>GPX track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="513"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="520"/>
         <source>Use simple GPX track appearance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="873"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="880"/>
         <source>GPS input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="879"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="886"/>
         <source>gpsd</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="886"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="893"/>
         <source>Serial</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="946"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="953"/>
         <source>Port</source>
         <translation>ポート</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="936"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="943"/>
         <source>Host</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="196"/>
+        <source>Use Virtual nodes (new session required)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4052,47 +4058,47 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
         <translation>%1/%2 の選択したアイテム</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="402"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="404"/>
         <source>Selected items</source>
         <translation>選択したアイテム</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="411"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="413"/>
         <source>Properties - Multiple elements</source>
         <translation>プロパティ - 複数要素</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="427"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="429"/>
         <source>Properties - Trackpoint</source>
         <translation>プロパティ - トラックポイント</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="441"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="443"/>
         <source>Properties - Road</source>
         <translation>プロパティ - 道路</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="459"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="461"/>
         <source>Properties - Relation</source>
         <translation>プロパティ - 関連</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="997"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="999"/>
         <source>Properties</source>
         <translation>プロパティ</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="998"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="1000"/>
         <source>Center map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="999"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="1001"/>
         <source>Center &amp;&amp; Zoom map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="1000"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="1002"/>
         <source>Select member</source>
         <translation type="unfinished"></translation>
     </message>

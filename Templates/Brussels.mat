@@ -11,8 +11,12 @@
    <description locale="fr" >Nom</description>
    <description locale="it" >Nome</description>
    <description locale="ja" >名前</description>
+   <description locale="nb" >Navn</description>
+   <description locale="nn" >Namn</description>
    <description locale="pl" >Nazwa</description>
    <description locale="pt" >Nome</description>
+   <description locale="ru" >Название</description>
+   <description locale="sk" >Meno</description>
    <description locale="sl" >Ime</description>
    <description locale="sv" >Namn</description>
    <description locale="uk" >Назва</description>
@@ -28,8 +32,12 @@
    <description locale="fr" >Nom (français)</description>
    <description locale="it" >Nome (francese)</description>
    <description locale="ja" >名前（フランス語)</description>
+   <description locale="nb" >Navn (fransk)</description>
+   <description locale="nn" >Namn (fransk)</description>
    <description locale="pl" >Nazwa (francuska)</description>
    <description locale="pt" >Name (francês)</description>
+   <description locale="ru" >Название (фран.)</description>
+   <description locale="sk" >Meno (francúzske)</description>
    <description locale="sv" >Namn (franska)</description>
    <description locale="uk" >Назва (французською)</description>
   </widget>
@@ -42,7 +50,11 @@
    <description locale="fr" >Nom (néérlandais)</description>
    <description locale="it" >Nome (olandese)</description>
    <description locale="ja" >名前（ドイツ語）</description>
+   <description locale="nb" >Navn (nederlansk)</description>
+   <description locale="nn" >Namn (nederlansk)</description>
    <description locale="pl" >Nazwa (belgijska)</description>
+   <description locale="ru" >Название (нем.)</description>
+   <description locale="sk" >Meno (holandské)</description>
    <description locale="sv" >Namn (nederländska)</description>
    <description locale="uk" >Назва (датською)</description>
   </widget>
@@ -51,9 +63,11 @@
   <description locale="en" >Brussels Ways</description>
   <description locale="cs" >[Belgické cesty]</description>
   <description locale="de" >Brüsseler Wege</description>
+  <description locale="es" >Camino de bruselas</description>
   <description locale="fr" >Rues de Bruxelles</description>
   <description locale="it" >Strade di Bruxelles</description>
   <description locale="pl" >Drogi Brukselskie</description>
+  <description locale="ru" >Брюссельские линии</description>
   <description locale="sv" >Brysselväg</description>
   <selector expr="not [name:fr] is _NULL_ and not [name:nl] is _NULL_" />
   <widgetref id="name_bxl" />

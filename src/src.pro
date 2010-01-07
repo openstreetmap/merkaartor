@@ -94,6 +94,7 @@ TRANSLATIONS += \
 	../translations/merkaartor_pl.ts \
 	../translations/merkaartor_pt.ts \
 	../translations/merkaartor_ru.ts \
+	../translations/merkaartor_sk.ts \
 	../translations/merkaartor_sv.ts
 
 BINTRANSLATIONS += \
@@ -108,6 +109,7 @@ BINTRANSLATIONS += \
 	../translations/merkaartor_pl.qm \
 	../translations/merkaartor_pt.qm \
 	../translations/merkaartor_ru.qm \
+	../translations/merkaartor_sk.qm \
 	../translations/merkaartor_sv.qm
 
 #Include file(s)

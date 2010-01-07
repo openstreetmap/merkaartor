@@ -3,73 +3,73 @@
 <context>
     <name></name>
     <message>
-        <location filename="../src/MainWindow.cpp" line="759"/>
+        <location filename="../src/MainWindow.cpp" line="760"/>
         <source>Supported formats</source>
         <translation>Format som stödjs</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="748"/>
+        <location filename="../src/MainWindow.cpp" line="749"/>
         <source>Merkaartor document (*.mdc)
 </source>
         <translation>Merkaartor-dokument (*.mdc)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="761"/>
+        <location filename="../src/MainWindow.cpp" line="762"/>
         <source>GPS Exchange format (*.gpx)
 </source>
         <translation>GPS utbytesformat (*.gpx)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="762"/>
+        <location filename="../src/MainWindow.cpp" line="763"/>
         <source>OpenStreetMap format (*.osm)
 </source>
         <translation>OpenStreetMap filformat (*.osm)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="763"/>
+        <location filename="../src/MainWindow.cpp" line="764"/>
         <source>OpenStreetMap binary format (*.osb)
 </source>
         <translation>OpenStreetMap binärt filformat (*.osb)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="764"/>
+        <location filename="../src/MainWindow.cpp" line="765"/>
         <source>Noni GPSPlot format (*.ngt)
 </source>
         <translation>Noni GPSPlot-format (*.ngt)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="765"/>
+        <location filename="../src/MainWindow.cpp" line="766"/>
         <source>NMEA GPS log format (*.nmea *.nma)
 </source>
         <translation>NMEA GPS logg-format (*.nmea, *.nma)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="766"/>
+        <location filename="../src/MainWindow.cpp" line="767"/>
         <source>KML file (*.kml)
 </source>
         <translation>KML-fil (*.kml)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="767"/>
+        <location filename="../src/MainWindow.cpp" line="768"/>
         <source>ESRI Shapefile (*.shp)
 </source>
         <translation>ESRI Shapefil (*.shp)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="769"/>
+        <location filename="../src/MainWindow.cpp" line="770"/>
         <source>All Files (*)</source>
         <translation>Alla filer (*)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="755"/>
+        <location filename="../src/MainWindow.cpp" line="756"/>
         <source>Geotagged images (*.jpg)
 </source>
         <translation>Geotaggad bild (*jpg)
@@ -79,12 +79,12 @@
 <context>
     <name>AboutDialog</name>
     <message>
-        <location filename="../src/AboutDialog.ui" line="13"/>
+        <location filename="../src/AboutDialog.ui" line="14"/>
         <source>About Merkaartor</source>
         <translation>Om Merkaartor</translation>
     </message>
     <message>
-        <location filename="../src/AboutDialog.ui" line="23"/>
+        <location filename="../src/AboutDialog.ui" line="24"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -100,7 +100,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%1%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../src/AboutDialog.ui" line="35"/>
+        <location filename="../src/AboutDialog.ui" line="36"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -115,42 +115,38 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%1&lt;/span&gt; (byggd med &lt;span style=&quot; font-weight:600;&quot;&gt;%2&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../src/AboutDialog.ui" line="87"/>
+        <location filename="../src/AboutDialog.ui" line="88"/>
         <source>TextLabel</source>
         <translation>Textetikett</translation>
     </message>
     <message>
-        <location filename="../src/AboutDialog.ui" line="96"/>
+        <location filename="../src/AboutDialog.ui" line="97"/>
         <source>Copyright Bart Vanhauwaert, Chris Browet and others, 2006-2009</source>
         <translation>Upphovsrätt Bart Vanhauwaert, Chris Browet med flera, 2006-2009</translation>
     </message>
     <message>
-        <location filename="../src/AboutDialog.ui" line="103"/>
+        <location filename="../src/AboutDialog.ui" line="104"/>
         <source>This program is licensed under the GNU Public License v2</source>
         <translation>Detta program är licenserat med GNU Public License v2</translation>
     </message>
     <message>
-        <location filename="../src/AboutDialog.ui" line="110"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://merkaartor.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://merkaartor.org/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://merkaartor.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://merkaartor.org/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <location filename="../src/AboutDialog.ui" line="124"/>
+        <location filename="../src/AboutDialog.ui" line="125"/>
         <source>Changelog</source>
         <translation>Ändringslogg</translation>
     </message>
     <message>
-        <location filename="../src/AboutDialog.ui" line="180"/>
+        <location filename="../src/AboutDialog.ui" line="181"/>
         <source>OK</source>
         <translation>OK</translation>
+    </message>
+    <message>
+        <location filename="../src/AboutDialog.ui" line="111"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://www.merkaartor.org&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.merkaartor.org&lt;/span&gt;&lt;/a&gt; or &lt;a href=&quot;http://merkaartor.yuio.de&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;http://merkaartor.yuio.de&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -340,86 +336,86 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>DirtyListExecutor</name>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="571"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="572"/>
         <source>ADD road %1</source>
         <translation>LÄGG TILL väg %1</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="601"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="602"/>
         <source>ADD trackpoint %1</source>
         <translation>LÄGG TILL spårpunkt %1</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="542"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="543"/>
         <source>ADD relation %1</source>
         <translation>LÄGG TILL relation %1</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="691"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="692"/>
         <source>UPDATE trackpoint %1</source>
         <translation>UPDATERA spårpunkt %1</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="632"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="633"/>
         <source>UPDATE relation %1</source>
         <translation>UPDATERA relation %1</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="662"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="663"/>
         <source>UPDATE road %1</source>
         <translation>UPDATERA väg %1</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="722"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="723"/>
         <source>REMOVE trackpoint %1</source>
         <translation>TA BORT spårpunkt %1</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="747"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="748"/>
         <source>REMOVE road %1</source>
         <translation>TA BORT väg %1</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="772"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="773"/>
         <source>REMOVE relation %1</source>
         <translation>TA BORT relation %1</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="453"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="454"/>
         <source>Error uploading request</source>
         <translation>Fel vid uppladdningsbegäran</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="431"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="432"/>
         <source>Please check your username and password in the Preferences menu</source>
         <translation>Kontrollera ditt användarnamn och lösenord i menyn för inställningar</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="454"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="455"/>
         <source>There was an error uploading this request (%1)
 Server message is &apos;%2&apos;</source>
         <translation>Ett fel inträffade när den här förfrågan laddades upp (%1)
 Meddelande från servern: %2</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="436"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="437"/>
         <source>
 API message is &apos;%1&apos;</source>
         <translation>
 API-meddelande är &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="469"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="470"/>
         <source>Uploading changes...</source>
         <translation>Laddar upp ändringar...</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="494"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="495"/>
         <source>OPEN changeset</source>
         <translation>ÖPPNA ändringsset</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="522"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="523"/>
         <source>CLOSE changeset</source>
         <translation>STÄNG ändringsset</translation>
     </message>
@@ -1170,14 +1166,14 @@ Do you still want to use it?</source>
 <context>
     <name>Main</name>
     <message>
-        <location filename="../src/Main.cpp" line="151"/>
+        <location filename="../src/Main.cpp" line="155"/>
         <source>Merkaartor v%1%2
 Loading plugins...</source>
         <translation>Merkaartor v%1%2
 Laddar insticksprogram...</translation>
     </message>
     <message>
-        <location filename="../src/Main.cpp" line="183"/>
+        <location filename="../src/Main.cpp" line="187"/>
         <source>Merkaartor v%1%2
 Initializing...</source>
         <translation>Merkaartor v%1%2
@@ -1197,17 +1193,17 @@ Initiliserar...</translation>
         <translation>Sätt Tagg &apos;%1=%2&apos; för %3</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="677"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="679"/>
         <source>Clear Tag &apos;%1&apos; on %2</source>
         <translation>Rensa tagg &apos;%1&apos; från %2</translation>
     </message>
     <message>
-        <location filename="../src/Command/TrackPointCommands.cpp" line="108"/>
+        <location filename="../src/Command/TrackPointCommands.cpp" line="109"/>
         <source>Move node %1</source>
         <translation>Flytta nod %1</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="711"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="713"/>
         <source>Remove member &apos;%1&apos; on %2</source>
         <translation>Ta bort medlem &apos;%1&apos; från %2</translation>
     </message>
@@ -1267,17 +1263,17 @@ Initiliserar...</translation>
         <translation>Skapa dubbelväg Väg %1</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreateNodeInteraction.cpp" line="28"/>
+        <location filename="../src/Interaction/CreateNodeInteraction.cpp" line="31"/>
         <source>Create node Interaction</source>
         <translation>Skapa nod-interaktion</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreateNodeInteraction.cpp" line="48"/>
+        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="201"/>
         <source>Create node in Road: %1</source>
         <translation>Skapa nod för väg: %1</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreateNodeInteraction.cpp" line="64"/>
+        <location filename="../src/Interaction/CreateNodeInteraction.cpp" line="100"/>
         <source>Create point %1</source>
         <translation>Skapa punkt %1</translation>
     </message>
@@ -1332,62 +1328,62 @@ Initiliserar...</translation>
         <translation>Lägg till Nod %1 till Väg %2</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/EditInteraction.cpp" line="58"/>
+        <location filename="../src/Interaction/EditInteraction.cpp" line="62"/>
         <source>LEFT-CLICK to select;RIGHT-CLICK to pan;CTRL-LEFT-CLICK to toggle selection;SHIFT-LEFT-CLICK to add to selection;LEFT-DRAG for area selection;CTRL-RIGHT-DRAG for zoom;</source>
         <translation>VÄNSTERKLCKA för att välja; HÖGERKLICKA för att panorera; CTRL-VÄNSTERKLICKA för att växla val; SHIFT-VÄNSTERKLICKA för att lägga till val; VÄNSTER-DRAG för ytval; CTRL-HÖGERDRAG för att zooma;</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/EditInteraction.cpp" line="60"/>
+        <location filename="../src/Interaction/EditInteraction.cpp" line="64"/>
         <source>CLICK to select/move;CTRL-CLICK to toggle selection;SHIFT-CLICK to add to selection;SHIFT-DRAG for area selection;CTRL-DRAG for zoom;</source>
         <translation>KLICKA för att välja/flytta;CTRL-KLICKA för att växla val;SHIFT-KLICKA för att lägga till val;SHIFT-DRA för yturval;CTRL-DRA för att zooma;</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/EditInteraction.cpp" line="65"/>
+        <location filename="../src/Interaction/EditInteraction.cpp" line="69"/>
         <source>Edit Interaction</source>
         <translation>Redigera-interaktion</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="107"/>
+        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="112"/>
         <source>Move Nodes</source>
         <translation>Flytta noder</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="109"/>
+        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="116"/>
         <source>Move Node %1</source>
         <translation>Flytta nod %1</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="147"/>
+        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="156"/>
         <source>Nodes at the same position found.</source>
         <translation>Noder vid samma position funna</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="148"/>
+        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="157"/>
         <source>Do you want to merge all nodes at the drop position?</source>
         <translation>Vill du slå ihop alla noder vid punkten där du släppte?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1474"/>
+        <location filename="../src/MainWindow.cpp" line="1482"/>
         <source>Merge Nodes into %1</source>
         <translation>Slå ihop noder till %1</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/EditInteraction.cpp" line="397"/>
+        <location filename="../src/Interaction/EditInteraction.cpp" line="238"/>
         <source>Remove feature %1</source>
         <translation>Ta bort tecken %1</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/EditInteraction.cpp" line="427"/>
+        <location filename="../src/Interaction/EditInteraction.cpp" line="268"/>
         <source>Reverse Road %1</source>
         <translation>Vänd riktning på väg %1</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="33"/>
+        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="34"/>
         <source>LEFT-CLICK to select;LEFT-DRAG to move</source>
         <translation>VÄNSTERKLICKA för att välja; VÄNSTERDRAG för att flytta</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="38"/>
+        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="39"/>
         <source>Move node Interaction</source>
         <translation>Flytta nodinteraktion</translation>
     </message>
@@ -1422,47 +1418,47 @@ Initiliserar...</translation>
         <translation>ruta %v / %m</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="286"/>
+        <location filename="../src/MainWindow.cpp" line="287"/>
         <source>Properties...</source>
         <translation>Egenskaper...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="306"/>
+        <location filename="../src/MainWindow.cpp" line="307"/>
         <source>Cannot load Projections file</source>
         <translation>Kan inte ladda projektionsfil</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="306"/>
+        <location filename="../src/MainWindow.cpp" line="307"/>
         <source>&quot;Projections.xml&quot; could not be opened anywhere. Aborting.</source>
         <translation>&quot;Projectons.xml&quot; kunde inte öppnas någonstans. Avbryter.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="314"/>
+        <location filename="../src/MainWindow.cpp" line="315"/>
         <source>Low</source>
         <translation>Låg</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="314"/>
+        <location filename="../src/MainWindow.cpp" line="315"/>
         <source>High</source>
         <translation>Hög</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="314"/>
+        <location filename="../src/MainWindow.cpp" line="315"/>
         <source>Opaque</source>
         <translation>Ogenomskinlig</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="516"/>
+        <location filename="../src/MainWindow.cpp" line="517"/>
         <source>Clipboard invalid</source>
         <translation>Urklipp ogiltig</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="516"/>
+        <location filename="../src/MainWindow.cpp" line="517"/>
         <source>Clipboard do not contain valid data.</source>
         <translation>Urklipp innehåller inte giltiga data</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="773"/>
+        <location filename="../src/MainWindow.cpp" line="774"/>
         <source>Open track file</source>
         <translation>Öppna spårfil</translation>
     </message>
@@ -1472,29 +1468,29 @@ Initiliserar...</translation>
         <translation>Osparade ändringar</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="801"/>
+        <location filename="../src/MainWindow.cpp" line="802"/>
         <source>The current map contains unsaved changes that will be lost when starting a new one.
 Do you want to cancel starting a new map or continue and discard the old changes?</source>
         <translation>Den aktuella kartan innehåller osparade ändringar som kommer förloras när en ny skapas.
 Vill du avbryta skapandet av en ny karta eller fortsätta och förkasta ändringarna?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="828"/>
+        <location filename="../src/MainWindow.cpp" line="829"/>
         <source>Waypoints</source>
         <translation>Vägpunkter</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="848"/>
+        <location filename="../src/MainWindow.cpp" line="849"/>
         <source>Track %1</source>
         <translation>Spår %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="886"/>
+        <location filename="../src/MainWindow.cpp" line="887"/>
         <source>Big Fat Copyright Warning</source>
         <translation>Stor Fet Varning Angående Upphovsrätt</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="900"/>
+        <location filename="../src/MainWindow.cpp" line="901"/>
         <source>You are trying to import a KML file. Please be aware that:
 
  - You cannot import to OSM a KML file created from Google Earth. While you might
@@ -1522,39 +1518,39 @@ Om du är osäker, vänligen fråga på OpenStreetMaps mailinglistor &quot;legal
 Är du helt säker på att upphovsrätten för denna KML-fil tillåter att den importeras till OSM?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="939"/>
+        <location filename="../src/MainWindow.cpp" line="940"/>
         <source>No valid file</source>
         <translation>Ingen giltig fil</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1812"/>
+        <location filename="../src/MainWindow.cpp" line="1820"/>
         <source>%1 could not be opened.</source>
         <translation>%1 kunde inte öppnas</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1049"/>
+        <location filename="../src/MainWindow.cpp" line="1050"/>
         <source>Open track files</source>
         <translation>Öppna spårfiler</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1061"/>
+        <location filename="../src/MainWindow.cpp" line="1062"/>
         <source>Old Qt version detected</source>
         <translation>Gammal version av Qt upptäckt</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1065"/>
+        <location filename="../src/MainWindow.cpp" line="1066"/>
         <source>Your setup uses Qt %1, which contains various known errors in uploading data to OpenStreetMap leading to 401 server response codes. Are you sure you want to continue (which is not recommended).
 For more information see http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor</source>
         <translation>Din installation använder Qt %1, vilket innehåller en del kända fel med uppladdning till OpenStreetMap,vilket leder till 401-felmeddelanden från servern. Är du säker på att du vill fortsätta (ej rekommenderat).
 För mer information se http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor (på engelska)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1071"/>
+        <location filename="../src/MainWindow.cpp" line="1072"/>
         <source>Upload OSM</source>
         <translation>Ladda upp OSM</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1072"/>
+        <location filename="../src/MainWindow.cpp" line="1073"/>
         <source>You don&apos;t seem to have specified your
 OpenStreetMap username and password.
 Do you want to do this now?</source>
@@ -1563,274 +1559,274 @@ ditt användarnamn och lösenord för OSM.
 Vill du göra detta nu?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1119"/>
+        <location filename="../src/MainWindow.cpp" line="1120"/>
         <source>Error downloading</source>
         <translation>Fel vid nedladdning</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1119"/>
+        <location filename="../src/MainWindow.cpp" line="1120"/>
         <source>The map could not be downloaded</source>
         <translation>Kartan kunde inte laddas ner</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1324"/>
+        <location filename="../src/MainWindow.cpp" line="1332"/>
         <source>Create Polygon</source>
         <translation>Skapa polygon</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1324"/>
+        <location filename="../src/MainWindow.cpp" line="1332"/>
         <source>Specify the number of sides</source>
         <translation>Ange antal sidor</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1369"/>
+        <location filename="../src/MainWindow.cpp" line="1377"/>
         <source>Join Roads</source>
         <translation>Förena vägar</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1382"/>
+        <location filename="../src/MainWindow.cpp" line="1390"/>
         <source>Split Roads</source>
         <translation>splittra vägar</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1395"/>
+        <location filename="../src/MainWindow.cpp" line="1403"/>
         <source>Break Roads</source>
         <translation>Slå isär vägar</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1408"/>
+        <location filename="../src/MainWindow.cpp" line="1416"/>
         <source>Force Feature upload</source>
         <translation>Tvinga uppladdning av tecken</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1421"/>
+        <location filename="../src/MainWindow.cpp" line="1429"/>
         <source>Create Junction</source>
         <translation>Skapa knutpunkt</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1425"/>
+        <location filename="../src/MainWindow.cpp" line="1433"/>
         <source>Multiple intersection.</source>
         <translation>Flera skärningspunkter</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1426"/>
+        <location filename="../src/MainWindow.cpp" line="1434"/>
         <source>Those roads have multiple intersections.
 Do you still want to create a junction for each one (Unwanted junctions can still be deleted afterhand)?</source>
         <translation>Dessa vägar har flera skärningar.
 Vill du fortfarande skapa en korsning för varje (Oönskade skärningar kan fortfarande tas bort efteråt)?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1443"/>
+        <location filename="../src/MainWindow.cpp" line="1451"/>
         <source>Add Street Numbers</source>
         <translation>Lägg till gatnummer</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1459"/>
+        <location filename="../src/MainWindow.cpp" line="1467"/>
         <source>Align Nodes</source>
         <translation>Rikta in noder</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1489"/>
+        <location filename="../src/MainWindow.cpp" line="1497"/>
         <source>Detach Node %1</source>
         <translation>Lösgör nod %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1503"/>
+        <location filename="../src/MainWindow.cpp" line="1511"/>
         <source>Add member to relation</source>
         <translation>Lägg till medlem till relation</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1515"/>
+        <location filename="../src/MainWindow.cpp" line="1523"/>
         <source>Remove member from relation</source>
         <translation>Ta bort medlemmar från relationer</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1530"/>
+        <location filename="../src/MainWindow.cpp" line="1538"/>
         <source>Create Relation %1</source>
         <translation>Skapa relation %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1580"/>
+        <location filename="../src/MainWindow.cpp" line="1588"/>
         <source>Save map style</source>
         <translation>Spara stil för karta</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1591"/>
+        <location filename="../src/MainWindow.cpp" line="1599"/>
         <source>Merkaartor map style (*.mas)</source>
         <translation>Merkaartor kartstil (*.mas)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1591"/>
+        <location filename="../src/MainWindow.cpp" line="1599"/>
         <source>Load map style</source>
         <translation>Ladda kartstil</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1748"/>
+        <location filename="../src/MainWindow.cpp" line="1756"/>
         <source>Save Merkaartor document</source>
         <translation>Spara Merkaartor-dokument</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1748"/>
+        <location filename="../src/MainWindow.cpp" line="1756"/>
         <source>untitled</source>
         <translation>namnlös</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1748"/>
+        <location filename="../src/MainWindow.cpp" line="1756"/>
         <source>Merkaartor documents Files (*.mdc)</source>
         <translation>Merkaartor dokumentfiler (*.mdc)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1791"/>
+        <location filename="../src/MainWindow.cpp" line="1799"/>
         <source>Unable to open save file</source>
         <translation>Kan inte öppna sparad fil</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1791"/>
+        <location filename="../src/MainWindow.cpp" line="1799"/>
         <source>%1 could not be opened for writing.</source>
         <translation>%1 kunde inte öppnas för skrivning</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1828"/>
+        <location filename="../src/MainWindow.cpp" line="1836"/>
         <source>Invalid file</source>
         <translation>Ogiltig fil</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1818"/>
+        <location filename="../src/MainWindow.cpp" line="1826"/>
         <source>%1 is not a valid XML file.</source>
         <translation>%1 är inte en giltig XML-fil</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1828"/>
+        <location filename="../src/MainWindow.cpp" line="1836"/>
         <source>%1 is not a valid Merkaartor document.</source>
         <translation>%1 är inte en giltig Merkaartor-fil</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1886"/>
+        <location filename="../src/MainWindow.cpp" line="1894"/>
         <source>Export OSM</source>
         <translation>Exportera OSM-format</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1886"/>
+        <location filename="../src/MainWindow.cpp" line="1894"/>
         <source>OSM Files (*.osm)</source>
         <translation>OSM filer (*.osm)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1905"/>
+        <location filename="../src/MainWindow.cpp" line="1913"/>
         <source>Export Binary OSM</source>
         <translation>Exportera binärt OSM-format</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1905"/>
+        <location filename="../src/MainWindow.cpp" line="1913"/>
         <source>OSM Binary Files (*.osb)</source>
         <translation>OSM binärfiler (*.osb)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1930"/>
+        <location filename="../src/MainWindow.cpp" line="1938"/>
         <source>Export GPX</source>
         <translation>Exportera GPX</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1930"/>
+        <location filename="../src/MainWindow.cpp" line="1938"/>
         <source>GPX Files (*.gpx)</source>
         <translation>GPX-filer (*.gpx)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1955"/>
+        <location filename="../src/MainWindow.cpp" line="1963"/>
         <source>Export KML</source>
         <translation>Exportera KML</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1955"/>
+        <location filename="../src/MainWindow.cpp" line="1963"/>
         <source>KML Files (*.kml)</source>
         <translation>KML-filer (*.kml)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2199"/>
+        <location filename="../src/MainWindow.cpp" line="2207"/>
         <source>%1 (int)</source>
         <translation>%1 (int)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2251"/>
+        <location filename="../src/MainWindow.cpp" line="2259"/>
         <source>Add Bookmark</source>
         <translation>Lägg till bokmärke</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2252"/>
+        <location filename="../src/MainWindow.cpp" line="2260"/>
         <source>Specify the name of the bookmark.</source>
         <translation>Ange ett namn för bokmärket</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2255"/>
+        <location filename="../src/MainWindow.cpp" line="2263"/>
         <source>Invalid bookmark name</source>
         <translation>Ogiltigt namn på bokmärke</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2256"/>
+        <location filename="../src/MainWindow.cpp" line="2264"/>
         <source>Bookmark cannot be blank.</source>
         <translation>Bokmärke kan inte vara tom</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2260"/>
+        <location filename="../src/MainWindow.cpp" line="2268"/>
         <source>Warning: Bookmark name already exists</source>
         <translation>Varning: Bokmärkesnamn finns redan</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2261"/>
+        <location filename="../src/MainWindow.cpp" line="2269"/>
         <source>Enter a new one, keep the same to overwrite or cancel.</source>
         <translation>Skriv in en ny; behåll samma för att skriva över eller avbryta.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2299"/>
+        <location filename="../src/MainWindow.cpp" line="2307"/>
         <source>Remove Bookmark</source>
         <translation>Ta bort bokmärke</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2300"/>
+        <location filename="../src/MainWindow.cpp" line="2308"/>
         <source>Select the bookmark to remove.</source>
         <translation>Välj bokmärke att ta bort</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2362"/>
+        <location filename="../src/MainWindow.cpp" line="2370"/>
         <source>Invalid projection</source>
         <translation>Ogiltig kartprojektion</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2362"/>
+        <location filename="../src/MainWindow.cpp" line="2370"/>
         <source>Unable to set projection &quot;%1&quot;.</source>
         <translation>Kan inte sätta projektion &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2499"/>
+        <location filename="../src/MainWindow.cpp" line="2507"/>
         <source>GPS error</source>
         <translation>GPS-fel</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2500"/>
+        <location filename="../src/MainWindow.cpp" line="2508"/>
         <source>Unable to open GPS port.</source>
         <translation>Kan inte öppna port för GPS.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2509"/>
+        <location filename="../src/MainWindow.cpp" line="2517"/>
         <source>Open NMEA log file</source>
         <translation>Öppna NMEA loggfil</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2623"/>
+        <location filename="../src/MainWindow.cpp" line="2631"/>
         <source>Save Tag Templates</source>
         <translation>Spara mall för taggar</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2623"/>
+        <location filename="../src/MainWindow.cpp" line="2631"/>
         <source>Merkaartor tag templates (*.mat)</source>
         <translation>Merkaartor taggmallar (*.mat)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2649"/>
+        <location filename="../src/MainWindow.cpp" line="2657"/>
         <source>Open Tag Templates</source>
         <translation>Öppna taggmall</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2701"/>
+        <location filename="../src/MainWindow.cpp" line="2709"/>
         <source>Warning! Could not load the Merkaartor translations for the &quot;%1&quot; language. Switching to default english.</source>
         <translation>Varning! Kunde inte ladda Merkaartors översättning för språket &quot;%1&quot;. Byter till standard engelska.</translation>
     </message>
@@ -1850,7 +1846,7 @@ Vill du fortfarande skapa en korsning för varje (Oönskade skärningar kan fort
         <translation>&amp;Skapa</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="617"/>
+        <location filename="../src/MainWindow.ui" line="618"/>
         <source>&amp;Road</source>
         <translation>&amp;Väg</translation>
     </message>
@@ -1885,1082 +1881,1082 @@ Vill du fortfarande skapa en korsning för varje (Oönskade skärningar kan fort
         <translation>Sätt &amp;ogenomskinlighet för ytor</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="136"/>
+        <location filename="../src/MainWindow.ui" line="137"/>
         <source>&amp;File</source>
         <translation>&amp;Fil</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="140"/>
+        <location filename="../src/MainWindow.ui" line="141"/>
         <source>&amp;Export</source>
         <translation>&amp;Exportera</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="149"/>
+        <location filename="../src/MainWindow.ui" line="150"/>
         <source>Re&amp;cent open</source>
         <translation>Öppna &amp;nyligen använd</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="154"/>
+        <location filename="../src/MainWindow.ui" line="155"/>
         <source>Recen&amp;t import</source>
         <translation>Importera nyligen använd</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="178"/>
+        <location filename="../src/MainWindow.ui" line="179"/>
         <source>T&amp;ools</source>
         <translation>Ver&amp;ktyg</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="182"/>
+        <location filename="../src/MainWindow.ui" line="183"/>
         <source>&amp;Style</source>
         <translation>&amp;Stil</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="192"/>
+        <location filename="../src/MainWindow.ui" line="193"/>
         <source>Tag templates</source>
         <translation>Taggmallar</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="635"/>
+        <location filename="../src/MainWindow.ui" line="636"/>
         <source>&amp;Node</source>
         <translation>&amp;Nod</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="220"/>
+        <location filename="../src/MainWindow.ui" line="221"/>
         <source>&amp;Window</source>
         <translation>&amp;Fönster</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="913"/>
+        <location filename="../src/MainWindow.ui" line="914"/>
         <source>&amp;Docks</source>
         <translation>&amp;Paneler</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="243"/>
+        <location filename="../src/MainWindow.ui" line="244"/>
         <source>Fea&amp;ture</source>
         <translation>Tecken</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="938"/>
+        <location filename="../src/MainWindow.ui" line="939"/>
         <source>&amp;Layers</source>
         <translation>&amp;Lager</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="256"/>
+        <location filename="../src/MainWindow.ui" line="257"/>
         <source>&amp;Gps</source>
         <translation>&amp;GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="269"/>
+        <location filename="../src/MainWindow.ui" line="270"/>
         <source>Rel&amp;ation</source>
         <translation>Rel&amp;ation</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="346"/>
+        <location filename="../src/MainWindow.ui" line="347"/>
         <source>Tool Bar</source>
         <translation>Verktygsrad</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="387"/>
+        <location filename="../src/MainWindow.ui" line="388"/>
         <source>&amp;Quit</source>
         <translation>&amp;Avsluta</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="392"/>
+        <location filename="../src/MainWindow.ui" line="393"/>
         <source>&amp;About</source>
         <translation>&amp;Om</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="401"/>
+        <location filename="../src/MainWindow.ui" line="402"/>
         <source>&amp;Open</source>
         <translation>&amp;Öppna</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="404"/>
+        <location filename="../src/MainWindow.ui" line="405"/>
         <source>Create a new document and import a file</source>
         <translation>Skapa ett nytt dokument och importera en fil</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="407"/>
+        <location filename="../src/MainWindow.ui" line="408"/>
         <source>Ctrl+O</source>
         <translation>Ctrl+O</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="416"/>
+        <location filename="../src/MainWindow.ui" line="417"/>
         <source>Zoom &amp;all</source>
         <translation>Zooma &amp;alla</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="419"/>
+        <location filename="../src/MainWindow.ui" line="420"/>
         <source>F2</source>
         <translation>F2</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="424"/>
+        <location filename="../src/MainWindow.ui" line="425"/>
         <source>Zoom &amp;window</source>
         <translation>Zooma &amp;fönster</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="430"/>
+        <location filename="../src/MainWindow.ui" line="431"/>
         <source>Zoom window</source>
         <translation>Zoomfönster</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="433"/>
+        <location filename="../src/MainWindow.ui" line="434"/>
         <source>F3</source>
         <translation>F3</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="442"/>
+        <location filename="../src/MainWindow.ui" line="443"/>
         <source>Zoom &amp;out</source>
         <translation>Zooma &amp;ut</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="445"/>
+        <location filename="../src/MainWindow.ui" line="446"/>
         <source>-</source>
         <translation>-</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="454"/>
+        <location filename="../src/MainWindow.ui" line="455"/>
         <source>Zoom &amp;in</source>
         <translation>Zooma &amp;in</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="460"/>
+        <location filename="../src/MainWindow.ui" line="461"/>
         <source>Zoom in</source>
         <translation>Zooma in</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="463"/>
+        <location filename="../src/MainWindow.ui" line="464"/>
         <source>+</source>
         <translation>+</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="474"/>
+        <location filename="../src/MainWindow.ui" line="475"/>
         <source>Curved link</source>
         <translation>Böjd länk</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="990"/>
+        <location filename="../src/MainWindow.ui" line="991"/>
         <source>&amp;Undo</source>
         <translation>&amp;Ångra</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="489"/>
+        <location filename="../src/MainWindow.ui" line="490"/>
         <source>Ctrl+Z</source>
         <translation>Ctrl+Z</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="498"/>
+        <location filename="../src/MainWindow.ui" line="499"/>
         <source>&amp;Redo</source>
         <translation>&amp;Gör om</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="501"/>
+        <location filename="../src/MainWindow.ui" line="502"/>
         <source>Ctrl+Y</source>
         <translation>Ctrl+Y</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="513"/>
+        <location filename="../src/MainWindow.ui" line="514"/>
         <source>&amp;Move</source>
         <translation>&amp;Flytta</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="516"/>
+        <location filename="../src/MainWindow.ui" line="517"/>
         <source>Ctrl+M</source>
         <translation>Ctrl+M</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="525"/>
+        <location filename="../src/MainWindow.ui" line="526"/>
         <source>&amp;Import</source>
         <translation>&amp;Importera</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="528"/>
+        <location filename="../src/MainWindow.ui" line="529"/>
         <source>Import a file into the current document</source>
         <translation>Importera en fil till aktuellt dokument</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="537"/>
+        <location filename="../src/MainWindow.ui" line="538"/>
         <source>&amp;Download</source>
         <translation>&amp;Ladda ner</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="540"/>
+        <location filename="../src/MainWindow.ui" line="541"/>
         <source>Download map data for a new area</source>
         <translation>Ladda ner kartdata för ett nytt område</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="543"/>
+        <location filename="../src/MainWindow.ui" line="544"/>
         <source>Ctrl+D</source>
         <translation>Ctrl+D</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="548"/>
+        <location filename="../src/MainWindow.ui" line="549"/>
         <source>Link</source>
         <translation>Länka</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="554"/>
+        <location filename="../src/MainWindow.ui" line="555"/>
         <source>Create link</source>
         <translation>Skapa länk</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="557"/>
+        <location filename="../src/MainWindow.ui" line="558"/>
         <source>L</source>
         <translation>L</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="569"/>
+        <location filename="../src/MainWindow.ui" line="570"/>
         <source>&amp;Select</source>
         <translation>&amp;Markera</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="572"/>
+        <location filename="../src/MainWindow.ui" line="573"/>
         <source>Esc</source>
         <translation>Esc</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="581"/>
+        <location filename="../src/MainWindow.ui" line="582"/>
         <source>&amp;Upload</source>
         <translation>Ladda &amp;upp</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="584"/>
+        <location filename="../src/MainWindow.ui" line="585"/>
         <source>Upload changes to the server</source>
         <translation>Ladda upp ändringar till servern</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="587"/>
+        <location filename="../src/MainWindow.ui" line="588"/>
         <source>Ctrl+U</source>
         <translation>Ctrl+U</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="599"/>
+        <location filename="../src/MainWindow.ui" line="600"/>
         <source>R&amp;emove</source>
         <translation>&amp;Ta bort</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="602"/>
+        <location filename="../src/MainWindow.ui" line="603"/>
         <source>Remove selected features</source>
         <translation>Ta bort valda tecken</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="605"/>
+        <location filename="../src/MainWindow.ui" line="606"/>
         <source>Del</source>
         <translation>Del</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="620"/>
+        <location filename="../src/MainWindow.ui" line="621"/>
         <source>Create new road</source>
         <translation>Skapa ny väg</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="623"/>
+        <location filename="../src/MainWindow.ui" line="624"/>
         <source>Ctrl+R</source>
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="638"/>
+        <location filename="../src/MainWindow.ui" line="639"/>
         <source>Create new node</source>
         <translation>Skapa ny nod</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="641"/>
+        <location filename="../src/MainWindow.ui" line="642"/>
         <source>Ctrl+N</source>
         <translation>Ctrl+N</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="653"/>
+        <location filename="../src/MainWindow.ui" line="654"/>
         <source>&amp;Reverse</source>
         <translation>&amp;Ändra riktning</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="656"/>
+        <location filename="../src/MainWindow.ui" line="657"/>
         <source>Reverse road direction</source>
         <translation>Vänd riktning på väg</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="665"/>
+        <location filename="../src/MainWindow.ui" line="666"/>
         <source>&amp;Go To...</source>
         <translation>&amp;Gå till...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="668"/>
+        <location filename="../src/MainWindow.ui" line="669"/>
         <source>Ctrl+G</source>
         <translation>Ctrl+G</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="673"/>
+        <location filename="../src/MainWindow.ui" line="674"/>
         <source>&amp;Double carriage way</source>
         <translation>&amp;Dubbla körbanor</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="676"/>
+        <location filename="../src/MainWindow.ui" line="677"/>
         <source>Create Double carriage way</source>
         <translation>Skapa dubbla körbanor</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="681"/>
+        <location filename="../src/MainWindow.ui" line="682"/>
         <source>&amp;Roundabout</source>
         <translation>&amp;Rondell</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="684"/>
+        <location filename="../src/MainWindow.ui" line="685"/>
         <source>Create Roundabout</source>
         <translation>Skapa rondell</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="693"/>
+        <location filename="../src/MainWindow.ui" line="694"/>
         <source>&amp;New</source>
         <translation>&amp;Ny</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="696"/>
+        <location filename="../src/MainWindow.ui" line="697"/>
         <source>Create a new document</source>
         <translation>Skapar ett nytt tomt dokument</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="705"/>
+        <location filename="../src/MainWindow.ui" line="706"/>
         <source>&amp;Split</source>
         <translation>&amp;Dela</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="708"/>
+        <location filename="../src/MainWindow.ui" line="709"/>
         <source>Split road into separate (connected) roads</source>
         <translation>splittra väg till separata (förbundna) vägar</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="711"/>
+        <location filename="../src/MainWindow.ui" line="712"/>
         <source>Alt+S</source>
         <translation>Alt+S</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="720"/>
+        <location filename="../src/MainWindow.ui" line="721"/>
         <source>&amp;Join</source>
         <translation>&amp;Sammanfoga</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="723"/>
+        <location filename="../src/MainWindow.ui" line="724"/>
         <source>Join connected roads to a single road</source>
         <translation>Förena sammanhängande vägar till en väg.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="726"/>
+        <location filename="../src/MainWindow.ui" line="727"/>
         <source>Alt+J</source>
         <translation>Alt+J</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="735"/>
+        <location filename="../src/MainWindow.ui" line="736"/>
         <source>&amp;Break apart</source>
         <translation>%Slå isär</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="738"/>
+        <location filename="../src/MainWindow.ui" line="739"/>
         <source>Break</source>
         <translation>Slå isär</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="741"/>
+        <location filename="../src/MainWindow.ui" line="742"/>
         <source>Break apart connected roads</source>
         <translation>Slå isär sammanhängande vägar</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="744"/>
+        <location filename="../src/MainWindow.ui" line="745"/>
         <source>Alt+B</source>
         <translation>Alt+B</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="749"/>
+        <location filename="../src/MainWindow.ui" line="750"/>
         <source>Re&amp;lation</source>
         <translation>Re&amp;lation</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="752"/>
+        <location filename="../src/MainWindow.ui" line="753"/>
         <source>Create Relation</source>
         <translation>Skapa relation</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="764"/>
+        <location filename="../src/MainWindow.ui" line="765"/>
         <source>&amp;Area</source>
         <translation>&amp;Yta</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="767"/>
+        <location filename="../src/MainWindow.ui" line="768"/>
         <source>Create new area</source>
         <translation>Skapa ny yta</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="772"/>
+        <location filename="../src/MainWindow.ui" line="773"/>
         <source>&amp;Edit...</source>
         <translation>&amp;Redigera...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1377"/>
+        <location filename="../src/MainWindow.ui" line="1378"/>
         <source>&amp;Save...</source>
         <translation>&amp;Spara...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1367"/>
+        <location filename="../src/MainWindow.ui" line="1368"/>
         <source>&amp;Load...</source>
         <translation>&amp;Ladda...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="787"/>
+        <location filename="../src/MainWindow.ui" line="788"/>
         <source>&amp;Curved road</source>
         <translation>&amp;Böjd väg</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="796"/>
+        <location filename="../src/MainWindow.ui" line="797"/>
         <source>&amp;Preferences...</source>
         <translation>&amp;Inställningar...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="809"/>
+        <location filename="../src/MainWindow.ui" line="810"/>
         <source>&amp;All...</source>
         <translation>&amp;Alla...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="812"/>
+        <location filename="../src/MainWindow.ui" line="813"/>
         <source>Export all visible layers to a file</source>
         <translation>Exportera alla synliga lager till en fil</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="821"/>
+        <location filename="../src/MainWindow.ui" line="822"/>
         <source>&amp;Find...</source>
         <translation>&amp;Sök...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="824"/>
+        <location filename="../src/MainWindow.ui" line="825"/>
         <source>Find</source>
         <translation>Sök</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="827"/>
+        <location filename="../src/MainWindow.ui" line="828"/>
         <source>Find and select items</source>
         <translation>Sök och välj föremål</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="840"/>
+        <location filename="../src/MainWindow.ui" line="841"/>
         <source>&amp;Viewport...</source>
         <translation>&amp;Vy</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="843"/>
+        <location filename="../src/MainWindow.ui" line="844"/>
         <source>Export the features in the viewport to a file</source>
         <translation>Exportera tecknes i vyn till en fil</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="848"/>
+        <location filename="../src/MainWindow.ui" line="849"/>
         <source>&amp;Add...</source>
         <translation>&amp;Lägg till...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="853"/>
+        <location filename="../src/MainWindow.ui" line="854"/>
         <source>&amp;Remove...</source>
         <translation>&amp;Ta bort...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="858"/>
+        <location filename="../src/MainWindow.ui" line="859"/>
         <source>&amp;Merge</source>
         <translation>&amp;Slå ihop</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="861"/>
+        <location filename="../src/MainWindow.ui" line="862"/>
         <source>Node Merge</source>
         <translation>Slå ihop noder</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="864"/>
+        <location filename="../src/MainWindow.ui" line="865"/>
         <source>Merge the selected nodes (first selected will remain)</source>
         <translation>Slå ihop valda noder (första valda blir kvar)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="867"/>
+        <location filename="../src/MainWindow.ui" line="868"/>
         <source>Alt+M</source>
         <translation>Alt+M</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="872"/>
+        <location filename="../src/MainWindow.ui" line="873"/>
         <source>Save &amp;As...</source>
         <translation>Spara s&amp;om...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="881"/>
+        <location filename="../src/MainWindow.ui" line="882"/>
         <source>&amp;Save</source>
         <translation>&amp;Spara</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="884"/>
+        <location filename="../src/MainWindow.ui" line="885"/>
         <source>Save to file</source>
         <translation>Spara till fil</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="887"/>
+        <location filename="../src/MainWindow.ui" line="888"/>
         <source>Ctrl+S</source>
         <translation>Ctrl+S</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="896"/>
+        <location filename="../src/MainWindow.ui" line="897"/>
         <source>Download more</source>
         <translation>Ladda ner mer</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="899"/>
+        <location filename="../src/MainWindow.ui" line="900"/>
         <source>Download more map data for the current area</source>
         <translation>Ladda ner mer kartdata för nuvarande vy</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="905"/>
+        <location filename="../src/MainWindow.ui" line="906"/>
         <source>Download the current view to the previous download layer</source>
         <translation>Ladda ner nuvarande vyn till tidigare nedladdat lager</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="908"/>
+        <location filename="../src/MainWindow.ui" line="909"/>
         <source>Ctrl+Shift+D</source>
         <translation>Ctrl+Shift+D</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="921"/>
+        <location filename="../src/MainWindow.ui" line="922"/>
         <source>&amp;Properties</source>
         <translation>&amp;Egenskaper</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="927"/>
+        <location filename="../src/MainWindow.ui" line="928"/>
         <source>Hide/Show the Properties dock</source>
         <translation>Dölj/Visa ruta för Egenskaper</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="930"/>
+        <location filename="../src/MainWindow.ui" line="931"/>
         <source>Ctrl+P</source>
         <translation>Ctrl+P</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="944"/>
+        <location filename="../src/MainWindow.ui" line="945"/>
         <source>Hide/Show the Layers dock</source>
         <translation>Dölj/Visa ruta för lager</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="947"/>
+        <location filename="../src/MainWindow.ui" line="948"/>
         <source>Ctrl+L</source>
         <translation>Ctrl+L</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="955"/>
+        <location filename="../src/MainWindow.ui" line="956"/>
         <source>&amp;Info</source>
         <translation>&amp;Information</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="961"/>
+        <location filename="../src/MainWindow.ui" line="962"/>
         <source>Hide/Show the Info dock</source>
         <translation>Visa/Dölj Inforuta</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="964"/>
+        <location filename="../src/MainWindow.ui" line="965"/>
         <source>Ctrl+I</source>
         <translation>Ctrl+I</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="973"/>
+        <location filename="../src/MainWindow.ui" line="974"/>
         <source>&amp;Align</source>
         <translation>&amp;Justera</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="976"/>
+        <location filename="../src/MainWindow.ui" line="977"/>
         <source>Align nodes</source>
         <translation>Rikta in noder</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="979"/>
+        <location filename="../src/MainWindow.ui" line="980"/>
         <source>Align selected nodes. First two selected give the line.</source>
         <translation>Rikta in valda noder. Första två valda ger linjen.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="982"/>
+        <location filename="../src/MainWindow.ui" line="983"/>
         <source>Alt+A</source>
         <translation>Alt+A</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="996"/>
+        <location filename="../src/MainWindow.ui" line="997"/>
         <source>Hide/Show the Undo dock</source>
         <translation>Dölj/Visa ruta för ångra</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="999"/>
+        <location filename="../src/MainWindow.ui" line="1000"/>
         <source>Ctrl+T</source>
         <translation>Ctrl+T</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1007"/>
+        <location filename="../src/MainWindow.ui" line="1008"/>
         <source>Show &amp;downloaded areas</source>
         <translation>Visa &amp;nerladdade ytor</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1010"/>
+        <location filename="../src/MainWindow.ui" line="1011"/>
         <source>Ctrl+Alt+A</source>
         <translation>Ctrl+Alt+A</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1019"/>
+        <location filename="../src/MainWindow.ui" line="1020"/>
         <source>&amp;Copy</source>
         <translation>&amp;Kopiera</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1022"/>
+        <location filename="../src/MainWindow.ui" line="1023"/>
         <source>Copy selected features and tags to the clipboard</source>
         <translation>Kopiera valt tecken och taggar till urklipp</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1025"/>
+        <location filename="../src/MainWindow.ui" line="1026"/>
         <source>Copy the selected feature&apos;s tags to the clipboard; if the feature is a trackpoint, copy the coordinates, too.</source>
         <translation>Kopiera valda teckens taggar till urklipp; om tecknet är en spårpunkt, kopiera också koordinaterna.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1028"/>
+        <location filename="../src/MainWindow.ui" line="1029"/>
         <source>Ctrl+C</source>
         <translation>Ctrl+C</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1033"/>
+        <location filename="../src/MainWindow.ui" line="1034"/>
         <source>Paste Tags (&amp;Overwrite)</source>
         <translation>Klistra in taggar (&amp;Skriv över)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1036"/>
+        <location filename="../src/MainWindow.ui" line="1037"/>
         <source>Paste (and overwrite) the tags in the clipboard to the selected feature.</source>
         <translation>Klistra in (och skriv över) taggar från utklipp till det valda tecknet</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1039"/>
+        <location filename="../src/MainWindow.ui" line="1040"/>
         <source>Ctrl+V, O</source>
         <translation>Ctrl+V, O</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1048"/>
+        <location filename="../src/MainWindow.ui" line="1049"/>
         <source>Paste Tags (&amp;Merge)</source>
         <translation>Klistra in taggar (&amp;Slå ihop)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1051"/>
+        <location filename="../src/MainWindow.ui" line="1052"/>
         <source>Paste tags</source>
         <translation>Klistra in taggar</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1054"/>
+        <location filename="../src/MainWindow.ui" line="1055"/>
         <source>Paste tags from the clipboard (Merge with existing tags)</source>
         <translation>Klistra in taggar från urklipp (Lägg till existerande taggar)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1057"/>
+        <location filename="../src/MainWindow.ui" line="1058"/>
         <source>Merge the tags in the clipboard with the ones of the selected feature.</source>
         <translation>Slå ihop taggar i urklipp med de för den valda tecknet.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1060"/>
+        <location filename="../src/MainWindow.ui" line="1061"/>
         <source>Ctrl+V, M</source>
         <translation>Ctrl+V, M</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1070"/>
+        <location filename="../src/MainWindow.ui" line="1071"/>
         <source>Selected...</source>
         <translation>Valda...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1079"/>
+        <location filename="../src/MainWindow.ui" line="1080"/>
         <source>Paste Features</source>
         <translation>Klistra in tecken</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1082"/>
+        <location filename="../src/MainWindow.ui" line="1083"/>
         <source>Paste</source>
         <translation>Klistra in</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1085"/>
+        <location filename="../src/MainWindow.ui" line="1086"/>
         <source>Paste features from the clipboard</source>
         <translation>Klistra in tecken från urklipp</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1088"/>
+        <location filename="../src/MainWindow.ui" line="1089"/>
         <source>Paste the features in the clipboard; If the features&apos;id are already in the document, overwrite them.</source>
         <translation>Klistra in tecken till urklipp; Om tecknens id redan finns i dokumentet, skriv över dem.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1536"/>
+        <location filename="../src/MainWindow.ui" line="1537"/>
         <source>Ctrl+V, F</source>
         <translation>Ctrl+V, F</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1099"/>
+        <location filename="../src/MainWindow.ui" line="1100"/>
         <source>OSM (XML)</source>
         <translation>OSM (XML)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1104"/>
+        <location filename="../src/MainWindow.ui" line="1105"/>
         <source>OSM (Binary)</source>
         <translation>OSM (binärt)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1109"/>
+        <location filename="../src/MainWindow.ui" line="1110"/>
         <source>&amp;Force Upload</source>
         <translation>Tvinga uppladdning</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1112"/>
+        <location filename="../src/MainWindow.ui" line="1113"/>
         <source>Commit feature to the dirty layer</source>
         <translation>Överlämna tecken till skräplagret</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1118"/>
+        <location filename="../src/MainWindow.ui" line="1119"/>
         <source>Commit the selected feature from a non-uploadable layer (e.g.Track or Extract) to the dirty layer, ready for upload</source>
         <translation>Överlämna det valda tecknet från ett icke-uppladdningsbart lager (t.ex. Spår eller Extract) till skräplagret, redo för uppladdning</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1123"/>
+        <location filename="../src/MainWindow.ui" line="1124"/>
         <source>GPX</source>
         <translation>GPX</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1128"/>
+        <location filename="../src/MainWindow.ui" line="1129"/>
         <source>KML</source>
         <translation>KML</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1133"/>
+        <location filename="../src/MainWindow.ui" line="1134"/>
         <source>Toggle Toolbar</source>
         <translation>Visa eller dölj verktygsraden</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1139"/>
+        <location filename="../src/MainWindow.ui" line="1140"/>
         <source>Hide/Show the Toolbar</source>
         <translation>Dölj/Visa verktygsrad</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1144"/>
+        <location filename="../src/MainWindow.ui" line="1145"/>
         <source>Hide All</source>
         <translation>Dölj alla</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1155"/>
+        <location filename="../src/MainWindow.ui" line="1156"/>
         <source>Ctrl+F</source>
         <translation>Ctrl+F</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1152"/>
+        <location filename="../src/MainWindow.ui" line="1153"/>
         <source>Show All</source>
         <translation>Visa alla</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1163"/>
+        <location filename="../src/MainWindow.ui" line="1164"/>
         <source>&amp;Image layer</source>
         <translation>&amp;Bildlager</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1168"/>
+        <location filename="../src/MainWindow.ui" line="1169"/>
         <source>Osmarender</source>
         <translation>Osmarender</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1173"/>
+        <location filename="../src/MainWindow.ui" line="1174"/>
         <source>&amp;Render</source>
         <translation>&amp;Rendera</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1181"/>
+        <location filename="../src/MainWindow.ui" line="1182"/>
         <source>Show track &amp;points</source>
         <translation>Visa spår&amp;punkt</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1184"/>
+        <location filename="../src/MainWindow.ui" line="1185"/>
         <source>Ctrl+Alt+P</source>
         <translation>Ctrl+Alt+P</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1192"/>
+        <location filename="../src/MainWindow.ui" line="1193"/>
         <source>Show &amp;names</source>
         <translation>Visa &amp;namn</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1195"/>
+        <location filename="../src/MainWindow.ui" line="1196"/>
         <source>Ctrl+Alt+N</source>
         <translation>Ctrl+Alt+N</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1200"/>
+        <location filename="../src/MainWindow.ui" line="1201"/>
         <source>&amp;Start</source>
         <translation>&amp;Starta</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1203"/>
+        <location filename="../src/MainWindow.ui" line="1204"/>
         <source>Start GPS</source>
         <translation>Starta GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1208"/>
+        <location filename="../src/MainWindow.ui" line="1209"/>
         <source>&amp;Replay...</source>
         <translation>&amp;Spela om</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1211"/>
+        <location filename="../src/MainWindow.ui" line="1212"/>
         <source>Replay GPS</source>
         <translation>Återspela GPS-spår</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1219"/>
+        <location filename="../src/MainWindow.ui" line="1220"/>
         <source>&amp;GPS</source>
         <translation>&amp;GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1225"/>
+        <location filename="../src/MainWindow.ui" line="1226"/>
         <source>Hide/Show the GPS dock</source>
         <translation>Dölj/Visa GPS-ruta</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1228"/>
+        <location filename="../src/MainWindow.ui" line="1229"/>
         <source>Ctrl+W</source>
         <translation>Ctrl+W</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1236"/>
+        <location filename="../src/MainWindow.ui" line="1237"/>
         <source>S&amp;top</source>
         <translation>S&amp;toppa</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1239"/>
+        <location filename="../src/MainWindow.ui" line="1240"/>
         <source>Stop GPS</source>
         <translation>Stoppa GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1247"/>
+        <location filename="../src/MainWindow.ui" line="1248"/>
         <source>&amp;Center on GPS</source>
         <translation>&amp;Centrera på GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1255"/>
+        <location filename="../src/MainWindow.ui" line="1256"/>
         <source>Show track &amp;segments</source>
         <translation>Visa spår&amp;segment</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1258"/>
+        <location filename="../src/MainWindow.ui" line="1259"/>
         <source>Ctrl+Alt+T</source>
         <translation>Ctrl+Alt+T</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1266"/>
+        <location filename="../src/MainWindow.ui" line="1267"/>
         <source>Show &amp;scale</source>
         <translation>Visa &amp;skala</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1269"/>
+        <location filename="../src/MainWindow.ui" line="1270"/>
         <source>Ctrl+Alt+S</source>
         <translation>Ctrl+Alt+S</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1277"/>
+        <location filename="../src/MainWindow.ui" line="1278"/>
         <source>Show &amp;relations</source>
         <translation>Visa &amp;relationer</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1280"/>
+        <location filename="../src/MainWindow.ui" line="1281"/>
         <source>Ctrl+Alt+R</source>
         <translation>Ctrl+Alt+R</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1288"/>
+        <location filename="../src/MainWindow.ui" line="1289"/>
         <source>Show roads background</source>
         <translation>Visa vägbakgrunder</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1296"/>
+        <location filename="../src/MainWindow.ui" line="1297"/>
         <source>Show roads boundary</source>
         <translation>Visa vägkanter</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1304"/>
+        <location filename="../src/MainWindow.ui" line="1305"/>
         <source>Show touchup</source>
         <translation>Visa försköning</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1318"/>
+        <location filename="../src/MainWindow.ui" line="1319"/>
         <source>Record</source>
         <translation>Spela in</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1321"/>
+        <location filename="../src/MainWindow.ui" line="1322"/>
         <source>Record GPS</source>
         <translation>Spela in GPS-spår</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1332"/>
+        <location filename="../src/MainWindow.ui" line="1333"/>
         <source>Pause</source>
         <translation>Pausa</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1335"/>
+        <location filename="../src/MainWindow.ui" line="1336"/>
         <source>Pause GPS</source>
         <translation>Pausa GPS</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1343"/>
+        <location filename="../src/MainWindow.ui" line="1344"/>
         <source>G&amp;eoImage</source>
         <translation>G&amp;eorefererad bild</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1349"/>
+        <location filename="../src/MainWindow.ui" line="1350"/>
         <source>Hide/Show the GeoImage dock</source>
         <translation>Dölj/Visa ruta för geotaggning</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1352"/>
+        <location filename="../src/MainWindow.ui" line="1353"/>
         <source>Ctrl+E</source>
         <translation>Ctrl+E</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1357"/>
+        <location filename="../src/MainWindow.ui" line="1358"/>
         <source>World OSB manager...</source>
         <translation>World OSB hanterare</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1362"/>
+        <location filename="../src/MainWindow.ui" line="1363"/>
         <source>&amp;Shortcut Editor...</source>
         <translation>&amp;Genvägsredigerare...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1372"/>
+        <location filename="../src/MainWindow.ui" line="1373"/>
         <source>&amp;Merge...</source>
         <translation>&amp;Slå ihop...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1382"/>
+        <location filename="../src/MainWindow.ui" line="1383"/>
         <source>&amp;Add member</source>
         <translation>&amp;Lägg till medlem</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1387"/>
+        <location filename="../src/MainWindow.ui" line="1388"/>
         <source>&amp;Remove member</source>
         <translation>&amp;Ta bort medlem</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1395"/>
+        <location filename="../src/MainWindow.ui" line="1396"/>
         <source>&amp;Never</source>
         <translation>A&amp;ldrig</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1403"/>
+        <location filename="../src/MainWindow.ui" line="1404"/>
         <source>for &amp;Oneway roads</source>
         <translation>för &amp;enkelriktade vägar</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1411"/>
+        <location filename="../src/MainWindow.ui" line="1412"/>
         <source>&amp;Always</source>
         <translation>&amp;Alltid</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1420"/>
+        <location filename="../src/MainWindow.ui" line="1421"/>
         <source>&amp;Detach</source>
         <translation>&amp;Koppla loss</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1423"/>
+        <location filename="../src/MainWindow.ui" line="1424"/>
         <source>Detach node from a road</source>
         <translation>Lösgör nod från en väg</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1426"/>
+        <location filename="../src/MainWindow.ui" line="1427"/>
         <source>Detach a node from a Road</source>
         <translation>Lösgör en nod från en väg</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1438"/>
+        <location filename="../src/MainWindow.ui" line="1439"/>
         <source>&amp;Work Offline</source>
         <translation>&amp;Arbeta nedkopplad</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1443"/>
+        <location filename="../src/MainWindow.ui" line="1444"/>
         <source>SVG</source>
         <translation>SVG</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1451"/>
+        <location filename="../src/MainWindow.ui" line="1452"/>
         <source>&amp;Styles</source>
         <translation>&amp;Stilar</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1457"/>
+        <location filename="../src/MainWindow.ui" line="1458"/>
         <source>Hide/Show the Styles dock</source>
         <translation>Dölj/Visa ruta för stilar</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1460"/>
+        <location filename="../src/MainWindow.ui" line="1461"/>
         <source>Ctrl+B</source>
         <translation>Ctrl+B</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1465"/>
+        <location filename="../src/MainWindow.ui" line="1466"/>
         <source>WMS Servers Editor...</source>
         <translation>Redigera servrar för WMS...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1470"/>
+        <location filename="../src/MainWindow.ui" line="1471"/>
         <source>TMS Servers Editor...</source>
         <translation>Redigera TMS-servrar...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1475"/>
+        <location filename="../src/MainWindow.ui" line="1476"/>
         <source>&amp;Reset Discardable dialogs status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1484"/>
+        <location filename="../src/MainWindow.ui" line="1485"/>
         <source>GPS Menu</source>
         <translation>GPS-meny</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1493"/>
+        <location filename="../src/MainWindow.ui" line="1494"/>
         <source>Camera</source>
         <translation>Kamera</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1498"/>
+        <location filename="../src/MainWindow.ui" line="1499"/>
         <source>Create &amp;Junction</source>
         <translation>Skapa &amp;knutpunkt</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1510"/>
+        <location filename="../src/MainWindow.ui" line="1511"/>
         <source>Rotate</source>
         <translation>Rotera</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1513"/>
+        <location filename="../src/MainWindow.ui" line="1514"/>
         <source>Ctrl+A</source>
         <translation>Ctrl+A</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1518"/>
+        <location filename="../src/MainWindow.ui" line="1519"/>
         <source>Polygon</source>
         <translation>Polygon</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1523"/>
+        <location filename="../src/MainWindow.ui" line="1524"/>
         <source>Rectangle</source>
         <translation>Rektangel</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1528"/>
+        <location filename="../src/MainWindow.ui" line="1529"/>
         <source>Add new Image layer</source>
         <translation>Lägg till ett nytt bildlager</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1533"/>
+        <location filename="../src/MainWindow.ui" line="1534"/>
         <source>Paste Feature(s)</source>
         <translation>Klistra in tecken</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1541"/>
+        <location filename="../src/MainWindow.ui" line="1542"/>
         <source>Features</source>
         <translation>Tecken</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1546"/>
+        <location filename="../src/MainWindow.ui" line="1547"/>
         <source>Add street &amp;numbers (Karlsruhe scheme)</source>
         <translation>Lägg till &amp;gatunummer (Karlsruheschema)</translation>
     </message>
@@ -2980,12 +2976,12 @@ Vill du fortfarande skapa en korsning för varje (Oönskade skärningar kan fort
         <translation>Relation modifierad %1</translation>
     </message>
     <message>
-        <location filename="../src/Maps/Road.cpp" line="725"/>
+        <location filename="../src/Maps/Road.cpp" line="792"/>
         <source>Delete Children.</source>
         <translation>Ta bart barn</translation>
     </message>
     <message>
-        <location filename="../src/Maps/Road.cpp" line="726"/>
+        <location filename="../src/Maps/Road.cpp" line="793"/>
         <source>Do you want to delete the children nodes also?</source>
         <translation>Vill du ta bort undernoderna också?</translation>
     </message>
@@ -3007,14 +3003,19 @@ Do you want to do this now?</source>
 Vill du göra detta nu?</translation>
     </message>
     <message>
-        <location filename="../src/TagModel.cpp" line="159"/>
+        <location filename="../src/TagModel.cpp" line="162"/>
         <source>Set Tags on multiple features</source>
         <translation>Sätt taggar på flera tecken</translation>
     </message>
     <message>
-        <location filename="../src/TagModel.cpp" line="161"/>
+        <location filename="../src/TagModel.cpp" line="164"/>
         <source>Set Tags on %1</source>
         <translation>Sätt taggar för %1</translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1555"/>
+        <source>Show &amp;virtual nodes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3038,27 +3039,27 @@ Vill du göra detta nu?</translation>
 <context>
     <name>MapFeature</name>
     <message>
-        <location filename="../src/Maps/MapFeature.cpp" line="738"/>
+        <location filename="../src/Maps/MapFeature.cpp" line="751"/>
         <source>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; by &lt;b&gt;%2&lt;/b&gt;</source>
         <translation>&lt;i&gt;sista: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; av &lt;b&gt;%2&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/Maps/MapFeature.cpp" line="740"/>
+        <location filename="../src/Maps/MapFeature.cpp" line="753"/>
         <source>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt;</source>
         <translation>&lt;i&gt;sista: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/Maps/MapFeature.cpp" line="747"/>
+        <location filename="../src/Maps/MapFeature.cpp" line="760"/>
         <source>History</source>
         <translation>Historik</translation>
     </message>
     <message>
-        <location filename="../src/Maps/MapFeature.cpp" line="750"/>
+        <location filename="../src/Maps/MapFeature.cpp" line="763"/>
         <source>Referenced by ways</source>
         <translation>Refererade av vägar</translation>
     </message>
     <message>
-        <location filename="../src/Maps/MapFeature.cpp" line="753"/>
+        <location filename="../src/Maps/MapFeature.cpp" line="766"/>
         <source>Referenced by relation</source>
         <translation>Refererad av relation</translation>
     </message>
@@ -3068,12 +3069,12 @@ Vill du göra detta nu?</translation>
         <translation>storlek</translation>
     </message>
     <message>
-        <location filename="../src/Maps/Road.cpp" line="1042"/>
+        <location filename="../src/Maps/Road.cpp" line="1112"/>
         <source>Topleft</source>
         <translation>Övre vänster</translation>
     </message>
     <message>
-        <location filename="../src/Maps/Road.cpp" line="1044"/>
+        <location filename="../src/Maps/Road.cpp" line="1114"/>
         <source>Botright</source>
         <translation>Nedhöger</translation>
     </message>
@@ -3093,72 +3094,72 @@ Vill du göra detta nu?</translation>
         <translation>Medlem</translation>
     </message>
     <message>
-        <location filename="../src/Maps/Road.cpp" line="1037"/>
+        <location filename="../src/Maps/Road.cpp" line="1107"/>
         <source>Length</source>
         <translation>Längd</translation>
     </message>
     <message>
-        <location filename="../src/Maps/Road.cpp" line="1039"/>
+        <location filename="../src/Maps/Road.cpp" line="1109"/>
         <source>Size</source>
         <translation>Storlek</translation>
     </message>
     <message>
-        <location filename="../src/Maps/Road.cpp" line="1039"/>
+        <location filename="../src/Maps/Road.cpp" line="1109"/>
         <source>%1 nodes</source>
         <translation>%1 noder</translation>
     </message>
     <message>
-        <location filename="../src/Maps/Road.cpp" line="1046"/>
+        <location filename="../src/Maps/Road.cpp" line="1116"/>
         <source>Way</source>
         <translation>Väg</translation>
     </message>
     <message>
-        <location filename="../src/Maps/Road.cpp" line="1046"/>
+        <location filename="../src/Maps/Road.cpp" line="1116"/>
         <source>Area</source>
         <translation>Yta</translation>
     </message>
     <message>
-        <location filename="../src/Maps/TrackPoint.cpp" line="463"/>
+        <location filename="../src/Maps/TrackPoint.cpp" line="485"/>
         <source>timestamp</source>
         <translation>tidsstämpel</translation>
     </message>
     <message>
-        <location filename="../src/Maps/TrackPoint.cpp" line="464"/>
+        <location filename="../src/Maps/TrackPoint.cpp" line="486"/>
         <source>coord</source>
         <translation>koord</translation>
     </message>
     <message>
-        <location filename="../src/Maps/TrackPoint.cpp" line="467"/>
+        <location filename="../src/Maps/TrackPoint.cpp" line="489"/>
         <source>elevation</source>
         <translation>höjd</translation>
     </message>
     <message>
-        <location filename="../src/Maps/TrackPoint.cpp" line="469"/>
+        <location filename="../src/Maps/TrackPoint.cpp" line="491"/>
         <source>speed</source>
         <translation>hastighet</translation>
     </message>
     <message>
-        <location filename="../src/Maps/TrackPoint.cpp" line="479"/>
+        <location filename="../src/Maps/TrackPoint.cpp" line="501"/>
         <source>description</source>
         <translation>beskrivning</translation>
     </message>
     <message>
-        <location filename="../src/Maps/TrackPoint.cpp" line="482"/>
+        <location filename="../src/Maps/TrackPoint.cpp" line="504"/>
         <source>comment</source>
         <translation>kommentar</translation>
     </message>
     <message>
-        <location filename="../src/Maps/TrackPoint.cpp" line="476"/>
+        <location filename="../src/Maps/TrackPoint.cpp" line="498"/>
         <source>Waypoint</source>
         <translation>Vägpunkt</translation>
     </message>
     <message>
-        <location filename="../src/Maps/TrackPoint.cpp" line="485"/>
+        <location filename="../src/Maps/TrackPoint.cpp" line="507"/>
         <source>layer</source>
         <translation>lager</translation>
     </message>
     <message>
-        <location filename="../src/Maps/TrackPoint.cpp" line="490"/>
+        <location filename="../src/Maps/TrackPoint.cpp" line="512"/>
         <source>Node</source>
         <translation>Nod</translation>
     </message>
@@ -3182,47 +3183,47 @@ Vill du göra detta nu?</translation>
 <context>
     <name>MapView</name>
     <message>
-        <location filename="../src/MapView.cpp" line="227"/>
+        <location filename="../src/MapView.cpp" line="239"/>
         <source>%1ms;ppm:%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="252"/>
+        <location filename="../src/MapView.cpp" line="268"/>
         <source>%1 m</source>
         <translation>%1 m</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="254"/>
+        <location filename="../src/MapView.cpp" line="270"/>
         <source>%1 km</source>
         <translation>%1 km</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="941"/>
+        <location filename="../src/MapView.cpp" line="958"/>
         <source>Feature</source>
         <translation>Tecken</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="950"/>
+        <location filename="../src/MapView.cpp" line="967"/>
         <source>Node</source>
         <translation>Nod</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="958"/>
+        <location filename="../src/MapView.cpp" line="975"/>
         <source>Road</source>
         <translation>Väg</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="966"/>
+        <location filename="../src/MapView.cpp" line="983"/>
         <source>Relation</source>
         <translation>Relation</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="1057"/>
+        <location filename="../src/MapView.cpp" line="1074"/>
         <source>Add trackpoint position to image</source>
         <translation>Lägg till spårpunkts position till bild</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="1059"/>
+        <location filename="../src/MapView.cpp" line="1076"/>
         <source>Cancel</source>
         <translation>Avbryt</translation>
     </message>
@@ -3660,59 +3661,59 @@ Vill du göra detta nu?</translation>
         <translation>Ryska</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="566"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="573"/>
         <source>Custom styles directory</source>
         <translation>Mapp för anpassade stilar</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="652"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="659"/>
         <source>Tag Template</source>
         <translation>Taggmall</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="368"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="370"/>
         <source>Merkaartor tag template (*.mat)</source>
         <translation>Merkaartor taggmall (*.mat)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="438"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="440"/>
         <source>Tool already exists</source>
         <translation>Verktyg finns redan</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="439"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="441"/>
         <source>A tool of this name already exists.
 Please select another name or click the &lt;Apply&gt; button if you want to modify the existing one</source>
         <translation>Ett verktyg med det här namnet finns redan.
 Välj ett annat namn eller klicka på &lt;Apply&gt; knappen om du vill ändra den nuvarande.</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="458"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="460"/>
         <source>Cannot delete preset tool</source>
         <translation>Kan inte ta bort snabbväljare</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="459"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="461"/>
         <source>Cannot delete preset tool &quot;%1&quot;</source>
         <translation>Kan inte ta bort snabbväljare &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="477"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="479"/>
         <source>Cannot modify preset tool name</source>
         <translation>Kan inte modifiera snabbväljares namn</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="478"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="480"/>
         <source>Cannot modify preset tool &quot;%1&quot;&apos;s name</source>
         <translation>Kan inte modifiera snabbväljare &quot;%1&quot;s namn</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="503"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="505"/>
         <source>Select tool executable</source>
         <translation>Välj verktyg körbar fil</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="511"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="513"/>
         <source>Select Log directory</source>
         <translation>Välj mapp för logg</translation>
     </message>
@@ -3777,278 +3778,283 @@ Välj ett annat namn eller klicka på &lt;Apply&gt; knappen om du vill ändra de
         <translation>Använd skräddarsydd Qt-stil</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="207"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="214"/>
         <source>Colors</source>
         <translation>Färger</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="213"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="220"/>
         <source>Background</source>
         <translation>Bakgrund</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1286"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1293"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="241"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="248"/>
         <source>Overwrite style</source>
         <translation>Skriv över stil</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="263"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="270"/>
         <source>Hover</source>
         <translation>Sväva</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="506"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="513"/>
         <source>Pixels</source>
         <translation>Bildpunkter</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="316"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="323"/>
         <source>Highlight</source>
         <translation>Framhäva</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="369"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="376"/>
         <source>Focus</source>
         <translation>Fokusera</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="422"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="429"/>
         <source>Relations</source>
         <translation>Relationer</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="475"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="482"/>
         <source>GPX track</source>
         <translation>GPX-spår</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="513"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="520"/>
         <source>Use simple GPX track appearance</source>
         <translation>Använd förenklad GPX-spår visning</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="552"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="559"/>
         <source>Style</source>
         <translation>Stil</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="558"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="565"/>
         <source>Map style</source>
         <translation>Kartstil</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="600"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="607"/>
         <source>Current style</source>
         <translation>Aktuell stil</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="622"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="629"/>
         <source>Disable styles for track layers</source>
         <translation>Avaktivera stilar för spårlager</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="646"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="653"/>
         <source>Template</source>
         <translation>Mall</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="660"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="667"/>
         <source>Built-in</source>
         <translation>Inbyggd</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="684"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="691"/>
         <source>Custom</source>
         <translation>Anpassad</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="733"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="740"/>
         <source>Data</source>
         <translation>Data</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="745"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="752"/>
         <source>OSM</source>
         <translation>OSM</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="753"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="760"/>
         <source>Website:</source>
         <translation>Webbsida:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="763"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="770"/>
         <source>Username:</source>
         <translation>Användarnamn:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1055"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1062"/>
         <source>Password:</source>
         <translation>Lösenord:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="792"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="799"/>
         <source>Documents</source>
         <translation>Dokument</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="798"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="805"/>
         <source>Autosave documents after upload</source>
         <translation>Autospara dokument efter uppladdning</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="808"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="815"/>
         <source>Tracks</source>
         <translation>Spår</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="816"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="823"/>
         <source>Automatically extract tracks on open</source>
         <translation>Ta automatiskt fram spår när öppnas</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="823"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="830"/>
         <source>Track layers readonly by default</source>
         <translation>Lager för spår skrivskyddad som förvalt</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="834"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="841"/>
         <source>Don&apos;t connect GPX nodes separated by more than (in km; 0 to disable)</source>
         <translation>Förbind inte GPX-noder separerade mer än så här (i km; 0 för att avaktivera)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="867"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="874"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="974"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="981"/>
         <source>Save NMEA log</source>
         <translation>Spara NMEA-logg</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1015"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1022"/>
         <source>Set system time to GPS</source>
         <translation>Sätt systemtid till GPS</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1036"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1043"/>
         <source>Network</source>
         <translation>Nätverk</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1042"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1049"/>
         <source>Proxy settings</source>
         <translation>Proxyinställningar</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1048"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1055"/>
         <source>Use Proxy</source>
         <translation>Använd proxy</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1078"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1085"/>
         <source>User:</source>
         <translation>Användare:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1085"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1092"/>
         <source>Port:</source>
         <translation>Port:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1092"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1099"/>
         <source>Host:</source>
         <translation>Värd:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1155"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1162"/>
         <source>Background Image</source>
         <translation>Bakgrundsbild</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1161"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1168"/>
         <source>Tiles Caching (not active for Yahoo! due to legal restrictions)</source>
         <translation>Cachning av rutor (inte aktivt för Yahoo! pga legala hinder)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1167"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1174"/>
         <source>Cache directory</source>
         <translation>Cache-mapp</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1177"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1184"/>
         <source>Cache size (in Mb; 0 to disable)</source>
         <translation>Storlek på cache (i Mb; 0 för att avaktivera)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1196"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1203"/>
         <source>Map Adapter</source>
         <translation>Kartanpassning</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1202"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1209"/>
         <source>Enable use of OSB background (needs new document)</source>
         <translation>Aktivera OSB-bakgrunder (kräver nytt dokument)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1231"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1238"/>
         <source>Tools</source>
         <translation>Verktyg</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1249"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1256"/>
         <source>Name:</source>
         <translation>Namn:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1259"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1266"/>
         <source>Path:</source>
         <translation>Sökväg:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1308"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1315"/>
         <source>Apply</source>
         <translation>Verkställ</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1315"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1322"/>
         <source>Add</source>
         <translation>Lägg till</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1322"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1329"/>
         <source>Remove</source>
         <translation>Ta bort</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="873"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="880"/>
         <source>GPS input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="879"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="886"/>
         <source>gpsd</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="886"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="893"/>
         <source>Serial</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="946"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="953"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="936"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="943"/>
         <source>Host</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="196"/>
+        <source>Use Virtual nodes (new session required)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4065,47 +4071,47 @@ Välj ett annat namn eller klicka på &lt;Apply&gt; knappen om du vill ändra de
         <translation>%1/%2 valda objekt</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="402"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="404"/>
         <source>Selected items</source>
         <translation>Valda objekt</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="411"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="413"/>
         <source>Properties - Multiple elements</source>
         <translation>Egenskaper - Flera element</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="427"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="429"/>
         <source>Properties - Trackpoint</source>
         <translation>Egenskaper - spårpunkt</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="441"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="443"/>
         <source>Properties - Road</source>
         <translation>Egenskaper - Väg</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="459"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="461"/>
         <source>Properties - Relation</source>
         <translation>Egenskaper - Relation</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="997"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="999"/>
         <source>Properties</source>
         <translation>Egenskaper</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="998"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="1000"/>
         <source>Center map</source>
         <translation>Centrera karta</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="999"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="1001"/>
         <source>Center &amp;&amp; Zoom map</source>
         <translation>Centrera &amp;&amp; Zooma karta</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="1000"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="1002"/>
         <source>Select member</source>
         <translation>Välj medlem</translation>
     </message>
