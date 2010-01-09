@@ -30,7 +30,7 @@ class RoadPrivate
 	public:
 		RoadPrivate()
 		: SmoothedUpToDate(false), BBox(Coord(0,0),Coord(0,0)), BBoxUpToDate(false), Area(0), Distance(0), Width(0),
-			wasPathComplete(false), ProjectionRevision(0)
+			wasPathComplete(false), ProjectionRevision(0), IsCoastline(false)
 		{
 		}
 		std::vector<TrackPointPtr> Nodes;
@@ -123,6 +123,7 @@ void Road::setLayer(MapLayer* L)
 				p->Nodes[i]->unsetParentFeature(this);
 		}
 	}
+	updateVirtuals();
 	MapFeature::setLayer(L);
 }
 
@@ -323,7 +324,6 @@ void Road::updateMeta()
 {
 	p->Area = 0;
 	p->Distance = 0;
-	p->IsCoastline = false;
 
 	p->NotEverythingDownloaded = false;
 	if (lastUpdated() == MapFeature::NotYetDownloaded)
@@ -368,10 +368,6 @@ void Road::updateMeta()
 		p->theRenderPriority = RenderPriority(RenderPriority::IsLinear,Priority);
 	}
 
-	if (tagValue("natural","") == "coastline")
-		p->IsCoastline = true;
-
-
 	MetaUpToDate = true;
 }
 
@@ -385,9 +381,6 @@ double Road::distance()
 
 bool Road::isCoastline()
 {
-	if (MetaUpToDate == false)
-		updateMeta();
-
 	return p->IsCoastline;
 }
 
@@ -843,6 +836,12 @@ void Road::setTag(const QString& key, const QString& value, bool addToTagList)
 	MapFeature::setTag(key, value, addToTagList);
 	MetaUpToDate = false;
 	p->Width = 0;
+	if (key == "natural") {
+		if (value == "coastline")
+			p->IsCoastline = true;
+		else
+			p->IsCoastline = false;
+	}
 }
 
 void Road::setTag(int index, const QString& key, const QString& value, bool addToTagList)
@@ -850,6 +849,12 @@ void Road::setTag(int index, const QString& key, const QString& value, bool addT
 	MapFeature::setTag(index, key, value, addToTagList);
 	MetaUpToDate = false;
 	p->Width = 0;
+	if (key == "natural") {
+		if (value == "coastline")
+			p->IsCoastline = true;
+		else
+			p->IsCoastline = false;
+	}
 }
 
 void Road::clearTags()

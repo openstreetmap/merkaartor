@@ -384,7 +384,7 @@ void MapLayer::reIndex()
 	p->theRTree = new MyRTree(7, 2);
 
 	for (int i=0; i<p->Features.size(); ++i) {
-		if (p->Features.at(i)->isDeleted() || p->Features.at(i)->isVirtual())
+		if (p->Features.at(i)->isDeleted())
 			continue;
 		MapFeature* f = p->Features.at(i);
 		CoordBox bb = f->boundingBox();

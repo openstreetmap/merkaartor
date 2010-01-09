@@ -213,11 +213,15 @@ void MoveTrackPointInteraction::snapMouseMoveEvent(QMouseEvent* event, MapFeatur
 				}
 				theList->add(new AddFeatureCommand(main()->document()->getDirtyOrOriginLayer(aRoad->layer()),N,true));
 				theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx,main()->document()->getDirtyOrOriginLayer(aRoad->layer())));
-				aRoad->updateVirtuals();
 
 				Moving[i] = N;
-			} else
+			} else {
 				Moving[i]->setPosition(OriginalPosition[i]+Diff);
+				for (int j=0; j<Moving[i]->sizeParents(); ++j) {
+					if (Road* aRoad = CAST_WAY(Moving[i]->getParent(j)))
+						aRoad->updateVirtuals();
+				}
+			}
 		}
 		view()->invalidate(true, false);
 	}

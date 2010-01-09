@@ -227,12 +227,12 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 #ifndef NDEBUG
 	QPointF pbl = theProjection.project(viewport().bottomLeft());
 	QPointF ptr = theProjection.project(viewport().topRight());
-	qDebug() << "VP: " << QString("%1 (%2,%3,%4,%5)")
-	   .arg(Main->ViewportStatusLabel->text())
-		.arg(QString::number(pbl.x(),'f',4))
-		.arg(QString::number(pbl.y(),'f',4))
-		.arg(QString::number(ptr.x(),'f',4))
-		.arg(QString::number(ptr.y(),'f',4));
+//	qDebug() << "VP: " << QString("%1 (%2,%3,%4,%5)")
+//	   .arg(Main->ViewportStatusLabel->text())
+//		.arg(QString::number(pbl.x(),'f',4))
+//		.arg(QString::number(pbl.y(),'f',4))
+//		.arg(QString::number(ptr.x(),'f',4))
+//		.arg(QString::number(ptr.y(),'f',4));
 
 	QTime Stop(QTime::currentTime());
 	//Main->PaintTimeLabel->setText(tr("%1ms").arg(Start.msecsTo(Stop)));
@@ -295,6 +295,7 @@ void MapView::sortRenderingPriorityInLayers()
 void MapView::sortRenderingPriority()
 {
 	// TODO Avoid copy
+	// TODO Although it seems to work, sorting a QSet is a nonsense!
 	QList<MapFeature*> aList = p->theFeatures.toList();
 	qSort(aList.begin(),aList.end(),SortAccordingToRenderingPriority());
 	p->theFeatures.fromList(aList);
