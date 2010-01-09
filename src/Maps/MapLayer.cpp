@@ -55,7 +55,7 @@ public:
 	}
 	QList<MapFeaturePtr> Features;
 	MyRTree* theRTree;
- 
+
 	QHash<QString, MapFeaturePtr> IdMap;
 	QString Name;
 	QString Description;
@@ -71,13 +71,13 @@ public:
 	bool RenderPriorityUpToDate;
 	MapDocument* theDocument;
 
- 	void sortRenderingPriority();
+	void sortRenderingPriority();
 };
 
  void MapLayerPrivate::sortRenderingPriority()
 {
- 	qSort(Features.begin(),Features.end(),SortAccordingToRenderingPriority());
-  	RenderPriorityUpToDate = true;
+	qSort(Features.begin(),Features.end(),SortAccordingToRenderingPriority());
+	RenderPriorityUpToDate = true;
 }
 
 MapLayer::MapLayer()
@@ -228,6 +228,7 @@ void MapLayer::deleteFeature(MapFeature* aFeature)
 		notifyIdUpdate(aFeature->id(),0);
 		p->RenderPriorityUpToDate = false;
 	}
+
 	delete aFeature;
 }
 
@@ -257,12 +258,12 @@ int MapLayer::size() const
 
 void MapLayer::setDocument(MapDocument* aDocument)
 {
-    p->theDocument = aDocument;
+	p->theDocument = aDocument;
 }
 
 MapDocument* MapLayer::getDocument()
 {
-    return p->theDocument;
+	return p->theDocument;
 }
 
 int MapLayer::get(MapFeature* aFeature)
@@ -292,7 +293,7 @@ MapFeature* MapLayer::get(int i)
 MapFeature* MapLayer::get(const QString& id, bool exact)
 {
 	QHash<QString, MapFeaturePtr>::const_iterator i;
-	
+
 	i = p->IdMap.find(id);
 	if (i != p->IdMap.end())
 		return i.value();
@@ -383,7 +384,7 @@ void MapLayer::reIndex()
 	p->theRTree = new MyRTree(7, 2);
 
 	for (int i=0; i<p->Features.size(); ++i) {
-		if (p->Features.at(i)->isDeleted())
+		if (p->Features.at(i)->isDeleted() || p->Features.at(i)->isVirtual())
 			continue;
 		MapFeature* f = p->Features.at(i);
 		CoordBox bb = f->boundingBox();
@@ -466,7 +467,7 @@ QString MapLayer::toMainHtml()
 	"<small><i>" + QString(metaObject()->className()) + "</i></small><br/>"
 	+ desc;
 	S += "<hr/>";
-        S += "<i>"+QApplication::translate("MapLayer", "Size")+": </i>" + QApplication::translate("MapLayer", "%n features", "", QCoreApplication::CodecForTr, size())+"<br/>";
+		S += "<i>"+QApplication::translate("MapLayer", "Size")+": </i>" + QApplication::translate("MapLayer", "%n features", "", QCoreApplication::CodecForTr, size())+"<br/>";
 	S += "%1";
 	S += "</body></html>";
 
@@ -576,7 +577,7 @@ DrawingMapLayer * DrawingMapLayer::doFromXML(DrawingMapLayer* l, MapDocument* d,
 // 		return NULL;
 // 	}
 
-	
+
 	int i=0;
 	c = c.firstChildElement();
 	while(!c.isNull()) {
@@ -615,7 +616,7 @@ DrawingMapLayer * DrawingMapLayer::doFromXML(DrawingMapLayer* l, MapDocument* d,
 	}
 
 	if (i > 0) progress.setValue(progress.value()+i);
-	
+
 	l->blockIndexing(false);
 	l->reIndex();
 
@@ -936,7 +937,7 @@ class OsbMapLayerPrivate
 {
 public:
 	OsbMapLayerPrivate()
-		: theImp(0) 
+		: theImp(0)
 	{
 	}
 	OsbMapLayer* theLayer;

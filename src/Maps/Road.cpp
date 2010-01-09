@@ -195,10 +195,10 @@ void Road::add(TrackPoint* Pt, int Idx)
 void Road::updateVirtuals()
 {
 	while (p->virtualNodes.size()) {
-		if (p->virtualNodes[0]->layer())
-			p->virtualNodes[0]->layer()->remove(p->virtualNodes[0]);
 		p->virtualNodes[0]->unsetParentFeature(this);
-		delete p->virtualNodes[0];
+		if (p->virtualNodes[0]->layer())
+			p->virtualNodes[0]->layer()->deleteFeature(p->virtualNodes[0]);
+//		delete p->virtualNodes[0];
 		p->virtualNodes.erase(p->virtualNodes.begin());
 	}
 
