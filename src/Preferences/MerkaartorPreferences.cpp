@@ -1251,6 +1251,7 @@ M_PARAM_IMPLEMENT_BOOL(DrawingHack, visual, true)
 M_PARAM_IMPLEMENT_BOOL(SimpleGpxTrack, visual, false)
 M_PARAM_IMPLEMENT_BOOL(VirtualNodesVisible, visual, true)
 M_PARAM_IMPLEMENT_BOOL(UseVirtualNodes, visual, true)
+M_PARAM_IMPLEMENT_BOOL(RelationsSelectableWhenHidden, visual, true)
 
 /* Templates */
 M_PARAM_IMPLEMENT_STRING(DefaultTemplate, templates, ":/Templates/default.mat")

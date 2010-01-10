@@ -299,6 +299,7 @@ public:
 	M_PARAM_DECLARE_BOOL(SimpleGpxTrack)
 	M_PARAM_DECLARE_BOOL(VirtualNodesVisible)
 	M_PARAM_DECLARE_BOOL(UseVirtualNodes)
+	M_PARAM_DECLARE_BOOL(RelationsSelectableWhenHidden)
 
 	/* Templates */
 	M_PARAM_DECLARE_STRING(DefaultTemplate)

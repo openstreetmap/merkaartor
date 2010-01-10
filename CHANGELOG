@@ -1,4 +1,5 @@
 v0.15
+	* ADD : Add a preference disallowing selection of relations when hidden
 	* ADD : Automatic SVN revision number in about dialog and elsewhere (closes #2208)
     * FIX : URL's in about dialog (fixes #2606)
 	* FIX : Export trackpoints time when exporting GPX (fixes #2594)

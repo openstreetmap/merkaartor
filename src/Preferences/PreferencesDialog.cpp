@@ -231,6 +231,7 @@ void PreferencesDialog::loadPrefs()
 	cbMouseSingleButton->setChecked(M_PREFS->getMouseSingleButton());
 	cbSeparateMoveMode->setChecked(M_PREFS->getSeparateMoveMode());
 	cbVirtualNodes->setChecked(M_PREFS->getUseVirtualNodes());
+	cbRelationsHiddenSelectable->setChecked(M_PREFS->getRelationsSelectableWhenHidden());
 
 	cbCustomStyle->setChecked(M_PREFS->getMerkaartorStyle());
 	comboCustomStyle->addItems(QStyleFactory::keys());
@@ -354,6 +355,7 @@ void PreferencesDialog::savePrefs()
 	M_PREFS->setMouseSingleButton(cbMouseSingleButton->isChecked());
 	M_PREFS->setSeparateMoveMode(cbSeparateMoveMode->isChecked());
 	M_PREFS->setUseVirtualNodes(cbVirtualNodes->isChecked());
+	M_PREFS->setRelationsSelectableWhenHidden(cbRelationsHiddenSelectable->isChecked());
 
 	M_PREFS->setMerkaartorStyle(cbCustomStyle->isChecked());
 	M_PREFS->setMerkaartorStyleString(comboCustomStyle->currentText());

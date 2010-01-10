@@ -222,6 +222,8 @@ void Relation::drawHighlight(QPainter& P, MapView* theView, bool solid)
 double Relation::pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection, const QTransform& theTransform) const
 {
 	double Best = 1000000;
+	if (!M_PREFS->getRelationsVisible() && !M_PREFS->getRelationsSelectableWhenHidden())
+		return Best;
 
 	//for (int i=0; i<p->Members.size(); ++i)
 	//{
