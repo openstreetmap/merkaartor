@@ -1,11 +1,12 @@
 #include <QtGui/QApplication>
-#include <QtGui/QMessageBox> 
+#include <QtGui/QMessageBox>
 
 #include <QLibraryInfo>
 #include <QSplashScreen>
 
-#include "MainWindow.h" 
+#include "MainWindow.h"
 #include "Preferences/MerkaartorPreferences.h"
+#include "revision.h"
 
 #include "IMapAdapter.h"
 
@@ -70,7 +71,7 @@ void myMessageOutput(QtMsgType msgType, const char *buf)
 void showVersion()
 {
 	QString o;
-	o = QString("Merkaartor %1%2\n").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION));
+	o = QString("Merkaartor %1%2(%3)\n").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV));
 	fprintf(stdout, "%s", o.toLatin1().data());
 	o = QString("using QT version %1 (built with %2)\n").arg(qVersion()).arg(QT_VERSION_STR);
 	fprintf(stdout, "%s", o.toLatin1().data());
@@ -125,7 +126,7 @@ int main(int argc, char** argv)
 		pLogFile = fopen(logFilename.toLatin1(), "a");
 	qInstallMsgHandler(myMessageOutput);
 
-	qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Starting " << QString("Merkaartor %1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION));
+	qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Starting " << QString("Merkaartor %1%2(%3)").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV));
 	qDebug() <<	"-------" << QString("using QT version %1 (built with %2)").arg(qVersion()).arg(QT_VERSION_STR);
 #ifdef Q_WS_X11
 	qDebug() << "-------" << "on X11";
@@ -152,7 +153,7 @@ int main(int argc, char** argv)
 	splash.show();
 	app.processEvents();
 
-	splash.showMessage(QString(app.translate("Main", "Merkaartor v%1%2\nLoading plugins...")).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
+	splash.showMessage(QString(app.translate("Main", "Merkaartor v%1%2(%3)\nLoading plugins...")).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
 	app.processEvents();
 
 	if (!QDir::home().exists(".merkaartor"))
@@ -184,7 +185,7 @@ int main(int argc, char** argv)
 		}
 	}
 
-	splash.showMessage(QString(app.translate("Main", "Merkaartor v%1%2\nInitializing...")).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
+	splash.showMessage(QString(app.translate("Main", "Merkaartor v%1%2(%3)\nInitializing...")).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
 	app.processEvents();
 
 	MainWindow Main;
@@ -206,7 +207,7 @@ int main(int argc, char** argv)
 
 	int x = app.exec();
 
-	qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Ending " << QString("Merkaartor %1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION));
+	qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Ending " << QString("Merkaartor %1%2(%3)").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV));
 	if(pLogFile)
 		fclose(pLogFile);
 

@@ -1,5 +1,7 @@
 VERSION="0.15"
-REVISION="-svn"
+#SVNREV = $$system($$escape_expand(svn info \"http://svn.openstreetmap.org/applications/editors/merkaartor/\" | sed -n \"s/Last Changed Rev: \\([0-9]\\+\\)/\\1/p\"))
+SVNREV=$$system(echo $${LITERAL_HASH}define SVNREV \\ > revision.h && svnversion >> revision.h)
+REVISION="\'-svn$$SVNREV\'"
 
 # NODEBUG=1             - no debug target
 # TRANSDIR_MERKAARTOR - translations directory for merkaartor

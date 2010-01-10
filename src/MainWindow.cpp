@@ -61,6 +61,8 @@
 #include "Tools/ActionsDialog.h"
 #include "GotoDialog.h"
 
+#include "revision.h"
+
 #ifdef GEOIMAGE
 #include "GeoImageDock.h"
 #endif
@@ -1138,7 +1140,7 @@ void MainWindow::on_helpAboutAction_triggered()
 	About.setupUi(&dlg);
 	dlg.setWindowFlags(dlg.windowFlags() & ~Qt::WindowContextHelpButtonHint);
 	dlg.setWindowFlags(dlg.windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
-	About.Version->setText(About.Version->text().arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
+	About.Version->setText(About.Version->text().arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV)));
 	About.QTVersion->setText(About.QTVersion->text().arg(qVersion()).arg(QT_VERSION_STR));
 	QFile ct(":/Utils/CHANGELOG");
 	ct.open(QIODevice::ReadOnly);

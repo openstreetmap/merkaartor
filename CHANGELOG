@@ -1,4 +1,5 @@
 v0.15
+	* ADD : Automatic SVN revision number in about dialog and elsewhere (closes #2208)
     * FIX : URL's in about dialog (fixes #2606)
 	* FIX : Export trackpoints time when exporting GPX (fixes #2594)
 	* ADD : Virtual nodes allow fast creation of intermediary nodes (closes #821)

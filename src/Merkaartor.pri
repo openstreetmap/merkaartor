@@ -75,7 +75,8 @@ HEADERS += ./Command/Command.h \
 	./Utils/MDiscardableDialog.h \
 	./GotoDialog.h \
 	../include/ggl/extensions/gis/projections/impl/geocent.h \
-	../interfaces/IMapAdapter.h
+	../interfaces/IMapAdapter.h \
+	revision.h
 
 # Source files
 SOURCES += ./Command/Command.cpp \
