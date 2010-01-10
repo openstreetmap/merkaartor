@@ -95,7 +95,8 @@ TRANSLATIONS += \
 	../translations/merkaartor_pt.ts \
 	../translations/merkaartor_ru.ts \
 	../translations/merkaartor_sk.ts \
-	../translations/merkaartor_sv.ts
+	../translations/merkaartor_sv.ts \
+	../translations/merkaartor_uk.ts \
 
 BINTRANSLATIONS += \
 	../translations/merkaartor_ar.qm \
@@ -110,7 +111,8 @@ BINTRANSLATIONS += \
 	../translations/merkaartor_pt.qm \
 	../translations/merkaartor_ru.qm \
 	../translations/merkaartor_sk.qm \
-	../translations/merkaartor_sv.qm
+	../translations/merkaartor_sv.qm \
+	../translations/merkaartor_uk.qm \
 
 #Include file(s)
 include(Merkaartor.pri)

@@ -6,7 +6,7 @@
    <description locale="en" >Place</description>
    <description locale="ar" >مكان</description>
    <description locale="bs" >Mjesto</description>
-   <description locale="cs" >Místo</description>
+   <description locale="cs" >Písto</description>
    <description locale="de" >Ort</description>
    <description locale="es" >Lugar</description>
    <description locale="fr" >Lieu</description>
@@ -314,7 +314,7 @@
     <description locale="ar" >طريق ثانوية</description>
     <description locale="cs" >Silnice II. třídy</description>
     <description locale="de" >Landesstraße</description>
-    <description locale="es" >Camino secundario</description>
+    <description locale="es" >Carretera Secundaria</description>
     <description locale="fr" >Route secondaire</description>
     <description locale="it" >Strada secondaria</description>
     <description locale="ja" >主要道路</description>
@@ -411,7 +411,7 @@
     <description locale="en" >Pedestrian priority road</description>
     <description locale="ar" >طريق أولوية للمشاة</description>
     <description locale="bs" >Put sa prioritetom za pješake</description>
-    <description locale="cs" >Obytná zóna</description>
+    <description locale="cs" >Pěší zóna</description>
     <description locale="de" >Spielstraße</description>
     <description locale="es" >Camino con prioridad para peatones</description>
     <description locale="fr" >Rue à majorité piétonne</description>
@@ -565,7 +565,7 @@
    <value tag="allotments" >
     <description locale="en" >Allotments</description>
     <description locale="ar" >حصص سكنية</description>
-    <description locale="cs" >Pozemky</description>
+    <description locale="cs" >Místo pro pěstování květin, zeleniny</description>
     <description locale="de" >Schrebergärten</description>
     <description locale="es" >Parcelas</description>
     <description locale="fr" >Lotissements</description>
@@ -583,7 +583,7 @@
    <value tag="basin" >
     <description locale="en" >Basin</description>
     <description locale="ar" >حوض</description>
-    <description locale="cs" >Vodní nádrž</description>
+    <description locale="cs" >Bazén</description>
     <description locale="de" >Wasserbecken</description>
     <description locale="es" >Lavabo</description>
     <description locale="fr" >Bassin</description>
@@ -787,7 +787,7 @@
     <description locale="ar" >ميدان الألعاب</description>
     <description locale="cs" >Rekreační oblast</description>
     <description locale="de" >Erholungsgebiet</description>
-    <description locale="es" >Zona de recreación</description>
+    <description locale="es" >Zona de Recreo</description>
     <description locale="fr" >Aire de jeux</description>
     <description locale="it" >Zona di svago</description>
     <description locale="ja" >遊び場</description>
@@ -891,7 +891,7 @@
    <description locale="ar" >إتجاه واحد</description>
    <description locale="cs" >Jednosměrka</description>
    <description locale="de" >Einbahnstraße</description>
-   <description locale="es" >Una sola vía</description>
+   <description locale="es" >Sentido único</description>
    <description locale="fr" >Sens unique</description>
    <description locale="it" >Senso unico</description>
    <description locale="ja" >一方通行</description>
@@ -915,7 +915,7 @@
    <description locale="fr" >Équipement</description>
    <description locale="it" >Attrattiva</description>
    <description locale="ja" >各種施設</description>
-   <description locale="pl" >Miejsce</description>
+   <description locale="pl" >Miejsce kultu</description>
    <description locale="ru" >Инфраструктура</description>
    <description locale="sk" >Vybavenosť</description>
    <description locale="sv" >Facilitet</description>
@@ -980,7 +980,7 @@
    <value tag="bank;atm" >
     <description locale="en" >Bank with ATM</description>
     <description locale="ar" >مصرف و آلة نقود</description>
-    <description locale="cs" >Banka s bankomatem</description>
+    <description locale="cs" >Banka s automatem</description>
     <description locale="de" >Bank mit Geldautomat</description>
     <description locale="es" >Banco con Cajero Automático</description>
     <description locale="fr" >Banque et DAB</description>
@@ -1166,7 +1166,7 @@
     <description locale="en" >College</description>
     <description locale="ar" >كلّية</description>
     <description locale="bs" >Koledž</description>
-    <description locale="cs" >Vysoká škola</description>
+    <description locale="cs" >Střední škola</description>
     <description locale="de" >Gymnasium</description>
     <description locale="es" >Instituto</description>
     <description locale="fr" >Établissement d&apos;enseignement supérieur</description>
@@ -1224,7 +1224,7 @@
     <description locale="bs" >Izvor pitke vode</description>
     <description locale="cs" >Zdroj pitné vody</description>
     <description locale="de" >Trinkwasser</description>
-    <description locale="es" >Manantial de agua potable</description>
+    <description locale="es" >Manantial de Agua Potable</description>
     <description locale="fr" >Source d&apos;eau potable</description>
     <description locale="it" >Fonte di acqua potabile</description>
     <description locale="ja" >飲み水の水源</description>
@@ -1242,7 +1242,7 @@
     <description locale="ar" >وجبات سريعة</description>
     <description locale="cs" >Rychlé občerstvení</description>
     <description locale="de" >Schnellimbiss</description>
-    <description locale="es" >Comida Rápida</description>
+    <description locale="es" >COmida Rápida</description>
     <description locale="fr" >Restauration rapide</description>
     <description locale="it" >Fast food</description>
     <description locale="ja" >ファーストフード</description>
@@ -1259,7 +1259,7 @@
     <description locale="ar" >فوج إطفاء</description>
     <description locale="cs" >Požární stanice</description>
     <description locale="de" >Feuerwehr</description>
-    <description locale="es" >Estación de bomberos</description>
+    <description locale="es" >Parque de Bomberos</description>
     <description locale="fr" >Caserne de pompiers</description>
     <description locale="it" >Pompieri</description>
     <description locale="ja" >消防署</description>
@@ -1429,7 +1429,7 @@
     <description locale="ar" >معبد</description>
     <description locale="cs" >Bohoslužebné místo</description>
     <description locale="de" >Anbetungsort</description>
-    <description locale="es" >Lugar de culto</description>
+    <description locale="es" >Lugar de Culto</description>
     <description locale="fr" >Lieu de culte</description>
     <description locale="it" >Luogo di culto</description>
     <description locale="ja" >祈りのための場所</description>
@@ -1447,7 +1447,7 @@
     <description locale="bs" >Policijska Stanica</description>
     <description locale="cs" >Policejní stanice</description>
     <description locale="de" >Polizeidienststelle</description>
-    <description locale="es" >Estación policial</description>
+    <description locale="es" >Comisaría</description>
     <description locale="fr" >Poste de police</description>
     <description locale="it" >Stazione di polizia</description>
     <description locale="ja" >警察署・交番</description>
@@ -1466,7 +1466,7 @@
     <description locale="ar" >صندوق بريد</description>
     <description locale="cs" >Poštovní schránka</description>
     <description locale="de" >Briefkasten</description>
-    <description locale="es" >Buzón de correos</description>
+    <description locale="es" >Buzón de Correos</description>
     <description locale="fr" >Boîte aux lettres</description>
     <description locale="it" >Cassetta delle lettere</description>
     <description locale="ja" >ポスト</description>
@@ -1526,7 +1526,7 @@
     <description locale="bs" >Bar</description>
     <description locale="cs" >Hospoda</description>
     <description locale="de" >Kneipe</description>
-    <description locale="es" >Bar</description>
+    <description locale="es" >Bar de copas</description>
     <description locale="fr" >Bar</description>
     <description locale="it" >Bar</description>
     <description locale="ja" >パブ</description>
@@ -1679,7 +1679,7 @@
     <description locale="ar" >مراحيض</description>
     <description locale="cs" >Veřejné záchody</description>
     <description locale="de" >Toiletten</description>
-    <description locale="es" >Baños</description>
+    <description locale="es" >Aseos</description>
     <description locale="fr" >Toilettes</description>
     <description locale="it" >Toilets</description>
     <description locale="ja" >トイレ</description>
@@ -2020,7 +2020,7 @@
   <description locale="ar" >معبد</description>
   <description locale="cs" >Bohoslužebné místo</description>
   <description locale="de" >Anbetungsort</description>
-  <description locale="es" >Lugar de culto</description>
+  <description locale="es" >Lugar de Culto</description>
   <description locale="fr" >Lieu de culte</description>
   <description locale="it" >Luogo di culto</description>
   <description locale="ja" >祈りのための場所</description>
@@ -2041,7 +2041,7 @@
    <description locale="fr" >Équipement</description>
    <description locale="it" >Attrattiva</description>
    <description locale="ja" >各種施設</description>
-   <description locale="pl" >Miejsce</description>
+   <description locale="pl" >Miejsce kultu</description>
    <description locale="ru" >Инфраструктура</description>
    <description locale="sk" >Vybavenosť</description>
    <description locale="sv" >Facilitet</description>
@@ -2051,7 +2051,7 @@
     <description locale="ar" >معبد</description>
     <description locale="cs" >Bohoslužebné místo</description>
     <description locale="de" >Anbetungsort</description>
-    <description locale="es" >Lugar de culto</description>
+    <description locale="es" >Lugar de Culto</description>
     <description locale="fr" >Lieu de culte</description>
     <description locale="it" >Luogo di culto</description>
     <description locale="ja" >祈りのための場所</description>
@@ -2097,7 +2097,7 @@
    <description locale="fr" >Équipement</description>
    <description locale="it" >Attrattiva</description>
    <description locale="ja" >各種施設</description>
-   <description locale="pl" >Miejsce</description>
+   <description locale="pl" >Miejsce kultu</description>
    <description locale="ru" >Инфраструктура</description>
    <description locale="sk" >Vybavenosť</description>
    <description locale="sv" >Facilitet</description>
@@ -2107,7 +2107,7 @@
     <description locale="ar" >معبد</description>
     <description locale="cs" >Bohoslužebné místo</description>
     <description locale="de" >Anbetungsort</description>
-    <description locale="es" >Lugar de culto</description>
+    <description locale="es" >Lugar de Culto</description>
     <description locale="fr" >Lieu de culte</description>
     <description locale="it" >Luogo di culto</description>
     <description locale="ja" >祈りのための場所</description>

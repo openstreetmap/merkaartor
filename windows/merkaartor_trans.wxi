@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Include>
+  
+  <Fragment>
+  
+    <DirectoryRef Id="QTTRANSLATIONS">
+         <Component Id="MerkaartorTranslationsCt" Guid="8BA3BDF5-D15B-46e0-8581-2BF72A4B6940">
+            <File Id="merkaartor_ar.qm" Name="merkaartor_ar.qm"
+               Source="..\translations\merkaartor_ar.qm" DiskId="1">
+            </File>
+            <File Id="merkaartor_cs.qm" Name="merkaartor_cs.qm"
+               Source="..\translations\merkaartor_cs.qm" DiskId="1">
+            </File>
+            <File Id="merkaartor_de.qm" Name="merkaartor_de.qm"
+               Source="..\translations\merkaartor_de.qm" DiskId="1">
+            </File>
+            <File Id="merkaartor_es.qm" Name="merkaartor_es.qm"
+               Source="..\translations\merkaartor_es.qm" DiskId="1">
+            </File>
+            <File Id="merkaartor_fr.qm" Name="merkaartor_fr.qm"
+               Source="..\translations\merkaartor_fr.qm" DiskId="1">
+            </File>
+            <File Id="merkaartor_it.qm" Name="merkaartor_it.qm"
+               Source="..\translations\merkaartor_it.qm" DiskId="1">
+            </File>
+            <File Id="merkaartor_ru.qm" Name="merkaartor_ru.qm"
+               Source="..\translations\merkaartor_ru.qm" DiskId="1">
+            </File>
+            <File Id="merkaartor_pl.qm" Name="merkaartor_pl.qm"
+               Source="..\translations\merkaartor_pl.qm" DiskId="1">
+            </File>
+            <File Id="merkaartor_ja.qm" Name="merkaartor_ja.qm"
+               Source="..\translations\merkaartor_ja.qm" DiskId="1">
+            </File>
+            <File Id="merkaartor_nl.qm" Name="merkaartor_nl.qm"
+               Source="..\translations\merkaartor_nl.qm" DiskId="1">
+            </File>
+            <File Id="merkaartor_pt.qm" Name="merkaartor_pt.qm"
+               Source="..\translations\merkaartor_pt.qm" DiskId="1">
+            </File>
+            <File Id="merkaartor_sk.qm" Name="merkaartor_sk.qm"
+               Source="..\translations\merkaartor_sk.qm" DiskId="1">
+            </File>
+            <File Id="merkaartor_sv.qm" Name="merkaartor_sv.qm"
+               Source="..\translations\merkaartor_sv.qm" DiskId="1">
+            </File>
+            <File Id="merkaartor_uk.qm" Name="merkaartor_uk.qm"
+               Source="..\translations\merkaartor_uk.qm" DiskId="1">
+            </File>
+         </Component>
+      </DirectoryRef>
+   
+  </Fragment>
+
+</Include>
