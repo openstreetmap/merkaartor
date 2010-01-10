@@ -148,13 +148,13 @@ QString Road::description() const
 	return QString("%1").arg(id());
 }
 
-RenderPriority Road::renderPriority()
+const RenderPriority& Road::renderPriority()
 {
 	// FIWME Segments of a road with different layers are wrongly painted (rounded corners)
 	return p->theRenderPriority;
 }
 
-RenderPriority Road::getRenderPriority()
+const RenderPriority& Road::getRenderPriority()
 {
 	return p->theRenderPriority;
 }

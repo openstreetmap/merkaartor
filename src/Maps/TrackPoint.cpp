@@ -277,7 +277,7 @@ void TrackPoint::updateMeta()
 	MetaUpToDate = true;
 }
 
-RenderPriority TrackPoint::renderPriority()
+const RenderPriority& TrackPoint::renderPriority()
 {
 	RenderPriority apriority(RenderPriority::IsSingular,0.);
 	setRenderPriority(apriority);

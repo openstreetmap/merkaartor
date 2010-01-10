@@ -38,8 +38,8 @@ class Road : public MapFeature
 		virtual void cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const QList<MapFeature*>& Alternatives);
 		virtual bool notEverythingDownloaded();
 		virtual QString description() const;
-		virtual RenderPriority renderPriority();
-		virtual RenderPriority getRenderPriority();
+		virtual const RenderPriority& renderPriority();
+		virtual const RenderPriority& getRenderPriority();
 
 		virtual void add(TrackPoint* Pt);
 		virtual void add(TrackPoint* Pt, int Idx);
@@ -47,18 +47,18 @@ class Road : public MapFeature
 		virtual void remove(MapFeature* F);
 		virtual int size() const;
 		virtual int find(MapFeature* Pt) const;
-        virtual int findVirtual(MapFeature* Pt) const;
-        virtual MapFeature* get(int idx);
+		virtual int findVirtual(MapFeature* Pt) const;
+		virtual MapFeature* get(int idx);
 		virtual const MapFeature* get(int Idx) const;
 		virtual bool isNull() const;
-        void updateVirtuals();
+		void updateVirtuals();
 
 		const QList<Coord>& smoothed() const;
 
 		TrackPoint* getNode(int idx);
 		const TrackPoint* getNode(int idx) const;
 		const std::vector<TrackPointPtr>& getNodes() const;
-		
+
 		bool isNodeAtEnd(TrackPoint* node);
 
 		/** Set the tag "key=value" to the current object
@@ -107,7 +107,7 @@ class Road : public MapFeature
 		static Road* fromXML(MapDocument* d, MapLayer* L, const QDomElement e);
 
 		virtual QString toHtml();
-	
+
 		virtual void toBinary(QDataStream& ds, QHash <QString, quint64>& theIndex);
 		static Road* fromBinary(MapDocument* d, OsbMapLayer* L, QDataStream& ds, qint8 c, qint64 id);
 

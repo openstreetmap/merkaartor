@@ -41,7 +41,7 @@ class TrackPoint : public MapFeature
 		virtual void cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const QList<MapFeature*>& Alternatives);
 		virtual bool notEverythingDownloaded();
 		virtual QString description() const;
-		virtual RenderPriority renderPriority();
+		virtual const RenderPriority& renderPriority();
 
 		virtual int find(MapFeature* Pt) const;
 		virtual void remove(int idx);
@@ -69,7 +69,7 @@ class TrackPoint : public MapFeature
 		double elevation() const;
 		void setElevation(double aElevation);
 
-        virtual void partChanged(MapFeature* F, int ChangeId);
+		virtual void partChanged(MapFeature* F, int ChangeId);
 
 		virtual QString toXML(int lvl=0, QProgressDialog * progress=NULL);
 		virtual bool toXML(QDomElement xParent, QProgressDialog & progress);
@@ -113,16 +113,16 @@ template<> struct coordinate_system<TrackPointPtr>
 { typedef cs::cartesian type; };
 
 template<> struct dimension<TrackPointPtr>
-    : boost::mpl::int_<2> {};
+	: boost::mpl::int_<2> {};
 
 template<>
 struct access<TrackPointPtr>
 {
-    template <std::size_t I>
-    static inline qreal get(const TrackPointPtr& p)
-    {
+	template <std::size_t I>
+	static inline qreal get(const TrackPointPtr& p)
+	{
 		return I == 0 ? p->projection().x() : p->projection().y();
-    }
+	}
 
 //    template <std::size_t I>
 //    static inline void set(TrackPointPtr& p, const qreal& value)

@@ -32,6 +32,8 @@ class RenderPriority
 			: theClass(IsLinear), InClassPriority(0.0) { }
 		RenderPriority(Class C, double IC)
 			: theClass(C), InClassPriority(IC) { }
+		RenderPriority(const RenderPriority& other)
+			: theClass(other.theClass), InClassPriority(other.InClassPriority) { }
 		bool operator<(const RenderPriority& R) const
 		{
 			return (theClass < R.theClass) ||
@@ -41,6 +43,15 @@ class RenderPriority
 		{
 			return ((theClass == R.theClass) && (InClassPriority == R.InClassPriority));
 		}
+		RenderPriority &operator=(const RenderPriority &other)
+		{
+			if (this != &other) {
+				theClass = other.theClass;
+				InClassPriority = other.InClassPriority;
+			}
+			return *this;
+		}
+
 	private:
 		Class theClass;
 		double InClassPriority;
@@ -130,9 +141,9 @@ class MapFeature : public QObject
 		int versionNumber() const;
 		void setVersionNumber(int vn);
 		virtual QString description() const = 0;
-		virtual RenderPriority renderPriority() = 0;
-		virtual RenderPriority getRenderPriority();
-		virtual void setRenderPriority(RenderPriority aPriority);
+		virtual const RenderPriority& renderPriority() = 0;
+		virtual const RenderPriority& getRenderPriority();
+		virtual void setRenderPriority(const RenderPriority& aPriority);
 
 		/** Set the tag "key=value" to the current object
 		 * If a tag with the same key exist, it is replaced
@@ -219,13 +230,13 @@ class MapFeature : public QObject
 		 * @return true if uploaded
 		 */
 		bool isUploaded() const;
-        void setUploaded(bool state);
+		void setUploaded(bool state);
 
-        /** check if the feature is virtual
-         * @return true if virtual
-         */
-        bool isVirtual() const;
-        void setVirtual(bool val);
+		/** check if the feature is virtual
+		 * @return true if virtual
+		 */
+		bool isVirtual() const;
+		void setVirtual(bool val);
 
 		virtual bool isInteresting() const {return true;}
 
@@ -240,7 +251,7 @@ class MapFeature : public QObject
 		virtual int size() const = 0;
 		virtual int find(MapFeature* Pt) const = 0;
 		virtual MapFeature* get(int idx) = 0;
-		virtual const MapFeature* get(int Idx) const = 0; 
+		virtual const MapFeature* get(int Idx) const = 0;
 		virtual bool isNull() const = 0;
 
 		void setParentFeature(MapFeature* F);

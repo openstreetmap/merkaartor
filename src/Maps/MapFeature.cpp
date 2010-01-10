@@ -167,12 +167,12 @@ MapLayer* MapFeature::layer()
 	return dynamic_cast<MapLayer*>(parent());
 }
 
-RenderPriority MapFeature::getRenderPriority()
+const RenderPriority& MapFeature::getRenderPriority()
 {
 	return p->theRenderPriority;
 }
 
-void MapFeature::setRenderPriority(RenderPriority aPriority)
+void MapFeature::setRenderPriority(const RenderPriority& aPriority)
 {
 	p->theRenderPriority = aPriority;
 }

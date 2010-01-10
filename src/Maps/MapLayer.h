@@ -85,7 +85,6 @@ public:
 	const MapFeature* get(int i) const;
 	MapFeature* get(const QString& id, bool exact=true);
 	void notifyIdUpdate(const QString& id, MapFeature* aFeature);
-	void sortRenderingPriority();
 
 	virtual void invalidate(MapDocument*, CoordBox) {}
 	void invalidateRenderPriority();
@@ -161,7 +160,7 @@ public:
 	static DrawingMapLayer* doFromXML(DrawingMapLayer* l, MapDocument* d, const QDomElement e, QProgressDialog & progress);
 
 	virtual /* const */ LayerType classType() {return MapLayer::DrawingMapLayerType;}
-    virtual const LayerGroups classGroups() {return (MapLayer::OSM);}
+	virtual const LayerGroups classGroups() {return (MapLayer::OSM);}
 };
 
 class TrackMapLayer : public MapLayer

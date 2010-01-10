@@ -107,7 +107,7 @@ QString Relation::description() const
 	return QString("%1").arg(id());
 }
 
-RenderPriority Relation::renderPriority()
+const RenderPriority& Relation::renderPriority()
 {
 	setRenderPriority(p->theRenderPriority);
 	return p->theRenderPriority;

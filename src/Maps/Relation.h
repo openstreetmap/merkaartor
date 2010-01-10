@@ -31,7 +31,7 @@ class Relation : public MapFeature
 		virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection, const QTransform& theTransform) const;
 		virtual void cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const QList<MapFeature*>& Alternatives);
 		virtual bool notEverythingDownloaded();
-		virtual RenderPriority renderPriority();
+		virtual const RenderPriority& renderPriority();
 
 		void add(const QString& Role, MapFeature* Pt);
 		void add(const QString& Role, MapFeature* Pt, int Idx);

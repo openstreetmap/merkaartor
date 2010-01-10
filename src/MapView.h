@@ -34,7 +34,7 @@ class MapView :	public QWidget
 		MapDocument* document();
 		void launch(Interaction* anInteraction);
 		Interaction* interaction();
-		
+
 		void buildFeatureSet();
 		void drawBackground(QPainter & painter, Projection& aProj);
 		void drawFeatures(QPainter & painter, Projection& aProj);
@@ -70,7 +70,7 @@ class MapView :	public QWidget
 		void setViewport(const CoordBox& Map, const QRect& Screen);
 		CoordBox viewport() const;
 		static void transformCalc(QTransform& theTransform, const Projection& theProjection, const CoordBox& TargetMap, const QRect& Screen);
-		double pixelPerM() const; 
+		double pixelPerM() const;
 
 		void zoom(double d, const QPointF& Around, const QRect& Screen);
 		void setCenter(Coord& Center, const QRect& Screen);
@@ -80,8 +80,6 @@ class MapView :	public QWidget
 		void fromXML(const QDomElement e);
 
 	private:
-		void sortRenderingPriority();
-		void sortRenderingPriorityInLayers();
 		void drawDownloadAreas(QPainter & painter);
 		void drawScale(QPainter & painter);
 		void drawGPS(QPainter & painter);
@@ -120,7 +118,7 @@ class MapView :	public QWidget
 		virtual void on_MoveRight_activated();
 		virtual void on_MoveUp_activated();
 		virtual void on_MoveDown_activated();
-	
+
 	signals:
 		void interactionChanged(Interaction* anInteraction);
 		void viewportChanged();

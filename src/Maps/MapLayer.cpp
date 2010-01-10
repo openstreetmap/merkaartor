@@ -15,7 +15,6 @@
 #include "Command/RoadCommands.h"
 
 #include "Utils/LineF.h"
-#include "Utils/SortAccordingToRenderingPriority.h"
 
 #include "ImportExport/ImportExportOsmBin.h"
 
@@ -70,15 +69,7 @@ public:
 
 	bool RenderPriorityUpToDate;
 	MapDocument* theDocument;
-
-	void sortRenderingPriority();
 };
-
- void MapLayerPrivate::sortRenderingPriority()
-{
-	qSort(Features.begin(),Features.end(),SortAccordingToRenderingPriority());
-	RenderPriorityUpToDate = true;
-}
 
 MapLayer::MapLayer()
 :  p(new MapLayerPrivate), theWidget(0)
@@ -103,12 +94,6 @@ MapLayer::MapLayer(const MapLayer&)
 MapLayer::~MapLayer()
 {
 	SAFE_DELETE(p);
-}
-
-void MapLayer::sortRenderingPriority()
-{
-	if (!p->RenderPriorityUpToDate)
-		p->sortRenderingPriority();
 }
 
 void MapLayer::invalidateRenderPriority()

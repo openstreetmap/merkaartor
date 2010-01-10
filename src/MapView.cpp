@@ -25,7 +25,6 @@
 #endif
 #include "Preferences/MerkaartorPreferences.h"
 #include "Utils/SvgCache.h"
-#include "Utils/SortAccordingToRenderingPriority.h"
 
 
 #include <QTime>
@@ -48,7 +47,7 @@ public:
 	CoordBox Viewport;
 	QList<CoordBox> invalidRects;
 	QPoint theRasterPanDelta, theVectorPanDelta;
-	QSet<MapFeature*> theFeatures;
+	QMultiMap<RenderPriority, MapFeature*> theFeatures;
 	QSet<Road*> theCoastlines;
 	QList<TrackPoint*> theVirtualNodes;
 
@@ -184,7 +183,6 @@ void MapView::paintEvent(QPaintEvent * anEvent)
 #endif
 
 	p->theFeatures.clear();
-	p->theCoastlines.clear();
 
 	QPainter P;
 	P.begin(this);
@@ -284,23 +282,6 @@ void MapView::drawGPS(QPainter & P)
 	}
 }
 
-void MapView::sortRenderingPriorityInLayers()
-{
-	for (int i = 0; i < theDocument->layerSize(); ++i) {
-		theDocument->getLayer(i)->
-			sortRenderingPriority();
-	}
-}
-
-void MapView::sortRenderingPriority()
-{
-	// TODO Avoid copy
-	// TODO Although it seems to work, sorting a QSet is a nonsense!
-	QList<MapFeature*> aList = p->theFeatures.toList();
-	qSort(aList.begin(),aList.end(),SortAccordingToRenderingPriority());
-	p->theFeatures.fromList(aList);
-}
-
 void MapView::updateLayersImage()
 {
 	if (!StaticMap || (StaticMap->size() != size()))
@@ -333,8 +314,6 @@ void MapView::buildFeatureSet()
 	QRectF clipRect = p->theTransform.inverted().mapRect(QRectF(rect().adjusted(-1000, -1000, 1000, 1000)));
 	//QRectF clipRect = p->theTransform.inverted().mapRect(QRectF(rect().adjusted(10, 10, -10, -10)));
 
-#if 1
-
 	//qDebug() << "Inv rects size: " << p->invalidRects.size();
 	for (int i=0; i < p->invalidRects.size(); ++i) {
 		Coord bl = p->invalidRects[i].bottomLeft();
@@ -348,56 +327,33 @@ void MapView::buildFeatureSet()
 			for (std::deque < MapFeaturePtr >::const_iterator it = ret.begin(); it != ret.end(); ++it) {
 				if (Road * R = CAST_WAY(*it)) {
 					R->buildPath(theProjection, p->theTransform, clipRect);
-					p->theFeatures.insert(R);
+					if (p->theFeatures.find(R->renderPriority(), R) == p->theFeatures.end()) {
+						p->theFeatures.insert(R->renderPriority(), R);
+					}
 					if (R->isCoastline())
 						p->theCoastlines.insert(R);
 				} else
 				if (Relation * RR = CAST_RELATION(*it)) {
 					RR->buildPath(theProjection, p->theTransform, clipRect);
-					p->theFeatures.insert(RR);
+					if (p->theFeatures.find(RR->renderPriority(), RR) == p->theFeatures.end()) {
+						p->theFeatures.insert(RR->renderPriority(), RR);
+					}
 				} else
 				if (TrackPoint * pt = CAST_NODE(*it)) {
 					if (theDocument->getLayer(j)->arePointsDrawable())
-						p->theFeatures.insert(pt);
+						if (p->theFeatures.find(pt->renderPriority(), pt) == p->theFeatures.end()) {
+							p->theFeatures.insert(pt->renderPriority(), pt);
+						}
 				} else
-					p->theFeatures.insert(*it);
+					if (p->theFeatures.find((*it)->renderPriority(), *it) == p->theFeatures.end()) {
+						p->theFeatures.insert((*it)->renderPriority(), *it);
+					}
 			}
 		}
 
 		coordRegion.merge(CoordBox(bl, tr));
 	}
-	sortRenderingPriority();
-
-#else
-
-	for (int i=0; i < invalidRegion.rects().size(); ++i) {
-		Coord bl = aProj.inverse(invalidRegion.rects()[i].bottomLeft());
-		Coord tr = aProj.inverse(invalidRegion.rects()[i].topRight());
-		coordRegion += CoordBox(bl, tr);
-	}
-
-	sortRenderingPriorityInLayers();
-	for (VisibleFeatureIterator vit(theDocument); !vit.isEnd(); ++vit) {
-		bool OK = false;
-		for (int k=0; k<coordRegion.size() && !OK; ++k)
-			if (coordRegion[k].intersects(vit.get()->boundingBox()))
-				OK = true;
-		if (OK) {
-			if (Road * R = dynamic_cast < Road * >(vit.get())) {
-				R->buildPath(aProj, clipRect);
-				p->theFeatures.push_back(R);
-				if (R->isCoastline())
-					p->theCoastlines.push_back(R);
-			} else
-			if (Relation * RR = dynamic_cast < Relation * >(vit.get())) {
-				RR->buildPath(aProj, clipRect);
-				p->theFeatures.push_back(RR);
-			} else {
-				p->theFeatures.push_back(vit.get());
-			}
-		}
-	}
-#endif
+//	sortRenderingPriority();
 }
 
 bool testColor(const QImage& theImage, const QPoint& P, const QRgb& targetColor)
@@ -702,7 +658,7 @@ void MapView::drawFeatures(QPainter & P, Projection& /*aProj*/)
 {
 	M_STYLE->initialize(P, *this);
 
-	QSet<MapFeature*>::const_iterator it;
+	QMap<RenderPriority, MapFeature*>::const_iterator it;
 	for (int i = 0; i < M_STYLE->size(); ++i)
 	{
 		PaintStyleLayer *Current = M_STYLE->get(i);
@@ -713,11 +669,11 @@ void MapView::drawFeatures(QPainter & P, Projection& /*aProj*/)
 		for (it = p->theFeatures.constBegin() ;it != p->theFeatures.constEnd(); ++it)
 		{
 			P.setOpacity((*it)->layer()->getAlpha());
-			if (Road * R = dynamic_cast < Road * >((*it)))
+			if (Road * R = dynamic_cast < Road * >(it.value()))
 				Current->draw(R);
-			else if (TrackPoint * Pt = dynamic_cast < TrackPoint * >((*it)))
+			else if (TrackPoint * Pt = dynamic_cast < TrackPoint * >(it.value()))
 				Current->draw(Pt);
-			else if (Relation * RR = dynamic_cast < Relation * >((*it)))
+			else if (Relation * RR = dynamic_cast < Relation * >(it.value()))
 				Current->draw(RR);
 		}
 		P.restore();
@@ -726,7 +682,7 @@ void MapView::drawFeatures(QPainter & P, Projection& /*aProj*/)
 	for (it = p->theFeatures.constBegin(); it != p->theFeatures.constEnd(); ++it)
 	{
 		P.setOpacity((*it)->layer()->getAlpha());
-		(*it)->draw(P, this);
+		it.value()->draw(P, this);
 	}
 }
 
