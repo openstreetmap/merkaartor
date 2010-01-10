@@ -37,10 +37,10 @@ static bool regionalZoom(const MapView& theView)
 	return theView.pixelPerM() < REGIONALZOOM;
 }
 
-static bool globalZoom(const MapView& theView)
-{
-	return theView.pixelPerM() < GLOBALZOOM;
-}
+//static bool globalZoom(const MapView& theView)
+//{
+//	return theView.pixelPerM() < GLOBALZOOM;
+//}
 
 class EditPaintStylePrivate
 {

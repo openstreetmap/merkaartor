@@ -29,8 +29,9 @@ class RoadPrivate
 {
 	public:
 		RoadPrivate()
-		: SmoothedUpToDate(false), BBox(Coord(0,0),Coord(0,0)), BBoxUpToDate(false), Area(0), Distance(0), Width(0),
-			wasPathComplete(false), ProjectionRevision(0), IsCoastline(false)
+		: SmoothedUpToDate(false), BBox(Coord(0,0),Coord(0,0)), BBoxUpToDate(false)
+			, IsCoastline(false), Area(0), Distance(0), Width(0)
+			, wasPathComplete(false), ProjectionRevision(0)
 		{
 		}
 		std::vector<TrackPointPtr> Nodes;
@@ -46,7 +47,6 @@ class RoadPrivate
 		double Width;
 		bool NotEverythingDownloaded;
 		bool wasPathComplete;
-		RenderPriority theRenderPriority;
 		QPainterPath thePath;
 #ifndef _MOBILE
 		int ProjectionRevision;
@@ -136,6 +136,7 @@ void Road::partChanged(MapFeature*, int ChangeId)
 	MetaUpToDate = false;
 	p->SmoothedUpToDate = false;
 	p->wasPathComplete = false;
+	updateVirtuals();
 
 	notifyParents(ChangeId);
 }
@@ -148,31 +149,9 @@ QString Road::description() const
 	return QString("%1").arg(id());
 }
 
-const RenderPriority& Road::renderPriority()
-{
-	// FIWME Segments of a road with different layers are wrongly painted (rounded corners)
-	return p->theRenderPriority;
-}
-
-const RenderPriority& Road::getRenderPriority()
-{
-	return p->theRenderPriority;
-}
-
 void Road::add(TrackPoint* Pt)
 {
-	if (layer())
-		layer()->indexRemove(p->BBox, this);
-	p->Nodes.push_back(Pt);
-	Pt->setParentFeature(this);
-	p->BBoxUpToDate = false;
-	MetaUpToDate = false;
-	p->SmoothedUpToDate = false;
-	p->wasPathComplete = false;
-	if (layer()) {
-		CoordBox bb = boundingBox();
-		layer()->indexAdd(bb, this);
-	}
+	add(Pt, p->Nodes.size());
 }
 
 void Road::add(TrackPoint* Pt, int Idx)
@@ -190,6 +169,16 @@ void Road::add(TrackPoint* Pt, int Idx)
 	if (layer()) {
 		CoordBox bb = boundingBox();
 		layer()->indexAdd(bb, this);
+	}
+
+	if (Idx) {
+		QLineF l(toQt(p->Nodes[Idx-1]->position()), toQt(p->Nodes[Idx]->position()));
+		l.setLength(l.length()/2);
+		TrackPoint* v = new TrackPoint(toCoord(l.p2()));
+		v->setVirtual(true);
+		v->setParentFeature(this);
+		layer()->add(v);
+		p->virtualNodes.push_back(v);
 	}
 }
 
@@ -237,6 +226,7 @@ void Road::remove(int idx)
 {
 	if (layer())
 		layer()->indexRemove(p->BBox, this);
+
 	if (p->Nodes[idx]) {
 		TrackPoint* Pt = p->Nodes[idx];
 		Pt->unsetParentFeature(this);
@@ -250,6 +240,8 @@ void Road::remove(int idx)
 		CoordBox bb = boundingBox();
 		layer()->indexAdd(bb, this);
 	}
+
+	updateVirtuals();
 }
 
 void Road::remove(MapFeature* F)
@@ -335,7 +327,6 @@ void Road::updateMeta()
 				break;
 			}
 
-	updateVirtuals();
 	if (p->Nodes.size() == 0)
 	{
 		MetaUpToDate = true;
@@ -358,14 +349,14 @@ void Road::updateMeta()
 
 	if (isArea) {
 		p->Area = p->Distance;
-		p->theRenderPriority = RenderPriority(RenderPriority::IsArea,-fabs(p->Area));
+		setRenderPriority(RenderPriority(RenderPriority::IsArea,-fabs(p->Area)));
 	} else {
 		qreal Priority = tagValue("layer","0").toInt();
 		if (Priority >= 0)
 			Priority++;
 		// dummy number to get a deterministic feature sort
 		Priority *= sin(intToRad(boundingBox().lonDiff()));
-		p->theRenderPriority = RenderPriority(RenderPriority::IsLinear,Priority);
+		setRenderPriority(RenderPriority(RenderPriority::IsLinear,Priority));
 	}
 
 	MetaUpToDate = true;

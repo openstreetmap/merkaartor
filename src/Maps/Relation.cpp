@@ -470,7 +470,7 @@ void Relation::updateMeta()
 	p->theRenderPriority = RenderPriority(RenderPriority::IsSingular, 0.);
 	for (int i=0; i<p->Members.size(); ++i) {
 		if (p->Members.at(i).second->renderPriority() < p->theRenderPriority)
-			p->theRenderPriority = p->Members.at(i).second->getRenderPriority();
+			p->theRenderPriority = p->Members.at(i).second->renderPriority();
 	}
 
 	MetaUpToDate = true;

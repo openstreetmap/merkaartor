@@ -87,7 +87,6 @@ public:
 	void notifyIdUpdate(const QString& id, MapFeature* aFeature);
 
 	virtual void invalidate(MapDocument*, CoordBox) {}
-	void invalidateRenderPriority();
 
 	void setDocument(MapDocument* aDocument);
 	MapDocument* getDocument();

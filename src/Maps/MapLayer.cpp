@@ -33,7 +33,6 @@ class MapLayerPrivate
 {
 public:
 	MapLayerPrivate()
-		: RenderPriorityUpToDate(false)
 	{
 		theDocument = NULL;
 		selected = false;
@@ -67,7 +66,6 @@ public:
 	qreal alpha;
 	int dirtyLevel;
 
-	bool RenderPriorityUpToDate;
 	MapDocument* theDocument;
 };
 
@@ -94,11 +92,6 @@ MapLayer::MapLayer(const MapLayer&)
 MapLayer::~MapLayer()
 {
 	SAFE_DELETE(p);
-}
-
-void MapLayer::invalidateRenderPriority()
-{
-	p->RenderPriorityUpToDate = false;
 }
 
 void MapLayer::setName(const QString& s)
@@ -177,7 +170,6 @@ void MapLayer::add(MapFeature* aFeature)
 		indexAdd(aFeature->boundingBox(), aFeature);
 	p->Features.push_back(aFeature);
 	notifyIdUpdate(aFeature->id(),aFeature);
-	p->RenderPriorityUpToDate = false;
 }
 
 void MapLayer::add(MapFeature* aFeature, int Idx)
@@ -199,7 +191,6 @@ void MapLayer::remove(MapFeature* aFeature)
 		if (!aFeature->isDeleted())
 			indexRemove(aFeature->boundingBox(), aFeature);
 		notifyIdUpdate(aFeature->id(),0);
-		p->RenderPriorityUpToDate = false;
 	}
 }
 
@@ -211,7 +202,6 @@ void MapLayer::deleteFeature(MapFeature* aFeature)
 		if (!aFeature->isDeleted())
 			indexRemove(aFeature->boundingBox(), aFeature);
 		notifyIdUpdate(aFeature->id(),0);
-		p->RenderPriorityUpToDate = false;
 	}
 
 	delete aFeature;
@@ -224,7 +214,6 @@ void MapLayer::clear()
 	{
 		(*i)->setLayer(0);
 		notifyIdUpdate((*i)->id(),0);
-		p->RenderPriorityUpToDate = false;
 		i = p->Features.erase(i);
 	}
 	reIndex();

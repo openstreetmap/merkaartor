@@ -26,11 +26,13 @@ class TrackSegmentPrivate
 TrackSegment::TrackSegment(void)
 {
 	p = new TrackSegmentPrivate;
+	setRenderPriority(RenderPriority (RenderPriority::IsLinear,0.));
 }
 
 TrackSegment::TrackSegment(const TrackSegment& other)
 : MapFeature(other), p(0)
 {
+	setRenderPriority(RenderPriority (RenderPriority::IsLinear,0.));
 }
 
 TrackSegment::~TrackSegment(void)
@@ -59,13 +61,6 @@ void TrackSegment::sortByTime()
 QString TrackSegment::description() const
 {
 	return "tracksegment";
-}
-
-const RenderPriority& TrackSegment::renderPriority()
-{
-	RenderPriority apriority(RenderPriority::IsLinear,0.);
-	setRenderPriority(apriority);
-	return apriority;
 }
 
 void TrackSegment::add(TrackPoint* aPoint)

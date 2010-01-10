@@ -28,6 +28,7 @@ TrackPoint::TrackPoint(const Coord& aCoord)
 	, p(new TrackPointPrivate)
 {
 	BBox = CoordBox(Position,Position);
+	setRenderPriority(RenderPriority(RenderPriority::IsSingular,0.));
 }
 
 TrackPoint::TrackPoint(const TrackPoint& other)
@@ -41,6 +42,7 @@ TrackPoint::TrackPoint(const TrackPoint& other)
 	setTime(other.time());
 	BBox = other.boundingBox();
 	p->ProjectionRevision = other.projectionRevision();
+	setRenderPriority(RenderPriority(RenderPriority::IsSingular,0.));
 }
 
 TrackPoint::~TrackPoint(void)
@@ -275,13 +277,6 @@ void TrackPoint::updateMeta()
 {
 	p->IsWaypoint = (findKey("_waypoint_") != tagSize());
 	MetaUpToDate = true;
-}
-
-const RenderPriority& TrackPoint::renderPriority()
-{
-	RenderPriority apriority(RenderPriority::IsSingular,0.);
-	setRenderPriority(apriority);
-	return apriority;
 }
 
 QString TrackPoint::toXML(int lvl, QProgressDialog * progress)

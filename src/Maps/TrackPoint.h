@@ -41,7 +41,6 @@ class TrackPoint : public MapFeature
 		virtual void cascadedRemoveIfUsing(MapDocument* theDocument, MapFeature* aFeature, CommandList* theList, const QList<MapFeature*>& Alternatives);
 		virtual bool notEverythingDownloaded();
 		virtual QString description() const;
-		virtual const RenderPriority& renderPriority();
 
 		virtual int find(MapFeature* Pt) const;
 		virtual void remove(int idx);

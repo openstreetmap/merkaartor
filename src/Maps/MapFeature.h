@@ -141,8 +141,7 @@ class MapFeature : public QObject
 		int versionNumber() const;
 		void setVersionNumber(int vn);
 		virtual QString description() const = 0;
-		virtual const RenderPriority& renderPriority() = 0;
-		virtual const RenderPriority& getRenderPriority();
+		virtual const RenderPriority& renderPriority();
 		virtual void setRenderPriority(const RenderPriority& aPriority);
 
 		/** Set the tag "key=value" to the current object
