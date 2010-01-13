@@ -294,15 +294,17 @@ void ImageMapLayer::drawImage(QPixmap& thePix, QPoint delta)
 	const qreal ratio = qMax<const qreal>((qreal)pmSize.width()/ps.width()*1.0, (qreal)pmSize.height()/ps.height());
 	QPixmap pms;
 	if (ratio >= 1.0) {
-		pms = p->pm.scaled(ps);
+        qDebug() << "Bg image scale 1 " << ps << " : " << p->pm.size();
+        pms = p->pm.scaled(ps);
 	} else {
 		const QSizeF drawingSize = pmSize * ratio;
 		const QSizeF originSize = pmSize/2 - drawingSize/2;
 		const QPointF drawingOrigin = QPointF(originSize.width(), originSize.height());
 		const QRect drawingRect = QRect(drawingOrigin.toPoint(), drawingSize.toSize());
 
-		pms = p->pm.copy(drawingRect).scaled(ps*ratio);
-	}
+        qDebug() << "Bg image scale 2 " << ps*ratio << " : " << p->pm.size();
+        pms = p->pm.copy(drawingRect).scaled(ps*ratio);
+    }
 
 	if (!delta.isNull())
 		p->theDelta = delta;
@@ -419,8 +421,8 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect) const
 		vlm = QRectF(ulCoord, QSizeF( (lrCoord-ulCoord).x(), (lrCoord-ulCoord).y()));
 	}
 
-	if (p->theMapAdapter->getAdaptedZoom() && vp.contains(vlm))
-		p->theMapAdapter->zoom_out();
+    if (p->theMapAdapter->getAdaptedZoom() && vp.contains(vlm))
+        p->theMapAdapter->zoom_out();
 
 	mapmiddle_px = p->theMapAdapter->coordinateToDisplay(vp.center()); 
 

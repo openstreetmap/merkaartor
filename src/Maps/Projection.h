@@ -37,11 +37,11 @@ class Projection
 
 		static void projTransform(ProjProjection *srcdefn, 
 						   ProjProjection *dstdefn, 
-						   long point_count, int point_offset, double *x, double *y, double *z );
-		void projTransformToWGS84(long point_count, int point_offset, double *x, double *y, double *z );
-		void projTransformFromWGS84(long point_count, int point_offset, double *x, double *y, double *z );
+                           long point_count, int point_offset, double *x, double *y, double *z );
+        void projTransformToWGS84(long point_count, int point_offset, double *x, double *y, double *z ) const;
+        void projTransformFromWGS84(long point_count, int point_offset, double *x, double *y, double *z ) const;
 		bool projIsLatLong();
-		QRectF getProjectedViewport(CoordBox& Viewport, QRect& screen);
+        QRectF getProjectedViewport(const CoordBox& Viewport, const QRect& screen) const;
 
 		int projectionRevision() const;
 #endif

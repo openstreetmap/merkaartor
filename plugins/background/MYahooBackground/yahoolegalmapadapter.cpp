@@ -68,13 +68,13 @@ QString YahooLegalMapAdapter::getQuery(const QRectF& wgs84Bbox, const QRectF& /*
 
 	return QString()
 						.append("qrc:/Html/ymap.html?")
-						.append("WIDTH=").append(QString::number(size.width()))
-						.append("&HEIGHT=").append(QString::number(size.height()))
+                        .append("WIDTH=").append(QString::number(size.width()+100))
+                        .append("&HEIGHT=").append(QString::number(size.height()+100))
 						.append("&BBOX=")
-						.append(loc.toString(wgs84Bbox.bottomLeft().x(),'f',6)).append(",")
-						.append(loc.toString(wgs84Bbox.bottomLeft().y(),'f',6)).append(",")
-						.append(loc.toString(wgs84Bbox.topRight().x(),'f',6)).append(",")
-						.append(loc.toString(wgs84Bbox.topRight().y(),'f',6))
+                        .append(loc.toString(wgs84Bbox.bottomLeft().x(),'f',8)).append(",")
+                        .append(loc.toString(wgs84Bbox.bottomLeft().y(),'f',8)).append(",")
+                        .append(loc.toString(wgs84Bbox.topRight().x(),'f',8)).append(",")
+                        .append(loc.toString(wgs84Bbox.topRight().y(),'f',8))
 						;
 }
 

@@ -40,8 +40,6 @@
 class MapViewPrivate
 {
 public:
-	//double ScaleLat, ScaleLon;
-	//double DeltaLat, DeltaLon;
 	QTransform theTransform;
 	double PixelPerM;
 	CoordBox Viewport;
@@ -818,15 +816,20 @@ void MapView::wheelEvent(QWheelEvent* ev)
 {
 	double finalZoom = 1.;
 	int Steps = ev->delta() / 120;
-	if (Steps > 0) {
-		for (int i = 0; i < Steps; ++i) {
-			finalZoom *= M_PREFS->getZoomInPerc()/100.0;
-		}
-	} else if (Steps < 0) {
-		for (int i = 0; i < -Steps; ++i) {
-			finalZoom *= M_PREFS->getZoomOutPerc()/100.0;
+	if (M_PREFS->getZoomBoris()) {
+		finalZoom = pow(2., Steps);
+	} else {
+		if (Steps > 0) {
+			for (int i = 0; i < Steps; ++i) {
+				finalZoom *= M_PREFS->getZoomIn()/100.0;
+			}
+		} else if (Steps < 0) {
+			for (int i = 0; i < -Steps; ++i) {
+				finalZoom *= M_PREFS->getZoomOut()/100.0;
+			}
 		}
 	}
+
 	zoom(finalZoom, ev->pos(), rect());
 	for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
 		ImgIt.get()->zoom(finalZoom, ev->pos(), rect());
@@ -1226,52 +1229,34 @@ void MapView::setViewport(const CoordBox & TargetMap)
 void MapView::setViewport(const CoordBox & TargetMap,
 									const QRect & Screen)
 {
-#ifndef _MOBILE
 	transformCalc(p->theTransform, theProjection, TargetMap, Screen);
 	viewportRecalc(Screen);
 
-	// Calculate PixelPerM
-	double LengthOfOneDegreeLat = EQUATORIALRADIUS * M_PI / 180;
-	double LengthOfOneDegreeLon =
-		LengthOfOneDegreeLat * fabs(cos(intToRad(TargetMap.center().lat())));
-	double degAspect = LengthOfOneDegreeLon / LengthOfOneDegreeLat;
-	double so = Screen.width() / (double)p->Viewport.lonDiff();
-	double sa = so / degAspect;
+	QRectF vp = theProjection.getProjectedViewport(p->Viewport, Screen);
+	p->PixelPerM = Screen.width() / vp.width();
 
-	double LatAngPerM = 1.0 / EQUATORIALRADIUS;
-	p->PixelPerM = LatAngPerM / M_PI * INT_MAX * sa;
-	//
-#else
-	Viewport = TargetMap;
-	Coord Center(Viewport.center());
-	double LengthOfOneDegreeLat = EQUATORIALRADIUS * M_PI / 180;
-	double LengthOfOneDegreeLon =
-		LengthOfOneDegreeLat * fabs(cos(intToRad(Center.lat())));
-	double Aspect = LengthOfOneDegreeLon / LengthOfOneDegreeLat;
-	ScaleLon = Screen.width() / (double)Viewport.lonDiff();
-	ScaleLat = ScaleLon / Aspect;
+	if (M_PREFS->getZoomBoris()) {
+		QPointF pt = theProjection.project(Coord(0, angToInt(180)));
+		qDebug() << "pt: " << int(pt.x());
+		double earthWidth = pt.x() * 2;
+		double zoomPixPerMat0 = 512. / earthWidth;
+        double z = 0;
+        int zoomLevel = 0;
+        for (;z<p->theTransform.m11(); ++zoomLevel) {
+            double zoomPixPerMatCur = zoomPixPerMat0 * pow(2, zoomLevel);
+            z = zoomPixPerMatCur / p->PixelPerM;
+        }
+        double zoomPixPerMatCur = zoomPixPerMat0 * pow(2, zoomLevel-1);
+        z = zoomPixPerMatCur / p->PixelPerM;
 
-	if ((ScaleLat * Viewport.latDiff()) > Screen.height())
-	{
-		ScaleLat = Screen.height() / (double)Viewport.latDiff();
-		ScaleLon = ScaleLat * Aspect;
+		double x = 1. / p->theTransform.m11() * z;
+		zoom(x, Screen.center(), Screen);
 	}
-
-	double LatAngPerM = 1.0 / EQUATORIALRADIUS;
-	PixelPerM = LatAngPerM / M_PI * INT_MAX * ScaleLat;
-
-	double PLon = Center.lon() * ScaleLon;
-	double PLat = Center.lat() * ScaleLat;
-	DeltaLon = Screen.width() / 2 - PLon;
-	DeltaLat = Screen.height() - (Screen.height() / 2 - PLat);
-	viewportRecalc(Screen);
-#endif
 }
 
 void MapView::zoom(double d, const QPointF & Around,
 							 const QRect & Screen)
 {
-#ifndef _MOBILE
 	if (p->PixelPerM > 100 && d > 1.0)
 		return;
 
@@ -1286,40 +1271,16 @@ void MapView::zoom(double d, const QPointF & Around,
 	p->theTransform.setMatrix(ScaleLon, 0, 0, 0, ScaleLat, 0, DeltaLon, DeltaLat, 1);
 	viewportRecalc(Screen);
 
-	double LengthOfOneDegreeLat = EQUATORIALRADIUS * M_PI / 180;
-	double LengthOfOneDegreeLon =
-		LengthOfOneDegreeLat * fabs(cos(intToRad(Before.lat())));
-	double degAspect = LengthOfOneDegreeLon / LengthOfOneDegreeLat;
-	double so = Screen.width() / (double)p->Viewport.lonDiff();
-	double sa = so / degAspect;
+	QRectF vp = theProjection.getProjectedViewport(p->Viewport, Screen);
+	p->PixelPerM = Screen.width() / vp.width();
 
-	double LatAngPerM = 1.0 / EQUATORIALRADIUS;
-	p->PixelPerM = LatAngPerM / M_PI * INT_MAX * sa;
-
-#else
-	if (ScaleLat * d < 1.0 && ScaleLon * d < 1.0) {
-		Coord Before = inverse(Around);
-		ScaleLon *= d;
-		ScaleLat *= d;
-		DeltaLat = int(Around.y() + Before.lat() * ScaleLat);
-		DeltaLon = int(Around.x() - Before.lon() * ScaleLon);
-
-		double LatAngPerM = 1.0 / EQUATORIALRADIUS;
-		PixelPerM = LatAngPerM / M_PI * INT_MAX * ScaleLat;
-
-		viewportRecalc(Screen);
-	}
-#endif
+	qDebug() << "Zoom: " << ScaleLon;
 }
 
 void MapView::resize(QSize oldS, QSize newS)
 {
 	Q_UNUSED(oldS)
-#ifndef _MOBILE
 	viewportRecalc(QRect(QPoint(0,0), newS));
-#else
-	Q_UNUSED(newS)
-#endif
 }
 
 void MapView::setCenter(Coord & Center, const QRect & /*Screen*/)

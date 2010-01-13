@@ -22,6 +22,7 @@ class ProjectionPrivate
 {
 public:
 	ProjProjection *theWGS84Proj;
+    ProjectionType projType;
 	QRectF ProjectedViewport;
 	int ProjectionRevision;
 
@@ -39,6 +40,7 @@ Projection::Projection(void)
 {
 #ifndef _MOBILE
 	p->theWGS84Proj = Projection::getProjection("+proj=longlat +ellps=WGS84 +datum=WGS84");
+    p->projType = "";
 	setProjectionType(M_PREFS->getProjectionType());
 #endif
 }
@@ -54,17 +56,17 @@ Projection::~Projection(void)
 #include "ggl/extensions/gis/projections/impl/pj_transform.hpp"
 void Projection::projTransform(ProjProjection *srcdefn, 
 						   ProjProjection *dstdefn, 
-						   long point_count, int point_offset, double *x, double *y, double *z )
+                           long point_count, int point_offset, double *x, double *y, double *z )
 {
 	ggl::projection::detail::pj_transform(srcdefn, dstdefn, point_count, point_offset, x, y, z);
 }
 
-void Projection::projTransformFromWGS84(long point_count, int point_offset, double *x, double *y, double *z )
+void Projection::projTransformFromWGS84(long point_count, int point_offset, double *x, double *y, double *z ) const
 {
 	ggl::projection::detail::pj_transform(p->theWGS84Proj, theProj, point_count, point_offset, x, y, z);
 }
 
-void Projection::projTransformToWGS84(long point_count, int point_offset, double *x, double *y, double *z )
+void Projection::projTransformToWGS84(long point_count, int point_offset, double *x, double *y, double *z ) const
 {
 	ggl::projection::detail::pj_transform(theProj, p->theWGS84Proj, point_count, point_offset, x, y, z);
 }
@@ -102,7 +104,7 @@ bool Projection::projIsLatLong()
 	return (theProj->params().is_latlong > 0);
 }
 
-QRectF Projection::getProjectedViewport(CoordBox& Viewport, QRect& screen)
+QRectF Projection::getProjectedViewport(const CoordBox& Viewport, const QRect& screen) const
 {
 	QPointF bl, tr;
 
@@ -176,8 +178,12 @@ ProjProjection * Projection::getProjection(QString projString)
 
 bool Projection::setProjectionType(ProjectionType aProjectionType)
 {
+    if (aProjectionType == p->projType)
+        return true;
+
 	delete theProj;
 	p->ProjectionRevision++;
+    p->projType = aProjectionType;
 	try {
 		theProj = getProjection(M_PREFS->getProjection(aProjectionType).projection);
 	} catch (...) {
@@ -205,46 +211,63 @@ double Projection::lonAnglePerM(double Lat) const
 QPointF Projection::project(const Coord & Map) const
 {
 #ifndef _MOBILE
-	if (theProj->params().is_latlong)
-		return QPointF(radToAng(Map.lon()), radToAng(Map.lat()));
-	else
-		return projProject(Map);
+    if (theProj->params().is_latlong)
+        return QPointF(radToAng(Map.lon()), radToAng(Map.lat()));
+    else
+        return projProject(Map);
 #else
-	return QPointF(Map.lon(), Map.lat());
+    int numberOfTiles, tilesize;
+    numberOfTiles = tilesize = 1;
+    QPointF coordinate(intToAng(Map.lon()), intToAng(Map.lat()));
+    double x = (coordinate.x()+180.) * (numberOfTiles*tilesize) /360.;                // coord to pixel!
+    double y = (1.-(log(tan(M_PI/4+angToRad(coordinate.y())/2)) /M_PI)) * (numberOfTiles*tilesize) /2;
+
+    return QPointF(x, y);
 #endif
 }
 
 QPointF Projection::project(TrackPoint* aNode) const
 {
 #ifndef _MOBILE
-	if (aNode && aNode->projectionRevision() == p->ProjectionRevision)
-		return aNode->projection();
+    if (aNode && aNode->projectionRevision() == p->ProjectionRevision)
+        return aNode->projection();
 
-	QPointF pt;
-	if (theProj->params().is_latlong)
-		pt = QPointF(radToAng(aNode->position().lon()), radToAng(aNode->position().lat()));
-	else
-		pt = projProject(aNode->position());
+    QPointF pt;
+    if (theProj->params().is_latlong)
+        pt = QPointF(radToAng(aNode->position().lon()), radToAng(aNode->position().lat()));
+    else
+        pt = projProject(aNode->position());
 
-	aNode->setProjectionRevision(p->ProjectionRevision);
-	aNode->setProjection(pt);
+    aNode->setProjectionRevision(p->ProjectionRevision);
+    aNode->setProjection(pt);
 
-	return pt;
+    return pt;
 #else
-	return project(aNode->position());
+    if (aNode && aNode->projectionRevision() == p->ProjectionRevision)
+        return aNode->projection();
+
+    QPointF pt = project(aNode->position());
+    aNode->setProjectionRevision(p->ProjectionRevision);
+    aNode->setProjection(pt);
+
+    return pt;
 #endif
 }
 
 Coord Projection::inverse(const QPointF & Screen) const
 {
 #ifndef _MOBILE
-	if (theProj->params().is_latlong)
-		return Coord(angToRad(Screen.y()), angToRad(Screen.x()));
-	else
-		return projInverse(QPointF(Screen.x(), Screen.y()));
+    if (theProj->params().is_latlong)
+        return Coord(angToRad(Screen.y()), angToRad(Screen.x()));
+    else
+        return projInverse(QPointF(Screen.x(), Screen.y()));
 #else
-	return Coord(qRound(Screen.y()),
-				 qRound(Screen.x()));
+    int numberOfTiles, tilesize;
+    numberOfTiles = tilesize = 1;
+    double longitude = (Screen.x() * (360.0/(numberOfTiles*(double)tilesize)) ) -180.0;
+    double latitude = radToAng(atan(sinh((1.0-Screen.y() * (2.0/(numberOfTiles*(double)tilesize)) ) *M_PI)));
+
+    return Coord(angToInt(latitude), angToInt(longitude));
 #endif
 }
 

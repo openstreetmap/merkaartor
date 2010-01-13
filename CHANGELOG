@@ -1,5 +1,9 @@
 v0.15
+    * ADD : "Zoom lock" mode. Zoom steps are locked to TMS ones and projection is locked to Mercator
+    * FIX : get sharper Yahoo images (closes #2623)
+    * FIX : tag value "Fast food" should be "fast_food" (closes #2625)
 	* ADD : Add a preference disallowing selection of relations when hidden
+	* ADD : add japanese and ukrainian languages to Windows installer (fixes #2619)
 	* ADD : Automatic SVN revision number in about dialog and elsewhere (closes #2208)
     * FIX : URL's in about dialog (fixes #2606)
 	* FIX : Export trackpoints time when exporting GPX (fixes #2594)

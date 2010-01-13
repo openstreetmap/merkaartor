@@ -1746,6 +1746,12 @@ void MainWindow::preferencesChanged(void)
 				QApplication::setStyle(QStyleFactory::create(M_PREFS->getMerkaartorStyleString()));
 		}
 	}
+    if (M_PREFS->getZoomBoris())
+        mnuProjections->menuAction()->setVisible(false);
+    else {
+        mnuProjections->menuAction()->setVisible(true);
+        view()->projection().setProjectionType(M_PREFS->getProjectionType());
+    }
 
 	updateStyleMenu();
 	updateMenu();
@@ -2181,19 +2187,21 @@ void MainWindow::updateRecentImportMenu()
 void MainWindow::updateProjectionMenu()
 {
 #ifndef _MOBILE
-	QActionGroup* actgrp = new QActionGroup(this);
-	foreach (QString name, M_PREFS->getProjectionsList().getProjections().keys()) {
-		QAction* a = new QAction(name, mnuProjections);
-		actgrp->addAction(a);
-		a->setCheckable (true);
-		if (name.contains(M_PREFS->getProjectionType()))
-			a->setChecked(true);
-		mnuProjections->addAction(a);
-	}
-	connect (mnuProjections, SIGNAL(triggered(QAction *)), this, SLOT(projectionTriggered(QAction *)));
-#else
-	mnuProjections->setVisible(false);
+    QActionGroup* actgrp = new QActionGroup(this);
+    foreach (QString name, M_PREFS->getProjectionsList().getProjections().keys()) {
+        QAction* a = new QAction(name, mnuProjections);
+        actgrp->addAction(a);
+        a->setCheckable (true);
+        if (name.contains(M_PREFS->getProjectionType()))
+            a->setChecked(true);
+        mnuProjections->addAction(a);
+    }
+    connect (mnuProjections, SIGNAL(triggered(QAction *)), this, SLOT(projectionTriggered(QAction *)));
 #endif
+    if (M_PREFS->getZoomBoris())
+        mnuProjections->menuAction()->setVisible(false);
+    else
+        mnuProjections->menuAction()->setVisible(true);
 }
 
 void MainWindow::updateStyleMenu()

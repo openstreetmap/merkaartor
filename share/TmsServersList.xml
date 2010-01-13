@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <MerkaartorList>
- <TmsServers version="1.0" creator="SVN" >
+ <TmsServers version="1.1" creator="SVN" >
   <TmsServer minzoom="0" maxzoom="14" path="/tiles/cycle/%1/%2/%3.png" address="andy.sandbox.cloudmade.com" name="Cycle Map" tilesize="256" />
   <TmsServer minzoom="0" maxzoom="14" path="/tiles/cycle/%1/%2/%3.png" address="thunderflames.org" name="Gravitystorm Cycle" tilesize="256" />
   <TmsServer minzoom="12" maxzoom="16" path="/Tiles/maplint/%1/%2/%3.png" address="tah.openstreetmap.org" name="Maplint" tilesize="256" />
@@ -8,8 +8,8 @@
   <TmsServer minzoom="14" maxzoom="14" path="/npe/%1/%2/%3.jpg" address="richard.dev.openstreetmap.org" name="New Popular Edition (NPE) at zoom 14" tilesize="256" />
   <TmsServer minzoom="12" maxzoom="16" path="/Tiles/maplint/%1/%2/%3.png" address="tah.openstreetmap.org" name="OSM Maplint" tilesize="256" />
   <TmsServer minzoom="0" maxzoom="17" path="/%1/%2/%3.png" address="tile.openstreetmap.org" name="OSM Mapnik" tilesize="256" />
-  <TmsServer minzoom="0" maxzoom="17" path="/Tiles/tile/%1/%2/%3.png" address="tah.openstreetmap.org" name="OSM T@H" tilesize="256" />
-  <TmsServer minzoom="0" maxzoom="17" path="/tiles/1.0.0/openaerialmap-900913/%1/%2/%3.png" address="tile.openaerialmap.org" name="OpenAerialMap" tilesize="256" />
+  <TmsServer minzoom="0" maxzoom="18" path="/Tiles/tile/%1/%2/%3.png" address="tah.openstreetmap.org" name="OSM T@H" tilesize="256" />
+  <TmsServer minzoom="0" maxzoom="18" path="/tiles/1.0.0/openaerialmap-900913/%1/%2/%3.png" address="tile.openaerialmap.org" name="OpenAerialMap" tilesize="256" />
  <TmsServer minzoom="0" maxzoom="23" path="/maps/nml=Vert&amp;x=%2&amp;y=%3&amp;z=%1" address="www.nearmap.com" name="NearMap" tilesize="256"/>
  </TmsServers>
 </MerkaartorList>

@@ -35,6 +35,13 @@
          </property>
          <layout class="QVBoxLayout">
           <item>
+           <widget class="QCheckBox" name="cbBorisZoom">
+            <property name="text">
+             <string>&quot;Zoom lock&quot; mode (lock zoom level to Yahoo! tiles and force Mercator projection)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <layout class="QHBoxLayout">
             <item>
              <widget class="QLabel" name="label_5">
@@ -1397,8 +1404,8 @@
      <y>65</y>
     </hint>
     <hint type="destinationlabel">
-     <x>86</x>
-     <y>89</y>
+     <x>97</x>
+     <y>69</y>
     </hint>
    </hints>
   </connection>
@@ -1413,8 +1420,8 @@
      <y>65</y>
     </hint>
     <hint type="destinationlabel">
-     <x>86</x>
-     <y>115</y>
+     <x>69</x>
+     <y>69</y>
     </hint>
    </hints>
   </connection>
@@ -1425,12 +1432,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>21</x>
-     <y>135</y>
+     <x>32</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
-     <x>125</x>
-     <y>134</y>
+     <x>119</x>
+     <y>74</y>
     </hint>
    </hints>
   </connection>
@@ -1441,12 +1448,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>21</x>
-     <y>135</y>
+     <x>32</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
-     <x>624</x>
-     <y>132</y>
+     <x>49</x>
+     <y>74</y>
     </hint>
    </hints>
   </connection>
@@ -1473,12 +1480,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>87</x>
-     <y>84</y>
+     <x>98</x>
+     <y>69</y>
     </hint>
     <hint type="destinationlabel">
-     <x>171</x>
-     <y>85</y>
+     <x>119</x>
+     <y>69</y>
     </hint>
    </hints>
   </connection>
@@ -1489,12 +1496,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>91</x>
-     <y>114</y>
+     <x>102</x>
+     <y>69</y>
     </hint>
     <hint type="destinationlabel">
-     <x>175</x>
-     <y>115</y>
+     <x>119</x>
+     <y>69</y>
     </hint>
    </hints>
   </connection>
@@ -1505,12 +1512,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>91</x>
-     <y>114</y>
+     <x>102</x>
+     <y>69</y>
     </hint>
     <hint type="destinationlabel">
-     <x>614</x>
-     <y>118</y>
+     <x>49</x>
+     <y>69</y>
     </hint>
    </hints>
   </connection>
@@ -1521,12 +1528,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>126</x>
-     <y>164</y>
+     <x>148</x>
+     <y>206</y>
     </hint>
     <hint type="destinationlabel">
      <x>614</x>
-     <y>165</y>
+     <y>208</y>
     </hint>
    </hints>
   </connection>
@@ -1541,8 +1548,8 @@
      <y>65</y>
     </hint>
     <hint type="destinationlabel">
-     <x>86</x>
-     <y>141</y>
+     <x>97</x>
+     <y>69</y>
     </hint>
    </hints>
   </connection>
@@ -1557,8 +1564,8 @@
      <y>65</y>
     </hint>
     <hint type="destinationlabel">
-     <x>86</x>
-     <y>167</y>
+     <x>97</x>
+     <y>69</y>
     </hint>
    </hints>
   </connection>
@@ -1569,8 +1576,8 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>66</x>
-     <y>74</y>
+     <x>77</x>
+     <y>69</y>
     </hint>
     <hint type="destinationlabel">
      <x>111</x>
@@ -1585,12 +1592,44 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>51</x>
-     <y>105</y>
+     <x>62</x>
+     <y>69</y>
     </hint>
     <hint type="destinationlabel">
-     <x>126</x>
-     <y>93</y>
+     <x>119</x>
+     <y>69</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbBorisZoom</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>sbZoomOutPerc</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>45</x>
+     <y>95</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>250</x>
+     <y>76</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbBorisZoom</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>sbZoomInPerc</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>165</x>
+     <y>101</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>468</x>
+     <y>75</y>
     </hint>
    </hints>
   </connection>

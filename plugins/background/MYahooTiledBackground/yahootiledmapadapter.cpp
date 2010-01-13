@@ -34,9 +34,9 @@ YahooTiledMapAdapter::YahooTiledMapAdapter()
 {
 	host = "";
 	serverPath = "qrc:/Html/ymap.html?";
-	tilesize = 512;
+    tilesize = 512;
 	max_zoom = 17;
-	min_zoom = 0;
+    min_zoom = 0;
 	current_zoom = 0;
 
 	int zoom = max_zoom < min_zoom ? min_zoom - current_zoom : current_zoom;
@@ -77,7 +77,7 @@ QString YahooTiledMapAdapter::projection() const
 
 int YahooTiledMapAdapter::tilesonzoomlevel(int zoomlevel) const
 {
-	return int(pow(2, zoomlevel+1.0));
+    return int(pow(2, zoomlevel+1.));
 }
 
 QString YahooTiledMapAdapter::getQuery(int i, int j, int /* z */) const
@@ -89,13 +89,13 @@ QString YahooTiledMapAdapter::getQuery(int i, int j, int /* z */) const
 QString YahooTiledMapAdapter::getQ(QPointF ul, QPointF br) const
 {
 	return QString().append(serverPath)
-						.append("WIDTH=").append(QString().setNum(tilesize))
-						.append("&HEIGHT=").append(QString().setNum(tilesize))
+                        .append("WIDTH=").append(QString().setNum(tilesize+100))
+                        .append("&HEIGHT=").append(QString().setNum(tilesize+100))
 						.append("&BBOX=")
-						 .append(loc.toString(ul.x(),'f',6)).append(",")
-						 .append(loc.toString(ul.y(),'f',6)).append(",")
-						 .append(loc.toString(br.x(),'f',6)).append(",")
-						 .append(loc.toString(br.y(),'f',6));
+                         .append(loc.toString(ul.x(),'f',8)).append(",")
+                         .append(loc.toString(ul.y(),'f',8)).append(",")
+                         .append(loc.toString(br.x(),'f',8)).append(",")
+                         .append(loc.toString(br.y(),'f',8));
 }
 
 int YahooTiledMapAdapter::getyoffset(int y) const

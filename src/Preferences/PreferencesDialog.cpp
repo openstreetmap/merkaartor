@@ -190,8 +190,13 @@ void PreferencesDialog::loadPrefs()
 		BrowseTemplate->setEnabled(true);
 	}
 
-	sbZoomInPerc->setValue(M_PREFS->getZoomInPerc());
-	sbZoomOutPerc->setValue(M_PREFS->getZoomOutPerc());
+    sbZoomInPerc->setValue(M_PREFS->getZoomIn());
+    sbZoomOutPerc->setValue(M_PREFS->getZoomOut());
+    cbBorisZoom->setChecked(M_PREFS->getZoomBoris());
+    if (M_PREFS->getZoomBoris()) {
+        sbZoomInPerc->setEnabled(false);
+        sbZoomOutPerc->setEnabled(false);
+    }
 
 	sbAlphaLow->setValue(M_PREFS->getAlpha("Low"));
 	sbAlphaHigh->setValue(M_PREFS->getAlpha("High"));
@@ -328,8 +333,10 @@ void PreferencesDialog::savePrefs()
 
 	M_PREFS->setCustomStyle(CustomStylesDir->text());
 	M_PREFS->setCustomTemplate(CustomTemplateName->text());
-	M_PREFS->setZoomInPerc(sbZoomInPerc->text().toInt());
-	M_PREFS->setZoomOutPerc(sbZoomOutPerc->text().toInt());
+
+    M_PREFS->setZoomIn(sbZoomInPerc->text().toInt());
+    M_PREFS->setZoomOut(sbZoomOutPerc->text().toInt());
+    M_PREFS->setZoomBoris(cbBorisZoom->isChecked());
 
 	M_PREFS->getAlphaPtr()->insert("Low", sbAlphaLow->value());
 	M_PREFS->getAlphaPtr()->insert("High", sbAlphaHigh->value());

@@ -6,7 +6,7 @@ win32 {
 !win32 {
 	system('echo -n "$${LITERAL_HASH}define SVNREV " > revision.h && svnversion >> revision.h')
 }
-REVISION="\'-svn\'"
+REVISION="-svn"
 
 # NODEBUG=1             - no debug target
 # TRANSDIR_MERKAARTOR - translations directory for merkaartor

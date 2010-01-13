@@ -697,26 +697,6 @@ QString MerkaartorPreferences::getLastSearchValue() const
 
 /* Visuals */
 
-	int MerkaartorPreferences::getZoomInPerc() const
-{
-	return Sets->value("zoom/zoomIn", "133").toInt();
-}
-
-void MerkaartorPreferences::setZoomInPerc(int theValue)
-{
-	Sets->setValue("zoom/zoomIn", theValue);
-}
-
-int MerkaartorPreferences::getZoomOutPerc() const
-{
-	return Sets->value("zoom/zoomOut", "75").toInt();
-}
-
-void MerkaartorPreferences::setZoomOutPerc(int theValue)
-{
-	Sets->setValue("zoom/zoomOut", theValue);
-}
-
 void MerkaartorPreferences::saveMainWindowState(const MainWindow * mainWindow)
 {
 	Sets->setValue("MainWindow/Position", mainWindow->pos());
@@ -792,9 +772,12 @@ void MerkaartorPreferences::setProjectionType(ProjectionType theValue)
 	Sets->setValue("projection/Type", theValue);
 }
 
-ProjectionType MerkaartorPreferences::getProjectionType() const
+ProjectionType MerkaartorPreferences::getProjectionType()
 {
-	return (ProjectionType)Sets->value("projection/Type", "Mercator").toString();
+    if (getZoomBoris())
+        return (ProjectionType)QString("Mercator");
+    else
+        return (ProjectionType)Sets->value("projection/Type", "Mercator").toString();
 }
 
 ProjectionsList MerkaartorPreferences::getProjectionsList()
@@ -1244,6 +1227,9 @@ M_PARAM_IMPLEMENT_STRING(CustomStyle, style, "")
 M_PARAM_IMPLEMENT_BOOL(DisableStyleForTracks, style, true)
 
 /* Visual */
+M_PARAM_IMPLEMENT_INT(ZoomIn, zoom, 133)
+M_PARAM_IMPLEMENT_INT(ZoomOut, zoom, 75)
+M_PARAM_IMPLEMENT_BOOL(ZoomBoris, zoom, false)
 M_PARAM_IMPLEMENT_BOOL(BackgroundOverwriteStyle, visual, false)
 M_PARAM_IMPLEMENT_INT(AreaOpacity, visual, 100)
 M_PARAM_IMPLEMENT_BOOL(UseShapefileForBackground, visual, false)

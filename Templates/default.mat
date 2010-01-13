@@ -1237,7 +1237,7 @@
     <description locale="sv" >Källa för dricksvatten</description>
     <description locale="uk" >Питна вода</description>
    </value>
-   <value tag="Fast food" >
+   <value tag="fast_food" >
     <description locale="en" >Fast food</description>
     <description locale="ar" >وجبات سريعة</description>
     <description locale="cs" >Rychlé občerstvení</description>

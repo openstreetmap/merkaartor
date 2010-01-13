@@ -344,7 +344,7 @@ void BrowserImageManager::checkRequests()
 		requestDuration = 0;
 		launchRequest();
 	} else {
-		if ((requestDuration++) > 50) {
+        if ((requestDuration++) > 100) {
 			requestDuration = 0;
 			page->triggerAction(QWebPage::Stop);
 			qDebug() << "BrowserImageManager Timeout";
