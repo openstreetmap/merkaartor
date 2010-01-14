@@ -27,14 +27,17 @@
 
 EditInteraction::EditInteraction(MapView* theView)
 : FeatureSnapInteraction(theView), Dragging(false), StartDrag(0,0), EndDrag(0,0)
-    , currentMode(EditMode)
-    , theMoveInteraction(0)
+	, currentMode(EditMode)
+	, theMoveInteraction(0)
 {
 	connect(main(),SIGNAL(remove_triggered()),this,SLOT(on_remove_triggered()));
 	connect(main(),SIGNAL(reverse_triggered()), this,SLOT(on_reverse_triggered()));
 	view()->properties()->checkMenuStatus();
 
-    theMoveInteraction = new MoveTrackPointInteraction(theView);
+	if (!M_PREFS->getSeparateMoveMode()) {
+		setDontSelectVirtual(false);
+		theMoveInteraction = new MoveTrackPointInteraction(theView);
+	}
 }
 
 EditInteraction::~EditInteraction(void)
@@ -44,7 +47,7 @@ EditInteraction::~EditInteraction(void)
 		main()->editRemoveAction->setEnabled(false);
 		main()->editReverseAction->setEnabled(false);
 	}
-    SAFE_DELETE(theMoveInteraction);
+	SAFE_DELETE(theMoveInteraction);
 }
 
 #ifndef Q_OS_SYMBIAN
@@ -123,17 +126,17 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 		view()->properties()->checkMenuStatus();
 		view()->update();
 	}
-    if (currentMode == MoveMode) {
-        theMoveInteraction->snapMousePressEvent(ev, aLast);
-    }
+	if (currentMode == MoveMode) {
+		theMoveInteraction->snapMousePressEvent(ev, aLast);
+	}
 }
 
 void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* aLast)
 {
 	Q_UNUSED(ev);
 	if (currentMode == MoveMode) {
-        theMoveInteraction->snapMouseReleaseEvent(ev, aLast);
-    } else
+		theMoveInteraction->snapMouseReleaseEvent(ev, aLast);
+	} else
 	if (Dragging)
 	{
 		QList<MapFeature*> List;
@@ -161,7 +164,7 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* aLast
 								break;
 							}
 						}
-					} else 
+					} else
 					if (Relation* r = dynamic_cast<Relation*>(it.get())) {
 						for (int k=0; k<r->size(); ++k) {
 							if (Road* R = dynamic_cast<Road*>(r->get(k))) {
@@ -204,29 +207,29 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* aLast
 void EditInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, MapFeature* aLast)
 {
 	Q_UNUSED(anEvent);
-    if (currentMode == MoveMode) {
-        theMoveInteraction->snapMouseMoveEvent(anEvent, aLast);
-    }
-    if (Dragging)
+	if (currentMode == MoveMode) {
+		theMoveInteraction->snapMouseMoveEvent(anEvent, aLast);
+	}
+	if (Dragging)
 	{
 		EndDrag = XY_TO_COORD(anEvent->pos());
 		view()->update();
 	} else
-    if (anEvent->buttons() == Qt::NoButton) {
-        if (aLast && view()->properties()->isSelected(aLast) && !M_PREFS->getSeparateMoveMode())
-        {
-    #ifndef Q_OS_SYMBIAN
-            view()->setCursor(moveCursor());
-    #endif
-            currentMode = MoveMode;
-        } else
-        {
-    #ifndef Q_OS_SYMBIAN
-            view()->setCursor(cursor());
-    #endif
-            currentMode = EditMode;
-        }
-    }
+	if (anEvent->buttons() == Qt::NoButton) {
+		if (aLast && view()->properties()->isSelected(aLast) && !M_PREFS->getSeparateMoveMode())
+		{
+	#ifndef Q_OS_SYMBIAN
+			view()->setCursor(moveCursor());
+	#endif
+			currentMode = MoveMode;
+		} else
+		{
+	#ifndef Q_OS_SYMBIAN
+			view()->setCursor(cursor());
+	#endif
+			currentMode = EditMode;
+		}
+	}
 }
 
 void EditInteraction::on_remove_triggered()

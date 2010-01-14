@@ -76,6 +76,7 @@ class GenericFeatureSnapInteraction : public Interaction
 		GenericFeatureSnapInteraction(MapView* theView)
 			: Interaction(theView), LastSnap(0), SnapActive(true),
 			  NoSelectPoints(false), NoSelectRoads(false)
+			  , NoSelectVirtuals(true)
 		{
 		}
 
@@ -189,6 +190,10 @@ class GenericFeatureSnapInteraction : public Interaction
 		{
 			NoSelectRoads = b;
 		}
+		void setDontSelectVirtual(bool b)
+		{
+			NoSelectVirtuals = b;
+		}
 	private:
 		void updateSnap(QMouseEvent* event)
 		{
@@ -236,6 +241,8 @@ class GenericFeatureSnapInteraction : public Interaction
 					}
 				}
 			}
+			if (LastSnap && LastSnap->isVirtual() && NoSelectVirtuals)
+				LastSnap = LastSnap->getParent(0);
 
 #else
 //			for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it)
@@ -290,6 +297,7 @@ class GenericFeatureSnapInteraction : public Interaction
 		bool NoSelectPoints;
 		bool NoSelectWays;
 		bool NoSelectRoads;
+		bool NoSelectVirtuals;
 
 	protected:
 		QList<MapFeature*> StackSnap;

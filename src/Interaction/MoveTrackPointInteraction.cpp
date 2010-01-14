@@ -22,6 +22,9 @@ MoveTrackPointInteraction::MoveTrackPointInteraction(MapView* aView)
 	: FeatureSnapInteraction(aView)
 	, StartDragPosition(0,0)
 {
+	if (M_PREFS->getSeparateMoveMode()) {
+		setDontSelectVirtual(false);
+	}
 }
 
 MoveTrackPointInteraction::~MoveTrackPointInteraction(void)
@@ -106,7 +109,8 @@ void MoveTrackPointInteraction::snapMousePressEvent(QMouseEvent * event, MapFeat
 
 void MoveTrackPointInteraction::snapMouseReleaseEvent(QMouseEvent * event, MapFeature* Closer)
 {
-	if (Moving.size() && !panning())
+	Coord Diff(calculateNewPosition(event,Closer, theList)-StartDragPosition);
+	if (Moving.size() && !panning() && !Diff.isNull())
 	{
 		if (Moving.size() > 1) {
 			theList->setDescription(MainWindow::tr("Move Nodes"));
@@ -117,7 +121,6 @@ void MoveTrackPointInteraction::snapMouseReleaseEvent(QMouseEvent * event, MapFe
 				theList->setFeature(Moving[0]);
 			}
 		}
-		Coord Diff(calculateNewPosition(event,Closer, theList)-StartDragPosition);
 		for (int i=0; i<Moving.size(); ++i)
 		{
 			if (Moving[i]->layer()->isTrack())
@@ -190,9 +193,9 @@ void MoveTrackPointInteraction::snapMouseReleaseEvent(QMouseEvent * event, MapFe
 
 void MoveTrackPointInteraction::snapMouseMoveEvent(QMouseEvent* event, MapFeature* Closer)
 {
-	if (Moving.size() && !panning())
+	Coord Diff = calculateNewPosition(event,Closer,NULL)-StartDragPosition;
+	if (Moving.size() && !panning() && !Diff.isNull())
 	{
-		Coord Diff = calculateNewPosition(event,Closer,NULL)-StartDragPosition;
 		for (int i=0; i<Moving.size(); ++i) {
 			if (Moving[i]->isVirtual()) {
 				Virtual = true;

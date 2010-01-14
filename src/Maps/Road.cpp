@@ -123,8 +123,8 @@ void Road::setLayer(MapLayer* L)
 				p->Nodes[i]->unsetParentFeature(this);
 		}
 	}
-	updateVirtuals();
 	MapFeature::setLayer(L);
+	updateVirtuals();
 }
 
 void Road::partChanged(MapFeature*, int ChangeId)
@@ -171,7 +171,8 @@ void Road::add(TrackPoint* Pt, int Idx)
 		layer()->indexAdd(bb, this);
 	}
 
-	if (Idx) {
+	// Virtual Node
+	if (Idx && layer()) {
 		QLineF l(toQt(p->Nodes[Idx-1]->position()), toQt(p->Nodes[Idx]->position()));
 		l.setLength(l.length()/2);
 		TrackPoint* v = new TrackPoint(toCoord(l.p2()));
