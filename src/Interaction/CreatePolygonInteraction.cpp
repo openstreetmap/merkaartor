@@ -197,6 +197,14 @@ void CreatePolygonInteraction::mouseMoveEvent(QMouseEvent* event)
 	Interaction::mouseMoveEvent(event);
 }
 
+void CreatePolygonInteraction::mouseReleaseEvent(QMouseEvent* event)
+{
+	if (M_PREFS->getMouseSingleButton() && event->button() == Qt::RightButton) {
+		HaveOrigin = false;
+		view()->update();
+	}
+}
+
 
 #ifndef Q_OS_SYMBIAN
 QCursor CreatePolygonInteraction::cursor() const

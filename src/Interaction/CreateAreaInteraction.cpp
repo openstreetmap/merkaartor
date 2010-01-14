@@ -17,7 +17,7 @@
 #include <QtGui/QPainter>
 
 CreateAreaInteraction::CreateAreaInteraction(MainWindow* aMain, MapView* aView)
-	: GenericFeatureSnapInteraction<MapFeature>(aView), Main(aMain),
+	: FeatureSnapInteraction(aView), Main(aMain),
 	  theRelation(0), theRoad(0), LastRoad(0), FirstPoint(0,0),
 	  FirstNode(0), HaveFirst(false), EndNow(false)
 {
@@ -63,7 +63,7 @@ void CreateAreaInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainte
 		QPen TP(SomeBrush,view()->pixelPerM()*4);
 		::draw(thePainter,TP,MapFeature::UnknownDirection, PreviousPoint,LastCursor ,4 ,view()->projection());
 	}
-	GenericFeatureSnapInteraction<MapFeature>::paintEvent(anEvent,thePainter);
+	FeatureSnapInteraction::paintEvent(anEvent,thePainter);
 }
 
 void CreateAreaInteraction::snapMouseMoveEvent(QMouseEvent* ev, MapFeature* aFeature)
@@ -197,30 +197,26 @@ void CreateAreaInteraction::addToRoad(QMouseEvent* anEvent, MapFeature* Snap, Co
 
 void CreateAreaInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFeature* aFeature)
 {
-	if (anEvent->buttons() & Qt::LeftButton)
+	if (!HaveFirst)
 	{
-		if (!HaveFirst)
-		{
-			HaveFirst = true;
-			startNewRoad(anEvent, aFeature);
-		}
-		else
-		{
- 			CommandList* L  = new CommandList();
-			if (!theRoad)
-				createNewRoad(L);
-			addToRoad(anEvent, aFeature, L);
-			document()->addHistory(L);
-			view()->invalidate(true, false);
-			if (theRelation)
-				Main->properties()->setSelection(theRelation);
-			else
-				Main->properties()->setSelection(theRoad);
-		}
-		FirstPoint = XY_TO_COORD(anEvent->pos());
+		HaveFirst = true;
+		startNewRoad(anEvent, aFeature);
 	}
 	else
-		Interaction::mousePressEvent(anEvent);
+	{
+		CommandList* L  = new CommandList();
+		if (!theRoad)
+			createNewRoad(L);
+		addToRoad(anEvent, aFeature, L);
+		document()->addHistory(L);
+		view()->invalidate(true, false);
+		if (theRelation)
+			Main->properties()->setSelection(theRelation);
+		else
+			Main->properties()->setSelection(theRoad);
+	}
+	FirstPoint = XY_TO_COORD(anEvent->pos());
+
 	if (EndNow)
 		view()->launch(0);
 }

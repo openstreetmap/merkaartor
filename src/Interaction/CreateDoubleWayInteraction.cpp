@@ -114,6 +114,14 @@ void CreateDoubleWayInteraction::mouseMoveEvent(QMouseEvent* event)
 	Interaction::mouseMoveEvent(event);
 }
 
+void CreateDoubleWayInteraction::mouseReleaseEvent(QMouseEvent* anEvent)
+{
+	if (M_PREFS->getMouseSingleButton() && anEvent->button() == Qt::RightButton) {
+		HaveFirst = false;
+		view()->update();
+	}
+}
+
 void CreateDoubleWayInteraction::mousePressEvent(QMouseEvent* anEvent)
 {
 	if (anEvent->buttons() & Qt::LeftButton)

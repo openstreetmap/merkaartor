@@ -49,6 +49,7 @@ class Road : public MapFeature
 		virtual MapFeature* get(int idx);
 		virtual const MapFeature* get(int Idx) const;
 		virtual bool isNull() const;
+		virtual void setDeleted(bool delState);
 		void updateVirtuals();
 
 		const QList<Coord>& smoothed() const;

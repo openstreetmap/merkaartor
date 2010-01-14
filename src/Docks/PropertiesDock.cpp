@@ -182,6 +182,7 @@ void PropertiesDock::checkMenuStatus()
 	Main->editRemoveAction->setEnabled(Selection.size());
 	Main->editMoveAction->setEnabled(true);
 	Main->editReverseAction->setEnabled(IsRoad);
+	Main->roadAddStreetNumbersAction->setEnabled(NumRoads > 1);
 	Main->roadJoinAction->setEnabled(NumRoads > 1 && canJoinRoads(this));
 	Main->roadCreateJunctionAction->setEnabled(NumRoads > 1 && canCreateJunction(this));
 	Main->roadSplitAction->setEnabled((IsParentRoadInner && !IsParentArea) || (NumRoads && NumPoints) || (NumAreas && NumPoints));
@@ -370,16 +371,16 @@ void PropertiesDock::cleanUpUi()
 
 void PropertiesDock::switchUi()
 {
-    if (CurrentTagView)
-        M_PREFS->setTagListFirstColumnWidth(CurrentTagView->columnWidth(0));
+	if (CurrentTagView)
+		M_PREFS->setTagListFirstColumnWidth(CurrentTagView->columnWidth(0));
 
-    if (FullSelection.size() == 0)
+	if (FullSelection.size() == 0)
 		switchToNoUi();
 	else if (FullSelection.size() == 1)
 	{
-        if (FullSelection[0]->isVirtual())
-            switchToNoUi();
-        else if (CAST_NODE(FullSelection[0]))
+		if (FullSelection[0]->isVirtual())
+			switchToNoUi();
+		else if (CAST_NODE(FullSelection[0]))
 			switchToTrackPointUi();
 		else if (CAST_WAY(FullSelection[0]))
 			switchToRoadUi();
@@ -478,8 +479,8 @@ void PropertiesDock::resetValues()
 	Highlighted.clear();
 
 	// Tables that might need column sizing
-    CurrentTagView = NULL;
-    CurrentMembersView = NULL;
+	CurrentTagView = NULL;
+	CurrentMembersView = NULL;
 
 	// to prevent slots to change the values also
 	QList<MapFeature*> Current = Selection;
@@ -515,10 +516,10 @@ void PropertiesDock::resetValues()
 			}
 
 			CurrentTagView = TrackPointUi.TagView;
- 
- 			#ifdef GEOIMAGE
- 			Main->geoImage()->setImage(Pt);
- 			#endif
+
+			#ifdef GEOIMAGE
+			Main->geoImage()->setImage(Pt);
+			#endif
 		}
 		else if ((R) && (NowShowing == RoadUiShowing))
 		{
@@ -562,7 +563,7 @@ void PropertiesDock::resetValues()
 				w->installEventFilter(shortcutFilter);
 				RelationUi.variableLayout->addWidget(w);
 			}
-			
+
 			CurrentTagView     = RelationUi.TagView;
 			CurrentMembersView = RelationUi.MembersView;
 		}
@@ -582,19 +583,19 @@ void PropertiesDock::resetValues()
 	}
 	theModel->setFeature(Current);
 	Selection = Current;
-	
+
 	/* If we have standard TableViews in the current UI, set it so that the */
 	/* first column is the width of the default text (Edit this to add...)  */
 	/* And the rest of the space is assigned to the second column           */
-    if (CurrentTagView) {
-        if (M_PREFS->getTagListFirstColumnWidth())
-            CurrentTagView->setColumnWidth(
-                0, M_PREFS->getTagListFirstColumnWidth()
-            );
-        else
-            CurrentTagView->setColumnWidth(
-                0, CurrentTagView->fontMetrics().width(theModel->newKeyText())+10
-            );
+	if (CurrentTagView) {
+		if (M_PREFS->getTagListFirstColumnWidth())
+			CurrentTagView->setColumnWidth(
+				0, M_PREFS->getTagListFirstColumnWidth()
+			);
+		else
+			CurrentTagView->setColumnWidth(
+				0, CurrentTagView->fontMetrics().width(theModel->newKeyText())+10
+			);
 		CurrentTagView->horizontalHeader()->setStretchLastSection(true);
 		CurrentTagView->installEventFilter(shortcutFilter);
 	}
@@ -901,9 +902,9 @@ bool PropertiesDock::loadTemplates(const QString& filename)
 		File.close();
 		QMessageBox::warning(Main,"Parse error",
 			QString("Parse error at line %1, column %2:\n%3")
-                                  .arg(ErrorLine)
-                                  .arg(ErrorColumn)
-                                  .arg(ErrorStr));
+								  .arg(ErrorLine)
+								  .arg(ErrorColumn)
+								  .arg(ErrorStr));
 		return false;
 	}
 

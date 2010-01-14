@@ -68,7 +68,7 @@ void Interaction::mousePressEvent(QMouseEvent * anEvent)
 		if (anEvent->modifiers() & Qt::ControlModifier) {
 			EndDrag = StartDrag = XY_TO_COORD(anEvent->pos());
 			Dragging = true;
-		} else 
+		} else
 		if (anEvent->modifiers() & Qt::ShiftModifier) {
 		} else {
 			Panning = true;
@@ -98,9 +98,7 @@ void Interaction::mouseReleaseEvent(QMouseEvent * anEvent)
 			view()->launch(0);
 		}
 		Dragging = false;
-	} else
-		if (anEvent->button() == Qt::RightButton)
-			emit(requestCustomContextMenu(anEvent->pos()));
+	}
 }
 
 void Interaction::mouseMoveEvent(QMouseEvent* anEvent)
@@ -136,6 +134,28 @@ void Interaction::mouseMoveEvent(QMouseEvent* anEvent)
 	}
 }
 
+void Interaction::wheelEvent(QWheelEvent* ev)
+{
+	double finalZoom = 1.;
+	int Steps = ev->delta() / 120;
+	if (M_PREFS->getZoomBoris()) {
+		finalZoom = pow(2., Steps);
+	} else {
+		if (Steps > 0) {
+			for (int i = 0; i < Steps; ++i) {
+				finalZoom *= M_PREFS->getZoomIn()/100.0;
+			}
+		} else if (Steps < 0) {
+			for (int i = 0; i < -Steps; ++i) {
+				finalZoom *= M_PREFS->getZoomOut()/100.0;
+			}
+		}
+	}
+
+	view()->zoom(finalZoom, ev->pos());
+	view()->invalidate(true, true);
+}
+
 void Interaction::paintEvent(QPaintEvent*, QPainter& thePainter)
 {
 	if (Dragging)
@@ -151,3 +171,248 @@ QCursor Interaction::cursor() const
 	return QCursor(Qt::ArrowCursor);
 }
 #endif
+
+/***************/
+
+FeatureSnapInteraction::FeatureSnapInteraction(MapView* theView)
+	: Interaction(theView), LastSnap(0), SnapActive(true),
+	  NoSelectPoints(false), NoSelectRoads(false)
+	  , NoSelectVirtuals(true)
+{
+}
+
+void FeatureSnapInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
+{
+	Interaction::paintEvent(anEvent, thePainter);
+
+	for (int i=0; i<main()->features()->highlightedSize(); ++i)
+		if (document()->exists(main()->features()->highlighted(i)))
+			main()->features()->highlighted(i)->drawHighlight(thePainter, view(), true);
+	for (int i=0; i<main()->properties()->size(); ++i)
+		if (document()->exists(main()->properties()->selection(i)))
+			main()->properties()->selection(i)->drawFocus(thePainter, view());
+	for (int i=0; i<main()->properties()->highlightedSize(); ++i)
+		if (document()->exists(main()->properties()->highlighted(i)))
+			main()->properties()->highlighted(i)->drawHighlight(thePainter, view(), true);
+
+#ifndef _MOBILE
+	if (LastSnap && document()->exists(LastSnap)) {
+		LastSnap->drawHover(thePainter, view());
+		view()->setToolTip(LastSnap->toHtml());
+	} else {
+		view()->setToolTip("");
+	}
+#endif
+}
+
+void FeatureSnapInteraction::mousePressEvent(QMouseEvent * event)
+{
+	updateSnap(event);
+	if (event->button() == Qt::LeftButton)
+		snapMousePressEvent(event,LastSnap);
+	if (!(M_PREFS->getMouseSingleButton() && LastSnap))
+		Interaction::mousePressEvent(event);
+}
+
+void FeatureSnapInteraction::mouseReleaseEvent(QMouseEvent * event)
+{
+	updateSnap(event);
+	snapMouseReleaseEvent(event,LastSnap);
+	if (!(M_PREFS->getMouseSingleButton() && LastSnap))
+		Interaction::mouseReleaseEvent(event);
+
+	if (event->button() == Qt::RightButton)
+		emit(requestCustomContextMenu(event->pos()));
+
+}
+
+void FeatureSnapInteraction::mouseMoveEvent(QMouseEvent* event)
+{
+	updateSnap(event);
+	snapMouseMoveEvent(event, LastSnap);
+	if (!(M_PREFS->getMouseSingleButton() && LastSnap))
+		Interaction::mouseMoveEvent(event);
+}
+
+void FeatureSnapInteraction::snapMousePressEvent(QMouseEvent * , MapFeature*)
+{
+}
+
+void FeatureSnapInteraction::snapMouseReleaseEvent(QMouseEvent * , MapFeature*)
+{
+}
+
+void FeatureSnapInteraction::snapMouseMoveEvent(QMouseEvent* , MapFeature*)
+{
+}
+
+void FeatureSnapInteraction::activateSnap(bool b)
+{
+	SnapActive = b;
+}
+
+void FeatureSnapInteraction::addToNoSnap(MapFeature* F)
+{
+	NoSnap.push_back(F);
+}
+
+void FeatureSnapInteraction::clearNoSnap()
+{
+	NoSnap.clear();
+}
+
+void FeatureSnapInteraction::clearSnap()
+{
+	StackSnap.clear();
+}
+
+void FeatureSnapInteraction::clearLastSnap()
+{
+	LastSnap = 0;
+}
+
+QList<MapFeature*> FeatureSnapInteraction::snapList()
+{
+	return StackSnap;
+}
+
+void FeatureSnapInteraction::addSnap(MapFeature* aSnap)
+{
+	StackSnap.append(aSnap);
+}
+
+void FeatureSnapInteraction::setSnap(QList<MapFeature*> aSnapList)
+{
+	StackSnap = aSnapList;
+	curStackSnap = 0;
+}
+
+void FeatureSnapInteraction::nextSnap()
+{
+	curStackSnap++;
+	if (curStackSnap > StackSnap.size() -1)
+		curStackSnap = 0;
+	view()->properties()->setSelection(StackSnap[curStackSnap]);
+	view()->update();
+}
+
+void FeatureSnapInteraction::previousSnap()
+{
+	curStackSnap--;
+	if (curStackSnap < 0)
+		curStackSnap = StackSnap.size() -1;
+	view()->properties()->setSelection(StackSnap[curStackSnap]);
+	view()->update();
+}
+
+void FeatureSnapInteraction::setDontSelectPoints(bool b)
+{
+	NoSelectPoints = b;
+}
+
+void FeatureSnapInteraction::setDontSelectRoads(bool b)
+{
+	NoSelectRoads = b;
+}
+
+void FeatureSnapInteraction::setDontSelectVirtual(bool b)
+{
+	NoSelectVirtuals = b;
+}
+
+void FeatureSnapInteraction::updateSnap(QMouseEvent* event)
+{
+	if (panning())
+	{
+		LastSnap = 0;
+		return;
+	}
+	bool NoRoads =
+		( (QApplication::keyboardModifiers() & Qt::AltModifier) &&  (QApplication::keyboardModifiers() &Qt::ControlModifier) );
+	MapFeature* Prev = LastSnap;
+	LastSnap = 0;
+	if (!SnapActive) return;
+	//QTime Start(QTime::currentTime());
+	CoordBox HotZone(XY_TO_COORD(event->pos()-QPointF(15,15)),XY_TO_COORD(event->pos()+QPointF(15,15)));
+	SnapList.clear();
+	double BestDistance = 5;
+#if 1
+	//ggl::box < Coord > cb(HotZone.bottomLeft(), HotZone.topRight());
+
+	for (int j=0; j<document()->layerSize(); ++j) {
+		if (!document()->getLayer(j)->isVisible() || document()->getLayer(j)->isReadonly())
+			continue;
+
+		std::deque < MapFeaturePtr > ret = document()->getLayer(j)->indexFind(HotZone);
+		for (std::deque < MapFeaturePtr >::const_iterator it = ret.begin(); it < ret.end(); ++it) {
+			MapFeature* Pt = dynamic_cast<MapFeature*>(*it);
+			if (Pt)
+			{
+				if (Pt->notEverythingDownloaded())
+					continue;
+				if ( (NoRoads || NoSelectRoads) && dynamic_cast<Road*>(Pt))
+					continue;
+				if (NoSelectPoints && dynamic_cast<TrackPoint*>(Pt))
+					continue;
+				if (std::find(NoSnap.begin(),NoSnap.end(),Pt) != NoSnap.end())
+					continue;
+				double Distance = Pt->pixelDistance(event->pos(), 5.01, projection(), transform());
+				SnapList.push_back(Pt);
+				if (Distance < BestDistance)
+				{
+					BestDistance = Distance;
+					LastSnap = Pt;
+				}
+			}
+		}
+	}
+	if (LastSnap && LastSnap->isVirtual() && NoSelectVirtuals)
+		LastSnap = LastSnap->getParent(0);
+
+#else
+//			for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it)
+//			{
+//				MapFeature* Pt = dynamic_cast<MapFeature*>(it.get());
+//				if (Pt)
+//				{
+//					if (Pt->layer()->isReadonly())
+//						continue;
+//					if (Pt->notEverythingDownloaded())
+//						continue;
+//					if ( (NoRoads || NoSelectRoads) && dynamic_cast<Road*>(Pt))
+//						continue;
+//					if (NoSelectPoints && dynamic_cast<TrackPoint*>(Pt))
+//						continue;
+//					if (std::find(NoSnap.begin(),NoSnap.end(),Pt) != NoSnap.end())
+//						continue;
+//					if (Pt->boundingBox().disjunctFrom(HotZone))
+//						continue;
+//					double Distance = Pt->pixelDistance(transform().inverted().map(event->pos()), 5.01, projection());
+//					SnapList.push_back(Pt);
+//					if (Distance < BestDistance)
+//					{
+//						BestDistance = Distance;
+//						LastSnap = Pt;
+//					}
+//				}
+//			}
+#endif
+	if (Prev != LastSnap) {
+		curStackSnap = SnapList.indexOf(LastSnap);
+		view()->update();
+	}
+
+	if (M_PREFS->getMapTooltip()) {
+		if (LastSnap)
+			view()->setToolTip(LastSnap->toHtml());
+		else
+			view()->setToolTip("");
+	}
+	if (M_PREFS->getInfoOnHover() && main()->info()->isVisible()) {
+		if (LastSnap) {
+			main()->info()->setHoverHtml(LastSnap->toHtml());
+		} else
+			main()->info()->unsetHoverHtml();
+	}
+}
+

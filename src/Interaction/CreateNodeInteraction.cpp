@@ -75,34 +75,31 @@ void CreateNodeInteraction::snapMouseReleaseEvent(QMouseEvent * ev, MapFeature* 
 	Road* aRoad = dynamic_cast<Road*>(aFeat);
 	if (!aFeat || aRoad) {
 		SAFE_DELETE(theMoveInteraction);
-		if (ev->button() == Qt::LeftButton)
+		Coord P(XY_TO_COORD(ev->pos()));
+		if (aRoad)
 		{
-			Coord P(XY_TO_COORD(ev->pos()));
-			if (aRoad)
-			{
-				main()->properties()->setSelection(0);
-				CommandList* theList  = new CommandList(MainWindow::tr("Create node in Road: %1").arg(aRoad->id()), aRoad);
-				int SnapIdx = findSnapPointIndex(aRoad, P);
-				TrackPoint* N = new TrackPoint(P);
-				if (M_PREFS->apiVersionNum() < 0.6)
-					N->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
-				theList->add(new AddFeatureCommand(main()->document()->getDirtyOrOriginLayer(aRoad->layer()),N,true));
-				theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx,main()->document()->getDirtyOrOriginLayer(aRoad->layer())));
-				document()->addHistory(theList);
-				main()->properties()->setSelection(N);
-				view()->invalidate(true, false);
-			}
-			else
-			{
-				TrackPoint* N = new TrackPoint(P);
-				if (M_PREFS->apiVersionNum() < 0.6)
-					N->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
-				CommandList* theList  = new CommandList(MainWindow::tr("Create point %1").arg(N->id()), aRoad);
-				theList->add(new AddFeatureCommand(main()->document()->getDirtyOrOriginLayer(),N,true));
-				document()->addHistory(theList);
-				main()->properties()->setSelection(N);
-				view()->invalidate(true, false);
-			}
+			main()->properties()->setSelection(0);
+			CommandList* theList  = new CommandList(MainWindow::tr("Create node in Road: %1").arg(aRoad->id()), aRoad);
+			int SnapIdx = findSnapPointIndex(aRoad, P);
+			TrackPoint* N = new TrackPoint(P);
+			if (M_PREFS->apiVersionNum() < 0.6)
+				N->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
+			theList->add(new AddFeatureCommand(main()->document()->getDirtyOrOriginLayer(aRoad->layer()),N,true));
+			theList->add(new RoadAddTrackPointCommand(aRoad,N,SnapIdx,main()->document()->getDirtyOrOriginLayer(aRoad->layer())));
+			document()->addHistory(theList);
+			main()->properties()->setSelection(N);
+			view()->invalidate(true, false);
+		}
+		else
+		{
+			TrackPoint* N = new TrackPoint(P);
+			if (M_PREFS->apiVersionNum() < 0.6)
+				N->setTag("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
+			CommandList* theList  = new CommandList(MainWindow::tr("Create point %1").arg(N->id()), aRoad);
+			theList->add(new AddFeatureCommand(main()->document()->getDirtyOrOriginLayer(),N,true));
+			document()->addHistory(theList);
+			main()->properties()->setSelection(N);
+			view()->invalidate(true, false);
 		}
 		theMoveInteraction = new MoveTrackPointInteraction(theView);
 		theView->setCursor(theMoveInteraction->cursor());

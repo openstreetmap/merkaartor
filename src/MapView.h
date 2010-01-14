@@ -72,7 +72,8 @@ class MapView :	public QWidget
 		static void transformCalc(QTransform& theTransform, const Projection& theProjection, const CoordBox& TargetMap, const QRect& Screen);
 		double pixelPerM() const;
 
-		void zoom(double d, const QPointF& Around, const QRect& Screen);
+        void zoom(double d, const QPoint& Around);
+        void zoom(double d, const QPoint& Around, const QRect& Screen);
 		void setCenter(Coord& Center, const QRect& Screen);
 		void resize(QSize oldS, QSize newS);
 

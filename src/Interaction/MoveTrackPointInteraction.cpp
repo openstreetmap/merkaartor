@@ -74,11 +74,12 @@ void MoveTrackPointInteraction::snapMousePressEvent(QMouseEvent * event, MapFeat
 		else
 			sel.append(aLast);
 	} else {
-		if (view()->properties()->selection().size())
-			sel = view()->properties()->selection();
-		else
-			if (aLast)
+		if (aLast) {
+			if (view()->properties()->selection().size())
+				sel = view()->properties()->selection();
+			else
 				sel.append(aLast);
+		}
 	}
 	clearNoSnap();
 	Moving.clear();

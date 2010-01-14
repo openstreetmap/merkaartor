@@ -99,28 +99,25 @@ void EditInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
 void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 {
 	if (!view()->isSelectionLocked()) {
-		if (ev->buttons() & Qt::LeftButton)
-		{
-			if (ev->modifiers()) {
-				if ((ev->modifiers() & Qt::ControlModifier) && aLast)
-					view()->properties()->toggleSelection(aLast);
+		if (ev->modifiers()) {
+			if ((ev->modifiers() & Qt::ControlModifier) && aLast)
+				view()->properties()->toggleSelection(aLast);
 
-				if ((ev->modifiers() & Qt::ShiftModifier) && aLast)
-					view()->properties()->addSelection(aLast);
-			} else {
-				StackSnap = SnapList;
+			if ((ev->modifiers() & Qt::ShiftModifier) && aLast)
+				view()->properties()->addSelection(aLast);
+		} else {
+			StackSnap = SnapList;
 //				if (aLast)
 //					view()->properties()->setSelection(aLast);
-			}
-			if (view()->properties()->selection().size() == 0) {
-				if (
-					(M_PREFS->getMouseSingleButton() && (ev->modifiers() & Qt::ShiftModifier) && !aLast) ||
-					(!M_PREFS->getMouseSingleButton() && !aLast)
-					)
-				{
-					EndDrag = StartDrag = XY_TO_COORD(ev->pos());
-					Dragging = true;
-				}
+		}
+		if (view()->properties()->selection().size() == 0) {
+			if (
+				(M_PREFS->getMouseSingleButton() && (ev->modifiers() & Qt::ShiftModifier) && !aLast) ||
+				(!M_PREFS->getMouseSingleButton() && !aLast)
+				)
+			{
+				EndDrag = StartDrag = XY_TO_COORD(ev->pos());
+				Dragging = true;
 			}
 		}
 		view()->properties()->checkMenuStatus();
@@ -133,7 +130,9 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, MapFeature* aLast)
 
 void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* aLast)
 {
-	Q_UNUSED(ev);
+	if (ev->button() != Qt::LeftButton)
+		return;
+
 	if (currentMode == MoveMode) {
 		theMoveInteraction->snapMouseReleaseEvent(ev, aLast);
 	} else

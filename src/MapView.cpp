@@ -814,26 +814,8 @@ void MapView::mouseMoveEvent(QMouseEvent* anEvent)
 
 void MapView::wheelEvent(QWheelEvent* ev)
 {
-	double finalZoom = 1.;
-	int Steps = ev->delta() / 120;
-	if (M_PREFS->getZoomBoris()) {
-		finalZoom = pow(2., Steps);
-	} else {
-		if (Steps > 0) {
-			for (int i = 0; i < Steps; ++i) {
-				finalZoom *= M_PREFS->getZoomIn()/100.0;
-			}
-		} else if (Steps < 0) {
-			for (int i = 0; i < -Steps; ++i) {
-				finalZoom *= M_PREFS->getZoomOut()/100.0;
-			}
-		}
-	}
-
-	zoom(finalZoom, ev->pos(), rect());
-	for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
-		ImgIt.get()->zoom(finalZoom, ev->pos(), rect());
-	invalidate(true, true);
+    if (theInteraction)
+        theInteraction->wheelEvent(ev);
 }
 
 void MapView::launch(Interaction* anInteraction)
@@ -1254,7 +1236,12 @@ void MapView::setViewport(const CoordBox & TargetMap,
 	}
 }
 
-void MapView::zoom(double d, const QPointF & Around,
+void MapView::zoom(double d, const QPoint & Around)
+{
+    zoom(d, Around, rect());
+}
+
+void MapView::zoom(double d, const QPoint & Around,
 							 const QRect & Screen)
 {
 	if (p->PixelPerM > 100 && d > 1.0)
@@ -1273,6 +1260,9 @@ void MapView::zoom(double d, const QPointF & Around,
 
 	QRectF vp = theProjection.getProjectedViewport(p->Viewport, Screen);
 	p->PixelPerM = Screen.width() / vp.width();
+
+    for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
+        ImgIt.get()->zoom(d, Around, Screen);
 
 	qDebug() << "Zoom: " << ScaleLon;
 }

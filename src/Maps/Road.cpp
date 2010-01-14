@@ -110,6 +110,12 @@ Road::~Road(void)
 	delete p;
 }
 
+void Road::setDeleted(bool delState)
+{
+	MapFeature::setDeleted(delState);
+	updateVirtuals();
+}
+
 void Road::setLayer(MapLayer* L)
 {
 	if (L) {

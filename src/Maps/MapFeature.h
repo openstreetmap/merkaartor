@@ -172,70 +172,70 @@ class MapFeature : public QObject
 
 		/** @return the number of tags for the current object
 		 */
-		int tagSize() const;
+		virtual int tagSize() const;
 
 		/** if a tag with the key "k" exists, return its index.
 		 * if the key doesn't exist, return the number of tags
 		 * @return index of tag
 		 */
-		int findKey(const QString& k) const;
+		virtual int findKey(const QString& k) const;
 
 		/** return the value of the tag at the position "i".
 		 * position start at 0.
 		 * Be carefull: no verification is made on i.
 		 * @return the value
 		 */
-		QString tagValue(int i) const;
+		virtual QString tagValue(int i) const;
 
 		/** return the value of the tag with the key "k".
 		 * if such a tag doesn't exists, return Default.
 		 * @return value or Default
 		 */
-		QString tagValue(const QString& k, const QString& Default) const;
+		virtual QString tagValue(const QString& k, const QString& Default) const;
 
 		/** return the value of the tag at the position "i".
 		 * position start at 0.
 		 * Be carefull: no verification is made on i.
 		 * @return the value
 		*/
-		QString tagKey(int i) const;
+		virtual QString tagKey(int i) const;
 
 		/** remove the tag at the position "i".
 		 * position start at 0.
 		 * Be carefull: no verification is made on i.
 		 */
-		void removeTag(int i);
+		virtual void removeTag(int i);
 
 		/** check if the feature is on the dirty layer
 		 * @return true if on the dirty layer
 		 */
-		bool isDirty() const;
+		virtual bool isDirty() const;
 
 		/** check if the feature is on an uploadable layer
 		 * @return true if on an uploadable layer
 		 */
-		bool isUploadable() const;
+		virtual bool isUploadable() const;
 
 		/** set the logical delete state of the feature
 		 */
-		void setDeleted(bool delState);
+		virtual void setDeleted(bool delState);
 
 		/** check if the feature is logically deleted
 		 * @return true if logically deleted
 		 */
-		bool isDeleted() const;
+		virtual bool isDeleted() const;
 
 		/** check if the feature has been uploaded
 		 * @return true if uploaded
 		 */
-		bool isUploaded() const;
-		void setUploaded(bool state);
+		virtual bool isUploaded() const;
+		virtual void setUploaded(bool state);
 
 		/** check if the feature is virtual
 		 * @return true if virtual
 		 */
-		bool isVirtual() const;
-		void setVirtual(bool val);
+		virtual bool isVirtual() const;
+		virtual void setVirtual(bool val);
 
 		virtual bool isInteresting() const {return true;}
 

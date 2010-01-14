@@ -13,7 +13,7 @@
 #include <QtGui/QPainter>
 
 CreateSingleWayInteraction::CreateSingleWayInteraction(MainWindow* aMain, MapView* aView, TrackPoint *firstNode, bool aCurved)
-	: GenericFeatureSnapInteraction<MapFeature>(aView), Main(aMain), theRoad(0), FirstPoint(0,0),
+	: FeatureSnapInteraction(aView), Main(aMain), theRoad(0), FirstPoint(0,0),
 	 FirstNode(firstNode), HaveFirst(false), Prepend(false), IsCurved(aCurved), Creating(false)
 {
 	if (firstNode)
@@ -82,7 +82,7 @@ void CreateSingleWayInteraction::paintEvent(QPaintEvent* anEvent, QPainter& theP
 
 		thePainter.drawText(LastCursor + QPointF(10,-10), distanceTag);
 	}
-	GenericFeatureSnapInteraction<MapFeature>::paintEvent(anEvent,thePainter);
+	FeatureSnapInteraction::paintEvent(anEvent,thePainter);
 }
 
 void CreateSingleWayInteraction::snapMouseMoveEvent(QMouseEvent* ev, MapFeature* aFeature)
@@ -103,12 +103,15 @@ void CreateSingleWayInteraction::snapMouseMoveEvent(QMouseEvent* ev, MapFeature*
 void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, MapFeature* aFeature)
 {
 	Q_UNUSED(aFeature)
-	if ((anEvent->buttons() & Qt::LeftButton) )
-		Creating = true;
+	Creating = true;
 }
 
 void CreateSingleWayInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, MapFeature* aFeature)
 {
+	if (M_PREFS->getMouseSingleButton() && anEvent->button() == Qt::RightButton) {
+		HaveFirst = false;
+		theRoad = NULL;
+	} else
 	if ( Creating && !panning() )
 	{
 		TrackPoint* Pt = dynamic_cast<TrackPoint*>(aFeature);

@@ -20,12 +20,13 @@ class CreateDoubleWayInteraction : public Interaction
 
 		virtual void mousePressEvent(QMouseEvent * event);
 		virtual void mouseMoveEvent(QMouseEvent* event);
+		virtual void mouseReleaseEvent(QMouseEvent* event);
 		virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter);
 		virtual QString toHtml();
 #ifndef Q_OS_SYMBIAN
 		virtual QCursor cursor() const;
 #endif
-		
+
 	private:
 		MainWindow* Main;
 		QDockWidget* theDock;

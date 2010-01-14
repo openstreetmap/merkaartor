@@ -9,7 +9,7 @@ class Way;
 
 class QDockWidget;
 
-class CreateSingleWayInteraction : public GenericFeatureSnapInteraction<MapFeature>
+class CreateSingleWayInteraction : public FeatureSnapInteraction
 {
 	Q_OBJECT
 

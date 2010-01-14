@@ -149,6 +149,14 @@ void CreateRoundaboutInteraction::mouseMoveEvent(QMouseEvent* event)
 	Interaction::mouseMoveEvent(event);
 }
 
+void CreateRoundaboutInteraction::mouseReleaseEvent(QMouseEvent* anEvent)
+{
+	if (M_PREFS->getMouseSingleButton() && anEvent->button() == Qt::RightButton) {
+		HaveCenter = false;
+		view()->update();
+	}
+}
+
 void CreateRoundaboutInteraction::paintEvent(QPaintEvent* , QPainter& thePainter)
 {
 	if (HaveCenter)
