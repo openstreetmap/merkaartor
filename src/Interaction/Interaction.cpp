@@ -165,13 +165,6 @@ void Interaction::paintEvent(QPaintEvent*, QPainter& thePainter)
 	}
 }
 
-#ifndef Q_OS_SYMBIAN
-QCursor Interaction::cursor() const
-{
-	return QCursor(Qt::ArrowCursor);
-}
-#endif
-
 /***************/
 
 FeatureSnapInteraction::FeatureSnapInteraction(MapView* theView)
@@ -179,6 +172,9 @@ FeatureSnapInteraction::FeatureSnapInteraction(MapView* theView)
 	  NoSelectPoints(false), NoSelectRoads(false)
 	  , NoSelectVirtuals(true)
 {
+	handCursor = QCursor(QPixmap(":/Icons/grab.png"));
+	grabCursor = QCursor(QPixmap(":/Icons/grabbing.png"));
+	defaultCursor = QCursor(Qt::ArrowCursor);
 }
 
 void FeatureSnapInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
@@ -216,19 +212,19 @@ void FeatureSnapInteraction::mousePressEvent(QMouseEvent * event)
 
 void FeatureSnapInteraction::mouseReleaseEvent(QMouseEvent * event)
 {
+	if (event->button() == Qt::RightButton && !Panning)
+		emit(requestCustomContextMenu(event->pos()));
+
 	updateSnap(event);
 	snapMouseReleaseEvent(event,LastSnap);
 	if (!(M_PREFS->getMouseSingleButton() && LastSnap))
 		Interaction::mouseReleaseEvent(event);
-
-	if (event->button() == Qt::RightButton)
-		emit(requestCustomContextMenu(event->pos()));
-
 }
 
 void FeatureSnapInteraction::mouseMoveEvent(QMouseEvent* event)
 {
 	updateSnap(event);
+	view()->setCursor(cursor());
 	snapMouseMoveEvent(event, LastSnap);
 	if (!(M_PREFS->getMouseSingleButton() && LastSnap))
 		Interaction::mouseMoveEvent(event);
@@ -415,4 +411,19 @@ void FeatureSnapInteraction::updateSnap(QMouseEvent* event)
 			main()->info()->unsetHoverHtml();
 	}
 }
+
+#ifndef Q_OS_SYMBIAN
+QCursor FeatureSnapInteraction::cursor() const
+{
+	if (M_PREFS->getMouseSingleButton()) {
+		if (!Panning) {
+			return handCursor;
+		} else {
+			return grabCursor;
+		}
+
+	} else
+		return defaultCursor;
+}
+#endif
 

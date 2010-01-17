@@ -32,6 +32,8 @@ class RotateInteraction : public FeatureSnapInteraction
 		QPointF RotationCenter;
 		double Angle;
 		double Radius;
+
+		QCursor rotateCursor;
 };
 
 #endif

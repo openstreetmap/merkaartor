@@ -814,8 +814,8 @@ void MapView::mouseMoveEvent(QMouseEvent* anEvent)
 
 void MapView::wheelEvent(QWheelEvent* ev)
 {
-    if (theInteraction)
-        theInteraction->wheelEvent(ev);
+	if (theInteraction)
+		theInteraction->wheelEvent(ev);
 }
 
 void MapView::launch(Interaction* anInteraction)
@@ -830,9 +830,6 @@ void MapView::launch(Interaction* anInteraction)
 	theInteraction = anInteraction;
 	EI = dynamic_cast<EditInteraction*>(theInteraction);
 	if (theInteraction) {
-#ifndef Q_OS_SYMBIAN
-		setCursor(theInteraction->cursor());
-#endif
 		emit interactionChanged(anInteraction);
 		if (EI)
 			EI->setSnap(theSnapList);
@@ -894,8 +891,9 @@ void MapView::on_customContextMenuRequested(const QPoint & pos)
 		//if (createMenu.actions().size())
 		//	menu.addMenu(&createMenu);
 
-		menu.addAction(Main->viewZoomInAction);
 		menu.addAction(Main->viewZoomOutAction);
+		menu.addAction(Main->viewZoomWindowAction);
+		menu.addAction(Main->viewZoomInAction);
 
 		QMenu featureMenu(tr("Feature"));
 		for(int i=0; i<Main->menu_Feature->actions().size(); ++i) {
@@ -1222,14 +1220,14 @@ void MapView::setViewport(const CoordBox & TargetMap,
 		qDebug() << "pt: " << int(pt.x());
 		double earthWidth = pt.x() * 2;
 		double zoomPixPerMat0 = 512. / earthWidth;
-        double z = 0;
-        int zoomLevel = 0;
-        for (;z<p->theTransform.m11(); ++zoomLevel) {
-            double zoomPixPerMatCur = zoomPixPerMat0 * pow(2, zoomLevel);
-            z = zoomPixPerMatCur / p->PixelPerM;
-        }
-        double zoomPixPerMatCur = zoomPixPerMat0 * pow(2, zoomLevel-1);
-        z = zoomPixPerMatCur / p->PixelPerM;
+		double z = 0;
+		int zoomLevel = 0;
+		for (;z<p->theTransform.m11(); ++zoomLevel) {
+			double zoomPixPerMatCur = zoomPixPerMat0 * pow(2, zoomLevel);
+			z = zoomPixPerMatCur / p->PixelPerM;
+		}
+		double zoomPixPerMatCur = zoomPixPerMat0 * pow(2, zoomLevel-1);
+		z = zoomPixPerMatCur / p->PixelPerM;
 
 		double x = 1. / p->theTransform.m11() * z;
 		zoom(x, Screen.center(), Screen);
@@ -1238,7 +1236,7 @@ void MapView::setViewport(const CoordBox & TargetMap,
 
 void MapView::zoom(double d, const QPoint & Around)
 {
-    zoom(d, Around, rect());
+	zoom(d, Around, rect());
 }
 
 void MapView::zoom(double d, const QPoint & Around,
@@ -1261,8 +1259,8 @@ void MapView::zoom(double d, const QPoint & Around,
 	QRectF vp = theProjection.getProjectedViewport(p->Viewport, Screen);
 	p->PixelPerM = Screen.width() / vp.width();
 
-    for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
-        ImgIt.get()->zoom(d, Around, Screen);
+	for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
+		ImgIt.get()->zoom(d, Around, Screen);
 
 	qDebug() << "Zoom: " << ScaleLon;
 }

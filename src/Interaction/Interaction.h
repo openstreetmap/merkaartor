@@ -43,14 +43,11 @@ class Interaction : public QObject
 		virtual void mousePressEvent(QMouseEvent * event);
 		virtual void mouseReleaseEvent(QMouseEvent * event);
 		virtual void mouseMoveEvent(QMouseEvent* event);
-        virtual void wheelEvent(QWheelEvent* ev);
+		virtual void wheelEvent(QWheelEvent* ev);
 
-        virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter);
+		virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter);
 		virtual QString toHtml() = 0;
 
-#ifndef Q_OS_SYMBIAN
-		virtual QCursor cursor() const;
-#endif
 		MapView* view();
 		MapDocument* document();
 		MainWindow* main();
@@ -74,48 +71,56 @@ class Interaction : public QObject
 class FeatureSnapInteraction : public Interaction
 {
 public:
-    FeatureSnapInteraction(MapView* theView);
+	FeatureSnapInteraction(MapView* theView);
 
-    virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter);
+	virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter);
 
-    virtual void mousePressEvent(QMouseEvent * event);
-    virtual void mouseReleaseEvent(QMouseEvent * event);
-    virtual void mouseMoveEvent(QMouseEvent* event);
+	virtual void mousePressEvent(QMouseEvent * event);
+	virtual void mouseReleaseEvent(QMouseEvent * event);
+	virtual void mouseMoveEvent(QMouseEvent* event);
 
-    virtual void snapMousePressEvent(QMouseEvent * , MapFeature*);
-    virtual void snapMouseReleaseEvent(QMouseEvent * , MapFeature*);
-    virtual void snapMouseMoveEvent(QMouseEvent* , MapFeature*);
+	virtual void snapMousePressEvent(QMouseEvent * , MapFeature*);
+	virtual void snapMouseReleaseEvent(QMouseEvent * , MapFeature*);
+	virtual void snapMouseMoveEvent(QMouseEvent* , MapFeature*);
 
-    void activateSnap(bool b);
-    void addToNoSnap(MapFeature* F);
-    void clearNoSnap();
-    void clearSnap();
-    void clearLastSnap();
-    QList<MapFeature*> snapList();
-    void addSnap(MapFeature* aSnap);
-    void setSnap(QList<MapFeature*> aSnapList);
-    void nextSnap();
-    void previousSnap();
+	void activateSnap(bool b);
+	void addToNoSnap(MapFeature* F);
+	void clearNoSnap();
+	void clearSnap();
+	void clearLastSnap();
+	QList<MapFeature*> snapList();
+	void addSnap(MapFeature* aSnap);
+	void setSnap(QList<MapFeature*> aSnapList);
+	void nextSnap();
+	void previousSnap();
 
-    void setDontSelectPoints(bool b);
-    void setDontSelectRoads(bool b);
-    void setDontSelectVirtual(bool b);
+	void setDontSelectPoints(bool b);
+	void setDontSelectRoads(bool b);
+	void setDontSelectVirtual(bool b);
+
+#ifndef Q_OS_SYMBIAN
+	virtual QCursor cursor() const;
+#endif
 
 private:
-    void updateSnap(QMouseEvent* event);
+	void updateSnap(QMouseEvent* event);
 
-    MapFeature* LastSnap;
-    QList<MapFeature*> NoSnap;
-    bool SnapActive;
-    bool NoSelectPoints;
-    bool NoSelectWays;
-    bool NoSelectRoads;
-    bool NoSelectVirtuals;
+	QList<MapFeature*> NoSnap;
+	bool SnapActive;
+	bool NoSelectPoints;
+	bool NoSelectWays;
+	bool NoSelectRoads;
+	bool NoSelectVirtuals;
+
+	QCursor handCursor;
+	QCursor grabCursor;
+	QCursor defaultCursor;
 
 protected:
-    QList<MapFeature*> StackSnap;
-    QList<MapFeature*> SnapList;
-    int curStackSnap;
+	MapFeature* LastSnap;
+	QList<MapFeature*> StackSnap;
+	QList<MapFeature*> SnapList;
+	int curStackSnap;
 };
 
 #endif

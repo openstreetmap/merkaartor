@@ -30,6 +30,9 @@ EditInteraction::EditInteraction(MapView* theView)
 	, currentMode(EditMode)
 	, theMoveInteraction(0)
 {
+	moveCursor = QCursor(QPixmap(":/Icons/move.xpm"));
+	defaultCursor = QCursor(Qt::ArrowCursor);
+
 	connect(main(),SIGNAL(remove_triggered()),this,SLOT(on_remove_triggered()));
 	connect(main(),SIGNAL(reverse_triggered()), this,SLOT(on_reverse_triggered()));
 	view()->properties()->checkMenuStatus();
@@ -49,14 +52,6 @@ EditInteraction::~EditInteraction(void)
 	}
 	SAFE_DELETE(theMoveInteraction);
 }
-
-#ifndef Q_OS_SYMBIAN
-QCursor EditInteraction::moveCursor() const
-{
-	QPixmap pm(":/Icons/move.xpm");
-	return QCursor(pm);
-}
-#endif
 
 QString EditInteraction::toHtml()
 {
@@ -193,9 +188,6 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , MapFeature* aLast
 			view()->properties()->setSelection(aLast);
 			if (view()->properties()->isSelected(aLast) && !M_PREFS->getSeparateMoveMode()) {
 				currentMode = MoveMode;
-#ifndef Q_OS_SYMBIAN
-				view()->setCursor(moveCursor());
-#endif
 			}
 			view()->properties()->checkMenuStatus();
 			view()->update();
@@ -217,15 +209,9 @@ void EditInteraction::snapMouseMoveEvent(QMouseEvent* anEvent, MapFeature* aLast
 	if (anEvent->buttons() == Qt::NoButton) {
 		if (aLast && view()->properties()->isSelected(aLast) && !M_PREFS->getSeparateMoveMode())
 		{
-	#ifndef Q_OS_SYMBIAN
-			view()->setCursor(moveCursor());
-	#endif
 			currentMode = MoveMode;
 		} else
 		{
-	#ifndef Q_OS_SYMBIAN
-			view()->setCursor(cursor());
-	#endif
 			currentMode = EditMode;
 		}
 	}
@@ -273,3 +259,16 @@ void EditInteraction::on_reverse_triggered()
 	}
 	view()->invalidate(true, false);
 }
+
+#ifndef Q_OS_SYMBIAN
+QCursor EditInteraction::cursor() const
+{
+	if (currentMode == MoveMode)
+		return moveCursor;
+
+	if (LastSnap)
+		return defaultCursor;
+
+	return FeatureSnapInteraction::cursor();
+}
+#endif

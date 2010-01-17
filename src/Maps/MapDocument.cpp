@@ -1,7 +1,7 @@
-#include "Maps/MapFeature.h"
 #include "Command/Command.h"
-#include "Maps/ImportOSM.h"
 
+#include "Maps/MapFeature.h"
+#include "Maps/ImportOSM.h"
 #include "Maps/MapDocument.h"
 #include "Maps/ImageMapLayer.h"
 
@@ -9,6 +9,8 @@
 #include "ImportExport/ImportExportOsmBin.h"
 #include "ImportExport/ImportExportKML.h"
 #include "ImportExport/ImportExportSHP.h"
+
+#include "LayerWidget.h"
 
 #include <QtCore/QString>
 #include <QMultiMap>
@@ -49,7 +51,7 @@ public:
 	QHash<MapLayer*, CoordBox>		downloadBoxes;
 
 	QHash< QString, QSet<QString> * >		tagList;
-	
+
 };
 
 MapDocument::MapDocument()
@@ -79,8 +81,13 @@ void MapDocument::addDefaultLayers()
 {
 	ImageMapLayer*l = addImageLayer();
 	l->setMapAdapter(M_PREFS->getBackgroundPlugin(), M_PREFS->getSelectedServer());
-	if (M_PREFS->getBackgroundPlugin() != NONE_ADAPTER_UUID)
-		l->setVisible(MerkaartorPreferences::instance()->getBgVisible());
+	if (M_PREFS->getBackgroundPlugin() != NONE_ADAPTER_UUID) {
+		l->setVisible(M_PREFS->getBgVisible());
+		// Sync the menu entry label & visible checkbox to the layer
+		QMenu *lMenu = l->getWidget()->getAssociatedMenu();
+		lMenu->menuAction()->menu()->actions().at(0)->setChecked(M_PREFS->getBgVisible());
+		lMenu->setTitle(l->name());
+	}
 
 	p->dirtyLayer = new DirtyMapLayer(tr("Dirty layer"));
 	add(p->dirtyLayer);
@@ -230,7 +237,7 @@ void MapDocument::undoHistory()
 void MapDocument::add(MapLayer* aLayer)
 {
 	p->Layers.push_back(aLayer);
-    aLayer->setDocument(this);
+	aLayer->setDocument(this);
 	if (p->theDock)
 		p->theDock->addLayer(aLayer);
 }
@@ -382,7 +389,7 @@ MapFeature* MapDocument::getFeature(const QString& id, bool exact)
 	for (int i=0; i<p->Layers.size(); ++i)
 	{
 		MapFeature* F = p->Layers[i]->get(id);
-		if (F) 
+		if (F)
 			return F;
 		if (!exact) {
 			if ((F = p->Layers[i]->get("node_"+id)))
@@ -767,7 +774,7 @@ bool FeatureIterator::check()
 		return false;
 
 	MapFeature* curFeature = theDocument->getLayer(curLayerIdx)->get(curFeatureIdx);
-	if (curFeature->lastUpdated() == MapFeature::NotYetDownloaded 
+	if (curFeature->lastUpdated() == MapFeature::NotYetDownloaded
 			|| curFeature->isDeleted())
 		return false;
 
@@ -794,7 +801,7 @@ bool VisibleFeatureIterator::check()
 		return false;
 	else {
 		if (theDocument->getLayer(curLayerIdx)->isVisible()) {
-			if (CAST_NODE(theDocument->getLayer(curLayerIdx)->get(curFeatureIdx)) 
+			if (CAST_NODE(theDocument->getLayer(curLayerIdx)->get(curFeatureIdx))
 					&& !(theDocument->getLayer(curLayerIdx)->arePointsDrawable()))
 				return false;
 		} else

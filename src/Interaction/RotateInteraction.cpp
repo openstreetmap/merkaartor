@@ -22,6 +22,9 @@
 RotateInteraction::RotateInteraction(MapView* aView)
 : FeatureSnapInteraction(aView), StartDragPosition(0,0)
 {
+	QPixmap pm(":/Icons/rotate.png");
+	rotateCursor =  QCursor(pm.scaledToWidth(22));
+
 }
 
 RotateInteraction::~RotateInteraction(void)
@@ -56,8 +59,10 @@ QString RotateInteraction::toHtml()
 #ifndef Q_OS_SYMBIAN
 QCursor RotateInteraction::cursor() const
 {
-	QPixmap pm(":/Icons/rotate.png");
-	return QCursor(pm.scaledToWidth(22));
+	if (LastSnap)
+		return rotateCursor;
+
+	return FeatureSnapInteraction::cursor();
 }
 #endif
 
@@ -127,8 +132,8 @@ void RotateInteraction::snapMouseReleaseEvent(QMouseEvent * event, MapFeature* /
 			else
 				theList->add(new MoveTrackPointCommand(Rotating[i],rotatePosition(OriginalPosition[i], Angle, Radius), document()->getDirtyOrOriginLayer(Rotating[i]->layer())));
 		}
-		
-		
+
+
 		document()->addHistory(theList);
 		view()->invalidate(true, false);
 	}

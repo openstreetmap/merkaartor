@@ -20,10 +20,8 @@ class EditInteraction :	public FeatureSnapInteraction
 		virtual void snapMouseReleaseEvent(QMouseEvent * event, MapFeature* aLast);
 		virtual void snapMouseMoveEvent(QMouseEvent* event, MapFeature* aLast);
 		virtual QString toHtml();
-
-	private:
 #ifndef Q_OS_SYMBIAN
-		QCursor moveCursor() const;
+		virtual QCursor cursor() const;
 #endif
 
 	public slots:
@@ -37,7 +35,9 @@ class EditInteraction :	public FeatureSnapInteraction
 
 		EditModeEnum currentMode;
 
-        MoveTrackPointInteraction* theMoveInteraction;
+		MoveTrackPointInteraction* theMoveInteraction;
+		QCursor moveCursor;
+		QCursor defaultCursor;
 };
 
 #endif
