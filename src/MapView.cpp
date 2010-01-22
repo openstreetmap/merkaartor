@@ -36,6 +36,7 @@
 
 // from wikipedia
 #define EQUATORIALRADIUS 6378137.0
+#define LAT_ANG_PER_M 1.0 / EQUATORIALRADIUS
 
 class MapViewPrivate
 {
@@ -131,7 +132,8 @@ void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
 	}
 	if (theDocument && updateMap) {
 		for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
-			ImgIt.get()->forceRedraw(*this, rect());
+			ImgIt.get()->forceRedraw(*this, rect(), p->theRasterPanDelta);
+		p->theRasterPanDelta = QPoint();
 		StaticMapUpToDate = false;
 	}
 	update();
@@ -291,9 +293,8 @@ void MapView::updateLayersImage()
 
 	for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
 		if (ImgIt.get()->isVisible())
-			ImgIt.get()->drawImage(*StaticMap, p->theRasterPanDelta);
+			ImgIt.get()->drawImage(*StaticMap);
 
-	p->theRasterPanDelta = QPoint(0, 0);
 	StaticMapUpToDate = true;
 }
 
@@ -954,7 +955,7 @@ void MapView::on_imageRequested(ImageMapLayer*)
 void MapView::on_imageReceived(ImageMapLayer* aLayer)
 {
 	Main->pbImages->setValue(Main->pbImages->value()+1);
-	aLayer->forceRedraw(*this, rect());
+	aLayer->forceRedraw(*this, rect(), p->theRasterPanDelta);
 	StaticMapUpToDate = false;
 	update();
 }
@@ -1212,8 +1213,12 @@ void MapView::setViewport(const CoordBox & TargetMap,
 	transformCalc(p->theTransform, theProjection, TargetMap, Screen);
 	viewportRecalc(Screen);
 
-	QRectF vp = theProjection.getProjectedViewport(p->Viewport, Screen);
-	p->PixelPerM = Screen.width() / vp.width();
+	if (theProjection.projIsLatLong()) {
+		p->PixelPerM = Screen.width() / (double)p->Viewport.lonDiff() * LAT_ANG_PER_M / M_PI * INT_MAX;
+	} else {
+		QRectF vp = theProjection.getProjectedViewport(p->Viewport, Screen);
+		p->PixelPerM = Screen.width() / vp.width();
+	}
 
 	if (M_PREFS->getZoomBoris()) {
 		QPointF pt = theProjection.project(Coord(0, angToInt(180)));
@@ -1245,7 +1250,7 @@ void MapView::zoom(double d, const QPoint & Around,
 	if (p->PixelPerM > 100 && d > 1.0)
 		return;
 
-	Coord Before = theProjection.inverse(p->theTransform.inverted().map(Around));
+	Coord Before = theProjection.inverse(p->theTransform.inverted().map(QPointF(Around)));
 	QPointF pBefore = theProjection.project(Before);
 
 	double ScaleLon = p->theTransform.m11() * d;
@@ -1256,8 +1261,26 @@ void MapView::zoom(double d, const QPoint & Around,
 	p->theTransform.setMatrix(ScaleLon, 0, 0, 0, ScaleLat, 0, DeltaLon, DeltaLat, 1);
 	viewportRecalc(Screen);
 
-	QRectF vp = theProjection.getProjectedViewport(p->Viewport, Screen);
-	p->PixelPerM = Screen.width() / vp.width();
+	if (theProjection.projIsLatLong()) {
+		p->PixelPerM = Screen.width() / (double)p->Viewport.lonDiff() * LAT_ANG_PER_M / M_PI * INT_MAX;
+	} else {
+		QRectF vp = theProjection.getProjectedViewport(p->Viewport, Screen);
+		p->PixelPerM = Screen.width() / vp.width();
+	}
+	if (theProjection.projIsLatLong()) {
+		double LengthOfOneDegreeLat = EQUATORIALRADIUS * M_PI / 180;
+		double LengthOfOneDegreeLon =
+			LengthOfOneDegreeLat * fabs(cos(intToRad(Before.lat())));
+		double degAspect = LengthOfOneDegreeLon / LengthOfOneDegreeLat;
+		double so = Screen.width() / (double)p->Viewport.lonDiff();
+		double sa = so / degAspect;
+
+		double LatAngPerM = 1.0 / EQUATORIALRADIUS;
+		p->PixelPerM = LatAngPerM / M_PI * INT_MAX * sa;
+	} else {
+		QRectF vp = theProjection.getProjectedViewport(p->Viewport, Screen);
+		p->PixelPerM = Screen.width() / vp.width();
+	}
 
 	for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
 		ImgIt.get()->zoom(d, Around, Screen);

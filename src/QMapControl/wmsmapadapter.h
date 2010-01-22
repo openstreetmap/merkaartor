@@ -95,6 +95,7 @@ public:
 	virtual bool	isValid(int, int, int) const { return true; }
 	virtual QString getQuery(int, int, int)  const { return ""; }
 	virtual QString getQuery(const QRectF& wgs84Bbox, const QRectF& projBbox, const QRect& size) const ;
+	virtual QPixmap getPixmap(const QRectF& wgs84Bbox, const QRectF& projBbox, const QRect& size) const { return QPixmap(); };
 
 	//! translates a world coordinate to display coordinate
 	/*!
@@ -116,6 +117,8 @@ public:
 
 	virtual bool isTiled() const { return false; }
 	virtual QString projection() const;
+
+	virtual QMenu* getMenu() const { return NULL; }
 
 	virtual IImageManager* getImageManager();
 	virtual void setImageManager(IImageManager* anImageManager);

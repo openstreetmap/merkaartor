@@ -31,18 +31,18 @@ DEFINES += REVISION=$$REVISION
 TEMPLATE = app
 TARGET = merkaartor
 
-CONFIG += rtti stl 
+CONFIG += rtti stl
 #CONFIG -= exceptions
 QT += svg network xml core gui
 
 !contains(NODEBUG,1) {
-    CONFIG += debug
-    #OBJECTS_DIR += $$PWD/../tmp/$$(QMAKESPEC)/obj_debug
+	CONFIG += debug
+	#OBJECTS_DIR += $$PWD/../tmp/$$(QMAKESPEC)/obj_debug
 }
 contains(NODEBUG,1) {
-    CONFIG += release
-    DEFINES += NDEBUG
-    #OBJECTS_DIR += $$PWD/../tmp/$$(QMAKESPEC)/obj_release
+	CONFIG += release
+	DEFINES += NDEBUG
+	#OBJECTS_DIR += $$PWD/../tmp/$$(QMAKESPEC)/obj_release
 }
 COMMON_DIR=$$PWD/../binaries
 OUTPUT_DIR=$$PWD/../binaries/$$(QMAKESPEC)
@@ -66,21 +66,11 @@ macx {
 }
 
 contains(NVIDIA_HACK,1) {
-    DEFINES += ENABLE_NVIDIA_HACK
+	DEFINES += ENABLE_NVIDIA_HACK
 }
 
 INCLUDEPATH += $$PWD Render qextserialport GPS NameFinder
 DEPENDPATH += $$PWD Render qextserialport GPS NameFinder
-
-!contains(NOUSEWEBKIT,1) {
-	greaterThan(QT_VER_MAJ, 3) : greaterThan(QT_VER_MIN, 3) {
-    	DEFINES += USE_WEBKIT
-    	SOURCES += QMapControl/browserimagemanager.cpp
-    	HEADERS += QMapControl/browserimagemanager.h
-    	QT += webkit
-        contains(THREADED_BROWSERIMAGEMANAGER,1): DEFINES += BROWSERIMAGEMANAGER_IS_THREADED
-	}
-}
 
 TRANSLATIONS += \
 	../translations/merkaartor_ar.ts \
@@ -127,37 +117,37 @@ include(NameFinder/NameFinder.pri)
 
 
 !win32 {
-    # Prefix: base instalation directory
-    isEmpty( PREFIX ) {
+	# Prefix: base instalation directory
+	isEmpty( PREFIX ) {
 		PREFIX = /usr/local
 	}
-    isEmpty( LIBDIR ) {
+	isEmpty( LIBDIR ) {
 		LIBDIR = $${PREFIX}/lib${LIB_SUFFIX}
 	}
 	DEFINES += PLUGINS_DIR=$${LIBDIR}/merkaartor/plugins
-    target.path = $${PREFIX}/bin
-    SHARE_DIR = $${PREFIX}/share/merkaartor
+	target.path = $${PREFIX}/bin
+	SHARE_DIR = $${PREFIX}/share/merkaartor
 
-    isEmpty(TRANSDIR_MERKAARTOR) {
-        TRANSDIR_MERKAARTOR = $${SHARE_DIR}/translations
-    }
+	isEmpty(TRANSDIR_MERKAARTOR) {
+		TRANSDIR_MERKAARTOR = $${SHARE_DIR}/translations
+	}
 }
 win32 {
 	DEFINES += PLUGINS_DIR=plugins
-    SHARE_DIR = share
-    isEmpty(TRANSDIR_MERKAARTOR) {
-        TRANSDIR_MERKAARTOR = translations
-    }
-    isEmpty(TRANSDIR_SYSTEM) {
-        TRANSDIR_SYSTEM = translations
-    }
+	SHARE_DIR = share
+	isEmpty(TRANSDIR_MERKAARTOR) {
+		TRANSDIR_MERKAARTOR = translations
+	}
+	isEmpty(TRANSDIR_SYSTEM) {
+		TRANSDIR_SYSTEM = translations
+	}
 }
 
 DEFINES += SHARE_DIR=$${SHARE_DIR}
 INSTALLS += target
 
 win32-msvc* {
-    DEFINES += _USE_MATH_DEFINES
+	DEFINES += _USE_MATH_DEFINES
 }
 
 
@@ -173,10 +163,10 @@ count(TRANSDIR_SYSTEM, 1) {
 }
 
 contains(MOBILE,1) {
-    DEFINES += _MOBILE
-    win32-wince* {
-      DEFINES += _WINCE
-    }
+	DEFINES += _MOBILE
+	win32-wince* {
+	  DEFINES += _WINCE
+	}
 }
 
 contains(GEOIMAGE, 1) {
@@ -184,11 +174,11 @@ contains(GEOIMAGE, 1) {
 }
 
 lists.path = $${SHARE_DIR}
-lists.files = \ 
-    $$PWD/../share/BookmarksList.xml \
-    $$PWD/../share/Projections.xml \
-    $$PWD/../share/WmsServersList.xml \
-    $$PWD/../share/TmsServersList.xml
+lists.files = \
+	$$PWD/../share/BookmarksList.xml \
+	$$PWD/../share/Projections.xml \
+	$$PWD/../share/WmsServersList.xml \
+	$$PWD/../share/TmsServersList.xml
 INSTALLS += lists
 
 contains (GDAL, 1) {

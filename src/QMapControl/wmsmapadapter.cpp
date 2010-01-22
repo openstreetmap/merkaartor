@@ -62,7 +62,7 @@ QUuid WMSMapAdapter::getId() const
 
 IMapAdapter::Type WMSMapAdapter::getType() const
 {
-	return IMapAdapter::DirectBackground;
+	return IMapAdapter::NetworkBackground;
 }
 
 QString WMSMapAdapter::getQuery(const QRectF& /*wgs84Bbox*/, const QRectF& projBbox, const QRect& size) const

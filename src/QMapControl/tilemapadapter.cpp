@@ -87,7 +87,7 @@ QUuid TileMapAdapter::getId() const
 
 IMapAdapter::Type TileMapAdapter::getType() const
 {
-	return IMapAdapter::DirectBackground;
+	return IMapAdapter::NetworkBackground;
 }
 
 

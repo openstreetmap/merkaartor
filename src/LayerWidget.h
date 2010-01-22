@@ -14,7 +14,7 @@ class LayerWidget : public QAbstractButton
 {
 	Q_OBJECT
 
-        friend class LayerDock;
+		friend class LayerDock;
 
 	public:
 		LayerWidget(MapLayer* aLayer, QWidget* aParent = 0);
@@ -120,6 +120,7 @@ class ImageLayerWidget : public LayerWidget
 	private slots:
 		void setWms(QAction*);
 		void setTms(QAction*);
+		void setOther(QAction*);
 
 		void setBackground(QAction*);
 };

@@ -1,7 +1,8 @@
 TEMPLATE = subdirs
 
 !symbian {
-	SUBDIRS += \ 
+	SUBDIRS += \
 		MYahooBackground \
-		MYahooTiledBackground
+		MYahooTiledBackground \
+		MGdalBackground
 }

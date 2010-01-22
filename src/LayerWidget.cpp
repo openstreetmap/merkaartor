@@ -19,7 +19,7 @@ LayerWidget::LayerWidget(MapLayer* aLayer, QWidget* aParent)
 	setCheckable(true);
 	//setAutoExclusive(true) ;
 	setFocusPolicy(Qt::NoFocus);
-    setContextMenuPolicy(Qt::NoContextMenu);
+	setContextMenuPolicy(Qt::NoContextMenu);
 	visibleIcon = QPixmap(":Icons/eye.xpm");
 	hiddenIcon = QPixmap(":Icons/empty.xpm");
 }
@@ -148,7 +148,7 @@ void LayerWidget::initActions()
 	ctxMenu = new QMenu(this);
 	associatedMenu = new QMenu(theLayer->name());
 	//connect(associatedMenu, SIGNAL(aboutToShow()), this, SLOT(associatedAboutToShow()));
-    
+
 	actVisible = new QAction(tr("Visible"), ctxMenu);
 	actVisible->setCheckable(true);
 	actVisible->setChecked(theLayer->isVisible());
@@ -322,6 +322,17 @@ void ImageLayerWidget::setTms(QAction* act)
 	emit (layerChanged(this, true));
 }
 
+void ImageLayerWidget::setOther(QAction* act)
+{
+	QUuid u(act->data().toString());
+
+	((ImageMapLayer *)theLayer.data())->setMapAdapter(u);
+	theLayer->setVisible(true);
+
+	this->update(rect());
+	emit (layerChanged(this, true));
+}
+
 void ImageLayerWidget::setBackground(QAction* act)
 {
 	QUuid aUuid = act->data().value<QUuid>();
@@ -406,6 +417,12 @@ void ImageLayerWidget::initActions()
 		QAction* actBackPlug = new QAction(it.value()->getName(), this);
 		actBackPlug->setChecked((M_PREFS->getBackgroundPlugin() == it.key()));
 		actBackPlug->setData(QVariant::fromValue(it.key()));
+
+		if (it.value()->getMenu()) {
+			actBackPlug->setMenu(it.value()->getMenu());
+			disconnect(it.value()->getMenu(), 0, 0, 0);
+			connect(it.value()->getMenu(), SIGNAL(triggered(QAction*)), SLOT(setOther(QAction*)));
+		}
 
 		ctxMenu->addAction(actBackPlug);
 		associatedMenu->addAction(actBackPlug);

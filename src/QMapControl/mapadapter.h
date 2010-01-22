@@ -118,6 +118,8 @@ public:
 	 */
 	virtual QPointF	displayToCoordinate(const QPoint& point) const = 0;
 
+	virtual QMenu* getMenu() const { return NULL; }
+
 	virtual IImageManager* getImageManager();
 	virtual void setImageManager(IImageManager* anImageManager);
 

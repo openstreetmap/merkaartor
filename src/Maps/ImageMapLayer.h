@@ -11,7 +11,7 @@ class IImageManager;
 struct Tile
 {
 	Tile(int i, int j, double priority)
-	    : i(i), j(j), priority(priority)
+		: i(i), j(j), priority(priority)
 	{}
 
 	int i, j;
@@ -24,7 +24,7 @@ class ImageMapLayer : public OsbMapLayer
 {
 	Q_OBJECT
 public:
-    //ImageMapLayer() : layermanager(0) {}
+	//ImageMapLayer() : layermanager(0) {}
 	ImageMapLayer(const QString& aName);
 	virtual ~ImageMapLayer();
 
@@ -44,8 +44,8 @@ public:
 
 	virtual bool arePointsDrawable() {return false;}
 
-	virtual void drawImage(QPixmap& thePix, QPoint delta);
-	virtual void forceRedraw(MapView& theView, QRect rect);
+	virtual void drawImage(QPixmap& thePix);
+	virtual void forceRedraw(MapView& theView, QRect rect, QPoint delta);
 	virtual void draw(MapView& theView, QRect& rect);
 	virtual void zoom(double zoom, const QPoint& pos, const QRect& rect);
 

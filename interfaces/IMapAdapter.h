@@ -1,10 +1,12 @@
 #ifndef IMAPADAPTER_H
 #define IMAPADAPTER_H
 
+#include <QObject>
 #include <QString>
 #include <QPoint>
 #include <QPointF>
 #include <QUuid>
+#include <QMenu>
 
 #include "IImageManager.h"
 
@@ -28,8 +30,9 @@ class IMapAdapter
 public:
 	enum Type
 	{
-		DirectBackground,
-		BrowserBackground
+		NetworkBackground,
+		BrowserBackground,
+		DirectBackground
 	};
 
 	virtual ~IMapAdapter() {};
@@ -92,6 +95,7 @@ public:
 	virtual bool	isValid(int x, int y, int z) const = 0;
 	virtual QString getQuery(int x, int y, int z) const = 0;
 	virtual QString getQuery(const QRectF& wgs84Bbox, const QRectF& projBbox, const QRect& size) const = 0;
+	virtual QPixmap getPixmap(const QRectF& wgs84Bbox, const QRectF& projBbox, const QRect& size) const = 0;
 
 	//! translates a world coordinate to display coordinate
 	/*!
@@ -113,6 +117,8 @@ public:
 
 	virtual bool isTiled() const = 0;
 	virtual QString projection() const = 0;
+
+	virtual QMenu* getMenu() const = 0;
 
 	virtual IImageManager* getImageManager() = 0;
 	virtual void setImageManager(IImageManager* anImageManager) = 0;
