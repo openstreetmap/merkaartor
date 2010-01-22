@@ -40,22 +40,22 @@ const QString& Command::id() const
 	return Id;
 }
 
-QString Command::getDescription() 
+QString Command::getDescription()
 {
 	return description;
 }
 
-void Command::setDescription(QString desc) 
+void Command::setDescription(QString desc)
 {
 	description = desc;
 }
 
-MapFeature* Command::getFeature() 
+MapFeature* Command::getFeature()
 {
 	return mainFeature;
 }
 
-void Command::setFeature(MapFeature* feat) 
+void Command::setFeature(MapFeature* feat)
 {
 	mainFeature = feat;
 }
@@ -211,7 +211,7 @@ bool CommandList::buildDirtyList(DirtyList& theList)
 		else
 			++i;
 	}
-	
+
 	return Size == 0;
 }
 
@@ -240,15 +240,15 @@ CommandList* CommandList::fromXML(MapDocument* d, const QDomElement& e)
 {
 	CommandList* l = new CommandList();
 	l->setId(e.attribute("xml:id"));
-	if (e.hasAttribute("description")) 
+	if (e.hasAttribute("description"))
 		l->description = e.attribute("description");
 	if (e.hasAttribute("feature")) {
 		if (e.attribute("featureclass") == "TrackPoint") {
 			l->mainFeature = (MapFeature*) MapFeature::getTrackPointOrCreatePlaceHolder(d, (MapLayer *) d->getDirtyOrOriginLayer(), e.attribute("feature"));
-		} else 
+		} else
 		if (e.attribute("featureclass") == "Road") {
 			l->mainFeature = (MapFeature*) MapFeature::getWayOrCreatePlaceHolder(d, (MapLayer *) d->getDirtyOrOriginLayer(), e.attribute("feature"));
-		} else 
+		} else
 		if (e.attribute("featureclass") == "Relation") {
 			l->mainFeature = (MapFeature*) MapFeature::getRelationOrCreatePlaceHolder(d, (MapLayer *) d->getDirtyOrOriginLayer(), e.attribute("feature"));
 		}
@@ -427,7 +427,10 @@ int CommandHistory::buildDirtyList(DirtyList& theList)
 int CommandHistory::buildUndoList(QListWidget* theList)
 {
 	for (int i=0; i<Index; ++i)
-		Subs[i]->buildUndoList(theList);
+		if (!(i < Subs.size()))
+			qDebug() << "!!! Error: Undo Index > list size";
+		else
+			Subs[i]->buildUndoList(theList);
 
 	return Index;
 }
