@@ -192,26 +192,26 @@ void EPTouchupLayer::draw(Road* R)
 							QPointF T(DistFromCenter*cos(A),DistFromCenter*sin(A));
 							QPointF V1(theWidth*cos(A+M_PI/6),theWidth*sin(A+M_PI/6));
 							QPointF V2(theWidth*cos(A-M_PI/6),theWidth*sin(A-M_PI/6));
-							if ( M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Oneway )
+							if ( (TT == MapFeature::OtherWay) || (TT == MapFeature::BothWays) )
 							{
-								if ( (TT == MapFeature::OtherWay) || (TT == MapFeature::BothWays) )
-								{
-									p->thePainter.setPen(QPen(QColor(0,0,255), 2));
-									p->thePainter.drawLine(H+T,H+T-V1);
-									p->thePainter.drawLine(H+T,H+T-V2);
-								}
-								if ( (TT == MapFeature::OneWay) || (TT == MapFeature::BothWays) )
-								{
-									p->thePainter.setPen(QPen(QColor(0,0,255), 2));
-									p->thePainter.drawLine(H-T,H-T+V1);
-									p->thePainter.drawLine(H-T,H-T+V2);
-								}
+								p->thePainter.setPen(QPen(QColor(0,0,255), 2));
+								p->thePainter.drawLine(H+T,H+T-V1);
+								p->thePainter.drawLine(H+T,H+T-V2);
+							}
+							if ( (TT == MapFeature::OneWay) || (TT == MapFeature::BothWays) )
+							{
+								p->thePainter.setPen(QPen(QColor(0,0,255), 2));
+								p->thePainter.drawLine(H-T,H-T+V1);
+								p->thePainter.drawLine(H-T,H-T+V2);
 							}
 							else
 							{
-								p->thePainter.setPen(QPen(QColor(255,0,0), 2));
-								p->thePainter.drawLine(H-T,H-T+V1);
-								p->thePainter.drawLine(H-T,H-T+V2);
+								if ( M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Always )
+								{
+									p->thePainter.setPen(QPen(QColor(255,0,0), 2));
+									p->thePainter.drawLine(H-T,H-T+V1);
+									p->thePainter.drawLine(H-T,H-T+V2);
+								}
 							}
 						}
 					}

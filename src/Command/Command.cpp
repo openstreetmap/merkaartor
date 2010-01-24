@@ -323,6 +323,12 @@ CommandList* CommandList::fromXML(MapDocument* d, const QDomElement& e)
 		c = c.nextSiblingElement();
 	}
 
+	if (l->Size == 0) {
+		qDebug() << "!! Corrupted (empty) command list. Deleting...";
+		delete l;
+		return NULL;
+	}
+
 	return l;
 }
 
@@ -458,28 +464,41 @@ bool CommandHistory::toXML(QDomElement& xParent, QProgressDialog & /*progress*/)
 
 CommandHistory* CommandHistory::fromXML(MapDocument* d, QDomElement& e, QProgressDialog & progress)
 {
+	bool OK = true;
 	CommandHistory* h = new CommandHistory();
 
 	QDomElement c = e.firstChildElement();
 	while(!c.isNull()) {
 		if (c.tagName() == "CommandList") {
 			CommandList* l = CommandList::fromXML(d, c);
-			h->add(l);
+			if (l)
+				h->add(l);
+			else
+				OK = false;
 		} else
 		if (c.tagName() == "SetTagCommand") {
 			SetTagCommand* C = SetTagCommand::fromXML(d, c);
 			if (C)
 				h->add(C);
-		}
+			else
+				OK = false;
+		} else
 		if (c.tagName() == "ClearTagCommand") {
 			ClearTagCommand* C = ClearTagCommand::fromXML(d, c);
 			if (C)
 				h->add(C);
-		}
+			else
+				OK = false;
+		} else
 		if (c.tagName() == "MoveTrackPointCommand") {
 			MoveTrackPointCommand* C = MoveTrackPointCommand::fromXML(d, c);
 			if (C)
 				h->add(C);
+			else
+				OK = false;
+		} else {
+			qDebug() << "!!! Error: Undefined tag in CommandHistory::fromXML: " << c.tagName();
+			OK = false;
 		}
 
 		if (progress.wasCanceled())
@@ -488,6 +507,14 @@ CommandHistory* CommandHistory::fromXML(MapDocument* d, QDomElement& e, QProgres
 		c = c.nextSiblingElement();
 	}
 	h->Index = e.attribute("index").toUInt();
+
+	if (!OK) {
+		qDebug() << "!! File history is corrupted. Reseting...";
+		qDebug() << "-- Size: " << h->Size;
+		qDebug() << "-- Index: " << h->Index;
+		delete h;
+		h = new CommandHistory();
+	}
 
 	return h;
 }

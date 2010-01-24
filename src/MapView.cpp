@@ -1228,10 +1228,10 @@ void MapView::setViewport(const CoordBox & TargetMap,
 		double z = 0;
 		int zoomLevel = 0;
 		for (;z<p->theTransform.m11(); ++zoomLevel) {
-			double zoomPixPerMatCur = zoomPixPerMat0 * pow(2, zoomLevel);
+			double zoomPixPerMatCur = zoomPixPerMat0 * pow(2., zoomLevel);
 			z = zoomPixPerMatCur / p->PixelPerM;
 		}
-		double zoomPixPerMatCur = zoomPixPerMat0 * pow(2, zoomLevel-1);
+		double zoomPixPerMatCur = zoomPixPerMat0 * pow(2., zoomLevel-1);
 		z = zoomPixPerMatCur / p->PixelPerM;
 
 		double x = 1. / p->theTransform.m11() * z;

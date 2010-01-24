@@ -42,7 +42,7 @@ static void buildCubicPath(QPainterPath& Path, const QPointF& P1, const QPointF&
 //	if (QLineF(r.topLeft(), r.bottomLeft()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
 //		a = pF.toPoint();
 //		hasP1 = true;
-//	} 
+//	}
 //	if (QLineF(r.bottomLeft(), r.bottomRight()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
 //		if (hasP1) {
 //			b = pF.toPoint();
@@ -51,7 +51,7 @@ static void buildCubicPath(QPainterPath& Path, const QPointF& P1, const QPointF&
 //			a = pF.toPoint();
 //			hasP1 = true;
 //		}
-//	} 
+//	}
 //	if (QLineF(r.bottomRight(), r.topRight()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
 //		if (hasP1) {
 //			b = pF.toPoint();
@@ -60,7 +60,7 @@ static void buildCubicPath(QPainterPath& Path, const QPointF& P1, const QPointF&
 //			a = pF.toPoint();
 //			hasP1 = true;
 //		}
-//	} 
+//	}
 //	if (QLineF(r.topRight(), r.topLeft()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
 //		if (hasP1) {
 //			b = pF.toPoint();
@@ -159,8 +159,8 @@ static void buildCubicPath(QPainterPath& Path, const QPointF& P1, const QPointF&
 void buildPolygonFromRoad(Road *R, Projection const &theProjection, QPolygonF &Polygon)
 {
 	for (int i=0; i<R->size(); ++i)
-        if (!R->getNode(i)->isVirtual())
-            Polygon.append(theProjection.project(R->getNode(i)));
+		if (!R->getNode(i)->isVirtual())
+			Polygon.append(theProjection.project(R->getNode(i)));
 }
 
 /// draws way with oneway markers
@@ -181,15 +181,24 @@ void draw(QPainter& thePainter, QPen& thePen, MapFeature::TrafficDirectionType T
 //		MapFeature::TrafficDirectionType TT = W->trafficDirection();
 		if ( (TT == MapFeature::OtherWay) || (TT == MapFeature::BothWays) )
 		{
-			thePainter.setPen(QColor(0,0,0));
+			thePainter.setPen(QPen(QColor(0,0,255), 2));
 			thePainter.drawLine(H+T,H+T-V1);
 			thePainter.drawLine(H+T,H+T-V2);
 		}
 		if ( (TT == MapFeature::OneWay) || (TT == MapFeature::BothWays) )
 		{
-			thePainter.setPen(QColor(0,0,0));
+			thePainter.setPen(QPen(QColor(0,0,255), 2));
 			thePainter.drawLine(H-T,H-T+V1);
 			thePainter.drawLine(H-T,H-T+V2);
+		}
+		else
+		{
+			if ( M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Always )
+			{
+				thePainter.setPen(QPen(QColor(255,0,0), 2));
+				thePainter.drawLine(H-T,H-T+V1);
+				thePainter.drawLine(H-T,H-T+V2);
+			}
 		}
 	}
 	thePainter.strokePath(Path,thePen);

@@ -1,4 +1,5 @@
 v0.15
+	* CHG : Keep directional arrows blue for oneway roads in "Show directional arrows - Always" mode.
     * ADD : GeoTIFF background plugin (closes #1025)
     * ADD : Grabbing hand icon in signle mouse mode
     * FIX : Layers menu entry for background layer is wrong at startup. Patch by Trav (closes #2641)

@@ -149,9 +149,9 @@ bool SetTagCommand::toXML(QDomElement& xParent) const
 	e.setAttribute("value", theV);
 	e.setAttribute("oldvalue", oldV);
 	if (theLayer)
-	    e.setAttribute("layer", theLayer->id());
+		e.setAttribute("layer", theLayer->id());
 	if (oldLayer)
-	    e.setAttribute("oldlayer", oldLayer->id());
+		e.setAttribute("oldlayer", oldLayer->id());
 
 	Command::toXML(e);
 
@@ -161,21 +161,21 @@ bool SetTagCommand::toXML(QDomElement& xParent) const
 SetTagCommand * SetTagCommand::fromXML(MapDocument * d, QDomElement e)
 {
 	MapFeature* F;
-	if (!(F = d->getFeature(e.attribute("feature"), false)))
+	if (!(F = d->getFeature(e.attribute("feature"), false))) {
+		qDebug() << "SetTagCommand::fromXML: Undefined feature: " << e.attribute("feature");
 		return NULL;
+	}
 
 	SetTagCommand* a = new SetTagCommand(F);
 	a->setId(e.attribute("xml:id"));
 	if (e.hasAttribute("oldkey"))
 		a->oldK = e.attribute("oldkey");
-	if (!(F = d->getFeature(e.attribute("feature"), false)))
-		return NULL;
 	a->theFeature = F;
 	a->theIdx = e.attribute("idx").toInt();
 	a->theK = e.attribute("key");
 	a->theV = e.attribute("value");
-    if (e.hasAttribute("oldvalue"))
-        a->oldV = e.attribute("oldvalue");
+	if (e.hasAttribute("oldvalue"))
+		a->oldV = e.attribute("oldvalue");
 	if (e.hasAttribute("layer"))
 		a->theLayer = d->getLayer(e.attribute("layer"));
 	else
@@ -244,7 +244,7 @@ bool ClearTagsCommand::toXML(QDomElement& xParent) const
 	e.setAttribute("xml:id", id());
 	e.setAttribute("feature", theFeature->xmlId());
 	if (theLayer)
-	    e.setAttribute("layer", theLayer->id());
+		e.setAttribute("layer", theLayer->id());
 	if (oldLayer)
 		e.setAttribute("oldlayer", oldLayer->id());
 
@@ -363,7 +363,7 @@ bool ClearTagCommand::toXML(QDomElement& xParent) const
 	e.setAttribute("key", theK);
 	e.setAttribute("value", theV);
 	if (theLayer)
-	    e.setAttribute("layer", theLayer->id());
+		e.setAttribute("layer", theLayer->id());
 	if (oldLayer)
 		e.setAttribute("oldlayer", oldLayer->id());
 
