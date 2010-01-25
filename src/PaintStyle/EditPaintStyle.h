@@ -80,7 +80,6 @@ class EPTouchupLayer : public PaintStyleLayer
 		virtual void draw(Relation* R);
 	private:
 		EditPaintStylePrivate* p;
-		QPainterPath cross;
 };
 
 class EPLabelLayer : public PaintStyleLayer

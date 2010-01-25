@@ -33,6 +33,8 @@
 #include <QPainter>
 #include <QStatusBar>
 #include <QToolTip>
+#include <QMap>
+#include <QSet>
 
 // from wikipedia
 #define EQUATORIALRADIUS 6378137.0
@@ -46,7 +48,7 @@ public:
 	CoordBox Viewport;
 	QList<CoordBox> invalidRects;
 	QPoint theRasterPanDelta, theVectorPanDelta;
-	QMultiMap<RenderPriority, MapFeature*> theFeatures;
+	QMap<RenderPriority, QSet <MapFeature*> > theFeatures;
 	QSet<Road*> theCoastlines;
 	QList<TrackPoint*> theVirtualNodes;
 
@@ -311,9 +313,7 @@ void MapView::buildFeatureSet()
 
 	CoordBox coordRegion;
 	QRectF clipRect = p->theTransform.inverted().mapRect(QRectF(rect().adjusted(-1000, -1000, 1000, 1000)));
-	//QRectF clipRect = p->theTransform.inverted().mapRect(QRectF(rect().adjusted(10, 10, -10, -10)));
 
-	//qDebug() << "Inv rects size: " << p->invalidRects.size();
 	for (int i=0; i < p->invalidRects.size(); ++i) {
 		Coord bl = p->invalidRects[i].bottomLeft();
 		Coord tr = p->invalidRects[i].topRight();
@@ -324,29 +324,26 @@ void MapView::buildFeatureSet()
 
 			std::deque < MapFeaturePtr > ret = theDocument->getLayer(j)->indexFind(CoordBox(bl, tr));
 			for (std::deque < MapFeaturePtr >::const_iterator it = ret.begin(); it != ret.end(); ++it) {
+
+				if (p->theFeatures[(*it)->renderPriority()].contains(*it))
+					continue;
+
 				if (Road * R = CAST_WAY(*it)) {
 					R->buildPath(theProjection, p->theTransform, clipRect);
-					if (p->theFeatures.find(R->renderPriority(), R) == p->theFeatures.end()) {
-						p->theFeatures.insert(R->renderPriority(), R);
-					}
+					p->theFeatures[(*it)->renderPriority()].insert(*it);
+
 					if (R->isCoastline())
 						p->theCoastlines.insert(R);
 				} else
 				if (Relation * RR = CAST_RELATION(*it)) {
 					RR->buildPath(theProjection, p->theTransform, clipRect);
-					if (p->theFeatures.find(RR->renderPriority(), RR) == p->theFeatures.end()) {
-						p->theFeatures.insert(RR->renderPriority(), RR);
-					}
+					p->theFeatures[(*it)->renderPriority()].insert(*it);
 				} else
 				if (TrackPoint * pt = CAST_NODE(*it)) {
 					if (theDocument->getLayer(j)->arePointsDrawable())
-						if (p->theFeatures.find(pt->renderPriority(), pt) == p->theFeatures.end()) {
-							p->theFeatures.insert(pt->renderPriority(), pt);
-						}
+						p->theFeatures[(*it)->renderPriority()].insert(*it);
 				} else
-					if (p->theFeatures.find((*it)->renderPriority(), *it) == p->theFeatures.end()) {
-						p->theFeatures.insert((*it)->renderPriority(), *it);
-					}
+					p->theFeatures[(*it)->renderPriority()].insert(*it);
 			}
 		}
 
@@ -657,7 +654,9 @@ void MapView::drawFeatures(QPainter & P, Projection& /*aProj*/)
 {
 	M_STYLE->initialize(P, *this);
 
-	QMap<RenderPriority, MapFeature*>::const_iterator it;
+	QMap<RenderPriority, QSet<MapFeature*> >::const_iterator itm;
+	QSet<MapFeature*>::const_iterator it;
+
 	for (int i = 0; i < M_STYLE->size(); ++i)
 	{
 		PaintStyleLayer *Current = M_STYLE->get(i);
@@ -665,23 +664,29 @@ void MapView::drawFeatures(QPainter & P, Projection& /*aProj*/)
 		P.save();
 		P.setRenderHint(QPainter::Antialiasing);
 
-		for (it = p->theFeatures.constBegin() ;it != p->theFeatures.constEnd(); ++it)
+		for (itm = p->theFeatures.constBegin() ;itm != p->theFeatures.constEnd(); ++itm)
 		{
-			P.setOpacity((*it)->layer()->getAlpha());
-			if (Road * R = dynamic_cast < Road * >(it.value()))
-				Current->draw(R);
-			else if (TrackPoint * Pt = dynamic_cast < TrackPoint * >(it.value()))
-				Current->draw(Pt);
-			else if (Relation * RR = dynamic_cast < Relation * >(it.value()))
-				Current->draw(RR);
+			for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it)
+			{
+				P.setOpacity((*it)->layer()->getAlpha());
+				if (Road * R = dynamic_cast < Road * >(*it))
+					Current->draw(R);
+				else if (TrackPoint * Pt = dynamic_cast < TrackPoint * >(*it))
+					Current->draw(Pt);
+				else if (Relation * RR = dynamic_cast < Relation * >(*it))
+					Current->draw(RR);
+			}
 		}
 		P.restore();
 	}
 
-	for (it = p->theFeatures.constBegin(); it != p->theFeatures.constEnd(); ++it)
+	for (itm = p->theFeatures.constBegin() ;itm != p->theFeatures.constEnd(); ++itm)
 	{
-		P.setOpacity((*it)->layer()->getAlpha());
-		it.value()->draw(P, this);
+		for (it = itm.value().constBegin() ;it != itm.value().constEnd(); ++it)
+		{
+			P.setOpacity((*it)->layer()->getAlpha());
+			(*it)->draw(P, this);
+		}
 	}
 }
 

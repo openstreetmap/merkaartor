@@ -178,7 +178,7 @@ void Road::add(TrackPoint* Pt, int Idx)
 	}
 
 	// Virtual Node
-	if (Idx && layer()) {
+	if (M_PREFS->getUseVirtualNodes() && Idx && layer()) {
 		QLineF l(toQt(p->Nodes[Idx-1]->position()), toQt(p->Nodes[Idx]->position()));
 		l.setLength(l.length()/2);
 		TrackPoint* v = new TrackPoint(toCoord(l.p2()));

@@ -152,10 +152,6 @@ void EPForegroundLayer::draw(TrackPoint*)
 
 EPTouchupLayer::EPTouchupLayer()
 {
-	cross.moveTo(-3, -3);
-	cross.lineTo(3, 3);
-	cross.moveTo(-3, 3);
-	cross.lineTo(3, -3);
 }
 
 void EPTouchupLayer::setP(EditPaintStylePrivate* ap)
@@ -250,8 +246,8 @@ void EPTouchupLayer::draw(TrackPoint* Pt)
 					if (M_PREFS->getVirtualNodesVisible()) {
 						p->thePainter.save();
 						p->thePainter.setPen(QColor(0,0,0));
-						p->thePainter.translate(P);
-						p->thePainter.drawPath(cross);
+						p->thePainter.drawLine(P+QPoint(-3, -3), P+QPoint(3, 3));
+						p->thePainter.drawLine(P+QPoint(3, -3), P+QPoint(-3, 3));
 						p->thePainter.restore();
 					}
 				} else {
