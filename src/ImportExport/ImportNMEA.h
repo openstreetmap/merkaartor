@@ -20,23 +20,23 @@
 class ImportNMEA : public IImportExport
 {
 public:
-    ImportNMEA(MapDocument* doc);
+    ImportNMEA(Document* doc);
 
     ~ImportNMEA();
 
 	// import the  input
-	virtual bool import(MapLayer* aLayer);
+	virtual bool import(Layer* aLayer);
 	// export
-	virtual bool export_(const QList<MapFeature *>& featList);
+	virtual bool export_(const QList<Feature *>& featList);
 
 private:
-	TrackMapLayer* theLayer;
+	TrackLayer* theLayer;
 
 	bool importGSA (QString line);
 	bool importGSV (QString line);
 	bool importGGA (QString line);
 	bool importGLL (QString line);
-	TrackPoint* importRMC (QString line);
+	Node* importRMC (QString line);
 
 	double curAltitude;
 

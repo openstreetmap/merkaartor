@@ -15,7 +15,7 @@
 #include <ImportExport/IImportExport.h>
 
 class Projection;
-class MapLayer;
+class Layer;
 class OGRGeometry;
 
 /**
@@ -24,7 +24,7 @@ class OGRGeometry;
 class ImportExportSHP : public IImportExport
 {
 public:
-    ImportExportSHP(MapDocument* doc);
+    ImportExportSHP(Document* doc);
 
     ~ImportExportSHP();
 
@@ -33,15 +33,15 @@ public:
 	// Specify the output as a QFile
 	virtual bool saveFile(QString filename);
 	// import the  input
-	virtual bool import(MapLayer* aLayer);
+	virtual bool import(Layer* aLayer);
 
 	//export
-	virtual bool export_(const QList<MapFeature *>& featList);
+	virtual bool export_(const QList<Feature *>& featList);
 
 protected:
 	Projection* theProjection;
 
-	void parseGeometry(MapLayer* aLayer, OGRGeometry *poGeometry);
+	void parseGeometry(Layer* aLayer, OGRGeometry *poGeometry);
 
 };
 

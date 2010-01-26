@@ -20,7 +20,7 @@
 #include <QList>
 
 class MainWindow;
-class MapFeature;
+class Feature;
 
 /**
 	@author cbro <cbro@semperpax.com>
@@ -48,7 +48,7 @@ private:
 	QAction* centerAction;
 	QAction* centerZoomAction;
 	
-	QList<MapFeature*> Selection;
+	QList<Feature*> Selection;
 public:
 	void changeEvent(QEvent*);
 	void retranslateUi();

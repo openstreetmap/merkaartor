@@ -12,7 +12,7 @@
 #include "InfoDock.h"
 #include "MainWindow.h"
 #include "Preferences/MerkaartorPreferences.h"
-#include "Maps/DownloadOSM.h"
+#include "DownloadOSM.h"
 
 #include <QMessageBox>
 

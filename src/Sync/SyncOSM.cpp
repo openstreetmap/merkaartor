@@ -1,10 +1,10 @@
 #include "Sync/SyncOSM.h"
 
 #include "MainWindow.h"
-#include "Command/Command.h"
-#include "Maps/MapDocument.h"
-#include "Maps/MapLayer.h"
-#include "Maps/DownloadOSM.h"
+#include "Command.h"
+#include "Document.h"
+#include "Layer.h"
+#include "DownloadOSM.h"
 #include "Sync/DirtyList.h"
 
 #include <QtGui/QMessageBox>

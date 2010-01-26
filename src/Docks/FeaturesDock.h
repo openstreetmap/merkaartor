@@ -14,7 +14,7 @@
 
 #include "MDockAncestor.h"
 #include "Maps/Coord.h"
-#include "Maps/MapFeature.h"
+#include "Feature.h"
 #include "Maps/MapTypedef.h"
 
 #include "ui_FeaturesDock.h"
@@ -32,8 +32,8 @@ public:
 
 	void updateList();
 
-	MapFeature* highlighted(int idx);
-	QList<MapFeature*> highlighted();
+	Feature* highlighted(int idx);
+	QList<Feature*> highlighted();
 	int highlightedSize() const;
 
 public slots:
@@ -53,7 +53,7 @@ public slots:
 	void tabChanged(int idx);
 
 private:
-	QList<MapFeature*> Highlighted;
+	QList<Feature*> Highlighted;
 
     MainWindow* Main;
 	Ui::FeaturesDockWidget ui;
@@ -63,7 +63,7 @@ private:
 	QAction* addSelectAction;
 
 	CoordBox theViewport;
-	MapFeature::FeatureType curFeatType;
+	Feature::FeatureType curFeatType;
 
 	void clearItems();
 	void addItem(MapFeaturePtr F);

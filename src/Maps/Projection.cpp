@@ -1,5 +1,5 @@
 #include "Maps/Projection.h"
-#include "Maps/TrackPoint.h"
+#include "Node.h"
 
 #include <QRect>
 #include <QRectF>
@@ -229,7 +229,7 @@ QPointF Projection::project(const Coord & Map) const
 #endif
 }
 
-QPointF Projection::project(TrackPoint* aNode) const
+QPointF Projection::project(Node* aNode) const
 {
 #ifndef _MOBILE
 	if (aNode && aNode->projectionRevision() == p->ProjectionRevision)

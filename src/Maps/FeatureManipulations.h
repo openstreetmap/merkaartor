@@ -2,29 +2,29 @@
 #define MERKAARTOR_FEATUREMANIPULATIONS_H_
 
 class CommandList;
-class MapDocument;
-class MapLayer;
+class Document;
+class Layer;
 class PropertiesDock;
-class Road;
+class Way;
 
 #include <QList>
 
-void joinRoads(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock);
-void splitRoads(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock);
-void breakRoads(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock);
+void joinRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
+void splitRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
+void breakRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
 bool canCreateJunction(PropertiesDock* theDock);
-int createJunction(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock, bool doIt=true);
-void addStreetNumbers(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock);
-void reversePoints(MapDocument* theDocument, CommandList* theList, Road* R);
-void alignNodes(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock);
-void mergeNodes(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock);
-void detachNode(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock);
-void commitFeatures(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock);
+int createJunction(Document* theDocument, CommandList* theList, PropertiesDock* theDock, bool doIt=true);
+void addStreetNumbers(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
+void reversePoints(Document* theDocument, CommandList* theList, Way* R);
+void alignNodes(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
+void mergeNodes(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
+void detachNode(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
+void commitFeatures(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
 bool canJoinRoads(PropertiesDock* theDock);
 bool canBreakRoads(PropertiesDock* theDock);
 bool canDetachNodes(PropertiesDock* theDock);
-void addRelationMember(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock);
-void removeRelationMember(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock);
+void addRelationMember(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
+void removeRelationMember(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
 
 
 #endif

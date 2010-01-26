@@ -1,0 +1,5 @@
+#include "Feature.h"
+#include "Node.h"
+#include "Way.h"
+#include "Relation.h"
+#include "TrackSegment.h"

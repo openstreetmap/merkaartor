@@ -19,9 +19,9 @@
 
 #include <QDir>
 
-bool parseContainer(QDomElement& e, MapLayer* aLayer);
+bool parseContainer(QDomElement& e, Layer* aLayer);
 
-ImportExportSHP::ImportExportSHP(MapDocument* doc)
+ImportExportSHP::ImportExportSHP(Document* doc)
  : IImportExport(doc), theProjection(0)
 {
 }
@@ -46,7 +46,7 @@ bool ImportExportSHP::saveFile(QString filename)
 
 
 // export
-bool ImportExportSHP::export_(const QList<MapFeature *>& featList)
+bool ImportExportSHP::export_(const QList<Feature *>& featList)
 {
 	Q_UNUSED(featList);
 
@@ -55,19 +55,19 @@ bool ImportExportSHP::export_(const QList<MapFeature *>& featList)
 
 // IMPORT
 
-void ImportExportSHP::parseGeometry(MapLayer* aLayer, OGRGeometry *poGeometry)
+void ImportExportSHP::parseGeometry(Layer* aLayer, OGRGeometry *poGeometry)
 {
-	TrackPoint* N;
+	Node* N;
 	double x, y;
 	if ( wkbFlatten(poGeometry->getGeometryType()) == wkbPoint )
 	{
 		OGRPoint *poPoint = (OGRPoint *) poGeometry;
 		x = poPoint->getX(); y = poPoint->getY();
 		if (!theProjection || theProjection->projIsLatLong())
-			N = new TrackPoint(Coord(angToInt(y), angToInt(x)));
+			N = new Node(Coord(angToInt(y), angToInt(x)));
 		else {
 			theProjection->projTransformToWGS84(1, 0, &x, &y, NULL);
-			N = new TrackPoint(Coord(radToInt(y), radToInt(x)));
+			N = new Node(Coord(radToInt(y), radToInt(x)));
 		}
 
 		aLayer->add(N);
@@ -77,18 +77,18 @@ void ImportExportSHP::parseGeometry(MapLayer* aLayer, OGRGeometry *poGeometry)
 		OGRPolygon  *poPoly = (OGRPolygon *) poGeometry;
 		OGRLinearRing *poRing = poPoly->getExteriorRing();
 		OGRPoint p;
-		TrackPoint* firstPoint = NULL;
+		Node* firstPoint = NULL;
 
 		if(int numNode = poRing->getNumPoints()) {
-			Road* R = new Road();
+			Way* R = new Way();
 			for(int i=0; i<numNode-1; i++) {
 				poRing->getPoint(i, &p);
 				x = p.getX(); y = p.getY();
 				if (!theProjection || theProjection->projIsLatLong())
-					N = new TrackPoint(Coord(angToInt(y), angToInt(x)));
+					N = new Node(Coord(angToInt(y), angToInt(x)));
 				else {
 					theProjection->projTransformToWGS84(1, 0, &x, &y, NULL);
-					N = new TrackPoint(Coord(radToInt(y), radToInt(x)));
+					N = new Node(Coord(radToInt(y), radToInt(x)));
 				}
 				aLayer->add(N);
 				R->add(N);
@@ -106,15 +106,15 @@ void ImportExportSHP::parseGeometry(MapLayer* aLayer, OGRGeometry *poGeometry)
 		OGRPoint p;
 
 		if(int numNode = poLS->getNumPoints()) {
-			Road* R = new Road();
+			Way* R = new Way();
 			for(int i=0; i<numNode; i++) {
 				poLS->getPoint(i, &p);
 				x = p.getX(); y = p.getY();
 				if (!theProjection || theProjection->projIsLatLong())
-					N = new TrackPoint(Coord(angToInt(y), angToInt(x)));
+					N = new Node(Coord(angToInt(y), angToInt(x)));
 				else {
 					theProjection->projTransformToWGS84(1, 0, &x, &y, NULL);
-					N = new TrackPoint(Coord(radToInt(y), radToInt(x)));
+					N = new Node(Coord(radToInt(y), radToInt(x)));
 				}
 				aLayer->add(N);
 
@@ -140,7 +140,7 @@ void ImportExportSHP::parseGeometry(MapLayer* aLayer, OGRGeometry *poGeometry)
 }
 
 // import the  input
-bool ImportExportSHP::import(MapLayer* aLayer)
+bool ImportExportSHP::import(Layer* aLayer)
 {
 	OGRRegisterAll();
 

@@ -14,9 +14,9 @@
 
 #include "../ImportExport/ImportExportKML.h"
 
-bool parseContainer(QDomElement& e, MapLayer* aLayer);
+bool parseContainer(QDomElement& e, Layer* aLayer);
 
-ImportExportKML::ImportExportKML(MapDocument* doc)
+ImportExportKML::ImportExportKML(Document* doc)
  : IImportExport(doc)
 {
 }
@@ -28,9 +28,9 @@ ImportExportKML::~ImportExportKML()
 
 
 // export
-bool ImportExportKML::export_(const QList<MapFeature *>& featList)
+bool ImportExportKML::export_(const QList<Feature *>& featList)
 {
-	QList<TrackPoint*>	waypoints;
+	QList<Node*>	waypoints;
 	QList<TrackSegment*>	segments;
 	QDomElement k;
 	QDomText v;
@@ -54,7 +54,7 @@ bool ImportExportKML::export_(const QList<MapFeature *>& featList)
 	//p.appendChild(g);
 
 	for (int i=0; i<theFeatures.size(); ++i) {
-		if (Road* R = dynamic_cast<Road*>(theFeatures[i])) {
+		if (Way* R = dynamic_cast<Way*>(theFeatures[i])) {
 			QDomElement p = theXmlDoc.createElement("Placemark");
 			d.appendChild(p);
 
@@ -102,14 +102,14 @@ bool ImportExportKML::export_(const QList<MapFeature *>& featList)
 			
 			QString s;
 			for (int j=0; j<R->size(); ++j) {
-				TrackPoint* N = dynamic_cast<TrackPoint*>(R->get(j));
+				Node* N = dynamic_cast<Node*>(R->get(j));
 				s += QString(" %1,%2").arg(QString::number(intToAng(N->position().lon()),'f',8)).arg(QString::number(intToAng(N->position().lat()),'f',8));
 			}
 
 			QDomText v = theXmlDoc.createTextNode(s);
 			c.appendChild(v);
 		}
-		else if (TrackPoint* N = dynamic_cast<TrackPoint*>(theFeatures[i])) {
+		else if (Node* N = dynamic_cast<Node*>(theFeatures[i])) {
 			if (N->sizeParents()) continue;
 
 			QDomElement p = theXmlDoc.createElement("Placemark");
@@ -174,9 +174,9 @@ bool ImportExportKML::export_(const QList<MapFeature *>& featList)
 
 QString kmlId;
 
-MapFeature* parsePoint(QDomElement& e, MapLayer* aLayer)
+Feature* parsePoint(QDomElement& e, Layer* aLayer)
 {
-	TrackPoint* P = NULL;
+	Node* P = NULL;
 
 	QDomElement c = e.firstChildElement();
 	while(!c.isNull() && !P) {
@@ -188,7 +188,7 @@ MapFeature* parsePoint(QDomElement& e, MapLayer* aLayer)
 			double lat = tokens[1].toDouble();
 			Coord p(angToInt(lat), angToInt(lon));
 
-			P = new TrackPoint(p);
+			P = new Node(p);
 			P->setTag("%kml:guid", kmlId);
 			aLayer->add(P);
 		}
@@ -199,9 +199,9 @@ MapFeature* parsePoint(QDomElement& e, MapLayer* aLayer)
 	return P;
 }
 
-MapFeature* parseGeometry(QDomElement& e, MapLayer* aLayer)
+Feature* parseGeometry(QDomElement& e, Layer* aLayer)
 {
-	MapFeature* F = NULL;
+	Feature* F = NULL;
 	if (e.tagName() == "Point") {
 		F = parsePoint(e, aLayer);
 	}
@@ -209,9 +209,9 @@ MapFeature* parseGeometry(QDomElement& e, MapLayer* aLayer)
 	return F;
 }
 
-bool parsePlacemark(QDomElement& e, MapLayer* aLayer)
+bool parsePlacemark(QDomElement& e, Layer* aLayer)
 {
-	MapFeature* F = NULL;
+	Feature* F = NULL;
 	QDomElement c = e.firstChildElement();
 	QString name;
 	QString address;
@@ -250,7 +250,7 @@ bool parsePlacemark(QDomElement& e, MapLayer* aLayer)
 		return false;
 }
 
-bool parseFeature(QDomElement& e, MapLayer* aLayer)
+bool parseFeature(QDomElement& e, Layer* aLayer)
 {
 	bool ret= false;
 	QDomElement c = e.cloneNode().toElement();
@@ -266,7 +266,7 @@ bool parseFeature(QDomElement& e, MapLayer* aLayer)
 	return ret;
 }
 
-bool parseContainer(QDomElement& e, MapLayer* aLayer)
+bool parseContainer(QDomElement& e, Layer* aLayer)
 {
 	if ((e.tagName() != "Document") && (e.tagName() != "Folder"))
 		return false;
@@ -282,7 +282,7 @@ bool parseContainer(QDomElement& e, MapLayer* aLayer)
 	return ret;
 }
 
-bool parseKML(QDomElement& e, MapLayer* aLayer)
+bool parseKML(QDomElement& e, Layer* aLayer)
 {
 	bool ret= false;
 	QDomElement c = e.firstChildElement();
@@ -298,7 +298,7 @@ bool parseKML(QDomElement& e, MapLayer* aLayer)
 }
 
 // import the  input
-bool ImportExportKML::import(MapLayer* aLayer)
+bool ImportExportKML::import(Layer* aLayer)
 {
 	QDomDocument* theXmlDoc = new QDomDocument();
 	if (!theXmlDoc->setContent(Device)) {

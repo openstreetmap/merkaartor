@@ -1,7 +1,7 @@
 
 #include "MapView.h"
 #include "MainWindow.h"
-#include "Maps/MapDocument.h"
+#include "Document.h"
 
 #include <QtGui/QPainter>
 #include <QtGui/QDockWidget>
@@ -49,7 +49,7 @@ public:
 	~GeoImageDock(void);
 
 	void loadImages(QStringList fileNames);
-	void setImage(TrackPoint *Pt);
+	void setImage(Node *Pt);
 	void setImage(int ImageId);
 
 	void addGeoDataToImage(Coord pos, const QString & file);
@@ -68,16 +68,16 @@ private:
 
 	ImageView *Image;
 
-	struct TrackPointData {
-		TrackPointData(const QString & mId, const QString & mFilename, const QDateTime & mTimestamp, bool mInserted)
+	struct NodeData {
+		NodeData(const QString & mId, const QString & mFilename, const QDateTime & mTimestamp, bool mInserted)
 	 	 : id(mId), filename(mFilename), inserted(mInserted), timestamp(mTimestamp) { }
-		bool operator<(const TrackPointData & other) const { return timestamp < other.timestamp; }
+		bool operator<(const NodeData & other) const { return timestamp < other.timestamp; }
 		QString id;
 		QString filename;
 		bool inserted;
 		QDateTime timestamp;
 	};
-	QList<TrackPointData> usedTrackPoints;
+	QList<NodeData> usedTrackPoints;
 
 	MainWindow *Main;
 

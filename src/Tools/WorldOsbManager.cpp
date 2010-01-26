@@ -11,8 +11,8 @@
 //
 #include "WorldOsbManager.h"
 
-#include "ImportExport/ImportExportOsmBin.h"
-#include "Maps/DownloadOSM.h"
+#include "ImportExportOsmBin.h"
+#include "DownloadOSM.h"
 #include "Preferences/MerkaartorPreferences.h"
 
 
@@ -161,8 +161,8 @@ bool WorldOsbManager::generateRegion(quint32 rg)
 	theProgressLabel->setText("");
 	theProgressBar->reset();
 
-	MapDocument * aDoc = new MapDocument();
-	DrawingMapLayer* aLayer = new DrawingMapLayer("Tmp");
+	Document * aDoc = new Document();
+	DrawingLayer* aLayer = new DrawingLayer("Tmp");
 	aLayer->blockIndexing(true);
 	aDoc->add(aLayer);
 

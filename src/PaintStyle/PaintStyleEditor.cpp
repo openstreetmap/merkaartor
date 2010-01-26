@@ -1,7 +1,7 @@
 #include "PaintStyle/PaintStyleEditor.h"
 #include "PaintStyle/PaintStyle.h"
 #include "MainWindow.h"
-#include "Maps/MapDocument.h"
+#include "Document.h"
 
 #include <QtGui/QCheckBox>
 #include <QtGui/QColorDialog>

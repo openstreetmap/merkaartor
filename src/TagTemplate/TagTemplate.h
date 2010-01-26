@@ -21,7 +21,7 @@
 
 #include "PaintStyle/TagSelector.h"
 
-class MapFeature;
+class Feature;
 class QGroupBox;
 class QDomElement;
 class QComboBox;
@@ -41,10 +41,10 @@ class TagTemplateWidget: public QObject
 	public:
 		QString id() {return (!theId.isEmpty() ? theId : theTag);};
 		QString tag() {return theTag;};
-		virtual QWidget*	getWidget(const MapFeature* /* F */) {return NULL;};
+		virtual QWidget*	getWidget(const Feature* /* F */) {return NULL;};
 		virtual TagTemplateWidgetValue* getCurrentValue() {return NULL;};
 
-		virtual void apply(const MapFeature*) {};
+		virtual void apply(const Feature*) {};
 
 		virtual bool toXML(QDomElement& /* xParent */, bool /* header */) {return false;};
 		static TagTemplateWidget*		fromXml(const QDomElement& e);
@@ -98,9 +98,9 @@ class TagTemplateWidgetCombo: public TagTemplateWidget
 		virtual ~TagTemplateWidgetCombo();
 
 	public:
-		QWidget*	getWidget(const MapFeature* F);
+		QWidget*	getWidget(const Feature* F);
 
-		virtual void apply(const MapFeature* F);
+		virtual void apply(const Feature* F);
 
 		static TagTemplateWidgetCombo*		fromXml(const QDomElement& e);
 		bool toXML(QDomElement& xParent, bool header);
@@ -114,9 +114,9 @@ class TagTemplateWidgetYesno: public TagTemplateWidget
 	Q_OBJECT
 
 	public:
-		QWidget*	getWidget(const MapFeature* F);
+		QWidget*	getWidget(const Feature* F);
 
-		virtual void apply(const MapFeature* F);
+		virtual void apply(const Feature* F);
 
 		static TagTemplateWidgetYesno*		fromXml(const QDomElement& e);
 		bool toXML(QDomElement& xParent, bool header);
@@ -133,9 +133,9 @@ class TagTemplateWidgetConstant: public TagTemplateWidget
 		~TagTemplateWidgetConstant();
 
 	public:
-		QWidget*	getWidget(const MapFeature* F);
+		QWidget*	getWidget(const Feature* F);
 
-		virtual void apply(const MapFeature* F);
+		virtual void apply(const Feature* F);
 
 		static TagTemplateWidgetConstant*		fromXml(const QDomElement& e);
 		bool toXML(QDomElement& xParent, bool header);
@@ -146,9 +146,9 @@ class TagTemplateWidgetEdit: public TagTemplateWidget
 	Q_OBJECT
 
 	public:
-		QWidget*	getWidget(const MapFeature* F);
+		QWidget*	getWidget(const Feature* F);
 
-		virtual void apply(const MapFeature* F);
+		virtual void apply(const Feature* F);
 
 		static TagTemplateWidgetEdit*		fromXml(const QDomElement& e);
 		bool toXML(QDomElement& xParent, bool header);
@@ -172,13 +172,13 @@ class TagTemplate: public QObject
 		~TagTemplate();
 
 	public:
-		TagSelectorMatchResult		matchesTag(const MapFeature* F);
-		QWidget*	getWidget(const MapFeature* F);
+		TagSelectorMatchResult		matchesTag(const Feature* F);
+		QWidget*	getWidget(const Feature* F);
 
 		void setSelector(const QString& aName);
 		void setSelector(TagSelector* aSelector);
 
-		virtual void apply(const MapFeature* F);
+		virtual void apply(const Feature* F);
 
 		bool toXML(QDomElement& xParent);
 		static TagTemplate*		fromXml(const QDomElement& e, TagTemplates* templates);
@@ -209,14 +209,14 @@ class TagTemplates : public QObject
 		~TagTemplates();
 
 	public:
-		QWidget*	getWidget(const MapFeature* F);
+		QWidget*	getWidget(const Feature* F);
 		QList<TagTemplate*> items;
-		TagTemplate* match(MapFeature* F);
+		TagTemplate* match(Feature* F);
 
 		void addWidget(TagTemplateWidget* aWidget);
 		TagTemplateWidget* findWidget(const QString& tag);
 
-		virtual void apply(const MapFeature* F);
+		virtual void apply(const Feature* F);
 
 		static TagTemplates*	fromXml(const QDomElement& e);
 		bool mergeXml(const QDomElement& e);
@@ -226,7 +226,7 @@ class TagTemplates : public QObject
 		QList<TagTemplateWidget*> widgets;
 		QWidget*		theWidget;
 		QComboBox*		theCombo;
-		const MapFeature*		theFeature;
+		const Feature*		theFeature;
 		TagTemplate*	curTemplate;
 		TagTemplate*	forcedTemplate;
 

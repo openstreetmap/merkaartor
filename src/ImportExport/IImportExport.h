@@ -15,13 +15,10 @@
 class QString;
 class QIODevice;
 
-#include "Maps/TrackPoint.h"
-#include "Maps/TrackSegment.h"
-#include "Maps/Road.h"
-#include "Maps/Relation.h"
-#include "Maps/MapLayer.h"
-#include "Command/Command.h"
-#include "Command/DocumentCommands.h"
+#include "Features.h"
+#include "Layer.h"
+#include "Command.h"
+#include "DocumentCommands.h"
 
 /**
 Interface for Import/Export
@@ -30,7 +27,7 @@ Interface for Import/Export
 */
 class IImportExport{
 public:
-	IImportExport(MapDocument* doc);
+	IImportExport(Document* doc);
 	virtual ~IImportExport();
 
 public:
@@ -41,9 +38,9 @@ public:
 	// Specify the output as a QFile
 	virtual bool saveFile(QString filename);
 	// import the  input
-	virtual bool import(MapLayer* /* aLayer */) { return false; };
+	virtual bool import(Layer* /* aLayer */) { return false; };
 	// export
-	virtual bool export_(const QList<MapFeature *>& featList);
+	virtual bool export_(const QList<Feature *>& featList);
 
 	// Return the filename
 	const QString& getFilename() const;
@@ -51,10 +48,10 @@ public:
 	virtual CommandList* getCommandList();
 
 protected:
-	MapDocument* theDoc;
+	Document* theDoc;
 	QIODevice* Device;
 	CommandList* theList;
-	QList<MapFeature*> theFeatures;
+	QList<Feature*> theFeatures;
 	QString FileName;
 	bool ownDevice;
 };

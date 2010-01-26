@@ -15,7 +15,7 @@
 #include "../ImportExport/ExportGPX.h"
 
 
-ExportGPX::ExportGPX(MapDocument* doc)
+ExportGPX::ExportGPX(Document* doc)
  : IImportExport(doc)
 {
 }
@@ -26,12 +26,12 @@ ExportGPX::~ExportGPX()
 }
 
 // export
-bool ExportGPX::export_(const QList<MapFeature *>& featList)
+bool ExportGPX::export_(const QList<Feature *>& featList)
 {
-	QList<TrackPoint*>	waypoints;
+	QList<Node*>	waypoints;
 	QList<TrackSegment*>	segments;
-	QList<MapLayer*>	tracks;
-	QList<Road*>	routes;
+	QList<Layer*>	tracks;
+	QList<Way*>	routes;
 
 	if(! IImportExport::export_(featList) ) return false;
 
@@ -56,13 +56,13 @@ bool ExportGPX::export_(const QList<MapFeature *>& featList)
 			if (!tracks.contains(S->layer()))
 				tracks.push_back(S->layer());
 		} else
-		if (TrackPoint* P = CAST_NODE(theFeatures[i])) {
+		if (Node* P = CAST_NODE(theFeatures[i])) {
 			if (!P->tagValue("_waypoint_","").isEmpty())
 				waypoints.push_back(P);
 			if (!P->tagValue("name","").isEmpty() && !P->sizeParents())
 				waypoints.push_back(P);
 		} else
-		if (Road* R = CAST_WAY(theFeatures[i])) {
+		if (Way* R = CAST_WAY(theFeatures[i])) {
 			if (R->size())
 				routes.push_back(R);
 		}

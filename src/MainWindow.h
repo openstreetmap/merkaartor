@@ -11,17 +11,17 @@
 
 class MainWindowPrivate;
 class LayerDock;
-class MapDocument;
-class MapLayer;
+class Document;
+class Layer;
 class MapView;
-class MapFeature;
+class Feature;
 class PropertiesDock;
 class InfoDock;
 class DirtyDock;
 class FeaturesDock;
 class QGPS;
 class FeaturePainter;
-class TrackMapLayer;
+class TrackLayer;
 class TrackSegment;
 class Interaction;
 
@@ -173,7 +173,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 		#ifdef GEOIMAGE
 		GeoImageDock* geoImage();
 		#endif
-		MapDocument* document();
+		Document* document();
 		//MapLayer* activeLayer();
 		MapView* view();
 		QByteArray fullscreenState;
@@ -197,18 +197,18 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 
 	public:
 		void invalidateView(bool UpdateDock = true);
-		bool importFiles(MapDocument * mapDocument, const QStringList & filesNames, QStringList * importedFileNames = NULL);
+		bool importFiles(Document * mapDocument, const QStringList & filesNames, QStringList * importedFileNames = NULL);
 		void loadFiles(const QStringList & fileNames);
 		void loadDocument(QString fn);
 		void saveDocument();
-		void downloadFeatures(const QList<MapFeature*>& aDownloadList);
+		void downloadFeatures(const QList<Feature*>& aDownloadList);
 
 		void updateLanguage();
 
 
 	private:
 		MapView* theView;
-		MapDocument* theDocument;
+		Document* theDocument;
 		PropertiesDock* theProperties;
 		InfoDock* theInfo;
 		DirtyDock* theDirty;
@@ -218,7 +218,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 		#endif
 		QGPS* theGPS;
 
-		TrackMapLayer* gpsRecLayer;
+		TrackLayer* gpsRecLayer;
 		TrackSegment* curGpsTrackSegment;
 		QHash<QString, QString> shortcutsDefault;
 
@@ -239,8 +239,8 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 		void updateRecentImportMenu();
 		void updateProjectionMenu();
 		void updateStyleMenu();
-		MapDocument* getDocumentFromClipboard();
-		bool selectExportedFeatures(QList<MapFeature*>& theFeatures);
+		Document* getDocumentFromClipboard();
+		bool selectExportedFeatures(QList<Feature*>& theFeatures);
 
 	protected:
 		void closeEvent(QCloseEvent * event);

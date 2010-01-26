@@ -7,36 +7,33 @@
 #include "DirtyDock.h"
 #include "StyleDock.h"
 #include "FeaturesDock.h"
-#include "Command/Command.h"
-#include "Command/DocumentCommands.h"
-#include "Command/FeatureCommands.h"
-#include "ImportExport/ImportExportOsmBin.h"
-#include "ImportExport/ExportGPX.h"
-#include "ImportExport/ImportExportKML.h"
-#include "Interaction/CreateAreaInteraction.h"
-#include "Interaction/CreateDoubleWayInteraction.h"
-#include "Interaction/CreateNodeInteraction.h"
-#include "Interaction/CreateRoundaboutInteraction.h"
-#include "Interaction/CreatePolygonInteraction.h"
-#include "Interaction/CreateSingleWayInteraction.h"
-#include "Interaction/EditInteraction.h"
-#include "Interaction/MoveTrackPointInteraction.h"
-#include "Interaction/RotateInteraction.h"
-#include "Interaction/ZoomInteraction.h"
+#include "Command.h"
+#include "DocumentCommands.h"
+#include "FeatureCommands.h"
+#include "ImportExportOsmBin.h"
+#include "ExportGPX.h"
+#include "ImportExportKML.h"
+#include "CreateAreaInteraction.h"
+#include "CreateDoubleWayInteraction.h"
+#include "CreateNodeInteraction.h"
+#include "CreateRoundaboutInteraction.h"
+#include "CreatePolygonInteraction.h"
+#include "CreateSingleWayInteraction.h"
+#include "EditInteraction.h"
+#include "MoveNodeInteraction.h"
+#include "RotateInteraction.h"
+#include "ZoomInteraction.h"
 #include "Maps/Coord.h"
-#include "Maps/DownloadOSM.h"
-#include "Maps/ImportGPX.h"
-#include "Maps/ImportNGT.h"
-#include "Maps/ImportOSM.h"
-#include "Maps/MapDocument.h"
-#include "Maps/MapLayer.h"
-#include "Maps/ImageMapLayer.h"
-#include "Maps/MapFeature.h"
-#include "Maps/Relation.h"
-#include "Maps/Road.h"
+#include "DownloadOSM.h"
+#include "ImportGPX.h"
+#include "ImportNGT.h"
+#include "ImportOSM.h"
+#include "Document.h"
+#include "Layer.h"
+#include "ImageMapLayer.h"
+#include "Features.h"
 #include "Maps/FeatureManipulations.h"
-#include "Maps/TrackPoint.h"
-#include "Maps/LayerIterator.h"
+#include "LayerIterator.h"
 #include "PaintStyle/EditPaintStyle.h"
 #include "PaintStyle/PaintStyleEditor.h"
 #include "Sync/SyncOSM.h"
@@ -441,12 +438,12 @@ FeaturesDock* MainWindow::features()
 	return p->theFeats;
 }
 
-MapDocument* MainWindow::document()
+Document* MainWindow::document()
 {
 	return theDocument;
 }
 
-MapDocument* MainWindow::getDocumentFromClipboard()
+Document* MainWindow::getDocumentFromClipboard()
 {
 	QClipboard *clipboard = QApplication::clipboard();
 	QDomDocument* theXmlDoc = new QDomDocument();
@@ -476,8 +473,8 @@ MapDocument* MainWindow::getDocumentFromClipboard()
 	QDomElement c = theXmlDoc->documentElement();
 
 	if (c.tagName() == "osm") {
-		MapDocument* NewDoc = new MapDocument(NULL);
-		DrawingMapLayer* l = new DrawingMapLayer("Dummy");
+		Document* NewDoc = new Document(NULL);
+		DrawingLayer* l = new DrawingLayer("Dummy");
 		NewDoc->add(l);
 
 		c = c.firstChildElement();
@@ -485,13 +482,13 @@ MapDocument* MainWindow::getDocumentFromClipboard()
 			if (c.tagName() == "bound") {
 			} else
 			if (c.tagName() == "way") {
-				Road::fromXML(NewDoc, l, c);
+				Way::fromXML(NewDoc, l, c);
 			} else
 			if (c.tagName() == "relation") {
 				Relation::fromXML(NewDoc, l, c);
 			} else
 			if (c.tagName() == "node") {
-				TrackPoint::fromXML(NewDoc, l, c);
+				Node::fromXML(NewDoc, l, c);
 			}
 
 			c = c.nextSiblingElement();
@@ -501,8 +498,8 @@ MapDocument* MainWindow::getDocumentFromClipboard()
 		return NewDoc;
 	} else
 	if (c.tagName() == "kml") {
-		MapDocument* NewDoc = new MapDocument(NULL);
-		DrawingMapLayer* l = new DrawingMapLayer("Dummy");
+		Document* NewDoc = new Document(NULL);
+		DrawingLayer* l = new DrawingLayer("Dummy");
 		NewDoc->add(l);
 
 		ImportExportKML imp(NewDoc);
@@ -552,19 +549,19 @@ void MainWindow::on_editCopyAction_triggered()
 
 void MainWindow::on_editPasteFeatureAction_triggered()
 {
-	MapDocument* doc;
+	Document* doc;
 	if (!(doc = getDocumentFromClipboard()))
 		return;
 
 	CommandList* theList = new CommandList();
 	theList->setDescription("Paste Features");
 
-	QList<MapFeature*> theFeats;
+	QList<Feature*> theFeats;
 	for (FeatureIterator k(doc); !k.isEnd(); ++k) {
 		theFeats.push_back(k.get());
 	}
 	for (int i=0; i<theFeats.size(); ++i) {
-		MapFeature*F = theFeats.at(i);
+		Feature*F = theFeats.at(i);
 		if (theDocument->getFeature(F->id()))
 			F->resetId();
 
@@ -591,11 +588,11 @@ void MainWindow::on_editPasteFeatureAction_triggered()
 
 void MainWindow::on_editPasteOverwriteAction_triggered()
 {
-	QList<MapFeature*> sel = properties()->selection();
+	QList<Feature*> sel = properties()->selection();
 	if (!sel.size())
 		return;
 
-	MapDocument* doc;
+	Document* doc;
 	if (!(doc = getDocumentFromClipboard()))
 		return;
 
@@ -605,7 +602,7 @@ void MainWindow::on_editPasteOverwriteAction_triggered()
 	for(int i=0; i < sel.size(); ++i) {
 		theList->add(new ClearTagsCommand(sel[i], theDocument->getDirtyOrOriginLayer(sel[i]->layer())));
 		for (FeatureIterator k(doc); !k.isEnd(); ++k) {
-			MapFeature::mergeTags(theDocument, theList, sel[i], k.get());
+			Feature::mergeTags(theDocument, theList, sel[i], k.get());
 		}
 	}
 
@@ -620,11 +617,11 @@ void MainWindow::on_editPasteOverwriteAction_triggered()
 
 void MainWindow::on_editPasteMergeAction_triggered()
 {
-	QList<MapFeature*> sel = properties()->selection();
+	QList<Feature*> sel = properties()->selection();
 	if (!sel.size())
 		return;
 
-	MapDocument* doc;
+	Document* doc;
 	if (!(doc = getDocumentFromClipboard()))
 		return;
 
@@ -633,7 +630,7 @@ void MainWindow::on_editPasteMergeAction_triggered()
 
 	for(int i=0; i < sel.size(); ++i) {
 		for (FeatureIterator k(doc); !k.isEnd(); ++k) {
-			MapFeature::mergeTags(theDocument, theList, sel[i], k.get());
+			Feature::mergeTags(theDocument, theList, sel[i], k.get());
 		}
 	}
 
@@ -710,7 +707,7 @@ void MainWindow::on_editRemoveAction_triggered()
 void MainWindow::on_editMoveAction_triggered()
 {
 	if (M_PREFS->getSeparateMoveMode()) {
-		view()->launch(new MoveTrackPointInteraction(view()));
+		view()->launch(new MoveNodeInteraction(view()));
 		theInfo->setHtml(theView->interaction()->toHtml());
 	}
 }
@@ -806,7 +803,7 @@ static bool mayDiscardUnsavedChanges(QWidget* aWidget)
 								 QMessageBox::Discard | QMessageBox::Cancel, QMessageBox::Cancel) == QMessageBox::Discard;
 }
 
-bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & fileNames, QStringList * importedFileNames )
+bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNames, QStringList * importedFileNames )
 {
 	createProgressDialog();
 #ifndef Q_OS_SYMBIAN
@@ -822,14 +819,14 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 		changeCurrentDirToFile(fn);
 
 		QString baseFileName = fn.section('/', - 1);
-		MapLayer* newLayer = NULL;
+		Layer* newLayer = NULL;
 
 		bool importOK = false;
 		bool importAborted = false;
 
 		if (fn.toLower().endsWith(".gpx")) {
-			QList<TrackMapLayer*> theTracklayers;
-			TrackMapLayer* newLayer = new TrackMapLayer( baseFileName + " - " + tr("Waypoints"), baseFileName);
+			QList<TrackLayer*> theTracklayers;
+			TrackLayer* newLayer = new TrackLayer( baseFileName + " - " + tr("Waypoints"), baseFileName);
 			mapDocument->add(newLayer);
 			theTracklayers.append(newLayer);
 			newLayer->blockIndexing(true);
@@ -857,33 +854,33 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 			}
 		}
 		else if (fn.toLower().endsWith(".osm")) {
-			newLayer = new DrawingMapLayer( baseFileName );
+			newLayer = new DrawingLayer( baseFileName );
 			newLayer->blockIndexing(true);
 			mapDocument->add(newLayer);
 			importOK = importOSM(this, baseFileName, mapDocument, newLayer);
 		}
 		else if (fn.toLower().endsWith(".osb")) {
-			newLayer = new OsbMapLayer( baseFileName, fn );
+			newLayer = new OsbLayer( baseFileName, fn );
 			newLayer->blockIndexing(true);
 			mapDocument->add(newLayer);
-			importOK = mapDocument->importOSB(fn, (DrawingMapLayer *)newLayer);
+			importOK = mapDocument->importOSB(fn, (DrawingLayer *)newLayer);
 		}
 		else if (fn.toLower().endsWith(".ngt")) {
-			newLayer = new TrackMapLayer( baseFileName );
+			newLayer = new TrackLayer( baseFileName );
 			newLayer->blockIndexing(true);
 			mapDocument->add(newLayer);
 			importOK = importNGT(this, baseFileName, mapDocument, newLayer);
 			if (importOK && MerkaartorPreferences::instance()->getAutoExtractTracks()) {
-				((TrackMapLayer *)newLayer)->extractLayer();
+				((TrackLayer *)newLayer)->extractLayer();
 			}
 		}
 		else if (fn.toLower().endsWith(".nmea") || (fn.toLower().endsWith(".nma"))) {
-			newLayer = new TrackMapLayer( baseFileName );
+			newLayer = new TrackLayer( baseFileName );
 			newLayer->blockIndexing(true);
 			mapDocument->add(newLayer);
-			importOK = mapDocument->importNMEA(baseFileName, (TrackMapLayer *)newLayer);
+			importOK = mapDocument->importNMEA(baseFileName, (TrackLayer *)newLayer);
 			if (importOK && MerkaartorPreferences::instance()->getAutoExtractTracks()) {
-				((TrackMapLayer *)newLayer)->extractLayer();
+				((TrackLayer *)newLayer)->extractLayer();
 			}
 		}
 		else if (fn.toLower().endsWith(".kml")) {
@@ -904,20 +901,20 @@ bool MainWindow::importFiles(MapDocument * mapDocument, const QStringList & file
 					 "Are you absolutely sure this KML can legally be imported in OSM?"),
 					 QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes)
 			{
-				newLayer = new DrawingMapLayer( baseFileName );
+				newLayer = new DrawingLayer( baseFileName );
 				newLayer->blockIndexing(true);
 				newLayer->setUploadable(false);
 				mapDocument->add(newLayer);
-				importOK = mapDocument->importKML(baseFileName, (TrackMapLayer *)newLayer);
+				importOK = mapDocument->importKML(baseFileName, (TrackLayer *)newLayer);
 			} else
 				importAborted = true;
 		}
 #ifdef USE_GDAL
 		else if (fn.toLower().endsWith(".shp")) {
-			newLayer = new DrawingMapLayer( baseFileName );
+			newLayer = new DrawingLayer( baseFileName );
 			newLayer->setUploadable(false);
 			mapDocument->add(newLayer);
-			importOK = mapDocument->importSHP(baseFileName, (DrawingMapLayer*)newLayer);
+			importOK = mapDocument->importSHP(baseFileName, (DrawingLayer*)newLayer);
 		}
 #endif
 
@@ -994,9 +991,9 @@ void MainWindow::loadFiles(const QStringList & fileList)
 		it.remove();
 	}
 
-	MapDocument* newDoc = theDocument;
+	Document* newDoc = theDocument;
 	if (foundDocument == false) {
-		newDoc = new MapDocument(theLayers);
+		newDoc = new Document(theLayers);
 		newDoc->addDefaultLayers();
 	}
 
@@ -1115,7 +1112,7 @@ void MainWindow::on_fileDownloadMoreAction_triggered()
 	theProgressLabel = NULL;
 }
 
-void MainWindow::downloadFeatures(const QList<MapFeature*>& aDownloadList)
+void MainWindow::downloadFeatures(const QList<Feature*>& aDownloadList)
 {
 	createProgressDialog();
 
@@ -1292,10 +1289,10 @@ void MainWindow::on_fileNewAction_triggered()
 	theProperties->setSelection(0);
 	if (!theDocument || !theDocument->hasUnsavedChanges() || mayDiscardUnsavedChanges(this)) {
 		delete theDocument;
-		theDocument = new MapDocument(theLayers);
+		theDocument = new Document(theLayers);
 		theDocument->addDefaultLayers();
 		if (M_PREFS->getWorldOsbAutoload() && !M_PREFS->getWorldOsbUri().isEmpty()) {
-			MapLayer* newLayer = new OsbMapLayer( "World", M_PREFS->getWorldOsbUri() + "/world.osb" );
+			Layer* newLayer = new OsbLayer( "World", M_PREFS->getWorldOsbUri() + "/world.osb" );
 			if (M_PREFS->getWorldOsbAutoshow())
 				newLayer->setVisible(true);
 			else
@@ -1345,12 +1342,12 @@ void MainWindow::on_createRectangleAction_triggered()
 
 void MainWindow::on_createRoadAction_triggered()
 {
-	TrackPoint * firstPoint = NULL;
+	Node * firstPoint = NULL;
 
 	if (theProperties->size() == 1)
 	{
-		MapFeature * feature = theProperties->selection(0);
-		firstPoint = dynamic_cast<TrackPoint*>(feature);
+		Feature * feature = theProperties->selection(0);
+		firstPoint = dynamic_cast<Node*>(feature);
 	}
 
 	theView->launch(new CreateSingleWayInteraction(this, theView, firstPoint, false));
@@ -1481,7 +1478,7 @@ void MainWindow::on_nodeAlignAction_triggered()
 
 void MainWindow::on_nodeMergeAction_triggered()
 {
-	MapFeature* F = theProperties->selection(0);
+	Feature* F = theProperties->selection(0);
 	CommandList* theList = new CommandList(MainWindow::tr("Merge Nodes into %1").arg(F->id()), F);
 	mergeNodes(theDocument, theList, theProperties);
 	if (theList->empty())
@@ -1496,7 +1493,7 @@ void MainWindow::on_nodeMergeAction_triggered()
 
 void MainWindow::on_nodeDetachAction_triggered()
 {
-	MapFeature* F = theProperties->selection(0);
+	Feature* F = theProperties->selection(0);
 	CommandList* theList = new CommandList(MainWindow::tr("Detach Node %1").arg(F->id()), F);
 	detachNode(theDocument, theList, theProperties);
 	if (theList->empty())
@@ -1859,7 +1856,7 @@ void MainWindow::loadDocument(QString fn)
 	QDomElement e = docElem.firstChildElement();
 	while(!e.isNull()) {
 		if (e.tagName() == "MapDocument") {
-			MapDocument* newDoc = MapDocument::fromXML(e, version, theLayers, progress);
+			Document* newDoc = Document::fromXML(e, version, theLayers, progress);
 
 			if (progress.wasCanceled())
 				break;
@@ -1895,7 +1892,7 @@ void MainWindow::loadDocument(QString fn)
 
 void MainWindow::on_exportOSMAction_triggered()
 {
-	QList<MapFeature*> theFeatures;
+	QList<Feature*> theFeatures;
 	if (!selectExportedFeatures(theFeatures))
 		return;
 
@@ -1914,7 +1911,7 @@ void MainWindow::on_exportOSMAction_triggered()
 
 void MainWindow::on_exportOSMBinAction_triggered()
 {
-	QList<MapFeature*> theFeatures;
+	QList<Feature*> theFeatures;
 	if (!selectExportedFeatures(theFeatures))
 		return;
 
@@ -1939,7 +1936,7 @@ void MainWindow::on_exportOSMBinAction_triggered()
 
 void MainWindow::on_exportGPXAction_triggered()
 {
-	QList<MapFeature*> theFeatures;
+	QList<Feature*> theFeatures;
 	if (!selectExportedFeatures(theFeatures))
 		return;
 
@@ -1964,7 +1961,7 @@ void MainWindow::on_exportGPXAction_triggered()
 
 void MainWindow::on_exportKMLAction_triggered()
 {
-	QList<MapFeature*> theFeatures;
+	QList<Feature*> theFeatures;
 	if (!selectExportedFeatures(theFeatures))
 		return;
 
@@ -1987,7 +1984,7 @@ void MainWindow::on_exportKMLAction_triggered()
 	}
 }
 
-bool MainWindow::selectExportedFeatures(QList<MapFeature*>& theFeatures)
+bool MainWindow::selectExportedFeatures(QList<Feature*>& theFeatures)
 {
 	QDialog dlg(this);
 	Ui::ExportDialog dlgExport;
@@ -2017,15 +2014,15 @@ bool MainWindow::selectExportedFeatures(QList<MapFeature*>& theFeatures)
 
 			theFeatures.clear();
 			for (VisibleFeatureIterator i(document()); !i.isEnd(); ++i) {
-				if (TrackPoint* P = dynamic_cast<TrackPoint*>(i.get())) {
+				if (Node* P = dynamic_cast<Node*>(i.get())) {
 					if (aCoordBox.contains(P->position())) {
 						theFeatures.append(P);
 					}
 				} else
-					if (Road* G = dynamic_cast<Road*>(i.get())) {
+					if (Way* G = dynamic_cast<Way*>(i.get())) {
 						if (aCoordBox.intersects(G->boundingBox())) {
 							for (int j=0; j < G->size(); j++) {
-								if (TrackPoint* P = dynamic_cast<TrackPoint*>(G->get(j)))
+								if (Node* P = dynamic_cast<Node*>(G->get(j)))
 									if (!aCoordBox.contains(P->position()))
 										theFeatures.append(P);
 							}
@@ -2036,10 +2033,10 @@ bool MainWindow::selectExportedFeatures(QList<MapFeature*>& theFeatures)
 						if (Relation* G = dynamic_cast<Relation*>(i.get())) {
 							if (aCoordBox.intersects(G->boundingBox())) {
 								for (int j=0; j < G->size(); j++) {
-									if (Road* R = dynamic_cast<Road*>(G->get(j))) {
+									if (Way* R = dynamic_cast<Way*>(G->get(j))) {
 										if (!aCoordBox.contains(R->boundingBox())) {
 											for (int k=0; k < R->size(); k++) {
-												if (TrackPoint* P = dynamic_cast<TrackPoint*>(R->get(k)))
+												if (Node* P = dynamic_cast<Node*>(R->get(k)))
 													if (!aCoordBox.contains(P->position()))
 														theFeatures.append(P);
 											}
@@ -2081,10 +2078,10 @@ void MainWindow::on_editSelectAction_triggered()
 		QRegExp selValue(Sel->cbValue->currentText(), theSensitivity, QRegExp::RegExp);
 		int selMaxResult = Sel->sbMaxResult->value();
 
-		QList <MapFeature *> selection;
+		QList <Feature *> selection;
 		int added = 0;
 		for (VisibleFeatureIterator i(theDocument); !i.isEnd() && added < selMaxResult; ++i) {
-			MapFeature* F = i.get();
+			Feature* F = i.get();
 			int ok = false;
 
 			if (selName.indexIn(F->description()) == -1) {
@@ -2579,7 +2576,7 @@ void MainWindow::updateGpsPosition(float latitude, float longitude, QDateTime ti
 		}
 
 		if (gpsRecordAction->isChecked() && !gpsPauseAction->isChecked()) {
-			TrackPoint* pt = new TrackPoint(gpsCoord);
+			Node* pt = new Node(gpsCoord);
 			pt->setTime(time);
 			pt->setElevation(altitude);
 			pt->setSpeed(speed);
@@ -2610,7 +2607,7 @@ void MainWindow::on_gpsRecordAction_triggered()
 			QString fn = "log-" + QDateTime::currentDateTime().toString(Qt::ISODate);
 			fn.replace(':', '-');
 
-			gpsRecLayer = new TrackMapLayer();
+			gpsRecLayer = new TrackLayer();
 			gpsRecLayer->setName(fn);
 			theDocument->add(gpsRecLayer);
 
@@ -2731,7 +2728,7 @@ void MainWindow::updateLanguage()
 void MainWindow::mapView_interactionChanged(Interaction* anInteraction)
 {
 	editPropertiesAction->setChecked(dynamic_cast<EditInteraction*>(anInteraction) != NULL);
-	editMoveAction->setChecked(dynamic_cast<MoveTrackPointInteraction*>(anInteraction) != NULL);
+	editMoveAction->setChecked(dynamic_cast<MoveNodeInteraction*>(anInteraction) != NULL);
 	editRotateAction->setChecked(dynamic_cast<RotateInteraction*>(anInteraction) != NULL);
 	createNodeAction->setChecked(dynamic_cast<CreateNodeInteraction*>(anInteraction) != NULL);
 	createRoadAction->setChecked(dynamic_cast<CreateSingleWayInteraction*>(anInteraction) != NULL);

@@ -16,7 +16,7 @@
 #include <QTextBrowser>
 
 class MainWindow;
-class MapFeature;
+class Feature;
 
 /**
 	@author cbro <cbro@semperpax.com>

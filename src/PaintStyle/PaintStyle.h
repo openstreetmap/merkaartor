@@ -11,12 +11,12 @@
 #include "PaintStyle/TagSelector.h"
 
 class MapView;
-class MapFeature;
+class Feature;
 class Projection;
 class Relation;
-class Road;
+class Way;
 class TagSelector;
-class TrackPoint;
+class Node;
 class QPainter;
 class QPainterPath;
 class QFont;
@@ -56,7 +56,7 @@ class FeaturePainter
 		void setSelector(const QString& aName);
 		void setSelector(TagSelector* aSelector);
 		bool isFilled() const;
-		TagSelectorMatchResult matchesTag(const MapFeature* F) const;
+		TagSelectorMatchResult matchesTag(const Feature* F) const;
 		bool matchesZoom(double PixelPerM) const;
 		FeaturePainter& backgroundActive(bool b);
 		FeaturePainter& background(QColor Color, double Scale, double Offset);
@@ -103,15 +103,15 @@ class FeaturePainter
 		QString toXML(QString filename) const;
 		static FeaturePainter fromXML(const QDomElement& e, QString filename);
 
-		void drawBackground(Road* R, QPainter& thePainter, MapView& theView) const;
+		void drawBackground(Way* R, QPainter& thePainter, MapView& theView) const;
 		void drawBackground(Relation* R, QPainter& thePainter, MapView& theView) const;
-		void drawForeground(Road* R, QPainter& thePainter, MapView& theView) const;
+		void drawForeground(Way* R, QPainter& thePainter, MapView& theView) const;
 		void drawForeground(Relation* R, QPainter& thePainter, MapView& theView) const;
-		void drawTouchup(Road* R, QPainter& thePainter, MapView& theView) const;
-		void drawTouchup(TrackPoint* R, QPainter& thePainter, MapView& theView) const;
-		void drawLabel(Road* R, QPainter& thePainter, MapView& theView) const;
+		void drawTouchup(Way* R, QPainter& thePainter, MapView& theView) const;
+		void drawTouchup(Node* R, QPainter& thePainter, MapView& theView) const;
+		void drawLabel(Way* R, QPainter& thePainter, MapView& theView) const;
 		void drawPointLabel(QPointF C, QString str, QString strBG, QPainter& thePainter, MapView& theView) const;
-		void drawLabel(TrackPoint* Pt, QPainter& thePainter, MapView& theView) const;
+		void drawLabel(Node* Pt, QPainter& thePainter, MapView& theView) const;
 
 	public:
 		TagSelector* theSelector;
@@ -179,8 +179,8 @@ class PaintStyleLayer
 {
 	public:
 		virtual ~PaintStyleLayer() = 0;
-		virtual void draw(Road* R) = 0;
-		virtual void draw(TrackPoint* Pt) = 0;
+		virtual void draw(Way* R) = 0;
+		virtual void draw(Node* Pt) = 0;
 		virtual void draw(Relation* R) = 0;
 };
 

@@ -21,15 +21,15 @@ class QDomDocument;
 class ImportExportKML : public IImportExport
 {
 public:
-    ImportExportKML(MapDocument* doc);
+    ImportExportKML(Document* doc);
 
     ~ImportExportKML();
 
 	// import the  input
-	virtual bool import(MapLayer* aLayer);
+	virtual bool import(Layer* aLayer);
 
 	//export
-	virtual bool export_(const QList<MapFeature *>& featList);
+	virtual bool export_(const QList<Feature *>& featList);
 };
 
 #endif

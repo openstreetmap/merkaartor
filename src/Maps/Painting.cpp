@@ -1,8 +1,6 @@
 #include "Maps/Painting.h"
 #include "Maps/Projection.h"
-#include "Maps/TrackPoint.h"
-#include "Maps/Relation.h"
-#include "Maps/Road.h"
+#include "Features.h"
 #include "Utils/LineF.h"
 
 #include <QtGui/QPainter>
@@ -156,7 +154,7 @@ static void buildCubicPath(QPainterPath& Path, const QPointF& P1, const QPointF&
 //		}
 //}
 //
-void buildPolygonFromRoad(Road *R, Projection const &theProjection, QPolygonF &Polygon)
+void buildPolygonFromRoad(Way *R, Projection const &theProjection, QPolygonF &Polygon)
 {
 	for (int i=0; i<R->size(); ++i)
 		if (!R->getNode(i)->isVirtual())
@@ -164,7 +162,7 @@ void buildPolygonFromRoad(Road *R, Projection const &theProjection, QPolygonF &P
 }
 
 /// draws way with oneway markers
-void draw(QPainter& thePainter, QPen& thePen, MapFeature::TrafficDirectionType TT, const QPointF& FromF, const QPointF& ToF, double theWidth, const Projection&)
+void draw(QPainter& thePainter, QPen& thePen, Feature::TrafficDirectionType TT, const QPointF& FromF, const QPointF& ToF, double theWidth, const Projection&)
 {
 	QPainterPath Path;
 	Path.moveTo(FromF);
@@ -179,13 +177,13 @@ void draw(QPainter& thePainter, QPen& thePen, MapFeature::TrafficDirectionType T
 		QPointF V1(theWidth*cos(A+M_PI/6),theWidth*sin(A+M_PI/6));
 		QPointF V2(theWidth*cos(A-M_PI/6),theWidth*sin(A-M_PI/6));
 //		MapFeature::TrafficDirectionType TT = W->trafficDirection();
-		if ( (TT == MapFeature::OtherWay) || (TT == MapFeature::BothWays) )
+		if ( (TT == Feature::OtherWay) || (TT == Feature::BothWays) )
 		{
 			thePainter.setPen(QPen(QColor(0,0,255), 2));
 			thePainter.drawLine(H+T,H+T-V1);
 			thePainter.drawLine(H+T,H+T-V2);
 		}
-		if ( (TT == MapFeature::OneWay) || (TT == MapFeature::BothWays) )
+		if ( (TT == Feature::OneWay) || (TT == Feature::BothWays) )
 		{
 			thePainter.setPen(QPen(QColor(0,0,255), 2));
 			thePainter.drawLine(H-T,H-T+V1);
@@ -204,7 +202,7 @@ void draw(QPainter& thePainter, QPen& thePen, MapFeature::TrafficDirectionType T
 	thePainter.strokePath(Path,thePen);
 }
 
-void draw(QPainter& thePainter, QPen& thePen, MapFeature::TrafficDirectionType TT, const Coord& From, const Coord& To, double theWidth, const Projection& theProjection)
+void draw(QPainter& thePainter, QPen& thePen, Feature::TrafficDirectionType TT, const Coord& From, const Coord& To, double theWidth, const Projection& theProjection)
 {
 	QPointF FromF(theProjection.project(From));
 	QPointF ToF(theProjection.project(To));

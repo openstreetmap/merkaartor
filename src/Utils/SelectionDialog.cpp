@@ -11,7 +11,7 @@
 //
 #include "SelectionDialog.h"
 #include "MainWindow.h"
-#include "Maps/MapDocument.h"
+#include "Document.h"
 
 #include <QCompleter>
 

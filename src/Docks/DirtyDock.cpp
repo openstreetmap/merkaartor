@@ -14,12 +14,12 @@
 #include "MainWindow.h"
 #include "MapView.h"
 #include "Preferences/MerkaartorPreferences.h"
-#include "Maps/MapDocument.h"
-#include "Maps/MapLayer.h"
-#include "Maps/MapFeature.h"
-#include "Maps/DownloadOSM.h"
-#include "Command/Command.h"
-#include "Sync/DirtyList.h"
+#include "Document.h"
+#include "Layer.h"
+#include "Feature.h"
+#include "DownloadOSM.h"
+#include "Command.h"
+#include "DirtyList.h"
 
 #include <QMessageBox>
 
@@ -89,7 +89,7 @@ void DirtyDock::updateList()
 
 void DirtyDock::on_ChangesList_itemSelectionChanged()
 {
-	MapFeature* F;
+	Feature* F;
 
 	if (ui.ChangesList->selectedItems().count() != 0) {
 
@@ -129,7 +129,7 @@ void DirtyDock::on_ChangesList_customContextMenuRequested(const QPoint & pos)
 
 void DirtyDock::on_centerAction_triggered()
 {
-	MapFeature* F;
+	Feature* F;
 	CoordBox cb;
 
 	Main->setUpdatesEnabled(false);
@@ -152,7 +152,7 @@ void DirtyDock::on_centerAction_triggered()
 
 void DirtyDock::on_centerZoomAction_triggered()
 {
-	MapFeature* F;
+	Feature* F;
 	CoordBox cb;
 
 	Main->setUpdatesEnabled(false);

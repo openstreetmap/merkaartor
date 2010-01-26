@@ -3,10 +3,10 @@
 
 #include "MainWindow.h"
 #include "MapView.h"
-#include "Maps/MapDocument.h"
-#include "Maps/MapLayer.h"
+#include "Document.h"
+#include "Layer.h"
 #include "PropertiesDock.h"
-#include "Command/Command.h"
+#include "Command.h"
 #include "InfoDock.h"
 
 #include <QPushButton>
@@ -118,16 +118,16 @@ void LayerDock::clearLayers()
 	}
 }
 
-void LayerDock::addLayer(MapLayer* aLayer)
+void LayerDock::addLayer(Layer* aLayer)
 {
 	LayerWidget* w = aLayer->newWidget();
 	if (w) {
 		p->Layout->addWidget(w);
 
 		connect(w, SIGNAL(layerChanged(LayerWidget*,bool)), this, SLOT(layerChanged(LayerWidget*,bool)));
-		connect(w, SIGNAL(layerClosed(MapLayer*)), this, SLOT(layerClosed(MapLayer*)));
-		connect(w, SIGNAL(layerCleared(MapLayer*)), this, SLOT(layerCleared(MapLayer*)));
-		connect(w, SIGNAL(layerZoom(MapLayer*)), this, SLOT(layerZoom(MapLayer*)));
+		connect(w, SIGNAL(layerClosed(Layer*)), this, SLOT(layerClosed(Layer*)));
+		connect(w, SIGNAL(layerCleared(Layer*)), this, SLOT(layerCleared(Layer*)));
+		connect(w, SIGNAL(layerZoom(Layer*)), this, SLOT(layerZoom(Layer*)));
 
 		p->Main->menuLayers->addMenu(w->getAssociatedMenu());
 
@@ -140,7 +140,7 @@ void LayerDock::addLayer(MapLayer* aLayer)
 	}
 }
 
-void LayerDock::deleteLayer(MapLayer* aLayer)
+void LayerDock::deleteLayer(Layer* aLayer)
 {
 	for (int i=CHILD_WIDGETS.size()-1; i >= 0; i--) {
 		if (!CHILD_WIDGET(i))
@@ -172,13 +172,13 @@ void LayerDock::createContent()
 //	p->tab->setElideMode(Qt::ElideRight);
 	int t;
 	t = p->tab->addTab(NULL);
-	p->tab->setTabData(t, MapLayer::All);
+	p->tab->setTabData(t, Layer::All);
 	t = p->tab->addTab(NULL);
-	p->tab->setTabData(t, MapLayer::Default);
+	p->tab->setTabData(t, Layer::Default);
 	t = p->tab->addTab(NULL);
-	p->tab->setTabData(t, MapLayer::OSM);
+	p->tab->setTabData(t, Layer::OSM);
 	t = p->tab->addTab(NULL);
-	p->tab->setTabData(t, MapLayer::Tracks);
+	p->tab->setTabData(t, Layer::Tracks);
 	retranslateTabBar();
 	connect(p->tab, SIGNAL(currentChanged (int)), this, SLOT(tabChanged(int)));
 	connect(p->tab, SIGNAL(customContextMenuRequested (const QPoint&)), this, SLOT(tabContextMenuRequested(const QPoint&)));
@@ -258,7 +258,7 @@ void LayerDock::layerChanged(LayerWidget* l, bool adjustViewport)
 	emit(layersChanged(adjustViewport));
 }
 
-void LayerDock::layerClosed(MapLayer* l)
+void LayerDock::layerClosed(Layer* l)
 {
 //	Main->document()->getUploadedLayer()->clear();
 	//Main->document()->remove(l);
@@ -273,13 +273,13 @@ void LayerDock::layerClosed(MapLayer* l)
 	update();
 }
 
-void LayerDock::layerCleared(MapLayer* l)
+void LayerDock::layerCleared(Layer* l)
 {
 	l->clear();
 	p->Main->on_editPropertiesAction_triggered();
 }
 
-void LayerDock::layerZoom(MapLayer * l)
+void LayerDock::layerZoom(Layer * l)
 {
 	CoordBox bb = l->boundingBox();
 	CoordBox mini(bb.center()-2000, bb.center()+2000);

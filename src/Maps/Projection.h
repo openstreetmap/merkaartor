@@ -14,7 +14,7 @@
 #include <ggl/extensions/gis/projections/projection.hpp>
 
 class QRect;
-class TrackPoint;
+class Node;
 class ProjectionPrivate;
 
 typedef ggl::projection::projection<ggl::point_ll_deg, ggl::point_2d> ProjProjection;
@@ -28,7 +28,7 @@ class Projection
 		double latAnglePerM() const;
 		double lonAnglePerM(double Lat) const;
 		QPointF project(const Coord& Map) const;
-		QPointF project(TrackPoint* aNode) const;
+		QPointF project(Node* aNode) const;
 		Coord inverse(const QPointF& Screen) const;
 
 #ifndef _MOBILE

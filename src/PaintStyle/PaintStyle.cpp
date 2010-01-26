@@ -2,10 +2,7 @@
 #include "PaintStyle.h"
 #include "Maps/Painting.h"
 #include "Maps/Projection.h"
-#include "Maps/TrackPoint.h"
-#include "Maps/Relation.h"
-#include "Maps/Road.h"
-#include "Maps/Road.h"
+#include "Features.h"
 #include "Utils/LineF.h"
 #include "Utils/SvgCache.h"
 
@@ -618,7 +615,7 @@ void FeaturePainter::setSelector(TagSelector* aSel)
 	theSelector = aSel;
 }
 
-TagSelectorMatchResult FeaturePainter::matchesTag(const MapFeature* F) const
+TagSelectorMatchResult FeaturePainter::matchesTag(const Feature* F) const
 {
 	TagSelectorMatchResult res;
 
@@ -668,7 +665,7 @@ void buildPathFromRelation(Relation *R, const Projection &theProjection, QPainte
 }
 
 */
-void FeaturePainter::drawBackground(Road* R, QPainter& thePainter, MapView& theView) const
+void FeaturePainter::drawBackground(Way* R, QPainter& thePainter, MapView& theView) const
 {
 	if (!DrawBackground && !ForegroundFill) return;
 
@@ -731,7 +728,7 @@ void FeaturePainter::drawBackground(Relation* R, QPainter& thePainter, MapView& 
 	thePainter.drawPath(theView.transform().map(R->getPath()));
 }
 
-void FeaturePainter::drawForeground(Road* R, QPainter& thePainter, MapView& theView) const
+void FeaturePainter::drawForeground(Way* R, QPainter& thePainter, MapView& theView) const
 {
 	if (!DrawForeground) return;
 
@@ -814,7 +811,7 @@ void FeaturePainter::drawForeground(Relation* R, QPainter& thePainter, MapView& 
 }
 
 
-void FeaturePainter::drawTouchup(TrackPoint* Pt, QPainter& thePainter, MapView& theView) const
+void FeaturePainter::drawTouchup(Node* Pt, QPainter& thePainter, MapView& theView) const
 {
 	bool IconError = false;
 	if (DrawIcon && (IconName != "") )
@@ -852,7 +849,7 @@ void FeaturePainter::drawTouchup(TrackPoint* Pt, QPainter& thePainter, MapView& 
 	}
 }
 
-void FeaturePainter::drawTouchup(Road* R, QPainter& thePainter, MapView& theView) const
+void FeaturePainter::drawTouchup(Way* R, QPainter& thePainter, MapView& theView) const
 {
 	if (DrawTouchup)
 	{
@@ -874,8 +871,8 @@ void FeaturePainter::drawTouchup(Road* R, QPainter& thePainter, MapView& theView
 	}
 	if ( ((DrawTrafficDirectionMarks) && (M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Oneway)) ||  M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Always)
 	{
-		MapFeature::TrafficDirectionType TT = trafficDirection(R);
-		if ( (TT != MapFeature::UnknownDirection) || (M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Always) )
+		Feature::TrafficDirectionType TT = trafficDirection(R);
+		if ( (TT != Feature::UnknownDirection) || (M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Always) )
 		{
 			double theWidth = theView.pixelPerM()*R->widthOf()-4;
 			if (theWidth > 8)
@@ -895,13 +892,13 @@ void FeaturePainter::drawTouchup(Road* R, QPainter& thePainter, MapView& theView
 						QPointF T(DistFromCenter*cos(A),DistFromCenter*sin(A));
 						QPointF V1(theWidth*cos(A+M_PI/6),theWidth*sin(A+M_PI/6));
 						QPointF V2(theWidth*cos(A-M_PI/6),theWidth*sin(A-M_PI/6));
-						if ( (TT == MapFeature::OtherWay) || (TT == MapFeature::BothWays) )
+						if ( (TT == Feature::OtherWay) || (TT == Feature::BothWays) )
 						{
 							thePainter.setPen(QPen(QColor(0,0,255), 2));
 							thePainter.drawLine(H+T,H+T-V1);
 							thePainter.drawLine(H+T,H+T-V2);
 						}
-						if ( (TT == MapFeature::OneWay) || (TT == MapFeature::BothWays) )
+						if ( (TT == Feature::OneWay) || (TT == Feature::BothWays) )
 						{
 							thePainter.setPen(QPen(QColor(0,0,255), 2));
 							thePainter.drawLine(H-T,H-T+V1);
@@ -997,7 +994,7 @@ void FeaturePainter::drawPointLabel(QPointF C, QString str, QString strBg, QPain
 }
 
 
-void FeaturePainter::drawLabel(TrackPoint* Pt, QPainter& thePainter, MapView& theView) const
+void FeaturePainter::drawLabel(Node* Pt, QPainter& thePainter, MapView& theView) const
 {
 	if (!DrawLabel)
 		return;
@@ -1012,7 +1009,7 @@ void FeaturePainter::drawLabel(TrackPoint* Pt, QPainter& thePainter, MapView& th
 	drawPointLabel(C, str, strBg, thePainter, theView);
 }
 
-void FeaturePainter::drawLabel(Road* R, QPainter& thePainter, MapView& theView) const
+void FeaturePainter::drawLabel(Way* R, QPainter& thePainter, MapView& theView) const
 {
 	if (!DrawLabel)
 		return;

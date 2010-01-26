@@ -9,9 +9,9 @@
 #include <QLabel>
 
 class MainWindow;
-class MapFeature;
-class Road;
-class MapDocument;
+class Feature;
+class Way;
+class Document;
 class PropertiesDock;
 class InfoDock;
 class MapAdapter;
@@ -30,8 +30,8 @@ class MapView :	public QWidget
 		~MapView();
 
 		MainWindow* main();
-		void setDocument(MapDocument* aDoc);
-		MapDocument* document();
+		void setDocument(Document* aDoc);
+		Document* document();
 		void launch(Interaction* anInteraction);
 		Interaction* interaction();
 
@@ -57,7 +57,7 @@ class MapView :	public QWidget
 		Projection& projection();
 		QTransform& transform();
 		QPoint toView(const Coord& aCoord) const;
-		QPoint toView(TrackPoint* aPt) const;
+		QPoint toView(Node* aPt) const;
 
 		PropertiesDock* properties();
 		//InfoDock* info();
@@ -72,8 +72,8 @@ class MapView :	public QWidget
 		static void transformCalc(QTransform& theTransform, const Projection& theProjection, const CoordBox& TargetMap, const QRect& Screen);
 		double pixelPerM() const;
 
-        void zoom(double d, const QPoint& Around);
-        void zoom(double d, const QPoint& Around, const QRect& Screen);
+		void zoom(double d, const QPoint& Around);
+		void zoom(double d, const QPoint& Around, const QRect& Screen);
 		void setCenter(Coord& Center, const QRect& Screen);
 		void resize(QSize oldS, QSize newS);
 
@@ -90,7 +90,7 @@ class MapView :	public QWidget
 
 		MainWindow* Main;
 		Projection theProjection;
-		MapDocument* theDocument;
+		Document* theDocument;
 		Interaction* theInteraction;
 		QPixmap* StaticBackground;
 		QPixmap* StaticBuffer;
@@ -99,12 +99,12 @@ class MapView :	public QWidget
 		bool StaticMapUpToDate;
 		bool SelectionLocked;
 		QLabel* lockIcon;
-		QList<MapFeature*> theSnapList;
+		QList<Feature*> theSnapList;
 
 		void viewportRecalc(const QRect& Screen);
 
 		#ifdef GEOIMAGE
-		TrackPoint *dropTarget;
+		Node *dropTarget;
 		#endif
 
 		int numImages;

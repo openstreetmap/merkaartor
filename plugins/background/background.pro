@@ -3,6 +3,11 @@ TEMPLATE = subdirs
 !symbian {
 	SUBDIRS += \
 		MYahooBackground \
-		MYahooTiledBackground \
-		MGdalBackground
+		MYahooTiledBackground
+
+	contains (GDAL, 1) {
+		SUBDIRS += MGdalBackground
+	}
+
 }
+

@@ -12,7 +12,7 @@
 #include "Utils/ShortcutOverrideFilter.h"
 
 class MainWindow;
-class MapFeature;
+class Feature;
 class TagModel;
 class EditCompleterDelegate;
 class TagTemplates;
@@ -28,17 +28,17 @@ class PropertiesDock : public MDockAncestor
 	public:
 		~PropertiesDock(void);
 
-		void setSelection(MapFeature* aFeature);
-		void setMultiSelection(MapFeature* aFeature);
+		void setSelection(Feature* aFeature);
+		void setMultiSelection(Feature* aFeature);
 		template<class T>
 				void setSelection(const QList<T*>& aFeatureList);
-		void setMultiSelection(const QList<MapFeature*>& aFeatureList);
-		void toggleSelection(MapFeature* aFeature);
-		void addSelection(MapFeature* aFeature);
+		void setMultiSelection(const QList<Feature*>& aFeatureList);
+		void toggleSelection(Feature* aFeature);
+		void addSelection(Feature* aFeature);
 		void adjustSelection();
-		MapFeature* selection(int idx);
-		QList<MapFeature*> selection();
-		bool isSelected(MapFeature *aFeature);
+		Feature* selection(int idx);
+		QList<Feature*> selection();
+		bool isSelected(Feature *aFeature);
 		int size() const;
 		void resetValues();
 		void checkMenuStatus();
@@ -46,8 +46,8 @@ class PropertiesDock : public MDockAncestor
 		bool mergeTemplates(const QString& filename = "");
 		bool saveTemplates(const QString& filename);
 
-		MapFeature* highlighted(int idx);
-		QList<MapFeature*> highlighted();
+		Feature* highlighted(int idx);
+		QList<Feature*> highlighted();
 		int highlightedSize() const;
 
 
@@ -83,8 +83,8 @@ class PropertiesDock : public MDockAncestor
 
 		MainWindow* Main;
 		QWidget* CurrentUi;
-		QList<MapFeature*> Selection;
-		QList<MapFeature*> FullSelection;
+		QList<Feature*> Selection;
+		QList<Feature*> FullSelection;
 		Ui::TrackPointProperties TrackPointUi;
 		Ui::RoadProperties RoadUi;
 		Ui::MultiProperties MultiUi;
@@ -98,7 +98,7 @@ class PropertiesDock : public MDockAncestor
 		ShortcutOverrideFilter* shortcutFilter;
 		TagTemplates* theTemplates;
 
-		QList<MapFeature*> Highlighted;
+		QList<Feature*> Highlighted;
 
 		QTableView *CurrentTagView;
 		QTableView *CurrentMembersView;

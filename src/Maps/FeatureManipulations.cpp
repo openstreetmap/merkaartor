@@ -1,13 +1,11 @@
 #include "Maps/FeatureManipulations.h"
-#include "Command/DocumentCommands.h"
-#include "Command/FeatureCommands.h"
-#include "Command/RoadCommands.h"
-#include "Command/RelationCommands.h"
-#include "Command/TrackPointCommands.h"
-#include "Maps/MapDocument.h"
-#include "Maps/Road.h"
-#include "Maps/Relation.h"
-#include "Maps/TrackPoint.h"
+#include "DocumentCommands.h"
+#include "FeatureCommands.h"
+#include "WayCommands.h"
+#include "RelationCommands.h"
+#include "NodeCommands.h"
+#include "Document.h"
+#include "Features.h"
 #include "PropertiesDock.h"
 
 #include <QtCore/QString>
@@ -20,21 +18,21 @@
 #include <ggl/algorithms/intersection.hpp>
 #endif
 
-bool canJoin(Road* R1, Road* R2)
+bool canJoin(Way* R1, Way* R2)
 {
 	if ( (R1->size() == 0) || (R2->size() == 0) )
 		return true;
-	MapFeature* Start1 = R1->get(0);
-	MapFeature* End1 = R1->get(R1->size()-1);
-	MapFeature* Start2 = R2->get(0);
-	MapFeature* End2 = R2->get(R2->size()-1);
+	Feature* Start1 = R1->get(0);
+	Feature* End1 = R1->get(R1->size()-1);
+	Feature* Start2 = R2->get(0);
+	Feature* End2 = R2->get(R2->size()-1);
 	return (Start1 == Start2) ||
 		(Start1 == End2) ||
 		(Start2 == End1) ||
 		(End2 == End1);
 }
 
-bool canBreak(Road* R1, Road* R2)
+bool canBreak(Way* R1, Way* R2)
 {
 	if ( (R1->size() == 0) || (R2->size() == 0) )
 		return false;
@@ -47,9 +45,9 @@ bool canBreak(Road* R1, Road* R2)
 
 bool canJoinRoads(PropertiesDock* theDock)
 {
-	QList<Road*> Input;
+	QList<Way*> Input;
 	for (int i=0; i<theDock->size(); ++i)
-		if (Road* R = dynamic_cast<Road*>(theDock->selection(i)))
+		if (Way* R = dynamic_cast<Way*>(theDock->selection(i)))
 			if (!(R->isClosed()))
 				Input.push_back(R);
 	for (int i=0; i<Input.size(); ++i)
@@ -61,9 +59,9 @@ bool canJoinRoads(PropertiesDock* theDock)
 
 bool canBreakRoads(PropertiesDock* theDock)
 {
-	QList<Road*> Input;
+	QList<Way*> Input;
 	for (int i=0; i<theDock->size(); ++i)
-		if (Road* R = dynamic_cast<Road*>(theDock->selection(i)))
+		if (Way* R = dynamic_cast<Way*>(theDock->selection(i)))
 			Input.push_back(R);
 	for (int i=0; i<Input.size(); ++i)
 		for (int j=i+1; j<Input.size(); ++j)
@@ -74,12 +72,12 @@ bool canBreakRoads(PropertiesDock* theDock)
 
 bool canDetachNodes(PropertiesDock* theDock)
 {
-	QList<Road*> Roads, Result;
-	QList<TrackPoint*> Points;
+	QList<Way*> Roads, Result;
+	QList<Node*> Points;
 	for (int i=0; i<theDock->size(); ++i)
-		if (Road* R = dynamic_cast<Road*>(theDock->selection(i)))
+		if (Way* R = dynamic_cast<Way*>(theDock->selection(i)))
 			Roads.push_back(R);
-		else if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(theDock->selection(i)))
+		else if (Node* Pt = dynamic_cast<Node*>(theDock->selection(i)))
 			Points.push_back(Pt);
 
 	if (Roads.size() > 1 && Points.size() > 1)
@@ -87,7 +85,7 @@ bool canDetachNodes(PropertiesDock* theDock)
 
 	if (Roads.size() == 0 && Points.size()) {
 		for (int i=0; i<Points.size(); ++i) {
-			Road * R = Road::GetSingleParentRoad(Points[i]);
+			Way * R = Way::GetSingleParentRoad(Points[i]);
 			if (R)
 				return true;
 		}
@@ -103,65 +101,65 @@ bool canDetachNodes(PropertiesDock* theDock)
 	return false;
 }
 
-void reversePoints(MapDocument* theDocument, CommandList* theList, Road* R)
+void reversePoints(Document* theDocument, CommandList* theList, Way* R)
 {
-	QList<TrackPoint*> Pts;
+	QList<Node*> Pts;
 	for (int i=R->size(); i; --i)
 	{
-		TrackPoint* Pt = R->getNode(i-1);
+		Node* Pt = R->getNode(i-1);
 		Pts.push_back(Pt);
 	}
 	for (int i=0; i<Pts.size(); ++i)
-		theList->add(new RoadRemoveTrackPointCommand(R,Pts[i],theDocument->getDirtyOrOriginLayer(R->layer())));
+		theList->add(new WayRemoveNodeCommand(R,Pts[i],theDocument->getDirtyOrOriginLayer(R->layer())));
 	for (int i=0; i<Pts.size(); ++i)
-		theList->add(new RoadAddTrackPointCommand(R,Pts[i],theDocument->getDirtyOrOriginLayer(R->layer())));
+		theList->add(new WayAddNodeCommand(R,Pts[i],theDocument->getDirtyOrOriginLayer(R->layer())));
 }
 
-static void appendPoints(MapDocument* theDocument, CommandList* L, Road* Dest, Road* Src)
+static void appendPoints(Document* theDocument, CommandList* L, Way* Dest, Way* Src)
 {
-	L->add(new RoadRemoveTrackPointCommand(Src,(int)0,theDocument->getDirtyOrOriginLayer(Src->layer())));
+	L->add(new WayRemoveNodeCommand(Src,(int)0,theDocument->getDirtyOrOriginLayer(Src->layer())));
 	while (Src->size())
 	{
-		TrackPoint* Pt = Src->getNode(0);
-		L->add(new RoadRemoveTrackPointCommand(Src,(int)0,theDocument->getDirtyOrOriginLayer(Src->layer())));
-		L->add(new RoadAddTrackPointCommand(Dest,Pt,theDocument->getDirtyOrOriginLayer(Src->layer())));
+		Node* Pt = Src->getNode(0);
+		L->add(new WayRemoveNodeCommand(Src,(int)0,theDocument->getDirtyOrOriginLayer(Src->layer())));
+		L->add(new WayAddNodeCommand(Dest,Pt,theDocument->getDirtyOrOriginLayer(Src->layer())));
 	}
 }
 
-static Road* join(MapDocument* theDocument, CommandList* L, Road* R1, Road* R2)
+static Way* join(Document* theDocument, CommandList* L, Way* R1, Way* R2)
 {
-	QList<MapFeature*> Alternatives;
+	QList<Feature*> Alternatives;
 	if (R1->size() == 0)
 	{
-		MapFeature::mergeTags(theDocument,L,R2,R1);
+		Feature::mergeTags(theDocument,L,R2,R1);
 		L->add(new RemoveFeatureCommand(theDocument,R1,Alternatives));
 		return R2;
 	}
 	if (R2->size() == 0)
 	{
-		MapFeature::mergeTags(theDocument,L,R1,R2);
+		Feature::mergeTags(theDocument,L,R1,R2);
 		L->add(new RemoveFeatureCommand(theDocument,R2,Alternatives));
 		return R1;
 	}
-	MapFeature* Start1 = R1->get(0);
-	MapFeature* End1 = R1->get(R1->size()-1);
-	MapFeature* Start2 = R2->get(0);
-	MapFeature* End2 = R2->get(R2->size()-1);
+	Feature* Start1 = R1->get(0);
+	Feature* End1 = R1->get(R1->size()-1);
+	Feature* Start2 = R2->get(0);
+	Feature* End2 = R2->get(R2->size()-1);
 	if ( (Start1 == Start2) || (Start1 == End2) )
 		reversePoints(theDocument,L,R1);
 	if ( (End1 == End2) || (Start1 == End2) )
 		reversePoints(theDocument,L,R2);
 	appendPoints(theDocument,L,R1,R2);
-	MapFeature::mergeTags(theDocument,L,R1,R2);
+	Feature::mergeTags(theDocument,L,R1,R2);
 	L->add(new RemoveFeatureCommand(theDocument,R2,Alternatives));
 	return R1;
 }
 
-void joinRoads(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)
+void joinRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
-	QList<Road*> Input;
+	QList<Way*> Input;
 	for (int i=0; i<theDock->size(); ++i)
-		if (Road* R = dynamic_cast<Road*>(theDock->selection(i)))
+		if (Way* R = dynamic_cast<Way*>(theDock->selection(i)))
 			if (!(R->area() > 0.0))
 				Input.push_back(R);
 	while (Input.size() > 1)
@@ -171,7 +169,7 @@ void joinRoads(MapDocument* theDocument, CommandList* theList, PropertiesDock* t
 			for (int j=i+1; j<Input.size(); ++j)
 				if (canJoin(Input[i],Input[j]))
 				{
-					Road* R = join(theDocument, theList,Input[i],Input[j]);
+					Way* R = join(theDocument, theList,Input[i],Input[j]);
 					Input.erase(Input.begin()+j);
 					Input[i] = R;
 					i=j=Input.size();
@@ -183,12 +181,12 @@ void joinRoads(MapDocument* theDocument, CommandList* theList, PropertiesDock* t
 	theDock->setSelection(Input);
 }
 
-static void splitRoad(MapDocument* theDocument, CommandList* theList, Road* In, const QList<TrackPoint*>& Points, QList<Road*>& Result)
+static void splitRoad(Document* theDocument, CommandList* theList, Way* In, const QList<Node*>& Points, QList<Way*>& Result)
 {
 	int pos;
 	if (In->isClosed()) {  // Special case: If area, rotate the area so that the start node is the first point of splitting
 
-		QList<TrackPoint*> Target;
+		QList<Node*> Target;
 		for (int i=0; i < Points.size(); i++)
 			if ((pos = In->find(Points[i])) != In->size()) {
 				for (int j=pos+1; j<In->size(); ++j)
@@ -200,9 +198,9 @@ static void splitRoad(MapDocument* theDocument, CommandList* theList, Road* In, 
 		if (pos == In->size())
 			return;
 
-		if (Points.size() == 1) // Special case: For a 1 point area splitting, de-close the road, i.e. duplicate the selected node 
+		if (Points.size() == 1) // Special case: For a 1 point area splitting, de-close the road, i.e. duplicate the selected node
 		{
-			TrackPoint* N = new TrackPoint(*(In->getNode(pos)));
+			Node* N = new Node(*(In->getNode(pos)));
 			theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(In->layer()),N,true));
 
 			Target.prepend(N);
@@ -211,10 +209,10 @@ static void splitRoad(MapDocument* theDocument, CommandList* theList, Road* In, 
 
 		// Now, reconstruct the road/area
 		while (In->size())
-			theList->add(new RoadRemoveTrackPointCommand(In,(int)0,theDocument->getDirtyOrOriginLayer(In->layer())));
+			theList->add(new WayRemoveNodeCommand(In,(int)0,theDocument->getDirtyOrOriginLayer(In->layer())));
 
 		for (int i=0; i<Target.size(); ++i)
-			theList->add(new RoadAddTrackPointCommand(In,Target[i],theDocument->getDirtyOrOriginLayer(In->layer())));
+			theList->add(new WayAddNodeCommand(In,Target[i],theDocument->getDirtyOrOriginLayer(In->layer())));
 
 		if (Points.size() == 1) {  // For 1-point, we are done
 			Result.push_back(In);
@@ -222,24 +220,24 @@ static void splitRoad(MapDocument* theDocument, CommandList* theList, Road* In, 
 		}
 	}
 
-	Road* FirstPart = In;
+	Way* FirstPart = In;
 	Result.push_back(FirstPart);
 	for (int i=1; (i+1)<FirstPart->size(); ++i)
 	{
 		if (std::find(Points.begin(),Points.end(),FirstPart->get(i)) != Points.end())
 		{
-			Road* NextPart = new Road;
+			Way* NextPart = new Way;
 			copyTags(NextPart,FirstPart);
 			theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(In->layer()),NextPart,true));
-			theList->add(new RoadAddTrackPointCommand(NextPart, FirstPart->getNode(i), theDocument->getDirtyOrOriginLayer(In->layer())));
-            for (int j=0; j < In->sizeParents(); j++) {
+			theList->add(new WayAddNodeCommand(NextPart, FirstPart->getNode(i), theDocument->getDirtyOrOriginLayer(In->layer())));
+			for (int j=0; j < In->sizeParents(); j++) {
 				Relation* L = CAST_RELATION(In->getParent(j));
 				theList->add(new RelationAddFeatureCommand(L, L->getRole(L->find(In)), NextPart, theDocument->getDirtyOrOriginLayer(In->layer())));
-            }
+			}
 			while ( (i+1) < FirstPart->size() )
 			{
-				theList->add(new RoadAddTrackPointCommand(NextPart, FirstPart->getNode(i+1), theDocument->getDirtyOrOriginLayer(In->layer())));
-				theList->add(new RoadRemoveTrackPointCommand(FirstPart,i+1,theDocument->getDirtyOrOriginLayer(In->layer())));
+				theList->add(new WayAddNodeCommand(NextPart, FirstPart->getNode(i+1), theDocument->getDirtyOrOriginLayer(In->layer())));
+				theList->add(new WayRemoveNodeCommand(FirstPart,i+1,theDocument->getDirtyOrOriginLayer(In->layer())));
 			}
 			Result.push_back(NextPart);
 			FirstPart = NextPart;
@@ -248,19 +246,19 @@ static void splitRoad(MapDocument* theDocument, CommandList* theList, Road* In, 
 	}
 }
 
-void splitRoads(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)
+void splitRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
-	QList<Road*> Roads, Result;
-	QList<TrackPoint*> Points;
+	QList<Way*> Roads, Result;
+	QList<Node*> Points;
 	for (int i=0; i<theDock->size(); ++i)
-		if (Road* R = dynamic_cast<Road*>(theDock->selection(i)))
+		if (Way* R = dynamic_cast<Way*>(theDock->selection(i)))
 			Roads.push_back(R);
-		else if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(theDock->selection(i)))
+		else if (Node* Pt = dynamic_cast<Node*>(theDock->selection(i)))
 			Points.push_back(Pt);
 
 	if (Roads.size() == 0 && Points.size() == 1)
 	{
-		Road * R = Road::GetSingleParentRoadInner(Points[0]);
+		Way * R = Way::GetSingleParentRoadInner(Points[0]);
 		if (R)
 			Roads.push_back(R);
 	}
@@ -270,35 +268,35 @@ void splitRoads(MapDocument* theDocument, CommandList* theList, PropertiesDock* 
 	theDock->setSelection(Result);
 }
 
-static void breakRoad(MapDocument* theDocument, CommandList* theList, Road* R, TrackPoint* Pt)
+static void breakRoad(Document* theDocument, CommandList* theList, Way* R, Node* Pt)
 {
 	for (int i=0; i<R->size(); ++i)
 		if (R->get(i) == Pt)
 		{
-			TrackPoint* New = new TrackPoint(*Pt);
+			Node* New = new Node(*Pt);
 			copyTags(New,Pt);
 			theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(R->layer()),New,true));
-			theList->add(new RoadRemoveTrackPointCommand(R,i,theDocument->getDirtyOrOriginLayer(R->layer())));
-			theList->add(new RoadAddTrackPointCommand(R,New,i,theDocument->getDirtyOrOriginLayer(R->layer())));
+			theList->add(new WayRemoveNodeCommand(R,i,theDocument->getDirtyOrOriginLayer(R->layer())));
+			theList->add(new WayAddNodeCommand(R,New,i,theDocument->getDirtyOrOriginLayer(R->layer())));
 		}
 		if (!Pt->sizeParents())
 			theList->add(new RemoveFeatureCommand(theDocument,Pt));
 }
 
-void breakRoads(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)
+void breakRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
-	QList<Road*> Roads, Result;
-	QList<TrackPoint*> Points;
+	QList<Way*> Roads, Result;
+	QList<Node*> Points;
 	for (int i=0; i<theDock->size(); ++i)
-		if (Road* R = dynamic_cast<Road*>(theDock->selection(i)))
+		if (Way* R = dynamic_cast<Way*>(theDock->selection(i)))
 			Roads.push_back(R);
-		else if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(theDock->selection(i)))
+		else if (Node* Pt = dynamic_cast<Node*>(theDock->selection(i)))
 			Points.push_back(Pt);
 
 	if (Roads.size() == 0 && Points.size() == 1)
 	{
 		for (int i=0; i<Points[0]->sizeParents() ; ++i) {
-			Road * R = dynamic_cast<Road*>(Points[0]->getParent(i));
+			Way * R = dynamic_cast<Way*>(Points[0]->getParent(i));
 			if (R)
 				Roads.push_back(R);
 		}
@@ -312,12 +310,12 @@ void breakRoads(MapDocument* theDocument, CommandList* theList, PropertiesDock* 
 		} else {
 			Roads = Result;
 		}
-	} 
+	}
 
 	for (int i=0; i<Roads.size(); ++i)
 		for (int j=0; j<Roads[i]->size(); ++j)
 			for (int k=i+1; k<Roads.size(); ++k)
-				breakRoad(theDocument, theList, Roads[k],dynamic_cast<TrackPoint*>(Roads[i]->get(j)));
+				breakRoad(theDocument, theList, Roads[k],dynamic_cast<Node*>(Roads[i]->get(j)));
 }
 
 bool canCreateJunction(PropertiesDock* theDock)
@@ -325,28 +323,28 @@ bool canCreateJunction(PropertiesDock* theDock)
 	return createJunction(NULL, NULL, theDock, false);
 }
 
-int createJunction(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock, bool doIt)
+int createJunction(Document* theDocument, CommandList* theList, PropertiesDock* theDock, bool doIt)
 {
 	int numInter = 0;
 
 	//TODO test that the junction do not already exists!
 	typedef ggl::point_2d P;
 
-	QList<Road*> Roads, Result;
+	QList<Way*> Roads, Result;
 	for (int i=0; i<theDock->size(); ++i)
-		if (Road* R = dynamic_cast<Road*>(theDock->selection(i)))
+		if (Way* R = dynamic_cast<Way*>(theDock->selection(i)))
 			Roads.push_back(R);
 
 	if (Roads.size() < 2)
 		return 0;
 
-	Road* R1 = Roads[0];
-	Road* R2 = Roads[1];
+	Way* R1 = Roads[0];
+	Way* R2 = Roads[1];
 
 	for (int i=0; i<R1->size()-1; ++i) {
 		P a(R1->getNode(i)->position().lon(), R1->getNode(i)->position().lat());
 		P b(R1->getNode(i+1)->position().lon(), R1->getNode(i+1)->position().lat());
-        ggl::segment<P> s1(a, b);
+		ggl::segment<P> s1(a, b);
 
 		for (int j=0; j<R2->size()-1; ++j) {
 			P c(R2->getNode(j)->position().lon(), R2->getNode(j)->position().lat());
@@ -361,10 +359,10 @@ int createJunction(MapDocument* theDocument, CommandList* theList, PropertiesDoc
 			if (intersected.size()) {
 				numInter++;
 				if (doIt) {
-					TrackPoint* pt = new TrackPoint(Coord(qRound(intersected[0].y()), qRound(intersected[0].x())));
+					Node* pt = new Node(Coord(qRound(intersected[0].y()), qRound(intersected[0].x())));
 					theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(R1->layer()),pt,true));
-					theList->add(new RoadAddTrackPointCommand(R1,pt,i+1,theDocument->getDirtyOrOriginLayer(R1->layer())));
-					theList->add(new RoadAddTrackPointCommand(R2,pt,j+1,theDocument->getDirtyOrOriginLayer(R2->layer())));
+					theList->add(new WayAddNodeCommand(R1,pt,i+1,theDocument->getDirtyOrOriginLayer(R1->layer())));
+					theList->add(new WayAddNodeCommand(R2,pt,j+1,theDocument->getDirtyOrOriginLayer(R2->layer())));
 				}
 				++i; ++j;
 			}
@@ -405,13 +403,13 @@ int createJunction(MapDocument* theDocument, CommandList* theList, PropertiesDoc
 #define STREET_NUMBERS_LENGTH 1500.0
 #define STREET_NUMBERS_ANGLE 30.0
 
-void createStreetNumbers(MapDocument* theDocument, CommandList* theList, Road* theRoad, bool Left)
+void createStreetNumbers(Document* theDocument, CommandList* theList, Way* theRoad, bool Left)
 {
 	QString streetName = theRoad->tagValue("name", "");
 	QLineF l, l2, nv;
 
-	TrackPoint* N;
-	Road* R = new Road;
+	Node* N;
+	Way* R = new Way;
 	theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),R,true));
 	theList->add(new SetTagCommand(R, "addr:interpolation", ""));
 	theList->add(new SetTagCommand(R, "addr:street", streetName));
@@ -423,7 +421,7 @@ void createStreetNumbers(MapDocument* theDocument, CommandList* theList, Road* t
 			l = l2;
 			l.setAngle(l2.angle() + 180.);
 			prevPoint = l.p2();
-		} else 
+		} else
 		if (j == theRoad->size()-1) {
 			l = QLineF(theRoad->getNode(j)->position().toPointF(), theRoad->getNode(j-1)->position().toPointF());
 			l2 = l;
@@ -448,7 +446,7 @@ void createStreetNumbers(MapDocument* theDocument, CommandList* theList, Road* t
 
 		bool intersectedTo = false;
 		for (int k=0; k < theRoad->getNode(j)->sizeParents(); ++k) {
-			Road* I = CAST_WAY(theRoad->getNode(j)->getParent(k));
+			Way* I = CAST_WAY(theRoad->getNode(j)->getParent(k));
 			if (!I || I == theRoad)
 				continue;
 
@@ -471,7 +469,7 @@ void createStreetNumbers(MapDocument* theDocument, CommandList* theList, Road* t
 
 			bool intersectedFrom = false;
 			for (int k=0; k < theRoad->getNode(j-1)->sizeParents(); ++k) {
-				Road* I = CAST_WAY(theRoad->getNode(j-1)->getParent(k));
+				Way* I = CAST_WAY(theRoad->getNode(j-1)->getParent(k));
 				if (!I || I == theRoad)
 					continue;
 
@@ -490,14 +488,14 @@ void createStreetNumbers(MapDocument* theDocument, CommandList* theList, Road* t
 				lfrom.setLength(lfrom.length() - STREET_NUMBERS_LENGTH);
 				pfrom = lfrom.p2();
 
-				R = new Road;
+				R = new Way;
 				theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),R,true));
 				theList->add(new SetTagCommand(R, "addr:interpolation", ""));
 				theList->add(new SetTagCommand(R, "addr:street", streetName));
 
-				N = new TrackPoint(Coord(pfrom));
+				N = new Node(Coord(pfrom));
 				theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),N,true));
-				theList->add(new RoadAddTrackPointCommand(R, N, theDocument->getDirtyOrOriginLayer(R->layer())));
+				theList->add(new WayAddNodeCommand(R, N, theDocument->getDirtyOrOriginLayer(R->layer())));
 				theList->add(new SetTagCommand(N, "addr:housenumber", ""));
 			} else {
 				pfrom = prevPoint;
@@ -509,16 +507,16 @@ void createStreetNumbers(MapDocument* theDocument, CommandList* theList, Road* t
 				lto.setLength(lto.length() - STREET_NUMBERS_LENGTH);
 				pto = lto.p2();
 
-				N = new TrackPoint(Coord(pto));
+				N = new Node(Coord(pto));
 				theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),N,true));
-				theList->add(new RoadAddTrackPointCommand(R, N, theDocument->getDirtyOrOriginLayer(R->layer())));
+				theList->add(new WayAddNodeCommand(R, N, theDocument->getDirtyOrOriginLayer(R->layer())));
 				theList->add(new SetTagCommand(N, "addr:housenumber", ""));
 			}
 		} else {
 			if (theAngle < 85. || theAngle > 95. || j== 0 || j == theRoad->size()-1) {
-				N = new TrackPoint(Coord(nv.p2()));
+				N = new Node(Coord(nv.p2()));
 				theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),N,true));
-				theList->add(new RoadAddTrackPointCommand(R, N, theDocument->getDirtyOrOriginLayer(R->layer())));
+				theList->add(new WayAddNodeCommand(R, N, theDocument->getDirtyOrOriginLayer(R->layer())));
 				theList->add(new SetTagCommand(N, "addr:housenumber", ""));
 			}
 
@@ -528,17 +526,17 @@ void createStreetNumbers(MapDocument* theDocument, CommandList* theList, Road* t
 	}
 }
 
-void addStreetNumbers(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)
+void addStreetNumbers(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
-	QList<Road*> Roads;
+	QList<Way*> Roads;
 	for (int i=0; i<theDock->size(); ++i)
-		if (Road* R = CAST_WAY(theDock->selection(i)))
+		if (Way* R = CAST_WAY(theDock->selection(i)))
 			Roads.push_back(R);
 
 	if (Roads.isEmpty())
 		return;
 
-	QList<Road*>::const_iterator it = Roads.constBegin();
+	QList<Way*>::const_iterator it = Roads.constBegin();
 	for (;it != Roads.constEnd(); ++it) {
 		if((*it)->size() < 2)
 			continue;
@@ -551,15 +549,15 @@ void addStreetNumbers(MapDocument* theDocument, CommandList* theList, Properties
 		theList->setFeature(Roads.at(0));
 }
 
-void alignNodes(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)
+void alignNodes(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
 	if (theDock->size() < 3) //thre must be at least 3 nodes to align something
 		return;
-	
+
 	//We build a list of selected nodes
-	QList<TrackPoint*> Nodes;
+	QList<Node*> Nodes;
 	for (int i=0; i<theDock->size(); ++i)
-		if (TrackPoint* N = dynamic_cast<TrackPoint*>(theDock->selection(i)))
+		if (Node* N = dynamic_cast<Node*>(theDock->selection(i)))
 			Nodes.push_back(N);
 
 	//we check that we have at least 3 nodes and the first two can give a line
@@ -579,35 +577,35 @@ void alignNodes(MapDocument* theDocument, CommandList* theList, PropertiesDock* 
 		pos.setLat(0);
 		rotate(pos,slope);
 		pos=pos+p1;
-		theList->add(new MoveTrackPointCommand( Nodes[i], pos, theDocument->getDirtyOrOriginLayer(Nodes[i]->layer()) ));
+		theList->add(new MoveNodeCommand( Nodes[i], pos, theDocument->getDirtyOrOriginLayer(Nodes[i]->layer()) ));
 	}
 }
 
-void mergeNodes(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)
+void mergeNodes(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
 	if (theDock->size() <= 1)
 		return;
-	QList<TrackPoint*> Nodes;
-	QList<MapFeature*> alt;
+	QList<Node*> Nodes;
+	QList<Feature*> alt;
 	for (int i=0; i<theDock->size(); ++i)
-		if (TrackPoint* N = dynamic_cast<TrackPoint*>(theDock->selection(i)))
+		if (Node* N = dynamic_cast<Node*>(theDock->selection(i)))
 			Nodes.push_back(N);
-	TrackPoint* merged = Nodes[0];
+	Node* merged = Nodes[0];
 	alt.push_back(merged);
 	for (int i=1; i<Nodes.size(); ++i) {
-		MapFeature::mergeTags(theDocument, theList, merged, Nodes[i]);
+		Feature::mergeTags(theDocument, theList, merged, Nodes[i]);
 		theList->add(new RemoveFeatureCommand(theDocument, Nodes[i], alt));
 	}
 }
 
-void detachNode(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)
+void detachNode(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
-	QList<Road*> Roads, Result;
-	QList<TrackPoint*> Points;
+	QList<Way*> Roads, Result;
+	QList<Node*> Points;
 	for (int i=0; i<theDock->size(); ++i)
-		if (Road* R = dynamic_cast<Road*>(theDock->selection(i)))
+		if (Way* R = dynamic_cast<Way*>(theDock->selection(i)))
 			Roads.push_back(R);
-		else if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(theDock->selection(i)))
+		else if (Node* Pt = dynamic_cast<Node*>(theDock->selection(i)))
 			Points.push_back(Pt);
 
 	if (Roads.size() > 1 && Points.size() > 1)
@@ -616,9 +614,9 @@ void detachNode(MapDocument* theDocument, CommandList* theList, PropertiesDock* 
 	if (Roads.size() == 0 && Points.size())
 	{
 		for (int i=0; i<Points.size(); ++i) {
-			Road * R = Road::GetSingleParentRoad(Points[i]);
+			Way * R = Way::GetSingleParentRoad(Points[i]);
 			if (R)
-				theList->add(new RoadRemoveTrackPointCommand(R, Points[i],
+				theList->add(new WayRemoveNodeCommand(R, Points[i],
 					theDocument->getDirtyOrOriginLayer(R)));
 		}
 	}
@@ -627,7 +625,7 @@ void detachNode(MapDocument* theDocument, CommandList* theList, PropertiesDock* 
 	{
 		for (int i=0; i<Roads.size(); ++i) {
 			if (Roads[i]->find(Points[0]) < Roads[i]->size())
-				theList->add(new RoadRemoveTrackPointCommand(Roads[i], Points[0],
+				theList->add(new WayRemoveNodeCommand(Roads[i], Points[0],
 					theDocument->getDirtyOrOriginLayer(Roads[i])));
 		}
 	}
@@ -636,25 +634,25 @@ void detachNode(MapDocument* theDocument, CommandList* theList, PropertiesDock* 
 	{
 		for (int i=0; i<Points.size(); ++i) {
 			if (Roads[0]->find(Points[i]) < Roads[0]->size())
-				theList->add(new RoadRemoveTrackPointCommand(Roads[0], Points[i],
+				theList->add(new WayRemoveNodeCommand(Roads[0], Points[i],
 					theDocument->getDirtyOrOriginLayer(Roads[0])));
 		}
 	}
 }
 
-void commitFeatures(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)
+void commitFeatures(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
-	QList<MapFeature*> alt;
-	QList<MapFeature*> Features;
+	QList<Feature*> alt;
+	QList<Feature*> Features;
 
 	for (int i=0; i<theDock->size(); ++i)
 		if (!theDock->selection(i)->isDirty())
 			Features.push_back(theDock->selection(i));
 	for (int i=0; i<Features.size(); ++i) {
-		if (TrackPoint* N = dynamic_cast<TrackPoint *>(Features[i])) {
+		if (Node* N = dynamic_cast<Node *>(Features[i])) {
 			theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),N,true));
 		}
-		if (Road* R = dynamic_cast<Road *>(Features[i])) {
+		if (Way* R = dynamic_cast<Way *>(Features[i])) {
 			theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),R,true));
 			for (int j=0; j < R->size(); ++j) {
 				if (!Features.contains(R->get(j))) {
@@ -665,41 +663,41 @@ void commitFeatures(MapDocument* theDocument, CommandList* theList, PropertiesDo
 	}
 }
 
-void addRelationMember(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)
+void addRelationMember(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
 	Relation* theRelation = NULL;
-	QList<MapFeature*> Features;
+	QList<Feature*> Features;
 	for (int i=0; i<theDock->size(); ++i)
 		if ((theDock->selection(i)->getClass() == "Relation") && !theRelation)
 			theRelation = dynamic_cast<Relation*>(theDock->selection(i));
-		else 
+		else
 			Features.push_back(theDock->selection(i));
 
 	if (!(theRelation && Features.size())) return;
 
 	for (int i=0; i<Features.size(); ++i) {
-		theList->add(new RelationAddFeatureCommand(theRelation, "", Features[i], theDocument->getDirtyOrOriginLayer(theRelation->layer()))); 
+		theList->add(new RelationAddFeatureCommand(theRelation, "", Features[i], theDocument->getDirtyOrOriginLayer(theRelation->layer())));
 	}
 }
 
-void removeRelationMember(MapDocument* theDocument, CommandList* theList, PropertiesDock* theDock)
+void removeRelationMember(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
 	Relation* theRelation = NULL;
-	QList<MapFeature*> Features;
+	QList<Feature*> Features;
 	for (int i=0; i<theDock->size(); ++i)
 		if ((theDock->selection(i)->getClass() == "Relation") && !theRelation)
 			theRelation = dynamic_cast<Relation*>(theDock->selection(i));
-		else 
+		else
 			Features.push_back(theDock->selection(i));
 
 	if (!theRelation && Features.size() == 1)
-		theRelation = MapFeature::GetSingleParentRelation(Features[0]);
+		theRelation = Feature::GetSingleParentRelation(Features[0]);
 	if (!(theRelation && Features.size())) return;
 
 	int idx;
 	for (int i=0; i<Features.size(); ++i) {
 		if ((idx = theRelation->find(Features[i])) != theRelation->size())
-			theList->add(new RelationRemoveFeatureCommand(theRelation, idx, theDocument->getDirtyOrOriginLayer(theRelation->layer()))); 
+			theList->add(new RelationRemoveFeatureCommand(theRelation, idx, theDocument->getDirtyOrOriginLayer(theRelation->layer())));
 	}
 }
 

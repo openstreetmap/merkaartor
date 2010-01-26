@@ -3,18 +3,18 @@
 #include "MapView.h"
 #include "MainWindow.h"
 #include "PropertiesDock.h"
-#include "Maps/MapDocument.h"
-#include "Maps/MapLayer.h"
-#include "Maps/ImageMapLayer.h"
-#include "Maps/MapFeature.h"
-#include "Maps/Relation.h"
-#include "Interaction/Interaction.h"
-#include "Interaction/EditInteraction.h"
+#include "Document.h"
+#include "Layer.h"
+#include "ImageMapLayer.h"
+#include "Feature.h"
+#include "Relation.h"
+#include "Interaction.h"
+#include "EditInteraction.h"
 #include "PaintStyle/EditPaintStyle.h"
 #include "Maps/Projection.h"
 #include "GPS/qgps.h"
 #include "GPS/qgpsdevice.h"
-#include "Maps/LayerIterator.h"
+#include "LayerIterator.h"
 
 #ifdef GEOIMAGE
 #include "GeoImageDock.h"
@@ -48,9 +48,9 @@ public:
 	CoordBox Viewport;
 	QList<CoordBox> invalidRects;
 	QPoint theRasterPanDelta, theVectorPanDelta;
-	QMap<RenderPriority, QSet <MapFeature*> > theFeatures;
-	QSet<Road*> theCoastlines;
-	QList<TrackPoint*> theVirtualNodes;
+	QMap<RenderPriority, QSet <Feature*> > theFeatures;
+	QSet<Way*> theCoastlines;
+	QList<Node*> theVirtualNodes;
 
 	MapViewPrivate()
 	  : PixelPerM(0.0), Viewport(WORLD_COORDBOX)
@@ -107,7 +107,7 @@ PropertiesDock *MapView::properties()
 //	return Main->info();
 //}
 
-void MapView::setDocument(MapDocument* aDoc)
+void MapView::setDocument(Document* aDoc)
 {
 	theDocument = aDoc;
 	connect(aDoc, SIGNAL(imageRequested(ImageMapLayer*)),
@@ -120,7 +120,7 @@ void MapView::setDocument(MapDocument* aDoc)
 	setViewport(viewport(), rect());
 }
 
-MapDocument *MapView::document()
+Document *MapView::document()
 {
 	return theDocument;
 }
@@ -328,7 +328,7 @@ void MapView::buildFeatureSet()
 				if (p->theFeatures[(*it)->renderPriority()].contains(*it))
 					continue;
 
-				if (Road * R = CAST_WAY(*it)) {
+				if (Way * R = CAST_WAY(*it)) {
 					R->buildPath(theProjection, p->theTransform, clipRect);
 					p->theFeatures[(*it)->renderPriority()].insert(*it);
 
@@ -339,7 +339,7 @@ void MapView::buildFeatureSet()
 					RR->buildPath(theProjection, p->theTransform, clipRect);
 					p->theFeatures[(*it)->renderPriority()].insert(*it);
 				} else
-				if (TrackPoint * pt = CAST_NODE(*it)) {
+				if (Node * pt = CAST_NODE(*it)) {
 					if (theDocument->getLayer(j)->arePointsDrawable())
 						p->theFeatures[(*it)->renderPriority()].insert(*it);
 				} else
@@ -421,7 +421,7 @@ void MapView::drawBackground(QPainter & theP, Projection& /*aProj*/)
 	}
 
 	QList<QPainterPath*> theCoasts;
-	QSet<Road*>::const_iterator it = p->theCoastlines.constBegin();
+	QSet<Way*>::const_iterator it = p->theCoastlines.constBegin();
 	for (;it != p->theCoastlines.constEnd(); ++it) {
 		if ((*it)->getPath().elementCount() < 2) continue;
 
@@ -654,8 +654,8 @@ void MapView::drawFeatures(QPainter & P, Projection& /*aProj*/)
 {
 	M_STYLE->initialize(P, *this);
 
-	QMap<RenderPriority, QSet<MapFeature*> >::const_iterator itm;
-	QSet<MapFeature*>::const_iterator it;
+	QMap<RenderPriority, QSet<Feature*> >::const_iterator itm;
+	QSet<Feature*>::const_iterator it;
 
 	for (int i = 0; i < M_STYLE->size(); ++i)
 	{
@@ -669,9 +669,9 @@ void MapView::drawFeatures(QPainter & P, Projection& /*aProj*/)
 			for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it)
 			{
 				P.setOpacity((*it)->layer()->getAlpha());
-				if (Road * R = dynamic_cast < Road * >(*it))
+				if (Way * R = dynamic_cast < Way * >(*it))
 					Current->draw(R);
-				else if (TrackPoint * Pt = dynamic_cast < TrackPoint * >(*it))
+				else if (Node * Pt = dynamic_cast < Node * >(*it))
 					Current->draw(Pt);
 				else if (Relation * RR = dynamic_cast < Relation * >(*it))
 					Current->draw(RR);
@@ -869,7 +869,7 @@ QPoint MapView::toView(const Coord& aCoord) const
 	return p->theTransform.map(theProjection.project(aCoord)).toPoint();
 }
 
-QPoint MapView::toView(TrackPoint* aPt) const
+QPoint MapView::toView(Node* aPt) const
 {
 	return p->theTransform.map(theProjection.project(aPt)).toPoint();
 }
@@ -996,9 +996,9 @@ void MapView::dragMoveEvent(QDragMoveEvent *event)
 		QMouseEvent mE(QEvent::MouseMove, event->pos(), Qt::LeftButton, Qt::LeftButton, qApp->keyboardModifiers());
 		mouseMoveEvent(&mE);
 	}
-	TrackPoint *tP;
+	Node *tP;
 	for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it) {
-		if ((tP = qobject_cast<TrackPoint*>(it.get())) && tP->pixelDistance(event->pos(), 5.01, projection(), p->theTransform) < 5.01) {
+		if ((tP = qobject_cast<Node*>(it.get())) && tP->pixelDistance(event->pos(), 5.01, projection(), p->theTransform) < 5.01) {
 			dropTarget = tP;
 			QRect acceptedRect(tP->projection().toPoint() - QPoint(3, 3), tP->projection().toPoint() + QPoint(3, 3));
 			event->acceptProposedAction();

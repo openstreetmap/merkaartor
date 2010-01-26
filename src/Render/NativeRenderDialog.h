@@ -19,7 +19,7 @@
 
 #include <ui_NativeRenderDialog.h>
 
-class MapDocument;
+class Document;
 class MapView;
 class CoordBox;
 
@@ -28,7 +28,7 @@ class NativeRenderDialog: public QDialog , public Ui::NativeRenderDialog
 	Q_OBJECT
 
 public:
-    NativeRenderDialog(MapDocument *aDoc, const CoordBox& aCoordBox, QWidget *parent = 0);
+    NativeRenderDialog(Document *aDoc, const CoordBox& aCoordBox, QWidget *parent = 0);
 	void render();
 
 public slots:
@@ -44,7 +44,7 @@ protected:
 	void calcRatio();
 
 private:
-	MapDocument* theDoc;
+	Document* theDoc;
 	QSettings*	Sets;
 	double		ratio;
 

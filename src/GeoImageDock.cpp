@@ -1,8 +1,8 @@
 #include "GeoImageDock.h"
 
-#include "Maps/TrackPoint.h"
-#include "Maps/MapLayer.h"
-#include "Command/DocumentCommands.h"
+#include "Node.h"
+#include "Layer.h"
+#include "DocumentCommands.h"
 #include "LayerWidget.h"
 #include "PropertiesDock.h"
 
@@ -50,7 +50,7 @@ GeoImageDock::~GeoImageDock(void)
 	delete widget();
 }
 
-void GeoImageDock::setImage(TrackPoint *Pt)
+void GeoImageDock::setImage(Node *Pt)
 {
 	if (curImage != -1) // save last imageId to start iteration there again
 		lastImage = curImage;
@@ -118,7 +118,7 @@ void GeoImageDock::removeImages(void)
 	int i;
 
 	for (i = 0; i < usedTrackPoints.size(); i++) {
-		TrackPoint *Pt = dynamic_cast<TrackPoint*>(Main->document()->getFeature(usedTrackPoints.at(i).id));
+		Node *Pt = dynamic_cast<Node*>(Main->document()->getFeature(usedTrackPoints.at(i).id));
 		if (!Pt) {
 			qWarning("This should not happen. See %s::%d!", __FILE__, __LINE__);
 			continue;
@@ -173,7 +173,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
 	QDateTime time;
 	int offset = -1, timeQuestion = 0, noMatchQuestion = 0;
 
-	MapDocument *theDocument = Main->document();
+	Document *theDocument = Main->document();
 	MapView *theView = Main->view();
 
 	Exiv2::Image::AutoPtr image;
@@ -181,23 +181,23 @@ void GeoImageDock::loadImages(QStringList fileNames)
 	double lat = 0.0, lon = 0.0;
 	bool positionValid = FALSE;
 
-	MapLayer *theLayer;
+	Layer *theLayer;
 	{ // retrieve the target layer from the user
 		QStringList layers;
 		QList<int> layerId;
 		int i;
-		MapLayer *layer;
-		MapLayer *singleLayer = NULL;
-		MapLayer *singleTrackLayer = NULL;
+		Layer *layer;
+		Layer *singleLayer = NULL;
+		Layer *singleTrackLayer = NULL;
 		int trackLayersCount = 0;
 		for (i=0;i<theDocument->layerSize();i++) {
 			layer = theDocument->getLayer(i);
-			if (layer->classType() == MapLayer::TrackMapLayerType) {
+			if (layer->classType() == Layer::TrackLayerType) {
 				trackLayersCount++;
 				if (!singleTrackLayer)
 					singleTrackLayer = layer;
 			}
-			if (layer->classType() == MapLayer::TrackMapLayerType || layer->classType() == MapLayer::DrawingMapLayerType) {
+			if (layer->classType() == Layer::TrackLayerType || layer->classType() == Layer::DrawingLayerType) {
 				if (!singleLayer)
 					singleLayer = layer;
 				layers.append(theDocument->getLayer(i)->name());
@@ -299,18 +299,18 @@ void GeoImageDock::loadImages(QStringList fileNames)
 
 		if (positionValid) {
 			Coord newPos(angToInt(lat), angToInt(lon));
-			TrackPoint *Pt;
+			Node *Pt;
 			int i = 0;
 			for (; i<theLayer->size(); ++i) // use existing TrackPoint if there is one in small distance
 				if ((Pt = CAST_NODE(theLayer->get(i))) &&
 				 Pt->position().distanceFrom(newPos) <= .002)
 					break;
 			if (i == theLayer->size())
-				Pt = new TrackPoint(newPos);
+				Pt = new Node(newPos);
 
 			//Pt->setTag("_waypoint_", "true");
 			Pt->setTag("Picture", "GeoTagged");
-			usedTrackPoints << TrackPointData(Pt->id(), file, time, i == theLayer->size());
+			usedTrackPoints << NodeData(Pt->id(), file, time, i == theLayer->size());
 			if (i == theLayer->size()) {
 				theLayer->add(Pt);
 				theLayer->indexAdd(Pt->boundingBox(), Pt);
@@ -364,14 +364,14 @@ void GeoImageDock::loadImages(QStringList fileNames)
 
 			time = time.addSecs(offset);
 
-			MapFeature *feature = NULL;
-			TrackPoint *Pt, *bestPt = NULL;
+			Feature *feature = NULL;
+			Node *Pt, *bestPt = NULL;
 			int a, secondsTo = INT_MAX;
 			int u;
 
 			for (u=0; u<theLayer->size(); u++) {
 				feature = theLayer->get(u);
-				if ((Pt = dynamic_cast<TrackPoint*>(feature))) {
+				if ((Pt = dynamic_cast<Node*>(feature))) {
 					a = time.secsTo(Pt->time().toLocalTime());
 					if (abs(a) < abs(secondsTo)) {
 						secondsTo = a;
@@ -399,7 +399,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
 				 noMatchQuestion);
 			}
 
-			usedTrackPoints << TrackPointData(bestPt->id(), file, time, false);
+			usedTrackPoints << NodeData(bestPt->id(), file, time, false);
 			//bestPt->setTag("_waypoint_", "true");
 			bestPt->setTag("Picture", "GeoTagged");
 	

@@ -13,8 +13,8 @@
 #include "PaintStyle/EditPaintStyle.h"
 
 #include "MainWindow.h"
-#include "Maps/MapDocument.h"
-#include "Maps/MapFeature.h"
+#include "Document.h"
+#include "Feature.h"
 #include "PropertiesDock.h"
 
 #include <QFileDialog>

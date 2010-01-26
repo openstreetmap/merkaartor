@@ -12,15 +12,12 @@
 #include "NativeRenderDialog.h"
 
 #include "MainWindow.h"
-#include "Maps/MapDocument.h"
+#include "Document.h"
 #include "MapView.h"
 #include "PaintStyle/EditPaintStyle.h"
 #include "Maps/Projection.h"
-#include "Maps/MapLayer.h"
-#include "Maps/MapFeature.h"
-#include "Maps/Relation.h"
-#include "Maps/Road.h"
-#include "Maps/TrackPoint.h"
+#include "Layer.h"
+#include "Features.h"
 #include "Preferences/MerkaartorPreferences.h"
 
 #include "Utils/PictureViewerDialog.h"
@@ -29,7 +26,7 @@
 #include <QPainter>
 #include <QSvgGenerator>
 
-NativeRenderDialog::NativeRenderDialog(MapDocument *aDoc, const CoordBox& aCoordBox, QWidget *parent)
+NativeRenderDialog::NativeRenderDialog(Document *aDoc, const CoordBox& aCoordBox, QWidget *parent)
 	:QDialog(parent), theDoc(aDoc)
 {
 	setupUi(this);

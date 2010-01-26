@@ -15,7 +15,7 @@
 #include "../ImportExport/ImportNMEA.h"
 
 
-ImportNMEA::ImportNMEA(MapDocument* doc)
+ImportNMEA::ImportNMEA(Document* doc)
  : IImportExport(doc), curAltitude(0.0)
 {
 }
@@ -26,7 +26,7 @@ ImportNMEA::~ImportNMEA()
 }
 
 // no export
-bool ImportNMEA::export_(const QList<MapFeature *>& featList)
+bool ImportNMEA::export_(const QList<Feature *>& featList)
 {
 	IImportExport::export_(featList);
 
@@ -34,13 +34,13 @@ bool ImportNMEA::export_(const QList<MapFeature *>& featList)
 }
 
 // import the  input
-bool ImportNMEA::import(MapLayer* aLayer)
+bool ImportNMEA::import(Layer* aLayer)
 {
 	bool goodFix = false;
 	bool goodFix3D = true;
 	QTextStream in(Device);
 
-	theLayer = dynamic_cast <TrackMapLayer *> (aLayer);
+	theLayer = dynamic_cast <TrackLayer *> (aLayer);
 	theList = new CommandList(MainWindow::tr("Import NMEA"), NULL);
 
 	TrackSegment* TS = new TrackSegment;
@@ -91,7 +91,7 @@ bool ImportNMEA::import(MapLayer* aLayer)
 		} else
 		if (command == "RMC") {
 			if (goodFix && goodFix3D) {
-				TrackPoint* p = importRMC(line);
+				Node* p = importRMC(line);
 				if (p)
 					TS->add(p);
 			}
@@ -179,7 +179,7 @@ bool ImportNMEA::importGLL (QString line)
 	return true;
 }
 
-TrackPoint* ImportNMEA::importRMC (QString line)
+Node* ImportNMEA::importRMC (QString line)
 {
 	if (line.count('$') > 1)
 		return NULL;
@@ -214,8 +214,8 @@ TrackPoint* ImportNMEA::importRMC (QString line)
 		date = date.addYears(100);
 	//date.setTimeSpec(Qt::UTC);
 
-	TrackPoint* Pt = new TrackPoint(Coord(angToInt(lat),angToInt(lon)));
-	Pt->setLastUpdated(MapFeature::Log);
+	Node* Pt = new Node(Coord(angToInt(lat),angToInt(lon)));
+	Pt->setLastUpdated(Feature::Log);
 	Pt->setElevation(curAltitude);
 	Pt->setSpeed(speed);
 	theList->add(new AddFeatureCommand(theLayer,Pt, true));

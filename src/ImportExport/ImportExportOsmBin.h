@@ -28,11 +28,11 @@ class OsbRegion
 		OsbRegion(ImportExportOsmBin* osb);
 		~OsbRegion();
 
-		bool load(qint32 rg, MapDocument* d, OsbMapLayer* theLayer);
-		bool loadRegion(qint32 rg, MapDocument* d, OsbMapLayer* theLayer);
-		bool loadTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer);
-		bool clearRegion(MapDocument* d, OsbMapLayer* theLayer);
-		bool clearTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer);
+		bool load(qint32 rg, Document* d, OsbLayer* theLayer);
+		bool loadRegion(qint32 rg, Document* d, OsbLayer* theLayer);
+		bool loadTile(qint32 tile, Document* d, OsbLayer* theLayer);
+		bool clearRegion(Document* d, OsbLayer* theLayer);
+		bool clearTile(qint32 tile, Document* d, OsbLayer* theLayer);
 
 	public:
 		qint32		region;
@@ -56,31 +56,31 @@ class OsbTile
 */
 class ImportExportOsmBin : public IImportExport
 {
-	friend class OsbMapLayer;
+	friend class OsbLayer;
 	friend class WorldOsbManager;
 	friend class OsbRegion;
-	friend class OsbMapLayerPrivate;
+	friend class OsbLayerPrivate;
 
 public:
-    ImportExportOsmBin(MapDocument* doc);
+    ImportExportOsmBin(Document* doc);
 
     ~ImportExportOsmBin();
 
 	// import the  input
-	virtual bool import(MapLayer* aLayer);
+	virtual bool import(Layer* aLayer);
 
 	//export
-	virtual bool export_(const QList<MapFeature *>& featList);
-	virtual bool export_(const QList<MapFeature *>& featList, quint32 rg);
+	virtual bool export_(const QList<Feature *>& featList);
+	virtual bool export_(const QList<Feature *>& featList, quint32 rg);
 
 protected:
 //	void addTileIndex(MapFeature* F, qint64 pos);
-	void doAddTileIndex(MapFeature* F, qint32 tile);
-	bool exists(MapFeature* F, qint32 tile);
-	void addTileIndex(MapFeature* F);
-	void tagsToBinary(MapFeature* F, QDataStream& ds);
-	void tagsFromBinary(MapFeature* F, QDataStream& ds);
-	void tagsPopularity(MapFeature * F);
+	void doAddTileIndex(Feature* F, qint32 tile);
+	bool exists(Feature* F, qint32 tile);
+	void addTileIndex(Feature* F);
+	void tagsToBinary(Feature* F, QDataStream& ds);
+	void tagsFromBinary(Feature* F, QDataStream& ds);
+	void tagsPopularity(Feature * F);
 	
 	bool prepare();
 	bool writeHeader(QDataStream& ds);
@@ -89,7 +89,7 @@ protected:
 	//bool writeNodes(QDataStream& ds);
 	//bool writeRoads(QDataStream& ds);
 	//bool writeRelations(QDataStream& ds);
-	bool writeFeatures(QList<MapFeature*>, QDataStream& ds);
+	bool writeFeatures(QList<Feature*>, QDataStream& ds);
 
 	bool readWorld(QDataStream& ds);
 	void addWorldRegion(int region);
@@ -104,12 +104,12 @@ protected:
 	//bool readRoads(QDataStream& ds, OsbMapLayer* aLayer);
 	//bool readRelations(QDataStream& ds, OsbMapLayer* aLayer);
 
-	bool loadRegion(qint32 rg, MapDocument* d, OsbMapLayer* theLayer);
-	bool loadTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer);
-	bool clearRegion(qint32 rg, MapDocument* d, OsbMapLayer* theLayer);
-	bool clearTile(qint32 tile, MapDocument* d, OsbMapLayer* theLayer);
-	MapFeature* getFeature(OsbRegion* osr, MapDocument* d, OsbMapLayer* theLayer, quint64 ref);
-	MapFeature* getFeature(OsbRegion* osr, MapDocument* d, OsbMapLayer* theLayer);
+	bool loadRegion(qint32 rg, Document* d, OsbLayer* theLayer);
+	bool loadTile(qint32 tile, Document* d, OsbLayer* theLayer);
+	bool clearRegion(qint32 rg, Document* d, OsbLayer* theLayer);
+	bool clearTile(qint32 tile, Document* d, OsbLayer* theLayer);
+	Feature* getFeature(OsbRegion* osr, Document* d, OsbLayer* theLayer, quint64 ref);
+	Feature* getFeature(OsbRegion* osr, Document* d, OsbLayer* theLayer);
 
 protected:
 	QMap <QString, qint32> keyPopularity;
@@ -121,16 +121,16 @@ protected:
 	QMap< qint32, quint64 > theRegionToc;
 	QMap< qint32, OsbRegion* > theRegionList;
 
-	QMap< qint32, QList<MapFeature*> > theTileIndex;
+	QMap< qint32, QList<Feature*> > theTileIndex;
 	QMap< qint32, QList< QPair < qint32, quint64 > > > theRegionIndex;
-	QMap< qint32, QList<MapFeature*> > theTileNodesIndex;
-	QMap< qint32, QList<MapFeature*> > theTileRoadsIndex;
-	QMap< qint32, QList<MapFeature*> > theTileRelationsIndex;
+	QMap< qint32, QList<Feature*> > theTileNodesIndex;
+	QMap< qint32, QList<Feature*> > theTileRoadsIndex;
+	QMap< qint32, QList<Feature*> > theTileRelationsIndex;
 
 	QHash <QString, quint64> theFeatureIndex;
 
-	QMap<quint64, TrackPoint*> theNodes;
-	QMap<quint64,Road*> theRoads;
+	QMap<quint64, Node*> theNodes;
+	QMap<quint64,Way*> theRoads;
 	QMap<quint64, Relation*> theRelations;
 
 	QMap <QString, quint64> theTagKeysIndex;

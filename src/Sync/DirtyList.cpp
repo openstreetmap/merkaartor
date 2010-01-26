@@ -1,13 +1,11 @@
-#include "Sync/DirtyList.h"
-#include "Command/Command.h"
+#include "DirtyList.h"
+#include "Command.h"
 #include "Maps/Coord.h"
-#include "Maps/DownloadOSM.h"
-#include "Maps/ExportOSM.h"
-#include "Maps/MapDocument.h"
-#include "Maps/MapLayer.h"
-#include "Maps/Relation.h"
-#include "Maps/Road.h"
-#include "Maps/TrackPoint.h"
+#include "DownloadOSM.h"
+#include "ExportOSM.h"
+#include "Document.h"
+#include "Layer.h"
+#include "Features.h"
 
 #include <QtCore/QEventLoop>
 #include <QtGui/QDialog>
@@ -31,7 +29,7 @@ static QString stripToOSMId(const QString& id)
 	return id;
 }
 
-static QString userName(const MapFeature* F)
+static QString userName(const Feature* F)
 {
 	QString s(F->tagValue("name",""));
 	if (!s.isEmpty())
@@ -43,7 +41,7 @@ DirtyList::~DirtyList()
 {
 }
 
-bool DirtyListBuild::add(MapFeature* F)
+bool DirtyListBuild::add(Feature* F)
 {
 	if (!F->isDirty()) return false;
 	//if (F->hasOSMId()) return false;
@@ -52,7 +50,7 @@ bool DirtyListBuild::add(MapFeature* F)
 	return false;
 }
 
-bool DirtyListBuild::update(MapFeature* F)
+bool DirtyListBuild::update(Feature* F)
 {
 	if (!F->isDirty()) return false;
 
@@ -67,7 +65,7 @@ bool DirtyListBuild::update(MapFeature* F)
 	return false;
 }
 
-bool DirtyListBuild::erase(MapFeature* F)
+bool DirtyListBuild::erase(Feature* F)
 {
 	if (!F->isDirty()) return false;
 
@@ -75,17 +73,17 @@ bool DirtyListBuild::erase(MapFeature* F)
 	return false;
 }
 
-bool DirtyListBuild::willBeAdded(MapFeature* F) const
+bool DirtyListBuild::willBeAdded(Feature* F) const
 {
 	return std::find(Added.begin(),Added.end(),F) != Added.end();
 }
 
-bool DirtyListBuild::willBeErased(MapFeature* F) const
+bool DirtyListBuild::willBeErased(Feature* F) const
 {
 	return std::find(Deleted.begin(),Deleted.end(),F) != Deleted.end();
 }
 
-bool DirtyListBuild::updateNow(MapFeature* F) const
+bool DirtyListBuild::updateNow(Feature* F) const
 {
 	for (int i=0; i<Updated.size(); ++i)
 		if (Updated[i] == F)
@@ -104,7 +102,7 @@ void DirtyListBuild::resetUpdates()
 
 /* DIRTYLISTVISIT */
 
-DirtyListVisit::DirtyListVisit(MapDocument* aDoc, const DirtyListBuild &aBuilder, bool b)
+DirtyListVisit::DirtyListVisit(Document* aDoc, const DirtyListBuild &aBuilder, bool b)
 : theDocument(aDoc), Future(aBuilder), EraseFromHistory(b)
 {
 }
@@ -132,17 +130,17 @@ bool DirtyListVisit::runVisit()
 	return document()->history().buildDirtyList(*this);
 }
 
-MapDocument* DirtyListVisit::document()
+Document* DirtyListVisit::document()
 {
 	return theDocument;
 }
 
-bool DirtyListVisit::notYetAdded(MapFeature* F)
+bool DirtyListVisit::notYetAdded(Feature* F)
 {
 	return std::find(AlreadyAdded.begin(),AlreadyAdded.end(),F) == AlreadyAdded.end();
 }
 
-bool DirtyListVisit::add(MapFeature* F)
+bool DirtyListVisit::add(Feature* F)
 {
 	if (DeletePass) return false;
 	if (F->isDeleted()) return false;
@@ -159,7 +157,7 @@ bool DirtyListVisit::add(MapFeature* F)
 			return EraseResponse[i];
 
 	bool x;
-    if (TrackPoint* Pt = CAST_NODE(F))
+    if (Node* Pt = CAST_NODE(F))
 	{
 		if (Pt->isInteresting())
 		{
@@ -174,7 +172,7 @@ bool DirtyListVisit::add(MapFeature* F)
 		else
 			return EraseFromHistory;
 	}
-	else if (Road* R = dynamic_cast<Road*>(F))
+	else if (Way* R = dynamic_cast<Way*>(F))
 	{
 		for (int i=0; i<R->size(); ++i)
             if (!R->getNode(i)->isVirtual())
@@ -204,7 +202,7 @@ bool DirtyListVisit::add(MapFeature* F)
 	return EraseFromHistory;
 }
 
-bool DirtyListVisit::update(MapFeature* F)
+bool DirtyListVisit::update(Feature* F)
 {
 	if (DeletePass) return false;
 	if (!F->isDirty()) return false;
@@ -214,7 +212,7 @@ bool DirtyListVisit::update(MapFeature* F)
 		return EraseFromHistory;
 	if (!Future.updateNow(F))
 		return EraseFromHistory;
-	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(F))
+	if (Node* Pt = dynamic_cast<Node*>(F))
 	{
 		if (Pt->isInteresting()) {
 			if (!(Pt->hasOSMId()) && notYetAdded(Pt)) 
@@ -224,7 +222,7 @@ bool DirtyListVisit::update(MapFeature* F)
 		} else
 			return EraseFromHistory;
 	}
-	else if (Road* R = dynamic_cast<Road*>(F)) {
+	else if (Way* R = dynamic_cast<Way*>(F)) {
 		for (int i=0; i<R->size(); ++i)
 			if (!(R->get(i)->hasOSMId()) && notYetAdded(R->get(i)))
 				add(R->get(i));
@@ -238,26 +236,26 @@ bool DirtyListVisit::update(MapFeature* F)
 	return EraseFromHistory;
 }
 
-bool DirtyListVisit::erase(MapFeature* F)
+bool DirtyListVisit::erase(Feature* F)
 {
 	if (!F->isDirty()) return false;
 
 	if (DeletePass) {
-		if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(F))
+		if (Node* Pt = dynamic_cast<Node*>(F))
 			return TrackPointsToDelete[Pt];
-		else if (Road* R = dynamic_cast<Road*>(F)) 
+		else if (Way* R = dynamic_cast<Way*>(F)) 
 			return RoadsToDelete[R];
 		else if (Relation* S = dynamic_cast<Relation*>(F)) 
 			return RelationsToDelete[S];
 	}
 	if (Future.willBeAdded(F))
 		return EraseFromHistory;
-	if (TrackPoint* Pt = dynamic_cast<TrackPoint*>(F))
+	if (Node* Pt = dynamic_cast<Node*>(F))
 	{
 		if (Pt->isInteresting()) 
 			TrackPointsToDelete[Pt] = false;
 	}
-	else if (Road* R = dynamic_cast<Road*>(F)) 
+	else if (Way* R = dynamic_cast<Way*>(F)) 
 		RoadsToDelete[R] = false;
 	else if (Relation* S = dynamic_cast<Relation*>(F)) 
 		RelationsToDelete[S] = false;
@@ -265,7 +263,7 @@ bool DirtyListVisit::erase(MapFeature* F)
 	return false;
 }
 
-bool DirtyListVisit::noop(MapFeature* F)
+bool DirtyListVisit::noop(Feature* F)
 {
 	if (!F->isDirty()) return false;
 
@@ -278,7 +276,7 @@ bool DirtyListVisit::noop(MapFeature* F)
 /* DIRTYLISTDESCRIBER */
 
 
-DirtyListDescriber::DirtyListDescriber(MapDocument* aDoc, const DirtyListBuild& aFuture)
+DirtyListDescriber::DirtyListDescriber(Document* aDoc, const DirtyListBuild& aFuture)
 : DirtyListVisit(aDoc, aFuture, false), Task(0)
 {
 	glbAdded = glbUpdated = glbDeleted = 0;
@@ -330,7 +328,7 @@ bool DirtyListDescriber::showChanges(QWidget* aParent)
 }
 
 
-bool DirtyListDescriber::addRoad(Road* R)
+bool DirtyListDescriber::addRoad(Way* R)
 {
 	QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","ADD road %1").arg(R->id()) + userName(R), theListWidget);
 	it->setData(Qt::UserRole, R->id());
@@ -338,7 +336,7 @@ bool DirtyListDescriber::addRoad(Road* R)
 	return false;
 }
 
-bool DirtyListDescriber::addPoint(TrackPoint* Pt)
+bool DirtyListDescriber::addPoint(Node* Pt)
 {
 	QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","ADD trackpoint %1").arg(Pt->id()) + userName(Pt), theListWidget);
 	it->setData(Qt::UserRole, Pt->id());
@@ -354,7 +352,7 @@ bool DirtyListDescriber::addRelation(Relation* R)
 	return false;
 }
 
-bool DirtyListDescriber::updatePoint(TrackPoint* Pt)
+bool DirtyListDescriber::updatePoint(Node* Pt)
 {
 	QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","UPDATE trackpoint %1").arg(Pt->id()) + userName(Pt), theListWidget);
 	it->setData(Qt::UserRole, Pt->id());
@@ -370,7 +368,7 @@ bool DirtyListDescriber::updateRelation(Relation* R)
 	return false;
 }
 
-bool DirtyListDescriber::updateRoad(Road* R)
+bool DirtyListDescriber::updateRoad(Way* R)
 {
 	QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","UPDATE road %1").arg(R->id()) + userName(R), theListWidget);
 	it->setData(Qt::UserRole, R->id());
@@ -378,7 +376,7 @@ bool DirtyListDescriber::updateRoad(Road* R)
 	return false;
 }
 
-bool DirtyListDescriber::erasePoint(TrackPoint* Pt)
+bool DirtyListDescriber::erasePoint(Node* Pt)
 {
 	QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","REMOVE trackpoint %1").arg(Pt->id()) + userName(Pt), theListWidget);
 	it->setData(Qt::UserRole, Pt->id());
@@ -386,7 +384,7 @@ bool DirtyListDescriber::erasePoint(TrackPoint* Pt)
 	return false;
 }
 
-bool DirtyListDescriber::eraseRoad(Road* R)
+bool DirtyListDescriber::eraseRoad(Way* R)
 {
 	QListWidgetItem* it = new QListWidgetItem(QApplication::translate("DirtyListExecutor","REMOVE road %1").arg(R->id()) + userName(R), theListWidget);
 	it->setData(Qt::UserRole, R->id());
@@ -405,7 +403,7 @@ bool DirtyListDescriber::eraseRelation(Relation* R)
 /* DIRTYLIST */
 
 
-DirtyListExecutor::DirtyListExecutor(MapDocument* aDoc, const DirtyListBuild& aFuture, const QString& aWeb, const QString& aUser, const QString& aPwd, int aTasks)
+DirtyListExecutor::DirtyListExecutor(Document* aDoc, const DirtyListBuild& aFuture, const QString& aWeb, const QString& aUser, const QString& aPwd, int aTasks)
 : DirtyListVisit(aDoc, aFuture, false), Tasks(aTasks), Done(0), Web(aWeb), User(aUser), Pwd(aPwd), theDownloader(0)
 {
 	theDownloader = new Downloader(Web, User, Pwd);
@@ -553,7 +551,7 @@ bool DirtyListExecutor::addRelation(Relation *R)
 	{
 		// chop off extra spaces, newlines etc
 		R->setId("rel_"+QString::number(DataOut.toInt()));
-		R->setLastUpdated(MapFeature::OSMServer);
+		R->setLastUpdated(Feature::OSMServer);
 		R->setVersionNumber(1);
 		R->layer()->remove(R);
 		document()->getUploadedLayer()->add(R);
@@ -563,7 +561,7 @@ bool DirtyListExecutor::addRelation(Relation *R)
 	return false;
 }
 
-bool DirtyListExecutor::addRoad(Road *R)
+bool DirtyListExecutor::addRoad(Way *R)
 {
 	Progress->setValue(++Done);
 
@@ -582,7 +580,7 @@ bool DirtyListExecutor::addRoad(Road *R)
 	{
 		// chop off extra spaces, newlines etc
 		R->setId("way_"+QString::number(DataOut.toInt()));
-		R->setLastUpdated(MapFeature::OSMServer);
+		R->setLastUpdated(Feature::OSMServer);
 		R->setVersionNumber(1);
 		R->layer()->remove(R);
 		document()->getUploadedLayer()->add(R);
@@ -593,7 +591,7 @@ bool DirtyListExecutor::addRoad(Road *R)
 }
 
 
-bool DirtyListExecutor::addPoint(TrackPoint* Pt)
+bool DirtyListExecutor::addPoint(Node* Pt)
 {
 	Progress->setValue(++Done);
 
@@ -612,7 +610,7 @@ bool DirtyListExecutor::addPoint(TrackPoint* Pt)
 	{
 		// chop off extra spaces, newlines etc
 		Pt->setId("node_"+QString::number(DataOut.toInt()));
-		Pt->setLastUpdated(MapFeature::OSMServer);
+		Pt->setLastUpdated(Feature::OSMServer);
 		Pt->setVersionNumber(1);
 		Pt->layer()->remove(Pt);
 		document()->getUploadedLayer()->add(Pt);
@@ -637,7 +635,7 @@ bool DirtyListExecutor::updateRelation(Relation* R)
 	DataIn = wrapOSM(exportOSM(*R, ChangeSetId), ChangeSetId);
 	if (sendRequest("PUT",URL,DataIn,DataOut))
 	{
-		R->setLastUpdated(MapFeature::OSMServer);
+		R->setLastUpdated(Feature::OSMServer);
 		if (M_PREFS->apiVersionNum() > 0.5)
 		{
 			int NewVersion = DataOut.toInt();
@@ -654,7 +652,7 @@ bool DirtyListExecutor::updateRelation(Relation* R)
 }
 
 
-bool DirtyListExecutor::updateRoad(Road* R)
+bool DirtyListExecutor::updateRoad(Way* R)
 {
 	Progress->setValue(++Done);
 
@@ -667,7 +665,7 @@ bool DirtyListExecutor::updateRoad(Road* R)
 	DataIn = wrapOSM(exportOSM(*R, ChangeSetId), ChangeSetId);
 	if (sendRequest("PUT",URL,DataIn,DataOut))
 	{
-		R->setLastUpdated(MapFeature::OSMServer);
+		R->setLastUpdated(Feature::OSMServer);
 		if (M_PREFS->apiVersionNum() > 0.5)
 		{
 			int NewVersion = DataOut.toInt();
@@ -683,7 +681,7 @@ bool DirtyListExecutor::updateRoad(Road* R)
 	return true;
 }
 
-bool DirtyListExecutor::updatePoint(TrackPoint* Pt)
+bool DirtyListExecutor::updatePoint(Node* Pt)
 {
 	Progress->setValue(++Done);
 
@@ -698,7 +696,7 @@ bool DirtyListExecutor::updatePoint(TrackPoint* Pt)
 	DataIn = wrapOSM(exportOSM(*Pt, ChangeSetId), ChangeSetId);
 	if (sendRequest("PUT",URL,DataIn,DataOut))
 	{
-		Pt->setLastUpdated(MapFeature::OSMServer);
+		Pt->setLastUpdated(Feature::OSMServer);
 		if (M_PREFS->apiVersionNum() > 0.5)
 		{
 			int NewVersion = DataOut.toInt();
@@ -714,7 +712,7 @@ bool DirtyListExecutor::updatePoint(TrackPoint* Pt)
 	return false;
 }
 
-bool DirtyListExecutor::erasePoint(TrackPoint *Pt)
+bool DirtyListExecutor::erasePoint(Node *Pt)
 {
 	Progress->setValue(++Done);
 
@@ -730,7 +728,7 @@ bool DirtyListExecutor::erasePoint(TrackPoint *Pt)
 		DataIn = wrapOSM(exportOSM(*Pt, ChangeSetId), ChangeSetId);
 	if (sendRequest("DELETE",URL,DataIn,DataOut))
 	{
-		Pt->setLastUpdated(MapFeature::OSMServer);
+		Pt->setLastUpdated(Feature::OSMServer);
 		Pt->layer()->remove(Pt);
 		document()->getUploadedLayer()->add(Pt);
 		Pt->setUploaded(true);
@@ -739,7 +737,7 @@ bool DirtyListExecutor::erasePoint(TrackPoint *Pt)
 	return false;
 }
 
-bool DirtyListExecutor::eraseRoad(Road *R)
+bool DirtyListExecutor::eraseRoad(Way *R)
 {
 	Progress->setValue(++Done);
 
@@ -755,7 +753,7 @@ bool DirtyListExecutor::eraseRoad(Road *R)
 		DataIn = wrapOSM(exportOSM(*R, ChangeSetId), ChangeSetId);
 	if (sendRequest("DELETE",URL,DataIn,DataOut))
 	{
-		R->setLastUpdated(MapFeature::OSMServer);
+		R->setLastUpdated(Feature::OSMServer);
 		R->layer()->remove(R);
 		document()->getUploadedLayer()->add(R);
 		R->setUploaded(true);
@@ -778,7 +776,7 @@ bool DirtyListExecutor::eraseRelation(Relation *R)
 		DataIn = wrapOSM(exportOSM(*R, ChangeSetId), ChangeSetId);
 	if (sendRequest("DELETE",URL,DataIn,DataOut))
 	{
-		R->setLastUpdated(MapFeature::OSMServer);
+		R->setLastUpdated(Feature::OSMServer);
 		R->layer()->remove(R);
 		document()->getUploadedLayer()->add(R);
 		R->setUploaded(true);

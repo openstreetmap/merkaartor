@@ -20,12 +20,12 @@
 class ExportGPX : public IImportExport
 {
 public:
-    ExportGPX(MapDocument* doc);
+    ExportGPX(Document* doc);
 
     ~ExportGPX();
 
 	//export
-	virtual bool export_(const QList<MapFeature *>& featList);
+	virtual bool export_(const QList<Feature *>& featList);
 };
 
 #endif

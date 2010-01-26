@@ -14,7 +14,7 @@
 
 #include "../ImportExport/IImportExport.h"
 
-IImportExport::IImportExport(MapDocument* doc)
+IImportExport::IImportExport(Document* doc)
 		: theDoc(doc), Device(0), ownDevice(false)
 {
 }
@@ -52,7 +52,7 @@ bool IImportExport::saveFile(QString filename)
 	return Device->open(QIODevice::WriteOnly | QIODevice::Truncate);
 }
 
-bool IImportExport::export_(const QList<MapFeature *>& featList)
+bool IImportExport::export_(const QList<Feature *>& featList)
 {
 	theFeatures = featList;
 

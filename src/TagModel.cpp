@@ -1,11 +1,11 @@
 #include <algorithm>
 #include "TagModel.h"
 #include "MainWindow.h"
-#include "Command/DocumentCommands.h"
-#include "Command/FeatureCommands.h"
-#include "Maps/MapDocument.h"
-#include "Maps/MapFeature.h"
-#include "Maps/MapLayer.h"
+#include "DocumentCommands.h"
+#include "FeatureCommands.h"
+#include "Document.h"
+#include "Feature.h"
+#include "Layer.h"
 
 TagModel::TagModel(MainWindow* aMain)
 : Main(aMain)
@@ -16,7 +16,7 @@ TagModel::~TagModel(void)
 {
 }
 
-void TagModel::setFeature(const QList<MapFeature*> Features)
+void TagModel::setFeature(const QList<Feature*> Features)
 {
 	if (theFeatures.size())
 	{
@@ -27,7 +27,7 @@ void TagModel::setFeature(const QList<MapFeature*> Features)
 	theFeatures = Features;
 	if (theFeatures.size())
 	{
-		MapFeature* F = theFeatures[0];
+		Feature* F = theFeatures[0];
 		for (int i=0; i<F->tagSize(); ++i)
 		{
 			int j=0;
@@ -141,7 +141,7 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
 						L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),theFeatures[i],userAdded));
 					}
 					L->add(new SetTagCommand(theFeatures[i],value.toString(),"", Main->document()->getDirtyOrOriginLayer(theFeatures[i]->layer())));
-					theFeatures[i]->setLastUpdated(MapFeature::User);
+					theFeatures[i]->setLastUpdated(Feature::User);
 				}
 				Tags.push_back(qMakePair(value.toString(),QString("")));
 				Main->document()->addHistory(L);
@@ -175,7 +175,7 @@ bool TagModel::setData(const QModelIndex &index, const QVariant &value, int role
 					}
 					L->add(new SetTagCommand(theFeatures[i],j , Tags[index.row()].first, Tags[index.row()].second, Main->document()->getDirtyOrOriginLayer(theFeatures[i]->layer())));
 				}
-				theFeatures[i]->setLastUpdated(MapFeature::User);
+				theFeatures[i]->setLastUpdated(Feature::User);
 			}
 			Main->document()->addHistory(L);
 			Main->invalidateView(false);

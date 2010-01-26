@@ -9,7 +9,7 @@
 #include <QPair>
 
 class MainWindow;
-class MapFeature;
+class Feature;
 
 class TagModel : public QAbstractTableModel
 {
@@ -21,7 +21,7 @@ Q_OBJECT
 		inline static const QString newKeyText(void)
 		{ return tr("Edit this to add..."); }
 
-		void setFeature(const QList<MapFeature*> Features);
+		void setFeature(const QList<Feature*> Features);
 		int rowCount(const QModelIndex &parent = QModelIndex()) const;
 		int columnCount(const QModelIndex &parent = QModelIndex()) const;
 		QVariant data(const QModelIndex &index, int role) const;
@@ -30,7 +30,7 @@ Q_OBJECT
 		bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 	private:
 		MainWindow* Main;
-		QList<MapFeature*> theFeatures;
+		QList<Feature*> theFeatures;
 		QList<QPair<QString, QString> > Tags;
 };
 

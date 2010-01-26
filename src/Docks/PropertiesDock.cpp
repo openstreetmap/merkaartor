@@ -5,17 +5,14 @@
 #include "TagModel.h"
 #include "Utils/EditCompleterDelegate.h"
 #include "Utils/ShortcutOverrideFilter.h"
-#include "Command/DocumentCommands.h"
-#include "Command/FeatureCommands.h"
-#include "Command/TrackPointCommands.h"
-#include "Command/RelationCommands.h"
+#include "DocumentCommands.h"
+#include "FeatureCommands.h"
+#include "NodeCommands.h"
+#include "RelationCommands.h"
 #include "Maps/Coord.h"
-#include "Maps/MapDocument.h"
-#include "Maps/MapFeature.h"
-#include "Maps/Relation.h"
-#include "Maps/Road.h"
+#include "Document.h"
+#include "Features.h"
 #include "Maps/FeatureManipulations.h"
-#include "Maps/TrackPoint.h"
 #include "TagTemplate/TagTemplate.h"
 
 #ifdef GEOIMAGE
@@ -73,25 +70,25 @@ PropertiesDock::~PropertiesDock(void)
 	delete shortcutFilter;
 }
 
-static bool isChildOfSingleRoadInner(MapFeature *mapFeature)
+static bool isChildOfSingleRoadInner(Feature *mapFeature)
 {
-	return Road::GetSingleParentRoadInner(mapFeature) != NULL;
+	return Way::GetSingleParentRoadInner(mapFeature) != NULL;
 }
 
-static bool isChildOfArea(MapFeature *mapFeature)
+static bool isChildOfArea(Feature *mapFeature)
 {
-	Road* R =  Road::GetSingleParentRoadInner(mapFeature);
+	Way* R =  Way::GetSingleParentRoadInner(mapFeature);
 	if (R)
 		return (R->area() > 0.0);
 	return false;
 }
 
-static bool isChildOfSingleRoad(MapFeature *mapFeature)
+static bool isChildOfSingleRoad(Feature *mapFeature)
 {
-	return Road::GetSingleParentRoad(mapFeature) != NULL;
+	return Way::GetSingleParentRoad(mapFeature) != NULL;
 }
 
-static bool isChildOfSingleRelation(MapFeature *mapFeature)
+static bool isChildOfSingleRelation(Feature *mapFeature)
 {
 	int parents = mapFeature->sizeParents();
 
@@ -103,7 +100,7 @@ static bool isChildOfSingleRelation(MapFeature *mapFeature)
 	int i;
 	for (i=0; i<parents; i++)
 	{
-		MapFeature * parent = mapFeature->getParent(i);
+		Feature * parent = mapFeature->getParent(i);
 		bool isParentRelation = dynamic_cast<Relation*>(parent) != 0;
 		if (isParentRelation)
 			parentRelations++;
@@ -114,7 +111,7 @@ static bool isChildOfSingleRelation(MapFeature *mapFeature)
 	return (parentRelations == 1);
 }
 
-static bool isChildOfRelation(MapFeature *mapFeature)
+static bool isChildOfRelation(Feature *mapFeature)
 {
 	int parents = mapFeature->sizeParents();
 
@@ -124,7 +121,7 @@ static bool isChildOfRelation(MapFeature *mapFeature)
 	int i;
 	for (i=0; i<parents; i++)
 	{
-		MapFeature * parent = mapFeature->getParent(i);
+		Feature * parent = mapFeature->getParent(i);
 		if (dynamic_cast<Relation*>(parent))
 			return true;
 	}
@@ -148,8 +145,8 @@ void PropertiesDock::checkMenuStatus()
 	int NumAreas = 0;
 	if (Selection.size() == 1)
 	{
-		IsPoint = dynamic_cast<TrackPoint*>(Selection[0]) != 0;
-		IsRoad = dynamic_cast<Road*>(Selection[0]) != 0;
+		IsPoint = dynamic_cast<Node*>(Selection[0]) != 0;
+		IsRoad = dynamic_cast<Way*>(Selection[0]) != 0;
 		IsParentRoad = IsPoint && isChildOfSingleRoad(Selection[0]);
 		IsParentRoadInner = IsPoint && isChildOfSingleRoadInner(Selection[0]);
 		IsParentRelation = isChildOfSingleRelation(Selection[0]);
@@ -159,7 +156,7 @@ void PropertiesDock::checkMenuStatus()
 	{
 		if (CAST_NODE(Selection[i]))
 			++NumPoints;
-		if (Road* R = dynamic_cast<Road*>(Selection[i]))
+		if (Way* R = dynamic_cast<Way*>(Selection[i]))
 		{
 			if (R->area() > 0.0)
 			{
@@ -203,19 +200,19 @@ int PropertiesDock::size() const
 	return Selection.size();
 }
 
-MapFeature* PropertiesDock::selection(int idx)
+Feature* PropertiesDock::selection(int idx)
 {
 	if (idx < Selection.size())
 		return Selection[idx];
 	return 0;
 }
 
-QList<MapFeature*> PropertiesDock::selection()
+QList<Feature*> PropertiesDock::selection()
 {
 	return Selection;
 }
 
-void PropertiesDock::setSelection(MapFeature*aFeature)
+void PropertiesDock::setSelection(Feature*aFeature)
 {
 	cleanUpUi();
 	Selection.clear();
@@ -226,7 +223,7 @@ void PropertiesDock::setSelection(MapFeature*aFeature)
 	fillMultiUiSelectionBox();
 }
 
-void PropertiesDock::setMultiSelection(const QList<MapFeature*>& aFeatureList)
+void PropertiesDock::setMultiSelection(const QList<Feature*>& aFeatureList)
 {
 	cleanUpUi();
 	Selection.clear();
@@ -235,13 +232,13 @@ void PropertiesDock::setMultiSelection(const QList<MapFeature*>& aFeatureList)
 	FullSelection = Selection;
 	switchToMultiUi();
 	// to prevent slots to change the values also
-	QList<MapFeature*> Current = Selection;
+	QList<Feature*> Current = Selection;
 	Selection.clear();
 	MultiUi.TagView->setModel(theModel);
 	MultiUi.TagView->setItemDelegate(delegate);
 	Main->info()->setHtml("");
 	#ifdef GEOIMAGE
-	Main->geoImage()->setImage((TrackPoint *)NULL);
+	Main->geoImage()->setImage((Node *)NULL);
 	#endif
 	CurrentTagView = MultiUi.TagView;
 	theModel->setFeature(Current);
@@ -249,10 +246,10 @@ void PropertiesDock::setMultiSelection(const QList<MapFeature*>& aFeatureList)
 	fillMultiUiSelectionBox();
 }
 
-void PropertiesDock::toggleSelection(MapFeature* S)
+void PropertiesDock::toggleSelection(Feature* S)
 {
 	cleanUpUi();
-	QList<MapFeature*>::iterator i = std::find(Selection.begin(),Selection.end(),S);
+	QList<Feature*>::iterator i = std::find(Selection.begin(),Selection.end(),S);
 	if (i == Selection.end())
 		Selection.push_back(S);
 	else
@@ -262,10 +259,10 @@ void PropertiesDock::toggleSelection(MapFeature* S)
 	fillMultiUiSelectionBox();
 }
 
-void PropertiesDock::addSelection(MapFeature* S)
+void PropertiesDock::addSelection(Feature* S)
 {
 	cleanUpUi();
-	QList<MapFeature*>::iterator i = std::find(Selection.begin(),Selection.end(),S);
+	QList<Feature*>::iterator i = std::find(Selection.begin(),Selection.end(),S);
 	if (i == Selection.end())
 		Selection.push_back(S);
 	FullSelection = Selection;
@@ -275,14 +272,14 @@ void PropertiesDock::addSelection(MapFeature* S)
 
 void PropertiesDock::adjustSelection()
 {
-	QList<MapFeature*> aSelection;
+	QList<Feature*> aSelection;
 	int cnt = Selection.size();
 
 	for (int i=0; i<FullSelection.size(); ++i) {
 		if (Main->document()->exists(FullSelection[i])) {
 			aSelection.push_back(FullSelection[i]);
 		} else {
-			QList<MapFeature*>::iterator it = std::find(Selection.begin(),Selection.end(),FullSelection[i]);
+			QList<Feature*>::iterator it = std::find(Selection.begin(),Selection.end(),FullSelection[i]);
 			if (it != Selection.end())
 				Selection.erase(it);
 		}
@@ -293,9 +290,9 @@ void PropertiesDock::adjustSelection()
 		switchUi();
 }
 
-bool PropertiesDock::isSelected(MapFeature *aFeature)
+bool PropertiesDock::isSelected(Feature *aFeature)
 {
-	QList<MapFeature*>::iterator i = std::find(Selection.begin(),Selection.end(),aFeature);
+	QList<Feature*>::iterator i = std::find(Selection.begin(),Selection.end(),aFeature);
 	if (i == Selection.end())
 		return false;
 	else
@@ -334,8 +331,8 @@ void PropertiesDock::on_SelectionList_itemSelectionChanged()
 			Main->info()->setHtml(Selection[0]->toHtml());
 
 			#ifdef GEOIMAGE
-			TrackPoint *Pt;
-			if ((Pt = dynamic_cast<TrackPoint*>(Selection[0]))) Main->geoImage()->setImage(Pt);
+			Node *Pt;
+			if ((Pt = dynamic_cast<Node*>(Selection[0]))) Main->geoImage()->setImage(Pt);
 			#endif
 		}
 		theModel->setFeature(Selection);
@@ -427,7 +424,7 @@ void PropertiesDock::switchToTrackPointUi()
 	connect(TrackPointUi.Longitude,SIGNAL(editingFinished()),this, SLOT(on_TrackPointLon_editingFinished()));
 	connect(TrackPointUi.Latitude,SIGNAL(editingFinished()),this, SLOT(on_TrackPointLat_editingFinished()));
 	connect(TrackPointUi.RemoveTagButton,SIGNAL(clicked()),this, SLOT(on_RemoveTagButton_clicked()));
-	setWindowTitle(tr("Properties - Trackpoint"));
+	setWindowTitle(tr("Properties - Node"));
 }
 
 void PropertiesDock::switchToRoadUi()
@@ -483,14 +480,14 @@ void PropertiesDock::resetValues()
 	CurrentMembersView = NULL;
 
 	// to prevent slots to change the values also
-	QList<MapFeature*> Current = Selection;
+	QList<Feature*> Current = Selection;
 	Selection.clear();
 	if (FullSelection.size() == 1)
 	{
 		Main->info()->setHtml(FullSelection[0]->toHtml());
 
-		TrackPoint* Pt = dynamic_cast<TrackPoint*>(FullSelection[0]);
-		Road* R = dynamic_cast<Road*>(FullSelection[0]);
+		Node* Pt = dynamic_cast<Node*>(FullSelection[0]);
+		Way* R = dynamic_cast<Way*>(FullSelection[0]);
 		Relation* L = dynamic_cast<Relation*>(FullSelection[0]);
 
 		if ((Pt) && (NowShowing == TrackPointUiShowing))
@@ -575,7 +572,7 @@ void PropertiesDock::resetValues()
 	{
 		Main->info()->setHtml("");
 		#ifdef GEOIMAGE
-		Main->geoImage()->setImage((TrackPoint *)NULL);
+		Main->geoImage()->setImage((Node *)NULL);
 		#endif
 		MultiUi.TagView->setModel(theModel);
 		MultiUi.TagView->setItemDelegate(delegate);
@@ -611,11 +608,11 @@ void PropertiesDock::resetValues()
 void PropertiesDock::on_TrackPointLat_editingFinished()
 {
 	if (TrackPointUi.Latitude->text().isEmpty()) return;
-	TrackPoint* Pt = dynamic_cast<TrackPoint*>(selection(0));
+	Node* Pt = dynamic_cast<Node*>(selection(0));
 	if (Pt)
 	{
 		Main->document()->addHistory(
-			new MoveTrackPointCommand(Pt,
+			new MoveNodeCommand(Pt,
 				Coord(angToInt(TrackPointUi.Latitude->text().toDouble()),Pt->position().lon()), Main->document()->getDirtyOrOriginLayer(Pt->layer()) ));
 		Main->invalidateView(false);
 	}
@@ -624,11 +621,11 @@ void PropertiesDock::on_TrackPointLat_editingFinished()
 void PropertiesDock::on_TrackPointLon_editingFinished()
 {
 	if (TrackPointUi.Longitude->text().isEmpty()) return;
-	TrackPoint* Pt = dynamic_cast<TrackPoint*>(selection(0));
+	Node* Pt = dynamic_cast<Node*>(selection(0));
 	if (Pt)
 	{
 		Main->document()->addHistory(
-			new MoveTrackPointCommand(Pt,
+			new MoveNodeCommand(Pt,
 				Coord(Pt->position().lat(),angToInt(TrackPointUi.Longitude->text().toDouble())), Main->document()->getDirtyOrOriginLayer(Pt->layer()) ));
 		Main->invalidateView(false);
 	}
@@ -636,7 +633,7 @@ void PropertiesDock::on_TrackPointLon_editingFinished()
 
 void PropertiesDock::on_tag_changed(QString k, QString v)
 {
-	MapFeature* F = FullSelection[0];
+	Feature* F = FullSelection[0];
 	if (F->tagValue(k, "__NULL__") != v) {
 		Main->document()->addHistory(new SetTagCommand(F,k,v,Main->document()->getDirtyOrOriginLayer(F->layer())));
 		Main->invalidateView();
@@ -645,7 +642,7 @@ void PropertiesDock::on_tag_changed(QString k, QString v)
 
 void PropertiesDock::on_tag_cleared(QString k)
 {
-	MapFeature* F = FullSelection[0];
+	Feature* F = FullSelection[0];
 	Main->document()->addHistory(new ClearTagCommand(F,k,Main->document()->getDirtyOrOriginLayer(F->layer())));
 	Main->invalidateView();
 }
@@ -709,7 +706,7 @@ void PropertiesDock::on_RemoveMemberButton_clicked()
 				QVariant Content(R->referenceMemberModel(Main)->data(idx,Qt::UserRole));
 				if (Content.isValid())
 				{
-					MapFeature* F = Content.value<MapFeature*>();
+					Feature* F = Content.value<Feature*>();
 					if (F) {
 						CommandList* L = new CommandList(MainWindow::tr("Remove member '%1' on %2").arg(F->description()).arg(R->description()), R);
 						if (R->find(F) < R->size())
@@ -750,7 +747,7 @@ void PropertiesDock::on_Member_clicked(const QModelIndex & index)
 		QVariant Content(R->referenceMemberModel(Main)->data(index,Qt::UserRole));
 		if (Content.isValid())
 		{
-			MapFeature* F = Content.value<MapFeature*>();
+			Feature* F = Content.value<Feature*>();
 			if (F)
 				Highlighted.push_back(F);
 		}
@@ -771,7 +768,7 @@ void PropertiesDock::on_Member_selected()
 			QVariant Content(R->referenceMemberModel(Main)->data(idx,Qt::UserRole));
 			if (Content.isValid())
 			{
-				MapFeature* F = Content.value<MapFeature*>();
+				Feature* F = Content.value<Feature*>();
 				if (F) {
 					setSelection(F);
 				}
@@ -808,7 +805,7 @@ void PropertiesDock::on_centerAction_triggered()
 				QVariant Content(R->referenceMemberModel(Main)->data(idx,Qt::UserRole));
 				if (Content.isValid())
 				{
-					MapFeature* F = Content.value<MapFeature*>();
+					Feature* F = Content.value<Feature*>();
 					if (F) {
 						//setSelection(F);
 						cb = F->boundingBox();
@@ -848,7 +845,7 @@ void PropertiesDock::on_centerZoomAction_triggered()
 				QVariant Content(R->referenceMemberModel(Main)->data(idx,Qt::UserRole));
 				if (Content.isValid())
 				{
-					MapFeature* F = Content.value<MapFeature*>();
+					Feature* F = Content.value<Feature*>();
 					if (F) {
 						//setSelection(F);
 						cb = F->boundingBox();
@@ -1010,14 +1007,14 @@ int PropertiesDock::highlightedSize() const
 	return Highlighted.size();
 }
 
-MapFeature* PropertiesDock::highlighted(int idx)
+Feature* PropertiesDock::highlighted(int idx)
 {
 	if (idx < Highlighted.size())
 		return Highlighted[idx];
 	return 0;
 }
 
-QList<MapFeature*> PropertiesDock::highlighted()
+QList<Feature*> PropertiesDock::highlighted()
 {
 	return Highlighted;
 }

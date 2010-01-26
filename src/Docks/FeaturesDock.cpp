@@ -13,14 +13,12 @@
 
 #include "MainWindow.h"
 #include "MapView.h"
-#include "Maps/MapDocument.h"
-#include "Maps/ImageMapLayer.h"
+#include "Document.h"
+#include "ImageMapLayer.h"
 #include "PropertiesDock.h"
-#include "Maps/ImportOSM.h"
+#include "ImportOSM.h"
 
-#include "Maps/Relation.h"
-#include "Maps/Road.h"
-#include "Maps/TrackPoint.h"
+#include "Features.h"
 
 #include <QAction>
 #include <QTimer>
@@ -28,7 +26,7 @@
 #define MAX_FEATS 100
 
 FeaturesDock::FeaturesDock(MainWindow* aParent)
-	: MDockAncestor(aParent), Main(aParent), curFeatType(MapFeature::Relations)
+	: MDockAncestor(aParent), Main(aParent), curFeatType(Feature::Relations)
 {
     setMinimumSize(220,100);
 	setObjectName("FeaturesDock");
@@ -57,13 +55,13 @@ FeaturesDock::FeaturesDock(MainWindow* aParent)
 
 	int t;
 	t = ui.tabBar->addTab(NULL);
-	ui.tabBar->setTabData(t, MapFeature::Relations);
+	ui.tabBar->setTabData(t, Feature::Relations);
 	t = ui.tabBar->addTab(NULL);
-	ui.tabBar->setTabData(t, MapFeature::Roads);
+	ui.tabBar->setTabData(t, Feature::Ways);
 	t = ui.tabBar->addTab(NULL);
-	ui.tabBar->setTabData(t, MapFeature::Nodes);
+	ui.tabBar->setTabData(t, Feature::Nodes);
 	t = ui.tabBar->addTab(NULL);
-	ui.tabBar->setTabData(t, MapFeature::All);
+	ui.tabBar->setTabData(t, Feature::All);
 	retranslateTabBar();
 
 	connect(ui.tabBar, SIGNAL(currentChanged (int)), this, SLOT(tabChanged(int)));
@@ -81,7 +79,7 @@ void FeaturesDock::on_FeaturesList_itemSelectionChanged()
 	Highlighted.clear();
 	for (int i=0; i<ui.FeaturesList->selectedItems().count(); ++i) {
 		QListWidgetItem* item = ui.FeaturesList->selectedItems()[i];
-		MapFeature * F = item->data(Qt::UserRole).value<MapFeature*>();
+		Feature * F = item->data(Qt::UserRole).value<Feature*>();
 		Highlighted.push_back(F);
 	}
 
@@ -90,7 +88,7 @@ void FeaturesDock::on_FeaturesList_itemSelectionChanged()
 
 void FeaturesDock::on_FeaturesList_itemDoubleClicked(QListWidgetItem* item)
 {
-	MapFeature * F = item->data(Qt::UserRole).value<MapFeature*>();
+	Feature * F = item->data(Qt::UserRole).value<Feature*>();
 	Main->properties()->setSelection(F);
 	Main->view()->update();
 }
@@ -109,9 +107,9 @@ void FeaturesDock::on_FeaturesList_customContextMenuRequested(const QPoint & pos
 	menu.addSeparator();
 
 	downloadAction->setEnabled(false);
-	MapFeature* F;
+	Feature* F;
 	for (int i=0; i < ui.FeaturesList->selectedItems().count(); ++i) {
-		F = ui.FeaturesList->selectedItems()[i]->data(Qt::UserRole).value<MapFeature*>();
+		F = ui.FeaturesList->selectedItems()[i]->data(Qt::UserRole).value<Feature*>();
 		if (F->notEverythingDownloaded()) {
 			downloadAction->setEnabled(true);
 			break;
@@ -130,13 +128,13 @@ void FeaturesDock::on_rbWithin_stateChanged ( int state )
 
 void FeaturesDock::on_centerAction_triggered()
 {
-	MapFeature* F;
+	Feature* F;
 	CoordBox cb;
 
 	Main->view()->blockSignals(true);
 
 	for (int i=0; i < ui.FeaturesList->selectedItems().count(); ++i) {
-		F = ui.FeaturesList->selectedItems()[i]->data(Qt::UserRole).value<MapFeature*>();
+		F = ui.FeaturesList->selectedItems()[i]->data(Qt::UserRole).value<Feature*>();
 		if (F) {
 			if (cb.isNull())
 				cb = F->boundingBox();
@@ -156,13 +154,13 @@ void FeaturesDock::on_centerAction_triggered()
 
 void FeaturesDock::on_centerZoomAction_triggered()
 {
-	MapFeature* F;
+	Feature* F;
 	CoordBox cb;
 
 	Main->view()->blockSignals(true);
 
 	for (int i=0; i < ui.FeaturesList->selectedItems().count(); ++i) {
-		F = ui.FeaturesList->selectedItems()[i]->data(Qt::UserRole).value<MapFeature*>();
+		F = ui.FeaturesList->selectedItems()[i]->data(Qt::UserRole).value<Feature*>();
 		if (F) {
 			if (cb.isNull())
 				cb = F->boundingBox();
@@ -184,10 +182,10 @@ void FeaturesDock::on_centerZoomAction_triggered()
 
 void FeaturesDock::on_downloadAction_triggered()
 {
-	MapFeature* F;
-	QList<MapFeature*> toResolve;
+	Feature* F;
+	QList<Feature*> toResolve;
 	for (int i=0; i < ui.FeaturesList->selectedItems().count(); ++i) {
-		F = ui.FeaturesList->selectedItems()[i]->data(Qt::UserRole).value<MapFeature*>();
+		F = ui.FeaturesList->selectedItems()[i]->data(Qt::UserRole).value<Feature*>();
 
 		if (F->notEverythingDownloaded()) {
 			toResolve.push_back(F);
@@ -198,11 +196,11 @@ void FeaturesDock::on_downloadAction_triggered()
 
 void FeaturesDock::on_addSelectAction_triggered()
 {
-	MapFeature* F;
+	Feature* F;
 	Main->view()->blockSignals(true);
 
 	for (int i=0; i < ui.FeaturesList->selectedItems().count(); ++i) {
-		F = ui.FeaturesList->selectedItems()[i]->data(Qt::UserRole).value<MapFeature*>();
+		F = ui.FeaturesList->selectedItems()[i]->data(Qt::UserRole).value<Feature*>();
 		if (F) {
 			Main->properties()->addSelection(F);
 		}
@@ -220,7 +218,7 @@ void FeaturesDock::changeEvent(QEvent * event)
 
 void FeaturesDock::tabChanged(int idx)
 {
-	curFeatType = (MapFeature::FeatureType)ui.tabBar->tabData(idx).toInt();
+	curFeatType = (Feature::FeatureType)ui.tabBar->tabData(idx).toInt();
 	ui.FeaturesList->clear();
 	Highlighted.clear();
 
@@ -242,23 +240,23 @@ void FeaturesDock::addItem(MapFeaturePtr F)
 	if (Highlighted.contains(F))
 		return;
 
-	if (curFeatType == MapFeature::Relations || curFeatType == MapFeature::All)
+	if (curFeatType == Feature::Relations || curFeatType == Feature::All)
 	{
 		if (Relation* L = CAST_RELATION(F)) {
 			QListWidgetItem* anItem = new QListWidgetItem(L->description(), ui.FeaturesList);
 			anItem->setData(Qt::UserRole, QVariant::fromValue(F));
 		}
 	}
-	if (curFeatType == MapFeature::Roads || curFeatType == MapFeature::All)
+	if (curFeatType == Feature::Ways || curFeatType == Feature::All)
 	{
-		if (Road* R = CAST_WAY(F)) {
+		if (Way* R = CAST_WAY(F)) {
 			QListWidgetItem* anItem = new QListWidgetItem(R->description(), ui.FeaturesList);
 			anItem->setData(Qt::UserRole, QVariant::fromValue(F));
 		}
 	}
-	if (curFeatType == MapFeature::Nodes || curFeatType == MapFeature::All)
+	if (curFeatType == Feature::Nodes || curFeatType == Feature::All)
 	{
-		if (TrackPoint* N = CAST_NODE(F)) {
+		if (Node* N = CAST_NODE(F)) {
 		for (int i=0; i<N->tagSize(); ++i)
 			if ((N->tagKey(i) != "created_by") && (N->tagKey(i) != "ele")) {
 				QListWidgetItem* anItem = new QListWidgetItem(N->description(), ui.FeaturesList);
@@ -315,14 +313,14 @@ int FeaturesDock::highlightedSize() const
 	return Highlighted.size();
 }
 
-MapFeature* FeaturesDock::highlighted(int idx)
+Feature* FeaturesDock::highlighted(int idx)
 {
 	if (idx < Highlighted.size())
 		return Highlighted[idx];
 	return 0;
 }
 
-QList<MapFeature*> FeaturesDock::highlighted()
+QList<Feature*> FeaturesDock::highlighted()
 {
 	return Highlighted;
 }

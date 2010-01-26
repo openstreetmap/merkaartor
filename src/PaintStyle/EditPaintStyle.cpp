@@ -2,11 +2,9 @@
 #include "PaintStyle/EditPaintStyle.h"
 #include "Maps/Painting.h"
 #include "Maps/Projection.h"
-#include "Maps/TrackPoint.h"
-#include "Maps/Relation.h"
-#include "Maps/Road.h"
-#include "Maps/MapLayer.h"
-#include "Maps/ImageMapLayer.h"
+#include "Features.h"
+#include "Layer.h"
+#include "ImageMapLayer.h"
 #include "PaintStyle/TagSelector.h"
 #include "Utils/LineF.h"
 
@@ -81,7 +79,7 @@ void EPBackgroundLayer::setP(EditPaintStylePrivate* ap)
 }
 
 
-void EPBackgroundLayer::draw(Road* R)
+void EPBackgroundLayer::draw(Way* R)
 {
 	const FeaturePainter* paintsel = R->getEditPainter(p->theView.pixelPerM());
 	if (paintsel) {
@@ -123,7 +121,7 @@ void EPBackgroundLayer::draw(Relation* R)
 }
 
 
-void EPBackgroundLayer::draw(TrackPoint*)
+void EPBackgroundLayer::draw(Node*)
 {
 }
 
@@ -132,7 +130,7 @@ void EPForegroundLayer::setP(EditPaintStylePrivate* ap)
 	p = ap;
 }
 
-void EPForegroundLayer::draw(Road* R)
+void EPForegroundLayer::draw(Way* R)
 {
 	const FeaturePainter* paintsel = R->getEditPainter(p->theView.pixelPerM());
 	if (paintsel)
@@ -146,7 +144,7 @@ void EPForegroundLayer::draw(Relation* R)
 		paintsel->drawForeground(R,p->thePainter,p->theView);
 }
 
-void EPForegroundLayer::draw(TrackPoint*)
+void EPForegroundLayer::draw(Node*)
 {
 }
 
@@ -159,7 +157,7 @@ void EPTouchupLayer::setP(EditPaintStylePrivate* ap)
 	p = ap;
 }
 
-void EPTouchupLayer::draw(Road* R)
+void EPTouchupLayer::draw(Way* R)
 {
 	const FeaturePainter* paintsel = R->getEditPainter(p->theView.pixelPerM());
 	if (paintsel)
@@ -167,8 +165,8 @@ void EPTouchupLayer::draw(Road* R)
 	else {
 		if ( M_PREFS->getDirectionalArrowsVisible() != DirectionalArrows_Never )
 		{
-			MapFeature::TrafficDirectionType TT = trafficDirection(R);
-			if ( (TT != MapFeature::UnknownDirection) || (M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Always) )
+			Feature::TrafficDirectionType TT = trafficDirection(R);
+			if ( (TT != Feature::UnknownDirection) || (M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Always) )
 			{
 				double theWidth = p->theView.pixelPerM()*R->widthOf()-4;
 				if (theWidth > 8)
@@ -188,13 +186,13 @@ void EPTouchupLayer::draw(Road* R)
 							QPointF T(DistFromCenter*cos(A),DistFromCenter*sin(A));
 							QPointF V1(theWidth*cos(A+M_PI/6),theWidth*sin(A+M_PI/6));
 							QPointF V2(theWidth*cos(A-M_PI/6),theWidth*sin(A-M_PI/6));
-							if ( (TT == MapFeature::OtherWay) || (TT == MapFeature::BothWays) )
+							if ( (TT == Feature::OtherWay) || (TT == Feature::BothWays) )
 							{
 								p->thePainter.setPen(QPen(QColor(0,0,255), 2));
 								p->thePainter.drawLine(H+T,H+T-V1);
 								p->thePainter.drawLine(H+T,H+T-V2);
 							}
-							if ( (TT == MapFeature::OneWay) || (TT == MapFeature::BothWays) )
+							if ( (TT == Feature::OneWay) || (TT == Feature::BothWays) )
 							{
 								p->thePainter.setPen(QPen(QColor(0,0,255), 2));
 								p->thePainter.drawLine(H-T,H-T+V1);
@@ -221,13 +219,13 @@ void EPTouchupLayer::draw(Relation* /* R */)
 {
 }
 
-void EPTouchupLayer::draw(TrackPoint* Pt)
+void EPTouchupLayer::draw(Node* Pt)
 {
 	const FeaturePainter* paintsel = Pt->getEditPainter(p->theView.pixelPerM());
 	if (paintsel)
 		paintsel->drawTouchup(Pt,p->thePainter,p->theView);
 	else if (!Pt->hasEditPainter()) {
-		if (p->isTrackPointVisible || (Pt->lastUpdated() == MapFeature::Log && !p->isTrackSegmentVisible)) {
+		if (p->isTrackPointVisible || (Pt->lastUpdated() == Feature::Log && !p->isTrackSegmentVisible)) {
 			bool Draw = p->theView.pixelPerM() > 1;
 			// Do not draw GPX nodes when simple GPX track appearance is enabled
 			if (M_PREFS->getSimpleGpxTrack() && Pt->layer()->isTrack())
@@ -235,7 +233,7 @@ void EPTouchupLayer::draw(TrackPoint* Pt)
 			if (!Draw) {
 				if (!Pt->sizeParents() && (p->theView.pixelPerM() > LOCALZOOM) )
 					Draw = true;
-				else if (Pt->lastUpdated() == MapFeature::Log && !p->isTrackSegmentVisible)
+				else if (Pt->lastUpdated() == Feature::Log && !p->isTrackSegmentVisible)
 					Draw = true;
 			}
 			if (Draw)
@@ -269,7 +267,7 @@ void EPLabelLayer::setP(EditPaintStylePrivate* ap)
 	p = ap;
 }
 
-void EPLabelLayer::draw(Road* R)
+void EPLabelLayer::draw(Way* R)
 {
 	const FeaturePainter* paintsel = R->getEditPainter(p->theView.pixelPerM());
 	if (paintsel)
@@ -280,7 +278,7 @@ void EPLabelLayer::draw(Relation* /* R */)
 {
 }
 
-void EPLabelLayer::draw(TrackPoint* Pt)
+void EPLabelLayer::draw(Node* Pt)
 {
 	const FeaturePainter* paintsel = Pt->getEditPainter(p->theView.pixelPerM());
 	if (paintsel)

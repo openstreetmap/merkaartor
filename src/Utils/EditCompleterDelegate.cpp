@@ -11,7 +11,7 @@
 //
 #include "Utils/EditCompleterDelegate.h"
 #include "MainWindow.h"
-#include "Maps/MapDocument.h"
+#include "Document.h"
 #include "TagModel.h"
 
 #include <QLineEdit>

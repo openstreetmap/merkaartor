@@ -13,8 +13,8 @@
 
 #include "MainWindow.h"
 #include "MapView.h"
-#include "Maps/MapDocument.h"
-#include "Maps/MapFeature.h"
+#include "Document.h"
+#include "Feature.h"
 #include "PaintStyle/EditPaintStyle.h"
 
 #include <QAction>

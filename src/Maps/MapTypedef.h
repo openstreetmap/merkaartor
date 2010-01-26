@@ -3,17 +3,17 @@
 
 //#include <QPointer>
 
-class MapFeature;
+class Feature;
 //typedef QPointer<MapFeature> MapFeaturePtr;
-typedef MapFeature* MapFeaturePtr;
+typedef Feature* MapFeaturePtr;
 
-class TrackPoint;
+class Node;
 //typedef QPointer<TrackPoint> TrackPointPtr;
-typedef TrackPoint* TrackPointPtr;
+typedef Node* NodePtr;
 
-class Road;
+class Way;
 //typedef QPointer<Road> RoadPtr;
-typedef Road* RoadPtr;
+typedef Way* WayPtr;
 
 class Relation;
 //typedef QPointer<Relation> RelationPtr;

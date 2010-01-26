@@ -12,11 +12,8 @@
 
 #include "TagTemplate.h"
 
-#include "Maps/MapFeature.h"
-#include "Maps/TrackPoint.h"
-#include "Maps/Relation.h"
-#include "Maps/Road.h"
-#include "Command/FeatureCommands.h"
+#include "Features.h"
+#include "FeatureCommands.h"
 
 #include <QComboBox>
 #include <QLabel>
@@ -156,7 +153,7 @@ TagTemplateWidgetCombo::~TagTemplateWidgetCombo()
 {
 }
 
-QWidget* TagTemplateWidgetCombo::getWidget(const MapFeature* F)
+QWidget* TagTemplateWidgetCombo::getWidget(const Feature* F)
 {
 	if (theSelector && (theSelector->matches(F) != TagSelect_Match && theSelector->matches(F) != TagSelect_DefaultMatch))
 		return NULL;
@@ -300,13 +297,13 @@ void TagTemplateWidgetCombo::on_combo_activated(int idx)
 		emit tagChanged(theTag, val);
 }
 
-void TagTemplateWidgetCombo::apply(const MapFeature*)
+void TagTemplateWidgetCombo::apply(const Feature*)
 {
 }
 
 /** TagTemplateWidgetYesno **/
 
-QWidget* TagTemplateWidgetYesno::getWidget(const MapFeature* F)
+QWidget* TagTemplateWidgetYesno::getWidget(const Feature* F)
 {
 	if (theSelector && (theSelector->matches(F) != TagSelect_Match && theSelector->matches(F) != TagSelect_DefaultMatch))
 		return NULL;
@@ -368,7 +365,7 @@ void TagTemplateWidgetYesno::on_checkbox_stateChanged(int state)
 	}
 }
 
-void TagTemplateWidgetYesno::apply(const MapFeature*)
+void TagTemplateWidgetYesno::apply(const Feature*)
 {
 }
 
@@ -418,7 +415,7 @@ TagTemplateWidgetConstant::~TagTemplateWidgetConstant()
 {
 }
 
-QWidget* TagTemplateWidgetConstant::getWidget(const MapFeature* F)
+QWidget* TagTemplateWidgetConstant::getWidget(const Feature* F)
 {
 	if (theSelector && (theSelector->matches(F) != TagSelect_Match && theSelector->matches(F) != TagSelect_DefaultMatch))
 		return NULL;
@@ -483,7 +480,7 @@ QWidget* TagTemplateWidgetConstant::getWidget(const MapFeature* F)
 	return theWidget;
 }
 
-void TagTemplateWidgetConstant::apply(const MapFeature* F)
+void TagTemplateWidgetConstant::apply(const Feature* F)
 {
 	if (!theValues.count()) {
 		((QLabel*)theMainWidget)->setText(QString("<b>%1</b>").arg(F->tagValue(theTag, "")));
@@ -550,7 +547,7 @@ bool TagTemplateWidgetConstant::toXML(QDomElement& xParent, bool header)
 
 /** TagTemplateWidgetEdit **/
 
-QWidget* TagTemplateWidgetEdit::getWidget(const MapFeature* F)
+QWidget* TagTemplateWidgetEdit::getWidget(const Feature* F)
 {
 	if (theSelector && (theSelector->matches(F) != TagSelect_Match && theSelector->matches(F) != TagSelect_DefaultMatch))
 		return NULL;
@@ -601,7 +598,7 @@ QWidget* TagTemplateWidgetEdit::getWidget(const MapFeature* F)
 	return theWidget;
 }
 
-void TagTemplateWidgetEdit::apply(const MapFeature*)
+void TagTemplateWidgetEdit::apply(const Feature*)
 {
 }
 
@@ -687,13 +684,13 @@ TagTemplate::~TagTemplate()
 	delete theSelector;
 }
 
-TagSelectorMatchResult TagTemplate::matchesTag(const MapFeature* F)
+TagSelectorMatchResult TagTemplate::matchesTag(const Feature* F)
 {
 	TagSelectorMatchResult res;
 
 	if (!theSelector) return TagSelect_NoMatch;
 	// Special casing for multipolygon roads
-	if (const Road* R = dynamic_cast<const Road*>(F))
+	if (const Way* R = dynamic_cast<const Way*>(F))
 	{
 		// TODO create a isPartOfMultiPolygon(R) function for this
 		for (int i=0; i<R->sizeParents(); ++i)
@@ -715,7 +712,7 @@ TagSelectorMatchResult TagTemplate::matchesTag(const MapFeature* F)
 	return TagSelect_NoMatch;
 }
 
-QWidget* TagTemplate::getWidget(const MapFeature* F)
+QWidget* TagTemplate::getWidget(const Feature* F)
 {
 	QString lang = getDefaultLanguage();
 	QString defLang = "en";
@@ -751,7 +748,7 @@ void TagTemplate::setSelector(TagSelector* aSel)
 	theSelector = aSel;
 }
 
-void TagTemplate::apply(const MapFeature* F)
+void TagTemplate::apply(const Feature* F)
 {
 	for (int i=0; i<theFields.size(); ++i) {
 		theFields[i]->apply(F);
@@ -859,7 +856,7 @@ TagTemplates::~TagTemplates()
 		delete items[i];
 }
 
-QWidget* TagTemplates::getWidget(const MapFeature* F)
+QWidget* TagTemplates::getWidget(const Feature* F)
 {
 	QString lang = getDefaultLanguage();
 	QString defLang = "en";
@@ -1043,7 +1040,7 @@ bool TagTemplates::mergeXml(const QDomElement& e)
 	return true;
 }
 
-TagTemplate* TagTemplates::match(MapFeature* F)
+TagTemplate* TagTemplates::match(Feature* F)
 {
 	for (int i=0; i<items.size(); ++i) {
 		if (items[i]->matchesTag(F) == TagSelect_Match)
@@ -1100,7 +1097,7 @@ void TagTemplates::addWidget(TagTemplateWidget* aWidget)
 	widgets.append(aWidget);
 }
 
-void TagTemplates::apply(const MapFeature* F)
+void TagTemplates::apply(const Feature* F)
 {
 	if (curTemplate)
 		curTemplate->apply(F);
