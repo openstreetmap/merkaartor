@@ -124,6 +124,7 @@ void MoveNodeInteraction::snapMouseReleaseEvent(QMouseEvent * event, Feature* Cl
 		}
 		for (int i=0; i<Moving.size(); ++i)
 		{
+			Moving[i]->setPosition(OriginalPosition[i]);
 			if (Moving[i]->layer()->isTrack())
 				theList->add(new MoveNodeCommand(Moving[i],OriginalPosition[i]+Diff, Moving[i]->layer()));
 			else
