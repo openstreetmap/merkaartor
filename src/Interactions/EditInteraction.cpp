@@ -133,7 +133,10 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , Feature* aLast)
 		for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it) {
 			if (it.get()->layer()->isReadonly())
 				continue;
-			else if (
+			if (it.get()->isVirtual())
+				continue;
+
+			if (
 				(M_PREFS->getMouseSingleButton() && ev->modifiers().testFlag(Qt::ShiftModifier) && ev->modifiers().testFlag(Qt::AltModifier)) ||
 				(!M_PREFS->getMouseSingleButton() && ev->modifiers().testFlag(Qt::ShiftModifier))
 				)

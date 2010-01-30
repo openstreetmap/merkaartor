@@ -81,7 +81,7 @@ class Node : public Feature
 		virtual void toBinary(QDataStream& ds, QHash <QString, quint64>& theIndex);
 		static Node* fromBinary(Document* d, OsbLayer* L, QDataStream& ds, qint8 c, qint64 id);
 
-private:
+	private:
 		Coord Position;
 		CoordBox BBox;
 
@@ -89,7 +89,7 @@ private:
 		double Speed;
 		QPointF Projected;
 
-private:
+	private:
 		NodePrivate* p;
 
 };

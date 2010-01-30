@@ -3,6 +3,7 @@
 
 #include "Maps/MapTypedef.h"
 #include "Maps/Coord.h"
+#include "Feature.h"
 
 #include <QProgressDialog>
 
@@ -86,7 +87,9 @@ public:
 	Feature* get(const QString& id, bool exact=true);
 	void notifyIdUpdate(const QString& id, Feature* aFeature);
 
-	virtual void invalidate(Document*, CoordBox) {}
+	virtual void get(const CoordBox& hz, QList<Feature*>& theFeatures);
+	void getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures, QSet<Way*>& theCoastlines, Document* theDocument,
+					   QList<CoordBox>& invalidRects, QRectF& clipRect, Projection& theProjection, QTransform& theTransform);
 
 	void setDocument(Document* aDocument);
 	Document* getDocument();
@@ -244,9 +247,12 @@ public:
 class OsbLayer : public Layer
 {
 	Q_OBJECT
+
+	friend class OsbFeatureIterator;
+
 public:
 	OsbLayer(const QString& aName);
-	OsbLayer(const QString& aName, const QString& filename);
+	OsbLayer(const QString& aName, const QString& filename, bool isWorld = false);
 	virtual ~OsbLayer();
 
 	virtual /* const */ LayerType classType() {return Layer::OsbLayerType;}
@@ -258,16 +264,15 @@ public:
 	virtual bool isUploadable() {return true;}
 	virtual bool arePointsDrawable();
 
-	virtual void invalidate(Document* d, CoordBox vp);
-	//MapFeature*  getFeatureByRef(MapDocument* d, quint64 ref);
+	virtual void preload();
+	virtual void get(const CoordBox& hz, QList<Feature*>& theFeatures);
+	virtual void getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures, QSet<Way*>& theCoastlines, Document* theDocument,
+							   QList<CoordBox>& invalidRects, QRectF& clipRect, Projection& theProjection, QTransform& theTransform);
 
 	virtual bool toXML(QDomElement& xParent, QProgressDialog & progress);
 	static OsbLayer* fromXML(Document* d, const QDomElement& e, QProgressDialog & progress);
 
 	virtual QString toHtml();
-
-public:
-	QMap < Feature*, quint32 > featRefCount;
 
 protected:
 	OsbLayerPrivate* pp;

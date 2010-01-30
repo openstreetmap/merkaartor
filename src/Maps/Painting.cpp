@@ -157,7 +157,7 @@ static void buildCubicPath(QPainterPath& Path, const QPointF& P1, const QPointF&
 void buildPolygonFromRoad(Way *R, Projection const &theProjection, QPolygonF &Polygon)
 {
 	for (int i=0; i<R->size(); ++i)
-		if (!R->getNode(i)->isVirtual())
+		if (R->getNode(i)->isVisible() && !R->getNode(i)->isVirtual())
 			Polygon.append(theProjection.project(R->getNode(i)));
 }
 

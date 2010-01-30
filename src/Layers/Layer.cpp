@@ -23,7 +23,7 @@
 #include <QMap>
 #include <QList>
 
-/* MAPLAYER */
+/* Layer */
 
 class LayerPrivate
 {
@@ -90,9 +90,53 @@ Layer::~Layer()
 	SAFE_DELETE(p);
 }
 
+void Layer::get(const CoordBox& hz, QList<Feature*>& theFeatures)
+{
+	std::deque < MapFeaturePtr > ret = indexFind(hz);
+	for (std::deque < MapFeaturePtr >::const_iterator it = ret.begin(); it < ret.end(); ++it) {
+		theFeatures.push_back(*it);
+	}
+}
+
+void Layer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures, QSet<Way*>& theCoastlines, Document* theDocument,
+				   QList<CoordBox>& invalidRects, QRectF& clipRect, Projection& theProjection, QTransform& theTransform)
+{
+	if (!isVisible() || !size())
+		return;
+
+	for (int i=0; i < invalidRects.size(); ++i) {
+		std::deque < MapFeaturePtr > ret = indexFind(invalidRects[i]);
+		for (std::deque < MapFeaturePtr >::const_iterator it = ret.begin(); it != ret.end(); ++it) {
+			if (theFeatures[(*it)->renderPriority()].contains(*it))
+				continue;
+
+			if (Way * R = CAST_WAY(*it)) {
+				R->buildPath(theProjection, theTransform, clipRect);
+				theFeatures[(*it)->renderPriority()].insert(*it);
+
+				if (R->isCoastline())
+					theCoastlines.insert(R);
+			} else
+			if (Relation * RR = CAST_RELATION(*it)) {
+				RR->buildPath(theProjection, theTransform, clipRect);
+				theFeatures[(*it)->renderPriority()].insert(*it);
+			} else
+			if (Node * pt = CAST_NODE(*it)) {
+				if (arePointsDrawable())
+					theFeatures[(*it)->renderPriority()].insert(*it);
+			} else
+				theFeatures[(*it)->renderPriority()].insert(*it);
+		}
+	}
+}
+
+
 void Layer::setName(const QString& s)
 {
 	p->Name = s;
+	if (theWidget) {
+		theWidget->getAssociatedMenu()->setTitle(s);
+	}
 }
 
 const QString& Layer::name() const
@@ -439,7 +483,7 @@ QString Layer::toMainHtml()
 	"<small><i>" + QString(metaObject()->className()) + "</i></small><br/>"
 	+ desc;
 	S += "<hr/>";
-		S += "<i>"+QApplication::translate("MapLayer", "Size")+": </i>" + QApplication::translate("MapLayer", "%n features", "", QCoreApplication::CodecForTr, size())+"<br/>";
+		S += "<i>"+QApplication::translate("Layer", "Size")+": </i>" + QApplication::translate("Layer", "%n features", "", QCoreApplication::CodecForTr, size())+"<br/>";
 	S += "%1";
 	S += "</body></html>";
 
@@ -452,7 +496,7 @@ QString Layer::toHtml()
 }
 
 
-// DrawingMapLayer
+// DrawingLayer
 
 DrawingLayer::DrawingLayer(const QString & aName)
 	: Layer(aName)
@@ -556,7 +600,7 @@ DrawingLayer * DrawingLayer::doFromXML(DrawingLayer* l, Document* d, const QDomE
 		if (c.tagName() == "bound") {
 		} else
 		if (c.tagName() == "way") {
-			/* Road* R = */ Way::fromXML(d, l, c);
+			/* Way* R = */ Way::fromXML(d, l, c);
 //			l->add(R);
 			i++;
 		} else
@@ -566,7 +610,7 @@ DrawingLayer * DrawingLayer::doFromXML(DrawingLayer* l, Document* d, const QDomE
 			i++;
 		} else
 		if (c.tagName() == "node") {
-			/* TrackPoint* N = */ Node::fromXML(d, l, c);
+			/* Node* N = */ Node::fromXML(d, l, c);
 //			l->add(N);
 			i++;
 		} else
@@ -595,7 +639,7 @@ DrawingLayer * DrawingLayer::doFromXML(DrawingLayer* l, Document* d, const QDomE
 	return l;
 }
 
-// TrackMapLayer
+// TrackLayer
 
 TrackLayer::TrackLayer(const QString & aName, const QString& filename)
 	: Layer(aName), Filename(filename)
@@ -718,9 +762,9 @@ QString TrackLayer::toHtml()
 		}
 	}
 
-	S += "<i>"+QApplication::translate("TrackMapLayer", "# of track segments")+": </i>" + QApplication::translate("TrackMapLayer", "%1").arg(QLocale().toString(totSegment))+"<br/>";
-	S += "<i>"+QApplication::translate("TrackMapLayer", "Total distance")+": </i>" + QApplication::translate("TrackMapLayer", "%1 km").arg(QLocale().toString(totDistance, 'g', 3))+"<br/>";
-	S += "<i>"+QApplication::translate("TrackMapLayer", "Total duration")+": </i>" + QApplication::translate("TrackMapLayer", "%1h %2m").arg(QLocale().toString(totSec/3600)).arg(QLocale().toString((totSec%3600)/60))+"<br/>";
+	S += "<i>"+QApplication::translate("TrackLayer", "# of track segments")+": </i>" + QApplication::translate("TrackLayer", "%1").arg(QLocale().toString(totSegment))+"<br/>";
+	S += "<i>"+QApplication::translate("TrackLayer", "Total distance")+": </i>" + QApplication::translate("TrackLayer", "%1 km").arg(QLocale().toString(totDistance, 'g', 3))+"<br/>";
+	S += "<i>"+QApplication::translate("TrackLayer", "Total duration")+": </i>" + QApplication::translate("TrackLayer", "%1h %2m").arg(QLocale().toString(totSec/3600)).arg(QLocale().toString((totSec%3600)/60))+"<br/>";
 
 	return toMainHtml().arg(S);
 }
@@ -802,7 +846,7 @@ TrackLayer * TrackLayer::fromXML(Document* d, const QDomElement& e, QProgressDia
 			}
 		}
 		if (c.tagName() == "wpt") {
-			/* TrackPoint* N = */ Node::fromGPX(d, l, c);
+			/* Node* N = */ Node::fromGPX(d, l, c);
 			//l->add(N);
 			progress.setValue(progress.value()+1);
 		}
@@ -819,7 +863,7 @@ TrackLayer * TrackLayer::fromXML(Document* d, const QDomElement& e, QProgressDia
 	return l;
 }
 
-// DirtyMapLayer
+// DirtyLayer
 
 DirtyLayer::DirtyLayer(const QString & aName)
 	: DrawingLayer(aName)
@@ -846,7 +890,7 @@ LayerWidget* DirtyLayer::newWidget(void)
 	return theWidget;
 }
 
-// UploadedMapLayer
+// UploadedLayer
 
 UploadedLayer::UploadedLayer(const QString & aName)
 	: DrawingLayer(aName)
@@ -873,7 +917,7 @@ LayerWidget* UploadedLayer::newWidget(void)
 	return theWidget;
 }
 
-// DeletedMapLayer
+// DeletedLayer
 
 DeletedLayer::DeletedLayer(const QString & aName)
 	: DrawingLayer(aName)
@@ -893,7 +937,7 @@ bool DeletedLayer::toXML(QDomElement& , QProgressDialog & )
 
 DeletedLayer* DeletedLayer::fromXML(Document* d, const QDomElement& e, QProgressDialog & progress)
 {
-	/* Only keep DeletedMapLayer for backward compatibility with MDC */
+	/* Only keep DeletedLayer for backward compatibility with MDC */
 	DrawingLayer::doFromXML(dynamic_cast<DrawingLayer*>(d->getDirtyOrOriginLayer()), d, e, progress);
 	return NULL;
 }
@@ -903,13 +947,13 @@ LayerWidget* DeletedLayer::newWidget(void)
 	return NULL;
 }
 
-// OsbMapLayer
+// OsbLayer
 
 class OsbLayerPrivate
 {
 public:
 	OsbLayerPrivate()
-		: theImp(0)
+		: theImp(0), IsWorld(false)
 	{
 	}
 	OsbLayer* theLayer;
@@ -922,6 +966,101 @@ public:
 	void loadRegion(Document* d, int rt);
 	void clearRegion(Document* d, int rt);
 	void handleTile(Document* d, int rt);
+
+	bool IsWorld;
+	CoordBox theVP;
+};
+
+class OsbFeatureIterator
+{
+public:
+	OsbLayer* theLayer;
+
+	QMap< qint32, OsbRegion* >::const_iterator itR;
+	QHash< qint32, OsbTile* >::const_iterator itT;
+	QList<Feature_ptr>::const_iterator itF;
+
+	bool isAtEnd;
+
+	Feature* get()
+	{
+		if (!isAtEnd)
+			return (*itF).get();
+		else
+			return NULL;
+	}
+
+	OsbFeatureIterator(OsbLayer* aLayer)
+			: theLayer(aLayer), isAtEnd(false)
+	{
+		itR = theLayer->pp->theImp->theRegionList.constBegin()+1;
+		while (true) {
+			if (itR != theLayer->pp->theImp->theRegionList.constEnd()) {
+				itT = itR.value()->getTileIndex().constBegin();
+				while (itT != itR.value()->getTileIndex().constEnd() && (!itT.value() || itT.value()->isDeleted)) {
+					++itT;
+				}
+				if (itT == itR.value()->getTileIndex().constEnd()) {
+					++itR;
+					continue;
+				}
+				itF = itT.value()->theIndex.constBegin();
+				break;
+			} else {
+				isAtEnd = true;
+				break;
+			}
+		}
+	}
+
+	OsbFeatureIterator& operator++()
+	{
+		if (isAtEnd)
+			return *this;
+
+		while (true) {
+			++itF;
+			while (itF == itT.value()->theIndex.constEnd())
+			{
+				++itT;
+				while (itT != itR.value()->getTileIndex().constEnd() && (!itT.value() || itT.value()->isDeleted)) {
+					++itT;
+				}
+				if (itT != itR.value()->getTileIndex().constEnd())
+					itF = itT.value()->theIndex.constBegin();
+				else {
+					while (true) {
+						++itR;
+						if (itR != theLayer->pp->theImp->theRegionList.constEnd()) {
+							itT = itR.value()->getTileIndex().constBegin();
+							while (itT != itR.value()->getTileIndex().constEnd() && (!itT.value() || itT.value()->isDeleted)) {
+								++itT;
+							}
+							if (itT == itR.value()->getTileIndex().constEnd())
+								continue;
+							itF = itT.value()->theIndex.constBegin();
+							break;
+						} else {
+							isAtEnd = true;
+							return *this;
+						}
+					}
+				}
+			}
+
+			if ((*itF)->isDeleted() || (*itF)->isHidden() || !(*itF)->hasEditPainter())
+				continue;
+
+			break;
+		}
+		return *this;
+	}
+
+	bool isEnd() const
+	{
+		return isAtEnd;
+	}
+
 };
 
 OsbLayer::OsbLayer(const QString & aName)
@@ -933,12 +1072,13 @@ OsbLayer::OsbLayer(const QString & aName)
 	pp->theImp = new ImportExportOsmBin(NULL);
 }
 
-OsbLayer::OsbLayer(const QString & aName, const QString & filename)
+OsbLayer::OsbLayer(const QString & aName, const QString & filename, bool isWorld)
 	: Layer(aName)
 {
 	p->Visible = true;
 	pp = new OsbLayerPrivate();
 	pp->theLayer = this;
+	pp->IsWorld = isWorld;
 	pp->theImp = new ImportExportOsmBin(NULL);
 	if (pp->theImp->loadFile(filename))
 		pp->theImp->import(this);
@@ -1029,12 +1169,62 @@ void OsbLayerPrivate::clearRegion(Document* d, int rt)
 	}
 }
 
-void OsbLayer::invalidate(Document* d, CoordBox vp)
+
+void OsbLayer::preload()
+{
+	pp->rl = 0;
+	pp->ri = pp->theImp->theRegionToc.constBegin();
+
+	pp->loadRegion(NULL, 0);
+}
+
+void OsbLayer::get(const CoordBox& hz, QList<Feature*>& theFeatures)
+{
+	if (intToAng(pp->theVP.lonDiff()) > M_PREFS->getRegionTo0Threshold()) {
+//		Layer::get(hz, theFeatures);
+		return;
+	} else {
+		OsbFeatureIterator oit(this);
+		while (!oit.isEnd()) {
+			Feature* F = oit.get();
+
+			if (!theFeatures.contains(F)) {
+				if (hz.intersects(F->boundingBox())) {
+					if (Way * R = CAST_WAY(F)) {
+						theFeatures.push_back(R);
+					} else
+					if (Relation * RR = CAST_RELATION(F)) {
+//						theFeatures.push_back(RR);
+					} else
+					if (Node * pt = CAST_NODE(F)) {
+						if (arePointsDrawable())
+							theFeatures.push_back(pt);
+					} else
+						theFeatures.push_back(F);
+					break;
+				}
+			}
+
+			++oit;
+		}
+	}
+}
+
+void OsbLayer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures, QSet<Way*>& theCoastlines, Document* theDocument,
+				   QList<CoordBox>& invalidRects, QRectF& clipRect, Projection& theProjection, QTransform& theTransform)
 {
 	if (!isVisible())
 		return;
 
-	QRectF r(vp.toQRectF());
+	pp->theVP = CoordBox();
+	for (int i=0; i < invalidRects.size(); ++i) {
+		if (pp->theVP.isNull())
+			pp->theVP = invalidRects[i];
+		else
+			pp->theVP.merge(invalidRects[i]);
+	}
+
+	QRectF r(pp->theVP.toQRectF());
 
 	int xr1 = int((r.topLeft().x() + INT_MAX) / REGION_WIDTH);
 	int yr1 = int((r.topLeft().y() + INT_MAX) / REGION_WIDTH);
@@ -1049,40 +1239,83 @@ void OsbLayer::invalidate(Document* d, CoordBox vp)
 	pp->rl = 0;
 	pp->ri = pp->theImp->theRegionToc.constBegin();
 
-	pp->loadRegion(d, 0);
-	for (int j=yr1; j <= yr2; ++j)
-		for (int i=xr1; i <= xr2; ++i) {
-			pp->loadRegion(d, j*NUM_REGIONS+i);
-		}
+
+	pp->loadRegion(theDocument, 0);
+
+	blockIndexing(true);
+
+	if (intToAng(pp->theVP.lonDiff()) <= M_PREFS->getRegionTo0Threshold()) {
+		for (int j=yr1; j <= yr2; ++j)
+			for (int i=xr1; i <= xr2; ++i) {
+				pp->loadRegion(theDocument, j*NUM_REGIONS+i);
+			}
+	}
 
 	pp->rl = 0;
-	if (intToAng(vp.lonDiff()) <= M_PREFS->getTileToRegionThreshold()) {
+	if (intToAng(pp->theVP.lonDiff()) <= M_PREFS->getTileToRegionThreshold()) {
 		for (int j=yt1; j <= yt2; ++j)
 			for (int i=xt1; i <= xt2; ++i)
-				pp->handleTile(d, j*NUM_TILES+i);
+				pp->handleTile(theDocument, j*NUM_TILES+i);
 	}
 	while (pp->rl < pp->loadedTiles.size() ) {
-		if (pp->theImp->clearTile(pp->loadedTiles.at(pp->rl), d, this))
+		if (pp->theImp->clearTile(pp->loadedTiles.at(pp->rl), theDocument, this))
 			pp->loadedTiles.removeAt(pp->rl);
 		else
 			++pp->rl;
 	}
 
-	pp->rl = 0;
-	for (int j=yr1; j <= yr2; ++j)
-		for (int i=xr1; i <= xr2; ++i) {
-			pp->clearRegion(d, j*NUM_REGIONS+i);
-		}
+	pp->rl = 1;
+	if (intToAng(pp->theVP.lonDiff()) <= M_PREFS->getRegionTo0Threshold()) {
+		for (int j=yr1; j <= yr2; ++j)
+			for (int i=xr1; i <= xr2; ++i) {
+				pp->clearRegion(theDocument, j*NUM_REGIONS+i);
+			}
+	}
 
 	while (pp->rl < pp->loadedRegions.size()) {
-		if (pp->theImp->clearRegion(pp->loadedRegions.at(pp->rl), d, this))
+		if (pp->theImp->clearRegion(pp->loadedRegions.at(pp->rl), theDocument, this))
 			pp->loadedRegions.removeAt(pp->rl);
 		else
 			++pp->rl;
 	}
+
+	blockIndexing(false);
+
+	if (intToAng(pp->theVP.lonDiff()) > M_PREFS->getRegionTo0Threshold()) {
+		Layer::getFeatureSet(theFeatures, theCoastlines, theDocument,
+				   invalidRects, clipRect, theProjection, theTransform);
+	} else {
+		OsbFeatureIterator oit(this);
+		while (!oit.isEnd()) {
+			Feature* F = oit.get();
+			if (theFeatures[F->renderPriority()].contains(F))
+				continue;
+			for (int i=0; i < invalidRects.size(); ++i) {
+				if (invalidRects[i].intersects(F->boundingBox())) {
+					if (Way * R = CAST_WAY(F)) {
+						R->buildPath(theProjection, theTransform, clipRect);
+						theFeatures[F->renderPriority()].insert(F);
+						if (R->isCoastline())
+							theCoastlines.insert(R);
+					} else
+					if (Relation * RR = CAST_RELATION(F)) {
+						RR->buildPath(theProjection, theTransform, clipRect);
+						theFeatures[F->renderPriority()].insert(F);
+					} else
+					if (Node * pt = CAST_NODE(F)) {
+						if (arePointsDrawable())
+							theFeatures[F->renderPriority()].insert(F);
+					} else
+						theFeatures[F->renderPriority()].insert(F);
+					break;
+				}
+			}
+			++oit;
+		}
+	}
 }
 
-//MapFeature*  OsbMapLayer::getFeatureByRef(MapDocument* d, quint64 ref)
+//Feature*  OsbLayer::getFeatureByRef(Document* d, quint64 ref)
 //{
 //	return pp->theImp->getFeature(d, this, ref);
 //}
@@ -1092,6 +1325,9 @@ bool OsbLayer::toXML(QDomElement& xParent, QProgressDialog & progress)
 	Q_UNUSED(progress);
 
 	bool OK = true;
+
+	if (pp->IsWorld)
+		return OK;
 
 	QDomElement e = xParent.ownerDocument().createElement(metaObject()->className());
 	xParent.appendChild(e);
@@ -1107,6 +1343,43 @@ bool OsbLayer::toXML(QDomElement& xParent, QProgressDialog & progress)
 	e.setAttribute("filename", pp->theImp->getFilename());
 
 	return OK;
+
+//	bool OK = true;
+//
+//	QDomElement e = xParent.ownerDocument().createElement(metaObject()->className());
+//	xParent.appendChild(e);
+//
+//	e.setAttribute("xml:id", id());
+//	e.setAttribute("name", p->Name);
+//	e.setAttribute("alpha", QString::number(p->alpha,'f',2));
+//	e.setAttribute("visible", QString((p->Visible ? "true" : "false")));
+//	e.setAttribute("selected", QString((p->selected ? "true" : "false")));
+//	e.setAttribute("enabled", QString((p->Enabled ? "true" : "false")));
+//	e.setAttribute("readonly", QString((p->Readonly ? "true" : "false")));
+//
+//	QDomElement o = xParent.ownerDocument().createElement("osm");
+//	e.appendChild(o);
+//	o.setAttribute("version", "0.5");
+//	o.setAttribute("generator", "Merkaartor");
+//
+//	if (p->Features.size()) {
+//		QDomElement bb = xParent.ownerDocument().createElement("bound");
+//		o.appendChild(bb);
+//		CoordBox layBB = boundingBox();
+//		QString S = QString().number(intToAng(layBB.bottomLeft().lat()),'f',6) + ",";
+//		S += QString().number(intToAng(layBB.bottomLeft().lon()),'f',6) + ",";
+//		S += QString().number(intToAng(layBB.topRight().lat()),'f',6) + ",";
+//		S += QString().number(intToAng(layBB.topRight().lon()),'f',6);
+//		bb.setAttribute("box", S);
+//		bb.setAttribute("origin", QString("http://www.openstreetmap.org/api/%1").arg(M_PREFS->apiVersion()));
+//	}
+//
+//	QList<MapFeaturePtr>::iterator it;
+//	for(it = p->Features.begin(); it != p->Features.end(); it++)
+//		(*it)->toXML(o, progress);
+//
+//	return OK;
+
 }
 
 OsbLayer * OsbLayer::fromXML(Document* d, const QDomElement& e, QProgressDialog & progress)
@@ -1137,9 +1410,8 @@ QString OsbLayer::toHtml()
 {
 	QString S;
 
-	S += "<i>"+QApplication::translate("OsbMapLayer", "# of loaded Regions")+": </i>" + QApplication::translate("OsbMapLayer", "%1").arg(QLocale().toString(pp->loadedRegions.size()))+"<br/>";
-	S += "<i>"+QApplication::translate("OsbMapLayer", "# of loaded Tiles")+": </i>" + QApplication::translate("OsbMapLayer", "%1").arg(QLocale().toString(pp->loadedTiles.size()))+"<br/>";
+	S += "<i>"+QApplication::translate("OsbLayer", "# of loaded Regions")+": </i>" + QApplication::translate("OsbLayer", "%1").arg(QLocale().toString(pp->loadedRegions.size()))+"<br/>";
+	S += "<i>"+QApplication::translate("OsbLayer", "# of loaded Tiles")+": </i>" + QApplication::translate("OsbLayer", "%1").arg(QLocale().toString(pp->loadedTiles.size()))+"<br/>";
 
 	return toMainHtml().arg(S);
 }
-

@@ -1,7 +1,7 @@
 //
 // C++ Interface: ImportExportOsmBin
 //
-// Description: 
+// Description:
 //
 //
 // Author: cbro <cbro@semperpax.com>, (C) 2008
@@ -12,6 +12,7 @@
 #ifndef IMPORTEXPORTOSMBIN_H
 #define IMPORTEXPORTOSMBIN_H
 
+#include "Feature.h"
 #include <ImportExport/IImportExport.h>
 
 #define TILE_WIDTH (int(UINT_MAX/40000))
@@ -20,9 +21,23 @@
 #define NUM_REGIONS (int(UINT_MAX/REGION_WIDTH))
 #define TILETOREGION_THRESHOLD 9
 
+typedef boost::intrusive_ptr<Feature> Feature_ptr;
+
 class ImportExportOsmBin;
 
-class OsbRegion 
+class OsbTile
+{
+	public:
+		OsbTile();
+		~OsbTile();
+
+		QList<Feature_ptr> theIndex;
+
+		bool isLocked;
+		bool isDeleted;
+};
+
+class OsbRegion
 {
 	public:
 		OsbRegion(ImportExportOsmBin* osb);
@@ -31,6 +46,9 @@ class OsbRegion
 		bool load(qint32 rg, Document* d, OsbLayer* theLayer);
 		bool loadRegion(qint32 rg, Document* d, OsbLayer* theLayer);
 		bool loadTile(qint32 tile, Document* d, OsbLayer* theLayer);
+
+		QHash< qint32, OsbTile* >&  getTileIndex();
+
 		bool clearRegion(Document* d, OsbLayer* theLayer);
 		bool clearTile(qint32 tile, Document* d, OsbLayer* theLayer);
 
@@ -38,33 +56,34 @@ class OsbRegion
 		qint32		region;
 		QIODevice*	device;
 		bool		isWorld;
-	
+
 		QList< QPair < qint32, quint64 > > theRegionIndex;
+		QHash< qint32, OsbTile* > theTileIndex;
+
 		QMap< qint32, quint64 > theTileToc;
 
 		quint64 tocPos;
 		ImportExportOsmBin* theOsb;
-};
 
-class OsbTile
-{
+		bool isLocked;
+		bool isDeleted;
 };
-
 
 /**
 	@author cbro <cbro@semperpax.com>
 */
 class ImportExportOsmBin : public IImportExport
 {
-	friend class OsbLayer;
 	friend class WorldOsbManager;
+	friend class OsbLayer;
 	friend class OsbRegion;
 	friend class OsbLayerPrivate;
+	friend class OsbFeatureIterator;
 
 public:
-    ImportExportOsmBin(Document* doc);
+	ImportExportOsmBin(Document* doc);
 
-    ~ImportExportOsmBin();
+	~ImportExportOsmBin();
 
 	// import the  input
 	virtual bool import(Layer* aLayer);
@@ -74,20 +93,20 @@ public:
 	virtual bool export_(const QList<Feature *>& featList, quint32 rg);
 
 protected:
-//	void addTileIndex(MapFeature* F, qint64 pos);
+//	void addTileIndex(Feature* F, qint64 pos);
 	void doAddTileIndex(Feature* F, qint32 tile);
 	bool exists(Feature* F, qint32 tile);
-	void addTileIndex(Feature* F);
+	void addTileIndex(Feature* F, qint32 selRegion=-1);
 	void tagsToBinary(Feature* F, QDataStream& ds);
 	void tagsFromBinary(Feature* F, QDataStream& ds);
 	void tagsPopularity(Feature * F);
-	
-	bool prepare();
+
+	bool prepare(qint32 selRegion=-1);
 	bool writeHeader(QDataStream& ds);
 	bool writeIndex(QDataStream& ds, int selRegion=-1);
 	bool writeTagLists(QDataStream& ds);
 	//bool writeNodes(QDataStream& ds);
-	//bool writeRoads(QDataStream& ds);
+	//bool writeWays(QDataStream& ds);
 	//bool writeRelations(QDataStream& ds);
 	bool writeFeatures(QList<Feature*>, QDataStream& ds);
 
@@ -100,9 +119,9 @@ protected:
 	bool readRegionToc(QDataStream& ds);
 	bool readPopularTagLists(QDataStream& ds);
 	//bool readTagLists(QDataStream& ds);
-	//bool readNodes(QDataStream& ds, OsbMapLayer* aLayer);
-	//bool readRoads(QDataStream& ds, OsbMapLayer* aLayer);
-	//bool readRelations(QDataStream& ds, OsbMapLayer* aLayer);
+	//bool readNodes(QDataStream& ds, OsbLayer* aLayer);
+	//bool readWays(QDataStream& ds, OsbLayer* aLayer);
+	//bool readRelations(QDataStream& ds, OsbLayer* aLayer);
 
 	bool loadRegion(qint32 rg, Document* d, OsbLayer* theLayer);
 	bool loadTile(qint32 tile, Document* d, OsbLayer* theLayer);
@@ -124,13 +143,13 @@ protected:
 	QMap< qint32, QList<Feature*> > theTileIndex;
 	QMap< qint32, QList< QPair < qint32, quint64 > > > theRegionIndex;
 	QMap< qint32, QList<Feature*> > theTileNodesIndex;
-	QMap< qint32, QList<Feature*> > theTileRoadsIndex;
+	QMap< qint32, QList<Feature*> > theTileWaysIndex;
 	QMap< qint32, QList<Feature*> > theTileRelationsIndex;
 
 	QHash <QString, quint64> theFeatureIndex;
 
 	QMap<quint64, Node*> theNodes;
-	QMap<quint64,Way*> theRoads;
+	QMap<quint64,Way*> theWays;
 	QMap<quint64, Relation*> theRelations;
 
 	QMap <QString, quint64> theTagKeysIndex;

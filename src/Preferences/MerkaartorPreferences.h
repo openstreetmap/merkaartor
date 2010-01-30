@@ -176,7 +176,7 @@ public:
 	void setLastSearchValue(const QString & theValue);
 	QString getLastSearchValue() const;
 
-    /* Visual */
+	/* Visual */
 	QStringList getAlphaList() const;
 	void setAlphaList();
 	qreal getAlpha(QString lvl);
@@ -287,10 +287,10 @@ public:
 	M_PARAM_DECLARE_BOOL(DisableStyleForTracks)
 
 	/* Visual */
-    M_PARAM_DECLARE_INT(ZoomIn)
-    M_PARAM_DECLARE_INT(ZoomOut)
-    M_PARAM_DECLARE_BOOL(ZoomBoris)
-    M_PARAM_DECLARE_BOOL(BackgroundOverwriteStyle)
+	M_PARAM_DECLARE_INT(ZoomIn)
+	M_PARAM_DECLARE_INT(ZoomOut)
+	M_PARAM_DECLARE_BOOL(ZoomBoris)
+	M_PARAM_DECLARE_BOOL(BackgroundOverwriteStyle)
 	M_PARAM_DECLARE_INT(AreaOpacity)
 	M_PARAM_DECLARE_BOOL(UseShapefileForBackground)
 	M_PARAM_DECLARE_BOOL(DrawingHack)
@@ -324,6 +324,7 @@ public:
 
 	/* World OSB manager */
 	M_PARAM_DECLARE_DOUBLE(TileToRegionThreshold)
+	M_PARAM_DECLARE_DOUBLE(RegionTo0Threshold)
 
 	M_PARAM_DECLARE_STRING(WorldOsbUri)
 	M_PARAM_DECLARE_BOOL(WorldOsbAutoload)
@@ -384,7 +385,7 @@ public:
 
 #ifndef _MOBILE
 	void setProjectionType(ProjectionType theValue);
-    ProjectionType getProjectionType();
+	ProjectionType getProjectionType();
 	ProjectionsList getProjectionsList();
 	ProjectionItem getProjection(QString aProj);
 #endif

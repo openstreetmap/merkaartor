@@ -305,51 +305,13 @@ void MapView::buildFeatureSet()
 	if (!theDocument)
 		return;
 
-	for (int i=0; i<theDocument->layerSize(); ++i) {
-		theDocument->getLayer(i)->invalidate(theDocument, p->Viewport);
-		if (Main)
-			Main->properties()->adjustSelection();
-	}
-
-	CoordBox coordRegion;
 	QRectF clipRect = p->theTransform.inverted().mapRect(QRectF(rect().adjusted(-1000, -1000, 1000, 1000)));
 
-	for (int i=0; i < p->invalidRects.size(); ++i) {
-		Coord bl = p->invalidRects[i].bottomLeft();
-		Coord tr = p->invalidRects[i].topRight();
-		//qDebug() << "rect : " << p->theTransform.map(theProjection.project(bl)) << ", " << p->theTransform.map(theProjection.project(tr));
-		for (int j=0; j<theDocument->layerSize(); ++j) {
-			if (!theDocument->getLayer(j)->size() || !theDocument->getLayer(j)->isVisible())
-				continue;
-
-			std::deque < MapFeaturePtr > ret = theDocument->getLayer(j)->indexFind(CoordBox(bl, tr));
-			for (std::deque < MapFeaturePtr >::const_iterator it = ret.begin(); it != ret.end(); ++it) {
-
-				if (p->theFeatures[(*it)->renderPriority()].contains(*it))
-					continue;
-
-				if (Way * R = CAST_WAY(*it)) {
-					R->buildPath(theProjection, p->theTransform, clipRect);
-					p->theFeatures[(*it)->renderPriority()].insert(*it);
-
-					if (R->isCoastline())
-						p->theCoastlines.insert(R);
-				} else
-				if (Relation * RR = CAST_RELATION(*it)) {
-					RR->buildPath(theProjection, p->theTransform, clipRect);
-					p->theFeatures[(*it)->renderPriority()].insert(*it);
-				} else
-				if (Node * pt = CAST_NODE(*it)) {
-					if (theDocument->getLayer(j)->arePointsDrawable())
-						p->theFeatures[(*it)->renderPriority()].insert(*it);
-				} else
-					p->theFeatures[(*it)->renderPriority()].insert(*it);
-			}
-		}
-
-		coordRegion.merge(CoordBox(bl, tr));
+	for (int i=0; i<theDocument->layerSize(); ++i) {
+		if (Main)
+			Main->properties()->adjustSelection();
+		theDocument->getLayer(i)->getFeatureSet(p->theFeatures, p->theCoastlines, theDocument, p->invalidRects, clipRect, theProjection, p->theTransform);
 	}
-//	sortRenderingPriority();
 }
 
 bool testColor(const QImage& theImage, const QPoint& P, const QRgb& targetColor)

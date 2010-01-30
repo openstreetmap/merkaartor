@@ -5,8 +5,9 @@
 #include "PaintStyle/PaintStyle.h"
 
 #include <QtCore/QString>
-
 #include <QList>
+
+#include <boost/intrusive_ptr.hpp>
 
 #define CAST_NODE(x) (dynamic_cast<Node*>(x))
 #define CAST_WAY(x) (dynamic_cast<Way*>(x))
@@ -56,6 +57,12 @@ class RenderPriority
 		Class theClass;
 		double InClassPriority;
 };
+
+namespace boost
+{
+	void intrusive_ptr_add_ref(Feature * p);
+	void intrusive_ptr_release(Feature * p);
+}
 
 /// Used to store objects of the map
 class Feature : public QObject
@@ -225,6 +232,20 @@ class Feature : public QObject
 		 */
 		virtual bool isDeleted() const;
 
+		/** set the visibility state of the feature
+		 */
+		virtual void setVisible(bool val);
+
+		/** check if the feature is visible
+		 * @return true if visible
+		 */
+		virtual bool isVisible() const;
+
+		/** check if the feature is hidden
+		 * @return true if hidden
+		 */
+		virtual bool isHidden() const;
+
 		/** check if the feature has been uploaded
 		 * @return true if uploaded
 		 */
@@ -295,6 +316,9 @@ class Feature : public QObject
 		static void tagsFromXML(Document* d, Feature* f, QDomElement e);
 		static QString stripToOSMId(const QString& id);
 
+		long    m_references;
+		friend void ::boost::intrusive_ptr_add_ref(Feature * p);
+		friend void ::boost::intrusive_ptr_release(Feature * p);
 };
 
 Q_DECLARE_METATYPE( Feature * );

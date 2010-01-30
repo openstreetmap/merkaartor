@@ -774,10 +774,10 @@ void MerkaartorPreferences::setProjectionType(ProjectionType theValue)
 
 ProjectionType MerkaartorPreferences::getProjectionType()
 {
-    if (getZoomBoris())
-        return (ProjectionType)QString("Mercator");
-    else
-        return (ProjectionType)Sets->value("projection/Type", "Mercator").toString();
+	if (getZoomBoris())
+		return (ProjectionType)QString("Mercator");
+	else
+		return (ProjectionType)Sets->value("projection/Type", "Mercator").toString();
 }
 
 ProjectionsList MerkaartorPreferences::getProjectionsList()
@@ -1270,6 +1270,7 @@ M_PARAM_IMPLEMENT_BOOL(TranslateTags, locale, true)
 
 /* World OSB manager */
 M_PARAM_IMPLEMENT_DOUBLE(TileToRegionThreshold, WOSB, 0.03)
+M_PARAM_IMPLEMENT_DOUBLE(RegionTo0Threshold, WOSB, 1.)
 
 M_PARAM_IMPLEMENT_STRING(WorldOsbUri, WOSB, "")
 M_PARAM_IMPLEMENT_BOOL(WorldOsbAutoload, WOSB, false)

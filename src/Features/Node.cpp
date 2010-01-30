@@ -129,7 +129,7 @@ void Node::setPosition(const Coord& aCoord)
 	Position = aCoord;
 	BBox = CoordBox(Position,Position);
 	p->ProjectionRevision = 0;
-	if (layer()) {
+	if (layer() && !isDeleted() && isVisible()) {
 		layer()->indexAdd(BBox, this);
 	}
 	notifyChanges();

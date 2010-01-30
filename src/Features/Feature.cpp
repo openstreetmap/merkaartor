@@ -60,6 +60,24 @@ const QString encodeAttributes(const QString & text);
 //#endif
 //}
 
+namespace boost
+{
+	void intrusive_ptr_add_ref(Feature * p)
+	{
+		++(p->m_references);
+	}
+	void intrusive_ptr_release(Feature * p)
+	{
+		if (--(p->m_references) == 0) {
+			if (p->layer())
+				p->layer()->deleteFeature(p);
+			else
+				delete p;
+		}
+	}
+} // namespace boost
+
+
 void copyTags(Feature* Dest, Feature* Src)
 {
 	for (int i=0; i<Src->tagSize(); ++i)
@@ -74,7 +92,7 @@ class MapFeaturePrivate
 				PossiblePaintersUpToDate(false),
 				PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
 				theFeature(0), LastPartNotification(0),
-				Time(QDateTime::currentDateTime()), Deleted(false), Uploaded(false), LongId(0)
+				Time(QDateTime::currentDateTime()), Deleted(false), Visible(true), Uploaded(false), LongId(0)
 				, Virtual(false)
 		{
 			initVersionNumber();
@@ -84,7 +102,7 @@ class MapFeaturePrivate
 				PossiblePaintersUpToDate(false),
 				PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
 				theFeature(0), LastPartNotification(0),
-				Time(other.Time), Deleted(false), Uploaded(false), LongId(0)
+				Time(other.Time), Deleted(false), Visible(true), Uploaded(false), LongId(0)
 				, Virtual(other.Virtual)
 		{
 			initVersionNumber();
@@ -111,6 +129,7 @@ class MapFeaturePrivate
 		QString User;
 		int VersionNumber;
 		bool Deleted;
+		bool Visible;
 		bool Uploaded;
 		qint64 LongId;
 		RenderPriority theRenderPriority;
@@ -314,6 +333,30 @@ void Feature::setDeleted(bool delState)
 bool Feature::isDeleted() const
 {
 	return p->Deleted;
+}
+
+void Feature::setVisible(bool state)
+{
+	if (state == p->Visible)
+		return;
+
+	if (layer()) {
+		if (!state)
+			layer()->indexRemove(boundingBox(), this);
+		else
+			layer()->indexAdd(boundingBox(), this);
+	}
+	p->Visible = state;
+}
+
+bool Feature::isVisible() const
+{
+	return p->Visible;
+}
+
+bool Feature::isHidden() const
+{
+	return !p->Visible;
 }
 
 void Feature::setVirtual(bool val)
@@ -553,7 +596,6 @@ const Feature* Feature::getParent(int i) const
 {
 	return p->Parents[i];
 }
-
 
 void Feature::notifyChanges()
 {
