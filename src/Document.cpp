@@ -134,25 +134,25 @@ Document* Document::fromXML(const QDomElement e, double version, LayerDock* aDoc
 		if (c.tagName() == "ImageMapLayer") {
 			/*ImageMapLayer* l =*/ ImageMapLayer::fromXML(NewDoc, c, progress);
 		} else
-		if (c.tagName() == "DeletedMapLayer") {
+		if (c.tagName() == "DeletedLayer") {
 			/*DeletedMapLayer* l =*/ DeletedLayer::fromXML(NewDoc, c, progress);
 		} else
-		if (c.tagName() == "DirtyMapLayer") {
+		if (c.tagName() == "DirtyLayer") {
 			/*DirtyMapLayer* l =*/ DirtyLayer::fromXML(NewDoc, c, progress);
 		} else
-		if (c.tagName() == "UploadedMapLayer") {
+		if (c.tagName() == "UploadedLayer") {
 			/*UploadedMapLayer* l =*/ UploadedLayer::fromXML(NewDoc, c, progress);
 		} else
-		if (c.tagName() == "DrawingMapLayer") {
+		if (c.tagName() == "DrawingLayer") {
 			/*DrawingMapLayer* l =*/ DrawingLayer::fromXML(NewDoc, c, progress);
 		} else
-		if (c.tagName() == "TrackMapLayer") {
+		if (c.tagName() == "TrackLayer") {
 			/*TrackMapLayer* l =*/ TrackLayer::fromXML(NewDoc, c, progress);
 		} else
-		if (c.tagName() == "ExtractedMapLayer") {
+		if (c.tagName() == "ExtractedLayer") {
 			/*DrawingMapLayer* l =*/ DrawingLayer::fromXML(NewDoc, c, progress);
 		} else
-		if (c.tagName() == "OsbMapLayer") {
+		if (c.tagName() == "OsbLayer") {
 			/*OsbMapLayer* l =*/ OsbLayer::fromXML(NewDoc, c, progress);
 		} else
 		if (c.tagName() == "CommandHistory") {
