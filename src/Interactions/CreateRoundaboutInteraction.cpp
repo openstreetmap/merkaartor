@@ -52,28 +52,6 @@ QString CreateRoundaboutInteraction::toHtml()
 	return S;
 }
 
-void CreateRoundaboutInteraction::testIntersections(CommandList* L, Way* Left, int FromIdx, Way* Right, int RightIndex)
-{
-	LineF L1(COORD_TO_XY(Right->getNode(RightIndex-1)),
-		COORD_TO_XY(Right->getNode(RightIndex)));
-	for (int i=FromIdx; i<Left->size(); ++i)
-	{
-		LineF L2(COORD_TO_XY(Left->getNode(i-1)),
-			COORD_TO_XY(Left->getNode(i)));
-		QPointF Intersection(L1.intersectionWith(L2));
-		if (L1.segmentContains(Intersection) && L2.segmentContains(Intersection))
-		{
-			Node* Pt = new Node(XY_TO_COORD(Intersection));
-			L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),Pt,true));
-			L->add(new WayAddNodeCommand(Left,Pt,i));
-			L->add(new WayAddNodeCommand(Right,Pt,RightIndex));
-			testIntersections(L,Left,i+2,Right,RightIndex);
-			testIntersections(L,Left,i+2,Right,RightIndex+1);
-			return;
-		}
-	}
-}
-
 void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
 {
 	if (event->buttons() & Qt::LeftButton)
@@ -121,15 +99,9 @@ void CreateRoundaboutInteraction::mousePressEvent(QMouseEvent * event)
 			L->add(new AddFeatureCommand(Main->document()->getDirtyOrOriginLayer(),R,true));
 			for (FeatureIterator it(document()); !it.isEnd(); ++it)
 			{
-				Way* W1 = dynamic_cast<Way*>(it.get());
+				Way* W1 = CAST_WAY(it.get());
 				if (W1 && (W1 != R))
-					for (int i=1; i<W1->size(); ++i)
-					{
-						int Before = W1->size();
-						testIntersections(L,R,1,W1,i);
-						int After = W1->size();
-						i += (After-Before);
-					}
+					Way::createJunction(Main->document(), L, R, W1, true);
 			}
 			Main->properties()->setSelection(R);
 			document()->addHistory(L);

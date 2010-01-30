@@ -1289,3 +1289,40 @@ Way * Way::GetSingleParentRoadInner(Feature * mapFeature)
 	return parentRoad;
 }
 
+int Way::createJunction(Document* theDocument, CommandList* theList, Way* R1, Way* R2, bool doIt)
+{
+	int numInter = 0;
+
+	//TODO test that the junction do not already exists!
+	typedef ggl::point_2d P;
+
+	for (int i=0; i<R1->size()-1; ++i) {
+		P a(R1->getNode(i)->position().lon(), R1->getNode(i)->position().lat());
+		P b(R1->getNode(i+1)->position().lon(), R1->getNode(i+1)->position().lat());
+		ggl::segment<P> s1(a, b);
+
+		for (int j=0; j<R2->size()-1; ++j) {
+			P c(R2->getNode(j)->position().lon(), R2->getNode(j)->position().lat());
+			P d(R2->getNode(j+1)->position().lon(), R2->getNode(j+1)->position().lat());
+			ggl::segment<P> s2(c, d);
+
+			std::vector<ggl::point_2d> intersected;
+//			ggl::intersection < ggl::point_2d, ggl::segment, ggl::segment, std::back_insert_iterator< std::vector<ggl::point_2d> > >
+//				(s1, s2, std::back_inserter(intersected));
+			ggl::intersection<ggl::point_2d>(s1, s2, std::back_inserter(intersected));
+
+			if (intersected.size()) {
+				numInter++;
+				if (doIt) {
+					Node* pt = new Node(Coord(qRound(intersected[0].y()), qRound(intersected[0].x())));
+					theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(R1->layer()),pt,true));
+					theList->add(new WayAddNodeCommand(R1,pt,i+1,theDocument->getDirtyOrOriginLayer(R1->layer())));
+					theList->add(new WayAddNodeCommand(R2,pt,j+1,theDocument->getDirtyOrOriginLayer(R2->layer())));
+				}
+				++i; ++j;
+			}
+		}
+	}
+
+	return numInter;
+}

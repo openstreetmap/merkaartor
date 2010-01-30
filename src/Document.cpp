@@ -775,7 +775,7 @@ bool FeatureIterator::check()
 
 	Feature* curFeature = theDocument->getLayer(curLayerIdx)->get(curFeatureIdx);
 	if (curFeature->lastUpdated() == Feature::NotYetDownloaded
-			|| curFeature->isDeleted())
+			|| curFeature->isDeleted() || curFeature->isVirtual())
 		return false;
 
 	return true;

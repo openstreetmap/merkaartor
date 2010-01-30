@@ -143,14 +143,14 @@ void MapFeaturePrivate::initVersionNumber()
 }
 
 Feature::Feature()
-: p(0), MetaUpToDate(false)
+: p(0), MetaUpToDate(false), m_references(0)
 {
 	 p = new MapFeaturePrivate;
 	 p->theFeature = this;
 }
 
 Feature::Feature(const Feature& other)
-: QObject(), MetaUpToDate(false)
+: QObject(), MetaUpToDate(false), m_references(0)
 {
 	p = new MapFeaturePrivate(*other.p);
 	p->theFeature = this;
@@ -227,7 +227,7 @@ const QString& Feature::resetId()
 
 const QString& Feature::id() const
 {
-	if (p->Id == "")
+	if (p->Id.isEmpty())
 	{
 		p->Id = QString::number((((qint64)this) * -1));
 		Layer* L = dynamic_cast<Layer*>(parent());

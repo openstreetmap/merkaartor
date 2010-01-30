@@ -325,8 +325,6 @@ bool canCreateJunction(PropertiesDock* theDock)
 
 int createJunction(Document* theDocument, CommandList* theList, PropertiesDock* theDock, bool doIt)
 {
-	int numInter = 0;
-
 	//TODO test that the junction do not already exists!
 	typedef ggl::point_2d P;
 
@@ -341,63 +339,7 @@ int createJunction(Document* theDocument, CommandList* theList, PropertiesDock* 
 	Way* R1 = Roads[0];
 	Way* R2 = Roads[1];
 
-	for (int i=0; i<R1->size()-1; ++i) {
-		P a(R1->getNode(i)->position().lon(), R1->getNode(i)->position().lat());
-		P b(R1->getNode(i+1)->position().lon(), R1->getNode(i+1)->position().lat());
-		ggl::segment<P> s1(a, b);
-
-		for (int j=0; j<R2->size()-1; ++j) {
-			P c(R2->getNode(j)->position().lon(), R2->getNode(j)->position().lat());
-			P d(R2->getNode(j+1)->position().lon(), R2->getNode(j+1)->position().lat());
-			ggl::segment<P> s2(c, d);
-
-			std::vector<ggl::point_2d> intersected;
-//			ggl::intersection < ggl::point_2d, ggl::segment, ggl::segment, std::back_insert_iterator< std::vector<ggl::point_2d> > >
-//				(s1, s2, std::back_inserter(intersected));
-			ggl::intersection<ggl::point_2d>(s1, s2, std::back_inserter(intersected));
-
-			if (intersected.size()) {
-				numInter++;
-				if (doIt) {
-					Node* pt = new Node(Coord(qRound(intersected[0].y()), qRound(intersected[0].x())));
-					theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(R1->layer()),pt,true));
-					theList->add(new WayAddNodeCommand(R1,pt,i+1,theDocument->getDirtyOrOriginLayer(R1->layer())));
-					theList->add(new WayAddNodeCommand(R2,pt,j+1,theDocument->getDirtyOrOriginLayer(R2->layer())));
-				}
-				++i; ++j;
-			}
-		}
-	}
-
-	return numInter;
-
-
-//	QList<Road*> Roads, Result;
-//	for (int i=0; i<theDock->size(); ++i)
-//		if (Road* R = dynamic_cast<Road*>(theDock->selection(i)))
-//			Roads.push_back(R);
-//
-//	if (Roads.size() < 2)
-//		return false;
-//
-//	Road* R1 = Roads[0];
-//	Road* R2 = Roads[1];
-//
-//	std::vector<ggl::point_2d> intersected;
-//	ggl::intersection <std::vector<ggl::point_2d>, std::vector<TrackPointPtr>, std::vector<TrackPointPtr>, std::back_insert_iterator <std::vector<ggl::point_2d> > >
-//			(R1->getNodes(), R2->getNodes(), std::back_inserter(intersected));
-//
-//	if (!doIt)
-//		return intersected.size();
-//
-//	for (int i=0; i<intersected.size()-1; ++i) {
-//		TrackPoint* pt = new TrackPoint(Coord(qRound(intersected[i].y()), qRound(intersected[i].x())));
-//		theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(R1->layer()),pt,true));
-//		theList->add(new RoadAddTrackPointCommand(R1,pt,i+1,theDocument->getDirtyOrOriginLayer(R1->layer())));
-//		theList->add(new RoadAddTrackPointCommand(R2,pt,j+1,theDocument->getDirtyOrOriginLayer(R2->layer())));
-//	}
-//
-//	return intersected.size();
+	return Way::createJunction(theDocument, theList, R1, R2, doIt);
 }
 
 #define STREET_NUMBERS_LENGTH 1500.0

@@ -22,7 +22,6 @@ class CreatePolygonInteraction : public Interaction
 #endif
 
 	private:
-		void testIntersections(CommandList* L, Way* Left, int FromIdx, Way* Right, int RightIdx);
 		MainWindow* Main;
 		QDockWidget* theDock;
 		Coord Origin;

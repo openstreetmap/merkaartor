@@ -114,6 +114,8 @@ class Way : public Feature
 		static Way * GetSingleParentRoad(Feature * mapFeature);
 		static Way * GetSingleParentRoadInner(Feature * mapFeature);
 
+		static int createJunction(Document* theDocument, CommandList* theList, Way* R1, Way* R2, bool doIt);
+
 	protected:
 		WayPrivate* p;
 };
