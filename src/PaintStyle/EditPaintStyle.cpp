@@ -19,9 +19,9 @@
 #include <math.h>
 #include <utility>
 
-#define LOCALZOOM		0.05
-#define REGIONALZOOM	0.01
-#define GLOBALZOOM		0.002
+//#define LOCALZOOM		0.05
+//#define REGIONALZOOM	0.01
+//#define GLOBALZOOM		0.002
 
 EditPaintStyle* EditPaintStyle::m_EPSInstance = 0;
 
@@ -30,10 +30,10 @@ EditPaintStyle* EditPaintStyle::m_EPSInstance = 0;
 //	return theProjection.pixelPerM() < LOCALZOOM;
 //}
 
-static bool regionalZoom(const MapView& theView)
-{
-	return theView.pixelPerM() < REGIONALZOOM;
-}
+//static bool regionalZoom(const MapView& theView)
+//{
+//	return theView.pixelPerM() < REGIONALZOOM;
+//}
 
 //static bool globalZoom(const MapView& theView)
 //{
@@ -104,7 +104,7 @@ void EPBackgroundLayer::draw(Way* R)
 					p->thePainter.setBrush(QBrush(M_STYLE->getGlobalPainter().getBackgroundColor()));
 			}
 		} else {
-			if (regionalZoom(p->theView))
+			if (p->theView.pixelPerM() < M_PREFS->getRegionalZoom())
 				thePen = QPen(QColor(0x77,0x77,0x77),1);
 		}
 
@@ -226,12 +226,12 @@ void EPTouchupLayer::draw(Node* Pt)
 		paintsel->drawTouchup(Pt,p->thePainter,p->theView);
 	else if (!Pt->hasEditPainter()) {
 		if (p->isTrackPointVisible || (Pt->lastUpdated() == Feature::Log && !p->isTrackSegmentVisible)) {
-			bool Draw = p->theView.pixelPerM() > 1;
+			bool Draw = p->theView.pixelPerM() > M_PREFS->getLocalZoom();
 			// Do not draw GPX nodes when simple GPX track appearance is enabled
 			if (M_PREFS->getSimpleGpxTrack() && Pt->layer()->isTrack())
 				Draw = false;
 			if (!Draw) {
-				if (!Pt->sizeParents() && (p->theView.pixelPerM() > LOCALZOOM) )
+				if (!Pt->sizeParents())
 					Draw = true;
 				else if (Pt->lastUpdated() == Feature::Log && !p->isTrackSegmentVisible)
 					Draw = true;

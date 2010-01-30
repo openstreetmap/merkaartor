@@ -1238,6 +1238,8 @@ M_PARAM_IMPLEMENT_BOOL(SimpleGpxTrack, visual, false)
 M_PARAM_IMPLEMENT_BOOL(VirtualNodesVisible, visual, true)
 M_PARAM_IMPLEMENT_BOOL(UseVirtualNodes, visual, true)
 M_PARAM_IMPLEMENT_BOOL(RelationsSelectableWhenHidden, visual, true)
+M_PARAM_IMPLEMENT_DOUBLE(LocalZoom, visual, 1.0)
+M_PARAM_IMPLEMENT_DOUBLE(RegionalZoom, visual, 0.01)
 
 /* Templates */
 M_PARAM_IMPLEMENT_STRING(DefaultTemplate, templates, ":/Templates/default.mat")

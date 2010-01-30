@@ -341,23 +341,30 @@ void FeatureSnapInteraction::updateSnap(QMouseEvent* event)
 
 		std::deque < MapFeaturePtr > ret = document()->getLayer(j)->indexFind(HotZone);
 		for (std::deque < MapFeaturePtr >::const_iterator it = ret.begin(); it < ret.end(); ++it) {
-			Feature* Pt = dynamic_cast<Feature*>(*it);
-			if (Pt)
+			Feature* F = dynamic_cast<Feature*>(*it);
+			if (F)
 			{
-				if (Pt->notEverythingDownloaded())
+				if (F->notEverythingDownloaded())
 					continue;
-				if ( (NoRoads || NoSelectRoads) && dynamic_cast<Way*>(Pt))
+				if (CAST_WAY(F)) {
+					if ( NoRoads || NoSelectRoads)
+						continue;
+				}
+				if (CAST_NODE(F)) {
+					if (NoSelectPoints)
+						continue;
+					if (view()->pixelPerM() < M_PREFS->getLocalZoom())
+						continue;
+				}
+				if (std::find(NoSnap.begin(),NoSnap.end(),F) != NoSnap.end())
 					continue;
-				if (NoSelectPoints && dynamic_cast<Node*>(Pt))
-					continue;
-				if (std::find(NoSnap.begin(),NoSnap.end(),Pt) != NoSnap.end())
-					continue;
-				double Distance = Pt->pixelDistance(event->pos(), 5.01, projection(), transform());
-				SnapList.push_back(Pt);
+
+				double Distance = F->pixelDistance(event->pos(), 5.01, projection(), transform());
+				SnapList.push_back(F);
 				if (Distance < BestDistance)
 				{
 					BestDistance = Distance;
-					LastSnap = Pt;
+					LastSnap = F;
 				}
 			}
 		}

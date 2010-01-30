@@ -298,6 +298,8 @@ public:
 	M_PARAM_DECLARE_BOOL(VirtualNodesVisible)
 	M_PARAM_DECLARE_BOOL(UseVirtualNodes)
 	M_PARAM_DECLARE_BOOL(RelationsSelectableWhenHidden)
+	M_PARAM_DECLARE_DOUBLE(LocalZoom)
+	M_PARAM_DECLARE_DOUBLE(RegionalZoom)
 
 	/* Templates */
 	M_PARAM_DECLARE_STRING(DefaultTemplate)

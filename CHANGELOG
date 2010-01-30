@@ -1,4 +1,6 @@
 v0.15
+	* ADD : Make the point where nodes are not displayed configurable
+	* FIX : Do not allow node interaction when they are not displayed (closes #2674)
 	* FIX : 100% CPU usage and Crash on creating roundabout (fixes #2659)
     * FIX : No name in for gpx track layer in Layers menu after File -> Import. Patch by Trav (closes #2661)
 	* CHG : Keep directional arrows blue for oneway roads in "Show directional arrows - Always" mode.
