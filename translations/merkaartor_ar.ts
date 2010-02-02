@@ -1,93 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0" language="ar">
+<!DOCTYPE TS><TS version="1.1" language="ar">
 <context>
     <name></name>
     <message>
-        <location filename="../src/MainWindow.cpp" line="737"/>
-        <location filename="../src/MainWindow.cpp" line="749"/>
-        <location filename="../src/MainWindow.cpp" line="762"/>
+        <location filename="../src/MainWindow.cpp" line="760"/>
         <source>Supported formats</source>
         <translation>التنسيقات المتوفّرة</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="746"/>
-        <location filename="../src/MainWindow.cpp" line="759"/>
         <location filename="../src/MainWindow.cpp" line="770"/>
         <source>All Files (*)</source>
         <translation>كلّ الملفات (*)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="738"/>
-        <location filename="../src/MainWindow.cpp" line="750"/>
+        <location filename="../src/MainWindow.cpp" line="749"/>
         <source>Merkaartor document (*.mdc)
 </source>
         <translation>مستند Merkaartor (*.mdc)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="739"/>
-        <location filename="../src/MainWindow.cpp" line="751"/>
-        <location filename="../src/MainWindow.cpp" line="763"/>
+        <location filename="../src/MainWindow.cpp" line="762"/>
         <source>GPS Exchange format (*.gpx)
 </source>
         <translation>تصميم تبادل الملفات (*.gpx) لجهاز تحديد المواقع العالمي
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="740"/>
-        <location filename="../src/MainWindow.cpp" line="752"/>
-        <location filename="../src/MainWindow.cpp" line="764"/>
+        <location filename="../src/MainWindow.cpp" line="763"/>
         <source>OpenStreetMap format (*.osm)
 </source>
         <translation>تصميم المفات OpenStreetMap (*.osm)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="741"/>
-        <location filename="../src/MainWindow.cpp" line="753"/>
-        <location filename="../src/MainWindow.cpp" line="765"/>
+        <location filename="../src/MainWindow.cpp" line="764"/>
         <source>OpenStreetMap binary format (*.osb)
 </source>
         <translation>تصميم المفلات الثنائي OpenStreetMap (*.osb)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="742"/>
-        <location filename="../src/MainWindow.cpp" line="754"/>
-        <location filename="../src/MainWindow.cpp" line="766"/>
+        <location filename="../src/MainWindow.cpp" line="765"/>
         <source>Noni GPSPlot format (*.ngt)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="743"/>
-        <location filename="../src/MainWindow.cpp" line="755"/>
-        <location filename="../src/MainWindow.cpp" line="767"/>
+        <location filename="../src/MainWindow.cpp" line="766"/>
         <source>NMEA GPS log format (*.nmea *.nma)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="744"/>
-        <location filename="../src/MainWindow.cpp" line="756"/>
-        <location filename="../src/MainWindow.cpp" line="768"/>
+        <location filename="../src/MainWindow.cpp" line="767"/>
         <source>KML file (*.kml)
 </source>
         <translation>مستند KML (*.kml)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="745"/>
-        <location filename="../src/MainWindow.cpp" line="758"/>
-        <location filename="../src/MainWindow.cpp" line="769"/>
+        <location filename="../src/MainWindow.cpp" line="768"/>
         <source>ESRI Shapefile (*.shp)
 </source>
         <translation>ملف شكل ESRI  (*.shp)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="757"/>
+        <location filename="../src/MainWindow.cpp" line="756"/>
         <source>Geotagged images (*.jpg)
 </source>
         <translation type="unfinished"></translation>
@@ -203,7 +183,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Tools/ActionsDialog.cpp" line="116"/>
         <location filename="../src/Tools/ActionsDialog.cpp" line="143"/>
         <source>Merkaartor shortcut scheme (*.mss)</source>
         <translation type="unfinished"></translation>
@@ -242,7 +221,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Command</name>
     <message>
-        <location filename="../src/Command/Command.cpp" line="24"/>
+        <location filename="../src/Commands/Command.cpp" line="24"/>
         <source>No description</source>
         <translation>بدون وصف</translation>
     </message>
@@ -250,17 +229,17 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>CreateDoubleWayDock</name>
     <message>
-        <location filename="../src/Interaction/CreateDoubleWayDock.ui" line="13"/>
+        <location filename="../src/Interactions/CreateDoubleWayDock.ui" line="13"/>
         <source>Form</source>
         <translation>الشكل</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreateDoubleWayDock.ui" line="25"/>
+        <location filename="../src/Interactions/CreateDoubleWayDock.ui" line="25"/>
         <source>Driving at the right side of the road</source>
         <translation>القيادة على الطرف اليمين للطريق</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreateDoubleWayDock.ui" line="40"/>
+        <location filename="../src/Interactions/CreateDoubleWayDock.ui" line="40"/>
         <source>Distance between two roads</source>
         <translation>المسافة بين طريقين</translation>
     </message>
@@ -268,12 +247,12 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>CreateRoundaboutDock</name>
     <message>
-        <location filename="../src/Interaction/CreateRoundaboutDock.ui" line="13"/>
+        <location filename="../src/Interactions/CreateRoundaboutDock.ui" line="13"/>
         <source>Form</source>
         <translation>الشكل</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreateRoundaboutDock.ui" line="25"/>
+        <location filename="../src/Interactions/CreateRoundaboutDock.ui" line="25"/>
         <source>Driving at the right side of the road</source>
         <translation>القيادة على الطرف اليمين للطريق</translation>
     </message>
@@ -339,7 +318,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>DirtyLayerWidget</name>
     <message>
-        <location filename="../src/LayerWidget.cpp" line="476"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="493"/>
         <source>Zoom</source>
         <translation>التكبير</translation>
     </message>
@@ -347,100 +326,106 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>DirtyListExecutor</name>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="335"/>
-        <location filename="../src/Sync/DirtyList.cpp" line="572"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="570"/>
         <source>ADD road %1</source>
         <translation>أضف الطريق %1</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="343"/>
-        <location filename="../src/Sync/DirtyList.cpp" line="602"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="600"/>
         <source>ADD trackpoint %1</source>
         <translation>أضف نقطة ممر %1</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="351"/>
-        <location filename="../src/Sync/DirtyList.cpp" line="543"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="541"/>
         <source>ADD relation %1</source>
         <translation>أضف العلاقة %1</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="359"/>
-        <location filename="../src/Sync/DirtyList.cpp" line="692"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="690"/>
         <source>UPDATE trackpoint %1</source>
         <translation>حدّث نقطة الممر %1</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="367"/>
-        <location filename="../src/Sync/DirtyList.cpp" line="633"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="631"/>
         <source>UPDATE relation %1</source>
         <translation>حدّث العلاقة %1</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="375"/>
-        <location filename="../src/Sync/DirtyList.cpp" line="663"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="661"/>
         <source>UPDATE road %1</source>
         <translation>حدّث الطريق %1</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="383"/>
-        <location filename="../src/Sync/DirtyList.cpp" line="723"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="721"/>
         <source>REMOVE trackpoint %1</source>
         <translation>أحذف نقطة الممر %1</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="391"/>
-        <location filename="../src/Sync/DirtyList.cpp" line="748"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="746"/>
         <source>REMOVE road %1</source>
         <translation>أحذف الطريق %1</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="399"/>
-        <location filename="../src/Sync/DirtyList.cpp" line="773"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="771"/>
         <source>REMOVE relation %1</source>
         <translation>أحذف العلاقة %1</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="431"/>
-        <location filename="../src/Sync/DirtyList.cpp" line="438"/>
-        <location filename="../src/Sync/DirtyList.cpp" line="454"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="452"/>
         <source>Error uploading request</source>
         <translation>خطأ عندتحميل المطلب</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="432"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="430"/>
         <source>Please check your username and password in the Preferences menu</source>
         <translation>الرجاء فحص إسمك و كلمتك للمرور في لائحة التفضيلات</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="435"/>
-        <location filename="../src/Sync/DirtyList.cpp" line="455"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="453"/>
         <source>There was an error uploading this request (%1)
 Server message is &apos;%2&apos;</source>
         <translation>لقد حصل خطأ عند تحميل هذا المطلب (%1)
 تبليغ الخادم هو &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="437"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="435"/>
         <source>
 API message is &apos;%1&apos;</source>
         <translation>
 رسالة الــAPI هي &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="495"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="493"/>
         <source>OPEN changeset</source>
         <translation>إفتح حزمة تغييرات</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="523"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="521"/>
         <source>CLOSE changeset</source>
         <translation>أغلق حزمة التغييرات</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DirtyList.cpp" line="470"/>
+        <location filename="../src/Sync/DirtyList.cpp" line="468"/>
         <source>Uploading changes...</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Document</name>
+    <message>
+        <location filename="../src/Document.cpp" line="92"/>
+        <source>Dirty layer</source>
+        <translation>طبقة الخرطوش</translation>
+    </message>
+    <message>
+        <location filename="../src/Document.cpp" line="95"/>
+        <source>Uploaded layer</source>
+        <translation>حمّلت الطبقة</translation>
+    </message>
+    <message>
+        <location filename="../src/Document.cpp" line="254"/>
+        <source>Background imagery</source>
+        <translation>الصور الخلفية</translation>
     </message>
 </context>
 <context>
@@ -489,10 +474,7 @@ API message is &apos;%1&apos;</source>
 <context>
     <name>Downloader</name>
     <message>
-        <location filename="../src/Docks/InfoDock.cpp" line="80"/>
-        <location filename="../src/Maps/DownloadOSM.cpp" line="476"/>
-        <location filename="../src/Maps/DownloadOSM.cpp" line="481"/>
-        <location filename="../src/Maps/DownloadOSM.cpp" line="487"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="487"/>
         <source>Download failed</source>
         <translation>فشل عملية التنزيل</translation>
     </message>
@@ -502,17 +484,17 @@ API message is &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Maps/DownloadOSM.cpp" line="207"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="207"/>
         <source>error</source>
         <translation>خطأ</translation>
     </message>
     <message>
-        <location filename="../src/Maps/DownloadOSM.cpp" line="211"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="211"/>
         <source>didn&apos;t download enough</source>
         <translation>لم أنزل الكافي</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/Maps/DownloadOSM.cpp" line="320"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="320"/>
         <source>Downloading from OSM (%n bytes)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -524,7 +506,7 @@ API message is &apos;%1&apos;</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/Maps/DownloadOSM.cpp" line="322"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="322"/>
         <source>Downloading from OSM (%n kBytes)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -536,114 +518,109 @@ API message is &apos;%1&apos;</source>
         </translation>
     </message>
     <message>
-        <location filename="../src/Maps/DownloadOSM.cpp" line="443"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="443"/>
         <source>Downloading from OSM (connecting)</source>
         <translation>جاري التنزيل من OSM (جاري الإتصال)</translation>
     </message>
     <message>
-        <location filename="../src/Maps/DownloadOSM.cpp" line="473"/>
-        <location filename="../src/Maps/DownloadOSM.cpp" line="484"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="484"/>
         <source>Unexpected http status code (%1)
 Server message is &apos;%2&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Maps/DownloadOSM.cpp" line="475"/>
-        <location filename="../src/Maps/DownloadOSM.cpp" line="486"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="486"/>
         <source>
 API message is &apos;%1&apos;</source>
         <translation>
 رسالة الــAPI هي &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/Maps/DownloadOSM.cpp" line="481"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="481"/>
         <source>Username/password invalid</source>
         <translation>فشل إسم المستخدم/كلمة المرور</translation>
     </message>
     <message>
-        <location filename="../src/Maps/DownloadOSM.cpp" line="499"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="499"/>
         <source>Unresolved conflicts</source>
         <translation>تناقضات غير محلولة</translation>
     </message>
     <message>
-        <location filename="../src/Maps/DownloadOSM.cpp" line="499"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="499"/>
         <source>Please resolve existing conflicts first</source>
         <translation>الرجاء حلّ التناقضات الموجودة أولاً</translation>
     </message>
     <message>
-        <location filename="../src/Maps/DownloadOSM.cpp" line="552"/>
-        <location filename="../src/Maps/ImportOSM.cpp" line="394"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="552"/>
         <source>Parsing XML</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Maps/DownloadOSM.cpp" line="560"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="560"/>
         <source>Downloading trackpoints %1-%2</source>
         <translation>جاري تنزيل نقاط الأثر %1-%2</translation>
     </message>
     <message>
-        <location filename="../src/Maps/DownloadOSM.cpp" line="578"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="578"/>
         <source>Downloaded track - nodes %1-%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Maps/DownloadOSM.cpp" line="598"/>
-        <location filename="../src/Maps/DownloadOSM.cpp" line="648"/>
-        <location filename="../src/Maps/DownloadOSM.cpp" line="773"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="773"/>
         <source>%1 download</source>
         <translation>تنزيل %1</translation>
     </message>
     <message>
-        <location filename="../src/Maps/DownloadOSM.cpp" line="746"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="746"/>
         <source>Zoom factor too low</source>
         <translation>نسبة التكبير/التصغير خفيفة جدا</translation>
     </message>
     <message>
-        <location filename="../src/Maps/DownloadOSM.cpp" line="747"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="747"/>
         <source>Please use a higher zoom factor!</source>
         <translation>الرجاء إستعمال نسبة تكبير أكبر</translation>
     </message>
     <message>
-        <location filename="../src/Maps/ImportOSM.cpp" line="276"/>
+        <location filename="../src/ImportExport/ImportOSM.cpp" line="271"/>
         <source>Downloading unresolved %1 of %2</source>
         <translation>نزّل الـ %1 غير المحلول من %2</translation>
     </message>
     <message>
-        <location filename="../src/Maps/ImportOSM.cpp" line="285"/>
+        <location filename="../src/ImportExport/ImportOSM.cpp" line="280"/>
         <source>Parsing unresolved %1 of %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Maps/ImportOSM.cpp" line="401"/>
+        <location filename="../src/ImportExport/ImportOSM.cpp" line="396"/>
         <source>Conflicts from %1</source>
         <translation>تناقض من %1</translation>
     </message>
     <message>
-        <location filename="../src/Maps/ImportOSM.cpp" line="445"/>
+        <location filename="../src/ImportExport/ImportOSM.cpp" line="440"/>
         <source>Conflicts have been detected</source>
         <translation>تمّ إكتشاف تناقد</translation>
     </message>
     <message>
-        <location filename="../src/Maps/ImportOSM.cpp" line="446"/>
+        <location filename="../src/ImportExport/ImportOSM.cpp" line="447"/>
         <source>This means that some of the feature you modified since your last download have since been modified by someone else on the server.
 The features have been duplicated as &quot;conflict_...&quot; on the &quot;Conflicts...&quot; layer.
 Before being able to upload your changes, you will have to manually merge the two versions and remove the one from the &quot;Conflicts...&quot; layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Maps/ImportOSM.cpp" line="462"/>
+        <location filename="../src/ImportExport/ImportOSM.cpp" line="457"/>
         <source>Empty roads/relations detected</source>
         <translation>إكتشاف طرقات/علاقات فارغة</translation>
     </message>
     <message>
-        <location filename="../src/Maps/ImportOSM.cpp" line="463"/>
+        <location filename="../src/ImportExport/ImportOSM.cpp" line="460"/>
         <source>Empty roads/relations are probably errors.
 Do you want to mark them for deletion?</source>
         <translation>إحتمال أن تكون الطرقات/العلاقات خطأ
 هل تريد وضع علامة عليهم للمحو ؟</translation>
     </message>
     <message>
-        <location filename="../src/Maps/ImportOSM.cpp" line="471"/>
+        <location filename="../src/ImportExport/ImportOSM.cpp" line="466"/>
         <source>Remove empty feature %1</source>
         <translation>أمحي الميزة الفارغة %1</translation>
     </message>
@@ -653,18 +630,17 @@ Do you want to mark them for deletion?</source>
         <translation>جاري تنزيل %1,%2 (نسبة التكبير/التصغير %3)...</translation>
     </message>
     <message>
-        <location filename="../src/Maps/DownloadOSM.cpp" line="433"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="433"/>
         <source>Downloading...</source>
         <translation>جاري التنزيل...</translation>
     </message>
     <message>
-        <location filename="../src/Maps/DownloadOSM.cpp" line="545"/>
-        <location filename="../src/Maps/ImportOSM.cpp" line="388"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="545"/>
         <source>Parsing...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Maps/ImportOSM.cpp" line="269"/>
+        <location filename="../src/ImportExport/ImportOSM.cpp" line="264"/>
         <source>Downloading unresolved...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -672,12 +648,12 @@ Do you want to mark them for deletion?</source>
 <context>
     <name>DrawingLayerWidget</name>
     <message>
-        <location filename="../src/LayerWidget.cpp" line="257"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="257"/>
         <source>Zoom</source>
         <translation>التكبير</translation>
     </message>
     <message>
-        <location filename="../src/LayerWidget.cpp" line="265"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="265"/>
         <source>Close</source>
         <translation>أغلِق</translation>
     </message>
@@ -685,27 +661,27 @@ Do you want to mark them for deletion?</source>
 <context>
     <name>ExportDialog</name>
     <message>
-        <location filename="../src/ExportDialog.ui" line="13"/>
+        <location filename="../src/ImportExport/ExportDialog.ui" line="13"/>
         <source>Export</source>
         <translation>صدِّر</translation>
     </message>
     <message>
-        <location filename="../src/ExportDialog.ui" line="25"/>
+        <location filename="../src/ImportExport/ExportDialog.ui" line="25"/>
         <source>What do you want to export?</source>
         <translation>تريد تصدير ماذا ؟</translation>
     </message>
     <message>
-        <location filename="../src/ExportDialog.ui" line="38"/>
+        <location filename="../src/ImportExport/ExportDialog.ui" line="38"/>
         <source>All visible (i.e. not hidden)</source>
         <translation>كلّ الظاهر ( أي غير المخبئ)</translation>
     </message>
     <message>
-        <location filename="../src/ExportDialog.ui" line="45"/>
+        <location filename="../src/ImportExport/ExportDialog.ui" line="45"/>
         <source>Viewport</source>
         <translation>منفذ عرض</translation>
     </message>
     <message>
-        <location filename="../src/ExportDialog.ui" line="52"/>
+        <location filename="../src/ImportExport/ExportDialog.ui" line="52"/>
         <source>Selected</source>
         <translation>المنتقى</translation>
     </message>
@@ -713,47 +689,47 @@ Do you want to mark them for deletion?</source>
 <context>
     <name>FeaturesDock</name>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="332"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="330"/>
         <source>Features</source>
         <translation>الميزات</translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="333"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="331"/>
         <source>Center map</source>
         <translation>حدّد مركز الخريطة</translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="334"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="332"/>
         <source>Center &amp;&amp; Zoom map</source>
         <translation>حدّد مركز و كبر/صغر الخريطة</translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="335"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="333"/>
         <source>Download missing children</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="341"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="339"/>
         <source>Relations</source>
         <translation>العلاقات</translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="342"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="340"/>
         <source>Roads</source>
         <translation>الطرقات</translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="343"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="341"/>
         <source>POI&apos;s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="344"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="342"/>
         <source>All</source>
         <translation>الكلّ</translation>
     </message>
     <message>
-        <location filename="../src/Docks/FeaturesDock.cpp" line="336"/>
+        <location filename="../src/Docks/FeaturesDock.cpp" line="334"/>
         <source>Add to selection</source>
         <translation>إضافة إلى الاختيار</translation>
     </message>
@@ -892,9 +868,6 @@ Do you still want to use it?</source>
         <translation>غير قادر للعثور على الصورة  &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../src/GeoImageDock.cpp" line="261"/>
-        <location filename="../src/GeoImageDock.cpp" line="263"/>
-        <location filename="../src/GeoImageDock.cpp" line="434"/>
         <location filename="../src/GeoImageDock.cpp" line="438"/>
         <source>Exiv2</source>
         <translation>Exiv2</translation>
@@ -927,7 +900,6 @@ Do you still want to use it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GeoImageDock.cpp" line="263"/>
         <location filename="../src/GeoImageDock.cpp" line="438"/>
         <source>Error while loading EXIF-data from &quot;%1&quot;.</source>
         <translation>خطء عند تحميل معطيات الــ EXIF من &quot;%1&quot;.</translation>
@@ -979,19 +951,16 @@ If not, you can&apos;t load images that belongs to it.</source>
 <context>
     <name>GotoDialog</name>
     <message>
-        <location filename="../src/GotoDialog.cpp" line="109"/>
         <location filename="../src/GotoDialog.cpp" line="116"/>
         <source>Invalid OSM url</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GotoDialog.cpp" line="110"/>
         <location filename="../src/GotoDialog.cpp" line="117"/>
         <source>The specified url is invalid!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GotoDialog.cpp" line="137"/>
         <location filename="../src/GotoDialog.cpp" line="146"/>
         <source>Invalid Coordinates format</source>
         <translation>بنية الإحداثيات غير صحيحة</translation>
@@ -1047,7 +1016,6 @@ If not, you can&apos;t load images that belongs to it.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GotoDialog.ui" line="196"/>
         <location filename="../src/GotoDialog.ui" line="209"/>
         <source>Search</source>
         <translation>إبحث</translation>
@@ -1056,22 +1024,22 @@ If not, you can&apos;t load images that belongs to it.</source>
 <context>
     <name>ImageLayerWidget</name>
     <message>
-        <location filename="../src/LayerWidget.cpp" line="280"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="280"/>
         <source>None</source>
         <translation>لا شيء</translation>
     </message>
     <message>
-        <location filename="../src/LayerWidget.cpp" line="286"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="286"/>
         <source>Shape adapter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/LayerWidget.cpp" line="350"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="361"/>
         <source>WMS adapter</source>
         <translation>مكيّف الــ WMS</translation>
     </message>
     <message>
-        <location filename="../src/LayerWidget.cpp" line="366"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="377"/>
         <source>TMS adapter</source>
         <translation>مكيف الــTMS</translation>
     </message>
@@ -1079,29 +1047,27 @@ If not, you can&apos;t load images that belongs to it.</source>
 <context>
     <name>ImageMapLayer</name>
     <message>
-        <location filename="../src/Maps/ImageMapLayer.cpp" line="63"/>
-        <location filename="../src/Maps/ImageMapLayer.cpp" line="135"/>
-        <location filename="../src/Maps/ImageMapLayer.cpp" line="159"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="159"/>
         <source>Map - None</source>
         <translation>الخريطة - بدون</translation>
     </message>
     <message>
-        <location filename="../src/Maps/ImageMapLayer.cpp" line="145"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="145"/>
         <source>Map - WMS - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Maps/ImageMapLayer.cpp" line="154"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="154"/>
         <source>Map - TMS - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Maps/ImageMapLayer.cpp" line="167"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="167"/>
         <source>Map - OSB Background</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Maps/ImageMapLayer.cpp" line="172"/>
+        <location filename="../src/Layers/ImageMapLayer.cpp" line="172"/>
         <source>Map - %1</source>
         <translation>الخريطة - %1</translation>
     </message>
@@ -1109,22 +1075,39 @@ If not, you can&apos;t load images that belongs to it.</source>
 <context>
     <name>InfoDock</name>
     <message>
-        <location filename="../src/Docks/InfoDock.cpp" line="23"/>
         <location filename="../src/Docks/InfoDock.cpp" line="93"/>
         <source>Info</source>
         <translation>المعلومات</translation>
     </message>
 </context>
 <context>
+    <name>Layer</name>
+    <message>
+        <location filename="../src/Layers/Layer.cpp" line="486"/>
+        <source>Size</source>
+        <translation>القياس</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../src/Layers/Layer.cpp" line="486"/>
+        <source>%n features</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+</context>
+<context>
     <name>LayerDock</name>
     <message>
-        <location filename="../src/Docks/LayerDock.cpp" line="221"/>
         <location filename="../src/Docks/LayerDock.cpp" line="311"/>
         <source>Show All</source>
         <translation>أعرض الكلّ</translation>
     </message>
     <message>
-        <location filename="../src/Docks/LayerDock.cpp" line="226"/>
         <location filename="../src/Docks/LayerDock.cpp" line="315"/>
         <source>Hide All</source>
         <translation>إخفاء الكلّ</translation>
@@ -1173,32 +1156,32 @@ If not, you can&apos;t load images that belongs to it.</source>
 <context>
     <name>LayerWidget</name>
     <message>
-        <location filename="../src/LayerWidget.cpp" line="152"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="152"/>
         <source>Visible</source>
         <translation>ظاهر</translation>
     </message>
     <message>
-        <location filename="../src/LayerWidget.cpp" line="158"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="158"/>
         <source>Readonly</source>
         <translation>فقط للقراءة</translation>
     </message>
     <message>
-        <location filename="../src/LayerWidget.cpp" line="166"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="166"/>
         <source>Low</source>
         <translation>منحفض</translation>
     </message>
     <message>
-        <location filename="../src/LayerWidget.cpp" line="166"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="166"/>
         <source>High</source>
         <translation>عالي</translation>
     </message>
     <message>
-        <location filename="../src/LayerWidget.cpp" line="166"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="166"/>
         <source>Opaque</source>
         <translation>غير شفاف</translation>
     </message>
     <message>
-        <location filename="../src/LayerWidget.cpp" line="169"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="169"/>
         <source>Opacity</source>
         <translation>اللاشفافية</translation>
     </message>
@@ -1229,28 +1212,22 @@ Initializing...</source>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/Command/DocumentCommands.cpp" line="141"/>
+        <location filename="../src/Commands/DocumentCommands.cpp" line="138"/>
         <source>Cascaded cleanup</source>
         <translation>تنظيف شلالي</translation>
     </message>
     <message>
-        <location filename="../src/Command/FeatureCommands.cpp" line="66"/>
-        <location filename="../src/Command/FeatureCommands.cpp" line="74"/>
-        <location filename="../src/Command/FeatureCommands.cpp" line="188"/>
+        <location filename="../src/Commands/FeatureCommands.cpp" line="188"/>
         <source>Set Tag &apos;%1=%2&apos; on %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Command/FeatureCommands.cpp" line="307"/>
-        <location filename="../src/Command/FeatureCommands.cpp" line="396"/>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="679"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="677"/>
         <source>Clear Tag &apos;%1&apos; on %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Command/TrackPointCommands.cpp" line="16"/>
-        <location filename="../src/Command/TrackPointCommands.cpp" line="24"/>
-        <location filename="../src/Command/TrackPointCommands.cpp" line="109"/>
+        <location filename="../src/Commands/NodeCommands.cpp" line="110"/>
         <source>Move node %1</source>
         <translation>حرّك العقدة %1</translation>
     </message>
@@ -1260,149 +1237,143 @@ Initializing...</source>
         <translation>إستورد NMEA</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreateAreaInteraction.cpp" line="91"/>
+        <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="91"/>
         <source>Create Area %1</source>
         <translation>أنشئ المنطقة %1</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreateAreaInteraction.cpp" line="126"/>
+        <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="126"/>
         <source>Area: Create Road %1</source>
         <translation>المنطقة: أنشئ الطريق %1</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreateAreaInteraction.cpp" line="157"/>
+        <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="157"/>
         <source>Area: Finish Road %1</source>
         <translation>المنطقة: أنهي الطريق %1</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreateAreaInteraction.cpp" line="174"/>
-        <location filename="../src/Interaction/CreateAreaInteraction.cpp" line="187"/>
+        <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="187"/>
         <source>Area: Add node %1 to Road %2</source>
         <translation>المنطقة: أضف العقدة %1 إلى الطريق %2</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreateDoubleWayInteraction.cpp" line="157"/>
+        <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="165"/>
         <source>Add nodes to double-way Road %1</source>
         <translation>أضف العقدة إلى الطريق %1 المزدوجة الممرات</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreateDoubleWayInteraction.cpp" line="212"/>
+        <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="220"/>
         <source>Create double-way Road %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreateNodeInteraction.cpp" line="84"/>
-        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="201"/>
+        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="206"/>
         <source>Create node in Road: %1</source>
         <translation>أنشئ عقدة في الطريق: %1</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreateNodeInteraction.cpp" line="100"/>
+        <location filename="../src/Interactions/CreateNodeInteraction.cpp" line="98"/>
         <source>Create point %1</source>
         <translation>أنشئ النقطة  %1</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreateRoundaboutInteraction.cpp" line="109"/>
+        <location filename="../src/Interactions/CreateRoundaboutInteraction.cpp" line="87"/>
         <source>Create Roundabout %1</source>
         <translation>إنشاء مستديرة %1</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreateSingleWayInteraction.cpp" line="127"/>
-        <location filename="../src/Interaction/CreateSingleWayInteraction.cpp" line="178"/>
-        <location filename="../src/Interaction/CreateSingleWayInteraction.cpp" line="191"/>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="194"/>
         <source>Create Node %1 in Road %2</source>
         <translation>أنشئ العقدة %1 في الطريق %2</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreateSingleWayInteraction.cpp" line="160"/>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="163"/>
         <source>Create Road: %1</source>
         <translation>%1إنشاء الطريق :</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreateSingleWayInteraction.cpp" line="168"/>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="171"/>
         <source>Create Node: %1</source>
         <translation>أنشئ العقدة : %1</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreateSingleWayInteraction.cpp" line="194"/>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="197"/>
         <source>Add Node %1 to Road %2</source>
         <translation>أضف العقدة %1 إلى الطريق %2</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="156"/>
+        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="161"/>
         <source>Nodes at the same position found.</source>
         <translation>وجدتُ عقد على نفس الموقع.</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="157"/>
+        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="162"/>
         <source>Do you want to merge all nodes at the drop position?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="166"/>
-        <location filename="../src/MainWindow.cpp" line="1484"/>
+        <location filename="../src/MainWindow.cpp" line="1482"/>
         <source>Merge Nodes into %1</source>
         <translation>أدمج العقد إلى %1</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/EditInteraction.cpp" line="238"/>
+        <location filename="../src/Interactions/EditInteraction.cpp" line="222"/>
         <source>Remove feature %1</source>
         <translation>أحذف الميزة %1</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/EditInteraction.cpp" line="268"/>
+        <location filename="../src/Interactions/EditInteraction.cpp" line="252"/>
         <source>Reverse Road %1</source>
         <translation>أعكس الطريق%1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="157"/>
+        <location filename="../src/MainWindow.cpp" line="154"/>
         <source>tile %v / %m</source>
         <translation>البلاطة %v / %m</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="289"/>
+        <location filename="../src/MainWindow.cpp" line="286"/>
         <source>Properties...</source>
         <translation>الخصائص...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="317"/>
+        <location filename="../src/MainWindow.cpp" line="314"/>
         <source>Low</source>
         <translation>منحفض</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="317"/>
+        <location filename="../src/MainWindow.cpp" line="314"/>
         <source>High</source>
         <translation>عالي</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="317"/>
+        <location filename="../src/MainWindow.cpp" line="314"/>
         <source>Opaque</source>
         <translation>غير شفاف</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="519"/>
+        <location filename="../src/MainWindow.cpp" line="517"/>
         <source>Clipboard invalid</source>
         <translation>الحافظة غير صالحة</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="802"/>
         <location filename="../src/Sync/SyncOSM.cpp" line="36"/>
         <source>Unsaved changes</source>
         <translation>تغييرات غير محفوطة</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="803"/>
+        <location filename="../src/MainWindow.cpp" line="802"/>
         <source>The current map contains unsaved changes that will be lost when starting a new one.
 Do you want to cancel starting a new map or continue and discard the old changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="889"/>
+        <location filename="../src/MainWindow.cpp" line="887"/>
         <source>Big Fat Copyright Warning</source>
         <translation>تحذيرمشدد عن حقوق المؤلف</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="890"/>
+        <location filename="../src/MainWindow.cpp" line="901"/>
         <source>You are trying to import a KML file. Please be aware that:
 
  - You cannot import to OSM a KML file created from Google Earth. While you might
@@ -1419,72 +1390,72 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1379"/>
+        <location filename="../src/MainWindow.cpp" line="1377"/>
         <source>Join Roads</source>
         <translation>ألصق الطرقات</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1392"/>
+        <location filename="../src/MainWindow.cpp" line="1390"/>
         <source>Split Roads</source>
         <translation>إفسخ الطرقات</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1405"/>
+        <location filename="../src/MainWindow.cpp" line="1403"/>
         <source>Break Roads</source>
         <translation>أفصل الطرقات</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1469"/>
+        <location filename="../src/MainWindow.cpp" line="1467"/>
         <source>Align Nodes</source>
         <translation>إصطف العقد</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1499"/>
+        <location filename="../src/MainWindow.cpp" line="1497"/>
         <source>Detach Node %1</source>
         <translation>أفصل العقدة %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1513"/>
+        <location filename="../src/MainWindow.cpp" line="1511"/>
         <source>Add member to relation</source>
         <translation>أضف العضو إلى العلاقة</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1525"/>
+        <location filename="../src/MainWindow.cpp" line="1523"/>
         <source>Remove member from relation</source>
         <translation>أحذف العضو من العلاقة</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1540"/>
+        <location filename="../src/MainWindow.cpp" line="1538"/>
         <source>Create Relation %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2261"/>
+        <location filename="../src/MainWindow.cpp" line="2267"/>
         <source>Add Bookmark</source>
         <translation>أضف إشارة مرجعية</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2262"/>
+        <location filename="../src/MainWindow.cpp" line="2268"/>
         <source>Specify the name of the bookmark.</source>
         <translation>حدد إسم الإشارة المرجعية</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2270"/>
+        <location filename="../src/MainWindow.cpp" line="2276"/>
         <source>Warning: Bookmark name already exists</source>
         <translation>تحذير: إسم الإشارة المرجعية موجود مسبقاً</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2271"/>
+        <location filename="../src/MainWindow.cpp" line="2277"/>
         <source>Enter a new one, keep the same to overwrite or cancel.</source>
         <translation>أدخل واحداً جديداً، حافظ على الحالي للكتابة عليه أو ألغي.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2309"/>
+        <location filename="../src/MainWindow.cpp" line="2315"/>
         <source>Remove Bookmark</source>
         <translation>إزالة الإشارة المرجعية</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2310"/>
+        <location filename="../src/MainWindow.cpp" line="2316"/>
         <source>Select the bookmark to remove.</source>
         <translation>إختر الإشارة المرجعية لحذفها.</translation>
     </message>
@@ -1504,7 +1475,6 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>أن&amp;شئ</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="51"/>
         <location filename="../src/MainWindow.ui" line="618"/>
         <source>&amp;Road</source>
         <translation>&amp;طريق</translation>
@@ -1580,7 +1550,6 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>قوالب التسمية</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="213"/>
         <location filename="../src/MainWindow.ui" line="636"/>
         <source>&amp;Node</source>
         <translation>&amp;العقدة</translation>
@@ -1591,7 +1560,6 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>&amp;النافذة</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="225"/>
         <location filename="../src/MainWindow.ui" line="914"/>
         <source>&amp;Docks</source>
         <translation type="unfinished"></translation>
@@ -1602,7 +1570,6 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>ال&amp;خصوصية</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="250"/>
         <location filename="../src/MainWindow.ui" line="939"/>
         <source>&amp;Layers</source>
         <translation>ال&amp;طبقات</translation>
@@ -1618,7 +1585,6 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>ال&amp;علاقة</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="295"/>
         <location filename="../src/MainWindow.ui" line="347"/>
         <source>Tool Bar</source>
         <translation>شريط الأدوات</translation>
@@ -1664,7 +1630,6 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>كبّر ال&amp;نافذة</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="428"/>
         <location filename="../src/MainWindow.ui" line="431"/>
         <source>Zoom window</source>
         <translation>كبّر النافذة</translation>
@@ -1690,7 +1655,6 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>&amp;كبّر الرؤية</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="458"/>
         <location filename="../src/MainWindow.ui" line="461"/>
         <source>Zoom in</source>
         <translation>كبّر الرؤية</translation>
@@ -1701,14 +1665,11 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>+</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="469"/>
-        <location filename="../src/MainWindow.ui" line="472"/>
         <location filename="../src/MainWindow.ui" line="475"/>
         <source>Curved link</source>
         <translation>صلة منحنية</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="487"/>
         <location filename="../src/MainWindow.ui" line="991"/>
         <source>&amp;Undo</source>
         <translation>ت&amp;راجع</translation>
@@ -1769,7 +1730,6 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>وصلة</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="552"/>
         <location filename="../src/MainWindow.ui" line="555"/>
         <source>Create link</source>
         <translation>أنتج وصلة</translation>
@@ -1965,13 +1925,11 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>&amp;حرّر...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="778"/>
         <location filename="../src/MainWindow.ui" line="1378"/>
         <source>&amp;Save...</source>
         <translation>&amp;إحفظ...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="783"/>
         <location filename="../src/MainWindow.ui" line="1368"/>
         <source>&amp;Load...</source>
         <translation>&amp;حمّل...</translation>
@@ -1987,13 +1945,11 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>الت&amp;فضيلات...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="802"/>
         <location filename="../src/MainWindow.ui" line="810"/>
         <source>&amp;All...</source>
         <translation>ال&amp;كلّ</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="805"/>
         <location filename="../src/MainWindow.ui" line="813"/>
         <source>Export all visible layers to a file</source>
         <translation>صدّر كلّ الطبقات الظاهرة إلى ملف</translation>
@@ -2014,13 +1970,11 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>إبحث و إختر بنود</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="833"/>
         <location filename="../src/MainWindow.ui" line="841"/>
         <source>&amp;Viewport...</source>
         <translation>&amp;نافذة الرؤية</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="836"/>
         <location filename="../src/MainWindow.ui" line="844"/>
         <source>Export the features in the viewport to a file</source>
         <translation type="unfinished"></translation>
@@ -2086,7 +2040,6 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>نزّل المزيد من المعطيات للمنطقة الحالية</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="903"/>
         <location filename="../src/MainWindow.ui" line="906"/>
         <source>Download the current view to the previous download layer</source>
         <translation type="unfinished"></translation>
@@ -2102,7 +2055,6 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>&amp;خصائص</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="925"/>
         <location filename="../src/MainWindow.ui" line="928"/>
         <source>Hide/Show the Properties dock</source>
         <translation type="unfinished"></translation>
@@ -2113,7 +2065,6 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>Ctrl+P</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="942"/>
         <location filename="../src/MainWindow.ui" line="945"/>
         <source>Hide/Show the Layers dock</source>
         <translation type="unfinished"></translation>
@@ -2129,7 +2080,6 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>ال&amp;معلومات</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="959"/>
         <location filename="../src/MainWindow.ui" line="962"/>
         <source>Hide/Show the Info dock</source>
         <translation type="unfinished"></translation>
@@ -2160,7 +2110,6 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>Alt+A</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="994"/>
         <location filename="../src/MainWindow.ui" line="997"/>
         <source>Hide/Show the Undo dock</source>
         <translation type="unfinished"></translation>
@@ -2241,7 +2190,6 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>Ctrl+V, M</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1066"/>
         <location filename="../src/MainWindow.ui" line="1071"/>
         <source>Selected...</source>
         <translation>المختارة...</translation>
@@ -2267,7 +2215,6 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1092"/>
         <location filename="../src/MainWindow.ui" line="1537"/>
         <source>Ctrl+V, F</source>
         <translation>Ctrl+V, F</translation>
@@ -2288,7 +2235,6 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>أودع الخاصية في طبقة العمل</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1116"/>
         <location filename="../src/MainWindow.ui" line="1119"/>
         <source>Commit the selected feature from a non-uploadable layer (e.g.Track or Extract) to the dirty layer, ready for upload</source>
         <translation type="unfinished"></translation>
@@ -2309,7 +2255,6 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>أقلب شريط الأدوات</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1137"/>
         <location filename="../src/MainWindow.ui" line="1140"/>
         <source>Hide/Show the Toolbar</source>
         <translation>إطهار/إخفاء شريط الأدوات</translation>
@@ -2320,7 +2265,6 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>إخفاء الكلّ</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1148"/>
         <location filename="../src/MainWindow.ui" line="1156"/>
         <source>Ctrl+F</source>
         <translation>Ctrl+F</translation>
@@ -2386,7 +2330,6 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>&amp;نطام العالمي لتحديد الموقع</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1223"/>
         <location filename="../src/MainWindow.ui" line="1226"/>
         <source>Hide/Show the GPS dock</source>
         <translation>إخفاء/عرض حاضن جهاز تحديد المواقع العالمي</translation>
@@ -2457,7 +2400,6 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1316"/>
         <location filename="../src/MainWindow.ui" line="1319"/>
         <source>Record</source>
         <translation>سجِّل</translation>
@@ -2483,7 +2425,6 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>صورة &amp;جغرافية</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1347"/>
         <location filename="../src/MainWindow.ui" line="1350"/>
         <source>Hide/Show the GeoImage dock</source>
         <translation type="unfinished"></translation>
@@ -2564,38 +2505,37 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation>أ&amp;زياء</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1455"/>
         <location filename="../src/MainWindow.ui" line="1458"/>
         <source>Hide/Show the Styles dock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1547"/>
+        <location filename="../src/MainWindow.ui" line="1550"/>
         <source>Add street &amp;numbers (Karlsruhe scheme)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Maps/ImportGPX.cpp" line="280"/>
+        <location filename="../src/ImportExport/ImportGPX.cpp" line="280"/>
         <source>Import GPX</source>
         <translation>إستيراد GPX</translation>
     </message>
     <message>
-        <location filename="../src/Maps/ImportNGT.cpp" line="19"/>
+        <location filename="../src/ImportExport/ImportNGT.cpp" line="19"/>
         <source>Import NGT</source>
         <translation>إسيراد NGT</translation>
     </message>
     <message>
-        <location filename="../src/Maps/Relation.cpp" line="804"/>
+        <location filename="../src/Features/Relation.cpp" line="804"/>
         <source>Relation Modified %1</source>
         <translation>العلاقة المغييرة %1</translation>
     </message>
     <message>
-        <location filename="../src/Maps/Road.cpp" line="777"/>
+        <location filename="../src/Features/Way.cpp" line="784"/>
         <source>Do you want to delete the children nodes also?</source>
         <translation>هل تريد أيضاً محو العقد المتفرعة ؟</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="713"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="711"/>
         <source>Remove member &apos;%1&apos; on %2</source>
         <translation>أحذف العضو &apos;%1&apos; على %2</translation>
     </message>
@@ -2616,260 +2556,250 @@ Do you want to do this now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/TagModel.cpp" line="133"/>
         <location filename="../src/TagModel.cpp" line="164"/>
         <source>Set Tags on %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="776"/>
+        <location filename="../src/MainWindow.cpp" line="774"/>
         <source>Open track file</source>
         <translation>إفتح ملف ممر</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="831"/>
+        <location filename="../src/MainWindow.cpp" line="829"/>
         <source>Waypoints</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="851"/>
+        <location filename="../src/MainWindow.cpp" line="849"/>
         <source>Track %1</source>
         <translation>الأثر %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="942"/>
+        <location filename="../src/MainWindow.cpp" line="940"/>
         <source>No valid file</source>
         <translation>ملف غير صالح</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="942"/>
-        <location filename="../src/MainWindow.cpp" line="1822"/>
+        <location filename="../src/MainWindow.cpp" line="1826"/>
         <source>%1 could not be opened.</source>
         <translation>لم أستطع فتح %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1052"/>
+        <location filename="../src/MainWindow.cpp" line="1050"/>
         <source>Open track files</source>
         <translation>إفتح ملفات ممرات</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1064"/>
+        <location filename="../src/MainWindow.cpp" line="1062"/>
         <source>Old Qt version detected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1065"/>
+        <location filename="../src/MainWindow.cpp" line="1066"/>
         <source>Your setup uses Qt %1, which contains various known errors in uploading data to OpenStreetMap leading to 401 server response codes. Are you sure you want to continue (which is not recommended).
 For more information see http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1074"/>
+        <location filename="../src/MainWindow.cpp" line="1072"/>
         <source>Upload OSM</source>
         <translation>حمّل OSM</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1074"/>
+        <location filename="../src/MainWindow.cpp" line="1073"/>
         <source>You don&apos;t seem to have specified your
 OpenStreetMap username and password.
 Do you want to do this now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1095"/>
-        <location filename="../src/MainWindow.cpp" line="1109"/>
-        <location filename="../src/MainWindow.cpp" line="1122"/>
+        <location filename="../src/MainWindow.cpp" line="1120"/>
         <source>Error downloading</source>
         <translation>خطأ عند التنزيل</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1095"/>
-        <location filename="../src/MainWindow.cpp" line="1109"/>
-        <location filename="../src/MainWindow.cpp" line="1122"/>
+        <location filename="../src/MainWindow.cpp" line="1120"/>
         <source>The map could not be downloaded</source>
         <translation>لم أتمكن من تنزيل الخريطة</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1453"/>
+        <location filename="../src/MainWindow.cpp" line="1451"/>
         <source>Add Street Numbers</source>
         <translation>أضف أرقام شارع</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1590"/>
+        <location filename="../src/MainWindow.cpp" line="1588"/>
         <source>Save map style</source>
         <translation>إحفظ زيّ الخريطة</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1590"/>
-        <location filename="../src/MainWindow.cpp" line="1601"/>
+        <location filename="../src/MainWindow.cpp" line="1599"/>
         <source>Merkaartor map style (*.mas)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1601"/>
+        <location filename="../src/MainWindow.cpp" line="1599"/>
         <source>Load map style</source>
         <translation>حمّل زيّ الخريطة</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1758"/>
+        <location filename="../src/MainWindow.cpp" line="1762"/>
         <source>Save Merkaartor document</source>
         <translation>إحفظ المستند Merkaartor</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1758"/>
+        <location filename="../src/MainWindow.cpp" line="1762"/>
         <source>untitled</source>
         <translation>غير معنون</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1758"/>
+        <location filename="../src/MainWindow.cpp" line="1762"/>
         <source>Merkaartor documents Files (*.mdc)</source>
         <translation>ملفات مستند  (*.mdc) Merkaartor</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1801"/>
+        <location filename="../src/MainWindow.cpp" line="1805"/>
         <source>Unable to open save file</source>
         <translation>غير قادر على فتح ملف الحفظ</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1801"/>
+        <location filename="../src/MainWindow.cpp" line="1805"/>
         <source>%1 could not be opened for writing.</source>
         <translation>إستحالة فتح %1 للكتابة.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1822"/>
-        <location filename="../src/MainWindow.cpp" line="1828"/>
-        <location filename="../src/MainWindow.cpp" line="1838"/>
+        <location filename="../src/MainWindow.cpp" line="1842"/>
         <source>Invalid file</source>
         <translation>الملف غير صحيح</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1828"/>
+        <location filename="../src/MainWindow.cpp" line="1832"/>
         <source>%1 is not a valid XML file.</source>
         <translation>ليس %1 ملف XML صالح.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1838"/>
+        <location filename="../src/MainWindow.cpp" line="1842"/>
         <source>%1 is not a valid Merkaartor document.</source>
         <translation>ليس %1 مستند صالح من النوع Merkaartor</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1896"/>
+        <location filename="../src/MainWindow.cpp" line="1900"/>
         <source>Export OSM</source>
         <translation>صدّر OSM</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1896"/>
+        <location filename="../src/MainWindow.cpp" line="1900"/>
         <source>OSM Files (*.osm)</source>
         <translation>ملفات  (*.osm)OSM</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1915"/>
+        <location filename="../src/MainWindow.cpp" line="1919"/>
         <source>Export Binary OSM</source>
         <translation>صدّر  ثنائيOSM</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1915"/>
+        <location filename="../src/MainWindow.cpp" line="1919"/>
         <source>OSM Binary Files (*.osb)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1940"/>
+        <location filename="../src/MainWindow.cpp" line="1944"/>
         <source>Export GPX</source>
         <translation>صدّر  GPX</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1940"/>
+        <location filename="../src/MainWindow.cpp" line="1944"/>
         <source>GPX Files (*.gpx)</source>
         <translation>GPX ملفات الــ (*.gpx)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1965"/>
+        <location filename="../src/MainWindow.cpp" line="1969"/>
         <source>Export KML</source>
         <translation>صدّر KML</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1965"/>
+        <location filename="../src/MainWindow.cpp" line="1969"/>
         <source>KML Files (*.kml)</source>
         <translation>KML الملفات (*.kml)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2265"/>
+        <location filename="../src/MainWindow.cpp" line="2271"/>
         <source>Invalid bookmark name</source>
         <translation>إسم الإشارة المرجعية غير صالح</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2266"/>
+        <location filename="../src/MainWindow.cpp" line="2272"/>
         <source>Bookmark cannot be blank.</source>
         <translation>لا تستطيع الإشارة المرجعية أن تكون خالية من التعبير.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2509"/>
+        <location filename="../src/MainWindow.cpp" line="2515"/>
         <source>GPS error</source>
         <translation>خطء جهاز تحديد المواقع العالمي</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2510"/>
+        <location filename="../src/MainWindow.cpp" line="2516"/>
         <source>Unable to open GPS port.</source>
         <translation>غير قادر على فتح منفذ جهاز تحديد المواقع العالمي.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2519"/>
+        <location filename="../src/MainWindow.cpp" line="2525"/>
         <source>Open NMEA log file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2633"/>
+        <location filename="../src/MainWindow.cpp" line="2639"/>
         <source>Save Tag Templates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2633"/>
+        <location filename="../src/MainWindow.cpp" line="2639"/>
         <source>Merkaartor tag templates (*.mat)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2645"/>
-        <location filename="../src/MainWindow.cpp" line="2659"/>
+        <location filename="../src/MainWindow.cpp" line="2665"/>
         <source>Open Tag Templates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2209"/>
+        <location filename="../src/MainWindow.cpp" line="2215"/>
         <source>%1 (int)</source>
         <translation>%1 (int)</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreateAreaInteraction.cpp" line="152"/>
+        <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="152"/>
         <source>Add a hole.</source>
         <translation>أضف ثغرة.</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreateAreaInteraction.cpp" line="153"/>
+        <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="153"/>
         <source>Do you want to add a(nother) hole to this area?</source>
         <translation>هل تريد إضافة فجوة (جديدة) إلى هذه المساحة ؟</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="309"/>
+        <location filename="../src/MainWindow.cpp" line="306"/>
         <source>Cannot load Projections file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="309"/>
+        <location filename="../src/MainWindow.cpp" line="306"/>
         <source>&quot;Projections.xml&quot; could not be opened anywhere. Aborting.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1431"/>
+        <location filename="../src/MainWindow.cpp" line="1429"/>
         <source>Create Junction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2372"/>
+        <location filename="../src/MainWindow.cpp" line="2378"/>
         <source>Invalid projection</source>
         <translation>إسقاط غير صالح</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2372"/>
+        <location filename="../src/MainWindow.cpp" line="2378"/>
         <source>Unable to set projection &quot;%1&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2909,118 +2839,117 @@ Do you want to do this now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Maps/Road.cpp" line="776"/>
+        <location filename="../src/Features/Way.cpp" line="783"/>
         <source>Delete Children.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/TagModel.cpp" line="131"/>
         <location filename="../src/TagModel.cpp" line="162"/>
         <source>Set Tags on multiple features</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreateAreaInteraction.cpp" line="36"/>
+        <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="36"/>
         <source>Create Area Interaction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreateDoubleWayInteraction.cpp" line="44"/>
+        <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="44"/>
         <source>Create double way Interaction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreateNodeInteraction.cpp" line="31"/>
+        <location filename="../src/Interactions/CreateNodeInteraction.cpp" line="31"/>
         <source>Create node Interaction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreatePolygonInteraction.cpp" line="30"/>
+        <location filename="../src/Interactions/CreatePolygonInteraction.cpp" line="30"/>
         <source>LEFT-CLICK to start;DRAG to scale;SHIFT-DRAG to rotate;LEFT-CLICK to end</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreatePolygonInteraction.cpp" line="35"/>
+        <location filename="../src/Interactions/CreatePolygonInteraction.cpp" line="35"/>
         <source>Create Polygon Interaction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreatePolygonInteraction.cpp" line="108"/>
+        <location filename="../src/Interactions/CreatePolygonInteraction.cpp" line="86"/>
         <source>Create Polygon %1</source>
         <translation>أنشء متعدد الأضلاع %1</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreateRoundaboutInteraction.cpp" line="43"/>
+        <location filename="../src/Interactions/CreateRoundaboutInteraction.cpp" line="43"/>
         <source>Create roundabout Interaction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Interaction/CreateSingleWayInteraction.cpp" line="44"/>
+        <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="44"/>
         <source>Create way Interaction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Interaction/EditInteraction.cpp" line="69"/>
+        <location filename="../src/Interactions/EditInteraction.cpp" line="62"/>
         <source>Edit Interaction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="112"/>
+        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="117"/>
         <source>Move Nodes</source>
         <translation>أنقل العقد</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="116"/>
+        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="121"/>
         <source>Move Node %1</source>
         <translation>أقل اعقدة %1</translation>
     </message>
     <message>
-        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="34"/>
+        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="37"/>
         <source>LEFT-CLICK to select;LEFT-DRAG to move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Interaction/MoveTrackPointInteraction.cpp" line="39"/>
+        <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="42"/>
         <source>Move node Interaction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Interaction/RotateInteraction.cpp" line="34"/>
+        <location filename="../src/Interactions/RotateInteraction.cpp" line="37"/>
         <source>HOVER to select;LEFT-DRAG to rotate/scale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Interaction/RotateInteraction.cpp" line="39"/>
+        <location filename="../src/Interactions/RotateInteraction.cpp" line="42"/>
         <source>Rotate Interaction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Interaction/RotateInteraction.cpp" line="121"/>
+        <location filename="../src/Interactions/RotateInteraction.cpp" line="126"/>
         <source>Scale/Rotate Nodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Interaction/ZoomInteraction.cpp" line="23"/>
+        <location filename="../src/Interactions/ZoomInteraction.cpp" line="23"/>
         <source>LEFT-CLICK to first corner -&gt; LEFT-DRAG to specify area -&gt; LEFT-CLICK to zoom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Interaction/ZoomInteraction.cpp" line="26"/>
+        <location filename="../src/Interactions/ZoomInteraction.cpp" line="26"/>
         <source>Zoom Interaction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1334"/>
+        <location filename="../src/MainWindow.cpp" line="1332"/>
         <source>Create Polygon</source>
         <translation>أنشء متعدد الأضلاع</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1334"/>
+        <location filename="../src/MainWindow.cpp" line="1332"/>
         <source>Specify the number of sides</source>
         <translation>حدد عدد الجوانب</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1418"/>
+        <location filename="../src/MainWindow.cpp" line="1416"/>
         <source>Force Feature upload</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3055,27 +2984,27 @@ Do you want to do this now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Interaction/EditInteraction.cpp" line="62"/>
+        <location filename="../src/Interactions/EditInteraction.cpp" line="55"/>
         <source>LEFT-CLICK to select;RIGHT-CLICK to pan;CTRL-LEFT-CLICK to toggle selection;SHIFT-LEFT-CLICK to add to selection;LEFT-DRAG for area selection;CTRL-RIGHT-DRAG for zoom;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Interaction/EditInteraction.cpp" line="64"/>
+        <location filename="../src/Interactions/EditInteraction.cpp" line="57"/>
         <source>CLICK to select/move;CTRL-CLICK to toggle selection;SHIFT-CLICK to add to selection;SHIFT-DRAG for area selection;CTRL-DRAG for zoom;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="519"/>
+        <location filename="../src/MainWindow.cpp" line="517"/>
         <source>Clipboard do not contain valid data.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1435"/>
+        <location filename="../src/MainWindow.cpp" line="1433"/>
         <source>Multiple intersection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1436"/>
+        <location filename="../src/MainWindow.cpp" line="1434"/>
         <source>Those roads have multiple intersections.
 Do you still want to create a junction for each one (Unwanted junctions can still be deleted afterhand)?</source>
         <translation type="unfinished"></translation>
@@ -3086,235 +3015,193 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1542"/>
+        <location filename="../src/MainWindow.ui" line="1545"/>
         <source>Features</source>
         <translation>الميزات</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2711"/>
+        <location filename="../src/MainWindow.cpp" line="2717"/>
         <source>Warning! Could not load the Merkaartor translations for the &quot;%1&quot; language. Switching to default english.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.ui" line="1555"/>
+        <location filename="../src/MainWindow.ui" line="1558"/>
         <source>Show &amp;virtual nodes</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>MapDocument</name>
-    <message>
-        <location filename="../src/Maps/MapDocument.cpp" line="247"/>
-        <source>Background imagery</source>
-        <translation>الصور الخلفية</translation>
-    </message>
-    <message>
-        <location filename="../src/Maps/MapDocument.cpp" line="85"/>
-        <source>Dirty layer</source>
-        <translation>طبقة الخرطوش</translation>
-    </message>
-    <message>
-        <location filename="../src/Maps/MapDocument.cpp" line="88"/>
-        <source>Uploaded layer</source>
-        <translation>حمّلت الطبقة</translation>
-    </message>
-</context>
-<context>
     <name>MapFeature</name>
     <message>
-        <location filename="../src/Maps/MapFeature.cpp" line="749"/>
+        <location filename="../src/Features/Feature.cpp" line="794"/>
         <source>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; by &lt;b&gt;%2&lt;/b&gt;</source>
         <translation>&lt;i&gt;الأخيرt: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; by &lt;b&gt;%2&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/Maps/MapFeature.cpp" line="751"/>
+        <location filename="../src/Features/Feature.cpp" line="796"/>
         <source>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt;</source>
         <translation>&lt;i&gt;الأخير: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/Maps/MapFeature.cpp" line="758"/>
+        <location filename="../src/Features/Feature.cpp" line="803"/>
         <source>History</source>
         <translation>الخط الزمني</translation>
     </message>
     <message>
-        <location filename="../src/Maps/MapFeature.cpp" line="761"/>
+        <location filename="../src/Features/Feature.cpp" line="806"/>
         <source>Referenced by ways</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Maps/MapFeature.cpp" line="764"/>
+        <location filename="../src/Features/Feature.cpp" line="809"/>
         <source>Referenced by relation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Maps/Relation.cpp" line="621"/>
+        <location filename="../src/Features/Relation.cpp" line="621"/>
         <source>size</source>
         <translation>القياس</translation>
     </message>
     <message>
-        <location filename="../src/Maps/Relation.cpp" line="624"/>
-        <location filename="../src/Maps/Road.cpp" line="1108"/>
+        <location filename="../src/Features/Way.cpp" line="1115"/>
         <source>Topleft</source>
         <translation>أعلى اليسار</translation>
     </message>
     <message>
-        <location filename="../src/Maps/Relation.cpp" line="626"/>
-        <location filename="../src/Maps/Road.cpp" line="1110"/>
+        <location filename="../src/Features/Way.cpp" line="1117"/>
         <source>Botright</source>
         <translation>أسفل اليمين</translation>
     </message>
     <message>
-        <location filename="../src/Maps/Relation.cpp" line="628"/>
+        <location filename="../src/Features/Relation.cpp" line="628"/>
         <source>Relation</source>
         <translation>العلاقة</translation>
     </message>
     <message>
-        <location filename="../src/Maps/Relation.cpp" line="783"/>
+        <location filename="../src/Features/Relation.cpp" line="783"/>
         <source>Role</source>
         <translation>الدور</translation>
     </message>
     <message>
-        <location filename="../src/Maps/Relation.cpp" line="785"/>
+        <location filename="../src/Features/Relation.cpp" line="785"/>
         <source>Member</source>
         <translation>العضو</translation>
     </message>
     <message>
-        <location filename="../src/Maps/Road.cpp" line="1103"/>
+        <location filename="../src/Features/Way.cpp" line="1110"/>
         <source>Length</source>
         <translation>الطول</translation>
     </message>
     <message>
-        <location filename="../src/Maps/Road.cpp" line="1105"/>
+        <location filename="../src/Features/Way.cpp" line="1112"/>
         <source>Size</source>
         <translation>القياس</translation>
     </message>
     <message>
-        <location filename="../src/Maps/Road.cpp" line="1105"/>
+        <location filename="../src/Features/Way.cpp" line="1112"/>
         <source>%1 nodes</source>
         <translation>%1 عقد</translation>
     </message>
     <message>
-        <location filename="../src/Maps/Road.cpp" line="1112"/>
+        <location filename="../src/Features/Way.cpp" line="1119"/>
         <source>Way</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Maps/Road.cpp" line="1112"/>
+        <location filename="../src/Features/Way.cpp" line="1119"/>
         <source>Area</source>
         <translation>المساحة</translation>
     </message>
     <message>
-        <location filename="../src/Maps/TrackPoint.cpp" line="480"/>
+        <location filename="../src/Features/Node.cpp" line="480"/>
         <source>timestamp</source>
         <translation>دمغة الزمن</translation>
     </message>
     <message>
-        <location filename="../src/Maps/TrackPoint.cpp" line="481"/>
+        <location filename="../src/Features/Node.cpp" line="481"/>
         <source>coord</source>
         <translation>الإحداثيات</translation>
     </message>
     <message>
-        <location filename="../src/Maps/TrackPoint.cpp" line="484"/>
+        <location filename="../src/Features/Node.cpp" line="484"/>
         <source>elevation</source>
         <translation>الإرتفاع</translation>
     </message>
     <message>
-        <location filename="../src/Maps/TrackPoint.cpp" line="486"/>
+        <location filename="../src/Features/Node.cpp" line="486"/>
         <source>speed</source>
         <translation>السرعة</translation>
     </message>
     <message>
-        <location filename="../src/Maps/TrackPoint.cpp" line="493"/>
+        <location filename="../src/Features/Node.cpp" line="493"/>
         <source>Waypoint</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Maps/TrackPoint.cpp" line="488"/>
-        <location filename="../src/Maps/TrackPoint.cpp" line="496"/>
+        <location filename="../src/Features/Node.cpp" line="496"/>
         <source>description</source>
         <translation>الوصف</translation>
     </message>
     <message>
-        <location filename="../src/Maps/TrackPoint.cpp" line="490"/>
-        <location filename="../src/Maps/TrackPoint.cpp" line="499"/>
+        <location filename="../src/Features/Node.cpp" line="499"/>
         <source>comment</source>
         <translation>التعليق</translation>
     </message>
     <message>
-        <location filename="../src/Maps/TrackPoint.cpp" line="502"/>
+        <location filename="../src/Features/Node.cpp" line="502"/>
         <source>layer</source>
         <translation>الطبقة</translation>
     </message>
     <message>
-        <location filename="../src/Maps/TrackPoint.cpp" line="507"/>
+        <location filename="../src/Features/Node.cpp" line="507"/>
         <source>Node</source>
         <translation>العقدة</translation>
-    </message>
-</context>
-<context>
-    <name>MapLayer</name>
-    <message>
-        <location filename="../src/Maps/MapLayer.cpp" line="444"/>
-        <source>Size</source>
-        <translation>القياس</translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../src/Maps/MapLayer.cpp" line="444"/>
-        <source>%n features</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
     </message>
 </context>
 <context>
     <name>MapView</name>
     <message>
-        <location filename="../src/MapView.cpp" line="266"/>
+        <location filename="../src/MapView.cpp" line="271"/>
         <source>%1 m</source>
         <translation>%1 م.</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="268"/>
+        <location filename="../src/MapView.cpp" line="273"/>
         <source>%1 km</source>
         <translation>%1 كلم</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="915"/>
+        <location filename="../src/MapView.cpp" line="639"/>
         <source>Feature</source>
         <translation>الخصوصية</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="924"/>
+        <location filename="../src/MapView.cpp" line="648"/>
         <source>Node</source>
         <translation>العقدة</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="932"/>
+        <location filename="../src/MapView.cpp" line="656"/>
         <source>Road</source>
         <translation>الطريق</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="940"/>
+        <location filename="../src/MapView.cpp" line="664"/>
         <source>Relation</source>
         <translation>العلاقة</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="1031"/>
+        <location filename="../src/MapView.cpp" line="755"/>
         <source>Add trackpoint position to image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="1033"/>
+        <location filename="../src/MapView.cpp" line="757"/>
         <source>Cancel</source>
         <translation>ألغي</translation>
     </message>
     <message>
-        <location filename="../src/MapView.cpp" line="237"/>
+        <location filename="../src/MapView.cpp" line="242"/>
         <source>%1ms;ppm:%2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3322,15 +3209,11 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
 <context>
     <name>MerkaartorPreferences</name>
     <message>
-        <location filename="../src/Preferences/TmsServersList.cpp" line="20"/>
-        <location filename="../src/Preferences/TmsServersList.cpp" line="27"/>
-        <location filename="../src/Preferences/WmsServersList.cpp" line="20"/>
         <location filename="../src/Preferences/WmsServersList.cpp" line="33"/>
         <source>New Server</source>
         <translation>الخادم الجديد</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="361"/>
         <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="364"/>
         <source>Preferences upload failed</source>
         <translation type="unfinished"></translation>
@@ -3346,7 +3229,6 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
         <translation>أكثر من 150 تفضيلات</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/BookmarksList.cpp" line="20"/>
         <location filename="../src/Preferences/BookmarksList.cpp" line="27"/>
         <source>New Bookmark</source>
         <translation>مرجعية جديدة</translation>
@@ -3437,23 +3319,21 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
 <context>
     <name>NativeRenderDialog</name>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="40"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="36"/>
         <source>Proceed...</source>
         <translation>كمّل...</translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="129"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="125"/>
         <source>Working. Please Wait...</source>
         <translation>قيد العمل. الرجاء الإنتظار....</translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="129"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="125"/>
         <source>Cancel</source>
         <translation>ألغي</translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="155"/>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="158"/>
         <location filename="../src/Render/NativeRenderDialog.ui" line="14"/>
         <source>Native rendering</source>
         <translation>الطلاء الأصلي</translation>
@@ -3520,36 +3400,34 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     </message>
 </context>
 <context>
-    <name>OsbLayerWidget</name>
+    <name>OsbLayer</name>
     <message>
-        <location filename="../src/LayerWidget.cpp" line="525"/>
-        <source>Close</source>
-        <translation>أغلِق</translation>
-    </message>
-</context>
-<context>
-    <name>OsbMapLayer</name>
-    <message>
-        <location filename="../src/Maps/MapLayer.cpp" line="1142"/>
+        <location filename="../src/Layers/Layer.cpp" line="1413"/>
         <source># of loaded Regions</source>
         <translation>عدد المناطق المحملة</translation>
     </message>
     <message>
-        <location filename="../src/Maps/MapLayer.cpp" line="1142"/>
-        <location filename="../src/Maps/MapLayer.cpp" line="1143"/>
+        <location filename="../src/Layers/Layer.cpp" line="1414"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="../src/Maps/MapLayer.cpp" line="1143"/>
+        <location filename="../src/Layers/Layer.cpp" line="1414"/>
         <source># of loaded Tiles</source>
         <translation>عدد البلاطات المحملة</translation>
     </message>
 </context>
 <context>
+    <name>OsbLayerWidget</name>
+    <message>
+        <location filename="../src/Layers/LayerWidget.cpp" line="542"/>
+        <source>Close</source>
+        <translation>أغلِق</translation>
+    </message>
+</context>
+<context>
     <name>PaintStyleEditor</name>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="45"/>
         <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="46"/>
         <source>Always</source>
         <translation>دائماً</translation>
@@ -3565,20 +3443,11 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
         <translation>عالمي</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="33"/>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="296"/>
         <source>Background</source>
         <translation>الخلفيّة</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="49"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="129"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="145"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="326"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="521"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="595"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="748"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1074"/>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1319"/>
         <source>...</source>
         <translation>...</translation>
@@ -3604,7 +3473,6 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
         <translation>إختيار التسمية</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="197"/>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="253"/>
         <source>meter/pixel</source>
         <translation>متر/بكسل</translation>
@@ -3620,38 +3488,26 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="310"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="579"/>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1058"/>
         <source>Draw with color</source>
         <translation>لوّن بللون</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="372"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="641"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="794"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="967"/>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1168"/>
         <source>Proportional thickness</source>
         <translation>ثخانة نسبية</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="392"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="661"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="814"/>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="987"/>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1188"/>
         <source>Fixed thickness</source>
         <translation>سماكة مثبتة</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="454"/>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="876"/>
         <source>Dashed</source>
         <translation>منقط</translation>
     </message>
     <message>
-        <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="468"/>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="890"/>
         <source>off</source>
         <translation>غير شغال</translation>
@@ -3720,7 +3576,6 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
 <context>
     <name>PictureViewerDialog</name>
     <message>
-        <location filename="../src/Utils/PictureViewerDialog.cpp" line="39"/>
         <location filename="../src/Utils/PictureViewerDialog.cpp" line="45"/>
         <source>Output filename</source>
         <translation>إسم ملف المخرج</translation>
@@ -3744,61 +3599,59 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
 <context>
     <name>PreferencesDialog</name>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="361"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="573"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="634"/>
         <source>Custom styles directory</source>
         <translation>دليل الأزياء المعتادة</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="370"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="659"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="720"/>
         <source>Tag Template</source>
         <translation>قالب تسمية</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="370"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="392"/>
         <source>Merkaartor tag template (*.mat)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="440"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="462"/>
         <source>Tool already exists</source>
         <translation>الأدات موجودة مسبقاً</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="441"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="463"/>
         <source>A tool of this name already exists.
 Please select another name or click the &lt;Apply&gt; button if you want to modify the existing one</source>
         <translation>يوجد أداة بهذا الإسم مسبقاً.
 الرجاء إختيار إسم آخر أو الضغط على الزرّ &lt;طبّق&gt; إذا كنت تريد تغيير الموجود حالياً</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="460"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="482"/>
         <source>Cannot delete preset tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="461"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="483"/>
         <source>Cannot delete preset tool &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="479"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="501"/>
         <source>Cannot modify preset tool name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="480"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="502"/>
         <source>Cannot modify preset tool &quot;%1&quot;&apos;s name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="505"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="527"/>
         <source>Select tool executable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="513"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="535"/>
         <source>Select Log directory</source>
         <translation>إختر مجلد السجلّ</translation>
     </message>
@@ -3808,296 +3661,282 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
         <translation>التفضيلات</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="28"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="549"/>
         <source>Locale</source>
         <translation>الإعداد المحلي</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="34"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="555"/>
         <source>You may need to restart the program for these changes to take effect</source>
         <translation>قد تكون بحاجة إلى إعادة تشغيل البرنامج كي تحصل على التغييرات</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="43"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="564"/>
         <source>Use language</source>
         <translation>إستعمل اللغة</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="78"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="599"/>
         <source>Translate standard tags</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="99"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="28"/>
         <source>Visual</source>
         <translation>مرئي</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="105"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="34"/>
         <source>General</source>
         <translation>عامّ</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="113"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="49"/>
         <source>Zoom Out/in (%)</source>
         <translation>كبّر/صغّر (%)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="137"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="73"/>
         <source>Opacity low/high</source>
         <translation>غير شفافية منخفضة/عالية</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="168"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="141"/>
         <source>Separate Move mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="175"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="148"/>
         <source>Single mouse button interaction</source>
         <translation>تفاعل فردي زرّ الفأرة</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="182"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="155"/>
         <source>Use custom Qt style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="214"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="202"/>
         <source>Colors</source>
         <translation>الألوان</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="220"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="481"/>
         <source>Background</source>
         <translation>الخلفيّة</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="235"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="285"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="338"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="391"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="444"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="497"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="596"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="714"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1004"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1293"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1354"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="248"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="232"/>
         <source>Overwrite style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="270"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="404"/>
         <source>Hover</source>
         <translation>حوم</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="301"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="354"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="407"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="460"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="513"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="519"/>
         <source>Pixels</source>
         <translation>بكسلات</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="376"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="464"/>
         <source>Focus</source>
         <translation>تبئير/تركيز</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="429"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="457"/>
         <source>Relations</source>
         <translation>العلاقات</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="559"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="620"/>
         <source>Style</source>
         <translation>الزيّ</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="565"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="626"/>
         <source>Map style</source>
         <translation>زيّ الخريطة</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="607"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="668"/>
         <source>Current style</source>
         <translation>الزيّ الحالي</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="629"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="690"/>
         <source>Disable styles for track layers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="653"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="714"/>
         <source>Template</source>
         <translation>القالب</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="667"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="728"/>
         <source>Built-in</source>
         <translation>المدمج</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="691"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="752"/>
         <source>Custom</source>
         <translation>المعتاد</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="740"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="801"/>
         <source>Data</source>
         <translation>المعطيات</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="752"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="813"/>
         <source>OSM</source>
         <translation>OSM</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="760"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="821"/>
         <source>Website:</source>
         <translation>الموقع على الإنترنت:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="770"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="831"/>
         <source>Username:</source>
         <translation>إسم المستخدم:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="780"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1062"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1123"/>
         <source>Password:</source>
         <translation>كلمة المرور:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="799"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="860"/>
         <source>Documents</source>
         <translation>المستندات</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="805"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="866"/>
         <source>Autosave documents after upload</source>
         <translation>إحفظ تلقائياً المستندات بعد التحميل</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="815"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="876"/>
         <source>Tracks</source>
         <translation>الأثرات</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="823"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="884"/>
         <source>Automatically extract tracks on open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="830"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="891"/>
         <source>Track layers readonly by default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="841"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="902"/>
         <source>Don&apos;t connect GPX nodes separated by more than (in km; 0 to disable)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="874"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="935"/>
         <source>GPS</source>
         <translation>GPSجهاز تحديد المواقع العالمي</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="981"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1042"/>
         <source>Save NMEA log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1022"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1083"/>
         <source>Set system time to GPS</source>
         <translation>أضبط توقيت النظام على نظام تحديد المواقع العالمي</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1043"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1104"/>
         <source>Network</source>
         <translation>الشّبكة</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1049"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1110"/>
         <source>Proxy settings</source>
         <translation>إعدادات الوكيل</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1055"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1116"/>
         <source>Use Proxy</source>
         <translation>إستعمل الوكيل</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1099"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1160"/>
         <source>Host:</source>
         <translation>المضيف:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1092"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1153"/>
         <source>Port:</source>
         <translation>المنفذ:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1162"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1223"/>
         <source>Background Image</source>
         <translation>صورة الخلفية</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1168"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1229"/>
         <source>Tiles Caching (not active for Yahoo! due to legal restrictions)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1174"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1235"/>
         <source>Cache directory</source>
         <translation>الدليل المخبأ</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1184"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1245"/>
         <source>Cache size (in Mb; 0 to disable)</source>
         <translation>حجم المخبأ ( م.بايت ، 0 للتعطيل)</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1203"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1264"/>
         <source>Map Adapter</source>
         <translation>مكيف الخريطة</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1238"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1299"/>
         <source>Tools</source>
         <translation>الأدوات/العدة</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1256"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1317"/>
         <source>Name:</source>
         <translation>الإسم :</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1266"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1327"/>
         <source>Path:</source>
         <translation>المسار:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1315"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1376"/>
         <source>Apply</source>
-        <translation>طبّق</translation>
+        <translation>تطبيق</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1322"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1383"/>
         <source>Add</source>
         <translation>أضِف</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1329"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1390"/>
         <source>Remove</source>
         <translation>أحذف</translation>
     </message>
@@ -4117,164 +3956,212 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
         <translation>التشيكية</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="111"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="112"/>
         <source>German</source>
         <translation>الألمانية</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="112"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="113"/>
         <source>French</source>
         <translation>الفرنسية</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="113"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="114"/>
         <source>Italian</source>
         <translation>الإيطالية</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="114"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="116"/>
         <source>Polish</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="115"/>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="118"/>
         <source>Russian</source>
         <translation>روسي</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1085"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1146"/>
         <source>User:</source>
         <translation>المستخدم:</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1209"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1270"/>
         <source>Enable use of OSB background (needs new document)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="323"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="471"/>
         <source>Highlight</source>
         <translation>تسليط الضوء</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="482"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="488"/>
         <source>GPX track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="520"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="526"/>
         <source>Use simple GPX track appearance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="880"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="941"/>
         <source>GPS input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="886"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="947"/>
         <source>gpsd</source>
         <translation>gpsd</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="893"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="954"/>
         <source>Serial</source>
         <translation>تسلسلي</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="915"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="953"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1014"/>
         <source>Port</source>
         <translation>المنفذ</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="943"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1004"/>
         <source>Host</source>
         <translation>المضيف</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="196"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="169"/>
         <source>Use Virtual nodes (new session required)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="111"/>
+        <source>Dutch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="115"/>
+        <source>Japanase</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="117"/>
+        <source>Portuguese</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="119"/>
+        <source>Slovak</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="120"/>
+        <source>Spanish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="121"/>
+        <source>Swedish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="122"/>
+        <source>Ukrainian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="40"/>
+        <source>&quot;Zoom lock&quot; mode (lock zoom level to Yahoo! tiles and force Mercator projection)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="104"/>
+        <source>Maximum meters per pixel to show nodes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="176"/>
+        <source>Relations selectable while hidden</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="260"/>
+        <source>Interface</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>PropertiesDock</name>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="318"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="316"/>
         <source>%1/%1 selected item(s)</source>
         <translation>%1/%1 بنود منتقات</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="341"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="339"/>
         <source>%1/%2 selected item(s)</source>
         <translation>%1/%2 بنود منتقات</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="404"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="402"/>
         <source>Selected items</source>
         <translation>البنود المختارة</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="413"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="411"/>
         <source>Properties - Multiple elements</source>
         <translation>الخصائص - عناصر متعددة</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="429"/>
-        <source>Properties - Trackpoint</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="443"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="441"/>
         <source>Properties - Road</source>
         <translation>الخصائص - طريق</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="461"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="459"/>
         <source>Properties - Relation</source>
         <translation>الخصائص - العلاقة</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="473"/>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="999"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="997"/>
         <source>Properties</source>
         <translation>الخصائص</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="1000"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="998"/>
         <source>Center map</source>
         <translation>حدّد مركز الخريطة</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="1001"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="999"/>
         <source>Center &amp;&amp; Zoom map</source>
         <translation>حدّد مركز و كبر/صغر الخريطة</translation>
     </message>
     <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="1002"/>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="1000"/>
         <source>Select member</source>
         <translation>إختر العضو</translation>
+    </message>
+    <message>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="427"/>
+        <source>Properties - Node</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QGPS</name>
     <message>
-        <location filename="../src/GPS/qgps.cpp" line="92"/>
         <location filename="../src/GPS/qgps.cpp" line="151"/>
         <source>Invalid</source>
         <translation>غير صالح</translation>
     </message>
     <message>
-        <location filename="../src/GPS/qgps.cpp" line="94"/>
-        <location filename="../src/GPS/qgps.cpp" line="166"/>
         <location filename="../src/GPS/qgps.cpp" line="221"/>
         <source>No Position Fix</source>
         <translation>لا إكتساب للموقع</translation>
     </message>
     <message>
-        <location filename="../src/GPS/qgps.cpp" line="95"/>
-        <location filename="../src/GPS/qgps.cpp" line="171"/>
         <location filename="../src/GPS/qgps.cpp" line="222"/>
         <source>No UTC Time</source>
         <translation>لا توقيت عالمي</translation>
@@ -4344,13 +4231,11 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
         <translation>الشكل</translation>
     </message>
     <message>
-        <location filename="../src/GPS/qgpsmainwindowui.ui" line="21"/>
         <location filename="../src/GPS/qgpsmainwindowui.ui" line="28"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GPS/qgpsmainwindowui.ui" line="62"/>
         <location filename="../src/GPS/qgpsmainwindowui.ui" line="79"/>
         <source>99 99&apos; 99&quot;</source>
         <translation>99 99&apos; 99&quot;</translation>
@@ -4427,7 +4312,6 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
         <translation>الأعضاء</translation>
     </message>
     <message>
-        <location filename="../src/Docks/MinimumRelationProperties.ui" line="50"/>
         <location filename="../src/Docks/MinimumRelationProperties.ui" line="98"/>
         <source>...</source>
         <translation>...</translation>
@@ -4528,7 +4412,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
 <context>
     <name>StyleDock</name>
     <message>
-        <location filename="../src/Docks/StyleDock.cpp" line="101"/>
+        <location filename="../src/Docks/StyleDock.cpp" line="100"/>
         <source>Styles</source>
         <translation>الأزياء</translation>
     </message>
@@ -4619,7 +4503,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="173"/>
         <source>Apply</source>
-        <translation>طبّق</translation>
+        <translation>تطبيق</translation>
     </message>
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="180"/>
@@ -4653,7 +4537,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
 <context>
     <name>TagTemplateWidgetCombo</name>
     <message>
-        <location filename="../src/TagTemplate/TagTemplate.cpp" line="196"/>
+        <location filename="../src/TagTemplate/TagTemplate.cpp" line="193"/>
         <source>Undefined</source>
         <translation>غير معرف</translation>
     </message>
@@ -4661,65 +4545,65 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
 <context>
     <name>TagTemplates</name>
     <message>
-        <location filename="../src/TagTemplate/TagTemplate.cpp" line="906"/>
+        <location filename="../src/TagTemplate/TagTemplate.cpp" line="903"/>
         <source>Undefined</source>
         <translation>غير معرف</translation>
     </message>
 </context>
 <context>
-    <name>TrackLayerWidget</name>
+    <name>TrackLayer</name>
     <message>
-        <location filename="../src/LayerWidget.cpp" line="431"/>
-        <source>Extract Drawing layer</source>
-        <translation>إستخرج طبقة الرسم</translation>
-    </message>
-    <message>
-        <location filename="../src/LayerWidget.cpp" line="436"/>
-        <source>Zoom</source>
-        <translation>التكبير</translation>
-    </message>
-    <message>
-        <location filename="../src/LayerWidget.cpp" line="444"/>
-        <source>Close</source>
-        <translation>أغلِق</translation>
-    </message>
-</context>
-<context>
-    <name>TrackMapLayer</name>
-    <message>
-        <location filename="../src/Maps/MapLayer.cpp" line="621"/>
+        <location filename="../src/Layers/Layer.cpp" line="663"/>
         <source>Extract - %1</source>
         <translation>إستخرج - %1</translation>
     </message>
     <message>
-        <location filename="../src/Maps/MapLayer.cpp" line="723"/>
+        <location filename="../src/Layers/Layer.cpp" line="765"/>
         <source># of track segments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Maps/MapLayer.cpp" line="723"/>
+        <location filename="../src/Layers/Layer.cpp" line="765"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="../src/Maps/MapLayer.cpp" line="724"/>
+        <location filename="../src/Layers/Layer.cpp" line="766"/>
         <source>Total distance</source>
         <translation>المسافة الإجمالية</translation>
     </message>
     <message>
-        <location filename="../src/Maps/MapLayer.cpp" line="724"/>
+        <location filename="../src/Layers/Layer.cpp" line="766"/>
         <source>%1 km</source>
         <translation>%1 كلم</translation>
     </message>
     <message>
-        <location filename="../src/Maps/MapLayer.cpp" line="725"/>
+        <location filename="../src/Layers/Layer.cpp" line="767"/>
         <source>Total duration</source>
         <translation>إجمالي الوقت</translation>
     </message>
     <message>
-        <location filename="../src/Maps/MapLayer.cpp" line="725"/>
+        <location filename="../src/Layers/Layer.cpp" line="767"/>
         <source>%1h %2m</source>
         <translation>%1س %2د</translation>
+    </message>
+</context>
+<context>
+    <name>TrackLayerWidget</name>
+    <message>
+        <location filename="../src/Layers/LayerWidget.cpp" line="448"/>
+        <source>Extract Drawing layer</source>
+        <translation>إستخرج طبقة الرسم</translation>
+    </message>
+    <message>
+        <location filename="../src/Layers/LayerWidget.cpp" line="453"/>
+        <source>Zoom</source>
+        <translation>التكبير</translation>
+    </message>
+    <message>
+        <location filename="../src/Layers/LayerWidget.cpp" line="461"/>
+        <source>Close</source>
+        <translation>أغلِق</translation>
     </message>
 </context>
 <context>
@@ -4801,12 +4685,12 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
 <context>
     <name>UploadedLayerWidget</name>
     <message>
-        <location filename="../src/LayerWidget.cpp" line="497"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="514"/>
         <source>Zoom</source>
         <translation>التكبير</translation>
     </message>
     <message>
-        <location filename="../src/LayerWidget.cpp" line="502"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="519"/>
         <source>Clear</source>
         <translation>محو</translation>
     </message>
@@ -4814,8 +4698,6 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
 <context>
     <name>WMSPreferencesDialog</name>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="169"/>
-        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="223"/>
         <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="248"/>
         <source>Merkaartor: GetCapabilities</source>
         <translation type="unfinished"></translation>
@@ -4826,7 +4708,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
         <translation>لا يمكن ترك العنوان و الدرب فارغاً.</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="224"/>
+        <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="225"/>
         <source>Download failed: %1.</source>
         <translation>فشل التنزيل: %1.</translation>
     </message>
@@ -4885,7 +4767,7 @@ Please select another name or click the &lt;Apply&gt; button if you want to modi
     <message>
         <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="175"/>
         <source>Apply</source>
-        <translation>طبّق</translation>
+        <translation>تطبيق</translation>
     </message>
     <message>
         <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="182"/>
