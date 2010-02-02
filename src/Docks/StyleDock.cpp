@@ -15,23 +15,22 @@
 #include "MapView.h"
 #include "Document.h"
 #include "Feature.h"
-#include "PaintStyle/EditPaintStyle.h"
 
 #include <QAction>
 
 StyleDock::StyleDock(MainWindow* aParent)
-    : MDockAncestor(aParent), Main(aParent)
+	: MDockAncestor(aParent), Main(aParent)
 {
-    setMinimumSize(220,100);
-    setObjectName("StyleDock");
+	setMinimumSize(220,100);
+	setObjectName("StyleDock");
 
-    ui.setupUi(getWidget());
+	ui.setupUi(getWidget());
 
-    connect(ui.StyleList, SIGNAL(itemSelectionChanged()), this, SLOT(on_StyleList_itemSelectionChanged()));
-    connect(ui.StyleList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(on_StyleList_itemDoubleClicked(QListWidgetItem*)));
-    connect(ui.StyleList, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(on_StyleList_customContextMenuRequested(const QPoint &)));
+	connect(ui.StyleList, SIGNAL(itemSelectionChanged()), this, SLOT(on_StyleList_itemSelectionChanged()));
+	connect(ui.StyleList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(on_StyleList_itemDoubleClicked(QListWidgetItem*)));
+	connect(ui.StyleList, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(on_StyleList_customContextMenuRequested(const QPoint &)));
 
-    retranslateUi();
+	retranslateUi();
 }
 
 StyleDock::~StyleDock()
@@ -51,7 +50,7 @@ void StyleDock::addItem(QAction* a)
 
 	QListWidgetItem* it = new QListWidgetItem(a->text());
 	it->setData(Qt::UserRole, qVariantFromValue((void *)a));
-    ui.StyleList->addItem(it);
+	ui.StyleList->addItem(it);
 	if (a->data().toString() == M_PREFS->getDefaultStyle())
 		ui.StyleList->setCurrentItem(it);
 
@@ -91,13 +90,13 @@ void StyleDock::on_StyleList_customContextMenuRequested(const QPoint & pos)
 
 void StyleDock::changeEvent(QEvent * event)
 {
-    if (event->type() == QEvent::LanguageChange)
-        retranslateUi();
-    MDockAncestor::changeEvent(event);
+	if (event->type() == QEvent::LanguageChange)
+		retranslateUi();
+	MDockAncestor::changeEvent(event);
 }
 
 void StyleDock::retranslateUi()
 {
-    setWindowTitle(tr("Styles"));
+	setWindowTitle(tr("Styles"));
 }
 

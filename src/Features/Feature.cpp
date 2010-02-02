@@ -7,7 +7,7 @@
 #include "NodeCommands.h"
 #include "Document.h"
 #include "Layer.h"
-#include "PaintStyle/EditPaintStyle.h"
+#include "PaintStyle/MasPaintStyle.h"
 #include "PaintStyle/TagSelector.h"
 
 #include <QtCore/QUuid>
@@ -371,12 +371,12 @@ bool Feature::isVirtual() const
 
 void Feature::setTag(int index, const QString& key, const QString& value, bool addToTagList)
 {
-	int i;
-
-	p->PixelPerMForPainter = -1;
-	for (i=0; i<p->Tags.size(); ++i)
+	int i = 0;
+	for (; i<p->Tags.size(); ++i)
 		if (p->Tags[i].first == key)
 		{
+			if (p->Tags[i].second == value)
+				return;
 			p->Tags[i].second = value;
 			break;
 		}
@@ -384,6 +384,7 @@ void Feature::setTag(int index, const QString& key, const QString& value, bool a
 		p->Tags.insert(p->Tags.begin() + index, qMakePair(key,value));
 		p->TagsSize++;
 	}
+	p->PixelPerMForPainter = -1;
 	invalidatePainter();
 	invalidateMeta();
 
@@ -394,15 +395,20 @@ void Feature::setTag(int index, const QString& key, const QString& value, bool a
 
 void Feature::setTag(const QString& key, const QString& value, bool addToTagList)
 {
-	p->PixelPerMForPainter = -1;
-	for (int i=0; i<p->Tags.size(); ++i)
+	int i = 0;
+	for (; i<p->Tags.size(); ++i)
 		if (p->Tags[i].first == key)
 		{
+			if (p->Tags[i].second == value)
+				return;
 			p->Tags[i].second = value;
-			return;
+			break;
 		}
-	p->Tags.push_back(qMakePair(key,value));
-	p->TagsSize++;
+	if (i == p->Tags.size()) {
+		p->Tags.push_back(qMakePair(key,value));
+		p->TagsSize++;
+	}
+	p->PixelPerMForPainter = -1;
 	invalidateMeta();
 	invalidatePainter();
 

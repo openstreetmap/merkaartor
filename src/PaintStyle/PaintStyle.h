@@ -7,6 +7,7 @@
 
 #include <QList>
 #include <QPair>
+#include <QPointF>
 
 #include "PaintStyle/TagSelector.h"
 
@@ -103,15 +104,15 @@ class FeaturePainter
 		QString toXML(QString filename) const;
 		static FeaturePainter fromXML(const QDomElement& e, QString filename);
 
-		void drawBackground(Way* R, QPainter& thePainter, MapView& theView) const;
-		void drawBackground(Relation* R, QPainter& thePainter, MapView& theView) const;
-		void drawForeground(Way* R, QPainter& thePainter, MapView& theView) const;
-		void drawForeground(Relation* R, QPainter& thePainter, MapView& theView) const;
-		void drawTouchup(Way* R, QPainter& thePainter, MapView& theView) const;
-		void drawTouchup(Node* R, QPainter& thePainter, MapView& theView) const;
-		void drawLabel(Way* R, QPainter& thePainter, MapView& theView) const;
-		void drawPointLabel(QPointF C, QString str, QString strBG, QPainter& thePainter, MapView& theView) const;
-		void drawLabel(Node* Pt, QPainter& thePainter, MapView& theView) const;
+		void drawBackground(Way* R, QPainter* thePainter, MapView* theView) const;
+		void drawBackground(Relation* R, QPainter* thePainter, MapView* theView) const;
+		void drawForeground(Way* R, QPainter* thePainter, MapView* theView) const;
+		void drawForeground(Relation* R, QPainter* thePainter, MapView* theView) const;
+		void drawTouchup(Way* R, QPainter* thePainter, MapView* theView) const;
+		void drawTouchup(Node* R, QPainter* thePainter, MapView* theView) const;
+		void drawLabel(Way* R, QPainter* thePainter, MapView* theView) const;
+		void drawPointLabel(QPointF C, QString str, QString strBG, QPainter* thePainter, MapView* theView) const;
+		void drawLabel(Node* Pt, QPainter* thePainter, MapView* theView) const;
 
 	public:
 		TagSelector* theSelector;
@@ -173,25 +174,6 @@ class GlobalPainter
 	public:
 		bool DrawBackground;
 		QColor BackgroundColor;
-};
-
-class PaintStyleLayer
-{
-	public:
-		virtual ~PaintStyleLayer() = 0;
-		virtual void draw(Way* R) = 0;
-		virtual void draw(Node* Pt) = 0;
-		virtual void draw(Relation* R) = 0;
-};
-
-class PaintStyle
-{
-	public:
-		void add(PaintStyleLayer* aLayer);
-		int size() const;
-		PaintStyleLayer* get(int i);
-	protected:
-		QList<PaintStyleLayer*> Layers;
 };
 
 #endif

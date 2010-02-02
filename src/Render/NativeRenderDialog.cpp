@@ -14,7 +14,6 @@
 #include "MainWindow.h"
 #include "Document.h"
 #include "MapView.h"
-#include "PaintStyle/EditPaintStyle.h"
 #include "Maps/Projection.h"
 #include "Layer.h"
 #include "Features.h"

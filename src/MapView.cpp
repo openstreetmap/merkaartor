@@ -10,11 +10,13 @@
 #include "Relation.h"
 #include "Interaction.h"
 #include "EditInteraction.h"
-#include "PaintStyle/EditPaintStyle.h"
+#include "PaintStyle/MasPaintStyle.h"
 #include "Maps/Projection.h"
 #include "GPS/qgps.h"
 #include "GPS/qgpsdevice.h"
 #include "LayerIterator.h"
+
+#include "MapRenderer.h"
 
 #ifdef GEOIMAGE
 #include "GeoImageDock.h"
@@ -51,6 +53,7 @@ public:
 	QMap<RenderPriority, QSet <Feature*> > theFeatures;
 	QSet<Way*> theCoastlines;
 	QList<Node*> theVirtualNodes;
+	MapRenderer renderer;
 
 	MapViewPrivate()
 	  : PixelPerM(0.0), Viewport(WORLD_COORDBOX)
@@ -417,239 +420,9 @@ void MapView::drawBackground(QPainter & theP, Projection& /*aProj*/)
 	}
 }
 
-//void MapView::drawBackground(QPainter & P, Projection& aProj)
-//{
-//	QImage theImage(size(), QImage::Format_RGB32);
-//	QList <QPoint> theFloodStarts;
-//	QColor theFillColor;
-//
-//	QPainter theP;
-//	theP.begin(&theImage);
-//    theP.setRenderHint(QPainter::Antialiasing);
-//    theP.setPen(QPen(M_PREFS->getWaterColor(), 1));
-//	theP.setBrush(Qt::NoBrush);
-//
-//	if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
-//		theFillColor = M_PREFS->getBgColor();
-//	else
-//		theFillColor = M_STYLE->getGlobalPainter().getBackgroundColor();
-//	theP.fillRect(rect(), theFillColor);
-//
-//	if (p->theCoastlines.isEmpty()) {
-//		if (M_PREFS->getUseShapefileForBackground() && theDocument->getImageLayer()->isVisible()) {
-//			theP.fillRect(rect(), M_PREFS->getWaterColor());
-//		}
-//		P.drawImage(QPoint(0, 0), theImage);
-//		return;
-//	}
-//
-//	for (int i=0; i<p->theCoastlines.size(); i++) {
-//		if (p->theCoastlines[i]->getPath().elementCount() < 2) continue;
-//
-//		for (int j=1; j < p->theCoastlines[i]->getPath().elementCount(); j++) {
-//			QLineF l(QPointF(p->theCoastlines[i]->getPath().elementAt(j)), QPointF(p->theCoastlines[i]->getPath().elementAt(j-1)));
-//			QLineF l1 = l.normalVector().unitVector();
-//			QLineF l2(l1);
-//			l2.translate(-l1.p1());
-//            //l2.setP2(l2.p2() * 2.0);
-//			QPointF p2 = QPointF(l.p1().x() + ((l.p2().x() - l.p1().x()) / 2.0), l.p1().y() + ((l.p2().y() - l.p1().y()) / 2.0));
-//			//l2.translate(l1.p1());
-//			l2.translate(p2);
-//            theFloodStarts.append(l2.p2().toPoint());
-//            //theP.drawEllipse(l2.p2(), 5, 5);
-//		}
-//		theP.drawPath(p->theCoastlines[i]->getPath());
-//	}
-//	theP.end();
-//
-//	for (int i=0; i < theFloodStarts.size(); i++) {
-//		floodFill(theImage, theFloodStarts[i], theFillColor.rgb(), M_PREFS->getWaterColor().rgb() );
-//	}
-//	P.drawImage(QPoint(0, 0), theImage);
-//}
-//
-//void MapView::drawBackground(QPainter & P, Projection& aProj)
-//{
-//	/*
-//	p->thePath = QPainterPath();
-//	if (!p->Nodes.size())
-//		return;
-//
-//	bool lastPointVisible = true;
-//	QPoint lastPoint = theProjection.project(p->Nodes[0]);
-//	QPoint aP = lastPoint;
-//
-//	double PixelPerM = theProjection.pixelPerM();
-//	double WW = PixelPerM*widthOf()*10+10;
-//	QRect clipRect = paintRegion.boundingRect().adjusted(int(-WW-20), int(-WW-20), int(WW+20), int(WW+20));
-//
-//
-//	if (M_PREFS->getDrawingHack()) {
-//		if (!clipRect.contains(aP)) {
-//			aP.setX(qMax(clipRect.left(), aP.x()));
-//			aP.setX(qMin(clipRect.right(), aP.x()));
-//			aP.setY(qMax(clipRect.top(), aP.y()));
-//			aP.setY(qMin(clipRect.bottom(), aP.y()));
-//			lastPointVisible = false;
-//		}
-//	}
-//	p->thePath.moveTo(aP);
-//	QPoint firstPoint = aP;
-//	if (smoothed().size())
-//	{
-//		for (int i=3; i<smoothed().size(); i+=3)
-//			p->thePath.cubicTo(
-//				theProjection.project(smoothed()[i-2]),
-//				theProjection.project(smoothed()[i-1]),
-//				theProjection.project(smoothed()[i]));
-//	}
-//	else
-//		for (int j=1; j<size(); ++j) {
-//			aP = theProjection.project(p->Nodes[j]);
-//			if (M_PREFS->getDrawingHack()) {
-//				QLine l(lastPoint, aP);
-//				if (!clipRect.contains(aP)) {
-//					if (!lastPointVisible) {
-//						QPoint a, b;
-//						if (QRectInterstects(clipRect, l, a, b)) {
-//							p->thePath.lineTo(a);
-//							lastPoint = aP;
-//							aP = b;
-//						} else {
-//							lastPoint = aP;
-//							aP.setX(qMax(clipRect.left(), aP.x()));
-//							aP.setX(qMin(clipRect.right(), aP.x()));
-//							aP.setY(qMax(clipRect.top(), aP.y()));
-//							aP.setY(qMin(clipRect.bottom(), aP.y()));
-//						}
-//					} else {
-//						QPoint a, b;
-//						QRectInterstects(clipRect, l, a, b);
-//						lastPoint = aP;
-//						aP = a;
-//					}
-//					lastPointVisible = false;
-//				} else {
-//					if (!lastPointVisible) {
-//						QPoint a, b;
-//						QRectInterstects(clipRect, l, a, b);
-//						p->thePath.lineTo(a);
-//					}
-//					lastPoint = aP;
-//					lastPointVisible = true;
-//				}
-//			}
-//			p->thePath.lineTo(aP);
-//		}
-//		if (area() > 0.0 && !lastPointVisible)
-//			p->thePath.lineTo(firstPoint);
-//*/
-//
-//	if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
-//		P.fillRect(rect(), QBrush(M_PREFS->getBgColor()));
-//	else
-//		P.fillRect(rect(), QBrush(M_STYLE->getGlobalPainter().getBackgroundColor()));
-//
-//	if (p->theCoastlines.isEmpty()) {
-//		if (M_PREFS->getUseShapefileForBackground() && theDocument->getImageLayer()->isVisible()) {
-//			P.fillRect(rect(), QBrush(M_PREFS->getWaterColor()));
-//		}
-//		return;
-//	}
-//
-//	QPainterPath theCoast;
-//	QRect clipRect = rect().adjusted(int(-40), int(-40), int(40), int(40));
-//	QPointF firstPoint, lastPoint;
-//	QList<Road*> aCoastlines;
-//	QList < QPair <TrackPoint*, Road*> > aStartPoints;
-//	QList < QPair <TrackPoint*, Road*> > aEndPoints;
-//
-//	for (int i=0; i < p->theCoastlines.size(); i++) {
-//		if (p->theCoastlines[i]->isClosed()) {
-//			theCoast.addPath(p->theCoastlines[i]->getPath());
-//			continue;
-//		}
-//		aStartPoints.append(qMakePair(dynamic_cast<TrackPoint*>(p->theCoastlines[i]->get(0)), p->theCoastlines[i]));
-//		aEndPoints.append(qMakePair(dynamic_cast<TrackPoint*>(p->theCoastlines[i]->get(p->theCoastlines[i]->size()-1)), p->theCoastlines[i]));
-//	}
-//
-//	int curIndex, tmpIndex;
-//	for (int i=0; i < aStartPoints.size(); i++) {
-//		if ((curIndex = aCoastlines.indexOf(aStartPoints[i].second)) == -1) {
-//			aCoastlines.append(aStartPoints[i].second);
-//			curIndex = aStartPoints.size()-1;
-//		}
-//		for (int j=0; j < aEndPoints.size(); j++) {
-//			if (aEndPoints[j].first == aStartPoints[i].first)
-//				if ((tmpIndex = aCoastlines.indexOf(aEndPoints[j].second)) == -1)
-//					aCoastlines.insert(curIndex, aEndPoints[j].second);
-//				else
-//					aCoastlines.move(tmpIndex, curIndex);
-//		}
-//	}
-//
-//	QList<QPainterPath*> theIncompleteCoasts;
-//	QPainterPath* curPath = NULL;
-//	for (int i=0; i<aCoastlines.size(); i++) {
-//		if (aCoastlines[i]->getPath().elementAt(0) != lastPoint) {
-//			if (curPath)
-//				theCoast.addPath(*curPath);
-//			curPath = new QPainterPath;
-//			theIncompleteCoasts.append(curPath);
-//			lastPoint = QPointF(aCoastlines[i]->getPath().elementAt(0));
-//		}
-//		curPath->moveTo(lastPoint);
-//		for (int j=1; j < aCoastlines[i]->getPath().elementCount(); j++) {
-//			lastPoint = QPointF(aCoastlines[i]->getPath().elementAt(j));
-//			curPath->lineTo(lastPoint);
-//		}
-//	}
-//	if (curPath)
-//		theCoast.addPath(*curPath);
-//
-//	P.setBrush(M_PREFS->getWaterColor());
-//	P.setPen(QPen(M_PREFS->getWaterColor(), 1));
-//	P.drawPath(theCoast);
-//}
-
 void MapView::drawFeatures(QPainter & P, Projection& /*aProj*/)
 {
-	M_STYLE->initialize(P, *this);
-
-	QMap<RenderPriority, QSet<Feature*> >::const_iterator itm;
-	QSet<Feature*>::const_iterator it;
-
-	for (int i = 0; i < M_STYLE->size(); ++i)
-	{
-		PaintStyleLayer *Current = M_STYLE->get(i);
-
-		P.save();
-		P.setRenderHint(QPainter::Antialiasing);
-
-		for (itm = p->theFeatures.constBegin() ;itm != p->theFeatures.constEnd(); ++itm)
-		{
-			for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it)
-			{
-				P.setOpacity((*it)->layer()->getAlpha());
-				if (Way * R = dynamic_cast < Way * >(*it))
-					Current->draw(R);
-				else if (Node * Pt = dynamic_cast < Node * >(*it))
-					Current->draw(Pt);
-				else if (Relation * RR = dynamic_cast < Relation * >(*it))
-					Current->draw(RR);
-			}
-		}
-		P.restore();
-	}
-
-	for (itm = p->theFeatures.constBegin() ;itm != p->theFeatures.constEnd(); ++itm)
-	{
-		for (it = itm.value().constBegin() ;it != itm.value().constEnd(); ++it)
-		{
-			P.setOpacity((*it)->layer()->getAlpha());
-			(*it)->draw(P, this);
-		}
-	}
+	p->renderer.render(&P, p->theFeatures, this);
 }
 
 void MapView::drawDownloadAreas(QPainter & P)

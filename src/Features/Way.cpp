@@ -362,7 +362,7 @@ void Way::updateMeta()
 		if (Priority >= 0)
 			Priority++;
 		// dummy number to get a deterministic feature sort
-		Priority *= sin(intToRad(boundingBox().lonDiff()));
+		Priority += sin(intToRad(boundingBox().lonDiff()));
 		setRenderPriority(RenderPriority(RenderPriority::IsLinear,Priority));
 	}
 

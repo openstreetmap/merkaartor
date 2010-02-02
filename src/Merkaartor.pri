@@ -16,7 +16,7 @@ HEADERS += \
 	./Maps/Projection.h \
 	./Maps/FeatureManipulations.h \
 	./MapView.h \
-	./PaintStyle/EditPaintStyle.h \
+	./PaintStyle/MasPaintStyle.h \
 	./PaintStyle/PaintStyle.h \
 	./PaintStyle/PaintStyleEditor.h \
 	./PaintStyle/TagSelector.h \
@@ -51,7 +51,7 @@ SOURCES += \
 	./Maps/Projection.cpp \
 	./Maps/FeatureManipulations.cpp \
 	./MapView.cpp \
-	./PaintStyle/EditPaintStyle.cpp \
+	./PaintStyle/MasPaintStyle.cpp \
 	./PaintStyle/PaintStyle.cpp \
 	./PaintStyle/PaintStyleEditor.cpp \
 	./PaintStyle/TagSelector.cpp \

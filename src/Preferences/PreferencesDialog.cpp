@@ -10,7 +10,7 @@
 //
 //
 #include "Preferences/PreferencesDialog.h"
-#include "PaintStyle/EditPaintStyle.h"
+#include "PaintStyle/MasPaintStyle.h"
 
 #include "MainWindow.h"
 #include "Document.h"

@@ -34,7 +34,7 @@
 #include "Features.h"
 #include "Maps/FeatureManipulations.h"
 #include "LayerIterator.h"
-#include "PaintStyle/EditPaintStyle.h"
+#include "PaintStyle/MasPaintStyle.h"
 #include "PaintStyle/PaintStyleEditor.h"
 #include "Sync/SyncOSM.h"
 #include <ui_AboutDialog.h>
@@ -344,8 +344,8 @@ MainWindow::~MainWindow(void)
 {
 	theProperties->setSelection(NULL);
 
-	if (EditPaintStyle::instance())
-		delete EditPaintStyle::instance();
+	if (MasPaintStyle::instance())
+		delete MasPaintStyle::instance();
 	MerkaartorPreferences::instance()->setWorkingDir(QDir::currentPath());
 	delete theDocument;
 	delete theView;
