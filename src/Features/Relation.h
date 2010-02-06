@@ -20,7 +20,7 @@ class Relation : public Feature
 		virtual ~Relation(void);
 
 		virtual QString getClass() const {return "Relation";}
-		virtual Feature::FeatureType getType() const {return Feature::Nodes;}
+		virtual Feature::FeatureType getType() const {return Feature::Relations;}
 		virtual void updateMeta();
 
 		virtual CoordBox boundingBox() const;

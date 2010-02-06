@@ -26,13 +26,13 @@ class TrackSegmentPrivate
 TrackSegment::TrackSegment(void)
 {
 	p = new TrackSegmentPrivate;
-	setRenderPriority(RenderPriority (RenderPriority::IsLinear,0.));
+	setRenderPriority(RenderPriority (RenderPriority::IsLinear,0.,99));
 }
 
 TrackSegment::TrackSegment(const TrackSegment& other)
 : Feature(other), p(0)
 {
-	setRenderPriority(RenderPriority (RenderPriority::IsLinear,0.));
+	setRenderPriority(RenderPriority (RenderPriority::IsLinear,0.,99));
 }
 
 TrackSegment::~TrackSegment(void)

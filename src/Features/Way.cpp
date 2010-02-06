@@ -138,7 +138,15 @@ void Way::partChanged(Feature*, int ChangeId)
 	if (isDeleted())
 		return;
 
+	// FIXME Far too slow. Cannot be put in boundingbox() because it would be updated inside index find loop in buildfeatureset()
+//	if (layer())
+//		layer()->indexRemove(p->BBox, this);
 	p->BBoxUpToDate = false;
+//	if (layer()) {
+//		CoordBox bb = boundingBox();
+//		layer()->indexAdd(bb, this);
+//	}
+
 	MetaUpToDate = false;
 	p->SmoothedUpToDate = false;
 	p->wasPathComplete = false;
@@ -340,7 +348,9 @@ void Way::updateMeta()
 		return;
 	}
 
-	bool isArea = (p->Nodes[0] == p->Nodes[p->Nodes.size()-1]);
+	bool isArea = false;
+	if (tagValue("junction", "") != "roundabout")
+		isArea = (p->Nodes[0] == p->Nodes[p->Nodes.size()-1]);
 
 	for (unsigned int i=0; (i+1)<p->Nodes.size(); ++i)
 	{
@@ -356,14 +366,15 @@ void Way::updateMeta()
 
 	if (isArea) {
 		p->Area = p->Distance;
-		setRenderPriority(RenderPriority(RenderPriority::IsArea,-fabs(p->Area)));
+		setRenderPriority(RenderPriority(RenderPriority::IsArea,-fabs(p->Area), 0));
 	} else {
 		qreal Priority = tagValue("layer","0").toInt();
 		if (Priority >= 0)
 			Priority++;
+		int layer = Priority;
 		// dummy number to get a deterministic feature sort
 		Priority += sin(intToRad(boundingBox().lonDiff()));
-		setRenderPriority(RenderPriority(RenderPriority::IsLinear,Priority));
+		setRenderPriority(RenderPriority(RenderPriority::IsLinear,Priority, layer));
 	}
 
 	MetaUpToDate = true;

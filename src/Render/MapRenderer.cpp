@@ -218,12 +218,13 @@ void MapRenderer::render(
 )
 {
 	theView = aView;
-	thePainter = P;
-
-	P->setRenderHint(QPainter::Antialiasing);
 
 	QMap<RenderPriority, QSet<Feature*> >::const_iterator itm;
 	QSet<Feature*>::const_iterator it;
+
+#if 1
+	P->setRenderHint(QPainter::Antialiasing);
+	thePainter = P;
 
 	if (M_PREFS->getStyleBackgroundVisible())
 	{
@@ -301,6 +302,106 @@ void MapRenderer::render(
 			(*it)->draw(*P, aView);
 		}
 	}
+
+#else
+	BackgroundStyleLayer bglayer(this);
+	ForegroundStyleLayer fglayer(this);
+	TouchupStyleLayer tchuplayer(this);
+	LabelStyleLayer lbllayer(this);
+
+	Way * R = NULL;
+	Node * Pt = NULL;
+	Relation * RR = NULL;
+
+	QPixmap pix(theView->size());
+	thePainter = new QPainter();
+
+	itm = theFeatures.constBegin();
+	while (itm != theFeatures.constEnd())
+	{
+		pix.fill(Qt::transparent);
+
+		thePainter->begin(&pix);
+		thePainter->setRenderHint(QPainter::Antialiasing);
+		int curLayer = (itm.key()).layer();
+		while (itm != theFeatures.constEnd() && (itm.key()).layer() == curLayer)
+		{
+			for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it)
+			{
+				thePainter->setOpacity((*it)->layer()->getAlpha());
+
+				R = NULL;
+				Pt = NULL;
+				RR = NULL;
+
+				if (!(R = CAST_WAY(*it)))
+					if (!(Pt = CAST_NODE(*it)))
+						RR = CAST_RELATION(*it);
+
+				if (!Pt) {
+					if (M_PREFS->getStyleBackgroundVisible())
+					{
+						thePainter->save();
+						if (R && R->area() == 0)
+							thePainter->setCompositionMode(QPainter::CompositionMode_DestinationOver);
+
+						if (R)
+							bglayer.draw(R);
+						else if (Pt)
+							bglayer.draw(Pt);
+						else if (RR)
+							bglayer.draw(RR);
+
+						thePainter->restore();
+					}
+					if (M_PREFS->getStyleForegroundVisible())
+					{
+						thePainter->save();
+
+						if (R)
+							fglayer.draw(R);
+						else if (Pt)
+							fglayer.draw(Pt);
+						else if (RR)
+							fglayer.draw(RR);
+
+						thePainter->restore();
+					}
+				}
+				if (M_PREFS->getStyleTouchupVisible())
+				{
+					thePainter->save();
+
+					if (R)
+						tchuplayer.draw(R);
+					else if (Pt)
+						tchuplayer.draw(Pt);
+					else if (RR)
+						tchuplayer.draw(RR);
+
+					thePainter->restore();
+				}
+				if (M_PREFS->getNamesVisible()) {
+					thePainter->save();
+
+					if (R)
+						lbllayer.draw(R);
+					else if (Pt)
+						lbllayer.draw(Pt);
+					else if (RR)
+						lbllayer.draw(RR);
+
+					thePainter->restore();
+				}
+
+				(*it)->draw(*thePainter, aView);
+			}
+			++itm;
+		}
+		thePainter->end();
+		P->drawPixmap(0, 0, pix);
+	}
+#endif
 }
 
 

@@ -217,8 +217,16 @@ void CreateAreaInteraction::snapMousePressEvent(QMouseEvent* anEvent, Feature* a
 	}
 	FirstPoint = XY_TO_COORD(anEvent->pos());
 
-	if (EndNow)
-		view()->launch(0);
+	if (EndNow) {
+		if (theRelation)
+			Main->properties()->setSelection(theRelation);
+		else
+			Main->properties()->setSelection(LastRoad);
+		LastRoad = NULL;
+		theRelation = NULL;
+		HaveFirst = false;
+		EndNow = false;
+	}
 }
 
 #ifndef Q_OS_SYMBIAN

@@ -168,18 +168,18 @@ void PaintStyleEditor::on_PaintList_itemSelectionChanged()
 	LabelArea->setChecked(FP.getLabelArea());
 
 	updatePagesIcons();
-	
+
 	FreezeUpdate = false;
 }
 
 void PaintStyleEditor::updatePagesIcons()
 {
-	if (DrawForeground->isChecked() || DrawFill->isChecked()) 
+	if (DrawForeground->isChecked() || DrawFill->isChecked())
 		tbStyle->setItemIcon(0, QIcon(":/Icons/actions/software-update-available.png"));
 	else
 		tbStyle->setItemIcon(0, QIcon());
 
-	if (DrawBackground->isChecked()) 
+	if (DrawBackground->isChecked())
 		tbStyle->setItemIcon(1, QIcon(":/Icons/actions/software-update-available.png"));
 	else
 		tbStyle->setItemIcon(1, QIcon());
@@ -230,11 +230,10 @@ void PaintStyleEditor::on_DrawGlobalBackground_clicked(bool b)
 
 void PaintStyleEditor::on_GlobalBackgroundColor_clicked()
 {
-	bool OK = false;
-	QRgb rgb = QColorDialog::getRgba(theGlobalPainter.getBackgroundColor().rgba(), &OK, this);
-	if (OK) {
-		makeBoundaryIcon(GlobalBackgroundColor, QColor::fromRgba(rgb));
-		theGlobalPainter.background(QColor::fromRgba(rgb));
+	QColor rgb = QColorDialog::getColor(theGlobalPainter.getBackgroundColor(), this, tr("Select Color"), QColorDialog::ShowAlphaChannel);
+	if (rgb.isValid()) {
+		makeBoundaryIcon(GlobalBackgroundColor, rgb);
+		theGlobalPainter.background(rgb);
 	}
 }
 
@@ -254,11 +253,10 @@ void PaintStyleEditor::on_BackgroundColor_clicked()
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
-	bool OK = false;
-	QRgb rgb = QColorDialog::getRgba(FP.backgroundBoundary().Color.rgba(), &OK, this);
-	if (OK) {
-		makeBoundaryIcon(BackgroundColor, QColor::fromRgba(rgb));
-		FP.background(QColor::fromRgba(rgb), ProportionalBackground->value(), FixedBackground->value());
+	QColor rgb = QColorDialog::getColor(FP.backgroundBoundary().Color, this, tr("Select Color"), QColorDialog::ShowAlphaChannel);
+	if (rgb.isValid()) {
+		makeBoundaryIcon(BackgroundColor, rgb);
+		FP.background(rgb, ProportionalBackground->value(), FixedBackground->value());
 	}
 }
 
@@ -295,11 +293,10 @@ void PaintStyleEditor::on_ForegroundColor_clicked()
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
-	bool OK = false;
-	QRgb rgb = QColorDialog::getRgba(FP.foregroundBoundary().Color.rgba(), &OK, this);
-	if (OK) {
-		makeBoundaryIcon(ForegroundColor, QColor::fromRgba(rgb));
-		FP.foreground(QColor::fromRgba(rgb), ProportionalForeground->value(), FixedForeground->value());
+	QColor rgb = QColorDialog::getColor(FP.foregroundBoundary().Color, this, tr("Select Color"), QColorDialog::ShowAlphaChannel);
+	if (rgb.isValid()) {
+		makeBoundaryIcon(ForegroundColor, rgb);
+		FP.foreground(rgb, ProportionalForeground->value(), FixedForeground->value());
 	}
 }
 
@@ -360,11 +357,10 @@ void PaintStyleEditor::on_TouchupColor_clicked()
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
-	bool OK = false;
-	QRgb rgb = QColorDialog::getRgba(FP.touchupBoundary().Color.rgba(), &OK, this);
-	if (OK) {
-		makeBoundaryIcon(TouchupColor, QColor::fromRgba(rgb));
-		FP.touchup(QColor::fromRgba(rgb), ProportionalTouchup->value(), FixedTouchup->value());
+	QColor rgb = QColorDialog::getColor(FP.touchupBoundary().Color, this, tr("Select Color"), QColorDialog::ShowAlphaChannel);
+	if (rgb.isValid()) {
+		makeBoundaryIcon(TouchupColor, rgb);
+		FP.touchup(rgb, ProportionalTouchup->value(), FixedTouchup->value());
 	}
 }
 
@@ -425,11 +421,10 @@ void PaintStyleEditor::on_FillColor_clicked()
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
-	bool OK = false;
-	QRgb rgb = QColorDialog::getRgba(FP.fillColor().rgba(), &OK, this);
-	if (OK) {
-		makeBoundaryIcon(FillColor, QColor::fromRgba(rgb));
-		FP.foregroundFill(QColor::fromRgba(rgb));
+	QColor rgb = QColorDialog::getColor(FP.fillColor(), this, tr("Select Color"), QColorDialog::ShowAlphaChannel);
+	if (rgb.isValid()) {
+		makeBoundaryIcon(FillColor, rgb);
+		FP.foregroundFill(rgb);
 	}
 }
 
@@ -512,11 +507,10 @@ void PaintStyleEditor::on_LabelColor_clicked()
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
-	bool OK = false;
-	QRgb rgb = QColorDialog::getRgba(FP.labelBoundary().Color.rgba(), &OK, this);
-	if (OK) {
-		makeBoundaryIcon(LabelColor, QColor::fromRgba(rgb));
-		FP.label(QColor::fromRgba(rgb), ProportionalLabel->value(), FixedLabel->value());
+	QColor rgb = QColorDialog::getColor(FP.labelBoundary().Color, this, tr("Select Color"), QColorDialog::ShowAlphaChannel);
+	if (rgb.isValid()) {
+		makeBoundaryIcon(LabelColor, rgb);
+		FP.label(rgb, ProportionalLabel->value(), FixedLabel->value());
 	}
 }
 
@@ -550,11 +544,10 @@ void PaintStyleEditor::on_LabelBackgroundlColor_clicked()
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
-	bool OK = false;
-	QRgb rgb = QColorDialog::getRgba(FP.labelBackgroundColor().rgba(), &OK, this);
-	if (OK) {
-		makeBoundaryIcon(LabelBackgroundlColor, QColor::fromRgba(rgb));
-		FP.labelBackground(QColor::fromRgba(rgb));
+	QColor rgb = QColorDialog::getColor(FP.labelBackgroundColor(), this, tr("Select Color"), QColorDialog::ShowAlphaChannel);
+	if (rgb.isValid()) {
+		makeBoundaryIcon(LabelBackgroundlColor, rgb);
+		FP.labelBackground(rgb);
 	}
 }
 

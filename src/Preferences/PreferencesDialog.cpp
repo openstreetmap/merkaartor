@@ -396,59 +396,53 @@ void PreferencesDialog::on_BrowseTemplate_clicked()
 
 void PreferencesDialog::on_btBgColor_clicked()
 {
-	bool OK = false;
-	QRgb rgb = QColorDialog::getRgba(BgColor.rgba(), &OK, this);
-	if (OK) {
-		BgColor = QColor::fromRgba(rgb);
+	QColor rgb = QColorDialog::getColor(BgColor, this, tr("Select Color"), QColorDialog::ShowAlphaChannel);
+	if (rgb.isValid()) {
+		BgColor = rgb;
 		makeBoundaryIcon(btBgColor, BgColor);
 	}
 }
 
 void PreferencesDialog::on_btFocusColor_clicked()
 {
-	bool OK = false;
-	QRgb rgb = QColorDialog::getRgba(FocusColor.rgba(), &OK, this);
-	if (OK) {
-		FocusColor = QColor::fromRgba(rgb);
+	QColor rgb = QColorDialog::getColor(FocusColor, this, tr("Select Color"), QColorDialog::ShowAlphaChannel);
+	if (rgb.isValid()) {
+		FocusColor = rgb;
 		makeBoundaryIcon(btFocusColor, FocusColor);
 	}
 }
 
 void PreferencesDialog::on_btHoverColor_clicked()
 {
-	bool OK = false;
-	QRgb rgb = QColorDialog::getRgba(HoverColor.rgba(), &OK, this);
-	if (OK) {
-		HoverColor = QColor::fromRgba(rgb);
+	QColor rgb = QColorDialog::getColor(HoverColor, this, tr("Select Color"), QColorDialog::ShowAlphaChannel);
+	if (rgb.isValid()) {
+		HoverColor = rgb;
 		makeBoundaryIcon(btHoverColor, HoverColor);
 	}
 }
 
 void PreferencesDialog::on_btHighlightColor_clicked()
 {
-	bool OK = false;
-	QRgb rgb = QColorDialog::getRgba(HighlightColor.rgba(), &OK, this);
-	if (OK) {
-		HighlightColor = QColor::fromRgba(rgb);
-		makeBoundaryIcon(btHighlightColor, HoverColor);
+	QColor rgb = QColorDialog::getColor(HighlightColor, this, tr("Select Color"), QColorDialog::ShowAlphaChannel);
+	if (rgb.isValid()) {
+		HighlightColor = rgb;
+		makeBoundaryIcon(btHighlightColor, HighlightColor);
 	}
 }
 
 void PreferencesDialog::on_btRelationsColor_clicked()
 {
-	bool OK = false;
-	QRgb rgb = QColorDialog::getRgba(RelationsColor.rgba(), &OK, this);
-	if (OK) {
-		RelationsColor = QColor::fromRgba(rgb);
+	QColor rgb = QColorDialog::getColor(RelationsColor, this, tr("Select Color"), QColorDialog::ShowAlphaChannel);
+	if (rgb.isValid()) {
+		RelationsColor = rgb;
 		makeBoundaryIcon(btRelationsColor, RelationsColor);
 	}
 }
 void PreferencesDialog::on_btGpxTrackColor_clicked()
 {
-	bool OK = false;
-	QRgb rgb = QColorDialog::getRgba(GpxTrackColor.rgba(), &OK, this);
-	if (OK) {
-		GpxTrackColor = QColor::fromRgba(rgb);
+	QColor rgb = QColorDialog::getColor(GpxTrackColor, this, tr("Select Color"), QColorDialog::ShowAlphaChannel);
+	if (rgb.isValid()) {
+		GpxTrackColor = rgb;
 		makeBoundaryIcon(btGpxTrackColor, GpxTrackColor);
 	}
 }

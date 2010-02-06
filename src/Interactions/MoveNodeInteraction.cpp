@@ -75,7 +75,7 @@ void MoveNodeInteraction::snapMousePressEvent(QMouseEvent * event, Feature* aLas
 			sel.append(aLast);
 	} else {
 		if (aLast) {
-			if (view()->properties()->selection().size())
+			if (view()->properties()->selection().size() && !M_PREFS->getSeparateMoveMode())
 				sel = view()->properties()->selection();
 			else
 				sel.append(aLast);

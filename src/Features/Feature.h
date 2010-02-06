@@ -30,11 +30,11 @@ class RenderPriority
 	public:
 		typedef enum { IsArea, IsLinear, IsSingular } Class;
 		RenderPriority()
-			: theClass(IsLinear), InClassPriority(0.0) { }
-		RenderPriority(Class C, double IC)
-			: theClass(C), InClassPriority(IC) { }
+			: theClass(IsLinear), InClassPriority(0.0), theLayer(0) { }
+		RenderPriority(Class C, double IC, int L)
+			: theClass(C), InClassPriority(IC), theLayer(L) { }
 		RenderPriority(const RenderPriority& other)
-			: theClass(other.theClass), InClassPriority(other.InClassPriority) { }
+			: theClass(other.theClass), InClassPriority(other.InClassPriority), theLayer(other.theLayer) { }
 		bool operator<(const RenderPriority& R) const
 		{
 			return (theClass < R.theClass) ||
@@ -49,13 +49,19 @@ class RenderPriority
 			if (this != &other) {
 				theClass = other.theClass;
 				InClassPriority = other.InClassPriority;
+				theLayer = other.theLayer;
 			}
 			return *this;
+		}
+		int layer() const
+		{
+			return theLayer;
 		}
 
 	private:
 		Class theClass;
 		double InClassPriority;
+		int theLayer;
 };
 
 namespace boost

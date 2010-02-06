@@ -28,7 +28,7 @@ Node::Node(const Coord& aCoord)
 	, p(new NodePrivate)
 {
 	BBox = CoordBox(Position,Position);
-	setRenderPriority(RenderPriority(RenderPriority::IsSingular,0.));
+	setRenderPriority(RenderPriority(RenderPriority::IsSingular,0., 0));
 }
 
 Node::Node(const Node& other)
@@ -42,7 +42,7 @@ Node::Node(const Node& other)
 	setTime(other.time());
 	BBox = other.boundingBox();
 	p->ProjectionRevision = other.projectionRevision();
-	setRenderPriority(RenderPriority(RenderPriority::IsSingular,0.));
+	setRenderPriority(RenderPriority(RenderPriority::IsSingular,0., 0));
 }
 
 Node::~Node(void)

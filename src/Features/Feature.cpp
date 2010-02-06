@@ -185,6 +185,8 @@ Layer* Feature::layer()
 
 const RenderPriority& Feature::renderPriority()
 {
+	if (!MetaUpToDate)
+		updateMeta();
 	return p->theRenderPriority;
 }
 
