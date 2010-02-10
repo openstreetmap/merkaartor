@@ -373,7 +373,8 @@ void Way::updateMeta()
 			Priority++;
 		int layer = Priority;
 		// dummy number to get a deterministic feature sort
-		Priority += sin(intToRad(boundingBox().lonDiff()));
+//		Priority += sin(intToRad(boundingBox().lonDiff()));
+		Priority += p->Distance / INT_MAX;
 		setRenderPriority(RenderPriority(RenderPriority::IsLinear,Priority, layer));
 	}
 

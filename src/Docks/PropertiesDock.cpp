@@ -633,6 +633,8 @@ void PropertiesDock::on_TrackPointLon_editingFinished()
 
 void PropertiesDock::on_tag_changed(QString k, QString v)
 {
+	if (!FullSelection.size())
+		return;
 	Feature* F = FullSelection[0];
 	if (F->tagValue(k, "__NULL__") != v) {
 		Main->document()->addHistory(new SetTagCommand(F,k,v,Main->document()->getDirtyOrOriginLayer(F->layer())));
@@ -642,6 +644,8 @@ void PropertiesDock::on_tag_changed(QString k, QString v)
 
 void PropertiesDock::on_tag_cleared(QString k)
 {
+	if (!FullSelection.size())
+		return;
 	Feature* F = FullSelection[0];
 	Main->document()->addHistory(new ClearTagCommand(F,k,Main->document()->getDirtyOrOriginLayer(F->layer())));
 	Main->invalidateView();

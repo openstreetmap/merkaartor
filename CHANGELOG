@@ -1,4 +1,5 @@
 v0.15
+	* FIX : Handle case of selection being reset during tag editing (fixes #2646)
 	* ADD : Make the point where nodes are not displayed configurable
 	* FIX : Do not allow node interaction when they are not displayed (closes #2674)
 	* FIX : 100% CPU usage and Crash on creating roundabout (fixes #2659)
