@@ -34,7 +34,7 @@ TARGET = merkaartor
 CONFIG += rtti stl
 #CONFIG -= exceptions
 QT += svg network xml core gui
-unix: LIBS += -lz
+LIBS += -lz
 
 !contains(NODEBUG,1) {
 	CONFIG += debug

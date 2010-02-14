@@ -28,7 +28,7 @@
 #include <QStatusBar>
 #include <QInputDialog>
 
-#include "zlib/zlib.h"
+#include <zlib.h>
 
 // #define DEBUG_EVERY_CALL
 // #define DEBUG_MAPCALL_ONLY
@@ -129,10 +129,10 @@ QByteArray gzipDecode(const QByteArray& In)
 	strm.next_in = Z_NULL;
 	ret = inflateInit2(&strm,15+32);
 	if (ret != Z_OK)
-       {
-               (void)inflateEnd(&strm);
+	   {
+			   (void)inflateEnd(&strm);
 		return Total;
-       }
+	   }
 	int RealSize = In.size();
 	for (int i=0; i<RealSize/CHUNK+1; ++i)
 	{
@@ -150,10 +150,10 @@ QByteArray gzipDecode(const QByteArray& In)
 			strm.next_out = reinterpret_cast<unsigned char*>(out);
 			ret = inflate(&strm, Z_NO_FLUSH);
 			if (ret == Z_STREAM_ERROR)
-                       {
-                               (void)inflateEnd(&strm);
+					   {
+							   (void)inflateEnd(&strm);
 				return Total;
-                       }
+					   }
 			switch (ret)
 			{
 				case Z_NEED_DICT:
@@ -168,7 +168,7 @@ QByteArray gzipDecode(const QByteArray& In)
 			Total.append(QByteArray(out,have));
 		} while (strm.avail_out == 0);
 	}
-       (void)inflateEnd(&strm);
+	   (void)inflateEnd(&strm);
 	return Total;
 }
 
@@ -235,7 +235,7 @@ bool Downloader::go(const QString& url)
 bool Downloader::request(const QString& Method, const QString& URL, const QString& Data)
 {
 	if (Error) return false;
-	
+
 	qDebug() << "Downloader::request: " << URL;
 
 	QByteArray ba(Data.toUtf8());
@@ -246,7 +246,7 @@ bool Downloader::request(const QString& Method, const QString& URL, const QStrin
 		Header.setValue("Host",Web);
 	else
 		Header.setValue("Host",Web+':'+QString::number(Port));
-	
+
 	QString auth = QString("%1:%2").arg(User).arg(Password);
 	QByteArray ba_auth = auth.toUtf8().toBase64();
 	Header.setValue("Authorization", QString("Basic %1").arg(QString(ba_auth)));
@@ -502,7 +502,7 @@ bool downloadOSM(QWidget* aParent, const QString& aWeb, const QString& aUser, co
 	Downloader Rcv(aWeb, aUser, aPassword);
 	QString URL = Rcv.getURLToMap();
 	URL = URL.arg(intToAng(aBox.bottomLeft().lon()), 0, 'f').arg(intToAng(aBox.bottomLeft().lat()), 0, 'f').arg(intToAng(aBox.topRight().lon()), 0, 'f').arg(intToAng(aBox.topRight().lat()), 0, 'f');
-	
+
 	QUrl theUrl;
 	theUrl.setHost(aWeb);
 	theUrl.setPath(URL);
@@ -737,9 +737,9 @@ bool downloadOSM(QWidget* aParent, const CoordBox& aBox , Document* theDocument)
 				} else {
 					link.toUInt(&Regional);
 					if (!Regional) {
-						QUrl url = QUrl(link); 
-						double lat = url.queryItemValue("lat").toDouble(); 
-						double lon = url.queryItemValue("lon").toDouble(); 
+						QUrl url = QUrl(link);
+						double lat = url.queryItemValue("lat").toDouble();
+						double lon = url.queryItemValue("lon").toDouble();
 						int zoom = url.queryItemValue("zoom").toInt();
 
 						if (zoom <= 10) {
@@ -790,10 +790,10 @@ bool downloadOSM(QWidget* aParent, const CoordBox& aBox , Document* theDocument)
 				theLayer->reIndex();
 				theDocument->setLastDownloadLayer(theLayer);
 				theDocument->addDownloadBox(theLayer, Clip);
-                if (directAPI)
-                    Main->on_viewZoomAllAction_triggered();
-                else
-                    Main->view()->setViewport(Clip,Main->view()->rect());
+				if (directAPI)
+					Main->on_viewZoomAllAction_triggered();
+				else
+					Main->view()->setViewport(Clip,Main->view()->rect());
 				Main->invalidateView();
 			} else {
 				retry = true;
