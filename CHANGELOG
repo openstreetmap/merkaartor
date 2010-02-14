@@ -1,4 +1,5 @@
 v0.15
+	* FIX : Joining 2 ways to create an area doesn't create a polygon if the 2 ways have opposite directions (fixes #2718)
 	* FIX : Improve tag completion behaviour (by Trav) (closes #2716)
 	* ADD : Add GlobeXplorer (DigitalGlobe) to default WMS list (by sim6) (closes #2714)
 	* FIX : Handle case of selection being reset during tag editing (fixes #2646)

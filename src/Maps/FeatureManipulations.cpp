@@ -147,7 +147,7 @@ static Way* join(Document* theDocument, CommandList* L, Way* R1, Way* R2)
 	Feature* End2 = R2->get(R2->size()-1);
 	if ( (Start1 == Start2) || (Start1 == End2) )
 		reversePoints(theDocument,L,R1);
-	if ( (End1 == End2) || (Start1 == End2) )
+	else if ( (End1 == End2) || (Start1 == End2) )
 		reversePoints(theDocument,L,R2);
 	appendPoints(theDocument,L,R1,R2);
 	Feature::mergeTags(theDocument,L,R1,R2);
