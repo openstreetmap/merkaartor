@@ -28,15 +28,31 @@ EditCompleterDelegate::~EditCompleterDelegate()
 
 QWidget* EditCompleterDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& /* option */, const QModelIndex& index) const
 {
-    QCompleter* completer = NULL;
+	QCompleter* completer = NULL;
 
 	QWidget* edit;
-    MainWindow* mw = (MainWindow *)(this->parent());
-    if (index.column() == 0) {
-        completer = new QCompleter(mw->document()->getTagList(), (QObject *)this);
+	MainWindow* mw = (MainWindow *)(this->parent());
+    
+	if (index.column() == 0) {
+	 
+		QStringList tagKeys = mw->document()->getTagList();
+
+		// Exclude any tags already defined in the current model
+		for (int i=0; i<index.model()->rowCount(); i++) {
+			if (i != index.row()) {
+				QModelIndex r = index.model()->index(0, 0);
+				tagKeys.removeAll(index.model()->data(r).toString());
+			}
+		}
+
+		// QCompleter relies on the list order, so sort it for
+		// consistent completion behaviour
+		tagKeys.sort();
+
+        completer = new QCompleter(tagKeys, (QObject *)this);
 		QComboBox *cb = new QComboBox(parent);
 		cb->setInsertPolicy(QComboBox::InsertAlphabetically);
-        cb->insertItems(-1, mw->document()->getTagList());
+        cb->insertItems(-1, tagKeys);
 		cb->setEditable(true);
 		completer->setCompletionMode(QCompleter::InlineCompletion);
 		completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
