@@ -1,4 +1,5 @@
 v0.15
+	* ADD : Add GlobeXplorer (DigitalGlobe) to default WMS list (by sim6) (closes #2714)
 	* FIX : Handle case of selection being reset during tag editing (fixes #2646)
 	* ADD : Make the point where nodes are not displayed configurable
 	* FIX : Do not allow node interaction when they are not displayed (closes #2674)

@@ -12,6 +12,6 @@
   <WmsServer styles="," layers="Wohnstrasse,Wege,Zufahrtswege,Landstrasse,Bundesstrasse,Kraftfahrstrasse,Autobahn" projections="EPSG:4326" format="image/png" path="/cgi-bin/mapserv?map=/data/umn/osm/osm_basic.map&amp;SERVICE=WMS&amp;" address="mapbender.wheregroup.com" name="WhereGroup OSM" />
   <WmsServer styles="" layers="PICC/Voirie,PICC/Voirie mob (l),PICC/Voirie ame,PICC/Voirie,PICC/Voirie mob (p)" projections="EPSG:31370" format="image/png" path="/wmspicc/wms110.do?" address="cartopro2.wallonie.be" name="Wallonie PICC" />
   <WmsServer styles="" layers="ppnc1,ppnc2,ppnc3,ppnc4,ppnc5,ppnc6,ppnc7" projections="EPSG:31370" format="image/png" path="/WMS/com.esri.wms.Esrimap/PPNC?version1.1.1&amp;" address="cartopro1.wallonie.be" name="Wallonie PPNC" />
-  <WmsServer styles="" layers="osm" projections="EPSG:4326" format="image/png" path="/cgi-bin/c2corg4osm?" address="www.camptocamp.org" name="camptocamp.org" />
+  <WmsServer styles="" layers="osm" projections="EPSG:4326" format="image/png" path="/cgi-bin/c2corg4osm?" address="www.camptocamp.org" name="camptocamp.org" />  <WmsServer styles="" layers="GlobeXplorer Image" projections="EPSG:4326" format="image/jpeg" path="/gexservlets/wms?" address="wms.globexplorer.com" name="GlobeXplorer DigitalGlobe" />
  </WmsServers>
 </MerkaartorList>
