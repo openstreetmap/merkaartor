@@ -590,6 +590,15 @@ void Feature::unsetParentFeature(Feature* F)
 		}
 }
 
+void Feature::updateIndex()
+{
+	if (layer()) {
+		layer()->indexRemove(BBox, this);
+		CoordBox bb = boundingBox();
+		layer()->indexAdd(bb, this);
+	}
+}
+
 int Feature::sizeParents() const
 {
 	return p->Parents.size();

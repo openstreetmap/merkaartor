@@ -299,6 +299,7 @@ class Feature : public QObject
 
 		virtual QString getClass() const = 0;
 		virtual void updateMeta() = 0;
+		virtual void updateIndex();
 		virtual void invalidateMeta();
 
 		virtual bool deleteChildren(Document* , CommandList* ) { return true; }
@@ -315,6 +316,7 @@ class Feature : public QObject
 		MapFeaturePrivate* p;
 
 	protected:
+		mutable CoordBox BBox;
 		bool MetaUpToDate;
 
 		QString tagsToXML(int lvl=0);

@@ -29,7 +29,7 @@ class WayPrivate
 {
 	public:
 		WayPrivate()
-		: SmoothedUpToDate(false), BBox(Coord(0,0),Coord(0,0)), BBoxUpToDate(false)
+		: SmoothedUpToDate(false), BBoxUpToDate(false)
 			, IsCoastline(false), Area(0), Distance(0), Width(0)
 			, wasPathComplete(false), ProjectionRevision(0)
 		{
@@ -38,7 +38,6 @@ class WayPrivate
 		std::vector<NodePtr> virtualNodes;
 		QList<Coord> Smoothed;
 		bool SmoothedUpToDate;
-		CoordBox BBox;
 		bool BBoxUpToDate;
 
 		bool IsCoastline;
@@ -138,15 +137,7 @@ void Way::partChanged(Feature*, int ChangeId)
 	if (isDeleted())
 		return;
 
-	// FIXME Far too slow. Cannot be put in boundingbox() because it would be updated inside index find loop in buildfeatureset()
-//	if (layer())
-//		layer()->indexRemove(p->BBox, this);
 	p->BBoxUpToDate = false;
-//	if (layer()) {
-//		CoordBox bb = boundingBox();
-//		layer()->indexAdd(bb, this);
-//	}
-
 	MetaUpToDate = false;
 	p->SmoothedUpToDate = false;
 	p->wasPathComplete = false;
@@ -171,7 +162,7 @@ void Way::add(Node* Pt)
 void Way::add(Node* Pt, int Idx)
 {
 	if (layer())
-		layer()->indexRemove(p->BBox, this);
+		layer()->indexRemove(BBox, this);
 	p->Nodes.insert(p->Nodes.begin() + Idx, Pt);
 //	p->Nodes.push_back(Pt);
 //	std::rotate(p->Nodes.begin()+Idx,p->Nodes.end()-1,p->Nodes.end());
@@ -240,7 +231,7 @@ int Way::findVirtual(Feature* Pt) const
 void Way::remove(int idx)
 {
 	if (layer())
-		layer()->indexRemove(p->BBox, this);
+		layer()->indexRemove(BBox, this);
 
 	if (p->Nodes[idx]) {
 		Node* Pt = p->Nodes[idx];
@@ -316,15 +307,15 @@ CoordBox Way::boundingBox() const
 	{
 		if (p->Nodes.size())
 		{
-			p->BBox = CoordBox(p->Nodes[0]->position(),p->Nodes[0]->position());
+			BBox = CoordBox(p->Nodes[0]->position(),p->Nodes[0]->position());
 			for (unsigned int i=1; i<p->Nodes.size(); ++i)
-				p->BBox.merge(p->Nodes[i]->position());
+				BBox.merge(p->Nodes[i]->position());
 		}
 		else
-			p->BBox = CoordBox(Coord(0,0),Coord(0,0));
+			BBox = CoordBox(Coord(0,0),Coord(0,0));
 		p->BBoxUpToDate = true;
 	}
-	return p->BBox;
+	return BBox;
 }
 
 void Way::updateMeta()
@@ -621,8 +612,8 @@ void Way::buildPath(const Projection &theProjection, const QTransform& /*theTran
 	for (unsigned int i=0; i<p->Nodes.size(); ++i)
 		theProjection.project(p->Nodes[i]);
 
-	QPointF pbl = theProjection.project(p->BBox.bottomLeft());
-	QPointF ptr = theProjection.project(p->BBox.topRight());
+	QPointF pbl = theProjection.project(BBox.bottomLeft());
+	QPointF ptr = theProjection.project(BBox.topRight());
 	box_2d roadRect (
 		make<point_2d>(pbl.x(), pbl.y()),
 		make<point_2d>(ptr.x(), ptr.y())

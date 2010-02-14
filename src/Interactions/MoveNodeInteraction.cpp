@@ -129,6 +129,9 @@ void MoveNodeInteraction::snapMouseReleaseEvent(QMouseEvent * event, Feature* Cl
 				theList->add(new MoveNodeCommand(Moving[i],OriginalPosition[i]+Diff, Moving[i]->layer()));
 			else
 				theList->add(new MoveNodeCommand(Moving[i],OriginalPosition[i]+Diff, document()->getDirtyOrOriginLayer(Moving[i]->layer())));
+			for (int j=0; j<Moving[i]->sizeParents(); ++j) {
+				Moving[i]->getParent(i)->updateIndex();
+			}
 		}
 
 		// If moving a single node (not a track node), see if it got dropped onto another node

@@ -83,7 +83,6 @@ class Node : public Feature
 
 	private:
 		Coord Position;
-		CoordBox BBox;
 
 		double Elevation;
 		double Speed;

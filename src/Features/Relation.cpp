@@ -36,7 +36,7 @@ class RelationPrivate
 	public:
 		RelationPrivate(Relation* R)
 			: theRelation(R), theModel(0), ModelReferences(0),
-				BBox(Coord(0,0),Coord(0,0)), BBoxUpToDate(false)
+				BBoxUpToDate(false)
 		{
 		}
 		~RelationPrivate()
@@ -49,7 +49,6 @@ class RelationPrivate
 		int ModelReferences;
 		QPainterPath thePath;
 		QPainterPath theBoundingPath;
-		CoordBox BBox;
 		bool BBoxUpToDate;
 
 		RenderPriority theRenderPriority;
@@ -116,7 +115,7 @@ CoordBox Relation::boundingBox() const
 	if (!p->BBoxUpToDate)
 	{
 		if (p->Members.size() == 0)
-			p->BBox = CoordBox(Coord(0,0),Coord(0,0));
+			BBox = CoordBox(Coord(0,0),Coord(0,0));
 		else
 		{
 			CoordBox Clip;
@@ -129,11 +128,11 @@ CoordBox Relation::boundingBox() const
 					} else
 						Clip.merge(p->Members[i].second->boundingBox());
 				}
-			p->BBox = Clip;
+			BBox = Clip;
 			p->BBoxUpToDate = true;
 		}
 	}
-	return p->BBox;
+	return BBox;
 }
 
 void Relation::draw(QPainter& P, MapView* theView)
@@ -290,7 +289,7 @@ bool Relation::notEverythingDownloaded()
 void Relation::add(const QString& Role, Feature* F)
 {
 	if (layer())
-		layer()->indexRemove(p->BBox, this);
+		layer()->indexRemove(BBox, this);
 	p->Members.push_back(qMakePair(Role,F));
 	F->setParentFeature(this);
 	p->BBoxUpToDate = false;
@@ -304,7 +303,7 @@ void Relation::add(const QString& Role, Feature* F)
 void Relation::add(const QString& Role, Feature* F, int Idx)
 {
 	if (layer())
-		layer()->indexRemove(p->BBox, this);
+		layer()->indexRemove(BBox, this);
 	p->Members.push_back(qMakePair(Role,F));
 	std::rotate(p->Members.begin()+Idx,p->Members.end()-1,p->Members.end());
 	F->setParentFeature(this);
@@ -319,7 +318,7 @@ void Relation::add(const QString& Role, Feature* F, int Idx)
 void Relation::remove(int Idx)
 {
 	if (layer())
-		layer()->indexRemove(p->BBox, this);
+		layer()->indexRemove(BBox, this);
 	if (p->Members[Idx].second) {
 		Feature* F = p->Members[Idx].second;
 		F->unsetParentFeature(this);
