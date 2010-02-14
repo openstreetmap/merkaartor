@@ -17,14 +17,14 @@ class CreateAreaInteraction : public FeatureSnapInteraction
 		CreateAreaInteraction(MainWindow* Main, MapView* aView);
 		~CreateAreaInteraction();
 
-		virtual void snapMousePressEvent(QMouseEvent * event, Feature* aLast);
+		virtual void snapMouseReleaseEvent(QMouseEvent * event, Feature* aLast);
 		virtual void snapMouseMoveEvent(QMouseEvent* event, Feature* aLast);
 		virtual void paintEvent(QPaintEvent* anEvent, QPainter& thePainter);
 		virtual QString toHtml();
 #ifndef Q_OS_SYMBIAN
 		virtual QCursor cursor() const;
 #endif
-		
+
 	private:
 		void startNewRoad(QMouseEvent* anEvent, Feature* Snap);
 		void createNewRoad(CommandList* L);

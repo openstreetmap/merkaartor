@@ -195,37 +195,45 @@ void CreateAreaInteraction::addToRoad(QMouseEvent* anEvent, Feature* Snap, Comma
 		finishRoad(L);
 }
 
-void CreateAreaInteraction::snapMousePressEvent(QMouseEvent* anEvent, Feature* aFeature)
+void CreateAreaInteraction::snapMouseReleaseEvent(QMouseEvent* anEvent, Feature* aFeature)
 {
-	if (!HaveFirst)
-	{
-		HaveFirst = true;
-		startNewRoad(anEvent, aFeature);
-	}
-	else
-	{
-		CommandList* L  = new CommandList();
-		if (!theRoad)
-			createNewRoad(L);
-		addToRoad(anEvent, aFeature, L);
-		document()->addHistory(L);
-		view()->invalidate(true, false);
-		if (theRelation)
-			Main->properties()->setSelection(theRelation);
-		else
-			Main->properties()->setSelection(theRoad);
-	}
-	FirstPoint = XY_TO_COORD(anEvent->pos());
-
-	if (EndNow) {
-		if (theRelation)
-			Main->properties()->setSelection(theRelation);
-		else
-			Main->properties()->setSelection(LastRoad);
+	if (M_PREFS->getMouseSingleButton() && anEvent->button() == Qt::RightButton) {
 		LastRoad = NULL;
 		theRelation = NULL;
 		HaveFirst = false;
 		EndNow = false;
+	} else
+	if ( !panning() ) {
+		if (!HaveFirst)
+		{
+			HaveFirst = true;
+			startNewRoad(anEvent, aFeature);
+		}
+		else
+		{
+			CommandList* L  = new CommandList();
+			if (!theRoad)
+				createNewRoad(L);
+			addToRoad(anEvent, aFeature, L);
+			document()->addHistory(L);
+			view()->invalidate(true, false);
+			if (theRelation)
+				Main->properties()->setSelection(theRelation);
+			else
+				Main->properties()->setSelection(theRoad);
+		}
+		FirstPoint = XY_TO_COORD(anEvent->pos());
+
+		if (EndNow) {
+			if (theRelation)
+				Main->properties()->setSelection(theRelation);
+			else
+				Main->properties()->setSelection(LastRoad);
+			LastRoad = NULL;
+			theRelation = NULL;
+			HaveFirst = false;
+			EndNow = false;
+		}
 	}
 }
 
