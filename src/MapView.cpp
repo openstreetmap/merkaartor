@@ -310,6 +310,7 @@ void MapView::buildFeatureSet()
 
 	QRectF clipRect = p->theTransform.inverted().mapRect(QRectF(rect().adjusted(-1000, -1000, 1000, 1000)));
 
+	p->theCoastlines.clear();
 	for (int i=0; i<theDocument->layerSize(); ++i) {
 		if (Main)
 			Main->properties()->adjustSelection();
