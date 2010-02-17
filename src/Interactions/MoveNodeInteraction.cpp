@@ -130,7 +130,7 @@ void MoveNodeInteraction::snapMouseReleaseEvent(QMouseEvent * event, Feature* Cl
 			else
 				theList->add(new MoveNodeCommand(Moving[i],OriginalPosition[i]+Diff, document()->getDirtyOrOriginLayer(Moving[i]->layer())));
 			for (int j=0; j<Moving[i]->sizeParents(); ++j) {
-				Moving[i]->getParent(i)->updateIndex();
+				Moving[i]->getParent(j)->updateIndex();
 			}
 		}
 
