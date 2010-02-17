@@ -30,7 +30,7 @@ bool canParseValue(const QString& Expression, int& idx, QString& Key)
 	unsigned short opened =0;
 	while (idx < Expression.length())
 	{
-		if ( ((Expression[idx] == '_') || (Expression[idx].isLetterOrNumber()) || (Expression[idx].isPunct()) || (Expression[idx] == '*') || (Expression[idx] == '?')) 
+		if ( ((Expression[idx] == '_') || (Expression[idx].isLetterOrNumber()) || (Expression[idx].isPunct()) || (Expression[idx] == '*') || (Expression[idx] == '?'))
 				&&  ( (Expression[idx] != '[') && (Expression[idx] != ']') && (Expression[idx] != ',') && (Expression[idx] != '(')&& (Expression[idx] != ')')) )
 			Key += Expression[idx++];
 		else if ( Expression[idx] == '[' )
@@ -216,7 +216,7 @@ TagSelector* parseTerm(const QString& Expression, int& idx)
 		if (!canParseLiteral(Expression,idx,"and"))
 			break;
 	}
-	if (Factors.size() == 1) 
+	if (Factors.size() == 1)
 		return Factors[0];
 	else if (Factors.size() > 1)
 		return new TagSelectorAnd(Factors);
@@ -367,7 +367,7 @@ TagSelector* TagSelectorTypeIs::copy() const
 
 TagSelectorMatchResult TagSelectorTypeIs::matches(const Feature* F) const
 {
-	if (F->getClass() == Type) 
+	if (F->getClass() == Type)
 		return TagSelect_Match;
 	else
 		if (Type.toLower() == "area")
@@ -510,6 +510,8 @@ TagSelectorNot::~TagSelectorNot()
 
 TagSelector* TagSelectorNot::copy() const
 {
+	if (!Term)
+		return NULL;
 	return new TagSelectorNot(Term->copy());
 }
 
@@ -522,6 +524,8 @@ TagSelectorMatchResult TagSelectorNot::matches(const Feature* F) const
 
 QString TagSelectorNot::asExpression(bool /* Precedence */) const
 {
+	if (!Term)
+		return "";
 	QString R;
 	R += " not ";
 	R += Term->asExpression(true);
