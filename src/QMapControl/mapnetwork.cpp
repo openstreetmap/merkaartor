@@ -28,7 +28,7 @@ MapNetwork::MapNetwork(IImageManager* parent)
 		: parent(parent), http(new QHttp(this)), loaded(0)
 {
 	connect(http, SIGNAL(requestFinished(int, bool)),
-	        this, SLOT(requestFinished(int, bool)));
+			this, SLOT(requestFinished(int, bool)));
 }
 
 MapNetwork::~MapNetwork()
@@ -60,8 +60,8 @@ void MapNetwork::launchRequest()
 		return;
 	LoadingRequest* R = loadingRequests.dequeue();
 
-    QUrl U("http://" + QString(R->host).append(R->url));
-	qDebug() << "getting: " << U.host() << " ; " << U.path();
+	QUrl U("http://" + QString(R->host).append(R->url));
+	qDebug() << "getting: " << U.toString();
 
 	launchRequest(U, R->hash);
 
@@ -72,6 +72,7 @@ void MapNetwork::launchRequest(QUrl url, QString hash)
 {
 	http->setProxy(M_PREFS->getProxy(url));
 	http->setHost(url.host(), url.port() == -1 ? 80 : url.port());
+	http->setUser(url.userName(), url.password());
 
 	QHttpRequestHeader header;
 	if (url.hasQuery())
@@ -92,12 +93,12 @@ void MapNetwork::launchRequest(QUrl url, QString hash)
 
 void MapNetwork::requestFinished(int id, bool error)
 {
-    int statusCode = http->lastResponse().statusCode();
+	int statusCode = http->lastResponse().statusCode();
 
-    if (!loadingMap.contains(id)){
-        // Don't react on setProxy and setHost requestFinished...
-        return;
-    }
+	if (!loadingMap.contains(id)){
+		// Don't react on setProxy and setHost requestFinished...
+		return;
+	}
 
 	if (error) {
 		qDebug() << "network error: " << statusCode << " " << http->errorString();
