@@ -62,7 +62,19 @@ void CreateAreaInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainte
 		QBrush SomeBrush(QColor(0xff,0x77,0x11,128));
 		QPen TP(SomeBrush,view()->pixelPerM()*4);
 		::draw(thePainter,TP,Feature::UnknownDirection, PreviousPoint,LastCursor ,4 ,view()->projection());
+
+		Coord NewPoint = XY_TO_COORD(LastCursor);
+		const double distance = FirstPoint.distanceFrom(NewPoint);
+
+		QString distanceTag;
+		if (distance < 1.0)
+			distanceTag = QString("%1 m").arg(int(distance * 1000));
+		else
+			distanceTag = QString("%1 km").arg(distance, 0, 'f', 3);
+
+		thePainter.drawText(LastCursor + QPointF(10,-10), distanceTag);
 	}
+
 	FeatureSnapInteraction::paintEvent(anEvent,thePainter);
 }
 

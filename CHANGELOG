@@ -1,4 +1,5 @@
 v0.15
+	* ADD : Show distance measurement during area creation (closes #1640)
 	* ADD : Add language to changeset created_by (closes #2369)
 	* FIX : Add support for HTTP auth to TMS (by Trav) (closes #2473)
 	* FIX : Crash in tag selection with invalid "not" expression (fixes #2722)
