@@ -144,7 +144,7 @@ bool DirtyListVisit::add(Feature* F)
 {
 	if (DeletePass) return false;
 	if (F->isDeleted()) return false;
-	// TODO Needed to add children of updated imported features. Sure there is no advert cases? 
+	// TODO Needed to add children of updated imported features. Sure there is no advert cases?
 	//if (!F->isDirty()) return false;
 
 	// Allow "Force Upload" of OSM objects
@@ -157,7 +157,7 @@ bool DirtyListVisit::add(Feature* F)
 			return EraseResponse[i];
 
 	bool x;
-    if (Node* Pt = CAST_NODE(F))
+	if (Node* Pt = CAST_NODE(F))
 	{
 		if (Pt->isInteresting())
 		{
@@ -175,9 +175,9 @@ bool DirtyListVisit::add(Feature* F)
 	else if (Way* R = dynamic_cast<Way*>(F))
 	{
 		for (int i=0; i<R->size(); ++i)
-            if (!R->getNode(i)->isVirtual())
-                if (!(R->get(i)->hasOSMId()) && notYetAdded(R->get(i)))
-                    add(R->get(i));
+			if (!R->getNode(i)->isVirtual())
+				if (!(R->get(i)->hasOSMId()) && notYetAdded(R->get(i)))
+					add(R->get(i));
 		if (F->hasOSMId())
 			x = updateRoad(R);
 		else
@@ -215,7 +215,7 @@ bool DirtyListVisit::update(Feature* F)
 	if (Node* Pt = dynamic_cast<Node*>(F))
 	{
 		if (Pt->isInteresting()) {
-			if (!(Pt->hasOSMId()) && notYetAdded(Pt)) 
+			if (!(Pt->hasOSMId()) && notYetAdded(Pt))
 				return addPoint(Pt);
 			else
 				return updatePoint(Pt);
@@ -243,21 +243,21 @@ bool DirtyListVisit::erase(Feature* F)
 	if (DeletePass) {
 		if (Node* Pt = dynamic_cast<Node*>(F))
 			return TrackPointsToDelete[Pt];
-		else if (Way* R = dynamic_cast<Way*>(F)) 
+		else if (Way* R = dynamic_cast<Way*>(F))
 			return RoadsToDelete[R];
-		else if (Relation* S = dynamic_cast<Relation*>(F)) 
+		else if (Relation* S = dynamic_cast<Relation*>(F))
 			return RelationsToDelete[S];
 	}
 	if (Future.willBeAdded(F))
 		return EraseFromHistory;
 	if (Node* Pt = dynamic_cast<Node*>(F))
 	{
-		if (Pt->isInteresting()) 
+		if (Pt->isInteresting())
 			TrackPointsToDelete[Pt] = false;
 	}
-	else if (Way* R = dynamic_cast<Way*>(F)) 
+	else if (Way* R = dynamic_cast<Way*>(F))
 		RoadsToDelete[R] = false;
-	else if (Relation* S = dynamic_cast<Relation*>(F)) 
+	else if (Relation* S = dynamic_cast<Relation*>(F))
 		RelationsToDelete[S] = false;
 
 	return false;
@@ -321,7 +321,7 @@ bool DirtyListDescriber::showChanges(QWidget* aParent)
 		else
 			glbChangeSetComment = "-";
 	}
-	
+
 	Task = Ui.ChangesList->count();
 	SAFE_DELETE(dlg);
 	return ok;
@@ -496,11 +496,11 @@ bool DirtyListExecutor::start()
 	QString DataIn(
 		"<osm>"
 		"<changeset>"
-		"<tag k=\"created_by\" v=\"Merkaartor %1\"/>"
-		"<tag k=\"comment\" v=\"%2\"/>"
+		"<tag k=\"created_by\" v=\"Merkaartor %1 (%2)\"/>"
+		"<tag k=\"comment\" v=\"%3\"/>"
 		"</changeset>"
 		"</osm>");
-	DataIn = DataIn.arg(VERSION).arg(encodeAttributes(glbChangeSetComment));
+	DataIn = DataIn.arg(VERSION).arg(QLocale::system().name().split("_")[0]).arg(encodeAttributes(glbChangeSetComment));
 	QString DataOut;
 	QString URL = theDownloader->getURLToOpenChangeSet();
 	if (sendRequest("PUT",URL,DataIn, DataOut))

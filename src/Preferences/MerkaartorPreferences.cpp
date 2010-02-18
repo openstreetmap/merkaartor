@@ -1575,6 +1575,3 @@ void setDefaultLanguage(const QString& theValue)
 	QSettings Sets;
 	Sets.setValue("locale/language", theValue);
 }
-
-
-
