@@ -12,6 +12,7 @@
 #include "Utils/SlippyMapWidget.h"
 #include "Preferences/MerkaartorPreferences.h"
 #include "ImportExport/ImportExportOsmBin.h"
+#include "utils/OsmLink.h"
 
 #include "IProgressWindow.h"
 
@@ -737,29 +738,10 @@ bool downloadOSM(QWidget* aParent, const CoordBox& aBox , Document* theDocument)
 				} else {
 					link.toUInt(&Regional);
 					if (!Regional) {
-						QUrl url = QUrl(link);
-						double lat = url.queryItemValue("lat").toDouble();
-						double lon = url.queryItemValue("lon").toDouble();
-						int zoom = url.queryItemValue("zoom").toInt();
-
-						if (zoom <= 10) {
-							QMessageBox::warning(dlg, QApplication::translate("Downloader", "Zoom factor too low"),
-								QApplication::translate("Downloader", "Please use a higher zoom factor!"));
+						OsmLink ol(link);
+						Clip = ol.getCoordBox();
+						if (Clip.isNull())
 							retry = true;
-						}
-						else {
-							if (zoom < 1 || zoom > 18) // use default when not in bounds
-								zoom = 15;
-
-							/* term to calculate the angle from the zoom-value */
-							double zoomLat = 360.0 / (double)(1 << zoom);
-							double zoomLon = zoomLat / fabs(cos(angToRad(lat)));
-							/* the following line is equal to the line above. (just for explanation) */
-							//double zoomLon = zoomLat / aParent->view()->projection().latAnglePerM() * aParent->view()->projection().lonAnglePerM(angToRad(lat));
-
-							/* the OSM link contains the coordinates from the middle of the visible map so we have to add and sub zoomLon/zoomLat */
-							Clip = CoordBox(Coord(angToInt(lat-zoomLat), angToInt(lon-zoomLon)), Coord(angToInt(lat+zoomLat), angToInt(lon+zoomLon)));
-						}
 					}
 				}
 			}

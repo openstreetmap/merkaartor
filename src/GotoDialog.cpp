@@ -14,8 +14,8 @@
 #include <QMessageBox>
 
 #include "Preferences/MerkaartorPreferences.h"
-
 #include "NameFinder/namefinderwidget.h"
+#include "Utils/OsmLink.h"
 
 GotoDialog::GotoDialog(const MapView& aView, QWidget *parent)
 	:QDialog(parent)
@@ -50,7 +50,7 @@ GotoDialog::GotoDialog(const MapView& aView, QWidget *parent)
 		++idx;
 	}
 	coordBookmark->setCurrentIndex(selIdx);
-	
+
 	searchWidget = new NameFinder::NameFinderWidget(this);
 	connect(searchWidget, SIGNAL(selectionChanged()), this, SLOT(searchWidget_selectionChanged()));
 	connect(searchWidget, SIGNAL(doubleClicked()), this, SLOT(searchWidget_doubleClicked()));
@@ -104,32 +104,13 @@ void GotoDialog::on_buttonBox_clicked(QAbstractButton * button)
 			theNewViewport = M_PREFS->getBookmarks()->value(coordBookmark->currentText()).Coordinates;
 		} else
 		if (rbOSM->isChecked()) {
-			QUrl url = QUrl(coordOSM->text()); 
-			if (!url.isValid()) {
+			OsmLink ol(coordOSM->text());
+			if (!ol.isValid()) {
 				QMessageBox::warning(this, QApplication::translate("GotoDialog", "Invalid OSM url"),
 					QApplication::translate("GotoDialog", "The specified url is invalid!"));
 				return;
 			}
-			double lat = url.queryItemValue("lat").toDouble(); 
-			double lon = url.queryItemValue("lon").toDouble(); 
-			if (lat == 0.0 || lon == 0.0) {
-				QMessageBox::warning(this, QApplication::translate("GotoDialog", "Invalid OSM url"),
-					QApplication::translate("GotoDialog", "The specified url is invalid!"));
-				return;
-			}
-			int zoom = url.queryItemValue("zoom").toInt();
-
-			if (zoom < 1 || zoom > 18) // use default when not in bounds
-				zoom = 15;
-
-			/* term to calculate the angle from the zoom-value */
-			double zoomLat = 360.0 / (double)(1 << zoom);
-			double zoomLon = zoomLat / fabs(cos(angToRad(lat)));
-			/* the following line is equal to the line above. (just for explanation) */
-			//double zoomLon = zoomLat / aParent->view()->projection().latAnglePerM() * aParent->view()->projection().lonAnglePerM(angToRad(lat));
-
-			/* the OSM link contains the coordinates from the middle of the visible map so we have to add and sub zoomLon/zoomLat */
-			theNewViewport = CoordBox(Coord(angToInt(lat-zoomLat), angToInt(lon-zoomLon)), Coord(angToInt(lat+zoomLat), angToInt(lon+zoomLon)));
+			theNewViewport = ol.getCoordBox();
 		} else
 		if (rbCoord->isChecked()) {
 			QStringList tokens = coordCoord->text().split(",");
@@ -170,25 +151,25 @@ void GotoDialog::searchWidget_selectionChanged()
 	coordOSM->setText( QString("http://www.openstreetmap.org/?lat=%1&lon=%2&zoom=%3")
 		.arg(QString::number(centerPoint.x(), 'f', 4))
 		.arg(QString::number(centerPoint.y(), 'f', 4))
-                .arg(QString::number(zoom))
+				.arg(QString::number(zoom))
 		);
 	rbOSM->setChecked(true);
-	
+
 }
 
 void GotoDialog::on_NameFinderEdit_textChanged(const QString & text)
 {
-    if (!text.isEmpty()) {
+	if (!text.isEmpty()) {
 		searchButton->setDefault(true);
-    } else {
+	} else {
 		searchButton->setDefault(false);
 		buttonBox->button(QDialogButtonBox::Ok)->setDefault(true);
-    }
+	}
 }
 
 void GotoDialog::searchWidget_doubleClicked()
 {
-    buttonBox->button(QDialogButtonBox::Ok)->click();
+	buttonBox->button(QDialogButtonBox::Ok)->click();
 }
 
 void GotoDialog::searchWidget_done()
@@ -198,7 +179,7 @@ void GotoDialog::searchWidget_done()
 
 void GotoDialog::changeEvent(QEvent * event)
 {
-        if (event->type() == QEvent::LanguageChange)
-                retranslateUi(this);
+		if (event->type() == QEvent::LanguageChange)
+				retranslateUi(this);
 }
 

@@ -1,17 +1,19 @@
 v0.15
-	* ADD : Show distance measurement during area creation (closes #1640)
-	* ADD : Add language to changeset created_by (closes #2369)
-	* FIX : Add support for HTTP auth to TMS (by Trav) (closes #2473)
-	* FIX : Crash in tag selection with invalid "not" expression (fixes #2722)
-	* FIX : Joining 2 ways to create an area doesn't create a polygon if the 2 ways have opposite directions (fixes #2718)
-	* FIX : Improve tag completion behaviour (by Trav) (closes #2716)
-	* ADD : Add GlobeXplorer (DigitalGlobe) to default WMS list (by sim6) (closes #2714)
-	* FIX : Handle case of selection being reset during tag editing (fixes #2646)
-	* ADD : Make the point where nodes are not displayed configurable
-	* FIX : Do not allow node interaction when they are not displayed (closes #2674)
-	* FIX : 100% CPU usage and Crash on creating roundabout (fixes #2659)
+    * FIX : In about box, the changelog is now properly resized
+    * ADD : support for OSM short link as input
+    * ADD : Show distance measurement during area creation (closes #1640)
+    * ADD : Add language to changeset created_by (closes #2369)
+    * FIX : Add support for HTTP auth to TMS (by Trav) (closes #2473)
+    * FIX : Crash in tag selection with invalid "not" expression (fixes #2722)
+    * FIX : Joining 2 ways to create an area doesn't create a polygon if the 2 ways have opposite directions (fixes #2718)
+    * FIX : Improve tag completion behaviour (by Trav) (closes #2716)
+    * ADD : Add GlobeXplorer (DigitalGlobe) to default WMS list (by sim6) (closes #2714)
+    * FIX : Handle case of selection being reset during tag editing (fixes #2646)
+    * ADD : Make the point where nodes are not displayed configurable
+    * FIX : Do not allow node interaction when they are not displayed (closes #2674)
+    * FIX : 100% CPU usage and Crash on creating roundabout (fixes #2659)
     * FIX : No name in for gpx track layer in Layers menu after File -> Import. Patch by Trav (closes #2661)
-	* CHG : Keep directional arrows blue for oneway roads in "Show directional arrows - Always" mode.
+    * CHG : Keep directional arrows blue for oneway roads in "Show directional arrows - Always" mode.
     * ADD : GeoTIFF background plugin (closes #1025)
     * ADD : Grabbing hand icon in signle mouse mode
     * FIX : Layers menu entry for background layer is wrong at startup. Patch by Trav (closes #2641)
