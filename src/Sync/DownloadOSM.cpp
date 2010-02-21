@@ -12,7 +12,7 @@
 #include "Utils/SlippyMapWidget.h"
 #include "Preferences/MerkaartorPreferences.h"
 #include "ImportExport/ImportExportOsmBin.h"
-#include "utils/OsmLink.h"
+#include "Utils/OsmLink.h"
 
 #include "IProgressWindow.h"
 
