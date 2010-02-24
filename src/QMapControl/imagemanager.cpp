@@ -45,6 +45,7 @@ ImageManager::ImageManager(QObject* parent)
 
 ImageManager::~ImageManager()
 {
+	net->abortLoading();
 	delete net;
 }
 
@@ -57,7 +58,7 @@ QPixmap ImageManager::getImage(IMapAdapter* anAdapter, int x, int y, int z)
 QPixmap ImageManager::getImage(IMapAdapter* anAdapter, QString url)
 {
 // 	qDebug() << "ImageManager::getImage";
-	
+
 	QString host = anAdapter->getHost();
 	QString strHash = QString("%1%2").arg(anAdapter->getName()).arg(url);
 	QString hash = QString(strHash.toAscii().toBase64());
@@ -71,13 +72,13 @@ QPixmap ImageManager::getImage(IMapAdapter* anAdapter, QString url)
 	pm.fill(Qt::black);*/
 //	QPixmap pm(emptyPixmap);
 	QPixmap pm;
-	
+
 	// is image in picture cache
 	if (QPixmapCache::find(hash, pm))
 		return pm;
 
 	// disk cache?
-    if (anAdapter->isTiled() && useDiskCache(hash + ".png")) {
+	if (anAdapter->isTiled() && useDiskCache(hash + ".png")) {
 		if (pm.load(cacheDir.absolutePath() + "/" + hash + ".png")) {
 			QPixmapCache::insert(hash, pm);
 			return pm;
@@ -86,7 +87,7 @@ QPixmap ImageManager::getImage(IMapAdapter* anAdapter, QString url)
 
 	if (M_PREFS->getOfflineMode())
 		return pm;
-	
+
 	// currently loading?
 	if (!net->imageIsLoading(hash))
 	{

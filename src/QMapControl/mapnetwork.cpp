@@ -18,7 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "mapnetwork.h"
-#include <QWaitCondition>
 
 #include "Preferences/MerkaartorPreferences.h"
 
@@ -33,10 +32,8 @@ MapNetwork::MapNetwork(IImageManager* parent)
 
 MapNetwork::~MapNetwork()
 {
-	http->clearPendingRequests();
+	http->abort();
 	delete http;
-	while (!loadingRequests.isEmpty())
-		delete loadingRequests.dequeue();
 }
 
 
