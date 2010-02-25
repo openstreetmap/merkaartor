@@ -6,8 +6,6 @@
 
 #include <QPointF>
 
-#include "QMapControl/mapadapter.h"
-
 #include <ggl/geometries/cartesian2d.hpp>
 #include <ggl/extensions/gis/latlong/latlong.hpp>
 
@@ -21,40 +19,40 @@ typedef ggl::projection::projection<ggl::point_ll_deg, ggl::point_2d> ProjProjec
 
 class Projection
 {
-	public:
-		Projection(void);
-		virtual ~Projection(void);
+    public:
+        Projection(void);
+        virtual ~Projection(void);
 
-		double latAnglePerM() const;
-		double lonAnglePerM(double Lat) const;
-		QPointF project(const Coord& Map) const;
-		QPointF project(Node* aNode) const;
-		Coord inverse(const QPointF& Screen) const;
+        double latAnglePerM() const;
+        double lonAnglePerM(double Lat) const;
+        QPointF project(const Coord& Map) const;
+        QPointF project(Node* aNode) const;
+        Coord inverse(const QPointF& Screen) const;
 
 #ifndef _MOBILE
-		static ProjProjection * getProjection(QString projString);
-		bool setProjectionType(ProjectionType aProjectionType);
+        static ProjProjection * getProjection(QString projString);
+        bool setProjectionType(ProjectionType aProjectionType);
 
-		static void projTransform(ProjProjection *srcdefn, 
-						   ProjProjection *dstdefn, 
+        static void projTransform(ProjProjection *srcdefn,
+                           ProjProjection *dstdefn,
                            long point_count, int point_offset, double *x, double *y, double *z );
         void projTransformToWGS84(long point_count, int point_offset, double *x, double *y, double *z ) const;
         void projTransformFromWGS84(long point_count, int point_offset, double *x, double *y, double *z ) const;
-		bool projIsLatLong();
+        bool projIsLatLong();
         QRectF getProjectedViewport(const CoordBox& Viewport, const QRect& screen) const;
 
-		int projectionRevision() const;
+        int projectionRevision() const;
 #endif
 
-	protected:
+    protected:
 #ifndef _MOBILE
-		ProjProjection *theProj;
-		QPointF projProject(const Coord& Map) const;
-		Coord projInverse(const QPointF& Screen) const;
+        ProjProjection *theProj;
+        QPointF projProject(const Coord& Map) const;
+        Coord projInverse(const QPointF& Screen) const;
 #endif
 
-	private:
-		ProjectionPrivate* p;
+    private:
+        ProjectionPrivate* p;
 };
 
 

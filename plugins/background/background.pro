@@ -1,13 +1,14 @@
 TEMPLATE = subdirs
 
 !symbian {
-	SUBDIRS += \
-		MYahooBackground \
-		MYahooTiledBackground
+    SUBDIRS += \
+        # MArbitraryRasterMapBackground \
+        MYahooBackground \
+        MYahooTiledBackground
 
-	contains (GDAL, 1) {
-		SUBDIRS += MGdalBackground
-	}
+    contains (GDAL, 1) {
+        SUBDIRS += MGdalBackground
+    }
 
 }
 

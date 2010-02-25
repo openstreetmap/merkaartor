@@ -19,6 +19,7 @@
  ***************************************************************************/
 #include "imagemanager.h"
 #include "Preferences/MerkaartorPreferences.h"
+#include "IMapAdapter.h"
 
 #include <QDateTime>
 #include <QCryptographicHash>
@@ -26,120 +27,120 @@
 ImageManager* ImageManager::m_ImageManagerInstance = 0;
 
 ImageManager::ImageManager(QObject* parent)
-	:QObject(parent), emptyPixmap(QPixmap(1,1)), net(new MapNetwork(this))
+    :QObject(parent), emptyPixmap(QPixmap(1,1)), net(new MapNetwork(this))
 {
-	emptyPixmap.fill(Qt::transparent);
+    emptyPixmap.fill(Qt::transparent);
 
 #ifndef _MOBILE
-	if (QPixmapCache::cacheLimit() <= 20000)
-	{
-		QPixmapCache::setCacheLimit(20000);	// in kb
-	}
+    if (QPixmapCache::cacheLimit() <= 20000)
+    {
+        QPixmapCache::setCacheLimit(20000);	// in kb
+    }
 #else
-	if (QPixmapCache::cacheLimit() <= 2048)
-	{
-		QPixmapCache::setCacheLimit(2048);	// in kb
-	}
+    if (QPixmapCache::cacheLimit() <= 2048)
+    {
+        QPixmapCache::setCacheLimit(2048);	// in kb
+    }
 #endif
 }
 
 ImageManager::~ImageManager()
 {
-	net->abortLoading();
-	delete net;
+    net->abortLoading();
+    delete net;
 }
 
 QPixmap ImageManager::getImage(IMapAdapter* anAdapter, int x, int y, int z)
 {
-	QString url = anAdapter->getQuery(x, y, z);
-	return getImage(anAdapter, url);
+    QString url = anAdapter->getQuery(x, y, z);
+    return getImage(anAdapter, url);
 }
 
 QPixmap ImageManager::getImage(IMapAdapter* anAdapter, QString url)
 {
 // 	qDebug() << "ImageManager::getImage";
 
-	QString host = anAdapter->getHost();
-	QString strHash = QString("%1%2").arg(anAdapter->getName()).arg(url);
-	QString hash = QString(strHash.toAscii().toBase64());
-	if (hash.size() > 255) {
-		QCryptographicHash crypt(QCryptographicHash::Md5);
-		crypt.addData(hash.toLatin1());
-		hash = QString(crypt.result().toHex());
-	}
+    QString host = anAdapter->getHost();
+    QString strHash = QString("%1%2").arg(anAdapter->getName()).arg(url);
+    QString hash = QString(strHash.toAscii().toBase64());
+    if (hash.size() > 255) {
+        QCryptographicHash crypt(QCryptographicHash::Md5);
+        crypt.addData(hash.toLatin1());
+        hash = QString(crypt.result().toHex());
+    }
 
 /*	QPixmap pm(anAdapter->getTileSize(), anAdapter->getTileSize());
-	pm.fill(Qt::black);*/
+    pm.fill(Qt::black);*/
 //	QPixmap pm(emptyPixmap);
-	QPixmap pm;
+    QPixmap pm;
 
-	// is image in picture cache
-	if (QPixmapCache::find(hash, pm))
-		return pm;
+    // is image in picture cache
+    if (QPixmapCache::find(hash, pm))
+        return pm;
 
-	// disk cache?
-	if (anAdapter->isTiled() && useDiskCache(hash + ".png")) {
-		if (pm.load(cacheDir.absolutePath() + "/" + hash + ".png")) {
-			QPixmapCache::insert(hash, pm);
-			return pm;
-		}
-	}
+    // disk cache?
+    if (anAdapter->isTiled() && useDiskCache(hash + ".png")) {
+        if (pm.load(cacheDir.absolutePath() + "/" + hash + ".png")) {
+            QPixmapCache::insert(hash, pm);
+            return pm;
+        }
+    }
 
-	if (M_PREFS->getOfflineMode())
-		return pm;
+    if (M_PREFS->getOfflineMode())
+        return pm;
 
-	// currently loading?
-	if (!net->imageIsLoading(hash))
-	{
-		// load from net, add empty image
-		net->loadImage(hash, host, url);
-		emit(imageRequested());
-		return pm;
-	}
-	return pm;
+    // currently loading?
+    if (!net->imageIsLoading(hash))
+    {
+        // load from net, add empty image
+        net->loadImage(hash, host, url);
+        emit(imageRequested());
+        return pm;
+    }
+    return pm;
 }
 
 //QPixmap ImageManager::prefetchImage(const QString& host, const QString& url)
 QPixmap ImageManager::prefetchImage(IMapAdapter* anAdapter, int x, int y, int z)
 {
-	QString host = anAdapter->getHost();
-	QString url = anAdapter->getQuery(x, y, z);
-	QString strHash = QString("%1%2").arg(anAdapter->getName()).arg(url);
-	QString hash = QString(strHash.toAscii().toBase64());
+    QString host = anAdapter->getHost();
+    QString url = anAdapter->getQuery(x, y, z);
+    QString strHash = QString("%1%2").arg(anAdapter->getName()).arg(url);
+    QString hash = QString(strHash.toAscii().toBase64());
 
-	prefetch.append(hash);
-	return getImage(anAdapter, x, y, z);
+    prefetch.append(hash);
+    return getImage(anAdapter, x, y, z);
 }
 
 void ImageManager::receivedImage(const QPixmap& pixmap, const QString& hash)
 {
 // 	qDebug() << "ImageManager::receivedImage";
-	if (pixmap.isNull()) {
-		QPixmap pm(256, 256);
-		pm.fill(Qt::gray);
-		QPixmapCache::insert(hash, pm);
-	} else {
-		QPixmapCache::insert(hash, pixmap);
-		if (cacheMaxSize) {
-			pixmap.save(cacheDir.absolutePath() + "/" + hash + ".png");
-			QFileInfo info(cacheDir.absolutePath() + "/" + hash + ".png");
-			cacheInfo.append(info);
-			cacheSize += info.size();
+    if (pixmap.isNull()) {
+        QPixmap pm(256, 256);
+        pm.fill(Qt::gray);
+        QPixmapCache::insert(hash, pm);
+    } else {
+        QPixmapCache::insert(hash, pixmap);
+        if (cacheMaxSize) {
+            pixmap.save(cacheDir.absolutePath() + "/" + hash + ".png");
+            QFileInfo info(cacheDir.absolutePath() + "/" + hash + ".png");
+            cacheInfo.append(info);
+            cacheSize += info.size();
 
-			adaptCache();
-		}
-	}
+            adaptCache();
+        }
+    }
 
-	if (prefetch.contains(hash))
-	{
-		prefetch.removeAt(prefetch.indexOf(hash));
-	}
-	emit(imageReceived());
+    if (prefetch.contains(hash))
+    {
+        prefetch.removeAt(prefetch.indexOf(hash));
+    }
+    emit(imageReceived());
 }
 
 void ImageManager::loadingQueueEmpty()
 {
-	emit(loadingFinished());
+    emit(loadingFinished());
 // 	((Layer*)this->parent())->removeZoomImage();
 // 	qDebug() << "size of image-map: " << images.size();
 // 	qDebug() << "size: " << QPixmapCache::cacheLimit();
@@ -147,6 +148,6 @@ void ImageManager::loadingQueueEmpty()
 
 void ImageManager::abortLoading()
 {
-	net->abortLoading();
-	loadingQueueEmpty();
+    net->abortLoading();
+    loadingQueueEmpty();
 }

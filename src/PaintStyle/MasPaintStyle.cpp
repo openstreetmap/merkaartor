@@ -4,7 +4,6 @@
 #include "Maps/Projection.h"
 #include "Features.h"
 #include "Layer.h"
-#include "ImageMapLayer.h"
 #include "PaintStyle/TagSelector.h"
 #include "Utils/LineF.h"
 
@@ -48,82 +47,82 @@ MasPaintStyle::~MasPaintStyle(void)
 
 void MasPaintStyle::savePainters(const QString& filename)
 {
-	QFile data(filename);
-	if (data.open(QFile::WriteOnly | QFile::Truncate))
-	{
-		QTextStream out(&data);
-		out << "<mapStyle>\n";
-		out << globalPainter.toXML();
-		for (int i=0; i<Painters.size(); ++i)
-		{
-			QString s = Painters[i].toXML(filename);
-			out << s;
-		}
-		out << "</mapStyle>\n";
-	}
+    QFile data(filename);
+    if (data.open(QFile::WriteOnly | QFile::Truncate))
+    {
+        QTextStream out(&data);
+        out << "<mapStyle>\n";
+        out << globalPainter.toXML();
+        for (int i=0; i<Painters.size(); ++i)
+        {
+            QString s = Painters[i].toXML(filename);
+            out << s;
+        }
+        out << "</mapStyle>\n";
+    }
 }
 
 void MasPaintStyle::loadPainters(const QString& filename)
 {
-	QDomDocument doc;
-	QFile file(filename);
-	if (!file.open(QIODevice::ReadOnly))
-		return;
-	if (!doc.setContent(&file))
-	{
-		file.close();
-		return;
-	}
-	file.close();
-	GlobalPainter gp;
-	globalPainter = gp;
-	Painters.clear();
-	QDomElement docElem = doc.documentElement();
-	QDomNode n = docElem.firstChild();
-	while(!n.isNull())
-	{
-		QDomElement e = n.toElement(); // try to convert the node to an element.
-		if(!e.isNull() && e.tagName() == "global")
-		{
-			globalPainter = GlobalPainter::fromXML(e);
-		} else
-		if(!e.isNull() && e.tagName() == "painter")
-		{
-			FeaturePainter FP = FeaturePainter::fromXML(e, filename);
-			Painters.push_back(FP);
-		}
-		n = n.nextSibling();
-	}
+    QDomDocument doc;
+    QFile file(filename);
+    if (!file.open(QIODevice::ReadOnly))
+        return;
+    if (!doc.setContent(&file))
+    {
+        file.close();
+        return;
+    }
+    file.close();
+    GlobalPainter gp;
+    globalPainter = gp;
+    Painters.clear();
+    QDomElement docElem = doc.documentElement();
+    QDomNode n = docElem.firstChild();
+    while(!n.isNull())
+    {
+        QDomElement e = n.toElement(); // try to convert the node to an element.
+        if(!e.isNull() && e.tagName() == "global")
+        {
+            globalPainter = GlobalPainter::fromXML(e);
+        } else
+        if(!e.isNull() && e.tagName() == "painter")
+        {
+            FeaturePainter FP = FeaturePainter::fromXML(e, filename);
+            Painters.push_back(FP);
+        }
+        n = n.nextSibling();
+    }
 }
 
 int MasPaintStyle::painterSize()
 {
-	return Painters.size();
+    return Painters.size();
 }
 
 const GlobalPainter& MasPaintStyle::getGlobalPainter() const
 {
-	return globalPainter;
+    return globalPainter;
 }
 
 void MasPaintStyle::setGlobalPainter(GlobalPainter aGlobalPainter)
 {
-	globalPainter = aGlobalPainter;
+    globalPainter = aGlobalPainter;
 }
 
 const FeaturePainter* MasPaintStyle::getPainter(int i) const
 {
-	return &(Painters[i]);
+    return &(Painters[i]);
 }
 
 QList<FeaturePainter> MasPaintStyle::getPainters() const
 {
-	return Painters;
+    return Painters;
 }
 
 void MasPaintStyle::setPainters(QList<FeaturePainter> aPainters)
 {
-	Painters = aPainters;
+    Painters = aPainters;
 }
 
 

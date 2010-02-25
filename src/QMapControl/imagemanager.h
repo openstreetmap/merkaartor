@@ -27,63 +27,64 @@
 #include <QFileInfo>
 #include "mapnetwork.h"
 
-#include "IMapAdapter.h"
 #include "IImageManager.h"
 
 class MapNetwork;
+class IMapAdapter;
+
 /**
-	@author Kai Winter <kaiwinter@gmx.de>
+    @author Kai Winter <kaiwinter@gmx.de>
 */
 class ImageManager : public QObject, public IImageManager
 {
-	Q_OBJECT;
-	public:	
-		ImageManager(QObject* parent = 0);
-		ImageManager(const ImageManager&);
-		ImageManager& operator=(const ImageManager&);
-		~ImageManager();
+    Q_OBJECT;
+    public:
+        ImageManager(QObject* parent = 0);
+        ImageManager(const ImageManager&);
+        ImageManager& operator=(const ImageManager&);
+        ~ImageManager();
 
-		//! returns a QPixmap of the asked image
-		/*!
-		 * If this component doesn´t have the image a network query gets started to load it.
-		 * @param host the host of the image
-		 * @param path the path to the image
-		 * @return the pixmap of the asked image
-		 */
-		//QPixmap getImage(const QString& host, const QString& path);
-		QPixmap getImage(IMapAdapter* anAdapter, int x, int y, int z);
-		QPixmap getImage(IMapAdapter* anAdapter, QString url);
-		
-		//QPixmap prefetchImage(const QString& host, const QString& path);
-		QPixmap prefetchImage(IMapAdapter* anAdapter, int x, int y, int z);
-		
-		void receivedImage(const QPixmap& pixmap, const QString& url);
-		
-		/*!
-		 * This method is called by MapNetwork, after all images in its queue were loaded.
-		 * The ImageManager emits a signal, which is used in MapControl to remove the zoom image.
-		 * The zoom image should be removed on Tile Images with transparency.
-		 * Else the zoom image stay visible behind the newly loaded tiles.
-		 */
-		void loadingQueueEmpty();
-		
-		/*!
-		 * Aborts all current loading threads.
-		 * This is useful when changing the zoom-factor, though newly needed images loads faster
-		 */
-		void abortLoading();
-		
-	private:
-		QPixmap emptyPixmap;
-		MapNetwork* net;
-		QList<QString> prefetch;
-	
-		static ImageManager* m_ImageManagerInstance;
+        //! returns a QPixmap of the asked image
+        /*!
+         * If this component doesn´t have the image a network query gets started to load it.
+         * @param host the host of the image
+         * @param path the path to the image
+         * @return the pixmap of the asked image
+         */
+        //QPixmap getImage(const QString& host, const QString& path);
+        QPixmap getImage(IMapAdapter* anAdapter, int x, int y, int z);
+        QPixmap getImage(IMapAdapter* anAdapter, QString url);
 
-	signals:
-		void imageRequested();
-		void imageReceived();
-		void loadingFinished();
+        //QPixmap prefetchImage(const QString& host, const QString& path);
+        QPixmap prefetchImage(IMapAdapter* anAdapter, int x, int y, int z);
+
+        void receivedImage(const QPixmap& pixmap, const QString& url);
+
+        /*!
+         * This method is called by MapNetwork, after all images in its queue were loaded.
+         * The ImageManager emits a signal, which is used in MapControl to remove the zoom image.
+         * The zoom image should be removed on Tile Images with transparency.
+         * Else the zoom image stay visible behind the newly loaded tiles.
+         */
+        void loadingQueueEmpty();
+
+        /*!
+         * Aborts all current loading threads.
+         * This is useful when changing the zoom-factor, though newly needed images loads faster
+         */
+        void abortLoading();
+
+    private:
+        QPixmap emptyPixmap;
+        MapNetwork* net;
+        QList<QString> prefetch;
+
+        static ImageManager* m_ImageManagerInstance;
+
+    signals:
+        void imageRequested();
+        void imageReceived();
+        void loadingFinished();
 };
 
 #endif
