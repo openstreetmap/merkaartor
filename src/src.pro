@@ -195,7 +195,6 @@ contains (GDAL, 1) {
         win32-g++:LIBS += -lgdal
     }
     unix {
-        INCLUDEPATH += /usr/include/gdal
         LIBS += $$system(gdal-config --libs)
         QMAKE_CXXFLAGS += $$system(gdal-config --cflags)
         QMAKE_CFLAGS += $$system(gdal-config --cflags)
