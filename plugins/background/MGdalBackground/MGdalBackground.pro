@@ -15,6 +15,7 @@ SOURCES += \
 COMMON_DIR=$${MERKAARTOR_SRC_DIR}/binaries
 
 win32 {
+    INCLUDEPATH += $$COMMON_DIR/include
     LIBS += -L$$COMMON_DIR/lib
     win32-msvc*:LIBS += -lgdal_i
     win32-g++:LIBS += -lgdal

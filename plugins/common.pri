@@ -35,17 +35,17 @@ RCC_DIR += tmp/$$(QMAKESPEC)
 DESTDIR = $$OUTPUT_DIR/$$(QMAKESPEC)/bin/plugins
 
 DEPENDPATH += $${MERKAARTOR_SRC_DIR}/interfaces
-INCLUDEPATH += $${MERKAARTOR_SRC_DIR}/interfacesH
+INCLUDEPATH += $${MERKAARTOR_SRC_DIR}/interfaces
 
 unix {
     # Prefix: base instalation directory
     isEmpty( PREFIX ) {
-		PREFIX = /usr/local
-	}
+        PREFIX = /usr/local
+    }
     isEmpty( LIBDIR ) {
-		LIBDIR = $${PREFIX}/lib${LIB_SUFFIX}
-	}
+        LIBDIR = $${PREFIX}/lib${LIB_SUFFIX}
+    }
 
-	target.path = $${LIBDIR}/merkaartor/plugins
-	INSTALLS += target
+    target.path = $${LIBDIR}/merkaartor/plugins
+    INSTALLS += target
 }

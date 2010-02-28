@@ -3,8 +3,8 @@
 <?include defines.wxi?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-   <Product  Id="5D43BC5B-DA2E-49ad-937E-1B48E1A882AB" Name="$(var.PackageName)" 
-      Language="1033" Version="0.14.0.3" Manufacturer="Merkaartor"
+   <Product  Id="c1612e6b-7e8d-4f87-b34c-0b164245e3c0" Name="$(var.PackageName)" 
+      Language="1033" Version="0.15.0.3" Manufacturer="Merkaartor"
       UpgradeCode="CBE31473-E824-4065-BC54-A90AA2BE143A">
 
       <Package 
@@ -44,11 +44,13 @@
       </DirectoryRef>
 
       <DirectoryRef Id="MPBACKGROUND">
-         <Component Id="yahoo" Guid="A37E552D-FF55-4507-8C8D-3201993F7C48">
+         <Component Id="background_plug" Guid="A37E552D-FF55-4507-8C8D-3201993F7C48">
             <File Id="MYahooBackgroundPlugin.dll" Name="MYahooBackgroundPlugin.dll"
-		    Source="$(var.BinPath)\plugins\background\MYahooBackgroundPlugin.dll" DiskId="1" />
+			    Source="$(var.BinPath)\plugins\background\MYahooBackgroundPlugin.dll" DiskId="1" />
             <File Id="MYahooTiledBackgroundPlugin.dll" Name="MYahooTiledBackgroundPlugin.dll"
-		    Source="$(var.BinPath)\plugins\background\MYahooTiledBackgroundPlugin.dll" DiskId="1" />
+			    Source="$(var.BinPath)\plugins\background\MYahooTiledBackgroundPlugin.dll" DiskId="1" />
+            <File Id="MGdalBackgroundPlugin.dll" Name="MGdalBackgroundPlugin.dll"
+                   Source="$(var.BinPath)\plugins\background\MGdalBackgroundPlugin.dll" DiskId="1" />
          </Component>
       </DirectoryRef>
       
@@ -76,7 +78,7 @@
          Display="expand" ConfigurableDirectory="INSTALLLOCATION">
          <ComponentRef Id="DllCt" />
          <ComponentRef Id="Merkaartor" />
-         <ComponentRef Id="yahoo" />
+         <ComponentRef Id="background_plug" />
          <ComponentRef Id="skulpture" />
       </Feature>
       <Feature Id="ftWorld_Shp" Title="World Shape file" Level="1"
