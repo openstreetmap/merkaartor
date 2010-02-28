@@ -83,6 +83,7 @@
     <description locale="es" >Aldea (pocas casas)</description>
     <description locale="fr" >Hameau</description>
     <description locale="it" >Frazione</description>
+    <description locale="ja" >集落(数軒の家)</description>
     <description locale="nb" >Sted (noen få hus)</description>
     <description locale="nn" >Sted (noken få hus)</description>
     <description locale="pl" >Wólka</description>
@@ -102,6 +103,7 @@
     <description locale="es" >Barrio</description>
     <description locale="fr" >Banlieue</description>
     <description locale="it" >Sobborgo</description>
+    <description locale="ja" >近郊住宅地</description>
     <description locale="nb" >Forstad/bydel</description>
     <description locale="nn" >Poststad</description>
     <description locale="pl" >Dzielnica</description>
@@ -266,6 +268,7 @@
     <description locale="en" >Ramp to trunk road</description>
     <description locale="cs" >Nájezd na víceproudou cestu</description>
     <description locale="de" >Schnellstraßenanschlussstelle</description>
+    <description locale="es" >Rampa de acceso a carretera</description>
     <description locale="fr" >Voie d&apos;accès à une voie rapide</description>
     <description locale="it" >Svincolo per la strada principale</description>
     <description locale="ja" >国道の乗り口</description>
@@ -488,6 +491,7 @@
     <description locale="ar" >طريق الخيل</description>
     <description locale="cs" >Cesta pro koně</description>
     <description locale="de" >Reitweg</description>
+    <description locale="es" >Camino para caballos</description>
     <description locale="fr" >Chemin équestre</description>
     <description locale="it" >Strada per cavalli</description>
     <description locale="ja" >馬道</description>
@@ -539,6 +543,7 @@
     <description locale="es" >Camino sin asfaltar (etiqueta antigua)</description>
     <description locale="fr" >Route sans revêtement (étiquette dépréciée)</description>
     <description locale="it" >Non asfaltata (vecchio tag)</description>
+    <description locale="ja" >未舗装道路(古いタグ)</description>
     <description locale="nb" >Udekket vei (gammelt merke)</description>
     <description locale="nn" >Udekket veg (gammelt merke)</description>
     <description locale="pl" >Nieutwardzona droga (przestarzały znacznik)</description>
@@ -553,6 +558,7 @@
    <description locale="ar" >إستعمال الأرض</description>
    <description locale="cs" >Využití plochy</description>
    <description locale="de" >Landnutzung</description>
+   <description locale="es" >Uso de la tierra</description>
    <description locale="fr" >Utilisation du sol</description>
    <description locale="it" >Suolo</description>
    <description locale="ja" >土地利用</description>
@@ -715,6 +721,7 @@
     <description locale="ar" >حقل أخضر</description>
     <description locale="cs" >Výstavba na zelené louce</description>
     <description locale="de" >Bauland</description>
+    <description locale="es" >Campo verde</description>
     <description locale="fr" >Espace vert</description>
     <description locale="it" >Campo verde</description>
     <description locale="ja" >未開発工業地</description>
@@ -754,7 +761,7 @@
     <description locale="es" >Vertedero</description>
     <description locale="fr" >Décharge</description>
     <description locale="it" >Terra</description>
-    <description locale="ja" >埋め立て地</description>
+    <description locale="ja" >埋め立てゴミ処理地</description>
     <description locale="nb" >Avfallsdeponi</description>
     <description locale="nn" >Avfallsdeponi</description>
     <description locale="pl" >Wysypisko śmieci</description>
@@ -1207,6 +1214,7 @@
     <description locale="es" >Crematorio</description>
     <description locale="fr" >Crématorium</description>
     <description locale="it" >Crematorio</description>
+    <description locale="ja" >火葬場</description>
     <description locale="nb" >Krematorium</description>
     <description locale="nn" >Krematorium</description>
     <description locale="pl" >Krematorium</description>
@@ -1314,6 +1322,7 @@
     <description locale="ar" >مقبرة صغيرة</description>
     <description locale="cs" >Malý hřbitov</description>
     <description locale="de" >Grabstelle</description>
+    <description locale="es" >Pequeño cementerio</description>
     <description locale="fr" >Petit cimetière</description>
     <description locale="it" >Piccolo luogo di sepoltura</description>
     <description locale="ja" >墓地</description>
@@ -1547,7 +1556,7 @@
     <description locale="es" >Edificio Público</description>
     <description locale="fr" >Bâtiment public</description>
     <description locale="it" >Edificio pubblico</description>
-    <description locale="ja" >公共のビル</description>
+    <description locale="ja" >公共の建物</description>
     <description locale="nb" >Offentlig bygning</description>
     <description locale="nn" >Offentleg bygning</description>
     <description locale="pl" >Budynek publiczny</description>
@@ -2134,6 +2143,7 @@
   <description locale="es" >Relaciones Genéricas</description>
   <description locale="fr" >Relations génériques</description>
   <description locale="it" >Relazioni Generiche</description>
+  <description locale="ja" >汎用の関連</description>
   <description locale="nb" >Generisk relasjon</description>
   <description locale="nn" >Generisk relasjon</description>
   <description locale="pl" >Ogólne relacje</description>
@@ -2152,6 +2162,7 @@
   <description locale="es" >Metodos genericos</description>
   <description locale="fr" >Routes génériques</description>
   <description locale="it" >Strade Generiche</description>
+  <description locale="ja" >汎用のウェイ</description>
   <description locale="nb" >Generisk vei</description>
   <description locale="nn" >Generisk veg</description>
   <description locale="pl" >Ogólne drogi</description>
@@ -2175,6 +2186,7 @@
   <description locale="es" >Nodos Genéricos</description>
   <description locale="fr" >Nœuds génériques</description>
   <description locale="it" >Nodi Generici</description>
+  <description locale="ja" >汎用のノード</description>
   <description locale="nb" >Generisk node</description>
   <description locale="nn" >Generisk node</description>
   <description locale="pl" >Ogólne węzły</description>
