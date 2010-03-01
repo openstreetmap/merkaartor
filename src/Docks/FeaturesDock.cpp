@@ -22,16 +22,17 @@
 
 #include <QAction>
 #include <QTimer>
+#include <QMenu>
 
 #define MAX_FEATS 100
 
 FeaturesDock::FeaturesDock(MainWindow* aParent)
 	: MDockAncestor(aParent), Main(aParent), curFeatType(Feature::Relations)
 {
-    setMinimumSize(220,100);
+	setMinimumSize(220,100);
 	setObjectName("FeaturesDock");
 
-    ui.setupUi(getWidget());
+	ui.setupUi(getWidget());
 
 	ui.cbWithin->setChecked(M_PREFS->getFeaturesWithin());
 	ui.FeaturesList->sortItems();
@@ -67,7 +68,7 @@ FeaturesDock::FeaturesDock(MainWindow* aParent)
 	connect(ui.tabBar, SIGNAL(currentChanged (int)), this, SLOT(tabChanged(int)));
 	//connect(ui.tabBar, SIGNAL(customContextMenuRequested (const QPoint&)), this, SLOT(tabContextMenuRequested(const QPoint&)));
 
-    retranslateUi();
+	retranslateUi();
 }
 
 FeaturesDock::~FeaturesDock()
@@ -211,9 +212,9 @@ void FeaturesDock::on_addSelectAction_triggered()
 
 void FeaturesDock::changeEvent(QEvent * event)
 {
-    if (event->type() == QEvent::LanguageChange)
-        retranslateUi();
-    MDockAncestor::changeEvent(event);
+	if (event->type() == QEvent::LanguageChange)
+		retranslateUi();
+	MDockAncestor::changeEvent(event);
 }
 
 void FeaturesDock::tabChanged(int idx)

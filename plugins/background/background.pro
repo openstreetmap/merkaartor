@@ -6,9 +6,9 @@ TEMPLATE = subdirs
         MYahooBackground \
         MYahooTiledBackground
 
-    contains (GDAL, 1) {
-        SUBDIRS += MGdalBackground
-    }
+	contains (GDAL, 1) {
+		SUBDIRS += MGdalBackground
+	}
 
 }
 

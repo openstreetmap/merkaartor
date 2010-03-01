@@ -22,6 +22,7 @@
 #include "DirtyList.h"
 
 #include <QMessageBox>
+#include <QMenu>
 
 DirtyDock::DirtyDock(MainWindow* aParent)
 	: MDockAncestor(aParent), Main(aParent)
@@ -76,7 +77,7 @@ void DirtyDock::updateList()
 			ui.label->setText(tr("There are <b>%n</b> objects in the dirty layer", "", dirtyObjects));
 			break;
 	}
-	
+
 	Main->document()->history().buildUndoList(ui.ChangesList);
 
 	if (!M_PREFS->getAutoHistoryCleanup()) {
