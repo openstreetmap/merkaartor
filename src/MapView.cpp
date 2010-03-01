@@ -2,6 +2,7 @@
 
 #include "MapView.h"
 #include "MainWindow.h"
+#include <ui_MainWindow.h>
 #include "PropertiesDock.h"
 #include "Document.h"
 #include "Layer.h"
@@ -27,7 +28,6 @@
 #endif
 #include "Preferences/MerkaartorPreferences.h"
 #include "Utils/SvgCache.h"
-
 
 #include <QTime>
 #include <QMainWindow>
@@ -633,39 +633,39 @@ void MapView::on_customContextMenuRequested(const QPoint & pos)
 		//if (createMenu.actions().size())
 		//	menu.addMenu(&createMenu);
 
-		menu.addAction(Main->viewZoomOutAction);
-		menu.addAction(Main->viewZoomWindowAction);
-		menu.addAction(Main->viewZoomInAction);
+		menu.addAction(Main->ui->viewZoomOutAction);
+		menu.addAction(Main->ui->viewZoomWindowAction);
+		menu.addAction(Main->ui->viewZoomInAction);
 
 		QMenu featureMenu(tr("Feature"));
-		for(int i=0; i<Main->menu_Feature->actions().size(); ++i) {
-			if (Main->menu_Feature->actions()[i]->isEnabled())
-				featureMenu.addAction(Main->menu_Feature->actions()[i]);
+		for(int i=0; i<Main->ui->menu_Feature->actions().size(); ++i) {
+			if (Main->ui->menu_Feature->actions()[i]->isEnabled())
+				featureMenu.addAction(Main->ui->menu_Feature->actions()[i]);
 		}
 		if (featureMenu.actions().size())
 			menu.addMenu(&featureMenu);
 
 
 		QMenu nodeMenu(tr("Node"));
-		for(int i=0; i<Main->menu_Node->actions().size(); ++i) {
-			if (Main->menu_Node->actions()[i]->isEnabled())
-				nodeMenu.addAction(Main->menu_Node->actions()[i]);
+		for(int i=0; i<Main->ui->menu_Node->actions().size(); ++i) {
+			if (Main->ui->menu_Node->actions()[i]->isEnabled())
+				nodeMenu.addAction(Main->ui->menu_Node->actions()[i]);
 		}
 		if (nodeMenu.actions().size())
 			menu.addMenu(&nodeMenu);
 
 		QMenu roadMenu(tr("Road"));
-		for(int i=0; i<Main->menuRoad->actions().size(); ++i) {
-			if (Main->menuRoad->actions()[i]->isEnabled())
-				roadMenu.addAction(Main->menuRoad->actions()[i]);
+		for(int i=0; i<Main->ui->menuRoad->actions().size(); ++i) {
+			if (Main->ui->menuRoad->actions()[i]->isEnabled())
+				roadMenu.addAction(Main->ui->menuRoad->actions()[i]);
 		}
 		if (roadMenu.actions().size())
 			menu.addMenu(&roadMenu);
 
 		QMenu relationMenu(tr("Relation"));
-		for(int i=0; i<Main->menuRelation->actions().size(); ++i) {
-			if (Main->menuRelation->actions()[i]->isEnabled())
-				relationMenu.addAction(Main->menuRelation->actions()[i]);
+		for(int i=0; i<Main->ui->menuRelation->actions().size(); ++i) {
+			if (Main->ui->menuRelation->actions()[i]->isEnabled())
+				relationMenu.addAction(Main->ui->menuRelation->actions()[i]);
 		}
 		if (relationMenu.actions().size())
 			menu.addMenu(&relationMenu);

@@ -7,18 +7,18 @@ DEFINES += VERSION=\"\\\"$$VERSION\\\"\"
 DEFINES += REVISION=\"\\\"$$REVISION\\\"\"
 
 !contains(NODEBUG,1) {
-    CONFIG += debug
-    OBJECTS_DIR += tmp/$$(QMAKESPEC)/obj_debug
+	CONFIG += debug
+	OBJECTS_DIR += tmp/$$(QMAKESPEC)/obj_debug
 }
 contains(NODEBUG,1) {
-    CONFIG += release
-    DEFINES += NDEBUG
-    DEFINES += QT_NO_DEBUG_OUTPUT
-    OBJECTS_DIR += tmp/$$(QMAKESPEC)/obj_release
+	CONFIG += release
+	DEFINES += NDEBUG
+	DEFINES += QT_NO_DEBUG_OUTPUT
+	OBJECTS_DIR += tmp/$$(QMAKESPEC)/obj_release
 }
 
 win32-msvc* {
-    DEFINES += _USE_MATH_DEFINES
+	DEFINES += _USE_MATH_DEFINES
 }
 
 TEMPLATE = lib
@@ -38,14 +38,14 @@ DEPENDPATH += $${MERKAARTOR_SRC_DIR}/interfaces
 INCLUDEPATH += $${MERKAARTOR_SRC_DIR}/interfaces
 
 unix {
-    # Prefix: base instalation directory
-    isEmpty( PREFIX ) {
-        PREFIX = /usr/local
-    }
-    isEmpty( LIBDIR ) {
-        LIBDIR = $${PREFIX}/lib${LIB_SUFFIX}
-    }
+	# Prefix: base instalation directory
+	isEmpty( PREFIX ) {
+		PREFIX = /usr/local
+	}
+	isEmpty( LIBDIR ) {
+		LIBDIR = $${PREFIX}/lib${LIB_SUFFIX}
+	}
 
-    target.path = $${LIBDIR}/merkaartor/plugins
-    INSTALLS += target
+	target.path = $${LIBDIR}/merkaartor/plugins
+	INSTALLS += target
 }

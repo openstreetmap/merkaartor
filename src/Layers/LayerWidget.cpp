@@ -8,8 +8,9 @@
 
 #include "IMapAdapter.h"
 
-#include <QtGui/QMouseEvent>
-#include <QtGui/QPainter>
+#include <QApplication>
+#include <QMouseEvent>
+#include <QPainter>
 
 #define LINEHEIGHT 25
 

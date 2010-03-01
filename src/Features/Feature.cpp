@@ -10,7 +10,8 @@
 #include "PaintStyle/MasPaintStyle.h"
 #include "PaintStyle/TagSelector.h"
 
-#include <QtCore/QUuid>
+#include <QApplication>
+#include <QUuid>
 #include <QProgressDialog>
 
 #include <algorithm>

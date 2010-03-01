@@ -148,10 +148,10 @@ void NativeRenderDialog::render()
 #endif
 
 	if (rbSVG->isChecked()) {
-		PictureViewerDialog vwDlg(tr("Native rendering"), QDir::tempPath()+"/tmp.svg", this);
+		PictureViewerDialog vwDlg(tr("SVG rendering"), QDir::tempPath()+"/tmp.svg", this);
 		vwDlg.exec();
 	} else {
-		PictureViewerDialog vwDlg(tr("Native rendering"), bitmap, this);
+		PictureViewerDialog vwDlg(tr("Raster rendering"), bitmap, this);
 		vwDlg.exec();
 	}
 }

@@ -3,6 +3,7 @@
 #include "MapView.h"
 #include "Utils/LineF.h"
 
+#include <QApplication>
 #include <QtGui/QPainter>
 #include <QProgressDialog>
 

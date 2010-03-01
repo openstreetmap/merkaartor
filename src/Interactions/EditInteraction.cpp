@@ -1,5 +1,6 @@
 #include "EditInteraction.h"
 #include "MainWindow.h"
+#include "ui_MainWindow.h"
 #include "MapView.h"
 #include "PropertiesDock.h"
 #include "InfoDock.h"
@@ -42,8 +43,8 @@ EditInteraction::~EditInteraction(void)
 {
 	if(main())
 	{
-		main()->editRemoveAction->setEnabled(false);
-		main()->editReverseAction->setEnabled(false);
+		main()->ui->editRemoveAction->setEnabled(false);
+		main()->ui->editReverseAction->setEnabled(false);
 	}
 	SAFE_DELETE(theMoveInteraction);
 }

@@ -7,17 +7,17 @@
     <x>0</x>
     <y>0</y>
     <width>446</width>
-    <height>205</height>
+    <height>254</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Native rendering</string>
+   <string>Raster/SVG export</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string>Render type</string>
+      <string>Export type</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
@@ -30,7 +30,7 @@
       <item row="0" column="1">
        <widget class="QRadioButton" name="rbBitmap">
         <property name="text">
-         <string>Bitmap</string>
+         <string>Raster</string>
         </property>
        </widget>
       </item>
@@ -40,7 +40,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Render options</string>
+      <string>Export options</string>
      </property>
      <layout class="QVBoxLayout">
       <item>

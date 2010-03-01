@@ -9,6 +9,7 @@
 #include "NodeCommands.h"
 #include "FeatureCommands.h"
 
+#include <QApplication>
 #include <QAction>
 #include <QListWidget>
 #include <QUuid>

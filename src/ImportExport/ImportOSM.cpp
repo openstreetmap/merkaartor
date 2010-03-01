@@ -9,6 +9,7 @@
 #include "Layer.h"
 #include "Features.h"
 
+#include <QApplication>
 #include <QtCore/QBuffer>
 #include <QtCore/QDateTime>
 #include <QtCore/QEventLoop>

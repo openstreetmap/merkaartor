@@ -14,14 +14,15 @@
 
 #include "ImportExport/ImportExportOsmBin.h"
 
-#include <QtCore/QString>
+#include <QApplication>
 #include <QMultiMap>
 #include <QProgressDialog>
 #include <QUuid>
-
-#include <algorithm>
 #include <QMap>
 #include <QList>
+#include <QMenu>
+
+#include <algorithm>
 
 /* Layer */
 
@@ -483,7 +484,7 @@ QString Layer::toMainHtml()
 	"<small><i>" + QString(metaObject()->className()) + "</i></small><br/>"
 	+ desc;
 	S += "<hr/>";
-		S += "<i>"+QApplication::translate("Layer", "Size")+": </i>" + QApplication::translate("Layer", "%n features", "", QCoreApplication::CodecForTr, size())+"<br/>";
+	S += "<i>"+tr("Layer", "Size")+": </i>" + QApplication::translate("Layer", "%n features", "", QCoreApplication::CodecForTr, size())+"<br/>";
 	S += "%1";
 	S += "</body></html>";
 
@@ -762,9 +763,9 @@ QString TrackLayer::toHtml()
 		}
 	}
 
-	S += "<i>"+QApplication::translate("TrackLayer", "# of track segments")+": </i>" + QApplication::translate("TrackLayer", "%1").arg(QLocale().toString(totSegment))+"<br/>";
-	S += "<i>"+QApplication::translate("TrackLayer", "Total distance")+": </i>" + QApplication::translate("TrackLayer", "%1 km").arg(QLocale().toString(totDistance, 'g', 3))+"<br/>";
-	S += "<i>"+QApplication::translate("TrackLayer", "Total duration")+": </i>" + QApplication::translate("TrackLayer", "%1h %2m").arg(QLocale().toString(totSec/3600)).arg(QLocale().toString((totSec%3600)/60))+"<br/>";
+	S += "<i>"+tr("TrackLayer", "# of track segments")+": </i>" + tr("TrackLayer", "%1").arg(QLocale().toString(totSegment))+"<br/>";
+	S += "<i>"+tr("TrackLayer", "Total distance")+": </i>" + tr("TrackLayer", "%1 km").arg(QLocale().toString(totDistance, 'g', 3))+"<br/>";
+	S += "<i>"+tr("TrackLayer", "Total duration")+": </i>" + tr("TrackLayer", "%1h %2m").arg(QLocale().toString(totSec/3600)).arg(QLocale().toString((totSec%3600)/60))+"<br/>";
 
 	return toMainHtml().arg(S);
 }
@@ -1410,8 +1411,8 @@ QString OsbLayer::toHtml()
 {
 	QString S;
 
-	S += "<i>"+QApplication::translate("OsbLayer", "# of loaded Regions")+": </i>" + QApplication::translate("OsbLayer", "%1").arg(QLocale().toString(pp->loadedRegions.size()))+"<br/>";
-	S += "<i>"+QApplication::translate("OsbLayer", "# of loaded Tiles")+": </i>" + QApplication::translate("OsbLayer", "%1").arg(QLocale().toString(pp->loadedTiles.size()))+"<br/>";
+	S += "<i>"+tr("OsbLayer", "# of loaded Regions")+": </i>" + tr("OsbLayer", "%1").arg(QLocale().toString(pp->loadedRegions.size()))+"<br/>";
+	S += "<i>"+tr("OsbLayer", "# of loaded Tiles")+": </i>" + tr("OsbLayer", "%1").arg(QLocale().toString(pp->loadedTiles.size()))+"<br/>";
 
 	return toMainHtml().arg(S);
 }

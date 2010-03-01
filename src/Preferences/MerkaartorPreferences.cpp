@@ -18,6 +18,7 @@
 
 
 #include "MainWindow.h"
+#include <ui_MainWindow.h>
 #include "MapView.h"
 
 #include "IMapAdapter.h"
@@ -702,7 +703,7 @@ void MerkaartorPreferences::saveMainWindowState(const MainWindow * mainWindow)
 	Sets->setValue("MainWindow/Position", mainWindow->pos());
 	Sets->setValue("MainWindow/Size", mainWindow->size());
 	Sets->setValue("MainWindow/State", mainWindow->saveState());
-	Sets->setValue("MainWindow/Fullscreen", mainWindow->windowShowAllAction->isEnabled());
+	Sets->setValue("MainWindow/Fullscreen", mainWindow->ui->windowShowAllAction->isEnabled());
 	Sets->setValue("MainWindow/FullscreenState", mainWindow->fullscreenState);
 }
 
@@ -721,15 +722,15 @@ void MerkaartorPreferences::restoreMainWindowState(MainWindow * mainWindow) cons
 		mainWindow->fullscreenState = Sets->value("MainWindow/FullscreenState").toByteArray();
 
 	if (Sets->value("MainWindow/Fullscreen", false).toBool()) {
-		mainWindow->windowHideAllAction->setEnabled(false);
-		mainWindow->windowHideAllAction->setVisible(false);
-		mainWindow->windowShowAllAction->setEnabled(true);
-		mainWindow->windowShowAllAction->setVisible(true);
+		mainWindow->ui->windowHideAllAction->setEnabled(false);
+		mainWindow->ui->windowHideAllAction->setVisible(false);
+		mainWindow->ui->windowShowAllAction->setEnabled(true);
+		mainWindow->ui->windowShowAllAction->setVisible(true);
 	} else {
-		mainWindow->windowHideAllAction->setEnabled(true);
-		mainWindow->windowHideAllAction->setVisible(true);
-		mainWindow->windowShowAllAction->setEnabled(false);
-		mainWindow->windowShowAllAction->setVisible(false);
+		mainWindow->ui->windowHideAllAction->setEnabled(true);
+		mainWindow->ui->windowHideAllAction->setVisible(true);
+		mainWindow->ui->windowShowAllAction->setEnabled(false);
+		mainWindow->ui->windowShowAllAction->setVisible(false);
 	}
 }
 

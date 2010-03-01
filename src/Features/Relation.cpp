@@ -8,7 +8,8 @@
 
 #include "ExportOSM.h"
 
-#include <QtCore/QAbstractTableModel>
+#include <QApplication>
+#include <QAbstractTableModel>
 #include <QProgressDialog>
 #include <QPainter>
 

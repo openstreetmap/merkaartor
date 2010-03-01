@@ -2,12 +2,15 @@
 #define MERKATOR_MAINWINDOW_H_
 
 #include "IProgressWindow.h"
-#include <ui_MainWindow.h>
 
 #include <QtGui/QMainWindow>
 #include <QtXml>
 #include <QProgressBar>
 #include <QLabel>
+
+namespace Ui {
+	class MainWindow;
+}
 
 class MainWindowPrivate;
 class LayerDock;
@@ -29,16 +32,16 @@ class Interaction;
 class GeoImageDock;
 #endif
 
-class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWindow
+class MainWindow : public QMainWindow, public IProgressWindow
 {
 	Q_OBJECT
 
 	friend class ActionsDialog;
 
 	public:
-		MainWindow(void);
+		MainWindow(QWidget *parent = 0);
 	public:
-		virtual ~MainWindow(void);
+		virtual ~MainWindow();
 
 	public slots:
 		virtual void on_createRoundaboutAction_triggered();
@@ -164,6 +167,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 
 	public:
 		MainWindowPrivate* p;
+		Ui::MainWindow *ui;
 
 		QString fileName;
 		PropertiesDock* properties();
@@ -206,7 +210,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public IProgressWi
 		void updateLanguage();
 
 
-	private:
+	protected:
 		MapView* theView;
 		Document* theDocument;
 		PropertiesDock* theProperties;

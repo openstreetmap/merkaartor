@@ -14,6 +14,7 @@
 #include "Preferences/MerkaartorPreferences.h"
 #include "DownloadOSM.h"
 
+#include <QApplication>
 #include <QMessageBox>
 
 InfoDock::InfoDock(MainWindow* aParent)

@@ -1,3 +1,5 @@
+v0.16
+    * CHG : Move the "File-Render" menu to "File-Export-Raster/SVG"
 v0.15
     * FIX : In about box, the changelog is now properly resized
     * ADD : support for OSM short link as input

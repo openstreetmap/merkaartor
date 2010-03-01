@@ -2,6 +2,7 @@
 #include "LayerWidget.h"
 
 #include "MainWindow.h"
+#include "ui_MainWindow.h"
 #include "MapView.h"
 #include "Document.h"
 #include "Layer.h"
@@ -35,8 +36,8 @@ class LayerDockPrivate
 		QTabBar* tab;
 		LayerWidget* theDropWidget;
 		LayerWidget* lastSelWidget;
-   		QMenu* ctxMenu;
-        QList<LayerWidget*> selWidgets;
+		QMenu* ctxMenu;
+		QList<LayerWidget*> selWidgets;
 };
 
 LayerDock::LayerDock(MainWindow* aMain)
@@ -129,7 +130,7 @@ void LayerDock::addLayer(Layer* aLayer)
 		connect(w, SIGNAL(layerCleared(Layer*)), this, SLOT(layerCleared(Layer*)));
 		connect(w, SIGNAL(layerZoom(Layer*)), this, SLOT(layerZoom(Layer*)));
 
-		p->Main->menuLayers->addMenu(w->getAssociatedMenu());
+		p->Main->ui->menuLayers->addMenu(w->getAssociatedMenu());
 
 		//w->setChecked(aLayer->isSelected());
 		w->setVisible(aLayer->isEnabled());
@@ -146,7 +147,7 @@ void LayerDock::deleteLayer(Layer* aLayer)
 		if (!CHILD_WIDGET(i))
 			continue;
 		if (CHILD_LAYER(i) == aLayer) {
-			p->Main->menuLayers->removeAction(CHILD_WIDGET(i)->getAssociatedMenu()->menuAction());
+			p->Main->ui->menuLayers->removeAction(CHILD_WIDGET(i)->getAssociatedMenu()->menuAction());
 			LayerWidget* curW = CHILD_WIDGET(i);
 			curW->deleteLater();
 			break;
@@ -215,9 +216,9 @@ void LayerDock::createContent()
 	setWidget(frame);
 	update();
 
-    //Contextual Menu
+	//Contextual Menu
 	p->ctxMenu = new QMenu(this);
-    
+
 	QAction* actShowAll = new QAction(tr("Show All"), p->ctxMenu);
 	actShowAll->setCheckable(false);
 	p->ctxMenu->addAction(actShowAll);
@@ -228,14 +229,14 @@ void LayerDock::createContent()
 	p->ctxMenu->addAction(actHideAll);
 	connect(actHideAll, SIGNAL(triggered(bool)), this, SLOT(hideAllLayers(bool)));
 
-   	p->ctxMenu->addSeparator();
+	p->ctxMenu->addSeparator();
 
-    QAction* actReadonlyAll = new QAction(tr("Readonly All"), p->ctxMenu);
+	QAction* actReadonlyAll = new QAction(tr("Readonly All"), p->ctxMenu);
 	actReadonlyAll->setCheckable(false);
 	p->ctxMenu->addAction(actReadonlyAll);
 	connect(actReadonlyAll, SIGNAL(triggered(bool)), this, SLOT(readonlyAllLayers(bool)));
 
-    QAction* actReadonlyNone = new QAction(tr("Readonly None"), p->ctxMenu);
+	QAction* actReadonlyNone = new QAction(tr("Readonly None"), p->ctxMenu);
 	actReadonlyNone->setCheckable(false);
 	p->ctxMenu->addAction(actReadonlyNone);
 	connect(actReadonlyNone, SIGNAL(triggered(bool)), this, SLOT(readonlyNoneLayers(bool)));
@@ -365,30 +366,30 @@ void LayerDock::retranslateTabBar()
 
 void LayerDock::showAllLayers(bool)
 {
-    for (int i=0; i<p->selWidgets.size(); ++i) {
-        p->selWidgets[i]->setLayerVisible(true);
-    }
+	for (int i=0; i<p->selWidgets.size(); ++i) {
+		p->selWidgets[i]->setLayerVisible(true);
+	}
 }
 
 void LayerDock::hideAllLayers(bool)
 {
-    for (int i=0; i<p->selWidgets.size(); ++i) {
-        p->selWidgets[i]->setLayerVisible(false);
-    }
+	for (int i=0; i<p->selWidgets.size(); ++i) {
+		p->selWidgets[i]->setLayerVisible(false);
+	}
 }
 
 void LayerDock::readonlyAllLayers(bool)
 {
-    for (int i=0; i<p->selWidgets.size(); ++i) {
-        p->selWidgets[i]->setLayerReadonly(true);
-    }
+	for (int i=0; i<p->selWidgets.size(); ++i) {
+		p->selWidgets[i]->setLayerReadonly(true);
+	}
 }
 
 void LayerDock::readonlyNoneLayers(bool)
 {
-    for (int i=0; i<p->selWidgets.size(); ++i) {
-        p->selWidgets[i]->setLayerReadonly(false);
-    }
+	for (int i=0; i<p->selWidgets.size(); ++i) {
+		p->selWidgets[i]->setLayerReadonly(false);
+	}
 }
 
 void LayerDock::closeLayers(bool)
@@ -401,90 +402,90 @@ void LayerDock::closeLayers(bool)
 
 void LayerDock::contextMenuEvent(QContextMenuEvent* anEvent)
 {
-    LayerWidget* aWidget = dynamic_cast<LayerWidget*>(childAt(anEvent->pos()));
+	LayerWidget* aWidget = dynamic_cast<LayerWidget*>(childAt(anEvent->pos()));
 
-    p->selWidgets.clear();
-    for (int i=0; i < CHILD_WIDGETS.size(); ++i) {
+	p->selWidgets.clear();
+	for (int i=0; i < CHILD_WIDGETS.size(); ++i) {
 		if (CHILD_WIDGET(i) && CHILD_WIDGET(i)->isChecked())
-            p->selWidgets.push_back(CHILD_WIDGET(i));
-    }
+			p->selWidgets.push_back(CHILD_WIDGET(i));
+	}
 
-    if ((p->selWidgets.size() == 0 || p->selWidgets.size() == 1) && aWidget) {
- 	    for (int i=0; i < CHILD_WIDGETS.size(); ++i) {
-    	    if (CHILD_WIDGET(i))
-	    	    CHILD_WIDGET(i)->setChecked(false);
-        }
-	    aWidget->setChecked(true);
-	    p->lastSelWidget = aWidget;
+	if ((p->selWidgets.size() == 0 || p->selWidgets.size() == 1) && aWidget) {
+		for (int i=0; i < CHILD_WIDGETS.size(); ++i) {
+			if (CHILD_WIDGET(i))
+				CHILD_WIDGET(i)->setChecked(false);
+		}
+		aWidget->setChecked(true);
+		p->lastSelWidget = aWidget;
 
 		aWidget->showContextMenu(anEvent);
-    } else 
-    if (p->selWidgets.size()) {
- 		p->ctxMenu->exec(anEvent->globalPos());
+	} else
+	if (p->selWidgets.size()) {
+		p->ctxMenu->exec(anEvent->globalPos());
    }
 }
 
 #if QT_VERSION < 0x040500
 bool LayerDock::event (QEvent* ev)
 {
-    switch (ev->type()) {
-    case QEvent::MouseButtonPress:
-        mousePressEvent(static_cast<QMouseEvent *>(ev));
-        break;
-    }
-    return MDockAncestor::event(ev);
+	switch (ev->type()) {
+	case QEvent::MouseButtonPress:
+		mousePressEvent(static_cast<QMouseEvent *>(ev));
+		break;
+	}
+	return MDockAncestor::event(ev);
 }
 #endif
 
 void LayerDock::mousePressEvent ( QMouseEvent * ev )
 {
 	if (ev->button() != Qt::LeftButton) {
-        ev->ignore();
+		ev->ignore();
 		return;
 	}
 
 	LayerWidget* aWidget = dynamic_cast<LayerWidget*>(childAt(ev->pos()));
-    
+
 	if (!aWidget) {
 		for (int i=0; i < CHILD_WIDGETS.size(); ++i) {
 			if (CHILD_WIDGET(i))
 				CHILD_WIDGET(i)->setChecked(false);
 		}
 		p->lastSelWidget = NULL;
-        ev->ignore();
+		ev->ignore();
 		return;
 	}
 
-    if (ev->modifiers() & Qt::ControlModifier) {
+	if (ev->modifiers() & Qt::ControlModifier) {
 		bool toSelect = !aWidget->isChecked();
 		aWidget->setChecked(toSelect);
 		if (toSelect)
 			p->lastSelWidget = aWidget;
 		else
 			p->lastSelWidget = NULL;
-    } else
-    if (ev->modifiers() & Qt::ShiftModifier) {
+	} else
+	if (ev->modifiers() & Qt::ShiftModifier) {
 		bool toSelect = false;
- 	    for (int i=0; i < CHILD_WIDGETS.size(); ++i) {
+		for (int i=0; i < CHILD_WIDGETS.size(); ++i) {
 			if (CHILD_WIDGET(i)) {
 				if (CHILD_WIDGET(i) == aWidget || CHILD_WIDGET(i) == p->lastSelWidget)
 					toSelect = !toSelect;
 
 				if (toSelect)
-	    			CHILD_WIDGET(i)->setChecked(true);
+					CHILD_WIDGET(i)->setChecked(true);
 			}
-        }
+		}
 		aWidget->setChecked(true);
-    } else {
- 	    for (int i=0; i < CHILD_WIDGETS.size(); ++i) {
-    	    if (CHILD_WIDGET(i))
-	    	    CHILD_WIDGET(i)->setChecked(false);
-        }
+	} else {
+		for (int i=0; i < CHILD_WIDGETS.size(); ++i) {
+			if (CHILD_WIDGET(i))
+				CHILD_WIDGET(i)->setChecked(false);
+		}
 		aWidget->setChecked(true);
 		p->lastSelWidget = aWidget;
 
 		if (p->Main->info())
 			p->Main->info()->setHtml(aWidget->getMapLayer()->toHtml());
 	}
-    ev->accept();
+	ev->accept();
 }
