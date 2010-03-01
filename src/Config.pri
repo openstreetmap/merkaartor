@@ -1,4 +1,4 @@
-VERSION="0.15"
+VERSION="0.15.1"
 !contains(RELEASE,1) {
     #SVNREV = $$system($$escape_expand(svn info \"http://svn.openstreetmap.org/applications/editors/merkaartor/\" | sed -n \"s/Last Changed Rev: \\([0-9]\\+\\)/\\1/p\"))
     win32 {

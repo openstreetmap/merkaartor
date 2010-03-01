@@ -500,7 +500,7 @@ bool DirtyListExecutor::start()
 		"<tag k=\"comment\" v=\"%3\"/>"
 		"</changeset>"
 		"</osm>");
-	DataIn = DataIn.arg(VERSION).arg(QLocale::system().name().split("_")[0]).arg(encodeAttributes(glbChangeSetComment));
+	DataIn = DataIn.arg(STRINGIFY(VERSION)).arg(QLocale::system().name().split("_")[0]).arg(encodeAttributes(glbChangeSetComment));
 	QString DataOut;
 	QString URL = theDownloader->getURLToOpenChangeSet();
 	if (sendRequest("PUT",URL,DataIn, DataOut))

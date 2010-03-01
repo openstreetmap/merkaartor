@@ -123,7 +123,7 @@ MerkaartorPreferences::~MerkaartorPreferences()
 
 void MerkaartorPreferences::save(bool UserPwdChanged)
 {
-	Sets->setValue("version/version", QString("%1").arg(VERSION));
+	Sets->setValue("version/version", QString("%1").arg(STRINGIFY(VERSION)));
 	setWmsServers();
 	setTmsServers();
 	setTools();
