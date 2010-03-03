@@ -1,4 +1,5 @@
 v0.16
+    * FIX : crash when coming from "Separate move mode" and a feature is selected.
     * CHG : Move the "File-Render" menu to "File-Export-Raster/SVG"
 v0.15
     * FIX : In about box, the changelog is now properly resized

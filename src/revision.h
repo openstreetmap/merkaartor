@@ -1,0 +1,2 @@
+#define SVNREV \  
+exported
