@@ -301,7 +301,7 @@ MainWindow::MainWindow(QWidget *parent)
 #endif
 
 #ifndef GEOIMAGE
-	windowGeoimageAction->setVisible(false);
+        ui->windowGeoimageAction->setVisible(false);
 #endif
 
 	ui->viewStyleBackgroundAction->setVisible(false);

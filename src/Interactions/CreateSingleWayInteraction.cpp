@@ -100,7 +100,7 @@ void CreateSingleWayInteraction::snapMouseMoveEvent(QMouseEvent* ev, Feature* aF
 	view()->update();
 }
 
-void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* anEvent, Feature* aFeature)
+void CreateSingleWayInteraction::snapMousePressEvent(QMouseEvent* /* anEvent */, Feature* aFeature)
 {
 	Q_UNUSED(aFeature)
 	Creating = true;

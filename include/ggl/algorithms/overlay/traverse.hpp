@@ -302,7 +302,7 @@ template
 inline void traverse(Geometry1 const& geometry1,
             Geometry2 const& geometry2, int direction,
             IntersectionPoints& intersection_points,
-            bool trivial,
+            bool /* trivial */,
             OutputIterator out)
 {
     typedef typename boost::range_iterator

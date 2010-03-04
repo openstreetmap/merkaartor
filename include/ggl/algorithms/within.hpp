@@ -83,7 +83,7 @@ struct box_in_box
 template <typename B1, typename B2, size_t N>
 struct box_in_box<B1, B2, N, N>
 {
-    static inline bool inside(B1 const& b1, B2 const& b2)
+    static inline bool inside(B1 const&, B2 const& b2)
     {
         return true;
     }

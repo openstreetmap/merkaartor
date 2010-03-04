@@ -461,7 +461,7 @@ static inline void assign_order(M const& map, V& intersection_points)
         no touch, collinearities, etc.
  */
 template <typename IntersectionPoints>
-inline void enrich_intersection_points(IntersectionPoints& intersection_points, bool trivial)
+inline void enrich_intersection_points(IntersectionPoints& intersection_points, bool /* trivial */)
 {
 
     // Create a map of segment<source_index,segment_index,ring_index,multi_index>

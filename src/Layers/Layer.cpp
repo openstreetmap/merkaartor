@@ -99,7 +99,7 @@ void Layer::get(const CoordBox& hz, QList<Feature*>& theFeatures)
 	}
 }
 
-void Layer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures, QSet<Way*>& theCoastlines, Document* theDocument,
+void Layer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures, QSet<Way*>& theCoastlines, Document* /* theDocument */,
 				   QList<CoordBox>& invalidRects, QRectF& clipRect, Projection& theProjection, QTransform& theTransform)
 {
 	if (!isVisible() || !size())

@@ -168,9 +168,9 @@ void Interaction::paintEvent(QPaintEvent*, QPainter& thePainter)
 /***************/
 
 FeatureSnapInteraction::FeatureSnapInteraction(MapView* theView)
-	: Interaction(theView), LastSnap(0), SnapActive(true),
+        : Interaction(theView), SnapActive(true),
 	  NoSelectPoints(false), NoSelectRoads(false)
-	  , NoSelectVirtuals(true)
+          , NoSelectVirtuals(true), LastSnap(0)
 {
 	handCursor = QCursor(QPixmap(":/Icons/grab.png"));
 	grabCursor = QCursor(QPixmap(":/Icons/grabbing.png"));
