@@ -263,6 +263,8 @@ class Feature : public QObject
 		 */
 		virtual bool isVirtual() const;
 		virtual void setVirtual(bool val);
+		void blockVirtualUpdates(bool val);
+		bool isVirtualUpdatesBlocked() const;
 
 		virtual bool isInteresting() const {return true;}
 

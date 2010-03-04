@@ -50,6 +50,8 @@ class Way : public Feature
 		virtual const Feature* get(int Idx) const;
 		virtual bool isNull() const;
 		virtual void setDeleted(bool delState);
+		void removeVirtuals();
+		void addVirtuals();
 		void updateVirtuals();
 
 		const QList<Coord>& smoothed() const;

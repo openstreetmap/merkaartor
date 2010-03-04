@@ -133,7 +133,7 @@ void Way::setLayer(Layer* L)
 	updateVirtuals();
 }
 
-void Way::partChanged(Feature*, int ChangeId)
+void Way::partChanged(Feature* F, int ChangeId)
 {
 	if (isDeleted())
 		return;
@@ -142,7 +142,8 @@ void Way::partChanged(Feature*, int ChangeId)
 	MetaUpToDate = false;
 	p->SmoothedUpToDate = false;
 	p->wasPathComplete = false;
-	updateVirtuals();
+	if (!F->isVirtualUpdatesBlocked())
+		updateVirtuals();
 
 	notifyParents(ChangeId);
 }
@@ -189,7 +190,7 @@ void Way::add(Node* Pt, int Idx)
 	}
 }
 
-void Way::updateVirtuals()
+void Way::removeVirtuals()
 {
 	while (p->virtualNodes.size()) {
 		p->virtualNodes[0]->unsetParentFeature(this);
@@ -198,10 +199,10 @@ void Way::updateVirtuals()
 //		delete p->virtualNodes[0];
 		p->virtualNodes.erase(p->virtualNodes.begin());
 	}
+}
 
-	if (!M_PREFS->getUseVirtualNodes() || !layer() || isDeleted())
-		return;
-
+void Way::addVirtuals()
+{
 	for (unsigned int i=1; i<p->Nodes.size(); ++i) {
 		QLineF l(toQt(p->Nodes[i-1]->position()), toQt(p->Nodes[i]->position()));
 		l.setLength(l.length()/2);
@@ -211,6 +212,17 @@ void Way::updateVirtuals()
 		layer()->add(v);
 		p->virtualNodes.push_back(v);
 	}
+}
+
+void Way::updateVirtuals()
+{
+	if (isVirtualUpdatesBlocked())
+		return;
+
+	removeVirtuals();
+	if (!M_PREFS->getUseVirtualNodes() || !layer() || isDeleted())
+		return;
+	addVirtuals();
 }
 
 int Way::find(Feature* Pt) const

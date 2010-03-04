@@ -85,17 +85,23 @@ void MoveNodeInteraction::snapMousePressEvent(QMouseEvent * event, Feature* aLas
 	Moving.clear();
 	OriginalPosition.clear();
 	StartDragPosition = XY_TO_COORD(event->pos());
-	for (int j=0; j<sel.size(); j++) {
-		if (Node* Pt = dynamic_cast<Node*>(sel[j]))
+	for (int i=0; i<sel.size(); i++) {
+		if (Node* Pt = CAST_NODE(sel[i]))
 		{
 			Moving.push_back(Pt);
 			if (sel.size() == 1)
 				StartDragPosition = Pt->position();
+			if (!Moving[i]->isVirtual())
+				for (int j=0; j<Moving[i]->sizeParents(); ++j) {
+					if (Way* aRoad = CAST_WAY(Moving[i]->getParent(j)))
+						aRoad->removeVirtuals();
+				}
 		}
-		else if (Way* R = dynamic_cast<Way*>(sel[j])) {
-			for (int i=0; i<R->size(); ++i)
-				if (std::find(Moving.begin(),Moving.end(),R->get(i)) == Moving.end())
-					Moving.push_back(R->getNode(i));
+		else if (Way* R = CAST_WAY(sel[i])) {
+			for (int j=0; j<R->size(); ++j)
+				if (std::find(Moving.begin(),Moving.end(),R->get(j)) == Moving.end())
+					Moving.push_back(R->getNode(j));
+			R->removeVirtuals();
 			addToNoSnap(R);
 		}
 	}
@@ -131,6 +137,10 @@ void MoveNodeInteraction::snapMouseReleaseEvent(QMouseEvent * event, Feature* Cl
 				theList->add(new MoveNodeCommand(Moving[i],OriginalPosition[i]+Diff, document()->getDirtyOrOriginLayer(Moving[i]->layer())));
 			for (int j=0; j<Moving[i]->sizeParents(); ++j) {
 				Moving[i]->getParent(j)->updateIndex();
+			}
+			for (int j=0; j<Moving[i]->sizeParents(); ++j) {
+				if (Way* aRoad = CAST_WAY(Moving[i]->getParent(j)))
+					aRoad->updateVirtuals();
 			}
 		}
 
@@ -223,12 +233,15 @@ void MoveNodeInteraction::snapMouseMoveEvent(QMouseEvent* event, Feature* Closer
 				theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx,main()->document()->getDirtyOrOriginLayer(aRoad->layer())));
 
 				Moving[i] = N;
+				aRoad->removeVirtuals();
 			} else {
+				Moving[i]->layer()->blockIndexing(true);
+				Moving[i]->blockVirtualUpdates(true);
+
 				Moving[i]->setPosition(OriginalPosition[i]+Diff);
-				for (int j=0; j<Moving[i]->sizeParents(); ++j) {
-					if (Way* aRoad = CAST_WAY(Moving[i]->getParent(j)))
-						aRoad->updateVirtuals();
-				}
+
+				Moving[i]->layer()->blockIndexing(false);
+				Moving[i]->blockVirtualUpdates(false);
 			}
 		}
 		view()->invalidate(true, false);
