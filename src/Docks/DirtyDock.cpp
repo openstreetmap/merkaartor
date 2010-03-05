@@ -17,7 +17,6 @@
 #include "Document.h"
 #include "Layer.h"
 #include "Feature.h"
-#include "DownloadOSM.h"
 #include "Command.h"
 #include "DirtyList.h"
 

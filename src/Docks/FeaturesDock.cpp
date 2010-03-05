@@ -16,7 +16,6 @@
 #include "Document.h"
 #include "ImageMapLayer.h"
 #include "PropertiesDock.h"
-#include "ImportOSM.h"
 
 #include "Features.h"
 

@@ -132,6 +132,9 @@ public:
 	virtual bool isTrack() {return false;}
 	virtual bool arePointsDrawable() {return true;}
 
+	void blockVirtualUpdates(bool val);
+	bool isVirtualUpdatesBlocked() const;
+
 	virtual void blockIndexing(bool val);
 	virtual void indexAdd(const CoordBox& bb, const MapFeaturePtr aFeat);
 	virtual void indexRemove(const CoordBox& bb, const MapFeaturePtr aFeat);

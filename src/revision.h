@@ -1,1 +1,1 @@
-#define SVNREV 20268M
+#define SVNREV exported

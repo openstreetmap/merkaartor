@@ -1,4 +1,5 @@
 v0.16
+    * FIX : avoid multiple updateVirtuals() at download time by disabling it and doing them all when the download is done
     * FIX : speedup node moving by disabling virtual nodes and index updates during drag
     * FIX : crash when coming from "Separate move mode" and a feature is selected.
     * CHG : Move the "File-Render" menu to "File-Export-Raster/SVG"

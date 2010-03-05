@@ -216,9 +216,8 @@ void Way::addVirtuals()
 
 void Way::updateVirtuals()
 {
-	if (isVirtualUpdatesBlocked())
+	if (isVirtualUpdatesBlocked() || (layer() && layer()->isVirtualUpdatesBlocked()))
 		return;
-
 	removeVirtuals();
 	if (!M_PREFS->getUseVirtualNodes() || !layer() || isDeleted())
 		return;

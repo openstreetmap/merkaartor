@@ -407,6 +407,8 @@ bool importOSM(QWidget* aParent, QIODevice& File, Document* theDocument, Layer* 
 	xmlReader.parse(&source,true);
 	Bar->setMaximum(File.size());
 	Bar->setValue(Bar->value()+buf.size());
+
+	theLayer->blockVirtualUpdates(true);
 	while (!File.atEnd())
 	{
 		QByteArray buf(File.read(20480));
@@ -417,6 +419,7 @@ bool importOSM(QWidget* aParent, QIODevice& File, Document* theDocument, Layer* 
 		if (dlg && dlg->wasCanceled())
 			break;
 	}
+	theLayer->blockVirtualUpdates(false);
 
 	bool WasCanceled = false;
 	if (dlg)
@@ -448,11 +451,25 @@ bool importOSM(QWidget* aParent, QIODevice& File, Document* theDocument, Layer* 
 				));
 		}
 
-		// Check for empty Roads/Relations
+		if (M_PREFS->getUseVirtualNodes()) {
+			Lbl->setText(QApplication::translate("Downloader","Update virtuals"));
+			Bar->setMaximum(theLayer->size());
+			Bar->setValue(0);
+		}
+
+		// Check for empty Roads/Relations and update virtual nodes
 		QList<Feature*> EmptyFeature;
 		for (int i=0; i<theLayer->size(); ++i) {
-			if (!theLayer->get(i)->size() && !theLayer->get(i)->notEverythingDownloaded() && !CAST_NODE(theLayer->get(i)))
-					EmptyFeature.push_back(theLayer->get(i));
+			if (!theLayer->get(i)->notEverythingDownloaded()) {
+				if (!theLayer->get(i)->size() && !CAST_NODE(theLayer->get(i)))
+						EmptyFeature.push_back(theLayer->get(i));
+				if (M_PREFS->getUseVirtualNodes()) {
+					if (Way* w = CAST_WAY(theLayer->get(i)))
+						w->updateVirtuals();
+					Bar->setValue(i);
+					qApp->processEvents();
+				}
+			}
 		}
 		if (EmptyFeature.size()) {
 			if (QMessageBox::warning(aParent,QApplication::translate("Downloader","Empty roads/relations detected"),

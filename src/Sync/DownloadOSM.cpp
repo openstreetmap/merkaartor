@@ -652,7 +652,6 @@ bool downloadMoreOSM(QWidget* aParent, const CoordBox& aBox , Document* theDocum
 		theLayer = theDocument->getLastDownloadLayer();
 	theLayer->blockIndexing(true);
 
-
 	QString osmWebsite, osmUser, osmPwd;
 
 	osmWebsite = MerkaartorPreferences::instance()->getOsmWebsite();
