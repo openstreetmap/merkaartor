@@ -123,7 +123,7 @@ include(TagTemplate/TagTemplate.pri)
 include(NameFinder/NameFinder.pri)
 
 
-!win32 {
+unix {
 	# Prefix: base instalation directory
 	isEmpty( PREFIX ) {
 		PREFIX = /usr/local
@@ -203,7 +203,12 @@ contains (GDAL, 1) {
 world_shp.path = $${SHARE_DIR}
 world_shp.files = $$PWD/../share/world_background.osb
 
-DEFINES += WORLD_SHP=$$world_shp.path/world_background.osb
+
+macx {
+	DEFINES += WORLD_SHP=world_background.osb
+} else {
+	DEFINES += WORLD_SHP=$$world_shp.path/world_background.osb
+}
 INSTALLS += world_shp
 
 desktop.path = $${PREFIX}/share/applications

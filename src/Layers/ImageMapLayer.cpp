@@ -159,12 +159,21 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
 			setName(tr("Map - None"));
 			setVisible(false);
 		} else {
+#if defined(Q_OS_MAC)
+			QDir resources = QDir(QCoreApplication::applicationDirPath());
+			resources.cdUp();
+			resources.cd("Resources");
+			QString world_shp = resources.absolutePath() + "/" + STRINGIFY(WORLD_SHP);
+			setFilename(world_shp);
+#else
 			if (QDir::isAbsolutePath(STRINGIFY(WORLD_SHP)))
 				setFilename(STRINGIFY(WORLD_SHP));
 			else
 				setFilename(QCoreApplication::applicationDirPath() + "/" + STRINGIFY(WORLD_SHP));
+#endif
 		}
 			setName(tr("Map - OSB Background"));
+			setVisible(true);
 	} else
 	{
 		p->theMapAdapter = M_PREFS->getBackgroundPlugin(p->bgType);
