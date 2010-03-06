@@ -157,6 +157,7 @@ sub loadfiles($$@)
         elsif(/<TS .* language="(.*)">/) { $l = getlang($1); ++$lang->{$l}; }
         elsif(/<TS version.*>/) {}
         elsif(/<\?xml/ || /<!DOCTYPE/ || /<\/TS>/ || /<defaultcodec>/){} # ignore
+        elsif(/comment>(.*)<\/comment>/){} # ignore
         # source
         elsif(/<source>(.*)<\/source>/){$source = $1;}
         elsif(/<source>(.*)/){$source = "$1\n"; $issource = 1;}

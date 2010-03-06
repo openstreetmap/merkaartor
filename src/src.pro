@@ -88,6 +88,7 @@ TRANSLATIONS += \
 	../translations/merkaartor_sk.ts \
 	../translations/merkaartor_sv.ts \
 	../translations/merkaartor_uk.ts \
+	../translations/merkaartor_pt_BR.ts \
 
 BINTRANSLATIONS += \
 	../translations/merkaartor_ar.qm \
@@ -104,6 +105,7 @@ BINTRANSLATIONS += \
 	../translations/merkaartor_sk.qm \
 	../translations/merkaartor_sv.qm \
 	../translations/merkaartor_uk.qm \
+	../translations/merkaartor_pt_BR.qm \
 
 #Include file(s)
 include(Merkaartor.pri)
@@ -158,12 +160,10 @@ win32-msvc* {
 }
 
 
-count(TRANSDIR_MERKAARTOR, 1) {
-	translations.path =  $${TRANSDIR_MERKAARTOR}
-	translations.files = $${BINTRANSLATIONS}
-	DEFINES += TRANSDIR_MERKAARTOR=$$translations.path
-	INSTALLS += translations
-}
+translations.path =  $${TRANSDIR_MERKAARTOR}
+translations.files = $${BINTRANSLATIONS}
+DEFINES += TRANSDIR_MERKAARTOR=$$translations.path
+INSTALLS += translations
 
 count(TRANSDIR_SYSTEM, 1) {
 	DEFINES += TRANSDIR_SYSTEM=$${TRANSDIR_SYSTEM}

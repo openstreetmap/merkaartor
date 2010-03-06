@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="es">
+<TS version="2.0" language="pt_BR">
 <context>
     <name></name>
     <message>
@@ -8,7 +8,7 @@
         <location filename="../src/MainWindow.cpp" line="755"/>
         <location filename="../src/MainWindow.cpp" line="768"/>
         <source>Supported formats</source>
-        <translation>Formatos soportados</translation>
+        <translation>Formatos suportados</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="744"/>
@@ -42,7 +42,7 @@
         <location filename="../src/MainWindow.cpp" line="771"/>
         <source>OpenStreetMap binary format (*.osb)
 </source>
-        <translation>Formato binario OpenStreetMap (*.osb)
+        <translation>Formato binário OpenStreetMap (*.osb)
 </translation>
     </message>
     <message>
@@ -60,7 +60,7 @@
         <location filename="../src/MainWindow.cpp" line="773"/>
         <source>NMEA GPS log format (*.nmea *.nma)
 </source>
-        <translation>formato de registro NMEA GPS (*.nmea *.nma)
+        <translation>Formato de registro NMEA GPS (*.nmea *.nma)
 </translation>
     </message>
     <message>
@@ -69,7 +69,7 @@
         <location filename="../src/MainWindow.cpp" line="774"/>
         <source>KML file (*.kml)
 </source>
-        <translation>Archivo KML (*.kml)
+        <translation>Arquivo KML (*.kml)
 </translation>
     </message>
     <message>
@@ -78,7 +78,7 @@
         <location filename="../src/MainWindow.cpp" line="775"/>
         <source>ESRI Shapefile (*.shp)
 </source>
-        <translation>Archivo de forma ESRI (*.shp)
+        <translation>Arquivo de forma ESRI (*.shp)
 </translation>
     </message>
     <message>
@@ -86,13 +86,13 @@
         <location filename="../src/MainWindow.cpp" line="765"/>
         <location filename="../src/MainWindow.cpp" line="776"/>
         <source>All Files (*)</source>
-        <translation>Todos los archivos (*)</translation>
+        <translation>Todos os arquivos (*)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="763"/>
         <source>Geotagged images (*.jpg)
 </source>
-        <translation>Imágenes geoetiquetadas (*.jpg)
+        <translation>Imagens georeferenciadas (*.jpg)
 </translation>
     </message>
 </context>
@@ -101,42 +101,17 @@
     <message>
         <location filename="../src/AboutDialog.ui" line="14"/>
         <source>About Merkaartor</source>
-        <translation>Acerca de Merkaartor</translation>
+        <translation>Sobre o Merkaartor</translation>
     </message>
     <message>
         <location filename="../src/AboutDialog.ui" line="81"/>
         <source>TextLabel</source>
-        <translation>Etiqueta de texto</translation>
+        <translation>TextLabel</translation>
     </message>
     <message>
         <location filename="../src/AboutDialog.ui" line="97"/>
         <source>This program is licensed under the GNU Public License v2</source>
-        <translation>Este programa esta licenciado bajo la Licencia Publica GNU v2</translation>
-    </message>
-    <message>
-        <location filename="../src/AboutDialog.ui" line="124"/>
-        <source>Changelog</source>
-        <translation>Registro de cambios</translation>
-    </message>
-    <message>
-        <location filename="../src/AboutDialog.ui" line="167"/>
-        <source>OK</source>
-        <translation>Aceptar</translation>
-    </message>
-    <message>
-        <location filename="../src/AboutDialog.ui" line="42"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;QT version&lt;/span&gt; &lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%1&lt;/span&gt; (built with &lt;span style=&quot; font-weight:600;&quot;&gt;%2&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Versión de QT&lt;/span&gt; &lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%1&lt;/span&gt; (compilado con &lt;span style=&quot; font-weight:600;&quot;&gt;%2&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>Este programa está licenciado sob os termos da Licença Pública Geral GNU v2</translation>
     </message>
     <message>
         <location filename="../src/AboutDialog.ui" line="30"/>
@@ -162,18 +137,43 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://www.merkaartor.org&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.merkaartor.org&lt;/span&gt;&lt;/a&gt; or &lt;a href=&quot;http://merkaartor.yuio.de&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;http://merkaartor.yuio.de&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../src/AboutDialog.ui" line="124"/>
+        <source>Changelog</source>
+        <translation>Registro de mudanças</translation>
+    </message>
+    <message>
+        <location filename="../src/AboutDialog.ui" line="167"/>
+        <source>OK</source>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <location filename="../src/AboutDialog.ui" line="42"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;QT version&lt;/span&gt; &lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%1&lt;/span&gt; (built with &lt;span style=&quot; font-weight:600;&quot;&gt;%2&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Versão do QT&lt;/span&gt; &lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%1&lt;/span&gt; (compilado com &lt;span style=&quot; font-weight:600;&quot;&gt;%2&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
 </context>
 <context>
     <name>ActionsDialog</name>
     <message>
         <location filename="../src/Tools/ActionsDialog.cpp" line="20"/>
         <source>Description</source>
-        <translation>Descripción</translation>
+        <translation>Descrição</translation>
     </message>
     <message>
         <location filename="../src/Tools/ActionsDialog.cpp" line="20"/>
         <source>Shortcut</source>
-        <translation>Atajo</translation>
+        <translation>Atalho</translation>
     </message>
     <message>
         <location filename="../src/Tools/ActionsDialog.cpp" line="41"/>
@@ -188,12 +188,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/Tools/ActionsDialog.cpp" line="43"/>
         <source>&amp;Default</source>
-        <translation>Pre&amp;determinado</translation>
+        <translation>Pa&amp;drão</translation>
     </message>
     <message>
         <location filename="../src/Tools/ActionsDialog.cpp" line="44"/>
         <source>&amp;OK</source>
-        <translation>&amp;Aceptar</translation>
+        <translation>&amp;OK</translation>
     </message>
     <message>
         <location filename="../src/Tools/ActionsDialog.cpp" line="45"/>
@@ -203,48 +203,48 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/Tools/ActionsDialog.cpp" line="72"/>
         <source>Shortcut Editor</source>
-        <translation>Editor de Atajos</translation>
+        <translation>Editor de Atalhos</translation>
     </message>
     <message>
         <location filename="../src/Tools/ActionsDialog.cpp" line="116"/>
         <source>Load Shortcut scheme</source>
-        <translation>Cargar esquema de Atajo</translation>
+        <translation>Carregar esquema de atalho</translation>
     </message>
     <message>
         <location filename="../src/Tools/ActionsDialog.cpp" line="116"/>
         <location filename="../src/Tools/ActionsDialog.cpp" line="143"/>
         <source>Merkaartor shortcut scheme (*.mss)</source>
-        <translation>Esquema de atajos Merkaator (*.mss)</translation>
+        <translation>Esquema de atalhos Merkaator (*.mss)</translation>
     </message>
     <message>
         <location filename="../src/Tools/ActionsDialog.cpp" line="120"/>
         <source>Unable to open file</source>
-        <translation>Incapaz de abrir archivo</translation>
+        <translation>Não foi possível abrir arquivo</translation>
     </message>
     <message>
         <location filename="../src/Tools/ActionsDialog.cpp" line="120"/>
         <source>%1 could not be opened.</source>
-        <translation>%1 no pudo ser abierto</translation>
+        <translation>%1 não pode ser aberto.</translation>
     </message>
     <message>
         <location filename="../src/Tools/ActionsDialog.cpp" line="143"/>
         <source>Save Shortcut scheme</source>
-        <translation>Guardar esquema de Atajos</translation>
+        <translation>Salvar esquema de atalhos</translation>
     </message>
     <message>
         <location filename="../src/Tools/ActionsDialog.cpp" line="143"/>
         <source>untitled</source>
-        <translation>sin nombre</translation>
+        <translation>Sem título</translation>
     </message>
     <message>
         <location filename="../src/Tools/ActionsDialog.cpp" line="148"/>
         <source>Unable to open save file</source>
-        <translation>No se puede abrir el archivo</translation>
+        <translation>Não foi possível abrir arquivo salvo</translation>
     </message>
     <message>
         <location filename="../src/Tools/ActionsDialog.cpp" line="148"/>
         <source>%1 could not be opened for writing.</source>
-        <translation>%1 no pudo ser abierto para su escritura.</translation>
+        <translation>%1 não pode ser aberto para escrita.</translation>
     </message>
 </context>
 <context>
@@ -252,7 +252,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/Commands/Command.cpp" line="25"/>
         <source>No description</source>
-        <translation>Sin descripción</translation>
+        <translation>Sem descrição</translation>
     </message>
 </context>
 <context>
@@ -260,17 +260,17 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/Interactions/CreateDoubleWayDock.ui" line="13"/>
         <source>Form</source>
-        <translation>Formulario</translation>
+        <translation>Form</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateDoubleWayDock.ui" line="25"/>
         <source>Driving at the right side of the road</source>
-        <translation>Conducir por el lado derecho de la carretera</translation>
+        <translation>Condução de veículos no lado direito da estrada</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateDoubleWayDock.ui" line="40"/>
         <source>Distance between two roads</source>
-        <translation>Distancia entre dos carreteras</translation>
+        <translation>Distância entre duas estradas</translation>
     </message>
 </context>
 <context>
@@ -278,12 +278,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/Interactions/CreateRoundaboutDock.ui" line="13"/>
         <source>Form</source>
-        <translation>Formulario</translation>
+        <translation>Form</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateRoundaboutDock.ui" line="25"/>
         <source>Driving at the right side of the road</source>
-        <translation>Conducir por el lado derecho de la carretera</translation>
+        <translation>Condução de veículos no lado direito da estrada</translation>
     </message>
 </context>
 <context>
@@ -291,35 +291,35 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/Docks/DirtyDock.cpp" line="70"/>
         <source>There is &lt;b&gt;no&lt;/b&gt; object in the dirty layer</source>
-        <translation>&lt;b&gt;No&lt;/b&gt; hay objetos en la capa sucia</translation>
+        <translation>&lt;b&gt;Não&lt;/b&gt; há objetos na camada temporária</translation>
     </message>
     <message>
         <location filename="../src/Docks/DirtyDock.cpp" line="73"/>
         <source>There is &lt;b&gt;one&lt;/b&gt; object in the dirty layer</source>
-        <translation>Hay &lt;b&gt;un&lt;/b&gt; objeto en la capa sucia</translation>
+        <translation>Há &lt;b&gt;um&lt;/b&gt; objeto na camada temporária</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/Docks/DirtyDock.cpp" line="77"/>
         <source>There are &lt;b&gt;%n&lt;/b&gt; objects in the dirty layer</source>
-        <translation type="unfinished">
-            <numerusform>Hay &lt;b&gt;%n&lt;/b&gt; objeto en la capa sucia</numerusform>
-            <numerusform>Hay &lt;b&gt;%n&lt;/b&gt; objetos en la capa sucia</numerusform>
+        <translation>
+            <numerusform>Há &lt;b&gt;%n&lt;/b&gt; objeto na camada temporária</numerusform>
+            <numerusform>Há &lt;b&gt;%n&lt;/b&gt; objetos na camada temporária</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../src/Docks/DirtyDock.cpp" line="195"/>
         <source>Undo</source>
-        <translation>Deshacer</translation>
+        <translation>Desfazer</translation>
     </message>
     <message>
         <location filename="../src/Docks/DirtyDock.cpp" line="196"/>
         <source>Center map</source>
-        <translation>Centrar mapa</translation>
+        <translation>Centro do mapa</translation>
     </message>
     <message>
         <location filename="../src/Docks/DirtyDock.cpp" line="197"/>
         <source>Center &amp;&amp; Zoom map</source>
-        <translation>Centrar mapa y hacer zoom</translation>
+        <translation>Centro &amp;&amp; Zoom do mapa</translation>
     </message>
 </context>
 <context>
@@ -327,17 +327,17 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/Docks/DirtyDock.ui" line="13"/>
         <source>DirtyDock</source>
-        <translation>Puerto Sucio</translation>
+        <translation>Porto sujo</translation>
     </message>
     <message>
         <location filename="../src/Docks/DirtyDock.ui" line="36"/>
         <source>There is &lt;b&gt;no&lt;/b&gt; object in the dirty layer</source>
-        <translation>&lt;b&gt;No&lt;/b&gt; hay objetos en la capa sucia</translation>
+        <translation>&lt;b&gt;Não&lt;/b&gt; há objetos na camada temporária</translation>
     </message>
     <message>
         <location filename="../src/Docks/DirtyDock.ui" line="52"/>
         <source>Cleanup</source>
-        <translation>Limpieza</translation>
+        <translation>Limpar</translation>
     </message>
 </context>
 <context>
@@ -354,97 +354,97 @@ p, li { white-space: pre-wrap; }
         <location filename="../src/Sync/DirtyList.cpp" line="333"/>
         <location filename="../src/Sync/DirtyList.cpp" line="570"/>
         <source>ADD road %1</source>
-        <translation>AÑADIR carretera %1</translation>
+        <translation>Adicionar estrada %1</translation>
     </message>
     <message>
         <location filename="../src/Sync/DirtyList.cpp" line="341"/>
         <location filename="../src/Sync/DirtyList.cpp" line="600"/>
         <source>ADD trackpoint %1</source>
-        <translation>Añadir Puntodepista %1</translation>
+        <translation>Adicionar ponto de pista %1</translation>
     </message>
     <message>
         <location filename="../src/Sync/DirtyList.cpp" line="349"/>
         <location filename="../src/Sync/DirtyList.cpp" line="541"/>
         <source>ADD relation %1</source>
-        <translation>AÑADIR relación %1</translation>
+        <translation>Adicionar relação %1</translation>
     </message>
     <message>
         <location filename="../src/Sync/DirtyList.cpp" line="357"/>
         <location filename="../src/Sync/DirtyList.cpp" line="690"/>
         <source>UPDATE trackpoint %1</source>
-        <translation>ACTUALIZAR punto de ruta %1</translation>
+        <translation>Atualizar ponto de pista %1</translation>
     </message>
     <message>
         <location filename="../src/Sync/DirtyList.cpp" line="365"/>
         <location filename="../src/Sync/DirtyList.cpp" line="631"/>
         <source>UPDATE relation %1</source>
-        <translation>ACTUALIZAR relación %1</translation>
+        <translation>Atualizar relação %1</translation>
     </message>
     <message>
         <location filename="../src/Sync/DirtyList.cpp" line="373"/>
         <location filename="../src/Sync/DirtyList.cpp" line="661"/>
         <source>UPDATE road %1</source>
-        <translation>ACTUALIZAR ruta %1</translation>
+        <translation>Atualizar estrada %1</translation>
     </message>
     <message>
         <location filename="../src/Sync/DirtyList.cpp" line="381"/>
         <location filename="../src/Sync/DirtyList.cpp" line="721"/>
         <source>REMOVE trackpoint %1</source>
-        <translation>REMOVER punto de vista %1</translation>
+        <translation>Romover ponto de pista %1</translation>
     </message>
     <message>
         <location filename="../src/Sync/DirtyList.cpp" line="389"/>
         <location filename="../src/Sync/DirtyList.cpp" line="746"/>
         <source>REMOVE road %1</source>
-        <translation>REMOVER ruta %1</translation>
+        <translation>Remover estrada %1</translation>
     </message>
     <message>
         <location filename="../src/Sync/DirtyList.cpp" line="397"/>
         <location filename="../src/Sync/DirtyList.cpp" line="771"/>
         <source>REMOVE relation %1</source>
-        <translation>ELIMINAR relación %1</translation>
+        <translation>Remover relação %1</translation>
     </message>
     <message>
         <location filename="../src/Sync/DirtyList.cpp" line="429"/>
         <location filename="../src/Sync/DirtyList.cpp" line="436"/>
         <location filename="../src/Sync/DirtyList.cpp" line="452"/>
         <source>Error uploading request</source>
-        <translation>Error cargando la petición de subida</translation>
+        <translation>Erro ao carregar solicitação</translation>
     </message>
     <message>
         <location filename="../src/Sync/DirtyList.cpp" line="430"/>
         <source>Please check your username and password in the Preferences menu</source>
-        <translation>Compruebe su nombre de usuario y contraseña en el menú Preferencias</translation>
+        <translation>Por favor, verifique seu nome de usuário e senha no menu Preferências</translation>
     </message>
     <message>
         <location filename="../src/Sync/DirtyList.cpp" line="433"/>
         <location filename="../src/Sync/DirtyList.cpp" line="453"/>
         <source>There was an error uploading this request (%1)
 Server message is &apos;%2&apos;</source>
-        <translation>Hubo un error al subir ésta petición (%1)
-El mensaje del servidor es &apos;%2&apos;</translation>
+        <translation>Houve um erro ao carregar esta solicitação (%1)
+A mensagem do servidor foi &apos;%2&apos;</translation>
     </message>
     <message>
         <location filename="../src/Sync/DirtyList.cpp" line="435"/>
         <source>
 API message is &apos;%1&apos;</source>
         <translation>
-El mensaje de la API es &apos;%1&apos;</translation>
+A mensagem da API foi &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../src/Sync/DirtyList.cpp" line="493"/>
         <source>OPEN changeset</source>
-        <translation>ABRIR cambios</translation>
+        <translation>Abrir mudança definida</translation>
     </message>
     <message>
         <location filename="../src/Sync/DirtyList.cpp" line="521"/>
         <source>CLOSE changeset</source>
-        <translation>CERRAR cambios</translation>
+        <translation>Fechar mudança definida</translation>
     </message>
     <message>
         <location filename="../src/Sync/DirtyList.cpp" line="468"/>
         <source>Uploading changes...</source>
-        <translation>Subiendo cambios...</translation>
+        <translation>Carregando mudanças....</translation>
     </message>
 </context>
 <context>
@@ -452,17 +452,17 @@ El mensaje de la API es &apos;%1&apos;</translation>
     <message>
         <location filename="../src/Document.cpp" line="93"/>
         <source>Dirty layer</source>
-        <translation>Capa sucia</translation>
+        <translation type="unfinished">Camada temporária</translation>
     </message>
     <message>
         <location filename="../src/Document.cpp" line="96"/>
         <source>Uploaded layer</source>
-        <translation>Capa actualizada</translation>
+        <translation type="unfinished">Camada atualizada</translation>
     </message>
     <message>
         <location filename="../src/Document.cpp" line="255"/>
         <source>Background imagery</source>
-        <translation>Imágenes de Fondo</translation>
+        <translation type="unfinished">Imagens de fundo</translation>
     </message>
 </context>
 <context>
@@ -470,12 +470,12 @@ El mensaje de la API es &apos;%1&apos;</translation>
     <message>
         <location filename="../src/DownloadMapDialog.ui" line="13"/>
         <source>Download</source>
-        <translation>Descargar</translation>
+        <translation>Download</translation>
     </message>
     <message>
         <location filename="../src/DownloadMapDialog.ui" line="31"/>
         <source>Location</source>
-        <translation>Ubicación</translation>
+        <translation>Local</translation>
     </message>
     <message>
         <location filename="../src/DownloadMapDialog.ui" line="39"/>
@@ -485,27 +485,27 @@ El mensaje de la API es &apos;%1&apos;</translation>
     <message>
         <location filename="../src/DownloadMapDialog.ui" line="61"/>
         <source>Current view</source>
-        <translation>Vista actual</translation>
+        <translation>Visão atual</translation>
     </message>
     <message>
         <location filename="../src/DownloadMapDialog.ui" line="73"/>
         <source>Use OSM link</source>
-        <translation>Utilizar enlace OSM</translation>
+        <translation>Utilizar link OSM</translation>
     </message>
     <message>
         <location filename="../src/DownloadMapDialog.ui" line="85"/>
         <source>From the map below (map provided by the OpenStreetMap project)</source>
-        <translation>Del mapa abajo mostrado (mapa proporcionado por el proyecto OpenStreetMap)</translation>
+        <translation>A partir do mapa abaixo (mapas fornecidos pelo projeto OpenStreetMap)</translation>
     </message>
     <message>
         <location filename="../src/DownloadMapDialog.ui" line="97"/>
         <source>Also download raw GPS tracks</source>
-        <translation>Tambien descargar Pistas GPS</translation>
+        <translation>Também baixar pistas GPS</translation>
     </message>
     <message>
         <location filename="../src/DownloadMapDialog.ui" line="104"/>
         <source>Resolve all relations</source>
-        <translation>Resolver todas las relaciones</translation>
+        <translation>Resolver todas as relações</translation>
     </message>
 </context>
 <context>
@@ -516,51 +516,51 @@ El mensaje de la API es &apos;%1&apos;</translation>
         <location filename="../src/Sync/DownloadOSM.cpp" line="482"/>
         <location filename="../src/Sync/DownloadOSM.cpp" line="488"/>
         <source>Download failed</source>
-        <translation>Descarga fallida</translation>
+        <translation>Falha ao baixar</translation>
     </message>
     <message>
         <location filename="../src/Docks/InfoDock.cpp" line="81"/>
         <source>Unexpected http status code (%1)</source>
-        <translation>Código de estado de http inesperado (%1)</translation>
+        <translation>Código de status de http inesperado (%1)</translation>
     </message>
     <message>
         <location filename="../src/Sync/DownloadOSM.cpp" line="208"/>
         <source>error</source>
-        <translation>error</translation>
+        <translation>erro</translation>
     </message>
     <message>
         <location filename="../src/Sync/DownloadOSM.cpp" line="212"/>
         <source>didn&apos;t download enough</source>
-        <translation>No descargó suficiente</translation>
+        <translation>Não baixado suficiente</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/Sync/DownloadOSM.cpp" line="321"/>
         <source>Downloading from OSM (%n bytes)</source>
-        <translation type="unfinished">
-            <numerusform>Descargando desde OSM (%n bytes)</numerusform>
-            <numerusform>Descargando desde OSM (%n bytes)</numerusform>
+        <translation>
+            <numerusform>Baixando de OSM (%n bytes)</numerusform>
+            <numerusform>Baixando de OSM (%n bytes)</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../src/Sync/DownloadOSM.cpp" line="323"/>
         <source>Downloading from OSM (%n kBytes)</source>
-        <translation type="unfinished">
-            <numerusform>Descargando desde OSM (%n kBytes)</numerusform>
-            <numerusform>Descargando desde OSM (%n kBytes)</numerusform>
+        <translation>
+            <numerusform>Baixando de OSM (%n kBytes)</numerusform>
+            <numerusform>Baixando de OSM (%n kBytes)</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../src/Sync/DownloadOSM.cpp" line="444"/>
         <source>Downloading from OSM (connecting)</source>
-        <translation>Descargando desde OSM (conectando)</translation>
+        <translation>Baixando de OSM (conectando)</translation>
     </message>
     <message>
         <location filename="../src/Sync/DownloadOSM.cpp" line="474"/>
         <location filename="../src/Sync/DownloadOSM.cpp" line="485"/>
         <source>Unexpected http status code (%1)
 Server message is &apos;%2&apos;</source>
-        <translation>Código de estado de http inesperado (%1)
-El mensaje del servidor es &apos;%2&apos;</translation>
+        <translation>Código de status de http inesperado (%1)
+A mensagem do servidor foi &apos;%2&apos;</translation>
     </message>
     <message>
         <location filename="../src/Sync/DownloadOSM.cpp" line="476"/>
@@ -568,110 +568,111 @@ El mensaje del servidor es &apos;%2&apos;</translation>
         <source>
 API message is &apos;%1&apos;</source>
         <translation>
-El mensaje de la API es &apos;%1&apos;</translation>
+A mensagem da API foi &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../src/Sync/DownloadOSM.cpp" line="482"/>
         <source>Username/password invalid</source>
-        <translation>Nombre de usuario/contraseña inválido</translation>
+        <translation>Usuário/senha inválidos</translation>
     </message>
     <message>
         <location filename="../src/Sync/DownloadOSM.cpp" line="500"/>
         <source>Unresolved conflicts</source>
-        <translation>Conflictos no resueltos</translation>
+        <translation>Conflitos não resolvidos</translation>
     </message>
     <message>
         <location filename="../src/Sync/DownloadOSM.cpp" line="500"/>
         <source>Please resolve existing conflicts first</source>
-        <translation>Resuelva primero los conflictos existentes</translation>
+        <translation>Por favor, resolva primeiro os conflitos existentes</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportOSM.cpp" line="390"/>
         <location filename="../src/Sync/DownloadOSM.cpp" line="553"/>
         <source>Parsing XML</source>
-        <translation>Analizar XML</translation>
+        <translation>Analizando XML</translation>
     </message>
     <message>
         <location filename="../src/Sync/DownloadOSM.cpp" line="561"/>
         <source>Downloading trackpoints %1-%2</source>
-        <translation>Descargando puntos de ruta %1-%2</translation>
+        <translation>Baixando pontos de pista %1-%2</translation>
     </message>
     <message>
         <location filename="../src/Sync/DownloadOSM.cpp" line="579"/>
         <source>Downloaded track - nodes %1-%2</source>
-        <translation>Ruta descargada - nodos %1-%2</translation>
+        <translation>Estrada baixada - nós %1-%2</translation>
     </message>
     <message>
         <location filename="../src/Sync/DownloadOSM.cpp" line="599"/>
         <location filename="../src/Sync/DownloadOSM.cpp" line="649"/>
         <location filename="../src/Sync/DownloadOSM.cpp" line="755"/>
         <source>%1 download</source>
-        <translation>%1 descarga</translation>
+        <translation>%1 baixados</translation>
     </message>
     <message>
         <location filename="../src/Utils/OsmLink.cpp" line="51"/>
         <source>Zoom factor too low</source>
-        <translation>Factor del zoom muy bajo</translation>
+        <translation>Fator zoom muito baixo</translation>
     </message>
     <message>
         <location filename="../src/Utils/OsmLink.cpp" line="52"/>
         <source>Please use a higher zoom factor!</source>
-        <translation>Por favor, use un factor de ampliacion mas alto!</translation>
+        <translation>Por favor, use um fator zoom maior!</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportOSM.cpp" line="272"/>
         <source>Downloading unresolved %1 of %2</source>
-        <translation>Descargando &apos;no resueltos&apos; %1 de %2</translation>
+        <translation>Baixando não resolvido %1 de %2</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportOSM.cpp" line="281"/>
         <source>Parsing unresolved %1 of %2</source>
-        <translation>Analisis no resuelto %1 de %2</translation>
+        <translation>Analisando não resolvido %1 de %2</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportOSM.cpp" line="397"/>
         <source>Conflicts from %1</source>
-        <translation>Conflictos desde %1</translation>
+        <translation>Conflitos de %1</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportOSM.cpp" line="441"/>
         <source>Conflicts have been detected</source>
-        <translation>Se han detectado conflictos</translation>
+        <translation>Os conflitos têm sido detectados</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportOSM.cpp" line="442"/>
         <source>This means that some of the feature you modified since your last download have since been modified by someone else on the server.
 The features have been duplicated as &quot;conflict_...&quot; on the &quot;Conflicts...&quot; layer.
 Before being able to upload your changes, you will have to manually merge the two versions and remove the one from the &quot;Conflicts...&quot; layer.</source>
-        <translation>Esto significa que algunos de los atributos que ha modificado desde su ultima descarga han sido modificadas por alguien mas en el servidor.Los atributos han sido duplicados como &quot;conflicto...&quot; en las capas &quot;conflictos.
-Antes de que sea capaz de cargar sus cambios,tendra que combinar manualmente las dos versiones y quitar el primero de la capa &quot;conflictos...&quot;</translation>
+        <translation>Isso significa que alguns dos recursos que você modificou desde o seu último download já foram modificado por alguém no servidor.
+Os recursos têm sido duplicados como &quot;conflito...&quot; sobre a camada &quot;Conflitos..&quot;.
+Antes de carregar as alterações, você terá que manualmente mesclar as duas versões e remover uma da camada &quot;Conflitos...&quot;.</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportOSM.cpp" line="458"/>
         <source>Empty roads/relations detected</source>
-        <translation>caminos/relaciones vacios detectados</translation>
+        <translation>Estradas/relações vazias detectadas</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportOSM.cpp" line="459"/>
         <source>Empty roads/relations are probably errors.
 Do you want to mark them for deletion?</source>
-        <translation>Carreteras o relaciones vacías podrían significar errores.
-¿Desea marcarlos para su borrado?</translation>
+        <translation>Estradas/relações vazias são provavelmente erros.
+Você deseja marcá-las para exclusão?</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportOSM.cpp" line="467"/>
         <source>Remove empty feature %1</source>
-        <translation>Remover caracteristica vacia %1</translation>
+        <translation>Remover característica vazia %1</translation>
     </message>
     <message>
         <location filename="../src/Utils/SlippyMapWidget.cpp" line="67"/>
         <source>Downloading %1,%2 (zoom %3)...</source>
-        <translation>Descargando %1,%2 (zoom %3)...</translation>
+        <translation>Baixando %1,%2 (zoom %3)...</translation>
     </message>
     <message>
         <location filename="../src/Sync/DownloadOSM.cpp" line="434"/>
         <source>Downloading...</source>
-        <translation>Descargando...</translation>
+        <translation>Baixando...</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportOSM.cpp" line="384"/>
@@ -682,7 +683,7 @@ Do you want to mark them for deletion?</source>
     <message>
         <location filename="../src/ImportExport/ImportOSM.cpp" line="265"/>
         <source>Downloading unresolved...</source>
-        <translation>Descargando no resueltos...</translation>
+        <translation>Baixando não resolvido...</translation>
     </message>
 </context>
 <context>
@@ -695,7 +696,7 @@ Do you want to mark them for deletion?</source>
     <message>
         <location filename="../src/Layers/LayerWidget.cpp" line="266"/>
         <source>Close</source>
-        <translation>Cerrar</translation>
+        <translation>Fechar</translation>
     </message>
 </context>
 <context>
@@ -708,22 +709,22 @@ Do you want to mark them for deletion?</source>
     <message>
         <location filename="../src/ImportExport/ExportDialog.ui" line="25"/>
         <source>What do you want to export?</source>
-        <translation>¿Qué quieres exportar?</translation>
+        <translation>O que você deseja exportar?</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ExportDialog.ui" line="38"/>
         <source>All visible (i.e. not hidden)</source>
-        <translation>Todos los visibles (i.e. no ocultos)</translation>
+        <translation>Todos visíveis (não ocultos)</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ExportDialog.ui" line="45"/>
         <source>Viewport</source>
-        <translation>Visor</translation>
+        <translation>Janela de exibição</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ExportDialog.ui" line="52"/>
         <source>Selected</source>
-        <translation>Seleccionado</translation>
+        <translation>Selecionado</translation>
     </message>
 </context>
 <context>
@@ -731,47 +732,47 @@ Do you want to mark them for deletion?</source>
     <message>
         <location filename="../src/Docks/FeaturesDock.cpp" line="331"/>
         <source>Features</source>
-        <translation>Atributos</translation>
+        <translation>Recursos</translation>
     </message>
     <message>
         <location filename="../src/Docks/FeaturesDock.cpp" line="332"/>
         <source>Center map</source>
-        <translation>Centrar mapa</translation>
+        <translation>Centro do mapa</translation>
     </message>
     <message>
         <location filename="../src/Docks/FeaturesDock.cpp" line="333"/>
         <source>Center &amp;&amp; Zoom map</source>
-        <translation>Centrar mapa y hacer zoom</translation>
+        <translation>Centro &amp;&amp; Zoom do mapa</translation>
     </message>
     <message>
         <location filename="../src/Docks/FeaturesDock.cpp" line="334"/>
         <source>Download missing children</source>
-        <translation>Descargar hijos perdidos</translation>
+        <translation>Download de crianças desaparecidas</translation>
     </message>
     <message>
         <location filename="../src/Docks/FeaturesDock.cpp" line="340"/>
         <source>Relations</source>
-        <translation>Relaciones</translation>
+        <translation>Relações</translation>
     </message>
     <message>
         <location filename="../src/Docks/FeaturesDock.cpp" line="341"/>
         <source>Roads</source>
-        <translation>Carreteras</translation>
+        <translation>Estradas</translation>
     </message>
     <message>
         <location filename="../src/Docks/FeaturesDock.cpp" line="342"/>
         <source>POI&apos;s</source>
-        <translation>Puntos de Interés</translation>
+        <translation>POI&apos;s</translation>
     </message>
     <message>
         <location filename="../src/Docks/FeaturesDock.cpp" line="343"/>
         <source>All</source>
-        <translation>Todo</translation>
+        <translation>Todos</translation>
     </message>
     <message>
         <location filename="../src/Docks/FeaturesDock.cpp" line="335"/>
         <source>Add to selection</source>
-        <translation>Agregar a seleccion</translation>
+        <translation>Adicionar para seleção</translation>
     </message>
 </context>
 <context>
@@ -779,12 +780,12 @@ Do you want to mark them for deletion?</source>
     <message>
         <location filename="../src/Docks/FeaturesDock.ui" line="14"/>
         <source>DirtyDock</source>
-        <translation>Puerto Sucio</translation>
+        <translation>Porto sujo</translation>
     </message>
     <message>
         <location filename="../src/Docks/FeaturesDock.ui" line="48"/>
         <source>Only features fully within the viewport</source>
-        <translation>Solo caracteristicas compatibles con el puerto de vista</translation>
+        <translation>Apenas características totalmente dentro da janela de exibição</translation>
     </message>
 </context>
 <context>
@@ -792,74 +793,74 @@ Do you want to mark them for deletion?</source>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="23"/>
         <source>Geo Images</source>
-        <translation>Geo Imágenes</translation>
+        <translation>Geo imagens</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="30"/>
         <source>Remove Images</source>
-        <translation>Eliminar Imágenes</translation>
+        <translation>Remover imagens</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="31"/>
         <source>Copy filename to clipboard</source>
-        <translation>Copiar nombre de archivo al portapapeles</translation>
+        <translation>Copiar nome de arquivo para área de transferência</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="209"/>
         <source>No layers</source>
-        <translation>Sin capas</translation>
+        <translation>Sem camadas</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="209"/>
         <source>No suitable layer found. Please first download data from OSM server or open a track.</source>
-        <translation>No se encontró ninguna capa compatible. Por favor, descargue primero los datos desde un servidor OSM o cree una ruta.</translation>
+        <translation>Nenhuma camada compatível encontrada. Por favor, primeiro baixe os dados do servidor OSM ou abra uma rota.</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="227"/>
         <source>Load geotagged Images</source>
-        <translation>Cargar imágenes geoetiquetadas</translation>
+        <translation>Carregar imagens georeferenciadas</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="228"/>
         <source>Select the layer to which the images belong:</source>
-        <translation>Elige la capa a la que corresponden las siguientes imágenes:</translation>
+        <translation>Selecionar a camada a que pertencem as imagens seguintes:</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="245"/>
         <source>Loading Images ...</source>
-        <translation>Cargando imágenes ...</translation>
+        <translation>Carregando imagens ...</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="245"/>
         <source>Abort loading</source>
-        <translation>Abortar carga</translation>
+        <translation>Cancelar carregamento</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="292"/>
         <source>No EXIF header found in image &quot;%1&quot;.
 Do you want to revert to improper file timestamp?</source>
-        <translation>Cabecera EXIF no encontrada en imagen &quot;%1&quot;.
-¿Desea revertir a una fecha de modificación incorrecta?</translation>
+        <translation>Nenhum cabeçalho EXIF encontrado na imagem &quot;%1&quot;.
+Você deseja reverter para uma data de modificação do arquivo incorreto?</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="322"/>
         <source>Specify offset</source>
-        <translation>Especificar desplazamiento</translation>
+        <translation>Especificar distância</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="324"/>
         <source>Position images more to the:</source>
-        <translation>Imágenes en posición más a la:</translation>
+        <translation>Posição das imagnes mais para o:</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="325"/>
         <source>end of the track</source>
-        <translation>fin de la pista</translation>
+        <translation>final da pista</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="326"/>
         <source>beginning of the track</source>
-        <translation>Comienzo de la pista</translation>
+        <translation>início da pista</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="330"/>
@@ -874,41 +875,41 @@ Do you want to revert to improper file timestamp?</source>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="393"/>
         <source>mm &apos;minutes and&apos; ss &apos;seconds&apos;</source>
-        <translation>mm &apos;minutos y&apos; ss &apos;segundos&apos;</translation>
+        <translation>mm &apos;minutos e&apos; ss &apos;segundos&apos;</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="395"/>
         <source>hh &apos;hours,&apos; mm &apos;minutes and&apos; ss &apos;seconds&apos;</source>
-        <translation>hh &apos;horas,&apos; mm &apos;minutos y&apos; ss &apos;segundos&apos;</translation>
+        <translation>hh &apos;horas,&apos; mm &apos;minutos e&apos; ss &apos;segundos&apos;</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="396"/>
         <source>Wrong image?</source>
-        <translation>¿Imagen incorrecta?</translation>
+        <translation>Imagen incorreta?</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="397"/>
         <source>Image &quot;%1&quot; was taken %2 before the next trackpoint was recorded.
 Do you still want to use it?</source>
-        <translation>La imagen &quot;%1&quot; fue tomada %2 antes de que el siguiente punto de ruta fuera grabado.
-¿Deseas seguir usándola?</translation>
+        <translation>A imagem &quot;%1&quot; foi obtida %2 antes do próximo ponto de pista que foi gravado.
+Desejas continuar a usá-lo?</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="398"/>
         <source>Image &quot;%1&quot; was taken %2 after the last trackpoint was recorded.
 Do you still want to use it?</source>
-        <translation>La imagen &quot;%1&quot; fué tomada %2 después de que el último punto de ruta fuera grabado.
-¿Deseas seguir usándolo?</translation>
+        <translation>A imagem &quot;%1&quot; foi obtida %2 depois do último ponto de pista que foi gravado.
+Desejas continuar a usá-lo?</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="255"/>
         <source>No such file</source>
-        <translation>No existe el fichero</translation>
+        <translation>Arquivo não existe</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="255"/>
         <source>Can&apos;t find image &quot;%1&quot;.</source>
-        <translation>No se puede encontrar la imagen «%1».</translation>
+        <translation>Não foi possível localizar imagem &quot;%1&quot;.</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="261"/>
@@ -922,78 +923,78 @@ Do you still want to use it?</source>
         <location filename="../src/GeoImageDock.cpp" line="261"/>
         <source>Error while opening &quot;%2&quot;:
 %1</source>
-        <translation>Error al abrir &quot;%2&quot;:
+        <translation>Erro ao abrir &quot;%2&quot;:
 %1</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="384"/>
         <source>No TrackPoints</source>
-        <translation>Sin puntos de ruta</translation>
+        <translation>Sem pontos de pista</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="384"/>
         <source>No TrackPoints found for image &quot;%1&quot;</source>
-        <translation>Puntos de ruta no encontrados para la imagen &quot;%1&quot;</translation>
+        <translation>Pontos de pista não encontrados para a imagem &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="408"/>
         <source>No geo informations</source>
-        <translation>Sin información geográfica</translation>
+        <translation>Sem informações geográficas</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="408"/>
         <source>Image &quot;%1&quot; is not a geotagged image.</source>
-        <translation>La imagen &quot;%1&quot; no es una imagen geomarcada</translation>
+        <translation>A imagem &quot;%1&quot; não é uma imagem georeferenciada.</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="263"/>
         <location filename="../src/GeoImageDock.cpp" line="438"/>
         <source>Error while loading EXIF-data from &quot;%1&quot;.</source>
-        <translation>Error en la carga de datos EXIF desde &quot;%1&quot;.</translation>
+        <translation>Erro ao carregar dados EXIF a partir de &quot;%1&quot;.</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="292"/>
         <source>No EXIF</source>
-        <translation>Sin datos EXIF</translation>
+        <translation>Sem dados EXIF</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="434"/>
         <source>Error while opening &quot;%1&quot;:
 %2</source>
-        <translation>Error al abrir &quot;%1&quot;:
+        <translation>Erro ao abrir &quot;%1&quot;:
 %2</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="32"/>
         <source>Select next image</source>
-        <translation>Seleccionar siguiente imagen</translation>
+        <translation>Selecionar próxima imagem</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="33"/>
         <source>PgDown</source>
-        <translation>AvPág</translation>
+        <translation>PageDown</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="34"/>
         <source>Select previous image</source>
-        <translation>Seleccionar imagen previa</translation>
+        <translation>Selecionar imagem anterior</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="35"/>
         <source>PgUp</source>
-        <translation>RePág</translation>
+        <translation>PageUp</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="237"/>
         <source>Layer is readonly</source>
-        <translation>Capa de sólo lectura</translation>
+        <translation>Camada apenas leitura</translation>
     </message>
     <message>
         <location filename="../src/GeoImageDock.cpp" line="238"/>
         <source>The used layer is not writeable. Should it be made writeable?
 If not, you can&apos;t load images that belongs to it.</source>
-        <translation>La capa usada no es escribible, ¿ Puede hacerla escribible ?
-Si no, no puedes cargar imágenes que le pertenezcan.</translation>
+        <translation>A camada em uso não é gravável. Deseja torná-la gravável?
+Se não, você não poderá carregar imagens que pertence a ela.</translation>
     </message>
 </context>
 <context>
@@ -1001,33 +1002,33 @@ Si no, no puedes cargar imágenes que le pertenezcan.</translation>
     <message>
         <location filename="../src/GotoDialog.cpp" line="109"/>
         <source>Invalid OSM url</source>
-        <translation>Dirección</translation>
+        <translation>URL OSM inválida</translation>
     </message>
     <message>
         <location filename="../src/GotoDialog.cpp" line="110"/>
         <source>The specified url is invalid!</source>
-        <translation>¡La dirección especificada no es válida!</translation>
+        <translation>A URL especificada não é válida!</translation>
     </message>
     <message>
         <location filename="../src/GotoDialog.cpp" line="118"/>
         <location filename="../src/GotoDialog.cpp" line="127"/>
         <source>Invalid Coordinates format</source>
-        <translation>Formato de Coordenadas inválido</translation>
+        <translation>Formato das coordenadas inválido</translation>
     </message>
     <message>
         <location filename="../src/GotoDialog.cpp" line="119"/>
         <source>Coordinates must be: &apos;&lt;left lon&gt;, &lt;bottom lat&gt;, &lt;right lon&gt;, &lt;top lat&gt;&apos;</source>
-        <translation>Formato de las coordenadas: &apos;&lt;left lon&gt;, &lt;botton lat&gt;, &lt;right lon&gt;, &lt;top lat&gt;&apos;</translation>
+        <translation>Formato das coordenadas: &apos;&lt;left lon&gt;, &lt;botton lat&gt;, &lt;right lon&gt;, &lt;top lat&gt;&apos;</translation>
     </message>
     <message>
         <location filename="../src/GotoDialog.cpp" line="128"/>
         <source>Coordinates must be: &apos;&lt;center lat&gt;, &lt;center lon&gt;, &lt;span lat&gt;, &lt;span lon&gt;&apos;</source>
-        <translation>Formato de las coordenadas: &apos;&lt;center lat&gt;, &lt;center lon&gt;, &lt;span lat&gt;, &lt;span lon&gt;&apos;</translation>
+        <translation>Formato das coordenadas: &apos;&lt;center lat&gt;, &lt;center lon&gt;, &lt;span lat&gt;, &lt;span lon&gt;&apos;</translation>
     </message>
     <message>
         <location filename="../src/GotoDialog.ui" line="13"/>
         <source>Go To</source>
-        <translation>Ir A</translation>
+        <translation>Ir para</translation>
     </message>
     <message>
         <location filename="../src/GotoDialog.ui" line="27"/>
@@ -1037,7 +1038,7 @@ Si no, no puedes cargar imágenes que le pertenezcan.</translation>
     <message>
         <location filename="../src/GotoDialog.ui" line="60"/>
         <source>OSM permalink</source>
-        <translation>Enlace permanente OSM</translation>
+        <translation>Link permanente OSM</translation>
     </message>
     <message>
         <location filename="../src/GotoDialog.ui" line="87"/>
@@ -1052,23 +1053,23 @@ Si no, no puedes cargar imágenes que le pertenezcan.</translation>
     <message>
         <location filename="../src/GotoDialog.ui" line="133"/>
         <source>Info</source>
-        <translation>Información</translation>
+        <translation>Informações</translation>
     </message>
     <message>
         <location filename="../src/GotoDialog.ui" line="147"/>
         <source>OSM API Url</source>
-        <translation>Dirección de API OSM</translation>
+        <translation>URL da API OSM</translation>
     </message>
     <message>
         <location filename="../src/GotoDialog.ui" line="174"/>
         <source>OSM XAPI url</source>
-        <translation>Dirección de XAPI OSM</translation>
+        <translation>URL da XAPI OSM</translation>
     </message>
     <message>
         <location filename="../src/GotoDialog.ui" line="196"/>
         <location filename="../src/GotoDialog.ui" line="209"/>
         <source>Search</source>
-        <translation>Buscar</translation>
+        <translation>Pesquisar</translation>
     </message>
 </context>
 <context>
@@ -1076,12 +1077,12 @@ Si no, no puedes cargar imágenes que le pertenezcan.</translation>
     <message>
         <location filename="../src/Layers/LayerWidget.cpp" line="281"/>
         <source>None</source>
-        <translation>Ninguno</translation>
+        <translation>Nenhum</translation>
     </message>
     <message>
         <location filename="../src/Layers/LayerWidget.cpp" line="287"/>
         <source>Shape adapter</source>
-        <translation>Adaptar forma</translation>
+        <translation>Adaptador de forma</translation>
     </message>
     <message>
         <location filename="../src/Layers/LayerWidget.cpp" line="362"/>
@@ -1101,7 +1102,7 @@ Si no, no puedes cargar imágenes que le pertenezcan.</translation>
         <location filename="../src/Layers/ImageMapLayer.cpp" line="135"/>
         <location filename="../src/Layers/ImageMapLayer.cpp" line="159"/>
         <source>Map - None</source>
-        <translation>Mapa - Ninguno</translation>
+        <translation>Mapa - Nenhum</translation>
     </message>
     <message>
         <location filename="../src/Layers/ImageMapLayer.cpp" line="145"/>
@@ -1116,7 +1117,7 @@ Si no, no puedes cargar imágenes que le pertenezcan.</translation>
     <message>
         <location filename="../src/Layers/ImageMapLayer.cpp" line="167"/>
         <source>Map - OSB Background</source>
-        <translation>Mapa - Fondo OSB</translation>
+        <translation>Mapa - Fundo OSB</translation>
     </message>
     <message>
         <location filename="../src/Layers/ImageMapLayer.cpp" line="172"/>
@@ -1130,24 +1131,24 @@ Si no, no puedes cargar imágenes que le pertenezcan.</translation>
         <location filename="../src/Docks/InfoDock.cpp" line="24"/>
         <location filename="../src/Docks/InfoDock.cpp" line="94"/>
         <source>Info</source>
-        <translation>Información</translation>
+        <translation>Informações</translation>
     </message>
 </context>
 <context>
     <name>Layer</name>
-    <message numerus="yes">
-        <location filename="../src/Layers/Layer.cpp" line="487"/>
-        <source>%n features</source>
-        <translation type="unfinished">
-            <numerusform>%n caracteristica</numerusform>
-            <numerusform>%n caracteristicas</numerusform>
-        </translation>
-    </message>
     <message>
         <location filename="../src/Layers/Layer.cpp" line="487"/>
         <source>Layer</source>
         <comment>Size</comment>
         <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../src/Layers/Layer.cpp" line="487"/>
+        <source>%n features</source>
+        <translation type="unfinished">
+            <numerusform>%n característica</numerusform>
+            <numerusform>%n características</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -1156,28 +1157,28 @@ Si no, no puedes cargar imágenes que le pertenezcan.</translation>
         <location filename="../src/Docks/LayerDock.cpp" line="222"/>
         <location filename="../src/Docks/LayerDock.cpp" line="312"/>
         <source>Show All</source>
-        <translation>Mostrar Todos</translation>
+        <translation>Mostrar todas</translation>
     </message>
     <message>
         <location filename="../src/Docks/LayerDock.cpp" line="227"/>
         <location filename="../src/Docks/LayerDock.cpp" line="316"/>
         <source>Hide All</source>
-        <translation>Ocultar Todo</translation>
+        <translation>Ocultar todas</translation>
     </message>
     <message>
         <location filename="../src/Docks/LayerDock.cpp" line="355"/>
         <source>Layers</source>
-        <translation>Capas</translation>
+        <translation>Camadas</translation>
     </message>
     <message>
         <location filename="../src/Docks/LayerDock.cpp" line="361"/>
         <source>All</source>
-        <translation>Todo</translation>
+        <translation>Todos</translation>
     </message>
     <message>
         <location filename="../src/Docks/LayerDock.cpp" line="362"/>
         <source>Default</source>
-        <translation>Predeterminado</translation>
+        <translation>Padrão</translation>
     </message>
     <message>
         <location filename="../src/Docks/LayerDock.cpp" line="363"/>
@@ -1187,22 +1188,22 @@ Si no, no puedes cargar imágenes que le pertenezcan.</translation>
     <message>
         <location filename="../src/Docks/LayerDock.cpp" line="364"/>
         <source>Tracks</source>
-        <translation>Trazas</translation>
+        <translation>Estradas</translation>
     </message>
     <message>
         <location filename="../src/Docks/LayerDock.cpp" line="234"/>
         <source>Readonly All</source>
-        <translation>Todos Solo lectura</translation>
+        <translation>Todas apenas leitura</translation>
     </message>
     <message>
         <location filename="../src/Docks/LayerDock.cpp" line="239"/>
         <source>Readonly None</source>
-        <translation>Ninguno Solo lectura</translation>
+        <translation>Nenhuma apenas leitura</translation>
     </message>
     <message>
         <location filename="../src/Docks/LayerDock.cpp" line="246"/>
         <source>Close</source>
-        <translation>Cerrar</translation>
+        <translation>Fechar</translation>
     </message>
 </context>
 <context>
@@ -1210,17 +1211,17 @@ Si no, no puedes cargar imágenes que le pertenezcan.</translation>
     <message>
         <location filename="../src/Layers/LayerWidget.cpp" line="153"/>
         <source>Visible</source>
-        <translation>Visible</translation>
+        <translation>Visível</translation>
     </message>
     <message>
         <location filename="../src/Layers/LayerWidget.cpp" line="159"/>
         <source>Readonly</source>
-        <translation>Sólo Lectura</translation>
+        <translation>Apenas leitura</translation>
     </message>
     <message>
         <location filename="../src/Layers/LayerWidget.cpp" line="167"/>
         <source>Low</source>
-        <translation>Bajo</translation>
+        <translation>Baixo</translation>
     </message>
     <message>
         <location filename="../src/Layers/LayerWidget.cpp" line="167"/>
@@ -1235,7 +1236,7 @@ Si no, no puedes cargar imágenes que le pertenezcan.</translation>
     <message>
         <location filename="../src/Layers/LayerWidget.cpp" line="170"/>
         <source>Opacity</source>
-        <translation>Opacidad</translation>
+        <translation>Opacidade</translation>
     </message>
 </context>
 <context>
@@ -1243,7 +1244,7 @@ Si no, no puedes cargar imágenes que le pertenezcan.</translation>
     <message>
         <location filename="../src/Utils/MDiscardableDialog.cpp" line="25"/>
         <source>Don&apos;t ask me this again</source>
-        <translation>No me pregunte esto de nuevo</translation>
+        <translation>Não me pregunte isto novamente</translation>
     </message>
 </context>
 <context>
@@ -1252,8 +1253,7 @@ Si no, no puedes cargar imágenes que le pertenezcan.</translation>
         <location filename="../src/Main.cpp" line="161"/>
         <source>Merkaartor v%1%2(%3)
 Loading plugins...</source>
-        <translation>Merkaartor v%1%2(%3)
-Cargando plugins...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Main.cpp" line="163"/>
@@ -1265,8 +1265,7 @@ Loading plugins...</source>
         <location filename="../src/Main.cpp" line="197"/>
         <source>Merkaartor v%1%2(%3)
 Initializing...</source>
-        <translation>Merkaartor v%1%2(%3)
-Iniciando...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Main.cpp" line="199"/>
@@ -1280,28 +1279,28 @@ Initializing...</source>
     <message>
         <location filename="../src/Commands/DocumentCommands.cpp" line="138"/>
         <source>Cascaded cleanup</source>
-        <translation>Limpieza en cascada</translation>
+        <translation>Limpeza em cascata</translation>
     </message>
     <message>
         <location filename="../src/Commands/FeatureCommands.cpp" line="66"/>
         <location filename="../src/Commands/FeatureCommands.cpp" line="74"/>
         <location filename="../src/Commands/FeatureCommands.cpp" line="188"/>
         <source>Set Tag &apos;%1=%2&apos; on %3</source>
-        <translation>Establecer etiqueta &apos;%1=%2&apos; en %3</translation>
+        <translation>Definir rótulo &apos;%1=%2&apos; em %3</translation>
     </message>
     <message>
         <location filename="../src/Commands/FeatureCommands.cpp" line="307"/>
         <location filename="../src/Commands/FeatureCommands.cpp" line="396"/>
         <location filename="../src/Docks/PropertiesDock.cpp" line="682"/>
         <source>Clear Tag &apos;%1&apos; on %2</source>
-        <translation>Borrar etiqueta «%1» en %2</translation>
+        <translation>Apagar rótulo &apos;%1&apos; em %2</translation>
     </message>
     <message>
         <location filename="../src/Commands/NodeCommands.cpp" line="17"/>
         <location filename="../src/Commands/NodeCommands.cpp" line="25"/>
         <location filename="../src/Commands/NodeCommands.cpp" line="110"/>
         <source>Move node %1</source>
-        <translation>Mover nodo %1</translation>
+        <translation>Mover nó %1</translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportNMEA.cpp" line="44"/>
@@ -1311,112 +1310,112 @@ Initializing...</source>
     <message>
         <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="103"/>
         <source>Create Area %1</source>
-        <translation>Crear área %1</translation>
+        <translation>Criar área %1</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="138"/>
         <source>Area: Create Road %1</source>
-        <translation>Area: Crear camino %1</translation>
+        <translation>Área: Criar via %1</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="169"/>
         <source>Area: Finish Road %1</source>
-        <translation>Area: Terminar Camino %1</translation>
+        <translation>Área: Concluir via %1</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="186"/>
         <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="199"/>
         <source>Area: Add node %1 to Road %2</source>
-        <translation>Area: Añadir nodo %1 a camino %2</translation>
+        <translation>Área: Adicionar nó %1 a via %2</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="165"/>
         <source>Add nodes to double-way Road %1</source>
-        <translation>Añadir nodos a camino de doble via %1</translation>
+        <translation>Adicionar nós a via de duplo sentido %1</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="220"/>
         <source>Create double-way Road %1</source>
-        <translation>Crear carretera de doble vía %1</translation>
+        <translation>Criar via de duplo sentido %1</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateNodeInteraction.cpp" line="82"/>
         <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="219"/>
         <source>Create node in Road: %1</source>
-        <translation>Crear nodo en carretera: %1</translation>
+        <translation>Criar nó na via: %1</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateNodeInteraction.cpp" line="98"/>
         <source>Create point %1</source>
-        <translation>Crear punto %1</translation>
+        <translation>Criar ponto %1</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateRoundaboutInteraction.cpp" line="87"/>
         <source>Create Roundabout %1</source>
-        <translation>Crear rotonda %1</translation>
+        <translation>Criar desvio %1</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="130"/>
         <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="181"/>
         <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="194"/>
         <source>Create Node %1 in Road %2</source>
-        <translation>Crear nodo %1 en carretera %2</translation>
+        <translation>Criar nó %1 na via %2</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="163"/>
         <source>Create Road: %1</source>
-        <translation>Crear carretera: %1</translation>
+        <translation>Criar via: %1</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="171"/>
         <source>Create Node: %1</source>
-        <translation>Crear nodo: %1</translation>
+        <translation>Criar nó: %1</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="197"/>
         <source>Add Node %1 to Road %2</source>
-        <translation>Añadir nodo %1 to camino %2</translation>
+        <translation>Adicionar nó %1 a via %2</translation>
     </message>
     <message>
         <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="174"/>
         <source>Nodes at the same position found.</source>
-        <translation>Encontrados varios nodos en la misma posición.</translation>
+        <translation>Encontrados vários nós na mesma posição.</translation>
     </message>
     <message>
         <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="175"/>
         <source>Do you want to merge all nodes at the drop position?</source>
-        <translation>¿Desea combinar todos los nodos en el punto de reunión?</translation>
+        <translation>Deseja unir todos os nós em um ponto de reunião?</translation>
     </message>
     <message>
         <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="184"/>
         <location filename="../src/MainWindow.cpp" line="1490"/>
         <source>Merge Nodes into %1</source>
-        <translation>Combinar nodos en %1</translation>
+        <translation>Uni nós em %1</translation>
     </message>
     <message>
         <location filename="../src/Interactions/EditInteraction.cpp" line="223"/>
         <source>Remove feature %1</source>
-        <translation>Eliminar característica %1</translation>
+        <translation>Remover característica %1</translation>
     </message>
     <message>
         <location filename="../src/Interactions/EditInteraction.cpp" line="253"/>
         <source>Reverse Road %1</source>
-        <translation>Revertir ruta %1</translation>
+        <translation>Inverter via %1</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="162"/>
         <source>tile %v / %m</source>
-        <translation type="unfinished"></translation>
+        <translation>imagem %v / %m</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="294"/>
         <source>Properties...</source>
-        <translation>Propiedades...</translation>
+        <translation>Propriedades...</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="322"/>
         <source>Low</source>
-        <translation>Bajo</translation>
+        <translation>Baixo</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="322"/>
@@ -1431,40 +1430,40 @@ Initializing...</source>
     <message>
         <location filename="../src/MainWindow.cpp" line="525"/>
         <source>Clipboard invalid</source>
-        <translation>Contenido inválido en el portapapeles</translation>
+        <translation>Conteúdo inválido para a área de transferência</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="782"/>
         <source>Open track file</source>
-        <translation>Abrir archivo de pista</translation>
+        <translation>Abrir arquivo de via</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="808"/>
         <location filename="../src/Sync/SyncOSM.cpp" line="36"/>
         <source>Unsaved changes</source>
-        <translation>Cambios no guardados</translation>
+        <translation>Alterações não salvas</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="809"/>
         <source>The current map contains unsaved changes that will be lost when starting a new one.
 Do you want to cancel starting a new map or continue and discard the old changes?</source>
-        <translation>El mapa actual contiene cambios no guardados que serán perdidos al empezar uno nuevo.
-¿Deseas cancelar o quieres continuar y descartar los cambios?</translation>
+        <translation>O mapa atual contem alterações não salvas que serão perdidas quando se iniciar um novo.
+Deseja cancelar o início de um novo mapa ou continuar e descartar as alterações?</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="837"/>
         <source>Waypoints</source>
-        <translation>Puntos de referencia</translation>
+        <translation>Pontos da via</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="857"/>
         <source>Track %1</source>
-        <translation>Traza %1</translation>
+        <translation>Via %1</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="895"/>
         <source>Big Fat Copyright Warning</source>
-        <translation>Enorme advertencia de copyright</translation>
+        <translation>Aviso de advertência de copyright</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="896"/>
@@ -1498,107 +1497,108 @@ Si no estás seguro, deberías preguntar en las listas &quot;legal&quot; o &quot
     <message>
         <location filename="../src/MainWindow.cpp" line="948"/>
         <source>No valid file</source>
-        <translation>Archivo no válido</translation>
+        <translation>Arquivo não é válido</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="948"/>
         <location filename="../src/MainWindow.cpp" line="1835"/>
         <source>%1 could not be opened.</source>
-        <translation>%1 no pudo ser abierto</translation>
+        <translation>%1 não pode ser aberto.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1058"/>
         <source>Open track files</source>
-        <translation>Abrir archivos de pistas</translation>
+        <translation>Abrir arquivos de vias</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1070"/>
         <source>Old Qt version detected</source>
-        <translation>Detectada versión antigua de Qt</translation>
+        <translation>Versão antiga de Qt detectada</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1071"/>
         <source>Your setup uses Qt %1, which contains various known errors in uploading data to OpenStreetMap leading to 401 server response codes. Are you sure you want to continue (which is not recommended).
 For more information see http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor</source>
-        <translation>Tu configuración usa Qt %1, el que contiene varios errores conocidos en subidas de datos a OpenStreetMap que conducen a códigos 401 en las respuestas de los servidores.</translation>
+        <translation>Sua configuração utiliza Qt %1, que contém vários erros conhecidos em transferir dados para o OpenStreetMap levando ao código 401 como resposta do servidor. Tem certeza que deseja continuar (o que não é recomendado)?
+Para mais informações consulte http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1080"/>
         <source>Upload OSM</source>
-        <translation>Subir OSM</translation>
+        <translation>Enviar OSM</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1080"/>
         <source>You don&apos;t seem to have specified your
 OpenStreetMap username and password.
 Do you want to do this now?</source>
-        <translation>Parece que no has especificado todavía tu
-nombre de usuario y contraseña OpenStreetMap
-¿Deseas hacerlo ahora?</translation>
+        <translation>Parece que você não especificou o seu
+nome de usuário e senha do OpenStreetMap.
+Você deseja fazer isso agora?</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1101"/>
         <location filename="../src/MainWindow.cpp" line="1115"/>
         <location filename="../src/MainWindow.cpp" line="1128"/>
         <source>Error downloading</source>
-        <translation>Error descargando</translation>
+        <translation>Erro ao baixar</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1101"/>
         <location filename="../src/MainWindow.cpp" line="1115"/>
         <location filename="../src/MainWindow.cpp" line="1128"/>
         <source>The map could not be downloaded</source>
-        <translation>El mapa no pudo ser descargado</translation>
+        <translation>O mapa não pode ser baixado</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1385"/>
         <source>Join Roads</source>
-        <translation>Unir carreteras</translation>
+        <translation>Unir vias</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1398"/>
         <source>Split Roads</source>
-        <translation>Dividir carreteras</translation>
+        <translation>Dividir vias</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1411"/>
         <source>Break Roads</source>
-        <translation>Romper Carreteras</translation>
+        <translation>Interromper vias</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1459"/>
         <source>Add Street Numbers</source>
-        <translation>Añadir números de calles</translation>
+        <translation>Adicionar números de rua</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1475"/>
         <source>Align Nodes</source>
-        <translation>Alinear nodos</translation>
+        <translation>Alinhar nós</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1505"/>
         <source>Detach Node %1</source>
-        <translation>Separar nodo %1</translation>
+        <translation>Separar nó %1</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1519"/>
         <source>Add member to relation</source>
-        <translation>Añadir miembro a la relación</translation>
+        <translation>Adicionar membro à relação</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1531"/>
         <source>Remove member from relation</source>
-        <translation>Eliminar miembro de la relación</translation>
+        <translation>Remover membro da relação</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1546"/>
         <source>Create Relation %1</source>
-        <translation>Crear relación %1</translation>
+        <translation>Criar relação %1</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1596"/>
         <source>Save map style</source>
-        <translation>Guardar estilo de mapa</translation>
+        <translation>Salvar estilo de mapa</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1596"/>
@@ -1609,69 +1609,69 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.cpp" line="1607"/>
         <source>Load map style</source>
-        <translation>Cargar estilo de mapa</translation>
+        <translation>Carregar estilo de mapa</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1771"/>
         <source>Save Merkaartor document</source>
-        <translation>Guardar documento Merkaartor</translation>
+        <translation>Salvar documento Merkaartor</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1771"/>
         <source>untitled</source>
-        <translation>sin nombre</translation>
+        <translation>Sem título</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1771"/>
         <source>Merkaartor documents Files (*.mdc)</source>
-        <translation>Archivos de documentos Merkaartor (*.mdc)</translation>
+        <translation>Arquivos de documentos Merkaartor (*.mdc)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1814"/>
         <source>Unable to open save file</source>
-        <translation>No se puede abrir el archivo</translation>
+        <translation>Não foi possível abrir arquivo salvo</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1814"/>
         <source>%1 could not be opened for writing.</source>
-        <translation>%1 no pudo ser abierto para su escritura.</translation>
+        <translation>%1 não pode ser aberto para escrita.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1835"/>
         <location filename="../src/MainWindow.cpp" line="1841"/>
         <location filename="../src/MainWindow.cpp" line="1851"/>
         <source>Invalid file</source>
-        <translation>Archivo inválido</translation>
+        <translation>Arquivo inválido</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1841"/>
         <source>%1 is not a valid XML file.</source>
-        <translation>%1 no es un archivo XML válido</translation>
+        <translation>%1 não é um arquivo XML válido.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1851"/>
         <source>%1 is not a valid Merkaartor document.</source>
-        <translation>%1 no es un documento de Merkaartor válido</translation>
+        <translation>%1 não é um documento de Merkaartor válido.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1909"/>
         <source>Export OSM</source>
-        <translation>Export arOSM</translation>
+        <translation>Exportar OSM</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1909"/>
         <source>OSM Files (*.osm)</source>
-        <translation>Archivos OSM (*.osm)</translation>
+        <translation>Arquivos OSM (*.osm)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1928"/>
         <source>Export Binary OSM</source>
-        <translation>Exportar Binarios OSM</translation>
+        <translation>Exportar binários OSM</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1928"/>
         <source>OSM Binary Files (*.osb)</source>
-        <translation>Archivos Binarios OSM (*.osb)</translation>
+        <translation>Arquivos binários OSM (*.osb)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1953"/>
@@ -1681,7 +1681,7 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.cpp" line="1953"/>
         <source>GPX Files (*.gpx)</source>
-        <translation>Archivos GPX (*.gpx)</translation>
+        <translation>Arquivos GPX (*.gpx)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1978"/>
@@ -1691,83 +1691,83 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.cpp" line="1978"/>
         <source>KML Files (*.kml)</source>
-        <translation>Archivos KML (*.kml)</translation>
+        <translation>Arquivos KML (*.kml)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="2224"/>
         <source>%1 (int)</source>
-        <translation>%1 (entero)</translation>
+        <translation>%1 (inteiro)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="2276"/>
         <source>Add Bookmark</source>
-        <translation>Añadir marcador</translation>
+        <translation>Adicionar marcador</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="2277"/>
         <source>Specify the name of the bookmark.</source>
-        <translation>Especificar el nombre del marcador</translation>
+        <translation>Especificar o nome do marcador.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="2280"/>
         <source>Invalid bookmark name</source>
-        <translation>Nombre de marcador inválido</translation>
+        <translation>Nome de marcador inválido</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="2281"/>
         <source>Bookmark cannot be blank.</source>
-        <translation>El marcador no puede estar en blanco.</translation>
+        <translation>O marcador não pode estar em branco.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="2285"/>
         <source>Warning: Bookmark name already exists</source>
-        <translation>Aviso: El nombre del Marcador ya existe</translation>
+        <translation>Aviso: O nome do marcador já existe</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="2286"/>
         <source>Enter a new one, keep the same to overwrite or cancel.</source>
-        <translation>Introducir uno nuevo, mantener el mismo para sobreescribir o cancelar.</translation>
+        <translation>Digite um novo, mantenha o mesmo para substituir ou cancelar.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="2324"/>
         <source>Remove Bookmark</source>
-        <translation>Eliminar Marcador</translation>
+        <translation>Remover marcador</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="2325"/>
         <source>Select the bookmark to remove.</source>
-        <translation>Seleccionar el marcador a eliminar.</translation>
+        <translation>Selecionar o marcador para remover.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="2524"/>
         <source>GPS error</source>
-        <translation>Error del GPS</translation>
+        <translation>Erro de GPS</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="2525"/>
         <source>Unable to open GPS port.</source>
-        <translation>Incapaz de abrir el puerto GPS.</translation>
+        <translation>Não foi possível abrir a porta GPS.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="2534"/>
         <source>Open NMEA log file</source>
-        <translation>Abrir archivo de registro NMEA</translation>
+        <translation>Abrir arquivo de registro NMEA</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="2648"/>
         <source>Save Tag Templates</source>
-        <translation>Guardar plantillas de etiquetado</translation>
+        <translation>Salvar modelos rotulados</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="2648"/>
         <source>Merkaartor tag templates (*.mat)</source>
-        <translation>Plantillas de etiquetas Merkaartor (*.mat)</translation>
+        <translation>Modelos de rótulos Merkaartor (*.mat)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="2660"/>
         <location filename="../src/MainWindow.cpp" line="2674"/>
         <source>Open Tag Templates</source>
-        <translation>Plantillas de Etiqueta Abierta</translation>
+        <translation>Abrir modelos de rótulos</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="14"/>
@@ -1777,18 +1777,18 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="32"/>
         <source>&amp;Help</source>
-        <translation>Ay&amp;uda</translation>
+        <translation>A&amp;juda</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="38"/>
         <source>&amp;Create</source>
-        <translation>&amp;Crear</translation>
+        <translation>&amp;Criar</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="51"/>
         <location filename="../src/MainWindow.ui" line="618"/>
         <source>&amp;Road</source>
-        <translation>&amp;Carretera</translation>
+        <translation>V&amp;ia</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="62"/>
@@ -1798,7 +1798,7 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="82"/>
         <source>&amp;View</source>
-        <translation>&amp;Ver</translation>
+        <translation>E&amp;xibir</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="86"/>
@@ -1808,22 +1808,22 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="94"/>
         <source>Set &amp;projection</source>
-        <translation>Establecer &amp;proyección</translation>
+        <translation>Definir &amp;projeção</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="99"/>
         <source>Show directional &amp;Arrows</source>
-        <translation>Mostrar flech&amp;as de dirección</translation>
+        <translation>Mostrar set&amp;as direcionais</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="107"/>
         <source>Set Areas &amp;opacity</source>
-        <translation>Establecer &amp;opacidad de Áreas</translation>
+        <translation>Definirr &amp;opacidade de áreas</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="137"/>
         <source>&amp;File</source>
-        <translation>&amp;Archivo</translation>
+        <translation>&amp;Arquivo</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="141"/>
@@ -1833,17 +1833,17 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="151"/>
         <source>Re&amp;cent open</source>
-        <translation>Abrir re&amp;ciente</translation>
+        <translation>Abrir re&amp;cente</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="156"/>
         <source>Recen&amp;t import</source>
-        <translation>Importado recien&amp;te</translation>
+        <translation>Importar recen&amp;te</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="179"/>
         <source>T&amp;ools</source>
-        <translation>H&amp;erramientas</translation>
+        <translation>F&amp;erramentas</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="183"/>
@@ -1853,24 +1853,24 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="193"/>
         <source>Tag templates</source>
-        <translation>Plantillas de etiquetas</translation>
+        <translation>Modelos de rótulos</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="213"/>
         <location filename="../src/MainWindow.ui" line="636"/>
         <source>&amp;Node</source>
-        <translation>&amp;Nodo</translation>
+        <translation>&amp;Nó</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="221"/>
         <source>&amp;Window</source>
-        <translation>&amp;Ventana</translation>
+        <translation>&amp;Janela</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="225"/>
         <location filename="../src/MainWindow.ui" line="914"/>
         <source>&amp;Docks</source>
-        <translation>&amp;Puertos</translation>
+        <translation>&amp;Barras</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="244"/>
@@ -1881,7 +1881,7 @@ nombre de usuario y contraseña OpenStreetMap
         <location filename="../src/MainWindow.ui" line="250"/>
         <location filename="../src/MainWindow.ui" line="939"/>
         <source>&amp;Layers</source>
-        <translation>&amp;Capas</translation>
+        <translation>&amp;Camadas</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="257"/>
@@ -1891,23 +1891,23 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="270"/>
         <source>Rel&amp;ation</source>
-        <translation>Rel&amp;ación</translation>
+        <translation>Rel&amp;ação</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="295"/>
         <location filename="../src/MainWindow.ui" line="347"/>
         <source>Tool Bar</source>
-        <translation>Barra de Herramientas</translation>
+        <translation>Barra de ferramentas</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="388"/>
         <source>&amp;Quit</source>
-        <translation>&amp;Salir</translation>
+        <translation>&amp;Sair</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="393"/>
         <source>&amp;About</source>
-        <translation>&amp;Acerca de</translation>
+        <translation>So&amp;bre</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="402"/>
@@ -1917,7 +1917,7 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="405"/>
         <source>Create a new document and import a file</source>
-        <translation>Crear un documento nuevo e importar un archivo</translation>
+        <translation>Criar um novo documento e importar um arquivo</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="408"/>
@@ -1927,7 +1927,7 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="417"/>
         <source>Zoom &amp;all</source>
-        <translation>Zoom &amp;todo</translation>
+        <translation>Zoom em &amp;tudo</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="420"/>
@@ -1937,13 +1937,13 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="425"/>
         <source>Zoom &amp;window</source>
-        <translation>Zoom &amp;ventana</translation>
+        <translation>Zoom na &amp;janela</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="428"/>
         <location filename="../src/MainWindow.ui" line="431"/>
         <source>Zoom window</source>
-        <translation>Hacer zoom a la ventana</translation>
+        <translation>Zoom na janela</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="434"/>
@@ -1953,7 +1953,7 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="443"/>
         <source>Zoom &amp;out</source>
-        <translation>A&amp;lejar</translation>
+        <translation>&amp;Diminuir zoom</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="446"/>
@@ -1963,13 +1963,13 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="455"/>
         <source>Zoom &amp;in</source>
-        <translation>A&amp;cercar</translation>
+        <translation>&amp;Aumentar zoom</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="458"/>
         <location filename="../src/MainWindow.ui" line="461"/>
         <source>Zoom in</source>
-        <translation>Acercar</translation>
+        <translation>Aumentar zoom</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="464"/>
@@ -1981,13 +1981,13 @@ nombre de usuario y contraseña OpenStreetMap
         <location filename="../src/MainWindow.ui" line="472"/>
         <location filename="../src/MainWindow.ui" line="475"/>
         <source>Curved link</source>
-        <translation>Enlace curvo</translation>
+        <translation>Link curvo</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="487"/>
         <location filename="../src/MainWindow.ui" line="991"/>
         <source>&amp;Undo</source>
-        <translation>&amp;Deshacer</translation>
+        <translation>&amp;Desfazer</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="490"/>
@@ -1997,7 +1997,7 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="499"/>
         <source>&amp;Redo</source>
-        <translation>&amp;Rehacer</translation>
+        <translation>&amp;Refazer</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="502"/>
@@ -2022,17 +2022,17 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="529"/>
         <source>Import a file into the current document</source>
-        <translation>Importar un fichero en el documento actual</translation>
+        <translation>Importar um arquivo no documento atual</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="538"/>
         <source>&amp;Download</source>
-        <translation>&amp;Descargar</translation>
+        <translation>&amp;Download</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="541"/>
         <source>Download map data for a new area</source>
-        <translation>Descargar datos de mapa para un área nueva</translation>
+        <translation>Baixar dados de mapa para uma nova área</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="544"/>
@@ -2042,13 +2042,13 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="549"/>
         <source>Link</source>
-        <translation>Enlace</translation>
+        <translation>Link</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="552"/>
         <location filename="../src/MainWindow.ui" line="555"/>
         <source>Create link</source>
-        <translation>Crear enlace</translation>
+        <translation>Criar link</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="558"/>
@@ -2058,7 +2058,7 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="570"/>
         <source>&amp;Select</source>
-        <translation>&amp;Seleccionar</translation>
+        <translation>&amp;Selecionar</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="573"/>
@@ -2068,12 +2068,12 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="582"/>
         <source>&amp;Upload</source>
-        <translation>&amp;Cargar</translation>
+        <translation>&amp;Enviar</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="585"/>
         <source>Upload changes to the server</source>
-        <translation>Subir cambios al servidor</translation>
+        <translation>Enviar alterações ao servidor</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="588"/>
@@ -2083,22 +2083,22 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="600"/>
         <source>R&amp;emove</source>
-        <translation>&amp;Eliminar</translation>
+        <translation>R&amp;emover</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="603"/>
         <source>Remove selected features</source>
-        <translation>Eliminar características seleccionadas</translation>
+        <translation>Remover características selecionadas</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="606"/>
         <source>Del</source>
-        <translation>Borrar</translation>
+        <translation>Delete</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="621"/>
         <source>Create new road</source>
-        <translation>Crear carretera nueva</translation>
+        <translation>Criar uma nova via</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="624"/>
@@ -2108,7 +2108,7 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="639"/>
         <source>Create new node</source>
-        <translation>Crear nuevo nodo</translation>
+        <translation>Criar um novo nó</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="642"/>
@@ -2118,17 +2118,17 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="654"/>
         <source>&amp;Reverse</source>
-        <translation>&amp;Revertir</translation>
+        <translation>Inve&amp;rter</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="657"/>
         <source>Reverse road direction</source>
-        <translation>Revertir direccion de ruta</translation>
+        <translation>Inverter direção da via</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="666"/>
         <source>&amp;Go To...</source>
-        <translation>&amp;Ir a...</translation>
+        <translation>&amp;Ir para...</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="669"/>
@@ -2138,42 +2138,42 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="674"/>
         <source>&amp;Double carriage way</source>
-        <translation>&amp;Doble via de transporte</translation>
+        <translation>Via de &amp;duplo sentido</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="677"/>
         <source>Create Double carriage way</source>
-        <translation>Crear vía de doble sentido</translation>
+        <translation>Criar via de duplo sentido</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="682"/>
         <source>&amp;Roundabout</source>
-        <translation>&amp;Rotonda</translation>
+        <translation>Des&amp;vio</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="685"/>
         <source>Create Roundabout</source>
-        <translation>Crear rotonda</translation>
+        <translation>Criar desvio</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="694"/>
         <source>&amp;New</source>
-        <translation>&amp;Nuevo</translation>
+        <translation>&amp;Novo</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="697"/>
         <source>Create a new document</source>
-        <translation>Crear un documento nuevo</translation>
+        <translation>Criar um novo documento</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="706"/>
         <source>&amp;Split</source>
-        <translation>&amp;Partir</translation>
+        <translation>&amp;Dividir</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="709"/>
         <source>Split road into separate (connected) roads</source>
-        <translation>Camino dividido en caminos separados (conectados)</translation>
+        <translation>Dividir via em estradas separadas (conectadas)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="712"/>
@@ -2188,7 +2188,7 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="724"/>
         <source>Join connected roads to a single road</source>
-        <translation>Unir carreteras conectadas en una única carretera</translation>
+        <translation>Unir vias conectadas em uma única estrada</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="727"/>
@@ -2198,17 +2198,17 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="736"/>
         <source>&amp;Break apart</source>
-        <translation>&amp;Separar en dos partes</translation>
+        <translation>&amp;Separar</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="739"/>
         <source>Break</source>
-        <translation>Romper</translation>
+        <translation>Separar</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="742"/>
         <source>Break apart connected roads</source>
-        <translation>Separar carreteras conectadas</translation>
+        <translation>Separar vias conectadas</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="745"/>
@@ -2218,12 +2218,12 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="750"/>
         <source>Re&amp;lation</source>
-        <translation>Re&amp;lación</translation>
+        <translation>Re&amp;lação</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="753"/>
         <source>Create Relation</source>
-        <translation>Crear relación</translation>
+        <translation>Criar relação</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="765"/>
@@ -2233,7 +2233,7 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="768"/>
         <source>Create new area</source>
-        <translation>Crear área nueva</translation>
+        <translation>Criar uma nova área</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="773"/>
@@ -2244,87 +2244,87 @@ nombre de usuario y contraseña OpenStreetMap
         <location filename="../src/MainWindow.ui" line="778"/>
         <location filename="../src/MainWindow.ui" line="1378"/>
         <source>&amp;Save...</source>
-        <translation>&amp;Guardar...</translation>
+        <translation>&amp;Salvar...</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="783"/>
         <location filename="../src/MainWindow.ui" line="1368"/>
         <source>&amp;Load...</source>
-        <translation>&amp;Cargar...</translation>
+        <translation>&amp;Carregar...</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="788"/>
         <source>&amp;Curved road</source>
-        <translation>Ruta &amp;curvada</translation>
+        <translation>Via &amp;curva</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="797"/>
         <source>&amp;Preferences...</source>
-        <translation>&amp;Preferencias...</translation>
+        <translation>&amp;Preferências...</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="802"/>
         <location filename="../src/MainWindow.ui" line="810"/>
         <source>&amp;All...</source>
-        <translation>&amp;Todo</translation>
+        <translation>&amp;Todas...</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="805"/>
         <location filename="../src/MainWindow.ui" line="813"/>
         <source>Export all visible layers to a file</source>
-        <translation>Exportar todas las capas visibles a un archivo</translation>
+        <translation>Exportar todas as camadas visíveis para um arquivo</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="822"/>
         <source>&amp;Find...</source>
-        <translation>&amp;Encontar...</translation>
+        <translation>&amp;Localizar...</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="825"/>
         <source>Find</source>
-        <translation>Encontrar</translation>
+        <translation>Localizar</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="828"/>
         <source>Find and select items</source>
-        <translation>Encontrar y seleccionar elementos</translation>
+        <translation>Localizar e selecionar itens</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="833"/>
         <location filename="../src/MainWindow.ui" line="841"/>
         <source>&amp;Viewport...</source>
-        <translation>&amp;Verpuerto...</translation>
+        <translation>&amp;Janela de exibição...</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="836"/>
         <location filename="../src/MainWindow.ui" line="844"/>
         <source>Export the features in the viewport to a file</source>
-        <translation>Exportar las características en pantalla a un fichero</translation>
+        <translation>Exportar as características da janela de exibição para um arquivo</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="849"/>
         <source>&amp;Add...</source>
-        <translation>&amp;Añadir...</translation>
+        <translation>&amp;Adicionar...</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="854"/>
         <source>&amp;Remove...</source>
-        <translation>Elimina&amp;r...</translation>
+        <translation>&amp;Remover...</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="859"/>
         <source>&amp;Merge</source>
-        <translation>Co&amp;mbinar</translation>
+        <translation>&amp;Unir</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="862"/>
         <source>Node Merge</source>
-        <translation>Combinacion de Nodo</translation>
+        <translation>Unir nó</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="865"/>
         <source>Merge the selected nodes (first selected will remain)</source>
-        <translation>Combinar los nodos seleccionados (el primero permanecerá seleccionado)</translation>
+        <translation>Unir os nós selecionados (o primeiro permanecerá selecionado)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="868"/>
@@ -2334,17 +2334,17 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="873"/>
         <source>Save &amp;As...</source>
-        <translation>Guardar &amp;Como...</translation>
+        <translation>Salvar &amp;como...</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="882"/>
         <source>&amp;Save</source>
-        <translation>&amp;Guardar</translation>
+        <translation>&amp;Salvar</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="885"/>
         <source>Save to file</source>
-        <translation>Guardar a archivo</translation>
+        <translation>Salvar para arquivo</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="888"/>
@@ -2354,18 +2354,18 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="897"/>
         <source>Download more</source>
-        <translation>Descargar más</translation>
+        <translation>Baixar mais</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="900"/>
         <source>Download more map data for the current area</source>
-        <translation>Descargar más datos de mapa para el área catual</translation>
+        <translation>Baixar mais dados de mapa para a área atual</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="903"/>
         <location filename="../src/MainWindow.ui" line="906"/>
         <source>Download the current view to the previous download layer</source>
-        <translation>Descargar la vista actual a la capa de descarga anterior</translation>
+        <translation>Baixar a visualização atual para a camada baixada anterior</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="909"/>
@@ -2375,13 +2375,13 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="922"/>
         <source>&amp;Properties</source>
-        <translation>&amp;Propiedades</translation>
+        <translation>&amp;Propriedades</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="925"/>
         <location filename="../src/MainWindow.ui" line="928"/>
         <source>Hide/Show the Properties dock</source>
-        <translation>Ocultar/Mostrar la barra de Propiedades</translation>
+        <translation>Ocultar/Mostrar a barra de propriedades</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="931"/>
@@ -2392,7 +2392,7 @@ nombre de usuario y contraseña OpenStreetMap
         <location filename="../src/MainWindow.ui" line="942"/>
         <location filename="../src/MainWindow.ui" line="945"/>
         <source>Hide/Show the Layers dock</source>
-        <translation>Ocultar/Mostrar la barra de Capas</translation>
+        <translation>Ocultar/Mostrar a barra de camadas</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="948"/>
@@ -2402,13 +2402,13 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="956"/>
         <source>&amp;Info</source>
-        <translation>&amp;Información</translation>
+        <translation>&amp;Informações</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="959"/>
         <location filename="../src/MainWindow.ui" line="962"/>
         <source>Hide/Show the Info dock</source>
-        <translation>Ocultar/Mostrar la barra de Información</translation>
+        <translation>Ocultar/Mostrar a barra de informação</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="965"/>
@@ -2418,17 +2418,17 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="974"/>
         <source>&amp;Align</source>
-        <translation>&amp;Alinear</translation>
+        <translation>&amp;Alinhar</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="977"/>
         <source>Align nodes</source>
-        <translation>Alinear nodos</translation>
+        <translation>Alinhar nós</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="980"/>
         <source>Align selected nodes. First two selected give the line.</source>
-        <translation>Alinear nodos seleccionados.Los dos primeros seleccionados dan la linea</translation>
+        <translation>Alinhar os nós selecionados. Os dois primeiros selecionados dão o alinhamento.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="983"/>
@@ -2439,7 +2439,7 @@ nombre de usuario y contraseña OpenStreetMap
         <location filename="../src/MainWindow.ui" line="994"/>
         <location filename="../src/MainWindow.ui" line="997"/>
         <source>Hide/Show the Undo dock</source>
-        <translation>Ocultar/Mostrar la barra de Acciones</translation>
+        <translation>Ocultar/Mostrar a barra de ações</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1000"/>
@@ -2449,7 +2449,7 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="1008"/>
         <source>Show &amp;downloaded areas</source>
-        <translation>Mostrar áreas &amp;descargadas</translation>
+        <translation>Mostrar áreas baixa&amp;das</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1011"/>
@@ -2464,12 +2464,12 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="1023"/>
         <source>Copy selected features and tags to the clipboard</source>
-        <translation>Copiar las características seleccionadas y las etiquetas al portapapeles</translation>
+        <translation>Copiar as características selecionadas e os rótulos para a área de transferência</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1026"/>
         <source>Copy the selected feature&apos;s tags to the clipboard; if the feature is a trackpoint, copy the coordinates, too.</source>
-        <translation>Copiar las etiquetas de las características seleccionadas al portapapeles; si la característica es un señalizador, copiar también las coordenadas.</translation>
+        <translation>Copiar os rótulos das características selecionadas para a área de transferência; se a característica é um ponto de via, copiar as coordenadas também.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1029"/>
@@ -2479,12 +2479,12 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="1034"/>
         <source>Paste Tags (&amp;Overwrite)</source>
-        <translation>Pegar Etiquetas (&amp;Reescribir)</translation>
+        <translation>Colar rótulos (&amp;Substituir)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1037"/>
         <source>Paste (and overwrite) the tags in the clipboard to the selected feature.</source>
-        <translation>Pegar (y sobreescribir) las etiquetas en el portapapeles a la funcion seleccionada</translation>
+        <translation>Colar (e substituir) os rótulos na área de transferência para o recurso selecionado.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1040"/>
@@ -2494,22 +2494,22 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="1049"/>
         <source>Paste Tags (&amp;Merge)</source>
-        <translation>Pegar Etiquetas (&amp;Combinar)</translation>
+        <translation>Colar rótulos (&amp;Unir)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1052"/>
         <source>Paste tags</source>
-        <translation>Pegar Etiquetas</translation>
+        <translation>Colar rótulos</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1055"/>
         <source>Paste tags from the clipboard (Merge with existing tags)</source>
-        <translation>Pegar etiquetas desde el portapapeles (Combinar con etiquetas existentes)</translation>
+        <translation>Colar rótulos da área de transferência (Unir com os rótulos existentes)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1058"/>
         <source>Merge the tags in the clipboard with the ones of the selected feature.</source>
-        <translation>Combinar las marcas en el portapapeles con las de la característica seleccionada.</translation>
+        <translation>Unir os rótulos na área de transferência com os do recurso selecionado.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1061"/>
@@ -2520,27 +2520,27 @@ nombre de usuario y contraseña OpenStreetMap
         <location filename="../src/MainWindow.ui" line="1066"/>
         <location filename="../src/MainWindow.ui" line="1071"/>
         <source>Selected...</source>
-        <translation>Seleccionado...</translation>
+        <translation>Selecionado...</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1080"/>
         <source>Paste Features</source>
-        <translation>Pegar Características</translation>
+        <translation>Colar características</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1083"/>
         <source>Paste</source>
-        <translation>Pegar</translation>
+        <translation>Colar</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1086"/>
         <source>Paste features from the clipboard</source>
-        <translation>Pegar caracteristicas desde el portapapeles</translation>
+        <translation>Colar características da área de transferência</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1089"/>
         <source>Paste the features in the clipboard; If the features&apos;id are already in the document, overwrite them.</source>
-        <translation>Pegar las caracteristicas en el portapapeles; si las caracteristicas ya estan en el documento, reescribalas</translation>
+        <translation>Colar as caracteristicas na área de transferência; se as caracteríssticas já estão no documento, substitua-as.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1092"/>
@@ -2556,18 +2556,18 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="1105"/>
         <source>OSM (Binary)</source>
-        <translation>OSM (Binario)</translation>
+        <translation>OSM (Binário)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1113"/>
         <source>Commit feature to the dirty layer</source>
-        <translation>Confirmar característica en la capa temporal</translation>
+        <translation>Confirmar característica para a camanda temporária</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1116"/>
         <location filename="../src/MainWindow.ui" line="1119"/>
         <source>Commit the selected feature from a non-uploadable layer (e.g.Track or Extract) to the dirty layer, ready for upload</source>
-        <translation>Confirmar la característica seleccionada desde una capa no-cargable (p. ej. Pista o Extracto) a la capa temporal, lista para cargar.</translation>
+        <translation>Confirmar a característica selecionada de uma camada não carregável (ex.: Pista ou Extracto) para a camada temporária, pronta para o envio</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1124"/>
@@ -2582,18 +2582,18 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="1134"/>
         <source>Toggle Toolbar</source>
-        <translation>Activar/desactivar barra de herramientas</translation>
+        <translation>Ativar/desativar barra de ferramentas</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1137"/>
         <location filename="../src/MainWindow.ui" line="1140"/>
         <source>Hide/Show the Toolbar</source>
-        <translation>Ocultar/Mostrar la Barra de Herramientas</translation>
+        <translation>Ocultar/Mostrar a barra de ferramentas</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1145"/>
         <source>Hide All</source>
-        <translation>Ocultar Todo</translation>
+        <translation>Ocultar todas</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1148"/>
@@ -2604,12 +2604,12 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="1153"/>
         <source>Show All</source>
-        <translation>Mostrar Todos</translation>
+        <translation>Mostrar todas</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1164"/>
         <source>&amp;Image layer</source>
-        <translation>Capa de &amp;imagen</translation>
+        <translation>Camada de &amp;imagem</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1169"/>
@@ -2624,7 +2624,7 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="1182"/>
         <source>Show track &amp;points</source>
-        <translation>Mostrar pistas &amp;puntos</translation>
+        <translation>Mostrar &amp;pontos de via</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1185"/>
@@ -2634,7 +2634,7 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="1193"/>
         <source>Show &amp;names</source>
-        <translation>Mostrar &amp;nombres</translation>
+        <translation>Mostrar &amp;nomes</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1196"/>
@@ -2654,12 +2654,12 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="1209"/>
         <source>&amp;Replay...</source>
-        <translation>&amp;Reproducir...</translation>
+        <translation>&amp;Reproduzir...</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1212"/>
         <source>Replay GPS</source>
-        <translation>Reproducir GPS</translation>
+        <translation>Reproduzir GPS</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1220"/>
@@ -2670,7 +2670,7 @@ nombre de usuario y contraseña OpenStreetMap
         <location filename="../src/MainWindow.ui" line="1223"/>
         <location filename="../src/MainWindow.ui" line="1226"/>
         <source>Hide/Show the GPS dock</source>
-        <translation>Ocultar/Mostrar la barra GPS</translation>
+        <translation>Ocultar/Mostrar a barra GPS</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1229"/>
@@ -2680,22 +2680,22 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="1237"/>
         <source>S&amp;top</source>
-        <translation>D&amp;etener</translation>
+        <translation>P&amp;arar</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1240"/>
         <source>Stop GPS</source>
-        <translation>Detener GPS</translation>
+        <translation>Parar GPS</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1248"/>
         <source>&amp;Center on GPS</source>
-        <translation>&amp;Centrar en GPS</translation>
+        <translation>&amp;Centrar no GPS</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1256"/>
         <source>Show track &amp;segments</source>
-        <translation>Mostrar pistas &amp;segmentos</translation>
+        <translation>Mostrar &amp;segmentos da via</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1259"/>
@@ -2715,7 +2715,7 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="1278"/>
         <source>Show &amp;relations</source>
-        <translation>Mostrar &amp;relaciones</translation>
+        <translation>Mostrar &amp;relações</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1281"/>
@@ -2725,12 +2725,12 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="1289"/>
         <source>Show roads background</source>
-        <translation>Mostrar las carreteras de fondo</translation>
+        <translation>Mostrar vias do fundo</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1297"/>
         <source>Show roads boundary</source>
-        <translation>Mostrar el límite de las carreteras</translation>
+        <translation>Mostrar vias de fronteira</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1305"/>
@@ -2741,12 +2741,12 @@ nombre de usuario y contraseña OpenStreetMap
         <location filename="../src/MainWindow.ui" line="1316"/>
         <location filename="../src/MainWindow.ui" line="1319"/>
         <source>Record</source>
-        <translation>Grabar</translation>
+        <translation>Gravar</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1322"/>
         <source>Record GPS</source>
-        <translation>Grabar GPS</translation>
+        <translation>Gravar GPS</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1333"/>
@@ -2761,13 +2761,13 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="1344"/>
         <source>G&amp;eoImage</source>
-        <translation>G&amp;eoImagen</translation>
+        <translation>G&amp;eoImagem</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1347"/>
         <location filename="../src/MainWindow.ui" line="1350"/>
         <source>Hide/Show the GeoImage dock</source>
-        <translation>Ocultar/Mostrar la barra de GeoImágenes</translation>
+        <translation>Ocultar/Mostrar a barra de geoimagens</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1353"/>
@@ -2777,27 +2777,27 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="1358"/>
         <source>World OSB manager...</source>
-        <translation>Gestor de World OSB...</translation>
+        <translation>Gerenciador OSB Wolrd...</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1363"/>
         <source>&amp;Shortcut Editor...</source>
-        <translation>&amp;Editor de Atajos...</translation>
+        <translation>&amp;Editor de atalhos...</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1373"/>
         <source>&amp;Merge...</source>
-        <translation>Co&amp;mbinar...</translation>
+        <translation>&amp;Unir...</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1383"/>
         <source>&amp;Add member</source>
-        <translation>&amp;Añadir miembro</translation>
+        <translation>&amp;Adicionar membro</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1388"/>
         <source>&amp;Remove member</source>
-        <translation>Elimina&amp;r miembro</translation>
+        <translation>&amp;Remover membro</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1396"/>
@@ -2807,32 +2807,32 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/MainWindow.ui" line="1404"/>
         <source>for &amp;Oneway roads</source>
-        <translation>para &amp;Pistas de un camino</translation>
+        <translation>para vias de mã&amp;o única</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1412"/>
         <source>&amp;Always</source>
-        <translation>&amp;Siempre</translation>
+        <translation>&amp;Sempre</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1421"/>
         <source>&amp;Detach</source>
-        <translation>&amp;Detalle</translation>
+        <translation>&amp;Separar</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1424"/>
         <source>Detach node from a road</source>
-        <translation>Separar nodo de una carretera</translation>
+        <translation>Separar nó de uma via</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1427"/>
         <source>Detach a node from a Road</source>
-        <translation>Separar nodo de una carretera</translation>
+        <translation>Separar um nó de uma via</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1439"/>
         <source>&amp;Work Offline</source>
-        <translation>&amp;Trabajar desconectado</translation>
+        <translation>&amp;Trabalhar desconectado</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1444"/>
@@ -2848,12 +2848,17 @@ nombre de usuario y contraseña OpenStreetMap
         <location filename="../src/MainWindow.ui" line="1455"/>
         <location filename="../src/MainWindow.ui" line="1458"/>
         <source>Hide/Show the Styles dock</source>
-        <translation>Ocultar/Mostrar la barra de Estilos</translation>
+        <translation>Ocultar/Mostrar a barra de estilos</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1550"/>
         <source>Add street &amp;numbers (Karlsruhe scheme)</source>
-        <translation>Agregar &amp;números de calle (Karlsruhe scheme)</translation>
+        <translation>Adicionar &amp;número de rua (esquema Karlsruhe)</translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.ui" line="1558"/>
+        <source>Show &amp;virtual nodes</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportGPX.cpp" line="280"/>
@@ -2868,27 +2873,27 @@ nombre de usuario y contraseña OpenStreetMap
     <message>
         <location filename="../src/Features/Relation.cpp" line="804"/>
         <source>Relation Modified %1</source>
-        <translation>Relacion Modificada %1</translation>
+        <translation>Relação modificada %1</translation>
     </message>
     <message>
         <location filename="../src/Features/Way.cpp" line="800"/>
         <source>Do you want to delete the children nodes also?</source>
-        <translation>¿Desea eliminar también los nodos hijo?</translation>
+        <translation>Você deseja excluir também os nós filhos?</translation>
     </message>
     <message>
         <location filename="../src/Docks/PropertiesDock.cpp" line="716"/>
         <source>Remove member &apos;%1&apos; on %2</source>
-        <translation>Eliminar miembro &apos;%1&apos; en %2</translation>
+        <translation>Remover membro &apos;%1&apos; em %2</translation>
     </message>
     <message>
         <location filename="../src/Sync/SyncOSM.cpp" line="16"/>
         <source>Unresolved conflicts</source>
-        <translation>Conflictos no resueltos</translation>
+        <translation>Conflitos não resolvidos</translation>
     </message>
     <message>
         <location filename="../src/Sync/SyncOSM.cpp" line="16"/>
         <source>Please resolve existing conflicts first</source>
-        <translation>Resuelva primero los conflictos existentes</translation>
+        <translation>Por favor, resolva primeiro os conflitos existentes</translation>
     </message>
     <message>
         <location filename="../src/Sync/SyncOSM.cpp" line="37"/>
@@ -2901,42 +2906,42 @@ Do you want to do this now?</source>
         <location filename="../src/TagModel.cpp" line="133"/>
         <location filename="../src/TagModel.cpp" line="164"/>
         <source>Set Tags on %1</source>
-        <translation>Establecer etiquetas en %1</translation>
+        <translation>Definir rótulos em %1</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="164"/>
         <source>Add a hole.</source>
-        <translation>Añadir un agujero.</translation>
+        <translation>Adicionar um buraco.</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="165"/>
         <source>Do you want to add a(nother) hole to this area?</source>
-        <translation>¿Desea añadir un agujero (u otro) a este área?</translation>
+        <translation>Você deseja adicionar um (outro) buraco a esta área?</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="314"/>
         <source>Cannot load Projections file</source>
-        <translation>No se puede cargar archivo proyecciones</translation>
+        <translation>Não foi possível carregar arquivo de projeções</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="314"/>
         <source>&quot;Projections.xml&quot; could not be opened anywhere. Aborting.</source>
-        <translation>&quot;Projections.xml&quot; no se puede abrir en cualquier lugar. Abortando.</translation>
+        <translation>&quot;Projections.xml&quot; não pode ser aberto em qualquer lugar. Cancelando.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1437"/>
         <source>Create Junction</source>
-        <translation>Crear Salida</translation>
+        <translation>Criar junção</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="2387"/>
         <source>Invalid projection</source>
-        <translation>Poyeccion invalida</translation>
+        <translation>Projeção inválida</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="2387"/>
         <source>Unable to set projection &quot;%1&quot;.</source>
-        <translation>No se puede estabecler proyección &quot;%1&quot;</translation>
+        <translation>Não foi possível definir projeção &quot;%1&quot;.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1461"/>
@@ -2966,38 +2971,38 @@ Do you want to do this now?</source>
     <message>
         <location filename="../src/MainWindow.ui" line="1494"/>
         <source>Camera</source>
-        <translation>Cámara</translation>
+        <translation>Casa</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1499"/>
         <source>Create &amp;Junction</source>
-        <translation>Crear &amp;Salida</translation>
+        <translation>Criar &amp;junção</translation>
     </message>
     <message>
         <location filename="../src/Features/Way.cpp" line="799"/>
         <source>Delete Children.</source>
-        <translation>Eliminar Infantes.</translation>
+        <translation>Excluir filhos.</translation>
     </message>
     <message>
         <location filename="../src/TagModel.cpp" line="131"/>
         <location filename="../src/TagModel.cpp" line="162"/>
         <source>Set Tags on multiple features</source>
-        <translation>Establecer etiquetas en multiples funciones</translation>
+        <translation>Definir rótulos em múltiplas funções</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateAreaInteraction.cpp" line="36"/>
         <source>Create Area Interaction</source>
-        <translation>Crear Area de Interaccion</translation>
+        <translation>Criar área de interação</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateDoubleWayInteraction.cpp" line="44"/>
         <source>Create double way Interaction</source>
-        <translation>Crear via de doble interaccion</translation>
+        <translation>Criar via de dupla interação</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateNodeInteraction.cpp" line="31"/>
         <source>Create node Interaction</source>
-        <translation>Crear nodo de interaccion</translation>
+        <translation>Criar interação em nó</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreatePolygonInteraction.cpp" line="30"/>
@@ -3007,62 +3012,62 @@ Do you want to do this now?</source>
     <message>
         <location filename="../src/Interactions/CreatePolygonInteraction.cpp" line="35"/>
         <source>Create Polygon Interaction</source>
-        <translation>Crear Poligono de Interaccion</translation>
+        <translation>Criar interação em polígono</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreatePolygonInteraction.cpp" line="86"/>
         <source>Create Polygon %1</source>
-        <translation>Crear polígono %1</translation>
+        <translation>Criar polígono %1</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateRoundaboutInteraction.cpp" line="43"/>
         <source>Create roundabout Interaction</source>
-        <translation>Crear interaccion en rotonda</translation>
+        <translation>Criar interação em desvio</translation>
     </message>
     <message>
         <location filename="../src/Interactions/CreateSingleWayInteraction.cpp" line="44"/>
         <source>Create way Interaction</source>
-        <translation>Crear via de interaccion</translation>
+        <translation>Criar interação em via</translation>
     </message>
     <message>
         <location filename="../src/Interactions/EditInteraction.cpp" line="63"/>
         <source>Edit Interaction</source>
-        <translation>Editar Interaccion</translation>
+        <translation>Editar interação</translation>
     </message>
     <message>
         <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="123"/>
         <source>Move Nodes</source>
-        <translation>Mover nodos</translation>
+        <translation>Mover nós</translation>
     </message>
     <message>
         <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="127"/>
         <source>Move Node %1</source>
-        <translation>Mover nodo %1</translation>
+        <translation>Mover nó %1</translation>
     </message>
     <message>
         <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="37"/>
         <source>LEFT-CLICK to select;LEFT-DRAG to move</source>
-        <translation>CLICK IZQUIERDO para seleccionar;ARRASTRE IZQUIERDO para mover</translation>
+        <translation>CLIQUE para selecionar;CLIQUE+ARRASTE para mover</translation>
     </message>
     <message>
         <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="42"/>
         <source>Move node Interaction</source>
-        <translation>Mover nodo de interaccion</translation>
+        <translation>Mover nó de interação</translation>
     </message>
     <message>
         <location filename="../src/Interactions/RotateInteraction.cpp" line="37"/>
         <source>HOVER to select;LEFT-DRAG to rotate/scale</source>
-        <translation type="unfinished"></translation>
+        <translation>MANTER SOBRE para selecionar;CLIQUE+ARRASTE para rotacionar/escalar</translation>
     </message>
     <message>
         <location filename="../src/Interactions/RotateInteraction.cpp" line="42"/>
         <source>Rotate Interaction</source>
-        <translation>Rotar interaccion</translation>
+        <translation>Girar interação</translation>
     </message>
     <message>
         <location filename="../src/Interactions/RotateInteraction.cpp" line="126"/>
         <source>Scale/Rotate Nodes</source>
-        <translation>Scalar/rotar nodos</translation>
+        <translation>Escalar/girar nós</translation>
     </message>
     <message>
         <location filename="../src/Interactions/ZoomInteraction.cpp" line="23"/>
@@ -3072,32 +3077,32 @@ Do you want to do this now?</source>
     <message>
         <location filename="../src/Interactions/ZoomInteraction.cpp" line="26"/>
         <source>Zoom Interaction</source>
-        <translation>Zoom interactivo</translation>
+        <translation>Interação do zoom</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1340"/>
         <source>Create Polygon</source>
-        <translation>Crear polígono</translation>
+        <translation>Criar polígono</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1340"/>
         <source>Specify the number of sides</source>
-        <translation>Especificar el numero de lados</translation>
+        <translation>Especificar o número de lados</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1424"/>
         <source>Force Feature upload</source>
-        <translation>Forzar descarga de características</translation>
+        <translation>Forçar envio do recurso</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1110"/>
         <source>&amp;Force Upload</source>
-        <translation>Carga &amp;forzada</translation>
+        <translation>&amp;Forçar envio</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1511"/>
         <source>Rotate</source>
-        <translation>Rotar</translation>
+        <translation>Girar</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1514"/>
@@ -3107,64 +3112,59 @@ Do you want to do this now?</source>
     <message>
         <location filename="../src/MainWindow.ui" line="1519"/>
         <source>Polygon</source>
-        <translation>Poligono</translation>
+        <translation>Polígono</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1524"/>
         <source>Rectangle</source>
-        <translation>Rectangulo</translation>
+        <translation>Retângulo</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1529"/>
         <source>Add new Image layer</source>
-        <translation>Añadir nuevas capas de imagenes</translation>
+        <translation>Adicionar nova camada de imagem</translation>
     </message>
     <message>
         <location filename="../src/Interactions/EditInteraction.cpp" line="56"/>
         <source>LEFT-CLICK to select;RIGHT-CLICK to pan;CTRL-LEFT-CLICK to toggle selection;SHIFT-LEFT-CLICK to add to selection;LEFT-DRAG for area selection;CTRL-RIGHT-DRAG for zoom;</source>
-        <translation>CLIC-IZQUIERDO para seleccionar; CLIC-DERECHO para desplazarse; CTRL-CLIC-IZQUIERDO para cambiar la selección; SHIFT-CLIC-IZQUIERDO para añadadir selección; ARRASTRAR-IZQUIERDA para seleccionar área; CTRL-ARRASTRAR-DERECHA para zoom;</translation>
+        <translation>CLIQUE para selecionar;CLIQUE BOTÃO DIREITO para deslocar;CTRL+CLIQUE para ativar/desativar seleção;SHIFT+CLIQUE para adicionar à seleção;CLIQUE+ARRASTE para selecionar uma área;CTRL DIREITO+ARRATE para dar zoom;</translation>
     </message>
     <message>
         <location filename="../src/Interactions/EditInteraction.cpp" line="58"/>
         <source>CLICK to select/move;CTRL-CLICK to toggle selection;SHIFT-CLICK to add to selection;SHIFT-DRAG for area selection;CTRL-DRAG for zoom;</source>
-        <translation>CLICK para mover/seleccionar;CTRL-CLICK para activar/desactivar la selección;SHIFT-CLICK para añadir a la selección;SHIFT-ARRASTRE para seleccionar un área;CTRL-ARRASTRE para hacer zoom;</translation>
+        <translation>CLIQUE para mover/selecionar;CTRL+CLIQUE para ativar/desativar a seleção;SHIFT+CLIQUE para adicionar à seleção;SHIFT+ARRASTE para selecionar uma área;CTRL+ARRASTE para dar zoom;</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="525"/>
         <source>Clipboard do not contain valid data.</source>
-        <translation>Portapapeles no contiene datos validos</translation>
+        <translation>A área de transferência não contem dados válidos.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1441"/>
         <source>Multiple intersection.</source>
-        <translation>Intersección múltiple</translation>
+        <translation>Cruzamentos múltiplos.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1442"/>
         <source>Those roads have multiple intersections.
 Do you still want to create a junction for each one (Unwanted junctions can still be deleted afterhand)?</source>
-        <translation>Las vías tienen múltiples intersecciones.
-¿Todavía desea crear una unión para cada uno (los cruces no deseados puede ser suprimidos después)?</translation>
+        <translation>Essas vias têm cruzamentos múltiplos.
+Você ainda deseja criar uma junção para cada uma (cruzamentos indesejados podem ainda serem excluídos depois da mão)?</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1534"/>
         <source>Paste Feature(s)</source>
-        <translation>Pegar caracteristica o caracteristicas</translation>
+        <translation>Colar recurso(s)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.ui" line="1545"/>
         <source>Features</source>
-        <translation>Atributos</translation>
+        <translation>Recursos</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="2726"/>
         <source>Warning! Could not load the Merkaartor translations for the &quot;%1&quot; language. Switching to default english.</source>
-        <translation>¡Precaución! no se puede cargar la traducción de Merkaartor al &quot;%1&quot;. Cambiando al inglés por defecto.</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.ui" line="1558"/>
-        <source>Show &amp;virtual nodes</source>
-        <translation>Mostrar nodos &amp;virtuales</translation>
+        <translation>Aviso! Não foi possível carregar as traduções do Merkaartor para o idioma &quot;%1&quot;. Alternando para o inglês padrão.</translation>
     </message>
 </context>
 <context>
@@ -3172,17 +3172,17 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/Features/Feature.cpp" line="819"/>
         <source>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; by &lt;b&gt;%2&lt;/b&gt;</source>
-        <translation>&lt;i&gt;Ultimo: &lt;/i&gt;&lt;b&gt;%1&lt;/b&amp;gt; by &lt;b&gt;%2&lt;/b&amp;gt;</translation>
+        <translation>&lt;i&gt;Último: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt; by &lt;b&gt;%2&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../src/Features/Feature.cpp" line="821"/>
         <source>&lt;i&gt;last: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt;</source>
-        <translation>&lt;i&gt;Ultimo: &lt;/i&gt;&lt;b&gt;%1&lt;/b&amp;gt;</translation>
+        <translation>&lt;i&gt;Último: &lt;/i&gt;&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../src/Features/Feature.cpp" line="828"/>
         <source>History</source>
-        <translation>Historial</translation>
+        <translation>Histórico</translation>
     </message>
     <message>
         <location filename="../src/Features/Feature.cpp" line="831"/>
@@ -3192,59 +3192,59 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/Features/Feature.cpp" line="834"/>
         <source>Referenced by relation</source>
-        <translation>Referenciada por relacion</translation>
+        <translation>Referenciada por relação</translation>
     </message>
     <message>
         <location filename="../src/Features/Relation.cpp" line="621"/>
         <source>size</source>
-        <translation>tamaño</translation>
+        <translation>tamanho</translation>
     </message>
     <message>
         <location filename="../src/Features/Relation.cpp" line="624"/>
         <location filename="../src/Features/Way.cpp" line="1131"/>
         <source>Topleft</source>
-        <translation>Arriba a la izquierda</translation>
+        <translation>No topo à esquerda</translation>
     </message>
     <message>
         <location filename="../src/Features/Relation.cpp" line="626"/>
         <location filename="../src/Features/Way.cpp" line="1133"/>
         <source>Botright</source>
-        <translation>Botright</translation>
+        <translation>Abaixo à direita</translation>
     </message>
     <message>
         <location filename="../src/Features/Relation.cpp" line="628"/>
         <source>Relation</source>
-        <translation>Relación</translation>
+        <translation>Relação</translation>
     </message>
     <message>
         <location filename="../src/Features/Relation.cpp" line="783"/>
         <source>Role</source>
-        <translation>Rol</translation>
+        <translation>Função</translation>
     </message>
     <message>
         <location filename="../src/Features/Relation.cpp" line="785"/>
         <source>Member</source>
-        <translation>Miembro</translation>
+        <translation>Membro</translation>
     </message>
     <message>
         <location filename="../src/Features/Way.cpp" line="1126"/>
         <source>Length</source>
-        <translation>Longitud</translation>
+        <translation>Comprimento</translation>
     </message>
     <message>
         <location filename="../src/Features/Way.cpp" line="1128"/>
         <source>Size</source>
-        <translation>Tamaño</translation>
+        <translation>Tamanho</translation>
     </message>
     <message>
         <location filename="../src/Features/Way.cpp" line="1128"/>
         <source>%1 nodes</source>
-        <translation>nodos %1</translation>
+        <translation>nós %1</translation>
     </message>
     <message>
         <location filename="../src/Features/Way.cpp" line="1135"/>
         <source>Way</source>
-        <translation>Dirección</translation>
+        <translation>Direção</translation>
     </message>
     <message>
         <location filename="../src/Features/Way.cpp" line="1135"/>
@@ -3254,7 +3254,7 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/Features/Node.cpp" line="481"/>
         <source>timestamp</source>
-        <translation>marcador de hora</translation>
+        <translation>data de modificação</translation>
     </message>
     <message>
         <location filename="../src/Features/Node.cpp" line="482"/>
@@ -3264,39 +3264,39 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/Features/Node.cpp" line="485"/>
         <source>elevation</source>
-        <translation>elevación</translation>
+        <translation>elevação</translation>
     </message>
     <message>
         <location filename="../src/Features/Node.cpp" line="487"/>
         <source>speed</source>
-        <translation>velocidad</translation>
+        <translation>velocidade</translation>
     </message>
     <message>
         <location filename="../src/Features/Node.cpp" line="494"/>
         <source>Waypoint</source>
-        <translation>Punta de referencia</translation>
+        <translation>Ponto da tota</translation>
     </message>
     <message>
         <location filename="../src/Features/Node.cpp" line="489"/>
         <location filename="../src/Features/Node.cpp" line="497"/>
         <source>description</source>
-        <translation>descripción</translation>
+        <translation>descrição</translation>
     </message>
     <message>
         <location filename="../src/Features/Node.cpp" line="491"/>
         <location filename="../src/Features/Node.cpp" line="500"/>
         <source>comment</source>
-        <translation>comentario</translation>
+        <translation>comentérios</translation>
     </message>
     <message>
         <location filename="../src/Features/Node.cpp" line="503"/>
         <source>layer</source>
-        <translation>capa</translation>
+        <translation>camada</translation>
     </message>
     <message>
         <location filename="../src/Features/Node.cpp" line="508"/>
         <source>Node</source>
-        <translation>Nodo</translation>
+        <translation>Nó</translation>
     </message>
 </context>
 <context>
@@ -3319,22 +3319,22 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/MapView.cpp" line="649"/>
         <source>Node</source>
-        <translation>Nodo</translation>
+        <translation>Nó</translation>
     </message>
     <message>
         <location filename="../src/MapView.cpp" line="657"/>
         <source>Road</source>
-        <translation>Ruta</translation>
+        <translation>Rota</translation>
     </message>
     <message>
         <location filename="../src/MapView.cpp" line="665"/>
         <source>Relation</source>
-        <translation>Relación</translation>
+        <translation>Relação</translation>
     </message>
     <message>
         <location filename="../src/MapView.cpp" line="756"/>
         <source>Add trackpoint position to image</source>
-        <translation>Añadir posicion punto de pista a imagen</translation>
+        <translation>Adicionar posição do ponto de pista a imagem</translation>
     </message>
     <message>
         <location filename="../src/MapView.cpp" line="758"/>
@@ -3355,29 +3355,29 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
         <location filename="../src/Preferences/WmsServersList.cpp" line="20"/>
         <location filename="../src/Preferences/WmsServersList.cpp" line="33"/>
         <source>New Server</source>
-        <translation>Nuevo Servidor</translation>
+        <translation>Novo servidor</translation>
     </message>
     <message>
         <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="362"/>
         <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="365"/>
         <source>Preferences upload failed</source>
-        <translation>Preferencias de carga</translation>
+        <translation>Falha ao carregar preferências</translation>
     </message>
     <message>
         <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="362"/>
         <source>Duplicate key</source>
-        <translation>Duplicar clave</translation>
+        <translation>Chave duplicada</translation>
     </message>
     <message>
         <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="365"/>
         <source>More than 150 preferences</source>
-        <translation>Más de 150 preferencias</translation>
+        <translation>Mais de 150 preferências</translation>
     </message>
     <message>
         <location filename="../src/Preferences/BookmarksList.cpp" line="20"/>
         <location filename="../src/Preferences/BookmarksList.cpp" line="27"/>
         <source>New Bookmark</source>
-        <translation>Nuevo marcador</translation>
+        <translation>Novo marcador</translation>
     </message>
 </context>
 <context>
@@ -3385,7 +3385,7 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/MultiProperties.ui" line="13"/>
         <source>Form</source>
-        <translation>Formulario</translation>
+        <translation>Form</translation>
     </message>
     <message>
         <location filename="../src/MultiProperties.ui" line="33"/>
@@ -3400,7 +3400,7 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/MultiProperties.ui" line="73"/>
         <source>Selected items</source>
-        <translation>Elementos seleccionados</translation>
+        <translation>Itens selecionados</translation>
     </message>
 </context>
 <context>
@@ -3408,7 +3408,7 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/NameFinder/namefindertablemodel.cpp" line="68"/>
         <source>Name</source>
-        <translation>Nombre</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <location filename="../src/NameFinder/namefindertablemodel.cpp" line="71"/>
@@ -3418,12 +3418,12 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/NameFinder/namefindertablemodel.cpp" line="74"/>
         <source>Near</source>
-        <translation>Cerca</translation>
+        <translation>Aproximado</translation>
     </message>
     <message>
         <location filename="../src/NameFinder/namefindertablemodel.cpp" line="77"/>
         <source>Unknown field</source>
-        <translation>Campo desconocido.</translation>
+        <translation>Campo desconhecido</translation>
     </message>
 </context>
 <context>
@@ -3431,27 +3431,27 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/NameFinder/namefinderwidget.cpp" line="89"/>
         <source>Error!</source>
-        <translation>¡Error!</translation>
+        <translation>Erro!</translation>
     </message>
     <message>
         <location filename="../src/NameFinder/namefinderwidget.cpp" line="93"/>
         <source>Name finder service host not found.</source>
-        <translation>Nombre del servicio del buscador no encontrado</translation>
+        <translation>Servidor não encontrado pelo serviço de busca.</translation>
     </message>
     <message>
         <location filename="../src/NameFinder/namefinderwidget.cpp" line="96"/>
         <source>Name finder service host refused connection.</source>
-        <translation>Nombre del servicio de busqueda administrador niega conexion</translation>
+        <translation>Conexão recusada pelo servidor de serviço de busca.</translation>
     </message>
     <message>
         <location filename="../src/NameFinder/namefinderwidget.cpp" line="99"/>
         <source>Name finder service requires authentication.</source>
-        <translation>Nombre del servicio de busqueda necesita autentifcacion</translation>
+        <translation>O servidor do serviço de busca requer autenticação.</translation>
     </message>
     <message>
         <location filename="../src/NameFinder/namefinderwidget.cpp" line="101"/>
         <source>Unknown error.</source>
-        <translation>Error desconocido.</translation>
+        <translation>Erro desconhecido.</translation>
     </message>
 </context>
 <context>
@@ -3459,7 +3459,7 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/NameFinder/namefinderwidget.ui" line="13"/>
         <source>Form</source>
-        <translation>Formulario</translation>
+        <translation>Form</translation>
     </message>
 </context>
 <context>
@@ -3472,7 +3472,7 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/Render/NativeRenderDialog.cpp" line="125"/>
         <source>Working. Please Wait...</source>
-        <translation>Trabajando. Espere...</translation>
+        <translation>Trabalhando. Por favor, aguarde...</translation>
     </message>
     <message>
         <location filename="../src/Render/NativeRenderDialog.cpp" line="125"/>
@@ -3527,27 +3527,27 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/Render/NativeRenderDialog.ui" line="201"/>
         <source>Show Scale</source>
-        <translation>Mostrar Escala</translation>
+        <translation>Mostrar escala</translation>
     </message>
     <message>
         <location filename="../src/Render/NativeRenderDialog.ui" line="214"/>
         <source>Show Grid</source>
-        <translation>Mostrar cuadrícula</translation>
+        <translation>Mostrar grade</translation>
     </message>
     <message>
         <location filename="../src/Render/NativeRenderDialog.ui" line="227"/>
         <source>Show Borders</source>
-        <translation>Mostrar Bordes</translation>
+        <translation>Mostrar bordas</translation>
     </message>
     <message>
         <location filename="../src/Render/NativeRenderDialog.ui" line="240"/>
         <source>Show License</source>
-        <translation>Mostrar Licencia</translation>
+        <translation>Mostrar licença</translation>
     </message>
     <message>
         <location filename="../src/Render/NativeRenderDialog.ui" line="256"/>
         <source>Width x Height (px)</source>
-        <translation>Ancho x Alto (px)</translation>
+        <translation>Largura x Altura (px)</translation>
     </message>
     <message>
         <location filename="../src/Render/NativeRenderDialog.ui" line="279"/>
@@ -3582,7 +3582,7 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/Layers/LayerWidget.cpp" line="543"/>
         <source>Close</source>
-        <translation>Cerrar</translation>
+        <translation>Fechar</translation>
     </message>
 </context>
 <context>
@@ -3591,7 +3591,7 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
         <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="45"/>
         <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="46"/>
         <source>Always</source>
-        <translation>Siempre</translation>
+        <translation>Sempre</translation>
     </message>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.cpp" line="233"/>
@@ -3618,7 +3618,7 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="33"/>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="296"/>
         <source>Background</source>
-        <translation>Fondo</translation>
+        <translation>Fundo</translation>
     </message>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="49"/>
@@ -3636,12 +3636,12 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="86"/>
         <source>Add</source>
-        <translation>Añadir</translation>
+        <translation>Adicionar</translation>
     </message>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="93"/>
         <source>Remove</source>
-        <translation>Eliminar</translation>
+        <translation>Remover</translation>
     </message>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="100"/>
@@ -3651,30 +3651,30 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="177"/>
         <source>Tag selection</source>
-        <translation>Selección de etiqueta</translation>
+        <translation>Marcar seleção</translation>
     </message>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="197"/>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="253"/>
         <source>meter/pixel</source>
-        <translation>metro/píxel</translation>
+        <translation>metros/pixel</translation>
     </message>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="223"/>
         <source>Visible up to</source>
-        <translation>Visible desde arriba</translation>
+        <translation>Visível até</translation>
     </message>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="230"/>
         <source>Visible from scale</source>
-        <translation>Visible desde escala</translation>
+        <translation>Visível a partir da escala</translation>
     </message>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="310"/>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="579"/>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1058"/>
         <source>Draw with color</source>
-        <translation>Dibujar con color</translation>
+        <translation>Desenhar com cores</translation>
     </message>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="372"/>
@@ -3683,7 +3683,7 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="967"/>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1168"/>
         <source>Proportional thickness</source>
-        <translation>Espesor proporcional</translation>
+        <translation>Espessura proporcional</translation>
     </message>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="392"/>
@@ -3692,13 +3692,13 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="987"/>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1188"/>
         <source>Fixed thickness</source>
-        <translation>Grosor fijo</translation>
+        <translation>Espessura fixa</translation>
     </message>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="454"/>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="876"/>
         <source>Dashed</source>
-        <translation>Línea discontinua</translation>
+        <translation>Tracejada</translation>
     </message>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="468"/>
@@ -3709,27 +3709,27 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="505"/>
         <source>Fill area</source>
-        <translation>Rellenar área</translation>
+        <translation>Área de preenchimento</translation>
     </message>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="565"/>
         <source>Boundary</source>
-        <translation>Borde</translation>
+        <translation>Borda</translation>
     </message>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="718"/>
         <source>Touchup</source>
-        <translation>Retocar</translation>
+        <translation>Retoque</translation>
     </message>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="732"/>
         <source>Draw steps</source>
-        <translation>Dibujar pasos</translation>
+        <translation>Desenhar etapas</translation>
     </message>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="927"/>
         <source>Draw icon</source>
-        <translation>Dibujar icono</translation>
+        <translation>Desenhar ícone</translation>
     </message>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1044"/>
@@ -3739,7 +3739,7 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1081"/>
         <source>Font</source>
-        <translation>Tipografía</translation>
+        <translation>Fonte</translation>
     </message>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1128"/>
@@ -3759,12 +3759,12 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1303"/>
         <source>Draw with background color</source>
-        <translation>Dibujar con color de fondo</translation>
+        <translation>Desenhar com a cor de fundo</translation>
     </message>
     <message>
         <location filename="../src/PaintStyle/PaintStyleEditor.ui" line="1359"/>
         <source>Label with background tag</source>
-        <translation>Etiqueta con marca de fondo</translation>
+        <translation>Etiquetar com a marca de fundo</translation>
     </message>
 </context>
 <context>
@@ -3773,17 +3773,17 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
         <location filename="../src/Utils/PictureViewerDialog.cpp" line="39"/>
         <location filename="../src/Utils/PictureViewerDialog.cpp" line="45"/>
         <source>Output filename</source>
-        <translation>Nombre de archivo de salida</translation>
+        <translation>Nome do arquivo de saída</translation>
     </message>
     <message>
         <location filename="../src/Utils/PictureViewerDialog.cpp" line="39"/>
         <source>SVG files (*.svg)</source>
-        <translation>Archivos SVG (*.svg)</translation>
+        <translation>Arquivos SVG (*.svg)</translation>
     </message>
     <message>
         <location filename="../src/Utils/PictureViewerDialog.cpp" line="45"/>
         <source>Image files (*.png *.jpg)</source>
-        <translation>Archivos de imagen (*.png *.jpg)</translation>
+        <translation>Arquivos de imagens (*.png *.jpg)</translation>
     </message>
     <message>
         <location filename="../src/Utils/PictureViewerDialog.ui" line="13"/>
@@ -3796,7 +3796,7 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="108"/>
         <source>English</source>
-        <translation>Inglés</translation>
+        <translation>Inglês</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="109"/>
@@ -3806,17 +3806,22 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="110"/>
         <source>Czech</source>
-        <translation>Checo</translation>
+        <translation>Tcheco</translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="111"/>
+        <source>Dutch</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="112"/>
         <source>German</source>
-        <translation>Alemán</translation>
+        <translation>Alemão</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="113"/>
         <source>French</source>
-        <translation>Francés</translation>
+        <translation>Francês</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="114"/>
@@ -3824,31 +3829,61 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
         <translation>Italiano</translation>
     </message>
     <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="115"/>
+        <source>Japanase</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="116"/>
         <source>Polish</source>
-        <translation>Polaco</translation>
+        <translation>Polonês</translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="117"/>
+        <source>Portuguese</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="118"/>
         <source>Russian</source>
-        <translation>Ruso</translation>
+        <translation>Russo</translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="119"/>
+        <source>Slovak</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="120"/>
+        <source>Spanish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="121"/>
+        <source>Swedish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.cpp" line="122"/>
+        <source>Ukrainian</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="383"/>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="634"/>
         <source>Custom styles directory</source>
-        <translation>Directorio de estilos personalizados</translation>
+        <translation>Diretório de estilos personalizados</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="392"/>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="720"/>
         <source>Tag Template</source>
-        <translation>Plantilla de etiqueta</translation>
+        <translation>Marcar modelo</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="392"/>
         <source>Merkaartor tag template (*.mat)</source>
-        <translation>Merkaartor plantilla de etiqueta (*.mat)</translation>
+        <translation>Merkaartor tag template (*.mat)</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="399"/>
@@ -3863,59 +3898,59 @@ Do you still want to create a junction for each one (Unwanted junctions can stil
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="456"/>
         <source>Tool already exists</source>
-        <translation>La herramienta ya existe</translation>
+        <translation>A ferramenta já existe</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="457"/>
         <source>A tool of this name already exists.
 Please select another name or click the &lt;Apply&gt; button if you want to modify the existing one</source>
         <translation>Ya existe una herramienta con este nombre.
-Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere modificar el existente</translation>
+Por favor elija otro nombre o haga clic &lt;Aplicar&gt; buton si quiere modificar el existente</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="476"/>
         <source>Cannot delete preset tool</source>
-        <translation>No se puede eliminar una herramienta preconfigurada</translation>
+        <translation>Não foi possível excluir ferramenta predefinida</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="477"/>
         <source>Cannot delete preset tool &quot;%1&quot;</source>
-        <translation>No se puede eliminar la herramienta preestablecida «%1»</translation>
+        <translation>Não foi possível excluir ferramenta predefinida &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="495"/>
         <source>Cannot modify preset tool name</source>
-        <translation>No se puede modificar el nombre de una herramienta preconfigurada</translation>
+        <translation>Não foi possível modificar o nome da ferramenta predefinida</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="496"/>
         <source>Cannot modify preset tool &quot;%1&quot;&apos;s name</source>
-        <translation>No se puede modificar el nombre de la herramienta preconfigurada «%1»</translation>
+        <translation>Não foi possível modificar o nome da ferramenta predefinida &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="521"/>
         <source>Select tool executable</source>
-        <translation>Seleccionar herramienta ejecutable</translation>
+        <translation>Selecionar o executável da ferramenta</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.cpp" line="529"/>
         <source>Select Log directory</source>
-        <translation>Seleccionar el directorio de registros</translation>
+        <translation>Selecionar o diretório de registros (log)</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="15"/>
         <source>Preferences</source>
-        <translation>Preferencias</translation>
+        <translation>Preferências</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="549"/>
         <source>Locale</source>
-        <translation>Sitio</translation>
+        <translation>Local</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="555"/>
         <source>You may need to restart the program for these changes to take effect</source>
-        <translation>Puede que necesite reiniciar el programa para que estos cambios tengan efecto</translation>
+        <translation>Você pode precisar reiniciar o programa para que essas alterações entrem em vigor</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="564"/>
@@ -3925,7 +3960,7 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="599"/>
         <source>Translate standard tags</source>
-        <translation>Traducir las etiquetas estándar</translation>
+        <translation>Traduzir as etiquetas padrão</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="28"/>
@@ -3935,42 +3970,42 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="34"/>
         <source>General</source>
-        <translation>General</translation>
+        <translation>Geral</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="49"/>
         <source>Zoom Out/in (%)</source>
-        <translation>Zoom alejar/acercar (%)</translation>
+        <translation>Aumentar/diminuir zoom (%)</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="73"/>
         <source>Opacity low/high</source>
-        <translation>Opacidad baja/alta</translation>
+        <translation>Opacidade baixa/alta</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="141"/>
         <source>Separate Move mode</source>
-        <translation>Modo separar mover</translation>
+        <translation>Modo mover separadamente</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="148"/>
         <source>Single mouse button interaction</source>
-        <translation>Interacción con un solo botón del ratón</translation>
+        <translation>Única interação do botão do mouse</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="155"/>
         <source>Use custom Qt style</source>
-        <translation>Utilizar estylo Qt personalizado</translation>
+        <translation>Utilizar estilo Qt personalizado</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="202"/>
         <source>Colors</source>
-        <translation>Colores</translation>
+        <translation>Cores</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="481"/>
         <source>Background</source>
-        <translation>Fondo</translation>
+        <translation>Fundo</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="219"/>
@@ -3989,12 +4024,12 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="232"/>
         <source>Overwrite style</source>
-        <translation>Sobreescribir stilo</translation>
+        <translation>Sobrescrever estilo</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="404"/>
         <source>Hover</source>
-        <translation>Resaltado</translation>
+        <translation>Pairar</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="290"/>
@@ -4003,17 +4038,42 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
         <location filename="../src/Preferences/PreferencesDialog.ui" line="435"/>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="519"/>
         <source>Pixels</source>
-        <translation>Píxeles</translation>
+        <translation>Pixels</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="464"/>
         <source>Focus</source>
-        <translation>Enfocar</translation>
+        <translation>Foco</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="457"/>
         <source>Relations</source>
-        <translation>Relaciones</translation>
+        <translation>Relações</translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="40"/>
+        <source>&quot;Zoom lock&quot; mode (lock zoom level to Yahoo! tiles and force Mercator projection)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="104"/>
+        <source>Maximum meters per pixel to show nodes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="169"/>
+        <source>Use Virtual nodes (new session required)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="176"/>
+        <source>Relations selectable while hidden</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="260"/>
+        <source>Interface</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="620"/>
@@ -4028,17 +4088,17 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="668"/>
         <source>Current style</source>
-        <translation>Estilo Actual</translation>
+        <translation>Estilo atual</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="690"/>
         <source>Disable styles for track layers</source>
-        <translation>Desactivar estilos para las capas de rutas</translation>
+        <translation>Desabilitar estilos para as camadas de rotas</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="714"/>
         <source>Template</source>
-        <translation>Plantilla</translation>
+        <translation>Modelo</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="728"/>
@@ -4053,7 +4113,7 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="801"/>
         <source>Data</source>
-        <translation>Datos</translation>
+        <translation>Dados</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="813"/>
@@ -4063,18 +4123,18 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="821"/>
         <source>Website:</source>
-        <translation>Sitio Web:</translation>
+        <translation>Site:</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="831"/>
         <source>Username:</source>
-        <translation>Nombre de usuario:</translation>
+        <translation>Nome de usuário:</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="841"/>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1123"/>
         <source>Password:</source>
-        <translation>Contraseña:</translation>
+        <translation>Senha:</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="860"/>
@@ -4084,27 +4144,27 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="866"/>
         <source>Autosave documents after upload</source>
-        <translation>Guardar documentos automáticamente después de cargarlos</translation>
+        <translation>Salvar documentos automaticamente depois de carregá-los</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="876"/>
         <source>Tracks</source>
-        <translation>Trazas</translation>
+        <translation>Estradas</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="884"/>
         <source>Automatically extract tracks on open</source>
-        <translation>Extraiga automaticamente todas las pistas abiertas</translation>
+        <translation>Extrair automaticamente todas as pistas abertas</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="891"/>
         <source>Track layers readonly by default</source>
-        <translation>Pistas de capas sólo lecturas por defecto</translation>
+        <translation>Camadas das pistas apenas leitura por padrão</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="902"/>
         <source>Don&apos;t connect GPX nodes separated by more than (in km; 0 to disable)</source>
-        <translation>No conectar los nodos GPX separados por más de (en km; 0 para deshabilitar)</translation>
+        <translation>Não conectar os nós GPX separados por mais de (em km; 0 para desabilitar)</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="935"/>
@@ -4114,77 +4174,103 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1042"/>
         <source>Save NMEA log</source>
-        <translation>Guardar registro NMEA</translation>
+        <translation>Salvar registro NMEA</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1083"/>
         <source>Set system time to GPS</source>
-        <translation>Establecer el tiempo del sistema en el GPS</translation>
+        <translation>Definir a hora do sistema GPS</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1104"/>
         <source>Network</source>
-        <translation>Red</translation>
+        <translation>Rede</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1110"/>
         <source>Proxy settings</source>
-        <translation>Ajustes de proxy</translation>
+        <translation>Configurações de proxy</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1116"/>
         <source>Use Proxy</source>
-        <translation>Utilizar Proxy</translation>
+        <translation>Utilizar proxy</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1160"/>
         <source>Host:</source>
-        <translation>Host:</translation>
+        <translation>Servidor:</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1153"/>
         <source>Port:</source>
-        <translation>Puerto:</translation>
+        <translation>Porta:</translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="941"/>
+        <source>GPS input</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="947"/>
+        <source>gpsd</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="954"/>
+        <source>Serial</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="976"/>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1014"/>
+        <source>Port</source>
+        <translation>Porta</translation>
+    </message>
+    <message>
+        <location filename="../src/Preferences/PreferencesDialog.ui" line="1004"/>
+        <source>Host</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1223"/>
         <source>Background Image</source>
-        <translation>Imagen de fondo</translation>
+        <translation>Imagem de fundo</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1229"/>
         <source>Tiles Caching (not active for Yahoo! due to legal restrictions)</source>
-        <translation>Almacenar caché (no disponible para Yahoo! debido a restricciones legales)</translation>
+        <translation>Cache das imagens (não ative para o Yahoo! devido a restrições legais)</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1235"/>
         <source>Cache directory</source>
-        <translation>Directorio de la caché</translation>
+        <translation>Diretório de cache</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1245"/>
         <source>Cache size (in Mb; 0 to disable)</source>
-        <translation>Tamaño de la caché (en Mb; 0 para deshabilitar)</translation>
+        <translation>Tamanho do cache (em Mb; 0 para desabilitar)</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1264"/>
         <source>Map Adapter</source>
-        <translation>Adaptador de Mapa</translation>
+        <translation>Adaptador de mapa</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1299"/>
         <source>Tools</source>
-        <translation>Herramientas</translation>
+        <translation>Ferramentas</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1317"/>
         <source>Name:</source>
-        <translation>Nombre:</translation>
+        <translation>Nome:</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1327"/>
         <source>Path:</source>
-        <translation>Ruta:</translation>
+        <translation>Caminho:</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1376"/>
@@ -4194,123 +4280,37 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1383"/>
         <source>Add</source>
-        <translation>Añadir</translation>
+        <translation>Adicionar</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1390"/>
         <source>Remove</source>
-        <translation>Eliminar</translation>
+        <translation>Remover</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1146"/>
         <source>User:</source>
-        <translation>Usuario:</translation>
+        <translation>Usuário:</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="1270"/>
         <source>Enable use of OSB background (needs new document)</source>
-        <translation>Permitir uso del fondo OSB (necesita un documento nuevo)</translation>
+        <translation>Permitir o uso de fundo OSB (necessita de um novo documento)</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="471"/>
         <source>Highlight</source>
-        <translation>Resaltar</translation>
+        <translation>Destacar</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="488"/>
         <source>GPX track</source>
-        <translation>pista GPX</translation>
+        <translation>Pista GPX</translation>
     </message>
     <message>
         <location filename="../src/Preferences/PreferencesDialog.ui" line="526"/>
         <source>Use simple GPX track appearance</source>
-        <translation>Usar apariencia simple de pista GPX</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="941"/>
-        <source>GPS input</source>
-        <translation>Entrada GPS</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="947"/>
-        <source>gpsd</source>
-        <translation>gpsd</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="954"/>
-        <source>Serial</source>
-        <translation>Serie</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="976"/>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1014"/>
-        <source>Port</source>
-        <translation>Puerto</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="1004"/>
-        <source>Host</source>
-        <translation>Alojamiento (servidor)</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="169"/>
-        <source>Use Virtual nodes (new session required)</source>
-        <translation>Usar nodos Virtuales (requiere reiniciar)</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="111"/>
-        <source>Dutch</source>
-        <translation>Holandés</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="115"/>
-        <source>Japanase</source>
-        <translation>Japones</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="117"/>
-        <source>Portuguese</source>
-        <translation>Portugues</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="119"/>
-        <source>Slovak</source>
-        <translation>Esloveno</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="120"/>
-        <source>Spanish</source>
-        <translation>Español</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="121"/>
-        <source>Swedish</source>
-        <translation>Sueco</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.cpp" line="122"/>
-        <source>Ukrainian</source>
-        <translation>Ucraniano</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="40"/>
-        <source>&quot;Zoom lock&quot; mode (lock zoom level to Yahoo! tiles and force Mercator projection)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="104"/>
-        <source>Maximum meters per pixel to show nodes</source>
-        <translation>Metros máximos por pixel para mostrar nodos</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="176"/>
-        <source>Relations selectable while hidden</source>
-        <translation>relaciones seleccionables mientras esta oculto</translation>
-    </message>
-    <message>
-        <location filename="../src/Preferences/PreferencesDialog.ui" line="260"/>
-        <source>Interface</source>
-        <translation>Interface</translation>
+        <translation>Utilizar aparência simples de pista GPX</translation>
     </message>
 </context>
 <context>
@@ -4318,58 +4318,58 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Docks/PropertiesDock.cpp" line="317"/>
         <source>%1/%1 selected item(s)</source>
-        <translation>%1/%1 elemento(s) seleccionado(s)</translation>
+        <translation>%1/%1 iten(s) selecionado(s)</translation>
     </message>
     <message>
         <location filename="../src/Docks/PropertiesDock.cpp" line="340"/>
         <source>%1/%2 selected item(s)</source>
-        <translation>%1/%2 elemento(s) seleccionado(s)</translation>
+        <translation>%1/%2 iten(s) selecionado(s)</translation>
     </message>
     <message>
         <location filename="../src/Docks/PropertiesDock.cpp" line="403"/>
         <source>Selected items</source>
-        <translation>Elementos seleccionados</translation>
+        <translation>Itens selecionados</translation>
     </message>
     <message>
         <location filename="../src/Docks/PropertiesDock.cpp" line="412"/>
         <source>Properties - Multiple elements</source>
-        <translation>Propiedades - elementos multiples</translation>
+        <translation>Propriedades - Vários itens</translation>
+    </message>
+    <message>
+        <location filename="../src/Docks/PropertiesDock.cpp" line="428"/>
+        <source>Properties - Node</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Docks/PropertiesDock.cpp" line="442"/>
         <source>Properties - Road</source>
-        <translation>Propiedades - Camino</translation>
+        <translation>Propriedades - Rota</translation>
     </message>
     <message>
         <location filename="../src/Docks/PropertiesDock.cpp" line="460"/>
         <source>Properties - Relation</source>
-        <translation>Propiedades - Relacion</translation>
+        <translation>Propriedades - Relação</translation>
     </message>
     <message>
         <location filename="../src/Docks/PropertiesDock.cpp" line="472"/>
         <location filename="../src/Docks/PropertiesDock.cpp" line="1002"/>
         <source>Properties</source>
-        <translation>Propiedades</translation>
+        <translation>Propriedades</translation>
     </message>
     <message>
         <location filename="../src/Docks/PropertiesDock.cpp" line="1003"/>
         <source>Center map</source>
-        <translation>Centrar mapa</translation>
+        <translation>Centro do mapa</translation>
     </message>
     <message>
         <location filename="../src/Docks/PropertiesDock.cpp" line="1004"/>
         <source>Center &amp;&amp; Zoom map</source>
-        <translation>Centrar mapa y hacer zoom</translation>
+        <translation>Centro &amp;&amp; Zoom do mapa</translation>
     </message>
     <message>
         <location filename="../src/Docks/PropertiesDock.cpp" line="1005"/>
         <source>Select member</source>
-        <translation>Seleccionar miembro</translation>
-    </message>
-    <message>
-        <location filename="../src/Docks/PropertiesDock.cpp" line="428"/>
-        <source>Properties - Node</source>
-        <translation>Propiedades - Nodo</translation>
+        <translation>Selecionar membro</translation>
     </message>
 </context>
 <context>
@@ -4385,14 +4385,14 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
         <location filename="../src/GPS/qgps.cpp" line="166"/>
         <location filename="../src/GPS/qgps.cpp" line="221"/>
         <source>No Position Fix</source>
-        <translation>Sin posición fija</translation>
+        <translation>Sem posição fixa</translation>
     </message>
     <message>
         <location filename="../src/GPS/qgps.cpp" line="95"/>
         <location filename="../src/GPS/qgps.cpp" line="171"/>
         <location filename="../src/GPS/qgps.cpp" line="222"/>
         <source>No UTC Time</source>
-        <translation>Sin Hora UTC</translation>
+        <translation>Sem hora UTC</translation>
     </message>
     <message>
         <location filename="../src/GPS/qgps.cpp" line="136"/>
@@ -4407,7 +4407,7 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/GPS/qgps.cpp" line="148"/>
         <source>Unavailable</source>
-        <translation>No disponible</translation>
+        <translation>Indisponível</translation>
     </message>
     <message>
         <location filename="../src/GPS/qgps.cpp" line="154"/>
@@ -4422,7 +4422,7 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/GPS/qgps.cpp" line="163"/>
         <source>Position Fix available</source>
-        <translation>Fijar posicion disponible</translation>
+        <translation>Posição fixa disponível</translation>
     </message>
 </context>
 <context>
@@ -4430,12 +4430,12 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/GPS/qgpsdevice.cpp" line="683"/>
         <source>GPS log error</source>
-        <translation>Error de registro GPS</translation>
+        <translation>Erro de registro GPS</translation>
     </message>
     <message>
         <location filename="../src/GPS/qgpsdevice.cpp" line="684"/>
         <source>Unable to create GPS log file: %1.</source>
-        <translation>Incapaz de crear archivo de registro GPS: %1.</translation>
+        <translation>Não é possível criar arquivo de registro do GPS: %1.</translation>
     </message>
 </context>
 <context>
@@ -4443,12 +4443,12 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/GPS/qgpsdevice.cpp" line="922"/>
         <source>GPS log error</source>
-        <translation>Error de registro GPS</translation>
+        <translation>Erro de registro GPS</translation>
     </message>
     <message>
         <location filename="../src/GPS/qgpsdevice.cpp" line="923"/>
         <source>Unable to create GPS log file: %1.</source>
-        <translation>Incapaz de crear archivo de registro GPS: %1.</translation>
+        <translation>Não é possível criar arquivo de registro do GPS: %1.</translation>
     </message>
 </context>
 <context>
@@ -4456,13 +4456,13 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/GPS/qgpsmainwindowui.ui" line="13"/>
         <source>Form</source>
-        <translation>Formulario</translation>
+        <translation>Form</translation>
     </message>
     <message>
         <location filename="../src/GPS/qgpsmainwindowui.ui" line="21"/>
         <location filename="../src/GPS/qgpsmainwindowui.ui" line="28"/>
         <source>TextLabel</source>
-        <translation>Etiqueta de texto</translation>
+        <translation>TextLabel</translation>
     </message>
     <message>
         <location filename="../src/GPS/qgpsmainwindowui.ui" line="62"/>
@@ -4473,12 +4473,12 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/GPS/qgpsmainwindowui.ui" line="69"/>
         <source>Longitude</source>
-        <translation>Longitud</translation>
+        <translation>Longitude</translation>
     </message>
     <message>
         <location filename="../src/GPS/qgpsmainwindowui.ui" line="86"/>
         <source>Altitude</source>
-        <translation>Altitud</translation>
+        <translation>Altitude</translation>
     </message>
     <message>
         <location filename="../src/GPS/qgpsmainwindowui.ui" line="96"/>
@@ -4498,7 +4498,7 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/GPS/qgpsmainwindowui.ui" line="120"/>
         <source>Fix Type</source>
-        <translation>Fijar tipo</translation>
+        <translation>Fixar tipo</translation>
     </message>
     <message>
         <location filename="../src/GPS/qgpsmainwindowui.ui" line="130"/>
@@ -4508,7 +4508,7 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/GPS/qgpsmainwindowui.ui" line="137"/>
         <source>Speed</source>
-        <translation>Velocidad</translation>
+        <translation>Velocidade</translation>
     </message>
     <message>
         <location filename="../src/GPS/qgpsmainwindowui.ui" line="147"/>
@@ -4518,7 +4518,7 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/GPS/qgpsmainwindowui.ui" line="154"/>
         <source>Latitude</source>
-        <translation>Latitud</translation>
+        <translation>Latitude</translation>
     </message>
 </context>
 <context>
@@ -4526,7 +4526,7 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/NameFinder/xmlstreamreader.cpp" line="41"/>
         <source>Not a proper results stream!</source>
-        <translation>¡Flujo de resultados incorrecto!</translation>
+        <translation>Fluxo de resultados incorreto!</translation>
     </message>
 </context>
 <context>
@@ -4534,12 +4534,12 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Docks/MinimumRelationProperties.ui" line="13"/>
         <source>Form</source>
-        <translation>Formulario</translation>
+        <translation>Form</translation>
     </message>
     <message>
         <location filename="../src/Docks/MinimumRelationProperties.ui" line="30"/>
         <source>Members</source>
-        <translation>Miembros</translation>
+        <translation>Membros</translation>
     </message>
     <message>
         <location filename="../src/Docks/MinimumRelationProperties.ui" line="50"/>
@@ -4558,7 +4558,7 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Docks/MinimumRoadProperties.ui" line="13"/>
         <source>Form</source>
-        <translation>Formulario</translation>
+        <translation>Form</translation>
     </message>
     <message>
         <location filename="../src/Docks/MinimumRoadProperties.ui" line="33"/>
@@ -4586,7 +4586,7 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/GPS/SatelliteStrengthView.cpp" line="50"/>
         <source>No satellites</source>
-        <translation>Sin satélites</translation>
+        <translation>Sem satélites</translation>
     </message>
 </context>
 <context>
@@ -4594,12 +4594,12 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Utils/SelectionDialog.ui" line="14"/>
         <source>Selection</source>
-        <translation>Selección</translation>
+        <translation>Seleção</translation>
     </message>
     <message>
         <location filename="../src/Utils/SelectionDialog.ui" line="28"/>
         <source>Key</source>
-        <translation>Clave</translation>
+        <translation>Chave</translation>
     </message>
     <message>
         <location filename="../src/Utils/SelectionDialog.ui" line="35"/>
@@ -4614,12 +4614,12 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Utils/SelectionDialog.ui" line="58"/>
         <source>Name</source>
-        <translation>Nombre</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <location filename="../src/Utils/SelectionDialog.ui" line="104"/>
         <source>Maximum returned results</source>
-        <translation>Máximos resultados devueltos</translation>
+        <translation>Máximos resultados retornados</translation>
     </message>
     <message>
         <location filename="../src/Utils/SelectionDialog.ui" line="74"/>
@@ -4629,7 +4629,7 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Utils/SelectionDialog.ui" line="84"/>
         <source>Case sensitive</source>
-        <translation>Diferenciando mayúsculas y minúsculas</translation>
+        <translation>Diferenciar maiúsculas/minúsculas</translation>
     </message>
 </context>
 <context>
@@ -4637,7 +4637,7 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Utils/SlippyMapWidget.cpp" line="275"/>
         <source>Reset view</source>
-        <translation>Reiniciar vista</translation>
+        <translation>Atualizar visualização</translation>
     </message>
 </context>
 <context>
@@ -4653,7 +4653,7 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Docks/StyleDock.ui" line="14"/>
         <source>DirtyDock</source>
-        <translation>Puerto Sucio</translation>
+        <translation>Porto sujo</translation>
     </message>
 </context>
 <context>
@@ -4661,12 +4661,12 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Sync/SyncListDialog.ui" line="35"/>
         <source>Please review carefully the changes sent to OSM</source>
-        <translation>Revise minuciosamente los cambios enviados a OSM</translation>
+        <translation>Por favor, reveja cuidadosamente as alterações enviadas para OSM</translation>
     </message>
     <message>
         <location filename="../src/Sync/SyncListDialog.ui" line="66"/>
         <source>OK</source>
-        <translation>Aceptar</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../src/Sync/SyncListDialog.ui" line="73"/>
@@ -4676,12 +4676,12 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Sync/SyncListDialog.ui" line="13"/>
         <source>Upload to Openstreetmap</source>
-        <translation>Subir a Openstreetmap</translation>
+        <translation>Enviar para Openstreetmap</translation>
     </message>
     <message>
         <location filename="../src/Sync/SyncListDialog.ui" line="25"/>
         <source>Please specify a comment for this changeset.</source>
-        <translation>Por favor,especifique un comentario para cambio de opciones</translation>
+        <translation>Por favor, especifique um comentário para estas alterações definidas.</translation>
     </message>
 </context>
 <context>
@@ -4689,7 +4689,7 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="13"/>
         <source>TMS servers setup</source>
-        <translation>Configuración de los servidores TMS</translation>
+        <translation>Configuração dos servidores TMS</translation>
     </message>
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="19"/>
@@ -4699,27 +4699,27 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="64"/>
         <source>Server list:</source>
-        <translation>Lista de servidor:</translation>
+        <translation>Lista de servidores:</translation>
     </message>
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="86"/>
         <source>Name:</source>
-        <translation>Nombre:</translation>
+        <translation>Nome:</translation>
     </message>
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="103"/>
         <source>Server address:</source>
-        <translation>Direccion de servidor:</translation>
+        <translation>Endereço do servidor:</translation>
     </message>
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="113"/>
         <source>Path</source>
-        <translation>Ruta</translation>
+        <translation>Rota</translation>
     </message>
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="123"/>
         <source>Tile size</source>
-        <translation>Tamaño de la tesela</translation>
+        <translation>Tamanho da imagem</translation>
     </message>
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="140"/>
@@ -4739,12 +4739,12 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="180"/>
         <source>Add</source>
-        <translation>Añadir</translation>
+        <translation>Adicionar</translation>
     </message>
     <message>
         <location filename="../src/Preferences/TMSPreferencesDialog.ui" line="187"/>
         <source>Remove</source>
-        <translation>Eliminar</translation>
+        <translation>Remover</translation>
     </message>
 </context>
 <context>
@@ -4752,7 +4752,7 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/TagModel.cpp" line="105"/>
         <source>Key</source>
-        <translation>Clave</translation>
+        <translation>Chave</translation>
     </message>
     <message>
         <location filename="../src/TagModel.cpp" line="107"/>
@@ -4762,7 +4762,7 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/TagModel.h" line="22"/>
         <source>Edit this to add...</source>
-        <translation>Editar esto para añadir...</translation>
+        <translation>Editar isso para adicionar...</translation>
     </message>
 </context>
 <context>
@@ -4783,6 +4783,11 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
 </context>
 <context>
     <name>TrackLayer</name>
+    <message>
+        <location filename="../src/Layers/Layer.cpp" line="664"/>
+        <source>Extract - %1</source>
+        <translation type="unfinished">Extrair - %1</translation>
+    </message>
     <message>
         <location filename="../src/Layers/Layer.cpp" line="766"/>
         <source>TrackLayer</source>
@@ -4819,18 +4824,13 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
         <comment>%1h %2m</comment>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../src/Layers/Layer.cpp" line="664"/>
-        <source>Extract - %1</source>
-        <translation>Extraer - %1</translation>
-    </message>
 </context>
 <context>
     <name>TrackLayerWidget</name>
     <message>
         <location filename="../src/Layers/LayerWidget.cpp" line="449"/>
         <source>Extract Drawing layer</source>
-        <translation>Extraer capa de dibujo</translation>
+        <translation>Extrair camada de desenho</translation>
     </message>
     <message>
         <location filename="../src/Layers/LayerWidget.cpp" line="454"/>
@@ -4840,7 +4840,7 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Layers/LayerWidget.cpp" line="462"/>
         <source>Close</source>
-        <translation>Cerrar</translation>
+        <translation>Fechar</translation>
     </message>
 </context>
 <context>
@@ -4848,17 +4848,17 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Docks/MinimumTrackPointProperties.ui" line="13"/>
         <source>Trackpoint</source>
-        <translation>Punto de ruta</translation>
+        <translation>Ponto de pista</translation>
     </message>
     <message>
         <location filename="../src/Docks/MinimumTrackPointProperties.ui" line="33"/>
         <source>Latitude</source>
-        <translation>Latitud</translation>
+        <translation>Latitude</translation>
     </message>
     <message>
         <location filename="../src/Docks/MinimumTrackPointProperties.ui" line="43"/>
         <source>Longitude</source>
-        <translation>Longitud</translation>
+        <translation>Longitude</translation>
     </message>
     <message>
         <location filename="../src/Docks/MinimumTrackPointProperties.ui" line="50"/>
@@ -4891,17 +4891,17 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/UploadMapDialog.ui" line="36"/>
         <source>Website</source>
-        <translation>Sitio Web</translation>
+        <translation>Site</translation>
     </message>
     <message>
         <location filename="../src/UploadMapDialog.ui" line="49"/>
         <source>Password</source>
-        <translation>Contraseña</translation>
+        <translation>Senha</translation>
     </message>
     <message>
         <location filename="../src/UploadMapDialog.ui" line="56"/>
         <source>Username</source>
-        <translation>Nombre de usuario</translation>
+        <translation>Nome de usuário</translation>
     </message>
     <message>
         <location filename="../src/UploadMapDialog.ui" line="63"/>
@@ -4911,7 +4911,7 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/UploadMapDialog.ui" line="88"/>
         <source>Port</source>
-        <translation>Puerto</translation>
+        <translation>Porta</translation>
     </message>
     <message>
         <location filename="../src/UploadMapDialog.ui" line="104"/>
@@ -4929,7 +4929,7 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Layers/LayerWidget.cpp" line="520"/>
         <source>Clear</source>
-        <translation>Limpiar</translation>
+        <translation>Limpar</translation>
     </message>
 </context>
 <context>
@@ -4939,23 +4939,23 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
         <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="223"/>
         <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="248"/>
         <source>Merkaartor: GetCapabilities</source>
-        <translation>Merkaartor: Tener Capacidades</translation>
+        <translation>Merkaartor: Tenha capacidades</translation>
     </message>
     <message>
         <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="169"/>
         <source>Address and Path cannot be blank.</source>
-        <translation>Dirección y ruta no pueden estar vacíos.</translation>
+        <translation>Endereço e Rota não podem estra em branco.</translation>
     </message>
     <message>
         <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="224"/>
         <source>Download failed: %1.</source>
-        <translation>Descarga fallida: %1.</translation>
+        <translation>Falha ao baixar: %1.</translation>
     </message>
     <message>
         <location filename="../src/Preferences/WMSPreferencesDialog.cpp" line="248"/>
         <source>Error reading capabilities.
 </source>
-        <translation>Error al leer las capacidades
+        <translation>Erro ao ler capacidades.
 </translation>
     </message>
     <message>
@@ -4971,12 +4971,12 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="46"/>
         <source>Server list:</source>
-        <translation>Lista de servidor:</translation>
+        <translation>Lista de servidores:</translation>
     </message>
     <message>
         <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="68"/>
         <source>Name:</source>
-        <translation>Nombre:</translation>
+        <translation>Nome:</translation>
     </message>
     <message>
         <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="95"/>
@@ -4986,12 +4986,12 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="102"/>
         <source>Layers:</source>
-        <translation>Capas:</translation>
+        <translation>Camadas:</translation>
     </message>
     <message>
         <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="124"/>
         <source>Projection:</source>
-        <translation>Proyección:</translation>
+        <translation>Projeção:</translation>
     </message>
     <message>
         <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="165"/>
@@ -5001,7 +5001,7 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="138"/>
         <source>Image format</source>
-        <translation>Formato de imagen</translation>
+        <translation>Formato de imagem</translation>
     </message>
     <message>
         <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="175"/>
@@ -5011,17 +5011,17 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="182"/>
         <source>Add</source>
-        <translation>Añadir</translation>
+        <translation>Adicionar</translation>
     </message>
     <message>
         <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="189"/>
         <source>Remove</source>
-        <translation>Eliminar</translation>
+        <translation>Remover</translation>
     </message>
     <message>
         <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="85"/>
         <source>Server Url:</source>
-        <translation>URL del servidor:</translation>
+        <translation>URL do servidor:</translation>
     </message>
     <message>
         <location filename="../src/Preferences/WMSPreferencesDialog.ui" line="116"/>
@@ -5034,27 +5034,27 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Tools/WorldOsbManager.cpp" line="87"/>
         <source>Select OSB World directory</source>
-        <translation>Seleccionar directorio de OSB World</translation>
+        <translation>Selecionar diretório OSB World</translation>
     </message>
     <message>
         <location filename="../src/Tools/WorldOsbManager.cpp" line="101"/>
         <source>Invalid OSB World directory name</source>
-        <translation>Nombre de directorio OSB World inválido.</translation>
+        <translation>Nome de diretório OSB World inválido</translation>
     </message>
     <message>
         <location filename="../src/Tools/WorldOsbManager.cpp" line="102"/>
         <source>Please provide a valid directory name.</source>
-        <translation>Proporcione un nombre de directorio válido.</translation>
+        <translation>Por favor, forneça um nome de diretório válido.</translation>
     </message>
     <message>
         <location filename="../src/Tools/WorldOsbManager.cpp" line="115"/>
         <source>Region generation error</source>
-        <translation>Region del error de generacion</translation>
+        <translation>Erro na geração da região</translation>
     </message>
     <message>
         <location filename="../src/Tools/WorldOsbManager.cpp" line="116"/>
         <source>Error while generating region %1</source>
-        <translation>Error al generar la región %1</translation>
+        <translation>Erro ao gerar a região %1</translation>
     </message>
     <message>
         <location filename="../src/Tools/WorldOsbManager.ui" line="13"/>
@@ -5064,7 +5064,7 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Tools/WorldOsbManager.ui" line="24"/>
         <source>World URI</source>
-        <translation>URI mundial</translation>
+        <translation>World URI</translation>
     </message>
     <message>
         <location filename="../src/Tools/WorldOsbManager.ui" line="47"/>
@@ -5074,22 +5074,22 @@ Por favor elija otro nombre o haga clic en el boton &lt;Aplicar&gt; si quiere mo
     <message>
         <location filename="../src/Tools/WorldOsbManager.ui" line="58"/>
         <source>Auto-load</source>
-        <translation>Cargar automáticamente</translation>
+        <translation>Carregar automaticamente</translation>
     </message>
     <message>
         <location filename="../src/Tools/WorldOsbManager.ui" line="65"/>
         <source>Auto-show</source>
-        <translation>Mostrar automáticamente</translation>
+        <translation>Mostrar automaticamente</translation>
     </message>
     <message>
         <location filename="../src/Tools/WorldOsbManager.ui" line="94"/>
         <source>Show Grid</source>
-        <translation>Mostrar cuadrícula</translation>
+        <translation>Mostrar grade</translation>
     </message>
     <message>
         <location filename="../src/Tools/WorldOsbManager.ui" line="126"/>
         <source>TextLabel</source>
-        <translation>Etiqueta de texto</translation>
+        <translation>TextLabel</translation>
     </message>
 </context>
 </TS>
