@@ -252,7 +252,7 @@ void Node::drawHighlight(QPainter& thePainter, MapView* theView, bool /*solid*/)
 //	}
 }
 
-double Node::pixelDistance(const QPointF& Target, double, const Projection& theProjection, const QTransform& theTransform) const
+double Node::pixelDistance(const QPointF& Target, double, bool, const Projection& theProjection, const QTransform& theTransform) const
 {
 	return distance(Target,theTransform.map(theProjection.project(Position)));
 }

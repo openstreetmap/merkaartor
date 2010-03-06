@@ -28,7 +28,7 @@ class Relation : public Feature
 		virtual void drawFocus(QPainter& P, MapView* theView, bool solid=true);
 		virtual void drawHover(QPainter& P, MapView* theView, bool solid=true);
 		virtual void drawHighlight(QPainter& P, MapView* theView, bool solid=true);
-		virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection, const QTransform& theTransform) const;
+		virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, bool selectNodes, const Projection& theProjection, const QTransform& theTransform) const;
 		virtual void cascadedRemoveIfUsing(Document* theDocument, Feature* aFeature, CommandList* theList, const QList<Feature*>& Alternatives);
 		virtual bool notEverythingDownloaded();
 		virtual const RenderPriority& renderPriority();

@@ -168,9 +168,9 @@ void Interaction::paintEvent(QPaintEvent*, QPainter& thePainter)
 /***************/
 
 FeatureSnapInteraction::FeatureSnapInteraction(MapView* theView)
-        : Interaction(theView), SnapActive(true),
+		: Interaction(theView), SnapActive(true),
 	  NoSelectPoints(false), NoSelectRoads(false)
-          , NoSelectVirtuals(true), LastSnap(0)
+		  , NoSelectVirtuals(true), LastSnap(0)
 {
 	handCursor = QCursor(QPixmap(":/Icons/grab.png"));
 	grabCursor = QCursor(QPixmap(":/Icons/grabbing.png"));
@@ -332,8 +332,7 @@ void FeatureSnapInteraction::updateSnap(QMouseEvent* event)
 	CoordBox HotZone(XY_TO_COORD(event->pos()-QPointF(15,15)),XY_TO_COORD(event->pos()+QPointF(15,15)));
 	SnapList.clear();
 	double BestDistance = 5;
-#if 1
-	//ggl::box < Coord > cb(HotZone.bottomLeft(), HotZone.topRight());
+	bool areNodesVisible = (view()->pixelPerM() >= M_PREFS->getLocalZoom());
 
 	for (int j=0; j<document()->layerSize(); ++j) {
 		if (!document()->getLayer(j)->isVisible() || document()->getLayer(j)->isReadonly())
@@ -353,13 +352,13 @@ void FeatureSnapInteraction::updateSnap(QMouseEvent* event)
 				if (CAST_NODE(F)) {
 					if (NoSelectPoints)
 						continue;
-					if (view()->pixelPerM() < M_PREFS->getLocalZoom())
+					if (!areNodesVisible)
 						continue;
 				}
 				if (std::find(NoSnap.begin(),NoSnap.end(),F) != NoSnap.end())
 					continue;
 
-				double Distance = F->pixelDistance(event->pos(), 5.01, projection(), transform());
+				double Distance = F->pixelDistance(event->pos(), 5.01, areNodesVisible, projection(), transform());
 				SnapList.push_back(F);
 				if (Distance < BestDistance)
 				{
@@ -372,34 +371,6 @@ void FeatureSnapInteraction::updateSnap(QMouseEvent* event)
 	if (LastSnap && LastSnap->isVirtual() && NoSelectVirtuals)
 		LastSnap = LastSnap->getParent(0);
 
-#else
-//			for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it)
-//			{
-//				MapFeature* Pt = dynamic_cast<MapFeature*>(it.get());
-//				if (Pt)
-//				{
-//					if (Pt->layer()->isReadonly())
-//						continue;
-//					if (Pt->notEverythingDownloaded())
-//						continue;
-//					if ( (NoRoads || NoSelectRoads) && dynamic_cast<Road*>(Pt))
-//						continue;
-//					if (NoSelectPoints && dynamic_cast<TrackPoint*>(Pt))
-//						continue;
-//					if (std::find(NoSnap.begin(),NoSnap.end(),Pt) != NoSnap.end())
-//						continue;
-//					if (Pt->boundingBox().disjunctFrom(HotZone))
-//						continue;
-//					double Distance = Pt->pixelDistance(transform().inverted().map(event->pos()), 5.01, projection());
-//					SnapList.push_back(Pt);
-//					if (Distance < BestDistance)
-//					{
-//						BestDistance = Distance;
-//						LastSnap = Pt;
-//					}
-//				}
-//			}
-#endif
 	if (Prev != LastSnap) {
 		curStackSnap = SnapList.indexOf(LastSnap);
 		view()->update();

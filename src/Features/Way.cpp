@@ -525,23 +525,25 @@ void Way::drawFocus(QPainter& thePainter, MapView* theView, bool solid)
 	}
 }
 
-double Way::pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection, const QTransform& theTransform) const
+double Way::pixelDistance(const QPointF& Target, double ClearEndDistance, bool selectNodes, const Projection& theProjection, const QTransform& theTransform) const
 {
 	double Best = 1000000;
-	for (unsigned int i=0; i<p->Nodes.size(); ++i)
-	{
-		if (p->Nodes.at(i)) {
-			double x = ::distance(Target,theTransform.map(theProjection.project(p->Nodes.at(i))));
-			if (x<ClearEndDistance)
-				return Best;
+	if (selectNodes) {
+		for (unsigned int i=0; i<p->Nodes.size(); ++i)
+		{
+			if (p->Nodes.at(i)) {
+				double x = ::distance(Target,theTransform.map(theProjection.project(p->Nodes.at(i))));
+				if (x<ClearEndDistance)
+					return Best;
+			}
 		}
-	}
-	for (unsigned int i=0; i<p->virtualNodes.size(); ++i)
-	{
-		if (p->virtualNodes.at(i)) {
-			double x = ::distance(Target,theTransform.map(theProjection.project(p->virtualNodes.at(i))));
-			if (x<ClearEndDistance)
-				return Best;
+		for (unsigned int i=0; i<p->virtualNodes.size(); ++i)
+		{
+			if (p->virtualNodes.at(i)) {
+				double x = ::distance(Target,theTransform.map(theProjection.project(p->virtualNodes.at(i))));
+				if (x<ClearEndDistance)
+					return Best;
+			}
 		}
 	}
 	if (smoothed().size())

@@ -118,7 +118,7 @@ class Feature : public QObject
 		virtual void drawHighlight(QPainter& P, MapView* theView, bool solid=true) = 0;
 
 
-		virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, const Projection& theProjection, const QTransform& theTransform) const = 0;
+		virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, bool selectNodes, const Projection& theProjection, const QTransform& theTransform) const = 0;
 		virtual void cascadedRemoveIfUsing(Document* theDocument, Feature* aFeature, CommandList* theList, const QList<Feature*>& Alternatives) = 0;
 		virtual bool notEverythingDownloaded() = 0;
 
