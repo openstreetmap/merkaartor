@@ -61,7 +61,9 @@
 #include "Tools/ActionsDialog.h"
 #include "GotoDialog.h"
 
+#ifndef RELEASE
 #include "revision.h"
+#endif
 
 #ifdef GEOIMAGE
 #include "GeoImageDock.h"
