@@ -48,7 +48,6 @@ HEADERS += ./IProgressWindow.h \
     ./GotoDialog.h \
     ../include/ggl/extensions/gis/projections/impl/geocent.h \
     ../interfaces/IMapAdapter.h \
-    revision.h \
     Utils/OsmLink.h
 
 # Source files
