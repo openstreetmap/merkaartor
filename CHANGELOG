@@ -1,5 +1,6 @@
 v0.16
-	* ADD : Brazilian Portuguese translation (by Marcio Moraes)
+    * FIX : When merging contiguous nodes in the same way, check that we don't add the same node twice (fixes #2771)  
+    * ADD : Brazilian Portuguese translation (by Marcio Moraes)
     * FIX : OSX enhacements (by Aleksandar Topuzovic) (closes #2774)
     * FIX : When nodes are hidden,do not put them in the way of selecting roads
     * FIX : avoid multiple updateVirtuals() at download time by disabling it and doing them all when the download is done
