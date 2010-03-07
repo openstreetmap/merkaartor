@@ -610,7 +610,8 @@ void MainWindow::on_editPasteOverwriteAction_triggered()
     for(int i=0; i < sel.size(); ++i) {
         theList->add(new ClearTagsCommand(sel[i], theDocument->getDirtyOrOriginLayer(sel[i]->layer())));
         for (FeatureIterator k(doc); !k.isEnd(); ++k) {
-            Feature::mergeTags(theDocument, theList, sel[i], k.get());
+            if (k.get()->getClass() == sel[i]->getClass())
+                Feature::mergeTags(theDocument, theList, sel[i], k.get());
         }
     }
 
@@ -638,7 +639,8 @@ void MainWindow::on_editPasteMergeAction_triggered()
 
     for(int i=0; i < sel.size(); ++i) {
         for (FeatureIterator k(doc); !k.isEnd(); ++k) {
-            Feature::mergeTags(theDocument, theList, sel[i], k.get());
+            if (k.get()->getClass() == sel[i]->getClass())
+                Feature::mergeTags(theDocument, theList, sel[i], k.get());
         }
     }
 
