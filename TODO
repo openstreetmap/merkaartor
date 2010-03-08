@@ -1,0 +1,6 @@
+- Do a "Center & Zoom" when loading a GeoTIFF (and other file related future plugins)
+- Implement WMS-C (Tiling and caching of WMS images)
+- Implement in-process WMS-C proxy for "standard" WMS
+- Implement Walking Paper plugin
+- Implement printing (with barcode reference)
+- Implement generalization of Walking Paper plugin to own system
