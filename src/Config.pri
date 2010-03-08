@@ -1,5 +1,5 @@
-NODEBUG=1             - no debug target
-RELEASE=1             - release target (use with NODEBUG=1)
+# NODEBUG=1             - no debug target
+# RELEASE=1             - release target (use with NODEBUG=1)
 # TRANSDIR_MERKAARTOR - translations directory for merkaartor
 #TRANSDIR_MERKAARTOR=c:/home/cbrowet/src/merkaartor_trunk
 # TRANSDIR_SYSTEM     - translations directory for Qt itself
@@ -15,17 +15,17 @@ GDAL=1    	      - enable GDAL (for, e.g., shapefile import; requires libgdal)
 
 VERSION="0.16"
 !contains(RELEASE,1) {
-    #SVNREV = $$system($$escape_expand(svn info \"http://svn.openstreetmap.org/applications/editors/merkaartor/\" | sed -n \"s/Last Changed Rev: \\([0-9]\\+\\)/\\1/p\"))
-    win32 {
-        system(echo $${LITERAL_HASH}define SVNREV \\ > revision.h && svnversion >> revision.h)
-    }
-    !win32 {
-        system('echo -n "$${LITERAL_HASH}define SVNREV " > revision.h && svnversion >> revision.h')
-    }
-    REVISION="-svn"
+	#SVNREV = $$system($$escape_expand(svn info \"http://svn.openstreetmap.org/applications/editors/merkaartor/\" | sed -n \"s/Last Changed Rev: \\([0-9]\\+\\)/\\1/p\"))
+	win32 {
+		system(echo $${LITERAL_HASH}define SVNREV \\ > revision.h && svnversion >> revision.h)
+	}
+	!win32 {
+		system('echo -n "$${LITERAL_HASH}define SVNREV " > revision.h && svnversion >> revision.h')
+	}
+	REVISION="-svn"
 } else {
-    DEFINES += RELEASE
-    REVISION=""
-    SVNREV=""
+	DEFINES += RELEASE
+	REVISION=""
+	SVNREV=""
 }
 

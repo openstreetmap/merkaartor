@@ -100,8 +100,8 @@ public:
 
 	virtual bool	isValid(int x, int y, int z) const;
 	virtual QString getQuery(int x, int y, int z) const;
-        virtual QString getQuery(const QRectF& /* wgs84Bbox */, const QRectF& /* projBbox */, const QRect& /* size */) const  { return ""; }
-        virtual QPixmap getPixmap(const QRectF& /* wgs84Bbox */, const QRectF& /* projBbox */, const QRect& /* size */) const { return QPixmap(); };
+		virtual QString getQuery(const QRectF& /* wgs84Bbox */, const QRectF& /* projBbox */, const QRect& /* size */) const  { return ""; }
+		virtual QPixmap getPixmap(const QRectF& /* wgs84Bbox */, const QRectF& /* projBbox */, const QRect& /* size */) const { return QPixmap(); };
 
 	//! translates a world coordinate to display coordinate
 	/*!
@@ -120,6 +120,8 @@ public:
 	 * @return the world coordinate
 	 */
 	virtual QPointF	displayToCoordinate(const QPoint& point) const;
+
+	virtual QRectF	getBoundingbox() const;
 
 	virtual bool isTiled() const { return true; };
 	virtual QString projection() const;
