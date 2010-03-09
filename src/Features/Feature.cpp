@@ -63,838 +63,838 @@ const QString encodeAttributes(const QString & text);
 
 namespace boost
 {
-	void intrusive_ptr_add_ref(Feature * p)
-	{
-		++(p->m_references);
-	}
-	void intrusive_ptr_release(Feature * p)
-	{
-		if (--(p->m_references) == 0) {
-			if (p->layer())
-				p->layer()->deleteFeature(p);
-			else
-				delete p;
-		}
-	}
+    void intrusive_ptr_add_ref(Feature * p)
+    {
+        ++(p->m_references);
+    }
+    void intrusive_ptr_release(Feature * p)
+    {
+        if (--(p->m_references) == 0) {
+            if (p->layer())
+                p->layer()->deleteFeature(p);
+            else
+                delete p;
+        }
+    }
 } // namespace boost
 
 
 void copyTags(Feature* Dest, Feature* Src)
 {
-	for (int i=0; i<Src->tagSize(); ++i)
-		Dest->setTag(Src->tagKey(i),Src->tagValue(i));
+    for (int i=0; i<Src->tagSize(); ++i)
+        Dest->setTag(Src->tagKey(i),Src->tagValue(i));
 }
 
 class MapFeaturePrivate
 {
-	public:
-		MapFeaturePrivate()
-			:  TagsSize(0), LastActor(Feature::User),
-				PossiblePaintersUpToDate(false),
-				PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
-				theFeature(0), LastPartNotification(0),
-				Time(QDateTime::currentDateTime()), Deleted(false), Visible(true), Uploaded(false), LongId(0)
-				, Virtual(false)
-				, VirtualsUpdatesBlocked(false)
-		{
-			initVersionNumber();
-		}
-		MapFeaturePrivate(const MapFeaturePrivate& other)
-			: Tags(other.Tags), TagsSize(other.TagsSize), LastActor(other.LastActor),
-				PossiblePaintersUpToDate(false),
-				PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
-				theFeature(0), LastPartNotification(0),
-				Time(other.Time), Deleted(false), Visible(true), Uploaded(false), LongId(0)
-				, Virtual(other.Virtual)
-				, VirtualsUpdatesBlocked(other.VirtualsUpdatesBlocked)
-		{
-			initVersionNumber();
-		}
+    public:
+        MapFeaturePrivate()
+            :  TagsSize(0), LastActor(Feature::User),
+                PossiblePaintersUpToDate(false),
+                PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
+                theFeature(0), LastPartNotification(0),
+                Time(QDateTime::currentDateTime()), Deleted(false), Visible(true), Uploaded(false), LongId(0)
+                , Virtual(false)
+                , VirtualsUpdatesBlocked(false)
+        {
+            initVersionNumber();
+        }
+        MapFeaturePrivate(const MapFeaturePrivate& other)
+            : Tags(other.Tags), TagsSize(other.TagsSize), LastActor(other.LastActor),
+                PossiblePaintersUpToDate(false),
+                PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
+                theFeature(0), LastPartNotification(0),
+                Time(other.Time), Deleted(false), Visible(true), Uploaded(false), LongId(0)
+                , Virtual(other.Virtual)
+                , VirtualsUpdatesBlocked(other.VirtualsUpdatesBlocked)
+        {
+            initVersionNumber();
+        }
 
-		void updatePossiblePainters();
-		void blankPainters();
-		void updatePainters(double PixelPerM);
-		void initVersionNumber();
+        void updatePossiblePainters();
+        void blankPainters();
+        void updatePainters(double PixelPerM);
+        void initVersionNumber();
 
-		mutable QString Id;
-		QList<QPair<QString, QString> > Tags;
-		int TagsSize;
-		Feature::ActorType LastActor;
-		QList<const FeaturePainter*> PossiblePainters;
-		bool PossiblePaintersUpToDate;
-		double PixelPerMForPainter;
-		const FeaturePainter* CurrentPainter;
-		bool HasPainter;
-		Feature* theFeature;
-		QList<Feature*> Parents;
-		int LastPartNotification;
-		QDateTime Time;
-		QString User;
-		int VersionNumber;
-		bool Deleted;
-		bool Visible;
-		bool Uploaded;
-		qint64 LongId;
-		RenderPriority theRenderPriority;
-		bool Virtual;
-		bool VirtualsUpdatesBlocked;
+        mutable QString Id;
+        QList<QPair<QString, QString> > Tags;
+        int TagsSize;
+        Feature::ActorType LastActor;
+        QList<const FeaturePainter*> PossiblePainters;
+        bool PossiblePaintersUpToDate;
+        double PixelPerMForPainter;
+        const FeaturePainter* CurrentPainter;
+        bool HasPainter;
+        Feature* theFeature;
+        QList<Feature*> Parents;
+        int LastPartNotification;
+        QDateTime Time;
+        QString User;
+        int VersionNumber;
+        bool Deleted;
+        bool Visible;
+        bool Uploaded;
+        qint64 LongId;
+        RenderPriority theRenderPriority;
+        bool Virtual;
+        bool VirtualsUpdatesBlocked;
 };
 
 void MapFeaturePrivate::initVersionNumber()
 {
-	static int VN = -1;
-	VersionNumber = VN--;
+    static int VN = -1;
+    VersionNumber = VN--;
 }
 
 Feature::Feature()
 : p(0), MetaUpToDate(false), m_references(0)
 {
-	 p = new MapFeaturePrivate;
-	 p->theFeature = this;
+     p = new MapFeaturePrivate;
+     p->theFeature = this;
 }
 
 Feature::Feature(const Feature& other)
 : QObject(), MetaUpToDate(false), m_references(0)
 {
-	p = new MapFeaturePrivate(*other.p);
-	p->theFeature = this;
+    p = new MapFeaturePrivate(*other.p);
+    p->theFeature = this;
 }
 
 Feature::~Feature(void)
 {
-	while (sizeParents())
-		getParent(0)->remove(this);
-	delete p;
+    while (sizeParents())
+        getParent(0)->remove(this);
+    delete p;
 }
 
 void Feature::setVersionNumber(int vn)
 {
-	p->VersionNumber = vn;
+    p->VersionNumber = vn;
 }
 
 int Feature::versionNumber() const
 {
-	return p->VersionNumber;
+    return p->VersionNumber;
 }
 
 void Feature::setLayer(Layer* aLayer)
 {
-	setParent(aLayer);
+    setParent(aLayer);
 }
 
 Layer* Feature::layer()
 {
-	return dynamic_cast<Layer*>(parent());
+    return dynamic_cast<Layer*>(parent());
 }
 
 const RenderPriority& Feature::renderPriority()
 {
-	if (!MetaUpToDate)
-		updateMeta();
-	return p->theRenderPriority;
+    if (!MetaUpToDate)
+        updateMeta();
+    return p->theRenderPriority;
 }
 
 void Feature::setRenderPriority(const RenderPriority& aPriority)
 {
-	p->theRenderPriority = aPriority;
+    p->theRenderPriority = aPriority;
 }
 
 void Feature::setLastUpdated(Feature::ActorType A)
 {
-	p->LastActor = A;
+    p->LastActor = A;
 }
 
 Feature::ActorType Feature::lastUpdated() const
 {
-	Layer* L = dynamic_cast<Layer*>(parent());
-	if (L && L->classType() == Layer::DirtyLayerType)
-		return Feature::User;
-	else
-		return p->LastActor;
+    Layer* L = dynamic_cast<Layer*>(parent());
+    if (L && L->classType() == Layer::DirtyLayerType)
+        return Feature::User;
+    else
+        return p->LastActor;
 }
 
 void Feature::setId(const QString& id)
 {
-	if (parent())
-	{
-		dynamic_cast<Layer*>(parent())->notifyIdUpdate(p->Id,0);
-		dynamic_cast<Layer*>(parent())->notifyIdUpdate(id,this);
-	}
-	p->Id = id;
+    if (parent())
+    {
+        dynamic_cast<Layer*>(parent())->notifyIdUpdate(p->Id,0);
+        dynamic_cast<Layer*>(parent())->notifyIdUpdate(id,this);
+    }
+    p->Id = id;
 }
 
 const QString& Feature::resetId()
 {
-	p->Id = QString::number((((qint64)this) * -1));
-	if (parent())
-		dynamic_cast<Layer*>(parent())->notifyIdUpdate(p->Id,const_cast<Feature*>(this));
-	return p->Id;
+    p->Id = QString::number((((qint64)this) * -1));
+    if (parent())
+        dynamic_cast<Layer*>(parent())->notifyIdUpdate(p->Id,const_cast<Feature*>(this));
+    return p->Id;
 }
 
 const QString& Feature::id() const
 {
-	if (p->Id.isEmpty())
-	{
-		p->Id = QString::number((((qint64)this) * -1));
-		Layer* L = dynamic_cast<Layer*>(parent());
-		if (L)
-			L->notifyIdUpdate(p->Id,const_cast<Feature*>(this));
-	}
-	return p->Id;
+    if (p->Id.isEmpty())
+    {
+        p->Id = QString::number((((qint64)this) * -1));
+        Layer* L = dynamic_cast<Layer*>(parent());
+        if (L)
+            L->notifyIdUpdate(p->Id,const_cast<Feature*>(this));
+    }
+    return p->Id;
 }
 
 qint64 Feature::idToLong() const
 {
-	if (p->LongId)
-		return p->LongId;
+    if (p->LongId)
+        return p->LongId;
 
-	if (hasOSMId()) {
-		bool ok;
-		QString s = stripToOSMId(id());
-		p->LongId = s.toLongLong(&ok);
-		Q_ASSERT(ok);
-	} else {
-		p->LongId = (((qint64)this) * -1);
-	}
+    if (hasOSMId()) {
+        bool ok;
+        QString s = stripToOSMId(id());
+        p->LongId = s.toLongLong(&ok);
+        Q_ASSERT(ok);
+    } else {
+        p->LongId = (((qint64)this) * -1);
+    }
 
-	return p->LongId;
+    return p->LongId;
 }
 
 QString Feature::xmlId() const
 {
-	return stripToOSMId(id());
+    return stripToOSMId(id());
 }
 
 bool Feature::hasOSMId() const
 {
-	if (p->Id.left(5) == "node_")
-		return true;
-	if (p->Id.left(4) == "way_")
-		return true;
-	if (p->Id.left(4) == "rel_")
-		return true;
-	return false;
+    if (p->Id.left(5) == "node_")
+        return true;
+    if (p->Id.left(4) == "way_")
+        return true;
+    if (p->Id.left(4) == "rel_")
+        return true;
+    return false;
 }
 
 const QDateTime& Feature::time() const
 {
-	return p->Time;
+    return p->Time;
 }
 
 void Feature::setTime(const QDateTime& time)
 {
-	p->Time = time;
+    p->Time = time;
 }
 
 const QString& Feature::user() const
 {
-	return p->User;
+    return p->User;
 }
 
 void Feature::setUser(const QString& user)
 {
-	p->User = user;
+    p->User = user;
 }
 
 bool Feature::isDirty() const
 {
-	if (parent())
-		return (dynamic_cast<Layer*>(parent())->classType() == Layer::DirtyLayerType);
-	else
-		return false;
+    if (parent())
+        return (dynamic_cast<Layer*>(parent())->classType() == Layer::DirtyLayerType);
+    else
+        return false;
 }
 
 void Feature::setUploaded(bool state)
 {
-	p->Uploaded = state;
+    p->Uploaded = state;
 }
 
 bool Feature::isUploaded() const
 {
-	return p->Uploaded;
+    return p->Uploaded;
 }
 
 bool Feature::isUploadable() const
 {
-	if (parent())
-		return (dynamic_cast<Layer*>(parent())->isUploadable());
-	else
-		return false;
+    if (parent())
+        return (dynamic_cast<Layer*>(parent())->isUploadable());
+    else
+        return false;
 }
 
 void Feature::setDeleted(bool delState)
 {
-	if (delState == p->Deleted)
-		return;
+    if (delState == p->Deleted)
+        return;
 
-	if (layer()) {
-		if (delState)
-			layer()->indexRemove(boundingBox(), this);
-		else
-			layer()->indexAdd(boundingBox(), this);
-	}
-	p->Deleted = delState;
+    if (layer()) {
+        if (delState)
+            layer()->indexRemove(boundingBox(), this);
+        else
+            layer()->indexAdd(boundingBox(), this);
+    }
+    p->Deleted = delState;
 }
 
 bool Feature::isDeleted() const
 {
-	return p->Deleted;
+    return p->Deleted;
 }
 
 void Feature::setVisible(bool state)
 {
-	if (state == p->Visible)
-		return;
+    if (state == p->Visible)
+        return;
 
-	if (layer()) {
-		if (!state)
-			layer()->indexRemove(boundingBox(), this);
-		else
-			layer()->indexAdd(boundingBox(), this);
-	}
-	p->Visible = state;
+    if (layer()) {
+        if (!state)
+            layer()->indexRemove(boundingBox(), this);
+        else
+            layer()->indexAdd(boundingBox(), this);
+    }
+    p->Visible = state;
 }
 
 bool Feature::isVisible() const
 {
-	return p->Visible;
+    return p->Visible;
 }
 
 bool Feature::isHidden() const
 {
-	return !p->Visible;
+    return !p->Visible;
 }
 
 void Feature::setVirtual(bool val)
 {
-	p->Virtual = val;
+    p->Virtual = val;
 }
 
 void Feature::blockVirtualUpdates(bool val)
 {
-	p->VirtualsUpdatesBlocked = val;
+    p->VirtualsUpdatesBlocked = val;
 }
 
 bool Feature::isVirtualUpdatesBlocked() const
 {
-	return p->VirtualsUpdatesBlocked;
+    return p->VirtualsUpdatesBlocked;
 }
 
 bool Feature::isVirtual() const
 {
-	return p->Virtual;
+    return p->Virtual;
 }
 
 void Feature::setTag(int index, const QString& key, const QString& value, bool addToTagList)
 {
-	int i = 0;
-	for (; i<p->Tags.size(); ++i)
-		if (p->Tags[i].first == key)
-		{
-			if (p->Tags[i].second == value)
-				return;
-			p->Tags[i].second = value;
-			break;
-		}
-	if (i == p->Tags.size()) {
-		p->Tags.insert(p->Tags.begin() + index, qMakePair(key,value));
-		p->TagsSize++;
-	}
-	invalidatePainter();
-	invalidateMeta();
+    int i = 0;
+    for (; i<p->Tags.size(); ++i)
+        if (p->Tags[i].first == key)
+        {
+            if (p->Tags[i].second == value)
+                return;
+            p->Tags[i].second = value;
+            break;
+        }
+    if (i == p->Tags.size()) {
+        p->Tags.insert(p->Tags.begin() + index, qMakePair(key,value));
+        p->TagsSize++;
+    }
+    invalidatePainter();
+    invalidateMeta();
 
-	if (parent() && addToTagList)
-		if (dynamic_cast<Layer*>(parent())->getDocument())
-			dynamic_cast<Layer*>(parent())->getDocument()->addToTagList(key, value);
+    if (parent() && addToTagList)
+        if (dynamic_cast<Layer*>(parent())->getDocument())
+            dynamic_cast<Layer*>(parent())->getDocument()->addToTagList(key, value);
 }
 
 void Feature::setTag(const QString& key, const QString& value, bool addToTagList)
 {
-	int i = 0;
-	for (; i<p->Tags.size(); ++i)
-		if (p->Tags[i].first == key)
-		{
-			if (p->Tags[i].second == value)
-				return;
-			p->Tags[i].second = value;
-			break;
-		}
-	if (i == p->Tags.size()) {
-		p->Tags.push_back(qMakePair(key,value));
-		p->TagsSize++;
-	}
-	invalidateMeta();
-	invalidatePainter();
+    int i = 0;
+    for (; i<p->Tags.size(); ++i)
+        if (p->Tags[i].first == key)
+        {
+            if (p->Tags[i].second == value)
+                return;
+            p->Tags[i].second = value;
+            break;
+        }
+    if (i == p->Tags.size()) {
+        p->Tags.push_back(qMakePair(key,value));
+        p->TagsSize++;
+    }
+    invalidateMeta();
+    invalidatePainter();
 
-	if (parent() && addToTagList)
-		if (dynamic_cast<Layer*>(parent())->getDocument())
-			dynamic_cast<Layer*>(parent())->getDocument()->addToTagList(key, value);
+    if (parent() && addToTagList)
+        if (dynamic_cast<Layer*>(parent())->getDocument())
+            dynamic_cast<Layer*>(parent())->getDocument()->addToTagList(key, value);
 }
 
 void Feature::clearTags()
 {
-	p->Tags.clear();
-	p->TagsSize = 0;
-	invalidateMeta();
-	invalidatePainter();
+    p->Tags.clear();
+    p->TagsSize = 0;
+    invalidateMeta();
+    invalidatePainter();
 }
 
 void Feature::invalidateMeta()
 {
-	MetaUpToDate = false;
+    MetaUpToDate = false;
 }
 
 void Feature::invalidatePainter()
 {
-	p->PossiblePaintersUpToDate = false;
-	p->PixelPerMForPainter = -1;
+    p->PossiblePaintersUpToDate = false;
+    p->PixelPerMForPainter = -1;
 }
 
 void Feature::clearTag(const QString& k)
 {
-	for (int i=0; i<p->Tags.size(); ++i)
-		if (p->Tags[i].first == k)
-		{
-			p->PixelPerMForPainter = -1;
-			p->Tags.erase(p->Tags.begin()+i);
-			p->TagsSize--;
-			break;
-		}
-	invalidateMeta();
-	invalidatePainter();
+    for (int i=0; i<p->Tags.size(); ++i)
+        if (p->Tags[i].first == k)
+        {
+            p->PixelPerMForPainter = -1;
+            p->Tags.erase(p->Tags.begin()+i);
+            p->TagsSize--;
+            break;
+        }
+    invalidateMeta();
+    invalidatePainter();
 }
 
 void Feature::removeTag(int idx)
 {
-	p->Tags.erase(p->Tags.begin()+idx);
-	p->TagsSize--;
-	invalidateMeta();
-	invalidatePainter();
+    p->Tags.erase(p->Tags.begin()+idx);
+    p->TagsSize--;
+    invalidateMeta();
+    invalidatePainter();
 }
 
 int Feature::tagSize() const
 {
-	return p->TagsSize;
+    return p->TagsSize;
 }
 
 QString Feature::tagValue(int i) const
 {
-	return p->Tags[i].second;
+    return p->Tags[i].second;
 }
 
 QString Feature::tagKey(int i) const
 {
-	return p->Tags[i].first;
+    return p->Tags[i].first;
 }
 
 int Feature::findKey(const QString &k) const
 {
-	for (int i=0; i<p->TagsSize; ++i)
-		if (p->Tags[i].first == k)
-			return i;
-	return p->Tags.size();
+    for (int i=0; i<p->TagsSize; ++i)
+        if (p->Tags[i].first == k)
+            return i;
+    return p->Tags.size();
 }
 
 QString Feature::tagValue(const QString& k, const QString& Default) const
 {
-	for (int i=0; i<p->TagsSize; ++i)
-		if (p->Tags[i].first == k)
-			return p->Tags[i].second;
-	return Default;
+    for (int i=0; i<p->TagsSize; ++i)
+        if (p->Tags[i].first == k)
+            return p->Tags[i].second;
+    return Default;
 }
 
 void MapFeaturePrivate::updatePossiblePainters()
 {
-	//if the object has no tags or only the created_by tag, we don't check for style
-	//search is about 15 times faster like that !!!
-	//However, still match features with no tags and no parent, i.e. "lost" trackpoints
-	if ( (theFeature->layer()->isTrack()) && MerkaartorPreferences::instance()->getDisableStyleForTracks() ) return blankPainters();
+    //if the object has no tags or only the created_by tag, we don't check for style
+    //search is about 15 times faster like that !!!
+    //However, still match features with no tags and no parent, i.e. "lost" trackpoints
+    if ( (theFeature->layer()->isTrack()) && MerkaartorPreferences::instance()->getDisableStyleForTracks() ) return blankPainters();
 
-	if ( (theFeature->layer()->isTrack()) || theFeature->sizeParents() ) {
-		int i;
-		for (i=0; i<theFeature->tagSize(); ++i)
-			if ((theFeature->tagKey(i) != "created_by") && (theFeature->tagKey(i) != "ele"))
-				break;
+    if ( (theFeature->layer()->isTrack()) || theFeature->sizeParents() ) {
+        int i;
+        for (i=0; i<theFeature->tagSize(); ++i)
+            if ((theFeature->tagKey(i) != "created_by") && (theFeature->tagKey(i) != "ele"))
+                break;
 
-		if (i == theFeature->tagSize()) return blankPainters();
-	}
+        if (i == theFeature->tagSize()) return blankPainters();
+    }
 
-	PossiblePainters.clear();
-	QList<const FeaturePainter*> DefaultPainters;
-	for (int i=0; i<M_STYLE->painterSize(); ++i)
-	{
-		const FeaturePainter* Current = M_STYLE->getPainter(i);
-		switch (Current->matchesTag(theFeature)) {
-			case TagSelect_Match:
-				PossiblePainters.push_back(Current);
-				break;
-			case TagSelect_DefaultMatch:
-				DefaultPainters.push_back(Current);
-				break;
-			default:
-				break;
-		}
-	}
-	if (!PossiblePainters.size())
-		PossiblePainters = DefaultPainters;
-	PossiblePaintersUpToDate = true;
-	HasPainter = (PossiblePainters.size() > 0);
+    PossiblePainters.clear();
+    QList<const FeaturePainter*> DefaultPainters;
+    for (int i=0; i<M_STYLE->painterSize(); ++i)
+    {
+        const FeaturePainter* Current = M_STYLE->getPainter(i);
+        switch (Current->matchesTag(theFeature)) {
+            case TagSelect_Match:
+                PossiblePainters.push_back(Current);
+                break;
+            case TagSelect_DefaultMatch:
+                DefaultPainters.push_back(Current);
+                break;
+            default:
+                break;
+        }
+    }
+    if (!PossiblePainters.size())
+        PossiblePainters = DefaultPainters;
+    PossiblePaintersUpToDate = true;
+    HasPainter = (PossiblePainters.size() > 0);
 }
 
 void MapFeaturePrivate::updatePainters(double PixelPerM)
 {
-	if (!PossiblePaintersUpToDate)
-		updatePossiblePainters();
+    if (!PossiblePaintersUpToDate)
+        updatePossiblePainters();
 
-	CurrentPainter = 0;
-	PixelPerMForPainter = PixelPerM;
-	for (int i=0; i<PossiblePainters.size(); ++i)
-		if (PossiblePainters[i]->matchesZoom(PixelPerM))
-		{
-			CurrentPainter = PossiblePainters[i];
-			return;
-		}
+    CurrentPainter = 0;
+    PixelPerMForPainter = PixelPerM;
+    for (int i=0; i<PossiblePainters.size(); ++i)
+        if (PossiblePainters[i]->matchesZoom(PixelPerM))
+        {
+            CurrentPainter = PossiblePainters[i];
+            return;
+        }
 }
 
 void MapFeaturePrivate::blankPainters()
 {
-	CurrentPainter = 0;
-	PossiblePainters.clear();
-	PossiblePaintersUpToDate = true;
-	HasPainter = false;
+    CurrentPainter = 0;
+    PossiblePainters.clear();
+    PossiblePaintersUpToDate = true;
+    HasPainter = false;
 }
 
 const FeaturePainter* Feature::getEditPainter(double PixelPerM) const
 {
-	if (p->PixelPerMForPainter != PixelPerM)
-		p->updatePainters(PixelPerM);
-	return p->CurrentPainter;
+    if (p->PixelPerMForPainter != PixelPerM)
+        p->updatePainters(PixelPerM);
+    return p->CurrentPainter;
 }
 
 const FeaturePainter* Feature::getCurrentEditPainter() const
 {
-	return p->CurrentPainter;
+    return p->CurrentPainter;
 }
 
 bool Feature::hasEditPainter() const
 {
-	if (!p->PossiblePaintersUpToDate)
-		p->updatePossiblePainters();
+    if (!p->PossiblePaintersUpToDate)
+        p->updatePossiblePainters();
 
-	return p->HasPainter;
+    return p->HasPainter;
 }
 
 void Feature::setParentFeature(Feature* F)
 {
-	if (std::find(p->Parents.begin(),p->Parents.end(),F) == p->Parents.end())
-		p->Parents.push_back(F);
+    if (std::find(p->Parents.begin(),p->Parents.end(),F) == p->Parents.end())
+        p->Parents.push_back(F);
 }
 
 void Feature::unsetParentFeature(Feature* F)
 {
-	for (int i=0; i<p->Parents.size(); ++i)
-		if (p->Parents[i] == F)
-		{
-			p->Parents.erase(p->Parents.begin()+i);
-			return;
-		}
+    for (int i=0; i<p->Parents.size(); ++i)
+        if (p->Parents[i] == F)
+        {
+            p->Parents.erase(p->Parents.begin()+i);
+            return;
+        }
 }
 
 void Feature::updateIndex()
 {
-	if (isDeleted())
-		return;
+    if (isDeleted())
+        return;
 
-	if (layer()) {
-		layer()->indexRemove(BBox, this);
-		CoordBox bb = boundingBox();
-		layer()->indexAdd(bb, this);
-	}
+    if (layer()) {
+        layer()->indexRemove(BBox, this);
+        CoordBox bb = boundingBox();
+        layer()->indexAdd(bb, this);
+    }
 }
 
 int Feature::sizeParents() const
 {
-	return p->Parents.size();
+    return p->Parents.size();
 }
 
 Feature* Feature::getParent(int i)
 {
-	return p->Parents[i];
+    return p->Parents[i];
 }
 
 const Feature* Feature::getParent(int i) const
 {
-	return p->Parents[i];
+    return p->Parents[i];
 }
 
 void Feature::notifyChanges()
 {
-	static int Id = 0;
-	notifyParents(++Id);
+    static int Id = 0;
+    notifyParents(++Id);
 }
 
 void Feature::notifyParents(int Id)
 {
-	if (Id != p->LastPartNotification)
-	{
-		p->LastPartNotification = Id;
-		for (int i=0; i<p->Parents.size(); ++i)
-			p->Parents[i]->partChanged(this, Id);
-	}
+    if (Id != p->LastPartNotification)
+    {
+        p->LastPartNotification = Id;
+        for (int i=0; i<p->Parents.size(); ++i)
+            p->Parents[i]->partChanged(this, Id);
+    }
 }
 
 QString Feature::tagsToXML(int lvl)
 {
-	QString S;
-	for (int i=0; i<tagSize(); ++i)
-	{
-		S += QString(lvl*2, ' ') + QString("<tag k=\"%1\" v=\"%2\"/>\n").arg(encodeAttributes(tagKey(i))).arg(encodeAttributes(tagValue(i)));
-	}
-	return S;
+    QString S;
+    for (int i=0; i<tagSize(); ++i)
+    {
+        S += QString(lvl*2, ' ') + QString("<tag k=\"%1\" v=\"%2\"/>\n").arg(encodeAttributes(tagKey(i))).arg(encodeAttributes(tagValue(i)));
+    }
+    return S;
 }
 
 bool Feature::tagsToXML(QDomElement xParent)
 {
-	bool OK = true;
+    bool OK = true;
 
-	for (int i=0; i<tagSize(); ++i)
-	{
-		QDomElement e = xParent.ownerDocument().createElement("tag");
-		xParent.appendChild(e);
+    for (int i=0; i<tagSize(); ++i)
+    {
+        QDomElement e = xParent.ownerDocument().createElement("tag");
+        xParent.appendChild(e);
 
-		e.setAttribute("k", tagKey(i));
-		e.setAttribute("v", tagValue(i));
-	}
+        e.setAttribute("k", tagKey(i));
+        e.setAttribute("v", tagValue(i));
+    }
 
-	return OK;
+    return OK;
 }
 
 void Feature::tagsFromXML(Document* d, Feature * f, QDomElement e)
 {
-	Q_UNUSED(d)
-	QDomElement c = e.firstChildElement();
-	while(!c.isNull()) {
-		if (c.tagName() == "tag") {
-			f->setTag(c.attribute("k"),c.attribute("v"));
-		}
-		c = c.nextSiblingElement();
-	}
+    Q_UNUSED(d)
+    QDomElement c = e.firstChildElement();
+    while(!c.isNull()) {
+        if (c.tagName() == "tag") {
+            f->setTag(c.attribute("k"),c.attribute("v"));
+        }
+        c = c.nextSiblingElement();
+    }
 }
 
 QString Feature::stripToOSMId(const QString& id)
 {
-	int f = id.lastIndexOf("_");
-	if (f>0)
-		return id.right(id.length()-(f+1));
-	return id;
+    int f = id.lastIndexOf("_");
+    if (f>0)
+        return id.right(id.length()-(f+1));
+    return id;
 }
 
 Relation * Feature::GetSingleParentRelation(Feature * mapFeature)
 {
-	int parents = mapFeature->sizeParents();
+    int parents = mapFeature->sizeParents();
 
-	if (parents == 0)
-		return NULL;
+    if (parents == 0)
+        return NULL;
 
-	Relation * parentRelation = NULL;
+    Relation * parentRelation = NULL;
 
-	int i;
-	for (i=0; i<parents; i++)
-	{
-		Feature * parent = mapFeature->getParent(i);
-		Relation * rel = dynamic_cast<Relation*>(parent);
+    int i;
+    for (i=0; i<parents; i++)
+    {
+        Feature * parent = mapFeature->getParent(i);
+        Relation * rel = dynamic_cast<Relation*>(parent);
 
-		if (rel == NULL)
-			continue;
+        if (rel == NULL)
+            continue;
 
-		if (parentRelation)
-			return NULL;
+        if (parentRelation)
+            return NULL;
 
-		if (rel->layer()->isEnabled())
-			parentRelation = rel;
-	}
+        if (rel->layer()->isEnabled())
+            parentRelation = rel;
+    }
 
-	return parentRelation;
+    return parentRelation;
 }
 
 //Static
 Node* Feature::getTrackPointOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const QString& Id)
 {
-	Node* Part = dynamic_cast<Node*>(theDocument->getFeature("node_"+Id));
-	if (!Part)
-	{
-		Part = dynamic_cast<Node*>(theDocument->getFeature(Id));
-		if (!Part)
-		{
-			Part = new Node(Coord(0,0));
-			if (Id.startsWith('{') || Id.startsWith('-'))
-				Part->setId(Id);
-			else
-				Part->setId("node_"+Id);
-			Part->setLastUpdated(Feature::NotYetDownloaded);
-			theLayer->add(Part);
-		}
-	}
-	return Part;
+    Node* Part = dynamic_cast<Node*>(theDocument->getFeature("node_"+Id));
+    if (!Part)
+    {
+        Part = dynamic_cast<Node*>(theDocument->getFeature(Id));
+        if (!Part)
+        {
+            Part = new Node(Coord(0,0));
+            if (Id.startsWith('{') || Id.startsWith('-'))
+                Part->setId(Id);
+            else
+                Part->setId("node_"+Id);
+            Part->setLastUpdated(Feature::NotYetDownloaded);
+            theLayer->add(Part);
+        }
+    }
+    return Part;
 }
 
 Way* Feature::getWayOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const QString& Id)
 {
-	Way* Part = dynamic_cast<Way*>(theDocument->getFeature("way_"+Id));
-	if (!Part)
-	{
-		Part = dynamic_cast<Way*>(theDocument->getFeature(Id));
-		if (!Part)
-		{
-			Part = new Way;
-			if (Id.startsWith('{') || Id.startsWith('-'))
-				Part->setId(Id);
-			else
-				Part->setId("way_"+Id);
-			Part->setLastUpdated(Feature::NotYetDownloaded);
-			theLayer->add(Part);
-		}
-	}
-	return Part;
+    Way* Part = dynamic_cast<Way*>(theDocument->getFeature("way_"+Id));
+    if (!Part)
+    {
+        Part = dynamic_cast<Way*>(theDocument->getFeature(Id));
+        if (!Part)
+        {
+            Part = new Way;
+            if (Id.startsWith('{') || Id.startsWith('-'))
+                Part->setId(Id);
+            else
+                Part->setId("way_"+Id);
+            Part->setLastUpdated(Feature::NotYetDownloaded);
+            theLayer->add(Part);
+        }
+    }
+    return Part;
 }
 
 Relation* Feature::getRelationOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const QString& Id)
 {
-	Relation* Part = dynamic_cast<Relation*>(theDocument->getFeature("rel_"+Id));
-	if (!Part)
-	{
-		Part = dynamic_cast<Relation*>(theDocument->getFeature(Id));
-		if (!Part)
-		{
-			Part = new Relation;
-			if (Id.startsWith('{') || Id.startsWith('-'))
-				Part->setId(Id);
-			else
-				Part->setId("rel_"+Id);
-			Part->setLastUpdated(Feature::NotYetDownloaded);
-			theLayer->add(Part);
-		}
-	}
-	return Part;
+    Relation* Part = dynamic_cast<Relation*>(theDocument->getFeature("rel_"+Id));
+    if (!Part)
+    {
+        Part = dynamic_cast<Relation*>(theDocument->getFeature(Id));
+        if (!Part)
+        {
+            Part = new Relation;
+            if (Id.startsWith('{') || Id.startsWith('-'))
+                Part->setId(Id);
+            else
+                Part->setId("rel_"+Id);
+            Part->setLastUpdated(Feature::NotYetDownloaded);
+            theLayer->add(Part);
+        }
+    }
+    return Part;
 }
 
 void Feature::mergeTags(Document* theDocument, CommandList* L, Feature* Dest, Feature* Src)
 {
-	for (int i=0; i<Src->tagSize(); ++i)
-	{
-		QString k = Src->tagKey(i);
-		QString v1 = Src->tagValue(i);
-		int j = Dest->findKey(k);
-		if (j == Dest->tagSize())
-			L->add(new SetTagCommand(Dest,k,v1, theDocument->getDirtyOrOriginLayer(Dest->layer())));
-		else
-		{
-			QString v2 = Dest->tagValue(j);
-			if (v1 != v2 && k !="created_by")
-			{
-				L->add(new SetTagCommand(Dest,k,QString("%1;%2").arg(v2).arg(v1), theDocument->getDirtyOrOriginLayer(Dest->layer())));
-			}
-		}
-	}
+    for (int i=0; i<Src->tagSize(); ++i)
+    {
+        QString k = Src->tagKey(i);
+        QString v1 = Src->tagValue(i);
+        int j = Dest->findKey(k);
+        if (j == Dest->tagSize())
+            L->add(new SetTagCommand(Dest,k,v1, theDocument->getDirtyOrOriginLayer(Dest->layer())));
+        else
+        {
+            QString v2 = Dest->tagValue(j);
+            if (v1 != v2 && k !="created_by")
+            {
+                L->add(new SetTagCommand(Dest,k,QString("%1;%2").arg(v2).arg(v1), theDocument->getDirtyOrOriginLayer(Dest->layer())));
+            }
+        }
+    }
 }
 
 
 QString Feature::toMainHtml(QString type, QString systemtype)
 {
-	QString desc;
-	QString name(tagValue("name",""));
-	if (!name.isEmpty())
-		desc = QString("<big><b>%1</b></big><br/><small>(%2)</small>").arg(name).arg(id());
-	else
-		desc = QString("<big><b>%1</b></big>").arg(id());
+    QString desc;
+    QString name(tagValue("name",""));
+    if (!name.isEmpty())
+        desc = QString("<big><b>%1</b></big><br/><small>(%2)</small>").arg(name).arg(id());
+    else
+        desc = QString("<big><b>%1</b></big>").arg(id());
 
-	QString S =
-	"<html><head/><body>"
-	"<small><i>" + type + "</i></small><br/>"
-	+ desc +
-	"<br/>"
-	"<small>";
-	if (!user().isEmpty())
-		S += QApplication::translate("MapFeature", "<i>last: </i><b>%1</b> by <b>%2</b>").arg(time().toString(Qt::SystemLocaleDate)).arg(user());
-		else
-		S += QApplication::translate("MapFeature", "<i>last: </i><b>%1</b>").arg(time().toString(Qt::SystemLocaleDate));
-	S += "</small>"
-	"<hr/>"
-	"%1";
-	int f = id().lastIndexOf("_");
-	if (f>0) {
-		S += "<hr/>"
-		"<a href='/api/" + M_PREFS->apiVersion() + "/" + systemtype + "/" + xmlId() + "/history'>"+QApplication::translate("MapFeature", "History")+"</a>";
-		if (systemtype == "node") {
-			S += "<br/>"
-			"<a href='/api/" + M_PREFS->apiVersion() + "/" + systemtype + "/" + xmlId() + "/ways'>"+QApplication::translate("MapFeature", "Referenced by ways")+"</a>";
-		}
-		S += "<br/>"
-		"<a href='/api/" + M_PREFS->apiVersion() + "/" + systemtype + "/" + xmlId() + "/relations'>"+QApplication::translate("MapFeature", "Referenced by relation")+"</a>";
-	}
+    QString S =
+    "<html><head/><body>"
+    "<small><i>" + type + "</i></small><br/>"
+    + desc +
+    "<br/>"
+    "<small>";
+    if (!user().isEmpty())
+        S += QApplication::translate("MapFeature", "<i>last: </i><b>%1</b> by <b>%2</b>").arg(time().toString(Qt::SystemLocaleDate)).arg(user());
+        else
+        S += QApplication::translate("MapFeature", "<i>last: </i><b>%1</b>").arg(time().toString(Qt::SystemLocaleDate));
+    S += "</small>"
+    "<hr/>"
+    "%1";
+    int f = id().lastIndexOf("_");
+    if (f>0) {
+        S += "<hr/>"
+        "<a href='/api/" + M_PREFS->apiVersion() + "/" + systemtype + "/" + xmlId() + "/history'>"+QApplication::translate("MapFeature", "History")+"</a>";
+        if (systemtype == "node") {
+            S += "<br/>"
+            "<a href='/api/" + M_PREFS->apiVersion() + "/" + systemtype + "/" + xmlId() + "/ways'>"+QApplication::translate("MapFeature", "Referenced by ways")+"</a>";
+        }
+        S += "<br/>"
+        "<a href='/api/" + M_PREFS->apiVersion() + "/" + systemtype + "/" + xmlId() + "/relations'>"+QApplication::translate("MapFeature", "Referenced by relation")+"</a>";
+    }
 //	QString bbox("bbox=%1,%2,%3,%4");
 //	bbox = bbox.arg(intToAng(boundingBox().bottomLeft().lon()), 0, 'f').arg(intToAng(boundingBox().bottomLeft().lat()), 0, 'f').arg(intToAng(boundingBox().topRight().lon()), 0, 'f').arg(intToAng(boundingBox().topRight().lat()), 0, 'f');
 //	S += "<br/>"
 //		"<a href='/api/" + M_PREFS->apiVersion() + "/changesets?" + bbox + "'>"+QApplication::translate("MapFeature", "Changesets in feature bbox")+"</a>";
-	S += "</body></html>";
+    S += "</body></html>";
 
-	return S;
+    return S;
 }
 
 bool Feature::QRectInterstects(const QRect& r, const QLine& l, QPoint& a, QPoint& b)
 {
-	QLineF lF = QLineF(l);
-	QPointF pF;
-	bool hasP1 = false;
-	bool hasP2 = false;
+    QLineF lF = QLineF(l);
+    QPointF pF;
+    bool hasP1 = false;
+    bool hasP2 = false;
 
-	if (QLineF(r.topLeft(), r.bottomLeft()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
-		a = pF.toPoint();
-		hasP1 = true;
-	}
-	if (QLineF(r.bottomLeft(), r.bottomRight()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
-		if (hasP1) {
-			b = pF.toPoint();
-			hasP2 = true;
-		} else {
-			a = pF.toPoint();
-			hasP1 = true;
-		}
-	}
-	if (QLineF(r.bottomRight(), r.topRight()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
-		if (hasP1) {
-			b = pF.toPoint();
-			hasP2 = true;
-		} else {
-			a = pF.toPoint();
-			hasP1 = true;
-		}
-	}
-	if (QLineF(r.topRight(), r.topLeft()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
-		if (hasP1) {
-			b = pF.toPoint();
-			hasP2 = true;
-		} else {
-			a = pF.toPoint();
-			hasP1 = true;
-		}
-	}
+    if (QLineF(r.topLeft(), r.bottomLeft()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
+        a = pF.toPoint();
+        hasP1 = true;
+    }
+    if (QLineF(r.bottomLeft(), r.bottomRight()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
+        if (hasP1) {
+            b = pF.toPoint();
+            hasP2 = true;
+        } else {
+            a = pF.toPoint();
+            hasP1 = true;
+        }
+    }
+    if (QLineF(r.bottomRight(), r.topRight()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
+        if (hasP1) {
+            b = pF.toPoint();
+            hasP2 = true;
+        } else {
+            a = pF.toPoint();
+            hasP1 = true;
+        }
+    }
+    if (QLineF(r.topRight(), r.topLeft()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
+        if (hasP1) {
+            b = pF.toPoint();
+            hasP2 = true;
+        } else {
+            a = pF.toPoint();
+            hasP1 = true;
+        }
+    }
 
-	if (hasP1 && hasP2) {
+    if (hasP1 && hasP2) {
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 4, 0))
-		double la1 = QLineF(a,b).angleTo(lF);
+        double la1 = QLineF(a,b).angleTo(lF);
 #else
-		double la1 = QLineF(a,b).angle(lF);
+        double la1 = QLineF(a,b).angle(lF);
 #endif
-		if (la1 > 15.0 && la1 < 345.0) {
-			QPoint t = b;
-			b = a;
-			a = t;
-		}
-	}
-	if (hasP1)
-		return true;
-	else
-		return false;
+        if (la1 > 15.0 && la1 < 345.0) {
+            QPoint t = b;
+            b = a;
+            a = t;
+        }
+    }
+    if (hasP1)
+        return true;
+    else
+        return false;
 }
 

@@ -10,62 +10,64 @@ class IImageManager;
 
 struct Tile
 {
-	Tile(int i, int j, double priority)
-		: i(i), j(j), priority(priority)
-	{}
+    Tile(int i, int j, double priority)
+        : i(i), j(j), priority(priority)
+    {}
 
-	int i, j;
-	double priority;
+    int i, j;
+    double priority;
 
-	bool operator<(const Tile& rhs) const { return priority < rhs.priority; }
+    bool operator<(const Tile& rhs) const { return priority < rhs.priority; }
 };
 
 class ImageMapLayer : public OsbLayer
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	//ImageMapLayer() : layermanager(0) {}
-	ImageMapLayer(const QString& aName);
-	virtual ~ImageMapLayer();
+    //ImageMapLayer() : layermanager(0) {}
+    ImageMapLayer(const QString& aName);
+    virtual ~ImageMapLayer();
 
-	void setMapAdapter(const QUuid& theAdapterUid, const QString& server = QString());
-	QString projection() const;
+    IMapAdapter* getMapAdapter();
+    void setMapAdapter(const QUuid& theAdapterUid, const QString& server = QString());
+    QString projection() const;
 
-	virtual void setVisible(bool b);
-	virtual LayerWidget* newWidget(void);
-	virtual void updateWidget();
-	virtual int size() const;
+    virtual void setVisible(bool b);
+    virtual LayerWidget* newWidget(void);
+    virtual void updateWidget();
+    CoordBox boundingBox();
+    virtual int size() const;
 
-	virtual bool toXML(QDomElement& xParent, QProgressDialog & progress);
-	static ImageMapLayer* fromXML(Document* d, const QDomElement& e, QProgressDialog & progress);
+    virtual bool toXML(QDomElement& xParent, QProgressDialog & progress);
+    static ImageMapLayer* fromXML(Document* d, const QDomElement& e, QProgressDialog & progress);
 
-	virtual /* const */ LayerType classType() {return Layer::ImageLayerType;}
-	virtual const LayerGroups classGroups() {return(Layer::Default);}
+    virtual /* const */ LayerType classType() {return Layer::ImageLayerType;}
+    virtual const LayerGroups classGroups() {return(Layer::Default);}
 
-	virtual bool arePointsDrawable() {return false;}
+    virtual bool arePointsDrawable() {return false;}
 
-	virtual void drawImage(QPixmap& thePix);
-	virtual void forceRedraw(MapView& theView, QRect rect, QPoint delta);
-	virtual void draw(MapView& theView, QRect& rect);
-	virtual void zoom(double zoom, const QPoint& pos, const QRect& rect);
+    virtual void drawImage(QPixmap& thePix);
+    virtual void forceRedraw(MapView& theView, QRect rect, QPoint delta);
+    virtual void draw(MapView& theView, QRect& rect);
+    virtual void zoom(double zoom, const QPoint& pos, const QRect& rect);
 
-	IImageManager* getImageManger();
+    IImageManager* getImageManger();
 private:
-	QRect drawTiled(MapView& theView, QRect& rect) const;
-	QRect drawFull(MapView& theView, QRect& rect) const;
+    QRect drawTiled(MapView& theView, QRect& rect) const;
+    QRect drawFull(MapView& theView, QRect& rect) const;
 
 signals:
-	void imageRequested(ImageMapLayer*);
-	void imageReceived(ImageMapLayer*);
-	void loadingFinished(ImageMapLayer*);
+    void imageRequested(ImageMapLayer*);
+    void imageReceived(ImageMapLayer*);
+    void loadingFinished(ImageMapLayer*);
 
 private slots:
-	void on_imageRequested();
-	void on_imageReceived();
-	void on_loadingFinished();
+    void on_imageRequested();
+    void on_imageReceived();
+    void on_loadingFinished();
 
 protected:
-	ImageMapLayerPrivate* p;
+    ImageMapLayerPrivate* p;
 };
 
 #endif

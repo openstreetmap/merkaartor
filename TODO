@@ -1,7 +1,7 @@
-- Do a "Center & Zoom" when loading a GeoTIFF (and other file related future plugins)
-- Allow to middle-split a road by selecting only 2 single-parented nodes from it
+- Allow to display coordinate gris
 - Implement WMS-C (Tiling and caching of WMS images)
 - Implement in-process WMS-C proxy for "standard" WMS
+- Allow to middle-split a road by selecting only 2 single-parented nodes from it
 - Implement Walking Paper plugin
 - Implement printing (with barcode reference)
 - Implement generalization of Walking Paper plugin to own system

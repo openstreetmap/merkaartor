@@ -1,4 +1,5 @@
 v0.16
+    * ADD : Allow to zoom on the location of a GeoTIFF image
     * FIX : Do not updateindex() if the feature is deleted 
     * FIX : roads not always refreshed when changing type or properties (fixes #2773)
     * FIX : Cannot cleanly copy tags from one relation to another (fixes #2746)
