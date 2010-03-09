@@ -536,7 +536,21 @@ void PreferencesDialog::on_btGpsLogDirBrowse_clicked()
 void PreferencesDialog::changeEvent(QEvent * event)
 {
     if (event->type() == QEvent::LanguageChange)
+    {
         retranslateUi(this);
+        Language->clear();
+        initLanguages(Language);
+        QString CurrentLanguage(getDefaultLanguage());
+        int l;
+        for (l = 0; l < Language->count(); ++l)
+            if (CurrentLanguage == Language->itemData(l))
+                break;
+        SelectLanguage->setChecked(l < Language->count());
+        Language->setEnabled(l < Language->count());
+        if (l < Language->count())
+            Language->setCurrentIndex(l);
+    }
+
     QDialog::changeEvent(event);
 }
 

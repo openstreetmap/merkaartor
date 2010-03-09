@@ -1,4 +1,7 @@
 v0.16
+    * FIX : OSX Qt system translations location (by Aleksandar)
+    * FIX : Update language of language combo after language change (by Alaeksandar)
+    * FIX : Only allow virtual node updates after relations resolution (by Trav)(closes #2782)
     * ADD : Allow to zoom on the location of a GeoTIFF image
     * FIX : Do not updateindex() if the feature is deleted 
     * FIX : roads not always refreshed when changing type or properties (fixes #2773)
