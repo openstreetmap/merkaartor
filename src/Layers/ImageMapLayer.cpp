@@ -67,7 +67,6 @@ ImageMapLayer::ImageMapLayer(const QString & aName)
 
 ImageMapLayer::~ ImageMapLayer()
 {
-    clear();
     SAFE_DELETE(p);
 }
 
