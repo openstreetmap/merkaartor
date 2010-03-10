@@ -808,7 +808,7 @@ bool Way::deleteChildren(Document* theDocument, CommandList* theList)
             for (int j=0; j<N->sizeParents(); ++j)
                 if (!N->getParent(j)->isDeleted())
                     sizeValidParents++;
-            if (sizeValidParents < 2) {
+            if (sizeValidParents == 0) {
                 ToDelete[N] = i;
             }
         }
