@@ -583,29 +583,26 @@ void Way::cascadedRemoveIfUsing(Document* theDocument, Feature* aFeature, Comman
                 if (Pt)
                     Alternatives.push_back(Pt);
             }
-            if ( (p->Nodes.size() == 1) && (Alternatives.size() == 0) ) {
-                if (!isDeleted())
-                    theList->add(new RemoveFeatureCommand(theDocument,this));
-            }
-            else
+            for (int j=0; j<Alternatives.size(); ++j)
             {
-                for (int j=0; j<Alternatives.size(); ++j)
+                if (i < p->Nodes.size())
                 {
-                    if (i < p->Nodes.size())
+                    if (p->Nodes[i+j] != Alternatives[j])
                     {
-                        if (p->Nodes[i+j] != Alternatives[j])
-                        {
-                            if ((i+j) == 0)
-                                theList->add(new WayAddNodeCommand(this, Alternatives[j], i+j,theDocument->getDirtyOrOriginLayer(layer())));
-                            else if (p->Nodes[i+j-1] != Alternatives[j] && p->Nodes[i+j+1] != Alternatives[j])
-                                theList->add(new WayAddNodeCommand(this, Alternatives[j], i+j,theDocument->getDirtyOrOriginLayer(layer())));
-                        }
+                        if ((i+j) == 0)
+                            theList->add(new WayAddNodeCommand(this, Alternatives[j], i+j,theDocument->getDirtyOrOriginLayer(layer())));
+                        else if (p->Nodes[i+j-1] != Alternatives[j] && p->Nodes[i+j+1] != Alternatives[j])
+                            theList->add(new WayAddNodeCommand(this, Alternatives[j], i+j,theDocument->getDirtyOrOriginLayer(layer())));
                     }
                 }
-                theList->add(new WayRemoveNodeCommand(this, (Node*)aFeature,theDocument->getDirtyOrOriginLayer(layer())));
             }
+            theList->add(new WayRemoveNodeCommand(this, (Node*)aFeature,theDocument->getDirtyOrOriginLayer(layer())));
         }
         ++i;
+    }
+    if (p->Nodes.size() == 1) {
+        if (!isDeleted())
+            theList->add(new RemoveFeatureCommand(theDocument,this));
     }
 }
 
