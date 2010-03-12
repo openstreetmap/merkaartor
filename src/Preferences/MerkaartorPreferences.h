@@ -44,36 +44,36 @@ class IMapAdapter;
 #define HOMEDIR QDir::homePath() + "/.merkaartor"
 
 #define M_PARAM_DECLARE_BOOL(Param) \
-	private: \
-		bool m_##Param; \
-	public: \
-		void set##Param(bool theValue); \
-		bool get##Param();
+    private: \
+        bool m_##Param; \
+    public: \
+        void set##Param(bool theValue); \
+        bool get##Param();
 #define M_PARAM_DECLARE_STRING(Param) \
-	private: \
-		QString m_##Param; \
-	public: \
-		void set##Param(QString theValue); \
-		QString get##Param();
+    private: \
+        QString m_##Param; \
+    public: \
+        void set##Param(QString theValue); \
+        QString get##Param();
 #define M_PARAM_DECLARE_INT(Param) \
-	private: \
-		int m_##Param; \
-	public: \
-		void set##Param(int theValue); \
-		int get##Param();
+    private: \
+        int m_##Param; \
+    public: \
+        void set##Param(int theValue); \
+        int get##Param();
 #define M_PARAM_DECLARE_DOUBLE(Param) \
-	private: \
-		double m_##Param; \
-	public: \
-		void set##Param(double theValue); \
-		double get##Param();
+    private: \
+        double m_##Param; \
+    public: \
+        void set##Param(double theValue); \
+        double get##Param();
 
 #define SAFE_DELETE(x) {delete (x); x = NULL;}
 #define STRINGIFY(x) XSTRINGIFY(x)
 #define XSTRINGIFY(x) #x
 
 /**
-	@author cbro <cbro@semperpax.com>
+    @author cbro <cbro@semperpax.com>
 */
 
 #ifndef _MOBILE
@@ -81,27 +81,27 @@ typedef QString ProjectionType;
 #endif
 
 enum ExportType {
-	Export_All,
-	Export_Viewport,
-	Export_Selected
+    Export_All,
+    Export_Viewport,
+    Export_Selected
 };
 
 enum DirectionalArrowsShow {
-	DirectionalArrows_Never,
-	DirectionalArrows_Oneway,
-	DirectionalArrows_Always
+    DirectionalArrows_Never,
+    DirectionalArrows_Oneway,
+    DirectionalArrows_Always
 };
 
 #define TOOL_FIELD_SIZE 2
 class Tool
 {
-	public:
-		Tool();
-		Tool(QString Name, QString Path);
+    public:
+        Tool();
+        Tool(QString Name, QString Path);
 
-	public:
-		QString ToolName;
-		QString ToolPath;
+    public:
+        QString ToolName;
+        QString ToolPath;
 };
 typedef QMap<QString, Tool> ToolList;
 typedef QMapIterator<QString, Tool> ToolListIterator;
@@ -116,327 +116,316 @@ class MerkaartorPreferences : public QObject
 {
 Q_OBJECT
 public:
-	MerkaartorPreferences();
-	~MerkaartorPreferences();
+    MerkaartorPreferences();
+    ~MerkaartorPreferences();
 
-	static MerkaartorPreferences* instance() {
-		if (!m_prefInstance) {
-			m_prefInstance = new MerkaartorPreferences;
-		}
+    static MerkaartorPreferences* instance() {
+        if (!m_prefInstance) {
+            m_prefInstance = new MerkaartorPreferences;
+        }
 
-		return m_prefInstance;
-	}
+        return m_prefInstance;
+    }
 
-	void save(bool UserPwdChanged = false);
+    void save(bool UserPwdChanged = false);
 
-	void toOsmPref();
-	void fromOsmPref();
-	void putOsmPref(const QString& k, const QString& v);
-	void deleteOsmPref(const QString& k);
+    void toOsmPref();
+    void fromOsmPref();
+    void putOsmPref(const QString& k, const QString& v);
+    void deleteOsmPref(const QString& k);
 
-	const QVector<qreal> getParentDashes() const;
+    const QVector<qreal> getParentDashes() const;
 
-	//bool use06Api() const;
-	void setUse06Api(bool b);
-	const QString apiVersion() const;
-	double apiVersionNum() const;
+    //bool use06Api() const;
+    void setUse06Api(bool b);
+    const QString apiVersion() const;
+    double apiVersionNum() const;
 
-	void setRightSideDriving(bool theValue);
-	bool getRightSideDriving() const;
+    void setRightSideDriving(bool theValue);
+    bool getRightSideDriving() const;
 
-	void setDoubleRoadDistance(double theValue);
-	double getDoubleRoadDistance() const;
+    void setDoubleRoadDistance(double theValue);
+    double getDoubleRoadDistance() const;
 
-	void setWorkingDir(const QString & theValue);
-	QString getWorkingDir() const;
+    void setWorkingDir(const QString & theValue);
+    QString getWorkingDir() const;
 
-	BookmarkList*  getBookmarks();
+    BookmarkList*  getBookmarks();
 
-	WmsServerList* getWmsServers();
-	TmsServerList* getTmsServers();
-	void setSelectedServer(const QString & theValue);
-	QString getSelectedServer() const;
+    WmsServerList* getWmsServers();
+    TmsServerList* getTmsServers();
+    void setSelectedServer(const QString & theValue);
+    QString getSelectedServer() const;
 
-	void setBgVisible(bool theValue);
-	bool getBgVisible() const;
+    void setBgVisible(bool theValue);
+    bool getBgVisible() const;
 
-	/* Tile Cache */
-	void setCacheDir(const QString & theValue);
-	QString getCacheDir() const;
-	void setCacheSize(int theValue);
-	int getCacheSize() const;
+    /* Tile Cache */
+    void setCacheDir(const QString & theValue);
+    QString getCacheDir() const;
+    void setCacheSize(int theValue);
+    int getCacheSize() const;
 
-	/* Search */
-	void setLastMaxSearchResults(int theValue);
-	int getLastMaxSearchResults() const;
-	void setLastSearchName(const QString & theValue);
-	QString getLastSearchName() const;
-	void setLastSearchKey(const QString & theValue);
-	QString getLastSearchKey() const;
-	void setLastSearchValue(const QString & theValue);
-	QString getLastSearchValue() const;
+    /* Search */
+    void setLastMaxSearchResults(int theValue);
+    int getLastMaxSearchResults() const;
+    void setLastSearchName(const QString & theValue);
+    QString getLastSearchName() const;
+    void setLastSearchKey(const QString & theValue);
+    QString getLastSearchKey() const;
+    void setLastSearchValue(const QString & theValue);
+    QString getLastSearchValue() const;
 
-	/* Visual */
-	QStringList getAlphaList() const;
-	void setAlphaList();
-	qreal getAlpha(QString lvl);
-	QHash<QString, qreal>* getAlphaPtr();
+    /* Visual */
+    QStringList getAlphaList() const;
+    void setAlphaList();
+    qreal getAlpha(QString lvl);
+    QHash<QString, qreal>* getAlphaPtr();
 
-	QColor getBgColor() const;
-	void setBgColor(const QColor theValue);
-	QColor getWaterColor() const;
-	void setWaterColor(const QColor theValue);
-	QColor getFocusColor() const;
-	int getFocusWidth() const;
-	void setFocusColor(const QColor theValue, int width);
-	QColor getHoverColor() const;
-	int getHoverWidth() const;
-	void setHoverColor(const QColor theValue, int width);
-	QColor getHighlightColor() const;
-	int getHighlightWidth() const;
-	void setHighlightColor(const QColor theValue, int width);
-	QColor getRelationsColor() const;
-	int getRelationsWidth() const;
-	void setRelationsColor(const QColor theValue, int width);
-	QColor getGpxTrackColor() const;
-	int getGpxTrackWidth() const;
-	void setGpxTrackColor(const QColor theValue, int width);
+    QColor getBgColor() const;
+    void setBgColor(const QColor theValue);
+    QColor getWaterColor() const;
+    void setWaterColor(const QColor theValue);
+    QColor getFocusColor() const;
+    int getFocusWidth() const;
+    void setFocusColor(const QColor theValue, int width);
+    QColor getHoverColor() const;
+    int getHoverWidth() const;
+    void setHoverColor(const QColor theValue, int width);
+    QColor getHighlightColor() const;
+    int getHighlightWidth() const;
+    void setHighlightColor(const QColor theValue, int width);
+    QColor getRelationsColor() const;
+    int getRelationsWidth() const;
+    void setRelationsColor(const QColor theValue, int width);
+    QColor getGpxTrackColor() const;
+    int getGpxTrackWidth() const;
+    void setGpxTrackColor(const QColor theValue, int width);
 
-	void setDownloadedVisible(bool theValue);
-	bool getDownloadedVisible() const;
+    DirectionalArrowsShow getDirectionalArrowsVisible();
+    void setDirectionalArrowsVisible(DirectionalArrowsShow theValue);
 
-	void setScaleVisible(bool theValue);
-	bool getScaleVisible() const;
+    M_PARAM_DECLARE_INT(TagListFirstColumnWidth)
 
-	bool getStyleBackgroundVisible() const;
-	void setStyleBackgroundVisible(bool theValue);
-	bool getStyleForegroundVisible() const;
-	void setStyleForegroundVisible(bool theValue);
-	bool getStyleTouchupVisible() const;
-	void setStyleTouchupVisible(bool theValue);
-	void setNamesVisible(bool theValue);
-	bool getNamesVisible() const;
+    /* MainWindow state */
+    void saveMainWindowState(const class MainWindow * mainWindow);
+    void restoreMainWindowState(class MainWindow * mainWindow) const;
 
-	DirectionalArrowsShow getDirectionalArrowsVisible();
-	void setDirectionalArrowsVisible(DirectionalArrowsShow theValue);
+    void setInitialPosition(MapView* vw);
+    void initialPosition(MapView* vw);
 
-	void setTrackPointsVisible(bool theValue);
-	bool getTrackPointsVisible() const;
+    bool getDrawTileBoundary();
 
-	void setTrackSegmentsVisible(bool theValue);
-	bool getTrackSegmentsVisible() const;
+    /* Data */
+    void setOsmWebsite(const QString & theValue);
+    QString getOsmWebsite() const;
 
-	void setRelationsVisible(bool theValue);
-	bool getRelationsVisible() const;
+    M_PARAM_DECLARE_STRING(XapiWebSite)
+    M_PARAM_DECLARE_BOOL(AutoHistoryCleanup)
 
-	M_PARAM_DECLARE_INT(TagListFirstColumnWidth)
+    void setOsmUser(const QString & theValue);
+    QString getOsmUser() const;
 
-	/* MainWindow state */
-	void saveMainWindowState(const class MainWindow * mainWindow);
-	void restoreMainWindowState(class MainWindow * mainWindow) const;
+    void setOsmPassword(const QString & theValue);
+    QString getOsmPassword() const;
 
-	void setInitialPosition(MapView* vw);
-	void initialPosition(MapView* vw);
+    M_PARAM_DECLARE_DOUBLE(MaxDistNodes)
 
-	bool getDrawTileBoundary();
+    void setAutoSaveDoc(bool theValue);
+    bool getAutoSaveDoc() const;
 
-	/* Data */
-	void setOsmWebsite(const QString & theValue);
-	QString getOsmWebsite() const;
+    void setAutoExtractTracks(bool theValue);
+    bool getAutoExtractTracks() const;
 
-	M_PARAM_DECLARE_STRING(XapiWebSite)
-	M_PARAM_DECLARE_BOOL(AutoHistoryCleanup)
+    /* Export Type */
+    void setExportType(ExportType theValue);
+    ExportType getExportType() const;
 
-	void setOsmUser(const QString & theValue);
-	QString getOsmUser() const;
+    /* Tools */
+    ToolList* getTools() const;
+    Tool getTool(QString toolName) const;
 
-	void setOsmPassword(const QString & theValue);
-	QString getOsmPassword() const;
+    QStringList getShortcuts() const;
+    void setShortcuts(const QStringList & theValue);
 
-	M_PARAM_DECLARE_DOUBLE(MaxDistNodes)
+    /* Recent */
+    void setRecentOpen(const QStringList & theValue);
+    QStringList getRecentOpen() const;
+    void addRecentOpen(const QString & theValue);
 
-	void setAutoSaveDoc(bool theValue);
-	bool getAutoSaveDoc() const;
+    void setRecentImport(const QStringList & theValue);
+    QStringList getRecentImport() const;
+    void addRecentImport(const QString & theValue);
 
-	void setAutoExtractTracks(bool theValue);
-	bool getAutoExtractTracks() const;
+    /* Styles */
+    M_PARAM_DECLARE_STRING(DefaultStyle)
+    M_PARAM_DECLARE_STRING(CustomStyle)
+    M_PARAM_DECLARE_BOOL(DisableStyleForTracks)
 
-	/* Export Type */
-	void setExportType(ExportType theValue);
-	ExportType getExportType() const;
+    /* Visual */
+    M_PARAM_DECLARE_INT(ZoomIn)
+    M_PARAM_DECLARE_INT(ZoomOut)
+    M_PARAM_DECLARE_BOOL(ZoomBoris)
+    M_PARAM_DECLARE_BOOL(BackgroundOverwriteStyle)
+    M_PARAM_DECLARE_INT(AreaOpacity)
+    M_PARAM_DECLARE_BOOL(UseShapefileForBackground)
+    M_PARAM_DECLARE_BOOL(DrawingHack)
+    M_PARAM_DECLARE_BOOL(SimpleGpxTrack)
+    M_PARAM_DECLARE_BOOL(VirtualNodesVisible)
+    M_PARAM_DECLARE_BOOL(UseVirtualNodes)
+    M_PARAM_DECLARE_BOOL(RelationsSelectableWhenHidden)
+    M_PARAM_DECLARE_DOUBLE(LocalZoom)
+    M_PARAM_DECLARE_DOUBLE(RegionalZoom)
 
-	/* Tools */
-	ToolList* getTools() const;
-	Tool getTool(QString toolName) const;
+    M_PARAM_DECLARE_BOOL(DownloadedVisible)
+    M_PARAM_DECLARE_BOOL(ScaleVisible)
+    M_PARAM_DECLARE_BOOL(LatLonGridVisible)
+    M_PARAM_DECLARE_BOOL(BackgroundVisible)
+    M_PARAM_DECLARE_BOOL(ForegroundVisible)
+    M_PARAM_DECLARE_BOOL(TouchupVisible)
+    M_PARAM_DECLARE_BOOL(NamesVisible)
+    M_PARAM_DECLARE_BOOL(TrackPointsVisible)
+    M_PARAM_DECLARE_BOOL(TrackSegmentsVisible)
+    M_PARAM_DECLARE_BOOL(RelationsVisible)
 
-	QStringList getShortcuts() const;
-	void setShortcuts(const QStringList & theValue);
+    /* Templates */
+    M_PARAM_DECLARE_STRING(DefaultTemplate)
+    M_PARAM_DECLARE_STRING(CustomTemplate)
 
-	/* Recent */
-	void setRecentOpen(const QStringList & theValue);
-	QStringList getRecentOpen() const;
-	void addRecentOpen(const QString & theValue);
+    /* GPS */
+    M_PARAM_DECLARE_BOOL(GpsUseGpsd)
+    M_PARAM_DECLARE_STRING(GpsPort)
+    M_PARAM_DECLARE_STRING(GpsdHost)
+    M_PARAM_DECLARE_INT(GpsdPort)
+    M_PARAM_DECLARE_BOOL(GpsSaveLog)
+    M_PARAM_DECLARE_BOOL(GpsMapCenter)
+    M_PARAM_DECLARE_STRING(GpsLogDir)
+    M_PARAM_DECLARE_BOOL(GpsSyncTime)
 
-	void setRecentImport(const QStringList & theValue);
-	QStringList getRecentImport() const;
-	void addRecentImport(const QString & theValue);
+    M_PARAM_DECLARE_BOOL(ResolveRelations)
+    M_PARAM_DECLARE_BOOL(DeleteIncompleteRelations)
 
-	/* Styles */
-	M_PARAM_DECLARE_STRING(DefaultStyle)
-	M_PARAM_DECLARE_STRING(CustomStyle)
-	M_PARAM_DECLARE_BOOL(DisableStyleForTracks)
+    M_PARAM_DECLARE_BOOL(TranslateTags)
 
-	/* Visual */
-	M_PARAM_DECLARE_INT(ZoomIn)
-	M_PARAM_DECLARE_INT(ZoomOut)
-	M_PARAM_DECLARE_BOOL(ZoomBoris)
-	M_PARAM_DECLARE_BOOL(BackgroundOverwriteStyle)
-	M_PARAM_DECLARE_INT(AreaOpacity)
-	M_PARAM_DECLARE_BOOL(UseShapefileForBackground)
-	M_PARAM_DECLARE_BOOL(DrawingHack)
-	M_PARAM_DECLARE_BOOL(SimpleGpxTrack)
-	M_PARAM_DECLARE_BOOL(VirtualNodesVisible)
-	M_PARAM_DECLARE_BOOL(UseVirtualNodes)
-	M_PARAM_DECLARE_BOOL(RelationsSelectableWhenHidden)
-	M_PARAM_DECLARE_DOUBLE(LocalZoom)
-	M_PARAM_DECLARE_DOUBLE(RegionalZoom)
+    M_PARAM_DECLARE_BOOL(MapTooltip)
+    M_PARAM_DECLARE_BOOL(InfoOnHover)
+    M_PARAM_DECLARE_BOOL(ShowParents)
 
-	/* Templates */
-	M_PARAM_DECLARE_STRING(DefaultTemplate)
-	M_PARAM_DECLARE_STRING(CustomTemplate)
+    /* World OSB manager */
+    M_PARAM_DECLARE_DOUBLE(TileToRegionThreshold)
+    M_PARAM_DECLARE_DOUBLE(RegionTo0Threshold)
 
-	/* GPS */
-	M_PARAM_DECLARE_BOOL(GpsUseGpsd)
-	M_PARAM_DECLARE_STRING(GpsPort)
-	M_PARAM_DECLARE_STRING(GpsdHost)
-	M_PARAM_DECLARE_INT(GpsdPort)
-	M_PARAM_DECLARE_BOOL(GpsSaveLog)
-	M_PARAM_DECLARE_BOOL(GpsMapCenter)
-	M_PARAM_DECLARE_STRING(GpsLogDir)
-	M_PARAM_DECLARE_BOOL(GpsSyncTime)
+    M_PARAM_DECLARE_STRING(WorldOsbUri)
+    M_PARAM_DECLARE_BOOL(WorldOsbAutoload)
+    M_PARAM_DECLARE_BOOL(WorldOsbAutoshow)
 
-	M_PARAM_DECLARE_BOOL(ResolveRelations)
-	M_PARAM_DECLARE_BOOL(DeleteIncompleteRelations)
+    /* Mouse bevaviour */
+    M_PARAM_DECLARE_BOOL(MouseSingleButton)
+    M_PARAM_DECLARE_BOOL(SeparateMoveMode)
 
-	M_PARAM_DECLARE_BOOL(TranslateTags)
+    /* Custom Style */
+    M_PARAM_DECLARE_BOOL(MerkaartorStyle)
+    M_PARAM_DECLARE_STRING(MerkaartorStyleString)
 
-	M_PARAM_DECLARE_BOOL(MapTooltip)
-	M_PARAM_DECLARE_BOOL(InfoOnHover)
-	M_PARAM_DECLARE_BOOL(ShowParents)
+    /* Network */
+    M_PARAM_DECLARE_BOOL(OfflineMode)
 
-	/* World OSB manager */
-	M_PARAM_DECLARE_DOUBLE(TileToRegionThreshold)
-	M_PARAM_DECLARE_DOUBLE(RegionTo0Threshold)
+    /* Proxy */
+    QNetworkProxy getProxy(const QUrl & requestUrl);
 
-	M_PARAM_DECLARE_STRING(WorldOsbUri)
-	M_PARAM_DECLARE_BOOL(WorldOsbAutoload)
-	M_PARAM_DECLARE_BOOL(WorldOsbAutoshow)
+    M_PARAM_DECLARE_BOOL(ProxyUse)
+    M_PARAM_DECLARE_STRING(ProxyHost)
+    M_PARAM_DECLARE_INT(ProxyPort)
+    M_PARAM_DECLARE_STRING(ProxyUser)
+    M_PARAM_DECLARE_STRING(ProxyPassword)
 
-	/* Mouse bevaviour */
-	M_PARAM_DECLARE_BOOL(MouseSingleButton)
-	M_PARAM_DECLARE_BOOL(SeparateMoveMode)
+    /* Track */
+    M_PARAM_DECLARE_BOOL(ReadonlyTracksDefault)
 
-	/* Custom Style */
-	M_PARAM_DECLARE_BOOL(MerkaartorStyle)
-	M_PARAM_DECLARE_STRING(MerkaartorStyleString)
+    /* FeaturesDock */
+    M_PARAM_DECLARE_BOOL(FeaturesWithin)
 
-	/* Network */
-	M_PARAM_DECLARE_BOOL(OfflineMode)
+    /* Plugins */
+    void addBackgroundPlugin(IMapAdapter* aPlugin);
+    void setBackgroundPlugin(const QUuid& theValue);
+    QUuid getBackgroundPlugin() const;
+    IMapAdapter* getBackgroundPlugin(const QUuid& anAdapterUid);
+    QMap<QUuid, IMapAdapter *> getBackgroundPlugins();
 
-	/* Proxy */
-	QNetworkProxy getProxy(const QUrl & requestUrl);
+    /* Projections */
+    void loadProjection(QString fn);
+    void loadProjections();
+    void saveProjections();
 
-	M_PARAM_DECLARE_BOOL(ProxyUse)
-	M_PARAM_DECLARE_STRING(ProxyHost)
-	M_PARAM_DECLARE_INT(ProxyPort)
-	M_PARAM_DECLARE_STRING(ProxyUser)
-	M_PARAM_DECLARE_STRING(ProxyPassword)
+    /* WMSes */
+    void loadWMS(QString fn);
+    void loadWMSes();
+    void saveWMSes();
 
-	/* Track */
-	M_PARAM_DECLARE_BOOL(ReadonlyTracksDefault)
+    /* TMSes */
+    void loadTMS(QString fn);
+    void loadTMSes();
+    void saveTMSes();
 
-	/* FeaturesDock */
-	M_PARAM_DECLARE_BOOL(FeaturesWithin)
-
-	/* Plugins */
-	void addBackgroundPlugin(IMapAdapter* aPlugin);
-	void setBackgroundPlugin(const QUuid& theValue);
-	QUuid getBackgroundPlugin() const;
-	IMapAdapter* getBackgroundPlugin(const QUuid& anAdapterUid);
-	QMap<QUuid, IMapAdapter *> getBackgroundPlugins();
-
-	/* Projections */
-	void loadProjection(QString fn);
-	void loadProjections();
-	void saveProjections();
-
-	/* WMSes */
-	void loadWMS(QString fn);
-	void loadWMSes();
-	void saveWMSes();
-
-	/* TMSes */
-	void loadTMS(QString fn);
-	void loadTMSes();
-	void saveTMSes();
-
-	/* Bookmarks */
-	void loadBookmark(QString fn);
-	void loadBookmarks();
-	void saveBookmarks();
+    /* Bookmarks */
+    void loadBookmark(QString fn);
+    void loadBookmarks();
+    void saveBookmarks();
 
 #ifndef _MOBILE
-	void setProjectionType(ProjectionType theValue);
-	ProjectionType getProjectionType();
-	ProjectionsList getProjectionsList();
-	ProjectionItem getProjection(QString aProj);
+    void setProjectionType(ProjectionType theValue);
+    ProjectionType getProjectionType();
+    ProjectionsList getProjectionsList();
+    ProjectionItem getProjection(QString aProj);
 #endif
 
 
 
 protected:
-	QVector<qreal> parentDashes;
+    QVector<qreal> parentDashes;
 
-	bool Use06Api;
-	QString version;
-	bool RightSideDriving;
-	double DoubleRoadDistance;
-	QString WorkingDir;
-	QString OsmWebsite;
-	QString OsmUser;
-	QString OsmPassword;
+    bool Use06Api;
+    QString version;
+    bool RightSideDriving;
+    double DoubleRoadDistance;
+    QString WorkingDir;
+    QString OsmWebsite;
+    QString OsmUser;
+    QString OsmPassword;
 
-	QHttp httpRequest;
-	int OsmPrefLoadId;
-	int OsmPrefSaveId;
-	int OsmPrefDeleteId;
-	QBuffer OsmPrefContent;
-	QMap<QString, int> OsmPrefListsCount;
+    QHttp httpRequest;
+    int OsmPrefLoadId;
+    int OsmPrefSaveId;
+    int OsmPrefDeleteId;
+    QBuffer OsmPrefContent;
+    QMap<QString, int> OsmPrefListsCount;
 
-	void setWmsServers();
-	void setTmsServers();
-	void setTools();
-	void initialize();
+    void setWmsServers();
+    void setTmsServers();
+    void setTools();
+    void initialize();
 
 private:
-	QHash<QString, qreal> alpha;
-	ToolList* theToolList;
-	QSettings * Sets;
-	QStringList projTypes;
-	QMap<QUuid, IMapAdapter *> mBackgroundPlugins;
-	ProjectionsList theProjectionsList;
-	WmsServersList theWmsServerList;
-	TmsServersList theTmsServerList;
-	BookmarksList theBookmarkList;
+    QHash<QString, qreal> alpha;
+    ToolList* theToolList;
+    QSettings * Sets;
+    QStringList projTypes;
+    QMap<QUuid, IMapAdapter *> mBackgroundPlugins;
+    ProjectionsList theProjectionsList;
+    WmsServersList theWmsServerList;
+    TmsServersList theTmsServerList;
+    BookmarksList theBookmarkList;
 
-	static MerkaartorPreferences* m_prefInstance;
+    DirectionalArrowsShow m_DirectionalArrowsVisible;
+
+    static MerkaartorPreferences* m_prefInstance;
 
 private slots:
-	void on_responseHeaderReceived(const QHttpResponseHeader & hdr);
-	void on_requestFinished ( int id, bool error );
+    void on_responseHeaderReceived(const QHttpResponseHeader & hdr);
+    void on_requestFinished ( int id, bool error );
 
 signals:
-	void bookmarkChanged();
+    void bookmarkChanged();
 };
 
 #endif

@@ -322,7 +322,7 @@ void ImageMapLayer::drawImage(QPixmap& thePix)
     const qreal ratio = qMax<const qreal>((qreal)pmSize.width()/ps.width()*1.0, (qreal)pmSize.height()/ps.height());
     QPixmap pms;
     if (ratio >= 1.0) {
-        qDebug() << "Bg image scale 1 " << ps << " : " << p->pm.size();
+        //qDebug() << "Bg image scale 1 " << ps << " : " << p->pm.size();
         pms = p->pm.scaled(ps);
     } else {
         const QSizeF drawingSize = pmSize * ratio;
@@ -330,7 +330,7 @@ void ImageMapLayer::drawImage(QPixmap& thePix)
         const QPointF drawingOrigin = QPointF(originSize.width(), originSize.height());
         const QRect drawingRect = QRect(drawingOrigin.toPoint(), drawingSize.toSize());
 
-        qDebug() << "Bg image scale 2 " << ps*ratio << " : " << p->pm.size();
+        //qDebug() << "Bg image scale 2 " << ps*ratio << " : " << p->pm.size();
         pms = p->pm.copy(drawingRect).scaled(ps*ratio);
     }
 

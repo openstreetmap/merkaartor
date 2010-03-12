@@ -11,96 +11,96 @@
 
 inline double angToRad(double a)
 {
-	return a*M_PI/180.;
+    return a*M_PI/180.;
 }
 
 inline double radToAng(double a)
 {
-	return a*180/M_PI;
+    return a*180/M_PI;
 }
 
 inline int angToInt(double a)
 {
-	return qRound(a/180.0*INT_MAX);
+    return qRound(a/180.0*INT_MAX);
 }
 
 inline double intToAng(int a)
 {
-	return double(a)*180./INT_MAX;
+    return double(a)*180./INT_MAX;
 }
 
 inline double intToRad(int a)
 {
-	return double(a)*M_PI/INT_MAX;
+    return double(a)*M_PI/INT_MAX;
 }
 
 inline int radToInt(double x)
 {
-	return qRound(x/M_PI*INT_MAX);
+    return qRound(x/M_PI*INT_MAX);
 }
 
 class Coord
 {
-	public:
-		Coord()
-			: Lat(0), Lon(0) {}
-		Coord(const Coord& c)
-			: Lat(c.Lat), Lon(c.Lon) {}
-		Coord(const QPoint& P)
-			: Lat(P.x()), Lon(P.y()) {}
-		Coord(const QPointF& P)
-			: Lat(qRound(P.x())), Lon(qRound(P.y())) {}
-		Coord(int aLat, int aLon)
-			: Lat(aLat), Lon(aLon) {}
+    public:
+        Coord()
+            : Lat(0), Lon(0) {}
+        Coord(const Coord& c)
+            : Lat(c.Lat), Lon(c.Lon) {}
+        Coord(const QPoint& P)
+            : Lat(P.x()), Lon(P.y()) {}
+        Coord(const QPointF& P)
+            : Lat(qRound(P.x())), Lon(qRound(P.y())) {}
+        Coord(int aLat, int aLon)
+            : Lat(aLat), Lon(aLon) {}
 
-		bool isNull() const
-		{
-			return (Lat == 0) && (Lon == 0);
-		}
+        bool isNull() const
+        {
+            return (Lat == 0) && (Lon == 0);
+        }
 
-		int lat() const
-		{
-			return Lat;
-		}
+        int lat() const
+        {
+            return Lat;
+        }
 
-		int lon() const
-		{
-			return Lon;
-		}
+        int lon() const
+        {
+            return Lon;
+        }
 
-		void setLat(int l)
-		{
-			Lat = l;
-		}
+        void setLat(int l)
+        {
+            Lat = l;
+        }
 
-		void setLon(int l)
-		{
-			Lon = l;
-		}
+        void setLon(int l)
+        {
+            Lon = l;
+        }
 
-		double length() const
-		{
-			return sqrt((double)((long)Lat*(long)Lat+(long)Lon*(long)Lon));
-		}
+        double length() const
+        {
+            return sqrt((double)((long)Lat*(long)Lat+(long)Lon*(long)Lon));
+        }
 
-		double distanceFrom(const Coord& other) const;
+        double distanceFrom(const Coord& other) const;
 
-		bool toXML(QString elName, QDomElement& xParent) const;
-		static Coord fromXML(QDomElement e);
+        bool toXML(QString elName, QDomElement& xParent) const;
+        static Coord fromXML(QDomElement e);
 
-		QPointF toPointF() const
-		{
-			return QPointF(Lat, Lon);
-		}
+        QPointF toPointF() const
+        {
+            return QPointF(Lat, Lon);
+        }
 
-		QPoint toQPoint() const
-		{
-			return QPoint(Lon, Lat);
-		}
+        QPoint toQPoint() const
+        {
+            return QPoint(Lon, Lat);
+        }
 
-	private:
-		int Lat;
-		int Lon;
+    private:
+        int Lat;
+        int Lon;
 };
 
 #ifndef _MOBILE
@@ -113,42 +113,42 @@ GEOMETRY_REGISTER_POINT_2D_GET_SET(Coord, int, cs::cartesian, lat, lon, setLat, 
 
 inline Coord operator-(const Coord& A, const Coord& B)
 {
-	return Coord(A.lat()-B.lat(),A.lon()-B.lon());
+    return Coord(A.lat()-B.lat(),A.lon()-B.lon());
 }
 
 inline Coord operator-(const Coord& A, const int B)
 {
-	return Coord(A.lat()-B,A.lon()-B);
+    return Coord(A.lat()-B,A.lon()-B);
 }
 
 inline Coord operator+(const Coord& A, const Coord& B)
 {
-	return Coord(A.lat()+B.lat(),A.lon()+B.lon());
+    return Coord(A.lat()+B.lat(),A.lon()+B.lon());
 }
 
 inline Coord operator+(const Coord& A, const int B)
 {
-	return Coord(A.lat()+B,A.lon()+B);
+    return Coord(A.lat()+B,A.lon()+B);
 }
 
 inline Coord operator*(const Coord& A, int d)
 {
-	return Coord(A.lat()*d,A.lon()*d);
+    return Coord(A.lat()*d,A.lon()*d);
 }
 
 inline Coord operator/(const Coord& A, int d)
 {
-	if(d==0)
-	{
-		qDebug()<<"Error: divide by 0"<<endl;
-		return A;
-	}
-	return Coord(A.lat()/d,A.lon()/d);
+    if(d==0)
+    {
+        qDebug()<<"Error: divide by 0"<<endl;
+        return A;
+    }
+    return Coord(A.lat()/d,A.lon()/d);
 }
 
 inline bool operator==(const Coord& A,const Coord& B)
 {
-	return A.lat()==B.lat() && A.lon()==B.lon();
+    return A.lat()==B.lat() && A.lon()==B.lon();
 }
 
 double angle(Coord p1);
@@ -156,129 +156,129 @@ void rotate(Coord & p1,double angle);
 
 class CoordBox
 {
-	public:
-		CoordBox() {}
-		CoordBox(const CoordBox& cb);
-		CoordBox(const Coord& C1, const Coord& C2);
+    public:
+        CoordBox() {}
+        CoordBox(const CoordBox& cb);
+        CoordBox(const Coord& C1, const Coord& C2);
 
-		bool isNull() const
-		{
-			return (BottomLeft.isNull() && TopRight.isNull());
-		}
-		bool isEmpty() const
-		{
-			return (!lonDiff() || !latDiff());
-		}
-		void merge(const Coord& C)
-		{
-			if (C.lat() < BottomLeft.lat())
-				BottomLeft.setLat(C.lat());
-			if (C.lon() < BottomLeft.lon())
-				BottomLeft.setLon(C.lon());
-			if (C.lat() > TopRight.lat())
-				TopRight.setLat(C.lat());
-			if (C.lon() > TopRight.lon())
-				TopRight.setLon(C.lon());
-		}
+        bool isNull() const
+        {
+            return (BottomLeft.isNull() && TopRight.isNull());
+        }
+        bool isEmpty() const
+        {
+            return (!lonDiff() || !latDiff());
+        }
+        void merge(const Coord& C)
+        {
+            if (C.lat() < BottomLeft.lat())
+                BottomLeft.setLat(C.lat());
+            if (C.lon() < BottomLeft.lon())
+                BottomLeft.setLon(C.lon());
+            if (C.lat() > TopRight.lat())
+                TopRight.setLat(C.lat());
+            if (C.lon() > TopRight.lon())
+                TopRight.setLon(C.lon());
+        }
 
-		bool contains(const Coord& C) const
-		{
-			return (BottomLeft.lat() <= C.lat()) && (BottomLeft.lon() <= C.lon()) &&
-				(C.lat() < TopRight.lat()) && (C.lon() <= TopRight.lon());
-		}
+        bool contains(const Coord& C) const
+        {
+            return (BottomLeft.lat() <= C.lat()) && (BottomLeft.lon() <= C.lon()) &&
+                (C.lat() < TopRight.lat()) && (C.lon() <= TopRight.lon());
+        }
 
-		bool contains(const CoordBox& B) const
-		{
-			return contains(B.BottomLeft) && contains(B.TopRight);
-		}
+        bool contains(const CoordBox& B) const
+        {
+            return contains(B.BottomLeft) && contains(B.TopRight);
+        }
 
-		bool intersects(const Coord& C) const
-		{
-			return contains(C);
-		}
+        bool intersects(const Coord& C) const
+        {
+            return contains(C);
+        }
 
-		bool intersects(const CoordBox& B) const
-		{
-			if ((B.latDiff() == 0) && (B.lonDiff() == 0)) {
-				return contains(B.bottomLeft());
-			}
-			return qMax(BottomLeft.lon(), B.bottomLeft().lon()) <= qMin(TopRight.lon(), B.topRight().lon())
-					&& qMax(BottomLeft.lat(), B.bottomLeft().lat()) <= qMin(TopRight.lat(), B.topRight().lat());
+        bool intersects(const CoordBox& B) const
+        {
+            if ((B.latDiff() == 0) && (B.lonDiff() == 0)) {
+                return contains(B.bottomLeft());
+            }
+            return qMax(BottomLeft.lon(), B.bottomLeft().lon()) <= qMin(TopRight.lon(), B.topRight().lon())
+                    && qMax(BottomLeft.lat(), B.bottomLeft().lat()) <= qMin(TopRight.lat(), B.topRight().lat());
 
 /*			QRectF BRect(B.bottomLeft().lon(), B.topRight().lat(), B.lonDiff(), B.latDiff());
-			QRectF myRect(BottomLeft.lon(), TopRight.lat(), lonDiff(), latDiff());
+            QRectF myRect(BottomLeft.lon(), TopRight.lat(), lonDiff(), latDiff());
 
-			return myRect.intersects(BRect);*/
-		}
+            return myRect.intersects(BRect);*/
+        }
 
-		void merge(const CoordBox& B)
-		{
-			merge(B.BottomLeft);
-			merge(B.TopRight);
-		}
+        void merge(const CoordBox& B)
+        {
+            merge(B.BottomLeft);
+            merge(B.TopRight);
+        }
 
-		Coord center() const
-		{
-			return Coord( BottomLeft.lat() + latDiff()/2, BottomLeft.lon() + lonDiff()/2 );		
-		}
+        Coord center() const
+        {
+            return Coord( BottomLeft.lat() + latDiff()/2, BottomLeft.lon() + lonDiff()/2 );
+        }
 
-		int lonDiff() const
-		{
-			return TopRight.lon()-BottomLeft.lon();
-		}
-		int latDiff() const
-		{
-			return TopRight.lat()-BottomLeft.lat();
-		}
-		CoordBox zoomed(double f) const;
-		const Coord& bottomLeft() const
-		{
-			return BottomLeft;
-		}
+        quint32 lonDiff() const
+        {
+            return TopRight.lon()-BottomLeft.lon();
+        }
+        quint32 latDiff() const
+        {
+            return TopRight.lat()-BottomLeft.lat();
+        }
+        CoordBox zoomed(double f) const;
+        const Coord& bottomLeft() const
+        {
+            return BottomLeft;
+        }
 
-		const Coord& topRight() const
-		{
-			return TopRight;
-		}
+        const Coord& topRight() const
+        {
+            return TopRight;
+        }
 
-		Coord topLeft() const
-		{
-			return Coord(TopRight.lat(), BottomLeft.lon());
-		}
+        Coord topLeft() const
+        {
+            return Coord(TopRight.lat(), BottomLeft.lon());
+        }
 
-		Coord bottomRight() const
-		{
-			return Coord(BottomLeft.lat(), TopRight.lon());
-		}
+        Coord bottomRight() const
+        {
+            return Coord(BottomLeft.lat(), TopRight.lon());
+        }
 
-		bool disjunctFrom(const CoordBox& B) const
-		{
-			if (BottomLeft.lat() > B.TopRight.lat()) return true;
-			if (BottomLeft.lon() > B.TopRight.lon()) return true;
-			if (TopRight.lat() < B.BottomLeft.lat()) return true;
-			if (TopRight.lon() < B.BottomLeft.lon()) return true;
-			return false;
-		}
+        bool disjunctFrom(const CoordBox& B) const
+        {
+            if (BottomLeft.lat() > B.TopRight.lat()) return true;
+            if (BottomLeft.lon() > B.TopRight.lon()) return true;
+            if (TopRight.lat() < B.BottomLeft.lat()) return true;
+            if (TopRight.lon() < B.BottomLeft.lon()) return true;
+            return false;
+        }
 
-		QRectF toQRectF()
-		{
-			return QRectF(BottomLeft.lon(), BottomLeft.lat(), lonDiff(), latDiff());
-		}
+        QRectF toQRectF()
+        {
+            return QRectF(BottomLeft.lon(), BottomLeft.lat(), lonDiff(), latDiff());
+        }
 
-		QRect toRect()
-		{
-			return QRect(BottomLeft.lon(), BottomLeft.lat(), lonDiff(), latDiff());
-		}
+        QRect toRect()
+        {
+            return QRect(BottomLeft.lon(), BottomLeft.lat(), lonDiff(), latDiff());
+        }
 
-		void resize(double f);
+        void resize(double f);
 
-		static bool visibleLine(const CoordBox & viewport, Coord & last, Coord & here);
+        static bool visibleLine(const CoordBox & viewport, Coord & last, Coord & here);
 
-		bool toXML(QString elName, QDomElement& xParent) const;
-		static CoordBox fromXML(QDomElement e);
+        bool toXML(QString elName, QDomElement& xParent) const;
+        static CoordBox fromXML(QDomElement e);
 
-	//private:
-		Coord BottomLeft, TopRight;
+    //private:
+        Coord BottomLeft, TopRight;
 };
 
 Q_DECLARE_METATYPE( CoordBox );

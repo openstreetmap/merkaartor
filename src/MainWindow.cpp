@@ -221,9 +221,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->viewDownloadedAction->setChecked(MerkaartorPreferences::instance()->getDownloadedVisible());
     ui->viewScaleAction->setChecked(M_PREFS->getScaleVisible());
-    ui->viewStyleBackgroundAction->setChecked(M_PREFS->getStyleBackgroundVisible());
-    ui->viewStyleForegroundAction->setChecked(M_PREFS->getStyleForegroundVisible());
-    ui->viewStyleTouchupAction->setChecked(M_PREFS->getStyleTouchupVisible());
+    ui->viewShowLatLonGridAction->setChecked(M_PREFS->getLatLonGridVisible());
+    ui->viewStyleBackgroundAction->setChecked(M_PREFS->getBackgroundVisible());
+    ui->viewStyleForegroundAction->setChecked(M_PREFS->getForegroundVisible());
+    ui->viewStyleTouchupAction->setChecked(M_PREFS->getTouchupVisible());
     ui->viewNamesAction->setChecked(M_PREFS->getNamesVisible());
     ui->viewTrackPointsAction->setChecked(M_PREFS->getTrackPointsVisible());
     ui->viewTrackSegmentsAction->setChecked(M_PREFS->getTrackSegmentsVisible());
@@ -1203,24 +1204,31 @@ void MainWindow::on_viewScaleAction_triggered()
     invalidateView();
 }
 
+void MainWindow::on_viewShowLatLonGridAction_triggered()
+{
+    M_PREFS->setLatLonGridVisible(!M_PREFS->getLatLonGridVisible());
+    ui->viewShowLatLonGridAction->setChecked(M_PREFS->getLatLonGridVisible());
+    invalidateView();
+}
+
 void MainWindow::on_viewStyleBackgroundAction_triggered()
 {
-    M_PREFS->setStyleBackgroundVisible(!M_PREFS->getStyleBackgroundVisible());
-    ui->viewStyleBackgroundAction->setChecked(M_PREFS->getStyleBackgroundVisible());
+    M_PREFS->setBackgroundVisible(!M_PREFS->getBackgroundVisible());
+    ui->viewStyleBackgroundAction->setChecked(M_PREFS->getBackgroundVisible());
     invalidateView();
 }
 
 void MainWindow::on_viewStyleForegroundAction_triggered()
 {
-    M_PREFS->setStyleForegroundVisible(!M_PREFS->getStyleForegroundVisible());
-    ui->viewStyleForegroundAction->setChecked(M_PREFS->getStyleForegroundVisible());
+    M_PREFS->setForegroundVisible(!M_PREFS->getForegroundVisible());
+    ui->viewStyleForegroundAction->setChecked(M_PREFS->getForegroundVisible());
     invalidateView();
 }
 
 void MainWindow::on_viewStyleTouchupAction_triggered()
 {
-    M_PREFS->setStyleTouchupVisible(!M_PREFS->getStyleTouchupVisible());
-    ui->viewStyleTouchupAction->setChecked(M_PREFS->getStyleTouchupVisible());
+    M_PREFS->setTouchupVisible(!M_PREFS->getTouchupVisible());
+    ui->viewStyleTouchupAction->setChecked(M_PREFS->getTouchupVisible());
     invalidateView();
 }
 

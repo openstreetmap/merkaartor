@@ -24,7 +24,7 @@
      <x>0</x>
      <y>0</y>
      <width>1100</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp">
@@ -119,6 +119,7 @@
     <addaction name="viewStyleBackgroundAction"/>
     <addaction name="viewStyleTouchupAction"/>
     <addaction name="viewScaleAction"/>
+    <addaction name="viewShowLatLonGridAction"/>
     <addaction name="viewNamesAction"/>
     <addaction name="menuShow_directional_Arrows"/>
     <addaction name="separator"/>
@@ -1556,6 +1557,14 @@
    </property>
    <property name="text">
     <string>Show &amp;virtual nodes</string>
+   </property>
+  </action>
+  <action name="viewShowLatLonGridAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show lat/lon &amp;grid</string>
    </property>
   </action>
  </widget>

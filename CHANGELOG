@@ -1,5 +1,6 @@
 v0.16
-    * FIX : delete a way when its second to last node is deleted
+    * ADD : add the possibility to show a lat/lon grid
+    * FIX : delete a way when its second to last node is deleted (fixes #2786)
     * FIX : make sure polygons are at least 1 pixel wide when drawing them at creation time
     * FIX : Do not count deleted parents when removing children nodes (fixes #2785)
     * FIX : Make sure not to write to the log after it has been closed (fixes #2783)
