@@ -429,6 +429,9 @@ void MapView::drawBackground(QPainter & theP, Projection& /*aProj*/)
 
 void MapView::drawLatLonGrid(QPainter & P)
 {
+    if (!M_PREFS->getLatLonGridVisible())
+        return;
+
     int int1deg = angToInt(1.);
     int lonInterval = angToInt(0.002/p->ZoomLevel);
     int latInterval = angToInt(0.002/p->ZoomLevel);
