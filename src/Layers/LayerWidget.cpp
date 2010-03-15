@@ -134,7 +134,7 @@ void LayerWidget::showContextMenu(QContextMenuEvent* anEvent)
     if (ctxMenu) {
         if (actZoom) {
             actZoom->setVisible(true);
-            ImageMapLayer* il = (ImageMapLayer *)theLayer.data();
+            ImageMapLayer* il = dynamic_cast<ImageMapLayer *>(theLayer.data());
             if (il) {
                 if (!il->getMapAdapter() || il->getMapAdapter()->getBoundingbox().isNull())
                     actZoom->setVisible(false);
