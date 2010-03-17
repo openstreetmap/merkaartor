@@ -98,14 +98,16 @@ Way::Way(const Way& other)
 
 Way::~Way(void)
 {
-    while (p->virtualNodes.size()) {
-        p->virtualNodes[0]->unsetParentFeature(this);
-        delete p->virtualNodes[0];
-        p->virtualNodes.erase(p->virtualNodes.begin());
-    }
-    for (unsigned int i=0; i<p->Nodes.size(); ++i)
-        if (p->Nodes[i])
-            p->Nodes[i]->unsetParentFeature(this);
+    // TODO Those cleanup shouldn't be necessary and lead to crashes
+    //      Check for side effect of supressing them.
+//    while (p->virtualNodes.size()) {
+//        p->virtualNodes[0]->unsetParentFeature(this);
+//        delete p->virtualNodes[0];
+//        p->virtualNodes.erase(p->virtualNodes.begin());
+//    }
+//    for (unsigned int i=0; i<p->Nodes.size(); ++i)
+//        if (p->Nodes[i])
+//            p->Nodes[i]->unsetParentFeature(this);
 
     delete p;
 }

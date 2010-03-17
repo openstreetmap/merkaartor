@@ -44,9 +44,6 @@ public:
     ~LayerPrivate()
     {
         delete theRTree;
-        //for (int i=0; i<Features.size(); ++i)
-        //	if (Features[i])
-        //		delete Features[i];
     }
     QList<MapFeaturePtr> Features;
     MyRTree* theRTree;

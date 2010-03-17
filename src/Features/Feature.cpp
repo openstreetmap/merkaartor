@@ -162,8 +162,10 @@ Feature::Feature(const Feature& other)
 
 Feature::~Feature(void)
 {
-    while (sizeParents())
-        getParent(0)->remove(this);
+    // TODO Those cleanup shouldn't be necessary and lead to crashes
+    //      Check for side effect of supressing them.
+//    while (sizeParents())
+//        getParent(0)->remove(this);
     delete p;
 }
 
