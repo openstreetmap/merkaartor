@@ -284,7 +284,7 @@ bool Projection::setProjectionType(ProjectionType aProjectionType)
     if (aProjectionType == p->projType)
         return true;
 
-    delete theProj;
+    SAFE_DELETE(theProj);
     p->ProjectionRevision++;
     p->projType = aProjectionType;
 
