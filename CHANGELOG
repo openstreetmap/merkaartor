@@ -1,4 +1,6 @@
 v0.16
+    * CHG : hardcode "google" projection.
+    * CHG : adapt TMS code to allow for non-google projections
     * ADD : add the possibility to show a lat/lon grid
     * FIX : delete a way when its second to last node is deleted (fixes #2786)
     * FIX : make sure polygons are at least 1 pixel wide when drawing them at creation time

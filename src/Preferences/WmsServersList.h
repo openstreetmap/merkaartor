@@ -17,42 +17,64 @@
 #include <QMap>
 #include <QtXml>
 
+#include "Maps/Coord.h"
+
+class WmscLayer
+{
+public:
+    QString LayerName;
+    QString Projection;
+    QString Styles;
+    QString ImgFormat;
+    QRectF BoundingBox;
+    QList<qreal> Resolutions;
+    int TileWidth;
+    int TileHeight;
+};
+
 class WmsServer
 {
-	public:
-		WmsServer();
-		WmsServer(const WmsServer& other);
-		WmsServer(QString Name, QString Adress, QString Path, QString Layers, QString Projections, QString Styles, QString ImgFormat, bool Deleted=false);
+    public:
+        WmsServer();
+        WmsServer(const WmsServer& other);
+        WmsServer(QString Name, QString Adress, QString Path, QString Layers, QString Projections, QString Styles, QString ImgFormat
+                  , bool IsTiled = false
+                  , WmscLayer CLayer = WmscLayer()
+                  , bool Deleted=false
+                                 );
 
-		void toXml(QDomElement parent);
-		static WmsServer fromXml(QDomElement parent);
+        void toXml(QDomElement parent);
+        static WmsServer fromXml(QDomElement parent);
 
-	public:
-		QString WmsName;
-		QString WmsAdress;
-		QString WmsPath;
-		QString WmsLayers;
-		QString WmsProjections;
-		QString WmsStyles;
-		QString WmsImgFormat;
-		bool deleted;
+    public:
+        QString WmsName;
+        QString WmsAdress;
+        QString WmsPath;
+        QString WmsLayers;
+        QString WmsProjections;
+        QString WmsStyles;
+        QString WmsImgFormat;
+        bool WmsIsTiled;
+        WmscLayer WmsCLayer;
+
+        bool deleted;
 };
 typedef QMap<QString, WmsServer> WmsServerList;
 typedef QMapIterator<QString, WmsServer> WmsServerListIterator;
 
 class WmsServersList
 {
-	public:
-		void add(WmsServersList aWmsServersList);
-		void addServer(WmsServer aServer);
-		bool contains(QString name) const;
-		WmsServerList* getServers();
-		WmsServer getServer(QString name) const;
-		void toXml(QDomElement parent);
-		static WmsServersList fromXml(QDomElement parent);
+    public:
+        void add(WmsServersList aWmsServersList);
+        void addServer(WmsServer aServer);
+        bool contains(QString name) const;
+        WmsServerList* getServers();
+        WmsServer getServer(QString name) const;
+        void toXml(QDomElement parent);
+        static WmsServersList fromXml(QDomElement parent);
 
-	private:
-		WmsServerList theServers;
+    private:
+        WmsServerList theServers;
 };
 
 #endif // WMSSERVERS_LIST_H

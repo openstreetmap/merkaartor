@@ -1,4 +1,5 @@
 - Implement WMS-C (Tiling and caching of WMS images)
+- Update the gpsd code
 - Implement in-process WMS-C proxy for "standard" WMS
 - Allow to middle-split a road by selecting only 2 single-parented nodes from it
 - Implement Walking Paper plugin

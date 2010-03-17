@@ -17,25 +17,35 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef WMSMAPADAPTER_H
-#define WMSMAPADAPTER_H
+#ifndef WMSCMAPADAPTER_H
+#define WMSCMAPADAPTER_H
 
-#include "IMapAdapter.h"
+#include "mapadapter.h"
 #include "Preferences/WmsServersList.h"
 
-#include <QLocale>
-
-//! MapAdapter for WMS servers
+//! MapAdapter for servers with image tiles
 /*!
- * Use this derived MapAdapter to display maps from WMS servers
+ * Use this derived MapAdapter to display maps from OpenStreetMap
  *	@author Kai Winter <kaiwinter@gmx.de>
 */
-class WMSMapAdapter : public IMapAdapter
+class WmscMapAdapter : public MapAdapter
 {
 public:
+    //! constructor
+    /*!
+     * Sample of a correct initialization of a MapAdapter:<br/>
+     * TileMapAdapter* ta = new TileMapAdapter("192.168.8.1", "/img/img_cache.php/%1/%2/%3.png", 256, 0,17);<br/>
+     * The placeholders %1, %2, %3 stands for x, y, z<br/>
+     * The minZoom is 0 (means the whole world is visible). The maxZoom is 17 (means it is zoomed in to the max)
+     * @param host The servers URL
+     * @param serverPath The path to the tiles with placeholders
+     * @param tilesize the size of the tiles
+     * @param minZoom the minimum zoom level
+     * @param maxZoom the maximum zoom level
+     */
+    WmscMapAdapter(WmsServer aServer);
 
-    WMSMapAdapter(WmsServer aServer);
-    virtual ~WMSMapAdapter();
+    virtual ~WmscMapAdapter();
 
     //! returns the unique identifier (Uuid) of this MapAdapter
     /*!
@@ -49,71 +59,25 @@ public:
      */
     virtual IMapAdapter::Type	getType		() const;
 
-    //! returns the name of this MapAdapter
-    /*!
-     * @return  the name of this MapAdapter
-     */
-    virtual QString	getName		() const;
+    double PI;
 
-    //! returns the host of this MapAdapter
-    /*!
-     * @return  the host of this MapAdapter
-     */
-    virtual QString	getHost		() const;
+    virtual void zoom_in();
+    virtual void zoom_out();
 
-    //! returns the size of the tiles
-    /*!
-     * @return the size of the tiles
-     */
-    virtual int		getTileSize	() const { return -1; }
-
-    //! returns the min zoom value
-    /*!
-     * @return the min zoom value
-     */
-    virtual int 		getMinZoom	() const { return -1; }
-
-    //! returns the max zoom value
-    /*!
-     * @return the max zoom value
-     */
-    virtual int		getMaxZoom	() const { return -1; }
-
-    //! returns the current zoom
-    /*!
-     * @return the current zoom
-     */
-    virtual int 		getZoom		() const { return -1; }
-
-    virtual int		getAdaptedZoom() const { return -1; }
-    virtual int 	getAdaptedMinZoom() const { return -1; }
-    virtual int		getAdaptedMaxZoom() const { return -1; }
-
-    virtual void	zoom_in() {}
-    virtual void	zoom_out() {}
-
-    virtual bool	isValid(int, int, int) const { return true; }
-    virtual QString getQuery(int, int, int)  const { return ""; }
-    virtual QString getQuery(const QRectF& wgs84Bbox, const QRectF& projBbox, const QRect& size) const ;
+    virtual bool isValid(int x, int y, int z) const;
+    virtual QString getQuery(int x, int y, int z) const;
+    virtual QString getQuery(const QRectF& , const QRectF& , const QRect& ) const { return ""; }
     virtual QPixmap getPixmap(const QRectF& /* wgs84Bbox */, const QRectF& /* projBbox */, const QRect& /* size */) const { return QPixmap(); }
 
     virtual QString projection() const;
     virtual QRectF	getBoundingbox() const { return QRectF(); }
 
-    virtual bool isTiled() const { return false; }
-    virtual int getTilesWE(int) const { return -1; }
-    virtual int getTilesNS(int) const { return -1; }
+    virtual bool isTiled() const { return true; }
+    virtual int getTilesWE(int zoomlevel) const;
+    virtual int getTilesNS(int zoomlevel) const;
 
-    virtual QMenu* getMenu() const { return NULL; }
-
-    virtual IImageManager* getImageManager();
-    virtual void setImageManager(IImageManager* anImageManager);
-
-private:
-
-    QLocale loc;
+protected:
     WmsServer theServer;
-    IImageManager* theImageManager;
 };
 
-#endif
+#endif //WMSCMAPADAPTER_H

@@ -222,7 +222,7 @@ void MapRenderer::render(
     QMap<RenderPriority, QSet<Feature*> >::const_iterator itm;
     QSet<Feature*>::const_iterator it;
 
-#if 1
+#if 0
     P->setRenderHint(QPainter::Antialiasing);
     thePainter = P;
 
@@ -339,7 +339,7 @@ void MapRenderer::render(
                         RR = CAST_RELATION(*it);
 
                 if (!Pt) {
-                    if (M_PREFS->getStyleBackgroundVisible())
+                    if (M_PREFS->getBackgroundVisible())
                     {
                         thePainter->save();
                         if (R && R->area() == 0)
@@ -354,7 +354,7 @@ void MapRenderer::render(
 
                         thePainter->restore();
                     }
-                    if (M_PREFS->getStyleForegroundVisible())
+                    if (M_PREFS->getForegroundVisible())
                     {
                         thePainter->save();
 
@@ -368,7 +368,7 @@ void MapRenderer::render(
                         thePainter->restore();
                     }
                 }
-                if (M_PREFS->getStyleTouchupVisible())
+                if (M_PREFS->getTouchupVisible())
                 {
                     thePainter->save();
 

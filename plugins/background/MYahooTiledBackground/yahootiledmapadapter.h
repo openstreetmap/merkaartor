@@ -31,123 +31,102 @@
 */
 class YahooTiledMapAdapter : public QObject, public IMapAdapter
 {
-	Q_OBJECT
-	Q_INTERFACES(IMapAdapter)
+    Q_OBJECT
+    Q_INTERFACES(IMapAdapter)
 
 public:
-	//! constructor
-	/*!
-	 * This construct a Yahoo Adapter
-	 */
-	YahooTiledMapAdapter();
-	virtual ~YahooTiledMapAdapter();
+    //! constructor
+    /*!
+     * This construct a Yahoo Adapter
+     */
+    YahooTiledMapAdapter();
+    virtual ~YahooTiledMapAdapter();
 
 
-	//! returns the unique identifier (Uuid) of this MapAdapter
-	/*!
-	 * @return  the unique identifier (Uuid) of this MapAdapter
-	 */
-	virtual QUuid	getId		() const;
+    //! returns the unique identifier (Uuid) of this MapAdapter
+    /*!
+     * @return  the unique identifier (Uuid) of this MapAdapter
+     */
+    virtual QUuid	getId		() const;
 
-	//! returns the type of this MapAdapter
-	/*!
-	 * @return  the type of this MapAdapter
-	 */
-	virtual IMapAdapter::Type	getType		() const;
+    //! returns the type of this MapAdapter
+    /*!
+     * @return  the type of this MapAdapter
+     */
+    virtual IMapAdapter::Type	getType		() const;
 
-	//! returns the name of this MapAdapter
-	/*!
-	 * @return  the name of this MapAdapter
-	 */
-	virtual QString	getName		() const;
+    //! returns the name of this MapAdapter
+    /*!
+     * @return  the name of this MapAdapter
+     */
+    virtual QString	getName		() const;
 
-	//! returns the host of this MapAdapter
-	/*!
-	 * @return  the host of this MapAdapter
-	 */
-	virtual QString	getHost		() const;
+    //! returns the host of this MapAdapter
+    /*!
+     * @return  the host of this MapAdapter
+     */
+    virtual QString	getHost		() const;
 
-	//! returns the size of the tiles
-	/*!
-	 * @return the size of the tiles
-	 */
-	virtual int		getTileSize	() const;
+    //! returns the size of the tiles
+    /*!
+     * @return the size of the tiles
+     */
+    virtual int		getTileSize	() const;
 
-	//! returns the min zoom value
-	/*!
-	 * @return the min zoom value
-	 */
-	virtual int 		getMinZoom	() const;
+    //! returns the min zoom value
+    /*!
+     * @return the min zoom value
+     */
+    virtual int 		getMinZoom	() const;
 
-	//! returns the max zoom value
-	/*!
-	 * @return the max zoom value
-	 */
-	virtual int		getMaxZoom	() const;
+    //! returns the max zoom value
+    /*!
+     * @return the max zoom value
+     */
+    virtual int		getMaxZoom	() const;
 
-	//! returns the current zoom
-	/*!
-	 * @return the current zoom
-	 */
-	virtual int 		getZoom		() const;
+    //! returns the current zoom
+    /*!
+     * @return the current zoom
+     */
+    virtual int 		getZoom		() const;
 
-	virtual int		getAdaptedZoom()   const;
-	virtual int 	getAdaptedMinZoom	() const;
-	virtual int		getAdaptedMaxZoom	() const;
+    virtual int		getAdaptedZoom()   const;
+    virtual int 	getAdaptedMinZoom	() const;
+    virtual int		getAdaptedMaxZoom	() const;
 
-	virtual void	zoom_in();
-	virtual void	zoom_out();
+    virtual void	zoom_in();
+    virtual void	zoom_out();
 
-	virtual bool	isValid(int x, int y, int z) const;
-	virtual QString getQuery(int x, int y, int z) const;
-		virtual QString getQuery(const QRectF& /* wgs84Bbox */, const QRectF& /* projBbox */, const QRect& /* size */) const  { return ""; }
-		virtual QPixmap getPixmap(const QRectF& /* wgs84Bbox */, const QRectF& /* projBbox */, const QRect& /* size */) const { return QPixmap(); };
+    virtual bool	isValid(int x, int y, int z) const;
+    virtual QString getQuery(int x, int y, int z) const;
+    virtual QString getQuery(const QRectF& /* wgs84Bbox */, const QRectF& /* projBbox */, const QRect& /* size */) const  { return ""; }
+    virtual QPixmap getPixmap(const QRectF& /* wgs84Bbox */, const QRectF& /* projBbox */, const QRect& /* size */) const { return QPixmap(); }
 
-	//! translates a world coordinate to display coordinate
-	/*!
-	 * The calculations also needs the current zoom. The current zoom is managed by the MapAdapter, so this is no problem.
-	 * To divide model from view the current zoom should be moved to the layers.
-	 * @param  coordinate the world coordinate
-	 * @return the display coordinate (in widget coordinates)
-	 */
-	virtual QPoint		coordinateToDisplay(const QPointF& coordinate) const;
+    virtual QRectF	getBoundingbox() const;
 
-	//! translates display coordinate to world coordinate
-	/*!
-	 * The calculations also needs the current zoom. The current zoom is managed by the MapAdapter, so this is no problem.
-	 * To divide model from view the current zoom should be moved to the layers.
-	 * @param  point the display coordinate
-	 * @return the world coordinate
-	 */
-	virtual QPointF	displayToCoordinate(const QPoint& point) const;
+    virtual bool isTiled() const { return true; }
+    virtual int getTilesWE(int zoom) const;
+    virtual int getTilesNS(int zoom) const;
+    virtual QString projection() const;
 
-	virtual QRectF	getBoundingbox() const;
+    virtual QMenu* getMenu() const { return NULL; }
 
-	virtual bool isTiled() const { return true; };
-	virtual QString projection() const;
-
-	virtual QMenu* getMenu() const { return NULL; }
-
-	virtual IImageManager* getImageManager();
-	virtual void setImageManager(IImageManager* anImageManager);
-
-protected:
-	virtual int tilesonzoomlevel(int zoomlevel) const;
-	virtual int getyoffset(int y) const;
+    virtual IImageManager* getImageManager();
+    virtual void setImageManager(IImageManager* anImageManager);
 
 private:
-	QLocale loc;
-	IImageManager* theImageManager;
+    QLocale loc;
+    IImageManager* theImageManager;
 
-	QString	host;
-	QString	serverPath;
-	int	tilesize;
-	int min_zoom;
-	int max_zoom;
-	int current_zoom;
-	double numberOfTiles;
+    QString	host;
+    QString	serverPath;
+    int	tilesize;
+    int min_zoom;
+    int max_zoom;
+    int current_zoom;
 
-	virtual QString getQ(QPointF ul, QPointF br) const;
+    virtual QString getQ(QPointF ul, QPointF br) const;
 };
 
 #endif

@@ -84,8 +84,8 @@ CoordBox OsmLink::getCoordBox()
 		x <<= (32 - z);
 		y <<= (32 - z);
 
-		m_Lon = (x * 360. / pow(2, 32)) - 180.;
-		m_Lat = (y * 180. / pow(2, 32)) - 90.;
+		m_Lon = (x * 360. / pow(2., 32)) - 180.;
+		m_Lat = (y * 180. / pow(2., 32)) - 90.;
 		if (z_offset)
 			z_offset = (3 - (z_offset % 3));
 		m_Zoom = z - 8  - z_offset;

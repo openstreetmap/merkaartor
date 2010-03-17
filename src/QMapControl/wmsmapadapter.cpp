@@ -22,33 +22,35 @@
 WMSMapAdapter::WMSMapAdapter(WmsServer aServer)
  : theServer(aServer)
 {
-	loc = QLocale(QLocale::English);
-	loc.setNumberOptions(QLocale::OmitGroupSeparator);
+    loc = QLocale(QLocale::English);
+    loc.setNumberOptions(QLocale::OmitGroupSeparator);
 }
 
 QString	WMSMapAdapter::getName() const
 {
-	return theServer.WmsName;
+    return theServer.WmsName;
 }
 
 QString	WMSMapAdapter::getHost() const
 {
-	return theServer.WmsAdress;
+    return theServer.WmsAdress;
 }
 
 IImageManager* WMSMapAdapter::getImageManager()
 {
-	return theImageManager;
+    return theImageManager;
 }
 
 void WMSMapAdapter::setImageManager(IImageManager* anImageManager)
 {
-	theImageManager = anImageManager;
+    theImageManager = anImageManager;
 }
 
 QString WMSMapAdapter::projection() const
 {
-	return theServer.WmsProjections;
+    if (theServer.WmsProjections == "OSGEO:41001")
+        return "EPSG:3785";
+    return theServer.WmsProjections;
 }
 
 WMSMapAdapter::~WMSMapAdapter()
@@ -57,32 +59,32 @@ WMSMapAdapter::~WMSMapAdapter()
 
 QUuid WMSMapAdapter::getId() const
 {
-	return QUuid("{E238750A-AC27-429e-995C-A60C17B9A1E0}");
+    return QUuid("{E238750A-AC27-429e-995C-A60C17B9A1E0}");
 }
 
 IMapAdapter::Type WMSMapAdapter::getType() const
 {
-	return IMapAdapter::NetworkBackground;
+    return IMapAdapter::NetworkBackground;
 }
 
 QString WMSMapAdapter::getQuery(const QRectF& /*wgs84Bbox*/, const QRectF& projBbox, const QRect& size) const
 {
-	return QString()
-						.append(theServer.WmsPath)
-						.append("SERVICE=WMS")
-						.append("&VERSION=1.1.1")
-						.append("&REQUEST=GetMap")
-						.append("&TRANSPARENT=TRUE")
-						.append("&LAYERS=").append(theServer.WmsLayers)
-						.append("&SRS=").append(theServer.WmsProjections)
-						.append("&STYLES=").append(theServer.WmsStyles)
-						.append("&FORMAT=").append(theServer.WmsImgFormat)
-						.append("&WIDTH=").append(QString::number(size.width()))
-						.append("&HEIGHT=").append(QString::number(size.height()))
-						.append("&BBOX=")
-						.append(loc.toString(projBbox.bottomLeft().x(),'f',6)).append(",")
-						 .append(loc.toString(projBbox.bottomLeft().y(),'f',6)).append(",")
-						 .append(loc.toString(projBbox.topRight().x(),'f',6)).append(",")
-						 .append(loc.toString(projBbox.topRight().y(),'f',6))
-						 ;
+    return QString()
+                        .append(theServer.WmsPath)
+                        .append("SERVICE=WMS")
+                        .append("&VERSION=1.1.1")
+                        .append("&REQUEST=GetMap")
+                        .append("&TRANSPARENT=TRUE")
+                        .append("&LAYERS=").append(theServer.WmsLayers)
+                        .append("&SRS=").append(theServer.WmsProjections)
+                        .append("&STYLES=").append(theServer.WmsStyles)
+                        .append("&FORMAT=").append(theServer.WmsImgFormat)
+                        .append("&WIDTH=").append(QString::number(size.width()))
+                        .append("&HEIGHT=").append(QString::number(size.height()))
+                        .append("&BBOX=")
+                        .append(loc.toString(projBbox.bottomLeft().x(),'f',6)).append(",")
+                         .append(loc.toString(projBbox.bottomLeft().y(),'f',6)).append(",")
+                         .append(loc.toString(projBbox.topRight().x(),'f',6)).append(",")
+                         .append(loc.toString(projBbox.topRight().y(),'f',6))
+                         ;
 }

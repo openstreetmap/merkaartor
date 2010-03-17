@@ -24,46 +24,51 @@
 #include <QtXml>
 
 /**
-	@author cbro <cbro@semperpax.com>
+    @author cbro <cbro@semperpax.com>
 */
 
 class WMSPreferencesDialog : public QDialog, public Ui::WMSPreferencesDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	WMSPreferencesDialog(QWidget* parent = 0);
-	~WMSPreferencesDialog();
+    WMSPreferencesDialog(QWidget* parent = 0);
+    ~WMSPreferencesDialog();
 
-	void addServer(const WmsServer & srv);
+    void addServer(const WmsServer & srv);
 
 public slots:
-	void on_btApplyWmsServer_clicked();
-	void on_btAddWmsServer_clicked();
-	void on_btDelWmsServer_clicked();
-	void on_btShowCapabilities_clicked();
-	void on_lvWmsServers_itemSelectionChanged();
-	void readResponseHeader(const QHttpResponseHeader &responseHeader);
-	void httpRequestFinished(bool error);
-	void on_buttonBox_clicked(QAbstractButton * button);
-	void on_tvWmsLayers_itemChanged(QTreeWidgetItem *, int);
+    void on_btApplyWmsServer_clicked();
+    void on_btAddWmsServer_clicked();
+    void on_btDelWmsServer_clicked();
+    void on_btShowCapabilities_clicked();
+    void on_lvWmsServers_itemSelectionChanged();
+    void readResponseHeader(const QHttpResponseHeader &responseHeader);
+    void httpRequestFinished(bool error);
+    void on_buttonBox_clicked(QAbstractButton * button);
+    void on_tvWmsLayers_itemChanged(QTreeWidgetItem *, int);
 
 private:
-	void loadPrefs();
-	void savePrefs();
-	void requestCapabilities(QUrl url);
-	QTreeWidgetItem * fillLayers(QDomElement& aLayerElem, QTreeWidgetItem* aLayerItem);
+    void loadPrefs();
+    void savePrefs();
+    void requestCapabilities(QUrl url);
+    QTreeWidgetItem * parseLayers(QDomElement& aLayerElem, QTreeWidgetItem* aLayerItem);
+    void parseVendorSpecific(QDomElement& vendorElem);
+    void parseTileSet(QDomElement& tilesetElem, WmscLayer& aLayer);
+
 public:
-	QList<WmsServer> theWmsServers;
-	QString getSelectedServer();
-	void setSelectedServer(QString theValue);
+    QList<WmsServer> theWmsServers;
+    QString getSelectedServer();
+    void setSelectedServer(QString theValue);
 
 private:
-	QString selectedServer;
-	int httpGetId;
-	QHttp *http;
-	QBuffer* buf;
-
+    QString selectedServer;
+    int httpGetId;
+    QHttp *http;
+    QBuffer* buf;
+    bool isTiled;
+    QList<WmscLayer> wmscLayers;
+    WmscLayer selWmscLayer;
 };
 
 #endif

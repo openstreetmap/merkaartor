@@ -432,34 +432,25 @@ void MapView::drawLatLonGrid(QPainter & P)
     if (!M_PREFS->getLatLonGridVisible())
         return;
 
-    int int1deg = angToInt(1.);
     int lonInterval = angToInt(0.002/p->ZoomLevel);
     int latInterval = angToInt(0.002/p->ZoomLevel);
-    int lonStart = qMax(int(p->Viewport.bottomLeft().lon() / int1deg) * int1deg, -INT_MAX);
-    int latStart = qMax(int(p->Viewport.bottomLeft().lat() / int1deg) * int1deg, -INT_MAX/2);
+    int lonStart = qMax(int(p->Viewport.bottomLeft().lon() / lonInterval) * lonInterval, -INT_MAX);
+    int latStart = qMax(int(p->Viewport.bottomLeft().lat() / latInterval) * latInterval, -INT_MAX/2);
 
     QList<QPolygonF> medianLines;
     QList<QPolygonF> parallelLines;
 
     for (double y=latStart; y<=qMin(p->Viewport.topLeft().lat()+latInterval, INT_MAX/2); y+=latInterval) {
-        if (y < p->Viewport.bottomLeft().lat()-latInterval)
-            continue;
         QPolygonF l;
         for (double x=lonStart; x<=qMin(p->Viewport.bottomRight().lon()+lonInterval, INT_MAX); x+=lonInterval) {
-            if (x < p->Viewport.bottomLeft().lon()-lonInterval)
-                continue;
             QPointF pt = QPointF(theProjection.project(Coord(y, x)));
             l << pt;
         }
         parallelLines << l;
     }
     for (double x=lonStart; x<=qMin(p->Viewport.bottomRight().lon()+lonInterval, INT_MAX); x+=lonInterval) {
-        if (x < p->Viewport.bottomLeft().lon()-lonInterval)
-            continue;
         QPolygonF l;
         for (double y=latStart; y<=qMin(p->Viewport.topLeft().lat()+latInterval, INT_MAX/2); y+=latInterval) {
-            if (y < p->Viewport.bottomLeft().lat()-latInterval)
-                continue;
             QPointF pt = QPointF(theProjection.project(Coord(y, x)));
             l << pt;
         }
@@ -1022,7 +1013,6 @@ void MapView::setViewport(const CoordBox & TargetMap,
     }
 
     QPointF pt = theProjection.project(Coord(0, angToInt(180)));
-    qDebug() << "pt: " << int(pt.x());
     double earthWidth = pt.x() * 2;
     double zoomPixPerMat0 = 512. / earthWidth;
     double z = 0;
@@ -1075,7 +1065,6 @@ void MapView::zoom(double d, const QPoint & Around,
         ImgIt.get()->zoom(d, Around, Screen);
 
     QPointF pt = theProjection.project(Coord(0, angToInt(180)));
-    qDebug() << "pt: " << int(pt.x());
     double earthWidth = pt.x() * 2;
     double zoomPixPerMat0 = 512. / earthWidth;
     double z = 0;

@@ -5,6 +5,7 @@ HEADERS += \
 		   QMapControl/mapadapter.h \
 		   QMapControl/mapnetwork.h \
 		   QMapControl/wmsmapadapter.h \
+		   QMapControl/WmscMapadapter.h \
 		   QMapControl/tilemapadapter.h
 
 SOURCES += \
@@ -13,6 +14,7 @@ SOURCES += \
 		   QMapControl/mapadapter.cpp \
 		   QMapControl/mapnetwork.cpp \
 		   QMapControl/wmsmapadapter.cpp \
+		   QMapControl/WmscMapadapter.cpp \
 		   QMapControl/tilemapadapter.cpp
 
 QT += network

@@ -49,119 +49,99 @@
 */
 class MapAdapter : public QObject, public IMapAdapter
 {
-	//friend class ImageManager;
-	//friend class BrowserImageManager;
-	//friend class Layer;
+    //friend class ImageManager;
+    //friend class BrowserImageManager;
+    //friend class Layer;
 
-	Q_OBJECT
-	Q_INTERFACES(IMapAdapter)
+    Q_OBJECT
+    Q_INTERFACES(IMapAdapter)
 
 public:
-	virtual ~MapAdapter();
+    virtual ~MapAdapter();
 
-	//! returns the host of this MapAdapter
-	/*!
-	 * @return  the host of this MapAdapter
-	 */
-	virtual QString	getName		() const;
+    //! returns the host of this MapAdapter
+    /*!
+     * @return  the host of this MapAdapter
+     */
+    virtual QString	getName		() const;
 
-	//! returns the host of this MapAdapter
-	/*!
-	 * @return  the host of this MapAdapter
-	 */
-	virtual QString	getHost		() const;
+    //! returns the host of this MapAdapter
+    /*!
+     * @return  the host of this MapAdapter
+     */
+    virtual QString	getHost		() const;
 
-	//! returns the size of the tiles
-	/*!
-	 * @return the size of the tiles
-	 */
-	virtual int		getTileSize	() const;
+    //! returns the size of the tiles
+    /*!
+     * @return the size of the tiles
+     */
+    virtual int		getTileSize	() const;
 
-	//! returns the min zoom value
-	/*!
-	 * @return the min zoom value
-	 */
-	virtual int 		getMinZoom	() const;
+    //! returns the min zoom value
+    /*!
+     * @return the min zoom value
+     */
+    virtual int 		getMinZoom	() const;
 
-	//! returns the max zoom value
-	/*!
-	 * @return the max zoom value
-	 */
-	virtual int		getMaxZoom	() const;
+    //! returns the max zoom value
+    /*!
+     * @return the max zoom value
+     */
+    virtual int		getMaxZoom	() const;
 
-	//! returns the current zoom
-	/*!
-	 * @return the current zoom
-	 */
-	virtual int 		getZoom		() const;
+    //! returns the current zoom
+    /*!
+     * @return the current zoom
+     */
+    virtual int 		getZoom		() const;
 
-	virtual int		getAdaptedZoom()const;
-	virtual int 	getAdaptedMinZoom	() const;
-	virtual int		getAdaptedMaxZoom	() const;
+    virtual int		getAdaptedZoom()const;
+    virtual int 	getAdaptedMinZoom	() const;
+    virtual int		getAdaptedMaxZoom	() const;
 
+    virtual QMenu* getMenu() const { return NULL; }
 
-	//! translates a world coordinate to display coordinate
-	/*!
-	 * The calculations also needs the current zoom. The current zoom is managed by the MapAdapter, so this is no problem.
-	 * To divide model from view the current zoom should be moved to the layers.
-	 * @param  coordinate the world coordinate
-	 * @return the display coordinate (in widget coordinates)
-	 */
-	virtual QPoint		coordinateToDisplay(const QPointF& coordinate) const = 0;
-
-	//! translates display coordinate to world coordinate
-	/*!
-	 * The calculations also needs the current zoom. The current zoom is managed by the MapAdapter, so this is no problem.
-	 * To divide model from view the current zoom should be moved to the layers.
-	 * @param  point the display coordinate
-	 * @return the world coordinate
-	 */
-	virtual QPointF	displayToCoordinate(const QPoint& point) const = 0;
-
-	virtual QMenu* getMenu() const { return NULL; }
-
-	virtual IImageManager* getImageManager();
-	virtual void setImageManager(IImageManager* anImageManager);
+    virtual IImageManager* getImageManager();
+    virtual void setImageManager(IImageManager* anImageManager);
 
 protected:
-	QString name;
-	MapAdapter(const QString& host, const QString& serverPath, int tilesize, int minZoom = 0, int maxZoom = 0);
-	virtual void zoom_in() = 0;
-	virtual void zoom_out() = 0;
-	virtual bool 		isValid(int x, int y, int z) const = 0;
-	virtual QString getQuery(int x, int y, int z) const = 0;
+    QString name;
+    MapAdapter(const QString& host, const QString& serverPath, int tilesize, int minZoom = 0, int maxZoom = 0);
+    virtual void zoom_in() = 0;
+    virtual void zoom_out() = 0;
+    virtual bool 		isValid(int x, int y, int z) const = 0;
+    virtual QString getQuery(int x, int y, int z) const = 0;
 
-	QSize size;
-	QString	host;
-	QString	serverPath;
-	int		tilesize;
-	int min_zoom;
-	int max_zoom;
-	int current_zoom;
+    QSize size;
+    QString	host;
+    QString	serverPath;
+    int		tilesize;
+    int min_zoom;
+    int max_zoom;
+    int current_zoom;
 
-	int param1;
-	int param2;
-	int param3;
-	int param4;
-	int param5;
-	int param6;
+    int param1;
+    int param2;
+    int param3;
+    int param4;
+    int param5;
+    int param6;
 
-	QString sub1;
-	QString sub2;
-	QString sub3;
-	QString sub4;
-	QString sub5;
-	QString sub6;
+    QString sub1;
+    QString sub2;
+    QString sub3;
+    QString sub4;
+    QString sub5;
+    QString sub6;
 
-	int order[3][2];
+    int order[3][2];
 
-	int middle_x;
-	int middle_y;
+    int middle_x;
+    int middle_y;
 
-	double numberOfTiles;
-	QLocale loc;
+    QLocale loc;
 
-	IImageManager* theImageManager;
+    IImageManager* theImageManager;
 };
 
 #endif
