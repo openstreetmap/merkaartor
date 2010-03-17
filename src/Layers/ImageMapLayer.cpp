@@ -12,7 +12,7 @@
 #endif
 #include "QMapControl/tilemapadapter.h"
 #include "QMapControl/wmsmapadapter.h"
-#include "QMapControl/WmscMapadapter.h"
+#include "QMapControl/WmscMapAdapter.h"
 
 #include <QLocale>
 #include <QPainter>
