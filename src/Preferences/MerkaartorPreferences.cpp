@@ -776,9 +776,9 @@ void MerkaartorPreferences::setProjectionType(ProjectionType theValue)
 ProjectionType MerkaartorPreferences::getProjectionType()
 {
     if (getZoomBoris())
-        return (ProjectionType)QString("Mercator");
+        return (ProjectionType)QString("EPSG:900913");
     else
-        return (ProjectionType)Sets->value("projection/Type", "Mercator").toString();
+        return (ProjectionType)Sets->value("projection/Type", "EPSG:900913").toString();
 }
 
 ProjectionsList MerkaartorPreferences::getProjectionsList()

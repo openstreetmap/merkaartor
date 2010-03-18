@@ -117,11 +117,8 @@ void reversePoints(Document* theDocument, CommandList* theList, Way* R)
 
 static void appendPoints(Document* theDocument, CommandList* L, Way* Dest, Way* Src)
 {
-    L->add(new WayRemoveNodeCommand(Src,(int)0,theDocument->getDirtyOrOriginLayer(Src->layer())));
-    while (Src->size())
-    {
-        Node* Pt = Src->getNode(0);
-        L->add(new WayRemoveNodeCommand(Src,(int)0,theDocument->getDirtyOrOriginLayer(Src->layer())));
+    for (int i=1; i<Src->size(); ++i) {
+        Node* Pt = Src->getNode(i);
         L->add(new WayAddNodeCommand(Dest,Pt,theDocument->getDirtyOrOriginLayer(Src->layer())));
     }
 }
@@ -145,10 +142,15 @@ static Way* join(Document* theDocument, CommandList* L, Way* R1, Way* R2)
     Feature* End1 = R1->get(R1->size()-1);
     Feature* Start2 = R2->get(0);
     Feature* End2 = R2->get(R2->size()-1);
-    if ( (Start1 == Start2) || (Start1 == End2) )
+    if ( (Start1 == Start2) )
         reversePoints(theDocument,L,R1);
-    else if ( (End1 == End2) || (Start1 == End2) )
+    else if ( (End1 == End2) )
         reversePoints(theDocument,L,R2);
+    if (Start1 == End2) {
+        Way* r = R1;
+        R1 = R2;
+        R2 = r;
+    }
     appendPoints(theDocument,L,R1,R2);
     Feature::mergeTags(theDocument,L,R1,R2);
     L->add(new RemoveFeatureCommand(theDocument,R2,Alternatives));

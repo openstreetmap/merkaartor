@@ -26,11 +26,13 @@ public:
     QRectF ProjectedViewport;
     int ProjectionRevision;
     bool IsMercator;
+    bool IsLatLong;
 
 public:
     ProjectionPrivate()
         : ProjectionRevision(0)
         , IsMercator(false)
+        , IsLatLong(false)
     {
     }
 
@@ -74,7 +76,7 @@ QPointF Projection::project(const Coord & Map) const
     if (p->IsMercator)
         return p->mercatorProject(Map);
     else
-    if (projIsLatLong())
+    if (p->IsLatLong)
         return QPointF(intToAng(Map.lon()), intToAng(Map.lat()));
     else
         return projProject(Map);
@@ -99,7 +101,7 @@ QPointF Projection::project(Node* aNode) const
     if (p->IsMercator)
         pt = p->mercatorProject(aNode->position());
     else
-    if (projIsLatLong())
+    if (p->IsLatLong)
         pt = QPointF(intToAng(aNode->position().lon()), intToAng(aNode->position().lat()));
     else
         pt = projProject(aNode->position());
@@ -123,7 +125,7 @@ QPointF Projection::project(Node* aNode) const
 Coord Projection::inverse(const QPointF & Screen) const
 {
 #ifndef _MOBILE
-    if (projIsLatLong())
+    if (p->IsLatLong)
         return Coord(angToInt(Screen.y()), angToInt(Screen.x()));
     else
     if (p->IsMercator)
@@ -190,7 +192,7 @@ Coord Projection::projInverse(const QPointF & pProj) const
 
 bool Projection::projIsLatLong() const
 {
-    return (theProj && theProj->params().is_latlong > 0);
+    return p->IsLatLong;
 }
 
 //bool Projection::projIsMercator()
@@ -203,7 +205,7 @@ QRectF Projection::getProjectedViewport(const CoordBox& Viewport, const QRect& s
     QPointF bl, tr;
 
     double x, y;
-    if (projIsLatLong())
+    if (p->IsLatLong)
         tr = QPointF(intToAng(Viewport.topRight().lon()), intToAng(Viewport.topRight().lat()));
     else if (p->IsMercator)
         tr = project(Viewport.topRight());
@@ -214,7 +216,7 @@ QRectF Projection::getProjectedViewport(const CoordBox& Viewport, const QRect& s
         tr = QPointF(x, y);
     }
 
-    if (projIsLatLong())
+    if (p->IsLatLong)
         bl = QPointF(intToAng(Viewport.bottomLeft().lon()), intToAng(Viewport.bottomLeft().lat()));
     else if (p->IsMercator)
         bl = project(Viewport.bottomLeft());
@@ -264,14 +266,6 @@ ProjProjection * Projection::getProjection(QString projString)
     try {
         par = ggl::projection::init(std::string(QString("%1 +over").arg(projString).toLatin1().data()));
         theProj = fac.create_new(par);
-        if (!theProj) {
-            par = ggl::projection::init(std::string(QString("%1 +over").arg(M_PREFS->getProjection("mercator").projection).toLatin1().data()));
-            theProj = fac.create_new(par);
-            if (!theProj) {
-                qDebug() << "Unable to set projection : " << projString;
-                return NULL;
-            }
-        }
     } catch (...) {
         par = ggl::projection::init(std::string(QString("%1 +over").arg(M_PREFS->getProjection("mercator").projection).toLatin1().data()));
         theProj = fac.create_new(par);
@@ -284,12 +278,13 @@ bool Projection::setProjectionType(ProjectionType aProjectionType)
     if (aProjectionType == p->projType)
         return true;
 
-    SAFE_DELETE(theProj);
+    SAFE_DELETE(theProj)
     p->ProjectionRevision++;
     p->projType = aProjectionType;
-
-    // Handle "Google" projection specifically
+    p->IsLatLong = false;
     p->IsMercator = false;
+
+    // Hardcode "Google " projection
     if (
             p->projType.toUpper().contains("OSGEO:41001") ||
             p->projType.toUpper().contains("EPSG:3785") ||
@@ -300,13 +295,23 @@ bool Projection::setProjectionType(ProjectionType aProjectionType)
         p->IsMercator = true;
         return true;
     }
+    // Hardcode "lat/long " projection
+    if (
+            p->projType.toUpper().contains("EPSG:4326")
+            )
+    {
+        p->IsLatLong = true;
+        return true;
+    }
 
     try {
         theProj = getProjection(M_PREFS->getProjection(aProjectionType).projection);
+        if (!theProj)
+            p->IsMercator = true;
     } catch (...) {
         return false;
     }
-    return (theProj != NULL);
+    return (theProj != NULL || p->IsLatLong || p->IsMercator);
 }
 #endif
 

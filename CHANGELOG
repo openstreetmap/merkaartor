@@ -1,4 +1,6 @@
 v0.16
+    * FIX : problem when joining ways
+    * CHG : hardcode "lat/long", i.e. EPSG:4326, projection
     * CHG : hardcode "google" projection.
     * CHG : adapt TMS code to allow for non-google projections
     * ADD : add the possibility to show a lat/lon grid
