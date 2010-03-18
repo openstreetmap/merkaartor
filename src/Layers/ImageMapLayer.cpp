@@ -434,9 +434,6 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect) const
 {
     QRectF vp = p->theProjection.getProjectedViewport(p->Viewport, rect);
 
-    QPointF pt = p->theProjection.project(Coord(angToInt(50.84), angToInt(4.3506)));
-    qDebug() << "pt: " << pt;
-
     qreal tileWidth, tileHeight;
     int maxZoom = p->theMapAdapter->getAdaptedMaxZoom();
     int tilesize = p->theMapAdapter->getTileSize();
@@ -482,12 +479,13 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect) const
 
     // Actual drawing
     int i, j;
-    int mapmiddle_tile_x = (mapmiddle_px.x()-p->theMapAdapter->getBoundingbox().left())/tileWidth;
-    int mapmiddle_tile_y = (p->theMapAdapter->getBoundingbox().bottom()-mapmiddle_px.y())/tileHeight;
+    QPointF mapmiddle_px0 = QPointF(mapmiddle_px.x()-p->theMapAdapter->getBoundingbox().left(), p->theMapAdapter->getBoundingbox().bottom()-mapmiddle_px.y());
+    int mapmiddle_tile_x = mapmiddle_px0.x()/tileWidth;
+    int mapmiddle_tile_y = mapmiddle_px0.y()/tileHeight;
     qDebug() << "z: " << p->theMapAdapter->getAdaptedZoom() << "; t_x: " << mapmiddle_tile_x << "; t_y: " << mapmiddle_tile_y ;
 
-    qreal cross_x = mapmiddle_px.x() - int(mapmiddle_px.x()/tileWidth)*tileWidth;		// position on middle tile
-    qreal cross_y = mapmiddle_px.y() - int(mapmiddle_px.y()/tileHeight)*tileHeight;
+    qreal cross_x = mapmiddle_px0.x() - int(mapmiddle_px0.x()/tileWidth)*tileWidth;		// position on middle tile
+    qreal cross_y = mapmiddle_px0.y() - int(mapmiddle_px0.y()/tileHeight)*tileHeight;
     qDebug() << "cross_x: " << cross_x << "; cross_y: " << cross_y;
 
         // calculate how many surrounding tiles have to be drawn to fill the display
@@ -496,7 +494,7 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect) const
     if (space_left>0)
         tiles_left+=1;
 
-    qreal space_above = screenmiddle.y() - (tileHeight-cross_y);
+    qreal space_above = screenmiddle.y() - cross_y;
     int tiles_above = space_above/tileHeight;
     if (space_above>0)
         tiles_above+=1;
@@ -506,7 +504,7 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect) const
     if (space_right>0)
         tiles_right+=1;
 
-    qreal space_bottom = screenmiddle.y() - cross_y;
+    qreal space_bottom = screenmiddle.y() - (tileHeight-cross_y);
     int tiles_bottom = space_bottom/tileHeight;
     if (space_bottom>0)
         tiles_bottom+=1;
@@ -537,12 +535,12 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect) const
             QPixmap pm = p->theMapAdapter->getImageManager()->getImage(p->theMapAdapter, tile->i, tile->j, p->theMapAdapter->getZoom());
             if (!pm.isNull())
                 painter.drawPixmap(((tile->i-mapmiddle_tile_x)*tilesize)+rect.width()/2 -cross_scr_x,
-                            ((tile->j-mapmiddle_tile_y)*tilesize)+rect.height()/2-(tilesize-cross_scr_y),
+                            ((tile->j-mapmiddle_tile_y)*tilesize)+rect.height()/2-cross_scr_y,
                                                     pm);
 
             if (MerkaartorPreferences::instance()->getDrawTileBoundary()) {
                 painter.drawRect(((tile->i-mapmiddle_tile_x)*tilesize)-cross_scr_x+rect.width()/2,
-                          ((tile->j-mapmiddle_tile_y)*tilesize)+cross_scr_y-rect.height()/2,
+                          ((tile->j-mapmiddle_tile_y)*tilesize)-cross_scr_y-rect.height()/2,
                                             tilesize, tilesize);
             }
         }
@@ -555,6 +553,7 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect) const
     const QPointF tl = theView.transform().map(theView.projection().project(ulCoord));
     const QPointF br = theView.transform().map(theView.projection().project(lrCoord));
 
+    qDebug() << "tl: " << tl << "; br: " << br;
     return QRectF(tl, br).toRect();
 }
 
