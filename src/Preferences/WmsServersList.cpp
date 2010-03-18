@@ -67,9 +67,9 @@ void WmsServer::toXml(QDomElement parent)
         QDomElement bb = parent.ownerDocument().createElement("BoundingBox");
         c.appendChild(bb);
         bb.setAttribute("minx", WmsCLayer.BoundingBox.left());
-        bb.setAttribute("miny", WmsCLayer.BoundingBox.bottom());
+        bb.setAttribute("miny", WmsCLayer.BoundingBox.top());
         bb.setAttribute("maxx", WmsCLayer.BoundingBox.right());
-        bb.setAttribute("maxy", WmsCLayer.BoundingBox.top());
+        bb.setAttribute("maxy", WmsCLayer.BoundingBox.bottom());
 
         QDomElement r = parent.ownerDocument().createElement("Resolutions");
         c.appendChild(r);

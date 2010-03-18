@@ -359,12 +359,12 @@ void WMSPreferencesDialog::parseTileSet(QDomElement &tilesetElem, WmscLayer &aLa
         } else if (elem.tagName() == "Styles") {
             aLayer.Styles = elem.firstChild().toText().nodeValue();
         } else if (elem.tagName() == "BoundingBox") {
-            QPointF bl, tr;
-            bl.setX(elem.attribute("minx").toDouble());
-            bl.setY(elem.attribute("miny").toDouble());
-            tr.setX(elem.attribute("maxx").toDouble());
-            tr.setY(elem.attribute("maxy").toDouble());
-            aLayer.BoundingBox = QRectF(bl, tr);
+            QPointF tl, br;
+            tl.setX(elem.attribute("minx").toDouble());
+            tl.setY(elem.attribute("miny").toDouble());
+            br.setX(elem.attribute("maxx").toDouble());
+            br.setY(elem.attribute("maxy").toDouble());
+            aLayer.BoundingBox = QRectF(tl, br);
         } else if (elem.tagName() == "Resolutions") {
             QStringList resL;
             resL = elem.firstChild().toText().nodeValue().split(" ", QString::SkipEmptyParts);

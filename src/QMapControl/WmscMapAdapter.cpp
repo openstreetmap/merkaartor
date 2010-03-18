@@ -23,6 +23,7 @@ WmscMapAdapter::WmscMapAdapter(WmsServer aServer)
     : MapAdapter("", "", 0, 0, 0), theServer(aServer)
 {
     //	:MapAdapter(host, serverPath, tilesize, minZoom, maxZoom)
+    name = theServer.WmsName;
     host = theServer.WmsAdress;
     serverPath = theServer.WmsPath;
     tilesize = theServer.WmsCLayer.TileWidth;
@@ -49,6 +50,11 @@ QString WmscMapAdapter::projection() const
     return theServer.WmsProjections;
 }
 
+QRectF	WmscMapAdapter::getBoundingbox() const
+{
+    return theServer.WmsCLayer.BoundingBox;
+}
+
 void WmscMapAdapter::zoom_in()
 {
     current_zoom = current_zoom < max_zoom ? current_zoom+1 : max_zoom;
@@ -59,19 +65,42 @@ void WmscMapAdapter::zoom_out()
     current_zoom = current_zoom > min_zoom ? current_zoom-1 : min_zoom;
 }
 
-QString WmscMapAdapter::getQuery		(int x, int y, int z) const
+QString WmscMapAdapter::getQuery(int i, int j, int /* z */) const
 {
-    int a[3] = {z, x, y};
-    return QString(serverPath).replace(order[2][0],2, loc.toString(a[order[2][1]]))
-                                      .replace(order[1][0],2, loc.toString(a[order[1][1]]))
-                                      .replace(order[0][0],2, loc.toString(a[order[0][1]]));
+    // WMS-C Y origin is lower left
+//    j = getTilesNS(current_zoom)-1 - j;
 
+    qreal tileWidth = getBoundingbox().width() / getTilesWE(current_zoom);
+    qreal tileHeight = getBoundingbox().height() / getTilesNS(current_zoom);
+
+    QPointF ul = QPointF(i*tileWidth+theServer.WmsCLayer.BoundingBox.topLeft().x(), -theServer.WmsCLayer.BoundingBox.topLeft().y()-j*tileHeight);
+    QPointF br = QPointF((i+1)*tileWidth+theServer.WmsCLayer.BoundingBox.topLeft().x(), -theServer.WmsCLayer.BoundingBox.topLeft().y()- (j+1)*tileHeight);
+
+    return QString()
+                        .append(theServer.WmsPath)
+                        .append("SERVICE=WMS")
+                        .append("&VERSION=1.1.1")
+                        .append("&REQUEST=GetMap")
+                        .append("&TRANSPARENT=TRUE")
+                        .append("&tiled=true")
+                        .append("&LAYERS=").append(theServer.WmsLayers)
+                        .append("&SRS=").append(theServer.WmsProjections)
+                        .append("&STYLES=").append(theServer.WmsStyles)
+                        .append("&FORMAT=").append(theServer.WmsImgFormat)
+                        .append("&WIDTH=").append(QString::number(tilesize))
+                        .append("&HEIGHT=").append(QString::number(tilesize))
+                        .append("&BBOX=")
+                        .append(loc.toString(ul.x(),'f',6)).append(",")
+                        .append(loc.toString(br.y(),'f',6)).append(",")
+                        .append(loc.toString(br.x(),'f',6)).append(",")
+                        .append(loc.toString(ul.y(),'f',6));
+                         ;
 }
 
 bool WmscMapAdapter::isValid(int x, int y, int z) const
 {
-    if ((x<0) || (x>pow(2,z+0.0)-1) ||
-            (y<0) || (y>pow(2,z+0.0)-1))
+    if ((x<0) || (x>getTilesWE(z)) ||
+            (y<0) || (y>getTilesNS(z)))
     {
         return false;
     }
