@@ -475,6 +475,7 @@ void ImageMapLayer::forceRedraw(MapView& theView, QRect Screen, QPoint delta)
              p->theProjection.inverse(p->theTransform.inverted().map(fScreen.topRight())));
 
     p->theDelta = delta;
+    p->theMapAdapter->getImageManager()->abortLoading();
     draw(theView, Screen);
 }
 
@@ -507,7 +508,6 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect) const
 
             qDebug() << "ImageMapLayer::drawFull: getting: " << url;
 
-            p->theMapAdapter->getImageManager()->abortLoading();
             QPixmap pm = p->theMapAdapter->getImageManager()->getImage(p->theMapAdapter,url);
             if (!pm.isNull())  {
                 p->pm = pm.scaled(rect.size(), Qt::IgnoreAspectRatio);

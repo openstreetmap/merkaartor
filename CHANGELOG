@@ -1,4 +1,5 @@
 v0.16
+    * FIX : abort tile downloading when zooming
     * ADD : Allow to tile (and cache) arbitrary WMS'es (only EPSG:4326 and google projection supported)
     * CHG : rework "Zoom lock" and move it to the view menu
     * ADD : support for WMS-C servers (see http://wiki.openstreetmap.org/wiki/Merkaartor/Documentation#WMS-C_Servers) (closes #2598)
