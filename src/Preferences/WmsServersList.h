@@ -38,7 +38,7 @@ class WmsServer
         WmsServer();
         WmsServer(const WmsServer& other);
         WmsServer(QString Name, QString Adress, QString Path, QString Layers, QString Projections, QString Styles, QString ImgFormat
-                  , bool IsTiled = false
+                  , int IsTiled = 0
                   , WmscLayer CLayer = WmscLayer()
                   , bool Deleted=false
                                  );
@@ -54,7 +54,7 @@ class WmsServer
         QString WmsProjections;
         QString WmsStyles;
         QString WmsImgFormat;
-        bool WmsIsTiled;
+        int WmsIsTiled;
         WmscLayer WmsCLayer;
 
         bool deleted;

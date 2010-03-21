@@ -30,7 +30,7 @@ WmsServer::WmsServer(const WmsServer& other)
 }
 
 WmsServer::WmsServer(QString Name, QString Adress, QString Path, QString Layers, QString Projections, QString Styles, QString ImgFormat
-                     , bool IsTiled
+                     , int IsTiled
                      , WmscLayer CLayer
                      , bool Deleted
                                     )
@@ -57,8 +57,16 @@ void WmsServer::toXml(QDomElement parent)
     p.setAttribute("format", WmsImgFormat);
     if (deleted)
         p.setAttribute("deleted", "true");
-    if (WmsIsTiled) {
-        QDomElement c = parent.ownerDocument().createElement("WMS-C");
+    if (WmsIsTiled > 0) {
+        QDomElement c;
+        switch (WmsIsTiled) {
+        case 1:
+            c = parent.ownerDocument().createElement("WMS-C");
+            break;
+        case 2:
+            c = parent.ownerDocument().createElement("Tiling");
+            break;
+        }
         p.appendChild(c);
 
         c.setAttribute("TileWidth", WmsCLayer.TileWidth);
@@ -95,11 +103,16 @@ WmsServer WmsServer::fromXml(QDomElement parent)
         theServer.WmsImgFormat = parent.attribute("format");
         theServer.deleted = (parent.attribute("deleted") == "true" ? true : false);
 
-        theServer.WmsIsTiled = false;
+        theServer.WmsIsTiled = 0;
         QDomElement wmscElem = parent.firstChildElement("WMS-C");
-        if (!wmscElem.isNull()) {
-            theServer.WmsIsTiled = true;
+        if (wmscElem.isNull()) {
+            wmscElem = parent.firstChildElement("Tiling");
+            if (!wmscElem.isNull())
+                theServer.WmsIsTiled = 2;
+        } else
+            theServer.WmsIsTiled = 1;
 
+        if (!wmscElem.isNull()) {
             theServer.WmsCLayer.LayerName = theServer.WmsLayers;
             theServer.WmsCLayer.Projection = theServer.WmsProjections;
             theServer.WmsCLayer.Styles = theServer.WmsStyles;

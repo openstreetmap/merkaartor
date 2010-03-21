@@ -43,6 +43,7 @@ public slots:
     void on_btDelWmsServer_clicked();
     void on_btShowCapabilities_clicked();
     void on_lvWmsServers_itemSelectionChanged();
+    void on_cbWmsProj_currentIndexChanged(const QString & text);
     void readResponseHeader(const QHttpResponseHeader &responseHeader);
     void httpRequestFinished(bool error);
     void on_buttonBox_clicked(QAbstractButton * button);
@@ -62,11 +63,13 @@ public:
     void setSelectedServer(QString theValue);
 
 private:
+    void generateWmscLayer();
+
     QString selectedServer;
     int httpGetId;
     QHttp *http;
     QBuffer* buf;
-    bool isTiled;
+    int isTiled;
     QList<WmscLayer> wmscLayers;
     WmscLayer selWmscLayer;
 };

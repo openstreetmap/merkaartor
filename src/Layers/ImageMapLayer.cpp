@@ -106,7 +106,7 @@ LayerWidget* ImageMapLayer::newWidget(void)
 void ImageMapLayer::updateWidget()
 {
     theWidget->initActions();
-    setMapAdapter(M_PREFS->getBackgroundPlugin());
+    setMapAdapter(M_PREFS->getBackgroundPlugin(), M_PREFS->getSelectedServer());
     theWidget->update();
 }
 
@@ -161,14 +161,22 @@ void ImageMapLayer::setMapAdapter(const QUuid& theAdapterUid, const QString& ser
         wsl = M_PREFS->getWmsServers();
         p->selServer = server;
         WmsServer theWmsServer(wsl->value(p->selServer));
-        if (!theWmsServer.WmsIsTiled) {
+        switch (theWmsServer.WmsIsTiled) {
+        case 0:
             p->wmsa = new WMSMapAdapter(theWmsServer);
             p->theMapAdapter = p->wmsa;
             setName(tr("Map - WMS - %1").arg(p->theMapAdapter->getName()));
-        } else {
+            break;
+        case 1:
             p->wmsca = new WmscMapAdapter(theWmsServer);
             p->theMapAdapter = p->wmsca;
             setName(tr("Map - WMS-C - %1").arg(p->theMapAdapter->getName()));
+            break;
+        case 2:
+            p->wmsca = new WmscMapAdapter(theWmsServer);
+            p->theMapAdapter = p->wmsca;
+            setName(tr("Map - WMS-Tiled - %1").arg(p->theMapAdapter->getName()));
+            break;
         }
     } else
     if (p->bgType == TMS_ADAPTER_UUID) {

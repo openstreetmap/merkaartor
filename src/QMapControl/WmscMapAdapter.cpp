@@ -76,13 +76,12 @@ QString WmscMapAdapter::getQuery(int i, int j, int /* z */) const
     QPointF ul = QPointF(i*tileWidth+theServer.WmsCLayer.BoundingBox.topLeft().x(), -theServer.WmsCLayer.BoundingBox.topLeft().y()-j*tileHeight);
     QPointF br = QPointF((i+1)*tileWidth+theServer.WmsCLayer.BoundingBox.topLeft().x(), -theServer.WmsCLayer.BoundingBox.topLeft().y()- (j+1)*tileHeight);
 
-    return QString()
+    QString path =  QString()
                         .append(theServer.WmsPath)
                         .append("SERVICE=WMS")
                         .append("&VERSION=1.1.1")
                         .append("&REQUEST=GetMap")
                         .append("&TRANSPARENT=TRUE")
-                        .append("&tiled=true")
                         .append("&LAYERS=").append(theServer.WmsLayers)
                         .append("&SRS=").append(theServer.WmsProjections)
                         .append("&STYLES=").append(theServer.WmsStyles)
@@ -95,6 +94,10 @@ QString WmscMapAdapter::getQuery(int i, int j, int /* z */) const
                         .append(loc.toString(br.x(),'f',6)).append(",")
                         .append(loc.toString(ul.y(),'f',6));
                          ;
+    if (theServer.WmsIsTiled == 1)
+        path += "&tiled=true";
+
+    return path;
 }
 
 bool WmscMapAdapter::isValid(int x, int y, int z) const

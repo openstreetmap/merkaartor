@@ -29,7 +29,8 @@ WMSPreferencesDialog::WMSPreferencesDialog(QWidget* parent)
     edWmsLayers->setVisible(false);
     frWmsSettings->setVisible(false);
     lblWMSC->setVisible(false);
-    isTiled = false;
+    isTiled = 0;
+    frTileIt->setEnabled(false);
 
     connect(tvWmsLayers, SIGNAL(itemChanged(QTreeWidgetItem *, int)), this, SLOT(on_tvWmsLayers_itemChanged(QTreeWidgetItem *, int)));
 }
@@ -45,6 +46,30 @@ void WMSPreferencesDialog::addServer(const WmsServer & srv)
         QListWidgetItem* item = new QListWidgetItem(srv.WmsName);
         item->setData(Qt::UserRole, (int)(theWmsServers.size()-1));
         lvWmsServers->addItem(item);
+    }
+}
+
+void WMSPreferencesDialog::generateWmscLayer()
+{
+    selWmscLayer.LayerName = edWmsLayers->text();
+    selWmscLayer.Projection = cbWmsProj->currentText();
+    selWmscLayer.Styles = edWmsStyles->text();
+    selWmscLayer.ImgFormat = cbWmsImgFormat->currentText();
+    selWmscLayer.TileHeight = 256;
+    selWmscLayer.TileWidth = 256;
+    qreal startRes;
+    if (selWmscLayer.Projection.contains("4326")) {
+        selWmscLayer.BoundingBox = QRectF(QPointF(-180, -90.), QPointF(180., 90.));
+        startRes = 0.703125;
+    } else {
+        selWmscLayer.BoundingBox = QRectF(QPointF(-20037508.34, -20037508.34), QPointF(20037508.34, 20037508.34));
+        startRes = 156543.03;
+    }
+    selWmscLayer.Resolutions.clear();
+    selWmscLayer.Resolutions << startRes;
+    for (int i=1; i<sbZoomLevels->value(); ++i) {
+        startRes /= 2.;
+        selWmscLayer.Resolutions << startRes;
     }
 }
 
@@ -66,13 +91,17 @@ void WMSPreferencesDialog::on_btApplyWmsServer_clicked(void)
     WS.WmsProjections = cbWmsProj->currentText();
     WS.WmsStyles = edWmsStyles->text();
     WS.WmsImgFormat = cbWmsImgFormat->currentText();
-    WS.WmsIsTiled = isTiled;
+    if (cbTileIt->isChecked()) {
+        isTiled = 2;
+        generateWmscLayer();
+    }
     if (isTiled) {
         WS.WmsCLayer = selWmscLayer;
         WS.WmsProjections = selWmscLayer.Projection;
         WS.WmsImgFormat = selWmscLayer.ImgFormat;
         WS.WmsStyles = selWmscLayer.Styles;
     }
+    WS.WmsIsTiled = isTiled;
 
     lvWmsServers->currentItem()->setText(WS.WmsName);
     selectedServer = WS.WmsName;
@@ -84,10 +113,14 @@ void WMSPreferencesDialog::on_btAddWmsServer_clicked(void)
     QString theAdress = theUrl.host();
     if (theUrl.port() != -1)
         theAdress += ":" + QString::number(theUrl.port());
+    if (cbTileIt->isChecked()) {
+        isTiled = 2;
+        generateWmscLayer();
+    }
     if (isTiled)
         addServer(WmsServer(edWmsName->text(), theAdress, theUrl.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority),
             edWmsLayers->text(), selWmscLayer.Projection, selWmscLayer.Styles, selWmscLayer.ImgFormat,
-            true, selWmscLayer));
+            isTiled, selWmscLayer));
     else
         addServer(WmsServer(edWmsName->text(), theAdress, theUrl.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority),
             edWmsLayers->text(), cbWmsProj->currentText(), edWmsStyles->text(), cbWmsImgFormat->currentText()));
@@ -109,8 +142,11 @@ void WMSPreferencesDialog::on_btDelWmsServer_clicked(void)
 void WMSPreferencesDialog::on_lvWmsServers_itemSelectionChanged()
 {
     frWmsSettings->setVisible(false);
+    frTileIt->setEnabled(false);
+    cbTileIt->setChecked(false);
+    sbZoomLevels->setValue(0);
     lblWMSC->setVisible(false);
-    isTiled = false;
+    isTiled = 0;
     selWmscLayer = WmscLayer();
 
     QListWidgetItem* it = lvWmsServers->item(lvWmsServers->currentRow());
@@ -124,11 +160,17 @@ void WMSPreferencesDialog::on_lvWmsServers_itemSelectionChanged()
     edWmsUrl->setText("http://" + WS.WmsAdress + WS.WmsPath);
     edWmsLayers->setText(WS.WmsLayers);
     cbWmsProj->setEditText(WS.WmsProjections);
+    on_cbWmsProj_currentIndexChanged(WS.WmsProjections);
     edWmsStyles->setText(WS.WmsStyles);
     cbWmsImgFormat->setEditText(WS.WmsImgFormat);
     isTiled = WS.WmsIsTiled;
-    if (isTiled)
+    if (isTiled > 0)
         selWmscLayer = WS.WmsCLayer;
+    if (isTiled == 2) {
+        frTileIt->setEnabled(true);
+        cbTileIt->setChecked(true);
+        sbZoomLevels->setValue(selWmscLayer.Resolutions.size());
+    }
 
     selectedServer = WS.WmsName;
 
@@ -136,6 +178,21 @@ void WMSPreferencesDialog::on_lvWmsServers_itemSelectionChanged()
     if ((theUrl.host() != "") && (theUrl.path() != "")) {
         QUrl url(edWmsUrl->text() + "VERSION=1.1.1&SERVICE=WMS&request=GetCapabilities");
         requestCapabilities(url);
+    }
+}
+
+void WMSPreferencesDialog::on_cbWmsProj_currentIndexChanged(const QString &text)
+{
+    frTileIt->setEnabled(false);
+    if (
+            text.toUpper().contains("OSGEO:41001") ||
+            text.toUpper().contains("EPSG:3785") ||
+            text.toUpper().contains("EPSG:900913") ||
+            text.toUpper().contains("EPSG:3857") ||
+            text.toUpper().contains("EPSG:4326")
+            )
+    {
+        frTileIt->setEnabled(true);
     }
 }
 
@@ -275,7 +332,7 @@ void WMSPreferencesDialog::httpRequestFinished(bool error)
 
     frWmsSettings->setVisible(true);
     lblWMSC->setVisible(false);
-    isTiled = false;
+    isTiled = 0;
 
     QDomDocument theXmlDoc;
     theXmlDoc.setContent(http->readAll());
@@ -306,6 +363,7 @@ void WMSPreferencesDialog::httpRequestFinished(bool error)
     srsList.sort();
     cbWmsProj->addItems(srsList);
     cbWmsProj->setEditText(oldSrs);
+    on_cbWmsProj_currentIndexChanged(oldSrs);
 
     QDomElement reqElem = capElem.firstChildElement("Request");
     QDomElement GetMapElem = reqElem.firstChildElement("GetMap");
@@ -346,7 +404,7 @@ void WMSPreferencesDialog::parseTileSet(QDomElement &tilesetElem, WmscLayer &aLa
 {
     frWmsSettings->setVisible(false);
     lblWMSC->setVisible(true);
-    isTiled = true;
+    isTiled = 1;
 
     QDomElement elem = tilesetElem.firstChildElement();
     while(!elem.isNull()) {
@@ -423,7 +481,7 @@ void WMSPreferencesDialog::on_tvWmsLayers_itemChanged(QTreeWidgetItem *twi, int)
     QStringList theLayers;
     bool hasSelection = false;
 
-    if (isTiled && twi->checkState(0) == Qt::Checked) {
+    if (isTiled == 1 && twi->checkState(0) == Qt::Checked) {
         theLayers.append(twi->data(0, Qt::UserRole).toString());
         hasSelection = true;
         foreach(WmscLayer layer, wmscLayers)
@@ -435,7 +493,7 @@ void WMSPreferencesDialog::on_tvWmsLayers_itemChanged(QTreeWidgetItem *twi, int)
     QTreeWidgetItemIterator it(tvWmsLayers);
     while (*it) {
         if ((*it)->checkState(0) == Qt::Checked) {
-            if (isTiled) {
+            if (isTiled == 1) {
                 if (hasSelection && *it != twi)
                     (*it)->setCheckState(0, Qt::Unchecked);
             } else {

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>497</width>
-    <height>593</height>
+    <height>604</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -154,6 +154,59 @@ p, li { white-space: pre-wrap; }
               <property name="editable">
                <bool>true</bool>
               </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QWidget" name="frTileIt" native="true">
+              <layout class="QHBoxLayout" name="horizontalLayout_2">
+               <property name="spacing">
+                <number>4</number>
+               </property>
+               <property name="margin">
+                <number>4</number>
+               </property>
+               <item>
+                <widget class="QCheckBox" name="cbTileIt">
+                 <property name="text">
+                  <string>Tile it</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_2">
+                 <property name="text">
+                  <string>Zoom levels</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="sbZoomLevels">
+                 <property name="maximum">
+                  <number>99</number>
+                 </property>
+                 <property name="value">
+                  <number>17</number>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+              <zorder>cbTileIt</zorder>
+              <zorder>horizontalSpacer</zorder>
+              <zorder>label_2</zorder>
+              <zorder>sbZoomLevels</zorder>
              </widget>
             </item>
             <item>
