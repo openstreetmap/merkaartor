@@ -102,6 +102,7 @@ class MainWindowPrivate
     public:
         MainWindowPrivate()
             : lastPrefTabIndex(0)
+            , projActgrp(0)
         {
             title = QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION));
         }
@@ -110,6 +111,7 @@ class MainWindowPrivate
         StyleDock* theStyle;
         FeaturesDock* theFeats;
         QString title;
+        QActionGroup* projActgrp;
 };
 
 MainWindow::MainWindow(QWidget *parent)
@@ -214,8 +216,6 @@ MainWindow::MainWindow(QWidget *parent)
     updateRecentImportMenu();
     connect (ui->menuRecentImport, SIGNAL(triggered(QAction *)), this, SLOT(recentImportTriggered(QAction *)));
 
-    updateProjectionMenu();
-
     updateStyleMenu();
     connect (ui->menuStyles, SIGNAL(triggered(QAction *)), this, SLOT(styleTriggered(QAction *)));
 
@@ -230,6 +230,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->viewTrackSegmentsAction->setChecked(M_PREFS->getTrackSegmentsVisible());
     ui->viewRelationsAction->setChecked(M_PREFS->getRelationsVisible());
     ui->viewVirtualNodesAction->setChecked(M_PREFS->getVirtualNodesVisible());
+    ui->viewLockZoomAction->setChecked(M_PREFS->getZoomBoris());
 
     updateMenu();
 
@@ -347,6 +348,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::delayedInit()
 {
+    updateProjectionMenu();
     updateWindowMenu();
 }
 
@@ -399,21 +401,18 @@ void MainWindow::setAreaOpacity(QAction *act)
 
 void MainWindow::adjustLayers(bool adjustViewport)
 {
+    if (M_PREFS->getZoomBoris()) {
+        ImageMapLayer* l = NULL;
+        for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
+            l = ImgIt.get();
+            break;
+        }
+        if (l && l->isTiled())
+            theView->projection().setProjectionType(l->projection());
+    }
     CoordBox theVp;
     if (adjustViewport) {
         theVp = theView->viewport();
-#ifndef _MOBILE
-        ////FIXME Remove when the image layers will be independent from the projection
-        //for (int i=0; i<theDocument->getImageLayersSize(); ++i)
-        //{
-        //	ProjectionItem pi = M_PREFS->getProjection(theDocument->getImageLayer(i)->projection());
-        //	if (theView->projection().setProjectionType(theDocument->getImageLayer(i)->projection())) {
-        //		M_PREFS->setProjectionType(pi.name);
-        //		// TODO Select the proper action in the Projection menu
-        //	}
-        //	break;
-        //}
-#endif
         theView->setViewport(theVp, theView->rect());
     }
     invalidateView(true);
@@ -1175,19 +1174,38 @@ void MainWindow::on_viewZoomAllAction_triggered()
 
 void MainWindow::on_viewZoomInAction_triggered()
 {
-    theView->zoom(1.33333, theView->rect().center(), theView->rect());
+    theView->zoom(M_PREFS->getZoomIn(), theView->rect().center());
     invalidateView();
 }
 
 void MainWindow::on_viewZoomOutAction_triggered()
 {
-    theView->zoom(0.75, theView->rect().center(), theView->rect());
+    theView->zoom(M_PREFS->getZoomIn(), theView->rect().center());
     invalidateView();
 }
 
 void MainWindow::on_viewZoomWindowAction_triggered()
 {
     theView->launch(new ZoomInteraction(theView));
+}
+
+void MainWindow::on_viewLockZoomAction_triggered()
+{
+    M_PREFS->setZoomBoris(!M_PREFS->getZoomBoris());
+    ui->viewLockZoomAction->setChecked(M_PREFS->getZoomBoris());
+    ImageMapLayer* l = NULL;
+    for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
+        l = ImgIt.get();
+        break;
+    }
+    if (l && l->isTiled()) {
+        theView->projection().setProjectionType(l->projection());
+        M_PREFS->setProjectionType(l->projection());
+        theView->setViewport(theView->viewport(), theView->rect());
+    }
+    theView->adjustZoomToBoris();
+    updateProjectionMenu();
+    invalidateView();
 }
 
 void MainWindow::on_viewDownloadedAction_triggered()
@@ -1764,11 +1782,19 @@ void MainWindow::preferencesChanged(void)
                 QApplication::setStyle(QStyleFactory::create(M_PREFS->getMerkaartorStyleString()));
         }
     }
-    if (M_PREFS->getZoomBoris())
-        ui->mnuProjections->menuAction()->setVisible(false);
-    else {
-        ui->mnuProjections->menuAction()->setVisible(true);
-        view()->projection().setProjectionType(M_PREFS->getProjectionType());
+    ui->mnuProjections->menuAction()->setEnabled(true);
+    view()->projection().setProjectionType(M_PREFS->getProjectionType());
+    if (M_PREFS->getZoomBoris()) {
+        ImageMapLayer* l = NULL;
+        for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
+            l = ImgIt.get();
+            break;
+        }
+        if (l && l->isTiled()) {
+            ui->mnuProjections->menuAction()->setEnabled(false);
+            view()->projection().setProjectionType(l->projection());
+            view()->zoom(0.99, view()->rect().center());
+        }
     }
 
     updateStyleMenu();
@@ -2206,21 +2232,27 @@ void MainWindow::updateRecentImportMenu()
 void MainWindow::updateProjectionMenu()
 {
 #ifndef _MOBILE
-    QActionGroup* actgrp = new QActionGroup(this);
+    SAFE_DELETE(p->projActgrp)
+    p->projActgrp = new QActionGroup(this);
     foreach (QString name, M_PREFS->getProjectionsList().getProjections().keys()) {
-        QAction* a = new QAction(name, ui->mnuProjections);
-        actgrp->addAction(a);
+        QAction* a = new QAction(name, p->projActgrp);
         a->setCheckable (true);
-        if (name.contains(M_PREFS->getProjectionType()))
+        if (name.contains(M_PREFS->getProjectionType(), Qt::CaseInsensitive))
             a->setChecked(true);
         ui->mnuProjections->addAction(a);
     }
     connect (ui->mnuProjections, SIGNAL(triggered(QAction *)), this, SLOT(projectionTriggered(QAction *)));
 #endif
-    if (M_PREFS->getZoomBoris())
-        ui->mnuProjections->menuAction()->setVisible(false);
-    else
-        ui->mnuProjections->menuAction()->setVisible(true);
+    ui->mnuProjections->menuAction()->setVisible(true);
+    if (M_PREFS->getZoomBoris()) {
+        ImageMapLayer* l = NULL;
+        for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
+            l = ImgIt.get();
+            break;
+        }
+        if (l && l->isTiled())
+            ui->mnuProjections->menuAction()->setVisible(false);
+    }
 }
 
 void MainWindow::updateStyleMenu()

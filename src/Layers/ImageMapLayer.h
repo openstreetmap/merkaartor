@@ -49,7 +49,15 @@ public:
     virtual void drawImage(QPixmap& thePix);
     virtual void forceRedraw(MapView& theView, QRect rect, QPoint delta);
     virtual void draw(MapView& theView, QRect& rect);
+
     virtual void zoom(double zoom, const QPoint& pos, const QRect& rect);
+    virtual void zoom_in();
+    virtual void zoom_out();
+    virtual int getCurrentZoom();
+    virtual void setCurrentZoom(const CoordBox& viewport, const QRect& rect);
+    virtual qreal pixelPerM();
+
+    bool isTiled();
 
     IImageManager* getImageManger();
 private:

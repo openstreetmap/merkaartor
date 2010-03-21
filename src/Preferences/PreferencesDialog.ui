@@ -35,13 +35,6 @@
          </property>
          <layout class="QVBoxLayout">
           <item>
-           <widget class="QCheckBox" name="cbBorisZoom">
-            <property name="text">
-             <string>&quot;Zoom lock&quot; mode (lock zoom level to Yahoo! tiles and force Mercator projection)</string>
-            </property>
-           </widget>
-          </item>
-          <item>
            <layout class="QHBoxLayout">
             <item>
              <widget class="QLabel" name="label_5">
@@ -1645,38 +1638,6 @@
     <hint type="destinationlabel">
      <x>119</x>
      <y>69</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbBorisZoom</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>sbZoomOutPerc</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>45</x>
-     <y>95</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>250</x>
-     <y>76</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbBorisZoom</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>sbZoomInPerc</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>165</x>
-     <y>101</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>468</x>
-     <y>75</y>
     </hint>
    </hints>
   </connection>

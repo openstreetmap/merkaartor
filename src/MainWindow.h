@@ -80,6 +80,7 @@ class MainWindow : public QMainWindow, public IProgressWindow
         virtual void on_viewZoomInAction_triggered();
         virtual void on_viewZoomOutAction_triggered();
         virtual void on_viewZoomWindowAction_triggered();
+        virtual void on_viewLockZoomAction_triggered();
         virtual void on_viewDownloadedAction_triggered();
         virtual void on_viewScaleAction_triggered();
         virtual void on_viewShowLatLonGridAction_triggered();

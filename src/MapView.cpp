@@ -443,7 +443,7 @@ void MapView::drawLatLonGrid(QPainter & P)
     for (double y=latStart; y<=qMin(p->Viewport.topLeft().lat()+latInterval, INT_MAX/2); y+=latInterval) {
         QPolygonF l;
         for (double x=lonStart; x<=qMin(p->Viewport.bottomRight().lon()+lonInterval, INT_MAX); x+=lonInterval) {
-            QPointF pt = QPointF(theProjection.project(Coord(y, x)));
+            QPointF pt = QPointF(theProjection.project(Coord(qRound(y), qRound(x))));
             l << pt;
         }
         parallelLines << l;
@@ -451,7 +451,7 @@ void MapView::drawLatLonGrid(QPainter & P)
     for (double x=lonStart; x<=qMin(p->Viewport.bottomRight().lon()+lonInterval, INT_MAX); x+=lonInterval) {
         QPolygonF l;
         for (double y=latStart; y<=qMin(p->Viewport.topLeft().lat()+latInterval, INT_MAX/2); y+=latInterval) {
-            QPointF pt = QPointF(theProjection.project(Coord(y, x)));
+            QPointF pt = QPointF(theProjection.project(Coord(qRound(y), qRound(x))));
             l << pt;
         }
         medianLines << l;
@@ -997,6 +997,18 @@ void MapView::transformCalc(QTransform& theTransform, const Projection& theProje
 void MapView::setViewport(const CoordBox & TargetMap)
 {
     p->Viewport = TargetMap;
+    if (M_PREFS->getZoomBoris()) {
+        ImageMapLayer* l = NULL;
+        for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
+            l = ImgIt.get();
+            break;
+        }
+        if (l && l->isTiled()) {
+            l->setCurrentZoom(p->Viewport, rect());
+            qreal z = l->pixelPerM() / p->PixelPerM;
+            zoom(z, rect().center(), rect());
+        }
+    }
 }
 
 void MapView::setViewport(const CoordBox & TargetMap,
@@ -1025,24 +1037,62 @@ void MapView::setViewport(const CoordBox & TargetMap,
     qDebug() << "Abstract zoom level: " << p->AbstractZoomLevel;
 
     if (M_PREFS->getZoomBoris()) {
-        double zoomPixPerMatCur = zoomPixPerMat0 * pow(2., p->AbstractZoomLevel-1);
-        z = zoomPixPerMatCur / p->PixelPerM;
-        double x = 1. / p->theTransform.m11() * z;
-        zoom(x, Screen.center(), Screen);
+        ImageMapLayer* l = NULL;
+        for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
+            l = ImgIt.get();
+            break;
+        }
+        if (l && l->isTiled()) {
+            l->setCurrentZoom(p->Viewport, rect());
+            qreal z = l->pixelPerM() / p->PixelPerM;
+            zoom(z, Screen.center(), Screen);
+        }
     }
 }
 
 void MapView::zoom(double d, const QPoint & Around)
 {
-    zoom(d, Around, rect());
+    if (p->PixelPerM > 100 && d > 1.0)
+        return;
+
+    qreal z = d;
+    if (M_PREFS->getZoomBoris()) {
+        ImageMapLayer* l = NULL;
+        for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
+            l = ImgIt.get();
+            break;
+        }
+        if (l && l->isTiled()) {
+            if (d > 1.0) {
+                l->zoom_in();
+            } else {
+                l->zoom_out();
+            }
+            z = l->pixelPerM() / p->PixelPerM;
+        }
+    }
+
+    zoom(z, Around, rect());
+}
+
+void MapView::adjustZoomToBoris()
+{
+    if (M_PREFS->getZoomBoris()) {
+        ImageMapLayer* l = NULL;
+        for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
+            l = ImgIt.get();
+            break;
+        }
+        if (l && l->isTiled()) {
+            qreal z = l->pixelPerM() / p->PixelPerM;
+            zoom(z, rect().center(), rect());
+        }
+    }
 }
 
 void MapView::zoom(double d, const QPoint & Around,
                              const QRect & Screen)
 {
-    if (p->PixelPerM > 100 && d > 1.0)
-        return;
-
     Coord Before = theProjection.inverse(p->theTransform.inverted().map(QPointF(Around)));
     QPointF pBefore = theProjection.project(Before);
 

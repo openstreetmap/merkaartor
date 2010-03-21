@@ -24,7 +24,7 @@
      <x>0</x>
      <y>0</y>
      <width>1100</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp">
@@ -111,6 +111,7 @@
     <addaction name="viewZoomWindowAction"/>
     <addaction name="viewZoomOutAction"/>
     <addaction name="viewZoomInAction"/>
+    <addaction name="viewLockZoomAction"/>
     <addaction name="separator"/>
     <addaction name="viewDownloadedAction"/>
     <addaction name="viewRelationsAction"/>
@@ -1565,6 +1566,14 @@
    </property>
    <property name="text">
     <string>Show lat/lon &amp;grid</string>
+   </property>
+  </action>
+  <action name="viewLockZoomAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Lock zoom to tiled background</string>
    </property>
   </action>
  </widget>

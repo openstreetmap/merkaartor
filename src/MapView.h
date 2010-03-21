@@ -74,6 +74,7 @@ class MapView :	public QWidget
 
         void zoom(double d, const QPoint& Around);
         void zoom(double d, const QPoint& Around, const QRect& Screen);
+        void adjustZoomToBoris();
         void setCenter(Coord& Center, const QRect& Screen);
         void resize(QSize oldS, QSize newS);
 
