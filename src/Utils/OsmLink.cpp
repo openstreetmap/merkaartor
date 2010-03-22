@@ -9,7 +9,7 @@ OsmLink::OsmLink(QString url)
     , m_IsShort(false)
     , m_hasSpan(false)
 {
-    theUrl = QUrl(url);
+    theUrl = QUrl(url, QUrl::TolerantMode);
     checkUrl();
 }
 
@@ -32,7 +32,7 @@ void OsmLink::checkUrl()
         m_IsValid = true;
         m_IsShort = true;
     } else
-    if ((theUrl.host().contains("openstreetmap") || theUrl.host().contains("osm")) && theUrl.hasQueryItem("lat") && theUrl.hasQueryItem("lon") && theUrl.hasQueryItem("zoom"))
+    if (theUrl.hasQueryItem("lat") && theUrl.hasQueryItem("lon") && theUrl.hasQueryItem("zoom"))
     {
         m_Lat = theUrl.queryItemValue("lat").toDouble();
         m_Lon = theUrl.queryItemValue("lon").toDouble();
