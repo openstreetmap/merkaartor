@@ -1,4 +1,5 @@
 v0.16
+    * ADD : allow google maps links in goto and download dialogs
     * FIX : abort tile downloading when zooming
     * ADD : Allow to tile (and cache) arbitrary WMS'es (only EPSG:4326 and google projection supported)
     * CHG : rework "Zoom lock" and move it to the view menu

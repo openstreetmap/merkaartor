@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>GotoDialog</class>
- <widget class="QDialog" name="GotoDialog" >
-  <property name="geometry" >
+ <widget class="QDialog" name="GotoDialog">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,34 +10,34 @@
     <height>637</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Go To</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" >
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_4" >
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
-      <widget class="QRadioButton" name="rbBookmark" >
-       <property name="minimumSize" >
+      <widget class="QRadioButton" name="rbBookmark">
+       <property name="minimumSize">
         <size>
          <width>200</width>
          <height>0</height>
         </size>
        </property>
-       <property name="text" >
+       <property name="text">
         <string>Bookmark</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="coordBookmark" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+      <widget class="QComboBox" name="coordBookmark">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="minimumSize" >
+       <property name="minimumSize">
         <size>
          <width>200</width>
          <height>0</height>
@@ -47,24 +48,24 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2" >
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QRadioButton" name="rbOSM" >
-       <property name="minimumSize" >
+      <widget class="QRadioButton" name="rbLink">
+       <property name="minimumSize">
         <size>
          <width>200</width>
          <height>0</height>
         </size>
        </property>
-       <property name="text" >
-        <string>OSM permalink</string>
+       <property name="text">
+        <string>WWW link (OSM/google maps)</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="coordOSM" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+      <widget class="QLineEdit" name="coordLink">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -74,24 +75,24 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3" >
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
-      <widget class="QRadioButton" name="rbCoord" >
-       <property name="minimumSize" >
+      <widget class="QRadioButton" name="rbCoord">
+       <property name="minimumSize">
         <size>
          <width>200</width>
          <height>0</height>
         </size>
        </property>
-       <property name="text" >
+       <property name="text">
         <string>lonMin, latMin, lonMax, latMax</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="coordCoord" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+      <widget class="QLineEdit" name="coordCoord">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -101,24 +102,24 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout" >
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QRadioButton" name="rbSpan" >
-       <property name="minimumSize" >
+      <widget class="QRadioButton" name="rbSpan">
+       <property name="minimumSize">
         <size>
          <width>200</width>
          <height>0</height>
         </size>
        </property>
-       <property name="text" >
+       <property name="text">
         <string>latCent, lonCent, latSpan, lonSpan</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="coordSpan" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+      <widget class="QLineEdit" name="coordSpan">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -128,32 +129,32 @@
     </layout>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox" >
-     <property name="title" >
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
       <string>Info</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2" >
+     <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_5" >
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
         <item>
-         <widget class="QLabel" name="label" >
-          <property name="minimumSize" >
+         <widget class="QLabel" name="label">
+          <property name="minimumSize">
            <size>
             <width>75</width>
             <height>0</height>
            </size>
           </property>
-          <property name="text" >
+          <property name="text">
            <string>OSM API Url</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="coordOsmApi" >
-          <property name="enabled" >
+         <widget class="QLineEdit" name="coordOsmApi">
+          <property name="enabled">
            <bool>true</bool>
           </property>
-          <property name="readOnly" >
+          <property name="readOnly">
            <bool>true</bool>
           </property>
          </widget>
@@ -161,26 +162,26 @@
        </layout>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_6" >
+       <layout class="QHBoxLayout" name="horizontalLayout_6">
         <item>
-         <widget class="QLabel" name="label_2" >
-          <property name="minimumSize" >
+         <widget class="QLabel" name="label_2">
+          <property name="minimumSize">
            <size>
             <width>75</width>
             <height>0</height>
            </size>
           </property>
-          <property name="text" >
+          <property name="text">
            <string>OSM XAPI url</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="coordOsmXApi" >
-          <property name="enabled" >
+         <widget class="QLineEdit" name="coordOsmXApi">
+          <property name="enabled">
            <bool>true</bool>
           </property>
-          <property name="readOnly" >
+          <property name="readOnly">
            <bool>true</bool>
           </property>
          </widget>
@@ -191,21 +192,21 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="searchBox" >
-     <property name="title" >
+    <widget class="QGroupBox" name="searchBox">
+     <property name="title">
       <string>Search</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_3" >
+     <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_4" >
+       <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_7" >
+         <layout class="QHBoxLayout" name="horizontalLayout_7">
           <item>
-           <widget class="QLineEdit" name="NameFinderEdit" />
+           <widget class="QLineEdit" name="NameFinderEdit"/>
           </item>
           <item>
-           <widget class="QPushButton" name="searchButton" >
-            <property name="text" >
+           <widget class="QPushButton" name="searchButton">
+            <property name="text">
              <string>Search</string>
             </property>
            </widget>
@@ -218,11 +219,11 @@
     </widget>
    </item>
    <item>
-    <widget class="QDialogButtonBox" name="buttonBox" >
-     <property name="orientation" >
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="standardButtons" >
+     <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
@@ -237,11 +238,11 @@
    <receiver>GotoDialog</receiver>
    <slot>reject()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>223</x>
      <y>151</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>266</x>
      <y>108</y>
     </hint>
@@ -253,11 +254,11 @@
    <receiver>rbSpan</receiver>
    <slot>toggle()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>240</x>
      <y>98</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>101</x>
      <y>106</y>
     </hint>
@@ -269,27 +270,27 @@
    <receiver>rbCoord</receiver>
    <slot>toggle()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>259</x>
      <y>72</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>117</x>
      <y>79</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>coordOSM</sender>
+   <sender>coordLink</sender>
    <signal>textEdited(QString)</signal>
-   <receiver>rbOSM</receiver>
+   <receiver>rbLink</receiver>
    <slot>toggle()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>238</x>
      <y>44</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>111</x>
      <y>48</y>
     </hint>
@@ -301,11 +302,11 @@
    <receiver>rbBookmark</receiver>
    <slot>toggle()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>263</x>
      <y>21</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>89</x>
      <y>23</y>
     </hint>
@@ -317,11 +318,11 @@
    <receiver>rbBookmark</receiver>
    <slot>toggle()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>290</x>
      <y>14</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>137</x>
      <y>19</y>
     </hint>
