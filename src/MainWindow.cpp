@@ -1180,13 +1180,13 @@ void MainWindow::on_viewZoomAllAction_triggered()
 
 void MainWindow::on_viewZoomInAction_triggered()
 {
-    theView->zoom(M_PREFS->getZoomIn(), theView->rect().center());
+    theView->zoom(M_PREFS->getZoomIn()/100., theView->rect().center());
     invalidateView();
 }
 
 void MainWindow::on_viewZoomOutAction_triggered()
 {
-    theView->zoom(M_PREFS->getZoomIn(), theView->rect().center());
+    theView->zoom(M_PREFS->getZoomOut()/100., theView->rect().center());
     invalidateView();
 }
 
