@@ -131,6 +131,7 @@ class MainWindow : public QMainWindow, public IProgressWindow
         virtual void on_toolsShortcutsAction_triggered();
         virtual void on_toolsWMSServersAction_triggered();
         virtual void on_toolsTMSServersAction_triggered();
+        virtual void on_toolsProjectionsAction_triggered();
         virtual void toolsPreferencesAction_triggered(bool focusData=false);
         virtual void on_toolsResetDiscardableAction_triggered();
 

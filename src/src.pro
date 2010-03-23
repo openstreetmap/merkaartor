@@ -115,6 +115,7 @@ BINTRANSLATIONS += \
 include(Merkaartor.pri)
 include(Features/Features.pri)
 include(Layers/Layers.pri)
+include(Preferences/Preferences.pri)
 include(Sync/Sync.pri)
 include(Commands/Commands.pri)
 include(Interactions/Interactions.pri)

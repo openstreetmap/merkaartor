@@ -778,9 +778,9 @@ ProjectionType MerkaartorPreferences::getProjectionType()
     return (ProjectionType)Sets->value("projection/Type", "EPSG:900913").toString();
 }
 
-ProjectionsList MerkaartorPreferences::getProjectionsList()
+ProjectionsList* MerkaartorPreferences::getProjectionsList()
 {
-    return theProjectionsList;
+    return &theProjectionsList;
 }
 
 ProjectionItem MerkaartorPreferences::getProjection(QString aProj)

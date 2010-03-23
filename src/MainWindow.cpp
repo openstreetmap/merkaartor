@@ -49,6 +49,7 @@
 #include "Preferences/ProjectionsList.h"
 #include "Preferences/WMSPreferencesDialog.h"
 #include "Preferences/TMSPreferencesDialog.h"
+#include "Preferences/ProjPreferencesDialog.h"
 #include "Utils/SelectionDialog.h"
 #include "Utils/MDiscardableDialog.h"
 #include "QMapControl/imagemanager.h"
@@ -314,7 +315,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     MerkaartorPreferences::instance()->restoreMainWindowState( this );
 #ifndef _MOBILE
-    if (!M_PREFS->getProjectionsList().getProjections().size()) {
+    if (!M_PREFS->getProjectionsList()->getProjections()->size()) {
         QMessageBox::critical(this, tr("Cannot load Projections file"), tr("\"Projections.xml\" could not be opened anywhere. Aborting."));
         exit(1);
     }
@@ -1672,6 +1673,15 @@ void MainWindow::on_toolsTMSServersAction_triggered()
     }
 }
 
+void MainWindow::on_toolsProjectionsAction_triggered()
+{
+    ProjPreferencesDialog* prefDlg;
+    prefDlg = new ProjPreferencesDialog();
+    if (prefDlg->exec() == QDialog::Accepted) {
+        updateProjectionMenu();
+    }
+}
+
 void MainWindow::on_toolsResetDiscardableAction_triggered()
 {
     QSettings Sets;
@@ -2234,10 +2244,12 @@ void MainWindow::updateProjectionMenu()
 #ifndef _MOBILE
     SAFE_DELETE(p->projActgrp)
     p->projActgrp = new QActionGroup(this);
-    foreach (QString name, M_PREFS->getProjectionsList().getProjections().keys()) {
-        QAction* a = new QAction(name, p->projActgrp);
+    foreach (ProjectionItem it, *M_PREFS->getProjectionsList()->getProjections()) {
+        if (it.deleted)
+            continue;
+        QAction* a = new QAction(it.name, p->projActgrp);
         a->setCheckable (true);
-        if (name.contains(M_PREFS->getProjectionType(), Qt::CaseInsensitive))
+        if (it.name.contains(M_PREFS->getProjectionType(), Qt::CaseInsensitive))
             a->setChecked(true);
         ui->mnuProjections->addAction(a);
     }

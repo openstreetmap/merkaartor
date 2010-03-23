@@ -19,30 +19,33 @@
 
 class ProjectionItem
 {
-	public:
-		ProjectionItem ();
-		ProjectionItem (QString aName, QString aProjection, bool aDeleted = false);
-		QString name;
-		QString projection;
-		bool deleted;
+    public:
+        ProjectionItem ();
+        ProjectionItem (QString aName, QString aProjection, bool aDeleted = false);
+        QString name;
+        QString projection;
+        bool deleted;
 
-	public:
-		void toXml(QDomElement parent);
-		static ProjectionItem fromXml(QDomElement parent);
+    public:
+        void toXml(QDomElement parent);
+        static ProjectionItem fromXml(QDomElement parent);
 };
+
+typedef QMap <QString, ProjectionItem> ProjectionList;
+typedef QMapIterator<QString, ProjectionItem> ProjectionListIterator;
 
 class ProjectionsList
 {
-	public:
-		void add(ProjectionsList aProjectionsList);
-		void addProjection(ProjectionItem aProjItem);
-		ProjectionItem getProjection(QString name) const;
-		QMap <QString, ProjectionItem> getProjections() const;
-		void toXml(QDomElement parent);
-		static ProjectionsList fromXml(QDomElement parent);
+    public:
+        void add(ProjectionsList aProjectionsList);
+        void addProjection(ProjectionItem aProjItem);
+        ProjectionItem getProjection(QString name) const;
+        ProjectionList* getProjections();
+        void toXml(QDomElement parent);
+        static ProjectionsList fromXml(QDomElement parent);
 
-	private:
-		QMap <QString, ProjectionItem> theProjections;
+    private:
+        ProjectionList theProjections;
 };
 
 #endif // PROJECTIONS_LIST_H

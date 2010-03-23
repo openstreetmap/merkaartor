@@ -205,6 +205,7 @@
     <addaction name="toolsWorldOsbAction"/>
     <addaction name="toolsTMSServersAction"/>
     <addaction name="toolsWMSServersAction"/>
+    <addaction name="toolsProjectionsAction"/>
     <addaction name="separator"/>
     <addaction name="toolsResetDiscardableAction"/>
     <addaction name="separator"/>
@@ -1574,6 +1575,11 @@
    </property>
    <property name="text">
     <string>&amp;Lock zoom to tiled background</string>
+   </property>
+  </action>
+  <action name="toolsProjectionsAction">
+   <property name="text">
+    <string>&amp;Projections Editor...</string>
    </property>
   </action>
  </widget>

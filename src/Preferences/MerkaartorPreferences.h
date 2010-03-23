@@ -150,13 +150,6 @@ public:
     void setWorkingDir(const QString & theValue);
     QString getWorkingDir() const;
 
-    BookmarkList*  getBookmarks();
-
-    WmsServerList* getWmsServers();
-    TmsServerList* getTmsServers();
-    void setSelectedServer(const QString & theValue);
-    QString getSelectedServer() const;
-
     void setBgVisible(bool theValue);
     bool getBgVisible() const;
 
@@ -372,10 +365,16 @@ public:
     void loadBookmarks();
     void saveBookmarks();
 
+    BookmarkList*  getBookmarks();
+    WmsServerList* getWmsServers();
+    TmsServerList* getTmsServers();
+    void setSelectedServer(const QString & theValue);
+    QString getSelectedServer() const;
+
 #ifndef _MOBILE
     void setProjectionType(ProjectionType theValue);
     ProjectionType getProjectionType();
-    ProjectionsList getProjectionsList();
+    ProjectionsList* getProjectionsList();
     ProjectionItem getProjection(QString aProj);
 #endif
 

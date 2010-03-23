@@ -28,14 +28,6 @@ HEADERS += ./IProgressWindow.h \
     ./PaintStyle/PaintStyleEditor.h \
     ./PaintStyle/TagSelector.h \
     ./TagModel.h \
-    ./Preferences/MerkaartorPreferences.h \
-    ./Preferences/PreferencesDialog.h \
-    ./Preferences/WMSPreferencesDialog.h \
-    ./Preferences/TMSPreferencesDialog.h \
-    ./Preferences/ProjectionsList.h \
-    ./Preferences/WmsServersList.h \
-    ./Preferences/TmsServersList.h \
-    ./Preferences/BookmarksList.h \
     ./Utils/LineF.h \
     ./Utils/ShortcutOverrideFilter.h \
     ./Utils/SlippyMapWidget.h \
@@ -72,14 +64,6 @@ SOURCES += ./Maps/Coord.cpp \
     ./Utils/SelectionDialog.cpp \
     ./Utils/SvgCache.cpp \
     ./Utils/MDiscardableDialog.cpp \
-    ./Preferences/MerkaartorPreferences.cpp \
-    ./Preferences/PreferencesDialog.cpp \
-    ./Preferences/WMSPreferencesDialog.cpp \
-    ./Preferences/TMSPreferencesDialog.cpp \
-    ./Preferences/ProjectionsList.cpp \
-    ./Preferences/WmsServersList.cpp \
-    ./Preferences/TmsServersList.cpp \
-    ./Preferences/BookmarksList.cpp \
     ./GotoDialog.cpp \
     ../include/ggl/extensions/gis/projections/impl/geocent.c \
     Utils/OsmLink.cpp
@@ -92,9 +76,6 @@ FORMS += ./AboutDialog.ui \
     ./GotoDialog.ui \
     ./MultiProperties.ui \
     ./PaintStyle/PaintStyleEditor.ui \
-    ./Preferences/PreferencesDialog.ui \
-    ./Preferences/WMSPreferencesDialog.ui \
-    ./Preferences/TMSPreferencesDialog.ui \
     ./Utils/PictureViewerDialog.ui \
     ./Utils/SelectionDialog.ui
 

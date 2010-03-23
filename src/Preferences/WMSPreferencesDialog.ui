@@ -49,7 +49,14 @@
           </widget>
          </item>
          <item>
-          <widget class="QListWidget" name="lvWmsServers"/>
+          <widget class="QListWidget" name="lvWmsServers">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
