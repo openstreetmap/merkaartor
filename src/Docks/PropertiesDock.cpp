@@ -667,32 +667,48 @@ void PropertiesDock::on_RemoveTagButton_clicked()
 		TagTable = RelationUi.TagView; break;
 	default: break;
 	}
-	if (TagTable)
-	{
-		QModelIndexList indexes = TagTable->selectionModel()->selectedIndexes();
-		QModelIndex index;
+	if (!TagTable) return;
 
-		foreach(index, indexes)
+	QModelIndexList indexes = TagTable->selectionModel()->selectedIndexes();
+	if (indexes.isEmpty()) return;
+
+	CommandList *L = 0;
+	if (indexes.count()==1)
+	{
+		QModelIndex index = indexes.at(0);
+		QModelIndex idx = index.sibling(index.row(),0);
+		QVariant Content(theModel->data(idx,Qt::DisplayRole));
+		if (Content.isValid())
 		{
+			QString KeyName = Content.toString();
+			L = new CommandList(MainWindow::tr("Clear Tag '%1' on %2").arg(KeyName).arg(Selection[0]->id()), Selection[0]);
+			for (int i=0; i<Selection.size(); ++i)
+				if (Selection[i]->findKey(KeyName) < Selection[i]->tagSize())
+					L->add(new ClearTagCommand(Selection[i],KeyName,Main->document()->getDirtyOrOriginLayer(Selection[i]->layer())));
+		}
+	}
+	else
+	{
+		L = new CommandList(MainWindow::tr("Clear %1 tags on %2").arg(indexes.count()).arg(Selection[0]->id()), Selection[0]);
+		while (!indexes.isEmpty()) {
+			QModelIndex index = indexes.takeLast();
 			QModelIndex idx = index.sibling(index.row(),0);
 			QVariant Content(theModel->data(idx,Qt::DisplayRole));
 			if (Content.isValid())
 			{
 				QString KeyName = Content.toString();
-				CommandList* L = new CommandList(MainWindow::tr("Clear Tag '%1' on %2").arg(KeyName).arg(Selection[0]->id()), Selection[0]);
 				for (int i=0; i<Selection.size(); ++i)
 					if (Selection[i]->findKey(KeyName) < Selection[i]->tagSize())
 						L->add(new ClearTagCommand(Selection[i],KeyName,Main->document()->getDirtyOrOriginLayer(Selection[i]->layer())));
-				if (L->empty())
-					delete L;
-				else
-				{
-					Main->document()->addHistory(L);
-					Main->invalidateView();
-					return;
-				}
 			}
 		}
+	}
+	if (!L) return;
+	if (L->empty()) {
+		delete L;
+	} else {
+		Main->document()->addHistory(L);
+		Main->invalidateView();
 	}
 }
 
