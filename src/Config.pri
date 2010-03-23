@@ -12,6 +12,7 @@ symbian:MOBILE=1
 # GEOIMAGE=1          - enable geotagged images (requires exiv2)
 # NVIDIA_HACK=1       - used to solve nvidia specific slowdown
 # GDAL=1    	      - enable GDAL (for, e.g., shapefile import; requires libgdal)
+# USE_BUILTIN_BOOST=1 - use the Boost version (1.38) from Merkaartor rather than the system one (ony on Linux)
 
 VERSION="0.16"
 !contains(RELEASE,1) {

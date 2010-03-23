@@ -60,6 +60,14 @@ DESTDIR = $$OUTPUT_DIR/bin
 INCLUDEPATH += $$PWD/../include $$PWD/../interfaces
 DEPENDPATH += $$PWD/../interfaces
 
+INCLUDEPATH += $$PWD/../include/builtin-ggl
+unix {
+	contains(USE_BUILTIN_BOOST,1) {
+		INCLUDEPATH += $$PWD/../include/builtin-boost
+	}
+} else {
+	INCLUDEPATH += $$PWD/../include/builtin-boost
+}
 win32 {
     INCLUDEPATH += $$COMMON_DIR/include
     LIBS += -L$$COMMON_DIR/lib

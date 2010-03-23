@@ -38,7 +38,7 @@ HEADERS += ./IProgressWindow.h \
     ./Utils/SvgCache.h \
     ./Utils/MDiscardableDialog.h \
     ./GotoDialog.h \
-    ../include/ggl/extensions/gis/projections/impl/geocent.h \
+    ../include/builtin-ggl/ggl/extensions/gis/projections/impl/geocent.h \
     ../interfaces/IMapAdapter.h \
     Utils/OsmLink.h
 
@@ -65,7 +65,7 @@ SOURCES += ./Maps/Coord.cpp \
     ./Utils/SvgCache.cpp \
     ./Utils/MDiscardableDialog.cpp \
     ./GotoDialog.cpp \
-    ../include/ggl/extensions/gis/projections/impl/geocent.c \
+    ../include/builtin-ggl/ggl/extensions/gis/projections/impl/geocent.c \
     Utils/OsmLink.cpp
 
 # Forms

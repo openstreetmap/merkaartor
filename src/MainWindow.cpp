@@ -65,6 +65,7 @@
 #ifndef RELEASE
 #include "revision.h"
 #endif
+#include <boost/version.hpp>
 
 #ifdef GEOIMAGE
 #include "GeoImageDock.h"
@@ -1153,6 +1154,10 @@ void MainWindow::on_helpAboutAction_triggered()
     dlg.setWindowFlags(dlg.windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
     About.Version->setText(About.Version->text().arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV)));
     About.QTVersion->setText(About.QTVersion->text().arg(qVersion()).arg(QT_VERSION_STR));
+    int boostMajVer = BOOST_VERSION / 100000;
+    int boostMinVer = BOOST_VERSION / 100 % 1000;
+    About.BoostVersion->setText(About.BoostVersion->text().arg(QString::number(boostMajVer)+"."+QString::number(boostMinVer)));
+
     QFile ct(":/Utils/CHANGELOG");
     ct.open(QIODevice::ReadOnly);
     QTextStream cl(&ct);
