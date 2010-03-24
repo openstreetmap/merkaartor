@@ -163,12 +163,14 @@ void Relation::drawFocus(QPainter& P, MapView* theView, bool solid)
 
         for (int i=0; i<p->Members.size(); ++i)
             if (p->Members[i].second && !p->Members[i].second->isDeleted())
-                p->Members[i].second->drawFocus(P,theView, solid);
+                if (p->Members[i].second->boundingBox().intersects(theView->viewport()))
+                    p->Members[i].second->drawFocus(P,theView, solid);
 
         if (M_PREFS->getShowParents()) {
             for (int i=0; i<sizeParents(); ++i)
                 if (!getParent(i)->isDeleted())
-                    getParent(i)->drawFocus(P, theView, false);
+                    if (getParent(i)->boundingBox().intersects(theView->viewport()))
+                        getParent(i)->drawFocus(P, theView, false);
         }
     }
 }
@@ -186,12 +188,14 @@ void Relation::drawHover(QPainter& P, MapView* theView, bool solid)
 
         for (int i=0; i<p->Members.size(); ++i)
             if (p->Members[i].second && !p->Members[i].second->isDeleted())
-                p->Members[i].second->drawHover(P,theView, solid);
+                if (p->Members[i].second->boundingBox().intersects(theView->viewport()))
+                    p->Members[i].second->drawHover(P,theView, solid);
 
         if (M_PREFS->getShowParents()) {
             for (int i=0; i<sizeParents(); ++i)
                 if (!getParent(i)->isDeleted())
-                    getParent(i)->drawHover(P, theView, false);
+                    if (getParent(i)->boundingBox().intersects(theView->viewport()))
+                        getParent(i)->drawHover(P, theView, false);
         }
     }
 }
@@ -209,7 +213,8 @@ void Relation::drawHighlight(QPainter& P, MapView* theView, bool solid)
 
         for (int i=0; i<p->Members.size(); ++i)
             if (p->Members[i].second && !p->Members[i].second->isDeleted())
-                p->Members[i].second->drawHighlight(P,theView, solid);
+                if (p->Members[i].second->boundingBox().intersects(theView->viewport()))
+                    p->Members[i].second->drawHighlight(P,theView, solid);
 
 //		if (M_PREFS->getShowParents()) {
 //			for (int i=0; i<sizeParents(); ++i)

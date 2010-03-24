@@ -140,6 +140,7 @@ public:
     virtual void indexRemove(const CoordBox& bb, const MapFeaturePtr aFeat);
     virtual std::deque<Feature*> indexFind(const CoordBox& vp);
     virtual void reIndex();
+    virtual void reIndex(QProgressDialog & progress);
 
 
 protected:

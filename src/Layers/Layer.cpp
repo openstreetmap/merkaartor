@@ -423,6 +423,29 @@ void Layer::reIndex()
     }
 }
 
+void Layer::reIndex(QProgressDialog & progress)
+{
+    qDebug() << "Reindexing...";
+
+    delete p->theRTree;
+    p->theRTree = new MyRTree(7, 2);
+
+    progress.setLabelText("Indexing...");
+    progress.setValue(0);
+    progress.setMaximum(p->Features.size());
+    for (int i=0; i<p->Features.size(); ++i) {
+        if (!p->Features.at(i)->isDeleted()) {
+            Feature* f = p->Features.at(i);
+            CoordBox bb = f->boundingBox();
+            if (!bb.isNull()) {
+                p->theRTree->insert(bb, f);
+            }
+        }
+        progress.setValue(i);
+        qApp->processEvents();
+    }
+}
+
 CoordBox Layer::boundingBox()
 {
     if(p->Features.size()==0) return CoordBox(Coord(0,0),Coord(0,0));
@@ -637,15 +660,28 @@ DrawingLayer * DrawingLayer::doFromXML(DrawingLayer* l, Document* d, const QDomE
 
     if (i > 0) progress.setValue(progress.value()+i);
 
+    QString savlbl = progress.labelText();
+    int savval = progress.value();
+    int savmax = progress.maximum();
+
     l->blockVirtualUpdates(false);
     if (M_PREFS->getUseVirtualNodes()) {
+        progress.setLabelText("Updating virtual...");
+        progress.setMaximum(addedWays.size());
+        progress.setValue(0);
         foreach (Way* value, addedWays) {
             value->updateVirtuals();
+            progress.setValue(progress.value()+1);
             qApp->processEvents();
         }
     }
     l->blockIndexing(false);
-    l->reIndex();
+    l->reIndex(progress);
+
+    progress.setLabelText(savlbl);
+    progress.setMaximum(savmax);
+    progress.setValue(savval);
+    qApp->processEvents();
 
     return l;
 }
