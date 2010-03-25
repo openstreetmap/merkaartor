@@ -1,5 +1,4 @@
 - FIXME : Problem with zoom lock with initial viewport
-- Implement WMS-C like tiling for "standard" WMS
 - Update the gpsd code
 - Allow to middle-split a road by selecting only 2 single-parented nodes from it
 - Implement Walking Paper plugin
