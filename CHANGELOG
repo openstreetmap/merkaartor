@@ -1,4 +1,5 @@
 v0.16
+    * FIX : crash when closing layers containing photos (fixes #2828)
     * CHG : Allow importing geotagged photos when no track layer is present (closes #2827)
     * ADD : Templates xsd (by Jonathan Bennett) (closes #2809; closes #2707)	
     * ADD : allow to re-order relation members (closes #2759)

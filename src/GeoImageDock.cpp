@@ -92,26 +92,44 @@ void GeoImageDock::setImage(int ImageId)
         return;
     }
 
-    VisibleFeatureIterator it(Main->document());
-    for (; !it.isEnd(); ++it) // find TrackPoint
-        if (usedTrackPoints.at(ImageId).id == it.get()->id())
-            break;
+    int lookImage = ImageId;
+    bool ok = false;
+    Feature* theFeature;
+    while (!ok) {
+        FeatureIterator it(Main->document());
+        for (; !it.isEnd(); ++it) // find TrackPoint
+            if (usedTrackPoints.at(lookImage).id == it.get()->id()) {
+                break;
+            }
+        if (it.isEnd())
+            usedTrackPoints.removeAt(ImageId);
+        if (it.isEnd() || !it.get()->isVisible()) {
+            if (usedTrackPoints.size()) {
+                if (++lookImage >= usedTrackPoints.size())
+                    lookImage = 0;
+            } else
+                break;
+        } else {
+            theFeature = it.get();
+            ok = true;
+        }
+    }
 
-    if (it.isEnd()) { // haven't found one
+    if (!ok) { // haven't found one
         Image->setImage("");
         curImage = -1;
         return;
     }
 
     updateByMe = true;
-    if (!Main->properties()->isSelected(it.get())) {
-        Main->properties()->setSelection(it.get());
+    if (!Main->properties()->isSelected(theFeature)) {
+        Main->properties()->setSelection(theFeature);
         Main->view()->invalidate(true, false);
     }
     updateByMe = false;
 
-    Image->setImage(usedTrackPoints.at(ImageId).filename);
-    curImage = ImageId;
+    Image->setImage(usedTrackPoints.at(lookImage).filename);
+    curImage = lookImage;
 }
 
 void GeoImageDock::removeImages(void)
@@ -119,7 +137,7 @@ void GeoImageDock::removeImages(void)
     int i;
 
     for (i = 0; i < usedTrackPoints.size(); i++) {
-        Node *Pt = dynamic_cast<Node*>(Main->document()->getFeature(usedTrackPoints.at(i).id));
+        Node *Pt = CAST_NODE(Main->document()->getFeature(usedTrackPoints.at(i).id));
         if (!Pt) {
             qWarning("This should not happen. See %s::%d!", __FILE__, __LINE__);
             continue;
