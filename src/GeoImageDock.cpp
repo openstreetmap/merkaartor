@@ -216,6 +216,8 @@ void GeoImageDock::loadImages(QStringList fileNames)
         int trackLayersCount = 0;
         for (i=0;i<theDocument->layerSize();i++) {
             layer = theDocument->getLayer(i);
+            if (!layer->isEnabled())
+                continue;
             if (layer->classType() == Layer::TrackLayerType) {
                 trackLayersCount++;
                 if (!singleTrackLayer)
