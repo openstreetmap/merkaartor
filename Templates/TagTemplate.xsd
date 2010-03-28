@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://www.merkaartor.org/tagtemplate/0.1/"
+    elementFormDefault="unqualified" xmlns:tns="http://www.merkaartor.org/tagtemplate/0.1/" version="0.1" attributeFormDefault="unqualified">
+    <xsd:element name="templates">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="widgets">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="widget" type="tns:widgetType" maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+                <xsd:element name="template" type="tns:templateType" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:complexType name="templateType">
+        <xsd:sequence>
+            <xsd:element name="description" type="tns:descriptionType" maxOccurs="unbounded"/>
+            <xsd:element name="widgetref" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:attribute name="id" type="xsd:string" use="required"/>
+                </xsd:complexType>
+            </xsd:element>
+          <xsd:element name="widget" type="tns:widgetType"></xsd:element>
+          <xsd:element name="selector" type="tns:selectorType"></xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="widgetType">
+        <xsd:sequence>
+            <xsd:element name="description" maxOccurs="unbounded" type="tns:descriptionType"/>
+            <xsd:element name="value" type="tns:valueType" maxOccurs="unbounded"/>
+        </xsd:sequence>
+        <xsd:attribute ref="tns:tag"/>
+        <xsd:attribute ref="tns:type"/>
+        <xsd:attribute name="id" type="xsd:ID"/>
+    </xsd:complexType>
+    <xsd:complexType name="descriptionType">
+        <xsd:attribute name="locale" type="xsd:language" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="valueType">
+        <xsd:sequence maxOccurs="unbounded" minOccurs="1">
+            <xsd:element name="description" type="tns:descriptionType"/>
+        </xsd:sequence>
+        <xsd:attribute ref="tns:tag"/>
+    </xsd:complexType>
+    <xsd:complexType name="selectorType">
+        <xsd:attribute name="expr" type="xsd:string"/>
+    </xsd:complexType>
+    <xsd:complexType name="linkType">
+        <xsd:attribute name="src" type="xsd:anyURI"/>
+    </xsd:complexType>
+    <xsd:attribute name="type" type="tns:widgetTypes"></xsd:attribute>
+    <xsd:simpleType name="widgetTypes">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="edit"/>
+            <xsd:enumeration value="combo"/>
+            <xsd:enumeration value="yesno"/>
+            <xsd:enumeration value="constant"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:attribute name="tag" type="xsd:string"/>
+</xsd:schema>
+

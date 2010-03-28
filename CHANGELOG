@@ -1,4 +1,5 @@
 v0.16
+    * ADD : Templates xsd (by Jonathan Bennett) (closes #2809; closes #2707)	
     * ADD : allow to re-order relation members (closes #2759)
     * FIX : solves a problem when hovering large relations
     * ADD : add a projection editor 
