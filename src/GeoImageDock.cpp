@@ -333,6 +333,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
 
             //Pt->setTag("_waypoint_", "true");
             Pt->setTag("Picture", "GeoTagged");
+            Pt->setPhoto(QPixmap(file));
             usedTrackPoints << NodeData(Pt->id(), file, time, i == theLayer->size());
             if (i == theLayer->size()) {
                 theLayer->add(Pt);

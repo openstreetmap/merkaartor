@@ -280,6 +280,7 @@ public:
     M_PARAM_DECLARE_BOOL(TrackPointsVisible)
     M_PARAM_DECLARE_BOOL(TrackSegmentsVisible)
     M_PARAM_DECLARE_BOOL(RelationsVisible)
+    M_PARAM_DECLARE_BOOL(PhotosVisible)
 
     /* Templates */
     M_PARAM_DECLARE_STRING(DefaultTemplate)

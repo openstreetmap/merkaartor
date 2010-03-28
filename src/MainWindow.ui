@@ -24,7 +24,7 @@
      <x>0</x>
      <y>0</y>
      <width>1100</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp">
@@ -121,6 +121,7 @@
     <addaction name="viewStyleTouchupAction"/>
     <addaction name="viewScaleAction"/>
     <addaction name="viewShowLatLonGridAction"/>
+    <addaction name="viewPhotosAction"/>
     <addaction name="viewNamesAction"/>
     <addaction name="menuShow_directional_Arrows"/>
     <addaction name="separator"/>
@@ -1580,6 +1581,14 @@
   <action name="toolsProjectionsAction">
    <property name="text">
     <string>&amp;Projections Editor...</string>
+   </property>
+  </action>
+  <action name="viewPhotosAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show &amp;Photos on map</string>
    </property>
   </action>
  </widget>

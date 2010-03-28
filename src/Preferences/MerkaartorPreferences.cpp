@@ -1181,6 +1181,7 @@ M_PARAM_IMPLEMENT_BOOL(NamesVisible, visual, false)
 M_PARAM_IMPLEMENT_BOOL(TrackPointsVisible, visual, true)
 M_PARAM_IMPLEMENT_BOOL(TrackSegmentsVisible, visual, true)
 M_PARAM_IMPLEMENT_BOOL(RelationsVisible, visual, false)
+M_PARAM_IMPLEMENT_BOOL(PhotosVisible, visual, true)
 
 /* Templates */
 M_PARAM_IMPLEMENT_STRING(DefaultTemplate, templates, ":/Templates/default.mat")

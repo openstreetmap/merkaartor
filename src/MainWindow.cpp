@@ -223,6 +223,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->viewDownloadedAction->setChecked(MerkaartorPreferences::instance()->getDownloadedVisible());
     ui->viewScaleAction->setChecked(M_PREFS->getScaleVisible());
+    ui->viewPhotosAction->setChecked(M_PREFS->getPhotosVisible());
     ui->viewShowLatLonGridAction->setChecked(M_PREFS->getLatLonGridVisible());
     ui->viewStyleBackgroundAction->setChecked(M_PREFS->getBackgroundVisible());
     ui->viewStyleForegroundAction->setChecked(M_PREFS->getForegroundVisible());
@@ -308,6 +309,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 #ifndef GEOIMAGE
         ui->windowGeoimageAction->setVisible(false);
+        ui->viewPhotosAction->setVisible(false);
 #endif
 
     ui->viewStyleBackgroundAction->setVisible(false);
@@ -1225,6 +1227,13 @@ void MainWindow::on_viewScaleAction_triggered()
 {
     M_PREFS->setScaleVisible(!M_PREFS->getScaleVisible());
     ui->viewScaleAction->setChecked(M_PREFS->getScaleVisible());
+    invalidateView();
+}
+
+void MainWindow::on_viewPhotosAction_triggered()
+{
+    M_PREFS->setPhotosVisible(!M_PREFS->getPhotosVisible());
+    ui->viewPhotosAction->setChecked(M_PREFS->getPhotosVisible());
     invalidateView();
 }
 
