@@ -28,6 +28,7 @@ GeoImageDock::GeoImageDock(MainWindow *aMain)
 
     setContextMenuPolicy(Qt::ActionsContextMenu);
 
+    QAction *centerAction = new QAction(tr("Center map"), this);
     QAction *remImages = new QAction(tr("Remove Images"), this);
     QAction *toClipboard = new QAction(tr("Copy filename to clipboard"), this);
     QAction *nextImage = new QAction(tr("Select next image"), Main); // make it available from everywhere
@@ -35,11 +36,13 @@ GeoImageDock::GeoImageDock(MainWindow *aMain)
     QAction *previousImage = new QAction(tr("Select previous image"), Main); // make it available from everywhere
     previousImage->setShortcut(tr("PgUp"));
 
+    addAction(centerAction);
     addAction(remImages);
     addAction(toClipboard);
     addAction(nextImage);
     addAction(previousImage);
 
+    connect(centerAction, SIGNAL(triggered()), this, SLOT(centerMap()));
     connect(remImages, SIGNAL(triggered()), this, SLOT(removeImages()));
     connect(toClipboard, SIGNAL(triggered()), this, SLOT(toClipboard()));
     connect(nextImage, SIGNAL(triggered()), this, SLOT(selectNext()));
@@ -185,6 +188,22 @@ void GeoImageDock::selectPrevious(void)
     setImage(curImage);
 }
 
+void GeoImageDock::centerMap(void)
+{
+	int index = curImage;
+	if (index == -1)
+		index = lastImage;
+	if (index < 0 || index >= usedTrackPoints.size()) { // invalid ImageId
+		return;
+	}
+	Feature* f = Main->document()->getFeature(usedTrackPoints.at(index).id);
+	if (f && !f->isNull()) {
+		Coord c = f->boundingBox().center();
+		Main->view()->setCenter(c, Main->view()->rect());
+		Main->invalidateView();
+	}
+}
+
 
 void GeoImageDock::loadImages(QStringList fileNames)
 {
@@ -324,13 +343,15 @@ void GeoImageDock::loadImages(QStringList fileNames)
 
         if (positionValid) {
             Coord newPos(angToInt(lat), angToInt(lon));
-            Node *Pt;
+            Node *Pt = 0;
             int i = 0;
             for (; i<theLayer->size(); ++i) // use existing TrackPoint if there is one in small distance
                 if ((Pt = CAST_NODE(theLayer->get(i))) &&
                  Pt->position().distanceFrom(newPos) <= .002)
                     break;
-            if (i == theLayer->size())
+                else
+                    Pt = 0;
+            if (!Pt)
                 Pt = new Node(newPos);
 
             //Pt->setTag("_waypoint_", "true");

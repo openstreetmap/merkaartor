@@ -59,6 +59,7 @@ private slots:
     void toClipboard(void);
     void selectNext(void);
     void selectPrevious(void);
+    void centerMap(void);
 
 private:
 
