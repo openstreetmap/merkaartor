@@ -1,4 +1,5 @@
 v0.16
+    * FIX : use gpsd api and implement gpsd-ng
     * FIX : Do not take closed layers into account when choosing photo layer (fixes #2823)
     * ADD : show geotagged photos on the map (disable via 'view-Show Photos on map')
     * FIX : crash when closing layers containing photos (fixes #2828)

@@ -1,31 +1,36 @@
-
 FORMS += \
-           qgpsmainwindowui.ui 
+           qgpsmainwindowui.ui
 
 HEADERS += qgps.h \
            qgpssatellitetracker.h \
            qgpsdevice.h \
-	   SatelliteStrengthView.h
+       SatelliteStrengthView.h
 
 SOURCES += qgps.cpp \
            qgpssatellitetracker.cpp \
            qgpsdevice.cpp \
-	   SatelliteStrengthView.cpp
+       SatelliteStrengthView.cpp
 
 DEFINES += USE_GPS
 
-symbian: { 
-	DEPENDPATH += ../S60extensions/location/src
-	INCLUDEPATH += ../S60extensions/location/src
+symbian {
+    DEPENDPATH += ../S60extensions/location/src
+    INCLUDEPATH += ../S60extensions/location/src
 
-	# Mobile extensions headers and sources
-	HEADERS += xqlocation.h
+    # Mobile extensions headers and sources
+    HEADERS += xqlocation.h
 
-	SOURCES += xqlocation.cpp
+    SOURCES += xqlocation.cpp
 
     HEADERS += xqlocation_s60_p.h
     SOURCES += xqlocation_s60_p.cpp
-    
+
     LIBS += -llbs
+} 
+win32 {
+    LIBS += -lQgpsmm
 }
 
+unix|macx {
+	LIBS += -lgps
+}

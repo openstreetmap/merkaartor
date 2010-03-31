@@ -2645,9 +2645,11 @@ void MainWindow::updateGpsPosition(float latitude, float longitude, QDateTime ti
     Q_UNUSED(heading)
     if (theGPS->getGpsDevice()) {
         Coord gpsCoord(angToInt(latitude), angToInt(longitude));
-        if (ui->gpsCenterAction->isChecked()) {
+        if (M_PREFS->getGpsMapCenter()) {
             CoordBox vp = theView->viewport();
-            QRect vpr = vp.toRect().adjusted(vp.lonDiff() / 4, vp.latDiff() / 4, -vp.lonDiff() / 4, -vp.latDiff() / 4);
+            int lonDiff = vp.lonDiff();
+            int latDiff = vp.latDiff();
+            QRect vpr = vp.toRect().adjusted(lonDiff / 4, latDiff / 4, -lonDiff / 4, -latDiff / 4);
             if (!vpr.contains(gpsCoord.toQPoint())) {
                 theView->setCenter(gpsCoord, theView->rect());
                 theView->invalidate(true, true);

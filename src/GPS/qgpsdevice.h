@@ -30,7 +30,7 @@ class QString;
 class QMutex;
 class QextSerialPort;
 class QFile;
- 
+
 class QGPSDevice;
 // We want these slots to be executed within the thread represented by
 // QGPSDDevice. Since that class itself lives in the main thread, we need
@@ -38,45 +38,45 @@ class QGPSDevice;
 
 class GPSSlotForwarder : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
-	public:
-		GPSSlotForwarder(QGPSDevice* Target);
+    public:
+        GPSSlotForwarder(QGPSDevice* Target);
 
 
-	public slots:
-		void onLinkReady();
-		void onDataAvailable();
-		void onStop();
-		void checkDataAvailable();
+    public slots:
+        void onLinkReady();
+        void onDataAvailable();
+        void onStop();
+        void checkDataAvailable();
 
-	private:
-		QGPSDevice* Target;
+    private:
+        QGPSDevice* Target;
 };
 
 class QGPSDevice : public QThread
 {
     Q_OBJECT
-    
+
     public:
-    
+
         QGPSDevice();
-        
+
         virtual bool openDevice() = 0;
         virtual bool closeDevice() = 0;
-        
+
         enum FixMode
         {
             FixAuto,
             FixManual
         };
-        
+
         enum FixStatus
         {
             StatusActive,
             StatusVoid
         };
-    
+
         enum FixType
         {
             FixUnavailable,
@@ -84,7 +84,7 @@ class QGPSDevice : public QThread
             Fix2D,
             Fix3D
         };
-        
+
         enum CardinalDirection
         {
             CardinalNorth,
@@ -93,19 +93,19 @@ class QGPSDevice : public QThread
             CardinalWest,
             CardinalNone
         };
-        
+
         void setDevice(QString new_device) { cur_device = new_device; }
-        
+
         QString device()    { return cur_device;    }
-        
-		QDateTime	dateTime()	{ return cur_datetime;		} 
-        
+
+        QDateTime	dateTime()	{ return cur_datetime;		}
+
         int   fixQuality()      { return cur_fixQuality;    }
         int   numSatellites()   { return cur_numSatellites; }
-		FixType		fixType()		{ return cur_fixType; }
-		FixMode		fixMode()		{ return cur_fixMode; }
-		FixStatus	fixStatus()		{ return cur_fixStatus; }
-        
+        FixType		fixType()		{ return cur_fixType; }
+        FixMode		fixMode()		{ return cur_fixMode; }
+        FixStatus	fixStatus()		{ return cur_fixStatus; }
+
         float latitude()        { return cur_latitude;      }
         float longitude()       { return cur_longitude;     }
         float altitude()        { return cur_altitude;      }
@@ -113,48 +113,48 @@ class QGPSDevice : public QThread
         float speed()           { return cur_speed;         }
         float variation()       { return cur_variation;     }
         float dillution()       { return cur_dillution;     }
-        
+
         CardinalDirection latCardinal()     { return cur_latCardinal;   }
         CardinalDirection longCardinal()    { return cur_longCardinal;  }
         CardinalDirection varCardinal()     { return cur_varCardinal;   }
-        
+
         bool isActiveSat(int prn);
         void satInfo(int index, int &elev, int &azim, int &snr);
-        
+
         // some convinience functions
-        
+
         int latDegrees();
         int latMinutes();
         int latSeconds();
-        
+
         int longDegrees();
         int longMinutes();
         int longSeconds();
-        
+
     public slots:
-            
+
         virtual void startDevice();
         virtual void stopDevice();
 
     signals:
-    
+
         void  updatePosition(float latitude, float longitude, QDateTime time, float altitude, float speed, float heading);
         void  updateStatus();
         void doStopDevice();
 
-        
+
     protected:
-    
-		virtual void checkDataAvailable() {};
+
+        virtual void checkDataAvailable() {};
         virtual void run() = 0;
-    
+
         int     fd;
         bool    stopLoop;
-        
+
         QMutex  *mutex;
-        
+
         // functions to set various properties - private
-        
+
         void setLatitude(float new_latitude)                    { cur_latitude      = new_latitude;     }
         void setLongitude(float new_longitude)                  { cur_longitude     = new_longitude;    }
         void setAltitude(float new_altitude)                    { cur_altitude      = new_altitude;     }
@@ -173,7 +173,7 @@ class QGPSDevice : public QThread
 
         QString cur_device;
 
-		QDateTime cur_datetime;
+        QDateTime cur_datetime;
 
         float cur_latitude;
         float cur_longitude;
@@ -182,62 +182,62 @@ class QGPSDevice : public QThread
         float cur_speed;
         float cur_variation;
         float cur_dillution;
-        
+
         CardinalDirection cur_latCardinal;
         CardinalDirection cur_longCardinal;
         CardinalDirection cur_varCardinal;
-        
+
         int cur_fixQuality;
         int cur_numSatellites;
-        
+
         int satArray[50][3];
         int activeSats[12];
-        
+
         FixType cur_fixType;
         FixMode cur_fixMode;
         FixStatus cur_fixStatus;
-        
-		QFile* LogFile;
-		void parseNMEA(const QByteArray& array);
-		bool parseGGA(const char *ggaString = 0);
+
+        QFile* LogFile;
+        void parseNMEA(const QByteArray& array);
+        bool parseGGA(const char *ggaString = 0);
         bool parseGLL(const char *ggaString = 0);
         bool parseGSA(const char *gsaString = 0);
         bool parseGSV(const char *gsvString = 0);
         bool parseRMC(const char *gsvString = 0);
-        
-	private:
-		virtual void onLinkReady() = 0;
-		virtual void onDataAvailable() = 0;
-		virtual void onStop() = 0;
 
-		friend class GPSSlotForwarder;
+    private:
+        virtual void onLinkReady() = 0;
+        virtual void onDataAvailable() = 0;
+        virtual void onStop() = 0;
+
+        friend class GPSSlotForwarder;
 };
-      
+
 #ifndef Q_OS_SYMBIAN
 class QGPSComDevice : public QGPSDevice
 {
 Q_OBJECT
 
 public:
-	QGPSComDevice(const QString &device);
-	virtual ~QGPSComDevice();
+    QGPSComDevice(const QString &device);
+    virtual ~QGPSComDevice();
 
-	virtual bool openDevice();
+    virtual bool openDevice();
     virtual bool closeDevice();
 
 private:
-	virtual void onLinkReady();
-	virtual void onDataAvailable();
-	virtual void onStop();
+    virtual void onLinkReady();
+    virtual void onDataAvailable();
+    virtual void onStop();
 
-	QextSerialPort *port;
-	QByteArray Buffer;
+    QextSerialPort *port;
+    QByteArray Buffer;
 
-	virtual void run();
+    virtual void run();
 
 protected:
-	virtual void checkDataAvailable();
-};        
+    virtual void checkDataAvailable();
+};
 #endif
 
 class QGPSFileDevice : public QGPSDevice
@@ -245,50 +245,52 @@ class QGPSFileDevice : public QGPSDevice
 Q_OBJECT
 
 public:
-	QGPSFileDevice(const QString &device);
+    QGPSFileDevice(const QString &device);
 
-	virtual bool openDevice();
+    virtual bool openDevice();
     virtual bool closeDevice();
 
 private:
-		virtual void onLinkReady();
-		virtual void onDataAvailable();
-		virtual void onStop();
+        virtual void onLinkReady();
+        virtual void onDataAvailable();
+        virtual void onStop();
 
-	QFile* theFile;
+    QFile* theFile;
 
-	virtual void run();
-};        
+    virtual void run();
+};
 
 #ifndef Q_OS_SYMBIAN
-class QTcpSocket;
+#include "libgpsmm.h"
 
 class QGPSDDevice;
 class QGPSDDevice : public QGPSDevice
 {
-	Q_OBJECT
+    Q_OBJECT
 
-	public:
-		QGPSDDevice(const QString& device);
+    public:
+        QGPSDDevice(const QString& device);
 
-		virtual bool openDevice();
-		virtual bool closeDevice();
+        virtual bool openDevice();
+        virtual bool closeDevice();
 
-	protected:
-		virtual void run();
+    protected:
+        virtual void run();
 
-	private:
-		void onLinkReady();
-		void onDataAvailable();
-		void onStop();
+    private:
+        void onLinkReady();
+        void onDataAvailable();
+        void onStop();
 
-		void parse(const QString& s);
-		void parseO(const QString& s);
-		void parseY(const QString& s);
-		QTcpSocket* Server;
-		QByteArray Buffer;
+//        void parse(const QString& s);
+//        void parseO(const QString& s);
+//        void parseY(const QString& s);
+//        QTcpSocket* Server;
+        gpsmm* Server;
+        struct gps_data_t* gpsdata;
+        QByteArray Buffer;
 
-		friend class GPSSlotForwarder;
+        friend class GPSSlotForwarder;
 };
 #endif
 
@@ -297,28 +299,28 @@ class QGPSDDevice : public QGPSDevice
 
 class QGPSS60Device : public QGPSDevice
 {
-	Q_OBJECT
+    Q_OBJECT
 
-	public:
-		QGPSS60Device();
+    public:
+        QGPSS60Device();
 
-		virtual bool openDevice();
-		virtual bool closeDevice();
+        virtual bool openDevice();
+        virtual bool closeDevice();
 
-	protected:
-		virtual void run();
+    protected:
+        virtual void run();
 
-	private slots:
-		void onLocationChanged(double latitude, double longitude, double altitude, float speed);
-		void onStatusChanged(XQLocation::DeviceStatus);
-		void onDataQualityChanged(XQLocation::DataQuality);
+    private slots:
+        void onLocationChanged(double latitude, double longitude, double altitude, float speed);
+        void onStatusChanged(XQLocation::DeviceStatus);
+        void onDataQualityChanged(XQLocation::DataQuality);
 
-	private:
-		void onLinkReady();
-		void onDataAvailable();
-		void onStop();
+    private:
+        void onLinkReady();
+        void onDataAvailable();
+        void onStop();
 
-		friend class GPSSlotForwarder;
+        friend class GPSSlotForwarder;
 };
 #endif
 

@@ -62,11 +62,11 @@ DEPENDPATH += $$PWD/../interfaces
 
 INCLUDEPATH += $$PWD/../include/builtin-ggl
 unix {
-	contains(USE_BUILTIN_BOOST,1) {
-		INCLUDEPATH += $$PWD/../include/builtin-boost
-	}
+    contains(USE_BUILTIN_BOOST,1) {
+        INCLUDEPATH += $$PWD/../include/builtin-boost
+    }
 } else {
-	INCLUDEPATH += $$PWD/../include/builtin-boost
+    INCLUDEPATH += $$PWD/../include/builtin-boost
 }
 win32 {
     INCLUDEPATH += $$COMMON_DIR/include
