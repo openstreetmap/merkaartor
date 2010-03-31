@@ -13,6 +13,7 @@ symbian:MOBILE=1
 # NVIDIA_HACK=1       - used to solve nvidia specific slowdown
 # GDAL=1    	      - enable GDAL (for, e.g., shapefile import; requires libgdal)
 # USE_BUILTIN_BOOST=1 - use the Boost version (1.38) from Merkaartor rather than the system one (ony on Linux)
+# GPSDLIB=1           - use gpsd libgps or libQgpsmm for access to a gpsd server
 
 VERSION="0.16"
 !contains(RELEASE,1) {

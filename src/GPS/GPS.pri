@@ -1,3 +1,4 @@
+
 FORMS += \
            qgpsmainwindowui.ui
 
@@ -26,11 +27,15 @@ symbian {
     SOURCES += xqlocation_s60_p.cpp
 
     LIBS += -llbs
-} 
-win32 {
-    LIBS += -lQgpsmm
 }
 
-unix|macx {
-	LIBS += -lgps
+contains(GPSDLIB,1) {
+    DEFINES += USE_GPSD_LIB
+    win32 {
+        LIBS += -lQgpsmm
+    }
+
+    unix|macx {
+        LIBS += -lgps
+    }
 }

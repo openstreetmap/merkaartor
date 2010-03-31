@@ -908,6 +908,7 @@ void QGPSFileDevice::onDataAvailable()
 #ifndef Q_OS_SYMBIAN
 /* GPSSDEVICE */
 
+#ifdef USE_GPSD_LIB
 QGPSDDevice::QGPSDDevice(const QString& device)
 {
     setDevice(device);
@@ -1014,9 +1015,9 @@ void QGPSDDevice::onDataAvailable()
                         cur_altitude, cur_speed, cur_heading);
 
 #if GPSD_API_MAJOR_VERSION > 3
-	int num_sat = gpsdata->satellites_visible;
+    int num_sat = gpsdata->satellites_visible;
 #else
-	int num_sat = gpsdata->satellites;
+    int num_sat = gpsdata->satellites;
 #endif
     for(int i = 0; i < 50; i ++)
         satArray[i][0] = satArray[i][1] = satArray[i][2] = 0;
@@ -1041,6 +1042,166 @@ void QGPSDDevice::onLinkReady()
     gpsdata = Server->query("w+x\n");
 #endif
 }
+#else /*USE_GPSD_LIB*/
+QGPSDDevice::QGPSDDevice(const QString& device)
+{
+    setDevice(device);
+}
+
+bool QGPSDDevice::openDevice()
+{
+    if (M_PREFS->getGpsSaveLog()) {
+        QString fn = "log-" + QDateTime::currentDateTime().toString(Qt::ISODate) + ".nmea";
+        fn.replace(':', '-');
+        LogFile = new QFile(M_PREFS->getGpsLogDir() + "/"+fn);
+        if (!LogFile->open(QIODevice::WriteOnly)) {
+            QMessageBox::critical(NULL, tr("GPS log error"),
+                tr("Unable to create GPS log file: %1.").arg(M_PREFS->getGpsLogDir() + "/"+fn), QMessageBox::Ok);
+            delete LogFile;
+            LogFile = NULL;
+        }
+    }
+    return true;
+}
+
+bool QGPSDDevice::closeDevice()
+{
+    return true;
+}
+
+// this function will be called within this thread
+void QGPSDDevice::onStop()
+{
+    quit();
+}
+
+void QGPSDDevice::run()
+{
+    GPSSlotForwarder Forward(this);
+    QTcpSocket Link;
+    Server = &Link;
+    Link.connectToHost(M_PREFS->getGpsdHost(),M_PREFS->getGpsdPort());
+    connect(Server,SIGNAL(connected()),&Forward,SLOT(onLinkReady()));
+    connect(Server,SIGNAL(readyRead()),&Forward,SLOT(onDataAvailable()));
+    connect(this,SIGNAL(doStopDevice()),&Forward,SLOT(onStop()));
+    exec();
+}
+
+void QGPSDDevice::onDataAvailable()
+{
+    QByteArray ba(Server->readAll());
+    // filter out unwanted characters
+    for (int i=ba.count(); i; --i)
+        if(ba[i-1] == '\0' ||
+            (!isalnum((quint8)ba[i-1]) &&
+             !isspace((quint8)ba[i-1]) &&
+             !ispunct((quint8)ba[i-1])))
+        {
+            ba.remove(i-1,1);
+        }
+    if (LogFile)
+        LogFile->write(ba);
+    Buffer.append(ba);
+    if (Buffer.length() > 4096)
+        // safety valve
+        Buffer.remove(0,Buffer.length()-4096);
+    while (Buffer.count())
+    {
+        // look for begin of sentence marker
+        int i = Buffer.indexOf('$');
+        if (i<0)
+        {
+            Buffer.clear();
+            return;
+        }
+        Buffer.remove(0,i);
+        // look for end of sentence marker
+        for (i=0; i<Buffer.count(); ++i)
+            if ( (Buffer[i] == (char)(0x0a)) || (Buffer[i] == (char)(0x0d)) )
+                break;
+        if (i == Buffer.count())
+            return;
+        parseNMEA(Buffer.mid(0,i-2));
+        Buffer.remove(0,i);
+    }
+}
+
+void QGPSDDevice::parse(const QString& s)
+{
+    qDebug() << "parsing " << s.toUtf8().data() << "*";
+    QStringList Args(s.split(',',QString::SkipEmptyParts));
+    for (int i=0; i<Args.count(); ++i)
+    {
+        QString Left(Args[i].left(2));
+        if (Left == "O=")
+            parseO(Args[i].right(Args[i].length()-2));
+        if (Left == "Y=")
+            parseY(Args[i].right(Args[i].length()-2));
+    }
+}
+
+void QGPSDDevice::parseY(const QString& s)
+{
+    for(int i = 0; i < 50; i ++)
+        satArray[i][0] = satArray[i][1] = satArray[i][2] = 0;
+    QStringList Sats(s.split(':',QString::SkipEmptyParts));
+    for (int i=1; i<Sats.size(); ++i)
+    {
+        QStringList Items(Sats[i].split(' ',QString::SkipEmptyParts));
+        if (Items.count() < 5)
+            continue;
+        int id = Items[0].toInt();
+        if ( (id >= 0) && (id<50) )
+        {
+            satArray[id][0] = int(Items[1].toDouble());
+            satArray[id][1] = int(Items[2].toDouble());
+            satArray[id][2] = int(Items[3].toDouble());
+        }
+    }
+    setNumSatellites(Sats.size());
+    emit updateStatus();
+}
+
+void QGPSDDevice::parseO(const QString& s)
+{
+    if (s.isEmpty()) return;
+    setFixType(FixInvalid);
+    if (s[0] == '?') return;
+    QStringList Args(s.split(' ',QString::SkipEmptyParts));
+    if (Args.count() < 5) return;
+    setFixType(Fix3D);
+    setFixStatus(StatusActive);
+    setLatitude(Args[3].toDouble());
+    setLongitude(Args[4].toDouble());
+    double Alt = 0;
+    if (Args.count() > 5)
+        Alt = Args[5].toDouble();
+    double Speed = 0;
+    if (Args.count() > 9)
+        Speed = Args[9].toDouble();
+    double Heading = 0;
+    if (Args.count() > 7)
+        Heading = Args[7].toDouble();
+    emit updatePosition(Args[3].toDouble(),
+        Args[4].toDouble(),
+        QDateTime::currentDateTime(),
+        Alt, Speed, Heading);
+    setHeading(Heading);
+    setAltitude(Alt);
+    setSpeed(Speed);
+    emit updateStatus();
+
+}
+
+void QGPSDDevice::onLinkReady()
+{
+    if (!Server) return;
+    Server->write("w+");
+    Server->write("r+");
+    Server->write("j=1");
+}
+#endif /*USE_GPSD_LIB*/
+
 #endif
 
 #ifdef Q_OS_SYMBIAN

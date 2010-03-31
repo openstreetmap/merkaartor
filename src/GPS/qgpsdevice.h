@@ -261,6 +261,8 @@ private:
 };
 
 #ifndef Q_OS_SYMBIAN
+
+#ifdef USE_GPSD_LIB
 #include "libgpsmm.h"
 
 class QGPSDDevice;
@@ -282,16 +284,44 @@ class QGPSDDevice : public QGPSDevice
         void onDataAvailable();
         void onStop();
 
-//        void parse(const QString& s);
-//        void parseO(const QString& s);
-//        void parseY(const QString& s);
-//        QTcpSocket* Server;
         gpsmm* Server;
         struct gps_data_t* gpsdata;
         QByteArray Buffer;
 
         friend class GPSSlotForwarder;
 };
+#else /*USE_GPSD_LIB*/
+class QTcpSocket;
+
+class QGPSDDevice;
+class QGPSDDevice : public QGPSDevice
+{
+    Q_OBJECT
+
+    public:
+        QGPSDDevice(const QString& device);
+
+        virtual bool openDevice();
+        virtual bool closeDevice();
+
+    protected:
+        virtual void run();
+
+    private:
+        void onLinkReady();
+        void onDataAvailable();
+        void onStop();
+
+        void parse(const QString& s);
+        void parseO(const QString& s);
+        void parseY(const QString& s);
+        QTcpSocket* Server;
+        QByteArray Buffer;
+
+        friend class GPSSlotForwarder;
+};
+#endif /*USE_GPSD_LIB*/
+
 #endif
 
 #ifdef Q_OS_SYMBIAN
