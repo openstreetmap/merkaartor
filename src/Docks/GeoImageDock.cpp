@@ -13,6 +13,9 @@
 #include <QtGui/QRadioButton>
 #include <QtGui/QTimeEdit>
 #include <QtGui/QDialogButtonBox>
+#include <QFileDialog>
+
+#include "ui_PhotoLoadErrorDialog.h"
 
 
 GeoImageDock::GeoImageDock(MainWindow *aMain)
@@ -28,25 +31,28 @@ GeoImageDock::GeoImageDock(MainWindow *aMain)
 
     setContextMenuPolicy(Qt::ActionsContextMenu);
 
-    QAction *centerAction = new QAction(tr("Center map"), this);
-    QAction *remImages = new QAction(tr("Remove Images"), this);
-    QAction *toClipboard = new QAction(tr("Copy filename to clipboard"), this);
-    QAction *nextImage = new QAction(tr("Select next image"), Main); // make it available from everywhere
-    nextImage->setShortcut(tr("PgDown"));
-    QAction *previousImage = new QAction(tr("Select previous image"), Main); // make it available from everywhere
-    previousImage->setShortcut(tr("PgUp"));
+    centerAction = new QAction(tr("Center map"), this);
+    remImagesAction = new QAction(tr("Remove Images"), this);
+    toClipboardAction = new QAction(tr("Copy filename to clipboard"), this);
+    nextImageAction = new QAction(tr("Select next image"), Main); // make it available from everywhere
+    nextImageAction->setShortcut(tr("PgDown"));
+    previousImageAction = new QAction(tr("Select previous image"), Main); // make it available from everywhere
+    previousImageAction->setShortcut(tr("PgUp"));
+    saveImageAction = new QAction(tr("Save geotagged image..."), this);
 
     addAction(centerAction);
-    addAction(remImages);
-    addAction(toClipboard);
-    addAction(nextImage);
-    addAction(previousImage);
+    addAction(remImagesAction);
+    addAction(nextImageAction);
+    addAction(previousImageAction);
+    addAction(toClipboardAction);
+    addAction(saveImageAction);
 
     connect(centerAction, SIGNAL(triggered()), this, SLOT(centerMap()));
-    connect(remImages, SIGNAL(triggered()), this, SLOT(removeImages()));
-    connect(toClipboard, SIGNAL(triggered()), this, SLOT(toClipboard()));
-    connect(nextImage, SIGNAL(triggered()), this, SLOT(selectNext()));
-    connect(previousImage, SIGNAL(triggered()), this, SLOT(selectPrevious()));
+    connect(remImagesAction, SIGNAL(triggered()), this, SLOT(removeImages()));
+    connect(toClipboardAction, SIGNAL(triggered()), this, SLOT(toClipboardAction()));
+    connect(nextImageAction, SIGNAL(triggered()), this, SLOT(selectNext()));
+    connect(previousImageAction, SIGNAL(triggered()), this, SLOT(selectPrevious()));
+    connect(saveImageAction, SIGNAL(triggered()), this, SLOT(saveImage()));
 }
 
 GeoImageDock::~GeoImageDock(void)
@@ -67,9 +73,8 @@ void GeoImageDock::setImage(Node *Pt)
     }
 
     int ImageId;
-    QString id = Pt->id();
     for (ImageId = 0; ImageId < usedTrackPoints.size(); ImageId++) // search for an entry in our list
-        if (usedTrackPoints.at(ImageId).id == id)
+        if (usedTrackPoints.at(ImageId).node == Pt)
             break;
 
     if (ImageId == curImage)
@@ -96,40 +101,43 @@ void GeoImageDock::setImage(int ImageId)
     }
 
     int lookImage = ImageId;
-    bool ok = false;
-    Feature* theFeature;
-    while (!ok) {
-        FeatureIterator it(Main->document());
-        for (; !it.isEnd(); ++it) // find TrackPoint
-            if (usedTrackPoints.at(lookImage).id == it.get()->id()) {
-                break;
+
+    if (usedTrackPoints.at(lookImage).node) {
+        bool ok = false;
+        Feature* theFeature;
+        while (!ok) {
+            FeatureIterator it(Main->document());
+            for (; !it.isEnd(); ++it) // find TrackPoint
+                if (usedTrackPoints.at(lookImage).node == it.get()) {
+                    break;
+                }
+            if (it.isEnd())
+                usedTrackPoints.removeAt(ImageId);
+            if (it.isEnd() || !it.get()->isVisible()) {
+                if (usedTrackPoints.size()) {
+                    if (++lookImage >= usedTrackPoints.size())
+                        lookImage = 0;
+                } else
+                    break;
+            } else {
+                theFeature = it.get();
+                ok = true;
             }
-        if (it.isEnd())
-            usedTrackPoints.removeAt(ImageId);
-        if (it.isEnd() || !it.get()->isVisible()) {
-            if (usedTrackPoints.size()) {
-                if (++lookImage >= usedTrackPoints.size())
-                    lookImage = 0;
-            } else
-                break;
-        } else {
-            theFeature = it.get();
-            ok = true;
         }
-    }
 
-    if (!ok) { // haven't found one
-        Image->setImage("");
-        curImage = -1;
-        return;
-    }
+//        if (!ok) { // haven't found one
+//            Image->setImage("");
+//            curImage = -1;
+//            return;
+//        }
 
-    updateByMe = true;
-    if (!Main->properties()->isSelected(theFeature)) {
-        Main->properties()->setSelection(theFeature);
-        Main->view()->invalidate(true, false);
+        updateByMe = true;
+        if (!Main->properties()->isSelected(theFeature)) {
+            Main->properties()->setSelection(theFeature);
+            Main->view()->invalidate(true, false);
+        }
+        updateByMe = false;
     }
-    updateByMe = false;
 
     Image->setImage(usedTrackPoints.at(lookImage).filename);
     curImage = lookImage;
@@ -140,9 +148,8 @@ void GeoImageDock::removeImages(void)
     int i;
 
     for (i = 0; i < usedTrackPoints.size(); i++) {
-        Node *Pt = CAST_NODE(Main->document()->getFeature(usedTrackPoints.at(i).id));
+        Node *Pt = usedTrackPoints.at(i).node;
         if (!Pt) {
-            qWarning("This should not happen. See %s::%d!", __FILE__, __LINE__);
             continue;
         }
         if (usedTrackPoints.at(i).inserted) {
@@ -190,18 +197,18 @@ void GeoImageDock::selectPrevious(void)
 
 void GeoImageDock::centerMap(void)
 {
-	int index = curImage;
-	if (index == -1)
-		index = lastImage;
-	if (index < 0 || index >= usedTrackPoints.size()) { // invalid ImageId
-		return;
-	}
-	Feature* f = Main->document()->getFeature(usedTrackPoints.at(index).id);
-	if (f && !f->isNull()) {
-		Coord c = f->boundingBox().center();
-		Main->view()->setCenter(c, Main->view()->rect());
-		Main->invalidateView();
-	}
+    int index = curImage;
+    if (index == -1)
+        index = lastImage;
+    if (index < 0 || index >= usedTrackPoints.size()) { // invalid ImageId
+        return;
+    }
+    Feature* f = usedTrackPoints.at(index).node;
+    if (f && !f->isNull()) {
+        Coord c = f->boundingBox().center();
+        Main->view()->setCenter(c, Main->view()->rect());
+        Main->invalidateView();
+    }
 }
 
 
@@ -216,12 +223,12 @@ void GeoImageDock::loadImages(QStringList fileNames)
 
     Exiv2::Image::AutoPtr image;
     Exiv2::ExifData exifData;
-    double lat = 0.0, lon = 0.0;
     bool positionValid = FALSE;
 
     Layer *theLayer;
     if (photoLayer == NULL) {
         photoLayer = new TrackLayer(tr("Photo layer"));
+        photoLayer->setReadonly(false);
         theDocument->add(photoLayer);
     }
 
@@ -292,11 +299,15 @@ void GeoImageDock::loadImages(QStringList fileNames)
     progress.setWindowModality(Qt::WindowModal);
     progress.show();
 
+    int photoDlgRes = -1;
     foreach(file, fileNames) {
         progress.setValue(fileNames.indexOf(file));
+        double lat = 0.0, lon = 0.0;
 
-        if (!QFile::exists(file))
+        if (!QFile::exists(file)) {
             WARNING(tr("No such file"), tr("Can't find image \"%1\".").arg(file));
+            continue;
+        }
 
         try {
             image = Exiv2::ImageFactory::open(file.toStdString());
@@ -307,8 +318,8 @@ void GeoImageDock::loadImages(QStringList fileNames)
             WARNING(tr("Exiv2"), tr("Error while loading EXIF-data from \"%1\".").arg(file));
 
         image->readMetadata();
-
         exifData = image->exifData();
+
         time = QDateTime();
         if (!exifData.empty()) {
             Exiv2::Exifdatum &latV = exifData["Exif.GPSInfo.GPSLatitude"];
@@ -331,15 +342,32 @@ void GeoImageDock::loadImages(QStringList fileNames)
             if (!timeStamp.isEmpty())
                 time = QDateTime::fromString(timeStamp, "yyyy:MM:dd hh:mm:ss");
         }
-        if (exifData.empty() || (!positionValid && time.isNull()) ) {
-            // this question is asked when the file timestamp is used to find out to which node the image belongs
-            QUESTION(tr("No EXIF"), tr("No EXIF header found in image \"%1\".\nDo you want to revert to improper file timestamp?").arg(file), timeQuestion);
-            time = QFileInfo(file).created();
-        }
+//        if (exifData.empty() || (!positionValid && time.isNull()) ) {
+//            // this question is asked when the file timestamp is used to find out to which node the image belongs
+//            QUESTION(tr("No EXIF"), tr("No EXIF header found in image \"%1\".\nDo you want to revert to improper file timestamp?").arg(file), timeQuestion);
+//            time = QFileInfo(file).created();
+//        }
         if (time.isNull()) // if time is still null, we use the file date as reference for image sorting (and not for finding out to which node the image belongs)
             // so we don't have to ask a question here
             time = QFileInfo(file).created();
 
+        int res = photoDlgRes;
+        if (!positionValid && res == -1) {
+            QDialog* dlg = new QDialog;
+            Ui::PhotoLoadErrorDialog* ui = new Ui::PhotoLoadErrorDialog;
+            ui->setupUi(dlg);
+            ui->photo->setPixmap(QPixmap(file).scaledToWidth(320));
+
+            dlg->exec();
+            if (ui->pbIgnore->isChecked())
+                res = 0;
+            else if (ui->pbLoad->isChecked())
+                res = 1;
+            else if (ui->pbMatch->isChecked())
+                res = 2;
+            if (ui->cbRemember->isChecked())
+                photoDlgRes = res;
+        }
 
         if (positionValid) {
             Coord newPos(angToInt(lat), angToInt(lon));
@@ -357,12 +385,12 @@ void GeoImageDock::loadImages(QStringList fileNames)
             //Pt->setTag("_waypoint_", "true");
             Pt->setTag("Picture", "GeoTagged");
             Pt->setPhoto(QPixmap(file));
-            usedTrackPoints << NodeData(Pt->id(), file, time, i == theLayer->size());
+            usedTrackPoints << NodeData(Pt, file, time, i == theLayer->size());
             if (i == theLayer->size()) {
                 theLayer->add(Pt);
                 theLayer->indexAdd(Pt->boundingBox(), Pt);
             }
-        } else if (!time.isNull()) {
+        } else if (!time.isNull() && res == 2) {
 
             if (offset == -1) { // ask the user to specify an offset for the images
                 QDialog dialog(this);
@@ -450,13 +478,16 @@ void GeoImageDock::loadImages(QStringList fileNames)
                  noMatchQuestion);
             }
 
-            usedTrackPoints << NodeData(bestPt->id(), file, time, false);
+            usedTrackPoints << NodeData(bestPt, file, time, false);
             //bestPt->setTag("_waypoint_", "true");
             bestPt->setTag("Picture", "GeoTagged");
 
             time = QDateTime(); // empty time to be null for the next image
         } else
-            WARNING(tr("No geo informations"), tr("Image \"%1\" is not a geotagged image."));
+        if (res == 1) {
+            Coord newPos;
+            usedTrackPoints << NodeData(0, file, time, true);
+        }
 
         if (progress.wasCanceled()) {
             theView->invalidate(true, false);
@@ -482,6 +513,85 @@ void GeoImageDock::loadImages(QStringList fileNames)
 
 }
 
+void GeoImageDock::saveImage()
+{
+    int index = curImage;
+    if (index == -1)
+        index = lastImage;
+    if (index < 0 || index >= usedTrackPoints.size()) { // invalid ImageId
+        return;
+    }
+    Node* n = usedTrackPoints.at(index).node;
+    if (!n)
+        return;
+
+    QFileInfo fi(usedTrackPoints.at(index).filename);
+    QString fn = fi.absoluteFilePath() + "/" + fi.completeBaseName() + ".jpg";
+    fn = QFileDialog::getSaveFileName(0, "Specify output filename", fn, tr("JPEG Images (*.jpg)"));
+    qDebug() << fn;
+    if (!fn.isEmpty()) {
+        Exiv2::Image::AutoPtr imageIn, imageOut;
+        Exiv2::ExifData exifData;
+        try {
+            imageIn = Exiv2::ImageFactory::open(usedTrackPoints.at(index).filename.toStdString());
+            imageIn->readMetadata();
+            exifData = imageIn->exifData();
+        }
+        catch (Exiv2::Error error) {}
+        QPixmap px(usedTrackPoints.at(index).filename);
+        px.save(fn);
+        try {
+            imageOut = Exiv2::ImageFactory::open(fn.toStdString());
+            imageOut->setExifData(exifData);
+            imageOut->writeMetadata();
+        }
+        catch (Exiv2::Error error) {}
+        addGeoDataToImage(n->position(), fn);
+    }
+}
+
+Coord GeoImageDock::getGeoDataFromImage(const QString & file)
+{
+    Coord pos;
+    double lat = 0.0, lon = 0.0;
+    Exiv2::Image::AutoPtr image;
+    Exiv2::ExifData exifData;
+    bool positionValid = FALSE;
+
+    if (!QFile::exists(file)) {
+        return pos;
+    }
+
+    try {
+        image = Exiv2::ImageFactory::open(file.toStdString());
+    }
+    catch (Exiv2::Error error) {
+        return pos;
+    }
+    if (image.get() == 0)
+        return pos;
+
+    image->readMetadata();
+
+    exifData = image->exifData();
+    if (!exifData.empty()) {
+        Exiv2::Exifdatum &latV = exifData["Exif.GPSInfo.GPSLatitude"];
+        Exiv2::Exifdatum &lonV = exifData["Exif.GPSInfo.GPSLongitude"];
+        positionValid = latV.count()==3 && lonV.count()==3;
+
+        if (!positionValid)
+            return pos;
+        lat = latV.toFloat(0) + latV.toFloat(1) / 60.0 + latV.toFloat(2) / 3600.0;
+        lon = lonV.toFloat(0) + lonV.toFloat(1) / 60.0 + lonV.toFloat(2) / 3600.0;
+        if (exifData["Exif.GPSInfo.GPSLatitudeRef"].toString() == "S")
+            lat *= -1.0;
+        if (exifData["Exif.GPSInfo.GPSLongitudeRef"].toString() == "W")
+            lon *= -1.0;
+    }
+    pos = Coord(angToInt(lat), angToInt(lon));
+    return pos;
+}
+
 void GeoImageDock::addGeoDataToImage(Coord position, const QString & file)
 {
     Exiv2::Image::AutoPtr image;
@@ -490,45 +600,49 @@ void GeoImageDock::addGeoDataToImage(Coord position, const QString & file)
         image = Exiv2::ImageFactory::open(file.toStdString());
     }
     catch (Exiv2::Error error) {
-        QMessageBox::warning(this, tr("Exiv2"), tr("Error while opening \"%1\":\n%2").arg(file).arg(error.what()), QMessageBox::Ok);
+        QMessageBox::warning(0, tr("Exiv2"), tr("Error while opening \"%1\":\n%2").arg(file).arg(error.what()), QMessageBox::Ok);
         return;
     }
     if (image.get() == 0) {
-        QMessageBox::warning(this, tr("Exiv2"), tr("Error while loading EXIF-data from \"%1\".").arg(file), QMessageBox::Ok);
+        QMessageBox::warning(0, tr("Exiv2"), tr("Error while loading EXIF-data from \"%1\".").arg(file), QMessageBox::Ok);
         return;
     }
 
     image->readMetadata();
+    Exiv2::ExifData &exifData = image->exifData();
 
-    double lat = intToAng(position.lat());
-    double lon = intToAng(position.lon());
+    double lat = fabs(intToAng(position.lat()));
+    double lon = fabs(intToAng(position.lon()));
+    int h, m, s;
 
     QString hourFormat("%1/1 %2/1 %3/100");
 
-    int h = qRound(lat / 1); // translate angle to hours, minutes and seconds
-    int m = qRound((lat - h) * 60 / 1);
-    int s = qRound((lat - h - m/60.0) * 60 * 60 * 100 / 1); // multiply with 100 because of divider in hourFormat
-    Exiv2::ValueType<Exiv2::URational> vlat;
-    vlat.read(hourFormat.arg(h).arg(m).arg(s).toStdString()); // fill vlat with string
-    Exiv2::ExifKey klat("Exif.GPSInfo.GPSLatitude");
-    Exiv2::ExifData::iterator pos;
-    while ((pos = image->exifData().findKey(klat)) != image->exifData().end())
-        image->exifData().erase(pos);
-    image->exifData().add(klat, &vlat); // add key with value
-
-    h = qRound(lon / 1); // translate angle to hours, minutes and seconds
-    m = qRound((lon - h) * 60 / 1);
-    s = qRound((lon - h - m/60.0) * 60 * 60 * 100 / 1); // multiply with 100 because of divider in hourFormat
+    h = int(lon / 1); // translate angle to hours, minutes and seconds
+    m = int((lon - h) * 60 / 1);
+    s = int((lon - h - m/60.0) * 60 * 60 * 100 / 1); // multiply with 100 because of divider in hourFormat
     Exiv2::ValueType<Exiv2::URational> vlon;
     vlon.read(hourFormat.arg(h).arg(m).arg(s).toStdString()); // fil vlon with string
-    Exiv2::ExifKey klon("Exif.GPSInfo.GPSLongitude");
-    while ((pos = image->exifData().findKey(klon)) != image->exifData().end())
-        image->exifData().erase(pos);
-    image->exifData().add(klon, &vlon); // add key with value
+
+    h = int(lat / 1); // translate angle to hours, minutes and seconds
+    m = int((lat - h) * 60 / 1);
+    s = int((lat - h - m/60.0) * 60 * 60 * 100 / 1); // multiply with 100 because of divider in hourFormat
+    Exiv2::ValueType<Exiv2::URational> vlat;
+    vlat.read(hourFormat.arg(h).arg(m).arg(s).toStdString()); // fill vlat with string
+
+    exifData["Exif.GPSInfo.GPSVersionID"] = "2 0 0 0";
+
+    exifData["Exif.GPSInfo.GPSLatitude"] = vlat;
+    if (position.lat() < 0)
+        exifData["Exif.GPSInfo.GPSLatitudeRef"] = "S";
+    else
+        exifData["Exif.GPSInfo.GPSLatitudeRef"] = "N";
+    exifData["Exif.GPSInfo.GPSLongitude"] = vlon;
+    if (position.lon() < 0)
+        exifData["Exif.GPSInfo.GPSLongitudeRef"] = "W";
+    else
+        exifData["Exif.GPSInfo.GPSLongitudeRef"] = "E";
 
     image->writeMetadata(); // store it
-
-    loadImages(QStringList(file)); // loadImages now can load the data and display the image
 
     return;
 }

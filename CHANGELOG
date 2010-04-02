@@ -1,4 +1,7 @@
 v0.16
+    * ADD : Allow to save geotagged images
+    * CHG : Enhanced support for geotagged images drag&drop
+    * CHG : Geotag support enhancements
     * FIX : use gpsd api and implement gpsd-ng
     * FIX : Do not take closed layers into account when choosing photo layer (fixes #2823)
     * ADD : show geotagged photos on the map (disable via 'view-Show Photos on map')

@@ -190,7 +190,7 @@ contains(MOBILE,1) {
 }
 
 contains(GEOIMAGE, 1) {
-    include(GeoImage.pri)
+    include(Docks/GeoImage.pri)
 }
 
 lists.path = $${SHARE_DIR}

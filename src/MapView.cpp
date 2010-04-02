@@ -771,9 +771,10 @@ void MapView::resizeEvent(QResizeEvent * ev)
 #ifdef GEOIMAGE
 void MapView::dragEnterEvent(QDragEnterEvent *event)
 {
-    if (event->mimeData()->hasUrls() && event->mimeData()->urls().first().toLocalFile().endsWith(".jpg", Qt::CaseInsensitive))
+    if (event->mimeData()->hasUrls() && event->mimeData()->urls().first().toLocalFile().endsWith(".jpg", Qt::CaseInsensitive)) {
+        dropTarget = NULL;
         event->accept();
-    else
+    } else
         event->ignore();
 }
 
@@ -793,7 +794,8 @@ void MapView::dragMoveEvent(QDragMoveEvent *event)
             return;
         }
     }
-    event->ignore();
+    event->acceptProposedAction();
+    event->accept();
 }
 
 void MapView::dropEvent(QDropEvent *event)
@@ -801,14 +803,40 @@ void MapView::dropEvent(QDropEvent *event)
     // first save the image url because the even->mimeData() releases its data very soon
     // this is probably because the drop action ends with calling of this event
     // so the program that started the drag-action thinks the data isn't needed anymore
-    QUrl imageUrl = event->mimeData()->urls().first();
+    QList<QUrl> imageUrls = event->mimeData()->urls();
+    QStringList locFiles;
+    foreach(QUrl url, imageUrls)
+        locFiles << url.toLocalFile();
 
-    QMenu menu(this);
-    QAction *add = menu.addAction(tr("Add trackpoint position to image"));
-    menu.addSeparator();
-    menu.addAction(tr("Cancel"));
-    if (menu.exec(QCursor::pos()) == add)
-        Main->geoImage()->addGeoDataToImage(dropTarget->position(), imageUrl.toLocalFile());
+    if (locFiles.size() > 1)
+        Main->geoImage()->loadImages(locFiles);
+    else {
+        QMenu menu(this);
+        QString imageFn = locFiles[0];
+        Coord pos = GeoImageDock::getGeoDataFromImage(imageFn);
+
+        if (pos.isNull()) {
+            QAction *add, *load;
+            load = menu.addAction(tr("Load image"));
+            if (dropTarget)
+                add = menu.addAction(tr("Add node position to image"));
+            else
+                add = menu.addAction(tr("Geotag image with this position"));
+            menu.addSeparator();
+            menu.addAction(tr("Cancel"));
+            QAction* res = menu.exec(QCursor::pos());
+            if (res == add) {
+                if (dropTarget)
+                    Main->geoImage()->addGeoDataToImage(dropTarget->position(), imageFn);
+                else
+                    Main->geoImage()->addGeoDataToImage(theProjection.inverse(p->theTransform.inverted().map(event->pos())),
+                                                        imageFn);
+                Main->geoImage()->loadImages(locFiles);
+            } else if (res == load)
+                Main->geoImage()->loadImages(locFiles);
+        } else
+            Main->geoImage()->loadImages(locFiles);
+    }
 }
 #endif // GEOIMAGE
 

@@ -52,7 +52,8 @@ public:
     void setImage(Node *Pt);
     void setImage(int ImageId);
 
-    void addGeoDataToImage(Coord pos, const QString & file);
+    static void addGeoDataToImage(Coord pos, const QString & file);
+    static Coord getGeoDataFromImage(const QString & file);
 
 private slots:
     void removeImages(void);
@@ -60,23 +61,31 @@ private slots:
     void selectNext(void);
     void selectPrevious(void);
     void centerMap(void);
+    void saveImage(void);
 
 private:
 
     MainWindow *Main;
+    QAction *centerAction;
+    QAction *remImagesAction;
+    QAction *toClipboardAction;
+    QAction *nextImageAction;
+    QAction *previousImageAction;
+    QAction *saveImageAction;
+
 
     QStringList Images;
     int curImage, lastImage;
     bool updateByMe;
-    TrackLayer* photoLayer;
+    QPointer<TrackLayer> photoLayer;
 
     ImageView *Image;
 
     struct NodeData {
-        NodeData(const QString & mId, const QString & mFilename, const QDateTime & mTimestamp, bool mInserted)
-         : id(mId), filename(mFilename), inserted(mInserted), timestamp(mTimestamp) { }
+        NodeData(Node* mNode, const QString & mFilename, const QDateTime & mTimestamp, bool mInserted)
+         : node(mNode), filename(mFilename), inserted(mInserted), timestamp(mTimestamp) { }
         bool operator<(const NodeData & other) const { return timestamp < other.timestamp; }
-        QString id;
+        Node* node;
         QString filename;
         bool inserted;
         QDateTime timestamp;
