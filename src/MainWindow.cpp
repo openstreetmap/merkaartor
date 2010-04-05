@@ -1366,6 +1366,10 @@ void MainWindow::on_fileNewAction_triggered()
         on_editPropertiesAction_triggered();
         adjustLayers(true);
     }
+#ifdef GEOIMAGE
+    if (theGeoImage)
+        theGeoImage->clear();
+#endif
 }
 
 void MainWindow::on_createDoubleWayAction_triggered()
@@ -1956,6 +1960,11 @@ void MainWindow::loadDocument(QString fn)
     }
     progress.reset();
     delete theXmlDoc;
+
+#ifdef GEOIMAGE
+    if (theGeoImage)
+        theGeoImage->clear();
+#endif
 
     M_PREFS->addRecentOpen(fn);
     updateRecentOpenMenu();

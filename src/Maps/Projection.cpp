@@ -160,6 +160,7 @@ void Projection::projTransformFromWGS84(long point_count, int point_offset, doub
 void Projection::projTransformToWGS84(long point_count, int point_offset, double *x, double *y, double *z ) const
 {
     ggl::projection::detail::pj_transform(theProj, p->theWGS84Proj, point_count, point_offset, x, y, z);
+
 }
 
 QPointF Projection::projProject(const Coord & Map) const

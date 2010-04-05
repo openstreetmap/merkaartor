@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>506</width>
-    <height>516</height>
+    <width>640</width>
+    <height>360</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>TMS servers setup</string>
+   <string>Projections setup</string>
   </property>
   <layout class="QVBoxLayout">
    <item>

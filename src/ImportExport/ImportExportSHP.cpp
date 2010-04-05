@@ -34,167 +34,182 @@ ImportExportSHP::~ImportExportSHP()
 // Specify the input as a QFile
 bool ImportExportSHP::loadFile(QString filename)
 {
-	FileName = filename;
+    FileName = filename;
 
-	return true;
+    return true;
 }
 
 bool ImportExportSHP::saveFile(QString filename)
 {
-	return false;
+    return false;
 }
 
 
 // export
 bool ImportExportSHP::export_(const QList<Feature *>& featList)
 {
-	Q_UNUSED(featList);
+    Q_UNUSED(featList);
 
-	return false;
+    return false;
 }
 
 // IMPORT
 
 void ImportExportSHP::parseGeometry(Layer* aLayer, OGRGeometry *poGeometry)
 {
-	Node* N;
-	double x, y;
-	if ( wkbFlatten(poGeometry->getGeometryType()) == wkbPoint )
-	{
-		OGRPoint *poPoint = (OGRPoint *) poGeometry;
-		x = poPoint->getX(); y = poPoint->getY();
-		if (!theProjection || theProjection->projIsLatLong())
-			N = new Node(Coord(angToInt(y), angToInt(x)));
-		else {
-			theProjection->projTransformToWGS84(1, 0, &x, &y, NULL);
-			N = new Node(Coord(radToInt(y), radToInt(x)));
-		}
+    Node* N;
+    double x, y;
+    if ( wkbFlatten(poGeometry->getGeometryType()) == wkbPoint )
+    {
+        OGRPoint *poPoint = (OGRPoint *) poGeometry;
+        x = poPoint->getX(); y = poPoint->getY();
+        if (!theProjection || theProjection->projIsLatLong())
+            N = new Node(Coord(angToInt(y), angToInt(x)));
+        else {
+            theProjection->projTransformToWGS84(1, 0, &x, &y, NULL);
+            N = new Node(Coord(radToInt(y), radToInt(x)));
+        }
 
-		aLayer->add(N);
-	} else
-	if ( wkbFlatten(poGeometry->getGeometryType()) == wkbPolygon )
-	{
-		OGRPolygon  *poPoly = (OGRPolygon *) poGeometry;
-		OGRLinearRing *poRing = poPoly->getExteriorRing();
-		OGRPoint p;
-		Node* firstPoint = NULL;
+        aLayer->add(N);
+    } else
+    if ( wkbFlatten(poGeometry->getGeometryType()) == wkbPolygon )
+    {
+        OGRPolygon  *poPoly = (OGRPolygon *) poGeometry;
+        OGRLinearRing *poRing = poPoly->getExteriorRing();
+        OGRPoint p;
+        Node* firstPoint = NULL;
 
-		if(int numNode = poRing->getNumPoints()) {
-			Way* R = new Way();
-			for(int i=0; i<numNode-1; i++) {
-				poRing->getPoint(i, &p);
-				x = p.getX(); y = p.getY();
-				if (!theProjection || theProjection->projIsLatLong())
-					N = new Node(Coord(angToInt(y), angToInt(x)));
-				else {
-					theProjection->projTransformToWGS84(1, 0, &x, &y, NULL);
-					N = new Node(Coord(radToInt(y), radToInt(x)));
-				}
-				aLayer->add(N);
-				R->add(N);
+        if(int numNode = poRing->getNumPoints()) {
+            Way* R = new Way();
+            for(int i=0; i<numNode-1; i++) {
+                poRing->getPoint(i, &p);
+                x = p.getX(); y = p.getY();
+                if (!theProjection || theProjection->projIsLatLong())
+                    N = new Node(Coord(angToInt(y), angToInt(x)));
+                else {
+                    theProjection->projTransformToWGS84(1, 0, &x, &y, NULL);
+                    N = new Node(Coord(radToInt(y), radToInt(x)));
+                }
+                aLayer->add(N);
+                R->add(N);
 
-				if (!firstPoint)
-					firstPoint = N;
-			}
-			R->add(firstPoint);
-			aLayer->add(R);
-		}
-	} else
-	if ( wkbFlatten(poGeometry->getGeometryType()) == wkbLineString )
-	{
-		OGRLineString  *poLS = (OGRLineString *) poGeometry;
-		OGRPoint p;
+                if (!firstPoint)
+                    firstPoint = N;
+            }
+            R->add(firstPoint);
+            aLayer->add(R);
+        }
+    } else
+    if ( wkbFlatten(poGeometry->getGeometryType()) == wkbLineString )
+    {
+        OGRLineString  *poLS = (OGRLineString *) poGeometry;
+        OGRPoint p;
 
-		if(int numNode = poLS->getNumPoints()) {
-			Way* R = new Way();
-			for(int i=0; i<numNode; i++) {
-				poLS->getPoint(i, &p);
-				x = p.getX(); y = p.getY();
-				if (!theProjection || theProjection->projIsLatLong())
-					N = new Node(Coord(angToInt(y), angToInt(x)));
-				else {
-					theProjection->projTransformToWGS84(1, 0, &x, &y, NULL);
-					N = new Node(Coord(radToInt(y), radToInt(x)));
-				}
-				aLayer->add(N);
+        if(int numNode = poLS->getNumPoints()) {
+            Way* R = new Way();
+            for(int i=0; i<numNode; i++) {
+                poLS->getPoint(i, &p);
+                x = p.getX(); y = p.getY();
+                if (!theProjection || theProjection->projIsLatLong())
+                    N = new Node(Coord(angToInt(y), angToInt(x)));
+                else {
+                    theProjection->projTransformToWGS84(1, 0, &x, &y, NULL);
+                    N = new Node(Coord(radToInt(y), radToInt(x)));
+                }
+                aLayer->add(N);
 
-				R->add(N);
-			}
-			aLayer->add(R);
-		}
-	} else
-	if (
-		( wkbFlatten(poGeometry->getGeometryType()) == wkbMultiPolygon  ) ||
-		( wkbFlatten(poGeometry->getGeometryType()) == wkbMultiLineString  ) ||
-		( wkbFlatten(poGeometry->getGeometryType()) == wkbMultiPoint  )
-		)
-	{
-		OGRGeometryCollection  *poCol = (OGRGeometryCollection *) poGeometry;
+                R->add(N);
+            }
+            aLayer->add(R);
+        }
+    } else
+    if (
+        ( wkbFlatten(poGeometry->getGeometryType()) == wkbMultiPolygon  ) ||
+        ( wkbFlatten(poGeometry->getGeometryType()) == wkbMultiLineString  ) ||
+        ( wkbFlatten(poGeometry->getGeometryType()) == wkbMultiPoint  )
+        )
+    {
+        OGRGeometryCollection  *poCol = (OGRGeometryCollection *) poGeometry;
 
-		if(int numCol = poCol->getNumGeometries()) {
-			for(int i=0; i<numCol; i++) {
-				parseGeometry(aLayer, poCol->getGeometryRef(i));
-			}
-		}
-	}
+        if(int numCol = poCol->getNumGeometries()) {
+            for(int i=0; i<numCol; i++) {
+                parseGeometry(aLayer, poCol->getGeometryRef(i));
+            }
+        }
+    }
 }
 
 // import the  input
 bool ImportExportSHP::import(Layer* aLayer)
 {
-	OGRRegisterAll();
+    OGRRegisterAll();
 
-	OGRDataSource       *poDS;
+    OGRDataSource       *poDS;
 
-	QFileInfo fi(FileName);
-	poDS = OGRSFDriverRegistrar::Open( fi.path().toUtf8().constData(), FALSE );
-	if( poDS == NULL )
-	{
-		qDebug( "SHP Open failed.\n" );
-		return false;
-	}
+    QFileInfo fi(FileName);
+//    poDS = OGRSFDriverRegistrar::Open( fi.path().toUtf8().constData(), FALSE );
+    poDS = OGRSFDriverRegistrar::Open( FileName.toUtf8().constData(), FALSE );
+    if( poDS == NULL )
+    {
+        qDebug( "SHP Open failed.\n" );
+        return false;
+    }
 
-	OGRLayer  *poLayer;
+    OGRLayer  *poLayer;
 
-	//poLayer = poDS->GetLayerByName( "point" );
-	poLayer = poDS->GetLayer( 0 );
-	OGRSpatialReference * theSrs = poLayer->GetSpatialRef();
-	if (theSrs) {
-		theSrs->morphFromESRI();
-		char* theProj4;
-		if (theSrs->exportToProj4(&theProj4) == OGRERR_NONE) {
-			qDebug() << "SHP: to proj4 : " << theProj4;
-		} else {
-			qDebug() << "SHP: to proj4 error: " << CPLGetLastErrorMsg();
-			return false;
-		}
-		theProjection = new Projection();
-		theProjection->setProjectionType(QString(theProj4));
-	}
+    //poLayer = poDS->GetLayerByName( "point" );
+    poLayer = poDS->GetLayer( 0 );
+    OGRSpatialReference * theSrs = poLayer->GetSpatialRef();
+    if (theSrs) {
+        theProjection = new Projection();
+        theSrs->morphFromESRI();
+//        if (theSrs->AutoIdentifyEPSG() == OGRERR_NONE)
+//        {
+//            qDebug() << "SHP: EPSG:" << theSrs->GetAuthorityCode(NULL);
+//            theProjection->setProjectionType(QString("EPSG:%1").arg(theSrs->GetAuthorityCode(NULL)));
+//        } else
+        {
+            char* cTheProj4;
+            if (theSrs->exportToProj4(&cTheProj4) == OGRERR_NONE) {
+                qDebug() << "SHP: to proj4 : " << cTheProj4;
+            } else {
+                qDebug() << "SHP: to proj4 error: " << CPLGetLastErrorMsg();
+                return false;
+            }
+            QString theProj4(cTheProj4);
 
-	OGRFeature *poFeature;
+            // Hack because GDAL (as of 1.6.1) do not recognize "DATUM["D_OSGB_1936"" from the WKT
+            QString datum = theSrs->GetAttrValue("DATUM");
+            if (datum == "OSGB_1936" && !theProj4.contains("+datum"))
+                theProj4 += " +datum=OSGB36";
 
-	poLayer->ResetReading();
-	while( (poFeature = poLayer->GetNextFeature()) != NULL )
-	{
-		OGRGeometry *poGeometry;
+            theProjection->setProjectionType(QString(theProj4));
+        }
+    }
 
-		poGeometry = poFeature->GetGeometryRef();
-		if( poGeometry != NULL) {
-			// qDebug( "GeometryType : %d,", poGeometry->getGeometryType() );
+    OGRFeature *poFeature;
 
-			parseGeometry(aLayer, poGeometry);
-		}
-		else
-		{
-			qDebug( "no geometry\n" );
-		}
+    poLayer->ResetReading();
+    while( (poFeature = poLayer->GetNextFeature()) != NULL )
+    {
+        OGRGeometry *poGeometry;
 
-		OGRFeature::DestroyFeature( poFeature );
-	}
+        poGeometry = poFeature->GetGeometryRef();
+        if( poGeometry != NULL) {
+            // qDebug( "GeometryType : %d,", poGeometry->getGeometryType() );
 
-	OGRDataSource::DestroyDataSource( poDS );
+            parseGeometry(aLayer, poGeometry);
+        }
+        else
+        {
+            qDebug( "no geometry\n" );
+        }
 
-	return true;
+        OGRFeature::DestroyFeature( poFeature );
+    }
+
+    OGRDataSource::DestroyDataSource( poDS );
+
+    return true;
 }
 

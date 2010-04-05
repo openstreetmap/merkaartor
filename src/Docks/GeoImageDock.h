@@ -48,6 +48,7 @@ public:
     GeoImageDock(MainWindow *aMain);
     ~GeoImageDock(void);
 
+    void clear();
     void loadImages(QStringList fileNames);
     void setImage(Node *Pt);
     void setImage(int ImageId);
@@ -91,6 +92,8 @@ private:
         QDateTime timestamp;
     };
     QList<NodeData> usedTrackPoints;
+
+    void addUsedTrackpoint(NodeData data);
 };
 
 class ImageView : public QWidget
@@ -99,7 +102,8 @@ public:
     ImageView(QWidget *parent);
     ~ImageView();
 
-    void setImage(QString filename);
+    void setImage(QString filename, bool movable=true);
+    void setMovable(bool movable=true);
 
 protected:
     void paintEvent(QPaintEvent *e);
@@ -110,6 +114,7 @@ protected:
     void resizeEvent(QResizeEvent *e);
 
 private:
+    bool Movable;
     QImage image;
     QString name;
     QPoint mousePos;

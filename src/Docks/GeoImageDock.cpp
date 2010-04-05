@@ -49,7 +49,7 @@ GeoImageDock::GeoImageDock(MainWindow *aMain)
 
     connect(centerAction, SIGNAL(triggered()), this, SLOT(centerMap()));
     connect(remImagesAction, SIGNAL(triggered()), this, SLOT(removeImages()));
-    connect(toClipboardAction, SIGNAL(triggered()), this, SLOT(toClipboardAction()));
+    connect(toClipboardAction, SIGNAL(triggered()), this, SLOT(toClipboard()));
     connect(nextImageAction, SIGNAL(triggered()), this, SLOT(selectNext()));
     connect(previousImageAction, SIGNAL(triggered()), this, SLOT(selectPrevious()));
     connect(saveImageAction, SIGNAL(triggered()), this, SLOT(saveImage()));
@@ -58,6 +58,13 @@ GeoImageDock::GeoImageDock(MainWindow *aMain)
 GeoImageDock::~GeoImageDock(void)
 {
     delete widget();
+}
+
+void GeoImageDock::clear()
+{
+    usedTrackPoints.clear();
+    curImage = lastImage = -1;
+    Image->setImage("");
 }
 
 void GeoImageDock::setImage(Node *Pt)
@@ -86,7 +93,7 @@ void GeoImageDock::setImage(Node *Pt)
         return;
     }
 
-    Image->setImage(usedTrackPoints.at(ImageId).filename);
+    Image->setImage(usedTrackPoints.at(ImageId).filename, (Pt ? true : false));
     curImage = ImageId;
 }
 
@@ -139,7 +146,7 @@ void GeoImageDock::setImage(int ImageId)
         updateByMe = false;
     }
 
-    Image->setImage(usedTrackPoints.at(lookImage).filename);
+    Image->setImage(usedTrackPoints.at(lookImage).filename, (usedTrackPoints.at(lookImage).node ? true : false));
     curImage = lookImage;
 }
 
@@ -211,6 +218,17 @@ void GeoImageDock::centerMap(void)
     }
 }
 
+void GeoImageDock::addUsedTrackpoint(NodeData data)
+{
+    for(int i=0; i<usedTrackPoints.size(); ++i) {
+        if (usedTrackPoints[i].filename == data.filename) {
+            usedTrackPoints[i] = data;
+            return;
+        }
+    }
+
+    usedTrackPoints << data;
+}
 
 void GeoImageDock::loadImages(QStringList fileNames)
 {
@@ -385,7 +403,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
             //Pt->setTag("_waypoint_", "true");
             Pt->setTag("Picture", "GeoTagged");
             Pt->setPhoto(QPixmap(file));
-            usedTrackPoints << NodeData(Pt, file, time, i == theLayer->size());
+            addUsedTrackpoint(NodeData(Pt, file, time, i == theLayer->size()));
             if (i == theLayer->size()) {
                 theLayer->add(Pt);
                 theLayer->indexAdd(Pt->boundingBox(), Pt);
@@ -478,7 +496,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
                  noMatchQuestion);
             }
 
-            usedTrackPoints << NodeData(bestPt, file, time, false);
+            addUsedTrackpoint(NodeData(bestPt, file, time, false));
             //bestPt->setTag("_waypoint_", "true");
             bestPt->setTag("Picture", "GeoTagged");
 
@@ -486,7 +504,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
         } else
         if (res == 1) {
             Coord newPos;
-            usedTrackPoints << NodeData(0, file, time, true);
+            addUsedTrackpoint(NodeData(0, file, time, true));
         }
 
         if (progress.wasCanceled()) {
@@ -660,9 +678,10 @@ ImageView::~ImageView()
 {
 }
 
-void ImageView::setImage(QString filename)
+void ImageView::setImage(QString filename, bool movable)
 {
     name = filename;
+    Movable = movable;
     if (!name.isEmpty())
         image.load(name);
     else
@@ -673,11 +692,16 @@ void ImageView::setImage(QString filename)
     update();
 }
 
+void ImageView::setMovable(bool movable)
+{
+    Movable = movable;
+}
+
 void ImageView::paintEvent(QPaintEvent * /* e */)
 {
     QPainter P(this);
 
-    P.setRenderHint(QPainter::SmoothPixmapTransform);
+//    P.setRenderHint(QPainter::SmoothPixmapTransform);
     P.drawImage(rect, image, area, Qt::OrderedDither); // draw the image
 
     QRect text = QFontMetrics(P.font()).boundingRect(name); // calculate size of filename
@@ -696,6 +720,11 @@ void ImageView::paintEvent(QPaintEvent * /* e */)
     }
 
     P.drawText(text, Qt::AlignRight, name);
+
+    if (!Movable) {
+        P.setPen(QPen(Qt::red, 2));
+        P.drawRect(rect);
+    }
 }
 
 void ImageView::resizeEvent(QResizeEvent * /* e */)
@@ -716,13 +745,29 @@ void ImageView::mouseDoubleClickEvent(QMouseEvent * /* e */)
 
 void ImageView::mousePressEvent(QMouseEvent * e)
 {
+    if ((e->button() & Qt::LeftButton) && !Movable) {
+        QDrag *drag = new QDrag(this);
+        QMimeData *mimeData = new QMimeData;
+
+        QList<QUrl> urls;
+        urls << QUrl::fromLocalFile(name);
+        mimeData->setUrls(urls);
+        drag->setMimeData(mimeData);
+        drag->setPixmap(QPixmap::fromImage(image).scaledToWidth(64));
+
+        Qt::DropAction dropAction = drag->exec();
+        return;
+    }
     if (e->button() & Qt::RightButton)
-        QWidget::mousePressEvent(e);
-    else mousePos = e->pos();
+        return QWidget::mousePressEvent(e);
+    mousePos = e->pos();
 }
 
 void ImageView::mouseMoveEvent(QMouseEvent * e)
 {
+    if (!Movable)
+        return QWidget::mouseMoveEvent(e);
+
     if (geometry().width() == 0 || geometry().height() == 0) return;
     area.translate((double)(mousePos.x() - e->pos().x()) / (double)rect.width() * area.width(),
         (double)(mousePos.y() - e->pos().y()) / (double)rect.height() * area.height());
