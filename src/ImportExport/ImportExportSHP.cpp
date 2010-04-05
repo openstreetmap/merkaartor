@@ -14,6 +14,7 @@
 
 #include "../ImportExport/ImportExportSHP.h"
 #include "Maps/Projection.h"
+#include "Features.h"
 
 #include "ogrsf_frmts.h"
 
@@ -55,8 +56,9 @@ bool ImportExportSHP::export_(const QList<Feature *>& featList)
 
 // IMPORT
 
-void ImportExportSHP::parseGeometry(Layer* aLayer, OGRGeometry *poGeometry)
+Feature* ImportExportSHP::parseGeometry(Layer* aLayer, OGRGeometry *poGeometry)
 {
+    Feature* F = NULL;
     Node* N;
     double x, y;
     if ( wkbFlatten(poGeometry->getGeometryType()) == wkbPoint )
@@ -71,6 +73,7 @@ void ImportExportSHP::parseGeometry(Layer* aLayer, OGRGeometry *poGeometry)
         }
 
         aLayer->add(N);
+        F = N;
     } else
     if ( wkbFlatten(poGeometry->getGeometryType()) == wkbPolygon )
     {
@@ -98,6 +101,7 @@ void ImportExportSHP::parseGeometry(Layer* aLayer, OGRGeometry *poGeometry)
             }
             R->add(firstPoint);
             aLayer->add(R);
+            F = R;
         }
     } else
     if ( wkbFlatten(poGeometry->getGeometryType()) == wkbLineString )
@@ -121,6 +125,7 @@ void ImportExportSHP::parseGeometry(Layer* aLayer, OGRGeometry *poGeometry)
                 R->add(N);
             }
             aLayer->add(R);
+            F = R;
         }
     } else
     if (
@@ -132,11 +137,17 @@ void ImportExportSHP::parseGeometry(Layer* aLayer, OGRGeometry *poGeometry)
         OGRGeometryCollection  *poCol = (OGRGeometryCollection *) poGeometry;
 
         if(int numCol = poCol->getNumGeometries()) {
+            Relation* R = new Relation;
             for(int i=0; i<numCol; i++) {
-                parseGeometry(aLayer, poCol->getGeometryRef(i));
+                Feature* F = parseGeometry(aLayer, poCol->getGeometryRef(i));
+                if (F)
+                    R->add("", F);
             }
+            aLayer->add(R);
+            F = R;
         }
     }
+    return F;
 }
 
 // import the  input
@@ -198,7 +209,15 @@ bool ImportExportSHP::import(Layer* aLayer)
         if( poGeometry != NULL) {
             // qDebug( "GeometryType : %d,", poGeometry->getGeometryType() );
 
-            parseGeometry(aLayer, poGeometry);
+            Feature* F = parseGeometry(aLayer, poGeometry);
+            if (F) {
+                for (int i=0; i<poFeature->GetFieldCount(); ++i) {
+                    OGRFieldDefn  *fd = poFeature->GetFieldDefnRef(i);
+                    QString k(fd->GetNameRef());
+                    k = "_" + k + "_";
+                    F->setTag(k, poFeature->GetFieldAsString(i));
+                }
+            }
         }
         else
         {

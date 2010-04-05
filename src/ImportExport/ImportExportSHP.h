@@ -1,7 +1,7 @@
 //
 // C++ Interface: ImportExportSHP
 //
-// Description: 
+// Description:
 //
 //
 // Author: cbro <cbro@semperpax.com>, (C) 2008
@@ -19,7 +19,7 @@ class Layer;
 class OGRGeometry;
 
 /**
-	@author cbro <cbro@semperpax.com>
+    @author cbro <cbro@semperpax.com>
 */
 class ImportExportSHP : public IImportExport
 {
@@ -28,20 +28,20 @@ public:
 
     ~ImportExportSHP();
 
-	// Specify the input as a QFile
-	virtual bool loadFile(QString filename);
-	// Specify the output as a QFile
-	virtual bool saveFile(QString filename);
-	// import the  input
-	virtual bool import(Layer* aLayer);
+    // Specify the input as a QFile
+    virtual bool loadFile(QString filename);
+    // Specify the output as a QFile
+    virtual bool saveFile(QString filename);
+    // import the  input
+    virtual bool import(Layer* aLayer);
 
-	//export
-	virtual bool export_(const QList<Feature *>& featList);
+    //export
+    virtual bool export_(const QList<Feature *>& featList);
 
 protected:
-	Projection* theProjection;
+    Projection* theProjection;
 
-	void parseGeometry(Layer* aLayer, OGRGeometry *poGeometry);
+    Feature* parseGeometry(Layer* aLayer, OGRGeometry *poGeometry);
 
 };
 

@@ -1,4 +1,5 @@
 v0.16
+    * ADD : Add SHP feature attributes as not uploadable OSM Feature tags
     * FIX : Allow to load OS VectorMap District shapefiles
     * ADD : Allow to save geotagged images
     * CHG : Enhanced support for geotagged images drag&drop
