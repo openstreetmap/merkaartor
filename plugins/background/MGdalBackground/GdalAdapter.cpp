@@ -17,6 +17,7 @@
 #include <QAction>
 #include <QFileDialog>
 #include <QPainter>
+#include <QMessageBox>
 
 #include "gdal_priv.h"
 #include "ogrsf_frmts.h"
@@ -26,20 +27,20 @@
 static const QUuid theUid ("{867e78e9-3156-45f8-a9a7-e5cfa52f8507}");
 
 #define FILTER_OPEN_SUPPORTED \
-	tr("Supported formats")+" (*.tif *.tiff)\n" \
-	+tr("GeoTIFF files (*.tif *.tiff)\n") \
-	+tr("All Files (*)")
+    tr("Supported formats")+" (*.tif *.tiff)\n" \
+    +tr("GeoTIFF files (*.tif *.tiff)\n") \
+    +tr("All Files (*)")
 
 GdalAdapter::GdalAdapter()
-	: poDataset(0)
+    : poDataset(0)
 {
-	GDALAllRegister();
+    GDALAllRegister();
 
-	QAction* loadImage = new QAction(tr("Load image..."), this);
-	loadImage->setData(theUid.toString());
-	connect(loadImage, SIGNAL(triggered()), SLOT(onLoadImage()));
-	theMenu = new QMenu();
-	theMenu->addAction(loadImage);
+    QAction* loadImage = new QAction(tr("Load image..."), this);
+    loadImage->setData(theUid.toString());
+    connect(loadImage, SIGNAL(triggered()), SLOT(onLoadImage()));
+    theMenu = new QMenu();
+    theMenu->addAction(loadImage);
 }
 
 
@@ -49,67 +50,76 @@ GdalAdapter::~GdalAdapter()
 
 void GdalAdapter::onLoadImage()
 {
-	QStringList fileNames = QFileDialog::getOpenFileNames(
-					NULL,
-					tr("Open GDAL files"),
-					"", FILTER_OPEN_SUPPORTED);
-	if (fileNames.isEmpty())
-		return;
+    int fileOk = 0;
 
-	theBbox = QRectF();
-	theImages.clear();
+    QStringList fileNames = QFileDialog::getOpenFileNames(
+                    NULL,
+                    tr("Open GDAL files"),
+                    "", FILTER_OPEN_SUPPORTED);
+    if (fileNames.isEmpty())
+        return;
 
-	for (int i=0; i<fileNames.size(); i++) {
-		QFileInfo fi(fileNames[i]);
-		GdalImage img;
+    theBbox = QRectF();
+    theImages.clear();
 
-		poDataset = (GDALDataset *) GDALOpen( QDir::toNativeSeparators(fi.absoluteFilePath()).toUtf8().constData(), GA_ReadOnly );
-		if( poDataset == NULL )
-		{
-			qDebug() <<  "GDAL Open failed: " << fileNames[i];
-			continue;
-		}
+    for (int i=0; i<fileNames.size(); i++) {
+        QFileInfo fi(fileNames[i]);
+        GdalImage img;
 
-		if( poDataset->GetProjectionRef()  != NULL ) {
-			qDebug( "Projection is `%s'\n", poDataset->GetProjectionRef() );
-			OGRSpatialReference* theSrs = new OGRSpatialReference(poDataset->GetProjectionRef());
-			if (theSrs) {
-				theSrs->morphFromESRI();
-				char* theProj4;
-				if (theSrs->exportToProj4(&theProj4) == OGRERR_NONE) {
-					qDebug() << "SHP: to proj4 : " << theProj4;
-				} else {
-					qDebug() << "SHP: to proj4 error: " << CPLGetLastErrorMsg();
-					return;
-				}
-				theProjection = QString(theProj4);
-			}
-		}
+        poDataset = (GDALDataset *) GDALOpen( QDir::toNativeSeparators(fi.absoluteFilePath()).toUtf8().constData(), GA_ReadOnly );
+        if( poDataset == NULL )
+        {
+            qDebug() <<  "GDAL Open failed: " << fileNames[i];
+            continue;
+        }
 
-		if( poDataset->GetGeoTransform( img.adfGeoTransform ) == CE_None )
-		{
-			qDebug( "Origin = (%.6f,%.6f)\n",
-					img.adfGeoTransform[0], img.adfGeoTransform[3] );
+        if( strlen(poDataset->GetProjectionRef()) != 0 ) {
+            qDebug( "Projection is `%s'\n", poDataset->GetProjectionRef() );
+            OGRSpatialReference* theSrs = new OGRSpatialReference(poDataset->GetProjectionRef());
+            if (theSrs) {
+                theSrs->morphFromESRI();
+                char* theProj4;
+                if (theSrs->exportToProj4(&theProj4) == OGRERR_NONE) {
+                    qDebug() << "SHP: to proj4 : " << theProj4;
+                } else {
+                    qDebug() << "SHP: to proj4 error: " << CPLGetLastErrorMsg();
+                    return;
+                }
+                theProjection = QString(theProj4);
+            }
+        } else
+            continue;
 
-			qDebug( "Pixel Size = (%.6f,%.6f)\n",
-					img.adfGeoTransform[1], img.adfGeoTransform[5] );
+        if( poDataset->GetGeoTransform( img.adfGeoTransform ) == CE_None )
+        {
+            qDebug( "Origin = (%.6f,%.6f)\n",
+                    img.adfGeoTransform[0], img.adfGeoTransform[3] );
 
-			theBbox.setTopLeft(QPointF(img.adfGeoTransform[0], img.adfGeoTransform[3]));
-			theBbox.setWidth(img.adfGeoTransform[1]*poDataset->GetRasterXSize());
-			theBbox.setHeight(img.adfGeoTransform[5]*poDataset->GetRasterYSize());
-		}
+            qDebug( "Pixel Size = (%.6f,%.6f)\n",
+                    img.adfGeoTransform[1], img.adfGeoTransform[5] );
 
-		qDebug( "Driver: %s/%s\n",
-				poDataset->GetDriver()->GetDescription(),
-				poDataset->GetDriver()->GetMetadataItem( GDAL_DMD_LONGNAME ) );
+            theBbox.setTopLeft(QPointF(img.adfGeoTransform[0], img.adfGeoTransform[3]));
+            theBbox.setWidth(img.adfGeoTransform[1]*poDataset->GetRasterXSize());
+            theBbox.setHeight(img.adfGeoTransform[5]*poDataset->GetRasterYSize());
+        } else
+            continue;
 
-		qDebug( "Size is %dx%dx%d\n",
-				poDataset->GetRasterXSize(), poDataset->GetRasterYSize(),
-				poDataset->GetRasterCount() );
+        qDebug( "Driver: %s/%s\n",
+                poDataset->GetDriver()->GetDescription(),
+                poDataset->GetDriver()->GetMetadataItem( GDAL_DMD_LONGNAME ) );
 
-		img.theImg.load(fileNames[i]);
-		theImages.push_back(img);
-	}
+        qDebug( "Size is %dx%dx%d\n",
+                poDataset->GetRasterXSize(), poDataset->GetRasterYSize(),
+                poDataset->GetRasterCount() );
+
+        img.theImg.load(fileNames[i]);
+        theImages.push_back(img);
+        ++fileOk;
+    }
+
+    if (!fileOk) {
+        QMessageBox::critical(0,QCoreApplication::translate("GdalBackground","No valid file"),QCoreApplication::translate("GdalBackground","No valid GeoTIFF file could be found."));
+    }
 
 //	theType == GdalAdapter::Unknown;
 //	bandCount = poDataset->GetRasterCount();
@@ -202,88 +212,88 @@ void GdalAdapter::onLoadImage()
 //		}
 //		QCoreApplication::processEvents();
 //	}
-	return;
+    return;
 }
 
 QString	GdalAdapter::getHost() const
 {
-	return "";
+    return "";
 }
 
 QUuid GdalAdapter::getId() const
 {
-	return QUuid(theUid);
+    return QUuid(theUid);
 }
 
 IMapAdapter::Type GdalAdapter::getType() const
 {
-	return IMapAdapter::DirectBackground;
+    return IMapAdapter::DirectBackground;
 }
 
 QString	GdalAdapter::getName() const
 {
-	return "GeoTIFF";
+    return "GeoTIFF";
 }
 
 QMenu* GdalAdapter::getMenu() const
 {
-	return theMenu;
+    return theMenu;
 }
 
 QRectF GdalAdapter::getBoundingbox() const
 {
-	return theBbox;
+    return theBbox;
 }
 
 QString GdalAdapter::projection() const
 {
-	return theProjection;
+    return theProjection;
 }
 
 QPixmap GdalAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& projBbox, const QRect& src) const
 {
-	QPixmap pix(src.size());
-	pix.fill(Qt::transparent);
-	QPainter p(&pix);
+    QPixmap pix(src.size());
+    pix.fill(Qt::transparent);
+    QPainter p(&pix);
 
-	for (int i=0; i<theImages.size(); ++i) {
-		QPixmap theImg = theImages[i].theImg;
+    for (int i=0; i<theImages.size(); ++i) {
+        QPixmap theImg = theImages[i].theImg;
 
-		QSize sz(projBbox.width() / theImages[i].adfGeoTransform[1], projBbox.height() / theImages[i].adfGeoTransform[5]);
-		if (sz.isNull())
-			return QPixmap();
+        QSize sz(projBbox.width() / theImages[i].adfGeoTransform[1], projBbox.height() / theImages[i].adfGeoTransform[5]);
+        if (sz.isNull())
+            return QPixmap();
 
-		QPoint s((projBbox.left() - theImages[i].adfGeoTransform[0]) / theImages[i].adfGeoTransform[1],
-				 (projBbox.top() - theImages[i].adfGeoTransform[3]) / theImages[i].adfGeoTransform[5]);
+        QPoint s((projBbox.left() - theImages[i].adfGeoTransform[0]) / theImages[i].adfGeoTransform[1],
+                 (projBbox.top() - theImages[i].adfGeoTransform[3]) / theImages[i].adfGeoTransform[5]);
 
-		qDebug() << "Pixmap Origin: " << s.x() << "," << s.y();
-		qDebug() << "Pixmap size: " << sz.width() << "," << sz.height();
+        qDebug() << "Pixmap Origin: " << s.x() << "," << s.y();
+        qDebug() << "Pixmap size: " << sz.width() << "," << sz.height();
 
-		double rtx = src.width() / (double)sz.width();
-		double rty = src.height() / (double)sz.height();
+        double rtx = src.width() / (double)sz.width();
+        double rty = src.height() / (double)sz.height();
 
-		QRect mRect = QRect(s, sz);
-		QRect iRect = theImg.rect().intersect(mRect);
-		QRect sRect = QRect(iRect.topLeft() - mRect.topLeft(), iRect.size());
-		QRect fRect = QRect(sRect.x() * rtx, sRect.y() * rty, sRect.width() * rtx, sRect.height() * rty);
+        QRect mRect = QRect(s, sz);
+        QRect iRect = theImg.rect().intersect(mRect);
+        QRect sRect = QRect(iRect.topLeft() - mRect.topLeft(), iRect.size());
+        QRect fRect = QRect(sRect.x() * rtx, sRect.y() * rty, sRect.width() * rtx, sRect.height() * rty);
 
-		qDebug() << "mrect: " << mRect;
-		qDebug() << "iRect: " << iRect;
-		qDebug() << "sRect: " << sRect;
+        qDebug() << "mrect: " << mRect;
+        qDebug() << "iRect: " << iRect;
+        qDebug() << "sRect: " << sRect;
 
-	//	QImage img2 = theImg.copy(iRect).scaled(fRect.size());
-	//	p.drawImage(fRect.topLeft(), img2);
-		QPixmap img2 = theImg.copy(iRect).scaled(fRect.size());
-		p.drawPixmap(fRect.topLeft(), img2);
-	}
+    //	QImage img2 = theImg.copy(iRect).scaled(fRect.size());
+    //	p.drawImage(fRect.topLeft(), img2);
+        QPixmap img2 = theImg.copy(iRect).scaled(fRect.size());
+        p.drawPixmap(fRect.topLeft(), img2);
+    }
 
-	p.end();
-	return pix;
+    p.end();
+    return pix;
 }
 
 IImageManager* GdalAdapter::getImageManager()
 {
-	return NULL;
+    return NULL;
 }
 
 void GdalAdapter::setImageManager(IImageManager* anImageManager)

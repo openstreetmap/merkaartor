@@ -475,7 +475,8 @@ void ImageMapLayer::forceRedraw(MapView& theView, QRect Screen, QPoint delta)
              p->theProjection.inverse(p->theTransform.inverted().map(fScreen.topRight())));
 
     p->theDelta = delta;
-    p->theMapAdapter->getImageManager()->abortLoading();
+    if (p->theMapAdapter->getImageManager())
+        p->theMapAdapter->getImageManager()->abortLoading();
     draw(theView, Screen);
 }
 
