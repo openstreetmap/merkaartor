@@ -48,6 +48,14 @@ GdalAdapter::~GdalAdapter()
 {
 }
 
+bool GdalAdapter::alreadyLoaded(QString fn) const
+{
+    for (int j=0; j<theImages.size(); ++j)
+        if (theImages[j].theFilename == fn)
+            return true;
+    return false;
+}
+
 void GdalAdapter::onLoadImage()
 {
     int fileOk = 0;
@@ -60,9 +68,12 @@ void GdalAdapter::onLoadImage()
         return;
 
     theBbox = QRectF();
-    theImages.clear();
+//    theImages.clear();
 
     for (int i=0; i<fileNames.size(); i++) {
+        if (alreadyLoaded(fileNames[i]))
+            continue;
+
         QFileInfo fi(fileNames[i]);
         GdalImage img;
 
@@ -112,6 +123,7 @@ void GdalAdapter::onLoadImage()
                 poDataset->GetRasterXSize(), poDataset->GetRasterYSize(),
                 poDataset->GetRasterCount() );
 
+        img.theFilename = fileNames[i];
         img.theImg.load(fileNames[i]);
         theImages.push_back(img);
         ++fileOk;

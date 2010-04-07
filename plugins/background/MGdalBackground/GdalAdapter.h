@@ -23,6 +23,7 @@ class GDALColorTable;
 class GdalImage
 {
 public:
+    QString theFilename;
     QPixmap theImg;
     double adfGeoTransform[6];
 };
@@ -121,6 +122,9 @@ public:
 
 public slots:
     void onLoadImage();
+
+protected:
+    bool alreadyLoaded(QString fn) const;
 
 private:
     QMenu* theMenu;

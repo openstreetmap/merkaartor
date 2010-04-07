@@ -552,18 +552,18 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect) const
         while ((!vp.contains(vlm)) && (p->theMapAdapter->getAdaptedZoom() < maxZoom)) {
             p->theMapAdapter->zoom_in();
 
-            tileWidth = p->theMapAdapter->getBoundingbox().width() / p->theMapAdapter->getTilesWE(p->theMapAdapter->getAdaptedZoom());
-            tileHeight = p->theMapAdapter->getBoundingbox().height() / p->theMapAdapter->getTilesNS(p->theMapAdapter->getAdaptedZoom());
+            tileWidth = p->theMapAdapter->getBoundingbox().width() / p->theMapAdapter->getTilesWE(p->theMapAdapter->getZoom());
+            tileHeight = p->theMapAdapter->getBoundingbox().height() / p->theMapAdapter->getTilesNS(p->theMapAdapter->getZoom());
             w = ((qreal)rect.width() / tilesize) * tileWidth;
             h = ((qreal)rect.height() / tilesize) * tileHeight;
             upperLeft = QPointF(mapmiddle_px.x() - w/2, mapmiddle_px.y() + h/2);
             lowerRight = QPointF(mapmiddle_px.x() + w/2, mapmiddle_px.y() - h/2);
             vlm = QRectF(upperLeft, lowerRight);
         }
-        if (p->theMapAdapter->getAdaptedZoom() && vp != vlm) {
+        if (p->theMapAdapter->getAdaptedZoom() && vp.contains(vlm)) {
             p->theMapAdapter->zoom_out();
-            tileWidth = p->theMapAdapter->getBoundingbox().width() / p->theMapAdapter->getTilesWE(p->theMapAdapter->getAdaptedZoom());
-            tileHeight = p->theMapAdapter->getBoundingbox().height() / p->theMapAdapter->getTilesNS(p->theMapAdapter->getAdaptedZoom());
+            tileWidth = p->theMapAdapter->getBoundingbox().width() / p->theMapAdapter->getTilesWE(p->theMapAdapter->getZoom());
+            tileHeight = p->theMapAdapter->getBoundingbox().height() / p->theMapAdapter->getTilesNS(p->theMapAdapter->getZoom());
             w = ((qreal)rect.width() / tilesize) * tileWidth;
             h = ((qreal)rect.height() / tilesize) * tileHeight;
             upperLeft = QPointF(mapmiddle_px.x() - w/2, mapmiddle_px.y() + h/2);

@@ -1299,7 +1299,9 @@ void MerkaartorPreferences::loadProjection(QString fn)
 
 void MerkaartorPreferences::loadProjections()
 {
-    QString fn = ":/Projections.xml";
+    QString fn;
+
+    fn = HOMEDIR + "/Projections.xml";
     loadProjection(fn);
 
 #if defined(Q_OS_MAC)
@@ -1314,7 +1316,7 @@ void MerkaartorPreferences::loadProjections()
 #endif
     loadProjection(fn);
 
-    fn = HOMEDIR + "/Projections.xml";
+    fn = ":/Projections.xml";
     loadProjection(fn);
 }
 

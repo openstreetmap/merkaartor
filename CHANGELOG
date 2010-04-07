@@ -1,4 +1,6 @@
 v0.16
+    * ADD : OSGB36 to the default list of projections
+    * CHG : Allow to add images to a GeoTIFF layer
     * ADD : Add SHP feature attributes as not uploadable OSM Feature tags
     * FIX : Allow to load OS VectorMap District shapefiles
     * ADD : Allow to save geotagged images
