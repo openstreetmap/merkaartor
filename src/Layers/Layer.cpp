@@ -248,12 +248,11 @@ void Layer::deleteFeature(Feature* aFeature)
 
 void Layer::clear()
 {
-    QList<MapFeaturePtr>::iterator i;
-    for (i=p->Features.begin(); i != p->Features.end();)
+    while (p->Features.count())
     {
-        (*i)->setLayer(0);
-        notifyIdUpdate((*i)->id(),0);
-        i = p->Features.erase(i);
+        p->Features[0]->setLayer(0);
+        notifyIdUpdate(p->Features[0]->id(),0);
+        p->Features.removeAt(0);
     }
     reIndex();
 }
