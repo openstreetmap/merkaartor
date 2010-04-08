@@ -1,18 +1,18 @@
 <?xml version="1.0"?>
 
-<?include defines_dbg.wxi?>
+<?include defines_qt_dbg.wxi?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
    <Product  Id="*" Name="$(var.PackageName)"
       Language="1033" Version="$(var.ProductVersion)" Manufacturer="Merkaartor"
-      UpgradeCode="4892C085-55A9-413b-9C7B-42E33ED7D7D2">
+      UpgradeCode="956156B2-4304-11DF-A7D3-81E355D89593">
 
      <Package 
-         Description="A map editor for OpenStreetMap.org (Debug version)" InstallerVersion="100" Compressed="yes" />
+         Description="Qt debug libraries for Merkaartor" InstallerVersion="100" Compressed="yes" />
      
-     <Upgrade Id="4892C085-55A9-413b-9C7B-42E33ED7D7D2">
+     <Upgrade Id="956156B2-4304-11DF-A7D3-81E355D89593">
        <UpgradeVersion OnlyDetect="yes" Minimum="$(var.ProductVersion)" Property="NEWERVERSIONDETECTED" IncludeMinimum="no" />
-       <UpgradeVersion OnlyDetect="no" Maximum="$(var.ProductVersion)" Property="OLDERVERSIONBEINGUPGRADED" IncludeMaximum="yes" />
+       <UpgradeVersion OnlyDetect="no" Maximum="$(var.ProductVersion)" Property="OLDERVERSIONBEINGUPGRADED" IncludeMaximum="no" />
      </Upgrade>
 
      <InstallExecuteSequence>
@@ -38,14 +38,13 @@
                    <Directory Id="MPBACKGROUND" Name="background" />
                    <Directory Id="MPSTYLES" Name="styles" />
                 </Directory>
-<!--
                 <Directory Id="QTIMAGEPLUGINDIR" Name="imageformats" />
--->
                 <Directory Id="QTTRANSLATIONS" Name="translations" />
             </Directory>
          </Directory>
       </Directory>
 
+<!--
       <DirectoryRef Id="MERKAARTORSHARE">
          <Component Id="worldbackgroundosb" Guid="12ACB195-D065-49bb-A7A9-CACE30DD8F1B">
             <File Id="world_background.osb" Name="world_background.osb"
@@ -94,7 +93,6 @@
             </File>
          </Component>
       </DirectoryRef>
- 
       
        <Feature Id="MerkaartorFeature" Title="Merkaartor editor" Level="1"
          Display="expand" ConfigurableDirectory="INSTALLLOCATION">
@@ -107,7 +105,8 @@
          Display="expand" ConfigurableDirectory="MERKAARTORSHARE">
          <ComponentRef Id="worldbackgroundosb" />
       </Feature>
-<!--     <Feature Id="QtMainFeature" Title="Main Qt DLLs" Level="1"
+-->
+      <Feature Id="QtMainFeature" Title="Main Qt DLLs" Level="1"
         Display="expand" ConfigurableDirectory="INSTALLLOCATION">
        <ComponentRef Id="QtMainD" />
      </Feature>
@@ -115,23 +114,20 @@
         Display="expand" ConfigurableDirectory="QTIMAGEPLUGINDIR">
        <ComponentRef Id="QtImagePluginsD" />
      </Feature>
--->
      <Feature Id="TranslationsFeature" Title="Translation files" Level="1"
         Display="expand" ConfigurableDirectory="QTTRANSLATIONS">
-<!--
        <ComponentRef Id="QtTranslations" />
--->
+<!--
        <ComponentRef Id="MerkaartorTranslationsCt" />
+-->
      </Feature>
 
      <UIRef Id="WixUI_Mondo"/>
 
    </Product>
 
-<!--   
    <?include qt_dbg.wxi?>
    <?include qttrans.wxi?>
--->
    <?include external.wxi?>
    <?include merkaartor_trans.wxi?>
 
