@@ -1228,6 +1228,9 @@ M_PARAM_IMPLEMENT_BOOL(WorldOsbAutoshow, WOSB, false)
 #endif
 M_PARAM_IMPLEMENT_BOOL(SeparateMoveMode, Mouse, true)
 
+// Geotag
+M_PARAM_IMPLEMENT_INT(MaxGeoPicWidth, geotag, 160)
+
 /* Custom Style */
 M_PARAM_IMPLEMENT_BOOL(MerkaartorStyle, visual, false)
 M_PARAM_IMPLEMENT_STRING(MerkaartorStyleString, visual, "skulpture")

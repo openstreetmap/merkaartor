@@ -224,7 +224,7 @@ void Relation::drawHighlight(QPainter& P, MapView* theView, bool solid)
     }
 }
 
-double Relation::pixelDistance(const QPointF& Target, double ClearEndDistance, bool, const Projection& theProjection, const QTransform& theTransform) const
+double Relation::pixelDistance(const QPointF& Target, double ClearEndDistance, bool, MapView* theView) const
 {
     double Best = 1000000;
     if (!M_PREFS->getRelationsVisible() && !M_PREFS->getRelationsSelectableWhenHidden())
@@ -240,7 +240,7 @@ double Relation::pixelDistance(const QPointF& Target, double ClearEndDistance, b
     //}
 
     double D;
-    QRectF bb = QRectF(theTransform.map(theProjection.project(boundingBox().topLeft())),theTransform.map(theProjection.project(boundingBox().bottomRight())));
+    QRectF bb = QRectF(theView->toView(boundingBox().topLeft()),theView->toView(boundingBox().bottomRight()));
     //bb.adjust(-10, -10, 10, 10);
 
     LineF F(bb.topLeft(), bb.topRight());

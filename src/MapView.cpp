@@ -786,7 +786,7 @@ void MapView::dragMoveEvent(QDragMoveEvent *event)
     }
     Node *tP;
     for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it) {
-        if ((tP = qobject_cast<Node*>(it.get())) && tP->pixelDistance(event->pos(), 5.01, true, projection(), p->theTransform) < 5.01) {
+        if ((tP = qobject_cast<Node*>(it.get())) && tP->pixelDistance(event->pos(), 5.01, true, this) < 5.01) {
             dropTarget = tP;
             QRect acceptedRect(tP->projection().toPoint() - QPoint(3, 3), tP->projection().toPoint() + QPoint(3, 3));
             event->acceptProposedAction();

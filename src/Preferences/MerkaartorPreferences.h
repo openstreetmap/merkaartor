@@ -317,6 +317,9 @@ public:
     M_PARAM_DECLARE_BOOL(MouseSingleButton)
     M_PARAM_DECLARE_BOOL(SeparateMoveMode)
 
+    // Geotag
+    M_PARAM_DECLARE_INT(MaxGeoPicWidth)
+
     /* Custom Style */
     M_PARAM_DECLARE_BOOL(MerkaartorStyle)
     M_PARAM_DECLARE_STRING(MerkaartorStyleString)

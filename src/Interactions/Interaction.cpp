@@ -325,7 +325,8 @@ void FeatureSnapInteraction::updateSnap(QMouseEvent* event)
     LastSnap = 0;
     if (!SnapActive) return;
     //QTime Start(QTime::currentTime());
-    CoordBox HotZone(XY_TO_COORD(event->pos()-QPointF(15,15)),XY_TO_COORD(event->pos()+QPointF(15,15)));
+//    CoordBox HotZone(XY_TO_COORD(event->pos()-QPointF(15,15)),XY_TO_COORD(event->pos()+QPointF(15,15)));
+    CoordBox HotZone(XY_TO_COORD(event->pos()-QPointF(M_PREFS->getMaxGeoPicWidth()+5,M_PREFS->getMaxGeoPicWidth()+5)),XY_TO_COORD(event->pos()+QPointF(M_PREFS->getMaxGeoPicWidth()+5,M_PREFS->getMaxGeoPicWidth()+5)));
     SnapList.clear();
     double BestDistance = 5;
     bool areNodesVisible = (view()->pixelPerM() >= M_PREFS->getLocalZoom());
@@ -345,16 +346,16 @@ void FeatureSnapInteraction::updateSnap(QMouseEvent* event)
                     if ( NoRoads || NoSelectRoads)
                         continue;
                 }
-                if (CAST_NODE(F)) {
+                if (Node* N = CAST_NODE(F)) {
                     if (NoSelectPoints)
                         continue;
-                    if (!areNodesVisible)
+                    if (!areNodesVisible && !N->hasPhoto())
                         continue;
                 }
                 if (std::find(NoSnap.begin(),NoSnap.end(),F) != NoSnap.end())
                     continue;
 
-                double Distance = F->pixelDistance(event->pos(), 5.01, areNodesVisible, projection(), transform());
+                double Distance = F->pixelDistance(event->pos(), 5.01, areNodesVisible, view());
                 SnapList.push_back(F);
                 if (Distance < BestDistance)
                 {

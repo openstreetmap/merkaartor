@@ -13,6 +13,7 @@ class NodePrivate
         NodePrivate()
         : IsWaypoint(false), ProjectionRevision(0)
         , HasPhoto(false)
+        , photoLocationBR(true)
         {
         }
 
@@ -22,6 +23,7 @@ class NodePrivate
 #endif
         bool HasPhoto;
         QPixmap Photo;
+        bool photoLocationBR;
 };
 
 
@@ -181,13 +183,18 @@ void Node::setElevation(double aElevation)
     Elevation = aElevation;
 }
 
+bool Node::hasPhoto() const
+{
+    return p->HasPhoto;
+}
+
 QPixmap Node::photo() const
 {
     return p->Photo;
 }
 void Node::setPhoto(QPixmap thePhoto)
 {
-    p->Photo = thePhoto.scaled(160, 120, Qt::KeepAspectRatio);
+    p->Photo = thePhoto.scaled(M_PREFS->getMaxGeoPicWidth(), M_PREFS->getMaxGeoPicWidth(), Qt::KeepAspectRatio);
     p->HasPhoto = true;
 }
 
@@ -212,8 +219,15 @@ void Node::draw(QPainter& thePainter , MapView* theView )
 
         if (M_PREFS->getPhotosVisible() && theView->pixelPerM() > M_PREFS->getRegionalZoom()) {
             qreal rt = qBound(0.2, theView->pixelPerM(), 1.0);
-            QPoint phPt = me + QPoint(10*rt, 10*rt);
-            thePainter.drawPixmap(phPt, p->Photo.scaledToWidth(160*rt));
+            QPoint phPt;
+            if (p->photoLocationBR) {
+                phPt = me + QPoint(10*rt, 10*rt);
+            } else {
+                qreal rt = qBound(0.2, theView->pixelPerM(), 1.0);
+                double phRt = 1. * p->Photo.width() / p->Photo.height();
+                phPt = me - QPoint(10*rt, 10*rt) - QPoint(M_PREFS->getMaxGeoPicWidth()*rt, M_PREFS->getMaxGeoPicWidth()*rt/phRt);
+            }
+            thePainter.drawPixmap(phPt, p->Photo.scaledToWidth(M_PREFS->getMaxGeoPicWidth()*rt));
         }
     }
 }
@@ -226,8 +240,8 @@ void Node::draw(QPainter& /* thePainter */, MapView* /*theView*/ )
 void Node::drawFocus(QPainter& thePainter, MapView* theView, bool solid)
 {
     thePainter.setPen(MerkaartorPreferences::instance()->getFocusColor());
-    QPointF P(theView->toView(this));
-    QRectF R(P-QPoint(3,3),QSize(6,6));
+    QPoint me(theView->toView(this));
+    QRect R(me-QPoint(3,3),QSize(6,6));
     thePainter.drawRect(R);
     R.adjust(-7, -7, 7, 7);
     thePainter.drawEllipse(R);
@@ -242,11 +256,28 @@ void Node::drawFocus(QPainter& thePainter, MapView* theView, bool solid)
 void Node::drawHover(QPainter& thePainter, MapView* theView, bool solid)
 {
     thePainter.setPen(MerkaartorPreferences::instance()->getHoverColor());
-    QPointF P(theView->toView(this));
-    QRectF R(P-QPoint(3,3),QSize(6,6));
+    QPoint me(theView->toView(this));
+    QRect R(me-QPoint(3,3),QSize(6,6));
     thePainter.drawRect(R);
     R.adjust(-7, -7, 7, 7);
     thePainter.drawEllipse(R);
+
+#ifdef GEOIMAGE
+    if (p->HasPhoto) {
+        if (M_PREFS->getPhotosVisible() && theView->pixelPerM() > M_PREFS->getRegionalZoom()) {
+            qreal rt = qBound(0.2, theView->pixelPerM(), 1.0);
+            double phRt = 1. * p->Photo.width() / p->Photo.height();
+            QPoint phPt;
+            if (p->photoLocationBR) {
+                phPt = me + QPoint(10*rt, 10*rt);
+            } else {
+                phPt = me - QPoint(10*rt, 10*rt) - QPoint(M_PREFS->getMaxGeoPicWidth()*rt, M_PREFS->getMaxGeoPicWidth()*rt/phRt);
+            }
+            QRect box(phPt, QSize(M_PREFS->getMaxGeoPicWidth()*rt, M_PREFS->getMaxGeoPicWidth()*rt/phRt));
+            thePainter.drawRect(box);
+        }
+    }
+#endif
 
     if (M_PREFS->getShowParents() && solid) {
         for (int i=0; i<sizeParents(); ++i)
@@ -258,8 +289,8 @@ void Node::drawHover(QPainter& thePainter, MapView* theView, bool solid)
 void Node::drawHighlight(QPainter& thePainter, MapView* theView, bool /*solid*/)
 {
     thePainter.setPen(MerkaartorPreferences::instance()->getHighlightColor());
-    QPointF P(theView->toView(this));
-    QRectF R(P-QPoint(3,3),QSize(6,6));
+    QPoint me(theView->toView(this));
+    QRect R(me-QPoint(3,3),QSize(6,6));
     thePainter.drawRect(R);
     R.adjust(-7, -7, 7, 7);
     thePainter.drawEllipse(R);
@@ -271,9 +302,34 @@ void Node::drawHighlight(QPainter& thePainter, MapView* theView, bool /*solid*/)
 //	}
 }
 
-double Node::pixelDistance(const QPointF& Target, double, bool, const Projection& theProjection, const QTransform& theTransform) const
+double Node::pixelDistance(const QPointF& Target, double, bool, MapView* theView) const
 {
-    return distance(Target,theTransform.map(theProjection.project(Position)));
+    double Best = 1000000;
+
+    QPoint me = theView->toView(const_cast<Node*>(this));
+
+    Best = distance(Target, me);
+#ifdef GEOIMAGE
+    if (p->HasPhoto) {
+        if (M_PREFS->getPhotosVisible() && theView->pixelPerM() > M_PREFS->getRegionalZoom()) {
+            qreal rt = qBound(0.2, theView->pixelPerM(), 1.0);
+            double phRt = 1. * p->Photo.width() / p->Photo.height();
+            QPoint phPt;
+            if (p->photoLocationBR) {
+                phPt = me + QPoint(10*rt, 10*rt);
+            } else {
+                phPt = me - QPoint(10*rt, 10*rt) - QPoint(M_PREFS->getMaxGeoPicWidth()*rt, M_PREFS->getMaxGeoPicWidth()*rt/phRt);
+            }
+            QRect box(phPt, QSize(M_PREFS->getMaxGeoPicWidth()*rt, M_PREFS->getMaxGeoPicWidth()*rt/phRt));
+            if (box.contains(Target.toPoint())) {
+                p->photoLocationBR = !p->photoLocationBR;
+                theView->invalidate(true, false);
+            }
+        }
+    }
+#endif
+
+    return Best;
 }
 
 void Node::cascadedRemoveIfUsing(Document*, Feature*, CommandList*, const QList<Feature*>&)

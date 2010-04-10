@@ -249,7 +249,7 @@ CoordBox TrackSegment::boundingBox() const
     return CoordBox(Coord(0,0),Coord(0,0));
 }
 
-double TrackSegment::pixelDistance(const QPointF& , double , bool , const Projection&, const QTransform& ) const
+double TrackSegment::pixelDistance(const QPointF& , double , bool , MapView*) const
 {
     // unable to select that one
     return 1000000;

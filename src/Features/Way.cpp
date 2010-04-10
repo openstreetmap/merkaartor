@@ -527,14 +527,14 @@ void Way::drawFocus(QPainter& thePainter, MapView* theView, bool solid)
     }
 }
 
-double Way::pixelDistance(const QPointF& Target, double ClearEndDistance, bool selectNodes, const Projection& theProjection, const QTransform& theTransform) const
+double Way::pixelDistance(const QPointF& Target, double ClearEndDistance, bool selectNodes, MapView* theView) const
 {
     double Best = 1000000;
     if (selectNodes) {
         for (unsigned int i=0; i<p->Nodes.size(); ++i)
         {
             if (p->Nodes.at(i)) {
-                double x = ::distance(Target,theTransform.map(theProjection.project(p->Nodes.at(i))));
+                double x = ::distance(Target, theView->toView(p->Nodes.at(i)));
                 if (x<ClearEndDistance)
                     return Best;
             }
@@ -542,7 +542,7 @@ double Way::pixelDistance(const QPointF& Target, double ClearEndDistance, bool s
         for (unsigned int i=0; i<p->virtualNodes.size(); ++i)
         {
             if (p->virtualNodes.at(i)) {
-                double x = ::distance(Target,theTransform.map(theProjection.project(p->virtualNodes.at(i))));
+                double x = ::distance(Target,theView->toView(p->virtualNodes.at(i)));
                 if (x<ClearEndDistance)
                     return Best;
             }
@@ -552,10 +552,10 @@ double Way::pixelDistance(const QPointF& Target, double ClearEndDistance, bool s
         for (int i=3; i <p->Smoothed.size(); i += 3)
         {
             BezierF F(
-                theTransform.map(theProjection.project(p->Smoothed[i-3])),
-                theTransform.map(theProjection.project(p->Smoothed[i-2])),
-                theTransform.map(theProjection.project(p->Smoothed[i-1])),
-                theTransform.map(theProjection.project(p->Smoothed[i])));
+                theView->toView(p->Smoothed[i-3]),
+                theView->toView(p->Smoothed[i-2]),
+                theView->toView(p->Smoothed[i-1]),
+                theView->toView(p->Smoothed[i]));
             double D = F.distance(Target);
             if (D < ClearEndDistance)
                 Best = D;
@@ -564,7 +564,7 @@ double Way::pixelDistance(const QPointF& Target, double ClearEndDistance, bool s
         for (unsigned int i=1; i<p->Nodes.size(); ++i)
         {
             if (p->Nodes.at(i) && p->Nodes.at(i-1)) {
-                LineF F(theTransform.map(theProjection.project(p->Nodes.at(i-1))),theTransform.map(theProjection.project(p->Nodes.at(i))));
+                LineF F(theView->toView(p->Nodes.at(i-1)),theView->toView(p->Nodes.at(i)));
                 double D = F.capDistance(Target);
                 if (D < ClearEndDistance)
                     Best = D;
