@@ -345,12 +345,10 @@ void ImageMapLayer::drawImage(QPixmap& thePix)
 
     const QSize ps = p->pr.size();
     const QSize pmSize = p->pm.size();
-    const qreal ratio = qMax<const qreal>((qreal)pmSize.width()/ps.width()*1.0, (qreal)pmSize.height()/ps.height());
+    const qreal ratio = qMax<const qreal>((qreal)pmSize.width()/ps.width()*1.0, (qreal)pmSize.height()/ps.height()*1.0);
     qDebug() << "Bg image ratio " << ratio;
     QPixmap pms;
-    if (ratio == 1.0)
-        pms = p->pm;
-    else if (ratio >= 1.0) {
+    if (ratio >= 1.0) {
         qDebug() << "Bg image scale 1 " << ps << " : " << p->pm.size();
         pms = p->pm.scaled(ps);
     } else {
@@ -517,8 +515,8 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect) const
         }
     }
 
-    const QPointF bl = theView.transform().map(theView.projection().project(p->Viewport.bottomLeft()));
-    const QPointF tr = theView.transform().map(theView.projection().project(p->Viewport.topRight()));
+    const QPointF bl = theView.toView(p->Viewport.bottomLeft());
+    const QPointF tr = theView.toView(p->Viewport.topRight());
 
     return QRectF(bl.x(), tr.y(), tr.x() - bl.x(), bl.y() - tr.y()).toRect();
 }
