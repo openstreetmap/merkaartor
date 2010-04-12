@@ -26,7 +26,6 @@ class NodePrivate
         bool photoLocationBR;
 };
 
-
 Node::Node(const Coord& aCoord)
     : Position(aCoord)
     , Elevation(0.0)

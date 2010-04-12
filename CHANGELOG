@@ -1,4 +1,5 @@
 v0.16
+    * ADD : CSV POI import
     * FIX : crash when closing layer with virtual nodes (fixes #2858)
     * ADD : OSGB36 to the default list of projections
     * CHG : Allow to add images to a GeoTIFF layer

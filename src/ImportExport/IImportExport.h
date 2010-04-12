@@ -23,37 +23,37 @@ class QIODevice;
 /**
 Interface for Import/Export
 
-	@author cbro <cbro@semperpax.com>
+    @author cbro <cbro@semperpax.com>
 */
 class IImportExport{
 public:
-	IImportExport(Document* doc);
-	virtual ~IImportExport();
+    IImportExport(Document* doc);
+    virtual ~IImportExport();
 
 public:
-	// Specify the input as a QIODevice
-	virtual bool setDevice(QIODevice* aDevice);
-	// Specify the input as a QFile
-	virtual bool loadFile(QString filename);
-	// Specify the output as a QFile
-	virtual bool saveFile(QString filename);
-	// import the  input
-	virtual bool import(Layer* /* aLayer */) { return false; };
-	// export
-	virtual bool export_(const QList<Feature *>& featList);
+    // Specify the input as a QIODevice
+    virtual bool setDevice(QIODevice* aDevice);
+    // Specify the input as a QFile
+    virtual bool loadFile(QString filename);
+    // Specify the output as a QFile
+    virtual bool saveFile(QString filename);
+    // import the  input
+    virtual bool import(Layer* /* aLayer */) { return false; }
+    // export
+    virtual bool export_(const QList<Feature *>& featList);
 
-	// Return the filename
-	const QString& getFilename() const;
+    // Return the filename
+    const QString& getFilename() const;
 
-	virtual CommandList* getCommandList();
+    virtual CommandList* getCommandList();
 
 protected:
-	Document* theDoc;
-	QIODevice* Device;
-	CommandList* theList;
-	QList<Feature*> theFeatures;
-	QString FileName;
-	bool ownDevice;
+    Document* theDoc;
+    QIODevice* Device;
+    CommandList* theList;
+    QList<Feature*> theFeatures;
+    QString FileName;
+    bool ownDevice;
 };
 
 #endif

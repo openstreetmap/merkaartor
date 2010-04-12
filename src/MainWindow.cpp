@@ -748,7 +748,7 @@ static void changeCurrentDirToFile(const QString& s)
 
 #ifndef GEOIMAGE
 #define FILTER_OPEN_SUPPORTED \
-    tr("Supported formats")+" (*.mdc *.gpx *.osm *.osb *.ngt *.nmea *.nma *.kml *.shp)\n" \
+    tr("Supported formats")+" (*.mdc *.gpx *.osm *.osb *.ngt *.nmea *.nma *.kml *.shp *.csv)\n" \
     +tr("Merkaartor document (*.mdc)\n") \
     +tr("GPS Exchange format (*.gpx)\n") \
     +tr("OpenStreetMap format (*.osm)\n") \
@@ -757,10 +757,11 @@ static void changeCurrentDirToFile(const QString& s)
     +tr("NMEA GPS log format (*.nmea *.nma)\n") \
     +tr("KML file (*.kml)\n") \
     +tr("ESRI Shapefile (*.shp)\n") \
+    +tr("Comma delimited format (*.csv)\n") \
     +tr("All Files (*)")
 #else
 #define FILTER_OPEN_SUPPORTED \
-    tr("Supported formats")+" (*.mdc *.gpx *.osm *.osb *.ngt *.nmea *.nma *.kml *.shp *.jpg)\n" \
+    tr("Supported formats")+" (*.mdc *.gpx *.osm *.osb *.ngt *.nmea *.nma *.kml *.shp *.csv *.jpg)\n" \
     +tr("Merkaartor document (*.mdc)\n") \
     +tr("GPS Exchange format (*.gpx)\n") \
     +tr("OpenStreetMap format (*.osm)\n") \
@@ -768,12 +769,13 @@ static void changeCurrentDirToFile(const QString& s)
     +tr("Noni GPSPlot format (*.ngt)\n") \
     +tr("NMEA GPS log format (*.nmea *.nma)\n") \
     +tr("KML file (*.kml)\n") \
-    +tr("Geotagged images (*.jpg)\n") \
     +tr("ESRI Shapefile (*.shp)\n") \
+    +tr("Comma delimited format (*.csv)\n") \
+    +tr("Geotagged images (*.jpg)\n") \
     +tr("All Files (*)")
 #endif
 #define FILTER_IMPORT_SUPPORTED \
-    tr("Supported formats")+" (*.gpx *.osm *.osb *.ngt *.nmea *.nma *.kml *.shp)\n" \
+    tr("Supported formats")+" (*.gpx *.osm *.osb *.ngt *.nmea *.nma *.kml *.shp *.csv)\n" \
     +tr("GPS Exchange format (*.gpx)\n") \
     +tr("OpenStreetMap format (*.osm)\n") \
     +tr("OpenStreetMap binary format (*.osb)\n") \
@@ -781,6 +783,7 @@ static void changeCurrentDirToFile(const QString& s)
     +tr("NMEA GPS log format (*.nmea *.nma)\n") \
     +tr("KML file (*.kml)\n") \
     +tr("ESRI Shapefile (*.shp)\n") \
+    +tr("Comma delimited format (*.csv)\n") \
     +tr("All Files (*)")
 
 void MainWindow::on_fileImportAction_triggered()
@@ -925,6 +928,15 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
             } else
                 importAborted = true;
         }
+        else if (fn.toLower().endsWith(".csv")) {
+#ifndef Q_OS_SYMBIAN
+            QApplication::restoreOverrideCursor();
+#endif
+            newLayer = new DrawingLayer( baseFileName );
+            newLayer->setUploadable(false);
+            mapDocument->add(newLayer);
+            importOK = mapDocument->importCSV(baseFileName, (DrawingLayer*)newLayer);
+        }
 #ifdef USE_GDAL
         else if (fn.toLower().endsWith(".shp")) {
             newLayer = new DrawingLayer( baseFileName );
@@ -981,9 +993,6 @@ void MainWindow::loadFiles(const QStringList & fileList)
 
     if (fileNames.isEmpty())
         return;
-#ifndef Q_OS_SYMBIAN
-    QApplication::setOverrideCursor(Qt::BusyCursor);
-#endif
     theLayers->setUpdatesEnabled(false);
     view()->setUpdatesEnabled(false);
 
@@ -1051,9 +1060,6 @@ void MainWindow::loadFiles(const QStringList & fileList)
 
     theLayers->setUpdatesEnabled(true);
     view()->setUpdatesEnabled(true);
-#ifndef Q_OS_SYMBIAN
-    QApplication::restoreOverrideCursor();
-#endif
 }
 
 void MainWindow::on_fileOpenAction_triggered()
@@ -1642,7 +1648,7 @@ MapView* MainWindow::view()
 
 void MainWindow::on_mapStyleSaveAction_triggered()
 {
-    QString f = QFileDialog::getSaveFileName(this, tr("Save map style"), M_PREFS->M_PREFS->getCustomStyle(), tr("Merkaartor map style (*.mas)"));
+    QString f = QFileDialog::getSaveFileName(this, tr("Save map style"), M_PREFS->getCustomStyle(), tr("Merkaartor map style (*.mas)"));
     if (!f.isNull()) {
         if (!f.endsWith(".mas"))
             f.append(".mas");
