@@ -230,6 +230,103 @@ void GeoImageDock::addUsedTrackpoint(NodeData data)
     usedTrackPoints << data;
 }
 
+void GeoImageDock::loadImage(QString file, Coord pos)
+{
+    Document *theDocument = Main->document();
+    MapView *theView = Main->view();
+
+    Layer *theLayer;
+    if (photoLayer == NULL) {
+        photoLayer = new TrackLayer(tr("Photo layer"));
+        photoLayer->setReadonly(false);
+        theDocument->add(photoLayer);
+    }
+
+    { // retrieve the target layer from the user
+        QStringList layers;
+        QList<int> layerId;
+        int i;
+        Layer *layer;
+        Layer *singleLayer = NULL;
+        Layer *singleTrackLayer = NULL;
+        int trackLayersCount = 0;
+        for (i=0;i<theDocument->layerSize();i++) {
+            layer = theDocument->getLayer(i);
+            if (!layer->isEnabled())
+                continue;
+            if (layer->classType() == Layer::TrackLayerType) {
+                trackLayersCount++;
+                if (!singleTrackLayer)
+                    singleTrackLayer = layer;
+            }
+            if (layer->classType() == Layer::TrackLayerType || layer->classType() == Layer::DrawingLayerType) {
+                if (!singleLayer)
+                    singleLayer = layer;
+                layers.append(theDocument->getLayer(i)->name());
+                layerId.append(i);
+            }
+        }
+
+        // Select single layer if there is only one
+        if (layers.size() == 1)
+        {
+            theLayer = singleLayer;
+        }
+        // Select single track layer if there is only one
+        else if (trackLayersCount == 1)
+        {
+            theLayer = singleTrackLayer;
+        }
+        // Now ask the user what layer to add the photos to
+        else
+        {
+            bool ok;
+            QString name = QInputDialog::getItem(NULL, tr("Load geotagged Images"),
+             tr("Select the layer to which the images belong:"), layers, 0, false, &ok);
+            if (ok && !name.isEmpty())
+                theLayer = theDocument->getLayer(layerId.at(layers.indexOf(name)));
+            else
+                return;
+        }
+        if (theLayer != photoLayer && !photoLayer->size()) {
+            theDocument->remove(photoLayer);
+            SAFE_DELETE(photoLayer);
+        }
+    }
+
+    if (theLayer->isReadonly()) { // nodes from readonly layers can not be selected and therefore associated images can not be displayed
+        if (QMessageBox::question(this, tr("Layer is readonly"),
+         tr("The used layer is not writeable. Should it be made writeable?\nIf not, you can't load images that belongs to it."),
+         QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Yes) == QMessageBox::Yes)
+            theLayer->getWidget()->setLayerReadonly(false); // this makes/updates both the widget and the layer with readonly = false
+        else
+            return;
+    }
+
+    Node *Pt = 0;
+    int i = 0;
+    for (; i<theLayer->size(); ++i) // use existing TrackPoint if there is one in small distance
+        if ((Pt = CAST_NODE(theLayer->get(i))) &&
+         Pt->position().distanceFrom(pos) <= .002)
+            break;
+        else
+            Pt = 0;
+    if (!Pt)
+        Pt = new Node(pos);
+
+    QDateTime time = QFileInfo(file).created();
+
+    //Pt->setTag("_waypoint_", "true");
+    Pt->setTag("Picture", "GeoTagged");
+    Pt->setPhoto(QPixmap(file));
+    addUsedTrackpoint(NodeData(Pt, file, time, i == theLayer->size()));
+    if (i == theLayer->size()) {
+        theLayer->add(Pt);
+        theLayer->indexAdd(Pt->boundingBox(), Pt);
+    }
+
+}
+
 void GeoImageDock::loadImages(QStringList fileNames)
 {
     QString file;

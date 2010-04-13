@@ -813,6 +813,7 @@ void MapView::dropEvent(QDropEvent *event)
     else {
         QMenu menu(this);
         QString imageFn = locFiles[0];
+        Coord mapC = theProjection.inverse(p->theTransform.inverted().map(event->pos()));
         Coord pos = GeoImageDock::getGeoDataFromImage(imageFn);
 
         if (pos.isNull()) {
@@ -829,11 +830,10 @@ void MapView::dropEvent(QDropEvent *event)
                 if (dropTarget)
                     Main->geoImage()->addGeoDataToImage(dropTarget->position(), imageFn);
                 else
-                    Main->geoImage()->addGeoDataToImage(theProjection.inverse(p->theTransform.inverted().map(event->pos())),
-                                                        imageFn);
+                    Main->geoImage()->addGeoDataToImage(mapC,imageFn);
                 Main->geoImage()->loadImages(locFiles);
             } else if (res == load)
-                Main->geoImage()->loadImages(locFiles);
+                Main->geoImage()->loadImage(imageFn, mapC);
         } else
             Main->geoImage()->loadImages(locFiles);
     }

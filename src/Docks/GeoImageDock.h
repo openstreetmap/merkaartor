@@ -49,6 +49,7 @@ public:
     ~GeoImageDock(void);
 
     void clear();
+    void loadImage(QString fileName, Coord pos);
     void loadImages(QStringList fileNames);
     void setImage(Node *Pt);
     void setImage(int ImageId);
