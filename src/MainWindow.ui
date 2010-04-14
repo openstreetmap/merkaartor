@@ -145,6 +145,7 @@
      </property>
      <addaction name="exportOSMAction"/>
      <addaction name="exportOSMBinAction"/>
+     <addaction name="exportOSCAction"/>
      <addaction name="exportGPXAction"/>
      <addaction name="exportKMLAction"/>
      <addaction name="renderNativeAction"/>
@@ -247,6 +248,7 @@
     <property name="title">
      <string>Fea&amp;ture</string>
     </property>
+    <addaction name="featureDeleteAction"/>
     <addaction name="featureCommitAction"/>
    </widget>
    <widget class="QMenu" name="menuLayers">
@@ -1589,6 +1591,16 @@
    </property>
    <property name="text">
     <string>Show &amp;Photos on map</string>
+   </property>
+  </action>
+  <action name="exportOSCAction">
+   <property name="text">
+    <string>OsmChange (OSC)</string>
+   </property>
+  </action>
+  <action name="featureDeleteAction">
+   <property name="text">
+    <string>Force Delete</string>
    </property>
   </action>
  </widget>

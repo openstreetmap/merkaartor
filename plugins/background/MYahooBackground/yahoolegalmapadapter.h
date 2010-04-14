@@ -94,7 +94,7 @@ public:
     virtual QPixmap getPixmap(const QRectF& /* wgs84Bbox */, const QRectF& /* projBbox */, const QRect& /* size */) const { return QPixmap(); }
 
     virtual QString projection() const;
-    virtual QRectF	getBoundingbox() const;
+    virtual QRectF	getBoundingbox() const {return QRectF();}
 
     virtual bool isTiled() const { return false; }
     virtual int getTilesWE(int) const { return -1; }

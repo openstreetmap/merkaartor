@@ -11,6 +11,7 @@
 #include "DocumentCommands.h"
 #include "FeatureCommands.h"
 #include "ImportExportOsmBin.h"
+#include "ImportExportOSC.h"
 #include "ExportGPX.h"
 #include "ImportExportKML.h"
 #include "CreateAreaInteraction.h"
@@ -395,6 +396,13 @@ void MainWindow::createProgressDialog()
     theProgressDialog->setMaximum(11);
 }
 
+void MainWindow::deleteProgressDialog()
+{
+    SAFE_DELETE(theProgressDialog)
+    theProgressBar = NULL;
+    theProgressLabel = NULL;
+}
+
 void MainWindow::setAreaOpacity(QAction *act)
 {
     qreal a = act->data().toDouble();
@@ -748,11 +756,12 @@ static void changeCurrentDirToFile(const QString& s)
 
 #ifndef GEOIMAGE
 #define FILTER_OPEN_SUPPORTED \
-    tr("Supported formats")+" (*.mdc *.gpx *.osm *.osb *.ngt *.nmea *.nma *.kml *.shp *.csv)\n" \
+    tr("Supported formats")+" (*.mdc *.gpx *.osm *.osb *.osc *.ngt *.nmea *.nma *.kml *.shp *.csv)\n" \
     +tr("Merkaartor document (*.mdc)\n") \
     +tr("GPS Exchange format (*.gpx)\n") \
     +tr("OpenStreetMap format (*.osm)\n") \
     +tr("OpenStreetMap binary format (*.osb)\n") \
+    +tr("OpenStreetMap change format (*.osc)\n") \
     +tr("Noni GPSPlot format (*.ngt)\n") \
     +tr("NMEA GPS log format (*.nmea *.nma)\n") \
     +tr("KML file (*.kml)\n") \
@@ -761,11 +770,12 @@ static void changeCurrentDirToFile(const QString& s)
     +tr("All Files (*)")
 #else
 #define FILTER_OPEN_SUPPORTED \
-    tr("Supported formats")+" (*.mdc *.gpx *.osm *.osb *.ngt *.nmea *.nma *.kml *.shp *.csv *.jpg)\n" \
+    tr("Supported formats")+" (*.mdc *.gpx *.osm *.osb *.osc *.ngt *.nmea *.nma *.kml *.shp *.csv *.jpg)\n" \
     +tr("Merkaartor document (*.mdc)\n") \
     +tr("GPS Exchange format (*.gpx)\n") \
     +tr("OpenStreetMap format (*.osm)\n") \
     +tr("OpenStreetMap binary format (*.osb)\n") \
+    +tr("OpenStreetMap change format (*.osc)\n") \
     +tr("Noni GPSPlot format (*.ngt)\n") \
     +tr("NMEA GPS log format (*.nmea *.nma)\n") \
     +tr("KML file (*.kml)\n") \
@@ -775,10 +785,11 @@ static void changeCurrentDirToFile(const QString& s)
     +tr("All Files (*)")
 #endif
 #define FILTER_IMPORT_SUPPORTED \
-    tr("Supported formats")+" (*.gpx *.osm *.osb *.ngt *.nmea *.nma *.kml *.shp *.csv)\n" \
+    tr("Supported formats")+" (*.gpx *.osm *.osb *.osc *.ngt *.nmea *.nma *.kml *.shp *.csv)\n" \
     +tr("GPS Exchange format (*.gpx)\n") \
     +tr("OpenStreetMap format (*.osm)\n") \
     +tr("OpenStreetMap binary format (*.osb)\n") \
+    +tr("OpenStreetMap change format (*.osc)\n") \
     +tr("Noni GPSPlot format (*.ngt)\n") \
     +tr("NMEA GPS log format (*.nmea *.nma)\n") \
     +tr("KML file (*.kml)\n") \
@@ -971,7 +982,7 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
 #ifndef Q_OS_SYMBIAN
     QApplication::restoreOverrideCursor();
 #endif
-    SAFE_DELETE(theProgressDialog);
+    deleteProgressDialog();
 
     return foundImport;
 }
@@ -1114,9 +1125,7 @@ void MainWindow::on_fileDownloadAction_triggered()
     } else
         QMessageBox::warning(this, tr("Error downloading"), tr("The map could not be downloaded"));
 
-    SAFE_DELETE(theProgressDialog);
-    theProgressBar = NULL;
-    theProgressLabel = NULL;
+    deleteProgressDialog();
 
     updateBookmarksMenu();
 }
@@ -1129,9 +1138,7 @@ void MainWindow::on_fileDownloadMoreAction_triggered()
         QMessageBox::warning(this, tr("Error downloading"), tr("The map could not be downloaded"));
     }
 
-    SAFE_DELETE(theProgressDialog);
-    theProgressBar = NULL;
-    theProgressLabel = NULL;
+    deleteProgressDialog();
 }
 
 void MainWindow::downloadFeatures(const QList<Feature*>& aDownloadList)
@@ -1142,9 +1149,7 @@ void MainWindow::downloadFeatures(const QList<Feature*>& aDownloadList)
         QMessageBox::warning(this, tr("Error downloading"), tr("The map could not be downloaded"));
     }
 
-    SAFE_DELETE(theProgressDialog);
-    theProgressBar = NULL;
-    theProgressLabel = NULL;
+    deleteProgressDialog();
 }
 
 void MainWindow::on_fileWorkOfflineAction_triggered()
@@ -1474,6 +1479,20 @@ void MainWindow::on_roadBreakAction_triggered()
     }
 }
 
+void MainWindow::on_featureDeleteAction_triggered()
+{
+    Feature* F = theProperties->selection(0);
+    if (!F)
+        return;
+
+    while (F->sizeParents()) {
+        F->getParent(0)->remove(F);
+    }
+    F->layer()->deleteFeature(F);
+    theProperties->setSelection(0);
+    invalidateView();
+}
+
 void MainWindow::on_featureCommitAction_triggered()
 {
     CommandList* theList = new CommandList(MainWindow::tr("Force Feature upload"), NULL);
@@ -1760,6 +1779,7 @@ void MainWindow::on_toolsShortcutsAction_triggered()
     theActions.append(ui->createRelationAction);
     theActions.append(ui->createRectangleAction);
     theActions.append(ui->createPolygonAction);
+    theActions.append(ui->featureDeleteAction);
     theActions.append(ui->featureCommitAction);
     theActions.append(ui->roadSplitAction);
     theActions.append(ui->roadBreakAction);
@@ -2019,6 +2039,28 @@ void MainWindow::on_exportOSMBinAction_triggered()
 #endif
     }
 }
+
+void MainWindow::on_exportOSCAction_triggered()
+{
+    QString fileName = QFileDialog::getSaveFileName(this,
+        tr("Export osmChange"), MerkaartorPreferences::instance()->getWorkingDir() + "/untitled.osc", tr("osmChange Files (*.osc)"));
+
+    if (fileName != "") {
+#ifndef Q_OS_SYMBIAN
+        QApplication::setOverrideCursor(Qt::BusyCursor);
+#endif
+
+        ImportExportOSC osc(document());
+        if (osc.saveFile(fileName)) {
+            osc.export_();
+        }
+
+#ifndef Q_OS_SYMBIAN
+        QApplication::restoreOverrideCursor();
+#endif
+    }
+}
+
 
 void MainWindow::on_exportGPXAction_triggered()
 {

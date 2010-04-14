@@ -64,7 +64,7 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
             Pt->setId("conflict_"+id);
             Pt->setLastUpdated(Feature::OSMServerConflict);
             parseStandardAttributes(atts,Pt);
-            if (Pt->time() > userPt->time()) {
+            if (Pt->time() > userPt->time() || Pt->versionNumber() != userPt->versionNumber()) {
                 if (conflictLayer)
                     conflictLayer->add(Pt);
                 NewFeature = true;
@@ -127,7 +127,7 @@ void OSMHandler::parseWay(const QXmlAttributes& atts)
             R->setId("conflict_"+id);
             R->setLastUpdated(Feature::OSMServerConflict);
             parseStandardAttributes(atts,R);
-            if (R->time() > userRd->time()) {
+            if (R->time() > userRd->time() || R->versionNumber() != userRd->versionNumber()) {
                 if (conflictLayer)
                     conflictLayer->add(R);
                 NewFeature = true;
@@ -195,15 +195,20 @@ void OSMHandler::parseRelation(const QXmlAttributes& atts)
             R->setLastUpdated(Feature::UserResolved);
             NewFeature = false;
             // conflict
-/*				TrackPoint* Conflict = dynamic_cast<TrackPoint*>(theDocument->get("conflict_node_"+Root.attribute("from")));
-            if (Conflict) From = Conflict;
-            Conflict = dynamic_cast<TrackPoint*>(theDocument->get("conflict_node_"+Root.attribute("to")));
-            if (Conflict) To = Conflict;
-            Way* W = new Way(From,To);
-            W->setId("conflict_"+id);
-            loadSegmentTags(Root,W);
-            theList->add(new AddFeatureCommand(conflictLayer,W, false));
-            W->setLastUpdated(MapFeature::OSMServerConflict); */
+            Relation* userR = R;
+            R = new Relation();
+            R->setId("conflict_"+id);
+            R->setLastUpdated(Feature::OSMServerConflict);
+            parseStandardAttributes(atts,R);
+            if (R->time() > userR->time() || R->versionNumber() != userR->versionNumber()) {
+                if (conflictLayer)
+                    conflictLayer->add(R);
+                NewFeature = true;
+            } else {
+                delete R;
+                R = userR;
+                NewFeature = false;
+            }
         }
         else if (R->lastUpdated() != Feature::UserResolved)
         {

@@ -379,6 +379,9 @@ void ImageMapLayer::zoom(double zoom, const QPoint& pos, const QRect& rect)
     if (!p->theMapAdapter)
         return;
 
+    if (p->theMapAdapter->getImageManager())
+        p->theMapAdapter->getImageManager()->abortLoading();
+
     QPixmap tpm = p->pm.scaled(rect.size() * zoom, Qt::KeepAspectRatio);
     p->pm.fill(Qt::transparent);
     QPainter P(&p->pm);

@@ -82,6 +82,7 @@ class Feature : public QObject
             Relations			= 0x00000000,
             Ways				= 0x00000001,
             Nodes				= 0x00000002,
+            Segments			= 0x00000004,
             All					= 0xffffffff
         } FeatureType;
     public:
@@ -292,7 +293,7 @@ class Feature : public QObject
         void notifyParents(int Id);
 
         virtual QString toXML(int lvl=0, QProgressDialog * progress=NULL) = 0;
-        virtual bool toXML(QDomElement xParent, QProgressDialog & progress) = 0;
+        virtual bool toXML(QDomElement xParent, QProgressDialog & progress, bool strict=false) = 0;
 
         virtual QString toMainHtml(QString type, QString systemtype);
         virtual QString toHtml() = 0;
@@ -300,6 +301,7 @@ class Feature : public QObject
         virtual void toBinary(QDataStream& ds, QHash <QString, quint64>& theIndex) = 0;
 
         virtual QString getClass() const = 0;
+        virtual Feature::FeatureType getType() const = 0;
         virtual void updateMeta() = 0;
         virtual void updateIndex();
         virtual void invalidateMeta();

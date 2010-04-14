@@ -948,7 +948,7 @@ QString Way::toXML(int lvl, QProgressDialog * progress)
     return S;
 }
 
-bool Way::toXML(QDomElement xParent, QProgressDialog & progress)
+bool Way::toXML(QDomElement xParent, QProgressDialog & progress, bool strict)
 {
     bool OK = true;
 
@@ -958,10 +958,12 @@ bool Way::toXML(QDomElement xParent, QProgressDialog & progress)
     e.setAttribute("id", xmlId());
     e.setAttribute("timestamp", time().toString(Qt::ISODate)+"Z");
     e.setAttribute("user", user());
-    e.setAttribute("actor", (int)lastUpdated());
     e.setAttribute("version", versionNumber());
-    if (isDeleted())
-        e.setAttribute("deleted","true");
+    if (!strict) {
+        e.setAttribute("actor", (int)lastUpdated());
+        if (isDeleted())
+            e.setAttribute("deleted","true");
+    }
 
     if (size()) {
         QDomElement n = xParent.ownerDocument().createElement("nd");

@@ -1,4 +1,7 @@
 v0.16
+    * ADD : Feature-Force Delete action (deletes the feature without entry in the undo nor upload list)
+    * CHG : Switch to transactional diff uploads to OSM to harden the process
+	* ADD : Export to OSC (osmChange format)
     * ADD : CSV POI import
     * FIX : crash when closing layer with virtual nodes (fixes #2858)
     * ADD : OSGB36 to the default list of projections

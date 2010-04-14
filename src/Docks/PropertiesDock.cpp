@@ -134,6 +134,7 @@ void PropertiesDock::checkMenuStatus()
 {
     bool IsPoint = false;
     bool IsRoad = false;
+    bool IsRelation = false;
     bool IsParentRoad = false;
     bool IsParentRoadInner = false;
     bool IsParentRelation = false;
@@ -146,8 +147,9 @@ void PropertiesDock::checkMenuStatus()
     int NumAreas = 0;
     if (Selection.size() == 1)
     {
-        IsPoint = dynamic_cast<Node*>(Selection[0]) != 0;
-        IsRoad = dynamic_cast<Way*>(Selection[0]) != 0;
+        IsPoint = CAST_NODE(Selection[0]) != 0;
+        IsRoad = CAST_WAY(Selection[0]) != 0;
+        IsRelation = CAST_RELATION(Selection[0]) != 0;
         IsParentRoad = IsPoint && isChildOfSingleRoad(Selection[0]);
         IsParentRoadInner = IsPoint && isChildOfSingleRoadInner(Selection[0]);
         IsParentRelation = isChildOfSingleRelation(Selection[0]);
@@ -185,6 +187,7 @@ void PropertiesDock::checkMenuStatus()
     Main->ui->roadCreateJunctionAction->setEnabled(NumRoads > 1 && canCreateJunction(this));
     Main->ui->roadSplitAction->setEnabled((IsParentRoadInner && !IsParentArea) || (NumRoads && NumPoints) || (NumAreas && NumPoints > 1));
     Main->ui->roadBreakAction->setEnabled(IsParentRoadInner || ((NumRoads == 1 || NumAreas == 1) && NumPoints) || (NumRoads > 1 && canBreakRoads(this)));
+    Main->ui->featureDeleteAction->setEnabled(IsPoint || IsRoad || IsRelation);
     Main->ui->featureCommitAction->setEnabled(NumCommitableFeature);
     Main->ui->nodeMergeAction->setEnabled(NumPoints > 1);
     Main->ui->nodeAlignAction->setEnabled(NumPoints > 2);

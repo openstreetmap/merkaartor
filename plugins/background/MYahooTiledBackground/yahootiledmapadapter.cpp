@@ -105,6 +105,7 @@ QString YahooTiledMapAdapter::getQuery(int i, int j, int /* z */) const
 
     return getQ(ul, br);
 }
+
 QString YahooTiledMapAdapter::getQ(QPointF ul, QPointF br) const
 {
     return QString().append(serverPath)

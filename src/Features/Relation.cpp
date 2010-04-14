@@ -504,7 +504,7 @@ QString Relation::toXML(int lvl, QProgressDialog * progress)
     return S;
 }
 
-bool Relation::toXML(QDomElement xParent, QProgressDialog & progress)
+bool Relation::toXML(QDomElement xParent, QProgressDialog & progress, bool strict)
 {
     bool OK = true;
 
@@ -515,8 +515,11 @@ bool Relation::toXML(QDomElement xParent, QProgressDialog & progress)
     e.setAttribute("timestamp", time().toString(Qt::ISODate)+"Z");
     e.setAttribute("user", user());
     e.setAttribute("version", versionNumber());
-    if (isDeleted())
-        e.setAttribute("deleted","true");
+    if (!strict) {
+        e.setAttribute("actor", (int)lastUpdated());
+        if (isDeleted())
+            e.setAttribute("deleted","true");
+    }
 
     for (int i=0; i<size(); ++i) {
         QString Type("node");

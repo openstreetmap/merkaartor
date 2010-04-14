@@ -369,7 +369,7 @@ QString Node::toXML(int lvl, QProgressDialog * progress)
     return S.arg(stripToOSMId(id())).arg(intToAng(position().lat()),0,'f',8).arg(intToAng(position().lon()),0,'f',8);
 }
 
-bool Node::toXML(QDomElement xParent, QProgressDialog & progress)
+bool Node::toXML(QDomElement xParent, QProgressDialog & progress, bool strict)
 {
     bool OK = true;
     progress.setValue(progress.value()+1);
@@ -384,11 +384,13 @@ bool Node::toXML(QDomElement xParent, QProgressDialog & progress)
     e.setAttribute("lon",QString::number(intToAng(Position.lon()),'f',8));
     e.setAttribute("lat", QString::number(intToAng(Position.lat()),'f',8));
     e.setAttribute("timestamp", time().toString(Qt::ISODate)+"Z");
+    e.setAttribute("version", versionNumber());
     e.setAttribute("user", user());
-    e.setAttribute("actor", (int)lastUpdated());
-    e.setAttribute("versionr", versionNumber());
-    if (isDeleted())
-        e.setAttribute("deleted","true");
+    if (!strict) {
+        e.setAttribute("actor", (int)lastUpdated());
+        if (isDeleted())
+            e.setAttribute("deleted","true");
+    }
 
     tagsToXML(e);
 

@@ -350,7 +350,7 @@ bool TrackSegment::toGPX(QDomElement xParent, QProgressDialog & progress, bool f
     return OK;
 }
 
-bool TrackSegment::toXML(QDomElement xParent, QProgressDialog & progress)
+bool TrackSegment::toXML(QDomElement xParent, QProgressDialog & progress, bool)
 {
     return toGPX(xParent, progress, false);
 }

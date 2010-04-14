@@ -23,53 +23,54 @@ class Layer;
 
 class Downloader : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
-	public:
-		Downloader(const QString& aWeb, const QString& aUser, const QString& aPwd);
+    public:
+        Downloader(const QString& aWeb, const QString& aUser, const QString& aPwd);
 
-		bool request(const QString& Method, const QString& URL, const QString& Out);
-		bool go(const QString& url);
-		QByteArray& content();
-		int resultCode();
-		const QString & resultText();
-		const QString & errorText();
-		const QString & locationText();
-		QString getURLToMap();
-		QString getURLToTrackPoints();
-		QString getURLToFetchFull(Feature* aFeature);
-		QString getURLToFetch(const QString& What);
-		QString getURLToFetch(const QString& What, const QString& Id);
-		QString getURLToCreate(const QString& What);
-		QString getURLToUpdate(const QString& What, const QString& Id);
-		QString getURLToDelete(const QString& What, const QString& Id);
-		QString getURLToOpenChangeSet();
-		QString getURLToCloseChangeSet(const QString& Id);
-		void setAnimator(QProgressDialog *anAnimator, QLabel* AnimatorLabel, QProgressBar* AnimatorBar, bool anAnimate);
+        bool request(const QString& Method, const QString& URL, const QString& Out);
+        bool go(const QString& url);
+        QByteArray& content();
+        int resultCode();
+        const QString & resultText();
+        const QString & errorText();
+        const QString & locationText();
+        QString getURLToMap();
+        QString getURLToTrackPoints();
+        QString getURLToFetchFull(Feature* aFeature);
+        QString getURLToFetch(const QString& What);
+        QString getURLToFetch(const QString& What, const QString& Id);
+        QString getURLToCreate(const QString& What);
+        QString getURLToUpdate(const QString& What, const QString& Id);
+        QString getURLToDelete(const QString& What, const QString& Id);
+        QString getURLToOpenChangeSet();
+        QString getURLToCloseChangeSet(const QString& Id);
+        QString getURLToUploadDiff(QString changesetId);
+        void setAnimator(QProgressDialog *anAnimator, QLabel* AnimatorLabel, QProgressBar* AnimatorBar, bool anAnimate);
 
-	public slots:
-		void progress( int done, int total );
-		void on_requestFinished(int Id, bool Error);
-		void on_responseHeaderReceived(const QHttpResponseHeader & hdr);
-		void animate();
-		void on_Cancel_clicked();
+    public slots:
+        void progress( int done, int total );
+        void on_requestFinished(int Id, bool Error);
+        void on_responseHeaderReceived(const QHttpResponseHeader & hdr);
+        void animate();
+        void on_Cancel_clicked();
 
-	private:
-		int Port;
-		QHttp Request;
-		QString Web, User, Password;
-		QByteArray Content;
-		int Result;
-		QString LocationText;
-		QString ResultText;
-		QString ErrorText;
-		int Id;
-		int IdAuth;
-		bool Error;
-		QEventLoop Loop;
-		QLabel* AnimatorLabel;
-		QProgressBar* AnimatorBar;
-		QTimer *AnimationTimer;
+    private:
+        int Port;
+        QHttp Request;
+        QString Web, User, Password;
+        QByteArray Content;
+        int Result;
+        QString LocationText;
+        QString ResultText;
+        QString ErrorText;
+        int Id;
+        int IdAuth;
+        bool Error;
+        QEventLoop Loop;
+        QLabel* AnimatorLabel;
+        QProgressBar* AnimatorBar;
+        QTimer *AnimationTimer;
 };
 
 bool downloadOSM(QWidget* aParent, const CoordBox& aBox , Document* theDocument);

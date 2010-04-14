@@ -217,6 +217,9 @@ Feature::ActorType Feature::lastUpdated() const
 
 void Feature::setId(const QString& id)
 {
+    if (id == p->Id)
+        return;
+
     if (parent())
     {
         dynamic_cast<Layer*>(parent())->notifyIdUpdate(p->Id,0);
@@ -815,7 +818,9 @@ QString Feature::toMainHtml(QString type, QString systemtype)
     "<small><i>" + type + "</i></small><br/>"
     + desc +
     "<br/>"
+    "<i>"
     "<small>";
+    S += QApplication::translate("MapFeature", "<i>V: </i><b>%1</b> ").arg(QString::number(versionNumber()));
     if (!user().isEmpty())
         S += QApplication::translate("MapFeature", "<i>last: </i><b>%1</b> by <b>%2</b>").arg(time().toString(Qt::SystemLocaleDate)).arg(user());
         else

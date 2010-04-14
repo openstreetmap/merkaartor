@@ -109,6 +109,7 @@ class MainWindow : public QMainWindow, public IProgressWindow
         virtual void on_roadCreateJunctionAction_triggered();
         virtual void on_roadAddStreetNumbersAction_triggered();
 
+        virtual void on_featureDeleteAction_triggered();
         virtual void on_featureCommitAction_triggered();
         virtual void on_nodeAlignAction_triggered();
         virtual void on_nodeMergeAction_triggered();
@@ -120,6 +121,7 @@ class MainWindow : public QMainWindow, public IProgressWindow
         virtual void on_mapStyleLoadAction_triggered();
         virtual void on_exportOSMAction_triggered();
         virtual void on_exportOSMBinAction_triggered();
+        virtual void on_exportOSCAction_triggered();
         virtual void on_exportGPXAction_triggered();
         virtual void on_exportKMLAction_triggered();
         virtual void on_renderNativeAction_triggered();
@@ -211,6 +213,9 @@ class MainWindow : public QMainWindow, public IProgressWindow
         void saveDocument();
         void downloadFeatures(const QList<Feature*>& aDownloadList);
 
+        void createProgressDialog();
+        void deleteProgressDialog();
+
         void updateLanguage();
 
 
@@ -241,7 +246,6 @@ class MainWindow : public QMainWindow, public IProgressWindow
         void mapView_interactionChanged(Interaction* anInteraction);
 
     private:
-        void createProgressDialog();
         void updateMenu();
         void updateRecentOpenMenu();
         void updateRecentImportMenu();

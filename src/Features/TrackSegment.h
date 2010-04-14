@@ -22,6 +22,7 @@ class TrackSegment : public Feature
 
     public:
         virtual QString getClass() const {return "TrackSegment";}
+        virtual Feature::FeatureType getType() const {return Feature::Segments;}
         virtual void updateMeta();
 
         virtual CoordBox boundingBox() const;
@@ -54,7 +55,7 @@ class TrackSegment : public Feature
         virtual QString toXML(int, QProgressDialog *) {return QString("");}
         virtual bool toGPX(QDomElement xParent, QProgressDialog & progress, bool forExport=false);
         static TrackSegment* fromGPX(Document* d, Layer* L, const QDomElement e, QProgressDialog & progress);
-        virtual bool toXML(QDomElement xParent, QProgressDialog & progress);
+        virtual bool toXML(QDomElement xParent, QProgressDialog & progress, bool strict=false);
         static TrackSegment* fromXML(Document* d, Layer* L, const QDomElement e, QProgressDialog & progress);
 
         virtual QString toHtml() {return "";}

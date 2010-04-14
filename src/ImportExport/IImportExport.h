@@ -40,7 +40,7 @@ public:
     // import the  input
     virtual bool import(Layer* /* aLayer */) { return false; }
     // export
-    virtual bool export_(const QList<Feature *>& featList);
+    virtual bool export_(const QList<Feature *>& featList = QList<Feature *>());
 
     // Return the filename
     const QString& getFilename() const;

@@ -320,6 +320,7 @@ void BrowserImageManager::abortLoading()
         loadingRequests.clear();
         loadingRequests.enqueue(R);
     }
+    loadingQueueEmpty();
 }
 
 #ifdef BROWSERIMAGEMANAGER_IS_THREADED

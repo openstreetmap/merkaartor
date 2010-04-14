@@ -12,6 +12,7 @@ HEADERS += \
     ImportNMEA.h \
     ExportGPX.h \
     ImportExportKML.h \
+    ImportExportOSC.h \
     ImportExportCSV.h \
     ImportExportOsmBin.h \
     ImportExport/ImportCSVDialog.h
@@ -26,6 +27,7 @@ SOURCES += \
     ImportNMEA.cpp \
     ExportGPX.cpp \
     ImportExportKML.cpp \
+    ImportExportOSC.cpp \
     ImportExportCSV.cpp \
     ImportExportOsmBin.cpp \
     ImportExport/ImportCSVDialog.cpp
