@@ -675,7 +675,6 @@ DrawingLayer * DrawingLayer::doFromXML(DrawingLayer* l, Document* d, const QDomE
         }
     }
     l->blockIndexing(false);
-    l->reIndex(progress);
 
     progress.setLabelText(savlbl);
     progress.setMaximum(savmax);
@@ -904,7 +903,6 @@ TrackLayer * TrackLayer::fromXML(Document* d, const QDomElement& e, QProgressDia
     }
 
     l->blockIndexing(false);
-    l->reIndex();
 
     return l;
 }

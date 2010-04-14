@@ -67,6 +67,7 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
             if (Pt->time() > userPt->time() || Pt->versionNumber() != userPt->versionNumber()) {
                 if (conflictLayer)
                     conflictLayer->add(Pt);
+                userPt->setVersionNumber(Pt->versionNumber());
                 NewFeature = true;
             } else {
                 delete Pt;
@@ -130,6 +131,7 @@ void OSMHandler::parseWay(const QXmlAttributes& atts)
             if (R->time() > userRd->time() || R->versionNumber() != userRd->versionNumber()) {
                 if (conflictLayer)
                     conflictLayer->add(R);
+                userRd->setVersionNumber(R->versionNumber());
                 NewFeature = true;
             } else {
                 delete R;
@@ -203,6 +205,7 @@ void OSMHandler::parseRelation(const QXmlAttributes& atts)
             if (R->time() > userR->time() || R->versionNumber() != userR->versionNumber()) {
                 if (conflictLayer)
                     conflictLayer->add(R);
+                userR->setVersionNumber(R->versionNumber());
                 NewFeature = true;
             } else {
                 delete R;

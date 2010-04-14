@@ -178,6 +178,10 @@ Document* Document::fromXML(const QDomElement e, double version, LayerDock* aDoc
 
         if (h)
             NewDoc->setHistory(h);
+
+        for (int i=0; i<NewDoc->layerSize(); ++i) {
+            NewDoc->getLayer(i)->reIndex(progress);
+        }
     }
 
     return NewDoc;
