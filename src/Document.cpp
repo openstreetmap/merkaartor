@@ -9,6 +9,7 @@
 #include "ImportExportKML.h"
 #include "ImportExportSHP.h"
 #include "ImportExportCSV.h"
+#include "ImportExportOSC.h"
 
 #include "LayerWidget.h"
 
@@ -586,6 +587,19 @@ QList<Feature*> Document::exportCoreOSM(QList<Feature*> aFeatures)
 bool Document::importNMEA(const QString& filename, TrackLayer* NewLayer)
 {
     ImportNMEA imp(this);
+    if (!imp.loadFile(filename))
+        return false;
+    imp.import(NewLayer);
+
+    if (NewLayer->size())
+        return true;
+    else
+        return false;
+}
+
+bool Document::importOSC(const QString& filename, DirtyLayer* NewLayer)
+{
+    ImportExportOSC imp(this);
     if (!imp.loadFile(filename))
         return false;
     imp.import(NewLayer);

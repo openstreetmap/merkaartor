@@ -37,6 +37,7 @@ class Downloader : public QObject
         const QString & locationText();
         QString getURLToMap();
         QString getURLToTrackPoints();
+        QString getURLToFetchFull(QString id);
         QString getURLToFetchFull(Feature* aFeature);
         QString getURLToFetch(const QString& What);
         QString getURLToFetch(const QString& What, const QString& Id);
@@ -73,10 +74,12 @@ class Downloader : public QObject
         QTimer *AnimationTimer;
 };
 
-bool downloadOSM(QWidget* aParent, const CoordBox& aBox , Document* theDocument);
-bool downloadMoreOSM(QWidget* aParent, const CoordBox& aBox , Document* theDocument);
+bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument);
+bool downloadMoreOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument);
 bool downloadOSM(QWidget* Main, const QString& aUser, const QString& aPassword, const quint32 region , Document* theDocument, Layer* theLayer);
-bool downloadFeatures(QWidget* aParent, const QList<Feature*>& aDownloadList , Document* theDocument);
+bool downloadFeatures(MainWindow* Main, const QList<Feature*>& aDownloadList , Document* theDocument);
+bool downloadFeature(MainWindow* Main, const QString& id, Document* theDocument, Layer* theLayer=NULL);
+bool downloadFeatures(MainWindow* Main, const QList<QString>& aDownloadList, Document* theDocument, Layer* theLayer=NULL);
 
 bool checkForConflicts(Document* theDocument);
 

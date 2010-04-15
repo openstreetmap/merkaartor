@@ -368,22 +368,24 @@ QString Downloader::getURLToUploadDiff(QString changesetId)
 
 QString Downloader::getURLToFetch(const QString &What)
 {
-    QString URL = QString("/api/0.4/%1?%2=");
-    return URL.arg(What).arg(What);
+    QString URL = QString("/api/%1/%2?%3=");
+    return URL.arg(M_PREFS->apiVersion()).arg(What).arg(What);
+}
+
+QString Downloader::getURLToFetchFull(QString id)
+{
+    QRegExp What("(.*)_(\\d*)");
+    int pos = What.indexIn(id);
+    if (pos == -1)
+        return QString();
+
+    QString URL = QString("/api/%1/%2/%3/full");
+    return URL.arg(M_PREFS->apiVersion()).arg(What.cap(1)).arg(What.cap(2));
 }
 
 QString Downloader::getURLToFetchFull(Feature* aFeature)
 {
-    QString What;
-    if (aFeature->getClass() == "TrackPoint")
-        What = "node";
-    if (aFeature->getClass() == "Road")
-        What = "way";
-    if (aFeature->getClass() == "Relation")
-        What = "relation";
-    QString Id = aFeature->xmlId();
-    QString URL = QString("/api/%1/%2/%3/full");
-    return URL.arg(M_PREFS->apiVersion()).arg(What).arg(Id);
+    return getURLToFetchFull(aFeature->id());
 }
 
 QString Downloader::getURLToFetch(const QString &What, const QString& Id)
@@ -431,27 +433,27 @@ bool downloadOSM(QWidget* aParent, const QUrl& theUrl, const QString& aUser, con
     Downloader Rcv(aWeb, aUser, aPassword);
 
     IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(aParent);
-    if (!aProgressWindow)
-        return false;
+    if (aProgressWindow) {
 
-    QProgressDialog* dlg = aProgressWindow->getProgressDialog();
-    if (dlg) {
-        dlg->setWindowTitle(QApplication::translate("Downloader","Downloading..."));
-        dlg->setWindowFlags(dlg->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-        dlg->setWindowFlags(dlg->windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
+        QProgressDialog* dlg = aProgressWindow->getProgressDialog();
+        if (dlg) {
+            dlg->setWindowTitle(QApplication::translate("Downloader","Downloading..."));
+            dlg->setWindowFlags(dlg->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+            dlg->setWindowFlags(dlg->windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
+        }
+
+        QProgressBar* Bar = aProgressWindow->getProgressBar();
+        Bar->setTextVisible(false);
+        Bar->setMaximum(11);
+
+        QLabel* Lbl = aProgressWindow->getProgressLabel();
+        Lbl->setText(QApplication::translate("Downloader","Downloading from OSM (connecting)"));
+
+        if (dlg)
+            dlg->show();
+
+        Rcv.setAnimator(dlg, Lbl, Bar, true);
     }
-
-    QProgressBar* Bar = aProgressWindow->getProgressBar();
-    Bar->setTextVisible(false);
-    Bar->setMaximum(11);
-
-    QLabel* Lbl = aProgressWindow->getProgressLabel();
-    Lbl->setText(QApplication::translate("Downloader","Downloading from OSM (connecting)"));
-
-    if (dlg)
-        dlg->show();
-
-    Rcv.setAnimator(dlg, Lbl, Bar, true);
     if (!Rcv.go(URL))
     {
 #ifndef Q_OS_SYMBIAN
@@ -596,17 +598,37 @@ bool checkForConflicts(Document* theDocument)
     return false;
 }
 
-bool downloadFeatures(QWidget* aParent, const QList<Feature*>& aDownloadList , Document* theDocument)
+bool downloadFeatures(MainWindow* Main, const QList<Feature*>& aDownloadList , Document* theDocument)
 {
-    MainWindow* Main = dynamic_cast<MainWindow*>(aParent);
-    Layer* theLayer;
-    if (!theDocument->getLastDownloadLayer()) {
-        theLayer = new DrawingLayer(QApplication::translate("Downloader","%1 download").arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
-        theDocument->add(theLayer);
-    } else
-        theLayer = theDocument->getLastDownloadLayer();
-    theLayer->blockIndexing(true);
+    QList<QString> list;
+    foreach (Feature* F, aDownloadList) {
+        list << F->id();
+    }
 
+    bool ok = downloadFeatures(Main, list, theDocument, NULL);
+
+    return ok;
+}
+
+bool downloadFeature(MainWindow* Main, const QString& id, Document* theDocument, Layer* theLayer)
+{
+    QList<QString> list;
+    list << id;
+    bool ok = downloadFeatures(Main, list, theDocument, theLayer);
+
+    return ok;
+}
+
+bool downloadFeatures(MainWindow* Main, const QList<QString>& idList , Document* theDocument, Layer* theLayer)
+{
+    if (!theLayer) {
+        if (!theDocument->getLastDownloadLayer()) {
+            theLayer = new DrawingLayer(QApplication::translate("Downloader","%1 download").arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
+            theDocument->add(theLayer);
+        } else
+            theLayer = theDocument->getLastDownloadLayer();
+    }
+    theLayer->blockIndexing(true);
 
     QString osmWebsite, osmUser, osmPwd;
 
@@ -614,28 +636,31 @@ bool downloadFeatures(QWidget* aParent, const QList<Feature*>& aDownloadList , D
     osmUser = MerkaartorPreferences::instance()->getOsmUser();
     osmPwd = MerkaartorPreferences::instance()->getOsmPassword();
 
-    Main->view()->setUpdatesEnabled(false);
+    if (Main)
+        Main->view()->setUpdatesEnabled(false);
 
     bool OK = true;
     Downloader Rcv(osmWebsite, osmUser, osmPwd);
 
-    for (int i=0; i<aDownloadList.size(); ++i) {
-        QString URL = Rcv.getURLToFetchFull(aDownloadList[i]);
+    for (int i=0; i<idList.size(); ++i) {
+        QString URL = Rcv.getURLToFetchFull(idList[i]);
 
         QUrl theUrl;
         theUrl.setHost(osmWebsite);
         theUrl.setPath(URL);
         theUrl.setScheme("http");
 
-        downloadOSM(aParent, theUrl, osmUser, osmPwd, theDocument, theLayer);
+        downloadOSM(Main, theUrl, osmUser, osmPwd, theDocument, theLayer);
     }
 
-    Main->view()->setUpdatesEnabled(true);
+    if (Main)
+        Main->view()->setUpdatesEnabled(true);
     if (OK)
     {
         theLayer->blockIndexing(false);
         theLayer->reIndex();
-        Main->invalidateView();
+        if (Main)
+            Main->invalidateView();
     } else
     {
         if (theLayer != theDocument->getLastDownloadLayer()) {
@@ -646,9 +671,8 @@ bool downloadFeatures(QWidget* aParent, const QList<Feature*>& aDownloadList , D
     return OK;
 }
 
-bool downloadMoreOSM(QWidget* aParent, const CoordBox& aBox , Document* theDocument)
+bool downloadMoreOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
 {
-    MainWindow* Main = dynamic_cast<MainWindow*>(aParent);
     Layer* theLayer;
     if (!theDocument->getLastDownloadLayer()) {
         theLayer = new DrawingLayer(QApplication::translate("Downloader","%1 download").arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
@@ -666,7 +690,7 @@ bool downloadMoreOSM(QWidget* aParent, const CoordBox& aBox , Document* theDocum
     Main->view()->setUpdatesEnabled(false);
 
     bool OK = true;
-    OK = downloadOSM(aParent,osmWebsite,osmUser,osmPwd,aBox,theDocument,theLayer);
+    OK = downloadOSM(Main,osmWebsite,osmUser,osmPwd,aBox,theDocument,theLayer);
     Main->view()->setUpdatesEnabled(true);
     if (OK)
     {
@@ -687,13 +711,12 @@ bool downloadMoreOSM(QWidget* aParent, const CoordBox& aBox , Document* theDocum
     return OK;
 }
 
-bool downloadOSM(QWidget* aParent, const CoordBox& aBox , Document* theDocument)
+bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
 {
     QString osmWebsite, osmUser, osmPwd;
     static bool DownloadRaw = false;
 
-    MainWindow* Main = dynamic_cast<MainWindow*>(aParent);
-    QDialog * dlg = new QDialog(aParent);
+    QDialog * dlg = new QDialog(Main);
 
     osmWebsite = MerkaartorPreferences::instance()->getOsmWebsite();
     osmUser = MerkaartorPreferences::instance()->getOsmUser();
@@ -761,14 +784,14 @@ bool downloadOSM(QWidget* aParent, const CoordBox& aBox , Document* theDocument)
             theLayer->blockIndexing(true);
             M_PREFS->setResolveRelations(ui.ResolveRelations->isChecked());
             if (directAPI)
-                OK = downloadOSM(aParent,QUrl(QUrl::fromEncoded(ui.Link->text().toAscii())),osmUser,osmPwd,theDocument,theLayer);
+                OK = downloadOSM(Main,QUrl(QUrl::fromEncoded(ui.Link->text().toAscii())),osmUser,osmPwd,theDocument,theLayer);
             else
             if (Regional)
-                OK = downloadOSM(aParent,osmUser,osmPwd,ui.Link->text().toUInt(),theDocument,theLayer);
+                OK = downloadOSM(Main,osmUser,osmPwd,ui.Link->text().toUInt(),theDocument,theLayer);
             else
-                OK = downloadOSM(aParent,osmWebsite,osmUser,osmPwd,Clip,theDocument,theLayer);
+                OK = downloadOSM(Main,osmWebsite,osmUser,osmPwd,Clip,theDocument,theLayer);
             if (OK && ui.IncludeTracks->isChecked())
-                OK = downloadTracksFromOSM(aParent,osmWebsite,osmUser,osmPwd, Clip,theDocument);
+                OK = downloadTracksFromOSM(Main,osmWebsite,osmUser,osmPwd, Clip,theDocument);
             Main->view()->setUpdatesEnabled(true);
             if (OK)
             {

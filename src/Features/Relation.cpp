@@ -559,6 +559,8 @@ Relation * Relation::fromXML(Document * d, Layer * L, const QDomElement e)
         R->setLastUpdated(Feature::OSMServer);
     } else {
         R->layer()->remove(R);
+        while (R->p->Members.size())
+            R->remove(0);
     }
     R->setTime(time);
     R->setUser(user);

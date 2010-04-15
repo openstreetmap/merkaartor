@@ -383,22 +383,24 @@ bool importOSM(QWidget* aParent, QIODevice& File, Document* theDocument, Layer* 
     /* int ErrorLine; */
     /* int ErrorColumn; */
 
+    QProgressDialog* dlg = NULL;
+    QProgressBar* Bar = NULL;
+    QLabel* Lbl = NULL;
     IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(aParent);
-    if (!aProgressWindow)
-        return false;
+    if (aProgressWindow) {
+        dlg = aProgressWindow->getProgressDialog();
+        if (dlg) {
+            dlg->setWindowTitle(QApplication::translate("Downloader", "Parsing..."));
 
-    QProgressDialog* dlg = aProgressWindow->getProgressDialog();
-    if (dlg)
-        dlg->setWindowTitle(QApplication::translate("Downloader", "Parsing..."));
+            Bar = aProgressWindow->getProgressBar();
+            Bar->setTextVisible(false);
 
-    QProgressBar* Bar = aProgressWindow->getProgressBar();
-    Bar->setTextVisible(false);
+            Lbl = aProgressWindow->getProgressLabel();
+            Lbl->setText(QApplication::translate("Downloader","Parsing XML"));
 
-    QLabel* Lbl = aProgressWindow->getProgressLabel();
-    Lbl->setText(QApplication::translate("Downloader","Parsing XML"));
-
-    if (dlg)
-        dlg->show();
+            dlg->show();
+        }
+    }
 
     if (theDownloader)
         theDownloader->setAnimator(dlg,Lbl,Bar,false);
@@ -413,8 +415,10 @@ bool importOSM(QWidget* aParent, QIODevice& File, Document* theDocument, Layer* 
     QByteArray buf(File.read(10240));
     source.setData(buf);
     xmlReader.parse(&source,true);
-    Bar->setMaximum(File.size());
-    Bar->setValue(Bar->value()+buf.size());
+    if (Bar) {
+        Bar->setMaximum(File.size());
+        Bar->setValue(Bar->value()+buf.size());
+    }
 
     theLayer->blockVirtualUpdates(true);
     while (!File.atEnd())
@@ -422,7 +426,8 @@ bool importOSM(QWidget* aParent, QIODevice& File, Document* theDocument, Layer* 
         QByteArray buf(File.read(20480));
         source.setData(buf);
         xmlReader.parseContinue();
-        Bar->setValue(Bar->value()+buf.size());
+        if (Bar)
+            Bar->setValue(Bar->value()+buf.size());
         qApp->processEvents();
         if (dlg && dlg->wasCanceled())
             break;
@@ -461,9 +466,11 @@ bool importOSM(QWidget* aParent, QIODevice& File, Document* theDocument, Layer* 
         }
 
         if (M_PREFS->getUseVirtualNodes()) {
-            Lbl->setText(QApplication::translate("Downloader","Update virtuals"));
-            Bar->setMaximum(theLayer->size());
-            Bar->setValue(0);
+            if (dlg) {
+                Lbl->setText(QApplication::translate("Downloader","Update virtuals"));
+                Bar->setMaximum(theLayer->size());
+                Bar->setValue(0);
+            }
         }
 
         // Check for empty Roads/Relations and update virtual nodes
@@ -475,7 +482,8 @@ bool importOSM(QWidget* aParent, QIODevice& File, Document* theDocument, Layer* 
                 if (M_PREFS->getUseVirtualNodes()) {
                     if (Way* w = CAST_WAY(theLayer->get(i)))
                         w->updateVirtuals();
-                    Bar->setValue(i);
+                    if (Bar)
+                        Bar->setValue(i);
                     qApp->processEvents();
                 }
             }

@@ -889,6 +889,11 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
             mapDocument->add(newLayer);
             importOK = importOSM(this, baseFileName, mapDocument, newLayer);
         }
+        else if (fn.toLower().endsWith(".osc")) {
+            newLayer = mapDocument->getDirtyOrOriginLayer();
+            newLayer->blockIndexing(true);
+            importOK = mapDocument->importOSC(fn, (DirtyLayer *)newLayer);
+        }
         else if (fn.toLower().endsWith(".osb")) {
             newLayer = new OsbLayer( baseFileName, fn );
             newLayer->blockIndexing(true);

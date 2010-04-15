@@ -92,6 +92,7 @@ public:
     bool importKML(const QString& filename, TrackLayer* NewLayer);
     bool importSHP(const QString& filename, DrawingLayer* NewLayer);
     bool importCSV(const QString& filename, DrawingLayer* NewLayer);
+    bool importOSC(const QString& filename, DirtyLayer* NewLayer);
 
     Layer* getLastDownloadLayer();
     void setLastDownloadLayer(Layer * aLayer);

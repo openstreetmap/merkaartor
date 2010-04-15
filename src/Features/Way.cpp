@@ -807,7 +807,7 @@ bool Way::deleteChildren(Document* theDocument, CommandList* theList)
             for (int j=0; j<N->sizeParents(); ++j)
                 if (!N->getParent(j)->isDeleted())
                     sizeValidParents++;
-            if (sizeValidParents == 0) {
+            if (sizeValidParents == 1) {
                 ToDelete[N] = i;
             }
         }
@@ -1019,6 +1019,8 @@ Way * Way::fromXML(Document* d, Layer * L, const QDomElement e)
         }
         if (R->lastUpdated() == Feature::NotYetDownloaded)
             R->setLastUpdated(A);
+        while (R->p->Nodes.size())
+            R->remove(0);
     }
     R->setTime(time);
     R->setUser(user);
