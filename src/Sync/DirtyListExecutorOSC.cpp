@@ -104,6 +104,8 @@ QString DirtyListExecutorOSC::getChanges()
     Progress->setMaximum(Tasks+2);
     Progress->show();
 
+    OscDoc.appendChild(OscDoc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
+
     OscRoot = OscDoc.createElement("osmChange ");
     OscDoc.appendChild(OscRoot);
     OscRoot.setAttribute("version", "0.3");
@@ -140,6 +142,7 @@ bool DirtyListExecutorOSC::executeChanges(QWidget* aParent)
 
     if ((ok = start()))
     {
+        OscDoc.appendChild(OscDoc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
         OscRoot = OscDoc.createElement("osmChange ");
         OscDoc.appendChild(OscRoot);
         OscRoot.setAttribute("version", "0.3");
@@ -189,7 +192,7 @@ bool DirtyListExecutorOSC::stop()
     QString errFeat;
 
     QString URL = theDownloader->getURLToUploadDiff(ChangeSetId);
-    switch (sendRequest("POST", URL, OscDoc.toString().toUtf8(), DataOut)) {
+    switch (sendRequest("POST", URL, OscDoc.toString(), DataOut)) {
     case 200: {
         QDomDocument resDoc;
         if (resDoc.setContent(DataOut)) {
