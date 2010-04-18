@@ -63,6 +63,8 @@
 		    Source="$(var.BinPath)\plugins\background\MYahooTiledBackgroundPlugind0.dll" DiskId="1" />
             <File Id="MGdalBackgroundPlugind0.dll" Name="MGdalBackgroundPlugind0.dll"
 		    Source="$(var.BinPath)\plugins\background\MGdalBackgroundPlugind0.dll" DiskId="1" />
+            <File Id="MWalkingPapersBackgroundPlugind0.dll" Name="MWalkingPapersBackgroundPlugind0.dll"
+		    Source="$(var.BinPath)\plugins\background\MWalkingPapersBackgroundPlugind0.dll" DiskId="1" />
          </Component>
       </DirectoryRef>
       

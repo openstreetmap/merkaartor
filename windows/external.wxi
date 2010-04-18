@@ -17,6 +17,12 @@
             <File Id="libexiv2" Name="libexiv2-5.dll"
                Source="$(var.DllPath)\libexiv2-5.dll" DiskId="1">
             </File>
+            <File Id="libzbar0" Name="libzbar-0.dll"
+               Source="$(var.DllPath)\libzbar-0.dll" DiskId="1">
+            </File>
+            <File Id="Qgpsmm" Name="Qgpsmm.dll"
+               Source="$(var.DllPath)\Qgpsmm.dll" DiskId="1">
+            </File>
             <File Id="zlib1.dll2" Name="zlib1.dll"
                Source="$(var.DllPath)\zlib1.dll" DiskId="1">
             </File>
