@@ -1,4 +1,5 @@
 v0.16
+    * ADD : Accept mlon/mlat URLs as emitted by mkgmap logging
     * ADD : Walking Papers backgound plugin + load WP scans as geotagged images
     * ADD : Import from OSC (osmChange format)
     * ADD : Feature-Force Delete action (deletes the feature without entry in the undo nor upload list)

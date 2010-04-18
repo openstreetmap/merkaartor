@@ -41,6 +41,15 @@ void OsmLink::checkUrl()
         m_IsValid = true;
         m_IsShort = false;
     } else
+    if (theUrl.hasQueryItem("mlat") && theUrl.hasQueryItem("mlon") && theUrl.hasQueryItem("zoom"))
+    {
+        m_Lat = theUrl.queryItemValue("mlat").toDouble();
+        m_Lon = theUrl.queryItemValue("mlon").toDouble();
+        m_Zoom = theUrl.queryItemValue("zoom").toInt();
+
+        m_IsValid = true;
+        m_IsShort = false;
+    } else
     if (theUrl.host().contains("maps.google.com") && theUrl.hasQueryItem("ll") && theUrl.hasQueryItem("spn")) {
         QStringList ll = theUrl.queryItemValue("ll").split(",");
         m_Lat = ll[0].toDouble();
