@@ -11,7 +11,9 @@
 # MOBILE    	      - enable MOBILE
 # GEOIMAGE            - enable geotagged images (needs exiv2)
 # NVIDIA_HACK         - used to solve nvidia specific slowdown
-# THREADED_BROWSERIMAGEMANAGER
+# USE_BUILTIN_BOOST   - use the Boost version (1.38) from Merkaartor rather than the system one (ony on Linux)
+# GPSDLIB             - use gpsd libgps or libQgpsmm for access to a gpsd server
+# ZBAR                - use the ZBAR library to extract coordinates from barcode
 
 #Static config
 include (Config.pri)

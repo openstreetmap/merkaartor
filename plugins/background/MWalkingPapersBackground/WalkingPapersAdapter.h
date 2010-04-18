@@ -10,43 +10,30 @@
 //
 //******************************************************************
 
-#ifndef GDALADAPTER_H
-#define GDALADAPTER_H
+#ifndef WALKINGPAPERSADAPTER_H
+#define WALKINGPAPERSADAPTER_H
 
 #include "IMapAdapter.h"
 
 #include <QLocale>
 
-class GDALDataset;
-class GDALColorTable;
-
-class GdalImage
+class WalkingPapersImage
 {
 public:
     QString theFilename;
     QPixmap theImg;
-    double adfGeoTransform[6];
+    QRectF theBBox;
 };
 
-class GdalAdapter : public QObject, public IMapAdapter
+
+class WalkingPapersAdapter : public QObject, public IMapAdapter
 {
     Q_OBJECT
     Q_INTERFACES(IMapAdapter)
 
 public:
-    enum TiffType
-    {
-        Unknown,
-        Rgb,
-        Rgba,
-        Palette_Gray,
-        Palette_RGBA,
-        Palette_CMYK,
-        Palette_HLS
-    };
-
-    GdalAdapter();
-    virtual ~GdalAdapter();
+    WalkingPapersAdapter();
+    virtual ~WalkingPapersAdapter();
 
     //! returns the unique identifier (Uuid) of this MapAdapter
     /*!
@@ -127,22 +114,14 @@ public slots:
 
 protected:
     bool alreadyLoaded(QString fn) const;
+    bool getWalkingPapersDetails(const QUrl& reqUrl, QRectF& bbox) const;
+    bool askAndgetWalkingPapersDetails(QRectF& bbox) const;
 
 private:
     QMenu* theMenu;
 
-    GDALDataset       *poDataset;
-    QString imageFilename;
-    QString theProjection;
-    QRect thePicRect;
-    QRectF theBbox;
-
-    QList<GdalImage> theImages;
-
-//	TiffType theType;
-//	int bandCount;
-//	int ixR, ixG, ixB, ixA;
-//	GDALColorTable * colTable;
+    QRectF theCoordBbox;
+    QList<WalkingPapersImage> theImages;
 };
 
-#endif // GDALADAPTER_H
+#endif // WALKINGPAPERSADAPTER_H

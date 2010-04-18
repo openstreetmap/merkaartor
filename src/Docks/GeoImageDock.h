@@ -95,6 +95,8 @@ private:
     QList<NodeData> usedTrackPoints;
 
     void addUsedTrackpoint(NodeData data);
+    bool getWalkingPapersDetails(const QUrl& reqUrl, double &lat, double &lon, bool& positionValid) const;
+    bool askAndgetWalkingPapersDetails(double &lat, double &lon, bool& positionValid) const;
 };
 
 class ImageView : public QWidget

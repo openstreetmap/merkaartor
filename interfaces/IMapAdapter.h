@@ -108,9 +108,11 @@ public:
 
     virtual IImageManager* getImageManager() = 0;
     virtual void setImageManager(IImageManager* anImageManager) = 0;
+
+    virtual void cleanup() = 0;
 };
 
 Q_DECLARE_INTERFACE ( IMapAdapter,
-                      "com.cbsoft.Merkaartor.IMapAdapter/1.5" )
+                      "com.cbsoft.Merkaartor.IMapAdapter/1.6" )
 
 #endif

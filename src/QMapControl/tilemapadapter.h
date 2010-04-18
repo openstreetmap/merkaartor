@@ -71,6 +71,8 @@ public:
     virtual bool isTiled() const { return true; }
     virtual int getTilesWE(int zoomlevel) const;
     virtual int getTilesNS(int zoomlevel) const;
+
+    virtual void cleanup() {}
 };
 
 #endif

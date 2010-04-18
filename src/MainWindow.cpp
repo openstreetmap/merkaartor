@@ -1357,6 +1357,7 @@ void MainWindow::on_fileNewAction_triggered()
     theView->launch(0);
     theProperties->setSelection(0);
     if (!theDocument || !theDocument->hasUnsavedChanges() || mayDiscardUnsavedChanges(this)) {
+        M_PREFS->cleanupBackgroundPlugins();
         delete theDocument;
         theDocument = new Document(theLayers);
         theDocument->addDefaultLayers();

@@ -115,6 +115,8 @@ public:
     virtual IImageManager* getImageManager();
     virtual void setImageManager(IImageManager* anImageManager);
 
+    virtual void cleanup() {}
+
 private:
     QLocale loc;
     IImageManager* theImageManager;

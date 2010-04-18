@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>335</width>
-    <height>197</height>
+    <width>328</width>
+    <height>202</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -68,6 +68,16 @@ What do you want to do next?</string>
     </widget>
    </item>
    <item>
+    <widget class="QPushButton" name="pbBarcode">
+     <property name="text">
+      <string>Extract info from barcode (Walking Papers)</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QPushButton" name="pbIgnore">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -101,11 +111,11 @@ What do you want to do next?</string>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>263</x>
-     <y>97</y>
+     <x>272</x>
+     <y>82</y>
     </hint>
     <hint type="destinationlabel">
-     <x>332</x>
+     <x>300</x>
      <y>68</y>
     </hint>
    </hints>
@@ -117,11 +127,11 @@ What do you want to do next?</string>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>179</x>
-     <y>129</y>
+     <x>188</x>
+     <y>111</y>
     </hint>
     <hint type="destinationlabel">
-     <x>331</x>
+     <x>300</x>
      <y>160</y>
     </hint>
    </hints>
@@ -137,8 +147,24 @@ What do you want to do next?</string>
      <y>158</y>
     </hint>
     <hint type="destinationlabel">
-     <x>330</x>
+     <x>300</x>
      <y>35</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pbBarcode</sender>
+   <signal>clicked()</signal>
+   <receiver>PhotoLoadErrorDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>162</x>
+     <y>126</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>251</x>
+     <y>3</y>
     </hint>
    </hints>
   </connection>

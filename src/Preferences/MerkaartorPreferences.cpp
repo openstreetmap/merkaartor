@@ -611,6 +611,12 @@ void MerkaartorPreferences::addBackgroundPlugin(IMapAdapter* aPlugin)
     mBackgroundPlugins.insert(aPlugin->getId(), aPlugin);
 }
 
+void MerkaartorPreferences::cleanupBackgroundPlugins()
+{
+    foreach(IMapAdapter* adapter, mBackgroundPlugins)
+        adapter->cleanup();
+}
+
 IMapAdapter* MerkaartorPreferences::getBackgroundPlugin(const QUuid& anAdapterUid)
 {
     if (mBackgroundPlugins.contains(anAdapterUid))

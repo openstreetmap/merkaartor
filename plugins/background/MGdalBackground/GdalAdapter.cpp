@@ -312,4 +312,11 @@ void GdalAdapter::setImageManager(IImageManager* anImageManager)
 {
 }
 
+void GdalAdapter::cleanup()
+{
+    theImages.clear();
+    theBbox = QRectF();
+    theProjection = QString();
+}
+
 Q_EXPORT_PLUGIN2(MGdalBackgroundPlugin, GdalAdapter)

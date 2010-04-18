@@ -4,7 +4,8 @@ TEMPLATE = subdirs
     SUBDIRS += \
         # MArbitraryRasterMapBackground \
         MYahooTiledBackground \
-        MYahooBackground
+        MYahooBackground \
+        MWalkingPapersBackground
 
     contains (GDAL, 1) {
         SUBDIRS += MGdalBackground

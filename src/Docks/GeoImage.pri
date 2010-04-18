@@ -7,3 +7,9 @@ HEADERS += GeoImageDock.h
 SOURCES += GeoImageDock.cpp
 LIBS += -lexiv2
 FORMS += PhotoLoadErrorDialog.ui
+
+contains(ZBAR, 1) {
+    DEFINES += USE_ZBAR
+    LIBS += -lzbar
+}
+

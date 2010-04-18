@@ -344,6 +344,7 @@ public:
 
     /* Plugins */
     void addBackgroundPlugin(IMapAdapter* aPlugin);
+    void cleanupBackgroundPlugins();
     void setBackgroundPlugin(const QUuid& theValue);
     QUuid getBackgroundPlugin() const;
     IMapAdapter* getBackgroundPlugin(const QUuid& anAdapterUid);

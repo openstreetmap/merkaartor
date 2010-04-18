@@ -76,6 +76,8 @@ public:
     virtual int getTilesWE(int zoomlevel) const;
     virtual int getTilesNS(int zoomlevel) const;
 
+    virtual void cleanup() {}
+
 protected:
     WmsServer theServer;
 };

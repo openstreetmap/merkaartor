@@ -14,28 +14,29 @@ symbian:MOBILE=1
 # GDAL=1    	      - enable GDAL (for, e.g., shapefile import; requires libgdal)
 # USE_BUILTIN_BOOST=1 - use the Boost version (1.38) from Merkaartor rather than the system one (ony on Linux)
 # GPSDLIB=1           - use gpsd libgps or libQgpsmm for access to a gpsd server
+# ZBAR=1              - use the ZBAR library to extract coordinates from barcode
 
 isEmpty(VERSION): VERSION="0.16"
 isEmpty(SVNREV) {
-	!contains(RELEASE,1) {
-    	#SVNREV = $$system($$escape_expand(svn info \"http://svn.openstreetmap.org/applications/editors/merkaartor/\" | sed -n \"s/Last Changed Rev: \\([0-9]\\+\\)/\\1/p\"))
-    	win32 {
-        	system(echo $${LITERAL_HASH}define SVNREV \\ > revision.h && svnversion >> revision.h)
-    	} else {
-        	system('echo -n "$${LITERAL_HASH}define SVNREV " > revision.h && svnversion >> revision.h')
-    	}
-    	REVISION="-svn"
-	} else {
-    	DEFINES += RELEASE
-    	REVISION=""
-    	SVNREV=""
-	}
+    !contains(RELEASE,1) {
+        #SVNREV = $$system($$escape_expand(svn info \"http://svn.openstreetmap.org/applications/editors/merkaartor/\" | sed -n \"s/Last Changed Rev: \\([0-9]\\+\\)/\\1/p\"))
+        win32 {
+            system(echo $${LITERAL_HASH}define SVNREV \\ > revision.h && svnversion >> revision.h)
+        } else {
+            system('echo -n "$${LITERAL_HASH}define SVNREV " > revision.h && svnversion >> revision.h')
+        }
+        REVISION="-svn"
+    } else {
+        DEFINES += RELEASE
+        REVISION=""
+        SVNREV=""
+    }
 } else {
     win32 {
-       	system(echo $${LITERAL_HASH}define SVNREV $${SVNREV} > revision.h )
+        system(echo $${LITERAL_HASH}define SVNREV $${SVNREV} > revision.h )
     } else {
-       	system('echo -n "$${LITERAL_HASH}define SVNREV $${SVNREV}" > revision.h')
+        system('echo -n "$${LITERAL_HASH}define SVNREV $${SVNREV}" > revision.h')
     }
-	REVISION="-svn"
+    REVISION="-svn"
 }
 

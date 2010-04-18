@@ -6,6 +6,11 @@
 #include "LayerWidget.h"
 #include "PropertiesDock.h"
 
+#ifdef USE_ZBAR
+#include <zbar.h>
+#include <zbar/QZBarImage.h>
+#endif
+
 #include <QtGui/QInputDialog>
 #include <QtGui/QMessageBox>
 #include <QtGui/QProgressDialog>
@@ -15,8 +20,58 @@
 #include <QtGui/QDialogButtonBox>
 #include <QFileDialog>
 
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+
 #include "ui_PhotoLoadErrorDialog.h"
 
+bool GeoImageDock::getWalkingPapersDetails(const QUrl& reqUrl, double &lat, double &lon, bool& positionValid) const
+{
+    QNetworkAccessManager manager;
+    QEventLoop q;
+    QTimer tT;
+
+    tT.setSingleShot(true);
+    connect(&tT, SIGNAL(timeout()), &q, SLOT(quit()));
+    connect(&manager, SIGNAL(finished(QNetworkReply*)),
+            &q, SLOT(quit()));
+    QNetworkReply *reply = manager.get(QNetworkRequest(reqUrl));
+
+    tT.start(10000); // 10s timeout
+    q.exec();
+    if(tT.isActive()) {
+        // download complete
+        tT.stop();
+    } else {
+        QMessageBox::warning(0, tr("Network timeout"), tr("Cannot read the photo's details from the Walking Papers server."), QMessageBox::Ok);
+        return false;
+    }
+
+    QString center = QString::fromAscii(reply->rawHeader("X-Print-Center"));
+    QStringList sl = center.split(" ");
+    if (!sl.size() == 3)
+        return false;
+
+    int z = sl[2].toInt();
+    lat = sl[0].toDouble();
+    lon = sl[1].toDouble();
+    positionValid = true;
+
+    return true;
+}
+
+bool GeoImageDock::askAndgetWalkingPapersDetails(double &lat, double &lon, bool& positionValid) const
+{
+    bool ok;
+    QString text = QInputDialog::getText(0, tr("Please specify Walking Papers URL"),
+                                         tr("URL:"), QLineEdit::Normal, "", &ok);
+    if (ok && !text.isEmpty()) {
+        QUrl url(text);
+        return getWalkingPapersDetails(url, lat, lon, positionValid);
+    } else
+        return false;
+}
 
 GeoImageDock::GeoImageDock(MainWindow *aMain)
     : QDockWidget(aMain), Main(aMain)
@@ -317,7 +372,7 @@ void GeoImageDock::loadImage(QString file, Coord pos)
     QDateTime time = QFileInfo(file).created();
 
     //Pt->setTag("_waypoint_", "true");
-    Pt->setTag("Picture", "GeoTagged");
+    Pt->setTag("_picture_", "GeoTagged");
     Pt->setPhoto(QPixmap(file));
     addUsedTrackpoint(NodeData(Pt, file, time, i == theLayer->size()));
     if (i == theLayer->size()) {
@@ -473,6 +528,9 @@ void GeoImageDock::loadImages(QStringList fileNames)
             ui->setupUi(dlg);
             ui->photo->setPixmap(QPixmap(file).scaledToWidth(320));
 
+            if (M_PREFS->getOfflineMode())
+                ui->pbBarcode->setVisible(false);
+
             dlg->exec();
             if (ui->pbIgnore->isChecked())
                 res = 0;
@@ -480,8 +538,77 @@ void GeoImageDock::loadImages(QStringList fileNames)
                 res = 1;
             else if (ui->pbMatch->isChecked())
                 res = 2;
+            else if (ui->pbBarcode->isChecked())
+                res = 3;
+
             if (ui->cbRemember->isChecked())
                 photoDlgRes = res;
+        }
+
+        if (res == 3) {    // Barcode
+            QImage img(file);
+
+#ifdef USE_ZBAR
+            zbar::QZBarImage image(img);
+
+            // create a reader
+            zbar::ImageScanner scanner;
+
+            // configure the reader
+            scanner.set_config(zbar::ZBAR_NONE, zbar::ZBAR_CFG_ENABLE, 1);
+
+            // scan the image for barcodes
+            scanner.recycle_image(image);
+            zbar::Image tmp = image.convert(*(long*)"Y800");
+            int n = scanner.scan(tmp);
+            image.set_symbols(tmp.get_symbols());
+
+            if (n <= 0) {
+                if (!askAndgetWalkingPapersDetails(lat, lon, positionValid))
+                    continue;
+            } else {
+                QUrl url;
+                // extract results
+                for(zbar::Image::SymbolIterator symbol = image.symbol_begin(); symbol != image.symbol_end(); ++symbol) {
+                    // do something useful with results
+                    qDebug() << "decoded " << QString::fromStdString(symbol->get_type_name())
+                            << " symbol \"" << QString::fromStdString(symbol->get_data()) << '"';
+                    qDebug() << "x;y: " << symbol->get_location_x(0) << ", " << symbol->get_location_y(0);
+
+                    url = QUrl(QString::fromStdString(symbol->get_data()));
+                    if (url.host().contains("walking-papers.org")) {
+
+                        int x = symbol->get_location_x(0);
+                        int y = symbol->get_location_y(0);
+                        QPoint mid = QPoint(img.width()/2, img.height()/2);
+                        if (x < mid.x() || y < mid.y()) {
+                            if (QMessageBox::warning(this, "Wrong image orientation", "Image appear to be wrognly oriented.\nDo you want to rotate it?",
+                                                     QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) {
+                                QMatrix mat;
+                                if (x < mid.x() && y < mid.y())
+                                    mat.rotate(180);
+                                else if (x > mid.x() && y < mid.y())
+                                    mat.rotate(90);
+                                else if (x < mid.x() && y > mid.y())
+                                    mat.rotate(-90);
+                                img = img.transformed(mat);
+                                img.save(file);
+                            }
+                        }
+                        getWalkingPapersDetails(url, lat, lon, positionValid);
+                    } else {
+                        if (!askAndgetWalkingPapersDetails(lat, lon, positionValid))
+                            continue;
+                    }
+                }
+            }
+
+            // clean up
+            image.set_data(NULL, 0);
+#else
+            if (!askAndgetWalkingPapersDetails(lat, lon, positionValid))
+                continue;
+#endif
         }
 
         if (positionValid) {
@@ -498,7 +625,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
                 Pt = new Node(newPos);
 
             //Pt->setTag("_waypoint_", "true");
-            Pt->setTag("Picture", "GeoTagged");
+            Pt->setTag("_picture_", "GeoTagged");
             Pt->setPhoto(QPixmap(file));
             addUsedTrackpoint(NodeData(Pt, file, time, i == theLayer->size()));
             if (i == theLayer->size()) {
@@ -595,11 +722,10 @@ void GeoImageDock::loadImages(QStringList fileNames)
 
             addUsedTrackpoint(NodeData(bestPt, file, time, false));
             //bestPt->setTag("_waypoint_", "true");
-            bestPt->setTag("Picture", "GeoTagged");
+            bestPt->setTag("_picture_", "GeoTagged");
 
             time = QDateTime(); // empty time to be null for the next image
-        } else
-        if (res == 1) {
+        } else if (res == 1) {
             Coord newPos;
             addUsedTrackpoint(NodeData(0, file, time, true));
         }

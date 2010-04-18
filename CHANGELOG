@@ -1,5 +1,6 @@
 v0.16
-	* ADD : Import from OSC (osmChange format)
+    * ADD : Walking Papers backgound plugin + load WP scans as geotagged images
+    * ADD : Import from OSC (osmChange format)
     * ADD : Feature-Force Delete action (deletes the feature without entry in the undo nor upload list)
     * CHG : Switch to transactional diff uploads to OSM to harden the process
 	* ADD : Export to OSC (osmChange format)
