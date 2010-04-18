@@ -90,59 +90,113 @@
          <item>
           <widget class="QLabel" name="label_5">
            <property name="text">
-            <string>Server address:</string>
+            <string>Server Url:</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="edTmsAdr"/>
+          <widget class="QLineEdit" name="edTmsUrl"/>
          </item>
          <item>
-          <widget class="QLabel" name="label_6">
-           <property name="text">
-            <string>Path</string>
+          <widget class="QFrame" name="frOSGeo">
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
            </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout">
+            <property name="spacing">
+             <number>6</number>
+            </property>
+            <property name="margin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QPushButton" name="btGetServices">
+              <property name="text">
+               <string>Get Services</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_4">
+              <property name="text">
+               <string>Services :</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QListWidget" name="lvTmsServices"/>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_6">
+              <property name="text">
+               <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;This is a &amp;quot;standard&amp;quot; &lt;a href=&quot;http://wiki.osgeo.org/wiki/Tile_Map_Service_Specification&quot;&gt;TMS&lt;/a&gt; server&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="edTmsPath"/>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_3">
-           <property name="text">
-            <string>Tile size</string>
+          <widget class="QFrame" name="frOSM">
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
            </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_2">
+            <property name="spacing">
+             <number>6</number>
+            </property>
+            <property name="margin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>Tile size</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="sbTileSize">
+              <property name="maximum">
+               <number>9999</number>
+              </property>
+              <property name="singleStep">
+               <number>64</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>Minimum zoom</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="sbMinZoom"/>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_2">
+              <property name="text">
+               <string>Maximum zoom</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="sbMaxZoom"/>
+            </item>
+           </layout>
           </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="sbTileSize">
-           <property name="maximum">
-            <number>9999</number>
-           </property>
-           <property name="singleStep">
-            <number>64</number>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>Minimum zoom</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="sbMinZoom"/>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>Maximum zoom</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="sbMaxZoom"/>
          </item>
          <item>
           <spacer>

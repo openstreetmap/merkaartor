@@ -32,6 +32,9 @@ bool GeoImageDock::getWalkingPapersDetails(const QUrl& reqUrl, double &lat, doub
     QEventLoop q;
     QTimer tT;
 
+    if (!reqUrl.host().contains("walking-papers.org"))
+        return false;
+
     tT.setSingleShot(true);
     connect(&tT, SIGNAL(timeout()), &q, SLOT(quit()));
     connect(&manager, SIGNAL(finished(QNetworkReply*)),
@@ -53,7 +56,7 @@ bool GeoImageDock::getWalkingPapersDetails(const QUrl& reqUrl, double &lat, doub
     if (!sl.size() == 3)
         return false;
 
-    int z = sl[2].toInt();
+    //int z = sl[2].toInt();
     lat = sl[0].toDouble();
     lon = sl[1].toDouble();
     positionValid = true;
@@ -288,7 +291,7 @@ void GeoImageDock::addUsedTrackpoint(NodeData data)
 void GeoImageDock::loadImage(QString file, Coord pos)
 {
     Document *theDocument = Main->document();
-    MapView *theView = Main->view();
+    //MapView *theView = Main->view();
 
     Layer *theLayer;
     if (photoLayer == NULL) {
@@ -386,7 +389,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
 {
     QString file;
     QDateTime time;
-    int offset = -1, timeQuestion = 0, noMatchQuestion = 0;
+    int offset = -1, noMatchQuestion = 0;
 
     Document *theDocument = Main->document();
     MapView *theView = Main->view();
@@ -978,7 +981,7 @@ void ImageView::mousePressEvent(QMouseEvent * e)
         drag->setMimeData(mimeData);
         drag->setPixmap(QPixmap::fromImage(image).scaledToWidth(64));
 
-        Qt::DropAction dropAction = drag->exec();
+        /* Qt::DropAction dropAction = */ drag->exec();
         return;
     }
     if (e->button() & Qt::RightButton)

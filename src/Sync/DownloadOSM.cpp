@@ -379,8 +379,11 @@ QString Downloader::getURLToFetchFull(QString id)
     if (pos == -1)
         return QString();
 
+    QString type = What.cap(1);
+    if (type == "rel")
+        type = "relation";
     QString URL = QString("/api/%1/%2/%3/full");
-    return URL.arg(M_PREFS->apiVersion()).arg(What.cap(1)).arg(What.cap(2));
+    return URL.arg(M_PREFS->apiVersion()).arg(type).arg(What.cap(2));
 }
 
 QString Downloader::getURLToFetchFull(Feature* aFeature)

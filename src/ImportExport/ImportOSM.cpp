@@ -55,15 +55,16 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
     Node* Pt = dynamic_cast<Node*>(theDocument->getFeature(id));
     if (Pt)
     {
-        if (Pt->lastUpdated() == Feature::User)
+        Node* userPt = Pt;
+        Pt = new Node(Coord(angToInt(Lat),angToInt(Lon)));
+        Pt->setId("conflict_"+id);
+        Pt->setLastUpdated(Feature::OSMServerConflict);
+        parseStandardAttributes(atts,Pt);
+
+        if (userPt->lastUpdated() == Feature::User)
         {
             // conflict
-            Pt->setLastUpdated(Feature::UserResolved);
-            Node* userPt = Pt;
-            Pt = new Node(Coord(angToInt(Lat),angToInt(Lon)));
-            Pt->setId("conflict_"+id);
-            Pt->setLastUpdated(Feature::OSMServerConflict);
-            parseStandardAttributes(atts,Pt);
+            userPt->setLastUpdated(Feature::UserResolved);
             if (Pt->time() > userPt->time() || Pt->versionNumber() != userPt->versionNumber()) {
                 if (conflictLayer)
                     conflictLayer->add(Pt);
@@ -75,14 +76,23 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
                 NewFeature = false;
             }
         }
-        else if (Pt->lastUpdated() != Feature::UserResolved)
+        else if (userPt->lastUpdated() != Feature::UserResolved)
         {
-            Pt->layer()->remove(Pt);
-            theLayer->add(Pt);
-            Pt->setPosition(Coord(angToInt(Lat),angToInt(Lon)));
-            NewFeature = true;
-            if (Pt->lastUpdated() == Feature::NotYetDownloaded)
-                Pt->setLastUpdated(Feature::OSMServer);
+            if (Pt->time() > userPt->time() || Pt->versionNumber() != userPt->versionNumber()) {
+                delete Pt;
+                Pt = userPt;
+                Pt->layer()->remove(Pt);
+                theLayer->add(Pt);
+                Pt->setPosition(Coord(angToInt(Lat),angToInt(Lon)));
+                Pt->clearTags();
+                NewFeature = true;
+                if (Pt->lastUpdated() == Feature::NotYetDownloaded)
+                    Pt->setLastUpdated(Feature::OSMServer);
+            } else {
+                delete Pt;
+                Pt = userPt;
+                NewFeature = false;
+            }
         }
     }
     else
@@ -118,16 +128,17 @@ void OSMHandler::parseWay(const QXmlAttributes& atts)
     Way* R = dynamic_cast<Way*>(theDocument->getFeature(id));
     if (R)
     {
-        if (R->lastUpdated() == Feature::User)
+        Way* userRd = R;
+        R = new Way();
+        R->setId("conflict_"+id);
+        R->setLastUpdated(Feature::OSMServerConflict);
+        parseStandardAttributes(atts,R);
+
+        if (userRd->lastUpdated() == Feature::User)
         {
-            R->setLastUpdated(Feature::UserResolved);
+            userRd->setLastUpdated(Feature::UserResolved);
             NewFeature = false;
             // conflict
-            Way* userRd = R;
-            R = new Way();
-            R->setId("conflict_"+id);
-            R->setLastUpdated(Feature::OSMServerConflict);
-            parseStandardAttributes(atts,R);
             if (R->time() > userRd->time() || R->versionNumber() != userRd->versionNumber()) {
                 if (conflictLayer)
                     conflictLayer->add(R);
@@ -141,13 +152,22 @@ void OSMHandler::parseWay(const QXmlAttributes& atts)
         }
         else if (R->lastUpdated() != Feature::UserResolved)
         {
-            R->layer()->remove(R);
-            theLayer->add(R);
-            while (R->size())
-                R->remove((int)0);
-            NewFeature = true;
-            if (R->lastUpdated() == Feature::NotYetDownloaded)
-                R->setLastUpdated(Feature::OSMServer);
+            if (R->time() > userRd->time() || R->versionNumber() != userRd->versionNumber()) {
+                delete R;
+                R = userRd;
+                R->layer()->remove(R);
+                theLayer->add(R);
+                while (R->size())
+                    R->remove((int)0);
+                R->clearTags();
+                NewFeature = true;
+                if (R->lastUpdated() == Feature::NotYetDownloaded)
+                    R->setLastUpdated(Feature::OSMServer);
+            } else {
+                delete R;
+                R = userRd;
+                NewFeature = false;
+            }
         }
     }
     else
@@ -192,16 +212,17 @@ void OSMHandler::parseRelation(const QXmlAttributes& atts)
     Relation* R = dynamic_cast<Relation*>(theDocument->getFeature(id));
     if (R)
     {
+        Relation* userR = R;
+        R = new Relation();
+        R->setId("conflict_"+id);
+        R->setLastUpdated(Feature::OSMServerConflict);
+        parseStandardAttributes(atts,R);
+
         if (R->lastUpdated() == Feature::User)
         {
             R->setLastUpdated(Feature::UserResolved);
             NewFeature = false;
             // conflict
-            Relation* userR = R;
-            R = new Relation();
-            R->setId("conflict_"+id);
-            R->setLastUpdated(Feature::OSMServerConflict);
-            parseStandardAttributes(atts,R);
             if (R->time() > userR->time() || R->versionNumber() != userR->versionNumber()) {
                 if (conflictLayer)
                     conflictLayer->add(R);
@@ -215,13 +236,22 @@ void OSMHandler::parseRelation(const QXmlAttributes& atts)
         }
         else if (R->lastUpdated() != Feature::UserResolved)
         {
-            R->layer()->remove(R);
-            theLayer->add(R);
-            while (R->size())
-                R->remove((int)0);
-            NewFeature = true;
-            if (R->lastUpdated() == Feature::NotYetDownloaded)
-                R->setLastUpdated(Feature::OSMServer);
+            if (R->time() > userR->time() || R->versionNumber() != userR->versionNumber()) {
+                delete R;
+                R = userR;
+                R->layer()->remove(R);
+                theLayer->add(R);
+                while (R->size())
+                    R->remove((int)0);
+                R->clearTags();
+                NewFeature = true;
+                if (R->lastUpdated() == Feature::NotYetDownloaded)
+                    R->setLastUpdated(Feature::OSMServer);
+            } else {
+                delete R;
+                R = userR;
+                NewFeature = false;
+            }
         }
     }
     else
@@ -409,6 +439,8 @@ bool importOSM(QWidget* aParent, QIODevice& File, Document* theDocument, Layer* 
 
     OSMHandler theHandler(theDocument,theLayer,conflictLayer);
 
+    theLayer->blockVirtualUpdates(true);
+
     QXmlSimpleReader xmlReader;
     xmlReader.setContentHandler(&theHandler);
     QXmlInputSource source;
@@ -420,7 +452,6 @@ bool importOSM(QWidget* aParent, QIODevice& File, Document* theDocument, Layer* 
         Bar->setValue(Bar->value()+buf.size());
     }
 
-    theLayer->blockVirtualUpdates(true);
     while (!File.atEnd())
     {
         QByteArray buf(File.read(20480));

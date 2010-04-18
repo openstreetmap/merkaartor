@@ -99,6 +99,9 @@ bool WalkingPapersAdapter::getWalkingPapersDetails(const QUrl& reqUrl, QRectF& b
     QEventLoop q;
     QTimer tT;
 
+    if (!reqUrl.host().contains("walking-papers.org"))
+        return false;
+
     tT.setSingleShot(true);
     connect(&tT, SIGNAL(timeout()), &q, SLOT(quit()));
     connect(&manager, SIGNAL(finished(QNetworkReply*)),
