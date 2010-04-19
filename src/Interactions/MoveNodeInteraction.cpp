@@ -81,6 +81,7 @@ void MoveNodeInteraction::snapMousePressEvent(QMouseEvent * event, Feature* aLas
                 sel.append(aLast);
         }
     }
+    HasMoved = false;
     clearNoSnap();
     Moving.clear();
     OriginalPosition.clear();
@@ -122,9 +123,9 @@ void MoveNodeInteraction::snapMousePressEvent(QMouseEvent * event, Feature* aLas
 
 void MoveNodeInteraction::snapMouseReleaseEvent(QMouseEvent * event, Feature* Closer)
 {
-    Coord Diff(calculateNewPosition(event,Closer, theList)-StartDragPosition);
-    if (Moving.size() && !panning() && !Diff.isNull())
+    if (Moving.size() && !panning() && HasMoved)
     {
+        Coord Diff(calculateNewPosition(event,Closer, theList)-StartDragPosition);
         if (Moving.size() > 1) {
             theList->setDescription(MainWindow::tr("Move Nodes"));
             theList->setFeature(Moving[0]);
@@ -211,7 +212,8 @@ void MoveNodeInteraction::snapMouseReleaseEvent(QMouseEvent * event, Feature* Cl
 
         document()->addHistory(theList);
         view()->invalidate(true, false);
-    }
+    } else
+        delete theList;
     Moving.clear();
     OriginalPosition.clear();
     clearNoSnap();
@@ -219,9 +221,10 @@ void MoveNodeInteraction::snapMouseReleaseEvent(QMouseEvent * event, Feature* Cl
 
 void MoveNodeInteraction::snapMouseMoveEvent(QMouseEvent* event, Feature* Closer)
 {
-    Coord Diff = calculateNewPosition(event,Closer,NULL)-StartDragPosition;
-    if (Moving.size() && !panning() && !Diff.isNull())
+    if (Moving.size() && !panning())
     {
+        HasMoved = true;
+        Coord Diff = calculateNewPosition(event,Closer,NULL)-StartDragPosition;
         for (int i=0; i<Moving.size(); ++i) {
             if (Moving[i]->isVirtual()) {
                 Virtual = true;
