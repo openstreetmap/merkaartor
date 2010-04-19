@@ -369,6 +369,11 @@ void Layer::blockIndexing(bool val)
     p->IndexingBlocked = val;
 }
 
+bool Layer::isIndexingBlocked()
+{
+    return p->IndexingBlocked;
+}
+
 void Layer::blockVirtualUpdates(bool val)
 {
     p->VirtualsUpdatesBlocked = val;

@@ -103,9 +103,13 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
         Pt->setId(id);
         Pt->setLastUpdated(Feature::OSMServer);
     }
+
     if (NewFeature) {
         parseStandardAttributes(atts,Pt);
         Current = Pt;
+        for (int i=0; i<Pt->sizeParents(); ++i)
+            if (Way* w = CAST_WAY(Pt->getParent(i)))
+                touchedWays << w;
     } else
         Current = NULL;
 }
@@ -178,9 +182,11 @@ void OSMHandler::parseWay(const QXmlAttributes& atts)
         R->setId(id);
         R->setLastUpdated(Feature::OSMServer);
     }
+
     if (NewFeature) {
         parseStandardAttributes(atts,R);
         Current = R;
+        touchedWays << R;
     } else
         Current = NULL;
 }
@@ -262,9 +268,11 @@ void OSMHandler::parseRelation(const QXmlAttributes& atts)
         theLayer->add(R);
         R->setLastUpdated(Feature::OSMServer);
     }
+
     if (NewFeature) {
         parseStandardAttributes(atts,R);
         Current = R;
+        touchedRelations << R;
     } else
         Current = NULL;
 }
@@ -338,6 +346,9 @@ static bool downloadToResolve(const QList<Feature*>& Resolution, QWidget* aParen
                     qApp->processEvents();
                     if (dlg && dlg->wasCanceled())
                         break;
+                }
+                foreach (Way* w, theHandler.touchedWays) {
+                    w->updateVirtuals();
                 }
             }
             Resolution[i]->setLastUpdated(Feature::OSMServer);
@@ -482,43 +493,31 @@ bool importOSM(QWidget* aParent, QIODevice& File, Document* theDocument, Layer* 
     }
     else
     {
-        if (!conflictLayer->size()) {
-            theDocument->remove(conflictLayer);
-            delete conflictLayer;
-        } else {
-            QMessageBox::warning(aParent,QApplication::translate("Downloader","Conflicts have been detected"),
-                QApplication::translate("Downloader",
-                "This means that some of the feature you modified"
-                " since your last download have since been modified by someone else on the server.\n"
-                "The features have been duplicated as \"conflict_...\" on the \"Conflicts...\" layer.\n"
-                "Before being able to upload your changes, you will have to manually merge the two versions"
-                " and remove the one from the \"Conflicts...\" layer."
-                ));
-        }
-
         if (M_PREFS->getUseVirtualNodes()) {
             if (dlg) {
                 Lbl->setText(QApplication::translate("Downloader","Update virtuals"));
-                Bar->setMaximum(theLayer->size());
+                Bar->setMaximum(theHandler.touchedWays.size());
                 Bar->setValue(0);
+            }
+            foreach (Way* w, theHandler.touchedWays) {
+                w->updateVirtuals();
+                if (Bar)
+                    Bar->setValue(Bar->value()+1);
+                qApp->processEvents();
             }
         }
 
         // Check for empty Roads/Relations and update virtual nodes
         QList<Feature*> EmptyFeature;
-        for (int i=0; i<theLayer->size(); ++i) {
-            if (!theLayer->get(i)->notEverythingDownloaded()) {
-                if (!theLayer->get(i)->size() && !CAST_NODE(theLayer->get(i)))
-                        EmptyFeature.push_back(theLayer->get(i));
-                if (M_PREFS->getUseVirtualNodes()) {
-                    if (Way* w = CAST_WAY(theLayer->get(i)))
-                        w->updateVirtuals();
-                    if (Bar)
-                        Bar->setValue(i);
-                    qApp->processEvents();
-                }
-            }
+        foreach (Way* w, theHandler.touchedWays) {
+            if (!w->size())
+                EmptyFeature.push_back(w);
         }
+        foreach (Relation* r, theHandler.touchedRelations) {
+            if (!r->size())
+                EmptyFeature.push_back(r);
+        }
+
         if (EmptyFeature.size()) {
             if (QMessageBox::warning(aParent,QApplication::translate("Downloader","Empty roads/relations detected"),
                     QApplication::translate("Downloader",
@@ -535,6 +534,20 @@ bool importOSM(QWidget* aParent, QIODevice& File, Document* theDocument, Layer* 
                     theDocument->addHistory(emptyFeatureList);
                 }
             }
+        }
+
+        if (!conflictLayer->size()) {
+            theDocument->remove(conflictLayer);
+            delete conflictLayer;
+        } else {
+            QMessageBox::warning(aParent,QApplication::translate("Downloader","Conflicts have been detected"),
+                QApplication::translate("Downloader",
+                "This means that some of the feature you modified"
+                " since your last download have since been modified by someone else on the server.\n"
+                "The features have been duplicated as \"conflict_...\" on the \"Conflicts...\" layer.\n"
+                "Before being able to upload your changes, you will have to manually merge the two versions"
+                " and remove the one from the \"Conflicts...\" layer."
+                ));
         }
 
     }

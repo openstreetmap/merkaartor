@@ -136,6 +136,8 @@ public:
     bool isVirtualUpdatesBlocked() const;
 
     virtual void blockIndexing(bool val);
+    virtual bool isIndexingBlocked();
+
     virtual void indexAdd(const CoordBox& bb, const MapFeaturePtr aFeat);
     virtual void indexRemove(const CoordBox& bb, const MapFeaturePtr aFeat);
     virtual std::deque<Feature*> indexFind(const CoordBox& vp);
