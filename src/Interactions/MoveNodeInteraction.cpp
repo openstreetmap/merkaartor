@@ -100,8 +100,13 @@ void MoveNodeInteraction::snapMousePressEvent(QMouseEvent * event, Feature* aLas
         }
         else if (Way* R = CAST_WAY(sel[i])) {
             for (int j=0; j<R->size(); ++j)
-                if (std::find(Moving.begin(),Moving.end(),R->get(j)) == Moving.end())
+                if (std::find(Moving.begin(),Moving.end(),R->get(j)) == Moving.end()) {
                     Moving.push_back(R->getNode(j));
+                    for (int k=0; k<R->getNode(j)->sizeParents(); ++k)
+                        if (Way* aRoad = CAST_WAY(R->getNode(j)->getParent(k))) {
+                            aRoad->removeVirtuals();
+                        }
+                }
             R->removeVirtuals();
             addToNoSnap(R);
         }
