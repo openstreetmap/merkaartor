@@ -93,8 +93,9 @@ void MoveNodeInteraction::snapMousePressEvent(QMouseEvent * event, Feature* aLas
                 StartDragPosition = Pt->position();
             if (!Moving[i]->isVirtual())
                 for (int j=0; j<Moving[i]->sizeParents(); ++j) {
-                    if (Way* aRoad = CAST_WAY(Moving[i]->getParent(j)))
+                    if (Way* aRoad = CAST_WAY(Moving[i]->getParent(j))) {
                         aRoad->removeVirtuals();
+                    }
                 }
         }
         else if (Way* R = CAST_WAY(sel[i])) {
@@ -128,20 +129,26 @@ void MoveNodeInteraction::snapMouseReleaseEvent(QMouseEvent * event, Feature* Cl
                 theList->setFeature(Moving[0]);
             }
         }
+        QSet<Way*> WaysToUpdate;
         for (int i=0; i<Moving.size(); ++i)
         {
+            Moving[i]->blockVirtualUpdates(true);
             Moving[i]->setPosition(OriginalPosition[i]);
             if (Moving[i]->layer()->isTrack())
                 theList->add(new MoveNodeCommand(Moving[i],OriginalPosition[i]+Diff, Moving[i]->layer()));
             else
                 theList->add(new MoveNodeCommand(Moving[i],OriginalPosition[i]+Diff, document()->getDirtyOrOriginLayer(Moving[i]->layer())));
             for (int j=0; j<Moving[i]->sizeParents(); ++j) {
-                Moving[i]->getParent(j)->updateIndex();
-            }
-            for (int j=0; j<Moving[i]->sizeParents(); ++j) {
                 if (Way* aRoad = CAST_WAY(Moving[i]->getParent(j)))
-                    aRoad->updateVirtuals();
+                    WaysToUpdate << aRoad;
+                else
+                    Moving[i]->getParent(j)->updateIndex();
             }
+            Moving[i]->blockVirtualUpdates(false);
+        }
+        foreach (Way* w, WaysToUpdate) {
+            w->updateIndex();
+            w->updateVirtuals();
         }
 
         // If moving a single node (not a track node), see if it got dropped onto another node
