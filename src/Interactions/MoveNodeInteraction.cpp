@@ -123,6 +123,9 @@ void MoveNodeInteraction::snapMousePressEvent(QMouseEvent * event, Feature* aLas
 
 void MoveNodeInteraction::snapMouseReleaseEvent(QMouseEvent * event, Feature* Closer)
 {
+    if (event->button() == Qt::RightButton)
+        return;
+
     if (Moving.size() && !panning() && HasMoved)
     {
         Coord Diff(calculateNewPosition(event,Closer, theList)-StartDragPosition);
