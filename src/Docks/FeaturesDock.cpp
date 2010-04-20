@@ -38,6 +38,11 @@ FeaturesDock::FeaturesDock(MainWindow* aParent)
 
     connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(on_Viewport_changed()));
 
+    deleteAction = new QAction(NULL, this);
+//    deleteAction->setShortcut(QKeySequence::Delete);
+    ui.FeaturesList->addAction(deleteAction);
+    connect(deleteAction, SIGNAL(triggered()), SLOT(on_FeaturesList_delete()));
+
     connect(ui.FeaturesList, SIGNAL(itemSelectionChanged()), this, SLOT(on_FeaturesList_itemSelectionChanged()));
     connect(ui.FeaturesList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(on_FeaturesList_itemDoubleClicked(QListWidgetItem*)));
     connect(ui.FeaturesList, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(on_FeaturesList_customContextMenuRequested(const QPoint &)));
@@ -101,6 +106,7 @@ void FeaturesDock::on_FeaturesList_customContextMenuRequested(const QPoint & pos
 
     QMenu menu(ui.FeaturesList);
     menu.addAction(addSelectAction);
+    menu.addAction(deleteAction);
     menu.addSeparator();
     menu.addAction(centerAction);
     menu.addAction(centerZoomAction);
@@ -117,6 +123,27 @@ void FeaturesDock::on_FeaturesList_customContextMenuRequested(const QPoint & pos
     }
     menu.addAction(downloadAction);
     menu.exec(ui.FeaturesList->mapToGlobal(pos));
+}
+
+void FeaturesDock::on_FeaturesList_delete()
+{
+    if (!ui.FeaturesList->selectedItems().count())
+        return;
+
+    Feature* F;
+    Main->view()->blockSignals(true);
+
+    Highlighted.clear();
+    Main->properties()->setSelection(0);
+    for (int i=0; i < ui.FeaturesList->selectedItems().count(); ++i) {
+        F = ui.FeaturesList->selectedItems()[i]->data(Qt::UserRole).value<Feature*>();
+        if (F) {
+            Main->properties()->addSelection(F);
+        }
+    }
+
+    Main->view()->blockSignals(false);
+    Main->on_editRemoveAction_triggered();
 }
 
 void FeaturesDock::on_rbWithin_stateChanged ( int state )
@@ -335,6 +362,7 @@ void FeaturesDock::retranslateUi()
     centerZoomAction->setText(tr("Center && Zoom map"));
     downloadAction->setText(tr("Download missing children"));
     addSelectAction->setText(tr("Add to selection"));
+    deleteAction->setText(tr("Delete"));
 }
 
 void FeaturesDock::retranslateTabBar()

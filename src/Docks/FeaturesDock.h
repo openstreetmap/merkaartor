@@ -26,52 +26,54 @@ class FeaturesDock : public MDockAncestor
 {
 Q_OBJECT
 public:
-	FeaturesDock(MainWindow* aParent);
+    FeaturesDock(MainWindow* aParent);
 
-	~FeaturesDock();
+    ~FeaturesDock();
 
-	void updateList();
+    void updateList();
 
-	Feature* highlighted(int idx);
-	QList<Feature*> highlighted();
-	int highlightedSize() const;
+    Feature* highlighted(int idx);
+    QList<Feature*> highlighted();
+    int highlightedSize() const;
 
 public slots:
-	void on_FeaturesList_itemSelectionChanged();
-	void on_FeaturesList_itemDoubleClicked(QListWidgetItem* item);
-	void on_FeaturesList_customContextMenuRequested(const QPoint & pos);
+    void on_FeaturesList_itemSelectionChanged();
+    void on_FeaturesList_itemDoubleClicked(QListWidgetItem* item);
+    void on_FeaturesList_customContextMenuRequested(const QPoint & pos);
+    void on_FeaturesList_delete();
 
-	void on_rbWithin_stateChanged ( int state );
+    void on_rbWithin_stateChanged ( int state );
 
-	void on_centerAction_triggered();
-	void on_centerZoomAction_triggered();
-	void on_downloadAction_triggered();
-	void on_addSelectAction_triggered();
+    void on_centerAction_triggered();
+    void on_centerZoomAction_triggered();
+    void on_downloadAction_triggered();
+    void on_addSelectAction_triggered();
 
-	void on_Viewport_changed();
+    void on_Viewport_changed();
 
-	void tabChanged(int idx);
+    void tabChanged(int idx);
 
 private:
-	QList<Feature*> Highlighted;
+    QList<Feature*> Highlighted;
 
     MainWindow* Main;
-	Ui::FeaturesDockWidget ui;
-	QAction* centerAction;
-	QAction* centerZoomAction;
-	QAction* downloadAction;
-	QAction* addSelectAction;
+    Ui::FeaturesDockWidget ui;
+    QAction* centerAction;
+    QAction* centerZoomAction;
+    QAction* downloadAction;
+    QAction* addSelectAction;
+    QAction* deleteAction;
 
-	CoordBox theViewport;
-	Feature::FeatureType curFeatType;
+    CoordBox theViewport;
+    Feature::FeatureType curFeatType;
 
-	void clearItems();
-	void addItem(MapFeaturePtr F);
+    void clearItems();
+    void addItem(MapFeaturePtr F);
 
 public:
     void changeEvent(QEvent*);
     void retranslateUi();
-	void retranslateTabBar();
+    void retranslateTabBar();
 };
 
 #endif // FEATURESDOCK_H
