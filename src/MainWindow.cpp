@@ -1951,7 +1951,7 @@ void MainWindow::loadDocument(QString fn)
     }
     double version = docElem.attribute("version").toDouble();
 
-    QProgressDialog progress("Loading document...", "Cancel", 0, 0);
+    QProgressDialog progress("Loading document...", "Cancel", 0, 0, this);
     progress.setWindowModality(Qt::WindowModal);
 
     progress.setMaximum(progress.maximum() + theXmlDoc->elementsByTagName("relation").count());

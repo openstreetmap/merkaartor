@@ -232,14 +232,15 @@ static void splitRoad(Document* theDocument, CommandList* theList, Way* In, cons
             copyTags(NextPart,FirstPart);
             theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(In->layer()),NextPart,true));
             theList->add(new WayAddNodeCommand(NextPart, FirstPart->getNode(i), theDocument->getDirtyOrOriginLayer(In->layer())));
-            for (int j=0; j < In->sizeParents(); j++) {
-                Relation* L = CAST_RELATION(In->getParent(j));
-                theList->add(new RelationAddFeatureCommand(L, L->getRole(L->find(In)), NextPart, theDocument->getDirtyOrOriginLayer(In->layer())));
-            }
             while ( (i+1) < FirstPart->size() )
             {
                 theList->add(new WayAddNodeCommand(NextPart, FirstPart->getNode(i+1), theDocument->getDirtyOrOriginLayer(In->layer())));
                 theList->add(new WayRemoveNodeCommand(FirstPart,i+1,theDocument->getDirtyOrOriginLayer(In->layer())));
+            }
+            for (int j=0; j < In->sizeParents(); j++) {
+                Relation* L = CAST_RELATION(In->getParent(j));
+                int idx = L->find(FirstPart);
+                theList->add(new RelationAddFeatureCommand(L, L->getRole(idx), NextPart, idx+1, theDocument->getDirtyOrOriginLayer(In->layer())));
             }
             Result.push_back(NextPart);
             FirstPart = NextPart;
