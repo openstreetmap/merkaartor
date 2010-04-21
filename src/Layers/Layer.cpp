@@ -21,9 +21,11 @@
 #include <QList>
 #include <QMenu>
 
-#include <algorithm>
+#include <RTree.h>
 
 /* Layer */
+
+typedef RTree<MapFeaturePtr, int, 2, float> MyRTree;
 
 class LayerPrivate
 {
@@ -36,17 +38,15 @@ public:
         Readonly = false;
         Uploadable = true;
 
-        theRTree = new MyRTree(7, 2);
         IndexingBlocked = false;
         VirtualsUpdatesBlocked = false;
 
     }
     ~LayerPrivate()
     {
-        delete theRTree;
     }
     QList<MapFeaturePtr> Features;
-    MyRTree* theRTree;
+    MyRTree theRTree;
 
     QHash<QString, MapFeaturePtr> IdMap;
     QString Name;
@@ -89,12 +89,42 @@ Layer::~Layer()
     SAFE_DELETE(p);
 }
 
-void Layer::get(const CoordBox& hz, QList<Feature*>& theFeatures)
+bool __cdecl indexFindCallback(MapFeaturePtr data, void* ctxt)
 {
-    std::deque < MapFeaturePtr > ret = indexFind(hz);
-    for (std::deque < MapFeaturePtr >::const_iterator it = ret.begin(); it < ret.end(); ++it) {
-        theFeatures.push_back(*it);
-    }
+    ((QList<MapFeaturePtr>*)(ctxt))->append(data);
+    return true;
+}
+
+void Layer::get(const CoordBox& bb, QList<Feature*>& theFeatures)
+{
+    int min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
+    int max[] = {bb.topRight().lon(), bb.topRight().lat()};
+    p->theRTree.Search(min, max, &indexFindCallback, (void*)(&theFeatures));
+}
+
+bool getFeatureSetCallback(MapFeaturePtr data, void* ctxt)
+{
+//    if (theFeatures[(*it)->renderPriority()].contains(*it))
+//        continue;
+//
+//    if (Way * R = CAST_WAY(*it)) {
+//        R->buildPath(theProjection, theTransform, clipRect);
+//        theFeatures[(*it)->renderPriority()].insert(*it);
+//
+//        if (R->isCoastline())
+//            theCoastlines.insert(R);
+//    } else
+//    if (Relation * RR = CAST_RELATION(*it)) {
+//        RR->buildPath(theProjection, theTransform, clipRect);
+//        theFeatures[(*it)->renderPriority()].insert(*it);
+//    } else
+//    if (Node * pt = CAST_NODE(*it)) {
+//        if (arePointsDrawable())
+//            theFeatures[(*it)->renderPriority()].insert(*it);
+//    } else
+//        theFeatures[(*it)->renderPriority()].insert(*it);
+//
+    return true;
 }
 
 void Layer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures, QSet<Way*>& theCoastlines, Document* /* theDocument */,
@@ -104,27 +134,27 @@ void Layer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures, Q
         return;
 
     for (int i=0; i < invalidRects.size(); ++i) {
-        std::deque < MapFeaturePtr > ret = indexFind(invalidRects[i]);
-        for (std::deque < MapFeaturePtr >::const_iterator it = ret.begin(); it != ret.end(); ++it) {
-            if (theFeatures[(*it)->renderPriority()].contains(*it))
+        QList < MapFeaturePtr > ret = indexFind(invalidRects[i]);
+        foreach(MapFeaturePtr F, ret) {
+            if (theFeatures[F->renderPriority()].contains(F))
                 continue;
 
-            if (Way * R = CAST_WAY(*it)) {
+            if (Way * R = CAST_WAY(F)) {
                 R->buildPath(theProjection, theTransform, clipRect);
-                theFeatures[(*it)->renderPriority()].insert(*it);
+                theFeatures[F->renderPriority()].insert(F);
 
                 if (R->isCoastline())
                     theCoastlines.insert(R);
             } else
-            if (Relation * RR = CAST_RELATION(*it)) {
+            if (Relation * RR = CAST_RELATION(F)) {
                 RR->buildPath(theProjection, theTransform, clipRect);
-                theFeatures[(*it)->renderPriority()].insert(*it);
+                theFeatures[F->renderPriority()].insert(F);
             } else
-            if (Node * pt = CAST_NODE(*it)) {
+            if (Node * pt = CAST_NODE(F)) {
                 if (arePointsDrawable())
-                    theFeatures[(*it)->renderPriority()].insert(*it);
+                    theFeatures[F->renderPriority()].insert(F);
             } else
-                theFeatures[(*it)->renderPriority()].insert(*it);
+                theFeatures[F->renderPriority()].insert(F);
         }
     }
 }
@@ -389,29 +419,39 @@ void Layer::indexAdd(const CoordBox& bb, const MapFeaturePtr aFeat)
 {
     if (bb.isNull())
         return;
-    if (!p->IndexingBlocked)
-        p->theRTree->insert(bb, aFeat);
+    if (!p->IndexingBlocked) {
+        int min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
+        int max[] = {bb.topRight().lon(), bb.topRight().lat()};
+        p->theRTree.Insert(min, max, aFeat);
+    }
 }
 
 void Layer::indexRemove(const CoordBox& bb, const MapFeaturePtr aFeat)
 {
     if (bb.isNull())
         return;
-    if (!p->IndexingBlocked)
-        p->theRTree->remove(bb, aFeat);
+    if (!p->IndexingBlocked) {
+        int min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
+        int max[] = {bb.topRight().lon(), bb.topRight().lat()};
+        p->theRTree.Remove(min, max, aFeat);
+    }
 }
 
-std::deque<Feature*> Layer::indexFind(const CoordBox& vp)
+const QList<MapFeaturePtr>& Layer::indexFind(const CoordBox& bb)
 {
-    return p->theRTree->find(vp);
+    int min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
+    int max[] = {bb.topRight().lon(), bb.topRight().lat()};
+    findResult.clear();
+    p->theRTree.Search(min, max, &indexFindCallback, (void*)&findResult);
+
+    return findResult;
 }
 
 void Layer::reIndex()
 {
     qDebug() << "Reindexing...";
 
-    delete p->theRTree;
-    p->theRTree = new MyRTree(7, 2);
+    p->theRTree.RemoveAll();
 
     for (int i=0; i<p->Features.size(); ++i) {
         if (p->Features.at(i)->isDeleted())
@@ -419,10 +459,9 @@ void Layer::reIndex()
         Feature* f = p->Features.at(i);
         CoordBox bb = f->boundingBox();
         if (!bb.isNull()) {
-            //Q_ASSERT((bb.bottomLeft().lon() <= bb.topRight().lon()) && (bb.bottomLeft().lat() <= bb.topRight().lat()));
-            //Q_ASSERT((bb.bottomLeft().lon() < 100000000) && (bb.bottomLeft().lat() > 100000000));
-            //Q_ASSERT((bb.topRight().lon() < 100000000) && (bb.topRight().lat() > 100000000));
-            p->theRTree->insert(bb, f);
+            int min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
+            int max[] = {bb.topRight().lon(), bb.topRight().lat()};
+            p->theRTree.Insert(min, max, f);
         }
     }
 }
@@ -431,8 +470,7 @@ void Layer::reIndex(QProgressDialog & progress)
 {
     qDebug() << "Reindexing...";
 
-    delete p->theRTree;
-    p->theRTree = new MyRTree(7, 2);
+    p->theRTree.RemoveAll();
 
     progress.setLabelText("Indexing...");
     progress.setValue(0);
@@ -442,7 +480,9 @@ void Layer::reIndex(QProgressDialog & progress)
             Feature* f = p->Features.at(i);
             CoordBox bb = f->boundingBox();
             if (!bb.isNull()) {
-                p->theRTree->insert(bb, f);
+                int min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
+                int max[] = {bb.topRight().lon(), bb.topRight().lat()};
+                p->theRTree.Insert(min, max, f);
             }
         }
         progress.setValue(i);

@@ -322,13 +322,14 @@ void FeaturesDock::updateList()
         if (dynamic_cast<ImageMapLayer*>(Main->document()->getLayer(j)))
             continue;
 
-        std::deque < MapFeaturePtr > ret = Main->document()->getLayer(j)->indexFind(theViewport);
-        for (std::deque < MapFeaturePtr >::const_iterator it = ret.begin(); it != ret.end(); ++it)
+        QList < MapFeaturePtr > ret = Main->document()->getLayer(j)->indexFind(theViewport);
+        foreach (MapFeaturePtr F, ret) {
             if (ui.cbWithin->isChecked()) {
-                if (ggl::within((*it)->boundingBox(), Main->view()->viewport()))
-                    addItem(*it);
+                if (ggl::within(F->boundingBox(), Main->view()->viewport()))
+                    addItem(F);
             } else
-                addItem(*it);
+                addItem(F);
+        }
     }
     ui.FeaturesList->sortItems();
 

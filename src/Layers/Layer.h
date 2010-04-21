@@ -7,11 +7,6 @@
 
 #include <QProgressDialog>
 
-#include <deque>
-#include <ggl/extensions/index/rtree/rtree.hpp>
-
-typedef ggl::index::rtree<CoordBox, MapFeaturePtr> MyRTree;
-
 class QString;
 class QprogressDialog;
 
@@ -140,7 +135,8 @@ public:
 
     virtual void indexAdd(const CoordBox& bb, const MapFeaturePtr aFeat);
     virtual void indexRemove(const CoordBox& bb, const MapFeaturePtr aFeat);
-    virtual std::deque<Feature*> indexFind(const CoordBox& vp);
+//    bool __cdecl indexFindCallback(MapFeaturePtr data, void* ctxt);
+    virtual const QList<MapFeaturePtr>& indexFind(const CoordBox& vp);
     virtual void reIndex();
     virtual void reIndex(QProgressDialog & progress);
 
@@ -149,6 +145,7 @@ protected:
     LayerPrivate* p;
     LayerWidget* theWidget;
     mutable QString Id;
+    QList<MapFeaturePtr> findResult;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Layer::LayerGroups)

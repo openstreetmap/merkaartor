@@ -335,9 +335,8 @@ void FeatureSnapInteraction::updateSnap(QMouseEvent* event)
         if (!document()->getLayer(j)->isVisible() || document()->getLayer(j)->isReadonly())
             continue;
 
-        std::deque < MapFeaturePtr > ret = document()->getLayer(j)->indexFind(HotZone);
-        for (std::deque < MapFeaturePtr >::const_iterator it = ret.begin(); it < ret.end(); ++it) {
-            Feature* F = dynamic_cast<Feature*>(*it);
+        QList < MapFeaturePtr > ret = document()->getLayer(j)->indexFind(HotZone);
+        foreach(MapFeaturePtr F, ret) {
             if (F)
             {
                 if (F->notEverythingDownloaded())

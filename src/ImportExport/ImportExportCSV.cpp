@@ -33,6 +33,7 @@ ImportExportCSV::~ImportExportCSV()
 // export
 bool ImportExportCSV::export_(const QList<Feature *>& featList)
 {
+    return false;
 }
 
 // import the  input
@@ -41,6 +42,6 @@ bool ImportExportCSV::import(Layer* aLayer)
     ImportCSVDialog* dlg = new ImportCSVDialog(Device);
     if (dlg->exec() == QDialog::Rejected)
         return false;
-    dlg->import(aLayer);
+    return dlg->import(aLayer);
 }
 
