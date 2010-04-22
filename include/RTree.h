@@ -17,8 +17,10 @@
   #define Max qMax
 #endif //Max
 
+#ifndef __cdecl
 #if defined(__GNUC__)
 #define __cdecl __attribute__((cdecl))
+#endif
 #endif
 
 //
