@@ -50,6 +50,20 @@ void OsmLink::checkUrl()
         m_IsValid = true;
         m_IsShort = false;
     } else
+    if (theUrl.hasQueryItem("minlon") && theUrl.hasQueryItem("maxlon") && theUrl.hasQueryItem("minlat") && theUrl.hasQueryItem("maxlat"))
+    {
+        m_Lat = theUrl.queryItemValue("minlat").toDouble();
+        m_Lon = theUrl.queryItemValue("minlon").toDouble();
+        m_spanLat = theUrl.queryItemValue("maxlat").toDouble() - m_Lat;
+        m_spanLon = theUrl.queryItemValue("maxlon").toDouble() - m_Lon;
+
+        m_Lat += m_spanLat/2;
+        m_Lon += m_spanLon/2;
+
+        m_IsValid = true;
+        m_hasSpan = true;
+        m_IsShort = false;
+    } else
     if (theUrl.host().contains("maps.google.com") && theUrl.hasQueryItem("ll") && theUrl.hasQueryItem("spn")) {
         QStringList ll = theUrl.queryItemValue("ll").split(",");
         m_Lat = ll[0].toDouble();
