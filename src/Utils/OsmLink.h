@@ -11,26 +11,17 @@ public:
     OsmLink(QUrl url);
     OsmLink(QString url);
 
-    bool isValid() const {return m_IsValid;}
-    bool isShort() const {return m_IsShort;}
-    CoordBox getCoordBox();
-
-    static bool isValid(QUrl theUrl);
+    bool isValid() const { return m_IsValid; }
+    CoordBox getCoordBox() const { return m_Box; }
 
 private:
-    QUrl theUrl;
     bool m_IsValid;
-    bool m_IsShort;
-    bool m_hasSpan;
+    CoordBox m_Box;
 
-    double m_Lat;
-    double m_Lon;
-    double m_spanLat;
-    double m_spanLon;
-    int m_Zoom;
-
-protected:
-    void checkUrl();
+    QString parseUrl(QUrl url);
+    void parseShortUrl(QString code);
+    void setLatLonZoom(double lat, double lon, int zoom);
+    void setMinMax(double bottom, double left, double top, double right);
 };
 
 #endif // OSMLINK_H
