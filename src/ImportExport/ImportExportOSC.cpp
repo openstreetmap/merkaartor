@@ -111,15 +111,15 @@ bool ImportExportOSC::import(Layer* aLayer)
                     F = Node::fromXML(theDoc, aLayer, f);
                     theList->add(new AddFeatureCommand(aLayer, F, true));
                 } else if (f.tagName() == "way") {
-                    F = theDoc->getFeature("node_"+id);
+                    F = theDoc->getFeature("way_"+id);
                     if (!F || F->notEverythingDownloaded())
                         downloadFeature(0, "way_"+id, theDoc, dLayer);
                     F = Way::fromXML(theDoc, aLayer, f);
                     theList->add(new AddFeatureCommand(aLayer, F, true));
                 } else if (f.tagName() == "relation") {
-                    F = theDoc->getFeature("node_"+id);
+                    F = theDoc->getFeature("rel_"+id);
                     if (!F || F->notEverythingDownloaded())
-                        downloadFeature(0, "relation_"+id, theDoc, dLayer);
+                        downloadFeature(0, "rel_"+id, theDoc, dLayer);
                     F = Relation::fromXML(theDoc, aLayer, f);
                     theList->add(new AddFeatureCommand(aLayer, F, true));
                 }
