@@ -559,7 +559,7 @@
  zoomUnder="0.002" zoomUpper="1e+07"
  fillColor="#aaaaaacd"
  drawTrafficDirectionMarks="no" labelColor="#111111fc" labelScale="7" labelOffset="5.5"
- labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name"labelHalo="yes" labelArea="yes">
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes" labelArea="yes">
   <selector expr="[landuse] is quarry"/>
 </painter>
 <painter
@@ -578,7 +578,7 @@
  zoomUnder="0.002" zoomUpper="1e+07"
  fillColor="#d0eba977"
  drawTrafficDirectionMarks="no" labelColor="#333333fc" labelScale="7" labelOffset="5.5"
- labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name"labelHalo="yes" labelArea="yes">
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes" labelArea="yes">
   <selector expr="[landuse] is recreation_ground"/>
 </painter>
 <painter
@@ -591,7 +591,7 @@
  zoomUnder="0.002" zoomUpper="1e+07"
  fillColor="#9d9d6c77"
  drawTrafficDirectionMarks="no" labelColor="#333333fc" labelScale="7" labelOffset="5.5"
- labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name"labelHalo="yes" labelArea="yes">
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes" labelArea="yes">
   <selector expr="[landuse] isoneof (brownfield, landfill)"/>
 </painter>
 <painter
@@ -674,7 +674,7 @@
 <painter
  fillColor="#33cc99cd"
  drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="7" labelOffset="5"
- labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name"labelHalo="yes" labelArea="yes">
+ labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes" labelArea="yes">
   <selector expr="[leisure] is stadium"/>
 </painter>
 <painter
