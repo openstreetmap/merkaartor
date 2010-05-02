@@ -18,18 +18,31 @@
 #include <ggl/algorithms/intersection.hpp>
 #endif
 
+static void mergeNodes(Document* theDocument, CommandList* theList, Node *node1, Node *node2);
+
+static bool isNear(Node* a, Node* b)
+{
+    // For now, only if exactly same position
+    // Future: use distance threshold?
+    return a->position() == b->position();
+}
+
 bool canJoin(Way* R1, Way* R2)
 {
     if ( (R1->size() == 0) || (R2->size() == 0) )
         return true;
-    Feature* Start1 = R1->get(0);
-    Feature* End1 = R1->get(R1->size()-1);
-    Feature* Start2 = R2->get(0);
-    Feature* End2 = R2->get(R2->size()-1);
+    Node* Start1 = R1->getNode(0);
+    Node* End1 = R1->getNode(R1->size()-1);
+    Node* Start2 = R2->getNode(0);
+    Node* End2 = R2->getNode(R2->size()-1);
     return (Start1 == Start2) ||
         (Start1 == End2) ||
-        (Start2 == End1) ||
-        (End2 == End1);
+        (End1 == Start2) ||
+        (End1 == End2) ||
+        isNear(Start1, Start2) ||
+        isNear(Start1, End2) ||
+        isNear(End1, Start2) ||
+        isNear(End1, End2);
 }
 
 bool canBreak(Way* R1, Way* R2)
@@ -138,19 +151,42 @@ static Way* join(Document* theDocument, CommandList* L, Way* R1, Way* R2)
         L->add(new RemoveFeatureCommand(theDocument,R2,Alternatives));
         return R1;
     }
-    Feature* Start1 = R1->get(0);
-    Feature* End1 = R1->get(R1->size()-1);
-    Feature* Start2 = R2->get(0);
-    Feature* End2 = R2->get(R2->size()-1);
-    if ( (Start1 == Start2) )
-        reversePoints(theDocument,L,R1);
-    else if ( (End1 == End2) )
+    Node* Start1 = R1->getNode(0);
+    Node* End1 = R1->getNode(R1->size()-1);
+    Node* Start2 = R2->getNode(0);
+    Node* End2 = R2->getNode(R2->size()-1);
+
+    if (End1 == Start2) {
+        // nothing to do, but skip the other tests
+    } else if (End1 == End2) {
         reversePoints(theDocument,L,R2);
-    if (Start1 == End2) {
+    } else if (Start1 == Start2) {
+        reversePoints(theDocument,L,R1);
+    } else if (Start1 == End2) {
+        Way* r = R1;
+        R1 = R2;
+        R2 = r;
+    } else if (isNear(End1, Start2)) {
+        mergeNodes(theDocument, L, End1, Start2);
+    } else if (isNear(End1, End2)) {
+        mergeNodes(theDocument, L, End1, End2);
+        reversePoints(theDocument,L,R2);
+    } else if (isNear(Start1, Start2)) {
+        mergeNodes(theDocument, L, Start1, Start2);
+        reversePoints(theDocument,L,R1);
+    } else if (isNear(Start1, End2)) {
+        mergeNodes(theDocument, L, Start1, End2);
         Way* r = R1;
         R1 = R2;
         R2 = r;
     }
+
+    // Auto-merge closed ways
+    Node *StartResult = R1->getNode(0);
+    Node *EndResult = R2->getNode(R2->size()-1);
+    if (StartResult != EndResult && isNear(StartResult, EndResult))
+        mergeNodes(theDocument, L, StartResult, EndResult);
+
     appendPoints(theDocument,L,R1,R2);
     Feature::mergeTags(theDocument,L,R1,R2);
     L->add(new RemoveFeatureCommand(theDocument,R2,Alternatives));
@@ -524,6 +560,14 @@ void alignNodes(Document* theDocument, CommandList* theList, PropertiesDock* the
         pos=pos+p1;
         theList->add(new MoveNodeCommand( Nodes[i], pos, theDocument->getDirtyOrOriginLayer(Nodes[i]->layer()) ));
     }
+}
+
+static void mergeNodes(Document* theDocument, CommandList* theList, Node *node1, Node *node2)
+{
+    QList<Feature*> alt;
+    alt.append(node1);
+    Feature::mergeTags(theDocument, theList, node1, node2);
+    theList->add(new RemoveFeatureCommand(theDocument, node2, alt));
 }
 
 void mergeNodes(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
