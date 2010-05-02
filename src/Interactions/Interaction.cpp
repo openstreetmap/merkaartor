@@ -331,6 +331,8 @@ void FeatureSnapInteraction::updateSnap(QMouseEvent* event)
     double BestDistance = 5;
     bool areNodesVisible = (view()->pixelPerM() >= M_PREFS->getLocalZoom());
 
+    Way* R;
+    Node* N;
     for (int j=0; j<document()->layerSize(); ++j) {
         if (!document()->getLayer(j)->isVisible() || document()->getLayer(j)->isReadonly())
             continue;
@@ -341,11 +343,11 @@ void FeatureSnapInteraction::updateSnap(QMouseEvent* event)
             {
                 if (F->notEverythingDownloaded())
                     continue;
-                if (CAST_WAY(F)) {
+                if (R = CAST_WAY(F)) {
                     if ( NoRoads || NoSelectRoads)
                         continue;
                 }
-                if (Node* N = CAST_NODE(F)) {
+                if (N = CAST_NODE(F)) {
                     if (NoSelectPoints)
                         continue;
                     if (!areNodesVisible && !N->hasPhoto())
@@ -364,8 +366,14 @@ void FeatureSnapInteraction::updateSnap(QMouseEvent* event)
             }
         }
     }
-    if (LastSnap && LastSnap->isVirtual() && NoSelectVirtuals)
-        LastSnap = LastSnap->getParent(0);
+    if (!NoSelectVirtuals && areNodesVisible) {
+        R = CAST_WAY(LastSnap);
+        if (R) {
+            Node* N = R->pixelDistanceVirtual(event->pos(), 5.01, view());
+            if (N)
+                LastSnap = N;
+        }
+    }
 
     if (Prev != LastSnap) {
         curStackSnap = SnapList.indexOf(LastSnap);

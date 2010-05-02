@@ -347,9 +347,6 @@ static bool downloadToResolve(const QList<Feature*>& Resolution, QWidget* aParen
                     if (dlg && dlg->wasCanceled())
                         break;
                 }
-                foreach (Way* w, theHandler.touchedWays) {
-                    w->updateVirtuals();
-                }
             }
             Resolution[i]->setLastUpdated(Feature::OSMServer);
         }
@@ -450,8 +447,6 @@ bool importOSM(QWidget* aParent, QIODevice& File, Document* theDocument, Layer* 
 
     OSMHandler theHandler(theDocument,theLayer,conflictLayer);
 
-    theLayer->blockVirtualUpdates(true);
-
     QXmlSimpleReader xmlReader;
     xmlReader.setContentHandler(&theHandler);
     QXmlInputSource source;
@@ -483,8 +478,6 @@ bool importOSM(QWidget* aParent, QIODevice& File, Document* theDocument, Layer* 
     if (!WasCanceled && M_PREFS->getDeleteIncompleteRelations())
         WasCanceled = !deleteIncompleteRelations(aParent,theDocument,theLayer,theDownloader);
 
-    theLayer->blockVirtualUpdates(false);
-
     if (WasCanceled)
     {
         theDocument->remove(conflictLayer);
@@ -493,19 +486,19 @@ bool importOSM(QWidget* aParent, QIODevice& File, Document* theDocument, Layer* 
     }
     else
     {
-        if (M_PREFS->getUseVirtualNodes()) {
-            if (dlg) {
-                Lbl->setText(QApplication::translate("Downloader","Update virtuals"));
-                Bar->setMaximum(theHandler.touchedWays.size());
-                Bar->setValue(0);
-            }
-            foreach (Way* w, theHandler.touchedWays) {
-                w->updateVirtuals();
-                if (Bar)
-                    Bar->setValue(Bar->value()+1);
-                qApp->processEvents();
-            }
-        }
+//        if (M_PREFS->getUseVirtualNodes()) {
+//            if (dlg) {
+//                Lbl->setText(QApplication::translate("Downloader","Update virtuals"));
+//                Bar->setMaximum(theHandler.touchedWays.size());
+//                Bar->setValue(0);
+//            }
+//            foreach (Way* w, theHandler.touchedWays) {
+//                w->updateVirtuals();
+//                if (Bar)
+//                    Bar->setValue(Bar->value()+1);
+//                qApp->processEvents();
+//            }
+//        }
 
         // Check for empty Roads/Relations and update virtual nodes
         QList<Feature*> EmptyFeature;

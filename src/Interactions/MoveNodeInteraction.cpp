@@ -92,23 +92,12 @@ void MoveNodeInteraction::snapMousePressEvent(QMouseEvent * event, Feature* aLas
             Moving.push_back(Pt);
             if (sel.size() == 1)
                 StartDragPosition = Pt->position();
-            if (!Moving[i]->isVirtual())
-                for (int j=0; j<Moving[i]->sizeParents(); ++j) {
-                    if (Way* aRoad = CAST_WAY(Moving[i]->getParent(j))) {
-                        aRoad->removeVirtuals();
-                    }
-                }
         }
         else if (Way* R = CAST_WAY(sel[i])) {
             for (int j=0; j<R->size(); ++j)
                 if (std::find(Moving.begin(),Moving.end(),R->get(j)) == Moving.end()) {
                     Moving.push_back(R->getNode(j));
-                    for (int k=0; k<R->getNode(j)->sizeParents(); ++k)
-                        if (Way* aRoad = CAST_WAY(R->getNode(j)->getParent(k))) {
-                            aRoad->removeVirtuals();
-                        }
                 }
-            R->removeVirtuals();
             addToNoSnap(R);
         }
     }
@@ -141,7 +130,6 @@ void MoveNodeInteraction::snapMouseReleaseEvent(QMouseEvent * event, Feature* Cl
         QSet<Way*> WaysToUpdate;
         for (int i=0; i<Moving.size(); ++i)
         {
-            Moving[i]->blockVirtualUpdates(true);
             Moving[i]->setPosition(OriginalPosition[i]);
             if (Moving[i]->layer()->isTrack())
                 theList->add(new MoveNodeCommand(Moving[i],OriginalPosition[i]+Diff, Moving[i]->layer()));
@@ -153,11 +141,9 @@ void MoveNodeInteraction::snapMouseReleaseEvent(QMouseEvent * event, Feature* Cl
                 else
                     Moving[i]->getParent(j)->updateIndex();
             }
-            Moving[i]->blockVirtualUpdates(false);
         }
         foreach (Way* w, WaysToUpdate) {
             w->updateIndex();
-            w->updateVirtuals();
         }
 
         // If moving a single node (not a track node), see if it got dropped onto another node
@@ -250,15 +236,12 @@ void MoveNodeInteraction::snapMouseMoveEvent(QMouseEvent* event, Feature* Closer
                 theList->add(new WayAddNodeCommand(aRoad,N,SnapIdx,main()->document()->getDirtyOrOriginLayer(aRoad->layer())));
 
                 Moving[i] = N;
-                aRoad->removeVirtuals();
             } else {
                 Moving[i]->layer()->blockIndexing(true);
-                Moving[i]->blockVirtualUpdates(true);
 
                 Moving[i]->setPosition(OriginalPosition[i]+Diff);
 
                 Moving[i]->layer()->blockIndexing(false);
-                Moving[i]->blockVirtualUpdates(false);
             }
         }
         view()->invalidate(true, false);

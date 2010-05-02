@@ -35,6 +35,7 @@ class Way : public Feature
         virtual void drawHover(QPainter& P, MapView* theView, bool solid=true);
         virtual void drawHighlight(QPainter& P, MapView* theView, bool solid=true);
         virtual double pixelDistance(const QPointF& Target, double ClearEndDistance, bool selectNodes, MapView* theView) const;
+        Node* pixelDistanceVirtual(const QPointF& Target, double ClearEndDistance, MapView* theView) const;
         virtual void cascadedRemoveIfUsing(Document* theDocument, Feature* aFeature, CommandList* theList, const QList<Feature*>& Alternatives);
         virtual bool notEverythingDownloaded();
         virtual QString description() const;
@@ -50,9 +51,6 @@ class Way : public Feature
         virtual const Feature* get(int Idx) const;
         virtual bool isNull() const;
         virtual void setDeleted(bool delState);
-        void removeVirtuals();
-        void addVirtuals();
-        void updateVirtuals();
 
         const QList<Coord>& smoothed() const;
 

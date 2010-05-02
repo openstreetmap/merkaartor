@@ -630,7 +630,7 @@ QString Relation::toHtml()
 {
     QString D;
 
-    D += "<i>"+QApplication::translate("MapFeature", "size")+": </i>" + QString::number(size()) + " nodes";
+    D += "<i>"+QApplication::translate("MapFeature", "size")+": </i>" + QString::number(size()) + " " + QApplication::translate("MapFeature", "members");
     CoordBox bb = boundingBox();
     D += "<br/>";
     D += "<i>"+QApplication::translate("MapFeature", "Topleft")+": </i>" + QString::number(intToAng(bb.topLeft().lat()), 'f', 4) + " / " + QString::number(intToAng(bb.topLeft().lon()), 'f', 4);

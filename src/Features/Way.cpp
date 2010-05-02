@@ -29,12 +29,15 @@
 class WayPrivate
 {
     public:
-        WayPrivate()
-        : SmoothedUpToDate(false), BBoxUpToDate(false)
+        WayPrivate(Way* aWay)
+        : theWay(aWay), SmoothedUpToDate(false), BBoxUpToDate(false)
             , IsCoastline(false), Area(0), Distance(0), Width(0)
-            , wasPathComplete(false), ProjectionRevision(0)
+            , wasPathComplete(false), VirtualsUptodate(false)
+            , ProjectionRevision(0)
         {
         }
+        Way* theWay;
+
         std::vector<NodePtr> Nodes;
         std::vector<NodePtr> virtualNodes;
         QList<Coord> Smoothed;
@@ -47,6 +50,7 @@ class WayPrivate
         double Width;
         bool NotEverythingDownloaded;
         bool wasPathComplete;
+        bool VirtualsUptodate;
         QPainterPath thePath;
 #ifndef _MOBILE
         int ProjectionRevision;
@@ -54,6 +58,9 @@ class WayPrivate
 
         void updateSmoothed(bool DoSmooth);
         void addSmoothedBezier(int i, int j, int k, int l);
+        void doUpdateVirtuals();
+        void removeVirtuals();
+        void addVirtuals();
 };
 
 void WayPrivate::addSmoothedBezier(int i, int j, int k, int l)
@@ -86,14 +93,55 @@ void WayPrivate::updateSmoothed(bool DoSmooth)
     addSmoothedBezier(Last-2,Last-1,Last,Last);
 }
 
-Way::Way(void)
-: p(new WayPrivate)
+void WayPrivate::removeVirtuals()
 {
+    while (virtualNodes.size()) {
+        virtualNodes[0]->unsetParentFeature(theWay);
+        if (virtualNodes[0]->layer())
+            virtualNodes[0]->layer()->deleteFeature(virtualNodes[0]);
+//		delete p->virtualNodes[0];
+        virtualNodes.erase(virtualNodes.begin());
+    }
+}
+
+void WayPrivate::addVirtuals()
+{
+    for (unsigned int i=1; i<Nodes.size(); ++i) {
+        QLineF l(toQt(Nodes[i-1]->position()), toQt(Nodes[i]->position()));
+        l.setLength(l.length()/2);
+        Node* v = new Node(toCoord(l.p2()));
+        v->setVirtual(true);
+        v->setParentFeature(theWay);
+        theWay->layer()->add(v);
+        virtualNodes.push_back(v);
+    }
+}
+
+void WayPrivate::doUpdateVirtuals()
+{
+//    Q_ASSERT(!(theWay->layer()->isIndexingBlocked()));
+
+    if (VirtualsUptodate)
+        return;
+
+    removeVirtuals();
+    if (M_PREFS->getUseVirtualNodes() && theWay->layer() && !(theWay->layer()->isReadonly()) && !(theWay->isDeleted()))
+        addVirtuals();
+
+    VirtualsUptodate = true;
+}
+
+/**************************/
+
+Way::Way(void)
+{
+    p = new WayPrivate(this);
 }
 
 Way::Way(const Way& other)
-: Feature(other), p(new WayPrivate)
+: Feature(other)
 {
+    p = new WayPrivate(this);
 }
 
 Way::~Way(void)
@@ -115,7 +163,8 @@ Way::~Way(void)
 void Way::setDeleted(bool delState)
 {
     Feature::setDeleted(delState);
-    updateVirtuals();
+    p->VirtualsUptodate = false;
+    p->doUpdateVirtuals();
 }
 
 void Way::setLayer(Layer* L)
@@ -132,7 +181,7 @@ void Way::setLayer(Layer* L)
         }
     }
     Feature::setLayer(L);
-    updateVirtuals();
+    p->VirtualsUptodate = false;
 }
 
 void Way::partChanged(Feature* F, int ChangeId)
@@ -144,8 +193,7 @@ void Way::partChanged(Feature* F, int ChangeId)
     MetaUpToDate = false;
     p->SmoothedUpToDate = false;
     p->wasPathComplete = false;
-    if (!F->isVirtualUpdatesBlocked())
-        updateVirtuals();
+    p->VirtualsUptodate = false;
 
     notifyParents(ChangeId);
 }
@@ -175,55 +223,11 @@ void Way::add(Node* Pt, int Idx)
     MetaUpToDate = false;
     p->SmoothedUpToDate = false;
     p->wasPathComplete = false;
+    p->VirtualsUptodate = false;
     if (layer()) {
         CoordBox bb = boundingBox();
         layer()->indexAdd(bb, this);
     }
-
-    // Virtual Node
-    if (M_PREFS->getUseVirtualNodes() && Idx && layer()) {
-        QLineF l(toQt(p->Nodes[Idx-1]->position()), toQt(p->Nodes[Idx]->position()));
-        l.setLength(l.length()/2);
-        Node* v = new Node(toCoord(l.p2()));
-        v->setVirtual(true);
-        v->setParentFeature(this);
-        layer()->add(v);
-        p->virtualNodes.push_back(v);
-    }
-}
-
-void Way::removeVirtuals()
-{
-    while (p->virtualNodes.size()) {
-        p->virtualNodes[0]->unsetParentFeature(this);
-        if (p->virtualNodes[0]->layer())
-            p->virtualNodes[0]->layer()->deleteFeature(p->virtualNodes[0]);
-//		delete p->virtualNodes[0];
-        p->virtualNodes.erase(p->virtualNodes.begin());
-    }
-}
-
-void Way::addVirtuals()
-{
-    for (unsigned int i=1; i<p->Nodes.size(); ++i) {
-        QLineF l(toQt(p->Nodes[i-1]->position()), toQt(p->Nodes[i]->position()));
-        l.setLength(l.length()/2);
-        Node* v = new Node(toCoord(l.p2()));
-        v->setVirtual(true);
-        v->setParentFeature(this);
-        layer()->add(v);
-        p->virtualNodes.push_back(v);
-    }
-}
-
-void Way::updateVirtuals()
-{
-    if (isVirtualUpdatesBlocked() || (layer() && layer()->isVirtualUpdatesBlocked()))
-        return;
-    removeVirtuals();
-    if (!M_PREFS->getUseVirtualNodes() || !layer() || layer()->isReadonly() || isDeleted())
-        return;
-    addVirtuals();
 }
 
 int Way::find(Feature* Pt) const
@@ -256,12 +260,11 @@ void Way::remove(int idx)
     MetaUpToDate = false;
     p->SmoothedUpToDate = false;
     p->wasPathComplete = false;
+    p->VirtualsUptodate = false;
     if (layer()) {
         CoordBox bb = boundingBox();
         layer()->indexAdd(bb, this);
     }
-
-    updateVirtuals();
 }
 
 void Way::remove(Feature* F)
@@ -353,6 +356,8 @@ void Way::updateMeta()
         return;
     }
 
+    p->doUpdateVirtuals();
+
     bool isArea = false;
     if (tagValue("junction", "") != "roundabout")
         isArea = (p->Nodes[0] == p->Nodes[p->Nodes.size()-1]);
@@ -412,8 +417,20 @@ double Way::area()
     return p->Area;
 }
 
-void Way::draw(QPainter&, MapView* )
+void Way::draw(QPainter& P, MapView* theView)
 {
+    if (M_PREFS->getVirtualNodesVisible()) {
+        P.save();
+        P.setPen(QColor(0,0,0));
+        foreach (NodePtr N, p->virtualNodes) {
+            if (theView->viewport().contains(N->position())) {
+                QPoint p =  theView->toView(N);
+                P.drawLine(p+QPoint(-3, -3), p+QPoint(3, 3));
+                P.drawLine(p+QPoint(3, -3), p+QPoint(-3, 3));
+            }
+        }
+        P.restore();
+    }
 }
 
 void Way::drawHover(QPainter& thePainter, MapView* theView, bool solid)
@@ -539,14 +556,6 @@ double Way::pixelDistance(const QPointF& Target, double ClearEndDistance, bool s
                     return Best;
             }
         }
-        for (unsigned int i=0; i<p->virtualNodes.size(); ++i)
-        {
-            if (p->virtualNodes.at(i)) {
-                double x = ::distance(Target,theView->toView(p->virtualNodes.at(i)));
-                if (x<ClearEndDistance)
-                    return Best;
-            }
-        }
     }
     if (smoothed().size())
         for (int i=3; i <p->Smoothed.size(); i += 3)
@@ -571,6 +580,19 @@ double Way::pixelDistance(const QPointF& Target, double ClearEndDistance, bool s
             }
         }
     return Best;
+}
+
+Node* Way::pixelDistanceVirtual(const QPointF& Target, double ClearEndDistance, MapView* theView) const
+{
+    for (unsigned int i=0; i<p->virtualNodes.size(); ++i)
+    {
+        if (p->virtualNodes.at(i)) {
+            double x = ::distance(Target,theView->toView(p->virtualNodes.at(i)));
+            if (x<ClearEndDistance)
+                return p->virtualNodes.at(i);
+        }
+    }
+    return NULL;
 }
 
 void Way::cascadedRemoveIfUsing(Document* theDocument, Feature* aFeature, CommandList* theList, const QList<Feature*>& Proposals)

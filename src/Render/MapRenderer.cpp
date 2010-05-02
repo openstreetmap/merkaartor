@@ -165,23 +165,13 @@ void TouchupStyleLayer::draw(Node* Pt)
             {
                 QPoint P = r->theView->transform().map(r->theView->projection().project(Pt)).toPoint();
 
-                if (Pt->isVirtual()) {
-                    if (M_PREFS->getVirtualNodesVisible()) {
-                        r->thePainter->save();
-                        r->thePainter->setPen(QColor(0,0,0));
-                        r->thePainter->drawLine(P+QPoint(-3, -3), P+QPoint(3, 3));
-                        r->thePainter->drawLine(P+QPoint(3, -3), P+QPoint(-3, 3));
-                        r->thePainter->restore();
-                    }
-                } else {
-                    if (Pt->isWaypoint()) {
-                        QRect R2(P-QPoint(4,4),QSize(8,8));
-                        r->thePainter->fillRect(R2,QColor(255,0,0,128));
-                    }
-
-                    QRect R(P-QPoint(3,3),QSize(6,6));
-                    r->thePainter->fillRect(R,QColor(0,0,0,128));
+                if (Pt->isWaypoint()) {
+                    QRect R2(P-QPoint(4,4),QSize(8,8));
+                    r->thePainter->fillRect(R2,QColor(255,0,0,128));
                 }
+
+                QRect R(P-QPoint(3,3),QSize(6,6));
+                r->thePainter->fillRect(R,QColor(0,0,0,128));
             }
         }
     }

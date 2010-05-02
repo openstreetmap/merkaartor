@@ -309,7 +309,6 @@ ImageMapLayer * ImageMapLayer::fromXML(Document* d, const QDomElement& e, QProgr
 {
     ImageMapLayer* l = new ImageMapLayer(e.attribute("name"));
     l->blockIndexing(true);
-    l->blockVirtualUpdates(true);
     d->addImageLayer(l);
     l->setId(e.attribute("xml:id"));
 
@@ -331,7 +330,6 @@ ImageMapLayer * ImageMapLayer::fromXML(Document* d, const QDomElement& e, QProgr
 
     l->blockIndexing(false);
     l->reIndex();
-    l->blockVirtualUpdates(false);
     return l;
 }
 

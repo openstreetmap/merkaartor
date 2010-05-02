@@ -375,16 +375,6 @@ void Feature::setVirtual(bool val)
     p->Virtual = val;
 }
 
-void Feature::blockVirtualUpdates(bool val)
-{
-    p->VirtualsUpdatesBlocked = val;
-}
-
-bool Feature::isVirtualUpdatesBlocked() const
-{
-    return p->VirtualsUpdatesBlocked;
-}
-
 bool Feature::isVirtual() const
 {
     return p->Virtual;
