@@ -196,6 +196,7 @@ MainWindow::MainWindow(QWidget *parent)
     p->theFeats = new FeaturesDock(this);
     connect(p->theFeats, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
     connect(theView, SIGNAL(viewportChanged()), p->theFeats, SLOT(on_Viewport_changed()), Qt::QueuedConnection);
+    connect(this, SIGNAL(content_changed()), p->theFeats, SLOT(on_Viewport_changed()), Qt::QueuedConnection);
 
     theGPS = new QGPS(this);
     connect(theGPS, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
@@ -978,6 +979,7 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
                 newLayer->blockIndexing(false);
                 newLayer->reIndex();
             }
+            emit content_changed();
         }
         else
         if (!importAborted)
@@ -1135,6 +1137,8 @@ void MainWindow::on_fileDownloadAction_triggered()
     deleteProgressDialog();
 
     updateBookmarksMenu();
+
+    emit content_changed();
 }
 
 void MainWindow::on_fileDownloadMoreAction_triggered()
@@ -1146,6 +1150,8 @@ void MainWindow::on_fileDownloadMoreAction_triggered()
     }
 
     deleteProgressDialog();
+
+    emit content_changed();
 }
 
 void MainWindow::downloadFeatures(const QList<Feature*>& aDownloadList)
@@ -1157,6 +1163,9 @@ void MainWindow::downloadFeatures(const QList<Feature*>& aDownloadList)
     }
 
     deleteProgressDialog();
+
+    emit content_changed();
+
 }
 
 void MainWindow::on_fileWorkOfflineAction_triggered()
@@ -2002,6 +2011,8 @@ void MainWindow::loadDocument(QString fn)
 
     M_PREFS->addRecentOpen(fn);
     updateRecentOpenMenu();
+
+    emit content_changed();
 }
 
 void MainWindow::on_exportOSMAction_triggered()

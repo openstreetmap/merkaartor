@@ -171,6 +171,8 @@ class MainWindow : public QMainWindow, public IProgressWindow
         void add_triggered();
         void reverse_triggered();
 
+        void content_changed();
+
     public:
         MainWindowPrivate* p;
         Ui::MainWindow *ui;

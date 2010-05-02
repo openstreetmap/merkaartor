@@ -1,4 +1,5 @@
 v0.16
+    * FIX : Update Feature dock when document content changes (fixes #2923)
     * CHG : Change way the virtual nodes are handled
     * CHG : Allow tag pasting between different classes of features
     * CHG : Use a different spatial index provider
