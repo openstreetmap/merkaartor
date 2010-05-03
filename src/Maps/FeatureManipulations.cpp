@@ -641,11 +641,26 @@ void commitFeatures(Document* theDocument, CommandList* theList, PropertiesDock*
         if (Node* N = CAST_NODE(Features[i])) {
             theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),N,true));
         }
-        if (Way* R = CAST_WAY(Features[i])) {
+        if (Way* W = CAST_WAY(Features[i])) {
+            theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),W,true));
+            for (int j=0; j < W->size(); ++j) {
+                if (!Features.contains(W->get(j))) {
+                    theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),W->get(j),true));
+                }
+            }
+        }
+        if (Relation* R = CAST_RELATION(Features[i])) {
             theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),R,true));
             for (int j=0; j < R->size(); ++j) {
                 if (!Features.contains(R->get(j))) {
                     theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),R->get(j),true));
+                    if (Way* W = CAST_WAY(R->get(j))) {
+                        for (int k=0; k < W->size(); ++k) {
+                            if (!Features.contains(W->get(k))) {
+                                theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),W->get(k),true));
+                            }
+                        }
+                    }
                 }
             }
         }
