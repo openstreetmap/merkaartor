@@ -631,40 +631,28 @@ void detachNode(Document* theDocument, CommandList* theList, PropertiesDock* the
 
 void commitFeatures(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
-    QList<Feature*> alt;
-    QList<Feature*> Features;
+    QSet<Feature*> Features;
+    QQueue<Feature*> ToAdd;
+
+    Layer *layer = theDocument->getDirtyOrOriginLayer();
 
     for (int i=0; i<theDock->size(); ++i)
         if (!theDock->selection(i)->isDirty())
-            Features.push_back(theDock->selection(i));
-    for (int i=0; i<Features.size(); ++i) {
-        if (Node* N = CAST_NODE(Features[i])) {
-            theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),N,true));
-        }
-        if (Way* W = CAST_WAY(Features[i])) {
-            theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),W,true));
-            for (int j=0; j < W->size(); ++j) {
-                if (!Features.contains(W->get(j))) {
-                    theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),W->get(j),true));
-                }
-            }
-        }
-        if (Relation* R = CAST_RELATION(Features[i])) {
-            theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),R,true));
-            for (int j=0; j < R->size(); ++j) {
-                if (!Features.contains(R->get(j))) {
-                    theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),R->get(j),true));
-                    if (Way* W = CAST_WAY(R->get(j))) {
-                        for (int k=0; k < W->size(); ++k) {
-                            if (!Features.contains(W->get(k))) {
-                                theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(),W->get(k),true));
-                            }
-                        }
-                    }
-                }
+            ToAdd.enqueue(theDock->selection(i));
+
+    while (!ToAdd.isEmpty()) {
+        Feature *feature = ToAdd.dequeue();
+        Features.insert(feature);
+        for (int j=0; j < feature->size(); ++j) {
+            Feature *member = feature->get(j);
+            if (!Features.contains(member)) {
+                ToAdd.enqueue(member);
             }
         }
     }
+
+    foreach (Feature *feature, Features)
+        theList->add(new AddFeatureCommand(layer,feature,true));
 }
 
 void addRelationMember(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
