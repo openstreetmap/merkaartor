@@ -707,12 +707,14 @@ void MainWindow::clipboardChanged()
 void MainWindow::on_editRedoAction_triggered()
 {
     theDocument->redoHistory();
+    emit content_changed();
     invalidateView();
 }
 
 void MainWindow::on_editUndoAction_triggered()
 {
     theDocument->undoHistory();
+    emit content_changed();
     invalidateView();
 }
 
@@ -729,6 +731,7 @@ void MainWindow::on_editPropertiesAction_triggered()
 void MainWindow::on_editRemoveAction_triggered()
 {
     emit remove_triggered();
+    emit content_changed();
 }
 
 void MainWindow::on_editMoveAction_triggered()
@@ -1391,6 +1394,7 @@ void MainWindow::on_fileNewAction_triggered()
         fileName = "";
         setWindowTitle(QString("untitled - %1").arg(p->title));
 
+        emit content_changed();
         on_editPropertiesAction_triggered();
         adjustLayers(true);
     }
@@ -1466,6 +1470,7 @@ void MainWindow::on_roadJoinAction_triggered()
     else
     {
         theDocument->addHistory(theList);
+        emit content_changed();
         invalidateView();
     }
 }
@@ -1479,6 +1484,7 @@ void MainWindow::on_roadSplitAction_triggered()
     else
     {
         theDocument->addHistory(theList);
+        emit content_changed();
         invalidateView();
     }
 }
@@ -1492,6 +1498,7 @@ void MainWindow::on_roadBreakAction_triggered()
     else
     {
         theDocument->addHistory(theList);
+        emit content_changed();
         invalidateView();
     }
 }
@@ -1507,6 +1514,8 @@ void MainWindow::on_featureDeleteAction_triggered()
     }
     F->layer()->deleteFeature(F);
     theProperties->setSelection(0);
+
+    emit content_changed();
     invalidateView();
 }
 
