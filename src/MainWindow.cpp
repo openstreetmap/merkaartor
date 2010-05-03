@@ -1789,8 +1789,12 @@ void MainWindow::on_toolsShortcutsAction_triggered()
     theActions.append(ui->viewScaleAction);
     theActions.append(ui->viewNamesAction);
     theActions.append(ui->viewTrackPointsAction);
+    theActions.append(ui->viewVirtualNodesAction);
     theActions.append(ui->viewTrackSegmentsAction);
     theActions.append(ui->viewGotoAction);
+    theActions.append(ui->viewArrowsAlwaysAction);
+    theActions.append(ui->viewArrowsNeverAction);
+    theActions.append(ui->viewArrowsOnewayAction);
     theActions.append(ui->gpsConnectAction);
     theActions.append(ui->gpsReplayAction);
     theActions.append(ui->gpsRecordAction);
