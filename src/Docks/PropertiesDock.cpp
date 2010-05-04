@@ -783,6 +783,7 @@ void PropertiesDock::on_Member_clicked(const QModelIndex & index)
 
 void PropertiesDock::on_Member_selected()
 {
+    QList<Feature*> Features;
     Relation* R = dynamic_cast<Relation*>(Selection[0]);
     if (R) {
         QModelIndexList indexes = CurrentMembersView->selectionModel()->selectedIndexes();
@@ -796,10 +797,12 @@ void PropertiesDock::on_Member_selected()
             {
                 Feature* F = Content.value<Feature*>();
                 if (F) {
-                    setSelection(F);
+                    Features.append(F);
                 }
             }
         }
+        if (!Features.isEmpty())
+            setMultiSelection(Features);
     }
     Main->invalidateView(false);
 }
