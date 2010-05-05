@@ -40,7 +40,7 @@ bool ImportExportSHP::loadFile(QString filename)
     return true;
 }
 
-bool ImportExportSHP::saveFile(QString filename)
+bool ImportExportSHP::saveFile(QString)
 {
     return false;
 }
@@ -54,100 +54,116 @@ bool ImportExportSHP::export_(const QList<Feature *>& featList)
     return false;
 }
 
+// Make OGRPoint usable in a QHash<>
+static bool operator==(const OGRPoint a, const OGRPoint b)
+{
+    return a.getX() == b.getX()
+        && a.getY() == b.getY()
+        && a.getDimension() == b.getDimension()
+        && (a.getDimension() < 3 || a.getZ() == b.getZ());
+}
+static uint qHash(const OGRPoint o)
+{
+    // A good algorithm depends strongly on the data.  In particular,
+    // on the projection and extent of the map.  This is written for
+    // EPSG:27700 10kmx10km at 1m resolution (i.e. OS OpenData tiles).
+    return (uint)(o.getX() * 100000 + o.getY() * 1000000000);
+}
+
+
+Node *ImportExportSHP::nodeFor(const OGRPoint p)
+{
+    if (pointHash.contains(p)) {
+        return pointHash[p];
+    }
+
+    return pointHash[p] = new Node(Coord(angToInt(p.getY()), angToInt(p.getX())));
+}
+
 // IMPORT
+
+Way *ImportExportSHP::readWay(Layer* aLayer, OGRLineString *poRing) {
+    int numNode = poRing->getNumPoints();
+
+    if (!numNode) return NULL;
+
+    OGRPoint p;
+
+    Way* w = new Way();
+    for(int i = 0;  i < numNode;  i++) {
+        poRing->getPoint(i, &p);
+        Node *n = nodeFor(p);
+        aLayer->add(n);
+        w->add(n);
+    }
+    return w;
+}
 
 Feature* ImportExportSHP::parseGeometry(Layer* aLayer, OGRGeometry *poGeometry)
 {
-    Feature* F = NULL;
-    Node* N;
-    double x, y;
-    if ( wkbFlatten(poGeometry->getGeometryType()) == wkbPoint )
-    {
-        OGRPoint *poPoint = (OGRPoint *) poGeometry;
-        x = poPoint->getX(); y = poPoint->getY();
-        if (!theProjection || theProjection->projIsLatLong())
-            N = new Node(Coord(angToInt(y), angToInt(x)));
-        else {
-            theProjection->projTransformToWGS84(1, 0, &x, &y, NULL);
-            N = new Node(Coord(radToInt(y), radToInt(x)));
-        }
+    OGRwkbGeometryType type = wkbFlatten(poGeometry->getGeometryType());
 
-        aLayer->add(N);
-        F = N;
-    } else
-    if ( wkbFlatten(poGeometry->getGeometryType()) == wkbPolygon )
-    {
-        OGRPolygon  *poPoly = (OGRPolygon *) poGeometry;
+    switch(type) {
+    case wkbPoint: {
+        OGRPoint *p = (OGRPoint*)(poGeometry);
+        if (p->getDimension() > 2)
+            return nodeFor(OGRPoint(p->getX(), p->getY(), p->getZ()));
+        else
+            return nodeFor(OGRPoint(p->getX(), p->getY()));
+    }
+
+    case wkbPolygon: {
+        OGRPolygon *poPoly = (OGRPolygon*)poGeometry;
         OGRLinearRing *poRing = poPoly->getExteriorRing();
-        OGRPoint p;
-        Node* firstPoint = NULL;
-
-        if(int numNode = poRing->getNumPoints()) {
-            Way* R = new Way();
-            for(int i=0; i<numNode-1; i++) {
-                poRing->getPoint(i, &p);
-                x = p.getX(); y = p.getY();
-                if (!theProjection || theProjection->projIsLatLong())
-                    N = new Node(Coord(angToInt(y), angToInt(x)));
-                else {
-                    theProjection->projTransformToWGS84(1, 0, &x, &y, NULL);
-                    N = new Node(Coord(radToInt(y), radToInt(x)));
+        Way *outer = readWay(aLayer, poRing);
+        if (outer) {
+            if (int numHoles = poPoly->getNumInteriorRings()) {
+                aLayer->add(outer);
+                Relation* rel = new Relation;
+                rel->setTag("type", "multipolygon");
+                rel->add("outer", outer);
+                for (int i=0;  i<numHoles;  i++) {
+                    poRing = poPoly->getInteriorRing(i);
+                    Way *inner = readWay(aLayer, poRing);
+                    if (inner) {
+                        aLayer->add(inner);
+                        rel->add("inner", inner);
+                    }
                 }
-                aLayer->add(N);
-                R->add(N);
-
-                if (!firstPoint)
-                    firstPoint = N;
+                return rel;
             }
-            R->add(firstPoint);
-            aLayer->add(R);
-            F = R;
         }
-    } else
-    if ( wkbFlatten(poGeometry->getGeometryType()) == wkbLineString )
+        return outer;
+    }
+
+    case wkbLineString: {
+        return readWay(aLayer, (OGRLineString*)poGeometry);
+    }
+
+    case wkbMultiPolygon:
+        // TODO - merge multipolygon relations if members have holes; for now, fallthrough
+    case wkbMultiLineString:
+    case wkbMultiPoint:
     {
-        OGRLineString  *poLS = (OGRLineString *) poGeometry;
-        OGRPoint p;
-
-        if(int numNode = poLS->getNumPoints()) {
-            Way* R = new Way();
-            for(int i=0; i<numNode; i++) {
-                poLS->getPoint(i, &p);
-                x = p.getX(); y = p.getY();
-                if (!theProjection || theProjection->projIsLatLong())
-                    N = new Node(Coord(angToInt(y), angToInt(x)));
-                else {
-                    theProjection->projTransformToWGS84(1, 0, &x, &y, NULL);
-                    N = new Node(Coord(radToInt(y), radToInt(x)));
-                }
-                aLayer->add(N);
-
-                R->add(N);
-            }
-            aLayer->add(R);
-            F = R;
-        }
-    } else
-    if (
-        ( wkbFlatten(poGeometry->getGeometryType()) == wkbMultiPolygon  ) ||
-        ( wkbFlatten(poGeometry->getGeometryType()) == wkbMultiLineString  ) ||
-        ( wkbFlatten(poGeometry->getGeometryType()) == wkbMultiPoint  )
-        )
-    {
-        OGRGeometryCollection  *poCol = (OGRGeometryCollection *) poGeometry;
-
+        OGRGeometryCollection  *poCol = (OGRGeometryCollection*) poGeometry;
         if(int numCol = poCol->getNumGeometries()) {
             Relation* R = new Relation;
             for(int i=0; i<numCol; i++) {
                 Feature* F = parseGeometry(aLayer, poCol->getGeometryRef(i));
-                if (F)
+                if (F) {
+                    aLayer->add(F);
                     R->add("", F);
+                }
             }
-            aLayer->add(R);
-            F = R;
+            return R;
+        } else {
+            return NULL;
         }
     }
-    return F;
+    default:
+        qWarning("SHP: Unrecognised Geometry type %d, ignored", type);
+        return NULL;
+    }
 }
 
 // import the  input
@@ -156,9 +172,8 @@ bool ImportExportSHP::import(Layer* aLayer)
     OGRRegisterAll();
 
     OGRDataSource       *poDS;
+    int ogrError;
 
-    QFileInfo fi(FileName);
-//    poDS = OGRSFDriverRegistrar::Open( fi.path().toUtf8().constData(), FALSE );
     poDS = OGRSFDriverRegistrar::Open( FileName.toUtf8().constData(), FALSE );
     if( poDS == NULL )
     {
@@ -166,37 +181,33 @@ bool ImportExportSHP::import(Layer* aLayer)
         return false;
     }
 
+    OGRSpatialReference wgs84srs;
+    if (wgs84srs.SetWellKnownGeogCS("WGS84") != OGRERR_NONE) {
+        qDebug("SHP: couldn't initialise WGS84: %s", CPLGetLastErrorMsg());
+        return false;
+    }
+
     OGRLayer  *poLayer;
-
-    //poLayer = poDS->GetLayerByName( "point" );
+    // TODO: iterate over all layers?
     poLayer = poDS->GetLayer( 0 );
+
     OGRSpatialReference * theSrs = poLayer->GetSpatialRef();
-    if (theSrs) {
-        theProjection = new Projection();
-        theSrs->morphFromESRI();
-//        if (theSrs->AutoIdentifyEPSG() == OGRERR_NONE)
-//        {
-//            qDebug() << "SHP: EPSG:" << theSrs->GetAuthorityCode(NULL);
-//            theProjection->setProjectionType(QString("EPSG:%1").arg(theSrs->GetAuthorityCode(NULL)));
-//        } else
-        {
-            char* cTheProj4;
-            if (theSrs->exportToProj4(&cTheProj4) == OGRERR_NONE) {
-                qDebug() << "SHP: to proj4 : " << cTheProj4;
-            } else {
-                qDebug() << "SHP: to proj4 error: " << CPLGetLastErrorMsg();
-                return false;
-            }
-            QString theProj4(cTheProj4);
+    OGRCoordinateTransformation *toWGS84 = NULL;
 
-            // Hack because GDAL (as of 1.6.1) do not recognize "DATUM["D_OSGB_1936"" from the WKT
-            QString datum = theSrs->GetAttrValue("DATUM");
-            if (datum == "OSGB_1936" && !theProj4.contains("+datum"))
-                theProj4 += " +datum=OSGB36";
+    // { char *wkt; theSrs->exportToPrettyWkt(&wkt); qDebug() << "SHP: input SRS:" << endl << wkt; }
 
-            theProjection->setProjectionType(QString(theProj4));
+    // Workaround for OSGB - otherwise its datum is ignored (TODO: why?)
+    QString gcs = theSrs->GetAttrValue("GEOGCS");
+    if (gcs == "GCS_OSGB_1936" || gcs == "OSGB 1936") {
+        qDebug() << "SHP: substituting GCS_OSGB_1936 with EPSG:27700";
+        if ((ogrError = theSrs->importFromEPSG(27700)) != OGRERR_NONE) {
+            qDebug("SHP: couldn't initialise EPSG:27700: %d: %s", ogrError, CPLGetLastErrorMsg());
+            return false;
         }
     }
+
+    if (theSrs)
+        toWGS84 = OGRCreateCoordinateTransformation(theSrs, &wgs84srs);
 
     OGRFeature *poFeature;
 
@@ -209,12 +220,17 @@ bool ImportExportSHP::import(Layer* aLayer)
         if( poGeometry != NULL) {
             // qDebug( "GeometryType : %d,", poGeometry->getGeometryType() );
 
+            if (toWGS84)
+                poGeometry->transform(toWGS84);
+
             Feature* F = parseGeometry(aLayer, poGeometry);
             if (F) {
+                aLayer->add(F);
                 for (int i=0; i<poFeature->GetFieldCount(); ++i) {
                     OGRFieldDefn  *fd = poFeature->GetFieldDefnRef(i);
                     QString k(fd->GetNameRef());
-                    k = "_" + k + "_";
+                    k.prepend("_");
+                    k.append("_");
                     F->setTag(k, poFeature->GetFieldAsString(i));
                 }
             }
@@ -223,9 +239,12 @@ bool ImportExportSHP::import(Layer* aLayer)
         {
             qDebug( "no geometry\n" );
         }
-
-        OGRFeature::DestroyFeature( poFeature );
     }
+
+    pointHash.clear();
+
+    if (toWGS84)
+        delete toWGS84;
 
     OGRDataSource::DestroyDataSource( poDS );
 

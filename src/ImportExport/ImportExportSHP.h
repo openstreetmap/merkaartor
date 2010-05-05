@@ -17,6 +17,9 @@
 class Projection;
 class Layer;
 class OGRGeometry;
+class OGRLineString;
+class OGRPoint;
+
 
 /**
     @author cbro <cbro@semperpax.com>
@@ -43,6 +46,11 @@ protected:
 
     Feature* parseGeometry(Layer* aLayer, OGRGeometry *poGeometry);
 
+    Node *nodeFor(OGRPoint point);
+    Way *readWay(Layer* aLayer, OGRLineString *poRing);
+
+private:
+    QHash<OGRPoint, Node*> pointHash;
 };
 
 #endif
