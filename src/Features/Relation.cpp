@@ -402,64 +402,18 @@ void Relation::releaseMemberModel()
 
 void Relation::buildPath(Projection const &theProjection, const QTransform& /*theTransform*/, const QRectF& cr)
 {
-    using namespace ggl;
+    QPainterPath clipPath;
+    clipPath.addRect(cr);
 
     p->theBoundingPath = QPainterPath();
 
     if (!p->Members.size())
         return;
 
-    box_2d clipRect (make<point_2d>(cr.bottomLeft().x(), cr.topRight().y()), make<point_2d>(cr.topRight().x(), cr.bottomLeft().y()));
-
     QRectF bb = QRectF(theProjection.project(boundingBox().bottomLeft()),theProjection.project(boundingBox().topRight()));
-    //bb.adjust(-10, -10, 10, 10);
-    QList<QPointF> corners;
+    p->theBoundingPath.addRect(bb);
 
-    corners << bb.bottomLeft() << bb.topLeft() << bb.topRight() << bb.bottomRight() << bb.bottomLeft();
-
-    linestring_2d in;
-    for (int i=0; i<corners.size(); ++i) {
-        QPointF P = corners[i];
-        append(in, make<point_2d>(P.x(), P.y()));
-    }
-
-    std::vector<linestring_2d> clipped;
-    intersection <linestring_2d, box_2d, linestring_2d, std::back_insert_iterator <std::vector<linestring_2d> > >
-        (clipRect, in, std::back_inserter(clipped));
-
-    for (std::vector<linestring_2d>::const_iterator it = clipped.begin(); it != clipped.end(); it++)
-    {
-        if (!(*it).empty()) {
-            p->theBoundingPath.moveTo(QPointF((*it)[0].x(), (*it)[0].y()));
-        }
-        for (linestring_2d::const_iterator itl = (*it).begin()+1; itl != (*it).end(); itl++)
-        {
-            p->theBoundingPath.lineTo(QPointF((*itl).x(), (*itl).y()));
-        }
-    }
-
-    //polygon_2d in;
-    //for (int i=0; i<corners.size(); ++i) {
-    //	QPointF P = corners[i];
-    //	append(in, make<point_2d>(P.x(), P.y()));
-    //}
-    //correct(in);
-
-    //std::vector<polygon_2d> clipped;
-    //intersection(clipRect, in, std::back_inserter(clipped));
-
-    //for (std::vector<polygon_2d>::const_iterator it = clipped.begin(); it != clipped.end(); it++)
-    //{
-    //	if (!(*it).outer().empty()) {
-    //		p->theBoundingPath.moveTo(QPointF((*it).outer()[0].x(), (*it).outer()[0].y()));
-    //	}
-    //	for (ring_2d::const_iterator itl = (*it).outer().begin()+1; itl != (*it).outer().end(); itl++)
-    //	{
-    //		p->theBoundingPath.lineTo(QPointF((*itl).x(), (*itl).y()));
-    //	}
-    //	p->theBoundingPath.lineTo(QPointF((*it).outer()[0].x(), (*it).outer()[0].y()));
-    //}
-    //p->theBoundingPath = theTransform.map(p->theBoundingPath);
+    p->theBoundingPath = p->theBoundingPath.intersected(clipPath);
 }
 
 QPainterPath Relation::getPath()
