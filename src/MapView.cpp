@@ -48,7 +48,7 @@ public:
     QTransform theTransform;
     double PixelPerM;
     double ZoomLevel;
-    int AbstractZoomLevel;
+//    int AbstractZoomLevel;
     CoordBox Viewport;
     QList<CoordBox> invalidRects;
     QPoint theRasterPanDelta, theVectorPanDelta;
@@ -1052,18 +1052,17 @@ void MapView::setViewport(const CoordBox & TargetMap,
         QRectF vp = theProjection.getProjectedViewport(p->Viewport, Screen);
         p->PixelPerM = Screen.width() / vp.width();
     }
-
-    QPointF pt = theProjection.project(Coord(0, angToInt(180)));
-    double earthWidth = pt.x() * 2;
-    double zoomPixPerMat0 = 512. / earthWidth;
-    double z = 0;
-    p->AbstractZoomLevel = 0;
-    for (;z<p->theTransform.m11(); ++p->AbstractZoomLevel) {
-        double zoomPixPerMatCur = zoomPixPerMat0 * pow(2., p->AbstractZoomLevel);
-        z = zoomPixPerMatCur / p->PixelPerM;
-    }
     p->ZoomLevel = p->theTransform.m11();
-    qDebug() << "Abstract zoom level: " << p->AbstractZoomLevel;
+
+//    QPointF pt = theProjection.project(Coord(0, angToInt(180)));
+//    double earthWidth = pt.x() * 2;
+//    double zoomPixPerMat0 = 512. / earthWidth;
+//    double z = 0;
+//    p->AbstractZoomLevel = 0;
+//    for (;z<p->theTransform.m11(); ++p->AbstractZoomLevel) {
+//        double zoomPixPerMatCur = zoomPixPerMat0 * pow(2., p->AbstractZoomLevel);
+//        z = zoomPixPerMatCur / p->PixelPerM;
+//    }
 
     if (M_PREFS->getZoomBoris()) {
         ImageMapLayer* l = NULL;
@@ -1143,17 +1142,17 @@ void MapView::zoom(double d, const QPoint & Around,
     for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
         ImgIt.get()->zoom(d, Around, Screen);
 
-    QPointF pt = theProjection.project(Coord(0, angToInt(180)));
-    double earthWidth = pt.x() * 2;
-    double zoomPixPerMat0 = 512. / earthWidth;
-    double z = 0;
-    p->AbstractZoomLevel = 0;
-    for (;z<p->theTransform.m11(); ++p->AbstractZoomLevel) {
-        double zoomPixPerMatCur = zoomPixPerMat0 * pow(2., p->AbstractZoomLevel);
-        z = zoomPixPerMatCur / p->PixelPerM;
-    }
     p->ZoomLevel = ScaleLon;
-    qDebug() << "Zoom: " << ScaleLon << "; Abstract zoom level: " << p->AbstractZoomLevel;
+
+//    QPointF pt = theProjection.project(Coord(0, angToInt(180)));
+//    double earthWidth = pt.x() * 2;
+//    double zoomPixPerMat0 = 512. / earthWidth;
+//    double z = 0;
+//    p->AbstractZoomLevel = 0;
+//    for (;z<p->theTransform.m11(); ++p->AbstractZoomLevel) {
+//        double zoomPixPerMatCur = zoomPixPerMat0 * pow(2., p->AbstractZoomLevel);
+//        z = zoomPixPerMatCur / p->PixelPerM;
+//    }
 }
 
 void MapView::resize(QSize oldS, QSize newS)
