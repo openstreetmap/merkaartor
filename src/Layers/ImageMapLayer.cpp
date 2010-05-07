@@ -468,10 +468,11 @@ void ImageMapLayer::forceRedraw(MapView& theView, QRect Screen, QPoint delta)
 
     MapView::transformCalc(p->theTransform, p->theProjection, theView.viewport(), Screen);
 
-    QRectF fScreen(Screen);
-    p->Viewport =
-        CoordBox(p->theProjection.inverse(p->theTransform.inverted().map(fScreen.bottomLeft())),
-             p->theProjection.inverse(p->theTransform.inverted().map(fScreen.topRight())));
+//    QRectF fScreen(Screen);
+//    p->Viewport =
+//        CoordBox(p->theProjection.inverse(p->theTransform.inverted().map(fScreen.bottomLeft())),
+//             p->theProjection.inverse(p->theTransform.inverted().map(fScreen.topRight())));
+    p->Viewport = theView.viewport();
 
     p->theDelta = delta;
     if (p->theMapAdapter->getImageManager())
@@ -503,6 +504,12 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect) const
             p->pm = pm;
         p->theDelta = QPoint();
     } else {
+        QRectF fScreen(rect);
+        CoordBox Viewport(p->theProjection.inverse(p->theTransform.inverted().map(fScreen.bottomLeft())),
+                         p->theProjection.inverse(p->theTransform.inverted().map(fScreen.topRight())));
+        QRectF vp = p->theProjection.getProjectedViewport(Viewport, rect);
+        QRectF wgs84vp = QRectF(QPointF(intToAng(Viewport.bottomLeft().lon()), intToAng(Viewport.bottomLeft().lat()))
+                            , QPointF(intToAng(Viewport.topRight().lon()), intToAng(Viewport.topRight().lat())));
         QString url (p->theMapAdapter->getQuery(wgs84vp, vp, rect));
         if (!url.isEmpty()) {
 
@@ -514,6 +521,10 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect) const
                 p->theDelta = QPoint();
             }
         }
+        const QPointF bl = theView.toView(Viewport.bottomLeft());
+        const QPointF tr = theView.toView(Viewport.topRight());
+
+        return QRectF(bl.x(), tr.y(), tr.x() - bl.x(), bl.y() - tr.y()).toRect();
     }
 
     const QPointF bl = theView.toView(p->Viewport.bottomLeft());
