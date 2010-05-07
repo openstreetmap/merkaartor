@@ -185,6 +185,9 @@ void MapView::panScreen(QPoint delta)
 
 void MapView::paintEvent(QPaintEvent * anEvent)
 {
+    if (!theDocument)
+        return;
+
 #ifndef NDEBUG
     QTime Start(QTime::currentTime());
 #endif

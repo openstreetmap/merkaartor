@@ -325,7 +325,6 @@ MainWindow::MainWindow(QWidget *parent)
         exit(1);
     }
 #endif
-    on_fileNewAction_triggered();
 
 #define NUMOP 3
     static const char *opStr[NUMOP] = {
@@ -356,6 +355,7 @@ void MainWindow::delayedInit()
 {
     updateProjectionMenu();
     updateWindowMenu();
+    on_fileNewAction_triggered();
 }
 
 
