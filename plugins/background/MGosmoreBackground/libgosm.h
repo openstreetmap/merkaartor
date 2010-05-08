@@ -17,7 +17,6 @@ typedef int intptr_t;
 #endif
 
 #ifndef _WIN32
-#include <libxml/xmlreader.h>
 #include <inttypes.h>
 #define stricmp strcasecmp
 typedef long long __int64;

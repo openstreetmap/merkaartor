@@ -125,7 +125,7 @@ bool NavitBin::readTile(int aIndex) const
                 }
 
                 default:
-                    for (int i=0; i<(attrLen-1)*sizeof(qint32); ++i) {
+                    for (unsigned int i=0; i<(attrLen-1)*sizeof(qint32); ++i) {
                         data >> attr;
                         attribute.append(attr);
                     }
@@ -169,7 +169,7 @@ bool NavitBin::readTile(int aIndex) const
                 }
 
                 default:
-                    for (int i=0; i<(attrLen-1)*sizeof(qint32); ++i) {
+                    for (unsigned int i=0; i<(attrLen-1)*sizeof(qint32); ++i) {
                         data >> attr;
                         attribute.append(attr);
                     }
@@ -182,7 +182,7 @@ bool NavitBin::readTile(int aIndex) const
             }
 
             default:
-                for (int i=0; i<(attrLen-1)*sizeof(qint32); ++i) {
+                for (unsigned int i=0; i<(attrLen-1)*sizeof(qint32); ++i) {
                     data >> attr;
                     attribute.append(attr);
                 }

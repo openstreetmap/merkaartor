@@ -50,7 +50,7 @@ void* NavitZip::setZip(QString fn)
     if (!zipMem)
         return NULL;
 
-    memcpy((void*)&footer, zipMem + zipLen - sizeof(struct dirFooter), sizeof(struct dirFooter));
+    memcpy((void*)&footer, (void*)((quint32)zipMem + zipLen - sizeof(struct dirFooter)), sizeof(struct dirFooter));
     if (footer.magic != DIR_FOOTER_MAGIC) {
         delete zipFile;
         zipFile = NULL;
@@ -67,7 +67,7 @@ void NavitZip::initialize()
     qDebug() << "eof: " << (quint32)zipMem + zipLen;
     int num = 0;
     struct dirHeader* cdhdr;
-    struct dirHeader* dirstart = (struct dirHeader*) (zipMem + footer.directoryOffset);
+    struct dirHeader* dirstart = (struct dirHeader*) ((quint32)zipMem + footer.directoryOffset);
     for (cdhdr=dirstart; (quint32)cdhdr<(quint32)dirstart+footer.directorySize;) {
         Q_ASSERT(cdhdr->magic == 0x02014b50);
         if (cdhdr->sizeUncompressed) {
@@ -94,7 +94,7 @@ bool NavitZip::setCurrentFile(int aIndex)
         return false;
 
     curOffset = directory[aIndex].offset;
-    memcpy((void*)&curFile, zipMem + curOffset, sizeof(struct fileHeader1));
+    memcpy((void*)&curFile, (void*)((quint32)zipMem + curOffset), sizeof(struct fileHeader1));
 
     return true;
 }

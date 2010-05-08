@@ -68,7 +68,7 @@ QPoint gosmoreProject(const QPointF& c)
     double x = c.x() / 180.* INT_MAX;
     double y = log(tan(angToRad(c.y())) + 1/cos(angToRad(c.y()))) / M_PI * (INT_MAX);
 
-    return QPoint(x, y);
+    return QPoint(qRound(x), qRound(y));
 }
 
 GosmoreAdapter::GosmoreAdapter()
@@ -408,7 +408,7 @@ IImageManager* GosmoreAdapter::getImageManager()
     return NULL;
 }
 
-void GosmoreAdapter::setImageManager(IImageManager* anImageManager)
+void GosmoreAdapter::setImageManager(IImageManager*)
 {
 }
 
