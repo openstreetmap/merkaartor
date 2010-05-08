@@ -62,7 +62,7 @@ NavitAdapter::NavitAdapter()
     loaded = false;
 
 //    loaded = navit.setFilename("C:/home/cbro/Merkaartor/osm_bbox_11.3,47.9,11.7,48.2.bin");
-    loaded = navit.setFilename("C:/home/cbro/Merkaartor/osm_bbox_4.2,50.7,4.6,50.9.bin");
+//    loaded = navit.setFilename("C:/home/cbro/Merkaartor/osm_bbox_4.2,50.7,4.6,50.9.bin");
 //    loaded = navit.setFilename("C:/home/cbro/Merkaartor/belgium.navit.bin");
 
 }
