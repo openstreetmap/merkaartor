@@ -1000,7 +1000,6 @@ void MapView::transformCalc(QTransform& theTransform, const Projection& theProje
     QPointF tr = theProjection.project(TargetMap.topRight());
     QRectF pViewport = QRectF(bl, QSizeF(tr.x() - bl.x(), tr.y() - bl.y()));
 
-    Coord Center(TargetMap.center());
     QPointF pCenter(pViewport.center());
 
     double Aspect = (double)Screen.width() / Screen.height();

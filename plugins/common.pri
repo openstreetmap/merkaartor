@@ -32,7 +32,7 @@ QT += core
 
 #DEFINES += QT_NO_DEBUG_OUTPUT
 
-OUTPUT_DIR=../../../binaries
+OUTPUT_DIR = $$MERKAARTOR_SRC_DIR/$$(QMAKESPEC)/binaries
 UI_DIR += tmp/$$(QMAKESPEC)
 MOC_DIR += tmp/$$(QMAKESPEC)
 RCC_DIR += tmp/$$(QMAKESPEC)
@@ -40,6 +40,8 @@ DESTDIR = $$OUTPUT_DIR/$$(QMAKESPEC)/bin/plugins
 
 DEPENDPATH += $${MERKAARTOR_SRC_DIR}/interfaces
 INCLUDEPATH += $${MERKAARTOR_SRC_DIR}/interfaces
+INCLUDEPATH += $$MERKAARTOR_SRC_DIR/include
+LIBS += -L$$OUTPUT_DIR
 
 unix {
     # Prefix: base instalation directory
