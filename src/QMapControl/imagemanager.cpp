@@ -52,6 +52,11 @@ ImageManager::~ImageManager()
 
 QPixmap ImageManager::getImage(IMapAdapter* anAdapter, int x, int y, int z)
 {
+//    QSize ts(anAdapter->getTileSize(), anAdapter->getTileSize());
+//    if (emptyPixmap.size() != ts) {
+//        emptyPixmap = QPixmap(ts);
+//        emptyPixmap.fill(Qt::transparent);
+//    }
     QString url = anAdapter->getQuery(x, y, z);
     return getImage(anAdapter, url);
 }
@@ -69,10 +74,10 @@ QPixmap ImageManager::getImage(IMapAdapter* anAdapter, QString url)
         hash = QString(crypt.result().toHex());
     }
 
-/*	QPixmap pm(anAdapter->getTileSize(), anAdapter->getTileSize());
-    pm.fill(Qt::black);*/
-//	QPixmap pm(emptyPixmap);
-    QPixmap pm;
+    /*	QPixmap pm(anAdapter->getTileSize(), anAdapter->getTileSize());
+        pm.fill(Qt::black);*/
+    //	QPixmap pm(emptyPixmap);
+    QPixmap pm(emptyPixmap);
 
     // is image in picture cache
     if (QPixmapCache::find(hash, pm))

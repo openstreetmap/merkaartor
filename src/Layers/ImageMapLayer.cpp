@@ -583,6 +583,7 @@ QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect) const
     }
 
     p->pm = QPixmap(rect.size());
+    p->pm.fill(Qt::transparent);
     QPainter painter(&p->pm);
 
     // Actual drawing
