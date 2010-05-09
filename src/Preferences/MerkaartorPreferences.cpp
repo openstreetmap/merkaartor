@@ -1226,6 +1226,9 @@ M_PARAM_IMPLEMENT_STRING(WorldOsbUri, WOSB, "")
 M_PARAM_IMPLEMENT_BOOL(WorldOsbAutoload, WOSB, false)
 M_PARAM_IMPLEMENT_BOOL(WorldOsbAutoshow, WOSB, false)
 
+/* Data */
+M_PARAM_IMPLEMENT_STRING(OpenStreetBugsUrl, data, "http://openstreetbugs.schokokeks.org/api/0.1/")
+
 /* Mouse bevaviour */
 #ifdef _MOBILE
     M_PARAM_IMPLEMENT_BOOL(MouseSingleButton, Mouse, true)

@@ -339,6 +339,9 @@ public:
     /* Track */
     M_PARAM_DECLARE_BOOL(ReadonlyTracksDefault)
 
+    /* Data */
+    M_PARAM_DECLARE_STRING(OpenStreetBugsUrl)
+
     /* FeaturesDock */
     M_PARAM_DECLARE_BOOL(FeaturesWithin)
 

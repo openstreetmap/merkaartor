@@ -72,6 +72,16 @@ static Node* importTrkPt(const QDomElement& Root, Document* /* theDocument */, L
         {
             Pt->setTag("_comment_", t.text(), false);
         }
+        else if (t.tagName() == "extensions") // for OpenStreetBugs
+        {
+            QDomNodeList li = t.elementsByTagName("id");
+            if (li.size()) {
+                QString id = li.at(0).toElement().text();
+                Pt->setId("osb_" + id);
+                Pt->setTag("_special_", "yes"); // Assumed to be OpenstreetBugs as they don't use their own namesoace
+                Pt->setSpecial(true);
+            }
+        }
     }
 
     return Pt;

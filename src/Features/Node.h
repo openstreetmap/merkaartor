@@ -53,6 +53,11 @@ class Node : public Feature
         virtual bool isPOI() const;
         virtual bool isWaypoint();
 
+        /** check if the feature is drawable
+         * @return true if to be drawn
+         */
+        virtual bool isDrawable(MapView* view) const;
+
         const Coord& position() const;
         void setPosition(const Coord& aCoord);
         const QPointF& projection() const;

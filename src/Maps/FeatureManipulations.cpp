@@ -637,7 +637,7 @@ void commitFeatures(Document* theDocument, CommandList* theList, PropertiesDock*
     Layer *layer = theDocument->getDirtyOrOriginLayer();
 
     for (int i=0; i<theDock->size(); ++i)
-        if (!theDock->selection(i)->isDirty())
+        if (!theDock->selection(i)->isDirty() && !theDock->selection(i)->isSpecial())
             ToAdd.enqueue(theDock->selection(i));
 
     while (!ToAdd.isEmpty()) {

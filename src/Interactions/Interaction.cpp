@@ -343,14 +343,14 @@ void FeatureSnapInteraction::updateSnap(QMouseEvent* event)
             {
                 if (F->notEverythingDownloaded())
                     continue;
-                if (R = CAST_WAY(F)) {
+                if ((R = CAST_WAY(F))) {
                     if ( NoRoads || NoSelectRoads)
                         continue;
                 }
-                if (N = CAST_NODE(F)) {
+                if ((N = CAST_NODE(F))) {
                     if (NoSelectPoints)
                         continue;
-                    if (!areNodesVisible && !N->hasPhoto())
+                    if (!N->isDrawable(theView))
                         continue;
                 }
                 if (std::find(NoSnap.begin(),NoSnap.end(),F) != NoSnap.end())

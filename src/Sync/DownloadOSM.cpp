@@ -674,6 +674,68 @@ bool downloadFeatures(MainWindow* Main, const QList<QString>& idList , Document*
     return OK;
 }
 
+bool downloadOpenstreetbugs(MainWindow* Main, const CoordBox& aBox, Document* theDocument)
+{
+    QUrl osbUrl;
+
+    osbUrl.setUrl(M_PREFS->getOpenStreetBugsUrl());
+    osbUrl.setPath(osbUrl.path() + "getGPX");
+
+    if (Main)
+        Main->view()->setUpdatesEnabled(false);
+
+    Downloader theDownloader(osbUrl.host(), "", "");
+    QList<TrackLayer*> theTracklayers;
+    TrackLayer* trackLayer = new TrackLayer(QApplication::translate("Downloader","OpenStreetBugs"));
+    trackLayer->setUploadable(false);
+    theDocument->add(trackLayer);
+    theTracklayers << trackLayer;
+
+    trackLayer->blockIndexing(true);
+
+    IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(Main);
+    if (!aProgressWindow)
+        return false;
+
+    QProgressDialog* dlg = aProgressWindow->getProgressDialog();
+    dlg->setWindowTitle(QApplication::translate("Downloader","Parsing..."));
+
+    QProgressBar* Bar = aProgressWindow->getProgressBar();
+    Bar->setTextVisible(false);
+    Bar->setMaximum(11);
+
+    QLabel* Lbl = aProgressWindow->getProgressLabel();
+    Lbl->setText(QApplication::translate("Downloader","Parsing XML"));
+
+    if (dlg)
+        dlg->show();
+
+    theDownloader.setAnimator(dlg,Lbl,Bar,true);
+    Lbl->setText(QApplication::translate("Downloader","Downloading points"));
+    osbUrl.addQueryItem("t", QString::number(intToAng(aBox.topRight().lat())));
+    osbUrl.addQueryItem("l", QString::number(intToAng(aBox.bottomLeft().lon())));
+    osbUrl.addQueryItem("b", QString::number(intToAng(aBox.bottomLeft().lat())));
+    osbUrl.addQueryItem("r", QString::number(intToAng(aBox.topRight().lon())));
+    osbUrl.addQueryItem("open", "yes");
+
+    if (!theDownloader.go(osbUrl.toString()))
+        return false;
+    if (theDownloader.resultCode() != 200)
+        return false;
+    QByteArray Ar(theDownloader.content());
+    bool OK = importGPX(Main, Ar, theDocument, theTracklayers, true);
+
+    if (Main)
+        Main->view()->setUpdatesEnabled(true);
+    if (OK) {
+        trackLayer->blockIndexing(false);
+        trackLayer->reIndex();
+        if (Main)
+            Main->invalidateView();
+    }
+    return OK;
+}
+
 bool downloadMoreOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
 {
     Layer* theLayer;

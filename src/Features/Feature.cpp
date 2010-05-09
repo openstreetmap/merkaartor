@@ -94,7 +94,7 @@ class MapFeaturePrivate
                 PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
                 theFeature(0), LastPartNotification(0),
                 Time(QDateTime::currentDateTime()), Deleted(false), Visible(true), Uploaded(false), LongId(0)
-                , Virtual(false)
+                , Virtual(false), Special(false)
                 , VirtualsUpdatesBlocked(false)
         {
             initVersionNumber();
@@ -105,7 +105,7 @@ class MapFeaturePrivate
                 PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
                 theFeature(0), LastPartNotification(0),
                 Time(other.Time), Deleted(false), Visible(true), Uploaded(false), LongId(0)
-                , Virtual(other.Virtual)
+                , Virtual(other.Virtual), Special(other.Special)
                 , VirtualsUpdatesBlocked(other.VirtualsUpdatesBlocked)
         {
             initVersionNumber();
@@ -137,6 +137,7 @@ class MapFeaturePrivate
         qint64 LongId;
         RenderPriority theRenderPriority;
         bool Virtual;
+        bool Special;
         bool VirtualsUpdatesBlocked;
 };
 
@@ -184,7 +185,7 @@ void Feature::setLayer(Layer* aLayer)
     setParent(aLayer);
 }
 
-Layer* Feature::layer()
+Layer* Feature::layer() const
 {
     return dynamic_cast<Layer*>(parent());
 }
@@ -378,6 +379,16 @@ void Feature::setVirtual(bool val)
 bool Feature::isVirtual() const
 {
     return p->Virtual;
+}
+
+void Feature::setSpecial(bool val)
+{
+    p->Special = val;
+}
+
+bool Feature::isSpecial() const
+{
+    return p->Special;
 }
 
 void Feature::setTag(int index, const QString& key, const QString& value, bool addToTagList)

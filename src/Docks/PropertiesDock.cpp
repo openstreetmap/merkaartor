@@ -139,6 +139,7 @@ void PropertiesDock::checkMenuStatus()
     bool IsParentRoadInner = false;
     bool IsParentRelation = false;
     bool IsParentArea = false;
+    bool IsOpenStreetBug = false;
     int NumRoads = 0;
     int NumCommitableFeature = 0;
     int NumPoints = 0;
@@ -154,6 +155,8 @@ void PropertiesDock::checkMenuStatus()
         IsParentRoadInner = IsPoint && isChildOfSingleRoadInner(Selection[0]);
         IsParentRelation = isChildOfSingleRelation(Selection[0]);
         IsParentArea = isChildOfArea(Selection[0]);
+        IsOpenStreetBug = isChildOfArea(Selection[0]);
+        IsOpenStreetBug = IsPoint && Selection[0]->id().startsWith("osb_");
     }
     for (int i=0; i<Selection.size(); ++i)
     {
@@ -175,7 +178,7 @@ void PropertiesDock::checkMenuStatus()
         if (isChildOfRelation(Selection[i]))
             ++NumRelationChild;
 
-        if (!Selection[i]->isDirty())
+        if (!Selection[i]->isDirty() && !Selection[i]->isSpecial())
             ++NumCommitableFeature;
     }
     Main->ui->createRelationAction->setEnabled(Selection.size());
@@ -194,6 +197,7 @@ void PropertiesDock::checkMenuStatus()
     Main->ui->nodeDetachAction->setEnabled(NumPoints && canDetachNodes(this));
     Main->ui->relationAddMemberAction->setEnabled(NumRelation && Selection.size() > 1);
     Main->ui->relationRemoveMemberAction->setEnabled((NumRelation && Selection.size() > 1 && NumRelationChild) || IsParentRelation);
+    Main->ui->menuOpenStreetBugs->setEnabled(IsOpenStreetBug);
 
     Main->ui->editCopyAction->setEnabled(Selection.size());
     Main->clipboardChanged();

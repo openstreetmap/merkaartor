@@ -80,6 +80,7 @@ bool downloadOSM(QWidget* Main, const QString& aUser, const QString& aPassword, 
 bool downloadFeatures(MainWindow* Main, const QList<Feature*>& aDownloadList , Document* theDocument);
 bool downloadFeature(MainWindow* Main, const QString& id, Document* theDocument, Layer* theLayer=NULL);
 bool downloadFeatures(MainWindow* Main, const QList<QString>& aDownloadList, Document* theDocument, Layer* theLayer=NULL);
+bool downloadOpenstreetbugs(MainWindow* Main, const CoordBox& aBox, Document* theDocument);
 
 bool checkForConflicts(Document* theDocument);
 

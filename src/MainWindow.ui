@@ -173,6 +173,7 @@
     <addaction name="separator"/>
     <addaction name="fileDownloadAction"/>
     <addaction name="fileDownloadMoreAction"/>
+    <addaction name="fileDownloadOpenstreetbugsAction"/>
     <addaction name="fileUploadAction"/>
     <addaction name="separator"/>
     <addaction name="fileWorkOfflineAction"/>
@@ -248,8 +249,16 @@
     <property name="title">
      <string>Fea&amp;ture</string>
     </property>
+    <widget class="QMenu" name="menuOpenStreetBugs">
+     <property name="title">
+      <string>OpenStreetBugs</string>
+     </property>
+     <addaction name="featureOsbClose"/>
+    </widget>
     <addaction name="featureDeleteAction"/>
     <addaction name="featureCommitAction"/>
+    <addaction name="separator"/>
+    <addaction name="menuOpenStreetBugs"/>
    </widget>
    <widget class="QMenu" name="menuLayers">
     <property name="title">
@@ -1601,6 +1610,16 @@
   <action name="featureDeleteAction">
    <property name="text">
     <string>Force Delete</string>
+   </property>
+  </action>
+  <action name="fileDownloadOpenstreetbugsAction">
+   <property name="text">
+    <string>Download OpenStreet&amp;Bugs</string>
+   </property>
+  </action>
+  <action name="featureOsbClose">
+   <property name="text">
+    <string>Close</string>
    </property>
   </action>
  </widget>

@@ -602,6 +602,7 @@ bool DrawingLayer::toXML(QDomElement& xParent, QProgressDialog & progress)
     e.setAttribute("selected", QString((p->selected ? "true" : "false")));
     e.setAttribute("enabled", QString((p->Enabled ? "true" : "false")));
     e.setAttribute("readonly", QString((p->Readonly ? "true" : "false")));
+    e.setAttribute("uploadable", QString((p->Uploadable ? "true" : "false")));
 
     QDomElement o = xParent.ownerDocument().createElement("osm");
     e.appendChild(o);
@@ -649,6 +650,7 @@ DrawingLayer * DrawingLayer::doFromXML(DrawingLayer* l, Document* d, const QDomE
     l->setSelected((e.attribute("selected") == "true" ? true : false));
     l->setEnabled((e.attribute("enabled") == "false" ? false : true));
     l->setReadonly((e.attribute("readonly") == "true" ? true : false));
+    l->setUploadable((e.attribute("uploadable") == "true" ? true : false));
 
     QDomElement c = e.firstChildElement();
     if (c.tagName() != "osm")
@@ -864,6 +866,7 @@ bool TrackLayer::toXML(QDomElement& xParent, QProgressDialog & progress)
     e.setAttribute("selected", QString((p->selected ? "true" : "false")));
     e.setAttribute("enabled", QString((p->Enabled ? "true" : "false")));
     e.setAttribute("readonly", QString((p->Readonly ? "true" : "false")));
+    e.setAttribute("uploadable", QString((p->Uploadable ? "true" : "false")));
 
     QDomElement o = xParent.ownerDocument().createElement("gpx");
     e.appendChild(o);
@@ -906,6 +909,7 @@ TrackLayer * TrackLayer::fromXML(Document* d, const QDomElement& e, QProgressDia
     l->setSelected((e.attribute("selected") == "true" ? true : false));
     l->setEnabled((e.attribute("enabled") == "false" ? false : true));
     l->setReadonly((e.attribute("readonly") == "true" ? true : false));
+    l->setUploadable((e.attribute("uploadable") == "true" ? true : false));
 
     d->add(l);
 

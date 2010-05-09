@@ -91,7 +91,7 @@ void ImportCSVDialog::analyze()
     ui->cbHasHeader->setChecked(true);
     QStringList sl = l.split(delim);
     for (int i=0; i<sl.size(); ++i) {
-        qreal r = sl[i].toDouble(&ok);
+//        qreal r = sl[i].toDouble(&ok);
         if (ok) {
             ui->cbHasHeader->setChecked(false);
             break;
@@ -113,11 +113,11 @@ void ImportCSVDialog::analyze()
             f.name = hdr[i].simplified();
         else
             f.name = "field_" + QString::number(i);
-        int t1 = fld[i].toInt(&ok);
+//        int t1 = fld[i].toInt(&ok);
         if (ok)
             f.type = CSVInt;
         else {
-            double t2 = fld[i].toDouble(&ok);
+//            double t2 = fld[i].toDouble(&ok);
             if (ok)
                 f.type = CSVFloat;
             else

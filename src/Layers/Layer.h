@@ -124,7 +124,7 @@ public:
     virtual bool canDelete() const;
     virtual bool isUploadable() const;
     virtual bool isReadonly() const;
-    virtual bool isTrack() {return false;}
+    virtual bool isTrack() const {return false;}
     virtual bool arePointsDrawable() {return true;}
 
     virtual void blockIndexing(bool val);
@@ -185,7 +185,7 @@ public:
     virtual const LayerGroups classGroups() {return(Layer::Tracks);}
 
     virtual bool isUploadable() {return true;}
-    virtual bool isTrack() {return true;}
+    virtual bool isTrack() const {return true;}
 
 protected:
     QString Filename;

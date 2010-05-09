@@ -68,6 +68,7 @@ class MainWindow : public QMainWindow, public IProgressWindow
         virtual void on_fileNewAction_triggered();
         virtual void on_fileDownloadAction_triggered();
         virtual void on_fileDownloadMoreAction_triggered();
+        virtual void on_fileDownloadOpenstreetbugsAction_triggered();
         virtual void on_fileUploadAction_triggered();
         virtual void on_fileImportAction_triggered();
         virtual void on_fileOpenAction_triggered();
@@ -111,6 +112,7 @@ class MainWindow : public QMainWindow, public IProgressWindow
 
         virtual void on_featureDeleteAction_triggered();
         virtual void on_featureCommitAction_triggered();
+        virtual void on_featureOsbClose_triggered();
         virtual void on_nodeAlignAction_triggered();
         virtual void on_nodeMergeAction_triggered();
         virtual void on_nodeDetachAction_triggered();

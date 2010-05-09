@@ -151,7 +151,7 @@ class Feature : public QObject
         const QString& user() const;
         void setUser(const QString& aUser);
         virtual void setLayer(Layer* aLayer);
-        virtual Layer* layer();
+        virtual Layer* layer() const;
         int versionNumber() const;
         void setVersionNumber(int vn);
         virtual QString description() const = 0;
@@ -265,6 +265,17 @@ class Feature : public QObject
         virtual bool isVirtual() const;
         virtual void setVirtual(bool val);
 
+        /** check if the feature is a special one (cannot be uploaded)
+         * @return true if special
+         */
+        virtual bool isSpecial() const;
+        virtual void setSpecial(bool val);
+
+        /** check if the feature is drawable
+         * @return true if to be drawn
+         */
+        virtual bool isDrawable(MapView*) const {return true;}
+
         virtual bool isInteresting() const {return true;}
 
         const FeaturePainter* getEditPainter(double PixelPerM) const;
@@ -313,6 +324,7 @@ class Feature : public QObject
         static void mergeTags(Document* theDocument, CommandList* L, Feature* Dest, Feature* Src);
         static bool QRectInterstects(const QRect& r, const QLine& l, QPoint& a, QPoint& b);
 
+        static QString stripToOSMId(const QString& id);
 
     private:
         MapFeaturePrivate* p;
@@ -324,7 +336,6 @@ class Feature : public QObject
         QString tagsToXML(int lvl=0);
         bool tagsToXML(QDomElement xParent);
         static void tagsFromXML(Document* d, Feature* f, QDomElement e);
-        static QString stripToOSMId(const QString& id);
 
         long    m_references;
         friend void ::boost::intrusive_ptr_add_ref(Feature * p);

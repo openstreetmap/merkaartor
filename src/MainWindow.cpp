@@ -1157,6 +1157,17 @@ void MainWindow::on_fileDownloadMoreAction_triggered()
     emit content_changed();
 }
 
+void MainWindow::on_fileDownloadOpenstreetbugsAction_triggered()
+{
+    createProgressDialog();
+
+    if (!::downloadOpenstreetbugs(this, theView->viewport(), theDocument)) {
+        QMessageBox::warning(this, tr("Error downloading OpenStreetBugs"), tr("The OpenStreetBugs could not be downloaded"));
+    }
+
+    deleteProgressDialog();
+}
+
 void MainWindow::downloadFeatures(const QList<Feature*>& aDownloadList)
 {
     createProgressDialog();
@@ -1530,6 +1541,46 @@ void MainWindow::on_featureCommitAction_triggered()
         theDocument->addHistory(theList);
         invalidateView();
     }
+}
+
+void MainWindow::on_featureOsbClose_triggered()
+{
+    QNetworkAccessManager manager;
+    QEventLoop q;
+    QTimer tT;
+
+    Feature* bugNd = theProperties->selection(0);
+    tT.setSingleShot(true);
+    connect(&tT, SIGNAL(timeout()), &q, SLOT(quit()));
+    connect(&manager, SIGNAL(finished(QNetworkReply*)),
+            &q, SLOT(quit()));
+
+    QUrl osbUrl;
+    osbUrl.setUrl(M_PREFS->getOpenStreetBugsUrl());
+    osbUrl.setPath(osbUrl.path() + "closePOIexec");
+    osbUrl.addQueryItem("id", Feature::stripToOSMId(bugNd->id()));
+    qDebug() << osbUrl.toString();
+    QNetworkReply *reply = manager.get(QNetworkRequest(osbUrl));
+
+    tT.start(10000); // 10s timeout
+    q.exec();
+    if(tT.isActive()) {
+        // download complete
+        tT.stop();
+    } else {
+        QMessageBox::warning(0, tr("Network timeout"), tr("Cannot contact OpenStreetBugs."), QMessageBox::Ok);
+        return;
+    }
+
+    QString rply = reply->readAll();
+    if (rply.contains("ok")) {
+        bugNd->layer()->deleteFeature(bugNd);
+        theProperties->setSelection(0);
+        invalidateView();
+    } else
+        QMessageBox::warning(this, tr("Error closing bug"), tr("Cannot delete bug. Server message is:\n%1").arg(rply), QMessageBox::Ok);
+
+    return;
 }
 
 void MainWindow::on_roadCreateJunctionAction_triggered()

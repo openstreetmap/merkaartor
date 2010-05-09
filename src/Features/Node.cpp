@@ -122,6 +122,25 @@ bool Node::isWaypoint()
     return p->IsWaypoint;
 }
 
+bool Node::isDrawable(MapView* view) const
+{
+    bool Draw = false;
+    if (M_PREFS->getTrackPointsVisible() || (lastUpdated() == Feature::Log && !M_PREFS->getTrackSegmentsVisible())) {
+        Draw = view->pixelPerM() > M_PREFS->getLocalZoom();
+        // Do not draw GPX nodes when simple GPX track appearance is enabled
+        if (M_PREFS->getSimpleGpxTrack() && layer()->isTrack())
+            Draw = false;
+        if (!Draw) {
+            if (!sizeParents())
+                Draw = true;
+            else if (lastUpdated() == Feature::Log && !M_PREFS->getTrackSegmentsVisible())
+                Draw = true;
+        }
+    }
+    return Draw;
+}
+
+
 const Coord& Node::position() const
 {
     return Position;
@@ -454,6 +473,18 @@ bool Node::toGPX(QDomElement xParent, QProgressDialog & progress, bool forExport
         c.appendChild(v);
     }
 
+    // OpenStreetBug
+    s = tagValue("_special_","");
+    if (!s.isEmpty() && id().startsWith("osb_")) {
+        QDomElement c = xParent.ownerDocument().createElement("extensions");
+        e.appendChild(c);
+        QDomElement osbId = xParent.ownerDocument().createElement("id");
+        c.appendChild(osbId);
+        QString sid = stripToOSMId(id());
+        QDomText v = c.ownerDocument().createTextNode(sid);
+        osbId.appendChild(v);
+    }
+
     return OK;
 }
 
@@ -539,6 +570,20 @@ Node * Node::fromGPX(Document* d, Layer* L, const QDomElement e)
         } else
         if (c.tagName() == "desc") {
             Pt->setTag("_description_", c.text(), false);
+        }
+        else if (c.tagName() == "cmt")
+        {
+            Pt->setTag("_comment_", c.text(), false);
+        }
+        else if (c.tagName() == "extensions") // for OpenStreetBugs
+        {
+            QDomNodeList li = c.elementsByTagName("id");
+            if (li.size()) {
+                QString id = li.at(0).toElement().text();
+                Pt->setId("osb_" + id);
+                Pt->setTag("_special_", "yes"); // Assumed to be OpenstreetBugs as they don't use their own namesoace
+                Pt->setSpecial(true);
+            }
         }
 
         c = c.nextSiblingElement();

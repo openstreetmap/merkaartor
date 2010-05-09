@@ -150,29 +150,17 @@ void TouchupStyleLayer::draw(Node* Pt)
     if (paintsel)
         paintsel->drawTouchup(Pt,r->thePainter,r->theView);
     else if (!Pt->hasEditPainter()) {
-        if (M_PREFS->getTrackPointsVisible() || (Pt->lastUpdated() == Feature::Log && !M_PREFS->getTrackSegmentsVisible())) {
-            bool Draw = r->theView->pixelPerM() > M_PREFS->getLocalZoom();
-            // Do not draw GPX nodes when simple GPX track appearance is enabled
-            if (M_PREFS->getSimpleGpxTrack() && Pt->layer()->isTrack())
-                Draw = false;
-            if (!Draw) {
-                if (!Pt->sizeParents())
-                    Draw = true;
-                else if (Pt->lastUpdated() == Feature::Log && !M_PREFS->getTrackSegmentsVisible())
-                    Draw = true;
-            }
-            if (Draw)
-            {
-                QPoint P = r->theView->transform().map(r->theView->projection().project(Pt)).toPoint();
+        if (Pt->isDrawable(r->theView))
+        {
+            QPoint P = r->theView->transform().map(r->theView->projection().project(Pt)).toPoint();
 
-                if (Pt->isWaypoint()) {
-                    QRect R2(P-QPoint(4,4),QSize(8,8));
-                    r->thePainter->fillRect(R2,QColor(255,0,0,128));
-                }
-
-                QRect R(P-QPoint(3,3),QSize(6,6));
-                r->thePainter->fillRect(R,QColor(0,0,0,128));
+            if (Pt->isWaypoint()) {
+                QRect R2(P-QPoint(4,4),QSize(8,8));
+                r->thePainter->fillRect(R2,QColor(255,0,0,128));
             }
+
+            QRect R(P-QPoint(3,3),QSize(6,6));
+            r->thePainter->fillRect(R,QColor(0,0,0,128));
         }
     }
 }
