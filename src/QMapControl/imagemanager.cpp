@@ -77,7 +77,7 @@ QPixmap ImageManager::getImage(IMapAdapter* anAdapter, QString url)
     /*	QPixmap pm(anAdapter->getTileSize(), anAdapter->getTileSize());
         pm.fill(Qt::black);*/
     //	QPixmap pm(emptyPixmap);
-    QPixmap pm(emptyPixmap);
+    QPixmap pm;
 
     // is image in picture cache
     if (QPixmapCache::find(hash, pm))
