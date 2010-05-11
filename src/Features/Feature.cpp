@@ -849,41 +849,40 @@ QString Feature::toMainHtml(QString type, QString systemtype)
     return S;
 }
 
-bool Feature::QRectInterstects(const QRect& r, const QLine& l, QPoint& a, QPoint& b)
+bool Feature::QRectInterstects(const QRectF& r, const QLineF& lF, QPointF& a, QPointF& b)
 {
-    QLineF lF = QLineF(l);
     QPointF pF;
     bool hasP1 = false;
     bool hasP2 = false;
 
     if (QLineF(r.topLeft(), r.bottomLeft()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
-        a = pF.toPoint();
+        a = pF;
         hasP1 = true;
     }
     if (QLineF(r.bottomLeft(), r.bottomRight()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
         if (hasP1) {
-            b = pF.toPoint();
+            b = pF;
             hasP2 = true;
         } else {
-            a = pF.toPoint();
+            a = pF;
             hasP1 = true;
         }
     }
     if (QLineF(r.bottomRight(), r.topRight()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
         if (hasP1) {
-            b = pF.toPoint();
+            b = pF;
             hasP2 = true;
         } else {
-            a = pF.toPoint();
+            a = pF;
             hasP1 = true;
         }
     }
     if (QLineF(r.topRight(), r.topLeft()).intersect(lF, &pF) == QLineF::BoundedIntersection) {
         if (hasP1) {
-            b = pF.toPoint();
+            b = pF;
             hasP2 = true;
         } else {
-            a = pF.toPoint();
+            a = pF;
             hasP1 = true;
         }
     }
@@ -895,7 +894,7 @@ bool Feature::QRectInterstects(const QRect& r, const QLine& l, QPoint& a, QPoint
         double la1 = QLineF(a,b).angle(lF);
 #endif
         if (la1 > 15.0 && la1 < 345.0) {
-            QPoint t = b;
+            QPointF t = b;
             b = a;
             a = t;
         }

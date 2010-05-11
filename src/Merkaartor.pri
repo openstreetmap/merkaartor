@@ -25,7 +25,8 @@ HEADERS += ./IProgressWindow.h \
     ./GotoDialog.h \
     ../include/builtin-ggl/ggl/extensions/gis/projections/impl/geocent.h \
     ../interfaces/IMapAdapter.h \
-    Utils/OsmLink.h
+    Utils/OsmLink.h \
+    Utils/Utils.h
 
 # Source files
 SOURCES += ./Maps/Coord.cpp \
@@ -51,7 +52,8 @@ SOURCES += ./Maps/Coord.cpp \
     ./Utils/MDiscardableDialog.cpp \
     ./GotoDialog.cpp \
     ../include/builtin-ggl/ggl/extensions/gis/projections/impl/geocent.c \
-    Utils/OsmLink.cpp
+    Utils/OsmLink.cpp \
+    Utils/Utils.cpp
 
 # Forms
 FORMS += ./AboutDialog.ui \

@@ -322,7 +322,7 @@ class Feature : public QObject
         static Way* getWayOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const QString& Id);
         static Relation* getRelationOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const QString& Id);
         static void mergeTags(Document* theDocument, CommandList* L, Feature* Dest, Feature* Src);
-        static bool QRectInterstects(const QRect& r, const QLine& l, QPoint& a, QPoint& b);
+        static bool QRectInterstects(const QRectF& r, const QLineF& l, QPointF& a, QPointF& b);
 
         static QString stripToOSMId(const QString& id);
 

@@ -38,6 +38,7 @@
 #include "PaintStyle/MasPaintStyle.h"
 #include "PaintStyle/PaintStyleEditor.h"
 #include "Sync/SyncOSM.h"
+#include "Utils/Utils.h"
 
 #include <ui_MainWindow.h>
 #include <ui_AboutDialog.h>
@@ -1547,34 +1548,23 @@ void MainWindow::on_featureCommitAction_triggered()
 
 void MainWindow::on_featureOsbClose_triggered()
 {
-    QNetworkAccessManager manager;
-    QEventLoop q;
-    QTimer tT;
-
     Feature* bugNd = theProperties->selection(0);
-    tT.setSingleShot(true);
-    connect(&tT, SIGNAL(timeout()), &q, SLOT(quit()));
-    connect(&manager, SIGNAL(finished(QNetworkReply*)),
-            &q, SLOT(quit()));
 
     QUrl osbUrl;
     osbUrl.setUrl(M_PREFS->getOpenStreetBugsUrl());
     osbUrl.setPath(osbUrl.path() + "closePOIexec");
     osbUrl.addQueryItem("id", Feature::stripToOSMId(bugNd->id()));
     qDebug() << osbUrl.toString();
-    QNetworkReply *reply = manager.get(QNetworkRequest(osbUrl));
 
-    tT.start(10000); // 10s timeout
-    q.exec();
-    if(tT.isActive()) {
-        // download complete
-        tT.stop();
-    } else {
+    QString rply;
+    bool ret = Utils::sendBlockingNetRequest(osbUrl, rply);
+
+    if (!ret) {
         QMessageBox::warning(0, tr("Network timeout"), tr("Cannot contact OpenStreetBugs."), QMessageBox::Ok);
         return;
     }
 
-    QString rply = reply->readAll();
+    qDebug() << "openStreetBugs reply: " << rply;
     if (rply.contains("ok")) {
         bugNd->layer()->deleteFeature(bugNd);
         theProperties->setSelection(0);
