@@ -15,6 +15,9 @@
 
 #include <QObject>
 #include <QUrl>
+#include <QRectF>
+#include <QLineF>
+#include <QPointF>
 
 class Utils: public QObject
 {
@@ -23,6 +26,7 @@ class Utils: public QObject
 public:
 
     static bool sendBlockingNetRequest(const QUrl& theUrl, QString& reply);
+    static bool QRectInterstects(const QRectF& r, const QLineF& l, QPointF& a, QPointF& b);
 };
 
 #endif // UTILS_H

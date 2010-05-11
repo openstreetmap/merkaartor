@@ -8,6 +8,7 @@
 #include "MapView.h"
 #include "Utils/LineF.h"
 #include "Utils/MDiscardableDialog.h"
+#include "Utils/Utils.h"
 
 #include <QApplication>
 #include <QtGui/QPainter>
@@ -700,7 +701,7 @@ void Way::buildPath(const Projection &theProjection, const QTransform& /*theTran
                 if (!cr.contains(aP)) {
                     if (!lastPointVisible) {
                         QPointF a, b;
-                        if (QRectInterstects(cr, l, a, b)) {
+                        if (Utils::QRectInterstects(cr, l, a, b)) {
                             p->thePath.lineTo(a);
                             lastPoint = aP;
                             aP = b;
@@ -713,7 +714,7 @@ void Way::buildPath(const Projection &theProjection, const QTransform& /*theTran
                         }
                     } else {
                         QPointF a, b;
-                        QRectInterstects(cr, l, a, b);
+                        Utils::QRectInterstects(cr, l, a, b);
                         lastPoint = aP;
                         aP = a;
                     }
@@ -721,7 +722,7 @@ void Way::buildPath(const Projection &theProjection, const QTransform& /*theTran
                 } else {
                     if (!lastPointVisible) {
                         QPointF a, b;
-                        QRectInterstects(cr, l, a, b);
+                        Utils::QRectInterstects(cr, l, a, b);
                         p->thePath.lineTo(a);
                     }
                     lastPoint = aP;
