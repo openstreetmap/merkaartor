@@ -17,30 +17,15 @@
 #include <QEventLoop>
 #include <QTimer>
 
-bool Utils::sendBlockingNetRequest(const QUrl& theUrl, QString& reply)
+const QString Utils::encodeAttributes(const QString & text)
 {
-    QNetworkAccessManager manager;
-    QEventLoop q;
-    QTimer tT;
-
-    tT.setSingleShot(true);
-    connect(&tT, SIGNAL(timeout()), &q, SLOT(quit()));
-    connect(&manager, SIGNAL(finished(QNetworkReply*)),
-            &q, SLOT(quit()));
-
-    QNetworkReply *netReply = manager.get(QNetworkRequest(theUrl));
-
-    tT.start(10000); // 10s timeout
-    q.exec();
-    if(tT.isActive()) {
-        // download complete
-        tT.stop();
-    } else {
-        return false;
-    }
-
-    reply = netReply->readAll();
-    return true;
+    QString s = text;
+    s.replace( "&", "&amp;" );
+    s.replace( ">", "&gt;" );
+    s.replace( "<", "&lt;" );
+    s.replace( "\"", "&quot;" );
+    s.replace( "\'", "&apos;" );
+    return s;
 }
 
 bool Utils::QRectInterstects(const QRectF& r, const QLineF& lF, QPointF& a, QPointF& b)
@@ -97,5 +82,31 @@ bool Utils::QRectInterstects(const QRectF& r, const QLineF& lF, QPointF& a, QPoi
         return true;
     else
         return false;
+}
+
+bool Utils::sendBlockingNetRequest(const QUrl& theUrl, QString& reply)
+{
+    QNetworkAccessManager manager;
+    QEventLoop q;
+    QTimer tT;
+
+    tT.setSingleShot(true);
+    connect(&tT, SIGNAL(timeout()), &q, SLOT(quit()));
+    connect(&manager, SIGNAL(finished(QNetworkReply*)),
+            &q, SLOT(quit()));
+
+    QNetworkReply *netReply = manager.get(QNetworkRequest(theUrl));
+
+    tT.start(10000); // 10s timeout
+    q.exec();
+    if(tT.isActive()) {
+        // download complete
+        tT.stop();
+    } else {
+        return false;
+    }
+
+    reply = netReply->readAll();
+    return true;
 }
 

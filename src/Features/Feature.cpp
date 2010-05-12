@@ -10,13 +10,13 @@
 #include "PaintStyle/MasPaintStyle.h"
 #include "PaintStyle/TagSelector.h"
 
+#include "Utils/Utils.h"
+
 #include <QApplication>
 #include <QUuid>
 #include <QProgressDialog>
 
 #include <algorithm>
-
-const QString encodeAttributes(const QString & text);
 
 //static QString randomId()
 //{
@@ -654,7 +654,7 @@ QString Feature::tagsToXML(int lvl)
     QString S;
     for (int i=0; i<tagSize(); ++i)
     {
-        S += QString(lvl*2, ' ') + QString("<tag k=\"%1\" v=\"%2\"/>\n").arg(encodeAttributes(tagKey(i))).arg(encodeAttributes(tagValue(i)));
+        S += QString(lvl*2, ' ') + QString("<tag k=\"%1\" v=\"%2\"/>\n").arg(Utils::encodeAttributes(tagKey(i))).arg(Utils::encodeAttributes(tagValue(i)));
     }
     return S;
 }

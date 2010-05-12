@@ -6,6 +6,7 @@
 #include "Document.h"
 #include "Layer.h"
 #include "Features.h"
+#include "Utils/Utils.h"
 
 #include <QtCore/QEventLoop>
 #include <QtGui/QDialog>
@@ -504,7 +505,7 @@ bool DirtyListExecutor::start()
         "<tag k=\"comment\" v=\"%3\"/>"
         "</changeset>"
         "</osm>");
-    DataIn = DataIn.arg(STRINGIFY(VERSION)).arg(QLocale::system().name().split("_")[0]).arg(encodeAttributes(glbChangeSetComment));
+    DataIn = DataIn.arg(STRINGIFY(VERSION)).arg(QLocale::system().name().split("_")[0]).arg(Utils::encodeAttributes(glbChangeSetComment));
     QString DataOut;
     QString URL = theDownloader->getURLToOpenChangeSet();
     if (sendRequest("PUT",URL,DataIn, DataOut))
