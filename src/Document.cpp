@@ -544,14 +544,18 @@ QString Document::exportOSM(QMainWindow* main, QList<Feature*> aFeatures)
         return "";
 
     QProgressDialog* dlg = aProgressWindow->getProgressDialog();
-    dlg->setWindowTitle(tr("OSM Export"));
+    if (dlg)
+        dlg->setWindowTitle(tr("OSM Export"));
 
     QProgressBar* Bar = aProgressWindow->getProgressBar();
-    Bar->setTextVisible(false);
-    Bar->setMaximum(exportedFeatures.size());
+    if (Bar) {
+        Bar->setTextVisible(false);
+        Bar->setMaximum(exportedFeatures.size());
+    }
 
     QLabel* Lbl = aProgressWindow->getProgressLabel();
-    Lbl->setText(tr("Exporting OSM..."));
+    if (Lbl)
+        Lbl->setText(tr("Exporting OSM..."));
 
     if (dlg)
         dlg->show();
