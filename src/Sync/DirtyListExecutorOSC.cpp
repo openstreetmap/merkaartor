@@ -300,7 +300,7 @@ void DirtyListExecutorOSC::OscCreate(Feature* F)
         OscRoot.appendChild(OscCurElem);
     }
 
-    F->toXML(OscCurElem, *Progress, true);
+    F->toXML(OscCurElem, Progress, true);
     if (!ChangeSetId.isEmpty())
         OscCurElem.lastChildElement().setAttribute("changeset", ChangeSetId);
 }
@@ -312,7 +312,7 @@ void DirtyListExecutorOSC::OscModify(Feature* F)
         OscRoot.appendChild(OscCurElem);
     }
 
-    F->toXML(OscCurElem, *Progress, true);
+    F->toXML(OscCurElem, Progress, true);
     if (!ChangeSetId.isEmpty())
         OscCurElem.lastChildElement().setAttribute("changeset", ChangeSetId);
 }
@@ -324,7 +324,7 @@ void DirtyListExecutorOSC::OscDelete(Feature* F)
         OscRoot.appendChild(OscCurElem);
     }
 
-    F->toXML(OscCurElem, *Progress, true);
+    F->toXML(OscCurElem, Progress, true);
     if (!ChangeSetId.isEmpty())
         OscCurElem.lastChildElement().setAttribute("changeset", ChangeSetId);
 }

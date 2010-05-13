@@ -455,15 +455,15 @@ void Layer::reIndex()
     }
 }
 
-void Layer::reIndex(QProgressDialog & progress)
+void Layer::reIndex(QProgressDialog * progress)
 {
     qDebug() << "Reindexing...";
 
     p->theRTree.RemoveAll();
 
-    progress.setLabelText("Indexing...");
-    progress.setValue(0);
-    progress.setMaximum(p->Features.size());
+    progress->setLabelText("Indexing...");
+    progress->setValue(0);
+    progress->setMaximum(p->Features.size());
     for (int i=0; i<p->Features.size(); ++i) {
         if (!p->Features.at(i)->isDeleted() &&  !p->Features.at(i)->isVirtual()) {
             Feature* f = p->Features.at(i);
@@ -474,7 +474,7 @@ void Layer::reIndex(QProgressDialog & progress)
                 p->theRTree.Insert(min, max, f);
             }
         }
-        progress.setValue(i);
+        progress->setValue(i);
         qApp->processEvents();
     }
 }
@@ -588,7 +588,7 @@ LayerWidget* DrawingLayer::newWidget(void)
 }
 
 
-bool DrawingLayer::toXML(QDomElement& xParent, QProgressDialog & progress)
+bool DrawingLayer::toXML(QDomElement& xParent, QProgressDialog * progress)
 {
     bool OK = true;
 
@@ -606,8 +606,8 @@ bool DrawingLayer::toXML(QDomElement& xParent, QProgressDialog & progress)
 
     QDomElement o = xParent.ownerDocument().createElement("osm");
     e.appendChild(o);
-    o.setAttribute("version", "0.5");
-    o.setAttribute("generator", "Merkaartor");
+    o.setAttribute("version", "0.6");
+    o.setAttribute("generator", QString("Merkaartor %1").arg(STRINGIFY(VERSION)));
 
     if (p->Features.size()) {
         QDomElement bb = xParent.ownerDocument().createElement("bound");
@@ -628,7 +628,7 @@ bool DrawingLayer::toXML(QDomElement& xParent, QProgressDialog & progress)
     return OK;
 }
 
-DrawingLayer * DrawingLayer::fromXML(Document* d, const QDomElement& e, QProgressDialog & progress)
+DrawingLayer * DrawingLayer::fromXML(Document* d, const QDomElement& e, QProgressDialog * progress)
 {
     DrawingLayer* l = new DrawingLayer(e.attribute("name"));
     d->add(l);
@@ -640,7 +640,7 @@ DrawingLayer * DrawingLayer::fromXML(Document* d, const QDomElement& e, QProgres
     return l;
 }
 
-DrawingLayer * DrawingLayer::doFromXML(DrawingLayer* l, Document* d, const QDomElement e, QProgressDialog & progress)
+DrawingLayer * DrawingLayer::doFromXML(DrawingLayer* l, Document* d, const QDomElement e, QProgressDialog * progress)
 {
     l->blockIndexing(true);
 
@@ -685,22 +685,22 @@ DrawingLayer * DrawingLayer::doFromXML(DrawingLayer* l, Document* d, const QDomE
             i++;
         }
 
-        if (i >= progress.maximum()/100) {
-            progress.setValue(progress.value()+i);
+        if (i >= progress->maximum()/100) {
+            progress->setValue(progress->value()+i);
             i=0;
         }
 
-        if (progress.wasCanceled())
+        if (progress->wasCanceled())
             break;
 
         c = c.nextSiblingElement();
     }
 
-    if (i > 0) progress.setValue(progress.value()+i);
+    if (i > 0) progress->setValue(progress->value()+i);
 
-    QString savlbl = progress.labelText();
-    int savval = progress.value();
-    int savmax = progress.maximum();
+    QString savlbl = progress->labelText();
+    int savval = progress->value();
+    int savmax = progress->maximum();
 
 //    if (M_PREFS->getUseVirtualNodes()) {
 //        progress.setLabelText("Updating virtual...");
@@ -714,9 +714,9 @@ DrawingLayer * DrawingLayer::doFromXML(DrawingLayer* l, Document* d, const QDomE
 //    }
     l->blockIndexing(false);
 
-    progress.setLabelText(savlbl);
-    progress.setMaximum(savmax);
-    progress.setValue(savval);
+    progress->setLabelText(savlbl);
+    progress->setMaximum(savmax);
+    progress->setValue(savval);
     qApp->processEvents();
 
     return l;
@@ -852,7 +852,7 @@ QString TrackLayer::toHtml()
     return toMainHtml().arg(S);
 }
 
-bool TrackLayer::toXML(QDomElement& xParent, QProgressDialog & progress)
+bool TrackLayer::toXML(QDomElement& xParent, QProgressDialog * progress)
 {
     bool OK = true;
 
@@ -898,7 +898,7 @@ bool TrackLayer::toXML(QDomElement& xParent, QProgressDialog & progress)
     return OK;
 }
 
-TrackLayer * TrackLayer::fromXML(Document* d, const QDomElement& e, QProgressDialog & progress)
+TrackLayer * TrackLayer::fromXML(Document* d, const QDomElement& e, QProgressDialog * progress)
 {
     TrackLayer* l = new TrackLayer(e.attribute("name"));
     l->blockIndexing(true);
@@ -933,10 +933,10 @@ TrackLayer * TrackLayer::fromXML(Document* d, const QDomElement& e, QProgressDia
         if (c.tagName() == "wpt") {
             /* Node* N = */ Node::fromGPX(d, l, c);
             //l->add(N);
-            progress.setValue(progress.value()+1);
+            progress->setValue(progress->value()+1);
         }
 
-        if (progress.wasCanceled())
+        if (progress->wasCanceled())
             break;
 
         c = c.nextSiblingElement();
@@ -959,7 +959,7 @@ DirtyLayer::~ DirtyLayer()
 {
 }
 
-DirtyLayer* DirtyLayer::fromXML(Document* d, const QDomElement e, QProgressDialog & progress)
+DirtyLayer* DirtyLayer::fromXML(Document* d, const QDomElement e, QProgressDialog * progress)
 {
     DirtyLayer* l = new DirtyLayer(e.attribute("name"));
     d->add(l);
@@ -986,7 +986,7 @@ UploadedLayer::~ UploadedLayer()
 {
 }
 
-UploadedLayer* UploadedLayer::fromXML(Document* d, const QDomElement e, QProgressDialog & progress)
+UploadedLayer* UploadedLayer::fromXML(Document* d, const QDomElement e, QProgressDialog * progress)
 {
     UploadedLayer* l = new UploadedLayer(e.attribute("name"));
     d->add(l);
@@ -1014,12 +1014,12 @@ DeletedLayer::~ DeletedLayer()
 {
 }
 
-bool DeletedLayer::toXML(QDomElement& , QProgressDialog & )
+bool DeletedLayer::toXML(QDomElement& , QProgressDialog * )
 {
     return true;
 }
 
-DeletedLayer* DeletedLayer::fromXML(Document* d, const QDomElement& e, QProgressDialog & progress)
+DeletedLayer* DeletedLayer::fromXML(Document* d, const QDomElement& e, QProgressDialog * progress)
 {
     /* Only keep DeletedLayer for backward compatibility with MDC */
     DrawingLayer::doFromXML(dynamic_cast<DrawingLayer*>(d->getDirtyOrOriginLayer()), d, e, progress);
@@ -1404,7 +1404,7 @@ void OsbLayer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures
 //	return pp->theImp->getFeature(d, this, ref);
 //}
 
-bool OsbLayer::toXML(QDomElement& xParent, QProgressDialog & progress)
+bool OsbLayer::toXML(QDomElement& xParent, QProgressDialog * progress)
 {
     Q_UNUSED(progress);
 
@@ -1466,7 +1466,7 @@ bool OsbLayer::toXML(QDomElement& xParent, QProgressDialog & progress)
 
 }
 
-OsbLayer * OsbLayer::fromXML(Document* d, const QDomElement& e, QProgressDialog & progress)
+OsbLayer * OsbLayer::fromXML(Document* d, const QDomElement& e, QProgressDialog * progress)
 {
     Q_UNUSED(progress);
 

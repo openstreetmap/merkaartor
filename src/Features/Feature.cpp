@@ -143,8 +143,9 @@ class MapFeaturePrivate
 
 void MapFeaturePrivate::initVersionNumber()
 {
-    static int VN = -1;
-    VersionNumber = VN--;
+//    static int VN = -1;
+//    VersionNumber = VN--;
+    VersionNumber = 9999;
 }
 
 Feature::Feature()
@@ -649,14 +650,11 @@ void Feature::notifyParents(int Id)
     }
 }
 
-QString Feature::tagsToXML(int lvl)
+QString Feature::toXML(int lvl, QProgressDialog * progress)
 {
-    QString S;
-    for (int i=0; i<tagSize(); ++i)
-    {
-        S += QString(lvl*2, ' ') + QString("<tag k=\"%1\" v=\"%2\"/>\n").arg(Utils::encodeAttributes(tagKey(i))).arg(Utils::encodeAttributes(tagValue(i)));
-    }
-    return S;
+    QDomDocument theXmlDoc;
+    QDomElement root = theXmlDoc.documentElement();
+    toXML(root, progress);
 }
 
 bool Feature::tagsToXML(QDomElement xParent)

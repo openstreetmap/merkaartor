@@ -269,7 +269,7 @@ bool ImageMapLayer::isTiled()
     return (p->theMapAdapter->isTiled());
 }
 
-bool ImageMapLayer::toXML(QDomElement& xParent, QProgressDialog & /* progress */)
+bool ImageMapLayer::toXML(QDomElement& xParent, QProgressDialog * /* progress */)
 {
     bool OK = true;
 
@@ -305,7 +305,7 @@ bool ImageMapLayer::toXML(QDomElement& xParent, QProgressDialog & /* progress */
     return OK;
 }
 
-ImageMapLayer * ImageMapLayer::fromXML(Document* d, const QDomElement& e, QProgressDialog & progress)
+ImageMapLayer * ImageMapLayer::fromXML(Document* d, const QDomElement& e, QProgressDialog * /*progress*/)
 {
     ImageMapLayer* l = new ImageMapLayer(e.attribute("name"));
     l->blockIndexing(true);

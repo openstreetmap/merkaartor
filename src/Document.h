@@ -81,11 +81,11 @@ public:
     UploadedLayer* getUploadedLayer() const;
     //DeletedMapLayer* getTrashLayer() const;
 
-    QString exportOSM(const CoordBox& aCoordBox = WORLD_COORDBOX, bool renderBounds=false);
-    QString exportOSM(QList<Feature*> aFeatures);
+    QString exportOSM(QMainWindow* main, const CoordBox& aCoordBox = WORLD_COORDBOX, bool renderBounds=false);
+    QString exportOSM(QMainWindow* main, QList<Feature*> aFeatures);
     QList<Feature*> exportCoreOSM(QList<Feature*> aFeatures);
-    bool toXML(QDomElement xParent, QProgressDialog & progress);
-    static Document* fromXML(const QDomElement e, double version, LayerDock* aDock, QProgressDialog & progress);
+    bool toXML(QDomElement xParent, QProgressDialog * progress);
+    static Document* fromXML(const QDomElement e, double version, LayerDock* aDock, QProgressDialog * progress);
 
     bool importNMEA(const QString& filename, TrackLayer* NewLayer);
     bool importOSB(const QString& filename, DrawingLayer* NewLayer);

@@ -90,8 +90,8 @@ class CommandHistory
         int buildUndoList(QListWidget* theList);
         int index() const;
 
-        virtual bool toXML(QDomElement& xParent, QProgressDialog & progress) const;
-        static CommandHistory* fromXML(Document* d, QDomElement& e, QProgressDialog & progress);
+        virtual bool toXML(QDomElement& xParent, QProgressDialog * progress) const;
+        static CommandHistory* fromXML(Document* d, QDomElement& e, QProgressDialog * progress);
 
     private:
         QList<Command*> Subs;

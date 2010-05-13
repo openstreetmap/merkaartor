@@ -301,8 +301,8 @@ class Feature : public QObject
         void notifyChanges();
         void notifyParents(int Id);
 
-        virtual QString toXML(int lvl=0, QProgressDialog * progress=NULL) = 0;
-        virtual bool toXML(QDomElement xParent, QProgressDialog & progress, bool strict=false) = 0;
+        virtual QString toXML(int lvl=0, QProgressDialog * progress=NULL);
+        virtual bool toXML(QDomElement xParent, QProgressDialog * progress=NULL, bool strict=false) = 0;
 
         virtual QString toMainHtml(QString type, QString systemtype);
         virtual QString toHtml() = 0;
@@ -332,7 +332,6 @@ class Feature : public QObject
         mutable CoordBox BBox;
         bool MetaUpToDate;
 
-        QString tagsToXML(int lvl=0);
         bool tagsToXML(QDomElement xParent);
         static void tagsFromXML(Document* d, Feature* f, QDomElement e);
 

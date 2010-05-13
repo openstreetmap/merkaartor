@@ -38,8 +38,8 @@ public:
     CoordBox boundingBox();
     virtual int size() const;
 
-    virtual bool toXML(QDomElement& xParent, QProgressDialog & progress);
-    static ImageMapLayer* fromXML(Document* d, const QDomElement& e, QProgressDialog & progress);
+    virtual bool toXML(QDomElement& xParent, QProgressDialog * progress);
+    static ImageMapLayer* fromXML(Document* d, const QDomElement& e, QProgressDialog * progress);
 
     virtual /* const */ LayerType classType() {return Layer::ImageLayerType;}
     virtual const LayerGroups classGroups() {return(Layer::Default);}

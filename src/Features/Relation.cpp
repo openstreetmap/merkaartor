@@ -435,28 +435,7 @@ void Relation::updateMeta()
     MetaUpToDate = true;
 }
 
-QString Relation::toXML(int lvl, QProgressDialog * progress)
-{
-    if (progress)
-        progress->setValue(progress->value()+1);
-
-    QString S;
-    S += QString(lvl*2, ' ') + QString("<relation id=\"%1\">\n").arg(stripToOSMId(id()));
-    for (int i=0; i<size(); ++i)
-    {
-        QString Type("node");
-        if (dynamic_cast<const Way*>(get(i)))
-            Type="way";
-        else if (dynamic_cast<const Relation*>(get(i)))
-            Type="relation";
-        S += QString((lvl+1)*2, ' ') + QString("<member type=\"%1\" ref=\"%2\" role=\"%3\"/>").arg(Type).arg(stripToOSMId(get(i)->id())).arg(getRole(i));
-    }
-    S += tagsToXML(lvl+1);
-    S += QString(lvl*2, ' ') + "</relation>\n";
-    return S;
-}
-
-bool Relation::toXML(QDomElement xParent, QProgressDialog & progress, bool strict)
+bool Relation::toXML(QDomElement xParent, QProgressDialog * progress, bool strict)
 {
     bool OK = true;
 
@@ -490,7 +469,8 @@ bool Relation::toXML(QDomElement xParent, QProgressDialog & progress, bool stric
 
     tagsToXML(e);
 
-    progress.setValue(progress.value()+1);
+    if (progress)
+        progress->setValue(progress->value()+1);
     return OK;
 }
 
@@ -503,6 +483,8 @@ Relation * Relation::fromXML(Document * d, Layer * L, const QDomElement e)
     QString user = e.attribute("user");
     bool Deleted = (e.attribute("deleted") == "true");
     int Version = e.attribute("version").toInt();
+    if (Version < 1)
+        Version = 9999;
 
     Relation* R = dynamic_cast<Relation*>(d->getFeature(id));
     if (!R) {
