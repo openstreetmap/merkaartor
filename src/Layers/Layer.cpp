@@ -650,7 +650,7 @@ DrawingLayer * DrawingLayer::doFromXML(DrawingLayer* l, Document* d, const QDomE
     l->setSelected((e.attribute("selected") == "true" ? true : false));
     l->setEnabled((e.attribute("enabled") == "false" ? false : true));
     l->setReadonly((e.attribute("readonly") == "true" ? true : false));
-    l->setUploadable((e.attribute("uploadable") == "true" ? true : false));
+    l->setUploadable((e.attribute("uploadable") == "false" ? false : true));
 
     QDomElement c = e.firstChildElement();
     if (c.tagName() != "osm")
@@ -909,7 +909,7 @@ TrackLayer * TrackLayer::fromXML(Document* d, const QDomElement& e, QProgressDia
     l->setSelected((e.attribute("selected") == "true" ? true : false));
     l->setEnabled((e.attribute("enabled") == "false" ? false : true));
     l->setReadonly((e.attribute("readonly") == "true" ? true : false));
-    l->setUploadable((e.attribute("uploadable") == "true" ? true : false));
+    l->setUploadable((e.attribute("uploadable") == "false" ? false : true));
 
     d->add(l);
 

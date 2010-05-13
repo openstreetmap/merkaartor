@@ -25,8 +25,9 @@ class Utils: public QObject
 
 public:
 
-    static bool sendBlockingNetRequest(const QUrl& theUrl, QString& reply);
+    static const QString encodeAttributes(const QString & text);
     static bool QRectInterstects(const QRectF& r, const QLineF& l, QPointF& a, QPointF& b);
+    static bool sendBlockingNetRequest(const QUrl& theUrl, QString& reply);
 };
 
 #endif // UTILS_H

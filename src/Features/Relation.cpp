@@ -6,8 +6,6 @@
 #include "Document.h"
 #include "Utils/LineF.h"
 
-#include "ExportOSM.h"
-
 #include <QApplication>
 #include <QAbstractTableModel>
 #include <QProgressDialog>
