@@ -333,7 +333,7 @@ int TrackSegment::duration() const
 }
 
 
-bool TrackSegment::toGPX(QDomElement xParent, QProgressDialog & progress, bool forExport)
+bool TrackSegment::toGPX(QDomElement xParent, QProgressDialog * progress, bool forExport)
 {
     bool OK = true;
 
@@ -347,15 +347,18 @@ bool TrackSegment::toGPX(QDomElement xParent, QProgressDialog & progress, bool f
         dynamic_cast <Node*> (get(i))->toGPX(e, progress, forExport);
     }
 
+    if (progress)
+        progress->setValue(progress->value()+1);
+
     return OK;
 }
 
-bool TrackSegment::toXML(QDomElement xParent, QProgressDialog & progress, bool)
+bool TrackSegment::toXML(QDomElement xParent, QProgressDialog * progress, bool)
 {
     return toGPX(xParent, progress, false);
 }
 
-TrackSegment* TrackSegment::fromGPX(Document* d, Layer* L, const QDomElement e, QProgressDialog & progress)
+TrackSegment* TrackSegment::fromGPX(Document* d, Layer* L, const QDomElement e, QProgressDialog * progress)
 {
     TrackSegment* l = new TrackSegment();
 
@@ -367,10 +370,10 @@ TrackSegment* TrackSegment::fromGPX(Document* d, Layer* L, const QDomElement e, 
         if (c.tagName() == "trkpt") {
             Node* N = Node::fromGPX(d, L, c);
             l->add(N);
-            progress.setValue(progress.value()+1);
+            progress->setValue(progress->value()+1);
         }
 
-        if (progress.wasCanceled())
+        if (progress->wasCanceled())
             break;
 
         c = c.nextSiblingElement();
@@ -379,7 +382,7 @@ TrackSegment* TrackSegment::fromGPX(Document* d, Layer* L, const QDomElement e, 
     return l;
 }
 
-TrackSegment* TrackSegment::fromXML(Document* d, Layer* L, const QDomElement e, QProgressDialog & progress)
+TrackSegment* TrackSegment::fromXML(Document* d, Layer* L, const QDomElement e, QProgressDialog * progress)
 {
     return TrackSegment::fromGPX(d, L, e, progress);
 }

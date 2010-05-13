@@ -833,7 +833,7 @@ void Way::clearTag(const QString& k)
     p->Width = 0;
 }
 
-bool Way::toGPX(QDomElement xParent, QProgressDialog & progress, bool forExport)
+bool Way::toGPX(QDomElement xParent, QProgressDialog * progress, bool forExport)
 {
     bool OK = true;
 
@@ -869,30 +869,13 @@ bool Way::toGPX(QDomElement xParent, QProgressDialog & progress, bool forExport)
             getNode(i)->toGPX(e, progress, forExport);
     }
 
-    return OK;
-}
-
-QString Way::toXML(int lvl, QProgressDialog * progress)
-{
-    if (!size()) return "";
-
     if (progress)
         progress->setValue(progress->value()+1);
 
-    QString S(lvl*2, ' ');
-    S += QString("<way id=\"%1\">\n").arg(stripToOSMId(id()));
-
-    S += QString((lvl+1)*2, ' ') + QString("<nd ref=\"%1\"/>\n").arg(stripToOSMId(get(0)->id()));
-    for (int i=1; i<size(); ++i)
-        if (!getNode(i)->isVirtual())
-            if (get(i)->id() != get(i-1)->id())
-                S += QString((lvl+1)*2, ' ') + QString("<nd ref=\"%1\"/>\n").arg(stripToOSMId(get(i)->id()));
-    S += tagsToXML(lvl+1);
-    S += QString(lvl*2, ' ') + "</way>\n";
-    return S;
+    return OK;
 }
 
-bool Way::toXML(QDomElement xParent, QProgressDialog & progress, bool strict)
+bool Way::toXML(QDomElement xParent, QProgressDialog * progress, bool strict)
 {
     bool OK = true;
 
@@ -927,7 +910,9 @@ bool Way::toXML(QDomElement xParent, QProgressDialog & progress, bool strict)
 
     tagsToXML(e);
 
-    progress.setValue(progress.value()+1);
+    if (progress)
+        progress->setValue(progress->value()+1);
+
     return OK;
 }
 
@@ -940,6 +925,8 @@ Way * Way::fromXML(Document* d, Layer * L, const QDomElement e)
     QString user = e.attribute("user");
     bool Deleted = (e.attribute("deleted") == "true");
     int Version = e.attribute("version").toInt();
+    if (Version < 1)
+        Version = 9999;
     Feature::ActorType A;
     if (e.hasAttribute("actor"))
         A = (Feature::ActorType)(e.attribute("actor", "2").toInt());

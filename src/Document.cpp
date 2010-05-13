@@ -98,7 +98,7 @@ void Document::addDefaultLayers()
     add(p->uploadedLayer);
 }
 
-bool Document::toXML(QDomElement xParent, QProgressDialog & progress)
+bool Document::toXML(QDomElement xParent, QProgressDialog * progress)
 {
     bool OK = true;
 
@@ -113,7 +113,7 @@ bool Document::toXML(QDomElement xParent, QProgressDialog & progress)
         mapDoc.setAttribute("lastdownloadlayer", p->lastDownloadLayer->id());
 
     for (int i=0; i<p->Layers.size(); ++i) {
-        progress.setMaximum(progress.maximum() + p->Layers[i]->size());
+        progress->setMaximum(progress->maximum() + p->Layers[i]->size());
     }
 
     for (int i=0; i<p->Layers.size(); ++i) {
@@ -125,7 +125,7 @@ bool Document::toXML(QDomElement xParent, QProgressDialog & progress)
     return OK;
 }
 
-Document* Document::fromXML(const QDomElement e, double version, LayerDock* aDock, QProgressDialog & progress)
+Document* Document::fromXML(const QDomElement e, double version, LayerDock* aDock, QProgressDialog * progress)
 {
     Document* NewDoc = new Document(aDock);
 
@@ -162,13 +162,13 @@ Document* Document::fromXML(const QDomElement e, double version, LayerDock* aDoc
                 h = CommandHistory::fromXML(NewDoc, c, progress);
         }
 
-        if (progress.wasCanceled())
+        if (progress->wasCanceled())
             break;
 
         c = c.nextSiblingElement();
     }
 
-    if (progress.wasCanceled()) {
+    if (progress->wasCanceled()) {
         delete NewDoc;
         NewDoc = NULL;
     }
@@ -441,9 +441,8 @@ UploadedLayer* Document::getUploadedLayer() const
     return p->uploadedLayer;
 }
 
-QString Document::exportOSM(const CoordBox& aCoordBox, bool renderBounds)
+QString Document::exportOSM(QMainWindow* main, const CoordBox& aCoordBox, bool renderBounds)
 {
-    QString theExport, coreExport;
     QList<Feature*> theFeatures;
 
     for (VisibleFeatureIterator i(this); !i.isEnd(); ++i) {
@@ -484,59 +483,106 @@ QString Document::exportOSM(const CoordBox& aCoordBox, bool renderBounds)
 
     QList<Feature*> exportedFeatures = exportCoreOSM(theFeatures);
 
-    if (exportedFeatures.size()) {
-        for (int i=0; i < exportedFeatures.size(); i++) {
-            coreExport += exportedFeatures[i]->toXML(1) + "\n";
-        }
-    }
-    theExport += "<?xml version='1.0' encoding='UTF-8'?>\n";
-    theExport += QString("<osm version='%1' generator='Merkaartor'>\n").arg(M_PREFS->apiVersion());
-    theExport += "<bound box='";
-    theExport += QString().number(intToAng(aCoordBox.bottomLeft().lat()),'f',6) + ",";
-    theExport += QString().number(intToAng(aCoordBox.bottomLeft().lon()),'f',6) + ",";
-    theExport += QString().number(intToAng(aCoordBox.topRight().lat()),'f',6) + ",";
-    theExport += QString().number(intToAng(aCoordBox.topRight().lon()),'f',6);
-    theExport += QString("' origin='http://www.openstreetmap.org/api/%1' />\n").arg(M_PREFS->apiVersion());
-    if (renderBounds) {
-        theExport += "<bounds ";
-        theExport += "minlat=\"" + QString().number(intToAng(aCoordBox.bottomLeft().lat()),'f',6) + "\" ";
-        theExport += "minlon=\"" + QString().number(intToAng(aCoordBox.bottomLeft().lon()),'f',6) + "\" ";
-        theExport += "maxlat=\"" + QString().number(intToAng(aCoordBox.topRight().lat()),'f',6) + "\" ";
-        theExport += "maxlon=\"" + QString().number(intToAng(aCoordBox.topRight().lon()),'f',6) + "\" ";
-        theExport += "/>\n";
-    }
-    theExport += coreExport;
-    theExport += "</osm>";
+    IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(main);
+    if (!aProgressWindow)
+        return "";
 
-    return theExport;
+    QProgressDialog* dlg = aProgressWindow->getProgressDialog();
+    dlg->setWindowTitle(tr("OSM Export"));
+
+    QProgressBar* Bar = aProgressWindow->getProgressBar();
+    Bar->setTextVisible(false);
+    Bar->setMaximum(exportedFeatures.size());
+
+    QLabel* Lbl = aProgressWindow->getProgressLabel();
+    Lbl->setText(tr("Exporting OSM..."));
+
+    if (dlg)
+        dlg->show();
+
+    QDomDocument theXmlDoc;
+    theXmlDoc.appendChild(theXmlDoc.createProcessingInstruction("xml", "version=\"1.0\""));
+
+    QDomElement o = theXmlDoc.createElement("osm");
+    theXmlDoc.appendChild(o);
+    o.setAttribute("version", "0.6");
+    o.setAttribute("generator", QString("Merkaartor %1").arg(STRINGIFY(VERSION)));
+
+    QDomElement bb = theXmlDoc.createElement("bound");
+    o.appendChild(bb);
+    QString S = QString().number(intToAng(aCoordBox.bottomLeft().lat()),'f',6) + ",";
+    S += QString().number(intToAng(aCoordBox.bottomLeft().lon()),'f',6) + ",";
+    S += QString().number(intToAng(aCoordBox.topRight().lat()),'f',6) + ",";
+    S += QString().number(intToAng(aCoordBox.topRight().lon()),'f',6);
+    bb.setAttribute("box", S);
+    bb.setAttribute("origin", QString("http://www.openstreetmap.org/api/%1").arg(M_PREFS->apiVersion()));
+
+    if (renderBounds) {
+        QDomElement bnds = theXmlDoc.createElement("bounds");
+        o.appendChild(bnds);
+
+        bnds.setAttribute("minlat", QString::number(intToAng(aCoordBox.bottomLeft().lat()),'f',6));
+        bnds.setAttribute("minlon", QString::number(intToAng(aCoordBox.bottomLeft().lon()),'f',6));
+        bnds.setAttribute("maxlat", QString::number(intToAng(aCoordBox.topRight().lat()),'f',6));
+        bnds.setAttribute("maxlon", QString::number(intToAng(aCoordBox.topRight().lon()),'f',6));
+    }
+
+    for (int i=0; i < exportedFeatures.size(); i++) {
+        exportedFeatures[i]->toXML(o, dlg);
+    }
+
+    return theXmlDoc.toString(2);
 }
 
-QString Document::exportOSM(QList<Feature*> aFeatures)
+QString Document::exportOSM(QMainWindow* main, QList<Feature*> aFeatures)
 {
-    QString theExport, coreExport;
     QList<Feature*> exportedFeatures = exportCoreOSM(aFeatures);
     CoordBox aCoordBox;
 
+    IProgressWindow* aProgressWindow = dynamic_cast<IProgressWindow*>(main);
+    if (!aProgressWindow)
+        return "";
+
+    QProgressDialog* dlg = aProgressWindow->getProgressDialog();
+    dlg->setWindowTitle(tr("OSM Export"));
+
+    QProgressBar* Bar = aProgressWindow->getProgressBar();
+    Bar->setTextVisible(false);
+    Bar->setMaximum(exportedFeatures.size());
+
+    QLabel* Lbl = aProgressWindow->getProgressLabel();
+    Lbl->setText(tr("Exporting OSM..."));
+
+    if (dlg)
+        dlg->show();
+
+    QDomDocument theXmlDoc;
+    theXmlDoc.appendChild(theXmlDoc.createProcessingInstruction("xml", "version=\"1.0\""));
+
+    QDomElement o = theXmlDoc.createElement("osm");
+    theXmlDoc.appendChild(o);
+    o.setAttribute("version", "0.6");
+    o.setAttribute("generator", QString("Merkaartor %1").arg(STRINGIFY(VERSION)));
+
     if (exportedFeatures.size()) {
         aCoordBox = exportedFeatures[0]->boundingBox();
-        coreExport += exportedFeatures[0]->toXML(1) + "\n";
+        aCoordBox.merge(exportedFeatures[0]->boundingBox());
         for (int i=1; i < exportedFeatures.size(); i++) {
             aCoordBox.merge(exportedFeatures[i]->boundingBox());
-            coreExport += exportedFeatures[i]->toXML(1) + "\n";
+            exportedFeatures[i]->toXML(o, dlg);
         }
     }
-    theExport += "<?xml version='1.0' encoding='UTF-8'?>\n";
-    theExport += QString("<osm version='%1' generator='Merkaartor'>\n").arg(M_PREFS->apiVersion());
-    theExport += "<bound box='";
-    theExport += QString().number(intToAng(aCoordBox.bottomLeft().lat()),'f',6) + ",";
-    theExport += QString().number(intToAng(aCoordBox.bottomLeft().lon()),'f',6) + ",";
-    theExport += QString().number(intToAng(aCoordBox.topRight().lat()),'f',6) + ",";
-    theExport += QString().number(intToAng(aCoordBox.topRight().lon()),'f',6);
-    theExport += QString("' origin='http://www.openstreetmap.org/api/%1' />\n").arg(M_PREFS->apiVersion());
-    theExport += coreExport;
-    theExport += "</osm>";
 
-    return theExport;
+    QDomElement bb = theXmlDoc.createElement("bound");
+    o.appendChild(bb);
+    QString S = QString().number(intToAng(aCoordBox.bottomLeft().lat()),'f',6) + ",";
+    S += QString().number(intToAng(aCoordBox.bottomLeft().lon()),'f',6) + ",";
+    S += QString().number(intToAng(aCoordBox.topRight().lat()),'f',6) + ",";
+    S += QString().number(intToAng(aCoordBox.topRight().lon()),'f',6);
+    bb.setAttribute("box", S);
+    bb.setAttribute("origin", QString("http://www.openstreetmap.org/api/%1").arg(M_PREFS->apiVersion()));
+
+    return theXmlDoc.toString(2);
 }
 
 QList<Feature*> Document::exportCoreOSM(QList<Feature*> aFeatures)

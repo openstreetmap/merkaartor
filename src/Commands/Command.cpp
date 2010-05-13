@@ -442,7 +442,7 @@ int CommandHistory::buildUndoList(QListWidget* theList)
     return Index;
 }
 
-bool CommandHistory::toXML(QDomElement& xParent, QProgressDialog & /*progress*/) const
+bool CommandHistory::toXML(QDomElement& xParent, QProgressDialog * /*progress*/) const
 {
     bool OK = true;
 
@@ -463,7 +463,7 @@ bool CommandHistory::toXML(QDomElement& xParent, QProgressDialog & /*progress*/)
     return OK;
 }
 
-CommandHistory* CommandHistory::fromXML(Document* d, QDomElement& e, QProgressDialog & progress)
+CommandHistory* CommandHistory::fromXML(Document* d, QDomElement& e, QProgressDialog * progress)
 {
     bool OK = true;
     CommandHistory* h = new CommandHistory();
@@ -502,7 +502,7 @@ CommandHistory* CommandHistory::fromXML(Document* d, QDomElement& e, QProgressDi
             OK = false;
         }
 
-        if (progress.wasCanceled())
+        if (progress->wasCanceled())
             break;
 
         c = c.nextSiblingElement();

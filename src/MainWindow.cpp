@@ -547,7 +547,7 @@ void MainWindow::on_editCopyAction_triggered()
     QClipboard *clipboard = QApplication::clipboard();
     QMimeData* md = new QMimeData();
 
-    QString osm = theDocument->exportOSM(theProperties->selection());
+    QString osm = theDocument->exportOSM(this, theProperties->selection());
     md->setText(osm);
     md->setData("application/x-openstreetmap+xml", osm.toUtf8());
 
@@ -1971,7 +1971,7 @@ void MainWindow::saveDocument()
     QProgressDialog progress("Saving document...", "Cancel", 0, 0);
     progress.setWindowModality(Qt::WindowModal);
 
-    theDocument->toXML(root, progress);
+    theDocument->toXML(root, &progress);
     theView->toXML(root);
 
     QFile file(fileName);
@@ -2030,7 +2030,7 @@ void MainWindow::loadDocument(QString fn)
     QDomElement e = docElem.firstChildElement();
     while(!e.isNull()) {
         if (e.tagName() == "MapDocument") {
-            Document* newDoc = Document::fromXML(e, version, theLayers, progress);
+            Document* newDoc = Document::fromXML(e, version, theLayers, &progress);
 
             if (progress.wasCanceled())
                 break;
@@ -2081,12 +2081,16 @@ void MainWindow::on_exportOSMAction_triggered()
         tr("Export OSM"), MerkaartorPreferences::instance()->getWorkingDir() + "/untitled.osm", tr("OSM Files (*.osm)"));
 
     if (fileName != "") {
+        createProgressDialog();
+
         QFile file(fileName);
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
             return;
 
-        file.write(theDocument->exportOSM(theFeatures).toUtf8());
+        file.write(theDocument->exportOSM(this, theFeatures).toUtf8());
         file.close();
+
+        deleteProgressDialog();
     }
 }
 

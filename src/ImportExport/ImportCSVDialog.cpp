@@ -91,7 +91,7 @@ void ImportCSVDialog::analyze()
     ui->cbHasHeader->setChecked(true);
     QStringList sl = l.split(delim);
     for (int i=0; i<sl.size(); ++i) {
-//        qreal r = sl[i].toDouble(&ok);
+        sl[i].toDouble(&ok);
         if (ok) {
             ui->cbHasHeader->setChecked(false);
             break;
@@ -195,7 +195,7 @@ void ImportCSVDialog::generatePreview(int sel)
         line = m_dev->readLine();
         Feature* F = generateOSM(line);
         if (F) {
-            previewText += F->toXML(0, NULL);
+            previewText += F->toXML(2);
             delete F;
         }
         ++l;

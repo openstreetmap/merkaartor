@@ -373,25 +373,9 @@ void Node::updateMeta()
     MetaUpToDate = true;
 }
 
-QString Node::toXML(int lvl, QProgressDialog * progress)
-{
-    if (progress)
-        progress->setValue(progress->value()+1);
-
-    if (isVirtual())
-        return QString();
-
-    QString S(lvl*2, ' ');
-    S += "<node id=\"%1\" lat=\"%2\" lon=\"%3\">\n";
-    S += tagsToXML(lvl+1);
-    S += QString(lvl*2, ' ') + "</node>\n";
-    return S.arg(stripToOSMId(id())).arg(intToAng(position().lat()),0,'f',8).arg(intToAng(position().lon()),0,'f',8);
-}
-
-bool Node::toXML(QDomElement xParent, QProgressDialog & progress, bool strict)
+bool Node::toXML(QDomElement xParent, QProgressDialog * progress, bool strict)
 {
     bool OK = true;
-    progress.setValue(progress.value()+1);
 
     if (isVirtual())
         return OK;
@@ -413,13 +397,15 @@ bool Node::toXML(QDomElement xParent, QProgressDialog & progress, bool strict)
 
     tagsToXML(e);
 
+    if (progress)
+        progress->setValue(progress->value()+1);
+
     return OK;
 }
 
-bool Node::toGPX(QDomElement xParent, QProgressDialog & progress, bool forExport)
+bool Node::toGPX(QDomElement xParent, QProgressDialog * progress, bool forExport)
 {
     bool OK = true;
-    progress.setValue(progress.value()+1);
 
     if (isVirtual())
         return OK;
@@ -485,6 +471,9 @@ bool Node::toGPX(QDomElement xParent, QProgressDialog & progress, bool forExport
         osbId.appendChild(v);
     }
 
+    if (progress)
+        progress->setValue(progress->value()+1);
+
     return OK;
 }
 
@@ -498,6 +487,8 @@ Node * Node::fromXML(Document* d, Layer* L, const QDomElement e)
     time = QDateTime::fromString(e.attribute("timestamp").left(19), Qt::ISODate);
     QString user = e.attribute("user");
     int Version = e.attribute("version").toInt();
+    if (Version < 1)
+        Version = 9999;
     Feature::ActorType A = (Feature::ActorType)(e.attribute("actor", "2").toInt());
 
     QString id = (e.hasAttribute("id") ? e.attribute("id") : e.attribute("xml:id"));

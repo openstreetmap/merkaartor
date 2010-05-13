@@ -108,7 +108,7 @@ public:
 
     virtual QString toMainHtml();
     virtual QString toHtml();
-    virtual bool toXML(QDomElement& xParent, QProgressDialog & progress) = 0;
+    virtual bool toXML(QDomElement& xParent, QProgressDialog * progress) = 0;
 
     virtual CoordBox boundingBox();
 
@@ -135,7 +135,7 @@ public:
 //    bool __cdecl indexFindCallback(MapFeaturePtr data, void* ctxt);
     virtual const QList<MapFeaturePtr>& indexFind(const CoordBox& vp);
     virtual void reIndex();
-    virtual void reIndex(QProgressDialog & progress);
+    virtual void reIndex(QProgressDialog * progress);
 
 
 protected:
@@ -157,9 +157,9 @@ public:
 
     virtual LayerWidget* newWidget(void);
 
-    virtual bool toXML(QDomElement& xParent, QProgressDialog & progress);
-    static DrawingLayer* fromXML(Document* d, const QDomElement& e, QProgressDialog & progress);
-    static DrawingLayer* doFromXML(DrawingLayer* l, Document* d, const QDomElement e, QProgressDialog & progress);
+    virtual bool toXML(QDomElement& xParent, QProgressDialog * progress);
+    static DrawingLayer* fromXML(Document* d, const QDomElement& e, QProgressDialog * progress);
+    static DrawingLayer* doFromXML(DrawingLayer* l, Document* d, const QDomElement e, QProgressDialog * progress);
 
     virtual /* const */ LayerType classType() {return Layer::DrawingLayerType;}
     virtual const LayerGroups classGroups() {return (Layer::OSM);}
@@ -178,8 +178,8 @@ public:
     virtual const QString getFilename();
 
     virtual QString toHtml();
-    virtual bool toXML(QDomElement& xParent, QProgressDialog & progress);
-    static TrackLayer* fromXML(Document* d, const QDomElement& e, QProgressDialog & progress);
+    virtual bool toXML(QDomElement& xParent, QProgressDialog * progress);
+    static TrackLayer* fromXML(Document* d, const QDomElement& e, QProgressDialog * progress);
 
     virtual /* const */ LayerType classType() {return Layer::TrackLayerType;}
     virtual const LayerGroups classGroups() {return(Layer::Tracks);}
@@ -198,7 +198,7 @@ public:
     DirtyLayer(const QString& aName);
     virtual ~DirtyLayer();
 
-    static DirtyLayer* fromXML(Document* d, const QDomElement e, QProgressDialog & progress);
+    static DirtyLayer* fromXML(Document* d, const QDomElement e, QProgressDialog * progress);
 
     virtual /* const */ LayerType classType() {return Layer::DirtyLayerType;}
     virtual const LayerGroups classGroups() {return(Layer::Default|Layer::OSM);}
@@ -216,7 +216,7 @@ public:
     UploadedLayer(const QString& aName);
     virtual ~UploadedLayer();
 
-    static UploadedLayer* fromXML(Document* d, const QDomElement e, QProgressDialog & progress);
+    static UploadedLayer* fromXML(Document* d, const QDomElement e, QProgressDialog * progress);
 
     virtual /* const */ LayerType classType() {return Layer::UploadedLayerType;}
     virtual const LayerGroups classGroups() {return(Layer::Default|Layer::OSM);}
@@ -233,8 +233,8 @@ public:
     DeletedLayer(const QString& aName);
     virtual ~DeletedLayer();
 
-    virtual bool toXML(QDomElement& xParent, QProgressDialog & progress);
-    static DeletedLayer* fromXML(Document* d, const QDomElement& e, QProgressDialog & progress);
+    virtual bool toXML(QDomElement& xParent, QProgressDialog * progress);
+    static DeletedLayer* fromXML(Document* d, const QDomElement& e, QProgressDialog * progress);
 
     virtual /* const */ LayerType classType() {return Layer::DeletedLayerType;}
     virtual const LayerGroups classGroups() {return(Layer::None);}
@@ -269,8 +269,8 @@ public:
     virtual void getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures, QSet<Way*>& theCoastlines, Document* theDocument,
                                QList<CoordBox>& invalidRects, QRectF& clipRect, Projection& theProjection, QTransform& theTransform);
 
-    virtual bool toXML(QDomElement& xParent, QProgressDialog & progress);
-    static OsbLayer* fromXML(Document* d, const QDomElement& e, QProgressDialog & progress);
+    virtual bool toXML(QDomElement& xParent, QProgressDialog * progress);
+    static OsbLayer* fromXML(Document* d, const QDomElement& e, QProgressDialog * progress);
 
     virtual QString toHtml();
 

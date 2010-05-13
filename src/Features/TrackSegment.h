@@ -52,11 +52,10 @@ class TrackSegment : public Feature
         double distance();
         int duration() const;
 
-        virtual QString toXML(int, QProgressDialog *) {return QString("");}
-        virtual bool toGPX(QDomElement xParent, QProgressDialog & progress, bool forExport=false);
-        static TrackSegment* fromGPX(Document* d, Layer* L, const QDomElement e, QProgressDialog & progress);
-        virtual bool toXML(QDomElement xParent, QProgressDialog & progress, bool strict=false);
-        static TrackSegment* fromXML(Document* d, Layer* L, const QDomElement e, QProgressDialog & progress);
+        virtual bool toGPX(QDomElement xParent, QProgressDialog * progress, bool forExport=false);
+        static TrackSegment* fromGPX(Document* d, Layer* L, const QDomElement e, QProgressDialog * progress);
+        virtual bool toXML(QDomElement xParent, QProgressDialog * progress, bool strict=false);
+        static TrackSegment* fromXML(Document* d, Layer* L, const QDomElement e, QProgressDialog * progress);
 
         virtual QString toHtml() {return "";}
 
