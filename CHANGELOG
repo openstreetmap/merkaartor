@@ -1,4 +1,5 @@
 v0.16
+    * FIX : Make JOSM happy about our .osm export (fixes #2952)
     * ADD : Preliminary support for OpenStreetBugs (Refs #983)
     * ADD : POC of a Gosmore map adapter
     * FIX : Allow to "Force Upload" relations, too (fixes #2926)
