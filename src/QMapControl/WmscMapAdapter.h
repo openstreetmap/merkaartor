@@ -59,6 +59,12 @@ public:
      */
     virtual IMapAdapter::Type	getType		() const;
 
+    //! returns the size of the tiles
+    /*!
+     * @return the size of the tiles
+     */
+    virtual int		getTileSize	() const;
+
     double PI;
 
     virtual void zoom_in();
@@ -80,6 +86,8 @@ public:
 
 protected:
     WmsServer theServer;
+
+    int tilesize;
 };
 
 #endif //WMSCMAPADAPTER_H

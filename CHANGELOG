@@ -1,4 +1,5 @@
 v0.16
+    * ADD : support for "standard" (as in http://wiki.osgeo.org/wiki/Tile_Map_Service_Specification) TMS servers
     * FIX : Make JOSM happy about our .osm export (fixes #2952)
     * ADD : Preliminary support for OpenStreetBugs (Refs #983)
     * ADD : POC of a Gosmore map adapter
@@ -13,7 +14,7 @@ v0.16
     * ADD : Import from OSC (osmChange format)
     * ADD : Feature-Force Delete action (deletes the feature without entry in the undo nor upload list)
     * CHG : Switch to transactional diff uploads to OSM to harden the process
-	* ADD : Export to OSC (osmChange format)
+    * ADD : Export to OSC (osmChange format)
     * ADD : CSV POI import
     * FIX : crash when closing layer with virtual nodes (fixes #2858)
     * ADD : OSGB36 to the default list of projections
@@ -28,10 +29,10 @@ v0.16
     * ADD : show geotagged photos on the map (disable via 'view-Show Photos on map')
     * FIX : crash when closing layers containing photos (fixes #2828)
     * CHG : Allow importing geotagged photos when no track layer is present (closes #2827)
-    * ADD : Templates xsd (by Jonathan Bennett) (closes #2809; closes #2707)	
+    * ADD : Templates xsd (by Jonathan Bennett) (closes #2809; closes #2707)
     * ADD : allow to re-order relation members (closes #2759)
     * FIX : solves a problem when hovering large relations
-    * ADD : add a projection editor 
+    * ADD : add a projection editor
     * ADD : allow google maps links in goto and download dialogs
     * FIX : abort tile downloading when zooming
     * ADD : Allow to tile (and cache) arbitrary WMS'es (only EPSG:4326 and google projection supported)
@@ -50,10 +51,10 @@ v0.16
     * FIX : Update language of language combo after language change (by Alaeksandar)
     * FIX : Only allow virtual node updates after relations resolution (by Trav)(closes #2782)
     * ADD : Allow to zoom on the location of a GeoTIFF image
-    * FIX : Do not updateindex() if the feature is deleted 
+    * FIX : Do not updateindex() if the feature is deleted
     * FIX : roads not always refreshed when changing type or properties (fixes #2773)
     * FIX : Cannot cleanly copy tags from one relation to another (fixes #2746)
-    * FIX : When merging contiguous nodes in the same way, check that we don't add the same node twice (fixes #2771)  
+    * FIX : When merging contiguous nodes in the same way, check that we don't add the same node twice (fixes #2771)
     * ADD : Brazilian Portuguese translation (by Marcio Moraes)
     * FIX : OSX enhacements (by Aleksandar Topuzovic) (closes #2774)
     * FIX : When nodes are hidden,do not put them in the way of selecting roads
@@ -232,7 +233,7 @@ v0.13
     * ADD : Add a button to the Slippy map allowing to go to the current viewport.
     * ADD : Outline coastlines
     * ADD : Include build of translations during make
-    * ADD : Use a builtin shapefile of the world as a background 
+    * ADD : Use a builtin shapefile of the world as a background
     * ADD : Support for ESRI shapefile import (and, potentially, every GDAL supported file formats) via the GDAL library
     * FIX : Bugs when loading MDC history (fixes #1546)
     * ADD : Readonly layers + Preferences to default track layers to readonly (fixes #1460)
@@ -258,7 +259,7 @@ v0.13
     * FIX : Declutter - move translations to a seperate directory.
     * ADD : Custom Qt style (skulpture by Christoph Feck) to bypass Qt expanding dock problem on linux. Enable via preferences-visual. (fixes #1482)
     * FIX : Allow port number in WMS/TMS server address (fixes #1479)
-    * ADD : Save relative icon filenames in map styles if not builtin (closes #1463) 
+    * ADD : Save relative icon filenames in map styles if not builtin (closes #1463)
     * FIX : Don't loose selection(s) on "download more" (fixes #1470)
     * FIX : Make at least docks translated after a restart (refs #1432)
     * FIX : Do not re-sort features when zooming or when latitude changes.
@@ -392,7 +393,7 @@ v0.11
     * FIX : Qt slows to a crawl when drawing lines offscreen to a large virtual canvas, clipping enabled or not (Qt bug?). Try to optimize roads/track segments drawing to cope with this.
     * FIX : Save also the redo history in a MDC document
     * FIX : Allow deletion of a node from a track without deleting the whole segment
-    * FIX : Add a preference option to disable styling for Track layers + re-inject default waypoint painting from dantje 
+    * FIX : Add a preference option to disable styling for Track layers + re-inject default waypoint painting from dantje
     * ADD : non-uplodable tags; tags with key beginnig and ending with an underscore ("_") won't be uploaded
     * ADD : ability to commit features from non-uplodable layers to the dirty layer, i.e. make them uploadable
     * FIX : bump MDC documents to version 1.1 due to bug-fixes in history saving; history from version 1.0 MDC won't be imported.
@@ -423,7 +424,7 @@ v0.11
     * ADD : Split a road by selecting only the node
     * ADD : Arrow keys move the map (by Rainer Keller)
     * FIX : when cascade removing, not all children are deleted if they are present multiple times + avoid having twice the same node contiguous in the a road/relation
-    * FIX : segfault with MDC containing history where a feature is created and deleted 
+    * FIX : segfault with MDC containing history where a feature is created and deleted
     * ADD : "Dirty" layer where all modified features go
     * ADD : "Undo" dock with all undo actions
     * FIX : Start new road from selected node
@@ -441,7 +442,7 @@ v0.11
     * FIX : warn when using wrong credentials
     * ADD : drag the map around with control key for poor Mac owners
     * FIX : We can now select the move tool everytime
-    * FIX : Reverse on an area doesn't open it anymore 
+    * FIX : Reverse on an area doesn't open it anymore
     * FIX : Select dialog : fix the size of elements
     * FIX : Roundabout creation. Add tag junction=roundabout
     * FIX : Autoselect source in download dialog

@@ -41,7 +41,7 @@ public:
      * @param minZoom the minimum zoom level
      * @param maxZoom the maximum zoom level
      */
-    TileMapAdapter(const QString& host, const QString& serverPath, int tilesize, int minZoom = 0, int maxZoom = 17);
+    TileMapAdapter(const QString& host, const QString& serverPath, const QString& projection, int tilesize, int minZoom = 0, int maxZoom = 17, bool blOrigin = false);
 
     virtual ~TileMapAdapter();
 
@@ -57,6 +57,12 @@ public:
      */
     virtual IMapAdapter::Type	getType		() const;
 
+    //! returns the size of the tiles
+    /*!
+     * @return the size of the tiles
+     */
+    virtual int		getTileSize	() const;
+
     virtual void zoom_in();
     virtual void zoom_out();
 
@@ -65,14 +71,19 @@ public:
     virtual QString getQuery(const QRectF& , const QRectF& , const QRect& ) const { return ""; }
     virtual QPixmap getPixmap(const QRectF& /* wgs84Bbox */, const QRectF& /* projBbox */, const QRect& /* size */) const { return QPixmap(); }
 
-    virtual QString projection() const { return ("EPSG:3785"); }
-    virtual QRectF	getBoundingbox() const { return QRectF(QPointF(-20037508.34, -20037508.34), QPointF(20037508.34, 20037508.34)); }
+    virtual QRectF	getBoundingbox() const;
 
     virtual bool isTiled() const { return true; }
     virtual int getTilesWE(int zoomlevel) const;
     virtual int getTilesNS(int zoomlevel) const;
 
     virtual void cleanup() {}
+
+protected:
+    int	tilesize;
+    bool BlOrigin;
+    bool isProj4326;
+
 };
 
 #endif
