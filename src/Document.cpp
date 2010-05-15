@@ -302,7 +302,6 @@ QList<QString> Document::getTagValues()
 
 QStringList Document::getTagList()
 {
-    qDebug() << p->tagList.uniqueKeys() << endl;
     return p->tagList.uniqueKeys();
 }
 

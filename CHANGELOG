@@ -1,4 +1,5 @@
 v0.16
+    * FIX : check menu status whene resetting properties dock (fixes #2930)
     * CHG : Don't autocomplete pure numeric values (fixes #2951)
     * ADD : support for "standard" (as in http://wiki.osgeo.org/wiki/Tile_Map_Service_Specification) TMS servers
     * FIX : Make JOSM happy about our .osm export (fixes #2952)

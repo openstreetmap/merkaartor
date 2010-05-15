@@ -590,6 +590,7 @@ void PropertiesDock::resetValues()
     }
     theModel->setFeature(Current);
     Selection = Current;
+    checkMenuStatus();
 
     /* If we have standard TableViews in the current UI, set it so that the */
     /* first column is the width of the default text (Edit this to add...)  */
