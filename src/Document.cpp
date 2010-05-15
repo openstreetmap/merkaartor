@@ -273,6 +273,10 @@ ImageMapLayer* Document::addImageLayer(ImageMapLayer* aLayer)
 void Document::addToTagList(QString k, QString v)
 {
 #ifndef _MOBILE
+    bool ok;
+    v.toDouble(&ok);
+    if (ok)
+        return;
     if (p->tagList.contains(k)) {
         if (!p->tagList.value(k)->contains(v)) {
             //static_cast< QSet<QString> * >(p->tagList.value(k))->insert(v);
