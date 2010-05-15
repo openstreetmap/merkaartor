@@ -126,8 +126,10 @@ bool DirtyListExecutorOSC::executeChanges(QWidget* aParent)
     main->createProgressDialog();
 
     Progress = main->getProgressDialog();
-    if (Progress)
+    if (Progress) {
+        Progress->setMaximum(Tasks);
         Progress->setWindowTitle(QApplication::translate("Downloader", "Uploading..."));
+    }
 
     QProgressBar* Bar = main->getProgressBar();
     Bar->setTextVisible(false);
