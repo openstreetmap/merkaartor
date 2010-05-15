@@ -19,8 +19,10 @@
  ***************************************************************************/
 #include "tilemapadapter.h"
 
-TileMapAdapter::TileMapAdapter(const QString& host, const QString& serverPath, int tilesize, int minZoom, int maxZoom)
-    :MapAdapter(host, serverPath, tilesize, minZoom, maxZoom)
+TileMapAdapter::TileMapAdapter(const QString& host, const QString& serverPath, const QString& projection, int theTilesize, int minZoom, int maxZoom, bool blOrigin)
+    :MapAdapter(host, serverPath, projection, minZoom, maxZoom)
+    , tilesize(theTilesize)
+    , BlOrigin(blOrigin)
 {
     name = "tiles";
 
@@ -69,6 +71,7 @@ TileMapAdapter::TileMapAdapter(const QString& host, const QString& serverPath, i
     else
         order[2][1] = 2;
 
+    isProj4326 = (Projection.contains(":4326"));
     loc.setNumberOptions(QLocale::OmitGroupSeparator);
 }
 
@@ -86,6 +89,18 @@ IMapAdapter::Type TileMapAdapter::getType() const
     return IMapAdapter::NetworkBackground;
 }
 
+QRectF TileMapAdapter::getBoundingbox() const
+{
+    if (isProj4326)
+        return QRectF(QPointF(-180.00, -90.00), QPointF(180.00, 90.00));
+    else
+        return QRectF(QPointF(-20037508.34, -20037508.34), QPointF(20037508.34, 20037508.34));
+}
+
+int TileMapAdapter::getTileSize() const
+{
+    return tilesize;
+}
 
 //TODO: rausziehen? ->MapAdapter?
 void TileMapAdapter::zoom_in()
@@ -105,6 +120,8 @@ void TileMapAdapter::zoom_out()
 
 QString TileMapAdapter::getQuery		(int x, int y, int z) const
 {
+    if (BlOrigin)
+        y = getTilesNS(current_zoom) - y;
     int a[3] = {z, x, y};
     return QString(serverPath).replace(order[2][0],2, loc.toString(a[order[2][1]]))
                                       .replace(order[1][0],2, loc.toString(a[order[1][1]]))
@@ -114,23 +131,21 @@ QString TileMapAdapter::getQuery		(int x, int y, int z) const
 
 bool TileMapAdapter::isValid(int x, int y, int z) const
 {
-    if (max_zoom < min_zoom)
-    {
-        z= min_zoom - z;
-    }
-
-    if ((x<0) || (x>pow(2,z+0.0)-1) ||
-            (y<0) || (y>pow(2,z+0.0)-1))
+    if ((x<0) || (x>getTilesWE(z)) ||
+            (y<0) || (y>getTilesNS(z)))
     {
         return false;
     }
     return true;
-
 }
 
 int TileMapAdapter::getTilesWE(int zoomlevel) const
 {
-    return int(pow(2, zoomlevel+0.0));
+    int t = int(pow(2, zoomlevel+0.0));
+    if (isProj4326)
+        t *= 2;
+
+    return t;
 }
 
 int TileMapAdapter::getTilesNS(int zoomlevel) const

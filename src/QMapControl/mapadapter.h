@@ -71,11 +71,11 @@ public:
      */
     virtual QString	getHost		() const;
 
-    //! returns the size of the tiles
+    //! returns the projection of this MapAdapter
     /*!
-     * @return the size of the tiles
+     * @return  the projection of this MapAdapter
      */
-    virtual int		getTileSize	() const;
+    virtual QString projection() const;
 
     //! returns the min zoom value
     /*!
@@ -106,7 +106,7 @@ public:
 
 protected:
     QString name;
-    MapAdapter(const QString& host, const QString& serverPath, int tilesize, int minZoom = 0, int maxZoom = 0);
+    MapAdapter(const QString& host, const QString& serverPath, const QString& projection, int minZoom = 0, int maxZoom = 0);
     virtual void zoom_in() = 0;
     virtual void zoom_out() = 0;
     virtual bool 		isValid(int x, int y, int z) const = 0;
@@ -115,7 +115,7 @@ protected:
     QSize size;
     QString	host;
     QString	serverPath;
-    int		tilesize;
+    QString Projection;
     int min_zoom;
     int max_zoom;
     int current_zoom;

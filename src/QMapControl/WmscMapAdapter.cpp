@@ -20,7 +20,7 @@
 #include "WmscMapAdapter.h"
 
 WmscMapAdapter::WmscMapAdapter(WmsServer aServer)
-    : MapAdapter("", "", 0, 0, 0), theServer(aServer)
+    : MapAdapter("", "", 0, 0), theServer(aServer)
 {
     //	:MapAdapter(host, serverPath, tilesize, minZoom, maxZoom)
     name = theServer.WmsName;
@@ -53,6 +53,11 @@ QString WmscMapAdapter::projection() const
 QRectF	WmscMapAdapter::getBoundingbox() const
 {
     return theServer.WmsCLayer.BoundingBox;
+}
+
+int WmscMapAdapter::getTileSize() const
+{
+    return tilesize;
 }
 
 void WmscMapAdapter::zoom_in()

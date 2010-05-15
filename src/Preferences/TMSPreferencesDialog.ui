@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>506</width>
-    <height>516</height>
+    <height>587</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -98,6 +98,13 @@
           <widget class="QLineEdit" name="edTmsUrl"/>
          </item>
          <item>
+          <widget class="QPushButton" name="btGetServices">
+           <property name="text">
+            <string>Get Services</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QFrame" name="frOSGeo">
            <property name="frameShape">
             <enum>QFrame::NoFrame</enum>
@@ -112,13 +119,6 @@
             <property name="margin">
              <number>0</number>
             </property>
-            <item>
-             <widget class="QPushButton" name="btGetServices">
-              <property name="text">
-               <string>Get Services</string>
-              </property>
-             </widget>
-            </item>
             <item>
              <widget class="QLabel" name="label_4">
               <property name="text">
@@ -158,6 +158,34 @@ p, li { white-space: pre-wrap; }
             <property name="margin">
              <number>0</number>
             </property>
+            <item>
+             <widget class="QLabel" name="label_7">
+              <property name="text">
+               <string>Projection</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="cbSRS">
+              <item>
+               <property name="text">
+                <string>Mercator (EPSG:900913)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Lat/Lon (EPSG:4326)</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="cbBotLeftOrigin">
+              <property name="text">
+               <string>Origin is bottom-left</string>
+              </property>
+             </widget>
+            </item>
             <item>
              <widget class="QLabel" name="label_3">
               <property name="text">

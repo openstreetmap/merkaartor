@@ -22,7 +22,7 @@ isEmpty(VERSION): VERSION="0.16"
     isEmpty(SVNREV) {
         SVNREV = $$system(svnversion)
     }
-    contains(SVNREV, exported) {
+    contains(SVNREV, exported) | isEmpty(SVNREV) {
         SVNREV = $$system(git describe --tags)
         REVISION=""
     } else {
