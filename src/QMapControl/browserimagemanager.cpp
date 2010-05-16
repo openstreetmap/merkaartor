@@ -144,7 +144,11 @@ BrowserImageManager::BrowserImageManager(QObject* parent)
 
     timeoutTimer = new QTimer();
     connect(timeoutTimer, SIGNAL(timeout()), this, SLOT(timeout()));
-    timeoutTimer->setInterval(30000);
+    timeoutTimer->setInterval(3000);
+
+//    QWebView* theVw = new QWebView((QWidget*)parent);
+//    theVw->setPage(page);
+//    theVw->show();
 }
 #endif // BROWSERIMAGEMANAGER_IS_THREADED
 
