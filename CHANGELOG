@@ -1,4 +1,5 @@
 v0.16
+    * FIX : do not overwrite local lists with the ones from OSM user preferences
     * FIX : check menu status whene resetting properties dock (fixes #2930)
     * CHG : Don't autocomplete pure numeric values (fixes #2951)
     * ADD : support for "standard" (as in http://wiki.osgeo.org/wiki/Tile_Map_Service_Specification) TMS servers

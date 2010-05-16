@@ -57,7 +57,8 @@ void ProjectionsList::add(ProjectionsList aProjectionsList)
         it.next();
 
         ProjectionItem anItem = it.value();
-        theProjections.insert(anItem.name, anItem);
+        if (!theProjections.contains(anItem.name))
+            theProjections.insert(anItem.name, anItem);
     }
 }
 

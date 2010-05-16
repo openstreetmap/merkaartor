@@ -17,126 +17,127 @@
 
 Bookmark::Bookmark()
 {
-	Bookmark(QApplication::translate("MerkaartorPreferences","New Bookmark"), CoordBox());
+    Bookmark(QApplication::translate("MerkaartorPreferences","New Bookmark"), CoordBox());
 }
 
 Bookmark::Bookmark(QString aName, CoordBox aCoord, bool Deleted)
-	: Name(aName), Coordinates(aCoord), deleted(Deleted)
+    : Name(aName), Coordinates(aCoord), deleted(Deleted)
 {
-	if (Name == "") {
-		Name = QApplication::translate("MerkaartorPreferences","New Bookmark");
-	}
+    if (Name == "") {
+        Name = QApplication::translate("MerkaartorPreferences","New Bookmark");
+    }
 }
 
 void Bookmark::toXml(QDomElement parent)
 {
-	QDomElement p = parent.ownerDocument().createElement("Bookmark");
-	parent.appendChild(p);
-	p.setAttribute("name", Name);
-	if (deleted)
-		p.setAttribute("deleted", "true");
+    QDomElement p = parent.ownerDocument().createElement("Bookmark");
+    parent.appendChild(p);
+    p.setAttribute("name", Name);
+    if (deleted)
+        p.setAttribute("deleted", "true");
 
-	Coordinates.toXML("Coordinates", p);
+    Coordinates.toXML("Coordinates", p);
 }
 
 Bookmark Bookmark::fromXml(QDomElement parent)
 {
-	Bookmark theBookmark;
+    Bookmark theBookmark;
 
-	if (parent.tagName() == "Bookmark") {
-		theBookmark.Name = parent.attribute("name");
-		theBookmark.deleted = (parent.attribute("deleted") == "true" ? true : false);
+    if (parent.tagName() == "Bookmark") {
+        theBookmark.Name = parent.attribute("name");
+        theBookmark.deleted = (parent.attribute("deleted") == "true" ? true : false);
 
-		theBookmark.Coordinates = CoordBox::fromXML(parent.firstChildElement("Coordinates"));
-	}
+        theBookmark.Coordinates = CoordBox::fromXML(parent.firstChildElement("Coordinates"));
+    }
 
-	return theBookmark;
+    return theBookmark;
 }
 
 /** **/
 
 void BookmarksList::add(BookmarksList aBookmarksList)
 {
-	QMapIterator <QString, Bookmark> it(*(aBookmarksList.getBookmarks()));
-	while (it.hasNext()) {
-		it.next();
+    QMapIterator <QString, Bookmark> it(*(aBookmarksList.getBookmarks()));
+    while (it.hasNext()) {
+        it.next();
 
-		Bookmark anItem = it.value();
-		theBookmarks.insert(anItem.Name, anItem);
-	}
+        Bookmark anItem = it.value();
+        if (!theBookmarks.contains(anItem.Name))
+            theBookmarks.insert(anItem.Name, anItem);
+    }
 }
 
 BookmarkList* BookmarksList::getBookmarks()
 {
-	return &theBookmarks;
+    return &theBookmarks;
 }
 
 void BookmarksList::addBookmark(Bookmark aBookmark)
 {
-	theBookmarks.insert(aBookmark.Name, aBookmark);
+    theBookmarks.insert(aBookmark.Name, aBookmark);
 }
 
 bool BookmarksList::contains(QString name) const
 {
-	if (theBookmarks.contains(name))
-		return true;
-	else {
-		BookmarkListIterator it(theBookmarks);
-		while (it.hasNext()) {
-			it.next();
+    if (theBookmarks.contains(name))
+        return true;
+    else {
+        BookmarkListIterator it(theBookmarks);
+        while (it.hasNext()) {
+            it.next();
 
-			if (it.key().contains(name, Qt::CaseInsensitive))
-				return true;
-		}
-	}
-	return false;
+            if (it.key().contains(name, Qt::CaseInsensitive))
+                return true;
+        }
+    }
+    return false;
 }
 
 Bookmark BookmarksList::getBookmark(QString name) const
 {
-	if (theBookmarks.contains(name))
-		return theBookmarks.value(name);
-	else {
-		BookmarkListIterator it(theBookmarks);
-		while (it.hasNext()) {
-			it.next();
+    if (theBookmarks.contains(name))
+        return theBookmarks.value(name);
+    else {
+        BookmarkListIterator it(theBookmarks);
+        while (it.hasNext()) {
+            it.next();
 
-			if (it.key().contains(name, Qt::CaseInsensitive))
-				return it.value();
-		}
-	}
-	return Bookmark();
+            if (it.key().contains(name, Qt::CaseInsensitive))
+                return it.value();
+        }
+    }
+    return Bookmark();
 }
 
 void BookmarksList::toXml(QDomElement parent)
 {
-	QDomElement rt = parent.ownerDocument().createElement("Bookmarks");
-	parent.appendChild(rt);
-	rt.setAttribute("creator", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
+    QDomElement rt = parent.ownerDocument().createElement("Bookmarks");
+    parent.appendChild(rt);
+    rt.setAttribute("creator", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
 
-	BookmarkListIterator it(theBookmarks);
-	while (it.hasNext()) {
-		it.next();
+    BookmarkListIterator it(theBookmarks);
+    while (it.hasNext()) {
+        it.next();
 
-		Bookmark i = it.value();
-		i.toXml(rt);
-	}
+        Bookmark i = it.value();
+        i.toXml(rt);
+    }
 }
 
 BookmarksList BookmarksList::fromXml(QDomElement parent)
 {
-	BookmarksList theBookmarksList;
+    BookmarksList theBookmarksList;
 
-	if (parent.nodeName() == "Bookmarks") {
-		QDomElement c = parent.firstChildElement();
-		while(!c.isNull()) {
-			if (c.tagName() == "Bookmark") {
-				theBookmarksList.addBookmark(Bookmark::fromXml(c));
-			} 
+    if (parent.nodeName() == "Bookmarks") {
+        QDomElement c = parent.firstChildElement();
+        while(!c.isNull()) {
+            if (c.tagName() == "Bookmark") {
+                theBookmarksList.addBookmark(Bookmark::fromXml(c));
+            }
 
-			c = c.nextSiblingElement();
-		}
-	}
+            c = c.nextSiblingElement();
+        }
+    }
 
-	return theBookmarksList;
+    return theBookmarksList;
 }

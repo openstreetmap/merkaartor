@@ -108,7 +108,7 @@ class MainWindowPrivate
             : lastPrefTabIndex(0)
             , projActgrp(0)
         {
-            title = QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION));
+            title = QString("Merkaartor v%1%2(%3)").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV));
         }
         int lastPrefTabIndex;
         QString defStyle;

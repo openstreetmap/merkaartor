@@ -223,81 +223,82 @@ void MerkaartorPreferences::fromOsmPref()
 
 void MerkaartorPreferences::on_requestFinished ( int id, bool error )
 {
-    if (id == OsmPrefLoadId && !error) {
-        QMap<QString, QString> OsmPref;
+    if (id != OsmPrefLoadId || error)
+        return;
 
-        QDomDocument aOsmPrefDoc;
-        aOsmPrefDoc.setContent(OsmPrefContent.buffer(), false);
+    QMap<QString, QString> OsmPref;
 
-        QDomNodeList prefList = aOsmPrefDoc.elementsByTagName("preference");
+    QDomDocument aOsmPrefDoc;
+    aOsmPrefDoc.setContent(OsmPrefContent.buffer(), false);
 
-        int sz = 0;
-        for (int i=0; i < prefList.size(); ++i) {
-            QDomElement e = prefList.at(i).toElement();
-            if (e.attribute("k").startsWith("MerkaartorSizePrefsXML")) {
-                sz = e.attribute("v").toInt();
-                break;
-            }
+    QDomNodeList prefList = aOsmPrefDoc.elementsByTagName("preference");
+
+    int sz = 0;
+    for (int i=0; i < prefList.size(); ++i) {
+        QDomElement e = prefList.at(i).toElement();
+        if (e.attribute("k").startsWith("MerkaartorSizePrefsXML")) {
+            sz = e.attribute("v").toInt();
+            break;
         }
+    }
 
-        if (!sz)
-            return;
+    if (!sz)
+        return;
 
-        QVector<QString> slicedPrefs(sz);
-        QString k, v;
-        for (int i=0; i < prefList.size(); ++i) {
-            QDomElement e = prefList.at(i).toElement();
-            k = e.attribute("k");
-            v = e.attribute("v");
-            if (k.startsWith("MerkaartorPrefsXML")) {
-                int idx = k.right(3).toInt();
-                if (idx < sz)
-                    slicedPrefs[idx] = v;
-            }
+    QVector<QString> slicedPrefs(sz);
+    QString k, v;
+    for (int i=0; i < prefList.size(); ++i) {
+        QDomElement e = prefList.at(i).toElement();
+        k = e.attribute("k");
+        v = e.attribute("v");
+        if (k.startsWith("MerkaartorPrefsXML")) {
+            int idx = k.right(3).toInt();
+            if (idx < sz)
+                slicedPrefs[idx] = v;
         }
+    }
 
-        QByteArray PrefsXML;
-        for (int i=0; i<sz; i++)
-            PrefsXML.append(slicedPrefs[i].toAscii());
+    QByteArray PrefsXML;
+    for (int i=0; i<sz; i++)
+        PrefsXML.append(slicedPrefs[i].toAscii());
 
-        //qDebug() << "Size: " << PrefsXML.size();
+    //qDebug() << "Size: " << PrefsXML.size();
 
-        QDomDocument theXmlDoc;
-        QByteArray ba = QByteArray::fromBase64(PrefsXML);
-        if (!theXmlDoc.setContent(qUncompress(ba))) {
-            qDebug() << "Invalid OSM Prefs XML";
-            return;
-        }
+    QDomDocument theXmlDoc;
+    QByteArray ba = QByteArray::fromBase64(PrefsXML);
+    if (!theXmlDoc.setContent(qUncompress(ba))) {
+        qDebug() << "Invalid OSM Prefs XML";
+        return;
+    }
 
-        QDomElement docElem = theXmlDoc.documentElement();
-        if (docElem.tagName() != "MerkaartorLists") {
-            qDebug() << "Invalid OSM Prefs XML root element: " << docElem.tagName();
-            return;
-        }
+    QDomElement docElem = theXmlDoc.documentElement();
+    if (docElem.tagName() != "MerkaartorLists") {
+        qDebug() << "Invalid OSM Prefs XML root element: " << docElem.tagName();
+        return;
+    }
 
-        //qDebug() << theXmlDoc.toString();
+    //qDebug() << theXmlDoc.toString();
 
-        QDomElement c = docElem.firstChildElement();
-        while(!c.isNull()) {
-            if (c.tagName() == "Projections") {
-                //ProjectionsList aProjList = ProjectionsList::fromXml(c);
-                //theProjectionsList.add(aProjList);
-            } else
+    QDomElement c = docElem.firstChildElement();
+    while(!c.isNull()) {
+        if (c.tagName() == "Projections") {
+            ProjectionsList aProjList = ProjectionsList::fromXml(c);
+            theProjectionsList.add(aProjList);
+        } else
             if (c.tagName() == "Bookmarks") {
-                BookmarksList aBkList = BookmarksList::fromXml(c);
-                theBookmarkList.add(aBkList);
-            } else
+            BookmarksList aBkList = BookmarksList::fromXml(c);
+            theBookmarkList.add(aBkList);
+        } else
             if (c.tagName() == "TmsServers") {
-                TmsServersList aTmsList = TmsServersList::fromXml(c);
-                theTmsServerList.add(aTmsList);
-            } else
+            TmsServersList aTmsList = TmsServersList::fromXml(c);
+            theTmsServerList.add(aTmsList);
+        } else
             if (c.tagName() == "WmsServers") {
-                WmsServersList aWmsList = WmsServersList::fromXml(c);
-                theWmsServerList.add(aWmsList);
-            }
-
-            c = c.nextSiblingElement();
+            WmsServersList aWmsList = WmsServersList::fromXml(c);
+            theWmsServerList.add(aWmsList);
         }
+
+        c = c.nextSiblingElement();
     }
 }
 
@@ -1380,13 +1381,15 @@ void MerkaartorPreferences::loadWMS(QString fn)
 
 void MerkaartorPreferences::loadWMSes()
 {
-    QString fn = ":/WmsServersList.xml";
+    QString fn;
+
+    fn = HOMEDIR + "/WmsServersList.xml";
     loadWMS(fn);
 
     fn = QString(STRINGIFY(SHARE_DIR)) + "/WmsServersList.xml";
     loadWMS(fn);
 
-    fn = HOMEDIR + "/WmsServersList.xml";
+    fn = ":/WmsServersList.xml";
     loadWMS(fn);
 }
 
@@ -1438,13 +1441,15 @@ void MerkaartorPreferences::loadTMS(QString fn)
 
 void MerkaartorPreferences::loadTMSes()
 {
-    QString fn = ":/TmsServersList.xml";
+    QString fn;
+
+    fn = HOMEDIR + "/TmsServersList.xml";
     loadTMS(fn);
 
     fn = QString(STRINGIFY(SHARE_DIR)) + "/TmsServersList.xml";
     loadTMS(fn);
 
-    fn = HOMEDIR + "/TmsServersList.xml";
+    fn = ":/TmsServersList.xml";
     loadTMS(fn);
 }
 
@@ -1496,13 +1501,15 @@ void MerkaartorPreferences::loadBookmark(QString fn)
 
 void MerkaartorPreferences::loadBookmarks()
 {
-    QString fn = ":/BookmarksList.xml";
+    QString fn;
+
+    fn = HOMEDIR + "/BookmarksList.xml";
     loadBookmark(fn);
 
     fn = QString(STRINGIFY(SHARE_DIR)) + "/BookmarksList.xml";
     loadBookmark(fn);
 
-    fn = HOMEDIR + "/BookmarksList.xml";
+    fn = ":/BookmarksList.xml";
     loadBookmark(fn);
 }
 

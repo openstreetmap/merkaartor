@@ -89,7 +89,8 @@ void TmsServersList::add(TmsServersList aTmsServersList)
         it.next();
 
         TmsServer anItem = it.value();
-        theServers.insert(anItem.TmsName, anItem);
+        if (!theServers.contains(anItem.TmsName))
+            theServers.insert(anItem.TmsName, anItem);
     }
 }
 

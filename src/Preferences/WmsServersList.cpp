@@ -151,7 +151,8 @@ void WmsServersList::add(WmsServersList aWmsServersList)
         it.next();
 
         WmsServer anItem = it.value();
-        theServers.insert(anItem.WmsName, anItem);
+        if (!theServers.contains(anItem.WmsName))
+            theServers.insert(anItem.WmsName, anItem);
     }
 }
 
