@@ -10,6 +10,7 @@
 #include "Node.h"
 #include "Utils/LineF.h"
 #include "Utils/MDiscardableDialog.h"
+#include "PropertiesDock.h"
 
 #include <QtGui/QCursor>
 #include <QtGui/QMouseEvent>

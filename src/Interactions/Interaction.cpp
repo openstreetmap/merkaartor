@@ -4,6 +4,7 @@
 #include "Document.h"
 #include "Maps/Projection.h"
 #include "Node.h"
+#include "PropertiesDock.h"
 
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>

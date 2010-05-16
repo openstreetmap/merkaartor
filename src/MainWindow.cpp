@@ -119,6 +119,7 @@ class MainWindowPrivate
         QString title;
         QActionGroup* projActgrp;
         QTcpServer* theListeningServer;
+        PropertiesDock* theProperties;
 };
 
 MainWindow::MainWindow(QWidget *parent)
@@ -187,8 +188,8 @@ MainWindow::MainWindow(QWidget *parent)
     theLayers = new LayerDock(this);
     connect(theLayers, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
 
-    theProperties = new PropertiesDock(this);
-    connect(theProperties, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
+    p->theProperties = new PropertiesDock(this);
+    connect(p->theProperties, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
     on_editPropertiesAction_triggered();
 
     theDirty = new DirtyDock(this);
@@ -201,6 +202,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(p->theFeats, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
     connect(theView, SIGNAL(viewportChanged()), p->theFeats, SLOT(on_Viewport_changed()), Qt::QueuedConnection);
     connect(this, SIGNAL(content_changed()), p->theFeats, SLOT(on_Viewport_changed()), Qt::QueuedConnection);
+    connect(this, SIGNAL(content_changed()), p->theProperties, SLOT(adjustSelection()), Qt::QueuedConnection);
 
     theGPS = new QGPS(this);
     connect(theGPS, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
@@ -269,8 +271,8 @@ MainWindow::MainWindow(QWidget *parent)
     theLayers->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     addDockWidget(Qt::LeftDockWidgetArea, theLayers);
 
-    theProperties->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    addDockWidget(Qt::LeftDockWidgetArea, theProperties);
+    p->theProperties->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    addDockWidget(Qt::LeftDockWidgetArea, p->theProperties);
 
     theInfo->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     addDockWidget(Qt::RightDockWidgetArea, theInfo);
@@ -290,7 +292,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->mobileToolBar->setVisible(false);
 
 #else
-    theProperties->setVisible(false);
+    p->theProperties->setVisible(false);
     theInfo->setVisible(false);
     theLayers->setVisible(false);
     theDirty->setVisible(false);
@@ -394,14 +396,14 @@ void MainWindow::handleMessage(const QString &msg)
 
 MainWindow::~MainWindow(void)
 {
-    theProperties->setSelection(NULL);
+    p->theProperties->setSelection(NULL);
 
     if (MasPaintStyle::instance())
         delete MasPaintStyle::instance();
     MerkaartorPreferences::instance()->setWorkingDir(QDir::currentPath());
     delete theDocument;
     delete theView;
-    delete theProperties;
+    delete p->theProperties;
 
     delete qtTranslator;
     delete merkaartorTranslator;
@@ -492,12 +494,12 @@ void MainWindow::invalidateView(bool UpdateDock)
     theView->invalidate(true, true);
     //theLayers->updateContent();
     if (UpdateDock)
-        theProperties->resetValues();
+        p->theProperties->resetValues();
 }
 
 PropertiesDock* MainWindow::properties()
 {
-    return theProperties;
+    return p->theProperties;
 }
 
 InfoDock* MainWindow::info()
@@ -602,7 +604,7 @@ void MainWindow::on_editCopyAction_triggered()
     QClipboard *clipboard = QApplication::clipboard();
     QMimeData* md = new QMimeData();
 
-    QString osm = theDocument->exportOSM(this, theProperties->selection());
+    QString osm = theDocument->exportOSM(this, p->theProperties->selection());
     md->setText(osm);
     md->setData("application/x-openstreetmap+xml", osm.toUtf8());
 
@@ -610,7 +612,7 @@ void MainWindow::on_editCopyAction_triggered()
     QBuffer kmlBuf;
     kmlBuf.open(QIODevice::WriteOnly | QIODevice::Truncate);
     if (kmlexp.setDevice(&kmlBuf)) {
-        kmlexp.export_(theProperties->selection());
+        kmlexp.export_(p->theProperties->selection());
         md->setData("application/vnd.google-earth.kml+xml", kmlBuf.data());
     }
 
@@ -618,7 +620,7 @@ void MainWindow::on_editCopyAction_triggered()
     QBuffer gpxBuf;
     gpxBuf.open(QIODevice::WriteOnly | QIODevice::Truncate);
     if (gpxexp.setDevice(&gpxBuf)) {
-        gpxexp.export_(theProperties->selection());
+        gpxexp.export_(p->theProperties->selection());
         md->setData("application/gpx+xml", gpxBuf.data());
     }
 
@@ -661,7 +663,7 @@ void MainWindow::on_editPasteFeatureAction_triggered()
 
     delete doc;
 
-    theProperties->setSelection(theFeats);
+    p->theProperties->setSelection(theFeats);
     invalidateView();
 }
 
@@ -779,7 +781,7 @@ void MainWindow::on_editUndoAction_triggered()
 void MainWindow::on_editPropertiesAction_triggered()
 {
     if (theView->interaction() && dynamic_cast<EditInteraction*>(theView->interaction()))
-        theProperties->setSelection(0);
+        p->theProperties->setSelection(0);
     theView->unlockSelection();
     theView->invalidate(true, false);
     theView->launch(new EditInteraction(theView));
@@ -1111,7 +1113,7 @@ void MainWindow::loadFiles(const QStringList & fileList)
 
     updateRecentOpenMenu();
 
-    theProperties->setSelection(0);
+    p->theProperties->setSelection(0);
 
     if (skipImport == false)
     {
@@ -1477,7 +1479,7 @@ void MainWindow::on_viewArrowsAlwaysAction_triggered(bool checked)
 void MainWindow::on_fileNewAction_triggered()
 {
     theView->launch(0);
-    theProperties->setSelection(0);
+    p->theProperties->setSelection(0);
     if (!theDocument || !theDocument->hasUnsavedChanges() || mayDiscardUnsavedChanges(this)) {
         M_PREFS->cleanupBackgroundPlugins();
         delete theDocument;
@@ -1541,9 +1543,9 @@ void MainWindow::on_createRoadAction_triggered()
 {
     Node * firstPoint = NULL;
 
-    if (theProperties->size() == 1)
+    if (p->theProperties->size() == 1)
     {
-        Feature * feature = theProperties->selection(0);
+        Feature * feature = p->theProperties->selection(0);
         firstPoint = dynamic_cast<Node*>(feature);
     }
 
@@ -1572,7 +1574,7 @@ void MainWindow::on_createNodeAction_triggered()
 void MainWindow::on_roadJoinAction_triggered()
 {
     CommandList* theList = new CommandList(MainWindow::tr("Join Roads"), NULL);
-    joinRoads(theDocument, theList, theProperties);
+    joinRoads(theDocument, theList, p->theProperties);
     if (theList->empty())
         delete theList;
     else
@@ -1586,7 +1588,7 @@ void MainWindow::on_roadJoinAction_triggered()
 void MainWindow::on_roadSplitAction_triggered()
 {
     CommandList* theList = new CommandList(MainWindow::tr("Split Roads"), NULL);
-    splitRoads(theDocument, theList, theProperties);
+    splitRoads(theDocument, theList, p->theProperties);
     if (theList->empty())
         delete theList;
     else
@@ -1600,7 +1602,7 @@ void MainWindow::on_roadSplitAction_triggered()
 void MainWindow::on_roadBreakAction_triggered()
 {
     CommandList* theList = new CommandList(MainWindow::tr("Break Roads"), NULL);
-    breakRoads(theDocument, theList, theProperties);
+    breakRoads(theDocument, theList, p->theProperties);
     if (theList->empty())
         delete theList;
     else
@@ -1613,7 +1615,7 @@ void MainWindow::on_roadBreakAction_triggered()
 
 void MainWindow::on_featureDeleteAction_triggered()
 {
-    Feature* F = theProperties->selection(0);
+    Feature* F = p->theProperties->selection(0);
     if (!F)
         return;
 
@@ -1621,7 +1623,7 @@ void MainWindow::on_featureDeleteAction_triggered()
         F->getParent(0)->remove(F);
     }
     F->layer()->deleteFeature(F);
-    theProperties->setSelection(0);
+    p->theProperties->setSelection(0);
 
     emit content_changed();
     invalidateView();
@@ -1630,7 +1632,7 @@ void MainWindow::on_featureDeleteAction_triggered()
 void MainWindow::on_featureCommitAction_triggered()
 {
     CommandList* theList = new CommandList(MainWindow::tr("Force Feature upload"), NULL);
-    commitFeatures(theDocument, theList, theProperties);
+    commitFeatures(theDocument, theList, p->theProperties);
     if (theList->empty())
         delete theList;
     else
@@ -1642,7 +1644,7 @@ void MainWindow::on_featureCommitAction_triggered()
 
 void MainWindow::on_featureOsbClose_triggered()
 {
-    Feature* bugNd = theProperties->selection(0);
+    Feature* bugNd = p->theProperties->selection(0);
 
     QUrl osbUrl;
     osbUrl.setUrl(M_PREFS->getOpenStreetBugsUrl());
@@ -1661,7 +1663,7 @@ void MainWindow::on_featureOsbClose_triggered()
     qDebug() << "openStreetBugs reply: " << rply;
     if (rply.contains("ok")) {
         bugNd->layer()->deleteFeature(bugNd);
-        theProperties->setSelection(0);
+        p->theProperties->setSelection(0);
         invalidateView();
     } else
         QMessageBox::warning(this, tr("Error closing bug"), tr("Cannot delete bug. Server message is:\n%1").arg(rply), QMessageBox::Ok);
@@ -1672,7 +1674,7 @@ void MainWindow::on_featureOsbClose_triggered()
 void MainWindow::on_roadCreateJunctionAction_triggered()
 {
     CommandList* theList = new CommandList(MainWindow::tr("Create Junction"), NULL);
-    int n = createJunction(theDocument, theList, theProperties, false);
+    int n = createJunction(theDocument, theList, p->theProperties, false);
     if (n > 1) {
         MDiscardableMessage dlg(view(),
             MainWindow::tr("Multiple intersection."),
@@ -1680,7 +1682,7 @@ void MainWindow::on_roadCreateJunctionAction_triggered()
         if (dlg.check() != QDialog::Accepted)
             return;
     }
-    createJunction(theDocument, theList, theProperties, true);
+    createJunction(theDocument, theList, p->theProperties, true);
 
     if (theList->empty())
         delete theList;
@@ -1695,7 +1697,7 @@ void MainWindow::on_roadAddStreetNumbersAction_triggered()
 {
     CommandList* theList = new CommandList(MainWindow::tr("Add Street Numbers"), NULL);
 
-    addStreetNumbers(theDocument, theList, theProperties);
+    addStreetNumbers(theDocument, theList, p->theProperties);
 
     if (theList->empty())
         delete theList;
@@ -1710,7 +1712,7 @@ void MainWindow::on_nodeAlignAction_triggered()
 {
     //MapFeature* F = theView->properties()->selection(0);
     CommandList* theList = new CommandList(MainWindow::tr("Align Nodes"), NULL);
-    alignNodes(theDocument, theList, theProperties);
+    alignNodes(theDocument, theList, p->theProperties);
     if (theList->empty())
         delete theList;
     else
@@ -1723,30 +1725,30 @@ void MainWindow::on_nodeAlignAction_triggered()
 
 void MainWindow::on_nodeMergeAction_triggered()
 {
-    Feature* F = theProperties->selection(0);
+    Feature* F = p->theProperties->selection(0);
     CommandList* theList = new CommandList(MainWindow::tr("Merge Nodes into %1").arg(F->id()), F);
-    mergeNodes(theDocument, theList, theProperties);
+    mergeNodes(theDocument, theList, p->theProperties);
     if (theList->empty())
         delete theList;
     else
     {
         theDocument->addHistory(theList);
-        theProperties->setSelection(F);
+        p->theProperties->setSelection(F);
         invalidateView();
     }
 }
 
 void MainWindow::on_nodeDetachAction_triggered()
 {
-    Feature* F = theProperties->selection(0);
+    Feature* F = p->theProperties->selection(0);
     CommandList* theList = new CommandList(MainWindow::tr("Detach Node %1").arg(F->id()), F);
-    detachNode(theDocument, theList, theProperties);
+    detachNode(theDocument, theList, p->theProperties);
     if (theList->empty())
         delete theList;
     else
     {
         theDocument->addHistory(theList);
-        theProperties->setSelection(F);
+        p->theProperties->setSelection(F);
         invalidateView();
     }
 }
@@ -1754,7 +1756,7 @@ void MainWindow::on_nodeDetachAction_triggered()
 void MainWindow::on_relationAddMemberAction_triggered()
 {
     CommandList* theList = new CommandList(MainWindow::tr("Add member to relation"), NULL);
-    addRelationMember(theDocument, theList, theProperties);
+    addRelationMember(theDocument, theList, p->theProperties);
     if (theList->empty())
         delete theList;
     else {
@@ -1766,7 +1768,7 @@ void MainWindow::on_relationAddMemberAction_triggered()
 void MainWindow::on_relationRemoveMemberAction_triggered()
 {
     CommandList* theList = new CommandList(MainWindow::tr("Remove member from relation"), NULL);
-    removeRelationMember(theDocument, theList, theProperties);
+    removeRelationMember(theDocument, theList, p->theProperties);
     if (theList->empty())
         delete theList;
     else {
@@ -1778,13 +1780,13 @@ void MainWindow::on_relationRemoveMemberAction_triggered()
 void MainWindow::on_createRelationAction_triggered()
 {
     Relation* R = new Relation;
-    for (int i = 0; i < theProperties->size(); ++i)
-        R->add("", theProperties->selection(i));
+    for (int i = 0; i < p->theProperties->size(); ++i)
+        R->add("", p->theProperties->selection(i));
     CommandList* theList = new CommandList(MainWindow::tr("Create Relation %1").arg(R->description()), R);
     theList->add(
         new AddFeatureCommand(document()->getDirtyOrOriginLayer(), R, true));
     theDocument->addHistory(theList);
-    theProperties->setSelection(R);
+    p->theProperties->setSelection(R);
     invalidateView();
 }
 
@@ -2142,7 +2144,7 @@ void MainWindow::loadDocument(QString fn)
                 break;
 
             if (newDoc) {
-                theProperties->setSelection(0);
+                p->theProperties->setSelection(0);
                 delete theDocument;
                 theDocument = newDoc;
                 theView->setDocument(theDocument);
@@ -2365,7 +2367,7 @@ bool MainWindow::selectExportedFeatures(QList<Feature*>& theFeatures)
             return true;
         }
         if (dlgExport.rbSelected->isChecked()) {
-            theFeatures = theProperties->selection();
+            theFeatures = p->theProperties->selection();
             MerkaartorPreferences::instance()->setExportType(Export_Selected);
             return true;
         }
@@ -2417,7 +2419,7 @@ void MainWindow::on_editSelectAction_triggered()
                 ++added;
             }
         }
-        theProperties->setMultiSelection(selection);
+        p->theProperties->setMultiSelection(selection);
         view()->properties()->checkMenuStatus();
     }
 }
@@ -2559,7 +2561,7 @@ void MainWindow::updateStyleMenu()
 
 void MainWindow::updateWindowMenu(bool)
 {
-    ui->windowPropertiesAction->setChecked(theProperties->isVisible());
+    ui->windowPropertiesAction->setChecked(p->theProperties->isVisible());
     ui->windowLayersAction->setChecked(theLayers->isVisible());
     ui->windowInfoAction->setChecked(theInfo->isVisible());
     ui->windowDirtyAction->setChecked(theDirty->isVisible());
@@ -2724,8 +2726,8 @@ void MainWindow::styleTriggered(QAction* anAction)
 
 void MainWindow::on_windowPropertiesAction_triggered()
 {
-    theProperties->setVisible(!theProperties->isVisible());
-    ui->windowPropertiesAction->setChecked(theProperties->isVisible());
+    p->theProperties->setVisible(!p->theProperties->isVisible());
+    ui->windowPropertiesAction->setChecked(p->theProperties->isVisible());
 }
 
 void MainWindow::on_windowLayersAction_triggered()
@@ -2791,7 +2793,7 @@ void MainWindow::on_windowHideAllAction_triggered()
     theDirty->setVisible(false);
     p->theFeats->setVisible(false);
     theLayers->setVisible(false);
-    theProperties->setVisible(false);
+    p->theProperties->setVisible(false);
     theGPS->setVisible(false);
     p->theStyle->setVisible(false);
 #ifdef GEOIMAGE
@@ -2963,7 +2965,7 @@ void MainWindow::on_toolTemplatesSaveAction_triggered()
     if (!f.isNull()) {
         if (!f.endsWith(".mat"))
             f.append(".mat");
-        theProperties->saveTemplates(f);
+        p->theProperties->saveTemplates(f);
     }
 }
 
@@ -2977,8 +2979,8 @@ void MainWindow::on_toolTemplatesMergeAction_triggered()
     if (fileName.isEmpty())
         return;
 
-    theProperties->mergeTemplates(fileName);
-    theProperties->resetValues();
+    p->theProperties->mergeTemplates(fileName);
+    p->theProperties->resetValues();
 }
 
 void MainWindow::on_toolTemplatesLoadAction_triggered()
@@ -2991,8 +2993,8 @@ void MainWindow::on_toolTemplatesLoadAction_triggered()
     if (fileName.isEmpty())
         return;
 
-    theProperties->loadTemplates(fileName);
-    theProperties->resetValues();
+    p->theProperties->loadTemplates(fileName);
+    p->theProperties->resetValues();
 }
 
 void MainWindow::updateLanguage()

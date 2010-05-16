@@ -35,7 +35,6 @@ class PropertiesDock : public MDockAncestor
         void setMultiSelection(const QList<Feature*>& aFeatureList);
         void toggleSelection(Feature* aFeature);
         void addSelection(Feature* aFeature);
-        void adjustSelection();
         Feature* selection(int idx);
         QList<Feature*> selection();
         bool isSelected(Feature *aFeature);
@@ -70,6 +69,7 @@ class PropertiesDock : public MDockAncestor
         void on_tag_changed(QString k, QString v);
         void on_tag_cleared(QString k);
         void on_template_changed(TagTemplate* aNewTemplate);
+        void adjustSelection();
 
     private:
         void cleanUpUi();

@@ -229,7 +229,6 @@ public:
 protected:
     MapView* theView;
     Document* theDocument;
-    PropertiesDock* theProperties;
     InfoDock* theInfo;
     DirtyDock* theDirty;
     LayerDock* theLayers;

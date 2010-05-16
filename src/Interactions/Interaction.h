@@ -14,7 +14,6 @@ class QPainter;
 #include "MainWindow.h"
 #include "MapView.h"
 #include "InfoDock.h"
-#include "PropertiesDock.h"
 #include "FeaturesDock.h"
 #include "Document.h"
 #include "Features.h"

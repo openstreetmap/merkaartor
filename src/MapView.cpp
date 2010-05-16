@@ -234,8 +234,8 @@ void MapView::paintEvent(QPaintEvent * anEvent)
         );
 
 #ifndef NDEBUG
-    QPointF pbl = theProjection.project(viewport().bottomLeft());
-    QPointF ptr = theProjection.project(viewport().topRight());
+//    QPointF pbl = theProjection.project(viewport().bottomLeft());
+//    QPointF ptr = theProjection.project(viewport().topRight());
 //	qDebug() << "VP: " << QString("%1 (%2,%3,%4,%5)")
 //	   .arg(Main->ViewportStatusLabel->text())
 //		.arg(QString::number(pbl.x(),'f',4))
@@ -311,15 +311,12 @@ void MapView::updateLayersImage()
 
 void MapView::buildFeatureSet()
 {
-    if (!theDocument)
-        return;
-
-    QRectF clipRect = p->theTransform.inverted().mapRect(QRectF(rect().adjusted(-1000, -1000, 1000, 1000)));
+    QRectF clipRect = p->theTransform.inverted().mapRect(QRectF(rect().adjusted(-500, -500, 500, 500)));
 
     p->theCoastlines.clear();
     for (int i=0; i<theDocument->layerSize(); ++i) {
-        if (Main)
-            Main->properties()->adjustSelection();
+//        if (Main)
+//            Main->properties()->adjustSelection();
         theDocument->getLayer(i)->getFeatureSet(p->theFeatures, p->theCoastlines, theDocument, p->invalidRects, clipRect, theProjection, p->theTransform);
     }
 }
