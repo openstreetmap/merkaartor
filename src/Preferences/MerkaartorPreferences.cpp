@@ -864,7 +864,7 @@ void MerkaartorPreferences::setBgColor(const QColor theValue)
 QColor mb_WaterColor;
 QColor MerkaartorPreferences::getWaterColor() const
 {
-    if (!::mb_BgColor.isValid()) {
+    if (!::mb_WaterColor.isValid()) {
         QString sColor = Sets->value("visual/WaterColor").toString();
         if (sColor.isEmpty())
             ::mb_WaterColor = QColor(181, 208, 208);

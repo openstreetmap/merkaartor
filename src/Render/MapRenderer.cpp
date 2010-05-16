@@ -283,9 +283,13 @@ void MapRenderer::render(
 
 #else
     BackgroundStyleLayer bglayer(this);
+    bool bgLayerVisible = M_PREFS->getBackgroundVisible();
     ForegroundStyleLayer fglayer(this);
+    bool fgLayerVisible = M_PREFS->getForegroundVisible();
     TouchupStyleLayer tchuplayer(this);
+    bool tchpLayerVisible = M_PREFS->getTouchupVisible();
     LabelStyleLayer lbllayer(this);
+    bool lblLayerVisible = M_PREFS->getNamesVisible();
 
     Way * R = NULL;
     Node * Pt = NULL;
@@ -298,7 +302,6 @@ void MapRenderer::render(
     while (itm != theFeatures.constEnd())
     {
         pix.fill(Qt::transparent);
-
         thePainter->begin(&pix);
         thePainter->setRenderHint(QPainter::Antialiasing);
         int curLayer = (itm.key()).layer();
@@ -317,7 +320,7 @@ void MapRenderer::render(
                         RR = CAST_RELATION(*it);
 
                 if (!Pt) {
-                    if (M_PREFS->getBackgroundVisible())
+                    if (bgLayerVisible)
                     {
                         thePainter->save();
                         if (R && R->area() == 0)
@@ -332,7 +335,7 @@ void MapRenderer::render(
 
                         thePainter->restore();
                     }
-                    if (M_PREFS->getForegroundVisible())
+                    if (fgLayerVisible)
                     {
                         thePainter->save();
 
@@ -346,7 +349,7 @@ void MapRenderer::render(
                         thePainter->restore();
                     }
                 }
-                if (M_PREFS->getTouchupVisible())
+                if (tchpLayerVisible)
                 {
                     thePainter->save();
 
@@ -359,7 +362,7 @@ void MapRenderer::render(
 
                     thePainter->restore();
                 }
-                if (M_PREFS->getNamesVisible()) {
+                if (lblLayerVisible) {
                     thePainter->save();
 
                     if (R)

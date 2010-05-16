@@ -367,10 +367,8 @@ void floodFill(QImage& theImage, const QPoint& P, const QRgb& targetColor, const
     }
 }
 
-void MapView::drawBackground(QPainter & theP, Projection& /*aProj*/)
+void MapView::drawCoastlines(QPainter & theP, Projection& /*aProj*/)
 {
-    QColor theFillColor;
-
     double WW = p->PixelPerM*30.0 + 2.0;
 
     QPen thePen(M_PREFS->getWaterColor(), WW);
@@ -378,19 +376,7 @@ void MapView::drawBackground(QPainter & theP, Projection& /*aProj*/)
     thePen.setJoinStyle(Qt::RoundJoin);
     theP.setPen(thePen);
     theP.setBrush(Qt::NoBrush);
-
-    if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
-        theFillColor = M_PREFS->getBgColor();
-    else
-        theFillColor = M_STYLE->getGlobalPainter().getBackgroundColor();
-    theP.fillRect(rect(), theFillColor);
-
-    if (p->theCoastlines.isEmpty()) {
-//		if (M_PREFS->getUseShapefileForBackground() && theDocument->getImageLayer()->isVisible() && !LAYERMANAGER_OK) {
-        if (M_PREFS->getUseShapefileForBackground())
-            theP.fillRect(rect(), M_PREFS->getWaterColor());
-        return;
-    }
+    theP.setRenderHint(QPainter::Antialiasing);
 
     QList<QPainterPath*> theCoasts;
     QSet<Way*>::const_iterator it = p->theCoastlines.constBegin();
@@ -520,31 +506,13 @@ void MapView::updateStaticBackground()
     {
         delete StaticBackground;
         StaticBackground = new QPixmap(size());
-    }
 
-    QPainter P;
-
-    if (!p->theVectorPanDelta.isNull()) {
-        QPixmap savPix;
-        savPix = StaticBackground->copy();
-        StaticBackground->fill(Qt::transparent);
-        P.begin(StaticBackground);
-        P.drawPixmap(p->theVectorPanDelta, savPix);
-        P.end();
-    //} else {
-    //	StaticBackground->fill(Qt::transparent);
-    }
-
-    if (!p->invalidRects.isEmpty()) {
-        P.begin(StaticBackground);
-        P.setRenderHint(QPainter::Antialiasing);
-        if (!p->theVectorPanDelta.isNull()) {
-            P.setClipping(true);
-            P.setClipRegion(QRegion(rect()) - QRegion(QRect(p->theVectorPanDelta, size())));
-        }
-        drawBackground(P, theProjection);
-        P.setClipping(false);
-        P.end();
+        if (M_PREFS->getUseShapefileForBackground())
+            StaticBackground->fill(M_PREFS->getWaterColor());
+        else if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
+            StaticBackground->fill(M_PREFS->getBgColor());
+        else
+            StaticBackground->fill(M_STYLE->getGlobalPainter().getBackgroundColor());
     }
 }
 
@@ -571,12 +539,13 @@ void MapView::updateStaticBuffer()
 
     if (!p->invalidRects.isEmpty()) {
         P.begin(StaticBuffer);
-        P.setRenderHint(QPainter::Antialiasing);
+//        P.setRenderHint(QPainter::Antialiasing);
         P.setClipping(true);
         P.setClipRegion(QRegion(rect()));
         if (!p->theVectorPanDelta.isNull()) {
             P.setClipRegion(QRegion(rect()) - QRegion(QRect(p->theVectorPanDelta, size())));
         }
+        drawCoastlines(P, theProjection);
         drawFeatures(P, theProjection);
         P.setClipping(false);
         P.end();

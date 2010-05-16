@@ -36,7 +36,7 @@ class MapView :	public QWidget
         Interaction* interaction();
 
         void buildFeatureSet();
-        void drawBackground(QPainter & painter, Projection& aProj);
+        void drawCoastlines(QPainter & painter, Projection& aProj);
         void drawFeatures(QPainter & painter, Projection& aProj);
 
         void panScreen(QPoint delta) ;
