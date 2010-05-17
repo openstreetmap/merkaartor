@@ -654,7 +654,10 @@ QString Feature::toXML(int lvl, QProgressDialog * progress)
 {
     QDomDocument theXmlDoc;
     QDomElement root = theXmlDoc.documentElement();
-    toXML(root, progress);
+    if (toXML(root, progress))
+        return theXmlDoc.toString(lvl);
+    else
+        return "";
 }
 
 bool Feature::tagsToXML(QDomElement xParent)

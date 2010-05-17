@@ -134,7 +134,8 @@ void Layer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures, Q
         return;
 
     for (int i=0; i < invalidRects.size(); ++i) {
-        QList < MapFeaturePtr > ret = indexFind(invalidRects[i]);
+        QList < MapFeaturePtr > ret;
+        indexFind(invalidRects[i], &ret);
         foreach(MapFeaturePtr F, ret) {
             if (theFeatures[F->renderPriority()].contains(F))
                 continue;
@@ -434,6 +435,13 @@ const QList<MapFeaturePtr>& Layer::indexFind(const CoordBox& bb)
     p->theRTree.Search(min, max, &indexFindCallback, (void*)&findResult);
 
     return findResult;
+}
+
+void Layer::indexFind(const CoordBox& bb, QList<MapFeaturePtr>* findResult)
+{
+    int min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
+    int max[] = {bb.topRight().lon(), bb.topRight().lat()};
+    p->theRTree.Search(min, max, &indexFindCallback, (void*)findResult);
 }
 
 void Layer::reIndex()

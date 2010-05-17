@@ -9,10 +9,10 @@
 
 #include <boost/intrusive_ptr.hpp>
 
-#define CAST_NODE(x) (dynamic_cast<Node*>(x))
-#define CAST_WAY(x) (dynamic_cast<Way*>(x))
-#define CAST_RELATION(x) (dynamic_cast<Relation*>(x))
-#define CAST_SEGMENT(x) (dynamic_cast<TrackSegment*>(x))
+#define CAST_NODE(x) (qobject_cast<Node*>(x))
+#define CAST_WAY(x) (qobject_cast<Way*>(x))
+#define CAST_RELATION(x) (qobject_cast<Relation*>(x))
+#define CAST_SEGMENT(x) (qobject_cast<TrackSegment*>(x))
 
 class CommandList;
 class Document;

@@ -134,6 +134,7 @@ public:
     virtual void indexRemove(const CoordBox& bb, const MapFeaturePtr aFeat);
 //    bool __cdecl indexFindCallback(MapFeaturePtr data, void* ctxt);
     virtual const QList<MapFeaturePtr>& indexFind(const CoordBox& vp);
+    virtual void indexFind(const CoordBox& bb, QList<MapFeaturePtr>* findResult);
     virtual void reIndex();
     virtual void reIndex(QProgressDialog * progress);
 
