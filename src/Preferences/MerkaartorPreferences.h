@@ -20,6 +20,10 @@
 #include <QUuid>
 #include <QNetworkProxy>
 
+#ifdef USE_LIBPROXY
+#include <libproxy/proxy.h>
+#endif
+
 #include "Maps/Coord.h"
 #include "Preferences/WmsServersList.h"
 #include "Preferences/TmsServersList.h"
@@ -425,6 +429,11 @@ private:
     BookmarksList theBookmarkList;
 
     DirectionalArrowsShow m_DirectionalArrowsVisible;
+
+#ifdef USE_LIBPROXY
+    pxProxyFactory                          *proxyFactory;
+    QHash<QString,QNetworkProxy::ProxyType>  proxyTypeMap;
+#endif
 
     static MerkaartorPreferences* m_prefInstance;
 

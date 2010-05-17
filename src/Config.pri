@@ -15,6 +15,7 @@ symbian:MOBILE=1
 # USE_BUILTIN_BOOST=1 - use the Boost version (1.38) from Merkaartor rather than the system one (ony on Linux)
 # GPSDLIB=1           - use gpsd libgps or libQgpsmm for access to a gpsd server
 # ZBAR=1              - use the ZBAR library to extract coordinates from barcode
+# LIBPROXY=1          - use the libproxy library to find the system proxy
 
 isEmpty(VERSION): VERSION="0.16"
 

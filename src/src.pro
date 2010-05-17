@@ -14,6 +14,7 @@
 # USE_BUILTIN_BOOST   - use the Boost version (1.38) from Merkaartor rather than the system one (ony on Linux)
 # GPSDLIB             - use gpsd libgps or libQgpsmm for access to a gpsd server
 # ZBAR                - use the ZBAR library to extract coordinates from barcode
+# LIBPROXY            - use libproxy to find the system proxy
 
 #Static config
 include (Config.pri)

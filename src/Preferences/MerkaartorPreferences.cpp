@@ -113,6 +113,17 @@ MerkaartorPreferences::MerkaartorPreferences()
     connect(&httpRequest, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)), this, SLOT(on_responseHeaderReceived(const QHttpResponseHeader &)));
     connect(&httpRequest,SIGNAL(requestFinished(int, bool)),this,SLOT(on_requestFinished(int, bool)));
 
+#ifdef USE_LIBPROXY
+    // Initialise libproxy
+    proxyFactory = px_proxy_factory_new();
+
+    // Map libproxy URL schemes to QNetworkProxy types
+    proxyTypeMap["direct"] = QNetworkProxy::NoProxy;
+    proxyTypeMap["socks" ] = QNetworkProxy::Socks5Proxy;
+    proxyTypeMap["socks5"] = QNetworkProxy::Socks5Proxy;
+    proxyTypeMap["http"  ] = QNetworkProxy::HttpCachingProxy;
+#endif
+
     initialize();
 }
 
@@ -120,6 +131,9 @@ MerkaartorPreferences::~MerkaartorPreferences()
 {
     delete theToolList;
     delete Sets;
+#ifdef USE_LIBPROXY
+    px_proxy_factory_free(proxyFactory);
+#endif
 }
 
 void MerkaartorPreferences::save(bool UserPwdChanged)
@@ -1251,7 +1265,7 @@ M_PARAM_IMPLEMENT_BOOL(LocalServer, Network, false)
 
 /* Proxy */
 
-QNetworkProxy MerkaartorPreferences::getProxy(const QUrl & /*requestUrl*/)
+QNetworkProxy MerkaartorPreferences::getProxy(const QUrl & requestUrl)
 {
     QNetworkProxy theProxy;
 
@@ -1265,7 +1279,41 @@ QNetworkProxy MerkaartorPreferences::getProxy(const QUrl & /*requestUrl*/)
     }
     else
     {
+#ifdef USE_LIBPROXY
+        // Ask libproxy for the system proxy
+        if (proxyFactory) {
+            // get proxy URL(s) from libproxy, see http://code.google.com/p/libproxy/wiki/HowTo
+            char **proxies = px_proxy_factory_get_proxies(proxyFactory, requestUrl.toString().toUtf8().data());
+
+            // Iterate through the list until we find a proxy scheme QNetworkProxy supports
+            for (int i=0 ; proxies[i] ; i++) {
+                QUrl proxyUrl(proxies[i]);
+                if (proxyTypeMap.contains(proxyUrl.scheme())) {
+                    theProxy.setType(proxyTypeMap.value(proxyUrl.scheme()));
+                    theProxy.setHostName(proxyUrl.host());
+                    theProxy.setPort(proxyUrl.port());
+                    theProxy.setUser(proxyUrl.userName());
+                    theProxy.setPassword(proxyUrl.password());
+                    //qDebug() << "Using proxy " << proxyUrl << " from libproxy for " << requestUrl;
+                }
+            }
+            for (int i=0 ; proxies[i] ; i++) {
+                free(proxies[i]);
+            }
+            return theProxy;
+        }
+#endif
+#if QT_VERSION >= 0x040500
+        // Ask Qt for the system proxy (Qt >= 4.5.0), libproxy is preferred if available since QNetworkProxyFactory
+        // doesn't yet support auto-config (PAC) on MacOS or system settings on linux while libproxy does
+        QList<QNetworkProxy> systemProxies = QNetworkProxyFactory::systemProxyForQuery(
+            QNetworkProxyQuery(requestUrl, QNetworkProxyQuery::UrlRequest)
+        );
+        return systemProxies[0];
+#else
+        // Otherwise no proxy
         theProxy.setType(QNetworkProxy::NoProxy);
+#endif
     }
 
     return theProxy;

@@ -1,6 +1,11 @@
 INCLUDEPATH += Preferences
 DEPENDPATH += Preferences
 
+contains(LIBPROXY, 1) {
+    DEFINES += USE_LIBPROXY
+    LIBS += -lproxy
+}
+
 HEADERS +=  \
     MerkaartorPreferences.h \
     PreferencesDialog.h \
