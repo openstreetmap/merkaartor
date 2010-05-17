@@ -311,7 +311,7 @@ void MapView::updateLayersImage()
 
 void MapView::buildFeatureSet()
 {
-    QRectF clipRect = p->theTransform.inverted().mapRect(QRectF(rect().adjusted(-500, -500, 500, 500)));
+    QRectF clipRect = p->theTransform.inverted().mapRect(QRectF(rect().adjusted(-200, -200, 200, 200)));
 
     p->theCoastlines.clear();
     for (int i=0; i<theDocument->layerSize(); ++i) {
@@ -537,9 +537,10 @@ void MapView::updateStaticBuffer()
     if (!p->invalidRects.isEmpty()) {
         P.begin(StaticBuffer);
 //        P.setRenderHint(QPainter::Antialiasing);
-        P.setClipping(true);
-        P.setClipRegion(QRegion(rect()));
+//        P.setClipping(true);
+//        P.setClipRegion(QRegion(rect()));
         if (!p->theVectorPanDelta.isNull()) {
+            P.setClipping(true);
             P.setClipRegion(QRegion(rect()) - QRegion(QRect(p->theVectorPanDelta, size())));
         }
         drawCoastlines(P, theProjection);

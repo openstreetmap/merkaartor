@@ -27,68 +27,80 @@ class MapRenderer;
 class PaintStyleLayer
 {
 public:
-	PaintStyleLayer(MapRenderer* ar) { r = ar; }
-	virtual void draw(Way* R) = 0;
-	virtual void draw(Node* Pt) = 0;
-	virtual void draw(Relation* R) = 0;
+    PaintStyleLayer() {}
+    PaintStyleLayer(MapRenderer* ar) { r = ar; }
+    virtual void draw(Way* R) = 0;
+    virtual void draw(Node* Pt) = 0;
+    virtual void draw(Relation* R) = 0;
 
 protected:
-	MapRenderer* r;
+    MapRenderer* r;
 };
 
 class BackgroundStyleLayer : public PaintStyleLayer
 {
 public:
-	BackgroundStyleLayer(MapRenderer* ar)
-		: PaintStyleLayer(ar) {}
-	virtual void draw(Way* R);
-	virtual void draw(Node* Pt);
-	virtual void draw(Relation* R);
+    BackgroundStyleLayer() {}
+    BackgroundStyleLayer(MapRenderer* ar)
+        : PaintStyleLayer(ar) {}
+    virtual void draw(Way* R);
+    virtual void draw(Node* Pt);
+    virtual void draw(Relation* R);
 };
 
 class ForegroundStyleLayer : public PaintStyleLayer
 {
 public:
-	ForegroundStyleLayer(MapRenderer* ar)
-		: PaintStyleLayer(ar) {}
-	virtual void draw(Way* R);
-	virtual void draw(Node* Pt);
-	virtual void draw(Relation* R);
+    ForegroundStyleLayer() {}
+    ForegroundStyleLayer(MapRenderer* ar)
+        : PaintStyleLayer(ar) {}
+    virtual void draw(Way* R);
+    virtual void draw(Node* Pt);
+    virtual void draw(Relation* R);
 };
 
 class TouchupStyleLayer : public PaintStyleLayer
 {
 public:
-	TouchupStyleLayer(MapRenderer* ar)
-		: PaintStyleLayer(ar) {}
-	virtual void draw(Way* R);
-	virtual void draw(Node* Pt);
-	virtual void draw(Relation* R);
+    TouchupStyleLayer() {}
+    TouchupStyleLayer(MapRenderer* ar)
+        : PaintStyleLayer(ar) {}
+    virtual void draw(Way* R);
+    virtual void draw(Node* Pt);
+    virtual void draw(Relation* R);
 };
 
 class LabelStyleLayer : public PaintStyleLayer
 {
 public:
-	LabelStyleLayer(MapRenderer* ar)
-		: PaintStyleLayer(ar) {}
-	virtual void draw(Way* R);
-	virtual void draw(Node* Pt);
-	virtual void draw(Relation* R);
+    LabelStyleLayer() {}
+    LabelStyleLayer(MapRenderer* ar)
+        : PaintStyleLayer(ar) {}
+    virtual void draw(Way* R);
+    virtual void draw(Node* Pt);
+    virtual void draw(Relation* R);
 };
 
 class MapRenderer
 {
 public:
-	MapRenderer();
+    MapRenderer();
 
-	void render(
-			QPainter* P,
-			QMap<RenderPriority, QSet <Feature*> > theFeatures,
-			MapView* aView
-	);
+    void render(
+            QPainter* P,
+            QMap<RenderPriority, QSet <Feature*> > theFeatures,
+            MapView* aView
+    );
 
-	MapView* theView;
-	QPainter* thePainter;
+    MapView* theView;
+    QPainter* thePainter;
+
+protected:
+    BackgroundStyleLayer bglayer;
+    ForegroundStyleLayer fglayer;
+    TouchupStyleLayer tchuplayer;
+    LabelStyleLayer lbllayer;
+
 };
 
 #endif // MAPRENDERER_H

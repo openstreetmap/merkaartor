@@ -187,6 +187,10 @@ void LabelStyleLayer::draw(Node* Pt)
 
 MapRenderer::MapRenderer()
 {
+    bglayer = BackgroundStyleLayer(this);
+    fglayer = ForegroundStyleLayer(this);
+    tchuplayer = TouchupStyleLayer(this);
+    lbllayer = LabelStyleLayer(this);
 }
 
 void MapRenderer::render(
@@ -282,13 +286,9 @@ void MapRenderer::render(
     }
 
 #else
-    BackgroundStyleLayer bglayer(this);
     bool bgLayerVisible = M_PREFS->getBackgroundVisible();
-    ForegroundStyleLayer fglayer(this);
     bool fgLayerVisible = M_PREFS->getForegroundVisible();
-    TouchupStyleLayer tchuplayer(this);
     bool tchpLayerVisible = M_PREFS->getTouchupVisible();
-    LabelStyleLayer lbllayer(this);
     bool lblLayerVisible = M_PREFS->getNamesVisible();
 
     Way * R = NULL;

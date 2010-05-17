@@ -652,6 +652,7 @@ void Way::buildPath(const Projection &theProjection, const QTransform& /*theTran
     QPointF ptr = theProjection.project(BBox.topRight());
     QRectF roadRect(pbl, ptr);
     bool toClip = !cr.contains(roadRect);
+//    bool toClip = false;
     if (!toClip) {
         if (!p->wasPathComplete || p->ProjectionRevision != theProjection.projectionRevision()) {
             p->thePath = QPainterPath();

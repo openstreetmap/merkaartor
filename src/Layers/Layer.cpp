@@ -133,30 +133,30 @@ void Layer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures, Q
     if (!isVisible() || !size())
         return;
 
+    QList < MapFeaturePtr > ret;
     for (int i=0; i < invalidRects.size(); ++i) {
-        QList < MapFeaturePtr > ret;
         indexFind(invalidRects[i], &ret);
-        foreach(MapFeaturePtr F, ret) {
-            if (theFeatures[F->renderPriority()].contains(F))
-                continue;
+    }
+    foreach(MapFeaturePtr F, ret) {
+        if (theFeatures[F->renderPriority()].contains(F))
+            continue;
 
-            if (Way * R = CAST_WAY(F)) {
-                R->buildPath(theProjection, theTransform, clipRect);
-                theFeatures[F->renderPriority()].insert(F);
+        if (Way * R = CAST_WAY(F)) {
+            R->buildPath(theProjection, theTransform, clipRect);
+            theFeatures[F->renderPriority()].insert(F);
 
-                if (R->isCoastline())
-                    theCoastlines.insert(R);
-            } else
-            if (Relation * RR = CAST_RELATION(F)) {
-                RR->buildPath(theProjection, theTransform, clipRect);
+            if (R->isCoastline())
+                theCoastlines.insert(R);
+        } else
+        if (Relation * RR = CAST_RELATION(F)) {
+            RR->buildPath(theProjection, theTransform, clipRect);
+            theFeatures[F->renderPriority()].insert(F);
+        } else
+        if (Node * pt = CAST_NODE(F)) {
+            if (arePointsDrawable())
                 theFeatures[F->renderPriority()].insert(F);
-            } else
-            if (Node * pt = CAST_NODE(F)) {
-                if (arePointsDrawable())
-                    theFeatures[F->renderPriority()].insert(F);
-            } else
-                theFeatures[F->renderPriority()].insert(F);
-        }
+        } else
+            theFeatures[F->renderPriority()].insert(F);
     }
 }
 
