@@ -822,7 +822,6 @@ void FeaturePainter::drawTouchup(Node* Pt, QPainter* thePainter, MapView* theVie
 
 void FeaturePainter::drawTouchup(Way* R, QPainter* thePainter, MapView* theView) const
 {
-    return;
     if (DrawTouchup)
     {
         double PixelPerM = theView->pixelPerM();
