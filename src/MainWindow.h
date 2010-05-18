@@ -198,6 +198,8 @@ public:
     QLabel* PaintTimeLabel;
 
 public slots:
+    void handleMessage(const QString& msg);
+
     void adjustLayers(bool adjustViewport);
     void bookmarkTriggered(QAction* anAction);
     void recentOpenTriggered(QAction* anAction);

@@ -369,6 +369,24 @@ void MainWindow::delayedInit()
     on_fileNewAction_triggered();
 }
 
+void MainWindow::handleMessage(const QString &msg)
+{
+    qDebug() << "Message: " << msg;
+
+    QStringList args = msg.split("$", QString::SkipEmptyParts);
+    QStringList fileNames;
+    for (int i=0; i < args.size(); ++i) {
+        if (args[i] == "-l" || args[i] == "--log") {
+            ++i;
+        } else
+            fileNames.append(args[i]);
+    }
+
+    loadFiles(fileNames);
+
+    if (fileNames.isEmpty())
+        QDir::setCurrent(M_PREFS->getWorkingDir());
+}
 
 MainWindow::~MainWindow(void)
 {

@@ -22,6 +22,8 @@ include (Config.pri)
 #Custom config
 include(Custom.pri)
 
+include(../3rdparty/qtsingleapplication-2.6_1-opensource/src/qtsingleapplication.pri)
+
 #Qt Version
 QT_VERSION = $$[QT_VERSION]
 QT_VERSION = $$split(QT_VERSION, ".")

@@ -4,6 +4,7 @@
 #include <QLibraryInfo>
 #include <QSplashScreen>
 
+#include <qtsingleapplication.h>
 #include "MainWindow.h"
 #include "Preferences/MerkaartorPreferences.h"
 #ifndef RELEASE
@@ -94,12 +95,38 @@ void showHelp()
     fprintf(stdout, "  -h, --help\t\tShow help information\n");
     fprintf(stdout, "  -l, --log logfilename\t\tSave debugging information to file \"logfilename\"\n");
     fprintf(stdout, "  -v, --version\t\tShow version information\n");
+    fprintf(stdout, "  -n, --noreuse\t\tDo not reuse an existing Merkaartor instance\n");
     fprintf(stdout, "  [filenames]\t\tOpen designated files \n");
 }
 
 int main(int argc, char** argv)
 {
-    QApplication app(argc,argv);
+    QtSingleApplication instance(argc,argv);
+
+    bool reuse = true;
+    QStringList argsIn = QCoreApplication::arguments();
+    QStringList argsOut;
+    argsIn.removeFirst();
+    for (int i=0; i < argsIn.size(); ++i) {
+        if (argsIn[i] == "-v" || argsIn[i] == "--version") {
+            showVersion();
+            exit(0);
+        } else
+        if (argsIn[i] == "-h" || argsIn[i] == "--help") {
+            showHelp();
+            exit(0);
+        } else
+        if (argsIn[i] == "-n" || argsIn[i] == "--noreuse") {
+            reuse = false;
+        } else
+            argsOut << argsIn[i];
+
+    }
+
+    QString message = argsOut.join("$");
+    if (reuse)
+        if (instance.sendMessage(message))
+            return 0;
 
     QString logFilename;
 #ifndef NDEBUG
@@ -110,22 +137,12 @@ int main(int argc, char** argv)
 #endif
 #endif
     QStringList fileNames;
-    QStringList args = QCoreApplication::arguments();
-    args.removeFirst();
-    for (int i=0; i < args.size(); ++i) {
-        if (args[i] == "-l" || args[i] == "--log") {
+    for (int i=0; i < argsOut.size(); ++i) {
+        if (argsOut[i] == "-l" || argsOut[i] == "--log") {
             ++i;
-            logFilename = args[i];
+            logFilename = argsOut[i];
         } else
-        if (args[i] == "-v" || args[i] == "--version") {
-            showVersion();
-            exit(0);
-        } else
-        if (args[i] == "-h" || args[i] == "--help") {
-            showHelp();
-            exit(0);
-        } else
-            fileNames.append(args[i]);
+            fileNames.append(argsOut[i]);
     }
 
     if (!logFilename.isNull())
@@ -143,6 +160,7 @@ int main(int argc, char** argv)
 #ifdef Q_WS_MACX
     qDebug() << "-------" << "on Mac OS/X";
 #endif
+    qDebug() << "-------" << "with arguments: " << QCoreApplication::arguments();
 
     QCoreApplication::setOrganizationName("BartVanhauwaert");
     QCoreApplication::setOrganizationDomain("www.irule.be");
@@ -157,14 +175,14 @@ int main(int argc, char** argv)
     QPixmap pixmap(":/Splash/Mercator_splash.png");
     QSplashScreen splash(pixmap);
     splash.show();
-    app.processEvents();
+    instance.processEvents();
 
 #ifndef RELEASE
-    splash.showMessage(QString(app.translate("Main", "Merkaartor v%1%2(%3)\nLoading plugins...")).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
+    splash.showMessage(QString(instance.translate("Main", "Merkaartor v%1%2(%3)\nLoading plugins...")).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
 #else
-    splash.showMessage(QString(app.translate("Main", "Merkaartor v%1\nLoading plugins...")).arg(STRINGIFY(VERSION)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
+    splash.showMessage(QString(instance.translate("Main", "Merkaartor v%1\nLoading plugins...")).arg(STRINGIFY(VERSION)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
 #endif
-    app.processEvents();
+    instance.processEvents();
 
     if (!QDir::home().exists(".merkaartor"))
         QDir::home().mkdir(".merkaartor");
@@ -196,30 +214,30 @@ int main(int argc, char** argv)
     }
 
 #ifndef RELEASE
-    splash.showMessage(QString(app.translate("Main", "Merkaartor v%1%2(%3)\nInitializing...")).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
+    splash.showMessage(QString(instance.translate("Main", "Merkaartor v%1%2(%3)\nInitializing...")).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
 #else
-    splash.showMessage(QString(app.translate("Main", "Merkaartor v%1\nInitializing...")).arg(STRINGIFY(VERSION)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
+    splash.showMessage(QString(instance.translate("Main", "Merkaartor v%1\nInitializing...")).arg(STRINGIFY(VERSION)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
 #endif
-    app.processEvents();
+    instance.processEvents();
 
     MainWindow Main;
-
+    Main.handleMessage(message);
 
 #ifdef _MOBILE
-    app.setActiveWindow(&Main);
+    instance.setActiveWindow(&Main);
     Main.showMaximized();
 #else
     Main.show();
 #endif
-    Main.loadFiles(fileNames);
 
-    if (fileNames.isEmpty())
-        QDir::setCurrent(M_PREFS->getWorkingDir());
-
-    Main.show();
     splash.finish(&Main);
 
-    int x = app.exec();
+    QObject::connect(&instance, SIGNAL(messageReceived(const QString&)),
+             &Main, SLOT(handleMessage(const QString&)));
+    instance.setActivationWindow(&Main);
+//    QObject::connect(&Main, SIGNAL(needToShow()), &instance, SLOT(activateWindow()));
+
+    int x = instance.exec();
 
     qDebug() << "**** " << QDateTime::currentDateTime().toString(Qt::ISODate) << " -- Ending " << QString("Merkaartor %1%2(%3)").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV));
     if(pLogFile) {
