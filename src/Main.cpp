@@ -232,9 +232,11 @@ int main(int argc, char** argv)
 
     splash.finish(&Main);
 
+    instance.setActivationWindow(&Main, false);
+    QObject::connect(&instance, SIGNAL(messageReceived(const QString&)),
+             &instance, SLOT(activateWindow()));
     QObject::connect(&instance, SIGNAL(messageReceived(const QString&)),
              &Main, SLOT(handleMessage(const QString&)));
-    instance.setActivationWindow(&Main);
 //    QObject::connect(&Main, SIGNAL(needToShow()), &instance, SLOT(activateWindow()));
 
     int x = instance.exec();

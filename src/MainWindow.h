@@ -215,6 +215,7 @@ public:
     void invalidateView(bool UpdateDock = true);
     bool importFiles(Document * mapDocument, const QStringList & filesNames, QStringList * importedFileNames = NULL);
     void loadFiles(const QStringList & fileNames);
+    void loadUrl(const QUrl& u);
     void loadDocument(QString fn);
     void saveDocument();
     void downloadFeatures(const QList<Feature*>& aDownloadList);

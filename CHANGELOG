@@ -1,6 +1,7 @@
 v0.16
+    * CHG : Only allows one instance of Merkaartor (override with "-n")
     * ADD : support for JOSM remote protocol on port 8111
-    * FIX : reduce browserimagemanger timeout, improving Yahoo responsiveness 
+    * FIX : reduce browserimagemanger timeout, improving Yahoo responsiveness
     * FIX : do not overwrite local lists with the ones from OSM user preferences
     * FIX : check menu status whene resetting properties dock (fixes #2930)
     * CHG : Don't autocomplete pure numeric values (fixes #2951)

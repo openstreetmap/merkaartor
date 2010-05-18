@@ -371,15 +371,19 @@ void MainWindow::delayedInit()
 
 void MainWindow::handleMessage(const QString &msg)
 {
-    qDebug() << "Message: " << msg;
-
     QStringList args = msg.split("$", QString::SkipEmptyParts);
     QStringList fileNames;
     for (int i=0; i < args.size(); ++i) {
         if (args[i] == "-l" || args[i] == "--log") {
             ++i;
-        } else
+        } else {
+            QUrl u(args[i]);
+            if (u.scheme() == "osm") {
+                loadUrl(u);
+                continue;
+            }
             fileNames.append(args[i]);
+        }
     }
 
     loadFiles(fileNames);
@@ -425,41 +429,7 @@ void MainWindow::readLocalConnection()
         QStringList tokens = ln.split( QRegExp("[ \r\n][ \r\n]*"), QString::SkipEmptyParts );
         if ( tokens[0] == "GET" ) {
             QUrl u = QUrl(tokens[1]);
-            if (u.path() == "/load_and_zoom") {
-                qreal t = u.queryItemValue("top").toDouble();
-                qreal b = u.queryItemValue("bottom").toDouble();
-                qreal r = u.queryItemValue("right").toDouble();
-                qreal l = u.queryItemValue("left").toDouble();
-
-                if (theView) {
-                    CoordBox vp(Coord(angToInt(b), angToInt(l)), Coord(angToInt(t), angToInt(r)));
-                    theView->setViewport(vp, theView->rect());
-                    on_fileDownloadMoreAction_triggered();
-                }
-                properties()->setSelection(0);
-
-                Feature* F;
-                QString mId;
-                QString sel = u.queryItemValue("select");
-                if (!sel.isNull()) {
-                    QStringList sl = sel.split(",");
-                    foreach (QString f, sl) {
-                        if (f.startsWith("node")) {
-                            f.remove("node");
-                            mId = "node_" + f;
-                        } else if (f.startsWith("way")) {
-                            f.remove("way");
-                            mId = "way_" + f;
-                        } else if (f.startsWith("relation")) {
-                            f.remove("relation");
-                            mId = "rel_" + f;
-                        }
-                        F = theDocument->getFeature(mId);
-                        if (F)
-                            properties()->addSelection(F);
-                    }
-                }
-            }
+            loadUrl(u);
             socket->close();
 
         }
@@ -1108,7 +1078,7 @@ void MainWindow::loadFiles(const QStringList & fileList)
     view()->setUpdatesEnabled(false);
 
         // Load only the first merkaartor document
-    bool foundDocument = false;
+    bool skipImport = false;
     QMutableStringListIterator it(fileNames);
     while (it.hasNext())
     {
@@ -1117,18 +1087,18 @@ void MainWindow::loadFiles(const QStringList & fileList)
         if (fn.toLower().endsWith(".mdc") == false)
             continue;
 
-        if (foundDocument == false)
+        if (skipImport == false)
         {
             changeCurrentDirToFile(fn);
             loadDocument(fn);
-            foundDocument = true;
+            skipImport = true;
         }
 
         it.remove();
     }
 
     Document* newDoc = theDocument;
-    if (foundDocument == false) {
+    if (skipImport == false) {
         newDoc = new Document(theLayers);
         newDoc->addDefaultLayers();
     }
@@ -1143,7 +1113,7 @@ void MainWindow::loadFiles(const QStringList & fileList)
 
     theProperties->setSelection(0);
 
-    if (foundDocument == false)
+    if (skipImport == false)
     {
         if (foundImport)
         {
@@ -1171,6 +1141,45 @@ void MainWindow::loadFiles(const QStringList & fileList)
 
     theLayers->setUpdatesEnabled(true);
     view()->setUpdatesEnabled(true);
+}
+
+void MainWindow::loadUrl(const QUrl& u)
+{
+    if (u.path() == "/load_and_zoom") {
+        qreal t = u.queryItemValue("top").toDouble();
+        qreal b = u.queryItemValue("bottom").toDouble();
+        qreal r = u.queryItemValue("right").toDouble();
+        qreal l = u.queryItemValue("left").toDouble();
+
+        if (theView) {
+            CoordBox vp(Coord(angToInt(b), angToInt(l)), Coord(angToInt(t), angToInt(r)));
+            theView->setViewport(vp, theView->rect());
+            on_fileDownloadMoreAction_triggered();
+        }
+        properties()->setSelection(0);
+
+        Feature* F;
+        QString mId;
+        QString sel = u.queryItemValue("select");
+        if (!sel.isNull()) {
+            QStringList sl = sel.split(",");
+            foreach (QString f, sl) {
+                if (f.startsWith("node")) {
+                    f.remove("node");
+                    mId = "node_" + f;
+                } else if (f.startsWith("way")) {
+                    f.remove("way");
+                    mId = "way_" + f;
+                } else if (f.startsWith("relation")) {
+                    f.remove("relation");
+                    mId = "rel_" + f;
+                }
+                F = theDocument->getFeature(mId);
+                if (F)
+                    properties()->addSelection(F);
+            }
+        }
+    }
 }
 
 void MainWindow::on_fileOpenAction_triggered()
