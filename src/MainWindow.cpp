@@ -98,6 +98,7 @@
 #include <QMessageBox>
 #include <QStyleFactory>
 #include <QMenu>
+#include <QTcpServer>
 
 SlippyMapCache* SlippyMapWidget::theSlippyCache = 0;
 
@@ -107,6 +108,7 @@ class MainWindowPrivate
         MainWindowPrivate()
             : lastPrefTabIndex(0)
             , projActgrp(0)
+            , theListeningServer(0)
         {
             title = QString("Merkaartor v%1%2(%3)").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV));
         }
@@ -116,6 +118,7 @@ class MainWindowPrivate
         FeaturesDock* theFeats;
         QString title;
         QActionGroup* projActgrp;
+        QTcpServer* theListeningServer;
 };
 
 MainWindow::MainWindow(QWidget *parent)
@@ -356,6 +359,13 @@ void MainWindow::delayedInit()
 {
     updateProjectionMenu();
     updateWindowMenu();
+
+    if (M_PREFS->getLocalServer()) {
+        p->theListeningServer = new QTcpServer(this);
+        connect(p->theListeningServer, SIGNAL(newConnection()), this, SLOT(incomingLocalConnection()));
+        p->theListeningServer->listen(QHostAddress::LocalHost, 8111);
+    }
+
     on_fileNewAction_triggered();
 }
 
@@ -379,6 +389,63 @@ MainWindow::~MainWindow(void)
     delete p;
 
     delete MerkaartorPreferences::instance();
+}
+
+void MainWindow::incomingLocalConnection()
+{
+    QTcpSocket *clientConnection = p->theListeningServer->nextPendingConnection();
+    connect(clientConnection, SIGNAL(disconnected()),
+            clientConnection, SLOT(deleteLater()));
+    connect(clientConnection, SIGNAL(readyRead()), this, SLOT(readLocalConnection()) );
+}
+
+void MainWindow::readLocalConnection()
+{
+    QTcpSocket* socket = (QTcpSocket*)sender();
+    if ( socket->canReadLine() ) {
+        QString ln = socket->readLine();
+        QStringList tokens = ln.split( QRegExp("[ \r\n][ \r\n]*"), QString::SkipEmptyParts );
+        if ( tokens[0] == "GET" ) {
+            QUrl u = QUrl(tokens[1]);
+            if (u.path() == "/load_and_zoom") {
+                qreal t = u.queryItemValue("top").toDouble();
+                qreal b = u.queryItemValue("bottom").toDouble();
+                qreal r = u.queryItemValue("right").toDouble();
+                qreal l = u.queryItemValue("left").toDouble();
+
+                if (theView) {
+                    CoordBox vp(Coord(angToInt(b), angToInt(l)), Coord(angToInt(t), angToInt(r)));
+                    theView->setViewport(vp, theView->rect());
+                    on_fileDownloadMoreAction_triggered();
+                }
+                properties()->setSelection(0);
+
+                Feature* F;
+                QString mId;
+                QString sel = u.queryItemValue("select");
+                if (!sel.isNull()) {
+                    QStringList sl = sel.split(",");
+                    foreach (QString f, sl) {
+                        if (f.startsWith("node")) {
+                            f.remove("node");
+                            mId = "node_" + f;
+                        } else if (f.startsWith("way")) {
+                            f.remove("way");
+                            mId = "way_" + f;
+                        } else if (f.startsWith("relation")) {
+                            f.remove("relation");
+                            mId = "rel_" + f;
+                        }
+                        F = theDocument->getFeature(mId);
+                        if (F)
+                            properties()->addSelection(F);
+                    }
+                }
+            }
+            socket->close();
+
+        }
+    }
 }
 
 void MainWindow::createProgressDialog()
@@ -1921,6 +1988,18 @@ void MainWindow::preferencesChanged(void)
             ui->mnuProjections->menuAction()->setEnabled(false);
             view()->projection().setProjectionType(l->projection());
             view()->zoom(0.99, view()->rect().center());
+        }
+    }
+    if (M_PREFS->getLocalServer()) {
+        if (!p->theListeningServer) {
+            p->theListeningServer = new QTcpServer(this);
+            connect(p->theListeningServer, SIGNAL(newConnection()), this, SLOT(incomingLocalConnection()));
+            p->theListeningServer->listen(QHostAddress::LocalHost, 8111);
+        }
+    } else {
+        if (p->theListeningServer) {
+            delete p->theListeningServer;
+            p->theListeningServer = NULL;
         }
     }
 

@@ -1,4 +1,5 @@
 v0.16
+    * ADD : support for JOSM remote protocol on port 8111
     * FIX : reduce browserimagemanger timeout, improving Yahoo responsiveness 
     * FIX : do not overwrite local lists with the ones from OSM user preferences
     * FIX : check menu status whene resetting properties dock (fixes #2930)

@@ -164,6 +164,8 @@ void PreferencesDialog::loadPrefs()
     edProxyUser->setText(M_PREFS->getProxyUser());
     edProxyPassword->setText(M_PREFS->getProxyPassword());
 
+    cbLocalServer->setChecked(M_PREFS->getLocalServer());
+
     //bbUse06Api->setChecked((M_PREFS->apiVersionNum() > 0.5));
 
     edCacheDir->setText(M_PREFS->getCacheDir());
@@ -288,6 +290,8 @@ void PreferencesDialog::savePrefs()
     M_PREFS->setProxyPort(edProxyPort->text().toInt());
     M_PREFS->setProxyUser(edProxyUser->text());
     M_PREFS->setProxyPassword(edProxyPassword->text());
+
+    M_PREFS->setLocalServer(cbLocalServer->isChecked());
 
     M_PREFS->setCacheDir(edCacheDir->text());
     M_PREFS->setCacheSize(sbCacheSize->value());

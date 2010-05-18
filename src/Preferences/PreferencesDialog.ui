@@ -21,7 +21,7 @@
       <enum>QTabWidget::North</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>7</number>
      </property>
      <widget class="QWidget" name="tab_4">
       <attribute name="title">
@@ -1194,6 +1194,13 @@
            </widget>
           </item>
          </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="cbLocalServer">
+         <property name="text">
+          <string>Enable JOSM-compatible local server on port 8111</string>
+         </property>
         </widget>
        </item>
        <item>

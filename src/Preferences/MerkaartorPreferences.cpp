@@ -1247,6 +1247,7 @@ M_PARAM_IMPLEMENT_STRING(MerkaartorStyleString, visual, "skulpture")
 
 /* Network */
 M_PARAM_IMPLEMENT_BOOL(OfflineMode, Network, false)
+M_PARAM_IMPLEMENT_BOOL(LocalServer, Network, false)
 
 /* Proxy */
 
