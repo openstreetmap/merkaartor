@@ -250,8 +250,11 @@ void WMSPreferencesDialog::on_btShowCapabilities_clicked(void)
         QMessageBox::critical(this, tr("Merkaartor: GetCapabilities"), tr("Address and Path cannot be blank."), QMessageBox::Ok);
     }
 
-    QUrl url(edWmsUrl->text() + "VERSION=1.1.1&SERVICE=WMS&request=GetCapabilities");
-    requestCapabilities(url);
+    theUrl.addQueryItem("VERSION", "1.1.1");
+    theUrl.addQueryItem("SERVICE", "WMS");
+    theUrl.addQueryItem("request", "GetCapabilities");
+//    QUrl url(edWmsUrl->text() + "VERSION=1.1.1&SERVICE=WMS&request=GetCapabilities");
+    requestCapabilities(theUrl);
 }
 
 void WMSPreferencesDialog::requestCapabilities(QUrl url)
