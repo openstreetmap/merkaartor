@@ -15,42 +15,44 @@ class LayerDockPrivate;
 
 class LayerDock : public MDockAncestor
 {
-	Q_OBJECT
+    Q_OBJECT
 
-	public:
-		LayerDock(MainWindow* aParent);
-	public:
-		~LayerDock(void);
+    public:
+        LayerDock(MainWindow* aParent);
+    public:
+        ~LayerDock(void);
 
-		void createContent();
-		//void updateContent();
-		void resizeEvent(QResizeEvent* anEvent);
+        void createContent();
+        //void updateContent();
+        void resizeEvent(QResizeEvent* anEvent);
 
-		void clearLayers();
-		void addLayer(Layer* aLayer);
-		void deleteLayer(Layer* aLayer);
+        void clearLayers();
+        void addLayer(Layer* aLayer);
+        void deleteLayer(Layer* aLayer);
 
-	private slots:
-		void layerChanged(LayerWidget*, bool adjustViewport);
-		void layerClosed(Layer*);
-		void layerCleared(Layer*);
-		void layerZoom(Layer*);
-		void tabChanged(int idx);
-		void tabContextMenuRequested(const QPoint& pos);
-		void TabShowAll(bool);
-		void TabHideAll(bool);
+    private slots:
+        void layerChanged(LayerWidget*, bool adjustViewport);
+        void layerClosed(Layer*);
+        void layerCleared(Layer*);
+        void layerZoom(Layer*);
+        void tabChanged(int idx);
+        void tabContextMenuRequested(const QPoint& pos);
+        void TabShowAll(bool);
+        void TabHideAll(bool);
 
-   		void showAllLayers(bool);
-   		void hideAllLayers(bool);
-   		void readonlyAllLayers(bool);
-   		void readonlyNoneLayers(bool);
-		void closeLayers(bool);
+        void showAllLayers(bool);
+        void hideAllLayers(bool);
+        void readonlyAllLayers(bool);
+        void readonlyNoneLayers(bool);
+        void closeLayers(bool);
 
-	signals:
-		void layersChanged(bool adjustViewport);
+    signals:
+        void layersChanged(bool adjustViewport);
+        void layersClosed();
+        void layersCleared();
 
-	protected:
-		LayerDockPrivate* p;
+    protected:
+        LayerDockPrivate* p;
 
 #if QT_VERSION < 0x040500
         virtual bool event (QEvent* ev);
@@ -59,15 +61,15 @@ class LayerDock : public MDockAncestor
         virtual void contextMenuEvent(QContextMenuEvent* anEvent);
         virtual void mousePressEvent ( QMouseEvent * event );
 
-		void dragEnterEvent(QDragEnterEvent *event);
-		void dragMoveEvent(QDragMoveEvent *event);
-		void dragLeaveEvent(QDragLeaveEvent *event);
-		void dropEvent(QDropEvent *event);
+        void dragEnterEvent(QDragEnterEvent *event);
+        void dragMoveEvent(QDragMoveEvent *event);
+        void dragLeaveEvent(QDragLeaveEvent *event);
+        void dropEvent(QDropEvent *event);
 
-	private:
-		void changeEvent(QEvent*);
-		void retranslateUi();
-		void retranslateTabBar();
+    private:
+        void changeEvent(QEvent*);
+        void retranslateUi();
+        void retranslateTabBar();
 };
 
 #endif

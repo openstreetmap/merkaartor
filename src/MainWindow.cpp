@@ -214,7 +214,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(theGeoImage, SIGNAL(visibilityChanged(bool)), this, SLOT(updateWindowMenu(bool)));
 #endif
 
-    connect (theLayers, SIGNAL(layersChanged(bool)), this, SLOT(adjustLayers(bool)));
+    connect(theLayers, SIGNAL(layersChanged(bool)), this, SLOT(adjustLayers(bool)));
+    connect(theLayers, SIGNAL(layersCleared()), this, SIGNAL(content_changed()));
+    connect(theLayers, SIGNAL(layersClosed()), this, SIGNAL(content_changed()));
 
     connect (MerkaartorPreferences::instance(), SIGNAL(bookmarkChanged()), this, SLOT(updateBookmarksMenu()));
     updateBookmarksMenu();
@@ -481,8 +483,8 @@ void MainWindow::adjustLayers(bool adjustViewport)
         if (l && l->isTiled())
             theView->projection().setProjectionType(l->projection());
     }
-    CoordBox theVp;
     if (adjustViewport) {
+        CoordBox theVp;
         theVp = theView->viewport();
         theView->setViewport(theVp, theView->rect());
     }

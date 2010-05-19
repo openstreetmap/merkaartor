@@ -271,6 +271,7 @@ void LayerDock::layerClosed(Layer* l)
     p->Main->on_editPropertiesAction_triggered();
     p->Main->document()->removeDownloadBox(l);
 
+    emit layersClosed();
     update();
 }
 
@@ -278,6 +279,8 @@ void LayerDock::layerCleared(Layer* l)
 {
     l->clear();
     p->Main->on_editPropertiesAction_triggered();
+
+    emit layersCleared();
 }
 
 void LayerDock::layerZoom(Layer * l)
