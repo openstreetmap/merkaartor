@@ -475,8 +475,8 @@ void ImageMapLayer::forceRedraw(MapView& theView, QRect Screen, QPoint delta)
     p->Viewport = theView.viewport();
 
     p->theDelta = delta;
-    if (p->theMapAdapter->getImageManager())
-        p->theMapAdapter->getImageManager()->abortLoading();
+//    if (p->theMapAdapter->getImageManager())
+//        p->theMapAdapter->getImageManager()->abortLoading();
     draw(theView, Screen);
 }
 

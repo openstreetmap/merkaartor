@@ -28,7 +28,7 @@
 FeaturesDock::FeaturesDock(MainWindow* aParent)
     : MDockAncestor(aParent), Main(aParent), curFeatType(Feature::Relations)
 {
-    setMinimumSize(220,100);
+//    setMinimumSize(220,100);
     setObjectName("FeaturesDock");
 
     ui.setupUi(getWidget());
@@ -67,6 +67,8 @@ FeaturesDock::FeaturesDock(MainWindow* aParent)
     ui.tabBar->setTabData(t, Feature::Nodes);
     t = ui.tabBar->addTab(NULL);
     ui.tabBar->setTabData(t, Feature::All);
+    ui.tabBar->setElideMode(Qt::ElideRight);
+    ui.tabBar->setUsesScrollButtons(true);
     retranslateTabBar();
 
     connect(ui.tabBar, SIGNAL(currentChanged (int)), this, SLOT(tabChanged(int)));

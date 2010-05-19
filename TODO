@@ -1,7 +1,5 @@
 - drawtiled alignement issue when image received during panning
 - Manage 404 on tile download 
-- Tile download counter rest at each tile downloaded
-- Make tabbed dock ellidable (o allow resizing)
 - FIXME : Problem with zoom lock with initial viewport
 - Allow to middle-split a road by selecting only 2 single-parented nodes from it
 - Implement printing (with barcode reference)

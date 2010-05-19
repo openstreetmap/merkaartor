@@ -44,7 +44,7 @@ LayerDock::LayerDock(MainWindow* aMain)
 : MDockAncestor(aMain)
 {
     p = new LayerDockPrivate(aMain);
-//	setMinimumSize(220,100);
+    setMinimumSize(1,1);
     setObjectName("layersDock");
     setAcceptDrops(true);
 
@@ -169,8 +169,8 @@ void LayerDock::createContent()
     p->tab = new QTabBar(frame);
     p->tab->setShape(QTabBar::RoundedWest);
     p->tab->setContextMenuPolicy(Qt::CustomContextMenu);
-//	p->tab->setUsesScrollButtons(true);
-//	p->tab->setElideMode(Qt::ElideRight);
+    p->tab->setUsesScrollButtons(true);
+    p->tab->setElideMode(Qt::ElideRight);
     int t;
     t = p->tab->addTab(NULL);
     p->tab->setTabData(t, Layer::All);
