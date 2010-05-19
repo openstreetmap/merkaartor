@@ -143,6 +143,15 @@ void OsmLink::setLatLonZoom(double lat, double lon, int zoom)
 
 void OsmLink::setMinMax(double bottom, double left, double top, double right)
 {
+    const double minwidth = 0.0001;
+    if (right-left < minwidth) {
+        left = (left + right - minwidth) / 2.0;
+        right = left + minwidth;
+    }
+    if (top-bottom < minwidth) {
+        top = (top + bottom + minwidth) / 2.0;
+        bottom = top - minwidth;
+    }
 	m_Box = CoordBox(Coord(angToInt(bottom), angToInt(left)), Coord(angToInt(top), angToInt(right)));
 	m_IsValid = true;
 }
