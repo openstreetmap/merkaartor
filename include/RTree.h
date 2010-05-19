@@ -1359,7 +1359,7 @@ void RTREE_QUAL::InitParVars(PartitionVars* a_parVars, int a_maxRects, int a_min
 RTREE_TEMPLATE
 void RTREE_QUAL::PickSeeds(PartitionVars* a_parVars)
 {
-  int seed0, seed1;
+  int seed0 = 0, seed1 = 1;
   ELEMTYPEREAL worst, waste;
   ELEMTYPEREAL area[MAXNODES+1];
 
@@ -1577,7 +1577,7 @@ bool RTREE_QUAL::Search(Node* a_node, Rect* a_rect, int& a_foundCount, bool __cd
         DATATYPE& id = a_node->m_branch[index].m_data;
 
         // NOTE: There are different ways to return results.  Here's where to modify
-        if(&a_resultCallback)
+        if(a_resultCallback)
         {
           ++a_foundCount;
           if(!a_resultCallback(id, a_context))

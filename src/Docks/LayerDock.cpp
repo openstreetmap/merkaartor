@@ -270,6 +270,8 @@ void LayerDock::layerClosed(Layer* l)
     l->getWidget()->getAssociatedMenu()->setVisible(false);
     p->Main->on_editPropertiesAction_triggered();
     p->Main->document()->removeDownloadBox(l);
+    if (p->Main->document()->getLastDownloadLayer() == l)
+        p->Main->document()->setLastDownloadLayer(NULL);
 
     emit layersClosed();
     update();
