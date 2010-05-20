@@ -217,7 +217,7 @@ void ImportExportOsmBin::addTileIndex(Feature* F, qint32 selRegion)
         return;
     }
 
-    QRectF r = F->boundingBox().toQRectF();
+    QRectF r = F->boundingBox().toRectF();
     int x1 = int((r.topLeft().x() + COORD_MAX) / TILE_WIDTH);
     int y1 = int((r.topLeft().y() + COORD_MAX) / TILE_WIDTH);
     int x2 = int((r.bottomRight().x() + COORD_MAX) / TILE_WIDTH);

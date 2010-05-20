@@ -1316,7 +1316,7 @@ void OsbLayer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures
             pp->theVP.merge(invalidRects[i]);
     }
 
-    QRectF r(pp->theVP.toQRectF());
+    QRectF r(pp->theVP.toRectF());
 
     int xr1 = int((r.topLeft().x() + INT_MAX) / REGION_WIDTH);
     int yr1 = int((r.topLeft().y() + INT_MAX) / REGION_WIDTH);

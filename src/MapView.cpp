@@ -423,8 +423,8 @@ void MapView::drawLatLonGrid(QPainter & P)
     int lonInterval = angToCoord(0.002/p->ZoomLevel);
     int latInterval = angToCoord(0.002/p->ZoomLevel);
     if (!lonInterval || !latInterval) return; // avoid divide-by-zero
-    int lonStart = qMax(int(p->Viewport.bottomLeft().lon() / lonInterval) * lonInterval, -COORD_MAX);
-    int latStart = qMax(int(p->Viewport.bottomLeft().lat() / latInterval) * latInterval, -COORD_MAX/2);
+    int lonStart = qMax(p->Viewport.bottomLeft().lon() / lonInterval * lonInterval, -COORD_MAX);
+    int latStart = qMax(p->Viewport.bottomLeft().lat() / latInterval * latInterval, -COORD_MAX/2);
 
     QList<QPolygonF> medianLines;
     QList<QPolygonF> parallelLines;

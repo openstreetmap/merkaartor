@@ -1872,7 +1872,7 @@ void MainWindow::on_mapStyleLoadAction_triggered()
 void MainWindow::on_toolsWorldOsbAction_triggered()
 {
     WorldOsbManager osbMgr(this);
-    osbMgr.setViewport(theView->viewport().toQRectF());
+    osbMgr.setViewport(theView->viewport().toRectF());
     osbMgr.exec();
 }
 
@@ -2910,8 +2910,8 @@ void MainWindow::updateGpsPosition(float latitude, float longitude, QDateTime ti
             CoordBox vp = theView->viewport();
             int lonDiff = vp.lonDiff();
             int latDiff = vp.latDiff();
-            QRect vpr = vp.toRect().adjusted(lonDiff / 4, latDiff / 4, -lonDiff / 4, -latDiff / 4);
-            if (!vpr.contains(gpsCoord.toQPoint())) {
+            QRectF vpr = vp.toRectF().adjusted(lonDiff / 4, latDiff / 4, -lonDiff / 4, -latDiff / 4);
+            if (!vpr.contains(gpsCoord.toQPointF())) {
                 theView->setCenter(gpsCoord, theView->rect());
                 theView->invalidate(true, true);
             }
