@@ -24,7 +24,7 @@
      <x>0</x>
      <y>0</y>
      <width>1100</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp">
@@ -54,6 +54,7 @@
     <addaction name="roadBreakAction"/>
     <addaction name="roadJoinAction"/>
     <addaction name="editReverseAction"/>
+    <addaction name="roadSimplifyAction"/>
     <addaction name="roadCreateJunctionAction"/>
     <addaction name="roadAddStreetNumbersAction"/>
    </widget>
@@ -1620,6 +1621,11 @@
   <action name="featureOsbClose">
    <property name="text">
     <string>Close</string>
+   </property>
+  </action>
+  <action name="roadSimplifyAction">
+   <property name="text">
+    <string>Simplify</string>
    </property>
   </action>
  </widget>

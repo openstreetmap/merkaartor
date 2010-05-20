@@ -16,6 +16,7 @@ bool canCreateJunction(PropertiesDock* theDock);
 int createJunction(Document* theDocument, CommandList* theList, PropertiesDock* theDock, bool doIt=true);
 void addStreetNumbers(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
 void reversePoints(Document* theDocument, CommandList* theList, Way* R);
+void simplifyRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock, double threshold);
 void alignNodes(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
 void mergeNodes(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
 void detachNode(Document* theDocument, CommandList* theList, PropertiesDock* theDock);

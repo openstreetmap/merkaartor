@@ -107,6 +107,7 @@ public slots:
     virtual void on_roadSplitAction_triggered();
     virtual void on_roadBreakAction_triggered();
     virtual void on_roadJoinAction_triggered();
+    virtual void on_roadSimplifyAction_triggered();
     virtual void on_roadCreateJunctionAction_triggered();
     virtual void on_roadAddStreetNumbersAction_triggered();
 

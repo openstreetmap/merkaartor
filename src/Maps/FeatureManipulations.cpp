@@ -128,6 +128,83 @@ void reversePoints(Document* theDocument, CommandList* theList, Way* R)
         theList->add(new WayAddNodeCommand(R,Pts[i],theDocument->getDirtyOrOriginLayer(R->layer())));
 }
 
+
+static double distanceFrom(QLineF ab, const Coord& c)
+{
+    // distance in metres from c to line segment ab
+    qreal ab_len2 = ab.dx() * ab.dx() + ab.dy() * ab.dy();
+    QPointF dp;
+    if (ab_len2) {
+        QLineF ac(ab.p1(), c.toPointF());
+        float u = (ac.dx() * ab.dx() + ac.dy() * ab.dy()) / ab_len2;
+        if (u < 0.0) u = 0.0;
+        else if (u > 1.0) u = 1.0;
+        dp = ab.pointAt(u);
+    } else {
+        dp = ab.p1();
+    }
+    Coord dc(dp);
+    return dc.distanceFrom(c);
+}
+void simplifyWay(Document *doc, Layer *layer, CommandList *theList, Way *w, int start, int end, double threshold)
+{
+    // Douglas-Peucker reduction of uninteresting points in way, subject to maximum error in metres
+
+    // TODO Performance: Use path-hull algorithm described at http://www.cs.ubc.ca/cgi-bin/tr/1992/TR-92-07.ps
+    if (end - start <= 1)
+        // no removable nodes
+        return;
+
+    QLineF segment(w->getNode(start)->position().toPointF(), w->getNode(end)->position().toPointF());
+    qreal maxdist = -1;
+    int maxpos = 0;
+    for (int i = start+1;  i < end;  i++) {
+        qreal d = distanceFrom(segment, w->getNode(i)->position());
+        if (d > maxdist) {
+            maxdist = d;
+            maxpos = i;
+        }
+    }
+    // maxdist is in kilometres
+    if (maxpos && maxdist * 1000 > threshold) {
+        simplifyWay(doc, layer, theList, w, maxpos, end, threshold);
+        simplifyWay(doc, layer, theList, w, start, maxpos, threshold);
+    } else {
+        for (int i = end - 1;  i > start;  i--) {
+            Feature *n = w->get(i);
+            theList->add(new WayRemoveNodeCommand(w, i, layer));
+            theList->add(new RemoveFeatureCommand(doc, n));
+        }
+    }
+}
+QSet<QString> uninterestingKeys;
+bool isNodeInteresting(Node *n)
+{
+    for (int i = 0; i < n->tagSize();  i++)
+        if (!uninterestingKeys.contains(n->tagKey(i)))
+            return true;
+    return false;
+}
+
+void simplifyRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock, double threshold)
+{
+    if (uninterestingKeys.isEmpty())
+        uninterestingKeys << "created_by" << "source";
+
+    for (int i = 0;  i < theDock->size();  ++i)
+        if (Way* w = CAST_WAY(theDock->selection(i))) {
+            Layer *layer = theDocument->getDirtyOrOriginLayer(w->layer());
+            int end = w->size() - 1;
+            for (int i = end;  i >= 0;  i--) {
+                Node *n = w->getNode(i);
+                if (i == 0 || n->sizeParents() > 1 || isNodeInteresting(n)) {
+                    simplifyWay(theDocument, layer, theList, w, i, end, threshold);
+                    end = i;
+                }
+            }
+        }
+}
+
 static void appendPoints(Document* theDocument, CommandList* L, Way* Dest, Way* Src)
 {
     for (int i=1; i<Src->size(); ++i) {

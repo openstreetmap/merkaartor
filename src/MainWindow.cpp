@@ -1615,6 +1615,21 @@ void MainWindow::on_roadBreakAction_triggered()
     }
 }
 
+void MainWindow::on_roadSimplifyAction_triggered()
+{
+    CommandList* theList = new CommandList(MainWindow::tr("Simplify Roads"), NULL);
+    qreal threshold = 3.0; // in metres; TODO: allow user-specified threshold
+    simplifyRoads(theDocument, theList, p->theProperties, threshold);
+    if (theList->empty())
+        delete theList;
+    else
+    {
+        theDocument->addHistory(theList);
+        emit content_changed();
+        invalidateView();
+    }
+}
+
 void MainWindow::on_featureDeleteAction_triggered()
 {
     Feature* F = p->theProperties->selection(0);
