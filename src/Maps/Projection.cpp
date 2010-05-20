@@ -309,6 +309,9 @@ bool Projection::setProjectionType(ProjectionType aProjectionType)
         theProj = getProjection(M_PREFS->getProjection(aProjectionType).projection);
         if (!theProj)
             p->IsMercator = true;
+        else
+            if (theProj->params().is_latlong)
+                p->IsLatLong = true;
     } catch (...) {
         return false;
     }

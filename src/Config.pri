@@ -14,7 +14,7 @@ symbian:MOBILE=1
 # GDAL=1    	      - enable GDAL (for, e.g., shapefile import; requires libgdal)
 # USE_BUILTIN_BOOST=1 - use the Boost version (1.38) from Merkaartor rather than the system one (ony on Linux)
 # GPSDLIB=1           - use gpsd libgps or libQgpsmm for access to a gpsd server
-# ZBAR=1              - use the ZBAR library to extract coordinates from barcode
+# ZBAR=1              - use the ZBAR library to extract coordinates from barcode (>0.10 required)
 # LIBPROXY=1          - use the libproxy library to find the system proxy
 
 isEmpty(VERSION): VERSION="0.16"
