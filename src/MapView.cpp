@@ -446,12 +446,20 @@ void MapView::drawLatLonGrid(QPainter & P)
 
     P.setPen(QColor(180, 217, 255));
     for (int i=0; i<parallelLines.size(); ++i) {
+
+        if (parallelLines[i].size() == 0)
+          continue;
+
         P.drawPolyline(p->theTransform.map(parallelLines[i]));
         QPoint pt = QPoint(0, p->theTransform.map(parallelLines.at(i).at(0)).y());
         QPoint ptt = pt + QPoint(5, -5);
         P.drawText(ptt, QString("%1").arg(intToAng(theProjection.inverse(parallelLines.at(i).at(0)).lat()), 0, 'f', 2));
     }
     for (int i=0; i<medianLines.size(); ++i) {
+
+        if (medianLines[i].size() == 0)
+          continue;
+
         P.drawPolyline(p->theTransform.map(medianLines[i]));
         QPoint pt = QPoint(p->theTransform.map(medianLines.at(i).at(0)).x(), 0);
         QPoint ptt = pt + QPoint(5, 10);
