@@ -513,10 +513,10 @@ QString Document::exportOSM(QMainWindow* main, const CoordBox& aCoordBox, bool r
 
     QDomElement bb = theXmlDoc.createElement("bound");
     o.appendChild(bb);
-    QString S = QString().number(intToAng(aCoordBox.bottomLeft().lat()),'f',6) + ",";
-    S += QString().number(intToAng(aCoordBox.bottomLeft().lon()),'f',6) + ",";
-    S += QString().number(intToAng(aCoordBox.topRight().lat()),'f',6) + ",";
-    S += QString().number(intToAng(aCoordBox.topRight().lon()),'f',6);
+    QString S = QString().number(coordToAng(aCoordBox.bottomLeft().lat()),'f',6) + ",";
+    S += QString().number(coordToAng(aCoordBox.bottomLeft().lon()),'f',6) + ",";
+    S += QString().number(coordToAng(aCoordBox.topRight().lat()),'f',6) + ",";
+    S += QString().number(coordToAng(aCoordBox.topRight().lon()),'f',6);
     bb.setAttribute("box", S);
     bb.setAttribute("origin", QString("http://www.openstreetmap.org/api/%1").arg(M_PREFS->apiVersion()));
 
@@ -524,10 +524,10 @@ QString Document::exportOSM(QMainWindow* main, const CoordBox& aCoordBox, bool r
         QDomElement bnds = theXmlDoc.createElement("bounds");
         o.appendChild(bnds);
 
-        bnds.setAttribute("minlat", QString::number(intToAng(aCoordBox.bottomLeft().lat()),'f',6));
-        bnds.setAttribute("minlon", QString::number(intToAng(aCoordBox.bottomLeft().lon()),'f',6));
-        bnds.setAttribute("maxlat", QString::number(intToAng(aCoordBox.topRight().lat()),'f',6));
-        bnds.setAttribute("maxlon", QString::number(intToAng(aCoordBox.topRight().lon()),'f',6));
+        bnds.setAttribute("minlat", QString::number(coordToAng(aCoordBox.bottomLeft().lat()),'f',6));
+        bnds.setAttribute("minlon", QString::number(coordToAng(aCoordBox.bottomLeft().lon()),'f',6));
+        bnds.setAttribute("maxlat", QString::number(coordToAng(aCoordBox.topRight().lat()),'f',6));
+        bnds.setAttribute("maxlon", QString::number(coordToAng(aCoordBox.topRight().lon()),'f',6));
     }
 
     for (int i=0; i < exportedFeatures.size(); i++) {
@@ -582,10 +582,10 @@ QString Document::exportOSM(QMainWindow* main, QList<Feature*> aFeatures)
 
     QDomElement bb = theXmlDoc.createElement("bound");
     o.appendChild(bb);
-    QString S = QString().number(intToAng(aCoordBox.bottomLeft().lat()),'f',6) + ",";
-    S += QString().number(intToAng(aCoordBox.bottomLeft().lon()),'f',6) + ",";
-    S += QString().number(intToAng(aCoordBox.topRight().lat()),'f',6) + ",";
-    S += QString().number(intToAng(aCoordBox.topRight().lon()),'f',6);
+    QString S = QString().number(coordToAng(aCoordBox.bottomLeft().lat()),'f',6) + ",";
+    S += QString().number(coordToAng(aCoordBox.bottomLeft().lon()),'f',6) + ",";
+    S += QString().number(coordToAng(aCoordBox.topRight().lat()),'f',6) + ",";
+    S += QString().number(coordToAng(aCoordBox.topRight().lon()),'f',6);
     bb.setAttribute("box", S);
     bb.setAttribute("origin", QString("http://www.openstreetmap.org/api/%1").arg(M_PREFS->apiVersion()));
 

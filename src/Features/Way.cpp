@@ -187,7 +187,7 @@ void Way::setLayer(Layer* L)
     p->VirtualsUptodate = false;
 }
 
-void Way::partChanged(Feature* F, int ChangeId)
+void Way::partChanged(Feature* /*F*/, int ChangeId)
 {
     if (isDeleted())
         return;
@@ -1085,9 +1085,9 @@ QString Way::toHtml()
     D += "<i>"+QApplication::translate("MapFeature", "Size")+": </i>" + QApplication::translate("MapFeature", "%1 nodes").arg(size());
     CoordBox bb = boundingBox();
     D += "<br/>";
-    D += "<i>"+QApplication::translate("MapFeature", "Topleft")+": </i>" + QString::number(intToAng(bb.topLeft().lat()), 'f', 4) + " / " + QString::number(intToAng(bb.topLeft().lon()), 'f', 4);
+    D += "<i>"+QApplication::translate("MapFeature", "Topleft")+": </i>" + QString::number(coordToAng(bb.topLeft().lat()), 'f', 4) + " / " + QString::number(coordToAng(bb.topLeft().lon()), 'f', 4);
     D += "<br/>";
-    D += "<i>"+QApplication::translate("MapFeature", "Botright")+": </i>" + QString::number(intToAng(bb.bottomRight().lat()), 'f', 4) + " / " + QString::number(intToAng(bb.bottomRight().lon()), 'f', 4);
+    D += "<i>"+QApplication::translate("MapFeature", "Botright")+": </i>" + QString::number(coordToAng(bb.bottomRight().lat()), 'f', 4) + " / " + QString::number(coordToAng(bb.bottomRight().lon()), 'f', 4);
 
     QString type = isClosed() ? QApplication::translate("MapFeature", "Area") : QApplication::translate("MapFeature", "Way");
     return Feature::toMainHtml(type, "way").arg(D);

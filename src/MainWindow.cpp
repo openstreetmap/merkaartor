@@ -1156,7 +1156,7 @@ void MainWindow::loadUrl(const QUrl& u)
         qreal l = u.queryItemValue("left").toDouble();
 
         if (theView) {
-            CoordBox vp(Coord(angToInt(b), angToInt(l)), Coord(angToInt(t), angToInt(r)));
+            CoordBox vp(Coord(angToCoord(b), angToCoord(l)), Coord(angToCoord(t), angToCoord(r)));
             theView->setViewport(vp, theView->rect());
             on_fileDownloadMoreAction_triggered();
         }
@@ -2905,7 +2905,7 @@ void MainWindow::updateGpsPosition(float latitude, float longitude, QDateTime ti
 {
     Q_UNUSED(heading)
     if (theGPS->getGpsDevice()) {
-        Coord gpsCoord(angToInt(latitude), angToInt(longitude));
+        Coord gpsCoord(angToCoord(latitude), angToCoord(longitude));
         if (M_PREFS->getGpsMapCenter()) {
             CoordBox vp = theView->viewport();
             int lonDiff = vp.lonDiff();

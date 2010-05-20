@@ -9,6 +9,8 @@
 #include <QtDebug>
 #include <QtXml>
 
+#define COORD_MAX INT_MAX
+
 inline double angToRad(double a)
 {
     return a*M_PI/180.;
@@ -19,24 +21,24 @@ inline double radToAng(double a)
     return a*180/M_PI;
 }
 
-inline int angToInt(double a)
+inline int angToCoord(double a)
 {
-    return qRound(a/180.0*INT_MAX);
+    return qRound(a/180.0*COORD_MAX);
 }
 
-inline double intToAng(int a)
+inline double coordToAng(int a)
 {
-    return double(a)*180./INT_MAX;
+    return double(a)*180./COORD_MAX;
 }
 
-inline double intToRad(int a)
+inline double coordToRad(int a)
 {
-    return double(a)*M_PI/INT_MAX;
+    return double(a)*M_PI/COORD_MAX;
 }
 
-inline int radToInt(double x)
+inline int radToCoord(double x)
 {
-    return qRound(x/M_PI*INT_MAX);
+    return qRound(x/M_PI*COORD_MAX);
 }
 
 class Coord

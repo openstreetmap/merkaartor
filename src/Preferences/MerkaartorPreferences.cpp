@@ -400,8 +400,8 @@ void MerkaartorPreferences::initialize()
     QStringList sl = Sets->value("downloadosm/bookmarks").toStringList();
     if (sl.size()) {
         for (int i=0; i<sl.size(); i+=5) {
-            Bookmark B(sl[i], CoordBox(Coord(angToInt(sl[i+1].toDouble()),angToInt(sl[i+2].toDouble())),
-                                    Coord(angToInt(sl[i+3].toDouble()),angToInt(sl[i+4].toDouble()))));
+            Bookmark B(sl[i], CoordBox(Coord(angToCoord(sl[i+1].toDouble()),angToCoord(sl[i+2].toDouble())),
+                                    Coord(angToCoord(sl[i+3].toDouble()),angToCoord(sl[i+4].toDouble()))));
             theBookmarkList.addBookmark(B);
         }
         save();

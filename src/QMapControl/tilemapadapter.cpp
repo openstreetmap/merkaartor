@@ -19,6 +19,13 @@
  ***************************************************************************/
 #include "tilemapadapter.h"
 
+// from wikipedia
+#define EQUATORIALRADIUS 6378137.0
+#define POLARRADIUS      6356752.0
+#define EQUATORIALMETERCIRCUMFERENCE  40075016.68
+#define EQUATORIALMETERHALFCIRCUMFERENCE  20037508.34
+#define EQUATORIALMETERPERDEGREE    111319490.79
+
 TileMapAdapter::TileMapAdapter(const QString& host, const QString& serverPath, const QString& projection, int theTilesize, int minZoom, int maxZoom, bool blOrigin)
     :MapAdapter(host, serverPath, projection, minZoom, maxZoom)
     , tilesize(theTilesize)
@@ -94,7 +101,7 @@ QRectF TileMapAdapter::getBoundingbox() const
     if (isProj4326)
         return QRectF(QPointF(-180.00, -90.00), QPointF(180.00, 90.00));
     else
-        return QRectF(QPointF(-20037508.34, -20037508.34), QPointF(20037508.34, 20037508.34));
+        return QRectF(QPointF(-EQUATORIALMETERHALFCIRCUMFERENCE, -EQUATORIALMETERHALFCIRCUMFERENCE), QPointF(EQUATORIALMETERHALFCIRCUMFERENCE, EQUATORIALMETERHALFCIRCUMFERENCE));
 }
 
 int TileMapAdapter::getTileSize() const

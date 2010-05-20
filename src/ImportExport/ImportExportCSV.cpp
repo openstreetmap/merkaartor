@@ -31,7 +31,7 @@ ImportExportCSV::~ImportExportCSV()
 
 
 // export
-bool ImportExportCSV::export_(const QList<Feature *>& featList)
+bool ImportExportCSV::export_(const QList<Feature *>& /*featList*/)
 {
     return false;
 }

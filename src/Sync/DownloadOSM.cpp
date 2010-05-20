@@ -512,7 +512,7 @@ bool downloadOSM(QWidget* aParent, const QString& aWeb, const QString& aUser, co
     }
     Downloader Rcv(aWeb, aUser, aPassword);
     QString URL = Rcv.getURLToMap();
-    URL = URL.arg(intToAng(aBox.bottomLeft().lon()), 0, 'f').arg(intToAng(aBox.bottomLeft().lat()), 0, 'f').arg(intToAng(aBox.topRight().lon()), 0, 'f').arg(intToAng(aBox.topRight().lat()), 0, 'f');
+    URL = URL.arg(coordToAng(aBox.bottomLeft().lon()), 0, 'f').arg(coordToAng(aBox.bottomLeft().lat()), 0, 'f').arg(coordToAng(aBox.topRight().lon()), 0, 'f').arg(coordToAng(aBox.topRight().lat()), 0, 'f');
 
     QUrl theUrl;
     theUrl.setHost(aWeb);
@@ -529,8 +529,8 @@ bool downloadOSM(QWidget* Main, const QString& aUser, const QString& aPassword, 
     int y = int(region / NUM_REGIONS); //2565024
     int x = (region % NUM_REGIONS);
     CoordBox Clip = CoordBox(
-        Coord (y * REGION_WIDTH - INT_MAX, x * REGION_WIDTH - INT_MAX  ),
-        Coord ((y+1) * REGION_WIDTH - INT_MAX, (x+1) * REGION_WIDTH - INT_MAX )
+        Coord (y * REGION_WIDTH - COORD_MAX, x * REGION_WIDTH - COORD_MAX  ),
+        Coord ((y+1) * REGION_WIDTH - COORD_MAX, (x+1) * REGION_WIDTH - COORD_MAX )
         );
 
     QString osmWebsite, osmUser, osmPwd;
@@ -570,10 +570,10 @@ bool downloadTracksFromOSM(QWidget* Main, const QString& aWeb, const QString& aU
     {
         Lbl->setText(QApplication::translate("Downloader","Downloading trackpoints %1-%2").arg(Page*5000+1).arg(Page*5000+5000));
         QString URL = theDownloader.getURLToTrackPoints();
-        URL = URL.arg(intToAng(aBox.bottomLeft().lon())).
-                arg(intToAng(aBox.bottomLeft().lat())).
-                arg(intToAng(aBox.topRight().lon())).
-                arg(intToAng(aBox.topRight().lat())).
+        URL = URL.arg(coordToAng(aBox.bottomLeft().lon())).
+                arg(coordToAng(aBox.bottomLeft().lat())).
+                arg(coordToAng(aBox.topRight().lon())).
+                arg(coordToAng(aBox.topRight().lat())).
                 arg(Page);
         if (!theDownloader.go(URL))
             return false;
@@ -712,10 +712,10 @@ bool downloadOpenstreetbugs(MainWindow* Main, const CoordBox& aBox, Document* th
 
     theDownloader.setAnimator(dlg,Lbl,Bar,true);
     Lbl->setText(QApplication::translate("Downloader","Downloading points"));
-    osbUrl.addQueryItem("t", QString::number(intToAng(aBox.topRight().lat())));
-    osbUrl.addQueryItem("l", QString::number(intToAng(aBox.bottomLeft().lon())));
-    osbUrl.addQueryItem("b", QString::number(intToAng(aBox.bottomLeft().lat())));
-    osbUrl.addQueryItem("r", QString::number(intToAng(aBox.topRight().lon())));
+    osbUrl.addQueryItem("t", QString::number(coordToAng(aBox.topRight().lat())));
+    osbUrl.addQueryItem("l", QString::number(coordToAng(aBox.bottomLeft().lon())));
+    osbUrl.addQueryItem("b", QString::number(coordToAng(aBox.bottomLeft().lat())));
+    osbUrl.addQueryItem("r", QString::number(coordToAng(aBox.topRight().lon())));
     osbUrl.addQueryItem("open", "yes");
 
     if (!theDownloader.go(osbUrl.toString()))

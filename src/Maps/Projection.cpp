@@ -12,7 +12,9 @@
 // from wikipedia
 #define EQUATORIALRADIUS 6378137.0
 #define POLARRADIUS      6356752.0
-//#define PROJ_RATIO ((double(INT_MAX)/M_PI) / EQUATORIALRADIUS)
+#define EQUATORIALMETERCIRCUMFERENCE  40075016.68
+#define EQUATORIALMETERHALFCIRCUMFERENCE  20037508.34
+#define EQUATORIALMETERPERDEGREE    111319490.79
 
 using namespace ggl;
 
@@ -38,18 +40,28 @@ public:
 
     QPointF mercatorProject(const Coord& c) const
     {
-        double x = intToAng(c.lon()) / 180. * 20037508.34;
-        double y = log(tan(intToRad(c.lat())) + 1/cos(intToRad(c.lat()))) / M_PI * (20037508.34);
+        double x = coordToAng(c.lon()) / 180. * EQUATORIALMETERHALFCIRCUMFERENCE;
+        double y = log(tan(coordToRad(c.lat())) + 1/cos(coordToRad(c.lat()))) / M_PI * (EQUATORIALMETERHALFCIRCUMFERENCE);
 
         return QPointF(x, y);
     }
 
     Coord mercatorInverse(const QPointF& point) const
     {
-        int longitude = angToInt(point.x()*180.0/20037508.34);
-        int latitude = radToInt(atan(sinh(point.y()/20037508.34*M_PI)));
+        int longitude = angToCoord(point.x()*180.0/EQUATORIALMETERHALFCIRCUMFERENCE);
+        int latitude = radToCoord(atan(sinh(point.y()/EQUATORIALMETERHALFCIRCUMFERENCE*M_PI)));
 
         return Coord(latitude, longitude);
+    }
+
+    inline QPointF latlonProject(const Coord& c) const
+    {
+        return QPointF(coordToAng(c.lon())*EQUATORIALMETERPERDEGREE, coordToAng(c.lat())*EQUATORIALMETERPERDEGREE);
+    }
+
+    inline Coord latlonInverse(const QPointF& point) const
+    {
+        return Coord(angToCoord(point.y()/EQUATORIALMETERPERDEGREE), angToCoord(point.x()/EQUATORIALMETERPERDEGREE));
     }
 };
 
@@ -77,7 +89,7 @@ QPointF Projection::project(const Coord & Map) const
         return p->mercatorProject(Map);
     else
     if (p->IsLatLong)
-        return QPointF(intToAng(Map.lon()), intToAng(Map.lat()));
+        return p->latlonProject(Map);
     else
         return projProject(Map);
 #else
@@ -102,7 +114,7 @@ QPointF Projection::project(Node* aNode) const
         pt = p->mercatorProject(aNode->position());
     else
     if (p->IsLatLong)
-        pt = QPointF(intToAng(aNode->position().lon()), intToAng(aNode->position().lat()));
+        pt = p->latlonProject(aNode->position());
     else
         pt = projProject(aNode->position());
 
@@ -126,12 +138,12 @@ Coord Projection::inverse(const QPointF & Screen) const
 {
 #ifndef _MOBILE
     if (p->IsLatLong)
-        return Coord(angToInt(Screen.y()), angToInt(Screen.x()));
+        return p->latlonInverse(Screen);
     else
     if (p->IsMercator)
-        return p->mercatorInverse(QPointF(Screen.x(), Screen.y()));
+        return p->mercatorInverse(Screen);
     else
-        return projInverse(QPointF(Screen.x(), Screen.y()));
+        return projInverse(Screen);
 #else
     int numberOfTiles, tilesize;
     numberOfTiles = tilesize = 1;
@@ -166,7 +178,7 @@ void Projection::projTransformToWGS84(long point_count, int point_offset, double
 QPointF Projection::projProject(const Coord & Map) const
 {
     try {
-        point_ll_deg in(longitude<>(intToAng(Map.lon())), latitude<>(intToAng(Map.lat())));
+        point_ll_deg in(longitude<>(coordToAng(Map.lon())), latitude<>(coordToAng(Map.lat())));
         point_2d out;
 
         theProj->forward(in, out);
@@ -185,7 +197,7 @@ Coord Projection::projInverse(const QPointF & pProj) const
 
         theProj->inverse(in, out);
 
-        return Coord(angToInt(out.lat()), angToInt(out.lon()));
+        return Coord(angToCoord(out.lat()), angToCoord(out.lon()));
     } catch (...) {
         return Coord(0, 0);
     }
@@ -207,23 +219,23 @@ QRectF Projection::getProjectedViewport(const CoordBox& Viewport, const QRect& s
 
     double x, y;
     if (p->IsLatLong)
-        tr = QPointF(intToAng(Viewport.topRight().lon()), intToAng(Viewport.topRight().lat()));
+        tr = QPointF(coordToAng(Viewport.topRight().lon()), coordToAng(Viewport.topRight().lat()));
     else if (p->IsMercator)
         tr = project(Viewport.topRight());
     else {
-        x = intToRad(Viewport.topRight().lon());
-        y = intToRad(Viewport.topRight().lat());
+        x = coordToRad(Viewport.topRight().lon());
+        y = coordToRad(Viewport.topRight().lat());
         projTransformFromWGS84(1, 0, &x, &y, NULL);
         tr = QPointF(x, y);
     }
 
     if (p->IsLatLong)
-        bl = QPointF(intToAng(Viewport.bottomLeft().lon()), intToAng(Viewport.bottomLeft().lat()));
+        bl = QPointF(coordToAng(Viewport.bottomLeft().lon()), coordToAng(Viewport.bottomLeft().lat()));
     else if (p->IsMercator)
         bl = project(Viewport.bottomLeft());
     else {
-        x = intToRad(Viewport.bottomLeft().lon());
-        y = intToRad(Viewport.bottomLeft().lat());
+        x = coordToRad(Viewport.bottomLeft().lon());
+        y = coordToRad(Viewport.bottomLeft().lat());
         projTransformFromWGS84(1, 0, &x, &y, NULL);
         bl = QPointF(x, y);
     }

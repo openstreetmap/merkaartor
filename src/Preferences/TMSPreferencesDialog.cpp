@@ -268,7 +268,7 @@ void TMSPreferencesDialog::readResponseHeader(const QHttpResponseHeader &respons
     }
 }
 
-void TMSPreferencesDialog::httpRequestFinished(int id, bool error)
+void TMSPreferencesDialog::httpRequestFinished(int /*id*/, bool error)
 {
     if (error) {
         if (http->error() != QHttp::Aborted)
@@ -319,11 +319,11 @@ void TMSPreferencesDialog::httpRequestFinished(int id, bool error)
             } else if (c.nodeName().toLower() == "srs") {
                 srs = c.firstChild().toText().nodeValue();
             } else if (c.nodeName().toLower() == "boundingbox") {
-                Coord bl(angToInt(c.attribute("miny").toDouble()), angToInt(c.attribute("minx").toDouble()));
-                Coord tr(angToInt(c.attribute("maxy").toDouble()), angToInt(c.attribute("maxx").toDouble()));
+                Coord bl(angToCoord(c.attribute("miny").toDouble()), angToCoord(c.attribute("minx").toDouble()));
+                Coord tr(angToCoord(c.attribute("maxy").toDouble()), angToCoord(c.attribute("maxx").toDouble()));
                 bbox = CoordBox(bl, tr);
             } else if (c.nodeName().toLower() == "origin") {
-                Coord pt(angToInt(c.attribute("y").toDouble()), angToInt(c.attribute("x").toDouble()));
+                Coord pt(angToCoord(c.attribute("y").toDouble()), angToCoord(c.attribute("x").toDouble()));
                 origin = pt;
             } else if (c.nodeName().toLower() == "tileformat") {
                 tilesize.setWidth(c.attribute("width").toInt());

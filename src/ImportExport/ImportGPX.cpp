@@ -19,7 +19,7 @@ static Node* importTrkPt(const QDomElement& Root, Document* /* theDocument */, L
     double Lat = Root.attribute("lat").toDouble();
     double Lon = Root.attribute("lon").toDouble();
 
-    Node* Pt = new Node(Coord(angToInt(Lat),angToInt(Lon)));
+    Node* Pt = new Node(Coord(angToCoord(Lat),angToCoord(Lon)));
     Pt->setLastUpdated(Feature::Log);
     if (Root.hasAttribute("xml:id"))
         Pt->setId(Root.attribute("xml:id"));

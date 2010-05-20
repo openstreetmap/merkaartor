@@ -615,7 +615,7 @@ void GeoImageDock::loadImages(QStringList fileNames)
         }
 
         if (positionValid) {
-            Coord newPos(angToInt(lat), angToInt(lon));
+            Coord newPos(angToCoord(lat), angToCoord(lon));
             Node *Pt = 0;
             int i = 0;
             for (; i<theLayer->size(); ++i) // use existing TrackPoint if there is one in small distance
@@ -832,7 +832,7 @@ Coord GeoImageDock::getGeoDataFromImage(const QString & file)
         if (exifData["Exif.GPSInfo.GPSLongitudeRef"].toString() == "W")
             lon *= -1.0;
     }
-    pos = Coord(angToInt(lat), angToInt(lon));
+    pos = Coord(angToCoord(lat), angToCoord(lon));
     return pos;
 }
 
@@ -855,8 +855,8 @@ void GeoImageDock::addGeoDataToImage(Coord position, const QString & file)
     image->readMetadata();
     Exiv2::ExifData &exifData = image->exifData();
 
-    double lat = fabs(intToAng(position.lat()));
-    double lon = fabs(intToAng(position.lon()));
+    double lat = fabs(coordToAng(position.lat()));
+    double lon = fabs(coordToAng(position.lon()));
     int h, m, s;
 
     QString hourFormat("%1/1 %2/1 %3/100");
