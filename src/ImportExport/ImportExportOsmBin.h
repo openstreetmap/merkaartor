@@ -15,10 +15,10 @@
 #include "Feature.h"
 #include <ImportExport/IImportExport.h>
 
-#define TILE_WIDTH (int(COORD_MAX/40000))
-#define REGION_WIDTH (int(COORD_MAX/4000))
-#define NUM_TILES (int(COORD_MAX/TILE_WIDTH))
-#define NUM_REGIONS (int(COORD_MAX/REGION_WIDTH))
+#define NUM_REGIONS 4000
+#define NUM_TILES 40000
+#define TILE_WIDTH (COORD_MAX/NUM_TILES)
+#define REGION_WIDTH (COORD_MAX/NUM_REGIONS)
 #define TILETOREGION_THRESHOLD 9
 
 typedef boost::intrusive_ptr<Feature> Feature_ptr;

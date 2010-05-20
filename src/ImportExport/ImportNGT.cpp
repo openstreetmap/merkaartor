@@ -24,7 +24,7 @@ bool importNGT(QWidget* /* aParent */, const QString& aFilename, Document* theDo
             QStringList Items(Line.split('|'));
             if (Items.count() >= 5)
             {
-                Node* Pt = new Node(Coord(int(Items[4].toDouble()*COORD_MAX), int(Items[3].toDouble()*COORD_MAX)));
+                Node* Pt = new Node(Coord(Items[4].toDouble()*COORD_MAX, Items[3].toDouble()*COORD_MAX));
                 Pt->setLastUpdated(Feature::Log);
                 theList->add(new AddFeatureCommand(theLayer,Pt, true));
                 theSegment->add(Pt);

@@ -25,7 +25,7 @@
 
 /* Layer */
 
-typedef RTree<MapFeaturePtr, int, 2, float> MyRTree;
+typedef RTree<MapFeaturePtr, double, 2, double> MyRTree;
 
 class LayerPrivate
 {
@@ -97,12 +97,12 @@ bool __cdecl indexFindCallback(MapFeaturePtr data, void* ctxt)
 
 void Layer::get(const CoordBox& bb, QList<Feature*>& theFeatures)
 {
-    int min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
-    int max[] = {bb.topRight().lon(), bb.topRight().lat()};
+    double min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
+    double max[] = {bb.topRight().lon(), bb.topRight().lat()};
     p->theRTree.Search(min, max, &indexFindCallback, (void*)(&theFeatures));
 }
 
-bool getFeatureSetCallback(MapFeaturePtr data, void* ctxt)
+bool getFeatureSetCallback(MapFeaturePtr /*data*/, void* /*ctxt*/)
 {
 //    if (theFeatures[(*it)->renderPriority()].contains(*it))
 //        continue;
@@ -410,8 +410,8 @@ void Layer::indexAdd(const CoordBox& bb, const MapFeaturePtr aFeat)
     if (bb.isNull())
         return;
     if (!p->IndexingBlocked) {
-        int min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
-        int max[] = {bb.topRight().lon(), bb.topRight().lat()};
+        double min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
+        double max[] = {bb.topRight().lon(), bb.topRight().lat()};
         p->theRTree.Insert(min, max, aFeat);
     }
 }
@@ -421,16 +421,16 @@ void Layer::indexRemove(const CoordBox& bb, const MapFeaturePtr aFeat)
     if (bb.isNull())
         return;
     if (!p->IndexingBlocked) {
-        int min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
-        int max[] = {bb.topRight().lon(), bb.topRight().lat()};
+        double min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
+        double max[] = {bb.topRight().lon(), bb.topRight().lat()};
         p->theRTree.Remove(min, max, aFeat);
     }
 }
 
 const QList<MapFeaturePtr>& Layer::indexFind(const CoordBox& bb)
 {
-    int min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
-    int max[] = {bb.topRight().lon(), bb.topRight().lat()};
+    double min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
+    double max[] = {bb.topRight().lon(), bb.topRight().lat()};
     findResult.clear();
     p->theRTree.Search(min, max, &indexFindCallback, (void*)&findResult);
 
@@ -439,8 +439,8 @@ const QList<MapFeaturePtr>& Layer::indexFind(const CoordBox& bb)
 
 void Layer::indexFind(const CoordBox& bb, QList<MapFeaturePtr>* findResult)
 {
-    int min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
-    int max[] = {bb.topRight().lon(), bb.topRight().lat()};
+    double min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
+    double max[] = {bb.topRight().lon(), bb.topRight().lat()};
     p->theRTree.Search(min, max, &indexFindCallback, (void*)findResult);
 }
 
@@ -456,8 +456,8 @@ void Layer::reIndex()
         Feature* f = p->Features.at(i);
         CoordBox bb = f->boundingBox();
         if (!bb.isNull()) {
-            int min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
-            int max[] = {bb.topRight().lon(), bb.topRight().lat()};
+            double min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
+            double max[] = {bb.topRight().lon(), bb.topRight().lat()};
             p->theRTree.Insert(min, max, f);
         }
     }
@@ -477,8 +477,8 @@ void Layer::reIndex(QProgressDialog * progress)
             Feature* f = p->Features.at(i);
             CoordBox bb = f->boundingBox();
             if (!bb.isNull()) {
-                int min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
-                int max[] = {bb.topRight().lon(), bb.topRight().lat()};
+                double min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
+                double max[] = {bb.topRight().lon(), bb.topRight().lat()};
                 p->theRTree.Insert(min, max, f);
             }
         }
@@ -621,10 +621,10 @@ bool DrawingLayer::toXML(QDomElement& xParent, QProgressDialog * progress)
         QDomElement bb = xParent.ownerDocument().createElement("bound");
         o.appendChild(bb);
         CoordBox layBB = boundingBox();
-        QString S = QString().number(intToAng(layBB.bottomLeft().lat()),'f',6) + ",";
-        S += QString().number(intToAng(layBB.bottomLeft().lon()),'f',6) + ",";
-        S += QString().number(intToAng(layBB.topRight().lat()),'f',6) + ",";
-        S += QString().number(intToAng(layBB.topRight().lon()),'f',6);
+        QString S = QString().number(coordToAng(layBB.bottomLeft().lat()),'f',6) + ",";
+        S += QString().number(coordToAng(layBB.bottomLeft().lon()),'f',6) + ",";
+        S += QString().number(coordToAng(layBB.topRight().lat()),'f',6) + ",";
+        S += QString().number(coordToAng(layBB.topRight().lon()),'f',6);
         bb.setAttribute("box", S);
         bb.setAttribute("origin", QString("http://www.openstreetmap.org/api/%1").arg(M_PREFS->apiVersion()));
     }
@@ -757,7 +757,7 @@ void TrackLayer::extractLayer()
     Node* P;
     QList<Node*> PL;
 
-    const double coordPer10M = (double(INT_MAX) * 2 / 40080000) * 2;
+    const double coordPer10M = (double(COORD_MAX) * 2 / 40080000) * 2;
 
     for (int i=0; i < size(); i++) {
         if (TrackSegment* S = dynamic_cast<TrackSegment*>(get(i))) {
@@ -1272,7 +1272,7 @@ void OsbLayer::preload()
 
 void OsbLayer::get(const CoordBox& hz, QList<Feature*>& theFeatures)
 {
-    if (intToAng(pp->theVP.lonDiff()) > M_PREFS->getRegionTo0Threshold()) {
+    if (coordToAng(pp->theVP.lonDiff()) > M_PREFS->getRegionTo0Threshold()) {
 //		Layer::get(hz, theFeatures);
         return;
     } else {
@@ -1316,17 +1316,17 @@ void OsbLayer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures
             pp->theVP.merge(invalidRects[i]);
     }
 
-    QRectF r(pp->theVP.toQRectF());
+    QRectF r(pp->theVP.toRectF());
 
-    int xr1 = int((r.topLeft().x() + INT_MAX) / REGION_WIDTH);
-    int yr1 = int((r.topLeft().y() + INT_MAX) / REGION_WIDTH);
-    int xr2 = int((r.bottomRight().x() + INT_MAX) / REGION_WIDTH);
-    int yr2 = int((r.bottomRight().y() + INT_MAX) / REGION_WIDTH);
+    int xr1 = int((r.topLeft().x() + COORD_MAX) / REGION_WIDTH);
+    int yr1 = int((r.topLeft().y() + COORD_MAX) / REGION_WIDTH);
+    int xr2 = int((r.bottomRight().x() + COORD_MAX) / REGION_WIDTH);
+    int yr2 = int((r.bottomRight().y() + COORD_MAX) / REGION_WIDTH);
 
-    int xt1 = int((r.topLeft().x() + INT_MAX) / TILE_WIDTH);
-    int yt1 = int((r.topLeft().y() + INT_MAX) / TILE_WIDTH);
-    int xt2 = int((r.bottomRight().x() + INT_MAX) / TILE_WIDTH);
-    int yt2 = int((r.bottomRight().y() + INT_MAX) / TILE_WIDTH);
+    int xt1 = int((r.topLeft().x() + COORD_MAX) / TILE_WIDTH);
+    int yt1 = int((r.topLeft().y() + COORD_MAX) / TILE_WIDTH);
+    int xt2 = int((r.bottomRight().x() + COORD_MAX) / TILE_WIDTH);
+    int yt2 = int((r.bottomRight().y() + COORD_MAX) / TILE_WIDTH);
 
     pp->rl = 0;
     pp->ri = pp->theImp->theRegionToc.constBegin();
@@ -1336,7 +1336,7 @@ void OsbLayer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures
 
     blockIndexing(true);
 
-    if (intToAng(pp->theVP.lonDiff()) <= M_PREFS->getRegionTo0Threshold()) {
+    if (coordToAng(pp->theVP.lonDiff()) <= M_PREFS->getRegionTo0Threshold()) {
         for (int j=yr1; j <= yr2; ++j)
             for (int i=xr1; i <= xr2; ++i) {
                 pp->loadRegion(theDocument, j*NUM_REGIONS+i);
@@ -1344,7 +1344,7 @@ void OsbLayer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures
     }
 
     pp->rl = 0;
-    if (intToAng(pp->theVP.lonDiff()) <= M_PREFS->getTileToRegionThreshold()) {
+    if (coordToAng(pp->theVP.lonDiff()) <= M_PREFS->getTileToRegionThreshold()) {
         for (int j=yt1; j <= yt2; ++j)
             for (int i=xt1; i <= xt2; ++i)
                 pp->handleTile(theDocument, j*NUM_TILES+i);
@@ -1357,7 +1357,7 @@ void OsbLayer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures
     }
 
     pp->rl = 1;
-    if (intToAng(pp->theVP.lonDiff()) <= M_PREFS->getRegionTo0Threshold()) {
+    if (coordToAng(pp->theVP.lonDiff()) <= M_PREFS->getRegionTo0Threshold()) {
         for (int j=yr1; j <= yr2; ++j)
             for (int i=xr1; i <= xr2; ++i) {
                 pp->clearRegion(theDocument, j*NUM_REGIONS+i);
@@ -1373,7 +1373,7 @@ void OsbLayer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures
 
     blockIndexing(false);
 
-    if (intToAng(pp->theVP.lonDiff()) > M_PREFS->getRegionTo0Threshold()) {
+    if (coordToAng(pp->theVP.lonDiff()) > M_PREFS->getRegionTo0Threshold()) {
         Layer::getFeatureSet(theFeatures, theCoastlines, theDocument,
                    invalidRects, clipRect, theProjection, theTransform);
     } else {
@@ -1458,10 +1458,10 @@ bool OsbLayer::toXML(QDomElement& xParent, QProgressDialog * progress)
 //		QDomElement bb = xParent.ownerDocument().createElement("bound");
 //		o.appendChild(bb);
 //		CoordBox layBB = boundingBox();
-//		QString S = QString().number(intToAng(layBB.bottomLeft().lat()),'f',6) + ",";
-//		S += QString().number(intToAng(layBB.bottomLeft().lon()),'f',6) + ",";
-//		S += QString().number(intToAng(layBB.topRight().lat()),'f',6) + ",";
-//		S += QString().number(intToAng(layBB.topRight().lon()),'f',6);
+//		QString S = QString().number(coordToAng(layBB.bottomLeft().lat()),'f',6) + ",";
+//		S += QString().number(coordToAng(layBB.bottomLeft().lon()),'f',6) + ",";
+//		S += QString().number(coordToAng(layBB.topRight().lat()),'f',6) + ",";
+//		S += QString().number(coordToAng(layBB.topRight().lon()),'f',6);
 //		bb.setAttribute("box", S);
 //		bb.setAttribute("origin", QString("http://www.openstreetmap.org/api/%1").arg(M_PREFS->apiVersion()));
 //	}

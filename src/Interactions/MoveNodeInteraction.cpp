@@ -256,10 +256,10 @@ Coord MoveNodeInteraction::calculateNewPosition(QMouseEvent *event, Feature *aLa
         return Pt->position();
     else if (Way* R = dynamic_cast<Way*>(aLast))
     {
-        QPoint Target(TargetC.lat(),TargetC.lon());
+        QPointF Target = TargetC.toPointF();
         LineF L1(R->getNode(0)->position(),R->getNode(1)->position());
         double Dist = L1.capDistance(TargetC);
-        QPoint BestTarget = L1.project(Target).toPoint();
+        QPointF BestTarget = L1.project(Target);
         int BestIdx = 1;
         for (int i=2; i<R->size(); ++i)
         {
@@ -268,7 +268,7 @@ Coord MoveNodeInteraction::calculateNewPosition(QMouseEvent *event, Feature *aLa
             if (Dist2 < Dist)
             {
                 Dist = Dist2;
-                BestTarget = L2.project(Target).toPoint();
+                BestTarget = L2.project(Target);
                 BestIdx = i;
             }
         }

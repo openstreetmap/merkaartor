@@ -9,7 +9,7 @@
 #include <QtDebug>
 #include <QtXml>
 
-#define COORD_MAX INT_MAX
+#define COORD_MAX 180.0
 
 inline double angToRad(double a)
 {
@@ -21,24 +21,26 @@ inline double radToAng(double a)
     return a*180/M_PI;
 }
 
-inline int angToCoord(double a)
+#define angToCoord(a) a
+//inline double  angToCoord(double a)
+//{
+//    return a;
+//}
+
+#define coordToAng(a) a
+//inline double coordToAng(double a)
+//{
+//    return a;
+//}
+
+inline double coordToRad(double a)
 {
-    return qRound(a/180.0*COORD_MAX);
+    return angToRad(a);
 }
 
-inline double coordToAng(int a)
+inline double radToCoord(double x)
 {
-    return double(a)*180./COORD_MAX;
-}
-
-inline double coordToRad(int a)
-{
-    return double(a)*M_PI/COORD_MAX;
-}
-
-inline int radToCoord(double x)
-{
-    return qRound(x/M_PI*COORD_MAX);
+    return radToAng(x);
 }
 
 class Coord
@@ -52,7 +54,7 @@ class Coord
             : Lat(P.x()), Lon(P.y()) {}
         Coord(const QPointF& P)
             : Lat(qRound(P.x())), Lon(qRound(P.y())) {}
-        Coord(int aLat, int aLon)
+        Coord(double aLat, double aLon)
             : Lat(aLat), Lon(aLon) {}
 
         bool isNull() const
@@ -60,29 +62,29 @@ class Coord
             return (Lat == 0) && (Lon == 0);
         }
 
-        int lat() const
+        double lat() const
         {
             return Lat;
         }
 
-        int lon() const
+        double lon() const
         {
             return Lon;
         }
 
-        void setLat(int l)
+        void setLat(double l)
         {
             Lat = l;
         }
 
-        void setLon(int l)
+        void setLon(double l)
         {
             Lon = l;
         }
 
         double length() const
         {
-            return sqrt((double)((long)Lat*(long)Lat+(long)Lon*(long)Lon));
+            return sqrt((Lat*Lat+Lon*Lon));
         }
 
         double distanceFrom(const Coord& other) const;
@@ -95,21 +97,21 @@ class Coord
             return QPointF(Lat, Lon);
         }
 
-        QPoint toQPoint() const
+        QPointF toQPointF() const
         {
-            return QPoint(Lon, Lat);
+            return QPointF(Lon, Lat);
         }
 
     private:
-        int Lat;
-        int Lon;
+        double Lat;
+        double Lon;
 };
 
 #ifndef _MOBILE
 #include <ggl/ggl.hpp>
 #include <ggl/geometries/register/point.hpp>
 
-GEOMETRY_REGISTER_POINT_2D_GET_SET(Coord, int, cs::cartesian, lat, lon, setLat, setLon)
+GEOMETRY_REGISTER_POINT_2D_GET_SET(Coord, double, cs::cartesian, lat, lon, setLat, setLon)
 
 #endif
 
@@ -118,7 +120,7 @@ inline Coord operator-(const Coord& A, const Coord& B)
     return Coord(A.lat()-B.lat(),A.lon()-B.lon());
 }
 
-inline Coord operator-(const Coord& A, const int B)
+inline Coord operator-(const Coord& A, const double B)
 {
     return Coord(A.lat()-B,A.lon()-B);
 }
@@ -128,17 +130,17 @@ inline Coord operator+(const Coord& A, const Coord& B)
     return Coord(A.lat()+B.lat(),A.lon()+B.lon());
 }
 
-inline Coord operator+(const Coord& A, const int B)
+inline Coord operator+(const Coord& A, const double B)
 {
     return Coord(A.lat()+B,A.lon()+B);
 }
 
-inline Coord operator*(const Coord& A, int d)
+inline Coord operator*(const Coord& A, double d)
 {
     return Coord(A.lat()*d,A.lon()*d);
 }
 
-inline Coord operator/(const Coord& A, int d)
+inline Coord operator/(const Coord& A, double d)
 {
     if(d==0)
     {
@@ -224,11 +226,11 @@ class CoordBox
             return Coord( BottomLeft.lat() + latDiff()/2, BottomLeft.lon() + lonDiff()/2 );
         }
 
-        quint32 lonDiff() const
+        double lonDiff() const
         {
             return TopRight.lon()-BottomLeft.lon();
         }
-        quint32 latDiff() const
+        double latDiff() const
         {
             return TopRight.lat()-BottomLeft.lat();
         }
@@ -262,14 +264,9 @@ class CoordBox
             return false;
         }
 
-        QRectF toQRectF()
+        QRectF toRectF()
         {
             return QRectF(BottomLeft.lon(), BottomLeft.lat(), lonDiff(), latDiff());
-        }
-
-        QRect toRect()
-        {
-            return QRect(BottomLeft.lon(), BottomLeft.lat(), lonDiff(), latDiff());
         }
 
         void resize(double f);

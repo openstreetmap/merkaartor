@@ -794,7 +794,7 @@ bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
     SlippyMap->setMinimumHeight(256);
 #endif
     CoordBox Clip(aBox);
-    SlippyMap->setViewportArea(Clip.toQRectF());
+    SlippyMap->setViewportArea(Clip.toRectF());
     ui.vboxLayout1->addWidget(SlippyMap);
     QObject::connect(SlippyMap, SIGNAL(redraw()), ui.FromMap, SLOT(toggle()));
     BookmarkListIterator i(*(M_PREFS->getBookmarks()));
