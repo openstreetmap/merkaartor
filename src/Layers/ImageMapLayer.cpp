@@ -493,9 +493,13 @@ void ImageMapLayer::draw(MapView& theView, QRect& rect)
 
 QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect) const
 {
-    QRectF vp = p->theProjection.getProjectedViewport(p->Viewport, rect);
-    QRectF wgs84vp = QRectF(QPointF(intToAng(p->Viewport.bottomLeft().lon()), intToAng(p->Viewport.bottomLeft().lat()))
-                        , QPointF(intToAng(p->Viewport.topRight().lon()), intToAng(p->Viewport.topRight().lat())));
+    QRectF fScreen(rect);
+    CoordBox Viewport(p->theProjection.inverse(p->theTransform.inverted().map(fScreen.bottomLeft())),
+                     p->theProjection.inverse(p->theTransform.inverted().map(fScreen.topRight())));
+    QRectF vp = p->theProjection.getProjectedViewport(Viewport, rect);
+    QRectF wgs84vp = QRectF(QPointF(intToAng(Viewport.bottomLeft().lon()), intToAng(Viewport.bottomLeft().lat()))
+                        , QPointF(intToAng(Viewport.topRight().lon()), intToAng(Viewport.topRight().lat())));
+
     if (p->theMapAdapter->getType() == IMapAdapter::DirectBackground) {
         QPixmap pm = p->theMapAdapter->getPixmap(wgs84vp, vp, rect);
         if (!pm.isNull() && pm.rect() != rect)
@@ -504,12 +508,6 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect) const
             p->pm = pm;
         p->theDelta = QPoint();
     } else {
-        QRectF fScreen(rect);
-        CoordBox Viewport(p->theProjection.inverse(p->theTransform.inverted().map(fScreen.bottomLeft())),
-                         p->theProjection.inverse(p->theTransform.inverted().map(fScreen.topRight())));
-        QRectF vp = p->theProjection.getProjectedViewport(Viewport, rect);
-        QRectF wgs84vp = QRectF(QPointF(intToAng(Viewport.bottomLeft().lon()), intToAng(Viewport.bottomLeft().lat()))
-                            , QPointF(intToAng(Viewport.topRight().lon()), intToAng(Viewport.topRight().lat())));
         QString url (p->theMapAdapter->getQuery(wgs84vp, vp, rect));
         if (!url.isEmpty()) {
 
@@ -521,14 +519,10 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect) const
                 p->theDelta = QPoint();
             }
         }
-        const QPointF bl = theView.toView(Viewport.bottomLeft());
-        const QPointF tr = theView.toView(Viewport.topRight());
-
-        return QRectF(bl.x(), tr.y(), tr.x() - bl.x(), bl.y() - tr.y()).toRect();
     }
 
-    const QPointF bl = theView.toView(p->Viewport.bottomLeft());
-    const QPointF tr = theView.toView(p->Viewport.topRight());
+    const QPointF bl = theView.toView(Viewport.bottomLeft());
+    const QPointF tr = theView.toView(Viewport.topRight());
 
     return QRectF(bl.x(), tr.y(), tr.x() - bl.x(), bl.y() - tr.y()).toRect();
 }
