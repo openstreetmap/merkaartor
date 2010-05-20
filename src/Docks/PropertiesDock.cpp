@@ -504,8 +504,8 @@ void PropertiesDock::resetValues()
         if ((Pt) && (NowShowing == TrackPointUiShowing))
         {
             TrackPointUi.Id->setText(Pt->id());
-            TrackPointUi.Latitude->setText(QString::number(intToAng(Pt->position().lat()),'g',8));
-            TrackPointUi.Longitude->setText(QString::number(intToAng(Pt->position().lon()),'g',8));
+            TrackPointUi.Latitude->setText(QString::number(coordToAng(Pt->position().lat()),'g',8));
+            TrackPointUi.Longitude->setText(QString::number(coordToAng(Pt->position().lon()),'g',8));
             TrackPointUi.TagView->setModel(theModel);
             TrackPointUi.TagView->setItemDelegate(delegate);
 
@@ -625,7 +625,7 @@ void PropertiesDock::on_TrackPointLat_editingFinished()
     {
         Main->document()->addHistory(
             new MoveNodeCommand(Pt,
-                Coord(angToInt(TrackPointUi.Latitude->text().toDouble()),Pt->position().lon()), Main->document()->getDirtyOrOriginLayer(Pt->layer()) ));
+                Coord(angToCoord(TrackPointUi.Latitude->text().toDouble()),Pt->position().lon()), Main->document()->getDirtyOrOriginLayer(Pt->layer()) ));
         Main->invalidateView(false);
     }
 }
@@ -638,7 +638,7 @@ void PropertiesDock::on_TrackPointLon_editingFinished()
     {
         Main->document()->addHistory(
             new MoveNodeCommand(Pt,
-                Coord(Pt->position().lat(),angToInt(TrackPointUi.Longitude->text().toDouble())), Main->document()->getDirtyOrOriginLayer(Pt->layer()) ));
+                Coord(Pt->position().lat(),angToCoord(TrackPointUi.Longitude->text().toDouble())), Main->document()->getDirtyOrOriginLayer(Pt->layer()) ));
         Main->invalidateView(false);
     }
 }

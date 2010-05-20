@@ -308,7 +308,7 @@ IImageManager* GdalAdapter::getImageManager()
     return NULL;
 }
 
-void GdalAdapter::setImageManager(IImageManager* anImageManager)
+void GdalAdapter::setImageManager(IImageManager* /*anImageManager*/)
 {
 }
 

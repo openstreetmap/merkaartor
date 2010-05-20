@@ -17,6 +17,13 @@
 #include <QTextEdit>
 #include <QComboBox>
 
+// from wikipedia
+#define EQUATORIALRADIUS 6378137.0
+#define POLARRADIUS      6356752.0
+#define EQUATORIALMETERCIRCUMFERENCE  40075016.68
+#define EQUATORIALMETERHALFCIRCUMFERENCE  20037508.34
+#define EQUATORIALMETERPERDEGREE    111319490.79
+
 WMSPreferencesDialog::WMSPreferencesDialog(QWidget* parent)
     : QDialog(parent)
 {
@@ -62,7 +69,7 @@ void WMSPreferencesDialog::generateWmscLayer()
         selWmscLayer.BoundingBox = QRectF(QPointF(-180, -90.), QPointF(180., 90.));
         startRes = 0.703125;
     } else {
-        selWmscLayer.BoundingBox = QRectF(QPointF(-20037508.34, -20037508.34), QPointF(20037508.34, 20037508.34));
+        selWmscLayer.BoundingBox = QRectF(QPointF(-EQUATORIALMETERHALFCIRCUMFERENCE, -EQUATORIALMETERHALFCIRCUMFERENCE), QPointF(EQUATORIALMETERHALFCIRCUMFERENCE, EQUATORIALMETERHALFCIRCUMFERENCE));
         startRes = 156543.03;
     }
     selWmscLayer.Resolutions.clear();

@@ -497,8 +497,8 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect) const
     CoordBox Viewport(p->theProjection.inverse(p->theTransform.inverted().map(fScreen.bottomLeft())),
                      p->theProjection.inverse(p->theTransform.inverted().map(fScreen.topRight())));
     QRectF vp = p->theProjection.getProjectedViewport(Viewport, rect);
-    QRectF wgs84vp = QRectF(QPointF(intToAng(Viewport.bottomLeft().lon()), intToAng(Viewport.bottomLeft().lat()))
-                        , QPointF(intToAng(Viewport.topRight().lon()), intToAng(Viewport.topRight().lat())));
+    QRectF wgs84vp = QRectF(QPointF(coordToAng(Viewport.bottomLeft().lon()), coordToAng(Viewport.bottomLeft().lat()))
+                        , QPointF(coordToAng(Viewport.topRight().lon()), coordToAng(Viewport.topRight().lat())));
 
     if (p->theMapAdapter->getType() == IMapAdapter::DirectBackground) {
         QPixmap pm = p->theMapAdapter->getPixmap(wgs84vp, vp, rect);

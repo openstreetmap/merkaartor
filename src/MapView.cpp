@@ -229,10 +229,10 @@ void MapView::paintEvent(QPaintEvent * anEvent)
     P.end();
 
     Main->ViewportStatusLabel->setText(QString("%1,%2,%3,%4")
-        .arg(QString::number(intToAng(viewport().bottomLeft().lon()),'f',4))
-        .arg(QString::number(intToAng(viewport().bottomLeft().lat()),'f',4))
-        .arg(QString::number(intToAng(viewport().topRight().lon()),'f',4))
-        .arg(QString::number(intToAng(viewport().topRight().lat()),'f',4))
+        .arg(QString::number(coordToAng(viewport().bottomLeft().lon()),'f',4))
+        .arg(QString::number(coordToAng(viewport().bottomLeft().lat()),'f',4))
+        .arg(QString::number(coordToAng(viewport().topRight().lon()),'f',4))
+        .arg(QString::number(coordToAng(viewport().topRight().lat()),'f',4))
         );
 
 #ifndef NDEBUG
@@ -287,7 +287,7 @@ void MapView::drawGPS(QPainter & P)
 {
     if (Main->gps()->getGpsDevice()) {
         if (Main->gps()->getGpsDevice()->fixStatus() == QGPSDevice::StatusActive) {
-            Coord vp(angToInt(Main->gps()->getGpsDevice()->latitude()), angToInt(Main->gps()->getGpsDevice()->longitude()));
+            Coord vp(angToCoord(Main->gps()->getGpsDevice()->latitude()), angToCoord(Main->gps()->getGpsDevice()->longitude()));
             QPointF g = p->theTransform.map(projection().project(vp));
             QPixmap pm = getPixmapFromFile(":/Gps/Gps_Marker.svg", 32);
             P.drawPixmap(g - QPoint(16, 16), pm);
@@ -420,26 +420,26 @@ void MapView::drawLatLonGrid(QPainter & P)
     if (!M_PREFS->getLatLonGridVisible())
         return;
 
-    int lonInterval = angToInt(0.002/p->ZoomLevel);
-    int latInterval = angToInt(0.002/p->ZoomLevel);
+    int lonInterval = angToCoord(0.002/p->ZoomLevel);
+    int latInterval = angToCoord(0.002/p->ZoomLevel);
     if (!lonInterval || !latInterval) return; // avoid divide-by-zero
-    int lonStart = qMax(int(p->Viewport.bottomLeft().lon() / lonInterval) * lonInterval, -INT_MAX);
-    int latStart = qMax(int(p->Viewport.bottomLeft().lat() / latInterval) * latInterval, -INT_MAX/2);
+    int lonStart = qMax(int(p->Viewport.bottomLeft().lon() / lonInterval) * lonInterval, -COORD_MAX);
+    int latStart = qMax(int(p->Viewport.bottomLeft().lat() / latInterval) * latInterval, -COORD_MAX/2);
 
     QList<QPolygonF> medianLines;
     QList<QPolygonF> parallelLines;
 
-    for (double y=latStart; y<=qMin(p->Viewport.topLeft().lat()+latInterval, INT_MAX/2); y+=latInterval) {
+    for (double y=latStart; y<=qMin(p->Viewport.topLeft().lat()+latInterval, COORD_MAX/2); y+=latInterval) {
         QPolygonF l;
-        for (double x=lonStart; x<=qMin(p->Viewport.bottomRight().lon()+lonInterval, INT_MAX); x+=lonInterval) {
+        for (double x=lonStart; x<=qMin(p->Viewport.bottomRight().lon()+lonInterval, COORD_MAX); x+=lonInterval) {
             QPointF pt = QPointF(theProjection.project(Coord(qRound(y), qRound(x))));
             l << pt;
         }
         parallelLines << l;
     }
-    for (double x=lonStart; x<=qMin(p->Viewport.bottomRight().lon()+lonInterval, INT_MAX); x+=lonInterval) {
+    for (double x=lonStart; x<=qMin(p->Viewport.bottomRight().lon()+lonInterval, COORD_MAX); x+=lonInterval) {
         QPolygonF l;
-        for (double y=latStart; y<=qMin(p->Viewport.topLeft().lat()+latInterval, INT_MAX/2); y+=latInterval) {
+        for (double y=latStart; y<=qMin(p->Viewport.topLeft().lat()+latInterval, COORD_MAX/2); y+=latInterval) {
             QPointF pt = QPointF(theProjection.project(Coord(qRound(y), qRound(x))));
             l << pt;
         }
@@ -455,7 +455,7 @@ void MapView::drawLatLonGrid(QPainter & P)
         P.drawPolyline(p->theTransform.map(parallelLines[i]));
         QPoint pt = QPoint(0, p->theTransform.map(parallelLines.at(i).at(0)).y());
         QPoint ptt = pt + QPoint(5, -5);
-        P.drawText(ptt, QString("%1").arg(intToAng(theProjection.inverse(parallelLines.at(i).at(0)).lat()), 0, 'f', 2));
+        P.drawText(ptt, QString("%1").arg(coordToAng(theProjection.inverse(parallelLines.at(i).at(0)).lat()), 0, 'f', 2));
     }
     for (int i=0; i<medianLines.size(); ++i) {
 
@@ -465,7 +465,7 @@ void MapView::drawLatLonGrid(QPainter & P)
         P.drawPolyline(p->theTransform.map(medianLines[i]));
         QPoint pt = QPoint(p->theTransform.map(medianLines.at(i).at(0)).x(), 0);
         QPoint ptt = pt + QPoint(5, 10);
-        P.drawText(ptt, QString("%1").arg(intToAng(theProjection.inverse(medianLines.at(i).at(0)).lon()), 0, 'f', 2));
+        P.drawText(ptt, QString("%1").arg(coordToAng(theProjection.inverse(medianLines.at(i).at(0)).lon()), 0, 'f', 2));
     }
 }
 
@@ -1031,7 +1031,7 @@ void MapView::setViewport(const CoordBox & TargetMap,
     viewportRecalc(Screen);
 
     if (theProjection.projIsLatLong()) {
-        p->PixelPerM = Screen.width() / (double)p->Viewport.lonDiff() * LAT_ANG_PER_M / M_PI * INT_MAX;
+        p->PixelPerM = Screen.width() / (double)p->Viewport.lonDiff() * LAT_ANG_PER_M / M_PI * COORD_MAX;
     } else {
         QRectF vp = theProjection.getProjectedViewport(p->Viewport, Screen);
         p->PixelPerM = Screen.width() / vp.width();
@@ -1117,7 +1117,7 @@ void MapView::zoom(double d, const QPoint & Around,
     viewportRecalc(Screen);
 
     if (theProjection.projIsLatLong()) {
-        p->PixelPerM = Screen.width() / (double)p->Viewport.lonDiff() * LAT_ANG_PER_M / M_PI * INT_MAX;
+        p->PixelPerM = Screen.width() / (double)p->Viewport.lonDiff() * LAT_ANG_PER_M / M_PI * COORD_MAX;
     } else {
         QRectF vp = theProjection.getProjectedViewport(p->Viewport, Screen);
         p->PixelPerM = Screen.width() / vp.width();

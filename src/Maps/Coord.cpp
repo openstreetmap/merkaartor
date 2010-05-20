@@ -71,14 +71,14 @@ double Coord::distanceFrom(const Coord& other) const
 {
 	int dlon = other.lon() - lon();
 
-	const double slat1 = sin(intToRad(lat()));
-	const double clat1 = cos(intToRad(lat()));
+	const double slat1 = sin(coordToRad(lat()));
+	const double clat1 = cos(coordToRad(lat()));
 
-	const double slat2 = sin(intToRad(other.lat()));
-	const double clat2 = cos(intToRad(other.lat()));
+	const double slat2 = sin(coordToRad(other.lat()));
+	const double clat2 = cos(coordToRad(other.lat()));
 
-	const double sdlon = sin(intToRad(dlon));
-	const double cdlon = cos(intToRad(dlon));
+	const double sdlon = sin(coordToRad(dlon));
+	const double cdlon = cos(coordToRad(dlon));
 
 	const double t1 = clat2 * sdlon;
 	const double t2 = clat1 * slat2 - slat1 * clat2 * cdlon;
@@ -96,16 +96,16 @@ bool Coord::toXML(QString elName, QDomElement& xParent) const
 	QDomElement e = xParent.ownerDocument().createElement(elName);
 	xParent.appendChild(e);
 
-	e.setAttribute("lon",QString::number(intToAng(Lon),'f',8));
-	e.setAttribute("lat", QString::number(intToAng(Lat),'f',8));
+	e.setAttribute("lon",QString::number(coordToAng(Lon),'f',8));
+	e.setAttribute("lat", QString::number(coordToAng(Lat),'f',8));
 
 	return OK;
 }
 
 Coord Coord::fromXML(QDomElement e)
 {
-	int lat = angToInt(e.attribute("lat").toDouble());
-	int lon = angToInt(e.attribute("lon").toDouble());
+	int lat = angToCoord(e.attribute("lat").toDouble());
+	int lon = angToCoord(e.attribute("lon").toDouble());
 
 	return Coord(lat, lon);
 }

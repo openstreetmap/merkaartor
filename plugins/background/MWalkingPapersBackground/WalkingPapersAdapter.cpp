@@ -32,6 +32,13 @@
 #include <zbar/QZBarImage.h>
 #endif
 
+// from wikipedia
+#define EQUATORIALRADIUS 6378137.0
+#define POLARRADIUS      6356752.0
+#define EQUATORIALMETERCIRCUMFERENCE  40075016.68
+#define EQUATORIALMETERHALFCIRCUMFERENCE  20037508.34
+#define EQUATORIALMETERPERDEGREE    111319490.79
+
 static const QUuid theUid ("{c580b2bc-dd14-40b2-8bb6-241da2a1fdb3}");
 
 #define FILTER_OPEN_SUPPORTED \
@@ -45,8 +52,8 @@ double angToRad(double a)
 
 QPointF mercatorProject(const QPointF& c)
 {
-    double x = angToRad(c.x()) / M_PI * 20037508.34;
-    double y = log(tan(angToRad(c.y())) + 1/cos(angToRad(c.y()))) / M_PI * (20037508.34);
+    double x = angToRad(c.x()) / M_PI * EQUATORIALMETERHALFCIRCUMFERENCE;
+    double y = log(tan(angToRad(c.y())) + 1/cos(angToRad(c.y()))) / M_PI * (EQUATORIALMETERHALFCIRCUMFERENCE);
 
     return QPointF(x, y);
 }
@@ -269,7 +276,7 @@ QString WalkingPapersAdapter::projection() const
     return "EPSG:900913";
 }
 
-QPixmap WalkingPapersAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& projBbox, const QRect& src) const
+QPixmap WalkingPapersAdapter::getPixmap(const QRectF& wgs84Bbox, const QRectF& /*projBbox*/, const QRect& src) const
 {
     QPixmap pix(src.size());
     pix.fill(Qt::transparent);
@@ -318,7 +325,7 @@ IImageManager* WalkingPapersAdapter::getImageManager()
     return NULL;
 }
 
-void WalkingPapersAdapter::setImageManager(IImageManager* anImageManager)
+void WalkingPapersAdapter::setImageManager(IImageManager* /*anImageManager*/)
 {
 }
 

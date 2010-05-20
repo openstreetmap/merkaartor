@@ -120,18 +120,18 @@ QRect SlippyMapWidget::viewArea() const
 	double X2 = p->Lat + (width()/2.0)/TILESIZE;
 	double Y2 = p->Lon + (height()/2.0)/TILESIZE;
 
-	int Lon1 = angToInt(tile2lon(X1, p->Zoom));
-	int Lat1 = angToInt(tile2lat(Y1, p->Zoom));
+	int Lon1 = angToCoord(tile2lon(X1, p->Zoom));
+	int Lat1 = angToCoord(tile2lat(Y1, p->Zoom));
 
-	int Lon2 = angToInt(tile2lon(X2, p->Zoom));
-	int Lat2 = angToInt(tile2lat(Y2, p->Zoom));
+	int Lon2 = angToCoord(tile2lon(X2, p->Zoom));
+	int Lat2 = angToCoord(tile2lat(Y2, p->Zoom));
 
 	return QRect(Lon1, Lat2, Lon2-Lon1, Lat1-Lat2);
 }
 
 void SlippyMapWidget::setViewportArea(QRectF theRect)
 {
-    double zoom = 360.0 / intToAng(int(theRect.width()));
+    double zoom = 360.0 / coordToAng(int(theRect.width()));
 	zoom = log10(zoom)/log10(2.0);
 	if (zoom < MINZOOMLEVEL)
 		zoom = MINZOOMLEVEL;
@@ -139,8 +139,8 @@ void SlippyMapWidget::setViewportArea(QRectF theRect)
 		zoom = MAXZOOMLEVEL;
 	p->VpZoom = int(zoom);
 
-    p->VpLon = long2tile(intToAng(int(theRect.topRight().x())), p->VpZoom);
-    p->VpLat = lat2tile(intToAng(int(theRect.topRight().y())), p->VpZoom);
+    p->VpLon = long2tile(coordToAng(int(theRect.topRight().x())), p->VpZoom);
+    p->VpLat = lat2tile(coordToAng(int(theRect.topRight().y())), p->VpZoom);
 }
 
 void SlippyMapWidget::paintEvent(QPaintEvent*)

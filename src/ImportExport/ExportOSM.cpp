@@ -47,10 +47,10 @@ QString exportOSM(const Node& Pt, const QString& ChangesetId)
     QString S;
     if (ChangesetId.isEmpty())
         S += QString("<node id=\"%1\" lat=\"%2\" lon=\"%3\"%4>")
-            .arg(stripToOSMId(Pt.id())).arg(intToAng(Pt.position().lat()),0,'f',8).arg(intToAng(Pt.position().lon()),0,'f',8).arg(versionAttribute(Pt));
+            .arg(stripToOSMId(Pt.id())).arg(coordToAng(Pt.position().lat()),0,'f',8).arg(coordToAng(Pt.position().lon()),0,'f',8).arg(versionAttribute(Pt));
     else
         S += QString("<node id=\"%1\" lat=\"%2\" lon=\"%3\"%4 changeset=\"%5\">")
-            .arg(stripToOSMId(Pt.id())).arg(intToAng(Pt.position().lat()),0,'f',8).arg(intToAng(Pt.position().lon()),0,'f',8).arg(versionAttribute(Pt))
+            .arg(stripToOSMId(Pt.id())).arg(coordToAng(Pt.position().lat()),0,'f',8).arg(coordToAng(Pt.position().lon()),0,'f',8).arg(versionAttribute(Pt))
             .arg(ChangesetId);
     S+=tagOSM(Pt);
     S+="</node>";

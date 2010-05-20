@@ -35,7 +35,7 @@ class MapView;
 class IMapAdapter;
 
 //#define WORLD_COORDBOX CoordBox(Coord(1.3, -1.3), Coord(-1.3, 1.3))
-#define WORLD_COORDBOX CoordBox(Coord(INT_MAX/4, -INT_MAX/4), Coord(-INT_MAX/4, INT_MAX/4))
+#define WORLD_COORDBOX CoordBox(Coord(COORD_MAX/4, -COORD_MAX/4), Coord(-COORD_MAX/4, COORD_MAX/4))
 #define BUILTIN_STYLES_DIR ":/Styles"
 #define BUILTIN_TEMPLATES_DIR ":/Templates"
 #define M_PREFS MerkaartorPreferences::instance()

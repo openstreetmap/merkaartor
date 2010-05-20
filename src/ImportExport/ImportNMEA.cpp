@@ -214,7 +214,7 @@ Node* ImportNMEA::importRMC (QString line)
 		date = date.addYears(100);
 	//date.setTimeSpec(Qt::UTC);
 
-	Node* Pt = new Node(Coord(angToInt(lat),angToInt(lon)));
+	Node* Pt = new Node(Coord(angToCoord(lat),angToCoord(lon)));
 	Pt->setLastUpdated(Feature::Log);
 	Pt->setElevation(curAltitude);
 	Pt->setSpeed(speed);

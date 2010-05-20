@@ -103,7 +103,7 @@ bool ImportExportKML::export_(const QList<Feature *>& featList)
 			QString s;
 			for (int j=0; j<R->size(); ++j) {
 				Node* N = dynamic_cast<Node*>(R->get(j));
-				s += QString(" %1,%2").arg(QString::number(intToAng(N->position().lon()),'f',8)).arg(QString::number(intToAng(N->position().lat()),'f',8));
+				s += QString(" %1,%2").arg(QString::number(coordToAng(N->position().lon()),'f',8)).arg(QString::number(coordToAng(N->position().lat()),'f',8));
 			}
 
 			QDomText v = theXmlDoc.createTextNode(s);
@@ -158,7 +158,7 @@ bool ImportExportKML::export_(const QList<Feature *>& featList)
 			l.appendChild(c);
 			
 			QString s;
-			s += QString(" %1,%2").arg(QString::number(intToAng(N->position().lon()),'f',8)).arg(QString::number(intToAng(N->position().lat()),'f',8));
+			s += QString(" %1,%2").arg(QString::number(coordToAng(N->position().lon()),'f',8)).arg(QString::number(coordToAng(N->position().lat()),'f',8));
 
 			QDomText v = theXmlDoc.createTextNode(s);
 			c.appendChild(v);
@@ -186,7 +186,7 @@ Feature* parsePoint(QDomElement& e, Layer* aLayer)
 			QStringList tokens = s.split(",");
 			double lon = tokens[0].toDouble();
 			double lat = tokens[1].toDouble();
-			Coord p(angToInt(lat), angToInt(lon));
+			Coord p(angToCoord(lat), angToCoord(lon));
 
 			P = new Node(p);
 			P->setTag("%kml:guid", kmlId);

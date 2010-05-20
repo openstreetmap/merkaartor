@@ -77,7 +77,7 @@ Node *ImportExportSHP::nodeFor(const OGRPoint p)
         return pointHash[p];
     }
 
-    return pointHash[p] = new Node(Coord(angToInt(p.getY()), angToInt(p.getX())));
+    return pointHash[p] = new Node(Coord(angToCoord(p.getY()), angToCoord(p.getX())));
 }
 
 // IMPORT

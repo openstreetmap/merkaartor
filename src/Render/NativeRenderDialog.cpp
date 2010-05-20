@@ -45,10 +45,10 @@ NativeRenderDialog::NativeRenderDialog(Document *aDoc, const CoordBox& aCoordBox
     cbShowBorders->setCheckState((Qt::CheckState)Sets->value("cbShowBorders", "1").toInt());
     cbShowLicense->setCheckState((Qt::CheckState)Sets->value("cbShowLicense", "1").toInt());
 
-    sbMinLat->setValue(intToAng(aCoordBox.bottomLeft().lat()));
-    sbMaxLat->setValue(intToAng(aCoordBox.topLeft().lat()));
-    sbMinLon->setValue(intToAng(aCoordBox.topLeft().lon()));
-    sbMaxLon->setValue(intToAng(aCoordBox.topRight().lon()));
+    sbMinLat->setValue(coordToAng(aCoordBox.bottomLeft().lat()));
+    sbMaxLat->setValue(coordToAng(aCoordBox.topLeft().lat()));
+    sbMinLon->setValue(coordToAng(aCoordBox.topLeft().lon()));
+    sbMaxLon->setValue(coordToAng(aCoordBox.topRight().lon()));
 
     sbPreviewHeight->blockSignals(true);
     sbPreviewHeight->setValue(Sets->value("sbPreviewHeight", "600").toInt());
@@ -111,11 +111,11 @@ void NativeRenderDialog::render()
     vw->setDocument(mw->document());
 
     CoordBox VP(Coord(
-        angToInt(sbMinLat->value()),
-        angToInt(sbMinLon->value())
+        angToCoord(sbMinLat->value()),
+        angToCoord(sbMinLon->value())
         ), Coord(
-        angToInt(sbMaxLat->value()),
-        angToInt(sbMaxLon->value())
+        angToCoord(sbMaxLat->value()),
+        angToCoord(sbMaxLon->value())
     ));
 
     Projection aProj;
@@ -165,11 +165,11 @@ void NativeRenderDialog::render()
 void NativeRenderDialog::calcRatio()
 {
     CoordBox theB(Coord(
-        angToInt(sbMinLat->value()),
-        angToInt(sbMinLon->value())
+        angToCoord(sbMinLat->value()),
+        angToCoord(sbMinLon->value())
         ), Coord(
-        angToInt(sbMaxLat->value()),
-        angToInt(sbMaxLon->value())
+        angToCoord(sbMaxLat->value()),
+        angToCoord(sbMaxLon->value())
     ));
     Projection theProj;
     //int w = sbPreviewWidth->value();

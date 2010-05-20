@@ -181,7 +181,7 @@ Feature* ImportCSVDialog::generateOSM(QString line)
     return N;
 }
 
-void ImportCSVDialog::generatePreview(int sel)
+void ImportCSVDialog::generatePreview(int /*sel*/)
 {
     m_dev->seek(0);
     QString line;

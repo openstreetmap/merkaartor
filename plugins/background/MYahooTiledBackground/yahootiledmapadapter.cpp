@@ -25,6 +25,13 @@
 #define M_PI        3.14159265358979323846
 #endif
 
+// from wikipedia
+#define EQUATORIALRADIUS 6378137.0
+#define POLARRADIUS      6356752.0
+#define EQUATORIALMETERCIRCUMFERENCE  40075016.68
+#define EQUATORIALMETERHALFCIRCUMFERENCE  20037508.34
+#define EQUATORIALMETERPERDEGREE    111319490.79
+
 // {10F45DE0-E529-11DE-8B99-9E7D56D89593}
 static const QUuid theUid ( 0x10F45DE0, 0xE529, 0x11DE, 0x8B, 0x99, 0x9E, 0x7D, 0x56, 0xD8, 0x95, 0x93);
 
@@ -69,7 +76,7 @@ QString	YahooTiledMapAdapter::getName() const
 
 QRectF	YahooTiledMapAdapter::getBoundingbox() const
 {
-    return QRectF(QPointF(-20037508.34, -20037508.34), QPointF(20037508.34, 20037508.34));
+    return QRectF(QPointF(-EQUATORIALMETERHALFCIRCUMFERENCE, -EQUATORIALMETERHALFCIRCUMFERENCE), QPointF(EQUATORIALMETERHALFCIRCUMFERENCE, EQUATORIALMETERHALFCIRCUMFERENCE));
 }
 
 QString YahooTiledMapAdapter::projection() const
@@ -89,8 +96,8 @@ int YahooTiledMapAdapter::getTilesNS(int zoomlevel) const
 
 static QPointF mercatorInverse(const QPointF& point)
 {
-    qreal longitude = point.x()*180.0/20037508.34;
-    qreal latitude = (atan(sinh(point.y()/20037508.34*M_PI))) *180/M_PI;
+    qreal longitude = point.x()*180.0/EQUATORIALMETERHALFCIRCUMFERENCE;
+    qreal latitude = (atan(sinh(point.y()/EQUATORIALMETERHALFCIRCUMFERENCE*M_PI))) *180/M_PI;
 
     return QPointF(longitude, latitude);
 }
@@ -100,8 +107,8 @@ QString YahooTiledMapAdapter::getQuery(int i, int j, int /* z */) const
     qreal tileWidth = getBoundingbox().width() / getTilesWE(current_zoom);
     qreal tileHeight = getBoundingbox().height() / getTilesNS(current_zoom);
 
-    QPointF ul = mercatorInverse(QPointF(i*tileWidth-20037508.34, 20037508.34-j*tileHeight));
-    QPointF br = mercatorInverse(QPointF((i+1)*tileWidth-20037508.34, 20037508.34- (j+1)*tileHeight));
+    QPointF ul = mercatorInverse(QPointF(i*tileWidth-EQUATORIALMETERHALFCIRCUMFERENCE, EQUATORIALMETERHALFCIRCUMFERENCE-j*tileHeight));
+    QPointF br = mercatorInverse(QPointF((i+1)*tileWidth-EQUATORIALMETERHALFCIRCUMFERENCE, EQUATORIALMETERHALFCIRCUMFERENCE- (j+1)*tileHeight));
 
     return getQ(ul, br);
 }

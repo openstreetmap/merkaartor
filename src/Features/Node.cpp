@@ -389,8 +389,8 @@ bool Node::toXML(QDomElement xParent, QProgressDialog * progress, bool strict)
     xParent.appendChild(e);
 
     e.setAttribute("id", xmlId());
-    e.setAttribute("lon",QString::number(intToAng(Position.lon()),'f',8));
-    e.setAttribute("lat", QString::number(intToAng(Position.lat()),'f',8));
+    e.setAttribute("lon",QString::number(coordToAng(Position.lon()),'f',8));
+    e.setAttribute("lat", QString::number(coordToAng(Position.lat()),'f',8));
     e.setAttribute("timestamp", time().toString(Qt::ISODate)+"Z");
     e.setAttribute("version", versionNumber());
     e.setAttribute("user", user());
@@ -428,8 +428,8 @@ bool Node::toGPX(QDomElement xParent, QProgressDialog * progress, bool forExport
 
     if (!forExport)
         e.setAttribute("xml:id", xmlId());
-    e.setAttribute("lon",QString::number(intToAng(Position.lon()),'f',8));
-    e.setAttribute("lat", QString::number(intToAng(Position.lat()),'f',8));
+    e.setAttribute("lon",QString::number(coordToAng(Position.lon()),'f',8));
+    e.setAttribute("lat", QString::number(coordToAng(Position.lat()),'f',8));
 
     QDomElement c = xParent.ownerDocument().createElement("time");
     e.appendChild(c);
@@ -501,7 +501,7 @@ Node * Node::fromXML(Document* d, Layer* L, const QDomElement e)
         id = "node_" + id;
     Node* Pt = dynamic_cast<Node*>(d->getFeature(id));
     if (!Pt) {
-        Pt = new Node(Coord(angToInt(Lat),angToInt(Lon)));
+        Pt = new Node(Coord(angToCoord(Lat),angToCoord(Lon)));
         Pt->setId(id);
         Pt->setLastUpdated(A);
         L->add(Pt);
@@ -510,7 +510,7 @@ Node * Node::fromXML(Document* d, Layer* L, const QDomElement e)
             Pt->layer()->remove(Pt);
             L->add(Pt);
         }
-        Pt->setPosition(Coord(angToInt(Lat), angToInt(Lon)));
+        Pt->setPosition(Coord(angToCoord(Lat), angToCoord(Lon)));
         if (Pt->lastUpdated() == Feature::NotYetDownloaded)
             Pt->setLastUpdated(A);
     }
@@ -535,12 +535,12 @@ Node * Node::fromGPX(Document* d, Layer* L, const QDomElement e)
 
     Node* Pt = dynamic_cast<Node*>(d->getFeature(id));
     if (!Pt) {
-        Pt = new Node(Coord(angToInt(Lat),angToInt(Lon)));
+        Pt = new Node(Coord(angToCoord(Lat),angToCoord(Lon)));
         Pt->setId(id);
         Pt->setLastUpdated(Feature::Log);
         L->add(Pt);
     } else {
-        Pt->setPosition(Coord(angToInt(Lat), angToInt(Lon)));
+        Pt->setPosition(Coord(angToCoord(Lat), angToCoord(Lon)));
         if (Pt->lastUpdated() == Feature::NotYetDownloaded)
             Pt->setLastUpdated(Feature::OSMServer);
     }
@@ -596,7 +596,7 @@ QString Node::toHtml()
 
 
     D += "<i>"+QApplication::translate("MapFeature", "timestamp")+": </i>" + time().toString(Qt::ISODate) + "<br/>";
-    D += "<i>"+QApplication::translate("MapFeature", "coord")+": </i>" + QString::number(intToAng(position().lat()), 'f', 4) + " / " + QString::number(intToAng(position().lon()), 'f', 4) + "<br/>";
+    D += "<i>"+QApplication::translate("MapFeature", "coord")+": </i>" + QString::number(coordToAng(position().lat()), 'f', 4) + " / " + QString::number(coordToAng(position().lon()), 'f', 4) + "<br/>";
 
     if (elevation())
         D += "<i>"+QApplication::translate("MapFeature", "elevation")+": </i>" + QString::number(elevation(), 'f', 4) + "<br/>";
