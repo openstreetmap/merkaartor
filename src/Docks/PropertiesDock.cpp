@@ -870,8 +870,10 @@ void PropertiesDock::on_btMemberDown_clicked()
         }
         QModelIndexList indexes = CurrentMembersView->selectionModel()->selectedRows(0);
         QModelIndexList newSel;
-        foreach(index, indexes)
+        // We need to iterate backwards so that earlier moves don't corrupt the inputs to later ones
+        for (int i = indexes.count()-1;  i >= 0;  i--)
         {
+            index = indexes[i];
             QVariant Content(R->referenceMemberModel(Main)->data(index,Qt::UserRole));
             if (Content.isValid())
             {
