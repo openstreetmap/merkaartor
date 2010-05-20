@@ -52,6 +52,7 @@ class WayPrivate
         bool NotEverythingDownloaded;
         bool wasPathComplete;
         bool VirtualsUptodate;
+        QRectF roadRect;
         QPainterPath theFullPath;
         QPainterPath thePath;
 #ifndef _MOBILE
@@ -658,12 +659,13 @@ void Way::buildPath(const Projection &theProjection, const QTransform& /*theTran
         }
         p->ProjectionRevision = theProjection.projectionRevision();
         p->wasPathComplete = true;
+
+        QPointF pbl = theProjection.project(BBox.bottomLeft());
+        QPointF ptr = theProjection.project(BBox.topRight());
+        p->roadRect = QRectF(pbl, ptr);
     }
 
-    QPointF pbl = theProjection.project(BBox.bottomLeft());
-    QPointF ptr = theProjection.project(BBox.topRight());
-    QRectF roadRect(pbl, ptr);
-    bool toClip = !cr.contains(roadRect);
+    bool toClip = !cr.contains(p->roadRect);
 //    bool toClip = false;
     if (!toClip) {
         p->thePath = QPainterPath(p->theFullPath);
