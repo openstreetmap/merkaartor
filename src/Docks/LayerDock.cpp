@@ -292,7 +292,7 @@ void LayerDock::layerZoom(Layer * l)
     if (bb.isNull())
         return;
 
-    CoordBox mini(bb.center()-2000, bb.center()+2000);
+    CoordBox mini(bb.center()-0.00015, bb.center()+0.00015);
     bb.merge(mini);
     bb = bb.zoomed(1.1);
     p->Main->view()->setViewport(bb, p->Main->view()->rect());

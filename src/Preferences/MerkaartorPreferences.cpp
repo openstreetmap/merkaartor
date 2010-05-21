@@ -771,14 +771,14 @@ void MerkaartorPreferences::setInitialPosition(MapView* vw)
 void MerkaartorPreferences::initialPosition(MapView* vw)
 {
     if (!Sets->contains("MainWindow/InitialPosition")) {
-        vw->setViewport(CoordBox(Coord(313646971, -120391031), Coord(793005387, 444097188)), vw->rect());
+        vw->setViewport(WORLD_COORDBOX, vw->rect());
         return;
     }
 
     const QStringList & ip = Sets->value("MainWindow/InitialPosition").toStringList();
 
-    const Coord bottomLeft(ip[0].toInt(), ip[1].toInt());
-    const Coord topRight(ip[2].toInt(),ip[3].toInt());
+    const Coord bottomLeft(ip[0].toDouble(), ip[1].toDouble());
+    const Coord topRight(ip[2].toDouble(),ip[3].toDouble());
 
     if (!Sets->contains("MainWindow/ViewRect"))
         vw->setViewport(CoordBox(bottomLeft, topRight), vw->rect());

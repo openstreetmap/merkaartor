@@ -21,15 +21,17 @@ inline double radToAng(double a)
     return a*180/M_PI;
 }
 
-inline double  angToCoord(double a)
-{
-    return a;
-}
+#define angToCoord(a) a
+//inline double  angToCoord(double a)
+//{
+//    return a;
+//}
 
-inline double coordToAng(double a)
-{
-    return a;
-}
+#define coordToAng(a) a
+//inline double coordToAng(double a)
+//{
+//    return a;
+//}
 
 inline double coordToRad(double a)
 {
@@ -118,7 +120,7 @@ inline Coord operator-(const Coord& A, const Coord& B)
     return Coord(A.lat()-B.lat(),A.lon()-B.lon());
 }
 
-inline Coord operator-(const Coord& A, const int B)
+inline Coord operator-(const Coord& A, const double B)
 {
     return Coord(A.lat()-B,A.lon()-B);
 }
@@ -128,17 +130,17 @@ inline Coord operator+(const Coord& A, const Coord& B)
     return Coord(A.lat()+B.lat(),A.lon()+B.lon());
 }
 
-inline Coord operator+(const Coord& A, const int B)
+inline Coord operator+(const Coord& A, const double B)
 {
     return Coord(A.lat()+B,A.lon()+B);
 }
 
-inline Coord operator*(const Coord& A, int d)
+inline Coord operator*(const Coord& A, double d)
 {
     return Coord(A.lat()*d,A.lon()*d);
 }
 
-inline Coord operator/(const Coord& A, int d)
+inline Coord operator/(const Coord& A, double d)
 {
     if(d==0)
     {
@@ -224,11 +226,11 @@ class CoordBox
             return Coord( BottomLeft.lat() + latDiff()/2, BottomLeft.lon() + lonDiff()/2 );
         }
 
-        quint32 lonDiff() const
+        double lonDiff() const
         {
             return TopRight.lon()-BottomLeft.lon();
         }
-        quint32 latDiff() const
+        double latDiff() const
         {
             return TopRight.lat()-BottomLeft.lat();
         }
