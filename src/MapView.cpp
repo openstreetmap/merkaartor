@@ -200,8 +200,10 @@ void MapView::paintEvent(QPaintEvent * anEvent)
     if (!p->invalidRects.isEmpty())
         buildFeatureSet();
 
+
     if (!StaticMapUpToDate)
         updateLayersImage();
+
 
     updateStaticBackground();
 
@@ -524,28 +526,33 @@ void MapView::updateStaticBuffer()
     QPainter P;
 
     if (!p->theVectorPanDelta.isNull()) {
+#if QT_VERSION < 0x040600
         QPixmap savPix;
         savPix = StaticBuffer->copy();
         StaticBuffer->fill(Qt::transparent);
         P.begin(StaticBuffer);
         P.drawPixmap(p->theVectorPanDelta, savPix);
-        P.end();
+        P.setClipping(true);
+        P.setClipRegion(QRegion(rect()) - QRegion(QRect(p->theVectorPanDelta, size())));
+#else
+        QRegion exposed;
+        StaticBuffer->scroll(p->theVectorPanDelta.x(), p->theVectorPanDelta.y(), StaticBuffer->rect(), &exposed);
+        P.begin(StaticBuffer);
+        P.setClipping(true);
+        P.setClipRegion(exposed);
+        P.eraseRect(StaticBuffer->rect());
+#endif
     } else {
         StaticBuffer->fill(Qt::transparent);
+        P.begin(StaticBuffer);
     }
 
     if (!p->invalidRects.isEmpty()) {
-        P.begin(StaticBuffer);
 //        P.setRenderHint(QPainter::Antialiasing);
 //        P.setClipping(true);
 //        P.setClipRegion(QRegion(rect()));
-        if (!p->theVectorPanDelta.isNull()) {
-            P.setClipping(true);
-            P.setClipRegion(QRegion(rect()) - QRegion(QRect(p->theVectorPanDelta, size())));
-        }
         drawCoastlines(P, theProjection);
         drawFeatures(P, theProjection);
-        P.setClipping(false);
         P.end();
     }
 
