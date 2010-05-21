@@ -70,6 +70,16 @@ QString OsmLink::parseUrl(QUrl theUrl)
 
 		setMinMax(bottom, left, top, right);
 	}
+	else if (theUrl.hasQueryItem("left") && theUrl.hasQueryItem("right") &&
+		 theUrl.hasQueryItem("bottom") && theUrl.hasQueryItem("top"))
+	{
+		double bottom = theUrl.queryItemValue("bottom").toDouble(&parseOk);  ARG_VALID(minlat);
+		double left = theUrl.queryItemValue("left").toDouble(&parseOk);      ARG_VALID(minlon);
+		double top = theUrl.queryItemValue("top").toDouble(&parseOk);        ARG_VALID(maxlat);
+		double right = theUrl.queryItemValue("right").toDouble(&parseOk);    ARG_VALID(maxlon);
+
+		setMinMax(bottom, left, top, right);
+	}
 	else if ((theUrl.host().contains("maps.google.com") || theUrl.host().contains("maps.google.co.uk")) &&
 		 theUrl.hasQueryItem("ll") && theUrl.hasQueryItem("spn"))
 	{
