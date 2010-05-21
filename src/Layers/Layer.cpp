@@ -25,7 +25,7 @@
 
 /* Layer */
 
-typedef RTree<MapFeaturePtr, int, 2, float> MyRTree;
+typedef RTree<MapFeaturePtr, double, 2, double> MyRTree;
 
 class LayerPrivate
 {
@@ -97,8 +97,8 @@ bool __cdecl indexFindCallback(MapFeaturePtr data, void* ctxt)
 
 void Layer::get(const CoordBox& bb, QList<Feature*>& theFeatures)
 {
-    int min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
-    int max[] = {bb.topRight().lon(), bb.topRight().lat()};
+    double min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
+    double max[] = {bb.topRight().lon(), bb.topRight().lat()};
     p->theRTree.Search(min, max, &indexFindCallback, (void*)(&theFeatures));
 }
 
@@ -410,8 +410,8 @@ void Layer::indexAdd(const CoordBox& bb, const MapFeaturePtr aFeat)
     if (bb.isNull())
         return;
     if (!p->IndexingBlocked) {
-        int min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
-        int max[] = {bb.topRight().lon(), bb.topRight().lat()};
+        double min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
+        double max[] = {bb.topRight().lon(), bb.topRight().lat()};
         p->theRTree.Insert(min, max, aFeat);
     }
 }
@@ -421,16 +421,16 @@ void Layer::indexRemove(const CoordBox& bb, const MapFeaturePtr aFeat)
     if (bb.isNull())
         return;
     if (!p->IndexingBlocked) {
-        int min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
-        int max[] = {bb.topRight().lon(), bb.topRight().lat()};
+        double min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
+        double max[] = {bb.topRight().lon(), bb.topRight().lat()};
         p->theRTree.Remove(min, max, aFeat);
     }
 }
 
 const QList<MapFeaturePtr>& Layer::indexFind(const CoordBox& bb)
 {
-    int min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
-    int max[] = {bb.topRight().lon(), bb.topRight().lat()};
+    double min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
+    double max[] = {bb.topRight().lon(), bb.topRight().lat()};
     findResult.clear();
     p->theRTree.Search(min, max, &indexFindCallback, (void*)&findResult);
 
@@ -439,8 +439,8 @@ const QList<MapFeaturePtr>& Layer::indexFind(const CoordBox& bb)
 
 void Layer::indexFind(const CoordBox& bb, QList<MapFeaturePtr>* findResult)
 {
-    int min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
-    int max[] = {bb.topRight().lon(), bb.topRight().lat()};
+    double min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
+    double max[] = {bb.topRight().lon(), bb.topRight().lat()};
     p->theRTree.Search(min, max, &indexFindCallback, (void*)findResult);
 }
 
@@ -456,8 +456,8 @@ void Layer::reIndex()
         Feature* f = p->Features.at(i);
         CoordBox bb = f->boundingBox();
         if (!bb.isNull()) {
-            int min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
-            int max[] = {bb.topRight().lon(), bb.topRight().lat()};
+            double min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
+            double max[] = {bb.topRight().lon(), bb.topRight().lat()};
             p->theRTree.Insert(min, max, f);
         }
     }
@@ -477,8 +477,8 @@ void Layer::reIndex(QProgressDialog * progress)
             Feature* f = p->Features.at(i);
             CoordBox bb = f->boundingBox();
             if (!bb.isNull()) {
-                int min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
-                int max[] = {bb.topRight().lon(), bb.topRight().lat()};
+                double min[] = {bb.bottomLeft().lon(), bb.bottomLeft().lat()};
+                double max[] = {bb.topRight().lon(), bb.topRight().lat()};
                 p->theRTree.Insert(min, max, f);
             }
         }
