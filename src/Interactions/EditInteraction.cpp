@@ -101,15 +101,13 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, Feature* aLast)
 //				if (aLast)
 //					view()->properties()->setSelection(aLast);
         }
-        if (view()->properties()->selection().size() == 0) {
-            if (
-                (M_PREFS->getMouseSingleButton() && (ev->modifiers() & Qt::ShiftModifier) && !aLast) ||
-                (!M_PREFS->getMouseSingleButton() && !aLast)
-                )
-            {
-                EndDrag = StartDrag = XY_TO_COORD(ev->pos());
-                Dragging = true;
-            }
+        if (
+            (M_PREFS->getMouseSingleButton() && (ev->modifiers() & Qt::ShiftModifier) && !aLast) ||
+            (!M_PREFS->getMouseSingleButton() && !aLast)
+            )
+        {
+            EndDrag = StartDrag = XY_TO_COORD(ev->pos());
+            Dragging = true;
         }
         view()->properties()->checkMenuStatus();
         view()->update();
