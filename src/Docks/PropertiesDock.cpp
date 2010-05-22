@@ -190,6 +190,7 @@ void PropertiesDock::checkMenuStatus()
     Main->ui->roadCreateJunctionAction->setEnabled(NumRoads > 1 && canCreateJunction(this));
     Main->ui->roadSplitAction->setEnabled((IsParentRoadInner && !IsParentArea) || (NumRoads && NumPoints) || (NumAreas && NumPoints > 1));
     Main->ui->roadBreakAction->setEnabled(IsParentRoadInner || ((NumRoads == 1 || NumAreas == 1) && NumPoints) || (NumRoads > 1 && canBreakRoads(this)));
+    Main->ui->roadSimplifyAction->setEnabled(IsRoad || NumRoads > 0 || NumAreas > 0);
     Main->ui->featureDeleteAction->setEnabled(IsPoint || IsRoad || IsRelation);
     Main->ui->featureCommitAction->setEnabled(NumCommitableFeature);
     Main->ui->nodeMergeAction->setEnabled(NumPoints > 1);
