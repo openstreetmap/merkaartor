@@ -1625,7 +1625,13 @@
   </action>
   <action name="roadSimplifyAction">
    <property name="text">
-    <string>Simplify</string>
+    <string>S&amp;implify</string>
+   </property>
+   <property name="toolTip">
+    <string>Simplify road(s)</string>
+   </property>
+   <property name="statusTip">
+    <string>Simplify way by removing unnecessary child nodes</string>
    </property>
   </action>
  </widget>
