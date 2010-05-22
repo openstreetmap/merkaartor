@@ -200,7 +200,7 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , Feature* aLast)
                     List.push_back(it.get());
             }
         }
-        if (!List.isEmpty() || StartDrag==EndDrag)
+        if (!List.isEmpty() || !modifiersForAdd(modifiers) && !modifiersForToggle(modifiers))
             view()->properties()->setSelection(List);
         view()->properties()->checkMenuStatus();
         Dragging = false;
