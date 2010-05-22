@@ -122,8 +122,13 @@ bool Node::isWaypoint()
     return p->IsWaypoint;
 }
 
-bool Node::isDrawable(MapView* view) const
+bool Node::isSelectable(MapView* view) const
 {
+    // If Node has non-default tags -> POI -> always selectable
+    for (int i=0; i<tagSize(); ++i)
+        if ((tagKey(i) != "created_by") && (tagKey(i) != "ele"))
+            return true;
+
     bool Draw = false;
     if (M_PREFS->getTrackPointsVisible() || (lastUpdated() == Feature::Log && !M_PREFS->getTrackSegmentsVisible())) {
         Draw = view->pixelPerM() > M_PREFS->getLocalZoom();

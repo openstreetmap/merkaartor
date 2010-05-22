@@ -330,7 +330,7 @@ void FeatureSnapInteraction::updateSnap(QMouseEvent* event)
     CoordBox HotZone(XY_TO_COORD(event->pos()-QPointF(M_PREFS->getMaxGeoPicWidth()+5,M_PREFS->getMaxGeoPicWidth()+5)),XY_TO_COORD(event->pos()+QPointF(M_PREFS->getMaxGeoPicWidth()+5,M_PREFS->getMaxGeoPicWidth()+5)));
     SnapList.clear();
     double BestDistance = 5;
-    bool areNodesVisible = (view()->pixelPerM() >= M_PREFS->getLocalZoom());
+    bool areNodesSelectable = (view()->pixelPerM() >= M_PREFS->getLocalZoom() && M_PREFS->getTrackPointsVisible());
 
     Way* R;
     Node* N;
@@ -351,13 +351,13 @@ void FeatureSnapInteraction::updateSnap(QMouseEvent* event)
                 if ((N = CAST_NODE(F))) {
                     if (NoSelectPoints)
                         continue;
-                    if (!N->isDrawable(theView))
+                    if (!N->isSelectable(theView))
                         continue;
                 }
                 if (std::find(NoSnap.begin(),NoSnap.end(),F) != NoSnap.end())
                     continue;
 
-                double Distance = F->pixelDistance(event->pos(), 5.01, areNodesVisible, view());
+                double Distance = F->pixelDistance(event->pos(), 5.01, areNodesSelectable, view());
                 SnapList.push_back(F);
                 if (Distance < BestDistance)
                 {
@@ -367,7 +367,7 @@ void FeatureSnapInteraction::updateSnap(QMouseEvent* event)
             }
         }
     }
-    if (!NoSelectVirtuals && areNodesVisible) {
+    if (!NoSelectVirtuals && areNodesSelectable) {
         R = CAST_WAY(LastSnap);
         if (R) {
             Node* N = R->pixelDistanceVirtual(event->pos(), 5.01, view());

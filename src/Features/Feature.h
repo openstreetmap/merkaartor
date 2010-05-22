@@ -274,7 +274,7 @@ class Feature : public QObject
         /** check if the feature is drawable
          * @return true if to be drawn
          */
-        virtual bool isDrawable(MapView*) const {return true;}
+        virtual bool isSelectable(MapView*) const {return true;}
 
         virtual bool isInteresting() const {return true;}
 

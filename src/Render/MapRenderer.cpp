@@ -150,7 +150,7 @@ void TouchupStyleLayer::draw(Node* Pt)
     if (paintsel)
         paintsel->drawTouchup(Pt,r->thePainter,r->theView);
     else if (!Pt->hasEditPainter()) {
-        if (Pt->isDrawable(r->theView))
+        if (Pt->isSelectable(r->theView))
         {
             QPoint P = r->theView->transform().map(r->theView->projection().project(Pt)).toPoint();
 
