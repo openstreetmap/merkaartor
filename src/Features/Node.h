@@ -56,7 +56,7 @@ class Node : public Feature
         /** check if the feature is drawable
          * @return true if to be drawn
          */
-        virtual bool isDrawable(MapView* view) const;
+        virtual bool isSelectable(MapView* view) const;
 
         const Coord& position() const;
         void setPosition(const Coord& aCoord);

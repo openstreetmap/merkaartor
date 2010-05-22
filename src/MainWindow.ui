@@ -24,7 +24,7 @@
      <x>0</x>
      <y>0</y>
      <width>1100</width>
-     <height>20</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp">
@@ -126,8 +126,8 @@
     <addaction name="viewNamesAction"/>
     <addaction name="menuShow_directional_Arrows"/>
     <addaction name="separator"/>
-    <addaction name="viewVirtualNodesAction"/>
     <addaction name="viewTrackPointsAction"/>
+    <addaction name="viewVirtualNodesAction"/>
     <addaction name="viewTrackSegmentsAction"/>
     <addaction name="separator"/>
     <addaction name="mnuAreaOpacity"/>
@@ -1195,7 +1195,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Show track &amp;points</string>
+    <string>Show &amp;nodes</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Alt+P</string>
@@ -1206,7 +1206,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Show &amp;names</string>
+    <string>Show na&amp;mes</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Alt+N</string>
