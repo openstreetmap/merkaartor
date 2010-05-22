@@ -330,7 +330,7 @@ void FeatureSnapInteraction::updateSnap(QMouseEvent* event)
     CoordBox HotZone(XY_TO_COORD(event->pos()-QPointF(M_PREFS->getMaxGeoPicWidth()+5,M_PREFS->getMaxGeoPicWidth()+5)),XY_TO_COORD(event->pos()+QPointF(M_PREFS->getMaxGeoPicWidth()+5,M_PREFS->getMaxGeoPicWidth()+5)));
     SnapList.clear();
     double BestDistance = 5;
-    bool areNodesSelectable = (view()->pixelPerM() >= M_PREFS->getLocalZoom() && !M_PREFS->getTrackPointsVisible());
+    bool areNodesSelectable = (view()->pixelPerM() >= M_PREFS->getLocalZoom() && M_PREFS->getTrackPointsVisible());
 
     Way* R;
     Node* N;
