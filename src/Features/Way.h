@@ -57,6 +57,7 @@ class Way : public Feature
         Node* getNode(int idx);
         const Node* getNode(int idx) const;
         const std::vector<NodePtr>& getNodes() const;
+        const std::vector<NodePtr>& getVirtuals() const;
 
         bool isNodeAtEnd(Node* node);
 

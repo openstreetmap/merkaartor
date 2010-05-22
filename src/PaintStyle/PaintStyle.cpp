@@ -851,27 +851,33 @@ void FeaturePainter::drawTouchup(Way* R, QPainter* thePainter, MapView* theView)
             double DistFromCenter = 2*(theWidth+4);
             if (theWidth > 0)
             {
+                if ( M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Always )
+                    thePainter->setPen(QPen(QColor(255,0,0), 2));
+                else
+                    thePainter->setPen(QPen(QColor(0,0,255), 2));
+
+
                 for (int i=1; i<R->size(); ++i)
                 {
                     QPointF FromF(theView->transform().map(theView->projection().project(R->getNode(i-1))));
                     QPointF ToF(theView->transform().map(theView->projection().project(R->getNode(i))));
                     if (distance(FromF,ToF) > (DistFromCenter*2+4))
                     {
-                        QPointF H(FromF+ToF);
+                        QPoint H(FromF.toPoint()+ToF.toPoint());
                         H *= 0.5;
+                        if (!theView->rect().contains(H))
+                            continue;
                         double A = angle(FromF-ToF);
-                        QPointF T(DistFromCenter*cos(A),DistFromCenter*sin(A));
-                        QPointF V1(theWidth*cos(A+M_PI/6),theWidth*sin(A+M_PI/6));
-                        QPointF V2(theWidth*cos(A-M_PI/6),theWidth*sin(A-M_PI/6));
+                        QPoint T(qRound(DistFromCenter*cos(A)),qRound(DistFromCenter*sin(A)));
+                        QPoint V1(qRound(theWidth*cos(A+M_PI/6)),qRound(theWidth*sin(A+M_PI/6)));
+                        QPoint V2(qRound(theWidth*cos(A-M_PI/6)),qRound(theWidth*sin(A-M_PI/6)));
                         if ( (TT == Feature::OtherWay) || (TT == Feature::BothWays) )
                         {
-                            thePainter->setPen(QPen(QColor(0,0,255), 2));
                             thePainter->drawLine(H+T,H+T-V1);
                             thePainter->drawLine(H+T,H+T-V2);
                         }
                         if ( (TT == Feature::OneWay) || (TT == Feature::BothWays) )
                         {
-                            thePainter->setPen(QPen(QColor(0,0,255), 2));
                             thePainter->drawLine(H-T,H-T+V1);
                             thePainter->drawLine(H-T,H-T+V2);
                         }
@@ -879,7 +885,6 @@ void FeaturePainter::drawTouchup(Way* R, QPainter* thePainter, MapView* theView)
                         {
                             if ( M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Always )
                             {
-                                thePainter->setPen(QPen(QColor(255,0,0), 2));
                                 thePainter->drawLine(H-T,H-T+V1);
                                 thePainter->drawLine(H-T,H-T+V2);
                             }
@@ -889,6 +894,18 @@ void FeaturePainter::drawTouchup(Way* R, QPainter* thePainter, MapView* theView)
             }
         }
     }
+//    if (M_PREFS->getVirtualNodesVisible() && M_PREFS->getTrackPointsVisible()) {
+//        if (theView->pixelPerM() > M_PREFS->getLocalZoom()) {
+//            thePainter->setPen(QColor(0,0,0));
+//            foreach (NodePtr N, R->getVirtuals()) {
+//                if (theView->viewport().contains(N->position())) {
+//                    QPoint p =  theView->toView(N);
+//                    thePainter->drawLine(p+QPoint(-3, -3), p+QPoint(3, 3));
+//                    thePainter->drawLine(p+QPoint(3, -3), p+QPoint(-3, 3));
+//                }
+//            }
+//        }
+//    }
 }
 
 #define LABEL_PATH_DISTANCE 3

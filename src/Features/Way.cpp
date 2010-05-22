@@ -300,6 +300,11 @@ const std::vector<NodePtr>& Way::getNodes() const
     return p->Nodes;
 }
 
+const std::vector<NodePtr>& Way::getVirtuals() const
+{
+    return p->virtualNodes;
+}
+
 
 Feature* Way::get(int idx)
 {
@@ -429,7 +434,6 @@ void Way::draw(QPainter& P, MapView* theView)
     if (!Draw || !M_PREFS->getVirtualNodesVisible() || !M_PREFS->getTrackPointsVisible())
         return;
 
-    P.save();
     P.setPen(QColor(0,0,0));
     foreach (NodePtr N, p->virtualNodes) {
         if (theView->viewport().contains(N->position())) {
@@ -438,7 +442,6 @@ void Way::draw(QPainter& P, MapView* theView)
             P.drawLine(p+QPoint(3, -3), p+QPoint(-3, 3));
         }
     }
-    P.restore();
 }
 
 void Way::drawHover(QPainter& thePainter, MapView* theView, bool solid)
