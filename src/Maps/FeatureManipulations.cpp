@@ -283,27 +283,29 @@ static Way* join(Document* theDocument, CommandList* L, Way* R1, Way* R2)
 void joinRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
 {
     QList<Way*> Input;
+    QList<Way*> Output;
     for (int i=0; i<theDock->size(); ++i)
         if (Way* R = CAST_WAY(theDock->selection(i)))
-            if (!(R->area() > 0.0))
-                Input.push_back(R);
-    while (Input.size() > 1)
+            Input.append(R);
+    while (!Input.isEmpty())
     {
-        int Break = true;
-        for (int i=0; i<Input.size(); ++i)
-            for (int j=i+1; j<Input.size(); ++j)
-                if (canJoin(Input[i],Input[j]))
-                {
-                    Way* R = join(theDocument, theList,Input[i],Input[j]);
-                    Input.erase(Input.begin()+j);
-                    Input[i] = R;
-                    i=j=Input.size();
-                    Break = false;
+        Way *R1 = Input.takeFirst();
+        if (R1->size() >= 4 && !R1->isClosed() && R1->getNode(0)->position() == R1->getNode(R1->size()-1)->position()) {
+            // almost-area; close it properly
+            mergeNodes(theDocument, theList, R1->getNode(0), R1->getNode(R1->size()-1));
+        } else {
+            for (int i = 0;  i < Input.size();  ++i) {
+                Way *R2 = Input[i];
+                if (canJoin(R1, R2)) {
+                    R1 = join(theDocument, theList, R1, R2);
+                    Input.removeAt(i);
+                    i = -1;        // restart the loop
                 }
-        if (Break)
-            break;
+            }
+        }
+        Output.append(R1);
     }
-    theDock->setSelection(Input);
+    theDock->setSelection(Output);
 }
 
 static void splitRoad(Document* theDocument, CommandList* theList, Way* In, const QList<Node*>& Points, QList<Way*>& Result)
