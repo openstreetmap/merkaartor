@@ -209,7 +209,7 @@ void FeatureSnapInteraction::mousePressEvent(QMouseEvent * event)
 
 void FeatureSnapInteraction::mouseReleaseEvent(QMouseEvent * event)
 {
-    if (event->button() == Qt::RightButton && !Panning)
+    if (event->button() == Qt::RightButton && !Panning && !Dragging)
         emit(requestCustomContextMenu(event->pos()));
 
     updateSnap(event);
