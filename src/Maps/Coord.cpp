@@ -145,3 +145,7 @@ bool CoordBox::visibleLine(const CoordBox & viewport, Coord & last, Coord & here
 //	return viewport.intersects( CoordBox(last, here) );
 }
 
+uint qHash(const Coord &c)
+{
+    return (uint)(c.lat() + 65537 * c.lon());
+}

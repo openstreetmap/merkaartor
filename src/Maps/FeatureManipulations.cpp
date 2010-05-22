@@ -1,4 +1,5 @@
 #include "Maps/FeatureManipulations.h"
+#include "Coord.h"
 #include "DocumentCommands.h"
 #include "FeatureCommands.h"
 #include "WayCommands.h"
@@ -58,16 +59,17 @@ bool canBreak(Way* R1, Way* R2)
 
 bool canJoinRoads(PropertiesDock* theDock)
 {
-    QList<Way*> Input;
+    QHash<Coord,int> ends;
     for (int i=0; i<theDock->size(); ++i)
-        if (Way* R = CAST_WAY(theDock->selection(i)))
-            if (!(R->isClosed()))
-                Input.push_back(R);
-    for (int i=0; i<Input.size(); ++i)
-        for (int j=i+1; j<Input.size(); ++j)
-            if (canJoin(Input[i],Input[j]))
-                return true;
-    return false;
+        if (Way* R = CAST_WAY(theDock->selection(i))) {
+            if (R->isClosed()) continue;
+            Coord start = R->getNode(0)->position();
+            Coord end = R->getNode(R->size()-1)->position();
+            if (++ends[start] > 2) return false;
+            if (++ends[end] > 2) return false;
+        }
+
+    return ends.values().contains(2);
 }
 
 bool canBreakRoads(PropertiesDock* theDock)
@@ -210,6 +212,14 @@ static void appendPoints(Document* theDocument, CommandList* L, Way* Dest, Way* 
     for (int i=1; i<Src->size(); ++i) {
         Node* Pt = Src->getNode(i);
         L->add(new WayAddNodeCommand(Dest,Pt,theDocument->getDirtyOrOriginLayer(Src->layer())));
+    }
+}
+
+static void prependPoints(Document* theDocument, CommandList* L, Way* Dest, Way* Src)
+{
+    for (int i=1; i<Src->size(); ++i) {
+        Node* Pt = Src->getNode(i);
+        L->add(new WayAddNodeCommand(Dest,Pt,0,theDocument->getDirtyOrOriginLayer(Src->layer())));
     }
 }
 
