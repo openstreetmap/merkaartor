@@ -152,7 +152,7 @@ void Layer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures, Q
             RR->buildPath(theProjection, theTransform, clipRect);
             theFeatures[F->renderPriority()].insert(F);
         } else
-        if (Node * pt = CAST_NODE(F)) {
+        if (CAST_NODE(F)) {
             if (arePointsDrawable())
                 theFeatures[F->renderPriority()].insert(F);
         } else
@@ -1285,7 +1285,7 @@ void OsbLayer::get(const CoordBox& hz, QList<Feature*>& theFeatures)
                     if (Way * R = CAST_WAY(F)) {
                         theFeatures.push_back(R);
                     } else
-                    if (Relation * RR = CAST_RELATION(F)) {
+                    if (CAST_RELATION(F)) {
 //						theFeatures.push_back(RR);
                     } else
                     if (Node * pt = CAST_NODE(F)) {
@@ -1394,7 +1394,7 @@ void OsbLayer::getFeatureSet(QMap<RenderPriority, QSet <Feature*> >& theFeatures
                         RR->buildPath(theProjection, theTransform, clipRect);
                         theFeatures[F->renderPriority()].insert(F);
                     } else
-                    if (Node * pt = CAST_NODE(F)) {
+                    if (CAST_NODE(F)) {
                         if (arePointsDrawable())
                             theFeatures[F->renderPriority()].insert(F);
                     } else

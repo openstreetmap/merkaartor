@@ -286,6 +286,7 @@ void MapRenderer::render(
     }
 
 #else
+
     bool bgLayerVisible = M_PREFS->getBackgroundVisible();
     bool fgLayerVisible = M_PREFS->getForegroundVisible();
     bool tchpLayerVisible = M_PREFS->getTouchupVisible();
@@ -301,6 +302,9 @@ void MapRenderer::render(
     itm = theFeatures.constBegin();
     while (itm != theFeatures.constEnd())
     {
+//#ifndef NDEBUG
+//    QTime Start(QTime::currentTime());
+//#endif
         pix.fill(Qt::transparent);
         thePainter->begin(&pix);
         thePainter->setRenderHint(QPainter::Antialiasing);
@@ -381,7 +385,13 @@ void MapRenderer::render(
         }
         thePainter->end();
         P->drawPixmap(0, 0, pix);
+//#ifndef NDEBUG
+//    QTime Stop(QTime::currentTime());
+//    qDebug() << "curLayer: " << curLayer << " " << Start.msecsTo(Stop) << "ms";
+//#endif
     }
+
+
 #endif
 }
 
