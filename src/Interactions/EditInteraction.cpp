@@ -156,7 +156,8 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , Feature* aLast)
     if (Dragging)
     {
         QList<Feature*> List;
-        CoordBox DragBox(StartDrag,XY_TO_COORD(ev->pos()));
+        EndDrag = XY_TO_COORD(ev->pos());
+        CoordBox DragBox(StartDrag, EndDrag);
         for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it) {
             if (it.get()->layer()->isReadonly())
                 continue;
@@ -199,7 +200,7 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , Feature* aLast)
                     List.push_back(it.get());
             }
         }
-        if (!List.isEmpty())
+        if (!List.isEmpty() || StartDrag==EndDrag)
             view()->properties()->setSelection(List);
         view()->properties()->checkMenuStatus();
         Dragging = false;
