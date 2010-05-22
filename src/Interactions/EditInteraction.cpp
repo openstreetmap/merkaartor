@@ -199,7 +199,8 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , Feature* aLast)
                     List.push_back(it.get());
             }
         }
-        view()->properties()->setSelection(List);
+        if (!List.isEmpty())
+            view()->properties()->setSelection(List);
         view()->properties()->checkMenuStatus();
         Dragging = false;
         view()->update();
