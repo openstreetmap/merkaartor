@@ -87,24 +87,51 @@ void EditInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePainter)
     FeatureSnapInteraction::paintEvent(anEvent, thePainter);
 }
 
+static bool modifiersForAdd(Qt::KeyboardModifiers modifiers)
+{
+    return modifiers.testFlag(Qt::ShiftModifier);
+}
+
+static bool modifiersForToggle(Qt::KeyboardModifiers modifiers)
+{
+    return modifiers.testFlag(Qt::ControlModifier);
+}
+
+static bool modifiersForDrag(Qt::KeyboardModifiers modifiers)
+{
+    if (M_PREFS->getMouseSingleButton())
+        return modifiers.testFlag(Qt::ShiftModifier);
+    else
+        return true;
+}
+
+static bool modifiersForGreedyAdd(Qt::KeyboardModifiers modifiers)
+{
+    // whether drag select should include intersected as well as contained features
+    if (M_PREFS->getMouseSingleButton())
+        return modifiers.testFlag(Qt::ShiftModifier) && modifiers.testFlag(Qt::AltModifier);
+    else
+        return modifiers.testFlag(Qt::ShiftModifier);
+}
+
+
+
 void EditInteraction::snapMousePressEvent(QMouseEvent * ev, Feature* aLast)
 {
+    Qt::KeyboardModifiers modifiers = ev->modifiers();
     if (!view()->isSelectionLocked()) {
-        if (ev->modifiers()) {
-            if ((ev->modifiers() & Qt::ControlModifier) && aLast)
+        if (modifiers) {
+            if (modifiersForToggle(modifiers) && aLast)
                 view()->properties()->toggleSelection(aLast);
 
-            if ((ev->modifiers() & Qt::ShiftModifier) && aLast)
+            if (modifiersForAdd(modifiers) && aLast)
                 view()->properties()->addSelection(aLast);
         } else {
             StackSnap = SnapList;
 //				if (aLast)
 //					view()->properties()->setSelection(aLast);
         }
-        if (
-            (M_PREFS->getMouseSingleButton() && (ev->modifiers() & Qt::ShiftModifier) && !aLast) ||
-            (!M_PREFS->getMouseSingleButton() && !aLast)
-            )
+        if (!aLast && modifiersForDrag(modifiers))
         {
             EndDrag = StartDrag = XY_TO_COORD(ev->pos());
             Dragging = true;
@@ -119,6 +146,7 @@ void EditInteraction::snapMousePressEvent(QMouseEvent * ev, Feature* aLast)
 
 void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , Feature* aLast)
 {
+    Qt::KeyboardModifiers modifiers = ev->modifiers();
     if (ev->button() != Qt::LeftButton)
         return;
 
@@ -133,10 +161,7 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , Feature* aLast)
             if (it.get()->layer()->isReadonly())
                 continue;
 
-            if (
-                (M_PREFS->getMouseSingleButton() && ev->modifiers().testFlag(Qt::ShiftModifier) && ev->modifiers().testFlag(Qt::AltModifier)) ||
-                (!M_PREFS->getMouseSingleButton() && ev->modifiers().testFlag(Qt::ShiftModifier))
-                )
+            if (modifiersForGreedyAdd(modifiers))
             {
                 if (!DragBox.intersects(it.get()->boundingBox()))
                     continue;
@@ -179,7 +204,7 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , Feature* aLast)
         Dragging = false;
         view()->update();
     } else {
-        if (!panning() && !ev->modifiers()) {
+        if (!panning() && !modifiers) {
             view()->properties()->setSelection(aLast);
             if (view()->properties()->isSelected(aLast) && !M_PREFS->getSeparateMoveMode()) {
                 currentMode = MoveMode;
