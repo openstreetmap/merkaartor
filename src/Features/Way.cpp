@@ -1215,6 +1215,8 @@ Way * Way::GetSingleParentRoad(Feature * mapFeature)
     for (i=0; i<parents; i++)
     {
         Feature * parent = mapFeature->getParent(i);
+        if (parent->isDeleted()) continue;
+
         Way * road = CAST_WAY(parent);
 
         if (road == NULL)
@@ -1245,6 +1247,8 @@ Way * Way::GetSingleParentRoadInner(Feature * mapFeature)
     for (i=0; i<parents; i++)
     {
         Feature * parent = mapFeature->getParent(i);
+        if (parent->isDeleted()) continue;
+
         Way * road = CAST_WAY(parent);
 
         if (road == NULL)

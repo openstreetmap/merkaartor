@@ -360,6 +360,7 @@ static void splitRoad(Document* theDocument, CommandList* theList, Way* In, cons
                 theList->add(new WayRemoveNodeCommand(FirstPart,i+1,theDocument->getDirtyOrOriginLayer(In->layer())));
             }
             for (int j=0; j < In->sizeParents(); j++) {
+                if (In->getParent(j)->isDeleted()) continue;
                 Relation* L = CAST_RELATION(In->getParent(j));
                 int idx = L->find(FirstPart);
                 theList->add(new RelationAddFeatureCommand(L, L->getRole(idx), NextPart, idx+1, theDocument->getDirtyOrOriginLayer(In->layer())));
@@ -422,7 +423,7 @@ void breakRoads(Document* theDocument, CommandList* theList, PropertiesDock* the
     {
         for (int i=0; i<Points[0]->sizeParents() ; ++i) {
             Way * R = CAST_WAY(Points[0]->getParent(i));
-            if (R)
+            if (R && !R->isDeleted())
                 Roads.push_back(R);
         }
     }
@@ -514,7 +515,7 @@ void createStreetNumbers(Document* theDocument, CommandList* theList, Way* theRo
         bool intersectedTo = false;
         for (int k=0; k < theRoad->getNode(j)->sizeParents(); ++k) {
             Way* I = CAST_WAY(theRoad->getNode(j)->getParent(k));
-            if (!I || I == theRoad)
+            if (!I || I == theRoad || I->isDeleted())
                 continue;
 
             for (int m=0; m < I->size()-1; ++m) {
@@ -537,7 +538,7 @@ void createStreetNumbers(Document* theDocument, CommandList* theList, Way* theRo
             bool intersectedFrom = false;
             for (int k=0; k < theRoad->getNode(j-1)->sizeParents(); ++k) {
                 Way* I = CAST_WAY(theRoad->getNode(j-1)->getParent(k));
-                if (!I || I == theRoad)
+                if (!I || I == theRoad || I->isDeleted())
                     continue;
 
                 for (int m=0; m < I->size()-1; ++m) {

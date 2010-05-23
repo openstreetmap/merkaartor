@@ -696,8 +696,9 @@ TagSelectorMatchResult TagTemplate::matchesTag(const Feature* F)
         for (int i=0; i<R->sizeParents(); ++i)
         {
             if (const Relation* Parent = dynamic_cast<const Relation*>(R->getParent(i)))
-                if (Parent->tagValue("type","") == "multipolygon")
-                    return TagSelect_NoMatch;
+                if (!Parent->isDeleted())
+                    if (Parent->tagValue("type","") == "multipolygon")
+                        return TagSelect_NoMatch;
         }
     }
     if ((res = theSelector->matches(F)))

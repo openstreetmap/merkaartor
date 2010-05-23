@@ -107,9 +107,11 @@ void OSMHandler::parseNode(const QXmlAttributes& atts)
     if (NewFeature) {
         parseStandardAttributes(atts,Pt);
         Current = Pt;
-        for (int i=0; i<Pt->sizeParents(); ++i)
+        for (int i=0; i<Pt->sizeParents(); ++i) {
+            if (Pt->getParent(i)->isDeleted()) continue;
             if (Way* w = CAST_WAY(Pt->getParent(i)))
                 touchedWays << w;
+        }
     } else
         Current = NULL;
 }

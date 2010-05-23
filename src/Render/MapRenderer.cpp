@@ -25,10 +25,6 @@ void BackgroundStyleLayer::draw(Way* R)
         paintsel->drawBackground(R,r->thePainter,r->theView);
         return;
     }
-    for (int i=0; i<R->sizeParents(); ++i) {
-        if ((paintsel = R->getParent(i)->getEditPainter(r->theView->pixelPerM())))
-            return;
-    }
     if (/*!globalZoom(r->theProjection) && */!R->hasEditPainter()) //FIXME Untagged roads level of zoom?
     {
         QPen thePen(QColor(0,0,0),1);
@@ -324,6 +320,17 @@ void MapRenderer::render(
                 if (!(R = CAST_WAY(*it)))
                     if (!(Pt = CAST_NODE(*it)))
                         RR = CAST_RELATION(*it);
+
+                if (R) {
+                    // If there is painter at the relation level, don't paint at the way level
+                    bool draw = true;
+                    for (int i=0; i<R->sizeParents(); ++i) {
+                        if (!R->getParent(i)->isDeleted() && R->getParent(i)->getEditPainter(theView->pixelPerM()))
+                            draw = false;
+                    }
+                    if (!draw)
+                        continue;
+                }
 
                 if (!Pt) {
                     if (bgLayerVisible)

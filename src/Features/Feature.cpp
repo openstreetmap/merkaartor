@@ -709,6 +709,8 @@ Relation * Feature::GetSingleParentRelation(Feature * mapFeature)
     for (i=0; i<parents; i++)
     {
         Feature * parent = mapFeature->getParent(i);
+        if (parent->isDeleted()) continue;
+
         Relation * rel = dynamic_cast<Relation*>(parent);
 
         if (rel == NULL)

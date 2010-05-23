@@ -102,6 +102,8 @@ static bool isChildOfSingleRelation(Feature *mapFeature)
     for (i=0; i<parents; i++)
     {
         Feature * parent = mapFeature->getParent(i);
+        if (parent->isDeleted()) continue;
+
         bool isParentRelation = dynamic_cast<Relation*>(parent) != 0;
         if (isParentRelation)
             parentRelations++;
@@ -123,6 +125,8 @@ static bool isChildOfRelation(Feature *mapFeature)
     for (i=0; i<parents; i++)
     {
         Feature * parent = mapFeature->getParent(i);
+        if (parent->isDeleted()) continue;
+
         if (dynamic_cast<Relation*>(parent))
             return true;
     }
