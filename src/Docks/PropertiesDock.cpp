@@ -285,7 +285,7 @@ void PropertiesDock::adjustSelection()
     int cnt = Selection.size();
 
     for (int i=0; i<FullSelection.size(); ++i) {
-        if (Main->document()->exists(FullSelection[i])) {
+        if (Main->document()->exists(FullSelection[i]) && FullSelection[i] && !FullSelection[i]->isDeleted()) {
             aSelection.push_back(FullSelection[i]);
         } else {
             QList<Feature*>::iterator it = std::find(Selection.begin(),Selection.end(),FullSelection[i]);

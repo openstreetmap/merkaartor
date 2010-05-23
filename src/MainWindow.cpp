@@ -769,14 +769,14 @@ void MainWindow::clipboardChanged()
 void MainWindow::on_editRedoAction_triggered()
 {
     theDocument->redoHistory();
-    emit content_changed();
+    p->theProperties->adjustSelection();
     invalidateView();
 }
 
 void MainWindow::on_editUndoAction_triggered()
 {
     theDocument->undoHistory();
-    emit content_changed();
+    p->theProperties->adjustSelection();
     invalidateView();
 }
 
