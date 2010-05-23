@@ -143,7 +143,15 @@ WayRemoveNodeCommand::~WayRemoveNodeCommand(void)
 void WayRemoveNodeCommand::undo()
 {
     Command::undo();
-    theRoad->add(theNode,Idx);
+    if (theRoad->isClosed()) {
+        theRoad->add(theNode,Idx);
+        if (Idx == 0) {
+            theRoad->remove(theRoad->size()-1);
+            theRoad->add(theNode);
+        }
+    } else
+        theRoad->add(theNode,Idx);
+
     if (theLayer && oldLayer && (theLayer != oldLayer)) {
         theLayer->remove(theRoad);
         oldLayer->add(theRoad);
@@ -154,7 +162,15 @@ void WayRemoveNodeCommand::undo()
 void WayRemoveNodeCommand::redo()
 {
     oldLayer = theRoad->layer();
-    theRoad->remove(Idx);
+    if (theRoad->isClosed()) {
+        theRoad->remove(Idx); // cannot do outside of "if" because the way wouldn't be closed anymore
+        if (Idx == 0) {
+            theRoad->remove(theRoad->size()-1);
+            theRoad->add(theRoad->getNode(0));
+        }
+    } else
+        theRoad->remove(Idx);
+
     if (theLayer && oldLayer && (theLayer != oldLayer)) {
         oldLayer->remove(theRoad);
         incDirtyLevel(oldLayer);

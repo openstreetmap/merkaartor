@@ -1,4 +1,5 @@
 v0.16
+    * FIX : for consistency, when deleting the end-node of a polygon, don't break it (fixes #2983)
     * CHG : Only allows one instance of Merkaartor (override with "-n")
     * ADD : support for JOSM remote protocol on port 8111
     * FIX : reduce browserimagemanger timeout, improving Yahoo responsiveness
