@@ -18,8 +18,6 @@
 #include <math.h>
 #include <utility>
 
-//#define LOCALZOOM		0.05
-//#define REGIONALZOOM	0.01
 //#define GLOBALZOOM		0.002
 
 MasPaintStyle* MasPaintStyle::m_EPSInstance = 0;

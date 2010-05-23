@@ -199,8 +199,6 @@ void PreferencesDialog::loadPrefs()
     sbAlphaLow->setValue(M_PREFS->getAlpha("Low"));
     sbAlphaHigh->setValue(M_PREFS->getAlpha("High"));
 
-    sbLocalZoom->setValue(1./M_PREFS->getLocalZoom());
-
     BgColor = M_PREFS->getBgColor();
     cbBackgroundOverwriteStyle->setChecked(M_PREFS->getBackgroundOverwriteStyle());
     FocusColor = M_PREFS->getFocusColor();
@@ -342,8 +340,6 @@ void PreferencesDialog::savePrefs()
 
     M_PREFS->getAlphaPtr()->insert("Low", sbAlphaLow->value());
     M_PREFS->getAlphaPtr()->insert("High", sbAlphaHigh->value());
-
-    M_PREFS->setLocalZoom(1./sbLocalZoom->value());
 
     M_PREFS->setBgColor(BgColor);
     M_PREFS->setBackgroundOverwriteStyle(cbBackgroundOverwriteStyle->isChecked());

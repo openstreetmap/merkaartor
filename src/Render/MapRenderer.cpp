@@ -153,14 +153,16 @@ void TouchupStyleLayer::draw(Node* Pt)
         if (Pt->isSelectable(r->theView))
         {
             QPoint P = r->theView->transform().map(r->theView->projection().project(Pt)).toPoint();
+            double theWidth = r->theView->nodeWidth();
+            if (theWidth >= 1) {
+                if (Pt->isWaypoint()) {
+                    QRect R2(P-QPoint(theWidth*4/3/2,theWidth*4/3/2),QSize(theWidth*4/3,theWidth*4/3));
+                    r->thePainter->fillRect(R2,QColor(255,0,0,128));
+                }
 
-            if (Pt->isWaypoint()) {
-                QRect R2(P-QPoint(4,4),QSize(8,8));
-                r->thePainter->fillRect(R2,QColor(255,0,0,128));
+                QRect R(P-QPoint(theWidth/2,theWidth/2),QSize(theWidth,theWidth));
+                r->thePainter->fillRect(R,QColor(0,0,0,128));
             }
-
-            QRect R(P-QPoint(3,3),QSize(6,6));
-            r->thePainter->fillRect(R,QColor(0,0,0,128));
         }
     }
 }

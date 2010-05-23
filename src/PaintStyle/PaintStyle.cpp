@@ -894,18 +894,6 @@ void FeaturePainter::drawTouchup(Way* R, QPainter* thePainter, MapView* theView)
             }
         }
     }
-//    if (M_PREFS->getVirtualNodesVisible() && M_PREFS->getTrackPointsVisible()) {
-//        if (theView->pixelPerM() > M_PREFS->getLocalZoom()) {
-//            thePainter->setPen(QColor(0,0,0));
-//            foreach (NodePtr N, R->getVirtuals()) {
-//                if (theView->viewport().contains(N->position())) {
-//                    QPoint p =  theView->toView(N);
-//                    thePainter->drawLine(p+QPoint(-3, -3), p+QPoint(3, 3));
-//                    thePainter->drawLine(p+QPoint(3, -3), p+QPoint(-3, 3));
-//                }
-//            }
-//        }
-//    }
 }
 
 #define LABEL_PATH_DISTANCE 3

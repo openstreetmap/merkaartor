@@ -47,6 +47,7 @@ class MapViewPrivate
 public:
     QTransform theTransform;
     double PixelPerM;
+    double NodeWidth;
     double ZoomLevel;
 //    int AbstractZoomLevel;
     CoordBox Viewport;
@@ -1036,6 +1037,9 @@ void MapView::setViewport(const CoordBox & TargetMap,
         QRectF vp = theProjection.getProjectedViewport(p->Viewport, Screen);
         p->PixelPerM = Screen.width() / vp.width();
     }
+    p->NodeWidth = p->PixelPerM * M_PREFS->getNodeSize();
+    if (p->NodeWidth > M_PREFS->getNodeSize())
+        p->NodeWidth = M_PREFS->getNodeSize();
     p->ZoomLevel = p->theTransform.m11();
 
 //    QPointF pt = theProjection.project(Coord(0, angToInt(180)));
@@ -1122,6 +1126,9 @@ void MapView::zoom(double d, const QPoint & Around,
         QRectF vp = theProjection.getProjectedViewport(p->Viewport, Screen);
         p->PixelPerM = Screen.width() / vp.width();
     }
+    p->NodeWidth = p->PixelPerM * M_PREFS->getNodeSize();
+    if (p->NodeWidth > M_PREFS->getNodeSize())
+        p->NodeWidth = M_PREFS->getNodeSize();
 
     for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
         ImgIt.get()->zoom(d, Around, Screen);
@@ -1159,3 +1166,9 @@ double MapView::pixelPerM() const
 {
     return p->PixelPerM;
 }
+
+double MapView::nodeWidth() const
+{
+    return p->NodeWidth;
+}
+

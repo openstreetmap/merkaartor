@@ -21,7 +21,7 @@
       <enum>QTabWidget::North</enum>
      </property>
      <property name="currentIndex">
-      <number>7</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_4">
       <attribute name="title">
@@ -86,43 +86,6 @@
                <double>0.100000000000000</double>
               </property>
              </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout">
-            <item>
-             <widget class="QLabel" name="label_11">
-              <property name="text">
-               <string>Maximum meters per pixel to show nodes</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QDoubleSpinBox" name="sbLocalZoom">
-              <property name="minimum">
-               <double>0.100000000000000</double>
-              </property>
-              <property name="maximum">
-               <double>10.000000000000000</double>
-              </property>
-              <property name="singleStep">
-               <double>0.500000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_7">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
             </item>
            </layout>
           </item>

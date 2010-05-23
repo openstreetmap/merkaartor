@@ -430,16 +430,18 @@ double Way::area()
 
 void Way::draw(QPainter& P, MapView* theView)
 {
-    bool Draw = theView->pixelPerM() > M_PREFS->getLocalZoom();
+    double theWidth = theView->nodeWidth();
+    bool Draw = (theWidth >= 1);
     if (!Draw || !M_PREFS->getVirtualNodesVisible() || !M_PREFS->getTrackPointsVisible())
         return;
 
+    theWidth /= 2;
     P.setPen(QColor(0,0,0));
     foreach (NodePtr N, p->virtualNodes) {
         if (theView->viewport().contains(N->position())) {
             QPoint p =  theView->toView(N);
-            P.drawLine(p+QPoint(-3, -3), p+QPoint(3, 3));
-            P.drawLine(p+QPoint(3, -3), p+QPoint(-3, 3));
+            P.drawLine(p+QPoint(-theWidth, -theWidth), p+QPoint(theWidth, theWidth));
+            P.drawLine(p+QPoint(theWidth, -theWidth), p+QPoint(-theWidth, theWidth));
         }
     }
 }

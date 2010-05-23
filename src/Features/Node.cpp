@@ -131,7 +131,7 @@ bool Node::isSelectable(MapView* view) const
 
     bool Draw = false;
     if (M_PREFS->getTrackPointsVisible() || (lastUpdated() == Feature::Log && !M_PREFS->getTrackSegmentsVisible())) {
-        Draw = view->pixelPerM() > M_PREFS->getLocalZoom();
+        Draw = (view->nodeWidth() >= 1);
         // Do not draw GPX nodes when simple GPX track appearance is enabled
         if (M_PREFS->getSimpleGpxTrack() && layer()->isTrack())
             Draw = false;

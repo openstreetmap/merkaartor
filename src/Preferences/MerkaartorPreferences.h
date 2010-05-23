@@ -273,6 +273,7 @@ public:
     M_PARAM_DECLARE_BOOL(RelationsSelectableWhenHidden)
     M_PARAM_DECLARE_DOUBLE(LocalZoom)
     M_PARAM_DECLARE_DOUBLE(RegionalZoom)
+    M_PARAM_DECLARE_INT(NodeSize)
 
     M_PARAM_DECLARE_BOOL(DownloadedVisible)
     M_PARAM_DECLARE_BOOL(ScaleVisible)
