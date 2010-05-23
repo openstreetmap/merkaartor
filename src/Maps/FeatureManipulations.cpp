@@ -207,19 +207,15 @@ void simplifyRoads(Document* theDocument, CommandList* theList, PropertiesDock* 
         }
 }
 
-static void appendPoints(Document* theDocument, CommandList* L, Way* Dest, Way* Src)
+static void appendPoints(Document* theDocument, CommandList* L, Way* Dest, Way* Src, bool prepend, bool reverse)
 {
-    for (int i=1; i<Src->size(); ++i) {
-        Node* Pt = Src->getNode(i);
-        L->add(new WayAddNodeCommand(Dest,Pt,theDocument->getDirtyOrOriginLayer(Src->layer())));
-    }
-}
-
-static void prependPoints(Document* theDocument, CommandList* L, Way* Dest, Way* Src)
-{
-    for (int i=1; i<Src->size(); ++i) {
-        Node* Pt = Src->getNode(i);
-        L->add(new WayAddNodeCommand(Dest,Pt,0,theDocument->getDirtyOrOriginLayer(Src->layer())));
+    Layer *layer = theDocument->getDirtyOrOriginLayer(Src->layer());
+    int srclen = Src->size();
+    int destpos = prepend ? 0 : Dest->size();
+    for (int i=1; i<srclen; ++i) {
+        int j = (reverse ? srclen-i : i) - (prepend != reverse ? 1 : 0);
+        Node* Pt = Src->getNode(j);
+        L->add(new WayAddNodeCommand(Dest, Pt, destpos++, layer));
     }
 }
 
@@ -243,40 +239,41 @@ static Way* join(Document* theDocument, CommandList* L, Way* R1, Way* R2)
     Node* Start2 = R2->getNode(0);
     Node* End2 = R2->getNode(R2->size()-1);
 
+    bool prepend = false;       // set true if R2 meets beginning of R1
+    bool reverse = false;       // set true if R2 is opposite direction to R1
+
     if (End1 == Start2) {
         // nothing to do, but skip the other tests
     } else if (End1 == End2) {
-        reversePoints(theDocument,L,R2);
+        reverse = true;
     } else if (Start1 == Start2) {
-        reversePoints(theDocument,L,R1);
+        prepend = true;
+        reverse = true;
     } else if (Start1 == End2) {
-        Way* r = R1;
-        R1 = R2;
-        R2 = r;
+        prepend = true;
     } else if (isNear(End1, Start2)) {
         mergeNodes(theDocument, L, End1, Start2);
     } else if (isNear(End1, End2)) {
         mergeNodes(theDocument, L, End1, End2);
-        reversePoints(theDocument,L,R2);
+        reverse = true;
     } else if (isNear(Start1, Start2)) {
         mergeNodes(theDocument, L, Start1, Start2);
-        reversePoints(theDocument,L,R1);
+        prepend = true;
+        reverse = true;
     } else if (isNear(Start1, End2)) {
         mergeNodes(theDocument, L, Start1, End2);
-        Way* r = R1;
-        R1 = R2;
-        R2 = r;
+        prepend = true;
     }
 
-    // Auto-merge closed ways
-    Node *StartResult = R1->getNode(0);
-    Node *EndResult = R2->getNode(R2->size()-1);
-    if (StartResult != EndResult && isNear(StartResult, EndResult))
-        mergeNodes(theDocument, L, StartResult, EndResult);
-
-    appendPoints(theDocument,L,R1,R2);
+    appendPoints(theDocument, L, R1, R2, prepend, reverse);
     Feature::mergeTags(theDocument,L,R1,R2);
     L->add(new RemoveFeatureCommand(theDocument,R2,Alternatives));
+
+    // Auto-merge nearly-closed ways
+    Node *StartResult = R1->getNode(0);
+    Node *EndResult = R1->getNode(R1->size()-1);
+    if (StartResult != EndResult && isNear(StartResult, EndResult))
+        mergeNodes(theDocument, L, StartResult, EndResult);
     return R1;
 }
 
