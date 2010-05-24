@@ -723,6 +723,7 @@ void MapView::on_imageReceived(ImageMapLayer* aLayer)
 
 void MapView::on_loadingFinished(ImageMapLayer* aLayer)
 {
+    Q_UNUSED(aLayer)
     numImages = 0;
 //    Main->pbImages->setRange(0, 0);
     Main->pbImages->reset();

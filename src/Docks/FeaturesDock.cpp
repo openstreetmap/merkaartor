@@ -198,7 +198,7 @@ void FeaturesDock::on_centerZoomAction_triggered()
         }
     }
     if (!cb.isNull()) {
-        CoordBox mini(cb.center()-10, cb.center()+10);
+        CoordBox mini(cb.center()-COORD_ENLARGE, cb.center()+COORD_ENLARGE);
         cb.merge(mini);
         cb = cb.zoomed(1.1);
         Main->view()->setViewport(cb, Main->view()->rect());

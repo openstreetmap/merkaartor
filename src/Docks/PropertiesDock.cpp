@@ -980,7 +980,7 @@ void PropertiesDock::on_centerZoomAction_triggered()
                     if (F) {
                         //setSelection(F);
                         cb = F->boundingBox();
-                        CoordBox mini(cb.center()-2000, cb.center()+2000);
+                        CoordBox mini(cb.center()-COORD_ENLARGE, cb.center()+COORD_ENLARGE);
                         cb.merge(mini);
                         cb = cb.zoomed(1.1);
                     }
@@ -996,7 +996,7 @@ void PropertiesDock::on_centerZoomAction_triggered()
             idx = MultiUi.SelectionList->selectedItems()[i]->data(Qt::UserRole).toUInt();
             cb.merge(FullSelection[idx]->boundingBox());
         }
-        CoordBox mini(cb.center()-2000, cb.center()+2000);
+        CoordBox mini(cb.center()-COORD_ENLARGE, cb.center()+COORD_ENLARGE);
         cb.merge(mini);
         cb = cb.zoomed(1.1);
     }

@@ -10,6 +10,7 @@
 #include <QtXml>
 
 #define COORD_MAX 180.0
+#define COORD_ENLARGE 0.00015
 
 inline double angToRad(double a)
 {
