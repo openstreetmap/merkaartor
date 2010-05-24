@@ -162,8 +162,8 @@ int main(int argc, char** argv)
 #endif
     qDebug() << "-------" << "with arguments: " << QCoreApplication::arguments();
 
-    QCoreApplication::setOrganizationName("BartVanhauwaert");
-    QCoreApplication::setOrganizationDomain("www.irule.be");
+    QCoreApplication::setOrganizationName("Merkaartor");
+    QCoreApplication::setOrganizationDomain("merkaartor.org");
     QCoreApplication::setApplicationName("Merkaartor");
 
 #ifdef _MOBILE

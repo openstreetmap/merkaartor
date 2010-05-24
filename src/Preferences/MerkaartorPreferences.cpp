@@ -106,6 +106,16 @@ Tool::Tool()
 MerkaartorPreferences::MerkaartorPreferences()
 {
     Sets = new QSettings();
+
+    QSettings oldSettings("BartVanhauwaert", "Merkaartor");
+    QStringList oldKeys = oldSettings.allKeys();
+    foreach(QString k, oldKeys) {
+        Sets->setValue(k, oldSettings.value(k));
+        Sets->sync();
+        oldSettings.remove(k);
+    }
+    oldSettings.clear();
+
     theToolList = new ToolList();
 
     version = Sets->value("version/version", "0").toString();
