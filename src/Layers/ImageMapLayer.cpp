@@ -332,7 +332,7 @@ ImageMapLayer * ImageMapLayer::fromXML(Document* d, const QDomElement& e, QProgr
     return l;
 }
 
-void ImageMapLayer::drawImage(QPixmap& thePix)
+void ImageMapLayer::drawImage(QPainter* P)
 {
     if (!p->theMapAdapter)
         return;
@@ -340,9 +340,8 @@ void ImageMapLayer::drawImage(QPixmap& thePix)
     if (p->pm.isNull())
         return;
 
-    QPainter P(&thePix);
-    P.setOpacity(getAlpha());
-    P.drawPixmap(0, 0, p->pm);
+    P->setOpacity(getAlpha());
+    P->drawPixmap(0, 0, p->pm);
 }
 
 using namespace ggl;

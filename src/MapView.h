@@ -89,7 +89,6 @@ class MapView :	public QWidget
         void drawGPS(QPainter & painter);
         void updateStaticBackground();
         void updateStaticBuffer();
-        void updateLayersImage();
 
         MainWindow* Main;
         Projection theProjection;

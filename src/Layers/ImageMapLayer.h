@@ -46,7 +46,7 @@ public:
 
     virtual bool arePointsDrawable() {return false;}
 
-    virtual void drawImage(QPixmap& thePix);
+    virtual void drawImage(QPainter* P);
     virtual void forceRedraw(MapView& theView, QRect rect);
     virtual void draw(MapView& theView, QRect& rect);
 

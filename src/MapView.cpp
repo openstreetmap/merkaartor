@@ -67,7 +67,7 @@ public:
 
 MapView::MapView(MainWindow* aMain) :
     QWidget(aMain), Main(aMain), theDocument(0), theInteraction(0), StaticBackground(0), StaticBuffer(0), StaticMap(0),
-        StaticBufferUpToDate(false), StaticMapUpToDate(false), SelectionLocked(false),lockIcon(0), numImages(0),
+        StaticBufferUpToDate(false), SelectionLocked(false),lockIcon(0), numImages(0),
         p(new MapViewPrivate)
 {
     setMouseTracking(true);
@@ -141,7 +141,6 @@ void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
     if (theDocument && updateMap) {
         for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
             ImgIt.get()->forceRedraw(*this, rect());
-        StaticMapUpToDate = false;
     }
     update();
 }
@@ -181,7 +180,6 @@ void MapView::panScreen(QPoint delta)
 
     for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
         ImgIt.get()->pan(delta);
-    StaticMapUpToDate = false;
     update();
 }
 
@@ -202,11 +200,6 @@ void MapView::paintEvent(QPaintEvent * anEvent)
     if (!p->invalidRects.isEmpty())
         buildFeatureSet();
 
-
-    if (!StaticMapUpToDate)
-        updateLayersImage();
-
-
     updateStaticBackground();
 
     if (!StaticBufferUpToDate) {
@@ -214,7 +207,11 @@ void MapView::paintEvent(QPaintEvent * anEvent)
     }
 
     P.drawPixmap(p->theVectorPanDelta, *StaticBackground);
-    P.drawPixmap(0, 0, *StaticMap);
+    P.save();
+    for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
+        if (ImgIt.get()->isVisible())
+            ImgIt.get()->drawImage(&P);
+    P.restore();
     P.drawPixmap(p->theVectorPanDelta, *StaticBuffer);
 
     drawLatLonGrid(P);
@@ -295,22 +292,6 @@ void MapView::drawGPS(QPainter & P)
             P.drawPixmap(g - QPoint(16, 16), pm);
         }
     }
-}
-
-void MapView::updateLayersImage()
-{
-    if (!StaticMap || (StaticMap->size() != size()))
-    {
-        delete StaticMap;
-        StaticMap = new QPixmap(size());
-    }
-    StaticMap->fill(Qt::transparent);
-
-    for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
-        if (ImgIt.get()->isVisible())
-            ImgIt.get()->drawImage(*StaticMap);
-
-    StaticMapUpToDate = true;
 }
 
 void MapView::buildFeatureSet()
@@ -737,7 +718,6 @@ void MapView::on_imageReceived(ImageMapLayer* aLayer)
     if (Main->pbImages->value() < Main->pbImages->maximum())
         Main->pbImages->setValue(Main->pbImages->value()+1);
     aLayer->forceRedraw(*this, rect());
-    StaticMapUpToDate = false;
     update();
 }
 
@@ -747,7 +727,6 @@ void MapView::on_loadingFinished(ImageMapLayer* aLayer)
 //    Main->pbImages->setRange(0, 0);
     Main->pbImages->reset();
 //    aLayer->forceRedraw(*this, rect());
-//    StaticMapUpToDate = false;
 //    update();
 }
 
