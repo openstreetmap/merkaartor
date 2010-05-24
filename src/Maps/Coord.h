@@ -22,13 +22,13 @@ inline double radToAng(double a)
     return a*180/M_PI;
 }
 
-#define angToCoord(a) a
+#define angToCoord(a) (a)
 //inline double  angToCoord(double a)
 //{
 //    return a;
 //}
 
-#define coordToAng(a) a
+#define coordToAng(a) (a)
 //inline double coordToAng(double a)
 //{
 //    return a;
