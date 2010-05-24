@@ -28,7 +28,6 @@ public:
     IMapAdapter* theMapAdapter;
 
     QPixmap pm;
-    QPoint theDelta;
     Projection theProjection;
     QString selServer;
     IImageManager* theImageManager;
@@ -341,33 +340,9 @@ void ImageMapLayer::drawImage(QPixmap& thePix)
     if (p->pm.isNull())
         return;
 
-    const QSize ps = p->pr.size();
-    const QSize pmSize = p->pm.size();
-    const qreal ratio = qMax<const qreal>((qreal)pmSize.width()/ps.width()*1.0, (qreal)pmSize.height()/ps.height()*1.0);
-    qDebug() << "Bg image ratio " << ratio;
-    QPixmap pms;
-    if (ratio >= 1.0) {
-        qDebug() << "Bg image scale 1 " << ps << " : " << p->pm.size();
-        pms = p->pm.scaled(ps);
-    } else {
-        const QSizeF drawingSize = pmSize * ratio;
-        const QSizeF originSize = pmSize/2 - drawingSize/2;
-        const QPointF drawingOrigin = QPointF(originSize.width(), originSize.height());
-        const QRect drawingRect = QRect(drawingOrigin.toPoint(), drawingSize.toSize());
-
-        qDebug() << "Bg image scale 2 " << ps << " : " << p->pm.size();
-        if (ps*ratio != drawingRect.size())
-            pms = p->pm.copy(drawingRect).scaled(ps*ratio);
-        else
-            pms = p->pm.copy(drawingRect);
-    }
-
     QPainter P(&thePix);
     P.setOpacity(getAlpha());
-    if (p->theMapAdapter->isTiled())
-        P.drawPixmap((pmSize.width()-pms.width())/2, (pmSize.height()-pms.height())/2, pms);
-    else
-        P.drawPixmap(QPoint((pmSize.width()-pms.width())/2, (pmSize.height()-pms.height())/2) + p->theDelta, pms);
+    P.drawPixmap(0, 0, p->pm);
 }
 
 using namespace ggl;
@@ -384,6 +359,32 @@ void ImageMapLayer::zoom(double zoom, const QPoint& pos, const QRect& rect)
     p->pm.fill(Qt::transparent);
     QPainter P(&p->pm);
     P.drawPixmap(pos - (pos * zoom), tpm);
+}
+
+void ImageMapLayer::pan(QPoint delta)
+{
+    if (!p->theMapAdapter)
+        return;
+    if (p->pm.isNull())
+        return;
+    if (p->theMapAdapter->getImageManager())
+        p->theMapAdapter->getImageManager()->abortLoading();
+
+#if QT_VERSION < 0x040600
+        QPixmap savPix;
+        savPix = p->pm.copy();
+        p->pm.fill(Qt::transparent);
+        QPainter P(&p->pm);
+        P.drawPixmap(delta, savPix);
+#else
+        QRegion exposed;
+        p->pm.scroll(delta.x(), delta.y(), p->pm.rect(), &exposed);
+        QPainter P(&p->pm);
+        P.setClipping(true);
+        P.setClipRegion(exposed);
+        P.eraseRect(p->pm.rect());
+#endif
+//        on_imageReceived();
 }
 
 void ImageMapLayer::zoom_in()
@@ -456,7 +457,7 @@ qreal ImageMapLayer::pixelPerM()
     return (p->theMapAdapter->getTileSize() * p->theMapAdapter->getTilesWE(p->theMapAdapter->getAdaptedZoom())) / EQUATORIAL_CIRCUMFERENCE;
 }
 
-void ImageMapLayer::forceRedraw(MapView& theView, QRect Screen, QPoint delta)
+void ImageMapLayer::forceRedraw(MapView& theView, QRect Screen)
 {
     if (!p->theMapAdapter)
         return;
@@ -474,7 +475,6 @@ void ImageMapLayer::forceRedraw(MapView& theView, QRect Screen, QPoint delta)
 //             p->theProjection.inverse(p->theTransform.inverted().map(fScreen.topRight())));
     p->Viewport = theView.viewport();
 
-    p->theDelta = delta;
 //    if (p->theMapAdapter->getImageManager())
 //        p->theMapAdapter->getImageManager()->abortLoading();
     draw(theView, Screen);
@@ -489,6 +489,37 @@ void ImageMapLayer::draw(MapView& theView, QRect& rect)
         p->pr = drawTiled(theView, rect);
     else
         p->pr = drawFull(theView, rect);
+
+    if (p->pm.isNull())
+        return;
+
+    const QSize ps = p->pr.size();
+    const QSize pmSize = p->pm.size();
+    const qreal ratio = qMax<const qreal>((qreal)pmSize.width()/ps.width()*1.0, (qreal)pmSize.height()/ps.height()*1.0);
+    qDebug() << "Bg image ratio " << ratio;
+    QPixmap pms;
+    if (ratio >= 1.0) {
+        qDebug() << "Bg image scale 1 " << ps << " : " << p->pm.size();
+        pms = p->pm.scaled(ps);
+    } else {
+        const QSizeF drawingSize = pmSize * ratio;
+        const QSizeF originSize = pmSize/2 - drawingSize/2;
+        const QPointF drawingOrigin = QPointF(originSize.width(), originSize.height());
+        const QRect drawingRect = QRect(drawingOrigin.toPoint(), drawingSize.toSize());
+
+        qDebug() << "Bg image scale 2 " << ps << " : " << p->pm.size();
+        if (ps*ratio != drawingRect.size())
+            pms = p->pm.copy(drawingRect).scaled(ps*ratio);
+        else
+            pms = p->pm.copy(drawingRect);
+    }
+
+    QPainter P(&p->pm);
+    P.drawPixmap((pmSize.width()-pms.width())/2, (pmSize.height()-pms.height())/2, pms);
+    //    if (p->theMapAdapter->isTiled())
+    //        P.drawPixmap((pmSize.width()-pms.width())/2, (pmSize.height()-pms.height())/2, pms);
+    //    else
+    //        P.drawPixmap(QPoint((pmSize.width()-pms.width())/2, (pmSize.height()-pms.height())/2) + p->theDelta, pms);
 }
 
 QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect) const
@@ -506,7 +537,6 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect) const
             p->pm = pm.scaled(rect.size(), Qt::IgnoreAspectRatio);
         else
             p->pm = pm;
-        p->theDelta = QPoint();
     } else {
         QString url (p->theMapAdapter->getQuery(wgs84vp, vp, rect));
         if (!url.isEmpty()) {
@@ -516,7 +546,6 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect) const
             QPixmap pm = p->theMapAdapter->getImageManager()->getImage(p->theMapAdapter,url);
             if (!pm.isNull())  {
                 p->pm = pm.scaled(rect.size(), Qt::IgnoreAspectRatio);
-                p->theDelta = QPoint();
             }
         }
     }
@@ -789,7 +818,6 @@ void ImageMapLayer::on_imageRequested()
 
 void ImageMapLayer::on_imageReceived()
 {
-    p->theDelta = QPoint();
     emit imageReceived(this);
 }
 

@@ -52,7 +52,7 @@ public:
 //    int AbstractZoomLevel;
     CoordBox Viewport;
     QList<CoordBox> invalidRects;
-    QPoint theRasterPanDelta, theVectorPanDelta;
+    QPoint theVectorPanDelta;
     QMap<RenderPriority, QSet <Feature*> > theFeatures;
     QSet<Way*> theCoastlines;
     QList<Node*> theVirtualNodes;
@@ -140,8 +140,7 @@ void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
     }
     if (theDocument && updateMap) {
         for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
-            ImgIt.get()->forceRedraw(*this, rect(), p->theRasterPanDelta);
-        p->theRasterPanDelta = QPoint();
+            ImgIt.get()->forceRedraw(*this, rect());
         StaticMapUpToDate = false;
     }
     update();
@@ -149,7 +148,6 @@ void MapView::invalidate(bool updateStaticBuffer, bool updateMap)
 
 void MapView::panScreen(QPoint delta)
 {
-    p->theRasterPanDelta += delta;
     p->theVectorPanDelta += delta;
 
     CoordBox r1, r2;
@@ -179,8 +177,11 @@ void MapView::panScreen(QPoint delta)
 
     p->theTransform.translate(qreal(delta.x())/p->theTransform.m11(), qreal(delta.y())/p->theTransform.m22());
     viewportRecalc(rect());
-
     StaticBufferUpToDate = false;
+
+    for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt)
+        ImgIt.get()->pan(delta);
+    StaticMapUpToDate = false;
     update();
 }
 
@@ -213,7 +214,7 @@ void MapView::paintEvent(QPaintEvent * anEvent)
     }
 
     P.drawPixmap(p->theVectorPanDelta, *StaticBackground);
-    P.drawPixmap(p->theRasterPanDelta, *StaticMap);
+    P.drawPixmap(0, 0, *StaticMap);
     P.drawPixmap(p->theVectorPanDelta, *StaticBuffer);
 
     drawLatLonGrid(P);
@@ -733,16 +734,21 @@ void MapView::on_imageRequested(ImageMapLayer*)
 
 void MapView::on_imageReceived(ImageMapLayer* aLayer)
 {
-    Main->pbImages->setValue(Main->pbImages->value()+1);
-    aLayer->forceRedraw(*this, rect(), p->theRasterPanDelta);
+    if (Main->pbImages->value() < Main->pbImages->maximum())
+        Main->pbImages->setValue(Main->pbImages->value()+1);
+    aLayer->forceRedraw(*this, rect());
     StaticMapUpToDate = false;
     update();
 }
 
-void MapView::on_loadingFinished(ImageMapLayer*)
+void MapView::on_loadingFinished(ImageMapLayer* aLayer)
 {
     numImages = 0;
+//    Main->pbImages->setRange(0, 0);
     Main->pbImages->reset();
+//    aLayer->forceRedraw(*this, rect());
+//    StaticMapUpToDate = false;
+//    update();
 }
 
 void MapView::resizeEvent(QResizeEvent * ev)
