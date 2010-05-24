@@ -27,7 +27,7 @@ class QPainter;
 
 #include <algorithm>
 
-#define XY_TO_COORD(x)  projection().inverse(transform().inverted().map(x))
+#define XY_TO_COORD(x)  projection().inverse(transform().inverted().map(QPointF(x)))
 #define COORD_TO_XY(x)  transform().map(projection().project(x))
 
 class Interaction : public QObject

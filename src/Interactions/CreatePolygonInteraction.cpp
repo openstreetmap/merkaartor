@@ -58,7 +58,7 @@ void CreatePolygonInteraction::mousePressEvent(QMouseEvent * event)
         {
             HaveOrigin = true;
             Origin = XY_TO_COORD(event->pos());
-            OriginF = event->pos();
+            OriginF = QPointF(event->pos());
             bAngle = 0.;
             bScale = QPointF(1., 1.);
         }
