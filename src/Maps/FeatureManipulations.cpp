@@ -305,6 +305,76 @@ void joinRoads(Document* theDocument, CommandList* theList, PropertiesDock* theD
     theDock->setSelection(Output);
 }
 
+static bool handleWaysplitSpecialRestriction(Document* theDocument, CommandList* theList, Way* FirstPart, Way* NextPart, Relation* theRel)
+{
+    if (theRel->tagValue("type","") != "restriction")
+        return false;
+
+    for (int k=0; k < theRel->size(); k++)
+    {
+        // check for via
+        if (theRel->getRole(k) == "via")
+        {
+            if (theRel->get(k) == FirstPart)
+            {
+                // whoops, we just split a via way, just add the new way, too
+                theList->add(new RelationAddFeatureCommand(theRel, theRel->getRole(k), NextPart, k+1, theDocument->getDirtyOrOriginLayer(FirstPart->layer())));
+                // we just added a member, so get over it
+                k++;
+            }
+            else if ((theRel->get(k))->getType() == Feature::Nodes)
+            {
+                // this seems to be a via node, check if it is member the nextPart
+                if (NextPart->find(theRel->get(k)) < NextPart->size())
+                {
+                    // yes it is, so remove First Part and add Next Part to it
+                    int idx = theRel->find(FirstPart);
+                    theList->add(new RelationAddFeatureCommand(theRel, theRel->getRole(idx), NextPart, idx+1, theDocument->getDirtyOrOriginLayer(FirstPart->layer())));
+                    theList->add(new RelationRemoveFeatureCommand(theRel, idx, theDocument->getDirtyOrOriginLayer(FirstPart->layer())));
+                }
+            }
+            else if ((theRel->get(k))->getType() == Feature::Ways)
+            {
+                // this is a way, check the nodes
+                Way* W = CAST_WAY(theRel->get(k));
+                for (int l=0; l<W->size(); l++)
+                {
+		    // check if this node is member the nextPart
+                    if (NextPart->find(W->get(l)) < NextPart->size())
+                    {
+                        // yes it is, so remove First Part and add Next Part to it
+                        int idx = theRel->find(FirstPart);
+                        theList->add(new RelationAddFeatureCommand(theRel, theRel->getRole(idx), NextPart, idx+1, theDocument->getDirtyOrOriginLayer(FirstPart->layer())));
+                        theList->add(new RelationRemoveFeatureCommand(theRel, idx, theDocument->getDirtyOrOriginLayer(FirstPart->layer())));
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    return true;
+}
+
+static void handleWaysplitRelations(Document* theDocument, CommandList* theList, Way* FirstPart, Way* NextPart)
+{
+    /* since we may delete First Part from some Relations here, we first build a list of the relations to check */
+    QList<Relation*> checkList;
+
+    for (int j=0; j < FirstPart->sizeParents(); j++) {
+        checkList.append(CAST_RELATION(FirstPart->getParent(j)));
+    }
+
+    for (int j=0; j < checkList.count(); j++) {
+        Relation* L = checkList.at(j);
+        if (!handleWaysplitSpecialRestriction(theDocument, theList, FirstPart, NextPart, L))
+        {
+            int idx = L->find(FirstPart);
+            theList->add(new RelationAddFeatureCommand(L, L->getRole(idx), NextPart, idx+1, theDocument->getDirtyOrOriginLayer(FirstPart->layer())));
+        }
+    }
+}
+
+
 static void splitRoad(Document* theDocument, CommandList* theList, Way* In, const QList<Node*>& Points, QList<Way*>& Result)
 {
     int pos;
@@ -359,17 +429,15 @@ static void splitRoad(Document* theDocument, CommandList* theList, Way* In, cons
                 theList->add(new WayAddNodeCommand(NextPart, FirstPart->getNode(i+1), theDocument->getDirtyOrOriginLayer(In->layer())));
                 theList->add(new WayRemoveNodeCommand(FirstPart,i+1,theDocument->getDirtyOrOriginLayer(In->layer())));
             }
-            for (int j=0; j < In->sizeParents(); j++) {
-                if (In->getParent(j)->isDeleted()) continue;
-                Relation* L = CAST_RELATION(In->getParent(j));
-                int idx = L->find(FirstPart);
-                theList->add(new RelationAddFeatureCommand(L, L->getRole(idx), NextPart, idx+1, theDocument->getDirtyOrOriginLayer(In->layer())));
-            }
+            handleWaysplitRelations(theDocument, theList, FirstPart, NextPart);
+
             Result.push_back(NextPart);
             FirstPart = NextPart;
             i=0;
         }
     }
+
+
 }
 
 void splitRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
