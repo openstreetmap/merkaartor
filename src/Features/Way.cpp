@@ -417,7 +417,8 @@ bool Way::isCoastline()
 
 bool Way::isClosed() const
 {
-    return (p->Nodes.size() && p->Nodes[0] == p->Nodes[p->Nodes.size()-1]);
+    // minimal closed way is a triangle, with 4 nodes (3 distinct)
+    return (p->Nodes.size() > 3 && p->Nodes[0] == p->Nodes[p->Nodes.size()-1]);
 }
 
 double Way::area()
