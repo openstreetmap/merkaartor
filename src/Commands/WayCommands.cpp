@@ -164,7 +164,7 @@ void WayRemoveNodeCommand::redo()
     oldLayer = theRoad->layer();
     if (theRoad->isClosed()) {
         theRoad->remove(Idx); // cannot do outside of "if" because the way wouldn't be closed anymore
-        if (Idx == 0) {
+        if (Idx == 0 && theRoad->size() > 2) {
             theRoad->remove(theRoad->size()-1);
             theRoad->add(theRoad->getNode(0));
         }
