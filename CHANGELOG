@@ -235,7 +235,7 @@ v0.13
     * ADD : Allow to force the custom Qt style thru Config.pri
     * FIX : Do not remove incomplete downloaded relation; make them readonly and display them in red (temporary)
     * FIX : Painting slowdowns (+ memory consumption) when relations are involved (fixes #1528)
-    * FIX : Splitted roads not added to Relation (fixes #1586)
+    * FIX : Split roads not added to Relation (fixes #1586)
     * FIX : Tweaked windows menu to be "standard"
     * ADD : Splash screen
     * ADD : Styles dock + list of styles in "Tools-Styles" for quick style switching. As a consequence, a directory must be defined in the preferences where all custom styles will be stored.
@@ -265,7 +265,7 @@ v0.13
     * FIX : Allow disabling "Don't connect GPX nodes separated more than.." by setting it to 0. (fixes #1488)
     * FIX : getDefaultLanguage() returns an invalid value with 2-parts language definition (like en_GB) (by Lukasz Jernas) (closes #1417)
     * ADD : Single-node splitting of roads even with a connection to the extremity of another road (by Yves Goergen) (closes #1419)
-    * FIX : Declutter - move translations to a seperate directory.
+    * FIX : Declutter - move translations to a separate directory.
     * ADD : Custom Qt style (skulpture by Christoph Feck) to bypass Qt expanding dock problem on linux. Enable via preferences-visual. (fixes #1482)
     * FIX : Allow port number in WMS/TMS server address (fixes #1479)
     * ADD : Save relative icon filenames in map styles if not builtin (closes #1463)
@@ -385,7 +385,7 @@ v0.12
     * ADD : names rendering in styles
     * ADD : save last download layer to MDCs
     * ADD : switch to integer internal coordinates. Coordinates now vary from -INT_MAX to +INT_MAX rather than -M_PI / +M_PI
-    * FIX : 412 when uploading joined/splitted roads
+    * FIX : 412 when uploading joined/split roads
     * ADD : layer menu in menubar
     * ADD : display viewport coordinates in status bar
     * ADD : (almost) generalize progress dialogs
