@@ -6,7 +6,6 @@
 # PREFIX              - base prefix for installation (default: /usr/local)
 # LIBDIR              - base directory for plugins (default: $$PREFIX/lib)
 # NODEBUG             - no debug target
-# OSMARENDER          - enable osmarender
 # GDAL    	      - enable GDAL
 # MOBILE    	      - enable MOBILE
 # GEOIMAGE            - enable geotagged images (needs exiv2)

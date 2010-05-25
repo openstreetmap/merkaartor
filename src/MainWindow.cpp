@@ -74,9 +74,6 @@
 #endif
 
 #include "Render/NativeRenderDialog.h"
-#ifdef OSMARENDER
-    #include "Render/OsmaRenderDialog.h"
-#endif
 
 #include "qgps.h"
 #include "qgpsdevice.h"

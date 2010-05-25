@@ -1180,11 +1180,6 @@
     <string>&amp;Image layer</string>
    </property>
   </action>
-  <action name="renderOsmarenderAction">
-   <property name="text">
-    <string>Osmarender</string>
-   </property>
-  </action>
   <action name="renderNativeAction">
    <property name="text">
     <string>&amp;Raster/SVG</string>
