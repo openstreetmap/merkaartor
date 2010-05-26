@@ -1294,7 +1294,7 @@ int Way::createJunction(Document* theDocument, CommandList* theList, Way* R1, Wa
             if (intersected.size()) {
                 numInter++;
                 if (doIt) {
-                    Node* pt = new Node(Coord(qRound(intersected[0].y()), qRound(intersected[0].x())));
+                    Node* pt = new Node(Coord(intersected[0].y(), intersected[0].x()));
                     theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(R1->layer()),pt,true));
                     theList->add(new WayAddNodeCommand(R1,pt,i+1,theDocument->getDirtyOrOriginLayer(R1->layer())));
                     theList->add(new WayAddNodeCommand(R2,pt,j+1,theDocument->getDirtyOrOriginLayer(R2->layer())));

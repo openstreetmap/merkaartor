@@ -406,8 +406,8 @@ void MapView::drawLatLonGrid(QPainter & P)
     double lonInterval = angToCoord(0.002/p->ZoomLevel);
     double latInterval = angToCoord(0.002/p->ZoomLevel);
     if (!lonInterval || !latInterval) return; // avoid divide-by-zero
-    double lonStart = qMax(p->Viewport.bottomLeft().lon() / lonInterval * lonInterval, -COORD_MAX);
-    double latStart = qMax(p->Viewport.bottomLeft().lat() / latInterval * latInterval, -COORD_MAX/2);
+    double lonStart = qMax(int(p->Viewport.bottomLeft().lon() / lonInterval) * lonInterval, -COORD_MAX);
+    double latStart = qMax(int(p->Viewport.bottomLeft().lat() / latInterval) * latInterval, -COORD_MAX/2);
 
     QList<QPolygonF> medianLines;
     QList<QPolygonF> parallelLines;
@@ -415,7 +415,7 @@ void MapView::drawLatLonGrid(QPainter & P)
     for (double y=latStart; y<=qMin(p->Viewport.topLeft().lat()+latInterval, COORD_MAX/2); y+=latInterval) {
         QPolygonF l;
         for (double x=lonStart; x<=qMin(p->Viewport.bottomRight().lon()+lonInterval, COORD_MAX); x+=lonInterval) {
-            QPointF pt = QPointF(theProjection.project(Coord(qRound(y), qRound(x))));
+            QPointF pt = QPointF(theProjection.project(Coord(y, x)));
             l << pt;
         }
         parallelLines << l;
@@ -423,7 +423,7 @@ void MapView::drawLatLonGrid(QPainter & P)
     for (double x=lonStart; x<=qMin(p->Viewport.bottomRight().lon()+lonInterval, COORD_MAX); x+=lonInterval) {
         QPolygonF l;
         for (double y=latStart; y<=qMin(p->Viewport.topLeft().lat()+latInterval, COORD_MAX/2); y+=latInterval) {
-            QPointF pt = QPointF(theProjection.project(Coord(qRound(y), qRound(x))));
+            QPointF pt = QPointF(theProjection.project(Coord(y, x)));
             l << pt;
         }
         medianLines << l;
