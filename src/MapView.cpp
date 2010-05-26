@@ -1009,7 +1009,7 @@ void MapView::transformCalc(QTransform& theTransform, const Projection& theProje
 void MapView::setViewport(const CoordBox & TargetMap)
 {
     p->Viewport = TargetMap;
-    if (M_PREFS->getZoomBoris()) {
+    if (M_PREFS->getZoomBoris() && theDocument) {
         ImageMapLayer* l = NULL;
         for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
             l = ImgIt.get();
@@ -1050,7 +1050,7 @@ void MapView::setViewport(const CoordBox & TargetMap,
 //        z = zoomPixPerMatCur / p->PixelPerM;
 //    }
 
-    if (M_PREFS->getZoomBoris()) {
+    if (M_PREFS->getZoomBoris() && theDocument) {
         ImageMapLayer* l = NULL;
         for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
             l = ImgIt.get();

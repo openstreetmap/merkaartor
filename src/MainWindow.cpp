@@ -357,7 +357,6 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::delayedInit()
 {
-    updateProjectionMenu();
     updateWindowMenu();
 
     if (M_PREFS->getLocalServer()) {
@@ -367,6 +366,9 @@ void MainWindow::delayedInit()
     }
 
     on_fileNewAction_triggered();
+
+    // This is after fileNewAction, so theDocument is initialised
+    updateProjectionMenu();
 }
 
 void MainWindow::handleMessage(const QString &msg)
@@ -2526,7 +2528,7 @@ void MainWindow::updateProjectionMenu()
     }
     connect (ui->mnuProjections, SIGNAL(triggered(QAction *)), this, SLOT(projectionTriggered(QAction *)));
 #endif
-    ui->mnuProjections->menuAction()->setVisible(true);
+    ui->mnuProjections->menuAction()->setEnabled(true);
     if (M_PREFS->getZoomBoris()) {
         ImageMapLayer* l = NULL;
         for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
@@ -2534,7 +2536,7 @@ void MainWindow::updateProjectionMenu()
             break;
         }
         if (l && l->isTiled())
-            ui->mnuProjections->menuAction()->setVisible(false);
+            ui->mnuProjections->menuAction()->setEnabled(false);
     }
 }
 
