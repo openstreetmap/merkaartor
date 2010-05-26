@@ -45,7 +45,7 @@ class Command
     protected:
         mutable QString Id;
         QString description;
-        Feature* mainFeature;
+        QPointer<Feature> mainFeature;
         int commandDirtyLevel;
         QString oldCreated;
         bool isUndone;
