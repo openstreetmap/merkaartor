@@ -149,6 +149,14 @@ void Interaction::wheelEvent(QWheelEvent* ev)
         }
     }
 
+    // Do not overzoom in one go (circular scroll on touchpads can scroll very
+    // fast). Without this check we can end up scaling the background by e.g.
+    // 40 times in each direction and running out of memory.
+    if (finalZoom > 2.0)
+        finalZoom = 2.0;
+    else if (finalZoom < 0.5)
+        finalZoom = 0.5;
+
     view()->zoom(finalZoom, ev->pos());
     view()->invalidate(true, true);
 }
