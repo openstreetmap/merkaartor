@@ -554,6 +554,9 @@ void MapView::updateStaticBuffer()
 
 void MapView::mousePressEvent(QMouseEvent* event)
 {
+    if (!document())
+        return;
+
     if (theInteraction) {
         Main->info()->setHtml(theInteraction->toHtml());
         theInteraction->mousePressEvent(event);
@@ -562,12 +565,18 @@ void MapView::mousePressEvent(QMouseEvent* event)
 
 void MapView::mouseReleaseEvent(QMouseEvent* event)
 {
+    if (!document())
+        return;
+
     if (theInteraction)
         theInteraction->mouseReleaseEvent(event);
 }
 
 void MapView::mouseMoveEvent(QMouseEvent* anEvent)
 {
+    if (!document())
+        return;
+
     if (!updatesEnabled())
         return;
     if (theInteraction)
@@ -576,6 +585,9 @@ void MapView::mouseMoveEvent(QMouseEvent* anEvent)
 
 void MapView::wheelEvent(QWheelEvent* ev)
 {
+    if (!document())
+        return;
+
     if (theInteraction)
         theInteraction->wheelEvent(ev);
 }

@@ -221,15 +221,14 @@ int main(int argc, char** argv)
     instance.processEvents();
 
     MainWindow Main;
-    instance.processEvents();
-    Main.handleMessage(message);
-
 #ifdef _MOBILE
     instance.setActiveWindow(&Main);
     Main.showMaximized();
 #else
     Main.show();
 #endif
+    instance.processEvents();
+    Main.handleMessage(message);
 
     splash.finish(&Main);
 

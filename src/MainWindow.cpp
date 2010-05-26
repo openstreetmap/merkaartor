@@ -323,6 +323,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->viewStyleForegroundAction->setVisible(false);
     ui->viewStyleTouchupAction->setVisible(false);
 
+    M_PREFS->initialPosition(theView);
     MerkaartorPreferences::instance()->restoreMainWindowState( this );
 #ifndef _MOBILE
     if (!M_PREFS->getProjectionsList()->getProjections()->size()) {
@@ -350,8 +351,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->mnuAreaOpacity, SIGNAL(triggered(QAction*)), this, SLOT(setAreaOpacity(QAction*)));
 
     blockSignals(false);
-
-    M_PREFS->initialPosition(theView);
 
     QTimer::singleShot( 0, this, SLOT(delayedInit()) );
 }
@@ -387,10 +386,10 @@ void MainWindow::handleMessage(const QString &msg)
         }
     }
 
-    loadFiles(fileNames);
-
     if (fileNames.isEmpty())
         QDir::setCurrent(M_PREFS->getWorkingDir());
+    else
+        loadFiles(fileNames);
 }
 
 MainWindow::~MainWindow(void)

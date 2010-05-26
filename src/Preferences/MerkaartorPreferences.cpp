@@ -731,8 +731,9 @@ QString MerkaartorPreferences::getLastSearchValue() const
 
 void MerkaartorPreferences::saveMainWindowState(const MainWindow * mainWindow)
 {
-    Sets->setValue("MainWindow/Position", mainWindow->pos());
-    Sets->setValue("MainWindow/Size", mainWindow->size());
+//    Sets->setValue("MainWindow/Position", mainWindow->pos());
+//    Sets->setValue("MainWindow/Size", mainWindow->size());
+    Sets->setValue("MainWindow/Geometry", mainWindow->saveGeometry());
     Sets->setValue("MainWindow/State", mainWindow->saveState());
     Sets->setValue("MainWindow/Fullscreen", mainWindow->ui->windowShowAllAction->isEnabled());
     Sets->setValue("MainWindow/FullscreenState", mainWindow->fullscreenState);
@@ -740,11 +741,14 @@ void MerkaartorPreferences::saveMainWindowState(const MainWindow * mainWindow)
 
 void MerkaartorPreferences::restoreMainWindowState(MainWindow * mainWindow) const
 {
-    if (Sets->contains("MainWindow/Position"))
-        mainWindow->move( Sets->value("MainWindow/Position").toPoint());
+//    if (Sets->contains("MainWindow/Position"))
+//        mainWindow->move( Sets->value("MainWindow/Position").toPoint());
+//
+//    if (Sets->contains("MainWindow/Size"))
+//        mainWindow->resize( Sets->value("MainWindow/Size").toSize());
 
-    if (Sets->contains("MainWindow/Size"))
-        mainWindow->resize( Sets->value("MainWindow/Size").toSize());
+    if (Sets->contains("MainWindow/Geometry"))
+        mainWindow->restoreGeometry(Sets->value("MainWindow/Geometry").toByteArray() );
 
     if (Sets->contains("MainWindow/State"))
         mainWindow->restoreState( Sets->value("MainWindow/State").toByteArray() );
@@ -769,13 +773,13 @@ void MerkaartorPreferences::setInitialPosition(MapView* vw)
 {
     QStringList ip;
     CoordBox cb = vw->viewport();
-    ip.append(QString::number(cb.bottomLeft().lat()));
-    ip.append(QString::number(cb.bottomLeft().lon()));
-    ip.append(QString::number(cb.topRight().lat()));
-    ip.append(QString::number(cb.topRight().lon()));
+    ip.append(QString::number(cb.bottomLeft().lat(), 'f', 8));
+    ip.append(QString::number(cb.bottomLeft().lon(), 'f', 8));
+    ip.append(QString::number(cb.topRight().lat(), 'f', 8));
+    ip.append(QString::number(cb.topRight().lon(), 'f', 8));
 
     Sets->setValue("MainWindow/InitialPosition", ip);
-    Sets->setValue("MainWindow/ViewRect", vw->rect());
+//    Sets->setValue("MainWindow/ViewRect", vw->rect());
 }
 
 void MerkaartorPreferences::initialPosition(MapView* vw)
