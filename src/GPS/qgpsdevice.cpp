@@ -102,7 +102,7 @@ QGPSDevice::QGPSDevice()
  * Accessor functions
  */
 
-int QGPSDevice::latDegrees()    { return (int) (fabs(latitude()));													}
+int QGPSDevice::latDegrees()    { return (int) (fabs(latitude())); }
 int QGPSDevice::latMinutes()
 {
     double m = fabs(latitude()) - latDegrees();
@@ -114,7 +114,7 @@ int QGPSDevice::latSeconds()
     double s = (m * 60) - int(m * 60);
     return int(s * 60);
 }
-int QGPSDevice::longDegrees()    { return (int) (fabs(longitude()));													}
+int QGPSDevice::longDegrees()    { return (int) (fabs(longitude())); }
 int QGPSDevice::longMinutes()
 {
     double m = fabs(longitude()) - longDegrees();
@@ -956,8 +956,12 @@ void QGPSDDevice::run()
 
     Server = new gpsmm();
     gpsdata = Server->open(M_PREFS->getGpsdHost().toAscii().data(),QString::number(M_PREFS->getGpsdPort()).toAscii().data());
-    if (!gpsdata)
+    if (!gpsdata) {
+//        QMessageBox::critical(NULL, tr("GPSD connection error"),
+//                              tr("Unable to connect to %1:%2").arg(M_PREFS->getGpsdHost()).arg(QString::number(M_PREFS->getGpsdPort())), QMessageBox::Ok);
+        qDebug() << tr("Unable to connect to %1:%2").arg(M_PREFS->getGpsdHost()).arg(QString::number(M_PREFS->getGpsdPort()));
         return;
+    }
 
     onLinkReady();
     l.processEvents();
