@@ -1013,7 +1013,10 @@ void MapView::transformCalc(QTransform& theTransform, const Projection& theProje
 
 void MapView::setViewport(const CoordBox & TargetMap)
 {
-    p->Viewport = TargetMap;
+    if (TargetMap.latDiff() == 0 || TargetMap.lonDiff() == 0)
+        p->Viewport = CoordBox (TargetMap.center()-COORD_ENLARGE*10, TargetMap.center()+COORD_ENLARGE*10);
+    else
+        p->Viewport = TargetMap;
     if (M_PREFS->getZoomBoris() && theDocument) {
         ImageMapLayer* l = NULL;
         for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
@@ -1031,7 +1034,12 @@ void MapView::setViewport(const CoordBox & TargetMap)
 void MapView::setViewport(const CoordBox & TargetMap,
                                     const QRect & Screen)
 {
-    transformCalc(p->theTransform, theProjection, TargetMap, Screen);
+    CoordBox targetVp;
+    if (TargetMap.latDiff() == 0 || TargetMap.lonDiff() == 0)
+        targetVp = CoordBox (TargetMap.center()-COORD_ENLARGE*10, TargetMap.center()+COORD_ENLARGE*10);
+    else
+        targetVp = TargetMap;
+    transformCalc(p->theTransform, theProjection, targetVp, Screen);
     viewportRecalc(Screen);
 
     QRectF vp = theProjection.getProjectedViewport(p->Viewport, Screen);
