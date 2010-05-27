@@ -403,27 +403,32 @@ void MapView::drawLatLonGrid(QPainter & P)
     if (!M_PREFS->getLatLonGridVisible())
         return;
 
-    double lonInterval = angToCoord(0.002/p->ZoomLevel);
-    double latInterval = angToCoord(0.002/p->ZoomLevel);
+    double lonInterval = coordToAng(p->Viewport.lonDiff()) / 4;
+    double latInterval = coordToAng(p->Viewport.latDiff()) / 4;
+    int prec = log10(lonInterval);
     if (!lonInterval || !latInterval) return; // avoid divide-by-zero
     double lonStart = qMax(int(p->Viewport.bottomLeft().lon() / lonInterval) * lonInterval, -COORD_MAX);
+    if (lonStart<1 && lonStart != -COORD_MAX)
+        lonStart -= lonInterval;
     double latStart = qMax(int(p->Viewport.bottomLeft().lat() / latInterval) * latInterval, -COORD_MAX/2);
+    if (latStart<1 && latStart != -COORD_MAX/2)
+        latStart -= lonInterval;
 
     QList<QPolygonF> medianLines;
     QList<QPolygonF> parallelLines;
 
-    for (double y=latStart; y<=qMin(p->Viewport.topLeft().lat()+latInterval, COORD_MAX/2); y+=latInterval) {
+    for (double y=latStart; y<=p->Viewport.topLeft().lat()+latInterval; y+=latInterval) {
         QPolygonF l;
-        for (double x=lonStart; x<=qMin(p->Viewport.bottomRight().lon()+lonInterval, COORD_MAX); x+=lonInterval) {
-            QPointF pt = QPointF(theProjection.project(Coord(y, x)));
+        for (double x=lonStart; x<=p->Viewport.bottomRight().lon()+lonInterval; x+=lonInterval) {
+            QPointF pt = theProjection.project(Coord(qMin(y, COORD_MAX/2), qMin(x, COORD_MAX)));
             l << pt;
         }
         parallelLines << l;
     }
-    for (double x=lonStart; x<=qMin(p->Viewport.bottomRight().lon()+lonInterval, COORD_MAX); x+=lonInterval) {
+    for (double x=lonStart; x<=p->Viewport.bottomRight().lon()+lonInterval; x+=lonInterval) {
         QPolygonF l;
-        for (double y=latStart; y<=qMin(p->Viewport.topLeft().lat()+latInterval, COORD_MAX/2); y+=latInterval) {
-            QPointF pt = QPointF(theProjection.project(Coord(y, x)));
+        for (double y=latStart; y<=p->Viewport.topLeft().lat()+latInterval; y+=latInterval) {
+            QPointF pt = theProjection.project(Coord(qMin(y, COORD_MAX/2), qMin(x, COORD_MAX)));
             l << pt;
         }
         medianLines << l;
@@ -438,7 +443,7 @@ void MapView::drawLatLonGrid(QPainter & P)
         P.drawPolyline(p->theTransform.map(parallelLines[i]));
         QPoint pt = QPoint(0, p->theTransform.map(parallelLines.at(i).at(0)).y());
         QPoint ptt = pt + QPoint(5, -5);
-        P.drawText(ptt, QString("%1").arg(coordToAng(theProjection.inverse(parallelLines.at(i).at(0)).lat()), 0, 'f', 2));
+        P.drawText(ptt, QString("%1").arg(coordToAng(theProjection.inverse(parallelLines.at(i).at(0)).lat()), 0, 'f', 2-prec));
     }
     for (int i=0; i<medianLines.size(); ++i) {
 
@@ -448,7 +453,7 @@ void MapView::drawLatLonGrid(QPainter & P)
         P.drawPolyline(p->theTransform.map(medianLines[i]));
         QPoint pt = QPoint(p->theTransform.map(medianLines.at(i).at(0)).x(), 0);
         QPoint ptt = pt + QPoint(5, 10);
-        P.drawText(ptt, QString("%1").arg(coordToAng(theProjection.inverse(medianLines.at(i).at(0)).lon()), 0, 'f', 2));
+        P.drawText(ptt, QString("%1").arg(coordToAng(theProjection.inverse(medianLines.at(i).at(0)).lon()), 0, 'f', 2-prec));
     }
 }
 
@@ -1029,26 +1034,13 @@ void MapView::setViewport(const CoordBox & TargetMap,
     transformCalc(p->theTransform, theProjection, TargetMap, Screen);
     viewportRecalc(Screen);
 
-    if (theProjection.projIsLatLong()) {
-        p->PixelPerM = Screen.width() / (double)p->Viewport.lonDiff() * LAT_ANG_PER_M / M_PI * COORD_MAX;
-    } else {
-        QRectF vp = theProjection.getProjectedViewport(p->Viewport, Screen);
-        p->PixelPerM = Screen.width() / vp.width();
-    }
+    QRectF vp = theProjection.getProjectedViewport(p->Viewport, Screen);
+    p->PixelPerM = Screen.width() / vp.width();
+
     p->NodeWidth = p->PixelPerM * M_PREFS->getNodeSize();
     if (p->NodeWidth > M_PREFS->getNodeSize())
         p->NodeWidth = M_PREFS->getNodeSize();
     p->ZoomLevel = p->theTransform.m11();
-
-//    QPointF pt = theProjection.project(Coord(0, angToInt(180)));
-//    double earthWidth = pt.x() * 2;
-//    double zoomPixPerMat0 = 512. / earthWidth;
-//    double z = 0;
-//    p->AbstractZoomLevel = 0;
-//    for (;z<p->theTransform.m11(); ++p->AbstractZoomLevel) {
-//        double zoomPixPerMatCur = zoomPixPerMat0 * pow(2., p->AbstractZoomLevel);
-//        z = zoomPixPerMatCur / p->PixelPerM;
-//    }
 
     if (M_PREFS->getZoomBoris() && theDocument) {
         ImageMapLayer* l = NULL;

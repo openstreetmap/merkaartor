@@ -24,7 +24,7 @@
 #define POLARRADIUS      6356752.0
 #define EQUATORIALMETERCIRCUMFERENCE  40075016.68
 #define EQUATORIALMETERHALFCIRCUMFERENCE  20037508.34
-#define EQUATORIALMETERPERDEGREE    111319490.79
+#define EQUATORIALMETERPERDEGREE    222638.981555556
 
 TileMapAdapter::TileMapAdapter(const QString& host, const QString& serverPath, const QString& projection, int theTilesize, int minZoom, int maxZoom, bool blOrigin)
     :MapAdapter(host, serverPath, projection, minZoom, maxZoom)

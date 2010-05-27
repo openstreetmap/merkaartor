@@ -14,7 +14,7 @@
 #define POLARRADIUS      6356752.0
 #define EQUATORIALMETERCIRCUMFERENCE  40075016.68
 #define EQUATORIALMETERHALFCIRCUMFERENCE  20037508.34
-#define EQUATORIALMETERPERDEGREE    111319490.79
+#define EQUATORIALMETERPERDEGREE    222638.981555556
 
 using namespace ggl;
 
@@ -218,9 +218,7 @@ QRectF Projection::getProjectedViewport(const CoordBox& Viewport, const QRect& s
     QPointF bl, tr;
 
     double x, y;
-    if (p->IsLatLong)
-        tr = QPointF(coordToAng(Viewport.topRight().lon()), coordToAng(Viewport.topRight().lat()));
-    else if (p->IsMercator)
+    if (p->IsLatLong || p->IsMercator)
         tr = project(Viewport.topRight());
     else {
         x = coordToRad(Viewport.topRight().lon());
@@ -229,9 +227,7 @@ QRectF Projection::getProjectedViewport(const CoordBox& Viewport, const QRect& s
         tr = QPointF(x, y);
     }
 
-    if (p->IsLatLong)
-        bl = QPointF(coordToAng(Viewport.bottomLeft().lon()), coordToAng(Viewport.bottomLeft().lat()));
-    else if (p->IsMercator)
+    if (p->IsLatLong || p->IsMercator)
         bl = project(Viewport.bottomLeft());
     else {
         x = coordToRad(Viewport.bottomLeft().lon());
