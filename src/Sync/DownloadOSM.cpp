@@ -839,7 +839,7 @@ bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
             }
             else if (ui.FromMap->isChecked())
             {
-                QRect R(SlippyMap->viewArea());
+                QRectF R(SlippyMap->viewArea());
                 Clip = CoordBox(Coord(R.y(), R.x()), Coord(R.y()+R.height(), R.x()+R.width()));
             }
             if (retry) continue;
