@@ -118,16 +118,13 @@ bool canDetachNodes(PropertiesDock* theDock)
 
 void reversePoints(Document* theDocument, CommandList* theList, Way* R)
 {
-    QList<Node*> Pts;
-    for (int i=R->size(); i; --i)
+    Layer *layer=theDocument->getDirtyOrOriginLayer(R->layer());
+    for (int i=R->size()-2; i>=0; --i)
     {
-        Node* Pt = R->getNode(i-1);
-        Pts.push_back(Pt);
+        Node* Pt = R->getNode(i);
+        theList->add(new WayRemoveNodeCommand(R,i,layer));
+        theList->add(new WayAddNodeCommand(R,Pt,layer));
     }
-    for (int i=0; i<Pts.size(); ++i)
-        theList->add(new WayRemoveNodeCommand(R,Pts[i],theDocument->getDirtyOrOriginLayer(R->layer())));
-    for (int i=0; i<Pts.size(); ++i)
-        theList->add(new WayAddNodeCommand(R,Pts[i],theDocument->getDirtyOrOriginLayer(R->layer())));
 }
 
 
