@@ -177,8 +177,10 @@ FeatureSnapInteraction::FeatureSnapInteraction(MapView* theView)
       NoSelectPoints(false), NoSelectRoads(false)
           , NoSelectVirtuals(true), LastSnap(0)
 {
-    handCursor = QCursor(QPixmap(":/Icons/grab.png"));
-    grabCursor = QCursor(QPixmap(":/Icons/grabbing.png"));
+//    handCursor = QCursor(QPixmap(":/Icons/grab.png"));
+//    grabCursor = QCursor(QPixmap(":/Icons/grabbing.png"));
+    handCursor = QCursor(Qt::OpenHandCursor);
+    grabCursor = QCursor(Qt::ClosedHandCursor);
     defaultCursor = QCursor(Qt::ArrowCursor);
 }
 
