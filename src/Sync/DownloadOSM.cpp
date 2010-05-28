@@ -832,7 +832,7 @@ bool downloadOSM(MainWindow* Main, const CoordBox& aBox , Document* theDocument)
                     if (!Regional) {
                         OsmLink ol(link);
                         Clip = ol.getCoordBox();
-                        if (Clip.isNull())
+                        if (Clip.isNull() || Clip.isEmpty())
                             retry = true;
                     }
                 }
