@@ -1067,7 +1067,11 @@ void MapView::setViewport(const CoordBox & TargetMap,
 
 void MapView::zoom(double d, const QPoint & Around)
 {
-    if (p->PixelPerM > 100 && d > 1.0)
+    // Sensible limits on zoom range (circular scroll on touchpads can scroll
+    // very fast).
+    if (p->PixelPerM * d > 100 && d > 1.0)
+        return;
+    if (p->PixelPerM * d < 1e-5 && d < 1.0)
         return;
 
     qreal z = d;
