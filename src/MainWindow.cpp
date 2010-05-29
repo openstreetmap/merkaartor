@@ -323,8 +323,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->viewStyleForegroundAction->setVisible(false);
     ui->viewStyleTouchupAction->setVisible(false);
 
-    M_PREFS->initialPosition(theView);
-    MerkaartorPreferences::instance()->restoreMainWindowState( this );
+    M_PREFS->restoreMainWindowState( this );
+    on_fileNewAction_triggered();
 #ifndef _MOBILE
     if (!M_PREFS->getProjectionsList()->getProjections()->size()) {
         QMessageBox::critical(this, tr("Cannot load Projections file"), tr("\"Projections.xml\" could not be opened anywhere. Aborting."));
@@ -358,6 +358,7 @@ MainWindow::MainWindow(QWidget *parent)
 void MainWindow::delayedInit()
 {
     updateWindowMenu();
+    updateProjectionMenu();
 
     if (M_PREFS->getLocalServer()) {
         p->theListeningServer = new QTcpServer(this);
@@ -365,10 +366,7 @@ void MainWindow::delayedInit()
         p->theListeningServer->listen(QHostAddress::LocalHost, 8111);
     }
 
-    on_fileNewAction_triggered();
-
-    // This is after fileNewAction, so theDocument is initialised
-    updateProjectionMenu();
+    M_PREFS->initialPosition(theView);
 }
 
 void MainWindow::handleMessage(const QString &msg)
