@@ -230,6 +230,21 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>coordBookmark</tabstop>
+  <tabstop>coordLink</tabstop>
+  <tabstop>coordCoord</tabstop>
+  <tabstop>coordSpan</tabstop>
+  <tabstop>coordOsmApi</tabstop>
+  <tabstop>coordOsmXApi</tabstop>
+  <tabstop>NameFinderEdit</tabstop>
+  <tabstop>searchButton</tabstop>
+  <tabstop>buttonBox</tabstop>
+  <tabstop>rbBookmark</tabstop>
+  <tabstop>rbLink</tabstop>
+  <tabstop>rbCoord</tabstop>
+  <tabstop>rbSpan</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
