@@ -230,6 +230,11 @@ class Feature : public QObject
          */
         virtual bool isUploadable() const;
 
+        /** check if the feature is read-only
+         * @return true if is read-only
+         */
+        virtual bool isReadonly() const;
+
         /** set the logical delete state of the feature
          */
         virtual void setDeleted(bool delState);
@@ -311,7 +316,7 @@ class Feature : public QObject
 
         virtual QString getClass() const = 0;
         virtual Feature::FeatureType getType() const = 0;
-        virtual void updateMeta() = 0;
+        virtual void updateMeta();
         virtual void updateIndex();
         virtual void invalidateMeta();
         double widthOf();

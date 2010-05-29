@@ -426,6 +426,8 @@ QPainterPath Relation::getPath()
 
 void Relation::updateMeta()
 {
+    Feature::updateMeta();
+
     p->theRenderPriority = RenderPriority(RenderPriority::IsSingular, 0., 0);
     for (int i=0; i<p->Members.size(); ++i) {
         if (p->Members.at(i).second->renderPriority() < p->theRenderPriority)

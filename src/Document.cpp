@@ -13,6 +13,8 @@
 
 #include "LayerWidget.h"
 
+#include "PaintStyle/TagSelector.h"
+
 #include <QtCore/QString>
 #include <QMultiMap>
 #include <QProgressDialog>
@@ -29,7 +31,13 @@ class MapDocumentPrivate
 {
 public:
     MapDocumentPrivate()
-    : History(new CommandHistory()), dirtyLayer(0), uploadedLayer(0)/*, trashLayer(0)*/, theDock(0), lastDownloadLayer(0)
+        : History(new CommandHistory())
+        , dirtyLayer(0)
+        , uploadedLayer(0)
+        /*, trashLayer(0)*/
+        , theDock(0)
+        , lastDownloadLayer(0)
+        , tagFilter(0), FilterRevision(0)
     {
     };
     ~MapDocumentPrivate()
@@ -54,6 +62,9 @@ public:
 
     QHash< QString, QSet<QString> * >		tagList;
 
+    TagSelector* tagFilter;
+    int FilterRevision;
+
 };
 
 Document::Document()
@@ -61,12 +72,15 @@ Document::Document()
 {
     if (!(M_PREFS->apiVersionNum() > 0.5))
         addToTagList("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
+
+    setFilterType(M_PREFS->getCurrentFilter());
 }
 
 Document::Document(LayerDock* aDock)
 : p(new MapDocumentPrivate)
 {
     p->theDock = aDock;
+    setFilterType(M_PREFS->getCurrentFilter());
 }
 
 Document::Document(const Document&, LayerDock*)
@@ -786,6 +800,29 @@ bool Document::hasUnsavedChanges()
 {
 //	return aDoc.history().index();
     return (getDirtyOrOriginLayer()->getDirtySize() > 0);
+}
+
+bool Document::setFilterType(FilterType aFilter)
+{
+    p->FilterRevision++;
+    QString theFilter = M_PREFS->getFilter(aFilter).filter;
+    if (theFilter.isEmpty()) {
+        if (p->tagFilter)
+            SAFE_DELETE(p->tagFilter);
+        return true;
+    }
+    p->tagFilter = TagSelector::parse(M_PREFS->getFilter(aFilter).filter);
+    return (p->tagFilter != NULL);
+}
+
+TagSelector* Document::getTagFilter()
+{
+    return p->tagFilter;
+}
+
+int Document::filterRevision() const
+{
+    return p->FilterRevision;
 }
 
 /* FEATUREITERATOR */

@@ -29,6 +29,7 @@
 #include "Preferences/TmsServersList.h"
 #include "Preferences/ProjectionsList.h"
 #include "Preferences/BookmarksList.h"
+#include "Preferences/FilterList.h"
 
 class MainWindow;
 class MapView;
@@ -83,6 +84,7 @@ class IMapAdapter;
 #ifndef _MOBILE
 typedef QString ProjectionType;
 #endif
+typedef QString FilterType;
 
 enum ExportType {
     Export_All,
@@ -363,6 +365,21 @@ public:
     void loadProjection(QString fn);
     void loadProjections();
     void saveProjections();
+#ifndef _MOBILE
+    void setProjectionType(ProjectionType theValue);
+    ProjectionType getProjectionType();
+    ProjectionsList* getProjectionsList();
+    ProjectionItem getProjection(QString aProj);
+#endif
+
+    /* Filters */
+    void loadFilter(QString fn);
+    void loadFilters();
+    void saveFilters();
+    void setCurrentFilter(FilterType theValue);
+    FilterType getCurrentFilter();
+    FiltersList* getFiltersList();
+    FilterItem getFilter(QString aFilter);
 
     /* WMSes */
     void loadWMS(QString fn);
@@ -384,15 +401,6 @@ public:
     TmsServerList* getTmsServers();
     void setSelectedServer(const QString & theValue);
     QString getSelectedServer() const;
-
-#ifndef _MOBILE
-    void setProjectionType(ProjectionType theValue);
-    ProjectionType getProjectionType();
-    ProjectionsList* getProjectionsList();
-    ProjectionItem getProjection(QString aProj);
-#endif
-
-
 
 protected:
     QVector<qreal> parentDashes;
@@ -425,6 +433,7 @@ private:
     QStringList projTypes;
     QMap<QUuid, IMapAdapter *> mBackgroundPlugins;
     ProjectionsList theProjectionsList;
+    FiltersList theFiltersList;
     WmsServersList theWmsServerList;
     TmsServersList theTmsServerList;
     BookmarksList theBookmarkList;

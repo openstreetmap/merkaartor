@@ -575,7 +575,7 @@ QString Layer::toHtml()
     return toMainHtml().arg("");
 }
 
-bool Layer::toXML(QDomElement& e, QProgressDialog * progress)
+bool Layer::toXML(QDomElement& e, QProgressDialog * /*progress*/)
 {
     e.setAttribute("xml:id", id());
     e.setAttribute("name", p->Name);
@@ -589,7 +589,7 @@ bool Layer::toXML(QDomElement& e, QProgressDialog * progress)
     return true;
 }
 
-Layer * Layer::fromXML(Layer* l, Document* d, const QDomElement e, QProgressDialog * progress)
+Layer * Layer::fromXML(Layer* l, Document* /*d*/, const QDomElement e, QProgressDialog * /*progress*/)
 {
     l->setId(e.attribute("xml:id"));
     l->setAlpha(e.attribute("alpha").toDouble());

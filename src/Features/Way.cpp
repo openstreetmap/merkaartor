@@ -127,7 +127,7 @@ void WayPrivate::doUpdateVirtuals()
         return;
 
     removeVirtuals();
-    if (M_PREFS->getUseVirtualNodes() && theWay->layer() && !(theWay->layer()->isReadonly()) && !(theWay->isDeleted()))
+    if (M_PREFS->getUseVirtualNodes() && theWay->layer() && !(theWay->isReadonly()) && !(theWay->isDeleted()))
         addVirtuals();
 
     VirtualsUptodate = true;
@@ -166,7 +166,8 @@ void Way::setDeleted(bool delState)
 {
     Feature::setDeleted(delState);
     p->VirtualsUptodate = false;
-    p->doUpdateVirtuals();
+    if (p->Nodes.size())
+        p->doUpdateVirtuals();
 }
 
 void Way::setLayer(Layer* L)
@@ -347,6 +348,8 @@ CoordBox Way::boundingBox() const
 
 void Way::updateMeta()
 {
+    Feature::updateMeta();
+
     p->Area = 0;
     p->Distance = 0;
 
@@ -432,7 +435,7 @@ void Way::draw(QPainter& P, MapView* theView)
 {
     double theWidth = theView->nodeWidth();
     bool Draw = (theWidth >= 1);
-    if (!Draw || !M_PREFS->getVirtualNodesVisible() || !M_PREFS->getTrackPointsVisible())
+    if (!Draw || !M_PREFS->getVirtualNodesVisible() || !M_PREFS->getTrackPointsVisible() || isReadonly())
         return;
 
     theWidth /= 2;

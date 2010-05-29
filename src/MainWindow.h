@@ -138,6 +138,7 @@ public slots:
     virtual void on_toolsWMSServersAction_triggered();
     virtual void on_toolsTMSServersAction_triggered();
     virtual void on_toolsProjectionsAction_triggered();
+    virtual void on_toolsFiltersAction_triggered();
     virtual void toolsPreferencesAction_triggered(bool focusData=false);
     virtual void on_toolsResetDiscardableAction_triggered();
 
@@ -208,6 +209,7 @@ public slots:
 #ifndef _MOBILE
     void projectionTriggered(QAction* anAction);
 #endif
+    void filterTriggered(QAction* anAction);
     void styleTriggered(QAction* anAction);
     void updateGpsPosition(float latitude, float longitude, QDateTime time, float altitude, float speed, float heading);
     void applyStyles(QList<FeaturePainter>* thePainters);
@@ -259,6 +261,7 @@ private:
     void updateRecentOpenMenu();
     void updateRecentImportMenu();
     void updateProjectionMenu();
+    void updateFilterMenu();
     void updateStyleMenu();
     Document* getDocumentFromClipboard();
     bool selectExportedFeatures(QList<Feature*>& theFeatures);

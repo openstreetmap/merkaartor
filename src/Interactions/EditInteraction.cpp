@@ -159,7 +159,7 @@ void EditInteraction::snapMouseReleaseEvent(QMouseEvent * ev , Feature* aLast)
         EndDrag = XY_TO_COORD(ev->pos());
         CoordBox DragBox(StartDrag, EndDrag);
         for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it) {
-            if (it.get()->layer()->isReadonly())
+            if (it.get()->isReadonly())
                 continue;
 
             if (modifiersForGreedyAdd(modifiers))

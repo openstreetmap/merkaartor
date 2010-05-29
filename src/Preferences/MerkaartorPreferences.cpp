@@ -156,6 +156,7 @@ void MerkaartorPreferences::save(bool UserPwdChanged)
     Sets->sync();
 
     saveProjections();
+    saveFilters();
     saveWMSes();
     saveTMSes();
     saveBookmarks();
@@ -184,6 +185,7 @@ void MerkaartorPreferences::toOsmPref()
     theBookmarkList.toXml(root);
     theTmsServerList.toXml(root);
     theWmsServerList.toXml(root);
+    theFiltersList.toXml(root);
 
     QByteArray ba = qCompress(theXmlDoc.toString().toUtf8());
     QByteArray PrefsXML = ba.toBase64();
@@ -320,6 +322,10 @@ void MerkaartorPreferences::on_requestFinished ( int id, bool error )
             if (c.tagName() == "WmsServers") {
             WmsServersList aWmsList = WmsServersList::fromXml(c);
             theWmsServerList.add(aWmsList);
+        } else
+            if (c.tagName() == "Filters") {
+            FiltersList aFiltList = FiltersList::fromXml(c);
+            theFiltersList.add(aFiltList);
         }
 
         c = c.nextSiblingElement();
@@ -401,6 +407,7 @@ void MerkaartorPreferences::initialize()
     Use06Api = true;
 
     loadProjections();
+    loadFilters();
     loadWMSes();
     loadTMSes();
     loadBookmarks();
@@ -823,6 +830,26 @@ ProjectionItem MerkaartorPreferences::getProjection(QString aProj)
     return theProjectionsList.getProjection(aProj);
 }
 #endif
+
+void MerkaartorPreferences::setCurrentFilter(FilterType theValue)
+{
+    Sets->setValue("filter/Type", theValue);
+}
+
+ProjectionType MerkaartorPreferences::getCurrentFilter()
+{
+    return (ProjectionType)Sets->value("filter/Type", "").toString();
+}
+
+FiltersList* MerkaartorPreferences::getFiltersList()
+{
+    return &theFiltersList;
+}
+
+FilterItem MerkaartorPreferences::getFilter(QString aFilter)
+{
+    return theFiltersList.getFilter(aFilter);
+}
 
 qreal MerkaartorPreferences::getAlpha(QString lvl)
 {
@@ -1415,6 +1442,74 @@ void MerkaartorPreferences::saveProjections()
     file.write(theXmlDoc.toString().toUtf8());
     file.close();
 }
+
+/* Filters */
+void MerkaartorPreferences::loadFilter(QString fn)
+{
+    if (QDir::isRelativePath(fn))
+        fn = QCoreApplication::applicationDirPath() + "/" + fn;
+
+    qDebug() << "loadFilter " << fn;
+    QFile file(fn);
+    if (!file.open(QIODevice::ReadOnly)) {
+        return;
+    }
+
+    QDomDocument* theXmlDoc = new QDomDocument();
+    if (!theXmlDoc->setContent(&file)) {
+        file.close();
+        return;
+    }
+    file.close();
+
+    QDomElement docElem = theXmlDoc->documentElement();
+    FiltersList aFilterList = FiltersList::fromXml(docElem.firstChildElement());
+    theFiltersList.add(aFilterList);
+
+    delete theXmlDoc;
+}
+
+void MerkaartorPreferences::loadFilters()
+{
+    QString fn;
+
+    fn = HOMEDIR + "/Filters.xml";
+    loadFilter(fn);
+
+#if defined(Q_OS_MAC)
+    {
+        QDir resources = QDir(QCoreApplication::applicationDirPath());
+        resources.cdUp();
+        resources.cd("Resources");
+        fn = resources.absolutePath() + "/Filters.xml";
+    }
+#else
+    fn = QString(STRINGIFY(SHARE_DIR)) + "/Filters.xml";
+#endif
+    loadFilter(fn);
+
+    fn = ":/Filters.xml";
+    loadFilter(fn);
+}
+
+void MerkaartorPreferences::saveFilters()
+{
+    QDomDocument theXmlDoc;
+
+    theXmlDoc.appendChild(theXmlDoc.createProcessingInstruction("xml", "version=\"1.0\""));
+
+    QDomElement root = theXmlDoc.createElement("MerkaartorList");
+    theXmlDoc.appendChild(root);
+    theFiltersList.toXml(root);
+
+    QFile file(HOMEDIR + "/Filters.xml");
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        return;
+    }
+    file.write(theXmlDoc.toString().toUtf8());
+    file.close();
+}
+
 
 /* WMS Servers */
 void MerkaartorPreferences::loadWMS(QString fn)

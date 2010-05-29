@@ -103,6 +103,10 @@ public:
     bool hasUnsavedChanges();
     QPair<bool, CoordBox> boundingBox();
 
+    bool setFilterType(FilterType aFilter);
+    TagSelector* getTagFilter();
+    int filterRevision() const;
+
 private:
     MapDocumentPrivate* p;
 

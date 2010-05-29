@@ -13,9 +13,11 @@ HEADERS +=  \
     TMSPreferencesDialog.h \
     ProjPreferencesDialog.h \
     ProjectionsList.h \
+    FilterList.h \
     WmsServersList.h \
     TmsServersList.h \
-    BookmarksList.h 
+    BookmarksList.h \
+    FilterPreferencesDialog.h
 
 SOURCES +=  \
     MerkaartorPreferences.cpp \
@@ -24,12 +26,15 @@ SOURCES +=  \
     TMSPreferencesDialog.cpp \
     ProjPreferencesDialog.cpp \
     ProjectionsList.cpp \
+    FilterList.cpp \
     WmsServersList.cpp \
     TmsServersList.cpp \
-    BookmarksList.cpp 
+    BookmarksList.cpp \
+    FilterPreferencesDialog.cpp
 
 FORMS +=  \
     PreferencesDialog.ui \
     WMSPreferencesDialog.ui \
     TMSPreferencesDialog.ui \
-    ProjPreferencesDialog.ui
+    ProjPreferencesDialog.ui \
+    FilterPreferencesDialog.ui

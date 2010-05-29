@@ -93,7 +93,8 @@ class MapFeaturePrivate
                 PossiblePaintersUpToDate(false),
                 PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
                 theFeature(0), LastPartNotification(0),
-                Time(QDateTime::currentDateTime()), Deleted(false), Visible(true), Uploaded(false), LongId(0)
+                Time(QDateTime::currentDateTime()), Deleted(false), Visible(true), Uploaded(false), ReadOnly(false), FilterRevision(-1)
+                , LongId(0)
                 , Virtual(false), Special(false)
                 , VirtualsUpdatesBlocked(false)
                 , Width(0)
@@ -105,7 +106,8 @@ class MapFeaturePrivate
                 PossiblePaintersUpToDate(false),
                 PixelPerMForPainter(-1), CurrentPainter(0), HasPainter(false),
                 theFeature(0), LastPartNotification(0),
-                Time(other.Time), Deleted(false), Visible(true), Uploaded(false), LongId(0)
+                Time(other.Time), Deleted(false), Visible(true), Uploaded(false), ReadOnly(false), FilterRevision(-1)
+                , LongId(0)
                 , Virtual(other.Virtual), Special(other.Special)
                 , VirtualsUpdatesBlocked(other.VirtualsUpdatesBlocked)
                 , Width(other.Width)
@@ -136,6 +138,8 @@ class MapFeaturePrivate
         bool Deleted;
         bool Visible;
         bool Uploaded;
+        bool ReadOnly;
+        int FilterRevision;
         qint64 LongId;
         RenderPriority theRenderPriority;
         bool Virtual;
@@ -359,6 +363,42 @@ bool Feature::isUploadable() const
         return (dynamic_cast<Layer*>(parent())->isUploadable());
     else
         return false;
+}
+
+bool Feature::isReadonly() const
+{
+    Layer* L = qobject_cast<Layer*>(parent());
+    if (L) {
+        if (L->isReadonly())
+            return true;
+        else {
+            int i=0;
+            for (; i<sizeParents(); ++i)
+                if (!getParent(i)->isReadonly()) {
+                break;
+            }
+            if (i != sizeParents())
+                p->ReadOnly = false;
+            else {
+                Document* D = L->getDocument();
+                if (D) {
+                    if (D->filterRevision() != p->FilterRevision) {
+                        p->FilterRevision = D->filterRevision();
+                        if (D->getTagFilter()) {
+                            if (D->getTagFilter()->matches(this) != TagSelect_NoMatch)
+                                p->ReadOnly = false;
+                            else
+                                p->ReadOnly = true;
+                        } else
+                            p->ReadOnly = false;
+                    }
+                }
+            }
+        }
+    } else
+        return true;
+
+    return p->ReadOnly;
 }
 
 void Feature::setDeleted(bool delState)
@@ -659,6 +699,10 @@ void Feature::updateIndex()
         CoordBox bb = boundingBox();
         layer()->indexAdd(bb, this);
     }
+}
+
+void Feature::updateMeta()
+{
 }
 
 int Feature::sizeParents() const

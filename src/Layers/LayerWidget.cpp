@@ -223,7 +223,7 @@ void LayerWidget::visibleLayer(bool)
 
 void LayerWidget::readonlyLayer(bool)
 {
-    theLayer->setReadonly(actReadonly->isChecked());
+    setLayerReadonly(actReadonly->isChecked());
 }
 
 QMenu* LayerWidget::getAssociatedMenu()

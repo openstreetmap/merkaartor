@@ -52,6 +52,7 @@
 #include "Preferences/WMSPreferencesDialog.h"
 #include "Preferences/TMSPreferencesDialog.h"
 #include "Preferences/ProjPreferencesDialog.h"
+#include "Preferences/FilterPreferencesDialog.h"
 #include "Utils/SelectionDialog.h"
 #include "Utils/MDiscardableDialog.h"
 #include "QMapControl/imagemanager.h"
@@ -103,6 +104,7 @@ class MainWindowPrivate
         MainWindowPrivate()
             : lastPrefTabIndex(0)
             , projActgrp(0)
+            , filterActgrp(0)
             , theListeningServer(0)
         {
             title = QString("Merkaartor v%1%2(%3)").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV));
@@ -113,6 +115,7 @@ class MainWindowPrivate
         FeaturesDock* theFeats;
         QString title;
         QActionGroup* projActgrp;
+        QActionGroup* filterActgrp;
         QTcpServer* theListeningServer;
         PropertiesDock* theProperties;
 };
@@ -357,6 +360,7 @@ void MainWindow::delayedInit()
 {
     updateWindowMenu();
     updateProjectionMenu();
+    updateFilterMenu();
 
     if (M_PREFS->getLocalServer()) {
         p->theListeningServer = new QTcpServer(this);
@@ -1894,10 +1898,17 @@ void MainWindow::on_toolsTMSServersAction_triggered()
 
 void MainWindow::on_toolsProjectionsAction_triggered()
 {
-    ProjPreferencesDialog* prefDlg;
-    prefDlg = new ProjPreferencesDialog();
+    ProjPreferencesDialog* prefDlg = new ProjPreferencesDialog();
     if (prefDlg->exec() == QDialog::Accepted) {
         updateProjectionMenu();
+    }
+}
+
+void MainWindow::on_toolsFiltersAction_triggered()
+{
+    FilterPreferencesDialog* prefDlg = new FilterPreferencesDialog();
+    if (prefDlg->exec() == QDialog::Accepted) {
+        updateFilterMenu();
     }
 }
 
@@ -2536,6 +2547,25 @@ void MainWindow::updateProjectionMenu()
     }
 }
 
+void MainWindow::updateFilterMenu()
+{
+    SAFE_DELETE(p->filterActgrp)
+    p->filterActgrp = new QActionGroup(this);
+    p->filterActgrp->addAction(ui->filterNoneAction);
+    ui->filterNoneAction->setChecked(true);
+    foreach (FilterItem it, *M_PREFS->getFiltersList()->getFilters()) {
+        if (it.deleted)
+            continue;
+        QAction* a = new QAction(it.name, p->filterActgrp);
+        a->setCheckable (true);
+        if (M_PREFS->getCurrentFilter().contains(it.name, Qt::CaseInsensitive))
+            a->setChecked(true);
+        ui->menuFilters->addAction(a);
+    }
+    connect (ui->menuFilters, SIGNAL(triggered(QAction *)), this, SLOT(filterTriggered(QAction *)));
+    ui->menuFilters->menuAction()->setEnabled(true);
+}
+
 void MainWindow::updateStyleMenu()
 {
     for(int i=ui->menuStyles->actions().count()-1; i > 4 ; i--) {
@@ -2714,6 +2744,15 @@ void MainWindow::projectionTriggered(QAction* anAction)
     invalidateView();
 }
 #endif
+
+void MainWindow::filterTriggered(QAction* anAction)
+{
+    if (theDocument->setFilterType((FilterType)anAction->text()))
+        M_PREFS->setCurrentFilter(anAction->text());
+    else
+        QMessageBox::critical(this, tr("Invalid Filter"), tr("Unable to set filter \"%1\".").arg(anAction->text()));
+    invalidateView();
+}
 
 void MainWindow::styleTriggered(QAction* anAction)
 {

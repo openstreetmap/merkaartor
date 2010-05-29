@@ -371,11 +371,11 @@ void FeatureSnapInteraction::updateSnap(QMouseEvent* event)
 
                 double Distance = F->pixelDistance(event->pos(), 5.01, areNodesSelectable, view());
                 SnapList.push_back(F);
-                if (Distance < BestDistance && !document()->getLayer(j)->isReadonly())
+                if (Distance < BestDistance && !F->isReadonly())
                 {
                     BestDistance = Distance;
                     LastSnap = F;
-                } else if (Distance < BestReadonlyDistance && document()->getLayer(j)->isReadonly())
+                } else if (Distance < BestReadonlyDistance && F->isReadonly())
                 {
                     BestReadonlyDistance = Distance;
                     ReadOnlySnap = F;

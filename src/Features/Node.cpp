@@ -125,6 +125,7 @@ bool Node::isWaypoint()
 bool Node::isSelectable(MapView* view) const
 {
     // If Node has non-default tags -> POI -> always selectable
+    // TODO Optimize! This is done every time we draw the node!
     for (int i=0; i<tagSize(); ++i)
         if ((tagKey(i) != "created_by") && (tagKey(i) != "ele"))
             return true;
@@ -374,6 +375,8 @@ void Node::partChanged(Feature*, int)
 
 void Node::updateMeta()
 {
+    Feature::updateMeta();
+
     p->IsWaypoint = (findKey("_waypoint_") != tagSize());
     MetaUpToDate = true;
 }

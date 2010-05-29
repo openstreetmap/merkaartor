@@ -297,6 +297,8 @@ void TrackSegment::partChanged(Feature*, int)
 
 void TrackSegment::updateMeta()
 {
+    Feature::updateMeta();
+
     p->Distance = 0;
 
     if (p->Nodes.size() == 0)
