@@ -334,18 +334,20 @@ void FeatureSnapInteraction::updateSnap(QMouseEvent* event)
         ( (QApplication::keyboardModifiers() & Qt::AltModifier) &&  (QApplication::keyboardModifiers() &Qt::ControlModifier) );
     Feature* Prev = LastSnap;
     LastSnap = 0;
+    Feature* ReadOnlySnap = 0;
     if (!SnapActive) return;
     //QTime Start(QTime::currentTime());
 //    CoordBox HotZone(XY_TO_COORD(event->pos()-QPointF(15,15)),XY_TO_COORD(event->pos()+QPointF(15,15)));
     CoordBox HotZone(XY_TO_COORD(event->pos()-QPointF(M_PREFS->getMaxGeoPicWidth()+5,M_PREFS->getMaxGeoPicWidth()+5)),XY_TO_COORD(event->pos()+QPointF(M_PREFS->getMaxGeoPicWidth()+5,M_PREFS->getMaxGeoPicWidth()+5)));
     SnapList.clear();
     double BestDistance = 5;
+    double BestReadonlyDistance = 5;
     bool areNodesSelectable = (theView->nodeWidth() >= 1 && M_PREFS->getTrackPointsVisible());
 
     Way* R;
     Node* N;
     for (int j=0; j<document()->layerSize(); ++j) {
-        if (!document()->getLayer(j)->isVisible() || document()->getLayer(j)->isReadonly())
+        if (!document()->getLayer(j)->isVisible())
             continue;
 
         QList < MapFeaturePtr > ret = document()->getLayer(j)->indexFind(HotZone);
@@ -369,10 +371,14 @@ void FeatureSnapInteraction::updateSnap(QMouseEvent* event)
 
                 double Distance = F->pixelDistance(event->pos(), 5.01, areNodesSelectable, view());
                 SnapList.push_back(F);
-                if (Distance < BestDistance)
+                if (Distance < BestDistance && !document()->getLayer(j)->isReadonly())
                 {
                     BestDistance = Distance;
                     LastSnap = F;
+                } else if (Distance < BestReadonlyDistance && document()->getLayer(j)->isReadonly())
+                {
+                    BestReadonlyDistance = Distance;
+                    ReadOnlySnap = F;
                 }
             }
         }
@@ -401,7 +407,10 @@ void FeatureSnapInteraction::updateSnap(QMouseEvent* event)
         if (LastSnap) {
             main()->info()->setHoverHtml(LastSnap->toHtml());
         } else
-            main()->info()->unsetHoverHtml();
+            if (ReadOnlySnap)
+                main()->info()->setHoverHtml(ReadOnlySnap->toHtml());
+            else
+                main()->info()->unsetHoverHtml();
     }
 }
 
