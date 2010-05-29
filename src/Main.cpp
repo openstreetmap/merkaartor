@@ -221,6 +221,13 @@ int main(int argc, char** argv)
     instance.processEvents();
 
     MainWindow Main;
+    instance.setActivationWindow(&Main, false);
+    QObject::connect(&instance, SIGNAL(messageReceived(const QString&)),
+             &instance, SLOT(activateWindow()));
+    QObject::connect(&instance, SIGNAL(messageReceived(const QString&)),
+             &Main, SLOT(handleMessage(const QString&)));
+//    QObject::connect(&Main, SIGNAL(needToShow()), &instance, SLOT(activateWindow()));
+
 #ifdef _MOBILE
     instance.setActiveWindow(&Main);
     Main.showMaximized();
@@ -231,13 +238,6 @@ int main(int argc, char** argv)
     Main.handleMessage(message);
 
     splash.finish(&Main);
-
-    instance.setActivationWindow(&Main, false);
-    QObject::connect(&instance, SIGNAL(messageReceived(const QString&)),
-             &instance, SLOT(activateWindow()));
-    QObject::connect(&instance, SIGNAL(messageReceived(const QString&)),
-             &Main, SLOT(handleMessage(const QString&)));
-//    QObject::connect(&Main, SIGNAL(needToShow()), &instance, SLOT(activateWindow()));
 
     int x = instance.exec();
 

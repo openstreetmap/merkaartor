@@ -108,7 +108,8 @@ public:
 
     virtual QString toMainHtml();
     virtual QString toHtml();
-    virtual bool toXML(QDomElement& xParent, QProgressDialog * progress) = 0;
+    virtual bool toXML(QDomElement& e, QProgressDialog * progress);
+    static Layer* fromXML(Layer* l, Document* d, const QDomElement e, QProgressDialog * progress);
 
     virtual CoordBox boundingBox();
 
@@ -137,7 +138,6 @@ public:
     virtual void indexFind(const CoordBox& bb, QList<MapFeaturePtr>* findResult);
     virtual void reIndex();
     virtual void reIndex(QProgressDialog * progress);
-
 
 protected:
     LayerPrivate* p;

@@ -575,6 +575,32 @@ QString Layer::toHtml()
     return toMainHtml().arg("");
 }
 
+bool Layer::toXML(QDomElement& e, QProgressDialog * progress)
+{
+    e.setAttribute("xml:id", id());
+    e.setAttribute("name", p->Name);
+    e.setAttribute("alpha", QString::number(p->alpha,'f',2));
+    e.setAttribute("visible", QString((p->Visible ? "true" : "false")));
+    e.setAttribute("selected", QString((p->selected ? "true" : "false")));
+    e.setAttribute("enabled", QString((p->Enabled ? "true" : "false")));
+    e.setAttribute("readonly", QString((p->Readonly ? "true" : "false")));
+    e.setAttribute("uploadable", QString((p->Uploadable ? "true" : "false")));
+
+    return true;
+}
+
+Layer * Layer::fromXML(Layer* l, Document* d, const QDomElement e, QProgressDialog * progress)
+{
+    l->setId(e.attribute("xml:id"));
+    l->setAlpha(e.attribute("alpha").toDouble());
+    l->setVisible((e.attribute("visible") == "true" ? true : false));
+    l->setSelected((e.attribute("selected") == "true" ? true : false));
+    l->setEnabled((e.attribute("enabled") == "false" ? false : true));
+    l->setReadonly((e.attribute("readonly") == "true" ? true : false));
+    l->setUploadable((e.attribute("uploadable") == "false" ? false : true));
+
+    return l;
+}
 
 // DrawingLayer
 
@@ -602,15 +628,7 @@ bool DrawingLayer::toXML(QDomElement& xParent, QProgressDialog * progress)
 
     QDomElement e = xParent.ownerDocument().createElement(metaObject()->className());
     xParent.appendChild(e);
-
-    e.setAttribute("xml:id", id());
-    e.setAttribute("name", p->Name);
-    e.setAttribute("alpha", QString::number(p->alpha,'f',2));
-    e.setAttribute("visible", QString((p->Visible ? "true" : "false")));
-    e.setAttribute("selected", QString((p->selected ? "true" : "false")));
-    e.setAttribute("enabled", QString((p->Enabled ? "true" : "false")));
-    e.setAttribute("readonly", QString((p->Readonly ? "true" : "false")));
-    e.setAttribute("uploadable", QString((p->Uploadable ? "true" : "false")));
+    Layer::toXML(e, progress);
 
     QDomElement o = xParent.ownerDocument().createElement("osm");
     e.appendChild(o);
@@ -639,6 +657,7 @@ bool DrawingLayer::toXML(QDomElement& xParent, QProgressDialog * progress)
 DrawingLayer * DrawingLayer::fromXML(Document* d, const QDomElement& e, QProgressDialog * progress)
 {
     DrawingLayer* l = new DrawingLayer(e.attribute("name"));
+    Layer::fromXML(l, d, e, progress);
     d->add(l);
     if (!DrawingLayer::doFromXML(l, d, e, progress)) {
         d->remove(l);
@@ -651,14 +670,6 @@ DrawingLayer * DrawingLayer::fromXML(Document* d, const QDomElement& e, QProgres
 DrawingLayer * DrawingLayer::doFromXML(DrawingLayer* l, Document* d, const QDomElement e, QProgressDialog * progress)
 {
     l->blockIndexing(true);
-
-    l->setId(e.attribute("xml:id"));
-    l->setAlpha(e.attribute("alpha").toDouble());
-    l->setVisible((e.attribute("visible") == "true" ? true : false));
-    l->setSelected((e.attribute("selected") == "true" ? true : false));
-    l->setEnabled((e.attribute("enabled") == "false" ? false : true));
-    l->setReadonly((e.attribute("readonly") == "true" ? true : false));
-    l->setUploadable((e.attribute("uploadable") == "false" ? false : true));
 
     QDomElement c = e.firstChildElement();
     if (c.tagName() != "osm")
@@ -866,15 +877,7 @@ bool TrackLayer::toXML(QDomElement& xParent, QProgressDialog * progress)
 
     QDomElement e = xParent.ownerDocument().createElement(metaObject()->className());
     xParent.appendChild(e);
-
-    e.setAttribute("xml:id", id());
-    e.setAttribute("name", p->Name);
-    e.setAttribute("alpha", QString::number(p->alpha,'f',2));
-    e.setAttribute("visible", QString((p->Visible ? "true" : "false")));
-    e.setAttribute("selected", QString((p->selected ? "true" : "false")));
-    e.setAttribute("enabled", QString((p->Enabled ? "true" : "false")));
-    e.setAttribute("readonly", QString((p->Readonly ? "true" : "false")));
-    e.setAttribute("uploadable", QString((p->Uploadable ? "true" : "false")));
+    Layer::toXML(e, progress);
 
     QDomElement o = xParent.ownerDocument().createElement("gpx");
     e.appendChild(o);
@@ -909,17 +912,10 @@ bool TrackLayer::toXML(QDomElement& xParent, QProgressDialog * progress)
 TrackLayer * TrackLayer::fromXML(Document* d, const QDomElement& e, QProgressDialog * progress)
 {
     TrackLayer* l = new TrackLayer(e.attribute("name"));
-    l->blockIndexing(true);
-
-    l->setId(e.attribute("xml:id"));
-    l->setAlpha(e.attribute("alpha").toDouble());
-    l->setVisible((e.attribute("visible") == "true" ? true : false));
-    l->setSelected((e.attribute("selected") == "true" ? true : false));
-    l->setEnabled((e.attribute("enabled") == "false" ? false : true));
-    l->setReadonly((e.attribute("readonly") == "true" ? true : false));
-    l->setUploadable((e.attribute("uploadable") == "false" ? false : true));
-
+    Layer::fromXML(l, d, e, progress);
     d->add(l);
+
+    l->blockIndexing(true);
 
     QDomElement c = e.firstChildElement();
     if (c.tagName() != "gpx")
@@ -970,6 +966,7 @@ DirtyLayer::~ DirtyLayer()
 DirtyLayer* DirtyLayer::fromXML(Document* d, const QDomElement e, QProgressDialog * progress)
 {
     DirtyLayer* l = new DirtyLayer(e.attribute("name"));
+    Layer::fromXML(l, d, e, progress);
     d->add(l);
     d->setDirtyLayer(l);
     DrawingLayer::doFromXML(l, d, e, progress);
@@ -997,6 +994,7 @@ UploadedLayer::~ UploadedLayer()
 UploadedLayer* UploadedLayer::fromXML(Document* d, const QDomElement e, QProgressDialog * progress)
 {
     UploadedLayer* l = new UploadedLayer(e.attribute("name"));
+    Layer::fromXML(l, d, e, progress);
     d->add(l);
     d->setUploadedLayer(l);
     DrawingLayer::doFromXML(l, d, e, progress);
@@ -1030,6 +1028,7 @@ bool DeletedLayer::toXML(QDomElement& , QProgressDialog * )
 DeletedLayer* DeletedLayer::fromXML(Document* d, const QDomElement& e, QProgressDialog * progress)
 {
     /* Only keep DeletedLayer for backward compatibility with MDC */
+    Layer::fromXML(dynamic_cast<DrawingLayer*>(d->getDirtyOrOriginLayer()), d, e, progress);
     DrawingLayer::doFromXML(dynamic_cast<DrawingLayer*>(d->getDirtyOrOriginLayer()), d, e, progress);
     return NULL;
 }
@@ -1423,15 +1422,7 @@ bool OsbLayer::toXML(QDomElement& xParent, QProgressDialog * progress)
 
     QDomElement e = xParent.ownerDocument().createElement(metaObject()->className());
     xParent.appendChild(e);
-
-    e.setAttribute("xml:id", id());
-    e.setAttribute("name", p->Name);
-    e.setAttribute("alpha", QString::number(p->alpha,'f',2));
-    e.setAttribute("visible", QString((p->Visible ? "true" : "false")));
-    e.setAttribute("selected", QString((p->selected ? "true" : "false")));
-    e.setAttribute("enabled", QString((p->Enabled ? "true" : "false")));
-    e.setAttribute("readonly", QString((p->Readonly ? "true" : "false")));
-
+    Layer::toXML(e, progress);
     e.setAttribute("filename", pp->theImp->getFilename());
 
     return OK;
