@@ -95,14 +95,6 @@
       <string>Set &amp;projection</string>
      </property>
     </widget>
-    <widget class="QMenu" name="menuShow_directional_Arrows">
-     <property name="title">
-      <string>Show directional &amp;Arrows</string>
-     </property>
-     <addaction name="viewArrowsNeverAction"/>
-     <addaction name="viewArrowsOnewayAction"/>
-     <addaction name="viewArrowsAlwaysAction"/>
-    </widget>
     <widget class="QMenu" name="mnuAreaOpacity">
      <property name="title">
       <string>Set Areas &amp;opacity</string>
@@ -113,22 +105,6 @@
     <addaction name="viewZoomOutAction"/>
     <addaction name="viewZoomInAction"/>
     <addaction name="viewLockZoomAction"/>
-    <addaction name="separator"/>
-    <addaction name="viewDownloadedAction"/>
-    <addaction name="viewRelationsAction"/>
-    <addaction name="separator"/>
-    <addaction name="viewStyleForegroundAction"/>
-    <addaction name="viewStyleBackgroundAction"/>
-    <addaction name="viewStyleTouchupAction"/>
-    <addaction name="viewScaleAction"/>
-    <addaction name="viewShowLatLonGridAction"/>
-    <addaction name="viewPhotosAction"/>
-    <addaction name="viewNamesAction"/>
-    <addaction name="menuShow_directional_Arrows"/>
-    <addaction name="separator"/>
-    <addaction name="viewTrackPointsAction"/>
-    <addaction name="viewVirtualNodesAction"/>
-    <addaction name="viewTrackSegmentsAction"/>
     <addaction name="separator"/>
     <addaction name="mnuAreaOpacity"/>
     <addaction name="mnuProjections"/>
@@ -288,9 +264,39 @@
     <addaction name="relationAddMemberAction"/>
     <addaction name="relationRemoveMemberAction"/>
    </widget>
+   <widget class="QMenu" name="menu_Show">
+    <property name="title">
+     <string>&amp;Show</string>
+    </property>
+    <widget class="QMenu" name="menuShow_directional_Arrows">
+     <property name="title">
+      <string>Show directional &amp;Arrows</string>
+     </property>
+     <addaction name="viewArrowsNeverAction"/>
+     <addaction name="viewArrowsOnewayAction"/>
+     <addaction name="viewArrowsAlwaysAction"/>
+    </widget>
+    <addaction name="viewDownloadedAction"/>
+    <addaction name="viewRelationsAction"/>
+    <addaction name="menuShow_directional_Arrows"/>
+    <addaction name="separator"/>
+    <addaction name="viewStyleForegroundAction"/>
+    <addaction name="viewStyleBackgroundAction"/>
+    <addaction name="viewStyleTouchupAction"/>
+    <addaction name="viewNamesAction"/>
+    <addaction name="separator"/>
+    <addaction name="viewTrackPointsAction"/>
+    <addaction name="viewVirtualNodesAction"/>
+    <addaction name="viewTrackSegmentsAction"/>
+    <addaction name="separator"/>
+    <addaction name="viewPhotosAction"/>
+    <addaction name="viewScaleAction"/>
+    <addaction name="viewShowLatLonGridAction"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuView"/>
+   <addaction name="menu_Show"/>
    <addaction name="menuGps"/>
    <addaction name="menuLayers"/>
    <addaction name="menuCreate"/>
