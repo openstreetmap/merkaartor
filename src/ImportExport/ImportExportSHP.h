@@ -19,6 +19,7 @@ class Layer;
 class OGRGeometry;
 class OGRLineString;
 class OGRPoint;
+class OGRCoordinateTransformation;
 
 
 /**
@@ -42,6 +43,7 @@ public:
     virtual bool export_(const QList<Feature *>& featList);
 
 protected:
+    OGRCoordinateTransformation *toWGS84;
     Projection* theProjection;
 
     Feature* parseGeometry(Layer* aLayer, OGRGeometry *poGeometry);

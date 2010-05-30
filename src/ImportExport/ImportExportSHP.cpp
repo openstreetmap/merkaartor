@@ -77,7 +77,12 @@ Node *ImportExportSHP::nodeFor(const OGRPoint p)
         return pointHash[p];
     }
 
-    return pointHash[p] = new Node(Coord(angToCoord(p.getY()), angToCoord(p.getX())));
+    if (toWGS84)
+        return pointHash[p] = new Node(Coord(angToCoord(p.getY()), angToCoord(p.getX())));
+    else {
+        Coord c = theProjection->inverse(QPointF(p.getX(), p.getY()));
+        return pointHash[p] = new Node(c);
+    }
 }
 
 // IMPORT
@@ -192,7 +197,8 @@ bool ImportExportSHP::import(Layer* aLayer)
     poLayer = poDS->GetLayer( 0 );
 
     OGRSpatialReference * theSrs = poLayer->GetSpatialRef();
-    OGRCoordinateTransformation *toWGS84 = NULL;
+    toWGS84 = NULL;
+    theProjection = NULL;
 
     // { char *wkt; theSrs->exportToPrettyWkt(&wkt); qDebug() << "SHP: input SRS:" << endl << wkt; }
 
@@ -208,6 +214,26 @@ bool ImportExportSHP::import(Layer* aLayer)
 
     if (theSrs)
         toWGS84 = OGRCreateCoordinateTransformation(theSrs, &wgs84srs);
+
+    if (theSrs && !toWGS84) {
+        theProjection = new Projection();
+        theSrs->morphFromESRI();
+        {
+            char* cTheProj4;
+            if (theSrs->exportToProj4(&cTheProj4) == OGRERR_NONE) {
+                qDebug() << "SHP: to proj4 : " << cTheProj4;
+            } else {
+                qDebug() << "SHP: to proj4 error: " << CPLGetLastErrorMsg();
+                return false;
+            }
+            QString theProj4(cTheProj4);
+            // Hack because GDAL (as of 1.6.1) do not recognize "DATUM["D_OSGB_1936"" from the WKT
+            QString datum = theSrs->GetAttrValue("DATUM");
+            if (datum == "OSGB_1936" && !theProj4.contains("+datum"))
+                theProj4 += " +datum=OSGB36";
+            theProjection->setProjectionType(QString(theProj4));
+        }
+    }
 
     OGRFeature *poFeature;
 
