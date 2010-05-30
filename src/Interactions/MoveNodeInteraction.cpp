@@ -22,6 +22,7 @@
 MoveNodeInteraction::MoveNodeInteraction(MapView* aView)
     : FeatureSnapInteraction(aView)
     , StartDragPosition(0,0)
+    , theList(0)
 {
     if (M_PREFS->getSeparateMoveMode()) {
         setDontSelectVirtual(false);
@@ -113,7 +114,7 @@ void MoveNodeInteraction::snapMousePressEvent(QMouseEvent * event, Feature* aLas
 
 void MoveNodeInteraction::snapMouseReleaseEvent(QMouseEvent * event, Feature* Closer)
 {
-    if (event->button() == Qt::RightButton)
+    if (event->button() != Qt::LeftButton)
         return;
 
     if (Moving.size() && !panning() && HasMoved)
@@ -203,7 +204,8 @@ void MoveNodeInteraction::snapMouseReleaseEvent(QMouseEvent * event, Feature* Cl
         document()->addHistory(theList);
         view()->invalidate(true, false);
     } else
-        delete theList;
+        if (theList)
+            delete theList;
     Moving.clear();
     OriginalPosition.clear();
     clearNoSnap();
