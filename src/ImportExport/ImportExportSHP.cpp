@@ -98,7 +98,8 @@ Way *ImportExportSHP::readWay(Layer* aLayer, OGRLineString *poRing) {
     for(int i = 0;  i < numNode;  i++) {
         poRing->getPoint(i, &p);
         Node *n = nodeFor(p);
-        aLayer->add(n);
+        if (!aLayer->exists(n))
+            aLayer->add(n);
         w->add(n);
     }
     return w;
@@ -123,7 +124,8 @@ Feature* ImportExportSHP::parseGeometry(Layer* aLayer, OGRGeometry *poGeometry)
         Way *outer = readWay(aLayer, poRing);
         if (outer) {
             if (int numHoles = poPoly->getNumInteriorRings()) {
-                aLayer->add(outer);
+                if (!aLayer->exists(outer))
+                    aLayer->add(outer);
                 Relation* rel = new Relation;
                 rel->setTag("type", "multipolygon");
                 rel->add("outer", outer);
@@ -131,7 +133,8 @@ Feature* ImportExportSHP::parseGeometry(Layer* aLayer, OGRGeometry *poGeometry)
                     poRing = poPoly->getInteriorRing(i);
                     Way *inner = readWay(aLayer, poRing);
                     if (inner) {
-                        aLayer->add(inner);
+                        if (aLayer->exists(inner))
+                            aLayer->add(inner);
                         rel->add("inner", inner);
                     }
                 }
@@ -155,8 +158,9 @@ Feature* ImportExportSHP::parseGeometry(Layer* aLayer, OGRGeometry *poGeometry)
             Relation* R = new Relation;
             for(int i=0; i<numCol; i++) {
                 Feature* F = parseGeometry(aLayer, poCol->getGeometryRef(i));
-                if (F) {
-                    aLayer->add(F);
+                if (F ) {
+                    if (!aLayer->exists(F))
+                        aLayer->add(F);
                     R->add("", F);
                 }
             }
@@ -251,7 +255,8 @@ bool ImportExportSHP::import(Layer* aLayer)
 
             Feature* F = parseGeometry(aLayer, poGeometry);
             if (F) {
-                aLayer->add(F);
+                if (!aLayer->exists(F))
+                    aLayer->add(F);
                 for (int i=0; i<poFeature->GetFieldCount(); ++i) {
                     OGRFieldDefn  *fd = poFeature->GetFieldDefnRef(i);
                     QString k(fd->GetNameRef());
