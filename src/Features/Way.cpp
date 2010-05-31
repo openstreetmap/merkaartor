@@ -32,7 +32,7 @@ class WayPrivate
     public:
         WayPrivate(Way* aWay)
         : theWay(aWay), SmoothedUpToDate(false), BBoxUpToDate(false)
-            , IsCoastline(false), Area(0), Distance(0), Width(0)
+            , IsCoastline(false), Area(0), Distance(0)
             , wasPathComplete(false), VirtualsUptodate(false)
             , ProjectionRevision(0)
         {
@@ -48,7 +48,6 @@ class WayPrivate
         bool IsCoastline;
         double Area;
         double Distance;
-        double Width;
         bool NotEverythingDownloaded;
         bool wasPathComplete;
         bool VirtualsUptodate;
@@ -785,40 +784,10 @@ bool Way::deleteChildren(Document* theDocument, CommandList* theList)
     return true;
 }
 
-#define DEFAULTWIDTH 6
-#define LANEWIDTH 4
-
-double Way::widthOf()
-{
-    if (p->Width)
-        return p->Width;
-
-    QString s(tagValue("width",QString()));
-    if (!s.isNull())
-        p->Width = s.toDouble();
-    QString h = tagValue("highway",QString());
-    if ( (h == "motorway") || (h=="motorway_link") )
-        p->Width =  4*LANEWIDTH; // 3 lanes plus emergency
-    else if ( (h == "trunk") || (h=="trunk_link") )
-        p->Width =  3*LANEWIDTH; // 2 lanes plus emergency
-    else if ( (h == "primary") || (h=="primary_link") )
-        p->Width =  2*LANEWIDTH; // 2 lanes
-    else if (h == "secondary")
-        p->Width =  2*LANEWIDTH; // 2 lanes
-    else if (h == "tertiary")
-        p->Width =  1.5*LANEWIDTH; // shared middle lane
-    else if (h == "cycleway")
-        p->Width =  1.5;
-    p->Width = DEFAULTWIDTH;
-
-    return p->Width;
-}
-
 void Way::setTag(const QString& key, const QString& value, bool addToTagList)
 {
     Feature::setTag(key, value, addToTagList);
     MetaUpToDate = false;
-    p->Width = 0;
     if (key == "natural") {
         if (value == "coastline")
             p->IsCoastline = true;
@@ -831,7 +800,6 @@ void Way::setTag(int index, const QString& key, const QString& value, bool addTo
 {
     Feature::setTag(index, key, value, addToTagList);
     MetaUpToDate = false;
-    p->Width = 0;
     if (key == "natural") {
         if (value == "coastline")
             p->IsCoastline = true;
@@ -844,14 +812,12 @@ void Way::clearTags()
 {
     Feature::clearTags();
     MetaUpToDate = false;
-    p->Width = 0;
 }
 
 void Way::clearTag(const QString& k)
 {
     Feature::clearTag(k);
     MetaUpToDate = false;
-    p->Width = 0;
 }
 
 bool Way::toGPX(QDomElement xParent, QProgressDialog * progress, bool forExport)

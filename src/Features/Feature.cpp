@@ -96,6 +96,7 @@ class MapFeaturePrivate
                 Time(QDateTime::currentDateTime()), Deleted(false), Visible(true), Uploaded(false), LongId(0)
                 , Virtual(false), Special(false)
                 , VirtualsUpdatesBlocked(false)
+                , Width(0)
         {
             initVersionNumber();
         }
@@ -107,6 +108,7 @@ class MapFeaturePrivate
                 Time(other.Time), Deleted(false), Visible(true), Uploaded(false), LongId(0)
                 , Virtual(other.Virtual), Special(other.Special)
                 , VirtualsUpdatesBlocked(other.VirtualsUpdatesBlocked)
+                , Width(other.Width)
         {
             initVersionNumber();
         }
@@ -139,6 +141,7 @@ class MapFeaturePrivate
         bool Virtual;
         bool Special;
         bool VirtualsUpdatesBlocked;
+        double Width;
 };
 
 void MapFeaturePrivate::initVersionNumber()
@@ -169,6 +172,35 @@ Feature::~Feature(void)
 //    while (sizeParents())
 //        getParent(0)->remove(this);
     delete p;
+}
+
+#define DEFAULTWIDTH 6
+#define LANEWIDTH 4
+
+double Feature::widthOf()
+{
+    if (p->Width)
+        return p->Width;
+
+    QString s(tagValue("width",QString()));
+    if (!s.isNull())
+        p->Width = s.toDouble();
+    QString h = tagValue("highway",QString());
+    if ( (h == "motorway") || (h=="motorway_link") )
+        p->Width =  4*LANEWIDTH; // 3 lanes plus emergency
+    else if ( (h == "trunk") || (h=="trunk_link") )
+        p->Width =  3*LANEWIDTH; // 2 lanes plus emergency
+    else if ( (h == "primary") || (h=="primary_link") )
+        p->Width =  2*LANEWIDTH; // 2 lanes
+    else if (h == "secondary")
+        p->Width =  2*LANEWIDTH; // 2 lanes
+    else if (h == "tertiary")
+        p->Width =  1.5*LANEWIDTH; // shared middle lane
+    else if (h == "cycleway")
+        p->Width =  1.5;
+    p->Width = DEFAULTWIDTH;
+
+    return p->Width;
 }
 
 void Feature::setVersionNumber(int vn)
@@ -394,6 +426,8 @@ bool Feature::isSpecial() const
 
 void Feature::setTag(int index, const QString& key, const QString& value, bool addToTagList)
 {
+    p->Width = 0;
+
     int i = 0;
     for (; i<p->Tags.size(); ++i)
         if (p->Tags[i].first == key)
@@ -417,6 +451,8 @@ void Feature::setTag(int index, const QString& key, const QString& value, bool a
 
 void Feature::setTag(const QString& key, const QString& value, bool addToTagList)
 {
+    p->Width = 0;
+
     int i = 0;
     for (; i<p->Tags.size(); ++i)
         if (p->Tags[i].first == key)
@@ -440,6 +476,8 @@ void Feature::setTag(const QString& key, const QString& value, bool addToTagList
 
 void Feature::clearTags()
 {
+    p->Width = 0;
+
     p->Tags.clear();
     p->TagsSize = 0;
     invalidateMeta();
@@ -459,6 +497,8 @@ void Feature::invalidatePainter()
 
 void Feature::clearTag(const QString& k)
 {
+    p->Width = 0;
+
     for (int i=0; i<p->Tags.size(); ++i)
         if (p->Tags[i].first == k)
         {
@@ -473,6 +513,8 @@ void Feature::clearTag(const QString& k)
 
 void Feature::removeTag(int idx)
 {
+    p->Width = 0;
+
     p->Tags.erase(p->Tags.begin()+idx);
     p->TagsSize--;
     invalidateMeta();

@@ -699,18 +699,33 @@ void FeaturePainter::drawBackground(Way* R, QPainter* thePainter, MapView* theVi
 
 void FeaturePainter::drawBackground(Relation* R, QPainter* thePainter, MapView* theView) const
 {
-    Q_UNUSED(theView);
+    if (!DrawBackground && !ForegroundFill) return;
 
-    if (!DrawBackground) return;
-//	double PixelPerM = theProjection.pixelPerM();
-//	double WW = PixelPerM*widthOf(R)*BackgroundScale+BackgroundOffset;
-    double WW = BackgroundOffset;
-    if (WW < 0) return;
-    QPen thePen(BackgroundColor,WW);
-    thePen.setCapStyle(CAPSTYLE);
-    thePen.setJoinStyle(JOINSTYLE);
-    thePainter->setPen(thePen);
-    thePainter->setBrush(Qt::NoBrush);
+    thePainter->setPen(Qt::NoPen);
+    if (DrawBackground)
+    {
+        double PixelPerM = theView->pixelPerM();
+        double WW = PixelPerM*R->widthOf()*BackgroundScale+BackgroundOffset;
+        if (WW >= 0)
+        {
+            QPen thePen(BackgroundColor,WW);
+            thePen.setCapStyle(CAPSTYLE);
+            thePen.setJoinStyle(JOINSTYLE);
+            ////thePainter->strokePath(R->getPath(),thePen);
+            thePainter->setPen(thePen);
+        }
+    }
+
+    if (ForegroundFill && (R->size() > 2))
+    {
+        thePainter->setBrush(ForegroundFillFillColor);
+    }
+    else
+        thePainter->setBrush(Qt::NoBrush);
+
+    if (M_PREFS->getAreaOpacity() != 100 && ForegroundFill) {
+        thePainter->setOpacity(qreal(M_PREFS->getAreaOpacity()) / 100);
+    }
     thePainter->drawPath(theView->transform().map(R->getPath()));
 }
 
@@ -745,14 +760,13 @@ void FeaturePainter::drawForeground(Way* R, QPainter* thePainter, MapView* theVi
 
 void FeaturePainter::drawForeground(Relation* R, QPainter* thePainter, MapView* theView) const
 {
-    if (!DrawForeground && !ForegroundFill) return;
+    if (!DrawForeground) return;
 
     double WW = 0.0;
     if (DrawForeground)
     {
-//		double PixelPerM = theProjection.pixelPerM();
-//		double WW = PixelPerM*widthOf(R)*ForegroundScale+ForegroundOffset;
-        WW = ForegroundOffset;
+        double PixelPerM = theView->pixelPerM();
+        WW = PixelPerM*R->widthOf()*ForegroundScale+ForegroundOffset;
         if (WW < 0) return;
         QPen thePen(ForegroundColor,WW);
         thePen.setCapStyle(CAPSTYLE);
@@ -767,16 +781,9 @@ void FeaturePainter::drawForeground(Relation* R, QPainter* thePainter, MapView* 
     }
     else
         thePainter->setPen(Qt::NoPen);
-    if (ForegroundFill)
-    {
-        thePainter->setBrush(ForegroundFillFillColor);
-    }
-    else
-        thePainter->setBrush(Qt::NoBrush);
 
-    if (M_PREFS->getAreaOpacity() != 100 && ForegroundFill) {
-        thePainter->setOpacity(qreal(M_PREFS->getAreaOpacity()) / 100);
-    }
+    thePainter->setBrush(Qt::NoBrush);
+
     thePainter->drawPath(theView->transform().map(R->getPath()));
 }
 

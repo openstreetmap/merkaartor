@@ -94,7 +94,6 @@ class Way : public Feature
         double area();
         bool isClosed() const;
         double distance();
-        double widthOf();
 
         virtual bool deleteChildren(Document* theDocument, CommandList* theList);
 

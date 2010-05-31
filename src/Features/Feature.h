@@ -314,6 +314,7 @@ class Feature : public QObject
         virtual void updateMeta() = 0;
         virtual void updateIndex();
         virtual void invalidateMeta();
+        double widthOf();
 
         virtual bool deleteChildren(Document* , CommandList* ) { return true; }
 
