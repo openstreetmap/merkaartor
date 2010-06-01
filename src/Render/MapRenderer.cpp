@@ -202,89 +202,6 @@ void MapRenderer::render(
     QMap<RenderPriority, QSet<Feature*> >::const_iterator itm;
     QSet<Feature*>::const_iterator it;
 
-#if 0
-    P->setRenderHint(QPainter::Antialiasing);
-    thePainter = P;
-
-    if (M_PREFS->getBackgroundVisible())
-    {
-        BackgroundStyleLayer layer(this);
-        P->save();
-
-        for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm)
-            for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
-                P->setOpacity((*it)->layer()->getAlpha());
-                if (Way * R = dynamic_cast < Way * >(*it))
-                    layer.draw(R);
-                else if (Node * Pt = dynamic_cast < Node * >(*it))
-                    layer.draw(Pt);
-                else if (Relation * RR = dynamic_cast < Relation * >(*it))
-                    layer.draw(RR);
-            }
-        P->restore();
-    }
-    if (M_PREFS->getForegroundVisible())
-    {
-        ForegroundStyleLayer layer(this);
-        P->save();
-
-        for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm)
-            for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
-                P->setOpacity((*it)->layer()->getAlpha());
-                if (Way * R = dynamic_cast < Way * >(*it))
-                    layer.draw(R);
-                else if (Node * Pt = dynamic_cast < Node * >(*it))
-                    layer.draw(Pt);
-                else if (Relation * RR = dynamic_cast < Relation * >(*it))
-                    layer.draw(RR);
-            }
-        P->restore();
-    }
-    if (M_PREFS->getTouchupVisible())
-    {
-        TouchupStyleLayer layer(this);
-        P->save();
-
-        for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm)
-            for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
-                P->setOpacity((*it)->layer()->getAlpha());
-                if (Way * R = dynamic_cast < Way * >(*it))
-                    layer.draw(R);
-                else if (Node * Pt = dynamic_cast < Node * >(*it))
-                    layer.draw(Pt);
-                else if (Relation * RR = dynamic_cast < Relation * >(*it))
-                    layer.draw(RR);
-            }
-        P->restore();
-    }
-    if (M_PREFS->getNamesVisible()) {
-        LabelStyleLayer layer(this);
-        P->save();
-
-        for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm)
-            for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
-                P->setOpacity((*it)->layer()->getAlpha());
-                if (Way * R = dynamic_cast < Way * >(*it))
-                    layer.draw(R);
-                else if (Node * Pt = dynamic_cast < Node * >(*it))
-                    layer.draw(Pt);
-                else if (Relation * RR = dynamic_cast < Relation * >(*it))
-                    layer.draw(RR);
-            }
-        P->restore();
-    }
-
-    for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm)
-    {
-        for (it = itm.value().constBegin() ;it != itm.value().constEnd(); ++it)
-        {
-            P->setOpacity((*it)->layer()->getAlpha());
-            (*it)->draw(*P, aView);
-        }
-    }
-
-#else
-
     bool bgLayerVisible = M_PREFS->getBackgroundVisible();
     bool fgLayerVisible = M_PREFS->getForegroundVisible();
     bool tchpLayerVisible = M_PREFS->getTouchupVisible();
@@ -402,9 +319,6 @@ void MapRenderer::render(
 //    qDebug() << "curLayer: " << curLayer << " " << Start.msecsTo(Stop) << "ms";
 //#endif
     }
-
-
-#endif
 }
 
 

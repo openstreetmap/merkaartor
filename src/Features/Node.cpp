@@ -13,6 +13,7 @@ class NodePrivate
         NodePrivate()
         : IsWaypoint(false), ProjectionRevision(0)
         , HasPhoto(false)
+        , HasTags(false)
         , photoLocationBR(true)
         {
         }
@@ -22,6 +23,7 @@ class NodePrivate
         int ProjectionRevision;
 #endif
         bool HasPhoto;
+        bool HasTags;
         QPixmap Photo;
         bool photoLocationBR;
 };
@@ -125,10 +127,8 @@ bool Node::isWaypoint()
 bool Node::isSelectable(MapView* view) const
 {
     // If Node has non-default tags -> POI -> always selectable
-    // TODO Optimize! This is done every time we draw the node!
-    for (int i=0; i<tagSize(); ++i)
-        if ((tagKey(i) != "created_by") && (tagKey(i) != "ele"))
-            return true;
+    if (p->HasTags)
+        return true;
 
     bool Draw = false;
     if (M_PREFS->getTrackPointsVisible() || (lastUpdated() == Feature::Log && !M_PREFS->getTrackSegmentsVisible())) {
@@ -378,6 +378,13 @@ void Node::updateMeta()
     Feature::updateMeta();
 
     p->IsWaypoint = (findKey("_waypoint_") != tagSize());
+
+    for (int i=0; i<tagSize(); ++i)
+        if ((tagKey(i) != "created_by") && (tagKey(i) != "ele")) {
+            p->HasTags = true;
+            break;
+        }
+
     MetaUpToDate = true;
 }
 
