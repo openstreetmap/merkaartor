@@ -18,6 +18,7 @@ void addStreetNumbers(Document* theDocument, CommandList* theList, PropertiesDoc
 void reversePoints(Document* theDocument, CommandList* theList, Way* R);
 void simplifyRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock, double threshold);
 void alignNodes(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
+void spreadNodes(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
 void mergeNodes(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
 void detachNode(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
 void commitFeatures(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
@@ -26,6 +27,8 @@ bool canBreakRoads(PropertiesDock* theDock);
 bool canDetachNodes(PropertiesDock* theDock);
 void addRelationMember(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
 void removeRelationMember(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
+void subdivideRoad(Document* theDocument, CommandList *theList, PropertiesDock* theDock, int divisions);
+void splitArea(Document* theDocument, CommandList *theList, PropertiesDock* theDock);
 
 
 #endif

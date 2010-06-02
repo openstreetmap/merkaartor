@@ -128,6 +128,7 @@ MainWindow::MainWindow(QWidget *parent)
         , curGpsTrackSegment(0)
         , qtTranslator(0)
         , merkaartorTranslator(0)
+        , subdivideDialog(0)
 {
     p = new MainWindowPrivate;
 
@@ -395,6 +396,8 @@ void MainWindow::handleMessage(const QString &msg)
 MainWindow::~MainWindow(void)
 {
     p->theProperties->setSelection(NULL);
+
+    delete subdivideDialog;
 
     if (MasPaintStyle::instance())
         delete MasPaintStyle::instance();
@@ -1721,6 +1724,31 @@ void MainWindow::on_roadAddStreetNumbersAction_triggered()
     }
 }
 
+void MainWindow::on_roadSubdivideAction_dialogDone(int divisions)
+{
+    CommandList* theList = new CommandList(MainWindow::tr("Subdivide road"), NULL);
+    subdivideRoad(theDocument, theList, p->theProperties, divisions);
+    if (theList->empty())
+        delete theList;
+    else {
+        theDocument->addHistory(theList);
+        invalidateView();
+    }
+}
+
+void MainWindow::on_roadSubdivideAction_triggered()
+{
+    if (!subdivideDialog) {
+        subdivideDialog = new QInputDialog(this);
+        subdivideDialog->setInputMode(QInputDialog::IntInput);
+        subdivideDialog->setIntRange(2, 99);
+        connect(subdivideDialog, SIGNAL(intValueSelected(int)),
+                this, SLOT(on_roadSubdivideAction_dialogDone(int)));
+    }
+    subdivideDialog->setLabelText(tr("Number of segments to divide into"));
+    subdivideDialog->show();
+}
+
 void MainWindow::on_nodeAlignAction_triggered()
 {
     //MapFeature* F = theView->properties()->selection(0);
@@ -1732,6 +1760,19 @@ void MainWindow::on_nodeAlignAction_triggered()
     {
         theDocument->addHistory(theList);
     //	theView->properties()->setSelection(F);
+        invalidateView();
+    }
+}
+
+void MainWindow::on_nodeSpreadAction_triggered()
+{
+    CommandList* theList = new CommandList(MainWindow::tr("Spread Nodes"), NULL);
+    spreadNodes(theDocument, theList, p->theProperties);
+    if (theList->empty())
+        delete theList;
+    else
+    {
+        theDocument->addHistory(theList);
         invalidateView();
     }
 }
@@ -1782,6 +1823,18 @@ void MainWindow::on_relationRemoveMemberAction_triggered()
 {
     CommandList* theList = new CommandList(MainWindow::tr("Remove member from relation"), NULL);
     removeRelationMember(theDocument, theList, p->theProperties);
+    if (theList->empty())
+        delete theList;
+    else {
+        theDocument->addHistory(theList);
+        invalidateView();
+    }
+}
+
+void MainWindow::on_areaSplitAction_triggered()
+{
+    CommandList* theList = new CommandList(MainWindow::tr("Split area"), NULL);
+    splitArea(theDocument, theList, p->theProperties);
     if (theList->empty())
         delete theList;
     else {
@@ -1969,6 +2022,9 @@ void MainWindow::on_toolsShortcutsAction_triggered()
     theActions.append(ui->editReverseAction);
     theActions.append(ui->nodeMergeAction);
     theActions.append(ui->nodeAlignAction);
+    theActions.append(ui->nodeSpreadAction);
+    theActions.append(ui->roadSubdivideAction);
+    theActions.append(ui->areaSplitAction);
     theActions.append(ui->toolsPreferencesAction);
     theActions.append(ui->toolsShortcutsAction);
     theActions.append(ui->toolsWorldOsbAction);

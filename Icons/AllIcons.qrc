@@ -38,7 +38,10 @@
         <file>actions/reverse_road.png</file>
         <file>actions/save.png</file>
         <file>actions/select.png</file>
+        <file>actions/split_area.png</file>
         <file>actions/split_road.png</file>
+        <file>actions/spread_nodes.png</file>
+        <file>actions/subdivide_road.png</file>
         <file>actions/undo.png</file>
         <file>actions/upload.png</file>
         <file>actions/document_import.png</file>
