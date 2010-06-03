@@ -391,7 +391,11 @@ void PreferencesDialog::on_BrowseTemplate_clicked()
 
 void PreferencesDialog::on_btBgColor_clicked()
 {
-    QColor rgb = QColorDialog::getColor(BgColor, this, tr("Select Color"), QColorDialog::ShowAlphaChannel);
+    QColor rgb = QColorDialog::getColor(BgColor, this
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
+                                        , tr("Select Color"), QColorDialog::ShowAlphaChannel
+#endif
+                                       );
     if (rgb.isValid()) {
         BgColor = rgb;
         makeBoundaryIcon(btBgColor, BgColor);
@@ -400,7 +404,11 @@ void PreferencesDialog::on_btBgColor_clicked()
 
 void PreferencesDialog::on_btFocusColor_clicked()
 {
-    QColor rgb = QColorDialog::getColor(FocusColor, this, tr("Select Color"), QColorDialog::ShowAlphaChannel);
+    QColor rgb = QColorDialog::getColor(FocusColor, this
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
+                                        , tr("Select Color"), QColorDialog::ShowAlphaChannel
+#endif
+                                       );
     if (rgb.isValid()) {
         FocusColor = rgb;
         makeBoundaryIcon(btFocusColor, FocusColor);
@@ -409,7 +417,11 @@ void PreferencesDialog::on_btFocusColor_clicked()
 
 void PreferencesDialog::on_btHoverColor_clicked()
 {
-    QColor rgb = QColorDialog::getColor(HoverColor, this, tr("Select Color"), QColorDialog::ShowAlphaChannel);
+    QColor rgb = QColorDialog::getColor(HoverColor, this
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
+                                        , tr("Select Color"), QColorDialog::ShowAlphaChannel
+#endif
+                                       );
     if (rgb.isValid()) {
         HoverColor = rgb;
         makeBoundaryIcon(btHoverColor, HoverColor);
@@ -418,7 +430,11 @@ void PreferencesDialog::on_btHoverColor_clicked()
 
 void PreferencesDialog::on_btHighlightColor_clicked()
 {
-    QColor rgb = QColorDialog::getColor(HighlightColor, this, tr("Select Color"), QColorDialog::ShowAlphaChannel);
+    QColor rgb = QColorDialog::getColor(HighlightColor, this
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
+                                        , tr("Select Color"), QColorDialog::ShowAlphaChannel
+#endif
+                                       );
     if (rgb.isValid()) {
         HighlightColor = rgb;
         makeBoundaryIcon(btHighlightColor, HighlightColor);
@@ -427,7 +443,11 @@ void PreferencesDialog::on_btHighlightColor_clicked()
 
 void PreferencesDialog::on_btRelationsColor_clicked()
 {
-    QColor rgb = QColorDialog::getColor(RelationsColor, this, tr("Select Color"), QColorDialog::ShowAlphaChannel);
+    QColor rgb = QColorDialog::getColor(RelationsColor, this
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
+                                        , tr("Select Color"), QColorDialog::ShowAlphaChannel
+#endif
+                                       );
     if (rgb.isValid()) {
         RelationsColor = rgb;
         makeBoundaryIcon(btRelationsColor, RelationsColor);
@@ -435,7 +455,11 @@ void PreferencesDialog::on_btRelationsColor_clicked()
 }
 void PreferencesDialog::on_btGpxTrackColor_clicked()
 {
-    QColor rgb = QColorDialog::getColor(GpxTrackColor, this, tr("Select Color"), QColorDialog::ShowAlphaChannel);
+    QColor rgb = QColorDialog::getColor(GpxTrackColor, this
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
+                                        , tr("Select Color"), QColorDialog::ShowAlphaChannel
+#endif
+                                       );
     if (rgb.isValid()) {
         GpxTrackColor = rgb;
         makeBoundaryIcon(btGpxTrackColor, GpxTrackColor);

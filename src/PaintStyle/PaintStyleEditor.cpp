@@ -230,7 +230,11 @@ void PaintStyleEditor::on_DrawGlobalBackground_clicked(bool b)
 
 void PaintStyleEditor::on_GlobalBackgroundColor_clicked()
 {
-	QColor rgb = QColorDialog::getColor(theGlobalPainter.getBackgroundColor(), this, tr("Select Color"), QColorDialog::ShowAlphaChannel);
+	QColor rgb = QColorDialog::getColor(theGlobalPainter.getBackgroundColor(), this
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
+                                            , tr("Select Color"), QColorDialog::ShowAlphaChannel
+#endif
+                                           );
 	if (rgb.isValid()) {
 		makeBoundaryIcon(GlobalBackgroundColor, rgb);
 		theGlobalPainter.background(rgb);
@@ -253,7 +257,11 @@ void PaintStyleEditor::on_BackgroundColor_clicked()
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
-	QColor rgb = QColorDialog::getColor(FP.backgroundBoundary().Color, this, tr("Select Color"), QColorDialog::ShowAlphaChannel);
+	QColor rgb = QColorDialog::getColor(FP.backgroundBoundary().Color, this
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
+                                            , tr("Select Color"), QColorDialog::ShowAlphaChannel
+#endif
+                                           );
 	if (rgb.isValid()) {
 		makeBoundaryIcon(BackgroundColor, rgb);
 		FP.background(rgb, ProportionalBackground->value(), FixedBackground->value());
@@ -293,7 +301,11 @@ void PaintStyleEditor::on_ForegroundColor_clicked()
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
-	QColor rgb = QColorDialog::getColor(FP.foregroundBoundary().Color, this, tr("Select Color"), QColorDialog::ShowAlphaChannel);
+	QColor rgb = QColorDialog::getColor(FP.foregroundBoundary().Color, this
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
+                                            , tr("Select Color"), QColorDialog::ShowAlphaChannel
+#endif
+                                           );
 	if (rgb.isValid()) {
 		makeBoundaryIcon(ForegroundColor, rgb);
 		FP.foreground(rgb, ProportionalForeground->value(), FixedForeground->value());
@@ -357,7 +369,11 @@ void PaintStyleEditor::on_TouchupColor_clicked()
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
-	QColor rgb = QColorDialog::getColor(FP.touchupBoundary().Color, this, tr("Select Color"), QColorDialog::ShowAlphaChannel);
+	QColor rgb = QColorDialog::getColor(FP.touchupBoundary().Color, this
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
+                                            , tr("Select Color"), QColorDialog::ShowAlphaChannel
+#endif
+                                           );
 	if (rgb.isValid()) {
 		makeBoundaryIcon(TouchupColor, rgb);
 		FP.touchup(rgb, ProportionalTouchup->value(), FixedTouchup->value());
@@ -421,7 +437,11 @@ void PaintStyleEditor::on_FillColor_clicked()
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
-	QColor rgb = QColorDialog::getColor(FP.fillColor(), this, tr("Select Color"), QColorDialog::ShowAlphaChannel);
+	QColor rgb = QColorDialog::getColor(FP.fillColor(), this
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
+                                            , tr("Select Color"), QColorDialog::ShowAlphaChannel
+#endif
+                                           );
 	if (rgb.isValid()) {
 		makeBoundaryIcon(FillColor, rgb);
 		FP.foregroundFill(rgb);
@@ -507,7 +527,11 @@ void PaintStyleEditor::on_LabelColor_clicked()
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
-	QColor rgb = QColorDialog::getColor(FP.labelBoundary().Color, this, tr("Select Color"), QColorDialog::ShowAlphaChannel);
+	QColor rgb = QColorDialog::getColor(FP.labelBoundary().Color, this
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
+                                            , tr("Select Color"), QColorDialog::ShowAlphaChannel
+#endif
+                                           );
 	if (rgb.isValid()) {
 		makeBoundaryIcon(LabelColor, rgb);
 		FP.label(rgb, ProportionalLabel->value(), FixedLabel->value());
@@ -544,7 +568,11 @@ void PaintStyleEditor::on_LabelBackgroundlColor_clicked()
 	if (idx >= thePainters.size())
 		return;
 	FeaturePainter& FP(thePainters[idx]);
-	QColor rgb = QColorDialog::getColor(FP.labelBackgroundColor(), this, tr("Select Color"), QColorDialog::ShowAlphaChannel);
+	QColor rgb = QColorDialog::getColor(FP.labelBackgroundColor(), this
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
+                                            , tr("Select Color"), QColorDialog::ShowAlphaChannel
+#endif
+                                           );
 	if (rgb.isValid()) {
 		makeBoundaryIcon(LabelBackgroundlColor, rgb);
 		FP.labelBackground(rgb);
