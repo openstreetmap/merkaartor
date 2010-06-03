@@ -124,6 +124,8 @@ public slots:
     virtual void on_relationAddMemberAction_triggered();
     virtual void on_relationRemoveMemberAction_triggered();
     virtual void on_areaSplitAction_triggered();
+    virtual void on_areaTerraceAction_dialogDone(int divisions);
+    virtual void on_areaTerraceAction_triggered();
 
     virtual void on_mapStyleSaveAction_triggered();
     virtual void on_mapStyleLoadAction_triggered();
@@ -251,6 +253,7 @@ protected:
     QTranslator* merkaartorTranslator;
 
     QInputDialog *subdivideDialog;
+    QInputDialog *terraceDialog;
 
 private slots:
     void delayedInit();

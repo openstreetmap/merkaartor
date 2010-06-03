@@ -59,6 +59,7 @@
     <addaction name="roadAddStreetNumbersAction"/>
     <addaction name="roadSubdivideAction"/>
     <addaction name="areaSplitAction"/>
+    <addaction name="areaTerraceAction"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -360,6 +361,7 @@
    <addaction name="editReverseAction"/>
    <addaction name="roadSubdivideAction"/>
    <addaction name="areaSplitAction"/>
+   <addaction name="areaTerraceAction"/>
   </widget>
   <widget class="QToolBar" name="mobileToolBar">
    <property name="enabled">
@@ -1684,6 +1686,21 @@
    </property>
    <property name="statusTip">
     <string>Split a selected area between two selected nodes into two separates areas.</string>
+   </property>
+  </action>
+  <action name="areaTerraceAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
+     <normaloff>:/Icons/actions/terrace_building.png</normaloff>:/Icons/actions/terrace_building.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Terrace</string>
+   </property>
+   <property name="toolTip">
+    <string>Terrace area into residences</string>
+   </property>
+   <property name="statusTip">
+    <string>Split a selected area into terraced residences.</string>
    </property>
   </action>
  </widget>

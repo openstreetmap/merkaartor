@@ -129,6 +129,7 @@ MainWindow::MainWindow(QWidget *parent)
         , qtTranslator(0)
         , merkaartorTranslator(0)
         , subdivideDialog(0)
+        , terraceDialog(0)
 {
     p = new MainWindowPrivate;
 
@@ -398,6 +399,7 @@ MainWindow::~MainWindow(void)
     p->theProperties->setSelection(NULL);
 
     delete subdivideDialog;
+    delete terraceDialog;
 
     if (MasPaintStyle::instance())
         delete MasPaintStyle::instance();
@@ -1726,7 +1728,7 @@ void MainWindow::on_roadAddStreetNumbersAction_triggered()
 
 void MainWindow::on_roadSubdivideAction_dialogDone(int divisions)
 {
-    CommandList* theList = new CommandList(MainWindow::tr("Subdivide road"), NULL);
+    CommandList* theList = new CommandList(MainWindow::tr("Subdivide road into %1").arg(divisions), NULL);
     subdivideRoad(theDocument, theList, p->theProperties, divisions);
     if (theList->empty())
         delete theList;
@@ -1841,6 +1843,31 @@ void MainWindow::on_areaSplitAction_triggered()
         theDocument->addHistory(theList);
         invalidateView();
     }
+}
+
+void MainWindow::on_areaTerraceAction_dialogDone(int divisions)
+{
+    CommandList* theList = new CommandList(MainWindow::tr("Terrace area into %1").arg(divisions), NULL);
+    terraceArea(theDocument, theList, p->theProperties, divisions);
+    if (theList->empty())
+        delete theList;
+    else {
+        theDocument->addHistory(theList);
+        invalidateView();
+    }
+}
+
+void MainWindow::on_areaTerraceAction_triggered()
+{
+    if (!terraceDialog) {
+        terraceDialog = new QInputDialog(this);
+        terraceDialog->setInputMode(QInputDialog::IntInput);
+        terraceDialog->setIntRange(2, 99);
+        connect(terraceDialog, SIGNAL(intValueSelected(int)),
+                this, SLOT(on_areaTerraceAction_dialogDone(int)));
+    }
+    terraceDialog->setLabelText(tr("Number of houses to terrace into"));
+    terraceDialog->show();
 }
 
 void MainWindow::on_createRelationAction_triggered()
@@ -2025,6 +2052,7 @@ void MainWindow::on_toolsShortcutsAction_triggered()
     theActions.append(ui->nodeSpreadAction);
     theActions.append(ui->roadSubdivideAction);
     theActions.append(ui->areaSplitAction);
+    theActions.append(ui->areaTerraceAction);
     theActions.append(ui->toolsPreferencesAction);
     theActions.append(ui->toolsShortcutsAction);
     theActions.append(ui->toolsWorldOsbAction);

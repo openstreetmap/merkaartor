@@ -197,6 +197,7 @@ void PropertiesDock::checkMenuStatus()
     Main->ui->roadSimplifyAction->setEnabled(IsRoad || NumRoads > 0 || NumAreas > 0);
     Main->ui->roadSubdivideAction->setEnabled(((NumRoads + NumAreas) == 1 && NumPoints == 2) || (IsRoad && Selection[0]->size() == 2));
     Main->ui->areaSplitAction->setEnabled(NumAreas == 1 && NumPoints == 2);
+    Main->ui->areaTerraceAction->setEnabled(NumAreas == 1 && NumRoads == 0);
     Main->ui->featureDeleteAction->setEnabled((IsPoint || IsRoad || IsRelation) && !Selection[0]->isDirty());
     Main->ui->featureCommitAction->setEnabled(NumCommitableFeature);
     Main->ui->nodeMergeAction->setEnabled(NumPoints > 1);
