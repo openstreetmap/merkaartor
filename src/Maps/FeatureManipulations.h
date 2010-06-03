@@ -27,8 +27,11 @@ bool canBreakRoads(PropertiesDock* theDock);
 bool canDetachNodes(PropertiesDock* theDock);
 void addRelationMember(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
 void removeRelationMember(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
+bool canSubdivideRoad(PropertiesDock* theDock, Way** theRoad = 0, unsigned int* edge = 0);
 void subdivideRoad(Document* theDocument, CommandList* theList, PropertiesDock* theDock, unsigned int divisions);
+bool canSplitArea(PropertiesDock* theDock, Way** outTheArea = 0, unsigned int outNodes[2] = 0);
 void splitArea(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
+bool canTerraceArea(PropertiesDock* theDock, Way** outTheArea = 0);
 void terraceArea(Document* theDocument, CommandList* theList, PropertiesDock* theDock, unsigned int divisions);
 
 

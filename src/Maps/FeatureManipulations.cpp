@@ -922,13 +922,8 @@ static void subdivideRoad(Document* theDocument, CommandList* theList,
     }
 }
 
-
-void subdivideRoad(Document* theDocument, CommandList* theList, PropertiesDock* theDock, unsigned int divisions)
+bool canSubdivideRoad(PropertiesDock* theDock, Way** outTheRoad, unsigned int* outEdge)
 {
-    // Subidviding into 1 division is no-op
-    if (divisions < 2)
-        return;
-
     // Get the selected way and nodes
     Way* theRoad = NULL;
     Node* theNodes[2] = { NULL, NULL };
@@ -949,14 +944,12 @@ void subdivideRoad(Document* theDocument, CommandList* theList, PropertiesDock* 
         theNodes[1] = theRoad->getNode(1);
         // Now this would just be silly
         if (theNodes[0] == theNodes[1])
-            return;
+            return false;
     }
 
     // A way and 2 nodes
-    if (!theRoad || !theNodes[0] || !theNodes[1]) {
-        qDebug() << "Select a way and 2 nodes in the way";
-        return;
-    }
+    if (!theRoad || !theNodes[0] || !theNodes[1])
+        return false;
 
     // Nodes must be adjacent in the way
     int numNodes = theRoad->size();
@@ -964,21 +957,36 @@ void subdivideRoad(Document* theDocument, CommandList* theList, PropertiesDock* 
     for (int i = 0; i < numNodes-1; ++i) {
         Node* N0 = theRoad->getNode(i);
         Node* N1 = theRoad->getNode(i+1);
-        if (N0 == theNodes[0] && N1 == theNodes[1]) {
-            nodeIndex0 = i;
-            break;
-        } else if (N0 == theNodes[1] && N1 == theNodes[0]) {
+        if ((N0 == theNodes[0] && N1 == theNodes[1]) ||
+            (N0 == theNodes[1] && N1 == theNodes[0])) {
             nodeIndex0 = i;
             break;
         }
     }
 
-    if (nodeIndex0 < 0) {
-        qDebug() << "Nodes are not adjacent in the way";
-        return;
-    }
+    if (nodeIndex0 < 0)
+        return false;
 
-    subdivideRoad(theDocument, theList, theRoad, nodeIndex0, divisions);
+    if (outTheRoad)
+        *outTheRoad = theRoad;
+    if (outEdge)
+        *outEdge = nodeIndex0;
+
+    return true;
+}
+
+void subdivideRoad(Document* theDocument, CommandList* theList, PropertiesDock* theDock, unsigned int divisions)
+{
+    // Subdividing into 1 division is no-op
+    if (divisions < 2)
+        return;
+
+    // Get the selected way and nodes
+    Way* theRoad;
+    unsigned int edge;
+    if (!canSubdivideRoad(theDock, &theRoad, &edge))
+        return;
+    subdivideRoad(theDocument, theList, theRoad, edge, divisions);
 }
 
 /* Remove nodes between theNodes in theArea into a separate way newArea.
@@ -1025,10 +1033,10 @@ static bool splitArea(Document* theDocument, CommandList* theList,
     return true;
 }
 
-void splitArea(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
+bool canSplitArea(PropertiesDock* theDock, Way** outTheArea, unsigned int outNodes[2])
 {
     if (theDock->size() != 3)
-        return;
+        return false;
 
     // Get the selected way and nodes
     Way* theArea = NULL;
@@ -1045,30 +1053,51 @@ void splitArea(Document* theDocument, CommandList* theList, PropertiesDock* theD
     }
 
     // A way and 2 nodes
-    if (!theArea || !theNodes[0] || !theNodes[1]) {
-        qDebug() << "Select a way and 2 nodes in the way";
-        return;
-    }
+    if (!theArea || !theNodes[0] || !theNodes[1])
+        return false;
 
     // Way must be closed
-    if (!theArea->isClosed()) {
-        qDebug() << "Way must be closed";
-        return;
-    }
+    if (!theArea->isClosed())
+        return false;
 
     // Nodes must belong to way
     unsigned int numNodes = theArea->size();
     unsigned int nodeIndex[2];
     for (int i = 0; i < 2; ++i) {
         nodeIndex[i] = theArea->find(theNodes[i]);
-        if (nodeIndex[i] >= numNodes) {
-            qDebug() << "Nodes must be part of way";
-            return;
-        }
+        if (nodeIndex[i] >= numNodes)
+            return false;
     }
 
+    // Make sure nodes are in order
+    if (nodeIndex[0] > nodeIndex[1])
+        qSwap(nodeIndex[0], nodeIndex[1]);
+
+    // And not next to one another
+    if (nodeIndex[0] + 1 == nodeIndex[1] ||
+            (nodeIndex[0] == 0 && nodeIndex[1] == (unsigned int)theArea->size() - 2))
+        return false;
+
+
+    if (outTheArea)
+        *outTheArea = theArea;
+    if (outNodes) {
+        outNodes[0] = nodeIndex[0];
+        outNodes[1] = nodeIndex[1];
+    }
+
+    return true;
+}
+
+void splitArea(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
+{
+    Way* theArea;
+    unsigned int nodes[2];
+    if (!canSplitArea(theDock, &theArea, nodes))
+        return;
+
     Way* newArea;
-    if (!splitArea(theDocument, theList, theArea, nodeIndex, &newArea))
+    if (!splitArea(theDocument, theList, theArea, nodes, &newArea))
         return;
 
     theDock->setSelection(QList<Way*>() << theArea << newArea);
@@ -1098,7 +1127,7 @@ static void terraceArea(Document* theDocument, CommandList* theList,
         *outAreas << theArea;
 }
 
-void terraceArea(Document* theDocument, CommandList* theList, PropertiesDock* theDock, unsigned int divisions)
+bool canTerraceArea(PropertiesDock* theDock, Way** outTheArea)
 {
     // Get the selected area
     Way* theArea = NULL;
@@ -1108,10 +1137,22 @@ void terraceArea(Document* theDocument, CommandList* theList, PropertiesDock* th
             break;
         }
     if (!theArea || !theArea->isClosed())
-        return;
+        return false;
 
     // Only work with 4 edges for now
     if (theArea->size() != 5)
+        return false;
+
+    if (outTheArea)
+        *outTheArea = theArea;
+
+    return true;
+}
+
+void terraceArea(Document* theDocument, CommandList* theList, PropertiesDock* theDock, unsigned int divisions)
+{
+    Way* theArea;
+    if (!canTerraceArea(theDock, &theArea))
         return;
 
     float longestLen = 0.0f;

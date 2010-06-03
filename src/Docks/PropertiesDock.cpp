@@ -195,9 +195,9 @@ void PropertiesDock::checkMenuStatus()
     Main->ui->roadSplitAction->setEnabled((IsParentRoadInner && !IsParentArea) || (NumRoads && NumPoints) || (NumAreas && NumPoints > 1));
     Main->ui->roadBreakAction->setEnabled(IsParentRoadInner || ((NumRoads == 1 || NumAreas == 1) && NumPoints) || (NumRoads > 1 && canBreakRoads(this)));
     Main->ui->roadSimplifyAction->setEnabled(IsRoad || NumRoads > 0 || NumAreas > 0);
-    Main->ui->roadSubdivideAction->setEnabled(((NumRoads + NumAreas) == 1 && NumPoints == 2) || (IsRoad && Selection[0]->size() == 2));
-    Main->ui->areaSplitAction->setEnabled(NumAreas == 1 && NumPoints == 2);
-    Main->ui->areaTerraceAction->setEnabled(NumAreas == 1 && NumRoads == 0);
+    Main->ui->roadSubdivideAction->setEnabled((NumRoads + NumAreas) == 1 && (!NumPoints || NumPoints == 2) && canSubdivideRoad(this));
+    Main->ui->areaSplitAction->setEnabled(NumAreas == 1 && NumPoints == 2 && canSplitArea(this));
+    Main->ui->areaTerraceAction->setEnabled(NumAreas == 1 && NumRoads == 0 && canTerraceArea(this));
     Main->ui->featureDeleteAction->setEnabled((IsPoint || IsRoad || IsRelation) && !Selection[0]->isDirty());
     Main->ui->featureCommitAction->setEnabled(NumCommitableFeature);
     Main->ui->nodeMergeAction->setEnabled(NumPoints > 1);
