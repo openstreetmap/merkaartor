@@ -63,6 +63,7 @@
 #include "Tools/WorldOsbManager.h"
 #include "Tools/ActionsDialog.h"
 #include "GotoDialog.h"
+#include "TerraceDialog.h"
 
 #ifndef RELEASE
 #include "revision.h"
@@ -128,8 +129,6 @@ MainWindow::MainWindow(QWidget *parent)
         , curGpsTrackSegment(0)
         , qtTranslator(0)
         , merkaartorTranslator(0)
-        , subdivideDialog(0)
-        , terraceDialog(0)
 {
     p = new MainWindowPrivate;
 
@@ -397,9 +396,6 @@ void MainWindow::handleMessage(const QString &msg)
 MainWindow::~MainWindow(void)
 {
     p->theProperties->setSelection(NULL);
-
-    delete subdivideDialog;
-    delete terraceDialog;
 
     if (MasPaintStyle::instance())
         delete MasPaintStyle::instance();
@@ -1726,29 +1722,24 @@ void MainWindow::on_roadAddStreetNumbersAction_triggered()
     }
 }
 
-void MainWindow::on_roadSubdivideAction_dialogDone(int divisions)
-{
-    CommandList* theList = new CommandList(MainWindow::tr("Subdivide road into %1").arg(divisions), NULL);
-    subdivideRoad(theDocument, theList, p->theProperties, divisions);
-    if (theList->empty())
-        delete theList;
-    else {
-        theDocument->addHistory(theList);
-        invalidateView();
-    }
-}
-
 void MainWindow::on_roadSubdivideAction_triggered()
 {
-    if (!subdivideDialog) {
-        subdivideDialog = new QInputDialog(this);
-        subdivideDialog->setInputMode(QInputDialog::IntInput);
-        subdivideDialog->setIntRange(2, 99);
-        connect(subdivideDialog, SIGNAL(intValueSelected(int)),
-                this, SLOT(on_roadSubdivideAction_dialogDone(int)));
+    QInputDialog *Dlg = new QInputDialog(this);
+    Dlg->setInputMode(QInputDialog::IntInput);
+    Dlg->setIntRange(2, 99);
+    Dlg->setLabelText(tr("Number of segments to divide into"));
+    if (Dlg->exec() == QDialog::Accepted) {
+        int divisions = Dlg->intValue();
+        CommandList* theList = new CommandList(MainWindow::tr("Subdivide road into %1").arg(divisions), NULL);
+        subdivideRoad(theDocument, theList, p->theProperties, divisions);
+        if (theList->empty())
+            delete theList;
+        else {
+            theDocument->addHistory(theList);
+            invalidateView();
+        }
     }
-    subdivideDialog->setLabelText(tr("Number of segments to divide into"));
-    subdivideDialog->show();
+    delete Dlg;
 }
 
 void MainWindow::on_nodeAlignAction_triggered()
@@ -1845,29 +1836,34 @@ void MainWindow::on_areaSplitAction_triggered()
     }
 }
 
-void MainWindow::on_areaTerraceAction_dialogDone(int divisions)
-{
-    CommandList* theList = new CommandList(MainWindow::tr("Terrace area into %1").arg(divisions), NULL);
-    terraceArea(theDocument, theList, p->theProperties, divisions);
-    if (theList->empty())
-        delete theList;
-    else {
-        theDocument->addHistory(theList);
-        invalidateView();
-    }
-}
-
 void MainWindow::on_areaTerraceAction_triggered()
 {
-    if (!terraceDialog) {
-        terraceDialog = new QInputDialog(this);
-        terraceDialog->setInputMode(QInputDialog::IntInput);
-        terraceDialog->setIntRange(2, 99);
-        connect(terraceDialog, SIGNAL(intValueSelected(int)),
-                this, SLOT(on_areaTerraceAction_dialogDone(int)));
+    TerraceDialog* Dlg = new TerraceDialog(this);
+    if (Dlg->exec() == QDialog::Accepted) {
+        int divisions = Dlg->numHouses();
+        CommandList* theList = new CommandList(MainWindow::tr("Terrace area into %1").arg(divisions), NULL);
+        terraceArea(theDocument, theList, p->theProperties, divisions);
+        // Add the house numbers to the houses in the selection
+        if (Dlg->hasHouseNumbers()) {
+            QStringList numbers = Dlg->houseNumbers();
+            QList<Feature*> areas = p->theProperties->selection();
+            int i = 0;
+            foreach (Feature* area, areas) {
+                if (i >= numbers.size())
+                    break;
+                if (!numbers[i].isEmpty())
+                    theList->add(new SetTagCommand(area, "addr:housenumber", numbers[i]));
+                ++i;
+            }
+        }
+        if (theList->empty())
+            delete theList;
+        else {
+            theDocument->addHistory(theList);
+            invalidateView();
+        }
     }
-    terraceDialog->setLabelText(tr("Number of houses to terrace into"));
-    terraceDialog->show();
+    delete Dlg;
 }
 
 void MainWindow::on_createRelationAction_triggered()

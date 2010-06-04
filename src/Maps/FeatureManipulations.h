@@ -31,7 +31,7 @@ bool canSubdivideRoad(PropertiesDock* theDock, Way** theRoad = 0, unsigned int* 
 void subdivideRoad(Document* theDocument, CommandList* theList, PropertiesDock* theDock, unsigned int divisions);
 bool canSplitArea(PropertiesDock* theDock, Way** outTheArea = 0, unsigned int outNodes[2] = 0);
 void splitArea(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
-bool canTerraceArea(PropertiesDock* theDock, Way** outTheArea = 0);
+bool canTerraceArea(PropertiesDock* theDock, Way** outTheArea = 0, int* startNode = 0);
 void terraceArea(Document* theDocument, CommandList* theList, PropertiesDock* theDock, unsigned int divisions);
 
 

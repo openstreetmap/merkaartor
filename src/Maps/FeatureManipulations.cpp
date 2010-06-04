@@ -1104,12 +1104,15 @@ void splitArea(Document* theDocument, CommandList* theList, PropertiesDock* theD
 }
 
 static void terraceArea(Document* theDocument, CommandList* theList,
-                        Way* theArea, unsigned int sides[2], unsigned int divisions,
+                        Way* theArea, unsigned int sides[2],
+                        unsigned int divisions, int startNode,
                         QList<Feature*>* outAreas)
 {
     // We're adding nodes so ordering is important
     if (sides[0] > sides[1])
         qSwap(sides[0], sides[1]);
+
+    bool reverse = (startNode >= 0 && ((5 + startNode - sides[1]) & 2));
 
     // Subdivide both sides
     subdivideRoad(theDocument, theList, theArea, sides[1], divisions);
@@ -1120,24 +1123,41 @@ static void terraceArea(Document* theDocument, CommandList* theList,
         Way* newArea;
         unsigned int nodes[2] = { i, i + 3 };
         splitArea(theDocument, theList, theArea, nodes, &newArea);
-        if (newArea && outAreas)
-            *outAreas << newArea;
+        if (newArea && outAreas) {
+            if (reverse)
+                outAreas->push_front(newArea);
+            else
+                outAreas->push_back(newArea);
+        }
     }
-    if (outAreas)
-        *outAreas << theArea;
+    if (outAreas) {
+        if (reverse)
+            outAreas->push_front(theArea);
+        else
+            outAreas->push_back(theArea);
+    }
 }
 
-bool canTerraceArea(PropertiesDock* theDock, Way** outTheArea)
+bool canTerraceArea(PropertiesDock* theDock, Way** outTheArea, int* startNode)
 {
     // Get the selected area
     Way* theArea = NULL;
+    Node* theNode = NULL;
     for (int i = 0; i < theDock->size(); ++i)
         if ((theDock->selection(i)->getClass() == "Road") && !theArea) {
             theArea = CAST_WAY(theDock->selection(i));
-            break;
+        } else if (startNode && theDock->selection(i)->getClass() == "TrackPoint") {
+            theNode = CAST_NODE(theDock->selection(i));
         }
     if (!theArea || !theArea->isClosed())
         return false;
+
+    if (startNode) {
+        if (theNode)
+            *startNode = theArea->find(theNode);
+        else
+            *startNode = -1;
+    }
 
     // Only work with 4 edges for now
     if (theArea->size() != 5)
@@ -1152,7 +1172,8 @@ bool canTerraceArea(PropertiesDock* theDock, Way** outTheArea)
 void terraceArea(Document* theDocument, CommandList* theList, PropertiesDock* theDock, unsigned int divisions)
 {
     Way* theArea;
-    if (!canTerraceArea(theDock, &theArea))
+    int startNode;
+    if (!canTerraceArea(theDock, &theArea, &startNode))
         return;
 
     float longestLen = 0.0f;
@@ -1169,7 +1190,7 @@ void terraceArea(Document* theDocument, CommandList* theList, PropertiesDock* th
     sides[1] = (sides[0] + 2) % (theArea->size() - 1);
 
     QList<Feature*> areas;
-    terraceArea(theDocument, theList, theArea, sides, divisions, &areas);
+    terraceArea(theDocument, theList, theArea, sides, divisions, startNode, &areas);
 
     theDock->setSelection(areas);
 }

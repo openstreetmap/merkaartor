@@ -7,7 +7,6 @@
 #include <QtXml>
 #include <QProgressBar>
 #include <QLabel>
-#include <QInputDialog>
 
 namespace Ui {
     class MainWindow;
@@ -111,7 +110,6 @@ public slots:
     virtual void on_roadSimplifyAction_triggered();
     virtual void on_roadCreateJunctionAction_triggered();
     virtual void on_roadAddStreetNumbersAction_triggered();
-    virtual void on_roadSubdivideAction_dialogDone(int divisions);
     virtual void on_roadSubdivideAction_triggered();
 
     virtual void on_featureDeleteAction_triggered();
@@ -124,7 +122,6 @@ public slots:
     virtual void on_relationAddMemberAction_triggered();
     virtual void on_relationRemoveMemberAction_triggered();
     virtual void on_areaSplitAction_triggered();
-    virtual void on_areaTerraceAction_dialogDone(int divisions);
     virtual void on_areaTerraceAction_triggered();
 
     virtual void on_mapStyleSaveAction_triggered();
@@ -251,9 +248,6 @@ protected:
 
     QTranslator* qtTranslator;
     QTranslator* merkaartorTranslator;
-
-    QInputDialog *subdivideDialog;
-    QInputDialog *terraceDialog;
 
 private slots:
     void delayedInit();
