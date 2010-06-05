@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>DirtyDock</string>
+   <string>Features</string>
   </property>
   <layout class="QVBoxLayout">
    <property name="spacing">
@@ -67,7 +67,7 @@
          <widget class="QCheckBox" name="cbWithin"/>
         </item>
         <item>
-         <widget class="QLabel" name="label">
+         <widget class="QLabel" name="lblOnlyViewport">
           <property name="text">
            <string>Only features fully within the viewport</string>
           </property>

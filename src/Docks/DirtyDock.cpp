@@ -191,6 +191,8 @@ void DirtyDock::changeEvent(QEvent * event)
 
 void DirtyDock::retranslateUi()
 {
+    ui.retranslateUi(getWidget());
+
     setWindowTitle(tr("Undo"));
     centerAction->setText(tr("Center map"));
     centerZoomAction->setText(tr("Center && Zoom map"));

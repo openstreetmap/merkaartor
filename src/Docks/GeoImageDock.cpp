@@ -77,7 +77,7 @@ bool GeoImageDock::askAndgetWalkingPapersDetails(double &lat, double &lon, bool&
 }
 
 GeoImageDock::GeoImageDock(MainWindow *aMain)
-    : QDockWidget(aMain), Main(aMain)
+    : MDockAncestor(aMain), Main(aMain)
     , photoLayer(0)
 {
     curImage = lastImage = -1;
@@ -891,6 +891,23 @@ void GeoImageDock::addGeoDataToImage(Coord position, const QString & file)
     return;
 }
 
+void GeoImageDock::changeEvent(QEvent * event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        retranslateUi();
+    MDockAncestor::changeEvent(event);
+}
+
+void GeoImageDock::retranslateUi()
+{
+    setWindowTitle(tr("Geo Images"));
+    centerAction->setText(tr("Center map"));
+    remImagesAction->setText(tr("Remove Images"));
+    toClipboardAction->setText(tr("Copy filename to clipboard"));
+    nextImageAction->setText(tr("Select next image"));
+    previousImageAction->setText(tr("Select previous image"));
+    saveImageAction->setText(tr("Save geotagged image..."));
+}
 
 // *** ImageView *** //
 
@@ -1039,5 +1056,4 @@ void ImageView::zoom(double levelStep)
 
     update();
 }
-
 

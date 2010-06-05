@@ -360,12 +360,16 @@ QList<Feature*> FeaturesDock::highlighted()
 
 void FeaturesDock::retranslateUi()
 {
+    ui.retranslateUi(getWidget());
+
     setWindowTitle(tr("Features"));
     centerAction->setText(tr("Center map"));
     centerZoomAction->setText(tr("Center && Zoom map"));
     downloadAction->setText(tr("Download missing children"));
     addSelectAction->setText(tr("Add to selection"));
     deleteAction->setText(tr("Delete"));
+
+    retranslateTabBar();
 }
 
 void FeaturesDock::retranslateTabBar()

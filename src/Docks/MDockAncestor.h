@@ -8,15 +8,15 @@
 
 class MDockAncestor : public QDockWidget
 {
-	public:
-        MDockAncestor(QWidget *parent = 0) : QDockWidget(parent) {}
+    public:
+        MDockAncestor(QWidget *parent = 0) : QDockWidget(parent), mainWidget(0) {}
         void setWidget ( QWidget * widget ) { QDockWidget::setWidget(widget); }
-		QWidget* getWidget();
+        QWidget* getWidget();
         void setAllowedAreas ( Qt::DockWidgetAreas areas )  { QDockWidget::setAllowedAreas(areas); }
 
-	protected:
-		QWidget* mainWidget;
-		virtual void retranslateUi() = 0;
+    protected:
+        QWidget* mainWidget;
+        virtual void retranslateUi() = 0;
 };
 
 #else
@@ -27,16 +27,16 @@ class QVBoxLayout;
 
 class MDockAncestor : public QDialog
 {
-	public:
-		MDockAncestor(QWidget *parent = 0);
-		void setWidget ( QWidget * widget );
-		QWidget* getWidget();
-		void setAllowedAreas ( Qt::DockWidgetAreas  )  {  };
-	
-	protected:
-		QVBoxLayout* theLayout;
-		QWidget* mainWidget;
-		virtual void retranslateUi() = 0;
+    public:
+        MDockAncestor(QWidget *parent = 0);
+        void setWidget ( QWidget * widget );
+        QWidget* getWidget();
+        void setAllowedAreas ( Qt::DockWidgetAreas  )  {  };
+
+    protected:
+        QVBoxLayout* theLayout;
+        QWidget* mainWidget;
+        virtual void retranslateUi() = 0;
 };
 
 #endif

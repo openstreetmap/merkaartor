@@ -40,7 +40,7 @@
 
 class ImageView;
 
-class GeoImageDock : public QDockWidget
+class GeoImageDock : public MDockAncestor
 {
     Q_OBJECT
 
@@ -97,6 +97,10 @@ private:
     void addUsedTrackpoint(NodeData data);
     bool getWalkingPapersDetails(const QUrl& reqUrl, double &lat, double &lon, bool& positionValid) const;
     bool askAndgetWalkingPapersDetails(double &lat, double &lon, bool& positionValid) const;
+
+public:
+    void changeEvent(QEvent*);
+    void retranslateUi();
 };
 
 class ImageView : public QWidget

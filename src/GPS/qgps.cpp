@@ -33,19 +33,19 @@
 QGPS::QGPS(QWidget *parent)
     : MDockAncestor(parent), gpsDevice(0)
 {
-	setupUi(getWidget());
-	setObjectName("GPSMainWindow");
+    setupUi(getWidget());
+    setObjectName("GPSMainWindow");
 
     int w = fontMetrics().width("360N 60'60\" W");
     txtLatitude->setFixedWidth(w);
     txtLongitude->setFixedWidth(w);
     txtAltitude->setFixedWidth(w);
     txtSpeed->setFixedWidth(w);
-	txtNumSats->setFixedWidth(w);
-	txtFixType->setFixedWidth(w);
-	resetGpsStatus();
+    txtNumSats->setFixedWidth(w);
+    txtFixType->setFixedWidth(w);
+    resetGpsStatus();
 
-	retranslateUi();
+    retranslateUi();
 
     //loadSettings();
 
@@ -60,26 +60,26 @@ QGPS::QGPS(QWidget *parent)
 
 void QGPS::setGpsDevice(QGPSDevice * aDevice)
 {
-	if (gpsDevice)
-		disconnect(gpsDevice, SIGNAL(updateStatus()), this, SLOT(updateGpsStatus()));
-	gpsDevice = aDevice;
+    if (gpsDevice)
+        disconnect(gpsDevice, SIGNAL(updateStatus()), this, SLOT(updateGpsStatus()));
+    gpsDevice = aDevice;
 }
 
 void QGPS::startGps()
 {
-	if (gpsDevice) {
-		if (isVisible())
-			connect(gpsDevice, SIGNAL(updateStatus()), this, SLOT(updateGpsStatus()));
-		gpsDevice->startDevice();
-	}
+    if (gpsDevice) {
+        if (isVisible())
+            connect(gpsDevice, SIGNAL(updateStatus()), this, SLOT(updateGpsStatus()));
+        gpsDevice->startDevice();
+    }
 }
 
 void QGPS::stopGps()
 {
-	if (gpsDevice) {
-	    gpsDevice->stopDevice();
-		disconnect(gpsDevice, SIGNAL(updateStatus()), this, SLOT(updateGpsStatus()));
-	}
+    if (gpsDevice) {
+        gpsDevice->stopDevice();
+        disconnect(gpsDevice, SIGNAL(updateStatus()), this, SLOT(updateGpsStatus()));
+    }
 }
 
 void QGPS::resetGpsStatus()
@@ -88,13 +88,13 @@ void QGPS::resetGpsStatus()
     txtLongitude->setText("");
     txtAltitude->setText("");
     txtSpeed->setText("");
-	txtNumSats->setText("");
-	txtFixType->setText(tr("Invalid"));
-	
-	lblFixStatus->setText(tr("No Position Fix"));
-	lblFixTime->setText(tr("No UTC Time"));
+    txtNumSats->setText("");
+    txtFixType->setText(tr("Invalid"));
 
-	satTracker->setSatellites(QList<Satellite>());
+    lblFixStatus->setText(tr("No Position Fix"));
+    lblFixTime->setText(tr("No UTC Time"));
+
+    satTracker->setSatellites(QList<Satellite>());
 }
 
 void QGPS::updateGpsStatus()
@@ -140,85 +140,86 @@ void QGPS::updateGpsStatus()
             .arg(gpsDevice->speed())
             .arg(tr("km/h")));
 
-	txtNumSats->setText(
+    txtNumSats->setText(
         QString("%1").arg(gpsDevice->numSatellites()));
 
-	switch (gpsDevice->fixType()) {
-		case QGPSDevice::FixUnavailable:
-			txtFixType->setText(tr("Unavailable"));
-			break;
-		case QGPSDevice::FixInvalid:
-			txtFixType->setText(tr("Invalid"));
-			break;
-		case QGPSDevice::Fix2D:
-			txtFixType->setText(tr("2D"));
-			break;
-		case QGPSDevice::Fix3D:
-			txtFixType->setText(tr("3D"));
-			break;
-	}
+    switch (gpsDevice->fixType()) {
+        case QGPSDevice::FixUnavailable:
+            txtFixType->setText(tr("Unavailable"));
+            break;
+        case QGPSDevice::FixInvalid:
+            txtFixType->setText(tr("Invalid"));
+            break;
+        case QGPSDevice::Fix2D:
+            txtFixType->setText(tr("2D"));
+            break;
+        case QGPSDevice::Fix3D:
+            txtFixType->setText(tr("3D"));
+            break;
+    }
 
-	switch (gpsDevice->fixStatus()) {
-		case QGPSDevice::StatusActive:
-			lblFixStatus->setText(tr("Position Fix available"));
-			break;
-		case QGPSDevice::StatusVoid:
-			lblFixStatus->setText(tr("No Position Fix"));
-			break;
-	}
+    switch (gpsDevice->fixStatus()) {
+        case QGPSDevice::StatusActive:
+            lblFixStatus->setText(tr("Position Fix available"));
+            break;
+        case QGPSDevice::StatusVoid:
+            lblFixStatus->setText(tr("No Position Fix"));
+            break;
+    }
 
-	if (!gpsDevice->dateTime().isValid())
-		lblFixTime->setText(tr("No UTC Time"));
-	else
-		lblFixTime->setText(gpsDevice->dateTime().toString() + " UTC");
+    if (!gpsDevice->dateTime().isValid())
+        lblFixTime->setText(tr("No UTC Time"));
+    else
+        lblFixTime->setText(gpsDevice->dateTime().toString() + " UTC");
 
-	QList<Satellite> List;
-	for(int i = 1; i < 50; i ++)
-	{
-		int b, x, y;
-		gpsDevice->satInfo(i, b, x, y);
-		if (y || b || x)
-		{
-			Satellite S;
-			S.Azimuth = x;
-			S.Elevation = b;
-			S.SignalStrength = y;
-			S.Id = i;
-			List.push_back(S);
-		}
-	}
-	StrengthView->setSatellites(List);
-	satTracker->setSatellites(List);
+    QList<Satellite> List;
+    for(int i = 1; i < 50; i ++)
+    {
+        int b, x, y;
+        gpsDevice->satInfo(i, b, x, y);
+        if (y || b || x)
+        {
+            Satellite S;
+            S.Azimuth = x;
+            S.Elevation = b;
+            S.SignalStrength = y;
+            S.Id = i;
+            List.push_back(S);
+        }
+    }
+    StrengthView->setSatellites(List);
+    satTracker->setSatellites(List);
     satTracker->setHeading((int)gpsDevice->heading());
 }
 
 void QGPS::showEvent ( QShowEvent * anEvent )
 {
-	QWidget::showEvent(anEvent);
+    QWidget::showEvent(anEvent);
 
-	if (gpsDevice)
-		connect(gpsDevice, SIGNAL(updateStatus()), this, SLOT(updateGpsStatus()));
+    if (gpsDevice)
+        connect(gpsDevice, SIGNAL(updateStatus()), this, SLOT(updateGpsStatus()));
 }
 
 void QGPS::hideEvent ( QHideEvent * anEvent )
 {
-	QWidget::hideEvent(anEvent);
+    QWidget::hideEvent(anEvent);
 
-	if (gpsDevice) 
-		disconnect(gpsDevice, SIGNAL(updateStatus()), this, SLOT(updateGpsStatus()));
+    if (gpsDevice)
+        disconnect(gpsDevice, SIGNAL(updateStatus()), this, SLOT(updateGpsStatus()));
 }
 
 void QGPS::changeEvent(QEvent * event)
 {
-	if (event->type() == QEvent::LanguageChange)
-		retranslateUi();
-	MDockAncestor::changeEvent(event);
+    if (event->type() == QEvent::LanguageChange)
+        retranslateUi();
+    MDockAncestor::changeEvent(event);
 }
 
 void QGPS::retranslateUi()
 {
-	setWindowTitle("GPS");
-	lblFixStatus->setText(tr("No Position Fix"));
-	lblFixTime->setText(tr("No UTC Time"));
+    Ui_QGPSMainWindowUI::retranslateUi(getWidget());
 
+    setWindowTitle(tr("GPS"));
+    lblFixStatus->setText(tr("No Position Fix"));
+    lblFixTime->setText(tr("No UTC Time"));
 }
