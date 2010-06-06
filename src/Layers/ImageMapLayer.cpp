@@ -514,6 +514,7 @@ void ImageMapLayer::draw(MapView& theView, QRect& rect)
     }
 
     QPainter P(&p->pm);
+    p->pm.fill(Qt::transparent);
     P.drawPixmap((pmSize.width()-pms.width())/2, (pmSize.height()-pms.height())/2, pms);
     //    if (p->theMapAdapter->isTiled())
     //        P.drawPixmap((pmSize.width()-pms.width())/2, (pmSize.height()-pms.height())/2, pms);
