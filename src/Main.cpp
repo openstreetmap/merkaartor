@@ -7,9 +7,7 @@
 #include <qtsingleapplication.h>
 #include "MainWindow.h"
 #include "Preferences/MerkaartorPreferences.h"
-#ifndef RELEASE
 #include "revision.h"
-#endif
 
 #include "IMapAdapter.h"
 
@@ -74,11 +72,7 @@ void myMessageOutput(QtMsgType msgType, const char *buf)
 void showVersion()
 {
     QString o;
-#ifndef RELEASE
     o = QString("Merkaartor %1%2(%3)\n").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV));
-#else
-    o = QString("Merkaartor %1\n").arg(STRINGIFY(VERSION));
-#endif
     fprintf(stdout, "%s", o.toLatin1().data());
     o = QString("using QT version %1 (built with %2)\n").arg(qVersion()).arg(QT_VERSION_STR);
     fprintf(stdout, "%s", o.toLatin1().data());
@@ -177,11 +171,7 @@ int main(int argc, char** argv)
     splash.show();
     instance.processEvents();
 
-#ifndef RELEASE
     splash.showMessage(QString(instance.translate("Main", "Merkaartor v%1%2(%3)\nLoading plugins...")).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
-#else
-    splash.showMessage(QString(instance.translate("Main", "Merkaartor v%1\nLoading plugins...")).arg(STRINGIFY(VERSION)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
-#endif
     instance.processEvents();
 
     if (!QDir::home().exists(".merkaartor"))
@@ -213,11 +203,7 @@ int main(int argc, char** argv)
         }
     }
 
-#ifndef RELEASE
     splash.showMessage(QString(instance.translate("Main", "Merkaartor v%1%2(%3)\nInitializing...")).arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
-#else
-    splash.showMessage(QString(instance.translate("Main", "Merkaartor v%1\nInitializing...")).arg(STRINGIFY(VERSION)), Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
-#endif
     instance.processEvents();
 
     MainWindow Main;

@@ -64,9 +64,7 @@
 #include "Tools/ActionsDialog.h"
 #include "GotoDialog.h"
 
-#ifndef RELEASE
 #include "revision.h"
-#endif
 #include <boost/version.hpp>
 
 #ifdef GEOIMAGE

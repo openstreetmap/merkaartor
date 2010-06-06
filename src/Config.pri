@@ -19,7 +19,10 @@ symbian:MOBILE=1
 
 isEmpty(VERSION): VERSION="0.16"
 
-!contains(RELEASE,1) {
+contains(RELEASE,1) {
+    DEFINES += RELEASE
+    SVNREV="release"
+} else {
     isEmpty(SVNREV) {
         SVNREV = $$system(svnversion)
     }
@@ -29,14 +32,10 @@ isEmpty(VERSION): VERSION="0.16"
     } else {
         REVISION="-svn"
     }
+}
 
-    win32 {
-        system(echo $${LITERAL_HASH}define SVNREV $${SVNREV} > revision.h )
-    } else {
-        system('echo -n "$${LITERAL_HASH}define SVNREV $${SVNREV}" > revision.h')
-    }
+win32 {
+    system(echo $${LITERAL_HASH}define SVNREV $${SVNREV} > revision.h )
 } else {
-    DEFINES += RELEASE
-    REVISION=""
-    SVNREV=""
+    system('echo -n "$${LITERAL_HASH}define SVNREV $${SVNREV}" > revision.h')
 }

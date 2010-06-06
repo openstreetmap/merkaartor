@@ -39,7 +39,7 @@ public:
         for (int i=0; i<Layers.size(); ++i) {
             if (theDock)
                 theDock->deleteLayer(Layers[i]);
-            Layers[i]->	blockIndexing(true);
+            Layers[i]->blockIndexing(true);
             delete Layers[i];
         }
     }
