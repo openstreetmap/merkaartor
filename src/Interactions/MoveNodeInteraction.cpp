@@ -240,11 +240,7 @@ void MoveNodeInteraction::snapMouseMoveEvent(QMouseEvent* event, Feature* Closer
 
                 Moving[i] = N;
             } else {
-                Moving[i]->layer()->blockIndexing(true);
-
                 Moving[i]->setPosition(OriginalPosition[i]+Diff);
-
-                Moving[i]->layer()->blockIndexing(false);
             }
         }
         view()->invalidate(true, false);
