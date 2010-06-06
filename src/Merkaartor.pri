@@ -23,6 +23,7 @@ HEADERS += ./IProgressWindow.h \
     ./Utils/SvgCache.h \
     ./Utils/MDiscardableDialog.h \
     ./GotoDialog.h \
+    ./TerraceDialog.h \
     ../include/builtin-ggl/ggl/extensions/gis/projections/impl/geocent.h \
     ../interfaces/IMapAdapter.h \
     Utils/OsmLink.h \
@@ -51,6 +52,7 @@ SOURCES += ./Maps/Coord.cpp \
     ./Utils/SvgCache.cpp \
     ./Utils/MDiscardableDialog.cpp \
     ./GotoDialog.cpp \
+    ./TerraceDialog.cpp \
     ../include/builtin-ggl/ggl/extensions/gis/projections/impl/geocent.c \
     Utils/OsmLink.cpp \
     Utils/Utils.cpp
@@ -61,6 +63,7 @@ FORMS += ./AboutDialog.ui \
     ./MainWindow.ui \
     ./UploadMapDialog.ui \
     ./GotoDialog.ui \
+    ./TerraceDialog.ui \
     ./MultiProperties.ui \
     ./PaintStyle/PaintStyleEditor.ui \
     ./Utils/PictureViewerDialog.ui \

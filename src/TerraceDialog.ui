@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TerraceDialog</class>
+ <widget class="QDialog" name="TerraceDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>458</width>
+    <height>219</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Terrace</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QRadioButton" name="radioNoNumbering">
+     <property name="text">
+      <string>No House Numbering</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Number of houses</string>
+       </property>
+       <property name="buddy">
+        <cstring>spinHouses</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QSpinBox" name="spinHouses">
+       <property name="minimum">
+        <number>2</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QRadioButton" name="radioNumbering">
+     <property name="text">
+      <string>Add House Numbering (Karlsruhe scheme)</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="frame">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QFormLayout" name="formLayout_2">
+      <property name="fieldGrowthPolicy">
+       <enum>QFormLayout::ExpandingFieldsGrow</enum>
+      </property>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Ranges</string>
+        </property>
+        <property name="buddy">
+         <cstring>lineNumberingRanges</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="lineNumberingRanges"/>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>For example &quot;1-9;15-17;19,19A&quot;</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Pattern</string>
+        </property>
+        <property name="buddy">
+         <cstring>comboNumberingPattern</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QComboBox" name="comboNumberingPattern">
+        <item>
+         <property name="text">
+          <string>All numbers</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Odd numbers</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Even numbers</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Select a node in the area as well to indicate the end with the first house number</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>radioNoNumbering</tabstop>
+  <tabstop>spinHouses</tabstop>
+  <tabstop>radioNumbering</tabstop>
+  <tabstop>lineNumberingRanges</tabstop>
+  <tabstop>comboNumberingPattern</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>TerraceDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>222</x>
+     <y>204</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>218</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>TerraceDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>290</x>
+     <y>210</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>218</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioNumbering</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frame</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>51</x>
+     <y>62</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>21</x>
+     <y>91</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioNoNumbering</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>label</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>78</x>
+     <y>14</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>74</x>
+     <y>36</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioNoNumbering</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>spinHouses</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>111</x>
+     <y>11</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>109</x>
+     <y>42</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboNumberingPattern</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>TerraceDialog</receiver>
+   <slot>numberingTypeChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>75</x>
+     <y>162</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>166</x>
+     <y>35</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineNumberingRanges</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>TerraceDialog</receiver>
+   <slot>numberingRangeChanged(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>331</x>
+     <y>118</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>364</x>
+     <y>37</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioNumbering</sender>
+   <signal>clicked()</signal>
+   <receiver>TerraceDialog</receiver>
+   <slot>updateNumbering()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>206</x>
+     <y>70</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>248</x>
+     <y>46</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>numberingTypeChanged(int)</slot>
+  <slot>numberingRangeChanged(QString)</slot>
+  <slot>updateNumbering()</slot>
+ </slots>
+</ui>

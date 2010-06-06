@@ -64,6 +64,7 @@
 #include "Tools/WorldOsbManager.h"
 #include "Tools/ActionsDialog.h"
 #include "GotoDialog.h"
+#include "TerraceDialog.h"
 
 #include "revision.h"
 #include <boost/version.hpp>
@@ -1723,6 +1724,26 @@ void MainWindow::on_roadAddStreetNumbersAction_triggered()
     }
 }
 
+void MainWindow::on_roadSubdivideAction_triggered()
+{
+    QInputDialog *Dlg = new QInputDialog(this);
+    Dlg->setInputMode(QInputDialog::IntInput);
+    Dlg->setIntRange(2, 99);
+    Dlg->setLabelText(tr("Number of segments to divide into"));
+    if (Dlg->exec() == QDialog::Accepted) {
+        int divisions = Dlg->intValue();
+        CommandList* theList = new CommandList(MainWindow::tr("Subdivide road into %1").arg(divisions), NULL);
+        subdivideRoad(theDocument, theList, p->theProperties, divisions);
+        if (theList->empty())
+            delete theList;
+        else {
+            theDocument->addHistory(theList);
+            invalidateView();
+        }
+    }
+    delete Dlg;
+}
+
 void MainWindow::on_nodeAlignAction_triggered()
 {
     //MapFeature* F = theView->properties()->selection(0);
@@ -1734,6 +1755,19 @@ void MainWindow::on_nodeAlignAction_triggered()
     {
         theDocument->addHistory(theList);
     //	theView->properties()->setSelection(F);
+        invalidateView();
+    }
+}
+
+void MainWindow::on_nodeSpreadAction_triggered()
+{
+    CommandList* theList = new CommandList(MainWindow::tr("Spread Nodes"), NULL);
+    spreadNodes(theDocument, theList, p->theProperties);
+    if (theList->empty())
+        delete theList;
+    else
+    {
+        theDocument->addHistory(theList);
         invalidateView();
     }
 }
@@ -1790,6 +1824,48 @@ void MainWindow::on_relationRemoveMemberAction_triggered()
         theDocument->addHistory(theList);
         invalidateView();
     }
+}
+
+void MainWindow::on_areaSplitAction_triggered()
+{
+    CommandList* theList = new CommandList(MainWindow::tr("Split area"), NULL);
+    splitArea(theDocument, theList, p->theProperties);
+    if (theList->empty())
+        delete theList;
+    else {
+        theDocument->addHistory(theList);
+        invalidateView();
+    }
+}
+
+void MainWindow::on_areaTerraceAction_triggered()
+{
+    TerraceDialog* Dlg = new TerraceDialog(this);
+    if (Dlg->exec() == QDialog::Accepted) {
+        int divisions = Dlg->numHouses();
+        CommandList* theList = new CommandList(MainWindow::tr("Terrace area into %1").arg(divisions), NULL);
+        terraceArea(theDocument, theList, p->theProperties, divisions);
+        // Add the house numbers to the houses in the selection
+        if (Dlg->hasHouseNumbers()) {
+            QStringList numbers = Dlg->houseNumbers();
+            QList<Feature*> areas = p->theProperties->selection();
+            int i = 0;
+            foreach (Feature* area, areas) {
+                if (i >= numbers.size())
+                    break;
+                if (!numbers[i].isEmpty())
+                    theList->add(new SetTagCommand(area, "addr:housenumber", numbers[i]));
+                ++i;
+            }
+        }
+        if (theList->empty())
+            delete theList;
+        else {
+            theDocument->addHistory(theList);
+            invalidateView();
+        }
+    }
+    delete Dlg;
 }
 
 void MainWindow::on_createRelationAction_triggered()
@@ -1978,6 +2054,10 @@ void MainWindow::on_toolsShortcutsAction_triggered()
     theActions.append(ui->editReverseAction);
     theActions.append(ui->nodeMergeAction);
     theActions.append(ui->nodeAlignAction);
+    theActions.append(ui->nodeSpreadAction);
+    theActions.append(ui->roadSubdivideAction);
+    theActions.append(ui->areaSplitAction);
+    theActions.append(ui->areaTerraceAction);
     theActions.append(ui->toolsPreferencesAction);
     theActions.append(ui->toolsShortcutsAction);
     theActions.append(ui->toolsWorldOsbAction);

@@ -57,6 +57,9 @@
     <addaction name="roadSimplifyAction"/>
     <addaction name="roadCreateJunctionAction"/>
     <addaction name="roadAddStreetNumbersAction"/>
+    <addaction name="roadSubdivideAction"/>
+    <addaction name="areaSplitAction"/>
+    <addaction name="areaTerraceAction"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -205,6 +208,7 @@
     </property>
     <addaction name="nodeMergeAction"/>
     <addaction name="nodeAlignAction"/>
+    <addaction name="nodeSpreadAction"/>
     <addaction name="nodeDetachAction"/>
    </widget>
    <widget class="QMenu" name="windowAction">
@@ -357,11 +361,15 @@
    <addaction name="createAreaAction"/>
    <addaction name="separator"/>
    <addaction name="nodeAlignAction"/>
+   <addaction name="nodeSpreadAction"/>
    <addaction name="nodeDetachAction"/>
    <addaction name="roadSplitAction"/>
    <addaction name="roadBreakAction"/>
    <addaction name="roadJoinAction"/>
    <addaction name="editReverseAction"/>
+   <addaction name="roadSubdivideAction"/>
+   <addaction name="areaSplitAction"/>
+   <addaction name="areaTerraceAction"/>
   </widget>
   <widget class="QToolBar" name="mobileToolBar">
    <property name="enabled">
@@ -1013,6 +1021,21 @@
     <string>Alt+A</string>
    </property>
   </action>
+  <action name="nodeSpreadAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
+     <normaloff>:/Icons/actions/spread_nodes.png</normaloff>:/Icons/actions/spread_nodes.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Spread</string>
+   </property>
+   <property name="toolTip">
+    <string>Spread nodes</string>
+   </property>
+   <property name="statusTip">
+    <string>Align and spread selected nodes equally.</string>
+   </property>
+  </action>
   <action name="windowDirtyAction">
    <property name="checkable">
     <bool>true</bool>
@@ -1575,6 +1598,21 @@
     <string>Add street &amp;numbers (Karlsruhe scheme)</string>
    </property>
   </action>
+  <action name="roadSubdivideAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
+     <normaloff>:/Icons/actions/subdivide_road.png</normaloff>:/Icons/actions/subdivide_road.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Subdivide</string>
+   </property>
+   <property name="toolTip">
+    <string>Subdivide segment equally</string>
+   </property>
+   <property name="statusTip">
+    <string>Subdivide a selected way segment (the way and two adjacent nodes) into segments of equal length.</string>
+   </property>
+  </action>
   <action name="viewVirtualNodesAction">
    <property name="checkable">
     <bool>true</bool>
@@ -1654,6 +1692,36 @@
    </property>
    <property name="text">
     <string>&amp;None</string>
+   </property>
+  </action>
+  <action name="areaSplitAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
+     <normaloff>:/Icons/actions/split_area.png</normaloff>:/Icons/actions/split_area.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Split Area</string>
+   </property>
+   <property name="toolTip">
+    <string>Split area between two nodes</string>
+   </property>
+   <property name="statusTip">
+    <string>Split a selected area between two selected nodes into two separates areas.</string>
+   </property>
+  </action>
+  <action name="areaTerraceAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
+     <normaloff>:/Icons/actions/terrace_building.png</normaloff>:/Icons/actions/terrace_building.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Terrace</string>
+   </property>
+   <property name="toolTip">
+    <string>Terrace area into residences</string>
+   </property>
+   <property name="statusTip">
+    <string>Split a selected area into terraced residences.</string>
    </property>
   </action>
  </widget>

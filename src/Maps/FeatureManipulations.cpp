@@ -714,6 +714,65 @@ void alignNodes(Document* theDocument, CommandList* theList, PropertiesDock* the
     }
 }
 
+void spreadNodes(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
+{
+    // There must be at least 3 nodes to align something
+    if (theDock->size() < 3)
+        return;
+
+    // We build a list of selected nodes
+    // Sort by distance along the line between the first two nodes
+    QList<Node*> Nodes;
+    QList<float> Metrics;
+    Coord p;
+    Coord delta;
+    for (int i=0; i<theDock->size(); ++i) {
+        if (Node* N = CAST_NODE(theDock->selection(i))) {
+            Coord pos(N->position());
+            if (Nodes.size() == 0) {
+                p = pos;
+                Nodes.push_back(N);
+                Metrics.push_back(0.0f);
+            } else if (Nodes.size() == 1) {
+                delta = pos - p;
+                // First two nodes must form a line
+                if (delta.isNull())
+                    return;
+                Nodes.push_back(N);
+                Metrics.push_back(delta.lon()*delta.lon() + delta.lat()*delta.lat());
+            } else {
+                pos = pos - p;
+                float metric = pos.lon()*delta.lon() + pos.lat()*delta.lat();
+                // This could be done more efficiently with a binary search
+                for (int j = 0; j < Metrics.size(); ++j) {
+                    if (metric < Metrics[j]) {
+                        Nodes.insert(j, N);
+                        Metrics.insert(j, metric);
+                        goto inserted;
+                    }
+                }
+                Nodes.push_back(N);
+                Metrics.push_back(metric);
+inserted:
+                ;
+            }
+        }
+    }
+
+    // We check that we have at least 3 nodes
+    if(Nodes.size() < 3)
+        return;
+
+    // Do the spreading between the extremes
+    p = Nodes[0]->position();
+    delta = (Nodes[Nodes.size()-1]->position() - p) / (Nodes.size()-1);
+
+    for (int i=1; i<Nodes.size()-1; ++i) {
+        p = p + delta;
+        theList->add(new MoveNodeCommand( Nodes[i], p, theDocument->getDirtyOrOriginLayer(Nodes[i]->layer()) ));
+    }
+}
+
 static void mergeNodes(Document* theDocument, CommandList* theList, Node *node1, Node *node2)
 {
     QList<Feature*> alt;
@@ -845,3 +904,293 @@ void removeRelationMember(Document* theDocument, CommandList* theList, Propertie
     }
 }
 
+/* Subdivide theRoad between index and index+1 into divisions segments.
+ * divisions-1 new nodes are created starting at index index+1.
+ */
+static void subdivideRoad(Document* theDocument, CommandList* theList,
+                          Way* theRoad, unsigned int index, unsigned int divisions)
+{
+    Node* N0 = theRoad->getNode(index);
+    Node* N1 = theRoad->getNode(index+1);
+    Coord nodeBase = N0->position();
+    Coord nodeDelta = (N1->position() - nodeBase) / divisions;
+    for (unsigned int i = 1; i < divisions; ++i) {
+        nodeBase = nodeBase + nodeDelta;
+        Node* newNode = new Node(nodeBase);
+        theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(theRoad), newNode, true));
+        theList->add(new WayAddNodeCommand(theRoad, newNode, index + i, theDocument->getDirtyOrOriginLayer(theRoad)));
+    }
+}
+
+bool canSubdivideRoad(PropertiesDock* theDock, Way** outTheRoad, unsigned int* outEdge)
+{
+    // Get the selected way and nodes
+    Way* theRoad = NULL;
+    Node* theNodes[2] = { NULL, NULL };
+    for (int i = 0; i < theDock->size(); ++i) {
+        if ((theDock->selection(i)->getClass() == "Road") && !theRoad)
+            theRoad = CAST_WAY(theDock->selection(i));
+        else if (theDock->selection(i)->getClass() == "TrackPoint") {
+            if (!theNodes[0])
+                theNodes[0] = CAST_NODE(theDock->selection(i));
+            else if (!theNodes[1])
+                theNodes[1] = CAST_NODE(theDock->selection(i));
+        }
+    }
+
+    // If the way has only two nodes, use them
+    if (theRoad && theRoad->size() == 2) {
+        theNodes[0] = theRoad->getNode(0);
+        theNodes[1] = theRoad->getNode(1);
+        // Now this would just be silly
+        if (theNodes[0] == theNodes[1])
+            return false;
+    }
+
+    // A way and 2 nodes
+    if (!theRoad || !theNodes[0] || !theNodes[1])
+        return false;
+
+    // Nodes must be adjacent in the way
+    int numNodes = theRoad->size();
+    int nodeIndex0 = -1;
+    for (int i = 0; i < numNodes-1; ++i) {
+        Node* N0 = theRoad->getNode(i);
+        Node* N1 = theRoad->getNode(i+1);
+        if ((N0 == theNodes[0] && N1 == theNodes[1]) ||
+            (N0 == theNodes[1] && N1 == theNodes[0])) {
+            nodeIndex0 = i;
+            break;
+        }
+    }
+
+    if (nodeIndex0 < 0)
+        return false;
+
+    if (outTheRoad)
+        *outTheRoad = theRoad;
+    if (outEdge)
+        *outEdge = nodeIndex0;
+
+    return true;
+}
+
+void subdivideRoad(Document* theDocument, CommandList* theList, PropertiesDock* theDock, unsigned int divisions)
+{
+    // Subdividing into 1 division is no-op
+    if (divisions < 2)
+        return;
+
+    // Get the selected way and nodes
+    Way* theRoad;
+    unsigned int edge;
+    if (!canSubdivideRoad(theDock, &theRoad, &edge))
+        return;
+    subdivideRoad(theDocument, theList, theRoad, edge, divisions);
+}
+
+/* Remove nodes between theNodes in theArea into a separate way newArea.
+ * newArea's first node will be theNodes[0], and it's last nodes will be
+ * theNodes[1] and theNodes[0].
+ */
+static bool splitArea(Document* theDocument, CommandList* theList,
+                      Way* theArea, unsigned int nodes[2], Way** outNewArea)
+{
+    // Make sure nodes are in order
+    if (nodes[0] > nodes[1])
+        qSwap(nodes[0], nodes[1]);
+
+    // And not next to one another
+    if (nodes[0] + 1 == nodes[1] ||
+            (nodes[0] == 0 && nodes[1] == (unsigned int)theArea->size() - 2)) {
+        qDebug() << "Nodes must not be adjacent";
+        return false;
+    }
+
+    Node* theNodes[2];
+    for (int i = 0; i < 2; ++i)
+        theNodes[i] = theArea->getNode(nodes[i]);
+
+    // Extract nodes between nodes[0] and nodes[1] into a separate area
+    // and remove the nodes from the original area
+    Way* newArea = new Way;
+    copyTags(newArea, theArea);
+    theList->add(new AddFeatureCommand(theDocument->getDirtyOrOriginLayer(theArea), newArea, true));
+    theList->add(new WayAddNodeCommand(newArea, theNodes[0], theDocument->getDirtyOrOriginLayer(theArea)));
+    for (unsigned int i = nodes[0]+1; i < nodes[1]; ++i) {
+        theList->add(new WayAddNodeCommand(newArea, theArea->getNode(nodes[0]+1),
+                                           theDocument->getDirtyOrOriginLayer(theArea)));
+        theList->add(new WayRemoveNodeCommand(theArea, theArea->getNode(nodes[0]+1),
+                                              theDocument->getDirtyOrOriginLayer(theArea)));
+    }
+    theList->add(new WayAddNodeCommand(newArea, theNodes[1], theDocument->getDirtyOrOriginLayer(theArea)));
+    theList->add(new WayAddNodeCommand(newArea, theNodes[0], theDocument->getDirtyOrOriginLayer(theArea)));
+    handleWaysplitRelations(theDocument, theList, theArea, newArea);
+
+    if (outNewArea)
+        *outNewArea = newArea;
+
+    return true;
+}
+
+bool canSplitArea(PropertiesDock* theDock, Way** outTheArea, unsigned int outNodes[2])
+{
+    if (theDock->size() != 3)
+        return false;
+
+    // Get the selected way and nodes
+    Way* theArea = NULL;
+    Node* theNodes[2] = { NULL, NULL };
+    for (int i = 0; i < theDock->size(); ++i) {
+        if ((theDock->selection(i)->getClass() == "Road") && !theArea)
+            theArea = CAST_WAY(theDock->selection(i));
+        else if (theDock->selection(i)->getClass() == "TrackPoint") {
+            if (!theNodes[0])
+                theNodes[0] = CAST_NODE(theDock->selection(i));
+            else if (!theNodes[1])
+                theNodes[1] = CAST_NODE(theDock->selection(i));
+        }
+    }
+
+    // A way and 2 nodes
+    if (!theArea || !theNodes[0] || !theNodes[1])
+        return false;
+
+    // Way must be closed
+    if (!theArea->isClosed())
+        return false;
+
+    // Nodes must belong to way
+    unsigned int numNodes = theArea->size();
+    unsigned int nodeIndex[2];
+    for (int i = 0; i < 2; ++i) {
+        nodeIndex[i] = theArea->find(theNodes[i]);
+        if (nodeIndex[i] >= numNodes)
+            return false;
+    }
+
+    // Make sure nodes are in order
+    if (nodeIndex[0] > nodeIndex[1])
+        qSwap(nodeIndex[0], nodeIndex[1]);
+
+    // And not next to one another
+    if (nodeIndex[0] + 1 == nodeIndex[1] ||
+            (nodeIndex[0] == 0 && nodeIndex[1] == (unsigned int)theArea->size() - 2))
+        return false;
+
+
+    if (outTheArea)
+        *outTheArea = theArea;
+    if (outNodes) {
+        outNodes[0] = nodeIndex[0];
+        outNodes[1] = nodeIndex[1];
+    }
+
+    return true;
+}
+
+void splitArea(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
+{
+    Way* theArea;
+    unsigned int nodes[2];
+    if (!canSplitArea(theDock, &theArea, nodes))
+        return;
+
+    Way* newArea;
+    if (!splitArea(theDocument, theList, theArea, nodes, &newArea))
+        return;
+
+    theDock->setSelection(QList<Way*>() << theArea << newArea);
+}
+
+static void terraceArea(Document* theDocument, CommandList* theList,
+                        Way* theArea, unsigned int sides[2],
+                        unsigned int divisions, int startNode,
+                        QList<Feature*>* outAreas)
+{
+    // We're adding nodes so ordering is important
+    if (sides[0] > sides[1])
+        qSwap(sides[0], sides[1]);
+
+    bool reverse = (startNode >= 0 && ((5 + startNode - sides[1]) & 2));
+
+    // Subdivide both sides
+    subdivideRoad(theDocument, theList, theArea, sides[1], divisions);
+    subdivideRoad(theDocument, theList, theArea, sides[0], divisions);
+
+    // Split apart
+    for (unsigned int i = sides[0] + divisions - 1; i > sides[0]; --i) {
+        Way* newArea;
+        unsigned int nodes[2] = { i, i + 3 };
+        splitArea(theDocument, theList, theArea, nodes, &newArea);
+        if (newArea && outAreas) {
+            if (reverse)
+                outAreas->push_front(newArea);
+            else
+                outAreas->push_back(newArea);
+        }
+    }
+    if (outAreas) {
+        if (reverse)
+            outAreas->push_front(theArea);
+        else
+            outAreas->push_back(theArea);
+    }
+}
+
+bool canTerraceArea(PropertiesDock* theDock, Way** outTheArea, int* startNode)
+{
+    // Get the selected area
+    Way* theArea = NULL;
+    Node* theNode = NULL;
+    for (int i = 0; i < theDock->size(); ++i)
+        if ((theDock->selection(i)->getClass() == "Road") && !theArea) {
+            theArea = CAST_WAY(theDock->selection(i));
+        } else if (startNode && theDock->selection(i)->getClass() == "TrackPoint") {
+            theNode = CAST_NODE(theDock->selection(i));
+        }
+    if (!theArea || !theArea->isClosed())
+        return false;
+
+    if (startNode) {
+        if (theNode)
+            *startNode = theArea->find(theNode);
+        else
+            *startNode = -1;
+    }
+
+    // Only work with 4 edges for now
+    if (theArea->size() != 5)
+        return false;
+
+    if (outTheArea)
+        *outTheArea = theArea;
+
+    return true;
+}
+
+void terraceArea(Document* theDocument, CommandList* theList, PropertiesDock* theDock, unsigned int divisions)
+{
+    Way* theArea;
+    int startNode;
+    if (!canTerraceArea(theDock, &theArea, &startNode))
+        return;
+
+    float longestLen = 0.0f;
+    unsigned int sides[2];
+    for (int i = 0; i < theArea->size()-1; ++i) {
+        const Coord p1(theArea->getNode(i)->position());
+        const Coord p2(theArea->getNode(i+1)->position());
+        const float len = p1.distanceFrom(p2);
+        if (len > longestLen) {
+            longestLen = len;
+            sides[0] = i;
+        }
+    }
+    sides[1] = (sides[0] + 2) % (theArea->size() - 1);
+
+    QList<Feature*> areas;
+    terraceArea(theDocument, theList, theArea, sides, divisions, startNode, &areas);
+
+    theDock->setSelection(areas);
+}
