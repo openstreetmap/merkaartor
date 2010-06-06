@@ -1990,6 +1990,7 @@
      <description locale="pt" >Interpolação do número</description>
      <description locale="ru" >Интерполяция номеров</description>
      <description locale="sv" >Nummerisk interpolering</description>
+     <description locale="uk" >Вставка номерів</description>
      <value tag="even" >
        <description locale="en" >even</description>
        <description locale="ar" >مثنى</description>

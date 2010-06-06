@@ -2264,6 +2264,7 @@
   <description locale="pl" >Drogi Brukselskie</description>
   <description locale="ru" >Брюссельские линии</description>
   <description locale="sv" >Brysselväg</description>
+  <description locale="uk" >Брюссельські лінії</description>
   <widget tag="name" type="constant" id="name_bxl" >
    <description locale="en" >Name</description>
    <description locale="ar" >الإسم</description>
