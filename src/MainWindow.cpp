@@ -686,7 +686,7 @@ void MainWindow::on_editPasteOverwriteAction_triggered()
         for (FeatureIterator k(doc); !k.isEnd(); ++k) {
             // TODO Restricts tag copy to same class. Yes or Not
             // For now, restrict interclass from way to relation
-            if (k.get()->getClass() == sel[i]->getClass() || ((k.get()->getClass() == "Road") && (sel[i]->getClass() == "Relation")))
+            if (k.get()->getClass() == sel[i]->getClass() || ((k.get()->getClass() == "Way") && (sel[i]->getClass() == "Relation")))
                 Feature::mergeTags(theDocument, theList, sel[i], k.get());
         }
     }
@@ -717,7 +717,7 @@ void MainWindow::on_editPasteMergeAction_triggered()
         for (FeatureIterator k(doc); !k.isEnd(); ++k) {
             // TODO Restricts tag copy to same class. Yes or Not
             // For now, restrict interclass from way to relation
-            if (k.get()->getClass() == sel[i]->getClass() || ((k.get()->getClass() == "Road") && (sel[i]->getClass() == "Relation")))
+            if (k.get()->getClass() == sel[i]->getClass() || ((k.get()->getClass() == "Way") && (sel[i]->getClass() == "Relation")))
                 Feature::mergeTags(theDocument, theList, sel[i], k.get());
         }
     }
@@ -2482,41 +2482,40 @@ void MainWindow::on_editSelectAction_triggered()
     SelectionDialog* Sel = new SelectionDialog(this);
 
     if (Sel->exec() == QDialog::Accepted) {
-        MerkaartorPreferences::instance()->setLastSearchName(Sel->edName->text());
-        MerkaartorPreferences::instance()->setLastSearchKey(Sel->cbKey->currentText());
-        MerkaartorPreferences::instance()->setLastSearchValue(Sel->cbValue->currentText());
-        MerkaartorPreferences::instance()->setLastMaxSearchResults(Sel->sbMaxResult->value());
+        TagSelector* tsel = TagSelector::parse(Sel->edTagQuery->text());
+        if (!tsel)
+            return;
 
-        Qt::CaseSensitivity theSensitivity = Qt::CaseInsensitive;
-        if (Sel->cbCaseSensitive->isChecked())
-            theSensitivity = Qt::CaseSensitive;
-        QRegExp selName(Sel->edName->text(), theSensitivity, QRegExp::RegExp);
-        QRegExp selKey(Sel->cbKey->currentText(), theSensitivity, QRegExp::RegExp);
-        QRegExp selValue(Sel->cbValue->currentText(), theSensitivity, QRegExp::RegExp);
+//        Qt::CaseSensitivity theSensitivity = Qt::CaseInsensitive;
+////        if (Sel->cbCaseSensitive->isChecked())
+////            theSensitivity = Qt::CaseSensitive;
+//        QRegExp selName(Sel->edName->text(), theSensitivity, QRegExp::RegExp);
+//        QRegExp selKey(Sel->cbKey->currentText(), theSensitivity, QRegExp::RegExp);
+//        QRegExp selValue(Sel->cbValue->currentText(), theSensitivity, QRegExp::RegExp);
         int selMaxResult = Sel->sbMaxResult->value();
 
         QList <Feature *> selection;
         int added = 0;
         for (VisibleFeatureIterator i(theDocument); !i.isEnd() && added < selMaxResult; ++i) {
             Feature* F = i.get();
-            int ok = false;
+//            int ok = false;
 
-            if (selName.indexIn(F->description()) == -1) {
-                continue;
-            }
-            if (F->id().indexOf(Sel->edID->text(), theSensitivity) == -1) {
-                continue;
-            }
-            if (Sel->cbKey->currentText().isEmpty() && Sel->cbValue->currentText().isEmpty())
-                ok = true;
-            else
-                for (int j=0; j < F->tagSize(); j++) {
-                    if ((selKey.indexIn(F->tagKey(j)) > -1) && (selValue.indexIn(F->tagValue(j)) > -1)) {
-                        ok = true;
-                        break;
-                    }
-                }
-            if (ok) {
+//            if (selName.indexIn(F->description()) == -1) {
+//                continue;
+//            }
+//            if (F->id().indexOf(Sel->edID->text(), theSensitivity) == -1) {
+//                continue;
+//            }
+//            if (Sel->cbKey->currentText().isEmpty() && Sel->cbValue->currentText().isEmpty())
+//                ok = true;
+//            else
+//                for (int j=0; j < F->tagSize(); j++) {
+//                    if ((selKey.indexIn(F->tagKey(j)) > -1) && (selValue.indexIn(F->tagValue(j)) > -1)) {
+//                        ok = true;
+//                        break;
+//                    }
+//                }
+            if (tsel->matches(F)) {
                 selection.push_back(F);
                 ++added;
             }

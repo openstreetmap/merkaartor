@@ -17,7 +17,7 @@ symbian:MOBILE=1
 # ZBAR=1              - use the ZBAR library to extract coordinates from barcode (>0.10 required)
 # LIBPROXY=1          - use the libproxy library to find the system proxy
 
-isEmpty(VERSION): VERSION="0.16"
+isEmpty(VERSION): VERSION="0.17"
 
 contains(RELEASE,1) {
     DEFINES += RELEASE

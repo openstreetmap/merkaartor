@@ -18,30 +18,31 @@
 SelectionDialog::SelectionDialog(QWidget *parent)
  : QDialog(parent)
 {
-	setupUi(this);
+    setupUi(this);
 
-	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
-	setWindowFlags(windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    setWindowFlags(windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
 
-	cbKey->setInsertPolicy(QComboBox::InsertAlphabetically);
-	cbValue->setInsertPolicy(QComboBox::InsertAlphabetically);
+    cbKey->setInsertPolicy(QComboBox::InsertAlphabetically);
+    cbValue->setInsertPolicy(QComboBox::InsertAlphabetically);
 
-	MainWindow* mw = (MainWindow *)(this->parent());
+    MainWindow* mw = (MainWindow *)(this->parent());
 
-	QCompleter* completer = new QCompleter(mw->document()->getTagList(), (QObject *)this);
-	cbKey->insertItems(-1, mw->document()->getTagList());
-	completer->setCompletionMode(QCompleter::InlineCompletion);
-	completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
-	cbKey->setCompleter(completer);
-	cbKey->setEditable(true);
+    QCompleter* completer = new QCompleter(mw->document()->getTagList(), (QObject *)this);
+    cbKey->insertItems(-1, mw->document()->getTagList());
+    completer->setCompletionMode(QCompleter::InlineCompletion);
+    completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
+    cbKey->setCompleter(completer);
+    cbKey->setEditable(true);
 
-	cbValue->insertItems(-1, mw->document()->getTagValueList("*"));
-	cbValue->setEditable(true);
+    cbValue->insertItems(-1, mw->document()->getTagValueList("*"));
+    cbValue->setEditable(true);
 
-	edName->setText(MerkaartorPreferences::instance()->getLastSearchName());
-	cbKey->setEditText(MerkaartorPreferences::instance()->getLastSearchKey());
-	cbValue->setEditText(MerkaartorPreferences::instance()->getLastSearchValue());
-	sbMaxResult->setValue(MerkaartorPreferences::instance()->getLastMaxSearchResults());
+    edName->setText(M_PREFS->getLastSearchName());
+    cbKey->setEditText(M_PREFS->getLastSearchKey());
+    cbValue->setEditText(M_PREFS->getLastSearchValue());
+    sbMaxResult->setValue(M_PREFS->getLastMaxSearchResults());
+    edTagQuery->setText(M_PREFS->getLastSearchTagSelector());
 }
 
 SelectionDialog::~SelectionDialog()
@@ -50,18 +51,46 @@ SelectionDialog::~SelectionDialog()
 
 void SelectionDialog::on_cbKey_editTextChanged(const QString & text)
 {
-	cbValue->clear();
+    cbValue->clear();
 
-	MainWindow* mw = (MainWindow *)(this->parent());
+    MainWindow* mw = (MainWindow *)(this->parent());
 
-	QStringList sl = mw->document()->getTagValueList(text);
-	QCompleter* completer = new QCompleter(sl, (QObject *)this);
-	cbValue->insertItems(-1, mw->document()->getTagValueList(text));
-	completer->setCompletionMode(QCompleter::InlineCompletion);
-	completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
-	if (cbValue->completer())
-		delete cbValue->completer();
-	cbValue->setCompleter(completer);
+    QStringList sl = mw->document()->getTagValueList(text);
+    QCompleter* completer = new QCompleter(sl, (QObject *)this);
+    cbValue->insertItems(-1, mw->document()->getTagValueList(text));
+    completer->setCompletionMode(QCompleter::InlineCompletion);
+    completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
+    if (cbValue->completer())
+        delete cbValue->completer();
+    cbValue->setCompleter(completer);
+
+    edTagQuery->setText("[" + text + "] is " + cbValue->currentText());
+
 }
 
+void SelectionDialog::on_cbValue_editTextChanged(const QString & text)
+{
+    edTagQuery->setText("[" + cbKey->currentText() + "] is " + text);
 
+}
+
+void SelectionDialog::on_edName_textChanged(const QString &text)
+{
+    edTagQuery->setText("[name] is *" + text + "*");
+}
+
+void SelectionDialog::on_edID_textChanged(const QString &text)
+{
+    edTagQuery->setText("[:id] is " + text);
+}
+
+void SelectionDialog::on_buttonBox_accepted()
+{
+    M_PREFS->setLastSearchName(edName->text());
+    M_PREFS->setLastSearchKey(cbKey->currentText());
+    M_PREFS->setLastSearchValue(cbValue->currentText());
+    M_PREFS->setLastMaxSearchResults(sbMaxResult->value());
+    M_PREFS->setLastSearchTagSelector(edTagQuery->text());
+
+    emit accept();
+}

@@ -166,14 +166,11 @@ public:
     int getCacheSize() const;
 
     /* Search */
-    void setLastMaxSearchResults(int theValue);
-    int getLastMaxSearchResults() const;
-    void setLastSearchName(const QString & theValue);
-    QString getLastSearchName() const;
-    void setLastSearchKey(const QString & theValue);
-    QString getLastSearchKey() const;
-    void setLastSearchValue(const QString & theValue);
-    QString getLastSearchValue() const;
+    M_PARAM_DECLARE_INT(LastMaxSearchResults);
+    M_PARAM_DECLARE_STRING(LastSearchName);
+    M_PARAM_DECLARE_STRING(LastSearchKey);
+    M_PARAM_DECLARE_STRING(LastSearchValue);
+    M_PARAM_DECLARE_STRING(LastSearchTagSelector);
 
     /* Visual */
     QStringList getAlphaList() const;

@@ -336,7 +336,7 @@ static bool handleWaysplitSpecialRestriction(Document* theDocument, CommandList*
                 Way* W = CAST_WAY(theRel->get(k));
                 for (int l=0; l<W->size(); l++)
                 {
-		    // check if this node is member the nextPart
+            // check if this node is member the nextPart
                     if (NextPart->find(W->get(l)) < NextPart->size())
                     {
                         // yes it is, so remove First Part and add Next Part to it
@@ -928,9 +928,9 @@ bool canSubdivideRoad(PropertiesDock* theDock, Way** outTheRoad, unsigned int* o
     Way* theRoad = NULL;
     Node* theNodes[2] = { NULL, NULL };
     for (int i = 0; i < theDock->size(); ++i) {
-        if ((theDock->selection(i)->getClass() == "Road") && !theRoad)
+        if ((theDock->selection(i)->getClass() == "Way") && !theRoad)
             theRoad = CAST_WAY(theDock->selection(i));
-        else if (theDock->selection(i)->getClass() == "TrackPoint") {
+        else if (theDock->selection(i)->getClass() == "Node") {
             if (!theNodes[0])
                 theNodes[0] = CAST_NODE(theDock->selection(i));
             else if (!theNodes[1])
@@ -1042,9 +1042,9 @@ bool canSplitArea(PropertiesDock* theDock, Way** outTheArea, unsigned int outNod
     Way* theArea = NULL;
     Node* theNodes[2] = { NULL, NULL };
     for (int i = 0; i < theDock->size(); ++i) {
-        if ((theDock->selection(i)->getClass() == "Road") && !theArea)
+        if ((theDock->selection(i)->getClass() == "Way") && !theArea)
             theArea = CAST_WAY(theDock->selection(i));
-        else if (theDock->selection(i)->getClass() == "TrackPoint") {
+        else if (theDock->selection(i)->getClass() == "Node") {
             if (!theNodes[0])
                 theNodes[0] = CAST_NODE(theDock->selection(i));
             else if (!theNodes[1])
@@ -1144,9 +1144,9 @@ bool canTerraceArea(PropertiesDock* theDock, Way** outTheArea, int* startNode)
     Way* theArea = NULL;
     Node* theNode = NULL;
     for (int i = 0; i < theDock->size(); ++i)
-        if ((theDock->selection(i)->getClass() == "Road") && !theArea) {
+        if ((theDock->selection(i)->getClass() == "Way") && !theArea) {
             theArea = CAST_WAY(theDock->selection(i));
-        } else if (startNode && theDock->selection(i)->getClass() == "TrackPoint") {
+        } else if (startNode && theDock->selection(i)->getClass() == "Node") {
             theNode = CAST_NODE(theDock->selection(i));
         }
     if (!theArea || !theArea->isClosed())

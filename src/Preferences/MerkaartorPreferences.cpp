@@ -694,46 +694,11 @@ void MerkaartorPreferences::setCacheSize(int theValue)
 }
 
 /* Search */
-void MerkaartorPreferences::setLastMaxSearchResults(int theValue)
-{
-    Sets->setValue("search/LastMax", theValue);
-}
-
-int MerkaartorPreferences::getLastMaxSearchResults() const
-{
-    return Sets->value("search/LastMax", 100).toInt();
-}
-
-void MerkaartorPreferences::setLastSearchName(const QString & theValue)
-{
-    Sets->setValue("search/LastName", theValue);
-}
-
-QString MerkaartorPreferences::getLastSearchName() const
-{
-    return Sets->value("search/LastName").toString();
-}
-
-void MerkaartorPreferences::setLastSearchKey(const QString & theValue)
-{
-    Sets->setValue("search/LastKey", theValue);
-}
-
-QString MerkaartorPreferences::getLastSearchKey() const
-{
-    return Sets->value("search/LastKey").toString();
-}
-
-void MerkaartorPreferences::setLastSearchValue(const QString & theValue)
-{
-    Sets->setValue("search/LastValue", theValue);
-}
-
-QString MerkaartorPreferences::getLastSearchValue() const
-{
-    return Sets->value("search/LastValue").toString();
-}
-
+M_PARAM_IMPLEMENT_INT(LastMaxSearchResults, search, 100);
+M_PARAM_IMPLEMENT_STRING(LastSearchName, search, "");
+M_PARAM_IMPLEMENT_STRING(LastSearchKey, search, "");
+M_PARAM_IMPLEMENT_STRING(LastSearchValue, search, "");
+M_PARAM_IMPLEMENT_STRING(LastSearchTagSelector, search, "");
 /* Visuals */
 
 void MerkaartorPreferences::saveMainWindowState(const MainWindow * mainWindow)
