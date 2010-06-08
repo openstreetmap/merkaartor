@@ -247,6 +247,6 @@
  zoomUnder="0" zoomUpper="1e+07"
  icon=":/MapIcons/map-icons/square.small/unknown.png"
  drawTrafficDirectionMarks="no">
-  <selector expr="Type is TrackPoint and  not HasTags"/>
+  <selector expr="Type is Node and  not HasTags"/>
 </painter>
 </mapStyle>

@@ -28,7 +28,7 @@ class Node : public Feature
         Node(const Node& other);
         virtual ~Node();
 
-        virtual QString getClass() const {return "TrackPoint";}
+        virtual QString getClass() const {return "Node";}
         virtual Feature::FeatureType getType() const {return Feature::Nodes;}
         virtual void updateMeta();
 

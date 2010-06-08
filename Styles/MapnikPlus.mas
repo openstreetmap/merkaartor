@@ -799,14 +799,14 @@
  zoomUnder="0.002" zoomUpper="1e+07"
  fillColor="#dcdcdc55"
  drawTrafficDirectionMarks="yes">
-  <selector expr="[place] is town and  not Type is TrackPoint"/>
+  <selector expr="[place] is town and  not Type is Node"/>
 </painter>
 <painter
  zoomUnder="0.00666667" zoomUpper="1e+07"
  icon=":/Art/Places/place_town.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no" labelColor="#000000dd" labelScale="20" labelOffset="12"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes">
-  <selector expr="[place] is town and Type is TrackPoint"/>
+  <selector expr="[place] is town and Type is Node"/>
 </painter>
 <painter
  zoomUnder="0.01" zoomUpper="1e+07"
@@ -996,12 +996,12 @@
  icon=":/MapIcons/map-icons/square.small/misc/information.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name" labelHalo="yes">
-  <selector expr=" [Default] Type is TrackPoint and HasTags"/>
+  <selector expr=" [Default] Type is Node and HasTags"/>
 </painter>
 <painter
  zoomUnder="0" zoomUpper="1e+07"
  icon=":/MapIcons/map-icons/square.small/unknown.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no">
-  <selector expr="Type is TrackPoint and  not HasTags"/>
+  <selector expr="Type is Node and  not HasTags"/>
 </painter>
 </mapStyle>

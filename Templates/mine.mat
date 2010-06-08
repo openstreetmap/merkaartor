@@ -21,7 +21,7 @@
    <description locale="sl" >Kraj</description>
    <description locale="sv" >Plats</description>
    <description locale="uk" >Місце</description>
-   <selector expr="Type is Area or Type is TrackPoint" />
+   <selector expr="Type is Area or Type is Node" />
    <value tag="city" >
     <description locale="en" >City (Pop. &gt; 100.000)</description>
     <description locale="ar" >مدينة (عدد السكان يزيد عن مئة ألف)</description>
@@ -2208,7 +2208,7 @@
   <widgetref id="landuse" />
  </template>
  <template>
-  <selector expr=" [Default] Type is Road" />
+  <selector expr=" [Default] Type is Way" />
   <description locale="en" >Generic Ways</description>
   <description locale="cs" >Obecné cesty</description>
   <description locale="de" >Generische Wege</description>
@@ -2233,7 +2233,7 @@
   <widgetref id="area" />
  </template>
  <template>
-  <selector expr=" [Default] Type is TrackPoint" />
+  <selector expr=" [Default] Type is Node" />
   <description locale="en" >Generic Nodes</description>
   <description locale="cs" >Obecné uzly</description>
   <description locale="de" >Generischer Knoten</description>
