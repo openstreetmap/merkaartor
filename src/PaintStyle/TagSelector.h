@@ -7,156 +7,173 @@ class Feature;
 #include <QRegExp>
 #include <QList>
 
-#include <QList>
+#include <QDateTime>
 
 enum TagSelectorMatchResult {
-	TagSelect_NoMatch,
-	TagSelect_Match,
-	TagSelect_DefaultMatch
+    TagSelect_NoMatch,
+    TagSelect_Match,
+    TagSelect_DefaultMatch
+};
+
+enum TagSelectorSpecialKey {
+    TagSelectKey_None,
+    TagSelectKey_Id,
+    TagSelectKey_User,
+    TagSelectKey_Time,
+    TagSelectKey_Version
+};
+
+enum TagSelectorSpecialValue {
+    TagSelectValue_None,
+    TagSelectValue_Empty
 };
 
 class TagSelector
 {
-	public:
-		virtual ~TagSelector() = 0;
+    public:
+        virtual ~TagSelector() = 0;
 
-		virtual TagSelector* copy() const = 0;
-		virtual TagSelectorMatchResult matches(const Feature* F) const = 0;
-		virtual QString asExpression(bool Precedence) const = 0;
+        virtual TagSelector* copy() const = 0;
+        virtual TagSelectorMatchResult matches(const Feature* F) const = 0;
+        virtual QString asExpression(bool Precedence) const = 0;
 
-		static TagSelector* parse(const QString& Expression);
+        static TagSelector* parse(const QString& Expression);
 };
 
 class TagSelectorIs : public TagSelector
 {
-	public:
-		TagSelectorIs(const QString& key, const QString& value);
+    public:
+        TagSelectorIs(const QString& key, const QString& value);
 
-		virtual TagSelector* copy() const;
-		virtual TagSelectorMatchResult matches(const Feature* F) const;
-		virtual QString asExpression(bool Precedence) const;
+        virtual TagSelector* copy() const;
+        virtual TagSelectorMatchResult matches(const Feature* F) const;
+        virtual QString asExpression(bool Precedence) const;
 
-	private:
-		QRegExp rx;
-		QString Key, Value;
-		bool MatchEmpty;
-		bool UseRegExp;
-};
-
-class TagSelectorTypeIs : public TagSelector
-{
-	public:
-		TagSelectorTypeIs(const QString& type);
-
-		virtual TagSelector* copy() const;
-		virtual TagSelectorMatchResult matches(const Feature* F) const;
-		virtual QString asExpression(bool Precedence) const;
-
-	private:
-		QString Type;
-};
-
-class TagSelectorHasTags : public TagSelector
-{
-	public:
-		TagSelectorHasTags();
-
-		virtual TagSelector* copy() const;
-		virtual TagSelectorMatchResult matches(const Feature* F) const;
-		virtual QString asExpression(bool Precedence) const;
+    private:
+        QRegExp rx;
+        QString Key, Value;
+        double numValue;
+        QDateTime dtValue;
+        bool UseRegExp;
+        TagSelectorSpecialKey specialKey;
+        TagSelectorSpecialValue specialValue;
 };
 
 class TagSelectorIsOneOf : public TagSelector
 {
-	public:
-		TagSelectorIsOneOf(const QString& key, const QList<QString>& values);
+    public:
+        TagSelectorIsOneOf(const QString& key, const QList<QString>& values);
 
-		virtual TagSelector* copy() const;
-		virtual TagSelectorMatchResult matches(const Feature* F) const;
-		virtual QString asExpression(bool Precedence) const;
+        virtual TagSelector* copy() const;
+        virtual TagSelectorMatchResult matches(const Feature* F) const;
+        virtual QString asExpression(bool Precedence) const;
 
-	private:
-		QList<QRegExp> rxv;
-		QList<QString> exactMatchv;
-		QString Key;
-		QList<QString> Values;
-		bool MatchEmpty;
+    private:
+        QList<QRegExp> rxv;
+        QList<QString> exactMatchv;
+        QString Key;
+        QList<QString> Values;
+        TagSelectorSpecialKey specialKey;
+        TagSelectorSpecialValue specialValue;
+};
+
+class TagSelectorTypeIs : public TagSelector
+{
+    public:
+        TagSelectorTypeIs(const QString& type);
+
+        virtual TagSelector* copy() const;
+        virtual TagSelectorMatchResult matches(const Feature* F) const;
+        virtual QString asExpression(bool Precedence) const;
+
+    private:
+        QString Type;
+};
+
+class TagSelectorHasTags : public TagSelector
+{
+    public:
+        TagSelectorHasTags();
+
+        virtual TagSelector* copy() const;
+        virtual TagSelectorMatchResult matches(const Feature* F) const;
+        virtual QString asExpression(bool Precedence) const;
 };
 
 class TagSelectorOr : public TagSelector
 {
-	public:
-		TagSelectorOr(const QList<TagSelector*> Terms);
-		virtual ~TagSelectorOr();
+    public:
+        TagSelectorOr(const QList<TagSelector*> Terms);
+        virtual ~TagSelectorOr();
 
-		virtual TagSelector* copy() const;
-		virtual TagSelectorMatchResult matches(const Feature* F) const;
-		virtual QString asExpression(bool Precedence) const;
+        virtual TagSelector* copy() const;
+        virtual TagSelectorMatchResult matches(const Feature* F) const;
+        virtual QString asExpression(bool Precedence) const;
 
-	private:
-		QList<TagSelector*> Terms;
+    private:
+        QList<TagSelector*> Terms;
 };
 
 class TagSelectorAnd : public TagSelector
 {
-	public:
-		TagSelectorAnd(const QList<TagSelector*> Terms);
-		virtual ~TagSelectorAnd();
+    public:
+        TagSelectorAnd(const QList<TagSelector*> Terms);
+        virtual ~TagSelectorAnd();
 
-		virtual TagSelector* copy() const;
-		virtual TagSelectorMatchResult matches(const Feature* F) const;
-		virtual QString asExpression(bool Precedence) const;
+        virtual TagSelector* copy() const;
+        virtual TagSelectorMatchResult matches(const Feature* F) const;
+        virtual QString asExpression(bool Precedence) const;
 
-	private:
-		QList<TagSelector*> Terms;
+    private:
+        QList<TagSelector*> Terms;
 };
 
 class TagSelectorNot : public TagSelector
 {
-	public:
-		TagSelectorNot(TagSelector* Term);
-		virtual ~TagSelectorNot();
+    public:
+        TagSelectorNot(TagSelector* Term);
+        virtual ~TagSelectorNot();
 
-		virtual TagSelector* copy() const;
-		virtual TagSelectorMatchResult matches(const Feature* F) const;
-		virtual QString asExpression(bool Precedence) const;
+        virtual TagSelector* copy() const;
+        virtual TagSelectorMatchResult matches(const Feature* F) const;
+        virtual QString asExpression(bool Precedence) const;
 
-	private:
-		TagSelector* Term;
+    private:
+        TagSelector* Term;
 };
 
 class TagSelectorFalse : public TagSelector
 {
-	public:
-		TagSelectorFalse();
+    public:
+        TagSelectorFalse();
 
-		virtual TagSelector* copy() const;
-		virtual TagSelectorMatchResult matches(const Feature* F) const;
-		virtual QString asExpression(bool Precedence) const;
+        virtual TagSelector* copy() const;
+        virtual TagSelectorMatchResult matches(const Feature* F) const;
+        virtual QString asExpression(bool Precedence) const;
 };
 
 class TagSelectorTrue : public TagSelector
 {
-	public:
-		TagSelectorTrue();
+    public:
+        TagSelectorTrue();
 
-		virtual TagSelector* copy() const;
-		virtual TagSelectorMatchResult matches(const Feature* F) const;
-		virtual QString asExpression(bool Precedence) const;
+        virtual TagSelector* copy() const;
+        virtual TagSelectorMatchResult matches(const Feature* F) const;
+        virtual QString asExpression(bool Precedence) const;
 };
 
 class TagSelectorDefault : public TagSelector
 {
-	public:
-		TagSelectorDefault(TagSelector* Term);
-		virtual ~TagSelectorDefault();
+    public:
+        TagSelectorDefault(TagSelector* Term);
+        virtual ~TagSelectorDefault();
 
-		virtual TagSelector* copy() const;
-		virtual TagSelectorMatchResult matches(const Feature* F) const;
-		virtual QString asExpression(bool Precedence) const;
+        virtual TagSelector* copy() const;
+        virtual TagSelectorMatchResult matches(const Feature* F) const;
+        virtual QString asExpression(bool Precedence) const;
 
-	private:
-		TagSelector* Term;
+    private:
+        TagSelector* Term;
 };
 
 
