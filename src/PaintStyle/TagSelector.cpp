@@ -266,7 +266,7 @@ TagSelectorIs::TagSelectorIs(const QString& key, const QString& value)
         specialKey = TagSelectKey_User;
     else if (key.toUpper() == ":TIME") {
         specialKey = TagSelectKey_Time;
-        dtValue = QDateTime::fromString(value);
+        dtValue = QDateTime::fromString(value, Qt::ISODate);
     } else if (key.toUpper() == ":VERSION") {
         specialKey = TagSelectKey_Version;
         bool ok;
@@ -307,7 +307,7 @@ TagSelectorMatchResult TagSelectorIs::matches(const Feature* F) const
         case TagSelectKey_Time: {
                 if (!dtValue.isValid())
                     return TagSelect_NoMatch;
-                if (dtValue.time().isNull())
+                if (dtValue.time() == QTime(0, 0, 0))
                     return (F->time().date() == dtValue.date() ? TagSelect_Match : TagSelect_NoMatch);
                 else
                     return (F->time() == dtValue ? TagSelect_Match : TagSelect_NoMatch);
@@ -397,10 +397,10 @@ TagSelectorMatchResult TagSelectorIsOneOf::matches(const Feature* F) const
                 break;
 
             case TagSelectKey_Time: {
-                QDateTime dtValue = QDateTime::fromString(Value);
+                QDateTime dtValue = QDateTime::fromString(Value, Qt::ISODate);
                 if (!dtValue.isValid())
                     break;
-                if (dtValue.time().isNull()) {
+                if (dtValue.time() == QTime(0, 0, 0)) {
                     if (F->time().date() == dtValue.date())
                         return TagSelect_Match;
                 } else {

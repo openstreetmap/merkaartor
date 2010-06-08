@@ -1,4 +1,6 @@
 v0.17
+    * CHG : Use TagSelector for "Edit-Find"
+    * ADD : pseudo-tag key :id, :user, :version, :time to TagSelector
     * ADD : Added subdivide, area split, spread nodes, and terracing tools (by James Hogan)
     * ADD : Read-only filter system
 v0.16
