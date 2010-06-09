@@ -11,7 +11,6 @@ HEADERS += ./IProgressWindow.h \
     ./PaintStyle/MasPaintStyle.h \
     ./PaintStyle/PaintStyle.h \
     ./PaintStyle/PaintStyleEditor.h \
-    ./PaintStyle/TagSelector.h \
     ./TagModel.h \
     ./Utils/LineF.h \
     ./Utils/ShortcutOverrideFilter.h \
@@ -27,7 +26,9 @@ HEADERS += ./IProgressWindow.h \
     ../include/builtin-ggl/ggl/extensions/gis/projections/impl/geocent.h \
     ../interfaces/IMapAdapter.h \
     Utils/OsmLink.h \
-    Utils/Utils.h
+    Utils/Utils.h \
+    Utils/TagSelector.h \
+    Utils/TagSelectorWidget.h
 
 # Source files
 SOURCES += ./Maps/Coord.cpp \
@@ -39,7 +40,6 @@ SOURCES += ./Maps/Coord.cpp \
     ./PaintStyle/MasPaintStyle.cpp \
     ./PaintStyle/PaintStyle.cpp \
     ./PaintStyle/PaintStyleEditor.cpp \
-    ./PaintStyle/TagSelector.cpp \
     ./Main.cpp \
     ./MainWindow.cpp \
     ./TagModel.cpp \
@@ -55,7 +55,9 @@ SOURCES += ./Maps/Coord.cpp \
     ./TerraceDialog.cpp \
     ../include/builtin-ggl/ggl/extensions/gis/projections/impl/geocent.c \
     Utils/OsmLink.cpp \
-    Utils/Utils.cpp
+    Utils/Utils.cpp \
+    Utils/TagSelector.cpp \
+    Utils/TagSelectorWidget.cpp
 
 # Forms
 FORMS += ./AboutDialog.ui \
@@ -67,7 +69,8 @@ FORMS += ./AboutDialog.ui \
     ./MultiProperties.ui \
     ./PaintStyle/PaintStyleEditor.ui \
     ./Utils/PictureViewerDialog.ui \
-    ./Utils/SelectionDialog.ui
+    ./Utils/SelectionDialog.ui \
+    Utils/TagSelectorWidget.ui
 
 # Resource file(s)
 RESOURCES += ../Icons/AllIcons.qrc \

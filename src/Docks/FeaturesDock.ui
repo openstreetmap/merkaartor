@@ -95,6 +95,20 @@
           </property>
          </spacer>
         </item>
+        <item>
+         <widget class="QToolButton" name="btFind">
+          <property name="text">
+           <string>Find...</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="btReset">
+          <property name="text">
+           <string>Reset</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
      </layout>

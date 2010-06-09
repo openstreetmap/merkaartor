@@ -8,7 +8,7 @@
 #include "Document.h"
 #include "Layer.h"
 #include "PaintStyle/MasPaintStyle.h"
-#include "PaintStyle/TagSelector.h"
+#include "Utils/TagSelector.h"
 
 #include "Utils/Utils.h"
 

@@ -1,4 +1,5 @@
 v0.17
+    * ADD : Add a "Find" button to the Feature dock. Press "Reset" to revert to list current features.
     * CHG : Use TagSelector for "Edit-Find"
     * ADD : pseudo-tag key :id, :user, :version, :time to TagSelector
     * ADD : Added subdivide, area split, spread nodes, and terracing tools (by James Hogan)

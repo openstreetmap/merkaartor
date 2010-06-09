@@ -4,7 +4,7 @@
 #include "Maps/Projection.h"
 #include "Features.h"
 #include "Layer.h"
-#include "PaintStyle/TagSelector.h"
+#include "Utils/TagSelector.h"
 #include "Utils/LineF.h"
 
 #include <QtCore/QFile>

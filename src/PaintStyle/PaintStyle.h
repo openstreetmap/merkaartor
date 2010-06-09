@@ -9,7 +9,7 @@
 #include <QPair>
 #include <QPointF>
 
-#include "PaintStyle/TagSelector.h"
+#include "Utils/TagSelector.h"
 
 class MapView;
 class Feature;

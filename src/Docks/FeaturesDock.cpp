@@ -19,6 +19,9 @@
 
 #include "Features.h"
 
+#include "Utils/SelectionDialog.h"
+#include "Utils/TagSelector.h"
+
 #include <QAction>
 #include <QTimer>
 #include <QMenu>
@@ -26,7 +29,10 @@
 #define MAX_FEATS 100
 
 FeaturesDock::FeaturesDock(MainWindow* aParent)
-    : MDockAncestor(aParent), Main(aParent), curFeatType(Feature::Relations)
+    : MDockAncestor(aParent),
+    Main(aParent),
+    curFeatType(Feature::Relations),
+    findMode(false)
 {
 //    setMinimumSize(220,100);
     setObjectName("FeaturesDock");
@@ -48,6 +54,8 @@ FeaturesDock::FeaturesDock(MainWindow* aParent)
     connect(ui.FeaturesList, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(on_FeaturesList_customContextMenuRequested(const QPoint &)));
 
     connect(ui.cbWithin, SIGNAL(stateChanged(int)), this, SLOT(on_rbWithin_stateChanged(int)));
+    connect(ui.btFind, SIGNAL(clicked(bool)), SLOT(on_btFind_clicked(bool)));
+    connect(ui.btReset, SIGNAL(clicked(bool)), SLOT(on_btReset_clicked(bool)));
 
     centerAction = new QAction(NULL, this);
     connect(centerAction, SIGNAL(triggered()), this, SLOT(on_centerAction_triggered()));
@@ -238,6 +246,37 @@ void FeaturesDock::on_addSelectAction_triggered()
     Main->view()->blockSignals(false);
 }
 
+void FeaturesDock::on_btFind_clicked(bool)
+{
+    SelectionDialog* dlg = new SelectionDialog(Main);
+    if (!dlg->exec())
+        return;
+
+    TagSelector* tsel = TagSelector::parse(dlg->edTagQuery->text());
+    if (!tsel)
+        return;
+
+    Found.clear();
+    int added = 0;
+    for (VisibleFeatureIterator i(Main->document()); !i.isEnd() && added < dlg->sbMaxResult->value(); ++i) {
+        if (tsel->matches(i.get())) {
+            Found << i.get();
+        }
+    }
+
+    findMode = true;
+    ui.tabBar->blockSignals(true);
+    ui.tabBar->setCurrentIndex(3);
+    ui.tabBar->blockSignals(false);
+    tabChanged(3);
+}
+
+void FeaturesDock::on_btReset_clicked(bool)
+{
+    findMode = false;
+    updateList();
+}
+
 void FeaturesDock::changeEvent(QEvent * event)
 {
     if (event->type() == QEvent::LanguageChange)
@@ -314,23 +353,33 @@ void FeaturesDock::updateList()
     if (!isVisible() || !Main->document())
         return;
 
-    for (int j=0; j<Main->document()->layerSize(); ++j) {
-        if (!Main->document()->getLayer(j)->size()
-            || !Main->document()->getLayer(j)->isVisible()
-            || Main->document()->getLayer(j)->isIndexingBlocked()
-            )
-            continue;
-
-        if (dynamic_cast<ImageMapLayer*>(Main->document()->getLayer(j)))
-            continue;
-
-        QList < MapFeaturePtr > ret = Main->document()->getLayer(j)->indexFind(theViewport);
-        foreach (MapFeaturePtr F, ret) {
+    if (findMode) {
+        foreach (MapFeaturePtr F, Found) {
             if (ui.cbWithin->isChecked()) {
                 if (ggl::within(F->boundingBox(), Main->view()->viewport()))
                     addItem(F);
             } else
                 addItem(F);
+        }
+    } else {
+        for (int j=0; j<Main->document()->layerSize(); ++j) {
+            if (!Main->document()->getLayer(j)->size()
+                || !Main->document()->getLayer(j)->isVisible()
+                || Main->document()->getLayer(j)->isIndexingBlocked()
+                )
+                continue;
+
+            if (dynamic_cast<ImageMapLayer*>(Main->document()->getLayer(j)))
+                continue;
+
+            QList < MapFeaturePtr > ret = Main->document()->getLayer(j)->indexFind(theViewport);
+            foreach (MapFeaturePtr F, ret) {
+                if (ui.cbWithin->isChecked()) {
+                    if (ggl::within(F->boundingBox(), Main->view()->viewport()))
+                        addItem(F);
+                } else
+                    addItem(F);
+            }
         }
     }
     ui.FeaturesList->sortItems();

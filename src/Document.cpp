@@ -13,7 +13,7 @@
 
 #include "LayerWidget.h"
 
-#include "PaintStyle/TagSelector.h"
+#include "Utils/TagSelector.h"
 
 #include <QtCore/QString>
 #include <QMultiMap>

@@ -49,12 +49,16 @@ public slots:
     void on_downloadAction_triggered();
     void on_addSelectAction_triggered();
 
+    void on_btFind_clicked(bool);
+    void on_btReset_clicked(bool);
+
     void on_Viewport_changed();
 
     void tabChanged(int idx);
 
 private:
     QList<Feature*> Highlighted;
+    QList<Feature*> Found;
 
     MainWindow* Main;
     Ui::FeaturesDockWidget ui;
@@ -69,6 +73,8 @@ private:
 
     void clearItems();
     void addItem(MapFeaturePtr F);
+
+    bool findMode;
 
 public:
     void changeEvent(QEvent*);
