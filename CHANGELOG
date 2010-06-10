@@ -1,4 +1,5 @@
 v0.17
+    * FIX : Don't overzoom on layer zoom (and don't allow if the bbox is null). fixes #3046
     * ADD : Add a "portable" mode to merkaartor via command-line ("-p") or build setting ("PORTABLE=1")
     * ADD : Add a "Find" button to the Feature dock. Press "Reset" to revert to list current features.
     * CHG : Use TagSelector for "Edit-Find"

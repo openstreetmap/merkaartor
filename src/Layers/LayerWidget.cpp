@@ -359,6 +359,9 @@ void ImageLayerWidget::initActions()
     //actgrWms = new QActionGroup(this);
 
     LayerWidget::initActions();
+    ImageMapLayer* il = ((ImageMapLayer *)theLayer.data());
+    if (il && il->boundingBox().isNull())
+        actZoom->setVisible(false);
 
     actReadonly->setVisible(false);
 
