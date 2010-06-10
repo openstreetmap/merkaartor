@@ -20,7 +20,6 @@
 
 #include <Qt>
 #include <QStatusBar>
-#include <QSettings>
 #include <QDateTime>
 
 #include "qgps.h"

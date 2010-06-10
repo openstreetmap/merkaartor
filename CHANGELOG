@@ -1,3 +1,5 @@
+v0.16.1
+    * ADD : Add a "portable" mode to merkaartor via command-line ("-p") or build setting ("PORTABLE=1")
 v0.16
     * CHG : Split the view menu into a new "Show" menu
     * CHG : move Merkaartor's config from ~/.config/BartVanhauwaert to ~/.config/Merkaartor (or platform specific equivalent)

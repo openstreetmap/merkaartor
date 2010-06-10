@@ -19,7 +19,6 @@
 #include <ui_DownloadMapDialog.h>
 
 #include <QBuffer>
-#include <QSettings>
 #include <QTimer>
 #include <QComboBox>
 #include <QMessageBox>

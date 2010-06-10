@@ -1,4 +1,5 @@
 #include "Utils/MDiscardableDialog.h"
+#include "MerkaartorPreferences.h"
 
 #include <QVBoxLayout>
 #include <QApplication>
@@ -8,9 +9,14 @@
 MDiscardableDialog::MDiscardableDialog(QWidget *parent, QString title)
     : QDialog(parent), mainWidget(0), Title(title)
 {
-    QSettings Sets;
-    Sets.beginGroup("DiscardableDialogs");
-    DiscardableRole = Sets.value(title, -1).toInt();
+    QSettings* Sets;
+    if (!g_Merk_Portable) {
+        Sets = new QSettings();
+    } else {
+        Sets = new QSettings(qApp->applicationDirPath() + "/merkaartor.ini", QSettings::IniFormat);
+    }
+    Sets->beginGroup("DiscardableDialogs");
+    DiscardableRole = Sets->value(title, -1).toInt();
 
     setWindowTitle(title);
     setMinimumSize(300, 100);
@@ -21,6 +27,8 @@ MDiscardableDialog::MDiscardableDialog(QWidget *parent, QString title)
 
     theDSA.setText(tr("Don't ask me this again"));
     theLayout->addWidget(&theDSA);
+
+    delete Sets;
 }
 
 void MDiscardableDialog::setWidget ( QWidget * widget )
@@ -52,9 +60,15 @@ int MDiscardableDialog::check()
     if (theDSA.isChecked()) {
         DiscardableRole = tmpRet;
 
-        QSettings Sets;
-        Sets.beginGroup("DiscardableDialogs");
-        Sets.setValue(Title, DiscardableRole);
+        QSettings* Sets;
+        if (!g_Merk_Portable) {
+            Sets = new QSettings();
+        } else {
+            Sets = new QSettings(qApp->applicationDirPath() + "/merkaartor.ini", QSettings::IniFormat);
+        }
+        Sets->beginGroup("DiscardableDialogs");
+        Sets->setValue(Title, DiscardableRole);
+        delete Sets;
     }
 
     return tmpRet;
