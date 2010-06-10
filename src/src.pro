@@ -14,6 +14,7 @@
 # GPSDLIB             - use gpsd libgps or libQgpsmm for access to a gpsd server
 # ZBAR                - use the ZBAR library to extract coordinates from barcode
 # LIBPROXY            - use libproxy to find the system proxy
+# PORTABLE=1          - build merkaartor as a portable app (all files in app dir)
 
 #Static config
 include (Config.pri)
@@ -31,6 +32,8 @@ QT_VER_MIN = $$member(QT_VERSION, 1)
 
 DEFINES += VERSION=$$VERSION
 DEFINES += REVISION=$$REVISION
+
+contains(PORTABLE,1): DEFINES += PORTABLE_BUILD
 
 TEMPLATE = app
 TARGET = merkaartor

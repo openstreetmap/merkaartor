@@ -89,6 +89,12 @@
 
 /***************************/
 
+#ifdef PORTABLE_BUILD
+    bool g_Merk_Portable = true;
+#else
+    bool g_Merk_Portable = false;
+#endif
+
 MerkaartorPreferences* MerkaartorPreferences::m_prefInstance = 0;
 
 Tool::Tool(QString Name, QString Path)
@@ -105,16 +111,20 @@ Tool::Tool()
 
 MerkaartorPreferences::MerkaartorPreferences()
 {
-    Sets = new QSettings();
+    if (!g_Merk_Portable) {
+        Sets = new QSettings();
 
-    QSettings oldSettings("BartVanhauwaert", "Merkaartor");
-    QStringList oldKeys = oldSettings.allKeys();
-    foreach(QString k, oldKeys) {
-        Sets->setValue(k, oldSettings.value(k));
-        Sets->sync();
-        oldSettings.remove(k);
+        QSettings oldSettings("BartVanhauwaert", "Merkaartor");
+        QStringList oldKeys = oldSettings.allKeys();
+        foreach(QString k, oldKeys) {
+            Sets->setValue(k, oldSettings.value(k));
+            Sets->sync();
+            oldSettings.remove(k);
+        }
+        oldSettings.clear();
+    } else {
+        Sets = new QSettings(qApp->applicationDirPath() + "/merkaartor.ini", QSettings::IniFormat);
     }
-    oldSettings.clear();
 
     theToolList = new ToolList();
 
@@ -1381,7 +1391,7 @@ void MerkaartorPreferences::loadProjections()
         fn = resources.absolutePath() + "/Projections.xml";
     }
 #else
-    fn = QString(STRINGIFY(SHARE_DIR)) + "/Projections.xml";
+    fn = QString(SHAREDIR) + "/Projections.xml";
 #endif
     loadProjection(fn);
 
@@ -1449,7 +1459,7 @@ void MerkaartorPreferences::loadFilters()
         fn = resources.absolutePath() + "/Filters.xml";
     }
 #else
-    fn = QString(STRINGIFY(SHARE_DIR)) + "/Filters.xml";
+    fn = QString(SHAREDIR) + "/Filters.xml";
 #endif
     loadFilter(fn);
 
@@ -1510,7 +1520,7 @@ void MerkaartorPreferences::loadWMSes()
     fn = HOMEDIR + "/WmsServersList.xml";
     loadWMS(fn);
 
-    fn = QString(STRINGIFY(SHARE_DIR)) + "/WmsServersList.xml";
+    fn = QString(SHAREDIR) + "/WmsServersList.xml";
     loadWMS(fn);
 
     fn = ":/WmsServersList.xml";
@@ -1570,7 +1580,7 @@ void MerkaartorPreferences::loadTMSes()
     fn = HOMEDIR + "/TmsServersList.xml";
     loadTMS(fn);
 
-    fn = QString(STRINGIFY(SHARE_DIR)) + "/TmsServersList.xml";
+    fn = QString(SHAREDIR) + "/TmsServersList.xml";
     loadTMS(fn);
 
     fn = ":/TmsServersList.xml";
@@ -1630,7 +1640,7 @@ void MerkaartorPreferences::loadBookmarks()
     fn = HOMEDIR + "/BookmarksList.xml";
     loadBookmark(fn);
 
-    fn = QString(STRINGIFY(SHARE_DIR)) + "/BookmarksList.xml";
+    fn = QString(SHAREDIR) + "/BookmarksList.xml";
     loadBookmark(fn);
 
     fn = ":/BookmarksList.xml";

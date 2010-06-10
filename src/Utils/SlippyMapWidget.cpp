@@ -24,7 +24,11 @@ class SlippyMapWidgetPrivate
         SlippyMapWidgetPrivate(SlippyMapWidget* w)
             : theWidget(w), InDrag(false)
         {
-            Sets = new QSettings();
+            if (!g_Merk_Portable) {
+                Sets = new QSettings();
+            } else {
+                Sets = new QSettings(qApp->applicationDirPath() + "/merkaartor.ini", QSettings::IniFormat);
+            }
             Sets->beginGroup("SlippyMapWidget");
             Lat = Sets->value("Lat", 1).toDouble();
             Lon = Sets->value("Lon", 1).toDouble();

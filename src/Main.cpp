@@ -90,6 +90,7 @@ void showHelp()
     fprintf(stdout, "  -l, --log logfilename\t\tSave debugging information to file \"logfilename\"\n");
     fprintf(stdout, "  -v, --version\t\tShow version information\n");
     fprintf(stdout, "  -n, --noreuse\t\tDo not reuse an existing Merkaartor instance\n");
+    fprintf(stdout, "  -p, --portable\t\tExecute Merkaartor as a portable application (all files saved in the application directory)\n");
     fprintf(stdout, "  [filenames]\t\tOpen designated files \n");
 }
 
@@ -112,6 +113,9 @@ int main(int argc, char** argv)
         } else
         if (argsIn[i] == "-n" || argsIn[i] == "--noreuse") {
             reuse = false;
+        } else
+        if (argsIn[i] == "-p" || argsIn[i] == "--portable") {
+            g_Merk_Portable = true;
         } else
             argsOut << argsIn[i];
 
@@ -185,7 +189,7 @@ int main(int argc, char** argv)
     pluginsDir.cdUp();
     pluginsDir.cd("plugins");
 #else
-    QDir pluginsDir = QDir(STRINGIFY(PLUGINS_DIR));
+    QDir pluginsDir = (g_Merk_Portable ? QDir(qApp->applicationDirPath() + "/plugins") : QDir(STRINGIFY(PLUGINS_DIR)));
 #endif
     QCoreApplication::addLibraryPath(pluginsDir.path());
 

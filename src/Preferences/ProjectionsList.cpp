@@ -11,6 +11,7 @@
 //
 
 #include "ProjectionsList.h"
+#include "MerkaartorPreferences.h"
 
 #define STRINGIFY(x) XSTRINGIFY(x)
 #define XSTRINGIFY(x) #x
@@ -114,7 +115,7 @@ ProjectionItem ProjectionsList::getProjection(QString name) const
         theProj = searchEPSG(name, ":/proj/epsg");
         if (!theProj.isEmpty())
             return ProjectionItem(name, theProj);
-        theProj = searchEPSG(name, QString(STRINGIFY(SHARE_DIR)) + "/proj/epsg");
+        theProj = searchEPSG(name, QString(SHAREDIR) + "/proj/epsg");
         if (!theProj.isEmpty())
             return ProjectionItem(name, theProj);
     }

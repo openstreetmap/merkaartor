@@ -46,7 +46,8 @@ class IMapAdapter;
 #define WMS_ADAPTER_UUID QUuid("{E238750A-AC27-429e-995C-A60C17B9A1E0}")
 #define TMS_ADAPTER_UUID QUuid("{CA8A07EC-A466-462b-929F-3805BC9DEC95}")
 
-#define HOMEDIR QDir::homePath() + "/.merkaartor"
+#define HOMEDIR (g_Merk_Portable ? qApp->applicationDirPath() : QDir::homePath() + "/.merkaartor")
+#define SHAREDIR (g_Merk_Portable ? qApp->applicationDirPath() : STRINGIFY(SHARE_DIR))
 
 #define M_PARAM_DECLARE_BOOL(Param) \
     private: \
@@ -80,6 +81,8 @@ class IMapAdapter;
 /**
     @author cbro <cbro@semperpax.com>
 */
+
+extern bool g_Merk_Portable;
 
 #ifndef _MOBILE
 typedef QString ProjectionType;

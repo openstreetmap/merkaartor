@@ -16,6 +16,7 @@ symbian:MOBILE=1
 # GPSDLIB=1           - use gpsd libgps or libQgpsmm for access to a gpsd server
 # ZBAR=1              - use the ZBAR library to extract coordinates from barcode (>0.10 required)
 # LIBPROXY=1          - use the libproxy library to find the system proxy
+# PORTABLE=1          - build merkaartor as a portable app (all files in app dir)
 
 isEmpty(VERSION): VERSION="0.17"
 
