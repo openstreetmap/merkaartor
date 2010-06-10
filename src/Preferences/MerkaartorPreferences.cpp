@@ -1426,7 +1426,7 @@ void MerkaartorPreferences::saveProjections()
     file.close();
 }
 
-* WMS Servers */
+/* WMS Servers */
 void MerkaartorPreferences::loadWMS(QString fn)
 {
     if (QDir::isRelativePath(fn))
