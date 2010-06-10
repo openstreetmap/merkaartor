@@ -294,7 +294,7 @@ void LayerDock::layerZoom(Layer * l)
 
     CoordBox mini(bb.center()-COORD_ENLARGE, bb.center()+COORD_ENLARGE);
     bb.merge(mini);
-    bb = bb.zoomed(1.1);
+//    bb = bb.zoomed(1.1);
     p->Main->view()->setViewport(bb, p->Main->view()->rect());
     emit(layersChanged(false));
 }
