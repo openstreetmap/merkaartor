@@ -95,6 +95,8 @@
 #include <QMenu>
 #include <QTcpServer>
 
+#include <locale.h>
+
 SlippyMapCache* SlippyMapWidget::theSlippyCache = 0;
 
 class MainWindowPrivate
@@ -127,6 +129,8 @@ MainWindow::MainWindow(QWidget *parent)
         , qtTranslator(0)
         , merkaartorTranslator(0)
 {
+    setlocale(LC_NUMERIC, "C");  // impose decimal point separator
+
     p = new MainWindowPrivate;
 
     theProgressDialog = NULL;
