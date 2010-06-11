@@ -268,9 +268,14 @@ class CoordBox
             return false;
         }
 
-        QRectF toRectF()
+        QRectF toRectF() const
         {
             return QRectF(BottomLeft.lon(), BottomLeft.lat(), lonDiff(), latDiff());
+        }
+
+        QRectF toQRectF() const
+        {
+            return QRectF(BottomLeft.lon(), TopRight.lat(), lonDiff(), BottomLeft.lat()-TopRight.lat());
         }
 
         void resize(double f);
