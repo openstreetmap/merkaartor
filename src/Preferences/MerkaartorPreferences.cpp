@@ -792,7 +792,7 @@ void MerkaartorPreferences::setProjectionType(ProjectionType theValue)
 
 ProjectionType MerkaartorPreferences::getProjectionType()
 {
-    return (ProjectionType)Sets->value("projection/Type", "EPSG:900913").toString();
+    return (ProjectionType)Sets->value("projection/Type", "EPSG:3785").toString();
 }
 
 ProjectionsList* MerkaartorPreferences::getProjectionsList()
