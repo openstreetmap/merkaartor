@@ -412,7 +412,11 @@ int ImageMapLayer::getCurrentZoom()
 
 void ImageMapLayer::setCurrentZoom(const CoordBox& viewport, const QRect& rect)
 {
-    QRectF vp = p->theProjection.getProjectedViewport(viewport, rect);
+    QRectF vp;
+    if (p->theProjection.projIsLatLong())
+        vp = viewport.toQRectF();
+    else
+        vp = p->theProjection.getProjectedViewport(viewport, rect);
 
     qreal tileWidth, tileHeight;
     int maxZoom = p->theMapAdapter->getAdaptedMaxZoom();
@@ -527,7 +531,11 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect) const
     QRectF fScreen(rect);
     CoordBox Viewport(p->theProjection.inverse(p->theTransform.inverted().map(fScreen.bottomLeft())),
                      p->theProjection.inverse(p->theTransform.inverted().map(fScreen.topRight())));
-    QRectF vp = p->theProjection.getProjectedViewport(Viewport, rect);
+    QRectF vp;
+    if (p->theProjection.projIsLatLong())
+        vp = p->Viewport.toQRectF();
+    else
+        vp = p->theProjection.getProjectedViewport(p->Viewport, rect);
     QRectF wgs84vp = QRectF(QPointF(coordToAng(Viewport.bottomLeft().lon()), coordToAng(Viewport.bottomLeft().lat()))
                         , QPointF(coordToAng(Viewport.topRight().lon()), coordToAng(Viewport.topRight().lat())));
 
@@ -558,7 +566,11 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect) const
 
 QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect) const
 {
-    QRectF vp = p->theProjection.getProjectedViewport(p->Viewport, rect);
+    QRectF vp;
+    if (p->theProjection.projIsLatLong())
+        vp = p->Viewport.toQRectF();
+    else
+        vp = p->theProjection.getProjectedViewport(p->Viewport, rect);
 
     qreal tileWidth, tileHeight;
     int maxZoom = p->theMapAdapter->getAdaptedMaxZoom();
