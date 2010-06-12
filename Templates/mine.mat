@@ -1478,7 +1478,7 @@
     <description locale="ru" >Место поклонения</description>
     <description locale="sl" >Kraj čaščenja</description>
     <description locale="sv" >Religiös helgedom</description>
-    <description locale="uk" >Ритуальний заклад</description>
+    <description locale="uk" >Культове місце</description>
    </value>
    <value tag="police" >
     <description locale="en" >Police Station</description>
@@ -2013,7 +2013,7 @@
   <description locale="ru" >Место поклонения</description>
   <description locale="sl" >Kraj čaščenja</description>
   <description locale="sv" >Religiös helgedom</description>
-  <description locale="uk" >Ритуальний заклад</description>
+  <description locale="uk" >Культове місце</description>
   <widgetref id="name" />
   <widget tag="amenity" type="constant" >
    <description locale="en" >Amenity</description>
@@ -2047,7 +2047,7 @@
     <description locale="ru" >Место поклонения</description>
     <description locale="sl" >Kraj čaščenja</description>
     <description locale="sv" >Religiös helgedom</description>
-    <description locale="uk" >Ритуальний заклад</description>
+    <description locale="uk" >Культове місце</description>
    </value>
   </widget>
   <widgetref id="religion" />
@@ -2105,7 +2105,7 @@
     <description locale="ru" >Место поклонения</description>
     <description locale="sl" >Kraj čaščenja</description>
     <description locale="sv" >Religiös helgedom</description>
-    <description locale="uk" >Ритуальний заклад</description>
+    <description locale="uk" >Культове місце</description>
    </value>
   </widget>
   <widget tag="religion" type="constant" >

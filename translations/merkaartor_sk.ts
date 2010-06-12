@@ -4,88 +4,25 @@
 <context>
     <name></name>
     <message>
-        <location filename="../src/MainWindow.cpp" line="823"/>
-        <location filename="../src/MainWindow.cpp" line="837"/>
-        <location filename="../src/MainWindow.cpp" line="852"/>
+        <location filename="../src/MainWindow.cpp" line="825"/>
+        <location filename="../src/MainWindow.cpp" line="839"/>
+        <location filename="../src/MainWindow.cpp" line="854"/>
         <source>Supported formats</source>
         <translation>Podporované formáty</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="824"/>
-        <location filename="../src/MainWindow.cpp" line="838"/>
+        <location filename="../src/MainWindow.cpp" line="826"/>
+        <location filename="../src/MainWindow.cpp" line="840"/>
         <source>Merkaartor document (*.mdc)
 </source>
         <translation>Merkaartor dokument (*.mdc)
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="825"/>
-        <location filename="../src/MainWindow.cpp" line="839"/>
-        <location filename="../src/MainWindow.cpp" line="853"/>
-        <source>GPS Exchange format (*.gpx)
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.cpp" line="826"/>
-        <location filename="../src/MainWindow.cpp" line="840"/>
-        <location filename="../src/MainWindow.cpp" line="854"/>
-        <source>OpenStreetMap format (*.osm)
-</source>
-        <translation>OpenStreetMap format (*.osm)
-</translation>
-    </message>
-    <message>
         <location filename="../src/MainWindow.cpp" line="827"/>
         <location filename="../src/MainWindow.cpp" line="841"/>
         <location filename="../src/MainWindow.cpp" line="855"/>
-        <source>OpenStreetMap binary format (*.osb)
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.cpp" line="829"/>
-        <location filename="../src/MainWindow.cpp" line="843"/>
-        <location filename="../src/MainWindow.cpp" line="857"/>
-        <source>Noni GPSPlot format (*.ngt)
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.cpp" line="830"/>
-        <location filename="../src/MainWindow.cpp" line="844"/>
-        <location filename="../src/MainWindow.cpp" line="858"/>
-        <source>NMEA GPS log format (*.nmea *.nma)
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.cpp" line="831"/>
-        <location filename="../src/MainWindow.cpp" line="845"/>
-        <location filename="../src/MainWindow.cpp" line="859"/>
-        <source>KML file (*.kml)
-</source>
-        <translation>KML súbor (*.kml)
-</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.cpp" line="832"/>
-        <location filename="../src/MainWindow.cpp" line="846"/>
-        <location filename="../src/MainWindow.cpp" line="860"/>
-        <source>ESRI Shapefile (*.shp)
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.cpp" line="834"/>
-        <location filename="../src/MainWindow.cpp" line="849"/>
-        <location filename="../src/MainWindow.cpp" line="862"/>
-        <source>All Files (*)</source>
-        <translation>Všetky súbory (*)</translation>
-    </message>
-    <message>
-        <location filename="../src/MainWindow.cpp" line="848"/>
-        <source>Geotagged images (*.jpg)
+        <source>GPS Exchange format (*.gpx)
 </source>
         <translation type="unfinished"></translation>
     </message>
@@ -93,7 +30,32 @@
         <location filename="../src/MainWindow.cpp" line="828"/>
         <location filename="../src/MainWindow.cpp" line="842"/>
         <location filename="../src/MainWindow.cpp" line="856"/>
-        <source>OpenStreetMap change format (*.osc)
+        <source>OpenStreetMap format (*.osm)
+</source>
+        <translation>OpenStreetMap format (*.osm)
+</translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="829"/>
+        <location filename="../src/MainWindow.cpp" line="843"/>
+        <location filename="../src/MainWindow.cpp" line="857"/>
+        <source>OpenStreetMap binary format (*.osb)
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="831"/>
+        <location filename="../src/MainWindow.cpp" line="845"/>
+        <location filename="../src/MainWindow.cpp" line="859"/>
+        <source>Noni GPSPlot format (*.ngt)
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="832"/>
+        <location filename="../src/MainWindow.cpp" line="846"/>
+        <location filename="../src/MainWindow.cpp" line="860"/>
+        <source>NMEA GPS log format (*.nmea *.nma)
 </source>
         <translation type="unfinished"></translation>
     </message>
@@ -101,6 +63,44 @@
         <location filename="../src/MainWindow.cpp" line="833"/>
         <location filename="../src/MainWindow.cpp" line="847"/>
         <location filename="../src/MainWindow.cpp" line="861"/>
+        <source>KML file (*.kml)
+</source>
+        <translation>KML súbor (*.kml)
+</translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="834"/>
+        <location filename="../src/MainWindow.cpp" line="848"/>
+        <location filename="../src/MainWindow.cpp" line="862"/>
+        <source>ESRI Shapefile (*.shp)
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="836"/>
+        <location filename="../src/MainWindow.cpp" line="851"/>
+        <location filename="../src/MainWindow.cpp" line="864"/>
+        <source>All Files (*)</source>
+        <translation>Všetky súbory (*)</translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="850"/>
+        <source>Geotagged images (*.jpg)
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="830"/>
+        <location filename="../src/MainWindow.cpp" line="844"/>
+        <location filename="../src/MainWindow.cpp" line="858"/>
+        <source>OpenStreetMap change format (*.osc)
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="835"/>
+        <location filename="../src/MainWindow.cpp" line="849"/>
+        <location filename="../src/MainWindow.cpp" line="863"/>
         <source>Comma delimited format (*.csv)
 </source>
         <translation type="unfinished"></translation>
@@ -367,7 +367,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>DirtyLayerWidget</name>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="500"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="503"/>
         <source>Zoom</source>
         <translation>Zväčšenie</translation>
     </message>
@@ -640,9 +640,9 @@ Please redownload the problematic feature to handle the conflict.</source>
     <name>Downloader</name>
     <message>
         <location filename="../src/Docks/InfoDock.cpp" line="81"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="487"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="492"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="498"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="486"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="491"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="497"/>
         <source>Download failed</source>
         <translation>Sťahovanie zlyhalo</translation>
     </message>
@@ -652,17 +652,17 @@ Please redownload the problematic feature to handle the conflict.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="208"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="207"/>
         <source>error</source>
         <translation>chyba</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="212"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="211"/>
         <source>didn&apos;t download enough</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/Sync/DownloadOSM.cpp" line="321"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="320"/>
         <source>Downloading from OSM (%n bytes)</source>
         <translation type="unfinished">
             <numerusform>Sťahovanie z OSM (%n bytov)</numerusform>
@@ -671,7 +671,7 @@ Please redownload the problematic feature to handle the conflict.</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/Sync/DownloadOSM.cpp" line="323"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="322"/>
         <source>Downloading from OSM (%n kBytes)</source>
         <translation type="unfinished">
             <numerusform>Sťahovanie z OSM (%n kBytov)</numerusform>
@@ -680,83 +680,83 @@ Please redownload the problematic feature to handle the conflict.</source>
         </translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="443"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="442"/>
         <source>Downloading...</source>
         <translation>Sťahuje sa...</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="453"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="452"/>
         <source>Downloading from OSM (connecting)</source>
         <translation>Sťahovanie z OSM (pripájanie)</translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="484"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="495"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="483"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="494"/>
         <source>Unexpected http status code (%1)
 Server message is &apos;%2&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="486"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="497"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="485"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="496"/>
         <source>
 API message is &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="492"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="491"/>
         <source>Username/password invalid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="510"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="509"/>
         <source>Unresolved conflicts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="510"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="509"/>
         <source>Please resolve existing conflicts first</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="689"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="688"/>
         <source>OpenStreetBugs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="714"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="713"/>
         <source>Downloading points</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportOSM.cpp" line="433"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="556"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="701"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="555"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="700"/>
         <source>Parsing...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportOSM.cpp" line="439"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="563"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="708"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="562"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="707"/>
         <source>Parsing XML</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="571"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="570"/>
         <source>Downloading trackpoints %1-%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="589"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="588"/>
         <source>Downloaded track - nodes %1-%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/ImportExport/ImportExportOSC.cpp" line="73"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="629"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="743"/>
-        <location filename="../src/Sync/DownloadOSM.cpp" line="847"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="628"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="742"/>
+        <location filename="../src/Sync/DownloadOSM.cpp" line="846"/>
         <source>%1 download</source>
         <translation>%1 stiahnuté</translation>
     </message>
@@ -809,7 +809,7 @@ Do you want to mark them for deletion?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/SlippyMapWidget.cpp" line="67"/>
+        <location filename="../src/Utils/SlippyMapWidget.cpp" line="71"/>
         <source>Downloading %1,%2 (zoom %3)...</source>
         <translation>Sťahovanie %1,%2 (priblíženie %3)...</translation>
     </message>
@@ -1243,12 +1243,12 @@ Do you still want to use it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="368"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="371"/>
         <source>WMS adapter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="384"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="387"/>
         <source>TMS adapter</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1623,7 +1623,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>MDiscardableDialog</name>
     <message>
-        <location filename="../src/Utils/MDiscardableDialog.cpp" line="22"/>
+        <location filename="../src/Utils/MDiscardableDialog.cpp" line="28"/>
         <source>Don&apos;t ask me this again</source>
         <translation>Viac sa ma to nepýtaj</translation>
     </message>
@@ -1631,26 +1631,14 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Main</name>
     <message>
-        <location filename="../src/Main.cpp" line="181"/>
+        <location filename="../src/Main.cpp" line="178"/>
         <source>Merkaartor v%1%2(%3)
 Loading plugins...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Main.cpp" line="183"/>
-        <source>Merkaartor v%1
-Loading plugins...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Main.cpp" line="217"/>
+        <location filename="../src/Main.cpp" line="210"/>
         <source>Merkaartor v%1%2(%3)
-Initializing...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Main.cpp" line="219"/>
-        <source>Merkaartor v%1
 Initializing...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1874,7 +1862,7 @@ Initializing...</source>
     </message>
     <message>
         <location filename="../src/Interactions/MoveNodeInteraction.cpp" line="188"/>
-        <location filename="../src/MainWindow.cpp" line="1742"/>
+        <location filename="../src/MainWindow.cpp" line="1744"/>
         <source>Merge Nodes into %1</source>
         <translation>Zlúčiť body do %1</translation>
     </message>
@@ -1904,84 +1892,84 @@ Initializing...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="171"/>
+        <location filename="../src/MainWindow.cpp" line="173"/>
         <source>tile %v / %m</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="308"/>
+        <location filename="../src/MainWindow.cpp" line="310"/>
         <source>Properties...</source>
         <translation>Vlastnosti...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="330"/>
+        <location filename="../src/MainWindow.cpp" line="332"/>
         <source>Cannot load Projections file</source>
         <translation>Nemožno načítať súbor projekcií</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="330"/>
+        <location filename="../src/MainWindow.cpp" line="332"/>
         <source>&quot;Projections.xml&quot; could not be opened anywhere. Aborting.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="337"/>
+        <location filename="../src/MainWindow.cpp" line="339"/>
         <source>Low</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="337"/>
+        <location filename="../src/MainWindow.cpp" line="339"/>
         <source>High</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="337"/>
+        <location filename="../src/MainWindow.cpp" line="339"/>
         <source>Opaque</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="596"/>
+        <location filename="../src/MainWindow.cpp" line="598"/>
         <source>Clipboard invalid</source>
         <translation>Neplatná schránka</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="596"/>
+        <location filename="../src/MainWindow.cpp" line="598"/>
         <source>Clipboard do not contain valid data.</source>
         <translation>Schránka neobsahuje platné dáta</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="868"/>
+        <location filename="../src/MainWindow.cpp" line="870"/>
         <source>Open track file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="894"/>
+        <location filename="../src/MainWindow.cpp" line="896"/>
         <location filename="../src/Sync/SyncOSM.cpp" line="43"/>
         <source>Unsaved changes</source>
         <translation>Neuložené zmeny</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="895"/>
+        <location filename="../src/MainWindow.cpp" line="897"/>
         <source>The current map contains unsaved changes that will be lost when starting a new one.
 Do you want to cancel starting a new map or continue and discard the old changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="923"/>
+        <location filename="../src/MainWindow.cpp" line="925"/>
         <source>Waypoints</source>
         <translation>Cestné body</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="943"/>
+        <location filename="../src/MainWindow.cpp" line="945"/>
         <source>Track %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="986"/>
+        <location filename="../src/MainWindow.cpp" line="988"/>
         <source>Big Fat Copyright Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="987"/>
+        <location filename="../src/MainWindow.cpp" line="989"/>
         <source>You are trying to import a KML file. Please be aware that:
 
  - You cannot import to OSM a KML file created from Google Earth. While you might
@@ -1998,366 +1986,366 @@ Are you absolutely sure this KML can legally be imported in OSM?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1049"/>
+        <location filename="../src/MainWindow.cpp" line="1051"/>
         <source>No valid file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1049"/>
-        <location filename="../src/MainWindow.cpp" line="2121"/>
+        <location filename="../src/MainWindow.cpp" line="1051"/>
+        <location filename="../src/MainWindow.cpp" line="2129"/>
         <source>%1 could not be opened.</source>
         <translation>%1 sa nepodarilo otvoriť.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1192"/>
+        <location filename="../src/MainWindow.cpp" line="1194"/>
         <source>Open track files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1204"/>
+        <location filename="../src/MainWindow.cpp" line="1206"/>
         <source>Old Qt version detected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1205"/>
+        <location filename="../src/MainWindow.cpp" line="1207"/>
         <source>Your setup uses Qt %1, which contains various known errors in uploading data to OpenStreetMap leading to 401 server response codes. Are you sure you want to continue (which is not recommended).
 For more information see http://wiki.openstreetmap.org/index.php/Problem_uploading_with_Merkaartor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1214"/>
+        <location filename="../src/MainWindow.cpp" line="1216"/>
         <source>Upload OSM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1214"/>
+        <location filename="../src/MainWindow.cpp" line="1216"/>
         <source>You don&apos;t seem to have specified your
 OpenStreetMap username and password.
 Do you want to do this now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1235"/>
-        <location filename="../src/MainWindow.cpp" line="1249"/>
-        <location filename="../src/MainWindow.cpp" line="1273"/>
+        <location filename="../src/MainWindow.cpp" line="1237"/>
+        <location filename="../src/MainWindow.cpp" line="1251"/>
+        <location filename="../src/MainWindow.cpp" line="1275"/>
         <source>Error downloading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1235"/>
-        <location filename="../src/MainWindow.cpp" line="1249"/>
-        <location filename="../src/MainWindow.cpp" line="1273"/>
+        <location filename="../src/MainWindow.cpp" line="1237"/>
+        <location filename="../src/MainWindow.cpp" line="1251"/>
+        <location filename="../src/MainWindow.cpp" line="1275"/>
         <source>The map could not be downloaded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1262"/>
+        <location filename="../src/MainWindow.cpp" line="1264"/>
         <source>Error downloading OpenStreetBugs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1262"/>
+        <location filename="../src/MainWindow.cpp" line="1264"/>
         <source>The OpenStreetBugs could not be downloaded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1529"/>
+        <location filename="../src/MainWindow.cpp" line="1531"/>
         <source>Create Polygon</source>
         <translation>Vytvoriť polygon</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1529"/>
+        <location filename="../src/MainWindow.cpp" line="1531"/>
         <source>Specify the number of sides</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1574"/>
+        <location filename="../src/MainWindow.cpp" line="1576"/>
         <source>Join Roads</source>
         <translation>Spoj cesty</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1588"/>
+        <location filename="../src/MainWindow.cpp" line="1590"/>
         <source>Split Roads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1602"/>
+        <location filename="../src/MainWindow.cpp" line="1604"/>
         <source>Break Roads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1616"/>
+        <location filename="../src/MainWindow.cpp" line="1618"/>
         <source>Simplify Roads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1647"/>
+        <location filename="../src/MainWindow.cpp" line="1649"/>
         <source>Force Feature upload</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1672"/>
+        <location filename="../src/MainWindow.cpp" line="1674"/>
         <source>Network timeout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1672"/>
+        <location filename="../src/MainWindow.cpp" line="1674"/>
         <source>Cannot contact OpenStreetBugs.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1682"/>
+        <location filename="../src/MainWindow.cpp" line="1684"/>
         <source>Error closing bug</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1682"/>
+        <location filename="../src/MainWindow.cpp" line="1684"/>
         <source>Cannot delete bug. Server message is:
 %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1689"/>
+        <location filename="../src/MainWindow.cpp" line="1691"/>
         <source>Create Junction</source>
         <translation>Vytvotiť križovatku</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1693"/>
+        <location filename="../src/MainWindow.cpp" line="1695"/>
         <source>Multiple intersection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1694"/>
+        <location filename="../src/MainWindow.cpp" line="1696"/>
         <source>Those roads have multiple intersections.
 Do you still want to create a junction for each one (Unwanted junctions can still be deleted afterhand)?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1711"/>
+        <location filename="../src/MainWindow.cpp" line="1713"/>
         <source>Add Street Numbers</source>
         <translation>Pridať čísla domov</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1727"/>
+        <location filename="../src/MainWindow.cpp" line="1729"/>
         <source>Align Nodes</source>
         <translation>Zarovnať Body</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1757"/>
+        <location filename="../src/MainWindow.cpp" line="1759"/>
         <source>Detach Node %1</source>
         <translation>Odpojiť bod: %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1771"/>
+        <location filename="../src/MainWindow.cpp" line="1773"/>
         <source>Add member to relation</source>
         <translation>Pridať člena do väzby</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1783"/>
+        <location filename="../src/MainWindow.cpp" line="1785"/>
         <source>Remove member from relation</source>
         <translation>Odstrániť člena z väzby</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1798"/>
+        <location filename="../src/MainWindow.cpp" line="1800"/>
         <source>Create Relation %1</source>
         <translation>Vytvoriť Väzbu %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1848"/>
+        <location filename="../src/MainWindow.cpp" line="1850"/>
         <source>Save map style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1848"/>
-        <location filename="../src/MainWindow.cpp" line="1859"/>
+        <location filename="../src/MainWindow.cpp" line="1850"/>
+        <location filename="../src/MainWindow.cpp" line="1861"/>
         <source>Merkaartor map style (*.mas)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1859"/>
+        <location filename="../src/MainWindow.cpp" line="1861"/>
         <source>Load map style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2057"/>
+        <location filename="../src/MainWindow.cpp" line="2065"/>
         <source>Save Merkaartor document</source>
         <translation>Uložiť Merkaartor dokument</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2057"/>
+        <location filename="../src/MainWindow.cpp" line="2065"/>
         <source>untitled</source>
         <translation>bez názvu</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2057"/>
+        <location filename="../src/MainWindow.cpp" line="2065"/>
         <source>Merkaartor documents Files (*.mdc)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2100"/>
+        <location filename="../src/MainWindow.cpp" line="2108"/>
         <source>Unable to open save file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2100"/>
+        <location filename="../src/MainWindow.cpp" line="2108"/>
         <source>%1 could not be opened for writing.</source>
         <translation>%1 sa nepodarilo otvoriť na zápis.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2121"/>
-        <location filename="../src/MainWindow.cpp" line="2127"/>
-        <location filename="../src/MainWindow.cpp" line="2137"/>
+        <location filename="../src/MainWindow.cpp" line="2129"/>
+        <location filename="../src/MainWindow.cpp" line="2135"/>
+        <location filename="../src/MainWindow.cpp" line="2145"/>
         <source>Invalid file</source>
         <translation>Chybný súbor</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2127"/>
+        <location filename="../src/MainWindow.cpp" line="2135"/>
         <source>%1 is not a valid XML file.</source>
         <translation>%1 nie je platný XML súbor.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2137"/>
+        <location filename="../src/MainWindow.cpp" line="2145"/>
         <source>%1 is not a valid Merkaartor document.</source>
         <translation>%1 nie je platný dokument Merkaatora.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2202"/>
+        <location filename="../src/MainWindow.cpp" line="2210"/>
         <source>Export OSM</source>
         <translation>Exportovať OSM</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2202"/>
+        <location filename="../src/MainWindow.cpp" line="2210"/>
         <source>OSM Files (*.osm)</source>
         <translation>OSM Súbory (*.osm)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2225"/>
+        <location filename="../src/MainWindow.cpp" line="2233"/>
         <source>Export Binary OSM</source>
         <translation>Exportovať binárne OSM</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2225"/>
+        <location filename="../src/MainWindow.cpp" line="2233"/>
         <source>OSM Binary Files (*.osb)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2246"/>
+        <location filename="../src/MainWindow.cpp" line="2254"/>
         <source>Export osmChange</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2246"/>
+        <location filename="../src/MainWindow.cpp" line="2254"/>
         <source>osmChange Files (*.osc)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2272"/>
+        <location filename="../src/MainWindow.cpp" line="2280"/>
         <source>Export GPX</source>
         <translation>Exportovať GPX</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2272"/>
+        <location filename="../src/MainWindow.cpp" line="2280"/>
         <source>GPX Files (*.gpx)</source>
         <translation>GPX Súbory (*.gpx)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2297"/>
+        <location filename="../src/MainWindow.cpp" line="2305"/>
         <source>Export KML</source>
         <translation>Exportovať KML</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2297"/>
+        <location filename="../src/MainWindow.cpp" line="2305"/>
         <source>KML Files (*.kml)</source>
         <translation>KML Súbory (*.kml)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2551"/>
+        <location filename="../src/MainWindow.cpp" line="2559"/>
         <source>%1 (int)</source>
         <translation>%1 (celočís.)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2603"/>
+        <location filename="../src/MainWindow.cpp" line="2611"/>
         <source>Add Bookmark</source>
         <translation>Pridať záložku</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2604"/>
+        <location filename="../src/MainWindow.cpp" line="2612"/>
         <source>Specify the name of the bookmark.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2607"/>
+        <location filename="../src/MainWindow.cpp" line="2615"/>
         <source>Invalid bookmark name</source>
         <translation>Neplatné meno záložky</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2608"/>
+        <location filename="../src/MainWindow.cpp" line="2616"/>
         <source>Bookmark cannot be blank.</source>
         <translation>Záložka nemôže byť prázdna.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2612"/>
+        <location filename="../src/MainWindow.cpp" line="2620"/>
         <source>Warning: Bookmark name already exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2613"/>
+        <location filename="../src/MainWindow.cpp" line="2621"/>
         <source>Enter a new one, keep the same to overwrite or cancel.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2651"/>
+        <location filename="../src/MainWindow.cpp" line="2659"/>
         <source>Remove Bookmark</source>
         <translation>Odstrániť záložku</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2652"/>
+        <location filename="../src/MainWindow.cpp" line="2660"/>
         <source>Select the bookmark to remove.</source>
         <translation>Označiť záložku na odstránenie</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2714"/>
+        <location filename="../src/MainWindow.cpp" line="2722"/>
         <source>Invalid projection</source>
         <translation>Chybná projekcia</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2714"/>
+        <location filename="../src/MainWindow.cpp" line="2722"/>
         <source>Unable to set projection &quot;%1&quot;.</source>
         <translation>Nemožno nastaviť projekciu &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2851"/>
+        <location filename="../src/MainWindow.cpp" line="2859"/>
         <source>GPS error</source>
         <translation>GPS chyba</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2852"/>
+        <location filename="../src/MainWindow.cpp" line="2860"/>
         <source>Unable to open GPS port.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2861"/>
+        <location filename="../src/MainWindow.cpp" line="2869"/>
         <source>Open NMEA log file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2977"/>
+        <location filename="../src/MainWindow.cpp" line="2985"/>
         <source>Save Tag Templates</source>
         <translation>Uložiť šablóny značiek</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2977"/>
+        <location filename="../src/MainWindow.cpp" line="2985"/>
         <source>Merkaartor tag templates (*.mat)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2989"/>
-        <location filename="../src/MainWindow.cpp" line="3003"/>
+        <location filename="../src/MainWindow.cpp" line="2997"/>
+        <location filename="../src/MainWindow.cpp" line="3011"/>
         <source>Open Tag Templates</source>
         <translation>Otvoriť šablóny značiek</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="3069"/>
+        <location filename="../src/MainWindow.cpp" line="3085"/>
         <source>Warning! Could not load the Merkaartor translations for the &quot;%1&quot; language. Switching to default english.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3861,18 +3849,18 @@ Do you want to do this now?</source>
         <translation>Nová záložka</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="387"/>
-        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="390"/>
+        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="397"/>
+        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="400"/>
         <source>Preferences upload failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="387"/>
+        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="397"/>
         <source>Duplicate key</source>
         <translation>Duplikovať klúč</translation>
     </message>
     <message>
-        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="390"/>
+        <location filename="../src/Preferences/MerkaartorPreferences.cpp" line="400"/>
         <source>More than 150 preferences</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3975,22 +3963,22 @@ Do you want to do this now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="131"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="135"/>
         <source>Working. Please Wait...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="131"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="135"/>
         <source>Cancel</source>
         <translation>Zrušiť</translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="157"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="161"/>
         <source>SVG rendering</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Render/NativeRenderDialog.cpp" line="160"/>
+        <location filename="../src/Render/NativeRenderDialog.cpp" line="164"/>
         <source>Raster rendering</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4082,7 +4070,7 @@ Do you want to do this now?</source>
 <context>
     <name>OsbLayerWidget</name>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="549"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="552"/>
         <source>Close</source>
         <translation>Zavrieť</translation>
     </message>
@@ -4964,57 +4952,57 @@ Prosím vyberte iné meno alebo použite &lt;Apply&gt; tlačítko, pokial ho chc
 <context>
     <name>QGPS</name>
     <message>
-        <location filename="../src/GPS/qgps.cpp" line="92"/>
-        <location filename="../src/GPS/qgps.cpp" line="151"/>
+        <location filename="../src/GPS/qgps.cpp" line="91"/>
+        <location filename="../src/GPS/qgps.cpp" line="150"/>
         <source>Invalid</source>
         <translation>Neplatné</translation>
     </message>
     <message>
-        <location filename="../src/GPS/qgps.cpp" line="94"/>
-        <location filename="../src/GPS/qgps.cpp" line="166"/>
-        <location filename="../src/GPS/qgps.cpp" line="223"/>
+        <location filename="../src/GPS/qgps.cpp" line="93"/>
+        <location filename="../src/GPS/qgps.cpp" line="165"/>
+        <location filename="../src/GPS/qgps.cpp" line="222"/>
         <source>No Position Fix</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GPS/qgps.cpp" line="95"/>
-        <location filename="../src/GPS/qgps.cpp" line="171"/>
-        <location filename="../src/GPS/qgps.cpp" line="224"/>
+        <location filename="../src/GPS/qgps.cpp" line="94"/>
+        <location filename="../src/GPS/qgps.cpp" line="170"/>
+        <location filename="../src/GPS/qgps.cpp" line="223"/>
         <source>No UTC Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GPS/qgps.cpp" line="136"/>
+        <location filename="../src/GPS/qgps.cpp" line="135"/>
         <source>Meters</source>
         <translation>Metre</translation>
     </message>
     <message>
-        <location filename="../src/GPS/qgps.cpp" line="141"/>
+        <location filename="../src/GPS/qgps.cpp" line="140"/>
         <source>km/h</source>
         <translation>km/h</translation>
     </message>
     <message>
-        <location filename="../src/GPS/qgps.cpp" line="148"/>
+        <location filename="../src/GPS/qgps.cpp" line="147"/>
         <source>Unavailable</source>
         <translation>Nedostupné</translation>
     </message>
     <message>
-        <location filename="../src/GPS/qgps.cpp" line="154"/>
+        <location filename="../src/GPS/qgps.cpp" line="153"/>
         <source>2D</source>
         <translation>2D</translation>
     </message>
     <message>
-        <location filename="../src/GPS/qgps.cpp" line="157"/>
+        <location filename="../src/GPS/qgps.cpp" line="156"/>
         <source>3D</source>
         <translation>3D</translation>
     </message>
     <message>
-        <location filename="../src/GPS/qgps.cpp" line="163"/>
+        <location filename="../src/GPS/qgps.cpp" line="162"/>
         <source>Position Fix available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GPS/qgps.cpp" line="222"/>
+        <location filename="../src/GPS/qgps.cpp" line="221"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
@@ -5236,7 +5224,7 @@ Prosím vyberte iné meno alebo použite &lt;Apply&gt; tlačítko, pokial ho chc
 <context>
     <name>SlippyMapWidget</name>
     <message>
-        <location filename="../src/Utils/SlippyMapWidget.cpp" line="275"/>
+        <location filename="../src/Utils/SlippyMapWidget.cpp" line="279"/>
         <source>Reset view</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5480,17 +5468,17 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>TrackLayerWidget</name>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="455"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="458"/>
         <source>Extract Drawing layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="460"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="463"/>
         <source>Zoom</source>
         <translation>Zväčšenie</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="468"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="471"/>
         <source>Close</source>
         <translation>Zavrieť</translation>
     </message>
@@ -5574,12 +5562,12 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>UploadedLayerWidget</name>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="521"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="524"/>
         <source>Zoom</source>
         <translation>Zväčšenie</translation>
     </message>
     <message>
-        <location filename="../src/Layers/LayerWidget.cpp" line="526"/>
+        <location filename="../src/Layers/LayerWidget.cpp" line="529"/>
         <source>Clear</source>
         <translation>Zmazať</translation>
     </message>
