@@ -643,7 +643,7 @@ void MainWindow::on_editPasteFeatureAction_triggered()
     }
     for (int i=0; i<theFeats.size(); ++i) {
         Feature*F = theFeats.at(i);
-        if (theDocument->getFeature(F->id()))
+        if (theDocument->getFeature(F->id(), false))
             F->resetId();
 
 //		if (TrackPoint* P = CAST_NODE(F)) {

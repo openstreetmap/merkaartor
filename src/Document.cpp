@@ -573,7 +573,7 @@ QString Document::exportOSM(QMainWindow* main, QList<Feature*> aFeatures)
 
     if (exportedFeatures.size()) {
         aCoordBox = exportedFeatures[0]->boundingBox();
-        aCoordBox.merge(exportedFeatures[0]->boundingBox());
+        exportedFeatures[0]->toXML(o, dlg);
         for (int i=1; i < exportedFeatures.size(); i++) {
             aCoordBox.merge(exportedFeatures[i]->boundingBox());
             exportedFeatures[i]->toXML(o, dlg);
@@ -594,7 +594,6 @@ QString Document::exportOSM(QMainWindow* main, QList<Feature*> aFeatures)
 
 QList<Feature*> Document::exportCoreOSM(QList<Feature*> aFeatures)
 {
-    QString coreExport;
     QList<Feature*> exportedFeatures;
     QList<Feature*>::Iterator i;
 
