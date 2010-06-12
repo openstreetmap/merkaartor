@@ -330,6 +330,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->viewStyleForegroundAction->setVisible(false);
     ui->viewStyleTouchupAction->setVisible(false);
 
+    createToolBarManager();  // has to be before restorestate
     M_PREFS->restoreMainWindowState( this );
     on_fileNewAction_triggered();
 #ifndef _MOBILE
@@ -441,7 +442,6 @@ void MainWindow::readLocalConnection()
             QUrl u = QUrl(tokens[1]);
             loadUrl(u);
             socket->close();
-
         }
     }
 }
@@ -517,6 +517,10 @@ void MainWindow::createToolBarManager()
     }
 
     toolBarManager->addToolBar(ui->toolBar, "");
+
+    QSettings* Sets = M_PREFS->getQSettings();
+    if (Sets->contains("MainWindow/Toolbars"))
+        toolBarManager->restoreState(Sets->value("MainWindow/Toolbars").toByteArray());
 }
 
 void MainWindow::on_toolsToolbarsAction_triggered()
@@ -524,6 +528,9 @@ void MainWindow::on_toolsToolbarsAction_triggered()
     QtToolBarDialog dlg(this);
     dlg.setToolBarManager(toolBarManager);
     dlg.exec();
+
+    QSettings* Sets = M_PREFS->getQSettings();
+    Sets->setValue("MainWindow/Toolbars", toolBarManager->saveState());
 }
 
 void MainWindow::createProgressDialog()
