@@ -1043,8 +1043,12 @@ void MapView::setViewport(const CoordBox & TargetMap,
     transformCalc(p->theTransform, theProjection, targetVp, Screen);
     viewportRecalc(Screen);
 
-    QRectF vp = theProjection.getProjectedViewport(p->Viewport, Screen);
-    p->PixelPerM = Screen.width() / vp.width();
+    if (theProjection.projIsLatLong()) {
+        p->PixelPerM = Screen.width() / (double)p->Viewport.lonDiff() * LAT_ANG_PER_M / M_PI * COORD_MAX;
+    } else {
+        QRectF vp = theProjection.getProjectedViewport(p->Viewport, Screen);
+        p->PixelPerM = Screen.width() / vp.width();
+    }
 
     p->NodeWidth = p->PixelPerM * M_PREFS->getNodeSize();
     if (p->NodeWidth > M_PREFS->getNodeSize())
