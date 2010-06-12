@@ -27,6 +27,7 @@ class FeaturePainter;
 class TrackLayer;
 class TrackSegment;
 class Interaction;
+class QtToolBarManager;
 
 #ifdef GEOIMAGE
 class GeoImageDock;
@@ -37,6 +38,7 @@ class MainWindow : public QMainWindow, public IProgressWindow
     Q_OBJECT
 
     friend class ActionsDialog;
+    friend class MerkaartorPreferences;
 
 public:
     MainWindow(QWidget *parent = 0);
@@ -139,6 +141,7 @@ public slots:
     virtual void on_toolsPreferencesAction_triggered() {toolsPreferencesAction_triggered();}
     virtual void on_toolsWorldOsbAction_triggered();
     virtual void on_toolsShortcutsAction_triggered();
+    virtual void on_toolsToolbarsAction_triggered();
     virtual void on_toolsWMSServersAction_triggered();
     virtual void on_toolsTMSServersAction_triggered();
     virtual void on_toolsProjectionsAction_triggered();
@@ -253,7 +256,7 @@ protected:
     QTranslator* qtTranslator;
     QTranslator* merkaartorTranslator;
 
-    QAction* configureToolBarsAct;
+    QtToolBarManager *toolBarManager;
 
 private slots:
     void delayedInit();
@@ -263,7 +266,6 @@ private slots:
     void mapView_interactionChanged(Interaction* anInteraction);
     void incomingLocalConnection();
     void readLocalConnection();
-    void configureToolBars();
 
 private:
     void updateMenu();

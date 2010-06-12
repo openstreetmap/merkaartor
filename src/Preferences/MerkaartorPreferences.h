@@ -136,6 +136,7 @@ public:
         return m_prefInstance;
     }
 
+    QSettings* getQSettings() const { return Sets; }
     void save(bool UserPwdChanged = false);
 
     void toOsmPref();

@@ -111,7 +111,6 @@ class MainWindowPrivate
             , projActgrp(0)
             , filterActgrp(0)
             , theListeningServer(0)
-            , toolBarManager(0)
         {
             title = QString("Merkaartor v%1%2(%3)").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV));
         }
@@ -124,7 +123,6 @@ class MainWindowPrivate
         QActionGroup* filterActgrp;
         QTcpServer* theListeningServer;
         PropertiesDock* theProperties;
-        QtToolBarManager *toolBarManager;
 };
 
 MainWindow::MainWindow(QWidget *parent)
@@ -136,6 +134,7 @@ MainWindow::MainWindow(QWidget *parent)
         , curGpsTrackSegment(0)
         , qtTranslator(0)
         , merkaartorTranslator(0)
+        , toolBarManager(0)
 {
     setlocale(LC_NUMERIC, "C");  // impose decimal point separator
 
@@ -298,14 +297,6 @@ MainWindow::MainWindow(QWidget *parent)
     theGPS->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     addDockWidget(Qt::RightDockWidgetArea, theGPS);
 
-    ui->mobileToolBar->setVisible(false);
-
-    configureToolBarsAct = new QAction(tr("&Configure Toolbars..."), this);
-    configureToolBarsAct->setObjectName(QString::fromUtf8("configureToolBarsAct"));
-    configureToolBarsAct->setStatusTip(tr("Configure toolbars"));
-    QObject::connect(configureToolBarsAct, SIGNAL(triggered()),
-                this, SLOT(configureToolBars()));
-
 #else
     p->theProperties->setVisible(false);
     theInfo->setVisible(false);
@@ -457,27 +448,81 @@ void MainWindow::readLocalConnection()
 
 void MainWindow::createToolBarManager()
 {
-    p->toolBarManager = new QtToolBarManager(this);
-    p->toolBarManager->setMainWindow(this);
+    toolBarManager = new QtToolBarManager(this);
+    toolBarManager->setMainWindow(this);
 
-    p->toolBarManager->addToolBar(ui->toolBar, tr("Main toolbar"));
-//    p->toolBarManager->addToolBar(editToolBar, editStr);
+    foreach(QAction* a, ui->menuFile->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            toolBarManager->addAction(a, tr("File"));;
+    }
+    foreach(QAction* a, ui->menuEdit->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            toolBarManager->addAction(a, tr("Edit"));;
+    }
+    foreach(QAction* a, ui->menuView->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            toolBarManager->addAction(a, tr("View"));;
+    }
+    foreach(QAction* a, ui->menu_Show->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            toolBarManager->addAction(a, tr("Show"));;
+    }
+    foreach(QAction* a, ui->menuShow_directional_Arrows->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            toolBarManager->addAction(a, tr("Directional Arrows"));;
+    }
+    foreach(QAction* a, ui->menuGps->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            toolBarManager->addAction(a, tr("GPS"));;
+    }
+    foreach(QAction* a, ui->menuLayers->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            toolBarManager->addAction(a, tr("Layers"));;
+    }
+    foreach(QAction* a, ui->menuCreate->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            toolBarManager->addAction(a, tr("Create"));;
+    }
+    foreach(QAction* a, ui->menu_Feature->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            toolBarManager->addAction(a, tr("Feature"));;
+    }
+    foreach(QAction* a, ui->menuOpenStreetBugs->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            toolBarManager->addAction(a, tr("OpenStreetBugs"));;
+    }
+    foreach(QAction* a, ui->menu_Node->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            toolBarManager->addAction(a, tr("Node"));;
+    }
+    foreach(QAction* a, ui->menuRoad->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            toolBarManager->addAction(a, tr("Way"));;
+    }
+    foreach(QAction* a, ui->menuRelation->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            toolBarManager->addAction(a, tr("Relation"));;
+    }
+    foreach(QAction* a, ui->menuTools->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            toolBarManager->addAction(a, tr("Tools"));;
+    }
+    foreach(QAction* a, ui->menuWindow->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            toolBarManager->addAction(a, tr("Windows"));;
+    }
+    foreach(QAction* a, ui->menuHelp->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            toolBarManager->addAction(a, tr("Help"));;
+    }
 
-//    p->toolBarManager->addAction(saveAsAct, fileStr);
-//    p->toolBarManager->addAction(exitAct, fileStr);
-    p->toolBarManager->addAction(configureToolBarsAct, tr("Settings"));
-//    p->toolBarManager->addAction(saveToolBarsAct, settingsStr);
-//    p->toolBarManager->addAction(restoreToolBarsAct, settingsStr);
-//    p->toolBarManager->addAction(aboutAct, helpStr);
-//    p->toolBarManager->addAction(aboutQtAct, helpStr);
-
-    ui->menuTools->addAction(configureToolBarsAct);
+    toolBarManager->addToolBar(ui->toolBar, "");
 }
 
-void MainWindow::configureToolBars()
+void MainWindow::on_toolsToolbarsAction_triggered()
 {
     QtToolBarDialog dlg(this);
-    dlg.setToolBarManager(p->toolBarManager);
+    dlg.setToolBarManager(toolBarManager);
     dlg.exec();
 }
 
@@ -2032,12 +2077,7 @@ void MainWindow::on_toolsFiltersAction_triggered()
 
 void MainWindow::on_toolsResetDiscardableAction_triggered()
 {
-    QSettings* Sets;
-    if (!g_Merk_Portable) {
-        Sets = new QSettings();
-    } else {
-        Sets = new QSettings(qApp->applicationDirPath() + "/merkaartor.ini", QSettings::IniFormat);
-    }
+    QSettings* Sets = M_PREFS->getQSettings();
     Sets->remove("DiscardableDialogs");
     delete Sets;
 }
@@ -2045,81 +2085,71 @@ void MainWindow::on_toolsResetDiscardableAction_triggered()
 void MainWindow::on_toolsShortcutsAction_triggered()
 {
     QList<QAction*> theActions;
-    theActions.append(ui->fileNewAction);
-    theActions.append(ui->fileOpenAction);
-    theActions.append(ui->fileImportAction);
-    theActions.append(ui->fileSaveAction);
-    theActions.append(ui->fileSaveAsAction);
-    theActions.append(ui->fileDownloadAction);
-    theActions.append(ui->fileDownloadMoreAction);
-    theActions.append(ui->fileUploadAction);
-    theActions.append(ui->fileQuitAction);
-    theActions.append(ui->editUndoAction);
-    theActions.append(ui->editRedoAction);
-    theActions.append(ui->editCopyAction);
-    theActions.append(ui->editPasteFeatureAction);
-    theActions.append(ui->editPasteMergeAction);
-    theActions.append(ui->editPasteOverwriteAction);
-    theActions.append(ui->editRemoveAction);
-    theActions.append(ui->editPropertiesAction);
-    theActions.append(ui->editMoveAction);
-    theActions.append(ui->editRotateAction);
-    theActions.append(ui->editSelectAction);
-    theActions.append(ui->viewZoomAllAction);
-    theActions.append(ui->viewZoomWindowAction);
-    theActions.append(ui->viewZoomOutAction);
-    theActions.append(ui->viewZoomInAction);
-    theActions.append(ui->viewDownloadedAction);
-    theActions.append(ui->viewRelationsAction);
-    theActions.append(ui->viewScaleAction);
-    theActions.append(ui->viewNamesAction);
-    theActions.append(ui->viewTrackPointsAction);
-    theActions.append(ui->viewVirtualNodesAction);
-    theActions.append(ui->viewTrackSegmentsAction);
-    theActions.append(ui->viewGotoAction);
-    theActions.append(ui->viewArrowsAlwaysAction);
-    theActions.append(ui->viewArrowsNeverAction);
-    theActions.append(ui->viewArrowsOnewayAction);
-    theActions.append(ui->gpsConnectAction);
-    theActions.append(ui->gpsReplayAction);
-    theActions.append(ui->gpsRecordAction);
-    theActions.append(ui->gpsPauseAction);
-    theActions.append(ui->gpsDisconnectAction);
-    theActions.append(ui->gpsCenterAction);
-    theActions.append(ui->createNodeAction);
-    theActions.append(ui->createRoadAction);
-    theActions.append(ui->createDoubleWayAction);
-    theActions.append(ui->createRoundaboutAction);
-    theActions.append(ui->createAreaAction);
-    theActions.append(ui->createRelationAction);
-    theActions.append(ui->createRectangleAction);
-    theActions.append(ui->createPolygonAction);
-    theActions.append(ui->featureDeleteAction);
-    theActions.append(ui->featureCommitAction);
-    theActions.append(ui->roadSplitAction);
-    theActions.append(ui->roadBreakAction);
-    theActions.append(ui->roadJoinAction);
-    theActions.append(ui->editReverseAction);
-    theActions.append(ui->nodeMergeAction);
-    theActions.append(ui->nodeAlignAction);
-    theActions.append(ui->nodeSpreadAction);
-    theActions.append(ui->roadSubdivideAction);
-    theActions.append(ui->areaSplitAction);
-    theActions.append(ui->areaTerraceAction);
-    theActions.append(ui->toolsPreferencesAction);
-    theActions.append(ui->toolsShortcutsAction);
-    theActions.append(ui->toolsWorldOsbAction);
 
-    theActions.append(ui->windowHideAllAction);
-    theActions.append(ui->windowPropertiesAction);
-    theActions.append(ui->windowLayersAction);
-    theActions.append(ui->windowInfoAction);
-    theActions.append(ui->windowDirtyAction);
-    theActions.append(ui->windowGPSAction);
-    theActions.append(ui->windowGeoimageAction);
-    theActions.append(ui->windowStylesAction);
-
-    theActions.append(ui->helpAboutAction);
+    foreach(QAction* a, ui->menuFile->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            theActions << a;
+    }
+    foreach(QAction* a, ui->menuEdit->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            theActions << a;
+    }
+    foreach(QAction* a, ui->menuView->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            theActions << a;
+    }
+    foreach(QAction* a, ui->menu_Show->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            theActions << a;
+    }
+    foreach(QAction* a, ui->menuShow_directional_Arrows->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            theActions << a;
+    }
+    foreach(QAction* a, ui->menuGps->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            theActions << a;
+    }
+    foreach(QAction* a, ui->menuLayers->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            theActions << a;
+    }
+    foreach(QAction* a, ui->menuCreate->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            theActions << a;
+    }
+    foreach(QAction* a, ui->menu_Feature->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            theActions << a;
+    }
+    foreach(QAction* a, ui->menuOpenStreetBugs->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            theActions << a;
+    }
+    foreach(QAction* a, ui->menu_Node->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            theActions << a;
+    }
+    foreach(QAction* a, ui->menuRoad->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            theActions << a;
+    }
+    foreach(QAction* a, ui->menuRelation->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            theActions << a;
+    }
+    foreach(QAction* a, ui->menuTools->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            theActions << a;
+    }
+    foreach(QAction* a, ui->menuWindow->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            theActions << a;
+    }
+    foreach(QAction* a, ui->menuHelp->actions()) {
+        if (!a->isSeparator() && !a->menu())
+            theActions << a;
+    }
 
     ActionsDialog dlg(theActions, this);
     dlg.exec();

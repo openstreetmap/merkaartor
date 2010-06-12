@@ -9,12 +9,7 @@
 MDiscardableDialog::MDiscardableDialog(QWidget *parent, QString title)
     : QDialog(parent), mainWidget(0), Title(title)
 {
-    QSettings* Sets;
-    if (!g_Merk_Portable) {
-        Sets = new QSettings();
-    } else {
-        Sets = new QSettings(qApp->applicationDirPath() + "/merkaartor.ini", QSettings::IniFormat);
-    }
+    QSettings* Sets = M_PREFS->getQSettings();
     Sets->beginGroup("DiscardableDialogs");
     DiscardableRole = Sets->value(title, -1).toInt();
 
@@ -60,12 +55,7 @@ int MDiscardableDialog::check()
     if (theDSA.isChecked()) {
         DiscardableRole = tmpRet;
 
-        QSettings* Sets;
-        if (!g_Merk_Portable) {
-            Sets = new QSettings();
-        } else {
-            Sets = new QSettings(qApp->applicationDirPath() + "/merkaartor.ini", QSettings::IniFormat);
-        }
+        QSettings* Sets = M_PREFS->getQSettings();
         Sets->beginGroup("DiscardableDialogs");
         Sets->setValue(Title, DiscardableRole);
         delete Sets;

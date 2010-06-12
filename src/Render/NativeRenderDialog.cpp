@@ -34,11 +34,7 @@ NativeRenderDialog::NativeRenderDialog(Document *aDoc, const CoordBox& aCoordBox
     setWindowFlags(windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
 
     buttonBox->addButton(tr("Proceed..."), QDialogButtonBox::ActionRole);
-    if (!g_Merk_Portable) {
-        Sets = new QSettings();
-    } else {
-        Sets = new QSettings(qApp->applicationDirPath() + "/merkaartor.ini", QSettings::IniFormat);
-    }
+    Sets = M_PREFS->getQSettings();
     Sets->beginGroup("NativeRenderDialog");
 
     rbSVG->setChecked(Sets->value("rbSVG", true).toBool());
