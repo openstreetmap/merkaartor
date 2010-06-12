@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QtHelpProject version="1.0">
+    <namespace>com.nokia.qtsolutions.qttoolbardialog_2.2</namespace>
+    <virtualFolder>qdoc</virtualFolder>
+    <customFilter name="Qt Solutions: Toolbar Dialog">
+        <filterAttribute>qt</filterAttribute>
+        <filterAttribute>qttoolbardialog</filterAttribute>
+        <filterAttribute>solutions</filterAttribute>
+    </customFilter>
+    <filterSection>
+        <filterAttribute>qt</filterAttribute>
+        <filterAttribute>qttoolbardialog</filterAttribute>
+        <filterAttribute>solutions</filterAttribute>
+        <toc>
+            <section ref="index.html" title="Qt Solutions: Toolbar Dialog Documentation">
+                <section ref="index.html" title="Toolbar Dialog"/>
+            </section>
+        </toc>
+        <keywords>
+            <keyword name="QtToolBarDialog" id="QtToolBarDialog" ref="qttoolbardialog.html"/>
+            <keyword name="setToolBarManager" id="QtToolBarDialog::setToolBarManager" ref="qttoolbardialog.html#setToolBarManager"/>
+            <keyword name="~QtToolBarDialog" id="QtToolBarDialog::~QtToolBarDialog" ref="qttoolbardialog.html#dtor.QtToolBarDialog"/>
+            <keyword name="QtToolBarManager" id="QtToolBarManager" ref="qttoolbarmanager.html"/>
+            <keyword name="addAction" id="QtToolBarManager::addAction" ref="qttoolbarmanager.html#addAction"/>
+            <keyword name="addToolBar" id="QtToolBarManager::addToolBar" ref="qttoolbarmanager.html#addToolBar"/>
+            <keyword name="mainWindow" id="QtToolBarManager::mainWindow" ref="qttoolbarmanager.html#mainWindow"/>
+            <keyword name="removeAction" id="QtToolBarManager::removeAction" ref="qttoolbarmanager.html#removeAction"/>
+            <keyword name="removeToolBar" id="QtToolBarManager::removeToolBar" ref="qttoolbarmanager.html#removeToolBar"/>
+            <keyword name="restoreState" id="QtToolBarManager::restoreState" ref="qttoolbarmanager.html#restoreState"/>
+            <keyword name="saveState" id="QtToolBarManager::saveState" ref="qttoolbarmanager.html#saveState"/>
+            <keyword name="setMainWindow" id="QtToolBarManager::setMainWindow" ref="qttoolbarmanager.html#setMainWindow"/>
+            <keyword name="toolBars" id="QtToolBarManager::toolBars" ref="qttoolbarmanager.html#toolBars"/>
+            <keyword name="~QtToolBarManager" id="QtToolBarManager::~QtToolBarManager" ref="qttoolbarmanager.html#dtor.QtToolBarManager"/>
+            <keyword name="Toolbar Dialog" id="Toolbar Dialog" ref="index.html"/>
+        </keywords>
+        <files>
+            <file>index.html</file>
+            <file>images/qttoolbardialog.png</file>
+            <file>qttoolbarmanager.html</file>
+            <file>qttoolbardialog.html</file>
+            <file>classic.css</file>
+            <file>images/qt-logo.png</file>
+            <file>images/qttoolbardialog.png</file>
+        </files>
+    </filterSection>
+</QtHelpProject>

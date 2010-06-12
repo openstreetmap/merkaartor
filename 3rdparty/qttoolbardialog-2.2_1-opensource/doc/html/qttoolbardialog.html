@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!-- qttoolbardialog-2.2_1-opensource/src/qttoolbardialog.cpp -->
+<head>
+  <title>QtToolBarDialog Class Reference</title>
+  <link href="classic.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td align="left" valign="top" width="32"><img src="images/qt-logo.png" align="left" width="57" height="67" border="0" /></td>
+<td width="1">&nbsp;&nbsp;</td><td class="postheader" valign="center"><a href="index.html"><font color="#004faf">Home</font></a></td>
+</tr></table><h1 class="title">QtToolBarDialog Class Reference</h1>
+<p>The QtToolBarDialog class provides a dialog for customizing toolbars. <a href="#details">More...</a></p>
+<pre> #include &lt;QtToolBarDialog&gt;</pre><p>Inherits <a href="http://qt.nokia.com/doc/4.5/qdialog.html">QDialog</a>.</p>
+<ul>
+<li><a href="qttoolbardialog-members.html">List of all members, including inherited members</a></li>
+</ul>
+<a name="public-functions"></a>
+<h3>Public Functions</h3>
+<ul>
+<li><div class="fn"></div><b><a href="qttoolbardialog.html#QtToolBarDialog">QtToolBarDialog</a></b> ( QWidget * <i>parent</i> = 0, Qt::WFlags <i>flags</i> = 0 )</li>
+<li><div class="fn"></div><b><a href="qttoolbardialog.html#dtor.QtToolBarDialog">~QtToolBarDialog</a></b> ()</li>
+<li><div class="fn"></div>void <b><a href="qttoolbardialog.html#setToolBarManager">setToolBarManager</a></b> ( QtToolBarManager * <i>toolBarManager</i> )</li>
+</ul>
+<ul>
+<li><div class="fn"></div>5 public functions inherited from <a href="http://qt.nokia.com/doc/4.5/qdialog.html#public-functions">QDialog</a></li>
+<li><div class="fn"></div>207 public functions inherited from <a href="http://qt.nokia.com/doc/4.5/qwidget.html#public-functions">QWidget</a></li>
+<li><div class="fn"></div>12 public functions inherited from <a href="http://qt.nokia.com/doc/4.5/qpaintdevice.html#public-functions">QPaintDevice</a></li>
+<li><div class="fn"></div>29 public functions inherited from <a href="http://qt.nokia.com/doc/4.5/qobject.html#public-functions">QObject</a></li>
+</ul>
+<h3>Additional Inherited Members</h3>
+<ul>
+<li><div class="fn"></div>2 properties inherited from <a href="http://qt.nokia.com/doc/4.5/qdialog.html#properties">QDialog</a></li>
+<li><div class="fn"></div>57 properties inherited from <a href="http://qt.nokia.com/doc/4.5/qwidget.html#properties">QWidget</a></li>
+<li><div class="fn"></div>1 property inherited from <a href="http://qt.nokia.com/doc/4.5/qobject.html#properties">QObject</a></li>
+<li><div class="fn"></div>5 public slots inherited from <a href="http://qt.nokia.com/doc/4.5/qdialog.html#public-slots">QDialog</a></li>
+<li><div class="fn"></div>19 public slots inherited from <a href="http://qt.nokia.com/doc/4.5/qwidget.html#public-slots">QWidget</a></li>
+<li><div class="fn"></div>1 public slot inherited from <a href="http://qt.nokia.com/doc/4.5/qobject.html#public-slots">QObject</a></li>
+<li><div class="fn"></div>3 signals inherited from <a href="http://qt.nokia.com/doc/4.5/qdialog.html#signals">QDialog</a></li>
+<li><div class="fn"></div>1 signal inherited from <a href="http://qt.nokia.com/doc/4.5/qwidget.html#signals">QWidget</a></li>
+<li><div class="fn"></div>1 signal inherited from <a href="http://qt.nokia.com/doc/4.5/qobject.html#signals">QObject</a></li>
+<li><div class="fn"></div>1 public type inherited from <a href="http://qt.nokia.com/doc/4.5/qobject.html#public-variables">QObject</a></li>
+<li><div class="fn"></div>4 static public members inherited from <a href="http://qt.nokia.com/doc/4.5/qwidget.html#static-public-members">QWidget</a></li>
+<li><div class="fn"></div>4 static public members inherited from <a href="http://qt.nokia.com/doc/4.5/qobject.html#static-public-members">QObject</a></li>
+<li><div class="fn"></div>37 protected functions inherited from <a href="http://qt.nokia.com/doc/4.5/qwidget.html#protected-functions">QWidget</a></li>
+<li><div class="fn"></div>1 protected function inherited from <a href="http://qt.nokia.com/doc/4.5/qpaintdevice.html#protected-functions">QPaintDevice</a></li>
+<li><div class="fn"></div>7 protected functions inherited from <a href="http://qt.nokia.com/doc/4.5/qobject.html#protected-functions">QObject</a></li>
+<li><div class="fn"></div>1 protected slot inherited from <a href="http://qt.nokia.com/doc/4.5/qwidget.html#protected-slots">QWidget</a></li>
+<li><div class="fn"></div>1 protected type inherited from <a href="http://qt.nokia.com/doc/4.5/qpaintdevice.html#protected-variables">QPaintDevice</a></li>
+<li><div class="fn"></div>2 protected variables inherited from <a href="http://qt.nokia.com/doc/4.5/qobject.html#protected-variables">QObject</a></li>
+</ul>
+<a name="details"></a>
+<hr />
+<h2>Detailed Description</h2>
+<p>The QtToolBarDialog class provides a dialog for customizing toolbars.</p>
+<p>QtToolBarDialog allows the user to customize the toolbars for a given main window.</p>
+<p align="center"><img src="images/qttoolbardialog.png" /></p><p>The dialog lets the users add, rename and remove custom toolbars. Note that built-in toolbars are marked with a green color, and cannot be removed or renamed.</p>
+<p>The users can also add and remove actions from the toolbars. An action can be added to many toolbars, but a toolbar can only contain one instance of each action. Actions that contains a widget are marked with a blue color in the list of actions, and can only be added to one single toolbar.</p>
+<p>Finally, the users can add separators to the toolbars.</p>
+<p>The original toolbars can be restored by clicking the <b>Restore all</b> button. All custom toolbars will then be removed, and all built-in toolbars will be restored to their original state.</p>
+<p>The QtToolBarDialog class's functionality is controlled by an instance of the <a href="qttoolbarmanager.html">QtToolBarManager</a> class, and the main window is specified using the <a href="qttoolbarmanager.html#setMainWindow">QtToolBarManager::setMainWindow</a>() function.</p>
+<p>All you need to do to use QtToolBarDialog is to specify an <a href="qttoolbarmanager.html">QtToolBarManager</a> instance and call the <a href="http://qt.nokia.com/doc/4.5/qdialog.html#exec">QDialog::exec</a>() slot:</p>
+<pre> QtToolBarManager *toolBarManager;
+
+ void MyMainWindow::customize()
+     {
+         QtToolBarDialog dialog(this);
+         dialog.setToolBarManager(toolBarManager);
+         dialog.exec();
+     }</pre>
+<p>See also <a href="qttoolbarmanager.html">QtToolBarManager</a>.</p>
+<hr />
+<h2>Member Function Documentation</h2>
+<h3 class="fn"><a name="QtToolBarDialog"></a>QtToolBarDialog::QtToolBarDialog ( <a href="http://qt.nokia.com/doc/4.5/qwidget.html">QWidget</a> * <i>parent</i> = 0, <a href="http://qt.nokia.com/doc/4.5/qt.html#WFlags-typedef">Qt::WFlags</a> <i>flags</i> = 0 )</h3>
+<p>Creates a toolbar dialog with the given <i>parent</i> and the specifed window <i>flags</i>.</p>
+<h3 class="fn"><a name="dtor.QtToolBarDialog"></a>QtToolBarDialog::~QtToolBarDialog ()</h3>
+<p>Destroys the toolbar dialog.</p>
+<h3 class="fn"><a name="setToolBarManager"></a>void QtToolBarDialog::setToolBarManager ( <a href="qttoolbarmanager.html">QtToolBarManager</a> * <i>toolBarManager</i> )</h3>
+<p>Connects the toolbar dialog to the given <i>toolBarManager</i>. Then, when <a href="http://qt.nokia.com/doc/4.5/qdialog.html#exec">exec</a>() is called, the toolbar dialog will operate using the given <i>toolBarManager</i>.</p>
+<p /><address><hr /><div align="center">
+<table width="100%" cellspacing="0" border="0"><tr class="address">
+<td width="30%" align="left">Copyright &copy; 2009 Nokia Corporation and/or its subsidiary(-ies)</td>
+<td width="40%" align="center"><a href="http://qt.nokia.com/doc/trademarks.html">Trademarks</a></td>
+<td width="30%" align="right"><div align="right">Qt Solutions</div></td>
+</tr></table></div></address></body>
+</html>

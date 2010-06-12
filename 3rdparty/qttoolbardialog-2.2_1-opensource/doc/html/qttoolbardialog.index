@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE QDOCINDEX>
+<INDEX url="" title="Qt Solutions: Toolbar Dialog Documentation" version="">
+    <namespace access="public" threadsafety="unspecified" status="commendable" name="" href="" location="" module="">
+        <class access="public" threadsafety="unspecified" status="commendable" name="QtToolBarManager" href="qttoolbarmanager.html" location="qttoolbardialog.h" bases="QObject" module="">
+            <function access="public" threadsafety="unspecified" status="commendable" name="QtToolBarManager" fullname="QtToolBarManager::QtToolBarManager" href="qttoolbarmanager.html#QtToolBarManager" location="qttoolbardialog.h" virtual="non" meta="constructor" const="false" static="false" overload="false" type="" signature="QtToolBarManager(QObject * parent)">
+                <parameter left="QObject *" right="" name="parent" default="0"/>
+            </function>
+            <function access="public" threadsafety="unspecified" status="commendable" name="~QtToolBarManager" fullname="QtToolBarManager::~QtToolBarManager" href="qttoolbarmanager.html#dtor.QtToolBarManager" location="qttoolbardialog.h" virtual="non" meta="destructor" const="false" static="false" overload="false" type="" signature="~QtToolBarManager()"/>
+            <function access="public" threadsafety="unspecified" status="commendable" name="setMainWindow" fullname="QtToolBarManager::setMainWindow" href="qttoolbarmanager.html#setMainWindow" location="qttoolbardialog.h" virtual="non" meta="plain" const="false" static="false" overload="false" type="void" signature="setMainWindow(QMainWindow * mainWindow)">
+                <parameter left="QMainWindow *" right="" name="mainWindow" default=""/>
+            </function>
+            <function access="public" threadsafety="unspecified" status="commendable" name="mainWindow" fullname="QtToolBarManager::mainWindow" href="qttoolbarmanager.html#mainWindow" location="qttoolbardialog.h" virtual="non" meta="plain" const="true" static="false" overload="false" type="QMainWindow *" signature="mainWindow() const"/>
+            <function access="public" threadsafety="unspecified" status="commendable" name="addAction" fullname="QtToolBarManager::addAction" href="qttoolbarmanager.html#addAction" location="qttoolbardialog.h" virtual="non" meta="plain" const="false" static="false" overload="false" type="void" signature="addAction(QAction * action, const QString &amp; category)">
+                <parameter left="QAction *" right="" name="action" default=""/>
+                <parameter left="const QString &amp;" right="" name="category" default=""/>
+            </function>
+            <function access="public" threadsafety="unspecified" status="commendable" name="removeAction" fullname="QtToolBarManager::removeAction" href="qttoolbarmanager.html#removeAction" location="qttoolbardialog.h" virtual="non" meta="plain" const="false" static="false" overload="false" type="void" signature="removeAction(QAction * action)">
+                <parameter left="QAction *" right="" name="action" default=""/>
+            </function>
+            <function access="public" threadsafety="unspecified" status="commendable" name="addToolBar" fullname="QtToolBarManager::addToolBar" href="qttoolbarmanager.html#addToolBar" location="qttoolbardialog.h" virtual="non" meta="plain" const="false" static="false" overload="false" type="void" signature="addToolBar(QToolBar * toolBar, const QString &amp; category)">
+                <parameter left="QToolBar *" right="" name="toolBar" default=""/>
+                <parameter left="const QString &amp;" right="" name="category" default=""/>
+            </function>
+            <function access="public" threadsafety="unspecified" status="commendable" name="removeToolBar" fullname="QtToolBarManager::removeToolBar" href="qttoolbarmanager.html#removeToolBar" location="qttoolbardialog.h" virtual="non" meta="plain" const="false" static="false" overload="false" type="void" signature="removeToolBar(QToolBar * toolBar)">
+                <parameter left="QToolBar *" right="" name="toolBar" default=""/>
+            </function>
+            <function access="public" threadsafety="unspecified" status="commendable" name="toolBars" fullname="QtToolBarManager::toolBars" href="qttoolbarmanager.html#toolBars" location="qttoolbardialog.h" virtual="non" meta="plain" const="true" static="false" overload="false" type="QList&lt;QToolBar *&gt;" signature="toolBars() const"/>
+            <function access="public" threadsafety="unspecified" status="commendable" name="saveState" fullname="QtToolBarManager::saveState" href="qttoolbarmanager.html#saveState" location="qttoolbardialog.h" virtual="non" meta="plain" const="true" static="false" overload="false" type="QByteArray" signature="saveState(int version) const">
+                <parameter left="int" right="" name="version" default="0"/>
+            </function>
+            <function access="public" threadsafety="unspecified" status="commendable" name="restoreState" fullname="QtToolBarManager::restoreState" href="qttoolbarmanager.html#restoreState" location="qttoolbardialog.h" virtual="non" meta="plain" const="false" static="false" overload="false" type="bool" signature="restoreState(const QByteArray &amp; state, int version)">
+                <parameter left="const QByteArray &amp;" right="" name="state" default=""/>
+                <parameter left="int" right="" name="version" default="0"/>
+            </function>
+        </class>
+        <class access="public" threadsafety="unspecified" status="commendable" name="QtToolBarDialog" href="qttoolbardialog.html" location="qttoolbardialog.h" bases="QDialog" module="">
+            <function access="public" threadsafety="unspecified" status="commendable" name="QtToolBarDialog" fullname="QtToolBarDialog::QtToolBarDialog" href="qttoolbardialog.html#QtToolBarDialog" location="qttoolbardialog.h" virtual="non" meta="constructor" const="false" static="false" overload="false" type="" signature="QtToolBarDialog(QWidget * parent, Qt::WFlags flags)">
+                <parameter left="QWidget *" right="" name="parent" default="0"/>
+                <parameter left="Qt::WFlags" right="" name="flags" default="0"/>
+            </function>
+            <function access="public" threadsafety="unspecified" status="commendable" name="~QtToolBarDialog" fullname="QtToolBarDialog::~QtToolBarDialog" href="qttoolbardialog.html#dtor.QtToolBarDialog" location="qttoolbardialog.h" virtual="non" meta="destructor" const="false" static="false" overload="false" type="" signature="~QtToolBarDialog()"/>
+            <function access="public" threadsafety="unspecified" status="commendable" name="setToolBarManager" fullname="QtToolBarDialog::setToolBarManager" href="qttoolbardialog.html#setToolBarManager" location="qttoolbardialog.h" virtual="non" meta="plain" const="false" static="false" overload="false" type="void" signature="setToolBarManager(QtToolBarManager * toolBarManager)">
+                <parameter left="QtToolBarManager *" right="" name="toolBarManager" default=""/>
+            </function>
+        </class>
+        <page access="public" status="commendable" name="index.html" href="index.html" subtype="page" title="Toolbar Dialog" fulltitle="Toolbar Dialog" subtitle="" location="index.qdoc">
+            <contents name="description" title="Description" level="1"/>
+            <contents name="classes" title="Classes" level="1"/>
+            <contents name="tested-platforms" title="Tested platforms" level="1"/>
+            <contents name="screenshots" title="Screenshots" level="1"/>
+        </page>
+    </namespace>
+</INDEX>

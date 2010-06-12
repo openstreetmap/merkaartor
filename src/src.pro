@@ -23,6 +23,7 @@ include (Config.pri)
 include(Custom.pri)
 
 include(../3rdparty/qtsingleapplication-2.6_1-opensource/src/qtsingleapplication.pri)
+include(../3rdparty/qttoolbardialog-2.2_1-opensource/src/qttoolbardialog.pri)
 
 #Qt Version
 QT_VERSION = $$[QT_VERSION]

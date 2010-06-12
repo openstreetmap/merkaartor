@@ -230,6 +230,8 @@ public:
     void createProgressDialog();
     void deleteProgressDialog();
 
+    void createToolBarManager();
+
     void updateLanguage();
 
 
@@ -251,6 +253,8 @@ protected:
     QTranslator* qtTranslator;
     QTranslator* merkaartorTranslator;
 
+    QAction* configureToolBarsAct;
+
 private slots:
     void delayedInit();
     void setAreaOpacity(QAction*);
@@ -259,6 +263,7 @@ private slots:
     void mapView_interactionChanged(Interaction* anInteraction);
     void incomingLocalConnection();
     void readLocalConnection();
+    void configureToolBars();
 
 private:
     void updateMenu();

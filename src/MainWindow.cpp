@@ -97,6 +97,8 @@
 #include <QMenu>
 #include <QTcpServer>
 
+#include "qttoolbardialog.h"
+
 #include <locale.h>
 
 SlippyMapCache* SlippyMapWidget::theSlippyCache = 0;
@@ -109,6 +111,7 @@ class MainWindowPrivate
             , projActgrp(0)
             , filterActgrp(0)
             , theListeningServer(0)
+            , toolBarManager(0)
         {
             title = QString("Merkaartor v%1%2(%3)").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)).arg(STRINGIFY(SVNREV));
         }
@@ -121,6 +124,7 @@ class MainWindowPrivate
         QActionGroup* filterActgrp;
         QTcpServer* theListeningServer;
         PropertiesDock* theProperties;
+        QtToolBarManager *toolBarManager;
 };
 
 MainWindow::MainWindow(QWidget *parent)
@@ -296,6 +300,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->mobileToolBar->setVisible(false);
 
+    configureToolBarsAct = new QAction(tr("&Configure Toolbars..."), this);
+    configureToolBarsAct->setObjectName(QString::fromUtf8("configureToolBarsAct"));
+    configureToolBarsAct->setStatusTip(tr("Configure toolbars"));
+    QObject::connect(configureToolBarsAct, SIGNAL(triggered()),
+                this, SLOT(configureToolBars()));
+
 #else
     p->theProperties->setVisible(false);
     theInfo->setVisible(false);
@@ -363,6 +373,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::delayedInit()
 {
+    createToolBarManager();
+
     updateWindowMenu();
     updateProjectionMenu();
     updateFilterMenu();
@@ -441,6 +453,32 @@ void MainWindow::readLocalConnection()
 
         }
     }
+}
+
+void MainWindow::createToolBarManager()
+{
+    p->toolBarManager = new QtToolBarManager(this);
+    p->toolBarManager->setMainWindow(this);
+
+    p->toolBarManager->addToolBar(ui->toolBar, tr("Main toolbar"));
+//    p->toolBarManager->addToolBar(editToolBar, editStr);
+
+//    p->toolBarManager->addAction(saveAsAct, fileStr);
+//    p->toolBarManager->addAction(exitAct, fileStr);
+    p->toolBarManager->addAction(configureToolBarsAct, tr("Settings"));
+//    p->toolBarManager->addAction(saveToolBarsAct, settingsStr);
+//    p->toolBarManager->addAction(restoreToolBarsAct, settingsStr);
+//    p->toolBarManager->addAction(aboutAct, helpStr);
+//    p->toolBarManager->addAction(aboutQtAct, helpStr);
+
+    ui->menuTools->addAction(configureToolBarsAct);
+}
+
+void MainWindow::configureToolBars()
+{
+    QtToolBarDialog dlg(this);
+    dlg.setToolBarManager(p->toolBarManager);
+    dlg.exec();
 }
 
 void MainWindow::createProgressDialog()

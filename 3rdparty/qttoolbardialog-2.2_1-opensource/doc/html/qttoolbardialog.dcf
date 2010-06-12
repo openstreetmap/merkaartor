@@ -1,0 +1,29 @@
+<!DOCTYPE DCF>
+<DCF ref="index.html" icon="qttoolbardialog.png" imagedir="../../gif" title="Qt Solutions: Toolbar Dialog Documentation">
+<section ref="classes.html" title="Classes">
+    <section ref="qttoolbardialog.html" title="QtToolBarDialog Class Reference">
+        <keyword ref="qttoolbardialog.html">QtToolBarDialog</keyword>
+        <keyword ref="qttoolbardialog.html#setToolBarManager">setToolBarManager</keyword>
+        <section ref="qttoolbardialog-members.html" title="List of all members"/>
+    </section>
+    <section ref="qttoolbarmanager.html" title="QtToolBarManager Class Reference">
+        <keyword ref="qttoolbarmanager.html">QtToolBarManager</keyword>
+        <keyword ref="qttoolbarmanager.html#addAction">addAction</keyword>
+        <keyword ref="qttoolbarmanager.html#addToolBar">addToolBar</keyword>
+        <keyword ref="qttoolbarmanager.html#mainWindow">mainWindow</keyword>
+        <keyword ref="qttoolbarmanager.html#removeAction">removeAction</keyword>
+        <keyword ref="qttoolbarmanager.html#removeToolBar">removeToolBar</keyword>
+        <keyword ref="qttoolbarmanager.html#restoreState">restoreState</keyword>
+        <keyword ref="qttoolbarmanager.html#saveState">saveState</keyword>
+        <keyword ref="qttoolbarmanager.html#setMainWindow">setMainWindow</keyword>
+        <keyword ref="qttoolbarmanager.html#toolBars">toolBars</keyword>
+        <section ref="qttoolbarmanager-members.html" title="List of all members"/>
+    </section>
+</section>
+<section ref="overviews.html" title="Overviews">
+    <section ref="index.html" title="Toolbar Dialog">
+        <keyword ref="index.html">Toolbar Dialog</keyword>
+    </section>
+</section>
+<section ref="examples.html" title="Tutorial &amp; Examples"/>
+</DCF>
