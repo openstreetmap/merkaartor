@@ -102,6 +102,21 @@ void MoveNodeInteraction::snapMousePressEvent(QMouseEvent * event, Feature* aLas
                 }
             addToNoSnap(R);
         }
+        else if (Relation* L = CAST_RELATION(sel[i])) {
+            for (int j=0; j<L->size(); ++j) {
+                if (Node* N = CAST_NODE(L->get(j))) {
+                    if (std::find(Moving.begin(),Moving.end(),N) == Moving.end()) {
+                        Moving.push_back(N);
+                    }
+                } else {
+                    for (int k=0; k<L->get(j)->size(); k++)
+                        if (std::find(Moving.begin(),Moving.end(),L->get(j)->get(k)) == Moving.end()) {
+                        Moving.push_back(CAST_NODE(L->get(j)->get(k)));
+                    }
+                }
+            }
+            addToNoSnap(L);
+        }
     }
     for (int i=0; i<Moving.size(); ++i)
     {
