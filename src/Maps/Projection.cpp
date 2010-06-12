@@ -216,27 +216,32 @@ bool Projection::projIsLatLong() const
 QRectF Projection::getProjectedViewport(const CoordBox& Viewport, const QRect& screen) const
 {
     QPointF bl, tr;
-
+    QRectF pViewport;
     double x, y;
-    if (p->IsLatLong || p->IsMercator)
-        tr = project(Viewport.topRight());
-    else {
-        x = coordToRad(Viewport.topRight().lon());
-        y = coordToRad(Viewport.topRight().lat());
-        projTransformFromWGS84(1, 0, &x, &y, NULL);
-        tr = QPointF(x, y);
-    }
 
-    if (p->IsLatLong || p->IsMercator)
-        bl = project(Viewport.bottomLeft());
+    if (p->IsLatLong)
+        pViewport = Viewport.toQRectF();
     else {
-        x = coordToRad(Viewport.bottomLeft().lon());
-        y = coordToRad(Viewport.bottomLeft().lat());
-        projTransformFromWGS84(1, 0, &x, &y, NULL);
-        bl = QPointF(x, y);
-    }
+        if (p->IsMercator)
+            tr = project(Viewport.topRight());
+        else {
+            x = coordToRad(Viewport.topRight().lon());
+            y = coordToRad(Viewport.topRight().lat());
+            projTransformFromWGS84(1, 0, &x, &y, NULL);
+            tr = QPointF(x, y);
+        }
 
-    QRectF pViewport = QRectF(bl.x(), tr.y(), tr.x() - bl.x(), bl.y() - tr.y());
+        if (p->IsMercator)
+            bl = project(Viewport.bottomLeft());
+        else {
+            x = coordToRad(Viewport.bottomLeft().lon());
+            y = coordToRad(Viewport.bottomLeft().lat());
+            projTransformFromWGS84(1, 0, &x, &y, NULL);
+            bl = QPointF(x, y);
+        }
+
+        pViewport = QRectF(bl.x(), tr.y(), tr.x() - bl.x(), bl.y() - tr.y());
+    }
 
     QPointF pCenter(pViewport.center());
 

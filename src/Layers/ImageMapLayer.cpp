@@ -413,10 +413,7 @@ int ImageMapLayer::getCurrentZoom()
 void ImageMapLayer::setCurrentZoom(const CoordBox& viewport, const QRect& rect)
 {
     QRectF vp;
-    if (p->theProjection.projIsLatLong())
-        vp = viewport.toQRectF();
-    else
-        vp = p->theProjection.getProjectedViewport(viewport, rect);
+    vp = p->theProjection.getProjectedViewport(viewport, rect);
 
     qreal tileWidth, tileHeight;
     int maxZoom = p->theMapAdapter->getAdaptedMaxZoom();
@@ -517,8 +514,8 @@ void ImageMapLayer::draw(MapView& theView, QRect& rect)
             pms = p->pm.copy(drawingRect);
     }
 
-    QPainter P(&p->pm);
     p->pm.fill(Qt::transparent);
+    QPainter P(&p->pm);
     P.drawPixmap((pmSize.width()-pms.width())/2, (pmSize.height()-pms.height())/2, pms);
     //    if (p->theMapAdapter->isTiled())
     //        P.drawPixmap((pmSize.width()-pms.width())/2, (pmSize.height()-pms.height())/2, pms);
@@ -532,10 +529,7 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect) const
     CoordBox Viewport(p->theProjection.inverse(p->theTransform.inverted().map(fScreen.bottomLeft())),
                      p->theProjection.inverse(p->theTransform.inverted().map(fScreen.topRight())));
     QRectF vp;
-    if (p->theProjection.projIsLatLong())
-        vp = p->Viewport.toQRectF();
-    else
-        vp = p->theProjection.getProjectedViewport(p->Viewport, rect);
+    vp = p->theProjection.getProjectedViewport(p->Viewport, rect);
     QRectF wgs84vp = QRectF(QPointF(coordToAng(Viewport.bottomLeft().lon()), coordToAng(Viewport.bottomLeft().lat()))
                         , QPointF(coordToAng(Viewport.topRight().lon()), coordToAng(Viewport.topRight().lat())));
 
@@ -548,13 +542,12 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect) const
     } else {
         QString url (p->theMapAdapter->getQuery(wgs84vp, vp, rect));
         if (!url.isEmpty()) {
-
             qDebug() << "ImageMapLayer::drawFull: getting: " << url;
-
             QPixmap pm = p->theMapAdapter->getImageManager()->getImage(p->theMapAdapter,url);
-            if (!pm.isNull())  {
+            if (!pm.isNull())
                 p->pm = pm.scaled(rect.size(), Qt::IgnoreAspectRatio);
-            }
+            else
+                return rect;
         }
     }
 
@@ -567,10 +560,7 @@ QRect ImageMapLayer::drawFull(MapView& theView, QRect& rect) const
 QRect ImageMapLayer::drawTiled(MapView& theView, QRect& rect) const
 {
     QRectF vp;
-    if (p->theProjection.projIsLatLong())
-        vp = p->Viewport.toQRectF();
-    else
-        vp = p->theProjection.getProjectedViewport(p->Viewport, rect);
+    vp = p->theProjection.getProjectedViewport(p->Viewport, rect);
 
     qreal tileWidth, tileHeight;
     int maxZoom = p->theMapAdapter->getAdaptedMaxZoom();
