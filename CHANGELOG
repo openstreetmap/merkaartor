@@ -1,4 +1,5 @@
 v0.17
+    * ADD : Allow to move complete relations
     * FIX : WMS'es in EPSG:4326 not showing
     * FIX : Don't overzoom on layer zoom (and don't allow if the bbox is null). fixes #3046
     * ADD : Add a "portable" mode to merkaartor via command-line ("-p") or build setting ("PORTABLE=1")
