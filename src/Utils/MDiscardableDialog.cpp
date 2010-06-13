@@ -22,8 +22,6 @@ MDiscardableDialog::MDiscardableDialog(QWidget *parent, QString title)
 
     theDSA.setText(tr("Don't ask me this again"));
     theLayout->addWidget(&theDSA);
-
-    delete Sets;
 }
 
 void MDiscardableDialog::setWidget ( QWidget * widget )
@@ -58,7 +56,6 @@ int MDiscardableDialog::check()
         QSettings* Sets = M_PREFS->getQSettings();
         Sets->beginGroup("DiscardableDialogs");
         Sets->setValue(Title, DiscardableRole);
-        delete Sets;
     }
 
     return tmpRet;

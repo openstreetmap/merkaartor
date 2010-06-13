@@ -2086,7 +2086,6 @@ void MainWindow::on_toolsResetDiscardableAction_triggered()
 {
     QSettings* Sets = M_PREFS->getQSettings();
     Sets->remove("DiscardableDialogs");
-    delete Sets;
 }
 
 void MainWindow::on_toolsShortcutsAction_triggered()
