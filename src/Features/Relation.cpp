@@ -76,14 +76,15 @@ Relation::~Relation()
 
 void Relation::setLayer(Layer* L)
 {
-    if (L)
+    if (L) {
         for (int i=0; i<p->Members.size(); ++i)
             if (p->Members[i].second)
                 p->Members[i].second->setParentFeature(this);
-    else
+    } else {
         for (int i=0; i<p->Members.size(); ++i)
             if (p->Members[i].second)
                 p->Members[i].second->unsetParentFeature(this);
+    }
     Feature::setLayer(L);
 }
 
