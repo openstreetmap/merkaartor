@@ -38,7 +38,6 @@ class SlippyMapWidgetPrivate
             Sets->setValue("Lat", Lat);
             Sets->setValue("Lon", Lon);
             Sets->setValue("Zoom", Zoom);
-            delete Sets;
         }
 
         QPixmap* getImage(int x, int y);
