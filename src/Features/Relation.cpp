@@ -487,7 +487,7 @@ Relation * Relation::fromXML(Document * d, Layer * L, const QDomElement e)
     bool Deleted = (e.attribute("deleted") == "true");
     int Version = e.attribute("version").toInt();
     if (Version < 1)
-        Version = 9999;
+        Version = 0;
 
     Relation* R = dynamic_cast<Relation*>(d->getFeature(id));
     if (!R) {

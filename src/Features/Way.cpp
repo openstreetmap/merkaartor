@@ -916,7 +916,7 @@ Way * Way::fromXML(Document* d, Layer * L, const QDomElement e)
     bool Deleted = (e.attribute("deleted") == "true");
     int Version = e.attribute("version").toInt();
     if (Version < 1)
-        Version = 9999;
+        Version = 0;
     Feature::ActorType A;
     if (e.hasAttribute("actor"))
         A = (Feature::ActorType)(e.attribute("actor", "2").toInt());

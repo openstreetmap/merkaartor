@@ -378,6 +378,7 @@ void MainWindow::delayedInit()
     }
 
     M_PREFS->initialPosition(theView);
+    invalidateView();
 }
 
 void MainWindow::handleMessage(const QString &msg)
@@ -1306,8 +1307,7 @@ void MainWindow::on_fileUploadAction_triggered()
             return;
     }
 
-    MerkaartorPreferences* p = MerkaartorPreferences::instance();
-    while (p->getOsmUser().isEmpty()) {
+    while (M_PREFS->getOsmUser().isEmpty()) {
         int ret = QMessageBox::warning(this, tr("Upload OSM"), tr("You don't seem to have specified your\n"
             "OpenStreetMap username and password.\nDo you want to do this now?"), QMessageBox::Yes | QMessageBox::No);
         if (ret == QMessageBox::Yes) {
@@ -1316,7 +1316,7 @@ void MainWindow::on_fileUploadAction_triggered()
             return;
     }
     on_editPropertiesAction_triggered();
-    syncOSM(this, p->getOsmWebsite(), p->getOsmUser(), p->getOsmPassword());
+    syncOSM(this, M_PREFS->getOsmWebsite(), M_PREFS->getOsmUser(), M_PREFS->getOsmPassword());
 
     theDocument->history().updateActions();
     theDirty->updateList();

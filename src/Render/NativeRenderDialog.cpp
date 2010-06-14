@@ -55,6 +55,8 @@ NativeRenderDialog::NativeRenderDialog(Document *aDoc, const CoordBox& aCoordBox
     sbPreviewHeight->blockSignals(false);
     sbPreviewWidth->setValue(Sets->value("sbPreviewWidth", "800").toInt());
 
+    Sets->endGroup();
+
     calcRatio();
 
     resize(1,1);

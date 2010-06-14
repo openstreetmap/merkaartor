@@ -152,7 +152,7 @@ void MapFeaturePrivate::initVersionNumber()
 {
 //    static int VN = -1;
 //    VersionNumber = VN--;
-    VersionNumber = 9999;
+    VersionNumber = 0;
 }
 
 Feature::Feature()
@@ -913,8 +913,11 @@ QString Feature::toMainHtml(QString type, QString systemtype)
     S += QApplication::translate("MapFeature", "<i>V: </i><b>%1</b> ").arg(QString::number(versionNumber()));
     if (!user().isEmpty())
         S += QApplication::translate("MapFeature", "<i>last: </i><b>%1</b> by <b>%2</b>").arg(time().toString(Qt::SystemLocaleDate)).arg(user());
-        else
+    else
         S += QApplication::translate("MapFeature", "<i>last: </i><b>%1</b>").arg(time().toString(Qt::SystemLocaleDate));
+
+    if (layer())
+        S += QApplication::translate("MapFeature", "<br/><i>layer: </i><b>%1</b> ").arg(layer()->name());
     S += "</small>"
     "<hr/>"
     "%1";

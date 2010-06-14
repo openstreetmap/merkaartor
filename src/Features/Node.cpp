@@ -503,7 +503,7 @@ Node * Node::fromXML(Document* d, Layer* L, const QDomElement e)
     QString user = e.attribute("user");
     int Version = e.attribute("version").toInt();
     if (Version < 1)
-        Version = 9999;
+        Version = 0;
     Feature::ActorType A = (Feature::ActorType)(e.attribute("actor", "2").toInt());
 
     QString id = (e.hasAttribute("id") ? e.attribute("id") : e.attribute("xml:id"));
@@ -605,32 +605,26 @@ QString Node::toHtml()
     int i;
 
 
-    D += "<i>"+QApplication::translate("MapFeature", "timestamp")+": </i>" + time().toString(Qt::ISODate) + "<br/>";
-    D += "<i>"+QApplication::translate("MapFeature", "coord")+": </i>" + QString::number(coordToAng(position().lat()), 'f', 4) + " / " + QString::number(coordToAng(position().lon()), 'f', 4) + "<br/>";
+    D += "<i>"+QApplication::translate("MapFeature", "coord")+": </i>" + QString::number(coordToAng(position().lat()), 'f', 4) + " / " + QString::number(coordToAng(position().lon()), 'f', 4);
 
     if (elevation())
-        D += "<i>"+QApplication::translate("MapFeature", "elevation")+": </i>" + QString::number(elevation(), 'f', 4) + "<br/>";
+        D += "<br/><i>"+QApplication::translate("MapFeature", "elevation")+": </i>" + QString::number(elevation(), 'f', 4);
     if (speed())
-        D += "<i>"+QApplication::translate("MapFeature", "speed")+": </i>" + QString::number(speed(), 'f', 4) + "<br/>";
+        D += "<br/><i>"+QApplication::translate("MapFeature", "speed")+": </i>" + QString::number(speed(), 'f', 4);
     if ((i = findKey("_description_")) < tagSize())
-        D += "<i>"+QApplication::translate("MapFeature", "description")+": </i>" + tagValue(i) + "<br/>";
+        D += "<br/><i>"+QApplication::translate("MapFeature", "description")+": </i>" + tagValue(i);
     if ((i = findKey("_comment_")) < tagSize())
-        D += "<i>"+QApplication::translate("MapFeature", "comment")+": </i>" + tagValue(i) + "<br/>";
+        D += "<br/><i>"+QApplication::translate("MapFeature", "comment")+": </i>" + tagValue(i);
 
     if ((i = findKey("_waypoint_")) < tagSize()) {
-        D += "<p><b>"+QApplication::translate("MapFeature", "Waypoint")+"</b><br/>";
+        D += "<p><b>"+QApplication::translate("MapFeature", "Waypoint")+"</b>";
 
         if ((i = findKey("_description_")) < tagSize())
-            D += "<i>"+QApplication::translate("MapFeature", "description")+": </i>" + tagValue(i) + "<br/>";
+            D += "<br/><i>"+QApplication::translate("MapFeature", "description")+": </i>" + tagValue(i);
 
         if ((i = findKey("_comment_")) < tagSize())
-            D += "<i>"+QApplication::translate("MapFeature", "comment")+": </i>" + tagValue(i) + "<br/>";
+            D += "<br/><i>"+QApplication::translate("MapFeature", "comment")+": </i>" + tagValue(i);
     }
-
-    D += "<i>"+QApplication::translate("MapFeature", "layer")+": </i>";
-    if (layer())
-        D += layer()->name();
-    D += "<br/>";
 
     return Feature::toMainHtml(QApplication::translate("MapFeature", "Node"), "node").arg(D);
 }

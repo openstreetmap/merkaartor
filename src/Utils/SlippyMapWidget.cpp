@@ -29,15 +29,18 @@ class SlippyMapWidgetPrivate
             Lat = Sets->value("Lat", 1).toDouble();
             Lon = Sets->value("Lon", 1).toDouble();
             Zoom = Sets->value("Zoom", 1).toInt();
+            Sets->endGroup();
             VpLat = Lat;
             VpLon = Lon;
             VpZoom = Zoom;
         }
         ~SlippyMapWidgetPrivate()
         {
+            Sets->beginGroup("SlippyMapWidget");
             Sets->setValue("Lat", Lat);
             Sets->setValue("Lon", Lon);
             Sets->setValue("Zoom", Zoom);
+            Sets->endGroup();
         }
 
         QPixmap* getImage(int x, int y);

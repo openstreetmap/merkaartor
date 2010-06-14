@@ -224,6 +224,8 @@ bool DirtyListExecutorOSC::stop()
                         F->setId(idPrefix + c.attribute("new_id"));
                         F->setVersionNumber(c.attribute("new_version").toInt());
                         F->setLastUpdated(Feature::OSMServer);
+                        F->setUser("me");
+                        F->setTime(QDateTime::currentDateTime());
 
                         F->layer()->remove(F);
                         document()->getUploadedLayer()->add(F);

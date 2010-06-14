@@ -12,6 +12,7 @@ MDiscardableDialog::MDiscardableDialog(QWidget *parent, QString title)
     QSettings* Sets = M_PREFS->getQSettings();
     Sets->beginGroup("DiscardableDialogs");
     DiscardableRole = Sets->value(title, -1).toInt();
+    Sets->endGroup();
 
     setWindowTitle(title);
     setMinimumSize(300, 100);
@@ -56,6 +57,7 @@ int MDiscardableDialog::check()
         QSettings* Sets = M_PREFS->getQSettings();
         Sets->beginGroup("DiscardableDialogs");
         Sets->setValue(Title, DiscardableRole);
+        Sets->endGroup();
     }
 
     return tmpRet;
