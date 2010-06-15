@@ -1,4 +1,5 @@
 v0.17
+    * CHG : Allow to pan with middle mouse button
     * ADD : Toolbar editor (create/modify tollbars)
     * ADD : Allow to move complete relations
     * FIX : WMS'es in EPSG:4326 not showing
