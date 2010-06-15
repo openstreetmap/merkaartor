@@ -49,6 +49,7 @@ class WayRemoveNodeCommand : public Command
 		Layer* theLayer;
 		Layer* oldLayer;
 		int Idx;
+		bool wasClosed;
 		Way* theRoad;
 		Node* theNode;
 };

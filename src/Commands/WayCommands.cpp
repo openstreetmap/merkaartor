@@ -114,12 +114,12 @@ WayAddNodeCommand * WayAddNodeCommand::fromXML(Document * d, QDomElement e)
 /* ROADREMOVETRACKPOINTCOMMAND */
 
 WayRemoveNodeCommand::WayRemoveNodeCommand(Way* R)
-: Command(R), theLayer(0), oldLayer(0), Idx(0), theRoad(R), theNode(0)
+: Command(R), theLayer(0), oldLayer(0), Idx(0), wasClosed(R ? R->isClosed() : false), theRoad(R), theNode(0)
 {
 }
 
 WayRemoveNodeCommand::WayRemoveNodeCommand(Way* R, Node* W, Layer* aLayer)
-: Command(R), theLayer(aLayer), oldLayer(0), Idx(R->find(W)), theRoad(R), theNode(W)
+: Command(R), theLayer(aLayer), oldLayer(0), Idx(R->find(W)), wasClosed(R ? R->isClosed() : false), theRoad(R), theNode(W)
 {
     if (!theLayer)
         theLayer = theRoad->layer();
@@ -127,7 +127,7 @@ WayRemoveNodeCommand::WayRemoveNodeCommand(Way* R, Node* W, Layer* aLayer)
 }
 
 WayRemoveNodeCommand::WayRemoveNodeCommand(Way* R, int anIdx, Layer* aLayer)
-: Command(R), theLayer(aLayer), oldLayer(0), Idx(anIdx), theRoad(R), theNode(R->getNode(anIdx))
+: Command(R), theLayer(aLayer), oldLayer(0), Idx(anIdx), wasClosed(R ? R->isClosed() : false), theRoad(R), theNode(R->getNode(anIdx))
 {
     if (!theLayer)
         theLayer = theRoad->layer();
@@ -143,14 +143,11 @@ WayRemoveNodeCommand::~WayRemoveNodeCommand(void)
 void WayRemoveNodeCommand::undo()
 {
     Command::undo();
-    if (theRoad->isClosed()) {
-        theRoad->add(theNode,Idx);
-        if (Idx == 0) {
-            theRoad->remove(theRoad->size()-1);
-            theRoad->add(theNode);
-        }
-    } else
-        theRoad->add(theNode,Idx);
+    theRoad->add(theNode,Idx);
+    if (wasClosed && Idx == 0) {
+        theRoad->remove(theRoad->size()-1);
+        theRoad->add(theNode);
+    }
 
     if (theLayer && oldLayer && (theLayer != oldLayer)) {
         theLayer->remove(theRoad);
@@ -162,14 +159,11 @@ void WayRemoveNodeCommand::undo()
 void WayRemoveNodeCommand::redo()
 {
     oldLayer = theRoad->layer();
-    if (theRoad->isClosed()) {
-        theRoad->remove(Idx); // cannot do outside of "if" because the way wouldn't be closed anymore
-        if (Idx == 0 && theRoad->size() > 2) {
-            theRoad->remove(theRoad->size()-1);
-            theRoad->add(theRoad->getNode(0));
-        }
-    } else
-        theRoad->remove(Idx);
+    theRoad->remove(Idx);
+    if (wasClosed && Idx == 0) {
+        theRoad->remove(theRoad->size()-1);
+        theRoad->add(theRoad->getNode(0));
+    }
 
     if (theLayer && oldLayer && (theLayer != oldLayer)) {
         oldLayer->remove(theRoad);
@@ -204,6 +198,8 @@ bool WayRemoveNodeCommand::toXML(QDomElement& xParent) const
     e.setAttribute("road", theRoad->xmlId());
     e.setAttribute("trackpoint", theNode->xmlId());
     e.setAttribute("index", QString::number(Idx));
+    if (wasClosed)
+        e.setAttribute("closed", "true");
     if (theLayer)
         e.setAttribute("layer", theLayer->id());
     if (oldLayer)
@@ -226,6 +222,7 @@ WayRemoveNodeCommand * WayRemoveNodeCommand::fromXML(Document * d, QDomElement e
         a->oldLayer = d->getLayer(e.attribute("oldlayer"));
     else
         a->oldLayer = NULL;
+    a->wasClosed = (e.hasAttribute("closed") && e.attribute("closed") == "true");
     a->theRoad = Feature::getWayOrCreatePlaceHolder(d, a->theLayer, e.attribute("road"));
     a->theNode = Feature::getTrackPointOrCreatePlaceHolder(d, a->theLayer, e.attribute("trackpoint"));
     a->Idx = e.attribute("index").toUInt();
