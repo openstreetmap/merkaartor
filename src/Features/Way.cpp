@@ -256,11 +256,11 @@ void Way::remove(int idx)
     if (layer())
         layer()->indexRemove(BBox, this);
 
-    if (p->Nodes[idx]) {
-        Node* Pt = p->Nodes[idx];
-        Pt->unsetParentFeature(this);
-    }
+    Node* Pt = p->Nodes[idx];
+    // only remove as parent if the node is only included once
     p->Nodes.erase(p->Nodes.begin()+idx);
+    if (Pt && find(Pt) == p->Nodes.size())
+        Pt->unsetParentFeature(this);
     p->BBoxUpToDate = false;
     p->wasPathComplete = false;
     MetaUpToDate = false;
