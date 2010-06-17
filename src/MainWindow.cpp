@@ -123,6 +123,7 @@ class MainWindowPrivate
         QActionGroup* filterActgrp;
         QTcpServer* theListeningServer;
         PropertiesDock* theProperties;
+        RendererOptions renderOptions;
 };
 
 MainWindow::MainWindow(QWidget *parent)
@@ -155,7 +156,7 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     ui->setupUi(this);
-    M_STYLE->loadPainters(MerkaartorPreferences::instance()->getDefaultStyle());
+    M_STYLE->loadPainters(M_PREFS->getDefaultStyle());
 
     blockSignals(true);
 
@@ -224,7 +225,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(theLayers, SIGNAL(layersCleared()), this, SIGNAL(content_changed()));
     connect(theLayers, SIGNAL(layersClosed()), this, SIGNAL(content_changed()));
 
-    connect (MerkaartorPreferences::instance(), SIGNAL(bookmarkChanged()), this, SLOT(updateBookmarksMenu()));
+    connect (M_PREFS, SIGNAL(bookmarkChanged()), this, SLOT(updateBookmarksMenu()));
     updateBookmarksMenu();
     connect (ui->menuBookmarks, SIGNAL(triggered(QAction *)), this, SLOT(bookmarkTriggered(QAction *)));
 
@@ -237,7 +238,7 @@ MainWindow::MainWindow(QWidget *parent)
     updateStyleMenu();
     connect (ui->menuStyles, SIGNAL(triggered(QAction *)), this, SLOT(styleTriggered(QAction *)));
 
-    ui->viewDownloadedAction->setChecked(MerkaartorPreferences::instance()->getDownloadedVisible());
+    ui->viewDownloadedAction->setChecked(M_PREFS->getDownloadedVisible());
     ui->viewScaleAction->setChecked(M_PREFS->getScaleVisible());
     ui->viewPhotosAction->setChecked(M_PREFS->getPhotosVisible());
     ui->viewShowLatLonGridAction->setChecked(M_PREFS->getLatLonGridVisible());
@@ -251,6 +252,20 @@ MainWindow::MainWindow(QWidget *parent)
     ui->viewVirtualNodesAction->setChecked(M_PREFS->getVirtualNodesVisible());
     ui->viewLockZoomAction->setChecked(M_PREFS->getZoomBoris());
 
+    if (M_PREFS->getBackgroundVisible()) p->renderOptions.options |= RendererOptions::BackgroundVisible; else p->renderOptions.options &= ~RendererOptions::BackgroundVisible;
+    if (M_PREFS->getForegroundVisible()) p->renderOptions.options |= RendererOptions::ForegroundVisible; else p->renderOptions.options &= ~RendererOptions::ForegroundVisible;
+    if (M_PREFS->getTouchupVisible()) p->renderOptions.options |= RendererOptions::TouchupVisible; else p->renderOptions.options &= ~RendererOptions::TouchupVisible;
+    if (M_PREFS->getNamesVisible()) p->renderOptions.options |= RendererOptions::NamesVisible; else p->renderOptions.options &= ~RendererOptions::NamesVisible;
+    if (M_PREFS->getPhotosVisible()) p->renderOptions.options |= RendererOptions::PhotosVisible; else p->renderOptions.options &= ~RendererOptions::PhotosVisible;
+    if (M_PREFS->getVirtualNodesVisible()) p->renderOptions.options |= RendererOptions::VirtualNodesVisible; else p->renderOptions.options &= ~RendererOptions::VirtualNodesVisible;
+    if (M_PREFS->getTrackPointsVisible()) p->renderOptions.options |= RendererOptions::NodesVisible; else p->renderOptions.options &= ~RendererOptions::NodesVisible;
+    if (M_PREFS->getTrackSegmentsVisible()) p->renderOptions.options |= RendererOptions::TrackSegmentVisible; else p->renderOptions.options &= ~RendererOptions::TrackSegmentVisible;
+    if (M_PREFS->getRelationsVisible()) p->renderOptions.options |= RendererOptions::RelationsVisible; else p->renderOptions.options &= ~RendererOptions::RelationsVisible;
+    if (M_PREFS->getDownloadedVisible()) p->renderOptions.options |= RendererOptions::DownloadedVisible; else p->renderOptions.options &= ~RendererOptions::DownloadedVisible;
+    if (M_PREFS->getScaleVisible()) p->renderOptions.options |= RendererOptions::ScaleVisible; else p->renderOptions.options &= ~RendererOptions::ScaleVisible;
+    if (M_PREFS->getLatLonGridVisible()) p->renderOptions.options |= RendererOptions::LatLonGridVisible; else p->renderOptions.options &= ~RendererOptions::LatLonGridVisible;
+    if (M_PREFS->getZoomBoris()) p->renderOptions.options |= RendererOptions::LockZoom; else p->renderOptions.options &= ~RendererOptions::LockZoom;
+
     updateMenu();
 
     QActionGroup* actgrpArrows = new QActionGroup(this);
@@ -258,16 +273,21 @@ MainWindow::MainWindow(QWidget *parent)
     actgrpArrows->addAction(ui->viewArrowsOnewayAction);
     actgrpArrows->addAction(ui->viewArrowsAlwaysAction);
     switch (M_PREFS->getDirectionalArrowsVisible()) {
-        case DirectionalArrows_Never:
+        case RendererOptions::ArrowsNever:
             ui->viewArrowsNeverAction->setChecked(true);
+            p->renderOptions.arrowOptions = RendererOptions::ArrowsNever;
             break;
-        case DirectionalArrows_Oneway:
+        case RendererOptions::ArrowsOneway:
             ui->viewArrowsOnewayAction->setChecked(true);
+            p->renderOptions.arrowOptions = RendererOptions::ArrowsOneway;
             break;
-        case DirectionalArrows_Always:
+        case RendererOptions::ArrowsAlways:
             ui->viewArrowsAlwaysAction->setChecked(true);
+            p->renderOptions.arrowOptions = RendererOptions::ArrowsAlways;
             break;
     }
+
+    theView->setRenderOptions(p->renderOptions);
 
     ui->gpsCenterAction->setChecked(M_PREFS->getGpsMapCenter());
 
@@ -410,7 +430,7 @@ MainWindow::~MainWindow(void)
 
     if (MasPaintStyle::instance())
         delete MasPaintStyle::instance();
-    MerkaartorPreferences::instance()->setWorkingDir(QDir::currentPath());
+    M_PREFS->setWorkingDir(QDir::currentPath());
     delete theDocument;
     delete theView;
     delete p->theProperties;
@@ -422,7 +442,7 @@ MainWindow::~MainWindow(void)
 
     delete p;
 
-    delete MerkaartorPreferences::instance();
+    delete M_PREFS;
 }
 
 void MainWindow::incomingLocalConnection()
@@ -587,6 +607,7 @@ void MainWindow::adjustLayers(bool adjustViewport)
 
 void MainWindow::invalidateView(bool UpdateDock)
 {
+    theView->setRenderOptions(p->renderOptions);
     theView->invalidate(true, true);
     //theLayers->updateContent();
     if (UpdateDock)
@@ -913,7 +934,7 @@ static void changeCurrentDirToFile(const QString& s)
 {
     QFileInfo info(s);
     QDir::setCurrent(info.absolutePath());
-    MerkaartorPreferences::instance()->setWorkingDir(QDir::currentPath());
+    M_PREFS->setWorkingDir(QDir::currentPath());
 }
 
 #ifndef GEOIMAGE
@@ -1039,7 +1060,7 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
                 for (int i=1; i<theTracklayers.size(); i++) {
                     if (theTracklayers[i]->name().isEmpty())
                         theTracklayers[i]->setName(QString(baseFileName + " - " + tr("Track %1").arg(i)));
-                    if (importOK && MerkaartorPreferences::instance()->getAutoExtractTracks()) {
+                    if (importOK && M_PREFS->getAutoExtractTracks()) {
                         theTracklayers[i]->extractLayer();
                     }
                 }
@@ -1067,7 +1088,7 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
             newLayer->blockIndexing(true);
             mapDocument->add(newLayer);
             importOK = importNGT(this, baseFileName, mapDocument, newLayer);
-            if (importOK && MerkaartorPreferences::instance()->getAutoExtractTracks()) {
+            if (importOK && M_PREFS->getAutoExtractTracks()) {
                 ((TrackLayer *)newLayer)->extractLayer();
             }
         }
@@ -1076,7 +1097,7 @@ bool MainWindow::importFiles(Document * mapDocument, const QStringList & fileNam
             newLayer->blockIndexing(true);
             mapDocument->add(newLayer);
             importOK = mapDocument->importNMEA(baseFileName, (TrackLayer *)newLayer);
-            if (importOK && MerkaartorPreferences::instance()->getAutoExtractTracks()) {
+            if (importOK && M_PREFS->getAutoExtractTracks()) {
                 ((TrackLayer *)newLayer)->extractLayer();
             }
         }
@@ -1382,6 +1403,12 @@ void MainWindow::on_fileWorkOfflineAction_triggered()
     updateMenu();
 }
 
+void MainWindow::on_filePrintAction_triggered()
+{
+    NativeRenderDialog osmR(theDocument, theView->viewport(), this);
+    osmR.exec();
+}
+
 void MainWindow::on_helpAboutAction_triggered()
 {
     QDialog dlg(this);
@@ -1435,6 +1462,7 @@ void MainWindow::on_viewZoomWindowAction_triggered()
 void MainWindow::on_viewLockZoomAction_triggered()
 {
     M_PREFS->setZoomBoris(!M_PREFS->getZoomBoris());
+    if (M_PREFS->getZoomBoris()) p->renderOptions.options |= RendererOptions::LockZoom; else p->renderOptions.options &= ~RendererOptions::LockZoom;
     ui->viewLockZoomAction->setChecked(M_PREFS->getZoomBoris());
     ImageMapLayer* l = NULL;
     for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
@@ -1461,6 +1489,7 @@ void MainWindow::on_viewDownloadedAction_triggered()
 void MainWindow::on_viewScaleAction_triggered()
 {
     M_PREFS->setScaleVisible(!M_PREFS->getScaleVisible());
+    if (M_PREFS->getScaleVisible()) p->renderOptions.options |= RendererOptions::ScaleVisible; else p->renderOptions.options &= ~RendererOptions::ScaleVisible;
     ui->viewScaleAction->setChecked(M_PREFS->getScaleVisible());
     invalidateView();
 }
@@ -1468,6 +1497,7 @@ void MainWindow::on_viewScaleAction_triggered()
 void MainWindow::on_viewPhotosAction_triggered()
 {
     M_PREFS->setPhotosVisible(!M_PREFS->getPhotosVisible());
+    if (M_PREFS->getPhotosVisible()) p->renderOptions.options |= RendererOptions::PhotosVisible; else p->renderOptions.options &= ~RendererOptions::PhotosVisible;
     ui->viewPhotosAction->setChecked(M_PREFS->getPhotosVisible());
     invalidateView();
 }
@@ -1475,6 +1505,7 @@ void MainWindow::on_viewPhotosAction_triggered()
 void MainWindow::on_viewShowLatLonGridAction_triggered()
 {
     M_PREFS->setLatLonGridVisible(!M_PREFS->getLatLonGridVisible());
+    if (M_PREFS->getLatLonGridVisible()) p->renderOptions.options |= RendererOptions::LatLonGridVisible; else p->renderOptions.options &= ~RendererOptions::LatLonGridVisible;
     ui->viewShowLatLonGridAction->setChecked(M_PREFS->getLatLonGridVisible());
     invalidateView();
 }
@@ -1482,6 +1513,7 @@ void MainWindow::on_viewShowLatLonGridAction_triggered()
 void MainWindow::on_viewStyleBackgroundAction_triggered()
 {
     M_PREFS->setBackgroundVisible(!M_PREFS->getBackgroundVisible());
+    if (M_PREFS->getBackgroundVisible()) p->renderOptions.options |= RendererOptions::BackgroundVisible; else p->renderOptions.options &= ~RendererOptions::BackgroundVisible;
     ui->viewStyleBackgroundAction->setChecked(M_PREFS->getBackgroundVisible());
     invalidateView();
 }
@@ -1489,6 +1521,7 @@ void MainWindow::on_viewStyleBackgroundAction_triggered()
 void MainWindow::on_viewStyleForegroundAction_triggered()
 {
     M_PREFS->setForegroundVisible(!M_PREFS->getForegroundVisible());
+    if (M_PREFS->getForegroundVisible()) p->renderOptions.options |= RendererOptions::ForegroundVisible; else p->renderOptions.options &= ~RendererOptions::ForegroundVisible;
     ui->viewStyleForegroundAction->setChecked(M_PREFS->getForegroundVisible());
     invalidateView();
 }
@@ -1496,6 +1529,7 @@ void MainWindow::on_viewStyleForegroundAction_triggered()
 void MainWindow::on_viewStyleTouchupAction_triggered()
 {
     M_PREFS->setTouchupVisible(!M_PREFS->getTouchupVisible());
+    if (M_PREFS->getTouchupVisible()) p->renderOptions.options |= RendererOptions::TouchupVisible; else p->renderOptions.options &= ~RendererOptions::TouchupVisible;
     ui->viewStyleTouchupAction->setChecked(M_PREFS->getTouchupVisible());
     invalidateView();
 }
@@ -1503,6 +1537,7 @@ void MainWindow::on_viewStyleTouchupAction_triggered()
 void MainWindow::on_viewNamesAction_triggered()
 {
     M_PREFS->setNamesVisible(!M_PREFS->getNamesVisible());
+    if (M_PREFS->getNamesVisible()) p->renderOptions.options |= RendererOptions::NamesVisible; else p->renderOptions.options &= ~RendererOptions::NamesVisible;
     ui->viewNamesAction->setChecked(M_PREFS->getNamesVisible());
     invalidateView();
 }
@@ -1510,6 +1545,7 @@ void MainWindow::on_viewNamesAction_triggered()
 void MainWindow::on_viewVirtualNodesAction_triggered()
 {
     M_PREFS->setVirtualNodesVisible(!M_PREFS->getVirtualNodesVisible());
+    if (M_PREFS->getVirtualNodesVisible()) p->renderOptions.options |= RendererOptions::VirtualNodesVisible; else p->renderOptions.options &= ~RendererOptions::VirtualNodesVisible;
     ui->viewVirtualNodesAction->setChecked(M_PREFS->getVirtualNodesVisible());
     invalidateView();
 }
@@ -1517,6 +1553,7 @@ void MainWindow::on_viewVirtualNodesAction_triggered()
 void MainWindow::on_viewTrackPointsAction_triggered()
 {
     M_PREFS->setTrackPointsVisible(!M_PREFS->getTrackPointsVisible());
+    if (M_PREFS->getTrackPointsVisible()) p->renderOptions.options |= RendererOptions::NodesVisible; else p->renderOptions.options &= ~RendererOptions::NodesVisible;
     ui->viewTrackPointsAction->setChecked(M_PREFS->getTrackPointsVisible());
     invalidateView();
 }
@@ -1524,6 +1561,7 @@ void MainWindow::on_viewTrackPointsAction_triggered()
 void MainWindow::on_viewTrackSegmentsAction_triggered()
 {
     M_PREFS->setTrackSegmentsVisible(!M_PREFS->getTrackSegmentsVisible());
+    if (M_PREFS->getTrackSegmentsVisible()) p->renderOptions.options |= RendererOptions::TrackSegmentVisible; else p->renderOptions.options &= ~RendererOptions::TrackSegmentVisible;
     ui->viewTrackSegmentsAction->setChecked(M_PREFS->getTrackSegmentsVisible());
     invalidateView();
 }
@@ -1531,6 +1569,7 @@ void MainWindow::on_viewTrackSegmentsAction_triggered()
 void MainWindow::on_viewRelationsAction_triggered()
 {
     M_PREFS->setRelationsVisible(!M_PREFS->getRelationsVisible());
+    if (M_PREFS->getRelationsVisible()) p->renderOptions.options |= RendererOptions::RelationsVisible; else p->renderOptions.options &= ~RendererOptions::RelationsVisible;
     ui->viewRelationsAction->setChecked(M_PREFS->getRelationsVisible());
     invalidateView();
 }
@@ -1550,7 +1589,8 @@ void MainWindow::on_viewGotoAction_triggered()
 void MainWindow::on_viewArrowsNeverAction_triggered(bool checked)
 {
     if (checked) {
-        M_PREFS->setDirectionalArrowsVisible(DirectionalArrows_Never);
+        M_PREFS->setDirectionalArrowsVisible(RendererOptions::ArrowsNever);
+        p->renderOptions.arrowOptions = RendererOptions::ArrowsNever;
         invalidateView();
     }
 }
@@ -1558,7 +1598,8 @@ void MainWindow::on_viewArrowsNeverAction_triggered(bool checked)
 void MainWindow::on_viewArrowsOnewayAction_triggered(bool checked)
 {
     if (checked) {
-        M_PREFS->setDirectionalArrowsVisible(DirectionalArrows_Oneway);
+        M_PREFS->setDirectionalArrowsVisible(RendererOptions::ArrowsOneway);
+        p->renderOptions.arrowOptions = RendererOptions::ArrowsOneway;
         invalidateView();
     }
 }
@@ -1566,7 +1607,8 @@ void MainWindow::on_viewArrowsOnewayAction_triggered(bool checked)
 void MainWindow::on_viewArrowsAlwaysAction_triggered(bool checked)
 {
     if (checked) {
-        M_PREFS->setDirectionalArrowsVisible(DirectionalArrows_Always);
+        M_PREFS->setDirectionalArrowsVisible(RendererOptions::ArrowsAlways);
+        p->renderOptions.arrowOptions = RendererOptions::ArrowsAlways;
         invalidateView();
     }
 }
@@ -2227,7 +2269,7 @@ void MainWindow::preferencesChanged(void)
 void MainWindow::on_fileSaveAsAction_triggered()
 {
     fileName = QFileDialog::getSaveFileName(this,
-        tr("Save Merkaartor document"), QString("%1/%2.mdc").arg(MerkaartorPreferences::instance()->getWorkingDir()).arg(tr("untitled")), tr("Merkaartor documents Files (*.mdc)"));
+        tr("Save Merkaartor document"), QString("%1/%2.mdc").arg(M_PREFS->getWorkingDir()).arg(tr("untitled")), tr("Merkaartor documents Files (*.mdc)"));
 
     if (fileName != "") {
         saveDocument();
@@ -2372,7 +2414,7 @@ void MainWindow::on_exportOSMAction_triggered()
         return;
 
     QString fileName = QFileDialog::getSaveFileName(this,
-        tr("Export OSM"), MerkaartorPreferences::instance()->getWorkingDir() + "/untitled.osm", tr("OSM Files (*.osm)"));
+        tr("Export OSM"), M_PREFS->getWorkingDir() + "/untitled.osm", tr("OSM Files (*.osm)"));
 
     if (fileName != "") {
         createProgressDialog();
@@ -2395,7 +2437,7 @@ void MainWindow::on_exportOSMBinAction_triggered()
         return;
 
     QString fileName = QFileDialog::getSaveFileName(this,
-        tr("Export Binary OSM"), MerkaartorPreferences::instance()->getWorkingDir() + "/untitled.osb", tr("OSM Binary Files (*.osb)"));
+        tr("Export Binary OSM"), M_PREFS->getWorkingDir() + "/untitled.osb", tr("OSM Binary Files (*.osb)"));
 
     if (fileName != "") {
 #ifndef Q_OS_SYMBIAN
@@ -2416,7 +2458,7 @@ void MainWindow::on_exportOSMBinAction_triggered()
 void MainWindow::on_exportOSCAction_triggered()
 {
     QString fileName = QFileDialog::getSaveFileName(this,
-        tr("Export osmChange"), MerkaartorPreferences::instance()->getWorkingDir() + "/untitled.osc", tr("osmChange Files (*.osc)"));
+        tr("Export osmChange"), M_PREFS->getWorkingDir() + "/untitled.osc", tr("osmChange Files (*.osc)"));
 
     if (fileName != "") {
 #ifndef Q_OS_SYMBIAN
@@ -2442,7 +2484,7 @@ void MainWindow::on_exportGPXAction_triggered()
         return;
 
     QString fileName = QFileDialog::getSaveFileName(this,
-        tr("Export GPX"), MerkaartorPreferences::instance()->getWorkingDir() + "/untitled.gpx", tr("GPX Files (*.gpx)"));
+        tr("Export GPX"), M_PREFS->getWorkingDir() + "/untitled.gpx", tr("GPX Files (*.gpx)"));
 
     if (fileName != "") {
 #ifndef Q_OS_SYMBIAN
@@ -2467,7 +2509,7 @@ void MainWindow::on_exportKMLAction_triggered()
         return;
 
     QString fileName = QFileDialog::getSaveFileName(this,
-        tr("Export KML"), MerkaartorPreferences::instance()->getWorkingDir() + "/untitled.kml", tr("KML Files (*.kml)"));
+        tr("Export KML"), M_PREFS->getWorkingDir() + "/untitled.kml", tr("KML Files (*.kml)"));
 
     if (fileName != "") {
 #ifndef Q_OS_SYMBIAN
@@ -2490,7 +2532,7 @@ bool MainWindow::selectExportedFeatures(QList<Feature*>& theFeatures)
     QDialog dlg(this);
     Ui::ExportDialog dlgExport;
     dlgExport.setupUi(&dlg);
-    switch(MerkaartorPreferences::instance()->getExportType()) {
+    switch(M_PREFS->getExportType()) {
         case Export_All:
             dlgExport.rbAll->setChecked(true);
             break;
@@ -2507,7 +2549,7 @@ bool MainWindow::selectExportedFeatures(QList<Feature*>& theFeatures)
     if (dlg.exec()) {
         if (dlgExport.rbAll->isChecked()) {
             theFeatures = document()->getFeatures();
-            MerkaartorPreferences::instance()->setExportType(Export_All);
+            M_PREFS->setExportType(Export_All);
             return true;
         }
         if (dlgExport.rbViewport->isChecked()) {
@@ -2549,12 +2591,12 @@ bool MainWindow::selectExportedFeatures(QList<Feature*>& theFeatures)
                             }
                         }
             }
-            MerkaartorPreferences::instance()->setExportType(Export_Viewport);
+            M_PREFS->setExportType(Export_Viewport);
             return true;
         }
         if (dlgExport.rbSelected->isChecked()) {
             theFeatures = p->theProperties->selection();
-            MerkaartorPreferences::instance()->setExportType(Export_Selected);
+            M_PREFS->setExportType(Export_Selected);
             return true;
         }
     }
@@ -2593,16 +2635,10 @@ void MainWindow::closeEvent(QCloseEvent * event)
         return;
     }
 
-    MerkaartorPreferences::instance()->saveMainWindowState( this );
-    MerkaartorPreferences::instance()->setInitialPosition(theView);
+    M_PREFS->saveMainWindowState( this );
+    M_PREFS->setInitialPosition(theView);
 //4.3237,50.8753,4.3378,50.8838
     QMainWindow::closeEvent(event);
-}
-
-void MainWindow::on_renderNativeAction_triggered()
-{
-    NativeRenderDialog osmR(theDocument, theView->viewport(), this);
-    osmR.exec();
 }
 
 void MainWindow::updateBookmarksMenu()

@@ -15,6 +15,8 @@
 #include <utility>
 #include <QList>
 
+#define TEST_RFLAGS(x) theView->renderOptions().options.testFlag(x)
+
 class RelationMemberModel : public QAbstractTableModel
 {
     public:
@@ -139,7 +141,7 @@ CoordBox Relation::boundingBox() const
 
 void Relation::draw(QPainter& P, MapView* theView)
 {
-    if (!M_PREFS->getRelationsVisible())
+    if (!TEST_RFLAGS(RendererOptions::RelationsVisible))
         return;
 
     if (notEverythingDownloaded())
@@ -226,7 +228,7 @@ void Relation::drawHighlight(QPainter& P, MapView* theView, bool solid)
 double Relation::pixelDistance(const QPointF& Target, double ClearEndDistance, bool, MapView* theView) const
 {
     double Best = 1000000;
-    if (!M_PREFS->getRelationsVisible() && !M_PREFS->getRelationsSelectableWhenHidden())
+    if (!TEST_RFLAGS(RendererOptions::RelationsVisible) && !M_PREFS->getRelationsSelectableWhenHidden())
         return Best;
 
     //for (int i=0; i<p->Members.size(); ++i)

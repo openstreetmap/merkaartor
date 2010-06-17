@@ -18,6 +18,8 @@
 #include "ImageMapLayer.h"
 #include "Utils/LineF.h"
 
+#define TEST_RFLAGS(x) theOptions.options.testFlag(x)
+
 void BackgroundStyleLayer::draw(Way* R)
 {
     const FeaturePainter* paintsel = R->getEditPainter(r->theView->pixelPerM());
@@ -84,10 +86,10 @@ void TouchupStyleLayer::draw(Way* R)
     if (paintsel)
         paintsel->drawTouchup(R,r->thePainter,r->theView);
     else {
-        if ( M_PREFS->getDirectionalArrowsVisible() != DirectionalArrows_Never )
+        if ( r->theOptions.arrowOptions != RendererOptions::ArrowsNever )
         {
             Feature::TrafficDirectionType TT = trafficDirection(R);
-            if ( (TT != Feature::UnknownDirection) || (M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Always) )
+            if ( (TT != Feature::UnknownDirection) || (r->theOptions.arrowOptions == RendererOptions::ArrowsAlways) )
             {
                 double theWidth = r->theView->pixelPerM()*R->widthOf()-4;
                 if (theWidth > 8)
@@ -121,7 +123,7 @@ void TouchupStyleLayer::draw(Way* R)
                             }
                             else
                             {
-                                if ( M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Always )
+                                if ( r->theOptions.arrowOptions == RendererOptions::ArrowsAlways )
                                 {
                                     r->thePainter->setPen(QPen(QColor(255,0,0), 2));
                                     r->thePainter->drawLine(H-T,H-T+V1);
@@ -194,18 +196,20 @@ MapRenderer::MapRenderer()
 void MapRenderer::render(
         QPainter* P,
         QMap<RenderPriority, QSet <Feature*> > theFeatures,
+        const RendererOptions& options,
         MapView* aView
 )
 {
     theView = aView;
+    theOptions = options;
 
     QMap<RenderPriority, QSet<Feature*> >::const_iterator itm;
     QSet<Feature*>::const_iterator it;
 
-    bool bgLayerVisible = M_PREFS->getBackgroundVisible();
-    bool fgLayerVisible = M_PREFS->getForegroundVisible();
-    bool tchpLayerVisible = M_PREFS->getTouchupVisible();
-    bool lblLayerVisible = M_PREFS->getNamesVisible();
+    bool bgLayerVisible = TEST_RFLAGS(RendererOptions::BackgroundVisible);
+    bool fgLayerVisible = TEST_RFLAGS(RendererOptions::ForegroundVisible);
+    bool tchpLayerVisible = TEST_RFLAGS(RendererOptions::TouchupVisible);
+    bool lblLayerVisible = TEST_RFLAGS(RendererOptions::NamesVisible);
 
     Way * R = NULL;
     Node * Pt = NULL;

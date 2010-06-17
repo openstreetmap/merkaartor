@@ -77,6 +77,7 @@ public slots:
     virtual void on_fileSaveAsAction_triggered();
     virtual void on_fileSaveAction_triggered();
     virtual void on_fileWorkOfflineAction_triggered();
+    virtual void on_filePrintAction_triggered();
 
     virtual void on_helpAboutAction_triggered();
     virtual void on_viewZoomAllAction_triggered();
@@ -133,7 +134,6 @@ public slots:
     virtual void on_exportOSCAction_triggered();
     virtual void on_exportGPXAction_triggered();
     virtual void on_exportKMLAction_triggered();
-    virtual void on_renderNativeAction_triggered();
     virtual void on_editSelectAction_triggered();
     virtual void on_bookmarkAddAction_triggered();
     virtual void on_bookmarkRemoveAction_triggered();

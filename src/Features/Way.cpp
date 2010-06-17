@@ -26,6 +26,7 @@
 #include <ggl/algorithms/intersects.hpp>
 #endif
 
+#define TEST_RFLAGS(x) theView->renderOptions().options.testFlag(x)
 
 class WayPrivate
 {
@@ -435,7 +436,7 @@ void Way::draw(QPainter& P, MapView* theView)
 {
     double theWidth = theView->nodeWidth();
     bool Draw = (theWidth >= 1);
-    if (!Draw || !M_PREFS->getVirtualNodesVisible() || !M_PREFS->getTrackPointsVisible() || isReadonly())
+    if (!Draw || !TEST_RFLAGS(RendererOptions::VirtualNodesVisible) || !TEST_RFLAGS(RendererOptions::NodesVisible) || isReadonly())
         return;
 
     theWidth /= 2;
@@ -460,8 +461,8 @@ void Way::drawHover(QPainter& thePainter, MapView* theView, bool solid)
     F.setBold(true);
     F.setWeight(QFont::Black);
     thePainter.setFont(F);
-    QPen TP(MerkaartorPreferences::instance()->getHoverColor());
-    TP.setWidth(MerkaartorPreferences::instance()->getHoverWidth());
+    QPen TP(M_PREFS->getHoverColor());
+    TP.setWidth(M_PREFS->getHoverWidth());
     if (!solid) {
         TP.setDashPattern(M_PREFS->getParentDashes());
     }
@@ -471,7 +472,7 @@ void Way::drawHover(QPainter& thePainter, MapView* theView, bool solid)
     //buildPath(theProjection, clipRect);
     thePainter.drawPath(theView->transform().map(p->thePath));
     if (solid) {
-        TP.setWidth(MerkaartorPreferences::instance()->getHoverWidth()*3);
+        TP.setWidth(M_PREFS->getHoverWidth()*3);
         TP.setCapStyle(Qt::RoundCap);
         thePainter.setPen(TP);
         QPolygonF Pl;
@@ -497,8 +498,8 @@ void Way::drawHighlight(QPainter& thePainter, MapView* theView, bool solid)
     F.setBold(true);
     F.setWeight(QFont::Black);
     thePainter.setFont(F);
-    QPen TP(MerkaartorPreferences::instance()->getHighlightColor());
-    TP.setWidth(MerkaartorPreferences::instance()->getHighlightWidth());
+    QPen TP(M_PREFS->getHighlightColor());
+    TP.setWidth(M_PREFS->getHighlightWidth());
     if (!solid) {
         TP.setDashPattern(M_PREFS->getParentDashes());
     }
@@ -508,7 +509,7 @@ void Way::drawHighlight(QPainter& thePainter, MapView* theView, bool solid)
     //buildPath(theProjection, clipRect);
     thePainter.drawPath(theView->transform().map(p->thePath));
     if (solid) {
-        TP.setWidth(MerkaartorPreferences::instance()->getHighlightWidth()*3);
+        TP.setWidth(M_PREFS->getHighlightWidth()*3);
         TP.setCapStyle(Qt::RoundCap);
         thePainter.setPen(TP);
         QPolygonF Pl;
@@ -534,8 +535,8 @@ void Way::drawFocus(QPainter& thePainter, MapView* theView, bool solid)
     F.setBold(true);
     F.setWeight(QFont::Black);
     thePainter.setFont(F);
-    QPen TP(MerkaartorPreferences::instance()->getFocusColor());
-    TP.setWidth(MerkaartorPreferences::instance()->getFocusWidth());
+    QPen TP(M_PREFS->getFocusColor());
+    TP.setWidth(M_PREFS->getFocusWidth());
     if (!solid) {
         TP.setDashPattern(M_PREFS->getParentDashes());
     }
@@ -545,7 +546,7 @@ void Way::drawFocus(QPainter& thePainter, MapView* theView, bool solid)
     //buildPath(theProjection, clipRect);
     thePainter.drawPath(theView->transform().map(p->thePath));
     if (solid) {
-        TP.setWidth(MerkaartorPreferences::instance()->getFocusWidth()*3);
+        TP.setWidth(M_PREFS->getFocusWidth()*3);
         TP.setCapStyle(Qt::RoundCap);
         thePainter.setPen(TP);
         QPolygonF Pl;

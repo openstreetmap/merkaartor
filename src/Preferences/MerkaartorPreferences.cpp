@@ -1067,18 +1067,18 @@ bool MerkaartorPreferences::getAutoExtractTracks() const
     }
 
 bool mb_DirectionalArrowsVisible = false;
-DirectionalArrowsShow MerkaartorPreferences::getDirectionalArrowsVisible()
+RendererOptions::DirectionalArrowsShowOptions MerkaartorPreferences::getDirectionalArrowsVisible()
 {
     if (!::mb_DirectionalArrowsVisible) {
         ::mb_DirectionalArrowsVisible = true;
-        m_DirectionalArrowsVisible = (DirectionalArrowsShow)Sets->value("visual/DirectionalArrowsVisible", DirectionalArrows_Oneway).toInt();
+        m_DirectionalArrowsVisible = (RendererOptions::DirectionalArrowsShowOptions)Sets->value("visual/DirectionalArrowsVisible", RendererOptions::ArrowsOneway).toInt();
     }
     return m_DirectionalArrowsVisible;
 }
-void MerkaartorPreferences::setDirectionalArrowsVisible(DirectionalArrowsShow theValue)
+void MerkaartorPreferences::setDirectionalArrowsVisible(RendererOptions::DirectionalArrowsShowOptions theValue)
 {
     m_DirectionalArrowsVisible = theValue;
-    Sets->setValue("visual/DirectionalArrowsVisible", theValue);
+    Sets->setValue("visual/DirectionalArrowsVisible", (int)theValue);
 }
 
 /* Export Type */
@@ -1202,7 +1202,6 @@ M_PARAM_IMPLEMENT_INT(AreaOpacity, visual, 100)
 M_PARAM_IMPLEMENT_BOOL(UseShapefileForBackground, visual, false)
 M_PARAM_IMPLEMENT_BOOL(DrawingHack, visual, true)
 M_PARAM_IMPLEMENT_BOOL(SimpleGpxTrack, visual, false)
-M_PARAM_IMPLEMENT_BOOL(VirtualNodesVisible, visual, true)
 M_PARAM_IMPLEMENT_BOOL(UseVirtualNodes, visual, true)
 M_PARAM_IMPLEMENT_BOOL(RelationsSelectableWhenHidden, visual, true)
 M_PARAM_IMPLEMENT_DOUBLE(LocalZoom, visual, 0.5)
@@ -1220,6 +1219,7 @@ M_PARAM_IMPLEMENT_BOOL(TrackPointsVisible, visual, true)
 M_PARAM_IMPLEMENT_BOOL(TrackSegmentsVisible, visual, true)
 M_PARAM_IMPLEMENT_BOOL(RelationsVisible, visual, false)
 M_PARAM_IMPLEMENT_BOOL(PhotosVisible, visual, true)
+M_PARAM_IMPLEMENT_BOOL(VirtualNodesVisible, visual, true)
 
 /* Templates */
 M_PARAM_IMPLEMENT_STRING(DefaultTemplate, templates, ":/Templates/default.mat")

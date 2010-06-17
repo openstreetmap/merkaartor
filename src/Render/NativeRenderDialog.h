@@ -1,7 +1,7 @@
 //
 // C++ Interface: NativeRenderDialog
 //
-// Description: 
+// Description:
 //
 //
 // Author: Chris Browet <cbro@semperpax.com>, (C) 2008
@@ -22,31 +22,36 @@
 class Document;
 class MapView;
 class CoordBox;
+class QPrinter;
+class QMyPrintPreviewDialog;
 
-class NativeRenderDialog: public QDialog , public Ui::NativeRenderDialog
+class NativeRenderDialog: public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
     NativeRenderDialog(Document *aDoc, const CoordBox& aCoordBox, QWidget *parent = 0);
-	void render();
+    void render(QPainter& P, QRect theR);
 
 public slots:
-	void on_buttonBox_clicked(QAbstractButton * button);
-	void on_sbMinLat_valueChanged(double v);
-	void on_sbMinLon_valueChanged(double v);
-	void on_sbMaxLat_valueChanged(double v);
-	void on_sbMaxLon_valueChanged(double v);
-	void on_sbPreviewWidth_valueChanged(int v);
-	void on_sbPreviewHeight_valueChanged(int v);
+    void exportPDF();
+    void exportSVG();
+    void exportRaster();
 
-protected:
-	void calcRatio();
+public slots:
+    int exec();
+
+private slots:
+    void print(QPrinter* prt);
 
 private:
-	Document* theDoc;
-	QSettings*	Sets;
-	double		ratio;
+    Document* theDoc;
+    MapView* mapview;
+    CoordBox theOrigBox;
+    QSettings*	Sets;
+    double		ratio;
+    QPrinter* thePrinter;
+    QMyPrintPreviewDialog*  preview;
 
 };
 

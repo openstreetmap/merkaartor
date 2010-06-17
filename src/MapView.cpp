@@ -2,7 +2,7 @@
 
 #include "MapView.h"
 #include "MainWindow.h"
-#include <ui_MainWindow.h>
+#include "ui_MainWindow.h"
 #include "PropertiesDock.h"
 #include "Document.h"
 #include "Layer.h"
@@ -41,6 +41,7 @@
 // from wikipedia
 #define EQUATORIALRADIUS 6378137.0
 #define LAT_ANG_PER_M 1.0 / EQUATORIALRADIUS
+#define TEST_RFLAGS(x) p->ROptions.options.testFlag(x)
 
 class MapViewPrivate
 {
@@ -57,6 +58,7 @@ public:
     QSet<Way*> theCoastlines;
     QList<Node*> theVirtualNodes;
     MapRenderer renderer;
+    RendererOptions ROptions;
 
     MapViewPrivate()
       : PixelPerM(0.0), Viewport(WORLD_COORDBOX)
@@ -65,8 +67,8 @@ public:
 
 /****************/
 
-MapView::MapView(MainWindow* aMain) :
-    QWidget(aMain), Main(aMain), theDocument(0), theInteraction(0), StaticBackground(0), StaticBuffer(0), StaticMap(0),
+MapView::MapView(QWidget* parent) :
+    QWidget(parent), Main(dynamic_cast<MainWindow*>(parent)), theDocument(0), theInteraction(0), StaticBackground(0), StaticBuffer(0), StaticMap(0),
         StaticBufferUpToDate(false), SelectionLocked(false),lockIcon(0), numImages(0),
         p(new MapViewPrivate)
 {
@@ -105,13 +107,11 @@ MainWindow *MapView::main()
 
 PropertiesDock *MapView::properties()
 {
-    return Main->properties();
+    if (Main)
+        return Main->properties();
+    else
+        return NULL;
 }
-
-//InfoDock *MapView::info()
-//{
-//	return Main->info();
-//}
 
 void MapView::setDocument(Document* aDoc)
 {
@@ -224,36 +224,30 @@ void MapView::paintEvent(QPaintEvent * anEvent)
         theInteraction->paintEvent(anEvent, P);
     }
 
-    drawGPS(P);
+    if (Main)
+        drawGPS(P);
 
     P.end();
 
-    Main->ViewportStatusLabel->setText(QString("%1,%2,%3,%4")
-        .arg(QString::number(coordToAng(viewport().bottomLeft().lon()),'f',4))
-        .arg(QString::number(coordToAng(viewport().bottomLeft().lat()),'f',4))
-        .arg(QString::number(coordToAng(viewport().topRight().lon()),'f',4))
-        .arg(QString::number(coordToAng(viewport().topRight().lat()),'f',4))
-        );
+    if (Main) {
+        Main->ViewportStatusLabel->setText(QString("%1,%2,%3,%4")
+                                           .arg(QString::number(coordToAng(viewport().bottomLeft().lon()),'f',4))
+                                           .arg(QString::number(coordToAng(viewport().bottomLeft().lat()),'f',4))
+                                           .arg(QString::number(coordToAng(viewport().topRight().lon()),'f',4))
+                                           .arg(QString::number(coordToAng(viewport().topRight().lat()),'f',4))
+                                           );
 
 #ifndef NDEBUG
-//    QPointF pbl = theProjection.project(viewport().bottomLeft());
-//    QPointF ptr = theProjection.project(viewport().topRight());
-//	qDebug() << "VP: " << QString("%1 (%2,%3,%4,%5)")
-//	   .arg(Main->ViewportStatusLabel->text())
-//		.arg(QString::number(pbl.x(),'f',4))
-//		.arg(QString::number(pbl.y(),'f',4))
-//		.arg(QString::number(ptr.x(),'f',4))
-//		.arg(QString::number(ptr.y(),'f',4));
-
-    QTime Stop(QTime::currentTime());
-    //Main->PaintTimeLabel->setText(tr("%1ms").arg(Start.msecsTo(Stop)));
-    Main->PaintTimeLabel->setText(tr("%1ms;ppm:%2").arg(Start.msecsTo(Stop)).arg(p->PixelPerM));
+        QTime Stop(QTime::currentTime());
+        Main->PaintTimeLabel->setText(tr("%1ms;ppm:%2").arg(Start.msecsTo(Stop)).arg(p->PixelPerM));
 #endif
+    }
 }
 
 void MapView::drawScale(QPainter & P)
 {
-    if (!M_PREFS->getScaleVisible())
+
+    if (!TEST_RFLAGS(RendererOptions::ScaleVisible))
         return;
 
     errno = 0;
@@ -301,8 +295,6 @@ void MapView::buildFeatureSet()
 
     p->theCoastlines.clear();
     for (int i=0; i<theDocument->layerSize(); ++i) {
-//        if (Main)
-//            Main->properties()->adjustSelection();
         theDocument->getLayer(i)->getFeatureSet(p->theFeatures, p->theCoastlines, theDocument, p->invalidRects, clipRect, theProjection, p->theTransform);
     }
 }
@@ -350,7 +342,7 @@ void floodFill(QImage& theImage, const QPoint& P, const QRgb& targetColor, const
     }
 }
 
-void MapView::drawCoastlines(QPainter & theP, Projection& /*aProj*/)
+void MapView::drawCoastlines(QPainter & theP)
 {
     double WW = p->PixelPerM*30.0 + 2.0;
 
@@ -401,7 +393,7 @@ void MapView::drawCoastlines(QPainter & theP, Projection& /*aProj*/)
 
 void MapView::drawLatLonGrid(QPainter & P)
 {
-    if (!M_PREFS->getLatLonGridVisible())
+    if (!TEST_RFLAGS(RendererOptions::LatLonGridVisible))
         return;
 
     double lonInterval = coordToAng(p->Viewport.lonDiff()) / 4;
@@ -458,14 +450,14 @@ void MapView::drawLatLonGrid(QPainter & P)
     }
 }
 
-void MapView::drawFeatures(QPainter & P, Projection& /*aProj*/)
+void MapView::drawFeatures(QPainter & P)
 {
-    p->renderer.render(&P, p->theFeatures, this);
+    p->renderer.render(&P, p->theFeatures, p->ROptions, this);
 }
 
 void MapView::drawDownloadAreas(QPainter & P)
 {
-    if (MerkaartorPreferences::instance()->getDownloadedVisible() == false)
+    if (!TEST_RFLAGS(RendererOptions::DownloadedVisible))
         return;
 
     P.save();
@@ -548,8 +540,8 @@ void MapView::updateStaticBuffer()
 //        P.setRenderHint(QPainter::Antialiasing);
 //        P.setClipping(true);
 //        P.setClipRegion(QRegion(rect()));
-        drawCoastlines(P, theProjection);
-        drawFeatures(P, theProjection);
+        drawCoastlines(P);
+        drawFeatures(P);
         P.end();
     }
 
@@ -564,7 +556,8 @@ void MapView::mousePressEvent(QMouseEvent* event)
         return;
 
     if (theInteraction) {
-        Main->info()->setHtml(theInteraction->toHtml());
+        if (Main)
+            Main->info()->setHtml(theInteraction->toHtml());
         theInteraction->mousePressEvent(event);
     }
 }
@@ -604,7 +597,8 @@ void MapView::launch(Interaction* anInteraction)
     if (EI)
         theSnapList = EI->snapList();
     if (!theSnapList.size())
-        theSnapList = Main->properties()->selection();
+        if (Main)
+            theSnapList = Main->properties()->selection();
     if (theInteraction)
         delete theInteraction;
     theInteraction = anInteraction;
@@ -650,6 +644,9 @@ QPoint MapView::toView(Node* aPt) const
 
 void MapView::on_customContextMenuRequested(const QPoint & pos)
 {
+    if (!Main)
+        return;
+
     if (/*EditInteraction* ei = */dynamic_cast<EditInteraction*>(theInteraction)) {
         QMenu menu;
 
@@ -723,18 +720,22 @@ void MapView::on_customContextMenuRequested(const QPoint & pos)
 
 void MapView::on_imageRequested(ImageMapLayer*)
 {
-    ++numImages;
-    Main->pbImages->setRange(0, numImages);
-    //pbImages->setValue(0);
-    Main->pbImages->update();
-    if (Main->pbImages->value() < 0)
-        Main->pbImages->setValue(0);
+    if (Main) {
+        ++numImages;
+        Main->pbImages->setRange(0, numImages);
+        //pbImages->setValue(0);
+        Main->pbImages->update();
+        if (Main->pbImages->value() < 0)
+            Main->pbImages->setValue(0);
+    }
 }
 
 void MapView::on_imageReceived(ImageMapLayer* aLayer)
 {
-    if (Main->pbImages->value() < Main->pbImages->maximum())
-        Main->pbImages->setValue(Main->pbImages->value()+1);
+    if (Main) {
+        if (Main->pbImages->value() < Main->pbImages->maximum())
+            Main->pbImages->setValue(Main->pbImages->value()+1);
+    }
     aLayer->forceRedraw(*this, rect());
     update();
 }
@@ -743,10 +744,8 @@ void MapView::on_loadingFinished(ImageMapLayer* aLayer)
 {
     Q_UNUSED(aLayer)
     numImages = 0;
-//    Main->pbImages->setRange(0, 0);
-    Main->pbImages->reset();
-//    aLayer->forceRedraw(*this, rect());
-//    update();
+    if (Main)
+        Main->pbImages->reset();
 }
 
 void MapView::resizeEvent(QResizeEvent * ev)
@@ -762,6 +761,11 @@ void MapView::resizeEvent(QResizeEvent * ev)
 #ifdef GEOIMAGE
 void MapView::dragEnterEvent(QDragEnterEvent *event)
 {
+    if (!Main) {
+        event->ignore();
+        return;
+    }
+
     if (event->mimeData()->hasUrls() && event->mimeData()->urls().first().toLocalFile().endsWith(".jpg", Qt::CaseInsensitive)) {
         dropTarget = NULL;
         event->accept();
@@ -771,10 +775,14 @@ void MapView::dragEnterEvent(QDragEnterEvent *event)
 
 void MapView::dragMoveEvent(QDragMoveEvent *event)
 {
-    {
-        QMouseEvent mE(QEvent::MouseMove, event->pos(), Qt::LeftButton, Qt::LeftButton, qApp->keyboardModifiers());
-        mouseMoveEvent(&mE);
+    if (!Main) {
+        event->ignore();
+        return;
     }
+
+    QMouseEvent mE(QEvent::MouseMove, event->pos(), Qt::LeftButton, Qt::LeftButton, qApp->keyboardModifiers());
+    mouseMoveEvent(&mE);
+
     Node *tP;
     for (VisibleFeatureIterator it(document()); !it.isEnd(); ++it) {
         if ((tP = qobject_cast<Node*>(it.get())) && tP->pixelDistance(event->pos(), 5.01, true, this) < 5.01) {
@@ -791,6 +799,11 @@ void MapView::dragMoveEvent(QDragMoveEvent *event)
 
 void MapView::dropEvent(QDropEvent *event)
 {
+    if (!Main) {
+        event->ignore();
+        return;
+    }
+
     // first save the image url because the even->mimeData() releases its data very soon
     // this is probably because the drop action ends with calling of this event
     // so the program that started the drag-action thinks the data isn't needed anymore
@@ -931,7 +944,8 @@ bool MapView::event(QEvent *event)
         }
     } else
     if ( event->type() == QEvent::Leave ) {
-        Main->info()->unsetHoverHtml();
+        if (Main)
+            Main->info()->unsetHoverHtml();
         FeatureSnapInteraction* intr = dynamic_cast<FeatureSnapInteraction*>(interaction());
         if (intr)
             intr->clearLastSnap();
@@ -948,6 +962,9 @@ bool MapView::isSelectionLocked()
 
 void MapView::lockSelection()
 {
+    if (!Main)
+        return;
+
     if (!SelectionLocked && Main->properties()->selection().size()) {
         lockIcon = new QLabel(this);
         lockIcon->setPixmap(QPixmap(":/Icons/emblem-readonly.png"));
@@ -959,6 +976,9 @@ void MapView::lockSelection()
 
 void MapView::unlockSelection()
 {
+    if (!Main)
+        return;
+
     if (SelectionLocked) {
         Main->statusBar()->removeWidget(lockIcon);
         SAFE_DELETE(lockIcon);
@@ -1018,7 +1038,7 @@ void MapView::setViewport(const CoordBox & TargetMap)
         p->Viewport = CoordBox (TargetMap.center()-COORD_ENLARGE*10, TargetMap.center()+COORD_ENLARGE*10);
     else
         p->Viewport = TargetMap;
-    if (M_PREFS->getZoomBoris() && theDocument) {
+    if (TEST_RFLAGS(RendererOptions::LockZoom) && theDocument) {
         ImageMapLayer* l = NULL;
         for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
             l = ImgIt.get();
@@ -1055,7 +1075,7 @@ void MapView::setViewport(const CoordBox & TargetMap,
         p->NodeWidth = M_PREFS->getNodeSize();
     p->ZoomLevel = p->theTransform.m11();
 
-    if (M_PREFS->getZoomBoris() && theDocument) {
+    if (TEST_RFLAGS(RendererOptions::LockZoom) && theDocument) {
         ImageMapLayer* l = NULL;
         for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
             l = ImgIt.get();
@@ -1079,7 +1099,7 @@ void MapView::zoom(double d, const QPoint & Around)
         return;
 
     qreal z = d;
-    if (M_PREFS->getZoomBoris()) {
+    if (TEST_RFLAGS(RendererOptions::LockZoom)) {
         ImageMapLayer* l = NULL;
         for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
             l = ImgIt.get();
@@ -1100,7 +1120,7 @@ void MapView::zoom(double d, const QPoint & Around)
 
 void MapView::adjustZoomToBoris()
 {
-    if (M_PREFS->getZoomBoris()) {
+    if (TEST_RFLAGS(RendererOptions::LockZoom)) {
         ImageMapLayer* l = NULL;
         for (LayerIterator<ImageMapLayer*> ImgIt(theDocument); !ImgIt.isEnd(); ++ImgIt) {
             l = ImgIt.get();
@@ -1179,3 +1199,12 @@ double MapView::nodeWidth() const
     return p->NodeWidth;
 }
 
+RendererOptions MapView::renderOptions()
+{
+    return p->ROptions;
+}
+
+void MapView::setRenderOptions(const RendererOptions &opt)
+{
+    p->ROptions = opt;
+}

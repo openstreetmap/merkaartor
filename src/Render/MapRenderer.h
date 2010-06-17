@@ -19,6 +19,7 @@
 #include <QList>
 
 #include "Feature.h"
+#include "IRenderer.h"
 
 class Document;
 class PaintStylePrivate;
@@ -89,11 +90,13 @@ public:
     void render(
             QPainter* P,
             QMap<RenderPriority, QSet <Feature*> > theFeatures,
+            const RendererOptions& options,
             MapView* aView
     );
 
     MapView* theView;
     QPainter* thePainter;
+    RendererOptions theOptions;
 
 protected:
     BackgroundStyleLayer bglayer;

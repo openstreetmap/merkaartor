@@ -64,6 +64,8 @@ DESTDIR = $$OUTPUT_DIR/bin
 #UI_DIR += $$PWD/../tmp/$$(QMAKESPEC)
 #MOC_DIR += $$PWD/../tmp/$$(QMAKESPEC)
 #RCC_DIR += $$PWD/../tmp/$$(QMAKESPEC)
+INCLUDEPATH += $$MOC_DIR
+
 
 INCLUDEPATH += $$PWD/../include $$PWD/../interfaces
 DEPENDPATH += $$PWD/../interfaces

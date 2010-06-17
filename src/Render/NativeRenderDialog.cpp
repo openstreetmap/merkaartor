@@ -21,194 +21,146 @@
 #include "PaintStyle/MasPaintStyle.h"
 #include "Utils/PictureViewerDialog.h"
 
+#include <QPrinter>
+#include <QPrintDialog>
+
 #include <QProgressDialog>
 #include <QPainter>
 #include <QSvgGenerator>
+#include <QFileDialog>
+
+#include "qmyprintpreviewdialog.h"
 
 NativeRenderDialog::NativeRenderDialog(Document *aDoc, const CoordBox& aCoordBox, QWidget *parent)
-    :QDialog(parent), theDoc(aDoc)
+    :QObject(parent), theDoc(aDoc), theOrigBox(aCoordBox)
 {
-    setupUi(this);
+    thePrinter = new QPrinter();
 
-    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
-    setWindowFlags(windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
+    mapview = new MapView(NULL);
+    mapview->setDocument(theDoc);
 
-    buttonBox->addButton(tr("Proceed..."), QDialogButtonBox::ActionRole);
-    Sets = M_PREFS->getQSettings();
-    Sets->beginGroup("NativeRenderDialog");
+    preview = new QMyPrintPreviewDialog( thePrinter, parent );
+    connect( preview, SIGNAL(paintRequested(QPrinter*)), SLOT(print(QPrinter*)) );
+    preview->setBoundingBox(aCoordBox);
 
-    rbSVG->setChecked(Sets->value("rbSVG", true).toBool());
-    rbBitmap->setChecked(Sets->value("rbBitmap", false).toBool());
+    connect(preview, SIGNAL(exportPDF()), SLOT(exportPDF()));
+    connect(preview, SIGNAL(exportRaster()), SLOT(exportRaster()));
+    connect(preview, SIGNAL(exportSVG()), SLOT(exportSVG()));
 
-    cbShowScale->setCheckState((Qt::CheckState)Sets->value("cbShowScale", "1").toInt());
-    cbShowGrid->setCheckState((Qt::CheckState)Sets->value("cbShowGrid", "1").toInt());
-    cbShowBorders->setCheckState((Qt::CheckState)Sets->value("cbShowBorders", "1").toInt());
-    cbShowLicense->setCheckState((Qt::CheckState)Sets->value("cbShowLicense", "1").toInt());
+    //    setupUi(this);
 
-    sbMinLat->setValue(coordToAng(aCoordBox.bottomLeft().lat()));
-    sbMaxLat->setValue(coordToAng(aCoordBox.topLeft().lat()));
-    sbMinLon->setValue(coordToAng(aCoordBox.topLeft().lon()));
-    sbMaxLon->setValue(coordToAng(aCoordBox.topRight().lon()));
 
-    sbPreviewHeight->blockSignals(true);
-    sbPreviewHeight->setValue(Sets->value("sbPreviewHeight", "600").toInt());
-    sbPreviewHeight->blockSignals(false);
-    sbPreviewWidth->setValue(Sets->value("sbPreviewWidth", "800").toInt());
+//    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    Sets->endGroup();
+//    buttonBox->addButton(tr("Proceed..."), QDialogButtonBox::ActionRole);
+//    Sets = M_PREFS->getQSettings();
+//    Sets->beginGroup("NativeRenderDialog");
 
-    calcRatio();
+////    rbSVG->setChecked(Sets->value("rbSVG", true).toBool());
+////    rbBitmap->setChecked(Sets->value("rbBitmap", false).toBool());
 
-    resize(1,1);
+//    cbShowScale->setCheckState((Qt::CheckState)Sets->value("cbShowScale", "1").toInt());
+//    cbShowGrid->setCheckState((Qt::CheckState)Sets->value("cbShowGrid", "1").toInt());
+////    cbShowBorders->setCheckState((Qt::CheckState)Sets->value("cbShowBorders", "1").toInt());
+////    cbShowLicense->setCheckState((Qt::CheckState)Sets->value("cbShowLicense", "1").toInt());
+
+//    sbMinLat->setValue(coordToAng(aCoordBox.bottomLeft().lat()));
+//    sbMaxLat->setValue(coordToAng(aCoordBox.topLeft().lat()));
+//    sbMinLon->setValue(coordToAng(aCoordBox.topLeft().lon()));
+//    sbMaxLon->setValue(coordToAng(aCoordBox.topRight().lon()));
+
+//    sbPreviewHeight->blockSignals(true);
+//    sbPreviewHeight->setValue(Sets->value("sbPreviewHeight", "600").toInt());
+//    sbPreviewHeight->blockSignals(false);
+//    sbPreviewWidth->setValue(Sets->value("sbPreviewWidth", "800").toInt());
+
+//    Sets->endGroup();
+
+
+//    calcRatio();
 }
 
-void NativeRenderDialog::on_buttonBox_clicked(QAbstractButton * button)
+int NativeRenderDialog::exec()
 {
-    if (buttonBox->buttonRole(button) == QDialogButtonBox::ActionRole) {
-        Sets->setValue("rbSVG", rbSVG->isChecked());
-        Sets->setValue("rbBitmap", rbBitmap->isChecked());
-        Sets->setValue("cbShowScale", cbShowScale->checkState());
-        Sets->setValue("cbShowGrid", cbShowGrid->checkState());
-        Sets->setValue("cbShowBorders", cbShowBorders->checkState());
-        Sets->setValue("cbShowLicense", cbShowLicense->checkState());
-        Sets->setValue("sbPreviewWidth", sbPreviewWidth->value());
-        Sets->setValue("sbPreviewHeight", sbPreviewHeight->value());
-
-        render();
-    }
+    return preview->exec();
 }
 
-void NativeRenderDialog::render()
+void NativeRenderDialog::render(QPainter& P, QRect theR)
 {
+    RendererOptions opt = preview->options();
+
+    mapview->setGeometry(theR);
+    mapview->setViewport(preview->boundingBox(), theR);
+    mapview->setRenderOptions(opt);
+    mapview->invalidate(true, false);
+    mapview->buildFeatureSet();
+    mapview->drawCoastlines(P);
+    mapview->drawFeatures(P);
+    if (opt.options & RendererOptions::ScaleVisible)
+        mapview->drawScale(P);
+    if (opt.options & RendererOptions::LatLonGridVisible)
+        mapview->drawLatLonGrid(P);
+}
+
+void NativeRenderDialog::print(QPrinter* prt)
+{
+    QPainter P(prt);
+    P.setRenderHint(QPainter::Antialiasing);
+    QRect theR = prt->pageRect();
+    render(P, theR);
+}
+
+void NativeRenderDialog::exportPDF()
+{
+    QString s = QFileDialog::getSaveFileName(NULL,tr("Output filename"),"",tr("PDF files (*.pdf)"));
+    if (s.isNull())
+        return;
+
+    QPrinter* prt = preview->printer();
+    prt->setOutputFormat(QPrinter::PdfFormat);
+    prt->setOutputFileName(s);
+    print(prt);
+}
+
+void NativeRenderDialog::exportRaster()
+{
+    QString s = QFileDialog::getSaveFileName(NULL,tr("Output filename"),"",tr("Image files (*.png *.jpg)"));
+    if (s.isNull())
+        return;
+
+    QRect theR = preview->printer()->pageRect();
+
+    QPixmap pix(theR.size());
+    if (M_PREFS->getUseShapefileForBackground())
+        pix.fill(M_PREFS->getWaterColor());
+    else if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
+        pix.fill(M_PREFS->getBgColor());
+    else
+        pix.fill(M_STYLE->getGlobalPainter().getBackgroundColor());
+
+    QPainter P(&pix);
+    P.setRenderHint(QPainter::Antialiasing);
+    render(P, theR);
+
+    pix.save(s);
+}
+
+void NativeRenderDialog::exportSVG()
+{
+    QString s = QFileDialog::getSaveFileName(NULL,tr("Output filename"),"",tr("SVG files (*.svg)"));
+    if (s.isNull())
+        return;
+
     QSvgGenerator svgg;
-    QPixmap bitmap;
-    QPainter P;
-
-    int w = sbPreviewWidth->value();
-    int h = sbPreviewHeight->value();
-
-    if (rbSVG->isChecked()) {
-        svgg.setFileName(QDir::tempPath()+"/tmp.svg");
-        svgg.setSize(QSize(w,h));
+    QRect theR = preview->printer()->pageRect();
+    svgg.setSize(theR.size());
+    svgg.setFileName(s);
 #if QT_VERSION >= 0x040500
-        svgg.setViewBox(QRect(0, 0, w, h));
+        svgg.setViewBox(theR);
 #endif
 
-        P.begin(&svgg);
-    } else {
-        QPixmap pix(w, h);
-        if (M_PREFS->getUseShapefileForBackground())
-            pix.fill(M_PREFS->getWaterColor());
-        else if (M_PREFS->getBackgroundOverwriteStyle() || !M_STYLE->getGlobalPainter().getDrawBackground())
-            pix.fill(M_PREFS->getBgColor());
-        else
-            pix.fill(M_STYLE->getGlobalPainter().getBackgroundColor());
-        bitmap = pix;
-        P.begin(&bitmap);
-        P.setRenderHint(QPainter::Antialiasing);
-    }
-
-    MainWindow* mw = dynamic_cast<MainWindow*>(parentWidget());
-    MapView* vw = new MapView(NULL);
-    vw->setDocument(mw->document());
-
-    CoordBox VP(Coord(
-        angToCoord(sbMinLat->value()),
-        angToCoord(sbMinLon->value())
-        ), Coord(
-        angToCoord(sbMaxLat->value()),
-        angToCoord(sbMaxLon->value())
-    ));
-
-    Projection aProj;
-    QRect theR(0, 0, w, h);
-    vw->setGeometry(theR);
-    vw->setViewport(VP, theR);
-    P.setClipping(true);
-    P.setClipRect(theR);
-
-#ifndef Q_OS_SYMBIAN
-    QApplication::setOverrideCursor(Qt::BusyCursor);
-#endif
-    QProgressDialog progress(tr("Working. Please Wait..."), tr("Cancel"), 0, 0);
-    progress.setWindowModality(Qt::WindowModal);
-    progress.setCancelButton(NULL);
-    progress.show();
-
-    QApplication::processEvents();
-
-    double oldTileToRegionThreshold = M_PREFS->getTileToRegionThreshold();
-    M_PREFS->setTileToRegionThreshold(360.0);
-
-    vw->invalidate(true, false);
-    vw->buildFeatureSet();
-    vw->drawCoastlines(P, aProj);
-    vw->drawFeatures(P, aProj);
-
-    M_PREFS->setTileToRegionThreshold(oldTileToRegionThreshold);
-    P.end();
-
-    delete vw;
-
-    progress.reset();
-#ifndef Q_OS_SYMBIAN
-    QApplication::restoreOverrideCursor();
-#endif
-
-    if (rbSVG->isChecked()) {
-        PictureViewerDialog vwDlg(tr("SVG rendering"), QDir::tempPath()+"/tmp.svg", this);
-        vwDlg.exec();
-    } else {
-        PictureViewerDialog vwDlg(tr("Raster rendering"), bitmap, this);
-        vwDlg.exec();
-    }
+    QPainter P(&svgg);
+    P.setRenderHint(QPainter::Antialiasing);
+    render(P, theR);
 }
 
-void NativeRenderDialog::calcRatio()
-{
-    CoordBox theB(Coord(
-        angToCoord(sbMinLat->value()),
-        angToCoord(sbMinLon->value())
-        ), Coord(
-        angToCoord(sbMaxLat->value()),
-        angToCoord(sbMaxLon->value())
-    ));
-    Projection theProj;
-    //int w = sbPreviewWidth->value();
-    //int h = sbPreviewHeight->value();
-    ratio = (theB.latDiff() / theProj.latAnglePerM()) / (theB.lonDiff() / theProj.lonAnglePerM((theB.bottomLeft().lat() + theB.topRight().lat())/2));
-}
-
-void NativeRenderDialog::on_sbMinLat_valueChanged(double /* v */)
-{
-    calcRatio();
-}
-
-void NativeRenderDialog::on_sbMinLon_valueChanged(double /* v */)
-{
-    calcRatio();
-}
-
-void NativeRenderDialog::on_sbMaxLat_valueChanged(double /* v */)
-{
-    calcRatio();
-}
-
-void NativeRenderDialog::on_sbMaxLon_valueChanged(double /* v */)
-{
-    calcRatio();
-}
-
-void NativeRenderDialog::on_sbPreviewWidth_valueChanged(int v)
-{
-    sbPreviewHeight->blockSignals(true);
-    sbPreviewHeight->setValue(int(v*ratio));
-    sbPreviewHeight->blockSignals(false);
-}
-
-void NativeRenderDialog::on_sbPreviewHeight_valueChanged(int v)
-{
-    sbPreviewWidth->blockSignals(true);
-    sbPreviewWidth->setValue(int(v/ratio));
-    sbPreviewWidth->blockSignals(false);
-}

@@ -7,6 +7,8 @@
 #include <QtGui/QPainter>
 #include <QProgressDialog>
 
+#define TEST_RFLAGS(x) theView->renderOptions().options.testFlag(x)
+
 class NodePrivate
 {
     public:
@@ -124,22 +126,22 @@ bool Node::isWaypoint()
     return p->IsWaypoint;
 }
 
-bool Node::isSelectable(MapView* view) const
+bool Node::isSelectable(MapView* theView) const
 {
     // If Node has non-default tags -> POI -> always selectable
     if (p->HasTags)
         return true;
 
     bool Draw = false;
-    if (M_PREFS->getTrackPointsVisible() || (lastUpdated() == Feature::Log && !M_PREFS->getTrackSegmentsVisible())) {
-        Draw = (view->nodeWidth() >= 1);
+    if (TEST_RFLAGS(RendererOptions::NodesVisible) || (lastUpdated() == Feature::Log && !TEST_RFLAGS(RendererOptions::TrackSegmentVisible))) {
+        Draw = (theView->nodeWidth() >= 1);
         // Do not draw GPX nodes when simple GPX track appearance is enabled
         if (M_PREFS->getSimpleGpxTrack() && layer()->isTrack())
             Draw = false;
         if (!Draw) {
             if (!sizeParents())
                 Draw = true;
-            else if (lastUpdated() == Feature::Log && !M_PREFS->getTrackSegmentsVisible())
+            else if (lastUpdated() == Feature::Log && !TEST_RFLAGS(RendererOptions::TrackSegmentVisible))
                 Draw = true;
         }
     }
@@ -241,7 +243,7 @@ void Node::draw(QPainter& thePainter , MapView* theView )
         QRect box(me - QPoint(5, 3), QSize(10, 6));
         thePainter.drawRect(box);
 
-        if (M_PREFS->getPhotosVisible() && theView->pixelPerM() > M_PREFS->getRegionalZoom()) {
+        if (TEST_RFLAGS(RendererOptions::PhotosVisible) && theView->pixelPerM() > M_PREFS->getRegionalZoom()) {
             qreal rt = qBound(0.2, theView->pixelPerM(), 1.0);
             QPoint phPt;
             if (p->photoLocationBR) {
@@ -263,7 +265,7 @@ void Node::draw(QPainter& /* thePainter */, MapView* /*theView*/ )
 
 void Node::drawFocus(QPainter& thePainter, MapView* theView, bool solid)
 {
-    thePainter.setPen(MerkaartorPreferences::instance()->getFocusColor());
+    thePainter.setPen(M_PREFS->getFocusColor());
     QPoint me(theView->toView(this));
     QRect R(me-QPoint(3,3),QSize(6,6));
     thePainter.drawRect(R);
@@ -279,7 +281,7 @@ void Node::drawFocus(QPainter& thePainter, MapView* theView, bool solid)
 
 void Node::drawHover(QPainter& thePainter, MapView* theView, bool solid)
 {
-    thePainter.setPen(MerkaartorPreferences::instance()->getHoverColor());
+    thePainter.setPen(M_PREFS->getHoverColor());
     QPoint me(theView->toView(this));
     QRect R(me-QPoint(3,3),QSize(6,6));
     thePainter.drawRect(R);
@@ -288,7 +290,7 @@ void Node::drawHover(QPainter& thePainter, MapView* theView, bool solid)
 
 #ifdef GEOIMAGE
     if (p->HasPhoto) {
-        if (M_PREFS->getPhotosVisible() && theView->pixelPerM() > M_PREFS->getRegionalZoom()) {
+        if (TEST_RFLAGS(RendererOptions::PhotosVisible) && theView->pixelPerM() > M_PREFS->getRegionalZoom()) {
             qreal rt = qBound(0.2, theView->pixelPerM(), 1.0);
             double phRt = 1. * p->Photo.width() / p->Photo.height();
             QPoint phPt;
@@ -312,7 +314,7 @@ void Node::drawHover(QPainter& thePainter, MapView* theView, bool solid)
 
 void Node::drawHighlight(QPainter& thePainter, MapView* theView, bool /*solid*/)
 {
-    thePainter.setPen(MerkaartorPreferences::instance()->getHighlightColor());
+    thePainter.setPen(M_PREFS->getHighlightColor());
     QPoint me(theView->toView(this));
     QRect R(me-QPoint(3,3),QSize(6,6));
     thePainter.drawRect(R);
@@ -335,7 +337,7 @@ double Node::pixelDistance(const QPointF& Target, double, bool, MapView* theView
     Best = distance(Target, me);
 #ifdef GEOIMAGE
     if (p->HasPhoto) {
-        if (M_PREFS->getPhotosVisible() && theView->pixelPerM() > M_PREFS->getRegionalZoom()) {
+        if (TEST_RFLAGS(RendererOptions::PhotosVisible) && theView->pixelPerM() > M_PREFS->getRegionalZoom()) {
             qreal rt = qBound(0.2, theView->pixelPerM(), 1.0);
             double phRt = 1. * p->Photo.width() / p->Photo.height();
             QPoint phPt;

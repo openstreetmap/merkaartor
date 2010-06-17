@@ -31,6 +31,8 @@
 #include "Preferences/BookmarksList.h"
 #include "Preferences/FilterList.h"
 
+#include "IRenderer.h"
+
 class MainWindow;
 class MapView;
 class IMapAdapter;
@@ -93,12 +95,6 @@ enum ExportType {
     Export_All,
     Export_Viewport,
     Export_Selected
-};
-
-enum DirectionalArrowsShow {
-    DirectionalArrows_Never,
-    DirectionalArrows_Oneway,
-    DirectionalArrows_Always
 };
 
 #define TOOL_FIELD_SIZE 2
@@ -202,8 +198,8 @@ public:
     int getGpxTrackWidth() const;
     void setGpxTrackColor(const QColor theValue, int width);
 
-    DirectionalArrowsShow getDirectionalArrowsVisible();
-    void setDirectionalArrowsVisible(DirectionalArrowsShow theValue);
+    RendererOptions::DirectionalArrowsShowOptions getDirectionalArrowsVisible();
+    void setDirectionalArrowsVisible(RendererOptions::DirectionalArrowsShowOptions theValue);
 
     M_PARAM_DECLARE_INT(TagListFirstColumnWidth)
 
@@ -439,7 +435,7 @@ private:
     TmsServersList theTmsServerList;
     BookmarksList theBookmarkList;
 
-    DirectionalArrowsShow m_DirectionalArrowsVisible;
+    RendererOptions::DirectionalArrowsShowOptions m_DirectionalArrowsVisible;
 
 #ifdef USE_LIBPROXY
     pxProxyFactory                          *proxyFactory;

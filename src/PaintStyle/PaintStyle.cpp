@@ -13,6 +13,7 @@
 #include <QDomElement>
 #include <math.h>
 
+#define TEST_RFLAGS(x) theView->renderOptions().options.testFlag(x)
 #define CAPSTYLE Qt::RoundCap
 #define JOINSTYLE Qt::RoundJoin
 
@@ -847,10 +848,10 @@ void FeaturePainter::drawTouchup(Way* R, QPainter* thePainter, MapView* theView)
             thePainter->strokePath(theView->transform().map(R->getPath()),thePen);
         }
     }
-    if ( ((DrawTrafficDirectionMarks) && (M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Oneway)) ||  M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Always)
+    if ( ((DrawTrafficDirectionMarks) && (theView->renderOptions().arrowOptions == RendererOptions::ArrowsOneway)) ||  theView->renderOptions().arrowOptions == RendererOptions::ArrowsAlways)
     {
         Feature::TrafficDirectionType TT = trafficDirection(R);
-        if ( (TT != Feature::UnknownDirection) || (M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Always) )
+        if ( (TT != Feature::UnknownDirection) || (theView->renderOptions().arrowOptions == RendererOptions::ArrowsAlways) )
         {
             double theWidth = theView->pixelPerM()*R->widthOf()-4;
             if (theWidth > 8)
@@ -858,7 +859,7 @@ void FeaturePainter::drawTouchup(Way* R, QPainter* thePainter, MapView* theView)
             double DistFromCenter = 2*(theWidth+4);
             if (theWidth > 0)
             {
-                if ( M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Always )
+                if ( theView->renderOptions().arrowOptions == RendererOptions::ArrowsAlways )
                     thePainter->setPen(QPen(QColor(255,0,0), 2));
                 else
                     thePainter->setPen(QPen(QColor(0,0,255), 2));
@@ -890,7 +891,7 @@ void FeaturePainter::drawTouchup(Way* R, QPainter* thePainter, MapView* theView)
                         }
                         else
                         {
-                            if ( M_PREFS->getDirectionalArrowsVisible() == DirectionalArrows_Always )
+                            if ( theView->renderOptions().arrowOptions == RendererOptions::ArrowsAlways )
                             {
                                 thePainter->drawLine(H-T,H-T+V1);
                                 thePainter->drawLine(H-T,H-T+V2);

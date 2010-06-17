@@ -2,6 +2,7 @@
 #define MERKATOR_MAPVIEW_H_
 
 #include "Maps/Projection.h"
+#include "IRenderer.h"
 
 #include <QPixmap>
 #include <QWidget>
@@ -25,7 +26,7 @@ class MapView :	public QWidget
     Q_OBJECT
 
     public:
-        MapView(MainWindow* aMain);
+        MapView(QWidget* parent);
     public:
         ~MapView();
 
@@ -36,8 +37,11 @@ class MapView :	public QWidget
         Interaction* interaction();
 
         void buildFeatureSet();
-        void drawCoastlines(QPainter & painter, Projection& aProj);
-        void drawFeatures(QPainter & painter, Projection& aProj);
+        void drawCoastlines(QPainter & painter);
+        void drawFeatures(QPainter & painter);
+        void drawLatLonGrid(QPainter & painter);
+        void drawDownloadAreas(QPainter & painter);
+        void drawScale(QPainter & painter);
 
         void panScreen(QPoint delta) ;
         void invalidate(bool updateStaticBuffer, bool updateMap);
@@ -82,10 +86,10 @@ class MapView :	public QWidget
         bool toXML(QDomElement xParent);
         void fromXML(const QDomElement e);
 
+        RendererOptions renderOptions();
+        void setRenderOptions(const RendererOptions& opt);
+
     private:
-        void drawLatLonGrid(QPainter & painter);
-        void drawDownloadAreas(QPainter & painter);
-        void drawScale(QPainter & painter);
         void drawGPS(QPainter & painter);
         void updateStaticBackground();
         void updateStaticBuffer();
