@@ -1216,9 +1216,11 @@ void MainWindow::loadFiles(const QStringList & fileList)
         if (foundImport)
         {
             // only imported some tracks
+            p->theFeats->invalidate();
             delete theDocument;
             theDocument = newDoc;
             connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));
+            connect (theDocument, SIGNAL(historyChanged()), this, SIGNAL(content_changed()));
             theDirty->updateList();
             theView->setDocument(theDocument);
             on_viewZoomAllAction_triggered();
@@ -1577,6 +1579,7 @@ void MainWindow::on_fileNewAction_triggered()
     p->theProperties->setSelection(0);
     if (!theDocument || !theDocument->hasUnsavedChanges() || mayDiscardUnsavedChanges(this)) {
         M_PREFS->cleanupBackgroundPlugins();
+        p->theFeats->invalidate();
         delete theDocument;
         theDocument = new Document(theLayers);
         theDocument->addDefaultLayers();
@@ -1594,6 +1597,7 @@ void MainWindow::on_fileNewAction_triggered()
         theView->setDocument(theDocument);
         theDocument->history().setActions(ui->editUndoAction, ui->editRedoAction, ui->fileUploadAction);
         connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));
+        connect (theDocument, SIGNAL(historyChanged()), this, SIGNAL(content_changed()));
         theDirty->updateList();
 
         fileName = "";
@@ -2331,12 +2335,14 @@ void MainWindow::loadDocument(QString fn)
 
             if (newDoc) {
                 p->theProperties->setSelection(0);
+                p->theFeats->invalidate();
                 delete theDocument;
                 theDocument = newDoc;
                 theView->setDocument(theDocument);
                 on_editPropertiesAction_triggered();
                 theDocument->history().setActions(ui->editUndoAction, ui->editRedoAction, ui->fileUploadAction);
                 connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));
+                connect (theDocument, SIGNAL(historyChanged()), this, SIGNAL(content_changed()));
                 theDirty->updateList();
                 fileName = fn;
                 setWindowTitle(QString("%1 - %2").arg(fileName).arg(p->title));
