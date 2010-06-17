@@ -58,6 +58,7 @@
     <addaction name="roadCreateJunctionAction"/>
     <addaction name="roadAddStreetNumbersAction"/>
     <addaction name="roadSubdivideAction"/>
+    <addaction name="areaJoinAction"/>
     <addaction name="areaSplitAction"/>
     <addaction name="areaTerraceAction"/>
    </widget>
@@ -371,6 +372,7 @@
    <addaction name="roadJoinAction"/>
    <addaction name="editReverseAction"/>
    <addaction name="roadSubdivideAction"/>
+   <addaction name="areaJoinAction"/>
    <addaction name="areaSplitAction"/>
    <addaction name="areaTerraceAction"/>
   </widget>
@@ -1648,6 +1650,21 @@
    </property>
    <property name="text">
     <string>&amp;None</string>
+   </property>
+  </action>
+  <action name="areaJoinAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
+     <normaloff>:/Icons/actions/join_areas.png</normaloff>:/Icons/actions/join_areas.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Join Areas</string>
+   </property>
+   <property name="toolTip">
+    <string>Join touching areas</string>
+   </property>
+   <property name="statusTip">
+    <string>Join areas which are touching.</string>
    </property>
   </action>
   <action name="areaSplitAction">
