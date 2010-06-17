@@ -53,6 +53,8 @@ public slots:
 
     void tabChanged(int idx);
 
+    void invalidate();
+
 private:
     QList<Feature*> Highlighted;
 

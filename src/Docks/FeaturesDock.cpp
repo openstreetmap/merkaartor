@@ -296,11 +296,26 @@ void FeaturesDock::addItem(MapFeaturePtr F)
     }
 }
 
+void FeaturesDock::invalidate()
+{
+    ui.FeaturesList->clear();
+    Highlighted.clear();
+    Found.clear();
+}
+
 void FeaturesDock::clearItems()
 {
     for(int i=ui.FeaturesList->count()-1; i>=0; --i) {
-        if (!ui.FeaturesList->item(i)->isSelected())
-            delete ui.FeaturesList->item(i);
+        QListWidgetItem* item = ui.FeaturesList->item(i);
+        if (item->isSelected()) {
+            Feature * F = item->data(Qt::UserRole).value<Feature*>();
+            if (F->isDeleted()) {
+                item->setSelected(false);
+                Highlighted.removeOne(F);
+            }
+        }
+        if (!item->isSelected())
+            delete item;
     }
 }
 
