@@ -22,14 +22,13 @@
 #include "Utils/PictureViewerDialog.h"
 
 #include <QPrinter>
-#include <QPrintDialog>
+#include <QPrintPreviewDialog>
+#include <QPrintPreviewWidget>
 
 #include <QProgressDialog>
 #include <QPainter>
 #include <QSvgGenerator>
 #include <QFileDialog>
-
-#include "qmyprintpreviewdialog.h"
 
 NativeRenderDialog::NativeRenderDialog(Document *aDoc, const CoordBox& aCoordBox, QWidget *parent)
     :QObject(parent), theDoc(aDoc), theOrigBox(aCoordBox)
@@ -39,45 +38,82 @@ NativeRenderDialog::NativeRenderDialog(Document *aDoc, const CoordBox& aCoordBox
     mapview = new MapView(NULL);
     mapview->setDocument(theDoc);
 
-    preview = new QMyPrintPreviewDialog( thePrinter, parent );
+    preview = new QPrintPreviewDialog( thePrinter, parent );
+    QMainWindow* mw = preview->findChild<QMainWindow*>();
+    prtW = dynamic_cast<QPrintPreviewWidget*>(mw->centralWidget());
+
+    QWidget* myWidget = new QWidget(preview);
+    ui.setupUi(myWidget);
+    ui.verticalLayout->addWidget(prtW);
+    mw->setCentralWidget(myWidget);
+
+    connect(ui.cbShowNodes, SIGNAL(toggled(bool)), prtW, SLOT(updatePreview()));
+    connect(ui.cbShowRelations, SIGNAL(toggled(bool)), prtW, SLOT(updatePreview()));
+    connect(ui.cbShowGrid, SIGNAL(toggled(bool)), prtW, SLOT(updatePreview()));
+    connect(ui.cbShowScale, SIGNAL(toggled(bool)), prtW, SLOT(updatePreview()));
+    connect(ui.sbMinLat, SIGNAL(valueChanged(double)), prtW, SLOT(updatePreview()));
+    connect(ui.sbMaxLat, SIGNAL(valueChanged(double)), prtW, SLOT(updatePreview()));
+    connect(ui.sbMinLon, SIGNAL(valueChanged(double)), prtW, SLOT(updatePreview()));
+    connect(ui.sbMaxLon, SIGNAL(valueChanged(double)), prtW, SLOT(updatePreview()));
+
+    connect(ui.btExportPDF, SIGNAL(clicked()), SLOT(exportPDF()));
+    connect(ui.btExportSVG, SIGNAL(clicked()), SLOT(exportSVG()));
+    connect(ui.btExportRaster, SIGNAL(clicked()), SLOT(exportRaster()));
+
     connect( preview, SIGNAL(paintRequested(QPrinter*)), SLOT(print(QPrinter*)) );
-    preview->setBoundingBox(aCoordBox);
+    setBoundingBox(aCoordBox);
+}
 
-    connect(preview, SIGNAL(exportPDF()), SLOT(exportPDF()));
-    connect(preview, SIGNAL(exportRaster()), SLOT(exportRaster()));
-    connect(preview, SIGNAL(exportSVG()), SLOT(exportSVG()));
+RendererOptions NativeRenderDialog::options()
+{
+    RendererOptions opt;
+    opt.options |= RendererOptions::BackgroundVisible;
+    opt.options |= RendererOptions::ForegroundVisible;
+    opt.options |= RendererOptions::TouchupVisible;
+    opt.options |= RendererOptions::NamesVisible;
 
-    //    setupUi(this);
+    if (ui.cbShowNodes->isChecked())
+        opt.options |= RendererOptions::NodesVisible;
+    if (ui.cbShowRelations->isChecked())
+        opt.options |= RendererOptions::RelationsVisible;
+    if (ui.cbShowScale->isChecked())
+        opt.options |= RendererOptions::ScaleVisible;
+    if (ui.cbShowGrid->isChecked())
+        opt.options |= RendererOptions::LatLonGridVisible;
 
+    return opt;
+}
 
-//    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+void NativeRenderDialog::setOptions(RendererOptions aOpt)
+{
+    ui.cbShowNodes->setChecked(aOpt.options & RendererOptions::NodesVisible);
+    ui.cbShowRelations->setChecked(aOpt.options & RendererOptions::RelationsVisible);
+    ui.cbShowScale->setChecked(aOpt.options & RendererOptions::ScaleVisible);
+    ui.cbShowGrid->setChecked(aOpt.options & RendererOptions::LatLonGridVisible);
 
-//    buttonBox->addButton(tr("Proceed..."), QDialogButtonBox::ActionRole);
-//    Sets = M_PREFS->getQSettings();
-//    Sets->beginGroup("NativeRenderDialog");
+    prtW->updatePreview();
+}
 
-////    rbSVG->setChecked(Sets->value("rbSVG", true).toBool());
-////    rbBitmap->setChecked(Sets->value("rbBitmap", false).toBool());
+CoordBox NativeRenderDialog::boundingBox()
+{
+    CoordBox VP(Coord(
+                    angToCoord(ui.sbMinLat->value()),
+                    angToCoord(ui.sbMinLon->value())
+            ), Coord(
+                    angToCoord(ui.sbMaxLat->value()),
+                    angToCoord(ui.sbMaxLon->value())
+                    ));
+    return VP;
+}
 
-//    cbShowScale->setCheckState((Qt::CheckState)Sets->value("cbShowScale", "1").toInt());
-//    cbShowGrid->setCheckState((Qt::CheckState)Sets->value("cbShowGrid", "1").toInt());
-////    cbShowBorders->setCheckState((Qt::CheckState)Sets->value("cbShowBorders", "1").toInt());
-////    cbShowLicense->setCheckState((Qt::CheckState)Sets->value("cbShowLicense", "1").toInt());
+void NativeRenderDialog::setBoundingBox(CoordBox aBBox)
+{
+    ui.sbMinLat->setValue(coordToAng(aBBox.bottomLeft().lat()));
+    ui.sbMaxLat->setValue(coordToAng(aBBox.topLeft().lat()));
+    ui.sbMinLon->setValue(coordToAng(aBBox.topLeft().lon()));
+    ui.sbMaxLon->setValue(coordToAng(aBBox.topRight().lon()));
 
-//    sbMinLat->setValue(coordToAng(aCoordBox.bottomLeft().lat()));
-//    sbMaxLat->setValue(coordToAng(aCoordBox.topLeft().lat()));
-//    sbMinLon->setValue(coordToAng(aCoordBox.topLeft().lon()));
-//    sbMaxLon->setValue(coordToAng(aCoordBox.topRight().lon()));
-
-//    sbPreviewHeight->blockSignals(true);
-//    sbPreviewHeight->setValue(Sets->value("sbPreviewHeight", "600").toInt());
-//    sbPreviewHeight->blockSignals(false);
-//    sbPreviewWidth->setValue(Sets->value("sbPreviewWidth", "800").toInt());
-
-//    Sets->endGroup();
-
-
-//    calcRatio();
+    prtW->updatePreview();
 }
 
 int NativeRenderDialog::exec()
@@ -87,10 +123,10 @@ int NativeRenderDialog::exec()
 
 void NativeRenderDialog::render(QPainter& P, QRect theR)
 {
-    RendererOptions opt = preview->options();
+    RendererOptions opt = options();
 
     mapview->setGeometry(theR);
-    mapview->setViewport(preview->boundingBox(), theR);
+    mapview->setViewport(boundingBox(), theR);
     mapview->setRenderOptions(opt);
     mapview->invalidate(true, false);
     mapview->buildFeatureSet();

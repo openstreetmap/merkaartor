@@ -16,6 +16,7 @@
 #include <QSettings>
 
 #include "Maps/Coord.h"
+#include "IRenderer.h"
 
 #include <ui_NativeRenderDialog.h>
 
@@ -23,7 +24,8 @@ class Document;
 class MapView;
 class CoordBox;
 class QPrinter;
-class QMyPrintPreviewDialog;
+class QPrintPreviewDialog;
+class QPrintPreviewWidget;
 
 class NativeRenderDialog: public QObject
 {
@@ -32,6 +34,11 @@ class NativeRenderDialog: public QObject
 public:
     NativeRenderDialog(Document *aDoc, const CoordBox& aCoordBox, QWidget *parent = 0);
     void render(QPainter& P, QRect theR);
+
+    RendererOptions options();
+    void setOptions(RendererOptions aOpt);
+    CoordBox boundingBox();
+    void setBoundingBox(CoordBox aBBox);
 
 public slots:
     void exportPDF();
@@ -45,13 +52,15 @@ private slots:
     void print(QPrinter* prt);
 
 private:
+    Ui::NativeRenderWidget ui;
     Document* theDoc;
     MapView* mapview;
     CoordBox theOrigBox;
     QSettings*	Sets;
     double		ratio;
     QPrinter* thePrinter;
-    QMyPrintPreviewDialog*  preview;
+    QPrintPreviewDialog*  preview;
+    QPrintPreviewWidget* prtW;
 
 };
 
