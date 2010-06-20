@@ -190,7 +190,7 @@ void Relation::drawHover(QPainter& P, MapView* theView, bool solid)
         for (int i=0; i<p->Members.size(); ++i)
             if (p->Members[i].second && !p->Members[i].second->isDeleted())
                 if (p->Members[i].second->boundingBox().intersects(theView->viewport()))
-                    p->Members[i].second->drawHover(P,theView, solid);
+                    p->Members[i].second->drawHover(P,theView, false);
 
         if (M_PREFS->getShowParents()) {
             for (int i=0; i<sizeParents(); ++i)
