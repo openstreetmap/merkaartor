@@ -1081,6 +1081,28 @@ void MerkaartorPreferences::setDirectionalArrowsVisible(RendererOptions::Directi
     Sets->setValue("visual/DirectionalArrowsVisible", (int)theValue);
 }
 
+RendererOptions MerkaartorPreferences::getRenderOptions()
+{
+    RendererOptions opt;
+
+    if (getBackgroundVisible()) opt.options |= RendererOptions::BackgroundVisible; else opt.options &= ~RendererOptions::BackgroundVisible;
+    if (getForegroundVisible()) opt.options |= RendererOptions::ForegroundVisible; else opt.options &= ~RendererOptions::ForegroundVisible;
+    if (getTouchupVisible()) opt.options |= RendererOptions::TouchupVisible; else opt.options &= ~RendererOptions::TouchupVisible;
+    if (getNamesVisible()) opt.options |= RendererOptions::NamesVisible; else opt.options &= ~RendererOptions::NamesVisible;
+    if (getPhotosVisible()) opt.options |= RendererOptions::PhotosVisible; else opt.options &= ~RendererOptions::PhotosVisible;
+    if (getVirtualNodesVisible()) opt.options |= RendererOptions::VirtualNodesVisible; else opt.options &= ~RendererOptions::VirtualNodesVisible;
+    if (getTrackPointsVisible()) opt.options |= RendererOptions::NodesVisible; else opt.options &= ~RendererOptions::NodesVisible;
+    if (getTrackSegmentsVisible()) opt.options |= RendererOptions::TrackSegmentVisible; else opt.options &= ~RendererOptions::TrackSegmentVisible;
+    if (getRelationsVisible()) opt.options |= RendererOptions::RelationsVisible; else opt.options &= ~RendererOptions::RelationsVisible;
+    if (getDownloadedVisible()) opt.options |= RendererOptions::DownloadedVisible; else opt.options &= ~RendererOptions::DownloadedVisible;
+    if (getScaleVisible()) opt.options |= RendererOptions::ScaleVisible; else opt.options &= ~RendererOptions::ScaleVisible;
+    if (getLatLonGridVisible()) opt.options |= RendererOptions::LatLonGridVisible; else opt.options &= ~RendererOptions::LatLonGridVisible;
+    if (getZoomBoris()) opt.options |= RendererOptions::LockZoom; else opt.options &= ~RendererOptions::LockZoom;
+    opt.arrowOptions = getDirectionalArrowsVisible();
+
+    return opt;
+}
+
 /* Export Type */
 void MerkaartorPreferences::setExportType(ExportType theValue)
 {

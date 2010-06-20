@@ -85,7 +85,7 @@ public:
     QString exportOSM(QMainWindow* main, QList<Feature*> aFeatures);
     QList<Feature*> exportCoreOSM(QList<Feature*> aFeatures);
     bool toXML(QDomElement xParent, QProgressDialog * progress);
-    static Document* fromXML(const QDomElement e, double version, LayerDock* aDock, QProgressDialog * progress);
+    static Document* fromXML(QString title, const QDomElement e, double version, LayerDock* aDock, QProgressDialog * progress);
 
     bool importNMEA(const QString& filename, TrackLayer* NewLayer);
     bool importOSB(const QString& filename, DrawingLayer* NewLayer);
@@ -106,6 +106,9 @@ public:
     bool setFilterType(FilterType aFilter);
     TagSelector* getTagFilter();
     int filterRevision() const;
+
+    QString title() const;
+    void setTitle(const QString aTitle);
 
 private:
     MapDocumentPrivate* p;

@@ -34,6 +34,7 @@ NativeRenderDialog::NativeRenderDialog(Document *aDoc, const CoordBox& aCoordBox
     :QObject(parent), theDoc(aDoc), theOrigBox(aCoordBox)
 {
     thePrinter = new QPrinter();
+    thePrinter->setDocName(aDoc->title());
 
     mapview = new MapView(NULL);
     mapview->setDocument(theDoc);
@@ -62,6 +63,7 @@ NativeRenderDialog::NativeRenderDialog(Document *aDoc, const CoordBox& aCoordBox
 
     connect( preview, SIGNAL(paintRequested(QPrinter*)), SLOT(print(QPrinter*)) );
     setBoundingBox(aCoordBox);
+    setOptions(M_PREFS->getRenderOptions());
 }
 
 RendererOptions NativeRenderDialog::options()
@@ -123,6 +125,7 @@ int NativeRenderDialog::exec()
 
 void NativeRenderDialog::render(QPainter& P, QRect theR)
 {
+    P.setClipRect(theR);
     RendererOptions opt = options();
 
     mapview->setGeometry(theR);

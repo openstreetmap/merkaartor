@@ -293,8 +293,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardChanged()));
 
-    setWindowTitle(QString("untitled - %1").arg(p->title));
-
 #ifndef _MOBILE
     theLayers->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     addDockWidget(Qt::LeftDockWidgetArea, theLayers);
@@ -353,6 +351,8 @@ MainWindow::MainWindow(QWidget *parent)
     createToolBarManager();  // has to be before restorestate
     M_PREFS->restoreMainWindowState( this );
     on_fileNewAction_triggered();
+    setWindowTitle(QString("%1 - %2").arg(theDocument->title()).arg(p->title));
+
 #ifndef _MOBILE
     if (!M_PREFS->getProjectionsList()->getProjections()->size()) {
         QMessageBox::critical(this, tr("Cannot load Projections file"), tr("\"Projections.xml\" could not be opened anywhere. Aborting."));
@@ -1639,7 +1639,7 @@ void MainWindow::on_fileNewAction_triggered()
         theDirty->updateList();
 
         fileName = "";
-        setWindowTitle(QString("untitled - %1").arg(p->title));
+        setWindowTitle(QString("%1 - %2").arg(theDocument->title()).arg(p->title));
 
         emit content_changed();
         on_editPropertiesAction_triggered();
@@ -2321,7 +2321,8 @@ void MainWindow::saveDocument()
 
     progress.setValue(progress.maximum());
 
-    setWindowTitle(QString("%1 - %2").arg(fileName).arg(p->title));
+    theDocument->setTitle(QFileInfo(fileName).fileName());
+    setWindowTitle(QString("%1 - %2").arg(theDocument->title()).arg(p->title));
 
 #ifndef Q_OS_SYMBIAN
     QApplication::restoreOverrideCursor();
@@ -2366,7 +2367,7 @@ void MainWindow::loadDocument(QString fn)
     QDomElement e = docElem.firstChildElement();
     while(!e.isNull()) {
         if (e.tagName() == "MapDocument") {
-            Document* newDoc = Document::fromXML(e, version, theLayers, &progress);
+            Document* newDoc = Document::fromXML(QFileInfo(fn).fileName(), e, version, theLayers, &progress);
 
             if (progress.wasCanceled())
                 break;
@@ -2381,7 +2382,7 @@ void MainWindow::loadDocument(QString fn)
                 connect (theDocument, SIGNAL(historyChanged()), theDirty, SLOT(updateList()));
                 theDirty->updateList();
                 fileName = fn;
-                setWindowTitle(QString("%1 - %2").arg(fileName).arg(p->title));
+                setWindowTitle(QString("%1 - %2").arg(theDocument->title()).arg(p->title));
             }
         } else
         if (e.tagName() == "MapView") {

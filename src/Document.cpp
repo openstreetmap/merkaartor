@@ -64,6 +64,7 @@ public:
 
     TagSelector* tagFilter;
     int FilterRevision;
+    QString title;
 
 };
 
@@ -74,6 +75,7 @@ Document::Document()
         addToTagList("created_by", QString("Merkaartor v%1%2").arg(STRINGIFY(VERSION)).arg(STRINGIFY(REVISION)));
 
     setFilterType(M_PREFS->getCurrentFilter());
+    p->title = tr("untitled");
 }
 
 Document::Document(LayerDock* aDock)
@@ -81,11 +83,13 @@ Document::Document(LayerDock* aDock)
 {
     p->theDock = aDock;
     setFilterType(M_PREFS->getCurrentFilter());
+    p->title = tr("untitled");
 }
 
 Document::Document(const Document&, LayerDock*)
 : p(0)
 {
+    p->title = tr("untitled");
 }
 
 Document::~Document()
@@ -139,9 +143,10 @@ bool Document::toXML(QDomElement xParent, QProgressDialog * progress)
     return OK;
 }
 
-Document* Document::fromXML(const QDomElement e, double version, LayerDock* aDock, QProgressDialog * progress)
+Document* Document::fromXML(QString title, const QDomElement e, double version, LayerDock* aDock, QProgressDialog * progress)
 {
     Document* NewDoc = new Document(aDock);
+    NewDoc->p->title = title;
 
     CommandHistory* h = 0;
 
@@ -822,6 +827,16 @@ TagSelector* Document::getTagFilter()
 int Document::filterRevision() const
 {
     return p->FilterRevision;
+}
+
+QString Document::title() const
+{
+    return p->title;
+}
+
+void Document::setTitle(const QString aTitle)
+{
+    p->title = aTitle;
 }
 
 /* FEATUREITERATOR */

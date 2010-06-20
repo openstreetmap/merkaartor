@@ -200,6 +200,7 @@ public:
 
     RendererOptions::DirectionalArrowsShowOptions getDirectionalArrowsVisible();
     void setDirectionalArrowsVisible(RendererOptions::DirectionalArrowsShowOptions theValue);
+    RendererOptions getRenderOptions();
 
     M_PARAM_DECLARE_INT(TagListFirstColumnWidth)
 
