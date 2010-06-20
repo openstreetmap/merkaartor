@@ -328,11 +328,11 @@ void Relation::remove(int Idx)
 {
     if (layer())
         layer()->indexRemove(BBox, this);
-    if (p->Members[Idx].second) {
-        Feature* F = p->Members[Idx].second;
-        F->unsetParentFeature(this);
-    }
+    Feature* F = p->Members[Idx].second;
+    // only remove as parent if the feature is only a member once
     p->Members.erase(p->Members.begin()+Idx);
+    if (F && find(F) == p->Members.size())
+        F->unsetParentFeature(this);
     p->BBoxUpToDate = false;
     MetaUpToDate = false;
     if (layer() && !isDeleted() && isVisible()) {
