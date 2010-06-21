@@ -572,9 +572,9 @@ QString Relation::toHtml()
     D += "<i>"+QApplication::translate("MapFeature", "size")+": </i>" + QString::number(size()) + " " + QApplication::translate("MapFeature", "members");
     CoordBox bb = boundingBox();
     D += "<br/>";
-    D += "<i>"+QApplication::translate("MapFeature", "Topleft")+": </i>" + QString::number(coordToAng(bb.topLeft().lat()), 'f', 4) + " / " + QString::number(coordToAng(bb.topLeft().lon()), 'f', 4);
+    D += "<i>"+QApplication::translate("MapFeature", "Topleft")+": </i>" + COORD2STRING(coordToAng(bb.topLeft().lat())) + " / " + COORD2STRING(coordToAng(bb.topLeft().lon()));
     D += "<br/>";
-    D += "<i>"+QApplication::translate("MapFeature", "Botright")+": </i>" + QString::number(coordToAng(bb.bottomRight().lat()), 'f', 4) + " / " + QString::number(coordToAng(bb.bottomRight().lon()), 'f', 4);
+    D += "<i>"+QApplication::translate("MapFeature", "Botright")+": </i>" + COORD2STRING(coordToAng(bb.bottomRight().lat())) + " / " + COORD2STRING(coordToAng(bb.bottomRight().lon()));
 
     return Feature::toMainHtml(QApplication::translate("MapFeature", "Relation"),"relation").arg(D);
 }

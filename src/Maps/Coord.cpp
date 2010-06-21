@@ -96,8 +96,8 @@ bool Coord::toXML(QString elName, QDomElement& xParent) const
     QDomElement e = xParent.ownerDocument().createElement(elName);
     xParent.appendChild(e);
 
-    e.setAttribute("lon",QString::number(coordToAng(Lon),'f',8));
-    e.setAttribute("lat", QString::number(coordToAng(Lat),'f',8));
+    e.setAttribute("lon",COORD2STRING(coordToAng(Lon)));
+    e.setAttribute("lat", COORD2STRING(coordToAng(Lat)));
 
     return OK;
 }

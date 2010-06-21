@@ -711,10 +711,10 @@ bool downloadOpenstreetbugs(MainWindow* Main, const CoordBox& aBox, Document* th
 
     theDownloader.setAnimator(dlg,Lbl,Bar,true);
     Lbl->setText(QApplication::translate("Downloader","Downloading points"));
-    osbUrl.addQueryItem("t", QString::number(coordToAng(aBox.topRight().lat())));
-    osbUrl.addQueryItem("l", QString::number(coordToAng(aBox.bottomLeft().lon())));
-    osbUrl.addQueryItem("b", QString::number(coordToAng(aBox.bottomLeft().lat())));
-    osbUrl.addQueryItem("r", QString::number(coordToAng(aBox.topRight().lon())));
+    osbUrl.addQueryItem("t", COORD2STRING(coordToAng(aBox.topRight().lat())));
+    osbUrl.addQueryItem("l", COORD2STRING(coordToAng(aBox.bottomLeft().lon())));
+    osbUrl.addQueryItem("b", COORD2STRING(coordToAng(aBox.bottomLeft().lat())));
+    osbUrl.addQueryItem("r", COORD2STRING(coordToAng(aBox.topRight().lon())));
     osbUrl.addQueryItem("open", "yes");
 
     if (!theDownloader.go(osbUrl.toString()))

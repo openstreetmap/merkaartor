@@ -1058,9 +1058,9 @@ QString Way::toHtml()
     D += "<i>"+QApplication::translate("MapFeature", "Size")+": </i>" + QApplication::translate("MapFeature", "%1 nodes").arg(size());
     CoordBox bb = boundingBox();
     D += "<br/>";
-    D += "<i>"+QApplication::translate("MapFeature", "Topleft")+": </i>" + QString::number(coordToAng(bb.topLeft().lat()), 'f', 4) + " / " + QString::number(coordToAng(bb.topLeft().lon()), 'f', 4);
+    D += "<i>"+QApplication::translate("MapFeature", "Topleft")+": </i>" + COORD2STRING(coordToAng(bb.topLeft().lat())) + " / " + COORD2STRING(coordToAng(bb.topLeft().lon()));
     D += "<br/>";
-    D += "<i>"+QApplication::translate("MapFeature", "Botright")+": </i>" + QString::number(coordToAng(bb.bottomRight().lat()), 'f', 4) + " / " + QString::number(coordToAng(bb.bottomRight().lon()), 'f', 4);
+    D += "<i>"+QApplication::translate("MapFeature", "Botright")+": </i>" + COORD2STRING(coordToAng(bb.bottomRight().lat())) + " / " + COORD2STRING(coordToAng(bb.bottomRight().lon()));
 
     QString type = isClosed() ? QApplication::translate("MapFeature", "Area") : QApplication::translate("MapFeature", "Way");
     return Feature::toMainHtml(type, "way").arg(D);

@@ -30,143 +30,143 @@ ImportExportKML::~ImportExportKML()
 // export
 bool ImportExportKML::export_(const QList<Feature *>& featList)
 {
-	QList<Node*>	waypoints;
-	QList<TrackSegment*>	segments;
-	QDomElement k;
-	QDomText v;
+    QList<Node*>	waypoints;
+    QList<TrackSegment*>	segments;
+    QDomElement k;
+    QDomText v;
 
-	if(! IImportExport::export_(featList) ) return false;
+    if(! IImportExport::export_(featList) ) return false;
 
-	bool OK = true;
+    bool OK = true;
 
-	QDomDocument theXmlDoc;
-	theXmlDoc.appendChild(theXmlDoc.createProcessingInstruction("xml", "version=\"1.0\""));
+    QDomDocument theXmlDoc;
+    theXmlDoc.appendChild(theXmlDoc.createProcessingInstruction("xml", "version=\"1.0\""));
 
-	QDomElement kml = theXmlDoc.createElement("kml");
-	theXmlDoc.appendChild(kml);
-	kml.setAttribute("xmlns", "http://earth.google.com/kml/2.2");
+    QDomElement kml = theXmlDoc.createElement("kml");
+    theXmlDoc.appendChild(kml);
+    kml.setAttribute("xmlns", "http://earth.google.com/kml/2.2");
 
-	QDomElement d = theXmlDoc.createElement("Document");
-	kml.appendChild(d);
+    QDomElement d = theXmlDoc.createElement("Document");
+    kml.appendChild(d);
 
 
-	//QDomElement g = theXmlDoc.createElement("MultiGeometry");
-	//p.appendChild(g);
+    //QDomElement g = theXmlDoc.createElement("MultiGeometry");
+    //p.appendChild(g);
 
-	for (int i=0; i<theFeatures.size(); ++i) {
-		if (Way* R = dynamic_cast<Way*>(theFeatures[i])) {
-			QDomElement p = theXmlDoc.createElement("Placemark");
-			d.appendChild(p);
+    for (int i=0; i<theFeatures.size(); ++i) {
+        if (Way* R = dynamic_cast<Way*>(theFeatures[i])) {
+            QDomElement p = theXmlDoc.createElement("Placemark");
+            d.appendChild(p);
 
-			k = theXmlDoc.createElement("name");
-			p.appendChild(k);
-			v = theXmlDoc.createTextNode(R->description());
-			k.appendChild(v);
+            k = theXmlDoc.createElement("name");
+            p.appendChild(k);
+            v = theXmlDoc.createTextNode(R->description());
+            k.appendChild(v);
 
-			k = theXmlDoc.createElement("description");
-			p.appendChild(k);
-			QString desc;
-			for (int j=0; j<R->tagSize(); ++j) {
-				desc += R->tagKey(j);
-				desc += "=";
-				desc += R->tagValue(j);
-				desc += "<br/>";
-			}
-			v = theXmlDoc.createTextNode(desc);
-			k.appendChild(v);
+            k = theXmlDoc.createElement("description");
+            p.appendChild(k);
+            QString desc;
+            for (int j=0; j<R->tagSize(); ++j) {
+                desc += R->tagKey(j);
+                desc += "=";
+                desc += R->tagValue(j);
+                desc += "<br/>";
+            }
+            v = theXmlDoc.createTextNode(desc);
+            k.appendChild(v);
 
-			k = theXmlDoc.createElement("Style");
-			p.appendChild(k);
+            k = theXmlDoc.createElement("Style");
+            p.appendChild(k);
 
-			QDomElement ls = theXmlDoc.createElement("LineStyle");
-			k.appendChild(ls);
+            QDomElement ls = theXmlDoc.createElement("LineStyle");
+            k.appendChild(ls);
 
-			const FeaturePainter* fp = R->getCurrentEditPainter();
-			if (fp) {
-				QDomElement color = theXmlDoc.createElement("color");
-				ls.appendChild(color);
-				QRgb kcolor = fp->ForegroundColor.rgba();
-				v = theXmlDoc.createTextNode(QString::number(qRgba(qBlue(kcolor), qGreen(kcolor), qRed(kcolor), /*qAlpha(kcolor)*/ 192), 16));
-				color.appendChild(v);
-			} 
-			QDomElement width = theXmlDoc.createElement("width");
-			ls.appendChild(width);
-			v = theXmlDoc.createTextNode(QString::number(R->widthOf()));
-			width.appendChild(v);
+            const FeaturePainter* fp = R->getCurrentEditPainter();
+            if (fp) {
+                QDomElement color = theXmlDoc.createElement("color");
+                ls.appendChild(color);
+                QRgb kcolor = fp->ForegroundColor.rgba();
+                v = theXmlDoc.createTextNode(QString::number(qRgba(qBlue(kcolor), qGreen(kcolor), qRed(kcolor), /*qAlpha(kcolor)*/ 192), 16));
+                color.appendChild(v);
+            }
+            QDomElement width = theXmlDoc.createElement("width");
+            ls.appendChild(width);
+            v = theXmlDoc.createTextNode(QString::number(R->widthOf()));
+            width.appendChild(v);
 
-			QDomElement l = theXmlDoc.createElement("LineString");
-			p.appendChild(l);
+            QDomElement l = theXmlDoc.createElement("LineString");
+            p.appendChild(l);
 
-			QDomElement c = theXmlDoc.createElement("coordinates");
-			l.appendChild(c);
-			
-			QString s;
-			for (int j=0; j<R->size(); ++j) {
-				Node* N = dynamic_cast<Node*>(R->get(j));
-				s += QString(" %1,%2").arg(QString::number(coordToAng(N->position().lon()),'f',8)).arg(QString::number(coordToAng(N->position().lat()),'f',8));
-			}
+            QDomElement c = theXmlDoc.createElement("coordinates");
+            l.appendChild(c);
 
-			QDomText v = theXmlDoc.createTextNode(s);
-			c.appendChild(v);
-		}
-		else if (Node* N = dynamic_cast<Node*>(theFeatures[i])) {
-			if (N->sizeParents()) continue;
+            QString s;
+            for (int j=0; j<R->size(); ++j) {
+                Node* N = dynamic_cast<Node*>(R->get(j));
+                s += QString(" %1,%2").arg(COORD2STRING(coordToAng(N->position().lon()))).arg(COORD2STRING(coordToAng(N->position().lat())));
+            }
 
-			QDomElement p = theXmlDoc.createElement("Placemark");
-			d.appendChild(p);
+            QDomText v = theXmlDoc.createTextNode(s);
+            c.appendChild(v);
+        }
+        else if (Node* N = dynamic_cast<Node*>(theFeatures[i])) {
+            if (N->sizeParents()) continue;
 
-			k = theXmlDoc.createElement("name");
-			p.appendChild(k);
-			v = theXmlDoc.createTextNode(N->description());
-			k.appendChild(v);
+            QDomElement p = theXmlDoc.createElement("Placemark");
+            d.appendChild(p);
 
-			k = theXmlDoc.createElement("description");
-			p.appendChild(k);
-			QString desc;
-			for (int j=0; j<N->tagSize(); ++j) {
-				desc += N->tagKey(j);
-				desc += "=";
-				desc += N->tagValue(j);
-				desc += "<br/>";
-			}
-			v = theXmlDoc.createTextNode(desc);
-			k.appendChild(v);
+            k = theXmlDoc.createElement("name");
+            p.appendChild(k);
+            v = theXmlDoc.createTextNode(N->description());
+            k.appendChild(v);
 
-			//k = theXmlDoc.createElement("Style");
-			//p.appendChild(k);
+            k = theXmlDoc.createElement("description");
+            p.appendChild(k);
+            QString desc;
+            for (int j=0; j<N->tagSize(); ++j) {
+                desc += N->tagKey(j);
+                desc += "=";
+                desc += N->tagValue(j);
+                desc += "<br/>";
+            }
+            v = theXmlDoc.createTextNode(desc);
+            k.appendChild(v);
 
-			//QDomElement ls = theXmlDoc.createElement("LineStyle");
-			//k.appendChild(ls);
+            //k = theXmlDoc.createElement("Style");
+            //p.appendChild(k);
 
-			//FeaturePainter* fp = R->getCurrentEditPainter();
-			//if (fp) {
-			//	QDomElement color = theXmlDoc.createElement("color");
-			//	ls.appendChild(color);
-			//	QRgb kcolor = fp->ForegroundColor.rgba();
-			//	v = theXmlDoc.createTextNode(QString::number(qRgba(qBlue(kcolor), qGreen(kcolor), qRed(kcolor), /*qAlpha(kcolor)*/ 164), 16));
-			//	color.appendChild(v);
-			//} 
-			//QDomElement width = theXmlDoc.createElement("width");
-			//ls.appendChild(width);
-			//v = theXmlDoc.createTextNode(QString::number(widthOf(R)));
-			//width.appendChild(v);
+            //QDomElement ls = theXmlDoc.createElement("LineStyle");
+            //k.appendChild(ls);
 
-			QDomElement l = theXmlDoc.createElement("Point");
-			p.appendChild(l);
+            //FeaturePainter* fp = R->getCurrentEditPainter();
+            //if (fp) {
+            //	QDomElement color = theXmlDoc.createElement("color");
+            //	ls.appendChild(color);
+            //	QRgb kcolor = fp->ForegroundColor.rgba();
+            //	v = theXmlDoc.createTextNode(QString::number(qRgba(qBlue(kcolor), qGreen(kcolor), qRed(kcolor), /*qAlpha(kcolor)*/ 164), 16));
+            //	color.appendChild(v);
+            //}
+            //QDomElement width = theXmlDoc.createElement("width");
+            //ls.appendChild(width);
+            //v = theXmlDoc.createTextNode(QString::number(widthOf(R)));
+            //width.appendChild(v);
 
-			QDomElement c = theXmlDoc.createElement("coordinates");
-			l.appendChild(c);
-			
-			QString s;
-			s += QString(" %1,%2").arg(QString::number(coordToAng(N->position().lon()),'f',8)).arg(QString::number(coordToAng(N->position().lat()),'f',8));
+            QDomElement l = theXmlDoc.createElement("Point");
+            p.appendChild(l);
 
-			QDomText v = theXmlDoc.createTextNode(s);
-			c.appendChild(v);
-		}
-	}
+            QDomElement c = theXmlDoc.createElement("coordinates");
+            l.appendChild(c);
 
-	Device->write(theXmlDoc.toString().toUtf8());
-	return OK;
+            QString s;
+            s += QString(" %1,%2").arg(COORD2STRING(coordToAng(N->position().lon()))).arg(COORD2STRING(coordToAng(N->position().lat())));
+
+            QDomText v = theXmlDoc.createTextNode(s);
+            c.appendChild(v);
+        }
+    }
+
+    Device->write(theXmlDoc.toString().toUtf8());
+    return OK;
 
 }
 
@@ -176,146 +176,146 @@ QString kmlId;
 
 Feature* parsePoint(QDomElement& e, Layer* aLayer)
 {
-	Node* P = NULL;
+    Node* P = NULL;
 
-	QDomElement c = e.firstChildElement();
-	while(!c.isNull() && !P) {
-		if (c.tagName() == "coordinates") {
-			QDomText t = c.firstChild().toText();
-			QString s = t.nodeValue();
-			QStringList tokens = s.split(",");
-			double lon = tokens[0].toDouble();
-			double lat = tokens[1].toDouble();
-			Coord p(angToCoord(lat), angToCoord(lon));
+    QDomElement c = e.firstChildElement();
+    while(!c.isNull() && !P) {
+        if (c.tagName() == "coordinates") {
+            QDomText t = c.firstChild().toText();
+            QString s = t.nodeValue();
+            QStringList tokens = s.split(",");
+            double lon = tokens[0].toDouble();
+            double lat = tokens[1].toDouble();
+            Coord p(angToCoord(lat), angToCoord(lon));
 
-			P = new Node(p);
-			P->setTag("%kml:guid", kmlId);
-			aLayer->add(P);
-		}
+            P = new Node(p);
+            P->setTag("%kml:guid", kmlId);
+            aLayer->add(P);
+        }
 
-		c = c.nextSiblingElement();
-	}
+        c = c.nextSiblingElement();
+    }
 
-	return P;
+    return P;
 }
 
 Feature* parseGeometry(QDomElement& e, Layer* aLayer)
 {
-	Feature* F = NULL;
-	if (e.tagName() == "Point") {
-		F = parsePoint(e, aLayer);
-	}
+    Feature* F = NULL;
+    if (e.tagName() == "Point") {
+        F = parsePoint(e, aLayer);
+    }
 
-	return F;
+    return F;
 }
 
 bool parsePlacemark(QDomElement& e, Layer* aLayer)
 {
-	Feature* F = NULL;
-	QDomElement c = e.firstChildElement();
-	QString name;
-	QString address;
-	QString description;
-	QString phone;
+    Feature* F = NULL;
+    QDomElement c = e.firstChildElement();
+    QString name;
+    QString address;
+    QString description;
+    QString phone;
 
-	while(!c.isNull()) {
-		if (c.tagName() == "name")
-			name = c.firstChild().toText().nodeValue();
-		else
-		if (c.tagName() == "address")
-			address = c.firstChild().toText().nodeValue();
-		else
-		if (c.tagName() == "description")
-			description = c.firstChild().toText().nodeValue();
-		else
-		if (c.tagName() == "phoneNumber")
-			phone = c.firstChild().toText().nodeValue();
-		else
-		F = parseGeometry(c, aLayer);
+    while(!c.isNull()) {
+        if (c.tagName() == "name")
+            name = c.firstChild().toText().nodeValue();
+        else
+        if (c.tagName() == "address")
+            address = c.firstChild().toText().nodeValue();
+        else
+        if (c.tagName() == "description")
+            description = c.firstChild().toText().nodeValue();
+        else
+        if (c.tagName() == "phoneNumber")
+            phone = c.firstChild().toText().nodeValue();
+        else
+        F = parseGeometry(c, aLayer);
 
-		c = c.nextSiblingElement();
-	}
+        c = c.nextSiblingElement();
+    }
 
-	if (F) {
-		if (!name.isEmpty())
-			F->setTag("name", name);
-		if (!address.isEmpty())
-			F->setTag("addr:full", address);
-		if (!phone.isEmpty())
-			F->setTag("addr:phone_number", phone);
-		if (!description.isEmpty())
-			F->setTag("description", description);
-		return true;
-	} else
-		return false;
+    if (F) {
+        if (!name.isEmpty())
+            F->setTag("name", name);
+        if (!address.isEmpty())
+            F->setTag("addr:full", address);
+        if (!phone.isEmpty())
+            F->setTag("addr:phone_number", phone);
+        if (!description.isEmpty())
+            F->setTag("description", description);
+        return true;
+    } else
+        return false;
 }
 
 bool parseFeature(QDomElement& e, Layer* aLayer)
 {
-	bool ret= false;
-	QDomElement c = e.cloneNode().toElement();
+    bool ret= false;
+    QDomElement c = e.cloneNode().toElement();
 
-	while(!c.isNull()) {
-		if (c.tagName() == "Placemark")
-			ret = parsePlacemark(c, aLayer);
-		else
-			ret = parseContainer(c, aLayer);
+    while(!c.isNull()) {
+        if (c.tagName() == "Placemark")
+            ret = parsePlacemark(c, aLayer);
+        else
+            ret = parseContainer(c, aLayer);
 
-		c = c.nextSiblingElement();
-	}
-	return ret;
+        c = c.nextSiblingElement();
+    }
+    return ret;
 }
 
 bool parseContainer(QDomElement& e, Layer* aLayer)
 {
-	if ((e.tagName() != "Document") && (e.tagName() != "Folder"))
-		return false;
+    if ((e.tagName() != "Document") && (e.tagName() != "Folder"))
+        return false;
 
-	bool ret= false;
-	QDomElement c = e.firstChildElement();
+    bool ret= false;
+    QDomElement c = e.firstChildElement();
 
-	while(!c.isNull()) {
-		ret = parseFeature(c, aLayer);
+    while(!c.isNull()) {
+        ret = parseFeature(c, aLayer);
 
-		c = c.nextSiblingElement();
-	}
-	return ret;
+        c = c.nextSiblingElement();
+    }
+    return ret;
 }
 
 bool parseKML(QDomElement& e, Layer* aLayer)
 {
-	bool ret= false;
-	QDomElement c = e.firstChildElement();
-	
-	while(!c.isNull()) {
-		ret = parseFeature(c, aLayer);
-		if (!ret)
-			ret = parseGeometry(c, aLayer);
+    bool ret= false;
+    QDomElement c = e.firstChildElement();
 
-		c = c.nextSiblingElement();
-	}
-	return ret;
+    while(!c.isNull()) {
+        ret = parseFeature(c, aLayer);
+        if (!ret)
+            ret = parseGeometry(c, aLayer);
+
+        c = c.nextSiblingElement();
+    }
+    return ret;
 }
 
 // import the  input
 bool ImportExportKML::import(Layer* aLayer)
 {
-	QDomDocument* theXmlDoc = new QDomDocument();
-	if (!theXmlDoc->setContent(Device)) {
-		//QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
-		Device->close();
-		delete theXmlDoc;
-		theXmlDoc = NULL;
-		return false;
-	}
-	Device->close();
+    QDomDocument* theXmlDoc = new QDomDocument();
+    if (!theXmlDoc->setContent(Device)) {
+        //QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid XML file.").arg(fn));
+        Device->close();
+        delete theXmlDoc;
+        theXmlDoc = NULL;
+        return false;
+    }
+    Device->close();
 
-	QDomElement docElem = theXmlDoc->documentElement();
-	if (docElem.tagName() != "kml") {
-		//QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid KML document.").arg(fn));
-		return false;
-	}
-	kmlId = QUuid::createUuid().toString();
-	return parseKML(docElem, aLayer);
+    QDomElement docElem = theXmlDoc->documentElement();
+    if (docElem.tagName() != "kml") {
+        //QMessageBox::critical(this, tr("Invalid file"), tr("%1 is not a valid KML document.").arg(fn));
+        return false;
+    }
+    kmlId = QUuid::createUuid().toString();
+    return parseKML(docElem, aLayer);
 }
 

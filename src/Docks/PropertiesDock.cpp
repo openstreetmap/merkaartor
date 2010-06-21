@@ -512,8 +512,8 @@ void PropertiesDock::resetValues()
         if ((Pt) && (NowShowing == TrackPointUiShowing))
         {
             TrackPointUi.Id->setText(Pt->id());
-            TrackPointUi.Latitude->setText(QString::number(coordToAng(Pt->position().lat()),'g',8));
-            TrackPointUi.Longitude->setText(QString::number(coordToAng(Pt->position().lon()),'g',8));
+            TrackPointUi.Latitude->setText(COORD2STRING(coordToAng(Pt->position().lat())));
+            TrackPointUi.Longitude->setText(COORD2STRING(coordToAng(Pt->position().lon())));
             TrackPointUi.TagView->setModel(theModel);
             TrackPointUi.TagView->setItemDelegate(delegate);
 

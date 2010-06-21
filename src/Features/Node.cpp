@@ -401,8 +401,8 @@ bool Node::toXML(QDomElement xParent, QProgressDialog * progress, bool strict)
     xParent.appendChild(e);
 
     e.setAttribute("id", xmlId());
-    e.setAttribute("lon",QString::number(coordToAng(Position.lon()),'f',8));
-    e.setAttribute("lat", QString::number(coordToAng(Position.lat()),'f',8));
+    e.setAttribute("lon",COORD2STRING(coordToAng(Position.lon())));
+    e.setAttribute("lat", COORD2STRING(coordToAng(Position.lat())));
     e.setAttribute("timestamp", time().toString(Qt::ISODate)+"Z");
     e.setAttribute("version", versionNumber());
     e.setAttribute("user", user());
@@ -440,8 +440,8 @@ bool Node::toGPX(QDomElement xParent, QProgressDialog * progress, bool forExport
 
     if (!forExport)
         e.setAttribute("xml:id", xmlId());
-    e.setAttribute("lon",QString::number(coordToAng(Position.lon()),'f',8));
-    e.setAttribute("lat", QString::number(coordToAng(Position.lat()),'f',8));
+    e.setAttribute("lon",COORD2STRING(coordToAng(Position.lon())));
+    e.setAttribute("lat", COORD2STRING(coordToAng(Position.lat())));
 
     QDomElement c = xParent.ownerDocument().createElement("time");
     e.appendChild(c);
@@ -607,7 +607,7 @@ QString Node::toHtml()
     int i;
 
 
-    D += "<i>"+QApplication::translate("MapFeature", "coord")+": </i>" + QString::number(coordToAng(position().lat()), 'f', 4) + " / " + QString::number(coordToAng(position().lon()), 'f', 4);
+    D += "<i>"+QApplication::translate("MapFeature", "coord")+": </i>" + COORD2STRING(coordToAng(position().lat())) + " / " + COORD2STRING(coordToAng(position().lon()));
 
     if (elevation())
         D += "<br/><i>"+QApplication::translate("MapFeature", "elevation")+": </i>" + QString::number(elevation(), 'f', 4);

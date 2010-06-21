@@ -543,10 +543,10 @@ QString Document::exportOSM(QMainWindow* main, const CoordBox& aCoordBox, bool r
         QDomElement bnds = theXmlDoc.createElement("bounds");
         o.appendChild(bnds);
 
-        bnds.setAttribute("minlat", QString::number(coordToAng(aCoordBox.bottomLeft().lat()),'f',6));
-        bnds.setAttribute("minlon", QString::number(coordToAng(aCoordBox.bottomLeft().lon()),'f',6));
-        bnds.setAttribute("maxlat", QString::number(coordToAng(aCoordBox.topRight().lat()),'f',6));
-        bnds.setAttribute("maxlon", QString::number(coordToAng(aCoordBox.topRight().lon()),'f',6));
+        bnds.setAttribute("minlat", COORD2STRING(coordToAng(aCoordBox.bottomLeft().lat())));
+        bnds.setAttribute("minlon", COORD2STRING(coordToAng(aCoordBox.bottomLeft().lon())));
+        bnds.setAttribute("maxlat", COORD2STRING(coordToAng(aCoordBox.topRight().lat())));
+        bnds.setAttribute("maxlon", COORD2STRING(coordToAng(aCoordBox.topRight().lon())));
     }
 
     for (int i=0; i < exportedFeatures.size(); i++) {

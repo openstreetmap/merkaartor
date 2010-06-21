@@ -12,6 +12,8 @@
 #define COORD_MAX 180.0
 #define COORD_ENLARGE 0.00015
 
+#define COORD2STRING(c) QString::number(c, 'f', 7)
+
 inline double angToRad(double a)
 {
     return a*M_PI/180.;
