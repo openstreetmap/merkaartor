@@ -69,6 +69,7 @@ NativeRenderDialog::NativeRenderDialog(Document *aDoc, const CoordBox& aCoordBox
 RendererOptions NativeRenderDialog::options()
 {
     RendererOptions opt;
+    opt.options |= RendererOptions::ForPrinting;
     opt.options |= RendererOptions::BackgroundVisible;
     opt.options |= RendererOptions::ForegroundVisible;
     opt.options |= RendererOptions::TouchupVisible;
@@ -123,9 +124,19 @@ int NativeRenderDialog::exec()
     return preview->exec();
 }
 
+void NativeRenderDialog::print(QPrinter* prt)
+{
+    QPainter P(prt);
+    P.setRenderHint(QPainter::Antialiasing);
+    QRect theR = prt->pageRect();
+    theR.moveTo(0, 0);
+    render(P, theR);
+}
+
 void NativeRenderDialog::render(QPainter& P, QRect theR)
 {
     P.setClipRect(theR);
+    P.setClipping(true);
     RendererOptions opt = options();
 
     mapview->setGeometry(theR);
@@ -134,19 +145,11 @@ void NativeRenderDialog::render(QPainter& P, QRect theR)
     mapview->invalidate(true, false);
     mapview->buildFeatureSet();
     mapview->drawCoastlines(P);
-    mapview->drawFeatures(P);
+    mapview->printFeatures(P);
     if (opt.options & RendererOptions::ScaleVisible)
         mapview->drawScale(P);
     if (opt.options & RendererOptions::LatLonGridVisible)
         mapview->drawLatLonGrid(P);
-}
-
-void NativeRenderDialog::print(QPrinter* prt)
-{
-    QPainter P(prt);
-    P.setRenderHint(QPainter::Antialiasing);
-    QRect theR = prt->pageRect();
-    render(P, theR);
 }
 
 void NativeRenderDialog::exportPDF()
@@ -168,6 +171,7 @@ void NativeRenderDialog::exportRaster()
         return;
 
     QRect theR = preview->printer()->pageRect();
+    theR.moveTo(0, 0);
 
     QPixmap pix(theR.size());
     if (M_PREFS->getUseShapefileForBackground())
@@ -192,6 +196,7 @@ void NativeRenderDialog::exportSVG()
 
     QSvgGenerator svgg;
     QRect theR = preview->printer()->pageRect();
+    theR.moveTo(0, 0);
     svgg.setSize(theR.size());
     svgg.setFileName(s);
 #if QT_VERSION >= 0x040500

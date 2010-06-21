@@ -1,4 +1,5 @@
 v0.17
+    * ADD : Printing
     * ADD : Hungarian translation by Peter Sulyok
     * CHG : Allow to pan with middle mouse button
     * ADD : Toolbar editor (create/modify tollbars)

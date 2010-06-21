@@ -22,7 +22,8 @@ public:
         DownloadedVisible = 0x400,
         ScaleVisible = 0x800,
         LatLonGridVisible = 0x1000,
-        LockZoom = 0x2000
+        LockZoom = 0x2000,
+        ForPrinting = 0x4000
     };
     Q_DECLARE_FLAGS(RenderOptions, RenderOption)
 

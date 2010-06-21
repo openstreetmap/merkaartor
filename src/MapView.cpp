@@ -455,6 +455,11 @@ void MapView::drawFeatures(QPainter & P)
     p->renderer.render(&P, p->theFeatures, p->ROptions, this);
 }
 
+void MapView::printFeatures(QPainter & P)
+{
+    p->renderer.print(&P, p->theFeatures, p->ROptions, this);
+}
+
 void MapView::drawDownloadAreas(QPainter & P)
 {
     if (!TEST_RFLAGS(RendererOptions::DownloadedVisible))

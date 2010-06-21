@@ -325,4 +325,113 @@ void MapRenderer::render(
     }
 }
 
+void MapRenderer::print(
+        QPainter* P,
+        QMap<RenderPriority, QSet <Feature*> > theFeatures,
+        const RendererOptions& options,
+        MapView* aView
+)
+{
+    theView = aView;
+    theOptions = options;
+
+    QMap<RenderPriority, QSet<Feature*> >::const_iterator itm;
+    QSet<Feature*>::const_iterator it;
+
+    P->setRenderHint(QPainter::Antialiasing);
+    thePainter = P;
+
+    if (TEST_RFLAGS(RendererOptions::BackgroundVisible))
+    {
+        BackgroundStyleLayer layer(this);
+
+        for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm) {
+            for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
+                P->save();
+                P->setOpacity((*it)->layer()->getAlpha());
+                if (Way * R = CAST_WAY(*it)) {
+                    for (int i=0; i<R->sizeParents(); ++i)
+                        if (!R->getParent(i)->isDeleted() && R->getParent(i)->getEditPainter(theView->pixelPerM()))
+                            continue;
+                    layer.draw(R);
+                } else if (Node * Pt = CAST_NODE(*it))
+                    layer.draw(Pt);
+                else if (Relation * RR = CAST_RELATION(*it))
+                    layer.draw(RR);
+                P->restore();
+            }
+        }
+    }
+    if (TEST_RFLAGS(RendererOptions::ForegroundVisible))
+    {
+        ForegroundStyleLayer layer(this);
+
+        for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm) {
+            for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
+                P->save();
+                P->setOpacity((*it)->layer()->getAlpha());
+                if (Way * R = CAST_WAY(*it)) {
+                    for (int i=0; i<R->sizeParents(); ++i)
+                        if (!R->getParent(i)->isDeleted() && R->getParent(i)->getEditPainter(theView->pixelPerM()))
+                            continue;
+                    layer.draw(R);
+                } else if (Node * Pt = CAST_NODE(*it))
+                    layer.draw(Pt);
+                else if (Relation * RR = CAST_RELATION(*it))
+                    layer.draw(RR);
+                P->restore();
+            }
+        }
+    }
+    if (TEST_RFLAGS(RendererOptions::TouchupVisible))
+    {
+        TouchupStyleLayer layer(this);
+
+        for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm) {
+            for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
+                P->save();
+                P->setOpacity((*it)->layer()->getAlpha());
+                if (Way * R = CAST_WAY(*it)) {
+                    for (int i=0; i<R->sizeParents(); ++i)
+                        if (!R->getParent(i)->isDeleted() && R->getParent(i)->getEditPainter(theView->pixelPerM()))
+                            continue;
+                    layer.draw(R);
+                } else if (Node * Pt = CAST_NODE(*it))
+                    layer.draw(Pt);
+                else if (Relation * RR = CAST_RELATION(*it))
+                    layer.draw(RR);
+                P->restore();
+            }
+        }
+    }
+    if (TEST_RFLAGS(RendererOptions::NamesVisible)) {
+        LabelStyleLayer layer(this);
+
+        for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm) {
+            for (it = itm.value().constBegin(); it != itm.value().constEnd(); ++it) {
+                P->save();
+                P->setOpacity((*it)->layer()->getAlpha());
+                if (Way * R = CAST_WAY(*it)) {
+                    for (int i=0; i<R->sizeParents(); ++i)
+                        if (!R->getParent(i)->isDeleted() && R->getParent(i)->getEditPainter(theView->pixelPerM()))
+                            continue;
+                    layer.draw(R);
+                } else if (Node * Pt = CAST_NODE(*it))
+                    layer.draw(Pt);
+                else if (Relation * RR = CAST_RELATION(*it))
+                    layer.draw(RR);
+                P->restore();
+            }
+        }
+    }
+
+    for (itm = theFeatures.constBegin() ;itm != theFeatures.constEnd(); ++itm)
+    {
+        for (it = itm.value().constBegin() ;it != itm.value().constEnd(); ++it)
+        {
+            P->setOpacity((*it)->layer()->getAlpha());
+            (*it)->draw(*P, aView);
+        }
+    }
+}
 
