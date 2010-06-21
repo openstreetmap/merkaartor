@@ -128,7 +128,7 @@ void TileMapAdapter::zoom_out()
 QString TileMapAdapter::getQuery		(int x, int y, int z) const
 {
     if (BlOrigin)
-        y = getTilesNS(current_zoom) - y;
+        y = getTilesNS(current_zoom)-1 - y;
     int a[3] = {z, x, y};
     return QString(serverPath).replace(order[2][0],2, loc.toString(a[order[2][1]]))
                                       .replace(order[1][0],2, loc.toString(a[order[1][1]]))
