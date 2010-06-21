@@ -9,12 +9,14 @@
 #include "Layer.h"
 #include "PaintStyle/MasPaintStyle.h"
 #include "Utils/TagSelector.h"
+#include "MapView.h"
 
 #include "Utils/Utils.h"
 
 #include <QApplication>
 #include <QUuid>
 #include <QProgressDialog>
+#include <QPainter>
 
 #include <algorithm>
 
@@ -733,6 +735,55 @@ void Feature::notifyParents(int Id)
         p->LastPartNotification = Id;
         for (int i=0; i<p->Parents.size(); ++i)
             p->Parents[i]->partChanged(this, Id);
+    }
+}
+
+
+void Feature::drawHover(QPainter& thePainter, MapView* theView)
+{
+    QPen TP(M_PREFS->getHoverColor(),M_PREFS->getHoverWidth(),Qt::SolidLine);
+    thePainter.setPen(TP);
+
+    drawSpecial(thePainter, TP, theView);
+
+    drawChildrenSpecial(thePainter, TP, theView, 1);
+
+    if (M_PREFS->getShowParents()) {
+        TP.setDashPattern(M_PREFS->getParentDashes());
+        thePainter.setPen(TP);
+        drawParentsSpecial(thePainter, TP, theView);
+    }
+}
+
+void Feature::drawFocus(QPainter& thePainter, MapView* theView)
+{
+    QPen TP(M_PREFS->getFocusColor(),M_PREFS->getFocusWidth(),Qt::SolidLine);
+
+    thePainter.setPen(TP);
+
+    drawSpecial(thePainter, TP, theView);
+
+    drawChildrenSpecial(thePainter, TP, theView, 1);
+
+    if (M_PREFS->getShowParents()) {
+        TP.setDashPattern(M_PREFS->getParentDashes());
+        thePainter.setPen(TP);
+        drawParentsSpecial(thePainter, TP, theView);
+    }
+}
+
+void Feature::drawHighlight(QPainter& thePainter, MapView* theView)
+{
+    QPen TP(M_PREFS->getHighlightColor(),M_PREFS->getHighlightWidth(),Qt::SolidLine);
+    thePainter.setPen(TP);
+    drawSpecial(thePainter, TP, theView);
+
+    drawChildrenSpecial(thePainter, TP, theView, 1);
+
+    if (M_PREFS->getShowParents()) {
+        TP.setDashPattern(M_PREFS->getParentDashes());
+        thePainter.setPen(TP);
+        drawParentsSpecial(thePainter, TP, theView);
     }
 }
 

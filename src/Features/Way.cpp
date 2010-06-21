@@ -450,116 +450,35 @@ void Way::draw(QPainter& P, MapView* theView)
     }
 }
 
-void Way::drawHover(QPainter& thePainter, MapView* theView, bool solid)
+void Way::drawSpecial(QPainter& thePainter, QPen& Pen, MapView* theView)
 {
-    // FIXME Selected route
-    if (!size())
-        return;
-
-    QFont F(thePainter.font());
-    F.setPointSize(10);
-    F.setBold(true);
-    F.setWeight(QFont::Black);
-    thePainter.setFont(F);
-    QPen TP(M_PREFS->getHoverColor());
-    TP.setWidth(M_PREFS->getHoverWidth());
-    if (!solid) {
-        TP.setDashPattern(M_PREFS->getParentDashes());
-    }
-    thePainter.setPen(TP);
-    thePainter.setBrush(Qt::NoBrush);
-    //QRect clipRect = thePainter.clipRegion().boundingRect().adjusted(int(-20), int(-20), int(20), int(20));
-    //buildPath(theProjection, clipRect);
+    thePainter.setPen(Pen);
     thePainter.drawPath(theView->transform().map(p->thePath));
-    if (solid) {
-        TP.setWidth(M_PREFS->getHoverWidth()*3);
-        TP.setCapStyle(Qt::RoundCap);
-        thePainter.setPen(TP);
-        QPolygonF Pl;
-        buildPolygonFromRoad(this,theView->projection(),Pl);
-        thePainter.drawPoints(theView->transform().map(Pl));
 
-        if (M_PREFS->getShowParents()) {
-            for (int i=0; i<sizeParents(); ++i)
-                if (!getParent(i)->isDeleted())
-                    getParent(i)->drawHover(thePainter, theView, false);
-        }
-    }
+    QPolygonF Pl;
+    buildPolygonFromRoad(this,theView->projection(),Pl);
+    thePainter.drawPoints(theView->transform().map(Pl));
 }
 
-void Way::drawHighlight(QPainter& thePainter, MapView* theView, bool solid)
+void Way::drawParentsSpecial(QPainter& thePainter, QPen& Pen, MapView* theView)
 {
-    // FIXME Selected route
-    if (!size())
-        return;
-
-    QFont F(thePainter.font());
-    F.setPointSize(10);
-    F.setBold(true);
-    F.setWeight(QFont::Black);
-    thePainter.setFont(F);
-    QPen TP(M_PREFS->getHighlightColor());
-    TP.setWidth(M_PREFS->getHighlightWidth());
-    if (!solid) {
-        TP.setDashPattern(M_PREFS->getParentDashes());
-    }
-    thePainter.setPen(TP);
-    thePainter.setBrush(Qt::NoBrush);
-    //QRect clipRect = thePainter.clipRegion().boundingRect().adjusted(int(-20), int(-20), int(20), int(20));
-    //buildPath(theProjection, clipRect);
-    thePainter.drawPath(theView->transform().map(p->thePath));
-    if (solid) {
-        TP.setWidth(M_PREFS->getHighlightWidth()*3);
-        TP.setCapStyle(Qt::RoundCap);
-        thePainter.setPen(TP);
-        QPolygonF Pl;
-        buildPolygonFromRoad(this,theView->projection(),Pl);
-        thePainter.drawPoints(theView->transform().map(Pl));
-
-//		if (M_PREFS->getShowParents()) {
-//			for (int i=0; i<sizeParents(); ++i)
-//				if (!getParent(i)->isDeleted())
-//					getParent(i)->drawHover(thePainter, theView, false);
-//		}
-    }
+    for (int i=0; i<sizeParents(); ++i)
+        if (!getParent(i)->isDeleted())
+            getParent(i)->drawSpecial(thePainter, Pen, theView);
 }
 
-void Way::drawFocus(QPainter& thePainter, MapView* theView, bool solid)
-{
-    // FIXME Selected route
-    if (!size())
-        return;
-
-    QFont F(thePainter.font());
-    F.setPointSize(10);
-    F.setBold(true);
-    F.setWeight(QFont::Black);
-    thePainter.setFont(F);
-    QPen TP(M_PREFS->getFocusColor());
-    TP.setWidth(M_PREFS->getFocusWidth());
-    if (!solid) {
-        TP.setDashPattern(M_PREFS->getParentDashes());
-    }
+void Way::drawChildrenSpecial(QPainter& thePainter, QPen& Pen, MapView *theView, int depth)
+{               
+    QPen TP(Pen);
+    TP.setWidth(TP.width()*3);
+    TP.setCapStyle(Qt::RoundCap);
     thePainter.setPen(TP);
-    thePainter.setBrush(Qt::NoBrush);
-    //QRect clipRect = thePainter.clipRegion().boundingRect().adjusted(int(-20), int(-20), int(20), int(20));
-    //buildPath(theProjection, clipRect);
-    thePainter.drawPath(theView->transform().map(p->thePath));
-    if (solid) {
-        TP.setWidth(M_PREFS->getFocusWidth()*3);
-        TP.setCapStyle(Qt::RoundCap);
-        thePainter.setPen(TP);
-        QPolygonF Pl;
-        buildPolygonFromRoad(this,theView->projection(),Pl);
-        thePainter.drawPoints(theView->transform().map(Pl));
 
-        if (M_PREFS->getShowParents()) {
-            for (int i=0; i<sizeParents(); ++i)
-                if (!getParent(i)->isDeleted())
-                    getParent(i)->drawFocus(thePainter, theView, false);
-        }
-    }
+    QPolygonF Pl;
+    buildPolygonFromRoad(this,theView->projection(),Pl);
+    thePainter.drawPoints(theView->transform().map(Pl));
 }
+
 
 double Way::pixelDistance(const QPointF& Target, double ClearEndDistance, bool selectNodes, MapView* theView) const
 {

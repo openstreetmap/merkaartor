@@ -224,20 +224,21 @@ bool TrackSegment::notEverythingDownloaded()
     return false;
 }
 
-void TrackSegment::drawFocus(QPainter &, MapView*, bool)
+void TrackSegment::drawSpecial(QPainter&, QPen&, MapView*)
 {
-    // Can't be selection
+    // not implemented
 }
 
-void TrackSegment::drawHover(QPainter &, MapView*, bool)
+void TrackSegment::drawParentsSpecial(QPainter&, QPen&, MapView*)
 {
-    // Can't be highlighted
+    // not implemented
 }
 
-void TrackSegment::drawHighlight(QPainter &, MapView*, bool)
+void TrackSegment::drawChildrenSpecial(QPainter&, QPen&, MapView*, int)
 {
-    // Can't be selection
+    // not implemented
 }
+
 
 CoordBox TrackSegment::boundingBox() const
 {

@@ -207,13 +207,13 @@ void FeatureSnapInteraction::paintEvent(QPaintEvent* anEvent, QPainter& thePaint
 
     for (int i=0; i<main()->features()->highlightedSize(); ++i)
         if (document()->exists(main()->features()->highlighted(i)))
-            main()->features()->highlighted(i)->drawHighlight(thePainter, view(), true);
+            main()->features()->highlighted(i)->drawHighlight(thePainter, view());
     for (int i=0; i<main()->properties()->size(); ++i)
         if (document()->exists(main()->properties()->selection(i)))
             main()->properties()->selection(i)->drawFocus(thePainter, view());
     for (int i=0; i<main()->properties()->highlightedSize(); ++i)
         if (document()->exists(main()->properties()->highlighted(i)))
-            main()->properties()->highlighted(i)->drawHighlight(thePainter, view(), true);
+            main()->properties()->highlighted(i)->drawHighlight(thePainter, view());
 
 #ifndef _MOBILE
     if (LastSnap && document()->exists(LastSnap)) {
