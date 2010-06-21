@@ -1,3 +1,5 @@
+v0.16.2
+    * FIX : problem with "Bottom-left standard" TMS
 v0.16.1
     * ADD : Allow to move complete relations
     * FIX : First feature not OSM exported 
