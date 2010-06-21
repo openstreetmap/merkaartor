@@ -8,6 +8,7 @@
 #include "Document.h"
 #include "Features.h"
 #include "PropertiesDock.h"
+#include "Projection.h"
 
 #include <QtCore/QString>
 
@@ -1193,4 +1194,205 @@ void terraceArea(Document* theDocument, CommandList* theList, PropertiesDock* th
     terraceArea(theDocument, theList, theArea, sides, divisions, startNode, &areas);
 
     theDock->setSelection(areas);
+}
+
+// Align a set of midpoints in a specific direction
+void axisAlignAlignMidpoints(QVector<QPointF> &midpoints, const QVector<double> weights, const QPointF &dir, int begin, int end)
+{
+    // get weighted average midpoint
+    const int n = midpoints.size();
+    QPointF avg(0.0, 0.0);
+    double total_weight = 0.0;
+    for (int j = begin; j < end; ++j) {
+        int i = j % n;
+        avg += weights[i]*midpoints[i];
+        total_weight += weights[i];
+    }
+    avg /= total_weight;
+
+    // project midpoints onto dir line through avg
+    for (int j = begin; j < end; ++j) {
+        int i = j % n;
+        QPointF rel_mid = midpoints[i] - avg;
+        double dot = dir.x()*rel_mid.x() + dir.y()*rel_mid.y();
+        // assumes dir is normalised
+        midpoints[i] = avg + dir*dot;
+    }
+}
+
+// returns whether successful (if not don't add theList to history)
+bool axisAlignRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock, const Projection &proj, unsigned int axes)
+{
+    // find ways
+    QList<Way *> theWays;
+    for (int i = 0; i < theDock->size(); ++i)
+        if (theDock->selection(i)->getClass() == "Way")
+            theWays << CAST_WAY(theDock->selection(i));
+    if (theWays.empty())
+        return false;
+
+    // manipulate angles as fixed point values with a unit of the angle between axes
+    const int shift = 20;
+    int nedges = 0;
+    foreach (Way *theWay, theWays)
+        nedges += theWay->size()-1;
+    QVector<int> edge_angles(nedges);
+    QVector<int> edge_axis(nedges);
+    QVector<double> edge_weight(nedges);
+    QVector<QPointF> midpoints(nedges);
+    double total_weight = 0.0;
+
+    // Look at nodes and find angles etc
+    int i = 0;
+    foreach (Way *theWay, theWays) {
+        Node *n1;
+        Node *n2 = theWay->getNode(0);
+        QPointF p1;
+        QPointF p2 = proj.project(n2);
+        for (int j = 0; j < theWay->size()-1; ++j, ++i) {
+            n1 = n2;
+            n2 = theWay->getNode(j + 1);
+            p1 = p2;
+            p2 = proj.project(n2);
+            if (n1 == n2 || p1 == p2) {
+                qWarning() << "ERROR: duplicate nodes found during axis align in" << theWay->id();
+                return false;
+            }
+            midpoints[i] = (p1 + p2) * 0.5;
+            // weight towards longer edges rather than lots of smaller edges
+            edge_weight[i] = n1->position().distanceFrom(n2->position());
+            edge_weight[i] *= edge_weight[i];
+            total_weight += edge_weight[i];
+            // calculate angle of edge
+            float ang = QLineF(p1, p2).angle();
+            edge_angles[i] = ang * ((axes << shift) / 360.0);
+            if (edge_angles[i] < 0) {
+                edge_angles[i] += axes<<shift;
+            }
+            edge_axis[i] = -1;
+        }
+    }
+
+    // Use a variant of K-Means Clustering with regular spaced clusters to find
+    // the best angle for the first axis.
+    int theta = 0;
+    bool changed;
+    // This should always terminate pretty quickly, but for robustness it's better to warn than hang.
+    unsigned int safety = 100;
+    while (--safety) {
+        // reassign edges to axes, stopping when nothing changes
+        changed = false;
+        for (int i = 0; i < nedges; ++i) {
+            int angle = edge_angles[i] - theta;
+            int new_axis = ((angle >> (shift - 1)) + 1) >> 1;
+            if (new_axis >= (int)axes)
+                new_axis -= axes;
+            else if (new_axis < 0)
+                new_axis += axes;
+            if (new_axis != edge_axis[i]) {
+                edge_axis[i] = new_axis;
+                changed = true;
+            }
+        }
+        if (!changed)
+            break;
+        // adjust angle of first axis by weighted mean of angles between edges and their assigned axes
+        double dtheta = 0;
+        for (int i = 0; i < nedges; ++i) {
+            int diff = (edge_angles[i] - theta - (edge_axis[i] << shift)) % (1 << shift);
+            if (diff > ((1<<shift)>>1))
+                diff -= (1<<shift);
+            else if (diff < -((1<<shift)>>1))
+                diff += (1<<shift);
+            dtheta += edge_weight[i]*diff;
+        }
+        dtheta /= total_weight;
+        theta += dtheta;
+    }
+    if (!safety)
+        qWarning() << "WARNING: align axes clustering loop exceeded safety limit";
+
+    // Calculate axis direction vectors
+    QVector<QPointF> axis_vectors(axes);
+    for (unsigned int i = 0; i < axes; ++i) {
+        int angle = theta + (i<<shift);
+        axis_vectors[i].setX(cos(M_PI*2/(axes<<shift)*angle));
+        axis_vectors[i].setY(-sin(M_PI*2/(axes<<shift)*angle));
+    }
+
+    // If adjacent edges are in the same axis we can't intersect them to find
+    // where the node should go. Align midpoints of adjacent edges on the same
+    // axis so that we can just project the nodes onto the axis and make the
+    // result axis aligned. Note that this does not handle adjacent edges which
+    // have opposite axes and are therefore parallel (when axes is even).
+    i = 0;
+    foreach (Way *theWay, theWays) {
+        int start = i;
+        int n = theWay->size()-1;
+        int last_axis = -1;
+        int first_in_seq = -1;
+        int excess = 0;
+        for (; i < start + n; ++i) {
+            int axis = edge_axis[i];
+            if (axis != last_axis) {
+                if (first_in_seq == -1) {
+                    // If edges sharing axis cross the join between ends, we'll
+                    // come back to it anyway.
+                    excess = i;
+                    if (i != 0 || !theWay->isClosed() || edge_axis[start+n-1] != axis)
+                        first_in_seq = i;
+                } else {
+                    if (i - first_in_seq > 1) {
+                        axisAlignAlignMidpoints(midpoints, edge_weight, axis_vectors[last_axis], first_in_seq, i);
+                    }
+                    first_in_seq = i;
+                }
+                last_axis = axis;
+            }
+        }
+        if (n + excess - first_in_seq > 1)
+            axisAlignAlignMidpoints(midpoints, edge_weight, axis_vectors[last_axis], first_in_seq, n+excess);
+    }
+
+    // Move nodes onto the intersection of the neighbouring edge's axes through
+    // their midpoints. Where neighbouring edges are on the same axis (and so
+    // there is no intersection), project directly onto the axis through one of
+    // the midpoints.
+    i = 0;
+    foreach (Way *theWay, theWays) {
+        int index0, index1, max;
+        int start = i;
+        int n = theWay->size()-1;
+        if (theWay->isClosed()) {
+            index1 = start+n-1;
+            max = n;
+        } else {
+            index1 = -1;
+            max = theWay->size();
+        }
+        for (int j = 0; j < max; ++j) {
+            index0 = index1;
+            index1 = ((j < n) ? i++ : -1);
+            Node *N = theWay->getNode(j);
+            QPointF new_pos;
+            if (index0 >= 0 && index1 >= 0 && edge_axis[index0] != edge_axis[index1]) {
+                // axes different, so probably safe to intersect
+                QLineF l0(midpoints[index0], midpoints[index0] + axis_vectors[edge_axis[index0]]);
+                QLineF l1(midpoints[index1], midpoints[index1] + axis_vectors[edge_axis[index1]]);
+                if (l0.intersect(l1, &new_pos) == QLineF::NoIntersection) {
+                    qWarning() << "WARNING: adjacent edges assigned opposite axes, not able to resolve";
+                    continue;
+                }
+            } else {
+                // axes the same, midpoints are aligned so just project onto axis through midpoint
+                int index = ((index0 >= 0) ? index0 : index1);
+                QPointF rel_pos = proj.project(N) - midpoints[index];
+                QPointF dir = axis_vectors[edge_axis[index]];
+                double dot = dir.x()*rel_pos.x() + dir.y()*rel_pos.y();
+                new_pos = midpoints[index] + dir*dot;
+            }
+            theList->add(new MoveNodeCommand(N, proj.inverse(new_pos), theDocument->getDirtyOrOriginLayer(N->layer())));
+        }
+    }
+    return true;
 }

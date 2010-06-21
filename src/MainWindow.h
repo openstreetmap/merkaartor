@@ -114,6 +114,7 @@ public slots:
     virtual void on_roadCreateJunctionAction_triggered();
     virtual void on_roadAddStreetNumbersAction_triggered();
     virtual void on_roadSubdivideAction_triggered();
+    virtual void on_roadAxisAlignAction_triggered();
 
     virtual void on_featureDeleteAction_triggered();
     virtual void on_featureCommitAction_triggered();

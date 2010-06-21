@@ -196,6 +196,7 @@ void PropertiesDock::checkMenuStatus()
     Main->ui->roadBreakAction->setEnabled(IsParentRoadInner || ((NumRoads == 1 || NumAreas == 1) && NumPoints) || (NumRoads > 1 && canBreakRoads(this)));
     Main->ui->roadSimplifyAction->setEnabled(IsRoad || NumRoads > 0 || NumAreas > 0);
     Main->ui->roadSubdivideAction->setEnabled((NumRoads + NumAreas) == 1 && (!NumPoints || NumPoints == 2) && canSubdivideRoad(this));
+    Main->ui->roadAxisAlignAction->setEnabled((NumRoads + NumAreas) > 0);
     Main->ui->areaSplitAction->setEnabled(NumAreas == 1 && NumPoints == 2 && canSplitArea(this));
     Main->ui->areaTerraceAction->setEnabled(NumAreas == 1 && NumRoads == 0 && canTerraceArea(this));
     Main->ui->featureDeleteAction->setEnabled((IsPoint || IsRoad || IsRelation) && !Selection[0]->isDirty());

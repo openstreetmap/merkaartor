@@ -6,6 +6,7 @@ class Document;
 class Layer;
 class PropertiesDock;
 class Way;
+class Projection;
 
 #include <QList>
 
@@ -33,6 +34,7 @@ bool canSplitArea(PropertiesDock* theDock, Way** outTheArea = 0, unsigned int ou
 void splitArea(Document* theDocument, CommandList* theList, PropertiesDock* theDock);
 bool canTerraceArea(PropertiesDock* theDock, Way** outTheArea = 0, int* startNode = 0);
 void terraceArea(Document* theDocument, CommandList* theList, PropertiesDock* theDock, unsigned int divisions);
+bool axisAlignRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock, const Projection &proj, unsigned int axes);
 
 
 #endif

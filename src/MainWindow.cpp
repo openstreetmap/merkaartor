@@ -1884,6 +1884,41 @@ void MainWindow::on_roadSubdivideAction_triggered()
     delete Dlg;
 }
 
+void MainWindow::on_roadAxisAlignAction_triggered()
+{
+    bool ok;
+    unsigned int axes = QInputDialog::getInteger(this, tr("Axis Align"),
+                                                 tr("Specify the number of regular axes to align edges on (e.g. 4 for rectangular)"),
+                                                 4, 3, 16, 1, &ok);
+    if (!ok)
+        return;
+
+    // Create a command description
+    const QString special_names[] = {
+        tr("triangular"),
+        tr("rectangular"),
+        tr("pentagonal"),
+        tr("hexagonal"),
+        tr("heptagonal"),
+        tr("octagonal"),
+    };
+    QString command_name;
+    if (axes < 3 + (sizeof(special_names)/sizeof(special_names[0])))
+        command_name = tr("Align onto %1 axes").arg(special_names[axes-3]);
+    else
+        command_name = tr("Align onto %1 regular axes").arg(axes);
+
+    // Do the manipulation
+    CommandList* theList = new CommandList(command_name, NULL);
+    ok = axisAlignRoads(theDocument, theList, p->theProperties, view()->projection(), axes);
+    if (!ok || theList->empty())
+        delete theList;
+    else {
+        theDocument->addHistory(theList);
+        invalidateView();
+    }
+}
+
 void MainWindow::on_nodeAlignAction_triggered()
 {
     //MapFeature* F = theView->properties()->selection(0);

@@ -60,6 +60,7 @@
     <addaction name="roadSubdivideAction"/>
     <addaction name="areaSplitAction"/>
     <addaction name="areaTerraceAction"/>
+    <addaction name="roadAxisAlignAction"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -373,6 +374,7 @@
    <addaction name="roadSubdivideAction"/>
    <addaction name="areaSplitAction"/>
    <addaction name="areaTerraceAction"/>
+   <addaction name="roadAxisAlignAction"/>
   </widget>
   <action name="fileQuitAction">
    <property name="text">
@@ -1683,6 +1685,21 @@
   <action name="toolsToolbarsAction">
    <property name="text">
     <string>Toolbar Editor...</string>
+   </property>
+  </action>
+  <action name="roadAxisAlignAction">
+   <property name="icon">
+    <iconset resource="../Icons/AllIcons.qrc">
+     <normaloff>:/Icons/actions/axisalign.png</normaloff>:/Icons/actions/axisalign.png</iconset>
+   </property>
+   <property name="text">
+    <string>A&amp;xis Align</string>
+   </property>
+   <property name="toolTip">
+    <string>Align edges to regular axes</string>
+   </property>
+   <property name="statusTip">
+    <string>Align edges to a certain number of regularly spaced axes.</string>
    </property>
   </action>
   <action name="filePrintAction">

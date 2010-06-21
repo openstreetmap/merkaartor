@@ -20,6 +20,7 @@
         <file>edit-paste.png</file>
         <file>emblem-readonly.png</file>
         <file>actions/align_nodes.png</file>
+        <file>actions/axisalign.png</file>
         <file>actions/break_apart_roads.png</file>
         <file>actions/create_area.png</file>
         <file>actions/create_node.png</file>
