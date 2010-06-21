@@ -4,6 +4,11 @@ v0.17
     * ADD : Hungarian translation by Peter Sulyok
     * CHG : Allow to pan with middle mouse button
     * ADD : Toolbar editor (create/modify tollbars)
+    * FIX : OSX fix
+    * FIX : Draw relations children dashed to avoid multiple parent drawing
+    * FIX : Fix several issues with features dock.
+    * FIX : Fix reappearance of deleted features.
+    * FIX : Fix WayRemoveNodeCommand reversibility.
     * ADD : Allow to move complete relations
     * FIX : WMS'es in EPSG:4326 not showing
     * FIX : Don't overzoom on layer zoom (and don't allow if the bbox is null). fixes #3046
