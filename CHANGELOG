@@ -2,6 +2,9 @@ v0.16.2
     * FIX : problem with "Bottom-left standard" TMS
 	* FIX : OSX fix
     * FIX : Draw relations children dashed to avoid multiple parent drawing
+    * FIX : Fix several issues with features dock.
+    * FIX : Fix reappearance of deleted features.
+    * FIX : Fix WayRemoveNodeCommand reversibility.
 v0.16.1
     * ADD : Allow to move complete relations
     * FIX : First feature not OSM exported 
