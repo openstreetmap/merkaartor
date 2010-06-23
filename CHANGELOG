@@ -1,5 +1,6 @@
 v0.17
     * ADD : support for potlach-style TMS url (with "!") and "%x", "%y", "%z" in addition to "%1", "%2", "%3"
+    * ADD : Join areas tool
     * FIX : problem with "Bottom-left standard" TMS
     * ADD : Printing
     * ADD : Hungarian translation by Peter Sulyok

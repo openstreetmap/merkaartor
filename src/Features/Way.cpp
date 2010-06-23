@@ -758,7 +758,8 @@ void Way::buildPath(const Projection &theProjection, const QTransform& /*theTran
     }
 }
 
-bool Way::deleteChildren(Document* theDocument, CommandList* theList)
+bool Way::deleteChildren(Document* theDocument, CommandList* theList,
+                         bool force)
 {
     if (lastUpdated() == Feature::OSMServerConflict)
         return true;
@@ -766,7 +767,7 @@ bool Way::deleteChildren(Document* theDocument, CommandList* theList)
     MDiscardableMessage dlg(NULL,
         MainWindow::tr("Delete Children."),
         MainWindow::tr("Do you want to delete the children nodes also?"));
-    if (dlg.check() == QDialog::Accepted) {
+    if (force || dlg.check() == QDialog::Accepted) {
         QList<Feature*> Alternatives;
         QMap<Feature*, int> ToDelete;
         for (int i=(int)p->Nodes.size()-1; i>=0; --i) {

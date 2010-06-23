@@ -321,7 +321,7 @@ class Feature : public QObject
         virtual void invalidateMeta();
         double widthOf();
 
-        virtual bool deleteChildren(Document* , CommandList* ) { return true; }
+        virtual bool deleteChildren(Document* , CommandList*, bool = false ) { return true; }
 
         static Relation * GetSingleParentRelation(Feature * mapFeature);
         static Node* getTrackPointOrCreatePlaceHolder(Document *theDocument, Layer *theLayer, const QString& Id);

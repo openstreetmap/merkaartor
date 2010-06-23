@@ -1033,6 +1033,192 @@ static bool splitArea(Document* theDocument, CommandList* theList,
     return true;
 }
 
+// Cycle the node index in an area so it's >= 0, < size-1 (never the last node).
+static int cycleNodeIndex(Way* area, int index)
+{
+    if (index >= area->size()-1)
+        index -= area->size()-1;
+    else if (index < 0)
+        index += area->size()-1;
+    return index;
+}
+
+// Find the index of a node in an area as close as possible to expected.
+// Return -1 if node isn't in area. This is useful for tracing around shared
+// nodes of two areas, where we want the indexes to be continuous so we can
+// detect where the edges depart from one another.
+static int nodeIndexInArea(Way* area, Node* node, int expected)
+{
+    // parent list is gonna be shorter, so check this first
+    for (int i = 0; i < node->sizeParents(); ++i)
+        if (node->getParent(i) == area) {
+            // now we know it's on the list, find the index
+            if (area->getNode(expected) == node)
+                return expected;
+            int forward = expected;
+            int backward = expected;
+            for (int j = 0; j < (area->size()-1)/2; ++j) {
+                forward = cycleNodeIndex(area, forward + 1);
+                if (area->getNode(forward) == node)
+                    return forward;
+                backward = cycleNodeIndex(area, backward - 1);
+                if (area->getNode(backward) == node)
+                    return backward;
+            }
+            break;
+        }
+    return -1;
+}
+
+// Determine if two area node indexes are adjacent, and in a particular
+// direction if direction is 1 or -1. If they are adjacent, direction is set to
+// 1 or -1. This is useful tracing the shared nodes between two areas as the
+// direction is initialised to 0 and determined on the first check, and then
+// enforced on later checks.
+static bool nodeIndexesAdjacent(Way* way, unsigned int n1, unsigned int n2, int* direction)
+{
+    int dir = n2 - n1;
+    if (abs(dir) > 1) {
+        // wrap?
+        if (!n1)
+            n1 = way->size() - 1;
+        else if (!n2)
+            n2 = way->size() - 1;
+        else
+            return false;
+        dir = n2 - n1;
+    }
+    if (abs(dir) != 1)
+        return false;
+
+    // in the correct direction?
+    if (!*direction) {
+        *direction = dir;
+        return true;
+    } else
+        return *direction == dir;
+}
+
+// Join selected areas which are sharing edges. Multiple nodes adjacent in both
+// areas must be shared for them to be joined.
+// FIXME This does not currently produce multipolygons when the areas form an
+// enclosed area. Instead the edge will run around the outside, cut into the
+// middle and run around the inner part, and then cut back out the same way.
+void joinAreas(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
+{
+    // Collect the set of selected areas
+    QSet<Way*> areas;
+    for (int i = 0; i < theDock->size(); ++i)
+        if (theDock->selection(i)->getClass() == "Way") {
+            Way* area = CAST_WAY(theDock->selection(i));
+            if (area->isClosed())
+                areas << area;
+        }
+
+findNextJoin:
+    // Go through areas in the set
+    while (areas.size() > 1) {
+        Way* area = *areas.begin();
+        // Go through nodes shared between multiple features
+        for (int i = 0; i < area->size() - 1; ++i) {
+            Node* node = area->getNode(i);
+            if (node->sizeParents() <= 1)
+                continue;
+            // Go through parents of the node that are areas in our set
+            for (int p1 = 0; p1 < node->sizeParents(); ++p1) {
+                if (node->getParent(p1)->getClass() != "Way")
+                    continue;
+                Way* otherArea = CAST_WAY(node->getParent(p1));
+                if (otherArea == area || !areas.contains(otherArea))
+                    continue;
+                // Look for the first shared mutually adjacent node.
+                for (int n = 0; n < otherArea->size()-1; ++n) {
+                    if (otherArea->getNode(n) != node)
+                        continue;
+                    int otherFirst = n;
+                    int otherLast = otherFirst;
+                    int otherDirection = 0;
+                    int first = i;
+                    int count = 1;
+                    // We want node i to be the first shared node, so if the
+                    // one before it is also shared and adjacent we can safely
+                    // ignore it as we'll hit it again later
+                    int lastOtherIndex = nodeIndexInArea(otherArea, area->getNode(cycleNodeIndex(area, i-1)), n);
+                    if (lastOtherIndex != -1 && nodeIndexesAdjacent(otherArea, n, lastOtherIndex, &otherDirection))
+                        continue;
+                    // Continue forwards to see how many nodes are shared with
+                    // the other area and adjacent. The first nodeIndexesAdjacent
+                    // will set otherDirection and later nodes have to keep
+                    // going in that direction.
+                    for (int j = 1; j < area->size(); ++j) {
+                        int jIndex = (i + j) % (area->size()-1);
+                        int otherIndex = nodeIndexInArea(otherArea, area->getNode(jIndex), cycleNodeIndex(otherArea, otherLast + otherDirection));
+                        // is next node in same area?
+                        if (otherIndex == -1)
+                            break;
+                        // must be adjacent to last node (and in same direction)
+                        if (!nodeIndexesAdjacent(otherArea, otherLast, otherIndex, &otherDirection))
+                            break;
+                        otherLast = otherIndex;
+                        ++count;
+                    }
+                    if (count < 2)
+                        continue;
+
+                    // If all of area's nodes are shared (area is enclosed
+                    // inside otherArea), then it is better to swap area and
+                    // otherArea so that area is the one that gets removed.
+                    if (count == area->size()) {
+                        qSwap(area, otherArea);
+                        qSwap(first, otherFirst);
+                    }
+
+                    // Remove nodes along the shared edge from area. No need to
+                    // remove from otherArea, it'll get removed anyway.
+                    for (int del = 0; del < count-2; ++del) {
+                        int delIndex = cycleNodeIndex(area, first+1);
+                        theList->add(new WayRemoveNodeCommand(area, delIndex, theDocument->getDirtyOrOriginLayer(area->layer())));
+                        if (first > delIndex)
+                            --first;
+                    }
+
+                    // If otherArea is completely enclosed then the end nodes
+                    // of the shared edge are the same and are now adjacent, so
+                    // remove one of them.
+                    if (count == otherArea->size())
+                        theList->add(new WayRemoveNodeCommand(area, first, theDocument->getDirtyOrOriginLayer(area->layer())));
+                    // Seal the crack left over from an enclosed otherArea
+                    // until the nodes on either side of 'first' diverge.
+                    while (area->size() > 3 &&
+                           area->getNode(cycleNodeIndex(area, first-1)) == area->getNode(cycleNodeIndex(area, first+1))) {
+                        theList->add(new WayRemoveNodeCommand(area, first, theDocument->getDirtyOrOriginLayer(area->layer())));
+                        theList->add(new WayRemoveNodeCommand(area, first, theDocument->getDirtyOrOriginLayer(area->layer())));
+                        first = cycleNodeIndex(area, first-1);
+                    }
+                    // Add the remaining nodes of otherArea that aren't shared
+                    // to area.
+                    for (int add = 1; add < otherArea->size()-count; ++add) {
+                        int index = cycleNodeIndex(otherArea, otherFirst - otherDirection*add);
+                        theList->add(new WayAddNodeCommand(area, otherArea->getNode(index), ++first, theDocument->getDirtyOrOriginLayer(area->layer())));
+                    }
+                    // Merge tags and remove otherArea.
+                    Feature::mergeTags(theDocument, theList, area, otherArea);
+                    otherArea->deleteChildren(theDocument, theList, true);
+                    theList->add(new RemoveFeatureCommand(theDocument, otherArea));
+                    areas.remove(otherArea);
+                    // Remove otherArea from selection.
+                    QList<Feature*> sel = theDock->selection();
+                    sel.removeOne(otherArea);
+                    theDock->setSelection(sel);
+                    // Restart the process again.
+                    goto findNextJoin;
+                }
+            }
+        }
+        areas.remove(area);
+    }
+}
+
 bool canSplitArea(PropertiesDock* theDock, Way** outTheArea, unsigned int outNodes[2])
 {
     if (theDock->size() != 3)
