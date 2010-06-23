@@ -95,7 +95,7 @@ class Way : public Feature
         bool isClosed() const;
         double distance();
 
-        virtual bool deleteChildren(Document* theDocument, CommandList* theList);
+        virtual bool deleteChildren(Document* theDocument, CommandList* theList, bool force = false);
 
         QPainterPath getPath();
         void buildPath(Projection const &theProjection, const QTransform& thensform, const QRectF& clipRect);

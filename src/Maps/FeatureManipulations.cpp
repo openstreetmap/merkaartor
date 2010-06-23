@@ -1203,7 +1203,7 @@ findNextJoin:
                     }
                     // Merge tags and remove otherArea.
                     Feature::mergeTags(theDocument, theList, area, otherArea);
-                    otherArea->deleteChildren(theDocument, theList);
+                    otherArea->deleteChildren(theDocument, theList, true);
                     theList->add(new RemoveFeatureCommand(theDocument, otherArea));
                     areas.remove(otherArea);
                     // Remove otherArea from selection.
