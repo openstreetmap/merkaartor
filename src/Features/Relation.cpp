@@ -123,7 +123,7 @@ CoordBox Relation::boundingBox() const
             CoordBox Clip;
             bool haveFirst = false;
             for (int i=0; i<p->Members.size(); ++i)
-                if (p->Members[i].second && !p->Members[i].second->notEverythingDownloaded() && !CAST_RELATION(p->Members[i].second)) {
+                if (p->Members[i].second && !p->Members[i].second->notEverythingDownloaded()/* && !CAST_RELATION(p->Members[i].second)*/) {
                     if (!haveFirst) {
                         Clip = p->Members[i].second->boundingBox();
                         haveFirst = true;
