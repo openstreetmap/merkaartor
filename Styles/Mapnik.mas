@@ -438,11 +438,6 @@
 </painter>
 <painter
  fillColor="#cc9999cd"
- drawTrafficDirectionMarks="yes">
-  <selector expr="[building] isoneof (yes , true)"/>
-</painter>
-<painter
- fillColor="#cc9999cd"
  drawTrafficDirectionMarks="no">
   <selector expr="[amenity] is public_building"/>
 </painter>
@@ -657,6 +652,8 @@
 </painter>
 <painter
  zoomUnder="0.15" zoomUpper="1e+07"
+ foregroundColor="#111111ff" foregroundScale="0" foregroundOffset="2"
+ fillColor="#77777780"
  icon=":/Art/Mapnik/place_of_worship.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no" labelColor="#333333ff" labelScale="3.5" labelOffset="3"
  labelFont="DejaVu Sans Condensed,12,-1,5,50,0,0,0,0,0" labelTag="name">
@@ -673,6 +670,11 @@
  icon=":/Art/Mapnik/power_tower.png" iconScale="0" iconOffset="0"
  drawTrafficDirectionMarks="no">
   <selector expr="[power] is tower"/>
+</painter>
+<painter
+ fillColor="#cc9999cd"
+ drawTrafficDirectionMarks="yes">
+  <selector expr="[building] isoneof (yes , true)"/>
 </painter>
 <painter
  zoomUnder="0.00666667" zoomUpper="1e+07"
