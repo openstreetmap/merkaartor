@@ -690,12 +690,12 @@ TagSelectorMatchResult TagTemplate::matchesTag(const Feature* F)
 
     if (!theSelector) return TagSelect_NoMatch;
     // Special casing for multipolygon roads
-    if (const Way* R = dynamic_cast<const Way*>(F))
+    if (const Way* R = qobject_cast<const Way*>(F))
     {
         // TODO create a isPartOfMultiPolygon(R) function for this
         for (int i=0; i<R->sizeParents(); ++i)
         {
-            if (const Relation* Parent = dynamic_cast<const Relation*>(R->getParent(i)))
+            if (const Relation* Parent = qobject_cast<const Relation*>(R->getParent(i)))
                 if (!Parent->isDeleted())
                     if (Parent->tagValue("type","") == "multipolygon")
                         return TagSelect_NoMatch;
@@ -704,11 +704,14 @@ TagSelectorMatchResult TagTemplate::matchesTag(const Feature* F)
     if ((res = theSelector->matches(F)))
         return res;
     // Special casing for multipolygon relations
-    if (const Relation* R = dynamic_cast<const Relation*>(F))
+    if (const Relation* R = qobject_cast<const Relation*>(F))
     {
-        for (int i=0; i<R->size(); ++i)
-            if ((res = theSelector->matches(R->get(i))))
-                return res;
+        if (R->tagValue("type","") == "multipolygon") {
+            for (int i=0; i<R->size(); ++i)
+                if (!R->get(i)->isDeleted())
+                    if ((res = theSelector->matches(R->get(i))))
+                        return res;
+        }
     }
     return TagSelect_NoMatch;
 }
