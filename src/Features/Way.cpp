@@ -260,7 +260,7 @@ void Way::remove(int idx)
     Node* Pt = p->Nodes[idx];
     // only remove as parent if the node is only included once
     p->Nodes.erase(p->Nodes.begin()+idx);
-    if (Pt && find(Pt) == p->Nodes.size())
+    if (Pt && (find(Pt) >= size()))
         Pt->unsetParentFeature(this);
     p->BBoxUpToDate = false;
     p->wasPathComplete = false;
@@ -467,7 +467,7 @@ void Way::drawParentsSpecial(QPainter& thePainter, QPen& Pen, MapView* theView)
             getParent(i)->drawSpecial(thePainter, Pen, theView);
 }
 
-void Way::drawChildrenSpecial(QPainter& thePainter, QPen& Pen, MapView *theView, int depth)
+void Way::drawChildrenSpecial(QPainter& thePainter, QPen& Pen, MapView *theView, int)
 {               
     QPen TP(Pen);
     TP.setWidth(TP.width()*3);
