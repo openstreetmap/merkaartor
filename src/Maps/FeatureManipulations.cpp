@@ -1583,7 +1583,7 @@ unsigned int axisAlignGuessAxes(PropertiesDock* theDock, const Projection &proj,
 }
 
 // returns whether successful (if not don't add theList to history)
-bool axisAlignRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock, const Projection &proj, unsigned int axes)
+bool axisAlignRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock, const Projection &proj, unsigned int axes, bool *accurate)
 {
     // Make sure nodes aren't pointlessly repeated or angles would be undefined
     removeRepeatsInRoads(theDocument, theList, theDock);
@@ -1644,45 +1644,109 @@ bool axisAlignRoads(Document* theDocument, CommandList* theList, PropertiesDock*
             axisAlignAlignMidpoints(midpoints, edge_weight, axis_vectors[last_axis], first_in_seq, n+excess);
     }
 
-    // Move nodes onto the intersection of the neighbouring edge's axes through
-    // their midpoints. Where neighbouring edges are on the same axis (and so
-    // there is no intersection), project directly onto the axis through one of
-    // the midpoints.
-    i = 0;
+    // Get the positions of each unique node
+    QHash<Node *, QPointF> node_pos;
+    bool dups = false;
     foreach (Way *theWay, theWays) {
-        int index0, index1, max;
-        int start = i;
-        int n = theWay->size()-1;
-        if (theWay->isClosed()) {
-            index1 = start+n-1;
-            max = n;
-        } else {
-            index1 = -1;
-            max = theWay->size();
+        for (int i = 0; i < theWay->size(); ++i) {
+            Node *N = theWay->getNode(i);
+            if (!dups && node_pos.contains(N) && !(theWay->isClosed() && i == theWay->size()-1))
+                dups = true;
+            node_pos[N] = proj.project(N);
         }
-        for (int j = 0; j < max; ++j) {
-            index0 = index1;
-            index1 = ((j < n) ? i++ : -1);
-            Node *N = theWay->getNode(j);
-            QPointF new_pos;
-            if (index0 >= 0 && index1 >= 0 && edge_axis[index0] != edge_axis[index1]) {
-                // axes different, so probably safe to intersect
-                QLineF l0(midpoints[index0], midpoints[index0] + axis_vectors[edge_axis[index0]]);
-                QLineF l1(midpoints[index1], midpoints[index1] + axis_vectors[edge_axis[index1]]);
-                if (l0.intersect(l1, &new_pos) == QLineF::NoIntersection) {
-                    qWarning() << "WARNING: adjacent edges assigned opposite axes, not able to resolve";
-                    theList->undo();
-                    return false;
-                }
+    }
+
+    // Iteratively adjust the nodes. The process is repeated to lessen the fact
+    // that the algorithm doesn't handle nodes which are part of multiple ways
+    // or more than 2 segments. It does not guarantee alignment when dups==true
+    for (int it = 0; ; ++it) {
+        i = 0;
+        bool moved_far = false;
+        // Move nodes (only in node_pos) onto the intersection of the neighbouring
+        // edge's axes through their midpoints. Where neighbouring edges are on the
+        // same axis (and so there is no intersection), project directly onto the
+        // axis through one of the midpoints.
+        foreach (Way *theWay, theWays) {
+            int index0, index1, max;
+            int start = i;
+            int n = theWay->size()-1;
+            if (theWay->isClosed()) {
+                index1 = start+n-1;
+                max = n;
             } else {
-                // axes the same, midpoints are aligned so just project onto axis through midpoint
-                int index = ((index0 >= 0) ? index0 : index1);
-                QPointF rel_pos = proj.project(N) - midpoints[index];
-                QPointF dir = axis_vectors[edge_axis[index]];
-                double dot = dir.x()*rel_pos.x() + dir.y()*rel_pos.y();
-                new_pos = midpoints[index] + dir*dot;
+                index1 = -1;
+                max = theWay->size();
             }
-            theList->add(new MoveNodeCommand(N, proj.inverse(new_pos), theDocument->getDirtyOrOriginLayer(N->layer())));
+            for (int j = 0; j < max; ++j) {
+                index0 = index1;
+                index1 = ((j < n) ? i++ : -1);
+                Node *N = theWay->getNode(j);
+                QPointF old_pos = node_pos[N];
+                QPointF new_pos;
+                QPointF mid;
+                if (index0 >= 0 && index1 >= 0 && edge_axis[index0] != edge_axis[index1]) {
+                    // axes different, so probably safe to intersect
+                    QLineF l0(midpoints[index0], midpoints[index0] + axis_vectors[edge_axis[index0]]);
+                    QLineF l1(midpoints[index1], midpoints[index1] + axis_vectors[edge_axis[index1]]);
+                    if (l0.intersect(l1, &new_pos) == QLineF::NoIntersection) {
+                        qWarning() << "WARNING: adjacent edges assigned opposite axes, not able to resolve";
+                        return false;
+                    }
+
+                    if (!moved_far)
+                        mid = midpoints[index0];
+                } else {
+                    // axes the same, midpoints are aligned so just project onto axis through midpoint
+                    int index = ((index0 >= 0) ? index0 : index1);
+                    QPointF rel_pos = old_pos - midpoints[index];
+                    QPointF dir = axis_vectors[edge_axis[index]];
+                    double dot = dir.x()*rel_pos.x() + dir.y()*rel_pos.y();
+                    new_pos = midpoints[index] + dir*dot;
+
+                    if (!moved_far)
+                        mid = midpoints[index];
+                }
+                node_pos[N] = new_pos;
+
+                if (!moved_far) {
+                    old_pos -= new_pos;
+                    new_pos -= mid;
+                    if ((old_pos.x()*old_pos.x() + old_pos.y()*old_pos.y())*1000*1000 > (new_pos.x()*new_pos.x() + new_pos.y()*new_pos.y()))
+                        moved_far = true;
+                }
+            }
+        }
+        // safe to finish yet?
+        if (!moved_far)
+            dups = false;
+        if (!dups || it >= 20)
+            break;
+
+        // tweak midpoints
+        i = 0;
+        foreach (Way *theWay, theWays) {
+            Node *n1;
+            Node *n2 = theWay->getNode(0);
+            QPointF p1;
+            QPointF p2 = node_pos[n2];
+            for (int j = 0; j < theWay->size()-1; ++j, ++i) {
+                n1 = n2;
+                n2 = theWay->getNode(j + 1);
+                p1 = p2;
+                p2 = node_pos[n2];
+                midpoints[i] = (p1 + p2) * 0.5;
+            }
+        }
+    }
+    if (accurate)
+        *accurate = !dups;
+    if (dups)
+        qWarning() << "WARNING: ways are self intersecting or share nodes, so the alignment may not be accurate";
+    // Commit the changes
+    foreach (Way *theWay, theWays) {
+        for (int i = 0; i < theWay->size(); ++i) {
+            Node *N = theWay->getNode(i);
+            theList->add(new MoveNodeCommand(N, proj.inverse(node_pos[N]), theDocument->getDirtyOrOriginLayer(N->layer())));
         }
     }
     return true;
