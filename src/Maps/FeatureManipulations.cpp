@@ -1648,7 +1648,8 @@ bool axisAlignRoads(Document* theDocument, CommandList* theList, PropertiesDock*
                 QLineF l1(midpoints[index1], midpoints[index1] + axis_vectors[edge_axis[index1]]);
                 if (l0.intersect(l1, &new_pos) == QLineF::NoIntersection) {
                     qWarning() << "WARNING: adjacent edges assigned opposite axes, not able to resolve";
-                    continue;
+                    theList->undo();
+                    return false;
                 }
             } else {
                 // axes the same, midpoints are aligned so just project onto axis through midpoint

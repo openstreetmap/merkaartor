@@ -1918,6 +1918,8 @@ void MainWindow::on_roadAxisAlignAction_triggered()
     // Do the manipulation
     CommandList* theList = new CommandList(command_name, NULL);
     ok = axisAlignRoads(theDocument, theList, p->theProperties, view()->projection(), axes);
+    if (!ok)
+        QMessageBox::critical(this, tr("Unable to align to axes"), tr("Align to axes operation failed. Please adjust any sharp corners and try again."));
     if (!ok || theList->empty())
         delete theList;
     else {
