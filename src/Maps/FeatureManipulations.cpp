@@ -1383,7 +1383,7 @@ void terraceArea(Document* theDocument, CommandList* theList, PropertiesDock* th
 }
 
 // Align a set of midpoints in a specific direction
-void axisAlignAlignMidpoints(QVector<QPointF> &midpoints, const QVector<double> weights, const QPointF &dir, int begin, int end)
+static void axisAlignAlignMidpoints(QVector<QPointF> &midpoints, const QVector<double> weights, const QPointF &dir, int begin, int end)
 {
     // get weighted average midpoint
     const int n = midpoints.size();
@@ -1406,11 +1406,14 @@ void axisAlignAlignMidpoints(QVector<QPointF> &midpoints, const QVector<double> 
     }
 }
 
-// returns whether successful (if not don't add theList to history)
-bool axisAlignRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock, const Projection &proj, unsigned int axes)
+// Axis align uses binary fixed point for angles
+static const int angle_shift = 20;
+
+// returns true on success
+static bool axisAlignPreprocess(/* in */ PropertiesDock *theDock, const Projection &proj, int axes,
+                                /* out */ QList<Way *> &theWays, QVector<int> &edge_angles, QVector<int> &edge_axis,
+                                          QVector<double> &edge_weight, double &total_weight, QVector<QPointF> &midpoints)
 {
-    // find ways
-    QList<Way *> theWays;
     for (int i = 0; i < theDock->size(); ++i)
         if (theDock->selection(i)->getClass() == "Way")
             theWays << CAST_WAY(theDock->selection(i));
@@ -1418,15 +1421,14 @@ bool axisAlignRoads(Document* theDocument, CommandList* theList, PropertiesDock*
         return false;
 
     // manipulate angles as fixed point values with a unit of the angle between axes
-    const int shift = 20;
     int nedges = 0;
     foreach (Way *theWay, theWays)
         nedges += theWay->size()-1;
-    QVector<int> edge_angles(nedges);
-    QVector<int> edge_axis(nedges);
-    QVector<double> edge_weight(nedges);
-    QVector<QPointF> midpoints(nedges);
-    double total_weight = 0.0;
+    edge_angles.resize(nedges);
+    edge_axis.resize(nedges);
+    edge_weight.resize(nedges);
+    midpoints.resize(nedges);
+    total_weight = 0.0;
 
     // Look at nodes and find angles etc
     int i = 0;
@@ -1451,18 +1453,27 @@ bool axisAlignRoads(Document* theDocument, CommandList* theList, PropertiesDock*
             total_weight += edge_weight[i];
             // calculate angle of edge
             float ang = QLineF(p1, p2).angle();
-            edge_angles[i] = ang * ((axes << shift) / 360.0);
+            edge_angles[i] = ang * ((axes << angle_shift) / 360.0);
             if (edge_angles[i] < 0) {
-                edge_angles[i] += axes<<shift;
+                edge_angles[i] += axes<<angle_shift;
             }
             edge_axis[i] = -1;
         }
     }
+    return true;
+}
 
+// QVectors must be same size
+// return true on success
+static bool axisAlignCluster(/* in */  const QVector<int> &edge_angles, const QVector<double> &edge_weight,
+                                       double total_weight, unsigned int axes,
+                             /* out */ int &theta, QVector<int> &edge_axis)
+{
     // Use a variant of K-Means Clustering with regular spaced clusters to find
     // the best angle for the first axis.
-    int theta = 0;
+    const int nedges = edge_angles.size();
     bool changed;
+    theta = 0;
     // This should always terminate pretty quickly, but for robustness it's better to warn than hang.
     unsigned int safety = 100;
     while (--safety) {
@@ -1470,7 +1481,7 @@ bool axisAlignRoads(Document* theDocument, CommandList* theList, PropertiesDock*
         changed = false;
         for (int i = 0; i < nedges; ++i) {
             int angle = edge_angles[i] - theta;
-            int new_axis = ((angle >> (shift - 1)) + 1) >> 1;
+            int new_axis = ((angle >> (angle_shift - 1)) + 1) >> 1;
             if (new_axis >= (int)axes)
                 new_axis -= axes;
             else if (new_axis < 0)
@@ -1485,11 +1496,11 @@ bool axisAlignRoads(Document* theDocument, CommandList* theList, PropertiesDock*
         // adjust angle of first axis by weighted mean of angles between edges and their assigned axes
         double dtheta = 0;
         for (int i = 0; i < nedges; ++i) {
-            int diff = (edge_angles[i] - theta - (edge_axis[i] << shift)) % (1 << shift);
-            if (diff > ((1<<shift)>>1))
-                diff -= (1<<shift);
-            else if (diff < -((1<<shift)>>1))
-                diff += (1<<shift);
+            int diff = (edge_angles[i] - theta - (edge_axis[i] << angle_shift)) % (1 << angle_shift);
+            if (diff > ((1<<angle_shift)>>1))
+                diff -= (1<<angle_shift);
+            else if (diff < -((1<<angle_shift)>>1))
+                diff += (1<<angle_shift);
             dtheta += edge_weight[i]*diff;
         }
         dtheta /= total_weight;
@@ -1498,12 +1509,82 @@ bool axisAlignRoads(Document* theDocument, CommandList* theList, PropertiesDock*
     if (!safety)
         qWarning() << "WARNING: align axes clustering loop exceeded safety limit";
 
+    return safety;
+}
+
+// QVectors must be same size
+static double axisAlignCalcVariance(const QVector<int> &edge_angles, const QVector<int> &edge_axis, int theta)
+{
+    const int nedges = edge_angles.size();
+    double variance = 0.0;
+
+    for (int i = 0; i < nedges; ++i) {
+        int diff = (edge_angles[i] - theta - (edge_axis[i] << angle_shift)) % (1 << angle_shift);
+        if (diff > ((1<<angle_shift)>>1))
+            diff -= (1<<angle_shift);
+        else if (diff < -((1<<angle_shift)>>1))
+            diff += (1<<angle_shift);
+        double diff_f = (double)diff / ((1<<angle_shift)>>1);
+        variance += diff_f*diff_f;
+    }
+    variance /= nedges;
+    return variance;
+}
+
+// Guesses the number of axes in a shape.
+// returns 0 on failure.
+unsigned int axisAlignGuessAxes(PropertiesDock* theDock, const Projection &proj, unsigned int max_axes)
+{
+    QList<Way *> theWays;
+    QVector<int> edge_angles;
+    QVector<int> edge_axis;
+    QVector<double> edge_weight;
+    QVector<QPointF> midpoints;
+    double total_weight;
+    double min_var;
+    int min_var_axes = 0;
+    for (unsigned int axes = 3; axes <= max_axes; ++axes) {
+        if (!axisAlignPreprocess(theDock, proj, axes,
+                                 theWays, edge_angles, edge_axis, edge_weight, total_weight, midpoints))
+            return 0;
+        int theta;
+        axisAlignCluster(edge_angles, edge_weight, total_weight, axes, theta, edge_axis);
+        double var = axisAlignCalcVariance(edge_angles, edge_axis, theta);
+        // prefer a lower number of axes
+        var *= sqrt(axes);
+        // we want the number of axes with the lowest weighted variance
+        if (!min_var_axes || var < min_var) {
+            min_var = var;
+            min_var_axes = axes;
+        }
+    }
+
+    return min_var_axes;
+}
+
+// returns whether successful (if not don't add theList to history)
+bool axisAlignRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock, const Projection &proj, unsigned int axes)
+{
+    // manipulate angles as fixed point values with a unit of the angle between axes
+    QList<Way *> theWays;
+    QVector<int> edge_angles;
+    QVector<int> edge_axis;
+    QVector<double> edge_weight;
+    QVector<QPointF> midpoints;
+    double total_weight;
+    if (!axisAlignPreprocess(theDock, proj, axes,
+                             theWays, edge_angles, edge_axis, edge_weight, total_weight, midpoints))
+        return false;
+
+    int theta;
+    axisAlignCluster(edge_angles, edge_weight, total_weight, axes, theta, edge_axis);
+
     // Calculate axis direction vectors
     QVector<QPointF> axis_vectors(axes);
     for (unsigned int i = 0; i < axes; ++i) {
-        int angle = theta + (i<<shift);
-        axis_vectors[i].setX(cos(M_PI*2/(axes<<shift)*angle));
-        axis_vectors[i].setY(-sin(M_PI*2/(axes<<shift)*angle));
+        int angle = theta + (i<<angle_shift);
+        axis_vectors[i].setX(cos(M_PI*2/(axes<<angle_shift)*angle));
+        axis_vectors[i].setY(-sin(M_PI*2/(axes<<angle_shift)*angle));
     }
 
     // If adjacent edges are in the same axis we can't intersect them to find
@@ -1511,7 +1592,7 @@ bool axisAlignRoads(Document* theDocument, CommandList* theList, PropertiesDock*
     // axis so that we can just project the nodes onto the axis and make the
     // result axis aligned. Note that this does not handle adjacent edges which
     // have opposite axes and are therefore parallel (when axes is even).
-    i = 0;
+    int i = 0;
     foreach (Way *theWay, theWays) {
         int start = i;
         int n = theWay->size()-1;

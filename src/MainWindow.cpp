@@ -1886,10 +1886,17 @@ void MainWindow::on_roadSubdivideAction_triggered()
 
 void MainWindow::on_roadAxisAlignAction_triggered()
 {
+    const unsigned int max_axes = 16;
     bool ok;
-    unsigned int axes = QInputDialog::getInteger(this, tr("Axis Align"),
-                                                 tr("Specify the number of regular axes to align edges on (e.g. 4 for rectangular)"),
-                                                 4, 3, 16, 1, &ok);
+    unsigned int axes;
+
+    axes = axisAlignGuessAxes(p->theProperties, view()->projection(), max_axes);
+    if (!axes)
+        // FIXME not going to be possible because of duplicate adjacent nodes
+        return;
+    axes = QInputDialog::getInteger(this, tr("Axis Align"),
+                                    tr("Specify the number of regular axes to align edges on (e.g. 4 for rectangular)"),
+                                    axes, 3, max_axes, 1, &ok);
     if (!ok)
         return;
 
