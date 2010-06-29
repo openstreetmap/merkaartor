@@ -1892,8 +1892,7 @@ void MainWindow::on_roadAxisAlignAction_triggered()
 
     axes = axisAlignGuessAxes(p->theProperties, view()->projection(), max_axes);
     if (!axes)
-        // FIXME not going to be possible because of duplicate adjacent nodes
-        return;
+        axes = 4;
     axes = QInputDialog::getInteger(this, tr("Axis Align"),
                                     tr("Specify the number of regular axes to align edges on (e.g. 4 for rectangular)"),
                                     axes, 3, max_axes, 1, &ok);

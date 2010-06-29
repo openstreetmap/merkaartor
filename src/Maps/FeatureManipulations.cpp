@@ -1382,6 +1382,26 @@ void terraceArea(Document* theDocument, CommandList* theList, PropertiesDock* th
     theDock->setSelection(areas);
 }
 
+// Remove repeated (adjacent) nodes in ways.
+static void removeRepeatsInRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock)
+{
+    for (int i = 0; i < theDock->size(); ++i) {
+        if (theDock->selection(i)->getClass() == "Way") {
+            Way *way = CAST_WAY(theDock->selection(i));
+            Node *last = 0;
+            for (int j = 0; j < way->size();) {
+                Node *node = way->getNode(j);
+                if (node == last) {
+                    theList->add(new WayRemoveNodeCommand(way, j, theDocument->getDirtyOrOriginLayer(way->layer())));
+                    continue;
+                }
+                last = node;
+                ++j;
+            }
+        }
+    }
+}
+
 // Align a set of midpoints in a specific direction
 static void axisAlignAlignMidpoints(QVector<QPointF> &midpoints, const QVector<double> weights, const QPointF &dir, int begin, int end)
 {
@@ -1565,6 +1585,9 @@ unsigned int axisAlignGuessAxes(PropertiesDock* theDock, const Projection &proj,
 // returns whether successful (if not don't add theList to history)
 bool axisAlignRoads(Document* theDocument, CommandList* theList, PropertiesDock* theDock, const Projection &proj, unsigned int axes)
 {
+    // Make sure nodes aren't pointlessly repeated or angles would be undefined
+    removeRepeatsInRoads(theDocument, theList, theDock);
+
     // manipulate angles as fixed point values with a unit of the angle between axes
     QList<Way *> theWays;
     QVector<int> edge_angles;
